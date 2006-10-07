@@ -45,10 +45,11 @@ __Note:__ You do not need to install anything on the browser to use this add-on.
    * ==$req = new HTTP::Request 'GET' => $FORM{'url'}."?skin=print.pattern";== (Manually change the line into this for earlier releases)
 
 |  Add-on Author: | TWiki:Main/LynnwoodBrown |
-|  Add-on Version: | 18 Jan 2005 (v1.000) |
+|  Add-on Version: | 2 Aug 2006 (v1.10) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  18 Jan 2005: | Initial version |
+|  2 Aug 2006: | (v1.10): Templates never added to distribution archive correctly (TWiki:Main.SteffenPoulsen) |
 |  8 Apr 2006: | Minor update for TWiki:Codev.TWikiRelease04x00x02, TWiki oops templates added (TWiki:Main.SteffenPoulsen) |
+|  18 Jan 2005: | Initial version |
 |  CPAN Dependencies: | none |
 |  Other Dependencies: | none |
 |  Perl Version: | 5.005 |
@@ -57,7 +58,7 @@ __Note:__ You do not need to install anything on the browser to use this add-on.
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 |  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
-__Related Topic:__ %TWIKIWEB%.TWikiAddOns
+__Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
 
 -- TWiki:Main/LynnwoodBrown - 18 Jan 2005
 

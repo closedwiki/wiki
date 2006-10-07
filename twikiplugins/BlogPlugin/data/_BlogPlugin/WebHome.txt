@@ -1,11 +1,12 @@
 %META:TOPICINFO{author="TWikiContributor" date="1142193717" format="1.1" version="1.1"}%
-%META:TOPICPARENT{name="TestBlogEntry0"}%
-%~~ DBCALL{"RenderFrontPage" 
+%STARTINCLUDE% 
+%~~ DBCALL{"%WEB%.RenderFrontPage" 
 ~~~   SKIP="%URLPARAM{"skip"}%" 
 ~~~   LIMIT="%URLPARAM{"limit"}%" 
 ~~~   CAT="%URLPARAM{"cat"}%" 
 ~~~   AUTHOR="%URLPARAM{"author" default=".*"}%" 
-~~~ }%
+~~~ }% 
+%STOPINCLUDE%
 
 <!--
    * Set ALLOWTOPICCHANGE = %MAINWEB%.BlogAdminGroup

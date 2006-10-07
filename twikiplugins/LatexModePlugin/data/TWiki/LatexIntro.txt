@@ -21,7 +21,7 @@ and %BROWN%\]%%ENDCOLOR%. Thus, %BROWN%%<nop>\[\mathcal{N}=\langle \mathbb{N},0,
 
 All %BEGINLATEX{inline="1"}%\TeX%ENDLATEX% codes begin with a backslash (\). Curly braces ({ }) are used to delimit groupings, except in a few cases where optional arguments must be enclosed in square brackets ([ ]). Many symbols have mnemonic names, like =\Alpha=, =\alpha=, =\forall=, =\exists=, =\lor=, =\land=. 
 
-A list of some common symbols is given in the LatexSymbolList topic.  Other off-site lists include:  [[http://www.math.union.edu/~dpvc/jsMath/symbols/welcome.html][Some Symbols]] and [[http://www.iam.ubc.ca/~newbury/tex/symbols.html][Some Little-Known Symbols]], [[http://www.ctan.org/tex-archive/info/symbols/comprehensive/symbols-a4.pdf][All the Symbols]].  Not all the symbols work in the Wiki, but most of them do.
+A list of some common symbols is given in the LatexSymbols topic.  Other off-site lists include:  [[http://www.math.union.edu/~dpvc/jsMath/symbols/welcome.html][Some Symbols]] and [[http://www.iam.ubc.ca/~newbury/tex/symbols.html][Some Little-Known Symbols]], [[http://www.ctan.org/tex-archive/info/symbols/comprehensive/symbols-a4.pdf][All the Symbols]].  Not all the symbols work in the Wiki, but most of them do.
 
 A subscript is indicated with an underline (_). If the subscript consists of more than one symbol, it must be enclosed in braces. Similarly, a superscript is indicated with a caret (^). Thus, %BROWN%%<nop>$ \alpha _{ \beta _1^2}^{ \gamma ^{ \delta ^ \epsilon }}
 $%%ENDCOLOR% yields %$ \alpha _{ \beta _1^2}^{ \gamma ^{ \delta^ \epsilon }}$%,
@@ -51,12 +51,8 @@ functionality.  The _text_ area contains the actual text to be rendered.
 One does not need to use the =\documentclass= or =document= environment to
 use !LaTeX in TWiki.
 
-The ability to render a complete !LaTeX document, say from an existing file,
-within TWiki is currently under consideration.  See
+The ability to render a complete !LaTeX document within TWiki, say from an
+existing file, is currently under consideration.  See
 TWiki:Codev.IncludeExistingLatexDocsInTWiki for details and current status.
-
----+++Pitfalls
-
-Unlike standard %BEGINLATEX{inline="1"}%\TeX%ENDLATEX%, TWiki.LatexModePlugin is (often) finicky about requiring spaces around the name of each symbol: %BROWN%'%<nop>$ \Gamma \vdash $%'%ENDCOLOR% (with spaces around =\Gamma= and =\vdash=) yields, correctly, '%$ \Gamma \vdash $%,' but %BROWN%'%<nop>$\Gamma\vdash$%'%ENDCOLOR% (no spaces) yields '%$\Gamma\vdash$%'.
 
 -- courtesy of TWiki:Main.ShaughanLavine ([[http://zillion.philosophy.arizona.edu/twiki/bin/view/Courses/LaTeX][see also]])

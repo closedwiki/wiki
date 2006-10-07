@@ -1,0 +1,17 @@
+<!-- template: editjavascript.natedit.tmpl -->
+%TMPL:INCLUDE{"editjavascript.nat"}%
+%TMPL:DEF{"javascript"}% 
+%TMPL:P{"defaultjavascript"}%
+%TMPL:P{"editjavascript"}%
+<script type="text/javascript" src="%PUBURLPATH%/%TWIKIWEB%/NatSkin/edit.js"></script>
+<script type="text/javascript">
+/* testing ImagePlugin: %IMAGE{"clear"}% */
+function natEditImageButtonAction() {
+  %IFDEFINEDTHEN{"$percntIMAGE{\"clear\"}$percnt" as="<br.*"}%
+    natEditImageButtonActionImagePlugin();
+  %ELSEDEFINED%
+    natEditImageButtonActionStandard();
+  %FIDEFINED%
+}
+</script>
+%TMPL:END%

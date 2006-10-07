@@ -14,11 +14,9 @@ See also BlogHelpText
 
 ---++ Implementation
 <verbatim>
-%STARTINCLUDE%
-*~~
-<div class="blogSideBar">
+%STARTINCLUDE%<div class="blogSideBar">
 <div class="blogAbout">
-<h1>About%REDDOT{"%WEB%.BlogAbout"}%</h1>
+<h1 class="blogSideBarHeader">About%REDDOT{"%WEB%.BlogAbout"}%</h1>
 %IFDEFINEDTHEN{"%SIDEBAR%"}%
 %IFDEFINEDTHEN{"%SIDEBAR%" as="Author"}%
 %$nopDBQUERY{topic="%BASETOPIC%" format="$formfield(About)"}%
@@ -30,7 +28,6 @@ See also BlogHelpText
 %FIDEFINED%
 </div>
 %IFDEFINEDTHEN{"%SKIN%" as="pattern"}%
-<!-- %<nop>INCLUDE{"%TWIKIWEB%.WebLeftBarSearch"}% -->
 %ELSEDEFINED%
 %IFSKINSTATETHEN{searchbox="pos2"}%
 <div class="natSearchBox natSearchBoxPos2">
@@ -57,14 +54,14 @@ See also BlogHelpText
 %DBCALL{"RenderAdminTools" warn="off"}% 
 %DBCALL{"RenderRecentComments" LIMIT="5"}%
 %DBCALL{"RenderRecentPostings" LIMIT="10"}%
-%DBCALL{"RenderPages"}%
-%DBCALL{"RenderAuthors"}%
-%DBCALL{"RenderArchives"}%
 %DBCALL{"RenderCategories"}%
+%DBCALL{"RenderArchives"}%
+%DBCALL{"RenderAuthors"}%
 %DBCALL{"RenderBlogRoll" NOCAT="BlogUp"}%
 %DBCALL{"RenderBlogRoll" CAT="BlogUp" TITLE="BlogUp Ring"}%
+%DBCALL{"RenderPages"}%
 %DBCALL{"RenderLastFMRecentTracks"}%
-%DBCALL{"RenderVisitors"}%
+<!--%<nop>DBCALL{"RenderVisitors"}%-->
 %DBCALL{"RenderTechnorati"}%
 %DBCALL{"RenderAffiliation"}%
 %ENDSECTION{"Default"}%
@@ -77,13 +74,13 @@ See also BlogHelpText
 %DBCALL{"RenderAdminTools" warn="off"}% 
 %DBCALL{"RenderRecentComments" LIMIT="5" AUTHOR="%BASETOPIC%"}%
 %DBCALL{"RenderRecentPostings" LIMIT="10" AUTHOR="%BASETOPIC%"}%
-%DBCALL{"RenderPages" AUTHOR="%BASETOPIC%"}%
-%DBCALL{"RenderArchives" AUTHOR="%BASETOPIC%"}%
 %DBCALL{"RenderCategories"}%
+%DBCALL{"RenderArchives" AUTHOR="%BASETOPIC%"}%
 %DBCALL{"RenderBlogRoll" AUTHOR="%BASETOPIC%" NOCAT="BlogUp"}%
 %DBCALL{"RenderBlogRoll" CAT="BlogUp" TITLE="BlogUp Ring"}%
+%DBCALL{"RenderPages" AUTHOR="%BASETOPIC%"}%
 %DBCALL{"RenderLastFMRecentTracks"}%
-%DBCALL{"RenderVisitors"}%
+<!--%<nop>DBCALL{"RenderVisitors"}%-->
 %DBCALL{"RenderTechnorati"}%
 %ENDSECTION{"Author"}%
 </verbatim>
@@ -156,8 +153,8 @@ See also BlogHelpText
 %DBCALL{"RenderAdminTools" warn="off"}%
 %DBCALL{"RenderRecentComments" LIMIT="10" CAT="%BASETOPIC%"}%
 %DBCALL{"RenderRecentPostings" LIMIT="10" CAT="%BASETOPIC%"}%
-%DBCALL{"RenderArchives" CAT="%BASETOPIC%"}%
 %DBCALL{"RenderCategories"}%
+%DBCALL{"RenderArchives" CAT="%BASETOPIC%"}%
 %DBCALL{"RenderBlogRoll" CAT="%BASETOPIC%"}%
 %ENDSECTION{"Category"}%
 </verbatim>

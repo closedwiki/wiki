@@ -12,7 +12,7 @@ it.
 %STARTINCLUDE%
 %IFDEFINEDTHEN{"%LASTFMNICK%"}%
 <div class="blogSideBarSection blogSideBarLastFM">
-~~~ <h1><a href="http://www.last.fm/user/%LASTFMNICK%">Listening</a>
+~~~ <h1 class=\"blogSideBarHeader\"><a href="http://www.last.fm/user/%LASTFMNICK%">Listening</a>
 *~~   %REDDOT{"%WEB%.RenderLastFMRecentTracks"}%
 *~~ </h1>
 ~~~

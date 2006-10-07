@@ -1,5 +1,14 @@
 %META:TOPICINFO{author="TWikiContributor" date="1139390249" format="1.1" version="1.1"}%
----+!! <nop>%TOPIC%
+<!--
+
+   PLEASE DO NOT EDIT THIS TOPIC
+
+   It is automatically generated from the subversion repository, and any changes
+   you make will simply be overwritten the next time a release is generated.
+
+   Instead, you could check your fix in, raise a bug in the Bugs web, or mail the author.
+-->
+---+!! %TOPIC%
 
 This plugin is inspired by the <nop>WordPress <nop>TimeSince plugin.
 It which can be used to display a time difference in a human readable way, for instance to tell you that a topic has been published "2 days, 3 hours ago".
@@ -63,25 +72,27 @@ Format strings may contain the following:
 | %TIMESINCE{from="1955/04/18" to="1979-03-14" units="3"}% |
 
 
----++ Plugin Settings
-
-   * Set SHORTDESCRIPTION = Display time difference in a human readable way.
-
 ---++ Plugin Installation Instructions
 
-   * Download the ZIP file from the Plugin web (see below)
-   * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
+   * [[http://twiki.org/p/pub/Plugins/%TOPIC%/%TOPIC%.zip][Download]] the ZIP file
+   * Unzip it in your twiki installation directory. Content: 
      | *File:* | *Description:* |
-     | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
-     | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
+     | ==data/TWiki/%TOPIC%.txt== | plugin topic |
+     | ==lib/TWiki/Plugins/%TOPIC%.pm== | plugin perl module |
+     | ==lib/TWiki/Plugins/%TOPIC%/Core.pm== | plugin core |
+   * (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
 
 ---++ Plugin Info
+<!-- provided for compatibility only
+   * Set SHORTDESCRIPTION = Display time difference in a human readable way
+-->
 
 |  Plugin Author: | TWiki:Main.MichaelDaum |
 |  Copyright &copy;: | 2005-2006, Michael Daum |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | v1.00 |
+|  Plugin Version: | v1.01 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  31 Aug 2006: | added NO_PREFS_IN_TOPIC |
 |  27 Apr 2006: | added lazy compilation |
 |  11 Nov 2005: | Initial version |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 |
@@ -93,5 +104,4 @@ Format strings may contain the following:
 |  Feedback: | TWiki:Plugins/%TOPIC%Dev |
 |  Appraisal: | TWiki:Plugins/%TOPIC%Appraisal |
 
--- TWiki:Main.MichaelDaum - 27 Apr 2006
-
+-- TWiki:Main.MichaelDaum - 31 Apr 2006

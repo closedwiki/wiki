@@ -13,7 +13,7 @@ distinction will allow us to keep some topics of type TWikiTopic out of the way 
 we want to deal with BlogPages for this weblog application.
 
 <div class="twikiPageForm blogAdminButtons">
-<form action="%SCRIPTURL{"edit"}%/%WEB%/" method="post">
+<form action="%SCRIPTURLPATH{"edit"}%/%WEB%/" method="post">
 <input type="hidden" name="onlywikiname" value="on" />
 <input type="hidden" name="templatetopic" value="BlogPageTemplate" />
 <input type="hidden" name="formtemplate" value="BlogPageForm" />

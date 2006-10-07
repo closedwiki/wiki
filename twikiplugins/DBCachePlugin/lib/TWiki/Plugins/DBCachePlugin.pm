@@ -16,11 +16,14 @@ package TWiki::Plugins::DBCachePlugin;
 
 use strict;
 use vars qw( 
-  $VERSION $RELEASE $currentWeb $currentTopic $currentUser $isInitialized
+  $VERSION $RELEASE $SHORTDESCRIPTION $NO_PREFS_IN_TOPIC
+  $currentWeb $currentTopic $currentUser $isInitialized
 );
 
 $VERSION = '$Rev$';
-$RELEASE = '1.22';
+$RELEASE = '1.28';
+$NO_PREFS_IN_TOPIC = 1;
+$SHORTDESCRIPTION = 'Lightweighted frontend to the DBCacheContrib';
 
 ###############################################################################
 # plugin initializer

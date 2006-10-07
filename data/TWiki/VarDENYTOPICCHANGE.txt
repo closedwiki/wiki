@@ -1,0 +1,12 @@
+%META:TOPICINFO{author="TWikiContributor" date="1152047752" format="1.2" version="$Rev$"}%
+%META:TOPICPARENT{name="TWikiAccessControl"}%
+#VarDENYTOPICCHANGE
+---+++ DENYTOPICCHANGE -- access control for webs
+
+
+%STARTINCLUDE%
+<!-- intentionally nothing to be included -->
+%STOPINCLUDE%
+List of users or groups who must not change a topic.
+   * Type: Access control - See [[%TWIKIWEB%.TWikiAccessControl]] for a comprehensive description.
+

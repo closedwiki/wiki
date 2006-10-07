@@ -67,7 +67,7 @@ closely as possible.
 Checklist:
    - This script should be run in the directory where you unpacked the
      new 'Dakar' distribution.
-   - The first argument to the script is the path to your esiting TWiki 
+   - The first argument to the script is the path to your existing TWiki
      installation's setlib.cfg
    - The second argument to the script is the path to a target directory
      where it will create the new installation

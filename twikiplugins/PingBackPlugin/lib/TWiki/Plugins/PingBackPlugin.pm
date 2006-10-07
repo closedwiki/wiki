@@ -18,13 +18,15 @@
 package TWiki::Plugins::PingBackPlugin;
 
 use strict;
-use vars qw( $VERSION $RELEASE 
+use vars qw( $VERSION $RELEASE $NO_PREFS_IN_TOPIC $SHORTDESCRIPTION
   $currentWeb $currentTopic $currentUser $xmlRpcLink $doneHeader
   $enabledPingBack
 );
 
 $VERSION = '$Rev$';
-$RELEASE = 'v0.04';
+$RELEASE = 'v0.05-alpha';
+$NO_PREFS_IN_TOPIC = 1;
+$SHORTDESCRIPTION = 'Pingback service for TWiki';
 
 use TWiki::Contrib::XmlRpcContrib;
 

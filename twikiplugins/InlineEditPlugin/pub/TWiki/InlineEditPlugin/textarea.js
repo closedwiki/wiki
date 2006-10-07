@@ -15,22 +15,44 @@
 # http://www.gnu.org/copyleft/gpl.html
 #
 */
+
+//from http://www.webfx.nu/dhtml/mozInnerHTML/mozInnerHtml.html
+setInnerHTML = function(self, str) {
+   var r = self.ownerDocument.createRange();
+   r.selectNodeContents(self);
+   r.deleteContents();
+   var df = r.createContextualFragment(str);
+   self.appendChild(df);
+}
+setOuterHTML = function(self, str) {
+   var r = self.ownerDocument.createRange();
+   r.setStartBefore(self);
+   var df = r.createContextualFragment(str);
+   self.parentNode.replaceChild(df, self);
+}
+
 //TODO: change it to re-size dependant on the number of lines in the textarea.. with minimum
 
 //create the TWiki.InlineEditPlugin.TextArea Class constructor
 TWiki.InlineEditPlugin.TextArea = function(topicSectionObject) {
     this.topicSectionObject = topicSectionObject;
 }
+TWiki.InlineEditPlugin.TextArea.appliesToSection = function(topicSectionObject) {
+    return true;    //TextArea is the fallback editor
+}
+TWiki.InlineEditPlugin.TextArea.getDefaultTml = function() {
+    return 'new Section';    //TextArea is the fallback editor
+}
+TWiki.InlineEditPlugin.TextArea.getTypeName = function() {
+    return "Text";
+}
+
 //register this inline editor component with the main factory
 TWiki.InlineEditPlugin.TextArea.register = function() {
     if ( typeof( TWiki.InlineEditPlugin.editors ) == "undefined" ) {
         TWiki.InlineEditPlugin.editors = [];
     }
     TWiki.InlineEditPlugin.editors.push('TWiki.InlineEditPlugin.TextArea');
-}
-//returns true if the section can be edited by this editor
-TWiki.InlineEditPlugin.TextArea.appliesToSection = function(topicSectionObject) {
-    return true;    //TextArea is the fallback editor
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -69,25 +91,40 @@ TWiki.InlineEditPlugin.TextArea.prototype.createEditSection = function() {
         var defaultNumberOfRows = countLines(this.topicSectionObject.tml, defaultNumberOfCols);
         if (defaultNumberOfRows < 4) {defaultNumberOfRows = 4};
         if (defaultNumberOfRows > 12) {defaultNumberOfRows = 12};
-        var innerHTML = '<textarea id="componentedittextarea" name="text" onkeyup="TWiki.InlineEditPlugin.TextArea.TextAreaResize(this)"  onclick="TWiki.InlineEditPlugin.TextArea.showComponentEdit(event)" rows="'+defaultNumberOfRows+'" cols="'+defaultNumberOfCols+'" >'+this.topicSectionObject.tml+'</textarea>';
 
-        newForm.innerHTML = innerHTML;
-        newForm.elements.namedItem("text").topicSection =this.topicSectionObject.topicSection;
+//Don't use innerHTML - it does not work in Mozilla
+var newTextarea = document.createElement('TEXTAREA');
+newTextarea.name = 'text';
+newTextarea.id = "componentedittextarea";
+newTextarea.onkeyup = "TWiki.InlineEditPlugin.TextArea.TextAreaResize(this)";
+newTextarea.onclick = "TWiki.InlineEditPlugin.TextArea.showComponentEdit(event)";
+newTextarea.rows = defaultNumberOfRows;
+newTextarea.cols = defaultNumberOfCols;
+newTextarea.innerHTML = this.topicSectionObject.tml;
+newForm.appendChild(newTextarea);
+
+
+        newTextarea.topicSection =this.topicSectionObject.topicSection;
 
         //TODO: ***************************************make sure we're using this everwhere we should
         if (( typeof( getComputedStyle ) != "undefined" )) {
             //forks for firefox
             var s = getComputedStyle(this.topicSectionObject.HTMLdiv, "");
 //            topicSectionObject.editDivSection.elements.namedItem("text").style.height = s.height;
-            newForm.elements.namedItem("text").style.width = s.width;
+            newTextarea.style.width = s.width;
         } else {
             //IE
 //            topicSectionObject.editDivSection.elements.namedItem("text").style.height = topicSectionObject.HTMLdiv.offsetHeight;
-            newForm.elements.namedItem("text").style.width = this.topicSectionObject.HTMLdiv.offsetWidth;
+            newTextarea.style.width = this.topicSectionObject.HTMLdiv.offsetWidth;
         }
         //TWiki.InlineEditPlugin.TextArea.TextAreaResize(newForm.elements.namedItem("text"));
     return newForm;
 }
+
+TWiki.InlineEditPlugin.TextArea.prototype.disableEdit = function(disable) {
+        this.topicSectionObject.editDivSection.elements.namedItem("text").disabled = disable;
+}
+
 
 TWiki.InlineEditPlugin.TextArea.TextAreaResize = function(tg) {
     tg.rows = Math.max(1, tg.rows);
@@ -125,7 +162,8 @@ TWiki.InlineEditPlugin.TextArea.showComponentEdit = function(event) {
     //TODO: need to see if the found TMLVariable has {}'s - if so, have to find the matching pair'
     var openCount = 0;
     var closedCount = 0;
-    var open = (-1 != splitByPercents[i].search(/^[A-Z][A-Z0-9]*{/));
+    var openTMLRegex = new RegExp("^[A-Z][A-Z0-9]*{");
+    var open = (-1 != splitByPercents[i].search(openTMLRegex));
     if (open) {openCount++;}
     var close = ('}' == splitByPercents[i].charAt(splitByPercents[i].length-1));
     if (close) {closedCount++;}
@@ -140,7 +178,7 @@ TWiki.InlineEditPlugin.TextArea.showComponentEdit = function(event) {
         if ((i<0) || (i>=splitByPercents.length)) {
             return;//not fully symetric variable
         }
-        open = (-1 != splitByPercents[i].search(/^[A-Z][A-Z0-9]*{/));
+        open = (-1 != splitByPercents[i].search(openTMLRegex));
         if (open) {openCount++;}
         close = ('}' == splitByPercents[i].charAt(splitByPercents[i].length-1));
         if (close) {closedCount++;}
@@ -151,7 +189,8 @@ TWiki.InlineEditPlugin.TextArea.showComponentEdit = function(event) {
     for (i = startIdx;i<=stopIdx;i++) {
         selectedTml = selectedTml + splitByPercents[i] + '%';
     }
-    if ((startIdx != stopIdx) && (0 != selectedTml.search(/^%[A-Z][A-Z0-9]*{.*}%$/))) {
+    var fullTMLRegex = new RegExp("^%[A-Z][A-Z0-9]*{.*}%$");
+    if ((startIdx != stopIdx) && (0 != selectedTml.search(fullTMLRegex))) {
         return;//what a long way to come only to realise we're outside a variable, but surrounded by them
     }
 

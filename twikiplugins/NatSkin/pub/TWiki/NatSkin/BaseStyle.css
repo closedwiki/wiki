@@ -17,13 +17,14 @@ hr {
   border-bottom:1px solid black;
   margin:0.7em 0px;
 }
-a img {border: none;}
 
-h1, h2, h3, h4, h5, h6 {
-  margin-top:20px;
-  margin-bottom:5px;
-  padding:0px;
-}
+h1 { font-size:24px;}
+h2 { font-size:20px;}
+h3 { font-size:18px; margin-top:10px;margin-bottom:0px;}
+h4 { font-size:16px; margin-top:10px;margin-bottom:0px;}
+h5 { font-size:14px; margin-top:10px;margin-bottom:0px;}
+h6 { font-size:14px; margin-top:10px;margin-bottom:0px;}
+body { font-size:14px; }
 
 /* debug
 .natPageBox,
@@ -38,7 +39,7 @@ h1, h2, h3, h4, h5, h6 {
 .natMiddle, 
 .natTopBarSizer,
 .natSideBar, natSideBarContents			{ border: 1px solid red }
-.natMain, .natMainContents,
+.natMain, .natMainContents, natMainHeaderContents
 .natSideBar, .natSideBarContents,
 .natMainFooter, natMainFooterContents {
   border:1px solid red;
@@ -47,8 +48,18 @@ h1, h2, h3, h4, h5, h6 {
 
 /* layout */
 .natBody {
-  background:#ffffff;
   text-align:center;
+}
+.natBodyPrint {
+  width:21cm; 
+  margin:0px; 
+  padding:10px;
+}
+.natBodyPrint,
+.natBodyPrint .natMain,
+.natBodyPrint .natMiddle {
+  background-color:white !important;
+  color:black !important;
 }
 .natBodyContents {
   text-align:left;
@@ -65,12 +76,12 @@ h1, h2, h3, h4, h5, h6 {
 .natBottomBarContents {
   text-align:center;
   padding-top:5px;
+  font-size:12px;
 }
 .natSideBar, .natTopRight {
-  width:16em;
-  min-width:16em;
-  max-width:16em;
-  _width:17em; /* IE hack */
+  width:280px;
+  min-width:280px;
+  max-width:280px;
 }
 .natSideBar {
   padding-bottom:5px;
@@ -82,7 +93,6 @@ h1, h2, h3, h4, h5, h6 {
   margin-top:10px;
 }
 .natTopRightContents {
-  white-space:nowrap;
   margin-top:29px;
 }
 .natSideBarContents, .natMainContents {
@@ -99,11 +109,6 @@ h1, h2, h3, h4, h5, h6 {
 /* topbar */
 .natHeaderArt {
   background-repeat:no-repeat;
-}
-
-.natTopLeftContents,
-.natTopRightContents {
-  font-size:12px;
 }
 
 .natTopRight form {
@@ -125,18 +130,18 @@ h1, h2, h3, h4, h5, h6 {
   border:1px solid #aaaaaa;
   margin:0px;
   padding:0px;
-  width:13em;
-  _width:12em; /* IE hack */
+  width:170px;
 }
 
 .natWebTitle {
-  font-size:xx-large;
+  font-size:34px;
   font-weight:bold;
+  margin:0px;
+  padding:0px;
 }
-.natWebLocator {
-  font-size:small;
-  font-weight:bold;
-  text-transform:none;
+
+.natTopicActions {
+  font-size:12px;
 }
 
 /* sidebar */
@@ -145,31 +150,22 @@ h1, h2, h3, h4, h5, h6 {
 .natSearchBoxPos3 input {
   width:98%;
 }
-.natSideBarContents {
-  font-size:small;
-}
 .natSideBarPersonal {
   margin-top:1em;
 }
 .natSideBar h1 {
   margin-top:0px;
-  margin-bottom:5px;
-  font-size:24px;
+  margin-bottom:10px;
 }
 .natSideBar h2 {
   margin-top:10px;
-  margin-bottom:0px;
-  font-size:18px;
+  margin-bottom:5px;
   padding-left:15px; 
 }
 
 .natSideBar ul {
   list-style-type:square;
-  margin-left:0px;
-  margin-top:5px;
-  margin-bottom:5px;
 }
-
 
 .natNotes a:hover,
 .natNotes a {
@@ -180,26 +176,18 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* main area */
-.natMiddle {
-  /*background:white;*/
-}
 .natMiddleLeft {
   padding-right:10px;
 }
-.natMainContents,
-.natMainFooterContents { 
-  font-weight:normal;
-  font-size:small;
-  padding:1px; /* firefox fix */
-  padding-bottom:15px;
-  line-height:140%;
+.natMainContents {
+  padding:1px 1px 1px 1px;
 }
-.natMainFooterContents {
-  text-align:right;
-  font-size:x-small;
-}
-.natTopicAttachments {
-  font-size:x-small;
+.natRevision,
+.natMainFooterContents,
+.natMainHeaderContents {
+  padding:1px;
+  margin:5px 0px;
+  font-size:12px;
 }
 .natMainContents pre {
   width:99%;
@@ -216,9 +204,17 @@ h1, h2, h3, h4, h5, h6 {
   margin-top:10px;
   margin-bottom:10px;
 }
-.natRevision {
+
+.natMain dt {
+  font-weight:bold;
+}
+
+/* login */
+.natLogonFormHolder {
+  padding:10px 0px 10px 0px;
+}
+.natLogonFormButtons td {
   padding-top:1em;
-  padding-bottom:1em;
 }
 
 /*
@@ -228,19 +224,53 @@ h1, h2, h3, h4, h5, h6 {
 }
 */
 
-/* bottom bar */
-.natBottomBarContents {
-  font-size:x-small;
+/* edit */
+.natEditToolBar {
+  margin-bottom:5px;
+  padding:0px 2px;
+}
+.natPreviewToolBar img,
+.natEditToolBar img {
+  margin-right:3px;
+  width:24px;
+  height:24px;
+  border:0px;
+  position:relative;
+  top:3px;
+}
+.natPreviewToolBar a:hover img,
+.natEditToolBar a:hover img {
+  top:2px;
+  right:1px;
+}
+.natEditEditTools,
+.natEditHelpTools,
+.natEditObjectTools,
+.natEditParagraphTools,
+.natEditHeadlineTools,
+.natEditTextTools {
+  margin-right:5px;
+  white-space:nowrap;
+}
+.natEditHelpTools,
+.natEditEditTools {
+}
+.natEditDoneButton {
+  margin-left:15px;
+}
+
+.natBottomTopicActions {
+  margin:10px 0px;
+}
+.natBottomTopicActions a:hover {
+  text-decoration:none;
+}
+.natPreviewToolBar {
+  width:100%;
+  text-align:right;
 }
 
 /* headings */
-.natMain h1 {font-size:32px;}
-.natMain h2 {font-size:24px;}
-.natMain h3 {font-size:20px;}
-.natMain h4 {font-size:18px; margin-top:10px}
-.natMain h5 {font-size:16px; margin-top:10px}
-.natMain h6 {font-size:16px; margin-top:10px}
-
 .natMain h1 .twikiEmulatedLink,
 .natMain h2 .twikiEmulatedLink,
 .natMain h3 .twikiEmulatedLink,
@@ -259,16 +289,13 @@ h1, h2, h3, h4, h5, h6 {
   line-height:140%;
 }
 .natMainContents > h1,
-.natMainContents > h1,h2,
-.natMainContents > h1,h3,
+.natMainContents > h1,
+.natMainContents > h1,
 .natMainContents h1:first-child,
 .natMainContents h2:first-child,
 .natMainContents h3:first-child {
   margin-top:0px;
   padding-top:0px;
-}
-
-.natEmail {
 }
 
 /* search */
@@ -354,7 +381,7 @@ h1, h2, h3, h4, h5, h6 {
   padding:5px;
   margin-top:2ex;
   margin-bottom:2ex;
-  font:normal small monospace;
+  font-family:monospace;
   color:red;
 }
 
@@ -402,19 +429,11 @@ h1, h2, h3, h4, h5, h6 {
 .natCurrentAction {
   font-weight:bold;
 }
-.natBottomTopicActions {
-  margin-top:1em;
-  margin-bottom:1em;
-}
-.natBottomTopicActions a:hover {
-  text-decoration:none;
-  border:1px solid red;
-}
 .natCurrentAction,
 .natEditAction a,
 .natPreviewAction a,
 .natSaveAction a,
-.natQuitAction a,
+.natDoneAction a,
 .natFormAction a,
 .natUndoAction a,
 .natCancelAction a {
@@ -446,8 +465,8 @@ h1, h2, h3, h4, h5, h6 {
 .natSideBar .natSkinStyleBrowser ul,
 .natSkinStyleBrowser ul {
   padding-left:0px;
-  margin-top:5px;
-  margin-bottom:0px;
+  margin-top:0px;
+  margin-bottom:10px;
 }
 .natSkinStyleBrowser li  {
   list-style-type: none;
@@ -479,6 +498,12 @@ a.natFeedIcon {
   color:#444;
 }
 
+.natSubWebs a,
+.natSubWebs .natWebLink a {
+  font-weight:bold;
+}
+
+
 /* twiki styles */
 .twikiNewLink {
   color:blue;
@@ -490,14 +515,15 @@ a.natFeedIcon {
 }
 .twikiBroadcastMessage {
   background:yellow;
+  color:black;
   position:fixed;
   border:2px solid orange;
   padding:2px;
   left:2px;
   bottom:0px;
   width:99%;
-  font-size:small;
   line-height:100%;
+  z-index:999; /* fixes opera issues, thanks to ktwilight */
 }
 
 /* twiki tables */
@@ -510,9 +536,7 @@ a.natFeedIcon {
 
 .twikiTable th, 
 .twikiTable td {
-  padding-left:5px;
-  padding-right:5px;
-  padding-top:2px;
+  padding:2px 5px;
   line-height:140%;
   border:0px;
 }
@@ -521,10 +545,12 @@ a.natFeedIcon {
   font-weight:bold;
   text-align:left;
 }
-.twikiAttachments {
-  overflow:auto;
-  padding:1px;
+
+.twikiTable th img {
+  vertical-align:middle;
+  margin-left:2px;
 }
+
 .twikiDiffTable td {
   border:0px;
 }
@@ -620,18 +646,21 @@ td.twikiDiffAddedHeader {
 td.twikiDiffChangedText {
   color:red;
 }
+.twikiWebIndent {
+  margin:0 0 0 1em;
+}
 
 /* CAIRO-HACK to use the FORMBUTTON of the NatSkin */
 .natTopicForm .twikiChangeFormButtonHolder,
 .natTopicForm .twikiChangeFormButton {
-  display:none;
+  /*display:none;*/
 }
 
 /* see also page.nat.tmpl */
 .natMiddle .natExternalLink:after {
   margin-left:3px;
-  content:url("external.png");
   margin-right:3px;
+  content:url("external.png");
 }
 
 
@@ -718,7 +747,6 @@ img.alignleft {
   padding-left:25px;
   padding-right:5px;
   padding-bottom:5px;
-  font-size:small;
   text-transform:capitalize;
 }
 
@@ -822,3 +850,17 @@ img.alignleft {
   bottom:2px;
 }
 
+/* image plugin */
+.imageFloat .natExternalLink:after,
+.imageFrame .natExternalLink:after,
+.imageFloat a:after,
+.imageFrame a:after {
+  content:"";
+  margin:0px;
+}
+.imageFloat .natExternalLink:hover,
+.imageFrame .natExternalLink:hover,
+.imageFloat a:hover,
+.imageFrame a:hover {
+  text-decoration:none !important;
+}

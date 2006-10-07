@@ -60,6 +60,7 @@ use strict;
 ### use warnings;
 
 use Date::Calc qw(:all);
+use CGI;
 
 # =========================
 use vars qw(
@@ -75,6 +76,7 @@ use vars qw(
 	$theWeb $theTopic $attributes
 	$startDays
 	@processedTopics
+	$hlid
     );
 
 # This should always be $Rev$ so that TWiki can determine the checked-in
@@ -87,7 +89,10 @@ $VERSION = '$Rev$';
 # of the version number in PLUGINDESCRIPTIONS.
 $RELEASE = 'Dakar';
 
-$REVISION = '1.017'; #dro# fixed minor bug (periodic repeater)
+$REVISION = '1.020'; #dro# added week attribute requested by TWiki:Main.JanFilipsky; added tooltip to day headers;
+#$REVISION = '1.019'; #dro# improved navigation; fixed %<nop>ICON% tag handling bug reported by TWiki:Main.UlfJastrow;
+#$REVISION = '1.018'; #dro# fixed periodic event bug; added navigation feature
+#$REVISION = '1.017'; #dro# fixed minor bug (periodic repeater)
 #$REVISION = '1.016'; #dro# fixed some major bugs: deep recursion bug reported by TWiki:Main.ChrisHausen; exception handling bug (concerns Dakar)
 #$REVISION = '1.015'; #dro# added class attribute (holidaylistPluginTable) to table tag for stylesheet support (thanx TWiki:Main.HaraldJoerg and TWiki:Main.ArthurClemens); fixed mod_perl preload bug (removed 'use warnings;') reported by TWiki:Main.KennethLavrsen
 #$REVISION = '1.014'; #dro# incorporated documentation fixes by TWiki:Main.KennethLavrsen (Bugs:Item1440) 
@@ -187,7 +192,20 @@ sub initDefaults() {
 		unknownparamsmsg=> '%RED% Sorry, some parameters are unknown: %UNKNOWNPARAMSLIST% %ENDCOLOR% <br/> Allowed parameters are (see TWiki.HolidaylistPlugin topic for more details): %KNOWNPARAMSLIST%',
 		enablepubholidays	=> 1,		# enable public holidays
 		showpubholidays	=> 0,		# show public holidays in a separate row
-		pubholidayicon	=> ':-)'	# public holiday icon
+		pubholidayicon	=> ':-)',	# public holiday icon
+		navnext => '&gt;|',		# navigation button to the next n days
+		navnexthalf =>'&gt;',		# navigation button to the next n/2 days
+		navnexttitle => 'Next %n day(s)',
+		navnexthalftitle => 'Next %n day(s)',
+		navprev => '<br/>|&lt;',		# navigation button to the last n days
+		navprevhalf => '&lt;',		# navigation button to the last n/2 days
+		navprevtitle => 'Previous %n day(s)',
+		navprevhalftitle => 'Previous %n day(s)',
+		navhome => '%d',
+		navhometitle => 'Go to the start date',
+		navenable => 1,
+		navdays => undef,
+		week => undef,
 	);
 
 	# reminder: don't forget change documentation (HolidaylistPlugin topic) if you add a new rendered option
@@ -195,12 +213,14 @@ sub initDefaults() {
 
 	# options to turn or switch things on (1) or off (0)
 	# this special handling allows 'on'/'yes';'off'/'no' values additionally to '1'/'0'
-	@flagOptions = ( 'showweekends', 'removeatwork', 'compatmode', 'enablepubholidays', 'showpubholidays' );
+	@flagOptions = ( 'showweekends', 'removeatwork', 'compatmode', 'enablepubholidays', 'showpubholidays', 'navenable' );
 
 	%months = ( Jan=>1, Feb=>2, Mar=>3, Apr=>4, May=>5, Jun=>6, 
 	            Jul=>7, Aug=>8, Sep=>9, Oct=>10, Nov=>11, Dec=>12 );
 
 	%daysofweek = ( Mon=>1, Tue=>2, Wed=>3, Thu=>4, Fri=>5, Sat=>6, Sun=>7 );
+
+	$hlid = 0;
 
 	$defaultsInitialized = 1;
 
@@ -311,6 +331,8 @@ sub handleHolidaylist() {
 
 	&initDefaults() unless $defaultsInitialized;
 
+	$hlid++;
+
 	return &createUnknownParamsMessage() unless &initOptions($attributes);
 
 	&initRegexs(); 
@@ -367,6 +389,28 @@ sub getStartDate() {
 		if ($matched) {
 			$dd=1;
 			$options{days}=Days_in_Month($yy, $mm);
+		}
+	}
+	# handle week (absolute or offset) 
+	if (defined $options{week}) {
+		my $week = $options{week};
+		my $matched = 0;
+		if (($week =~ /^\d+$/)&&($week>0)&&($week<=Weeks_in_Year($yy))) {
+			$matched = 1;
+		} elsif ($week =~ /^[\+\-]\d+$/) {
+			$matched = 1;
+			($yy,$mm,$dd) = Add_Delta_Days($yy,$mm,$dd, 7 * $week);
+			$week = Week_of_Year($yy,$mm,$dd);
+		}
+		($yy,$mm,$dd) = Monday_of_Week($week, $yy) if ($matched);
+	}
+	# handle paging:
+	my $cgi = &TWiki::Func::getCgiQuery();
+	if (defined $cgi->param('hlppage'.$hlid)) {
+		if ($cgi->param('hlppage'.$hlid) =~ m/^([\+\-]?[\d\.]+)$/) {
+			my $hlppage = $1; 
+			my $days = int( (defined $options{'navdays'}?$options{'navdays'}:$options{'days'}) * $hlppage );
+			($yy,$mm,$dd) = Add_Delta_Days($yy,$mm,$dd, $days);
 		}
 	}
 
@@ -646,7 +690,7 @@ sub handleCalendarEvents {
 				}
 			}
 		}
-	} elsif ($line =~ m/^$day_rx\s+/) {
+	} elsif ($line =~ m/^$day_rx\s+\-/) {
 		### Monthly: dd
 		($strdate, $person, $location, $icon) = split /\s+\-\s+/, $line, 4;
 		my ($ptableref,$ltableref,$itableref) = &getTableRefs($person);
@@ -739,10 +783,12 @@ sub handleCalendarEvents {
 		return if (defined $start) && ($start > $endDays);
 		return if (defined $end) && ($end < $startDays);
 
-		($yy1, $mm1, $dd1) = Add_Delta_Days($yy1, $mm1, $dd1, 
+		if ( $start < $startDays ) {
+			($yy1, $mm1, $dd1) = Add_Delta_Days($yy1, $mm1, $dd1, 
 			### $n1 * int( (abs($startDays-$start)/$n1) + ($startDays-$start!=0?1:0) ) );
-			$n1 * int( (abs($startDays-$start)/$n1) + ((abs($startDays-$start) % $n1)!=0?1:0) ) );
-		$start = Date_to_Days($yy1, $mm1, $dd1);
+				$n1 * int( (abs($startDays-$start)/$n1) + ((abs($startDays-$start) % $n1)!=0?1:0) ) );
+			$start = Date_to_Days($yy1, $mm1, $dd1);
+		}
 
 		# start at first occurence and increment by repeating count ($n1)
 		for (my $i=(abs($startDays-$start) % $n1); (($i < $options{days})&&((!defined $end) || ( ($startDays+$i) <= $end)) ); $i+=$n1) {
@@ -818,7 +864,7 @@ sub renderHolidaylist() {
 
 	# create table header:
 	
-	$text .= '<noautolink><table'
+	$text .= '<noautolink><a name="hlpid'.$hlid.'"/><table'
 	       . ' class="holidaylistPluginTable"'
 	       . ' border="'.$options{border}.'"'
                . ' cellpadding="'.$options{cellpadding}.'"'
@@ -834,6 +880,7 @@ sub renderHolidaylist() {
 	$text .= '<th align="left"'.(defined $options{nwidth}?' width="'.$options{nwidth}.'"':'').'>'
 			.'<noautolink>'
 			.$options{name}
+			.($options{'navenable'}?&renderNav(-1).&renderNav(0).&renderNav(1):'')
 			.'</noautolink>'
 			.'</th>';
 
@@ -849,6 +896,7 @@ sub renderHolidaylist() {
 		$bgcolor=$options{todaybgcolor} if (defined $options{todaybgcolor})&&($today == $date);
 		
 		$text.='<th align="center" bgcolor="'.$bgcolor.'"'
+			.' title="'.Date_to_Text_Long($yy1,$mm1,$dd1).'"'
 			. (((defined $options{tcwidth})&&(($dow<6)||$options{showweekends}))?' width="'.$options{tcwidth}.'"':'')
 		        .((($today==$date)&&(defined $options{todayfgcolor}))?' style="color:' . $options{todayfgcolor} . '"' : '') .'>';
 		$text.='<noautolink>';
@@ -926,6 +974,7 @@ sub renderHolidaylist() {
 						$location =~ s/\@all//ig if $options{enablepubholidays}; # remove @all
 
 						$location=~s/<!--.*?-->//g; # remove HTML comments
+						$location=~ s/ - <img[^>]+>//ig; # throw image address away
 					
 						$location=&HTML::Entities::encode_entities($location); # quote special characters like "<>
 
@@ -936,8 +985,8 @@ sub renderHolidaylist() {
 						$location=~s/([A-Z][a-z]+\w*[A-Z][a-z0-9]+)/!$1/g; # quote WikiNames
 						$location=~s/\%\w+(\{[^\}\%]*\})?\%//g; # delete Vars
 
-						$icon=~s/(<img[^>]+alt=")[^">]+("[^>]*>)/$1$location$2/is;
-						$icon=~s/(<img[^>]+title=")[^">]+("[^>]*>)/$1$location$2/is;
+						$icon=~s/<img /<img alt="$location" /is unless $icon=~s/(<img[^>]+alt=")[^">]+("[^>]*>)/$1$location$2/is;
+						$icon=~s/<img /<img title="$location" /is unless $icon=~s/(<img[^>]+title=")[^">]+("[^>]*>)/$1$location$2/is;
 					}
 				};
 				$text.= $icon;
@@ -951,6 +1000,88 @@ sub renderHolidaylist() {
 	$text .= '</table></noautolink>';
 
 	return $text;
+}
+# =========================
+sub renderNav {
+	my ($nextp) = @_;
+	my $nav = "";
+
+	my $cgi = &TWiki::Func::getCgiQuery();
+	my $newcgi = new CGI($cgi);
+	my $newhalfcgi = new CGI($cgi);
+
+	my $days = (defined $options{'navdays'})?$options{'navdays'}:$options{'days'};
+
+	my $qphlppage = $cgi->param('hlppage'.$hlid);
+	$qphlppage = "0" unless defined $qphlppage;
+	$qphlppage =~ m/^([\+\-]?[\d\.]+)$/;
+	my $hlppage = $1;
+	$hlppage = 0 unless defined $hlppage;
+
+	$hlppage += $nextp;
+	my $halfpage = 0;
+	$halfpage= $hlppage - 0.5 if $nextp==1;
+	$halfpage= $hlppage + 0.5 if $nextp==-1;
+
+	if (($nextp==0)||($hlppage == 0)) {
+		$newcgi->delete('hlppage'.$hlid);
+	} else {
+		$newcgi->param(-name=>'hlppage'.$hlid,-value=>$hlppage);
+	}
+	if (($nextp==0)||($halfpage == 0)) {
+		$newhalfcgi->delete('hlppage'.$hlid);
+	} else {
+		$newhalfcgi->param(-name=>'hlppage'.$hlid,-value=>$halfpage);
+	}
+
+	$newcgi->delete('contenttype');
+	$newhalfcgi->delete('contenttype');
+
+	my $href = $newcgi->self_url();
+	$href=~s/\#.*$//;
+	$href.="#hlpid$hlid";
+
+	my $halfhref = $newhalfcgi->self_url();
+	$halfhref=~s/\#.$//;	
+	$halfhref.="#hlpid$hlid";
+
+	my $title = $options{'navhometitle'};
+	my $d = int($days*($hlppage-$nextp));
+	if ($d==0) {
+		$d='';
+	} else {
+		$d='+'.$d if ($d>0);
+	}
+
+	$title = $options{'navnexttitle'} if $nextp==1;
+	$title = $options{'navprevtitle'} if $nextp==-1;
+	$title=~s/%n/$days/g;
+	$title=~s/%d/$d/eg;
+
+	my $halftitle = "";
+	$halftitle = $options{'navnexthalftitle'} if $nextp==1;
+	$halftitle = $options{'navprevhalftitle'} if $nextp==-1;
+	my $halfdays = int($days/2);
+	$halftitle=~s/%n/$halfdays/g;
+	$halftitle=~s/%d/$d/eg;
+
+	my $text = $options{'navhome'};
+	$text = $options{'navnext'} if $nextp==1;
+	$text = $options{'navprev'} if $nextp==-1;
+	$text=~s/%n/$days/g;
+	$text=~s/%d/$d/eg;
+
+	my $halftext = "";
+	$halftext = $options{'navnexthalf'} if $nextp==1;
+	$halftext = $options{'navprevhalf'} if $nextp==-1;
+
+
+	$nav.=$cgi->a({-href=>$halfhref,-title=>$halftitle}, $halftext) if ($nextp==1);
+	$nav.=$cgi->a({-href=>$href,-title=>$title}, $text);
+	$nav.=$cgi->a({-href=>$halfhref,-title=>$halftitle}, $halftext) if ($nextp==-1);
+
+
+	return $nav;
 }
 ### dro: following code is derived from TWiki:Plugins.CalendarPlugin:
 # =========================

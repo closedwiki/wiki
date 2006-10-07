@@ -65,6 +65,8 @@ A wide range of standard styles are used in the TWiki core code and topics, and 
 |.twikiSortedAscendingCol  |TablePlugin  |
 |.twikiSortedDescendingCol  |TablePlugin  |
 |.twikiFirstCol  |TablePlugin  |
+|.twikiTableEven |TablePlugin  |
+|.twikiTableOdd |TablePlugin  |
 
 ---+++ TWiki Styles in Templates
 

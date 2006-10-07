@@ -1,12 +1,12 @@
-%META:TOPICINFO{author="TWikiContributor" date="1129330724" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributors" date="1159311585" format="1.1" version="1.2"}%
 %STARTINCLUDE%
 ---+!! Pattern skin
 
-*<nop>PatternSkin is developed to provide a CSS based default look and feel for TWiki - flexible and W3C-compliant.* Its layout and color scheme are designed to provide a nice, clean and productive _editing environment_. For use in corporate or perhaps in personal websites it should be fairly easy to tune the looks or even create a !PatternSkin-based new skin.
+*<nop>PatternSkin provides a CSS based default look and feel for TWiki - flexible and W3C-compliant.* Its layout and color scheme are designed to provide a nice, clean and productive _editing environment_. For use in corporate or perhaps in personal websites it should be fairly easy to tune the looks or even create a !PatternSkin-based new skin.
 
 %TOC{title="Page contents"}%
 
----++ Screen Shot
+---++ Screenshot
 
 <a href="%ATTACHURL%/patternskin_screenshot_full.png"><img src="%ATTACHURL%/patternskin_screenshot.jpg" style="border:1px solid #eee;" alt="Click for full screen image" width="600" height="130" /></a>
 <!--
@@ -15,13 +15,13 @@
 
 ---++ Creating your own look
 
-It is easy to tune the look and feel of !PatternSkin by changing the color and space (margin, padding) settings in the Style Sheet files. 
+---+++ Template customization
+%TWIKIWEB%.PatternSkinCustomization - how to configure page elements
+%TOC{"%TWIKIWEB%.PatternSkinCustomization"}%
 
-You may also choose to radically change the look and create a !PatternSkin-based new skin. This is easier than to create a skin by writing new template files; you can concentrate on how things should look instead of what elements should get displayed.
-
-   * PatternSkinCustomization - how to configure page elements
-   * PatternSkinCssCookbook - how to customize the default look of TWiki
-   * PatternSkinCss - documentation of !PatternSkin CSS classes
+---+++ Style sheet customization
+%TWIKIWEB%.PatternSkinCssCookbook - how to customize the visual style
+%TOC{"%TWIKIWEB%.PatternSkinCssCookbook"}%
 
 ---++ Supported browsers
 
@@ -64,6 +64,8 @@ If TWIKILAYOUTURL or TWIKISTYLEURL don't give a value or point to non-existing f
       * <nop>Set TWIKICOLORSURL = %<nop>PUBURLPATH%/%<nop>TWIKIWEB%/PatternSkin/colors.css
 </pre>
 
+*NOTE:* customization of these values should be done in [[%MAINWEB%.TWikiPreferences]]
+
 If this still does not work, contact the administrator who installs skins.
 
 For further troubleshooting and feedback, go to TWiki:Plugins/PatternSkinDev. Report bugs in the [[TWiki:Support/WebHome][Support web]].
@@ -72,13 +74,16 @@ For further troubleshooting and feedback, go to TWiki:Plugins/PatternSkinDev. Re
 
 |  Description: | TWiki's default skin; CSS based, flexible and W3C-compliant |
 |  Screenshot: | <a href="%ATTACHURL%/patternskin_screenshot_full.png"><img src="%ATTACHURL%/patternskin_screenshot.jpg" style="border:1px solid #eee;" alt="Click for full screen image" width="600" height="130" /></a> |
-|  Preview: | [[%SCRIPTURL{view}%/%WEB%/%TOPIC%?skin=pattern][Preview with this topic]] |
+|  Preview: | [[%SCRIPTURL{view}%/%WEB%/%TOPIC%?skin=pattern][Preview with this skin]] |
 |  Base Name: | pattern |
 |  Skin Author: | TWiki:Main/ArthurClemens |
-|  Skin Version: | 31 Jan 2006 (v2.0.0) | 
+|  Skin Version: | 26 Sep 2006 (v2.0.4) | 
 |  History: | <!-- specify latest version first -->&nbsp; |
-|  31 Jan 2006: | v.2.0.0 - DAKAR RELEASE VERSION |
-|  28 Aug 2004: | v.1.0.9 - CAIRO RELEASE VERSION |
+|  26 Sep 2006: | v.2.0.5 - Fixed form background colors |
+|  22 Jul 2006: | v.2.0.4 - Refactored info in colors.css; fixed textarea color |
+|  26 Jun 2006: | v.2.0.3 - TWiki 4.0.3 (Dakar) RELEASE VERSION |
+|  31 Jan 2006: | v.2.0.0 - TWiki 4.0.0 (Dakar) RELEASE VERSION |
+|  28 Aug 2004: | v.1.0.9 - TWiki 3.0 (Cairo) RELEASE VERSION |
 |  08 Aug 2004: | Initial version (v1.0.0) |
 |  Dependencies: | TWiki:Plugins/TwistyContrib (automatically supported by Dakar) |
 |  Skin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
@@ -87,44 +92,61 @@ For further troubleshooting and feedback, go to TWiki:Plugins/PatternSkinDev. Re
 
 ---++ Related topics
 
-   * TWikiCss
-   * PatternSkinCss
-   * PatternSkinCssCookbook
-   * PatternSkinCssCookbookCenterPage
-   * PatternSkinCssCookbookEditTableStyle
-   * PatternSkinCssCookbookFonts
-   * PatternSkinCssCookbookNoLeftBar
-   * PatternSkinCssCookbookNoTopBar
-   * PatternSkinCustomization
-   * PatternSkinJavascripts
-   * WebBottomBar
-   * WebLeftBar
-   * WebLeftBarCookbook
-   * WebLeftBarExample
-   * WebLeftBarLogin
-   * WebLeftBarPersonalTemplate
-   * WebLeftBarSearch
-   * WebLeftBarWebsList
-   * WebTopBar
-   * AdminDocumentationCategory
+   * %TWIKIWEB%.TWikiCss
+   * %TWIKIWEB%.PatternSkinCss
+   * %TWIKIWEB%.PatternSkinCssCookbook
+   * %TWIKIWEB%.PatternSkinCssCookbookCenterPage
+   * %TWIKIWEB%.PatternSkinCssCookbookEditTableStyle
+   * %TWIKIWEB%.PatternSkinCssCookbookFonts
+   * %TWIKIWEB%.PatternSkinCssCookbookNoLeftBar
+   * %TWIKIWEB%.PatternSkinCssCookbookNoTopBar
+   * %TWIKIWEB%.PatternSkinCustomization
+   * %TWIKIWEB%.PatternSkinJavascripts
+   * %TWIKIWEB%.WebBottomBar
+   * %TWIKIWEB%.WebLeftBar
+   * %TWIKIWEB%.WebLeftBarCookbook
+   * %TWIKIWEB%.WebLeftBarExample
+   * %TWIKIWEB%.WebLeftBarLogin
+   * %TWIKIWEB%.WebLeftBarPersonalTemplate
+   * %TWIKIWEB%.WebLeftBarSearch
+   * %TWIKIWEB%.WebLeftBarWebsList
+   * %TWIKIWEB%.WebTopBar
+   * %TWIKIWEB%.AdminDocumentationCategory
 
 Other skins:
-   * TWikiSkins
-   * TWikiSkinBrowser
+   * %TWIKIWEB%.TWikiSkins
+   * %TWIKIWEB%.TWikiSkinBrowser
 
 ---++ Feedback
 
 Leave remarks, suggestions and other feedback in TWiki:Plugins.PatternSkinDev.
 
 
-%META:FILEATTACHMENT{name="style.css" attr="" autoattached="1" comment="Style: appearance: margins, paddings, fonts" date="1129325986" path="style.css" size="19065" user="TWikiContributor" version=""}%
-%META:FILEATTACHMENT{name="tips_bg.gif" attr="" autoattached="1" comment="" date="1129323432" path="tips_bg.gif" size="3813" user="UnknownUser" version=""}%
-%META:FILEATTACHMENT{name="twikiTable_header_bg.gif" attr="" autoattached="1" comment="" date="1129323321" path="twikiTable_header_bg.gif" size="238" user="UnknownUser" version=""}%
-%META:FILEATTACHMENT{name="page_bg.gif" attr="" autoattached="1" comment="" date="1129323311" path="page_bg.gif" size="4085" user="UnknownUser" version=""}%
-%META:FILEATTACHMENT{name="layout.css" attr="" autoattached="1" comment="Layout: positioning of page elements" date="1129323310" path="layout.css" size="1676" user="TWikiContributor" version=""}%
-%META:FILEATTACHMENT{name="info_bg.gif" attr="" autoattached="1" comment="" date="1129323309" path="info_bg.gif" size="238" user="UnknownUser" version=""}%
-%META:FILEATTACHMENT{name="colors.css" attr="" autoattached="1" comment="Text colors, border colors, background colors" date="1129325055" path="colors.css" size="15202" user="UnknownUser" version=""}%
-%META:FILEATTACHMENT{name="twikiPageForm_bg.gif" attr="" autoattached="1" comment="" date="1129323320" path="twikiPageForm_bg.gif" size="238" user="UnknownUser" version=""}%
-%META:FILEATTACHMENT{name="bullet-blue.gif" attr="" autoattached="1" comment="" date="1129323302" path="bullet-blue.gif" size="49" user="UnknownUser" version=""}%
-%META:FILEATTACHMENT{name="view.pattern.tmpl" attr="" autoattached="1" comment="" date="1129323322" path="view.pattern.tmpl" size="5629" user="UnknownUser" version=""}%
-%META:FILEATTACHMENT{name="i_arrow_down.gif" attr="" autoattached="1" comment="Icon: down arrow; used for Table Of Contents" date="1129323308" path="i_arrow_down.gif" size="56" user="TWikiContributor" version=""}%
+%META:FILEATTACHMENT{name="oopsmore_diff_sidebyside.gif" attr="" autoattached="1" comment="" date="1159030472" path="oopsmore_diff_sidebyside.gif" size="1994" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="bullet-down.gif" attr="" autoattached="1" comment="" date="1159030472" path="bullet-down.gif" size="441" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="striped_white.gif" attr="" autoattached="1" comment="" date="1159030474" path="striped_white.gif" size="234" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="gradient_blue.gif" attr="" autoattached="1" comment="" date="1159030473" path="gradient_blue.gif" size="3813" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="background_input.gif" attr="" autoattached="1" comment="" date="1159030472" path="background_input.gif" size="55" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="TWiki_header.gif" attr="" autoattached="1" comment="" date="1159030472" path="TWiki_header.gif" size="18053" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="layout.css" attr="" autoattached="1" comment="" date="1159038567" path="layout.css" size="4952" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="oopsmore_diff_sequential.gif" attr="" autoattached="1" comment="" date="1159030472" path="oopsmore_diff_sequential.gif" size="3464" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="form_gradient.gif" attr="" autoattached="1" comment="" date="1159030471" path="form_gradient.gif" size="4115" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="background_submit.gif" attr="" autoattached="1" comment="" date="1159030473" path="background_submit.gif" size="158" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="background_button.gif" attr="" autoattached="1" comment="" date="1159030474" path="background_button.gif" size="104" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="patternskin_screenshot.jpg" attr="" autoattached="1" comment="" date="1159030474" path="patternskin_screenshot.jpg" size="41406" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="striped_pageshadow.gif" attr="" autoattached="1" comment="" date="1159030470" path="striped_pageshadow.gif" size="234" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="patternskin_screenshot_full.png" attr="" autoattached="1" comment="" date="1159030473" path="patternskin_screenshot_full.png" size="150987" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="TWiki_header.psd" attr="" autoattached="1" comment="" date="1159030471" path="TWiki_header.psd" size="425495" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="style.css" attr="" autoattached="1" comment="" date="1159306534" path="style.css" size="19435" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="print.css" attr="" autoattached="1" comment="" date="1159038573" path="print.css" size="1984" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="striped_gray.gif" attr="" autoattached="1" comment="" date="1159030472" path="striped_gray.gif" size="238" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="striped_yellow.gif" attr="" autoattached="1" comment="" date="1159030474" path="striped_yellow.gif" size="238" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="pattern.js" attr="" autoattached="1" comment="" date="1159030471" path="pattern.js" size="494" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="striped_blue.gif" attr="" autoattached="1" comment="" date="1159030471" path="striped_blue.gif" size="238" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="colors.css" attr="" autoattached="1" comment="" date="1159053978" path="colors.css" size="17464" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="gradient_yellow.gif" attr="" autoattached="1" comment="" date="1159030472" path="gradient_yellow.gif" size="4114" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="bullet-blue.gif" attr="" autoattached="1" comment="" date="1159030470" path="bullet-blue.gif" size="49" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="background_action.gif" attr="" autoattached="1" comment="" date="1159030470" path="background_action.gif" size="104" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="oopsmore_diff_debug.gif" attr="" autoattached="1" comment="" date="1159030473" path="oopsmore_diff_debug.gif" size="3205" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="background_form_element.gif" attr="" autoattached="1" comment="" date="1159030470" path="background_form_element.gif" size="70" user="UnknownUser" version=""}%
+%META:REVCOMMENT{ncomments="0"}%

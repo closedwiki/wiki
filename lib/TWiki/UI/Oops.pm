@@ -71,7 +71,6 @@ the =$query= are added as hiddens into the expanded template.
 sub oops {
     my( $session, $web, $topic, $query, $keep ) = @_;
 
-    $session->enterContext( 'oops' );
     my $tmplName;
     my $def;
     my @params;
@@ -125,18 +124,6 @@ sub oops {
         $tmplData = $session->handleCommonTags( $tmplData, $web, $topic );
         $tmplData = $session->{renderer}->getRenderedVersion( $tmplData, $web,
                                                               $topic );
-        if( $keep ) {
-            my $qp = '';
-            foreach my $p ( $query->param() ) {
-                # SMELL: what about multi-valued parameters? Do we
-                # ever use them?
-                $qp .= CGI::hidden( -name=>$p,
-                                    -default=>$query->param( $p ) );
-            }
-            $tmplData =~ s/%QUERYPARAMS%/$qp/g;
-        } else {
-            $tmplData =~ s/%QUERYPARAMS%//g;
-        }
     }
 
     $session->writeCompletePage( $tmplData );

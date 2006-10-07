@@ -63,9 +63,9 @@ $storable = 1;
 
 =begin text
 
----+++ =new($dataDir, $web)=
-   * =$dataDir= location of cache file
+---+++ =new($web, $cacheName)=
    * =$web= name of web to create the object for.
+   * =$cacheName= name of cache file
 Construct a new DBCache object.
 
 =cut
@@ -287,6 +287,7 @@ sub load {
     return "0 0 0" if ( $this->{loaded} );
 
     my $web = $this->{_web};
+    $web =~ s/\./\//go;
     my @topics = TWiki::Func::getTopicList( $web );
     my $dataDir = TWiki::Func::getDataDir() . "/$web";
     my $cacheFile = $dataDir . "/" . $this->{_cachename};

@@ -193,9 +193,11 @@ sub readTopicRaw {
         $text = $handler->getRevision( $version );
     }
 
+    # Note: passing undef as meta will cause extraction of the meta
+    # from the (raw) text passed
     if( $user &&
           !$this->{session}->{security}->checkAccessPermission
-            ( 'view', $user, $text, $topic, $web )) {
+            ( 'view', $user, $text, undef, $topic, $web )) {
         throw TWiki::AccessControlException(
             'VIEW', $user, $web, $topic,
             $this->{session}->{security}->getReason());
@@ -227,7 +229,7 @@ sub moveAttachment {
         my( $ometa, $otext ) = $this->readTopic( undef, $oldWeb, $oldTopic );
         if( $user &&
               !$this->{session}->{security}->checkAccessPermission
-                ( 'change', $user, $otext, $oldTopic, $oldWeb )) {
+                ( 'change', $user, $otext, $ometa, $oldTopic, $oldWeb )) {
             throw TWiki::AccessControlException(
                 'CHANGE', $user, $oldWeb, $oldTopic,
                 $this->{session}->{security}->getReason());
@@ -236,7 +238,7 @@ sub moveAttachment {
         my ( $nmeta, $ntext ) = $this->readTopic( undef, $newWeb, $newTopic );
         if( $user &&
               !$this->{session}->{security}->checkAccessPermission
-                ( 'change', $user, $ntext, $newTopic, $newWeb )) {
+                ( 'change', $user, $ntext, $nmeta, $newTopic, $newWeb )) {
             throw TWiki::AccessControlException(
                 'CHANGE', $user, $newWeb, $newTopic,
                 $this->{session}->{security}->getReason());
@@ -269,7 +271,7 @@ sub moveAttachment {
         $this->{session}->writeLog(
             'move',
             $fileAttachment->{movefrom}.' moved to '.
-              $fileAttachment->{movedto}, $user );
+              $fileAttachment->{movedto}, $user->webDotWikiName() );
     } finally {
         $this->unlockTopic( $user, $oldWeb, $oldTopic );
         $this->unlockTopic( $user, $newWeb, $newTopic );
@@ -300,7 +302,7 @@ sub getAttachmentStream {
 
     if( $user &&
           !$this->{session}->{security}->checkAccessPermission
-            ( 'view', $user, undef, $topic, $web )) {
+            ( 'view', $user, undef, undef, $topic, $web )) {
         throw TWiki::AccessControlException( 'VIEW', $user, $web, $topic,
                                              $this->{session}->{security}->getReason());
     }
@@ -436,9 +438,10 @@ sub moveTopic {
     $this->lockTopic( $user, $oldWeb, $oldTopic );
     try {
         my $otext = $this->readTopicRaw( undef, $oldWeb, $oldTopic );
+        # Note: undef $meta param will cause $otext to be parsed for meta
         if( $user &&
               !$this->{session}->{security}->checkAccessPermission
-                ( 'change', $user, $otext, $oldTopic, $oldWeb )) {
+                ( 'change', $user, $otext, undef, $oldTopic, $oldWeb )) {
             throw TWiki::AccessControlException(
                 'CHANGE', $user,
                 $oldWeb, $oldTopic,
@@ -451,7 +454,7 @@ sub moveTopic {
         }
         if( $user &&
               !$this->{session}->{security}->checkAccessPermission
-                ( 'change', $user, $ntext, $newTopic, $newWeb )) {
+                ( 'change', $user, $ntext, $nmeta, $newTopic, $newWeb )) {
             throw TWiki::AccessControlException(
                 'CHANGE', $user, $newWeb, $newTopic,
                 $this->{session}->{security}->getReason());
@@ -567,7 +570,7 @@ sub readAttachment {
 
     if( $user &&
           !$this->{session}->{security}->checkAccessPermission
-            ( 'view', $user, undef, $topic, $web )) {
+            ( 'view', $user, undef, undef, $topic, $web )) {
         throw TWiki::AccessControlException(
             'VIEW', $user, $web, $topic,
             $this->{session}->{security}->getReason());
@@ -820,7 +823,7 @@ sub saveTopic {
 
     if( $user &&
           !$this->{session}->{security}->checkAccessPermission
-            ( 'change', $user, undef, $topic, $web )) {
+            ( 'change', $user, undef, undef, $topic, $web )) {
 
         throw TWiki::AccessControlException(
             'CHANGE', $user, $web, $topic,
@@ -909,7 +912,7 @@ sub saveAttachment {
 
         if( $user &&
               !$this->{session}->{security}->checkAccessPermission
-                ( 'change', $user, $text, $topic, $web )) {
+                ( 'change', $user, $text, $meta, $topic, $web )) {
 
             throw TWiki::AccessControlException(
                 'CHANGE', $user, $web, $topic,
@@ -1594,7 +1597,8 @@ sub getListOfWebs {
         my $security = $this->{session}->{security};
         @webList =
           grep {
-              $security->checkAccessPermission( 'view', $user, undef, undef, $_ )
+              $security->checkAccessPermission(
+                  'view', $user, undef, undef, undef, $_ )
           } @webList;
     }
 

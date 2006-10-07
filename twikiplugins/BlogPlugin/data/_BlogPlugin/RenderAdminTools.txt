@@ -20,7 +20,7 @@ NONE
     <li>%TWISTY{id="admintools" remember="on" link="Tools"}%
       <ol>
 %~~   DBQUERY{"TopicType=~'\bAdminTool\b'"
-~~~      format="<li><a href=\"%SCRIPTURL{"view"}%/$web/$topic\"
+~~~      format="<li><a href=\"%SCRIPTURLPATH{"view"}%/$web/$topic\"
 ~~~                           title=\"$formfield(TopicDescription)\">$topic</a></li>"
 ~~~   }%
         <li> [[WebPreferences]] </li>
@@ -31,7 +31,7 @@ NONE
     <li>%TWISTY{id="topictypes" remember="on" link="TopicTypes"}%
       <ol>
 %~~   DBQUERY{"TopicType=~'\bTopicType\b'"
-~~~      format="<li><a href=\"%SCRIPTURL{"view"}%/$web/$topic\"
+~~~      format="<li><a href=\"%SCRIPTURLPATH{"view"}%/$web/$topic\"
 ~~~                           title=\"$formfield(TopicDescription)\">$topic</a></li>"
 ~~~   }%
       </ol>%ENDTWISTY%
@@ -39,7 +39,7 @@ NONE
     <li>%TWISTY{id="twikiforms" remember="on" link="TWikiForms"}%
       <ol>
 %~~   DBQUERY{"TopicType=~'\bTWikiForm\b'"
-~~~      format="<li><a href=\"%SCRIPTURL{"view"}%/$web/$topic\"
+~~~      format="<li><a href=\"%SCRIPTURLPATH{"view"}%/$web/$topic\"
 ~~~                           title=\"$formfield(TopicDescription)\">$topic</a></li>"
 ~~~   }%
       </ol>%ENDTWISTY%
@@ -47,7 +47,7 @@ NONE
     <li>%TWISTY{id="topictemplates" remember="on" link="TopicTemplates"}%
       <ol>
 %~~   DBQUERY{"TopicType=~'\bTopicTemplate\b'"
-~~~      format="<li><a href=\"%SCRIPTURL{"view"}%/$web/$topic\"
+~~~      format="<li><a href=\"%SCRIPTURLPATH{"view"}%/$web/$topic\"
 ~~~                           title=\"$formfield(TopicDescription)\">$topic</a></li>"
 ~~~   }%
       </ol>%ENDTWISTY%
@@ -55,7 +55,7 @@ NONE
     <li>%TWISTY{id="topicviews" remember="on" link="TopicViews"}%
       <ol>
 %~~   DBQUERY{"TopicType=~'\bTopicView\b'"
-~~~      format="<li><a href=\"%SCRIPTURL{"view"}%/$web/$topic\"
+~~~      format="<li><a href=\"%SCRIPTURLPATH{"view"}%/$web/$topic\"
 ~~~                           title=\"$formfield(TopicDescription)\">$topic</a></li>"
 ~~~   }%
       </ol>%ENDTWISTY%
@@ -63,7 +63,7 @@ NONE
     <li>%TWISTY{id="topicfunctions" remember="on" link="TopicFunctions"}%
       <ol>
 %~~   DBQUERY{"TopicType=~'\bTopicFunction\b'"
-~~~      format="<li><a href=\"%SCRIPTURL{"view"}%/$web/$topic\"
+~~~      format="<li><a href=\"%SCRIPTURLPATH{"view"}%/$web/$topic\"
 ~~~                           title=\"$formfield(TopicDescription)\">$topic</a></li>"
 ~~~   }%
       </ol>%ENDTWISTY%
@@ -76,13 +76,6 @@ NONE
 </div>
 </div>
 </div>
-
-<!-- 
-%~~   CALC{"$IF($EXISTS(_BlogPlugin/WebHome),
-~~~     <li><a href=\"%SCRIPTURLPATH{"view"}%/_BlogPlugin/WebHome\">BlogTemplateWeb</a></li>)"
-~~~   }%
-
--->
 
 %DBCALL{"RenderFunctionCallers"}%
 

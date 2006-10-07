@@ -49,6 +49,8 @@ $VERSION = '$Rev$';
 # of the version number in PLUGINDESCRIPTIONS.
 $RELEASE = 'Dakar';
 
+use strict;
+
 $pluginName = 'DirectedGraphPlugin';
 use Digest::MD5 qw( md5_hex );
 
@@ -258,8 +260,7 @@ sub handleDot
                 # errors existed so remove created files
                 unlink $image            unless $debug;
                 unlink $tmpFile          unless $debug;
-                unlink $tmpFile . ".err" unless $debug;
-              return showError( $status, $output, $hashed_math_strings{"$hash_code"} );
+              return showError( $status, $output, $hashed_math_strings{"$hash_code"}, $tmpFile.".err" );
             } ### if ($status)
             unlink $tmpFile . ".err" unless $debug;
         } ### unless ($antialias)
@@ -284,8 +285,7 @@ sub handleDot
                 # errors existed so remove created files
                 unlink $cmapx            unless $debug;
                 unlink $tmpFile          unless $debug;
-                unlink $tmpFile . ".err" unless $debug;
-              return showError( $status, $output, $hashed_math_strings{"$hash_code"} );
+              return showError( $status, $output, $hashed_math_strings{"$hash_code"}, $tmpFile.".err" );
             } ### if ($status)
             unlink $tmpFile . ".err" unless $debug;
         } ### if ($doMap)
@@ -308,8 +308,7 @@ sub handleDot
                 # errors existed so remove created files
                 unlink $svgImage         unless $debug;
                 unlink $tmpFile          unless $debug;
-                unlink $tmpFile . ".err" unless $debug;
-              return showError( $status, $output, $hashed_math_strings{"$hash_code"} );
+              return showError( $status, $output, $hashed_math_strings{"$hash_code"}, $tmpFile.".err" );
             } ### if ($status)
             unlink $tmpFile . ".err" unless $debug;
         } ### if ( $vectorformats =~...
@@ -332,15 +331,14 @@ sub handleDot
                 # errors existed so remove created files
                 unlink $psImage          unless $debug;
                 unlink $tmpFile          unless $debug;
-                unlink $tmpFile . ".err" unless $debug;
-              return showError( $status, $output, $hashed_math_strings{"$hash_code"} );
+              return showError( $status, $output, $hashed_math_strings{"$hash_code"}, $tmpFile.".err" );
             } ### if ($status)
             unlink $tmpFile . ".err" unless $debug;
         } ### if ( $antialias || ( $vectorformats...
 
         if ($antialias) {
 
-            ( $output, $status ) = $sandbox->sysCommand(
+            my ( $output, $status ) = $sandbox->sysCommand(
                 $antialiasCmd,
                 DENSITY  => $density,
                 GEOMETRY => $size,
@@ -424,7 +422,7 @@ sub handleDot
     } else {
 
         # attach "foo.png" at the source of the <dot> tag in $Web.$Topic
-        $loc = TWiki::Func::getPubUrlPath() . "/$web/$topic";
+        my $loc = TWiki::Func::getPubUrlPath() . "/$web/$topic";
       return "<img src=\"$loc/graph$hash_code.png\"/>";
     } ### else [ if ($doMap)
 } ### sub handleDot
@@ -432,10 +430,19 @@ sub handleDot
 # =========================
 sub showError
 {
-    my ( $status, $output, $text ) = @_;
+    my ( $status, $output, $text, $errFile ) = @_;
+
+    # Check error file for detailed report from graphviz binary
+    if (defined $errFile && $errFile && -s $errFile)
+    {
+        open (ERRFILE, $errFile);
+        my @errLines = <ERRFILE>;
+        $text = "*DirectedGraphPlugin error:* <verbatim>" . join("", @errLines) . "</verbatim>";
+        unlink $errFile unless $debug;
+    }
 
     my $line = 1;
-    $text =~ s/\n/sprintf("\n%02d: ", $line++)/ges;
+    $text =~ s/\n/sprintf("\n%02d: ", $line++)/ges if ($text);
     $output .= "<pre>$text\n</pre>";
   return "<font color=\"red\"><nop>DirectedGraph Error ($status): $output</font>";
 } ### sub showError

@@ -1,12 +1,12 @@
 %TMPL:INCLUDE{"oops"}%
 <!-- template: oopsaccesschange.nat.tmpl -->
-%TMPL:DEF{"msg_missing_action"}%Missing action command%TMPL:END%
-%TMPL:DEF{"msg_unrecognized_action"}%Unrecognized action command:%TMPL:END%
+%TMPL:DEF{"msg_missing_action"}%%MAKETEXT{"Missing action command"}%%TMPL:END%
+%TMPL:DEF{"msg_unrecognized_action"}%%MAKETEXT{"Unrecognized action command:"}%%TMPL:END%
 
-%TMPL:DEF{"heading"}%Administration error%TMPL:END%
+%TMPL:DEF{"heading"}%%MAKETEXT{"Administration error"}%%TMPL:END%
 %TMPL:DEF{"message"}%<!-- -->
----++ Error: %PARAM1% <span class="twikiAlert">%PARAM2%</span>
-Possibly caused by improper use of the =manage= script.<br />
+---++ %MAKETEXT{"Error: [_1] <span class=\"twikiAlert\">[_2]</span>" args="%PARAM1%,%PARAM2%"}%
+%MAKETEXT{"Possibly caused by improper use of the =manage= script."}%<br />
 
 %TMPL:P{"goback"}%
 %TMPL:END%

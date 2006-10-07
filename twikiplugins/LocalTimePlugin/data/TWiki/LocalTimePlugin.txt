@@ -71,10 +71,10 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 
 ---++ Plugin Info
 
-|  Plugin Author: | TWiki:Main.NathanOllerenshaw |
-|  Plugin Version: | 02 Jul 2003 (V1.000) |
+|  Plugin Author: | TWiki:Main.NathanOllerenshaw & TWiki:Main.SvenDowideit |
+|  Plugin Version: | 23 Jul 2006 (V2.000) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  05 Mar 2006: | SvenDowideit@home.org.au - updated to use TWiki04 registerHandler, added format= and dateGMT parameters |
+|  05 Mar 2006: | SvenDowideit@WikiRing.com - updated to use TWiki04 registerHandler, added format= and dateGMT parameters |
 |  02 Jul 2003: | Initial version |
 |  CPAN Dependencies: | Date::Handler |
 |  Other Dependencies: | none |

@@ -196,7 +196,7 @@ sub handleAliases {
     $text .= "| *Name* | *Regex* | *Value* |\n";
     foreach my $key (sort keys %aliasRegex) {
       my $regexText = $aliasRegex{$key};
-      $regexText =~ s/[\x01-\x09\x0b\x0c\x0e-\x1f<>"&]/'&#'.ord($&).';'/ge;
+      $regexText =~ s/([\x01-\x09\x0b\x0c\x0e-\x1f<>"&])/'&#'.ord($1).';'/ge;
       $regexText =~ s/\|/&#124;/go;
       $text .= "| <nop>$key | $regexText | $aliasValue{$key} |\n";
     }

@@ -236,7 +236,7 @@ sub _searchTopicsInWeb {
 
     if( $topic ) {
         # limit search to topic list
-        if( $topic =~ /^\^\([$TWiki::regex{mixedAlphaNum}\|]+\)\$$/ ) {
+        if( $topic =~ /^\^\([\_\-\+$TWiki::regex{mixedAlphaNum}\|]+\)\$$/ ) {
             # topic list without wildcards
             # for speed, do not get all topics in web
             # but convert topic pattern into topic list
@@ -328,7 +328,7 @@ sub _makeTopicPattern {
     my( $topic ) = @_ ;
     return '' unless( $topic );
     # 'Web*, FooBar' ==> ( 'Web*', 'FooBar' ) ==> ( 'Web.*', "FooBar" )
-    my @arr = map { s/[^\*\_$TWiki::regex{mixedAlphaNum}]//go; s/\*/\.\*/go; $_ }
+    my @arr = map { s/[^\*\_\-\+$TWiki::regex{mixedAlphaNum}]//go; s/\*/\.\*/go; $_ }
               split( /,\s*/, $topic );
     return '' unless( @arr );
     # ( 'Web.*', 'FooBar' ) ==> "^(Web.*|FooBar)$"
@@ -378,14 +378,18 @@ sub searchWeb {
     my $excludeTopic =  $params{excludetopic} || '';
     my $doExpandVars =  TWiki::isTrue( $params{expandvariables} );
     my $format =        $params{format} || '';
-    my $header =        $params{header} || '';
+    my $header =        $params{header};
     my $inline =        $params{inline};
     my $limit =         $params{limit} || '';
     my $doMultiple =    TWiki::isTrue( $params{multiple} );
     my $nonoise =       TWiki::isTrue( $params{nonoise} );
     my $noEmpty =       TWiki::isTrue( $params{noempty}, $nonoise );
-    my $noHeader =      (TWiki::isTrue( $params{noheader}, $nonoise)
-      || (($header eq '') && ($format ne '') && $inline));	#SMELL: this is a horrible Cairo compatibility hack, it seems everyone was relying on
+    # Note: a defined header overrides noheader
+    my $noHeader =
+      !defined($header) && TWiki::isTrue( $params{noheader}, $nonoise)
+        # SMELL: This is done for Cairo compatibility
+        || (!$header && $format && $inline);
+
     my $noSearch =      TWiki::isTrue( $params{nosearch}, $nonoise );
     my $noSummary =     TWiki::isTrue( $params{nosummary}, $nonoise );
     my $zeroResults =   1 - TWiki::isTrue( ($params{zeroresults} || 'on'), $nonoise );
@@ -681,11 +685,9 @@ sub searchWeb {
         # header and footer of $web
         my( $beforeText, $repeatText, $afterText ) =
           split( /%REPEAT%/, $tmplTable );
-        if( $header ) {
-            $header =~ s/\$n\(\)/\n/gos;          # expand '$n()' to new line
-            $header =~ s/\$n([^$mixedAlpha]|$)/\n$1/gos; # expand '$n' to new line
-            $beforeText = $header;
-            $beforeText =~ s/\$web/$web/gos;
+        if( defined $header ) {
+            $beforeText = TWiki::expandStandardEscapes($header);
+            $beforeText =~ s/\$web/$web/gos;         # expand name of web
             if( defined( $separator )) {
                 $beforeText .= $separator;
             } else {
@@ -836,15 +838,7 @@ sub searchWeb {
                         # SMELL: why?
                         $out =~ s/([^\n])$/$1\n/s;
                     }
-                    # expand '$n()' to new line
-                    $out =~ s/\$n\(\)/\n/gs;
-                    # expand '$n' to new line
-                    $out =~ s/\$n([^$mixedAlpha]|$)/\n$1/gos;
-                    # remove filler, useful for nested search
-                    $out =~ s/\$nop(\(\))?//gs;
-                    $out =~ s/\$quot(\(\))?/"/gs;
-                    $out =~ s/\$percnt(\(\))?/%/gs;
-                    $out =~ s/\$dollar(\(\))?/\$/gs;
+                    $out = TWiki::expandStandardEscapes( $out );
 
                 } elsif( $noSummary ) {
                     $out =~ s/%TEXTHEAD%//go;
@@ -1039,10 +1033,9 @@ sub _extractTopicInfo {
 
     $info->{allowView} =
       $session->{security}->
-        checkAccessPermission( 'view',
-                               $session->{user},
-                               $text, $topic,
-                               $web );
+        checkAccessPermission( 'view', $session->{user},
+                               $text, $meta,
+                               $topic, $web );
 
     return $info unless $sortfield;
 

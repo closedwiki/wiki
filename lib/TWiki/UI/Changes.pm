@@ -40,8 +40,6 @@ use Error qw( :try );
 sub changes {
     my $session = shift;
 
-    $session->enterContext( 'changes' );
-
     my $query = $session->{cgiQuery};
     my $webName = $session->{webName};
     my $topic = $session->{topicName};

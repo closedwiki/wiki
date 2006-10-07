@@ -36,6 +36,7 @@ sub tear_down {
     my $this = shift;
     $this->removeWebFixture($twiki,$testweb);
     $this->removeWebFixture($twiki,$testextra);
+    eval {$twiki->finish()};
     $this->SUPER::tear_down();
 }
 
@@ -340,4 +341,86 @@ sub test_extractParameters {
     }
 }
 
+sub test_w2em {
+    my $this = shift;
+    my $twiki = new TWiki();
+    $TWiki::Plugins::SESSION = $twiki;
+
+    my $ems = join(',', $twiki->{user}->emails());
+    $this->assert_str_equals(
+        $ems, TWiki::Func::wikiToEmail($twiki->{user}->wikiName()));
+}
+
+sub test_normalizeWebTopicName {
+    my $this = shift;
+    $TWiki::cfg{EnableHierarchicalWebs} = 1;
+    my ($w, $t) = TWiki::Func::normalizeWebTopicName( 'Web',  'Topic' );
+    $this->assert_str_equals( 'Web', $w);
+    $this->assert_str_equals( 'Topic', $t );
+    ($w, $t) = TWiki::Func::normalizeWebTopicName( '',     'Topic' );
+    $this->assert_str_equals( $TWiki::cfg{UsersWebName}, $w);
+    $this->assert_str_equals( 'Topic', $t );
+    ($w, $t) = TWiki::Func::normalizeWebTopicName( '',     '' );
+    $this->assert_str_equals( $TWiki::cfg{UsersWebName}, $w);
+    $this->assert_str_equals( 'WebHome', $t );
+    ($w, $t) = TWiki::Func::normalizeWebTopicName( '',     'Web/Topic' );
+    $this->assert_str_equals( 'Web', $w);
+    $this->assert_str_equals( 'Topic', $t );
+    ($w, $t) = TWiki::Func::normalizeWebTopicName( '',     'Web.Topic' );
+    $this->assert_str_equals( 'Web', $w);
+    $this->assert_str_equals( 'Topic', $t );
+    ($w, $t) = TWiki::Func::normalizeWebTopicName( 'Web1', 'Web2.Topic' );
+    $this->assert_str_equals( 'Web2', $w);
+    $this->assert_str_equals( 'Topic', $t );
+    ($w, $t) = TWiki::Func::normalizeWebTopicName( '%MAINWEB%', 'Topic' );
+    $this->assert_str_equals( $TWiki::cfg{UsersWebName}, $w);
+    $this->assert_str_equals( 'Topic', $t );
+    ($w, $t) = TWiki::Func::normalizeWebTopicName( 'Web',     '' );
+    $this->assert_str_equals( 'Web', $w);
+    $this->assert_str_equals( $TWiki::cfg{HomeTopicName}, $t );
+    ($w, $t) = TWiki::Func::normalizeWebTopicName( '%TWIKIWEB%', 'Topic' );
+    $this->assert_str_equals( $TWiki::cfg{SystemWebName}, $w);
+    $this->assert_str_equals( 'Topic', $t );
+    ($w, $t) = TWiki::Func::normalizeWebTopicName( '', '%MAINWEB%.Topic' );
+    $this->assert_str_equals( $TWiki::cfg{UsersWebName}, $w);
+    $this->assert_str_equals( 'Topic', $t );
+    ($w, $t) = TWiki::Func::normalizeWebTopicName( '', '%TWIKIWEB%.Topic' );
+    $this->assert_str_equals( $TWiki::cfg{SystemWebName}, $w);
+    $this->assert_str_equals( 'Topic', $t );
+    ($w, $t) = TWiki::Func::normalizeWebTopicName( '%MAINWEB%', 'Web2.Topic' );
+    $this->assert_str_equals( 'Web2', $w);
+    $this->assert_str_equals( 'Topic', $t );
+    ($w, $t) = TWiki::Func::normalizeWebTopicName( '%TWIKIWEB%', 'Web2.Topic' );
+    $this->assert_str_equals( 'Web2', $w);
+    $this->assert_str_equals( 'Topic', $t );
+    ($w, $t) = TWiki::Func::normalizeWebTopicName( 'Wibble.Web',  'Topic' );
+    $this->assert_str_equals( 'Wibble/Web', $w);
+    $this->assert_str_equals( 'Topic', $t );
+    ($w, $t) = TWiki::Func::normalizeWebTopicName( '',     'Wibble.Web/Topic' );
+    $this->assert_str_equals( 'Wibble/Web', $w);
+    $this->assert_str_equals( 'Topic', $t );
+    ($w, $t) = TWiki::Func::normalizeWebTopicName( '',     'Wibble/Web/Topic' );
+    $this->assert_str_equals( 'Wibble/Web', $w);
+    $this->assert_str_equals( 'Topic', $t );
+    ($w, $t) = TWiki::Func::normalizeWebTopicName( '',     'Wibble.Web.Topic' );
+    $this->assert_str_equals( 'Wibble/Web', $w);
+    $this->assert_str_equals( 'Topic', $t );
+    ($w, $t) = TWiki::Func::normalizeWebTopicName( 'Wibble.Web1', 'Wibble.Web2.Topic' );
+    $this->assert_str_equals( 'Wibble/Web2', $w);
+    $this->assert_str_equals( 'Topic', $t );
+    ($w, $t) = TWiki::Func::normalizeWebTopicName( '%MAINWEB%.Wibble', 'Topic' );
+    $this->assert_str_equals( $TWiki::cfg{UsersWebName}.'/Wibble', $w);
+    $this->assert_str_equals( 'Topic', $t );
+    ($w, $t) = TWiki::Func::normalizeWebTopicName( '%TWIKIWEB%.Wibble', 'Topic' );
+    $this->assert_str_equals( $TWiki::cfg{SystemWebName}.'/Wibble', $w);
+    $this->assert_str_equals( 'Topic', $t );
+    ($w, $t) = TWiki::Func::normalizeWebTopicName( '%MAINWEB%.Wibble', 'Wibble.Web2.Topic' );
+    $this->assert_str_equals( 'Wibble/Web2', $w);
+    $this->assert_str_equals( 'Topic', $t );
+    ($w, $t) = TWiki::Func::normalizeWebTopicName( '%TWIKIWEB%.Wibble', 'Wibble.Web2.Topic' );
+    $this->assert_str_equals( 'Wibble/Web2', $w);
+    $this->assert_str_equals( 'Topic', $t );
+}
+
 1;
+

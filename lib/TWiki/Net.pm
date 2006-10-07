@@ -33,6 +33,8 @@ use TWiki::Time;
 use TWiki::Sandbox;
 use Error qw( :try );
 
+use vars qw( $LWPavailable );
+
 sub new {
     my ( $class, $session ) = @_;
     ASSERT($session->isa( 'TWiki')) if DEBUG;
@@ -46,23 +48,32 @@ sub new {
 
 =pod
 
----++ ObjectMethod getUrl (  $host, $port, $url, $user, $pass, $header  ) -> $text
+---++ ObjectMethod getUrl($protocol, $host, $port, $url, $user, $pass ) -> $text
 
 Get the text at the other end of a URL
 
 =cut
 
 sub getUrl {
-    my ( $this, $host, $port, $url, $user, $pass, $header ) = @_;
-    ASSERT($this->isa( 'TWiki::Net')) if DEBUG;
+    my $this = shift;
+    my $protocol = shift;
+
+    if( $this->_LWPavailable()) {
+        return $this->_getURLUsingLWP( $protocol, @_ );
+    }
+
+    # Fallback mechanism
+    my( $host, $port, $url, $user, $pass ) = @_;
+    die "LWP not available for reading https: URLs: $@"
+      if( $protocol eq 'https');
 
     # Run-time use of Socket module when needed
     require Socket;
     import Socket qw(:all);
 
-    if( $port < 1 ) {
-        $port = 80;
-    }
+    $port ||= 80;
+    $port =~ s/^://;
+
     my $result = '';
     $url = "/" unless( $url );
     my $req = "GET $url HTTP/1.0\r\n";
@@ -88,7 +99,6 @@ sub getUrl {
         $port = $proxyPort;
     }
 
-    $req .= $header if( $header );
     $req .= "\r\n\r\n";
 
     my ( $iaddr, $paddr, $proto );
@@ -111,6 +121,40 @@ sub getUrl {
     }
     select STDOUT;
     return $result;
+}
+
+sub _LWPavailable {
+    unless( defined $LWPavailable ) {
+        eval 'use LWP';
+        $LWPavailable = !$@;
+    }
+    return $LWPavailable
+}
+
+sub _getURLUsingLWP {
+    my( $this, $protocol, $host, $port, $path, $user, $pass ) = @_;
+
+    $port ||= '';
+    my $request;
+    require HTTP::Request;
+    $request = HTTP::Request->new(GET => "$protocol://$host$port$path");
+    {
+        package _UserCredAgent;
+        @_UserCredAgent::ISA = qw(LWP::UserAgent);
+        sub new {
+            my $this = bless( new LWP::UserAgent(), $_[0] );
+            $this->{user} = $_[1];
+            $this->{pass} = $_[2];
+            return $this;
+        }
+        sub get_basic_credentials {
+            my($this, $realm, $uri) = @_;
+            return ($this->{user}, $this->{pass});
+        };
+    };
+    my $ua = new _UserCredAgent($user, $pass);
+    my $response = $ua->request($request);
+    return $response->as_string();
 }
 
 # pick a default mail handler
@@ -291,6 +335,13 @@ sub _sendEmailByNetSMTP {
     }
 
     return undef unless( scalar @to );
+
+    # Change SMTP protocol recipient format from 
+    # "User Name <userid@domain>" to "userid@domain"
+    # for those SMTP hosts that need it just that way.
+    foreach (@to) {
+        s/^.*<(.*)>$/$1/;
+    }
 
     my $smtp = 0;
     if( $this->{HELLO_HOST} ) {

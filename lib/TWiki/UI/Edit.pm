@@ -68,8 +68,14 @@ Most parameters are in the CGI query:
 
 sub edit {
     my $session = shift;
+    my ( $text, $tmpl ) = init_edit( $session, 'edit' );
+    finalize_edit ( $session, $text, $tmpl );
+}
 
-    $session->enterContext( 'edit' );
+
+sub init_edit {
+    my ( $session, $templateName )  = @_;
+
     my $query = $session->{cgiQuery};
     my $webName = $session->{webName};
     my $topic = $session->{topicName};
@@ -190,13 +196,14 @@ sub edit {
     my $templateWeb = $webName;
 
     # Get edit template, standard or a different skin
-    my $template = $session->{prefs}->getPreferencesValue('EDIT_TEMPLATE') ||
-        'edit';
+    my $template = $query->param( 'template' ) ||
+	$session->{prefs}->getPreferencesValue('EDIT_TEMPLATE') ||
+        $templateName;
     $tmpl =
       $session->{templates}->readTemplate( $template.$editaction, $skin );
 
-    if( !$tmpl && $template ne 'edit' ) {
-        $tmpl = $session->{templates}->readTemplate( 'edit', $skin );
+    if( !$tmpl && $template ne $templateName ) {
+        $tmpl = $session->{templates}->readTemplate( $templateName, $skin );
     }
 
     if( !$tmpl ) {
@@ -330,14 +337,28 @@ sub edit {
     $tmpl =~ s/%FORMFIELDS%/$formText/g;
 
     $tmpl =~ s/%FORMTEMPLATE%//go; # Clear if not being used
-    my $p = $session->{prefs};
+
+    return ( $text, $tmpl );
+}
+
+sub finalize_edit {
+
+    my ( $session, $text, $tmpl ) = @_;
+
+    my $query = $session->{cgiQuery};
+    my $webName = $session->{webName};
+    my $topic = $session->{topicName};
+    my $user = $session->{user};
+    # apptype is undocumented legacy
+    my $cgiAppType = $query->param( 'contenttype' ) ||
+      $query->param( 'apptype' ) || 'text/html';
 
     $tmpl =~ s/%UNENCODED_TEXT%/$text/g;
 
     $text = TWiki::entityEncode( $text );
     $tmpl =~ s/%TEXT%/$text/g;
 
-    $store->setLease( $webName, $topic, $user, $TWiki::cfg{LeaseLength} );
+    $session->{store}->setLease( $webName, $topic, $user, $TWiki::cfg{LeaseLength} );
 
     $session->writeCompletePage( $tmpl, 'edit', $cgiAppType );
 }

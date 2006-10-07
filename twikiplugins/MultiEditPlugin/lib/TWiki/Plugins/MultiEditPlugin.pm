@@ -20,23 +20,17 @@ package TWiki::Plugins::MultiEditPlugin;
 
 # =========================
 use vars qw(
-        $web $topic $user $installWeb $VERSION $RELEASE $pluginName $debug
+        $web $topic $user $installWeb $VERSION $pluginName $debug
         $label $skipskin $placement $renderedText $prefix
     );
 
-use TWiki;
+use TWiki::Func;
+use TWiki::Contrib::EditContrib;
 
-# This should always be $Rev$ so that TWiki can determine the checked-in
-# status of the plugin. It is used by the build automation tools, so
-# you should leave it alone.
-$VERSION = '$Rev$';
-
-# This is a free-form string you can use to "name" your own plugin version.
-# It is *not* used by the build automation tools, but is reported as part
-# of the version number in PLUGINDESCRIPTIONS.
-$RELEASE = 'Dakar';
-
+$VERSION = '$Rev: 0000';
 $pluginName = 'MultiEditPlugin';
+
+$RELEASE = 'Dakar';
 
 # =========================
 sub initPlugin
@@ -50,10 +44,15 @@ sub initPlugin
     }
 
     $label = &TWiki::Func::getPreferencesValue( "\U$pluginName\E_LABEL" ) || "Edit";
-    #$label = "<br><img src=\"". &TWiki::getPubUrlPath() . "/$installWeb/EditTablePlugin/edittable.gif\" alt=\"Edit\" border=\"0\">";
-    $skipskin = &TWiki::Func::getPreferencesValue( "\U$pluginName\E_SKIPSKIN" ) || "";
+    #Figure out how to do security in Dakar
+    #$label =~ s/$TWiki::securityFilter//go;    # zap anything suspicious
+    #$label = eval $label;
+    $label = TWiki::Func::expandCommonVariables( $label );
+    #Example for img tag:
+    #$label = "<br><img src=\"". &TWiki::Func::getPubUrlPath() . "/$installWeb/EditTablePlugin/edittable.gif\" alt=\"Edit\" border=\"0\">";
+    $skipskin = &TWiki::Func::getPreferencesValue( "\U$pluginName\E_SKIPSKIN" ) || '';
     $placement = &TWiki::Func::getPreferencesValue( "\U$pluginName\E_PLACEMENT" ) || "after";
-    $placement = ($placement =~ /left/i ? 1 : 0);
+    $placement = ($placement =~ /before/i ? 1 : 0);
 
     #initialize a few other things
     $renderedText = [];
@@ -68,51 +67,67 @@ sub initPlugin
 }
 
 # =========================
-sub startRenderingHandler
+sub preRenderingHandler
 {
-### my ( $text, $web ) = @_;   # do not uncomment, use $_[0], $_[1] instead
+### my ( $text, $pmap ) = @_;   # do not uncomment, use $_[0], $_[1] instead
 
-    &TWiki::Func::writeDebug( "- ${pluginName}::startRenderingHandler( $_[1].$topic )" ) if $debug;
+    &TWiki::Func::writeDebug( "- ${pluginName}::preRenderingHandler( $topic )" ) if $debug;
 
     # This handler is called by getRenderedVersion just before the line loop
 
-    my $cskin = &TWiki::Func::getSkin();
+    # Only bother with this plugin if viewing (i.e. not searching, etc)
+    return unless ($0 =~ m/view|viewauth|render/o);
+
+    my $ctmpl = $TWiki::Plugins::SESSION->{cgiQuery}->param('template') || '';
+    my $cskin = &TWiki::Func::getSkin() || '';
     my $skipit = 0;
     foreach my $ss (split(/\s*,\s*/, $skipskin)) {
-        if ($cskin eq $ss) {
+        if (($cskin eq $ss)||($ctmpl eq $ss)) {
             $skipit = 1;
         }
     }
 
-    unless($skipit) {
-        my $ret = '';
-	my $eurl = TWiki::Func::getScriptUrlPath() . "/editonesection/$web/$topic";
+    return if $skipit;
+    my $ret = '';
+    my $eurl = TWiki::Func::getScriptUrlPath() . "/editonesection/$web/$topic";
 
-	my $sectionedit = ($_[0] =~ m%<section/?>%i);
+    my $sectionedit = ($_[0] =~ m%<section( |>)%i);
 
-	if ($sectionedit) {
-	    my @sections = split(/(<\/?section>)/i, $_[0]);
-	    my $pos = 0;
-	    my $state = "noedit";
-	    my $lastsec = "";
-	    foreach $sec (@sections) {
-	      if ( $sec eq "<section>" ) { $state="edit"; next; }
-	      if ( $sec eq "</section>" ) {
-                my $tmp = TWiki::Func::renderText($lastsec, $_[1], $_[2]);
-  	        my $rText = &editRow($eurl, $pos, $tmp);
-                $$renderedText[$pos] = $rText;
-		$lastsec = "";
-                $ret .= ($prefix . $pos);
-		$state="noedit"; next; 
-	      }
-	      if ( $state eq "edit" ) { $lastsec = $sec; }
-	      else { $ret .= $sec; };
-	      $pos++;
-	    }
-	    $_[0] = $ret . $lastsec;
+    if ($sectionedit) {
+      my @sections = split(/(<\/?section(\s+[^>]+)?>)/i, $_[0]);
+      my $dontedit;
+      my $pos = 0;
+      my $state = "noedit";
+      my $skip = 0;
+      my $lastsec = "";
+      foreach $sec (@sections) {
+	if ( $skip ) { $skip = 0; next; }
+	if ( $sec eq "<section>" ) 
+	  { $state="edit"; $dontedit = 0; $skip = 1; next; }
+	if ( $sec =~ m/<section(.*)>/i ) 
+	  { use TWiki::Attrs;
+	    $attrs = new TWiki::Attrs($1, 1);
+	    $dontedit = ( ! $attrs->{edit} );
+	    $state="edit"; $skip = 1; next; }
+	if ( $sec eq "</section>" ) {
+	  $skip = 1;
+	  my $tmp = TWiki::Func::renderText($lastsec, $_[1], $_[2]);
+	  # restore verbatim markers
+	  $tmp =~ s/\<\!\-\-\!([a-z0-9]+)\!\-\-\>/\<\!\-\-$TWiki::TranslationToken$1$TWiki::TranslationToken\-\-\>/gio;
+	  my $rText = ( $dontedit )? $tmp : &editRow($eurl, $pos, $tmp);
+	  $$renderedText[$pos] = $rText;
+	  $lastsec = "";
+	  $ret .= ($prefix . $pos);
+          $dontedit = 0;
+	  $state="noedit"; next; 
+	}
+	if ( $state eq "edit" ) { $lastsec = $sec; }
+	else { $ret .= $sec; };
+	$pos++;
+      }
+      $_[0] = $ret . $lastsec;
 
-	  }
-       }
+    }
 }
 
 # =========================
@@ -136,15 +151,63 @@ sub editRow
 }
 
 # =========================
-sub endRenderingHandler
+sub postRenderingHandler
 {
 ### my ( $text ) = @_;   # do not uncomment, use $_[0] instead
 
-    TWiki::Func::writeDebug( "- ${pluginName}::endRenderingHandler( $web.$topic )" ) if $debug;
+    return if ($_[0] =~ m/\<\/?body[^>]*\>/o);
+
+    TWiki::Func::writeDebug( "- ${pluginName}::postRenderingHandler( $web.$topic )" ) if $debug;
 
     if (@$renderedText) {
         while ($_[0] =~ s/$prefix([0-9]+)/$$renderedText[$1]/e) {}
     }
+}
+
+# =========================
+
+sub doEdit
+{
+    my $session = shift;
+    my $text= '';
+    my $tmpl = '';
+    ( $session, $text, $tmpl ) = &TWiki::Contrib::EditContrib::edit( $session );
+
+    my $query = $session->{cgiQuery};
+    my $webName = $session->{webName};
+    my $topic = $session->{topicName};
+    my $theSec = int($query->param('sec')) || 0;
+    my $editUrl = &TWiki::Func::getScriptUrl( $webName, $topic, "editonesection" );
+    my $editUrlParams = "&sec=$theSec#SECEDITBOX";
+    $tmpl =~ s/%EDIT%/$editUrl/go;
+    $tmpl =~ s/%EDITPARAMS%/$editUrlParams/go;
+    my $sectxt = "";
+    my $pretxt = "";
+    my $postxt = "";
+    my $pos = 1;
+
+    # Get rid of CRs (we only want to deal with LFs)
+    $text =~ s/\r//g;
+
+    if ( $text =~ m/<\/?section>/i ) { 
+	my @sections = split(/(<\/?section>)/i, $text); 
+	foreach my $s (@sections) {
+	    if ($pos < $theSec) {
+		if ( $s =~ m/<(\/?)section>/ ) { $pretxt .= "<$1section>"; next; }
+		$pretxt .= $s;
+	    } elsif ($pos > $theSec) {
+		if ( $s =~ m/<(\/?)section>/ ) { $postxt .= "<$1section>"; next; }
+		$postxt .= $s;
+	    } else {
+		if ( $s =~ m/<(\/?)section>/ ) { $pretxt .= "<$1section>"; next; }
+		$sectxt = $s;
+	    }
+	    $pos++;
+	}
+    }
+
+    TWiki::Contrib::EditContrib::finalize_edit ( $session, $pretxt, $sectxt, $postxt, "", "", $tmpl );
+
 }
 
 1;

@@ -1,0 +1,10 @@
+%META:TOPICINFO{author="TWikiContributor" date="1152047755" format="1.2" version="$Rev$"}%
+%META:TOPICPARENT{name="TWikiPreferences"}%
+#VarTWIKICOLORSURL
+---+++ TWIKICOLORSURL -- location of custom colors style sheet
+
+
+Location of the colors style sheet, for use in a skin.
+   * Usage: Evaluated by TWiki skins/templates and not intended to be expanded in any topic.
+   * Current value: TWIKICOLORSURL = %TWIKICOLORSURL%
+

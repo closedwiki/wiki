@@ -1,6 +1,7 @@
 %META:TOPICINFO{author="TWikiContributor" date="1142931513" format="1.1" version="1.1"}%
 %TMPL:INCLUDE{"searchbase"}% 
 <!-- template: <nop>NatSkinSearchViewTemplate -->
+%TMPL:DEF{"contentheader"}%%TMPL:END%
 %TMPL:DEF{"content"}% %SPLIT%<b>Search</b>: <span class="natSearchString">%SEARCHSTRING%</span> 
 %SPLIT% 
 <table class="natSearchTable" cellpadding="0" cellspacing="0">
@@ -14,7 +15,7 @@
 <table class="natSearchHit %CALC{"$IF($ODD($GET(incr)),natSearchHitOdd,natSearchHitEven)"}%" width="100%" border="0" cellspacing="0" cellpadding="0">
   <tr>
     <th width="50%" class="natSearchTarget">
-      <a href="%SCRIPTURL{"view"}%/%WEB%/%TOPICNAME%">
+      <a href="%SCRIPTURLPATH{"view"}%/%WEB%/%TOPICNAME%">
 <noautolink>
 %~~ DBQUERY{topic="%TOPICNAME%" web="%WEB%" 
 ~~~   format="$expand(Headline or TopicDescription or Name or name)"
@@ -26,7 +27,7 @@
       %AUTHOR% 
     </th>
     <th width="30%" class="natSearchRevision">
-      <a style="white-space:pre"href="%SCRIPTURL{"rdiff"}%/%WEB%/%TOPICNAME%">%TIME% - %REVISION%</a>
+      <a style="white-space:pre"href="%SCRIPTURLPATH{"rdiff"}%/%WEB%/%TOPICNAME%">%TIME% - %REVISION%</a>
     </th>
   </tr>
   <tr>

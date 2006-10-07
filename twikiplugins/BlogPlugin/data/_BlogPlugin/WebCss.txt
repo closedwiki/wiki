@@ -5,8 +5,11 @@ Switches off revision info and breadcrumbs.
 Switches off authorship information on postings if this blog
 is single-authored (or even null-authored).
 
+Note, this only works with TWiki:Plugins.NatSkin.
+
 <verbatim>
 %STARTINCLUDE%
+~~~ .natMainHeaderContents,
 ~~~ .natRevision, .natWebLocator, .headlinesLogo
 ~~~ { display:none; }
 %~~ IFDEFINED{"

@@ -25,7 +25,10 @@
 
 ---+ package TWiki::Client::TemplateLogin
 
-This is a login manager that you can specify in the security setup section of [[%SCRIPTURL%/configure%SCRIPTSUFFIX%][configure]]. It provides users with a template-based form to enter usernames and passwords, and works with the PasswordManager that you specify to verify those passwords.
+This is a login manager that you can specify in the security setup section of
+[[%SCRIPTURL{"configure"}%][configure]]. It provides users with a
+template-based form to enter usernames and passwords, and works with the
+PasswordManager that you specify to verify those passwords.
 
 Subclass of TWiki::Client; see that class for documentation of the
 methods of this class.
@@ -55,9 +58,13 @@ sub forceAuthentication {
 
     unless( $twiki->inContext( 'authenticated' )) {
         my $query = $twiki->{cgiQuery};
-        # SMELL CGI::url drops the anchor. Report as bug against CGI::?
-        $query->param( origurl => $ENV{REQUEST_URI} );
-        $this->login( $query, $twiki );
+        # Redirect with passthrough so we don't lose the original query params
+        my $twiki = $this->{twiki};
+        my $topic = $twiki->{topicName};
+        my $web = $twiki->{webName};
+        my $url = $twiki->getScriptUrl( 0, 'login', $web, $topic);
+        $query->param( -name=>'origurl', -value=>$ENV{REQUEST_URI} );
+        $twiki->redirect( $url, 1 );
         return 1;
     }
     return undef;
@@ -126,7 +133,8 @@ sub login {
             if( !$origurl || $origurl eq $query->url() ) {
                 $origurl = $twiki->getScriptUrl( 0, 'view', $web, $topic );
             }
-            $this->redirectCgiQuery( $query, $origurl );
+            # Redirect with passthrough
+            $twikiSession->redirect($origurl, 1 );
             return;
         } else {
             $banner = $twiki->{templates}->expandTemplate('UNRECOGNISED_USER');

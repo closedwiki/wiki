@@ -20,12 +20,12 @@
 ~~~   web="%WEB%"
 ~~~   order="Name" hidenull="on"
 ~~~   header="<div class=\"blogSideBarSection blogSideBarAggregations\"><noautolink>
-~~~     <h1>
+~~~     <h1 class=\"blogSideBarHeader\">
 *~~       %IFDEFINED{"%TITLE%" then="%TITLE%" else="Blogroll"}%
 *~~       $percntREDDOT{\"%WEB%.%TOPIC%\"}$percnt</h1><ul>"
 ~~~   format="<li>
 ~~~      $percntIFDEFINEDTHEN{\"$formfield(Feed)\" glue=\"off\"}$percnt
-~~~        <a href=\"%SCRIPTURL{"view"}%/$web/$topic
+~~~        <a href=\"%SCRIPTURLPATH{"view"}%/$web/$topic
 *~~           %IFDEFINED{"%CAT%" then="?cat=%CAT%"}%\"
 ~~~           title=\"$formfield(Headline)\">$formfield(Name)</a>
 ~~~      $percntELSEDEFINED$percnt

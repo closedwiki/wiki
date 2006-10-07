@@ -1,4 +1,7 @@
 ---+!! TWiki Developer Environment
+<div style="float:right">
+<a href="http://wikiring.com"><img src="%ATTACHURLPATH%/logo.gif" title="WikiRing: Professional Wiki Innovation and Support" /></a>
+</div>
 <!--
 
    PLEASE DO NOT EDIT THIS TOPIC
@@ -14,133 +17,135 @@ Automates build process, including installer generation, for Pugins, Add-ons and
 %TOC%
 
 ---+ Summary of Contents
-
 ---++ Build & Install Modules
-The Build.pm module can be used by developers to create a really simple build process for your plugin, addon or contrib module. The advantage of using this module is that it dictates a standard build procedure for plugins, so you won't get file names wrong or get the list of files in the plugin topic wrong either.
+This module can be used by developers to create a really simple build process for your plugin, addon or contrib module. It is inspired by the Java ANT build tool developed by the Apache project, but is targeted specifically at building TWiki and TWiki extensions.
 
-The module also automatically generates an installer script that manages dependencies in the user installation.
+The module is used for TWiki release builds, and optionally for building TWiki extensions as well. The advantage of using the module is that it dictates a standard build procedure for extensions (such as plugins), so you won't get file names wrong or get the list of files in the topic wrong either. Further, if you use this build approach, your module can easily be included into other build scripts, for example for creating collections of plugins.
+
+The module can also automatically generate an installer script that simplifies end-user installation.
+
+__Notes__
+   * This is a _build_ module for use by _developers_, *not* an _install_ module for _end users_.
 
 #DevelopmentModel
 ---+++ Development Model
 The build module assumes:
-   * that you are *not* developing your plugin in a live TWiki installation (which is usually a really bad idea), but are instead doing the sensible thing and developing in a separate directory tree, usually - but not always - an SVN checkout area.
-   * that your module follows the standards for plugins and contribs i.e. that it
-      1 has a topic in the =data/TWiki= directory
+   1 that you are *not* developing your plugin in a 'live' TWiki installation (which would be a really bad idea), but are instead doing the sensible thing and developing in a separate directory tree, usually - but not always - a Subversion checkout area.
+   1 that your module follows the standards for extensions i.e. that it
+      1 has a topic named the same as the extension in the =data/TWiki= directory
       1 has a perl module in the =lib/TWiki/Plugins= or =lib/TWiki/Contrib= directory
       1 has a sub-directory alongside the perl module that contains the extra =.pm= files specific to the module
+The module also supports optional separation of your *development*, *module test*, and *integration test* TWiki installations. You can do all three steps in a single install, or you can use three separate installs for the three steps if you want to be particularly thorough.
 
-The idea is that your module is built using a perl script =build.pl= that is kept in the module-specific subdirectory (3). This build script is like a Makefile. It has several _targets_ that can be used to perform different stages of the development cycle. By default these targets are:
+Each individual extension has its own build script, usually called =build.pl=. This script uses the !BuildContrib libraries to build the extension.
+For example, assuming you are working in a Subversion checkout area (*strongly* recommended), the development cycle for a new Plugin looks like this. 
+   1 Create your plugin area under =twikiplugins=
+      * =cd twikiplugins; perl create-new-plugin.pl MyNewPlugin=
+   1 Edit files to create your plugin functionality
+   1 =cd twikiplugins/MyPlugin/lib/TWiki/Plugins/MyPlugin; perl build.pl release= to build a release package and installer
+   1 Unzip and install the built package in your *test* system (which may be your development system, or may be another TWiki install altogether)
+   1 Repeat from step 2 until it works
+   1 =cd twikiplugins/MyPlugin/lib/TWiki/Plugins/MyPlugin; perl build.pl upload= to upload the module to TWiki.org
+
+The build script is rather like a Makefile. It has several _targets_ that can be used to perform different stages of the development cycle. By default these targets are:
 | =build= | check that everything is perl |
 | =test= | run unit tests |
 | =installer= | Build an install/uninstall script for use by end-users |
-| =install= | install on local installation defined by $TWIKI_HOME |
-| =uninstall= | uninstall from local installation defined by $TWIKI_HOME |
 | =pod= | build POD documentation |
-| =release= | build, pod and package a release zip |
-| =upload= | build, pod, package and upload to twiki.org |
-| =manifest= | print a best-guess _draft_ MANIFEST file |
-| =history= | Updates the plugin/contrib topic with the history extracted from Subversion. See #HistoryTarget for more information. |
+| =release= | =build=, =installer=, =pod=, and package a release zip |
+| =upload= | =release= and upload to twiki.org |
+| =manifest= | _print_ a best-guess _draft_ MANIFEST file |
+| =history= | _update_ the plugin/contrib topic with the history extracted from Subversion. See #HistoryTarget for more information. |
 The default target is =test=.
 
 The module is designed so that most common behaviour is catered for. It is also easy to _override_ any of the default targets in your =build.pl= and add extra behaviours.
 
-The result of the 'release' target is a ZIP file, that will contain the following:
-   1 All the files listed in the MANIFEST
-   1 A generated documentation topic
-   1 An install/uninstall script, that is run after the module is unzipped
-This zip file can be generated and subsequently uploaded to twiki.org, or you can simply use the =upload= target directly.
-
-The easiest way to start using the module is to copy the =build.pl= file from =lib/TWiki/Contrib/BuildContrib/build.pl= into your own plugin or contrib, in the corresponding place i.e. copy it to =lib/TWiki/Plugins/MyPlugin/build.pl= or =lib/TWiki/Contrib/MyContrib/build.pl=. Then edit the file, and change as appropriate (it should be fairly obvious what you have to do). Then type
-   * =perl build.pl manifest=
-This should inspect the directory structure and write a best-guess MANIFEST file.
+The results of the 'release' target are three files: a Zip format archive, a gzipped tar archive, and an md5 checksum. The archives will each contain the following:
+   1 All the files listed in the =MANIFEST=
+   1 An install/uninstall script, that is can be run after the module is unpacked
 
 __Notes__
-   * This is a _build_ module for use by developers, not an _install_ module for end users. When a release is built, an installer/uninstaller script is automatically generated that is packaged with the release. This simple script is the only part of the build system visible to end users
-   * This topic and all the embedded POD documentation are generated using this build module.
-   * The build environment does _not_ assume the use of SVN, though it is highly recommended.
-   * The =test= target assumes you are using Test::Unit. =Build.pm= has only been tested on Linux, but should work with cygwin OK.
+   * When a release is built, an installer/uninstaller script is automatically generated that is packaged with the release. This simple script is the only part of the build system visible to end users
+   * This topic, and all the embedded POD documentation, are generated using this build module.
+   * The build environment does _not_ assume the use of Subversion, though it is highly recommended.
+   * The =test= target assumes you are using Test::Unit.
+   * =Build.pm= has only been tested on Linux, but should work with cygwin OK.
 ---+++ Install support
 The installer script shipped with the package is very simple. By default all it does is to check the dependencies you list, and if necessary download and install any missing TWiki and CPAN modules. Other dependencies are simply checked. In Dakar and later releases, TWiki topics shipped with the module are automatically merged into any existing local copies, ensuring histories are preserved.
 
-If you want your installer to do anything else - for example, optionally install submodules shipped with the module - then you will need to write a POSTINSTALL script. A good example of a POSTINSTALL can be found in the SVN tree for TWiki:Plugins/WysiwygPlugin.
+If you want your installer to do anything else - for example, optionally install submodules shipped with the module - then you will need to write a =POSTINSTALL= script. See #InstallScripts for more information.
 
----++ Test Fixtures
-The are a number of test fixtures in the repository that can be used for testing plugins with =Test::Unit=. The fixtures replace the =TWiki::Func=, =TWiki::Store= and TWiki modules, allowing a stand-alone unit test suite to be built for the plugin. The easiest way to use the fixtures is to copy the tests from an existing plugin that uses them - for example, CommentPlugin, ActionTrackerPlugin, WebDAVPlugin or FormQueryPlugin - and modify the tests appropriately for your plugin.
-
-The fixtures do not replace _all_ of the TWiki core functionality, just those pieces used by the plugins. If you find a piece is missing, and you need it, please feel free to extend the fixtures on condition that you check your improvements back in.
 ---++ Support scripts
-=conformance_analyser.pl= is a perl script that analyses the conformance of plugins to the API and packaging standards. It is driven from the zips downloadable from twiki.org.
+=conformance_analyser.pl= is a perl script that analyses the conformance of plugins to the API and packaging standards. It is driven from the archives downloadable from twiki.org.
 
 ---+ Detailed Documentation
 %$POD%
 
----+ Settings
-	* Name of the perl package
-		* Set STUB = %$STUB%
-	* One line description:
-		* Set SHORTDESCRIPTION = Automate build process for Pugins, Add-ons and Contrib modules
+<!--
+   * Set STUB = %$STUB%
+   * Set SHORTDESCRIPTION = Automate build process for Plugins, Add-ons and Contrib modules
+-->
 
 ---+ Installation Instructions
 You are strongly recommended to use this Contrib to help split your code development away from your live TWiki environment, as described [[#DevelopmentModel][above]].
-	* Download the ZIP file from the Plugin web (see below)
-	* Unzip ==%TOPIC%.zip== in your development ($TWIKI_DEV) directory. Content:
-	| *File:* | *Description:* |
-%$MANIFEST%
-	* Optionally, run ==%TOPIC%_installer.pl== to automatically check and install other TWiki modules that this module depends on. You can also do this step manually.
-	* Alternatively, manually make sure the dependencies listed in the table below are resolved.
-	%$DEPENDENCIES%
+
+%$INSTALL_INSTRUCTIONS%
 
 ---+ Contrib Info
 
-| Authors: | TWiki:Main.CrawfordCurrie |
-| Copyright &copy;: | 2004, Crawford Currie http://www.c-dot.co.uk |
-| License: | [[http://www.gnu.org/copyleft/gpl.html][GPL]] |
-| Version: | %$VERSION% |
-| Change History: | |
-| 8947 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1718'>Item1718</a>  discovered that svn log doesn't work recursively, so more code required to find changes. Added new inline tokens for various URLs. Updated history to 8894. |
-| 8894 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1718'>Item1718</a>  added rel=nofollow to generated links to ~develop |
-| 8892 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1718'>Item1718</a>  Added =history= target to support extraction of history from SVN logs. |
-| 8585 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1527'>Item1527</a>  BuildContrib: Remember original filedates for pub files |
-| 8584 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1527'>Item1527</a>  BuildContrib: Oops, some (very few) plugins are not ActionTrackerPlugin :-) |
-| 8583 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1527'>Item1527</a>  Generated install scripts now really attaches files in pub to topics (means less of these couldn't update history error messages) |
-| 8581 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1527'>Item1527</a>  BuildContrib: Execute topic saves in the TWiki web as TWikiAdminGroup by default |
-| 8365 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1347'>Item1347</a>  made build.pl tidy up it's mess; and switched buildcontrib over to using push and pop on dirs instead of cd, so we don;t get lost so easily. Oh, and corrected the permissions on the generated viewauth and rdiffauth files |
-| 8359 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1393'>Item1393</a>  For release topic name, removed upper case change of suffix. E.g. 'TWiki-4.0.0-beta6' becomes 'TWikiRelease04x00x00beta06' |
-| 8346 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1393'>Item1393</a>  added final parameter to build.pl (release name) and added processing to derive topic name from release id. |
-| 8263 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item663'>Item663</a>  fixing typos, etc |
-| 8217 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1374'>Item1374</a>  BuildContrib wasn't deleting its temporary files staging area |
-| 8216 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item663'>Item663</a>  fixing formatting/typos |
-| 8209 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1347'>Item1347</a>  changes to support arbitrary release naming, to better support TWiki builds. Should not affect extension builds. |
-| 8061 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1285'>Item1285</a>  Removed TWiki_installer.pl from release package |
-| 7531 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item956'>Item956</a>  skins have their MANIFEST in lib/TWiki/Contrib/...Skin/ |
-| 7215 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item437'>Item437</a>  Build.pm reverted - sorry people, it seems this broke the build :( |
-| 7207 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item437'>Item437</a>  Revised BuildContrib to build MD5s. Crawford - feel free to ditch anything you don't like. (I sent you email about this a couple of days ago). MD5 files are generated for each package and then aggregated during a hands-off install to collect all dependent MD5s into package/DEPS.md5 |
-| 6827 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item569'>Item569</a>  added default RELEASE to everything that had a version, and removed a load of dead code that was getting in the way |
-| 6791 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item598'>Item598</a>  removed comment that was getting added to txt files outside data |
-| 6759 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item569'>Item569</a>  computed version numbers for plugins from the repository rev they were built from. |
-| 6757 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item559'>Item559</a>  fixed permissions |
-| 6743 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item562'>Item562</a>  added ability to update VERSIOn number to current repository head |
-| 6742 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item561'>Item561</a>  added a script to build and upload all the plugins, so we can have releases of them from SVN. Presently uploaded to the same topic as the beta releases. |
-| 6515 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item432'>Item432</a>  applied the final polish (I hope) before beta release |
-| 6512 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item437'>Item437</a>  generated md5 sums for packages built using build.pl, and added them to the upload |
-| 6504 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item436'>Item436</a>  incremented vernos of all changed plugins |
-| 6470 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item421'>Item421</a>  polishing up installation, trying to catch gotchas, improving docs |
-| 6450 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item143'>Item143</a>  more apache warnings; and a silly error in comment plugin tests eliminated |
-| 6426 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item404'>Item404</a>  removed CHANGELOG from MANIFEST and added build scripts for all plugins and contribs, so they can be used with the main build. |
-| 6369 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item384'>Item384</a>  As excellent as Antonio's solution is, it breaks all the save script tests and is incompatible with previous releases. Need to fall back on the old 'action' parameter if the new parameters are not available - even though it is really bad news (it blocks the use of 'action' as a form-field name :-(. Also updated the script documentation for Antonio's changes. |
-| 6353 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item380'>Item380</a>  do as the man says; make all $/ local |
-| 6240 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item196'>Item196</a>  Extracted the Manifest File processing from Build.pm to a module that can be used by other Build implementations. Needed for a CommandSet of TWikiShellContrib |
-| 6092 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item196'>Item196</a>  more plugin and contrib fixes for develop; mainly just moving tests around and making sure they all pass. |
-| 6077 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item243'>Item243</a>  simplified gendocs to stop it generating ,v files, since Sven is going to solve that. Coorected MANIFEST for source code documents. |
-| 6076 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item243'>Item243</a>  added build scripts for all plugins shipped with TWikiForGenericUse |
-| 6068 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item244'>Item244</a>  extracted target_stage and target_archive from target_release to allow me to add functionality to target_stage |
-| 6051 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item237'>Item237</a>  removed requirement to set TWIKI_LIBS for core build |
-| 6040 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item237'>Item237</a>  now supports automatic instantiation of plugins and contribs in the release tree. Install scripts are _not_ run. |
-| 6039 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item237'>Item237</a>  MANIFEST build based on BuildContrib. Very few extensions to BuildContrib were required to do it. Things that are missing are: 1. generation of ,v files 2. packaging up and inclusion of plugins. |
-| 6026 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item229'>Item229</a>  added support for sub-headings in =configure=. Added support for adding comments to LocalSite.cfg to BuildContrib. Can now create sections in =configure= for individual plugins. |
-| 5960 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item181'>Item181</a>  new version, supports DEVELOP and Cairo, and adds support for attachments (you can now mail attachments to topics) |
+|  Authors: | TWiki:Main.CrawfordCurrie |
+|  Copyright &copy;: | 2004-2006, Crawford Currie http://wikiring.com |
+|  License: | [[http://www.gnu.org/copyleft/gpl.html][GPL]] |
+|  Version: | %$VERSION% |
+|  Change History: | |
+|  11505 | Added =twikiplugins/create_new_extension.pl= script |
+|  11492 | Fixed attachment upload. Will now upload attachments attached to the main topic |
+|  11478 | Install made easier to use for developers and end users; will now download an archive if it can't find one locally. Added dependencies target. |
+|  8947 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1718'>Item1718</a>  discovered that svn log doesn't work recursively, so more code required to find changes. Added new inline tokens for various URLs. Updated history to 8894. |
+|  8894 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1718'>Item1718</a>  added rel=nofollow to generated links to ~develop |
+|  8892 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1718'>Item1718</a>  Added =history= target to support extraction of history from SVN logs. |
+|  8585 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1527'>Item1527</a>  BuildContrib: Remember original filedates for pub files |
+|  8584 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1527'>Item1527</a>  BuildContrib: Oops, some (very few) plugins are not ActionTrackerPlugin :-) |
+|  8583 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1527'>Item1527</a>  Generated install scripts now really attaches files in pub to topics (means less of these couldn't update history error messages) |
+|  8581 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1527'>Item1527</a>  BuildContrib: Execute topic saves in the TWiki web as TWikiAdminGroup by default |
+|  8365 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1347'>Item1347</a>  made build.pl tidy up it's mess; and switched buildcontrib over to using push and pop on dirs instead of cd, so we don;t get lost so easily. Oh, and corrected the permissions on the generated viewauth and rdiffauth files |
+|  8359 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1393'>Item1393</a>  For release topic name, removed upper case change of suffix. E.g. 'TWiki-4.0.0-beta6' becomes 'TWikiRelease04x00x00beta06' |
+|  8346 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1393'>Item1393</a>  added final parameter to build.pl (release name) and added processing to derive topic name from release id. |
+|  8263 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item663'>Item663</a>  fixing typos, etc |
+|  8217 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1374'>Item1374</a>  BuildContrib wasn't deleting its temporary files staging area |
+|  8216 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item663'>Item663</a>  fixing formatting/typos |
+|  8209 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1347'>Item1347</a>  changes to support arbitrary release naming, to better support TWiki builds. Should not affect extension builds. |
+|  8061 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1285'>Item1285</a>  Removed TWiki_installer.pl from release package |
+|  7531 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item956'>Item956</a>  skins have their MANIFEST in lib/TWiki/Contrib/...Skin/ |
+|  7215 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item437'>Item437</a>  Build.pm reverted - sorry people, it seems this broke the build :( |
+|  7207 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item437'>Item437</a>  Revised BuildContrib to build MD5s. Crawford - feel free to ditch anything you don't like. (I sent you email about this a couple of days ago). MD5 files are generated for each package and then aggregated during a hands-off install to collect all dependent MD5s into package/DEPS.md5 |
+|  6827 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item569'>Item569</a>  added default RELEASE to everything that had a version, and removed a load of dead code that was getting in the way |
+|  6791 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item598'>Item598</a>  removed comment that was getting added to txt files outside data |
+|  6759 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item569'>Item569</a>  computed version numbers for plugins from the repository rev they were built from. |
+|  6757 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item559'>Item559</a>  fixed permissions |
+|  6743 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item562'>Item562</a>  added ability to update VERSIOn number to current repository head |
+|  6742 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item561'>Item561</a>  added a script to build and upload all the plugins, so we can have releases of them from SVN. Presently uploaded to the same topic as the beta releases. |
+|  6515 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item432'>Item432</a>  applied the final polish (I hope) before beta release |
+|  6512 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item437'>Item437</a>  generated md5 sums for packages built using build.pl, and added them to the upload |
+|  6504 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item436'>Item436</a>  incremented vernos of all changed plugins |
+|  6470 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item421'>Item421</a>  polishing up installation, trying to catch gotchas, improving docs |
+|  6450 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item143'>Item143</a>  more apache warnings; and a silly error in comment plugin tests eliminated |
+|  6426 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item404'>Item404</a>  removed CHANGELOG from MANIFEST and added build scripts for all plugins and contribs, so they can be used with the main build. |
+|  6369 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item384'>Item384</a>  As excellent as Antonio's solution is, it breaks all the save script tests and is incompatible with previous releases. Need to fall back on the old 'action' parameter if the new parameters are not available - even though it is really bad news (it blocks the use of 'action' as a form-field name :-(. Also updated the script documentation for Antonio's changes. |
+|  6353 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item380'>Item380</a>  do as the man says; make all $/ local |
+|  6240 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item196'>Item196</a>  Extracted the Manifest File processing from Build.pm to a module that can be used by other Build implementations. Needed for a CommandSet of TWikiShellContrib |
+|  6092 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item196'>Item196</a>  more plugin and contrib fixes for develop; mainly just moving tests around and making sure they all pass. |
+|  6077 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item243'>Item243</a>  simplified gendocs to stop it generating ,v files, since Sven is going to solve that. Coorected MANIFEST for source code documents. |
+|  6076 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item243'>Item243</a>  added build scripts for all plugins shipped with TWikiForGenericUse |
+|  6068 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item244'>Item244</a>  extracted target_stage and target_archive from target_release to allow me to add functionality to target_stage |
+|  6051 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item237'>Item237</a>  removed requirement to set TWIKI_LIBS for core build |
+|  6040 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item237'>Item237</a>  now supports automatic instantiation of plugins and contribs in the release tree. Install scripts are _not_ run. |
+|  6039 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item237'>Item237</a>  MANIFEST build based on BuildContrib. Very few extensions to BuildContrib were required to do it. Things that are missing are: 1. generation of ,v files 2. packaging up and inclusion of plugins. |
+|  6026 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item229'>Item229</a>  added support for sub-headings in =configure=. Added support for adding comments to LocalSite.cfg to BuildContrib. Can now create sections in =configure= for individual plugins. |
+|  5960 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item181'>Item181</a>  new version, supports DEVELOP and Cairo, and adds support for attachments (you can now mail attachments to topics) |
 
 __Related Topics:__ %TWIKIWEB%.TWikiPreferences
 
 -- TWiki:Main/CrawfordCurrie - %$DATE% %BR%
--- TWiki:Main/MartinCleaver - %$DATE%
+
+%META:FILEATTACHMENT{name="logo.gif" comment="logo" path="logo.gif"}%

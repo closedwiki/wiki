@@ -135,10 +135,11 @@ When you are searching for fields containing dates (such as =closed=, =created= 
 | =last week=               | =last week=      | 7 days ago |
 | =now=                     | =now=            | |
 | =now= =+= _count_ _units_ | =now + 2 years=  | |
-| =now= =-= _count_ _units_ | =now - 3 weeks   | |
+| =now= =-= _count_ _units_ | =now - 3 weeks=   | |
 | =+= _count_ _units_       | =+ 31 days=      | |
 | =-= _count_ _units_       | =- 2 months=     | |
 | _count_ _units_ =ago=     | =10 days ago=    | |
+Valid _units_ are =minutes=, =hours=, =days=, =weeks=, =years=.
 
 #PeopleAnchor
 ---+++ People
@@ -355,7 +356,7 @@ These settings can be overridden in the Web<nop>Preferences topic of the current
 
 #SettingsNotify
 	* The fields to scan to detect changes for actionnotify. Changes in other fields are ignored.
-		* Set NOTIFYCHANGES = $due,$state,$text
+		* Set NOTIFYCHANGES = $who,$due,$state,$text
 
 	* Non-standard attributes - see [[#NonStandardAttributes][Non-standard attributes]] above.
 		* Set EXTRAS = 
@@ -369,17 +370,7 @@ These settings can be overridden in the Web<nop>Preferences topic of the current
 ---
 ---+ Plugin Installation Instructions
 
-__Note:__ These instructions are for the TWiki maintainer. No changes to your browser are required. *This plugin makes extensive use of new features added to TWiki in the Feb 2003 release*. Earlier versions lack all the features described here. Make sure you install using the zip appropriate to your TWiki installation. If you install an earlier version of the plugin with the Feb 2003 release, note that change notification will not function correctly. For best overall performance, please upgrade your TWiki to the latest released version.
-
-	* Download the ZIP file from the Plugin web (see below). Contents:
-	| *File:* | *Description:* |
-%$MANIFEST%
-	* Unzip ==ActionTrackerPlugin.zip== in your twiki installation directory.
-	* =perl= ==%TOPIC%_installer.pl== to automatically check and install other TWiki modules that this module depends on. This script also includes an _uninstaller_ should you ever wish to remove the plugin from your installation.
-	* Alternatively, manually make sure the dependencies listed in the table below are resolved.
-%$DEPENDENCIES%
-	* (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
-
+%$INSTALL_INSTRUCTIONS%
 	* If the plugin is installed and enabled correctly you should see a formatted action below:
 %ACTION{who=TWikiGuest,due="1 Jan 2003",open}% Example action
 	* ... and the result of a formatted search below:
@@ -399,25 +390,27 @@ The mechanism for defining notification groups as lists of "EMail" lines in a to
 
 |  Plugin Author: | TWiki:Main/CrawfordCurrie, http://c-dot.co.uk |
 |  Plugin Version: | %$VERSION% |
-| Change History: | |
-| 8385 | <a href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1443'>Item1443</a>  style sheet bug makes yellow warning not show |
-| 8372 | <a href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1434'>Item1434</a>  moved actionnotify from bin into tools |
-| 8304 | <a href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1305'>Item1305</a>  removing dotted style from AT. Looks horrible in IE |
-| 8090 | <a href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1304'>Item1304</a>  removed unnecessary warning that may be breaking some sites |
-| 8089 | <a href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1305'>Item1305</a>  changed dotted to solid gray, as requested |
-| 26 Mar 2005 | 2.022 Corrected JSCalendar problems, and cleaned up lazy-loading of libraries. Added relative date specs to searches. |
-| 8 Feb 2005 | 2.021 Documentation fixes. |
-| 19 Nov 2004 | 2.020 Added conditions for date matching, and fixed config so that tests pass again. |
-| 13 Oct 2004 | 2.013 If a user cuts and pastes an action with a uid in it, the action editor would get confused. This update ensures all action UIDs are unique within a topic when it is saved. |
-| 16 Aug 2004 | 2.012 Dependency automation and Cairo readiness, further change to =within= behaviour (bidirectionality) |
-| 3 Feb 2004 | Fixes for internationalisation, name matching, QBE, within= behaviour, documentation. |
-| 21 May 2003 | Non-standard fields. Configurability of tables and action editor. Non-standard attributes. Eliminated chdir. Multi-line actions. Optimisation of notifies. |
-| 30 Apr 2003 | Version 2.0; Large sections rewritten to take advantage of improvements in Plugin support, eliminating two scripts in bin. Added UIDs and formattable action searches |
-| 30 Jan 2003 | Query-by-example action search with notify field; notification of change emails and actions email are sent as one; notify field was added to topic view and edit; various bug fixes by TWiki:Main/PaulineCheung |
-| 26 Sep 2002 | Added changedsince notify support, added support for editing in a seperate window, incorporated attribute syntax corrections contributed by Main.PeterThoeny, sorted ACTIONSEARCH output and action notifications |
-| 14 Feb 2002 | Sorted ACTIONSEARCH results by due date; Fixed bugs editaction kills form data, Actions flagged as late the day before, TWiki table and bullet formatting doesn't work within action text |
-| 11 Jan 2002 | Added ACTIONSEARCH for selected webs and topics; Changed action editor to use a template; Eliminated UNIX dependencies; Fixed formatting of actions in bulleted lists |
-| 9 Jan 2002 | Bugfix version |
+|  Change History: | |
+|  11556 | QBE topic made much friendlier using TWiki-4 features; minor bugfixes |
+|  10919 | <a href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item2606'>Item2606</a>  actionnotify can now read email addresses from password manager as well as new TWiki4 style user topics. actionnotify requires TWiki-4.0.4 + hotfix-4.0.4-1 |
+|  8385 | <a href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1443'>Item1443</a>  style sheet bug makes yellow warning not show |
+|  8372 | <a href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1434'>Item1434</a>  moved actionnotify from bin into tools |
+|  8304 | <a href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1305'>Item1305</a>  removing dotted style from AT. Looks horrible in IE |
+|  8090 | <a href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1304'>Item1304</a>  removed unnecessary warning that may be breaking some sites |
+|  8089 | <a href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1305'>Item1305</a>  changed dotted to solid gray, as requested |
+|  26 Mar 2005 | 2.022 Corrected JSCalendar problems, and cleaned up lazy-loading of libraries. Added relative date specs to searches. |
+|  8 Feb 2005 | 2.021 Documentation fixes. |
+|  19 Nov 2004 | 2.020 Added conditions for date matching, and fixed config so that tests pass again. |
+|  13 Oct 2004 | 2.013 If a user cuts and pastes an action with a uid in it, the action editor would get confused. This update ensures all action UIDs are unique within a topic when it is saved. |
+|  16 Aug 2004 | 2.012 Dependency automation and Cairo readiness, further change to =within= behaviour (bidirectionality) |
+|  3 Feb 2004 | Fixes for internationalisation, name matching, QBE, within= behaviour, documentation. |
+|  21 May 2003 | Non-standard fields. Configurability of tables and action editor. Non-standard attributes. Eliminated chdir. Multi-line actions. Optimisation of notifies. |
+|  30 Apr 2003 | Version 2.0; Large sections rewritten to take advantage of improvements in Plugin support, eliminating two scripts in bin. Added UIDs and formattable action searches |
+|  30 Jan 2003 | Query-by-example action search with notify field; notification of change emails and actions email are sent as one; notify field was added to topic view and edit; various bug fixes by TWiki:Main/PaulineCheung |
+|  26 Sep 2002 | Added changedsince notify support, added support for editing in a seperate window, incorporated attribute syntax corrections contributed by Main.PeterThoeny, sorted ACTIONSEARCH output and action notifications |
+|  14 Feb 2002 | Sorted ACTIONSEARCH results by due date; Fixed bugs editaction kills form data, Actions flagged as late the day before, TWiki table and bullet formatting doesn't work within action text |
+|  11 Jan 2002 | Added ACTIONSEARCH for selected webs and topics; Changed action editor to use a template; Eliminated UNIX dependencies; Fixed formatting of actions in bulleted lists |
+|  9 Jan 2002 | Bugfix version |
 |  Perl Version: | 5.8 |
 |  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/ActionTrackerPlugin |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/ActionTrackerPluginDev |

@@ -164,7 +164,7 @@ sub processTopic
 						xrf "$viewprefix/$1/$2";
 	# normal links
 	s/\[\[+([^]]+)\]/&xrf($1)/geo;
-	s/\b[A-Z]+[a-z]+[A-Z][A-Za-z0-9_-]*/&xrf($&)/geo;
+	s/(\b[A-Z]+[a-z]+[A-Z][A-Za-z0-9_-]*)/&xrf($1)/geo;
 	# external links
 	s/(^|href=|\s)(http:\/\/[^]> "\n	]+)/&xrf($2)/geo;
 	s/\b([A-Z][A-Z][A-Z]+)\W/&xrf("$1")/geo;

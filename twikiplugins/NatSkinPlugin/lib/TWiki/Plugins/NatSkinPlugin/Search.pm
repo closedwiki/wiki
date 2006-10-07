@@ -26,13 +26,14 @@ use vars qw($isInitialized $debug $includeWeb $excludeWeb
 	    $sandbox  $specialCharPattern);
 use URI::Escape;
 use TWiki::Plugins::NatSkinPlugin;
+
 $debug = 0; # toggle me
 $specialCharPattern = qr/([^\\])([\$\@\%\&\#\'\`\/])/o;
 
 ###############################################################################
 sub writeDebug {
-  &TWiki::Func::writeDebug("- NatSkinPlugin::Search - " . $_[0]) if $debug;
-  #print STDERR "NatSkinPlugin::Search - $_[0]\n" if $debug;
+  #&TWiki::Func::writeDebug("- NatSkinPlugin::Search - " . $_[0]) if $debug;
+  print STDERR "NatSkinPlugin::Search - $_[0]\n" if $debug;
 }
 
 ##############################################################################
@@ -55,12 +56,20 @@ sub doInit {
 }
 
 ##############################################################################
+# wrapper for dakar's TWiki::UI:run interface
+sub natSearchCgi {
+  my $session = shift;
+  $TWiki::Plugins::SESSION = $session;
+  return natSearch($session->{cgiQuery}, $session->{topicName}, $session->{webName});
+}
+
+##############################################################################
 sub natSearch {
   my ($query, $topic, $web) = @_;
 
+  #writeDebug("called natSearch()");
   &doInit();
 
-  #writeDebug("called natSearch()");
 
   my $theSearchString = $query->param('search') || '';
   my $theWeb = $query->param('web') || $web;
@@ -82,7 +91,8 @@ sub natSearch {
   #writeDebug("searchTemplate name =$searchTemplate");
   if ($searchTemplate) {
     $searchTemplate = &TWiki::Func::readTemplate($searchTemplate);
-  } else {
+  }
+  unless ($searchTemplate) {
     $searchTemplate =  &TWiki::Func::readTemplate('search');
   }
   $searchTemplate =~ s/^\s*(.*)\s*$/$1/os;
@@ -108,11 +118,10 @@ sub natSearch {
   # construct the list of webs to search in
   my @webList = ($theWeb);
   if ($options =~ /g/) {
-    @webList = TWiki::Func::getPublicWebList();
+    @webList = sort TWiki::Func::getPublicWebList();
     @webList = grep (/^$includeWeb$/, @webList) if $includeWeb;
     @webList = grep (!/^$excludeWeb$/, @webList) if $excludeWeb;
     @webList = grep (!/^$theWeb$/, @webList);
-    @webList = sort @webList;
     unshift @webList, $theWeb;
   }
   #writeDebug("webList=" . join(',', @webList));
@@ -128,9 +137,9 @@ sub natSearch {
   #     (3.1) try a topic search
   #     (3.2) fallback to content search
   my ($results, $nrHits);
-  if ($theSearchString =~ /^[A-Z]/) { 
+  if ($theSearchString =~ /^[A-Z]/) {
     if ($theSearchString =~ /^(.*)\.(.*?)$/) {  # Special web.topic notation
-      $theWeb = $1;
+      @webList = ($1);
       $theSearchString = $2;
     }
 
@@ -195,23 +204,24 @@ sub natSearch {
   #writeDebug("tmplHead='$tmplHead'");
   #writeDebug("tmplSearch='$tmplSearch'");
   #writeDebug("tmplTable='$tmplTable'");
-  writeDebug("tmplNumber='$tmplNumber'");
-  writeDebug("tmplTail='$tmplTail'");
+  #writeDebug("tmplNumber='$tmplNumber'");
+  #writeDebug("tmplTail='$tmplTail'");
 
   $tmplHead = &TWiki::Func::expandCommonVariables($tmplHead, $topic);
   $tmplHead = &TWiki::Func::renderText($tmplHead);
   $tmplHead =~ s|</*nop/*>||goi;
   $tmplHead =~ s/%TOPIC%/$topic/go;
   $tmplHead =~ s/%SEARCHSTRING%/$origSearch/go;
-
   print $tmplHead;
+
   if ($nrHits) {
     $tmplNumber =~ s/%NTOPICS%/$nrHits/go;
+    $tmplNumber = &TWiki::Func::expandCommonVariables($tmplNumber, $topic);
     print $tmplNumber;
     _natPrintSearchResult($tmplTable, $results, $theSearchString);
   } else {
-    print '<div class="natSearchMessage">Nothing found. Try again!</div>' . 
-      "\n";
+    my $text = &TWiki::Func::expandCommonVariables('%TMPL:P{"NOTHING_FOUND"}%');
+    print '<div class="natSearchMessage">'.$text."</div>\n";
   }
 
   # print last part of full HTML page
@@ -224,8 +234,7 @@ sub natSearch {
 }
 
 ##############################################################################
-sub natTopicSearch
-{
+sub natTopicSearch {
   my ($theSearchString, $theWebList, $doIgnoreCase, $theUser) = @_;
 
   my $nrHits = 0;
@@ -281,7 +290,7 @@ sub natTopicSearch
 
     # filter out non-viewable topics
     @topics = 
-      grep {&TWiki::Func::checkAccessPermission("view", $theUser, "", $_, $thisWebName);}
+      grep {&TWiki::Func::checkAccessPermission("view", $theUser, undef, $_, $thisWebName);}
       @topics;
 
 
@@ -394,13 +403,10 @@ sub natContentsSearch {
 }
 
 ##############################################################################
-sub _natPrintSearchResult
-{
+sub _natPrintSearchResult {
   my ($theTemplate, $theResults, $theSearchString) = @_;
 
-  my $noSpamPadding =
-    $TWiki::Plugins::NatSkinPlugin::isDakar?
-      $TWiki::cfg{AntiSpam}{EmailPadding}:$TWiki::noSpamPadding;
+  my $noSpamPadding = $TWiki::cfg{AntiSpam}{EmailPadding};
       
   # print hits in all webs
   foreach my $thisWeb (keys %{$theResults}) {
@@ -428,12 +434,11 @@ sub _natPrintSearchResult
 
       # get topic information
       my ($meta, $text) = &TWiki::Func::readTopic($thisWeb, $thisTopic);
-      my ($revDate, $revUser, $revNum) = &getRevisionInfoFromMeta($thisWeb, $thisTopic, $meta); 
-      #writeDebug("revDate=$revDate, revUser=$revUser, revNum=$revNum");
+      my ($revDate, $revUser, $revNum ) = $meta->getRevisionInfo();
+      $revUser = $revUser->webDotWikiName() if $revUser;
       $revUser = &TWiki::Func::userToWikiName($revUser);
-      $revDate = &TWiki::Func::formatTime($revDate) 
-	unless $TWiki::Plugins::NatSkinPlugin::isBeijing;
-
+      $revDate = &TWiki::Func::formatTime($revDate);
+      #writeDebug("revDate=$revDate, revUser=$revUser, revNum=$revNum");
 
       # insert the topic information into the template
       $tempVal =~ s/%WEB%/$thisWeb/go;
@@ -442,7 +447,7 @@ sub _natPrintSearchResult
       if ($revNum > 1) {
 	$revNum = "r1.$revNum";
       } else {
-	$revNum = '<span class="natSearchNewTopic">New</span>';
+	$revNum = '<span class="natSearchNewTopic">%TMPL:P{"NEW"}%</span>';
       } 
       $tempVal =~ s/%REVISION%/$revNum/go;
       $tempVal =~ s/%AUTHOR%/$revUser/go;
@@ -521,7 +526,7 @@ sub _getTopicSummary {
 
   # ... but hilight all of them
   foreach my $k (@theKeywords) {
-    $htext =~ s:$k:<font color="#cc0000">$&</font>:gi;
+    $htext =~ s:($k):<font color="#cc0000">$1</font>:gi;
   }
 
   # inline search renders text, 
@@ -556,23 +561,6 @@ sub _getSearchTerms {
   }
 
   return @searchTerms;
-}
-
-##############################################################################
-sub getRevisionInfoFromMeta {
-  my ($thisWeb, $thisTopic, $meta) = @_;
-
-  my ($revDate, $revUser, $revNum);
-
-  if ($TWiki::Plugins::NatSkinPlugin::isDakar) {
-    ($revDate, $revUser, $revNum ) = $meta->getRevisionInfo();
-    $revUser = $revUser->webDotWikiName() if $revUser;
-  } else {
-    ($revDate, $revUser, $revNum) = 
-      &TWiki::Store::getRevisionInfoFromMeta($thisWeb, $thisTopic, $meta); 
-  }
-
-  return ($revDate, $revUser, $revNum);
 }
 
 ##############################################################################

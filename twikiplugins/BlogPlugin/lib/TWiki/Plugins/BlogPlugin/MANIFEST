@@ -33,6 +33,12 @@ data/_BlogPlugin/FrontPage.txt 0644
 data/_BlogPlugin/HiddenFormViewTemplate.txt 0644
 data/_BlogPlugin/NatSkinSearchViewTemplate.txt 0644
 data/_BlogPlugin/NewsFeeds.txt 0644
+data/_BlogPlugin/PatternSkinBlogAuthorViewTemplate.txt 0644
+data/_BlogPlugin/PatternSkinBlogCommentViewTemplate.txt 0644
+data/_BlogPlugin/PatternSkinBlogEntryViewTemplate.txt 0644
+data/_BlogPlugin/PatternSkinBlogLinkViewTemplate.txt 0644
+data/_BlogPlugin/PatternSkinHiddenFormViewTemplate.txt 0644
+data/_BlogPlugin/PatternSkinSubjectCategoryViewTemplate.txt 0644
 data/_BlogPlugin/RenderAddComment.txt 0644
 data/_BlogPlugin/RenderAdminTools.txt 0644
 data/_BlogPlugin/RenderAffiliation.txt 0644
@@ -76,6 +82,7 @@ data/_BlogPlugin/RenderNewTWikiTopicButton.txt 0644
 data/_BlogPlugin/RenderNewTopicTypeForm.txt 0644
 data/_BlogPlugin/RenderNextCommentNr.txt 0644
 data/_BlogPlugin/RenderPageNavigation.txt 0644
+data/_BlogPlugin/RenderPageTitle.txt 0644
 data/_BlogPlugin/RenderPages.txt 0644
 data/_BlogPlugin/RenderRecentComments.txt 0644
 data/_BlogPlugin/RenderRecentPostings.txt 0644
@@ -93,6 +100,7 @@ data/_BlogPlugin/RenderUploadImageButton.txt 0644
 data/_BlogPlugin/RenderValidateButton.txt 0644
 data/_BlogPlugin/RenderVisitors.txt 0644
 data/_BlogPlugin/RenderWebChanges.txt 0644
+data/_BlogPlugin/RenderWebTools.txt 0644
 data/_BlogPlugin/RssViewTemplate.txt 0644
 data/_BlogPlugin/SubjectCategoryForm.txt 0644
 data/_BlogPlugin/SubjectCategoryTemplate.txt 0644
@@ -132,6 +140,8 @@ data/_BlogPlugin/WebRssCombined.txt 0644
 data/_BlogPlugin/WebRssComments.txt 0644
 data/_BlogPlugin/WebRssTeaser.txt 0644
 data/_BlogPlugin/WebRss.txt 0644
+data/_BlogPlugin/WebSearchAdvanced.txt 0644
+data/_BlogPlugin/WebSearch.txt 0644
 data/_BlogPlugin/WebSideBar.txt 0644
 data/_BlogPlugin/WebStatistics.txt 0644
 data/_BlogPlugin/WebSyndication.txt 0644

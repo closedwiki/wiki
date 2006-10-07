@@ -7,7 +7,10 @@
    * Syntax: =%<nop>META{ "item" ...}%=
    * Parameters:
      | *Item* | *Options* | *Description* |
-     | ="formfield"= | =name="..."= - name of the field. The field value can be shortened as described in %TWIKIWEB%.FormattedSearch for =$formfield= | Show a single form field |
+     | ="formfield"= | =name="..."=: name of the field. The field value can be shortened as described in %TWIKIWEB%.FormattedSearch for =$formfield= %BR% \
+                       =newline="..."=: by default, each newline character will be rewritten to =&lt;br /&gt;= to allow metadata that contains newlines to be used in tables, etc. =$n= indicates a newline character. %BR% \
+                       =bar="..."=: by default, each vertical bar is rewritten to an HTML entity so as to not be mistaken for a table separator. \
+                    | Show a single form field |
      | ="form"= | _none_ | Generates the table showing the form fields. See [[TWikiDocumentation#Form_Templates][Form Templates]] |
      | ="attachments"= | =all="on"= to show hidden attachments | Generates the table showing the attachments |
      | ="moved"= | _none_ | Details of any topic moves |

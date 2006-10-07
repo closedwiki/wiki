@@ -30,8 +30,6 @@ use TWiki::OopsException;
 sub preview {
     my $session = shift;
 
-    $session->enterContext( 'preview' );
-
     my $query = $session->{cgiQuery};
     my $web = $session->{webName};
     my $topic = $session->{topicName};
@@ -89,7 +87,7 @@ sub preview {
 
     # Disable links and inputs in the text
     $dispText =~ s#<a\s[^>]*>(.*?)</a>#<span class="twikiEmulatedLink">$1</span>#gis;
-    $dispText =~ s/<(input|button|textarea) /<$1 disabled="disabled"/gis;
+    $dispText =~ s/<(input|button|textarea) /<$1 disabled="disabled" /gis;
     $dispText =~ s(</?form(|\s.*?)>)()gis;
     $dispText =~ s/(<[^>]*\bon[A-Za-z]+=)('[^']*'|"[^"]*")/$1''/gis;
 

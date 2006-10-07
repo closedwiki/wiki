@@ -22,10 +22,15 @@
 package TWiki::Plugins::TimeSincePlugin;
 
 use strict;
-use vars qw( $VERSION $RELEASE $isInitialized);
+use vars qw( 
+  $VERSION $RELEASE $NO_PREFS_IN_TOPIC $SHORTSUMMARY
+  $isInitialized
+);
 
 $VERSION = '$Rev$';
-$RELEASE = '1.00';
+$RELEASE = '1.01';
+$NO_PREFS_IN_TOPIC = 1;
+$SHORTSUMMARY = 'Display time difference in a human readable way';
 
 ###############################################################################
 sub initPlugin {

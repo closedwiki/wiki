@@ -1,7 +1,7 @@
 %TMPL:INCLUDE{"oops"}%
 <!-- template: oopsregexist.nat.tmpl -->
-%TMPL:DEF{"heading"}%You are already registered%TMPL:END%
+%TMPL:DEF{"heading"}%%MAKETEXT{"You are already registered"}%%TMPL:END%
 %TMPL:DEF{"message"}%<!-- -->
-Can't register twice, the username %PARAM1% is already registered.
+%MAKETEXT{"You cannot register twice, the name [_1] is already registered." args="%PARAM1%"}%
 
 %TMPL:P{"goback"}% %TMPL:END%

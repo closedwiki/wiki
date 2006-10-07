@@ -43,12 +43,11 @@ use File::Spec;
 This method is designed to be
 invoked via the =TWiki::UI::run= method.
 
-Attach a file to a topic. CGI parameters are:
-
-| =filename= | Name of attachment |
-| =skin= | Skin(s) to use in presenting pages |
+Adds the meta-data for an attachment to a toic. Does *not* upload
+the attachment itself, just modifies the meta-data.
 
 =cut
+
 sub attach {
     my $session = shift;
 
@@ -139,6 +138,11 @@ CGI parameters, passed in $query:
 | =createlink= | if defined, will create a link to file at end of topic |
 | =changeproperties= | |
 
+Does the work of uploading a file to a topic. Designed to be useable as
+a REST method (it will redirect to the 'view' script unless the 'noredirect'
+parameter is specified, in which case it will print a message to
+STDOUT, starting with 'OK' on success and 'ERROR' on failure.
+
 =cut
 
 sub upload {
@@ -180,24 +184,8 @@ sub upload {
     my $origName = $fileName;
 
     unless( $doPropsOnly ) {
-        # SMELL: homegrown split because we don't know the client OS
-        # cut path from filepath name (Windows '\' and Unix "/" format)
-        my @pathz = ( split( /\\/, $filePath ) );
-        my $filetemp = $pathz[$#pathz];
-        my @pathza = ( split( '/', $filetemp ) );
-        $fileName = $pathza[$#pathza];
-        $origName = $fileName;
-
-        # Sanitize filename
-        # FIXME: Allow spaces and other chars by encoding them (and decoding on download)
-        # SMELL: Safer to keep only permitted chars instead of filtering out cfg{NameFilter} chars
-        $fileName =~ s/ /_/go;                                 # Change spaces to underscore
-        $fileName =~ s/$TWiki::cfg{NameFilter}//goi;           # Remove problematic chars
-        $fileName =~ s/$TWiki::cfg{UploadFilter}/$1\.txt/goi;  # Append .txt to some files
-
-        $fileName = TWiki::Sandbox::untaintUnchecked( $fileName );
-
-        ##$session->writeDebug ("Upload filename after cleanup is '$fileName'");
+        ( $fileName, $origName ) =
+          TWiki::Sandbox::sanitizeAttachmentName( $fileName );
 
         # check if upload has non zero size
         if( $stream ) {

@@ -36,6 +36,12 @@ sub test_boolean {
 	$this->assert_not_null($attrs->remove("b987"));
 	$this->assert_null($attrs->{"b987"});
 	$this->assert($attrs->isEmpty(), "Fail ".$attrs->stringify());
+
+	$attrs = TWiki::Attrs->new("Acid AnhydrousCopperSulphate='white' X", 1);
+	$this->assert_not_null($attrs->remove("Acid"));
+	$this->assert_not_null($attrs->remove("X"));
+	$this->assert_str_equals('white',$attrs->remove("AnhydrousCopperSulphate"));
+	$this->assert($attrs->isEmpty(), "Fail ".$attrs->stringify());
 }
 
 sub test_default {

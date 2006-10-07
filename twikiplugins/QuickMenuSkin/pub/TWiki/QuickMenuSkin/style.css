@@ -37,7 +37,7 @@ IMG {
 	vertical-align: text-bottom;
 }
 PRE, CODE, TT {
-	color: #606;
+	color: #630;
 	font-size: small;
 }
 P {
@@ -50,10 +50,22 @@ H1, H2, H3, H4, H5, H6 {
 	line-height: 120%;
 }
 H1 {
+	font-size: 2em;
+	font-weight: 500;
 	margin: 0 0 0.7em 0;
 }
-H1, H2 {
+H2 {
+	font-size: 1.6em;
 	font-weight: 500;
+}
+H3 {
+	font-size: 1.2em;
+}
+H4 {
+	font-size: 1.1em;
+}
+H6 {
+	font-size: 0.85em;
 }
 OL LI, UL LI {
 	line-height: 1.3em;
@@ -92,14 +104,18 @@ OL LI, UL LI {
 .PageHeader {
 	background-color: #f7f7f7;
 }
+.HomePathTitle {
+	font-size: 70%;
+}
 .MenuBar {
-	height: 21px;
-	font: 12px "Lucida Grande", Verdana, Arial, sans-serif;
+	height: 19px;
+	font: 12px/18px "Lucida Grande", Verdana, Arial, sans-serif;
 	background: url("menubar.gif");
-	padding: 1px 10px;
+	padding: 2px 10px;
 }
 .MenuBar CENTER {
-	padding: 3px 0;
+	padding-top: 1px;
+	font-weight: bold;
 }
 .MenuBarRight {
 	float: right;
@@ -129,7 +145,7 @@ OL LI, UL LI {
 	color: #666;
 }
 .twikiInputBox {
-	margin: 1px 4px;
+	margin: 0;
 	padding: 0 1px 1px 1px;
 	color: black;
 	font-size: 10px;
@@ -185,6 +201,13 @@ OL LI, UL LI {
 	color: #000;
 	background: url("menu_over.gif") repeat-x center;
 }
+INPUT.twikiSubmitDisabled,
+INPUT.twikiSubmitDisabled:focus,
+INPUT.twikiSubmitDisabled:hover {
+	border: 1px solid #666;
+	color: #666;
+	background: #aaa;
+}
 .twikiToc {
 	margin: 1em 0;
 	padding: .3em 0 .6em 0;
@@ -222,14 +245,16 @@ a:visited .twistyLinkLabel {
 }
 
 .tipsOfTheDay {
+	font-size: 80%;
 	background-color: #def;
+	border: 1px solid #69c;
 }
 .tipsOfTheDayHeader {
 	display: block;
-	padding: 5px;
+	padding: 3px;
 }
 .tipsOfTheDayText {
-	padding: 0 5px 5px 5px;
+	padding: 0 3px 3px 3px;
 }
 .tipsOfTheDayTitle {
 	font-weight: bold;
@@ -259,8 +284,8 @@ a:visited .twistyLinkLabel {
 .twikiTable th a:hover,
 .twikiTable th a:hover font {
 	background-color:transparent;
-	color: #709;
-	border: solid #709;
+	color: #609;
+	border: solid #609;
 	border-width: 0 0 1px 0;
 }
 th.twikiSortedAscendingCol,
@@ -382,4 +407,10 @@ TABLE#twikiSearchTable TD {
 }
 TABLE#twikiSearchTable TD.first {
 	background: #eee;
+}
+.twikiEditboxStyleMono {
+	font: 100% "Courier New", courier, monaco, monospace;
+}
+.twikiEditboxStyleProportional {
+	font: 100% "Lucida Grande", verdana, arial, sans-serif;
 }

@@ -69,7 +69,7 @@ sub initPlugin {
     $minimumSectionLength = TWiki::Func::getPluginPreferencesValue( 'MINIMUMSECTIONLENGTH' ) || 0;
     $supportedSkins = TWiki::Func::getPluginPreferencesValue( 'SKINS' ) || '';
     $lastSection = 0;
-
+    
     # Plugin correctly initialized
     return 1;
 }
@@ -87,7 +87,6 @@ sub beforeCommonTagsHandler {
     } else {
         return unless ( TWiki::Func::getContext()->{'body_text'});
     }
-
     fakeTWiki4RestHandlers(@_);
 
     #TODO:why is this called multiple times?
@@ -100,12 +99,11 @@ sub beforeCommonTagsHandler {
 #TODO: think about tuning this - but simple is more re-producable
 #save will need to look at the verision that its comming from , not the head..
     my $newDoc = '';
-    my $dashes = '';
     my $sections = getSection($_[0]);
     foreach my $sec (@{$sections}) {
             $lastSection++;
             $sectionIds{$lastSection} = $sec;
-            $newDoc .= "<div id='inlineeditTopicHTML_".$lastSection."' class='inlineeditTopicHTML'>\n".$dashes.$sec."\n</div>";
+            $newDoc .= "<div id='inlineeditTopicHTML_".$lastSection."' class='inlineeditTopicHTML'>\n".$sec."\n</div>";
     }
     $_[0] = $newDoc;
 }
@@ -130,7 +128,7 @@ sub beforeSaveHandler {
         foreach my $json (@jsons) {
             my $obj = jsonToObj($json);
             my $sectionName = $obj->{topicSection};
-            $sectionName =~ s/"//g;
+            $sectionName =~ s/"//g; #"gedit does dumb syntax highlighting
             $changedSections{$sectionName} = $obj;
         }
         my ($meta,$text) = TWiki::Func::readTopic($_[2],$_[1]);
@@ -150,7 +148,8 @@ sub beforeSaveHandler {
         for my $sectionName (@$sectionOrder) {
             $_[0] .= $changedSections{$sectionName}->{value};
         }
-
+        #TODO: SMELL: i don't know why twiki is loosing the meta if i don't change it at all
+        $_[0] = TWiki::Store::_writeMeta( $meta, $_[0] );
     } else {
         #TODO: deprecated
         #the old one section only save (still used by wikiwyg and TinyMCE)
@@ -222,7 +221,6 @@ sub postRenderingHandler {
     my $jscript .= TWiki::Func::readTemplate ( 'inlineeditplugin', 'prejavascript' );
     $scriptHeader .= $jscript;
 
-    my $hiddenStyle = 'style="display:none;" ';#visibility:hidden;height:0px;" ';
     my $output = '';
 
     #disable if the user does not have edit permissions
@@ -233,7 +231,7 @@ sub postRenderingHandler {
         #lets add an InfoSection for the topic.
         my $section = 0;
         my ($response, $date, $user, $rev, $comment, $oopsUrl, $loginName, $unlockTime, $viewUrl, $saveUrl, $restUrl, $sectionName) = _getTopicSectionState($WEB, $TOPIC, $section);
-        my $topicState = '<div class="inlineeditTopicInfo" '.$hiddenStyle.'id="inlineeditTopicInfo_'.$section.'" '.'>'.$response.'</div>';
+        my $topicState = '<div class="inlineeditTopicInfo hideElement" id="inlineeditTopicInfo_'.$section.'" '.'>'.$response.'</div>';
         $output .= $topicState;
     } else {
     	#add the inlineEdit JavaScript
@@ -248,7 +246,7 @@ sub postRenderingHandler {
             my $tml = $sectionIds{$key};
             my ($response, $date, $user, $rev, $comment, $oopsUrl, $loginName, $unlockTime, $viewUrl, $saveUrl, $restUrl, $sectionName) = _getTopicSectionState($WEB, $TOPIC, $section, $tml);
             #send the tml in a textarea to stop the browser from closing xml fragments
-            $output .= '<textarea class="inlineeditTopicTML" '.$hiddenStyle.'id="inlineeditTopicTML_'.$section.'" '.'>'.$tml.'</textarea>';
+            $output .= '<textarea rows="1" cols="1" disabled readonly class="inlineeditTopicTML hideElement" id="inlineeditTopicTML_'.$section.'" '.'>'.$tml.'</textarea>';
 
             #these need to remain in seperate divs to avoid needing to escape them
     	   if ( $sendHTML == 1) {
@@ -263,12 +261,12 @@ sub postRenderingHandler {
                                                     expandVarsInURL => \&TWiki::Plugins::WysiwygPlugin::expandVarsInURL,        #TODO: not sure if this will work without more magic
                                                     markVars=>1} );
                 $converted = $tml2html->cleanup( $converted );
-                my $tml2htmloutput .= '<form action="'.$saveUrl.'" method="POST"><div class="inlineeditTopicTML2HTML" '.$hiddenStyle.'id="inlineeditTopicTML2HTML_'.$section.'" '.'>'.$converted.'</div>'.$formelements.'</form>';
+                my $tml2htmloutput .= '<form action="'.$saveUrl.'" method="POST"><div class="inlineeditTopicTML2HTML hideElement" id="inlineeditTopicTML2HTML_'.$section.'" '.'>'.$converted.'</div>'.$formelements.'</form>';
                 #do this so that the editor form div directly follows the HTML we are editing
                 $_[0] =~ s/(<div id=.inlineeditTopicHTML_)/$tml2htmloutput$1/g;#TODO: this presumes only one editor
             } else {
             }
-            my $topicState = '<div class="inlineeditTopicInfo" '.$hiddenStyle.'id="inlineeditTopicInfo_'.$section.'" '.'>'.$response.'</div>';
+            my $topicState = '<textarea rows="1" cols="1" disabled readonly class="inlineeditTopicInfo hideElement" id="inlineeditTopicInfo_'.$section.'" '.'>'.$response.'</textarea>';
             $output .= $topicState;
         }
     }
@@ -391,7 +389,7 @@ sub _getTopicSectionState {
    my $leaseduserWikiName = TWiki::Func::userToWikiName($loginName);
    #TODO: remove lock on save?
 #   my $saveUrl = TWiki::Func::getScriptUrl( $WEB, $TOPIC, 'save').'?inlineeditsave=1;html2tml=1;section='.$section.';originalrev='.$rev;
-   my $saveUrl = TWiki::Func::getScriptUrl( $WEB, $TOPIC, 'save').'?inlineeditsave=1;section='.$section.';originalrev='.$rev;
+   my $saveUrl = TWiki::Func::getScriptUrl( $WEB, $TOPIC, 'save').'?inlineeditsave=1;section='.$section.';originalrev='.$rev.';forcenewrevision=1';
 #TODO: make this param up to the editor
 #   $saveUrl .= ';html2tml=1' if ( $EDITOR ne 'textarea');
    my $viewUrl = TWiki::Func::getScriptUrl( $WEB, $TOPIC, 'view').'?rev='.$rev;
@@ -438,17 +436,55 @@ sub _getTopicSectionState {
    return (objToJson($obj), $date, $user, $rev, $comment, $oopsUrl, $loginName, $unlockTime, $viewUrl, $saveUrl, $restUrl, $sectionName);
 }
 
+sub deepcopy {
+   if (ref $_[0] eq 'HASH') {
+      return { map(deepcopy($_), %{$_[0]}) };
+   } elsif (ref $_[0] eq 'ARRAY') {
+      return [ map(deepcopy($_), @{$_[0]}) ];
+   }
+   return $_[0];
+}
+
 #TODO: ffs use references
+#TODO: cacheing - the $sectionNumber case is dumb
 #if sectionNumber is not specified, return a list of all sections
 sub getSection {
     my $text = shift;
     my $sectionNumber = shift || -1;
-
-    my @sections = ($text);
+    
+    my $removedLiterals = {};
+    my $removedVerbatims = {};
+    my $removedPres = {};
+    my $renderer = $TWiki::Plugins::SESSION->{renderer};
+    
+    my @sections = ();
     if ($minimumSectionLength > 0) {
-        @sections = split(/(\n\n)/, $text);
-        #TODO: re-combine sections that are too small
-    }
+    	#TODO: change this to do all html?
+    	$text = $renderer->takeOutBlocks( $text, 'literal', $removedLiterals );
+    	$text = $renderer->takeOutBlocks( $text, 'verbatim', $removedVerbatims );
+    	$text = $renderer->takeOutBlocks( $text, 'pre', $removedPres );
+
+        my @rawSections = split(/(\n\n+)/, $text, -1);
+        #my @rawSections = ($text);
+        #re-combine sections that are just made up of newlines
+        for my $sec (@rawSections) {
+        	if ( $sec =~ /^[\n\r]*$/ ) {
+        		$sections[$#sections] .= $sec;
+        	} else {
+				my $tempHash;
+				$tempHash = deepcopy($removedLiterals);	#putBack is destructive :(
+        		$renderer->putBackBlocks( \$sec, $tempHash, 'literal', 'literal');
+				$tempHash = deepcopy($removedVerbatims);	#putBack is destructive :(
+        		$renderer->putBackBlocks( \$sec, $tempHash, 'verbatim', 'verbatim');
+				$tempHash = deepcopy($removedPres);	#putBack is destructive :(
+        		$renderer->putBackBlocks( \$sec, $tempHash, 'pre', 'pre');
+       			push @sections, $sec;
+       		}
+        }
+    } else {
+    	@sections = ($text);
+   	}
+
     if ($sectionNumber == -1) {
         return \@sections;
     } else {

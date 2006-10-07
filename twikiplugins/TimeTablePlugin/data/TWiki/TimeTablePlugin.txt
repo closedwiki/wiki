@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1151064979" format="1.0" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1154944125" format="1.0" version="$Rev$"}%
 ---+!! <nop>%TOPIC%
 The <nop>%TOPIC% handles the tag =%<nop>TIMETABLE%= and creates a weekly timetable. 
 The timetable is rendered with HTML tables and should work with all modern web browsers.
@@ -14,6 +14,11 @@ e.g:
 you get:
 	* 22 May 2006 - <span style="color:white;background-color:black">07:00am-01:00pm</span> Meeting
 	* 23 May 2006 - 24 May 2006 - <span style="background-color:yellow">07:00am-04:00pm</span> Conference
+
+The =%<nop>TTTOPICSETUP%= (!TimeTable Topic Setup) tag allows you 
+to define default foreground/background colors (eventfgcolor/eventbgcolor attributes) 
+and a time zone (timezone attribute) for all events on a topic. Please use it only once on a topic.
+
 
 
 *Example: (png image):*
@@ -37,6 +42,7 @@ Events are defined with bullets. Following event types are supported to define e
 | <b>Interval</b> | ==&nbsp;* DDD - DDD - HH:MM - HH:MM - description== | ==&nbsp;* Mon - Fri - 12:15 - 13:00 - Lunch== |
 |^| ==&nbsp;* DDD - DDD - HH:MM - HH:MM - description - background color== | ==&nbsp;* Mon - Fri - 12:15 - 13:00 - Lunch - green== |
 |^| ==&nbsp;* DDD - DDD - HH:MM - HH:MM - description - foreground color, background color== | ==&nbsp;* Mon - Fri - 12:15 - 13:00 - Lunch - white,black== |
+| <b>Duration</b> | instead of an end time (==HH:MM==) in a time range of a single/list/interval event you can define an event duration in days (==d==), hours (==h==) and/or minutes (==m==), e.g. one day: =1d= ; one day and two hours: =1:2d= ; one day, two hours and 30 minutes: =1:2:30d= ; two hours: =2h= ;  two yours and 30 minutes: =2:30h= ; 30 minutes: =30m= | ==&nbsp;* Mon - 10:00 - 2h - every Monday 2 hours at 10 o'clock== |
 
 If you enable the compatibility mode (see Attributes or Plugins Settings sections) you can also use all TWiki:Plugins.CalendarPlugin event types.
 Examples:
@@ -44,15 +50,16 @@ Examples:
 %TIMETABLE{compatmode="1" startdate="12 Jun 2006"}%
 	* 12 Jun - %TTCM{"10am-5pm,yellow"}% Every 12th of June between 10am and 5pm
 	* E Wed - Every Wednesday (whole-time)
-	* 12 Jun 2006 - 19 Jun 2006 - %TTCM{"12:15am-1pm,white,black"}% Lunch with Mary
+	* 12 Jun 2006 - 19 Jun 2006 - %TTCM{"12:15pm-1pm,white,black"}% Lunch with Mary
 	* 13 Jun 2006 - 10:00-12:00 Meeting 
 	* 14 Jun 2006 - Meeting - 01pm-03pm,green
 </verbatim>
 *Notes:*
 	* The parameter of the %<nop>TTCM% tag *must not contain any whitespaces*.
 	* Time ranges in a description field *must not contain any whitespaces*.
-	* If no %<nop>TTCM% tag or no time range was specified in a description of a TWiki:Plugins.CalendarPlugin event the event starts at 0:00am o'clock and ends at 0:00pm (24:00) o'clock.
+	* If no %<nop>TTCM% tag or no time range was specified in a description of a TWiki:Plugins.CalendarPlugin event the event gets a full-time event (12:01am-11:59pm o'clock, 0-24h).
 
+ 
 ---++ Attributes
 Usage: %<nop>TIMETABLE{attribute1="value1" attribute2="value2" ...}% 
 
@@ -68,7 +75,9 @@ Example: %<nop>TIMETABLE{lang="Deutsch" timeinterval="15" }%
 | starttime | a start time, e.g. 7:00, 8a.m., 9:15a.m. ... | starttime="7:00am" |
 | timeformat | time format; allowed values: 12, 12am, 12p.m., 12a.m, 12p.m. and 24 | timeformat="24" |
 | timeinterval | interval steps in minutes for the timeline | timeinterval="30" |
-| topic  | a comma separated list of source topics | topic="%<nop>TOPIC%" |
+| timezone | a hour offset (allowed values: -12 ... 0 ... +12) for time correction or a time zone abbreviation (e.g. UTC, CET ...) | timezone="0" |
+| timezoneabbr | a comma separated list of time zone abbreviations with UTC offsets; the standard time zone abbreviations will be extended with this user defined abbreviations | timezoneabbr="CET:+1, MEST:+2" |
+| topic  | a comma separated list of source topics; you can add a time zone to any source topic name by adding a ':' and a hour offset (-12 ... +12) or a time zone abbreviation, e.g: =topic="MySourceTopic:-2"=  %X% this time zone feature overwrites the =timezone= attribute of a =%<nop>TTTOPICSETUP%= tag | topic="%<nop>TOPIC%" |
 | wholetimerow | enables/disables a whole-time event row (related attributes: wholetimerowtext, wholetimerowtitle) | wholetimerow="0" |
 | workingendtime | working hours end time | workingendtime="5:00pm" |
 | workingstarttime | working hours start time | workingstarttime="9:00am" |
@@ -78,10 +87,10 @@ Example: %<nop>TIMETABLE{lang="Deutsch" timeinterval="15" }%
 | forcestartdate | if set to 1 the timetable starts with the given startdate ('0' means: the timetable view starts with Monday') | forcestartdate="0" |
 | month | set a month (e.g. Jan, Feb ... or 01, 02, ... 12 ) or a month offset (e.g. +0, +1, -2,...) | month="+1" |
 | monthnames | custom month names (a list separated by '¦' and starting on January; overwrites lang attribute) | monthnames="J¦F¦M¦A¦M¦J¦J¦A¦S¦O¦N¦D" |
-| navnext | navigation button to the next week | navnext="&amp;gt;&amp;gt;" |
-| navnexttitle | title text (tooltip text) for the navigation button to the next week | navnexttitle="Next Week" |
-| navprev | navigation button to the previous week | navprev="&amp;lt;&amp;lt;" |
-| navprevtitle | title text (tooltip text) for the navigation button to the previous week | navprevtitle="Previous Week" |
+| navnext | navigation button to the next n days | navnext="&amp;gt;&amp;gt;" |
+| navnexttitle | title text (tooltip text) for the navigation button to the next n days | navnexttitle="Next %n day(s)" |
+| navprev | navigation button to the previous n days | navprev="&amp;lt;&amp;lt;" |
+| navprevtitle | title text (tooltip text) for the navigation button to the previous n days | navprevtitle="Previous %n day(s)" |
 | startdate | a start date (e.g. '1 Oct 2005') or a day offset (e.g. '10', '+30' or '-30') | startdate="+0" |
 | year | set a year (e.g. 2005, 2006 ...) or a year offset (e.g. +0, +1, -1, ...) | year="+0" |
 |  *Table formatting:*  |||
@@ -208,9 +217,11 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Plugin Author: | TWiki:Main.DanielRohde |
 |  Copyright: | &copy; 2006, TWiki:Main.DanielRohde |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | V1.007 (23 Jun 2006) |
+|  Plugin Version: | V1.009 (7 Aug 2006) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  V1.007 (23 Jun 2006) | TWiki:Main.DanielRohde: fixed major bug (wholetimerow: emtpy column) |
+|  V1.009 (7 Aug 2006) | TWiki:Main.DanielRohde: added duration feature; added time zone abbreviations; improved performance; fixed conflict rendering bug; fixed time zone bugs (whole-time event handling, topic include) |
+|  V1.008 (2 Aug 2006) | TWiki:Main.DanielRohde: added timezone feature requested by TWiki:Main.BenWatts; fixed major midday/midnight (12pm/12am) bug reported by TWiki:Main.BenWatts; fixed overlapping day bug; fixed periodic event bug; fixed minor bugs (stylesheet bug: annyoing <nop>JavaScript errors; empty event row) |
+|  V1.007 (23 Jun 2006) | TWiki:Main.DanielRohde: fixed major bug (wholetimerow: empty column) |
 |  V1.006 (23 Jun 2006) | TWiki:Main.DanielRohde: fixed major mod_perl bug (paging in compatmode); added whole-time row feature; fixed minor bugs (empty column color; cutted text) |
 |  V1.005 (8 Jun 2006) | TWiki:Main.DanielRohde: fixed typos (documentation); added new features (compatmode only): inline time range feature and navigation; minor improvements (table header, ...) |
 |  V1.004 (31 May 2006) | TWiki:Main.DanielRohde: fixed typos (documentation, timeformat); added new attributes (days, forcestartdate, nowfgcolor, nowbgcolor); fixed minor bug (periodic repeater); added new event type (list) |
@@ -219,7 +230,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  V1.001 (19 May 2006): | TWiki:Main.DanielRohde: fixed some major bugs (conflict entries, parameter handling, long descriptions); added documentation; |
 |  V1.000 (16 May 2006): | TWiki:Main.DanielRohde: Initial version |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.021 |
-|  CPAN Dependencies: | CPAN:Date::Calc |
+|  CPAN Dependencies: | CPAN:Date::Calc %BR% CPAN:POSIX |
 |  Other Dependencies: | none |
 |  Perl Version: | 5.005 |
 |  [[TWiki:Plugins/Benchmark][Benchmarks]]: | %TWIKIWEB%.GoodStyle nn%, %TWIKIWEB%.FormattedSearch nn%, %TOPIC% nn% |

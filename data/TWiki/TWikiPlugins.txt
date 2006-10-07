@@ -56,12 +56,9 @@ By default, TWiki executes Plugins in alphabetical order on Plugin name. It is p
 
 ---+++ Plugin-Specific Settings
 
-Plugin-specific settings are done in individual Plugin topics. Two settings are standard for each Plugin:
-   1 One line description, used to form the bullets describing the Plugins in the %TWIKIWEB%.TextFormattingRules topic:
-      * =Set SHORTDESCRIPTION = Create dynamic foo bar reports=
-   1 Debug Plugin, output can be seen in =data/debug.txt=. Set to 0=off or 1=on:
-      * =Set DEBUG = 0=
-   * The settings can be retrieved as Preferences variables like =%&lt;pluginname&gt;_&lt;var&gt;%=. For example, =%<nop>DEFAULTPLUGIN_SHORTDESCRIPTION%= shows the description of the <nop>DefaultPlugin.
+Plugins are usually configured by variables accessible though the =configure= interface, but in some cases (usually older plugins) TWiki preferences are used. If a TWiki variable is defined in a Plugin topic e.g:
+   * Set SETTING = Create dynamic foo bar reports
+Then these settings can be retrieved as preferences variables like =%&lt;pluginname&gt;_&lt;var&gt;%=. For example, =%<nop>RUBBERPLUGIN_SETTING%= shows the value of SETTING in the !RubberPlugin topic.
 
 ---+++ Listing Active Plugins
 

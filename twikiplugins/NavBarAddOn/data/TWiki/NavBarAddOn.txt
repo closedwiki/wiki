@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1121493064" format="1.0" version="1.1"}%
+%META:TOPICINFO{author="PeterThoeny" date="1159213083" format="1.0" version="1.1"}%
 %INCLUDE{NavBarAddOnExample}%
 ---+ Navigation Bar Add-On
 
@@ -67,14 +67,21 @@ This Add-on works properly with different skins on IE, Netspace and Firefox. It 
 
 ---++ Add-On Info
 
-|  Add-on Author: | TWiki:Main/PeterThoeny |
+
+	* Set SHORTDESCRIPTION = Add tabbed navigation bars to TWiki topics
+
+|  Add-on Author: | TWiki:Main.PeterThoeny |
+|  Copyright: | &copy; 2005, TWiki:Main.PeterThoeny |
+|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public
+License]]) |
 |  Add-on Version: | 15 Jul 2005 (v1.000) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
 |  15 Jul 2005: | Initial version |
+|  TWiki Dependency: | $TWiki::Plugins::VERSION 1.024 (TWiki 01-Sep-2004) |
 |  CPAN Dependencies: | none |
-|  Other Dependencies: | TWiki:Plugins.SpreadSheetPlugin version 17 Jun 2005 (1.018) |
+|  Other Dependencies: | TWiki:Plugins.SpreadSheetPlugin version 17 Jun 2005
+(1.018) |
 |  Perl Version: | 5.005 |
-|  License: | GPL |
 |  Add-on Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 |  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |

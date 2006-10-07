@@ -42,6 +42,8 @@ my $testWeb = "TemporaryRegisterTestsTestWeb";
 my $peopleWeb = "TemporaryRegisterTestsPeopleWeb";
 my $systemWeb = "TemporaryRegisterTestsSystemWeb";
 
+my $approvalsDir  =  '/tmp/RegistrationApprovals';
+
 # SMELL: the sent mails are never checked in the tests
 my @mails;
 
@@ -75,6 +77,7 @@ sub set_up {
         $session->{store}->saveTopic($session->{user}, $peopleWeb,
                                      $TWiki::cfg{SuperAdminGroup},
                                      "   * Set GROUP = TestAdmin\n");
+        $session->finish();
         $session = new TWiki();
         my $u = $session->{users}->findUser('TestAdmin');
         $this->assert($u->isAdmin(), $u->stringify());
@@ -115,7 +118,7 @@ EOF
     $TWiki::cfg{Htpasswd}{FileName} = "/tmp/htpasswd";
     open(F,">$TWiki::cfg{Htpasswd}{FileName}") || die;
     close F;
-    $TWiki::cfg{RegistrationApprovals} = '/tmp/RegistrationApprovals';
+    $TWiki::cfg{RegistrationApprovals} = $approvalsDir;
     $TWiki::cfg{Register}{NeedVerification} = 1;
     $TWiki::cfg{MinPasswordLength} = 0;
 
@@ -132,8 +135,9 @@ sub tear_down {
     $this->removeWebFixture($session,$testWeb);
     $this->removeWebFixture($session,$peopleWeb);
     $this->removeWebFixture($session,$systemWeb);
-    File::Path::rmtree($TWiki::cfg{RegistrationApprovals});
+    File::Path::rmtree($approvalsDir);
     @mails = ();
+    eval {$session->finish()};
 
     $this->SUPER::tear_down();
 }
@@ -173,7 +177,7 @@ sub registerAccount {
                     $this->assert(!$done, $done."\n---------\n".$mail);
                     $done = $mail;
                 } else {
-                    $this->assert_matches(qr/To: %WIKIWEBMASTER/, $mail );
+                    $this->assert_matches(qr/To: $TWiki::cfg{WebMasterName} <$TWiki::cfg{WebMasterEmail}>/, $mail );
                 }
             } else {
                 $this->assert(0, $mail);
@@ -222,7 +226,7 @@ sub test_userTopicWithoutPMWithoutForm {
     $this->assert($text =~ s/^\s*\* Last Name: User$//m,$text);
     $this->assert($text =~ s/^\s*\* Comment:\s*$//m,$text);
     $this->assert($text =~ s/^\s*\* Name: Test User$//m,$text);
-    #$this->assert($text =~ s/^\s*\* Email: kakapo\@ground.dwelling.parrot.net$//m,$text);
+    $this->assert($text =~ s/^\s*\* Email: kakapo\@ground.dwelling.parrot.net$//m,$text);
     $this->assert($text =~ s/$TWiki::cfg{UsersWebName}\.$testUserWikiName//,$text);
     $this->assert($text =~ s/$testUserWikiName//,$text);
     $this->assert_matches(qr/\s*AFTER\s*/, $text);
@@ -321,6 +325,7 @@ sub registerVerifyOk {
                          });
 
     $query->path_info( "/$peopleWeb/TWikiRegistration" );
+    $session->finish();
     $session = new TWiki( $TWiki::cfg{DefaultUserName}, $query);
     $session->{net}->setMailHandler(\&sentMail);
 
@@ -350,6 +355,7 @@ sub registerVerifyOk {
                                    ]
                       });
     $query->path_info( "/$peopleWeb/TWikiRegistration" );
+    $session->finish();
     $session = new TWiki( $TWiki::cfg{DefaultUserName},$query);
     $session->{net}->setMailHandler(\&sentMail);
 
@@ -413,6 +419,7 @@ sub test_registerBadVerify {
                                       ]
                          });
     $query->path_info( "/$peopleWeb/TWikiRegistration" );
+    $session->finish();
     $session = new TWiki( $TWiki::cfg{DefaultUserName}, $query);
     $session->{net}->setMailHandler(\&sentMail);
     try {
@@ -442,6 +449,7 @@ sub test_registerBadVerify {
            ]
     });
     $query->path_info( "/$peopleWeb/TWikiRegistration" );
+    $session->finish();
     $session = new TWiki( $TWiki::cfg{DefaultUserName}, $query);
     $session->{net}->setMailHandler(\&sentMail);
 
@@ -462,7 +470,7 @@ sub test_registerBadVerify {
     };
     $this->assert_equals(1, scalar(@mails));
     my $mess = $mails[0];
-    $this->assert_matches(qr/From: %WIKIWEBMASTER/,$mess);
+    $this->assert_matches(qr/From: $TWiki::cfg{WebMasterName} <$TWiki::cfg{WebMasterEmail}>/,$mess);
     $this->assert_matches(qr/To: .*\b$testUserEmail\b/,$mess);
     # check the verification code
     $this->assert_matches(qr/'TestUser\.foo'/,$mess);
@@ -505,6 +513,7 @@ sub test_registerNoVerifyOk {
                          });
 
     $query->path_info( "/$peopleWeb/TWikiRegistration" );
+    $session->finish();
     $session = new TWiki( $TWiki::cfg{DefaultUserName}, $query);
     $session->{net}->setMailHandler(\&sentMail);
 
@@ -522,7 +531,7 @@ sub test_registerNoVerifyOk {
                     $this->assert(!$done, $done."\n---------\n".$mail);
                     $done = $mail;
                 } else {
-                    $this->assert_matches(qr/To: %WIKIWEBMASTER/, $mail );
+                    $this->assert_matches(qr/To: $TWiki::cfg{WebMasterName} <$TWiki::cfg{WebMasterEmail}>/, $mail );
                 }
             } else {
                 $this->assert(0, $mail);
@@ -564,6 +573,7 @@ sub test_rejectShortPassword {
                          });
 
     $query->path_info( "/$peopleWeb/TWikiRegistration" );
+    $session->finish();
     $session = new TWiki( $TWiki::cfg{DefaultUserName}, $query);
     $session->{net}->setMailHandler(\&sentMail);
 
@@ -609,6 +619,7 @@ sub test_ignoreShortPassword {
                          });
 
     $query->path_info( "/$peopleWeb/TWikiRegistration" );
+    $session->finish();
     $session = new TWiki( $TWiki::cfg{DefaultUserName}, $query);
     $session->{net}->setMailHandler(\&sentMail);
 
@@ -657,6 +668,7 @@ sub test_resetPasswordOkay {
                          });
 
     $query->path_info( '/'.$peopleWeb.'/WebHome' );
+    $session->finish();
     $session = new TWiki( $guestLoginName, $query);
     $session->{net}->setMailHandler(\&sentMail);
 
@@ -676,7 +688,7 @@ sub test_resetPasswordOkay {
     };
     $this->assert_equals(1, scalar(@mails));
     my $mess = $mails[0];
-    $this->assert_matches(qr/From: %WIKIWEBMASTER/,$mess);
+    $this->assert_matches(qr/From: $TWiki::cfg{WebMasterName} <$TWiki::cfg{WebMasterEmail}>/,$mess);
     $this->assert_matches(qr/To: .*\b$testUserEmail/,$mess);
 }
 
@@ -699,6 +711,7 @@ sub test_resetPasswordNoSuchUser {
                          });
 
     $query->path_info( '/.'.$peopleWeb.'/WebHome' );
+    $session->finish();
     $session = new TWiki( $guestLoginName, $query);
     $session->{net}->setMailHandler(\&sentMail);
 
@@ -740,6 +753,7 @@ sub test_resetPasswordNeedPrivilegeForMultipleReset {
                          });
 
     $query->path_info( '/.'.$peopleWeb.'/WebHome' );
+    $session->finish();
     $session = new TWiki( $guestLoginName, $query);
     $session->{net}->setMailHandler(\&sentMail);
 
@@ -785,6 +799,7 @@ sub test_resetPasswordNoPassword {
     $query->path_info( '/'.$peopleWeb.'/WebHome' );
     unlink $TWiki::cfg{Htpasswd}{FileName};
 
+    $session->finish();
     $session = new TWiki( $guestLoginName, $query);
     $session->{net}->setMailHandler(\&sentMail);
 
@@ -899,6 +914,7 @@ EOM
                          });
 
     $query->path_info( "/$testWeb/$regTopic" );
+    $session->finish();
     $session = new TWiki( "testuser", $query);
     $session->{net}->setMailHandler(\&sentMail);
     $session->{users}->findUser( "testuser" )->{isKnownAdmin} = 1;
@@ -992,6 +1008,7 @@ Test User - $testUserWikiName - $testUserEmail
    * Password: mypassword
 EOM
 
+    $session->finish();
     $session = new TWiki( $TWiki::cfg{DefaultUserName});
     $session->{net}->setMailHandler(\&sentMail);
 
@@ -1016,6 +1033,20 @@ sub visible {
  $a =~ s/\r/CR/g;
  $a =~ s/ /SP/g;
  $a;
+}
+
+# Make sure that the temporary files and directories we created are
+# removed even if the tests have been interrupted, or cancelled while
+# debugging (Bugs:Item2972)
+END {
+    eval {
+        for my $web ($testWeb,$peopleWeb,$systemWeb) {
+            # under normal operation the webs don't exist, so
+            # don't use the noisy TWikiTestCase::removeWebFixture
+            $session->{store}->removeWeb($session->{user}, $web);
+        }
+        File::Path::rmtree($approvalsDir);
+    }
 }
 
 1;

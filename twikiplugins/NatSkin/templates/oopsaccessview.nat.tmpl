@@ -1,11 +1,11 @@
 %TMPL:INCLUDE{"oopslogonbase"}%
 <!-- template: oopsaccessview.nat.tmpl -->
 %TMPL:DEF{"action"}%view%TMPL:END%
-%TMPL:DEF{"heading"}%View Access Denied%TMPL:END%
+%TMPL:DEF{"heading"}%%MAKETEXT{"View Access Denied"}%%TMPL:END%
 %TMPL:DEF{"message"}%<!-- -->
-%USERNAME% has no permission to view topic [[%WEB%.%TOPIC%]].
+%MAKETEXT{"[_1] has no permission to view topic [[[_2]]]." args="%USERNAME%,%WEB%.%TOPIC%"}%
 
 %TMPL:P{"logon"}%
 
-See also: %MAINWEB%.TWikiGroups, %TWIKIWEB%.TWikiAccessControl, %TWIKIWEB%.TWikiRegistration
+%MAKETEXT{"See also:"}% %MAINWEB%.TWikiGroups, %TWIKIWEB%.TWikiAccessControl, %TWIKIWEB%.TWikiRegistration
 %TMPL:END%

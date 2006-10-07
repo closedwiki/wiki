@@ -30,6 +30,7 @@ sub set_up {
 
 sub tear_down {
     my $this = shift;
+    eval {$twiki->finish()};
     $this->SUPER::tear_down();
     $twiki->{sandbox}->{REAL_SAFE_PIPE_OPEN} = $safe[0];
     $twiki->{sandbox}->{EMULATED_SAFE_PIPE_OPEN} = $safe[1];

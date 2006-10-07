@@ -26,33 +26,29 @@ hr {
   font-family:arial,sans-serif;
 }
 
-.natTopRightContents,
 .natTopLeftContents{
-  margin-left:20px;
-  margin-right:20px;
-  margin-top:25px;
-  margin-bottom:20px;
+  margin:20px;
 }
 .natTopRightContents {
-  margin-top:35px;
+  margin:25px 10px 0px 20px;
 }
 .natMiddle {
   padding:20px 10px 20px 10px;
 }
 
 .natMainContents,
+.natMainHeaderContents,
 .natMainFooterContents,
 .natSideBarContents {
   padding:5px 10px 5px 10px;
 }
 .natTopRight,
 .natSideBar {
-  width:15em;
-  _width:17em; /* IE hack */
+  width:250px;
 }
 
 .natTopBarSizer {
-  height:130px;
+  height:140px;
 }
 
 /* twiki styles */
@@ -62,6 +58,9 @@ hr {
 }
 
 /* twiki table */
+.twikiTable {
+  font-size:95%;
+}
 .twikiTable td,
 .twikiTable th,
 .twikiTable {
@@ -73,12 +72,22 @@ hr {
   background:black;
 }
 .twikiTable th,
+.twikiTable th font,
 .twikiTable th a {
   font-weight:bold;
-  font-size:small;
   color:#cccccc;
 }
 .twikiDiffTable td {
+  border:0px;
+}
+.twikiTableEven td {
+  background:#444444;
+}
+.twikiTableOdd td {
+  background:#333333;
+}
+
+.natTopicEditForm td {
   border:0px;
 }
 
@@ -115,7 +124,6 @@ hr {
 .natTopicForm th,
 .natTopicForm th a {
   font-weight:bold;
-  font-size:small;
   color:#cccccc;
 }
 /* twiki page form */
@@ -126,7 +134,7 @@ hr {
 }
 
 .twikiPageForm th {
-  font:bold small sans-serif;
+  font-weight:bold;
   background: #eeeeee;
   color:#cccccc;
   background:black;
@@ -192,7 +200,6 @@ hr {
 
 .natWebSlogan {
   font-weight:bold;
-  font-size:x-small;
   color:#999999;
 }
 
@@ -207,35 +214,30 @@ hr {
   color:white;
   background:black;
   border:1px solid #99ccff;
+  width:160px;
 }
 
 .natWebTitle {
-  font-size:xx-large;
   text-transform:none;
-}
-.natWebLocator {
-  font-size:small;
-}
-.natTopicActions {
-  line-height:110%;
 }
 
 /* sidebar */
 .natSideBarContents {
   color:#99ccff;
-  font:normal small arial,sans-serif;
 }
 
 .natSideBar h1 a,
 .natSideBar h1 {
   color:#cccccc;
   letter-spacing:0.2px;
-  font:bold small verdana,arial,sans-serif;
+  font-family:verdana,arial,sans-serif;
+  font-weight:bold;
+  font-size:14px;
   text-transform:uppercase;
 }
 .natSideBar h2 {
   padding-left:0px;
-  font-size:small;
+  font-size:14px;
 }
 .natSideBar ul {
   margin-left:0px;
@@ -245,7 +247,6 @@ hr {
 .natNotes {
   padding-left:0px;
   padding-right:10px;
-  font-size:small;
 }
 
 .natSideBar a.natFeedIcon {
@@ -255,11 +256,14 @@ hr {
 /* main */
 .natMiddle {
   background:#333333;
+  color:#cccccc;
+}
+.natMainHeaderContents {
+  font-size:12px;
 }
 .natMainFooterContents,
 .natMainContents {
-  color:#cccccc;
-  font:normal small arial,sans-serif;
+  font-size:14px;
 }
 
 .natMain a,
@@ -292,6 +296,7 @@ hr {
   background:#555555;
   color:#cccccc;
   border:1px solid #cccccc;
+  font-size:13px;
 }
 .natMiddle input[type="submit"] {
   background:white;
@@ -306,17 +311,16 @@ hr {
   color:red;
 }
 
-.natMainFooterContents {
-  font-size:x-small;
-}
-
 /* bottom*/
 .natBottomBarContents {
   margin-left:10px;
   margin-right:10px;
   padding:5px;
   color:#999999;
-  font:bold xx-small/140% verdana,arial,sans-serif;
+  font-family:verdana,arial,sans-serif;
+  font-weight:bold;
+  line-height:140%;
+  font-size:12px;
 }
 
 /* custom styles */

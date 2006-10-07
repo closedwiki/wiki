@@ -17,7 +17,7 @@ RenderNewBlogEntryButton, RenderNewTWikiTopicButton
 %STARTINCLUDE%
 *~~
 <noautolink>
-<form action="%SCRIPTURL{"edit"}%/%WEB%/BlogPageXXXXXXXXXX" method="post">
+<form action="%SCRIPTURLPATH{"edit"}%/%WEB%/BlogPageXXXXXXXXXX" method="post">
 <input type="hidden" name="onlywikiname" value="on" />
 <input type="hidden" name="templatetopic" value="BlogPageTemplate" />
 <input type="hidden" name="formtemplate" value="BlogPageForm" />

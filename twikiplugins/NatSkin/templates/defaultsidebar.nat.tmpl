@@ -1,25 +1,26 @@
 <!-- template: defaultsidebar.nat.tmpl -->
 %TMPL:DEF{"defaultsidebar"}% 
-%IFSKINSTATETHEN{style="Pattern" release="^[^b]"}%
+%IFSKINSTATETHEN{style="Pattern"}%
 <div class="natSideBarTitle">
   <h1 style="background:%WEBBGCOLOR%">%BASEWEB%</h1>
 </div>
-%$nopWEBCOMPONENT{"WebLeftBar"}%
-%ELSESKINSTATE%
-%$nopWEBCOMPONENT{"WebSideBar"}% 
-%FISKINSTATE%
-%IFSKINSTATETHEN{release="beijing"}%
-%ELSESKINSTATE%
-%$nopBROADCASTMESSAGE%
-%FISKINSTATE% 
-%TMPL:END%
-%TMPL:DEF{"sidebar"}% 
-%IFSKINSTATETHEN{searchbox="pos1"}%
+%$nopIFSKINSTATETHEN{searchbox="pos1"}%
 <div class="natSearchBox natSearchBoxPos1">
 %$nopTMPL:P{"searchbox"}%
 </div>
-%FISKINSTATE% <!-- -->
-%TMPL:P{"defaultsidebar"}% 
+%$nopFISKINSTATE% <!-- -->
+%$nopWEBCOMPONENT{"WebLeftBar"}%
+%ELSESKINSTATE%
+%$nopIFSKINSTATETHEN{searchbox="pos1"}%
+<div class="natSearchBox natSearchBoxPos1">
+%$nopTMPL:P{"searchbox"}%
+</div>
+%$nopFISKINSTATE% <!-- -->
+%$nopWEBCOMPONENT{"WebSideBar"}% 
+%FISKINSTATE%
+%BROADCASTMESSAGE%
+%TMPL:END%
+%TMPL:DEF{"sidebar"}%%TMPL:P{"defaultsidebar"}% 
 %IFSKINSTATETHEN{searchbox="pos3"}%
 <div class="natSearchBox natSearchBoxPos3">
 %$nopTMPL:P{"searchbox"}%
@@ -27,12 +28,14 @@
 %FISKINSTATE%
 %TMPL:END%
 %TMPL:DEF{"leftsidebar"}% 
-%IFSKINSTATETHEN{sidebar="both"}%
+%IFSKINSTATETHEN{sidebar="left|both"}%
 %$nopTMPL:P{"sidebar"}% 
 %FISKINSTATE%
 %TMPL:END%
 %TMPL:DEF{"rightsidebar"}%  
 %IFSKINSTATETHEN{sidebar="both"}%
 %$nopWEBCOMPONENT{"WebRightBar"}%
+%ELSESKINSTATE%
+%$nopTMPL:P{"sidebar"}%
 %FISKINSTATE%
 %TMPL:END%

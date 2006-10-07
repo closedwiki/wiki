@@ -31,13 +31,14 @@
 # =========================
 package TWiki::Plugins::TreeBrowserPlugin;
 
+
 # =========================
 use vars qw(
         $web $topic $user $installWeb $VERSION $pluginName
         $debug $js
     );
 
-$VERSION = '1.031';
+$VERSION = 'v0.7';
 $pluginName = 'TreeBrowserPlugin';
 
 # =========================
@@ -95,23 +96,27 @@ sub handleTreeView {
     my $open1 = &TWiki::Func::extractNameValuePair( $theAttr, "openTo" );
     my $open2 = &TWiki::Func::extractNameValuePair( $theAttr, "openAll" );
     my $shared = &TWiki::Func::extractNameValuePair( $theAttr, "shared" );
+    my $useLines = &TWiki::Func::extractNameValuePair( $theAttr, "uselines" );  
+    my $usePlusMinus = &TWiki::Func::extractNameValuePair( $theAttr, "useplusminus" );
+    my $noIndent = &TWiki::Func::extractNameValuePair( $theAttr, "noindent" );
+    my $noCss = &TWiki::Func::extractNameValuePair( $theAttr, "nocss" );
+    my $useStatusText = &TWiki::Func::extractNameValuePair( $theAttr, "usestatustext" );
+    my $closeSameLevel = &TWiki::Func::extractNameValuePair( $theAttr, "closesamelevel" );    
     my $icons = 0;
     $icons = 1 if ($type eq "icon");
     my $wrap = 0;
     $wrap = 1 if ($wraptext eq "on");
-    my $isunique = 0;
-    $isunique = 1 if ($unique eq "on");
     my $openall = 0;
     $openall = 1 if ($open2 eq "on");
     my $opento = 0;
     $opento = $open1 if (!$openall && $open1);
     
-    return $thePre . &renderTreeView( $type, $params, $theTitle, $icons, $shared, $openall, $opento, $theList );
+    return $thePre . &renderTreeView( $type, $params, $useLines, $usePlusMinus, $useStatusText, $closeSameLevel, $noIndent, $noCss, $theTitle, $icons, $shared, $openall, $opento, $theList );
 }
 
 sub renderTreeView
 {
-    my ( $theType, $theParams, $theTitle, $icons, $shared, $openAll, $openTo, $theText ) = @_;
+    my ( $theType, $theParams, $useLines, $usePlusMinus, $useStatusText, $closeSameLevel, $noIndent, $noCss, $theTitle, $icons, $shared, $openAll, $openTo, $theText ) = @_;
 
     $theText =~ s/^[\n\r]*//os;
     my @tree = ();
@@ -123,6 +128,8 @@ sub renderTreeView
     my $docgraphics = $attach . "/$installWeb/TWikiDocGraphics";
     $attach .= "/$installWeb/$pluginName";
     my $attachUrl = TWiki::Func::getUrlHost() . TWiki::Func::getPubUrlPath();
+    
+    $theParams="" unless defined $theParams; #Initialize if not defined to get ride of warnings in apache error logs       
     $theParams =~ s/%PUBURL%/$attachUrl/go;
     $attachUrl .= "/$installWeb/$pluginName";
     $theParams =~ s/%ATTACHURL%/$attachUrl/go;
@@ -131,8 +138,8 @@ sub renderTreeView
     $theParams =~ s/%TWIKIWEB%/TWiki::Func::getTwikiWebname()/geo;
     my ( $rooticon, $docicon, $fldricon, $fldropenicon )
        = split( /, */, $theParams );
-    $width   = 16;
-    $height  = 16;
+    my $width   = 16;
+    my $height  = 16;
     $docicon = "$attach/page.gif" unless( $docicon );
     $docicon = "$docgraphics/$docicon" unless ( !$docicon || $docicon =~ m#/#o );
     #$docicon = fixImageTag( $docicon, $width, $height );
@@ -156,10 +163,16 @@ sub renderTreeView
 
     $js++;
     my $var = ($shared)?$shared:"d$js";
-    my $script = "
-<link rel=\"StyleSheet\" href=\"$attachUrl/dtree.css\" type=\"text/css\" />
+    
+    my $script = "\n";
+   #add CSS unless no CSS specified
+    #$script .="<link rel=\"StyleSheet\" href=\"$attachUrl/dtree.css\" type=\"text/css\" />" unless ($noCss=~/true|1|on/i);  
+    $script .= "
 <script type=\"text/javascript\" src=\"$attachUrl/dtree.js\"></script>";
-    $text = "<div class=\"dtree\"><script type=\"text/javascript\">
+    $text = "<div class=\"dtree\">";
+    #$text .="<link rel=\"StyleSheet\" href=\"$attachUrl/dtree.css\" type=\"text/css\" />" unless ($noCss=~/true|1|on/i);
+   $text .="<style type=\"text/css\" media=\"all\">\@import \"$attachUrl/dtree.css\";</style>" unless ($noCss=~/true|1|on/i);    
+   $text .="<script type=\"text/javascript\">
 <!--
 $var = new dTree('$var');\n";
     $text .= "$var.config.inOrder=true;\n";
@@ -171,9 +184,18 @@ $var = new dTree('$var');\n";
 #    $text .= "$var.icon.node=\'$docicon\';\n";
     $text .= "$var.config.useIcons=false;\n" unless $icons;
     $text .= "$var.config.shared=true;\n" if $shared;
+    $text .= "$var.config.useLines=false;\n" if ($useLines=~/false|0|off/i);
+    $text .= "$var.config.usePlusMinus=false;\n" if ($usePlusMinus=~/false|0|off/i);
+    $text .= "$var.config.closeSameLevel=true;\n" if ($closeSameLevel=~/true|1|on/i);
+    $text .= "$var.config.noIndent=true;\n" if ($noIndent=~/true|1|on/i);
+
+
+    $text .= "$var.config.useStatusText=false;\n"; #Broken due to dtree usage if ($useStatusText=~/true|1|on/i);
+    $text .= "$var.config.useSelection=false;\n"; #Broken due to dtree usage
+    $text .= "$var.config.folderLinks=false;\n"; #Broken due to dtree usage
     $theTitle = &TWiki::Func::renderText( $theTitle, $web );
     $theTitle =~ s/\"/\\\"/go;
-    $text .= "$var.add(0,-1,\"<b>$theTitle</b>\");\n";
+    $text .= "$var.add(0,-1,\"$theTitle\");\n";
     my @fldrs = ();
     my $fldr = 0;
     for( my $i = 0; $i < scalar( @tree ); $i++ ) {

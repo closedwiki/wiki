@@ -1,0 +1,11 @@
+%META:TOPICINFO{author="TWikiContributor" date="1152047752" format="1.2" version="$Rev$"}%
+%META:TOPICPARENT{name="TWikiAccessControl"}%
+#VarDENYTOPICVIEW
+#VarDENYTOPICCHANGE
+---+++ DENYTOPICVIEW, DENYTOPICCHANGE -- access control for topics
+
+
+These variables define lists of users and groups who may _not_ view or edit
+topics, or move them around.
+   * Type: Access control - See [[%TWIKIWEB%.TWikiAccessControl]] for a comprehensive description.
+

@@ -29,7 +29,8 @@ $debug = 0; # toggle me
 
 ###############################################################################
 sub writeDebug {
-  &TWiki::Func::writeDebug('- DBCachePlugin - '.$_[0]) if $debug;
+  #&TWiki::Func::writeDebug('- DBCachePlugin - '.$_[0]) if $debug;
+  print STDERR "- DBCachePlugin - $_[0]\n" if $debug;
 }
 
 ###############################################################################
@@ -37,27 +38,25 @@ sub afterSaveHandler {
 
   # force reload
   my $theDB = getDB($TWiki::Plugins::DBCachePlugin::currentWeb);
-  writeDebug("touching webdb for $TWiki::Plugins::DBCachePlugin::currentWeb");
+  #writeDebug("touching webdb for $TWiki::Plugins::DBCachePlugin::currentWeb");
   $theDB->touch();
   if ($TWiki::Plugins::DBCachePlugin::currentWeb ne $_[2]) {
     $theDB = getDB($_[2]); 
-    writeDebug("touching webdb for $_[2]");
+    #writeDebug("touching webdb for $_[2]");
     $theDB->touch();
   }
 }
 
 ###############################################################################
 sub handleDBQUERY {
-  my ($session, $params, $theTopic, $theWeb) = @_;
+  my ($session, $params, undef, $theWeb) = @_;
 
   #writeDebug("called handleDBQUERY(" . $params->stringify() . ")");
 
   # params
   my $theSearch = $params->{_DEFAULT} || $params->{search};
-  my $theTopics = $params->{topics} || $params->{topic};
-  
-  return '' if $theTopics && $theTopics eq 'none';
-
+  my $theTopic = $params->{topic} || '';
+  my $theTopics = $params->{topics} || '';
   my $theFormat = $params->{format} || '$topic';
   my $theHeader = $params->{header} || '';
   my $theFooter = $params->{footer} || '';
@@ -69,15 +68,19 @@ sub handleDBQUERY {
   my $theLimit = $params->{limit} || '';
   my $theSkip = $params->{skip} || 0;
   my $theHideNull = $params->{hidenull} || 'off';
-  $theWeb = $params->{web} || $theWeb;
 
-  my $theDB = getDB($theWeb);
-
-  # get topics
+  # get web and topic(s)
   my @topicNames = ();
-  if ($theTopics) {
-    @topicNames = split(/, /, $theTopics);
+  $theWeb = $params->{web} || $theWeb;
+  if ($theTopic) {
+    ($theWeb, $theTopic) = TWiki::Func::normalizeWebTopicName($theWeb, $theTopic);
+    push @topicNames, $theTopic;
+  } else {
+    if ($theTopics) {
+      @topicNames = split(/, /, $theTopics);
+    }
   }
+  my $theDB = getDB($theWeb);
 
   # normalize 
   $theSkip =~ s/[^-\d]//go;
@@ -88,7 +91,6 @@ sub handleDBQUERY {
 
   my ($topicNames, $hits, $msg) = $theDB->dbQuery($theSearch, 
     \@topicNames, $theSort, $theReverse, $theInclude, $theExclude);
-  #print STDERR "DEBUG: got topicNames=@$topicNames\n";
 
   return _inlineError($msg) if $msg;
 
@@ -114,21 +116,29 @@ sub handleDBQUERY {
       $format = $theSep unless $isFirst;
       $isFirst = 0;
       $format .= $theFormat;
-      $format =~ s/\$formfield\((.*?)\)/$theDB->getFormField($topicName, $1)/geo;
-      $format =~ s/\$expand\((.*?)\)/$theDB->expandPath($topicObj, $1)/geo;
+      $format =~ s/\$formfield\((.*?)\)/
+	my $temp = $theDB->getFormField($topicName, $1);
+	$temp =~ s#\)#${TranslationToken}#g;
+	$temp/geo;
+      $format =~ s/\$expand\((.*?)\)/
+	my $temp = $theDB->expandPath($topicObj, $1);
+	$temp =~ s#\)#${TranslationToken}#g;
+	$temp/geo;
       $format =~ s/\$formatTime\((.*?)(?:,\s*'([^']*?)')?\)/TWiki::Func::formatTime($theDB->expandPath($topicObj, $1), $2)/geo; # single quoted
-      #$format =~ s/\$dbcall\((.*?)\)/dbCall($1)/ge; ## TODO
       $format = _expandVariables($format, topic=>$topicName, web=>$topicWeb, index=>$index, count=>$count);
+      $format = &TWiki::Func::expandCommonVariables($format, $topicName, $topicWeb);
       $text .= $format;
       last if $index == $theLimit;
     }
   }
+  $text =~ s/${TranslationToken}/)/go;
 
   $theHeader = _expandVariables($theHeader.$theSep, count=>$count, web=>$theWeb) if $theHeader;
   $theFooter = _expandVariables($theSep.$theFooter, count=>$count, web=>$theWeb) if $theFooter;
 
   $text = &TWiki::Func::expandCommonVariables("$theHeader$text$theFooter", 
     $TWiki::Plugins::DBCachePlugin::currentTopic, $theWeb);
+
   return $text;
 }
 
@@ -136,17 +146,19 @@ sub handleDBQUERY {
 sub handleDBCALL {
   my ($session, $params, $theTopic, $theWeb) = @_;
 
+  my $thisTopic = $params->remove('_DEFAULT');
+  return '' unless $thisTopic;
+  my $thisWeb;
+  ($thisWeb, $thisTopic) = &TWiki::Func::normalizeWebTopicName($theWeb, $thisTopic);
+
   # remember args for the key before mangling the params
   my $args = $params->stringify();
 
-  #writeDebug("called handleDBCALL($args)");
+  #writeDebug("called handleDBCALL()");
 
   my $section = $params->remove('section') || 'default';
   my $warn = $params->remove('warn') || 'on';
   $warn = ($warn eq 'on')?1:0;
-  my $thisTopic = $params->remove('_DEFAULT') || '';
-  my $thisWeb = $theWeb;
-  ($thisWeb, $thisTopic) = &TWiki::Func::normalizeWebTopicName($thisWeb, $thisTopic);
 
   #writeDebug("thisWeb=$thisWeb thisTopic=$thisTopic");
 
@@ -268,16 +280,18 @@ sub handleDBSTATS {
   }
 
   # compute statistics
+  my $wikiUserName = TWiki::Func::getWikiUserName();
   my %statistics = ();
   my $theDB = getDB($thisWeb);
   my @topicNames = $theDB->getKeys();
   foreach my $topicName (@topicNames) { # loop over all topics
     my $topicObj = $theDB->fastget($topicName);
     next unless $search->matches($topicObj); # that match the query
-    my $createdate = $topicObj->fastget('createdate');
+    next unless TWiki::Func::checkAccessPermission('VIEW', 
+      $wikiUserName, undef, $topicName, $thisWeb);
 
     #writeDebug("found topic $topicName");
-    
+    my $createdate = $topicObj->fastget('createdate');
     foreach my $field (split(/,\s/, $theFields)) { # loop over all fields
       my $fieldValue = $topicObj->fastget($field);
       unless ($fieldValue) {
@@ -292,8 +306,12 @@ sub handleDBSTATS {
       #writeDebug("reading field $field");
 
       while ($fieldValue =~ /$thePattern/g) { # loop over all occurrences of the pattern
-	my $key = $1;
-	my $record = $statistics{$key};
+	my $key1 = $1;
+	my $key2 = $2 || '';
+	my $key3 = $3 || '';
+	my $key4 = $4 || '';
+	my $key5 = $5 || '';
+	my $record = $statistics{$key1};
 	if ($record) {
 	  $record->{count}++;
 	  $record->{from} = $createdate if $record->{from} > $createdate;
@@ -302,9 +320,10 @@ sub handleDBSTATS {
 	  my %record = (
 	    count=>1,
 	    from=>$createdate,
-	    to=>$createdate
+	    to=>$createdate,
+	    keyList=>[$key1, $key2, $key3, $key4, $key5],
 	  );
-	  $statistics{$key} = \%record;
+	  $statistics{$key1} = \%record;
 	}
       }
     }
@@ -343,11 +362,18 @@ sub handleDBSTATS {
     $index++;
     my $record = $statistics{$key};
     my $text;
+    my ($key1, $key2, $key3, $key4, $key5) =
+      @{$record->{keyList}};
     $text = $theSep if $result;
     $text .= $theFormat;
     $result .= &_expandVariables($text, 
-      'web'=>$theWeb,
+      'web'=>$thisWeb,
       'key'=>$key,
+      'key1'=>$key1,
+      'key2'=>$key2,
+      'key3'=>$key3,
+      'key4'=>$key4,
+      'key5'=>$key5,
       'count'=>$record->{count}, 
       'index'=>$index,
       'min'=>$min,
@@ -360,7 +386,7 @@ sub handleDBSTATS {
   }
   $theHeader = &_expandVariables($theHeader);
   $theFooter = &_expandVariables($theFooter);
-  $result = &TWiki::Func::expandCommonVariables($theHeader.$result.$theFooter, $theTopic, $theWeb);
+  $result = &TWiki::Func::expandCommonVariables($theHeader.$result.$theFooter, $theTopic, $thisWeb);
 
   return $result;
 }
@@ -430,16 +456,16 @@ sub getDB {
   unless (defined $webDB{$theWeb}) {
     # never loaded
     $isModified = 1;
-    writeDebug("fresh reload");
+    #writeDebug("fresh reload");
   } else {
     unless (defined $webDBIsModified{$theWeb}) {
       # never checked
       $webDBIsModified{$theWeb} = $webDB{$theWeb}->isModified();
       if ($debug) {
 	if ($webDBIsModified{$theWeb}) {
-	  writeDebug("checking modified webdb for $theWeb");
+	  #writeDebug("checking modified webdb for $theWeb");
 	} else {
-	  writeDebug("don't need to load webdb for $theWeb");
+	  #writeDebug("don't need to load webdb for $theWeb");
 	}
       }
     }
@@ -447,11 +473,12 @@ sub getDB {
   }
 
   if ($isModified) {
-    my $impl = TWiki::Func::getPreferencesValue('WEBDB', $theWeb) 
+    my $impl = TWiki::Func::getPreferencesValue('WEBDB', $theWeb)
       || 'TWiki::Plugins::DBCachePlugin::WebDB';
-    $impl =~ s/^\s*(.*?)\s*$/$1/o;
-    writeDebug("loading new webdb for $theWeb");
-    eval "use $impl;";
+    $impl =~ s/^\s+//go;
+    $impl =~ s/\s+$//go;
+    #writeDebug("loading new webdb for '$theWeb'");
+    #writeDebug("impl='$impl'");
     $webDB{$theWeb} = new $impl($theWeb);
     $webDB{$theWeb}->load();
     $webDBIsModified{$theWeb} = 0;
@@ -486,8 +513,8 @@ sub _expandVariables {
   return '' unless $theFormat;
   
   foreach my $key (keys %params) {
-    if($theFormat =~ s/\$$key/$params{$key}/g) {
-      #print STDERR "DEBUG: expanding $key->$params{$key}\n";
+    if($theFormat =~ s/\$$key\b/$params{$key}/g) {
+      #writeDebug("expanding $key->$params{$key}");
     }
   }
   $theFormat =~ s/\$percnt/\%/go;
@@ -495,9 +522,9 @@ sub _expandVariables {
   $theFormat =~ s/\$n/\n/go;
   $theFormat =~ s/\$t\b/\t/go;
   $theFormat =~ s/\$nop//g;
-  $theFormat =~ s/\$flatten\((.*)\)/&_flatten($1)/ges;
-  $theFormat =~ s/\$encode\((.*)\)/&_encode($1)/ges;
-  $theFormat =~ s/\$trunc\((.*),\s*(\d+)\)/substr($1,0,$2)/ges;
+  $theFormat =~ s/\$flatten\((.*?)\)/&_flatten($1)/ges;
+  $theFormat =~ s/\$encode\((.*?)\)/&_encode($1)/ges;
+  $theFormat =~ s/\$trunc\((.*?),\s*(\d+)\)/substr($1,0,$2)/ges;
 
   return $theFormat;
 }
@@ -512,7 +539,7 @@ sub _encode {
   $text =~ s/<nop>//go;
   $text =~ s/[\n\r]+/ /go;
   $text =~ s/\n*<\/?noautolink>\n*//go;
-  $text =~ s/[[\x01-\x09\x0b\x0c\x0e-\x1f"%&'*<=>@[_\|]/'&#'.ord($&).';'/ge;
+  $text =~ s/([[\x01-\x09\x0b\x0c\x0e-\x1f"%&'*<=>@[_\|])/'&#'.ord($1).';'/ge;
   $text =~ s/^\s*(.*?)\s*$/$1/gos;
 
   return $text;
@@ -537,7 +564,7 @@ sub _flatten {
   $text =~ s/\[\[//go;
   $text =~ s/\]\]//go;
   $text =~ s/\]\[//go;
-  $text =~ s/[[\x01-\x09\x0b\x0c\x0e-\x1f"%&'*<=>@[_\|]/'&#'.ord($&).';'/ge;
+  $text =~ s/([[\x01-\x09\x0b\x0c\x0e-\x1f"%&'*<=>@[_\|])/'&#'.ord($1).';'/ge;
   $text =~ s/(https?)/<nop>$1/go;
   $text =~ s/\b($wikiWordRegex)\b/<nop>$1/g;
 

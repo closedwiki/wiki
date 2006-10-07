@@ -16,6 +16,7 @@
 #
 # =========================
 package TWiki::Plugins::ImageGalleryPlugin;
+use strict;
 
 # =========================
 use vars qw(
@@ -23,7 +24,7 @@ use vars qw(
     );
 
 $VERSION = '$Rev$';
-$RELEASE = '3.4';
+$RELEASE = '3.41';
 
 # =========================
 sub initPlugin {

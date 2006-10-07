@@ -11,7 +11,8 @@
    * Supported parameters:
      | *Parameter:* | *Description:* | *Default:* |
      | ="string"= | String to encode | required (can be empty) |
-     | =type="entity"= | Encode special characters into HTML entities, like a double quote into =&amp;#034;= | URL encoding |
+     | =type="entity"= | Encode special characters into HTML entities, like a double quote into =&amp;#034;= | URL encoding, Does *not* encode \n or \r. |
+     | =type="html"= | As =type="entity"= except it also encodes \n and \r |
      | =type="url"= | Encode special characters for URL parameter use, like a double quote into =%22= | (this is the default) |
    * Example: =%<nop>ENCODE{"spaced name"}%= expands to =%ENCODE{"spaced name"}%=
    * __%X% Note:__ Values of HTML input fields must be entity encoded, for example:%BR% =&lt;input type="text" name="address" value="%<nop>ENCODE{ "any text" type="entity" }%" /&gt;=

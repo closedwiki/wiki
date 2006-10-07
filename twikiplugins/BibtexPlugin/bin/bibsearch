@@ -96,7 +96,7 @@ sub main
   my $theFormat = $query->param("format");
   my $theErrors = $query->param("errors");
   my $theBibfile = $query->param("file");
-  my $theStyle = $query->param("style");
+  my $theStyle = $query->param("bibstyle");
   my $theForm = $query->param("form");
   my $theAbstracts = $query->param("abstracts");
   my $theKeywords = $query->param("keywords");
@@ -112,7 +112,7 @@ sub main
   if ($theFormat) {
     $mixed = "on" if $theFormat eq "mix";
     $style = "raw" if $theFormat eq "raw";
-    $style = "bibtool" if $theFormat eq "bibtool";
+#    $style = "bibtool" if $theFormat eq "bibtool";
   }
 
   my @textFields = ("author", "year", "title", "key", "type", "phrase", "inside", "select");

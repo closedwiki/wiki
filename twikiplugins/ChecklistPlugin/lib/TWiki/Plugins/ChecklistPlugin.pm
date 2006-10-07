@@ -80,7 +80,9 @@ $VERSION = '$Rev$';
 # of the version number in PLUGINDESCRIPTIONS.
 $RELEASE = 'Dakar';
 
-$REVISION = '1.016'; #dro# fixed access right bug reported by TWiki:Main.SaschaVogt
+$REVISION = '1.018'; #dro# fixed notification bug reported by TWiki:Main.JosMaccabiani; fixed a minor whitespace bug; add static attribute
+#$REVISION = '1.017'; #dro# fixed access right bug; disabled change/create mail notification (added attribute: notify)
+#$REVISION = '1.016'; #dro# fixed access right bug reported by TWiki:Main.SaschaVogt
 #$REVISION = '1.015'; #dro# fixed mod_perl preload bug (removed 'use warnings;') reported by TWiki:Main.KennethLavrsen
 #$REVISION = '1.014'; #dro# fixed mod_perl bug; fixed deprecated handler problem
 #$REVISION = '1.013'; #dro# fixed anchor bug; fixed multiple save bug (performance improvement); fixed reset bugs in named checklists
@@ -165,7 +167,9 @@ sub initDefaults() {
 		'useforms' => 0,
 		'clipos'=> 'right',
 		'pos'=>'bottom',
-		'statetopic'=> $topic.'ChecklistItemState'
+		'statetopic'=> $topic.'ChecklistItemState',
+		'notify'=> 0,
+		'static'=> 0,
 	);
 
 	@listOptions = ('states','stateicons');
@@ -173,7 +177,7 @@ sub initDefaults() {
 
 	@filteredOptions = ( 'id', 'name', 'states');
 
-	@flagOptions = ('showlegend', 'anchors', 'useforms' );
+	@flagOptions = ('showlegend', 'anchors', 'useforms', 'notify', 'static');
 
 	$idMapRef = { };
 
@@ -338,7 +342,7 @@ sub handleChecklist {
 		$legend.=qq@</noautolink>@;
 	}
 
-	if (defined $options{'reset'}) {
+	if (defined $options{'reset'} && !$options{'static'}) {
 		my $reset = $options{'reset'};
 		my $state = (split /\|/, $options{'states'})[0];
 
@@ -483,26 +487,34 @@ sub getNextState {
 }
 # =========================
 sub checkChangeAccessPermission {
-	my ($text) = @_;
+	my ($name, $text) = @_;
 	my $ret = 1;
-	if ( ! TWiki::Func::checkAccessPermission("CHANGE", TWiki::Func::getWikiName(), $text, $topic, $web)) {
+
+	my $perm = 'CHANGE';
+	my $checkTopic = $topic;
+	unless (&TWiki::Func::topicExists($web, &getClisTopicName($name))) {
+		$perm='CREATE';
+		$checkTopic = &getClisTopicName($name);
+		$text = undef;
+	}
+		
+
+	my $mainWebName=&TWiki::Func::getMainWebname();
+	my $user =TWiki::Func::getWikiName();
+	$user = "$mainWebName.$user" unless $user =~ m/^$mainWebName\./;
+
+	if ( ! &TWiki::Func::checkAccessPermission($perm, $user, $text, $checkTopic, $web)) {
 		$ret = 0;
 
-		###eval { require TWiki::OopsException; };
 		eval { require TWiki::AccessControlException; };
 		if ($@) {
-			TWiki::Func::redirectCgiQuery(TWiki::Func::getCgiQuery(),TWiki::Func::getOopsUrl($web,$topic,"oopsaccesschange"));
+			TWiki::Func::redirectCgiQuery(TWiki::Func::getCgiQuery(),TWiki::Func::getOopsUrl($web,$checkTopic,"oopsaccesschange"));
 		} else {
 			require Error;
-			###throw TWiki::OopsException(
-			###	'accessdenied',
-			###	def => 'topic_access',
-			###	web => $web, topic => $topic,
-			###	params => [ 'change', 'denied' ] );
 			throw TWiki::AccessControlException(
-					'CHANGE', 
+					$perm, 
 					$TWiki::Plugins::SESSION->{user},
-					$topic, $web, 'denied'
+					$checkTopic, $web, 'denied'
 				);
 		}
 	}
@@ -523,7 +535,7 @@ sub doChecklistItemStateReset {
 	TWiki::Func::writeDebug("- ${pluginName}::doChecklistItemStateReset($n,$state,...text...)") if $debug;
 
 	# access granted?
-	return if ! &checkChangeAccessPermission($text);
+	return if ! &checkChangeAccessPermission($n, $text);
 
 	if (!defined $state) {
 		my @states=split /\|/, $options{'states'};
@@ -540,7 +552,7 @@ sub doChecklistItemStateChange {
 	TWiki::Func::writeDebug("- ${pluginName}::doChecklistItemStateChange($id,$n,$lastState,...text...)") if $debug;
 
 	# access granted?
-	return if ! &checkChangeAccessPermission($text);
+	return if ! &checkChangeAccessPermission($n, $text);
 	
 	# reload?
 	return if ((defined $$idMapRef{$n}{$id})&&($$idMapRef{$n}{$id} ne $lastState));
@@ -610,7 +622,7 @@ sub renderChecklistItem {
 
 	$text.=$query->a({name=>"$name$uetId"}, "&nbsp;") if $options{'anchors'};
 
-	if ( ! $options{'useforms'} ) {
+	if ( ! $options{'useforms'} || $options{'static'}) {
 		
 		my $linktext="";
 		if (lc($options{'clipos'}) ne 'left') {
@@ -622,7 +634,7 @@ sub renderChecklistItem {
 		if (lc($options{'clipos'}) eq 'left') {
 			$linktext.=' '.$options{'text'} unless $options{'text'} =~ /^(\s|\&nbsp\;)*$/;
 		}
-		$text.=$query->a({-href=>$action},$linktext);
+		$text.=$options{'static'} ? $linktext : $query->a({-href=>$action},$linktext);
 	} else {
 		my $form=$query->start_form(-method=>"POST", -action=>$action, -name=>"changeitemstate\[$stId\]");
 		$form.=$query->hidden(-name=>'clpscls', -value=>$heState);
@@ -699,17 +711,21 @@ sub readChecklistItemStateTopic {
 	}
 
 	foreach my $line (split /[\r\n]+/, $clisTopic) {
-		if ($line =~ /^\s*\|\s*([^\|\*]*)\s*\|\s*([^\|\*]*)\s*\|\s*([^\|]*)\s*\|\s*$/) {
+		if ($line =~ /^\s*\|\s*([^\|\*\s]*)\s*\|\s*([^\|\*\s]*)\s*\|\s*([^\|\s]*)\s*\|\s*$/) {
 			$$idMapRef{$1}{$2}=$3;
 		}
 	}
 }
 # =========================
+sub getClisTopicName {
+	my ($name) = @_;
+	return $namedDefaults{$name}{'statetopic'}?$namedDefaults{$name}{'statetopic'}:$globalDefaults{'statetopic'};
+}
+# =========================
 sub saveChecklistItemStateTopic {
 	my ($name,$perm) = @_;
 	return if $name eq "";
-	#### my $clisTopicName = $options{'statetopic'};
-	my $clisTopicName = $namedDefaults{$name}{'statetopic'}?$namedDefaults{$name}{'statetopic'}:$globalDefaults{'statetopic'};
+	my $clisTopicName = getClisTopicName($name);
 
 	TWiki::Func::writeDebug("- ${pluginName}::saveChecklistItemStateTopic($name): $clisTopicName, ".$namedDefaults{$name}{'statetopic'}) if $debug;
 	my $oopsUrl = TWiki::Func::setTopicEditLock($web, $clisTopicName, 1);
@@ -739,7 +755,7 @@ sub saveChecklistItemStateTopic {
 		$topicText.="\n$perm\n" if $perm;
 	}
 	$topicText.="\n-- $installWeb.$pluginName - ".&TWiki::Func::formatTime(time(), "rcs")."\n";
-	TWiki::Func::saveTopicText($web, $clisTopicName, $topicText);
+	TWiki::Func::saveTopicText($web, $clisTopicName, $topicText, 1, !$options{'notify'});
 	TWiki::Func::setTopicEditLock($web, $clisTopicName, 0);
 }
 # =========================

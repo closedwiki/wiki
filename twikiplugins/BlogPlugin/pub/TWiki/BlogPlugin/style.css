@@ -13,7 +13,6 @@
    border:1px solid red;
 }
 */
-
 .blogAbout {
   /*text-align:justify; */
   font-size:95%; 
@@ -164,7 +163,7 @@
 .blogSideBar .twikiPageForm {
   width:90%;
   margin:auto;
-  font-size:x-small;
+  font-size:12px;
 }
 .blogFeedCategory { 
   margin-top:5px;
@@ -179,6 +178,17 @@
   margin-top:0px;
   margin-bottom:0px;
 }
+.blogSideBar dd {
+  margin-left:2em;
+}
+.blogSideBar dt {
+  font-weight:bold;
+}
+
+.blogSideBarAdmin li {
+  white-space:nowrap;
+}
+
 .blogAdminButtons,
 .blogAuthorButtons {
   margin-bottom:10px !important;
@@ -239,4 +249,7 @@
 }
 .blogSideBarLastFM h1 a:after {
   display:none;
+}
+.blogGoogleAds {
+  margin:5px auto;
 }

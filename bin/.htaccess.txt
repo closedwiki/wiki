@@ -65,17 +65,22 @@ AuthType Basic
 # to register with the TWiki. Apache requires this to be a *local* path.
 ErrorDocument 401 {ScriptUrlPath}/view/TWiki/TWikiRegistration
 
-# Turn off directory indexing in this and sub directories
-Options -Indexes
+# Set options for excuting CGI and allow symlinks for e.g. viewauth
+# This also unsets any options allowing directory indexing etc.
+Options ExecCGI FollowSymLinks
 
-<FilesMatch "[^/]*\.html$">
-       SetHandler blabla
-       allow from all
-</FilesMatch>
-
-# configure should be restricted to a small number of users
+# Limit access to configure to specific IP addresses and or users.
+# Make sure configure is not open to the general public.
+# The configure script is designed for administrators only.
+# The script itself and the information it reveals can be abused by
+# attackers if not properly protected against public access.
 <FilesMatch "configure.*">
-       require user "{Administrators}"
+	SetHandler cgi-script
+	Order Deny,Allow
+	Deny from all
+	Allow from 127.0.0.1, 192.168.1.10
+	Require user {Administrators}
+	Satisfy Any
 </FilesMatch>
 
 # These are scripts that might change content. The regular expression uses ".*"

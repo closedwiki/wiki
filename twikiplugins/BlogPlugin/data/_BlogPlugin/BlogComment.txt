@@ -13,7 +13,7 @@ See also: %TOPIC%Template, BlogCommentForm, RenderBlogComment
 ~~~ format="| [[$web.$topic][$topic]]
 ~~~         | $expand(Nr) 
 ~~~         | $percntIFDEFINED{\"$expand(@BlogRef.Headline)\"
-~~~             then=\"[[$web.$formfield(BlogRef)][$expand(@BlogRef.Headline)]]\"}$percnt
+~~~             then=\"[[$web.$formfield(BlogRef)][$test]]\"}$percnt
 ~~~         | $expand(Name)
 ~~~         | <nobr>$formatTime(createdate)</nobr>
 ~~~         |"

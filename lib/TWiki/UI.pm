@@ -37,21 +37,41 @@ use TWiki::OopsException;
 
 =pod
 
----++ StaticMethod run( \&method )
+---++ StaticMethod run( \&method, ... )
 
 Entry point for execution of a UI function. The parameter is a
 reference to the method.
 
+... is a list of name-value pairs that define initial context identifiers
+that must be set during initPlugin. This set will be extended to include
+command_line if the script is detected as being run outside the browser.
+
 =cut
 
 sub run {
-    my $method = shift;
+    my ( $method, %initialContext ) = @_;
 
     my ( $query, $pathInfo, $user, $url, $topic );
-    my $scripted = 0;
 
     # Use unbuffered IO
     $| = 1;
+
+    # -------------- Only needed to work around an Apache 2.0 bug on Unix
+    # OPTIONAL
+    # If you are running TWiki on Apache 2.0 on Unix you might experience
+    # TWiki scripts hanging forever. This is a known Apache 2.0 bug. A fix is 
+    # available at http://issues.apache.org/bugzilla/show_bug.cgi?id=22030.
+    # You are recommended to patch your Apache installation.
+    #
+    # As a workaround, uncomment ONE of the lines below. As a drawback,
+    # errors will not be reported to the browser via CGI::Carp any more.
+
+    # Opening STDERR here and not in the BEGIN block as some perl accelerators
+    # close STDERR after each request so that we need to reopen it here again
+
+    # open(STDERR, ">>/dev/null");      # throw away cgi script errors, or
+    # open(STDERR, ">>$TWiki::cfg{DataDir}/error.log"); # redirect errors to a log file
+
 
     if( DEBUG || $TWiki::cfg{WarningsAreErrors} ) {
         # For some mysterious reason if this handler is defined
@@ -62,7 +82,6 @@ sub run {
     if( $ENV{'GATEWAY_INTERFACE'} ) {
         # script is called by browser
         $query = new CGI;
-
         # drain STDIN.  This may be necessary if the script is called
         # due to a redirect and the original query was a POST. In this
         # case the web server is waiting to write the POST data to
@@ -73,12 +92,30 @@ sub run {
         # the script to _read_, not _write_), and everything blocks.
         # Some versions of apache seem to be more susceptible than others to
         # this.
-        my $content_length = 
+        my $content_length =
             defined($ENV{'CONTENT_LENGTH'}) ? $ENV{'CONTENT_LENGTH'} : 0;
         read(STDIN, my $buf, $content_length, 0 ) if $content_length;
+        my $cache = $query->param('twiki_redirect_cache');
+        if ($cache) {
+            $cache = TWiki::Sandbox::untaintUnchecked($cache);
+            # Read cached post parameters
+            if (open(F, '<'.$cache)) {
+                local $/;
+                #print STDERR "Loading ",<F>,"\n";
+                #close(F);
+                #open(F, '<'.$cache);
+                $query = new CGI(\*F);
+                close(F);
+                unlink($cache);
+                #print STDERR "Loaded and unlinked $cache\n";
+            } else {
+                #print STDERR "Could not find $cache\n";
+            }
+        }
     } else {
         # script is called by cron job or user
-        $scripted = 1;
+        $initialContext{command_line} = 1;
+
         $user = $TWiki::cfg{SuperAdminGroup};
         $query = new CGI();
         while( scalar( @ARGV )) {
@@ -97,21 +134,18 @@ sub run {
         }
     }
 
-    my $session = new TWiki( $user, $query );
-    $session->enterContext( 'command_line' ) if $scripted;
+    my $session = new TWiki( $user, $query, \%initialContext );
 
     local $SIG{__DIE__} = \&Carp::confess;
 
-    # end of comment out in production version
-
     try {
-        $session->{client}->checkAccess();
+        $session->{loginManager}->checkAccess();
         &$method( $session );
     } catch TWiki::AccessControlException with {
         my $e = shift;
-        unless( $session->{client}->forceAuthentication() ) {
+        unless( $session->{loginManager}->forceAuthentication() ) {
             # Client did not want to authenticate, perhaps because
-            # we are already authenticated 
+            # we are already authenticated.
             my $url = $session->getOopsUrl( 'accessdenied',
                                             def => 'topic_access',
                                             web => $e->{web},
@@ -123,17 +157,8 @@ sub run {
 
     } catch TWiki::OopsException with {
         my $e = shift;
-        if( $e->{keep} ) {
-            # must keep params from the query, so can't use redirect
-            require TWiki::UI::Oops;
-            $e->{template} = 'oops'.$e->{template};
-            TWiki::UI::Oops::oops( $session, $e->{web}, $e->{topic},
-                                   $session->{cgiQuery}, $e );
-        } else {
-            # no need to keep params, so can use a redirect
-            my $url = $session->getOopsUrl( $e );
-            $session->redirect( $url );
-        }
+        my $url = $session->getOopsUrl( $e );
+        $session->redirect( $url, $e->{keep} );
 
     } catch Error::Simple with {
         my $e = shift;
@@ -240,8 +265,8 @@ sub checkAccess {
     my ( $session, $web, $topic, $mode, $user ) = @_;
     ASSERT($session->isa( 'TWiki')) if DEBUG;
 
-    unless( $session->{security}->checkAccessPermission( $mode, $user, undef,
-                                                         $topic, $web )) {
+    unless( $session->{security}->checkAccessPermission(
+        $mode, $user, undef, undef, $topic, $web )) {
         throw TWiki::OopsException( 'accessdenied',
                                     def => 'topic_access',
                                     web => $web,

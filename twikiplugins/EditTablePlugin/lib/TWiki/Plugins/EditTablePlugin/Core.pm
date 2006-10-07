@@ -421,6 +421,8 @@ sub inputElement {
         while( $i < @bits ) {
             $val  = $bits[$i] || '';
             $valExpanded  = $bitsExpanded[$i] || '';
+            $expandedValue =~ s/^\s+//;
+            $expandedValue =~ s/\s+$//;
             if( $valExpanded eq $expandedValue ) {
                 $text .= " <option selected=\"selected\">$val</option>";
             } else {
@@ -442,6 +444,8 @@ sub inputElement {
         while( $i < @bits ) {
             $val  = $bits[$i] || "";
             $valExpanded  = $bitsExpanded[$i] || "";
+            $expandedValue =~ s/^\s+//;
+            $expandedValue =~ s/\s+$//;
             $text .= " <input type=\"radio\" name=\"$theName\" value=\"$val\"";
             $text .= " checked=\"checked\"" if( $valExpanded eq $expandedValue );
             $text .= " /> $val";
@@ -449,7 +453,7 @@ sub inputElement {
                 if( ($i-1) % $lines ) {
                     $text .= " <br />";
                 } elsif( $i-1 < $elements ) {
-                    $text .= "</td><td valign=\"top\">";
+                    $text .= " </td><td valign=\"top\">";
                 }
             }
             $i++;
@@ -469,6 +473,8 @@ sub inputElement {
         while( $i < @bits ) {
             $val  = $bits[$i] || "";
             $valExpanded  = $bitsExpanded[$i] || "";
+            $expandedValue =~ s/^\s+//;
+            $expandedValue =~ s/\s+$//;
             $names .= " ${theName}x$i";
             $text .= " <input type=\"checkbox\" name=\"${theName}x$i\" value=\"$val\"";
             $text .= " checked=\"checked\"" if( $expandedValue =~ /(^|, )\Q$valExpanded\E(,|$)/ );
@@ -477,7 +483,7 @@ sub inputElement {
                 if( ($i-1) % $lines ) {
                     $text .= " <br />";
                 } elsif( $i-1 < $elements ) {
-                    $text .= "</td><td valign=\"top\">";
+                    $text .= " </td><td valign=\"top\">";
                 }
             }
             $i++;
@@ -737,8 +743,12 @@ sub doEnableEdit {
 
     TWiki::Func::writeDebug( "- EditTablePlugin::doEnableEdit( $theWeb, $theTopic )" ) if $TWiki::Plugins::EditTablePlugin::debug;
 
+    my $pTopic = $theTopic;
+    # workaround for plugin API limitation that cannot check for permissions in meta data:
+    $pTopic = undef if( $doCheckIfLocked );
+
     my $wikiUserName = TWiki::Func::getWikiUserName();
-    if( ! TWiki::Func::checkAccessPermission( 'change', $wikiUserName, '', $theTopic, $theWeb ) ) {
+    if( ! TWiki::Func::checkAccessPermission( 'change', $wikiUserName, '', $pTopic, $theWeb ) ) {
         # user has no permission to change the topic
         throw TWiki::OopsException(
             'accessdenied',
@@ -748,7 +758,7 @@ sub doEnableEdit {
     }
 
     my( $oopsUrl, $lockUser ) = TWiki::Func::checkTopicEditLock( $theWeb, $theTopic );
-    if( ( $doCheckIfLocked ) && ( $lockUser ) ) {
+    if( $doCheckIfLocked && $lockUser && ( $lockUser ne $TWiki::Plugins::EditTablePlugin::user ) ) {
         # warn user that other person is editing this topic
         TWiki::Func::redirectCgiQuery( $query, $oopsUrl );
         return 0;

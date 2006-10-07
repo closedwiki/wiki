@@ -1,0 +1,10 @@
+%META:TOPICINFO{author="TWikiContributor" date="1152047756" format="1.2" version="$Rev$"}%
+%META:TOPICPARENT{name="TWikiPreferences"}%
+#VarWEBCOPYRIGHT
+---+++ WEBCOPYRIGHT -- shortcut for a web's copyright message
+
+This variable can be used as a simple shortcut for a copyright message.
+   * Type: Site preference variable defined in [[%TWIKIWEB%.%WIKIPREFSTOPIC%]].  Can be customized for a TWiki site in [[%LOCALSITEPREFS%]].
+   * Current value: WEBCOPYRIGHT = %WEBCOPYRIGHT%
+   * Related: TWikiTemplates
+

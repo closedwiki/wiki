@@ -75,8 +75,6 @@ sub view {
     # is this view indexable by search engines? Default yes.
     my $indexableView = 1;
 
-    $session->enterContext( 'view' );
-
     TWiki::UI::checkWebExists( $session, $webName, $topicName, 'view' );
 
     my $skin = $session->getSkin();
@@ -257,6 +255,9 @@ sub view {
     } elsif( $skin =~ /\brss/ ) {
         $contentType = 'text/xml';
         $minimalist = 1;
+    } elsif( $skin =~ /\bxml/ ) {
+        $contentType = 'text/xml';
+        $minimalist = 1;
     } elsif( $raw eq 'text' || $raw eq 'all' ) {
         $contentType = 'text/plain';
     } else {
@@ -353,14 +354,12 @@ sub viewfile {
     my $topic = $session->{topicName};
 
     my $fileName = $query->param( 'filename' );
+    $fileName = TWiki::Sandbox::sanitizeAttachmentName( $fileName );
 
     my $rev = $session->{store}->cleanUpRevID( $query->param( 'rev' ) );
-
-    TWiki::UI::checkWebExists( $session, $webName, $topic, 'viewfile' );
-    TWiki::UI::checkTopicExists( $session, $webName, $topic, 'viewfile' );
     unless( $fileName && $session->{store}->attachmentExists(
         $webName, $topic, $fileName )) {
-        throw TWiki::OopsException( 'accessdenied',
+        throw TWiki::OopsException( 'attention',
                                     def => 'no_such_attachment',
                                     web => $webName,
                                     topic => $topic,
@@ -369,11 +368,17 @@ sub viewfile {
     my $fileContent = $session->{store}->readAttachment(
         $session->{user}, $webName, $topic, $fileName, $rev );
 
-    print $query->header(
-        -type => _suffixToMimeType( $session, $fileName ),
-        -Content_length => length( $fileContent ),
-        -Content_Disposition => 'inline;filename='.$fileName);
-    print $fileContent;
+    my $type = _suffixToMimeType( $session, $fileName );
+    my $length =  length( $fileContent );
+    my $dispo = 'inline;filename='.$fileName;
+
+    print <<HERE;
+Content-type: $type
+Content-length: $length
+Content-Disposition: $dispo
+
+$fileContent
+HERE
 }
 
 sub _suffixToMimeType {

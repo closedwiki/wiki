@@ -188,14 +188,10 @@ Read
    * [[http://search.cpan.org/~mceglows/Search-VectorSpace-0.02/][Search-VectorSpace]]
 And send me a patch if you've coded that into TWiki ;).
 
-
----++ Plugin Settings
-
-   * Set SHORTDESCRIPTION = Basic blogging features used to implement the BlogUp <nop>TWikiApplication
-   
 ---++ Plugin Installation Instructions
 
-   * [[%ATTACHURL%/BlogPlugin.zip][Download]] and install all additionally required plugins listed in the
+   * [[http://twiki.org/p/pub/Plugins/%TOPIC%/%TOPIC%.zip][Download]] and install 
+     all additionally required plugins listed in the
      [[#Plugin_Info][dependencies information]] below
    * Download the BlogPlugin ZIP file from the Plugin web (see below)
    * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
@@ -221,12 +217,44 @@ And send me a patch if you've coded that into TWiki ;).
      %$DEPENDENCIES%
 
 ---++ Plugin Info
-
+<!-- provided for compatibility only
+   * Set SHORTDESCRIPTION = Basic blogging features used to implement the BlogUp <nop>TWikiApplication
+-->
 |  Plugin Author: | TWiki:Main.MichaelDaum |
 |  Copyright &copy;: | 2006, MichaelDaum@WikiRing.com |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Version: | v0.94 |
+|  Version: | v0.99 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  31 Aug 2006: | added NO_PREFS_IN_TOPIC;\
+                  added TWiki:Plugins/ImagePlugin support; \
+		  fixed <nop>BlogArchive not to compute terms _before_ calling the tagcloud; \
+		  removed whitespaces from <nop>WebPreferences to prevent insecure eval warnings (strange); \
+		  fixed use of <nop>NatSkin's IFSKINSTATE as it glues no more |
+|  21 Aug 2006: | fixed error in RECENTCOMMENTS checking the posting's status; \
+                  some css fixes; \
+                  added default meta data keywords |
+|  15 Aug 2006: | making use of new feature of the <nop>IfDefinedPlugin to speed up certain things; \
+                  improved way to render meta data and pagetitle; \
+		  generating relative urls instead of absolute where possible now |
+|  28 Jul 2006: | hiding the breadcrumbs in the blog introduced in the recent <nop>NatSkin version; \
+                  reordered sidebar section to "make more sense"; \
+		  minor docu changes; \
+		  added recommendation to use the <nop>BlogPlugin in combination with the \
+		  TWiki:Plugins/NatSkin because some features will work with it only |
+|  23 Jul 2006: | added view templates specific to <nop>PatternSkin; \
+                  improved the blog's sidebar for <nop>PatternSkin; \
+		  added standard <nop>WebSearch topics; \
+		  improved <nop>PatternSkin css support; \
+		  fixed rendering postings without a <nop>SubjectCategory; \
+		  usability improvements in <nop>RenderAddComment; \
+                  fighting back sprinkling &lt;p />; \
+		  small improvements to the <nop>BlogFactory; \
+		  *Upgrade warning*: blogentries created with older versions of this plugin \
+		  need to be editted to replace %BR%\
+		  =%META:FIELD{name="State" ... value="enabled"}%= \
+		  with %BR% \
+		  =%META:FIELD{name="State" ... value="published"}%=; %BR%\
+		  replace =disabled= with =unpublised= respectively |
 |  15 June 2006: | added <nop>BlogFactory to ease creation of blogs; \
                    fixed <nop>BlogImages feature introduced recently; \
 		   added docu to to blog's <nop>WebPreferences; \
@@ -365,4 +393,4 @@ And send me a patch if you've coded that into TWiki ;).
 |  Feedback: | TWiki:Plugins/%TOPIC%Dev |
 |  Appraisal: | TWiki:Plugins/%TOPIC%Appraisal |
 
--- TWiki:Main.MichaelDaum - 24 May 2006
+-- TWiki:Main.MichaelDaum - 31 Aug 2006

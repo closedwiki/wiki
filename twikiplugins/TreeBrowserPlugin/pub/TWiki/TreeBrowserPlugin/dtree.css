@@ -9,6 +9,7 @@
 	font-size: 11px;
 	color: #666;
 	white-space: nowrap;
+	line-height:100%;
 }
 .dtree img {
 	border: 0px;
@@ -32,3 +33,4 @@
 .dtree .clip {
 	overflow: hidden;
 }
+

@@ -2,11 +2,11 @@
 ---++ %TOPIC%
 %STARTINCLUDE%
 <ul>
-  <li class="%WEBBUTTONSCLASS_HOME%"><a href="%SCRIPTURL{"view"}%/%WEB%/WebHome" accesskey="1">Home</a></li>
-  <li><a href="%SCRIPTURL{"view"}%/%MAINWEB%/WebHome" accesskey="2">Wiki</a></li>
-  <li class="%WEBBUTTONSCLASS_NEWS%"><a href="%SCRIPTURL{"view"}%/%WEB%/NewsFeeds" accesskey="3">News</a></li>
-  <li class="%WEBBUTTONSCLASS_ARCHIVE%"><a href="%SCRIPTURL{"view"}%/%WEB%/BlogArchive" accesskey="4">Archive</a></li>
-  <li class="%WEBBUTTONSCLASS_ABOUT%"><a href="%SCRIPTURL{"view"}%/%WEB%/BlogAbout" accesskey="5">About</a></li>
+  <li class="%WEBBUTTONSCLASS_HOME%"><a href="%SCRIPTURLPATH{"view"}%/%WEB%/WebHome" accesskey="1">Home</a></li>
+  <li><a href="%SCRIPTURLPATH{"view"}%/%MAINWEB%/WebHome" accesskey="2">Wiki</a></li>
+  <li class="%WEBBUTTONSCLASS_NEWS%"><a href="%SCRIPTURLPATH{"view"}%/%WEB%/NewsFeeds" accesskey="3">News</a></li>
+  <li class="%WEBBUTTONSCLASS_ARCHIVE%"><a href="%SCRIPTURLPATH{"view"}%/%WEB%/BlogArchive" accesskey="4">Archive</a></li>
+  <li class="%WEBBUTTONSCLASS_ABOUT%"><a href="%SCRIPTURLPATH{"view"}%/%WEB%/BlogAbout" accesskey="5">About</a></li>
 </ul>
 %STOPINCLUDE%
 

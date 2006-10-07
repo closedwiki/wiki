@@ -1,0 +1,16 @@
+%META:TOPICINFO{author="TWikiContributor" date="1152044727" format="1.2" version="$Rev$"}%
+%META:TOPICPARENT{name="VarSITEMAP"}%
+#VarSITEMAPLIST
+---+++ SITEMAPLIST -- show a web in [[%TWIKIWEB%.SiteMap]]
+
+%STARTINCLUDE%
+<!-- intentionally nothing to be included -->
+%STOPINCLUDE%
+
+This variable, together with [[TWikiVariables.#VarSITEMAPWHAT][SITEMAPWHAT]] and
+[[TWikiVariables.#VarSITEMAPUSETO][SITEMAPUSETO]], control the appearance of the [[%TWIKIWEB%.SiteMap][SiteMap]].
+
+   * For the webs which you want listed in the [[%TWIKIWEB%.SiteMap][SiteMap]], set SITEMAPLIST to =on=, do not set NOSEARCHALL, and supply values for SITEMAPWHAT and SITEMAPUSETO.
+   * Type: Preference variable defined in [[%TWIKIWEB%.%WIKIPREFSTOPIC%]].  Can be customized for a TWiki site in [[%LOCALSITEPREFS%]], and for each web in their %WEBPREFSTOPIC% topics.
+   * Related: [[TWikiVariables.#VarSITEMAPWHAT][SITEMAPWHAT]], [[TWikiVariables.#VarSITEMAPUSETO][SITEMAPUSETO]], [[%TWIKIWEB%.SiteMap]], %TWIKIWEB%.ManagingWebs
+

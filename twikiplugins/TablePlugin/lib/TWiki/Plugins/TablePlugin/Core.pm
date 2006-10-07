@@ -548,7 +548,7 @@ sub emitTable {
             $rowtext .= &$fn($attr, " $cell ");
             use strict 'refs';
         }
-        $text .= $currTablePre.CGI::Tr( {}, $rowtext )."\n";
+        $text .= $currTablePre.CGI::Tr( { class=> ($rowCount % 2)?'twikiTableOdd':'twikiTableEven'}, $rowtext )."\n";
         $rowCount++;
         $dataColorCount++;
     }

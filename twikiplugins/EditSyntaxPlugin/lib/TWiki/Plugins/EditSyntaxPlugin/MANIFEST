@@ -1,0 +1,6 @@
+data/TWiki/EditSyntaxPlugin.txt 0664
+data/TWiki/MediawikiEditSyntaxRegex.txt 0664
+data/TWiki/MediawikiEditTest.txt 0664
+data/TWiki/MediawikiTextFormattingRules.txt 0664
+data/TWiki/MediawikiWikiSyntaxSummary.txt 0664
+lib/TWiki/Plugins/EditSyntaxPlugin.pm 0444

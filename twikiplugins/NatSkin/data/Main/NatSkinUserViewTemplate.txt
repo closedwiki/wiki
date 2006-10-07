@@ -2,7 +2,7 @@
 %TMPL:INCLUDE{"view"}%
 %TMPL:DEF{"active_form"}%
 <div style="float:right; margin:2px;">
-<a href="%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/%WEB%/%TOPIC%?action=form&t=%GMTIME{$hour$min$sec}%">Edit</a>
+<a href="%SCRIPTURLPATH{"edit"}%/%WEB%/%TOPIC%?action=form&t=%GMTIME{$hour$min$sec}%">Edit</a>
 </div>
 %TMPL:END%
 %TMPL:DEF{"inactive_form"}% %TMPL:END%

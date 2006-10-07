@@ -1,10 +1,17 @@
 %META:TOPICINFO{author="TWikiContributor" date="1139389799" format="1.1" version="1.1"}%
----+!! <nop>%TOPIC%
+<!--
 
+   PLEASE DO NOT EDIT THIS TOPIC
+
+   It is automatically generated from the subversion repository, and any changes
+   you make will simply be overwritten the next time a release is generated.
+
+   Instead, you could check your fix in, raise a bug in the Bugs web, or mail the author.
+-->
+---+!! <nop>%TOPIC%
+%TOC%
 This plugin allows to substitute and extract information from content by
 using regular expressions.
-
-%TOC%
 
 ---++ Syntax Rules
 
@@ -102,26 +109,28 @@ This is a second comment.
 
 
 
----++ Plugin Settings
-
-	* Set SHORTDESCRIPTION = Substitute and extract information from content by using regular expressions
 
 ---++ Plugin Installation Instructions
 
-	* Download the ZIP file from the Plugin web (see below)
-	* Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
+	* [[http://twiki.org/p/pub/Plugins/%TOPIC%.zip][Download]] the ZIP file
+	* Unzip it in your twiki installation directory. Content: 
 	  | *File:* | *Description:* |
 	  | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
 	  | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
 	* (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
 
 ---++ Plugin Info
+<!-- provided for compatibility only
+   * Set SHORTDESCRIPTION = Substitute and extract information from content by using regular expressions
+-->
 
 |  Plugin Author: | TWiki:Main.MichaelDaum |
-|  Copyright &copy;: | 2005-2006, Michael Daum |
+|  Copyright &copy;: | 2005-2006, MichaelDaum@WikiRing.com |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | v0.94 |
+|  Plugin Version: | v0.96 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  31 Aug 2006: | added NO_PREFS_IN_TOPIC |
+|  15 Aug 2006: | added =use strict;= and fixed revealed errors |
 |  14 Feb 2006: | moved in FORMATLIST from the TWiki:Plugins/NatSkinPlugin;\
                   added escape variables to format strings |
 |  06 Dec 2005: | fixed SUBST not to cut off the rest of the text |
@@ -136,4 +145,4 @@ This is a second comment.
 |  Feedback: | TWiki:Plugins/%TOPIC%Dev |
 |  Appraisal: | TWiki:Plugins/%TOPIC%Appraisal |
 
--- TWiki:Main.MichaelDaum - 14 Feb 2006
+-- TWiki:Main.MichaelDaum - 31 Aug 2006

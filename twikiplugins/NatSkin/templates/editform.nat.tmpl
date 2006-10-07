@@ -1,21 +1,17 @@
 %TMPL:INCLUDE{"edit"}%
 <!-- template: editform.nat.tmpl -->
-%TMPL:DEF{"title"}%%TOPIC% (edit form)%TMPL:END%
+%TMPL:DEF{"title"}%%TOPIC% (%MAKETEXT{"edit form"}%)%TMPL:END%
 %TMPL:DEF{"content"}% <!-- -->
 <div class="natEdit">
-<form name="EditFormular" method="post" action="%SCRIPTURLPATH%/save%SCRIPTSUFFIX%/%WEB%/%TOPIC%">
-  %IFSKINSTATETHEN{release="cairo"}%
-    <input type="hidden" name="action" value="" />
-  %ELSIFSKINSTATE{release="dakar"}%
-    <input type="hidden" name="action_preview" value="" />
-    <input type="hidden" name="action_save" value="" />
-    <input type="hidden" name="action_checkpoint" value="" />
-    <input type="hidden" name="action_addform" value="" />
-    <input type="hidden" name="action_replaceform" value="" />
-    <input type="hidden" name="action_cancel" value="" />
-    <input type="hidden" name="settingstopic" value="%SETTINGSTOPIC%" />
-    <input type="hidden" name="templatetopic" value="%TEMPLATETOPIC%" />
-  %FISKINSTATE%
+<form name="EditForm" method="post" action="%SCRIPTURLPATH{"save"}%/%WEB%/%TOPIC%">
+  <input type="hidden" name="action_preview" value="" />
+  <input type="hidden" name="action_save" value="" />
+  <input type="hidden" name="action_checkpoint" value="" />
+  <input type="hidden" name="action_addform" value="" />
+  <input type="hidden" name="action_replaceform" value="" />
+  <input type="hidden" name="action_cancel" value="" />
+  <input type="hidden" name="settingstopic" value="%SETTINGSTOPIC%" />
+  <input type="hidden" name="templatetopic" value="%TEMPLATETOPIC%" />
   <input type="hidden" name="submitChangeForm" value="" />
   <input type="hidden" name="editaction" value="form" />
   <input type="hidden" name="formtemplate" value="%FORMTEMPLATE%" />

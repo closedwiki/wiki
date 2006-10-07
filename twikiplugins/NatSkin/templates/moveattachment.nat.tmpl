@@ -5,32 +5,35 @@
 <!-- -->%TMPL:INCLUDE{"moveattachmenttopicactions"}% 
 <!-- -->%TMPL:INCLUDE{"moveattachmentjavascript"}%
 <!-- -->%TMPL:INCLUDE{"moveattachmentstyles"}%
-%TMPL:DEF{"title"}%%TOPIC% (move)%TMPL:END%
+%TMPL:DEF{"bodyclass"}%natMoveAttachmentBody%TMPL:END%
+%TMPL:DEF{"title"}%%TOPIC% (%MAKETEXT{"move"}%)%TMPL:END%
 %TMPL:DEF{"meta"}% <meta name="robots" content="noindex, nofollow" /> %TMPL:END%
 %TMPL:DEF{"onloadscript"}%document.rename.newtopic.focus();%TMPL:END%
 %TMPL:DEF{"locator"}%<span class="natSep">&middot;</span>[[WebHome][%WEB%]]<span class="natSep">&middot;</span>[[%TOPIC%]]%TMPL:END%
 %TMPL:DEF{"content"}% <!-- -->
-<form name="rename" action="%SCRIPTURLPATH%/rename%SCRIPTSUFFIX%/%INTURLENCODE{"%WEB%/%TOPIC%"}%">
----+ Move or Delete File "<nop>%FILENAME%"
+<form name="rename" action="%SCRIPTURLPATH{"rename"}%/%WEB%/%TOPIC%">
+---+ %MAKETEXT{"Move or Delete File \"[_1]\"" args="<nop>%FILENAME%"}%
 
 <div style="width:450px">
-| *&nbsp;* |  *Web:* | *&nbsp;Topic:* |
-|  *From:* |    %WEB% | &nbsp;%TOPIC% |
-|  *To:* |  <select name="newweb" onchange="if (document.rename.newweb.value == 'Trash') { document.rename.newtopic.value = 'TrashAttachment'; }"> %WEBLIST{"<option $marker value='$name'>$name</option>" webs="Trash,public" selection="%WEB%" separator=" "}% </select> | &nbsp;<input type="text" name="newtopic" value="%TOPIC%" /> |
+| *&nbsp;* |  *%MAKETEXT{"Web:"}%* | *&nbsp;%MAKETEXT{"Topic"}%:* |
+|  *%MAKETEXT{"From:"}%* |    %WEB% | &nbsp;%TOPIC% |
+|  *%MAKETEXT{"To:"}%* |  <select name="newweb" onchange="if (document.rename.newweb.value == 'Trash') { document.rename.newtopic.value = 'TrashAttachment'; }"> %WEBLIST{"<option $marker value='$name'>$name</option>" webs="Trash,public" selection="%WEB%" separator=" "}% </select> | &nbsp;<input type="text" name="newtopic" value="%TOPIC%" /> |
+
+<input type="checkbox" name="nonwikiword" /> %MAKETEXT{"Allow non <nop>WikiWord for the new topic name."}%
 <input type="hidden" name="attachment" value="%FILENAME%" />
 <input type="hidden" name="changeRefs" value="0" />
 <center>
 
-<input type="submit" class="natOkButton" value="OK" />&nbsp;
-<input type="button" class="natCancelButton" value="Cancel" onclick="window.location.href='%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%'">
+<input type="submit" class="natOkButton" value='%MAKETEXT{"OK"}%' />&nbsp;
+<input type="button" class="natCancelButton" value='%MAKETEXT{"Cancel"}%' onclick="window.location.href='%SCRIPTURLPATH{"view"}%/%WEB%/%TOPIC%'">
 </center>
 </div>
 </form>
 %TMPL:END%
 %TMPL:DEF{"notes"}% <!-- -->
-<p> To delete an attachment move it to Trash.TrashAttachment. </p>
+%MAKETEXT{"<p> To delete an attachment move it to Trash.TrashAttachment. </p>
 <p> The attachment and any history will be moved to the new topic. </p>
 <p> An error page will be shown if either of the topics are locked by another user. </p>
 <p> The new topic chosen must already exist. </p>
-<p> Note that any URLs that refer to the attachment will be broken after this move. </p>
+<p> Note that any URLs that refer to the attachment will be broken after this move. </p>"}%
 %TMPL:END%

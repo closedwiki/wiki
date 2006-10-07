@@ -1,0 +1,51 @@
+---+!! WikiwygContrib Package
+
+WikiwygContrib bundles up [[http://www.wikiwyg.net][WikiWyg]] wiki editor, and adds it to the options that you can use for Wysiwyg editing using the WysiwygPlugin. when you set the =COMPOSER= variable to wikiwyg, the WYSIWYG edit button will use wikiwyg instead of kupu. Right now, it works only with FireFox, but I'm looking into getting it workong in InternetExplorer etc.
+
+This is a work in progress, using WikiWyg version 0.12 , and it is not advisable to be used on topics that contain inline html.
+
+---++ Settings
+
+Settings are stored as preferences variables. To reference a setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, e.g. ==%<nop>WIKIWYGCONTRIB_STUB%==
+
+   * One line description:
+      * Set SHORTDESCRIPTION = Add Wikiwyg editor to Wysiwyg
+
+   * Name of the perl package
+      * Set STUB = %$STUB%
+
+---++ Installation Instructions
+	* Download the ZIP file from the Plugin web (see below)
+	* Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
+	| *File:* | *Description:* |
+%$MANIFEST%
+	* Run ==%TOPIC%_installer.pl== to automatically check and install other modules that this module depends on. You can also do this step manually. Dependencies:
+	%$DEPENDENCIES%
+
+   * set the COMPOSER variable to 'wikiwyg' in %TWIKIWEB%.TWikiPreferences
+
+---++ Contrib Info
+
+|  Author: | TWiki:Main/SvenDowideit |
+|  Copyright &copy;: | 2006, SvenDowideit@WikiRing.com and Copyright (c) 2005,2006 Socialtext Corporation |
+|  License: | LGPL ([[http://www.gnu.org/copyleft/lesser.txt][GNU Lesser General Public License]])  |
+|  Dependencies: | %$DEPENDENCIES% |
+|  Version: | %$VERSION% |
+|  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  %DATE%: | Initial version |
+|  Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
+|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
+|  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
+
+__Related Topics:__ %TWIKIWEB%.TWikiPreferences
+
+%META:FORM{name="PackageForm"}%
+%META:FIELD{name="TopicClassification" attributes="" title="TopicClassification" value="PluginPackage"}%
+%META:FIELD{name="TestedOnTWiki" attributes="" title="TestedOnTWiki" value="4.0.0"}%
+%META:FIELD{name="InstalledOnTWikiOrg" attributes="" title="InstalledOnTWikiOrg" value="No"}%
+%META:FIELD{name="DemoUrl" attributes="" title="DemoUrl" value=""}%
+%META:FIELD{name="DevelopedInSVN" attributes="" title="DevelopedInSVN" value="Yes"}%
+%META:FIELD{name="ModificationPolicy" attributes="" title="ModificationPolicy" value="ContactAuthorFirst"}%
+%META:FIELD{name="RelatedTopics" attributes="" title="RelatedTopics" value="WysiwygPlugin"}%
+%META:FIELD{name="TestedOnOS" attributes="" title="TestedOnOS" value="OsLinux"}%
+%META:FIELD{name="ShouldRunOnOS" attributes="" title="ShouldRunOnOS" value="AnyOS"}%

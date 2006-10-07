@@ -1,43 +1,54 @@
 %META:TOPICINFO{author="TWikiContributor" date="1147166156" format="1.1" reprev="1.5" version="1.1"}%
-%STARTINCLUDE%
-<div class="natSideBarTitle">
-  <h1>Navigation%REDDOT{"%TWIKIWEB%.TWikiWebSideBar"}%</h1>
+%STARTINCLUDE%<div class="natSideBarTitle">
+  <h1>%MAKETEXT{"Navigation"}%%REDDOT{"%TWIKIWEB%.TWikiWebSideBar"}%</h1>
 </div>
 <style type="text/css">
-
-%IFSKINSTATETHEN{style="Pattern"}%
-%$nopFORMATLIST{"%$nopWEBLIST{"$name" separator=" "}% TestCases" split=" " separator="$n" format="h2.navButton$1 a {background:$percntVAR{\"WEBBGCOLOR\" web=\"$1\"}$percnt;}"}%
-%FISKINSTATE%
-
-.navButton {%IFSKINSTATE{buttons="on" then="display:none"}%}
-.navButton%BASEWEB% {display:block}
+.navButton { %IFSKINSTATE{buttons="on" then="display:none"}% }
 </style>
-<h2 class="navButton navButtonMain">%WEBLINK{"Main"}%</h2>
-
-%IFDEFINEDTHEN{"%BASEWEB%" as="Main"}%
-%$nopWEBCOMPONENT{"WebLinks"}%
-%FIDEFINED%
-
-%FORMATLIST{"%WEBLIST{webs="public,%BASEWEB%" separator=" "}%" unique="on" exclude="Main|TWiki|Trash" split=" " separator="$n" format="<h2 class=\"navButton navButton$1\">$percntWEBLINK{\"$1\"}$percnt</h2><div style=\"$percntIFDEFINED{\"$percntBASEWEB$percnt\" as=\"$1\" else=\"display:none\"}$percnt\">$percntWEBCOMPONENT{\"WebLinks\"}$percnt</div>"}%
-
+%~~ FLEXWEBLIST{
+~~~   webs="%MAINWEB%,User,publiccurrent,%TWIKIWEB%" 
+~~~   map="%TWIKIWEB%=System"
+~~~   include="\w+|%BASEWEB%"
+~~~   exclude="TestCases|Trash" 
+~~~   selection="%BASEWEB%" 
+~~~   format="<h2 class=\"navButton\">
+~~~     $percntWEBLINK{web=\"$web\" name=\"$name\"}$percnt
+~~~     </h2>$n" 
+~~~   markerformat="
+~~~     <div class=\"navCurrent\">
+~~~     <h2 class=\"navButton\" style=\"display:block\">
+~~~       $percntWEBLINK{web=\"$web\" name=\"$name\"}$percnt
+~~~     </h2> $percntFLEXWEBLIST{
+~~~       include=\"$web/\w+\"
+~~~       header=\"<ul><li>
+~~~         $dollarpercntTWISTY{
+~~~           id=\\"subweb_$web\\" 
+~~~           mode=\\"div\\"
+~~~           remember=\\"on\\"
+~~~           link=\\"Subwebs\\"
+~~~         }$dollarpercnt
+~~~         <ul class=\\"natSubWebs\\">\"
+~~~       format=\"<li> $dollarpercntWEBLINK{name=\\"$dollarname\\" web=\\"$dollarweb\\"}$dollarpercnt</li>\"
+~~~       footer=\"</ul>$dollarpercntENDTWISTY$dollarpercnt</li></ul>\"
+~~~     }$percnt
+~~~     $percntWEBCOMPONENT{\"WebLinks\"}$percnt
+~~~     </div>"
+~~~ }%
 %IFDEFINEDTHEN{"%BASEWEB%" as="Trash"}%
 <h2 class="navButton navButtonTrash">%WEBLINK{"Trash"}%</h2>
-   * [[Trash.TrashAttachment][Attachments]] 
+   * [[Trash.TrashAttachment][%MAKETEXT{"Attachments"}%]]
 %$nopWEBCOMPONENT{"WebLinks"}%
 %FIDEFINED%
-
-<h2 class="navButton navButton%TWIKIWEB%">%WEBLINK{web="%TWIKIWEB%" name="System"}%</h2>
-
-%IFDEFINEDTHEN{"%BASEWEB%" as="TWiki"}%
-%$nopWEBCOMPONENT{"WebLinks"}%
-%FIDEFINED%
-
-%IFSKINSTATETHEN{searchbox="pos2"}%
-<p/>
+%IFSKINSTATETHEN{searchbox="pos2" glue="off"}%
 <div class="natSearchBox natSearchBoxPos2">
 %TMPL:P{"searchbox"}%
 </div>
 %FISKINSTATE%
-
-<div class="natSideBarPersonal"> %INCLUDE{"%CALC{"$IF($EXISTS(%MAINWEB%.%WIKINAME%SideBar),%MAINWEB%.%WIKINAME%SideBar,%TWIKIWEB%.MySideBar)"}%"}% </div>
+<div class="natSideBarPersonal" style="%IFDEFINED{"%BASEWEB%.%BASETOPIC%" as="%MAINWEB%.%WIKINAME%SideBar" then="display:none"}%"> 
+%IFDEFINEDTHEN{"$percntINCLUDE{\"%MAINWEB%.%WIKINAME%SideBar\" warn=\"off\"}$percnt"}%
+$test
+%ELSEDEFINED%
+%$nopINCLUDE{"%TWIKIWEB%.MySideBar" warn="off"}%
+%FIDEFINED%
+</div>
 %STOPINCLUDE%

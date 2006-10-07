@@ -66,8 +66,6 @@ Perform a search as dictated by CGI parameters:
 
 sub search {
     my $session = shift;
-    
-    $session->enterContext( 'search' );
 
     my $query = $session->{cgiQuery};
     my $webName = $session->{webName};

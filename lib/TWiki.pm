@@ -140,6 +140,7 @@ sub getTWikiLibDir {
 BEGIN {
 
     use TWiki::Sandbox;   # system command sandbox
+    use TWiki::Configure::Load;    # read configuration files
 
     $TRUE = 1;
     $FALSE = 0;
@@ -163,8 +164,8 @@ BEGIN {
     # DO NOT CHANGE THE FORMAT OF $VERSION
     # automatically expanded on checkin of this module
     $VERSION = '$Date$ $Rev$ ';
-    $RELEASE = 'TWiki-4.0.4';
-    $VERSION =~ s/^.*?\((.*)\).*: (\d+) .*?$/$1 build $2/;
+    $RELEASE = 'TWiki-4.1';
+    $VERSION =~ s/^.*?\((.*)\).*: (\d+) .*?$/$RELEASE, $1, build $2/;
 
     # Default handlers for different %TAGS%
     %functionTags = (
@@ -194,6 +195,7 @@ BEGIN {
         PLUGINVERSION     => \&_PLUGINVERSION,
         PUBURL            => \&_PUBURL,
         PUBURLPATH        => \&_PUBURLPATH,
+        QUERYPARAMS       => \&_QUERYPARAMS,
         QUERYSTRING       => \&_QUERYSTRING,
         RELATIVETOPICPATH => \&_RELATIVETOPICPATH,
         REMOTE_ADDR       => \&_REMOTE_ADDR,
@@ -261,31 +263,8 @@ BEGIN {
           TWiki::Sandbox::untaintUnchecked( $ENV{SERVER_NAME} );
     }
 
-    # Get LocalSite first, to pick up definitions of things like
-    # {RCS}{BinDir} and {LibDir} that are used in TWiki.cfg
-    # do, not require, because we do it twice
-    do 'LocalSite.cfg';
-    # Now get all the defaults
-    require 'TWiki.cfg';
-    die "Cannot read TWiki.cfg: $@" if $@;
-    die "Bad configuration: $@" if $@;
-
-    # If we got this far without definitions for key variables, then
-    # we need to default them. otherwise we get peppered with
-    # 'uninitialised variable' alerts later.
-
-    foreach my $var qw( DataDir DefaultUrlHost PubUrlPath
-                        PubDir TemplateDir ScriptUrlPath LocalesDir ) {
-        # We can't do this, because it prevents TWiki being run without
-        # a LocalSite.cfg, which we don't want
-        # die "$var must be defined in LocalSite.cfg"
-        #  unless( defined $TWiki::cfg{$var} );
-        $TWiki::cfg{$var} ||= 'NOT SET';
-    }
-
-    # read localsite again to ensure local definitions override TWiki.cfg
-    do 'LocalSite.cfg';
-    die "Bad configuration: $@" if $@;
+    # readConfig is defined in TWiki::Configure::Load to allow overriding it
+    TWiki::Configure::Load::readConfig();
 
     if( $TWiki::cfg{WarningsAreErrors} ) {
         # Note: Warnings are always errors if ASSERTs are enabled
@@ -311,10 +290,12 @@ BEGIN {
     $constantTags{DEFAULTURLHOST}  = $TWiki::cfg{DefaultUrlHost};
     $constantTags{WIKIPREFSTOPIC}  = $TWiki::cfg{SitePrefsTopicName};
     $constantTags{WIKIUSERSTOPIC}  = $TWiki::cfg{UsersTopicName};
+    $constantTags{WIKIWEBMASTER}   = $TWiki::cfg{WebMasterEmail};
+    $constantTags{WIKIWEBMASTERNAME} = $TWiki::cfg{WebMasterName};
     if( $TWiki::cfg{NoFollow} ) {
         $constantTags{NOFOLLOW} = 'rel='.$TWiki::cfg{NoFollow};
     }
-    $constantTags{ALLOWLOGINNAME}  = $TWiki::cfg{Register}{AllowLoginName};
+    $constantTags{ALLOWLOGINNAME} = $TWiki::cfg{Register}{AllowLoginName} || 0;
 
     # locale setup
     #
@@ -389,7 +370,7 @@ BEGIN {
     $regex{headerPatternNoTOC} = '(\!\!+|%NOTOC%)';
 
     # TWiki concept regexes
-    $regex{wikiWordRegex} = qr/[$regex{upperAlpha}]+[$regex{lowerAlpha}]+[$regex{upperAlpha}]+[$regex{mixedAlphaNum}]*/o;
+    $regex{wikiWordRegex} = qr/[$regex{upperAlpha}]+[$regex{lowerAlphaNum}]+[$regex{upperAlpha}]+[$regex{mixedAlphaNum}]*/o;
     $regex{webNameBaseRegex} = qr/[$regex{upperAlpha}]+[$regex{mixedAlphaNum}_]*/o;
     $regex{webNameRegex} = qr/$regex{webNameBaseRegex}(?:(?:[\.\/]$regex{webNameBaseRegex})+)*/o;
     $regex{defaultWebNameRegex} = qr/_[$regex{mixedAlphaNum}_]+/o;
@@ -407,13 +388,12 @@ BEGIN {
     $regex{mixedAlphaNumRegex} = qr/[$regex{mixedAlphaNum}]*/o;
 
     # %TAG% name
-    $regex{tagNameRegex} = qr/[$regex{mixedAlpha}][$regex{mixedAlphaNum}_:]*/o;
+    $regex{tagNameRegex} = '['.$regex{mixedAlpha}.']['.$regex{mixedAlphaNum}.'_:]*';
 
     # Set statement in a topic
-    $regex{bulletRegex} = qr/^(?:\t|   )+\*/;
-    $regex{setRegex} = qr/$regex{bulletRegex}\s+(Set|Local)\s+/o;
-    # SMELL: this ought to use $regex{tagNameRegex}
-    $regex{setVarRegex} = qr/$regex{setRegex}(\w+)\s*=\s*(.*)$/o;
+    $regex{bulletRegex} = '^(?:\t|   )+\*';
+    $regex{setRegex} = $regex{bulletRegex}.'\s+(Set|Local)\s+';
+    $regex{setVarRegex} = $regex{setRegex}.'('.$regex{tagNameRegex}.')\s*=\s*(.*)$';
 
     # Character encoding regexes
 
@@ -692,7 +672,7 @@ sub writePageHeader {
     $this->{plugins}->modifyHeaderHandler( $hopts, $this->{cgiQuery} );
 
     # add cookie(s)
-    $this->{client}->modifyHeader( $hopts );
+    $this->{loginManager}->modifyHeader( $hopts );
 
     my $hdr = CGI::header( $hopts );
 
@@ -701,36 +681,90 @@ sub writePageHeader {
 
 =pod
 
----++ ObjectMethod redirect( $url, ... )
+---++ ObjectMethod redirect( $url, $passthrough )
 
-Generate a CGI redirect to $url unless (1) $session->{cgiQuery} is undef or
-(2) $query->param('noredirect') is set to a true value. Thus a redirect is
-only generated when in a CGI context.
+Redirects the request to =$url=, *unless*
+   1 It is overridden by a plugin declaring a =redirectCgiQueryHandler=.
+   1 =$session->{cgiQuery}= is =undef= or
+   1 $query->param('noredirect') is set to a true value.
+Thus a redirect is only generated when in a CGI context.
 
-The ... parameters are concatenated to the message written when printing
-to STDOUT, and are ignored for a redirect.
+Normally this method will ignore parameters to the current query.
+If $passthrough is set, then it will pass all parameters that were passed
+to the current query on to the redirect target. If the request_method was
+GET, then all parameters can be passed in the URL. If the
+request_method was POST then it caches the form data and passes over a
+cache reference in the redirect GET.
 
-Redirects the request to $url, via the CGI module object $query unless
-overridden by a plugin declaring a =redirectCgiQueryHandler=.
+Passthrough is only meaningful if the redirect target is on the same server.
 
 =cut
 
 sub redirect {
-    my $this = shift;
-    my $url = shift;
+    my ($this, $url, $passthru) = @_;
 
     ASSERT($this->isa( 'TWiki')) if DEBUG;
 
     my $query = $this->{cgiQuery};
-    unless( $this->{plugins}->redirectCgiQueryHandler( $query, $url ) ) {
-        if ( $query && $query->param( 'noredirect' )) {
-            my $content = join(' ', @_) . "\n";
-            $this->writeCompletePage( $content );
-        } elsif ( $this->{client}->redirectCgiQuery( $query, $url ) ) {
-        } elsif ( $query ) {
-            print $query->redirect( $url );
-        }
+    # if we got here without a query, there's not much more we can do
+    return unless $query;
+
+    if( $query->param( 'noredirect' )) {
+        my $content = join(' ', @_) . "\n";
+        $this->writeCompletePage( $content );
+        return;
     }
+
+    if ($passthru) {
+        $url =~ s/\?(.*)$//;
+        my $existing = $1;
+        if ($ENV{REQUEST_METHOD} eq 'POST') {
+            # Redirecting from a port to a get
+            my $cache = $this->cacheQuery();
+            if ($cache) {
+                #print STDERR "302ing from a POST ".$query->url().$query->path_info()." to $url using $cache\n";
+                $url .= "?$cache";
+            }
+        } else {
+            $url .= '?'.$query->query_string();
+        }
+        $url .= (($url =~ /\?/) ? ';' : '?').$existing if $existing;
+    }
+
+    return if( $this->{plugins}->redirectCgiQueryHandler( $query, $url ) );
+    return if( $this->{loginManager}->redirectCgiQuery( $query, $url ) );
+    die "Login manager returned 0 from redirectCgiQuery";
+}
+
+=pod
+
+---++ ObjectMethod cacheQuery() -> $queryString
+Caches the current query in the params cache, and returns a rewritten
+query string for the cache to be picked up again on the other side of a
+redirect.
+
+We can't encode post params into a redirect, because they may exceed the
+size of the GET request. So we cache the params, and reload them when the
+redirect target is reached.
+
+=cut
+
+sub cacheQuery {
+    my $this = shift;
+    my $query = $this->{cgiQuery};
+
+    return '' unless (scalar($query->param()));
+    # Don't double-cache
+    return '' if ($query->param('twiki_redirect_cache'));
+
+    require Digest::MD5;
+    my $md5 = new Digest::MD5();
+    $md5->add($$, time(), rand(time));
+    my $uid = $TWiki::cfg{PassthroughDir}.'/passthru_'.$md5->hexdigest();
+    open(F, ">$uid") || die "{PassthroughDir} cache not writable $!";
+    $query->save(\*F);
+    close(F);
+    return 'twiki_redirect_cache='.$uid;
 }
 
 =pod
@@ -1095,21 +1129,12 @@ sub getOopsUrl {
 ---++ ObjectMethod normalizeWebTopicName( $theWeb, $theTopic ) -> ( $theWeb, $theTopic )
 
 Normalize a Web<nop>.<nop>TopicName
-<pre>
-Input:                      Return:
-  ( 'Web',  'Topic' )         ( 'Web',  'Topic' )
-  ( '',     'Topic' )         ( 'Main', 'Topic' )
-  ( '',     '' )              ( 'Main', 'WebHome' )
-  ( '',     'Web/Topic' )     ( 'Web',  'Topic' )
-  ( '',     'Web.Topic' )     ( 'Web',  'Topic' )
-  ( 'Web1', 'Web2.Topic' )    ( 'Web2', 'Topic' )
-  ( '%MAINWEB%', 'Web2.Topic' ) ( 'Main', 'Topic' )
-  ( '%TWIKIWEB%', 'Web2.Topic' ) ( 'TWiki', 'Topic' )
-</pre>
-Note: Function renamed from getWebTopic
 
-SMELL: WARNING: this function defaults the web and topic names.
-Be very careful where you use it!
+See TWikiFuncDotPm for a full specification of the expansion (not duplicated here)
+
+*WARNING* if there is no web specification (in the web or topic parameters) the web
+defaults to $TWiki::cfg{UsersWebName}. If there is no topic specification, or the topic
+is '0', the topic defaults to the web home topic name.
 
 =cut
 
@@ -1119,37 +1144,37 @@ sub normalizeWebTopicName {
     ASSERT($this->isa( 'TWiki')) if DEBUG;
     ASSERT(defined $topic) if DEBUG;
 
-    if( $topic =~ m|^(.*)[\./](.*)$| ) {
+    if( $topic =~ m|^(.*)[./](.*?)$| ) {
         $web = $1;
         $topic = $2;
     }
     $web ||= $cfg{UsersWebName};
     $topic ||= $cfg{HomeTopicName};
-    $web =~ s/^%((MAIN|TWIKI)WEB)%$/$this->_expandTagOnTopicRendering($1)||''/e;
+    $web =~ s/%((MAIN|TWIKI|USERS|SYSTEM|DOC)WEB)%/$this->_expandTagOnTopicRendering($1)||''/e;
     $web =~ s#\.#/#go;
     return( $web, $topic );
 }
 
 =pod
 
----++ ClassMethod new( $remoteUser, $query )
+---++ ClassMethod new( $loginName, $query, \%initialContext )
 Constructs a new TWiki object. Parameters are taken from the query object.
 
-   * =$remoteUser= the logged-in user (login name)
-   * =$query= the query
-
+   * =$loginName= is the username of the user you want to be logged-in if none is
+     available from a session or browser. Used mainly for side scripts and debugging.
+   * =$query= the CGI query (may be undef, in which case an empty query is used)
+   * =\%initialContext= - reference to a hash containing context name=value pairs
+     to be pre-installed in the context hash
 =cut
 
 sub new {
-    my( $class, $remoteUser, $query, $d ) = @_;
-    ASSERT(!defined($d)) if DEBUG; # upgrade check
-    $query ||= new CGI( {} );
-    $remoteUser ||= $query->remote_user() || $TWiki::cfg{DefaultUserLogin};
+    my( $class, $loginName, $query, $initialContext ) = @_;
 
+    $query ||= new CGI( {} );
     my $this = bless( {}, $class );
 
     $this->{htmlHeaders} = {};
-    $this->{context} = {};
+    $this->{context} = $initialContext || {};
 
     # create the various sub-objects
     $this->{sandbox} = $sharedSandbox;
@@ -1159,10 +1184,9 @@ sub new {
     $this->{search} = new TWiki::Search( $this );
     $this->{templates} = new TWiki::Templates( $this );
     $this->{attach} = new TWiki::Attach( $this );
-    $this->{client} = TWiki::Client::makeClient( $this );
+    $this->{loginManager} = TWiki::Client::makeLoginManager( $this );
     # cache CGI information in the session object
     $this->{cgiQuery} = $query;
-    $this->{remoteUser} = $remoteUser;
 
     $this->{users} = new TWiki::Users( $this );
 
@@ -1281,18 +1305,21 @@ sub new {
     # setup the cgi session, from a cookie or the url. this may return
     # the login, but even if it does, plugins will get the chance to override
     # it below.
-    my $login = $this->{client}->loadSession();
-
+    my $login = $this->{loginManager}->loadSession($loginName);
     my $prefs = new TWiki::Prefs( $this );
     $this->{prefs} = $prefs;
+
+    # Push global preferences from TWiki.TWikiPreferences
     $prefs->pushGlobalPreferences();
 
-    # SMELL: there should be a way for the plugin to specify
-    # the WikiName of the user as well as the login.
-    $login = $this->{plugins}->load( $TWiki::cfg{DisableAllPlugins} ) || $login;
-    unless( $login ) {
-        $login = $this->{users}->initializeRemoteUser( $remoteUser );
+    my $plogin = $this->{plugins}->load( $TWiki::cfg{DisableAllPlugins} );
+    $login = $plogin if $plogin;
+    $login ||= $TWiki::cfg{DefaultUserLogin};
+    unless( $login =~ /$TWiki::cfg{LoginNameFilterIn}/) {
+        die "Illegal format for login name '$login' (does not match ".$TWiki::cfg{LoginNameFilterIn}.")";
     }
+    $login = TWiki::Sandbox::untaintUnchecked( $login );
+
     my $user = $this->{users}->findUser( $login );
     $this->{user} = $user;
 
@@ -1307,6 +1334,12 @@ sub new {
     $this->{SESSION_TAGS}{INCLUDINGTOPIC} = $this->{topicName};
     $this->{SESSION_TAGS}{INCLUDINGWEB}   = $this->{webName};
 
+    # Push plugin settings
+    $this->{plugins}->settings();
+
+    # Now the rest of the preferences
+    $prefs->pushGlobalPreferencesSiteSpecific();
+
     $prefs->pushPreferences(
         $TWiki::cfg{UsersWebName}, $user->wikiName(),
         'USER '.$user->wikiName() );
@@ -1317,7 +1350,7 @@ sub new {
         $this->{webName}, $this->{topicName}, 'TOPIC' );
 
     $prefs->pushPreferenceValues( 'SESSION',
-                                  $this->{client}->getSessionValues() );
+                                  $this->{loginManager}->getSessionValues() );
 
     # requires preferences (such as NEWTOPICBGCOLOR)
     $this->{renderer} = new TWiki::Render( $this );
@@ -1348,7 +1381,7 @@ to. Right now this does two things:
 
 sub finish {
     my $this = shift;
-    $this->{client}->finish();
+    $this->{loginManager}->finish();
 
 #    use Data::Dumper;
 #    $Data::Dumper::Indent = 1;
@@ -1457,13 +1490,16 @@ sub _writeReport {
 
 sub _removeNewlines {
     my( $theTag ) = @_;
-    $theTag =~ s/[\r\n]+//gs;
+    $theTag =~ s/[\r\n]+/ /gs;
     return $theTag;
 }
 
 # Convert relative URLs to absolute URIs
 sub _rewriteURLInInclude {
     my( $theHost, $theAbsPath, $url ) = @_;
+
+    # leave out an eventual final non-directory component from the absolute path
+    $theAbsPath =~ s/(.*?)[^\/]*$/$1/;
 
     if( $url =~ /^\// ) {
         # fix absolute URL
@@ -1503,18 +1539,24 @@ sub _fixIncludeLink {
 
 # Clean-up HTML text so that it can be shown embedded in a topic
 sub _cleanupIncludedHTML {
-    my( $text, $host, $path ) = @_;
+    my( $text, $host, $path, $options ) = @_;
 
     # FIXME: Make aware of <base> tag
 
-    $text =~ s/^.*?<\/head>//is;            # remove all HEAD
-    $text =~ s/<script.*?<\/script>//gis;   # remove all SCRIPTs
-    $text =~ s/^.*?<body[^>]*>//is;         # remove all to <BODY>
-    $text =~ s/(?:\n)<\/body>.*//is;        # remove </BODY>
-    $text =~ s/(?:\n)<\/html>.*//is;        # remove </HTML>
-    $text =~ s/(<[^>]*>)/_removeNewlines($1)/ges;
-    # SMELL: this will miss all JavaScript links
-    $text =~ s/(\s(?:href|src|action)=(["']))(.*?)\2/$1._rewriteURLInInclude( $host, $path, $3 ).$2/geois;
+    $text =~ s/^.*?<\/head>//is
+      unless ( $options->{disableremoveheaders} );   # remove all HEAD
+    $text =~ s/<script.*?<\/script>//gis
+      unless ( $options->{disableremovescript} );    # remove all SCRIPTs
+    $text =~ s/^.*?<body[^>]*>//is
+      unless ( $options->{disableremovebody} );      # remove all to <BODY>
+    $text =~ s/(?:\n)<\/body>.*//is
+      unless ( $options->{disableremovebody} );      # remove </BODY>
+    $text =~ s/(?:\n)<\/html>.*//is
+      unless ( $options->{disableremoveheaders} );   # remove </HTML>
+    $text =~ s/(<[^>]*>)/_removeNewlines($1)/ges
+      unless ( $options->{disablecompresstags} );    # replace newlines in html tags with space
+    $text =~ s/(\s(?:href|src|action)=(["']))(.*?)\2/$1._rewriteURLInInclude( $host, $path, $3 ).$2/geois
+      unless ( $options->{disablerewriteurls} );
 
     return $text;
 }
@@ -1537,89 +1579,87 @@ sub applyPatternToIncludedText {
 
 # Fetch content from a URL for inclusion by an INCLUDE
 sub _includeUrl {
-    my( $this, $theUrl, $thePattern, $theWeb, $theTopic, $theRaw ) = @_;
+    my( $this, $url, $pattern, $web, $topic, $raw, $options, $warn ) = @_;
     my $text = '';
-    my $host = '';
-    my $port = 80;
-    my $path = '';
-    my $user = '';
-    my $pass = '';
-
-    return $this->inlineAlert( 'alerts', 'urls_not_allowed' )
-      unless $TWiki::cfg{INCLUDE}{AllowURLs};
 
     # For speed, read file directly if URL matches an attachment directory
-    if( $theUrl =~ /^$this->{urlHost}$TWiki::cfg{PubUrlPath}\/([^\/\.]+)\/([^\/\.]+)\/([^\/]+)$/ ) {
-        my $web = $1;
-        my $topic = $2;
-        my $attname = $3;
+    if( $url =~ /^$this->{urlHost}$TWiki::cfg{PubUrlPath}\/([^\/\.]+)\/([^\/\.]+)\/([^\/]+)$/ ) {
+        my $incWeb = $1;
+        my $incTopic = $2;
+        my $incAtt = $3;
         # FIXME: Check for MIME type, not file suffix
-        if( $attname =~ m/\.(txt|html?)$/i ) {
-            unless( $this->{store}->attachmentExists( $web, $topic,
-                                                      $attname )) {
-                return $this->inlineAlert( 'alerts', 'bad_attachment',
-                                           $theUrl );
+        if( $incAtt =~ m/\.(txt|html?)$/i ) {
+            unless( $this->{store}->attachmentExists(
+                $incWeb, $incTopic, $incAtt )) {
+                return $this->_includeWarning( $warn, 'bad_attachment', $url );
             }
-            if( $web ne $theWeb || $topic ne $theTopic ) {
+            if( $incWeb ne $web || $incTopic ne $topic ) {
                 # CODE_SMELL: Does not account for not yet authenticated user
                 unless( $this->{security}->checkAccessPermission(
-                    'view', $this->{user}, undef, $topic, $web ) ) {
-                    return $this->inlineAlert( 'alerts', 'access_denied',
-                                               $web, $topic );
+                    'view', $this->{user}, undef, undef, $incTopic, $incWeb ) ) {
+                    return $this->_includeWarning( $warn, 'access_denied',
+                                                   "$incWeb.$incTopic" );
                 }
             }
-            $text = $this->{store}->readAttachment( undef, $web, $topic,
-                                                    $attname );
+            $text = $this->{store}->readAttachment( undef, $incWeb, $incTopic,
+                                                    $incAtt );
             $text = _cleanupIncludedHTML( $text, $this->{urlHost},
-                                          $TWiki::cfg{PubUrlPath} ) unless $theRaw;
-            $text = applyPatternToIncludedText( $text, $thePattern )
-              if( $thePattern );
+                                          $TWiki::cfg{PubUrlPath}, $options )
+              unless $raw;
+            $text = applyPatternToIncludedText( $text, $pattern )
+              if( $pattern );
             return $text;
         }
         # fall through; try to include file over http based on MIME setting
     }
 
-    if( $theUrl =~ /http\:\/\/(.+)\:(.+)\@([^\:]+)\:([0-9]+)(\/.*)/ ) {
-        ( $user, $pass, $host, $port, $path ) = ( $1, $2, $3, $4, $5 );
-    } elsif( $theUrl =~ /http\:\/\/(.+)\:(.+)\@([^\/]+)(\/.*)/ ) {
-        ( $user, $pass, $host, $path ) = ( $1, $2, $3, $4 );
-    } elsif( $theUrl =~ /http\:\/\/([^\:]+)\:([0-9]+)(\/.*)/ ) {
-        ( $host, $port, $path ) = ( $1, $2, $3 );
-    } elsif( $theUrl =~ /http\:\/\/([^\/]+)(\/.*)/ ) {
-        ( $host, $path ) = ( $1, $2 );
-    } else {
-        $text = $this->inlineAlert( 'alerts', 'bad_protocol', $theUrl );
+    return $this->_includeWarning( $warn, 'urls_not_allowed' )
+      unless $TWiki::cfg{INCLUDE}{AllowURLs};
+
+    # SMELL: should use the URI module from CPAN to parse the URL
+    my $path = $url;
+    unless ($path =~ s!^(https?)://!!) {
+        $text = $this->_includeWarning( $warn, 'bad_protocol', $url );
         return $text;
     }
+    my $protocol = $1;
+    my ( $user, $pass );
+    if ($path =~ s!([^/\@:]+)(?::([^/\@:]+))?@!!) {
+        ( $user, $pass ) = ( $1, $2 );
+    }
+    unless ($path =~ s!([^:/]+)(?::([0-9]+))?!! ) {
+        return $this->_includeWarning( $warn, 'geturl_failed', $url );
+    }
+    my( $host, $port ) = ( $1, $2 );
 
     try {
-        $text = $this->{net}->getUrl( $host, $port, $path, $user, $pass );
+        $text = $this->{net}->getUrl( $protocol, $host, $port, $path, $user, $pass );
         $text =~ s/\r\n/\n/gs;
         $text =~ s/\r/\n/gs;
-        $text =~ s/^(.*?\n)\n(.*)/$2/s;
+        $text =~ s/^(.*?\n)\n//s;
         my $httpHeader = $1;
+        # Trap 4xx and 5xx
+        die $text if ($httpHeader =~ /^HTTP\/[\d.]+\s[45]\d\d\s/s);
         my $contentType = '';
         if( $httpHeader =~ /content\-type\:\s*([^\n]*)/ois ) {
             $contentType = $1;
         }
         if( $contentType =~ /^text\/html/ ) {
             $path =~ s/[#?].*$//;
-            $host = 'http://'.$host;
-            if( $port != 80 ) {
-                $host .= ":$port";
-            }
-            $text = _cleanupIncludedHTML( $text, $host, $path ) unless $theRaw;
+            $host = $protocol.'://'.$host;
+            $host .= ":$port" if $port;
+            $text = _cleanupIncludedHTML( $text, $host, $path, $options )
+              unless $raw;
         } elsif( $contentType =~ /^text\/(plain|css)/ ) {
             # do nothing
         } else {
-            $text = $this->inlineAlert( 'alerts', 'bad_content',
-                                        $contentType );
+            $text = $this->_includeWarning(
+                $warn, 'bad_content', $contentType );
         }
-        $text = applyPatternToIncludedText( $text, $thePattern )
-          if( $thePattern );
+        $text = applyPatternToIncludedText( $text, $pattern ) if( $pattern );
     } catch Error::Simple with {
         my $e = shift;
-        $text = $this->inlineAlert( 'alerts', 'geturl_failed', $theUrl );
+        $text = $this->_includeWarning( $warn, 'geturl_failed', $url );
     };
 
     return $text;
@@ -1656,6 +1696,8 @@ sub _TOC {
     $defaultWeb =~ s#/#.#g;
     my $web = $params->{web} || $defaultWeb;
 
+    my $isSameTopic = $web eq $defaultWeb  &&  $topic eq $defaultTopic;
+
     $web =~ s#/#\.#g;
     my $webPath = $web;
     $webPath =~ s/\./\//g;
@@ -1669,7 +1711,7 @@ sub _TOC {
 
     if( $web ne $defaultWeb || $topic ne $defaultTopic ) {
         unless( $this->{security}->checkAccessPermission
-                ( 'view', $this->{user}, undef, $topic, $web ) ) {
+                ( 'view', $this->{user}, undef, undef, $topic, $web ) ) {
             return $this->inlineAlert( 'alerts', 'access_denied',
                                        $web, $topic );
         }
@@ -1722,8 +1764,10 @@ sub _TOC {
             # Prevent manual links
             $line =~ s/<[\/]?a\b[^>]*>//gi;
             # create linked bullet item, using a relative link to anchor
-            $line = $tabs.'* '.
-              CGI::a( { href=>$this->getScriptUrl( 0, 'view', $web, $topic, '#'=>$anchor ) }, $line );
+            my $target = $isSameTopic ?
+                         "#$anchor"   :
+                         $this->getScriptUrl(0,'view',$web,$topic,'#'=>$anchor);
+            $line = $tabs.'* ' .  CGI::a({href=>$target},$line);
             $result .= "\n".$line;
         }
     }
@@ -1957,7 +2001,7 @@ sub entityEncode {
     # encode HTML special characters '>', '<', '&', ''' and '"'.
     # encode TML special characters '%', '|', '[', ']', '@', '_',
     # '*', and '='
-    $text =~ s/[[\x01-\x09\x0b\x0c\x0e-\x1f"%&'*<=>@[_\|$extra]/'&#'.ord($&).';'/ge;
+    $text =~ s/([[\x01-\x09\x0b\x0c\x0e-\x1f"%&'*<=>@[_\|$extra])/'&#'.ord($1).';'/ge;
     return $text;
 }
 
@@ -2630,16 +2674,12 @@ sub _includeWarning {
     my $this = shift;
     my $warn = shift;
     my $message = shift;
-    my $web = shift;
-    my $topic = shift || '';
-    $topic =~ s#/#.#g;
-    $topic = $web.'.'.$topic if( $web );
 
     if( $warn eq 'on' ) {
-        return $this->inlineAlert( 'alerts', $message,
-                                   $topic, @_ );
+        return $this->inlineAlert( 'alerts', $message, @_ );
     } elsif( isTrue( $warn )) {
-        $warn =~ s/\$topic/$topic/go;
+        my $topic = shift;
+        $warn =~ s/\$topic/$topic/go if $topic;
         return $warn;
     } # else fail silently
     return '';
@@ -2666,7 +2706,9 @@ sub _INCLUDE {
 
     if( $path =~ /^https?\:/ ) {
         # include web page
-        return $this->_includeUrl( $path, $pattern, $includingWeb, $includingTopic, $raw );
+        return $this->_includeUrl(
+            $path, $pattern, $includingWeb, $includingTopic,
+            $raw, $params, $warn );
     }
 
     $path =~ s/$TWiki::cfg{NameFilter}//go;    # zap anything suspicious
@@ -2731,7 +2773,7 @@ sub _INCLUDE {
                                  $rev );
 
     unless( $this->{security}->checkAccessPermission(
-        'VIEW', $this->{user}, $text, $includedTopic, $includedWeb )) {
+        'VIEW', $this->{user}, $text, $meta, $includedTopic, $includedWeb )) {
         if( isTrue( $warn )) {
             return $this->inlineAlert( 'alerts', 'access_denied',
                                        $includedTopic );
@@ -2814,7 +2856,7 @@ sub _INCLUDE {
     $this->{prefs}->restore( $prefsMark );
     $text =~ s/^[\r\n]+/\n/;
     $text =~ s/[\r\n]+$/\n/;
-    
+
     return $text;
 }
 
@@ -2907,6 +2949,8 @@ sub _ENCODE {
     my $text = $params->{_DEFAULT} || '';
     if ( $type && $type =~ /^entit(y|ies)$/i ) {
         return entityEncode( $text );
+    } elsif ( $type && $type =~ /^html$/i ) {
+        return entityEncode( $text, "\n\r" );
     } else {
         $text =~ s/\r*\n\r*/<br \/>/; # Legacy.
         return urlEncode( $text );
@@ -3004,6 +3048,50 @@ sub _TOPICLIST {
 sub _QUERYSTRING {
     my $this = shift;
     return $this->{cgiQuery}->query_string();
+}
+
+sub _QUERYPARAMS {
+    my ( $this, $params ) = @_;
+    return '' unless $this->{cgiQuery};
+    my $format = defined $params->{format} ? $params->{format} : '$name=$value';
+    my $separator = defined $params->{separator} ? $params->{separator} : "\n";
+
+    my @list;
+    foreach my $name ( $this->{cgiQuery}->param() ) {
+        # Issues multi-valued parameters as separate hiddens
+        my $value = $this->{cgiQuery}->param( $name );
+        my $entry = $format;
+        $entry =~ s/\$name/$name/g;
+        $entry =~ s/\$value/$value/;
+        push(@list, $entry);
+    }
+    return expandStandardEscapes(join($separator, @list));
+}
+
+=pod
+
+---++ StaticMethod expandStandardEscapes($str) -> $unescapedStr
+
+Expands standard escapes used in parameter values to block evaluation. The following escapes
+are handled:
+
+| *Escape:* | *Expands To:* |
+| =$n= or =$n()= | New line. Use =$n()= if followed by alphanumeric character, e.g. write =Foo$n()Bar= instead of =Foo$nBar= |
+| =$nop= or =$nop()= | Is a "no operation". |
+| =$quot= | Double quote (="=) |
+| =$percnt= | Percent sign (=%=) |
+| =$dollar= | Dollar sign (=$=) |
+=cut
+
+sub expandStandardEscapes {
+    my $text = shift;
+    $text =~ s/\$n\(\)/\n/gos;         # expand '$n()' to new line
+    $text =~ s/\$n([^$regex{mixedAlpha}]|$)/\n$1/gos; # expand '$n' to new line
+    $text =~ s/\$nop(\(\))?//gos;      # remove filler, useful for nested search
+    $text =~ s/\$quot(\(\))?/\"/gos;   # expand double quote
+    $text =~ s/\$percnt(\(\))?/\%/gos; # expand percent
+    $text =~ s/\$dollar(\(\))?/\$/gos; # expand dollar
+    return $text;
 }
 
 sub _URLPARAM {
@@ -3351,7 +3439,8 @@ sub _USERINFO {
 
     my $user = $this->{user};
     if( $params->{_DEFAULT} ) {
-        $user = $this->{users}->findUser( $params->{_DEFAULT}, undef, 0 );
+        $user = $this->{users}->findUser( $params->{_DEFAULT}, undef, 1 );
+        return '' if !$user;
         return '' if( $TWiki::cfg{AntiSpam}{HideUserDetails} &&
                         !$this->{user}->isAdmin() &&
                           $user != $this->{user} );
@@ -3361,25 +3450,25 @@ sub _USERINFO {
 
     if ($info =~ /\$username/) {
         my $username = $user->login();
-        $info =~ s/\$username\b/$username/g;
+        $info =~ s/\$username/$username/g;
     }
     if ($info =~ /\$wikiname/) {
         my $wikiname = $user->wikiName();
-        $info =~ s/\$wikiname\b/$wikiname/g;
+        $info =~ s/\$wikiname/$wikiname/g;
     }
     if ($info =~ /\$wikiusername/) {
         my $wikiusername = $user->webDotWikiName();
-        $info =~ s/\$wikiusername\b/$wikiusername/g;
+        $info =~ s/\$wikiusername/$wikiusername/g;
     }
     if ($info =~ /\$emails/) {
         my $emails = join(',', $user->emails());
-        $info =~ s/\$emails\b/$emails/g;
+        $info =~ s/\$emails/$emails/g;
     }
     if ($info =~ /\$groups/) {
         my @groupNames = map {$_->webDotWikiName();} $user->getGroups();
         my $groups = join(', ', @groupNames);
         $groups .= ' isAdmin()' if $user->isAdmin();
-        $info =~ s/\$groups\b/$groups/g;
+        $info =~ s/\$groups/$groups/g;
     }
 
     #don't give out userlists to non-admins

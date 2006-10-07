@@ -12,11 +12,11 @@ NONE
 <div class="blogSideBarSection blogImageSection">
 %~~ DBQUERY{
 ~~~   "TopicType=~'\bBlogEntry\b' 
-~~~    AND State='enabled' 
-~~~    AND (Teaser=~'<img ' OR Text=~'<img')
+~~~    AND State='published'
+~~~    AND (Teaser=~'<img ' OR Text=~'<img ' OR Teaser=~'25IMAGE.7b' OR Text=~'25IMAGE.7b')
 ~~~   "
 ~~~   hidenull="on" order="created" reverse="on"
-~~~   header="<h1>Image Utilisation</h1><ul>"
+~~~   header="<h1>Image Utilization</h1><ul>"
 ~~~   format="<li>[[$web.$topic][$expand(Headline or TopicDescription)]]</li>"
 ~~~   footer="</ul>"
 ~~~ }%

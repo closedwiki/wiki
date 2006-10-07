@@ -18,13 +18,16 @@ package TWiki::Plugins::BlogPlugin;
 
 use strict;
 use vars qw(
-        $VERSION $RELEASE $doneHeader $blogCore $blogFactory
-    );
+  $VERSION $RELEASE $NO_PREFS_IN_TOPIC $SHORTDESCRIPTION
+  $doneHeader $blogCore $blogFactory
+);
 
 use TWiki::Plugins::BlogPlugin::WebDB; # must be compiled in advance
 
 $VERSION = '$Rev$';
-$RELEASE = '0.94';
+$RELEASE = '0.99';
+$NO_PREFS_IN_TOPIC = 1;
+$SHORTDESCRIPTION = 'Basic blogging features used to implement the BlogUp <nop>TWikiApplication';
 
 ###############################################################################
 sub initPlugin {

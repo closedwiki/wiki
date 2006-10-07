@@ -1,11 +1,12 @@
 /* variation to switch on the web buttons for kubrick */
 @import url('BaseButtons.css');
 
-.natWebButtons {
-  padding-left:10px;
-}
 .natWebButtonsContents {
-  padding:5px 10px 5px;
+  padding:5px 10px 5px 10px;
+}
+
+.natWebButtons ul li {
+  margin-right:0px;
 }
 
 .natWebButtons ul li a {

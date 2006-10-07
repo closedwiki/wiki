@@ -52,7 +52,7 @@ package TWiki::Plugins::LinkOptionsPlugin;    # change the package name and $plu
 # =========================
 use vars qw(
         $web $topic $user $installWeb $VERSION $RELEASE $pluginName
-        $debug $exampleCfgVar
+        $debug
     );
 
 # This should always be $Rev$ so that TWiki can determine the checked-in
@@ -82,9 +82,6 @@ sub initPlugin
 
     # Get plugin debug flag
     $debug = TWiki::Func::getPreferencesFlag( "\U$pluginName\E_DEBUG" );
-
-    # Get plugin preferences, the variable defined by:          * Set EXAMPLE = ...
-    $exampleCfgVar = &TWiki::Func::getPreferencesValue( "EMPTYPLUGIN_EXAMPLE" ) || "default";
 
     # Plugin correctly initialized
     TWiki::Func::writeDebug( "- TWiki::Plugins::${pluginName}::initPlugin( $web.$topic ) is OK" ) if $debug;

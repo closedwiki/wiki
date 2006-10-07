@@ -222,6 +222,7 @@ sub findChanges {
                 if ( !$matchNew[$n] ) {
                     $naction = @{$this->{ACTIONS}}[$n];
                     my $score = $naction->fuzzyMatches( $oaction );
+
                     if ( $score > $bestScore ) {
                         $bestMatch = $n;
                         $bestScore = $score;

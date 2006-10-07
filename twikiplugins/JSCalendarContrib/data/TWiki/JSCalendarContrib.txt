@@ -20,6 +20,8 @@ This module packages the [[http://dynarch.com/mishoo/calendar.epl][Mishoo JSCale
 ---++ Detailed Documentation
 Read [[%ATTACHURL%/doc/html/reference.html][the Mishoo documentation]] or [[%ATTACHURL%][visit the demo page]].
 
+This package provides a =renderFormFieldForEditHandler= that could be invoked by a plugin to ensure that forms use the [[http://dynarch.com/mishoo/calendar.epl][Mishoo JSCalendar]] for editing.
+
 This package also includes a small Perl module to make using the calendar easier from TWiki plugins. This module includes the function:
 <verbatim>
 addHEAD( $setup )
@@ -70,6 +72,11 @@ Note that the header will only be added once, regardless of the number of times 
      | *File:* | *Description:* |
 %$MANIFEST%
 	* Make sure that all files are readable by the web server user
+	* An administrator can customize the appearance of the calendar by setting the following in =<nop>LocalSite.cfg=
+     | *Setting* | *Default* |
+     | =$TWiki::cfg{JSCalendarContrib}{style}= | ='blue'= |
+     | =$TWiki::cfg{JSCalendarContrib}{lang}= | ='en'= |
+     | =$TWiki::cfg{JSCalendarContrib}{format}= | ='%e %b %Y'= |
 
 ---+++ Contrib Info
 
@@ -77,9 +84,10 @@ Note that the header will only be added once, regardless of the number of times 
 |  Version: | %$VERSION% of the Mishoo calendar |
 |  Copyright &copy;: | See [[%ATTACHURL%/doc/html/reference.html][the Mishoo documentation]] |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|
 |  Dependencies: | %$DEPENDENCIES% |
 | Change History: | |
+| 11594 | Allow format to be configured. |
+| 11415 | Add a =renderFormFieldForEditHandler= so other plugins can forward to this handler to add the date field to the TWikiForms. (TWiki:Main.ThomasWeigert) |
 | 10247 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item2054'>Item2054</a>  put the calendar at z-index 2000, way above pattern skin divs. |
 | 6634 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item453'>Item453</a>  removed EditTablePlugins private copy of the Mishoo JS calendar, and made sure it works with JSCalendarContrib. Improved the documentation of the JSCalendar while I was there. |
 | 6626 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item468'>Item468</a>  updated docs for Dakar release |

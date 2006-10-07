@@ -1,12 +1,12 @@
 %TMPL:INCLUDE{"oopslogonbase"}%
 <!-- template: oopsaccesschange.nat.tmpl -->
 %TMPL:DEF{"action"}%edit%TMPL:END%
-%TMPL:DEF{"onloadscript"}%document.LogonFormular.username.focus();%TMPL:END%
-%TMPL:DEF{"heading"}%Change Access Denied%TMPL:END%
+%TMPL:DEF{"onloadscript"}%document.LogonForm.username.focus();%TMPL:END%
+%TMPL:DEF{"heading"}%%MAKETEXT{"Change Access Denied"}%%TMPL:END%
 %TMPL:DEF{"message"}% <!-- -->
-%USERNAME% has no permission to change topic [[%WEB%.%TOPIC%]].
+%MAKETEXT{"[_1] has no permission to change topic [[[_2]]]." args="%USERNAME%,%WEB%.%TOPIC%"}%
 
 %TMPL:P{"logon"}%
 
-See also: %MAINWEB%.TWikiGroups, %TWIKIWEB%.TWikiAccessControl, %TWIKIWEB%.TWikiRegistration
+%MAKETEXT{"See also:"}% %MAINWEB%.TWikiGroups, %TWIKIWEB%.TWikiAccessControl, %TWIKIWEB%.TWikiRegistration
 %TMPL:END%

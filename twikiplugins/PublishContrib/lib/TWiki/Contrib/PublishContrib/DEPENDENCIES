@@ -2,4 +2,5 @@ File::Spec,>=3.12,cpan,Required. Used to analyse URL paths.
 Archive::Zip,>=1.05,cpan,Optional. Required to generate .zip output
 Archive::Tar,>=1.29,cpan,Optional. Required to generate .tgz output
 LWP,>=5.805,cpan,Optional. Used to include images referenced by absolute URL
+Net::FTP,>=2.75,cpan,Optional. Used by ftp publishing to upload to ftp
 htmldoc,,c,Optional. Required to generate .pdf output

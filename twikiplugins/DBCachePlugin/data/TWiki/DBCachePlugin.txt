@@ -78,6 +78,7 @@ Following variables are expanded in format strings:
    * $t: tab
    * $nop: "empty string"
    * $count: the number of hits
+   * $index: the current row index in the search
    * $web: the web where the hits where found
    * $formfield(&lt;formfield-name>): the value of the given formfield
    * $formatTime(&lt;formfield-accessor> [,&lt;format>]): format the datefield pointed
@@ -122,8 +123,10 @@ Compute and format a statistics on the database.
 | =web="..."= | the web where to search in (default: current web) |
 | =field(s)="..."= | name of one or more formfields to be extracted (default: "text") |
 | =pattern="..."= | regex pattern to extract keys from the formfield(s); \
-                    you must provide a group ("(...)") in the pattern string that \
-		    encloses the key to be extracted (default: "(\w+)") |
+                    you must provide at least one grouping ("(...)") in the pattern string that \
+		    encloses the key to be extracted (default: "(\w+)"); \
+		    you may have up to five groupings in one pattern that are \
+		    accessible each in the format string |
 | =header="..."= | header format string to be prepended to the output |
 | =format="..."= | format string used for each key in the output |
 | =sep(arator)="..."= | separator to put between formatted keys |
@@ -141,7 +144,8 @@ or by createdate.
 
 Format strings (=header=, =format=, =footer=) can use the following variables to insert
 the computed statistics:
-   * $key: the found key, this must match the first group in the pattern argument
+   * $key, $key1: the found key, this must match the first group in the pattern argument
+   * $key2, $key3, $key4,$key5: second, third, etc grouping in the =pattern= argument
    * $count: the number of occurences of the key
    * $index: index of the key within the sorted result set
    * $min: minimum count found in the search
@@ -149,6 +153,22 @@ the computed statistics:
    * $mean: mean occurence of a key in the result set
    * $keys: total number of keys found
    * $web: the web we search in
+
+For example if you want to extract all month/years from a database's =Date= field
+that has the format =dd mon yyyy= and then format a link to an archive using
+the month and the year as separate url parameters then use something like this:
+<verbatim>
+%DBSTATS{"<db query>"
+   field="Date"
+   pattern="((\w+) (\d\d\d\d))"
+   header="---++ Archive"
+   format="   * <a href="...?month=$key2&year=$key3">$key</a>"
+}%
+</verbatim>
+
+Note, that the above pattern will crop away the day. Groups can be nested counting
+them from left to right, outside to inside:  the first group matches the
+compete pattern, the second the month the third the year.
 
 ---+++ DBDUMP
 Display the database record of a topic (usefull for debugging).
@@ -221,11 +241,12 @@ Access the formfield value of an arbitrary topic.
 
 returns the value of the named formfield 
 
-%RED%TODO: document the rest of the methods %ENDCOLOR%
+<!-- %RED%TODO: document the rest of the methods %ENDCOLOR% -->
 
 ---++ Plugin Settings
-Plugin description:
+<!-- provided for compatibility only
    * Set SHORTDESCRIPTION = Lightweighted frontend to the DBCacheContrib
+-->
 
 Each web can specify an alternative implementation inheriting from DBCachePlugin::WebDB.
 To specify it you have to set the =WEBDB= variable in the WebPreferences. If not the
@@ -250,8 +271,14 @@ following is the default paramenter (omitting the #)
 |  Plugin Author: | TWiki:Main.MichaelDaum |
 |  Copyright &copy;: | 2005-2006, MichaelDaum@WikiRing.com |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | v1.22 |
+|  Plugin Version: | v1.28 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  28 Sep 2006: | DBQUERY and DBSTATS did not obey twiki access rights |
+|  19 Sep 2006: | added $key1...$key5 to the pattern matcher and formatter |
+|  18 Sep 2006: | properly fixed parsing $trunc,$flatten and $encode in format strings; \
+                  multiple fixes for calls and formatting accross webs |
+|  31 Aug 2006: | added NO_PREFS_IN_TOPIC; fixed possibly insecure eval |
+|  22 Aug 2006: | fixed parsing $trunc() and $flatten() in format strings |
 |  15 June 2006: | generate an inline error instead of an oops on a bad search string to DBQUERY |
 |  05 Mai 2006: | don't segfault on uncompiled <nop>WebDB implementations |
 |  30 Mar 2006: | added <nop>WebDB property createdate formerly only known by the <nop>BlogPlugin;\
@@ -282,4 +309,4 @@ following is the default paramenter (omitting the #)
 |  Feedback: | TWiki:Plugins/%TOPIC%Dev |
 |  Appraisal: | TWiki:Plugins/%TOPIC%Appraisal |
 
--- TWiki:Main.MichaelDaum - 15 June 2006
+-- TWiki:Main.MichaelDaum - 28 Sep 2006

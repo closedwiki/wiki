@@ -93,30 +93,6 @@ sub finish {
 
 =pod
 
----++ ObjectMethod pushGlobalPreferences()
-Add global preferences to this preferences stack.
-
-=cut
-
-sub pushGlobalPreferences {
-    my $this = shift;
-
-    # Default prefs first, from read-only web
-    my $prefs = $this->pushPreferences(
-        $TWiki::cfg{SystemWebName},
-        $TWiki::cfg{SitePrefsTopicName},
-        'DEFAULT' );
-
-    # Then local site prefs
-    if( $TWiki::cfg{LocalSitePreferences} ) {
-        my( $lweb, $ltopic ) = $this->{session}->normalizeWebTopicName(
-            undef, $TWiki::cfg{LocalSitePreferences} );
-        $this->pushPreferences( $lweb, $ltopic, 'SITE' );
-    }
-}
-
-=pod
-
 ---++ ObjectMethod pushPreferences( $web, $topic, $type )
    * =$web= - web to read from
    * =$topic= - topic to read
@@ -164,6 +140,35 @@ sub pushWebPreferences {
         $path .= '/' if $path;
         $path .= $tmp;
         $this->pushPreferences( $path, $TWiki::cfg{WebPrefsTopicName}, 'WEB' );
+    }
+}
+
+=pod
+
+---++ ObjectMethod pushGlobalPreferences()
+Add global preferences to this preferences stack.
+
+=cut
+
+sub pushGlobalPreferences {
+    my $this = shift;
+
+    # Default prefs first, from read-only web
+    my $prefs = $this->pushPreferences(
+        $TWiki::cfg{SystemWebName},
+        $TWiki::cfg{SitePrefsTopicName},
+        'DEFAULT' );
+
+}
+
+sub pushGlobalPreferencesSiteSpecific {
+    my $this = shift;
+
+    # Then local site prefs
+    if( $TWiki::cfg{LocalSitePreferences} ) {
+        my( $lweb, $ltopic ) = $this->{session}->normalizeWebTopicName(
+            undef, $TWiki::cfg{LocalSitePreferences} );
+        $this->pushPreferences( $lweb, $ltopic, 'SITE' );
     }
 }
 
@@ -279,6 +284,8 @@ the prefs stack.
 
 sub getTopicPreferencesValue {
     my( $this, $key, $web, $topic ) = @_;
+
+    return undef unless defined $web && defined $topic;
     my $wtn = $web.'.'.$topic;
 
     unless( $this->{TOPICS}{$wtn} ) {
@@ -290,22 +297,20 @@ sub getTopicPreferencesValue {
 
 =pod
 
----++ getTextPreferencesValue( $key, $text, $web, $topic ) -> $value
-Get a preference value from the settings in the text. The values are
-*not* cached.
+---++ getTextPreferencesValue( $key, $text, $meta, $web, $topic ) -> $value
+Get a preference value from the settings in the text (and/or optional $meta).
+The values read are *not* cached.
 
 =cut
 
-# SMELL: this is horrible! But it's inevitable given the truly dreadful
-# business of storing access controls embedded in topic text.
 sub getTextPreferencesValue {
-    my( $this, $key, $text, $web, $topic ) = @_;
+    my( $this, $key, $text, $meta, $web, $topic ) = @_;
 
     my $wtn = $web.'.'.$topic;
 
     my $cache = 
       new TWiki::Prefs::PrefsCache( $this, undef, 'TOPIC' );
-    $cache->loadPrefsFromText( $text, $web, $topic );
+    $cache->loadPrefsFromText( $text, $meta, $web, $topic );
 
     return $cache->{values}{$key};
 }
@@ -325,6 +330,9 @@ the prefs stack.
 
 sub getWebPreferencesValue {
     my( $this, $key, $web ) = @_;
+
+    return undef unless defined $web;
+
     my $wtn = $web.'.'.$TWiki::cfg{WebPrefsTopicName};
 
     unless( $this->{WEBS}{$wtn} ) {

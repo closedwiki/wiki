@@ -30,7 +30,7 @@ use strict;
 # $VERSION is referred to by TWiki, and is the only global variable that
 # *must* exist in this package
 use vars qw( $VERSION $RELEASE $debug $pluginName $WEB $TOPIC );
-use vars qw( %TWikiCompatibility $popupSectionNumber );
+use vars qw( %TWikiCompatibility $popupSectionNumber $pluginPubUrl );
 
 # This should always be $Rev$ so that TWiki can determine the checked-in
 # status of the plugin. It is used by the build automation tools, so
@@ -66,6 +66,10 @@ sub initPlugin {
     $TOPIC= $topic;
     $popupSectionNumber = 0;
 
+   $pluginPubUrl = TWiki::Func::getPubUrlPath().'/'.
+            TWiki::Func::getTwikiWebname().'/'.$pluginName;
+
+
     # Plugin correctly initialized
     return 1;
 }
@@ -76,10 +80,9 @@ sub commonTagsHandler {
 #    my ( $text, $topic, $web ) = @_;
 
 #TODO: implement the regex for registerHandler
-    
     return unless ($_[0] =~ /<\/head>/);
     return unless (keys(%{$TWikiCompatibility{HEAD}}) > 0);
-    
+
     my $query = TWiki::Func::getCgiQuery();
     my $fromPopup = $query->param('fromPopup');
     return if (defined($fromPopup));#avoid nesting popups
@@ -97,7 +100,14 @@ sub commonTagsHandler {
     }
 }
 
-
+#TODO: MAKE SOME URL PARAMS TO POPUP TOO - SO YOU GET POPUP OOPSES
+#TODO:   * popuptexttype ="" - tml, rest
+#TODO:      * TODO: delayedtml, javascript
+#TODO:   * popuplocation="" - general location relative to the anchor (center, above, below, left, right) - center is default *TODO: only center and below are implemented*
+#TODO:      * TODO: its currently relative to the mouse event, not the anchor
+#TODO:      * TODO: add location on screen, not- relative to mouse.. (popup in top right)
+#TODO:   * buttons="" - what buttons to show (ok, cancel, save...) *TODO*
+#TODO:    * popuplocation="" - general location relative to the anchor (center, above, below, left, right) - center is default *TODO: only center and below are implemented*
 sub handlePopup {
     my($session, $params, $theTopic, $theWeb) = @_;
 
@@ -106,33 +116,44 @@ sub handlePopup {
     my $anchor = $params->{anchor};
     my $anchortype = $params->{anchortype} || 'onclick';
     my $popuptext = $params->{popuptext};
+    my $popuptitle = $params->{popuptitle} || '';
     my $popuptexttype = $params->{popuptexttype} || 'tml';
     my $popuplocation = $params->{popuplocation} || 'center';
     my $border = $params->{border} || 'on';
     my $buttons = $params->{buttons};
     my $evaluate = $params->{eval};
-    
+
+    my $display = 'display:none;';
+    my $event = '';
+
     my $output = '';
-    if (defined($anchor)) {
-        my $event = 'onclick="TWiki.JSPopupPlugin.openPopupSectional(event, \'popupSection'.$popupSectionNumber.'\')"';#ASSUME onclick
+    if ((defined($anchor)) && ($anchor ne '')) {
+        $event = 'onclick="TWiki.JSPopupPlugin.openPopupSectional(event, \'popupSection'.$popupSectionNumber.'\')"';#ASSUME onclick
         if ($anchortype eq 'onmouseover') {
             $event = 'onmouseover="TWiki.JSPopupPlugin.openPopupSectional(event, \'popupSection'.$popupSectionNumber.'\')"';
         }
         $output .= '<span '.$event.'>'."\n".$anchor."\n".'</span>';
-        
-        #TODO: work out a way to mix tml mode in topic, and rest & delayedtml mode where it needs to be added in the postRenderingHandler (and can use JSON)
-        if ($popuptexttype eq 'rest') {
-            #nasty way to stop the url from getting TWiki'd
-        } else {
-            $popuptext = "\n".$popuptext."\n";
-        }
-        #TODO: this should really get added outside the topic like InlineEdit
-        $output .= '<span style="display:none;" id="popupSection'.$popupSectionNumber.
-            '" anchortype="'.$anchortype.
-            '" type="'.$popuptexttype.
-            '" location="'.$popuplocation.
-            '" border="'.$border.'">'.$popuptext.'</span>';
+    } else {
+        $anchortype = 'anchorless';
     }
+
+    #TODO: work out a way to mix tml mode in topic, and rest & delayedtml mode where it needs to be added in the postRenderingHandler (and can use JSON)
+    if ($popuptexttype eq 'rest') {
+        #nasty way to stop the url from getting TWiki'd
+    } else {
+        $popuptext = "\n".$popuptext."\n";
+    }
+    #TODO: this should really get added outside the topic like InlineEdit
+    $output .= '<span class="JSPopupSpan"'.
+        'style="'.$display.
+        '" id="popupSection'.$popupSectionNumber.
+        '" anchortype="'.$anchortype.
+        '" type="'.$popuptexttype.
+        '" title="'.$popuptitle.
+        '" location="'.$popuplocation.
+        '" border="'.$border.'">'.$popuptext.'</span>';
+
+
     $popupSectionNumber++;
     return $output;
 }
@@ -145,9 +166,6 @@ sub postRenderingHandler {
     my $fromPopup = $query->param('fromPopup');
     return if (defined($fromPopup));#avoid nesting popups
 
-   my $pluginPubUrl = TWiki::Func::getPubUrlPath().'/'.
-            TWiki::Func::getTwikiWebname().'/'.$pluginName;
-
     #add the ComponentEdit JavaScript
     my $jscript = TWiki::Func::readTemplate ( 'jspopupplugin', 'javascript' );
     $jscript =~ s/%PLUGINPUBURL%/$pluginPubUrl/g;
@@ -155,7 +173,7 @@ sub postRenderingHandler {
 
     #TODO: evaluate the MAKETEXT's, and the variables....
     my $templateText = TWiki::Func::readTemplate ( 'jspopupplugin', 'popup' );
-    $jscript =~ s/%PLUGINPUBURL%/$pluginPubUrl/g;
+    $templateText =~ s/%PLUGINPUBURL%/$pluginPubUrl/g;
     $templateText = TWiki::Func::expandCommonVariables( $templateText, $TOPIC, $WEB );
 
     $_[0] =~ s/(<\/body>)/$templateText $1/g;

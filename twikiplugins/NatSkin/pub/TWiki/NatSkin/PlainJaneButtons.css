@@ -11,11 +11,11 @@
   margin-left:10px;
   margin-right:10px;
   padding:5px 0px 7px;
-  font-size:x-small;
+  font-size:95%;
   font-family:arial,sans-serif;
 }
 .natWebButtons ul li {
-  padding-right:10px;
+  margin-right:10px;
 }
 .natWebButtons ul li a {
   margin:0px;

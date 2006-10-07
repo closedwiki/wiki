@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="VlyonYahoo" date="1150901809" format="1.1" version="1.3"}%
+%META:TOPICINFO{author="VernonLyon" date="1153224941" format="1.1" reprev="1.9" version="1.9"}%
 ---+ Quick Menu Skin
 
 A functional skin that replaces the left bar with a customizable Javascript menu system.
@@ -18,22 +18,29 @@ A functional skin that replaces the left bar with a customizable Javascript menu
 
 ---++ Settings
 
-The menu can behave in two ways. When =CLICKMENU= is set to 0 then the menu automatically shows when you hover the mouse over the menu. When it is set to 1 then the menu is activated by clicking on it.
+The menu can behave in two ways. When =CLICKMENU= is set to 0 then the menu automatically shows when you hover the mouse over the menu. When it is set to 1 then the menu is activated by clicking on it. By default =CLICKMENU= is set to 0.
 
-To set =CLICKMENU= just add the following line to %MAINWEB%.TWikiPreferences, WebPreferences, or your personal page:
+To add different menus to the menubar you can set =QUICKMENUBAR= to the topic containing the javascript for your own custom menus. By default =QUICKMENUBAR= is set to =%%NOP%TWIKIWEB%.QuickMenuBar=, have a look at %TWIKIWEB%.QuickMenuBar to see how the menus are created.
+
+To change settings just add them to %MAINWEB%.TWikiPreferences, WebPreferences, or your personal page.%BR%
+Eg:
 <pre>
    * %NOP%Set CLICKMENU = 1
+   * %NOP%Set QUICKMENUBAR = %%NOP%TWIKIWEB%.QuickMenuBar
 </pre>
 
 ---++ Modifying Menus
 
-The menu bar is built by default from %TWIKIWEB%.QuickMenuBar, which in turn includes %TWIKIWEB%.QuickMenuBarWebs & %TWIKIWEB%.QuickMenuBarUtilities. These files contain javascript commands that are included in by the skin's templates. You can edit these files to customize the menu, but be sure to avoid unwanted linking by enclosing your code in =&lt;noautolink&gt;= ... =&lt;/noautolink&gt;= tags.
+The menu bar is built by default from %TWIKIWEB%.QuickMenuBar, which in turn includes %TWIKIWEB%.QuickMenuBarLogin (if login is enabled) and %TWIKIWEB%.QuickMenuBarWebs and %TWIKIWEB%.QuickMenuBarUtilities. If internationalisation is enabled, then %TWIKIWEB%.QuickMenuBarLanguage is also included. These files contain javascript commands that are included by the skin's templates. You can edit these files to customize the menu, but be sure to avoid unwanted linking by enclosing your code in =&lt;noautolink&gt;= ... =&lt;/noautolink&gt;= tags.
+
+%N% In this release, it is now possible to add icons to the menus in the menubar. The =QuickMenu.Menu= function has changed to make the arguments similar to the =QuickMenu.Menu.Add= function.
 
 <noautolink>
 ---+++ QuickMenu Javascript Reference
 
    * *To create a new menu* %BR%
-   =mymenu = new QuickMenu.Menu(menuBar, "Menu Text", "", "Menu Tip Information");= %BR%
+   <small> %ICON{warning}% %RED% _This has changed! See above.%ENDCOLOR%_ </small> %BR%
+   =mymenu = new QuickMenu.Menu(menuBar, "Menu Text", "", "/icons/icon.gif", "Menu Tip Information");= %BR%
    or just a link:%BR%
    =new QuickMenu.Menu(menuBar, "TWiki.org", "http://twiki.org/");= %BR%
    or a javascript function:%BR%
@@ -51,14 +58,17 @@ The menu bar is built by default from %TWIKIWEB%.QuickMenuBar, which in turn inc
 
 ---++ Skin Info
 
-<!-- Note on Screenshot: Please attach a 600x130 pixel screenshot and a full screen shot to the Skin topic, then update the href and img src to reflect the names -->
 |  Description: | Functional skin that replaces the left bar with a customizable Javascript menu system |
 |  Screenshot: | <a href="%ATTACHURL%/fullscreen.gif"><img src="%ATTACHURL%/screenshot.gif" alt="Click for full screen image" width="600" height="130" /></a> |
 |  Preview: | [[%SCRIPTURL{"view"}%/%WEB%/%TOPIC%?skin=quickmenu][Preview with this topic]] |
 |  Base Name: | quickmenu |
 |  Skin Author: | TWiki:Main/VernonLyon |
-|  Skin Version: | 21 Jun 2006 (v1.01) |
-|  Change History: | <!-- specify latest version first -->&nbsp; |
+|  Skin Version: | 13 Sep 2006 (v1.05) |
+| Change&nbsp;History: | <!-- specify latest version first -->&nbsp; |
+|  13 Sep 2006: | Fixed IE bug (v1.05) |
+|  18 Jul 2006: | Added language support (v1.04) |
+|  13 Jul 2006: | Added support for icons in the menubar (v1.03) |
+|  4 Jul 2006: | Added =QUICKMENUBAR= setting (v1.02) |
 |  21 Jun 2006: | Added "Account" menu (v1.01) |
 |  13 Jun 2006: | Initial version (v1.00) |
 |  Dependencies: |  |
@@ -66,22 +76,9 @@ The menu bar is built by default from %TWIKIWEB%.QuickMenuBar, which in turn inc
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/QuickMenuSkinDev |
 |  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/QuickMenuSkinAppraisal |
 
-__Note:__ The Description, Screenshot and Base Name rows are needed by the %TWIKIWEB%.TWikiSkinBrowser
-
 __Related topic:__ %TWIKIWEB%.TWikiSkins, %TWIKIWEB%.TWikiSkinBrowser, %TWIKIWEB%.UserDocumentationCategory, %TWIKIWEB%.AdminDocumentationCategory
 
 -- TWiki:Main/VernonLyon - 13 Jun 2006
 
-%META:FILEATTACHMENT{name="menuitem_over.gif" attr="" autoattached="1" comment="" date="1144339645" path="menuitem_over.gif" size="93" user="UnknownUser" version=""}%
-%META:FILEATTACHMENT{name="menu_over.gif" attr="" autoattached="1" comment="" date="1143900022" path="menu_over.gif" size="159" user="UnknownUser" version=""}%
-%META:FILEATTACHMENT{name="menubaritem_bg.gif" attr="" autoattached="1" comment="" date="1144250285" path="menubaritem_bg.gif" size="108" user="UnknownUser" version=""}%
-%META:FILEATTACHMENT{name="qmenu.js" attr="" autoattached="1" comment="" date="1150367165" path="qmenu.js" size="10906" user="UnknownUser" version=""}%
-%META:FILEATTACHMENT{name="arrow.gif" attr="" autoattached="1" comment="" date="1144850051" path="arrow.gif" size="85" user="UnknownUser" version=""}%
-%META:FILEATTACHMENT{name="arrow_over.gif" attr="" autoattached="1" comment="" date="1144853985" path="arrow_over.gif" size="227" user="UnknownUser" version=""}%
-%META:FILEATTACHMENT{name="screenshot.gif" attr="" autoattached="1" comment="" date="1150210415" path="screenshot.gif" size="8839" user="UnknownUser" version=""}%
-%META:FILEATTACHMENT{name="style.css" attr="" autoattached="1" comment="" date="1150900848" path="style.css" size="6322" user="UnknownUser" version=""}%
-%META:FILEATTACHMENT{name="menu_bg.gif" attr="" autoattached="1" comment="" date="1144247292" path="menu_bg.gif" size="825" user="UnknownUser" version=""}%
-%META:FILEATTACHMENT{name="qmenu.css" attr="" autoattached="1" comment="" date="1150898857" path="qmenu.css" size="2533" user="UnknownUser" version=""}%
-%META:FILEATTACHMENT{name="menuitem_bg.gif" attr="" autoattached="1" comment="" date="1144323350" path="menuitem_bg.gif" size="273" user="UnknownUser" version=""}%
-%META:FILEATTACHMENT{name="fullscreen.gif" attr="" autoattached="1" comment="" date="1150214550" path="fullscreen.gif" size="24979" user="UnknownUser" version=""}%
-%META:FILEATTACHMENT{name="menubar.gif" attr="" autoattached="1" comment="" date="1147966341" path="menubar.gif" size="874" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="screenshot.gif" attr="h" autoattached="1" comment="" date="1151935718" path="screenshot.gif" size="8839" user="VernonLyon" version=""}%
+%META:FILEATTACHMENT{name="fullscreen.gif" attr="h" autoattached="1" comment="" date="1151935718" path="fullscreen.gif" size="24979" user="VernonLyon" version=""}%

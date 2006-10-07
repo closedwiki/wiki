@@ -5,15 +5,26 @@
 	position: relative;
 	color: black;
 	cursor: default;
-	font: 11px verdana;
-	padding: 1px 6px 3px 6px;
-	top: 3px;
+	font: 11px/17px verdana;
+	padding: 0 6px;
 	border: 1px solid #315ea3;
 	z-index: 1;
 }
+.qmenu-menu IMG,
+.qmenu-menu-free IMG,
+.qmenu-menu-over IMG,
+.qmenu-menu-click IMG {
+	margin: 0 0 1px 0;
+	vertical-align: -3px;
+	height: 16px;
+	width: auto;
+	border: 0;
+	font-size: 12px;
+	line-height: 12px;
+}
 .qmenu-menu {
 	border: 0;
-	padding: 2px 7px 4px 7px;
+	padding: 1px 7px;
 }
 .qmenu-menu-free {
 	background: url("menubaritem_bg.gif") repeat-x center;

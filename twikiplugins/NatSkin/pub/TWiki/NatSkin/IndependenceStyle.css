@@ -26,23 +26,27 @@ hr {
   border: 1px solid #FFFFFF;
   text-align:left;
 }
-.natMiddle {
-  padding:20px;
+.natMiddleLeft {
+  padding:15px 15px 0px 20px;
+}
+.natMiddleRight {
+  padding:15px 10px 0px 15px;
 }
 
-.natTopRightContents,
 .natTopLeftContents {
-  margin-left:20px;
-  margin-right:20px;
-  margin-top:20px;
-  margin-bottom:20px;
+  margin:20px 5px 20px 20px;
 }
 .natTopRightContents {
-  margin-top:35px;
+  margin:35px 10px 10px 20px;
 }
 
 .natTopBarSizer {
   height:130px;
+}
+.natMainHeaderContents,
+.natMainFooterContents {
+  margin-bottom:10px;
+  margin-top:0px;
 }
 
 /* top */
@@ -50,7 +54,7 @@ hr {
   background: #B22222;
 }
 .natTopBar {
-  font-family: Georgia, 'Times New Roman', serif;
+  font-family:Georgia, 'Times New Roman', serif;
   color:white;
   border-bottom: 1px solid #FFFFFF;
 }
@@ -62,22 +66,26 @@ hr {
   color:white;
 }
 
-.natWebLocator a,
-.natWebLocator,
 .natWebTitle a {
   font-family: Georgia, 'Times New Roman', serif;
   color:white;
 }
 .natWebTitle {
   padding-top:10px;
-  font-size:xx-large;
+  padding-bottom:5px;
+  font-size:30px;
 }
 
 .natTopRightContents {
-  line-height:120%;
-}
-.natTopRightContents, .natWebSlogan {
+  font-size:12px;
   font-family:'Trebuchet MS', arial, sans-serif;
+}
+.natWebSlogan {
+  font-family:'Trebuchet MS', arial, sans-serif;
+  padding-left:3px;
+}
+.natTopicActions {
+  font-size:12px;
 }
 
 .natSearchBox input {
@@ -86,7 +94,6 @@ hr {
   color:white;
   border:1px dotted white;
   _border:1px solid white; /* IE only */
-  width:15em;
 }
 .natSearchBoxPos1 input,
 .natSearchBoxPos2 input,
@@ -103,11 +110,9 @@ hr {
   font-weight:bold;
   color:white;
 }
-
 /* sidebar */
 .natSideBarContents {
   font-family: 'Trebuchet MS', arial, sans-serif;
-  font-size: 0.9em;
   line-height:1.4em;
 }
 
@@ -118,7 +123,7 @@ hr {
 .natSideBar h1 a,
 .natSideBar h1 {
   color: #B22222;
-  font-size: small;
+  font-size: 15px;
   font-weight: bold;
   text-transform: uppercase;
   text-decoration:none;
@@ -130,7 +135,7 @@ hr {
 }
 .natSideBar h2,
 .natSideBar h2 a {
-  font-size: small;
+  font-size:15px;
   color: #666666;
 }
 
@@ -180,11 +185,12 @@ hr {
 .natMain h1 {font-size:24px;}
 .natMain h2 {font-size:18px;}
 .natMain h3 {font-size:16px;}
-.natMain h4 {font-size:small;}
-.natMain h5 {font-size:small;}
-.natMain h6 {font-size:small; margin-top:5px}
+.natMain h4 {font-size:14px;}
+.natMain h5 {font-size:14px;}
+.natMain h6 {font-size:14px; margin-top:5px}
 
 .natMain h2 {
+  margin-top:10px;
   border-bottom:1px solid #B22222;
 }
 
@@ -197,38 +203,50 @@ hr {
   color:#B22222;
   font-weight:bold;
 }
-.natMainFooterContents {
-  font-size:x-small;
+.natMainHeaderContents a {
+  text-decoration:none;
 }
 
+.natMiddle select,
+.natMiddle input,
+.natMiddle textarea {
+  font-size:12px;
+}
+.natMiddle input:hover {
+  color: #B22222; 
+}
 
 /* bottom */
-.natBottomBar {
-  font-size:x-small;
-}
 .natBottomBarContents {
   letter-spacing:.3em;
+  font-size:10px;
   font-family: 'Trebuchet MS', sans-serif;
-  font-size: 0.9em;
   line-height: 150%;
   color: #666666;
   margin-bottom:5px;
   margin-left:10px;
   margin-right:10px;
 }
-.natCopyRight, .natTWikiInfo {
+.natCopyRight {
   display:inline;
 }
 
 /* twiki tables */
+.twikiTable {
+  border:1px #B22222 solid;
+  background:white;
+  font-size:12px;
+}
+.twikiTable th {
+  background:#B22222;
+  font-family: 'Trebuchet MS', sans-serif;
+  letter-spacing: .3em;
+}
 .twikiTable th,
+.twikiTable th font,
 .twikiTable th a {
   color:white;
-  background:#B22222;
   font-weight:bold;
-  font-family: 'Trebuchet MS', sans-serif;
-  font-size:x-small;
-  letter-spacing: .3em;
 }
 .twikiTable th a {
   text-decoration:none;
@@ -239,20 +257,23 @@ hr {
   text-decoration:none;
 }
 
-.twikiTable {
-  border:1px #B22222 solid;
-}
 .twikiTable th {
   border:1px dotted white;
   _border:1px solid white; /* IE only */
 }
 .twikiTable td {
   border:1px ridge #999;
+  background:white;
+}
+.twikiTableEven td {
+  background:#f0f0f0;
+}
+.natTopicEditForm table td {
+  border:0px;
 }
 .twikiDiffTable td {
   border:0px;
 }
-
 /* topic form */
 .natTopicForm .natTopicFormFirstCol a,
 .natTopicForm .natTopicFormFirstCol,
@@ -311,7 +332,6 @@ hr {
 
 .twikiPageForm th  {
   font-family: 'Trebuchet MS', sans-serif;
-  font-size:x-small;
   letter-spacing: .3em;
   vertical-align:middle;
 }
@@ -338,13 +358,11 @@ hr {
   color:white;
   background:#B22222;
   font-family: 'Trebuchet MS', sans-serif;
-  font-size:0.9em;
   letter-spacing: .3em;
   vertical-align:middle;
 }
 .natSearchHit {
   border:1px #B22222 solid;
-  font-size:0.9em;
   line-height:140%;
 }
 .natSearchHit th {
@@ -381,7 +399,6 @@ hr {
 
 /* blogging */
 .blogAbout {
-  font-size:0.8em;
   line-height:1.3em;
 }
 .blogSideBarSection {
@@ -401,7 +418,7 @@ hr {
 }
 .blogHeadline {
   border-bottom:1px solid #B22222;
-  margin-bottom:0px;
+  margin-bottom:5px;
 }
 .blogHeadline .blogCommentCount {
   font-size:1.5em;
@@ -412,7 +429,6 @@ hr {
 .blogInfo {
   font-size:0.9em;
   margin-bottom:0.5em;
-  margin-top:0px;
 }
 .blogCommentOdd {
   background:#eee;
@@ -430,4 +446,7 @@ hr {
 }
 .blogCommentNr {
   color:#B22222;
+}
+.blogSubmitButton:hover {
+  color: #B22222; 
 }

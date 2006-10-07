@@ -326,7 +326,7 @@ Administrators, especially of public sites, need to be aware of the security imp
 
 The evaluation of protections has been re-worked to make it more naturally understandable, and also fill a number of holes in the protection scheme, These holes meant that it was relatively easy to _deny_ access to a topic, but rather difficult to subsequently _restore_ access without either compromising other topics, or compromising old revisions.
 
-When deciding whether to grant access, TWiki now evaluates the following rules in order (read from the top of the list; if the logic arrives at *PERMITTED* or *DENIED* that applies immediately and no more rules are applied). You need to read the rules bearing in mind that VIEW, CHANGE and RENAME access may be granted/denied separately.
+When deciding whether to grant access, TWiki now evaluates the following rules in order (read from the top of the list; if the logic arrives at *PERMITTED* or *DENIED* that applies immediately and no more rules are applied). You need to read the rules bearing in mind that VIEW and CHANGE access may be granted/denied separately.
    1 If the user is a [[#SuperAdminGroup][super-user]]
       * access is *PERMITTED*.
    1 If DENYTOPIC is set to a list of wikinames
@@ -351,12 +351,8 @@ The major impact of this change is that !WebPreferences topics shipped with earl
    * <nop>Set DENYWEBCHANGE = 
    * <nop>Set ALLOWWEBCHANGE = 
       * This will now _deny_ change access to everyone _not_ in the list (i.e. everyone except admins)
-   * <nop>Set DENYWEBRENAME = 
-   * <nop>Set ALLOWWEBRENAME = 
-      * This will now _deny_ rename access to everyone _not_ in the list (i.e. everyone except admins)
    * <nop>Set ALLOWTOPICCHANGE = 
       * This will now _deny_ change access to everyone _not_ in the list (i.e. everyone except admins)
-   * <nop>Set ALLOWTOPICRENAME = %MAINWEB%.<nop>TWikiAdminGroup
 
 The standard webs shipped with this release have these settings disabled. However you are likely to have inherited the old default settings in your user webs. The easiest way to deal with this is to simply insert a # sign in these settings; for example:
    * #Set DENYWEBVIEW = 
@@ -670,11 +666,123 @@ The 4.0.2 release was built from SVN http://svn.twiki.org:8181/svn/twiki/branche
 The following fixes and minor enhancements have been addressed in this release:
 
 ---+++ TWiki 4.0.3 Fixes
-FIXME
+| [[%BUGS%/Item668][Item668]] | _default web gives include error for WebLeftBar but the topic does exist |
+| [[%BUGS%/Item444][Item444]] | oops upload message with empty file is not intelligent |
+| [[%BUGS%/Item2530][Item2530]] | Prevent infinite recursion in TMPL:INCLUDE when including generic templates |
+| [[%BUGS%/Item2528][Item2528]] | Support for shortest view URLs |
+| [[%BUGS%/Item2524][Item2524]] | Make templates independent on TablePlugin |
+| [[%BUGS%/Item2509][Item2509]] | Render::getRenderedVersion converts translation token |
+| [[%BUGS%/Item2487][Item2487]] | Re-introducing attachment table list count |
+| [[%BUGS%/Item2481][Item2481]] | Need a configure data type to select a pluggable class (like TWiki::Store::*) |
+| [[%BUGS%/Item2476][Item2476]] | Topic action buttons shown with search result |
+| [[%BUGS%/Item2472][Item2472]] | Get user web name from config and not from registration form |
+| [[%BUGS%/Item2469][Item2469]] | TWikiAdminGroup definition topic must be called TWikiAdminGroup (not configurable) |
+| [[%BUGS%/Item2467][Item2467]] | Non-existing abbreviations in other than current web have web part stripped (AAA.BBB.FFF renders as FFF) |
+| [[%BUGS%/Item2464][Item2464]] | Definition of a group always requires "Group" in the group name |
+| [[%BUGS%/Item2463][Item2463]] | rdiff should show HTML comments |
+| [[%BUGS%/Item2441][Item2441]] | Func::getWikiToolName documentation is incorrect |
+| [[%BUGS%/Item2439][Item2439]] | Rename TWikiRelease04x00x00.html to TWikiRelease04x00.html |
+| [[%BUGS%/Item2436][Item2436]] | PatternSkin does not support PAGEBGCOLOR |
+| [[%BUGS%/Item2427][Item2427]] | viewfile delivers .tgz files as text (wrong mime type) |
+| [[%BUGS%/Item2426][Item2426]] | ICONTOPIC variable: Incorrect value deadlocks topic (no edit possible) |
+| [[%BUGS%/Item2422][Item2422]] | Inconsistent LocalSite.cfg.txt settings |
+| [[%BUGS%/Item2421][Item2421]] | Rename: Referrer topics need to be linked explicit |
+| [[%BUGS%/Item2409][Item2409]] | Form field checkbox option lost on topic edit |
+| [[%BUGS%/Item2402][Item2402]] | Sandbox not aware of I18N for user names |
+| [[%BUGS%/Item2399][Item2399]] | statistics does not like date variable sent to it because its tainted |
+| [[%BUGS%/Item2395][Item2395]] | Always show e-mail addresses to admins (USERINFO / HideUserDetails setting) |
+| [[%BUGS%/Item2394][Item2394]] | Allow registration without a running e-mail service (error during registration using TWiki::Net::_sendEmailBySendmail) |
+| [[%BUGS%/Item2390][Item2390]] | beforeAttachmentSaveHandler is broken on Solaris and RedHat |
+| [[%BUGS%/Item2380][Item2380]] | Logins / logouts with template login does not work with I18N topic names |
+| [[%BUGS%/Item2379][Item2379]] | Inconsistent meta data in registration |
+| [[%BUGS%/Item2369][Item2369]] | WIKIUSERNAME incorrectly expanded |
+| [[%BUGS%/Item2365][Item2365]] | Email address handling for registration and in users homepage is confusing and not working |
+| [[%BUGS%/Item2356][Item2356]] | in sequential rdiff a changed region is classified as twikiDiffAdd* |
+| [[%BUGS%/Item2353][Item2353]] | Cannot lock out re-registration by using htpasswd file anymore |
+| [[%BUGS%/Item2352][Item2352]] | Support secret values in configure (display stars for passwords) |
+| [[%BUGS%/Item2347][Item2347]] | Statistics without params updates only Main web |
+| [[%BUGS%/Item2339][Item2339]] | Unable to cleanly turn off WEBHEADERART completely causing unexpected major problems |
+| [[%BUGS%/Item2338][Item2338]] | Improve doc on session vars to preclude override of perms |
+| [[%BUGS%/Item2336][Item2336]] | Using htpasswd on the command line wipes out email address in .htpasswd file |
+| [[%BUGS%/Item2333][Item2333]] | TWiki::Func::readAttachment my line shows wrong parameters |
+| [[%BUGS%/Item2332][Item2332]] | GoodStyle talks about "Initials"; obsolete |
+| [[%BUGS%/Item2331][Item2331]] | Calling a speedy-fied view cgi from the commandline breaks template login |
+| [[%BUGS%/Item2327][Item2327]] | TWiki on Apache 2.0 hangs (Diab's TWikiOnApache2dot0Hangs patch) |
+| [[%BUGS%/Item2324][Item2324]] | PatternSkin menu layout issue with MS Internet Explorer 7 |
+| [[%BUGS%/Item2322][Item2322]] | Comment box should have ability to be disabled by skin template |
+| [[%BUGS%/Item2321][Item2321]] | Performance improvements to Users.pm implementation (large user bases) |
+| [[%BUGS%/Item2318][Item2318]] | Links in square brackets breaks if there is a space in front of chars like - and ( |
+| [[%BUGS%/Item2317][Item2317]] | ChangePassword confirms change without password-handler |
+| [[%BUGS%/Item2315][Item2315]] | Template file permissions more restrictive in tgz dist |
+| [[%BUGS%/Item2309][Item2309]] | Prevent change password to empty string (add MinPasswordLength configuration option) |
+| [[%BUGS%/Item2302][Item2302]] | Restore Using Forms for Settings Feature |
+| [[%BUGS%/Item2298][Item2298]] | TWiki::Data::DelimitedFile is not as robust as it could be |
+| [[%BUGS%/Item2297][Item2297]] | Lock down TWiki.TWikiPreferences to admin group |
+| [[%BUGS%/Item2293][Item2293]] | Registration fails if no mail available |
+| [[%BUGS%/Item2292][Item2292]] | SMTP mail fails if the server requires auth |
+| [[%BUGS%/Item2287][Item2287]] | When printing a view page, the print style is not called |
+| [[%BUGS%/Item2286][Item2286]] | When you move an attachment the rename screen shows all topics that refers to the topic name |
+| [[%BUGS%/Item2278][Item2278]] | userToWikiName broken |
+| [[%BUGS%/Item2274][Item2274]] | I18N: Non US-ASCII chars in usernames breaks groups |
+| [[%BUGS%/Item2271][Item2271]] | Cannot "put back" a moved non-wikiword topic |
+| [[%BUGS%/Item2261][Item2261]] | Error in Apache log due to TWikiWebPreferences (File does not exist / ATTACHEDFILELINKFORMAT preference) |
+| [[%BUGS%/Item2259][Item2259]] | TWiki::UI::Save::buildNewTopic does not treat onlywikiname as a Boolean |
+| [[%BUGS%/Item2247][Item2247]] | Unclosed DIV in viewprint.pattern.tmpl |
+| [[%BUGS%/Item2244][Item2244]] | Documented METASEARCH parameter defaults are not the actual defaults |
+| [[%BUGS%/Item2234][Item2234]] | natlogon broken due to recent changes in Client.pm |
+| [[%BUGS%/Item2227][Item2227]] | PatternSkin CSS updates for IE 7 |
+| [[%BUGS%/Item2226][Item2226]] | When you delete an attachment the rename screen shows all topics that refers to the topic name |
+| [[%BUGS%/Item2225][Item2225]] | Attachments are being named the full path name instead of the filename only |
+| [[%BUGS%/Item2223][Item2223]] | Empty textarea generated in raw mode (VIEW_TEMPLATE issue) |
+| [[%BUGS%/Item2214][Item2214]] | WebTopicCreator not stripping some disallowed characters |
+| [[%BUGS%/Item2186][Item2186]] | TWiki.SiteChanges shows oldest (not latest) changes |
+| [[%BUGS%/Item2163][Item2163]] | Groups should be defined in UsersWebName only (performance improvement) |
+| [[%BUGS%/Item2158][Item2158]] | TWiki leaks memory - mod_perl processes continually grow |
+| [[%BUGS%/Item2157][Item2157]] | Rendering of links containing periods does not work properly |
+| [[%BUGS%/Item2151][Item2151]] | Delete usecase broken in PatternSkin |
+| [[%BUGS%/Item2142][Item2142]] | Add option to write email into user topic |
+| [[%BUGS%/Item2141][Item2141]] | Error.pm not in sync with CPAN state |
+| [[%BUGS%/Item2140][Item2140]] | AUTHORS missing translators' credits |
+| [[%BUGS%/Item2133][Item2133]] | Editform templates are missing some save parameters (templatetopic and text) |
+| [[%BUGS%/Item2126][Item2126]] | Bulk register shouldn't change passwords of existing users |
+| [[%BUGS%/Item2116][Item2116]] | I18N: updated translations for TWiki 4.0.3 |
+| [[%BUGS%/Item2109][Item2109]] | Add css classes to PreferencesPlugin buttons |
+| [[%BUGS%/Item2105][Item2105]] | A form field defined as [[topic][name]] assumes that the topic is in the same web as the form |
+| [[%BUGS%/Item2102][Item2102]] | Clicking Upload without choosing a file gives error |
+| [[%BUGS%/Item2097][Item2097]] | Plugin API / Store.pm: beforeAttachmentSaveHandler broken |
+| [[%BUGS%/Item2096][Item2096]] | New topic missing from notification when renamed |
+| [[%BUGS%/Item2090][Item2090]] | Default values for fields not picked up in new form (TWIKI4 only) |
+| [[%BUGS%/Item2088][Item2088]] | PatternSkin MANIFEST is missing PatternSkin.pm |
+| [[%BUGS%/Item2057][Item2057]] | TMPL:P parameters broken |
+| [[%BUGS%/Item2054][Item2054]] | JSCalendarContrib only works with IE in PatternSkin |
+| [[%BUGS%/Item2050][Item2050]] | Easier overriding of PatternSkin |
+| [[%BUGS%/Item2048][Item2048]] | Mailto links written as mailto:address causes flooding with warning messages about uninitialized value |
+| [[%BUGS%/Item2032][Item2032]] | Some UTF8 characters in form values broken (CGI.pm interaction) |
+| [[%BUGS%/Item2029][Item2029]] | Build script: New topics added to distribution are not versioned correctly |
+| [[%BUGS%/Item2019][Item2019]] | Add tracing to Client.pm (login scenarios) |
+| [[%BUGS%/Item2012][Item2012]] | Break RCS locks on topics automatically when saving (Cairo upgrade issue) |
+| [[%BUGS%/Item2010][Item2010]] | Email address in the email field for the user is not turned into a link |
+| [[%BUGS%/Item2009][Item2009]] | Email addresses are not fully padded with the NOSPAM |
+| [[%BUGS%/Item2003][Item2003]] | lib/CPAN/lib/Error.pm has debugging print enabled |
+| [[%BUGS%/Item1989][Item1989]] | Latest CGI::Session is broken |
+| [[%BUGS%/Item1982][Item1982]] | Sequence of form fields in topics do not follow form definition |
+| [[%BUGS%/Item1980][Item1980]] | Login text remains untranslated |
+| [[%BUGS%/Item1941][Item1941]] | If REPEATs are munged in templates, RDiff bombs out |
+| [[%BUGS%/Item1939][Item1939]] | Inconsistent handling of non-wikiword topic names when creating new topic |
+| [[%BUGS%/Item1890][Item1890]] | Wysiwyg plugin in infinite loop |
+| [[%BUGS%/Item1869][Item1869]] | Clarify security docs in configure |
+| [[%BUGS%/Item1843][Item1843]] | A 1.2 version of a topic cannot be deleted (spam) with cmd=delRev |
+| [[%BUGS%/Item1651][Item1651]] | Extract UserMapping and GroupMapping code out of User.pm and Users.pm (enable non-TWikiTopic based User and Groups definititions) |
+| [[%BUGS%/Item1613][Item1613]] | Renaming the Main web breaks several links to users |
+| [[%BUGS%/Item1602][Item1602]] | link to TWikiUpgradeGuide needed from TWiki Installation Guide |
+| [[%BUGS%/Item1560][Item1560]] | Non-existing favicon.ico is referenced in upgraded Cairo webs |
 
 ---+++ TWiki 4.0.3 Enhancements
-FIXME
-
+| [[%BUGS%/Item2452][Item2452]] | mime.types lacks some widely used file types |
+| [[%BUGS%/Item2301][Item2301]] | Put {linkProtocolPattern} into configure |
+| [[%BUGS%/Item2282][Item2282]] | SpreadSheetPlugin with SETIFEMPTY |
+| [[%BUGS%/Item2155][Item2155]] | Remove hardcoded fonts from twiki's default content |
+| [[%BUGS%/Item2125][Item2125]] | Add format parameter to META{"parent"} | 
 </noautolink>
 
-The 4.0.3 release was built from SVN http://svn.twiki.org:8181/svn/twiki/branches/TWikiRelease04x00 revision *FIXME*.
+The 4.0.3 release was built from SVN http://svn.twiki.org:8181/svn/twiki/branches/TWikiRelease04x00 revision *10706*..

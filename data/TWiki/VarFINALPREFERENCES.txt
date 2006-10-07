@@ -1,0 +1,26 @@
+%META:TOPICINFO{author="TWikiContributor" date="1152050277" format="1.2" version="$Rev$"}%
+%META:TOPICPARENT{name="TWikiPreferences"}%
+#VarFINALPREFERENCES
+---+++ FINALPREFERENCES -- list of preferences which must not be overridden
+
+
+A comma separated list of preference variables which must not be
+overridden in subordinate settings.
+
+TWiki preferences get their values from a hierarchy of sources:
+   1 An distribution default may be defined in [[%TWIKIWEB%.%WIKIPREFSTOPIC%]].
+   2 A site customisation in [[%LOCALSITEPREFS%]] may override that value.
+   3 Per-web customisation in individual [[%WEBPREFSTOPIC%]] topics can override that.
+   4 Finally, per-user and per-topic settings can override that.
+
+With a FINALPREFERENCES setting at one of the stages, any settings in
+the following stages will be ignored.  Consider, for example, a
+[[%LOCALSITEPREFS%]] containing the following setting:
+<verbatim>
+   * Set FINALPREFERENCES = WIKIWEBMASTER
+</verbatim>
+In this case none of the [[%WEBPREFSTOPIC%]] topics can override that,
+WIKIWEBMASTER is a global setting for that site.
+   * Usage: Evaluated by TWiki and not intended to be expanded in any topic.
+   * Type: Preference variable defined in [[%TWIKIWEB%.%WIKIPREFSTOPIC%]].  Can be customized for a TWiki site in [[%LOCALSITEPREFS%]], and for each web in their %WEBPREFSTOPIC% topics.
+

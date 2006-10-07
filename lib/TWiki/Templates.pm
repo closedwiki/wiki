@@ -236,7 +236,7 @@ sub readTemplate {
     foreach( split( /(%TMPL\:)/, $text ) ) {
         if( /^(%TMPL\:)$/ ) {
             $delim = $1;
-        } elsif( ( /^DEF{[\s\"]*(.*?)[\"\s]*}%[\n\r]*(.*)/s ) && ( $1 ) ) {
+        } elsif( ( /^DEF{[\s\"]*(.*?)[\"\s]*}%(.*)/s ) && ( $1 ) ) {
             # handle %TMPL:DEF{key}%
             if( $key ) {
                 $this->{VARS}->{$key} = $val;
@@ -319,7 +319,7 @@ sub _readTemplateFile {
     }
 
     # See if it is web.topic
-    if( $name =~ /^(\w+)\.(\w+)$/ ) {
+    if( $name =~ /^(.+)\.(.+?)$/ ) {
         my $web = $1;
         my $topic = $2;
         my $candidate;
@@ -412,7 +412,8 @@ sub validateFile {
 sub validateTopic {
    my( $session, $store, $user, $topic, $web ) = @_;
    return $store->topicExists( $web, $topic ) && 
-   $session->{security}->checkAccessPermission ('view', $user, undef, $topic, $web );
+   $session->{security}->checkAccessPermission(
+       'view', $user, undef, undef, $topic, $web );
 }
 
 sub retrieveTopic {

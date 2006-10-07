@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1159684864" format="1.1" version="1.2"}%
 %TOC%
 %STARTINCLUDE%
 ---# TWiki Templates
@@ -24,7 +24,7 @@ _Templates_ are plain text with embedded _template directives_ that tell TWiki h
    * Directives are of the form ==%<nop>TMPL:&lt;key&gt;%== and ==%<nop>TMPL:&lt;key&gt;{"attr"}%==.
    * Directives:
       * ==%<nop>TMPL:INCLUDE{"file"}%==: Includes a template file. The file is found as described [[#FindingTemplates][below]].
-      * ==%<nop>TMPL:DEF{"block"}%==: Define a block. Text between this and the =%<nop>TMPL:END%= directive is not used in-place, but is saved for later use with =%<nop>TMPL:P=. Leading and trailing whitespace is ignored.
+      * ==%<nop>TMPL:DEF{"block"}%==: Define a block. *All* text between this and the next =%<nop>TMPL:END%= directive is removed and saved for later use with =%<nop>TMPL:P=.
       * ==%<nop>TMPL:END%==: Ends a block definition.
       * ==%<nop>TMPL:P{"var"}%==: Includes a previously defined block.
       * ==%<nop>{...}%==: is a comment.
@@ -143,7 +143,7 @@ The following variables get expanded when a user creates a new topic based on a 
 | =%<nop>DATE%= | Signature format date. See VarDATE |
 | =%<nop>GMTIME%= | Date/time. See VarGMTIME |
 | =%<nop>GMTIME{...}%= | Formatted date/time. See VarGMTIME2 |
-| =%<nop>NOP%= | A no-operation variable that gets removed. Useful to prevent a SEARCH from hitting an edit template topic; also useful to escape a variable like =%<nop>URLPARAM%<nop>NOP%{...}%= |
+| =%<nop>NOP%= | A no-operation variable that gets removed. Useful to prevent a SEARCH from hitting an edit template topic; also useful to escape a variable, such as =%<nop>URLPA%<nop>NOP%RAM{...}%= escaping URLPARAM |
 | =%<nop>STARTSECTION{type="templateonly"}%%BR%...%BR%%<nop>ENDSECTION{type="templateonly"}%= | Text that gets removed when a new topic based on the template is created. See notes below. |
 | =%<nop>SERVERTIME%= | Date/time. See VarSERVERTIME |
 | =%<nop>SERVERTIME{...}%= | Formatted date/time. See VarSERVERTIME2 |
@@ -203,11 +203,16 @@ See TWikiScripts for details of the parameters that the =edit= script understand
 #AutomaticallyGeneratedTopicname
 ---+++ Automatically Generated Topicname
 
-If you want to make a TWiki application where you need automatically generated unique topicnames, you can use 10 X's in the edit / save URL, and they will be replaced on topic save with a count value. For example, !BugIDXXXXXXXXXX will result in topics named !BugID0, !BugID1, !BugID2 etc. 
+For TWiki application it is useful to automatically generate unique topicnames, such as !BugID0001, !BugID0002, etc. You can add =AUTOINC&lt;n&gt;= to the topic name in the edit and save scripts, it gets replaced with an auto-incremented number on topic save. =&lt;n&gt;= is a number starting from 0, and may include leading zeros. Leading zeros are used to zero-pad numbers so that auto-incremented topic names can sort properly. Deleted topics are not re-used to ensure uniqueness of topic names. That is, the auto-incremented number is always higher than the existing ones, even if there are gaps in the number sequence.
+
+*Examples:*
+   * =BugAUTOINC0= - creates topic names =Bug0=, =Bug1=, =Bug2=, ... (does not sort properly)
+   * =ItemAUTOINC0000= - creates topic names =Item0000=, =Item0001=, =Item0002=, ... (sorts properly up to 9999)
+   * =DocIDAUTOINC10001= - start with =DocID10001=, =DocID10002=, ... (sorts properly up to 99999; auto-links)
 
 Example link to create a new topic:%BR%
 <verbatim>
-[[%SCRIPTURLPATH{"edit"}%/%WEB%/BugIDXXXXXXXXXX?templatetopic=BugTemplate&amp;topicparent=%TOPIC%&amp;t=%SERVERTIME{"$day$hour$min$sec"}%][Create new item]]=
+[[%SCRIPTURLPATH{"edit"}%/%WEB%/BugIDAUTOINC00000?templatetopic=BugTemplate&amp;topicparent=%TOPIC%&amp;t=%SERVERTIME{"$day$hour$min$sec"}%][Create new item]]=
 </verbatim>
 
 ---++ Master Templates by Example
@@ -306,4 +311,3 @@ With URL: ==.../bin/oops/Sandbox/TestTopic2?template=oopstest&param1=WebHome&par
 __Related Topics:__ TWikiSkins, DeveloperDocumentationCategory, AdminDocumentationCategory
 
 %META:FILEATTACHMENT{name="testscreen.gif" attr="h" comment="Example of oopstest.tmpl rendered" date="1026977240" path="C:\Data\Temp\testscreen.gif" size="9566" user="TWikiContributor" version="1.2"}%
-

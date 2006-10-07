@@ -63,7 +63,8 @@ to the script e.g. perl build.pl release 4.6.5)
 
 END
     if( $name ||
-          TWiki::Contrib::Build::ask("Do you want to name this release?")) {
+          TWiki::Contrib::Build::ask("Do you want to name this release?",
+                                     'n')) {
         while( $name !~ /^\d\.\d+\.\d+(-\w+)?$/ ) {
             $name =
               TWiki::Contrib::Build::prompt(
@@ -135,7 +136,7 @@ sub _checkInFile {
             $currentRevision = $1;
         } else {
             #it seems that you can have a ,v file with no commit, if you get here, you have an invalid ,v file. remove that file.
-            die 'failed to get revision: '.$file."\n";
+            die 'failed to get revision (make sure the ,v file is valid): '.$file."\n";
         }
     } else {
         #set revision number #TODO: what about topics with no META DATA?

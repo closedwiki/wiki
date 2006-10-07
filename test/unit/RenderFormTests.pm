@@ -56,6 +56,7 @@ sub set_up {
 sub tear_down {
     my $this = shift;
     $this->removeWebFixture($twiki, $testweb);
+    eval {$twiki->finish()};
     $this->SUPER::tear_down();
 }
 
@@ -99,7 +100,7 @@ sub test_TML_in_forms {
     $text = (($children[6]->content_list())[1]->content_list())[0];
     $this->assert_str_equals(' Defect ', $text);
     $text = (($children[7]->content_list())[1]->content_list())[0];
-    $this->assert_str_equals(' GRRR ', $text);
+    $this->assert_str_equals(" $testweb.GRRR ", $text);
     $tree->delete;
 }
 

@@ -65,40 +65,53 @@ sub inputTest {
     my $eidx = 1;
     my $sattrs = "";
 
-    $web = $baseweb unless $web;
-    $topic = $basetopic unless $topic;
+    $web ||= $baseweb;
+    $topic ||= $basetopic;
 
     if ($web ne $baseweb || $topic ne $basetopic || $anchor) {
 
-        $sattrs = "target=\"";
+        $sattrs = 'target="';
 
         $sattrs .= "$web." unless ($web eq $baseweb);
         $sattrs .= $topic unless ($topic eq $basetopic);
 
         if ( $anchor) {
-            $anchor = "#$anchor";
+            $anchor = '#'.$anchor;
             $sattrs .= $anchor;
         }
-        $sattrs .= "\"";
+        $sattrs .= '"';
     }
 
     my $url = "$TWiki::cfg{DefaultUrlHost}$TWiki::cfg{ScriptUrlPath}/save$TWiki::cfg{ScriptSuffix}/$web/$topic";
 
     if ( $location ) {
-        $sattrs .= " location=\"$location\"";
+        $sattrs .= ' location="'.$location.'"';
     }
 
     $type = "bottom" unless ($type);
-    $sattrs .= "type=\"$type\" ";
+    $sattrs .= 'type="'.$type.'" ';
 
-    my $commentref = "%COMMENT{type=\"$type\" refmark=\"here\"}%";
+    my $commentref = '%COMMENT{type="'.$type.'" refmark="here"}%';
 
     # Build the target topic
-    my $sample = "TopOfTopic\n%COMMENT{type=\"$type\"}%\n";
-    $sample .= "BeforeAnchor\n$anchor\nAfterAnchor\n" if ($anchor);
-    $sample .= "BeforeLocation\nHereIsTheLocation\nAfterLocation";
-    $sample .= "$commentref\n";
-    $sample .= "BottomOfTopic\n";
+    my $sample = <<HERE;
+TopOfTopic
+%COMMENT{type="$type"}%
+HERE
+    if ($anchor ) {
+        $sample .= <<HERE;
+BeforeAnchor
+$anchor
+AfterAnchor
+HERE
+    }
+    $sample .= <<HERE;
+BeforeLocation
+HereIsTheLocation
+AfterLocation
+$commentref
+BottomOfTopic
+HERE
 
     writeTopic($web, $topic, $sample);
     my $pidx = $eidx;
@@ -122,7 +135,7 @@ sub inputTest {
     $this->assert(scalar($dattrs =~ s/\s+method\s*=\s*\"post\"//i), $dattrs);
     $this->assert(scalar($dattrs =~ s/\s+action=\"(.*?)\"//), $dattrs);
     $this->assert_str_equals($url, $1);
-    $this->assert_str_equals('enctype="application/x-www-form-urlencoded"', trim($dattrs));
+    $this->assert_str_equals('enctype="multipart/form-data"', trim($dattrs));
 
     # no hiddens should be generated if disabled
     $this->assert(scalar($html =~ s/<input ([^>]*\bname="comment_type".*?)\/>//i),$html);
@@ -304,6 +317,121 @@ sub test_locationOverridesAnchor {
 	 "",
            "bottom");
     $this->assert_matches(qr/<input ([^>]*name="comment_location".*?)\s*\/>/, $html);
+}
+
+sub test_nopost {
+    my $this = shift;
+
+    my $sample = <<HERE;
+before
+%COMMENT{nopost="on"}%
+after
+HERE
+    writeTopic($baseweb, $basetopic, $sample);
+    my $pidx = 0;
+    my $html =
+      TWiki::Plugins::CommentPlugin::Comment::_handleInput(
+          'nopost="on"',
+          $baseweb,
+          $basetopic,
+          \$pidx,
+          "The Message",
+          "",
+          "bottom");
+    $this->assert_matches(qr/<input type="hidden" name="comment_nopost" value="on"/, $html);
+
+    # Compose the query
+    my $comm = "This is the comment";
+    my $query = new CGI(
+                        {
+                         'comment_action' => 'save',
+                         'comment_type' => 'above',
+                         'comment' => $comm,
+                         'comment_nopost' => 'on',
+                        });
+    $query->path_info("/$baseweb/$basetopic");
+
+    my $session = new TWiki( $TWiki::cfg{DefaultUserLoginName}, $query);
+    my $text = "Ignore this text";
+
+    # invoke the save handler
+    $this->capture(\&TWiki::UI::Save::save, $session );
+
+    $text = TWiki::Func::readTopicText($baseweb, $basetopic);
+    # make sure it hasn't changed
+    $text =~ s/^%META.*?\n//gm;
+    $this->assert_str_equals($sample, $text);
+}
+
+sub test_remove {
+    my $this = shift;
+
+    my $sample = <<HERE;
+before
+%COMMENT{remove="on"}%
+after
+HERE
+    writeTopic($baseweb, $basetopic, $sample);
+    my $pidx = 99;
+    my $html =
+      TWiki::Plugins::CommentPlugin::Comment::_handleInput(
+          'remove="on"',
+          $baseweb,
+          $basetopic,
+          \$pidx,
+          "The Message",
+          "",
+          "bottom");
+    $this->assert_matches(qr/<input type="hidden" name="comment_remove" value="99"/, $html);
+
+    # Compose the query
+    my $comm = "This is the comment";
+    my $query = new CGI(
+                        {
+                         'comment_action' => 'save',
+                         'comment_type' => 'above',
+                         'comment' => $comm,
+                         'comment_remove' => '0',
+                         'comment_index' => '99',
+                        });
+    $query->path_info("/$baseweb/$basetopic");
+
+    my $session = new TWiki( $TWiki::cfg{DefaultUserLoginName}, $query);
+    my $text = "Ignore this text";
+
+    # invoke the save handler
+    $this->capture(\&TWiki::UI::Save::save, $session );
+
+    $text = TWiki::Func::readTopicText($baseweb, $basetopic);
+    # make sure it hasn't changed
+    $text =~ s/^%META.*?\n//gm;
+    $this->assert_str_equals(<<HERE,
+before
+
+after
+HERE
+                             $text);
+}
+
+sub test_default {
+    my $this = shift;
+    my $sample = <<HERE;
+before
+%COMMENT{remove="on"}%
+after
+HERE
+    writeTopic($baseweb, $basetopic, $sample);
+    my $pidx = 99;
+    my $html =
+      TWiki::Plugins::CommentPlugin::Comment::_handleInput(
+          'default="wibble"',
+          $baseweb,
+          $basetopic,
+          \$pidx,
+          undef,
+          "",
+          "bottom");
+    $this->assert_matches(qr#>wibble</textarea>#, $html);
 }
 
 1;

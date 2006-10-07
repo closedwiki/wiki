@@ -24,21 +24,50 @@ use strict;
 ###use warnings;
 
 
+
+
 use CGI;
 use Date::Calc qw(:all);
+use POSIX qw(ceil);
 
 use vars qw( $session $theTopic $theWeb $topic $web $attributes $text $refText
              $defaultsInitialized %defaults %options @renderedOptions @flagOptions %months %daysofweek
-	     @processedTopics @unknownParams
+	     @processedTopics @unknownParams %topicDefaults
 	     $months_rx $date_rx $daterange_rx $bullet_rx $bulletdate_rx $bulletdaterange_rx $dow_rx $day_rx
 	     $year_rx $monthyear_rx $monthyearrange_rx
-	     $hour_rx $minute_rx $am_rx $pm_rx $ampm_rx $time_rx $timerange_rx $timerangestrict_rx
+	     $hour_rx $minute_rx $am_rx $pm_rx $ampm_rx $time_rx $timerange_rx $timerangestrict_rx $duration_rx
 	     $dowrange_rx 
 	     $cgi $pluginName
-	     $ttid
+	     $ttid 
+	     %TIMEZONES
 	 );
 
 $pluginName = "TimeTablePlugin";
+
+%TIMEZONES = (
+		'A'     =>      +1, 'ACDT'      =>      +10.30, 'ACST'  =>      +9.30, 'ADT'    =>      -3,
+		'AEDT'  =>      +11, 'AEST'     =>      +10, 'AKDT'     =>      -8, 'AKST'      =>      -9,
+		'AST'   =>      -4, 'AWST'      =>      +8, 'B' =>      +2, 'BST'       =>      +1,
+		'C'     =>      +3, 'CDT'       =>      -5, 'CEDT'      =>      +2, 'CEST'      =>      +2,
+		'CET'   =>      +1, 'CST'       =>      +10.30, 'CST'   =>      +9.30, 'CST'    =>      -6,
+		'CXT'   =>      +7, 'D' =>      +4, 'E' =>      +5, 'EDT'       =>      -4,
+		'EEDT'  =>      +3, 'EEST'      =>      +3, 'EET'       =>      +2, 'EST'       =>      +11,
+		'EST'   =>      +10, 'EST'      =>      -5, 'F' =>      +6, 'G' =>      +7,
+		'GMT'   =>      0, 'H'  =>      +8, 'HAA'       =>      -3, 'HAC'       =>      -5,
+		'HADT'  =>      -9, 'HAE'       =>      -4, 'HAP'       =>      -7, 'HAR'       =>      -6,
+		'HAST'  =>      -10, 'HAT'      =>      -2.30, 'HAY'    =>      -8, 'HNA'       =>      -4,
+		'HNC'   =>      -6, 'HNE'       =>      -5, 'HNP'       =>      -8, 'HNR'       =>      -7,
+		'HNT'   =>      -3.30, 'HNY'    =>      -9, 'I' =>      +9, 'IST'       =>      +1,
+		'K'     =>      +10, 'L'        =>      +11, 'M'        =>      +12, 'MDT'      =>      -6,
+		'MESZ'  =>      +2, 'MEZ'       =>      +1, 'MST'       =>      -7, 'N' =>      -1,
+		'NDT'   =>      -2.30, 'NFT'    =>      +11.30, 'NST'   =>      -3.30, 'O'      =>      -2,
+		'P'     =>      -3, 'PDT'       =>      -7, 'PST'       =>      -8, 'Q' =>      -4,
+		'R'     =>      -5, 'S' =>      -6, 'T' =>      -7, 'U' =>      -8,
+		'UTC'   =>      0, 'V'  =>      -9, 'W' =>      -10, 'WEDT'     =>      +1,
+		'WEST'  =>      +1, 'WET'       =>      0, 'WST'        =>      +8, 'X' =>      -11,
+		'Y'     =>      -12, 'Z'        =>      0,
+
+);
 
 # =========================
 sub initPlugin {
@@ -66,30 +95,31 @@ sub expand {
 sub inflate {
 	my ($attributes, $text, $topic, $web) = @_;
 
-	my ($starttime, $endtime, $fgcolor, $bgcolor) = &_getTTCMValues($attributes);
+	my ($starttime, $endtime, $duration, $fgcolor, $bgcolor) = &_getTTCMValues($attributes);
 
 	&_initDefaults() unless $defaultsInitialized;
 	return &_createUnknownParamsMessage() unless &_initOptions('');
 
 	$cgi = &TWiki::Func::getCgiQuery();
 
-	my $title = &_renderTime($starttime,"12pm").'-'.&_renderTime($endtime,"12pm")
-			.' / '.&_renderTime($starttime,24).'-'.&_renderTime($endtime,24);
+	my $title = &_renderTime($starttime,"12pm").(defined $duration?' ':'-').&_renderTime((defined $duration?$duration:$endtime),"12pm")
+		.' / '.&_renderTime($starttime,24).(defined $duration?' ':'-').&_renderTime((defined $duration?$duration:$endtime),24);
 
 	$fgcolor='' unless defined $fgcolor;
 	$bgcolor='' unless defined $bgcolor;
 
 	return $cgi->span(
 			{
-				-style=>"color:$fgcolor;background-color:$bgcolor",
+				-style=>(($fgcolor ne '')?"color:$fgcolor;":'').(($bgcolor ne '')?"background-color:$bgcolor":''),
 				-title=>$title
-			}, &_renderTime($starttime).'-'.&_renderTime($endtime));
+			}, &_renderTime($starttime).(defined $duration?' ':'-').&_renderTime((defined $duration?$duration:$endtime)));
 }
 # =========================
 sub _getTTCMValues {
 	my ($attributes) = @_;
 	my $textattr = &TWiki::Func::extractNameValuePair($attributes);
 
+	my $duration = undef;
 	my ($timerange, $fgcolor, $bgcolor) = split /\s*\,\s*/, $textattr;
 	if (!$bgcolor) {
 		$bgcolor = $fgcolor;
@@ -97,9 +127,16 @@ sub _getTTCMValues {
 	}
 
 	my ($starttime,$endtime) = split /-/,$timerange;
-	($starttime,$endtime) = (&_getTime($starttime), &_getTime($endtime));
+	$starttime = &_getTime($starttime);
+	if ($endtime =~ m/($duration_rx)$/i) { 
+		$duration = $endtime;
+		$endtime = undef;
+	} else {
+		$endtime =  &_getTime($endtime);
+		$duration = undef;
+	}
 
-	return ($starttime, $endtime, $fgcolor, $bgcolor);
+	return ($starttime, $endtime, $duration, $fgcolor, $bgcolor);
 
 }
 # =========================
@@ -145,13 +182,15 @@ sub _initDefaults {
 		forcestartdate => 0,
 		navprev => '&lt;&lt;',
 		navnext => '&gt;&gt;',
-		navprevtitle => 'Previous Week',
-		navnexttitle => 'Next Week',
+		navprevtitle => 'Previous %n day(s)',
+		navnexttitle => 'Next %n day(s)',
 		wholetimerow => 0,
 		wholetimerowtext => '24h',
 		wholetimerowtitle => 'whole-time events',
 		wholetimerowpos => 'top',
 		cuttext => '...',
+		timezone => 0,
+		timezoneabbr => undef,
 	);
 
 	@renderedOptions = ('tablecaption', 'name' , 'navprev', 'navnext', 'wholetimerowtext');
@@ -164,6 +203,8 @@ sub _initDefaults {
         %daysofweek = ( Mon=>1, Tue=>2, Wed=>3, Thu=>4, Fri=>5, Sat=>6, Sun=>7 );
 
 	$ttid = 0;
+
+	%topicDefaults = ( );
 
         $defaultsInitialized = 1;
 
@@ -183,16 +224,17 @@ sub _initRegexs {
         $bulletdate_rx = "$bullet_rx$date_rx\\s*-";
         $bulletdaterange_rx = "$bulletdate_rx\\s*$date_rx\\s*-";
 
-	$hour_rx = "([0-1]?[0-9]|2[0-4])";
+	$hour_rx = "([01]?[0-9]|2[0-4])";
 	$minute_rx = "[0-5]?[0-9]";
 	$am_rx = "[aA]\\.?[mM]\\.?";
 	$pm_rx = "[pP]\\.?[mM]\\.?";
 	$ampm_rx = "($am_rx|$pm_rx)";
 	
-	$time_rx = "$hour_rx([\.:]$minute_rx)?$ampm_rx?";
-	$timerange_rx="$time_rx\\s*-\\s*$time_rx";
+	$duration_rx = "\\d+([\\.:dhmDHM]\\d*)*[dhmDHM]";
+	$time_rx = "$hour_rx([\\.:]$minute_rx)?$ampm_rx?";
+	$timerange_rx="$time_rx\\s*-\\s*(($duration_rx)|($time_rx))";
 	
-	$timerangestrict_rx="$time_rx-$time_rx";
+	$timerangestrict_rx="$time_rx-(($duration_rx)|($time_rx))";
 
 	$dowrange_rx="($dow_rx)\\s*-\\s*($dow_rx)";
 }
@@ -273,15 +315,22 @@ sub _initOptions {
                 }
         }
 
+	# setup user defined time zone abbreviations:
+	if (defined $options{'timezoneabbr'}) {
+		my @abbrtz = split /\s*[\|,\;]\s*/, $options{'timezoneabbr'};
+		foreach my $at (@abbrtz) {
+			my ($abbr, $tz) = split /\s*:\s*/, $at,2;
+			$TIMEZONES{$abbr}=$tz if (defined $abbr)&&(defined $tz);
+		}
+	}
+
         @processedTopics = ( );
 
 	$cgi = &TWiki::Func::getCgiQuery();
 
         return 1;
-
-
-
 }
+
 # =========================
 sub _getTime {
 	my ($strtime) = @_;
@@ -293,7 +342,8 @@ sub _getTime {
 	$hh = 0 unless $hh;
 	$mm = 0 unless $mm;
 
-	$hh+=12 if ($strtime =~ m/$pm_rx/);
+	$hh+=12 if (($hh<12)&&($strtime =~ m/$pm_rx/)) || (($hh==12)&&($mm==0)&&($strtime =~ m/$am_rx/));
+	$hh=0 if (($hh==12)&&($mm>0)&&($strtime =~ m/$am_rx/));
 
 	return $hh*60+$mm;
 }
@@ -313,28 +363,46 @@ sub _fetch {
 	my $TIMEINTERVAL = $options{'timeinterval'};
 
 	foreach my $line (grep(/$bullet_rx/, split(/\r?\n/, $text))) {
+		my $setup = undef;
 
 		$line =~ s/$bullet_rx//g; 
+
+		my ($defaultFgColor, $defaultBgColor) = (undef, undef);
+		if ($line =~ s/%TTSETUP{\"(.*?)\"}%//g) {
+			$setup = $1;
+			my $defaultsRef = $topicDefaults{$setup};
+			$defaultFgColor = $$defaultsRef{'eventfgcolor'} if defined $defaultsRef;
+			$defaultBgColor = $$defaultsRef{'eventbgcolor'} if defined $defaultsRef;
+		}
 
 		my $excref = &_fetchExceptions($line, $startDays, $endDays);
 
 
+		my ($fgcolor,$bgcolor) = ($defaultFgColor, $defaultBgColor);
+
+		my ($duration);
+
 		if ($line =~ m/^($dowrange_rx)\s+\-\s+($timerange_rx)/ ) {
 			### DOW - DOW - hh:mm - hh:mm
 			my ($startdow,$enddow,$starttime,$endtime, $descr,$color) = split /\s+\-\s+/, $line, 6;
-			my ($fgcolor,$bgcolor);
 			if ($color) {
 				($fgcolor,$bgcolor) = split(/\s*\,\s*/,$color);
 				if (($fgcolor)&&(!$bgcolor)) {
 					$bgcolor = $fgcolor;
-					$fgcolor = undef;
+					$fgcolor = $defaultFgColor;
 				}
 			}
 
 			$startdow=$daysofweek{$startdow};
 			$enddow=$daysofweek{$enddow};
 			$starttime=&_getTime($starttime);
-			$endtime=&_getTime($endtime);
+			if ($endtime=~m/$duration_rx/i) {
+				$duration = $endtime;
+				$endtime = undef;
+			} else {
+				$endtime=&_getTime($endtime);
+				$duration = undef;
+			}
 			for (my $day = 0; $day < $options{'days'}; $day++) {
 				my ($yy1,$mm1,$dd1) = Add_Delta_Days($yy,$mm,$dd, $day);
 				my $dow = Day_of_Week($yy1,$mm1,$dd1);
@@ -343,25 +411,33 @@ sub _fetch {
 						{ 	'starttime' => $starttime, 
 							'endtime' => $endtime, 
 							'nstarttime' => &_normalize($starttime, $STARTTIME, $TIMEINTERVAL),
-							'nendtime' => &_normalize($endtime, $STARTTIME, $TIMEINTERVAL),
+							'nendtime' => &_normalize($endtime, $STARTTIME, $TIMEINTERVAL,1),
 							'descr' => $descr , 
 							'fgcolor'=>$fgcolor,
-							'bgcolor'=>$bgcolor
+							'bgcolor'=>$bgcolor,
+							'setup'=>$setup,
+							'duration'=>$duration
 						};
+					&_fixEntryTime(\%entries, $entries{$day+1}[$#{$entries{$day+1}}], $day);
 				}
 			}
 
 		} elsif ($line =~ m/^($dow_rx)[^\-]+\-\s+($timerange_rx)/ ) { 
 			### DOW[, DOW]* - hh:mm - hh:mm
 			my ($dowlist,$starttime,$endtime,$descr,$color) = split /\s+\-\s+/, $line, 5;
-			$starttime=&_getTime($starttime);
-			$endtime=&_getTime($endtime);
-			my ($fgcolor,$bgcolor);
+			$starttime=&_getTime($starttime); 
+			if ($endtime=~m/$duration_rx/i) {
+				$duration = $endtime;
+				$endtime = undef;
+			} else {
+				$endtime=&_getTime($endtime);
+				$duration = undef;
+			}
 			if ($color) {
 				($fgcolor,$bgcolor) = split(/\s*\,\s*/,$color);
 				if (!defined $bgcolor) {
 					$bgcolor = $fgcolor;
-					$fgcolor = undef;
+					$fgcolor = $defaultFgColor;
 				}
 			}
 			my @dowlistarr = split /[\s\,]+/, $dowlist;
@@ -370,20 +446,26 @@ sub _fetch {
 				my $dow=$daysofweek{$dowtext};
 				next unless defined $dow;
 				for (my $day=$dow-$cdow; $day<$options{'days'}; $day+=7) {
-					push @{$entries{$day+1}}, {  
-						'starttime'=>$starttime,  
-						'endtime' => $endtime, 
-						'nstarttime' => &_normalize($starttime, $STARTTIME, $TIMEINTERVAL),
-						'nendtime' => &_normalize($endtime, $STARTTIME, $TIMEINTERVAL),
-						'descr'=>$descr,
-						'fgcolor'=>$fgcolor,
-						'bgcolor'=>$bgcolor
-						} if $day >= 0;
+					
+					if ($day>=0) {
+						push @{$entries{$day+1}}, {  
+							'starttime'=>$starttime,  
+							'endtime' => $endtime, 
+							'nstarttime' => &_normalize($starttime, $STARTTIME, $TIMEINTERVAL),
+							'nendtime' => &_normalize($endtime, $STARTTIME, $TIMEINTERVAL,1),
+							'descr'=>$descr,
+							'fgcolor'=>$fgcolor,
+							'bgcolor'=>$bgcolor,
+							'setup'=>$setup,
+							'duration'=>$duration
+							};
+						&_fixEntryTime(\%entries, $entries{$day+1}[$#{$entries{$day+1}}], $day);
+					} 
 				}
 			} 
 		} elsif ($options{'compatmode'}) {
 
-			&_fetchCompat($line, \%entries, $excref);
+			&_fetchCompat($line, \%entries, $excref, $setup);
 
 		}
 
@@ -424,7 +506,7 @@ sub _render {
 		$colfgcolor = $options{'todayfgcolor'} if ($options{'todayfgcolor'})&&($todayDays==$startDateDays+$day);
 		$colfgcolor = '' unless defined $colfgcolor;
 
-		$tr .= $cgi->td({-style=>"color:$colfgcolor", -bgcolor=>$colbgcolor,-valign=>"top", -align=>"center"},&_mystrftime($yy1,$mm1,$dd1));
+		$tr .= $cgi->td({-style=>(($colfgcolor ne '')?"color:$colfgcolor":''), -bgcolor=>$colbgcolor,-valign=>"top", -align=>"center"},&_mystrftime($yy1,$mm1,$dd1));
 	}
 	$tr.=$cgi->td(&_renderNav(1));
 	$text .= $cgi->Tr($tr);
@@ -476,7 +558,7 @@ sub _render {
 		}
 		###$td = $cgi->start_table({-rules=>"rows", -border=>"1",-cellpadding=>'0',-cellspacing=>'0', -tableheight=>"100%"});
 		###$td = $cgi->start_table({-bgcolor=>"#fafafa", -cellpadding=>'0',-cellspacing=>'1', -tableheight=>"100%"});
-		$td = $cgi->start_table({-bgcolor=>$colbgcolor, -cellpadding=>'0',-cellspacing=>'1', -tableheight=>"100%"});
+		$td = $cgi->start_table({-width=>'100%', -bgcolor=>$colbgcolor, -cellpadding=>'0',-cellspacing=>'1', -tableheight=>"100%"});
 
 
 		for (my $min=$starttime; $min <=$endtime; $min+=$options{'timeinterval'}) {
@@ -555,7 +637,7 @@ sub _renderNav {
 
 	my $newcgi = new CGI($cgi);
 
-	if ($ttppage eq 0) {
+	if ($ttppage == 0) {
 		$newcgi->delete('ttppage'.$ttid);
 	} else {
 		$newcgi->param(-name=>'ttppage'.$ttid,-value=>$ttppage);
@@ -567,10 +649,13 @@ sub _renderNav {
 	$href=~s/\#.*$//;
 	$href.="#ttpa$ttid";
 
+	my $title = $options{($next?'navnexttitle':'navprevtitle')};
+	$title =~ s/\%n/$options{'days'}/g;
+
 	if ($next) {
-		$nav.="&nbsp;".$cgi->a({-href=>$href,-title=>$options{'navnexttitle'}}, $options{'navnext'});
+		$nav.="&nbsp;".$cgi->a({-href=>$href,-title=>$title}, $options{'navnext'});
 	} else {	
-		$nav.="&nbsp;".$cgi->a({-href=>$href,-title=>$options{'navprevtitle'}}, $options{'navprev'});
+		$nav.="&nbsp;".$cgi->a({-href=>$href,-title=>$title}, $options{'navprev'});
 	}
 	return $nav;
 }
@@ -589,10 +674,29 @@ sub _parseInt {
 sub _renderText {
 	my ($mentry_ref, $rs, $fillRows) = @_;
 	my $tddata ="";
-	my ($mst,$met) = ($$mentry_ref{'starttime'},$$mentry_ref{'endtime'});
+	my ($mst,$met,$md) = ($$mentry_ref{'starttime'},$$mentry_ref{'endtime'},$$mentry_ref{'duration'});
 
+	my $setup = $$mentry_ref{'setup'};
+	my $topicSetupRef = $topicDefaults{$setup} if defined $setup;
+	my $timezone = $$topicSetupRef{'timezone'} if defined $topicSetupRef;
+	$timezone = 0 unless defined $timezone;
+
+	my $tz = "";
+	if (defined $TIMEZONES{$timezone}) {
+		$tz=" $timezone";
+	} else {
+		my $otz = (defined $TIMEZONES{$options{'timezone'}})?$TIMEZONES{$options{'timezone'}}:$options{'timezone'};
+		$tz=($timezone-$otz!=0)&&(abs($timezone)<12)?sprintf(" DTZ%+.1f",$timezone-$otz):'';
+	}
+
+	my $trange = ' ('
+			.&_renderTime($mst)
+			.(defined $met?'-':' ')
+			.&_renderTime((defined $met?$met:$md))
+			.$tz
+			.')';
 	my $title = ($$mentry_ref{'longdescr'}?$$mentry_ref{'longdescr'}:$$mentry_ref{'descr'});
-	$title .= ' ('.&_renderTime($mst).'-'.&_renderTime($met).')';
+	$title .= $trange;
 
 	$title=TWiki::Func::renderText($title,$web);
 	$title=~s/<\/?[^>]+>//g;
@@ -600,7 +704,8 @@ sub _renderText {
 	### $title.=" (rows=$rs, fillRows=$fillRows)"; ## DEBUG
 
 	my $text = $$mentry_ref{'descr'};
-	$text.=' ('.&_renderTime($mst).'-'.&_renderTime($met).')' if $options{'displaytime'};
+
+	$text.=$trange if $options{'displaytime'};
 	
 	my $descrlimit = $options{'descrlimit'};
 	my $nt="";
@@ -647,6 +752,7 @@ sub _renderTimeline {
 				$cgi->div({
 						-style=>'color:'.$fgcolor,
 						-title=>&_renderTime($min,'12am').' / '.&_renderTime($min,24)
+							.((defined $options{'timezone'})&&($options{'timezone'} ne '0')?' '.$options{'timezone'}:'')
 					},
 						&_renderTime($min)
 					)
@@ -658,11 +764,12 @@ sub _renderTimeline {
 }
 # =========================
 sub _normalize {
-	my ($time, $starttime, $interval) = @_;
+	my ($time, $starttime, $interval, $up) = @_;
 	if ((!defined $time)||(!defined $starttime)||(! defined $interval)) {
-		TWiki::Func::writeWarning("_normalize needs time ($time), starttime ($starttime) and interval ($interval)");
+		$time = undef;
 	} else {
-		$time = int(( $time + ($starttime % $interval ) ) / $interval)*$interval;
+		$time = int(( $time + ($starttime % $interval ) ) / $interval)*$interval if !$up;
+		$time = ceil(( $time + ($starttime % $interval) ) / $interval)*$interval if $up;
 		$time=$starttime if $time<$starttime ;
 	}
 
@@ -717,7 +824,7 @@ sub _getWholeTimeEntries {
 	foreach my $entryref ( @{$entries_arrref} )  {
 		my $stime = $$entryref{'starttime'};
 		my $etime = $$entryref{'endtime'};
-		push(@matches, $entryref) if ($stime==0)&&($etime==1440);
+		push(@matches, $entryref) if ($stime==0)&&($etime>=1439);
 	}
 	return \@matches;
 	
@@ -727,11 +834,11 @@ sub _getMatchingEntries {
 	my ($entries_arrref, $time, $interval, $starttime) = @_;
 	my (@matches);
 	foreach my $entryref ( @{$entries_arrref} ) {
-		my $stime = $$entryref{'starttime'};
-		my $etime = $$entryref{'endtime'};
+		my $stime = $$entryref{'nstarttime'};
+		my $etime = $$entryref{'nendtime'};
 
 		# ignore whole-time events:
-		next if $options{'wholetimerow'} && ($stime==0) && ($etime==1440);
+		next if $options{'wholetimerow'} && ($$entryref{'starttime'}==0) && ($$entryref{'endtime'}==1440);
 
 		push(@matches, $entryref) 
 			if (($stime >= $time) && ($stime < $time+$interval))
@@ -745,14 +852,37 @@ sub _getMatchingEntries {
 }
 # =========================
 sub _renderTime {
-	my ($hours, $minutes) = ( int($_[0]/60), ($_[0] % 60) );
-	my ($timeformat) = ( $_[1]?$_[1]:$options{'timeformat'} );
+	return undef unless defined $_[0];
+	my $time="";
+	my ($days, $hours, $minutes);
+	if ($_[0] =~ m/$duration_rx/i) {
+		if ($_[0] =~ m/d/i) {
+			($days, $hours, $minutes) = split /[\.\:dhmDHM]/, $_[0];
+		} elsif ($_[0] =~ m/h/i ) {
+			($hours, $minutes) = split /[\.:hm]/i, $_[0];
+		} elsif ($_[0] =~ m/m/i) {
+			($minutes) = split /[\.:m]/i, $_[0];
+		}
 
-	$hours-=12 if ($hours>12)&&($timeformat =~ m/^12/);
-	my $time = sprintf("%02d",$hours).':'.sprintf("%02d",$minutes);
+		$time .= $days.'d' if (defined $days)&&($days ne "")&&(int($days) != 0);
+		$time .= $hours.'h' if (defined $hours)&&($hours ne "")&&(int($hours) != 0);
+		$time .= $minutes.'m' if (defined $minutes)&&($minutes ne "")&&(int($minutes) != 0);
+		
+	} else {
+		($hours, $minutes) = ( int($_[0]/60), ($_[0] % 60) );
+		my ($timeformat) = ( $_[1]?$_[1]:$options{'timeformat'} );
+		if ($timeformat =~ m/^12/) {
+			$hours-=12 if ($hours>12);
+			$hours=12 if ($hours==0);
+		}
+		$time = sprintf("%02d",$hours).':'.sprintf("%02d",$minutes);
+		my $rh = int($_[0]/60);
+		$time.=(($rh>11)&&($rh<24))?"p$1m$2":"a$1m$2" if ($timeformat =~ m/[ap](\.?)m(\.?)$/);
+		$time.=(($rh>11)&&($rh<24))?"P$1M$2":"A$1M$2" if ($timeformat =~ m/[AP](\.?)M(\.?)$/);
+	}
+
+
 	
-	$time.=(int($_[0]/60)>12)?"p$1m$2":"a$1m$2" if ($timeformat =~ m/[ap](\.?)m(\.?)$/);
-	$time.=(int($_[0]/60)>12)?"P$1M$2":"A$1M$2" if ($timeformat =~ m/[AP](\.?)M(\.?)$/);
 	
 	return $time;
 }
@@ -865,26 +995,54 @@ sub _mystrftime($$$) {
         return $text;
 }
 
+# =========================
+sub _handleTopicSetup {
+	my ($attributes, $web, $topic, $timezone) = @_;
+        my %params = &TWiki::Func::extractParameters($attributes);
 
+	$topicDefaults{"$web.$topic"} = \%params;
+	${$topicDefaults{"$web.$topic"}}{'timezone'}=$timezone if defined $timezone;
+
+	return "";
+}
+
+# =========================
+sub _processTopicSetup {
+	### my ($text, $web, $topic) = @_;
+	my $web = $_[1];
+	my $topic = $_[2];
+	my $timezone = $_[3];
+
+	$topicDefaults{"$web.$topic"} = { 'timezone' => $timezone } if (defined $timezone) ;
+
+	if (($_[0] =~s /%TTTOPICSETUP{(.*?)}%/&_handleTopicSetup($1, $web, $topic, $timezone)/esg)||(defined $timezone)) {
+		$_[0] =~ s/^(\s+\*.+)$/$1 \%TTSETUP{"$web.$topic"}\%/mg;
+	}
+	
+	return $_[0];
+}
 
 ### dro: following code is derived from TWiki:Plugins.CalendarPlugin:
 # =========================
 sub _getTopicText() {
 
-        my ($web, $topic);
+        my ($web, $topic, $timezone);
 
         my $topics = $options{topic};
         my @topics = split /,\s*/, $topics;
 
         my $text = "";
         foreach my $topicpair (@topics) {
-                if ($topicpair =~ m/([^\.]+)\.([^\.]+)/) {
-                        ($web, $topic) = ($1, $2);
-                } else {
-                        $web = $theWeb;
-                        $topic = $topicpair;
-                }
 
+		($web, $topic) = split /\./, $topicpair, 2;
+		if (!defined $topic) {
+			$topic = $web;
+			$web = $theWeb;
+		}
+		if ($topic =~ s/:(.*)$//) {
+			$timezone = $1;
+		}
+		
                 # ignore processed topics;
                 grep( /^\Q$web.$topic\E$/, @processedTopics ) && next;
 
@@ -892,9 +1050,10 @@ sub _getTopicText() {
 
                 if (($topic eq $theTopic) && ($web eq $theWeb)) {
                         # use current text so that preview can show unsaved events
-                        $text .= $refText;
+                        $text .= &_processTopicSetup($refText, $web, $topic, $timezone);
                 } else {
-                        $text .= &_readTopicText($web, $topic);
+			my $nt = &_readTopicText($web, $topic);
+			$text .= &_processTopicSetup($nt, $web, $topic, $timezone);
                 }
         }
 
@@ -960,7 +1119,7 @@ sub _createUnknownParamsMessage {
 }
 # =========================
 sub _fetchCompat {
-	my ($line, $entries_ref, $excref) = @_;
+	my ($line, $entries_ref, $excref, $setup) = @_;
 
 	my ($dd, $mm, $yy) = &_getStartDate();
 	my ($eyy,$emm,$edd) = Add_Delta_Days($yy,$mm,$dd, $options{'days'});
@@ -972,25 +1131,30 @@ sub _fetchCompat {
 	my $TIMEINTERVAL = $options{'timeinterval'};
 
 	my ($descr, $tt);
-	my ($starttime,$endtime,$nstarttime,$nendtime,$fgcolor,$bgcolor);
+	my ($starttime,$endtime,$nstarttime,$nendtime,$fgcolor,$bgcolor,$duration);
 	my ($strdate);
 
-	if ($line=~m/%TTCM{(.*?)}/) {
-		$line =~ s/%TTCM{(.*?)}%//;
-		$tt=$1;
-		($starttime,$endtime,$fgcolor,$bgcolor) = _getTTCMValues($tt);
+	$starttime=undef, $endtime=undef;
+	$fgcolor=undef; $bgcolor=undef;
+
+	if ($line=~s/%TTCM{(.*?)}%//) {
+		($starttime,$endtime,$duration,$fgcolor,$bgcolor) = _getTTCMValues($1);
 	} elsif ($line =~ s/($timerangestrict_rx(,\S+)*)//) {
-		($starttime,$endtime,$fgcolor,$bgcolor) = _getTTCMValues($1);
-	} else {
-		$starttime=0; $endtime=24*60; $fgcolor=undef; $bgcolor=undef;
+		($starttime,$endtime,$duration,$fgcolor,$bgcolor) = _getTTCMValues($1);
+	} 
+	if (defined $setup) {
+		my $topicSetupRef = $topicDefaults{$setup};
+		if (defined $topicSetupRef) {
+			$starttime=$$topicSetupRef{'defaultstarttime'} if defined $$topicSetupRef{'defaultstarttime'};
+			$endtime=$$topicSetupRef{'defaultendtime'} if defined $$topicSetupRef{'defaultendtime'};
+			$fgcolor=$$topicSetupRef{'eventfgcolor'} if defined $$topicSetupRef{'eventfgcolor'};
+			$bgcolor=$$topicSetupRef{'eventbgcolor'} if defined $$topicSetupRef{'eventbgcolor'};
+		}
 	}
-	if ((defined $starttime)&&(defined $endtime)) {
-		($nstarttime, $nendtime) = ( &_normalize($starttime, $STARTTIME, $TIMEINTERVAL),
-					     &_normalize($endtime, $STARTTIME, $TIMEINTERVAL) );
-	} else {
-		$nstarttime=undef;
-		$nendtime=undef;
-	}
+	$starttime=0 unless defined $starttime; 
+	$endtime=1440 unless defined $endtime || defined $duration; 
+
+	($nstarttime, $nendtime) = ( &_normalize($starttime, $STARTTIME, $TIMEINTERVAL), &_normalize($endtime, $STARTTIME, $TIMEINTERVAL,1) );
 
 	if (($line =~ m/^$daterange_rx/) || ($line =~ m/^$date_rx/)
 			|| ($line =~ m/^$monthyearrange_rx/)  || ($line =~ m/^$monthyear_rx/)) {
@@ -1023,8 +1187,11 @@ sub _fetchCompat {
 						'nstarttime' => $nstarttime,
 						'nendtime' => $nendtime,
 						'fgcolor' => $fgcolor,
-						'bgcolor' => $bgcolor
+						'bgcolor' => $bgcolor,
+						'setup'=>$setup,
+						'duration'=>$duration
 					};
+				&_fixEntryTime($entries_ref, $$entries_ref{$day+1}[$#{$$entries_ref{$day+1}}], $day);
 			}
 		}
 	} elsif ($line =~ m/^A\s+$date_rx/) {
@@ -1050,8 +1217,11 @@ sub _fetchCompat {
                                                 'nstarttime' => $nstarttime,
                                                 'nendtime' => $nendtime,
                                                 'fgcolor' => $fgcolor,
-                                                'bgcolor' => $bgcolor
+                                                'bgcolor' => $bgcolor,
+						'setup'=>$setup,
+						'duration'=>$duration
                                         };
+				&_fixEntryTime($entries_ref, $$entries_ref{$day+1}[$#{$$entries_ref{$day+1}}], $day);
 			}
 
 		}
@@ -1076,8 +1246,11 @@ sub _fetchCompat {
                                                 'nstarttime' => $nstarttime,
                                                 'nendtime' => $nendtime,
                                                 'fgcolor' => $fgcolor,
-                                                'bgcolor' => $bgcolor
+                                                'bgcolor' => $bgcolor,
+						'setup'=>$setup,
+						'duration'=>$duration
                                         };
+				&_fixEntryTime($entries_ref, $$entries_ref{$day+1}[$#{$$entries_ref{$day+1}}], $day);
 			}
 		}
 	} elsif ($line =~ m/^[0-9L](\.|th)?\s+($dow_rx)(\s+($months_rx))?/) {
@@ -1120,8 +1293,11 @@ sub _fetchCompat {
 							'nstarttime' => $nstarttime,
 							'nendtime' => $nendtime,
 							'fgcolor' => $fgcolor,
-							'bgcolor' => $bgcolor
+							'bgcolor' => $bgcolor,
+							'setup'=>$setup,
+							'duration'=>$duration
 						};
+					&_fixEntryTime($entries_ref, $$entries_ref{$day+1}[$#{$$entries_ref{$day+1}}], $day);
                                 } # if
                         } # if
 		} # for 
@@ -1142,8 +1318,11 @@ sub _fetchCompat {
 						'nstarttime' => $nstarttime,
 						'nendtime' => $nendtime,
 						'fgcolor' => $fgcolor,
-						'bgcolor' => $bgcolor
+						'bgcolor' => $bgcolor,
+						'setup'=>$setup,
+						'duration'=>$duration
 					};
+				&_fixEntryTime($entries_ref, $$entries_ref{$day+1}[$#{$$entries_ref{$day+1}}], $day);
 			} # if
 		} # for
 	} elsif ($line =~ m/^E\s+($dow_rx)/) {
@@ -1194,8 +1373,11 @@ sub _fetchCompat {
                                                 'nstarttime' => $nstarttime,
                                                 'nendtime' => $nendtime,
                                                 'fgcolor' => $fgcolor,
-                                                'bgcolor' => $bgcolor
+                                                'bgcolor' => $bgcolor,
+						'setup'=>$setup,
+						'duration'=>$duration
                                         };
+				&_fixEntryTime($entries_ref, $$entries_ref{$day+1}[$#{$$entries_ref{$day+1}}], $day);
                         }
 
 		}
@@ -1229,9 +1411,11 @@ sub _fetchCompat {
                 return if (defined $start) && ($start > $endDays);
                 return if (defined $end) && ($end < $startDays);
 
-                ($yy1, $mm1, $dd1) = Add_Delta_Days($yy1, $mm1, $dd1, 
-                        $n1 * int( (abs($startDays-$start)/$n1) + ((abs($startDays-$start) % $n1)!=0?1:0) ) );
-                $start = Date_to_Days($yy1, $mm1, $dd1);
+		if ($start < $startDays) {
+			($yy1, $mm1, $dd1) = Add_Delta_Days($yy1, $mm1, $dd1, 
+				$n1 * int( (abs($startDays-$start)/$n1) + ((abs($startDays-$start) % $n1)!=0?1:0) ) );
+			$start = Date_to_Days($yy1, $mm1, $dd1);
+		}
 
                 # start at first occurence and increment by repeating count ($n1)
                 for (my $day=(abs($startDays-$start) % $n1); (($day < $options{'days'})&&((!defined $end) || ( ($startDays+$day) <= $end)) ); $day+=$n1) {
@@ -1246,8 +1430,11 @@ sub _fetchCompat {
                                                 'nstarttime' => $nstarttime,
                                                 'nendtime' => $nendtime,
                                                 'fgcolor' => $fgcolor,
-                                                'bgcolor' => $bgcolor
+                                                'bgcolor' => $bgcolor,
+						'setup'=>$setup,
+						'duration'=>$duration
                                         };
+				&_fixEntryTime($entries_ref, $$entries_ref{$day+1}[$#{$$entries_ref{$day+1}}], $day);
 
                         }
                 } # for
@@ -1312,6 +1499,151 @@ sub _fetchExceptions {
 
         return \@exceptions;
 }
+# =========================
+sub _fixTZDate {
+	my ($day, $time, $timezone) = @_;
+	my ($dd, $mm, $yy) = &_getStartDate();
 
+	($yy,$mm,$dd)= Add_Delta_Days($yy,$mm,$dd, $day);
+
+	my $otz = (defined $TIMEZONES{$options{'timezone'}})?$TIMEZONES{$options{'timezone'}}:$options{'timezone'};
+
+	my $deltatime = 60 * ($timezone-$otz); # minutes
+
+	my $fixDays = 0;
+	while ($time>=1440) {
+		$time-=1440;
+		($yy,$mm,$dd) = Add_Delta_Days($yy,$mm,$dd, 1);
+		$fixDays++;
+	}
+	my ($HH,$MM,$SS) = (int($time/60), ($time % 60), 0);
+
+	my ($yy1,$mm1,$dd1,$HH1,$MM1,$SS1) = Add_Delta_YMDHMS($yy,$mm,$dd,$HH,$MM,$SS, 0,0,0, 0,$deltatime, 0); 
+	
+	return ($day+Delta_Days($yy,$mm,$dd,$yy1,$mm1,$dd1)+$fixDays, ($HH1*60)+$MM1);
+	
+}
+# =========================
+sub _calcDuration {
+	my ($day, $starttime, $duration) = @_;
+
+	my ($dd,$mm,$yy) = &_getStartDate();
+	($yy,$mm,$dd) = Add_Delta_Days($yy,$mm,$dd,$day);
+
+	if ($duration =~ m/d/i) {
+		my ($ddays,$dhours,$dminutes) = split /[\.:dhm]/i, $duration;
+		$duration=($ddays*1440);
+		$duration+=$dhours*60 if defined $dhours and ($dhours ne "");
+		$duration+=$dminutes if defined $dminutes and ($dminutes ne "");
+	} elsif ($duration =~ m/h/i) {
+		my ($dhours,$dminutes) = split /[\.:hm]/i, $duration;
+		$duration=$dhours*60;
+		$duration+=$dminutes if defined $dminutes and ($dminutes ne "");
+	} elsif ($duration =~ m/m/i) {
+		$duration=~s/m$//i;
+		($duration)  = split /[\.:]/i, $duration;
+	}
+
+	my ($HH,$MM,$SS) = (int($starttime/60), ($starttime % 60), 0);
+	my ($yy1,$mm1,$dd1,$HH1,$MM1,$SS1) = Add_Delta_YMDHMS($yy,$mm,$dd,$HH,$MM,$SS, 0,0,0, 0,$duration, 0);
+
+	return ($day + Delta_Days($yy,$mm,$dd,$yy1,$mm1,$dd1), ($HH1*60)+$MM1);
+	
+}
+# =========================
+sub _duplicateDaysSpanningEntry
+{
+	my ($entry_ref, $entries_ref, $startday) = @_;
+	my ($starttime, $endtime, $duration) = ($$entry_ref{'nstarttime'}, $$entry_ref{'nendtime'}, $$entry_ref{'duration'});
+
+	my $STARTTIME = &_getTime($options{'starttime'});
+	my $TIMEINTERVAL = $options{'timeinterval'};
+	my ($endday);
+
+	if (defined $duration) {
+		($endday, $endtime) = &_calcDuration($startday, $starttime, $duration);
+	} else {
+		return if ($starttime<=$endtime);
+		$endday = $startday+1;
+	}
+
+	## fix nendtime
+	$$entry_ref{'nendtime'} = &_normalize($endtime,	$STARTTIME, $TIMEINTERVAL,1);
+
+	return if ($startday==$endday);  # nothing to duplicate
+
+	my $wrapped = 0;
+	for (my $d=$startday; ($d<=$endday)&&(($d<$options{'days'})||(!$options{'compatmode'})); $d++) {
+		if ($d==$options{'days'}) { ## wrap arround if compatmode==0 (event goes above days limit)
+			$endday-=7; $d=0; $wrapped=1;
+		}
+		if (($d==$startday)&&(!$wrapped)) {
+			$$entry_ref{'nendtime'}=&_normalize(1440, $STARTTIME, $TIMEINTERVAL,1);
+		} else {
+			my %newentry = ( );
+
+			foreach my $key (keys %{$entry_ref}) {
+				$newentry{$key} = $$entry_ref{$key};
+			}
+
+			$newentry{'nstarttime'} = &_normalize(0, $STARTTIME, $TIMEINTERVAL);
+			$newentry{'nendtime'} = &_normalize(($d<$endday?1440:$endtime),$STARTTIME,$TIMEINTERVAL,1);
+			$newentry{'fixed'} = 1;
+			push @{$$entries_ref{$d+1}}, \%newentry;
+		}
+
+	}
+	
+}
+
+# =========================
+sub _fixEntryTime
+{
+	my ($entries_ref, $entry_ref, $day) = @_;
+
+	my $STARTTIME = &_getTime($options{'starttime'});
+	my $TIMEINTERVAL = $options{'timeinterval'};
+	my $setup = $$entry_ref{'setup'};
+	my ($starttime, $endtime, $duration) = ($$entry_ref{'nstarttime'}, $$entry_ref{'nendtime'}, $$entry_ref{'duration'});
+
+	my ($topicSetupRef, $timezone);
+
+	$topicSetupRef = $topicDefaults{$setup} if defined $setup;
+	$timezone = $$topicSetupRef{'timezone'} if defined $topicSetupRef;
+	$timezone = 0 unless defined $timezone;
+	$timezone = $TIMEZONES{$timezone} if (defined $timezone)&&(defined $TIMEZONES{$timezone});
+
+	my $otz = (defined $TIMEZONES{$options{'timezone'}})?$TIMEZONES{$options{'timezone'}}:$options{'timezone'};
+
+	if ((($timezone-$otz)!=0)&&(abs($timezone)<=12)) {
+		my ($nsday, $nstime) = &_fixTZDate($day, $starttime, $timezone);	
+		my ($neday, $netime) = (defined $duration)? &_calcDuration($nsday, $nstime, $duration) 
+							  : &_fixTZDate(($starttime<$endtime)?$day:$day+1, $endtime, $timezone);
+
+		$neday=$nsday if ($neday==$nsday+1)&&($netime==0);
+
+		$$entry_ref{'nstarttime'}=&_normalize($nstime,$STARTTIME,$TIMEINTERVAL);
+		$$entry_ref{'nendtime'}=&_normalize($netime,$STARTTIME,$TIMEINTERVAL,1);
+		$$entry_ref{'fixed'}=1;
+
+		## fix full-time events:
+		if (($$entry_ref{'starttime'}==0)&&($$entry_ref{'endtime'}>=1439)) {
+			$$entry_ref{'starttime'}=$$entry_ref{'nstarttime'};
+			$$entry_ref{'endtime'}=undef;
+			$$entry_ref{'duration'}='24h';
+		}
+
+		if ($nsday!=$day) { ## move entry
+			pop @{$$entries_ref{$day+1}};
+			push @{$$entries_ref{$nsday+1}}, $entry_ref if ($nsday>=0)&&($nsday<$options{'days'});
+		}
+
+		$day=$nsday;
+		
+	}
+
+	&_duplicateDaysSpanningEntry($entry_ref, $entries_ref, $day);
+
+}
 
 1;

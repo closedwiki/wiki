@@ -84,7 +84,7 @@ See also: RenderRss, WebSyndication
 *~~       <author>$n
 *~~         <name>$expand(BlogAuthor or Name)</name>$n
 *~~         $percntIFDEFINEDTHEN{\"$expand(Url)\"}$percnt
-*~~           <uri>$expand(Url)</uri>$n
+*~~           <uri>$test</uri>$n
 *~~         $percntELSEDEFINED$percnt
 *~~           <uri>%SCRIPTURL{"view"}%%MAINWEB%/$expand(BlogAuthor)</uri>$n
 *~~         $percntFIDEFINED$percnt

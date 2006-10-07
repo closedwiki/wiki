@@ -16,9 +16,9 @@ if the linked site has a nice rss feed.
 %~~ DBCALL{"RenderDocNavigation" 
 ~~~   NAME="%NAME%"
 ~~~   WHERE="TopicType=~'\bBlogLink\b'
-*~~     %IFDEFINED{"%URLPARAM{"cat"}%" then=" AND SubjectCategory=~'\b%URLPARAM{"cat"}%\b'"}%"
+*~~     %IFDEFINED{"%URLPARAM{"cat"}%" then=" AND SubjectCategory=~'\b$test\b'"}%"
 ~~~   ORDER="Name"
-~~~   %IFDEFINED{"%URLPARAM{"cat"}%" then="PARAMS=\"cat=%URLPARAM{"cat"}%\""}%
+~~~   %IFDEFINED{"%URLPARAM{"cat"}%" then="PARAMS=\"cat=$test\""}%
 ~~~ }%
 <noautolink>
 %~~ DBQUERY{topic="%NAME%"

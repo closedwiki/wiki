@@ -32,28 +32,30 @@ Copyright text to be added to the syndication feeds of this blog:
 
 See also the TopicFunction RenderLicense to display a content license icon in the sidebar.
 
----+++ Search 
+---+++ Search
 Flag to include/exclude this web from TWiki's SEARCH
-   * Set NOSEARCHALL = 
+   * Set NOSEARCHALL =
 
 <nop>NatSearch customization for <nop>BlogUp (expert settings):
    * Set NATSEARCHINCLUDEWEB = _BlogPlugin
-   * Set NATSEARCHEXCLUDEWEB = 
+   * Set NATSEARCHEXCLUDEWEB =
    * Set NATSEARCHINCLUDETOPIC = (BlogEntry|BlogComment|BlogPage)\d+.*
-   * Set NATSEASRCHEXCLUDETOPIC = 
+   * Set NATSEASRCHEXCLUDETOPIC =
+
+Note this is only relevant if you are using TWiki:Plugins.NatSkin
 
 Flag to enable/disable automatic linking of %TWIKIWEB%.WikiWords
-   * Set NOAUTOLINK = 
-   
+   * Set NOAUTOLINK =
+
 ---+++ Technorati
 Code of your blog you get if you claim this blog at technorati. If set
 technorati will crawl your blog periodically and/or when you ping technorati.
 In addition you will get a sidebar section linking to your technorati profile
-and tools.  Technorati will visit your blog to 
-   * Set TECHNORATICODE = 
+and tools.  Technorati will visit your blog to
+   * Set TECHNORATICODE =
 
 ---+++ Google
-Client code if you apply for Google Adsense. If set you switch on google ads 
+Client code if you apply for Google Adsense. If set you switch on google ads
 in your blog at "strategic" points.
    * Set GOOGLEADSENSECODE =
 
@@ -78,21 +80,21 @@ Default refresh rate for BlogLinks with rss feeds;
    * Set RSSREFRESH = 1440
 
 Syndication variables (expert settings):
-   * Set WEBRSS = <a class="natFeedIcon" href="%SCRIPTURL{"view"}%/%WEB%/WebRss" title="RSS Feed for the Entries on this Site">RSS</a>
-   * Set WEBRSSTEASER = <a class="natFeedIcon" href="%SCRIPTURL{"view"}%/%WEB%/WebRssTeaser" title="RSS Feed for the Teaser on this Site">RSS TEASER</a>
-   * Set WEBRSSCOMMENTS = <a class="natFeedIcon" href="%SCRIPTURL{"view"}%/%WEB%/WebRssComments" title="RSS Feed for the Comments on this Site">RSS COMMENTS</a>
-   * Set WEBRSSCOMBINED = <a class="natFeedIcon" href="%SCRIPTURL{"view"}%/%WEB%/WebRssCombined" title="RSS Feed for Site">RSS COMBINED</a>
-   * Set WEBATOM = <a class="natFeedIcon" href="%SCRIPTURL{"view"}%/%WEB%/WebAtom" title="ATOM Feed for the Entries on this Site">ATOM</a>
-   * Set WEBATOMTEASER = <a class="natFeedIcon" href="%SCRIPTURL{"view"}%/%WEB%/WebAtomTeaser" title="ATOM Feed for the Teasers on this Site">ATOM TEASER</a>
-   * Set WEBATOMCOMMENTS = <a class="natFeedIcon" href="%SCRIPTURL{"view"}%/%WEB%/WebAtomComments" title="ATOM Feed for the Comments on this Site">ATOM COMMENTS</a>
-   * Set WEBATOMCOMBINED = <a class="natFeedIcon" href="%SCRIPTURL{"view"}%/%WEB%/WebAtomCombined" title="ATOM Feed for this Site">ATOM COMBINED</a>
+   * Set WEBRSS = <a class="natFeedIcon" href="%SCRIPTURLPATH{"view"}%/%WEB%/WebRss" title="RSS Feed for the Entries on this Site">RSS</a>
+   * Set WEBRSSTEASER = <a class="natFeedIcon" href="%SCRIPTURLPATH{"view"}%/%WEB%/WebRssTeaser" title="RSS Feed for the Teaser on this Site">RSS TEASER</a>
+   * Set WEBRSSCOMMENTS = <a class="natFeedIcon" href="%SCRIPTURLPATH{"view"}%/%WEB%/WebRssComments" title="RSS Feed for the Comments on this Site">RSS COMMENTS</a>
+   * Set WEBRSSCOMBINED = <a class="natFeedIcon" href="%SCRIPTURLPATH{"view"}%/%WEB%/WebRssCombined" title="RSS Feed for Site">RSS COMBINED</a>
+   * Set WEBATOM = <a class="natFeedIcon" href="%SCRIPTURLPATH{"view"}%/%WEB%/WebAtom" title="ATOM Feed for the Entries on this Site">ATOM</a>
+   * Set WEBATOMTEASER = <a class="natFeedIcon" href="%SCRIPTURLPATH{"view"}%/%WEB%/WebAtomTeaser" title="ATOM Feed for the Teasers on this Site">ATOM TEASER</a>
+   * Set WEBATOMCOMMENTS = <a class="natFeedIcon" href="%SCRIPTURLPATH{"view"}%/%WEB%/WebAtomComments" title="ATOM Feed for the Comments on this Site">ATOM COMMENTS</a>
+   * Set WEBATOMCOMBINED = <a class="natFeedIcon" href="%SCRIPTURLPATH{"view"}%/%WEB%/WebAtomCombined" title="ATOM Feed for this Site">ATOM COMBINED</a>
    * Set WEBSYNDICATION = [[%WEB%.WebSyndication][Syndicate]] this site %WEBRSS%%WEBRSSCOMMENTS%%WEBATOM%%WEBATOMCOMMENTS%
 
 
 ---+++ Last.fm
-Nickname you registered at last.fm. If set the 10 most rescent tracks that 
+Nickname you registered at last.fm. If set the 10 most rescent tracks that
 you listened to (and submitted to last.fm) will be displayed in the sidebar.
-   * Set LASTFMNICK = 
+   * Set LASTFMNICK =
 
 
 ---+++ Sidebar
@@ -112,12 +114,12 @@ Chose the skin to be used for this web:
    * Set STYLESIDEBAR = right
    * Set STYLEBORDER= thin
    * Set STYLEBUTTONS = on
-   * Set STYLEVARIATION = 
+   * Set STYLEVARIATION =
    * Set STYLESEARCHBOX = pos2
 
 ---+++ Access rights
-   * Set #DENYWEBVIEW = 
-   * Set #ALLOWWEBVIEW = 
+   * Set #DENYWEBVIEW =
+   * Set #ALLOWWEBVIEW =
    * Set DENYWEBCHANGE = %MAINWEB%.TWikiGuest
    * Set #ALLOWWEBCHANGE = %MAINWEB%.BlogAuthorGroup
    * Set DENYWEBRENAME = %MAINWEB%.TWikiGuest
@@ -129,22 +131,27 @@ Chose the skin to be used for this web:
 <nop>DBCachePlugin settings registering the <nop>BlogPlugin's <nop>WebDB
 implementation for this web (don't change):
    * Set WEBDB = TWiki::Plugins::BlogPlugin::WebDB
-   
+
 Initialization of WebButtons variables (don't change):
    * Set WEBBUTTONSCLASS_HOME =
    * Set WEBBUTTONSCLASS_NEWS =
    * Set WEBBUTTONSCLASS_ARCHIVE =
    * Set WEBBUTTONSCLASS_ABOUT =
-   
+
 Definition of TWikiForms (expert settings):
    * Set WEBFORMS = BlogEntryForm, TopicForm, BlogCommentForm, BlogLinkForm, BlogPageForm, SubjectCategoryForm, BlogAuthorForm
 
-TopicFunction to generate html page header information:
+TopicFunctions to generate html page header information:
 <verbatim>
    * Set HTTP_EQUIV_ON_VIEW = %DBCALL{"RenderHttpEquivs"}%
+   * Set PAGETITLE = $percntDBCALL{\"RenderPageTitle\"}$percnt
+   * Set DEFAULT_METAKEYWORDS = TWiki, Blogging, BlogPlugin, BlogUp, BlogUpRing
+   * Set METAKEYWORDS = %DEFAULT_METAKEYWORDS%
+   * #Set METAAUTHOR =
+   * #Set METADESCRIPTION =
 </verbatim>
 
-   * Set FINALPREFERENCES = ATTACHFILESIZELIMIT, WIKIWEBMASTER, WEBCOPYRIGHT, WEBTOPICLIST, DENYWEBVIEW, ALLOWWEBVIEW, DENYWEBCHANGE, ALLOWWEBCHANGE, DENYWEBRENAME, ALLOWWEBRENAME
+   * Set FINALPREFERENCES = ATTACHFILESIZELIMIT, WIKIWEBMASTER, WEBCOPYRIGHT, WEBTOPICLIST, DENYWEBVIEW, ALLOWWEBVIEW, DENYWEBCHANGE, ALLOWWEBCHANGE, DENYWEBRENAME, ALLOWWEBRENAME, WEBDB
 
 __Related Topics__:
    * [[%LOCALSITEPREFS%]]

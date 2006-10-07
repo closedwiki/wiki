@@ -1,0 +1,11 @@
+%META:TOPICINFO{author="TWikiContributor" date="1152047755" format="1.2" version="$Rev$"}%
+%META:TOPICPARENT{name="TWikiPreferences"}%
+#VarUSERCOLORSURL
+---+++ USERCOLORSURL -- location of custom colors style sheet
+
+
+Location of the custom colors style sheet, for overriding colors in a skin.
+   * Usage: Evaluated by TWiki skins/templates and not intended to be expanded in any topic.
+   * Type: Preference variable defined in [[%TWIKIWEB%.%WIKIPREFSTOPIC%]].  Can be customized for a TWiki site in [[%LOCALSITEPREFS%]], and for each web in their %WEBPREFSTOPIC% topics.
+   * Current value: USERCOLORSURL = %USERCOLORSURL%
+

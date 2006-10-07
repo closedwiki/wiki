@@ -5,4 +5,5 @@ lib/TWiki/Contrib/PublishContrib/file.pm
 lib/TWiki/Contrib/PublishContrib/zip.pm
 lib/TWiki/Contrib/PublishContrib/tgz.pm
 lib/TWiki/Contrib/PublishContrib/pdf.pm
+lib/TWiki/Contrib/PublishContrib/ftp.pm
 bin/publish

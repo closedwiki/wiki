@@ -23,16 +23,18 @@
 ~~~   format="$count Comments"
 ~~~   footer="</h2>$n"
 ~~~ }%
-<div class="blogEntryFeed">
+~~~ <div class="blogEntryFeed">
 ~~~  <a class="natFeedIcon blogFeedIcon" 
 ~~~     title="RSS Feed for the Comments of this Entry"
-~~~     href="%SCRIPTURL{"view"}%/%BASEWEB%/WebRssComments?name=%NAME%">RSS</a>
+~~~     href="%SCRIPTURLPATH{"view"}%/%BASEWEB%/WebRssComments?name=%NAME%">RSS</a>
 *~~  <a class="natFeedIcon blogFeedIcon" 
 ~~~     title="ATOM Feed for the Comments of this Entry"
-~~~     href="%SCRIPTURL{"view"}%/%BASEWEB%/WebAtomComments?name=%NAME%">ATOM</a>
-</div>
+~~~     href="%SCRIPTURLPATH{"view"}%/%BASEWEB%/WebAtomComments?name=%NAME%">ATOM</a>
+~~~ </div>
+~~~ 
 %~~ DBQUERY{"TopicType='BlogComment' AND BlogRef='%NAME%'"
 ~~~        order="createdate"
+~~~        separator=" "
 ~~~        format="<!-- $percntCALC{\"$dollarSETM(commentCounter, +1)\"}$percnt -->
 ~~~                <div class=\"blogComment
 ~~~                $percntCALC{\"$dollarIF(
@@ -51,13 +53,12 @@
 ~~~            }$percnt};
 ~~~           </style>"
 ~~~ }%
-~~~
-<a name="bottomComment"></a>
-<div class="blogScroll">
+~~~ <a name="bottomComment"></a>
+~~~ <div class="blogScroll">
 ~~~ <a href="#topComment" title="scroll up">&uarr;</a>
 ~~~ </div>
-</div>
-*~~ 
+~~~ </div> 
+*~~
 %STOPINCLUDE%
 </verbatim>
 

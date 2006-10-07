@@ -41,21 +41,32 @@ sub new {
 ###########
 
 # let subclasses override if they want
-sub formatLevel { return $_[1] + 1 ;} # humans start counting at 1
+sub formatLevel { return $_[1];} # humans start counting at 1
 
 # let subclasses override if they want
 sub formatCount { return $_[1] ;}
 
 sub formatNode {
 	my ($this, $node, $count, $level) = @_;	
+  
+   #SL: do not render at level 0 when using "levelprefix" 
+   if ($level == 0 && $this->data("levelprefix"))
+      {
+      return "";
+      }
+
 	my $res = $this->data("format");
 
-	return $node->name() unless ($res);
+	my $nodeLinkName = '[[' . $node->name() . ']]';
+	return $nodeLinkName unless ($res);
 		
 	# special substituions
 
-	$res =~ s/\$topic/$node->name()/geo;
-	$res =~ s/\$spacetopic/&TWiki::Plugins::TreePlugin::FormatHelper::spaceTopic($node->name())/ge;
+        # Make linkable non-wiki-word names
+ 	my $spaceTopic = &TWiki::Plugins::TreePlugin::FormatHelper::spaceTopic($node->name()) ;
+ 	$res =~ s/\$topic/$node->name()/geo;
+ 	$res =~ s/\$spacetopic/$spaceTopic/ge;
+
 	$res =~ s/\$outnum/$this->formatOutNum($node)/geo;
 	$res =~ s/\$count/$this->formatCount($count)/geo;
 	$res =~ s/\$level/$this->formatLevel($level)/geo;
@@ -70,12 +81,24 @@ sub formatNode {
 		$res, $this, qw(url));
 	
 	# only do this if we are in full substituiton mode
-	if ( $this->data("fullSubs") ) {
+	if ( defined($this->data("fullSubs")) && $this->data("fullSubs") ) {
 		$res = &TWiki::Plugins::TreePlugin::FormatHelper::loopReplaceRefData(
 			$res, $node, qw(text summary));
 			
 		# some meta substitutions go here
-	}	
+	}
+
+   #SL: levelprefix allows rendering of bullet list using TWiki syntax thus enabling combination with TreeBrowserPlugin
+   if (defined($this->data("levelprefix")))
+      {
+      my $i=$level;
+      while ($i>0)
+         {
+         $res=$this->data("levelprefix").$res; 
+         $i--;
+         } 
+      }
+	
 	return $res;
 }
 

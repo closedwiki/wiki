@@ -1,6 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
-
-
+%META:TOPICINFO{author="TWikiContributor" date="1152856328" format="1.0" version="$Rev$"}%
 ---+!! Interwiki Plugin
 
 The <nop>%TOPIC% links ==ExternalSite:Page== text to external sites based on aliases defined in the %TWIKIWEB%.InterWikis topic. This plugin is inspired by <nop>UseMod Wiki's inter-wiki links, http://www.usemod.com/cgi-bin/wiki.pl?InterWiki.
@@ -12,6 +10,9 @@ The <nop>%TOPIC% links ==ExternalSite:Page== text to external sites based on ali
 	* Enter ==ExternalSite:Page== to create a link that points to the ==Page== on the ==ExternalSite== server.
 	* All ==ExternalSite== aliases are defined in the %TWIKIWEB%.InterWikis topic.
 	* Add and edit aliases in %TWIKIWEB%.InterWikis.
+	* Each entry must be of format: <br /> ==| External site alias | URL | Tooltip help text |==.
+	* Site aliases must start with an upper case letter and may contain alphanumeric letters.
+	* The URL and Tooltip Text may contain optional ==$page== variables; the variable gets expanded to the page name.
 	* %H% For TWiki sites, both the *web* and the *topic* have to be specified: ==<nop>TWikisite:Webname/<nop>SomePage==
 		* TWiki:Plugins/InterwikiPlugin or TWiki:Plugins.InterwikiPlugin
 
@@ -66,5 +67,3 @@ a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, for example, =
 |  Feedback: | TWiki:Plugins/%TOPIC%Dev (TWiki:Plugins/%TOPIC%Dev) |
 
 __Related Topics:__ %TWIKIWEB%.InterWikis, %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
-
-

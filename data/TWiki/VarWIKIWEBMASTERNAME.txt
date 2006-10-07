@@ -1,0 +1,14 @@
+%META:TOPICINFO{author="TWikiContributor" date="1152047756" format="1.2" version="$Rev$"}%
+%META:TOPICPARENT{name="TWikiPreferences"}%
+#VarWIKIWEBMASTERNAME
+---+++ WIKIWEBMASTERNAME -- name of %WIKITOOLNAME%'s webmaster
+
+%STARTINCLUDE%
+<!-- intentionally nothing to be included -->
+%STOPINCLUDE%
+TWiki administrator's name.  Will be used for sending mails,
+so it is recommended to change the distribution default during
+installation by providing a correct value in [[%LOCALSITEPREFS%]].
+
+   * Type: Site preference variable defined in [[%TWIKIWEB%.%WIKIPREFSTOPIC%]].  Can be customized for a TWiki site in [[%LOCALSITEPREFS%]].
+   * Current value: WIKIWEBMASTERNAME = %WIKIWEBMASTERNAME%

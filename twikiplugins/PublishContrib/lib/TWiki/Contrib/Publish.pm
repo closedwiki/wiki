@@ -80,6 +80,12 @@ sub publish {
     $session->{webName} = $web;
 
     $TWiki::Plugins::SESSION = $session;
+    
+    #don't add extra markup for topics we're not linking too
+    #NEWTOPICBGCOLOR, NEWTOPICFONTCOLOR NEWTOPICLINKSYMBOL LINKTOOLTIPINFO    
+    $TWiki::Plugins::SESSION->{renderer}->{NEWLINKSYMBOL} = '';    
+    $TWiki::Plugins::SESSION->{renderer}->{NEWTOPICBGCOLOR} = '';    
+    $TWiki::Plugins::SESSION->{renderer}->{NEWTOPICFONTCOLOR} = '';    
 
     my ($inclusions, $exclusions, $filter, $skin, $genopt, $format);
     $genopt = '';
@@ -217,6 +223,8 @@ sub publish {
             '("'.$dir.'","'.$web.'","'.
               $genopt.'")';
         die $@ if $@;
+        
+        $archive->{params} = $query->Vars;
 
         publishWeb($web, TWiki::Func::getWikiName(), $inclusions,
                    $exclusions, $skin, $template, $filter, $archive);
@@ -330,8 +338,26 @@ sub publishTopic {
 
     # SMELL: need a new prefs object for each topic
     my $twiki = $TWiki::Plugins::SESSION;
+
+    #tell the session what topic we are currently rendering so the contexts are correct
+    $twiki->{topicName} = $topic;
+    $twiki->{webName} = $web;
+
     $twiki->{prefs} = new TWiki::Prefs($twiki);
-    $twiki->{prefs}->pushGlobalPreferences();
+
+#    $twiki->{prefs}->pushGlobalPreferences();
+    my $prefs = $twiki->{prefs}->pushPreferences(
+            $TWiki::cfg{SystemWebName},
+	            $TWiki::cfg{SitePrefsTopicName},
+	            'DEFAULT' );
+
+     # Then local site prefs
+     if( $TWiki::cfg{LocalSitePreferences} ) {
+             my( $lweb, $ltopic ) = $twiki->normalizeWebTopicName(
+                        undef, $TWiki::cfg{LocalSitePreferences} );
+             $twiki->{prefs}->pushPreferences( $lweb, $ltopic, 'SITE' );
+    }
+
     $twiki->{prefs}->pushPreferences($TWiki::cfg{UsersWebName}, $wikiName, 'USER '.$wikiName);
     $twiki->{prefs}->pushWebPreferences($web);
     $twiki->{prefs}->pushPreferences($web, $topic, 'TOPIC');
@@ -557,7 +583,7 @@ sub _topicURL {
     my( $path, $web ) = @_;
     my $extra = '';
 
-    if( $path && $path =~ /([#\?].*)$/ ) {
+    if( $path && $path =~ s/([#\?].*)$// ) {
         $extra = $1;
     }
 
@@ -609,7 +635,8 @@ sub _handleURL {
 sub _handleNewLink {
     my $link = shift;
     $link =~ s!<a .*?>!!gi;
-    $link =~ s!\?</a>!!gi;
+    $link =~ s!</a>!!gi;
+    
     return $link;
 }
 

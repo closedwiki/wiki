@@ -142,7 +142,7 @@ sub perlDocHandler
     my $text = "";
     foreach( split( /\n\r?/, $rText ) ) {
         # convert tabs to spaces
-        1 while( s/\t+/' ' x (length($&) * 8 - length($`) % 8)/e );
+        1 while( s/(.*?)(\t+)/' ' x (length($2) * 8 - length($1) % 8)/e );
         $text .= "$_\n";
     }
 

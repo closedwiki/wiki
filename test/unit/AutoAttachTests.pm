@@ -60,6 +60,7 @@ sub set_up_topic {
 sub tear_down {
     my $this = shift;
     $this->removeWebFixture($session, $testweb);
+    eval {$session->finish()};
     $this->SUPER::tear_down();
 }
 

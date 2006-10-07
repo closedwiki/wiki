@@ -586,7 +586,7 @@ Plugin settings are stored as preferences variables. To reference
 a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>SPREADSHEETPLUGIN_SHORTDESCRIPTION%==
 
 	* One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
-		* Set SHORTDESCRIPTION = Add spreadsheet calculation like ="$SUM( $ABOVE() )"= to tables located in %WIKITOOLNAME% topics.
+		* Set SHORTDESCRIPTION = Add spreadsheet calculation like ="$SUM(&nbsp;$ABOVE()&nbsp;)"= to TWiki tables and other topic text
 
 	* Debug plugin: (See output in =data/debug.txt=)
 		* Set DEBUG = 0

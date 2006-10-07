@@ -20,7 +20,7 @@ __Setup Note to Administrator:__
    a. Verify that new members show up properly in the group listing at %MAINWEB%.TWikiGroups
    a. Write protect this topic by removing the # sign from the ALLOWTOPICCHANGE setting
    a. Save this topic again - <nop>TWikiAdminGroup is now locked to allow editing only by listed users in GROUP
-   a. Suggestion: Add the ALLOWTOPICHANGE setting to [[%TWIKIWEB%.TWikiPreferences]] and [[%MAINWEB%.TWikiPreferences]] and set it to this group (<nop>TWikiAdminGroup), 
+   a. The ALLOWTOPICHANGE and ALLOWTOPICRENAME settings in [[%TWIKIWEB%.TWikiPreferences]] and [[%MAINWEB%.TWikiPreferences]] have already been set to this group (<nop>TWikiAdminGroup), 
       restricting edit of site-wide preferences to the TWiki Administrator Group
    a. Remove this setup note after you have finished setup
 </td></tr></table>

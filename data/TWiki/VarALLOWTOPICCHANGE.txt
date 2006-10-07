@@ -1,0 +1,12 @@
+%META:TOPICINFO{author="TWikiContributor" date="1152047757" format="1.2" version="$Rev$"}%
+%META:TOPICPARENT{name="TWikiAccessControl"}%
+#VarALLOWTOPICCHANGE
+---+++ ALLOWTOPICCHANGE -- access control for webs
+
+
+%STARTINCLUDE%
+<!-- intentionally nothing to be included -->
+%STOPINCLUDE%
+List of users or groups who may change a topic.
+   * Type: Access control - See [[%TWIKIWEB%.TWikiAccessControl]] for a comprehensive description.
+

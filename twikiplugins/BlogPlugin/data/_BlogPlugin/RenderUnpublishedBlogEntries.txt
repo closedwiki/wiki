@@ -10,7 +10,7 @@
 <verbatim>
 %STARTINCLUDE%
 *~~
-%~~ DBQUERY{"TopicType=~'\bBlogEntry\b' AND State='disabled' AND name=~'^\bBlog'
+%~~ DBQUERY{"TopicType=~'\bBlogEntry\b' AND State='unpublished' AND name=~'^\bBlog'
 ~~~     %IFDEFINED{"%AUTHOR%" then="AND BlogAuthor=~'\b%AUTHOR%\b'" glue="off"}%"
 ~~~   order="created" reverse="on"
 ~~~   hidenull="on"
@@ -19,7 +19,7 @@
 ~~~       <h1>Unpublished$percntREDDOT{\"%WEB%.%TOPIC%\"}$percnt</h1>
 ~~~       <noautolink><ul style=\"margin-top:0px;margin-bottom:0px;\">"
 ~~~   format="<li>
-~~~     <a href=\"%SCRIPTURL{"view"}%/$web/$topic\"
+~~~     <a href=\"%SCRIPTURLPATH{"view"}%/$web/$topic\"
 ~~~       title=\"link to <nop>$topic\">
 *~~       $formfield(Headline)
 ~~~     </a>$percntREDDOT{\"$web.$topic\" style=\"margin:0;padding:0;\"}$percnt</li>"

@@ -1,0 +1,11 @@
+%META:TOPICINFO{author="TWikiContributor" date="1152047755" format="1.2" version="$Rev$"}%
+%META:TOPICPARENT{name="TWikiPreferences"}%
+#VarWEBRSSCOPYRIGHT
+---+++ WEBRSSCOPYRIGHT -- shortcut for a web's RSS copyright message
+
+This variable can be used as a simple shortcut for a copyright message
+to be used in RSS.  Don't use any special characters, html tags, entities, wiki markup or WikiWords.
+   * Type: Preference variable defined in [[%TWIKIWEB%.%WIKIPREFSTOPIC%]].  Can be customized for a TWiki site in [[%LOCALSITEPREFS%]], and for each web in their %WEBPREFSTOPIC% topics.
+   * Current value: WEBRSSCOPYRIGHT = %WEBRSSCOPYRIGHT%
+   * Related: TWikiTemplates
+

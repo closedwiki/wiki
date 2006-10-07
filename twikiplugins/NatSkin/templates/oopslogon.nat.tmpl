@@ -1,11 +1,11 @@
 %TMPL:INCLUDE{"oopslogonbase"}%
 <!-- template: oopslogon.nat.tmpl -->
-%TMPL:DEF{"title"}%%TOPIC% (note)%TMPL:END%
-%TMPL:DEF{"heading"}%Welcome to the <nop>%WIKITOOLNAME%%TMPL:END%
+%TMPL:DEF{"title"}% %TOPIC% (%MAKETEXT{"note"}%) %TMPL:END%
+%TMPL:DEF{"heading"}%%MAKETEXT{"Welcome to the [_1]" args="<nop>%WIKITOOLNAME%"}%%TMPL:END%
 %TMPL:DEF{"headingstyle"}%natNoteHeading%TMPL:END%
 %TMPL:DEF{"message"}%<!-- -->
 
 %TMPL:P{"logon"}%
 
-*See also*: %TWIKIWEB%.TWikiRegistration, %TWIKIWEB%.ResetPassword, %TWIKIWEB%.ChangePassword 
+*%MAKETEXT{"See also:"}%* %TWIKIWEB%.TWikiRegistration, %TWIKIWEB%.ResetPassword, %TWIKIWEB%.ChangePassword 
 %TMPL:END%

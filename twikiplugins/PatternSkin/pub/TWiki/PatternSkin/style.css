@@ -4,19 +4,19 @@
 	-----------------------------------------------------------	*/
 	
 
-/*	---------------------------------------------------------------------------------------
+/*	----------------------------------------------------------------------------
 	CONSTANTS
 	
 	Sizes
 	----------------------------------------
-	S1 line-height																	1.4em
-	S2 somewhat smaller font size													94%
-	S3 small font size, twikiSmall													font-size:86%; line-height:110%;
-	S4 horizontal bar padding (h2, patternTop)										5px
-	S5 form and attachment padding													20px
-	S6 left margin left bar															1em
+	S1 line-height											1.4em
+	S2 somewhat smaller font size							94%
+	S3 small font size, twikiSmall							font-size:86%; line-height:110%;
+	S4 horizontal bar padding (h2, patternTop)				5px
+	S5 form and attachment padding							20px
+	S6 left margin left bar									1em
 
-	---------------------------------------------------------------------------------------	*/
+	------------------------------------------------------------------------- */
 
 /* GENERAL HTML ELEMENTS */
 
@@ -74,10 +74,10 @@ h1 {
 }
 h1 { font-size:210%; }
 h2 { font-size:160%; }
-h3 { font-size:135%; }
-h4 { font-size:122%; }
-h5 { font-size:110%; }
-h6 { font-size:95%; }
+h3 { font-size:135%; font-weight:bold; }
+h4 { font-size:122%; font-weight:bold; }
+h5 { font-size:110%; font-weight:bold; }
+h6 { font-size:95%; font-weight:bold; }
 h2, h3, h4, h5, h6 {
 	display:block;
 	/* give header a background color for easy scanning:*/
@@ -275,7 +275,8 @@ th.twikiSortedAscendingCol a:link font,
 th.twikiSortedAscendingCol a:visited,
 th.twikiSortedAscendingCol a:visited font {
 	border-width:1px 0 0 0;
-	border-style:solid;	
+	border-style:solid;
+	text-decoration:none;
 }
 th.twikiSortedDescendingCol a:link,
 th.twikiSortedDescendingCol a:link font,
@@ -283,6 +284,7 @@ th.twikiSortedDescendingCol a:visited,
 th.twikiSortedDescendingCol a:visited font {
 	border-width:0 0 1px 0;
 	border-style:solid;
+	text-decoration:none;
 }
 th.twikiSortedAscendingCol a:hover,
 th.twikiSortedAscendingCol a:hover font {
@@ -335,13 +337,13 @@ th.twikiSortedDescendingCol a:hover font {
 }
 
 /* TwistyContrib */
-a:link.twistyTrigger,
-a:visited.twistyTrigger {
+.twistyTrigger a:link,
+.twistyTrigger a:visited {
 	text-decoration:none;
 }
-a:link .twistyLinkLabel,
-a:visited .twistyLinkLabel {
-      text-decoration:underline;
+.twistyTrigger a:link .twikiLinkLabel,
+.twistyTrigger a:visited .twikiLinkLabel {
+	text-decoration:none;
 }
 
 /*	-----------------------------------------------------------
@@ -373,7 +375,7 @@ a:visited .twistyLinkLabel {
 .patternContent .twikiForm {
 	/* form or attachment table inside topic area */
 	font-size:94%; /*S2*/
-	padding:.5em 20px; /*S5*/ /* top:use less padding for the toggle link; bottom:use less space in case the table is folded in  */
+	padding:1em 20px; /*S5*/ /* top:use less padding for the toggle link; bottom:use less space in case the table is folded in  */
 	border-width:1px 0 0 0;
 	border-style:solid;
 	margin:0;
@@ -416,8 +418,8 @@ table.twikiFormTable th.twikiFormTableHRow {
 	border-width:0 0 1px 0;
 	border-style:solid;
 }
-.twikiAttachments th a:link,
-.twikiAttachments th a:visited {
+.twikiAttachments a:link,
+.twikiAttachments a:visited {
 	text-decoration:none;
 }
 /* don't show any of those ugly sort icons */
@@ -574,6 +576,10 @@ a.twikiLinkInHeaderRight {
 .patternTopic {
 	margin:1em 0 2em 0;
 }
+.patternTopic .patternBlockquote {
+	margin:1em 0 1em 5em;
+}
+
 #patternLeftBarContents {
 	font-size:94%; /*S2*/
 	padding:0 0 .5em 0;

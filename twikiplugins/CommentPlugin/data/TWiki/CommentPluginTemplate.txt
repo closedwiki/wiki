@@ -23,7 +23,7 @@ Generic prompt box used by other templates
 </verbatim>
 Short comment, signed and dated
 <verbatim>
-%TMPL:DEF{outputoneliner}%<span class="commentPlugin commentPluginOutputOneliner">	* %URLPARAM{"comment"}% -- %WIKIUSERNAME% - %SERVERTIME%</span></span><!--/commentPlugin-->%TMPL:END%
+%TMPL:DEF{outputoneliner}%   * %URLPARAM{"comment"}% -- %WIKIUSERNAME% - %SERVERTIME%%TMPL:END%
 </verbatim>
 ---------------------------------------------------------------------------
 ---++ User templates

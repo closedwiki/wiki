@@ -39,6 +39,14 @@ sub doInit {
   $defaultWikiUserName = &TWiki::Func::userToWikiName($defaultWikiUserName, 1);
 }
 
+##############################################################################
+# wrapper for dakar's TWiki::UI:run interface
+sub logonCgi {
+  my $session = shift;
+  $TWiki::Plugins::SESSION = $session;
+  return logon($session->{cgiQuery}, $session->{topicName}, $session->{webName});
+}
+
 ###############################################################################
 sub logon {
   my ($query, $topic, $web) = @_;
@@ -76,7 +84,7 @@ sub logon {
   if ($theUser ne $defaultWikiUserName) {
 
     # ... for existing user
-    if (!&_existsUser($theUser)) {
+    if (!$TWiki::Plugins::SESSION->{users}->findUser($theUser, undef, 1)) {
       $theUrl = &TWiki::Func::getOopsUrl($theWeb, $theTopic, "oopsnotwikiuser", $theUser);
       &TWiki::Func::redirectCgiQuery($query, $theUrl);
       writeDebug("redirecting to oopsnotwikiuser");
@@ -101,7 +109,6 @@ sub logon {
     #$theUrl =~ s/^https:/http:/o; SMELL SMELL SMELL 
   } else {
     # logon
-    #&_getPrefsFromTopic($mainWeb, $theUser);
     my $logonWebTopic = &TWiki::Func::getPreferencesValue("LOGONTOPIC");
     my $logonWeb = $theWeb;
     my $logonTopic = $theTopic;
@@ -124,85 +131,23 @@ sub logon {
 }
 
 ###############################################################################
-sub _existsUser {
-  my $theUser = shift;
-
-  writeDebug("called _existsUser");
-
-  # beijing
-  if ($TWiki::Plugins::NatSkinPlugin::isBeijing) {
-    return &TWiki::Access::htpasswdExistUser($theUser);
-  } 
-
-  # dakar
-  if ($TWiki::Plugins::NatSkinPlugin::isDakar) {
-    return $TWiki::Plugins::SESSION->{users}->findUser($theUser, undef, 1);
-  }
-  
-  # well ... cairo ?
-  return &TWiki::User::UserPasswordExists($theUser);
-}
-
-###############################################################################
 sub _checkPasswd {
   my ($theUser, $thePasswd) = @_;
 
-  writeDebug("called _checkPasswd($theUser)");
-
-  # beijing
-  if ($TWiki::Plugins::NatSkinPlugin::isBeijing) {
-    writeDebug("beijing check");
-    my $oldcrypt = &TWiki::Access::htpasswdReadPasswd($theUser);
-    return &TWiki::Access::htpasswdCheckPasswd($thePasswd, $oldcrypt);
-  } 
-
-  # dakar
-  if ($TWiki::Plugins::NatSkinPlugin::isDakar) {
-    writeDebug("dakar check");
-    my $user = $TWiki::Plugins::SESSION->{users}->findUser($theUser);
-    return 0 unless $user;
-    return $user->checkPassword($thePasswd);
-  }
-  
-  # well ... cairo ?
-  writeDebug("cairo check");
-  return &TWiki::User::CheckUserPasswd($theUser, $thePasswd);
+  my $user = $TWiki::Plugins::SESSION->{users}->findUser($theUser);
+  return 0 unless $user;
+  return $user->checkPassword($thePasswd);
 }
 
 ###############################################################################
 sub _setAuthUser {
   my $theUser = shift;
 
-  writeDebug("_setAuthUser($theUser)");
-
-  if ($TWiki::Plugins::NatSkinPlugin::isDakar) {
-    $theUser = undef if $theUser eq $defaultWikiUserName;
+  $theUser = undef if $theUser eq $defaultWikiUserName;
+  if (defined $TWiki::Plugins::SESSION->{client}) {
     $TWiki::Plugins::SESSION->{client}->userLoggedIn($theUser);
   } else {
-    eval 'require TWiki::Plugins::SessionPlugin';
-    my $authUserSessionVar = $TWiki::Plugins::SessionPlugin::authUserSessionVar;
-    my $session = $TWiki::Plugins::SessionPlugin::session;
-    if ($theUser eq $defaultWikiUserName) {
-      $session->clear($authUserSessionVar);
-    }  else {
-      $session->param($authUserSessionVar, $theUser);
-    }
-    $session->flush();
-  }
-}
-
-###############################################################################
-sub _getPrefsFromTopic {
-  my ($thisWeb, $thisUser) = @_;
-
-  # dakar
-  if ($TWiki::Plugins::NatSkinPlugin::isDakar) {
-    $TWiki::Plugins::SESSION->{prefs}->getPrefsFromTopic($thisWeb, $thisUser);
-  } 
-  
-  # non-dakar
-  else {
-    &TWiki::Prefs::getPrefsFromTopic($thisWeb, $thisUser);
+    $TWiki::Plugins::SESSION->{loginManager}->userLoggedIn($theUser);
   }
 }
 

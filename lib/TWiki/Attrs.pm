@@ -131,7 +131,7 @@ sub new {
                   unless defined( $this->{$DEFAULTKEY} );
             }
             # simple name with no value (boolean, or _DEFAULT)
-            elsif ( $string =~ s/^$sep*([a-z]\w*)\b//s ) {
+            elsif ( $string =~ s/^$sep*([a-z]\w*)\b//is ) {
                 my $key = $1;
                 $this->{$key} = 1;
             }

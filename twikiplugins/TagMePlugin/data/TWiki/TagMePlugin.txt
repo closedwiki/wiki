@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1148184764" format="1.0" version="1.9"}%
+%META:TOPICINFO{author="PeterThoeny" date="1160281449" format="1.0" version="1.14"}%
 ---+!! Tag-me Plugin
 
 Plugin to tag wiki content collectively in order to find content by tags and to get a meaningful page ranking.
@@ -178,10 +178,12 @@ The Plugin handles a =%<nop>TAGME{}%= variable that performs different actions. 
 	* =%<nop>TAGME{ tpaction="add" ... }%= - add tag to topic, or add vote to existing tag
 	  | *Parameter* | *Comment* | *Default* |
 	  | =tag="..."= | Name of tag | (required) |
+	  | =nostatus="on"= | Turn off status text shown when a tag is added or voted on | (show status text) |
 
 	* =%<nop>TAGME{ tpaction="remove" ... }%= - remove my tag vote on existing tag
 	  | *Parameter* | *Comment* | *Default* |
 	  | =tag="..."= | Name of tag | (required) |
+	  | =nostatus="on"= | Turn off status text shown when a tag is removed or voted on | (show status text) |
 
 ---++ Plugin Settings
 
@@ -222,15 +224,20 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 
 ---++ Limitations
 
-	* Tags are lost if a topic is renamed or moved (this is currently a Plugin API limitation)
+	* TWiki 04-Sep-2005 and older: Tags are lost if a topic is renamed or moved
 
 ---++ Plugin Info
 
-|  Plugin Author: | TWiki:Main.PeterThoeny |
+|  Plugin Author: | TWiki:Main.PeterThoeny ([[http://www.structuredwikis.com/peter.html][blog]]) |
 |  Copyright: | &copy; 2006, Peter@Thoeny.org, [[http://www.structuredwikis.com/][StructuredWikis LLC]] |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 20 May 2006 (V1.009) |
+|  Plugin Version: | 07 Oct 2006 (V1.030) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  07 Oct 2006: | nostatus="on" parameter for add/remove tag (contributed by TWiki:Main.FredMorris) |
+|  05 Oct 2006: | Fix issue of missing topics in tag search if topic name contains plus or minus sign (workaround for TWiki core Bugs:Item2625 and Bugs:Item2967) |
+|  04 Oct 2006: | Fix issue of statistics moving !WebHome tags to !WebStatistics |
+|  02 Oct 2006: | Support for topic rename (tags are no longer lost) |
+|  14 Sep 2006: | MAKETEXT support (TWiki:Main.KoenMartens); fixed nested webs issue; fix in generated XHTML (TWiki:Main.ArthurClemens) |
 |  20 May 2006: | Support international characters (contributed by TWiki:Main.AntonioTerceiro) |
 |  09 May 2006: | Support for sub-webs; enclose tag list on topic in =span class="tagMePlugin"=; tag selector not shown if empty; limit max size of new tags to 30 characters |
 |  21 Mar 2006: | !TagMeSearch with =minsize= and =maxsize= paramters; !TagMeSearch format with =$votecount=, =$size=; fixed !JavaScript compatibility issue on TWiki 4.0 |
@@ -251,7 +258,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 
 __Related Topics:__ %TWIKIWEB%.TagMeViewAllTags, %TWIKIWEB%.TagMeViewMyTags, %TWIKIWEB%.TagMeSearch, %TWIKIWEB%.TagMeDebugViewTags, %TWIKIWEB%.TagMeDebugSearch, %TWIKIWEB%.TWikiPlugins, %TWIKIWEB%.DeveloperDocumentationCategory, %TWIKIWEB%.AdminDocumentationCategory, %TWIKIWEB%.TWikiPreferences
 
--- TWiki:Main.PeterThoeny - 20 May 2006
+-- TWiki:Main.PeterThoeny - 07 Oct 2006
 
 %META:FILEATTACHMENT{name="tag_add.gif" attr="h" comment="" date="1141691885" path="tag_add.gif" size="857" user="PeterThoeny" version="1.2"}%
 %META:FILEATTACHMENT{name="tag_ok.gif" attr="h" comment="" date="1141691901" path="tag_ok.gif" size="869" user="PeterThoeny" version="1.2"}%

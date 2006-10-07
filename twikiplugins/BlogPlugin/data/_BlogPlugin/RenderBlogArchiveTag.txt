@@ -13,17 +13,17 @@
 %STOPALIASAREA%
 <noautolink>
 *~~
-%~~ TAGCLOUD{"
-%~~   DBQUERY{"TopicType=~'\bBlogEntry\b' AND State='enabled'"
-~~~     format="$formfield(BlogTag)" separator=", "
-~~~   }%"
+%~~ TAGCLOUD{
+~~~   "$percntDBQUERY{\"TopicType=~'\bBlogEntry\b' AND State='published'\"
+~~~     format=\"$formfield(BlogTag)\" separator=\", \"
+~~~   }$percnt"
 ~~~   buckets="40"
 ~~~   offset="9"
 ~~~   split="[,\s]+"
 ~~~   group="<strong>$group</strong>"
 ~~~   header="<div class=\"blogArchiveTagCloud\">"
 ~~~   format="<span style=\"font-size:$weightpx;line-height:90%;margin:0;padding:0;\">
-~~~     <a href=\"%SCRIPTURL{"view"}%/%BASEWEB%/%BASETOPIC%?mode=tag;search=$term\"
+~~~     <a href=\"%SCRIPTURLPATH{"view"}%/%BASEWEB%/%BASETOPIC%?mode=tag;search=$term\"
 ~~~        title=\"$count\"
 ~~~        style=\"color:$fadeRGB(%TAGCLOUDFADE%);\"
 ~~~        class=\"$percntCALC{\"$IF($EXACT(%QUERY%,$term),current)\"}$percnt\"

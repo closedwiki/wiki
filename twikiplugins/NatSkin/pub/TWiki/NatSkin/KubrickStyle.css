@@ -32,18 +32,23 @@ hr {
   background:white;
   text-align:left;
   /*border: 1px solid #959596;*/
-  font-size: 65.5%;
+  font-size: 80%;
   font-family: 'Trebuchet MS', Verdana, Arial, Sans-Serif;
 }
 .natSideBar,
 .natTopRight {
-  width:22em;
+  width:250px;
 }
 
 .natSideBarContents,
-.natMainFooterContents,
 .natMainContents {
-  padding:15px;
+  padding:0px 15px 15px 15px;
+  /*padding:15px 15px 15px 20px;*/
+}
+.natMainFooterContents,
+.natMainHeaderContents {
+  margin:0px;
+  padding:0px 15px 10px;
 }
 
 .natMiddleLeft {
@@ -51,31 +56,25 @@ hr {
 }
 
 .natTopLeft, .natTopRight {
-  padding-top:0px;
-  padding-bottom:0px;
+  padding:0px;
 }
-.natTopLeftContents,
-.natTopRightContents{
-  margin-top:4em;
-  margin-bottom:1em;
-  margin-left:20px;
+.natTopLeftContents {
+  margin:45px 0px 10px 20px;
 }
 .natTopRightContents {
-  margin-top:5.2em;
+  margin:55px 5px 0px 15px;
 }
 .natTopBarSizer {
   height:160px;
 }
 .natSearchBox input {
-  width:13em;
+  width:150px;
+}
+.natSearchBoxTop {
+  margin-bottom:3px;
 }
 
 /* top bar */
-.natTopLeftContents,
-.natTopRightContents,
-.natSearchBox input {
-  font-size:1em;
-}
 .natHeaderArt,
 .natSearchBox input {
   background:#3388CC;
@@ -96,6 +95,9 @@ hr {
   font-weight:bold;
   margin:0px;
 }
+.natTopicActions {
+  font-size:1.0em;
+}
 
 .natWebTitle {
   font-size: 3em;
@@ -105,9 +107,6 @@ hr {
   color:white;
   /*text-shadow:1px 1px 1px black;*/
 
-}
-.natWebLocator {
-  font-size:0.5em;
 }
 .natSearchBox input {
   border:0px;
@@ -158,16 +157,18 @@ hr {
 .natSideBar a:hover {
   text-decoration:underline;
 }
-/*
-.natSideBar ol {
-  padding-left:2em;
-}
-*/
-html>body .natSideBar ul { /* hide from IE */
-  margin-left:0px;
+.natSideBar ul {
+  margin:0px;
   padding-left:2ex;
   list-style-type: none;
   text-indent:-2ex;
+}
+.natSideBar ol {
+  margin-top:0px;
+  margin-bottom:0px;
+  padding-left:4ex;
+  margin-left:0px;
+  _margin-left:1ex; /* IE hack */
 }
 html>body .natSideBar ol { /* hide from IE */
   text-indent:-1ex;
@@ -181,8 +182,6 @@ html>body .natSideBar ol { /* hide from IE */
 }
 .natSideBarContents .natSkinStyleBrowser ul {
   padding-top:0px;
-  margin-top:0px;
-  margin-bottom:5px;
   white-space:nowrap;
 }
 .natSideBarContents .natSkinStyleBrowser ul li:before {
@@ -206,11 +205,18 @@ html>body .natSideBar ol { /* hide from IE */
   font-family:arial,sans-serif;
   font-size:1.2em;
 }
+.natSubWebs h1 {
+  margin-bottom:0px;
+}
+.natSubWebs .natWebLink a {
+  color: #06c;
+}
 /* main */
 .natMiddle {
   background-color: white;
   font-weight:normal;
   color:#444;
+  padding-top:15px;
 }
 .natMainContents {
   /*color:#777;*/
@@ -240,7 +246,7 @@ html>body .natSideBar ol { /* hide from IE */
 .natMain h3 {font-size:1.5em}
 .natMain h4 {font-size:1.3em}
 .natMain h5 {font-size:1.2em}
-.natMain h6 {font-size:1.1em}
+.natMain h6 {font-size:1.2em}
 
 .natMain h1 {
   /*text-shadow:2px 2px 2px #ccc;*/
@@ -254,6 +260,7 @@ html>body .natSideBar ol { /* hide from IE */
 .natMain h6 {
   font-family: 'Trebuchet MS', Verdana, sans-serif;
   letter-spacing:-1px;
+  margin-bottom:0px;
 }
 
 .natMainContents pre {
@@ -280,21 +287,20 @@ html>body .natSideBar ol { /* hide from IE */
 
 /* bottom bar */
 .natBottomBarContents {
+  padding:0px 15px;
   font-size:1em;
 }
 .natBottomBarContents,
 .natBottomBarContents a {
   color:#959596;
 }
-.natCopyRight,
-.natTWikiInfo {
+.natCopyRight {
   display:inline;
 }
 
 /* tables */
 .twikiTable {
   border:1px solid #d9d6e7;
-  background:#f6f7f8;
   font-size:0.9em;
 }
 
@@ -303,6 +309,17 @@ html>body .natSideBar ol { /* hide from IE */
   border-top:1px solid #ffd324;
   border-bottom:1px solid #ffd324;
   text-align:center;
+}
+.twikiTable th,
+.twikiTable th font,
+.twikiTable th a {
+  color:#0055aa;
+}
+.twikiTable td {
+  background:white;
+}
+.twikiTableEven td {
+  background:#f4f4f4;
 }
 
 /* twiki forms */
@@ -317,6 +334,11 @@ html>body .natSideBar ol { /* hide from IE */
   border-left:0px;
   border-right:0px;
   font-family: 'Trebuchet MS', Verdana, Arial, Sans-Serif;
+}
+.twikiPageForm table table {
+  margin-top:2px;
+  margin-bottom:2px;
+  border:0px;
 }
 .natTopicForm {
   padding:5px;
@@ -363,7 +385,7 @@ html>body .natSideBar ol { /* hide from IE */
   border:1px solid #d9d6e7;
   margin:2px;
   font-family: 'Trebuchet MS', Verdana, Arial, Sans-Serif;
-  font-size:small;
+  font-size:14px;
   color:#444;
   padding:2px;
 }
@@ -497,9 +519,13 @@ html>body .natSideBar ol { /* hide from IE */
 /* supported plugins */
 
 /* blogging */
+.blogAbout h1 {
+  margin-top:5px;
+}
 .blogHeadline {
   border-bottom:1px solid #ddd;
   margin-bottom:5px;
+  margin-top:5px;
   font-size:95%;
 }
 .blogInfo {
@@ -570,7 +596,7 @@ html>body .natSideBar ol { /* hide from IE */
   text-align:justify; 
 }
 .blogNavigation {
-  padding-top:2px;
+  padding-top:7px;
 }
 .blogEntryFeed a,
 .blogScroll,
@@ -584,7 +610,7 @@ html>body .natSideBar ol { /* hide from IE */
   border:1px solid #aaa;
   color:#444;
   font-family: 'Trebuchet MS', Verdana, Arial, Sans-Serif;
-  font-size:small;
+  font-size:1.1em;
   padding:2px;
 }
 .blogAddComment .blogSubmitButton {
@@ -687,3 +713,4 @@ html>body .natSideBar ol { /* hide from IE */
   border:1px solid #b8b8b8;
   padding:3px;
 }
+

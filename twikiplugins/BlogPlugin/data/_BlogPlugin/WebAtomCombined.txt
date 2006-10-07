@@ -6,7 +6,7 @@
 *~~ <noautolink>
 *~~
 %~~ DBCALL{"RenderAtom" 
-~~~   SEARCH="(TopicType=~'\bBlogEntry\b' AND State='enabled') OR
+~~~   SEARCH="(TopicType=~'\bBlogEntry\b' AND State='published') OR
 ~~~            TopicType=~'\bBlogComment\b'"
 ~~~   LIMIT="20"
 ~~~   TITLE="<nop>%WIKITOOLNAME% <nop>%WEB% (combined)"

@@ -66,7 +66,7 @@ sub permissionsSet {
     my $permSet = 0;
 
     my @types = qw/ALLOW DENY/;
-    my @actions = qw/CHANGE VIEW RENAME/;
+    my @actions = qw/CHANGE VIEW/;
     my $prefs = $this->{session}->{prefs};
 
   OUT: foreach my $type ( @types ) {
@@ -100,11 +100,12 @@ sub getReason {
 
 =pod
 
----++ ObjectMethod checkAccessPermission( $action, $user, $text, $topic, $web ) -> $boolean
+---++ ObjectMethod checkAccessPermission( $action, $user, $text, $meta, $topic, $web ) -> $boolean
 Check if user is allowed to access topic
    * =$action=  - 'VIEW', 'CHANGE', 'CREATE', etc.
    * =$user=    - User object
    * =$text=    - If undef or '': Read '$theWebName.$theTopicName' to check permissions
+   * =$meta=    - If undef, but =$text= is defined, then metadata will be parsed from =$text=. If defined, then metadata embedded in =$text= will be ignored. Always ignored if =$text= is undefined. Settings in =$meta= override * Set settings in plain text.
    * =$topic=   - Topic name to check, e.g. 'SomeTopic' *undef to check web perms only)
    * =$web=     - Web, e.g. 'Know'
 If the check fails, the reason can be recoveered using getReason.
@@ -112,13 +113,13 @@ If the check fails, the reason can be recoveered using getReason.
 =cut
 
 sub checkAccessPermission {
-    my( $this, $mode, $user, $text, $topic, $web ) = @_;
+    my( $this, $mode, $user, $text, $meta, $topic, $web ) = @_;
     ASSERT($this->isa( 'TWiki::Access')) if DEBUG;
     ASSERT($user->isa( 'TWiki::User')) if DEBUG;
 
     undef $this->{failure};
 
-    #print STDERR "Check $mode access ", $user->stringify()," to $web.",$topic?$topic:'',"\n";
+    #print STDERR "Check $mode access ", $user->stringify()," to ", ($web||'undef'), '.', ($topic||'undef'),"\n";
 
     # super admin is always allowed
     if( $user->isAdmin() ) {
@@ -127,7 +128,6 @@ sub checkAccessPermission {
     }
 
     $mode = uc( $mode );  # upper case
-    $web ||= $this->{session}->{webName};
 
     my $prefs = $this->{session}->{prefs};
 
@@ -135,14 +135,12 @@ sub checkAccessPermission {
     my $denyText;
 
     # extract the * Set (ALLOWTOPIC|DENYTOPIC)$mode
-    if( $text ) {
-        # override topic permissions. Note: ignores embedded metadata
-        # SMELL: this is horrible! But it's inevitable given the dreadful
-        # business of storing access controls embedded in topic text.
-        $allowText = $prefs->getTextPreferencesValue( 'ALLOWTOPIC'.$mode,
-                                                      $text, $web, $topic );
-        $denyText = $prefs->getTextPreferencesValue( 'DENYTOPIC'.$mode,
-                                                     $text, $web, $topic );
+    if( defined $text ) {
+        # override topic permissions.
+        $allowText = $prefs->getTextPreferencesValue(
+            'ALLOWTOPIC'.$mode, $text, $meta, $web, $topic );
+        $denyText = $prefs->getTextPreferencesValue(
+            'DENYTOPIC'.$mode, $text, $meta, $web, $topic );
     } elsif( $topic ) {
         $allowText = $prefs->getTopicPreferencesValue( 'ALLOWTOPIC'.$mode,
                                                        $web, $topic );
@@ -197,6 +195,27 @@ sub checkAccessPermission {
             $this->{failure} = $this->{session}->{i18n}->maketext('access not allowed on web');
             #print STDERR $this->{failure},"\n";
             return 0;
+        }
+    }
+
+    # Check DENYROOT and ALLOWROOT, but only if web is not defined
+    unless( $web ) {
+        $denyText =
+          $prefs->getPreferencesValue( 'DENYROOT'.$mode, $web );
+        if( defined( $denyText ) && $user->isInList( $denyText )) {
+            $this->{failure} = $this->{session}->{i18n}->maketext('access denied on root');
+            #print STDERR $this->{failure},"\n";
+            return 0;
+        }
+
+        $allowText = $prefs->getPreferencesValue( 'ALLOWROOT'.$mode, $web );
+
+        if( defined( $allowText ) && $allowText =~ /\S/ ) {
+            unless( $user->isInList( $allowText )) {
+                $this->{failure} = $this->{session}->{i18n}->maketext('access not allowed on root');
+                #print STDERR $this->{failure},"\n";
+                return 0;
+            }
         }
     }
 

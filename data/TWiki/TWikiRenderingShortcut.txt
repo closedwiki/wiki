@@ -1,0 +1,17 @@
+%META:TOPICINFO{author="TWikiContributor" date="1152050131" format="1.2" version="$Rev$"}%
+%META:TOPICPARENT{name="TWikiPreferences"}%
+---+++ Rendering Shortcuts -- easy ways to save some typing
+
+
+Some TWiki preferences are just shortcuts for convenience, to either
+save typing or to easily allow line breaks in format strings and the like.
+These variables are not intended to be customized, though it is not
+forbidden to do so.  Your mileage will vary.
+
+
+*The following variables are classified as rendering shortcuts:*
+%SEARCH{"Type:.*TWikiRenderingShortcut" type="regex" topic="Var*" format="   * $topic" nonoise="on"}%
+
+*See also:*
+   * TWikiVariables - an alphabetical list of all variables
+   * TWikiPreferences - where rendering shortcuts are defined 

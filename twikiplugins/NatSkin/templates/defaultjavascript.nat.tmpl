@@ -1,78 +1,6 @@
 <!-- template: defaultjavascript.nat.tmpl -->
-<!-- vim:set filetype=javascript: -->
-%TMPL:DEF{"defaultjavascript"}%
-function checkAll(formular, theCheck) {
-  var j = 0;
-  for( var i = 0; i < document.forms[formular].length; i++ ) {
-    document.forms[formular].elements[i].checked = theCheck;
-  }
-}
-
-function toggleElement(id) {
-  if(document.getElementById) {
-    var element = document.getElementById(id);
-    var toggle = document.getElementById(id + "toggle").firstChild.firstChild;
-    if (element.style.display == '') {
-      element.style.display = 'none';
-      toggle.nodeValue = 'show';
-    } else {
-      element.style.display = '';
-      toggle.nodeValue = 'hide';
-    }
-  }
-}
-
-function submitEditFormular(script, action) {
-  if (action == 'add form') {
-    document.EditFormular.elements['submitChangeForm'].value = action;
-  }
-%IFSKINSTATETHEN{release="beijing" glue="off"}%
-  document.EditFormular.action = '%SCRIPTURLPATH%/' + script + '%SCRIPTSUFFIX%/%WEB%/%TOPIC%';
-%ELSIFSKINSTATE{release="cairo" glue="off"}%
-  document.EditFormular.elements['action'].value = action; 
-%ELSESKINSTATE%
-  document.EditFormular.elements['action_preview'].value = '';
-  document.EditFormular.elements['action_save'].value = '';
-  document.EditFormular.elements['action_checkpoint'].value = '';
-  document.EditFormular.elements['action_addform'].value = '';
-  document.EditFormular.elements['action_replaceform'].value = '';
-  document.EditFormular.elements['action_cancel'].value = '';
-  document.EditFormular.elements['action_' + action].value = 'foobar';
-%FISKINSTATE%
-  document.EditFormular.submit();
-}
-
-function writeEmailAddrs(addrs, linkText, id) {
-  var elem = document.getElementById(id);
-  if (elem) {
-    if (elem.firstChild) {
-      elem.removeChild(elem.firstChild);
-    }
-
-    var anchor = document.createElement("a");
-    elem.appendChild(anchor);
-
-    anchor.href = 'mailto:';
-
-    for (var i = 0; i < addrs.length; i++) {
-      anchor.href += addrs[i][1] + '@' + addrs[i][0] + '.' + addrs[i][2];
-      if (i < addrs.length-1) {
-	anchor.href += ', ';
-      }
-    }
-    
-    if (linkText == '') {
-      for (var i = 0; i < addrs.length; i++) {
-	linkText += addrs[i][1] + '@' + addrs[i][0] + '.' + addrs[i][2] + ' ';
-      }
-    }
-    var anchorText = document.createTextNode(linkText);
-    anchor.appendChild(anchorText);
-  }
-}
-
-// DON'T overwrite existing onload handlers
-//	http://simon.incutio.com/archive/2004/05/26/addLoadEvent
+%TMPL:DEF{"defaultjavascript"}%<script type="text/javascript">
+<!--
 function addLoadEvent(func){
   var oldonload = window.onload;
   if (typeof window.onload != 'function') {
@@ -86,21 +14,10 @@ function addLoadEvent(func){
     }
   }
 }
-
-function focusSearchBox () {
-  if (typeof document.SearchForm != 'undefined') {
-    document.SearchForm.search.focus();
-  }
-}
-
-// default plugin impls
-function initObfuscator() {}
-
 function initNatSkin() {
-  initObfuscator(); // SMELL: package this as a plugin of its own and use addLoadEvent
   %TMPL:P{"onloadscript"}%
 }
-
 addLoadEvent(initNatSkin);
-%TMPL:END%
-%TMPL:DEF{"javascript"}%%TMPL:P{"defaultjavascript"}%%TMPL:END%
+//-->
+</script>%TMPL:END%<!--
+-->%TMPL:DEF{"javascript"}%%TMPL:P{"defaultjavascript"}%%TMPL:END%

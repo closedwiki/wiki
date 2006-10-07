@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1157045278" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiVariables"}%
 %TOC%
 %STARTINCLUDE%
@@ -12,11 +12,21 @@ The default output format of a =[[VarSEARCH][%<nop>SEARCH{...}%]]= is a table co
 
 Two parameters can be used to specify a customized search result:
 
-1. =header="..."= parameter
+---+++ 1. =header="..."= parameter
 
 Use the header parameter to specify the header of a search result. It should correspond to the format of the format parameter. This parameter is optional. <br /> Example: =header="| <nop>*Topic:*<nop> | <nop>*Summary:*<nop> |"=
 
-2. =format="..."= parameter
+Variables that can be used in the header string:
+
+| *Name:* | *Expands To:* |
+| =$web= | Name of the web |
+| =$n= or =$n()= | New line. Use =$n()= if followed by alphanumeric character, e.g. write =Foo$n()Bar= instead of =Foo$nBar= |
+| =$nop= or =$nop()= | Is a "no operation". This variable gets removed; useful for nested search |
+| =$quot= | Double quote (="=). Alternatively write =\"= to escape it |
+| =$percnt= | Percent sign (=%=) |
+| =$dollar= | Dollar sign (=$=) |
+
+---+++ 2. =format="..."= parameter
 
 Use the format parameter to specify the format of one search hit.
 <br /> Example: =format="| $topic | $summary |"=
@@ -198,5 +208,4 @@ Find Topics:
 Result:
 %SEARCH{ search="%URLPARAM{"q"}%" format="   * $web.$topic: %BR% $summary" nosearch="on" }%
 
-__Related Topics:__ UserDocumentationCategory
-
+__Related Topics:__ UserDocumentationCategory, SearchPatternCookbook

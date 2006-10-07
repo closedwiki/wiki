@@ -125,26 +125,29 @@ InlineEditOnload = function() {
     var elements = document.getElementsByTagName('div');
     for (var i = 0; i < elements.length; i++) {
         //The user viewed HTML
-        if (elements[i].className == 'inlineeditTopicHTML') {
+        if (jscss('check', elements[i], 'inlineeditTopicHTML')) {
             var id = elements[i].id.substring((elements[i].id.lastIndexOf('_'))+1, elements[i].id.length) * 1;
-//            alert(elements[i].id + '>----<'+id+'>')
+            //alert(elements[i].id + '>----<'+id+'>')
             divs[id] = elements[i];
         }
         //The HTML generated using the perl TM2HTML code
-        if (elements[i].className == 'inlineeditTopicTML2HTML') {
+        if (jscss('check', elements[i], 'inlineeditTopicTML2HTML')) {
             var id = elements[i].id.substring((elements[i].id.lastIndexOf('_'))+1, elements[i].id.length) * 1;
             tml2htmldivs[id] = elements[i];
         }
-        if (elements[i].className == 'inlineeditTopicInfo') {
-            var id = elements[i].id.substring((elements[i].id.lastIndexOf('_'))+1, elements[i].id.length) * 1;
-            twikiTopicStatedivs[id] = elements[i];
-        }
+    }
+    elements = document.getElementsByTagName('button');
+    for (var i = 0; i < elements.length; i++) {
     }
     elements = document.getElementsByTagName('textarea');
     for (var i = 0; i < elements.length; i++) {
-        if (elements[i].className == 'inlineeditTopicTML') {
+        if (jscss('check', elements[i], 'inlineeditTopicTML')) {
             var id = elements[i].id.substring((elements[i].id.lastIndexOf('_'))+1, elements[i].id.length) * 1;
             tmldivs[id] = elements[i].value;
+        }
+        if (jscss('check', elements[i], 'inlineeditTopicInfo')) {
+            var id = elements[i].id.substring((elements[i].id.lastIndexOf('_'))+1, elements[i].id.length) * 1;
+            twikiTopicStatedivs[id] = elements[i];
         }
     }
     if (divs.length == 0) {
@@ -174,14 +177,34 @@ InlineEditOnload = function() {
         topicSectionObject.HTMLdiv.topicSectionObject = topicSectionObject;
         topicSectionObject.topicinfoSrc = topicInfo;
 
-        topicSectionObject.HTMLdiv.TWikiInlineEditPluginonDblClickFunction = gotoEditModeFromEvent;
-        XBrowserAddHandler(topicSectionObject.HTMLdiv, 'dblclick', 'TWikiInlineEditPluginonDblClickFunction');
+        //addEvent(topicSectionObject.HTMLdiv, 'mouseover', showSectionalEditButtons);
+        //addEvent(topicSectionObject.HTMLdiv, 'mouseout', hideSectionalEditButtons);
+        addEvent(topicSectionObject.HTMLdiv, 'dblclick', gotoEditModeFromEvent);
+
+        //TODO: add an action for each applicable mini-editor, and other actions
+        var span = document.createElement('div');
+        span.innerHTML = "[edit] ";
+        span.style.display='inline';
+        jscss('add', span, 'showFloatRight');
+        jscss('add', span, 'hoverUnderline');
+        topicSectionObject.HTMLdiv.insertBefore(span, topicSectionObject.HTMLdiv.firstChild);
+        addEvent(span, 'click', gotoEditModeFromEvent);
 
         topicSectionObject.TML2HTMLdiv = tml2htmldiv;
-//        topicSectionObject.editDivSection = initialiseInlineEditDiv(topicSectionObject);
 
+		topicSectionObject.index = topicSections.length;
         topicSections.push(topicSectionObject);
     }
+}
+
+showSectionalEditButtons = function(event) {
+//TODO: this should be done using css class names
+    var topicSectionObject = getTopicSectionObject(event);
+    jscss('add', topicSectionObject.HTMLdiv, 'showBorder');
+}
+hideSectionalEditButtons = function(event) {
+    var topicSectionObject = getTopicSectionObject(event);
+    jscss('remove', topicSectionObject.HTMLdiv, 'showBorder');
 }
 
 gotoEditModeFromEvent = function(event) {
@@ -193,16 +216,27 @@ gotoEditModeFromEvent = function(event) {
         topicSectionObject.editDivSection.adorned = 1;
 
         var pre = document.createElement('DIV');
-        pre.style.display='inline';
+        jscss('add', pre, ' showElementInline');
         var post = document.createElement('DIV');
-        post.style.display='inline';
-
-        //TODO: be more discriminating - only create add_ buttonset if there is not already one at that seperation
+        jscss('add', post, ' showElementInline');
 
         var add_above = '';
-        add_above = add_above + makeFormButton('add_above', 'Add Text Above', 'addNewSection(event, 1);');
-        add_above = add_above + makeFormButton('add_above', 'Add Table Above', 'addNewSection(event, 1, 1);');
-        pre.innerHTML = add_above;
+        //TODO: be more discriminating - only create add_ buttonset if there is not already one at that seperation
+//topicSectionObject.index = topicSections.length;
+		if ((topicSectionObject.index == 0)
+		 || (topicSectionObject.newSection)
+		 || (typeof(topicSections[topicSectionObject.index-1].editDivSection) == 'undefined')
+		 ) {
+		 	//TODO: replace with a dropdown selet and an add button (and right justify..)
+			//got through the registered editors
+        	for (var i=0;i<TWiki.InlineEditPlugin.editors.length;i++) {
+            	var getTypeName = TWiki.InlineEditPlugin.editors[i]+'.getTypeName()';
+            	var typeName = eval(getTypeName);
+
+    	    	add_above = add_above + makeFormButton('add_above', 'Add '+typeName+' Above', 'addNewSection(event, 1, '+i+');');
+			}
+		}
+       	pre.innerHTML = add_above;
 
         var add_below = '';
         add_below = add_below + makeFormButton('save', 'Save', 'saveEditMode(event);');
@@ -214,9 +248,20 @@ gotoEditModeFromEvent = function(event) {
         add_below = add_below + makeFormButton('delete', 'Delete', 'deleteSection(event);');
         add_below = add_below + makeFormButton('moveup', 'Move Up', 'moveSectionUp(event);', 1);
         add_below = add_below + makeFormButton('movedown', 'Move Down', 'moveSectiondown(event);', 1);
-        add_below = add_below + '&nbsp;|&nbsp;';
-        add_below = add_below + makeFormButton('add_below', 'Add Text Below', 'addNewSection(event, 0);');
-        add_below = add_below + makeFormButton('add_below', 'Add Table Below', 'addNewSection(event, 0, 1);');
+		if ((topicSectionObject.index == topicSections.length-1) 
+		 || (topicSectionObject.newSection)
+		 || (typeof(topicSections[topicSectionObject.index+1].editDivSection) == 'undefined')
+			) {
+        	add_below = add_below + '&nbsp;|&nbsp;';
+			//got through the registered editors
+        	for (var i=0;i<TWiki.InlineEditPlugin.editors.length;i++) {
+            	var getTypeName = TWiki.InlineEditPlugin.editors[i]+'.getTypeName()';
+            	var typeName = eval(getTypeName);
+
+    	    	add_below = add_below + makeFormButton('add_below', 'Add '+typeName+' Below', 'addNewSection(event, 1, '+i+');');
+			}
+		}
+
         post.innerHTML = add_below;
 
         topicSectionObject.editDivSection.insertBefore(pre, topicSectionObject.editDivSection.firstChild);
@@ -246,14 +291,18 @@ function gotoEditMode(topicSectionObject) {
     if (typeof( topicSectionObject.editDivSection ) == "undefined") {
         alert('sorry, no applicable inline editor registered');
     } else {
-        topicSectionObject.editDivSection.style.display='inline';
-        topicSectionObject.HTMLdiv.style.display='none';
+        jscss('add', topicSectionObject.editDivSection, 'showElementInline');
+        jscss('remove', topicSectionObject.editDivSection, 'hideElement');
+        jscss('add', topicSectionObject.HTMLdiv, 'hideElement');
+        jscss('remove', topicSectionObject.HTMLdiv, 'showElementInline');
     }
 }
 
 hideEdit = function(topicSectionObject) {
-    topicSectionObject.editDivSection.style.display='none';
-    topicSectionObject.HTMLdiv.style.display='inline';
+        jscss('add', topicSectionObject.HTMLdiv, 'showElementInline');
+        jscss('remove', topicSectionObject.HTMLdiv, 'hideElement');
+        jscss('add', topicSectionObject.editDivSection, 'hideElement');
+        jscss('remove', topicSectionObject.editDivSection, 'showElementInline');
 }
 
 addNewSection = function(event, putSectionAbove, sectionType, sectionTml) {
@@ -267,11 +316,8 @@ addNewSection = function(event, putSectionAbove, sectionType, sectionTml) {
         var newSectionID = 'new'+originatingTopicSectionObject.topicSection+aboveBelow[putSectionAbove]+originatingTopicSectionObject.newSectionName;
         originatingTopicSectionObject.newSectionName++;
 
-        //TODO: extract this into each editor
-        var newTml = 'new Section';
-        if (sectionType == 1) {
-            newTml = "||||\n||||\n||||";
-        }
+		var newTmlFunc = TWiki.InlineEditPlugin.editors[sectionType]+'.getDefaultTml()';
+        var newTml = eval(newTmlFunc);
 
         //TODO: change the ids etc..
         var htmldiv=document.createElement('DIV');
@@ -307,7 +353,7 @@ addNewSection = function(event, putSectionAbove, sectionType, sectionTml) {
         var hr=document.createElement('hr');
         if (putSectionAbove) {
             originatingTopicSectionObject.editDivSection.parentNode.insertBefore(topicSectionObject.HTMLdiv, originatingTopicSectionObject.editDivSection);
-            originatingTopicSectionObject.editDivSection.parentNode.insertBefore(hr, originatingTopicSectionObject.editDivSection);
+//            originatingTopicSectionObject.editDivSection.parentNode.insertBefore(hr, originatingTopicSectionObject.editDivSection);
             for (var i=0;i < topicSections.length;i++) {
                 if (topicSections[i] == originatingTopicSectionObject) {
                     topicSectionsArrayIndex = i;
@@ -316,7 +362,7 @@ addNewSection = function(event, putSectionAbove, sectionType, sectionTml) {
             }
         } else {
             var nextSibling = originatingTopicSectionObject.editDivSection.nextSibling.nextSibling
-            originatingTopicSectionObject.editDivSection.parentNode.insertBefore(hr, nextSibling);
+//            originatingTopicSectionObject.editDivSection.parentNode.insertBefore(hr, nextSibling);
             originatingTopicSectionObject.editDivSection.parentNode.insertBefore(topicSectionObject.HTMLdiv, nextSibling);
             for (var i=0;i < topicSections.length;i++) {
                 if (topicSections[i] == originatingTopicSectionObject) {
@@ -386,11 +432,12 @@ saveAllSections = function(event) {
         topicSectionalSaveUrl = topicSections[0].saveUrl;
         browserLogin = topicSections[0].browserLogin;
 
+//TODO: change this so the parameters are initialised from the topicSectionalSaveUrl sent by the perl
         var bindArgs = {
         url:        topicSectionalSaveUrl,
         username: browserLogin,
         method: 'POST',
-        parameters: {replywitherrors: 1, dataType: 'JSON', data: data, inlineeditsave: 1, originalrev: topicSections[0].topicRev,sectionOrder: sectionOrder},
+        parameters: {replywitherrors: 1, dataType: 'JSON', data: data, inlineeditsave: 1, originalrev: topicSections[0].topicRev,sectionOrder: sectionOrder, forcenewrevision: 1},
         onError:      function(req) {
                 // handle error here
                 alert('Error!\nStatusText='+req.statusText+'\nContents='+req.responseText);
@@ -442,11 +489,13 @@ deleteSection = function(event) {
     if (topicSectionObject.deleted) {
         topicSectionObject.deleted = 0;
         tg.value = 'Delete';
-        topicSectionObject.editDivSection.elements.namedItem("text").disabled = false;
+		topicSectionObject.editSectionObject.disableEdit(false);
+        //topicSectionObject.editDivSection.elements.namedItem("text").disabled = false;
     } else {
         topicSectionObject.deleted = 1;
         tg.value = 'unDelete';
-        topicSectionObject.editDivSection.elements.namedItem("text").disabled = true;
+		topicSectionObject.editSectionObject.disableEdit(true);
+        //topicSectionObject.editDivSection.elements.namedItem("text").disabled = true;
     }
 }
 
@@ -536,4 +585,25 @@ function findPosY(obj)
         curtop += obj.y;
     return curtop;
 }
+
+//from http://onlinetools.org/articles/unobtrusivejavascript/cssjsseparation.html
+function jscss(a,o,c1,c2)
+{
+  switch (a){
+    case 'swap':
+      o.className=!jscss('check',o,c1)?o.className.replace(c2,c1):o.className.replace(c1,c2);
+    break;
+    case 'add':
+      if(!jscss('check',o,c1)){o.className+=o.className?' '+c1:c1;}
+    break;
+    case 'remove':
+      var rep=o.className.match(' '+c1)?' '+c1:c1;
+      o.className=o.className.replace(rep,'');
+    break;
+    case 'check':
+      return new RegExp('\\b'+c1+'\\b').test(o.className)
+    break;
+  }
+}
+
 

@@ -62,17 +62,19 @@ BEGIN {
 
 =pod
 
----++ ClassMethod new ( $session, $web, $form )
+---++ ClassMethod new ( $session, $web, $form, $def )
 
    * $web - default web to recover form from, if $form doesn't specify a web
    * =$form= - topic name to read form definition from
+   * =$def= - optional. a reference to a list of field definitions. if present,
+              these definitions will be used, rather than those in =$form=.
 
 May throw TWiki::OopsException
 
 =cut
 
 sub new {
-    my( $class, $session, $web, $form, $noNameCheck ) = @_;
+    my( $class, $session, $web, $form, $def ) = @_;
     my $this = bless( {}, $class );
 
     ( $web, $form ) =
@@ -80,17 +82,26 @@ sub new {
 
     my $store = $session->{store};
 
-    # Read topic that defines the form
-    unless( $store->topicExists( $web, $form ) ) {
-        return undef;
-    }
-    my( $meta, $text ) =
-      $store->readTopic( $session->{user}, $web, $form, undef );
-
     $this->{session} = $session;
     $this->{web} = $web;
     $this->{topic} = $form;
-    $this->{fields} = $this->_parseFormDefinition( $text );
+
+    unless ( $def ) {
+
+      # Read topic that defines the form
+      unless( $store->topicExists( $web, $form ) ) {
+        return undef;
+      }
+      my( $meta, $text ) =
+	$store->readTopic( $session->{user}, $web, $form, undef );
+
+      $this->{fields} = $this->_parseFormDefinition( $text );
+
+    } else {
+
+      $this->{fields} = $def;
+
+    }
 
     # Expand out values arrays in the definition
     # SMELL: this should be done lazily
@@ -423,7 +434,6 @@ sub renderFieldForEdit {
     my $item;
     my %attrs;
     my @defaults;
-    my $selected;
 
     $name = $this->cgiName( $name );
 
@@ -468,20 +478,51 @@ sub renderFieldForEdit {
                                 -name => $name,
                                 -default => "\n".$value );
 
-    } elsif( $type eq 'select' ) {
+    } elsif( $type =~ /^select/ ) {
         $options = $fieldDef->{value};
         ASSERT( ref( $options )) if DEBUG;
+        my $minSize = $size;
+        my $maxSize = $size;
+        if( $size =~ /([0-9]+)\.\.([0-9]+)/ ) {
+            ( $minSize, $maxSize ) = ( $1, $2 );
+        }
+        my $isMulti  = ( $type =~ /\+multi/ );
+        my $isValues = ( $type =~ /\+values/ );
         my $choices = '';
         foreach $item ( @$options ) {
-            $selected = ( $item eq $value );
-            $item =~ s/<nop/&lt\;nop/go;
-            if( $selected ) {
-                $choices .= CGI::option({ selected=>'selected' }, $item );
-            } else {
-                $choices .= CGI::option( $item );
+            my $params = {};
+            my $itemValue = $item;
+            if( $isValues ) {
+                if( $item =~ /^(.*?[^\\])=(.*)$/ ) {
+                    $item = $1;
+                    $itemValue = $2;
+                    $params->{value} = $itemValue;
+                }
+                $item =~ s/\\=/=/g;
             }
+            if( defined $itemValue && defined $value ) {
+                my $selected;
+                if( $isMulti ) {
+                    $selected = ( $value =~ /^(.*,)?\s*$itemValue\s*(,.*)?$/ );
+                } else {
+                    $selected = ( $itemValue eq $value );
+                }
+                $params->{selected} = 'selected' if $selected;
+            }
+            $item =~ s/<nop/&lt\;nop/go;
+            $choices .= CGI::option( $params, $item );
         }
-        $value = CGI::Select( { name=>$name, size=>$size }, $choices );
+        $size = scalar @$options;
+        if( $size > $maxSize ) {
+            $size = $maxSize;
+        } elsif( $size < $minSize ) {
+            $size = $minSize;
+        }
+        my $params = { name=>$name, size=>$size };
+        if( $isMulti ) {
+            $params->{'multiple'}='on';
+        }
+        $value = CGI::Select( $params, $choices );
 
     } elsif( $type =~ /^checkbox/ ) {
         $options = $fieldDef->{value};
@@ -522,7 +563,7 @@ sub renderFieldForEdit {
     } elsif( $type eq 'radio' ) {
         $options = $fieldDef->{value};
         ASSERT( ref( $options )) if DEBUG;
-        $selected = '';
+        my $selected = '';
         foreach $item ( @$options ) {
             $attrs{$item} =
               { class=>'twikiEditFormRadioField twikiRadioButton',

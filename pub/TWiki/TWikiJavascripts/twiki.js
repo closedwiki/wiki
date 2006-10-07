@@ -31,7 +31,8 @@ var LOWER_ALPHA_CHARS		= "a-z";
 var NUMERIC_CHARS			= "\\d";
 var MIXED_ALPHA_CHARS		= UPPER_ALPHA_CHARS + LOWER_ALPHA_CHARS;
 var MIXED_ALPHANUM_CHARS	= MIXED_ALPHA_CHARS + NUMERIC_CHARS;
-var WIKIWORD_REGEX = "^" + "[" + UPPER_ALPHA_CHARS + "]" + "+" + "[" + LOWER_ALPHA_CHARS + "]" + "+" + "[" + UPPER_ALPHA_CHARS + "]" + "+" + "[" + MIXED_ALPHANUM_CHARS + "]" + "*";
+var LOWER_ALPHANUM_CHARS	= LOWER_ALPHA_CHARS + NUMERIC_CHARS;
+var WIKIWORD_REGEX = "^" + "[" + UPPER_ALPHA_CHARS + "]" + "+" + "[" + LOWER_ALPHANUM_CHARS + "]" + "+" + "[" + UPPER_ALPHA_CHARS + "]" + "+" + "[" + MIXED_ALPHANUM_CHARS + "]" + "*";
 var ALLOWED_URL_CHARS = MIXED_ALPHANUM_CHARS + "-_^";
 
 // TWiki namespace
@@ -240,6 +241,54 @@ function makeWikiWord(inString) {
 }
 
 /**
+Javascript query string parsing.
+Author: djohnson@ibsys.com {{djohnson}} - you may use this file as you wish but please keep this header with it thanks
+@use 
+Pass location.search to the constructor:
+<code>var myPageQuery = new PageQuery(location.search)</code>
+Retrieve values
+<code>var myValue = myPageQuery.getValue("param1")</code>
+*/
+TWiki.PageQuery = function (q) {
+	if (q.length > 1) {
+		this.q = q.substring(1, q.length);
+	} else {
+		this.q = null;
+	}
+	this.keyValuePairs = new Array();
+	if (q) {
+		for(var i=0; i < this.q.split(/[&;]/).length; i++) {
+			this.keyValuePairs[i] = this.q.split(/[&;]/)[i];
+		}
+	}
+}
+TWiki.PageQuery.prototype.getKeyValuePairs = function() {
+	return this.keyValuePairs;
+}
+/**
+@return The query string value; if not found returns -1.
+*/
+TWiki.PageQuery.prototype.getValue = function (s) {
+	for(var j=0; j < this.keyValuePairs.length; j++) {
+		if(this.keyValuePairs[j].split(/=/)[0] == s)
+			return this.keyValuePairs[j].split(/=/)[1];
+	}
+	return -1;
+}
+TWiki.PageQuery.prototype.getParameters = function () {
+	var a = new Array(this.getLength());
+	for(var j=0; j < this.keyValuePairs.length; j++) {
+		a[j] = this.keyValuePairs[j].split(/=/)[0];
+	}
+	return a;
+}
+TWiki.PageQuery.prototype.getLength = function() {
+	return this.keyValuePairs.length;
+}
+
+// COOKIE FUNCTIONS
+
+/**
 Add a cookie. If 'days' is set to a non-zero number of days, sets an expiry on the cookie.
 @deprecated Use setPref.
 */
@@ -279,9 +328,8 @@ Writes a TWiki preference value. If the TWiki preference of given name already e
 Characters '|' and '=' are reserved as separators.
 @param inPrefName (String): name of the preference to write, for instance 'SHOWATTACHMENTS'
 @param inPrefValue (String): value to write, for instance '1'
-@param inExpiryDate (Number): (optional) expiry date of cookie; if not set uses COOKIE_EXPIRY_TIME
 */
-function setPref(inPrefName, inPrefValue, inExpiryDate) {
+function setPref(inPrefName, inPrefValue) {
 	var prefName = _getSafeString(inPrefName);
 	var prefValue = (isNaN(inPrefValue)) ? _getSafeString(inPrefValue) : inPrefValue;
 	var cookieString = _getPrefCookie();
@@ -294,7 +342,7 @@ function setPref(inPrefName, inPrefValue, inExpiryDate) {
 	// else not found, so don't remove an existing entry
 	var keyvalueString = prefName + COOKIE_PREF_VALUE_SEPARATOR + prefValue;
 	prefs.push(keyvalueString);
-	_writePrefValues(prefs, inExpiryDate);
+	_writePrefValues(prefs);
 }
 
 /**
@@ -336,6 +384,9 @@ Finds a key-value pair in an array.
 @return The first occurrence of a key-value pair, where key == inKey; null if none is found.
 */
 function _getKeyValue (inKeyValues, inKey) {
+	if (!inKeyValues) {
+	  return null;
+	}
 	var i = inKeyValues.length;
 	while (i--) {
 		var keyvalue = inKeyValues[i].split(COOKIE_PREF_VALUE_SEPARATOR);
@@ -362,14 +413,13 @@ function _getKeyValueLoc (inKeyValues, inKey) {
 /**
 Writes a cookie with the stringified array values of inValues.
 @param inValues: (Array) an array with key-value tuples
-@param inExpiryDate: (Number) (optional) expiry date of cookie; if not set uses COOKIE_EXPIRY_TIME
 */
-function _writePrefValues (inValues, inExpiryDate) {
+function _writePrefValues (inValues) {
 	var cookieString = (inValues != null) ? inValues.join(COOKIE_PREF_SEPARATOR) : '';
-	var expdate = (inExpiryDate != null) ? inExpiryDate : new Date ();
-	FixCookieDate (expdate); // Correct for Mac date bug - call only once for given Date object!
-	expdate.setTime (expdate.getTime() + COOKIE_EXPIRY_TIME);
-	SetCookie(TWIKI_PREF_COOKIE_NAME, cookieString, expdate);
+	var expiryDate = new Date ();
+	FixCookieDate (expiryDate); // Correct for Mac date bug - call only once for given Date object!
+	expiryDate.setTime (expiryDate.getTime() + COOKIE_EXPIRY_TIME);
+	SetCookie(TWIKI_PREF_COOKIE_NAME, cookieString, expiryDate);
 }
 
 /**
@@ -379,9 +429,7 @@ Gets the TWiki pref cookie; creates a new cookie if it does not exist.
 function _getPrefCookie () {
 	var cookieString = GetCookie(TWIKI_PREF_COOKIE_NAME);
 	if (cookieString == undefined) {
-		// Cookie does not exist yet. Create a new one by writing without values.
-		_writePrefValues();
-		cookieString = GetCookie(TWIKI_PREF_COOKIE_NAME);
+		cookieString = "";
 	}
 	return cookieString;
 }
@@ -430,18 +478,19 @@ function FixCookieDate (date) {
 //      the cookie does not exist.
 //
 function GetCookie (name) {
-  var arg = name + "=";
-  var alen = arg.length;
-  var clen = document.cookie.length;
-  var i = 0;
-  while (i < clen) {
-    var j = i + alen;
-    if (document.cookie.substring(i, j) == arg)
-      return getCookieVal (j);
-    i = document.cookie.indexOf(" ", i) + 1;
-    if (i == 0) break; 
-  }
-  return null;
+	var arg = name + "=";
+	var alen = arg.length;
+	var clen = document.cookie.length;
+	var i = 0;
+	while (i < clen) {
+		var j = i + alen;
+		if (document.cookie.substring(i, j) == arg) {
+			return getCookieVal(j);
+		}
+		i = document.cookie.indexOf(" ", i) + 1;
+		if (i == 0) break; 
+	}
+	return null;
 }
 //
 //  Function to create or update a cookie.
@@ -472,11 +521,12 @@ function GetCookie (name) {
 //      SetCookie (myCookieVar, cookieValueVar, null, "/myPath", null, true);
 //
 function SetCookie (name,value,expires,path,domain,secure) {
-  document.cookie = name + "=" + escape (value) +
+  var cookieString = name + "=" + escape (value) +
     ((expires) ? "; expires=" + expires.toGMTString() : "") +
     ((path) ? "; path=" + path : "") +
     ((domain) ? "; domain=" + domain : "") +
     ((secure) ? "; secure" : "");
+    document.cookie = cookieString;
 }
 
 //  Function to delete a cookie. (Sets expiration date to start of epoch)
@@ -489,11 +539,7 @@ function SetCookie (name,value,expires,path,domain,secure) {
 //             no domain was specified when creating the cookie.
 //
 function DeleteCookie (name,path,domain) {
-  if (GetCookie(name)) {
-    document.cookie = name + "=" +
-      ((path) ? "; path=" + path : "") +
-      ((domain) ? "; domain=" + domain : "") +
-      "; expires=Thu, 01-Jan-70 00:00:01 GMT";
-  }
+	if (GetCookie(name)) {
+		document.cookie = name + "=" + ((path) ? "; path=" + path : "") + ((domain) ? "; domain=" + domain : "") + "; expires=Thu, 01-Jan-70 00:00:01 GMT";
+	}
 }
-

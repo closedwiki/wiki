@@ -27,18 +27,27 @@ TWiki.InlineEditPlugin.TableEdit.register = function() {
     }
     TWiki.InlineEditPlugin.editors.push('TWiki.InlineEditPlugin.TableEdit');
 }
+TWiki.InlineEditPlugin.TableEdit.getDefaultTml = function() {
+    return "||||\n||||\n||||";
+}
+TWiki.InlineEditPlugin.TableEdit.getTypeName = function() {
+    return "Table";
+}
+
 //returns true if the section can be edited by this editor
 TWiki.InlineEditPlugin.TableEdit.appliesToSection = function(topicSectionObject) {
 //TODO: deal with \ and other special cases
 //foreach line make sure it starts and ends with a |
     var lines = topicSectionObject.tml.split("\n");
     for (var i=0; i< lines.length;i++) {
-        if ( ! lines[i].match(/^\s*\|(.*)\|\s*$/)) {
+		//allow blank lines after the table
+        if ((lines[i] != '') && ( ! lines[i].match(/^\s*\|(.*)\|\s*$/))) {
             return false;
         }
     }
     return true;
 }
+
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //TWiki.InlineEditPlugin.TableEdit CLASS functions
@@ -75,7 +84,10 @@ TWiki.InlineEditPlugin.TableEdit.prototype.getSaveData = function() {
     if (this.topicSectionObject.newSection) {
         //make a real section of it
         serialzationObj.value = "\n\n"+serialzationObj.value+"\n\n";
-    }
+	}
+
+    serialzationObj.value = serialzationObj.value + this.topicSectionObject.editDivSection.postLines;
+	
     return serialzationObj.toJSONString();
 }
 
@@ -89,7 +101,13 @@ TWiki.InlineEditPlugin.TableEdit.prototype.createEditSection = function() {
     var innerHTML = '';
     var lines = this.topicSectionObject.tml.split("\n");
     var maxColumns = 0;
+	newForm.postLines = '';	//don't lose the empty lines on the end of the section
     for (var i=0; i< lines.length;i++) {
+		if (lines[i].length == 0) {
+			//must be in the post table empty lines
+			newForm.postLines = newForm.postLines + lines[i] + "\n"; 
+			continue;
+		}
 //        innerHTML = innerHTML + '<tr>';
 //        innerHTML = innerHTML + '<td>'+makeFormButton('add_row', '+', 'addRow(event);', 1);
 //        innerHTML = innerHTML + makeFormButton('delete_row', '-', 'deleteRow(event);', 1) +'</td>';
@@ -135,6 +153,19 @@ TWiki.InlineEditPlugin.TableEdit.prototype.createEditSection = function() {
 
     return newForm;
 }
+
+TWiki.InlineEditPlugin.TableEdit.prototype.disableEdit = function(disable) {
+        //this.topicSectionObject.editDivSection.elements.namedItem("text").disabled = disable;
+		
+		
+    for (var i=0;i<this.topicSectionObject.editDivSection.elements.length;i++) {
+        if (this.topicSectionObject.editDivSection.elements[i].name != 'text') {
+            continue;
+        }
+        this.topicSectionObject.editDivSection.elements[i].disabled = disable;
+	}
+}
+
 
 TWiki.InlineEditPlugin.TableEdit.TextAreaResize = function(event) {
     var tg = (event.target) ? event.target : event.srcElement;

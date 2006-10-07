@@ -15,6 +15,7 @@
 #
 ###############################################################################
 package TWiki::Plugins::RedDotPlugin;
+use strict;
 
 ###############################################################################
 use vars qw(
@@ -22,12 +23,14 @@ use vars qw(
         $debug $styleLink $doneHeader $hasInitRedirector
 	$redirectUrl $doneRedirect $query
 	%TWikiCompatibility
+	$NO_PREFS_IN_TOPIC $SHORTDESCRIPTION
     );
 
 
-$TWikiCompatibility{endRenderingHandler} = 1.1;
 $VERSION = '$Rev$';
-$RELEASE = '1.33';
+$RELEASE = '1.37';
+$NO_PREFS_IN_TOPIC = 1;
+$SHORTDESCRIPTION = 'Renders edit-links as little red dots';
 
 $debug = 0; # toggle me
 
@@ -88,8 +91,7 @@ sub initRedirector {
   $query = &TWiki::Func::getCgiQuery();
   return unless $query;
 
-  my $theAction = $ENV{'SCRIPT_NAME'} || '';
-  $theAction =~ s/^.*\///o;
+  my $theAction = getCgiAction();
   #writeDebug("theAction=$theAction");
 
   my $sessionKey = "REDDOT_REDIRECT_$web.$topic";
@@ -111,7 +113,7 @@ sub initRedirector {
     if ($theAction =~ /^view/) {
       writeDebug("found view");
       $theRedirect = &TWiki::Func::getSessionValue($sessionKey);
-      &clearSessionValue($sessionKey);
+      TWiki::Func::clearSessionValue($sessionKey);
     } else {
       writeDebug("found save");
       $theRedirect = $query->param('redirect');
@@ -142,32 +144,10 @@ sub initRedirector {
 }
 
 ###############################################################################
-sub endRenderingHandler {
+sub postRenderingHandler {
   return if $doneRedirect || $redirectUrl eq '' || !$query;
   writeDebug("called endRenderingHandler()");
   &TWiki::Func::redirectCgiQuery($query, $redirectUrl);
-}
-sub postRenderingHandler {
-  return endRenderingHandler(@_);
-}
-
-###############################################################################
-# wrapper
-sub clearSessionValue {
-  my $key = shift;
-
-  # using dakar's client 
-  if (defined &TWiki::Client::clearSessionValue) {
-    return $TWiki::Plugins::SESSION->{client}->clearSessionValue($key);
-  }
-  
-  # using the SessionPlugin
-  if (defined &TWiki::Plugins::SessionPlugin::clearSessionValueHandler) {
-    return &TWiki::Plugins::SessionPlugin::clearSessionValueHandler($key);
-  }
-
-  # last resort
-  return &TWiki::Func::setSessionValue($key, undef);
 }
 
 ###############################################################################
@@ -208,7 +188,7 @@ sub renderRedDot {
     if (&TWiki::Func::topicExists($theWeb, $theTopic)) {
       writeDebug("checking access on $theWeb.$theTopic for $wikiName");
       $hasEditAccess = &TWiki::Func::checkAccessPermission("CHANGE", 
-	$wikiName, '', $theTopic, $theWeb);
+	$wikiName, undef, $theTopic, $theWeb);
       if ($hasEditAccess) {
 	$hasEditAccess = 0 unless $wikiName =~ /$theGrant/; 
 	# SMELL: use the twiki users and groups functions to check
@@ -232,8 +212,8 @@ sub renderRedDot {
   my $result = 
     '<span class="redDot" ';
   $result .=
-    '><a href="%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/' .
-    "$theWeb/$theTopic" .
+    '><a href="'.
+    TWiki::Func::getScriptUrl($theWeb,$theTopic,'edit').
     '?t=' . time();
   $result .= 
     "&redirect=$theRedirect" if $theRedirect ne "$theWeb.$theTopic";
@@ -289,6 +269,24 @@ sub redirectCgiQueryHandler {
   return 0;
 }
 
+###############################################################################
+# take the REQUEST_URI, strip off the PATH_INFO from the end, the last word
+# is the action; this is done that complicated as there may be different
+# paths for the same action depending on the apache configuration (rewrites, aliases)
+sub getCgiAction {
 
+  my $pathInfo = $ENV{'PATH_INFO'} || '';
+  my $theAction = $ENV{'REQUEST_URI'} || '';
+  if ($theAction =~ /^.*?\/([^\/]+)$pathInfo.*$/) {
+    $theAction = $1;
+  } else {
+    $theAction = 'view';
+  }
+  #writeDebug("PATH_INFO=$ENV{'PATH_INFO'}");
+  #writeDebug("REQUEST_URI=$ENV{'REQUEST_URI'}");
+  #writeDebug("theAction=$theAction");
+
+  return $theAction;
+}
 
 1;

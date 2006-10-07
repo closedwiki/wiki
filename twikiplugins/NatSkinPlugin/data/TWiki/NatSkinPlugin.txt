@@ -13,26 +13,11 @@
 
 ---++ Description
 This is the supplemental plugin for the NatSkin. Its main purpose is to supply
-"skin states" to control different styles and variants to be switched
-dynamically while you are online. See the below for a full list of all
-provided features.
-
-This plugin tries to be maximal compatible with all past, current and upcoming
-TWiki releases, namely Beijing, Cairo and Dakar (aka TWiki-4.x). Therefore some
-mechanisms have been internalized that are only available since TWiki-4.0.
-The plugin tries to be interface-compatible to all engines using
-the =Func.pm= API. In those cases where this is _not_ possible, because needed
-functions are not part of the =Func.pm= API, access functions have been added
-to address the different implementations and incompatibilities (e.g. access to
-topic meta data). In the future a sensible part of that will be moved over to
-the TWiki:Plugins/DakarContrib package and be used by the NatSkinPlugin and similar.
+"skin states" to control different styles and variations to be switched
+dynamically while you are online. 
 
 The documentation of the NatSkinPlugin only covers the additional tags that have
 been implemented. Have a look at the NatSkin topic for more information.
-
-This plugin is inspired by the TWiki:Plugins/GnuSkin by
-TWiki:Main/JoachimNilsson and the TWiki:Plugins/PhotonSkin by
-TWiki:Main/EstebanManchado (<nop>PhotonSearch) renamed to =natsearch= .
 
 ---++ Syntax
 
@@ -46,40 +31,34 @@ see also:
 [[#NATREVISIONS][NATREVISIONS]]
 [[#PREVREV][PREVREV]], 
 
+---+++ FORMBUTTON
+*Syntax*: =%<nop>FORMBUTTON{";lt;format>"}%=
+
+returns a link on to add or change the form attached to a topic. This
+will be shown on the edit screen depending on WEBFORMs being defined or not.
+More precisely FORMBUTTON returns
+   * an empty string if there are no WEBFORMS defined
+   * or an "Add form" link if there are but no form is attached yet
+   * or a "Change form" link to change the current form
+
+The optional =%lt;format>= string may contain the following variables
+   * =$url=: the url of the link
+   * =$action=: the link text 
+   * =$1=: the complete anchor including the link and the text
+
+For example =%<nop>FORMBUTTON{"| $1"}%= will generate a pipe and the formbutton
+if possible. See the =edit.nat.tmpl= template file of the !NatSkin.
+
 ---+++ GETSKINSTYLE
 *Syntax*: =%<nop>GETSKINSTYLE%= 
 
 get the current skin style; the priority is 
-	1 urlparam =style=&lt;name>=, 
-	2 value of the session variable =NATSKIN_STYLE= and 
-	3 preference value =SKINSTYLE= set in 
-		(a) the user preferences 
-		(b) the WebPreferences or 
-		(c) %TWIKIWEB%.TWikiPreferences 
-
----+++ IFACCESS
-*Syntax*: 
-<verbatim>
-%IFACCESS{"<topic>" 
-  action="..." 
-  then="..." 
-  else="..." 
-  mode="..." 
-  [then_]args="..." 
-  else_args="..."}%
-</verbatim>
-
-display the =then= or =else= argument depending on the access rights of the current user
-to the topic =&lt;topic>=.
-=action= can be =view=, =change= or =rename= 
-specifying the requested access mode;
-=mode= can be =text= or =include= where =text= conditionally renders the text in  
-the =then= and =else= arguments and =text= includes the topic in =then= or =else=; 
-if =then= is not specified in =include= mode then =&lt;topic>= is included if access 
-is granted; 
-
-Example: %<nop>IFACCESS{"<nop>AdminSideBar" mode="include"}% includes the 
-<nop>AdminSideBar if the current user has view access to this topic 
+   1 urlparam =style=&lt;name>=, 
+   2 value of the session variable =NATSKIN_STYLE= and 
+   3 preference value =SKINSTYLE= set in 
+      (a) the user preferences 
+      (b) the WebPreferences or 
+      (c) %TWIKIWEB%.TWikiPreferences 
 
 ---+++ IFSKINSTATE
 *Syntax*: =%<nop>IFSKINSTATE{&lt;tests> then="..." else="..."}%= 
@@ -87,24 +66,24 @@ Example: %<nop>IFACCESS{"<nop>AdminSideBar" mode="include"}% includes the
 conditionally returns content depending on the current skin state; 
 &lt;tests> can be 
 
-	* =style="&lt;name>"=: test if the current style is &lt;name> 
-	* =variation="&lt;name>"=: test if the style variation is &lt;name> 
-	* =border="on,off,thin"=: test if the current border is on, off or "thin" 
-	* =buttons="on,off"=: test if the web buttons are currently on or off 
-	* =sidebar="left,right,off"=: 
-	 test if the sidebar is currently on the right, left or off 
-	* =searchbox="top,pos1,pos2,pos3,off"=: 
-	 test if the searchbox is currently on given position or off
-	* =release="beijing,cairo,dakar"=: test if the twiki release this plugin is installed on
-		      is Beijing, Cairo or Dakar
-	* =action="view,edit,preview,..."=: test the current topic action
-	* =glue="on,off"=: control wether to eat surrounding whitespaces or not
-	* =final="&lt;name>"=: test if a skin state variable
-	    called &lt;name> is set to be changeable
-	    or not using the the FINALPREFERENCES setting;
-	    known names are are "style", "sidebar", "buttons", "border", "variation" or "searchbox";
-	    "all" tests wether you can vary the skin at all; "switches" tests of you can change at least one
-	    of "sidebar", "buttons", "border" or "searchbox"
+   * =style="&lt;name>"=: test if the current style is &lt;name> 
+   * =variation="&lt;name>"=: test if the style variation is &lt;name> 
+   * =border="on,off,thin"=: test if the current border is on, off or "thin" 
+   * =buttons="on,off"=: test if the web buttons are currently on or off 
+   * =sidebar="left,right,off"=: 
+    test if the sidebar is currently on the right, left or off 
+   * =searchbox="top,pos1,pos2,pos3,off"=: 
+    test if the searchbox is currently on given position or off
+   * =release="beijing,cairo,dakar"=: test if the twiki release this plugin is installed on
+            is Beijing, Cairo or Dakar
+   * =action="view,edit,preview,..."=: test the current topic action
+   * =glue="on,off"=: control wether to eat surrounding whitespaces or not
+   * =final="&lt;name>"=: test if a skin state variable
+       called &lt;name> is set to be changeable
+       or not using the the FINALPREFERENCES setting;
+       known names are are "style", "sidebar", "buttons", "border", "variation" or "searchbox";
+       "all" tests wether you can vary the skin at all; "switches" tests of you can change at least one
+       of "sidebar", "buttons", "border" or "searchbox"
 
 The tag will render the "then" content if all tests evaluate to true and 
 the "else" content otherwise. Tested strings can be regular expressions. 
@@ -130,8 +109,8 @@ ELSIFSKINSTATE parts can be repeated arbitrarily.  Before rendering the
 Thereby nested <nop>TWikiML expressions can be prevented from being expanded in
 advance.
 
----+++ KNOWNSKINSTYLES
-*Syntax*: =%<nop>KNOWNSKINSTYLES%= 
+---+++ KNOWNSTYLES
+*Syntax*: =%<nop>KNOWNSTYLES%= 
 
 returns a list of all known skin styles. 
 
@@ -140,19 +119,19 @@ returns a list of all known skin styles.
 
 returns a list of all known styles variations.
 
----+++ NATLOGON
-*Syntax*: =%<nop>NATLOGON%=
+---+++ NATLOGINURL
+*Syntax*: =%<nop>NATLOGINURL%
 
-displays a link to a logon url depending on the current login scheme. This
+returns an url to a login depending on the current scheme. This
 will be a link to
    * =natlogon= on any legacy twiki releases or in case the <nop>LoginManager is set to "none"
    * =login= on using dakar's <nop>TemplateLogin 
    * =viewauth= using <nop>ApacheLogin
 
----+++ NATLOGOUT
+---+++ NATLOGOUTURL
 *Syntax*: =%<nop>NATLOGOUT%=
 
-displays a link to a logout url depending on the current login scheme. This
+returns an url to a logout depending on the current login scheme. This
 will be a link to
    * =natlogon= on any legacy twiki releases or in case the <nop>LoginManager is set to "none"
    * =view...?logout=1= on using dakar's <nop>TemplateLogin 
@@ -169,6 +148,37 @@ and Dakar. This version grants to behave the same.
 
 substitute for the =%<nop>REVISIONS%= tag which only works on 
 the TWiki:Plugins/PatternSkin.
+
+---+++ NATWEBLOGO
+*Syntax*: =%<nop>NATWEBLOGO%=
+
+returns either a textual or a graphical a logo to be used in the header bar
+depending on a set of preference variables.
+
+NATWEBLOGO will check for a couple of preference variables in the following order:
+   1 return =%<nop>NATWEBLOGONAME%= if defined
+   1 return =%<nop>NATWEBLOGOIMG%= if defined
+   1 return =%<nop>WEBLOGOIMG%= if defined
+   1 return =%<nop>WIKITOOLNAME%= if defined
+   1 or return the string 'TWiki' otherwise
+
+The =...IMG%= cases will return a full =&lt;img src="..." ... /&gt;= tag whereas
+the =...NAME%= cases will return the string only.
+
+So given you want to have the string <nop>%WIKITOOLNAME% in the logo position
+when using NatSkin but not so when using a different skin on the same site.
+Then add the following to the %MAINWEB%.TWikiPreferences:
+<verbatim>
+  * Set NATWEBLOGONAME = %WIKITOOLNAME%
+  * Set WEBLOGOIMG = /path/to/your/defaultlogo.gif
+</verbatim>
+
+If you want to have a different logo using NatSkin than using another skin on the same site
+then add the following to  the %MAINWEB%.TWikiPreferences:
+<verbatim>
+  * Set NATWEBLOGOIMG = /path/to/your/natskinlogo.gif
+  * Set WEBLOGOIMG = /path/to/your/defaultlogo.gif
+</verbatim>
 
 ---+++ PREVREV
 *Syntax*: =%<nop>PREVREV%= 
@@ -196,7 +206,6 @@ The following argumets are known and can be used in any combination:
 The values to these keys will be commited into the skin state at once. Multiple
 invokations will override any former setting.
 
-
 ---+++ USERACTIONS
 *Syntax*: =%<nop>USERACTIONS%= 
 
@@ -207,10 +216,10 @@ logged in and an empty string for <nop>TWikiGuest
 *Syntax*: =%<nop>WEBCOMPONENT{"name"}%=
 
 display a web component. A web component "<nop>MyComponent" is searched looking for
-	1 <nop>MyComponent in the current web,
-	2 <nop>TWikiMyComponent in the %MAINWEB% web,
-	3 <nop>TWikiMyComponent in the %TWIKIWEB% web and
-	4 <nop>MyComponent in the %TWIKIWEB% web.
+   1 <nop>MyComponent in the current web,
+   2 <nop>TWikiMyComponent in the %MAINWEB% web,
+   3 <nop>TWikiMyComponent in the %TWIKIWEB% web and
+   4 <nop>MyComponent in the %TWIKIWEB% web.
 
 The WEBCOMPONENT tag will retrieve the component where it was found
 first. Thereby every web can define a component of its own but if it is
@@ -229,7 +238,7 @@ By default the NatSkin comes with predefined components
 
 Example: 
    * use =%<nop>WEBCOMPONENT{"WebSideBar"}%= to display a the sidebar component
-   * use %<nop>WEBCOMPONENT{"WebButtons"}% to display the WebButtons
+   * use %<nop>WEBCOMPONENT{"WebButtons"}% to display the <nop>WebButtons
 
 see also: 
 [[#MYSIDEBAR][MYSIDEBAR]]
@@ -245,235 +254,149 @@ to the hover balloon
 
 returns "beijing", "cairo" or "dakar" depending on the TWiki engine this plugin is installed on 
 
----++ Plugin Settings
-Below are the settings which affect the behavior of the NatSkin.
-
-	* Set SHORTDESCRIPTION = Supplements the bare bones NatSkin theme for TWiki
-
----+++ CSS Styles
-The NatSkin can be themed using cascading styles attached to the <nop>TWiki.NatSkin or any
-other topic defined in the STYLEPATH preference variable.
-This variable is a list of topics that are consulted for css attachments. The default value is
-<verbatim>
-	* Set STYLEPATH = TWiki.NatSkin
-</verbatim>
-
-Styles are collected in the order specified. This allows to insert style contributions that are
-not part of the NatSkin. For example given you uploaded NatSkin css definitions to a topic
-<nop>Main.NatSkinThemesContrib you can activate them by setting the STYLEPATH to
-
-<verbatim>
-	* Set STYLEPATH = Main.NatSkinThemesContrib, TWiki.NatSkin
-</verbatim>
-
-Css files must obey the following naming scheme to be recognized
-	* =&lt;name>Style.css=: basic style definitions for style &lt;name>
-	* =&lt;name>Buttons.css=: <nop>WebButton definitions for style &lt;name>
-	* =&lt;name>Border.css=: definitions for style &lt;name> displayed using =STYLEBORDER = on=
-	* =&lt;name>Thin.css=: definitions for style &lt;name> displayed using =STYLEBORDER = thin=
-	* =&lt;name>Thin.css=: definitions for style &lt;name> displayed using =STYLEBORDER = thin=
-	* =&lt;name>Variation.css=: style variations that can be applied to any base style; this
-	  can be used to vary a base style, e.g. to add header art or change some fonts and colours
-	
-
----+++ Skin state configuration
-The skin state is controlled by a set of variables that are configured on the user's home topic,
-the WebPreferences or the [[%TWIKIWEB%.TWikiPreferences]] and are loaded into the current
-session of the user. So every setting can be changed by an url parameter to take effect for the
-duration of the user's session. The default values are given below 
-
-	* switch to the given style,
-	  Base, Clean, <nop>GeorgiaBlue, Gettysburg, Independence, Kubrick,
-	  Pattern, <nop>PlainJane, Rusty, <nop>SeaGreen, Squash or Stormy, 
-	  url param is =style=
-		* Set SKINSTYLE = Clean
-	* switch to the given style variation (<nop>PlasticLove, Subway, <nop>OrangeTunnel etc) or none, url param is =stylevariation=
-		* Set STYLEVARIATION = none
-	* change the border decoration on, off or to thin (enabling a thin blog-like page layout),
-	  url param is =styleborder=
-		* Set STYLEBORDER = off
-	* switch on/of the web buttons in the top bar of the page, 
-	  url param is =stylebuttons=
-		* Set STYLEBUTTONS = off
-	* switch the sidebar to be displayed on the right or left side or off, 
-	  url param is =stylesidebar=
-		* Set STYLESIDEBAR = left
-	* switch the searchbox to be displayed in the topbar (top), at the top of the sidebar (pos1), in the middle of the sidebar (pos2), at the bottom of the sidebar (pos3) or off, 
-	  url param is =stylessearchbox=
-		* Set STYLESEARCHBOX = top
-		
-There are a couple of special url parameters:
-	* =togglesidebar=: disable the sidebar for this request only. 
-	* =style=off=: switch off any styles (simulating a non-css browser)
-	* =style=reset=: switch back to the user and server settings by reverting any 
-	  session preferences
-	* =switchstyle=next/prev=: switch to the next/previous known style
-	* =switchvariation=next/prev=: switch to the next/previous known style variation
-	  
-To emulate the Kubrick style on the old
-[[http://binarybonsai.com][BinaryBonsai]] (not the new K2 style) then copy-paste this
-
-<verbatim>
-	* Set SKINSTYLE = Kubrick
-	* Set STYLEBORDER = thin
-	* Set STYLEBUTTONS = on
-	* Set STYLESIDEBAR = right
-	* Set STYLESVARIATION = none
-	* Set STYLESEARCHBOX = pos1
-</verbatim>
-
-to your [[%TWIKIWEB%.TWikiPreferences]]. Try out other settings using the NatSkinStyleBrowser,
-or even INCLUDE it in your [[%MAINWEB%.%WIKINAME%SideBar]].
-
-There are some constraints build into the NatSkin templates that try guarantee a pleasant appearance
-when combining the different skin states:
-	* If the styleborder is "thin" the sidebar will be disabled for the edit, manage, rdiff,
-	  natsearch, changes and search topic actions. 
-	* The web buttons will alternate with the sidebar so that they will not be displayed
-	  on the same side. 
-	* If the web buttons are enabled the default [[TWikiWebSideBar][WebSideBar]] will disable the redundant 
-	  navigation to other webs.
-
----+++ Style support for the TablePlugin 
-These attributes will be loaded into your session and thereby overwriting any 
-default settings on the TablePlugin topic. Depending on the skin style you are currently
-using these settings will be changed accordingly.
-
-
-	* Set BASETABLEATTRIBUTES = databg="white" headercolor="black" headerbg="white" tableborder="0" cellpadding="0" cellspacing="0" 
-	* Set CLEANTABLEATTRIBUTES = headercolor="#444444"
-	* Set GEORGIABLUETABLEATTRIBUTES = headercolor="#999966"
-	* Set GETTYSBURGTABLEATTRIBUTES = headercolor="#03366"
-	* Set INDEPENDENCETABLEATTRIBUTES = databg="white, #f0f0f0" headercolor="white"
-	* Set KUBRICKTABLEATTRIBUTES = databg="#f4f4f4, white" headercolor="#0055aa"
-	* Set PLAINJANETABLEATTRIBUTES = headercolor="#666666"
-	* Set RUSTYTABLEATTRIBUTES = headercolor="white"
-	* Set SEAGREENTABLEATTRIBUTES = databg="white, #f0f0f0" headercolor="white"
-	* Set SQUASHTABLEATTRIBUTES = databg="white, #f0f0f0" headercolor="white"
-	* Set STORMYTABLEATTRIBUTES = databg="#333333, #444444" headercolor="#cccccc" headerbackground="black" headerbg="black"
-	* Set PATTERNTABLEATTRIBUTES =  databg="#f0f0f0, white" headercolor="#444444"
-
----+++ Email Obfuscation
-The standard TWiki engine tries to obfuscate email addresses by adding a phrase to the email url (like NOSPAM)
-to fool collecting web crawlers. But that is not adequate enough today as crawlers are aware of that. The solution
-to that is to remove every trace of a pattern that could be an email address from the html source code and regenerate
-them using javascript. Most likely, web crawlers will only parse the html and don't run a javascript interpreter 
-beforehand. Nevertheless the obfuscation feature can be switched on and off by adding the =OBFUSCATEEMAIL= variable
-to your %TWIKIWEB%.TWikiPreferences like
-
-	* Set OBFUSCATEEMAIL = on
-
----+++ <nop>WysiwygPlugin support
-When the TWiki:Plugins/WysiwygPlugin is installed on your <nop>%WIKITOOLNAME% installation
-the "Edit" topicaction can be enabled to start the Kupu wysiwyg html editor instead of the 
-normal TWiki textarea by setting the USEWYSIWYG variable to "on" (in your %WIKIUSERNAME% topic,
-WebPreferences or %TWIKIWEB%.TWikiPreferences) 
-
-   * Set USEWYSIWYG = off
-
-By default this value is set to "off"
-
----++ Plugin Installation Instructions
-	* [[%ATTACHURL%/%TOPIC%.zip][Download]] the ZIP file
-	* Unzip it in your twiki installation directory. Content: 
-	  | *File:* | *Description:* |
-	  | ==bin/natlogon== | logon cgi script |
-	  | ==bin/natsearch== | search cgi script |
-	  | ==data/TWiki/%TOPIC%.txt== | plugin topic |
-	  | ==lib/TWiki/Plugins/NatSkinPlugin.pm== | main module |
-	  | ==lib/TWiki/Plugins/NatSkinPlugin/Search.pm== | <nop>NatSearch module |
-	  | ==lib/TWiki/Plugins/NatSkinPlugin/Auth.pm== | authentication module |
-	* If you are installing this plugin on a TWiki release prior to TWiki-4.0, then
-	  you need the TWiki:Plugins/SessionPlugin too.
-	* Optionally, run ==%TOPIC%_installer.pl== to automatically check and
-	  install other TWiki modules that this module depends on. You can also do
-	  this step manually.
-	* Alternatively, manually make sure the dependencies listed in the table
-	  below are resolved.
+---++ Installation Instructions
+   * [[http://twiki.org/p/pub/Plugins/%TOPIC%/%TOPIC%.zip][Download]] the ZIP file
+   * Unzip it in your twiki installation directory. Content: 
+     | *File:* | *Description:* |
+     | ==bin/natlogon== | logon cgi script |
+     | ==bin/natsearch== | search cgi script |
+     | ==data/TWiki/%TOPIC%.txt== | plugin topic |
+     | ==lib/TWiki/Plugins/NatSkinPlugin.pm== | main module |
+     | ==lib/TWiki/Plugins/NatSkinPlugin/Search.pm== | <nop>NatSearch module |
+     | ==lib/TWiki/Plugins/NatSkinPlugin/Auth.pm== | authentication module |
+   * If you are installing this plugin on a TWiki release prior to TWiki-4.0, then
+     you need the TWiki:Plugins/SessionPlugin too.
+   * Optionally, run ==%TOPIC%_installer.pl== to automatically check and
+     install other TWiki modules that this module depends on. You can also do
+     this step manually.
+   * Alternatively, manually make sure the dependencies listed in the table
+     below are resolved.
 %$DEPENDENCIES%
-	* Optionally install the TWiki:Plugins/RedDotPlugin to ease editing the sidebar navigation
-	* (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
-	* on [[%TWIKIWEB%.TWikiPreferences]] change the SKIN variable to "nat";
-	  customize the default style adding the variables SKINSTYLE, STYLEBORDER,
-	  STYLEBUTTONS and STYLESIDEBAR (see NatSkin)
-	* to enable the NatSkin's logon scheme disable TWiki's <nop>LoginManager
-	  and remove all lines containing "require valid-user" (except for the =configure= cgi script)
-	  from the file =bin/.htaccess=
-	* make sure that the scripts =natlogon= and =natsearch= are recognized as cgi scripts
-	  in your server configuration
-	* if you have set up ssl for your server add the following variable to your <nop>TWikiPreferences:
-	  <verbatim> * Set HTTPSLOGON = on </verbatim>
-	  This will prevent passwords being sent in clear-text over a possibly insecure net.
-	* to enable ssl as soon as you logged in use the following rewrite rules in =bin/.htaccess=:
-	  <verbatim>
+   * Optionally install the TWiki:Plugins/RedDotPlugin to ease editing the sidebar navigation
+   * (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
+   * on [[%TWIKIWEB%.TWikiPreferences]] change the SKIN variable to "nat";
+     customize the default style adding the variables SKINSTYLE, STYLEBORDER,
+     STYLEBUTTONS and STYLESIDEBAR (see NatSkin)
+   * If you are using TWiki version <= 4.0.4 and want TWiki table's appearance to match
+     the selected style then apply this
+     [[%PUBURLPATH%/%TWIKIWEB%/NatSkin/TablePlugin_Core_pm.diff][TablePlugin_Core_pm.diff]] patch.
+   * to enable the NatSkin's logon scheme disable TWiki's <nop>LoginManager
+     and remove all lines containing "require valid-user" (except for the =configure= cgi script)
+     from the file =bin/.htaccess=
+   * make sure that the scripts =natlogon= and =natsearch= are recognized as cgi scripts
+     in your server configuration
+   * if you have set up ssl for your server add the following variable to your <nop>TWikiPreferences:
+     <verbatim> * Set HTTPSLOGON = on </verbatim>
+     This will prevent passwords being sent in clear-text over a possibly insecure net.
+   * to enable ssl as soon as you logged in use the following rewrite rules in =bin/.htaccess=:
+     <verbatim>
  RewriteEngine On
  RewriteCond %{SERVER_PORT} !443
  RewriteCond %{QUERY_STRING} template=oopslogon
- RewriteRule ^(.*)$ https://%{HTTP_HOST}/bin/$1 [R,L] 
+ RewriteRule ^(.*)$ https://%{HTTP_HOST}/bin/$1 [R,L]
 </verbatim>
-	  Note, that you might need to accommodate the =/bin= url path above to your installation!
+     Note, that you might need to accommodate the =/bin= url path above to your installation!
 
 
 ---++ Plugin Info
+<!-- provided for compatibility only
+   * Set SHORTDESCRIPTION = Supplements the bare bones NatSkin theme for TWiki
+-->
 |  Plugin Author: | TWiki:Main/MichaelDaum |
 |  Copyright &copy;: | 2003-2006, MichaelDaum@WikiRing.com |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | v2.9997 |
+|  Plugin Version: | v3.00-pre9 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  15 June 2006: | remove double target attribute from external urls |
+|  02 Oct 2006: | respect access rights in WEBCOMPONENTs; \
+                  prevent deep recursion in WEBCOMPONENTs |
+|  18 Sep 2006: | fixed natlogon to run on current TWiki4.1-svn |
+|  31 Aug 2006: | don't call getSkin during initPlugin - you may switch off albeit you are needed |
+|  29 Aug 2006: | cleaned up and removed all spaghetti code distinguishing beijing, cairo and dakar; \
+                  removed lots of code that got useless now, i.e. NATSCRIPTURL |
+|  25 Aug 2006: | first release that drops beijing and cairo support; \
+                  fixed and cleaned up initialisation sequence to detect commandline context properly; \
+                  removed unused IFACCESS tag; \
+                  minor rewrite of the email obfuscator; \
+                  fixed natsearch to properly support web.topic jumps; \
+		  moved part of the documentation to NatSkin |
+|  21 Aug 2006: | removed <nop>TablePlugin hack loading plugin preferences into the session store;\
+                  instead provide proper css for twikiTables to match the current style now; \
+                  this needs !TablePlugin from TWiki > 4.0.4; \
+                  alternatively use the attached patch to it; \
+                  multiple fixes to email obfuscator; \
+                  simplified support for localization ; \
+                  fixed unexpanded MAKETEXT in natsearch |
+|  15 Aug 2006: | suport for userinterface internationalization |
+|  04 Aug 2006: | fixed detection of the cgi action to be more robust on different apache \
+                  configurations (rewrites, aliases);\
+                  implemented NATWEBLOGO to circumvent different ways of using WEBLOGO, \
+                  WIKITOOLNAME; \
+                  added a wrapper for natsearch and natlogon to be called using dakar's \
+                  =TWiki::UI:run()= mechanism; \
+                  reintroduced the dependency on the <nop>FilterPlugin which is still \
+                  used in one place; \
+                  load email obfuscator javascript only when needed |
+|  28 Jul 2006: | This version drops the dependency on the <nop>FilterPlugin \
+                  and adds three new dependencies (1) <nop>FlexWebListPlugin, \
+                  (2) <nop>BreadCrumbsPlugin and (3) <nop>GluePlugin; %BR% \
+                  added =use strict;= and fixed some minor bugs showing up then; \
+                  removed NATLOGON, NATLOGOUT tags and replaced it with \
+                  NATLOGINURL, NATLOGOUTURL for more flexibility; \
+                  fixed check of USEWYSIWYG preference variable |
+|  15 Jun 2006: | remove double target attribute from external urls |
 |  26 May 2006: | fixed error fetching the number of the last revision |
 |  24 May 2006: | fixed detection of style files to prevent 403 errors; \
                   added SETSKINSTATE; \
-		  added more accesskeys to topic actions; \
-		  added "nop" class to prevent external link detection| 
+                  added more accesskeys to topic actions; \
+                  added "nop" class to prevent external link detection| 
 |  05 May 2006: | fixed table bgcolor for Independence style; \
                   display default <nop>WebLinks for non-public webs |
 |  19 Apr 2006: | use &lt;link rel="stylesheet" ... /&gt; instead of @import url() \
                   to ease the pain for js wysiwyg editors |
 |  11 Apr 2006: | added STYLEPATH feature; \
                   added style=off feature to emulate non-css browser; \
-		  disable email obfuscation javascript if unused |
+                  disable email obfuscation javascript if unused |
 |  05 Apr 2006: | added support for dakar's <nop>TemplateLogin; \
                   changed semantics of NATLOGON, added NATLOGOUT;\
-		  fixed some grave bugs exposed by the <nop>PublishContrib |
+                  fixed some grave bugs exposed by the <nop>PublishContrib |
 |  27 Mar 2006: | moved <nop>MySideBar tempaltes to <nop>NatSkin; added docu for HTTPSLOGON |
 |  20 Mar 2006: | multiple errors in natsearch: \
                   always first look into the current web, even for a global search; \
-		  default to local search, was global before, use g: to switch to \
-		  global search explicitely; \
-		  GO function searches in all webs; \
-		  display number of hits; \
-		  sort hit results in reverse chronological order |
+                  default to local search, was global before, use g: to switch to \
+                  global search explicitely; \
+                  GO function searches in all webs; \
+                  display number of hits; \
+                  sort hit results in reverse chronological order |
 |  13 Mar 2006: | dont remove leading and trailing whitespaces from web components |
 |  11 Mar 2006: | removed MYSIDEBAR tag; \
                   new web component search path; \
-		  new sidebar construction logic using <nop>WebLinks; \
-		  docu restructuring; \
-		  packaging using <nop>BuildContrib |
+                  new sidebar construction logic using <nop>WebLinks; \
+                  docu restructuring; \
+                  packaging using <nop>BuildContrib |
 |  22 Feb 2006: | removed GROUPSUMMARY, ALLUSERS and registrationHandle \
                   which where only used on the <nop>NatsWiki installation, moved into \
-		  a plugin of its own; \
-		  fixed initPlugin not to return 0, disable the plugin if not used with thet NatSkin \
-		  on a per handler base |
+                  a plugin of its own; \
+                  fixed initPlugin not to return 0, disable the plugin if not used with thet NatSkin \
+                  on a per handler base |
 |  21 Feb 2006: | externalized the IFDEFINED family into a plugin of its own and \
                   added a new dependency for it |
 |  15 Feb 2006: | properly detect scripted mode on Dakar |
 |  14 Feb 2006: | moved FORMATLIST to TWiki:Plugins/FilterPlugin; \
                   added dependency on it; \
                   fixed uninitialized variables with perl-5.8.8; \
-		  added escape chars to IFDEFINED; \
-		  don't switch off using an atom skin |
+                  added escape chars to IFDEFINED; \
+                  don't switch off using an atom skin |
 |  03 Feb 2006: | added escape chars (percnt, dollar) to IFACCESS to make it more useful;\
                   fixed detection of a Dakar engine; \
-		  fixed default REDDOT in the MySideBarTemplate |
+                  fixed default REDDOT in the MySideBarTemplate |
 |  26 Jan 2006: | docu fixes |
 |  23 Jan 2006: | fixed natlogn; \
                   fixed FORMATLIST to expandCommonVariables of the format result |
 |  09 Jan 2006: | removed local sandbox; added dependency on <nop>DakarContrib; \
-		  added variable expansion to IFDEFINED; \
-		  added cleanup code if the <nop>AliasPlugin is not installed; \
-		  improved natsearch customization; \
-		  w3c fixes in the <nop>MySideBarTemplate |
+                  added variable expansion to IFDEFINED; \
+                  added cleanup code if the <nop>AliasPlugin is not installed; \
+                  improved natsearch customization; \
+                  w3c fixes in the <nop>MySideBarTemplate |
 |  06 Dec 2005: | switching off the plugin if the skin is not NatSkin |
 |  05 Dec 2005: | skin state variables respect FINALPREFERENCES settings; \
                   added WEBCOMPONENT |
@@ -484,8 +407,8 @@ By default this value is set to "off"
                   added custom templates for the <nop>BlackListPlugin's error messages |
 |  10 Nov 2005: | added switchvariation urlparam; \
                   work arround bug in Dakar (nested calls to getRenderedVersion()); \
-		  fixed duplicate target/class in external links; \
-		  improved <nop>MySideBarTemplate using Twisties |
+                  fixed duplicate target/class in external links; \
+                  improved <nop>MySideBarTemplate using Twisties |
 |  09 Nov 2005: | fixed wrong call to =expandCommonVariables()= ... doh |
 |  08 Nov 2005: | fixed use of uninitialized variables; https links to the same site are not external once |
 |  02 Nov 2005: | added OBFUSCATEEMAIL flag to switch off this feature |
@@ -497,11 +420,11 @@ By default this value is set to "off"
 |  20 Oct 2005: | improved external link detection |
 |  10 Oct 2005: | added switchstyle feature to cycle thru all installed skin styles|
 |  09 Oct 2005: | rewrite of skin state: support switching border, \
-		  sidebar, webbuttons and style independently; \
-		  rewrite of the email obfuscator; \
-		  improved skin style browser |
+                  sidebar, webbuttons and style independently; \
+                  rewrite of the email obfuscator; \
+                  improved skin style browser |
 |  27 Sep 2005: | added conditional content tags IFSKINSTATE and IFDEFINED; \
-						added web button support |
+                  added web button support |
 |  30 Aug 2005: | added external link detection; fixed IFSKINSTYLE; \
                   added style support for the TWiki:Plugins/TablePlugin |
 |  26 Aug 2005: | new NatSkin-2.0 release |
@@ -514,5 +437,5 @@ By default this value is set to "off"
 |  Appraisal: | TWiki:Plugins/%TOPIC%Appraisal |
 
 
--- TWiki:Main/MichaelDaum - 15 June 2006 
+-- TWiki:Main/MichaelDaum - 02 Oct 2006 
 

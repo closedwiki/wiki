@@ -93,12 +93,15 @@
 <div class="twikiFormStep">
 ---+++ %MAKETEXT{"Password"}%
 
-%ICON{"key"}% <input class="patternFormFieldVerticalForm" type="password" size="30" name="password" value="" tabindex="2" /><input type="hidden" name="origurl" value="%ORIGURL%" />%TMPL:P{"forgotpasswordnote"}%
+%ICON{"key"}% <input class="patternFormFieldVerticalForm" type="password" size="30" name="password" value="" tabindex="2" />%TMPL:P{"forgotpasswordnote"}%
 </div><!-- /twikiFormStep-->
 <div class="twikiFormStep twikiLast">
 <input class="twikiSubmit" type="submit" value='%MAKETEXT{"Logon"}%' tabindex="3" />
 </div><!-- /twikiFormStep-->
 </div><!-- /twikiFormSteps-->
+<literal>
+%QUERYPARAMS{format="<input type='hidden' name='$name' value='$percntENCODE{$quot()$value$quot type=$quot()html$quot}$percnt' />"}%
+</literal>
 </form>
 
 %TMPL:P{"seealsonote"}%

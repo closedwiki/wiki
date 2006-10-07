@@ -313,13 +313,13 @@ sub _registerSingleBulkUser {
 
     my $userTopic =
       $session->{users}->addUserToMapping( $user, $session->{user} );
-    $user->setEmails( $row->{Email} );
 
     if( $doOverwriteTopics or !$session->{store}->topicExists( $row->{webName}, $row->{WikiName} ) ) {
         $log .= _createUserTopic($session, 'NewUserTemplate', $row);
     } else {
         $log .= $b.' Not writing topic '.$row->{WikiName}."\n";
 	}
+    $user->setEmails( $row->{Email} );
 
     #if ($TWiki::cfg{EmailUserDetails}) {
         # If you want it, write it.
@@ -429,7 +429,7 @@ sub _requireVerification {
 
     if($err) {
         throw TWiki::OopsException( 'attention',
-                                    def => 'send_mail_error',
+                                    def => 'registration_mail_failed',
                                     web => $data->{webName},
                                     topic => $topic,
                                     params => [ $data->{Email}, $err ]);
@@ -783,7 +783,7 @@ sub finish {
     # let the client session know that we're logged in. (This probably
     # eliminates the need for the registrationHandler call above,
     # but we'll leave them both in here for now.)
-    $session->{client}->userLoggedIn( $data->{LoginName}, $data->{WikiName} );
+    $session->{loginManager}->userLoggedIn( $data->{LoginName}, $data->{WikiName} );
 
     # add user to TWikiUsers topic
     my $user = $session->{users}->createUser( $data->{LoginName},
@@ -794,12 +794,12 @@ sub finish {
 
     my $userTopic = $session->{users}->addUserToMapping( $user, $agent);
 
-    $user->setEmails( $data->{Email} );
-
     # inform user and admin about the registration.
     my $status = _emailRegistrationConfirmations( $session, $data );
 
     my $log = _createUserTopic($session, 'NewUserTemplate', $data);
+
+    $user->setEmails( $data->{Email} );
 
     # write log entry
     if ($TWiki::cfg{Log}{register}) {
@@ -984,7 +984,7 @@ sub _buildConfirmationEmail {
             $before .= $b.' '.$name.': '.$value."\n";
         }
     }
-    $templateText = $before.$after;
+    $templateText = $before.($after||'');
     $templateText = $session->handleCommonTags
       ( $templateText, $TWiki::cfg{UsersWebName}, $data->{WikiName} );
     $templateText =~ s/( ?) *<\/?(nop|noautolink)\/?>\n?/$1/gois;

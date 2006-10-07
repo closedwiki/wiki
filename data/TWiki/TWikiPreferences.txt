@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1123097457" format="1.1" version="$Rev $"}%
+%META:TOPICINFO{author="TWikiContributor" date="1155085246" format="1.1" version="$Rev $"}%
 ---+!! <nop>%WIKITOOLNAME% Site-Level Preferences
 
 This topic defines __site-level__ settings that apply to all users and webs on this TWikiSite.
@@ -91,7 +91,9 @@ _(Click for form-based editing of existing preferences.)_
 
    * Format of images when the __link__ check box is checked: (can be overwritten by user preferences)
       * %H% *NOTE:* Keyword ==$name== gets expanded to filename; ==$comment== to comment; ==$size== to ==width="..." height="..."== attribute of ==img== tag; ==\t== to tab and ==\n== to linefeed (3 spaces for bullets).
+<verbatim>
       * Set ATTACHEDIMAGEFORMAT = \n   * $comment: <br />\n     <img src="%ATTACHURLPATH%/$name" alt="$name" $size />
+</verbatim>
 
 ---++ TWiki Platform Settings
 
@@ -136,12 +138,6 @@ _(Click for form-based editing of existing preferences.)_
       * Set SEARCHSTOPWORDS = a, all, am, an, and, any, as, at, b, be, by, c, d, e, for, from, g, h, how, i, i'm, i.e., in, is, isn't, it, it's, its, j, k, l, m, n, o, of, on, or, p, q, r, s, t, that, that's, the, this, to, u, v, w, was, wasn't, what, what's, when, where, who, who's, will, with, x, y, z
 
 ---+++ E-mail Settings
-
-   * TWiki administrator e-mail address:
-      * Set WIKIWEBMASTER = webmaster@example.com
-
-   * TWiki administrator name (first name and last name, e.g. =Fred Smith=):
-      * Set WIKIWEBMASTERNAME = TWiki Administrator
 
    * 'Mail this topic' mailto: link - can be included in topics, templates or skins
       * Set MAILTHISTOPIC = <a href="mailto:?subject=%BASETOPIC%&amp;body=%TOPICURL%">%MAILTHISTOPICTEXT%</a>
@@ -219,6 +215,9 @@ _(Click for form-based editing of existing preferences.)_
 
    * Bullet sign:
       * Set BULLET = &#8226;
+
+   * %VBAR% symbol:
+      * Set VBAR = &#124;
 
    * Line break and bullet with different levels of indentation:
       * Set BB = <br />&#8226;
@@ -298,13 +297,17 @@ _(Click for form-based editing of existing preferences.)_
    * %TWIKIWEB%.PreviewBackground image:
       * Set PREVIEWBGIMAGE = %PUBURLPATH%/%TWIKIWEB%/PreviewBackground/preview2bg.gif
 
+   * User-friendly synonyms for MAINWEB and TWIKIWEB
+   * Set USERSWEB = %MAINWEB%
+   * Set SYSTEMWEB = %TWIKIWEB%
+   * Set DOCWEB = %TWIKIWEB%
 
 ---++ Access Control Settings
 
    * Users or groups allowed to change or rename this <nop>%TOPIC% topic:
       * Set ALLOWTOPICCHANGE = %MAINWEB%.TWikiAdminGroup
-      * Set ALLOWTOPICRENAME = %MAINWEB%.TWikiAdminGroup
-
+   * By default, only admins can create webs in the root
+      * Set ALLOWROOTCHANGE = %MAINWEB%.TWikiAdminGroup
 
 ---++ Creating New Preference Variables
  

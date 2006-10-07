@@ -1,0 +1,13 @@
+%META:TOPICINFO{author="TWikiContributor" date="1152044733" format="1.2" version="$Rev$"}%
+%META:TOPICPARENT{name="TWikiPreferences"}%
+#VarWIKIWEBMASTER
+#VarWIKIWEBMASTERNAME
+---+++ WIKIWEBMASTER, WIKIWEBMASTERNAME -- web master address and name
+
+
+TWiki administrator e-mail address and name.  Will be used for sending mails,
+so it is required to change the distribution default during
+installation by providing a correct value in [[%LOCALSITEPREFS%]].
+
+   * Type: Site preference variable defined in [[%TWIKIWEB%.%WIKIPREFSTOPIC%]].  Can be customized for a TWiki site in [[%LOCALSITEPREFS%]].
+   * Current value: WIKIWEBMASTER = %WIKIWEBMASTER%   * Current value: WIKIWEBMASTERNAME = %WIKIWEBMASTERNAME%

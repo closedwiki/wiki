@@ -1,0 +1,765 @@
+%META:TOPICINFO{author="TWikiContributor" date="1159306961" format="1.1" reprev="1.2" version="1.2"}%
+---+ !!Color scheme settings for %TWIKIWEB%.PatternSkin
+*Appearance: text colors, background colors, border colors.*
+
+Use this topic to change the color settings of %TWIKIWEB%.PatternSkin. When this topic is saved, the attachment =theme-colors.css= will be updated with new color values. This method relies on TWiki:Plugins.AttachContentPlugin to work.
+
+---++!! Usage
+---+++!! Step 1
+Let %TWIKIWEB%.PatternSkin point to the custom-made colors style sheet. In [[Main.TWikiPreferences]] put:
+<verbatim>
+   * Set USERCOLORSURL = %PUBURLPATH%/%WEB%/%TOPIC%/theme-colors.css
+</verbatim>
+Test this setting: USERCOLORSURL = %USERCOLORSURL% %BR%
+Test the file (may exist only after having saved this topic): <a href="%USERCOLORSURL%">theme-colors.css</a>
+
+---+++!! Step 2
+Edit this topic, and change the color variables as you like. 
+
+---++!! Color variables  
+%TOC%
+
+---++ Logical groupings
+---+++ Text on background
+---++++ MAIN_TEXT_COLOR Main text color
+   * Set MAIN_TEXT_COLOR = #fff
+---++++ MAIN_BACKGROUND_COLOR Main background color
+   * Set MAIN_BACKGROUND_COLOR = #000
+
+---+++ Links
+---++++ LINK_TEXT_NORMAL Link normal text
+   * Set LINK_TEXT_NORMAL = #06c
+---++++ LINK_BACKGROUND_NORMAL Link normal background
+   * Set LINK_BACKGROUND_NORMAL =
+---++++ LINK_TEXT_ACTION_BUTTON Link text red (same as LINK_BACKGROUND_HOVER)
+   * Set LINK_TEXT_ACTION_BUTTON = #D6000F
+---++++ LINK_TEXT_HOVER Link hover text
+   * Set LINK_TEXT_HOVER = #FBF7E8
+---++++ LINK_BACKGROUND_HOVER Link background hover
+   * Set LINK_BACKGROUND_HOVER = #D6000F
+   
+---+++ Disabled
+---++++ DISABLED_BORDER Disabled border
+   * Set DISABLED_BORDER = #e0e0e0
+---++++ DISABLED_TEXT Disabled text
+   * Set DISABLED_TEXT = #ccc
+---++++ DISABLED_BACKGROUND Disabled background
+   * Set DISABLED_BACKGROUND = #f5f5f5
+
+---+++ 'New'
+---++++ NEW_TEXT New text (green) 
+   * Set NEW_TEXT = #049804
+---++++ NEW_BACKGROUND New background (light green) 
+   * Set NEW_BACKGROUND = #ECFADC
+
+---+++ Alert
+---++++ ALERT_TEXT Alert text (red)
+   * Set ALERT_TEXT = #f00
+---++++ ALERT_TEXT_MUTED Muted alert text (dark red)
+   * Set ALERT_TEXT_MUTED = #900
+---++++ ALERT_BORDER Alert border
+   * Set ALERT_BORDER = #f00
+ 
+---+++ Buttons
+---++++ BUTTON_TEXT Button text color (dark gray)
+   * Set BUTTON_TEXT = #333
+---++++ BUTTON_BORDERS Button borders
+   * Set BUTTON_BORDERS = #ddd #aaa #aaa #ddd
+---++++ BUTTON_BORDERS_ACTIVE Button borders (active)
+   * Set BUTTON_BORDERS_ACTIVE = #999 #ccc #ccc #999
+---++++ SUBMIT_BUTTON_BACKGROUND Submit button background (dark yellow)
+   * Set SUBMIT_BUTTON_BACKGROUND = #FED764
+---++++ SUBMIT_BUTTON_BORDER Submit button border (blue) 
+   * Set SUBMIT_BUTTON_BORDER = #88B6CF
+
+---+++ Forms
+---++++ INPUT_FIELD_BORDERS Input field borders
+   * Set INPUT_FIELD_BORDERS = #aaa #ddd #ddd #aaa
+---++++ FORM_INPUT_BORDER Textarea, input and select (darker gray)
+   * Set FORM_INPUT_BORDER = #aaa
+---++++ FORM_BORDER Form (light gray)
+   * Set FORM_BORDER = #efefef
+---++++ ACTIVE_FORM_BACKGROUND Edit form, form steps (light blue)
+   * Set ACTIVE_FORM_BACKGROUND = #F6FAFD
+---++++ FORMFIELD_ACTIVE Active form field (not implemented yet)
+   * Set FORMFIELD_ACTIVE = #ffc
+   
+---++ Color groupings
+---+++ Text colors
+---++++ GENERAL_TEXT General text (if not set in MAIN_BACKGROUND_COLOR) (black)
+   * Set GENERAL_TEXT = #000
+---++++ HEADER_TEXT Header text
+   * Set HEADER_TEXT = #a00
+---++++ CODE_TEXT Code text, left bar text and links
+   * Set CODE_TEXT = #7A4707
+---++++ MUTED_TEXT Muted text (dark gray)
+   * Set MUTED_TEXT = #666
+---++++ GRAYED_OUT_TEXT Grayed out text
+   * Set GRAYED_OUT_TEXT = #8E9195
+---++++ STRONG_TEXT Dark text, header (dark gray)
+   * Set STRONG_TEXT = #333
+---++++ SEPARATOR Seperator in topic action bar
+   * Set SEPARATOR = #aaa
+	
+---+++ Background colors
+---++++ GENERAL_BACKGROUND General background color (if not set in  MAIN_TEXT_COLOR) (white)
+   * Set GENERAL_BACKGROUND = #fff
+---++++ TABLE_HEADER_BACKGROUND Table header background
+   * Set TABLE_HEADER_BACKGROUND = #efefef
+---++++ INFO_BACKGROUND Info (very light blue) (placeholder for background image)
+   * Set INFO_BACKGROUND = #ECF4FB
+---++++ TOPIC_ACTION_BACKGROUND Topic action row (light yellow)
+   * Set TOPIC_ACTION_BACKGROUND = #FCF8EC
+---++++ HEADER_BACKGROUND H1, H2, etc header (light yellow) 
+   * Set HEADER_BACKGROUND = #FDFAF3
+---++++ TABLE_HEADER_ACCENT_BACKGROUND Sorted table column accent background 
+   * Set TABLE_HEADER_ACCENT_BACKGROUND = #ccc
+---++++ ATTACHMENT_AND_FORM_BACKGROUND Attachment, form (light yellow)
+   * Set ATTACHMENT_AND_FORM_BACKGROUND = #FEFCF6
+---++++ DIFF_HEADER_BACKGROUND Diff header (dark gray) (same as GRAYED_OUT_TEXT)
+   * Set DIFF_HEADER_BACKGROUND = #8E9195
+---++++ SIDE_BAR_BACKGROUND Left bar (lighter blue)
+   * Set SIDE_BAR_BACKGROUND = #F5F9FD
+	
+---+++ Border colors
+---++++ INFO_BORDER Info (light blue)
+   * Set INFO_BORDER = #D5E6F3
+---++++ SEPARATOR_BORDER HR line, bottom of h2, attachment table, form (brown)
+   * Set SEPARATOR_BORDER = #E2DCC8
+---++++ MINOR_SEPARATOR_BORDER Header H3..H6 bottom (75% of SEPARATOR_BORDER)
+   * Set MINOR_SEPARATOR_BORDER = #E9E4D2
+---++++ LAYOUT_ELEMENT_BORDER Main layout elements (neutral tone) 
+   * Set LAYOUT_ELEMENT_BORDER = #ccc
+---++++ TABLE_BORDER Table border, sup (light neutral tone)
+   * Set TABLE_BORDER = #ddd
+
+<!-- END OF COLOR VARIABLES -->
+
+Do not change the text below this line unless you know what you are doing!
+-------------------------------------------------------------------------------
+<verbatim>
+%STARTATTACH{"theme-colors.css"}%
+/* PatternSkin colors */
+/* Generated by AttachContentPlugin from TWiki.PatternSkinColorSettings */
+
+/* LAYOUT ELEMENTS */
+
+#patternTopBar {
+	background-color:%MAIN_TEXT_COLOR%;
+	border-color:%LAYOUT_ELEMENT_BORDER%;
+}
+#patternMain { /* don't set a background here; use patternOuter */ }
+#patternOuter {
+	background-color:%MAIN_TEXT_COLOR%; /* Sets background of center col */
+	border-color:%LAYOUT_ELEMENT_BORDER%;
+}
+#patternLeftBar, #patternLeftBarContents { /* don't set a background here; use patternWrapper */ }
+#patternWrapper {
+	background-color:%ACTIVE_FORM_BACKGROUND%;
+}
+#patternBottomBar {
+	background-color:%MAIN_TEXT_COLOR%;
+	border-color:%LAYOUT_ELEMENT_BORDER%;
+}
+#patternBottomBarContents,
+#patternBottomBarContents a:link,
+#patternBottomBarContents a:visited {
+	color:%GRAYED_OUT_TEXT%;
+}
+#patternBottomBarContents a:hover {
+	color:%LINK_TEXT_HOVER%;
+}
+
+/* GENERAL HTML ELEMENTS */
+
+html body {
+	background-color:%MAIN_TEXT_COLOR%;
+	color:%MAIN_BACKGROUND_COLOR%;
+}
+/* be kind to netscape 4 that doesn't understand inheritance */
+body, p, li, ul, ol, dl, dt, dd, acronym, h1, h2, h3, h4, h5, h6 {
+	background-color:transparent;
+}
+hr {
+	color:%LAYOUT_ELEMENT_BORDER%;
+	background-color:%LAYOUT_ELEMENT_BORDER%;
+}
+pre, code, tt {
+	color:%CODE_TEXT%;
+}
+h1, h2, h3, h4, h5, h6 {
+	color:%HEADER_TEXT%;
+}
+h1 a:link,
+h1 a:visited {
+	color:%HEADER_TEXT%;
+}
+h1 a:hover {
+	color:%LINK_TEXT_HOVER%;
+}
+h2 {
+	background-color:%HEADER_BACKGROUND%;
+	border-color:%SEPARATOR_BORDER%;
+}
+h3, h4, h5, h6 {
+	border-color:%MINOR_SEPARATOR_BORDER%;
+}
+/* to override old Render.pm coded font color style */
+.twikiNewLink font {
+	color:inherit;
+}
+.twikiNewLink a:link sup,
+.twikiNewLink a:visited sup {
+	color:%MUTED_TEXT%;
+	border-color:%TABLE_BORDER%;
+}
+.twikiNewLink a:hover sup {
+	background-color:%LINK_BACKGROUND_HOVER%;
+	color:%LINK_TEXT_HOVER%;
+	border-color:%LINK_BACKGROUND_HOVER%;
+}
+.twikiNewLink {
+	border-color:%TABLE_BORDER%;
+}
+:link:focus,
+:visited:focus,
+:link,
+:visited,
+:link:active,
+:visited:active {
+	color:%LINK_TEXT_NORMAL%;
+	background-color:transparent;
+}
+:link:hover,
+:visited:hover {
+	color:%LINK_TEXT_HOVER%;
+	background-color:%LINK_BACKGROUND_HOVER%;
+}
+:link:hover img,
+:visited:hover img {
+	background-color:transparent;
+}
+/* fix for hover over transparent logo: */
+#patternTopBar :link:hover img,
+#patternTopBar :visited:hover img {
+	background:%MAIN_TEXT_COLOR%;
+}
+.patternTopic a:visited {
+	color:%MUTED_TEXT%;
+}
+.patternTopic a:hover {
+	color:%LINK_TEXT_HOVER%;
+}
+
+/* Form elements */
+
+textarea,
+input,
+select {
+	border-color:%FORM_INPUT_BORDER%;
+	color:%MAIN_BACKGROUND_COLOR%;
+	background-color:%GENERAL_BACKGROUND%;
+}
+.twikiSubmit,
+.twikiButton {
+	border-color:%BUTTON_BORDERS%;
+	color:%BUTTON_TEXT%;
+	background-color:%GENERAL_BACKGROUND%;
+}
+.twikiSubmit:active,
+.twikiButton:active {
+	border-color:%BUTTON_BORDERS_ACTIVE%;
+	color:%GENERAL_TEXT%;
+}
+.twikiSubmitDisabled,
+.twikiSubmitDisabled:active {
+	border-color:%DISABLED_BORDER%;
+	color:%DISABLED_TEXT%;
+	background-color:%DISABLED_BACKGROUND%;
+}
+.twikiInputField,
+.twikiSelect {
+	border-color:%INPUT_FIELD_BORDERS%;
+	color:%MAIN_BACKGROUND_COLOR%;
+	background-color:%MAIN_TEXT_COLOR%;
+}
+.twikiInputFieldDisabled {
+	color:%MUTED_TEXT%;
+}
+
+/*	-----------------------------------------------------------
+	Plugin elements
+	-----------------------------------------------------------	*/
+
+/* TablePlugin */
+.twikiTable,
+.twikiTable td,
+.twikiTable th {
+	border-color:%TABLE_BORDER%;
+}
+.twikiTable th a:link,
+.twikiTable th a:visited,
+.twikiTable th a font {
+	color:%LINK_TEXT_NORMAL%;
+}
+.twikiTable th a:hover,
+.twikiTable th a:hover font {
+	background-color:transparent;
+	color:%LINK_BACKGROUND_HOVER%;
+	border-color:%LINK_BACKGROUND_HOVER%;
+}
+
+/* TablePlugin - sorting of table columns */
+.patternTopic th.twikiSortedAscendingCol,
+.patternTopic th.twikiSortedDescendingCol {
+	background-color:%TABLE_HEADER_ACCENT_BACKGROUND%;
+}
+th.twikiSortedAscendingCol a:link,
+th.twikiSortedAscendingCol a:link font,
+th.twikiSortedAscendingCol a:visited,
+th.twikiSortedAscendingCol a:visited font,
+th.twikiSortedDescendingCol a:link,
+th.twikiSortedDescendingCol a:link font,
+th.twikiSortedDescendingCol a:visited,
+th.twikiSortedDescendingCol a:visited font {
+	border-color:%MUTED_TEXT%;
+}
+th.twikiSortedAscendingCol a:hover,
+th.twikiSortedAscendingCol a:hover font,
+th.twikiSortedDescendingCol a:hover,
+th.twikiSortedDescendingCol a:hover font {
+	border-color:%LINK_BACKGROUND_HOVER%;
+}
+
+/* TwistyContrib */
+.twistyPlaceholder {
+	color:%GRAYED_OUT_TEXT%;
+}
+a:hover.twistyTrigger {
+	color:%LINK_TEXT_HOVER%;
+}
+
+/* TipsContrib */
+.tipsOfTheDay {
+	background-color:%INFO_BACKGROUND%;
+}
+.patternTopic .tipsOfTheDayHeader {
+	color:%STRONG_TEXT%;
+}
+/* TipsContrib - in left bar */
+#patternLeftBar .tipsOfTheDay a:link,
+#patternLeftBar .tipsOfTheDay a:visited {
+	color:%HEADER_TEXT%;
+}
+#patternLeftBar .tipsOfTheDay a:hover {
+	color:%LINK_TEXT_HOVER%;
+}
+
+/* RevCommentPlugin */
+.revComment .patternTopicAction {
+	background-color:%ATTACHMENT_AND_FORM_BACKGROUND%;
+}
+
+/*	-----------------------------------------------------------
+	TWiki styles
+	-----------------------------------------------------------	*/
+
+.twikiGrayText {
+	color:%GRAYED_OUT_TEXT%;
+}
+.twikiGrayText a:link,
+.twikiGrayText a:visited {
+	color:%GRAYED_OUT_TEXT%;
+}
+.twikiGrayText a:hover {
+	color:%LINK_TEXT_HOVER%;
+}
+
+table.twikiFormTable th.twikiFormTableHRow,
+table.twikiFormTable td.twikiFormTableRow {
+	color:%MUTED_TEXT%;
+}
+.twikiEditForm {
+	color:%MAIN_BACKGROUND_COLOR%;
+}
+.twikiEditForm .twikiFormTable th,
+.twikiEditForm .twikiFormTable td {
+	border-color:%TABLE_BORDER%;
+}
+.twikiEditForm .twikiFormTable td  {
+	background-color:%ACTIVE_FORM_BACKGROUND%;
+}
+.twikiEditForm .twikiFormTable th {
+	background-color:%INFO_BACKGROUND%;
+}
+.patternContent .twikiAttachments,
+.patternContent .twikiForm {
+	background-color:%ATTACHMENT_AND_FORM_BACKGROUND%;
+	border-color:%SEPARATOR_BORDER%;
+}
+.twikiAttachments table,
+table.twikiFormTable {
+	border-color:%LAYOUT_ELEMENT_BORDER%;
+	background-color:%MAIN_TEXT_COLOR%;
+}
+.twikiAttachments table {
+	background-color:%MAIN_TEXT_COLOR%;
+}
+.twikiAttachments td, 
+.twikiAttachments th {
+	border-color:%LAYOUT_ELEMENT_BORDER%;
+}
+.twikiAttachments th/*,
+table.twikiFormTable th.twikiFormTableHRow*/ {
+	background-color:%MAIN_TEXT_COLOR%;
+}
+.twikiAttachments td {
+	background-color:%MAIN_TEXT_COLOR%;
+}
+.twikiAttachments th a:link,
+.twikiAttachments th a:visited,
+table.twikiFormTable th.twikiFormTableHRow a:link,
+table.twikiFormTable th.twikiFormTableHRow a:visited {
+	color:%LINK_TEXT_NORMAL%;
+}
+.twikiAttachments th font,
+table.twikiFormTable th.twikiFormTableHRow font {
+	color:%LINK_TEXT_NORMAL%;
+}
+.twikiAttachments th a:hover,
+table.twikiFormTable th.twikiFormTableHRow a:hover {
+	border-color:%LINK_TEXT_NORMAL%;
+	background-color:transparent;
+}
+.twikiAttachments th.twikiSortedAscendingCol,
+.twikiAttachments th.twikiSortedDescendingCol {
+	background-color:%TABLE_HEADER_BACKGROUND%;
+}
+.twikiFormSteps {
+	background-color:%ACTIVE_FORM_BACKGROUND%;
+	border-color:%SEPARATOR_BORDER%;
+}
+.twikiFormStep {
+	border-color:%SEPARATOR_BORDER%;
+}
+.twikiFormStep h3,
+.twikiFormStep h4 {
+	background-color:transparent;
+}
+.twikiToc .twikiTocTitle {
+	color:%MUTED_TEXT%;
+}
+.twikiBroadcastMessage {
+	background-color:yellow;
+}
+.twikiBroadcastMessage b,
+.twikiBroadcastMessage strong {
+	color:%ALERT_TEXT%;
+}
+.twikiAlert,
+.twikiAlert code {
+	color:%ALERT_TEXT%;
+}
+.twikiEmulatedLink {
+	color:%LINK_TEXT_NORMAL%;
+}
+.twikiPageForm table {
+	border-color:%TABLE_BORDER%;
+	background:%MAIN_TEXT_COLOR%;
+}
+.twikiPageForm hr {
+	border-color:%FORM_BORDER%;
+	background-color:%FORM_BORDER%;
+	color:%FORM_BORDER%;
+}
+.twikiHelp {
+	background-color:%INFO_BACKGROUND%;
+	border-color:%INFO_BORDER%;
+}
+.twikiAccessKey {
+	color:inherit;
+	border-color:%GRAYED_OUT_TEXT%;
+}
+a:link .twikiAccessKey,
+a:visited .twikiAccessKey,
+a:hover .twikiAccessKey {
+	color:inherit;
+}
+
+
+/*	-----------------------------------------------------------
+	Pattern skin specific elements
+	-----------------------------------------------------------	*/
+#patternPage {
+	background-color:%MAIN_TEXT_COLOR%;
+}
+/* Left bar */
+#patternLeftBarContents {
+	color:%MUTED_TEXT%;
+}
+#patternLeftBarContents .patternWebIndicator {
+	color:%GENERAL_TEXT%;
+}
+#patternLeftBarContents .patternWebIndicator a:link,
+#patternLeftBarContents .patternWebIndicator a:visited {
+	color:%GENERAL_TEXT%;
+}
+#patternLeftBarContents .patternWebIndicator a:hover {
+	color:%LINK_TEXT_HOVER%;
+}
+#patternLeftBarContents hr {
+	color:%SEPARATOR_BORDER%;
+	background-color:%SEPARATOR_BORDER%;
+}
+#patternLeftBarContents a:link,
+#patternLeftBarContents a:visited {
+	color:%CODE_TEXT%;
+}
+#patternLeftBarContents a:hover {
+	color:%LINK_TEXT_HOVER%;
+}
+#patternLeftBarContents b,
+#patternLeftBarContents strong {
+	color:%STRONG_TEXT%;
+}
+#patternLeftBarContents .patternChangeLanguage {
+	color:%GRAYED_OUT_TEXT%;
+}
+#patternLeftBarContents .patternLeftBarPersonal {
+	border-color:%INFO_BORDER%;
+}
+#patternLeftBarContents .patternLeftBarPersonal a:link,
+#patternLeftBarContents .patternLeftBarPersonal a:visited {
+	color:%LINK_TEXT_NORMAL%;
+}
+#patternLeftBarContents .patternLeftBarPersonal a:hover {
+	color:%LINK_TEXT_HOVER%;
+	background-color:%LINK_BACKGROUND_HOVER%;
+}
+.patternTopicActions {
+	border-color:%SEPARATOR_BORDER%;
+}
+.patternTopicAction {
+	color:%MUTED_TEXT%;
+	border-color:%SEPARATOR_BORDER%;
+	background-color:%TOPIC_ACTION_BACKGROUND%;
+}
+.patternTopicAction s,
+.patternTopicAction strike {
+	color:%DISABLED_TEXT%;
+}
+.patternTopicAction .twikiSeparator {
+	color:%SEPARATOR_BORDER%;
+}
+.patternActionButtons a:link,
+.patternActionButtons a:visited {
+	color:%LINK_TEXT_ACTION_BUTTON%;
+}
+.patternActionButtons a:hover {
+	color:%LINK_TEXT_HOVER%;
+}
+.patternTopicAction .twikiAccessKey {
+	color:%LINK_TEXT_ACTION_BUTTON%;
+	border-color:%LINK_TEXT_ACTION_BUTTON%;
+}
+.patternTopicAction label {
+	color:%GENERAL_TEXT%;
+}
+.patternHelpCol {
+	color:%GRAYED_OUT_TEXT%;
+}
+.patternFormFieldDefaultColor {
+	/* input fields default text color (no user input) */
+	color:%GRAYED_OUT_TEXT%;
+}
+
+.patternToolBar .patternButton s,
+.patternToolBar .patternButton strike,
+.patternToolBar .patternButton a:link,
+.patternToolBar .patternButton a:visited {
+	border-color:%SEPARATOR_BORDER%;
+	background-color:%GENERAL_BACKGROUND%;
+}
+.patternToolBar .patternButton a:link,
+.patternToolBar .patternButton a:visited {
+	color:%MUTED_TEXT%;
+}
+.patternToolBar .patternButton s,
+.patternToolBar .patternButton strike {
+	color:%DISABLED_TEXT%;
+	border-color:%DISABLED_BORDER%;
+}
+.patternToolBar .patternButton a:hover {
+	background-color:%LINK_BACKGROUND_HOVER%;
+	color:%LINK_TEXT_HOVER%;
+	border-color:%LINK_TEXT_ACTION_BUTTON%;
+}
+.patternToolBar .patternButton img {
+	background-color:transparent;
+}	
+.patternToolBarBottom {
+	border-color:%SEPARATOR_BORDER%;
+}
+.patternToolBar a:link .twikiAccessKey,
+.patternToolBar a:visited .twikiAccessKey {
+	color:inherit;
+	border-color:%MUTED_TEXT%;
+}
+.patternToolBar a:hover .twikiAccessKey {
+	background-color:transparent;
+	color:inherit;
+}
+
+.patternRevInfo,
+.patternRevInfo a:link,
+.patternRevInfo a:visited {
+	color:%GRAYED_OUT_TEXT%;
+}
+.patternRevInfo a:hover {
+	color:%LINK_TEXT_HOVER%;
+}
+
+.patternMoved,
+.patternMoved a:link,
+.patternMoved a:visited {
+	color:%GRAYED_OUT_TEXT%;
+}
+.patternMoved a:hover {
+	color:%LINK_TEXT_HOVER%;
+}
+.patternSaveHelp {
+	background-color:%MAIN_TEXT_COLOR%;
+}
+
+/* WebSearch, WebSearchAdvanced */
+table#twikiSearchTable th,
+table#twikiSearchTable td {
+	background-color:%GENERAL_BACKGROUND%;
+	border-color:%TABLE_BORDER%;
+} 
+table#twikiSearchTable th {
+	color:%GRAYED_OUT_TEXT%;
+}
+table#twikiSearchTable td.first {
+	background-color:%TABLE_HEADER_BACKGROUND%;
+}
+
+/*	-----------------------------------------------------------
+	Search results
+	styles and overridden styles used in search.pattern.tmpl
+	-----------------------------------------------------------	*/
+
+h3.patternSearchResultsHeader,
+h4.patternSearchResultsHeader {
+	background-color:%ATTACHMENT_AND_FORM_BACKGROUND%;
+	border-color:%LAYOUT_ELEMENT_BORDER%;
+}
+h4.patternSearchResultsHeader {
+	color:%MAIN_BACKGROUND_COLOR%;
+}
+.patternNoViewPage h4.patternSearchResultsHeader {
+	color:%HEADER_TEXT%;
+}
+.patternSearchResult .twikiBottomRow {
+	border-color:%TABLE_BORDER%;
+}
+.patternSearchResult .twikiAlert {
+	color:%ALERT_TEXT%;
+}
+.patternSearchResult .twikiSummary .twikiAlert {
+	color:%ALERT_TEXT_MUTED%;
+}
+.patternSearchResult .twikiNew {
+	background-color:%NEW_BACKGROUND%;
+	border-color:%NEW_TEXT%;
+	color:%NEW_TEXT%;
+}
+.patternViewPage .patternSearchResultsBegin {
+	border-color:%TABLE_BORDER%;
+}
+
+/* Search results in book view format */
+
+.patternBookView .twikiTopRow {
+	background-color:transparent; /* set to WEBBGCOLOR in css.pattern.tmpl */
+	color:%MUTED_TEXT%;
+}
+.patternBookView .twikiBottomRow {
+	border-color:%TABLE_BORDER%;
+}
+.patternBookView .patternSearchResultCount {
+	color:%GRAYED_OUT_TEXT%;
+}
+
+/* oopsmore.pattern.tmpl */
+
+table.patternDiffOptions img {
+	border-color:%LAYOUT_ELEMENT_BORDER%;
+}
+
+/* edit.pattern.tmpl */
+
+.twikiChangeFormButton .twikiButton,
+.twikiChangeFormButtonHolder .twikiButton { /* looks like a link */
+	color:%LINK_TEXT_NORMAL%;
+	background:none;
+}
+.patternSig input {
+	color:%GRAYED_OUT_TEXT%;
+	background-color:%MAIN_TEXT_COLOR%;
+}
+
+/* preview.pattern.tmpl */
+
+.patternPreviewArea {
+	border-color:%ALERT_BORDER%;
+	background-color:%MAIN_TEXT_COLOR%;
+}
+
+/* rdiff.pattern.tmpl */
+
+.patternDiff {
+	border-color:%LAYOUT_ELEMENT_BORDER%;
+}
+.patternDiff h4.patternSearchResultsHeader {
+	background-color:%TABLE_HEADER_ACCENT_BACKGROUND%;
+}
+tr.twikiDiffDebug td {
+	border-color:%TABLE_BORDER%;
+}
+.patternDiffPage .twikiDiffTable th {
+	background-color:%TABLE_HEADER_BACKGROUND%;
+}
+tr.twikiDiffDebug .twikiDiffChangedText,
+tr.twikiDiffDebug .twikiDiffChangedText {
+	background:#9f9; /* green - do not change */
+}
+/* Deleted */
+tr.twikiDiffDebug .twikiDiffDeletedMarker,
+tr.twikiDiffDebug .twikiDiffDeletedText {
+	background-color:#f99; /* red - do not change */
+}
+/* Added */
+tr.twikiDiffDebug .twikiDiffAddedMarker,
+tr.twikiDiffDebug .twikiDiffAddedText {
+	background-color:#ccf; /* violet - do not change */
+}
+/* Unchanged */
+tr.twikiDiffDebug .twikiDiffUnchangedText {
+	color:%GRAYED_OUT_TEXT%;
+}
+/* Headers */
+.twikiDiffChangedHeader,
+.twikiDiffDeletedHeader,
+.twikiDiffAddedHeader {
+	background-color:%TABLE_HEADER_ACCENT_BACKGROUND%;
+}
+/* Unchanged */
+.twikiDiffUnchangedTextContents { }
+.twikiDiffLineNumberHeader {
+	background-color:%TABLE_HEADER_BACKGROUND%;
+}
+%ENDATTACH%
+</verbatim>
+
+%META:FILEATTACHMENT{name="theme-colors.css" attachment="theme-colors.css" attr="" user="Main.TWikiContributor" version="1"}%

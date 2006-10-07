@@ -55,13 +55,7 @@ Both translators can be used directly from Perl scripts, for example to build yo
 An example stand-alone convertor script for HTML to TWiki is included in the installation. It can be found in the top-level =tools= directory and is called =html2tml.pl=.
 
 ---++ Plugin Installation Instructions
-	* Download the ZIP file from the Plugin web (see below)
-	* Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
-	| *File:* | *Description:* |
-%$MANIFEST%
-	* Run ==%TOPIC%_installer== to automatically check and install other modules that this module depends on. You can also do this step manually. Dependencies:
-	%$DEPENDENCIES%
-	* (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
+%$INSTALL_INSTRUCTIONS%
 	* To enable the editor in one of your skins, add the following link to the skin alongside or in place of the existing 'edit' link:<br /><code>&lt;a href="%<nop>SCRIPTURLPATH%/edit%<nop>SCRIPTSUFFIX%/%<nop>WEB%/%<nop>TOPIC%?skin=kupu"&gt;Kupu&lt;/a&gt;</code><br />As you can see this is just a standard edit link with the 'kupu' skin in place of the usual edit skin. Here it is for this topic: <a href="%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/%WEB%/%TOPIC%?skin=kupu">Kupu</a>. Try clicking on it, but _do not save_!
 
 ---++ Plugin Configuration Settings
@@ -106,16 +100,20 @@ The bit between the &gt; &lt; =value= defines text in the drop-down box in the e
 If it exists, the contents of this topic will be included and shown on the edit screen below the status bar. It is intended to be used for site-specific quick help information.
 
 ---+++ Editor control
-The global TWiki Variable =WYSIWYG_EXCLUDE= can be set to make the plugin sensitive to what is in a topic before allowing it to be edited. You can set it up to refuse to edit if 
+The *global* TWiki Variable =WYSIWYG_EXCLUDE= can be set to make the plugin sensitive to what is in a topic before allowing it to be edited. You can set it up to refuse to edit if 
 
    * some or all of HTML tags (e.g. =&lt;br /&gt;= or =&lt;div&gt;=), or 
    * simple variables (e.g. =%<nop>VAR%=) or 
-   * calls (e.g. =%VARIABLE{...}%=)
+   * calls (e.g. =%<nop>VARIABLE{...}%=)
    * PRE blocks (=&lt;pre&gt;=)
    * HTML comments (=&lt;!--= ... =--&gt;=)
    
 are used in the topic. If the plugin detects an excluded construct in the topic, it will redirect to the default editor. Comma-separated list of one or more of =html=, =variables=, =calls=, =pre= or =comments= e.g.
-   * =Set WYSIWYG_EXCLUDE = variables,calls= (inactive; you need to remove monospacing from this setting to enable it)
+   * Set WYSIWYG_EXCLUDE = calls,html
+Set =WYSIWYG_EXCLUDE in %MAINWEB%.TWikiPreferences, or in %WEBPREFSTOPIC% for each web.
+
+If you excluded =calls= in =WYSIWYG_EXCLUDE=, you can still define a subset of TWiki variables that do *not* block edits. this is done in the *global* preference variable =WYSIWYG_EDITABLE_CALLS=, which should be a list of TWiki variable names separated by vertical bars, with no spaces, e.g:
+   * Set WYSIWYG_EDITABLE_CALLS = COMMENT|CALENDAR|INCLUDE
 
 If you are using this plugin with TWiki-4.0.0 or later with =pattern= skin, the =%<nop>COMPOSER%= global TWiki variable is used to control the skin used for the WYSIWYG editor link. You can define this variable to the empty string to disable WYSIWYG editing on a site, per-web, per-user or per-topic basis.
 
@@ -131,7 +129,7 @@ Plugins that extend the syntax using TWiki variables, such as =%MYVARIABLE%=, sh
 Due to limitations in the browser support for editing, not all functions can be undone. Also, the undo buffer can be cleared unexpectedly during editing, especially when using Internet Explorer.
 
 ---+++ Overlapping styles (WysiwygPlugin)
-Because TWiki uses a "best guess" approach to some formatting, it allows overlapping of tags in a way forbidden by HTML, it is impossible to guarantee 100% that formating in the original TWiki document will still be there when the same document is loaded and then saved through the WysiwygPlugin. The most obvious case of this is to do with styles. For example, the sentence
+Because TWiki uses a "best guess" approach to some formatting, it allows overlapping of tags in a way forbidden by HTML, and it is impossible to guarantee 100% that formating in the original TWiki document will still be there when the same document is loaded and then saved through the WysiwygPlugin. The most obvious case of this is to do with styles. For example, the sentence
 <verbatim>
 *bold _bold-italic* italic_
 </verbatim>
@@ -156,6 +154,7 @@ This plugin is heavily based on the TWiki::Plugins.KupuEditorAddOn, and the auth
 | Copyright | &copy; ILOG 2005 http://www.ilog.fr |
 |  Plugin Version: | %$VERSION% |
 | Change&nbsp;History: | |
+|  11538 | Minor doc updates, minor fixes to spacing in lists, integrated Koen Marten's template topic patch |
 |  9671 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item2025'>Item2025</a>  corrected handling of SPAN and FONT tags used for colour changes |
 |  9566 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1890'>Item1890</a>  doc update |
 |  9565 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1890'>Item1890</a> <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1041'>Item1041</a> <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item944'>Item944</a> Much more aggressive cleanup of HTML pasted in from external sources. Excessively verbose HTML (e.g. from Outlook) was causing apparent infinite looing behaviour. |

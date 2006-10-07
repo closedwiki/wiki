@@ -273,36 +273,6 @@ sub addUserToMapping {
     return $this->{usermappingmanager}->addUserToMapping($user, $me);
 }
 
-=pod
-
----++ ObjectMethod initializeRemoteUser( $remoteUser ) -> $loginName
-
-Return value: $remoteUser
-
-Acts as a filter for $remoteUser.  If set, $remoteUser is filtered for
-insecure characters and untainted.
-
-If not user is passed, the remote user defaults to $cfg{DefaultUserLogin}
-(usually 'guest').
-
-If we got here via an authentication status failure, then the remote user
-is set to blank, effectively signalling an illegal access.
-
-If no remote user name was passed in, the user defaults to
-$cfg{DefaultUserLogin}.
-
-=cut
-
-sub initializeRemoteUser {
-    my( $this, $theRemoteUser ) = @_;
-
-    my $remoteUser = $theRemoteUser || $TWiki::cfg{DefaultUserLogin};
-    $remoteUser =~ s/$TWiki::cfg{NameFilter}//go;
-    $remoteUser = TWiki::Sandbox::untaintUnchecked( $remoteUser );
-
-    return $remoteUser;
-}
-
 # Translates username (e.g. jsmith) to Web.WikiName
 # (e.g. Main.JaneSmith)
 sub lookupLoginName {

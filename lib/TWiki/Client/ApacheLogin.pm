@@ -25,7 +25,13 @@
 
 ---+ package TWiki::Client::ApacheLogin
 
-This is login manager that you can specify in the security setup section of [[%SCRIPTURL%/configure%SCRIPTSUFFIX%][configure]]. It instructs TWiki to cooperate with your web server (typically Apache) to require authentication information (username & password) from users. It requires that you configure your web server to demand authentication for scripts named "login" and anything ending in "auth". The latter should be symlinks to existing scripts; e.g., =viewauth -> view=, =editauth -> edit=, and so on.
+This is login manager that you can specify in the security setup section of
+[[%SCRIPTURL{"configure"}%][configure]]. It instructs TWiki to
+cooperate with your web server (typically Apache) to require authentication
+information (username & password) from users. It requires that you configure
+your web server to demand authentication for scripts named "login" and anything
+ending in "auth". The latter should be symlinks to existing scripts; e.g.,
+=viewauth -> view=, =editauth -> edit=, and so on.
 
 See also TWikiUserAuthentication.
 
@@ -45,6 +51,8 @@ sub new {
     my( $class, $twiki ) = @_;
     my $this = bless( $class->SUPER::new($twiki), $class );
     $twiki->enterContext( 'can_login', 1 );
+    # Can't logout, though
+    TWiki::registerTagHandler('LOGOUT', sub { return '' });
     return $this;
 }
 
@@ -60,40 +68,34 @@ sub forceAuthentication {
     $script =~ s/^(.*\/)([^\/]+)($TWiki::cfg{ScriptSuffix})?$/$1/o;
     my $scriptPath = $1;
     my $scriptName = $2;
+    #print STDERR "Forcing auth for $script\n";
     $script = $scriptPath.$scriptName.'auth'.$TWiki::cfg{ScriptSuffix};
     if( ! $query->remote_user() && -e $script ) {
+        # Assemble the new URL using the host, the changed script name,
+        # the path info, and the query string.  All three query
+        # variables are in the list of the canonical request meta
+        # variables in CGI 1.1.
         my $url = $ENV{REQUEST_URI};
         if( $url && $url =~ s/\/$scriptName/\/${scriptName}auth/ ) {
             # $url i.e. is "twiki/bin/view.cgi/Web/Topic?cms1=val1&cmd2=val2"
             $url = $twiki->{urlHost}.$url;
+        } elsif( $ENV{SCRIPT_NAME} &&
+                   $ENV{SCRIPT_NAME} =~ s/\/$scriptName/\/${scriptName}auth/ ) {
+            $url = $twiki->{urlHost}.$ENV{SCRIPT_NAME};
         } else {
-            # If REQUEST_URI is rewritten and does not contain the script
-            # name, try looking at the CGI environment variable
-            # SCRIPT_NAME.
-            #
-            # Assemble the new URL using the host, the changed script name,
-            # the path info, and the query string.  All three query
-            # variables are in the list of the canonical request meta
-            # variables in CGI 1.1.
-            $scriptPath     = $ENV{'SCRIPT_NAME'};
-            my $pathInfo    = $ENV{'PATH_INFO'};
-            my $queryString = $ENV{'QUERY_STRING'};
-            $pathInfo    = '/' . $pathInfo    if ($pathInfo);
-            $queryString = '?' . $queryString if ($queryString);
-            if( $scriptPath &&
-                  $scriptPath =~ s/\/$scriptName/\/${scriptName}auth/ ) {
-                $url = $twiki->{urlHost}.$scriptPath;
-            } else {
-                # If SCRIPT_NAME does not contain the script name
-                # the last hope is to try building up the URL using
-                # the SCRIPT_FILENAME.
-                $url = $twiki->{urlhost}.$twiki->{scriptUrlPath}.'/'.
-                    ${scriptName}.$TWiki::cfg{ScriptSuffix};
-            }
-            $url .= $pathInfo.$queryString;
+            # If SCRIPT_NAME does not contain the script name
+            # the last hope is to try building up the URL using
+            # the SCRIPT_FILENAME.
+            $url = $twiki->{urlhost}.$twiki->{scriptUrlPath}.'/'.
+              $scriptName.$TWiki::cfg{ScriptSuffix};
         }
-        $twiki->redirect( $url );
+        $url .= '/' . $ENV{PATH_INFO} if $ENV{PATH_INFO};
+        #print STDERR "Redirect to logon\n";
+        # Redirect with passthrough so we don't lose the original query params
+        $twiki->redirect( $url, 1 );
         return 1;
+    } else {
+        #print STDERR $query->remote_user()." is already logged in\n";
     }
 
     return 0;
@@ -110,8 +112,9 @@ sub loginUrl {
 sub getUser {
     my $this = shift;
     my $query = $this->{twiki}->{cgiQuery};
-    return $query->remote_user() if(defined($query));
-    return undef;
+    my $authUser;
+    $authUser = $query->remote_user() if $query;
+    return $authUser;
 }
 
 sub checkSession {

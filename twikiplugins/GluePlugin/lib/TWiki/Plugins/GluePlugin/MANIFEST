@@ -1,2 +1,2 @@
-lib/TWiki/Plugins/GluePlugin.pm 0440
-data/TWiki/GluePlugin.txt 0440
+data/TWiki/GluePlugin.txt 0644
+lib/TWiki/Plugins/GluePlugin.pm 0644

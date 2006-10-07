@@ -102,8 +102,42 @@ sub tear_down {
     my $this = shift;
     $this->removeWebFixture($twiki, $testweb);
     $this->removeWebFixture($twiki, $testusersweb);
+    eval {$twiki->finish()};
     $this->SUPER::tear_down();
 }
+
+# AUTOINC
+sub test_AUTOINC {
+    my $this = shift;
+    my $query = new CGI({
+        action => [ 'save' ],
+        text => [ 'nowt' ],
+    });
+    $query->path_info( $testweb.'.TestAutoAUTOINC00' );
+    $twiki = new TWiki( $testuser1->login(), $query );
+    $this->capture( \&TWiki::UI::Save::save, $twiki);
+    my $seen = 0;
+    foreach my $t ($twiki->{store}->getTopicNames( $testweb)) {
+        if($t eq 'TestAuto00') {
+            $seen = 1;
+        } elsif( $t !~ /^(Web.*|TestForm[123])$/) {
+            $this->assert(0, $t);
+        }
+    }
+    $this->assert($seen);
+    $twiki = new TWiki( $testuser1->login(), $query );
+    $this->capture( \&TWiki::UI::Save::save, $twiki);
+    $seen = 0;
+    foreach my $t ($twiki->{store}->getTopicNames( $testweb)) {
+        if($t =~ /^TestAuto0[01]$/) {
+            $seen++;
+        } elsif( $t !~ /^(Web.*|TestForm[123])$/) {
+            $this->assert(0, $t);
+        }
+    }
+    $this->assert_equals(2,$seen);
+}
+
 
 # 10X
 sub test_XXXXXXXXXX {

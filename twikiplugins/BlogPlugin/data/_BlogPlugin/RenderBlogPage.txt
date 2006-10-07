@@ -27,10 +27,10 @@
 ~~~   </span>
 ~~~     $percntFORMATLIST{\"$formfield(SubjectCategory)\" sort=\"on\"
 ~~~       header=\"in <span class=\\"blogCategory\\">\"
-~~~       format=\"<a href=\\"%SCRIPTURL{"view"}%/$web/$1\\" rel=\\"tag\\">$1</a>\"
+~~~       format=\"<a href=\\"%SCRIPTURLPATH{"view"}%/$web/$1\\" rel=\\"tag\\">$1</a>\"
 ~~~       footer=\"</span>\"
 ~~~     }$percnt
-~~~   <span class=\"blogAuthor\">by $formfield(BlogAuthor) </span> 
+~~~   <span class=\"blogAuthor\">by [[$web.$formfield(BlogAuthor)][$formfield(BlogAuthor)]] </span> 
 ~~~   $n
 ~~~ </div>
 *~~

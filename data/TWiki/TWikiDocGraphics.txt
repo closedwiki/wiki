@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1127433585" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1153079538" format="1.1" version="$Rev$"}%
 ---+!! TWiki Documentation Graphics and Filetype icons
 
 This is the TWiki icon library. The graphics can be used in topics and by web applications. 
@@ -53,7 +53,7 @@ __Contributors:__ The icons on this page were originally designed by TWiki:Main.
 | *<img src="%ATTACHURLPATH%/stop.gif" alt="Stop" title="Stop" />*  | =stop.gif= | Stop | =%<nop>ICON{stop}%= |
 | *<img src="%ATTACHURLPATH%/target.gif" alt="Target" title="Target" />*  | =target.gif= | Target | =%<nop>ICON{target}%= |
 | *<img src="%ATTACHURLPATH%/tip.gif" alt="Tip, idea" title="Tip, idea" />*  | =tip.gif= | Tip, idea | =%<nop>T%=, =%<nop>ICON{tip}%= |
-| *<img src="%ATTACHURLPATH%/warning.gif" alt="Warning, important" title="Warning, important" />*  | =warning.gif= | Warning, important | =%<nop>W%=, =%<nop>ICON{warning}%= |
+| *<img src="%ATTACHURLPATH%/warning.gif" alt="Warning, important" title="Warning, important" />*  | =warning.gif= | Warning, important | =%<nop>X%=, =%<nop>ICON{warning}%= |
 | *<img src="%ATTACHURLPATH%/watch.gif" alt="Watch" title="Watch" />*  | =watch.gif= | Watch | =%<nop>ICON{watch}%= |
 | *<img src="%ATTACHURLPATH%/wip.gif" alt="Work in progress, under construction" title="Work in progress, under construction" />*  | =wip.gif= | Work in progress, under construction | =%<nop>ICON{wip}%= |
 | *<img src="%ATTACHURLPATH%/wrench.gif" alt="Wrench, tools" title="Wrench, tools" />*  | =wrench.gif= | Wrench, tools | =%<nop>ICON{wrench}%= |

@@ -41,13 +41,13 @@ $linkFormat =
 
 $simpleFormat = 
   '<a href="$href" id="$id" class="imageSimple $class" title="$title" style="$style">'.
-    '<image border="0" align="absmiddle" src="$src" alt="$alt" width="$width" height="$height" longdesc="$desc" onmouseover="$mousein" onmouseout="$mouseout" />'.
+    '<img border="0" align="absmiddle" src="$src" alt="$alt" width="$width" height="$height" longdesc="$desc" onmouseover="$mousein" onmouseout="$mouseout" />'.
   '</a>';
   
 $frameFormat = 
-  '<div id="$id" class="imageFrame imageFloat_$align" style="_width:$framewidthpx;max-width:$framewidthpx;$style">'.
+  '<div id="$id" class="imageFrame imageFrame_$align" style="_width:$framewidthpx;max-width:$framewidthpx;$style">'.
     '<a href="$href" class="imageHref" title="$title">'.
-      '<image border="0" align="absmiddle" src="$src" alt="$alt" width="$width" height="$height" longdesc="$desc" onmouseover="$mousein" onmouseout="$mouseout" />'.
+      '<img border="0" align="absmiddle" src="$src" alt="$alt" width="$width" height="$height" longdesc="$desc" onmouseover="$mousein" onmouseout="$mouseout" />'.
     '</a>'.
     '$captionFormat'.
   '</div>';
@@ -55,13 +55,13 @@ $frameFormat =
 $floatFormat = 
   '<div id="$id" class="imageFloat imageFloat_$align" style="$style">'.
     '<a href="$href" class="imageHref" title="$title">'.
-      '<image border="0" align="absmiddle" src="$src" alt="$alt" width="$width" height="$height" longdesc="$desc" onmouseover="$mousein" onmouseout="$mouseout" />'.
+      '<img border="0" align="absmiddle" src="$src" alt="$alt" width="$width" height="$height" longdesc="$desc" onmouseover="$mousein" onmouseout="$mouseout" />'.
     '</a>'.
     '$captionFormat'.
   '</div>';
 
 $clearFormat =
-  '<br id="$id" class="imageClear" clear="all" />';
+  '<br class="imageClear" clear="all" />';
  
 # helper formats
 $captionFormat =
@@ -70,7 +70,7 @@ $captionFormat =
 $magnifyFormat =
   '<div class="imageMagnify">'.
     '<a href="$href" title="Enlarge">'.
-      '<image bordeR="0" align="absmiddle" src="$magnifyIcon" width="$magnifyWidth" height="$magnifyHeight" alt="Enlarge" />'.
+      '<img border="0" align="absmiddle" src="$magnifyIcon" width="$magnifyWidth" height="$magnifyHeight" alt="Enlarge" />'.
     '</a>'.
   '</div>';
 
@@ -107,7 +107,7 @@ sub new {
       TWiki::Func::normalizeWebTopicName($baseWeb, $this->{albumTopic});
   }
 
-  writeDebug("IMAGEALBUM=$this->{albumWeb}.$this->{albumTopic}");
+  #writeDebug("IMAGEALBUM=$this->{albumWeb}.$this->{albumTopic}");
 
   return $this;
 }
@@ -116,12 +116,11 @@ sub new {
 sub handleIMAGE {
   my($this, $session, $params, $theTopic, $theWeb) = @_;
 
-  writeDebug("called handleIMAGE(params, $theTopic, $theWeb)");
+  #writeDebug("called handleIMAGE(params, $theTopic, $theWeb)");
 
   if($params->{_DEFAULT} =~ m/clr|clear/i ){ # SMELL: non-documented feature
     return $clearFormat;
   }
-
 
   # read parameters
   my $argsStr = $params->{_DEFAULT} || '';
@@ -132,6 +131,8 @@ sub handleIMAGE {
 
   # default and fix parameters
   $params->{size} ||= '';
+  $params->{width} ||= '';
+  $params->{height} ||= '';
   if ($params->{size} =~ /^(\d+)(px)?x?(\d+)?(px)?$/) {
     $params->{size} = $3?"$1x$3":$1;
   }
@@ -141,7 +142,7 @@ sub handleIMAGE {
   my $imgTopic = $params->{topic} || $this->{albumTopic} || $theTopic;
   ($imgWeb, $imgTopic) = TWiki::Func::normalizeWebTopicName($imgWeb, $imgTopic);
 
-  writeDebug("origFile=$origFile, imgWeb=$imgWeb, imgTopic=$imgTopic");
+  #writeDebug("origFile=$origFile, imgWeb=$imgWeb, imgTopic=$imgTopic");
 
   $params->{caption} ||= '';
   $params->{align} ||= 'right';
@@ -160,11 +161,13 @@ sub handleIMAGE {
   $params->{style} ||= '';
   $params->{type} = 'thumb' if $params->{type} eq 'thumbnail';
 
-  writeDebug("type=$params->{type}, align=$params->{align}, size=$params->{size}");
+  #writeDebug("type=$params->{type}, align=$params->{align}");
+  #writeDebug("size=$params->{size}, width=$params->{width}, height=$params->{height}");
 
   # compute image
   my $imgInfo = 
-    $this->getImageInfo($imgWeb, $imgTopic, $origFile, $params->{size});
+    $this->getImageInfo($imgWeb, $imgTopic, $origFile, 
+      $params->{size}, $params->{width}, $params->{height});
 
   unless ($imgInfo) {
     return "<span class=\"twikiAlert\">$this->{errorMsg}</span>";
@@ -184,7 +187,7 @@ sub handleIMAGE {
 	if $params->{caption};
     } elsif ($params->{type} eq 'thumb') {
       $result = $frameFormat; 
-      my $thumbCaption = $params->{caption}.$magnifyFormat;
+      my $thumbCaption = $magnifyFormat.$params->{caption};
       $result =~ s/\$captionFormat/$captionFormat/g;
       $result =~ s/\$caption/$thumbCaption/g;
     } else {
@@ -243,9 +246,9 @@ sub handleIMAGE {
 #    * origHeight: height of the source image
 # returns undef on error
 sub getImageInfo {
-  my ($this, $imgWeb, $imgTopic, $imgFile, $size) = @_;
+  my ($this, $imgWeb, $imgTopic, $imgFile, $size, $width, $height) = @_;
 
-  writeDebug("called getImageInfo($imgWeb, $imgTopic, $imgFile)");
+  #writeDebug("called getImageInfo($imgWeb, $imgTopic, $imgFile, $size, $width, $height)");
 
   unless ($this->{mage}) {
     $this->{mage} = new Image::Magick;
@@ -260,8 +263,8 @@ sub getImageInfo {
   my $imgPath = TWiki::Func::getPubDir().'/'.$imgWeb.'/'.$imgTopic;
   ($imgInfo{origWidth}, $imgInfo{origHeight}) = $this->{mage}->Ping($imgPath.'/'.$imgFile);
 
-  if ($size) {
-    my $newImgFile = '_'.$size.'px-'.$imgFile;
+  if ($size || $width || $height) {
+    my $newImgFile = "_${size}_${width}_${height}_$imgFile";
 
     if (-f $imgPath.'/'.$newImgFile) { # cached
       ($imgInfo{width}, $imgInfo{height}) = $this->{mage}->Ping($imgPath.'/'.$newImgFile);
@@ -274,8 +277,12 @@ sub getImageInfo {
 	return undef if $1 >= 400;
       }
       
-      # scacle
-      $error = $this->{mage}->Scale(geometry=>$size);
+      # scale
+      my %args;
+      $args{geometry} = $size if $size;
+      $args{width} = $width if $width;
+      $args{height} = $height if $height;
+      $error = $this->{mage}->Scale(%args);
       if ($error =~ /(\d+)/) {
 	$this->{errorMsg} = $error;
 	return undef if $1 >= 400;

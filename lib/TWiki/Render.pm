@@ -118,6 +118,8 @@ sub renderParent {
     my $usesep =      $ah->{separator} || ' &gt; ';
     my $format =      $ah->{format} || '[[$web.$topic][$topic]]';
 
+    return '' unless $web && $topic;
+
     my %visited;
     $visited{$web.'.'.$topic} = 1;
 
@@ -215,14 +217,21 @@ Render meta-data for a single formfield
 =cut
 
 sub renderFormField {
-    my( $this, $web, $topic, $meta, $attrs ) = @_;
+    my( $this, $meta, $attrs ) = @_;
     my $text = '';
     my $name = $attrs->{name};
     $text = renderFormFieldArg( $meta, $name ) if( $name );
+    my $newline = $attrs->{newline};
+    if ( defined $newline ) {
+      $newline =~ s/\$n/\n/gos;
+    } else {
+      $newline = "<br />";
+    }
+    my $bar = $attrs->{bar} || "&#124;";
     # change any new line character sequences to <br />
-    $text =~ s/\r?\n/ <br \/> /gos;
+    $text =~ s/\r?\n/ $newline /gos;
     # escape "|" to HTML entity
-    $text =~ s/\|/\&\#124;/gos;
+    $text =~ s/\|/$bar/gos;
     return $text;
 }
 
@@ -653,9 +662,7 @@ sub _handleWikiWord {
 # format: [[$text]]
 # format: [[$link][$text]]
 sub _handleSquareBracketedLink {
-    my( $this, $web, $topic, $text, $link ) = @_;
-
-    $text ||= $link;
+    my( $this, $web, $topic, $link, $text ) = @_;
 
     # Strip leading/trailing spaces
     $link =~ s/^\s*//;
@@ -665,18 +672,16 @@ sub _handleSquareBracketedLink {
     if( $link =~ /^file\:/ ) {
           # Prevent automatic WikiWord or CAPWORD linking in explicit links
           $link =~ s/(?<=[\s\(])($TWiki::regex{wikiWordRegex}|[$TWiki::regex{upperAlpha}])/<nop>$1/go;
-          $text =~ s/(?<=[\s\(])($TWiki::regex{wikiWordRegex}|[$TWiki::regex{upperAlpha}])/<nop>$1/go;
           return $this->_externalLink( $link, $text );
     }
 
     # Spot other full explicit URLs
     # (explicit external [[$link][$text]]-style, that can be handled directly)
     if( $link =~ /^$TWiki::regex{linkProtocolPattern}\:/ ) {
-        if (!($link eq $text)) {
-          # Prevent automatic WikiWord or CAPWORD linking in explicit links
-          $link =~ s/(?<=[\s\(])($TWiki::regex{wikiWordRegex}|[$TWiki::regex{upperAlpha}])/<nop>$1/go;
-          $text =~ s/(?<=[\s\(])($TWiki::regex{wikiWordRegex}|[$TWiki::regex{upperAlpha}])/<nop>$1/go;
-          return $this->_externalLink( $link, $text );
+        if (defined $text && !($link eq $text)) {
+            # Prevent automatic WikiWord or CAPWORD linking in explicit links
+            $link =~ s/(?<=[\s\(])($TWiki::regex{wikiWordRegex}|[$TWiki::regex{upperAlpha}])/<nop>$1/go;
+            return $this->_externalLink( $link, $text );
         }
     }
 
@@ -688,14 +693,12 @@ sub _handleSquareBracketedLink {
             # '[[URL#anchor display text]]' link:
             $link = $1;
             $text = $2;
-        } else {
-            # '[[Web.odd wiki word#anchor][display text]]' link:
-            # '[[Web.odd wiki word#anchor]]' link:
-            # External link: add <nop> before WikiWord and ABBREV
             $text =~ s/(?<=[\s\(])($TWiki::regex{wikiWordRegex}|[$TWiki::regex{upperAlpha}])/<nop>$1/go;
         }
         return $this->_externalLink( $link, $text );
     }
+
+    $text ||= $link;
 
     # Extract '#anchor'
     # $link =~ s/(\#[a-zA-Z_0-9\-]*$)//;
@@ -719,24 +722,6 @@ sub _handleSquareBracketedLink {
 
     $topic = $link if( $link );
 
-    if( $TWiki::cfg{EnableHierarchicalWebs} ) {
-        # look up the leading path components to see
-        # if they form a valid web path.
-        my @topica = split( /\./, $topic );
-        my @weba;
-        while( @topica && $this->{session}->{store}->webExists(
-            join('.', @weba, $topica[0]))) {
-            push(@weba, shift(@topica));
-        }
-
-        $web = join('.', @weba) if scalar(@weba);
-        $topic = join('', @topica);
-    } else {
-        if( $topic =~ s/^($TWiki::regex{webNameBaseRegex}|$TWiki::regex{defaultWebNameRegex})\.//) {
-            $web = $1;
-        }
-        $topic =~ s/\.//g;
-    }
     # Topic defaults to the current topic
     ($web, $topic) = $this->{session}->normalizeWebTopicName( $web, $topic );
 
@@ -754,22 +739,20 @@ sub _externalLink {
         $filename =~ s@.*/([^/]*)@$1@go;
         return CGI::img( { src => $url, alt => $filename } );
     }
-    $text ||= $url;
     my $opt = '';
     if( $url =~ /^mailto:/i ) {
         if( $TWiki::cfg{AntiSpam}{EmailPadding} ) {
             $url =~ s/(@\w*)/$1$TWiki::cfg{AntiSpam}{EmailPadding}/;
-            $text =~ s/(@\w*)/$1$TWiki::cfg{AntiSpam}{EmailPadding}/;
 
         }
         if( $TWiki::cfg{AntiSpam}{HideUserDetails} ) {
             # Much harder obfuscation scheme
             $url =~ s/(\W)/'&#'.ord($1).';'/ge;
-            $text =~ s/(\W)/'&#'.ord($1).';'/ge;
         }
     } else {
         $opt = ' target="_top"';
     }
+    $text ||= $url;
     # SMELL: Can't use CGI::a here, because it encodes ampersands in
     # the link, and those have already been encoded once in the
     # rendering loop (they are identified as "stand-alone"). One
@@ -1128,7 +1111,7 @@ sub getRenderedVersion {
     $text =~ s/(^|\s)\!\[\[/$1\[<nop>\[/gm;
     # Spaced-out Wiki words with alternative link text
     # i.e. [[$1][$3]]
-    $text =~ s/\[\[([^\]\n]+)\](\[([^\]\n]+)\])?\]/$this->_handleSquareBracketedLink($theWeb,$theTopic,$3,$1)/ge;
+    $text =~ s/\[\[([^\]\n]+)\](\[([^\]\n]+)\])?\]/$this->_handleSquareBracketedLink($theWeb,$theTopic,$1,$3)/ge;
 
     unless( TWiki::isTrue( $prefs->getPreferencesValue('NOAUTOLINK')) ) {
         # Handle WikiWords
@@ -1154,7 +1137,7 @@ sub getRenderedVersion {
 
     $this->putBackProtected( \$text, $removedHead );
     $this->putBackProtected( \$text, $removedComments );
-    $this->{session}->{client}->endRenderingHandler( $text );
+    $this->{session}->{loginManager}->endRenderingHandler( $text );
 
     $plugins->postRenderingHandler( $text );
     return $text;
@@ -1537,12 +1520,13 @@ Obtain and render revision info for a topic.
    | =$web= | the web name |
    | =$topic= | the topic name |
    | =$rev= | the rev number |
-   | =$date= | the date of the rev (no time) |
-   | =$time= | the full date and time of the rev |
    | =$comment= | the comment |
    | =$username= | the login of the saving user |
    | =$wikiname= | the wikiname of the saving user |
    | =$wikiusername= | the web.wikiname of the saving user |
+   | =$date= | the date of the rev (no time) |
+   | =$time= | the time of the rev |
+   | =$min=, =$sec=, etc. | Same date format qualifiers as GMTIME |
 
 =cut
 
@@ -1576,6 +1560,10 @@ sub renderRevisionInfo {
     $value =~ s/\$rev/$rev/gi;
     $value =~ s/\$time/TWiki::Time::formatTime($date, '$hour:$min:$sec')/gei;
     $value =~ s/\$date/TWiki::Time::formatTime($date, '$day $mon $year')/gei;
+    $value =~ s/(\$(rcs|http|email|iso))/TWiki::Time::formatTime($date, $1 )/gei;
+    if( $value =~ /\$(sec|min|hou|day|wday|dow|week|mo|ye|epoch|tz)/ ) {
+        $value = TWiki::Time::formatTime( $date, $value );
+    }
     $value =~ s/\$comment/$comment/gi;
     $value =~ s/\$username/$un/gi;
     $value =~ s/\$wikiname/$wn/gi;
@@ -1606,7 +1594,7 @@ In non-tml, lines are truncated to 70 characters. Differences are shown using + 
 sub summariseChanges {
     my( $this, $user, $web, $topic, $orev, $nrev, $tml ) = @_;
     ASSERT($this->isa( 'TWiki::Render')) if DEBUG;
-    ASSERT($user->isa( 'TWiki::User')) if DEBUG;
+    #ASSERT($user->isa( 'TWiki::User')) if DEBUG;
     my $summary = '';
     my $store = $this->{session}->{store};
 

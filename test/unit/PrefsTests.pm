@@ -66,6 +66,7 @@ sub tear_down {
     $this->removeWebFixture($twiki, $testUsersWeb);
     $this->removeWebFixture($twiki, $testSysWeb);
     $this->removeWebFixture($twiki, $testNormalWeb);
+    eval {$twiki->finish()};
     $this->SUPER::tear_down();
 }
 
@@ -372,12 +373,15 @@ sub test_whitespace {
 
     $this->_setTopicPref("ONE", "   VAL \n  UE   ");
     $this->_setTopicPref("TWO", "   VAL\n   U\n   E");
+    $this->_setTopicPref("THREE", "VAL\n   ");
 
     my $t = new TWiki( $testUser, $topicquery );
     $this->assert_str_equals("VAL ",
                              $t->{prefs}->getPreferencesValue("ONE"));
     $this->assert_str_equals("VAL\n   U\n   E",
                              $t->{prefs}->getPreferencesValue("TWO"));
+    $this->assert_str_equals("VAL",
+                             $t->{prefs}->getPreferencesValue("THREE"));
 }
 
 1;

@@ -172,8 +172,10 @@ sub processInbox {
           if $this->{debug};
 
         $from =~ s/^.*<(.*)>.*$/$1/;
-        $user = TWiki::Func::lookupUser( email => $from );
-
+        my $targets = TWiki::Func::lookupUser( email => $from );
+        if( $targets && scalar(@$targets)) {
+            $user = $targets->[0];
+        }
         my $to = $mail->header('To');
         $to =~ s/^.*<(.*)>.*$/$1/;
 

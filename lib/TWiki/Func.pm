@@ -250,7 +250,7 @@ sub getSessionValue {
 #   my( $key ) = @_;
     ASSERT($TWiki::Plugins::SESSION) if DEBUG;
 
-    return $TWiki::Plugins::SESSION->{client}->getSessionValue( @_ );
+    return $TWiki::Plugins::SESSION->{loginManager}->getSessionValue( @_ );
 }
 
 
@@ -271,7 +271,7 @@ sub setSessionValue {
 #   my( $key, $value ) = @_;
     ASSERT($TWiki::Plugins::SESSION) if DEBUG;
 
-    $TWiki::Plugins::SESSION->{client}->setSessionValue( @_ );
+    $TWiki::Plugins::SESSION->{loginManager}->setSessionValue( @_ );
 }
 
 =pod
@@ -290,7 +290,7 @@ sub clearSessionValue {
 #   my( $key, $value ) = @_;
     ASSERT($TWiki::Plugins::SESSION) if DEBUG;
 
-    $TWiki::Plugins::SESSION->{client}->clearSessionValue( @_ );
+    $TWiki::Plugins::SESSION->{loginManager}->clearSessionValue( @_ );
 }
 
 =pod
@@ -372,6 +372,9 @@ Return: =$value=  Preferences value; empty string if not set
       * WebPreferences topic has: =* Set WEBBGCOLOR = #FFFFC0=
       * =my $webColor = TWiki::Func::getPreferencesValue( 'WEBBGCOLOR', 'Sandbox' );=
 
+*NOTE:* As of TWiki4.1, if =$NO_PREFS_IN_TOPIC= is enabled in the plugin, then
+preferences set in the plugin topic will be ignored.
+
 =cut
 
 sub getPreferencesValue {
@@ -396,6 +399,9 @@ Return: =$value=  Preferences value; empty string if not set
 __Note__: This function will will *only* work when called from the Plugin.pm file itself. it *will not work* if called from a sub-package (e.g. TWiki::Plugins::MyPlugin::MyModule)
 
 *Since:* TWiki::Plugins::VERSION 1.021 (27 Mar 2004)
+
+*NOTE:* As of TWiki4.1, if =$NO_PREFS_IN_TOPIC= is enabled in the plugin, then
+preferences set in the plugin topic will be ignored.
 
 =cut
 
@@ -423,6 +429,9 @@ Return: =$value=  Preferences flag ='1'= (if set), or ="0"= (for preferences val
       * Use ="MYPLUGIN_SHOWHELP"= for =$key=
       * =my $showHelp = TWiki::Func::getPreferencesFlag( "MYPLUGIN_SHOWHELP" );=
 
+*NOTE:* As of TWiki4.1, if =$NO_PREFS_IN_TOPIC= is enabled in the plugin, then
+preferences set in the plugin topic will be ignored.
+
 =cut
 
 sub getPreferencesFlag {
@@ -442,6 +451,9 @@ Return: false for preferences values ="off"=, ="no"= and ="0"=, or values not se
 __Note__: This function will will *only* work when called from the Plugin.pm file itself. it *will not work* if called from a sub-package (e.g. TWiki::Plugins::MyPlugin::MyModule)
 
 *Since:* TWiki::Plugins::VERSION 1.021 (27 Mar 2004)
+
+*NOTE:* As of TWiki4.1, if =$NO_PREFS_IN_TOPIC= is enabled in the plugin, then
+preferences set in the plugin topic will be ignored.
 
 =cut
 
@@ -649,7 +661,7 @@ sub checkAccessPermission {
     ASSERT($TWiki::Plugins::SESSION) if DEBUG;
     $user = $TWiki::Plugins::SESSION->{users}->findUser( $user );
     return $TWiki::Plugins::SESSION->{security}->checkAccessPermission
-      ( $type, $user, $text, $topic, $web );
+      ( $type, $user, $text, undef, $topic, $web );
 }
 
 =pod
@@ -975,9 +987,9 @@ sub saveTopicText {
 
     # check access permission
     unless( $ignorePermissions ||
-            $session->{security}->checkAccessPermission( 'change',
-                                                     $session->{user}, undef,
-                                                     $topic, $web )
+            $session->{security}->checkAccessPermission(
+                'change', $session->{user}, undef, undef,
+                $topic, $web )
           ) {
         my @plugin = caller();
         return $session->getOopsUrl( 'accessdenied',
@@ -1457,6 +1469,7 @@ sub writeHeader {
 Redirect to URL
    * =$query= - CGI query object. Ignored, only there for compatibility. The session CGI query object is used instead.
    * =$url=   - URL to redirect to
+
 Return:             none, never returns
 
 *Since:* TWiki::Plugins::VERSION 1.000 (7 Dec 2002)
@@ -1617,7 +1630,7 @@ sub wikiToEmail {
     return '' unless $wiki;
     my $user = $TWiki::Plugins::SESSION->{users}->findUser( $wiki, undef, 1 );
     return '' unless $user;
-    return join( ',', @{$user->emails()} );
+    return join( ',', $user->emails() );
 }
 
 =pod
@@ -1973,20 +1986,27 @@ sub getRegularExpression {
 Parse a web and topic name, supplying defaults as appropriate.
    * =$web= - Web name, identifying variable, or empty string
    * =$topic= - Topic name, may be a web.topic string, required.
-Return: the parsed Web/Topic pai
+Return: the parsed Web/Topic pair
 
 *Since:* TWiki::Plugins::VERSION 1.1
 
-| *Input* | *Return* |
-| <tt>( 'Web',  'Topic' )     </tt> | <tt>( 'Web',  'Topic' ) </tt> |
-| <tt>( '',     'Topic' )     </tt> | <tt>( 'Main', 'Topic' ) </tt> |
-| <tt>( '',     '' )          </tt> | <tt>( 'Main', 'WebHome' ) </tt> |
-| <tt>( '',     'Web/Topic' ) </tt> | <tt>( 'Web',  'Topic' ) </tt> |
-| <tt>( '',     'Web.Topic' ) </tt> | <tt>( 'Web',  'Topic' ) </tt> |
-| <tt>( 'Web1', 'Web2.Topic' )</tt> | <tt>( 'Web2', 'Topic' ) </tt> |
-| <tt>( '%MAINWEB%', 'Topic' )</tt> | <tt>( 'Main', 'Topic' ) </tt> |
-| <tt>( '%TWIKIWEB%', 'Topic' )</tt> | <tt>( 'TWiki', 'Topic' ) </tt> |
-where =Main= and =TWiki= are the web names set in $cfg{UsersWebName} and $cfg{SystemWebName} respectively.
+| *Input*                               | *Return*  |
+| <tt>( 'Web', 'Topic' ) </tt>          | <tt>( 'Web', 'Topic' ) </tt>  |
+| <tt>( '', 'Topic' ) </tt>             | <tt>( 'Main', 'Topic' ) </tt>  |
+| <tt>( '', '' ) </tt>                  | <tt>( 'Main', 'WebHome' ) </tt>  |
+| <tt>( '', 'Web/Topic' ) </tt>         | <tt>( 'Web', 'Topic' ) </tt>  |
+| <tt>( '', 'Web/Subweb/Topic' ) </tt>  | <tt>( 'Web/Subweb', 'Topic' ) </tt>  |
+| <tt>( '', 'Web.Topic' ) </tt>         | <tt>( 'Web', 'Topic' ) </tt>  |
+| <tt>( '', 'Web.Subweb.Topic' ) </tt>  | <tt>( 'Web/Subweb', 'Topic' ) </tt>  |
+| <tt>( 'Web1', 'Web2.Topic' )</tt>     | <tt>( 'Web2', 'Topic' ) </tt>  |
+
+Note that hierarchical web names (Web.SubWeb) are only available if hierarchical webs are enabled in =configure=.
+
+The symbols %<nop>USERSWEB%, %<nop>SYSTEMWEB%, %<nop>DOCWEB%, %<nop>MAINWEB% and %<nop>TWIKIWEB% can be used in the input to represent the web names set in $cfg{UsersWebName} and $cfg{SystemWebName}. For example:
+| *Input*                               | *Return* |
+| <tt>( '%<nop>USERSWEB%', 'Topic' )</tt>     | <tt>( 'Main', 'Topic' ) </tt>  |
+| <tt>( '%<nop>SYSTEMWEB%', 'Topic' )</tt>    | <tt>( 'TWiki', 'Topic' ) </tt>  |
+| <tt>( '', '%<nop>DOCWEB%.Topic' )</tt>    | <tt>( 'TWiki', 'Topic' ) </tt>  |
 
 =cut
 

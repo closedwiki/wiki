@@ -40,7 +40,7 @@ $VERSION = '$Rev$';
 # This is a free-form string you can use to "name" your own plugin version.
 # It is *not* used by the build automation tools, but is reported as part
 # of the version number in PLUGINDESCRIPTIONS.
-$RELEASE = 'Dakar';
+$RELEASE = '4.0.3';
 
 $pluginName = 'TwistyPlugin';  # Name of this Plugin
 
@@ -66,7 +66,7 @@ sub initPlugin {
     TWiki::Func::registerTagHandler('ENDTWISTY',\&_ENDTWISTYTOGGLE);
     TWiki::Func::registerTagHandler('TWISTYTOGGLE',\&_TWISTYTOGGLE);
     TWiki::Func::registerTagHandler('ENDTWISTYTOGGLE',\&_ENDTWISTYTOGGLE);
-
+	
     return 1;
 }
 
@@ -79,6 +79,7 @@ sub _addHeader {
 @import url("%PUBURL%/%TWIKIWEB%/TwistyContrib/twist.css");
 </style>
 <script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/TWikiJavascripts/twiki.js"></script>
+<script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/BehaviourContrib/behaviour.js"></script>
 <script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/TwistyContrib/twist.js"></script>
 EOF
 
@@ -86,19 +87,19 @@ EOF
 }
 
 sub _TWISTYSHOW {
-    return _twistyImpl(@_, 'show');
+    return _twistyWrapInDiv(_twistyBtn(@_, 'show'));
 }
 
 sub _TWISTYHIDE {
-    return _twistyImpl(@_, 'hide');
+    return _twistyWrapInDiv(_twistyBtn(@_, 'hide'));
 }
 
 sub _TWISTYBUTTON {
-    return 
-      '<span>' . # fixes "jumpy" links in some browsers
-      _twistyImpl(@_, 'show') . 
-      _twistyImpl(@_, 'hide') . 
-      '</span>';
+    return _twistyWrapInDiv(
+      '<span>' .
+      _twistyBtn(@_, 'show') . 
+      _twistyBtn(@_, 'hide') . 
+      '</span>');
 }
 
 sub _TWISTY {
@@ -107,24 +108,55 @@ sub _TWISTY {
 
 sub _TWISTYTOGGLE {
     my($session, $params, $theTopic, $theWeb) = @_;
-    my $id=$params->{'id'}||'';
-    my $mode=$params->{'mode'}||'span';
-    my $remember=$params->{'remember'}||'off';
-    my $cookieEnabled=($remember eq 'on') ? ' twistyRememberSetting' : '';
+    my $id = $params->{'id'} || '';
+    my $idTag = $id.'toggle';
+    my $mode = $params->{'mode'} || 'span';
     unshift @modes,$mode;
-    return '<'.$mode.' id="'.$id.'toggle" class="twistyMakeHidden'.$cookieEnabled.'">';
+    
+    my $isTrigger = 0;
+    my @propList = _createHtmlProperties($idTag, $params, $isTrigger);
+    my $props = @propList ? " ".join(" ",@propList) : '';
+    my $modeTag = '<'.$mode.$props.'>';
+    $modeTag .= _createJavascriptTriggerCall($idTag);
+    return _twistyOpenDiv().$modeTag;
 }
 
 sub _ENDTWISTYTOGGLE {
     my($session, $params, $theTopic, $theWeb) = @_;
     my $mode=shift @modes;
-    return '</'.$mode.'>' if $mode;
+    my $modeTag = ($mode ne '') ? '</'.$mode.'>' : '';
+    return $modeTag._twistyCloseDiv();
 }
 
-sub _twistyImpl {
+=pod
+Disables _TWISTYSCRIPT tags written in the topic text.
+=cut
+
+sub beforeCommonTagsHandler {
+	# do not uncomment, use $_[0], $_[1]... instead
+	$_[0] =~ s/%_TWISTYSCRIPT{\"(.*?)\"}%/$1/g;
+}
+
+=pod
+Convert the semi-variable tag to JavaScript.
+=cut
+
+sub postRenderingHandler {
+    # do not uncomment, use $_[0], $_[1]... instead
+	$_[0] =~ s/%_TWISTYSCRIPT{\"(.*?)\"}%/<script type="text\/javascript\"\>$1<\/script>/g;
+}
+
+sub _twistyBtn {
     my($session, $params, $theTopic, $theWeb, $theState) = @_;
 
+    _addHeader();
+
+	# not used yet:
+	#my $triangle_right = '&#9658;';
+	#my $triangle_down = '&#9660;';
+	
     my $id = $params->{'id'} || '';
+    my $idTag = $id.$theState;
     my $link = $params->{$theState.'link'} || $params->{'link'} || '';
     my $img = $params->{$theState.'img'} || $params->{'img'} || '';
     my $imgright = $params->{$theState.'imgright'} || $params->{'imgright'} || '';
@@ -134,11 +166,78 @@ sub _twistyImpl {
     $imgleft =~ s/['\"]//go;
     my $imgTag = ($img ne '') ? '<img src="'.$img.'" border="0" alt="" />' : '';
     my $imgRightTag = ($imgright ne '') ? '<img src="'.$imgright.'" border="0" alt="" />' : '';
-    my $imgLeftTag = ($imgleft ne '') ? '<img src="'.$imgleft.'" border="0" alt="" />' : '';
-    my $initialHidden = ($theState eq 'hide') ? 'twistyTransparent ' : '';
-    _addHeader();
-    return '<span'.' id="'.$id.$theState.'" class="'.$initialHidden.'twistyMakeOpaque"><a href="#" class="twistyTrigger">'.$imgLeftTag.'<span class="twikiLinkLabel">'.$link.'</span>'.$imgTag.$imgRightTag.'</a></span>';
+    my $imgLeftTag = ($imgleft ne '') ? '<img src="'.$imgleft.'" border="0" alt="" />' : '';        
+    my $imgLinkTag = '<a href="#">'.$imgLeftTag.'<span class="twikiLinkLabel">'.$link.'</span>'.$imgTag.$imgRightTag.'</a>';
+	
+	my $isTrigger = 1;
+    my @propList = _createHtmlProperties($idTag, $params, $isTrigger);
+    my $props = @propList ? " ".join(" ",@propList) : '';
+    
+    my $triggerTag = '<span'.$props.'>'.$imgLinkTag.'</span>';
+    $triggerTag .= _createJavascriptTriggerCall($idTag);
+    return $triggerTag;
 }
 
+sub _createHtmlProperties {
+	my($idTag, $params, $isTrigger) = @_;
+	my $class = $params->{'class'} || '';
+    my $start = $params->{start} || '';
+    my $startHide = ($start eq 'hide');
+    my $startShow = ($start eq 'show');
+    my $firststart = $params->{'firststart'} || '';
+    my $firstStartHide = ($firststart eq 'hide');
+    my $firstStartShow = ($firststart eq 'show');
+    my $remember = $params->{'remember'} || 'off';
+    my $noscript = $params->{'noscript'} || '';
+    my $noscriptHide = ($noscript eq 'hide');
+    
+	my @classList = ();
+    push (@classList, $class) if $class && !$isTrigger;
+    push (@classList, 'twistyRememberSetting') if ($remember eq 'on');
+    push (@classList, 'twistyStartHide') if $startHide;
+    push (@classList, 'twistyStartShow') if $startShow;
+    push (@classList, 'twistyFirstStartHide') if $firstStartHide;
+    push (@classList, 'twistyFirstStartShow') if $firstStartShow;
+    
+    if ($isTrigger) {
+    	push (@classList, 'twistyTrigger');
+    	push (@classList, 'twistyMakeVisible');
+    }
+    if (!$isTrigger) {
+    	# content
+    	push (@classList, 'twistyContent');
+    	push (@classList, 'twistyMakeHidden') if !$noscriptHide; # don't set hidden directly but make it hidden with javascript, no browser without script will be able to see content
+    	push (@classList, 'twistyMakeVisible') if $noscriptHide;
+    }
+    
+    my @propList = ();
+    push (@propList, 'id="'.$idTag.'"');
+    push (@propList, 'class="'.join(" ",@classList).'"');
+    return @propList;
+}
+
+=pod
+If we write a JavaScript tag here, it will be removed at render time in 
+Render.getRenderedVersion if configure option AllowInlineScript is not set.
+So we create a semi-variable tag here and convert it to a JavaScript tag in #postRenderingHandler.
+=cut
+
+sub _createJavascriptTriggerCall {
+	my($idTag) = @_;
+	return '%_TWISTYSCRIPT{"TWiki.TwistyPlugin.init("'.$idTag.'");"}%';
+}
+
+sub _twistyWrapInDiv {
+	 my($text) = @_;
+	 return _twistyOpenDiv().$text._twistyCloseDiv();
+}
+
+sub _twistyOpenDiv {
+	 return '<div class="twistyPlugin" style="display:inline;">';
+}
+
+sub _twistyCloseDiv {
+	 return '</div><!--//twistyPlugin-->';
+}
 
 1;

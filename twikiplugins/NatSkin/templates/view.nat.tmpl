@@ -6,57 +6,15 @@
 <!-- -->%TMPL:INCLUDE{"viewjavascript"}%
 <!-- -->%TMPL:INCLUDE{"viewstyles"}%
 <!-- -->%TMPL:INCLUDE{"searchbox"}%
-%TMPL:DEF{"title"}%
-%IFSKINSTATETHEN{release="beijing"}%
-  %$nopIFDEFINED{"%PAGETITLE%" action="view|preview|save|edit" then="%PAGETITLE%" else="%TOPIC%"}%
-%ELSESKINSTATE%
-  %$nopIFDEFINEDTHEN{"%PAGETITLE%" action="view|preview|save|edit"}%
-    %PAGETITLE%
-  %ELSIFDEFINED{"%FORMFIELD{"Headline"}%" action="view|preview|save|edit"}%
-    %FORMFIELD{"Headline"}%
-  %ELSIFDEFINED{"%FORMFIELD{"TopicDescription"}%" action="view|preview|save|edit"}%
-    %TOPIC% - %FORMFIELD{"TopicDescription"}%
-  %ELSEDEFINED%
-    %TOPIC%
-  %FIDEFINED%
-%FISKINSTATE%
-%TMPL:END%
-%TMPL:DEF{"meta"}% %HTTP_EQUIV_ON_VIEW% 
-%IFDEFINEDTHEN{"%KEYWORDS%" action="view|preview|save|edit"}%
-  <meta name="keywords" content="%KEYWORDS%" /> 
-  <meta http-equiv="keywords" content="%KEYWORDS%" /> 
-%FIDEFINED%
-%IFSKINSTATETHEN{release="beijing"}%
-%ELSESKINSTATE%
-  %$nopIFDEFINEDTHEN{"%FORMFIELD{"Tags"}%"}%
-    <meta name="keywords" content="%FORMFIELD{"Tags"}%" /> 
-    <meta http-equiv="keywords" content="%FORMFIELD{"Tags"}%" /> 
-  %FIDEFINED%
-  %$nopIFDEFINEDTHEN{"%FORMFIELD{"BlogTag"}%"}%
-    <meta name="keywords" content="%FORMFIELD{"BlogTag"}%" /> 
-    <meta http-equiv="keywords" content="%FORMFIELD{"BlogTag"}%" /> 
-  %FIDEFINED%
-  %$nopIFDEFINEDTHEN{"%FORMFIELD{"SubjectCategory"}%"}%
-    <meta name="keywords" content="%FORMFIELD{"SubjectCategory"}%" /> 
-    <meta http-equiv="keywords" content="%FORMFIELD{"SubjectCategory"}%" /> 
-  %FIDEFINED%
-  %$nopIFDEFINEDTHEN{"%FORMFIELD{"Headline"}%" action="view"}%
-    <meta name="description" content="%FORMFIELD{"Headline"}%" />
-  %ELSIFDEFINED{"%FORMFIELD{"TopicDescription"}%"}%
-    <meta name="description" content="%FORMFIELD{"TopicDescription"}%" />
-  %FIDEFINED%
-  %$nopIFDEFINEDTHEN{"%FORMFIELD{"Author"}%"}%
-    <meta name="author" content="%FORMFIELD{"Author"}%" />
-  %ELSEDEFINED%
-    <meta name="author" content="%REVINFO{"$wikiname"}%" />
-  %FIDEFINED%
-%FISKINSTATE%
-%TMPL:END%
-%TMPL:DEF{"content"}%%STARTALIASAREA%%TEXT%
+%TMPL:DEF{"bodyclass"}%natViewBody%TMPL:END%
+%TMPL:DEF{"title"}%%IFDEFINED{"%PAGETITLE%" then="$test" else="%TOPIC%"}%%TMPL:END%<!-- 
+-->%TMPL:DEF{"meta"}%%HTTP_EQUIV_ON_VIEW%
+%IFDEFINED{"%METAKEYWORDS%" then="<meta name=\"keywords\" content=\"$test\" />$n<meta http-equiv=\"keywords\" content=\"$test\" />"}%
+%IFDEFINED{"%METAAUTHOR%" glue="off" then="<meta name=\"author\" content=\"$test\" />"}%
+%IFDEFINED{"%METADESCRIPTION%" then="<meta name=\"description\" content=\"$test\" />"}%%TMPL:END%<!--
+-->%TMPL:DEF{"content"}%%STARTALIASAREA%%TEXT%
 %META{"form"}%
-%STOPALIASAREA%
-%TMPL:END%
-%TMPL:DEF{"contentfooter"}% <!-- -->
-<div class="natTopicAttachments"> %META{"attachments"}% </div>
-<div class="natRevision"> %REVINFO% </div> 
-%TMPL:END%
+%STOPALIASAREA%%TMPL:END%<!--
+-->%TMPL:DEF{"contentheader"}%<div class="natBreadCrumbs">%BREADCRUMBS{separator="<span class='natSep'>&#187;</span>"}%</div>%TMPL:END%<!--
+-->%TMPL:DEF{"contentfooter"}%<div class="natTopicAttachments"> %META{"attachments"}% </div>
+<div class="natRevision"> %REVINFO% </div>%TMPL:END%
