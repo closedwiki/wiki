@@ -42,6 +42,8 @@ my $testWeb = "TemporaryRegisterTestsTestWeb";
 my $peopleWeb = "TemporaryRegisterTestsPeopleWeb";
 my $systemWeb = "TemporaryRegisterTestsSystemWeb";
 
+my $approvalsDir  =  '/tmp/RegistrationApprovals';
+
 # SMELL: the sent mails are never checked in the tests
 my @mails;
 
@@ -116,7 +118,7 @@ EOF
     $TWiki::cfg{Htpasswd}{FileName} = "/tmp/htpasswd";
     open(F,">$TWiki::cfg{Htpasswd}{FileName}") || die;
     close F;
-    $TWiki::cfg{RegistrationApprovals} = '/tmp/RegistrationApprovals';
+    $TWiki::cfg{RegistrationApprovals} = $approvalsDir;
     $TWiki::cfg{Register}{NeedVerification} = 1;
     $TWiki::cfg{MinPasswordLength} = 0;
 
@@ -133,7 +135,7 @@ sub tear_down {
     $this->removeWebFixture($session,$testWeb);
     $this->removeWebFixture($session,$peopleWeb);
     $this->removeWebFixture($session,$systemWeb);
-    File::Path::rmtree($TWiki::cfg{RegistrationApprovals});
+    File::Path::rmtree($approvalsDir);
     @mails = ();
     eval {$session->finish()};
 
@@ -1031,6 +1033,20 @@ sub visible {
  $a =~ s/\r/CR/g;
  $a =~ s/ /SP/g;
  $a;
+}
+
+# Make sure that the temporary files and directories we created are
+# removed even if the tests have been interrupted, or cancelled while
+# debugging (Bugs:Item2972)
+END {
+    eval {
+        for my $web ($testWeb,$peopleWeb,$systemWeb) {
+            # under normal operation the webs don't exist, so
+            # don't use the noisy TWikiTestCase::removeWebFixture
+            $session->{store}->removeWeb($session->{user}, $web);
+        }
+        File::Path::rmtree($approvalsDir);
+    }
 }
 
 1;
