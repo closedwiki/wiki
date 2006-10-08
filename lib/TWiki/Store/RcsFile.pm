@@ -807,7 +807,8 @@ sub _rmtree {
 
     if( opendir( D, $root ) ) {
         foreach my $entry ( grep { !/^\.+$/ } readdir( D ) ) {
-            $entry = $root.'/'.$entry;
+            $entry =~ /^(.*)$/;
+            $entry = $root.'/'.$1;
             if( -d $entry ) {
                 _rmtree( $entry );
             } else {
