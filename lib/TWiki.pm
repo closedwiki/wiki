@@ -1270,12 +1270,15 @@ sub new {
 
     # Convert UTF-8 web and topic name from URL into site charset
     # if necessary - no effect if URL is not in UTF-8
-    my $newt = $this->UTF82SiteCharSet( $this->{webName}.'.'.
-                                        $this->{topicName} );
-    if( $newt ) {
-        $newt =~ /^(.*?)\.([^.]*)$/;
-        $this->{webName} = $1;
-        $this->{topicName} = $2;
+    # handle topic and web names seperately; encoding is not necessarily shared
+    my $webNameTemp = $this->UTF82SiteCharSet( $this->{webName} );
+    if ( $webNameTemp ) {
+        $this->{webName} = $webNameTemp;
+    }
+
+    my $topicNameTemp = $this->UTF82SiteCharSet( $this->{topicName} );
+    if ( $topicNameTemp ) {
+        $this->{topicName} = $topicNameTemp;
     }
 
     $this->{scriptUrlPath} = $TWiki::cfg{ScriptUrlPath};
