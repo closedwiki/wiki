@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1147548797" format="1.0" version="1.46"}%
+%META:TOPICINFO{author="PeterThoeny" date="1160450224" format="1.0" version="1.47"}%
 ---+!! TWiki Spreadsheet Plugin
 
 This Plugin adds spreadsheet capabilities to %WIKITOOLNAME% topics. Formulae like ==%<nop>CALC{"$INT(7/3)"}%== are evaluated at page view time. They can be placed in table cells and outside of tables. In other words, this Plugin provides general formula evaluation capability, not just classic spreadsheet functions.
@@ -386,8 +386,8 @@ Conventions for Syntax:
 	* Related: =[[#FuncEVAL][$EVAL()]]=
 
 #FuncREPEAT
----+++ REPEAT(text) -- repeat text a number of times
-	* Syntax: ==$REPEAT( text )==
+---+++ REPEAT( text, num ) -- repeat text a number of times
+	* Syntax: ==$REPEAT( text, num )==
 	* Example: ==%<nop>CALC{"$REPEAT(/\, 5)"}%== returns ==/\/\/\/\/\==
 
 #FuncREPLACE
@@ -557,6 +557,29 @@ Conventions for Syntax:
 	* Example: ==%<nop>CALC{"$WORKINGDAYS($TIME(2004/07/15), $TIME(2004/08/03))"}%== returns ==13==
 	* Related: =[[#FuncSUMDAYS][$SUMDAYS()]]=, =[[#FuncTIME][$TIME()]]=, =[[#FuncTIMEDIFF][$TIMEDIFF()]]=
 
+---++ FAQ
+
+---+++ Can I use CALC in a formatted search?
+
+Specifically, how can I output some conditional text in a %TWIKIWEB%.FormattedSearch?
+
+You need to escape the CALC so that it executes once per search hit. This can be done by escaping the =%= signs of =%<nop>CALC{...}%= with =$percnt=. For example, to execute =$IF($EXACT($formfield(Tested), Yes), %<nop>PUBURL%/%<nop>TWIKIWEB%/TWikiDocGraphics/choice-yes.gif, %<nop>PUBURL%/%<nop>TWIKIWEB%/TWikiDocGraphics/choice-no.gif)= in the =format=""= parameter, write this:
+
+=%<nop>SEARCH{ .... format="| $topic | $percntCALC{$IF($EXACT($formfield(Tested), Yes), %<nop>PUBURL%/%<nop>TWIKIWEB%/TWikiDocGraphics/choice-yes.gif, %<nop>PUBURL%/%<nop>TWIKIWEB%/TWikiDocGraphics/choice-no.gif)}$percnt |" }%=
+
+---+++ How can I easily repeat a formula in a table?
+
+To repeat the same formula in all cells of a table row define the formula once in a preferences setting and use that in the CALC. The preferences setting can be hidden in HTML comments. Example:
+
+<verbatim>
+<!--
+	* Set MYFORMULA = $EVAL($SUBSTITUTE(...etc...))
+-->
+| A | 1 | %CALC{%MYFORMULA%}% |
+| B | 2 | %CALC{%MYFORMULA%}% |
+| C | 3 | %CALC{%MYFORMULA%}% |
+</verbatim>
+
 ---++ Bug Tracking Example
 
 | *Bug#:*  | *Priority:* | *Subject:* | *Status:* | *Days to fix* |
@@ -586,7 +609,7 @@ Plugin settings are stored as preferences variables. To reference
 a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>SPREADSHEETPLUGIN_SHORTDESCRIPTION%==
 
 	* One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
-		* Set SHORTDESCRIPTION = Add spreadsheet calculation like ="$SUM(&nbsp;$ABOVE()&nbsp;)"= to TWiki tables and other topic text
+		* Set SHORTDESCRIPTION = Add spreadsheet calculation like ="$SUM( $ABOVE() )"= to TWiki tables and other topic text
 
 	* Debug plugin: (See output in =data/debug.txt=)
 		* Set DEBUG = 0
@@ -618,8 +641,9 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Plugin Author: | TWiki:Main/PeterThoeny |
 |  Copyright: | &copy; 2001-2006, Peter@Thoeny.org, [[http://www.structuredwikis.com/][StructuredWikis LLC]] |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 13 May 2006 (10197) |
+|  Plugin Version: | 10 Oct 2006 (r11689) |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
+|  10 Oct 2006: | Enhanced documentation |
 |  13 May 2006: | Added $SETIFEMPTY(); fixes in documentation |
 |  17 Jun 2005: | Added $NOEXEC(), $EXEC() |
 |  25 Mar 2005: | Fixed evaluation bug when using <nop>SpeedyCGI accelerator; code refactor to load module only when needed, contributed by TWiki:Main/CrawfordCurrie |
@@ -661,5 +685,5 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 
 __Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
 
--- TWiki:Main/PeterThoeny - 13 May 2006
+-- TWiki:Main/PeterThoeny - 10 Oct 2006
 
