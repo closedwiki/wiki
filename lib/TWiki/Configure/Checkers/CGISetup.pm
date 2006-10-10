@@ -269,12 +269,12 @@ sub _loadDEPENDENCIES {
         next unless (scalar(@row) == 4 && $row[2] eq 'cpan');
         my $ver = $row[1];
         $ver =~ s/[<>=]//g;
-        my ($dispo,$usage)  =  $row[3] =~ /^\s*(\w+).?(.*)$/;
+        my ($dispo,$usage) = $row[3] =~ /^\s*(\w+).?(.*)$/;
         push(@perlModules, {
             name => $row[0],
             usage => $usage,
             minimumVersion => $ver,
-            disposition => $dispo
+            disposition => lc($dispo)
            });
     }
     close($d);

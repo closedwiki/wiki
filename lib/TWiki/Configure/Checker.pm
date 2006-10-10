@@ -193,8 +193,7 @@ sub checkPerlModules {
         my $mod_version;
         eval 'use '.$mod->{name};
         if ($@) {
-            $n = 'not installed. '.ucfirst($mod->{disposition}).' for '.
-              $mod->{usage};
+            $n = 'Not installed. '. $mod->{usage};
 
         } else {
             no strict 'refs';
@@ -208,15 +207,15 @@ sub checkPerlModules {
             }
         }
         if ($n) {
-            if( lc $mod->{disposition} eq 'required') {
+            if( $mod->{disposition} eq 'required') {
                 $n = $this->ERROR($n);
-            } elsif (lc $mod->{disposition} eq 'recommended') {
+            } elsif ($mod->{disposition} eq 'recommended') {
                 $n = $this->WARN($n);
             } else {
                 $n = $this->NOTE($n);
             }
         } else {
-            $n .= $this->NOTE($mod_version.' installed');
+            $n = $this->NOTE($mod_version.' installed');
         }
         $e .= $this->setting($mod->{name}, $n);
     }
