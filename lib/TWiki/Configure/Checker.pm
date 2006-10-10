@@ -22,8 +22,6 @@ use strict;
 
 package TWiki::Configure::Checker;
 
-use TWiki::Configure::UI;
-
 use base qw(TWiki::Configure::UI);
 
 sub guessed {
@@ -203,18 +201,19 @@ sub checkPerlModules {
             eval '$mod_version = $'.$mod->{name}.'::VERSION';
             use strict 'refs';
             if ($mod_version < $mod->{minimumVersion}) {
-                $n = $mod_version.' installed. Version '.
-                  $mod->{minimumVersion}.
-                    ' '.$mod->{disposition}.' for '.$mod->{usage};
+                $n = $mod_version.' installed. Version '
+                   . $mod->{minimumVersion}.' '
+                   . $mod->{disposition};
+                $n .= ' for '.$mod->{usage} if $mod->{usage};
             }
         }
         if ($n) {
-            if( $mod->{disposition} eq 'required') {
-                $n .= $this->ERROR($n);
-            } elsif ($mod->{disposition} eq 'recommended') {
-                $n .= $this->WARN($n);
+            if( lc $mod->{disposition} eq 'required') {
+                $n = $this->ERROR($n);
+            } elsif (lc $mod->{disposition} eq 'recommended') {
+                $n = $this->WARN($n);
             } else {
-                $n .= $this->NOTE($n);
+                $n = $this->NOTE($n);
             }
         } else {
             $n .= $this->NOTE($mod_version.' installed');

@@ -19,8 +19,6 @@ package TWiki::Configure::Checkers::CGISetup;
 
 use strict;
 
-use TWiki::Configure::Checker;
-
 use base 'TWiki::Configure::Checker';
 
 use File::Spec;
@@ -271,11 +269,10 @@ sub _loadDEPENDENCIES {
         next unless (scalar(@row) == 4 && $row[2] eq 'cpan');
         my $ver = $row[1];
         $ver =~ s/[<>=]//g;
-        my $dispo = $row[3];
-        $dispo =~ s/\..*$//;
+        my ($dispo,$usage)  =  $row[3] =~ /^\s*(\w+).?(.*)$/;
         push(@perlModules, {
             name => $row[0],
-            usage => $row[3],
+            usage => $usage,
             minimumVersion => $ver,
             disposition => $dispo
            });
