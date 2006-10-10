@@ -22,7 +22,7 @@
 # array :: '[' value ( ',' value )* ']' ;
 # hash  :: '{' keydef ( ',' keydef )* ']';
 # keydef :: string '=>' value ;
-# string ::= single quoted string, use \' to escape a quote
+# string ::= single quoted string, use \' to escape a quote, or \w+
 
 package TWiki::Configure::Types::PERL;
 
@@ -47,7 +47,6 @@ sub prompt {
 # verify that the string is a legal rvalue according to the grammar
 sub _rvalue {
     my ($s, $term) = @_;
-
     while (length($s) > 0 && (!$term || $s !~ s/^\s*$term//)) {
         if ($s =~ s/^\s*'//s) {
             my $escaped = 0;
@@ -55,6 +54,7 @@ sub _rvalue {
                 last if ($1 eq "'" && !$escaped);
                 $escaped = $1 eq '\\';
             }
+        } elsif ($s =~ s/^\s*(\w+)//s) {
         } elsif ($s =~ s/^\s*\[//s) {
             $s = _rvalue($s, ']');
         } elsif ($s =~ s/^\s*{//s) {
@@ -69,9 +69,10 @@ sub _rvalue {
 
 sub string2value {
     my ($this, $val) = @_;
-    if (_rvalue($val)) {
+    my $s;
+    if ($s = _rvalue($val)) {
         # Parse failed, return as a string.
-        return $val;
+        die "Parse of structured value failed at: $s\nPlease go back and check it.";
     }
     return eval $val;
 }
