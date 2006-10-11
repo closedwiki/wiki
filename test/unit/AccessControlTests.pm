@@ -375,24 +375,27 @@ THIS
 
 sub test_hierarchical_subweb_controls_Item2815 {
     my $this = shift;
+    my $subweb = "$testWeb.SubWeb";
 
     $TWiki::cfg{EnableHierarchicalWebs} = 1;
-    $twiki->{store}->createWeb($twiki->{user}, "$testWeb/SubWeb");
+    $twiki->{store}->createWeb($twiki->{user}, $subweb);
+    $twiki->{store}->saveTopic( $currUser, $testWeb, $testTopic, "Nowt");
     $twiki->{store}->saveTopic(
         $currUser, $testWeb, $TWiki::cfg{WebPrefsTopicName},
         <<THIS, undef);
 \t* Set ALLOWWEBVIEW = $MrGreen
 THIS
     $twiki->{store}->saveTopic(
-        $currUser, "$testWeb/SubWeb", $TWiki::cfg{WebPrefsTopicName},
+        $currUser, $subweb, $TWiki::cfg{WebPrefsTopicName},
         <<THIS, undef);
 \t* Set ALLOWWEBVIEW = $MrOrange
 THIS
-
+    $twiki->finish();
+    $twiki = new TWiki();
+    $this->PERMITTED($subweb,$testTopic,"VIEW",$MrOrange);
+    $this->DENIED($subweb,$testTopic,"VIEW",$MrGreen);
     $this->PERMITTED($testWeb,$testTopic,"VIEW",$MrGreen);
     $this->DENIED($testWeb,$testTopic,"VIEW",$MrOrange);
-    $this->PERMITTED($testWeb,$testTopic,"VIEW",$MrOrange);
-    $this->DENIED($testWeb,$testTopic,"VIEW",$MrGreen);
 }
 
 1;
