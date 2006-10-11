@@ -743,12 +743,8 @@ sub doEnableEdit {
 
     TWiki::Func::writeDebug( "- EditTablePlugin::doEnableEdit( $theWeb, $theTopic )" ) if $TWiki::Plugins::EditTablePlugin::debug;
 
-    my $pTopic = $theTopic;
-    # workaround for plugin API limitation that cannot check for permissions in meta data:
-    $pTopic = undef if( $doCheckIfLocked );
-
     my $wikiUserName = TWiki::Func::getWikiUserName();
-    if( ! TWiki::Func::checkAccessPermission( 'change', $wikiUserName, '', $pTopic, $theWeb ) ) {
+    if( ! TWiki::Func::checkAccessPermission( 'change', $wikiUserName, undef, $theTopic, $theWeb ) ) {
         # user has no permission to change the topic
         throw TWiki::OopsException(
             'accessdenied',
