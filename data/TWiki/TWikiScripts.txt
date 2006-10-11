@@ -14,14 +14,14 @@ Details on CGI scripts located in the =twiki/bin= directory.
 ---++++ CGI environment
 In the CGI environment parameters are passed to the scripts via the URL and URL parameters. Environment variables are also used to determine the user performing the action. If the environment is not set up, the default TWiki user is used (usually =guest=).
 ---++++ Command-line
-You *must* be cd'd to the =twiki/bin= directory to run the scripts from the command line. To avoid issues with file permissions, run the scripts as the web server user such as =nobody= or =www=.
+You *must* be have the =twiki/bin= directory on the perl path to run the scripts from the command line. To avoid issues with file permissions, run the scripts as the web server user such as =nobody= or =www=.
 
 Parameters are passed on the command line using '-name' - for example,
 <verbatim>
 $ cd /usr/local/twiki/bin
 $ save -topic MyWeb.MyTopic -user admin -action save -text "New text of the topic"
 </verbatim>
-All parameters require a value.
+All parameters require a value, even if that is the empty string.
 
 ---++++ Common parameters
 All the scripts accept a number of common parameters. The first two components of the URL after the script name are taken as the web and the topic, respectively. Standard URL parameters are:
@@ -188,13 +188,17 @@ This is used by BulkResetPassword and ResetPassword. Only users belonging to the
 BulkRegistration provides the means to create multiple accounts but it does not announce those accounts to the users who own them. BulkResetPassword is used to assign the passwords, the Introduction is used to explain why they are receiving the mail.
 
 ---+++ =rest=
-This REST ([[http://en.wikipedia.org/wiki/REST][Representational State Transfer]]) script can be invoked via http in a similar way as the view script (see *Invocation Examples*, below) to execute a function that is associated to a "subject" and a "verb" (see below). It'll print the result directly to the stream unless the =endPoint= parameter is specified, in which case the control is redirected to the given topic.
+This REST ([[http://en.wikipedia.org/wiki/REST][Representational State Transfer]]) script can be invoked via http in the same way as the other TWiki scripts (see *Invocation Examples*, below) to execute a function that is associated to a "subject" and a "verb" (see below). These functions are usually registered by plugins using the =TWiki::Func::registerRESTHandler= method. The =rest= script will print the result directly to the browser unless the =endPoint= parameter is specified, in which case it will output a redirect to the given topic.
 
-The =rest= script itself uses one parameter:
-
+The =rest= script supports the following parameters:
+| =username= | If =TemplateLogin=, or a similar login manager not embedded in the web server, is used, then you need to pass a username and password to the server. The =username= and =password= parameters are used for this purpose. |
+| =password= | See =username= |
+| =topic= | If defined as the full name (including web) of a topic, then when the script starts up plugins will be passed this as the "current" topic. If not defined, then %USERWEB%.%HOMETOPIC% will be passed to plugins. |
 | =endPoint= | Where to redirect the response once the request is served, in the form "Web.Topic" |
 
-Any additional parameters are passed directly to the function (i.e: The function can get any other parameter using the CGI $query object)
+The function is free to use any other query parameters for its own purposes.
+
+%X% The =rest= script should *always* require authentication in any TWiki that has logins. Otherwise there is a risk of opening up major security holes. So make sure you add it to the list of authenticated scripts if you are using =ApacheLogin=.
 
 ---++++ Invocation Examples
 
@@ -202,9 +206,7 @@ The =rest= script assumes that it will be called with URL in the form:
 
 =http://my.host/bin/rest/&lt;subject&gt;/&lt;verb&gt;=
 
-where =&lt;subject&gt;= must be the WikiWord name of one of the installed TWikiPlugins, and the =&lt;verb&gt;= is the alias for the function registered using the =registerRESTHandler=. The =&lt;subject&gt;= and =&lt;verb&gt;= are then used to lookup and call the registered function.
-
-Functions outside the Plugins also can be registered, but please consider the security implications of allowing URL access, as functions can sidestep TWiki Authentication & Authorisation settings.
+where =&lt;subject&gt;= must be the WikiWord name of one of the installed TWikiPlugins, and the =&lt;verb&gt;= is the alias for the function registered using the =TWiki::Func::registerRESTHandler= method. The =&lt;subject&gt;= and =&lt;verb&gt;= are then used to lookup and call the registered function.
 
 =&lt;subject&gt;= and =&lt;verb&gt;= are checked for illegal characters exactly in the same way as the web and topic names.
 
@@ -212,9 +214,7 @@ As an example, the EmptyPlugin has registered a function to be used with the =re
 
 [[%SCRIPTURL{rest}%/EmptyPlugin/example?debugenableplugin=EmptyPlugin][Call the Plugin]]
 
-You can also call the function from the command line, but this will be run as the Main.TWikiAdminGroup (as it is assumed that shell access is secure) - eg: <verbatim>./rest EmptyPlugin.example</verbatim>
-
-Note that for calls to Plugins, they must be enabled in =configure=.
+Note that for Plugins to register REST handlers, they must be enabled in =configure=.
 
 ---+++ =save=
 The =save= script performs a range of save-related functions, as selected by the =action= parameter.
