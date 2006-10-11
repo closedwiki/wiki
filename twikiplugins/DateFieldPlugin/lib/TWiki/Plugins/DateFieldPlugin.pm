@@ -56,7 +56,8 @@ sub renderFormFieldForEditHandler {
     my $calendarOutputFormat = 
       TWiki::Func::getPreferencesValue('DATEFORMAT') ||
           TWiki::Func::getPreferencesValue('DATEFIELDPLUGIN_DATEFORMAT') ||
-              '%d %b %Y';
+              $TWiki::cfg{JSCalendarContrib}{format} ||
+                '%d %b %Y';
 
     # Default to local today
     $value ||= POSIX::strftime($calendarOutputFormat, localtime(time()));

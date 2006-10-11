@@ -41,32 +41,4 @@ HERE
     TWiki::Func::addToHEAD( 'JSCALENDAR_HEAD'.$setup, $head );
 }
 
-sub renderFormFieldForEditHandler {
-  my ( $name, $type, $size, $value, $attributes, $possibleValues ) = @_;
-  return unless ( $type eq 'date' );
-  my $ifFormat = $TWiki::cfg{JSCalendarContrib}{format} || '%e %b %Y';
-  $size = 10 if( !$size || $size < 1 );
-  $value = TWiki::Plugins::EditTablePlugin::encodeValue( $value ) unless( $theValue eq '' );
-  my $text .= CGI::textfield(
-            { name => $name,
-              id => 'id'.$name,
-              size=> $size,
-              value => $value });
-  require TWiki::Contrib::JSCalendarContrib;
-  unless ( $@ ) {
-    addHEAD( 'twiki' );
-    $text .= CGI::image_button(
-                -name => 'calendar',
-                -onclick =>
-                  "return showCalendar('id$name','$ifFormat')",
-                -src=> TWiki::Func::getPubUrlPath() . '/' .
-                  TWiki::Func::getTwikiWebname() .
-                      '/JSCalendarContrib/img.gif',
-                -alt => 'Calendar',
-                -align => 'MIDDLE' );
-  }
-  return $text;
-  
-}
-
 1;

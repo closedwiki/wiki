@@ -121,7 +121,7 @@ a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, for example, =
 		* #Set EDITBUTTON = Edit table
 		* Set EDITBUTTON = Edit this table, %ATTACHURL%/edittable.gif
 
-__Note:__ The Plugin uses base settings like language and style from the JSCalendarContrib. The standard date format is '%e %B %Y' and is defined within this plugin.
+__Note:__ The Plugin uses base settings like date format, language and style from the JSCalendarContrib.
 
 ---++ Limitations and Known Issues
 
@@ -168,6 +168,7 @@ __Note:__ You do not need to install anything on the browser to use this Plugin.
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | %$VERSION% |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
+|  12 Oct 2006: | <a rel="nofollow" href="http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item2982">Item2982</a> Use default date format from JSCalendarContrib |
 |  02 Oct 2006: | <a rel="nofollow" href="http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item2884">Item2884</a> Check also for access permission in meta data; proper fix to not warn if oneself has a lock on topic |
 |  30 Aug 2006: | <a rel="nofollow" href="http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item2829">Item2829</a> Remove whitespace from select, radio and checkbox items; restored topic lock if $TWiki::Plugins::VERSION < 1.1 |
 |  29 Jul 2006: | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item2684'>Item2684</a> - Quietly ignore topic edit locks on table edit |

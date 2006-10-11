@@ -534,7 +534,7 @@ sub inputElement {
     } elsif( $type eq 'date' ) {
         my $ifFormat = '';
         $ifFormat = $bits[3] if( @bits > 3 );
-        $ifFormat ||= '%e %B %Y';
+        $ifFormat ||= $TWiki::cfg{JSCalendarContrib}{format} || '%e %B %Y';
         $size = 10 if( !$size || $size < 1 );
         $theValue = TWiki::Plugins::EditTablePlugin::encodeValue( $theValue ) unless( $theValue eq '' );
         $text .= CGI::textfield(
