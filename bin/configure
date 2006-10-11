@@ -552,7 +552,7 @@ HERE
 
     print "</div><!-- options -->\n";
 
-    if ($TWiki::Configure::UI::toterrors || $TWiki::Configure::UI::toterrors) {
+    if ($TWiki::Configure::UI::toterrors || $TWiki::Configure::UI::totwarnings) {
         my $mess = 'Total: '.$TWiki::Configure::UI::toterrors.' error'.
           ($TWiki::Configure::UI::toterrors==1?'':'s').
             $TWiki::Configure::UI::totwarnings.' warning'.
