@@ -22,7 +22,7 @@ use vars qw( $VERSION $RELEASE );
 
 =head1 The TWiki LatexModePlugin LaTeX Parse module
 
-This module provides the ability to include <nop>LaTeX source files
+This module provides the ability to include LaTeX source files
 in TWiki topics.
 
 This module is *very alpha*.  It has successfully rendered a few test
@@ -79,9 +79,9 @@ sub printF {
 
 =head2 Syntax
 
-To include full <nop>LaTeX source documents in a TWiki topic, insert
-the text to be converted inbetween the tags %<nop>BEGINALLTEX% and
-%<nop>ENDALLTEX%.
+To include full LaTeX source documents in a TWiki topic, insert
+the text to be converted inbetween the tags %BEGINALLTEX% and
+%ENDALLTEX%.
 
 =begin twiki
 
@@ -221,8 +221,8 @@ the =latex= parameter on view.  e.g.
 
 The option of TML output is provided for the following reason: it
 is unlikely that all portions of the .tex to TWiki topic
-conversion will render successfully.  [ The _parser_ in almost
-complete. The _converter_? not so much. ;-) ] With a .tex to TML
+conversion will render successfully.  [ The I<parser> in almost
+complete. The I<converter>? not so much. ;-) ] With a .tex to TML
 converter in place, one can copy-and-paste the twiki markup to
 another topic to correct the rendering problems.
 
@@ -230,6 +230,7 @@ another topic to correct the rendering problems.
 
     # replace all extracted verbatim blocks
     $doc =~ s/%VERBATIMBLOCK\{(.*?)\}%/&extractVerbatim($1)/ge;
+    $doc =~ s/%VERBATIMLINE\{(.*?)\}%/&extractVerbatim($1)/ge;
 
     open(F,">/tmp/after_eB.txt");
     print F $doc;
@@ -474,6 +475,17 @@ sub extractBlocks {
     return($txt);
 }
 
+sub pushVerb {
+    my $txt1 = '%VERBATIMLINE{';
+    my $txt2 = '}%';
+
+    while ($_[0] =~ m/\\verb(\*?)(.)/sg) {
+        my $u = $1;
+        my $d = $2;
+        $_[0] =~ s/\\verb\*?\Q$d\E(.+?)\Q$d\E/$txt1.&storeVerbatim($1,$u).$txt2/es;
+    }
+}
+
 sub mathShortToLong {
     #change all $ .. $, $$ .. $$, and \[ .. \] to math environments
     ### warning: can't do this within verbatim blocks!
@@ -494,6 +506,7 @@ sub extractEnvironments {
 	($pre,$block,$doc) = umbrellaHook( $doc,
                                            '\\\\begin\s*\{.*?\}',
                                            '\\\\end\s*\{.*?\}');
+        &pushVerb($pre,$1) if ($pre =~ m/\\verb(.)/);
         &mathShortToLong($pre);
         $pre = extractEnvironments($pre) if ($pre =~ m/\\begin\{.*?math\}/);
 	$txt .= $pre;
@@ -501,12 +514,14 @@ sub extractEnvironments {
         if ($block =~ m/^\\begin\{verbatim\}/) {
             $txt .= '%VERBATIMBLOCK{'.storeVerbatim($block).'}%';
         } else {
+            &pushVerb($block,$1) if ($block =~ m/\\verb(.)/);
             &mathShortToLong($block);
             $txt .= convertEnvironment($block) if ($block ne '');
         }
     } while ($block ne '');
 
     #there is still some $doc left:
+    &pushVerb($doc,$1) if ($doc =~ m/\\verb(.)/);
     &mathShortToLong($doc);
     $doc = extractEnvironments($doc) if ($doc =~ m/\\begin\{.*?math\}/);
     $txt .= $doc;
@@ -836,6 +851,7 @@ use TWiki:Plugins.PerlDocPlugin to see list of supported commands
       * parbox, fbox
       * emph, em, centering, bf
       * large, small, tiny, footnotesize
+      * verb
 
    * commands with limited support
       * includegraphics, 
@@ -848,7 +864,7 @@ use TWiki:Plugins.PerlDocPlugin to see list of supported commands
 =end twiki
 
 All mathmode commands are supported, as all mathmode enviroments are
-rendered as an image using the background =latex= engine.  Commands
+rendered as an image using the background C<latex> engine.  Commands
 that are not recognized are tagged as LATEX.  In future versions of
 the module, these may be passed off to the rendering engine as well.
 Error handling needs to be improved before this will be useful,
@@ -862,13 +878,13 @@ available on the TWiki SVN development tree,
 Download the Parse.pm file and copy it to the
 C<lib/TWiki/Plugins/LatexModePlugin/> directory of your TWiki
 installation.  Documentation for the module is provided in 
-=pod= format, and can be completely viewed using the TWiki:PerlDocPlugin 
+C<pod> format, and can be completely viewed using the TWiki:PerlDocPlugin 
 or partially viewed using C<perldoc> or C<pod2text>.
 
 
 =head2 Translation syntax
 
-Here is a description of the syntax used to define <nop>LaTeX to
+Here is a description of the syntax used to define LaTeX to
 HTML/TML translations in the module.
 
 Environments are currently handled by code chunks.  See the
@@ -919,7 +935,7 @@ and environments!
 =head2 Caveat Emptor
 
 This is what it is.  And it is not a replacement for more complete
-<nop>LaTeX2HTML translators like
+LaTeX2HTML translators like
 [[http://www.latex2html.org/][latex2html]],
 [[http://pauillac.inria.fr/~maranget/hevea/index.html][helvea]]
 or [[http://www.ccs.neu.edu/home/dorai/tex2page/tex2page-doc.html][tex2page]].
@@ -942,7 +958,7 @@ solution.
 
 =head3 Including Graphics
 
-There are many ways to include graphics in latex files.  So, I figured the most reasonable way to support them all is to render them using the backend image rendering.  This actually works OK, but introduces some minor complications.   For parsing and rendering raw latex files, the orginal _graphics_ files needs to be in .eps format in order to be understood by the =latex= command used during background rendering.  However, the =genpdflatex= script uses =pdflatex= instead, which works better with .pdf or .png image files.  One solution is to store .eps files and use =epstopdf= from the teTeX distribution to convert them to .pdf when using =genpdflatex=.   Alternatively, one can write a custom TWiki macro to handle attached .pdf images (e.g. %SHOWPDF{image.pdf}%), and then use a translation declaration to render the image (e.g. =:\includegraphics:1:%SHOWPDF{$1}:=).
+There are many ways to include graphics in latex files.  So, I figured the most reasonable way to support them all is to render them using the backend image rendering.  This actually works OK, but introduces some minor complications.   For parsing and rendering raw latex files, the orginal _graphics_ files needs to be in .eps format in order to be understood by the =latex= command used during background rendering.  However, the =genpdflatex= script uses =pdflatex= instead, which works better with .pdf or .png image files.  One solution is to store .eps files and use =epstopdf= from the teTeX distribution to convert them to .pdf when using =genpdflatex=.   Alternatively, one can write a custom TWiki macro to handle attached .pdf images (e.g. %SHOWPDF{image.pdf}%), and then use a translation declaration to render the image (e.g. =:\includegraphics:1:%SHOWPDF{$1}%:=).
 
 
 =head2 Acknowledgements
@@ -954,8 +970,11 @@ providing the core parsing routines.
 =cut
 
 sub storeVerbatim {
+    my $t = $_[0];
+    $t =~ s/\s/_/g if ($_[1] eq '*');
+    $t =~ s/(^\s+)|(\s+$)//g;   # TWiki requires no spaces between '=' and verbatim line
 
-    push( @{ TWiki::Func::getContext()->{'LMPcontext'}->{'verb'} }, $_[0] );
+    push( @{ TWiki::Func::getContext()->{'LMPcontext'}->{'verb'} }, $t );
     return( scalar( @{ TWiki::Func::getContext()->{'LMPcontext'}->{'verb'} } ) - 1 );
 }
 
@@ -964,8 +983,11 @@ sub extractVerbatim {
     my @a = @{ TWiki::Func::getContext()->{'LMPcontext'}->{'verb'} };
 
     my $block = $a[ $_[0] ];
+
     $block =~ s!^\\begin\{verbatim\}!<verbatim>!;
     $block =~ s!\\end\{verbatim\}$!</verbatim>!;
+
+    $block = '='.$block.'=' unless ($block =~ m/\<verbatim\>/);
 
     return( $block );
 }
