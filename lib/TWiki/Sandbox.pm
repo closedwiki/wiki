@@ -258,8 +258,7 @@ sub _buildCommandLine {
                     } elsif ($flag =~ /S/) {
                         # "Harmless" string. Aggressively filter-in on unsafe
                         # platforms.
-                        if ( $this->{SAFE} ||
-                               $param =~ /^[0-9A-Za-z.+_\-]$/ ) {
+                        if( $this->{SAFE} || $param =~ /^[-0-9A-Za-z.+_]+$/ ) {
                             push @targs, untaintUnchecked( $param );
                         } else {
                             throw Error::Simple( "invalid string argument '$param' $t" );
