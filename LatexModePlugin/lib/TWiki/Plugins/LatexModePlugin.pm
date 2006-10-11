@@ -120,6 +120,7 @@ sub commonTagsHandler
     if ( !($initialized) ) {
         if ( ($_[0]=~m/%(REFLATEX|MATHMODE){.*?}%/) ||
              ($_[0]=~m/%BEGINALLTEX.*?%/)  ||
+             ($_[0]=~m/%SECLABEL.*?%/)  ||
              ($_[0]=~m/%BEGINLATEX.*?%/)  ||
              ($_[0]=~m/%BEGIN(FIGURE|TABLE){.*?}%/) ||
              ($_[0] =~ m/%(\$.*?\$)%/) ||

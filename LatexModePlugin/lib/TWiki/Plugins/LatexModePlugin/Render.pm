@@ -117,6 +117,7 @@ sub handleLatex
     my %eqnrefs = defined(%{ $LMPc{'eqnrefs'} }) ? %{$LMPc{'eqnrefs'}} : ();
 
     # remove latex-common HTML entities from within math env
+    $math_string =~ s/\<br\s*\/\>//og;
     $math_string =~ s/&amp;/&/og;
     $math_string =~ s/&lt;/\</og;    
     $math_string =~ s/&gt;/\>/og;    
