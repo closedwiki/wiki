@@ -622,7 +622,6 @@ lib/TWiki/UI/Oops.pm 0440
 lib/TWiki/UI/Preview.pm 0440
 lib/TWiki/UI/RDiff.pm 0440
 lib/TWiki/UI/Register.pm 0440
-lib/TWiki/UI/Rest.pm 0440
 lib/TWiki/UI/Save.pm 0440
 lib/TWiki/UI/Search.pm 0440
 lib/TWiki/UI/Statistics.pm 0440
