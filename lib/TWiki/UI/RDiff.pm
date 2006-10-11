@@ -320,6 +320,9 @@ sub _renderRevisionDiff
 			@{$diffArray[$#diffArray]}[1] .= "\n".@$ele[1];
 			@{$diffArray[$#diffArray]}[2] .= "\n".@$ele[2];
 		} else {
+			# Store doesn't expand REVINFO and we don't have rev info available now; escape tags to avoid confusion
+			@$ele[1] =~ s/\%REVINFO/\%<nop>REVINFO/ unless $renderStyle eq 'debug';
+			@$ele[2] =~ s/\%REVINFO/\%<nop>REVINFO/ unless $renderStyle eq 'debug';
 			push @diffArray, $ele;
 		}
 	}
