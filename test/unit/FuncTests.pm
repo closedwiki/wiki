@@ -422,5 +422,31 @@ sub test_normalizeWebTopicName {
     $this->assert_str_equals( 'Topic', $t );
 }
 
+sub test_checkAccessPermission {
+    my $this = shift;
+    my $topic = "NoWayJose";
+
+	TWiki::Func::saveTopicText( $testweb, $topic, <<END,
+\t* Set DENYTOPICVIEW = $TWiki::cfg{DefaultUserWikiName}
+END
+ );
+    eval{$twiki->finish()};
+    $twiki = new TWiki();
+    $TWiki::Plugins::SESSION = $twiki;
+    my $access = TWiki::Func::checkAccessPermission(
+        'VIEW', $TWiki::cfg{DefaultUserWikiName}, undef, $topic, $testweb);
+    $this->assert(!$access);
+    $access = TWiki::Func::checkAccessPermission(
+        'VIEW', $TWiki::cfg{DefaultUserWikiName}, '', $topic, $testweb);
+    $this->assert(!$access);
+    $access = TWiki::Func::checkAccessPermission(
+        'VIEW', $TWiki::cfg{DefaultUserWikiName}, 0, $topic, $testweb);
+    $this->assert(!$access);
+    $access = TWiki::Func::checkAccessPermission(
+        'VIEW', $TWiki::cfg{DefaultUserWikiName}, "Please me, let me go",
+        $topic, $testweb);
+    $this->assert($access);
+}
+
 1;
 

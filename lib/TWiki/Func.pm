@@ -646,10 +646,11 @@ sub permissionsSet {
 
 Check access permission for a topic based on the [[%TWIKIWEB%.TWikiAccessControl]] rules
    * =$type=     - Access type, e.g. ='VIEW'=, ='CHANGE'=, ='CREATE'=
-   * =$wikiName= - WikiName of remote user, i.e. ="Main.PeterThoeny"=
-   * =$text=     - Topic text, optional. If empty, topic =$web.$topic= is consulted
+   * =$wikiName= - WikiName of remote user, e.g. ="PeterThoeny"=. If =$wikiName= is '', 0 or undef then access is always *permitted*.
+   * =$text=     - Topic text, optional. If 'perl false' (undef, 0 or ''), topic =$web.$topic= is consulted
    * =$topic=    - Topic name, required, e.g. ='PrivateStuff'=
    * =$web=      - Web name, required, e.g. ='Sandbox'=
+A perl true result indicates that access is permitted.
 
 *Since:* TWiki::Plugins::VERSION 1.000 (27 Feb 2001)
 
@@ -659,6 +660,7 @@ sub checkAccessPermission {
     my( $type, $user, $text, $topic, $web ) = @_;
     return 1 unless ( $user );
     ASSERT($TWiki::Plugins::SESSION) if DEBUG;
+    $text = undef unless $text;
     $user = $TWiki::Plugins::SESSION->{users}->findUser( $user );
     return $TWiki::Plugins::SESSION->{security}->checkAccessPermission
       ( $type, $user, $text, undef, $topic, $web );
