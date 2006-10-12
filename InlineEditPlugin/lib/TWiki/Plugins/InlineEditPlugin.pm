@@ -465,11 +465,11 @@ sub getSection {
     	$text = $renderer->takeOutBlocks( $text, 'pre', $removedPres );
 
         my @rawSections = split(/(\n\n+)/, $text, -1);
-        #my @rawSections = ($text);
+		my $preAmble = ''; #where we store \n that preceed the first block        
         #re-combine sections that are just made up of newlines
         for my $sec (@rawSections) {
         	if ( $sec =~ /^[\n\r]*$/ ) {
-        		$sections[$#sections] .= $sec;
+				$preAmble .= $sec;
         	} else {
 				my $tempHash;
 				$tempHash = deepcopy($removedLiterals);	#putBack is destructive :(
@@ -478,7 +478,8 @@ sub getSection {
         		$renderer->putBackBlocks( \$sec, $tempHash, 'verbatim', 'verbatim');
 				$tempHash = deepcopy($removedPres);	#putBack is destructive :(
         		$renderer->putBackBlocks( \$sec, $tempHash, 'pre', 'pre');
-       			push @sections, $sec;
+       			push @sections, $preAmble.$sec;
+       			$preAmble = '';
        		}
         }
     } else {
