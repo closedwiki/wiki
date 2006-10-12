@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1131718988" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1160701186" format="1.1" version="$Rev$"}%
 %TOC%
 %STARTINCLUDE%
 
@@ -97,7 +97,7 @@ now means _do not deny anyone the right to view this web_. See "How TWiki evalua
 
 ---+++ Controlling access to a Topic
 
-   * You can define these settings in the %WEBPREFSTOPIC% topic, preferable towards the end of the topic:
+   * You can define these settings in any topic, preferable towards the end of the topic:
       * ==Set <nop>DENYTOPICVIEW = &lt; comma-delimited list of Users and Groups &gt;==
       * ==Set <nop>ALLOWTOPICVIEW = &lt; comma-delimited list of Users and Groups &gt;==
       * ==Set <nop>DENYTOPICCHANGE = &lt; comma-delimited list of Users and Groups &gt;==
