@@ -110,8 +110,8 @@ and returns the formatted error response.
 
 ---++ Contrib Info
 
-|  Author: | TWiki:Main/%USERNAME% |
-|  Copyright &copy;: | 2006, MichaelDaum@WikiRing.com |
+|  Author: | TWiki:Main/MichaelDaum |
+|  Copyright &copy;: | 2006, MichaelDaum http://wikiring.com |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  CPAN Dependencies: | CPAN:RPC::XML |
 |  Version: | v0.03 |
