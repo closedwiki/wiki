@@ -28,7 +28,7 @@ use vars qw(
 );
 
 $VERSION = '$Rev$';
-$RELEASE = '1.01';
+$RELEASE = '1.02';
 $NO_PREFS_IN_TOPIC = 1;
 $SHORTSUMMARY = 'Display time difference in a human readable way';
 
