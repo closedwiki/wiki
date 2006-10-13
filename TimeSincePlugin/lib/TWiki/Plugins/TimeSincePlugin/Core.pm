@@ -73,6 +73,7 @@ sub handleTimeSince {
   my $theAbs = $params->{abs} || 'off';
   my $theNull = $params->{null} || 'about now';
   my $theFormat = $params->{format} || '$time';
+  my $theNegFormat = $params->{negformat} || '$time';
 
   if ($theFrom eq '' && $theTo eq '') {
     # if there's no starting date then get the current revision date
@@ -123,6 +124,7 @@ sub handleTimeSince {
   }
 
   my $since = $theTo - $theFrom;
+  my $isNeg = $since < 0;
   if ($theAbs eq 'on') {
     $since = abs($since);
   }
@@ -159,7 +161,8 @@ sub handleTimeSince {
   if ($timeString eq '') {
     return expandVariables($theNull);
   } else {
-    return expandVariables($theFormat, 'time'=>$timeString);
+    my $format = $isNeg?$theNegFormat:$theFormat;
+    return expandVariables($format, 'time'=>$timeString);
   }
 }
 
