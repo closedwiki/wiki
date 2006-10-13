@@ -154,7 +154,10 @@ sub beforeCommonTagsHandler
 sub commonTagsHandler {
 ### my ( $text, $topic, $web ) = @_;   # do not uncomment, use $_[0], $_[1]... instead
 
-    TWiki::Func::writeDebug( "- ${pluginName}::CommonTagsHandler( $_[1] )" ) if $debug;
+  TWiki::Func::writeDebug( "- ${pluginName}::CommonTagsHandler( $_[1] )" ) if $debug;
+
+  # bail out if latex=tml
+  return if ( TWiki::Func::getContext()->{'LMPcontext'}->{'alltexmode'} );
 
   $_[0] =~ s/%(BIBCITE|CITE){(.*?)}%/&handleCitation2($2,$1)/ge;
 

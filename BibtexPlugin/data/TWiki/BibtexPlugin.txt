@@ -132,7 +132,7 @@ you get (simulated) <img src="%ATTACHURL%/bibtex-cite-ex.png" alt="bibtex select
 
 The text within the citation is dictated by the results of the %<nop>BIBTEXREF% declaration in the topic (see below).
 
-_Note: The %<nop>CITE% macro is also defined by the TWiki:BibliographyPlugin.  If both plugins are also installed, one must use the alternate declaration, %!BIBCITE{...}%, to access the !BibtexPlugin functionality._
+_Note: The %<nop>CITE% macro is also defined by the TWiki:Plugins.BibliographyPlugin.  If both plugins are also installed, one must use the alternate declaration, %BIBCITE{...}%, to access the !BibtexPlugin functionality._
 
 ---++ Syntax
 	* =%<nop>BIBTEX{&lt;attributes&gt;}%= - render a set of bibtex files attached to some topic 
@@ -174,11 +174,11 @@ tag on the same topic (see [[#Tips][Tips]]).
 
 ---++ Citations and Automated Reference Lists
 
-As of release v1.3, the %TOPIC% has functionality similar to the TWiki:BibliographyPlugin.  Specifically, if a topic has =%<nop>CITE{key}%= declarations through out, the use of =%<nop>BIBTEXREFS{...}%= will generate a list of references based on the citations declared.  The output of the reference list is dictated by <nop>BibTex.  Thus, the HTML output can use all of the flexibility of bibtex, including custom bibtex style templates and string macros.
+As of release v1.3, the %TOPIC% has functionality similar to the TWiki:Plugins.BibliographyPlugin.  Specifically, if a topic has =%<nop>CITE{key}%= declarations through out, the use of =%<nop>BIBTEXREF{...}%= will generate a list of references based on the citations declared.  The output of the reference list is dictated by <nop>BibTeX.  Thus, the HTML output can use all of the flexibility of bibtex, including custom bibtex style templates and string macros.
 
-The citation keys _must refer to the output_ key produced by this plugin, which may differ from the entries in the associated .bib files according to the bibtool resource file in use.  Simply use the output key produced by [[#SearchTemplates][<nop>BibtexPlugin search template]] query results.
+The citation keys _must refer to the output key produced by this plugin_, which may differ from the entries in the associated .bib files according to the bibtool resource file in use.  Simply use the output key produced by [[#SearchTemplates][<nop>BibtexPlugin search template]] query results.
 
-Again, if both the TWiki:BibliographyPlugin and TWiki:BibtexPlugin are installed, one must use %<nop>BIBCITE{...}% inplace of %<nop>CITE% for the <nop>BibtexPlugin functionality to work.
+Again, if both the TWiki:Plugins.BibliographyPlugin and TWiki:BibtexPlugin are installed, one must use %<nop>BIBCITE{...}% inplace of %<nop>CITE% for the <nop>BibtexPlugin functionality to work.
 
 ---+++ Example
 
@@ -370,7 +370,7 @@ have a look at the bibtool manual page and dig into the =bibtoolrcs= file yourse
 
 
 ---++ Global Settings
-	* One line description, shown in the TextFormattingRules topic:
+	* One line description, shown in the %TWIKIWEB%.TextFormattingRules topic:
 		* Set SHORTDESCRIPTION = Embeds <nop>BibTeX entries in a TWiki page
 
 	* Default topic name for <nop>BibTeX files:
@@ -381,11 +381,9 @@ have a look at the bibtool manual page and dig into the =bibtoolrcs= file yourse
 
 
 ---++ Plugin Installation Instructions
-__Note:__ You need to install [[http://lml.ls.fi.upm.es/manuales/bibtool/][BibTool]] and [[http://www.lri.fr/~filliatr/bibtex2html/][Bibtex2html]] on the server. The commands bibtool and bibtex2html must be in the path of the process that runs the TWiki scripts. If they are not in the path, change *$bibtoolPath* and *$bibtex2htmlPath* in *lib/TWiki/Plugins/EmbedBibPlugin.pm* to point to the correct location. The following instructions are for the administrator who installs the plugin on the server where TWiki is running. 
 
-	* Download the ZIP file from the Plugin web (see below)
-	* Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
-
+	* Download the .zip or .tgz file from the Plugin web (see below)
+	* extract the plugin files in your twiki installation directory. Content:
 	  | *File:* | *Description:* |
 	  | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
 	  | ==data/TWiki/BibtexSearchTemplate.txt== | default query template |
@@ -397,6 +395,8 @@ __Note:__ You need to install [[http://lml.ls.fi.upm.es/manuales/bibtool/][BibTo
 	  | ==pub/TWiki/BibtexPlugin/bibtoolrsc== | bibtool resource file |
 	  | ==bin/bibsearch== | cgi query script |
 	  | ==tools/render.sh== | bibtex to html/raw rendering script |
+	* modify the =render.sh= script to point to the installed versions of =bibtool=, =bib2bib=, =bibtex2html=, and =bibtex=.
+	* set =$TWiki::cfg{Plugins}{BibtexPlugin}{render}= to declare the full path to =render.sh= in !LocalSite.cfg
 
 If TWiki access control is managed at the web-server level, be sure to add
 =bibsearch= to the authorization list. E.g., for Apache, add the following
@@ -428,6 +428,7 @@ lines to the .htaccess file:
 |  Perl Version: | >=5.6.1 |
 |  Plugin Home: | TWiki:Plugins/BibtexPlugin |
 |  Feedback: | TWiki:Plugins/BibtexPluginDev |
+|  Appraisal: | TWiki:Plugins/%TOPIC%Appraisal |
 
 %META:FILEATTACHMENT{name="style.css" attr="" autoattached="1" comment="" date="1134157744" path="style.css" size="1221" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="bibtoolrsc" attr="" autoattached="1" comment="" date="1136505651" path="bibtoolrsc" size="1905" user="UnknownUser" version=""}%
