@@ -25,15 +25,15 @@ use vars qw(
     );
 
 $VERSION = '$Rev$';
-$RELEASE = '0.96';
+$RELEASE = '0.97';
 $NO_PREFS_IN_TOPIC = 1;
 $SHORTDESCRIPTION = 'Substitute and extract information from content by using regular expressions';
 $debug = 0; # toggle me
 
 ###############################################################################
 sub writeDebug {
-  &TWiki::Func::writeDebug("- FilterPlugin - " . $_[0]) if $debug;
-  #print STDERR "DEBUG: FilterPlugin - $_[0]\n" if $debug;
+  #&TWiki::Func::writeDebug("- FilterPlugin - " . $_[0]) if $debug;
+  print STDERR "DEBUG: FilterPlugin - $_[0]\n" if $debug;
 }
 
 ###############################################################################
@@ -106,7 +106,7 @@ sub handleFilter {
   #writeDebug("thePattern=$thePattern");
   #writeDebug("theFormat=$theFormat");
   #writeDebug("theMaxHits=$theMaxHits");
-  writeDebug("source text=$text");
+  #writeDebug("source text=$text");
 
   my $result = '';
   if ($theMode == 0) {
@@ -199,7 +199,7 @@ sub handleFormatList {
   my %seen = ();
   my @result;
   my $count = 0;
-  foreach my $item (split /$theSplit/, $theList, $theLimit) {
+  foreach my $item (split(/$theSplit/, $theList)) {
     #writeDebug("found '$item'");
     next if $theExclude && $item =~ /($theExclude)/;
     next if $item =~ /^$/; # skip empty elements
@@ -226,6 +226,7 @@ sub handleFormatList {
     $line =~ s/\$index/$count/g;
     push @result, $line;
     $count++;
+    last if $theLimit - $count == 0;
   }
   return '' if $count == 0;
 
