@@ -18,6 +18,7 @@ data/TWiki/TWikiWebLinks.txt 0644
 data/TWiki/TWikiWebRightBar.txt 0644
 data/TWiki/TWikiWebSideBar.txt 0644
 data/TWiki/TWikiWebTopicActions.txt 0644
+data/TWiki/WebLinksForAdmins.txt 0644
 data/TWiki/WebLinks.txt 0644
 lib/TWiki/Contrib/NatSkin.pm 0644
 pub/TWiki/NatSkin/BaseBorder.css 0644
@@ -124,6 +125,7 @@ pub/TWiki/NatSkin/button_accept.png 0644
 pub/TWiki/NatSkin/button_bold.png 0644
 pub/TWiki/NatSkin/button_cancel.png 0644
 pub/TWiki/NatSkin/button_center.png 0644
+pub/TWiki/NatSkin/button_done.png 0644
 pub/TWiki/NatSkin/button_edit.png 0644
 pub/TWiki/NatSkin/button_ext.png 0644
 pub/TWiki/NatSkin/button_form.png 0644
@@ -174,6 +176,7 @@ templates/defaultjavascript.nat.tmpl 0644
 templates/defaultsidebar.nat.tmpl 0644
 templates/defaulttopbar.nat.tmpl 0644
 templates/editform.nat.tmpl 0644
+templates/editformtoolbar.natedit.tmpl 0644
 templates/editjavascript.natedit.tmpl 0644
 templates/editjavascript.nat.tmpl 0644
 templates/edit.natedit.tmpl 0644
@@ -181,6 +184,7 @@ templates/edit.nat.tmpl 0644
 templates/editsidebar.nat.tmpl 0644
 templates/edittext.nat.tmpl 0644
 templates/edittoolbar.natedit.tmpl 0644
+templates/edittopicactions.natedit.tmpl 0644
 templates/edittopicactions.nat.tmpl 0644
 templates/form.nat.tmpl 0644
 templates/formtables.nat.tmpl 0644
@@ -243,6 +247,7 @@ templates/preview.natedit.tmpl 0644
 templates/preview.nat.tmpl 0644
 templates/previewstyles.nat.tmpl 0644
 templates/previewtoolbar.natedit.tmpl 0644
+templates/previewtopicactions.natedit.tmpl 0644
 templates/previewtopicactions.nat.tmpl 0644
 templates/rdiff.nat.tmpl 0644
 templates/rdiffstyles.nat.tmpl 0644
@@ -271,6 +276,8 @@ templates/search.nat.tmpl 0644
 templates/searchrenameview.nat.tmpl 0644
 templates/searchtopicactions.nat.tmpl 0644
 templates/settings.nat.tmpl 0644
+templates/settingstoolbar.natedit.tmpl 0644
+templates/settingstopicactions.natedit.tmpl 0644
 templates/settingstopicactions.nat.tmpl 0644
 templates/strings.nat.tmpl 0644
 templates/view.nat.tmpl 0644

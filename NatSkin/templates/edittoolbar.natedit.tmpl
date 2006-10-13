@@ -1,5 +1,5 @@
-<!-- template: edit.natedit.tmpl -->
-%TMPL:DEF{"edittoolbar"}%<div class="natEditToolBar">%TMPL:P{"texttools"}%%TMPL:P{"headlinetools"}% %TMPL:P{"paragraphtools"}% %TMPL:P{"objecttools"}% %TMPL:P{"edittools"}%%TMPL:P{"helptools"}%</div>%TMPL:END%
+<!-- template: edittoolbar.natedit.tmpl -->
+%TMPL:DEF{"edittoolbar"}%<div class="natEditToolBar">%TMPL:P{"texttools"}%%TMPL:P{"headlinetools"}% %TMPL:P{"paragraphtools"}% %TMPL:P{"objecttools"}% %TMPL:P{"edittools"}%%TMPL:P{"exittools"}%%TMPL:P{"helptools"}%</div>%TMPL:END%
 %TMPL:DEF{"texttools"}%<span class="natEditTextTools"><!--
 --><a class="natEditBoldButton" accesskey="b" href="javascript:natEditBoldButtonAction();"><!--
 --><img src="%PUBURLPATH%/%TWIKIWEB%/NatSkin/button_bold.png" alt='%MAKETEXT{"Bold text"}%' title='%MAKETEXT{"Bold text"}%'/></a><!--
@@ -9,9 +9,9 @@
 --><img src="%PUBURLPATH%/%TWIKIWEB%/NatSkin/button_underlined.png" alt='%MAKETEXT{"Underlined text"}%' title='%MAKETEXT{"Underlined text"}%' /></a><!--
 --><a class="natEditStrikeButton" accesskey="-" href="javascript:natEditStrikeButtonAction();"><!--
 --><img src="%PUBURLPATH%/%TWIKIWEB%/NatSkin/button_strike.png" alt='%MAKETEXT{"Strike through text"}%' title='%MAKETEXT{"Strike through text"}%' /></a><!--
---><a class="natEditSubButton" accesskey="^" href="javascript:natEditSubButtonAction();"><!--
+--><a class="natEditSubButton" accesskey="l" href="javascript:natEditSubButtonAction();"><!--
 --><img src="%PUBURLPATH%/%TWIKIWEB%/NatSkin/button_sub.png" alt='%MAKETEXT{"Subscript text"}%' title='%MAKETEXT{"Subscript text"}%' /></a><!--
---><a class="natEditSupButton" accesskey="_" href="javascript:natEditSupButtonAction()"><!--
+--><a class="natEditSupButton" accesskey="^" href="javascript:natEditSupButtonAction()"><!--
 --><img src="%PUBURLPATH%/%TWIKIWEB%/NatSkin/button_super.png" alt='%MAKETEXT{"Superscript text"}%' title='%MAKETEXT{"Superscript text"}%'/></a><!--
 --></span>%TMPL:END%
 %TMPL:DEF{"paragraphtools"}%<span class="natEditParagraphTools"><!--
@@ -60,8 +60,10 @@
 --><img src="%PUBURLPATH%/%TWIKIWEB%/NatSkin/button_undo.png" alt='%MAKETEXT{"Abandon your changes but continue editing"}%' title='%MAKETEXT{"Abandon your changes but continue editing"}%' /></a><!--
 --><a class="natEditSaveButton" href="javascript:submitEditForm('save','checkpoint');" accesskey="s"><!--
 --><img src="%PUBURLPATH%/%TWIKIWEB%/NatSkin/button_save.png" alt='%MAKETEXT{"Save and continue editing"}%' title='%MAKETEXT{"Save and continue editing"}%' /></a><!--
+--></span>%TMPL:END%
+%TMPL:DEF{"exittools"}%<span class="natEditExitTools"><!--
 --><a class="natEditDoneButton" href="javascript:submitEditForm('save', 'save');" accesskey="d"><!--
---><img src="%PUBURLPATH%/%TWIKIWEB%/NatSkin/button_accept.png" alt='%MAKETEXT{"Save and exit"}%' title='%MAKETEXT{"Save and exit"}%' /></a><!--
+--><img src="%PUBURLPATH%/%TWIKIWEB%/NatSkin/button_done.png" alt='%MAKETEXT{"Save and exit"}%' title='%MAKETEXT{"Save and exit"}%' /></a><!--
 --><a class="natEditCancelButton" href="javascript:submitEditForm('save', 'cancel');" accesskey="c" title='%MAKETEXT{"Abandon your changes and exit"}%'><!--
 --><img src="%PUBURLPATH%/%TWIKIWEB%/NatSkin/button_cancel.png" alt='%MAKETEXT{"Cancel and abandon changes"}%' title='%MAKETEXT{"Cancel and abandon changes"}%' /></a><!--
 --></span>%TMPL:END%

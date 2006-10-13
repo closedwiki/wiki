@@ -1,6 +1,6 @@
 %META:TOPICINFO{author="TWikiContributor" date="1147166156" format="1.1" reprev="1.5" version="1.1"}%
 %STARTINCLUDE%<div class="natSideBarTitle">
-  <h1>%MAKETEXT{"Navigation"}%%REDDOT{"%TWIKIWEB%.TWikiWebSideBar"}%</h1>
+  <h1>%MAKETEXT{"Navigation"}%</h1>
 </div>
 <style type="text/css">
 .navButton { %IFSKINSTATE{buttons="on" then="display:none"}% }
@@ -18,7 +18,15 @@
 ~~~     <div class=\"navCurrent\">
 ~~~     <h2 class=\"navButton\" style=\"display:block\">
 ~~~       $percntWEBLINK{web=\"$web\" name=\"$name\"}$percnt
-~~~     </h2> $percntFLEXWEBLIST{
+~~~     </h2>
+~~~     $percntBREADCRUMBS{\"%BASEWEB%.WebHome\"
+~~~       recurse=\"once\"
+~~~       exclude=\".*($name|%BASETOPIC%|WebHome).*\"
+~~~       header=\"<ul>\"
+~~~       format=\"<li>[[$dollartarget][%MAKETEXT{"Parrent web"}%]]</li>\"
+~~~       footer=\"</ul>\"
+~~~     }$percnt
+~~~     $percntFLEXWEBLIST{
 ~~~       include=\"$web/\w+\"
 ~~~       header=\"<ul><li>
 ~~~         $dollarpercntTWISTY{

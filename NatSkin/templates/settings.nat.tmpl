@@ -5,6 +5,7 @@
 <!-- -->%TMPL:INCLUDE{"settingssidebar"}%
 <!-- -->%TMPL:INCLUDE{"settingsjavascript"}%
 <!-- -->%TMPL:INCLUDE{"settingsstyles"}%
+<!-- -->%TMPL:INCLUDE{"settingstoolbar"}%
 %TMPL:DEF{"bodyclass"}%natSettingsBody%TMPL:END%
 %TMPL:DEF{"meta"}% %HTTP_EQUIV_ON_EDIT% %TMPL:END%
 %TMPL:DEF{"title"}%%TOPIC% (%MAKETEXT{"prefs"}%)%TMPL:END%
@@ -15,8 +16,8 @@
 <div class="natEdit">
 <form name="SettingsForm" method="post" action="%SCRIPTURLPATH{"manage"}%/%WEB%/%TOPIC%">
   <input type="hidden" name="action" value="saveSettings" />
-  <input type="hidden" name="originalrev" value="%ORIGINALREV%" />
+  <input type="hidden" name="originalrev" value="%ORIGINALREV%" />%TMPL:P{"edittoolbar"}%
   <textarea name="text" wrap="virtual" rows="%EDITBOXHEIGHT%" cols="%EDITBOXWIDTH%" style="%EDITBOXSTYLE%">%TEXT%</textarea>
 </form>
-</div>
+%TMPL:P{"bottomtopicactions"}%</div> 
 %TMPL:END%
