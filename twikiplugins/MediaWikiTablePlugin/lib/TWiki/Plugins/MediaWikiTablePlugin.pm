@@ -21,7 +21,7 @@ use vars qw(
 );
 
 $VERSION = '$Rev$';
-$RELEASE = 'v0.01';
+$RELEASE = 'v0.02';
 $NO_PREFS_IN_TOPIC = 1;
 $SHORTDESCRIPTION = 'Format tables the <nop>MediaWiki way';
 
@@ -34,7 +34,8 @@ sub initPlugin {
 
 ###############################################################################
 sub commonTagsHandler {
-  handleMWTable($_[0]) if $_[0] =~ /(^|[\n\r]){\|/;
+# text, topic, web
+  handleMWTable($_[2], $_[1], $_[0]) if $_[0] =~ /(^|[\n\r])\s*{\|/;
 
   return if $doneHeader;
   my $link = 
