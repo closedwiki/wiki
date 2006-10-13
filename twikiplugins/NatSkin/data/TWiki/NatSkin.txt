@@ -164,7 +164,7 @@ allways open an extra window.
 |  Skin Author: | TWiki:Main/MichaelDaum |
 |  Copyright &copy;: | 2003-2006, MichaelDaum@WikiRing.com |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Skin Version: | v3.0-pre9 |
+|  Skin Version: | v3.0-pre10 |
 |  Dependencies: | TWiki:Plugins/NatSkinPlugin |
 |  Description: | Driven by cascading stylesheets, Comes with 12 alternative styles, <nop>MoveableType and Wordpress Look-n-Feel |
 |  Base Name: | nat |
@@ -180,6 +180,13 @@ allways open an extra window.
    <div class="screenshotter"><a href="%ATTACHURL%/SquashThin.jpeg"><img src="%ATTACHURL%/SquashThin.jpeg" title="SquashThin" /></a></div>\
    <div class="screenshotter"><a href="%ATTACHURL%/StormyThin.jpeg"><img src="%ATTACHURL%/StormyThin.jpeg" title="StormyThin" /></a></div> |
 |  Change&nbsp;History: | <!-- specify latest version first -->&nbsp; |
+|  13 Oct 2006: | improved usability of natedit toolbar; \
+                  fixed broadcast message for IE; \
+		  improved subweb-parentweb navigation in sidebar; \
+		  more separation of admin from non-admin navigation; \
+		  added help text to edit screens; \
+		  added support to alter the topic parent during edit \
+		  and removed it from the oopsmore dialog |
 |  02 Oct 2006: | hide links for admins in the sidebar navigation;\
                   don't include the <nop>WebSideBar twice;\
 		  added css classes to the &lt;body> to distinguish different cgi actions (view, edit, preview, ...) |
@@ -374,7 +381,7 @@ allways open an extra window.
 
 __Note:__ The Description, Screenshot and Base Name rows are needed by the TWiki:TWiki/TWikiSkinBrowser
 
--- TWiki:Main/MichaelDaum - 02 Oct 2006
+-- TWiki:Main/MichaelDaum - 13 Oct 2006
 
 %META:FILEATTACHMENT{name="favicon.ico" attr="h" comment="" date="1113468984" path="favicon.ico" size="4710" user="TWikiContributor" version="1.1"}%
 %META:FILEATTACHMENT{name="previewbg.png" attr="h" comment="" date="1114174051" path="previewbg.png" size="19334" user="TWikiContributor" version="1.1"}%

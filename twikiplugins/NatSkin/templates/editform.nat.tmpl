@@ -1,5 +1,11 @@
 %TMPL:INCLUDE{"edit"}%
 <!-- template: editform.nat.tmpl -->
+<!-- -->%TMPL:INCLUDE{"editformbody"}%
+<!-- -->%TMPL:INCLUDE{"editformtopicactions"}%
+<!-- -->%TMPL:INCLUDE{"editformsidebar"}%
+<!-- -->%TMPL:INCLUDE{"editformjavascript"}%
+<!-- -->%TMPL:INCLUDE{"editformstyles"}%
+<!-- -->%TMPL:INCLUDE{"editformtoolbar"}%
 %TMPL:DEF{"title"}%%TOPIC% (%MAKETEXT{"edit form"}%)%TMPL:END%
 %TMPL:DEF{"content"}% <!-- -->
 <div class="natEdit">
@@ -18,11 +24,10 @@
   <input type="hidden" name="originalrev" value="%ORIGINALREV%" />
   <input type="hidden" name="skin" value="%URLPARAM{"skin"}%" />
   <input type="hidden" name="cover" value="%URLPARAM{"cover"}%" />
-  <input type="hidden" name="topicparent" value="%TOPICPARENT%" />
-  <input type="hidden" name="cmd" value="%CMD%" />
+  <input type="hidden" name="cmd" value="%CMD%" /> %TMPL:P{"edittoolbar"}%
   <textarea name="text" rows="10" cols="80" style="display:none">%TEXT%</textarea>
 </div>
 %FORMFIELDS%
 %TMPL:P{"bottomtopicactions"}%
-</form>
-%TMPL:END%
+%TMPL:P{"editoptions"}%
+</form> %TMPL:END%

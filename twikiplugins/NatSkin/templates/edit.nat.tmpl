@@ -14,7 +14,7 @@
 %TMPL:DEF{"contentheader"}%<div class="natBreadCrumbs">%BREADCRUMBS{"%BASEWEB%.%BASETOPIC%" exclude="%BASETOPIC%" separator="<span class='natSep'>&#187;</span>" footer="<span class='natSep'>&#187;</span> <nop>%BASETOPIC%"}%</div>%TMPL:END%
 %TMPL:DEF{"content"}% <!-- -->
 <div class="natEdit">
-<form name="EditForm" method="post" action="%SCRIPTURLPATH{"save"}%/%WEB%/%TOPIC%">
+<form name="EditForm" action="%SCRIPTURLPATH{"save"}%/%WEB%/%TOPIC%" method="post">
   <input type="hidden" name="action_preview" value="" />
   <input type="hidden" name="action_save" value="" />
   <input type="hidden" name="action_checkpoint" value="" />
@@ -26,13 +26,49 @@
   <input type="hidden" name="originalrev" value="%ORIGINALREV%" />
   <input type="hidden" name="skin" value="%URLPARAM{"skin"}%" />
   <input type="hidden" name="cover" value="%URLPARAM{"cover"}%" />
-  <input type="hidden" name="topicparent" value="%TOPICPARENT%" />
   <input type="hidden" name="cmd" value="%CMD%" /> %TMPL:P{"edittoolbar"}%
   <textarea id="natEditTextArea" name="text" wrap="virtual" rows="%EDITBOXHEIGHT%" cols="%EDITBOXWIDTH%" style="%EDITBOXSTYLE%">%TEXT%</textarea>
+</div>
 %FORMFIELDS%
 %TMPL:P{"bottomtopicactions"}%
-</div>
+%TMPL:P{"editoptions"}%
 </form> %TMPL:END%
+%TMPL:DEF{"editoptions"}%<!-- -->
+%TWISTY{id="editoptions" mode="div" showlink="More" hidelink="Less" remember="on"}%
+<div class="natSubmitOptions">
+---+++ Options
+<table><tr>
+<td valign="middle" align="right" class="twikiFirstCol">
+  <b><label for="parent">%MAKETEXT{"Parent"}%:</b></label>
+</td>
+<td valign="middle">
+  <select id="parent" name="topicparent">
+    <option>none</option>
+    %TOPICLIST{"<option value='$name' $marker>$name</option>" separator="$n" selection="%META{"parent" format="$topic" dontrecurse="on"}%"}%
+  </select>
+</td>
+</tr>
+<tr>
+  <td valign="middle" align="right" class="twikiFirstCol">
+    <b><label for="dontnotify">%MAKETEXT{"Minor changes"}%:</b></label>
+  </td>
+  <td valign="middle">
+    <input type="checkbox" id="dontnotify" name="dontnotify" %DONTNOTIFYCHECKBOX% />
+  </td>
+</tr>
+<tr>
+  <td valign="middle" align="right" class="twikiFirstCol">
+    <b><label for="forcenewrevision">%MAKETEXT{"Force new revision"}%:</label></b>
+  </td>
+  <td valign="middle">
+    <input type="checkbox" class="twikiCheckbox" title='%MAKETEXT{"Creates a new topic revision when saving"}%' id="forcenewrevision" name="forcenewrevision" %FORCENEWREVISIONCHECKBOX% />
+  </td>
+</tr>
+</table> 
+</div>
+%TMPL:P{"edithelp"}% 
+%ENDTWISTY% 
+%TMPL:END%
 %TMPL:DEF{"bottomtopicactions"}%<div class="natBottomTopicActions"><!--
 --><span class="natEditAction natCurrentAction">Edit</span><!-- 
 --><span class="natPreviewAction"><a href="javascript:submitEditForm('preview','preview');" accesskey="p" title='%MAKETEXT{"Preview your changes"}%'>%MAKETEXT{"Preview"}%</a></span><!--
@@ -42,9 +78,21 @@
 --><span class="natDoneAction"><a href="javascript:submitEditForm('save', 'save');" accesskey="d" title='%MAKETEXT{"Save and exit"}%'>%MAKETEXT{"Done"}%</a></span><!--
 --><span class="natCancelAction"><a href="javascript:submitEditForm('save', 'cancel');" accesskey="c" title='%MAKETEXT{"Abandon your changes and exit"}%'>%MAKETEXT{"Cancel"}%</a></span>
 </div>
-<div class="natSubmitOptions">
-  <input type="checkbox" id="dontnotify" name="dontnotify" %DONTNOTIFYCHECKBOX% />
-  <label for="dontnotify">%MAKETEXT{"Minor changes"}%</label> <!-- -->
-  <input type="checkbox" class="twikiCheckbox" title='%MAKETEXT{"Creates a new topic revision when saving"}%' id="forcenewrevision" name="forcenewrevision" %FORCENEWREVISIONCHECKBOX% />
-  <label for="forcenewrevision">%MAKETEXT{"Force new revision"}%</label>
-</div> %TMPL:END%
+%TMPL:END%
+%TMPL:DEF{"edithelp"}%<!-- -->
+<div class="natEditHelp">
+---+++ %MAKETEXT{"Access keys"}%
+<table cellpadding="10">
+<tr>
+<td>
+   * C = Cancel
+   * D = Done
+   * F = Add form
+   * P = Preview
+   * S = Save
+   * U = Undo
+</td>
+</tr>
+</table>
+</div>
+%TMPL:END%
