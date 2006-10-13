@@ -32,6 +32,7 @@ if ($ENV{GATEWAY_INTERFACE} !~ /^CGI-Perl/) {
   use CGI::Carp qw( fatalsToBrowser );
   use TWiki;
 }
+use TWiki::UI;
 use TWiki::Plugins::NatSkinPlugin::Search;
 use strict;
 
@@ -46,5 +47,5 @@ sub main {
   my ($topic, $web, $dummy, $userName) =
     &TWiki::initialize($thePathInfo, $theRemoteUser, '', $theUrl, $query);
 
-  &TWiki::Plugins::NatSkinPlugin::Search::natSearch($query, $topic, $web);
+  &TWiki::UI::run(\&TWiki::Plugins::NatSkinPlugin::Search::natSearchCgi, 'natsearch' => 1);
 }

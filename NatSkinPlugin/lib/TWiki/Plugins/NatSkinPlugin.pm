@@ -50,7 +50,7 @@ $STARTWW = qr/^|(?<=[\s\(])/m;
 $ENDWW = qr/$|(?=[\s\,\.\;\:\!\?\)])/m;
 
 $VERSION = '$Rev$';
-$RELEASE = '3.00-pre9';
+$RELEASE = '3.00-pre10';
 $NO_PREFS_IN_TOPIC = 1;
 $SHORTDESCRIPTION = 'Supplements the bare bones NatSkin theme for TWiki';
 
@@ -186,7 +186,7 @@ sub doInit {
     $isEnabled = 1;
   }
 
-  writeDebug("called doInit");
+  #writeDebug("called doInit");
   $query = &TWiki::Func::getCgiQuery();
 
   # get skin state from session
@@ -220,7 +220,7 @@ sub doInit {
   }
   #writeDebug("useEmailObfuscator=$useEmailObfuscator");
 
-  writeDebug("done doInit");
+  #writeDebug("done doInit");
   return 1;
 }
 
@@ -878,12 +878,14 @@ sub getWebComponent {
   my $component = shift;
 
   #writeDebug("called getWebComponent($component)");
-  if ($seenWebComponent{$component}) {
+
+  # SMELL: why does preview call for components twice ???
+  if ($seenWebComponent{$component} && $seenWebComponent{$component} > 2) {
     return '<span class="twikiAlert">'.
-      "ERROR: can't include component '$component' twice".
+      "ERROR: component '$component' already included".
       '</span>';
   }
-  $seenWebComponent{$component} = 1;
+  $seenWebComponent{$component}++;
 
   # get component for web
   my $text = '';
@@ -935,7 +937,7 @@ sub getWebComponent {
   # ignore permission warnings here ;)
   $text =~ s/No permission to read.*//g;
 
-  #writeDebug("done getWebComponent()");
+  #writeDebug("done getWebComponent($component)");
 
   return $text;
 }
