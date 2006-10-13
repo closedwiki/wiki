@@ -41,7 +41,7 @@ sub new {
 sub handler {
   my ($this, $session, $params, $currentTopic, $currentWeb) = @_;
 
-  writeDebug("*** called hander()");
+  #writeDebug("*** called hander()");
 
   # extract parameters
   $this->{webs} = $params->{_DEFAULT} || $params->{webs} || 'public';
@@ -93,7 +93,9 @@ sub handler {
     if ($aweb =~ /^(public|webtemplate)(current)?$/) {
       $aweb = $1;
       my @webs;
-      push @webs, $currentWeb if defined $2;
+      if (defined $2 && TWiki::Func::webExists($currentWeb)) {
+	push @webs, $currentWeb
+      }
       push @webs, keys %{$this->getWebs($aweb)};
       foreach my $bweb (sort @webs) {
 	next if $seen{$bweb};
@@ -108,7 +110,7 @@ sub handler {
       push @list, $aweb if defined $allWebs->{$aweb}; # only add if it exists
     }
   }
-  writeDebug("list=".join(',', @list));
+  #writeDebug("list=".join(',', @list));
 
   # format result
   my @result;
@@ -137,7 +139,7 @@ sub handler {
   #writeDebug("result=$result");
   $result = TWiki::Func::expandCommonVariables($result, $currentTopic, $currentWeb);
 
-  writeDebug("*** hander done");
+  #writeDebug("*** hander done");
 
   return $result;
 }
@@ -148,6 +150,7 @@ sub formatWeb {
 
   # check conditions to format this web
   return '' if $web->{done};
+
 
   # filter webs
   unless ($this->{isExplicit}{$web->{key}}) {
@@ -247,7 +250,7 @@ sub hashWebs {
   my $this = shift;
   my @webs = @_;
 
-  #writeDebug("hashWebs(".join(',',@webs));
+  #writeDebug("hashWebs(".join(',', sort @webs));
 
   my %webs;
   # collect all webs
@@ -273,6 +276,7 @@ sub hashWebs {
       push @{$webs{$parentName}{children}}, $webs{$key};
     }
   }
+  #writeDebug("keys=".join(',',sort keys %webs));
 
   return \%webs;
 }
