@@ -70,6 +70,9 @@ tool or (b) as a tool to extract properties of (a set of) known topics.
 | =limit="..."= | maximum number of topics to include in the hit set |
 | =skip="..."= | number of topics to skip while constructing the hit set; defaults to "0" |
 | =hidenull="..."= | flag to indicate that an empty hit set should not be displayed |
+| =remote="on,off"= | switch fixing !WikiWords in transcluded content; \
+                     =on= means "don't touch, this is remote content" \
+		     defaults to "on" |
 
 Following variables are expanded in format strings:
    * $percnt: % sign
@@ -113,6 +116,11 @@ Fetch topic content or a section of it from the database store.
 | =&lt;key>="&lt;value>"= | topic arguments to be substituted within the included text; that is \
             every occurence of &lt;key> is substituted with &lt;value> |
 | =warn="on,off"= | enable/suppress error warnings |
+| =remote="on,off"= | switch fixing !WikiWords in transcluded content; \
+                     =on= means "don't touch, this is remote content" \
+		     defaults to "off" because that's the default behavior of \
+		     =%<nop>INCLUDE{}% (note, DBQUERY defaults to "on" \
+		     aka do-not-touch-mode) |
 
 ---+++ DBSTATS
 Compute and format a statistics on the database.
@@ -269,10 +277,15 @@ following is the default paramenter (omitting the #)
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.MichaelDaum |
-|  Copyright &copy;: | 2005-2006, MichaelDaum@WikiRing.com |
+|  Copyright &copy;: | 2005-2006, MichaelDaum http://wikiring.com |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | v1.28 |
+|  Plugin Version: | v1.29 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  13 Oct 2006: | don't use the separator for header and footer format strings; \
+                  fix links in DBQUERY the same way we do it in DBCALL; \
+		  added =remote= parameter to switch on/off fixing links in \
+		  transcluded content; \
+		  expansion of =$nop= and =$n= in that order |
 |  28 Sep 2006: | DBQUERY and DBSTATS did not obey twiki access rights |
 |  19 Sep 2006: | added $key1...$key5 to the pattern matcher and formatter |
 |  18 Sep 2006: | properly fixed parsing $trunc,$flatten and $encode in format strings; \
@@ -309,4 +322,4 @@ following is the default paramenter (omitting the #)
 |  Feedback: | TWiki:Plugins/%TOPIC%Dev |
 |  Appraisal: | TWiki:Plugins/%TOPIC%Appraisal |
 
--- TWiki:Main.MichaelDaum - 28 Sep 2006
+-- TWiki:Main.MichaelDaum - 13 Oct 2006

@@ -49,7 +49,7 @@ sub afterSaveHandler {
 
 ###############################################################################
 sub handleDBQUERY {
-  my ($session, $params, undef, $theWeb) = @_;
+  my ($session, $params, undef, $thisWeb) = @_;
 
   #writeDebug("called handleDBQUERY(" . $params->stringify() . ")");
 
@@ -68,10 +68,12 @@ sub handleDBQUERY {
   my $theLimit = $params->{limit} || '';
   my $theSkip = $params->{skip} || 0;
   my $theHideNull = $params->{hidenull} || 'off';
+  my $theRemote = $params->remove('remote') || 'on';
+  $theRemote = ($theRemote eq 'on')?1:0;
 
   # get web and topic(s)
   my @topicNames = ();
-  $theWeb = $params->{web} || $theWeb;
+  my $theWeb = $params->{web} || $thisWeb;
   if ($theTopic) {
     ($theWeb, $theTopic) = TWiki::Func::normalizeWebTopicName($theWeb, $theTopic);
     push @topicNames, $theTopic;
@@ -133,11 +135,15 @@ sub handleDBQUERY {
   }
   $text =~ s/${TranslationToken}/)/go;
 
-  $theHeader = _expandVariables($theHeader.$theSep, count=>$count, web=>$theWeb) if $theHeader;
-  $theFooter = _expandVariables($theSep.$theFooter, count=>$count, web=>$theWeb) if $theFooter;
+  $theHeader = _expandVariables($theHeader, count=>$count, web=>$theWeb) if $theHeader;
+  $theFooter = _expandVariables($theFooter, count=>$count, web=>$theWeb) if $theFooter;
 
   $text = &TWiki::Func::expandCommonVariables("$theHeader$text$theFooter", 
     $TWiki::Plugins::DBCachePlugin::currentTopic, $theWeb);
+
+  if($thisWeb ne $theWeb && !$theRemote) {
+    _fixInclude($session, $theWeb, $text);
+  }
 
   return $text;
 }
@@ -159,6 +165,8 @@ sub handleDBCALL {
   my $section = $params->remove('section') || 'default';
   my $warn = $params->remove('warn') || 'on';
   $warn = ($warn eq 'on')?1:0;
+  my $remote = $params->remove('remote') || 'off';
+  $remote = ($remote eq 'on')?1:0;
 
   #writeDebug("thisWeb=$thisWeb thisTopic=$thisTopic");
 
@@ -215,24 +223,9 @@ sub handleDBCALL {
   # expand
   $sectionText = TWiki::Func::expandCommonVariables($sectionText, $thisTopic, $thisWeb);
 
-  # from TWiki::_INCLUDE
-  if($thisWeb ne $theWeb) {
-    my $removed = {};
-
-    # Must handle explicit [[]] before noautolink
-    # '[[TopicName]]' to '[[Web.TopicName][TopicName]]'
-    $sectionText =~ s/\[\[([^\]]+)\]\]/&_fixIncludeLink($thisWeb, $1)/geo;
-    # '[[TopicName][...]]' to '[[Web.TopicName][...]]'
-    $sectionText =~ s/\[\[([^\]]+)\]\[([^\]]+)\]\]/&_fixIncludeLink($thisWeb, $1, $2)/geo;
-
-    $sectionText = $session->{renderer}->takeOutBlocks($sectionText, 'noautolink', $removed);
-
-    # 'TopicName' to 'Web.TopicName'
-    $sectionText =~ s/(^|[\s(])($webNameRegex\.$wikiWordRegex)/$1$TranslationToken$2/go;
-    $sectionText =~ s/(^|[\s(])($wikiWordRegex)/$1\[\[$thisWeb\.$2\]\[$2\]\]/go;
-    $sectionText =~ s/(^|[\s(])$TranslationToken/$1/go;
-
-    $session->{renderer}->putBackBlocks( \$sectionText, $removed, 'noautolink');
+  # fix local linx
+  if($thisWeb ne $theWeb && !$remote) {
+    _fixInclude($session, $thisWeb, $sectionText);
   }
 
 
@@ -488,6 +481,31 @@ sub getDB {
 }
 
 ###############################################################################
+# from TWiki::_INCLUDE
+sub _fixInclude {
+  my $session = shift;
+  my $thisWeb = shift;
+  # $text next
+
+  my $removed = {};
+
+  # Must handle explicit [[]] before noautolink
+  # '[[TopicName]]' to '[[Web.TopicName][TopicName]]'
+  $_[0] =~ s/\[\[([^\]]+)\]\]/&_fixIncludeLink($thisWeb, $1)/geo;
+  # '[[TopicName][...]]' to '[[Web.TopicName][...]]'
+  $_[0] =~ s/\[\[([^\]]+)\]\[([^\]]+)\]\]/&_fixIncludeLink($thisWeb, $1, $2)/geo;
+
+  $_[0] = $session->{renderer}->takeOutBlocks($_[0], 'noautolink', $removed);
+
+  # 'TopicName' to 'Web.TopicName'
+  $_[0] =~ s/(^|[\s(])($webNameRegex\.$wikiWordRegex)/$1$TranslationToken$2/go;
+  $_[0] =~ s/(^|[\s(])($wikiWordRegex)/$1\[\[$thisWeb\.$2\]\[$2\]\]/go;
+  $_[0] =~ s/(^|[\s(])$TranslationToken/$1/go;
+
+  $session->{renderer}->putBackBlocks( \$_[0], $removed, 'noautolink');
+}
+
+###############################################################################
 # from TWiki::_fixIncludeLink
 sub _fixIncludeLink {
   my( $theWeb, $theLink, $theLabel ) = @_;
@@ -519,9 +537,9 @@ sub _expandVariables {
   }
   $theFormat =~ s/\$percnt/\%/go;
   $theFormat =~ s/\$dollar/\$/go;
+  $theFormat =~ s/\$nop//g;
   $theFormat =~ s/\$n/\n/go;
   $theFormat =~ s/\$t\b/\t/go;
-  $theFormat =~ s/\$nop//g;
   $theFormat =~ s/\$flatten\((.*?)\)/&_flatten($1)/ges;
   $theFormat =~ s/\$encode\((.*?)\)/&_encode($1)/ges;
   $theFormat =~ s/\$trunc\((.*?),\s*(\d+)\)/substr($1,0,$2)/ges;
@@ -530,12 +548,14 @@ sub _expandVariables {
 }
 
 ###############################################################################
+# for rss
 sub _encode {
   my $text = shift;
 
   $text = "\n<noautolink>\n$text\n</noautolink>\n";
   $text = &TWiki::Func::expandCommonVariables($text);
   $text = &TWiki::Func::renderText($text);
+  $text =~ s/\b(onmouseover|onmouseout|style)=".*?"//go; # TODO filter out more not validating attributes
   $text =~ s/<nop>//go;
   $text =~ s/[\n\r]+/ /go;
   $text =~ s/\n*<\/?noautolink>\n*//go;
