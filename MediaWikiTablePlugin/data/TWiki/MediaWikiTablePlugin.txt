@@ -1239,8 +1239,9 @@ Wiki markup like <code>_text_</code> instead of "font-style:italic".
 |  Plugin Author: | TWiki:Main.MichaelDaum |
 |  Copyright &copy;: | 2006, Michael Daum http://wikiring.com |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | v0.01 |
+|  Plugin Version: | v0.02 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  13 Oct 2006: | table markup may start have whitespaces at the beginning of a line |
 |  22 Sep 2006: | Initial version |
 |  CPAN Dependencies: | none |
 |  Other Dependencies: | none |
@@ -1250,5 +1251,4 @@ Wiki markup like <code>_text_</code> instead of "font-style:italic".
 |  Feedback: | TWiki:Plugins/%TOPIC%Dev |
 |  Appraisal: | TWiki:Plugins/%TOPIC%Appraisal |
 
--- TWiki:Main/MichaelDaum - 22 Feb 2006
-
+-- TWiki:Main/MichaelDaum - 13 Oct 2006

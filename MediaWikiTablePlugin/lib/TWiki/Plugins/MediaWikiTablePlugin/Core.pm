@@ -24,11 +24,13 @@ sub writeDebug {
   print STDERR '- MediaWikiTablePlugin::Core - '.$_[0]."\n" if $debug;
 }
 
-
 ###############################################################################
 sub handleMWTable {
+  my $web = shift;
+  my $topic = shift;
+
   my $i = 0;
-  while ($_[0] =~ s/(^|[\n\r])({\|(?!.*?(^|[\n\r]){\|).*?[\n\r]\|})/$1.&_handleTable($2)/ges) {
+  while ($_[0] =~ s/(^|[\n\r])(\s*{\|(?!.*?(^|[\n\r])\s*{\|).*?[\n\r]\s*\|})/$1.&_handleTable($web, $topic, $2)/ges) {
     $i++;
     #writeDebug("### nesting $i");
   };
@@ -36,7 +38,7 @@ sub handleMWTable {
 
 ###############################################################################
 sub _handleTable {
-  my $text = shift;
+  my ($web, $topic, $text) = @_;
 
   #writeDebug("### called _handleTable");
   return '' unless $text;
@@ -48,17 +50,18 @@ sub _handleTable {
   my $foundHead = 0;
   my $foundTable = 0;
   my $foundCaption = 0;
+
   foreach my $line (split(/[\n\r]/,$text)) {
-    
+  
     # tables
-    if ($line =~ s/^{\|(.*)$/<table $1>/) { # begin table
+    if ($line =~ s/^\s*{\|(.*)$/<table $1>/) { # begin table
       die "second table found" if $foundTable;
       unless ($line =~ s/(class=[\\"'])/$1mwTable /) {
 	$line =~ s/<table /<table class='mwTable' /;
       }
       $foundTable = 1;
     }
-    if ($line =~ s/^\|}/<\/td><\/tr>\n<\/table>/) { # end table
+    if ($line =~ s/^\s*\|}/<\/td><\/tr>\n<\/table>/) { # end table
       $foundTable = 0;
       $foundRow = 0;
       $foundCell = 0;
@@ -66,7 +69,7 @@ sub _handleTable {
     }
 
     # cells
-    if ($line =~ s/^\|([^}\+\-].*)?$/&_handleTableCells($1, 0)/e) {
+    if ($line =~ s/^\s*\|([^}\+\-].*)?$/&_handleTableCells($1, 0)/e) {
       unless ($foundRow) {
 	$line = "<tr>".$line;
 	$foundRow = 1;
@@ -80,7 +83,7 @@ sub _handleTable {
     }
 
     # head
-    if ($line =~ s/^!([^}\+\-].*)$/&_handleTableCells($1, 1)/e) {
+    if ($line =~ s/^\s*!([^}\+\-].*)$/&_handleTableCells($1, 1)/e) {
       if ($foundCaption) {
 	$line = "</caption>".$line;
 	$foundCaption = 0;
@@ -94,7 +97,7 @@ sub _handleTable {
     }
 
     # captions
-    if ($line =~ s/^\|\+(.*)?$/&_handleTableCells($1, 2)/e) {
+    if ($line =~ s/^\s*\|\+(.*)?$/&_handleTableCells($1, 2)/e) {
       if ($foundCell) {
 	$line = "</td>".$line;
 	$foundCell = 0;
@@ -110,7 +113,7 @@ sub _handleTable {
     }
 
     # rows
-    if ($line =~ s/^\|-+(.*)$/<tr $1>/) { # begin row
+    if ($line =~ s/^\s*\|-+(.*)$/<tr $1>/) { # begin row
       if ($foundCaption) {
 	$line = "</caption>".$line;
 	$foundCaption = 0;
@@ -156,8 +159,6 @@ sub _handleTableCells {
       $cell = $2;
     }
     $cell =~ s/<<nop>!--/<!--/go;
-    $cell =~ s/^\s+//o;
-    $cell =~ s/\s+$//o;
     push (@cells, "<$cellTag$params>$cell");
   }
 
