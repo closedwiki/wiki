@@ -266,7 +266,7 @@ returns "beijing", "cairo" or "dakar" depending on the TWiki engine this plugin 
      | ==lib/TWiki/Plugins/NatSkinPlugin/Auth.pm== | authentication module |
    * If you are installing this plugin on a TWiki release prior to TWiki-4.0, then
      you need the TWiki:Plugins/SessionPlugin too.
-   * Optionally, run ==%TOPIC%_installer.pl== to automatically check and
+   * Optionally, run ==%TOPIC%_installer== to automatically check and
      install other TWiki modules that this module depends on. You can also do
      this step manually.
    * Alternatively, manually make sure the dependencies listed in the table
@@ -303,10 +303,12 @@ returns "beijing", "cairo" or "dakar" depending on the TWiki engine this plugin 
    * Set SHORTDESCRIPTION = Supplements the bare bones NatSkin theme for TWiki
 -->
 |  Plugin Author: | TWiki:Main/MichaelDaum |
-|  Copyright &copy;: | 2003-2006, MichaelDaum@WikiRing.com |
+|  Copyright &copy;: | 2003-2006, MichaelDaum http://wikiring.com |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | v3.00-pre9 |
+|  Plugin Version: | v3.00-pre10 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  13 Oct 2006: | prevent recursive expansion of WEBCOMPONENTs; \
+                  fixed natsearch not to print to STDOUT but use standard apis |
 |  02 Oct 2006: | respect access rights in WEBCOMPONENTs; \
                   prevent deep recursion in WEBCOMPONENTs |
 |  18 Sep 2006: | fixed natlogon to run on current TWiki4.1-svn |
@@ -318,7 +320,7 @@ returns "beijing", "cairo" or "dakar" depending on the TWiki engine this plugin 
                   removed unused IFACCESS tag; \
                   minor rewrite of the email obfuscator; \
                   fixed natsearch to properly support web.topic jumps; \
-		  moved part of the documentation to NatSkin |
+		  moved part of the documentation to <nop>NatSkin |
 |  21 Aug 2006: | removed <nop>TablePlugin hack loading plugin preferences into the session store;\
                   instead provide proper css for twikiTables to match the current style now; \
                   this needs !TablePlugin from TWiki > 4.0.4; \
@@ -376,7 +378,7 @@ returns "beijing", "cairo" or "dakar" depending on the TWiki engine this plugin 
 |  22 Feb 2006: | removed GROUPSUMMARY, ALLUSERS and registrationHandle \
                   which where only used on the <nop>NatsWiki installation, moved into \
                   a plugin of its own; \
-                  fixed initPlugin not to return 0, disable the plugin if not used with thet NatSkin \
+                  fixed initPlugin not to return 0, disable the plugin if not used with the <nop>NatSkin \
                   on a per handler base |
 |  21 Feb 2006: | externalized the IFDEFINED family into a plugin of its own and \
                   added a new dependency for it |
@@ -388,7 +390,7 @@ returns "beijing", "cairo" or "dakar" depending on the TWiki engine this plugin 
                   don't switch off using an atom skin |
 |  03 Feb 2006: | added escape chars (percnt, dollar) to IFACCESS to make it more useful;\
                   fixed detection of a Dakar engine; \
-                  fixed default REDDOT in the MySideBarTemplate |
+                  fixed default REDDOT in the <nop>MySideBarTemplate |
 |  26 Jan 2006: | docu fixes |
 |  23 Jan 2006: | fixed natlogn; \
                   fixed FORMATLIST to expandCommonVariables of the format result |
@@ -397,7 +399,7 @@ returns "beijing", "cairo" or "dakar" depending on the TWiki engine this plugin 
                   added cleanup code if the <nop>AliasPlugin is not installed; \
                   improved natsearch customization; \
                   w3c fixes in the <nop>MySideBarTemplate |
-|  06 Dec 2005: | switching off the plugin if the skin is not NatSkin |
+|  06 Dec 2005: | switching off the plugin if the skin is not <nop>NatSkin |
 |  05 Dec 2005: | skin state variables respect FINALPREFERENCES settings; \
                   added WEBCOMPONENT |
 |  01 Dec 2005: | added tooltips to topic actions |
@@ -414,9 +416,9 @@ returns "beijing", "cairo" or "dakar" depending on the TWiki engine this plugin 
 |  02 Nov 2005: | added OBFUSCATEEMAIL flag to switch off this feature |
 |  28 Oct 2005: | add searchbox and style variations to the skin state; \
                   configuring header art is now done using style variations; \
-                  fixed the NatSkinStyleBrowser to only "stick" to changes; \
+                  fixed the <nop>NatSkinStyleBrowser to only "stick" to changes; \
                   extended IFSKINSTATE to cover the new skin state variables |
-|  25 Oct 2005: | customization of =natsearch= by WebPreferences |
+|  25 Oct 2005: | customization of =natsearch= by <nop>WebPreferences |
 |  20 Oct 2005: | improved external link detection |
 |  10 Oct 2005: | added switchstyle feature to cycle thru all installed skin styles|
 |  09 Oct 2005: | rewrite of skin state: support switching border, \
@@ -427,7 +429,7 @@ returns "beijing", "cairo" or "dakar" depending on the TWiki engine this plugin 
                   added web button support |
 |  30 Aug 2005: | added external link detection; fixed IFSKINSTYLE; \
                   added style support for the TWiki:Plugins/TablePlugin |
-|  26 Aug 2005: | new NatSkin-2.0 release |
+|  26 Aug 2005: | new <nop>NatSkin-2.0 release |
 |  28 Apr 2005: | pre-release to fix installation on TWiki/Cairo |
 |  16 Mar 2005: | Initial version |
 |  Perl Version: | >=5.6 |
@@ -437,5 +439,4 @@ returns "beijing", "cairo" or "dakar" depending on the TWiki engine this plugin 
 |  Appraisal: | TWiki:Plugins/%TOPIC%Appraisal |
 
 
--- TWiki:Main/MichaelDaum - 02 Oct 2006 
-
+-- TWiki:Main/MichaelDaum - 13 Oct 2006 

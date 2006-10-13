@@ -60,16 +60,17 @@ sub doInit {
 sub natSearchCgi {
   my $session = shift;
   $TWiki::Plugins::SESSION = $session;
-  return natSearch($session->{cgiQuery}, $session->{topicName}, $session->{webName});
+  my $text = natSearch($session->{cgiQuery}, $session->{topicName}, $session->{webName});
+  $session->writeCompletePage($text, 'view');
 }
 
 ##############################################################################
+# returns the full text of the search
 sub natSearch {
   my ($query, $topic, $web) = @_;
 
   #writeDebug("called natSearch()");
   &doInit();
-
 
   my $theSearchString = $query->param('search') || '';
   my $theWeb = $query->param('web') || $web;
@@ -111,20 +112,18 @@ sub natSearch {
   if ($theSearchString =~ s/^(.*?)://) {
     $options = $1;
   }
-
-  my $doIgnoreCase = ($options =~ /u/ || $theIgnoreCase) ? '' : 'i';
   #writeDebug("options=$options");
+  my $doIgnoreCase = ($options =~ /u/ || $theIgnoreCase) ? '' : 'i';
 
   # construct the list of webs to search in
   my @webList = ($theWeb);
   if ($options =~ /g/) {
-    @webList = sort TWiki::Func::getPublicWebList();
+    @webList = TWiki::Func::getPublicWebList();
     @webList = grep (/^$includeWeb$/, @webList) if $includeWeb;
     @webList = grep (!/^$excludeWeb$/, @webList) if $excludeWeb;
     @webList = grep (!/^$theWeb$/, @webList);
     unshift @webList, $theWeb;
   }
-  #writeDebug("webList=" . join(',', @webList));
 
   # redirect according to the look of the string
   # (1) the string starts with an uppercase letter: 
@@ -149,7 +148,7 @@ sub natSearch {
 	my $viewUrl = &TWiki::Func::getViewUrl($thisWeb, $theSearchString);
 	&TWiki::Func::redirectCgiQuery($query, $viewUrl);
 	#writeDebug("done");
-	return;
+	return '';
       } 
     }
     
@@ -192,11 +191,11 @@ sub natSearch {
     my $viewUrl = &TWiki::Func::getViewUrl($resultWeb, $resultTopic);
     &TWiki::Func::redirectCgiQuery($query, $viewUrl);
     #writeDebug("done");
-    return;
+    return '';
   }
 
   # Else, print them
-  &TWiki::Func::writeHeader($query);
+  my $result = '';
   my ($tmplHead, $tmplSearch, $tmplTable, $tmplNumber, $tmplTail) = 
     split(/%SPLIT%/,$searchTemplate);
 
@@ -212,25 +211,27 @@ sub natSearch {
   $tmplHead =~ s|</*nop/*>||goi;
   $tmplHead =~ s/%TOPIC%/$topic/go;
   $tmplHead =~ s/%SEARCHSTRING%/$origSearch/go;
-  print $tmplHead;
+  $result .= $tmplHead;
 
   if ($nrHits) {
     $tmplNumber =~ s/%NTOPICS%/$nrHits/go;
     $tmplNumber = &TWiki::Func::expandCommonVariables($tmplNumber, $topic);
-    print $tmplNumber;
-    _natPrintSearchResult($tmplTable, $results, $theSearchString);
+    $result .= $tmplNumber;
+    $result .= _getSearchResult($tmplTable, $results, $theSearchString);
   } else {
     my $text = &TWiki::Func::expandCommonVariables('%TMPL:P{"NOTHING_FOUND"}%');
-    print '<div class="natSearchMessage">'.$text."</div>\n";
+    $result .= '<div class="natSearchMessage">'.$text."</div>\n";
   }
 
-  # print last part of full HTML page
+  # get last part of full HTML page
   $tmplTail = &TWiki::Func::expandCommonVariables($tmplTail, $topic);
   $tmplTail = &TWiki::Func::renderText($tmplTail);
   $tmplTail =~ s|</*nop/*>||goi;   # remove <nop> tag
-  print $tmplTail;
+  $result .= $tmplTail;
 
   #writeDebug("done natSearch()");
+
+  return $result;
 }
 
 ##############################################################################
@@ -403,22 +404,23 @@ sub natContentsSearch {
 }
 
 ##############################################################################
-sub _natPrintSearchResult {
+sub _getSearchResult {
   my ($theTemplate, $theResults, $theSearchString) = @_;
 
   my $noSpamPadding = $TWiki::cfg{AntiSpam}{EmailPadding};
+  my $result = '';
       
-  # print hits in all webs
+  # get hits in all webs
   foreach my $thisWeb (keys %{$theResults}) {
     my ($beforeText, $repeatText, $afterText) = split(/%REPEAT%/, $theTemplate);
 
-    # print web header
+    # get web header
     $beforeText =~ s/%WEB%/$thisWeb/o;
     $beforeText = &TWiki::Func::expandCommonVariables($beforeText, $thisWeb);
     $afterText  = &TWiki::Func::expandCommonVariables($afterText, $thisWeb);
     $beforeText = &TWiki::Func::renderText($beforeText, $thisWeb);
     $beforeText =~ s|</*nop/*>||goi;   # remove <nop> tag
-    print $beforeText;
+    $result .= $beforeText;
 
     # sort topics by modification time, reverse
     my @sortedTopics =
@@ -427,7 +429,7 @@ sub _natPrintSearchResult {
 	      map { [ &getModificationTime($thisWeb, $_ ), $_ ] }
 		@{$theResults->{$thisWeb}};
 
-    # print hits in all topics
+    # get hits in all topics
     my $index = 0;
     foreach my $thisTopic (@sortedTopics) {
       my $tempVal = $repeatText;
@@ -471,14 +473,15 @@ sub _natPrintSearchResult {
       $index++;
       $tempVal =~ s/(class="natSearchHit)"/$1 $hitClass"/g;
 
-      # print this hit
-      print $tempVal;
+      # get this hit
+      $result .= $tempVal;
     }
 
     $afterText = &TWiki::Func::renderText($afterText, $thisWeb);
     $afterText =~ s|</*nop/*>||goi;   # remove <nop> tag
-    print $afterText;
+    $result .= $afterText;
   }
+  return $result;
 }
 
 ##############################################################################
