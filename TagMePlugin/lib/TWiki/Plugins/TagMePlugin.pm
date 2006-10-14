@@ -28,7 +28,7 @@ use vars qw(
         $alphaNum
     );
 
-$VERSION = '1.030';
+$VERSION = '1.031';
 $RELEASE = 'Any TWiki';
 $pluginName = 'TagMePlugin';  # Name of this Plugin
 $initialized = 0;
@@ -122,7 +122,7 @@ sub _handleTagMe
     my $text = '';
     _initialize();
     if( $action eq 'show' ) {
-        $text = showDefault();
+        $text = _showDefault();
     } elsif( $action eq 'showalltags' ) {
         $text = _showAllTags( $attr );
     } elsif( $action eq 'query' ) {
