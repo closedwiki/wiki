@@ -63,7 +63,7 @@ writeFile($modPath, "build.pl", $data{"build.pl"});
 writeFile($modPath, "DEPENDENCIES", $data{DEPENDENCIES});
 writeFile($modPath, "MANIFEST", $data{MANIFEST});
 
-writeFile("$def{MODULE}/lib/TWiki", "$def{MODULE}.txt",
+writeFile("$def{MODULE}/data/TWiki", "$def{MODULE}.txt",
           ($data{"TXT_$def{TYPE}"} || $data{TXT}));
 
 sub expandVars {
