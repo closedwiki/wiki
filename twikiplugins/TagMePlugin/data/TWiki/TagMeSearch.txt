@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1158269636" format="1.0" version="1.5"}%
+%META:TOPICINFO{author="PeterThoeny" date="1160871532" format="1.0" version="1.6"}%
 %META:TOPICPARENT{name="TagMeViewAllTags"}%
 ---+ Tag-me: Tag Search
 
@@ -13,7 +13,7 @@
 <td bgcolor="#DDDDCC">&nbsp; *Tag Search* &nbsp;</td>
 </tr></table>
 <table border="0" cellpadding="5" cellspacing="0" style="width:100%;">
-<tr bgcolor="#DDDDCC"><td style="width:100%;"></dr></tr>
+<tr bgcolor="#DDDDCC"><td style="width:100%;"></td></tr>
 <tr bgcolor="#EEEEDD"><td style="width:100%;">
 Show topics tagged with 
 <select name="tag">
