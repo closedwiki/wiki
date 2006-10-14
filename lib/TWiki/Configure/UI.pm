@@ -35,8 +35,6 @@ sub new {
     my $this = bless( {}, $class);
     Carp::confess unless $item;
     $this->{item} = $item;
-    $this->{errors} = 0;
-    $this->{warnings} = 0;
 
     return $this;
 }
@@ -110,6 +108,7 @@ sub getUrl {
 }
 
 # STATIC Used by a whole bunch of things that just need to show a key-value row
+# (called as a method, i.e. with class as first parameter)
 sub setting {
     my $this = shift;
     my $key = shift;
@@ -123,14 +122,7 @@ sub foldableBlock {
     my( $this, $head, $attr, $body ) = @_;
     my $headText = $head . CGI::span({ class => 'blockLinkAttribute' }, $attr);
     $body = CGI::start_table({width => '100%', -border => 0, -cellspacing => 0, -cellpadding => 0}).$body.CGI::end_table();
-    my $mess = '';
-    my $errorsMess = ($this->{errors} > 1) ? ' errors' : ' error';
-    my $warningsMess = ($this->{warnings} > 1) ? ' warnings' : ' warning';
-    $mess .= CGI::span({class=>'error'}, $this->{errors} . $errorsMess) if $this->{errors};
-    if ($this->{errors} && $this->{warnings}) {
-        $mess .= '&nbsp;';
-    }
-    $mess .= CGI::span({class=>'warn'}, $this->{warnings} . $warningsMess) if $this->{warnings};
+    my $mess = $this->collectMessages($this->{item});
 
     my $anchor = $this->_makeAnchor( $head );
     my $id = $anchor;
@@ -169,6 +161,7 @@ sub NOTE {
 sub WARN {
     my $this = shift;
     $this->{item}->inc('warnings');
+    $totwarnings++;
     return CGI::div(CGI::span({class=>'warn'},
                               CGI::strong('Warning: ').join("\n",@_)));
 }
@@ -177,6 +170,7 @@ sub WARN {
 sub ERROR {
     my $this = shift;
     $this->{item}->inc('errors');
+    $toterrors++;
     return CGI::div(CGI::span({class=>'error'},
                               CGI::strong('Error: ').join("\n",@_)));
 }
@@ -230,6 +224,22 @@ sub authorised {
     }
 
     return 1;
+}
+
+
+sub collectMessages {
+    my $this = shift;
+    my ($item)  =  @_;
+
+    my $warnings      =  $item->{warnings} || 0;
+    my $errors        =  $item->{errors} || 0;
+    my $errorsMess    =  "$errors error"     .  (($errors   > 1) ? 's' : '');
+    my $warningsMess  =  "$warnings warning" .  (($warnings > 1) ? 's' : '');
+    my $mess          =  '';
+    $mess .= ' ' . CGI::span({class=>'error'}, $errorsMess) if $errors;
+    $mess .= ' ' . CGI::span({class=>'warn'}, $warningsMess) if $warnings;
+
+    return $mess;
 }
 
 sub _encode {

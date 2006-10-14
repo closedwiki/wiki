@@ -20,13 +20,12 @@ use strict;
 
 package TWiki::Configure::Section;
 
-use TWiki::Configure::Item;
-
 use base 'TWiki::Configure::Item';
 
 sub new {
     my ($class, $head) = @_;
 
+    # SMELL: What is the base object supposed to do with the UI class?
     my $this = $class->SUPER::new('TWiki::Configure::UIs::Section');
 
     $this->{headline} = $head;

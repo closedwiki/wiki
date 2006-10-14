@@ -19,8 +19,6 @@ use strict;
 
 package TWiki::Configure::Checkers::BasicSanity;
 
-use TWiki::Configure::Checker;
-
 use base 'TWiki::Configure::Checker';
 
 sub new {

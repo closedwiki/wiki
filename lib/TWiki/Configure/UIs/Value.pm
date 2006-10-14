@@ -21,8 +21,6 @@ use strict;
 
 package TWiki::Configure::UIs::Value;
 
-use TWiki::Configure::UI;
-
 use base 'TWiki::Configure::UI';
 
 # Generates the appropriate HTML for getting a value to configure the

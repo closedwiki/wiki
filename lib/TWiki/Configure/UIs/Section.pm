@@ -25,8 +25,6 @@ use strict;
 
 package TWiki::Configure::UIs::Section;
 
-use TWiki::Configure::UI;
-
 use base 'TWiki::Configure::UI';
 
 # depth == 1 is the root
@@ -51,14 +49,7 @@ sub open_html {
     my $linkId = 'blockLink'.$id;
     my $linkAnchor = $id.'link';
 
-    my $warnings = $section->{warnings} || 0;
-    my $errors = $section->{errors} || 0;
-    my $errorsMess = $errors . ' error'. (($errors > 1) ? 's' : '');
-    my $warningsMess = $warnings . ' warning'. (($warnings > 1) ? 's' : '');
-    my $mess = '';
-    $mess .= CGI::span({class=>'error'}, $errorsMess) if $errors;
-    $mess .= '&nbsp;' if ($errors && $warnings);
-    $mess .= CGI::span({class=>'warn'}, $warningsMess) if $warnings;
+    my $mess  =  $this->collectMessages($section);
 
     my $guts = "<!-- $depth $section->{headline} -->";
     if ($depth == 2) {

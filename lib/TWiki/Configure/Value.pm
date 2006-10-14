@@ -19,15 +19,13 @@ package TWiki::Configure::Value;
 
 use strict;
 
-use TWiki::Configure::Item;
-
 use base 'TWiki::Configure::Item';
 
 use TWiki::Configure::Type;
 
 # The opts are additional parameters, and by convention may
 # be a number (for a string length), a comma separated list of values
-# (for a select) and may also have an M for mandatory.
+# (for a select) and may also have an M for mandatory, or a H for hidden.
 sub new {
     my $class = shift;
 

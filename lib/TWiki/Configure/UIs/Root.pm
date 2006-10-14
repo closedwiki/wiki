@@ -17,8 +17,6 @@
 #
 package TWiki::Configure::UIs::Root;
 
-use TWiki::Configure::UIs::Section;
-
 use base 'TWiki::Configure::UIs::Section';
 
 # Visit the nodes in a tree of configuration items, and generate

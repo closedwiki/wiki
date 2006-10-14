@@ -131,11 +131,12 @@ SEE ALSO: TWiki::Configure::TWikiCfg::load
 =cut
 
 sub readDefaults {
-    my %read = ( 'TWiki.spec' );
+    my %read = ( );
     my @errors;
 
     eval {
         do 'TWiki.spec';
+        $read{'TWiki.spec'}  =  $INC{'TWiki.spec'};
     };
     push(@errors, $@) if ($@);
     foreach my $dir (@INC) {

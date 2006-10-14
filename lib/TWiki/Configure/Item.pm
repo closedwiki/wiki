@@ -15,9 +15,13 @@
 #
 # As per the GPL, removal of this notice is prohibited.
 #
+# ======================================================================
 # Abstract base class of all configuration components. A configuration
 # component may be a collection item (a ConfigSection) or an individual Value.
-
+#
+# Objects of this class are intended to form a tree with references in
+# both directions, circular references ahead.  But configure isn't
+# supposed to be run in a persistent environment anyway.
 package TWiki::Configure::Item;
 
 use strict;
@@ -28,8 +32,21 @@ sub new {
     my $this = bless({}, $class);
     $this->{parent} = undef;
     $this->{desc} = '';
+    $this->{errors} = 0;
+    $this->{warnings} = 0;
 
     return $this;
+}
+
+sub getDepth {
+    my $depth = 0;
+    my $mum = shift;
+
+    while ($mum) {
+        $depth++;
+        $mum = $mum->{parent};
+    }
+    return $depth;
 }
 
 sub addToDesc {
@@ -42,7 +59,10 @@ sub haveSettingFor {
     die "Implementation required";
 }
 
-# Accept an attribute setting for this item (e.g. a key name).
+
+# Purpose
+#     Accept an attribute setting for this item (e.g. a key name).
+#     Sort of a generic write accessor.
 sub set {
     my ($this, %params) = @_;
     foreach my $k (keys %params) {
@@ -50,12 +70,20 @@ sub set {
     }
 }
 
+
+# Purpose
+#     Increase a numeric value, recursing up to a parentless item
+# Assumptions
+#     All item levels have $key defined and initialized
+#     (intended for use with 'warnings' and 'errors')
+#     Parents of items are items (or precisely: can inc())
 sub inc {
     my ($this, $key) = @_;
 
     $this->{$key}++;
     $this->{parent}->inc($key) if $this->{parent};
 }
+
 
 sub getSectionObject {
     return undef;
