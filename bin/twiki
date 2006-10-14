@@ -177,7 +177,7 @@ sub doRequest {
   #writeDebug("package=$package, function=$function");
 
   # lazy compilation
-  if ($package ne '' && !$isInitialized{$package}) {
+  if ($package && !$isInitialized{$package}) {
     #writeDebug("initializing package $package");
     $isInitialized{$package} = 1;
     eval "use $package;";
@@ -185,7 +185,9 @@ sub doRequest {
   }
 
   # do it
-  my $sub = $package.'::'.$function;
+  my $sub;
+  $sub .= $package.'::' if $package;
+  $sub .= $function;
   TWiki::UI::run(\&$sub, $function => 1);
 
   #writeDebug("counter=$counter");
