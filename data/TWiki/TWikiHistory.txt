@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1160971176" format="1.0" version="$Rev$"}%
 %TOC%
 %STARTINCLUDE%
 ---# Appendix A: TWiki Development Timeline
@@ -435,7 +435,7 @@ __Major New Features__
    * *07 Jul 2000* - TWiki:Main.PeterThoeny
       * Added an "Release edit lock" checkbox in preview to let other people edit the topic immediately without the one hour lock. 
    * *07 Jul 2000* - TWiki:Main.PeterThoeny
-      * Fixed problem of losing carriage returns when editing topics with KDE KFM browser or W3M browser. 
+      * Fixed problem of losing carriage returns when editing topics with KDE KFM browser or <nop>W3M browser. 
    * *21 Jun 2000* - TWiki:Main.PeterThoeny
       * Fixed problem that a page redirect on some server environments is not working (host name is needed in URL). 
    * *21 Jun 2000* - TWiki:Main.CrisBailiff, TWiki:Main.PeterThoeny
@@ -485,7 +485,7 @@ __Major New Features__
 ---++ 01-Sep-1999 Release
 
    * *31 Aug 1999* - TWiki:Main.PeterThoeny
-      * Fixed Y2K bug. (Date in year 2000 had wrong format.) 
+      * Fixed <nop>Y2K bug. (Date in year 2000 had wrong format.) 
    * *08 Aug 1999* - TWiki:Main.PeterThoeny
       * New text formatting rule for creating tables. Text gets rendered as a table if enclosed in " " vertical bars. Example line as it is written and how it shows up  
    * *03 Aug 1999* - TWiki:Main.PeterThoeny
