@@ -228,6 +228,7 @@ data/TWiki/VarDATE.txt 0660
 data/TWiki/VarDISPLAYTIME.txt 0660
 data/TWiki/VarDISPLAYTIME2.txt 0660
 data/TWiki/VarENCODE.txt 0660
+data/TWiki/VarENDCOLOR.txt 0660
 data/TWiki/VarENDSECTION.txt 0660
 data/TWiki/VarFAILEDPLUGINS.txt 0660
 data/TWiki/VarFORMFIELD.txt 0660
