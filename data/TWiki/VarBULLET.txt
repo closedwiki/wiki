@@ -3,6 +3,5 @@
 #VarBULLET
 ---+++ BULLET -- bullet character
 
-
    * Type: Preference variable - TWikiRenderingShortcut.
    * Current value: BULLET = %BULLET%

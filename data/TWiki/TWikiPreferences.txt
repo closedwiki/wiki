@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1155085246" format="1.1" version="$Rev $"}%
+%META:TOPICINFO{author="TWikiContributor" date="1160958216" format="1.1" version="$Rev $"}%
 ---+!! <nop>%WIKITOOLNAME% Site-Level Preferences
 
 This topic defines __site-level__ settings that apply to all users and webs on this TWikiSite.
@@ -208,6 +208,7 @@ _(Click for form-based editing of existing preferences.)_
       * Set DISABLEDPLUGINS = The DISABLEDPLUGINS variable is no longer supported
       * Set INSTALLEDPLUGINS = The INSTALLEDPLUGINS variable is no longer supported. You can set the Plugins execution order using the [[%SCRIPTURLPATH{"configure"}%][configure]] interface.
 
+#RenderingShortcuts
 ---++ Rendering Shortcuts Settings
 
    * Line break:
@@ -216,7 +217,7 @@ _(Click for form-based editing of existing preferences.)_
    * Bullet sign:
       * Set BULLET = &#8226;
 
-   * %VBAR% symbol:
+   * Vertical bar / pipe symbol:
       * Set VBAR = &#124;
 
    * Line break and bullet with different levels of indentation:
@@ -224,6 +225,22 @@ _(Click for form-based editing of existing preferences.)_
       * Set BB2 = <br />&nbsp;&nbsp;&#8226;
       * Set BB3 = <br />&nbsp;&nbsp;&nbsp;&nbsp;&#8226;
       * Set BB4 = <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&#8226;
+
+   * __Hint:__ Above shortcuts are useful in TWiki tables where you cannot use newlines
+
+#DocGraphics
+   * Graphics used in TWiki documentation - view all images in %ICONTOPIC%. _(There are various ways to set up common icons as text variables. This is simply one quick approach.)_:
+      * Set H = <img src="%ICONURLPATH{help}%" alt="HELP" title="HELP" width="16" height="16" border="0" />
+      * Set I = <img src="%ICONURLPATH{tip}%" alt="IDEA!" title="IDEA!" width="16" height="16" border="0" />
+      * Set M = <img src="%ICONURLPATH{arrowright}%" alt="MOVED TO..." title="MOVED TO..." width="16" height="16" border="0" />
+      * Set N = <img src="%ICONURLPATH{new}%" alt="NEW" title="NEW" width="30" height="16" border="0" />
+      * Set P = <img src="%ICONURLPATH{pencil}%" alt="REFACTOR" title="REFACTOR" width="16" height="16" border="0" />
+      * Set Q = <img src="%ICONURLPATH{help}%" alt="QUESTION?" title="QUESTION?" width="16" height="16" border="0" />
+      * Set S = <img src="%ICONURLPATH{starred}%" alt="PICK" title="PICK" width="16" height="16" border="0" />
+      * Set T = <img src="%ICONURLPATH{tip}%" alt="TIP" title="TIP" width="16" height="16" border="0" />
+      * Set U = <img src="%ICONURLPATH{updated}%" alt="UPDATED" title="UPDATED" width="55" height="16" border="0" />
+      * Set X = <img src="%ICONURLPATH{warning}%" alt="ALERT!" title="ALERT!" width="16" height="16" border="0" />
+      * Set Y = <img src="%ICONURLPATH{choice-yes}%" alt="DONE" title="DONE" width="16" height="16" border="0" />
 
    * Colored text: (see more StandardColors)
      | You type: | =%<nop>RED% red text %<nop>ENDCOLOR% and %<nop>GREEN% green text %<nop>ENDCOLOR%= |
@@ -271,21 +288,6 @@ _(Click for form-based editing of existing preferences.)_
       * Set ENDCOLOR = </font>
 </verbatim>
 
-#DocGraphics
-   * Graphics used in TWiki documentation - view all images in %ICONTOPIC%. _(There are various ways to set up common icons as text variables. This is simply one quick approach.)_:
-      * Set H = <img src="%ICONURLPATH{help}%" alt="HELP" title="HELP" width="16" height="16" border="0" />
-      * Set I = <img src="%ICONURLPATH{tip}%" alt="IDEA!" title="IDEA!" width="16" height="16" border="0" />
-      * Set M = <img src="%ICONURLPATH{arrowright}%" alt="MOVED TO..." title="MOVED TO..." width="16" height="16" border="0" />
-      * Set N = <img src="%ICONURLPATH{new}%" alt="NEW" title="NEW" width="30" height="16" border="0" />
-      * Set P = <img src="%ICONURLPATH{pencil}%" alt="REFACTOR" title="REFACTOR" width="16" height="16" border="0" />
-      * Set Q = <img src="%ICONURLPATH{help}%" alt="QUESTION?" title="QUESTION?" width="16" height="16" border="0" />
-      * Set S = <img src="%ICONURLPATH{starred}%" alt="PICK" title="PICK" width="16" height="16" border="0" />
-      * Set T = <img src="%ICONURLPATH{tip}%" alt="TIP" title="TIP" width="16" height="16" border="0" />
-      * Set U = <img src="%ICONURLPATH{updated}%" alt="UPDATED" title="UPDATED" width="55" height="16" border="0" />
-      * Set X = <img src="%ICONURLPATH{warning}%" alt="ALERT!" title="ALERT!" width="16" height="16" border="0" />
-      * Set Y = <img src="%ICONURLPATH{choice-yes}%" alt="DONE" title="DONE" width="16" height="16" border="0" />
-
-
 ---++ Miscellaneous Settings
 
    * Background color of non existing topic: ( default =cornsilk= or =#FFFFCE= )
@@ -298,9 +300,9 @@ _(Click for form-based editing of existing preferences.)_
       * Set PREVIEWBGIMAGE = %PUBURLPATH%/%TWIKIWEB%/PreviewBackground/preview2bg.gif
 
    * User-friendly synonyms for MAINWEB and TWIKIWEB
-   * Set USERSWEB = %MAINWEB%
-   * Set SYSTEMWEB = %TWIKIWEB%
-   * Set DOCWEB = %TWIKIWEB%
+      * Set USERSWEB = %MAINWEB%
+      * Set SYSTEMWEB = %TWIKIWEB%
+      * Set DOCWEB = %TWIKIWEB%
 
 ---++ Access Control Settings
 

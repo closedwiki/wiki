@@ -1,16 +1,8 @@
-%META:TOPICINFO{author="TWikiContributor" date="1152050427" format="1.2" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1160951440" format="1.2" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiPreferences"}%
 #VarBB
-#VarBB2
-#VarBB3
-#VarBB4
----+++ BB, BB2, BB3, BB4 -- bullets with different levels of indentation
+---+++ BB -- bullet with line break
 
-
-Line break and bullet with different levels of indentation.
+Line break and bullet without indentation.
    * Type: Preference variable - TWikiRenderingShortcut.
    * Current value: BB = %BB%
-   * Current value: BB2 = %BB2%
-   * Current value: BB3 = %BB3%
-   * Current value: BB4 = %BB4%
-

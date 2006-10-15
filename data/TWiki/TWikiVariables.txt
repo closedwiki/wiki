@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1142799790" format="1.0" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1160958216" format="1.0" version="$Rev$"}%
 %META:TOPICPARENT{name="WebHome"}%
 %TOC%
 %STARTSECTION{type="include"}%
@@ -15,7 +15,7 @@ _Special text strings expand on the fly to display user data or system info_
 To use a variable type its name. For example,
    * type =%<nop>T%= to get %T% (a preferences variable)
    * type =%<nop>TOPIC%= to get =%TOPIC%= (a predefined variable)
-   * type =%<nop>CALC{ "$UPPER(Text)" }%= to get =TEXT= (a variable defined by Plugin)
+   * type =%<nop>CALC{ "$UPPER(Text)" }%= to get =TEXT= (a variable defined by a plugin)
 
 __Note:__
    * To leave a variable unexpanded, precede it with an exclamation point, e.g. type =!%<nop>TOPIC%= to get =%<nop>TOPIC%=
@@ -25,7 +25,7 @@ __Note:__
 ---++ Variable Names
 Variable names must start with a letter. The following characters can be letters, numbers and the underscore '_'. You can use both upper-case and lower-case letters and you can mix the characteres. E.g. =%<nop>MYVAR%=, =%<nop>MyVar%=, =%<nop>My2ndVar%=, and =%<nop>My_Var%= are all valid variable names. Variables are case sensitive. =%<nop>MyVAR%= and =%<nop>MYVAR%= are not the same variable.
 
-By convention all settings, predefined variables and variables used by plugins are always UPPER-CASE.
+By convention all settings, predefined variables and variables used by plugins are always UPPERCASE.
 
 #SettingPrefs
 #PreferencesVariables
@@ -87,7 +87,7 @@ Use this powerful feature with great care! =%<nop>ALLVARIABLES%= can be used to 
 
 ---+++ Frequently Used Preferences Variables
 
-The following preferences variables are frequently used. They are defined in TWikiPreferences#Miscellaneous_Settings:
+The following preferences variables are frequently used. They are defined in TWikiPreferences#RenderingShortcuts:
    * =%<nop>BR%= - line break
    * =%<nop>BULLET%= - bullet sign
    * =%<nop>BB%= - line break and bullet combined
