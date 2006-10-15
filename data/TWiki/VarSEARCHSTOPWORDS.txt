@@ -1,8 +1,0 @@
-%META:TOPICINFO{author="TWikiContributor" date="1152046313" format="1.2" version="$Rev$"}%
-%META:TOPICPARENT{name="TWikiPreferences"}%
-#VarSEARCHSTOPWORDS
----+++ SEARCHSTOPWORDS -- words to exclude from search
-
-Stop words, e.g., common words and characters to exclude from a keyword search
-   * Type: Preference variable defined in [[%TWIKIWEB%.%WIKIPREFSTOPIC%]].  Can be customized for a TWiki site in [[%LOCALSITEPREFS%]], and for each web in their %WEBPREFSTOPIC% topics.
-   * Current value: SEARCHSTOPWORDS = %SEARCHSTOPWORDS%
