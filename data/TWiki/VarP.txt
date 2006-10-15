@@ -1,7 +1,8 @@
 %META:TOPICINFO{author="TWikiContributor" date="1152044726" format="1.2" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiPreferences"}%
 #VarP
----+++ P -- pencil icon
 
+---+++ P -- pencil icon
    * Type: Preference variable - TWikiRenderingShortcut.
    * Current value: P = %P%
+   * Related: [[#VarH][H]], [[#VarI][I]], [[#VarICON][ICON]], [[#VarM][M]], [[#VarN][N]], [[#VarQ][Q]], [[#VarS][S]], [[#VarT][T]], [[#VarU][U]], [[#VarX][X]], [[#VarY][Y]]

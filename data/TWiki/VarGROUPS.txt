@@ -3,7 +3,6 @@
 #VarGROUPS
 
 ---+++ GROUPS -- a formatted list of groups
-
    * Expands to a formatted list of user groups in your %WIKITOOLNAME%.
    * Syntax: =%<nop>GROUPS%=
    * The variable is intended to be used in %MAINWEB%.TWikiGroups, to allow a
