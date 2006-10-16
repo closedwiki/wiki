@@ -186,6 +186,13 @@ select option {
 textarea {
 	font-size:100%;
 }
+/*
+blockquote {
+	border-width:1px;
+	border-style:solid;
+	padding:.5em 1em;
+}
+*/
 
 /* LAYOUT ELEMENTS */
 /* for specific layout sub-elements see further down */
@@ -539,7 +546,7 @@ table.twikiFormTable th.twikiFormTableHRow a:visited {
 }
 .twikiHelp {
 	padding:1em;
-	margin:0 0 1em 0;
+	margin:0 0 -1px 0;
 	border-width:1px 0;
 	border-style:solid;
 }
@@ -946,6 +953,12 @@ table.patternDiffOptions input {
 	border-style:solid;
 	margin:0 -0.5em 2em -0.5em;
 	padding:.5em;
+}
+
+/* rename.pattern.tmpl */
+
+.patternRenamePage .patternTopicAction {
+	margin-top:-1px;
 }
 
 /* attach.pattern.tmpl */
