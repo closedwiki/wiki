@@ -30,6 +30,7 @@ __Contributors:__ The icons on this page were originally designed by TWiki:Main.
 
 %TABLE{databg="#eaeaea, #ffffff" headerbg="#ffffff" headeralign="left"}%
 | *&nbsp;* | *File Name* | *Description* | *Write...* |
+| *<img src="%ATTACHURLPATH%/book.gif" alt="Book" title="Book" />*  | =book.gif= | Book | =%<nop>ICON{book}%= |
 | *<img src="%ATTACHURLPATH%/bubble.gif" alt="Speech bubble" title="Speech bubble" />*  | =bubble.gif= | Speech bubble | =%<nop>ICON{bubble}%= |
 | *<img src="%ATTACHURLPATH%/days.gif" alt="Days / Calendar" title="Days / Calendar" />*  | =days.gif= | Days, Calendar | =%<nop>ICON{days}%= |
 | *<img src="%ATTACHURLPATH%/download.gif" alt="Download" title="Download" />*  | =download.gif= | Download | =%<nop>ICON{download}%= |
@@ -46,6 +47,7 @@ __Contributors:__ The icons on this page were originally designed by TWiki:Main.
 | *<img src="%ATTACHURLPATH%/note.gif" alt="Note" title="Note" />*  | =note.gif= | Note | =%<nop>ICON{note}%= |
 | *<img src="%ATTACHURLPATH%/parked.gif" alt="Parked" title="Parked" />*  | =parked.gif= | Parked | =%<nop>ICON{parked}%= |
 | *<img src="%ATTACHURLPATH%/pencil.gif" alt="Pencil / Refactor / Edit" title="Pencil / Refactor / Edit" />*  | =pencil.gif= | Pencil / Refactor / Edit | =%<nop>P%=, =%<nop>ICON{pencil}%= |
+| *<img src="%ATTACHURLPATH%/puzzle.gif" alt="Puzzle" title="Puzzle" />*  | =puzzle.gif= | Puzzle | =%<nop>ICON{puzzle}%= |
 | *<img src="%ATTACHURLPATH%/rfc.gif" alt="Request for comments" title="Request for comments" />*  | =rfc.gif= | Request for comments | =%<nop>ICON{rfc}%= |
 | *<img src="%ATTACHURLPATH%/sort.gif" alt="Sort" title="Sort" />*  | =sort.gif= | Sort | =%<nop>ICON{sort}%= |
 | *<img src="%ATTACHURLPATH%/stargold.gif" alt="Gold star, favorites" title="Gold star, favorites" />*  | =stargold.gif= | Gold star, favorites | =%<nop>ICON{stargold}%= |
@@ -223,6 +225,21 @@ __Contributors:__ The icons on this page were originally designed by TWiki:Main.
 | *<img src="%ATTACHURLPATH%/dot_ur.gif" alt="" title="" />*  | =dot_ur.gif= | Dot graph up-right | =%<nop>ICON{dot_ur}%= |
 | *<img src="%ATTACHURLPATH%/empty.gif" alt="" title="" />*  | =empty.gif= | Empty transparent 16x16 spacer | =%<nop>ICON{empty}%= |
 
+---+++ %ICON{twiki}% TWiki icons
+
+%TABLE{databg="#eaeaea, #ffffff" headerbg="#ffffff" headeralign="left"}%
+| *&nbsp;* | *File Name* | *Description* | *Write...* |
+| *<img src="%ATTACHURLPATH%/addon.gif" alt="Add-on" title="Add-on" />*  | =addon.gif= | Add-on | =%<nop>ICON{addon}%= |
+| *<img src="%ATTACHURLPATH%/application.gif" alt="Application" title="Application" />*  | =application.gif= | Application | =%<nop>ICON{application}%= |
+| *<img src="%ATTACHURLPATH%/code.gif" alt="Code" title="Code" />*  | =code.gif= | Code | =%<nop>ICON{code}%= |
+| *<img src="%ATTACHURLPATH%/package.gif" alt="Package" title="Package" />*  | =package.gif= | Package | =%<nop>ICON{package}%= |
+| *<img src="%ATTACHURLPATH%/plugin.gif" alt="Plugin" title="Plugin" />*  | =plugin.gif= | Plugin | =%<nop>ICON{plugin}%= |
+| *<img src="%ATTACHURLPATH%/searchpackage.gif" alt="Search package" title="Search package" />*  | =searchpackage.gif= | Search package | =%<nop>ICON{searchpackage}%= |
+| *<img src="%ATTACHURLPATH%/searchplugin.gif" alt="Search plugin" title="Search plugin" />*  | =searchplugin.gif= | Search plugin | =%<nop>ICON{searchplugin}%= |
+| *<img src="%ATTACHURLPATH%/searchtag.gif" alt="Search tag" title="Search tag" />*  | =searchtag.gif= | Search tag | =%<nop>ICON{searchtag}%= |
+| *<img src="%ATTACHURLPATH%/skin.gif" alt="Skin" title="Skin" />*  | =skin.gif= | Skin | =%<nop>ICON{skin}%= |
+| *<img src="%ATTACHURLPATH%/tag.gif" alt="Tag" title="Tag" />*  | =tag.gif= | Tag | =%<nop>ICON{tag}%= |
+| *<img src="%ATTACHURLPATH%/twiki.gif" alt="TWiki" title="TWiki" />*  | =twiki.gif= | TWiki logo | =%<nop>ICON{twiki}%= |
 
 ---+++ %ICON{gif}% Filetype icons
 
@@ -271,12 +288,8 @@ Filetype icons are used by the attachment table and are seldom used in topics. W
 | *<img src="%ATTACHURLPATH%/xsl.gif" alt="xsl" title="xsl" />*  | =xsl.gif= | XSL (XML style sheet) | =%<nop>ICON{xsl}%= |
 | *<img src="%ATTACHURLPATH%/zip.gif" alt="zip" title="zip" />*  | =zip.gif= | Compressed Zip archive | =%<nop>ICON{zip}%= |
 
----+++ %ICON{twiki}% TWiki icons
-
-%TABLE{databg="#eaeaea, #ffffff" headerbg="#ffffff" headeralign="left"}%
-| *&nbsp;* | *File Name* | *Description* | *Write...* |
-| *<img src="%ATTACHURLPATH%/twiki.gif" alt="TWiki" title="TWiki" />*  | =twiki.gif= | TWiki logo | =%<nop>ICON{twiki}%= |
-
+%META:FILEATTACHMENT{name="addon.gif" attr="" autoattached="1" comment="" date="1128927124" path="addon.gif" size="383" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="application.gif" attr="" autoattached="1" comment="" date="1128927124" path="application.gif" size="383" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="arrowbdown.gif" attr="" autoattached="1" comment="" date="1128926947" path="arrowbdown.gif" size="101" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="arrowbleft.gif" attr="" autoattached="1" comment="" date="1128926948" path="arrowbleft.gif" size="98" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="arrowbright.gif" attr="" autoattached="1" comment="" date="1128926949" path="arrowbright.gif" size="97" user="UnknownUser" version=""}%
@@ -291,6 +304,7 @@ Filetype icons are used by the attachment table and are seldom used in topics. W
 %META:FILEATTACHMENT{name="attachfile.gif" attr="" autoattached="1" comment="" date="1128926957" path="attachfile.gif" size="121" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="bat.gif" attr="" autoattached="1" comment="" date="1128926958" path="bat.gif" size="377" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="bmp.gif" attr="" autoattached="1" comment="" date="1128926959" path="bmp.gif" size="378" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="book.gif" attr="" autoattached="1" comment="" date="1128927124" path="book.gif" size="383" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="bubble.gif" attr="" autoattached="1" comment="" date="1128926960" path="bubble.gif" size="238" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="building.gif" attr="" autoattached="1" comment="" date="1128926958" path="building.gif" size="127" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="buildings.gif" attr="" autoattached="1" comment="" date="1128926958" path="buildings.gif" size="164" user="UnknownUser" version=""}%
@@ -302,6 +316,7 @@ Filetype icons are used by the attachment table and are seldom used in topics. W
 %META:FILEATTACHMENT{name="choice-no.gif" attr="" autoattached="1" comment="" date="1128926965" path="choice-no.gif" size="166" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="choice-yes.gif" attr="" autoattached="1" comment="" date="1128926966" path="choice-yes.gif" size="159" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="closed.gif" attr="" autoattached="1" comment="" date="1128926976" path="closed.gif" size="379" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="code.gif" attr="" autoattached="1" comment="" date="1128927124" path="code.gif" size="383" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="days.gif" attr="" autoattached="1" comment="" date="1128926967" path="days.gif" size="161" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="detail.gif" attr="" autoattached="1" comment="" date="1128926968" path="detail.gif" size="118" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="dll.gif" attr="" autoattached="1" comment="" date="1128926969" path="dll.gif" size="376" user="UnknownUser" version=""}%
@@ -358,12 +373,6 @@ Filetype icons are used by the attachment table and are seldom used in topics. W
 %META:FILEATTACHMENT{name="key.gif" attr="" autoattached="1" comment="" date="1128926976" path="key.gif" size="91" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="led-aqua.gif" attr="" autoattached="1" comment="" date="1128927024" path="led-aqua.gif" size="944" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="led-blue.gif" attr="" autoattached="1" comment="" date="1128927025" path="led-blue.gif" size="944" user="UnknownUser" version=""}%
-%META:FILEATTACHMENT{name="led-gray.gif" attr="" autoattached="1" comment="" date="1128927026" path="led-gray.gif" size="944" user="UnknownUser" version=""}%
-%META:FILEATTACHMENT{name="led-green.gif" attr="" autoattached="1" comment="" date="1128927028" path="led-green.gif" size="944" user="UnknownUser" version=""}%
-%META:FILEATTACHMENT{name="led-orange.gif" attr="" autoattached="1" comment="" date="1128927029" path="led-orange.gif" size="944" user="UnknownUser" version=""}%
-%META:FILEATTACHMENT{name="led-purple.gif" attr="" autoattached="1" comment="" date="1128927030" path="led-purple.gif" size="944" user="UnknownUser" version=""}%
-%META:FILEATTACHMENT{name="led-red.gif" attr="" autoattached="1" comment="" date="1128927031" path="led-red.gif" size="944" user="UnknownUser" version=""}%
-%META:FILEATTACHMENT{name="led-yellow.gif" attr="" autoattached="1" comment="" date="1128927032" path="led-yellow.gif" size="944" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="led-box-aqua.gif" attr="" autoattached="1" comment="" date="1128927024" path="led-box-aqua.gif" size="393" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="led-box-blue.gif" attr="" autoattached="1" comment="" date="1128927025" path="led-box-blue.gif" size="393" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="led-box-gray.gif" attr="" autoattached="1" comment="" date="1128927026" path="led-box-gray.gif" size="389" user="UnknownUser" version=""}%
@@ -372,6 +381,12 @@ Filetype icons are used by the attachment table and are seldom used in topics. W
 %META:FILEATTACHMENT{name="led-box-purple.gif" attr="" autoattached="1" comment="" date="1128927030" path="led-box-purple.gif" size="393" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="led-box-red.gif" attr="" autoattached="1" comment="" date="1128927031" path="led-box-red.gif" size="393" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="led-box-yellow.gif" attr="" autoattached="1" comment="" date="1128927032" path="led-box-yellow.gif" size="393" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="led-gray.gif" attr="" autoattached="1" comment="" date="1128927026" path="led-gray.gif" size="944" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="led-green.gif" attr="" autoattached="1" comment="" date="1128927028" path="led-green.gif" size="944" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="led-orange.gif" attr="" autoattached="1" comment="" date="1128927029" path="led-orange.gif" size="944" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="led-purple.gif" attr="" autoattached="1" comment="" date="1128927030" path="led-purple.gif" size="944" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="led-red.gif" attr="" autoattached="1" comment="" date="1128927031" path="led-red.gif" size="944" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="led-yellow.gif" attr="" autoattached="1" comment="" date="1128927032" path="led-yellow.gif" size="944" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="left.gif" attr="" autoattached="1" comment="" date="1128927033" path="left.gif" size="192" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="line_ld.gif" attr="" autoattached="1" comment="" date="1128927034" path="line_ld.gif" size="106" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="line_lr.gif" attr="" autoattached="1" comment="" date="1128927035" path="line_lr.gif" size="105" user="UnknownUser" version=""}%
@@ -399,22 +414,25 @@ Filetype icons are used by the attachment table and are seldom used in topics. W
 %META:FILEATTACHMENT{name="mov.gif" attr="" autoattached="1" comment="" date="1128927058" path="mov.gif" size="379" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="move.gif" attr="" autoattached="1" comment="" date="1128926976" path="move.gif" size="209" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="mp3.gif" attr="" autoattached="1" comment="" date="1128927114" path="mp3.gif" size="377" user="UnknownUser" version=""}%
-%META:FILEATTACHMENT{name="proportional.gif" attr="" autoattached="1" comment="" date="1128927059" path="proportional.gif" size="159" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="new.gif" attr="" autoattached="1" comment="" date="1128927059" path="new.gif" size="298" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="newtopic.gif" attr="" autoattached="1" comment="" date="1128927060" path="newtopic.gif" size="340" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="note.gif" attr="" autoattached="1" comment="" date="1128927062" path="note.gif" size="222" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="notify.gif" attr="" autoattached="1" comment="" date="1128927063" path="notify.gif" size="347" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="package.gif" attr="" autoattached="1" comment="" date="1128927124" path="package.gif" size="383" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="parked.gif" attr="" autoattached="1" comment="" date="1128927066" path="parked.gif" size="224" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="pdf.gif" attr="" autoattached="1" comment="" date="1128927064" path="pdf.gif" size="375" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="pencil.gif" attr="" autoattached="1" comment="" date="1128927066" path="pencil.gif" size="539" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="person.gif" attr="" autoattached="1" comment="" date="1128927067" path="person.gif" size="166" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="persons.gif" attr="" autoattached="1" comment="" date="1128927068" path="persons.gif" size="172" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="pl.gif" attr="" autoattached="1" comment="" date="1128927069" path="pl.gif" size="380" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="plugin.gif" attr="" autoattached="1" comment="" date="1128927124" path="plugin.gif" size="383" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="plus.gif" attr="" autoattached="1" comment="" date="1128927070" path="plus.gif" size="90" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="png.gif" attr="" autoattached="1" comment="" date="1128927071" path="png.gif" size="378" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="ppt.gif" attr="" autoattached="1" comment="" date="1128927072" path="ppt.gif" size="373" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="printtopic.gif" attr="" autoattached="1" comment="" date="1128927074" path="printtopic.gif" size="221" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="proportional.gif" attr="" autoattached="1" comment="" date="1128927059" path="proportional.gif" size="159" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="ps.gif" attr="" autoattached="1" comment="" date="1128927075" path="ps.gif" size="362" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="puzzle.gif" attr="" autoattached="1" comment="" date="1128927124" path="puzzle.gif" size="383" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="py.gif" attr="" autoattached="1" comment="" date="1128927076" path="py.gif" size="382" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="ram.gif" attr="" autoattached="1" comment="" date="1128927077" path="ram.gif" size="373" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="recentchanges.gif" attr="" autoattached="1" comment="" date="1128927078" path="recentchanges.gif" size="227" user="UnknownUser" version=""}%
@@ -426,25 +444,30 @@ Filetype icons are used by the attachment table and are seldom used in topics. W
 %META:FILEATTACHMENT{name="rss-small.gif" attr="" autoattached="1" comment="" date="1128927085" path="rss-small.gif" size="122" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="save.gif" attr="" autoattached="1" comment="" date="1128926976" path="save.gif" size="217" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="search-small.gif" attr="" autoattached="1" comment="" date="1128926976" path="search-small.gif" size="554" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="searchpackage.gif" attr="" autoattached="1" comment="" date="1128927124" path="searchpackage.gif" size="383" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="searchplugin.gif" attr="" autoattached="1" comment="" date="1128927124" path="searchplugin.gif" size="383" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="searchtag.gif" attr="" autoattached="1" comment="" date="1128927124" path="searchtag.gif" size="383" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="searchtopic.gif" attr="" autoattached="1" comment="" date="1128927086" path="searchtopic.gif" size="580" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="sh.gif" attr="" autoattached="1" comment="" date="1128927088" path="sh.gif" size="380" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="skin.gif" attr="" autoattached="1" comment="" date="1128927124" path="skin.gif" size="383" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="sniff.gif" attr="" autoattached="1" comment="" date="1128927089" path="sniff.gif" size="368" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="stargold.gif" attr="" autoattached="1" comment="" date="1128927090" path="stargold.gif" size="338" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="starred.gif" attr="" autoattached="1" comment="" date="1128927091" path="starred.gif" size="226" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="statistics.gif" attr="" autoattached="1" comment="" date="1128927092" path="statistics.gif" size="118" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="stop.gif" attr="" autoattached="1" comment="" date="1128927093" path="stop.gif" size="91" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="swf.gif" attr="" autoattached="1" comment="" date="1128927094" path="swf.gif" size="380" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="tag.gif" attr="" autoattached="1" comment="" date="1128927124" path="tag.gif" size="383" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="target.gif" attr="" autoattached="1" comment="" date="1128927096" path="target.gif" size="261" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="tip.gif" attr="" autoattached="1" comment="" date="1128927097" path="tip.gif" size="233" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="todo.gif" attr="" autoattached="1" comment="" date="1128927098" path="todo.gif" size="318" user="UnknownUser" version=""}%
-%META:FILEATTACHMENT{name="toggleclose.gif" attr="" autoattached="1" comment="" date="1128927099" path="toggleclose.gif" size="135" user="UnknownUser" version=""}%
-%META:FILEATTACHMENT{name="toggleclose-small.gif" attr="" autoattached="1" comment="" date="1128927099" path="toggleclose-small.gif" size="135" user="UnknownUser" version=""}%
-%META:FILEATTACHMENT{name="toggleopen.gif" attr="" autoattached="1" comment="" date="1128927100" path="toggleopen.gif" size="138" user="UnknownUser" version=""}%
-%META:FILEATTACHMENT{name="toggleopen-mini.gif" attr="" autoattached="1" comment="" date="1128927100" path="toggleopen-mini.gif" size="51" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="toggleclose-mini.gif" attr="" autoattached="1" comment="" date="1128927100" path="toggleclose-mini.gif" size="51" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="toggleclose-small.gif" attr="" autoattached="1" comment="" date="1128927099" path="toggleclose-small.gif" size="135" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="toggleclose.gif" attr="" autoattached="1" comment="" date="1128927099" path="toggleclose.gif" size="135" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="toggleopen-mini.gif" attr="" autoattached="1" comment="" date="1128927100" path="toggleopen-mini.gif" size="51" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="toggleopen-small.gif" attr="" autoattached="1" comment="" date="1128927100" path="toggleopen-small.gif" size="138" user="UnknownUser" version=""}%
-%META:FILEATTACHMENT{name="toggleopenleft.gif" attr="" autoattached="1" comment="" date="1128927100" path="toggleopenleft.gif" size="138" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="toggleopen.gif" attr="" autoattached="1" comment="" date="1128927100" path="toggleopen.gif" size="138" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="toggleopenleft-small.gif" attr="" autoattached="1" comment="" date="1128927100" path="toggleopenleft-small.gif" size="138" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="toggleopenleft.gif" attr="" autoattached="1" comment="" date="1128927100" path="toggleopenleft.gif" size="138" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="topicbacklinks.gif" attr="" autoattached="1" comment="" date="1128927101" path="topicbacklinks.gif" size="130" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="topicdiffs.gif" attr="" autoattached="1" comment="" date="1128927103" path="topicdiffs.gif" size="157" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="trash.gif" attr="" autoattached="1" comment="" date="1128927104" path="trash.gif" size="224" user="UnknownUser" version=""}%
