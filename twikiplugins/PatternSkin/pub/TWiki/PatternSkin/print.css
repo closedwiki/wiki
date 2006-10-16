@@ -74,7 +74,7 @@
 	}
 	
 	#patternMainContents {
-		padding:0;
+		padding:0 0 0 2em; /* bigger side margin for binding */
 	}
 	#patternBottomBar {
 		border:none;
@@ -100,6 +100,11 @@
 	/* make sure that overflowing content is visible */
 	html>body pre { /* hide from IE */
 		/*\*/ overflow:visible !important; /* */ overflow:visible; width:auto; /* for Mac Safari */
+	}
+	:visited,
+	.patternTopic a:visited {
+		color:#06c;
+		background-color:transparent;
 	}
 	.twikiAttachments,
 	.patternContent .twikiAttachments,
