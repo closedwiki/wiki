@@ -32,6 +32,9 @@
 *%MAKETEXT{"Topic parent:"}%* <br />
 %INCLUDE{"%TWIKIWEB%.WebTopicCreator" section="topicparent"}%
 
+*%MAKETEXT{"Use template:"}%* <br />
+%INCLUDE{"%TWIKIWEB%.WebTopicCreator" section="topictemplate"}%
+
 %INCLUDE{"%TWIKIWEB%.WebTopicCreator" section="submit"}%
 %INCLUDE{"%TWIKIWEB%.WebTopicCreator" section="formend"}%%ENDSECTION{name="createtopicform"}%
 </blockquote>
