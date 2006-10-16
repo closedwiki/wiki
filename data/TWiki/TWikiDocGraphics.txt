@@ -7,11 +7,14 @@ This is the TWiki icon library. The graphics can be used in topics and by web ap
 
 ---++ Usage
 
-There are several ways to put an image in a topic.
+<blockquote>
+<code>%<nop>ICON{help}%</code> results in: %ICON{help}%
 
-   * *Shorthand notation:* <code>%<nop>ICON{help}%</code> results in: %ICON{help}%
-      * Note that =ICON{}= assumes an image of 16 x 16 pixels
-   * *Really shorthand notation:* in %TWIKIWEB%.TWikiPreferences set a variable to an ICON, for example:%BR% =<nop>   * Set H = %<nop>ICON{help}%= %BR% Now you can use the icon by writing =%<nop>H%=.
+Note that =ICON{}= assumes an image of 16 x 16 pixels
+</blockquote>
+
+There are several other ways to put an image in a topic:
+   * Shorthand notation: in [[%MAINWEB%.TWikiPreferences]] set a variable to an ICON, for example:%BR% =<nop>   * Set H = %<nop>ICON{help}%= %BR% Now you can use the icon by writing =%<nop>H%=.
    * There are other approaches as well:
       * In any topic, write =%<nop>PUBURL%/%<nop>TWIKIWEB%/TWikiDocGraphics/help.gif= to show the %PUBURL%/%TWIKIWEB%/TWikiDocGraphics/help.gif icon. %BR%
       * You are not restricted to use the !TWikiDocGraphics topic - in a similar way you can show attached images by replacing =TWikiDocGraphics= with the topic name.
@@ -197,6 +200,22 @@ __Contributors:__ The icons on this page were originally designed by TWiki:Main.
 | *<img src="%ATTACHURLPATH%/web-bg.gif" alt="Web" title="Web" />*  | =web-bg.gif= | Web background, used in %TWIKIWEB%.WebLeftBarWebsList | =%<nop>ICON{web-bg}%= |
 | *<img src="%ATTACHURLPATH%/web-bg-small.gif" alt="Web" title="Web" />*  | =web-bg-small.gif= | Web background, 13x13 | =&lt;img src="%<nop>ICONURL{web-bg-small}%" width="13" height="13" alt="Web" border="0" /&gt;= |
 
+---+++ %ICON{twiki}% TWiki icons
+
+%TABLE{databg="#eaeaea, #ffffff" headerbg="#ffffff" headeralign="left"}%
+| *&nbsp;* | *File Name* | *Description* | *Write...* |
+| *<img src="%ATTACHURLPATH%/addon.gif" alt="Add-on" title="Add-on" />*  | =addon.gif= | Add-on | =%<nop>ICON{addon}%= |
+| *<img src="%ATTACHURLPATH%/application.gif" alt="Application" title="Application" />*  | =application.gif= | Application | =%<nop>ICON{application}%= |
+| *<img src="%ATTACHURLPATH%/code.gif" alt="Code" title="Code" />*  | =code.gif= | Code | =%<nop>ICON{code}%= |
+| *<img src="%ATTACHURLPATH%/package.gif" alt="Package" title="Package" />*  | =package.gif= | Package | =%<nop>ICON{package}%= |
+| *<img src="%ATTACHURLPATH%/plugin.gif" alt="Plugin" title="Plugin" />*  | =plugin.gif= | Plugin | =%<nop>ICON{plugin}%= |
+| *<img src="%ATTACHURLPATH%/searchpackage.gif" alt="Search package" title="Search package" />*  | =searchpackage.gif= | Search package | =%<nop>ICON{searchpackage}%= |
+| *<img src="%ATTACHURLPATH%/searchplugin.gif" alt="Search plugin" title="Search plugin" />*  | =searchplugin.gif= | Search plugin | =%<nop>ICON{searchplugin}%= |
+| *<img src="%ATTACHURLPATH%/searchtag.gif" alt="Search tag" title="Search tag" />*  | =searchtag.gif= | Search tag | =%<nop>ICON{searchtag}%= |
+| *<img src="%ATTACHURLPATH%/skin.gif" alt="Skin" title="Skin" />*  | =skin.gif= | Skin | =%<nop>ICON{skin}%= |
+| *<img src="%ATTACHURLPATH%/tag.gif" alt="Tag" title="Tag" />*  | =tag.gif= | Tag | =%<nop>ICON{tag}%= |
+| *<img src="%ATTACHURLPATH%/twiki.gif" alt="TWiki" title="TWiki" />*  | =twiki.gif= | TWiki logo | =%<nop>ICON{twiki}%= |
+
 ---+++ %ICON{line_ur}% Block graphics
 
 %TABLE{databg="#eaeaea, #ffffff" headerbg="#ffffff" headeralign="left"}%
@@ -225,21 +244,6 @@ __Contributors:__ The icons on this page were originally designed by TWiki:Main.
 | *<img src="%ATTACHURLPATH%/dot_ur.gif" alt="" title="" />*  | =dot_ur.gif= | Dot graph up-right | =%<nop>ICON{dot_ur}%= |
 | *<img src="%ATTACHURLPATH%/empty.gif" alt="" title="" />*  | =empty.gif= | Empty transparent 16x16 spacer | =%<nop>ICON{empty}%= |
 
----+++ %ICON{twiki}% TWiki icons
-
-%TABLE{databg="#eaeaea, #ffffff" headerbg="#ffffff" headeralign="left"}%
-| *&nbsp;* | *File Name* | *Description* | *Write...* |
-| *<img src="%ATTACHURLPATH%/addon.gif" alt="Add-on" title="Add-on" />*  | =addon.gif= | Add-on | =%<nop>ICON{addon}%= |
-| *<img src="%ATTACHURLPATH%/application.gif" alt="Application" title="Application" />*  | =application.gif= | Application | =%<nop>ICON{application}%= |
-| *<img src="%ATTACHURLPATH%/code.gif" alt="Code" title="Code" />*  | =code.gif= | Code | =%<nop>ICON{code}%= |
-| *<img src="%ATTACHURLPATH%/package.gif" alt="Package" title="Package" />*  | =package.gif= | Package | =%<nop>ICON{package}%= |
-| *<img src="%ATTACHURLPATH%/plugin.gif" alt="Plugin" title="Plugin" />*  | =plugin.gif= | Plugin | =%<nop>ICON{plugin}%= |
-| *<img src="%ATTACHURLPATH%/searchpackage.gif" alt="Search package" title="Search package" />*  | =searchpackage.gif= | Search package | =%<nop>ICON{searchpackage}%= |
-| *<img src="%ATTACHURLPATH%/searchplugin.gif" alt="Search plugin" title="Search plugin" />*  | =searchplugin.gif= | Search plugin | =%<nop>ICON{searchplugin}%= |
-| *<img src="%ATTACHURLPATH%/searchtag.gif" alt="Search tag" title="Search tag" />*  | =searchtag.gif= | Search tag | =%<nop>ICON{searchtag}%= |
-| *<img src="%ATTACHURLPATH%/skin.gif" alt="Skin" title="Skin" />*  | =skin.gif= | Skin | =%<nop>ICON{skin}%= |
-| *<img src="%ATTACHURLPATH%/tag.gif" alt="Tag" title="Tag" />*  | =tag.gif= | Tag | =%<nop>ICON{tag}%= |
-| *<img src="%ATTACHURLPATH%/twiki.gif" alt="TWiki" title="TWiki" />*  | =twiki.gif= | TWiki logo | =%<nop>ICON{twiki}%= |
 
 ---+++ %ICON{gif}% Filetype icons
 
