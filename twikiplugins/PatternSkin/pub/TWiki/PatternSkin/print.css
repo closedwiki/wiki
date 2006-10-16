@@ -97,6 +97,10 @@
 	h2, h3, h4, h5, h6 {
 		background-color:transparent;
 	}
+	/* make sure that overflowing content is visible */
+	html>body pre { /* hide from IE */
+		/*\*/ overflow:visible !important; /* */ overflow:visible; width:auto; /* for Mac Safari */
+	}
 	.twikiAttachments,
 	.patternContent .twikiAttachments,
 	.twikiForm,
