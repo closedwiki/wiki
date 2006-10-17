@@ -206,6 +206,37 @@ In %MAINWEB%.TWikiGuest, set the cover to
 
 By default this topic is editable only by !TWikiAdminGroup members.
 
+---+++ I want to remove the History button from the bottom
+
+All action buttons are defined in =viewtopicactionbuttons.pattern.tmpl=. Remove module =revisions= from =%<nop>TMPL:DEF{"topicactionbuttons"}%=. %BR%
+<blockquote><code style="white-space:pre">
+%<nop>TMPL:DEF{"topicactionbuttons"}%%<nop>TMPL:P{"activatable_raw_edit"}%%<nop>TMPL:P{"sep"}%
+%<nop>TMPL:P{context="WysiwygPluginEnabled" then="activatable_edit_wysiwyg"}%%<nop>TMPL:P{context="WysiwygPluginEnabled" then="sep"}%
+%<nop>TMPL:P{"activatable_attach"}%%<nop>TMPL:P{"sep"}%
+%<nop>TMPL:P{"printable"}%%<nop>TMPL:P{"sep"}%
+%<nop>TMPL:P{"raw"}%%<nop>TMPL:P{"sep"}%
+%<nop>TMPL:P{"backlinks"}%%<nop>TMPL:P{"sep"}%
+<span style="color:red"><s>%<nop>TMPL:P{"revisions"}%%<nop>TMPL:P{"sep"}%</s></span>
+%<nop>TMPL:P{"activatable_more"}%%<nop>TMPL:END%
+</code>
+</blockquote>
+In your =view.myskin.tmpl= file (see above) you write:
+<blockquote><verbatim>
+%TMPL:INCLUDE{"view.pattern"}%
+
+%TMPL:DEF{"topicactionbuttons"}%%TMPL:P{"activatable_raw_edit"}%%TMPL:P{"sep"}%
+%TMPL:P{context="WysiwygPluginEnabled" then="activatable_edit_wysiwyg"}%%TMPL:P{context="WysiwygPluginEnabled" then="sep"}%
+%TMPL:P{"activatable_attach"}%%TMPL:P{"sep"}%
+%TMPL:P{"printable"}%%TMPL:P{"sep"}%
+%TMPL:P{"raw"}%%TMPL:P{"sep"}%
+%TMPL:P{"backlinks"}%%TMPL:P{"sep"}%
+%TMPL:P{"activatable_more"}%%TMPL:END%
+</verbatim>
+
+Remove all newlines if you copy-paste above text.
+</blockquote>
+Test by appending =?cover=myskin= to any topic.
+
 ---+++ I want to insert text outside of the topic content
 
 !PatternSkin has 2 'buckets' to write additional content to: =beforetextcontents= and =aftertextcontents=, both defined in =view.pattern.tmpl=. These containers can contain text or html and are placed directly before and after the topic text.
