@@ -6,7 +6,31 @@
 
 %TOC%
 
----++ Logo questions
+---++ First Read: How to modify !PatternSkin templates
+
+If you need to change any of the elements that are visible on the common 'view' pages, you need to change the 'view' _template_: =/templates/view.pattern.tmpl=. The quickest way would be to simply change the text in the template. A safer way -  strongly recommended, because it will survive a TWiki update - is to create your own custom skin. That may sound like an awful lot of work, but in reality a skin may be as much as 1 file that consists of only a few lines of code.
+
+*Example* %BR%
+Let's say you want to simplify the bottom toolbar and remove all links except for "More topic actions". You would need to target =%<nop>TMPL:DEF{"topicactionbuttons"}%=, which is located in =view.pattern.tmpl=.
+
+*The steps you would need:*
+   1 Think up a name for your skin. Let us use =myskin= for now.
+   1 Create a new (empty) view template file in =/templates= called =view.myskin.tmpl=.
+   1 In =view.myskin.tmpl= you write: %BR%
+   =%<nop>TMPL:INCLUDE{"view.pattern"}%= %BR%
+   =%<nop>TMPL:DEF{"topicactionbuttons"}%%<nop>TMPL:P{"activatable_more"}%%<nop>TMPL:END%=
+   1 Now the skin is set. For testing, view any topic and append to the topic name: =?cover=myskin=. You should see an effect now.
+   1 To make the changes visible on all pages, go to [[Main.TWikiPreferences]] (to keep %WIKIPREFSTOPIC% intact) and write:
+<blockquote><verbatim>
+   * Set COVER = myskin
+</verbatim>
+or write
+<verbatim>
+   * Set SKIN = myskin,pattern
+</verbatim></blockquote>
+
+
+---++ Logo
 
 ---+++ How can I change the web logo?
 
@@ -14,12 +38,12 @@ By default the logo at the top left of each web points to the image with name =l
 The default variables that cause this behavior are defined in [[%WIKIPREFSTOPIC%]].
 
 Redefine your custom variables in [[%LOCALSITEPREFS%]] (to keep %WIKIPREFSTOPIC% intact):
-<pre>
-      * Set <nop>WEBLOGONAME = logo.gif
-      * Set <nop>WEBLOGOIMG = %<nop>PUBURLPATH%/%<nop>BASEWEB%/%<nop>WEBPREFSTOPIC%/%<nop>WEBLOGONAME%
-      * Set <nop>WEBLOGOURL = %<nop>SCRIPTURLPATH{"view"}%/%<nop>BASEWEB%/%<nop>HOMETOPIC%
-      * Set <nop>WEBLOGOALT = Home
-</pre>
+<blockquote><pre>
+   * Set <nop>WEBLOGONAME = logo.gif
+   * Set <nop>WEBLOGOIMG = %<nop>PUBURLPATH%/%<nop>BASEWEB%/%<nop>WEBPREFSTOPIC%/%<nop>WEBLOGONAME%
+   * Set <nop>WEBLOGOURL = %<nop>SCRIPTURLPATH{"view"}%/%<nop>BASEWEB%/%<nop>HOMETOPIC%
+   * Set <nop>WEBLOGOALT = Home
+</pre></blockquote>
 
 There are 2 ways to change the logo in a web:
 
@@ -40,10 +64,9 @@ There are 2 ways to change the logo in a web:
 
 There is a bunch of site-wide logo variables in [[%LOCALSITEPREFS%]]: =WIKILOGOIMG=, =WIKILOGOURL= and =WIKILOGOALT=.
 To change only the web logo image to site-wide, in [[%LOCALSITEPREFS%]] set:
-<pre>
+<blockquote><pre>
    * Set <nop>WEBLOGOIMG = %<nop>WIKILOGOIMG%
-</pre>
-
+</pre></blockquote>
 
 ---+++ My logo does not fit the top bar
 
@@ -52,6 +75,7 @@ The top bar is 64 pixels high by default.
 *Using templates:*
 <blockquote>
 Change the height of the top bar in =templates/viewtopbar.pattern.tmpl=:
+
 <verbatim>
 %TMPL:DEF{"topbardimensions"}%
 #patternTopBar,
@@ -64,7 +88,8 @@ Change the height of the top bar in =templates/viewtopbar.pattern.tmpl=:
 }
 %TMPL:END%
 </verbatim>
-Only change the number.
+
+Only change the number from 64px to another value.
 </blockquote>
 
 *Using style sheets:*
@@ -74,28 +99,28 @@ Create a new stylesheet with above definition in it, attach it to a topic and po
 
 ---+++ I want to change the white space above and below the logo
 
-Change the table style in %TWIKIWEB%.WebTopBar. Default top padding is 11px.
+Change the table style in topic %TWIKIWEB%.WebTopBar. The default top padding is 11px.
 
----++ Top bar questions
+---++ Top bar
 
 ---+++ I want to set or change the top background image
 
 The image at the top is called "header art" - commonly the top image found on blog sites. The image that is displayed by default is set by the variable =WEBHEADERART=, defined in [[%WIKIPREFSTOPIC%]].
 
 Redefine your custom variables in [[%LOCALSITEPREFS%]] (to keep %WIKIPREFSTOPIC% intact):
-<pre>
+<blockquote><pre>
    * Set WEBHEADERART = %<nop>PUBURLPATH%/%<nop>TWIKIWEB%/PatternSkin/TWiki_header.gif
    * Set WEBHEADERBGCOLOR = somehexcolor (no quotes, for example: #ffffff)
-</pre>
+</pre></blockquote>
 
 You can also set =WEBHEADERART= per web, by defining the variable in the Web's !WebPreferences.
 
 ---+++ I want to have the web color in the top bar
 
 Redefine =WEBHEADERBGCOLOR= in [[%LOCALSITEPREFS%]] (to keep %WIKIPREFSTOPIC% intact):
-<pre>
+<blockquote><pre>
    * Set WEBHEADERBGCOLOR = %<nop>WEBBGCOLOR%
-</pre>
+</pre></blockquote>
 
 ---+++ I want to remove the Jump and Search boxes from the top bar 
 
@@ -106,8 +131,9 @@ You can remove these items from %TWIKIWEB%.WebTopBar.
 ---+++ I want to hide the top bar
 
 *Using templates:*
-<blockquote>
-The view template is populated like this:
+
+The view template is populated with page elements using template inclusions:
+
 <verbatim>
 %TMPL:INCLUDE{"page"}%
 %TMPL:INCLUDE{"viewtopbar"}%
@@ -117,7 +143,28 @@ The view template is populated like this:
 %TMPL:INCLUDE{"viewtopicactionbuttons"}%
 %TMPL:INCLUDE{"viewbottombar"}%
 </verbatim>
-Each included template draws a part of the screen. Omit =%<nop>TMPL:INCLUDE{"viewtopbar"}%= to hide the top bar, or in a view template clear it using =%<nop>TMPL:INCLUDE{"viewtopbar"}%%TMPL:END%=
+
+Each included template draws a part of the screen.%BR%
+Omit =%<nop>TMPL:INCLUDE{"viewtopbar"}%= to hide the top bar.
+
+Another approach is to clear the contents of module =topbar=; for example in =view.myskin.tmpl=:
+<blockquote><verbatim>
+%TMPL:INCLUDE{"view.pattern"}%
+
+%TMPL:INCLUDE{"topbar"}%%TMPL:END%
+</verbatim>
+
+and add:
+
+<verbatim>
+%TMPL:DEF{"topbardimensions"}%#patternTopBar,
+#patternClearHeaderCenter,
+#patternClearHeaderLeft,
+#patternClearHeaderRight,
+#patternTopBarContentsOuter {
+	height:0px;
+}%TMPL:END%
+</verbatim>
 </blockquote>
 
 *Using style sheets:*
@@ -125,7 +172,7 @@ Each included template draws a part of the screen. Omit =%<nop>TMPL:INCLUDE{"vie
 See PatternSkinCssCookbookNoTopBar.
 </blockquote>
 
----++ Left bar questions
+---++ Left bar
 
 ---+++ I want to hide the left bar
 
@@ -146,17 +193,39 @@ See PatternSkinCssCookbookNoLeftBar.
 It may defy the wiki-ness of your TWiki installation, but in certain circumstances it could be useful to hide the edit buttons from users that are not logged in, for instance for customers.
 
 Create in the template directory the file =view.customer.tmpl=. 'Empty' =topicaction= and =toolbar= by writing in the template:
-<verbatim>
+<blockquote><verbatim>
 %TMPL:INCLUDE{"view.pattern"}%
 %TMPL:DEF{"topicaction"}%%TMPL:END%
 %TMPL:DEF{"toolbar"}%%TMPL:END%
-</verbatim>
+</verbatim></blockquote>
 
-In %MAINWEB%.TWikiGuest, set the cover to 
-<verbatim>
+In %MAINWEB%.TWikiGuest, set the cover to
+<blockquote><verbatim>
    * Set COVER = customer
-</verbatim>
+</verbatim></blockquote>
 
 By default this topic is editable only by !TWikiAdminGroup members.
 
+---+++ I want to insert text outside of the topic content
 
+!PatternSkin has 2 'buckets' to write additional content to: =beforetextcontents= and =aftertextcontents=, both defined in =view.pattern.tmpl=. These containers can contain text or html and are placed directly before and after the topic text.
+
+Both modules are wrapped in CSS containers:
+   * =beforetextcontents= - wrapped in =div= of class =twikiBeforeText=
+   * =aftertextcontents= - wrapped in =div= of class =twikiAfterText=
+   
+To put contents before the main text, use the custom skin approach as described above.%BR%
+So our =view.myskin.tmpl= file contains:
+<blockquote><verbatim>
+%TMPL:INCLUDE{"view.pattern"}%
+
+%TMPL:DEF{"beforetextcontents"}%This is the text before%TMPL:END%
+</verbatim></blockquote>
+Test by appending =?cover=myskin= to any topic.
+
+Use the same procedure for contents to be put after the topic text:
+<blockquote><verbatim>
+%TMPL:INCLUDE{"view.pattern"}%
+
+%TMPL:DEF{"aftertextcontents"}%This is the text after%TMPL:END%
+</verbatim></blockquote>

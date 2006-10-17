@@ -61,8 +61,13 @@
 
 
 
-%TMPL:DEF{"beforetext"}%<div class="twikiBeforeText"></div>%TMPL:END%
-%TMPL:DEF{"aftertext"}%<div class="twikiAfterText"></div>%TMPL:END%
+%TMPL:DEF{"beforetextcontents"}%<nop>%TMPL:END%
+%TMPL:DEF{"beforetext"}%<div class="twikiBeforeText">%TMPL:P{"beforetextcontents"}%</div>%TMPL:END%
+
+
+
+%TMPL:DEF{"aftertextcontents"}%<nop>%TMPL:END%
+%TMPL:DEF{"aftertext"}%<div class="twikiAfterText">%TMPL:P{"aftertextcontents"}%</div>%TMPL:END%
 
 
 
