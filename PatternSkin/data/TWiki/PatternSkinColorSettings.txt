@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1159306961" format="1.1" reprev="1.2" version="1.2"}%
+%META:TOPICINFO{author="ArthurClemens" date="1161086821" format="1.1" reprev="1.2" version="1.2"}%
 ---+ !!Color scheme settings for %TWIKIWEB%.PatternSkin
 *Appearance: text colors, background colors, border colors.*
 
@@ -22,9 +22,9 @@ Edit this topic, and change the color variables as you like.
 ---++ Logical groupings
 ---+++ Text on background
 ---++++ MAIN_TEXT_COLOR Main text color
-   * Set MAIN_TEXT_COLOR = #fff
+   * Set MAIN_TEXT_COLOR = #000
 ---++++ MAIN_BACKGROUND_COLOR Main background color
-   * Set MAIN_BACKGROUND_COLOR = #000
+   * Set MAIN_BACKGROUND_COLOR = #fff
 
 ---+++ Links
 ---++++ LINK_TEXT_NORMAL Link normal text
@@ -102,8 +102,12 @@ Edit this topic, and change the color variables as you like.
    * Set SEPARATOR = #aaa
 	
 ---+++ Background colors
----++++ GENERAL_BACKGROUND General background color (if not set in  MAIN_TEXT_COLOR) (white)
+---++++ GENERAL_BACKGROUND General background color (if not set in  MAIN_BACKGROUND_COLOR) (white)
    * Set GENERAL_BACKGROUND = #fff
+---++++ SIDE_BAR_BACKGROUND Left bar (lighter blue)
+   * Set SIDE_BAR_BACKGROUND = #F5F9FD
+---++++ TABLE_DATA_BACKGROUND Table data background
+   * Set TABLE_DATA_BACKGROUND = #F5F9FD
 ---++++ TABLE_HEADER_BACKGROUND Table header background
    * Set TABLE_HEADER_BACKGROUND = #efefef
 ---++++ INFO_BACKGROUND Info (very light blue) (placeholder for background image)
@@ -113,13 +117,11 @@ Edit this topic, and change the color variables as you like.
 ---++++ HEADER_BACKGROUND H1, H2, etc header (light yellow) 
    * Set HEADER_BACKGROUND = #FDFAF3
 ---++++ TABLE_HEADER_ACCENT_BACKGROUND Sorted table column accent background 
-   * Set TABLE_HEADER_ACCENT_BACKGROUND = #ccc
+   * Set TABLE_HEADER_ACCENT_BACKGROUND = #d9e0e7
 ---++++ ATTACHMENT_AND_FORM_BACKGROUND Attachment, form (light yellow)
    * Set ATTACHMENT_AND_FORM_BACKGROUND = #FEFCF6
 ---++++ DIFF_HEADER_BACKGROUND Diff header (dark gray) (same as GRAYED_OUT_TEXT)
    * Set DIFF_HEADER_BACKGROUND = #8E9195
----++++ SIDE_BAR_BACKGROUND Left bar (lighter blue)
-   * Set SIDE_BAR_BACKGROUND = #F5F9FD
 	
 ---+++ Border colors
 ---++++ INFO_BORDER Info (light blue)
@@ -131,8 +133,10 @@ Edit this topic, and change the color variables as you like.
 ---++++ LAYOUT_ELEMENT_BORDER Main layout elements (neutral tone) 
    * Set LAYOUT_ELEMENT_BORDER = #ccc
 ---++++ TABLE_BORDER Table border, sup (light neutral tone)
-   * Set TABLE_BORDER = #ddd
-
+   * Set TABLE_BORDER = #ebebeb
+---++++ TABLE_HEADER_ACCENT_BORDER
+   * Set TABLE_HEADER_ACCENT_BORDER = #dbdbdb
+   
 <!-- END OF COLOR VARIABLES -->
 
 Do not change the text below this line unless you know what you are doing!
@@ -145,12 +149,12 @@ Do not change the text below this line unless you know what you are doing!
 /* LAYOUT ELEMENTS */
 
 #patternTopBar {
-	background-color:%MAIN_TEXT_COLOR%;
+	background-color:%MAIN_BACKGROUND_COLOR%;
 	border-color:%LAYOUT_ELEMENT_BORDER%;
 }
 #patternMain { /* don't set a background here; use patternOuter */ }
 #patternOuter {
-	background-color:%MAIN_TEXT_COLOR%; /* Sets background of center col */
+	background-color:%MAIN_BACKGROUND_COLOR%; /* Sets background of center col */
 	border-color:%LAYOUT_ELEMENT_BORDER%;
 }
 #patternLeftBar, #patternLeftBarContents { /* don't set a background here; use patternWrapper */ }
@@ -158,7 +162,7 @@ Do not change the text below this line unless you know what you are doing!
 	background-color:%ACTIVE_FORM_BACKGROUND%;
 }
 #patternBottomBar {
-	background-color:%MAIN_TEXT_COLOR%;
+	background-color:%MAIN_BACKGROUND_COLOR%;
 	border-color:%LAYOUT_ELEMENT_BORDER%;
 }
 #patternBottomBarContents,
@@ -173,8 +177,8 @@ Do not change the text below this line unless you know what you are doing!
 /* GENERAL HTML ELEMENTS */
 
 html body {
-	background-color:%MAIN_TEXT_COLOR%;
-	color:%MAIN_BACKGROUND_COLOR%;
+	background-color:%MAIN_BACKGROUND_COLOR%;
+	color:%MAIN_TEXT_COLOR%;
 }
 /* be kind to netscape 4 that doesn't understand inheritance */
 body, p, li, ul, ol, dl, dt, dd, acronym, h1, h2, h3, h4, h5, h6 {
@@ -186,6 +190,10 @@ hr {
 }
 pre, code, tt {
 	color:%CODE_TEXT%;
+}
+blockquote {
+	border-color:%SEPARATOR_BORDER%;
+	background-color:%ACTIVE_FORM_BACKGROUND%;
 }
 h1, h2, h3, h4, h5, h6 {
 	color:%HEADER_TEXT%;
@@ -242,7 +250,7 @@ h3, h4, h5, h6 {
 /* fix for hover over transparent logo: */
 #patternTopBar :link:hover img,
 #patternTopBar :visited:hover img {
-	background:%MAIN_TEXT_COLOR%;
+	background:%MAIN_BACKGROUND_COLOR%;
 }
 .patternTopic a:visited {
 	color:%MUTED_TEXT%;
@@ -257,7 +265,7 @@ textarea,
 input,
 select {
 	border-color:%FORM_INPUT_BORDER%;
-	color:%MAIN_BACKGROUND_COLOR%;
+	color:%MAIN_TEXT_COLOR%;
 	background-color:%GENERAL_BACKGROUND%;
 }
 .twikiSubmit,
@@ -280,8 +288,8 @@ select {
 .twikiInputField,
 .twikiSelect {
 	border-color:%INPUT_FIELD_BORDERS%;
-	color:%MAIN_BACKGROUND_COLOR%;
-	background-color:%MAIN_TEXT_COLOR%;
+	color:%MAIN_TEXT_COLOR%;
+	background-color:%MAIN_BACKGROUND_COLOR%;
 }
 .twikiInputFieldDisabled {
 	color:%MUTED_TEXT%;
@@ -380,7 +388,7 @@ table.twikiFormTable td.twikiFormTableRow {
 	color:%MUTED_TEXT%;
 }
 .twikiEditForm {
-	color:%MAIN_BACKGROUND_COLOR%;
+	color:%MAIN_TEXT_COLOR%;
 }
 .twikiEditForm .twikiFormTable th,
 .twikiEditForm .twikiFormTable td {
@@ -400,10 +408,10 @@ table.twikiFormTable td.twikiFormTableRow {
 .twikiAttachments table,
 table.twikiFormTable {
 	border-color:%LAYOUT_ELEMENT_BORDER%;
-	background-color:%MAIN_TEXT_COLOR%;
+	background-color:%MAIN_BACKGROUND_COLOR%;
 }
 .twikiAttachments table {
-	background-color:%MAIN_TEXT_COLOR%;
+	background-color:%MAIN_BACKGROUND_COLOR%;
 }
 .twikiAttachments td, 
 .twikiAttachments th {
@@ -411,10 +419,10 @@ table.twikiFormTable {
 }
 .twikiAttachments th/*,
 table.twikiFormTable th.twikiFormTableHRow*/ {
-	background-color:%MAIN_TEXT_COLOR%;
+	background-color:%MAIN_BACKGROUND_COLOR%;
 }
 .twikiAttachments td {
-	background-color:%MAIN_TEXT_COLOR%;
+	background-color:%MAIN_BACKGROUND_COLOR%;
 }
 .twikiAttachments th a:link,
 .twikiAttachments th a:visited,
@@ -465,7 +473,7 @@ table.twikiFormTable th.twikiFormTableHRow a:hover {
 }
 .twikiPageForm table {
 	border-color:%TABLE_BORDER%;
-	background:%MAIN_TEXT_COLOR%;
+	background:%MAIN_BACKGROUND_COLOR%;
 }
 .twikiPageForm hr {
 	border-color:%FORM_BORDER%;
@@ -491,7 +499,7 @@ a:hover .twikiAccessKey {
 	Pattern skin specific elements
 	-----------------------------------------------------------	*/
 #patternPage {
-	background-color:%MAIN_TEXT_COLOR%;
+	background-color:%MAIN_BACKGROUND_COLOR%;
 }
 /* Left bar */
 #patternLeftBarContents {
@@ -628,7 +636,7 @@ a:hover .twikiAccessKey {
 	color:%LINK_TEXT_HOVER%;
 }
 .patternSaveHelp {
-	background-color:%MAIN_TEXT_COLOR%;
+	background-color:%MAIN_BACKGROUND_COLOR%;
 }
 
 /* WebSearch, WebSearchAdvanced */
@@ -655,7 +663,7 @@ h4.patternSearchResultsHeader {
 	border-color:%LAYOUT_ELEMENT_BORDER%;
 }
 h4.patternSearchResultsHeader {
-	color:%MAIN_BACKGROUND_COLOR%;
+	color:%MAIN_TEXT_COLOR%;
 }
 .patternNoViewPage h4.patternSearchResultsHeader {
 	color:%HEADER_TEXT%;
@@ -706,14 +714,14 @@ table.patternDiffOptions img {
 }
 .patternSig input {
 	color:%GRAYED_OUT_TEXT%;
-	background-color:%MAIN_TEXT_COLOR%;
+	background-color:%MAIN_BACKGROUND_COLOR%;
 }
 
 /* preview.pattern.tmpl */
 
 .patternPreviewArea {
 	border-color:%ALERT_BORDER%;
-	background-color:%MAIN_TEXT_COLOR%;
+	background-color:%MAIN_BACKGROUND_COLOR%;
 }
 
 /* rdiff.pattern.tmpl */
@@ -762,4 +770,6 @@ tr.twikiDiffDebug .twikiDiffUnchangedText {
 %ENDATTACH%
 </verbatim>
 
-%META:FILEATTACHMENT{name="theme-colors.css" attachment="theme-colors.css" attr="" user="Main.TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="theme-colors.css" attachment="theme-colors.css" attr="" stream="GLOB(0x958d924)" tmpFilename="/tmp/9bgIDdpIIv" user="Main.ArthurClemens" version="10"}%
+%META:FILEATTACHMENT{name="test.css" attr="" autoattached="1" comment="" date="1161086083" path="test.css" size="12467" user="UnknownUser" version=""}%
+%META:REVCOMMENT{comment_1="Attached file !theme-colors.css" minor_1="0" ncomments="1" rev_1="" t_1="Upload1161086821"}%
