@@ -19,7 +19,7 @@ For help see the %TWIKIWEB%.BenchmarkContribUserGuide!
 |  *Topic:* | <input name="topic" type="text" value="%PROFILEWEB%.%PROFILETOPIC%" size="40" />  |  *Revision:* | <input name="revision" type="text" value="%PROFILEREVISION%" size="10" /> |
 |  *Script:*| <input name="method" type="text" value="%PROFILEMETHOD%" size="10" /> |  *Skin:* | <input name="pskin" type="text" value="%PROFILESKIN%"  size="10" /> |
 |  *View as:* | <input name="viewer" type="text" value="%PROFILEVIEWER%" size="40" />  |||
-|  <input type="submit" value="...and go!" />  ||||
+|  <input type="submit" class="twikiSubmit" value="...and go!" />  ||||
 </form>
 %ENDSECTION{"benchmarkform"}%
 

@@ -104,7 +104,7 @@ Forms have to be enabled for each individual web. The ==WEBFORMS== variable in W
     <form name="newtopic" action="%SCRIPTURLPATH{"edit"}%/%WEB%/">
        <input type="hidden" name="formtemplate" value="MyForm" />
        New topic name <input type="text" name="topic" size="40" />
-       <input type="submit" value="Create" />
+       <input type="submit" class="twikiSubmit" value="Create" />
     </form>
        </verbatim>
    * __%T% Tip:__ For TWiki applications you can [[TWikiTemplates#AutomaticallyGeneratedTopicname][automatically generate unique topicnames]].
