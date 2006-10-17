@@ -1,6 +1,5 @@
 data/TWiki/GoogleAnalyticsPlugin.txt
-pub/TWiki/GoogleAnalyticsPlugin/Google_Analytics_Dashboard.png
-pub/TWiki/GoogleAnalyticsPlugin/Google_Analytics_Dashboard_small.jpg
 lib/TWiki/Plugins/GoogleAnalyticsPlugin/build.pl
 lib/TWiki/Plugins/GoogleAnalyticsPlugin.pm
-#
+pub/TWiki/GoogleAnalyticsPlugin/Google_Analytics_Dashboard.png
+pub/TWiki/GoogleAnalyticsPlugin/Google_Analytics_Dashboard_small.jpg
