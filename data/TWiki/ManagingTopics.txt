@@ -35,7 +35,7 @@ The =Trash= web should be be cleared periodically, by archiving (saving) the tex
 
 You can use TWikiMetaData to place a command in the %TWIKIWEB%.WebTopicViewTemplate and %TWIKIWEB%.WebTopicNonWikiTemplate that will indicate that a topic has been moved by searching for the tag %<nop>META:TOPICMOVED{...}%. Customize something like this:
 
-<blockquote style="background-color:#f0f0f0">
+<blockquote>
 <verbatim>
 %<nop>METASEARCH{type="topicmoved" web="%WEB%" topic="%TOPIC%" 
 title="This topic used to exist and was moved to: "}%
@@ -76,7 +76,7 @@ Ultimately, the size, objectives, and policies of your TWiki site, the real-worl
 
 The following shows some limitations of square bracket processing.
 
-<blockquote style="background-color:#f0f0f0">
+<blockquote>
 <verbatim>
 [[Old Topic]]  => [[NewTopic][Old Topic]]
 [[old topic]]  => [[NewTopic][old topic]]

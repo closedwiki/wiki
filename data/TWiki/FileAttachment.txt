@@ -80,88 +80,44 @@ Move unwanted Attachments to web =Trash=, topic =TrashAttachment=.
 
 Files attached to a topic are displayed in a directory table, displayed at the bottom of the page, or optionally, hidden and accessed when you click *Attach*.
 
-<blockquote class="twikiAttachments">
-<table border="1" cellspacing="0" cellpadding="1"> 
-<tr><th align="center" bgcolor="#99CCCC" class="twikiFirstCol"><strong>I</strong></th><th align="center" bgcolor="#99CCCC"><strong>Attachment</strong></th><th align="center" bgcolor="#99CCCC"> <strong>Action</strong> </th><th align="center" bgcolor="#99CCCC"> <strong>Size</strong> </th><th align="center" bgcolor="#99CCCC"> <strong>Date</strong> </th><th align="center" bgcolor="#99CCCC"> <strong>Who</strong> </th><th align="center" bgcolor="#99CCCC"> <strong>Comment</strong> </th></tr>
-<tr><td class="twikiFirstCol">%ICON{"txt"}%</td><td><a href="%SCRIPTURLPATH{viewfile}%/%WEB%/%TOPIC%?rev=&amp;filename=Sample.txt">Sample.txt</a>     </td><td>  <a href="%SCRIPTURLPATH{attach}%/%WEB%/%TOPIC%?filename=Sample.txt&amp;revInfo=1">manage</a>     </td><td align="right">  0.1 K  </td><td>  22 Jul 2000 - 19:37  </td><td>  <a href="UploadingUser">UploadingUser</a>  </td><td>  Just a sample  </td></tr>
-<tr><td class="twikiFirstCol">%ICON{"bmp"}%</td><td><a href="%SCRIPTURLPATH{"viewfile"}%/%WEB%/%TOPIC%?rev=&amp;filename=Smile.gif">Smile.gif</a>     </td><td>  <a href="%SCRIPTURLPATH{attach}%/%WEB%/%TOPIC%?filename=Smile.gif&amp;revInfo=1">manage</a>     </td><td align="right">  0.1 K  </td><td>  22 Jul 2000 - 19:38  </td><td>  <a href="UploadingUser">UploadingUser</a>  </td><td>  Smiley face  </td></tr>
+<div class="twikiAttachments">
+<table summary="Topic attachments" cellspacing="0" id="twikiAttachmentsTable" cellpadding="0" class="twikiTable" border="0"><caption>Topic attachments</caption><tr class="twikiTableEven"><th bgcolor="#dadada" class="twikiFirstCol"> <a rel="nofollow" href="http://twiki4.visiblearea.com/twiki4/bin/view/TWiki/FileAttachment?sortcol=0;table=1;up=0#sorted_table" title="Sort by this column"><font color="#000000">I</font></a> </th><th bgcolor="#dadada"> <a rel="nofollow" href="http://twiki4.visiblearea.com/twiki4/bin/view/TWiki/FileAttachment?sortcol=1;table=1;up=0#sorted_table" title="Sort by this column"><font color="#000000">Attachment</font></a> </th><th bgcolor="#dadada"> <a rel="nofollow" href="http://twiki4.visiblearea.com/twiki4/bin/view/TWiki/FileAttachment?sortcol=2;table=1;up=0#sorted_table" title="Sort by this column"><font color="#000000">Action</font></a> </th><th bgcolor="#dadada"> <a rel="nofollow" href="http://twiki4.visiblearea.com/twiki4/bin/view/TWiki/FileAttachment?sortcol=3;table=1;up=0#sorted_table" title="Sort by this column"><font color="#000000">Size</font></a> </th><th bgcolor="#dadada"> <a rel="nofollow" href="http://twiki4.visiblearea.com/twiki4/bin/view/TWiki/FileAttachment?sortcol=4;table=1;up=0#sorted_table" title="Sort by this column"><font color="#000000">Date</font></a> </th><th bgcolor="#dadada"> <a rel="nofollow" href="http://twiki4.visiblearea.com/twiki4/bin/view/TWiki/FileAttachment?sortcol=5;table=1;up=0#sorted_table" title="Sort by this column"><font color="#000000">Who</font></a> </th><th bgcolor="#dadada"> <a rel="nofollow" href="http://twiki4.visiblearea.com/twiki4/bin/view/TWiki/FileAttachment?sortcol=6;table=1;up=0#sorted_table" title="Sort by this column"><font color="#000000">Comment</font></a> </th></tr>
+
+<tr class="twikiTableOdd"><td bgcolor="#FFFFFF" class="twikiFirstCol"> <img width="16" alt="txt" align="top" src="/twiki4/pub/TWiki/TWikiDocGraphics/txt.gif" height="16" border="0" /><span class="twikiHidden">txt</span> </td><td bgcolor="#FFFFFF"> <a href="/twiki4/bin/viewfile/TWiki/FileAttachment?rev=;filename=Sample.txt">Sample.txt</a> </td><td bgcolor="#FFFFFF"> <a href="/twiki4/bin/attach/TWiki/FileAttachment?filename=Sample.txt&amp;revInfo=1" title='change, update, previous revisions, move, delete...'rel='nofollow'>manage</a> </td><td bgcolor="#FFFFFF" align="right"> 0.1&nbsp;K </td><td bgcolor="#FFFFFF"> 08 Mar 2006 - 18:59 </td><td bgcolor="#FFFFFF"> <a href="/twiki4/bin/view/Main/TWikiContributor" class="twikiLink">TWikiContributor</a> </td><td bgcolor="#FFFFFF"> Just a sample </td></tr>
+
+<tr class="twikiTableEven"><td bgcolor="#FFFFFF" class="twikiFirstCol"> <img width="16" alt="gif" align="top" src="/twiki4/pub/TWiki/TWikiDocGraphics/gif.gif" height="16" border="0" /><span class="twikiHidden">gif</span> </td><td bgcolor="#FFFFFF"> <a href="/twiki4/bin/viewfile/TWiki/FileAttachment?rev=;filename=Smile.gif">Smile.gif</a> </td><td bgcolor="#FFFFFF"> <a href="/twiki4/bin/attach/TWiki/FileAttachment?filename=Smile.gif&amp;revInfo=1" title='change, update, previous revisions, move, delete...'rel='nofollow'>manage</a> </td><td bgcolor="#FFFFFF" align="right"> 0.1&nbsp;K </td><td bgcolor="#FFFFFF"> 08 Mar 2006 - 18:59 </td><td bgcolor="#FFFFFF"> <a href="/twiki4/bin/view/Main/TWikiContributor" class="twikiLink">TWikiContributor</a> </td><td bgcolor="#FFFFFF"> Smiley face </td></tr>
 </table>
-</blockquote>
+</div><!--//twikiAttachments-->
 
 ---++ File Attachment Controls
 
 Clicking on a ==Manage== link takes you to a new page that looks a bit like this (depending on what [[TWikiSkins][skin]] is selected):
 
-<blockquote style="background-color:#f0f0f0">
-<form>
-<table border="1" cellspacing="0" cellpadding="20"><tr><td>
-<nop><h2>Update attachment <code>Sample.txt</code></h2>
-<div class="twikiAttachments patternPrevious">
-<table border="1" cellspacing="0" cellpadding="1"> <tr><th align="center" bgcolor="#99CCCC"> <strong>Version</strong> </th><th align="center" bgcolor="#99CCCC"> <strong>Action</strong> </th><th align="center" bgcolor="#99CCCC"> <strong>Date</strong> </th><th align="center" bgcolor="#99CCCC"> <strong>Who</strong> </th><th align="center" bgcolor="#99CCCC"> <strong>Comment</strong> </th></tr>
-<tr><td>  1   </td><td>  <a href="%SCRIPTURLPATH{"viewfile"}%/%WEB%/%TOPIC%?rev=1&amp;filename=Sample.txt">view</a>  </td><td>  22 Jul 2000 - 19:37  </td><td>  <a href="UploadingUser">UploadingUser</a>  </td><td>    Just a sample    </td></tr>
-</table>
-</div>
+<div class="twikiFormSteps">
+<div class="twikiFormStep">
+<h3><a name="Attach_new_file"></a> Attach new file </h3>
 <p />
-<div class="patternVersatileTable">
-<table><tr>
-  <th class="patternOldCol">Previous upload</th>
-  <td class="patternOldCol">
-   <code>Sample.txt</code> <span class="twikiGrayText">(<a href="http://visiblearea.com/devtwiki/bin/view/Main/TWikiContributor" class="twikiLink">TWikiContributor</a>)</span>
-  </td>
-  <td class="patternHelpCol">Select a new local file to update this attachment.</td>
- </tr> 
-   <tr>
-      <th class="patternMainCol">
-         Local file
-      </th>
-      <td class="patternMainCol">
-         <input type="hidden" name="filename" value="Sample.txt" /><input type="file" name="filepath" value="Sample.txt" size="30" /> 
-      </td>
-      <td class="patternHelpCol patternMainCol">
-Upload up to 10000 KB.
-      </td>
-   </tr>
-   <tr>
-      <th>
-         Comment
-      </th>
-      <td>
-         <input class="comment" type="text" name="filecomment" value="Just a sample" maxlength="256" size="50" /> 
-      </td>
-      <td class="patternHelpCol"></td>
-   </tr>
-   <tr>
-      <th>
-         Link
-      </th>
-      <td>
-         <input type="checkbox" class="twikiCheckbox" id="createlink" name="createlink"  /><label for="createlink">Create a link to the attached file</label>
-      </td>
-      <td class="patternHelpCol">
-Images will be displayed, for other attachments a link will be created.
-      </td>
-   </tr>
-   <tr>
-      <th>
-         Hide file
-      </th>
-      <td>
-         <input type="checkbox" class="twikiCheckbox" id="hidefile" name="hidefile"  /><label for="hidefile">Do not show attachment in table</label>
-      </td>
-      <td class="patternHelpCol">Attachments will not be shown in topic view page.</td>
-   </tr>
-   <tr>
-   <th> </th>
-   <td colspan="2">
-      <input type="submit" class="twikiSubmit" name="changeproperties" value='Change properties only' />
-   </td>
-</tr>
-</table>
-</div>
-</td></tr>
-</table>
-</form>
-</blockquote>
+Select a new local file to update attachment <code>Sample.txt</code> <span class="twikiGrayText">(<a href="/twiki4/bin/view/Main/TWikiGuest" class="twikiLink">UploadingUser</a>)</span><br />Upload up to 10000 KB.
+<p />
+<input class="twikiInputField" type="file" name="filepath" value="Sample.txt" size="30" /><input type="hidden" name="filename" value="Sample.txt" />
+</div><!-- /twikiFormStep-->
+<div class="twikiFormStep">
+<h3><a name="Comment"></a> Comment </h3>
+<p />
+Describe the file so other people know what it is.
+<p />
+<input class="twikiInputField" type="text" name="filecomment" value="Just a sample" maxlength="256" size="50" />
+</div><!-- /twikiFormStep-->
+<div class="twikiFormStep">
+<h3><a name="Properties"></a> Properties </h3>
+<p />
+<input type="checkbox" class="twikiCheckbox" id="createlink" name="createlink"  /><label for="createlink">Create a link to the attached file</label> <span class="twikiGrayText">Images will be displayed, for other attachments a link will be created.</span>
+<p />
+<input type="checkbox" class="twikiCheckbox" id="hidefile" name="hidefile"  /><label for="hidefile">Do not show attachment in table</label> <span class="twikiGrayText">Attachments will not be shown in topic view page.</span>
+</div><!-- /twikiFormStep--><div class="twikiFormStep twikiLast"><input type="submit" class="twikiButton" name="changeproperties" value='Change comment and properties only' /></div><!-- /twikiFormStep-->
+</div><!-- /twikiFormSteps-->
+<a name="topic-actions"> </a><div class="patternTopicActions"><div class="patternTopicAction" style="margin-top:-1px;"><span class="patternActionButtons"> <input type="submit" class="twikiSubmit" value='Upload file' /> or <a href="/twiki4/bin/view/Sandbox/AttachTest" title='Back to topic' accesskey='c' rel='nofollow'><span class='twikiAccessKey'>C</span>ancel</a></span></div></div><!--/patternTopicActions-->
+
 
    * The first table is a list of all attachments, including their attributes. An =h= means the attachment is hidden, it isn't listed when viewing a topic.
 

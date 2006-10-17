@@ -47,6 +47,10 @@ hr {
 pre, code, tt {
 	color:#7A4707;
 }
+blockquote {
+	border-color:#E2DCC8;
+	background-color:#F6FAFD;
+}
 h1, h2, h3, h4, h5, h6 {
 	color:#a00;
 }

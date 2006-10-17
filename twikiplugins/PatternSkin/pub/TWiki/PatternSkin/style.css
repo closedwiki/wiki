@@ -49,7 +49,7 @@ hr {
 /* put overflow pre in a scroll area */
 pre {
     width:100%;
-    margin:1em 0; /* Win IE tries to make this bigger otherwise */
+    margin:0; /* Win IE tries to make this bigger otherwise */
 }
 html>body pre { /* hide from IE */
 	/*\*/ overflow:auto !important; /* */ overflow:scroll; width:auto; /* for Mac Safari */
@@ -186,13 +186,11 @@ select option {
 textarea {
 	font-size:100%;
 }
-/*
 blockquote {
 	border-width:1px;
 	border-style:solid;
 	padding:.5em 1em;
 }
-*/
 
 /* LAYOUT ELEMENTS */
 /* for specific layout sub-elements see further down */

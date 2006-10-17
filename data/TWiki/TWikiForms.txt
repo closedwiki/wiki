@@ -23,7 +23,7 @@ A Form Template specifies the fields in a form. A Form Template is simply a page
    1. For each field, fill in a new line; for the type of field, select from the list.
    1. Save the topic _(you can later choose to [[#EnablingForms][enable/disable]] individual forms)_.
 
-<blockquote style="background-color:#f0f0f0">
+<blockquote>
 *Example: <nop>WebForm* %BR%
 =| <nop>*Name* | <nop>*Type* | <nop>*Size* | <nop>*Values* | <nop>*Tooltip message* | <nop>*Attributes* |= %BR%
 =| !TopicClassification | select | 1 | !NoDisclosure, !PublicSupported, !PublicFAQ | blah blah... | &nbsp; |= %BR%
@@ -40,7 +40,7 @@ See [[#FormStructure][structure of a form]] for full details of what types are a
 
 You can also retrieve possible values for select, checkbox or radio types from other topics:
 
-<blockquote style="background-color:#f0f0f0">
+<blockquote>
 *Example: <nop>WebForm*
 
    * In the <nop>WebForm topic, define the form:
@@ -62,7 +62,7 @@ You can also retrieve possible values for select, checkbox or radio types from o
 
 Field values can also be obtained as the result of a %TWIKIWEB%.FormattedSearch. For example,
 
-<blockquote style="background-color:#f0f0f0">
+<blockquote>
 =%<nop>SEARCH{"Office$" scope="topic" web="%<nop>MAINWEB%" nototal="on" nosummary="on" nosearch="on" regex="on" format="$web.$topic" separator=", " }%=
 </blockquote>
 
@@ -84,7 +84,7 @@ when used in the value field of the form definition, will take the set of field 
 ---++ Enabling Forms by Web
 
 Forms have to be enabled for each individual web. The ==WEBFORMS== variable in WebPreferences is optional and defines a list of possible form templates.
-<blockquote style="background-color:#f0f0f0">
+<blockquote>
 *Example:*
    * <nop>Set WEBFORMS = <nop>BugForm, <nop>FeatureForm, Books.<nop>BookLoanForm
 </blockquote>

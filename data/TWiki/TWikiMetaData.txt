@@ -21,7 +21,7 @@ TWikiMetaData uses =META= variables to store topic data that's separate from the
 
    * =\n= (new line) is represented in values by =%<nop>_<nop>N_<nop>= and ="= (double-quotes) by =%<nop>_Q_%=.
 
-<blockquote style="background-color:#f0f0f0">
+<blockquote>
 *Example of Format*
 <pre>
 %<nop>META:TOPICINFO{version="1.6" date="976762663" author="LastEditorWikiName" format="1.0"}%

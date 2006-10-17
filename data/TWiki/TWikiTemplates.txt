@@ -224,8 +224,6 @@ Attached is an example of an oops based template =oopsbase.tmpl= and an example 
 The first line declares a delimiter variable called "sep", used to separate multiple link items. The variable can be called anywhere by writing =%<nop>TMPL:P{"sep"}%=
 
 <blockquote>
-<table border="1" cellspacing="0" cellpadding="1" bgcolor="#f5f5f5">
-<tr><td>
 <pre>
 %<nop>TMPL:DEF{"sep"}% | %<nop>TMPL:END%
 &lt;html&gt;
@@ -265,8 +263,6 @@ The first line declares a delimiter variable called "sep", used to separate mult
 &lt;/table&gt;
 &lt;/body&gt;
 </pre>
-</td></tr>
-</table>
 </blockquote>
 
 ---+++ Test template oopstest.tmpl
@@ -274,8 +270,6 @@ The first line declares a delimiter variable called "sep", used to separate mult
 Each oops template basically just defines some variables and includes the base template that does the layout work.
 
 <blockquote>
-<table border="1" cellspacing="0" cellpadding="1" bgcolor="#f5f5f5">
-<tr><td>
 <pre>
 %<nop>TMPL:DEF{"titleaction"}% (test =titleaction=) %<nop>TMPL:END%
 %<nop>TMPL:DEF{"webaction"}% test =webaction= %<nop>TMPL:END%
@@ -296,17 +290,13 @@ Test =topicaction=:
 [<nop>[%<nop>TWIKIWEB%.TWikiRegistration][Register]] %<nop>TMPL:END%
 %<nop>TMPL:INCLUDE{"oopsbase"}%
 </pre>
-</td></tr>
-</table>
 </blockquote>
 
 ---+++ Sample screen shot of oopstest.tmpl
 
 With URL: ==.../bin/oops/Sandbox/TestTopic2?template=oopstest&param1=WebHome&param2=WebNotify==
 
-<blockquote>
-| <img src="%ATTACHURLPATH%/testscreen.gif" width="589" height="304" alt="testscreen.gif"> |
-</blockquote>
+<img style="border:1px solid #ddd;" src="%ATTACHURLPATH%/testscreen.gif" width="589" height="304" alt="testscreen.gif">
 
 __Related Topics:__ TWikiSkins, DeveloperDocumentationCategory, AdminDocumentationCategory
 
