@@ -159,7 +159,7 @@ select {
 .twikiTable,
 .twikiTable td,
 .twikiTable th {
-	border-color:#ddd;
+	border-color:#ebebeb;
 }
 .twikiTable th a:link,
 .twikiTable th a:visited,
@@ -176,7 +176,7 @@ select {
 /* TablePlugin - sorting of table columns */
 .patternTopic th.twikiSortedAscendingCol,
 .patternTopic th.twikiSortedDescendingCol {
-	background-color:#ccc;
+	background-color:#d9e0e7;
 }
 th.twikiSortedAscendingCol a:link,
 th.twikiSortedAscendingCol a:link font,
@@ -586,7 +586,7 @@ table.patternDiffOptions img {
 	border-color:#ccc;
 }
 .patternDiff h4.patternSearchResultsHeader {
-	background-color:#ccc;
+	background-color:#d9e0e7;
 }
 tr.twikiDiffDebug td {
 	border-color:#ddd;
@@ -616,7 +616,7 @@ tr.twikiDiffDebug .twikiDiffUnchangedText {
 .twikiDiffChangedHeader,
 .twikiDiffDeletedHeader,
 .twikiDiffAddedHeader {
-	background-color:#ccc;
+	background-color:#d9e0e7;
 }
 /* Unchanged */
 .twikiDiffUnchangedTextContents { }
