@@ -7,25 +7,14 @@ This is the TWiki icon library. The graphics can be used in topics and by web ap
 
 ---++ Usage
 
+Default notation:
 <blockquote>
 <code>%<nop>ICON{help}%</code> results in: %ICON{help}%
 
-Note that =ICON{}= assumes an image of 16 x 16 pixels
+Note that =ICON{}= assumes a GIF image of 16 x 16 pixels. Use an HTML img tag with  =%<nop>ICONURL{}%= for image with other sizes. See the tables below for copy-paste examples.
 </blockquote>
 
-There are several other ways to put an image in a topic:
-   * Shorthand notation: in [[%MAINWEB%.TWikiPreferences]] set a variable to an ICON, for example:%BR% =<nop>   * Set H = %<nop>ICON{help}%= %BR% Now you can use the icon by writing =%<nop>H%=.
-   * There are other approaches as well:
-      * In any topic, write =%<nop>PUBURL%/%<nop>TWIKIWEB%/TWikiDocGraphics/help.gif= to show the %PUBURL%/%TWIKIWEB%/TWikiDocGraphics/help.gif icon. %BR%
-      * You are not restricted to use the !TWikiDocGraphics topic - in a similar way you can show attached images by replacing =TWikiDocGraphics= with the topic name.
-      * The TWiki:Plugins.SmiliesPlugin, using a different short hand than =<nop>%VARIABLES%=, may be worth checking out for extended use
-   * To create an image with a link, write: =[<nop>[%HOMETOPIC%][%<nop>ICON{home}%]]= to get: [[%HOMETOPIC%][%ICON{home}%]]
-   * To get the full URL of the icon, use [[VarICONURL][ICONURL]]: <code>%<nop>ICONURL{"toggleopen"}%</code> gets you: <code>%ICONURL{"toggleopen"}%</code> (if you paste that in a topic you will get: %ICONURL{"toggleopen"}%)
-   * __Note:__ Most images have 16x16 pixels. For those images you can use the =%<nop>ICON{}%= syntax. Use an HTML img tag with  =%<nop>ICONURL{}%= for image with other sizes.
-
-__Related Topics:__ TWikiSkins, DeveloperDocumentationCategory, AdminDocumentationCategory
-
-__Contributors:__ The icons on this page were originally designed by TWiki:Main.PeterThoeny. All except led-color icons, dot graph and line graph images were then recreated by TWiki:Main.ArthurClemens.
+Other usage: [[%TOPIC%#Usage_extended][see below]].
 
 ---++ Graphics
 
@@ -291,6 +280,46 @@ Filetype icons are used by the attachment table and are seldom used in topics. W
 | *<img src="%ATTACHURLPATH%/xml.gif" alt="xml" title="xml" />*  | =xml.gif= | XML | =%<nop>ICON{xml}%= |
 | *<img src="%ATTACHURLPATH%/xsl.gif" alt="xsl" title="xsl" />*  | =xsl.gif= | XSL (XML style sheet) | =%<nop>ICON{xsl}%= |
 | *<img src="%ATTACHURLPATH%/zip.gif" alt="zip" title="zip" />*  | =zip.gif= | Compressed Zip archive | =%<nop>ICON{zip}%= |
+
+---++ Usage (extended)
+
+There are several other ways to put an image in a topic.
+
+Shorthand notation:
+<blockquote>
+In [[%MAINWEB%.TWikiPreferences]] set a variable to an ICON, for example:
+
+=<nop>   * Set H = %<nop>ICON{help}%=
+
+Now you can use the icon by writing =%<nop>H%=
+
+For extended use, check out TWiki:Plugins.SmiliesPlugin that uses a different short hand than =<nop>%VARIABLES%=.
+</blockquote>
+
+Full path:
+<blockquote>
+In any topic, write =%<nop>PUBURL%/%<nop>TWIKIWEB%/TWikiDocGraphics/help.gif= to show %PUBURL%/%TWIKIWEB%/TWikiDocGraphics/help.gif
+
+You are not restricted to use the !TWikiDocGraphics topic - in a similar way you can show attached images by replacing =TWikiDocGraphics= with the topic name.
+</blockquote>
+
+To create an image with a link, write:
+<blockquote>
+=[<nop>[%HOMETOPIC%][%<nop>ICON{home}% Home]]= to get: [[%HOMETOPIC%][%ICON{home}% Home]]
+
+To get rid of the underline under the space, write: %BR%
+=[<nop>[%HOMETOPIC%][%<nop>ICON{home}%]] [<nop>[%HOMETOPIC%][Home]]= to get: [[%HOMETOPIC%][%ICON{home}%]] [[%HOMETOPIC%][Home]]
+</blockquote>
+
+To get the full URL of the icon, use [[VarICONURL][ICONURL]]:
+<blockquote>
+=%<nop>ICONURL{"toggleopen"}%= gets you the image path: <code>%ICONURL{"toggleopen"}%</code> %BR%
+and that will get rendered as: %ICONURL{"toggleopen"}%
+</blockquote>
+
+__Related Topics:__ TWikiSkins, DeveloperDocumentationCategory, AdminDocumentationCategory
+
+__Contributors:__ Most icons on this page were originally designed by TWiki:Main.PeterThoeny. All icons were recreated by TWiki:Main.ArthurClemens, except for led-color icons, dot graph and line graph images.
 
 %META:FILEATTACHMENT{name="addon.gif" attr="" autoattached="1" comment="" date="1128927124" path="addon.gif" size="383" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="application.gif" attr="" autoattached="1" comment="" date="1128927124" path="application.gif" size="383" user="UnknownUser" version=""}%
