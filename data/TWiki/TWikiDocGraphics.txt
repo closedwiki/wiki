@@ -199,7 +199,6 @@ Other usage: [[%TOPIC%#Usage_extended][see below]].
 | *<img src="%ATTACHURLPATH%/package.gif" alt="Package" title="Package" />*  | =package.gif= | Package | =%<nop>ICON{package}%= |
 | *<img src="%ATTACHURLPATH%/plugin.gif" alt="Plugin" title="Plugin" />*  | =plugin.gif= | Plugin | =%<nop>ICON{plugin}%= |
 | *<img src="%ATTACHURLPATH%/searchpackage.gif" alt="Search package" title="Search package" />*  | =searchpackage.gif= | Search package | =%<nop>ICON{searchpackage}%= |
-| *<img src="%ATTACHURLPATH%/searchplugin.gif" alt="Search plugin" title="Search plugin" />*  | =searchplugin.gif= | Search plugin | =%<nop>ICON{searchplugin}%= |
 | *<img src="%ATTACHURLPATH%/searchtag.gif" alt="Search tag" title="Search tag" />*  | =searchtag.gif= | Search tag | =%<nop>ICON{searchtag}%= |
 | *<img src="%ATTACHURLPATH%/skin.gif" alt="Skin" title="Skin" />*  | =skin.gif= | Skin | =%<nop>ICON{skin}%= |
 | *<img src="%ATTACHURLPATH%/tag.gif" alt="Tag" title="Tag" />*  | =tag.gif= | Tag | =%<nop>ICON{tag}%= |
@@ -478,7 +477,6 @@ __Contributors:__ Most icons on this page were originally designed by TWiki:Main
 %META:FILEATTACHMENT{name="save.gif" attr="" autoattached="1" comment="" date="1128926976" path="save.gif" size="217" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="search-small.gif" attr="" autoattached="1" comment="" date="1128926976" path="search-small.gif" size="554" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="searchpackage.gif" attr="" autoattached="1" comment="" date="1128927124" path="searchpackage.gif" size="383" user="UnknownUser" version=""}%
-%META:FILEATTACHMENT{name="searchplugin.gif" attr="" autoattached="1" comment="" date="1128927124" path="searchplugin.gif" size="383" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="searchtag.gif" attr="" autoattached="1" comment="" date="1128927124" path="searchtag.gif" size="383" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="searchtopic.gif" attr="" autoattached="1" comment="" date="1128927086" path="searchtopic.gif" size="580" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="sh.gif" attr="" autoattached="1" comment="" date="1128927088" path="sh.gif" size="380" user="UnknownUser" version=""}%
