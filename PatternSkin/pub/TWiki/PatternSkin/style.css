@@ -261,15 +261,17 @@ blockquote {
 	border-width:0 1px 1px 0;
 }
 .twikiTable th {
-    padding:4px;
+    padding:6px;
 }
 .twikiTable td {
-    padding:2px 4px;
+    padding:3px 5px;
 }
 .twikiTable th a:link,
 .twikiTable th a:visited,
 .twikiTable th a font {
 	text-decoration:none;
+	border-width:0 0 1px 0;
+	border-style:solid;
 }
 .twikiTable th a:hover,
 .twikiTable th a:hover font {
@@ -306,6 +308,15 @@ th.twikiSortedDescendingCol a:hover font {
 	border-width:1px 0 0 0;
 	border-style:solid;
 	text-decoration:none;
+}
+/* don't show any of those ugly sort icons */
+th.twikiSortedDescendingCol img,
+th.twikiSortedDescendingCol a:link img,
+th.twikiSortedDescendingCol a:visited img,
+th.twikiSortedAscendingCol img,
+th.twikiSortedAscendingCol a:link img,
+th.twikiSortedAscendingCol a:visited img {
+	display:none;
 }
 
 .twikiEditForm {

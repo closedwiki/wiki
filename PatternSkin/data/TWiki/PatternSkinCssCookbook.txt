@@ -1,13 +1,12 @@
 %META:TOPICINFO{author="TWikiContributor" date="1129333294" format="1.1" version="$Rev$"}%
 
-
 ---+!! %TWIKIWEB%.PatternSkin CSS Cookbook
 
 *Questions and answers on how to customize the default look of TWiki for your own needs, using style sheets.* For configuring page elements, see PatternSkinCustomization.
 
 %TOC%
 
----++ Introduction
+---++ First Read: How to modify !PatternSkin styles
 
 !PatternSkin uses 3 style sheets (attached to %TWIKIWEB%.PatternSkin):
    * [[%PUBURLPATH%/%TWIKIWEB%/PatternSkin/layout.css][layout.css]] - the positioning of main page elements (blocks), widths and heights
@@ -15,6 +14,9 @@
    * [[%PUBURLPATH%/%TWIKIWEB%/PatternSkin/colors.css][colors.css]] - border colors, text colors and background colors
 
 When customizing your TWiki installation, you can either choose to completely rewrite all css styles, or to selectively override some styles. The latter option is by far less time consuming, but all depends on your graphical wishes.
+
+---+++ Changing the color scheme
+Have a look at PatternSkinColorSettings.
 
 ---+++ When you need lots of graphic changes: Rewriting CSS
    * Create a new topic that will contain your new CSS files
@@ -26,7 +28,7 @@ When customizing your TWiki installation, you can either choose to completely re
       * <nop>Set TWIKICOLORSURL = %<nop>PUBURLPATH%/%<nop>TWIKIWEB%/YourNewTopic/colors.css
  </pre>
 
----+++ When you need small adjustments: Adding to existing CSS
+---+++ When you need to make small adjustments: Adding to existing CSS
 With CSS you cannot remove already defined classes, you can only add to it, or overwrite existing styles. <br />
 Overriding default CSS is done with 3 variables: =USERLAYOUTURL=, =USERSTYLEURL=, =USERCOLORSURL=.
    * Create a new topic that will contain your new CSS files

@@ -57,7 +57,7 @@ a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, for example, =
 		* Set SORT = all
 
 	* Default table attributes:
-		* Set TABLEATTRIBUTES = tableborder="1" cellpadding="0" cellspacing="0" headerbg="#e8f0f8" headercolor="#000000" databg="#F5F9FD, #ffffff"
+		* Set TABLEATTRIBUTES = tableborder="1" cellpadding="0" cellspacing="0" headerbg="#6b7f93" headercolor="#ffffff" databg="#ecf2f8, #ffffff"
 		* Classic skin table attributes:
 			* #Set TABLEATTRIBUTES = tableborder="1" cellpadding="0" cellspacing="1" headerbg="#99CCCC" databg="#FFFFCC, #FFFFFF"
 
