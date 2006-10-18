@@ -6,9 +6,9 @@ Use this topic to change the color settings of %TWIKIWEB%.PatternSkin. When this
 
 ---++!! Usage
 ---+++!! Step 1
-Let %TWIKIWEB%.PatternSkin point to the custom-made colors style sheet. In [[Main.TWikiPreferences]] put:
+Let %TWIKIWEB%.PatternSkin point to the custom-made colors style sheet. In [[%MAINWEB%.TWikiPreferences]] put:
 <verbatim>
-   * Set USERCOLORSURL = %PUBURLPATH%/%WEB%/%TOPIC%/theme-colors.css
+   * Set USERCOLORSURL = %PUBURLPATH%/%MAINWEB%/TWikiPreferences/theme-colors.css
 </verbatim>
 Test this setting: USERCOLORSURL = %USERCOLORSURL% %BR%
 Test the file (may exist only after having saved this topic): <a href="%USERCOLORSURL%">theme-colors.css</a>
@@ -37,6 +37,16 @@ Edit this topic, and change the color variables as you like.
    * Set LINK_TEXT_HOVER = #FBF7E8
 ---++++ LINK_BACKGROUND_HOVER Link background hover
    * Set LINK_BACKGROUND_HOVER = #D6000F
+---++++ SIDE_BAR_LINK_TEXT Side bar link text
+   * Set SIDE_BAR_LINK_TEXT = #666
+---++++ LINK_TEXT_NORMAL_TABLE_HEADER Table header link text
+   * Set LINK_TEXT_NORMAL_TABLE_HEADER = #fff
+---++++ LINK_TEXT_NORMAL_BORDER_TABLE_HEADER Table header link border
+   * Set LINK_TEXT_NORMAL_BORDER_TABLE_HEADER = #ccc
+---++++ LINK_TEXT_SORTED_TABLE_HEADER Sorted table header link text
+   * Set LINK_TEXT_SORTED_TABLE_HEADER = #fff
+---++++ LINK_TEXT_HOVER_TABLE_HEADER Table header link hover text
+   * Set LINK_TEXT_HOVER_TABLE_HEADER = #fff
    
 ---+++ Disabled
 ---++++ DISABLED_BORDER Disabled border
@@ -104,20 +114,20 @@ Edit this topic, and change the color variables as you like.
 ---+++ Background colors
 ---++++ GENERAL_BACKGROUND General background color (if not set in  MAIN_BACKGROUND_COLOR) (white)
    * Set GENERAL_BACKGROUND = #fff
----++++ SIDE_BAR_BACKGROUND Left bar (lighter blue)
-   * Set SIDE_BAR_BACKGROUND = #F5F9FD
+---++++ SIDE_BAR_BACKGROUND Side bar background
+   * Set SIDE_BAR_BACKGROUND = #f9f9f9
 ---++++ TABLE_DATA_BACKGROUND Table data background
-   * Set TABLE_DATA_BACKGROUND = #F5F9FD
+   * Set TABLE_DATA_BACKGROUND = #ecf2f8
 ---++++ TABLE_HEADER_BACKGROUND Table header background
-   * Set TABLE_HEADER_BACKGROUND = #efefef
+   * Set TABLE_HEADER_BACKGROUND = #6b7f93
 ---++++ INFO_BACKGROUND Info (very light blue) (placeholder for background image)
-   * Set INFO_BACKGROUND = #ECF4FB
+   * Set INFO_BACKGROUND = #f5f9fd
 ---++++ TOPIC_ACTION_BACKGROUND Topic action row (light yellow)
    * Set TOPIC_ACTION_BACKGROUND = #FCF8EC
 ---++++ HEADER_BACKGROUND H1, H2, etc header (light yellow) 
    * Set HEADER_BACKGROUND = #FDFAF3
 ---++++ TABLE_HEADER_ACCENT_BACKGROUND Sorted table column accent background 
-   * Set TABLE_HEADER_ACCENT_BACKGROUND = #d9e0e7
+   * Set TABLE_HEADER_ACCENT_BACKGROUND = #345
 ---++++ ATTACHMENT_AND_FORM_BACKGROUND Attachment, form (light yellow)
    * Set ATTACHMENT_AND_FORM_BACKGROUND = #FEFCF6
 ---++++ DIFF_HEADER_BACKGROUND Diff header (dark gray) (same as GRAYED_OUT_TEXT)
@@ -133,9 +143,7 @@ Edit this topic, and change the color variables as you like.
 ---++++ LAYOUT_ELEMENT_BORDER Main layout elements (neutral tone) 
    * Set LAYOUT_ELEMENT_BORDER = #ccc
 ---++++ TABLE_BORDER Table border, sup (light neutral tone)
-   * Set TABLE_BORDER = #ebebeb
----++++ TABLE_HEADER_ACCENT_BORDER
-   * Set TABLE_HEADER_ACCENT_BORDER = #dbdbdb
+   * Set TABLE_BORDER = #ccc
    
 <!-- END OF COLOR VARIABLES -->
 
@@ -308,13 +316,14 @@ select {
 .twikiTable th a:link,
 .twikiTable th a:visited,
 .twikiTable th a font {
-	color:%LINK_TEXT_NORMAL%;
+	color:%LINK_TEXT_NORMAL_TABLE_HEADER%;
+	border-color:%LINK_TEXT_NORMAL_BORDER_TABLE_HEADER%;
 }
 .twikiTable th a:hover,
 .twikiTable th a:hover font {
 	background-color:transparent;
-	color:%LINK_BACKGROUND_HOVER%;
-	border-color:%LINK_BACKGROUND_HOVER%;
+	color:%LINK_TEXT_HOVER_TABLE_HEADER%;
+	border-color:%LINK_TEXT_HOVER_TABLE_HEADER%;
 }
 
 /* TablePlugin - sorting of table columns */
@@ -330,13 +339,13 @@ th.twikiSortedDescendingCol a:link,
 th.twikiSortedDescendingCol a:link font,
 th.twikiSortedDescendingCol a:visited,
 th.twikiSortedDescendingCol a:visited font {
-	border-color:%MUTED_TEXT%;
+	border-color:%LINK_TEXT_SORTED_TABLE_HEADER%;
 }
 th.twikiSortedAscendingCol a:hover,
 th.twikiSortedAscendingCol a:hover font,
 th.twikiSortedDescendingCol a:hover,
 th.twikiSortedDescendingCol a:hover font {
-	border-color:%LINK_BACKGROUND_HOVER%;
+	border-color:%LINK_TEXT_HOVER_TABLE_HEADER%;
 }
 
 /* TwistyContrib */
@@ -521,7 +530,7 @@ a:hover .twikiAccessKey {
 }
 #patternLeftBarContents a:link,
 #patternLeftBarContents a:visited {
-	color:%CODE_TEXT%;
+	color:%SIDE_BAR_LINK_TEXT%;
 }
 #patternLeftBarContents a:hover {
 	color:%LINK_TEXT_HOVER%;
@@ -534,7 +543,7 @@ a:hover .twikiAccessKey {
 	color:%GRAYED_OUT_TEXT%;
 }
 #patternLeftBarContents .patternLeftBarPersonal {
-	border-color:%INFO_BORDER%;
+	border-color:%LAYOUT_ELEMENT_BORDER%;
 }
 #patternLeftBarContents .patternLeftBarPersonal a:link,
 #patternLeftBarContents .patternLeftBarPersonal a:visited {
@@ -769,7 +778,3 @@ tr.twikiDiffDebug .twikiDiffUnchangedText {
 }
 %ENDATTACH%
 </verbatim>
-
-%META:FILEATTACHMENT{name="theme-colors.css" attachment="theme-colors.css" attr="" stream="GLOB(0x958d924)" tmpFilename="/tmp/9bgIDdpIIv" user="Main.ArthurClemens" version="10"}%
-%META:FILEATTACHMENT{name="test.css" attr="" autoattached="1" comment="" date="1161086083" path="test.css" size="12467" user="UnknownUser" version=""}%
-%META:REVCOMMENT{comment_1="Attached file !theme-colors.css" minor_1="0" ncomments="1" rev_1="" t_1="Upload1161086821"}%
