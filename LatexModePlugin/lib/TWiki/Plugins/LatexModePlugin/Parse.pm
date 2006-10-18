@@ -67,6 +67,59 @@ while (<DATA>) {
 # print STDERR map {"$_  "} sort keys %commands;
 # print STDERR ":Keys\n";
 
+my %entities = (  '\`{A}'   => '&Agrave;',
+                  "\\\'{A}" => '&Aacute;',
+                  '\^{A}'   => '&Acirc;' ,
+                  '\"{A}'   => '&Auml;'  ,
+                  '\c{C}'   => '&Ccedil;',
+                  '\`{E}'   => '&Egrave;',
+                  "\\\'{E}" => '&Eacute;',
+                  '\^{E}'   => '&Ecirc;' ,
+                  '\"{E}'   => '&Euml;'  ,
+                  '\`{I}'   => '&Igrave;',
+                  "\\\'{I}" => '&Iacute;',
+                  '\^{I}'   => '&Icirc;' ,
+                  '\"{I}'   => '&Iuml;'  ,
+                  '\~{N}'   => '&Ntilde;',
+                  '\`{O}'   => '&Ograve;',
+                  "\\\'{O}" => '&Oacute;',
+                  '\^{O}'   => '&Ocirc;' ,
+                  '\~{O}'   => '&Otilde;',
+                  '\"{O}'   => '&Ouml;'  ,
+                  '\`{U}'   => '&Ugrave;',
+                  "\\\'{U}" => '&Uacute;',
+                  '\^{U}'   => '&Ucirc;' ,
+                  '\"{U}'   => '&Uuml;'  ,
+                  "\\\'{Y}" => '&Yacute;', 
+                  '\"{Y}'   => '&Yuml;',
+                  '\`{a}'   => '&agrave;',
+                  "\\\'{a}" => '&aacute;',
+                  '\^{a}'   => '&acirc;' ,
+                  '\"{a}'   => '&auml;'  ,
+                  '\c{c}'   => '&ccedil;',
+                  '\`{e}'   => '&egrave;',
+                  "\\\'{e}" => '&eacute;',
+                  '\^{e}'   => '&ecirc;' ,
+                  '\"{e}'   => '&euml;'  ,
+                  '\`{i}'   => '&igrave;',
+                  "\\\'{i}" => '&iacute;',
+                  '\^{i}'   => '&icirc;' ,
+                  '\"{i}'   => '&iuml;'  ,
+                  '\~{n}'   => '&ntilde;',
+                  '\`{o}'   => '&ograve;',
+                  "\\\'{o}" => '&oacute;',
+                  '\^{o}'   => '&ocirc;' ,
+                  '\~{o}'   => '&otilde;',
+                  '\"{o}'   => '&ouml;'  ,
+                  '\`{u}'   => '&ugrave;',
+                  "\\\'{u}" => '&uacute;',
+                  '\^{u}'   => '&ucirc;' ,
+                  '\"{u}'   => '&uuml;'  ,
+                  "\\\'{y}" => '&yacute;', 
+                  '\"{y}'   => '&yuml;' 
+                  );
+
+
 sub printF {
 
     my ($t) = @_;
@@ -166,14 +219,15 @@ sub handleAlltex
         
         $pre = $4;     # preamble
         $doc = $5;     # document
+
+        TWiki::Func::getContext()->{'LMPcontext'}->{'preamble'} .= $pre;
+        TWiki::Func::getContext()->{'LMPcontext'}->{'docclass'} .= $1;
+        printF($1);
     }
     else {
         $pre = '';
         $doc = $math_string;
     }
-    TWiki::Func::getContext()->{'LMPcontext'}->{'preamble'} .= $pre;
-    TWiki::Func::getContext()->{'LMPcontext'}->{'docclass'} .= $1;
-    printF($1);
 
     if ( exists(TWiki::Func::getContext()->{'genpdflatex'}) ) {
       # Note: needs improvement
@@ -198,6 +252,8 @@ The parsing is done in three stages:
 
 =cut
 
+    $doc = protectVerbatim( $doc );
+    &mathShortToLong($doc);
     $doc = extractEnvironments( $doc )
         if ($TWiki::Plugins::LatexModePlugin::Parse::RELEASE > 0.01);
 
@@ -253,6 +309,14 @@ sub convertSimple
               '\\\\' => "<br>",
               '\vfill' => '',
               '\newblock' => '',
+              '``' => '&ldquo;',
+              "''" => '&rdquo;', 
+              '\\o' => '&oslash;',
+              '\\O' => '&Oslash;',
+              '\\AA' => '&Aring;',
+              '\\aa' => '&aring;',
+              '\\ae' => '&aelig;',
+              '\\AE' => '&AElig;',
               '\\sloppy' => '' );
 
     foreach my $c ( keys %h) {
@@ -273,21 +337,21 @@ sub convertEmbed
               '\\tiny' => [ '<font size="-3">','</font>' ],
               '\\footnotesize' => [ '<font size="-4">','</font>' ],
               '\\large' => [ '<font size="+1">','</font>' ],
+              '\\raggedleft' => [ '<div style="text-align:right">', '</div>' ],
               '\\centering' => [ '<div align="center">', '</div>' ]
               );
 
     $b =~ s/^\s*\{(.*)(\\\/)?\}\s*$/$1/gs;
 
-    # open(F,">>/tmp/alltex_uH.txt");
-    # print F $b."\n";
+    
+    # printF("covertEmb: $b\n");
+    return($b) unless ($b=~m/\\/);
     foreach my $c ( keys %h) {
-        # print F "$c --> @{$h{'$c'}}\n";
+        # printF( "$c --> @{$h{'$c'}}\n" );
         if ($b =~ s/\Q$c\E//g) {
             $b = $h{$c}[0].$b.$h{$c}[1];
         }
     }
-
-    # close(F);
     return($b);
 }
 
@@ -362,13 +426,30 @@ sub extractBlocks {
 
         my ($cmd,$star,$opts) = ('','','');
         ($cmd,$star,$opts) = ($1,$2,$3) if
-            ($b =~ m!(\\\w+)\b(\*?)(\[
-                                  ([\\\w\d\.\=\,\s]+?)
-                                  \])?$!xs); # test for a latex command;
-        printF( "\nFound command: \n$cmd$star ") if ($cmd ne '');
-        defined($opts) ? printF(" opts = $opts \n") : printF("\n");
+            (
+             ($b =~ m!(\\[\"\'\`\^\~\.duvtbHc])$!)
+             or 
+             ($b =~ m!(\\\w+)\b(\*?)(\[
+                                     ([\\\w\d\.\=\,\s]+?)
+                                     \])?$!xs) # test for a latex command;
+             );
+        $star = '' unless defined($star);
+        printF( "\nFound command: $cmd$star ") if ($cmd ne '');
+        (defined($opts) and ($opts ne '') ) ?
+            printF(" opts = $opts \n") : printF("\n");
         if ($cmd ne '') {
-            if ( exists( $commands{$cmd} ) ) {
+            if ($cmd =~ m!\\[\`\"\'\^\~\.duvtbHc]$!) {
+                # map special text characters to html entities
+                printF("b: $b\n");
+                $b =~ s/\\$cmd$//;
+                printF("b: $b\n");
+                $txt .= $b;
+                my $t = $cmd.shift(@a);
+                $txt .= ( exists( $entities{$t} ) ) ? 
+                    $entities{$t} : 
+                    '%BEGINLATEX{inline="1"}%'.$t.'%ENDLATEX%';
+            }
+            elsif ( exists( $commands{$cmd} ) ) {
                 my $sz = 0;
                 my $str = $commands{$cmd}{'command'};
                 # print F $b." ";
@@ -386,6 +467,7 @@ sub extractBlocks {
                     }
                 } while ($sz < $commands{$cmd}{'size'});
                 $str =~ s/\$o/$opts/;
+                $str =~ s/\$c/$cmd/;
                 printF("\n$str\n---\n");
 
                 if ($cmd eq '\label') {
@@ -464,12 +546,16 @@ sub extractBlocks {
                 convertSimple($b);
             }
 
-            $b = convertEmbed($b); # if ($b =~ m/\\/);
+            # printF("calling convertEmbed\n");
+            $b = convertEmbed($b);
             $txt .= $b;
+            # printF( length($txt)."\n" );
         }
     } while (scalar(@a)>0);
 
     #there is still some $doc left:
+    $doc = convertEmbed($doc) if ($doc =~ m/\\/);
+    convertSimple($doc);
     $txt .= $doc;
 
     return($txt);
@@ -506,25 +592,48 @@ sub extractEnvironments {
 	($pre,$block,$doc) = umbrellaHook( $doc,
                                            '\\\\begin\s*\{.*?\}',
                                            '\\\\end\s*\{.*?\}');
-        &pushVerb($pre,$1) if ($pre =~ m/\\verb(.)/);
-        &mathShortToLong($pre);
-        $pre = extractEnvironments($pre) if ($pre =~ m/\\begin\{.*?math\}/);
+        # &pushVerb($pre,$1) if ($pre =~ m/\\verb(.)/);
+        # &mathShortToLong($pre);
+        # $pre = extractEnvironments($pre) if ($pre =~ m/\\begin\{.*?math\}/);
 	$txt .= $pre;
 
-        if ($block =~ m/^\\begin\{verbatim\}/) {
-            $txt .= '%VERBATIMBLOCK{'.storeVerbatim($block).'}%';
-        } else {
-            &pushVerb($block,$1) if ($block =~ m/\\verb(.)/);
-            &mathShortToLong($block);
+        # if ($block =~ m/^\\begin\{verbatim\}/) {
+        #     $txt .= '%VERBATIMBLOCK{'.storeVerbatim($block).'}%';
+        # } else {
+        #     &pushVerb($block,$1) if ($block =~ m/\\verb(.)/);
+        #     &mathShortToLong($block);
             $txt .= convertEnvironment($block) if ($block ne '');
-        }
+        # }
     } while ($block ne '');
 
     #there is still some $doc left:
-    &pushVerb($doc,$1) if ($doc =~ m/\\verb(.)/);
-    &mathShortToLong($doc);
-    $doc = extractEnvironments($doc) if ($doc =~ m/\\begin\{.*?math\}/);
+    # &pushVerb($doc,$1) if ($doc =~ m/\\verb(.)/);
+    # &mathShortToLong($doc);
+    # $doc = extractEnvironments($doc) if ($doc =~ m/\\begin\{.*?math\}/);
     $txt .= $doc;
+
+    return($txt);
+}
+
+sub protectVerbatim {
+
+    my $doc = $_[0];
+
+    my($pre,$block);
+    my $txt = '';
+    do {
+	($pre,$block,$doc) = umbrellaHook( $doc,
+                                           '\\\\begin\s*\{verbatim\}',
+                                           '\\\\end\s*\{verbatim\}');
+	$txt .= $pre;
+        $txt .= '%VERBATIMBLOCK{'.storeVerbatim($block).'}%'
+            unless ($block eq '');
+    } while ($block ne '');
+
+    #there is still some $doc left:
+    $txt .= $doc;
+
+    &pushVerb($txt,$1) if ($txt =~ m/\\verb(.)/);
 
     return($txt);
 }
@@ -607,12 +716,19 @@ sub convertEnvironment
         # print STDERR $block."\n";
         $txt .= '%BEGINLATEX{inline="0" '.$label.'}%'.$block.'%ENDLATEX%';
     }
+    elsif ( ($bname eq 'flushright') ) {
+        $block =~ s!^\\begin\{$bname\}!<div style="text-align:right">!;
+        $block =~ s!\\end\{$bname\}$!</div>!;
+        
+        $block = extractEnvironments($block);
+        $txt .= extractBlocks( $block );
+    }
     elsif ( ($bname eq 'quotation') || ($bname eq 'quote') ) {
         $block =~ s!^\\begin\{$bname\}!<blockquote>!;
         $block =~ s!\\end\{$bname\}$!</blockquote>!;
 
         $block = extractEnvironments($block);
-        $block = extractBlocks( $block );
+        $txt .= extractBlocks( $block );
     }
     # elsif ($bname eq 'verbatim') {
     #     $block =~ s!^\\begin\{$bname\}!<verbatim>!;
@@ -710,7 +826,8 @@ sub convertEnvironment
         $env =~ s/\~/&nbsp;/g;
         while ($env =~ m!\{(.*?)\}!g) {
             my $t = $1;
-            $env =~ s/\{$t\}/$t/ unless ($env =~ m!\\[^\s]+\{$t\}!);
+            $env =~ s/\{$t\}/$t/ unless ( ($env =~ m!\\[^\s]+\{$t\}!) or
+                                          ($env =~ m!%\w+\{$t\}%!) );
         }
         $txt .= $env."</table></div>\n";
     }
@@ -855,7 +972,7 @@ use TWiki:Plugins.PerlDocPlugin to see list of supported commands
 
    * commands with limited support
       * includegraphics, 
-      * label (works with equations and sections) 
+      * label (works with equations, figures, tables, and sections) 
       * title, address, name, maketitle (these work, but don't match the latex class output of the original document)
 
    * commands that are ignored
@@ -997,6 +1114,7 @@ sub addToTitle {
     my ($str) = @_;   
 
     TWiki::Func::getContext()->{'LMPcontext'}->{'title'} .= $str."\n";
+    printF( "title now:\n".TWiki::Func::getContext()->{'LMPcontext'}->{'title'} );
     return('');
 }
 

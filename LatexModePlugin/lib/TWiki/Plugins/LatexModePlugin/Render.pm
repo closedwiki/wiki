@@ -294,7 +294,11 @@ COLORS
                 '<td width=10>&nbsp;</td>'.
                 '<td width="100%" align="center">'.
                 "<img src=\"$image_name\" $str alt=\"$escaped\" /></td>".
-                "<td width=10>(".$LMPc{'eqn'}.")</dt></tr></table>\n";
+                "<td width=10>(".
+                '<a href="#'.$opts{'label'}.'" title="'.$opts{'label'}.'">'.
+                $LMPc{'eqn'}.
+                '</a>'.
+                ")</dt></tr></table>\n";
             
             if ( exists( $eqnrefs{ $opts{'label'} } ) ) {
                 $LMPc{'error_catch_all'} .= 
@@ -303,7 +307,7 @@ COLORS
             } else {
                 $eqnrefs{ $opts{'label'} } = $LMPc{'eqn'};
             }
-            
+
         } else {
             $txt = "<div align=\"center\"><img src=\"$image_name\" $str alt=\"$escaped\" /></div>";
         }
