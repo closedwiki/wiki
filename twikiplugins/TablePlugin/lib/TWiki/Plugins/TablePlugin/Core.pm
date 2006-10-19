@@ -499,6 +499,7 @@ sub emitTable {
                                       $downchar));
                         $attr->{class} = 'twikiSortedDescendingCol';
                     }
+                    $attr->{class} = _appendFirstRowCssClass( $attr->{class} ) if $colCount == 0;
                 }
                 if( $headerColor ) {
                     $cell = CGI::font( { color => $headerColor }, $cell );
@@ -555,6 +556,13 @@ sub emitTable {
     $text .= $currTablePre.CGI::end_table()."\n";
     _setDefaults();
     return $text;
+}
+
+sub _appendFirstRowCssClass() {
+	my ( $className ) = @_;
+	$className .= ' ' if length( $className ) > 0;
+	$className .= 'twikiFirstCol';
+	return $className;
 }
 
 sub handler {
