@@ -930,7 +930,7 @@ sub getScriptUrl {
     # SMELL: topics and webs that contain spaces?
 
     my $url;
-    if( defined $TWiki::cfg{ScriptUrlPaths} ) {
+    if( defined $TWiki::cfg{ScriptUrlPaths} && $script) {
         $url = $TWiki::cfg{ScriptUrlPaths}{$script};
     }
     unless( defined( $url )) {
@@ -1249,15 +1249,6 @@ sub new {
         $web = $1 unless $web;
     }
 
-    # Check to see if we just dissected a web path missing its WebHome
-    if($topic ne "") {
-      if(!$this->{store}->topicExists($web,$topic)) {
-	if($this->{store}->webExists("$web/$topic")) {
-	  $web .= '/'.$topic;
-	  $topic = "";
-	}
-      }
-    }
     # All roads lead to WebHome
     $topic = $TWiki::cfg{HomeTopicName} if ( $topic =~ /\.\./ );
     $topic =~ s/$TWiki::cfg{NameFilter}//go;
@@ -2110,7 +2101,7 @@ With parameter $sep any string may be used as separator between the word compone
 =cut
 
 sub spaceOutWikiWord {
-    my $word = shift;
+    my $word = shift || '';
     my $sep = shift || ' ';
     $word =~ s/([$regex{lowerAlpha}])([$regex{upperAlpha}$regex{numeric}]+)/$1$sep$2/go;
     $word =~ s/([$regex{numeric}])([$regex{upperAlpha}])/$1$sep$2/go;
