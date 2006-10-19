@@ -490,6 +490,7 @@ sub renderFieldForEdit {
         my $isValues = ( $type =~ /\+values/ );
         my $choices = '';
         foreach $item ( @$options ) {
+	    $item = &TWiki::urlDecode($item);
             my $params = {};
             my $itemValue = $item;
             if( $isValues ) {
