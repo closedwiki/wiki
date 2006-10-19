@@ -275,7 +275,7 @@ sub _processTableRow {
                 }
 
                 $attr->{valign} = $vAlign if $vAlign;
-                $attr->{class} = _appendFirstRowCssClass( $attr->{class} ) if $colCount == 0;
+                $attr->{class} = _appendFirstColumnCssClass( $attr->{class} ) if $colCount == 0;
                 push @row, { text => $value, attrs => $attr, type => 'th' };
             } else {
                 if( /^\s*(.*?)\s*$/ ) {   # strip white spaces
@@ -287,7 +287,7 @@ sub _processTableRow {
                     $attr->{align} = $align;
                 }
                 $attr->{valign} = $vAlign if $vAlign;
-                $attr->{class} = _appendFirstRowCssClass( $attr->{class} ) if $colCount == 0;
+                $attr->{class} = _appendFirstColumnCssClass( $attr->{class} ) if $colCount == 0;
                 push @row, { text => $value, attrs => $attr, type => 'td' };
             }
         }
@@ -354,7 +354,7 @@ sub _stripHtml {
 }
 
 # Append CSS class name for "first column" to (possibly) already defined class names
-sub _appendFirstRowCssClass {
+sub _appendFirstColumnCssClass {
 	my ( $className ) = @_;
 	$className ||= '';
 	$className .= ' ' if length( $className ) > 0;
@@ -517,7 +517,7 @@ sub emitTable {
                                       $downchar));
                         $attr->{class} = 'twikiSortedDescendingCol';
                     }
-                    $attr->{class} = _appendFirstRowCssClass( $attr->{class} ) if $colCount == 0;
+                    $attr->{class} = _appendFirstColumnCssClass( $attr->{class} ) if $colCount == 0;
                 }
                 if( $headerColor ) {
                     $cell = CGI::font( { color => $headerColor }, $cell );
