@@ -356,6 +356,7 @@ sub _stripHtml {
 # Append CSS class name for "first column" to (possibly) already defined class names
 sub _appendFirstRowCssClass {
 	my ( $className ) = @_;
+	$className ||= '';
 	$className .= ' ' if length( $className ) > 0;
 	$className .= 'twikiFirstCol';
 	return $className;
