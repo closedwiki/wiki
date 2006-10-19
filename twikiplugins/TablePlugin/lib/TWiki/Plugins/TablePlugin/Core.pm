@@ -214,7 +214,6 @@ sub _processTableRow {
     $span = 0;
     my $value = '';
     foreach( split( /\|/, $theRow ) ) {
-        $colCount++;
         my $attr = {};
         $span = 1;
         #AS 25-5-01 Fix to avoid matching also single columns
@@ -235,15 +234,15 @@ sub _processTableRow {
                 $attr->{align} = 'center';
             }
         }
-        if( defined $columnWidths[$colCount-1] &&
-              $columnWidths[$colCount-1] && $span <= 2 ) {
-            $attr->{width} = $columnWidths[$colCount-1];
+        if( defined $columnWidths[$colCount] &&
+              $columnWidths[$colCount] && $span <= 2 ) {
+            $attr->{width} = $columnWidths[$colCount];
         }
         if( /^\s*\^\s*$/ ) { # row span above
-            $rowspan[$colCount-1]++;
+            $rowspan[$colCount]++;
             push @row, { text => $value, type => 'Y' };
         } else {
-            for (my $col = $colCount-1; $col < ($colCount+$span-1); $col++) {
+            for (my $col = $colCount; $col < ($colCount+$span); $col++) {
                 if( defined($rowspan[$col]) && $rowspan[$col] ) {
                     my $nRows = scalar(@curTable);
                     my $rspan = $rowspan[$col]+1;
@@ -252,15 +251,31 @@ sub _processTableRow {
                     undef($rowspan[$col]);
                 }
             }
-            if( /^\s*\*(.*)\*\s*$/ ) {
+
+			my $direction = $up ? 0 : 1;
+			my $dir = 0;
+			$dir = $direction if( defined( $sortCol ) &&
+                                        $colCount == $sortCol );
+			if( defined( $requestedTable ) &&
+					defined( $sortCol ) && 
+						( $requestedTable eq $tableCount ) &&
+							( $colCount == $sortCol )) {
+				if( $dir == 0 ) {
+					$attr->{class} .= 'twikiSortedAscendingCol';
+				} else {
+					$attr->{class} .= 'twikiSortedDescendingCol';
+				}
+			}
+			
+			if( /^\s*\*(.*)\*\s*$/ ) {
                 $value = $1;
                 if( @headerAlign ) {
-                    my $align = @headerAlign[($colCount - 1) % ($#headerAlign + 1) ];
+                    my $align = @headerAlign[$colCount % ($#headerAlign + 1) ];
                     $attr->{align} = $align;
                 }
 
                 $attr->{valign} = $vAlign if $vAlign;
-                $attr->{class} = 'twikiFirstCol' if $colCount == 1;
+                $attr->{class} = _appendFirstRowCssClass( $attr->{class} ) if $colCount == 0;
                 push @row, { text => $value, attrs => $attr, type => 'th' };
             } else {
                 if( /^\s*(.*?)\s*$/ ) {   # strip white spaces
@@ -268,11 +283,11 @@ sub _processTableRow {
                 }
                 $value = $_;
                 if( @dataAlign ) {
-                    my $align = @dataAlign[($colCount - 1) % ($#dataAlign + 1) ];
+                    my $align = @dataAlign[$colCount % ($#dataAlign + 1) ];
                     $attr->{align} = $align;
                 }
                 $attr->{valign} = $vAlign if $vAlign;
-                $attr->{class} = 'twikiFirstCol' if $colCount == 1;
+                $attr->{class} = _appendFirstRowCssClass( $attr->{class} ) if $colCount == 0;
                 push @row, { text => $value, attrs => $attr, type => 'td' };
             }
         }
@@ -281,6 +296,7 @@ sub _processTableRow {
             $colCount++;
             $span--;
         }
+        $colCount++;
     }
     push @curTable, \@row;
     return $currTablePre.'<nop>'; # Avoid TWiki converting empty lines to new paras
@@ -290,13 +306,6 @@ sub _processTableRow {
 # indicates the context of the table (body or file attachment)
 sub _shouldISortThisTable {
     my( $header ) = @_;
-
-    # Attachments table?
-    # This code is no longer used since attachment table formatting is 
-    # done in template attachtables.tmpl -- Arthur Clemens 13 Dec 2005
-    #if( $header->[0]->{text} =~ /FileAttachment/ ) {
-    #    return $sortAttachments;
-    #}
 
     return 0 unless $sortAllTables;
 
@@ -342,6 +351,14 @@ sub _stripHtml {
     $text =~ s/^ *//go;                          # strip leading space space
     $text = lc( $text );                         # convert to lower case
     return $text;
+}
+
+# Append CSS class name for "first column" to (possibly) already defined class names
+sub _appendFirstRowCssClass {
+	my ( $className ) = @_;
+	$className .= ' ' if length( $className ) > 0;
+	$className .= 'twikiFirstCol';
+	return $className;
 }
 
 sub emitTable {
@@ -556,13 +573,6 @@ sub emitTable {
     $text .= $currTablePre.CGI::end_table()."\n";
     _setDefaults();
     return $text;
-}
-
-sub _appendFirstRowCssClass() {
-	my ( $className ) = @_;
-	$className .= ' ' if length( $className ) > 0;
-	$className .= 'twikiFirstCol';
-	return $className;
 }
 
 sub handler {
