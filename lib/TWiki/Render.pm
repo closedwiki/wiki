@@ -92,6 +92,11 @@ sub new {
     $this->{NEWLINKSYMBOL} =
       $session->{prefs}->getPreferencesValue('NEWTOPICLINKSYMBOL')
         || CGI::sup('?');
+    $this->{NEWLINKFORMAT} =
+      $session->{prefs}->getPreferencesValue('NEWLINKFORMAT')
+        || '<span class="twikiNewLink">$text<a href="%SCRIPTURLPATH{"edit"}%/$web/$topic?topicparent=%WEB%.%TOPIC%" '.
+	   'rel="nofollow" title="%MAKETEXT{"Create this topic"}%">'.
+           '$linksymbol</a></span>';
     # tooltip init
     $this->{LINKTOOLTIPINFO} =
       $session->{prefs}->getPreferencesValue('LINKTOOLTIPINFO')
@@ -527,13 +532,12 @@ sub _renderWikiWord {
                                        $theTopic, $theLinkText, $theAnchor);
     }
     if( $doLinkToMissingPages ) {
-        my @topics = ( $theTopic );
         # CDot: disabled until SuggestSingularNotPlural is resolved
         # if ($singular && $singular ne $theTopic) {
         #     #unshift( @topics, $singular);
         # }
-        return _renderNonExistingWikiWord($this, $theWeb, \@topics,
-                                          $theLinkText, $theAnchor);
+        return _renderNonExistingWikiWord($this, $theWeb, $theTopic,
+                                          $theLinkText);
     }
     if( $doKeepWeb ) {
         return $theWeb.'.'.$theLinkText;
@@ -565,41 +569,16 @@ sub _renderExistingWikiWord {
 }
 
 sub _renderNonExistingWikiWord {
-    my ($this, $theWeb, $theTopic, $theLinkText, $theAnchor) = @_;
-    my $ans;
+    my ($this, $theWeb, $theTopic, $theLinkText) = @_;
 
-    $ans = $theLinkText;
-
-    if (ref $theTopic && ref $theTopic eq 'ARRAY') {
-        my $num = 1;
-        my @posse = ();
-        foreach my $t(@{ $theTopic }) {
-            next if ! $t;
-            push( @posse,
-                  CGI::a(
-                      { href => $this->{session}->getScriptUrl(
-                          0, 'edit', $theWeb, $t,
-                          topicparent => $this->{session}->{webName}.'.'.
-                            $this->{session}->{topicName} ),
-                        rel => 'nofollow',
-                        title => ($this->{session}->{i18n}->maketext('Create this topic'))
-                    },
-                    $this->{NEWLINKSYMBOL} x $num ));
-            $num++;
-        }
-        $ans .= join( ' ', @posse );
-    } else {
-        $ans .= CGI::a( { href=>$this->{session}->getScriptUrl(
-            0, 'edit', $theWeb, $theTopic,
-            topicparent => $this->{session}->{webName}.'.'.
-              $this->{session}->{topicName} ),
-                          rel=>'nofollow',
-                          title=>($this->{session}->{i18n}->maketext('Create this topic'))
-                    },
-                    $this->{NEWLINKSYMBOL} );
-    }
-    return CGI::span( { class=>'twikiNewLink' },
-                      $ans );
+    my $ans = $this->{NEWLINKFORMAT};
+    $ans =~ s/\$web/$theWeb/g;
+    $ans =~ s/\$topic/$theTopic/g;
+    $ans =~ s/\$text/$theLinkText/g;
+    $ans =~ s/\$linksymbol/$this->{NEWLINKSYMBOL}/g;
+    $ans = $this->{session}->handleCommonTags($ans, 
+	$this->{session}{webName}, $this->{session}{topicName});
+    return $ans;
 }
 
 # _handleWikiWord is called by the TWiki Render routine when it sees a 
