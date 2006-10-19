@@ -555,7 +555,7 @@ sub emitTable {
                 }
                 if( @dataColor ) {
                     my $color = $dataColor[$dataColorCount % ($#dataColor+1) ];
-                    $cell = CGI::font({ color=>$color }, $cell)
+                    $cell = CGI::font({ color=>$color }, ' '.$cell.' ')
                       unless $color =~ /^(|none)$/i;
                 }
                 $type = 'td' unless $type eq 'Y';
