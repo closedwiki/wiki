@@ -253,18 +253,22 @@ blockquote {
 /* TablePlugin */
 .twikiTable {
 	border-style:solid;
-	border-width:1px 0 0 1px;
-}
-.twikiTable td,
-.twikiTable th {
-	border-style:solid;
-	border-width:0 1px 1px 0;
-}
-.twikiTable th {
-    padding:6px;
+	border-width:1px 1px 0 1px;
 }
 .twikiTable td {
-    padding:3px 5px;
+	border-style:solid;
+	border-width:0 0 1px 0;
+	padding:.25em .5em;
+}
+.twikiTable th {
+	border-style:solid;
+	border-width:0 0 0 1px;
+	padding:.35em .5em;
+    text-align:center;
+    line-height:1.5em;
+}
+.twikiTable th.twikiFirstCol {
+	border-left-width:0px;
 }
 .twikiTable th a:link,
 .twikiTable th a:visited,
@@ -452,12 +456,14 @@ table.twikiFormTable th.twikiFormTableHRow {
 table.twikiFormTable td {
 	padding:3px 6px;
 	height:1.4em; /*S1*/
-	text-align:left;
 	vertical-align:top;
 }
 .twikiAttachments td {
 	/* don't show column lines in attachment listing */
 	border-width:0 0 1px 0;
+}
+.twikiAttachments th.twikiFirstCol {
+	border-width:1px;
 }
 .twikiAttachments th.twikiFirstCol,
 .twikiAttachments td.twikiFirstCol {

@@ -157,9 +157,11 @@ select {
 
 /* TablePlugin */
 .twikiTable,
-.twikiTable td,
-.twikiTable th {
+.twikiTable td {
 	border-color:#ccc;
+}
+.twikiTable th {
+	border-color:#ccc #fff;
 }
 .twikiTable th a:link,
 .twikiTable th a:visited,
@@ -175,10 +177,7 @@ select {
 }
 
 /* TablePlugin - sorting of table columns */
-.patternTopic th.twikiSortedAscendingCol,
-.patternTopic th.twikiSortedDescendingCol {
-	background-color:#345;
-}
+
 th.twikiSortedAscendingCol a:link,
 th.twikiSortedAscendingCol a:link font,
 th.twikiSortedAscendingCol a:visited,
@@ -195,6 +194,21 @@ th.twikiSortedDescendingCol a:hover,
 th.twikiSortedDescendingCol a:hover font {
 	border-color:#fff;
 }
+/* This has to be defined as attribute in the plugin topic: */
+/*
+.patternTopic th.twikiSortedAscendingCol,
+.patternTopic th.twikiSortedDescendingCol {
+	background-color:#345;
+}
+tr.twikiTableOdd td.twikiSortedAscendingCol,
+tr.twikiTableOdd td.twikiSortedDescendingCol {
+	background-color:#f5f5f5;
+}
+tr.twikiTableEven td.twikiSortedAscendingCol,
+tr.twikiTableEven td.twikiSortedDescendingCol {
+	background-color:#dce5ee;
+}
+*/
 
 /* TwistyContrib */
 .twistyPlaceholder {
@@ -281,25 +295,49 @@ table.twikiFormTable th.twikiFormTableHRow*/ {
 .twikiAttachments td {
 	background-color:#fff;
 }
-.twikiAttachments th a:link,
-.twikiAttachments th a:visited,
+.twikiAttachments .twikiTable th a:link,
+.twikiAttachments .twikiTable th a:visited,
 table.twikiFormTable th.twikiFormTableHRow a:link,
 table.twikiFormTable th.twikiFormTableHRow a:visited {
 	color:#06c;
 }
-.twikiAttachments th font,
+.twikiAttachments .twikiTable th font,
 table.twikiFormTable th.twikiFormTableHRow font {
 	color:#06c;
 }
-.twikiAttachments th a:hover,
-table.twikiFormTable th.twikiFormTableHRow a:hover {
-	border-color:#06c;
+.twikiAttachments .twikiTable th a:hover,
+.twikiAttachments .twikiTable th a:hover font {
 	background-color:transparent;
+	color:#D6000F;
+	border-color:#D6000F;
 }
-.twikiAttachments th.twikiSortedAscendingCol,
-.twikiAttachments th.twikiSortedDescendingCol {
-	background-color:#6b7f93;
+.twikiAttachments .twikiTable th.twikiSortedAscendingCol,
+.twikiAttachments .twikiTable th.twikiSortedDescendingCol {
+	background-color:#eee;
 }
+.twikiAttachments th.twikiSortedAscendingCol a:link,
+.twikiAttachments th.twikiSortedAscendingCol a:link font,
+.twikiAttachments th.twikiSortedAscendingCol a:visited,
+.twikiAttachments th.twikiSortedAscendingCol a:visited font,
+.twikiAttachments th.twikiSortedDescendingCol a:link,
+.twikiAttachments th.twikiSortedDescendingCol a:link font,
+.twikiAttachments th.twikiSortedDescendingCol a:visited,
+.twikiAttachments th.twikiSortedDescendingCol a:visited font {
+	border-color:#999;
+}
+.twikiAttachments th.twikiSortedAscendingCol a:hover,
+.twikiAttachments th.twikiSortedAscendingCol a:hover font,
+.twikiAttachments th.twikiSortedDescendingCol a:hover,
+.twikiAttachments th.twikiSortedDescendingCol a:hover font {
+	border-color:#D6000F;
+}
+.twikiAttachments tr.twikiTableOdd td.twikiSortedAscendingCol,
+.twikiAttachments tr.twikiTableOdd td.twikiSortedDescendingCol,
+.twikiAttachments tr.twikiTableEven td.twikiSortedAscendingCol,
+.twikiAttachments tr.twikiTableEven td.twikiSortedDescendingCol {
+	background-color:#f5f5f5  ;
+}
+
 .twikiFormSteps {
 	background-color:#F6FAFD;
 	border-color:#E2DCC8;
