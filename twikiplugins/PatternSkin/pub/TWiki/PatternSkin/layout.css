@@ -158,7 +158,4 @@ from esc tab hack moz min-height solution ***/
 .twikiHidden {
 	display:none;
 }
-.twikiLast,
-.patternTopic .twikiLast {
-	border-bottom:0px;
-}
+
