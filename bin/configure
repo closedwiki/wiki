@@ -429,6 +429,9 @@ sub _actionInstallExtension {
 
 sub _actionConfigure {
 
+    $TWiki::Configure::UI::toterrors = 0;
+    $TWiki::Configure::UI::totwarnings = 0;
+
     print CGI::h1( 'Configuration');
 
     # The first three sections go without a root
@@ -567,3 +570,4 @@ DIVS
 }
 
 1;
+
