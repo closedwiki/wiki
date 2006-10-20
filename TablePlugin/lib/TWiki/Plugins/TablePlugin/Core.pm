@@ -142,20 +142,34 @@ sub _parseParameters {
     $tmp = $params{valign};
     $vAlign = $tmp if( defined $tmp );
 
-    $tmp = $params{headerbg};
-    $headerBg = $tmp if( defined $tmp );
+    my $tmpheaderbg = $params{headerbg};
+    $headerBg = $tmpheaderbg if( defined $tmpheaderbg );
 
+	# only set color if it is defined in %TABLE{}% attributes
 	$tmp = $params{headerbgsorted};
-    $headerBgSorted = ( defined $tmp ) ? $tmp : $headerBg;
+	if ( defined $tmp ) {
+		$headerBgSorted = $tmp;
+	} else {
+		if ( defined $tmpheaderbg ) {
+			$headerBgSorted = $tmpheaderbg;
+		}
+	}
     
     $tmp = $params{headercolor};
     $headerColor = $tmp if( defined $tmp );
 
-    $tmp = $params{databg};
-    @dataBg = split( /,\s*/, $tmp ) if( defined $tmp );
+    my $tmpdatabg = $params{databg};
+    @dataBg = split( /,\s*/, $tmpdatabg ) if( defined $tmpdatabg );
 
+	# only set color if it is defined in %TABLE{}% attributes
 	$tmp = $params{databgsorted};
-    @dataBgSorted = ( defined $tmp ) ? split( /,\s*/, $tmp ) : @dataBg;
+	if ( defined $tmp ) {
+		@dataBgSorted = split( /,\s*/, $tmp );
+	} else {
+		if ( defined $tmpdatabg ) {
+			@dataBgSorted = split( /,\s*/, $tmpdatabg );
+		}
+	}
     
     $tmp = $params{datacolor};
     @dataColor = split( /,\s*/, $tmp ) if( defined $tmp );
