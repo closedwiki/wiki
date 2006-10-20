@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1153079538" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1161409719" format="1.1" version="$Rev$"}%
 ---+!! TWiki Documentation Graphics and Filetype icons
 
 This is the TWiki icon library. The graphics can be used in topics and by web applications. 
@@ -146,14 +146,14 @@ Other usage: [[%TOPIC%#Usage_extended][see below]].
 | <img src="%ATTACHURLPATH%/led-box-red.gif" alt="Red led" title="Red led" />  | =led-box-red.gif= | Red led | =%<nop>ICON{led-box-red}%= |
 | <img src="%ATTACHURLPATH%/led-box-yellow.gif" alt="Yellow led" title="Yellow led" />  | =led-box-yellow.gif= | Yellow led | =%<nop>ICON{led-box-yellow}%= |
 | <img src="%ATTACHURLPATH%/tag.gif" alt="Tag" title="Tag" />  | =tag.gif= | Tag | =%<nop>ICON{tag}%= |
-| <img src="%ATTACHURLPATH%/tag-blue.gif" alt="Tag" title="Tag" />  | =tag-blue.gif= | Tag | =%<nop>ICON{tag-blue}%= |
-| <img src="%ATTACHURLPATH%/tag-brown.gif" alt="Tagged brown" title="Tagged brown" />  | =tag-brown.gif= | Tagged brown | =%<nop>ICON{tag-brown}%= |
-| <img src="%ATTACHURLPATH%/tag-green.gif" alt="Tagged green" title="Tagged green" />  | =tag-green.gif= | Tagged green | =%<nop>ICON{tag-green}%= |
-| <img src="%ATTACHURLPATH%/tag-magenta.gif" alt="Tagged magenta" title="Tagged magenta" />  | =tag-magenta.gif= | Tagged magenta | =%<nop>ICON{tag-magenta}%= |
-| <img src="%ATTACHURLPATH%/tag-orange.gif" alt="Tagged orange" title="Tagged orange" />  | =tag-orange.gif= | Tagged orange | =%<nop>ICON{tag-orange}%= |
-| <img src="%ATTACHURLPATH%/tag-purple.gif" alt="Tagged purple" title="Tagged purple" />  | =tag-purple.gif= | Tagged purple | =%<nop>ICON{tag-purple}%= |
-| <img src="%ATTACHURLPATH%/tag-red.gif" alt="Tagged red" title="Tagged red" />  | =tag-red.gif= | Tagged red | =%<nop>ICON{tag-red}%= |
-| <img src="%ATTACHURLPATH%/tag-yellow.gif" alt="Tagged yellow" title="Tagged yellow" />  | =tag-yellow.gif= | Tagged yellow | =%<nop>ICON{tag-yellow}%= |
+| <img src="%ATTACHURLPATH%/tag-blue.gif" alt="Blue tag" title="Blue tag" />  | =tag-blue.gif= | Blue tag | =%<nop>ICON{tag-blue}%= |
+| <img src="%ATTACHURLPATH%/tag-brown.gif" alt="Brown tag" title="Brown tag" />  | =tag-brown.gif= | Brown tag | =%<nop>ICON{tag-brown}%= |
+| <img src="%ATTACHURLPATH%/tag-green.gif" alt="Green tag" title="Green tag" />  | =tag-green.gif= | Green tag | =%<nop>ICON{tag-green}%= |
+| <img src="%ATTACHURLPATH%/tag-magenta.gif" alt="Magenta tag" title="Magenta tag" />  | =tag-magenta.gif= | Magenta tag | =%<nop>ICON{tag-magenta}%= |
+| <img src="%ATTACHURLPATH%/tag-orange.gif" alt="Orange tag" title="Orange tag" />  | =tag-orange.gif= | Orange tag | =%<nop>ICON{tag-orange}%= |
+| <img src="%ATTACHURLPATH%/tag-purple.gif" alt="Purple tag" title="Purple tag" />  | =tag-purple.gif= | Purple tag | =%<nop>ICON{tag-purple}%= |
+| <img src="%ATTACHURLPATH%/tag-red.gif" alt="Red tag" title="Red tag" />  | =tag-red.gif= | Red tag | =%<nop>ICON{tag-red}%= |
+| <img src="%ATTACHURLPATH%/tag-yellow.gif" alt="Yellow tag" title="Yellow tag" />  | =tag-yellow.gif= | Yellow tag | =%<nop>ICON{tag-yellow}%= |
 
 ---+++ %ICON{home}% Navigation icons
 
@@ -210,6 +210,7 @@ Other usage: [[%TOPIC%#Usage_extended][see below]].
 | <img src="%ATTACHURLPATH%/code.gif" alt="Code" title="Code" />  | =code.gif= | Code | =%<nop>ICON{code}%= |
 | <img src="%ATTACHURLPATH%/package.gif" alt="Package" title="Package" />  | =package.gif= | Package | =%<nop>ICON{package}%= |
 | <img src="%ATTACHURLPATH%/plugin.gif" alt="Plugin" title="Plugin" />  | =plugin.gif= | Plugin | =%<nop>ICON{plugin}%= |
+| <img src="%ATTACHURLPATH%/tag.gif" alt="Tag" title="Tag" />  | =tag.gif= | Tag | =%<nop>ICON{tag}%= |
 | <img src="%ATTACHURLPATH%/searchpackage.gif" alt="Search package" title="Search package" />  | =searchpackage.gif= | Search package | =%<nop>ICON{searchpackage}%= |
 | <img src="%ATTACHURLPATH%/searchtag.gif" alt="Search tag" title="Search tag" />  | =searchtag.gif= | Search tag | =%<nop>ICON{searchtag}%= |
 | <img src="%ATTACHURLPATH%/skin.gif" alt="Skin" title="Skin" />  | =skin.gif= | Skin | =%<nop>ICON{skin}%= |
