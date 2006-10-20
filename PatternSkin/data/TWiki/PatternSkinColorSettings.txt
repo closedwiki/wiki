@@ -1,3 +1,4 @@
+%META:TOPICINFO{author="ArthurClemens" date="1161297394" format="1.1" reprev="1.2" version="1.2"}%
 ---+ !!Color scheme settings for %TWIKIWEB%.PatternSkin
 *Appearance: text colors, background colors, border colors.*
 
@@ -41,13 +42,13 @@ Edit this topic, and change the color variables as you like.
 ---++++ LINK_TEXT_NORMAL_TABLE_HEADER Table header link text
    * Set LINK_TEXT_NORMAL_TABLE_HEADER = #fff
 ---++++ LINK_TEXT_NORMAL_BORDER_TABLE_HEADER Table header link border
-   * Set LINK_TEXT_NORMAL_BORDER_TABLE_HEADER = #ccc
+   * Set LINK_TEXT_NORMAL_BORDER_TABLE_HEADER = #bbb
 ---++++ LINK_TEXT_SORTED_TABLE_HEADER Sorted table header link text
    * Set LINK_TEXT_SORTED_TABLE_HEADER = #fff
 ---++++ LINK_TEXT_HOVER_TABLE_HEADER Table header link hover text
    * Set LINK_TEXT_HOVER_TABLE_HEADER = #fff
----++++ LINK_TABLE_SELECTED_COLUMN_HEADER_BORDER Link border in selected column header
-   * Set LINK_TABLE_SELECTED_COLUMN_HEADER_BORDER = #999
+---++++ LINK_BORDER_TABLE_SELECTED_COLUMN_HEADER Link border in selected column header
+   * Set LINK_BORDER_TABLE_SELECTED_COLUMN_HEADER = #999
    
 ---+++ Disabled
 ---++++ DISABLED_BORDER Disabled border
@@ -117,18 +118,14 @@ Edit this topic, and change the color variables as you like.
    * Set GENERAL_BACKGROUND = #fff
 ---++++ SIDE_BAR_BACKGROUND Side bar background
    * Set SIDE_BAR_BACKGROUND = #f9f9f9
----++++ TABLE_DATA_BACKGROUND Table data background
+   
+---++++ Table colors
+---+++++ TABLE_DATA_BACKGROUND Table data background
    * Set TABLE_DATA_BACKGROUND = #ecf2f8
----++++ TABLE_SELECTED_COLUMN_ODD_DATA_BACKGROUND Table data background of sorted column, odd row
-   * Set TABLE_SELECTED_COLUMN_ODD_DATA_BACKGROUND = #f5f5f5
----++++ TABLE_SELECTED_COLUMN_EVEN_DATA_BACKGROUND Table data background of sorted column, even row
-   * Set TABLE_SELECTED_COLUMN_EVEN_DATA_BACKGROUND = #dce5ee
----++++ TABLE_HEADER_BACKGROUND Table header background
+---+++++ TABLE_HEADER_BACKGROUND Table header background
    * Set TABLE_HEADER_BACKGROUND = #6b7f93
----++++ ATTACHMENT_TABLE_SELECTED_COLUMN_HEADER_BACKGROUND Attachment table, selected header background
-   * Set ATTACHMENT_TABLE_SELECTED_COLUMN_HEADER_BACKGROUND = #eee
----++++ ATTACHMENT_TABLE_SELECTED_COLUMN_HEADER_BACKGROUND Attachment table, selected header background
-   * Set ATTACHMENT_TABLE_SELECTED_COLUMN_DATA_BACKGROUND = #f5f5f5  
+---+++++ TABLE_SELECTED_COLUMN_HEADER_BACKGROUND Sorted table column accent background 
+   * Set TABLE_SELECTED_COLUMN_HEADER_BACKGROUND = #345
    
 ---++++ INFO_BACKGROUND Info (very light blue) (placeholder for background image)
    * Set INFO_BACKGROUND = #f5f9fd
@@ -136,8 +133,6 @@ Edit this topic, and change the color variables as you like.
    * Set TOPIC_ACTION_BACKGROUND = #FCF8EC
 ---++++ HEADER_BACKGROUND H1, H2, etc header (light yellow) 
    * Set HEADER_BACKGROUND = #FDFAF3
----++++ TABLE_SELECTED_COLUMN_HEADER_BACKGROUND Sorted table column accent background 
-   * Set TABLE_SELECTED_COLUMN_HEADER_BACKGROUND = #345
 ---++++ ATTACHMENT_AND_FORM_BACKGROUND Attachment, form (light yellow)
    * Set ATTACHMENT_AND_FORM_BACKGROUND = #FEFCF6
 ---++++ DIFF_HEADER_BACKGROUND Diff header (dark gray) (same as GRAYED_OUT_TEXT)
@@ -329,48 +324,12 @@ select {
 .twikiTable th a:visited,
 .twikiTable th a font {
 	color:%LINK_TEXT_NORMAL_TABLE_HEADER%;
-	border-color:%LINK_TEXT_NORMAL_BORDER_TABLE_HEADER%;
 }
 .twikiTable th a:hover,
 .twikiTable th a:hover font {
-	background-color:transparent;
 	color:%LINK_TEXT_HOVER_TABLE_HEADER%;
-	border-color:%LINK_TEXT_HOVER_TABLE_HEADER%;
+	background-color:%LINK_BACKGROUND_HOVER%;
 }
-
-/* TablePlugin - sorting of table columns */
-
-th.twikiSortedAscendingCol a:link,
-th.twikiSortedAscendingCol a:link font,
-th.twikiSortedAscendingCol a:visited,
-th.twikiSortedAscendingCol a:visited font,
-th.twikiSortedDescendingCol a:link,
-th.twikiSortedDescendingCol a:link font,
-th.twikiSortedDescendingCol a:visited,
-th.twikiSortedDescendingCol a:visited font {
-	border-color:%LINK_TEXT_SORTED_TABLE_HEADER%;
-}
-th.twikiSortedAscendingCol a:hover,
-th.twikiSortedAscendingCol a:hover font,
-th.twikiSortedDescendingCol a:hover,
-th.twikiSortedDescendingCol a:hover font {
-	border-color:%LINK_TEXT_HOVER_TABLE_HEADER%;
-}
-/* This has to be defined as attribute in the plugin topic: */
-/*
-.patternTopic th.twikiSortedAscendingCol,
-.patternTopic th.twikiSortedDescendingCol {
-	background-color:%TABLE_SELECTED_COLUMN_HEADER_BACKGROUND%;
-}
-tr.twikiTableOdd td.twikiSortedAscendingCol,
-tr.twikiTableOdd td.twikiSortedDescendingCol {
-	background-color:%TABLE_SELECTED_COLUMN_ODD_DATA_BACKGROUND%;
-}
-tr.twikiTableEven td.twikiSortedAscendingCol,
-tr.twikiTableEven td.twikiSortedDescendingCol {
-	background-color:%TABLE_SELECTED_COLUMN_EVEN_DATA_BACKGROUND%;
-}
-*/
 
 /* TwistyContrib */
 .twistyPlaceholder {
@@ -450,54 +409,9 @@ table.twikiFormTable {
 .twikiAttachments th {
 	border-color:%LAYOUT_ELEMENT_BORDER%;
 }
-.twikiAttachments th/*,
-table.twikiFormTable th.twikiFormTableHRow*/ {
-	background-color:%MAIN_BACKGROUND_COLOR%;
-}
-.twikiAttachments td {
-	background-color:%MAIN_BACKGROUND_COLOR%;
-}
-.twikiAttachments .twikiTable th a:link,
-.twikiAttachments .twikiTable th a:visited,
-table.twikiFormTable th.twikiFormTableHRow a:link,
-table.twikiFormTable th.twikiFormTableHRow a:visited {
-	color:%LINK_TEXT_NORMAL%;
-}
 .twikiAttachments .twikiTable th font,
 table.twikiFormTable th.twikiFormTableHRow font {
 	color:%LINK_TEXT_NORMAL%;
-}
-.twikiAttachments .twikiTable th a:hover,
-.twikiAttachments .twikiTable th a:hover font {
-	background-color:transparent;
-	color:%LINK_TEXT_ACTION_BUTTON%;
-	border-color:%LINK_TEXT_ACTION_BUTTON%;
-}
-.twikiAttachments .twikiTable th.twikiSortedAscendingCol,
-.twikiAttachments .twikiTable th.twikiSortedDescendingCol {
-	background-color:%ATTACHMENT_TABLE_SELECTED_COLUMN_HEADER_BACKGROUND%;
-}
-.twikiAttachments th.twikiSortedAscendingCol a:link,
-.twikiAttachments th.twikiSortedAscendingCol a:link font,
-.twikiAttachments th.twikiSortedAscendingCol a:visited,
-.twikiAttachments th.twikiSortedAscendingCol a:visited font,
-.twikiAttachments th.twikiSortedDescendingCol a:link,
-.twikiAttachments th.twikiSortedDescendingCol a:link font,
-.twikiAttachments th.twikiSortedDescendingCol a:visited,
-.twikiAttachments th.twikiSortedDescendingCol a:visited font {
-	border-color:%LINK_TABLE_SELECTED_COLUMN_HEADER_BORDER%;
-}
-.twikiAttachments th.twikiSortedAscendingCol a:hover,
-.twikiAttachments th.twikiSortedAscendingCol a:hover font,
-.twikiAttachments th.twikiSortedDescendingCol a:hover,
-.twikiAttachments th.twikiSortedDescendingCol a:hover font {
-	border-color:%LINK_TEXT_ACTION_BUTTON%;
-}
-.twikiAttachments tr.twikiTableOdd td.twikiSortedAscendingCol,
-.twikiAttachments tr.twikiTableOdd td.twikiSortedDescendingCol,
-.twikiAttachments tr.twikiTableEven td.twikiSortedAscendingCol,
-.twikiAttachments tr.twikiTableEven td.twikiSortedDescendingCol {
-	background-color:%ATTACHMENT_TABLE_SELECTED_COLUMN_DATA_BACKGROUND%;
 }
 
 .twikiFormSteps {
@@ -826,3 +740,5 @@ tr.twikiDiffDebug .twikiDiffUnchangedText {
 }
 %ENDATTACH%
 </verbatim>
+
+%META:FILEATTACHMENT{name="theme-colors.css" attachment="theme-colors.css" attr="" comment="Generated by !AttachContentPlugin" date="1161297394" path="theme-colors.css" size="13922" stream="GLOB(0x8c72510)" user="Main.ArthurClemens" version="12"}%
