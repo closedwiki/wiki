@@ -30,7 +30,7 @@ use vars qw( $translationToken
              $tableWidth @columnWidths
              $tableBorder $tableFrame $tableRules $cellPadding $cellSpacing 
              @headerAlign @dataAlign $vAlign
-             $headerBg $headerColor $sortAllTables $twoCol @dataBg @dataColor
+             $headerBg $headerBgSorted $headerColor $sortAllTables $twoCol @dataBg @dataBgSorted @dataColor
              @isoMonth
              $headerRows $footerRows
              $upchar $downchar $diamondchar $url
@@ -54,23 +54,25 @@ BEGIN {
 
 sub _setDefaults {
     $sortAllTables = $sortTablesInText;
-    $tableBorder  = 1;
-    $tableFrame   = '';
-    $tableRules   = '';
-    $cellSpacing  = 1;
-    $cellPadding  = 0;
-    $tableWidth   = '';
-    @columnWidths = ( );
-    $headerRows   = 1;
-    $footerRows   = 0;
-    @headerAlign  = ( );
-    @dataAlign    = ( );
-    $vAlign       = '';
-    $headerBg     = "#99CCCC";
-    $headerColor  = '';
-    @dataBg       = ( "#FFFFCC", "#FFFFFF" );
-    @dataColor    = ( );
-    $tableId      = '';
+    $tableBorder    = 1;
+    $tableFrame     = '';
+    $tableRules     = '';
+    $cellSpacing    = 0;
+    $cellPadding    = 0;
+    $tableWidth     = '';
+    @columnWidths   = ( );
+    $headerRows     = 1;
+    $footerRows     = 0;
+    @headerAlign    = ( );
+    @dataAlign      = ( );
+    $vAlign         = '';
+    $headerBg       = '#6b7f93';
+    $headerBgSorted = '';
+    $headerColor    = '#ffffff';
+    @dataBg         = ( '#ecf2f8', '#ffffff' );
+    @dataBgSorted   = ( );
+    @dataColor      = ( );
+    $tableId        = '';
     $tableSummary      = '';
     $tableCaption      = '';
     undef $initSort;
@@ -143,12 +145,18 @@ sub _parseParameters {
     $tmp = $params{headerbg};
     $headerBg = $tmp if( defined $tmp );
 
+	$tmp = $params{headerbgsorted};
+    $headerBgSorted = ( defined $tmp ) ? $tmp : $headerBg;
+    
     $tmp = $params{headercolor};
     $headerColor = $tmp if( defined $tmp );
 
     $tmp = $params{databg};
     @dataBg = split( /,\s*/, $tmp ) if( defined $tmp );
 
+	$tmp = $params{databgsorted};
+    @dataBgSorted = ( defined $tmp ) ? split( /,\s*/, $tmp ) : @dataBg;
+    
     $tmp = $params{datacolor};
     @dataColor = split( /,\s*/, $tmp ) if( defined $tmp );
     
@@ -246,8 +254,10 @@ sub _processTableRow {
                 if( defined($rowspan[$col]) && $rowspan[$col] ) {
                     my $nRows = scalar(@curTable);
                     my $rspan = $rowspan[$col]+1;
-                    $curTable[$nRows - $rspan][$col]->{attrs}->{rowspan} =
-                      $rspan;
+                    if ( $rspan > 1 ) {
+	                    $curTable[$nRows - $rspan][$col]->{attrs}->{rowspan} =
+                      		$rspan;
+                    }
                     undef($rowspan[$col]);
                 }
             }
@@ -261,9 +271,9 @@ sub _processTableRow {
 						( $requestedTable eq $tableCount ) &&
 							( $colCount == $sortCol )) {
 				if( $dir == 0 ) {
-					$attr->{class} .= 'twikiSortedAscendingCol';
+					$attr->{class} = _appendSortedAscendingCssClass( $attr->{class} );
 				} else {
-					$attr->{class} .= 'twikiSortedDescendingCol';
+					$attr->{class} = _appendSortedDescendingCssClass( $attr->{class} );
 				}
 			}
 			
@@ -353,13 +363,37 @@ sub _stripHtml {
     return $text;
 }
 
+# Append space if class names already exist
+# 'firstClass' becomes 'firstClass ' so 'secondClass' can be appended safely
+sub _makeCssClassListSafeToAppend {
+	my ( $classList ) = @_;
+	$classList ||= '';
+	$classList .= ' ' if length( $classList ) > 0;
+	return $classList;
+}
+
 # Append CSS class name for "first column" to (possibly) already defined class names
 sub _appendFirstColumnCssClass {
-	my ( $className ) = @_;
-	$className ||= '';
-	$className .= ' ' if length( $className ) > 0;
-	$className .= 'twikiFirstCol';
-	return $className;
+	my $classList = _makeCssClassListSafeToAppend( @_ );
+	return $classList.'twikiFirstCol';
+}
+
+# Append CSS class name for "last row" to (possibly) already defined class names
+sub _appendLastRowCssClass {
+	my $classList = _makeCssClassListSafeToAppend( @_ );
+	return $classList.'twikiLast';
+}
+
+# Append CSS class name for "sorted ascending" to (possibly) already defined class names
+sub _appendSortedAscendingCssClass {
+	my $classList = _makeCssClassListSafeToAppend( @_ );
+	return $classList.'twikiSortedAscendingCol';
+}
+
+# Append CSS class name for "sorted descending" to (possibly) already defined class names
+sub _appendSortedDescendingCssClass {
+	my $classList = _makeCssClassListSafeToAppend( @_ );
+	return $classList.'twikiSortedDescendingCol';
 }
 
 sub emitTable {
@@ -392,7 +426,9 @@ sub emitTable {
             my $rspan = $rowspan[$i]+1;
             my $r = $nRows - $rspan;
             $curTable[$r][$i]->{attrs} ||= {};
-            $curTable[$r][$i]->{attrs}->{rowspan} = $rspan;
+            if ( $rspan > 1 ) {
+                $curTable[$r][$i]->{attrs}->{rowspan} = $rspan;
+            }
         }
     }
 
@@ -464,6 +500,7 @@ sub emitTable {
         @curTable = ( @header, @curTable, @trailer );
     }
     my $rowCount = 0;
+    my $numberOfRows = scalar(@curTable);
     my $dataColorCount = 0;
     my $resetCountNeeded = 0;
     my $arrow = '';
@@ -477,6 +514,16 @@ sub emitTable {
             my $cell = $fcell->{text};
             my $attr = $fcell->{attrs} || {};
 
+			my $dir = 0;
+            $dir = $direction if( defined( $sortCol ) &&
+									$colCount == $sortCol );
+			 my $isSorted = 0;
+		 	if (defined( $sortCol ) &&
+					$colCount == $sortCol &&
+						$stype ne '' ) {
+				$isSorted = 1;
+			}
+			
             if( $type eq 'th' ) {
                 # reset data color count to start with first color after
                 # each table heading
@@ -487,36 +534,34 @@ sub emitTable {
                       $TWiki::Plugins::TablePlugin::installWeb.
                         '/TablePlugin/';
 
-                    $upchar = CGI::img({ src=> $gfx.'up.gif',
-                                         alt => 'up' });
-                    $downchar = CGI::img({ src =>$gfx.'down.gif',
-                                           alt => 'down'});
-                    $diamondchar = CGI::img({ src => $gfx.'diamond.gif',
-                                              border => 0, alt => 'sort'});
+                    $upchar = CGI::span( { class => 'tableSortIcon tableSortUp' },
+                    	CGI::img(
+                    	{ src=> $gfx.'up.gif',
+                          alt => 'up'} ));
+                    $downchar = CGI::span( { class => 'tableSortIcon tableSortDown' },
+                    	CGI::img(
+                    	{ src =>$gfx.'down.gif',
+                          alt => 'down'} ));
+                    $diamondchar = CGI::span( { class => 'tableSortIcon tableSortUp' },
+                    	CGI::img(
+                    	{ src => $gfx.'diamond.gif',
+                          border => 0, alt => 'sort'} ));
                 }
 
                 # DG: allow headers without b.g too (consistent and yes,
                 # I use this)
                 $attr->{bgcolor} = $headerBg unless( $headerBg =~ /none/i );
-                my $dir = 0;
-                $dir = $direction if( defined( $sortCol ) &&
-                                        $colCount == $sortCol );
-                if( defined( $sortCol ) && $colCount == $sortCol &&
-                      $stype ne '' ) {
+                if ($isSorted) {
                     if( $dir == 0 ) {
-                        $arrow = CGI::a({ name=>'sorted_table' },
-                                        CGI::span({ title=>$stype.
-                                                      ' sorted ascending'},
-                                                  $upchar));
-                        $attr->{class} = 'twikiSortedAscendingCol';
+                        $arrow = CGI::a({ name=>'sorted_table' }, '<!-- -->') .
+                                        CGI::span({ title=>'Sorted ascending'},
+                                                  $upchar);
                     } else {
-                        $arrow = CGI::a(
-                            { name=>'sorted_table' },
-                            CGI::span({ title=>$stype.
-                                          ' sorted descending'},
-                                      $downchar));
-                        $attr->{class} = 'twikiSortedDescendingCol';
+                        $arrow = CGI::a({ name=>'sorted_table' }, '<!-- -->') .
+                            			CGI::span({ title=>'Sorted descending'},
+                                      			$downchar);
                     }
+                    $attr->{bgcolor} = $headerBgSorted unless( $headerBgSorted =~ /none/i );
                     $attr->{class} = _appendFirstColumnCssClass( $attr->{class} ) if $colCount == 0;
                 }
                 if( $headerColor ) {
@@ -547,11 +592,16 @@ sub emitTable {
                 }
 
             } else {
+            	# $type is not 'th'
                 $resetCountNeeded = 1 if( $colCount == 0 );
                 if( @dataBg ) {
-                    my $color = $dataBg[$dataColorCount % ($#dataBg+1) ];
-                    $attr->{bgcolor} = $color
-                      unless( $color =~ /none/i );
+                    my $bgcolor;
+                    if ($isSorted) {
+                    	$bgcolor = $dataBgSorted[$dataColorCount % ($#dataBgSorted+1) ];
+                    } else {
+                    	$bgcolor = $dataBg[$dataColorCount % ($#dataBg+1) ];
+                    }
+                    $attr->{bgcolor} = $bgcolor unless( $bgcolor =~ /none/i );
                 }
                 if( @dataColor ) {
                     my $color = $dataColor[$dataColorCount % ($#dataColor+1) ];
@@ -559,7 +609,14 @@ sub emitTable {
                       unless $color =~ /^(|none)$/i;
                 }
                 $type = 'td' unless $type eq 'Y';
+            } ###if( $type eq 'th' )
+            
+            my $isLastRow = ($rowCount eq $numberOfRows - 1);
+            if ( $attr->{rowspan} ) {
+            	$isLastRow = (($rowCount + ($attr->{rowspan} - 1)) eq $numberOfRows - 1);
             }
+            $attr->{class} = _appendLastRowCssClass( $attr->{class} ) if $isLastRow;
+            
             $colCount++;
             next if( $type eq 'Y' );
             my $fn = 'CGI::'.$type;

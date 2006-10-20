@@ -57,7 +57,7 @@ a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, for example, =
 		* Set SORT = all
 
 	* Default table attributes:
-		* Set TABLEATTRIBUTES = tableborder="1" cellpadding="0" cellspacing="0" headerbg="#6b7f93" headercolor="#ffffff" databg="#ecf2f8, #ffffff"
+		* Set TABLEATTRIBUTES = tableborder="0" cellpadding="0" cellspacing="0" valign="top" headerbg="#6b7f93" headerbgsorted="#334455" headercolor="#ffffff" databg="#ecf2f8,#ffffff" databgsorted="#dce5ee,#f5f5f5"
 		* Classic skin table attributes:
 			* #Set TABLEATTRIBUTES = tableborder="1" cellpadding="0" cellspacing="1" headerbg="#99CCCC" databg="#FFFFCC, #FFFFFF"
 
@@ -65,29 +65,31 @@ a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, for example, =
 
 Attributes are defined as a =TABLEATTRIBUTES= Plugin setting in this topic, a =TABLEATTRIBUTES= preferences setting, or on line before the table using =%<nop>TABLE{...}%=:
 
-| *Argument* | *Comment* | *Example* |
-| =sort=	  | Set table sorting ="on"= or ="off"= | =sort="on"= |
-| =initsort= | Column to sort initially (="1"= to number of columns) | =initsort="2"= |
-| =initdirection= | Initial sorting direction for =initsort=, set to  ="up"= or ="down"= | =initdirection="up"= |
-| =headerbg= | Header cell background colour. Choose one of the %TWIKIWEB%.StandardColors | =headerbg="#99CCCC"= |
-| =headercolor= | Header cell text colour | =headercolor="#0000CC"= |
-| =databg=	| Data cell background colour, a comma separated list. Specify ="none"= for no colour, that is to use the colour/background of the page the table is on. | =databg="#C8CB8F, #DBDDB5"= |
-| =datacolor= | Data cell text colour, a comma separated list | =datacolor="#0000CC, #000000"= |
-| =tableborder= | Table border width (pixels) | =tableborder="2"= |
-| =tableframe= | Table frame, set to ="void"= (no sides), ="above"= (the top side only), ="below"= (the bottom side only), ="hsides"= (the top and bottom sides only), ="lhs"= (the left-hand side only), ="rhs"= (the right-hand side only), ="vsides"= (the right and left sides only), ="box"= (all four sides), ="border"= (all four sides); default ="void"= | =tableframe="hsides"= |
-| =tablerules= | Table rules, set to ="none"= (no rules), ="groups"= (rules will appear between row groups and column groups only), ="rows"= (rules will appear between rows only), ="cols"= (rules will appear between columns only), ="all"= (rules will appear between all rows and columns); default ="none"= | =tablerules="rows"= |		  
-| =cellpadding= | Cell padding (pixels) | =cellpadding="0"= |
-| =cellspacing= | Cell spacing (pixels) | =cellspacing="3"= |
-| =valign= | Vertical alignment of cells, set to ="top"=, ="middle"=, ="bottom"= or ="baseline"= | =valign="top"= |
-| =headeralign= | Header cell alignment, one value for all columns, or a comma separated list for different alignment of individual columns. Set to ="left"=, ="center"=, ="right"= or ="justify"=. Overrides individual cell settings | =headeralign="left, right"= |
-| =dataalign= | Data cell alignment, one value for all columns, or a comma separated list for different alignment of individual columns. Set to ="left"=, ="center"=, ="right"= or ="justify"=. Overrides individual cell settings | =dataalign="center"= |
-| =tablewidth= | Table width: Percentage of window width, or absolute pixel value. Default is unspecified. | =tablewidth="100%"= |
-| =columnwidths= | Column widths: Comma delimited list of column widths, percentage or absolute pixel value. Default is unspecified. | =columnwidths="80%, 20%"= |
-| =headerrows= | Number of header rows to exclude from sort; default ="1"= | =headerrows="1"= |
-| =footerrows= | Number of footer rows to exclude from sort; default ="0"= | =footerrows="1"= |
-| =id= | Table identifier string. Default is unspecified. | =id="userTable"= |
-| =summary= | Table summary used by screenreaders: A summary of what the table presents. It should provide an orientation for someone who listens to the table. Default is unspecified. | =summary="List of subscribed users"= |
-| =caption= | Table caption: A title that will be displayed just above the table. Default is unspecified. | =caption="Users"= |
+| *Argument*       | *Comment*  | *Default&nbsp;value*  | *Example*  |
+| =sort=           | Set table sorting ="on"= or ="off"=. | <span class="twikiGrayText">unspecified</span> | =sort="on"= |
+| =initsort=       | Column to sort initially (="1"= to number of columns). | <span class="twikiGrayText">unspecified</span> | =initsort="2"= |
+| =initdirection=  | Initial sorting direction for =initsort=, set to  ="up"= or ="down"=. | <span class="twikiGrayText">unspecified</span> | =initdirection="up"= |
+| =headerbg=       | Header cell background colour. | ="#6b7f93"= | =headerbg="#999999"= |
+| =headerbgsorted= | Header cell background colour of a sorted column. | the values of =headerbg= | =headerbgsorted="#32596c"= |
+| =headercolor=    | Header cell text colour. | ="#ffffff"= | =headercolor="#0000cc"= |
+| =databg=	       | Data cell background colour, a comma separated list. Specify ="none"= for no colour, that is to use the colour/background of the page the table is on. | ="#ecf2f8,#ffffff"= | =databg="#f2f2f2,#ffffff"= |
+| =databgsorted=   | Data cell background colour of a sorted column; see =databg=. | the values of =databg= | =databgsorted="#d4e8e4,#e5f5ea"= |
+| =datacolor=      | Data cell text colour, a comma separated list. | <span class="twikiGrayText">unspecified</span> | =datacolor="#0000CC, #000000"= |
+| =tableborder=    | Table border width (pixels). | ="1"= | =tableborder="2"= |
+| =tableframe=     | Table frame, set to ="void"= (no sides), ="above"= (the top side only), ="below"= (the bottom side only), ="hsides"= (the top and bottom sides only), ="lhs"= (the left-hand side only), ="rhs"= (the right-hand side only), ="vsides"= (the right and left sides only), ="box"= (all four sides), ="border"= (all four sides). | <span class="twikiGrayText">unspecified</span> | =tableframe="hsides"= |
+| =tablerules=     | Table rules, set to ="none"= (no rules), ="groups"= (rules will appear between row groups and column groups only), ="rows"= (rules will appear between rows only), ="cols"= (rules will appear between columns only), ="all"= (rules will appear between all rows and columns). | <span class="twikiGrayText">unspecified</span>  | =tablerules="rows"= |		  
+| =cellpadding=    | Cell padding (pixels). | ="0"= | =cellpadding="0"= |
+| =cellspacing=    | Cell spacing (pixels). | ="0"= | =cellspacing="3"= |
+| =valign=         | Vertical alignment of cells, set to ="top"=, ="middle"=, ="bottom"= or ="baseline"=. | <span class="twikiGrayText">unspecified</span>  | =valign="top"= |
+| =headeralign=    | Header cell alignment, one value for all columns, or a comma separated list for different alignment of individual columns. Set to ="left"=, ="center"=, ="right"= or ="justify"=. Overrides individual cell settings. | <span class="twikiGrayText">unspecified</span>  | =headeralign="left,right"= |
+| =dataalign=      | Data cell alignment, one value for all columns, or a comma separated list for different alignment of individual columns. Set to ="left"=, ="center"=, ="right"= or ="justify"=. Overrides individual cell settings. | <span class="twikiGrayText">unspecified</span>  | =dataalign="center"= |
+| =tablewidth=     | Table width: Percentage of window width, or absolute pixel value. | <span class="twikiGrayText">unspecified</span>  | =tablewidth="100%"= |
+| =columnwidths=   | Column widths: Comma delimited list of column widths, percentage or absolute pixel value. | <span class="twikiGrayText">unspecified</span>  | =columnwidths="80%,20%"= |
+| =headerrows=     | Number of header rows to exclude from sort. | ="1"=  | =headerrows="1"= |
+| =footerrows=     | Number of footer rows to exclude from sort. | ="0"=  | =footerrows="1"= |
+| =id=             | Table identifier string. | <span class="twikiGrayText">unspecified</span> | =id="userTable"= |
+| =summary=        | Table summary used by screenreaders: A summary of what the table presents. It should provide an orientation for someone who listens to the table. | <span class="twikiGrayText">unspecified</span> | =summary="List of subscribed users"= |
+| =caption=        | Table caption: A title that will be displayed just above the table.| <span class="twikiGrayText">unspecified</span> | =caption="Users"= |
 
 The =%<nop>TABLE{...}%= settings override =TABLEATTRIBUTES= preferences settings, which override the =TABLEATTRIBUTES= Plugin settings. 
 
@@ -134,12 +136,13 @@ This plugin is pre-installed with your TWiki release. You should not have to ins
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main/JohnTalintyre, TWiki:Main/PeterThoeny |
-|  Plugin Version: | 1.014 |
+|  Plugin Version: | 1.015 |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
-|  16 Aug 2006 | MD: Added CSS support for even/odd table rows |
-|  13 Dec 2005 | AC: Added support for id, summary and caption |
+|  20 Oct 2006 | 1.015: Arthur Clemens: Added support for background colors of sorted column |
+|  16 Aug 2006 | Michael Daum: Added CSS support for even/odd table rows |
+|  13 Dec 2005 | Arthur Clemens: Added support for id, summary and caption |
 |  5 Mar 2005 | 1.014: Crawford Currie eliminated deprecated handlers for Dakar |
-|  01 Aug 2004: | AC: Added CSS support for first column and ascending/descending table headers |
+|  01 Aug 2004: | Arthur Clemens: Added CSS support for first column and ascending/descending table headers |
 |  21 Mar 2004: | PTh: Internal change: Fixed reference to unofficial variable |
 |  01 Jan 2004: | PTh: Alternating data row colors restart again after each header row |
 |  01 Dec 2003: | PTh: Fixed error when footerrows was specified on an empty table, contributed by TWiki:Main/PaulineCheung |
