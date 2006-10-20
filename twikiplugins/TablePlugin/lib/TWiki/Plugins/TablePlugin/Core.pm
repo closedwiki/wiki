@@ -35,7 +35,8 @@ use vars qw( $translationToken
              $headerRows $footerRows
              $upchar $downchar $diamondchar $url
              @isoMonth %mon2num $initSort $initDirection
-             @rowspan $pluginAttrs $prefsAttrs $tableId $tableSummary $tableCaption );
+             @rowspan $pluginAttrs $prefsAttrs $tableId $tableSummary $tableCaption
+             %sortDirection );
 
 BEGIN {
     $translationToken = "\0";
@@ -50,6 +51,9 @@ BEGIN {
         my $count = 0;
         %mon2num = map { $_ => $count++ } @isoMonth;
     }
+    %sortDirection = ( "ASCENDING", 0, 
+    				   "DESCENDING", 1,
+    				   "NONE", 2 );
 };
 
 sub _setDefaults {
@@ -276,17 +280,18 @@ sub _processTableRow {
                 }
             }
 
-			my $direction = $up ? 0 : 1;
-			my $dir = 0;
+			my $direction = $up ? $sortDirection{"ASCENDING"} : $sortDirection{"DESCENDING"};
+			my $dir = $sortDirection{"ASCENDING"};
 			$dir = $direction if( defined( $sortCol ) &&
                                         $colCount == $sortCol );
 			if( defined( $requestedTable ) &&
 					defined( $sortCol ) && 
 						( $requestedTable eq $tableCount ) &&
 							( $colCount == $sortCol )) {
-				if( $dir == 0 ) {
+				if( $dir == $sortDirection{"ASCENDING"} ) {
 					$attr->{class} = _appendSortedAscendingCssClass( $attr->{class} );
-				} else {
+				}
+				if( $dir == $sortDirection{"DESCENDING"} ) {
 					$attr->{class} = _appendSortedDescendingCssClass( $attr->{class} );
 				}
 			}
@@ -418,7 +423,7 @@ sub emitTable {
     if ( $headerRows + $footerRows > @curTable ) {
         $footerRows = @curTable - $headerRows; # and footer to whatever is left
     }
-    my $direction = $up ? 0 : 1;
+    my $direction = $up ? $sortDirection{"ASCENDING"} : $sortDirection{"DESCENDING"};
     my $sortThisTable = _shouldISortThisTable( $curTable[$headerRows-1] );
     my $tattrs = { class => 'twikiTable',
                    border => $tableBorder,
@@ -452,7 +457,7 @@ sub emitTable {
     } elsif( defined( $initSort ) ) {
         $sortCol = $initSort - 1;
         $up = $initDirection;
-        $direction = $up ? 0 : 1;
+        $direction = $up ? $sortDirection{"ASCENDING"} : $sortDirection{"DESCENDING"};
         $requestedTable = $tableCount;
     }
 
@@ -528,10 +533,12 @@ sub emitTable {
             my $cell = $fcell->{text};
             my $attr = $fcell->{attrs} || {};
 
-			my $dir = 0;
-            $dir = $direction if( defined( $sortCol ) &&
-									$colCount == $sortCol );
-			 my $isSorted = 0;
+			my $currentDirection = $sortDirection{"ASCENDING"}; # default
+            if( defined $sortCol && $colCount == $sortCol ) {
+            	$currentDirection = $sortDirection{"ASCENDING"} if ( $direction eq $sortDirection{"DECENDING"} );
+            	$currentDirection = $sortDirection{"DESCENDING"} if ( $direction eq $sortDirection{"ASCENDING"} );
+            }
+			my $isSorted = 0;
 		 	if (defined( $sortCol ) &&
 					$colCount == $sortCol &&
 						$stype ne '' ) {
@@ -566,11 +573,12 @@ sub emitTable {
                 # I use this)
                 $attr->{bgcolor} = $headerBg unless( $headerBg =~ /none/i );
                 if ($isSorted) {
-                    if( $dir == 0 ) {
+                    if( $currentDirection == $sortDirection{"ASCENDING"} ) {
                         $arrow = CGI::a({ name=>'sorted_table' }, '<!-- -->') .
                                         CGI::span({ title=>'Sorted ascending'},
                                                   $upchar);
-                    } else {
+                    }
+                    if( $currentDirection == $sortDirection{"DESCENDING"} ) {
                         $arrow = CGI::a({ name=>'sorted_table' }, '<!-- -->') .
                             			CGI::span({ title=>'Sorted descending'},
                                       			$downchar);
@@ -585,9 +593,9 @@ sub emitTable {
                     if( $cell =~ /\[\[|href/o ) {
                         $cell .= ' '.CGI::a({ href => $url.
                                                 'sortcol='.$colCount.
-                                                  ';table='.$tableCount.
-                                                    ';up='.$dir.
-                                                      '#sorted_table',
+                                                ';table='.$tableCount.
+                                                ';up='.$direction.
+                                                '#sorted_table',
                                               rel => 'nofollow',
                                               title => 'Sort by this column'},
                                             $diamondchar).$arrow;
@@ -595,8 +603,8 @@ sub emitTable {
                         $cell = CGI::a({ href => $url.
                                            'sortcol='.$colCount.
                                              ';table='.$tableCount.
-                                               ';up='.$dir.
-                                                 '#sorted_table',
+                                             ';up='.$direction.
+                                             '#sorted_table',
                                          rel=>'nofollow',
                                          title=>'Sort by this column'},
                                        $cell ).$arrow;
