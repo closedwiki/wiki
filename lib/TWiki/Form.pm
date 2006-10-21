@@ -560,6 +560,9 @@ sub renderFieldForEdit {
                                       -defaults => \@defaults,
                                       -columns => $size,
                                       -attributes => \%attrs );
+        # Item2410: We need a dummy control to detect the case where
+        #           all checkboxes have been deliberately unchecked
+        $value .= CGI::hidden( -name => $name, -value => "");
 
     } elsif( $type eq 'radio' ) {
         $options = $fieldDef->{value};
@@ -686,7 +689,7 @@ sub getFieldValuesFromQuery {
             my @values = $query->param( $param );
             $value = shift @values;
             foreach my $val (@values) {
-                $value .= ", $val";
+                $value .= ", $val"  if $val; # skip empty values (Item2410)
             }
         }
 
