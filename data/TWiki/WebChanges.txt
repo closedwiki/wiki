@@ -1,5 +1,8 @@
-%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
-%SEARCH{".*" web="%INCLUDINGWEB%" regex="on" nosearch="on" order="modified" limit="50" reverse="on"}%
+%META:TOPICINFO{author="TWikiContributor" date="1161492304" format="1.0" version="$Rev$"}%
+---+ %MAKETEXT{"[_1] Recent Changes in [_2] Web" args="%URLPARAM{"limit" default="50"}%, <nop>%WEB%"}% <span style="font-size: 50%">%MAKETEXT{"retrieved at [_1]" args="%DISPLAYTIME{"$hour:$min ($tz)"}%"}%</span>
 
-   * %MAKETEXT{"See <a href='[_1]'>100</a>, <a href='[_2]'>200</a>, <a href='[_3]'>400</a>, <a href='[_4]'>800</a> most recent changes" args="%SCRIPTURLPATH{"search"}%/%INCLUDINGWEB%/?search=%5C.*;scope=topic;order=modified;reverse=on;regex=on;nosearch=on;limit=100, %SCRIPTURLPATH{"search"}%/%INCLUDINGWEB%/?search=%5C.*;scope=topic;order=modified;reverse=on;regex=on;nosearch=on;limit=200, %SCRIPTURLPATH{"search"}%/%INCLUDINGWEB%/?search=%5C.*;scope=topic;order=modified;reverse=on;regex=on;nosearch=on;limit=400, %SCRIPTURLPATH{"search"}%/%INCLUDINGWEB%/?search=%5C.*;scope=topic;order=modified;reverse=on;regex=on;nosearch=on;limit=800"}%
-   * %MAKETEXT{"See <a href='[_1]'>all</a> changes" args="%SCRIPTURLPATH{"search"}%/%INCLUDINGWEB%/SearchResult?search=%5C.*;scope=topic;order=modified;reverse=on;regex=on;nosearch=on"}%
+%SEARCH{".*" web="%INCLUDINGWEB%" regex="on" nosearch="on" noheader="on" order="modified" limit="%URLPARAM{"limit" default="50"}%" reverse="on"}%
+
+<strong><em>%MAKETEXT{"See also:"}%</em></strong>
+%ICON{rss-small}%
+%MAKETEXT{"<a href='[_1]'>RSS feed</a>, recent changes with <a href='[_2]'>50</a>, <a href='[_3]' rel='nofollow'>100</a>, <a href='[_4]' rel='nofollow'>200</a>, <a href='[_5]' rel='nofollow'>500</a>, <a href='[_6]' rel='nofollow'>1000</a> topics, <a href='[_7]' rel='nofollow'>all changes</a>" args="%SCRIPTURLPATH{"view"}%/%INCLUDINGWEB%/WebRss, %SCRIPTURLPATH{"view"}%/%INCLUDINGWEB%/%INCLUDINGTOPIC%, %SCRIPTURLPATH{"view"}%/%INCLUDINGWEB%/%INCLUDINGTOPIC%?limit=100, %SCRIPTURLPATH{"view"}%/%INCLUDINGWEB%/%INCLUDINGTOPIC%?limit=200, %SCRIPTURLPATH{"view"}%/%INCLUDINGWEB%/%INCLUDINGTOPIC%?limit=500, %SCRIPTURLPATH{"view"}%/%INCLUDINGWEB%/%INCLUDINGTOPIC%?limit=1000, %SCRIPTURLPATH{"view"}%/%INCLUDINGWEB%/%INCLUDINGTOPIC%?limit=All"}%
