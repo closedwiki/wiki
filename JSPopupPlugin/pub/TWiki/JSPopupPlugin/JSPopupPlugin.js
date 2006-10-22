@@ -42,6 +42,18 @@ if ( typeof( TWiki.JSPopupPlugin ) == "undefined" ) {
 }
 TWiki.JSPopupPlugin.closeButton = '<a style="float:right;display:inline;background-color: LightSteelBlue;" align="rght" onclick="TWiki.JSPopupPlugin.closePopup(event);">X</a>';
 
+TWiki.JSPopupPlugin.DelayedOpenPopupSectional = function (event, sectionName) {
+    var sectionElem = document.getElementById(sectionName);
+    var delay = sectionElem.getAttribute('delay');
+    
+    //TODO: consider making this an array, indexed by sectionName
+    delayedPopup = window.setTimeout("TWiki.JSPopupPlugin.openPopupSectional(event, '"+sectionName+"')", delay);
+}
+ 
+TWiki.JSPopupPlugin.CancelOpenPopup = function() {
+    window.clearTimeout(delayedPopup);
+}
+
 
 TWiki.JSPopupPlugin.openPopupSectional = function (event, sectionName) {
     if ((sectionName) && (sectionName != '')) {
