@@ -901,7 +901,7 @@ sub getSkin {
 Returns the URL to a TWiki script, providing the web and topic as
 "path info" parameters.  The result looks something like this:
 "http://host/twiki/bin/$script/$web/$topic".
-   * =...= - an arbitrary number of name,value parameter pairs that will be url-encoded and added to the url. The special parameter name '#' is reserved for specifying an anchor. e.g. <tt>getScriptUrl('x','y','view','#'=>'XXX',a=>1,b=>2)</tt> will give <tt>.../view/x/y#XXX?a=1&b=2</tt>
+   * =...= - an arbitrary number of name,value parameter pairs that will be url-encoded and added to the url. The special parameter name '#' is reserved for specifying an anchor. e.g. <tt>getScriptUrl('x','y','view','#'=>'XXX',a=>1,b=>2)</tt> will give <tt>.../view/x/y?a=1&b=2#XXX</tt>
 
 If $absolute is set, generates an absolute URL. $absolute is advisory only;
 TWiki can decide to generate absolute URLs (for example when run from the
@@ -955,21 +955,29 @@ sub getScriptUrl {
 
         $url .= urlEncode( '/'.$web.'/'.$topic );
 
-        my $ps = '';
-        while( my $p = shift @params ) {
-            if( $p eq '#' ) {
-                $url .= '#' . shift( @params );
-            } else {
-                $ps .= ';' . $p.'='.urlEncode(shift( @params )||'');
-            }
-        }
-        if( $ps ) {
-            $ps =~ s/^;/?/;
-            $url .= $ps;
-        }
+	$url .= _make_params(@params);
     }
 
     return $url;
+}
+
+sub _make_params {
+  my $url = '';
+  my $ps = '';
+  my $anchor = '';
+  while( my $p = shift @_ ) {
+    if( $p eq '#' ) {
+      $anchor .= '#' . shift( @_ );
+    } else {
+      $ps .= ';' . $p.'='.urlEncode(shift( @_ )||'');
+    }
+  }
+  if( $ps ) {
+    $ps =~ s/^;/?/;
+    $url .= $ps;
+  }
+  $url .= $anchor;
+  return $url;
 }
 
 =pod
@@ -1724,6 +1732,15 @@ sub _TOC {
     $text = $this->{renderer}->takeOutBlocks( $text, 'pre',
                                                $verbatim);
 
+    # Find URL parameters
+    my $query = $this->{cgiQuery};
+    my @qparams = ();
+    foreach my $name ( $query->param ) {
+      next if ($name eq 'keywords');
+      next if ($name eq 'topic');
+      push @qparams, $name => $query->param($name);
+    }
+
     # SMELL: this handling of <pre> is archaic.
     # SMELL: use forEachLine
     foreach my $line ( split( /\r?\n/, $text ) ) {
@@ -1759,8 +1776,8 @@ sub _TOC {
             $line =~ s/<[\/]?a\b[^>]*>//gi;
             # create linked bullet item, using a relative link to anchor
             my $target = $isSameTopic ?
-                         "#$anchor"   :
-                         $this->getScriptUrl(0,'view',$web,$topic,'#'=>$anchor);
+                         _make_params('#'=>$anchor,@qparams) :
+                         $this->getScriptUrl(0,'view',$web,$topic,'#'=>$anchor,@qparams);
             $line = $tabs.'* ' .  CGI::a({href=>$target},$line);
             $result .= "\n".$line;
         }
