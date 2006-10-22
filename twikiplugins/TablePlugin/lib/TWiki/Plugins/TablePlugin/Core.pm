@@ -36,7 +36,8 @@ use vars qw( $translationToken
              $upchar $downchar $diamondchar $url
              @isoMonth %mon2num $initSort $initDirection
              @rowspan $pluginAttrs $prefsAttrs $tableId $tableSummary $tableCaption
-             %sortDirection );
+             $iconUrl $unsortEnabled
+		  	 %sortDirection %columnType );
 
 BEGIN {
     $translationToken = "\0";
@@ -51,9 +52,17 @@ BEGIN {
         my $count = 0;
         %mon2num = map { $_ => $count++ } @isoMonth;
     }
-    %sortDirection = ( "ASCENDING", 0, 
-    				   "DESCENDING", 1,
-    				   "NONE", 2 );
+    %sortDirection = ( 'ASCENDING', 0, 
+    				   'DESCENDING', 1,
+    				   'NONE', 2 );
+    %columnType = ( 'TEXT', 'text',
+    				'DATE', 'date', 
+    				'NUMBER', 'number' );
+   	$iconUrl = TWiki::Func::getPubUrlPath().
+   		'/'.
+		$TWiki::Plugins::TablePlugin::installWeb.
+		'/TablePlugin/';
+	$unsortEnabled = 1; # if true, table columns can be unsorted
 };
 
 sub _setDefaults {
@@ -102,8 +111,8 @@ sub _parseParameters {
     # Defines which direction to sort the column set by initsort :
     # ShawnBradford 20020221
     $tmp = $params{initdirection};
-    $initDirection = 0 if( defined $tmp && $tmp =~/^down$/i );
-    $initDirection = 1 if( defined $tmp && $tmp =~/^up$/i );
+    $initDirection = $sortDirection{'ASCENDING'} if( defined $tmp && $tmp =~/^down$/i );
+    $initDirection = $sortDirection{'DESCENDING'} if( defined $tmp && $tmp =~/^up$/i );
 
     $tmp = $params{sort};
     $tmp = '0' if( defined $tmp && $tmp =~ /^off$/oi );
@@ -280,18 +289,20 @@ sub _processTableRow {
                 }
             }
 
-			my $direction = $up ? $sortDirection{"ASCENDING"} : $sortDirection{"DESCENDING"};
-			my $dir = $sortDirection{"ASCENDING"};
-			$dir = $direction if( defined( $sortCol ) &&
-                                        $colCount == $sortCol );
-			if( defined( $requestedTable ) &&
-					defined( $sortCol ) && 
-						( $requestedTable eq $tableCount ) &&
-							( $colCount == $sortCol )) {
-				if( $dir == $sortDirection{"ASCENDING"} ) {
+			my $currentDirection;
+			if( defined $sortCol && $colCount == $sortCol ) {
+				$currentDirection = _getCurrentSortDirection( $up );
+			}
+
+			if( defined $requestedTable &&
+				$requestedTable == $tableCount &&
+				defined $sortCol && 
+				$colCount == $sortCol) {
+					
+				if( $currentDirection == $sortDirection{'ASCENDING'} ) {
 					$attr->{class} = _appendSortedAscendingCssClass( $attr->{class} );
 				}
-				if( $dir == $sortDirection{"DESCENDING"} ) {
+				if( $currentDirection == $sortDirection{'DESCENDING'} ) {
 					$attr->{class} = _appendSortedDescendingCssClass( $attr->{class} );
 				}
 			}
@@ -361,11 +372,11 @@ sub _guessColumnType {
         $row->[$col]->{date} = $date;
         $row->[$col]->{number} = $num;
     }
-    my $type = 'text';
+    my $type = $columnType{'TEXT'};
     if( $isDate ) {
-        $type = 'date';
+        $type = $columnType{'DATE'};
     } elsif( $isNum ) {
-        $type = 'number';
+        $type = $columnType{'NUMBER'};
     }
     return $type;
 }
@@ -403,16 +414,54 @@ sub _appendLastRowCssClass {
 	return $classList.'twikiLast';
 }
 
-# Append CSS class name for "sorted ascending" to (possibly) already defined class names
+# Append CSS class name for "sorted ascending" to (possibly) already defined
+# class names.
 sub _appendSortedAscendingCssClass {
 	my $classList = _makeCssClassListSafeToAppend( @_ );
 	return $classList.'twikiSortedAscendingCol';
 }
 
-# Append CSS class name for "sorted descending" to (possibly) already defined class names
+# Append CSS class name for "sorted descending" to (possibly) already defined
+# class names.
 sub _appendSortedDescendingCssClass {
 	my $classList = _makeCssClassListSafeToAppend( @_ );
 	return $classList.'twikiSortedDescendingCol';
+}
+
+# The default sort direction.
+sub _getDefaultSortDirection {
+	return $sortDirection{'ASCENDING'};
+}
+
+# Gets the current sort direction.
+sub _getCurrentSortDirection {
+	my ( $currentDirection ) = @_;
+	$currentDirection ||= _getDefaultSortDirection();
+	return $currentDirection;
+}
+
+# Gets the new sort direction (needed for sort button) based on the current sort
+# direction.
+sub _getNewSortDirection {
+	my ( $currentDirection ) = @_;
+	if ( !defined $currentDirection ) {
+		return _getDefaultSortDirection();
+	}
+	my $newDirection;
+	if ( $currentDirection == $sortDirection{'ASCENDING'} ) {
+		$newDirection = $sortDirection{'DESCENDING'};
+	}
+	if ( $currentDirection == $sortDirection{'DESCENDING'} ) {
+		if ( $unsortEnabled) {
+			$newDirection = $sortDirection{'NONE'};
+		} else {
+			$newDirection = $sortDirection{'ASCENDING'};
+		}
+	}
+	if ( $currentDirection == $sortDirection{'NONE'} ) {
+		$newDirection = $sortDirection{'ASCENDING'};
+	}
+	return $newDirection;
 }
 
 sub emitTable {
@@ -423,7 +472,8 @@ sub emitTable {
     if ( $headerRows + $footerRows > @curTable ) {
         $footerRows = @curTable - $headerRows; # and footer to whatever is left
     }
-    my $direction = $up ? $sortDirection{"ASCENDING"} : $sortDirection{"DESCENDING"};
+    
+    my $currentDirection = _getCurrentSortDirection( $up );
     my $sortThisTable = _shouldISortThisTable( $curTable[$headerRows-1] );
     my $tattrs = { class => 'twikiTable',
                    border => $tableBorder,
@@ -451,21 +501,20 @@ sub emitTable {
         }
     }
 
-    #Added to aid initial sorting direction and column : ShawnBradford 20020221
+	#Added to aid initial sorting direction and column
     if ( defined( $sortCol ) ) {
         undef $initSort;
     } elsif( defined( $initSort ) ) {
         $sortCol = $initSort - 1;
-        $up = $initDirection;
-        $direction = $up ? $sortDirection{"ASCENDING"} : $sortDirection{"DESCENDING"};
+        $currentDirection = _getCurrentSortDirection( $initDirection );
         $requestedTable = $tableCount;
     }
-
-    if(( defined( $sortCol ) &&
-           defined( $requestedTable ) &&
-             $requestedTable eq $tableCount )
-         || defined( $initSort ) ) {
-
+	
+    if (( defined $sortCol &&
+         defined $requestedTable &&
+         $requestedTable == $tableCount )
+         || defined $initSort ) {
+         
         # DG 08 Aug 2002: Allow multi-line headers
         my @header = splice( @curTable, 0, $headerRows );
         # DG 08 Aug 2002: Skip sorting any trailers as well
@@ -487,26 +536,28 @@ sub emitTable {
         }
 
         $stype = _guessColumnType( $sortCol );
-        if( $stype eq 'text' ) {
-            if( $up ) {
+        if( $stype == $columnType{'TEXT'} ) {
+            if( $currentDirection == $sortDirection{'DESCENDING'} ) {
                 # efficient way of sorting stripped HTML text
                 # SMELL: efficient? That's not efficient!
                 @curTable = map { $_->[0] }
                   sort { $b->[1] cmp $a->[1] }
                     map { [ $_, _stripHtml( $_->[$sortCol]->{text} ) ] }
                       @curTable;
-            } else {
+            } 
+            if( $currentDirection == $sortDirection{'ASCENDING'} ) {
                 @curTable = map { $_->[0] }
                   sort { $a->[1] cmp $b->[1] }
                     map { [ $_, _stripHtml( $_->[$sortCol]->{text} ) ] }
                       @curTable;
             }
         } else {
-            if( $up ) {
+            if( $currentDirection == $sortDirection{'DESCENDING'} ) {
                 @curTable = sort {
                     $b->[$sortCol]->{$stype} <=> $a->[$sortCol]->{$stype} }
                   @curTable;
-            } else {
+            } 
+            if( $currentDirection == $sortDirection{'ASCENDING'} ) {
                 @curTable = sort {
                     $a->[$sortCol]->{$stype} <=> $b->[$sortCol]->{$stype} }
                   @curTable;
@@ -522,27 +573,27 @@ sub emitTable {
     my $numberOfRows = scalar(@curTable);
     my $dataColorCount = 0;
     my $resetCountNeeded = 0;
-    my $arrow = '';
     foreach my $row ( @curTable ) {
         my $rowtext = '';
         my $colCount = 0;
         foreach my $fcell ( @$row ) {
-            $arrow = '';
+            my $tableAnchor = '';
             next if( $fcell->{type} eq 'X' ); # data was there so sort could work with col spanning
             my $type = $fcell->{type};
             my $cell = $fcell->{text};
             my $attr = $fcell->{attrs} || {};
 
-			my $currentDirection = $sortDirection{"ASCENDING"}; # default
-            if( defined $sortCol && $colCount == $sortCol ) {
-            	$currentDirection = $sortDirection{"ASCENDING"} if ( $direction eq $sortDirection{"DECENDING"} );
-            	$currentDirection = $sortDirection{"DESCENDING"} if ( $direction eq $sortDirection{"ASCENDING"} );
-            }
+			my $newDirection;
 			my $isSorted = 0;
-		 	if (defined( $sortCol ) &&
-					$colCount == $sortCol &&
-						$stype ne '' ) {
+		 	if ( $currentDirection != $sortDirection{'NONE'} &&
+		 		   defined $sortCol &&
+				   $colCount == $sortCol &&
+				   $requestedTable == $tableCount && 
+				   $stype ne '' ) {
 				$isSorted = 1;
+				$newDirection = _getNewSortDirection( $currentDirection );
+			} else {
+				$newDirection = _getDefaultSortDirection();
 			}
 			
             if( $type eq 'th' ) {
@@ -551,63 +602,61 @@ sub emitTable {
                 $dataColorCount = 0 if( $resetCountNeeded );
                 $resetCountNeeded = 0;
                 unless( $upchar ) {
-                    my $gfx = TWiki::Func::getPubUrlPath().'/'.
-                      $TWiki::Plugins::TablePlugin::installWeb.
-                        '/TablePlugin/';
-
                     $upchar = CGI::span( { class => 'tableSortIcon tableSortUp' },
                     	CGI::img(
-                    	{ src=> $gfx.'up.gif',
+                    	{ src=> $iconUrl.'up.gif',
                           alt => 'up'} ));
                     $downchar = CGI::span( { class => 'tableSortIcon tableSortDown' },
                     	CGI::img(
-                    	{ src =>$gfx.'down.gif',
+                    	{ src =>$iconUrl.'down.gif',
                           alt => 'down'} ));
                     $diamondchar = CGI::span( { class => 'tableSortIcon tableSortUp' },
                     	CGI::img(
-                    	{ src => $gfx.'diamond.gif',
+                    	{ src => $iconUrl.'diamond.gif',
                           border => 0, alt => 'sort'} ));
                 }
 
                 # DG: allow headers without b.g too (consistent and yes,
                 # I use this)
                 $attr->{bgcolor} = $headerBg unless( $headerBg =~ /none/i );
-                if ($isSorted) {
-                    if( $currentDirection == $sortDirection{"ASCENDING"} ) {
-                        $arrow = CGI::a({ name=>'sorted_table' }, '<!-- -->') .
-                                        CGI::span({ title=>'Sorted ascending'},
-                                                  $upchar);
+                
+                if ( $isSorted ) {
+                    if( $currentDirection == $sortDirection{'ASCENDING'} ) {
+                        $tableAnchor = CGI::a( { name=>'sorted_table' }, '<!-- -->') .
+                                               CGI::span({ title=>'Sorted ascending'},
+                                               $upchar);
                     }
-                    if( $currentDirection == $sortDirection{"DESCENDING"} ) {
-                        $arrow = CGI::a({ name=>'sorted_table' }, '<!-- -->') .
-                            			CGI::span({ title=>'Sorted descending'},
-                                      			$downchar);
+                    if( $currentDirection == $sortDirection{'DESCENDING'} ) {
+                        $tableAnchor = CGI::a( { name=>'sorted_table' }, '<!-- -->') .
+                            			       CGI::span({ title=>'Sorted descending'},
+                                      		   $downchar);
                     }
                     $attr->{bgcolor} = $headerBgSorted unless( $headerBgSorted =~ /none/i );
                     $attr->{class} = _appendFirstColumnCssClass( $attr->{class} ) if $colCount == 0;
+                }
+                if ( $currentDirection == $sortDirection{'NONE'} ) {
+                	$tableAnchor = CGI::a( { name=>'sorted_table' },
+                						   '<!-- -->' );
                 }
                 if( $headerColor ) {
                     $cell = CGI::font( { color => $headerColor }, $cell );
                 }
                 if( $sortThisTable && $rowCount == $headerRows - 1 ) {
-                    if( $cell =~ /\[\[|href/o ) {
-                        $cell .= ' '.CGI::a({ href => $url.
-                                                'sortcol='.$colCount.
-                                                ';table='.$tableCount.
-                                                ';up='.$direction.
-                                                '#sorted_table',
-                                              rel => 'nofollow',
-                                              title => 'Sort by this column'},
-                                            $diamondchar).$arrow;
-                    } else {
-                        $cell = CGI::a({ href => $url.
-                                           'sortcol='.$colCount.
+                	#my $debugText = CGI::span( { class => 'twikiSmall' }, 'requestedTable='.$requestedTable.'; sortCol='.$sortCol.'; colCount='.$colCount.'; initSort='.$initSort.'; sorted='.$isSorted.'; currDir='.$currentDirection.'; newdir='.$newDirection.' ');
+                	my $debugText = '';
+                	my $linkAttributes = { href => $url.
+                                             'sortcol='.$colCount.
                                              ';table='.$tableCount.
-                                             ';up='.$direction.
+                                             ';up='.$newDirection.
                                              '#sorted_table',
-                                         rel=>'nofollow',
-                                         title=>'Sort by this column'},
-                                       $cell ).$arrow;
+                                             rel => 'nofollow',
+                                             title => 'Sort by this column' };
+                    if( $cell =~ /\[\[|href/o ) {
+                        $cell .= $debugText.' '.CGI::a(
+                        	$linkAttributes, $diamondchar).$tableAnchor;
+                    } else {
+                        $cell = $debugText.CGI::a(
+	                        $linkAttributes, $cell ).$tableAnchor;
                     }
                 } else {
                     $cell = ' *'.$cell.'* ';
@@ -618,7 +667,7 @@ sub emitTable {
                 $resetCountNeeded = 1 if( $colCount == 0 );
                 if( @dataBg ) {
                     my $bgcolor;
-                    if ($isSorted) {
+                    if ( $isSorted ) {
                     	$bgcolor = $dataBgSorted[$dataColorCount % ($#dataBgSorted+1) ];
                     } else {
                     	$bgcolor = $dataBg[$dataColorCount % ($#dataBg+1) ];
@@ -633,9 +682,9 @@ sub emitTable {
                 $type = 'td' unless $type eq 'Y';
             } ###if( $type eq 'th' )
             
-            my $isLastRow = ($rowCount eq $numberOfRows - 1);
+            my $isLastRow = ($rowCount == $numberOfRows - 1);
             if ( $attr->{rowspan} ) {
-            	$isLastRow = (($rowCount + ($attr->{rowspan} - 1)) eq $numberOfRows - 1);
+            	$isLastRow = (($rowCount + ($attr->{rowspan} - 1)) == $numberOfRows - 1);
             }
             $attr->{class} = _appendLastRowCssClass( $attr->{class} ) if $isLastRow;
             
@@ -675,7 +724,7 @@ sub handler {
         $url = $cgi->url . $cgi->path_info() . '?' . $plist;
         $url =~ s/\&/\&amp;/go;
 
-        $sortCol = $cgi->param( 'sortcol' );
+        $sortCol = $cgi->param( 'sortcol' ); # zero based: 0 is first column
         $requestedTable = $cgi->param( 'table' );
         $up = $cgi->param( 'up' );
 
