@@ -67,17 +67,22 @@ sub open_html {
             $section->{headline}.$mess);
 
         $guts .= "<div id='$id' class='foldableBlock foldableBlockClosed'>";
-
-        $guts .= CGI::div({class=>'tipsOfTheDay'}, $section->{desc})
-          if $section->{desc};
     }
 
     # Open subtable
     $guts .=
       CGI::start_table(
-          { width => '100%', -border => 1, -cellspacing => 0,
+          { width => '100%', -border => 0, -cellspacing => 0,
             -cellpadding => 0, -cols => 2})."\n";
-
+    
+    # Put info text inside table row for visual consistency
+	if ($depth == 2) {
+		$guts .= CGI::Tr(
+        	CGI::td(
+        		{ colspan => 2, class=>'docdata firstInfo' },
+        			$section->{desc} )) if $section->{desc};
+	}
+	
     return $guts;
 }
 
@@ -87,7 +92,7 @@ sub close_html {
     my $end = '';
     if ($depth <= 2) {
         # Close subtable
-        $end = "\n</table>";
+        $end = "</table>";
         if ($depth == 2) {
             # Close twisty div
             $end .= '</div>';

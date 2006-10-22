@@ -48,12 +48,18 @@ sub open_html {
        $keys, $value->{opts}, $valuer->currentValue($value));
     $prompter = CGI::span({class=>$class}, $prompter);
 
+	my $hiddenText = $this->hidden( 'TYPEOF:'.$keys, $value->{typename} );
+	my $cssClass = 'docdata info';
+	# Hide row if the hidden input field is the only contents
+	$cssClass .= ' twikiHidden' if $info eq '';
     my $td = CGI::td(
-        { colspan => 2, class=>'docdata info' },
-        $this->hidden( 'TYPEOF:'.$keys, $value->{typename} ).
-          $info );
+        { colspan => 2, class=>$cssClass },
+        $hiddenText.$info );
     my $row1;
+    
+    
     if ($value->{hidden}) {
+    	# This seems never to happen
         $row1 = CGI::Tr({class => 'hiddenRow '.$trclass }, $td)."\n";
     } else {
         $row1 = CGI::Tr({ class => $trclass }, $td)."\n";
