@@ -248,8 +248,8 @@ sub view {
     }
     ## SMELL continued: We could pass an argument into %QUERYPARAMS% and 
     ## handle as below. Still somewhat awkward...
-    #$tmpl =~ s/%QUERYPARAMS(?:{(.*?)})?%/TWiki::_make_params($1,@qparams)/geo;
-    $tmpl =~ s/%QUERYPARAMS%/TWiki::_make_params(1,@qparams)/geo;
+    #$tmpl =~ s/%URLPARAMS(?:{(.*?)})?%/TWiki::_make_params($1,@qparams)/geo;
+    $tmpl =~ s/%URLPARAMS%/TWiki::_make_params(1,@qparams)/geo;
 
 
     # extract header and footer from the template, if there is a
