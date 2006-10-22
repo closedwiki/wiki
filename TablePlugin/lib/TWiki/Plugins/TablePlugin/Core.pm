@@ -536,7 +536,7 @@ sub emitTable {
         }
 
         $stype = _guessColumnType( $sortCol );
-        if( $stype == $columnType{'TEXT'} ) {
+        if( $stype eq $columnType{'TEXT'} ) {
             if( $currentDirection == $sortDirection{'DESCENDING'} ) {
                 # efficient way of sorting stripped HTML text
                 # SMELL: efficient? That's not efficient!
