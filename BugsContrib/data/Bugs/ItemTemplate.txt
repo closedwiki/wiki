@@ -1,13 +1,13 @@
 | *Name*  | *Type* | *Size* | *Values* | *Tooltip message* | *Attributes* |
 | | label | | <h3>Summary</h3>One-line summary | | |
 | Summary | text | 85 | | | M |
-| | label | | <h3>Details</h3> Please use a horizontal rule to separate entries in the Details. If this is a bug report, please provide sufficient detail for the bug to be reproduced. If this is *not* a bug report, it should be marked as an Enhancement. All reports need to be SMART. | |
-| Details | textarea | 80x30 | | |
+| | label | | <h3>Details</h3> Please use a horizontal rule to separate entries in the Details. If this is a bug report, please provide sufficient detail for the bug to be reproduced. If this is *not* a bug report, it should be marked as an Enhancement. All reports need to be SMART. | | |
+| Details | textarea | 80x30 | | | |
 | | label | | <h3>Applies To</h3>Select which development area this problem applies to. Click on the field title to get help. | | |
 | AppliesTo | select | 1 | | | M |
 | | label | | <h3>Priority</h3>Select the items priority. Click on the field title to get help. | | |
 | ItemPriority | select | 1 | | | M |
-| | label | | <h3>Current State</h3>Click on the field title to get help. Please make sure there is an entry in the details explaining any state change.| |
+| | label | | <h3>Current State</h3>Click on the field title to get help. Please make sure there is an entry in the details explaining any state change.| | |
 | CurrentState | select | 1 | | | M |
 | | label | | <h3>Reporter</h3>Use your wiki name (%WIKIUSERNAME%) | | |
 | ReportedBy | text | 35 | %WIKIUSERNAME% | | M |
