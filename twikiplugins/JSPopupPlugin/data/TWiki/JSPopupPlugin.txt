@@ -51,6 +51,7 @@ parameters are
    * popuptexttype ="" - tml, rest
    * popuplocation="" - general location relative to the anchor (center, below) - center is default
    * border="" - show the border & close button (defaults to 'on') - if you select not to show the border and close button then there is an onmouseleave that closes the window
+   * delay=200 - used as the delay in mS if the anchortype='mouseover'
 
 
 ---++ Plugin Settings
@@ -82,6 +83,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | 01 May 2006 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  23 Oct 2006: | added delay by TWiki:Main.OliverKrueger |
 |  01 May 2006: | Initial version |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 |
 |  CPAN Dependencies: | none |

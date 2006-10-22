@@ -122,6 +122,7 @@ sub handlePopup {
     my $border = $params->{border} || 'on';
     my $buttons = $params->{buttons};
     my $evaluate = $params->{eval};
+    my $delay = $params->{delay} || '200';
 
     my $display = 'display:none;';
     my $event = '';
@@ -130,7 +131,7 @@ sub handlePopup {
     if ((defined($anchor)) && ($anchor ne '')) {
         $event = 'onclick="TWiki.JSPopupPlugin.openPopupSectional(event, \'popupSection'.$popupSectionNumber.'\')"';#ASSUME onclick
         if ($anchortype eq 'onmouseover') {
-            $event = 'onmouseover="TWiki.JSPopupPlugin.openPopupSectional(event, \'popupSection'.$popupSectionNumber.'\')"';
+            $event = 'onmouseover="TWiki.JSPopupPlugin.DelayedOpenPopupSectional(event, \'popupSection'.$popupSectionNumber.'\')" onmouseout="TWiki.JSPopupPlugin.CancelOpenPopup()"';
         }
         $output .= '<span '.$event.'>'."\n".$anchor."\n".'</span>';
     } else {
@@ -151,6 +152,7 @@ sub handlePopup {
         '" type="'.$popuptexttype.
         '" title="'.$popuptitle.
         '" location="'.$popuplocation.
+        '" delay="'.$delay.
         '" border="'.$border.'">'.$popuptext.'</span>';
 
 
@@ -248,3 +250,4 @@ sub setupTWiki4Compatibility {
 }
 
 1;
+
