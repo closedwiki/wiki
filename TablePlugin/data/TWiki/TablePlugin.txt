@@ -19,9 +19,8 @@ Gives extra control of table display:
 Click on column heading text to sort by a column.  Initial column will be sorted in descending order, click again to get ascending order.  The type of data in the cell is determined automatically:
 
 	* date if format is:
-		* dd MMM YYY - hh:mm
-		* dd-MMM-YY or dd-MMM-YYYY (can be / or space in place of -)
-		* MMM is Jan, Feb, etc
+		* dd MMM YYYY - hh:mm (MMM is Jan, Feb, etc.)
+		* dd-MMM-YY or dd-MMM-YYYY (can be / or space in place of -) (MMM is Jan, Feb, etc)
 	* number is digits, with optional decimal point
 	* otherwise treated as text
 
