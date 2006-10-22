@@ -6,6 +6,8 @@ Good for status messages, or to show detailed information without causing the we
 
 There is a running demo of JSPopupPlugin running at the [[http://demo.wikiring.com/twiki/bin/view/Demo/JSPopupPluginDemo][WikiRing demo site]]
 
+*NEW: Uses TWiki:Plugins.YahooUserInterfaceContrib*
+
 It uses javascript to create a popup window containing either a hidden pre-rendered part of a topic, or a TWiki request that is dynamically requested and served.
 Popups are activated either on a mouse click, when the mouse passes over the anchor, or when the page is loaded.
 
@@ -78,12 +80,11 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.SvenDowideit - SvenDowideit@wikiring.com - <img src="%ATTACHURLPATH%/wikiringlogo20x20.png" /> [[http://www.wikiring.com][WikiRing.com]] |
-|  uses AjaxToolbox | &copy; & Author: Matt Kruse <matt@ajaxtoolbox.com> http://www.AjaxToolbox.com/ |
 |  Copyright: | &copy; 2001-2006, SvenDowideit@wikiring.com |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | 01 May 2006 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  23 Oct 2006: | added delay by TWiki:Main.OliverKrueger |
+|  23 Oct 2006: | added delay by TWiki:Main.OliverKrueger, and added use of TWiki:Plugins.YahooUserInterfaceContrib |
 |  01 May 2006: | Initial version |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 |
 |  CPAN Dependencies: | none |

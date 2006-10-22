@@ -37,7 +37,7 @@ Settings are stored as preferences variables. To reference a setting write ==%<n
 
 ---++ Contrib Info
 
-|  Author: | TWiki:Main/SvenDowideit |
+|  Plugin Author: | TWiki:Main.SvenDowideit - SvenDowideit@wikiring.com - <img src="%ATTACHURLPATH%/wikiringlogo20x20.png" /> [[http://www.wikiring.com][WikiRing.com]] |
 |  Copyright &copy;: | Copyright Yahoo INC |
 |  License: | GPL ([[http://developer.yahoo.com/yui/license.txt][Yahoo BSD License]]) |
 |  Dependencies: | %$DEPENDENCIES% |
@@ -49,3 +49,5 @@ Settings are stored as preferences variables. To reference a setting write ==%<n
 |  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
 __Related Topics:__ %TWIKIWEB%.TWikiPreferences
+
+%META:FILEATTACHMENT{name="wikiringlogo20x20.png" attachment="wikiringlogo20x20.png" attr="" comment="" date="1153810769" path="wikiringlogo20x20.png" size="1343" stream="wikiringlogo20x20.png" user="Main.TWikiGuest" version="1"}%
