@@ -87,7 +87,7 @@ TWiki.InlineEditPlugin.TextArea.prototype.createEditSection = function() {
         if (numberOfLines < 4) {numberOfLines = 4};
         if (numberOfLines > 12) {numberOfLines = 12};
 
-        var defaultNumberOfCols = 40;
+        var defaultNumberOfCols = 60;
         var defaultNumberOfRows = countLines(this.topicSectionObject.tml, defaultNumberOfCols);
         if (defaultNumberOfRows < 4) {defaultNumberOfRows = 4};
         if (defaultNumberOfRows > 12) {defaultNumberOfRows = 12};
@@ -101,8 +101,11 @@ newTextarea.onclick = "TWiki.InlineEditPlugin.TextArea.showComponentEdit(event)"
 newTextarea.rows = defaultNumberOfRows;
 newTextarea.cols = defaultNumberOfCols;
 newTextarea.innerHTML = this.topicSectionObject.tml;
+var hr1 = document.createElement('HR');
+newForm.appendChild(hr1);
 newForm.appendChild(newTextarea);
-
+var hr2 = document.createElement('HR');
+newForm.appendChild(hr2);
 
         newTextarea.topicSection =this.topicSectionObject.topicSection;
 
