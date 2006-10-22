@@ -47,7 +47,7 @@ TWiki.JSPopupPlugin.DelayedOpenPopupSectional = function (event, sectionName) {
     var delay = sectionElem.getAttribute('delay');
     
     //TODO: consider making this an array, indexed by sectionName
-    delayedPopup = window.setTimeout("TWiki.JSPopupPlugin.openPopupSectional(event, '"+sectionName+"')", delay);
+    delayedPopup = window.setTimeout("TWiki.JSPopupPlugin.openPopupSectional(null, '"+sectionName+"')", delay);
 }
  
 TWiki.JSPopupPlugin.CancelOpenPopup = function() {
@@ -182,39 +182,31 @@ TWiki.JSPopupPlugin.ajaxCall = function(event, popupUrl, popupParams) {
     if ( typeof( popupParams ) != "undefined" ) {
          popupUrl = popupUrl+';'+popupParams;
     }
-    var bindArgs = {
-        url:        popupUrl,
-        onError:      function(req) {
-            // handle error here
-            alert('Error!\nStatusText='+req.statusText+'\nContents='+req.responseText);
-            },
-        onSuccess:      function(req) {
-            var data = req.responseText;
-            //protect against full html pages by only bringing in the body
-            var startBodyTag = data.indexOf('<body');
-            if (startBodyTag == -1) {
-                startBodyTag = data.indexOf('<BODY');
-            }
-            if (startBodyTag > -1) {
-                startBodyTag = data.indexOf('>', startBodyTag);
-
-                var endBodyTag = data.indexOf('</body');
-                if (endBodyTag == -1) {
-                    endBodyTag = data.indexOf('</BODY');
+    var callback = 	{ 	  success: function(o) {
+	            var data = o.responseText;
+                //protect against full html pages by only bringing in the body
+                var startBodyTag = data.indexOf('<body');
+                if (startBodyTag == -1) {
+                    startBodyTag = data.indexOf('<BODY');
                 }
-                if (endBodyTag > -1) {
-                    data = data.substring(startBodyTag+1, endBodyTag-1);
+                if (startBodyTag > -1) {
+                    startBodyTag = data.indexOf('>', startBodyTag);
+    
+                    var endBodyTag = data.indexOf('</body');
+                    if (endBodyTag == -1) {
+                        endBodyTag = data.indexOf('</BODY');
+                    }
+                    if (endBodyTag > -1) {
+                        data = data.substring(startBodyTag+1, endBodyTag-1);
+                    }
                 }
-            }
-            data = '<div>' + data + '</div>';
-            TWiki.JSPopupPlugin.openPopup(event, data);
-        }
-    };
+                data = '<div>' + data + '</div>';
+                TWiki.JSPopupPlugin.openPopup(event, data);
 
-    // dispatch the request
-    var requestObj = AjaxRequest.get(bindArgs);
-}
-
+	      }, 	  failure: function(o) {alert('Error!\nStatusText='+o.statusText+'\nContents='+o.responseText);}	  //,argument: [argument1, argument2, argument3] 	};
+	var transaction = YAHOO.util.Connect.asyncRequest('GET', popupUrl, callback, null); 
+}    
+    
 /***********************************************************
 more generic tools - need to share at some stage
 */
