@@ -955,25 +955,26 @@ sub getScriptUrl {
 
         $url .= urlEncode( '/'.$web.'/'.$topic );
 
-	$url .= _make_params(@params);
+	$url .= _make_params(0, @params);
     }
 
     return $url;
 }
 
 sub _make_params {
+  my ( $notfirst, @args ) = @_;
   my $url = '';
   my $ps = '';
   my $anchor = '';
-  while( my $p = shift @_ ) {
+  while( my $p = shift @args ) {
     if( $p eq '#' ) {
-      $anchor .= '#' . shift( @_ );
+      $anchor .= '#' . shift( @args );
     } else {
-      $ps .= ';' . $p.'='.urlEncode(shift( @_ )||'');
+      $ps .= ';' . $p.'='.urlEncode(shift( @args )||'');
     }
   }
   if( $ps ) {
-    $ps =~ s/^;/?/;
+    $ps =~ s/^;/?/ unless $notfirst;
     $url .= $ps;
   }
   $url .= $anchor;
@@ -1776,7 +1777,7 @@ sub _TOC {
             $line =~ s/<[\/]?a\b[^>]*>//gi;
             # create linked bullet item, using a relative link to anchor
             my $target = $isSameTopic ?
-                         _make_params('#'=>$anchor,@qparams) :
+                         _make_params(0, '#'=>$anchor,@qparams) :
                          $this->getScriptUrl(0,'view',$web,$topic,'#'=>$anchor,@qparams);
             $line = $tabs.'* ' .  CGI::a({href=>$target},$line);
             $result .= "\n".$line;

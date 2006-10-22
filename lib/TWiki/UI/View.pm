@@ -236,6 +236,22 @@ sub view {
     $tmpl =~ s/%REVINFO%/$ri/go;
     $tmpl =~ s/%REVISIONS%/$revs/go;
 
+    ## SMELL: This is also used in TWiki::_TOC. Could insert a tag in
+    ## TOC and remove all those here, finding the parameters only once
+    # Find URL parameters
+    my $query = $session->{cgiQuery};
+    my @qparams = ();
+    foreach my $name ( $query->param ) {
+      next if ($name eq 'keywords');
+      next if ($name eq 'topic');
+      push @qparams, $name => $query->param($name);
+    }
+    ## SMELL continued: We could pass an argument into %QUERYPARAMS% and 
+    ## handle as below. Still somewhat awkward...
+    #$tmpl =~ s/%QUERYPARAMS(?:{(.*?)})?%/TWiki::_make_params($1,@qparams)/geo;
+    $tmpl =~ s/%QUERYPARAMS%/TWiki::_make_params(1,@qparams)/geo;
+
+
     # extract header and footer from the template, if there is a
     # %TEXT% tag marking the split point
     my( $start, $end );
