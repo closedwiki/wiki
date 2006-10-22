@@ -1,0 +1,51 @@
+---+!! YahooUserInterfaceContrib Contrib Package
+
+Add short description here of your YahooUserInterfaceContrib contrib.
+
+%TOC%
+
+---++ Summary of Contents
+Contains an un-archived and ready for use copy of YUI 0.11.4 - see http://developer.yahoo.com/yui
+
+if you get the Contrib using svn, it will contain all the exampled and documentation that is in the original archive. the MANIFEST (and thus the zip file attached to this topic) only contains the actual javascript (both release and debug versions).
+
+
+---++ Detailed Documentation
+%$POD%
+
+---++ Settings
+
+Settings are stored as preferences variables. To reference a setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, e.g. ==%<nop>YAHOOUSERINTERFACECONTRIB_STUB%==
+
+   * One line description:
+      * Set SHORTDESCRIPTION = Add short description here of your YahooUserInterfaceContrib contrib
+
+   * Name of the perl package
+      * Set STUB = %$STUB%
+
+---++ Installation Instructions
+	* Download the ZIP file from the Plugin web (see below)
+	* Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
+	| *File:* | *Description:* |
+%$MANIFEST%
+	* Run ==%TOPIC%_installer.pl== to automatically check and install other modules that this module depends on. You can also do this step manually. Dependencies:
+	%$DEPENDENCIES%
+
+   * Test if the installation was successful:
+      * __enter sample here__
+      * see also [[Sandbox.PluginTest%TOPIC%]]
+
+---++ Contrib Info
+
+|  Author: | TWiki:Main/SvenDowideit |
+|  Copyright &copy;: | Copyright Yahoo INC |
+|  License: | GPL ([[http://developer.yahoo.com/yui/license.txt][Yahoo BSD License]]) |
+|  Dependencies: | %$DEPENDENCIES% |
+|  Version: | %$VERSION% |
+|  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  %DATE%: | Initial version |
+|  Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
+|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
+|  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
+
+__Related Topics:__ %TWIKIWEB%.TWikiPreferences
