@@ -1,6 +1,5 @@
 %META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
 
-
 ---+ Table Plugin
 
 Gives extra control of table display:
@@ -57,7 +56,7 @@ a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, for example, =
 		* Set SORT = all
 
 	* Default table attributes:
-		* Set TABLEATTRIBUTES = tableborder="0" cellpadding="0" cellspacing="0" valign="top" headerbg="#6b7f93" headerbgsorted="#334455" headercolor="#ffffff" databg="#ecf2f8,#ffffff" databgsorted="#dce5ee,#f5f5f5"
+		* Set TABLEATTRIBUTES = tableborder="0" cellpadding="0" cellspacing="0" valign="top" headeralign="center" headercolor="#ffffff" headerbg="#6b7f93" headerbgsorted="#334455" headercolor="#ffffff" databg="#edf4f9,#ffffff" databgsorted="#dce7ee,#f5f5f5"
 		* Classic skin table attributes:
 			* #Set TABLEATTRIBUTES = tableborder="1" cellpadding="0" cellspacing="1" headerbg="#99CCCC" databg="#FFFFCC, #FFFFFF"
 
@@ -68,11 +67,11 @@ Attributes are defined as a =TABLEATTRIBUTES= Plugin setting in this topic, a =T
 | *Argument*       | *Comment*  | *Default&nbsp;value*  | *Example*  |
 | =sort=           | Set table sorting ="on"= or ="off"=. | <span class="twikiGrayText">unspecified</span> | =sort="on"= |
 | =initsort=       | Column to sort initially (="1"= to number of columns). | <span class="twikiGrayText">unspecified</span> | =initsort="2"= |
-| =initdirection=  | Initial sorting direction for =initsort=, set to  ="up"= or ="down"=. | <span class="twikiGrayText">unspecified</span> | =initdirection="up"= |
+| =initdirection=  | Initial sorting direction for =initsort=, set to  ="up"= (descending) or ="down"= (ascending). | <span class="twikiGrayText">unspecified</span> | =initdirection="up"= |
 | =headerbg=       | Header cell background colour. | ="#6b7f93"= | =headerbg="#999999"= |
 | =headerbgsorted= | Header cell background colour of a sorted column. | the values of =headerbg= | =headerbgsorted="#32596c"= |
 | =headercolor=    | Header cell text colour. | ="#ffffff"= | =headercolor="#0000cc"= |
-| =databg=	       | Data cell background colour, a comma separated list. Specify ="none"= for no colour, that is to use the colour/background of the page the table is on. | ="#ecf2f8,#ffffff"= | =databg="#f2f2f2,#ffffff"= |
+| =databg=	       | Data cell background colour, a comma separated list. Specify ="none"= for no colour, that is to use the colour/background of the page the table is on. | ="#edf4f9,#ffffff"= | =databg="#f2f2f2,#ffffff"= |
 | =databgsorted=   | Data cell background colour of a sorted column; see =databg=. | the values of =databg= | =databgsorted="#d4e8e4,#e5f5ea"= |
 | =datacolor=      | Data cell text colour, a comma separated list. | <span class="twikiGrayText">unspecified</span> | =datacolor="#0000CC, #000000"= |
 | =tableborder=    | Table border width (pixels). | ="1"= | =tableborder="2"= |

@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="ArthurClemens" date="1161297394" format="1.1" reprev="1.2" version="1.2"}%
+%META:TOPICINFO{author="ArthurClemens" date="1161428514" format="1.1" reprev="1.2" version="1.2"}%
 ---+ !!Color scheme settings for %TWIKIWEB%.PatternSkin
 *Appearance: text colors, background colors, border colors.*
 
@@ -10,8 +10,6 @@ Let %TWIKIWEB%.PatternSkin point to the custom-made colors style sheet. In [[%MA
 <pre>
    * <nop>Set USERCOLORSURL = %<nop>PUBURLPATH%/%<nop>MAINWEB%/TWikiPreferences/theme-colors.css
 </pre>
-Test -- USERCOLORSURL now points to: %USERCOLORSURL% %BR%
-Test the file (may exist only after having saved this topic): <a href="%USERCOLORSURL%">theme-colors.css</a>
 
 ---+++!! Step 2
 Edit this topic, and change the color variables as you like. 
@@ -25,7 +23,9 @@ Edit this topic, and change the color variables as you like.
    * Set MAIN_TEXT_COLOR = #000
 ---++++ MAIN_BACKGROUND_COLOR Main background color
    * Set MAIN_BACKGROUND_COLOR = #fff
-
+---++++ LIGHT_ON_DARK_TEXT_COLOR Light on dark text color
+   * Set LIGHT_ON_DARK_TEXT_COLOR = #fff
+   
 ---+++ Links
 ---++++ LINK_TEXT_NORMAL Link normal text
    * Set LINK_TEXT_NORMAL = #06c
@@ -89,10 +89,10 @@ Edit this topic, and change the color variables as you like.
    * Set INPUT_FIELD_BORDERS = #aaa #ddd #ddd #aaa
 ---++++ FORM_INPUT_BORDER Textarea, input and select (darker gray)
    * Set FORM_INPUT_BORDER = #aaa
----++++ FORM_BORDER Form (light gray)
-   * Set FORM_BORDER = #efefef
----++++ ACTIVE_FORM_BACKGROUND Edit form, form steps (light blue)
-   * Set ACTIVE_FORM_BACKGROUND = #F6FAFD
+---++++ FORM_BORDER Form (same as twikiTable border)
+   * Set FORM_BORDER = #ccc
+---++++ ACTIVE_FORM_BACKGROUND Edit form, form steps (same as =databg= in TablePlugin)
+   * Set ACTIVE_FORM_BACKGROUND = #f0f6f9
 ---++++ FORMFIELD_ACTIVE Active form field (not implemented yet)
    * Set FORMFIELD_ACTIVE = #ffc
    
@@ -117,18 +117,9 @@ Edit this topic, and change the color variables as you like.
 ---++++ GENERAL_BACKGROUND General background color (if not set in  MAIN_BACKGROUND_COLOR) (white)
    * Set GENERAL_BACKGROUND = #fff
 ---++++ SIDE_BAR_BACKGROUND Side bar background
-   * Set SIDE_BAR_BACKGROUND = #f9f9f9
-   
----++++ Table colors
----+++++ TABLE_DATA_BACKGROUND Table data background
-   * Set TABLE_DATA_BACKGROUND = #ecf2f8
----+++++ TABLE_HEADER_BACKGROUND Table header background
-   * Set TABLE_HEADER_BACKGROUND = #6b7f93
----+++++ TABLE_SELECTED_COLUMN_HEADER_BACKGROUND Sorted table column accent background 
-   * Set TABLE_SELECTED_COLUMN_HEADER_BACKGROUND = #345
-   
+   * Set SIDE_BAR_BACKGROUND = #f6fafd
 ---++++ INFO_BACKGROUND Info (very light blue) (placeholder for background image)
-   * Set INFO_BACKGROUND = #f5f9fd
+   * Set INFO_BACKGROUND = #f8fbfc
 ---++++ TOPIC_ACTION_BACKGROUND Topic action row (light yellow)
    * Set TOPIC_ACTION_BACKGROUND = #FCF8EC
 ---++++ HEADER_BACKGROUND H1, H2, etc header (light yellow) 
@@ -137,6 +128,24 @@ Edit this topic, and change the color variables as you like.
    * Set ATTACHMENT_AND_FORM_BACKGROUND = #FEFCF6
 ---++++ DIFF_HEADER_BACKGROUND Diff header (dark gray) (same as GRAYED_OUT_TEXT)
    * Set DIFF_HEADER_BACKGROUND = #8E9195
+
+---++++ Table colors
+---+++++ TABLE_DATA_BACKGROUND Table data background
+   * Set TABLE_DATA_BACKGROUND = #f0f6f9
+---+++++ TABLE_HEADER_BACKGROUND Table header background
+   * Set TABLE_HEADER_BACKGROUND = #6b7f93
+---+++++ TABLE_SELECTED_COLUMN_HEADER_BACKGROUND Sorted table column accent background 
+   * Set TABLE_SELECTED_COLUMN_HEADER_BACKGROUND = #345
+---+++++ TABLE_DATA_ODD_BACKGROUND Table data background (odd row)
+   * Set TABLE_DATA_ODD_BACKGROUND = #edf4f9
+---+++++ TABLE_DATA_EVEN_BACKGROUND Table data background (even row)
+   * Set TABLE_DATA_EVEN_BACKGROUND = #ffffff
+---+++++ TABLE_DATA_ODD_SELECTED_BACKGROUND Table data background (odd row, selected column)
+   * Set TABLE_DATA_ODD_SELECTED_BACKGROUND = #dce7ee
+---+++++ TABLE_DATA_EVEN_SELECTED_BACKGROUND Table data background (even row, selected column)
+   * Set TABLE_DATA_EVEN_SELECTED_BACKGROUND = #f5f5f5
+---+++++ TABLE_DATA_MIX_BACKGROUND Table data background (mix between even and odd)
+   * Set TABLE_DATA_MIX_BACKGROUND = #f7fafc
 	
 ---+++ Border colors
 ---++++ INFO_BORDER Info (light blue)
@@ -149,6 +158,8 @@ Edit this topic, and change the color variables as you like.
    * Set LAYOUT_ELEMENT_BORDER = #ccc
 ---++++ TABLE_BORDER Table border, sup (light neutral tone)
    * Set TABLE_BORDER = #ccc
+---++++ TABLE_BORDER_LIGHT Table border light
+   * Set TABLE_BORDER_LIGHT = #e2e7eb
    
 <!-- END OF COLOR VARIABLES -->
 
@@ -172,7 +183,7 @@ Do not change the text below this line unless you know what you are doing!
 }
 #patternLeftBar, #patternLeftBarContents { /* don't set a background here; use patternWrapper */ }
 #patternWrapper {
-	background-color:%ACTIVE_FORM_BACKGROUND%;
+	background-color:%SIDE_BAR_BACKGROUND%;
 }
 #patternBottomBar {
 	background-color:%MAIN_BACKGROUND_COLOR%;
@@ -382,15 +393,17 @@ table.twikiFormTable td.twikiFormTableRow {
 .twikiEditForm {
 	color:%MAIN_TEXT_COLOR%;
 }
+.twikiEditForm .twikiFormTable,
 .twikiEditForm .twikiFormTable th,
 .twikiEditForm .twikiFormTable td {
-	border-color:%TABLE_BORDER%;
+	border-color:%TABLE_BORDER_LIGHT%;
 }
+/* use a different table background color mix: no odd/even rows, no white background */
 .twikiEditForm .twikiFormTable td  {
-	background-color:%ACTIVE_FORM_BACKGROUND%;
+	background-color:%TABLE_DATA_MIX_BACKGROUND%;
 }
 .twikiEditForm .twikiFormTable th {
-	background-color:%INFO_BACKGROUND%;
+	background-color:%TABLE_DATA_ODD_BACKGROUND%;
 }
 .patternContent .twikiAttachments,
 .patternContent .twikiForm {
@@ -617,10 +630,10 @@ table#twikiSearchTable td {
 	border-color:%TABLE_BORDER%;
 } 
 table#twikiSearchTable th {
-	color:%GRAYED_OUT_TEXT%;
+	color:%MAIN_TEXT_COLOR%;
 }
 table#twikiSearchTable td.first {
-	background-color:%TABLE_HEADER_BACKGROUND%;
+	background-color:%TOPIC_ACTION_BACKGROUND%;
 }
 
 /*	-----------------------------------------------------------
@@ -701,6 +714,7 @@ table.patternDiffOptions img {
 	border-color:%LAYOUT_ELEMENT_BORDER%;
 }
 .patternDiff h4.patternSearchResultsHeader {
+	color:%LIGHT_ON_DARK_TEXT_COLOR%;
 	background-color:%TABLE_SELECTED_COLUMN_HEADER_BACKGROUND%;
 }
 tr.twikiDiffDebug td {
@@ -731,6 +745,7 @@ tr.twikiDiffDebug .twikiDiffUnchangedText {
 .twikiDiffChangedHeader,
 .twikiDiffDeletedHeader,
 .twikiDiffAddedHeader {
+	color:%LIGHT_ON_DARK_TEXT_COLOR%;
 	background-color:%TABLE_SELECTED_COLUMN_HEADER_BACKGROUND%;
 }
 /* Unchanged */
@@ -741,4 +756,4 @@ tr.twikiDiffDebug .twikiDiffUnchangedText {
 %ENDATTACH%
 </verbatim>
 
-%META:FILEATTACHMENT{name="theme-colors.css" attachment="theme-colors.css" attr="" comment="Generated by !AttachContentPlugin" date="1161297394" path="theme-colors.css" size="13922" stream="GLOB(0x8c72510)" user="Main.ArthurClemens" version="12"}%
+%META:FILEATTACHMENT{name="theme-colors.css" attachment="theme-colors.css" attr="" comment="Generated by !AttachContentPlugin" date="1161428514" path="theme-colors.css" size="11205" stream="GLOB(0x8c7c6f0)" user="Main.ArthurClemens" version="1"}%
