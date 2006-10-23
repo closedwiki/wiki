@@ -1,4 +1,4 @@
-#!/usr/bin/perl
+#!/usr/bin/perl -w
 #
 # TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
@@ -125,7 +125,6 @@ HERE
 foreach my $module ('FindBin',
                     'File::Spec',
                     'Config',
-                    'Carp',
                     'CGI qw(:any)') {
     _loadBasicModule($module);
 }

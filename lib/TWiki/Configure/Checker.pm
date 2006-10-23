@@ -189,6 +189,7 @@ sub checkPerlModules {
 
     my $e = '';
     foreach my $mod (@$mods) {
+        next if $INC{$mod->{name} . '.pm'}; # skip if already included
         my $n = '';
         my $mod_version;
         eval 'use '.$mod->{name};
@@ -198,6 +199,8 @@ sub checkPerlModules {
         } else {
             no strict 'refs';
             eval '$mod_version = $'.$mod->{name}.'::VERSION';
+            $mod_version ||= '';
+            $mod_version =~ s/_\d+//; # avoid warnings with 9.999_99 syntax
             use strict 'refs';
             if ($mod_version < $mod->{minimumVersion}) {
                 $n = $mod_version.' installed. Version '

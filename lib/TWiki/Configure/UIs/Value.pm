@@ -69,7 +69,7 @@ sub open_html {
 
     my $row2col1 = $keys;
     if ($value->needsSaving($valuer)) {
-        my $v = $valuer->defaultValue($value);
+        my $v = $valuer->defaultValue($value) || '';
         $row2col1 .= CGI::span({title => 'default = '.$v,
                                 class => 'twikiAlert'}, '&delta;');
     }
