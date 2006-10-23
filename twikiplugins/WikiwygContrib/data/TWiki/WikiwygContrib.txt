@@ -26,7 +26,7 @@ Settings are stored as preferences variables. To reference a setting write ==%<n
 
 ---++ Contrib Info
 
-|  Author: | TWiki:Main/SvenDowideit |
+|  Plugin Author: | TWiki:Main.SvenDowideit - SvenDowideit@wikiring.com - <img src="%ATTACHURLPATH%/wikiringlogo20x20.png" /> [[http://www.wikiring.com][WikiRing.com]] |
 |  Copyright &copy;: | 2006, SvenDowideit@WikiRing.com and Copyright (c) 2005,2006 Socialtext Corporation |
 |  License: | LGPL ([[http://www.gnu.org/copyleft/lesser.txt][GNU Lesser General Public License]])  |
 |  Dependencies: | %$DEPENDENCIES% |
@@ -49,3 +49,4 @@ __Related Topics:__ %TWIKIWEB%.TWikiPreferences
 %META:FIELD{name="RelatedTopics" attributes="" title="RelatedTopics" value="WysiwygPlugin"}%
 %META:FIELD{name="TestedOnOS" attributes="" title="TestedOnOS" value="OsLinux"}%
 %META:FIELD{name="ShouldRunOnOS" attributes="" title="ShouldRunOnOS" value="AnyOS"}%
+%META:FILEATTACHMENT{name="wikiringlogo20x20.png" attr="h" autoattached="1" comment="wikiringlogo20x20.png" date="1161609076" path="wikiringlogo20x20.png" size="1343" user="Main.SvenDowideit" version="1"}%

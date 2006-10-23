@@ -98,4 +98,4 @@ __Related Topics:__ %TWIKIWEB%.TWikiPlugins, %TWIKIWEB%.DeveloperDocumentationCa
 
 -- SvenDowideit@wikiring.com - [[http://www.wikiring.com][WikiRing.com]]
 
-%META:FILEATTACHMENT{name="wikiringlogo20x20.png" attachment="wikiringlogo20x20.png" attr="" comment="" date="1153810769" path="wikiringlogo20x20.png" size="1343" stream="wikiringlogo20x20.png" user="Main.TWikiGuest" version="1"}%
+%META:FILEATTACHMENT{name="wikiringlogo20x20.png" attr="h" autoattached="1" comment="wikiringlogo20x20.png" date="1161609076" path="wikiringlogo20x20.png" size="1343" user="Main.SvenDowideit" version="1"}%

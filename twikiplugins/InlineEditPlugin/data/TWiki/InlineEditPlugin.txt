@@ -63,7 +63,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 ---++ Plugin Info 
 
 &nbsp;
-|  Plugin Author: | TWiki:Main.SvenDowideit - SvenDowideit @wikiring.com |
+|  Plugin Author: | TWiki:Main.SvenDowideit - SvenDowideit@wikiring.com - <img src="%ATTACHURLPATH%/wikiringlogo20x20.png" /> [[http://www.wikiring.com][WikiRing.com]] |
 |  Copyright: | &copy; 2001-2006, SvenDowideit@wikiring.com |
 |  Plugin Version: | 30 April 2006 (V0.900) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
@@ -81,3 +81,5 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 __Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
 
 -- TWiki:Main.SvenDowideit
+
+%META:FILEATTACHMENT{name="wikiringlogo20x20.png" attr="h" autoattached="1" comment="wikiringlogo20x20.png" date="1161609076" path="wikiringlogo20x20.png" size="1343" user="Main.SvenDowideit" version="1"}%
