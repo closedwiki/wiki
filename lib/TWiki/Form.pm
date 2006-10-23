@@ -412,7 +412,6 @@ from $meta. Plugins can provide a handler that extends the set of supported
 types
 
 SMELL: this should be a method on a field class
-SMELL: JSCalendarContrib ought to provide a 'date' handler.
 
 =cut
 
@@ -444,6 +443,25 @@ sub renderFieldForEdit {
     if( $output ) {
         $value = $output;
 
+    } elsif( $type eq 'date' ) {
+      $size = 10 if( !$size || $size < 1 );
+      $value = CGI::textfield({ name => $name,
+				id => 'id'.$name,
+				size=> $size,
+				value => $value });
+      require TWiki::Contrib::JSCalendarContrib;
+      unless ( $@ ) {
+	my $ifFormat = $TWiki::cfg{JSCalendarContrib}{format} || '%e %b %Y';
+	TWiki::Contrib::JSCalendarContrib::addHEAD( 'twiki' );
+	$value .= CGI::image_button( -name => 'calendar',
+				     -onclick =>
+				     "return showCalendar('id$name','$ifFormat')",
+				     -src=> TWiki::Func::getPubUrlPath() . '/' .
+				     TWiki::Func::getTwikiWebname() .
+				     '/JSCalendarContrib/img.gif',
+				     -alt => 'Calendar',
+				     -align => 'MIDDLE' );
+      }
     } elsif( $type eq 'text' ) {
         $value = CGI::textfield( -class => 'twikiEditFormTextField',
                                  -name => $name,
