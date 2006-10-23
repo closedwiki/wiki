@@ -522,8 +522,14 @@ sub renderFieldForEdit {
         my $params = { name=>$name, size=>$size };
         if( $isMulti ) {
             $params->{'multiple'}='on';
+            $value  = CGI::Select( $params, $choices );
+            # Item2410: We need a dummy control to detect the case where
+            #           all checkboxes have been deliberately unchecked
+            $value .= CGI::hidden( -name => $name, -value => "");
         }
-        $value = CGI::Select( $params, $choices );
+        else {
+            $value  = CGI::Select( $params, $choices );
+        }
 
     } elsif( $type =~ /^checkbox/ ) {
         $options = $fieldDef->{value};
