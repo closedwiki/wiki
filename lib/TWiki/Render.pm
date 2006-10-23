@@ -234,7 +234,7 @@ sub renderFormField {
     }
     my $bar = $attrs->{bar} || "&#124;";
     # change any new line character sequences to <br />
-    $text =~ s/\r?\n/$newline/gos;
+    $text =~ s/\r?\n/ $newline /gos;
     # escape "|" to HTML entity
     $text =~ s/\|/$bar/gos;
     return $text;
