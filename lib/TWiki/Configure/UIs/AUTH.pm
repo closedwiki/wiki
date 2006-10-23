@@ -42,7 +42,7 @@ sub ui {
     }
 
     # and add a few more
-    $output .= "<div id ='twikiPassword' class='twikiFormSteps'>\n";
+    $output .= "<div id ='twikiPassword'><div class='twikiFormSteps'>\n";
 
     $output .= CGI::div({ class=>'twikiFormStep' },
                    CGI::h3('Enter the configuration password'));
@@ -55,8 +55,9 @@ sub ui {
                                          -value=>$actionMess)));
 
     if ($TWiki::cfg{Password} ne '') {
-        $output .= CGI::p(CGI::strong('Forgotten your password?'));
-        $output .= CGI::p(<<'HERE');
+        $output .= CGI::div( { class=>'twikiFormStep' },
+        	CGI::p( CGI::strong('Forgotten your password?' )) .
+        	CGI::p(<<'HERE'));
 To reset the password, log in to the server and delete the
 <code>$TWiki::cfg{Password} = \'...\';</code> line in
 <code>lib/LocalSite.cfg</code>
@@ -85,26 +86,32 @@ HERE
 </div><!--expanation-->
 HERE
 
-    $output .= '</div><!--twikiPassword-->';
+    $output .= '</div><!--/twikiFormSteps--></div><!--/twikiPassword-->';
 
     my $submitStr = $actionMess;
-    if ($canChangePW) {
-        $output .= "<div id='twikiPasswordChange'>";
+    if ($canChangePW) {        
         if ($TWiki::cfg{Password} ne '') {
-            $output .= CGI::h3({ class=>'twikiFormStep' },
-                          'You may change your password here:' );
-        }
-        $output .= CGI::strong('New Password:');
-        $output .= CGI::div({ class=>'twikiFormStep' },
-                       CGI::password_field( 'newCfgP', '', 20, 80 ) );
-        $output .= CGI::strong('Confirm Password:');
-        $output .= CGI::div( { class=>'twikiFormStep' },
-                        CGI::password_field( 'confCfgP', '', 20, 80 ) );
-        $submitStr = 'Change Password and '.$submitStr;
-        $output .= "</div>\n";
+        	$output .= "<div id='twikiPasswordChange'><div class='twikiFormSteps'>\n";
+            $output .= CGI::div( { class=>'twikiFormStep' },
+            					 CGI::h3( { class=>'twikiFormStep' },
+                      			'You may change your password here:') );
+			$output .= CGI::div( { class=>'twikiFormStep' },
+								 CGI::strong('New Password:') .
+								 CGI::p( CGI::password_field(
+										 'newCfgP', '', 20, 80 )
+								 ));
+			$output .= CGI::div( { class=>'twikiFormStep' },
+								 CGI::strong('Confirm Password:') .
+								 CGI::p( CGI::password_field( 
+										 'confCfgP', '', 20, 80 )
+								 ));
+			$submitStr = 'Change Password and '.$submitStr;
+			$output .= CGI::div( { class=>'twikiFormStep twikiLast' },
+								 CGI::submit( -class=>'twikiSubmit', -value=>$submitStr ));
+			$output .= "</div><!--/twikiFormSteps--></div><!--/twikiPasswordChange-->";
+		}
     }
 
-    $output .= CGI::submit( -class=>'twikiSubmit', -value=>$submitStr );
     return $output.CGI::end_form();
 }
 
