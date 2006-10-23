@@ -239,7 +239,6 @@ sub view {
     ## SMELL: This is also used in TWiki::_TOC. Could insert a tag in
     ## TOC and remove all those here, finding the parameters only once
     # Find URL parameters
-    my $query = $session->{cgiQuery};
     my @qparams = ();
     foreach my $name ( $query->param ) {
       next if ($name eq 'keywords');
