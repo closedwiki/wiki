@@ -2,7 +2,7 @@
 
 WikiwygContrib bundles up [[http://www.wikiwyg.net][WikiWyg]] wiki editor, and adds it to the options that you can use for Wysiwyg editing using the WysiwygPlugin. when you set the =COMPOSER= variable to wikiwyg, the WYSIWYG edit button will use wikiwyg instead of kupu. Right now, it works only with FireFox, but I'm looking into getting it workong in InternetExplorer etc.
 
-This is a work in progress, using WikiWyg version 0.12 , and it is not advisable to be used on topics that contain inline html.
+This is a work in progress, using Wikiwyg version 0.12 , and it is not advisable to be used on topics that contain inline html. (ie same caveat as the kupu version of WysiwygPlugin)
 
 ---++ Settings
 
