@@ -55,7 +55,7 @@ a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, for example, =
 		* Set SORT = all
 
 	* Default table attributes:
-		* Set TABLEATTRIBUTES = tableborder="0" cellpadding="0" cellspacing="0" valign="top" headeralign="center" headercolor="#ffffff" headerbg="#6b7f93" headerbgsorted="#334455" headercolor="#ffffff" databg="#edf4f9,#ffffff" databgsorted="#dce7ee,#f5f5f5"
+		* Set TABLEATTRIBUTES = tableborder="1" cellpadding="0" cellspacing="0" valign="top" headeralign="center" headercolor="#ffffff" headerbg="#6b7f93" headerbgsorted="#334455" headercolor="#ffffff" databg="#edf4f9,#ffffff" databgsorted="#dce7ee,#f5f5f5"
 		* Classic skin table attributes:
 			* #Set TABLEATTRIBUTES = tableborder="1" cellpadding="0" cellspacing="1" headerbg="#99CCCC" databg="#FFFFCC, #FFFFFF"
 
@@ -78,7 +78,9 @@ Attributes are defined as a =TABLEATTRIBUTES= Plugin setting in this topic, a =T
 | =tablerules=     | Table rules, set to ="none"= (no rules), ="groups"= (rules will appear between row groups and column groups only), ="rows"= (rules will appear between rows only), ="cols"= (rules will appear between columns only), ="all"= (rules will appear between all rows and columns). | <span class="twikiGrayText">unspecified</span>  | =tablerules="rows"= |		  
 | =cellpadding=    | Cell padding (pixels). | ="0"= | =cellpadding="0"= |
 | =cellspacing=    | Cell spacing (pixels). | ="0"= | =cellspacing="3"= |
-| =valign=         | Vertical alignment of cells, set to ="top"=, ="middle"=, ="bottom"= or ="baseline"=. | <span class="twikiGrayText">unspecified</span>  | =valign="top"= |
+| =valign=         | Vertical alignment of cells and headers, set to ="top"=, ="middle"=, ="bottom"= or ="baseline"=. | <span class="twikiGrayText">unspecified</span>  | =valign="top"= |
+| =headervalign=   | Vertical alignment of header cells; overrides =valign=. | <span class="twikiGrayText">unspecified</span>  | =headervalign="top"= |
+| =datavalign=     | Vertical alignment of data cells; overrides =valign=. | <span class="twikiGrayText">unspecified</span>  | =datavalign="top"= |
 | =headeralign=    | Header cell alignment, one value for all columns, or a comma separated list for different alignment of individual columns. Set to ="left"=, ="center"=, ="right"= or ="justify"=. Overrides individual cell settings. | <span class="twikiGrayText">unspecified</span>  | =headeralign="left,right"= |
 | =dataalign=      | Data cell alignment, one value for all columns, or a comma separated list for different alignment of individual columns. Set to ="left"=, ="center"=, ="right"= or ="justify"=. Overrides individual cell settings. | <span class="twikiGrayText">unspecified</span>  | =dataalign="center"= |
 | =tablewidth=     | Table width: Percentage of window width, or absolute pixel value. | <span class="twikiGrayText">unspecified</span>  | =tablewidth="100%"= |
@@ -95,9 +97,9 @@ The =%<nop>TABLE{...}%= settings override =TABLEATTRIBUTES= preferences settings
 
 ---+++ Use of %<nop>TABLE{...}%
 
-Line before table: =%<nop>TABLE{ sort="on" tableborder="0" cellpadding="1" cellspacing="3" headerbg="#D5CCB1" headercolor="#666666" databg="#FAF0D4, #F3DFA8" headerrows="2" footerrows="1" }%=
+Line before table: =%<nop>TABLE{ sort="on" tableborder="0" cellpadding="4" cellspacing="3" headerbg="#D5CCB1" headercolor="#666666" databg="#FAF0D4, #F3DFA8" headerrows="2" footerrows="1" }%=
 
-%TABLE{ sort="on" tableborder="0" cellpadding="1" cellspacing="3" headerbg="#D5CCB1" headercolor="#666666" databg="#FAF0D4, #F3DFA8" headerrows="2" footerrows="1" }%
+%TABLE{ sort="on" tableborder="0" cellpadding="4" cellspacing="3" headerbg="#D5CCB1" headercolor="#666666" databg="#FAF0D4, #F3DFA8" headerrows="2" footerrows="1" }%
 | *Table with two Header Rows and Footer Row* ||||||
 | *Num* | *Status* | *Action* | *Who* | *When* | *Progress* |
 | 1 | C | Chose new colours | John | 1-Dec-02 | |
@@ -136,7 +138,7 @@ This plugin is pre-installed with your TWiki release. You should not have to ins
 |  Plugin Author: | TWiki:Main/JohnTalintyre, TWiki:Main/PeterThoeny |
 |  Plugin Version: | 1.015 |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
-|  20 Oct 2006 | 1.015: Arthur Clemens: Added support for background colors of sorted column. Columns can be unsorted - sorting order is now: sort ascending, sort descending, unsort. |
+|  25 Oct 2006 | 1.015: Arthur Clemens: Added support for background colors of sorted column. Columns can be unsorted - sorting order is now: sort ascending, sort descending, unsort. Added attributes =headervalign= and =datavalign=. |
 |  16 Aug 2006 | Michael Daum: Added CSS support for even/odd table rows |
 |  13 Dec 2005 | Arthur Clemens: Added support for id, summary and caption |
 |  5 Mar 2005 | 1.014: Crawford Currie eliminated deprecated handlers for Dakar |
