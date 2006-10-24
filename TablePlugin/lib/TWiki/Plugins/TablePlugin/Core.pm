@@ -29,7 +29,7 @@ use vars qw( $translationToken
              $sortTablesInText $sortAttachments $currTablePre
              $tableWidth @columnWidths
              $tableBorder $tableFrame $tableRules $cellPadding $cellSpacing 
-             @headerAlign @dataAlign $vAlign
+             @headerAlign @dataAlign $vAlign $headerVAlign $dataVAlign
              $headerBg $headerBgSorted $headerColor $sortAllTables $twoCol @dataBg @dataBgSorted @dataColor
              @isoMonth
              $headerRows $footerRows
@@ -79,6 +79,8 @@ sub _setDefaults {
     @headerAlign    = ( );
     @dataAlign      = ( );
     $vAlign         = '';
+    $headerVAlign	= '';
+    $dataVAlign		= '';
     $headerBg       = '#6b7f93';
     $headerBgSorted = '';
     $headerColor    = '#ffffff';
@@ -154,18 +156,23 @@ sub _parseParameters {
 
     $tmp = $params{valign};
     $vAlign = $tmp if( defined $tmp );
+    
+    $tmp = $params{datavalign};
+    $dataVAlign = $tmp if( defined $tmp );
+    
+    $tmp = $params{headervalign};
+    $headerVAlign = $tmp if( defined $tmp );
 
     my $tmpheaderbg = $params{headerbg};
     $headerBg = $tmpheaderbg if( defined $tmpheaderbg );
 
-	# only set color if it is defined in %TABLE{}% attributes
+	# only set headerbgsorted color if it is defined in %TABLE{}% attributes
+	# otherwise use headerbg
 	$tmp = $params{headerbgsorted};
 	if ( defined $tmp ) {
 		$headerBgSorted = $tmp;
-	} else {
-		if ( defined $tmpheaderbg ) {
-			$headerBgSorted = $tmpheaderbg;
-		}
+	} elsif ( defined $tmpheaderbg ) {
+		$headerBgSorted = $tmpheaderbg;
 	}
     
     $tmp = $params{headercolor};
@@ -174,14 +181,13 @@ sub _parseParameters {
     my $tmpdatabg = $params{databg};
     @dataBg = split( /,\s*/, $tmpdatabg ) if( defined $tmpdatabg );
 
-	# only set color if it is defined in %TABLE{}% attributes
+	# only set databgsorted color if it is defined in %TABLE{}% attributes
+	# otherwise use databg
 	$tmp = $params{databgsorted};
 	if ( defined $tmp ) {
 		@dataBgSorted = split( /,\s*/, $tmp );
-	} else {
-		if ( defined $tmpdatabg ) {
-			@dataBgSorted = split( /,\s*/, $tmpdatabg );
-		}
+	} elsif ( defined $tmpdatabg ) {
+		@dataBgSorted = split( /,\s*/, $tmpdatabg );
 	}
     
     $tmp = $params{datacolor};
@@ -250,6 +256,7 @@ sub _processTableRow {
     my $value = '';
     foreach( split( /\|/, $theRow ) ) {
         my $attr = {};
+        $attr->{style} = '';
         $span = 1;
         #AS 25-5-01 Fix to avoid matching also single columns
         if ( s/$translationToken([0-9]+)// ) {
@@ -271,7 +278,9 @@ sub _processTableRow {
         }
         if( defined $columnWidths[$colCount] &&
               $columnWidths[$colCount] && $span <= 2 ) {
-            $attr->{width} = $columnWidths[$colCount];
+        	$attr->{width} = $columnWidths[$colCount];
+        	# CSS style
+            $attr->{style} .= 'width:'.$columnWidths[$colCount].';';
         }
         if( /^\s*\^\s*$/ ) { # row span above
             $rowspan[$colCount]++;
@@ -298,7 +307,8 @@ sub _processTableRow {
 				$requestedTable == $tableCount &&
 				defined $sortCol && 
 				$colCount == $sortCol) {
-					
+				
+				# CSS class name
 				if( $currentDirection == $sortDirection{'ASCENDING'} ) {
 					$attr->{class} = _appendSortedAscendingCssClass( $attr->{class} );
 				}
@@ -312,10 +322,15 @@ sub _processTableRow {
                 if( @headerAlign ) {
                     my $align = @headerAlign[$colCount % ($#headerAlign + 1) ];
                     $attr->{align} = $align;
+                    $attr->{style} .= 'text-align:'.$align.';'
                 }
-
-                $attr->{valign} = $vAlign if $vAlign;
-                $attr->{class} = _appendFirstColumnCssClass( $attr->{class} ) if $colCount == 0;
+                if ( $headerVAlign ) {
+                	$attr->{valign} = $headerVAlign if $headerVAlign;
+                	$attr->{style} .= 'vertical-align:'.$headerVAlign.';';
+                } elsif ( $vAlign ) {
+                	$attr->{valign} = $vAlign;
+                	$attr->{style} .= 'vertical-align:'.$vAlign.';';
+                }           
                 push @row, { text => $value, attrs => $attr, type => 'th' };
             } else {
                 if( /^\s*(.*?)\s*$/ ) {   # strip white spaces
@@ -325,9 +340,15 @@ sub _processTableRow {
                 if( @dataAlign ) {
                     my $align = @dataAlign[$colCount % ($#dataAlign + 1) ];
                     $attr->{align} = $align;
+                    $attr->{style} .= 'text-align:'.$align.';';
                 }
-                $attr->{valign} = $vAlign if $vAlign;
-                $attr->{class} = _appendFirstColumnCssClass( $attr->{class} ) if $colCount == 0;
+                if ( $dataVAlign ) {
+                	$attr->{valign} = $dataVAlign if $dataVAlign;
+                	$attr->{style} .= 'vertical-align:'.$dataVAlign.';';
+                } elsif ( $vAlign ) {
+                	$attr->{valign} = $vAlign;
+                	$attr->{style} .= 'vertical-align:'.$vAlign.';';
+                }
                 push @row, { text => $value, attrs => $attr, type => 'td' };
             }
         }
@@ -478,7 +499,8 @@ sub emitTable {
     my $tattrs = { class => 'twikiTable',
                    border => $tableBorder,
                    cellspacing => $cellSpacing,
-                   cellpadding => $cellPadding };
+                   cellpadding => $cellPadding,
+                   style => 'border-width:'.$tableBorder.'px;'};
     $tattrs->{id} = $tableId if( $tableId );
     $tattrs->{summary} = $tableSummary if( $tableSummary );
     $tattrs->{frame} = $tableFrame if( $tableFrame );
@@ -528,7 +550,7 @@ sub emitTable {
             for my $col (0..$#{$curTable[$row]}) {
                 $curTable[$row][$col]->{attrs}->{rowspan} = 1;
                 if( $curTable[$row][$col]->{type} eq 'Y' ) {
-                    $curTable[$row][$col]->{text} =
+                    $curTable[$row][$col]->{text} = 
                       $curTable[$row-1][$col]->{text};
                     $curTable[$row][$col]->{type} = 'td';
                 }
@@ -631,17 +653,21 @@ sub emitTable {
                             			       CGI::span({ title=>'Sorted descending'},
                                       		   $downchar);
                     }
-                    $attr->{bgcolor} = $headerBgSorted unless( $headerBgSorted =~ /none/i );
-                    $attr->{class} = _appendFirstColumnCssClass( $attr->{class} ) if $colCount == 0;
                 }
                 if ( $currentDirection == $sortDirection{'NONE'} ) {
                 	$tableAnchor = CGI::a( { name=>'sorted_table' },
                 						   '<!-- -->' );
                 }
+                
+                my $linkColorStyle = '';
                 if( $headerColor ) {
-                    $cell = CGI::font( { color => $headerColor }, $cell );
+                    #$cell = CGI::span( { style => 'color:'.$headerColor }, $cell );
+                    $linkColorStyle = 'color:'.$headerColor;
                 }
                 if( $sortThisTable && $rowCount == $headerRows - 1 ) {
+                	if ( $isSorted ) {
+	                	$attr->{bgcolor} = $headerBgSorted unless( $headerBgSorted =~ /none/i );
+	                }
                 	#my $debugText = CGI::span( { class => 'twikiSmall' }, 'requestedTable='.$requestedTable.'; sortCol='.$sortCol.'; colCount='.$colCount.'; initSort='.$initSort.'; sorted='.$isSorted.'; currDir='.$currentDirection.'; newdir='.$newDirection.' ');
                 	my $debugText = '';
                 	my $linkAttributes = { href => $url.
@@ -649,6 +675,7 @@ sub emitTable {
                                              ';table='.$tableCount.
                                              ';up='.$newDirection.
                                              '#sorted_table',
+                                             style => $linkColorStyle,
                                              rel => 'nofollow',
                                              title => 'Sort by this column' };
                     if( $cell =~ /\[\[|href/o ) {
@@ -659,7 +686,8 @@ sub emitTable {
 	                        $linkAttributes, $cell ).$tableAnchor;
                     }
                 } else {
-                    $cell = ' *'.$cell.'* ';
+                	my $linkAttributes = { style => $linkColorStyle };
+                    $cell = CGI::span( $linkAttributes, ' *'.$cell.'* ' );
                 }
 
             } else {
@@ -676,7 +704,7 @@ sub emitTable {
                 }
                 if( @dataColor ) {
                     my $color = $dataColor[$dataColorCount % ($#dataColor+1) ];
-                    $cell = CGI::font({ color=>$color }, ' '.$cell.' ')
+                    $cell = CGI::span({ style => 'color:'.$color }, ' '.$cell.' ')
                       unless $color =~ /^(|none)$/i;
                 }
                 $type = 'td' unless $type eq 'Y';
@@ -686,8 +714,11 @@ sub emitTable {
             if ( $attr->{rowspan} ) {
             	$isLastRow = (($rowCount + ($attr->{rowspan} - 1)) == $numberOfRows - 1);
             }
-            $attr->{class} = _appendLastRowCssClass( $attr->{class} ) if $isLastRow;
             
+            # CSS class name
+            $attr->{class} = _appendFirstColumnCssClass( $attr->{class} ) if $colCount == 0;
+            $attr->{class} = _appendLastRowCssClass( $attr->{class} ) if $isLastRow;
+			
             $colCount++;
             next if( $type eq 'Y' );
             my $fn = 'CGI::'.$type;

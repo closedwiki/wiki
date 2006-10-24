@@ -165,13 +165,8 @@ select {
 }
 .twikiTable th a:link,
 .twikiTable th a:visited,
-.twikiTable th a font {
-	color:#fff;
-}
-.twikiTable th a:hover,
-.twikiTable th a:hover font {
-	color:#fff;
-	background-color:#D6000F;
+.twikiTable th a:hover {
+	background-color:transparent;
 }
 
 /* TwistyContrib */
