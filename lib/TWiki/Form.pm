@@ -448,7 +448,8 @@ sub renderFieldForEdit {
       $value = CGI::textfield({ name => $name,
 				id => 'id'.$name,
 				size=> $size,
-				value => $value });
+				value => $value,
+				class=> 'twikiEditFormDateField'});
       require TWiki::Contrib::JSCalendarContrib;
       unless ( $@ ) {
 	my $ifFormat = $TWiki::cfg{JSCalendarContrib}{format} || '%e %b %Y';
@@ -460,7 +461,7 @@ sub renderFieldForEdit {
 				     TWiki::Func::getTwikiWebname() .
 				     '/JSCalendarContrib/img.gif',
 				     -alt => 'Calendar',
-				     -align => 'MIDDLE' );
+				     -class => 'twikiEditFormCalendarButton' );
       }
     } elsif( $type eq 'text' ) {
         $value = CGI::textfield( -class => 'twikiEditFormTextField',
@@ -509,7 +510,9 @@ sub renderFieldForEdit {
         my $choices = '';
         foreach $item ( @$options ) {
 	    $item = &TWiki::urlDecode($item);
-            my $params = {};
+            my $params = {
+	      class=>'twikiEditFormOption'
+	    };
             my $itemValue = $item;
             if( $isValues ) {
                 if( $item =~ /^(.*?[^\\])=(.*)$/ ) {
@@ -537,7 +540,11 @@ sub renderFieldForEdit {
         } elsif( $size < $minSize ) {
             $size = $minSize;
         }
-        my $params = { name=>$name, size=>$size };
+        my $params = { 
+	  class=>'twikiEditFormSelect',
+	  name=>$name, 
+	  size=>$size 
+	};
         if( $isMulti ) {
             $params->{'multiple'}='on';
             $value  = CGI::Select( $params, $choices );
