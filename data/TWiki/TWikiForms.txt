@@ -163,6 +163,7 @@ The ==Type==, ==Size== and ==Value== fields describe the legal values for this f
       You can combine these modifiers e.g. =select+multi+values=
    * ==Type== =text= specifies a one-line text field. =Size= specifies the text box width in number of characters. =Value= is the initial (default) content when a new topic is created with this form template.
    * ==Type== =textarea= specifies a multi-line text box. The =Size= field should specify columns x rows, e.g. =80x6=; default size is 40x5. As for =text=, the =Value= field specifies the initial text
+   * ==Type== =date= specifies a single-line text box and a button next to it; clicking on the button will bring up a calendar from which the user can select a date. The date can also be typed into the text box. =Size= specifies the text box width in characters. As for =text=, the =Value= field specifies the initial text
 
 ==Tooltip message== is a message that will be displayed when the cursor is hovered over the field in =edit= view.
 
