@@ -419,7 +419,7 @@ function _writePrefValues (inValues) {
 	var expiryDate = new Date ();
 	FixCookieDate (expiryDate); // Correct for Mac date bug - call only once for given Date object!
 	expiryDate.setTime (expiryDate.getTime() + COOKIE_EXPIRY_TIME);
-	SetCookie(TWIKI_PREF_COOKIE_NAME, cookieString, expiryDate);
+	SetCookie(TWIKI_PREF_COOKIE_NAME, cookieString, expiryDate, '/');
 }
 
 /**
