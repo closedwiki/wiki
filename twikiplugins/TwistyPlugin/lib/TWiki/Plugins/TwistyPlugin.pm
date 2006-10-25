@@ -21,16 +21,17 @@
 Convenience plugin for TWiki:Plugins.TwistyContrib.
 It has two major features:
    * When active, the Twisty javascript library is included in every topic.
-   * Provides a convenience sintax to define twisty areas.
-
+   * Provides a convenience syntax to define twisty areas.
 
 =cut
 
-package TWiki::Plugins::TwistyPlugin;    # change the package name and $pluginName!!!
+package TWiki::Plugins::TwistyPlugin;
 
 use strict;
 
-use vars qw( $VERSION $RELEASE $pluginName $debug @modes $doneHeader);
+use vars qw( $VERSION $RELEASE $pluginName $debug @modes $doneHeader $twistyCount
+$prefMode $prefShowLink $prefHideLink $prefRemember
+$defaultMode $defaultShowLink $defaultHideLink $defaultRemember );
 
 # This should always be $Rev$ so that TWiki can determine the checked-in
 # status of the plugin. It is used by the build automation tools, so
@@ -40,9 +41,9 @@ $VERSION = '$Rev$';
 # This is a free-form string you can use to "name" your own plugin version.
 # It is *not* used by the build automation tools, but is reported as part
 # of the version number in PLUGINDESCRIPTIONS.
-$RELEASE = '4.0.3';
+$RELEASE = '1.2.0';
 
-$pluginName = 'TwistyPlugin';  # Name of this Plugin
+$pluginName = 'TwistyPlugin';
 
 #there is no need to document this.
 sub initPlugin {
@@ -54,11 +55,18 @@ sub initPlugin {
         return 0;
     }
 
-    # Get plugin preferences, variables defined by:
-    #   * Set EXAMPLE = ...
+	_setDefaults();
+	
     $debug = TWiki::Func::getPluginPreferencesFlag( "DEBUG" );
 
     $doneHeader = 0;
+    $twistyCount = 0;
+    
+    $prefMode = TWiki::Func::getPreferencesValue( 'TWISTYMODE' ) || TWiki::Func::getPluginPreferencesValue( 'TWISTYMODE' ) || $defaultMode;
+    $prefShowLink = TWiki::Func::getPreferencesValue( 'TWISTYSHOWLINK' ) || TWiki::Func::getPluginPreferencesValue( 'TWISTYSHOWLINK' ) || $defaultShowLink;
+    $prefHideLink = TWiki::Func::getPreferencesValue( 'TWISTYHIDELINK' ) || TWiki::Func::getPluginPreferencesValue( 'TWISTYHIDELINK' ) || $defaultHideLink;
+    $prefRemember = TWiki::Func::getPreferencesValue( 'TWISTYREMEMBER' ) || TWiki::Func::getPluginPreferencesValue( 'TWISTYREMEMBER' ) || $defaultRemember;
+    	
     TWiki::Func::registerTagHandler('TWISTYSHOW',\&_TWISTYSHOW);
     TWiki::Func::registerTagHandler('TWISTYHIDE',\&_TWISTYHIDE);
     TWiki::Func::registerTagHandler('TWISTYBUTTON',\&_TWISTYBUTTON);
@@ -70,6 +78,13 @@ sub initPlugin {
     return 1;
 }
 
+sub _setDefaults {
+	$defaultMode = 'span';
+	$defaultShowLink = '';
+	$defaultHideLink = '';
+	$defaultRemember = ''; # do not default to 'off' or all cookies will be cleared!
+}
+
 sub _addHeader {
     return if $doneHeader;
     $doneHeader = 1;
@@ -79,38 +94,48 @@ sub _addHeader {
 @import url("%PUBURL%/%TWIKIWEB%/TwistyContrib/twist.css");
 </style>
 <script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/TWikiJavascripts/twiki.js"></script>
-<script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/BehaviourContrib/behaviour.js"></script>
-<script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/TwistyContrib/twist.js"></script>
+<script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/BehaviourContrib/behaviour.compressed.js"></script>
+<script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/TwistyContrib/twist.compressed.js"></script>
 EOF
 
   TWiki::Func::addToHEAD('TWISTYPLUGIN_TWISTY',$header)
 }
 
 sub _TWISTYSHOW {
-    return _twistyWrapInDiv(_twistyBtn(@_, 'show'));
+    return _twistyWrapInSpan(_twistyBtn(@_, 'show'));
 }
 
 sub _TWISTYHIDE {
-    return _twistyWrapInDiv(_twistyBtn(@_, 'hide'));
+    return _twistyWrapInSpan(_twistyBtn(@_, 'hide'));
 }
 
 sub _TWISTYBUTTON {
-    return _twistyWrapInDiv(
-      '<span>' .
+    return _twistyWrapInSpan(
       _twistyBtn(@_, 'show') . 
-      _twistyBtn(@_, 'hide') . 
-      '</span>');
+      _twistyBtn(@_, 'hide'));
 }
 
 sub _TWISTY {
-    return _TWISTYBUTTON(@_) . _TWISTYTOGGLE(@_);
+	my($session, $params, $theTopic, $theWeb) = @_;
+	_addHeader();
+	$twistyCount++;
+	my $id = $params->{'id'};
+	if (!defined $id || $id eq '') {
+		$params->{'id'} = 'twistyId'.$theWeb.$theTopic.$twistyCount;
+	}
+	my $prefix = $params->{'prefix'} || '';
+	my $suffix = $params->{'suffix'} || '';
+    return $prefix . _TWISTYBUTTON(@_) . $suffix . _TWISTYTOGGLE(@_);
 }
 
 sub _TWISTYTOGGLE {
     my($session, $params, $theTopic, $theWeb) = @_;
-    my $id = $params->{'id'} || '';
+    my $id = $params->{'id'};
+    if (!defined $id || $id eq '') {
+		return '';
+	}
     my $idTag = $id.'toggle';
-    my $mode = $params->{'mode'} || 'span';
+    my $mode = $params->{'mode'} || $prefMode;
     unshift @modes,$mode;
     
     my $isTrigger = 0;
@@ -123,7 +148,7 @@ sub _TWISTYTOGGLE {
 
 sub _ENDTWISTYTOGGLE {
     my($session, $params, $theTopic, $theWeb) = @_;
-    my $mode=shift @modes;
+    my $mode = shift @modes;
     my $modeTag = ($mode ne '') ? '</'.$mode.'>' : '';
     return $modeTag._twistyCloseDiv();
 }
@@ -155,9 +180,22 @@ sub _twistyBtn {
 	#my $triangle_right = '&#9658;';
 	#my $triangle_down = '&#9660;';
 	
-    my $id = $params->{'id'} || '';
-    my $idTag = $id.$theState;
-    my $link = $params->{$theState.'link'} || $params->{'link'} || '';
+    my $id = $params->{'id'};
+    if (!defined $id || $id eq '') {
+		return '';
+	}
+    my $idTag = $id.$theState if ( $theState) || '';
+    my $defaultLink = ( $theState eq 'show' ) ? $prefShowLink : $prefHideLink;
+    # link="" takes precedence over showlink="" and hidelink=""
+    my $link = $params->{'link'};
+    if (!defined $link) {
+    	# if 'link' is not set, try 'showlink' / 'hidelink'
+    	$link = $params->{$theState.'link'};
+    }
+    if (!defined $link) {
+    	$link = $defaultLink || '';
+    }
+
     my $img = $params->{$theState.'img'} || $params->{'img'} || '';
     my $imgright = $params->{$theState.'imgright'} || $params->{'imgright'} || '';
     my $imgleft = $params->{$theState.'imgleft'} || $params->{'imgleft'} || '';
@@ -170,9 +208,11 @@ sub _twistyBtn {
     my $imgLinkTag = '<a href="#">'.$imgLeftTag.'<span class="twikiLinkLabel">'.$link.'</span>'.$imgTag.$imgRightTag.'</a>';
 	
 	my $isTrigger = 1;
-    my @propList = _createHtmlProperties($idTag, $params, $isTrigger);
-    my $props = @propList ? " ".join(" ",@propList) : '';
-    
+    my $props = '';
+    if ($idTag && $params) {
+	    my @propList = _createHtmlProperties($idTag, $params, $isTrigger);
+    	$props = @propList ? " ".join(" ",@propList) : '';
+    }
     my $triggerTag = '<span'.$props.'>'.$imgLinkTag.'</span>';
     $triggerTag .= _createJavascriptTriggerCall($idTag);
     return $triggerTag;
@@ -187,13 +227,14 @@ sub _createHtmlProperties {
     my $firststart = $params->{'firststart'} || '';
     my $firstStartHide = ($firststart eq 'hide');
     my $firstStartShow = ($firststart eq 'show');
-    my $remember = $params->{'remember'} || 'off';
+    my $remember = $params->{'remember'} || $prefRemember;
     my $noscript = $params->{'noscript'} || '';
     my $noscriptHide = ($noscript eq 'hide');
     
 	my @classList = ();
     push (@classList, $class) if $class && !$isTrigger;
     push (@classList, 'twistyRememberSetting') if ($remember eq 'on');
+    push (@classList, 'twistyForgetSetting') if ($remember eq 'off');
     push (@classList, 'twistyStartHide') if $startHide;
     push (@classList, 'twistyStartShow') if $startShow;
     push (@classList, 'twistyFirstStartHide') if $firstStartHide;
@@ -237,7 +278,20 @@ sub _twistyOpenDiv {
 }
 
 sub _twistyCloseDiv {
-	 return '</div><!--//twistyPlugin-->';
+	 return '</div><!-- END twistyPlugin-->';
+}
+
+sub _twistyWrapInSpan {
+	 my($text) = @_;
+	 return _twistyOpenSpan().$text._twistyCloseSpan();
+}
+
+sub _twistyOpenSpan {
+	 return '<span class="twistyPlugin">';
+}
+
+sub _twistyCloseSpan {
+	 return '</span><!-- END twistyPlugin-->';
 }
 
 1;
