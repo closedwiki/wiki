@@ -108,6 +108,37 @@ In any topic, your users can now write things like this:
      of control structures are the most critical components of a program. ... 
      %FLOP%
 
+---+++ All on, all off
+
+You can toggle all Twisties on or off at once by putting a link or button on the page with class =twistyExpandAll= or =twistyCollapseAll=.
+
+<verbatim>
+<button class="twistyExpandAll twikiButton">Expand all</button> 
+<button class="twistyCollapseAll twikiButton">Collapse all</button>
+</verbatim>
+
+Creates these controls:
+
+<button class="twistyExpandAll twikiButton">Expand all</button> 
+<button class="twistyCollapseAll twikiButton">Collapse all</button>
+
+When you want to use links, write:
+
+<verbatim>
+#VarTOGGLE
+
+<a href="#TOGGLE" class="twistyExpandAll">Expand all</a> 
+<a href="#TOGGLE" class="twistyCollapseAll">Collapse all</a>
+</verbatim>
+
+
+#VarTOGGLE
+
+<a href="#TOGGLE" class="twistyExpandAll">Expand all</a> 
+<a href="#TOGGLE" class="twistyCollapseAll">Collapse all</a>
+
+
+
 
 ---++ Settings
 
