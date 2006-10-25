@@ -65,6 +65,9 @@ TWiki.TwistyPlugin = new function () {
 		if (inMaySave && ref.saveSetting) {
 	        setPref(TWiki.TwistyPlugin.COOKIE_PREFIX + ref.name, ref.state);
 		}
+		if (ref.clearSetting) {
+	        setPref(TWiki.TwistyPlugin.COOKIE_PREFIX + ref.name, "");
+		}
 	}
 	
 	/**
@@ -80,6 +83,7 @@ TWiki.TwistyPlugin = new function () {
 			ref = new TWiki.TwistyPlugin.Storage();
 		}
 		if (hasClass(e, "twistyRememberSetting")) ref.saveSetting = true;
+		if (hasClass(e, "twistyForgetSetting")) ref.clearSetting = true;
 		if (hasClass(e, "twistyStartShow")) ref.startShown = true;
 		if (hasClass(e, "twistyStartHide")) ref.startHidden = true;
 		if (hasClass(e, "twistyFirstStartShow")) ref.firstStartShown = true;
@@ -115,13 +119,13 @@ TWiki.TwistyPlugin = new function () {
 		/**
 		Show control, hide control
 		*/
-		'.twistyPlugin .twistyTrigger' : function(e) {
+		'.twistyTrigger' : function(e) {
 			TWiki.TwistyPlugin.init(e.id);
 		},
 		/**
 		Content element
 		*/
-		'.twistyPlugin .twistyContent' : function(e) {
+		'.twistyContent' : function(e) {
 			TWiki.TwistyPlugin.init(e.id);
 		}
 	};
@@ -192,6 +196,7 @@ TWiki.TwistyPlugin.Storage = function () {
 	this.show;										// HTMLElement
 	this.toggle;									// HTMLElement (content element)
 	this.saveSetting = false;						// Boolean; default not saved
+	this.clearSetting = false;						// Boolean; default not cleared
 	this.startShown;								// Boolean
 	this.startHidden;								// Boolean
 	this.firstStartShown;							// Boolean
