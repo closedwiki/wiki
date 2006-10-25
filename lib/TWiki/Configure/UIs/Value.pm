@@ -40,6 +40,9 @@ sub open_html {
     $info .= $value->{desc};
     my $keys = $value->getKeys();
     my $checker = TWiki::Configure::UI::loadChecker($keys, $value);
+    # SMELL the following line is reported to have
+    #       Use of uninitialized value in concatenation (.) or string
+    #       under some circumstances
     $info .= $checker->check($value) if $checker;
 
     my $class = $value->{typename};
