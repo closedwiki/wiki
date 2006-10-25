@@ -20,6 +20,7 @@ Twisty has a fallback mechanism in case !JavaScript is not available: all conten
    * Property =id= is no longer required as this is automatically set (still recommended in some cases with =remember="on"=)
    * Property value =remember="off"= will clear a previously stored setting
    * New properties =prefix= and =suffix=
+   * !JavaScript to collapse or expand all Twisties on the page
 </div>
 
 %TOC{title="On this page:"}%
@@ -240,6 +241,35 @@ hideimgleft="%ICONURLPATH{toggleclose}%" suffix="</h4>"}%
 my twisty content
 %ENDTWISTY%
 
+---+++ All on, all off
+
+You can toggle all Twisties on or off at once by putting a link or button on the page with class =twistyExpandAll= or =twistyCollapseAll=.
+
+<verbatim>
+<button class="twistyExpandAll twikiButton">Expand all</button> 
+<button class="twistyCollapseAll twikiButton">Collapse all</button>
+</verbatim>
+
+Creates these controls:
+
+<button class="twistyExpandAll twikiButton">Expand all</button> 
+<button class="twistyCollapseAll twikiButton">Collapse all</button>
+
+When you want to use links, write:
+
+<verbatim>
+#VarTOGGLE
+
+<a href="#TOGGLE" class="twistyExpandAll">Expand all</a> 
+<a href="#TOGGLE" class="twistyCollapseAll">Collapse all</a>
+</verbatim>
+
+
+#VarTOGGLE
+
+<a href="#TOGGLE" class="twistyExpandAll">Expand all</a> 
+<a href="#TOGGLE" class="twistyCollapseAll">Collapse all</a>
+
 
 
 ---++ Syntax
@@ -403,7 +433,7 @@ a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>T
 | Copyright &copy;: | 2005 Rafael Alvarez, 2006 Arthur Clemens |
 | License: | [[http://www.gnu.org/copyleft/gpl.html][GPL]] |
 | Dependencies: | %$DEPENDENCIES% |
-| 25 Oct 2006 | 1.2 New variables to set default values: =TWISTYSHOWLINK=, =TWISTYHIDELINK=, =TWISTYMODE=, =TWISTYREMEMBER=; property =id= is no longer required as this is automatically set (still recommended in some cases with =remember="on"=); property value =remember="off"= will clear a previously stored cookie; new properties =prefix= and =suffix=.  |
+| 25 Oct 2006 | 1.2 New variables to set default values: =TWISTYSHOWLINK=, =TWISTYHIDELINK=, =TWISTYMODE=, =TWISTYREMEMBER=; property =id= is no longer required as this is automatically set (still recommended in some cases with =remember="on"=); property value =remember="off"= will clear a previously stored cookie; new properties =prefix= and =suffix=; !JavaScript to collapse or expand all Twisties on the page.  |
 | 27 Sep 2006 | 1.101 Fixes !JavaScript handling when !AllowInlineScript in configure is not set |
 | 11 June 2006 | 1.100 Added parameters =start=, =firststart=, =noscript= and =class=; complete !JavaScript rewrite for speed |
 | 12 Sep 2005 | 1.000 First Version |

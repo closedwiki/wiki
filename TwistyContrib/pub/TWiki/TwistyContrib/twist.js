@@ -1,3 +1,8 @@
+/*
+To compress this file you can use Dojo ShrinkSafe compressor at
+http://alex.dojotoolkit.org/shrinksafe/
+*/
+
 /**
 Singleton class. Requires behaviour.js from BehaviourContrib.
 */
@@ -127,6 +132,19 @@ TWiki.TwistyPlugin = new function () {
 		*/
 		'.twistyContent' : function(e) {
 			TWiki.TwistyPlugin.init(e.id);
+		},
+		/**
+		Content element
+		*/
+		'.twistyExpandAll' : function(e) {
+			e.onclick = function() {
+				TWiki.TwistyPlugin.toggleAll(TWiki.TwistyPlugin.CONTENT_SHOWN);
+			}
+		},
+		'.twistyCollapseAll' : function(e) {
+			e.onclick = function() {
+				TWiki.TwistyPlugin.toggleAll(TWiki.TwistyPlugin.CONTENT_HIDDEN);
+			}
 		}
 	};
 	Behaviour.register(this._UIbehaviour);
@@ -184,6 +202,15 @@ TWiki.TwistyPlugin.init = function(inId) {
 		this._update(ref, false);
 	}
 	return ref;	
+}
+
+TWiki.TwistyPlugin.toggleAll = function(inState) {
+	var i;
+	for (var i in this._storage) {
+		var e = this._storage[i];
+		e.state = inState;
+		this._update(e, true);
+	}
 }
 
 /**

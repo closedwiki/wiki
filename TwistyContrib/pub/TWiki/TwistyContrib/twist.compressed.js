@@ -86,6 +86,14 @@ this._UIbehaviour={".twistyTrigger":function(e){
 TWiki.TwistyPlugin.init(e.id);
 },".twistyContent":function(e){
 TWiki.TwistyPlugin.init(e.id);
+},".twistyExpandAll":function(e){
+e.onclick=function(){
+TWiki.TwistyPlugin.toggleAll(TWiki.TwistyPlugin.CONTENT_SHOWN);
+};
+},".twistyCollapseAll":function(e){
+e.onclick=function(){
+TWiki.TwistyPlugin.toggleAll(TWiki.TwistyPlugin.CONTENT_HIDDEN);
+};
 }};
 Behaviour.register(this._UIbehaviour);
 };
@@ -93,13 +101,13 @@ TWiki.TwistyPlugin.CONTENT_HIDDEN=0;
 TWiki.TwistyPlugin.CONTENT_SHOWN=1;
 TWiki.TwistyPlugin.COOKIE_PREFIX="TwistyContrib_";
 TWiki.TwistyPlugin.prefList;
-TWiki.TwistyPlugin.init=function(_16){
-var e=document.getElementById(_16);
+TWiki.TwistyPlugin.init=function(_18){
+var e=document.getElementById(_18);
 if(!e){
 return;
 }
-var _18=this._getName(_16);
-var ref=this._storage[_18];
+var _1a=this._getName(_18);
+var ref=this._storage[_1a];
 if(ref&&ref.show&&ref.hide&&ref.toggle){
 return ref;
 }
@@ -114,17 +122,17 @@ if(ref.show&&ref.hide&&ref.toggle){
 if(TWiki.TwistyPlugin.prefList==null){
 TWiki.TwistyPlugin.prefList=getPrefList();
 }
-var _1a=getPrefValueFromPrefList(TWiki.TwistyPlugin.COOKIE_PREFIX+ref.name,TWiki.TwistyPlugin.prefList);
+var _1c=getPrefValueFromPrefList(TWiki.TwistyPlugin.COOKIE_PREFIX+ref.name,TWiki.TwistyPlugin.prefList);
 if(ref.firstStartHidden){
 ref.state=TWiki.TwistyPlugin.CONTENT_HIDDEN;
 }
 if(ref.firstStartShown){
 ref.state=TWiki.TwistyPlugin.CONTENT_SHOWN;
 }
-if(_1a&&_1a=="0"){
+if(_1c&&_1c=="0"){
 ref.state=TWiki.TwistyPlugin.CONTENT_HIDDEN;
 }
-if(_1a&&_1a=="1"){
+if(_1c&&_1c=="1"){
 ref.state=TWiki.TwistyPlugin.CONTENT_SHOWN;
 }
 if(ref.startHidden){
@@ -136,6 +144,14 @@ ref.state=TWiki.TwistyPlugin.CONTENT_SHOWN;
 this._update(ref,false);
 }
 return ref;
+};
+TWiki.TwistyPlugin.toggleAll=function(_1d){
+var i;
+for(var i in this._storage){
+var e=this._storage[i];
+e.state=_1d;
+this._update(e,true);
+}
 };
 TWiki.TwistyPlugin.Storage=function(){
 this.name;
