@@ -78,14 +78,8 @@ sub tear_down {
     $this->SUPER::tear_down();
 }
 
-# TML is rendered correctly in form fields
-sub test_TML_in_forms {
-    my $this = shift;
-    my($meta, $text) = $twiki->{store}->readTopic(undef, $testweb, $testtopic1);
-    my $res = TWiki::Form::renderForDisplay($twiki->{templates},$meta);
-    my $render = $twiki->{renderer};
-    $res = $render->getRenderedVersion($res, $testweb, $testtopic1);
-
+sub get_HTML_tree {
+    my ($res) = @_;
     eval 'use HTML::TreeBuilder; use HTML::Element;';
     if( $@ ) {
         print STDERR "$@\nUNABLE TO RUN TEST\n";
@@ -94,32 +88,48 @@ sub test_TML_in_forms {
 
     my $tree = HTML::TreeBuilder->new_from_content($res);
     # Analyze the tree, could use find_by_tag_name
-    my @children = $tree->content_list();
-    @children = $children[1]->content_list();
-    @children = $children[0]->content_list();
-    @children = $children[0]->content_list();
-    # Now we have 8 rows
-    $text = (($children[0]->content_list())[0]->content_list())[0]->as_HTML();
-    $this->assert_str_equals('<span class="twikiNewLink">InitializationForm<a href="' .$twiki->getScriptUrl( 0, "edit", $testweb, "InitializationForm" ) . '?topicparent=Main.WebHome" rel="nofollow" title="Create this topic"><sup>?</sup></a></span>
-', $text);
-    $text = (($children[1]->content_list())[1]->content_list())[0]->as_HTML();
-    $this->assert_str_equals('<em>An issue</em>
-', $text);
-    $text = (($children[2]->content_list())[1]->content_list())[0]->as_HTML();
-    $this->assert_str_equals('<h1><a name="Example_problem"></a> Example problem </h1>
-', $text);
-    $text = (($children[3]->content_list())[1]->content_list())[0]->as_HTML();
-    $this->assert_str_equals('<strong>Defect</strong>
-', $text);
-    $text = (($children[4]->content_list())[1]->content_list())[0];
-    $this->assert_str_equals(' Enhancement ', $text);
-    $text = (($children[5]->content_list())[1]->content_list())[0];
-    $this->assert_str_equals(' Defect, None ', $text);
-    $text = (($children[6]->content_list())[1]->content_list())[0];
-    $this->assert_str_equals(' Defect ', $text);
-    $text = (($children[7]->content_list())[1]->content_list())[0];
-    $this->assert_str_equals(" $testweb.GRRR ", $text);
+    return $tree->content_list();
     $tree->delete;
+}
+
+sub get_HTML_tree_from_form {
+  return (((get_HTML_tree ( @_ ))[1]->content_list())[0]->content_list())[0]->content_list();
+}
+
+sub compare_field_from_form {
+  my ($this, $res, $child, @children) = @_;
+  my $text = (($children[$child]->content_list())[0]->content_list())[0]->as_HTML();
+  $this->assert_str_equals($res, $text);
+}
+
+# TML is rendered correctly in form fields
+sub test_TML_in_forms {
+    my $this = shift;
+    my($meta, $text) = $twiki->{store}->readTopic(undef, $testweb, $testtopic1);
+    my $res = TWiki::Form::renderForDisplay($twiki->{templates},$meta);
+    my $render = $twiki->{renderer};
+    $res = $render->getRenderedVersion($res, $testweb, $testtopic1);
+
+    my @children = get_HTML_tree_from_form( $res );
+    # Now we have 8 rows
+    $this->compare_field_from_form('<span class="twikiNewLink">InitializationForm<a href="' .$twiki->getScriptUrl( 0, "edit", $testweb, "InitializationForm" ) . '?topicparent=Main.WebHome" rel="nofollow" title="Create this topic"><sup>?</sup></a></span>
+', 0, @children);
+    $this->compare_field_from_form('<em>An issue</em>
+', 1, @children);
+    $this->compare_field_from_form('<h1><a name="Example_problem"></a> Example problem </h1>
+', 2, @children);
+    $this->compare_field_from_form('<strong>Defect</strong>
+', 3, @children);
+    $this->compare_field_from_form(' Enhancement ', 4, @children);
+    $this->compare_field_from_form(' Defect, None ', 5, @children);
+    $this->compare_field_from_form(' Defect ', 6, @children);
+    $this->compare_field_from_form(" $testweb.GRRR ", 7, @children);
+}
+
+sub compare_field_from_form_2 {
+  my ($this, $res, $child, @children) = @_;
+  my $text = (($children[$child]->content_list())[1]->content_list())[0]->as_HTML();
+  $this->assert_str_equals($res, $text);
 }
 
 sub test_formatted_TML_in_forms {
@@ -129,36 +139,58 @@ sub test_formatted_TML_in_forms {
     my $render = $twiki->{renderer};
     $res = $render->getRenderedVersion($res, $testweb, $testtopic2);
 
-    eval 'use HTML::TreeBuilder; use HTML::Element;';
-    if( $@ ) {
-        print STDERR "$@\nUNABLE TO RUN TEST\n";
-        return;
-    }
-
-    my $tree = HTML::TreeBuilder->new_from_content($res);
-    # Analyze the tree, could use find_by_tag_name
-    my @children = $tree->content_list();
-    @children = $children[1]->content_list();
-    @children = $children[0]->content_list();
-    @children = $children[0]->content_list();
+    my @children = get_HTML_tree_from_form( $res );
     # Now we have 8 rows
-    $text = (($children[1]->content_list())[1]->content_list())[0]->as_HTML();
-    $this->assert_str_equals('<em>An issue</em>
-', $text);
-    $text = (($children[2]->content_list())[1]->content_list())[0]->as_HTML();
-    $this->assert_str_equals('<table border=1 cellpadding=0 cellspacing=0 class="twikiTable" style="border-width:1px;"><tr class="twikiTableEven"><td bgcolor="#edf4f9" class="twikiFirstCol" style="vertical-align:top;" valign="top"> abc </td><td bgcolor="#edf4f9" style="vertical-align:top;" valign="top"> 123 </td></tr><tr class="twikiTableOdd"><td bgcolor="#ffffff" class="twikiFirstCol twikiLast" style="vertical-align:top;" valign="top"> def </td><td bgcolor="#ffffff" class="twikiLast" style="vertical-align:top;" valign="top"> ghk </td></tr></table>
-', $text);
-    $text = (($children[3]->content_list())[1]->content_list())[0]->as_HTML();
-    $this->assert_str_equals('<strong>no web</strong>
-', $text);
-    $text = (($children[4]->content_list())[1]->content_list())[0]->as_HTML();
-    $this->assert_str_equals('<ul><li> abc <li> def <ul><li> geh </ul><li> ijk </ul>
-', $text);
-    $text = (($children[5]->content_list())[1]->content_list())[0]->as_HTML();
-    $this->assert_str_equals('<em>hello world</em>
-', $text);
-    $tree->delete;
-
+#### Why is access these fields different from above?
+    $this->compare_field_from_form_2('<em>An issue</em>
+', 1, @children);
+    $this->compare_field_from_form_2('<table border=1 cellpadding=0 cellspacing=0 class="twikiTable" style="border-width:1px;"><tr class="twikiTableEven"><td bgcolor="#edf4f9" class="twikiFirstCol" style="vertical-align:top;" valign="top"> abc </td><td bgcolor="#edf4f9" style="vertical-align:top;" valign="top"> 123 </td></tr><tr class="twikiTableOdd"><td bgcolor="#ffffff" class="twikiFirstCol twikiLast" style="vertical-align:top;" valign="top"> def </td><td bgcolor="#ffffff" class="twikiLast" style="vertical-align:top;" valign="top"> ghk </td></tr></table>
+', 2, @children);
+    $this->compare_field_from_form_2('<strong>no web</strong>
+', 3, @children);
+    $this->compare_field_from_form_2('<ul><li> abc <li> def <ul><li> geh </ul><li> ijk </ul>
+', 4, @children);
+    $this->compare_field_from_form_2('<em>hello world</em>
+', 5, @children);
   }
+
+sub get_HTML_tree_from_field {
+  return (((get_HTML_tree ( @_ ))[1]->content_list())[0]->content_list())[0]->content_list();
+}
+
+sub compare_formfield {
+  my ($this, $res, $compare) = @_;
+  my @children = get_HTML_tree($res);
+  my $text = ($children[1]->content_list())[0]->as_HTML();
+  $this->assert_str_equals($compare, $text);
+}
+
+sub test_render_formfield_raw {
+
+    my $this = shift;
+    my($meta, $text) = $twiki->{store}->readTopic(undef, $testweb, $testtopic2);
+    my $render = $twiki->{renderer};
+    my $res;
+
+    $res = $render->renderFormField( $meta, new TWiki::Attrs('name="IssueDescription" newline="$n" bar="|"') );
+    $res = $render->getRenderedVersion($res, $testweb, $testtopic2);
+    $this->compare_formfield($res,'<table border=1 cellpadding=0 cellspacing=0 class="twikiTable" style="border-width:1px;"><tr class="twikiTableEven"><td bgcolor="#edf4f9" class="twikiFirstCol" style="vertical-align:top;" valign="top"> abc </td><td bgcolor="#edf4f9" style="vertical-align:top;" valign="top"> 123 </td></tr><tr class="twikiTableOdd"><td bgcolor="#ffffff" class="twikiFirstCol twikiLast" style="vertical-align:top;" valign="top"> def </td><td bgcolor="#ffffff" class="twikiLast" style="vertical-align:top;" valign="top"> ghk </td></tr></table>
+');
+    $res = $render->renderFormField( $meta, new TWiki::Attrs('name="Issue1" newline="$n" bar="|"') );
+    $res = $render->getRenderedVersion($res, $testweb, $testtopic2);
+    $this->compare_formfield($res,'<strong>no web</strong>
+');
+    $res = $render->renderFormField( $meta, new TWiki::Attrs('name="Issue2" newline="$n" bar="|"') );
+    $res = $render->getRenderedVersion($res, $testweb, $testtopic2);
+    $this->compare_formfield($res,'<ul><li> abc <li> def <ul><li> geh </ul><li> ijk </ul>
+');
+    $res = $render->renderFormField( $meta, new TWiki::Attrs('name="Issue3" newline="$n" bar="|"') );
+    $res = $render->getRenderedVersion($res, $testweb, $testtopic2);
+    $this->compare_formfield($res,'<em>hello world</em>
+');
+    return 0;
+
+    
+}
 
 1;

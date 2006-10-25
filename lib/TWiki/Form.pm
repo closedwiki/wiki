@@ -454,6 +454,7 @@ sub renderFieldForEdit {
       unless ( $@ ) {
 	my $ifFormat = $TWiki::cfg{JSCalendarContrib}{format} || '%e %b %Y';
 	TWiki::Contrib::JSCalendarContrib::addHEAD( 'twiki' );
+	$value .= '%TWISTY{link="" noscript="hide" start="show"}%';
 	$value .= CGI::image_button( -name => 'calendar',
 				     -onclick =>
 				     "return showCalendar('id$name','$ifFormat')",
@@ -462,6 +463,8 @@ sub renderFieldForEdit {
 				     '/JSCalendarContrib/img.gif',
 				     -alt => 'Calendar',
 				     -class => 'twikiEditFormCalendarButton' );
+	$value .= '%ENDTWISTY%';
+	$value = $session->{renderer}->getRenderedVersion( $session->handleCommonTags( $value, $web, $topic ) );
       }
     } elsif( $type eq 'text' ) {
         $value = CGI::textfield( -class => 'twikiEditFormTextField',
