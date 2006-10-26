@@ -59,9 +59,18 @@ TWiki.InlineEditPlugin.TextArea.register = function() {
 //TWiki.InlineEditPlugin.TextArea CLASS functions
 TWiki.InlineEditPlugin.TextArea.prototype.getSaveData = function() {
     var serialzationObj = {};
+    
+    //seems Safari does not like HTMLInputCollection.namedItem
+    var textInput;
+    for(var idx=0;idx<this.topicSectionObject.editDivSection.elements.length;idx++) {
+        if (this.topicSectionObject.editDivSection.elements[idx].name == 'text') {
+            textInput = this.topicSectionObject.editDivSection.elements[idx];
+            break;
+        }
+    }
 
-    serialzationObj.topicSection = this.topicSectionObject.editDivSection.elements.namedItem("text").topicSection;
-    serialzationObj.value = this.topicSectionObject.editDivSection.elements.namedItem("text").value;
+    serialzationObj.topicSection = textInput.topicSection;
+    serialzationObj.value = textInput.value;
     if (this.topicSectionObject.newSection) {
         //make a real section of it
         serialzationObj.value = "\n\n"+serialzationObj.value+"\n\n";
@@ -71,9 +80,9 @@ TWiki.InlineEditPlugin.TextArea.prototype.getSaveData = function() {
 //TODO: recode as object so each editor sends the object it thinks it should
     if (this.topicSectionObject.newSection) {
         //make a real section of it
-        this.topicSectionObject.editDivSection.elements.namedItem("text").value = "\n\n"+this.topicSectionObject.editDivSection.elements.namedItem("text").value+"\n\n";
+        textInput.value = "\n\n"+textInput.value+"\n\n";
     }
-    return this.topicSectionObject.editDivSection.elements.namedItem("text").toJSONString(1);
+    return textInput.toJSONString(1);
 }
 
 TWiki.InlineEditPlugin.TextArea.prototype.createEditSection = function() {
@@ -113,19 +122,25 @@ newForm.appendChild(hr2);
         if (( typeof( getComputedStyle ) != "undefined" )) {
             //forks for firefox
             var s = getComputedStyle(this.topicSectionObject.HTMLdiv, "");
-//            topicSectionObject.editDivSection.elements.namedItem("text").style.height = s.height;
             newTextarea.style.width = s.width;
         } else {
             //IE
-//            topicSectionObject.editDivSection.elements.namedItem("text").style.height = topicSectionObject.HTMLdiv.offsetHeight;
             newTextarea.style.width = this.topicSectionObject.HTMLdiv.offsetWidth;
         }
-        //TWiki.InlineEditPlugin.TextArea.TextAreaResize(newForm.elements.namedItem("text"));
+        this.topicSectionObject.editForm = newForm;
     return newForm;
 }
 
 TWiki.InlineEditPlugin.TextArea.prototype.disableEdit = function(disable) {
-        this.topicSectionObject.editDivSection.elements.namedItem("text").disabled = disable;
+    var textInput;
+    for(var idx=0;idx<this.topicSectionObject.editDivSection.elements.length;idx++) {
+        if (this.topicSectionObject.editDivSection.elements[idx].name == 'text') {
+            textInput = this.topicSectionObject.editDivSection.elements[idx];
+            break;
+        }
+    }
+    
+    textInput.disabled = disable;
 }
 
 

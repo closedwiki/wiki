@@ -155,9 +155,6 @@ TWiki.InlineEditPlugin.TableEdit.prototype.createEditSection = function() {
 }
 
 TWiki.InlineEditPlugin.TableEdit.prototype.disableEdit = function(disable) {
-        //this.topicSectionObject.editDivSection.elements.namedItem("text").disabled = disable;
-		
-		
     for (var i=0;i<this.topicSectionObject.editDivSection.elements.length;i++) {
         if (this.topicSectionObject.editDivSection.elements[i].name != 'text') {
             continue;
