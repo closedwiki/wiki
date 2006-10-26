@@ -433,41 +433,38 @@ saveAllSections = function(event) {
         browserLogin = topicSections[0].browserLogin;
 
 //TODO: change this so the parameters are initialised from the topicSectionalSaveUrl sent by the perl
-        var bindArgs = {
-        url:        topicSectionalSaveUrl,
-        username: browserLogin,
-        method: 'POST',
-        parameters: {replywitherrors: 1, dataType: 'JSON', data: data, inlineeditsave: 1, originalrev: topicSections[0].topicRev,sectionOrder: sectionOrder, forcenewrevision: 1},
-        onError:      function(req) {
-                // handle error here
-                alert('Error!\nStatusText='+req.statusText+'\nContents='+req.responseText);
-            },
-        onSuccess:      function(req) {
-            var data = req.responseText;
-            //protect against full html pages by only bringing in the body
-            var startBodyTag = data.indexOf('<body');
-            if (startBodyTag == -1) {
-                startBodyTag = data.indexOf('<BODY');
-            }
-            if (startBodyTag > -1) {
-                startBodyTag = data.indexOf('>', startBodyTag);
 
-                var endBodyTag = data.indexOf('</body');
-                if (endBodyTag == -1) {
-                    endBodyTag = data.indexOf('</BODY');
+    var callback = { 
+	  success: function(o) {
+	            var data = o.responseText;
+                //protect against full html pages by only bringing in the body
+                var startBodyTag = data.indexOf('<body');
+                if (startBodyTag == -1) {
+                    startBodyTag = data.indexOf('<BODY');
                 }
-                if (endBodyTag > -1) {
-                    data = data.substring(startBodyTag+1, endBodyTag-1);
+                if (startBodyTag > -1) {
+                    startBodyTag = data.indexOf('>', startBodyTag);
+    
+                    var endBodyTag = data.indexOf('</body');
+                    if (endBodyTag == -1) {
+                        endBodyTag = data.indexOf('</BODY');
+                    }
+                    if (endBodyTag > -1) {
+                        data = data.substring(startBodyTag+1, endBodyTag-1);
+                    }
+                    document.body.style.cursor = "default";
+                    window.location.reload();
                 }
-            }
-//            TWiki.JSPopupPlugin.openPopup(undefined, data);
-            document.body.style.cursor = "default";
-            window.location.reload();
-        }
-    };
-
-    // dispatch the request
-    var requestObj = AjaxRequest.post(bindArgs);
+                data = '<div>' + data + '</div>';
+                document.body.style.cursor = "default";
+                window.location.reload();
+	      }, 
+	  failure: function(o) {alert('Error!\nStatusText='+o.statusText+'\nContents='+o.responseText);}
+        ,argument: ['svenwashere'] 
+	};
+    //have to URI encode the data - to allow + signs in topic text..
+	var postParams = 'replywitherrors=1;dataType=JSON;data='+encodeURIComponent(data)+';inlineeditsave=1;originalrev='+topicSections[0].topicRev+';sectionOrder='+sectionOrder+';forcenewrevision=1;username='+browserLogin;
+	var transaction = YAHOO.util.Connect.asyncRequest('POST', topicSectionalSaveUrl, callback, postParams); 
 }
 
 cancelEditMode = function(event) {

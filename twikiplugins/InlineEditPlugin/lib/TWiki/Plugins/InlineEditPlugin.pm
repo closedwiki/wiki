@@ -115,9 +115,13 @@ sub beforeSaveHandler {
     return unless (pluginApplies('save'));
 
    my $query = TWiki::Func::getCgiQuery();
-
+   
+#   print STDERR 'beforeSaveHandler - $query->keywords = '.join(', ', $query->keywords)."\n";
+#   print STDERR 'beforeSaveHandler - $query->param = '.join(', ', $query->param)."\n";
+#   print STDERR 'beforeSaveHandler - $query->url_param = '.join(', ', $query->url_param)."\n";
+#   print STDERR 'beforeSaveHandler - $query->param(data) = '.join(', ', $query->param('data'))."\n";
+   
    return unless defined($query->param('inlineeditsave'));
-
 #detect if we've been sent a JSON package, and un-ravel that.
     my $dataType = $query->param('dataType') || '';
     if ($dataType eq 'JSON') {
