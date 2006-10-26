@@ -458,9 +458,9 @@ sub renderFieldForEdit {
 	$value .= CGI::image_button( -name => 'calendar',
 				     -onclick =>
 				     "return showCalendar('id$name','$ifFormat')",
-				     -src=> TWiki::Func::getPubUrlPath() . '/' .
-				     TWiki::Func::getTwikiWebname() .
-				     '/JSCalendarContrib/img.gif',
+				     -src=> $TWiki::cfg{PubUrlPath} . '/' .
+				       $TWiki::cfg{SystemWebName} .
+				       '/JSCalendarContrib/img.gif',
 				     -alt => 'Calendar',
 				     -class => 'twikiEditFormCalendarButton' );
 	$value .= '%ENDTWISTY%';
