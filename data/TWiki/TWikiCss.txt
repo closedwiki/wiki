@@ -31,6 +31,8 @@ A wide range of standard styles are used in the TWiki core code and topics, and 
 |.twikiLink  |Render.pm  |
 |.twikiNewLink  |Render.pm  |
 |.twikiAnchorLink  |Render.pm  |
+|.twikiCurrentWebHomeLink  |Render.pm  |
+|.twikiCurrentTopicLink  |Render.pm  |
 |.twikiEmulatedLink  |Preview.pm  |
 |.twikiWebIndent  |TWiki.pm  |
 

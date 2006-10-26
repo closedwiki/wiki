@@ -549,13 +549,21 @@ sub _renderWikiWord {
 sub _renderExistingWikiWord {
     my ($this, $web, $topic, $text, $anchor) = @_;
 
+    my $currentWebHome = '';
+    $currentWebHome = 'twikiCurrentWebHomeLink ' if (($web eq $this->{session}->{webName}) &&
+                                      ($topic eq $TWiki::cfg{HomeTopicName} ));
+
+    my $currentTopic = '';
+    $currentTopic = 'twikiCurrentTopicLink ' if (($web eq $this->{session}->{webName}) &&
+                                       ($topic eq $this->{session}->{topicName}));
+
     my @attrs;
     my $href = $this->{session}->getScriptUrl( 0, 'view', $web, $topic );
     if( $anchor ) {
         $anchor = $this->makeAnchorName( $anchor );
-        push( @attrs, class => 'twikiAnchorLink', href => $href.'#'.$anchor );
+        push( @attrs, class => $currentTopic.$currentWebHome.'twikiAnchorLink', href => $href.'#'.$anchor );
     } else {
-        push( @attrs, class => 'twikiLink', href => $href );
+        push( @attrs, class => $currentTopic.$currentWebHome.'twikiLink', href => $href );
     }
     my $tooltip = $this->_linkToolTipInfo( $web, $topic );
     push( @attrs, title => $tooltip ) if( $tooltip );
