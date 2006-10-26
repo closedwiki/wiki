@@ -553,7 +553,10 @@ sub renderFieldForEdit {
             $value  = CGI::Select( $params, $choices );
             # Item2410: We need a dummy control to detect the case where
             #           all checkboxes have been deliberately unchecked
-            $value .= CGI::hidden( -name => $name, -value => "");
+	    # Item3061:
+	    # Don't use CGI, it will insert the value from the query
+	    # once again and we need an empt field here.
+	    $value .= '<input type="hidden" name="'.$name.'" value="" />';
         }
         else {
             $value  = CGI::Select( $params, $choices );
@@ -596,7 +599,10 @@ sub renderFieldForEdit {
                                       -attributes => \%attrs );
         # Item2410: We need a dummy control to detect the case where
         #           all checkboxes have been deliberately unchecked
-        $value .= CGI::hidden( -name => $name, -value => "");
+	# Item3061:
+	# Don't use CGI, it will insert the value from the query
+	# once again and we need an empt field here.
+        $value .= '<input type="hidden" name="'.$name.'" value="" />';
 
     } elsif( $type eq 'radio' ) {
         $options = $fieldDef->{value};
