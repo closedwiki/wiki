@@ -11,16 +11,17 @@ After installing, include the core js file with:
    
 
 ---++ Example
-From the site:
+Adapted example from the site:
 
-Suppose we want to write a test for a function called =multiplyAndAddFive(value1, value2)= which multiplies =value1= and =value2= together, adds five, and returns the result. Also suppose that this function lives in a file called =myJsScripts.js=. Assume that if non-numeric values are passed in, the function should return null. A suitable Test Page would look like the following:
+Suppose we want to write a test for a function called =multiplyAndAddFive(value1, value2)= which multiplies =value1= and =value2= together, adds five, and returns the result. Also suppose that this function lives in a file called [[%ATTACHURL%/sample_script_to_test.js][sample_script_to_test]]. Assume that if non-numeric values are passed in, the function should return null. A suitable Test Page would look like the following:
 
+<blockquote>
 <verbatim>
 <html>
 <head>
 <title>Test Page for multiplyAndAddFive(value1, value2)</title>
 <script language="javascript" src="%PUBURL%/%TWIKIWEB%/JSUnitContrib/app/jsUnitCore.js"></script>
-<script language="javascript" src="myJsScripts.js"></script>
+<script language="javascript" src="%PUBURL%/%TWIKIWEB%/JSUnitContrib/sample_script_to_test.js"></script>
 </head>
 <body>
 <script language="javascript">
@@ -39,9 +40,38 @@ Suppose we want to write a test for a function called =multiplyAndAddFive(value1
         assertNull("An undefined argument should result in null", multiplyAndAddFive(2, JSUNIT_UNDEFINED_VALUE));
     }
 </script>
+*[[%PUBURL%/%TWIKIWEB%/JSUnitContrib/testRunner.html?testpage=%SCRIPTURL{"view"}%/%TWIKIWEB%/JSUnitContrib][Run test]]*
 </body>
 </html>
 </verbatim>
+</blockquote>
+
+This results in:
+
+<script language="javascript" src="%PUBURL%/%TWIKIWEB%/JSUnitContrib/app/jsUnitCore.js"></script>
+<script language="javascript" src="%PUBURL%/%TWIKIWEB%/JSUnitContrib/sample_script_to_test.js"></script>
+<script language="javascript">
+/*<![CDATA[*/
+    function testWithValidArgs() {
+        assertEquals("2 times 3 plus 5 is 11", 11, multiplyAndAddFive(2, 3));
+        assertEquals("Should work with negative numbers", -15, multiplyAndAddFive(-4, 5));
+    }
+    function testWithInvalidArgs() {
+        assertNull("A null argument should result in null", multiplyAndAddFive(2, null));
+        assertNull("A string argument should result in null", multiplyAndAddFive(2, "a string"));
+    }
+    function testStrictReturnType() {
+        assertNotEquals("Should return a number, not a string", "11", multiplyAndAddFive(2, 3));
+    }
+    function testWithUndefinedValue() {
+        assertNull("An undefined argument should result in null", multiplyAndAddFive(2, JSUNIT_UNDEFINED_VALUE));
+    }
+/*]]>*/
+</script>
+
+*[[%PUBURL%/%TWIKIWEB%/JSUnitContrib/testRunner.html?testpage=%SCRIPTURL{"view"}%/%TWIKIWEB%/JSUnitContrib][Run test]]*
+
+[[http://www.jsunit.net/documentation/][More JSUnit documentation]]
 
 ---++ Settings
 
