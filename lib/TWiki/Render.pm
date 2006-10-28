@@ -1885,8 +1885,10 @@ sub renderFormFieldArg {
         if( $name =~ /^($field->{name}|$title)$/ ) {
             $value = $field->{value};
             $value = '' unless defined( $value );
-            $value =~ s/^\s*(.*?)\s*$/$1/go;
-            $value = breakName( $value, $breakArgs );
+	    if ( $breakArgs ) {
+	      $value =~ s/^\s*(.*?)\s*$/$1/go;
+	      $value = breakName( $value, $breakArgs );
+	    }
 
             return $value;
         }

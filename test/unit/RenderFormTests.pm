@@ -46,7 +46,7 @@ my $testtext2 = <<'HERE';
 %META:FIELD{name="Issue1" attributes="" title="Issue1" value="*no web*"}%
 %META:FIELD{name="Issue2" attributes="" title="Issue2" value="   * abc%0d%0a   * def%0d%0a      * geh%0d%0a   * ijk"}%
 %META:FIELD{name="Issue3" attributes="" title="Issue3" value="_hello world_"}%
-%META:FIELD{name="Issue4" attributes="" title="Issue4" value="high"}%
+%META:FIELD{name="Issue4" attributes="" title="Issue4" value="   * high"}%
 %META:FIELD{name="State" attributes="H" title="State" value="Invisible"}%
 %META:FIELD{name="Anothertopic" attributes="" title="Another topic" value="GRRR "}%
 HERE
@@ -98,7 +98,13 @@ sub get_HTML_tree_from_form {
 
 sub compare_field_from_form {
   my ($this, $res, $child, @children) = @_;
-  my $text = (($children[$child]->content_list())[0]->content_list())[0]->as_HTML();
+  my $text = (($children[$child]->content_list())[1]->content_list())[0];
+  $this->assert_str_equals($res, $text);
+}
+
+sub compare_field_from_form_fmt {
+  my ($this, $res, $child, @children) = @_;
+  my $text = (($children[$child]->content_list())[1]->content_list())[0]->as_HTML();
   $this->assert_str_equals($res, $text);
 }
 
@@ -112,24 +118,18 @@ sub test_TML_in_forms {
 
     my @children = get_HTML_tree_from_form( $res );
     # Now we have 8 rows
-    $this->compare_field_from_form('<span class="twikiNewLink">InitializationForm<a href="' .$twiki->getScriptUrl( 0, "edit", $testweb, "InitializationForm" ) . '?topicparent=Main.WebHome" rel="nofollow" title="Create this topic"><sup>?</sup></a></span>
-', 0, @children);
-    $this->compare_field_from_form('<em>An issue</em>
+    # first is the header row
+    $this->assert_str_equals(((($children[0]->content_list())[0]->content_list())[0]->content_list())[0], 'InitializationForm');
+    $this->compare_field_from_form_fmt('<em>An issue</em>
 ', 1, @children);
-    $this->compare_field_from_form('<h1><a name="Example_problem"></a> Example problem </h1>
+    $this->compare_field_from_form_fmt('<h1><a name="Example_problem"></a> Example problem </h1>
 ', 2, @children);
-    $this->compare_field_from_form('<strong>Defect</strong>
+    $this->compare_field_from_form_fmt('<strong>Defect</strong>
 ', 3, @children);
     $this->compare_field_from_form(' Enhancement ', 4, @children);
     $this->compare_field_from_form(' Defect, None ', 5, @children);
     $this->compare_field_from_form(' Defect ', 6, @children);
     $this->compare_field_from_form(" $testweb.GRRR ", 7, @children);
-}
-
-sub compare_field_from_form_2 {
-  my ($this, $res, $child, @children) = @_;
-  my $text = (($children[$child]->content_list())[1]->content_list())[0]->as_HTML();
-  $this->assert_str_equals($res, $text);
 }
 
 sub test_formatted_TML_in_forms {
@@ -142,16 +142,18 @@ sub test_formatted_TML_in_forms {
     my @children = get_HTML_tree_from_form( $res );
     # Now we have 8 rows
 #### Why is access these fields different from above?
-    $this->compare_field_from_form_2('<em>An issue</em>
+    $this->compare_field_from_form_fmt('<em>An issue</em>
 ', 1, @children);
-    $this->compare_field_from_form_2('<table border=1 cellpadding=0 cellspacing=0 class="twikiTable" style="border-width:1px;"><tr class="twikiTableEven"><td bgcolor="#edf4f9" class="twikiFirstCol" style="vertical-align:top;" valign="top"> abc </td><td bgcolor="#edf4f9" style="vertical-align:top;" valign="top"> 123 </td></tr><tr class="twikiTableOdd"><td bgcolor="#ffffff" class="twikiFirstCol twikiLast" style="vertical-align:top;" valign="top"> def </td><td bgcolor="#ffffff" class="twikiLast" style="vertical-align:top;" valign="top"> ghk </td></tr></table>
+    $this->compare_field_from_form_fmt('<table border=1 cellpadding=0 cellspacing=0 class="twikiTable" style="border-width:1px;"><tr class="twikiTableEven"><td bgcolor="#edf4f9" class="twikiFirstCol" style="vertical-align:top;" valign="top"> abc </td><td bgcolor="#edf4f9" style="vertical-align:top;" valign="top"> 123 </td></tr><tr class="twikiTableOdd"><td bgcolor="#ffffff" class="twikiFirstCol twikiLast" style="vertical-align:top;" valign="top"> def </td><td bgcolor="#ffffff" class="twikiLast" style="vertical-align:top;" valign="top"> ghk </td></tr></table>
 ', 2, @children);
-    $this->compare_field_from_form_2('<strong>no web</strong>
+    $this->compare_field_from_form_fmt('<strong>no web</strong>
 ', 3, @children);
-    $this->compare_field_from_form_2('<ul><li> abc <li> def <ul><li> geh </ul><li> ijk </ul>
+    $this->compare_field_from_form_fmt('<ul><li> abc <li> def <ul><li> geh </ul><li> ijk </ul>
 ', 4, @children);
-    $this->compare_field_from_form_2('<em>hello world</em>
+    $this->compare_field_from_form_fmt('<em>hello world</em>
 ', 5, @children);
+    $this->compare_field_from_form_fmt('<ul><li> high </ul>
+', 6, @children);
   }
 
 sub get_HTML_tree_from_field {
@@ -187,6 +189,10 @@ sub test_render_formfield_raw {
     $res = $render->renderFormField( $meta, new TWiki::Attrs('name="Issue3" newline="$n" bar="|"') );
     $res = $render->getRenderedVersion($res, $testweb, $testtopic2);
     $this->compare_formfield($res,'<em>hello world</em>
+');
+    $res = $render->renderFormField( $meta, new TWiki::Attrs('name="Issue4" newline="$n" bar="|"') );
+    $res = $render->getRenderedVersion($res, $testweb, $testtopic2);
+    $this->compare_formfield($res,'<ul><li> high </ul>
 ');
     return 0;
 
