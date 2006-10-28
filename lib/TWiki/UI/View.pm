@@ -245,7 +245,7 @@ sub view {
       next if ($name eq 'topic');
       push @qparams, $name => $query->param($name);
     }
-    ## SMELL continued: We could pass an argument into %QUERYPARAMS% and 
+    ## SMELL continued: We could pass an argument into %URLPARAMS% and 
     ## handle as below. Still somewhat awkward...
     #$tmpl =~ s/%URLPARAMS(?:{(.*?)})?%/TWiki::_make_params($1,@qparams)/geo;
     $tmpl =~ s/%URLPARAMS%/TWiki::_make_params(1,@qparams)/geo;
