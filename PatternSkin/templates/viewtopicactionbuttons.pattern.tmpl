@@ -41,7 +41,7 @@
 %TMPL:DEF{"activatable_more"}%%TMPL:P{context="inactive" then="inactive_more" else="active_more"}%%TMPL:END%
 
 
-%TMPL:DEF{"printable"}%<a href="%SCRIPTURLPATH{"view"}%/%WEB%/%TOPIC%?template=viewprint%URLPARAMS%%REVARG%" title="%MAKETEXT{"Printable version of this topic"}%" accesskey="P" rel="nofollow">%MAKETEXT{"&Printable"}%</a>%TMPL:END%
+%TMPL:DEF{"printable"}%<a href="%SCRIPTURLPATH{"view"}%/%WEB%/%TOPIC%?template=viewprint%QUERYPARAMSTRING%%REVARG%" title="%MAKETEXT{"Printable version of this topic"}%" accesskey="P" rel="nofollow">%MAKETEXT{"&Printable"}%</a>%TMPL:END%
 
 
 %TMPL:DEF{"raw"}%%IF{"defined raw" then="%TMPL:P{"link_in_raw_to_view"}%" else="%TMPL:P{"link_in_view_to_raw"}%"}%%TMPL:END%
