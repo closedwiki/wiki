@@ -46,7 +46,7 @@ Suppose we want to write a test for a function called =multiplyAndAddFive(value1
 </verbatim>
 </blockquote>
 
-This results in:
+If installed this will result in:
 
 <script language="javascript" src="%PUBURL%/%TWIKIWEB%/JSUnitContrib/app/jsUnitCore.js"></script>
 <script language="javascript" src="%PUBURL%/%TWIKIWEB%/JSUnitContrib/sample_script_to_test.js"></script>
@@ -71,7 +71,8 @@ This results in:
 
 *[[%PUBURL%/%TWIKIWEB%/JSUnitContrib/testRunner.html?testpage=%SCRIPTURL{"view"}%/%TWIKIWEB%/JSUnitContrib][Run test]]*
 
-[[http://www.jsunit.net/documentation/][More JSUnit documentation]]
+---++ Documentation
+See: http://www.jsunit.net/documentation/
 
 ---++ Settings
 
