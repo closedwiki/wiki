@@ -1,5 +1,6 @@
 data/TWiki/JSUnitContrib.txt 0660
 lib/TWiki/Contrib/JSUnitContrib.pm 0440
+pub/TWiki/JSUnitContrib/sample_script_to_test.js 0644
 pub/TWiki/JSUnitContrib/app/css/jsUnitStyle.css 0644
 pub/TWiki/JSUnitContrib/app/css/readme 0644
 pub/TWiki/JSUnitContrib/app/emptyPage.html 0644
