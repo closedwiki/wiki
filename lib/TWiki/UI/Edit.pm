@@ -149,7 +149,6 @@ sub init_edit {
                     # use a 'keep' redirect to ensure we pass parameter
                     # values in the query on to the oops script
                     throw TWiki::OopsException( 'leaseconflict',
-                                                keep => 1,
                                                 def => $def,
                                                 web => $webName,
                                                 topic => $topic,
