@@ -52,12 +52,12 @@ my @deps = ( %$SATISFIES% );
 my $dakar;
 my %available;
 my $lwp;
-my @archTypes = ( 'tgz', 'tar.gz', 'zip' );
+my @archTypes = ( '.tgz', '.tar.gz', '.zip' );
 my %cfg;
-my $here;
+my $installationRoot;
 
 BEGIN {
-    $here = Cwd::getcwd();
+    $installationRoot = Cwd::getcwd();
     my $check_perl_module = sub {
         my $module = shift;
 
@@ -79,7 +79,7 @@ BEGIN {
     # read setlib.cfg
     chdir('bin');
     require 'setlib.cfg';
-    chdir($here);
+    chdir($installationRoot);
     # See if we can make a TWiki. If we can, then we can save topic
     # and attachment histories. Key off TWiki::Merge because it was
     # added in Dakar.
@@ -464,24 +464,26 @@ sub setConfig {
     }
 }
 
-# Try and find an archive for the named module.
+# Try and find an installer or archive.
 # Look in (1) the current directory (2) on the $TWIKI_PACKAGES path and
 # (3) in the twikiplugins subdirectory (if there, to support developers)
 # and finally (4) download from $PACKAGES_URL
-sub getArchive {
-    my( $module ) = @_;
+sub getComponent {
+    my ($module, $types, $what) = @_;
     my $f;
 
     # Look for the archive.
-    foreach my $dir ($here, $here.'/twikiplugins/'.$module,
+    foreach my $dir ($installationRoot, $installationRoot.'/twikiplugins/'.$module,
                      split(':', $ENV{TWIKI_PACKAGES}||'')) {
-        foreach my $type ( @archTypes ) { # .tgz preferred
-            $f = $dir.'/'.$module.'.'.$type;
+        foreach my $type ( @$types ) { # .tgz preferred
+            $f = $dir.'/'.$module.$type;
             if( -e $f ) {
-                my $ans = ask( 'An existing '.$f.
-                                 ' exists; would you like me to use it?' );
-                if ($ans) {
-                    print "Got a local archive from $f\n";
+                print <<HERE;
+An existing $f exists; would you like me to use it?
+If not, I will try to download a new one.
+HERE
+                if (ask("Use existing $f?")) {
+                    print "Got a local $what from $f\n";
                     return $f;
                 }
             }
@@ -490,7 +492,9 @@ sub getArchive {
 
     unless( $lwp ) {
         print STDERR <<HERE;
-Cannot find a package for $module, and LWP is not installed so I can't download it. Please download an archive for this module manually and re-run this script.
+Cannot find a local $what for $module, and LWP is not installed
+so I can't download it. Please download it manually and re-run
+this script.
 HERE
         return undef;
     }
@@ -509,8 +513,8 @@ HERE
     }
 
     my $response;
-    foreach my $type ( @archTypes ) {
-        $response = $lwp->get( $url.'.'.$type );
+    foreach my $type ( @$types ) {
+        $response = $lwp->get( $url.$type );
 
         if( $response->is_success() ) {
             $f = $downloadDir.'/'.$module.'.'.$type;
@@ -521,33 +525,68 @@ HERE
         }
     }
 
-    unless ($f) {
-        print STDERR 'Failed to download ', $module,
-          "\n", $response->status_line, "\n";
+    unless ($f && -e $f) {
+        print STDERR "Failed to download $module $what\n",
+          $response->status_line(),"\n";
         return undef;
     } else {
-        print "Downloaded an archive from $PACKAGES_URL to $f\n";
+        print "Downloaded $what from $PACKAGES_URL to $f\n";
     }
 
     return $f;
 }
 
-# install a package from the given url
+# Try and find an archive for the named module.
+sub getArchive {
+    my $module = shift;
+
+    return getComponent($module, \@archTypes, 'archive');
+}
+
+# Try and find an installer for the named module.
+sub getInstaller {
+    my $module = shift;
+
+    return getComponent($module, [ '_installer' ], 'installer');
+}
+
+# install a package by running the installer
 sub installPackage {
     my( $module ) = @_;
 
-
-
     my $script = getInstaller( $module );
-    my $cmd = 'perl $script';
-    $cmd .= ' -a' if $noconfirm;
-    $cmd .= ' -n' if $inactive;
-    $cmd .= ' install';
-    local $| = 0;
-    print `$cmd`;
-    if ( $? ) {
-        print STDERR "Installation of $module failed\n";
-        return 0;
+    if( $script && -e $script ) {
+        my $cmd = 'perl $script';
+        $cmd .= ' -a' if $noconfirm;
+        $cmd .= ' -n' if $inactive;
+        $cmd .= ' install';
+        local $| = 0;
+        print `$cmd`;
+        if( $? ) {
+            print STDERR "Installation of $module failed\n";
+            return 0;
+        }
+    } else {
+        print STDERR <<HERE;
+I cannot locate an installer for $module.
+$module may not have been designed to be installed with this installer.
+I might be able to download and unpack a simple archive, but you will
+have to satisfy the dependencies and finish the install of it yourself,
+as per the instructions for $module.
+HERE
+        my $ans = ask("Would you like me to try to get an archive of $module?");
+        return 0 unless ($ans);
+        my $arch = getArchive($module);
+        unless( $arch) {
+            print STDERR <<HERE;
+Cannot locate an archive for $module; installation failed.
+HERE
+            return 0;
+        }
+        # Unpack the archive in place. Don't bother trying to
+        # look for a MANIFEST or run the installer script - it
+        # was probably packaged by an amateur.
+        unpackArchive($arch, $installationRoot);
     }
 
     return 1;
@@ -555,26 +594,24 @@ sub installPackage {
 
 =pod
 
----++ StaticMethod unpackArchive($archive)
+---++ StaticMethod unpackArchive($archive [,$dir] )
 Unpack an archive. The unpacking method is determined from the file
-extension e.g. .zip, .tgz. .tar, etc.
-
-The archive is unpacked to a temporary directory, the name of which is
-returned.
+extension e.g. .zip, .tgz. .tar, etc. If $dir is not given, unpack
+to a temporary directory, the name of which is returned.
 
 =cut
 
 sub unpackArchive {
-    my $name = shift;
+    my ($name, $dir) = @_;
 
-    my $dir = File::Temp::tempdir(CLEANUP=>1);
+    $dir ||= File::Temp::tempdir(CLEANUP=>1);
     chdir( $dir );
     unless( $name =~ /\.zip/i && unzip( $name ) ||
               $name =~ /(\.tar\.gz|\.tgz|\.tar)/ && untar( $name )) {
         $dir = undef;
         print STDERR "Failed to unpack archive $name\n";
     }
-    chdir( $here );
+    chdir( $installationRoot );
 
     return $dir;
 }
@@ -717,7 +754,7 @@ sub uninstall {
         }
     }
     unless ( $#dead > 1 ) {
-        print STDERR 'No part of %$MODULE% is installed';
+        print STDERR "No part of %$MODULE% is installed\n";
         return 0;
     }
     print "To uninstall %$MODULE%, the following files will be deleted:\n";
