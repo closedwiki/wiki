@@ -189,7 +189,9 @@ Use the following setup to provide unrestricted viewing access to open webs, wit
 
 ---+++ Hide Control Settings
 
-__%T% Tip:__ To hide access control settings from normal browser viewing, place them in HTML comment markers.
+__%T% Tip:__ To hide access control settings from normal browser viewing, you can put them into the topic-local settings. You can access those settings via the "More" screen, as explained in [[TWikiVariables#Setting_Preferences_Variables][TWikiVariables]].
+
+Alternatively, place them in HTML comment markers, but this exposes the access setting during ordinary editing.
 
 <blockquote>
 ==&lt;!--== <br />
