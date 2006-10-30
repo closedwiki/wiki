@@ -89,7 +89,7 @@ sub oops {
             push( @params, $keep->{params} );
         }
     } else {
-        $tmplName = $query->param( 'oopstemplate' );
+        $tmplName = $query->param( 'template' );
         $def = $query->param( 'def' );
         while( defined( my $param = $query->param( 'param'.$n ) )) {
             push( @params, $param );

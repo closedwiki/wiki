@@ -1111,7 +1111,7 @@ sub getOopsUrl {
 
     ASSERT($this->isa( 'TWiki')) if DEBUG;
 
-    my @urlParams = ( oopstemplate => 'oops'.$template );
+    my @urlParams = ( template => 'oops'.$template );
 
     push( @urlParams, def => $def ) if $def;
 
