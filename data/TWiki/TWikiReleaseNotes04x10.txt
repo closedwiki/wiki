@@ -1,0 +1,11 @@
+%META:TOPICINFO{author="TWikiContributor" date="1162244118" format="1.1" version="1.1"}%
+---+!! TWiki Release 4.1 (Dakar)
+
+__These are release notes for the upcoming version of TWiki 4.1__
+
+%TOC%
+
+---++ Notes for !TWikiAdmins and !WikiMasters
+---+++ Preferences
+Usage of TWikiForms for setting preferences has been deprecated in favor of TWiki:Plugins.PreferencesPlugin. !PreferencesPlugin has been included in TWiki 4.0 to allow more convenient editing of preferences. This plugin provides input controls, such as menus, radio buttons, and checkboxes to select preference settings.
+
