@@ -117,7 +117,8 @@ sub parseMeta {
 	    $prefs->insert( $type, $keyPrefix.$name, $value );
     }
 
-    # SMELL: have to support the "S" form from Cairo for a single user
+    # Note that the use of the "S" attribute to support settings in
+    # form fields has been deprecated.
     my $form = $meta->get( 'FORM' );
     if( $form ) {
         my @fields = $meta->find( 'FIELD' );
