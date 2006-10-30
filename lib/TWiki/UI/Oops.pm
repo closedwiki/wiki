@@ -98,6 +98,9 @@ sub oops {
     }
     $tmplName ||= 'oops';
 
+    # Do not pass on the template parameter otherwise continuation won't work
+    $query->delete( 'template' );
+
     my $skin = $session->getSkin();
 
     my $tmplData = $session->{templates}->readTemplate( $tmplName, $skin );
