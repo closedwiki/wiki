@@ -388,6 +388,7 @@ sub renderForEdit {
                 }
             }
             $value = '' unless defined $value;  # allow 0 values
+	    $value = TWiki::expandStandardEscapes( $value );
             ( $extra, $value ) =
               $this->renderFieldForEdit( $fieldDef, $web, $topic, $value );
 
