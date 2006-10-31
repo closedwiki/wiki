@@ -91,8 +91,8 @@ Edit this topic, and change the color variables as you like.
    * Set FORM_INPUT_BORDER = #aaa
 ---++++ FORM_BORDER Form (same as twikiTable border)
    * Set FORM_BORDER = #ccc
----++++ ACTIVE_FORM_BACKGROUND Edit form, form steps (same as =databg= in TablePlugin)
-   * Set ACTIVE_FORM_BACKGROUND = #f0f6f9
+---++++ ACTIVE_FORM_BACKGROUND Edit form, form steps
+   * Set ACTIVE_FORM_BACKGROUND = #F6FAFD
 ---++++ FORMFIELD_ACTIVE Active form field (not implemented yet)
    * Set FORMFIELD_ACTIVE = #ffc
    
@@ -216,7 +216,7 @@ pre, code, tt {
 	color:%CODE_TEXT%;
 }
 blockquote {
-	border-color:%SEPARATOR_BORDER%;
+	border-color:%INFO_BORDER%;
 	background-color:%ACTIVE_FORM_BACKGROUND%;
 }
 h1, h2, h3, h4, h5, h6 {

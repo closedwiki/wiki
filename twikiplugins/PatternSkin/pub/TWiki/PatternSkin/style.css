@@ -186,10 +186,11 @@ textarea {
 	font-size:100%;
 }
 blockquote {
-	border-width:1px;
 	border-style:solid;
-	padding:.5em 1em;
+	border-width:0 0 0 3px;
+	padding:.5em 1.25em;
 }
+
 
 /* LAYOUT ELEMENTS */
 /* for specific layout sub-elements see further down */
