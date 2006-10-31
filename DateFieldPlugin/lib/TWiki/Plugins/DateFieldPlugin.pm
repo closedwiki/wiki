@@ -59,8 +59,11 @@ sub renderFormFieldForEditHandler {
               $TWiki::cfg{JSCalendarContrib}{format} ||
                 '%d %b %Y';
 
-    # Default to local today
-    $value ||= POSIX::strftime($calendarOutputFormat, localtime(time()));
+    # Default to local today if preference set
+    if ( TWiki::Func::getPreferencesValue('DATEFIELDPLUGIN_DEFAULTTOTODAY') )
+    {
+       $value ||= POSIX::strftime($calendarOutputFormat, localtime(time()));
+    }
 
     my $content =
       CGI::image_button(
