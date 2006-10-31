@@ -54,7 +54,7 @@ See JSCalendarContrib for additional settings.
 |  Copyright &copy;: | 2004 Deutsche Bank AG |
 |  License: | [[GPL][http://www.gnu.org/copyleft/gpl.html]] |
 | Change History: | |
-|        | Added DATEFIELDPLUGIN_DEFAULTTOTODAY to allow turning on the default to today's date |
+|  11860 | Added DATEFIELDPLUGIN_DEFAULTTOTODAY to allow turning on the default to today's date |
 |  11702 | Use default date format from JSCalendarContrib |
 |  11335 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item2804'>Item2804</a> default date to todays date, support DATEFORMAT as standard preference |
 |  7265 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item180'>Item180</a>  removed pointless, outdated dependency check from DateFieldPlugin |
