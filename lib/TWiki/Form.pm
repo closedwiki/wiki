@@ -189,7 +189,7 @@ sub _parseFormDefinition {
 
             $vals ||= '';
             $vals = $this->{session}->handleCommonTags($vals,$this->{web},$this->{topic});
-
+	    $vals =~ s/<\/?(nop|noautolink)\/?>//go;
             $vals =~ s/^\s*//go;
             $vals =~ s/\s*$//go;
 
