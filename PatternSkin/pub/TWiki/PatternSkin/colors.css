@@ -48,8 +48,8 @@ pre, code, tt {
 	color:#7A4707;
 }
 blockquote {
-	border-color:#E2DCC8;
-	background-color:#f0f6f9;
+	border-color:#D5E6F3;
+	background-color:#F6FAFD;
 }
 h1, h2, h3, h4, h5, h6 {
 	color:#a00;
@@ -255,7 +255,7 @@ table.twikiFormTable th.twikiFormTableHRow font {
 }
 
 .twikiFormSteps {
-	background-color:#f0f6f9;
+	background-color:#f6fafd;
 	border-color:#E2DCC8;
 }
 .twikiFormStep {
