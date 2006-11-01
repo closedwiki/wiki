@@ -20,6 +20,13 @@ use Error qw( :try );
 
 use vars qw( @mails );
 
+# Temporary directory to store log files in.
+# Will be cleaned up after running the tests unless the environment
+# variable TWIKI_DEBUG_KEEP is true
+use File::Temp;
+my $cleanup  =  $ENV{TWIKI_DEBUG_KEEP} ? 0 : 1;
+my $tempdir  =  File::Temp::tempdir( CLEANUP => $cleanup );
+
 sub new {
     my $class = shift;
     my $var = shift;
@@ -44,8 +51,8 @@ sub set_up {
     $TWiki::cfg{Register}{NeedVerification} = 0;
     $TWiki::cfg{MinPasswordLength} = 0;
     $TWiki::cfg{UsersWebName} = $this->{users_web};
-    $TWiki::cfg{LogFileName} = "$this->{var}.log";
-    $TWiki::cfg{WarningFileName} = "$this->{var}.warn";
+    $TWiki::cfg{LogFileName} = "$tempdir/$this->{var}.log";
+    $TWiki::cfg{WarningFileName} = "$tempdir/$this->{var}.warn";
 
     my $query = new CGI("");
     $query->path_info("/$this->{test_web}/$this->{test_topic}");
