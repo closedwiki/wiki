@@ -584,7 +584,25 @@ sub _patch {
                 $pos++;
             } elsif( $act eq 'a' ) {
                 my @toAdd = @$delta[$pos+1..$pos+$length];
+                # Fix for Item2957
+                # Check if the last element of what is to be added contains
+                # a valid marker. If it does, the chances are very high that
+                # this topic was saved using a broken version of RcsLite, and
+                # a line ending has been lost.
+                # As soon as a topic containing this problem is re-saved
+                # using this code, the need for this hack should go away,
+                # as the line endings will now be correct.
+                if (scalar(@toAdd) &&
+                      $toAdd[$#toAdd] =~ /^([ad])(\d+)\s(\d+)$/ &&
+                        $2 > $pos) {
+                    pop(@toAdd);
+                    push(@toAdd, <<'HERE');
+<div class="twikiAlert">WARNING: THIS TEXT WAS ADDED BY THE SYSTEM TO CORRECT A PROBABLE ERROR IN THE HISTORY OF THIS TOPIC. Edit and Save the topic again to clear this warning.</div>
+HERE
+                    $pos--; # so when we add $length we get to the right place
+                }
                 splice( @$text, $offset + $adj, 0, @toAdd );
+
                 $adj += $length;
                 $pos += $length + 1;
             }
@@ -696,7 +714,8 @@ sub _addChunk {
     if( $nLines > 0 ) {
         $$out .= $N if( $$out && $$out !~ /\n$/o );
         if( $chunkSign eq '+' ) {
-            $$out .= 'a'.($start-$adj).' '.$nLines.$N.join( "\n", @$lines );
+            # Added $N at end to correct Item2957
+            $$out .= 'a'.($start-$adj).' '.$nLines.$N.join( "\n", @$lines ).$N;
         } else {
             $$out .= 'd'.($start+1).' '.$nLines;
             $nLines *= -1;

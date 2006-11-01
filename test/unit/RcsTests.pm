@@ -142,7 +142,8 @@ BEGIN {
        [ "A\n1\n2\n3\none\nIII\niii\ntwo\nthree\n",
          "1\n2\n3\n4\n5\n6\n7\n8\none\nabc\nABC\ntwo\n" ],
        [ "one\ntwo\nthree\nfour\nfive\nsix\n",
-         "one\nA\ntwo\nB\nC\nfive\n" ]
+         "one\nA\ntwo\nB\nC\nfive\n" ],
+       [ "A\nB\n", "A\nC\n\nB\n" ],
       );
 
     foreach my $impl qw( RcsLite RcsWrap ) {
@@ -186,6 +187,9 @@ BEGIN {
 
         $sfn = $fn.'_MissingVdelRev';
         *$sfn = sub { shift->verifyMissingVdelRev( $class ) };
+
+        $sfn = $fn.'_Item2957';
+        *$sfn = sub { shift->verify_Item2957( $class ) };
     }
 }
 
@@ -483,6 +487,51 @@ sub verifyMissingVdelRev {
 
     unlink($file);
     unlink("$file,v");
+}
+
+sub verify_Item2957 {
+    my( $this, $class ) = @_;
+    my $rev1 = <<HERE;
+A
+C
+
+
+E
+B
+HERE
+    my $rev2 = <<HERE;
+A
+C
+
+F
+
+D
+B
+HERE
+    my $rev3 = <<HERE;
+A
+F
+B
+HERE
+    my $file = "$TWiki::cfg{DataDir}/$testWeb/Item2957.txt";
+    open(F, ">$file") || die;
+    print F $rev1;
+    close(F);
+
+    my $rcs = $class->new( $twiki, $testWeb, 'Item2957', '' );
+    $rcs->addRevisionFromText($rev2, "more", "idiot", time());
+    $rcs = $class->new( $twiki, $testWeb, 'Item2957', '' );
+    $rcs->addRevisionFromText($rev3, "more", "idiot", time());
+
+    $rcs = $class->new( $twiki, $testWeb, 'Item2957', '' );
+    my $text = $rcs->getRevision(1);
+    $this->assert_equals($rev1, $text);
+    $rcs = $class->new( $twiki, $testWeb, 'Item2957', '' );
+    $text = $rcs->getRevision(2);
+    $this->assert_equals($rev2, $text);
+    $rcs = $class->new( $twiki, $testWeb, 'Item2957', '' );
+    $text = $rcs->getRevision(3);
+    $this->assert_equals($rev3, $text);
 }
 
 1;
