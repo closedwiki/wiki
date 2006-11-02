@@ -75,7 +75,7 @@ use vars qw( %TWikiCompatibility );
 
 # number the release version of this plugin
 $VERSION = '$Rev$';
-$RELEASE = '3.1';
+$RELEASE = '3.2';
 
 # =========================
 sub initPlugin

@@ -128,6 +128,7 @@ sub handleLatex
                  'gamma' =>   $LMPc{'default_gamma'}, 
                  'scale' =>   $LMPc{'default_scale'},
                  'bgcolor' => 'white',
+                 'useps' => 0,
                  'color' => 'black' );
 
     my %opts2 = TWiki::Func::extractParameters( $prefs );
@@ -473,6 +474,7 @@ sub renderEquations {
         my %opts = %{ $markup_opts{$key} };
         # my %opts = defined($LMPc{'markup_opts'}{$key}) ? %{$LMPc{'markup_opts'}{$key}} : ();
 
+        $value =~ s/\n\s*?\n/\n/gs;
         # disable commands flagged as 'do not render'
         # e.g. lock-out the inclusion of other files via input/include
         foreach my $c (@norender) {
@@ -648,7 +650,7 @@ sub makePNGsFromDVI {
 
         my $outimg = "latex$key.$EXT";
         
-        if (-x $PATHTODVIPNG) {
+        if (  (-x $PATHTODVIPNG) and ($opts{'useps'} eq 0) ) {
             # if dvipng is installed ...
             # $EXT = lc($EXT);
             # my $cmd = "$PATHTODVIPNG -D ".$opts{'density'}." -T tight".
