@@ -3,6 +3,7 @@ use strict;
 package TWiki::Configure::Checkers::MSWin32;
 
 sub check {
+    my $this = shift;
     # ActivePerl-only function: returns number if
     # successful, otherwise treated as a literal (bareword).
     my $isActivePerl= eval 'Win32::BuildNumber !~ /Win32/';
@@ -10,7 +11,7 @@ sub check {
     # FIXME: Advice in this section should be reviewed and tested by people
     # using ActivePerl
     my $perl5shell = $ENV{PERL5SHELL} || '';
-    $n = $perl5shell.
+    my $n = $perl5shell.
       $this->NOTE(<<HERE);
 This environment variable is used by Win32 Perls to run
 commands from TWiki scripts - it determines which shell program is used to run
