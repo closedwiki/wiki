@@ -231,7 +231,7 @@ sub handleAlltex
 
     if ( exists(TWiki::Func::getContext()->{'genpdflatex'}) ) {
       # Note: needs improvement
-      return('<latex>'.$math_string.'<latex>');
+      return('<latex>'.$doc.'</latex>');
     }
 
     TWiki::Func::getContext()->{'LMPcontext'}->{'title'} = '';
@@ -440,9 +440,7 @@ sub extractBlocks {
         if ($cmd ne '') {
             if ($cmd =~ m!\\[\`\"\'\^\~\.duvtbHc]$!) {
                 # map special text characters to html entities
-                printF("b: $b\n");
                 $b =~ s/\\$cmd$//;
-                printF("b: $b\n");
                 $txt .= $b;
                 my $t = $cmd.shift(@a);
                 $txt .= ( exists( $entities{$t} ) ) ? 
@@ -453,7 +451,7 @@ sub extractBlocks {
                 my $sz = 0;
                 my $str = $commands{$cmd}{'command'};
                 # print F $b." ";
-                do {
+                while ($sz < $commands{$cmd}{'size'}) {
                     my $t = shift(@a);
                     if (length($t) > 0) {
                         $t = substr($t,1,length($t)-2);
@@ -465,7 +463,7 @@ sub extractBlocks {
                         $sz++;
                         $str =~ s/\$$sz/$t/gs;
                     }
-                } while ($sz < $commands{$cmd}{'size'});
+                }
                 $str =~ s/\$o/$opts/;
                 $str =~ s/\$c/$cmd/;
                 printF("\n$str\n---\n");
@@ -517,6 +515,7 @@ sub extractBlocks {
             #    print F "\ntesting: $b$t \n";
             #}
             # unshift(@a,$t);
+            $b = convertEmbed($b);
 
             if ($b =~ m/^(.*?)%BEGINLATEX.*?ENDLATEX%/s)  {
                 my $g = $b;
