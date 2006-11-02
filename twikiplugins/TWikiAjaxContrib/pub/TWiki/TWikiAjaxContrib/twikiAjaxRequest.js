@@ -1,6 +1,6 @@
 /*
-To compress this file you can use Dojo ShrinkSafe compressor at
-http://alex.dojotoolkit.org/shrinksafe/
+To compress this file you can use the js compressor from Creativyst at
+http://www.creativyst.com/Prod/3/
 */
 
 /**
