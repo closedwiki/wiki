@@ -1,0 +1,868 @@
+%META:TOPICINFO{author="TWikiContributor" date="1162505056" format="1.1" version="1.2"}%
+---+!! !TWikiAjaxContrib Examples
+
+*Code examples and demos for TWikiAjaxContrib.*
+
+<script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/YahooUserInterfaceContrib/build/yahoo/yahoo.js"></script>
+<script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/YahooUserInterfaceContrib/build/connection/connection.js"></script>
+<script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/TWikiAjaxContrib/twikiAjaxRequest.compressed.js"></script>
+<script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/BehaviourContrib/behaviour.compressed.js"></script>
+
+%TOC{title="On this page:"}%
+
+---++ Default loading indicator
+
+Because TWiki files are served along more or less dynamic urls we cannot use as url =indicator.gif=; instead we should set the default loading incidator explicitly.
+
+<blockquote>
+<verbatim>
+TWiki.AjaxRequest.setDefaultIndicatorHtml(
+	"<img src='%PUBURL%/%TWIKIWEB%/TWikiAjaxContrib/indicator.gif' alt='' />"
+	);
+</verbatim>
+</blockquote>
+
+<script type="text/javascript">
+// <![CDATA[
+TWiki.AjaxRequest.setDefaultIndicatorHtml(
+	"<img src='%PUBURL%/%TWIKIWEB%/TWikiAjaxContrib/indicator.gif' alt='' />"
+	);
+// ]]>
+</script>
+
+We can <a href="#" id="retrieve_loading_indicator">retrieve the loading indicator</a>:
+<div id="loadingIndicatorContainer"></div>
+
+<blockquote>
+<verbatim>
+TWiki.AjaxRequest.getDefaultIndicatorHtml();
+</verbatim>
+</blockquote>
+
+<script type="text/javascript">
+// <![CDATA[
+function showLoadingIndicator () {
+	insertHtml(TWiki.AjaxRequest.getDefaultIndicatorHtml(), "loadingIndicatorContainer");
+}
+var myrules = {
+	'#retrieve_loading_indicator' : function(el) {
+		el.onclick = function() {
+			showLoadingIndicator();
+			return false;
+		}
+	}
+};
+Behaviour.register(myrules);
+// ]]>
+</script>
+
+
+---++ Loading directly
+
+%TWISTY{id="autoload" mode="div" showlink=" Show example code" hidelink=" Hide example code"
+showimgleft="%ICONURLPATH{code}%" 
+hideimgleft="%ICONURLPATH{code}%"}%
+<blockquote>
+<verbatim>
+function autoLoad () {
+	TWiki.AjaxRequest.load(
+		"AUTOLOAD",
+		{
+			container:"autoLoadContainer",
+			url:"%PUBURL%/%TWIKIWEB%/TWikiAjaxContribExamples/test_hamlet.html?"
+		});
+}
+addLoadEvent(autoLoad);
+</verbatim>
+</blockquote>
+%ENDTWISTY%
+
+---+++ Demo
+
+<div>
+	Autoload
+	<div id="autoLoadContainer" style="width:300px; height:300px; overflow:auto; padding:10px; border:1px solid #999;"></div>
+</div>
+
+<script type="text/javascript">
+// <![CDATA[
+function autoLoad () {
+	TWiki.AjaxRequest.load(
+		"AUTOLOAD",
+		{
+			container:"autoLoadContainer",
+			url:"%PUBURL%/%TWIKIWEB%/TWikiAjaxContribExamples/test_hamlet.html?"
+		});
+}
+addLoadEvent(autoLoad);
+// ]]>
+</script>
+
+
+---++ Plugins vs. Skins
+
+%TWISTY{id="example_plugins_vs_skins" mode="div" showlink=" Show example code" hidelink=" Hide example code"
+showimgleft="%ICONURLPATH{code}%" 
+hideimgleft="%ICONURLPATH{code}%"}%
+
+<blockquote>
+<verbatim>
+var Plugin = {
+	init:function () {
+		TWiki.AjaxRequest.setProperties("SEARCHRESULTS",
+  			{
+  				container:"searchResultsPluginContainer",
+      			url:"%PUBURL%/%TWIKIWEB%/TWikiAjaxContribExamples/test_hamlet.html?"
+   			});
+	},
+	loadSearchResultsButton:function () {
+		// For testing try to use the earlier defined container
+		// if all is well, this should not succeed
+		TWiki.AjaxRequest.setProperties("SEARCHRESULTS",
+  			{
+      			container:"searchResultsPluginContainer"
+   			});
+		TWiki.AjaxRequest.load("SEARCHRESULTS");
+	}
+}
+Plugin.init();
+
+
+var Template = {
+	init:function () {
+		TWiki.AjaxRequest.setProperties("SEARCHRESULTS",
+  			{
+      			container:"searchResultsTemplateContainer"
+   			});
+		TWiki.AjaxRequest.lockProperties("SEARCHRESULTS", "container");
+	}
+}
+Template.init();
+
+
+var myrules = {
+	'#loadSearchResultsButton' : function(el) {
+		el.onclick = function() {
+			Plugin.loadSearchResultsButton();
+			return false;
+		}
+	}
+};
+Behaviour.register(myrules);
+</verbatim>
+</blockquote>
+%ENDTWISTY%
+
+---+++ Demo
+<div style="margin:1em 0;">
+<input id="loadSearchResultsButton" class="twikiButton" type="button" value="Load contents" />
+<br />
+<div style="float:left; margin:1em 1em 0 0;">
+	Plugin container
+	<div id="searchResultsPluginContainer" style="width:300px; height:300px; overflow:auto; padding:10px; border:1px solid #999;"></div>
+</div>
+<div style="float:left; margin:1em 1em 0 0;">
+	Template container
+	<div id="searchResultsTemplateContainer" style="width:300px; height:300px; overflow:auto; padding:10px; border:1px solid #999;"></div>
+</div>
+<br class="twikiClear" />
+</div>
+
+<script type="text/javascript">
+// <![CDATA[
+var Plugin = {
+	init:function () {
+		TWiki.AjaxRequest.setProperties("SEARCHRESULTS",
+  			{
+  				container:"searchResultsPluginContainer",
+      			url:"%PUBURL%/%TWIKIWEB%/TWikiAjaxContribExamples/test_hamlet.html?"
+   			});
+	},
+	loadSearchResultsButton:function () {
+		// For testing try to use the earlier defined container
+		// if all is well, this should not succeed
+		TWiki.AjaxRequest.setProperties("SEARCHRESULTS",
+  			{
+      			container:"searchResultsPluginContainer"
+   			});
+		TWiki.AjaxRequest.load("SEARCHRESULTS");
+	}
+}
+Plugin.init();
+
+
+var Template = {
+	init:function () {
+		TWiki.AjaxRequest.setProperties("SEARCHRESULTS",
+  			{
+      			container:"searchResultsTemplateContainer"
+   			});
+		TWiki.AjaxRequest.lockProperties("SEARCHRESULTS", "container");
+	}
+}
+Template.init();
+
+
+var myrules = {
+	'#loadSearchResultsButton' : function(el) {
+		el.onclick = function() {
+			Plugin.loadSearchResultsButton();
+			return false;
+		}
+	}
+};
+Behaviour.register(myrules);
+// ]]>
+</script>
+
+
+---++ Caching results
+
+%TWISTY{id="example_caching" mode="div" showlink=" Show example code" hidelink=" Hide example code"
+showimgleft="%ICONURLPATH{code}%" 
+hideimgleft="%ICONURLPATH{code}%"}%
+
+<blockquote>
+<verbatim>
+function writeContent () {
+	TWiki.AjaxRequest.load(
+		"CACHEDRESULTS",
+		{
+			container:"cachedContentContainer",
+			url:"%SCRIPTURL{view}%/%TWIKIWEB%/WikiSyntaxSummary?skin=text",
+			cache:true
+		});
+}
+
+function clearCache () {
+	TWiki.AjaxRequest.clearCache("CACHEDRESULTS");
+}
+
+var myrules = {
+	'#example_caching_demoshow' : function(el) {
+		var oldOnClick = el.onclick;
+		el.onclick = function() {
+			writeContent();
+			oldOnClick();
+			return false;
+		}
+	},
+	'#clearCacheButton' : function(el) {
+		el.onclick = function() {
+			clearCache();
+			return false;
+		}
+	}
+};
+Behaviour.register(myrules);
+</verbatim>
+</blockquote>
+%ENDTWISTY%
+
+
+---+++ Demo
+
+%TWISTY{id="example_caching_demo" mode="div" showlink="Show (cached)" hidelink="Hide"
+showimgleft="%ICONURLPATH{toggleopen-small}%" 
+hideimgleft="%ICONURLPATH{toggleclose-small}%"}%
+<div id="example_caching_demo_contents">
+	<div id="cachedContentContainer" style="width:600px; padding:10px; border:1px solid #999;"></div>
+	<p><input id="clearCacheButton" class="twikiButton" type="button" value="Clear cache" /></p>
+<br />
+</div>
+%ENDTWISTY%
+
+<script type="text/javascript">
+// <![CDATA[
+function writeContent () {
+	TWiki.AjaxRequest.load(
+		"CACHEDRESULTS",
+		{
+			container:"cachedContentContainer",
+			url:"%SCRIPTURL{view}%/%TWIKIWEB%/WikiSyntaxSummary?skin=text",
+			cache:true
+		});
+}
+
+function clearCache () {
+	TWiki.AjaxRequest.clearCache("CACHEDRESULTS");
+}
+
+var myrules = {
+	'#example_caching_demoshow' : function(el) {
+		var oldOnClick = el.onclick;
+		el.onclick = function() {
+			writeContent();
+			oldOnClick();
+			return false;
+		}
+	},
+	'#clearCacheButton' : function(el) {
+		el.onclick = function() {
+			clearCache();
+			return false;
+		}
+	}
+};
+Behaviour.register(myrules);
+// ]]>
+</script>
+
+
+
+---++ Custom loading indicator
+
+%TWISTY{id="customloadingindicator" mode="div" showlink=" Show example code" hidelink=" Hide example code"
+showimgleft="%ICONURLPATH{code}%" 
+hideimgleft="%ICONURLPATH{code}%"}%
+<blockquote>
+<verbatim>
+var indicatorHtml = "<div style=\"background-color:red; color:white; padding:.5em;\">Loading...<\/div>";
+
+TWiki.AjaxRequest.setProperties("CUSTOM_CONTAINER",
+	{
+		container:"customIndicatorContainer",
+		url:"%PUBURL%/%TWIKIWEB%/TWikiAjaxContribExamples/test_hamlet.html?",
+		indicator:indicatorHtml
+	});
+   			
+function loadWithCustomIndicatorButton () {
+	TWiki.AjaxRequest.load("CUSTOM_CONTAINER");
+}
+
+var myrules = {
+	'#loadWithCustomIndicatorButton' : function(el) {
+		el.onclick = function() {
+			loadWithCustomIndicatorButton();
+			return false;
+		}
+	}
+};
+Behaviour.register(myrules);
+</verbatim>
+</blockquote>
+%ENDTWISTY%
+
+---+++ Demo
+
+<input id="loadWithCustomIndicatorButton" class="twikiButton" type="button" value="Load contents" />
+<br />
+<div style="margin:1em 0 0 0;">
+	<div id="customIndicatorContainer" style="width:300px; height:300px; overflow:auto; padding:10px; border:1px solid #999;"></div>
+</div>
+
+<script type="text/javascript">
+// <![CDATA[
+var indicatorHtml = "<div style=\"background-color:red; color:white; padding:.5em;\">Loading...<\/div>";
+
+TWiki.AjaxRequest.setProperties("CUSTOM_CONTAINER",
+	{
+		container:"customIndicatorContainer",
+		url:"%PUBURL%/%TWIKIWEB%/TWikiAjaxContribExamples/test_hamlet.html?",
+		indicator:indicatorHtml
+	});
+   			
+function loadWithCustomIndicatorButton () {
+	TWiki.AjaxRequest.load("CUSTOM_CONTAINER");
+}
+
+var myrules = {
+	'#loadWithCustomIndicatorButton' : function(el) {
+		el.onclick = function() {
+			loadWithCustomIndicatorButton();
+			return false;
+		}
+	}
+};
+Behaviour.register(myrules);
+// ]]>
+</script>
+
+
+
+---++ HTML processing
+
+%TWISTY{id="htmlprocessing" mode="div" showlink=" Show example code" hidelink=" Hide example code"
+showimgleft="%ICONURLPATH{code}%" 
+hideimgleft="%ICONURLPATH{code}%"}%
+<blockquote>
+<verbatim>
+TWiki.AjaxRequest.setProperties(
+	"HTML_DATA",
+	{
+		url:"%SCRIPTURL{view}%/%TWIKIWEB%/WikiSyntaxSummary?skin=text",
+		handler:"handleHtml",
+		scope:this,
+		container:"cachedHtmlProcessingContentContainer",
+		cache:true
+	});
+	
+function handleHtml (inId, inHtml) {
+	// example 1: wrap in styled container
+	var processedHtml = "<h2>Processed text:<\/h2>" + 
+		"<div style=\"color:#aaa;\">" +
+		inHtml +
+		"<\/div>";
+	var element = TWikiAjaxContrib.HTML.updateElementWithId(inId, processedHtml);
+
+	// example 2: reverse texts
+	reverseNodeTextsInList(element.getElementsByTagName('p'));
+	
+	// example 3: style list elements
+	var style = {
+		'backgroundColor':'#666',
+		'fontWeight':'bold',
+		'color':'#fff',
+		'padding':'.5em',
+		'border':'none'
+	}
+	TWikiAjaxContrib.HTML.setNodeStylesInList(element.getElementsByTagName('ul'), style);
+	
+	// return HTML to be cached
+	return TWikiAjaxContrib.HTML.getHtmlOfElementWithId(inId);
+}
+
+function reverseNodeTextsInList (inNodeList) {
+	var i, ilen = inNodeList.length;
+	for (i=0; i<ilen; ++i) {	
+		var node = inNodeList[i];
+		if (node && node.nodeType == 3) {
+			node.data = reverseText(node.data);
+		}
+		if (node && node.nodeType == 1) {
+			node.firstChild.data = reverseText(node.firstChild.data);
+		}
+	}
+}
+
+function reverseText (inText) {
+	if (!inText) return '';
+	var outText = "";
+	var i, ilen = inText.length;
+	for (i=0; i<ilen; ++i) {
+		outText = inText.substring(i, i+1) + outText;
+	}
+	return outText;
+}
+
+function loadHtmlContent () {
+	TWiki.AjaxRequest.load("HTML_DATA");
+}
+
+function clearHtmlCache () {
+	TWiki.AjaxRequest.clearCache("HTML_DATA");
+}
+
+var myrules = {
+	'#example_htmlProcessing_caching_demoshow' : function(el) {
+		var oldOnClick = el.onclick;
+		el.onclick = function() {
+			loadHtmlContent();
+			oldOnClick();
+			return false;
+		}
+	},
+	'#clearHtmlProcessingCacheButton' : function(el) {
+		el.onclick = function() {
+			clearHtmlCache();
+			return false;
+		}
+	}
+};
+Behaviour.register(myrules);
+</verbatim>
+</blockquote>
+%ENDTWISTY%
+
+---+++ Demo
+
+%TWISTY{id="example_htmlProcessing_caching_demo" mode="div" showlink="Show (cached)" hidelink="Hide"
+showimgleft="%ICONURLPATH{toggleopen-small}%" 
+hideimgleft="%ICONURLPATH{toggleclose-small}%"}%
+<div id="example_caching_demo_contents">
+	<div id="cachedHtmlProcessingContentContainer" style="width:600px; padding:10px; border:1px solid #999;"></div>
+	<p><input id="clearHtmlProcessingCacheButton" class="twikiButton" type="button" value="Clear cache" /></p>
+<br />
+</div>
+%ENDTWISTY%
+
+<script type="text/javascript">
+// <![CDATA[
+TWiki.AjaxRequest.setProperties(
+	"HTML_DATA",
+	{
+		url:"%SCRIPTURL{view}%/%TWIKIWEB%/WikiSyntaxSummary?skin=text",
+		handler:"handleHtml",
+		scope:this,
+		container:"cachedHtmlProcessingContentContainer",
+		cache:true
+	});
+	
+function handleHtml (inId, inHtml) {
+	// example 1: wrap in styled container
+	var processedHtml = "<h2>Processed text:<\/h2>" + 
+		"<div style=\"color:#aaa;\">" +
+		inHtml +
+		"<\/div>";
+	var element = TWikiAjaxContrib.HTML.updateElementWithId(inId, processedHtml);
+
+	// example 2: reverse texts
+	reverseNodeTextsInList(element.getElementsByTagName('p'));
+	
+	// example 3: style list elements
+	var style = {
+		'backgroundColor':'#666',
+		'fontWeight':'bold',
+		'color':'#fff',
+		'padding':'.5em',
+		'border':'none'
+	}
+	TWikiAjaxContrib.HTML.setNodeStylesInList(element.getElementsByTagName('ul'), style);
+	
+	// return HTML to be cached
+	return TWikiAjaxContrib.HTML.getHtmlOfElementWithId(inId);
+}
+
+function reverseNodeTextsInList (inNodeList) {
+	var i, ilen = inNodeList.length;
+	for (i=0; i<ilen; ++i) {	
+		var node = inNodeList[i];
+		if (node && node.nodeType == 3) {
+			node.data = reverseText(node.data);
+		}
+		if (node && node.nodeType == 1) {
+			node.firstChild.data = reverseText(node.firstChild.data);
+		}
+	}
+}
+
+function reverseText (inText) {
+	if (!inText) return '';
+	var outText = "";
+	var i, ilen = inText.length;
+	for (i=0; i<ilen; ++i) {
+		outText = inText.substring(i, i+1) + outText;
+	}
+	return outText;
+}
+
+function loadHtmlContent () {
+	TWiki.AjaxRequest.load("HTML_DATA");
+}
+
+function clearHtmlCache () {
+	TWiki.AjaxRequest.clearCache("HTML_DATA");
+}
+
+var myrules = {
+	'#example_htmlProcessing_caching_demoshow' : function(el) {
+		var oldOnClick = el.onclick;
+		el.onclick = function() {
+			loadHtmlContent();
+			oldOnClick();
+			return false;
+		}
+	},
+	'#clearHtmlProcessingCacheButton' : function(el) {
+		el.onclick = function() {
+			clearHtmlCache();
+			return false;
+		}
+	}
+};
+Behaviour.register(myrules);
+// ]]>
+</script>
+
+
+
+---++ XML data handling
+
+%TWISTY{id="xmldata" mode="div" showlink=" Show example code" hidelink=" Hide example code"
+showimgleft="%ICONURLPATH{code}%" 
+hideimgleft="%ICONURLPATH{code}%"}%
+<blockquote>
+<verbatim>
+TWiki.AjaxRequest.setProperties(
+	"CITY_DATA",
+	{
+		url:"%PUBURL%/%TWIKIWEB%/TWikiAjaxContribExamples/test_cities.xml?",
+		handler:"processCityData",
+		scope:this,
+		type:"xml",
+		container:"weatherContainer"
+	});
+	
+function processCityData (inId, inXml) {
+	var cities = [];
+	var doc = inXml.firstChild; // world
+	for (var i=0; i<doc.childNodes.length; i++) {
+		if (doc.getElementsByTagName('airport')[i].hasChildNodes()) {
+			cities.push(doc.getElementsByTagName('airport')[i].firstChild.data);
+		}	
+	}
+	cities.sort();
+	var outText = "";
+	var ilen = cities.length;
+	for (var i=0; i<ilen; ++i) {
+		outText += "<li>" + cities[i] + "<\/li>"
+	}
+	outText = "<ul>" + outText + "<\/ul>";
+	TWikiAjaxContrib.HTML.updateElementWithId(inId, outText);
+}
+
+function showCityData () {
+	TWiki.AjaxRequest.load("CITY_DATA");
+}
+
+var myrules = {
+	'#loadXmlDataButton' : function(el) {
+		el.onclick = function() {
+			showCityData();
+			return false;
+		}
+	}
+};
+Behaviour.register(myrules);
+</verbatim>
+</blockquote>
+%ENDTWISTY%
+
+---+++ Demo
+
+<input id="loadXmlDataButton" class="twikiButton" type="button" value="Load XML data" />
+<br />
+<div style="margin:1em 0 0 0;">
+	<div id="xmlDataContainer" style="width:300px; height:300px; overflow:auto; padding:10px; border:1px solid #999;">Airport cities</div>
+</div>
+
+<script type="text/javascript">
+// <![CDATA[
+TWiki.AjaxRequest.setProperties(
+	"CITY_DATA",
+	{
+		url:"%PUBURL%/%TWIKIWEB%/TWikiAjaxContribExamples/test_cities.xml?",
+		handler:"processCityData",
+		scope:this,
+		type:"xml",
+		container:"xmlDataContainer"
+	});
+	
+function processCityData (inId, inXml) {
+	var cities = [];
+	var doc = inXml.firstChild; // world
+	for (var i=0; i<doc.childNodes.length; i++) {
+		if (doc.getElementsByTagName('airport')[i].hasChildNodes()) {
+			cities.push(doc.getElementsByTagName('airport')[i].firstChild.data);
+		}	
+	}
+	cities.sort();
+	var outText = "";
+	var ilen = cities.length;
+	for (var i=0; i<ilen; ++i) {
+		outText += "<li>" + cities[i] + "<\/li>"
+	}
+	outText = "<ul>" + outText + "<\/ul>";
+	TWikiAjaxContrib.HTML.updateElementWithId(inId, outText);
+}
+
+function showCityData () {
+	TWiki.AjaxRequest.load("CITY_DATA");
+}
+
+var myrules = {
+	'#loadXmlDataButton' : function(el) {
+		el.onclick = function() {
+			showCityData();
+			return false;
+		}
+	}
+};
+Behaviour.register(myrules);
+// ]]>
+</script>
+
+---++ Sending data with POST
+
+%TWISTY{id="postdata" mode="div" showlink=" Show example code" hidelink=" Hide example code"
+showimgleft="%ICONURLPATH{code}%" 
+hideimgleft="%ICONURLPATH{code}%"}%
+<blockquote>
+<verbatim>
+function postSearchForm () {
+	var queryString = TWikiAjaxContrib.Form.formData2QueryString(
+		document.getElementById('searchForm')
+	);
+	TWiki.AjaxRequest.load(
+		"SEARCH_DATA",
+		{
+			container:"searchResults",
+			url:"%SCRIPTURLPATH{search}%/%INCLUDINGWEB%/%INCLUDINGTOPIC%",	
+			method:"POST",
+			postData:queryString
+		});
+}
+
+var myrules = {
+	'#submitSearchButton' : function(el) {
+		el.onclick = function() {
+			postSearchForm();
+			return false;
+		}
+	}
+};
+Behaviour.register(myrules);
+</verbatim>
+</blockquote>
+%ENDTWISTY%
+
+---+++ Demo
+
+<div class="twikiPageForm">
+<form id="searchForm" name="searchForm" action="postSearchForm()">
+<table id="twikiSearchTable" border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td colspan="2" class="first">
+  <input type="text" class="twikiInputField" name="search" value="%URLPARAM{ "search" encode="entity" default="TWiki"}%" size="40" /> 
+  <input id="submitSearchButton" type="submit" class="twikiSubmit" value='%MAKETEXT{"Search"}%' /><span class="twikiSmall">&nbsp;&nbsp;[[%INCLUDINGWEB%.WebSearchAdvanced][%MAKETEXT{"Advanced search"}%]] | [[%TWIKIWEB%.SearchHelp][%MAKETEXT{"Help"}%]]</span>
+<div class="twikiSmall" style="padding:1em 0 0 0;">%MAKETEXT{"TIP: to search for all topics that contain =\"SOAP\"=, =\"WSDL\"=, a literal =\"web service\"=, but not =\"shampoo\"=, write:"}% <code>soap wsdl "web service" -shampoo</code></div>
+</td>
+</tr>
+<tr>
+<th class="last">%MAKETEXT{"Search where:"}%</th>
+<td class="last">
+<input type="radio" class="twikiRadioButton" id="textbody" name="scope" value="text" %IF{" '%URLPARAM{"scope" default="text"}%' = 'text' " then="checked=\"checked\"" else=""}% /><label for="textbody"> %MAKETEXT{"Text body"}%</label>&nbsp;&nbsp;&nbsp;<input type="radio" class="twikiRadioButton" id="topictitle" name="scope" value="topic" %IF{" '%URLPARAM{scope}%' = 'topic' " then="checked=\"checked\"" else=""}% /><label for="topictitle"> %MAKETEXT{"Topic title"}%</label>&nbsp;&nbsp;&nbsp;<input type="radio" class="twikiRadioButton" id="both" name="scope" value="all" %IF{" '%URLPARAM{scope}%' = 'all' " then="checked=\"checked\"" else=""}% /><label for="both"> %MAKETEXT{"Both body and title"}%</label>
+<hr />
+<input type="checkbox" class="twikiCheckbox" id="web" name="web" %IF{" '%URLPARAM{web}%' = 'on'" then="checked=\"checked\"" else=""}% /><label for="web"> %MAKETEXT{"All public webs"}%</label> <span class="twikiSmall">%MAKETEXT{"(otherwise search [_1] Web only)" args="<nop>%INCLUDINGWEB%"}%</span>
+<input type=hidden id="skin" name="skin" value="text" />
+</td>
+</tr>
+</table>
+</form>
+</div>
+<div style="margin:1em 0 0 0;">
+	<div id="searchResults" style="padding:10px; border:1px solid #ccc;">Search results</div>
+</div>
+
+<script type="text/javascript">
+// <![CDATA[
+function postSearchForm () {
+	var queryString = TWikiAjaxContrib.Form.formData2QueryString(
+		document.getElementById('searchForm')
+	);
+	TWiki.AjaxRequest.load(
+		"SEARCH_DATA",
+		{
+			container:"searchResults",
+			url:"%SCRIPTURLPATH{search}%/%INCLUDINGWEB%/%INCLUDINGTOPIC%",	
+			method:"POST",
+			postData:queryString
+		});
+}
+
+var myrules = {
+	'#submitSearchButton' : function(el) {
+		el.onclick = function() {
+			postSearchForm();
+			return false;
+		}
+	}
+};
+Behaviour.register(myrules);
+// ]]>
+</script>
+
+---++ Dealing with failure
+
+%TWISTY{id="failure" mode="div" showlink=" Show example code" hidelink=" Hide example code"
+showimgleft="%ICONURLPATH{code}%" 
+hideimgleft="%ICONURLPATH{code}%"}%
+<blockquote>
+<verbatim>
+TWiki.AjaxRequest.setProperties(
+	"FAILURE",
+	{
+		failHandler:"handleFailed",
+		failScope:this
+	});
+
+function handleFailed(inName, inStatus) {
+	var html = "<div style=\"background:#ffc; padding:.5em;\">" + 
+		"Could not load contents. Please try again later." + 
+		"<\/div>";
+	TWikiAjaxContrib.HTML.updateElementWithId("failureContainer", html);
+}
+
+function loadFailure () {
+	TWiki.AjaxRequest.load(
+		"FAILURE",
+		{
+			container:"failureContainer",
+			/* use wrong url */
+			url:"%PUBURL%/%TWIKIWEB%/TWikiAjaxContrib/bla"
+		});
+}
+
+var myrules = {
+	'#failureButton' : function(el) {
+		el.onclick = function() {
+			loadFailure();
+			return false;
+		}
+	}
+};
+Behaviour.register(myrules);
+</verbatim>
+</blockquote>
+%ENDTWISTY%
+
+---+++ Demo
+
+<input id="failureButton" class="twikiButton" type="button" value="Load (failing) contents" />
+<br />
+<div style="margin:1em 0 0 0;">
+	<div id="failureContainer" style="width:300px; height:100px; overflow:auto; padding:10px; border:1px solid #999;"></div>
+</div>
+
+<script type="text/javascript">
+// <![CDATA[
+TWiki.AjaxRequest.setProperties(
+	"FAILURE",
+	{
+		failHandler:"handleFailed",
+		failScope:this
+	});
+
+function handleFailed(inName, inStatus) {
+	var html = "<div style=\"background:#ffc; padding:.5em;\">" + 
+		"Could not load contents. Please try again later." + 
+		"<\/div>";
+	TWikiAjaxContrib.HTML.updateElementWithId("failureContainer", html);
+}
+
+function loadFailure () {
+	TWiki.AjaxRequest.load(
+		"FAILURE",
+		{
+			container:"failureContainer",
+			/* for this demo to work use a wrong url */
+			url:"%PUBURL%/%TWIKIWEB%/TWikiAjaxContrib/bla"
+		});
+}
+
+var myrules = {
+	'#failureButton' : function(el) {
+		el.onclick = function() {
+			loadFailure();
+			return false;
+		}
+	}
+};
+Behaviour.register(myrules);
+// ]]>
+</script>
+
+
+
+%META:FILEATTACHMENT{name="test_cities.xml" attr="" autoattached="1" comment="" date="1162426723" path="test_cities.xml" size="47135" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="test_hamlet.html" attr="" autoattached="1" comment="" date="1162150777" path="test_hamlet.html" size="247011" user="UnknownUser" version=""}%
