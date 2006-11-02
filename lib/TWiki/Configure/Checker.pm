@@ -190,6 +190,8 @@ sub checkPerlModules {
     my $e = '';
     foreach my $mod (@$mods) {
         next if $INC{$mod->{name} . '.pm'}; # skip if already included
+        $mod->{minimumVersion} ||= 0;
+        $mod->{disposition} ||= '';
         my $n = '';
         my $mod_version;
         eval 'use '.$mod->{name};
