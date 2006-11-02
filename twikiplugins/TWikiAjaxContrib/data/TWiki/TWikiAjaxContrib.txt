@@ -382,7 +382,7 @@ See TWikiAjaxContribExamples
 | Copyright &copy;: | 2006 Arthur Clemens |
 | License: | [[http://www.gnu.org/copyleft/gpl.html][GPL]] |
 | Dependencies: | %$DEPENDENCIES% |
-| 2 Nov 2006 | 0.8 First time in the open  |
+| 2 Nov 2006 | 0.8 (alpha) First time in the open  |
 | Demo url:  | http://twiki4.visiblearea.com/twiki4/MAIN/bin/view/TWiki/TWikiAjaxContribExamples  |
 | Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 | Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
