@@ -43,7 +43,7 @@ sub writeDebug {
 
 =pod 
 
----++++ new($session)
+---++++ new($session) -> $ldapUserMapping object
 
 create a new <nop>LdapUserMapping object and constructs an <nop>LdapContrib
 object to delegate LDAP services to.
@@ -79,7 +79,7 @@ sub new {
 
 =pod
 
----++++ Object Method getListOfGroups( ) -> @listOfUserObjects
+---++++ getListOfGroups( ) -> @listOfUserObjects
 
 Get a list of groups defined in the LDAP database. If 
 =twikiGroupsBackoff= is defined the set of LDAP and native groups will
@@ -89,6 +89,10 @@ merged whereas LDAP groups have precedence in case of a name clash.
 
 sub getListOfGroups {
   my $this = shift;
+
+  unless ($this->{ldap}->{mapGroups}) {
+    return $this->SUPER::getListOfGroups();
+  }
 
   #writeDebug("called getListOfGroups()");
   my %groups;
@@ -107,7 +111,7 @@ sub getListOfGroups {
 
 =pod 
 
----++++ Object Method groupMembers($group)
+---++++ groupMembers($group) -> @listOfTWikiUsers
 
 Returns a list of all members of a given group. Members are 
 TWiki::User objects.
@@ -118,6 +122,9 @@ sub groupMembers {
   my ($this, $group) = @_;
 
   #writeDebug("called groupMembers(".$group->wikiName().")");
+  unless ($this->{ldap}->{mapGroups}) {
+    return $this->SUPER::groupMembers($group);
+  }
 
   if (!defined $group->{members}) {
     my $members = $this->{ldap}->getGroupMembers($group->wikiName);
@@ -153,7 +160,7 @@ sub addUserToMapping {
 
 =pod
 
----++ ObjectMethod lookupLoginName($username) -> $wikiName
+---++++ lookupLoginName($username) -> $wikiName
 
 Map a username to the corresponding wikiname. This is used for lookups during
 user resolution, and should be as fast as possible.
@@ -163,13 +170,19 @@ user resolution, and should be as fast as possible.
 sub lookupLoginName {
     my ($this, $loginUser) = @_;
 
-    $this->_loadMapping();
-    return $U2W{$loginUser};
+  my $entry = $this->{ldap}->getAccount($loginUser);
+  return $this->SUPER::lookupLoginName($loginUser) unless $entry;
+
+  my $wikiName = $entry->get_value($this->{ldap}{wikiNameAttribute});
+  if ($this->{ldap}->{wikiNameRemoveWhiteSpace}) {
+    $wikiName =~ s/[^$TWiki::regex{mixedAlphaNum}]//g;
+  }
+  return $wikiName;
 }
 
 =pod
 
----++ Objectmethod lookupWikiName($wikiname) -> $username
+---++++ lookupWikiName($wikiname) -> $username
 
 Map a wikiname to the corresponding username. This is used for lookups during
 user resolution, and should be as fast as possible.
@@ -185,7 +198,7 @@ sub lookupWikiName {
 
 =pod
 
----++ ObjectMethod getListOfAllWikiNames() -> @wikinames
+---+++++ getListOfAllWikiNames() -> @wikinames
 
 Returns a list of all wikinames of users known to the mapping manager.
 
@@ -210,6 +223,10 @@ filling the internal mapping cache.
 
 sub _loadMapping {
   my $this = shift;
+
+  unless ($this->{ldap}->{mapGroups}) {
+    return $this->SUPER::_loadMapping();
+  }
 
   return if $this->{CACHED};
   $this->{CACHED} = 1;
@@ -245,7 +262,7 @@ sub _loadMapping {
 
 =pod
 
----++++ isGroup($user)
+---++++ isGroup($user) -> $boolean
 
 Establish if a user object refers to a user group or not.
 This returns true for the <nop>SuperAdminGroup or
@@ -257,6 +274,10 @@ a group
 
 sub isGroup {
   my ($this, $user) = @_;
+
+  unless ($this->{ldap}->{mapGroups}) {
+    return $this->SUPER::isGroup($user);
+  }
 
   # special treatment for build-in groups
   return 1 
@@ -275,7 +296,7 @@ sub isGroup {
 
 =pod
 
----++++ Object Method finish
+---++++ finish()
 
 Complete processing after the client's HTTP request has been responded
 to. I.e. it disconnects the LDAP database connection.
