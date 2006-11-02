@@ -1,3 +1,4 @@
+%META:TOPICINFO{author="TWikiContributor" date="1161732377" format="1.0" version="$Rev$"}%
 ---+!! TWiki Release 4.0 (Dakar)
 'Dakar' is the first major release of the TWiki Enterprise Collaboration Platform in over a year. The focus of this release has been on refactoring the code in the interests of *security*, *efficiency* and *maintainability*, though a range of powerful new features are also included. The refactoring work has included tightening up the specification of certain key TWiki behaviours, which has resulted in some specification changes. The impact on end users has been minimised as far as possible.
 
@@ -202,7 +203,7 @@ If you want user interface internationalization support, CPAN:Locale::Maketext::
 
 ---+++ Installation and configuration
 
-The installation and configuration processes have been simplified. 
+The installation and configuration processes have been simplified.
 
 ---++++ setlib.cfg
 The installer should now provide a file called =LocalLib.cfg= that contains local path settings. =setlib.cfg= contains documentation of what has to be done. Old =setlib.cfg= files *will not work* with Dakar.
@@ -296,13 +297,13 @@ These variables are now more closely associated with =WIKITOOLNAME=.  If you cha
 
 The =FINALPREFERENCES= setting prevents particular preference settings from being over-ridden at a lower level. The hierarchy of how =FINALPREFERENCES= settings are applied has been clarified/formalized as reflected in the following chart:
 | *Level* | *Set By* | *Local site examples* |
-| default site | !%TWIKIWEB%.TWikiPreferences or !%WIKIPREFSTOPIC%  | %TWIKIWEB%.%WIKIPREFSTOPIC% | 
+| default site | !%TWIKIWEB%.TWikiPreferences or !%WIKIPREFSTOPIC%  | %TWIKIWEB%.%WIKIPREFSTOPIC% |
 | local site | !%MAINWEB%.TWikiPreferences or !%LOCALSITEPREFS%  | %LOCALSITEPREFS% |
 | web | !WebPreferences  | %WEB%.%WEBPREFSTOPIC% |
 | user | In one's user topic  | %WIKIUSERNAME% |
-| topic | "Edit topic preferences settings" under "More topic actions"  | %WEB%.%TOPIC% | 
+| topic | "Edit topic preferences settings" under "More topic actions"  | %WEB%.%TOPIC% |
 
-By default, the site level =FINALPREFERENCES= are set in [[%LOCALSITEPREFS%]] so as not to conflict with preference settings in that topic. 
+By default, the site level =FINALPREFERENCES= are set in [[%LOCALSITEPREFS%]] so as not to conflict with preference settings in that topic.
 
 ---+++ =mod_perl= support improvements
 TWiki no longer uses global variables other than for constants. Each CGI script creates a new "session object" that holds all session-specific information.
@@ -345,21 +346,21 @@ When deciding whether to grant access, TWiki now evaluates the following rules i
 In addition, permissions set on a specific revision of a topic now _always_ apply to that revision, even if access to the topic is relaxed in a later revision. This change was necessary to prevent accidentally permitting access to sensitive data in old revisions.
 
 The major impact of this change is that !WebPreferences topics shipped with earlier releases of TWiki will have excessively restrictive controls, as the default settings were:
-   * <nop>Set DENYWEBVIEW = 
-   * <nop>Set ALLOWWEBVIEW = 
+   * <nop>Set DENYWEBVIEW =
+   * <nop>Set ALLOWWEBVIEW =
       * This will now _deny_ view access to everyone _not_ in the list (i.e. everyone except admins)
-   * <nop>Set DENYWEBCHANGE = 
-   * <nop>Set ALLOWWEBCHANGE = 
+   * <nop>Set DENYWEBCHANGE =
+   * <nop>Set ALLOWWEBCHANGE =
       * This will now _deny_ change access to everyone _not_ in the list (i.e. everyone except admins)
-   * <nop>Set ALLOWTOPICCHANGE = 
+   * <nop>Set ALLOWTOPICCHANGE =
       * This will now _deny_ change access to everyone _not_ in the list (i.e. everyone except admins)
 
 The standard webs shipped with this release have these settings disabled. However you are likely to have inherited the old default settings in your user webs. The easiest way to deal with this is to simply insert a # sign in these settings; for example:
-   * #Set DENYWEBVIEW = 
-   * #Set ALLOWWEBVIEW = 
+   * #Set DENYWEBVIEW =
+   * #Set ALLOWWEBVIEW =
    * _etc_
 
-%RED%Note:%ENDCOLOR% For security reasons, the [[Trash.WebHome][Trash]] web is shipped with =ALLOWWEBVIEW= set to %MAINWEB%.TWikiAdminGroup. 
+%RED%Note:%ENDCOLOR% For security reasons, the [[Trash.WebHome][Trash]] web is shipped with =ALLOWWEBVIEW= set to %MAINWEB%.TWikiAdminGroup.
 
 ---++++ Site Permissions Overview
 
@@ -368,7 +369,7 @@ The SitePermissions topic gives you a quick view of the permissions on each web 
 ---+++ Frustrating Robots and Spammers
 Standard TWiki incorporates some simple measures to protect e-mail addresses and control the activities of benign robots. These should be enough to handle intranet requirements. Administrators of public (internet) sites are *strongly* recommended to investigate the TWiki:Plugins/BlackListPlugin.
 
----+++ New User Registration 
+---+++ New User Registration
 
 The new user registration process has been extensively reworked to improve usability and security of the registration process.
    1 !FirstName and !LastName are recorded separately and tabulated. See %MAINWEB%.UserListByLocation
@@ -383,12 +384,12 @@ The new user registration process has been extensively reworked to improve usabi
 
 E-mail addresses for new users are no longer stored in home topics. Instead, the password manager API has been extended to support storing e-mails.
 
-The default password manager stores e-mails in the =.htpasswd= file - you can safely edit this file with a text editor to modify the info field that contains the e-mail addresses (the format of each line in this file is =username>:<password>:<info>=, and TWiki expects the info field to be a ;-separated list of e-mail addresses). Password managers for other systems e.g. LDAP can esily be extended to support the new API. If the password manager does not have an e-mail address for a user, then TWiki will still look in the users' personal topic. 
+The default password manager stores e-mails in the =.htpasswd= file - you can safely edit this file with a text editor to modify the info field that contains the e-mail addresses (the format of each line in this file is =username>:<password>:<info>=, and TWiki expects the info field to be a ;-separated list of e-mail addresses). Password managers for other systems e.g. LDAP can esily be extended to support the new API. If the password manager does not have an e-mail address for a user, then TWiki will still look in the users' personal topic.
 
 The script =tools/upgrade_emails.pl= can be used to extract e-mail addresses for existing TWiki users from personal topics, and add them to the password manager.
    * You are strongly recommended to run this script if you are running a public site.
    * It will not modify existing personal topics.
-   * The script will tell you if any users are found that don't have an e-mail. 
+   * The script will tell you if any users are found that don't have an e-mail.
    * You can re-run the script as many times as you like; once the password manager has an e-mail for a user, the e-mail in their personal topic is ignored.
 You should also advise all your registered users to make sure they have a valid e-mail. They can do this by logging in and visiting ChangeEmailAddress.
 
@@ -435,7 +436,7 @@ Previous releases required =verbatim= tags to be on their own line. TWiki can no
 <pre>
 blah&lt;verbatim&gt;inside&lt;/verbatim&gt;after
 </pre>
-results in 
+results in
 
 blah<verbatim>inside</verbatim>after
 
@@ -524,7 +525,7 @@ You should convert your plugins to call the =TWiki::Func= API. If you have calle
 
 ---++ TWiki 4.0.1 Patch Release Details
 <!-- do not use Bugs: interwiki links because interwiki rule might not be defined
-   * Set BUGS = http://develop.twiki.org/~develop/cgi-bin/view/Bugs
+   * Set BUGS = http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs
 -->
 <noautolink>
 The following fixes have been addressed in this release:
@@ -555,7 +556,7 @@ The following fixes have been addressed in this release:
 | Item0 | Untainting the tainted title |
 </noautolink>
 
-The 4.0.1 release was built from SVN http://svn.twiki.org:8181/svn/twiki/branches/TWikiRelease04x00 revision *8740*.
+The 4.0.1 release was built from SVN http://svn.twiki.org/svn/twiki/branches/TWikiRelease04x00 revision *8740*.
 
 ---++ TWiki 4.0.2 Patch Release Details
 
@@ -658,7 +659,7 @@ The following fixes and minor enhancements have been addressed in this release:
 | [[%BUGS%/Item1146][Item1146]] | Two "Create" buttons |
 </noautolink>
 
-The 4.0.2 release was built from SVN http://svn.twiki.org:8181/svn/twiki/branches/TWikiRelease04x00 revision *9626*.
+The 4.0.2 release was built from SVN http://svn.twiki.org/svn/twiki/branches/TWikiRelease04x00 revision *9626*.
 
 ---++ TWiki 4.0.3 Patch Release Details
 
@@ -782,7 +783,70 @@ The following fixes and minor enhancements have been addressed in this release:
 | [[%BUGS%/Item2301][Item2301]] | Put {linkProtocolPattern} into configure |
 | [[%BUGS%/Item2282][Item2282]] | SpreadSheetPlugin with SETIFEMPTY |
 | [[%BUGS%/Item2155][Item2155]] | Remove hardcoded fonts from twiki's default content |
-| [[%BUGS%/Item2125][Item2125]] | Add format parameter to META{"parent"} | 
+| [[%BUGS%/Item2125][Item2125]] | Add format parameter to META{"parent"} |
 </noautolink>
 
-The 4.0.3 release was built from SVN http://svn.twiki.org:8181/svn/twiki/branches/TWikiRelease04x00 revision *10706*..
+The 4.0.3 release was built from SVN http://svn.twiki.org/svn/twiki/branches/TWikiRelease04x00 revision *10706*..
+
+---++ TWiki 4.0.4 Patch Release Details
+
+<noautolink>
+The following fixes and minor enhancements have been addressed in this release:
+
+---+++ TWiki 4.0.4 Fixes
+
+| [[%BUGS%/Item2578][Item2578]] | SECURITY HOTFIX: Improved protection against attaching php scripts that can be executed afterwords by simple view |
+| [[%BUGS%/Item2568][Item2568]] | Fix potential script error when attachment twisty is removed |
+| [[%BUGS%/Item2558][Item2558]] | TWiki 4.0.3 distributed LocalSite.cfg.txt uses incorrect syntax |
+| [[%BUGS%/Item2546][Item2546]] | Handmade twisty buttons has underline under them |
+
+---+++ TWiki 4.0.4 Enhancements
+
+No enhancements.
+</noautolink>
+
+The 4.0.4 release was built from SVN http://svn.twiki.org/svn/twiki/branches/TWikiRelease04x00 revision *10799*
+
+---++ TWiki 4.0.5 Patch Release Details
+Note that TWiki 4.0.5 contains all fixes previously released at hotfixes 1 to 4 for TWiki 4.0.4.
+
+<noautolink>
+The following fixes have been addressed in this release:
+
+---+++ TWiki 4.0.5 Fixes
+| [[%BUGS%/Item2609][Item2609]] | Func.pm API function wikiToEmail has a coding error. |
+| [[%BUGS%/Item2602][Item2602]] | AfterEditHandler only called by preview, not save |
+| [[%BUGS%/Item2595][Item2595]] | Emails are not stored in user topic when TWiki setup in a corporate environment |
+| [[%BUGS%/Item2573][Item2573]] | %<nop>META{"formfield" name="formfieldname"}% broken (returns nothing) |
+| [[%BUGS%/Item2518][Item2518]] | INCLUDE from external url with filename breaks relative links of included content |
+| [[%BUGS%/Item2607][Item2607]] | Crash TWiki with IF variable. |
+| [[%BUGS%/Item2619][Item2619]] | TOC Link URI References are not Relative |
+| [[%BUGS%/Item2322][Item2322]] | Incomplete fix for Comment box should have ability to be disabled by skin template |
+| [[%BUGS%/Item2594][Item2594]] | Hierarchical webs and WEBLIST can make things excruciatingly slow |
+| [[%BUGS%/Item2666][Item2666]] | Javascript errors caused by twiki.js |
+| [[%BUGS%/Item2669][Item2669]] | Configure robustness update |
+| [[%BUGS%/Item2565][Item2565]] | SEARCH parameter newline not documented. |
+| [[%BUGS%/Item2631][Item2631]] | Reset Password does not work when $TWiki::cfg{MapUserToWikiName} = 0. |
+| [[%BUGS%/Item2684][Item2684]] | EditTablePlugin Don't complain on lock taken if taken by one self |
+| [[%BUGS%/Item2714][Item2714]] | SECURITY ISSUE! - Topics with ALLOWTOPICVIEW defined in "Edit Settings" (META) can be read by anyone with a specially crafted SEARCH. |
+| [[%BUGS%/Item2758][Item2758]] | Updated TWiki.TWikiVariables so that the variable precedence includes both TWiki.TWikiPreferences and Main.TWikiPreferences |
+| [[%BUGS%/Item2780][Item2780]] | Rename to non wikiword name gives empty message |
+| [[%BUGS%/Item2806][Item2806]] | Security Alert CVE-2006-4294 - viewfile doesn't follow rules for mapping attachment names |
+| [[%BUGS%/Item2821][Item2821]] | Potential bugs from parsing settings in topics when the following line contains white space. |
+| [[%BUGS%/Item2825][Item2825]] | Potential source of error related to code that checks access permissions. |
+| [[%BUGS%/Item2823][Item2823]] | SMTP recipient name format issue |
+| [[%BUGS%/Item2829][Item2829]] | EditTablePlugin select drops selected item if cell has whitespace |
+| [[%BUGS%/Item2625][Item2625]] | %<nop>SEARCH% does not work when non-wikiword used in topic="" parameter |
+| [[%BUGS%/Item2859][Item2859]] | Attachments are being named the full path name instead of the filename only |
+| [[%BUGS%/Item2746][Item2746]] | Disable tag parameter issue in preview |
+| [[%BUGS%/Item2856][Item2856]] | make TWikiForms defined in another web clickable in "changeform" |
+| [[%BUGS%/Item2721][Item2721]] | Newly created topics have wrong version number when using RcsLite |
+| [[%BUGS%/Item2928][Item2928]] | Mailto links in brackets [[ ][ ]] contain visible when text is upper case |
+| [[%BUGS%/Item2884][Item2884]] | EditTablePlugin does not honour ALLOWTOPICCHANGE (bug introduced in 4.0.4 hotfix 3) |
+| [[%BUGS%/Item2980][Item2980]] | TWiki::Func::checkAccessPermission issue with '' vs. undef |
+
+---+++ TWiki 4.0.5 Enhancements
+
+No enhancements
+
+The 4.0.5 release was built from SVN http://svn.twiki.org/svn/twiki/tags/TWikiRelease04x00x05 revision *11821*...
