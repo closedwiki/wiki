@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev: 7555 $"}%
+%META:TOPICINFO{author="TWikiContributor" date="1162514654" format="1.0" version="$Rev: 7555 $"}%
 %TOC%
 %STARTINCLUDE%
 ---# TWiki CGI and Command Line Scripts
@@ -342,8 +342,8 @@ Details on command line scripts located in the =twiki/tools= directory.
 
 ---+++ =geturl.pl=
 This is a very simple script to get the content of a web site. It is marked as _deprecated_ and might be removed (or enhanced) in a future TWiki release. Its functions are covered by the standard =wget= and =curl= commands.
-   * Usage:    =geturl &lt;host&gt; &lt;path&gt; [&lt;port&gt; [&lt;header&gt;]]=
-   * Example:  =geturl some.domain /some/dir/file.html 80=
+   * Usage:    =geturl.pl &lt;host&gt; &lt;path&gt; [&lt;port&gt; [&lt;header&gt;]]=
+   * Example:  =geturl.pl some.domain /some/dir/file.html 80=
    * Will get: =http://some.domain:80/some/dir/file.html=
 
 ---+++ =rewriteshebang.pl=
