@@ -112,7 +112,9 @@ sub checkPassword {
 
   # guest has no password
   return 1 if $login eq $TWiki::cfg{DefaultUserWikiName};
-  return $this->{ldap}->connect($login, $passU);
+  my $entry = $this->{ldap}->getAccount($login);
+  return 0 unless $entry;
+  return $this->{ldap}->connect($entry->dn(), $passU);
 }
 
 =pod 

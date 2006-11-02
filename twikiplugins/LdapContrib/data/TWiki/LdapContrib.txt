@@ -144,6 +144,8 @@ These are:
      a value of 0 disables the caching; 
      default is -1
      <verbatim> $TWiki::cfg{Ldap}{MaxCacheHits} = -1; </verbatim>
+   * enable/disable mapping ldap groups; default is 0
+     <verbatim> $TWiki::cfg{Ldap}{MapGroups} = 0; </verbatim>
 
 ---+++ Membership
 Ldap servers follow different schemata to define "membership". They store the
@@ -216,10 +218,14 @@ take precedence. If switched off <nop>TWikiGroups are ignored.
 |  Copyright &copy;: | 2006 Michael Daum http://wikiring.com %BR% \
    This work was partly funded by Spanlink Communications |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Version: | v0.6 |
+|  Version: | v0.7 |
 |  CPAN Dependencies: | CPAN:Net::LDAP, CPAN:Digest::MD5 | 
 |  Dependencies: | None |
 |  Change History: | |
+|  03 Nov 2006: | fixed binding to the server by first searching the full dn instead of assuming a fixed one \
+                  (issue found by Cederic Weber); \
+		  added new feature <nop>MapGroup to be able to switch off group mapping and have ;\
+		  login-to-wikiname conversion only |
 |  02 Aug 2006: | added a user accounts in memory cache |
 |  19 July 2006: | public release |
 |  24 May 2006: | api adjustments, improved wikiname generation |
@@ -229,4 +235,4 @@ take precedence. If switched off <nop>TWikiGroups are ignored.
 |  Appraisal: | TWiki:Plugins/%TOPIC%Appraisal |
 
 
--- TWiki:Main/MichaelDaum - 02 Aug 2006
+-- TWiki:Main/MichaelDaum - 03 Nov 2006

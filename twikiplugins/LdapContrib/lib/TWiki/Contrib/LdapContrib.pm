@@ -25,7 +25,7 @@ use Digest::MD5 qw( md5_hex );
 use vars qw($VERSION $RELEASE);
 
 $VERSION = '$Rev$';
-$RELEASE = 'v0.6';
+$RELEASE = 'v0.7';
 
 =begin text
 
@@ -114,6 +114,7 @@ sub new {
     bindDN=>$TWiki::cfg{Ldap}{BindDN} || '',
     bindPassword=>$TWiki::cfg{Ldap}{BindPassword} || '',
     ssl=>$TWiki::cfg{Ldap}{SSL} || 0,
+    mapGroups=>$TWiki::cfg{Ldap}{MapGroups} || 0,
     @_
   };
 
@@ -136,10 +137,10 @@ by calling this method. The methods below will do that automatically when needed
 =cut
 
 sub connect {
-  my ($this, $login, $passwd) = @_;
-  return if $this->{ldap};
+  my ($this, $dn, $passwd) = @_;
 
   #writeDebug("called connect");
+  #writeDebug("dn=$dn") if $dn;
 
   $this->{ldap} = Net::LDAP->new($this->{host},
     port=>$this->{port},
@@ -152,13 +153,10 @@ sub connect {
   }
 
   # authenticated bind
-  if (defined($login)) {
+  if (defined($dn)) {
     die "illegal call to connect()" unless defined($passwd);
-    my $msg = $this->{ldap}->bind(
-      "$this->{loginAttribute}=$login,$this->{basePasswd}", 
-      password=>$passwd
-    );
-    #writeDebug("bind for $login");
+    my $msg = $this->{ldap}->bind($dn, password=>$passwd);
+    #writeDebug("bind for $dn");
     return ($this->_checkError($msg) == LDAP_SUCCESS)?1:0;
   } 
 
