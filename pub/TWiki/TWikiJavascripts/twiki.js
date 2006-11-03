@@ -400,9 +400,7 @@ Finds a key-value pair in an array.
 @return The first occurrence of a key-value pair, where key == inKey; null if none is found.
 */
 function _getKeyValue (inKeyValues, inKey) {
-	if (!inKeyValues) {
-	  return null;
-	}
+	if (!inKeyValues) return null;
 	var i = inKeyValues.length;
 	while (i--) {
 		var keyvalue = inKeyValues[i].split(COOKIE_PREF_VALUE_SEPARATOR);
@@ -418,6 +416,7 @@ Finds the location of a key-value pair in an array.
 @return The location of the first occurrence of a key-value tuple, where key == inKey; -1 if none is found.
 */
 function _getKeyValueLoc (inKeyValues, inKey) {
+	if (!inKeyValues) return null;
 	var i = inKeyValues.length;
 	while (i--) {
 		var keyvalue = inKeyValues[i].split(COOKIE_PREF_VALUE_SEPARATOR);
