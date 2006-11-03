@@ -2,6 +2,7 @@
 
 var POPUP_WINDOW_WIDTH = 500;
 var POPUP_WINDOW_HEIGHT = 480;
+var POPUP_ATTRIBUTES = "titlebar=0,resizable,scrollbars";
 
 var TWIKI_PREF_COOKIE_NAME = "TWIKIPREF";
 var COOKIE_PREF_SEPARATOR = "|"; // separates key-value pairs
@@ -65,15 +66,30 @@ function initForm() {
 
 // Launch a fixed-size help window
 function launchTheWindow(inPath, inWeb, inTopic, inSkin, inTemplate) {
-	var template = "";
-	var skin = "";
+
+	var pathComps = [];
+	if (inWeb != undefined) pathComps.push(inWeb);
+	if (inTopic != undefined) pathComps.push(inTopic);
+	var pathString = inPath + pathComps.join("/");
+	
+	var params = [];
 	if (inSkin != undefined && inSkin.length > 0) {
-		skin = "?skin=" + inSkin;
+		params.push("skin=" + inSkin);
 	}
 	if (inTemplate != undefined && inTemplate.length > 0) {
-		template = "?template=" + inTemplate;
+		params.push("template=" + inTemplate);
 	}
-	var win = open(inPath + inWeb + "/" + inTopic + skin + template, inTopic, "titlebar=0,width=" + POPUP_WINDOW_WIDTH + ",height=" + POPUP_WINDOW_HEIGHT + ",resizable,scrollbars");
+	var paramsString = params.join(";");
+	if (paramsString.length > 0) paramsString = "?" + paramsString;
+	var name = (inTopic != undefined) ? inTopic : "";
+	
+	var attributes = [];
+	attributes.push("width=" + POPUP_WINDOW_WIDTH);
+	attributes.push("height=" + POPUP_WINDOW_HEIGHT);
+	attributes.push(POPUP_ATTRIBUTES);
+	var attributesString = attributes.join(",");
+	
+	var win = open(pathString + paramsString, name, attributesString);
 	if (win) win.focus();
 	return false;
 }
