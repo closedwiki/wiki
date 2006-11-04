@@ -336,15 +336,18 @@ twiki.AjaxRequest.setProperties(
 
 ---++ Usage
 
-Include the required scripts %TWISTY{id="includes" showlink="(show code)" hidelink="close"}%
+The Yahoo! classes are available as Contrib at TWiki:Plugins.YahooUserInterfaceContrib.
+
+Include the required scripts:
 <blockquote>
 <verbatim>
 <script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/YahooUserInterfaceContrib/build/yahoo/yahoo.js"></script>
 <script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/YahooUserInterfaceContrib/build/connection/connection.js"></script>
+<script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/TWikiJavascripts/twikilib.js"></script>
+<script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/TWikiJavascripts/twikiArray.js"></script>
 <script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/TWikiAjaxContrib/twikiAjaxRequest.compressed.js"></script>
 </verbatim>
 </blockquote>
-%ENDTWISTY%
 
 It is recommended to use TWiki:Plugins.BehaviourContrib for interface elements:
 
@@ -408,6 +411,7 @@ See TWikiAjaxContribExamples
 | Copyright &copy;: | 2006 Arthur Clemens |
 | License: | [[http://www.gnu.org/copyleft/gpl.html][GPL]] |
 | Dependencies: | %$DEPENDENCIES% |
+| 5 Nov 2006 | 0.8.2 Updated with dependency on twiki javascript class twiki.Array  |
 | 4 Nov 2006 | 0.8.1 Changed package =TWiki= to lowercase =twiki=  |
 | 2 Nov 2006 | 0.8 (alpha) First time in the open  |
 | Demo url:  | http://twiki4.visiblearea.com/twiki4/MAIN/bin/view/TWiki/TWikiAjaxContribExamples  |

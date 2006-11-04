@@ -362,7 +362,7 @@ Adds properties to the list of locked properties. Locked properties cannot be ch
 @public static
 */
 twiki.AjaxRequest.lockProperties = function(inName) {
-	var properties = twikiajaxcontrib.Array.convertArgumentsToArray(arguments, 1);
+	var properties = twiki.Array.convertArgumentsToArray(arguments, 1);
 	if (!properties) return;
 	twiki.AjaxRequest.getInstance()._lockProperties(inName, properties);
 }
@@ -374,7 +374,7 @@ Frees properties from the list of locked properties. Freed/unlocked properties c
 @public static
 */
 twiki.AjaxRequest.releaseProperties = function(inName, inPropertyList) {
-	var properties = twikiajaxcontrib.Array.convertArgumentsToArray(arguments, 1);
+	var properties = twiki.Array.convertArgumentsToArray(arguments, 1);
 	if (!properties) return;
 	twiki.AjaxRequest.getInstance()._releaseProperties(inName, properties);
 }
@@ -513,155 +513,3 @@ twikiajaxcontrib.HTML = {
 	}
 	
 };
-
-/**
-twikiajaxcontrib.Array functions will most likely be part of twikiLib.js, so this will be removed at that time. CHANGES ARE TO BE EXPECTED.
-*/
-twikiajaxcontrib.Array = {
-
-	convertArgumentsToArray:function (inArguments, inStartIndex) {
-		var start = (inStartIndex != undefined) ? inStartIndex : 0;
-		var list = [];
-		var ilen = inArguments.length;
-		for (var i = start; i < ilen; i++) {
-			list.push(inArguments[i]);
-		}
-		return list;
-	}
-	
-}
-
-/**
-twikiajaxcontrib.Form functions will most likely be part of twikiLib.js, so this will be removed at that time. CHANGES ARE TO BE EXPECTED.
-*/
-twikiajaxcontrib.Form = {
-
-	/*
-	* Copyright 2005 Matthew Eernisse (mde@fleegix.org)
-	*
-	* Licensed under the Apache License, Version 2.0 (the "License");
-	* you may not use this file except in compliance with the License.
-	* You may obtain a copy of the License at
-	* 
-	*   http://www.apache.org/licenses/LICENSE-2.0
-	* 
-	* Unless required by applicable law or agreed to in writing, software
-	* distributed under the License is distributed on an "AS IS" BASIS,
-	* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-	* See the License for the specific language governing permissions and
-	* limitations under the License.
-	*
-	* Original code by Matthew Eernisse (mde@fleegix.org), March 2005
-	* Additional bugfixes by Mark Pruett (mark.pruett@comcast.net), 12th July 2005
-	* Multi-select added by Craig Anderson (craig@sitepoint.com), 24th August 2006
-	*
-	* Version 1.3
-	*/
-	
-	/**
-	* Serializes the data from all the inputs in a Web form
-	* into a query-string style string.
-	* @param inForm -- Reference to a DOM node of the form element
-	* @param inFormatOptions -- JS object of options for how to format
-	* the return string. Supported options:
-	*    collapseMulti: (Boolean) take values from elements that
-	*    can return multiple values (multi-select, checkbox groups)
-	*    and collapse into a single, comman-delimited value
-	*    (e.g., thisVar=asdf,qwer,zxcv)
-	* @returns query-string style String of variable-value pairs
-	*/
-	formData2QueryString:function (inForm, inFormatOptions) {
-	 
-	 var opts = inFormatOptions || {};
-	 var str = '';
-	 var formElem;
-	 var lastElemName = '';
-	 
-	 for (i = 0; i < inForm.elements.length; i++) {
-		formElem = inForm.elements[i];
-		
-		switch (formElem.type) {
-		 // Text fields, hidden form elements
-		 case 'text':
-		 case 'hidden':
-		 case 'password':
-		 case 'textarea':
-		 case 'select-one':
-			str += formElem.name
-				+ '='
-				+ encodeURI(formElem.value)
-				+ '&';
-			break;
-			
-		 // Multi-option select
-		 case 'select-multiple':
-			var isSet = false;
-			for(var j = 0; j < formElem.options.length; j++) {
-			 var currOpt = formElem.options[j];
-			 if(currOpt.selected) {
-				if (opts.collapseMulti) {
-				 if (isSet) {
-					str += ','
-						+ encodeURI(currOpt.value);
-				 }
-				 else {
-					str += formElem.name
-						+ '='
-						+ encodeURI(currOpt.value);
-					isSet = true;
-				 }
-				}
-				else {
-				 str += formElem.name
-				 	+ '='
-				 	+ encodeURI(currOpt.value)
-				 	+ '&';
-				}
-			 }
-			}
-			if (opts.collapseMulti) {
-			 str += '&';
-			}
-			break;
-		 
-		 // Radio buttons
-		 case 'radio':
-			if (formElem.checked) {
-			 str += formElem.name
-			 	+ '='
-			 	+ encodeURI(formElem.value)
-			 	+ '&'
-			}
-			break;
-			
-		 // Checkboxes
-		 case 'checkbox':
-			if (formElem.checked) {
-			 // Collapse multi-select into comma-separated list
-			 if (opts.collapseMulti && (formElem.name == lastElemName)) {
-				// Strip of end ampersand if there is one
-				if (str.lastIndexOf('&') == str.length-1) {
-				 str = str.substr(0, str.length - 1);
-				}
-				// Append value as comma-delimited string
-				str += ','
-					+ encodeURI(formElem.value);
-			 }
-			 else {
-				str += formElem.name
-					+ '='
-					+ encodeURI(formElem.value);
-			 }
-			 str += '&';
-			 lastElemName = formElem.name;
-			}
-			break;
-			
-		}
-	 }
-	 // Remove trailing separator
-	 str = str.substr(0, str.length - 1);
-	 return str;
-	}
-	
-}
