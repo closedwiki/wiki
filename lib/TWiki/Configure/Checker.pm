@@ -202,7 +202,7 @@ sub checkPerlModules {
             no strict 'refs';
             eval '$mod_version = $'.$mod->{name}.'::VERSION';
             $mod_version ||= '';
-            $mod_version =~ s/_\d+//; # avoid warnings with 9.999_99 syntax
+            $mod_version =~ s/(\d+(\.\d*)?).*/$1/; # keep 99.99 style only
             use strict 'refs';
             if ($mod_version < $mod->{minimumVersion}) {
                 $n = $mod_version.' installed. Version '
