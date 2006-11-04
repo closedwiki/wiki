@@ -56,6 +56,57 @@ Behaviour.register(myrules);
 </verbatim>
 </blockquote>
 
+---++ Usage
+Include the javascript file:
+
+<blockquote>
+<verbatim>
+<script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/BehaviourContrib/behaviour.compressed.js"></script>
+</verbatim>
+</blockquote>
+
+In your code you create a "rules" object, with sub-objects for each html element class name or id:
+<blockquote>
+<verbatim>
+var myrules = {
+	'.classname' : function(element) {
+		// element event
+		element.onclick = function() {
+			// code here
+		}
+	},
+	
+	'#id' : function(element) {
+		// element event
+		element.onclick = function() {
+			// code here
+		}
+	}
+};
+</verbatim>
+
+Or use nested identifiers:
+
+<verbatim>
+var myrules = {
+	'.menu li a' : function(element) {
+		element.onclick = function() {
+			// code here
+		}
+	}
+};
+</verbatim>
+</blockquote>
+
+Apply the rules with:
+
+<blockquote>
+<verbatim>
+Behaviour.register(myrules);
+</verbatim>
+</blockquote>
+
+
 ---++ Example
 If we have a 'normal' link to TWiki Web hometopic: [[%TWIKIWEB%.%HOMETOPIC%][TWiki Web Home]], we can use javascript to make it open a popup window. When javascript is not available the link behaviour defaults to opening the page in the current window.
 
