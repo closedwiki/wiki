@@ -42,7 +42,7 @@ use TWiki::Time;
 
 =pod
 
----++ StaticMethod view( $session, $web, $topic, $scruptUrl, $query )
+---++ StaticMethod view( $session )
 =view= command handler.
 This method is designed to be
 invoked via the =TWiki::UI::run= method.
@@ -51,6 +51,7 @@ Generate a complete HTML page that represents the viewed topics.
 The view is controlled by CGI parameters as follows:
 
 | =rev= | topic revision to view |
+| =section= | restrict view to a named section |
 | =raw= | no format body text if set |
 | =skin= | comma-separated list of skin(s) to use |
 | =contenttype= | Allows you to specify an alternate content type |
@@ -96,14 +97,10 @@ sub view {
         ( $revdate, $revuser, $showRev ) = $currMeta->getRevisionInfo();
         $revdate = TWiki::Time::formatTime( $revdate );
 
-        throw Error::Simple( $rev.' is not a valid revision' )
-          unless $rev =~ /^([\d\.]+)$/;
-
         if ( !$rev || $rev > $showRev ) {
             $rev = $showRev;
-        } elsif ( $rev < 0 ) {
-            $rev = 1;
         }
+
         if( $rev < $showRev ) {
             ( $meta, $text ) = $store->readTopic
               ( $session->{user}, $webName, $topicName, $rev );
@@ -115,6 +112,22 @@ sub view {
             # viewing the most recent rev
             ( $text, $meta ) = ( $currText, $currMeta );
         }
+
+        # So we're reading an existing topic here.  It is about time
+        # to apply the 'section' selection (and maybe others in the
+        # future as well).  $text is unchanged unless a named section
+        # matching the 'section' URL parameter is found.
+        if (my $section  =  $query->param('section')) {
+            my ( $ntext, $sections ) = TWiki::parseSections( $text );
+          FINDSECTION:
+            for my $s (@$sections) {
+                if ($s->{type} eq 'section'  &&  $s->{name} eq $section) {
+                    $text = substr( $ntext, $s->{start}, $s->{end}-$s->{start} );
+                    last FINDSECTION;
+                }
+            }
+        }
+
     } else { # Topic does not exist yet
         $indexableView = 0;
         $session->enterContext( 'new_topic' );

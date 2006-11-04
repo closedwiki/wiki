@@ -1832,21 +1832,29 @@ sub inlineAlert {
     return $text;
 }
 
-# Generic parser for sections within a topic. Sections are delimited
-# by STARTSECTION and ENDSECTION, which may be nested, overlapped or
-# otherwise abused. The parser builds an array of sections, which is
-# ordered by the order of the STARTSECTION within the topic. It also
-# removes all the SECTION tags from the text, and returns the text
-# and the array of sections.
-# Each section is a TWiki::Attrs object, which contains the attributes
-# {type, name, start, end}
-# where start and end are character offsets in the
-# string *after all section tags have been removed*. All sections
-# are required to be uniquely named; if a section is unnamed, it
-# will be given a generated name. Sections may overlap or nest.
-# See test/unit/VariablesTests.pm for detailed testcases that
-# round out the spec.
-sub _parseSections {
+=pod
+
+---++ StaticMethod parseSections($text) -> ($string,$sectionlistref)
+
+Generic parser for sections within a topic. Sections are delimited
+by STARTSECTION and ENDSECTION, which may be nested, overlapped or
+otherwise abused. The parser builds an array of sections, which is
+ordered by the order of the STARTSECTION within the topic. It also
+removes all the SECTION tags from the text, and returns the text
+and the array of sections.
+
+Each section is a =TWiki::Attrs= object, which contains the attributes
+{type, name, start, end}
+where start and end are character offsets in the
+string *after all section tags have been removed*. All sections
+are required to be uniquely named; if a section is unnamed, it
+will be given a generated name. Sections may overlap or nest.
+
+See test/unit/Fn_SECTION.pm for detailed testcases that
+round out the spec.
+
+=cut
+sub parseSections {
     #my( $text _ = @_;
     my %sections;
     my @list = ();
@@ -1935,7 +1943,7 @@ sub expandVariablesOnTopicCreation {
     ASSERT($user->isa( 'TWiki::User')) if DEBUG;
 
     # Chop out templateonly sections
-    my( $ntext, $sections ) = _parseSections( $text );
+    my( $ntext, $sections ) = parseSections( $text );
 
     if( scalar( @$sections )) {
         # Note that if named templateonly sections overlap, the behaviour is undefined.
@@ -2800,7 +2808,7 @@ sub _INCLUDE {
     }
 
     # handle sections
-    my( $ntext, $sections ) = _parseSections( $text );
+    my( $ntext, $sections ) = parseSections( $text );
 
     my $interesting = 0;
     if( scalar( @$sections )) {

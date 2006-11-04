@@ -133,7 +133,7 @@ sub _epochToRcsDateTime {
 sub _controlFileName {
     my( $this, $type ) = @_;
 
-    my $fn = $this->{file};
+    my $fn = $this->{file} || '';
     $fn =~ s/txt$/$type/;
     return $fn;
 }

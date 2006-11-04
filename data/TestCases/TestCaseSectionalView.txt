@@ -1,0 +1,41 @@
+%META:TOPICINFO{author="TWikiContributor" date="1127097700" format="1.1" version="1.4"}%
+%META:TOPICPARENT{name="WebHome"}%
+---+!! %TOPIC%
+
+Description: Verify that TWiki:Codev.AddSectionParam is working
+
+This is really ugly - could be improved only if including URLs is
+allowed (which it isn't, per default).
+
+Additional Test Topic: IncludeFixtures, as stolen from TestCaseSectionalInclude.
+
+Compare the middle column (as obtained from including a section) with
+the result of clicking on the link in the right column.  Ouch.
+
+---++ First (Non Nested) Section
+
+<table border="1">
+  <tr>
+    <th>Section Name</th><th>Included</th><th>As Link</th>
+  </tr>
+  <tr>
+    <th>first</th>
+    <td>%INCLUDE{"IncludeFixtures" section="first"}%</td>
+    <td> %SCRIPTURL{view}%/%WEB%/IncludeFixtures?section=first</td>
+  </tr>
+  <tr>
+    <th>outer</th>
+    <td>%INCLUDE{"IncludeFixtures" section="outer"}%</td>
+    <td> %SCRIPTURL{view}%/%WEB%/IncludeFixtures?section=outer</td>
+  </tr>
+  <tr>
+    <th>inner</th>
+    <td>%INCLUDE{"IncludeFixtures" section="inner"}%</td>
+    <td> %SCRIPTURL{view}%/%WEB%/IncludeFixtures?section=inner</td>
+  </tr>
+  <tr>
+    <th>first, raw mode</th>
+    <td>%INCLUDE{"IncludeFixtures" section="first"}%</td>
+    <td> %SCRIPTURL{view}%/%WEB%/IncludeFixtures?section=first;raw=on</td>
+  </tr>
+</table>
