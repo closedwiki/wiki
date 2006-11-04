@@ -1,0 +1,169 @@
+%META:TOPICINFO{author="TWikiContributor" date="1111930902" format="1.0" version="$Rev: 7490 $"}%
+
+---+!! Unit tests for !TWikiJavascripts
+
+These tests require TWiki:Plugins.JSUnitContrib to run.
+
+*[[%PUBURL%/%TWIKIWEB%/JSUnitContrib/testRunner.html?testpage=%SCRIPTURL{"view"}%/%BASEWEB%/%TOPIC%][Run tests]]*
+
+<script language="javascript" src="%PUBURL%/%TWIKIWEB%/JSUnitContrib/app/jsUnitCore.js"></script>
+<script language="javascript" src="%PUBURL%/%TWIKIWEB%/TWikiJavascripts/twikilib.js"></script>
+
+%TOC%
+
+---++ twiki.Array
+<script language="javascript" src="%PUBURL%/%TWIKIWEB%/TWikiJavascripts/twikiArray.js"></script>
+
+---+++ twiki.Array.remove
+
+<script language="javascript">
+/*<![CDATA[*/
+    function testRemoveWithValidArgs() {
+    	var list = ["a", "b", "c"];
+    	twiki.Array.remove(list, "b");
+        assertEquals("Remove object 1 from list", "ac", list.join(""));
+        twiki.Array.remove(list, "a");
+        assertEquals("Remove object 2 from list", "c", list.join(""));
+        twiki.Array.remove(list, "c");
+        assertEquals("Remove object 3 from list", "", list.join(""));
+    }
+    function testRemoveWithInvalidArgs() {
+    	var list = ["a", "b", "c"];
+        assertNull("A null argument should result in null", twiki.Array.remove(list, null));
+        twiki.Array.remove(list, null);
+        assertEquals("A null argument should result in no objects removed", "abc", list.join(""));
+    }
+    function testRemoveWithUndefinedValue() {
+    	var list = ["a", "b", "c"];
+        assertNull("An undefined argument should result in null", twiki.Array.remove(list, JSUNIT_UNDEFINED_VALUE));
+    }
+/*]]>*/
+</script>
+
+---+++ twiki.Array.convertArgumentsToArray
+
+<script language="javascript">
+/*<![CDATA[*/
+	function returnArguments() {
+		return arguments;
+	}
+    function testConvertArgumentsToArrayWithValidArgs() {
+    	var args = returnArguments("a", "b", "c");
+    	var argsArray = twiki.Array.convertArgumentsToArray(args);
+    	assertEquals("Convert valid arguments", "abc", argsArray.join(""));
+    	var argsArray = twiki.Array.convertArgumentsToArray(args,1);
+    	assertEquals("Convert valid arguments with starting point", "bc", argsArray.join(""));
+    }
+    function testConvertArgumentsToArrayWithInValidArgs() {
+    	{
+			var args = returnArguments();
+			var list = twiki.Array.convertArgumentsToArray(args);
+			assertNull("Empty args list should result in null", list);
+		}
+		{
+			var args = returnArguments("a", "b", "c");
+			var list = twiki.Array.convertArgumentsToArray(args,3);
+			assertNull("Start beyond bounds should result in null", list);
+		}
+		{
+	    	assertNull("No args should result in null", twiki.Array.convertArgumentsToArray());
+    	}
+    	{
+			var args = returnArguments("a", "b", "c");
+			var list = twiki.Array.convertArgumentsToArray(args,"a");
+			assertNull("String input as start should result in null", list);
+		}
+    }
+
+/*]]>*/
+</script>
+
+---++ twiki.Form
+<script language="javascript" src="%PUBURL%/%TWIKIWEB%/TWikiJavascripts/twikiForm.js"></script>
+
+<form id="testForm%TOPIC%" name="testForm%TOPIC%">
+
+<!-- text input -->
+<input type="text" name="testInput%TOPIC%" value="TESTTEXT" size="40" disabled=true />
+
+<!-- text input -->
+<input type="password" name="testPwd%TOPIC%" value="secret" size="40" disabled=true />
+
+<!-- radio buttons -->
+<input type="radio" name="testRadio%TOPIC%" value="text" checked="checked" disabled=true /><label for="textbody">Text body</label><br />
+<input type="radio" name="testRadio%TOPIC%" value="topic" disabled=true /><label for="topictitle">Topic title</label><br />
+<input type="radio" name="testRadio%TOPIC%" value="all" disabled=true /><label for="both">Both body and title</label>
+
+<!-- checkboxes -->
+<input type="checkbox" name="testCbNoSearch%TOPIC%" checked="checked" disabled=true /><label for="nosearch">Search string</label><br />
+<input type="checkbox" name="testCbNoSummary%TOPIC%" checked="checked" disabled=true /><label for="nosummary">Summaries</label><br />
+<input type="checkbox" name="nototal" disabled=true /><label for="nototal">Total matches</label>
+
+<!-- hidden field -->
+<input type=hidden name="testHidden%TOPIC%" value="classic" disabled=true  />
+
+<!-- textarea -->
+<textarea name="testTextArea%TOPIC%" disabled=true >COMMENTSTEXT</textarea>
+
+<!-- select dropdown -->
+<select name="testSelect%TOPIC%" disabled=true >
+<option value="volvo">Volvo</option>
+<option value="saab">Saab</option>
+<option value="fiat" selected="selected">Fiat</option>
+<option value="audi">Audi</option>
+</select>
+
+<!-- select multile -->
+<select name="testSelectMultiple%TOPIC%" size="5" multiple disabled=true > 
+<option>[New Genre]</option> 
+<option selected="selected">Industrial</option> 
+<option selected="selected">Rock</option> 
+</select>
+
+</form>
+
+---+++ formData2QueryString
+
+<script language="javascript">
+/*<![CDATA[*/
+
+    function testFormData2QueryStringWithValidArgs() {
+    	{
+			var queryString = twiki.Form.formData2QueryString(
+				document.getElementById('testForm%TOPIC%')
+			);
+			assertEquals("Form values not collapsed", "testInput%TOPIC%=TESTTEXT;testPwd%TOPIC%=secret;testRadio%TOPIC%=text;testCbNoSearch%TOPIC%=on;testCbNoSummary%TOPIC%=on;testHidden%TOPIC%=classic;testTextArea%TOPIC%=COMMENTSTEXT;testSelect%TOPIC%=fiat;testSelectMultiple%TOPIC%=Industrial;testSelectMultiple%TOPIC%=Rock", queryString);
+		}
+		{
+			var queryString = twiki.Form.formData2QueryString(
+				document.getElementById('testForm%TOPIC%'),
+				{collapseMulti:false}
+			);
+			assertEquals("Form values; collapsed false", "testInput%TOPIC%=TESTTEXT;testPwd%TOPIC%=secret;testRadio%TOPIC%=text;testCbNoSearch%TOPIC%=on;testCbNoSummary%TOPIC%=on;testHidden%TOPIC%=classic;testTextArea%TOPIC%=COMMENTSTEXT;testSelect%TOPIC%=fiat;testSelectMultiple%TOPIC%=Industrial;testSelectMultiple%TOPIC%=Rock", queryString);
+		}
+		{
+			var queryString = twiki.Form.formData2QueryString(
+				document.getElementById('testForm%TOPIC%'),
+				{collapseMulti:true}
+			);
+			assertEquals("Form values collapsed", "testInput%TOPIC%=TESTTEXT;testPwd%TOPIC%=secret;testRadio%TOPIC%=text;testCbNoSearch%TOPIC%=on;testCbNoSummary%TOPIC%=on;testHidden%TOPIC%=classic;testTextArea%TOPIC%=COMMENTSTEXT;testSelect%TOPIC%=fiat;testSelectMultiple%TOPIC%=Industrial,Rock", queryString);
+		}
+    }
+
+	function testFormData2QueryStringWithInvalidArgs() {
+    	{
+    		var formElem = document.getElementById('doesNotExist');
+			var queryString = twiki.Form.formData2QueryString(formElem);
+			assertNull("Non-existing form should return null", queryString);
+		}
+		{
+			var queryString = twiki.Form.formData2QueryString(
+				document.getElementById('testForm%TOPIC%'),
+				{bla:true}
+			);
+			assertEquals("Non-existing options should do nothing", "testInput%TOPIC%=TESTTEXT;testPwd%TOPIC%=secret;testRadio%TOPIC%=text;testCbNoSearch%TOPIC%=on;testCbNoSummary%TOPIC%=on;testHidden%TOPIC%=classic;testTextArea%TOPIC%=COMMENTSTEXT;testSelect%TOPIC%=fiat;testSelectMultiple%TOPIC%=Industrial;testSelectMultiple%TOPIC%=Rock", queryString);
+		}
+    }
+
+/*]]>*/
+</script>
