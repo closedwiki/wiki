@@ -12,11 +12,11 @@
 
 ---++ Default loading indicator
 
-Because TWiki files are served along more or less dynamic urls we cannot use as url =indicator.gif=; instead we should set the default loading incidator explicitly.
+Because TWiki files are served along dynamic urls we cannot use a static url for the indicator; instead we create HTML with a path to our own default loading incidator.
 
 <blockquote>
 <verbatim>
-TWiki.AjaxRequest.setDefaultIndicatorHtml(
+twiki.AjaxRequest.setDefaultIndicatorHtml(
 	"<img src='%PUBURL%/%TWIKIWEB%/TWikiAjaxContrib/indicator.gif' alt='' />"
 	);
 </verbatim>
@@ -24,7 +24,7 @@ TWiki.AjaxRequest.setDefaultIndicatorHtml(
 
 <script type="text/javascript">
 // <![CDATA[
-TWiki.AjaxRequest.setDefaultIndicatorHtml(
+twiki.AjaxRequest.setDefaultIndicatorHtml(
 	"<img src='%PUBURL%/%TWIKIWEB%/TWikiAjaxContrib/indicator.gif' alt='' />"
 	);
 // ]]>
@@ -35,14 +35,14 @@ We can <a href="#" id="retrieve_loading_indicator">retrieve the loading indicato
 
 <blockquote>
 <verbatim>
-TWiki.AjaxRequest.getDefaultIndicatorHtml();
+twiki.AjaxRequest.getDefaultIndicatorHtml();
 </verbatim>
 </blockquote>
 
 <script type="text/javascript">
 // <![CDATA[
 function showLoadingIndicator () {
-	insertHtml(TWiki.AjaxRequest.getDefaultIndicatorHtml(), "loadingIndicatorContainer");
+	insertHtml(twiki.AjaxRequest.getDefaultIndicatorHtml(), "loadingIndicatorContainer");
 }
 var myrules = {
 	'#retrieve_loading_indicator' : function(el) {
@@ -65,7 +65,7 @@ hideimgleft="%ICONURLPATH{code}%"}%
 <blockquote>
 <verbatim>
 function autoLoad () {
-	TWiki.AjaxRequest.load(
+	twiki.AjaxRequest.load(
 		"AUTOLOAD",
 		{
 			container:"autoLoadContainer",
@@ -87,7 +87,7 @@ addLoadEvent(autoLoad);
 <script type="text/javascript">
 // <![CDATA[
 function autoLoad () {
-	TWiki.AjaxRequest.load(
+	twiki.AjaxRequest.load(
 		"AUTOLOAD",
 		{
 			container:"autoLoadContainer",
@@ -109,7 +109,7 @@ hideimgleft="%ICONURLPATH{code}%"}%
 <verbatim>
 var Plugin = {
 	init:function () {
-		TWiki.AjaxRequest.setProperties("SEARCHRESULTS",
+		twiki.AjaxRequest.setProperties("SEARCHRESULTS",
   			{
   				container:"searchResultsPluginContainer",
       			url:"%PUBURL%/%TWIKIWEB%/TWikiAjaxContribExamples/test_hamlet.html?"
@@ -118,11 +118,11 @@ var Plugin = {
 	loadSearchResultsButton:function () {
 		// For testing try to use the earlier defined container
 		// if all is well, this should not succeed
-		TWiki.AjaxRequest.setProperties("SEARCHRESULTS",
+		twiki.AjaxRequest.setProperties("SEARCHRESULTS",
   			{
       			container:"searchResultsPluginContainer"
    			});
-		TWiki.AjaxRequest.load("SEARCHRESULTS");
+		twiki.AjaxRequest.load("SEARCHRESULTS");
 	}
 }
 Plugin.init();
@@ -130,11 +130,11 @@ Plugin.init();
 
 var Template = {
 	init:function () {
-		TWiki.AjaxRequest.setProperties("SEARCHRESULTS",
+		twiki.AjaxRequest.setProperties("SEARCHRESULTS",
   			{
       			container:"searchResultsTemplateContainer"
    			});
-		TWiki.AjaxRequest.lockProperties("SEARCHRESULTS", "container");
+		twiki.AjaxRequest.lockProperties("SEARCHRESULTS", "container");
 	}
 }
 Template.init();
@@ -172,7 +172,7 @@ Behaviour.register(myrules);
 // <![CDATA[
 var Plugin = {
 	init:function () {
-		TWiki.AjaxRequest.setProperties("SEARCHRESULTS",
+		twiki.AjaxRequest.setProperties("SEARCHRESULTS",
   			{
   				container:"searchResultsPluginContainer",
       			url:"%PUBURL%/%TWIKIWEB%/TWikiAjaxContribExamples/test_hamlet.html?"
@@ -181,11 +181,11 @@ var Plugin = {
 	loadSearchResultsButton:function () {
 		// For testing try to use the earlier defined container
 		// if all is well, this should not succeed
-		TWiki.AjaxRequest.setProperties("SEARCHRESULTS",
+		twiki.AjaxRequest.setProperties("SEARCHRESULTS",
   			{
       			container:"searchResultsPluginContainer"
    			});
-		TWiki.AjaxRequest.load("SEARCHRESULTS");
+		twiki.AjaxRequest.load("SEARCHRESULTS");
 	}
 }
 Plugin.init();
@@ -193,11 +193,11 @@ Plugin.init();
 
 var Template = {
 	init:function () {
-		TWiki.AjaxRequest.setProperties("SEARCHRESULTS",
+		twiki.AjaxRequest.setProperties("SEARCHRESULTS",
   			{
       			container:"searchResultsTemplateContainer"
    			});
-		TWiki.AjaxRequest.lockProperties("SEARCHRESULTS", "container");
+		twiki.AjaxRequest.lockProperties("SEARCHRESULTS", "container");
 	}
 }
 Template.init();
@@ -225,7 +225,7 @@ hideimgleft="%ICONURLPATH{code}%"}%
 <blockquote>
 <verbatim>
 function writeContent () {
-	TWiki.AjaxRequest.load(
+	twiki.AjaxRequest.load(
 		"CACHEDRESULTS",
 		{
 			container:"cachedContentContainer",
@@ -235,7 +235,7 @@ function writeContent () {
 }
 
 function clearCache () {
-	TWiki.AjaxRequest.clearCache("CACHEDRESULTS");
+	twiki.AjaxRequest.clearCache("CACHEDRESULTS");
 }
 
 var myrules = {
@@ -275,7 +275,7 @@ hideimgleft="%ICONURLPATH{toggleclose-small}%"}%
 <script type="text/javascript">
 // <![CDATA[
 function writeContent () {
-	TWiki.AjaxRequest.load(
+	twiki.AjaxRequest.load(
 		"CACHEDRESULTS",
 		{
 			container:"cachedContentContainer",
@@ -285,7 +285,7 @@ function writeContent () {
 }
 
 function clearCache () {
-	TWiki.AjaxRequest.clearCache("CACHEDRESULTS");
+	twiki.AjaxRequest.clearCache("CACHEDRESULTS");
 }
 
 var myrules = {
@@ -319,7 +319,7 @@ hideimgleft="%ICONURLPATH{code}%"}%
 <verbatim>
 var indicatorHtml = "<div style=\"background-color:red; color:white; padding:.5em;\">Loading...<\/div>";
 
-TWiki.AjaxRequest.setProperties("CUSTOM_CONTAINER",
+twiki.AjaxRequest.setProperties("CUSTOM_CONTAINER",
 	{
 		container:"customIndicatorContainer",
 		url:"%PUBURL%/%TWIKIWEB%/TWikiAjaxContribExamples/test_hamlet.html?",
@@ -327,7 +327,7 @@ TWiki.AjaxRequest.setProperties("CUSTOM_CONTAINER",
 	});
    			
 function loadWithCustomIndicatorButton () {
-	TWiki.AjaxRequest.load("CUSTOM_CONTAINER");
+	twiki.AjaxRequest.load("CUSTOM_CONTAINER");
 }
 
 var myrules = {
@@ -355,7 +355,7 @@ Behaviour.register(myrules);
 // <![CDATA[
 var indicatorHtml = "<div style=\"background-color:red; color:white; padding:.5em;\">Loading...<\/div>";
 
-TWiki.AjaxRequest.setProperties("CUSTOM_CONTAINER",
+twiki.AjaxRequest.setProperties("CUSTOM_CONTAINER",
 	{
 		container:"customIndicatorContainer",
 		url:"%PUBURL%/%TWIKIWEB%/TWikiAjaxContribExamples/test_hamlet.html?",
@@ -363,7 +363,7 @@ TWiki.AjaxRequest.setProperties("CUSTOM_CONTAINER",
 	});
    			
 function loadWithCustomIndicatorButton () {
-	TWiki.AjaxRequest.load("CUSTOM_CONTAINER");
+	twiki.AjaxRequest.load("CUSTOM_CONTAINER");
 }
 
 var myrules = {
@@ -387,7 +387,7 @@ showimgleft="%ICONURLPATH{code}%"
 hideimgleft="%ICONURLPATH{code}%"}%
 <blockquote>
 <verbatim>
-TWiki.AjaxRequest.setProperties(
+twiki.AjaxRequest.setProperties(
 	"HTML_DATA",
 	{
 		url:"%SCRIPTURL{view}%/%TWIKIWEB%/WikiSyntaxSummary?skin=text",
@@ -403,7 +403,7 @@ function handleHtml (inId, inHtml) {
 		"<div style=\"color:#aaa;\">" +
 		inHtml +
 		"<\/div>";
-	var element = TWikiAjaxContrib.HTML.updateElementWithId(inId, processedHtml);
+	var element = twikiajaxcontrib.HTML.updateElementWithId(inId, processedHtml);
 
 	// example 2: reverse texts
 	reverseNodeTextsInList(element.getElementsByTagName('p'));
@@ -416,10 +416,10 @@ function handleHtml (inId, inHtml) {
 		'padding':'.5em',
 		'border':'none'
 	}
-	TWikiAjaxContrib.HTML.setNodeStylesInList(element.getElementsByTagName('ul'), style);
+	twikiajaxcontrib.HTML.setNodeStylesInList(element.getElementsByTagName('ul'), style);
 	
 	// return HTML to be cached
-	return TWikiAjaxContrib.HTML.getHtmlOfElementWithId(inId);
+	return twikiajaxcontrib.HTML.getHtmlOfElementWithId(inId);
 }
 
 function reverseNodeTextsInList (inNodeList) {
@@ -446,11 +446,11 @@ function reverseText (inText) {
 }
 
 function loadHtmlContent () {
-	TWiki.AjaxRequest.load("HTML_DATA");
+	twiki.AjaxRequest.load("HTML_DATA");
 }
 
 function clearHtmlCache () {
-	TWiki.AjaxRequest.clearCache("HTML_DATA");
+	twiki.AjaxRequest.clearCache("HTML_DATA");
 }
 
 var myrules = {
@@ -488,7 +488,7 @@ hideimgleft="%ICONURLPATH{toggleclose-small}%"}%
 
 <script type="text/javascript">
 // <![CDATA[
-TWiki.AjaxRequest.setProperties(
+twiki.AjaxRequest.setProperties(
 	"HTML_DATA",
 	{
 		url:"%SCRIPTURL{view}%/%TWIKIWEB%/WikiSyntaxSummary?skin=text",
@@ -504,7 +504,7 @@ function handleHtml (inId, inHtml) {
 		"<div style=\"color:#aaa;\">" +
 		inHtml +
 		"<\/div>";
-	var element = TWikiAjaxContrib.HTML.updateElementWithId(inId, processedHtml);
+	var element = twikiajaxcontrib.HTML.updateElementWithId(inId, processedHtml);
 
 	// example 2: reverse texts
 	reverseNodeTextsInList(element.getElementsByTagName('p'));
@@ -517,10 +517,10 @@ function handleHtml (inId, inHtml) {
 		'padding':'.5em',
 		'border':'none'
 	}
-	TWikiAjaxContrib.HTML.setNodeStylesInList(element.getElementsByTagName('ul'), style);
+	twikiajaxcontrib.HTML.setNodeStylesInList(element.getElementsByTagName('ul'), style);
 	
 	// return HTML to be cached
-	return TWikiAjaxContrib.HTML.getHtmlOfElementWithId(inId);
+	return twikiajaxcontrib.HTML.getHtmlOfElementWithId(inId);
 }
 
 function reverseNodeTextsInList (inNodeList) {
@@ -547,11 +547,11 @@ function reverseText (inText) {
 }
 
 function loadHtmlContent () {
-	TWiki.AjaxRequest.load("HTML_DATA");
+	twiki.AjaxRequest.load("HTML_DATA");
 }
 
 function clearHtmlCache () {
-	TWiki.AjaxRequest.clearCache("HTML_DATA");
+	twiki.AjaxRequest.clearCache("HTML_DATA");
 }
 
 var myrules = {
@@ -583,7 +583,7 @@ showimgleft="%ICONURLPATH{code}%"
 hideimgleft="%ICONURLPATH{code}%"}%
 <blockquote>
 <verbatim>
-TWiki.AjaxRequest.setProperties(
+twiki.AjaxRequest.setProperties(
 	"CITY_DATA",
 	{
 		url:"%PUBURL%/%TWIKIWEB%/TWikiAjaxContribExamples/test_cities.xml?",
@@ -608,11 +608,11 @@ function processCityData (inId, inXml) {
 		outText += "<li>" + cities[i] + "<\/li>"
 	}
 	outText = "<ul>" + outText + "<\/ul>";
-	TWikiAjaxContrib.HTML.updateElementWithId(inId, outText);
+	twikiajaxcontrib.HTML.updateElementWithId(inId, outText);
 }
 
 function showCityData () {
-	TWiki.AjaxRequest.load("CITY_DATA");
+	twiki.AjaxRequest.load("CITY_DATA");
 }
 
 var myrules = {
@@ -638,7 +638,7 @@ Behaviour.register(myrules);
 
 <script type="text/javascript">
 // <![CDATA[
-TWiki.AjaxRequest.setProperties(
+twiki.AjaxRequest.setProperties(
 	"CITY_DATA",
 	{
 		url:"%PUBURL%/%TWIKIWEB%/TWikiAjaxContribExamples/test_cities.xml?",
@@ -663,11 +663,11 @@ function processCityData (inId, inXml) {
 		outText += "<li>" + cities[i] + "<\/li>"
 	}
 	outText = "<ul>" + outText + "<\/ul>";
-	TWikiAjaxContrib.HTML.updateElementWithId(inId, outText);
+	twikiajaxcontrib.HTML.updateElementWithId(inId, outText);
 }
 
 function showCityData () {
-	TWiki.AjaxRequest.load("CITY_DATA");
+	twiki.AjaxRequest.load("CITY_DATA");
 }
 
 var myrules = {
@@ -690,10 +690,10 @@ hideimgleft="%ICONURLPATH{code}%"}%
 <blockquote>
 <verbatim>
 function postSearchForm () {
-	var queryString = TWikiAjaxContrib.Form.formData2QueryString(
+	var queryString = twikiajaxcontrib.Form.formData2QueryString(
 		document.getElementById('searchForm')
 	);
-	TWiki.AjaxRequest.load(
+	twiki.AjaxRequest.load(
 		"SEARCH_DATA",
 		{
 			container:"searchResults",
@@ -747,10 +747,10 @@ Behaviour.register(myrules);
 <script type="text/javascript">
 // <![CDATA[
 function postSearchForm () {
-	var queryString = TWikiAjaxContrib.Form.formData2QueryString(
+	var queryString = twikiajaxcontrib.Form.formData2QueryString(
 		document.getElementById('searchForm')
 	);
-	TWiki.AjaxRequest.load(
+	twiki.AjaxRequest.load(
 		"SEARCH_DATA",
 		{
 			container:"searchResults",
@@ -779,7 +779,7 @@ showimgleft="%ICONURLPATH{code}%"
 hideimgleft="%ICONURLPATH{code}%"}%
 <blockquote>
 <verbatim>
-TWiki.AjaxRequest.setProperties(
+twiki.AjaxRequest.setProperties(
 	"FAILURE",
 	{
 		failHandler:"handleFailed",
@@ -790,16 +790,16 @@ function handleFailed(inName, inStatus) {
 	var html = "<div style=\"background:#ffc; padding:.5em;\">" + 
 		"Could not load contents. Please try again later." + 
 		"<\/div>";
-	TWikiAjaxContrib.HTML.updateElementWithId("failureContainer", html);
+	twikiajaxcontrib.HTML.updateElementWithId("failureContainer", html);
 }
 
 function loadFailure () {
-	TWiki.AjaxRequest.load(
+	twiki.AjaxRequest.load(
 		"FAILURE",
 		{
 			container:"failureContainer",
 			/* use wrong url */
-			url:"%PUBURL%/%TWIKIWEB%/TWikiAjaxContrib/bla"
+			url:"%PUBURL%/%TWIKIWEB%/twikiajaxcontrib/bla"
 		});
 }
 
@@ -826,7 +826,7 @@ Behaviour.register(myrules);
 
 <script type="text/javascript">
 // <![CDATA[
-TWiki.AjaxRequest.setProperties(
+twiki.AjaxRequest.setProperties(
 	"FAILURE",
 	{
 		failHandler:"handleFailed",
@@ -837,11 +837,11 @@ function handleFailed(inName, inStatus) {
 	var html = "<div style=\"background:#ffc; padding:.5em;\">" + 
 		"Could not load contents. Please try again later." + 
 		"<\/div>";
-	TWikiAjaxContrib.HTML.updateElementWithId("failureContainer", html);
+	twikiajaxcontrib.HTML.updateElementWithId("failureContainer", html);
 }
 
 function loadFailure () {
-	TWiki.AjaxRequest.load(
+	twiki.AjaxRequest.load(
 		"FAILURE",
 		{
 			container:"failureContainer",

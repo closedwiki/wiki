@@ -1,17 +1,24 @@
 %META:TOPICINFO{author="TWikiContributor" date="1162505043" format="1.1" version="1.2"}%
 ---+!! <nop>%TOPIC%
 
-<b> !TWiki.AjaxRequest is a !JavaScript wrapper class around [[http://developer.yahoo.com/yui/connection/][Yahoo's Connection Manager]] (AJAX) class.</b>
+*TWikiAjaxContrib provides a convenience wrapper class around [[http://developer.yahoo.com/yui/connection/][Yahoo's Connection Manager]] (AJAX).*
 
-This wrapper makes it possible for plugins and skins to cooperate when dealing with AJAX requests. The order of the scripts (plugin code first or skin/template code first) is not important.
-
-The retrieved data may be XML, but the easiest to work with is HTML. This technique of fetching HTML with asynchronous communication is also known as [[Wikipedia:AHAH][AHAH]].
+Goals are:
+   * To make it possible for *plugins and skins to cooperate* when dealing with AJAX requests without having to plan the order of processing javascript code (plugin code first or skin/template code first)
+   * To make AJAX calls *easier to write,* for instance by simply appointing a target container plus data url
+   * Be able to fetch *HTML or XML*
+      * The technique of fetching HTML with asynchronous communication is also known as [[Wikipedia:AHAH][AHAH]].
+   * To be able to *cache* fetched and processed data
+   * To facilitate *error feedback*
+   * To be able to use different styles, for instance by appointing a custom loading indicator
 
 		
 %TOC{title="On this page:"}%
 
+---++ Working with !AjaxRequest
 
----++ Working with !TWiki.AjaxRequest
+The class =twiki.AjaxRequest= is located in file =twikiAjaxRequest.js=.
+
 ---+++ Plugins vs. Skins
 _Wouldn't it be nice if a template could just point to a different HTML element to load the content into?_
 
@@ -22,11 +29,11 @@ Imagine the following scenario:
 
 How would that work?
 
-HTML content is loaded using method =load=:
+Normally HTML content is loaded using =load=:
 
 <blockquote>
 <verbatim>
-TWiki.AjaxRequest.load("request id", 
+twiki.AjaxRequest.load("request id", 
 	{
 		container:"container id",
 		url:"url"
@@ -36,7 +43,7 @@ TWiki.AjaxRequest.load("request id",
 or, once properties have been set for the request id:
 
 <verbatim>
-TWiki.AjaxRequest.load("request id");
+twiki.AjaxRequest.load("request id");
 </verbatim>
 </blockquote>
 
@@ -48,7 +55,7 @@ But =load= would immediately invoke the loading of the HTML - convenient, but to
 So the plugin would use this code:
 <blockquote>
 <verbatim>
-TWiki.AjaxRequest.setProperties(
+twiki.AjaxRequest.setProperties(
 	"SEARCHRESULTS",
 	{
 		container:"searchResultsPluginContainer",
@@ -61,7 +68,7 @@ Now the skin sets the loading target to a different container (target) id:
 
 <blockquote>
 <verbatim>
-TWiki.AjaxRequest.setProperties(
+twiki.AjaxRequest.setProperties(
 	"SEARCHRESULTS",
 	{
 		container:"myBetterContainer"
@@ -71,7 +78,7 @@ TWiki.AjaxRequest.setProperties(
 And makes sure that no other code can change this target by locking the property =container= (it _can_ be changed when explicitely released with =releaseProperties=):
 
 <verbatim>
-	TWiki.AjaxRequest.lockProperties("SEARCHRESULTS", "container");
+	twiki.AjaxRequest.lockProperties("SEARCHRESULTS", "container");
 </verbatim>
 
 So in case the skin code would be loaded after the template code the template =container= would be used.
@@ -80,16 +87,20 @@ So in case the skin code would be loaded after the template code the template =c
 Now the HTML can be loaded and displayed with:
 <blockquote>
 <verbatim>
-TWiki.AjaxRequest.load("SEARCHRESULTS");
+twiki.AjaxRequest.load("SEARCHRESULTS");
 </verbatim>
 </blockquote>
 
 %ICON{hand}% [[TWikiAjaxContribExamples#Plugins_vs_Skins][View demo Plugins vs. Skins]]
 
+
+
 ---+++ Caching results
 Some content should be loaded only once. For instance, when a twisty is used to display dynamic contents it is not always desirable to reload the content each time the twisty is opened. Instead we want the twisty to close and reopen with the same content.
 
 Use property =cache:true= to store the fetched results and display these again with a next request.
+
+Cached contents can be cleared with =twiki.AjaxRequest.clearCache("request_id")=.
 
 %ICON{hand}% [[TWikiAjaxContribExamples#Caching_results][View demo Caching results]]
 
@@ -100,7 +111,7 @@ Because TWiki files are served along dynamic urls we cannot use a static url for
 
 <blockquote>
 <verbatim>
-TWiki.AjaxRequest.setDefaultIndicatorHtml(
+twiki.AjaxRequest.setDefaultIndicatorHtml(
 	"<img src='%PUBURL%/%TWIKIWEB%/TWikiAjaxContrib/indicator.gif' alt='' />"
 	);
 </verbatim>
@@ -109,14 +120,14 @@ TWiki.AjaxRequest.setDefaultIndicatorHtml(
 We can retrieve the loading indicator with:
 <blockquote>
 <verbatim>
-TWiki.AjaxRequest.getDefaultIndicatorHtml();
+twiki.AjaxRequest.getDefaultIndicatorHtml();
 </verbatim>
 </blockquote>
 
 %ICON{hand}% [[TWikiAjaxContribExamples#Default_loading_indicator][View demo Default loading indicator]]
 
 ---++++ Custom loading indicator
-Each request can have its own loading indicator. Add it as property to either =TWiki.AjaxRequest.setProperties=:
+Each request can have its own loading indicator. Add it as property to either =twiki.AjaxRequest.setProperties=:
 <blockquote>
 <verbatim>
 var indicatorHtml = "<div style=\"
@@ -124,7 +135,7 @@ var indicatorHtml = "<div style=\"
 	background-color:yellow;
 	padding:.5em;\">Loading...<\/div>";
 
-TWiki.AjaxRequest.setProperties(
+twiki.AjaxRequest.setProperties(
 	"MY_REQUEST",
 	{
 		indicator:indicatorHtml
@@ -134,16 +145,16 @@ TWiki.AjaxRequest.setProperties(
 (optionally lock the indicator property)
 <blockquote>
 <verbatim>
-TWiki.AjaxRequest.lockProperties(
+twiki.AjaxRequest.lockProperties(
 	"MY_REQUEST",
 	"container", "indicator");
 </verbatim>
 </blockquote>
 
-... or set the indicator property with =TWiki.AjaxRequest.load=
+... or set the indicator property with =twiki.AjaxRequest.load=
 <blockquote>
 <verbatim>
-TWiki.AjaxRequest.load(
+twiki.AjaxRequest.load(
 	"MY_REQUEST",
 	{
 		url:"my_url.html",
@@ -155,7 +166,7 @@ TWiki.AjaxRequest.load(
 We can retrieve the loading indicator with:
 <blockquote>
 <verbatim>
-TWiki.AjaxRequest.getIndicatorHtml("MY_REQUEST");
+twiki.AjaxRequest.getIndicatorHtml("MY_REQUEST");
 </verbatim>
 </blockquote>
 
@@ -163,7 +174,7 @@ TWiki.AjaxRequest.getIndicatorHtml("MY_REQUEST");
 
 
 ---+++ Processing HTML
-The default processing handler is =TWiki.AjaxRequest._writeHtml= that writes the fetched HTML content in the appointed container.
+The default processing handler is =twiki.AjaxRequest._writeHtml= that writes the fetched HTML content in the appointed container.
 
 Assign a custom processing handler with the properties =handler= (the processing function) and =scope= (the function owner). %BR%
 The function itself should accept 2 parameters: =inId= and =inHtml=, and should return the processed HTML so it can be cached.
@@ -180,10 +191,10 @@ function handleHtml (inId, inHtml) {
 		"<\/div>";
 	
 	// update the container
-	TWikiAjaxContrib.HTML.updateElementWithId(inId, processedHtml);
+	twikiajaxcontrib.HTML.updateElementWithId(inId, processedHtml);
 
 	// return HTML to be cached
-	return TWikiAjaxContrib.HTML.getHtmlOfElementWithId(inId);
+	return twikiajaxcontrib.HTML.getHtmlOfElementWithId(inId);
 }
 </verbatim>
 </blockquote>
@@ -194,14 +205,14 @@ function handleHtml (inId, inHtml) {
 function handleHtml (inId, inHtml) {
 	
 	// update the container
-	var element = TWikiAjaxContrib.HTML.updateElementWithId(inId, inHtml);
+	var element = twikiajaxcontrib.HTML.updateElementWithId(inId, inHtml);
 
 	// reverse some texts
 	reverseNodeTextsInList(element.getElementsByTagName('code'));
 	reverseNodeTextsInList(element.getElementsByTagName('p'));
 	
 	// return HTML to be cached
-	return TWikiAjaxContrib.HTML.getHtmlOfElementWithId(inId);
+	return twikiajaxcontrib.HTML.getHtmlOfElementWithId(inId);
 }
 </verbatim>
 </blockquote>
@@ -212,7 +223,7 @@ function handleHtml (inId, inHtml) {
 function handleHtml (inId, inHtml) {
 
 	// update the container
-	var element = TWikiAjaxContrib.HTML.updateElementWithId(inId, processedHtml);
+	var element = twikiajaxcontrib.HTML.updateElementWithId(inId, processedHtml);
 	
 	// style list elements
 	var style = {
@@ -222,10 +233,10 @@ function handleHtml (inId, inHtml) {
 		'padding':'.5em',
 		'border':'none'
 	}
-	TWikiAjaxContrib.HTML.setNodeStylesInList(element.getElementsByTagName('ul'), style);
+	twikiajaxcontrib.HTML.setNodeStylesInList(element.getElementsByTagName('ul'), style);
 	
 	// return HTML to be cached
-	return TWikiAjaxContrib.HTML.getHtmlOfElementWithId(inId);
+	return twikiajaxcontrib.HTML.getHtmlOfElementWithId(inId);
 }
 </verbatim>
 </blockquote>
@@ -246,7 +257,7 @@ To fetch XML instead of HTML, give property =type= the value ="xml"= (by default
 
 <blockquote>
 <verbatim>
-TWiki.AjaxRequest.setProperties(
+twiki.AjaxRequest.setProperties(
 	"CITY_DATA",
 	{
 		url:"city_data.xml",
@@ -262,7 +273,7 @@ function processCityData (inId, inXml) {
 	// write to container with id inId
 }
 function showCityData () {
-	TWiki.AjaxRequest.load("CITY_DATA");
+	twiki.AjaxRequest.load("CITY_DATA");
 }
 </verbatim>
 </blockquote>
@@ -277,7 +288,7 @@ To send information with =POST=, set properties =method= and =postData=:
 
 <blockquote>
 <verbatim>
-TWiki.AjaxRequest.load(
+twiki.AjaxRequest.load(
 	"SEARCH_DATA",
 	{
 		container:"searchResults",
@@ -291,24 +302,26 @@ TWiki.AjaxRequest.load(
 %ICON{hand}% [[TWikiAjaxContribExamples#Sending_data_with_POST][View demo Sending data with POST]]
 
 
----++ Dealing with failure
-To give proper feedback when loading of a request fails, set properties =failHandler= and =failScope=.
+---+++ Dealing with failure
+Use a 'fail' handler to give feedback when loading of a request should fail.
 
-=failHandler= receives 2 parameters: =inName= and =inStatus=. An example function looks like:
+The fail handler is defined by properties =failHandler= and =failScope=. =failHandler= receives 2 parameters: =inName= and =inStatus=.
+
+A fail handler may look like:
 <blockquote>
 <verbatim>
 function handleFailed(inName, inStatus) {
 	var html = "<div style=\"background:#ffc; padding:.5em;\">" + 
 		"Could not load contents. Please try again later." + 
 		"<\/div>";
-	TWikiAjaxContrib.HTML.updateElementWithId("failureContainer", html);
+	twikiajaxcontrib.HTML.updateElementWithId("failureContainer", html);
 }
 </verbatim>
 
 This handler is set using:
 
 <verbatim>
-TWiki.AjaxRequest.setProperties(
+twiki.AjaxRequest.setProperties(
 	"FAILURE",
 	{
 		failHandler:"handleFailed",
@@ -339,6 +352,19 @@ It is recommended to use TWiki:Plugins.BehaviourContrib for interface elements:
 <script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/BehaviourContrib/behaviour.compressed.js"></script>
 </verbatim>
 
+---+++ Public API
+
+=twiki.AjaxRequest= has these public methods:
+   * =twiki.AjaxRequest.load = function(inName, inProperties)=
+   * =twiki.AjaxRequest.stop = function(inName)=
+   * =twiki.AjaxRequest.setProperties = function(inName, inProperties)=
+   * =twiki.AjaxRequest.lockProperties = function(inName)=
+   * =twiki.AjaxRequest.releaseProperties = function(inName, inPropertyList)=
+   * =twiki.AjaxRequest.clearCache = function(inName)=
+   * =twiki.AjaxRequest.getDefaultIndicatorHtml = function()=
+   * =twiki.AjaxRequest.setDefaultIndicatorHtml = function(inHTML)=
+
+
 ---+++ Table of request properties
 
 Properties that can be passed to a request:
@@ -347,9 +373,9 @@ Properties that can be passed to a request:
 | =container=    | id of HTML content container  | String | none |
 | =url=          | URL to fetch HTML from | String | none  |
 | =handler=      | Name of function to process the response data | String | =_writeHtml= (private&nbsp;method) |
-| =scope=        | Owner of =handler= | Object | =TWiki.AjaxRequest= (singleton) instance |
+| =scope=        | Owner of =handler= | Object | =twiki.AjaxRequest= (singleton) instance |
 | =failHandler=  | Name of function to process the response data in case of failure | String | =_defaultFailHandler= (private&nbsp;method) |
-| =failScope=    | Owner of =failHandler= | Object | =TWiki.AjaxRequest= (singleton) instance |
+| =failScope=    | Owner of =failHandler= | Object | =twiki.AjaxRequest= (singleton) instance |
 | =type=         | Type of response data: text (=txt=) or XML (=xml=)  | String | =txt=  |
 | =cache=        | Cached state of response data | Boolean  | =false=  |
 | =method=       | Method of sending data: =GET= or =POST=  | String  | =GET=  |
@@ -362,7 +388,7 @@ See TWikiAjaxContribExamples
 
 ---++ Settings
 
-	* Set SHORTDESCRIPTION = !JavaScript wrapper class around Yahoo's Connection Manager connection.js (AJAX) class
+	* Set SHORTDESCRIPTION = javascript wrapper class around Yahoo's Connection Manager connection.js (AJAX) class
 	* Set STUB = %$STUB%
 
 ---++ Installation Instructions
@@ -382,6 +408,7 @@ See TWikiAjaxContribExamples
 | Copyright &copy;: | 2006 Arthur Clemens |
 | License: | [[http://www.gnu.org/copyleft/gpl.html][GPL]] |
 | Dependencies: | %$DEPENDENCIES% |
+| 4 Nov 2006 | 0.8.1 Changed package =TWiki= to lowercase =twiki=  |
 | 2 Nov 2006 | 0.8 (alpha) First time in the open  |
 | Demo url:  | http://twiki4.visiblearea.com/twiki4/MAIN/bin/view/TWiki/TWikiAjaxContribExamples  |
 | Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
@@ -389,7 +416,7 @@ See TWikiAjaxContribExamples
 | Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
 __Related Topics:__ %TWIKIWEB%.TWikiPreferences
- 
+
 
 %META:FILEATTACHMENT{name="twikiAjaxRequest.js" attr="" autoattached="1" comment="" date="1162503911" path="twikiAjaxRequest.js" size="19760" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="twikiAjaxRequest.compressed.js" attr="" autoattached="1" comment="" date="1162503911" path="twikiAjaxRequest.compressed.js" size="8000" user="UnknownUser" version=""}%
