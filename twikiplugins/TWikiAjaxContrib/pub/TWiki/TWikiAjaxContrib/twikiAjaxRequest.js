@@ -1,19 +1,130 @@
 /*
-To compress this file you can use the js compressor from Creativyst at
-http://www.creativyst.com/Prod/3/
+To compress this file you can use Dojo ShrinkSafe compressor at
+http://alex.dojotoolkit.org/shrinksafe/
 */
+
+var twiki;
+if (twiki == undefined) twiki = {};
 
 /**
-TWiki.AjaxRequest is a wrapper class around Yahoo's Connection Manager connection.js class: http://developer.yahoo.com/yui/connection/
+twiki.AjaxRequest is a wrapper class around Yahoo's Connection Manager connection.js class: http://developer.yahoo.com/yui/connection/
 */
 
-TWiki.AjaxRequest = function () {
+twiki.AjaxRequest = function () {
+	
+	// PRIVATE METHODS AND VARIABLES
+	// MAY BE CALLED ONLY BY PRIVILEGED METHODS
+	
+	var self = this;
+
+	/**
+	Key-value set of Properties objects. The value is accessed by request identifier name.
+	@private
+	*/
+	var _storage = {};
+	
+	/**
+	Inner property data class.
+	*/
+	var Properties = function(inName) {
+		this.name = inName; // String
+		this.url; // String
+		this.response; //  Object
+		this.lockedProperties = {}; // Value object of properties that cannot be changed
+		this.handler = "_writeHtml"; // String
+		this.scope = twiki.AjaxRequest.getInstance(); // Object
+		this.container; // String; id of HTML container
+		this.type = "txt"; // String; possible values: "txt", "xml"
+		this.cache = false; // Boolean
+		this.method = "GET"; // String
+		this.postData; // String
+		this.indicator; // HTML String
+		this.failHandler = "_defaultFailHandler"; // String
+		this.failScope = twiki.AjaxRequest.getInstance(); // Object
+		//
+		this.owner = twiki.AjaxRequest.getInstance(); // Object
+	}
+	Properties.prototype.isXml = function() {
+		return this.type == "xml";
+	}
+	/**
+	Debug string
+	*/
+	Properties.prototype.toString = function() {
+		return "name=" + this.name
+			+ "; handler=" + this.handler
+			+ "; scope=" + this.scope.toString()
+			+ "; container=" + this.container
+			+ "; url=" + this.url
+			+ "; type=" + this.type
+			+ "; cache=" + this.cache
+			+ "; method=" + this.method
+			+ "; postData=" + this.postData
+			+ "; indicator=" + this.indicator
+			+ "; response=" + this.response;
+	}
+	
+	/**
+	Creates a unique id for the loading indicator.
+	@private
+	*/
+	function _getIndicatorId (inName) {
+		return "twikiRequestIndicator" + inName;
+	}
+	
+	/**
+	Wraps indicator HTML inside a div with unique id, so indicator can be removed even when it is located outside of replaceable content.
+	@private
+	*/
+	function _wrapIndicator (inName, inHtml) {
+		return "<div style=\"display:inline;\" id=\""
+			+ _getIndicatorId(inName)
+			+ "\">"
+			+ inHtml
+			+ "<\/div>";
+	}
+	
+	/**
+	Hides (removes) the loading indicator image for request inName.
+	@private
+	*/
+	function _hideLoadingIndicator (inName) {
+		twikiajaxcontrib.HTML.clearElementWithId(_getIndicatorId(inName));
+	}
+	
+	/**
+	Stores a property key-value pair. If the property is locked the value is not set.
+	@param inObject (Properties) : reference to Properties object
+	@param inKey (String) : name of property
+	@param inValue (Object) : new value of property
+	@private
+	*/
+	function _storeProperty (inObject, inKey, inValue) {
+		if (inValue == undefined) return;
+		if (inObject.lockedProperties[inKey]) return;
+		inObject[inKey] = inValue;
+	}
+
+	/**
+	Retrieves the response reference for a given response object.
+	Compares tIds.
+	@private
+	*/
+	function _referenceForResponse (inResponse) {
+		for (var i in _storage) {
+			var response = _storage[i].response;
+			if (response && response.tId == inResponse.tId) {
+				return _storage[i];
+			}
+		}
+		return null;
+	}
 	
 	// PRIVILEGED METHODS
 	// MAY BE INVOKED PUBLICLY AND MAY ACCESS PRIVATE ITEMS
 	
 	/**
-	See TWiki.AjaxRequest.load
+	See twiki.AjaxRequest.load
 	*/
 	this._load = function (inName, inProperties) {
 		
@@ -29,7 +140,8 @@ TWiki.AjaxRequest = function () {
 		
 		// no stored data was found, so start loading
 		if (ref.scope == undefined) {
-			alert("TWiki.AjaxRequest._load: no scope given for function " + ref.handler);
+			alert("twiki.AjaxRequest._load: no scope given for function "
+				+ ref.handler);
 			return;
 		}
 		
@@ -43,7 +155,7 @@ TWiki.AjaxRequest = function () {
 		}
 		
 		var wrappedIndicator = _wrapIndicator(inName, indicatorHtml);
-		TWikiAjaxContrib.HTML.updateElementWithId(ref.container, wrappedIndicator);
+		twikiajaxcontrib.HTML.updateElementWithId(ref.container, wrappedIndicator);
 		
 		var cache = (ref.cache != undefined) ? ref.cache : false;
 		var callback = {
@@ -96,7 +208,7 @@ TWiki.AjaxRequest = function () {
 	}
 	
 	/**
-	See TWiki.AjaxRequest.lockProperties
+	See twiki.AjaxRequest.lockProperties
 	*/
 	this._lockProperties = function(inName, inPropertyList) {
 		if (!inPropertyList || inPropertyList.length == 0) {
@@ -114,7 +226,7 @@ TWiki.AjaxRequest = function () {
 	}
 	
 	/**
-	See TWiki.AjaxRequest.releaseProperties
+	See twiki.AjaxRequest.releaseProperties
 	*/
 	this._releaseProperties = function(inName, inPropertyList) {
 		if (!inPropertyList || inPropertyList.length == 0) {
@@ -132,7 +244,7 @@ TWiki.AjaxRequest = function () {
 	}
 	
 	/**
-	See TWiki.AjaxRequest.stop
+	See twiki.AjaxRequest.stop
 	*/
 	this._stop = function (inName) {
 		var ref = _storage[inName];
@@ -150,7 +262,6 @@ TWiki.AjaxRequest = function () {
 			var text = (ref.isXml()) ? inResponse.responseXML : inResponse.responseText;
 			var result = ref.scope[ref.handler].apply(ref.scope, [inResponse.argument.container, text]);
 			var shouldCache = false;
-			if (TWiki.AjaxRequest.cache == true) shouldCache = true;
 			if (inResponse.argument.cache == true) shouldCache = true;
 			if (inResponse.argument.cache == false) shouldCache = false;
 			if (shouldCache) {
@@ -173,7 +284,10 @@ TWiki.AjaxRequest = function () {
 	@privileged
 	*/
 	this._defaultFailHandler = function(inName, inStatus) {
-		alert("Could not load request for " + inName + " because of (error status): " + inStatus);
+		alert("Could not load request for "
+			+ inName
+			+ " because of (error status): "
+			+ inStatus);
 	}
 	
 	/**
@@ -191,123 +305,28 @@ TWiki.AjaxRequest = function () {
 	@privileged
 	*/
 	this._writeHtml = function(inContainer, inHtml) {
-		var element = TWikiAjaxContrib.HTML.updateElementWithId(inContainer, inHtml);
-		return TWikiAjaxContrib.HTML.getHtmlOfElementWithId(inContainer);
+		var element = twikiajaxcontrib.HTML.updateElementWithId(inContainer, inHtml);
+		return twikiajaxcontrib.HTML.getHtmlOfElementWithId(inContainer);
 	};
 	
 	this._defaultIndicatorHtml = "<img src='indicator.gif' alt='' />"; // for local testing, as a static url makes no sense for TWiki
 	
 	/**
-	See TWiki.AjaxRequest.setDefaultIndicatorHtml
+	See twiki.AjaxRequest.setDefaultIndicatorHtml
 	*/
-	this._setDefaultIndicatorHtml = function (inSrc) {
-		if (!inSrc) return;
-		this._defaultIndicatorHtml = inSrc;
-	}
-	
-	
-	// PRIVATE METHODS AND VARIABLES
-	// MAY BE CALLED ONLY BY PRIVILEGED METHODS
-	
-	var self = this;
-
-	/**
-	Key-value set of Properties objects. The value is accessed by request identifier name.
-	@private
-	*/
-	var _storage = {};
-	
-	/**
-	Inner property data class.
-	*/
-	var Properties = function(inName) {
-		this.name = inName; // String
-		this.url; // String
-		this.response; //  Object
-		this.lockedProperties = {}; // Value object of properties that cannot be changed
-		this.handler = "_writeHtml"; // String
-		this.scope = TWiki.AjaxRequest.getInstance(); // Object
-		this.container; // String; id of HTML container
-		this.type = "txt"; // String; possible values: "txt", "xml"
-		this.cache = false; // Boolean
-		this.method = "GET"; // String
-		this.postData; // String
-		this.indicator; // HTML String
-		this.failHandler = "_defaultFailHandler"; // String
-		this.failScope = TWiki.AjaxRequest.getInstance(); // Object
-		//
-		this.owner = TWiki.AjaxRequest.getInstance(); // Object
-	}
-	Properties.prototype.isXml = function() {
-		return this.type == "xml";
-	}
-	/**
-	Debug string
-	*/
-	Properties.prototype.toString = function() {
-		return "name=" + this.name + "; handler=" + this.handler + "; scope=" + this.scope.toString() + "; container=" + this.container + "; url=" + this.url + "; type=" + this.type + "; cache=" + this.cache + "; method=" + this.method + "; postData=" + this.postData + "; indicator=" + this.indicator + "; response=" + this.response;
-	}
-	
-	/**
-	Creates a unique id for the loading indicator.
-	@private
-	*/
-	function _getIndicatorId (inName) {
-		return "twikiRequestIndicator" + inName;
-	}
-	
-	/**
-	Wraps indicator HTML inside a div with unique id, so indicator can be removed even when it is located outside of replaceable content.
-	@private
-	*/
-	function _wrapIndicator (inName, inHtml) {
-		return "<div style=\"display:inline;\" id=\"" + _getIndicatorId(inName) + "\">" + inHtml + "<\/div>";
-	}
-	
-	/**
-	Hides (removes) the loading indicator image for request inName.
-	@private
-	*/
-	function _hideLoadingIndicator (inName) {
-		TWikiAjaxContrib.HTML.clearElementWithId(_getIndicatorId(inName));
-	}
-	
-	/**
-	Stores a property key-value pair. If the property is locked the value is not set.
-	@param inObject (Properties) : reference to Properties object
-	@param inKey (String) : name of property
-	@param inValue (Object) : new value of property
-	@private
-	*/
-	function _storeProperty (inObject, inKey, inValue) {
-		if (inValue == undefined) return;
-		if (inObject.lockedProperties[inKey]) return;
-		inObject[inKey] = inValue;
-	}
-
-	/**
-	Retrieves the response reference for a given response object.
-	Compares tIds.
-	@private
-	*/
-	function _referenceForResponse (inResponse) {
-		for (var i in _storage) {
-			var response = _storage[i].response;
-			if (response && response.tId == inResponse.tId) {
-				return _storage[i];
-			}
-		}
-		return null;
+	this._setDefaultIndicatorHtml = function (inHtml) {
+		if (!inHtml) return;
+		this._defaultIndicatorHtml = inHtml;
 	}
 
 }
 
 // CLASS INSTANCE
 
-TWiki.AjaxRequest.__instance__ = null; //define the static property
-TWiki.AjaxRequest.getInstance = function () {
+twiki.AjaxRequest.__instance__ = null; //define the static property
+twiki.AjaxRequest.getInstance = function () {
 	if (this.__instance__ == null) {
-		this.__instance__ = new TWiki.AjaxRequest();
+		this.__instance__ = new twiki.AjaxRequest();
 	}
 	return this.__instance__;
 }
@@ -332,20 +351,20 @@ Required properties to load a request:
 	if a handler is given: handler, scope, url
 @public static
 */
-TWiki.AjaxRequest.setProperties = function(inName, inProperties) {
-	TWiki.AjaxRequest.getInstance()._storeResponseProperties(inName, inProperties);
+twiki.AjaxRequest.setProperties = function(inName, inProperties) {
+	twiki.AjaxRequest.getInstance()._storeResponseProperties(inName, inProperties);
 }
 
 /**
-Adds properties to the list of locked properties. Locked properties cannot be changed unless they are freed using TWiki.AjaxRequest.releaseProperties.
+Adds properties to the list of locked properties. Locked properties cannot be changed unless they are freed using twiki.AjaxRequest.releaseProperties.
 @param inName (String) : (required) unique identifier for the request
 @param ... : (required) comma-separated list of properties to lock
 @public static
 */
-TWiki.AjaxRequest.lockProperties = function(inName) {
-	var properties = TWikiAjaxContrib.Array.convertArgumentsToArray(arguments, 1);
+twiki.AjaxRequest.lockProperties = function(inName) {
+	var properties = twikiajaxcontrib.Array.convertArgumentsToArray(arguments, 1);
 	if (!properties) return;
-	TWiki.AjaxRequest.getInstance()._lockProperties(inName, properties);
+	twiki.AjaxRequest.getInstance()._lockProperties(inName, properties);
 }
 
 /**
@@ -354,18 +373,18 @@ Frees properties from the list of locked properties. Freed/unlocked properties c
 @param ... : (required) comma-separated list of properties to release
 @public static
 */
-TWiki.AjaxRequest.releaseProperties = function(inName, inPropertyList) {
-	var properties = TWikiAjaxContrib.Array.convertArgumentsToArray(arguments, 1);
+twiki.AjaxRequest.releaseProperties = function(inName, inPropertyList) {
+	var properties = twikiajaxcontrib.Array.convertArgumentsToArray(arguments, 1);
 	if (!properties) return;
-	TWiki.AjaxRequest.getInstance()._releaseProperties(inName, properties);
+	twiki.AjaxRequest.getInstance()._releaseProperties(inName, properties);
 }
 
 /**
 Removes the cached response text, if any.
 @public static
 */
-TWiki.AjaxRequest.clearCache = function(inName) {
-	TWiki.AjaxRequest.getInstance()._storeHtml(inName, null);
+twiki.AjaxRequest.clearCache = function(inName) {
+	twiki.AjaxRequest.getInstance()._storeHtml(inName, null);
 }
 
 /**
@@ -376,12 +395,12 @@ Convenience method to directly load the HTML contents of inUrl into HTML element
 	cache (Boolean) : if true, the fetched response text will be cached for subsequent retrieval; default false
 	method (String) : either "GET" or "POST"; default "GET"
 	postData (String) : data to send
-	indicator (String) : loading indicator - HTML that will be displayed while retrieving data; if empty, TWiki.AjaxRequest.defaultIndicatorHtml is used
+	indicator (String) : loading indicator - HTML that will be displayed while retrieving data; if empty, twiki.AjaxRequest.defaultIndicatorHtml is used
 @return The new connection request.
 @public static
 */
-TWiki.AjaxRequest.load = function(inName, inProperties) {
-	return TWiki.AjaxRequest.getInstance()._load(inName, inProperties);
+twiki.AjaxRequest.load = function(inName, inProperties) {
+	return twiki.AjaxRequest.getInstance()._load(inName, inProperties);
 }
 
 /**
@@ -389,41 +408,34 @@ Aborts loading of request with name inName.
 @param inName (String) : (required) unique identifier for the request
 @public static
 */
-TWiki.AjaxRequest.stop = function(inName) {
-	TWiki.AjaxRequest.getInstance()._stop();
+twiki.AjaxRequest.stop = function(inName) {
+	twiki.AjaxRequest.getInstance()._stop();
 }
 
 /**
 The default indicator HTML string.
 @public static
 */
-TWiki.AjaxRequest.getDefaultIndicatorHtml = function() {
-	return TWiki.AjaxRequest.getInstance()._defaultIndicatorHtml;
+twiki.AjaxRequest.getDefaultIndicatorHtml = function() {
+	return twiki.AjaxRequest.getInstance()._defaultIndicatorHtml;
 }
 
 /**
 Sets the default indicator HTML string.
-@param inSrc (String) : HTML string for the loading indicator
+@param inHtml (String) : HTML string for the loading indicator
 @public static
 */
-TWiki.AjaxRequest.setDefaultIndicatorHtml = function(inSrc) {
-	return TWiki.AjaxRequest.getInstance()._setDefaultIndicatorHtml(inSrc);
+twiki.AjaxRequest.setDefaultIndicatorHtml = function(inHtml) {
+	return twiki.AjaxRequest.getInstance()._setDefaultIndicatorHtml(inHtml);
 }
 
-/**
-Caching option of received response texts. Default false; set to true to cache by default even if not explicitly set with property <code>cache</code>.
-@public static
-*/
-TWiki.AjaxRequest.cache = false;
 
-
-
-TWikiAjaxContrib = {};
+twikiajaxcontrib = {};
 
 /**
-TWikiAjaxContrib.HTML functions will most likely be part of twikiLib.js, so this will be removed at that time. CHANGES ARE TO BE EXPECTED.
+twikiajaxcontrib.HTML functions will most likely be part of twikiLib.js, so this will be removed at that time. CHANGES ARE TO BE EXPECTED.
 */
-TWikiAjaxContrib.HTML = {
+twikiajaxcontrib.HTML = {
 
 	/**
 	Writes HTML inHtml in element with id inId.
@@ -433,7 +445,7 @@ TWikiAjaxContrib.HTML = {
 	*/
 	updateElementWithId:function(inId, inHtml) {
 		var elem = document.getElementById(inId);
-		if (elem) return TWikiAjaxContrib.HTML.updateElement(elem, inHtml);
+		if (elem) return twikiajaxcontrib.HTML.updateElement(elem, inHtml);
 	},
 	
 	/**
@@ -442,7 +454,7 @@ TWikiAjaxContrib.HTML = {
 	updateElement:function(inElement, inHtml) {
 		if (inElement) {
 			if (inHtml == "") {
-				TWikiAjaxContrib.HTML.clearElement(inElement);
+				twikiajaxcontrib.HTML.clearElement(inElement);
 			} else {
 				inElement.innerHTML = inHtml;
 			}
@@ -470,7 +482,7 @@ TWikiAjaxContrib.HTML = {
 	*/
 	clearElementWithId:function(inId) {
 		var elem = document.getElementById(inId);
-		if (elem) return TWikiAjaxContrib.HTML.clearElement(elem);
+		if (elem) return twikiajaxcontrib.HTML.clearElement(elem);
 	},
 	
 	/**
@@ -503,9 +515,9 @@ TWikiAjaxContrib.HTML = {
 };
 
 /**
-TWikiAjaxContrib.Array functions will most likely be part of twikiLib.js, so this will be removed at that time. CHANGES ARE TO BE EXPECTED.
+twikiajaxcontrib.Array functions will most likely be part of twikiLib.js, so this will be removed at that time. CHANGES ARE TO BE EXPECTED.
 */
-TWikiAjaxContrib.Array = {
+twikiajaxcontrib.Array = {
 
 	convertArgumentsToArray:function (inArguments, inStartIndex) {
 		var start = (inStartIndex != undefined) ? inStartIndex : 0;
@@ -520,9 +532,9 @@ TWikiAjaxContrib.Array = {
 }
 
 /**
-TWikiAjaxContrib.Form functions will most likely be part of twikiLib.js, so this will be removed at that time. CHANGES ARE TO BE EXPECTED.
+twikiajaxcontrib.Form functions will most likely be part of twikiLib.js, so this will be removed at that time. CHANGES ARE TO BE EXPECTED.
 */
-TWikiAjaxContrib.Form = {
+twikiajaxcontrib.Form = {
 
 	/*
 	* Copyright 2005 Matthew Eernisse (mde@fleegix.org)
@@ -575,7 +587,10 @@ TWikiAjaxContrib.Form = {
 		 case 'password':
 		 case 'textarea':
 		 case 'select-one':
-			str += formElem.name + '=' + encodeURI(formElem.value) + '&'
+			str += formElem.name
+				+ '='
+				+ encodeURI(formElem.value)
+				+ '&';
 			break;
 			
 		 // Multi-option select
@@ -586,15 +601,21 @@ TWikiAjaxContrib.Form = {
 			 if(currOpt.selected) {
 				if (opts.collapseMulti) {
 				 if (isSet) {
-					str += ',' + encodeURI(currOpt.value);
+					str += ','
+						+ encodeURI(currOpt.value);
 				 }
 				 else {
-					str += formElem.name + '=' + encodeURI(currOpt.value);
+					str += formElem.name
+						+ '='
+						+ encodeURI(currOpt.value);
 					isSet = true;
 				 }
 				}
 				else {
-				 str += formElem.name + '=' + encodeURI(currOpt.value) + '&';
+				 str += formElem.name
+				 	+ '='
+				 	+ encodeURI(currOpt.value)
+				 	+ '&';
 				}
 			 }
 			}
@@ -606,7 +627,10 @@ TWikiAjaxContrib.Form = {
 		 // Radio buttons
 		 case 'radio':
 			if (formElem.checked) {
-			 str += formElem.name + '=' + encodeURI(formElem.value) + '&'
+			 str += formElem.name
+			 	+ '='
+			 	+ encodeURI(formElem.value)
+			 	+ '&'
 			}
 			break;
 			
@@ -620,10 +644,13 @@ TWikiAjaxContrib.Form = {
 				 str = str.substr(0, str.length - 1);
 				}
 				// Append value as comma-delimited string
-				str += ',' + encodeURI(formElem.value);
+				str += ','
+					+ encodeURI(formElem.value);
 			 }
 			 else {
-				str += formElem.name + '=' + encodeURI(formElem.value);
+				str += formElem.name
+					+ '='
+					+ encodeURI(formElem.value);
 			 }
 			 str += '&';
 			 lastElemName = formElem.name;
