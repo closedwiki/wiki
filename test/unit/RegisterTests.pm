@@ -64,6 +64,7 @@ sub set_up {
 
     $TWiki::cfg{PasswordManager} = 'TWiki::Users::HtPasswdUser';
     $TWiki::cfg{SuperAdminGroup} = "PowerRangers";
+    $TWiki::cfg{UserInterfaceInternationalisation} = 0;
 
     $session = new TWiki();
 
