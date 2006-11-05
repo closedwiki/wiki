@@ -71,7 +71,7 @@ processing.  This is most useful for graphics, e.g.
 %<nop>ENDLATEX%
 </blockquote>
 
-v3.2 introduced the ability to switch rendering dynamically between dvipng
+v3.3 introduced the ability to switch rendering dynamically between dvipng
 and dvips+convert.  Some latex packages are not supported by dvipng, for
 example [[http://sourceforge.net/projects/pgf/][Ti<em>k</em>Z and PGF]].
 Rather than force all rendering to use the slower backend, this flag allows
@@ -341,8 +341,9 @@ This plugin is an enhanced version of the TWiki:Plugins.MathModePlugin maintaine
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.ScottHoge |
-|  Plugin Version: | 8 Aug 2006 (v 3.2) |
+|  Plugin Version: | 8 Aug 2006 (v 3.3) |
 |  Change History: | %ICON{warning}% v3.0 and above requires TWiki 4.x.x and above %ICON{warning}% <!-- versions below in reverse order --> |
+|  11 Nov 2006 (v 3.3) | added dynamic switching of rendering engine between dvipng and dvips+convert, more Parse bug fixes |
 |  06 Oct 2006 (v 3.2) | more bugs fixed: bgcolor option was missing from v3.0; verbatim mode fixed in Parse |
 |  04 Oct 2006 (v 3.1) | fixed two bugs: populating files to check under Dakar, and itemize env parsing in Parse |
 |  30 Sep 2006 (v 3.0) | Significant rewrite of module, including: section numbering/cross-links and mod_perl compatibility. |

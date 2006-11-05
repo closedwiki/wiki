@@ -25,9 +25,10 @@ use vars qw( $VERSION $RELEASE );
 This module provides the ability to include LaTeX source files
 in TWiki topics.
 
-This module is *very alpha*.  It has successfully rendered a few test
-examples.  But no warranty or fitness for a particular purpose is claimed.
-Also, the translation syntaxes and processing order are subject to change.
+This module is approaching *beta*-level stability.  It has successfully
+rendered a few test examples from mulitiple authors.  But no warranty
+or fitness for a particular purpose is claimed.  Also, the translation
+syntaxes and processing order are subject to change.
 
 This document describes version $Rev$ of the module.
 
@@ -44,7 +45,7 @@ my %commands;
 
 # to prevent executing arbitrary code in the 'eval' below, allow
 # only registered commands to run.
-my @regSubs = ( '&addToTitle', '&formThanks' );
+my @regSubs = ( '&addToTitle', '&formThanks', '&formBib' );
 
 # open(F,"/var/www/twiki/conf/latex2tml.cfg") or die $!;
 while (<DATA>) {
@@ -301,37 +302,41 @@ another topic to correct the rendering problems.
 }
 
 
+my %simple = ( '~' => '&nbsp;',
+               '\\noindent' => '',
+               '\\\\' => "<br>",
+               '\vfill' => '',
+               '\newblock' => '',
+               '``' => '&ldquo;',
+               "''" => '&rdquo;', 
+               '\\o' => '&oslash;',
+               '\\O' => '&Oslash;',
+               '\\AA' => '&Aring;',
+               '\\aa' => '&aring;',
+               '\\ae' => '&aelig;',
+               '\\AE' => '&AElig;',
+               '\mainmatter' => '',
+               '\\sloppy' => '' );
+
+foreach my $c (keys %entities) {
+    my $m = $entities{$c};
+    $c =~ s/\{|\}//g;
+    $simple{$c} = $m;
+}
+
 sub convertSimple
 {
-    my %h = ( '~' => '&nbsp;',
-              '\\noindent' => '',
-              '\\maketitle' => TWiki::Func::getContext()->{'LMPcontext'}->{'title'}."\n<br>\n".TWiki::Func::getContext()->{'LMPcontext'}->{'thanks'}."\n<br>\n",
-              '\\\\' => "<br>",
-              '\vfill' => '',
-              '\newblock' => '',
-              '``' => '&ldquo;',
-              "''" => '&rdquo;', 
-              '\\o' => '&oslash;',
-              '\\O' => '&Oslash;',
-              '\\AA' => '&Aring;',
-              '\\aa' => '&aring;',
-              '\\ae' => '&aelig;',
-              '\\AE' => '&AElig;',
-              '\\sloppy' => '' );
+    
+    $simple{'\\maketitle'} = TWiki::Func::getContext()->{'LMPcontext'}->{'title'}."\n<br>\n".TWiki::Func::getContext()->{'LMPcontext'}->{'thanks'}."\n<br>\n";
 
-    foreach my $c ( keys %h) {
-        my $m = $h{$c};
+    foreach my $c ( keys %simple ) {
+        my $m  = $simple{$c}; 
         # printF( "$c --> $m\n" );
         $_[0] =~ s/\Q$c\E/$m/g;
     }
-
 }
 
-sub convertEmbed
-{
-    my ($b) = @_;
-
-    my %h = ( '\\em' => [ '<em>', '</em>' ],
+my %embed = ( '\\em' => [ '<em>', '</em>' ],
               '\\bf' => [ '<strong>', '</strong>' ],
               '\\small' => [ '<font size="-2">','</font>' ],
               '\\tiny' => [ '<font size="-3">','</font>' ],
@@ -341,17 +346,23 @@ sub convertEmbed
               '\\centering' => [ '<div align="center">', '</div>' ]
               );
 
-    $b =~ s/^\s*\{(.*)(\\\/)?\}\s*$/$1/gs;
+sub convertEmbed
+{
+    my ($b) = @_;
 
+
+    $b =~ s/^\s*\{(.*)\}\s*/$1/gs;
+    $b =~ s!\\\/$!!;
+    # printF("convertEmb  (pre): $b\n");
     
-    # printF("covertEmb: $b\n");
     return($b) unless ($b=~m/\\/);
-    foreach my $c ( keys %h) {
-        # printF( "$c --> @{$h{'$c'}}\n" );
-        if ($b =~ s/\Q$c\E//g) {
-            $b = $h{$c}[0].$b.$h{$c}[1];
+    foreach my $c ( keys %embed) {
+        # printF( "$c --> @{$embed{'$c'}}\n" );
+        if ($b =~ s/\Q$c\E\b//g) {
+            $b = $embed{$c}[0].$b.$embed{$c}[1];
         }
     }
+    # printF("convertEmb (post): $b\n");
     return($b);
 }
 
@@ -367,9 +378,10 @@ sub extractBlocks {
 
     my @a;
 
-    printF('-'x70); printF("\n");
+    printF('x'x70); printF("\n");
     printF($doc);
-    printF('-'x70); printF("\n");
+    printF('x'x70); printF("\n");
+    return($doc) unless ($doc =~ m/\{|\}/);
 
     ## parse once through to collect all nested braces
     do {
@@ -378,8 +390,8 @@ sub extractBlocks {
                                        '\}');
 
         if ($pre =~ m/^(.*)(\\[\w\*]+?)$/s) {
-            push(@a,$1);
-            push(@a,$2);
+            push(@a,$1);        # before command
+            push(@a,$2);        # command
         } elsif ( ($pre =~ m/[A-Z]+$/) || 
                   ($doc =~ m/^\%/) ){
             # printF("++ $pre ++ $block ++ $doc\n");
@@ -396,6 +408,8 @@ sub extractBlocks {
         # $txt .= "\n<<<< \n";
 
     } while ($block ne '');
+    #there is still some $doc left, so push it onto the stack:
+    push(@a,$doc);
 
     #### Convert the found blocks
     my $b = '';
@@ -423,11 +437,12 @@ sub extractBlocks {
         printF( "\n++ ".scalar(@a)."\n".$b );
         ## BEGINLATEX .. ENDLATEX blocks are now grouped, proceed to treat
         ## remaining tex commands of the form '\cmd{}' and '\cmd'
+        $b =~ s/\s+(\n?)$/$1/;
 
         my ($cmd,$star,$opts) = ('','','');
         ($cmd,$star,$opts) = ($1,$2,$3) if
             (
-             ($b =~ m!(\\[\"\'\`\^\~\.duvtbHc])$!)
+             ($b =~ m!(\\[\"\'\`\^\~\.duvtbHc])$!) # test for single char commands
              or 
              ($b =~ m!(\\\w+)\b(\*?)(\[
                                      ([\\\w\d\.\=\,\s]+?)
@@ -448,10 +463,12 @@ sub extractBlocks {
                     '%BEGINLATEX{inline="1"}%'.$t.'%ENDLATEX%';
             }
             elsif ( exists( $commands{$cmd} ) ) {
+                # if found command defined in %commands...
                 my $sz = 0;
                 my $str = $commands{$cmd}{'command'};
                 # print F $b." ";
                 while ($sz < $commands{$cmd}{'size'}) {
+                    # grab the number of needed blocks of the stack
                     my $t = shift(@a);
                     if (length($t) > 0) {
                         $t = substr($t,1,length($t)-2);
@@ -466,17 +483,23 @@ sub extractBlocks {
                 }
                 $str =~ s/\$o/$opts/;
                 $str =~ s/\$c/$cmd/;
-                printF("\n$str\n---\n");
+
+                # ensure that twiki section commands land at the start
+                # of a new line
+                $str = "\n\n".$str if ($str=~m/^\-\-\-/); 
+
+                printF("\n$str\n---\n"); # debug output
 
                 if ($cmd eq '\label') {
                     my $t = ' %SECLABEL{'.$str.'}% ';
                     $txt =~ s/(---\++\!?\s+)([\w\s\$\%\\]+)$/$1$t$2/s;
                 } else {
+                    # process the command...
 
                     my $cmd = $1 if ($str =~ s/^(&\w+)\((.*)\)$/$2/s);
 
                     $str = extractBlocks($str) if ($str =~ m/\\/); 
-                    convertSimple($str);
+                    convertSimple($str) if ($str =~ m/\\/); 
 
                     if (defined($cmd)) {
                         $str =~ s/^(\"|\')|(\"|\')$//g;
@@ -517,7 +540,7 @@ sub extractBlocks {
             # unshift(@a,$t);
             $b = convertEmbed($b);
 
-            if ($b =~ m/^(.*?)%BEGINLATEX.*?ENDLATEX%/s)  {
+            if ($b =~ m/^(.+?)%BEGINLATEX.*?ENDLATEX%/s)  {
                 my $g = $b;
                 my ($o2,$n2) = (undef,undef);
                 do {
@@ -551,11 +574,6 @@ sub extractBlocks {
             # printF( length($txt)."\n" );
         }
     } while (scalar(@a)>0);
-
-    #there is still some $doc left:
-    $doc = convertEmbed($doc) if ($doc =~ m/\\/);
-    convertSimple($doc);
-    $txt .= $doc;
 
     return($txt);
 }
@@ -834,7 +852,7 @@ sub convertEnvironment
         # $txt .= "<br><blockquote>\n---- \n";
          # $block =~ s/$env/convertEnvironment($env)/e if ($env=~m/\begin\{/);
         # $txt .= $block;
-        $txt .= "%BEGINLATEX%\n".$block."%ENDLATEX%\n";
+        $txt .= "%BEGINLATEX%\n".$block."\n%ENDLATEX%\n";
         # $txt .= "<br>\n---- <br></blockquote>\n";
         # $text .= LaTeX2TML($block);
     }
@@ -965,17 +983,18 @@ use TWiki:Plugins.PerlDocPlugin to see list of supported commands
       * section, subsection, subsubsection
       * cite, ref
       * parbox, fbox
-      * emph, em, centering, bf
+      * emph, em, centering, bf, textit, textbf, centerline
       * large, small, tiny, footnotesize
       * verb
+      * bibliographystyle, bibliography (with the TWiki:Plugins.BibtexPlugin installed)
 
    * commands with limited support
       * includegraphics, 
       * label (works with equations, figures, tables, and sections) 
-      * title, address, name, maketitle (these work, but don't match the latex class output of the original document)
+      * title, address, name, maketitle (these work, but don&rsquo;t match the latex class output of the original document)
 
    * commands that are ignored
-      * vspace, hspace, vfill, noindent, sloppy
+      * vspace, hspace, vfill, noindent, sloppy, mainmatter
 
 =end twiki
 
@@ -994,7 +1013,7 @@ available on the TWiki SVN development tree,
 Download the Parse.pm file and copy it to the
 C<lib/TWiki/Plugins/LatexModePlugin/> directory of your TWiki
 installation.  Documentation for the module is provided in 
-C<pod> format, and can be completely viewed using the TWiki:PerlDocPlugin 
+C<pod> format, and can be completely viewed using the TWiki:Plugins.PerlDocPlugin 
 or partially viewed using C<perldoc> or C<pod2text>.
 
 
@@ -1123,29 +1142,45 @@ sub formThanks {
     my $cnt =   TWiki::Func::getContext()->{'LMPcontext'}->{'thankscnt'};
     $cnt = $cnt + 1;
 
-    $str =~ s/(ENDLATEX%)(.*)$/$1/s;
-
     TWiki::Func::getContext()->{'LMPcontext'}->{'thanks'} .=
-        $cnt.'. '.$2."<br>\n";
-
-    $str =~ s/\$c/$cnt/;
+        $cnt.'. '.$str."<br>\n";
 
     TWiki::Func::getContext()->{'LMPcontext'}->{'thankscnt'} = $cnt;
 
-    return($str);
+    return( '%BEGINLATEX{inline="1"}% $^'.$cnt.'$ %ENDLATEX%' );
 }
 
-# :\includegraphics:1:%SHOWPDF{$1}%:
-#
-# :\title:1: <h1 align="center">$1</h1> :
+sub formBib {
+    my ($str) = @_;
+    printF("formBib: $str ");
 
+    if ($str =~ m/style\=/) {
+        TWiki::Func::getContext()->{'LMPcontext'}->{'bibstyle'} = $str;
+        return('');
+    } else {
+
+        my $style = TWiki::Func::getContext()->{'LMPcontext'}->{'bibstyle'};
+        my @files = ();
+        $str =~ s/.*?\=\"(.*)\"$/$1/;
+        foreach my $f (split(/\,/,$str)) {
+            push(@files,$f.".bib");
+        }
+        my $t = join(',',@files);
+        return( "\n\n".'%BIBTEXREF{ '.$style.' file="'.$t.'"}%' );
+    }
+}
+
+# 
+# :\includegraphics:1:%SHOWPDF{$1}%:
+# :\title:1: <h1 align="center">$1</h1> :
+# 
 __DATA__
 :\section:1:---+ $1 \n:
 :\subsection:1:---++ $1 \n::
 :\subsubsection:1:---+++ $1 \n::
-:\cite:1:%CITE{$1}%:
-!\ref!1!%REFLATEX{$1}%!
-!\eqref!1!%REFLATEX{$1}%!
+:\cite:1: %CITE{$1}%:
+!\ref!1! %REFLATEX{$1}%!
+!\eqref!1! %REFLATEX{$1}%!
 !\parbox!2!<table align="left" width="$1"><tr><td>$2</table>!
 !\fbox!1!<table align="left" border="1"><tr><td>$1</table>!
 :\emph:1: <em>$1</em>:
@@ -1156,12 +1191,16 @@ __DATA__
 :\name:1:&addToTitle('<div align="center">$1</div>'):
 :\includegraphics:1:%BEGINLATEX{attachment="$1"}% \includegraphics$o{$1} %ENDLATEX%:
 :\label:1:$1:  # modifies a past-parsed string to insert %SECLABEL% above
-:\bibliography:1:%<nop>BIBTEXREF{file="$1"}%
+:\bibliographystyle:1:&formBib('bibstyle="$1"'):
+:\bibliography:1:&formBib('file="$1"'):
 :\maketitle:0: \maketitle :
-:\thanks:1:&formThanks('%BEGINLATEX{inline="1"}% $^$c$ %ENDLATEX% $1'):
+:\thanks:1:&formThanks('$1'):
 !\footnote!1! <br><hr style="height:1px;width:90%"><font size="-3"> $1 </font><hr  style="height:1px;width:90%">!
 :\runningtitle:2: :
 :\title:1:&addToTitle(<h1 align="center">$1</h1>):
 :\author:1:&addToTitle(<div align="center"><font size="+1">$1</font></div>):
 !\address!1!&addToTitle(<table align="center"><tr><td valign="top">Address correspondence to:<td valign="top">$1</table>)!
-:\url:1:$1:
+:\url:1: $1:
+:\textit:1: _$1_ :
+:\textbf:1: *$1* :
+:\centerline:1:<div align="center">$1</div>:
