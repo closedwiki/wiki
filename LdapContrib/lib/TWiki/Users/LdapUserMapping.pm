@@ -131,12 +131,12 @@ sub groupMembers {
     if (defined($members)) {
       $group->{members} = [];
       foreach my $member (@$members) {
-	push @{$group->{members}},$this->{session}->{users}->findUser($member);
+        push @{$group->{members}},$this->{session}->{users}->findUser($member);
       }
     } else {
       # fallback to twiki groups
       if ($this->{ldap}->{twikiGroupsBackoff}) {
-	return $this->SUPER::groupMembers($group);
+        return $this->SUPER::groupMembers($group);
       }
     }
   }
