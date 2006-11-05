@@ -321,15 +321,15 @@ sub getGroupMembers {
     if ($this->{memberIndirection}) {
       #writeDebug("following indirection");
       my $msg = $this->search(
-	'objectClass=*', $member, 'base', 1, [$this->{loginAttribute}]);
+        'objectClass=*', $member, 'base', 1, [$this->{loginAttribute}]);
       my $memberEntry = $msg->entry(0);
       if ($memberEntry) {
-	$member = $memberEntry->get_value($this->{loginAttribute});
-	#writeDebug("found indirect member=$member");
+        $member = $memberEntry->get_value($this->{loginAttribute});
+        #writeDebug("found indirect member=$member");
       } else {
-	# inconsistent ldap data: the group points to an object that is not
-	# there, only warning about this error case
-	TWiki::Func::writeWarning("inconsistent ldap data: object '$member' not found");
+        # inconsistent ldap data: the group points to an object that is not
+        # there, only warning about this error case
+        TWiki::Func::writeWarning("inconsistent ldap data: object '$member' not found");
       }
     }
     push @members,$member;
