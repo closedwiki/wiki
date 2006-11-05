@@ -172,9 +172,7 @@ twiki.HTML = {
 			newElement.innerHTML = inHtmlContents;
 		}
 		if (inAttributes != undefined) {
-			for (var attr in inAttributes) {
-				newElement.setAttribute(attr, inAttributes[attr]);
-			}
+			twiki.HTML._setElementAttributes(newElement, inAttributes);
 		}
 		return newElement;
 	},
@@ -204,15 +202,19 @@ twiki.HTML = {
 		var i, ilen = inNodeList.length;
 		for (i=0; i<ilen; ++i) {
 			var elem = inNodeList[i];
-			for (var attr in inAttributes) {
-				if (attr == "style") {
-					var styleObject = inAttributes[attr];
-					for (var style in styleObject) {
-						elem.style[style] = styleObject[style];
-					}
-				} else {
-					elem.setAttribute(attr, inAttributes[attr]);
+			twiki.HTML._setElementAttributes(elem, inAttributes);
+		}
+	},
+	
+	_setElementAttributes:function (inElement, inAttributes) {
+		for (var attr in inAttributes) {
+			if (attr == "style") {
+				var styleObject = inAttributes[attr];
+				for (var style in styleObject) {
+					inElement.style[style] = styleObject[style];
 				}
+			} else {
+				inElement.setAttribute(attr, inAttributes[attr]);
 			}
 		}
 	}
