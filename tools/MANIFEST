@@ -805,6 +805,7 @@ pub/TWiki/TWikiJavascripts/twiki.js 0660
 pub/TWiki/TWikiJavascripts/twikilib.js 0660
 pub/TWiki/TWikiJavascripts/twikiArray.js 0660
 pub/TWiki/TWikiJavascripts/twikiForm.js 0660
+pub/TWiki/TWikiJavascripts/twikiHTML.js 0660
 pub/TWiki/TWikiJavascripts/twiki_attach.js 0660
 pub/TWiki/TWikiJavascripts/twiki_edit.js 0660
 pub/TWiki/TWikiJavascripts/twiki_renamebase.js 0660

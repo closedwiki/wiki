@@ -122,7 +122,7 @@ These tests require TWiki:Plugins.JSUnitContrib to run.
 
 </form>
 
----+++ formData2QueryString
+---+++ twiki.Form.formData2QueryString
 
 <script language="javascript">
 /*<![CDATA[*/
@@ -163,6 +163,337 @@ These tests require TWiki:Plugins.JSUnitContrib to run.
 			);
 			assertEquals("Non-existing options should do nothing", "testInput%TOPIC%=TESTTEXT;testPwd%TOPIC%=secret;testRadio%TOPIC%=text;testCbNoSearch%TOPIC%=on;testCbNoSummary%TOPIC%=on;testHidden%TOPIC%=classic;testTextArea%TOPIC%=COMMENTSTEXT;testSelect%TOPIC%=fiat;testSelectMultiple%TOPIC%=Industrial;testSelectMultiple%TOPIC%=Rock", queryString);
 		}
+    }
+
+/*]]>*/
+</script>
+
+---++ twiki.HTML
+
+<script language="javascript" src="%PUBURL%/%TWIKIWEB%/TWikiJavascripts/twikiHTML.js"></script>
+
+
+---+++ twiki.HTML.setHtmlOfElementWithId
+
+<div id="testSetHtmlOfElementWithId"></div>
+
+<script language="javascript">
+/*<![CDATA[*/
+    function testSetHtmlOfElementWithIdWithValidArgs() {
+    	var html = "<span style=\"color:blue;\">Blue text<\/span>";
+		var elem = twiki.HTML.setHtmlOfElementWithId(
+			"testSetHtmlOfElementWithId",
+			html
+		);
+		
+		var result = twiki.HTML.getHtmlOfElementWithId("testSetHtmlOfElementWithId");
+    	assertEquals(
+    		"Result setHtmlOfElementWithId",
+    		html.toLowerCase(),
+    		result.toLowerCase()
+    	);
+    	
+    	assertEquals(
+    		"Result setHtmlOfElementWithId element",
+    		document.getElementById('testSetHtmlOfElementWithId'),
+    		elem
+    	);
+	}
+	
+	function testSetHtmlOfElementWithIdWithInvalidArgs() {
+		var html = "<span style=\"color:blue;\">Blue text<\/span>";
+		var newElem = twiki.HTML.setHtmlOfElementWithId(
+			"doesNotExist",
+			html
+		);
+		assertNull("testSetHtmlOfElementWithIdWithInvalidArgs - Non-existing element should return null", newElem);
+	}
+	
+ /*]]>*/
+</script>
+
+---+++ twiki.HTML.setHtmlOfElement
+
+<div id="setHtmlOfElement"></div>
+
+<script language="javascript">
+/*<![CDATA[*/
+    function testSetHtmlOfElementWithValidArgs() {
+    	var html = "<span style=\"color:blue;\">Blue text<\/span>";
+    	var elem = document.getElementById("setHtmlOfElement");
+		var newElem = twiki.HTML.setHtmlOfElement(
+			elem,
+			html
+		);
+		
+		var result = twiki.HTML.getHtmlOfElementWithId("setHtmlOfElement");
+    	assertEquals(
+    		"Result setHtmlOfElement",
+    		html.toLowerCase(),
+    		result.toLowerCase()
+    	);
+    	
+    	assertEquals(
+    		"Result setHtmlOfElement element",
+    		document.getElementById('setHtmlOfElement'),
+    		newElem
+    	);
+
+	}
+	
+	function testSetHtmlOfElementWithInvalidArgs() {
+		var html = "<span style=\"color:blue;\">Blue text<\/span>";
+		var newElem = twiki.HTML.setHtmlOfElement(
+			null,
+			html
+		);
+		assertNull("testSetHtmlOfElementWithInvalidArgs - Non-existing element should return null", newElem);
+	}
+
+ /*]]>*/
+</script>
+
+---+++ twiki.HTML.getHtmlOfElementWithId
+
+<div id="testgetHtmlOfElementIdContainer">***HtmlOfElementWithId***</div>
+
+<script language="javascript">
+/*<![CDATA[*/
+    function testGetHtmlOfElementWithIdWithValidArgs() {
+    	var result = twiki.HTML.getHtmlOfElementWithId("testgetHtmlOfElementIdContainer");
+    	assertEquals(
+    		"Result html of element with id",
+    		'***HtmlOfElementWithId***',
+    		result
+    	);
+    }
+/*]]>*/
+</script>
+
+---+++ twiki.HTML.getHtmlOfElement
+
+<div id="testgetHtmlOfElementContainer">+++HtmlOfElement+++</div>
+
+<script language="javascript">
+/*<![CDATA[*/
+    function testGetHtmlOfElementWithIdWithValidArgs() {
+    	var result = twiki.HTML.getHtmlOfElementWithId("testgetHtmlOfElementContainer");
+    	assertEquals(
+    		"Result html of element",
+    		'+++HtmlOfElement+++',
+    		result
+    	);
+    }
+/*]]>*/
+</script>
+
+
+---+++ twiki.HTML.clearElementWithId
+
+<div id="testclearElementWithIdContainer">***clearElementWithId text***</div>
+
+<script language="javascript">
+/*<![CDATA[*/
+    function testClearElementWithIdWithValidArgs() {
+    	var elem = twiki.HTML.clearElementWithId("testclearElementWithIdContainer");
+    	
+    	var result = twiki.HTML.getHtmlOfElementWithId("testclearElementWithIdContainer");
+    	assertEquals(
+    		"Result html of clear element with id",
+    		'',
+    		result
+    	);
+    	
+    	assertEquals(
+    		"Result clearElementWithId element",
+    		document.getElementById('testclearElementWithIdContainer'),
+    		elem
+    	);
+    }
+/*]]>*/
+</script>
+
+---+++ twiki.HTML.clearElement
+
+<div id="testclearElementContainer">***clearElement text***</div>
+
+<script language="javascript">
+/*<![CDATA[*/
+    function testClearElementWithValidArgs() {
+    	var elem = document.getElementById("testclearElementContainer");
+    	var newElem = twiki.HTML.clearElement(elem);
+    	
+    	var result = twiki.HTML.getHtmlOfElementWithId("testclearElementContainer");
+    	assertEquals(
+    		"Result html of clear element",
+    		'',
+    		result
+    	);
+    	
+    	assertEquals(
+    		"Result clearElement element",
+    		document.getElementById('testclearElementContainer'),
+    		newElem
+    	);
+    }
+/*]]>*/
+</script>
+
+
+
+---+++ twiki.HTML.insertAfterElement
+
+<div id="testInsertAfter">insert after this div...</div>
+
+<script language="javascript">
+/*<![CDATA[*/
+    function testInsertAfterWithValidArgs() {
+    	var html = "<strong>RESULT INSERT AFTER</strong>";
+    	var newElem = twiki.HTML.insertAfterElement(
+    		document.getElementById('testInsertAfter'),
+    		'div',
+    		html,
+    		{
+    			"id":"testInsertAfterResult",
+    			"style":"color:red"
+    		}
+    	);
+    	var result = twiki.HTML.getHtmlOfElementWithId("testInsertAfterResult");
+    	assertEquals(
+    		"Result insert after",
+    		html.toLowerCase(),
+    		result.toLowerCase()
+    	);
+    	
+    	assertEquals(
+    		"Resulting element insert after",
+    		document.getElementById('testInsertAfterResult'),
+    		newElem
+    	);
+    }
+    
+    function testInsertAfterWithInvalidArgs() {
+    	var newElem = twiki.HTML.insertAfterElement(
+    		document.getElementById('doesNotExist')
+    	);
+    	assertNull("testInsertAfterWithValidArgs - Non-existing element should return null", newElem);
+    }
+ /*]]>*/
+</script>
+
+---+++ twiki.HTML.insertBeforeElement
+
+<div id="testInsertBefore">insert before this div...</div>
+
+<script language="javascript">
+/*<![CDATA[*/
+    function testInsertBeforeWithValidArgs() {
+    	var html = '<strong>RESULT INSERT BEFORE</strong>';
+    	var newElem = twiki.HTML.insertBeforeElement(
+    		document.getElementById('testInsertBefore'),
+    		'div',
+    		html,
+    		{
+    			"id":"testInsertBeforeResult"
+    		}
+    	);
+    	var result = twiki.HTML.getHtmlOfElementWithId("testInsertBeforeResult");
+    	assertEquals(
+    		"Result insert before",
+    		html.toLowerCase(),
+    		result.toLowerCase()
+    	);
+    	
+    	assertEquals(
+    		"Resulting element insert before",
+    		document.getElementById('testInsertBeforeResult'),
+    		newElem
+    	);
+    }
+    
+    function testInsertBeforeWithInvalidArgs() {
+    	var newElem = twiki.HTML.insertBeforeElement(
+    		document.getElementById('doesNotExist')
+    	);
+    	assertNull("testInsertBeforeWithInvalidArgs - Non-existing element should return null", newElem);
+    }
+/*]]>*/
+</script>
+
+---+++ twiki.HTML.replaceElement
+
+<div id="testReplace">replace this div...</div>
+
+<script language="javascript">
+/*<![CDATA[*/
+    function testReplaceWithValidArgs() {
+    	var html = '<strong>RESULT REPLACE</strong>';
+    	var newElem = twiki.HTML.replaceElement(
+    		document.getElementById('testReplace'),
+    		'div',
+    		html,
+    		{
+    			id:'resultReplaced'
+    		}
+    		
+    	);
+    	var result = twiki.HTML.getHtmlOfElementWithId("resultReplaced");
+    	assertEquals(
+    		"Result replaced",
+    		html.toLowerCase(),
+    		result.toLowerCase()
+    	);
+    	
+    	assertEquals(
+    		"Resulting element replaced",
+    		document.getElementById('resultReplaced'),
+    		newElem
+    	);
+    }
+    
+    function testReplaceWithInvalidArgs() {
+    	var newElem = twiki.HTML.replaceElement(
+    		document.getElementById('doesNotExist')
+    	);
+    	assertNull("testReplaceWithInvalidArgs - Non-existing element should return null", newElem);
+    }
+/*]]>*/
+</script>
+
+---+++ twiki.HTML.setNodeAttributesInList
+
+<div id="setNodeAttributesInListContainer">
+<ul>
+	<li>Item 1</li>
+	<li>Item 2</li>
+	<li>Item 3</li>
+</ul>
+</div>
+
+<script language="javascript">
+/*<![CDATA[*/
+    function testSetNodeAttributesInListWithValidArgs() {
+    	var elem = document.getElementById("setNodeAttributesInListContainer");
+    	var nodeList = elem.getElementsByTagName('ul')
+    	var attributes = {
+    		"class":"twikiSmall twikiGrayText",
+    		"style":
+    			{
+    				"font-size":"20px",
+    				"background-color":"#444"
+    			}
+    	};
+    	twiki.HTML.setNodeAttributesInList(nodeList, attributes);
+    	
+    	// test first element
+    	var elem = nodeList[0];
+    	assertEquals("testSetNodeAttributesInListWithValidArgs class",
+    		"twikiSmall twikiGrayText",
+    		elem.getAttribute("class"));
+    	assertEquals("testSetNodeAttributesInListWithValidArgs style.color",
+    		"20px",
+    		elem.style["font-size"]);
+    	
     }
 
 /*]]>*/
