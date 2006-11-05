@@ -8,6 +8,7 @@
 <script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/YahooUserInterfaceContrib/build/connection/connection.js"></script>
 <script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/TWikiJavascripts/twikilib.js"></script>
 <script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/TWikiJavascripts/twikiArray.js"></script>
+<script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/TWikiJavascripts/twikiHTML.js"></script>
 <script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/TWikiAjaxContrib/twikiAjaxRequest.compressed.js"></script>
 <script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/BehaviourContrib/behaviour.compressed.js"></script>
 <!-- Additional script for this page -->
@@ -103,6 +104,119 @@ addLoadEvent(autoLoad);
 // ]]>
 </script>
 
+
+
+---++ Page parts / Named sections
+
+_This demo illustrates functionality that is available from TWiki SVN 11890._
+
+%TWISTY{id="namedsections" mode="div" showlink=" Show example code" hidelink=" Hide example code"
+showimgleft="%ICONURLPATH{code}%" 
+hideimgleft="%ICONURLPATH{code}%"}%
+<blockquote>
+<verbatim>
+function showNewTopicForm(el) {
+
+	var containerId = "newTopicFormContainer";
+	
+	// remove old container if any
+	twiki.HTML.deleteElementWithId(containerId);
+	
+	var topicName = el.innerHTML.split("<")[0];
+	var newContainer = twiki.HTML.insertAfterElement(
+		el,
+		'div',
+		'',
+		{
+			"id":containerId,
+			"style":
+				{
+					"margin":"0 0 .5em 0"
+				}
+		}
+	);
+	var url = "%SCRIPTURL{"view"}%/%TWIKIWEB%/WebTopicCreator?section=newtopicform;skin=text;newtopic="
+				+ topicName
+				+ ";parent=" + "<nop>%TOPIC%";
+	twiki.AjaxRequest.load("NEWTOPICFORM",
+		{
+			container:containerId,
+			url:url
+		});
+}
+var myrules = {
+	'.twikiNewLink a' : function(el) {
+		el.onclick = function() {
+			showNewTopicForm(el.parentNode);
+			return false;
+		}
+	}
+};
+Behaviour.register(myrules);
+</verbatim>
+</blockquote>
+%ENDTWISTY%
+
+---+++ Demo
+
+_This demo does not work entirely: javascript code within the included topic is not imported well._
+
+%ICON{hand}% Click on the "new topic link question mark" at =DoesNotExist= in the text below to view the "Create new topic" form:
+
+Good now, sit down, and tell me, he that knows,
+Why this same strict and most observant watch
+So nightly toils the subject of the land, DoesNotExist
+And why such daily cast of brazen cannon,
+And foreign mart for implements of war;
+Why such impress of shipwrights, whose sore task
+Does not divide the Sunday from the week;
+What might be toward, that this sweaty haste
+Doth make the night joint-labourer with the day:
+Who is't that can inform me?
+
+
+<script type="text/javascript">
+// <![CDATA[
+function showNewTopicForm(el) {
+
+	var containerId = "newTopicFormContainer";
+	
+	// remove old container if any
+	twiki.HTML.deleteElementWithId(containerId);
+	
+	var topicName = el.innerHTML.split("<")[0];
+	var newContainer = twiki.HTML.insertAfterElement(
+		el,
+		'div',
+		'',
+		{
+			"id":containerId,
+			"style":
+				{
+					"margin":"0 0 .5em 0"
+				}
+		}
+	);
+	var url = "%SCRIPTURL{"view"}%/%TWIKIWEB%/WebTopicCreator?section=newtopicform;skin=text;newtopic="
+				+ topicName
+				+ ";parent=" + "<nop>%TOPIC%";
+	twiki.AjaxRequest.load("NEWTOPICFORM",
+		{
+			container:containerId,
+			url:url
+		});
+}
+var myrules = {
+	'.twikiNewLink a' : function(el) {
+		el.onclick = function() {
+			showNewTopicForm(el.parentNode);
+			return false;
+		}
+	}
+};
+Behaviour.register(myrules);
+// ]]>
+</script>
 
 ---++ Plugins vs. Skins
 
@@ -405,26 +519,27 @@ twiki.AjaxRequest.setProperties(
 function handleHtml (inId, inHtml) {
 	// example 1: wrap in styled container
 	var processedHtml = "<h2>Processed text:<\/h2>" + 
-		"<div style=\"color:#aaa;\">" +
+		"<div style=\"font-style:italic;\">" +
 		inHtml +
 		"<\/div>";
-	var element = twikiajaxcontrib.HTML.updateElementWithId(inId, processedHtml);
+	var element = twiki.HTML.setHtmlOfElementWithId(inId, processedHtml);
 
 	// example 2: reverse texts
 	reverseNodeTextsInList(element.getElementsByTagName('p'));
 	
 	// example 3: style list elements
-	var style = {
-		'backgroundColor':'#666',
-		'fontWeight':'bold',
-		'color':'#fff',
-		'padding':'.5em',
-		'border':'none'
-	}
-	twikiajaxcontrib.HTML.setNodeStylesInList(element.getElementsByTagName('ul'), style);
+	var attributes = {
+		"class":"twikiSmall twikiGrayText",
+		"style":
+			{
+				"color":"#fff",
+				"background-color":"#444"
+			}
+	};
+	twiki.HTML.setNodeAttributesInList(element.getElementsByTagName('ul'), attributes);
 	
 	// return HTML to be cached
-	return twikiajaxcontrib.HTML.getHtmlOfElementWithId(inId);
+	return twiki.HTML.getHtmlOfElementWithId(inId);
 }
 
 function reverseNodeTextsInList (inNodeList) {
@@ -506,26 +621,27 @@ twiki.AjaxRequest.setProperties(
 function handleHtml (inId, inHtml) {
 	// example 1: wrap in styled container
 	var processedHtml = "<h2>Processed text:<\/h2>" + 
-		"<div style=\"color:#aaa;\">" +
+		"<div style=\"font-style:italic;\">" +
 		inHtml +
 		"<\/div>";
-	var element = twikiajaxcontrib.HTML.updateElementWithId(inId, processedHtml);
+	var element = twiki.HTML.setHtmlOfElementWithId(inId, processedHtml);
 
 	// example 2: reverse texts
 	reverseNodeTextsInList(element.getElementsByTagName('p'));
 	
 	// example 3: style list elements
-	var style = {
-		'backgroundColor':'#666',
-		'fontWeight':'bold',
-		'color':'#fff',
-		'padding':'.5em',
-		'border':'none'
-	}
-	twikiajaxcontrib.HTML.setNodeStylesInList(element.getElementsByTagName('ul'), style);
+	var attributes = {
+		"class":"twikiSmall twikiGrayText",
+		"style":
+			{
+				"color":"#fff",
+				"background-color":"#444"
+			}
+	};
+	twiki.HTML.setNodeAttributesInList(element.getElementsByTagName('ul'), attributes);
 	
 	// return HTML to be cached
-	return twikiajaxcontrib.HTML.getHtmlOfElementWithId(inId);
+	return twiki.HTML.getHtmlOfElementWithId(inId);
 }
 
 function reverseNodeTextsInList (inNodeList) {
@@ -613,7 +729,7 @@ function processCityData (inId, inXml) {
 		outText += "<li>" + cities[i] + "<\/li>"
 	}
 	outText = "<ul>" + outText + "<\/ul>";
-	twikiajaxcontrib.HTML.updateElementWithId(inId, outText);
+	twiki.HTML.setHtmlOfElementWithId(inId, outText);
 }
 
 function showCityData () {
@@ -668,7 +784,7 @@ function processCityData (inId, inXml) {
 		outText += "<li>" + cities[i] + "<\/li>"
 	}
 	outText = "<ul>" + outText + "<\/ul>";
-	twikiajaxcontrib.HTML.updateElementWithId(inId, outText);
+	twiki.HTML.setHtmlOfElementWithId(inId, outText);
 }
 
 function showCityData () {
@@ -795,7 +911,7 @@ function handleFailed(inName, inStatus) {
 	var html = "<div style=\"background:#ffc; padding:.5em;\">" + 
 		"Could not load contents. Please try again later." + 
 		"<\/div>";
-	twikiajaxcontrib.HTML.updateElementWithId("failureContainer", html);
+	twiki.HTML.setHtmlOfElementWithId("failureContainer", html);
 }
 
 function loadFailure () {
@@ -842,7 +958,7 @@ function handleFailed(inName, inStatus) {
 	var html = "<div style=\"background:#ffc; padding:.5em;\">" + 
 		"Could not load contents. Please try again later." + 
 		"<\/div>";
-	twikiajaxcontrib.HTML.updateElementWithId("failureContainer", html);
+	twiki.HTML.setHtmlOfElementWithId("failureContainer", html);
 }
 
 function loadFailure () {

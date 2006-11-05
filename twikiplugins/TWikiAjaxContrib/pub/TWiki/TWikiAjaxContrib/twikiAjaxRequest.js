@@ -89,7 +89,7 @@ twiki.AjaxRequest = function () {
 	@private
 	*/
 	function _hideLoadingIndicator (inName) {
-		twikiajaxcontrib.HTML.clearElementWithId(_getIndicatorId(inName));
+		twiki.HTML.clearElementWithId(_getIndicatorId(inName));
 	}
 	
 	/**
@@ -155,7 +155,7 @@ twiki.AjaxRequest = function () {
 		}
 		
 		var wrappedIndicator = _wrapIndicator(inName, indicatorHtml);
-		twikiajaxcontrib.HTML.updateElementWithId(ref.container, wrappedIndicator);
+		twiki.HTML.setHtmlOfElementWithId(ref.container, wrappedIndicator);
 		
 		var cache = (ref.cache != undefined) ? ref.cache : false;
 		var callback = {
@@ -305,8 +305,8 @@ twiki.AjaxRequest = function () {
 	@privileged
 	*/
 	this._writeHtml = function(inContainer, inHtml) {
-		var element = twikiajaxcontrib.HTML.updateElementWithId(inContainer, inHtml);
-		return twikiajaxcontrib.HTML.getHtmlOfElementWithId(inContainer);
+		var element = twiki.HTML.setHtmlOfElementWithId(inContainer, inHtml);
+		return twiki.HTML.getHtmlOfElementWithId(inContainer);
 	};
 	
 	this._defaultIndicatorHtml = "<img src='indicator.gif' alt='' />"; // for local testing, as a static url makes no sense for TWiki
@@ -428,88 +428,3 @@ Sets the default indicator HTML string.
 twiki.AjaxRequest.setDefaultIndicatorHtml = function(inHtml) {
 	return twiki.AjaxRequest.getInstance()._setDefaultIndicatorHtml(inHtml);
 }
-
-
-twikiajaxcontrib = {};
-
-/**
-twikiajaxcontrib.HTML functions will most likely be part of twikiLib.js, so this will be removed at that time. CHANGES ARE TO BE EXPECTED.
-*/
-twikiajaxcontrib.HTML = {
-
-	/**
-	Writes HTML inHtml in element with id inId.
-	@param inId : String, element id
-	@param inHtml : HTML String
-	Calls writeHtmlToElement.
-	*/
-	updateElementWithId:function(inId, inHtml) {
-		var elem = document.getElementById(inId);
-		if (elem) return twikiajaxcontrib.HTML.updateElement(elem, inHtml);
-	},
-	
-	/**
-	Sets the HTML content of element inElement to inHtml.
-	*/
-	updateElement:function(inElement, inHtml) {
-		if (inElement) {
-			if (inHtml == "") {
-				twikiajaxcontrib.HTML.clearElement(inElement);
-			} else {
-				inElement.innerHTML = inHtml;
-			}
-			return inElement;
-		}
-	},
-	
-	/**
-	Returns the HTML contents of element with id inId.
-	*/
-	getHtmlOfElementWithId:function(inId) {
-		var elem = document.getElementById(inId);
-		if (elem) return elem.innerHTML;
-	},
-	
-	/**
-	Returns the HTML contents of element inElement.
-	*/
-	getHtmlOfElement:function(inElement) {
-		if (inElement) return inElement.innerHTML;
-	},
-	
-	/**
-	Clears the contents of element inId.
-	*/
-	clearElementWithId:function(inId) {
-		var elem = document.getElementById(inId);
-		if (elem) return twikiajaxcontrib.HTML.clearElement(elem);
-	},
-	
-	/**
-	Clears and optionally removes an element.
-	@param inElement (HTMLElement) : object to clear or remove
-	*/
-	clearElement:function(inElement) {
-		if (inElement) {
-			while(inElement.hasChildNodes()) {
-				inElement.removeChild(inElement.firstChild);
-			}
-			return inElement;
-		}
-	},
-	
-	/**
-	Passes style attributes from value object inStyleObject to all nodes in NodeList inNodeList.
-	*/
-	setNodeStylesInList:function (inNodeList, inStyleObject) {
-		if (!inNodeList) return;
-		var i, ilen = inNodeList.length;
-		for (i=0; i<ilen; ++i) {
-			var node = inNodeList[i];
-			for (var style in inStyleObject) {
-				node.style[style] = inStyleObject[style];
-			}
-		}
-	}
-	
-};
