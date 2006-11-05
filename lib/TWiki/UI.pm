@@ -146,13 +146,14 @@ sub run {
         unless( $session->{loginManager}->forceAuthentication() ) {
             # Client did not want to authenticate, perhaps because
             # we are already authenticated.
-            my $url = $session->getOopsUrl( 'accessdenied',
-                                            def => 'topic_access',
-                                            web => $e->{web},
-                                            topic => $e->{topic},
-                                            params => [ $e->{mode},
-                                                        $e->{reason} ] );
-            $session->redirect( $url );
+            throw TWiki::OopsException('accessdenied',
+                                       def => 'topic_access',
+                                       web => $e->{web},
+                                       topic => $e->{topic},
+                                       keep => 1,
+                                       params => [ $e->{mode},
+                                                   $e->{reason} ]);
+            # Exception will be caught in next catch
         }
 
     } catch TWiki::OopsException with {

@@ -152,6 +152,7 @@ sub init_edit {
                                                 def => $def,
                                                 web => $webName,
                                                 topic => $topic,
+                                                keep => 1,
                                                 params =>
                                                   [ $who, $past, $future ] );
                 }

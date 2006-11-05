@@ -708,7 +708,7 @@ sub redirect {
     my $query = $this->{cgiQuery};
     # if we got here without a query, there's not much more we can do
     return unless $query;
-
+#    print STDERR "Redirecting to $url".($passthru?" passthru (".join(',', $query->param()).')':'no passthru')."\n";
     if( $query->param( 'noredirect' )) {
         my $content = join(' ', @_) . "\n";
         $this->writeCompletePage( $content );
@@ -1091,39 +1091,62 @@ Alternatively you can pass a reference to an OopsException in place of the templ
 The returned URL ends up looking something like this:
 "http://host/twiki/bin/oops/$web/$topic?template=$template&param1=$scriptParams[0]..."
 
+Note: if {keep} is true in the params, then they will also be pushed into the
+current query.
+
 =cut
 
 sub getOopsUrl {
     my $this = shift;
+    ASSERT($this->isa( 'TWiki')) if DEBUG;
     my $template = shift;
     my $params;
+    my $keep;
+    my $query;
 
     if( $template->isa('TWiki::OopsException') ) {
+        # The parameters were provided when the exception was thrown
         $params = $template;
         $template = $params->{template};
     } else {
+        # The params are in the parameter array
         $params = { @_ };
     }
+
+    if ($params->{keep}) {
+        $query = $this->{cgiQuery};
+        $keep = 1;
+    }
+    delete($params->{keep});
+
     my $web = $params->{web} || $this->{webName};
     my $topic = $params->{topic} || $this->{topicName};
     my $def = $params->{def};
     my $PARAMS = $params->{params};
 
-    ASSERT($this->isa( 'TWiki')) if DEBUG;
-
+    # Build a query string for the new URL.
+    # Push all URL params into the current query as well if {keep} is
+    # set, because if it is, GET params will be ignored when it is
+    # restored.
     my @urlParams = ( template => 'oops'.$template );
+    $query->param(-name => "template", -value => 'oops'.$template ) if $keep;
 
-    push( @urlParams, def => $def ) if $def;
+    if ($def) {
+        push( @urlParams, def => $def );
+        $query->param(-name => "def", -value => $def ) if $keep;
+    }
 
     if( ref($PARAMS) eq "ARRAY" ) {
         my $n = 1;
         my $p;
         while( $p = shift @$PARAMS ) {
             push( @urlParams, "param$n" => $p );
+            $query->param(-name => "param$n", -value => $p ) if $keep;
             $n++;
         }
     } elsif( defined $PARAMS ) {
-        push( @urlParams, param1=> $PARAMS );
+        push( @urlParams, param1 => $PARAMS );
+        $query->param(-name => "param1", -value => $PARAMS ) if $keep;
     }
 
     $this->enterContext( 'absolute_urls' );
