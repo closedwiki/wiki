@@ -1466,22 +1466,46 @@ sub writeHeader {
 
 =pod
 
----+++ redirectCgiQuery( $query, $url )
+---+++ redirectCgiQuery( $query, $url, $passthru )
 
 Redirect to URL
    * =$query= - CGI query object. Ignored, only there for compatibility. The session CGI query object is used instead.
    * =$url=   - URL to redirect to
+   * =$passthru= - enable passthrough.
 
-Return:             none, never returns
+Return:             none
+
+Print output to STDOUT that will cause a 302 redirect to a new URL.
+Nothing more should be printed to STDOUT after this method has been called.
+
+The =$passthru= parameter allows you to pass the parameters that were passed
+to the current query on to the target URL, as long as it is another URL on the
+same TWiki installation. If =$passthru= is set to a true value, then TWiki
+will save the current URL parameters, and then try to restore them on the
+other side of the redirect. Parameters are stored on the server in a cache
+file (see ={PassthroughDir} in =configure=).
+
+Note that if =$passthru= is set, then any parameters in =$url= will be lost
+when the old parameters are restored. if you want to change any parameter
+values, you will need to do that in the current CGI query before redirecting
+e.g.
+<verbatim>
+my $query = TWiki::Func::getCgiQuery();
+$query->param(-name => 'text', -value => 'Different text');
+TWiki::Func::redirectCgiQuery(
+  undef, TWiki::Func::getScriptUrl($web, $topic, 'edit'), 1);
+</verbatim>
+=$passthru= does nothing if =$url= does not point to a script in the current
+TWiki installation.
 
 *Since:* TWiki::Plugins::VERSION 1.000 (7 Dec 2002)
 
 =cut
 
 sub redirectCgiQuery {
-    my( $query, $url ) = @_;
+    my( $query, $url, $passthru ) = @_;
     ASSERT($TWiki::Plugins::SESSION) if DEBUG;
-    return $TWiki::Plugins::SESSION->redirect( $url );
+    return $TWiki::Plugins::SESSION->redirect( $url, $passthru );
 }
 
 =pod
