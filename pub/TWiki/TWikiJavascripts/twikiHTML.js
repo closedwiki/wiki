@@ -185,7 +185,7 @@ twiki.HTML = {
 	/**
 	Passes attributes from value object inAttributes to all nodes in NodeList inNodeList.
 	@param inNodeList : (NodeList) nodes to set the style of
-	@param inAttributes : (Object) value object with element properties
+	@param inAttributes : (Object) value object with element properties, with stringified keys. For example, use "class":"twikiSmall" to set the class. This cannot be a property key written as <code>class</code> because this is a reserved keyword.
 	@use
 	In this example all NodeList elements get assigend a class and style:
 	<pre>
@@ -227,7 +227,8 @@ twiki.HTML = {
 					inElement.style[style] = styleObject[style];
 				}
 			} else {
-				inElement.setAttribute(attr, inAttributes[attr]);
+				//inElement.setAttribute(attr, inAttributes[attr]);
+				inElement[attr] = inAttributes[attr];
 			}
 		}
 	}
