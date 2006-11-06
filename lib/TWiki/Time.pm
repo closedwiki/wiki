@@ -47,25 +47,25 @@ use vars qw( @ISOMONTH @WEEKDAY @MONTHLENS %MON2NUM );
 
 %MON2NUM =
   (
-   Jan => 0,
-   Feb => 1,
-   Mar => 2,
-   Apr => 3,
-   May => 4,
-   Jun => 5,
-   Jul => 6,
-   Aug => 7,
-   Sep => 8,
-   Oct => 9,
-   Nov => 10,
-   Dec => 11
+   jan => 0,
+   feb => 1,
+   mar => 2,
+   apr => 3,
+   may => 4,
+   jun => 5,
+   jul => 6,
+   aug => 7,
+   sep => 8,
+   oct => 9,
+   nov => 10,
+   dec => 11
   );
 
 =pod
 
----++ StaticMethod parseTime( $szDate ) -> $iSecs
+---++ StaticMethod parseTime( $szDate, $defaultLocal ) -> $iSecs
 
-Convert string date/time to seconds since epoch.
+Convert string date/time string to seconds since epoch (1970-01-01T00:00:00Z).
    * =$sDate= - date/time string
 
 Handles the following formats:
@@ -74,58 +74,63 @@ Handles the following formats:
    * 2001.12.31.23.59.59
    * 2001/12/31 23:59
    * 2001.12.31.23.59
-   * 2001-12-31T23:59:59Z
+   * 2001-12-31T23:59:59
+ISO dates may have a timezone specifier, either Z or a signed difference
+in hh:mm format. For example:
    * 2001-12-31T23:59:59+01:00
    * 2001-12-31T23:59Z
-   * 2001-12-31T23:59+01:00
+The default timezone is Z, unless $defaultLocal is true in which case
+the local timezone will be assumed.
 
 If the date format was not recognised, will return 0.
 
 =cut
 
-# previously known as revDate2EpSecs
-
 sub parseTime {
-    my( $date ) = @_;
+    my( $date, $defaultLocal ) = @_;
     # NOTE: This routine *will break* if input is not one of below formats!
-    
-    # FIXME - why aren't ifs around pattern match rather than $5 etc
+    my $tzadj = 0; # Zulu
+    if ($defaultLocal) {
+        # Local time at midnight on the epoch gives us minus the 
+        # local difference. e.g. CST is GMT + 1, so midnight Jan 1 1970 CST
+        # is -01:00Z
+        $tzadj = -timelocal(0, 0, 0, 1, 0, 70);
+    }
+
     # try "31 Dec 2001 - 23:59"  (TWiki date)
-    if ($date =~ /([0-9]+)\s+([A-Za-z]+)\s+([0-9]+)[\s\-]+([0-9]+)\:([0-9]+)/) {
+    if ($date =~ /(\d+)\s+([a-z]{3})\s+(\d+)[-\s]+(\d+):(\d+)/i) {
         my $year = $3;
         $year -= 1900 if( $year > 1900 );
-        # The ($2) will look up the constant so named
-        return timegm( 0, $5, $4, $1, $MON2NUM{$2}, $year );
+        return timegm( 0, $5, $4, $1, $MON2NUM{lc($2)}, $year ) - $tzadj;
     }
 
     # try "2001/12/31 23:59:59" or "2001.12.31.23.59.59" (RCS date)
-    if ($date =~ /([0-9]+)[\.\/\-]([0-9]+)[\.\/\-]([0-9]+)[\.\s\-]+([0-9]+)[\.\:]([0-9]+)[\.\:]([0-9]+)/) {
+    if ($date =~ m!(\d+)[./](\d+)[./](\d+)[.\s]+(\d+)[.:](\d+)[.:](\d+)!) {
         my $year = $1;
         $year -= 1900 if( $year > 1900 );
-        return timegm( $6, $5, $4, $3, $2-1, $year );
+        return timegm( $6, $5, $4, $3, $2-1, $year ) - $tzadj;
     }
 
     # try "2001/12/31 23:59" or "2001.12.31.23.59" (RCS short date)
-    if ($date =~ /([0-9]+)[\.\/\-]([0-9]+)[\.\/\-]([0-9]+)[\.\s\-]+([0-9]+)[\.\:]([0-9]+)/) {
+    if ($date =~ m!(\d+)[./](\d+)[./](\d+)[.\s]+(\d+)[.:](\d+)!) {
         my $year = $1;
         $year -= 1900 if( $year > 1900 );
-        return timegm( 0, $5, $4, $3, $2-1, $year );
+        return timegm( 0, $5, $4, $3, $2-1, $year ) - $tzadj;
     }
 
-    # try "2001-12-31T23:59:59Z" or "2001-12-31T23:59:59+01:00" (ISO date)
-    # FIXME: Calc local to zulu time "2001-12-31T23:59:59+01:00"
-    if ($date =~ /([0-9]+)\-([0-9]+)\-([0-9]+)T([0-9]+)\:([0-9]+)\:([0-9]+)/ ) {
-        my $year = $1;
-        $year -= 1900 if( $year > 1900 );
-        return timegm( $6, $5, $4, $3, $2-1, $year );
-    }
-
-    # try "2001-12-31T23:59Z" or "2001-12-31T23:59+01:00" (ISO short date)
-    # FIXME: Calc local to zulu time "2001-12-31T23:59+01:00"
-    if ($date =~ /([0-9]+)\-([0-9]+)\-([0-9]+)T([0-9]+)\:([0-9]+)/ ) {
-        my $year = $1;
-        $year -= 1900 if( $year > 1900 );
-        return timegm( 0, $5, $4, $3, $2-1, $year );
+    # ISO date
+    if ($date =~ /(\d\d\d\d)(?:-(\d\d)(?:-(\d\d))?)?(?:T(\d\d)(?::(\d\d)(?::(\d\d(?:\.\d+)?))?)?)?(Z|[-+]\d\d(?::\d\d)?)?/ ) {
+        my ($Y, $M, $D, $h, $m, $s, $tz) =
+          ($1, $2||1, $3||1, $4||0, $5||0, $6||0, $7||'');
+        $M--;
+        $Y -= 1900 if( $Y > 1900 );
+        if ($tz eq 'Z') {
+            $tzadj = 0; # Zulu
+        } elsif ($tz =~ /([-+])(\d\d)(?::(\d\d))?/) {
+            $tzadj = ($1||'').((($2 * 60) + ($3||0)) * 60);
+            $tzadj -= 0;
+        }
+        return timegm( $s, $m, $h, $D, $M, $Y ) - $tzadj;
     }
 
     # give up, return start of epoch (01 Jan 1970 GMT)
@@ -323,7 +328,7 @@ nameOfDuration may be one of:
    * 2001-01-01T00:00:00
    * 2001-12-31T23:59:59
 
-timezone is optional and not supported yet.
+timezone is optional. Default is local time.
 
 If the format is not recognised, will return empty interval [0,0].
 
@@ -375,7 +380,7 @@ sub parseInterval{
         #     convert the string into integer amount of seconds
         #     from 1970-01-01T00:00:00.00 UTC
 
-        $ends[$i] = &parseTime($ends[$i]);
+        $ends[$i] = parseTime($ends[$i], 1);
     }
 
     # now we're ready to translate interval durations...
