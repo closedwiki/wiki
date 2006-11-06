@@ -42,8 +42,8 @@ sub open_html {
     my $checker = TWiki::Configure::UI::loadChecker($keys, $value);
     # SMELL the following line is reported to have
     #       Use of uninitialized value in concatenation (.) or string
-    #       under some circumstances
-    $info .= $checker->check($value) if $checker;
+    #       under some circumstances.  Should check routines return undef?
+    $info .= $checker->check($value) || '' if $checker;
 
     my $class = $value->{typename};
     $class .= ' mandatory' if ($value->{mandatory});
