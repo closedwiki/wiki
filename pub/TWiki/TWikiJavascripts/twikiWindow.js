@@ -18,6 +18,7 @@ twiki.Window = {
 		width : (String) width of new window; overrides default value POPUP_WINDOW_WIDTH
 		height : (String) height of new window; overrides default value POPUP_WINDOW_HEIGHT
 		attributes : (String) additional window attributes; overrides default value POPUP_ATTRIBUTES
+	@param inAltWindow : (Window) Window where url is loaded into if no pop-up could be created. The original window contents is replaced with the passed url (plus optionally web, topic, skin path)
 	@use
 	<pre>
 	var window = twiki.Window.openPopup(
@@ -30,7 +31,7 @@ twiki.Window = {
 	</pre>
 	@return The new Window object.
 	*/
-	openPopup:function (inUrl, inOptions) {
+	openPopup:function (inUrl, inOptions, inAltWindow) {
 		if (!inUrl) return null;
 		
 		var paramsString = "";
@@ -86,8 +87,15 @@ twiki.Window = {
 		windowAttributes.push(attributes);
 		var attributesString = windowAttributes.join(",");
 		
-		var win = open(pathString + paramsString, name, attributesString);
-		if (win) win.focus();
-		return win;
+		var window = open(pathString + paramsString, name, attributesString);
+		if (window) {
+			window.focus();
+			return window;
+		}
+		// no window opened
+		if (inAltWindow && inAltWindow.document) {
+			inAltWindow.document.location.href = pathString;
+		}
+		return null;
 	}
 };

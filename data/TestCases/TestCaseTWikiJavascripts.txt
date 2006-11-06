@@ -543,10 +543,15 @@ These tests require TWiki:Plugins.JSUnitContrib to run.
 
 ---+++ twiki.Window.openPopup
 
+<button class="twikiButton testopenPopup">Test open window</button>
+
+<script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/BehaviourContrib/behaviour.compressed.js"></script>
+
+
 <script language="javascript">
 /*<![CDATA[*/
-    function testOpenPopupWithValidArgs() {
-    	var win = twiki.Window.openPopup(
+	function openPopup() {
+		var win = twiki.Window.openPopup(
     		"%SCRIPTURL{view}%/",
     		{
     			topic:"WebChanges",
@@ -558,8 +563,13 @@ These tests require TWiki:Plugins.JSUnitContrib to run.
     			skin:"classic",
     			cover:"pattern",
     			attributes:"titlebar=1,resizable=no,scrollbars=no"
-    		}
+    		},
+    		this
     	);
+    	return win;
+	}
+    function testOpenPopupWithValidArgs() {
+    	var win = openPopup;
     	assertEquals("Window name", "TEST_WINDOW", win.name);
     	win.close();
     }
@@ -568,6 +578,17 @@ These tests require TWiki:Plugins.JSUnitContrib to run.
     	var win = twiki.Window.openPopup();
     	assertNull("No url passed should result in null", win);
     }
-    
+
+	//openPopup();
+	
+	var myrules = {
+	   '.testopenPopup' : function(el) {
+		  el.onclick = function() {
+			 openPopup();
+			 return false;
+		  }
+	   }
+	};
+	Behaviour.register(myrules);
 /*]]>*/
 </script>
