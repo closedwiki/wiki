@@ -907,20 +907,23 @@ sub target_archive {
     $this->apply_perms($this->{files}, $this->{tmpDir} );
 
     $this->sys_action('zip -r -q ' . $project . '.zip *');
-    $this->sys_action('tar czpf '  . $project . '.tgz *');
-    $this->sys_action('md5sum '    . $project . '.tgz '
-                                   . $project . '_installer '
-                                   . $project . '.zip '
-    .'> ' . $this->{basedir} . '/' . $project . '.md5');
-
-    $this->perl_action('File::Copy::move("'.$project.'.tgz", "'.
-                         $this->{basedir}.'/'.$project.'.tgz")');
     $this->perl_action('File::Copy::move("'.$project.'.zip", "'.
                          $this->{basedir}.'/'.$project.'.zip");');
 
-    $this->cp($this->{tmpDir}.'/'.$project.'_installer',
-              $this->{basedir}.'/'.$project.'_installer');
+    $this->sys_action('tar czpf '  . $project . '.tgz *');
+    $this->perl_action('File::Copy::move("'.$project.'.tgz", "'.
+                         $this->{basedir}.'/'.$project.'.tgz")');
 
+    $this->perl_action('File::Copy::move("'.
+                         $this->{tmpDir}.'/'.$project.'_installer","'.
+                         $this->{basedir}.'/'.$project.'_installer")');
+
+    $this->pushd($this->{basedir});
+    $this->sys_action('md5sum ' . $project . '.tgz '
+                        . $project . '_installer '
+                          . $project . '.zip '
+                            .'> ' . $project . '.md5');
+    $this->popd();
     $this->popd();
 
     print 'Release ZIP is '.$this->{basedir}.'/'.$project.'.zip',$NL;
@@ -1368,6 +1371,7 @@ Build the given target
 sub build {
     my $this = shift;
     my $target = shift;
+
     if ($this->{-v}) {
         print 'Building ',$target,$NL;
     }
