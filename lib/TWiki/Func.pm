@@ -847,6 +847,7 @@ sub checkTopicEditLock {
     ASSERT($TWiki::Plugins::SESSION) if DEBUG;
 
     ( $web, $topic ) = normalizeWebTopicName( $web, $topic );
+    $script ||= 'edit';
 
     my $lease = $TWiki::Plugins::SESSION->{store}->getLease( $web, $topic );
     if( $lease ) {
