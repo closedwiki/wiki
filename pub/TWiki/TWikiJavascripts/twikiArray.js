@@ -9,7 +9,7 @@ twiki.Array = {
 	@param inArray : (required) Array to remove object from
 	@param inObject : (required) Object to remove from Array
 	*/
-	remove:function (inArray, inObject) {
+	remove:function(inArray, inObject) {
 		if (!inArray || !inObject) return null;
 		for (i=0; i<inArray.length; i++) {
 			if (inObject == inArray[i]) {
@@ -33,7 +33,7 @@ twiki.Array = {
 	}
 	</pre>
 	*/
-	convertArgumentsToArray:function (inArguments, inStartIndex) {
+	convertArgumentsToArray:function(inArguments, inStartIndex) {
 		if (inArguments == undefined) return null;
 		var ilen = inArguments.length;
 		if (ilen == 0) return null;
@@ -48,5 +48,21 @@ twiki.Array = {
 			list.push(inArguments[i]);
 		}
 		return list;
+	},
+	
+	
+	/**
+	Determine the index of the (first) occurrence of an object in an array.
+	@param inArray : (Array) array to search
+	@param inElement : (Object) the object to find
+	@return The index number; -1 if the object is not found; null if no valid Array has been passed.
+	*/
+	indexOf:function(inArray, inElement) {
+		if (!inArray || inArray.length == undefined) return null;
+		var i, ilen = inArray.length;
+		for (i=0; i<ilen; ++i) {
+			if (inArray[i] == inElement) return i;
+		}
+		return -1;
 	}
 };

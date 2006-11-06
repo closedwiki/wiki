@@ -148,11 +148,11 @@ function setClassList(element, classlist) {
 
 // Determine the first index of a string in an array.
 // Return -1 if the string is not found.
-function indexOf(element, array) {
-	if (!array || array.length == undefined) return -1;
-	var i = array.length;
-	while (i--)	{
-		if (array[i] == element) return i;
+function indexOf(inArray, inElement) {
+	if (!inArray || inArray.length == undefined) return null;
+	var i, ilen = inArray.length;
+	for (i=0; i<ilen; ++i) {
+		if (inArray[i] == inElement) return i;
 	}
 	return -1;
 }
