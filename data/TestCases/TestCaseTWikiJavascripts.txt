@@ -536,3 +536,38 @@ These tests require TWiki:Plugins.JSUnitContrib to run.
 	testSetNodeAttributesInListWithValidArgs();
 /*]]>*/
 </script>
+
+
+---++ twiki.Window
+<script language="javascript" src="%PUBURL%/%TWIKIWEB%/TWikiJavascripts/twikiWindow.js"></script>
+
+---+++ twiki.Window.openPopup
+
+<script language="javascript">
+/*<![CDATA[*/
+    function testOpenPopupWithValidArgs() {
+    	var win = twiki.Window.openPopup(
+    		"%SCRIPTURL{view}%/",
+    		{
+    			topic:"WebChanges",
+    			web:"%TWIKIWEB%",
+    			name:"TEST_WINDOW",
+    			width:"700",
+    			height:"200",
+    			template:"view.print",
+    			skin:"classic",
+    			cover:"pattern",
+    			attributes:"titlebar=1,resizable=no,scrollbars=no"
+    		}
+    	);
+    	assertEquals("Window name", "TEST_WINDOW", win.name);
+    	win.close();
+    }
+    
+    function testOpenPopupWithInvalidArgs() {
+    	var win = twiki.Window.openPopup();
+    	assertNull("No url passed should result in null", win);
+    }
+    
+/*]]>*/
+</script>
