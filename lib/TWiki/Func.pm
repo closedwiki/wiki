@@ -831,18 +831,19 @@ sub topicExists {
 
 =pod
 
----+++ checkTopicEditLock( $web, $topic ) -> ( $oopsUrl, $loginName, $unlockTime )
+---+++ checkTopicEditLock( $web, $topic, $script ) -> ( $oopsUrl, $loginName, $unlockTime )
 Check if a lease has been taken by some other user.
    * =$web= Web name, e.g. ="Main"=, or empty
    * =$topic= Topic name, e.g. ="MyTopic"=, or ="Main.MyTopic"=
 Return: =( $oopsUrl, $loginName, $unlockTime )= - The =$oopsUrl= for calling redirectCgiQuery(), user's =$loginName=, and estimated =$unlockTime= in minutes, or ( '', '', 0 ) if no lease exists.
+   * =$script= The script to invoke when continuing with the edit
 
 *Since:* TWiki::Plugins::VERSION 1.010 (31 Dec 2002)
 
 =cut
 
 sub checkTopicEditLock {
-    my( $web, $topic ) = @_;
+    my( $web, $topic, $script ) = @_;
     ASSERT($TWiki::Plugins::SESSION) if DEBUG;
 
     ( $web, $topic ) = normalizeWebTopicName( $web, $topic );
@@ -862,10 +863,11 @@ sub checkTopicEditLock {
                                                   $TWiki::Plugins::SESSION->{i18n}
                                                  );
             return( $session->getOopsUrl( 'leaseconflict',
-                                          def => 'active',
+                                          def => 'lease_active',
+					  keep => 1,   # Need to keep parameters across redirect
                                           web => $web,
                                           topic => $topic,
-                                          params => [ $wn, $past, $future ] ),
+                                          params => [ $wn, $past, $future, $script ] ),
                                           $who, $remain / 60 );
         }
     }

@@ -154,7 +154,7 @@ sub init_edit {
                                                 topic => $topic,
                                                 keep => 1,
                                                 params =>
-                                                  [ $who, $past, $future ] );
+                                                  [ $who, $past, $future, 'edit' ] );
                 }
             }
         }
