@@ -148,14 +148,17 @@ function setClassList(element, classlist) {
 
 // Determine the first index of a string in an array.
 // Return -1 if the string is not found.
-function indexOf(inArray, inElement) {
-	if (!inArray || inArray.length == undefined) return null;
-	var i, ilen = inArray.length;
-	for (i=0; i<ilen; ++i) {
-		if (inArray[i] == inElement) return i;
+// WATCH OUT: the refactored function in twiki.Array returns null with an
+// invalid array, but CSS class manipulation functions still rely on a 
+// return value of -1
+function indexOf(inElement, inArray) {
+		if (!inArray || inArray.length == undefined) return -1;
+		var i, ilen = inArray.length;
+		for (i=0; i<ilen; ++i) {
+			if (inArray[i] == inElement) return i;
+		}
+		return -1;
 	}
-	return -1;
-}
 
 // Applies the given function to all elements in the document of
 // the given tag type
