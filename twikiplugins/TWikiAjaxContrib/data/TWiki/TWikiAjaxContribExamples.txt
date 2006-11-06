@@ -533,7 +533,7 @@ function handleHtml (inId, inHtml) {
 		"style":
 			{
 				"color":"#fff",
-				"background-color":"#444"
+				"backgroundColor":"#444"
 			}
 	};
 	twiki.HTML.setNodeAttributesInList(element.getElementsByTagName('ul'), attributes);
@@ -635,7 +635,7 @@ function handleHtml (inId, inHtml) {
 		"style":
 			{
 				"color":"#fff",
-				"background-color":"#444"
+				"backgroundColor":"#444"
 			}
 	};
 	twiki.HTML.setNodeAttributesInList(element.getElementsByTagName('ul'), attributes);

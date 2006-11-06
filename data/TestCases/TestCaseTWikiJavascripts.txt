@@ -509,14 +509,14 @@ These tests require TWiki:Plugins.JSUnitContrib to run.
 /*<![CDATA[*/
     function testSetNodeAttributesInListWithValidArgs() {
     	var elem = document.getElementById("setNodeAttributesInListContainer");
-    	var nodeList = elem.getElementsByTagName('ul')
+    	var nodeList = elem.getElementsByTagName('ul');
     	var attributes = {
     		"class":"twikiSmall twikiGrayText",
     		"style":
     			{
-    				"font-size":"20px",
-    				"background-color":"#444",
-    				"border-left":"5px solid red",
+    				"fontSize":"20px",
+    				"backgroundColor":"#444",
+    				"borderLeft":"5px solid red",
 					"margin":"0 0 1em 0"
     			}
     	};
@@ -569,7 +569,11 @@ These tests require TWiki:Plugins.JSUnitContrib to run.
     	return win;
 	}
     function testOpenPopupWithValidArgs() {
-    	var win = openPopup;
+    	var win = openPopup();
+    	if (!win) {
+    		alert("Disable your pop-up blocker to run this test");
+    		return;
+    	}
     	assertEquals("Window name", "TEST_WINDOW", win.name);
     	win.close();
     }

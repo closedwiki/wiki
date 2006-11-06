@@ -99,7 +99,11 @@ twiki.HTML = {
     		'div',
     		'<strong>not published</strong>',
     		{
-    			"style":"color:red"
+    			"style":
+    				{
+    					"backgroundColor":"#f00",
+    					"color":"#fff"
+    				}
     		}
     	);
     </pre>
@@ -189,11 +193,14 @@ twiki.HTML = {
 	var nodeList = elem.getElementsByTagName('ul')
 	var attributes = {
 		"class":"twikiSmall twikiGrayText",
-		"style":
-			{
-				"color":"#fff",
-				"background-color":"#444"
-			}
+    	"style":
+    		{
+    			"fontSize":"20px",
+    			"backgroundColor":"#444",
+    			"borderLeft":"5px solid red",
+				"margin":"0 0 1em 0"
+    		}
+    	};
 	};
 	twiki.HTML.setNodeAttributesInList(nodeList, attributes);
 	</pre>
@@ -207,6 +214,11 @@ twiki.HTML = {
 		}
 	},
 	
+	/**
+	Sets attributes to an HTMLElement.
+	@param inElement : (HTMLElement) element to set attributes to
+	@param inAttributes : (Object) value object with attributes
+	*/
 	setElementAttributes:function (inElement, inAttributes) {
 		for (var attr in inAttributes) {
 			if (attr == "style") {
