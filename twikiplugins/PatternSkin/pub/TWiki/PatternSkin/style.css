@@ -51,7 +51,7 @@ pre {
     margin:0; /* Win IE tries to make this bigger otherwise */
 }
 html>body pre { /* hide from IE */
-	/*\*/ overflow:auto !important; /* */ overflow:scroll; width:auto; /* for Mac Safari */
+	overflow-x:auto;
 }
 /* IE behavior for pre is defined in twiki.pattern.tmpl in conditional comment */
 ol, ul {

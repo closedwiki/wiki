@@ -98,8 +98,24 @@
 		background-color:transparent;
 	}
 	/* make sure that overflowing content is visible */
-	html>body pre { /* hide from IE */
-		/*\*/ overflow:visible !important; /* */ overflow:visible; width:auto; /* for Mac Safari */
+	pre,
+	html>body pre {
+		overflow:visible;
+	}
+	/*Some rules about Page breaks */
+	h1, h2, h3, h4, h5, h6 {
+		page-break-after:avoid;
+		page-break-inside:avoid;
+	}
+	img {
+		page-break-inside:avoid;
+		page-break-after:avoid;
+	}
+	blockquote, table, pre {
+		page-break-inside:avoid;
+	}
+	ul, ol, dl {
+		page-break-before:avoid;
 	}
 	pre, code, tt {
 		color:#5b4221;
