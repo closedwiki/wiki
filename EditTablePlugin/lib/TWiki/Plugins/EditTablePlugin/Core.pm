@@ -753,12 +753,16 @@ sub doEnableEdit {
             params => [ 'change', 'denied' ] );
     }
 
-    my( $oopsUrl, $lockUser ) = TWiki::Func::checkTopicEditLock( $theWeb, $theTopic );
-    if( $doCheckIfLocked && $lockUser && ( $lockUser ne $TWiki::Plugins::EditTablePlugin::user ) ) {
+    my $breakLock = $query->param( 'breaklock' ) || '';
+    unless( $breakLock ) {
+      my( $oopsUrl ) = TWiki::Func::checkTopicEditLock( $theWeb, $theTopic, 'view' );
+      if ( $oopsUrl ) {
         # warn user that other person is editing this topic
-        TWiki::Func::redirectCgiQuery( $query, $oopsUrl );
+        TWiki::Func::redirectCgiQuery( $query, $oopsUrl, 1 );
         return 0;
+      }
     }
+    # We are allowed to edit
     TWiki::Func::setTopicEditLock( $theWeb, $theTopic, 1 );
 
     return 1;
