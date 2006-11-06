@@ -92,6 +92,17 @@ twiki.HTML = {
 	@param inHtmlContents : (String) (optional) element HTML contents
 	@param inAttributes : (Object) (optional) value object with attributes to set to the new element
 	@return The new HTMLElement
+	@use
+	<pre>
+	twiki.HTML.insertAfterElement(
+    		document.getElementById('title'),
+    		'div',
+    		'<strong>not published</strong>',
+    		{
+    			"style":"color:red"
+    		}
+    	);
+    </pre>
 	*/
 	insertAfterElement:function(inElement, inType, inHtmlContents, inAttributes) {
 		if (!inElement || !inType) return null;
@@ -114,17 +125,6 @@ twiki.HTML = {
 	@param inHtmlContents : (String) (optional) element HTML contents
 	@param inAttributes : (Object) (optional) value object with attributes to set to the new element
 	@return The new HTMLElement
-	@use
-	<pre>
-	twiki.HTML.insertAfterElement(
-    		document.getElementById('title'),
-    		'div',
-    		'<strong>not published</strong>',
-    		{
-    			"style":"color:red"
-    		}
-    	);
-    </pre>
 	*/
 	insertBeforeElement:function(inElement, inType, inHtmlContents, inAttributes) {
 		if (!inElement || !inType) return null;
@@ -165,6 +165,7 @@ twiki.HTML = {
 	/**
 	Creates a new HTMLElement. See insertAfterElement, insertBeforeElement and replaceElement.
 	@return The new HTMLElement
+	@priviliged
 	*/
 	_createElementWithTypeAndContents:function(inType, inHtmlContents, inAttributes) {
 		var newElement = document.createElement(inType);
@@ -172,7 +173,7 @@ twiki.HTML = {
 			newElement.innerHTML = inHtmlContents;
 		}
 		if (inAttributes != undefined) {
-			twiki.HTML._setElementAttributes(newElement, inAttributes);
+			twiki.HTML.setElementAttributes(newElement, inAttributes);
 		}
 		return newElement;
 	},
@@ -202,11 +203,11 @@ twiki.HTML = {
 		var i, ilen = inNodeList.length;
 		for (i=0; i<ilen; ++i) {
 			var elem = inNodeList[i];
-			twiki.HTML._setElementAttributes(elem, inAttributes);
+			twiki.HTML.setElementAttributes(elem, inAttributes);
 		}
 	},
 	
-	_setElementAttributes:function (inElement, inAttributes) {
+	setElementAttributes:function (inElement, inAttributes) {
 		for (var attr in inAttributes) {
 			if (attr == "style") {
 				var styleObject = inAttributes[attr];
