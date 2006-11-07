@@ -708,7 +708,6 @@ sub redirect {
     my $query = $this->{cgiQuery};
     # if we got here without a query, there's not much more we can do
     return unless $query;
-#    print STDERR "Redirecting to $url".($passthru?" passthru (".join(',', $query->param()).')':'no passthru')."\n";
     if( $query->param( 'noredirect' )) {
         my $content = join(' ', @_) . "\n";
         $this->writeCompletePage( $content );
@@ -722,13 +721,12 @@ sub redirect {
             # Redirecting from a port to a get
             my $cache = $this->cacheQuery();
             if ($cache) {
-                #print STDERR "302ing from a POST ".$query->url().$query->path_info()." to $url using $cache\n";
                 $url .= "?$cache";
             }
         } else {
             $url .= '?'.$query->query_string();
+	    $url .= (($url =~ /\?/) ? ';' : '?').$existing if $existing;
         }
-        $url .= (($url =~ /\?/) ? ';' : '?').$existing if $existing;
     }
 
     return if( $this->{plugins}->redirectCgiQueryHandler( $query, $url ) );
