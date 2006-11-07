@@ -472,6 +472,7 @@ lib/TWiki/Configure/Checkers/UpperNational.pm 0440
 lib/TWiki/Configure/Checkers/UseClientSessions.pm 0440
 lib/TWiki/Configure/Checkers/UseLocale.pm 0440
 lib/TWiki/Configure/Checkers/WarningFileName.pm 0440
+lib/TWiki/Configure/Checkers/WebMasterEmail.pm 0440
 lib/TWiki/Configure/Checkers/cygwin.pm 0440
 lib/TWiki/Configure/Item.pm 0440
 lib/TWiki/Configure/JS.pm 0440
