@@ -40,7 +40,6 @@ if ( typeof( TWiki ) == "undefined" ) {
 if ( typeof( TWiki.JSPopupPlugin ) == "undefined" ) {
     TWiki.JSPopupPlugin = {};
 }
-TWiki.JSPopupPlugin.closeButton = '<a style="float:right;display:inline;background-color: LightSteelBlue;" align="rght" onclick="TWiki.JSPopupPlugin.closePopup(event);">X</a>';
 
 TWiki.JSPopupPlugin.DelayedOpenPopupSectional = function (event, sectionName) {
     var sectionElem = document.getElementById(sectionName);
@@ -71,11 +70,10 @@ TWiki.JSPopupPlugin.openPopupSectional = function (event, sectionName) {
 }
 
 TWiki.JSPopupPlugin.closePopup = function (event) {
-    var showControl = document.getElementById('popupwindow');
-    showControl.style.display = 'none';
+    //var showControl = document.getElementById('popupwindow');
+    //showControl.style.display = 'none';
 }
 
-//where text == the payload, most often in html
 TWiki.JSPopupPlugin.openPopup = function (event, text, popuplocation, border, title) {
     if ( typeof( popuplocation ) == "undefined" ) {
         popuplocation = 'center';
@@ -86,90 +84,51 @@ TWiki.JSPopupPlugin.openPopup = function (event, text, popuplocation, border, ti
     if ( typeof( title ) == "undefined" ) {
         title = '';
     }
-
-    var showControl = document.getElementById('popupwindow');
-    var popupWrapper = document.getElementById('popupwrapper');
-    var popupNoBorder = document.getElementById('popupnoborder');
-    popupNoBorder.popuplocation = popuplocation;
-    popupNoBorder.border = border;
-    popupNoBorder.title = title;
-
-        //reset the text to a simple default
-    popupWrapper.innerHTML = '';
-    popupNoBorder.innerHTML = '';
-
-    //from http://www.quirksmode.org/js/events_compinfo.html#prop
-    var posx = 200;
-    var posy = 50;
-    if (typeof( event ) == "undefined") var event = window.event;
-    if ((typeof( event ) != "undefined") && (event != null)) {
-        if (event.pageX || event.pageY)
-        {
-            posx = event.pageX;
-            posy = event.pageY;
-        }
-        else if (event.clientX || event.clientY)
-        {
-            posx = event.clientX + document.body.scrollLeft;
-            posy = event.clientY + document.body.scrollTop;
-        }
-        showControl.target = (event.target) ? event.target : event.srcElement;
+    
+    //The second argument passed to the
+    //constructor is a configuration object:
+    myPanel = new YAHOO.widget.Panel("win", {
+        width:"75%", 
+        fixedcenter: true, 
+        constraintoviewport: true, 
+        underlay:"none", 
+        close:true, 
+        visible:false, 
+        draggable:true} 
+    );
+    
+    if (title.length > 0) {
+        myPanel.setHeader(title);
     }
+    myPanel.setBody(text);
+    myPanel.render(document.body);
+    
+    if (border != 'on') {
+        myPanel.setHeader('');
+        //TODO: this is out of the docco, but has no effect :(
+        myPanel.cfg.setProperty("close", false);
+        myPanel.cfg.setProperty("draggable", false);
 
-    var mousex = posx;
-    var mousey = posy//IE..
-    showControl.style.top=mousey+"px";
-    showControl.style.left=mousex+"px";
-    showControl.style.display = 'inline';
-    showControl.style.zindex=999;
-
-//        try { showControlText.focus(); } catch (er) {alert(er)}
-
-    if (border == 'on') {
-        popupWrapper.innerHTML = text;
-        popupNoBorder.innerHTML = TWiki.JSPopupPlugin.closeButton+title;
-    } else {
-        popupNoBorder.innerHTML = text;
-        popupWrapper.innerHTML = '';
+        //add across browser onmouseleave to close
+        function fnCallback(e) { 
+            if (!e) var e = window.event;
+            var tg = (window.event) ? e.srcElement : e.target;
+            if (tg.id != this.id) return;
+            var reltg = (e.relatedTarget) ? e.relatedTarget : e.toElement;
+            while (reltg != tg && reltg.nodeName != 'BODY')
+                reltg= reltg.parentNode
+            if (reltg== tg) return;
+            
+            myPanel = new YAHOO.widget.Panel(this.id); 
+            myPanel.hide(); 
+        } 
+        YAHOO.util.Event.addListener(myPanel.id, "mouseout", fnCallback);
     }
-    if (popuplocation == 'center') {
-        mousey = mousey - (showControl.clientHeight/2);
-        if (mousey < 10) {mousey = 10;}
-    } else {
-//        mousex = mousex - (showControl.clientWidth/2);
-//        if (mousex < 10) {mousex = 10;}
-    }
-    showControl.style.top=mousey+"px";
-    showControl.style.left=mousex+"px";
-
-    return showControl;
+    myPanel.show();
+    
+    return myPanel;
 }
 
-
-//hacked version of http://www.quirksmode.org/js/events_mouse.html
-//specific to the popupnoborder section
-//TODO: somehat buggy, looking forward to finding a nice lightweight GUI library
-TWiki.JSPopupPlugin.OnMouseLeave = function (e, sectionName)
-{
-	if (!e) var e = window.event;
-	var tg = (window.event) ? e.srcElement : e.target;
-	if (tg.id != 'popuptable') return;     //TODO: make this on popuptable, when we know what anchortype it is
-    var popupNoBorder = document.getElementById('popupnoborder');
-	if (        popupNoBorder.border == 'on') return;        //TODO: don't exit if there is a border and a close button
-	var reltg = (e.relatedTarget) ? e.relatedTarget : e.toElement;
-	while (reltg != tg && reltg.nodeName != 'BODY')
-		reltg= reltg.parentNode
-	if (reltg== tg) return;
-	// Mouseout took place when mouse actually left layer
-	// Handle event
-	TWiki.JSPopupPlugin.closePopup(e);
-}
-
-
-
-/********************************************************
-http://www.ajaxtoolbox.com/ call
-*/
 TWiki.JSPopupPlugin.ajaxCall = function(event, popupUrl, popupParams) {
 //TODO: redo these as params in the Args
     //make sure there's no popup div in the reply
@@ -182,7 +141,9 @@ TWiki.JSPopupPlugin.ajaxCall = function(event, popupUrl, popupParams) {
     if ( typeof( popupParams ) != "undefined" ) {
          popupUrl = popupUrl+';'+popupParams;
     }
-    var callback = 	{ 	  success: function(o) {
+    var callback = 
+	{ 
+	  success: function(o) {
 	            var data = o.responseText;
                 //protect against full html pages by only bringing in the body
                 var startBodyTag = data.indexOf('<body');
@@ -203,7 +164,10 @@ TWiki.JSPopupPlugin.ajaxCall = function(event, popupUrl, popupParams) {
                 data = '<div>' + data + '</div>';
                 TWiki.JSPopupPlugin.openPopup(event, data);
 
-	      }, 	  failure: function(o) {alert('Error!\nStatusText='+o.statusText+'\nContents='+o.responseText);}	  //,argument: [argument1, argument2, argument3] 	};
+	      }, 
+	  failure: function(o) {alert('Error!\nStatusText='+o.statusText+'\nContents='+o.responseText);}
+	  //,argument: [argument1, argument2, argument3] 
+	};
 	var transaction = YAHOO.util.Connect.asyncRequest('GET', popupUrl, callback, null); 
 }    
     
