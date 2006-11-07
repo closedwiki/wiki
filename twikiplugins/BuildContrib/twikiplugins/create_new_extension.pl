@@ -16,6 +16,52 @@
 #
 use strict;
 
+sub ask {
+    my ($q, $default) = @_;
+    my $reply;
+    local $/ = "\n";
+
+    $q .= '?' unless $q =~ /\?\s*$/;
+
+    my $yorn = 'y/n';
+    if (defined $default) {
+        if ($default =~ /y/i) {
+            $default = 'yes';
+            $yorn = 'Y/n';
+        } elsif( $default =~ /n/i) {
+            $default = 'no';
+            $yorn = 'y/N';
+        } else {
+            $default = undef;
+        }
+    }
+    print $q.' ['.$yorn.'] ';
+
+    while ( ( $reply = <STDIN> ) !~ /^[yn]/i ) {
+        if ($reply =~ /^\s*$/ && defined($default)) {
+            $reply = $default;
+            last;
+        }
+        print "Please answer yes or no\n";
+    }
+    return ( $reply =~ /^y/i ) ? 1 : 0;
+}
+
+sub prompt {
+    my( $q, $default) = @_;
+    local $/ = "\n";
+    my $reply = '';
+    while( !$reply ) {
+        print $q;
+        print " ($default)" if defined $default;
+        print ': ';
+        $reply = <STDIN>;
+        chomp($reply);
+        $reply ||= $default;
+    }
+    return $reply;
+}
+
 sub usage {
     print STDERR <<HERE;
 This script will generate a new extension in a directory under
@@ -59,6 +105,30 @@ if ($def{TYPE} eq 'Plugin') {
               $data{PM}.($data{"PM_$def{TYPE}"} || ''));
 }
 my $modPath = "$stubPath/$def{MODULE}";
+$def{UPLOADTARGETPUB} = 'http://twiki.org/p/pub';
+$def{UPLOADTARGETSCRIPT} = 'http://twiki.org/cgi-bin';
+$def{UPLOADTARGETSUFFIX} = '';
+$def{UPLOADTARGETWEB} = "Plugins";
+while (1) {
+    print <<END;
+The 'upload' target in the generated script will use:
+Web:     $def{UPLOADTARGETWEB}
+PubDir:  $def{UPLOADTARGETPUB}
+Scripts: $def{UPLOADTARGETSCRIPT}
+Suffix:  $def{UPLOADTARGETSUFFIX}
+END
+    last if ask("Is that correct? Answer 'n' to change", 1);
+    print "Enter the name of the TWiki web that contains the target repository\n";
+    $def{UPLOADTARGETWEB} = prompt("Web", $def{UPLOADTARGETWEB});
+    print "Enter the full URL path to the TWiki pub directory\n";
+    $def{UPLOADTARGETPUB} = prompt("PubDir", $def{UPLOADTARGETPUB});
+    print "Enter the full URL path to the TWiki bin directory\n";
+    $def{UPLOADTARGETSCRIPT} = prompt("Scripts", $def{UPLOADTARGETSCRIPT});
+    print "Enter the file suffix used on scripts in the TWiki bin directory (enter 'none' for none)\n";
+    $def{UPLOADTARGETSUFFIX} = prompt("Suffix", $def{UPLOADTARGETSUFFIX});
+    $def{UPLOADTARGETSUFFIX} = '' if $def{UPLOADTARGETSUFFIX} eq 'none';
+}
+
 writeFile($modPath, "build.pl", $data{"build.pl"});
 writeFile($modPath, "DEPENDENCIES", $data{DEPENDENCIES});
 writeFile($modPath, "MANIFEST", $data{MANIFEST});
@@ -109,8 +179,20 @@ use TWiki::Contrib::Build;
 # Create the build object
 $build = new TWiki::Contrib::Build('%$MODULE%');
 
+# Set the details of the repository for uploads.
+# This can be any web on any accessible TWiki installation.
+
+# name of web to upload to
+$build->{UPLOADTARGETWEB} = '%$UPLOADTARGETWEB%';
+# Full URL of pub directory
+$build->{UPLOADTARGETPUB} = '%$UPLOADTARGETPUB%';
+# Full URL of bin directory
+$build->{UPLOADTARGETSCRIPT} = '%$UPLOADTARGETSCRIPT%';
+# Script extension
+$build->{UPLOADTARGETSUFFIX} = '%$UPLOADTARGETSUFFIX%';
+
 # Build the target on the command line, or the default target
-$build->build(\$build->{target});
+$build->build($build->{target});
 
 <<<< DEPENDENCIES >>>>
 # Dependencies for %$MODULE%
@@ -149,6 +231,7 @@ $SHORTDESCRIPTION = '';
 
 <<<< TXT >>>>
 ---+!! %$MODULE%
+%TOC%
 
 ---++ Usage
 
@@ -163,10 +246,9 @@ $SHORTDESCRIPTION = '';
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
 |  Dependencies: | |
 %$DEPENDENCIES%
-|  TWiki:Plugins/Benchmark: | %TWIKIWEB%.GoodStyle nn%, %TWIKIWEB%.FormattedSearch nn%, %$MODULE% nn% |
-|  %$TYPE% Home: | http://TWiki.org/cgi-bin/view/Plugins/%$MODULE% |
-|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%$MODULE%Dev |
-|  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%$MODULE%Appraisal |
+|  %$TYPE% Home: | %$UPLOADTARGETSCRIPT%/view%$UPLOADTARGETSUFFIX%/%$UPLOADTARGETWEB%/%$MODULE% |
+|  Feedback: | %$UPLOADTARGETSCRIPT%/view%$UPLOADTARGETSUFFIX%/%$UPLOADTARGETWEB%/%$MODULE%Dev |
+|  Appraisal: | %$UPLOADTARGETSCRIPT%/view%$UPLOADTARGETSUFFIX%/%$UPLOADTARGETWEB%/%$MODULE%Appraisal |
 
 <!-- Do _not_ attempt to edit this topic; it is auto-generated. Please add comments/questions/remarks to the Dev topic instead. -->
 
@@ -194,9 +276,8 @@ Required if this extension is to be installed in TWiki < 4.1
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
 |  Dependencies: | |
 %$DEPENDENCIES%
-|  TWiki:Plugins/Benchmark: | %TWIKIWEB%.GoodStyle nn%, %TWIKIWEB%.FormattedSearch nn%, %$MODULE% nn% |
-|  %$TYPE% Home: | http://TWiki.org/cgi-bin/view/Plugins/%$MODULE% |
-|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%$MODULE%Dev |
-|  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%$MODULE%Appraisal |
+|  %$TYPE% Home: | %$UPLOADTARGETSCRIPT%/view%$UPLOADTARGETSUFFIX%/%$UPLOADTARGETWEB%/%$MODULE% |
+|  Feedback: | %$UPLOADTARGETSCRIPT%/view%$UPLOADTARGETSUFFIX%/%$UPLOADTARGETWEB%/%$MODULE%Dev |
+|  Appraisal: | %$UPLOADTARGETSCRIPT%/view%$UPLOADTARGETSUFFIX%/%$UPLOADTARGETWEB%/%$MODULE%Appraisal |
 
 <!-- Do _not_ attempt to edit this topic; it is auto-generated. Please add comments/questions/remarks to the Dev topic instead. -->
