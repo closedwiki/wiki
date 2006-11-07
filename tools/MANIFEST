@@ -925,4 +925,5 @@ tools/geturl.pl 0550
 tools/rewriteshbang.pl 0550
 tools/tick_twiki.pl 0550
 tools/upgrade_emails.pl 0550
+tools/DEPENDENCIES 0440
 twiki_httpd_conf.txt 0440
