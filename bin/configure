@@ -400,26 +400,19 @@ sub _actionFindMoreExtensions {
     my $ui = _checkLoadUI('EXTENSIONS');
     return 1 unless $ui;
 
-    # keep 'em amused until we are ready
-    print <<HERE;
-<div id="consulting">Consulting repositories...</div>
-HERE
-        print $ui->ui(). <<HERE;
-<script>
-document.getElementById("consulting").className="twikiHidden"
-</script>
-HERE
+    print $ui->ui();
     return 1;
 }
 
 sub _actionInstallExtension {
     my $root = new TWiki::Configure::Root();
+    my $ui;
     if (!TWiki::Configure::UI::authorised()) {
-        my $ui = _checkLoadUI('AUTH', $root);
+        $ui = _checkLoadUI('AUTH', $root);
         return 1 unless $ui;
         print $ui->ui(0, 'Install '.($query->param('extension')||''));
     } else {
-        my $ui = _checkLoadUI('EXTEND', $root);
+        $ui = _checkLoadUI('EXTEND', $root);
         return 1 unless $ui;
         print $ui->ui();
     }

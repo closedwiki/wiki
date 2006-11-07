@@ -25,7 +25,6 @@ use base 'TWiki::Configure::UI';
 use TWiki::Configure::Type;
 
 use Data::Dumper;
-use File::Temp;
 use Archive::Tar;
 use Cwd;
 use File::Spec;
@@ -48,11 +47,14 @@ my %headNames = (
 sub new {
     my $class = shift;
     my $this = bless({}, $class);
-
-    push(@{$this->{repositories}},
-         { data => 'http://twiki.org/cgi-bin/view/Plugins/',
-           pub => 'http://twiki.org/p/pub/Plugins/' } );
-
+    my $replist = $ENV{TWIKI_REPOSITORIES} || '';
+    $replist .= <<DEFAULTS;
+TWiki.org=(http://twiki.org/cgi-bin/view/Plugins/FastReport?skin=text&contenttype=text/plain,http://twiki.org/p/pub/Plugins/)
+DEFAULTS
+    $replist = ";$replist;";
+    while ($replist =~ s/[;\s]+(.*?)=\((.*?),(.*?)\)\s*;/;/so) {
+        push(@{$this->{repositories}}, { name => $1, data => $2, pub => $3 });
+    }
     $this->{bin} = $FindBin::Bin;
     my @root = File::Spec->splitdir($this->{bin});
     pop(@root);
@@ -69,9 +71,8 @@ sub _getListOfExtensions {
     if (!$this->{list}) {
         $this->{list} = [];
         foreach my $place ( @{$this->{repositories}} ) {
-            my $page = $this->getUrl(
-                $place->{data}.
-                  'FastReport?skin=text;contenttype=text/plain');
+            print CGI::div("Consulting $place->{name}...");
+            my $page = $this->getUrl($place->{data});
             # SMELL handle failure to connect
             $page =~ s/{(.*?)}/$this->_parseRow($1, $place)/ges;
         }
@@ -115,7 +116,7 @@ sub ui {
                 }
                 $text = CGI::a({ href => $link }, $text);
             } else {
-                $text = $ext->{$f};
+                $text = $ext->{$f}||'-';
                 if ($f eq 'topic') {
                     my $link = $ext->{data}.$ext->{topic};
                     $text = CGI::a({ href => $link }, $text);
@@ -134,7 +135,27 @@ sub ui {
         {colspan => 7},
         $installed . ' extension'.
           ($installed==1?'':'s').' out of '.$rows.' already installed'));
-    return CGI::table({class=>'twikiForm'},$table);
+    my $page = CGI::table({class=>'twikiForm'},$table);
+    $page .= <<'HELP';
+<p />
+You can add more repositories to the search path by defining the
+environment variable <code>$TWIKI_REPOSITORIES</code>. Repositories are just
+TWiki webs which contain published extensions, same as the Plugins
+web on TWiki.org.
+
+<code>$TWIKI_REPOSITORIES</code> has to be a semicolon-separated list of repository specifications, <i>name=(list,pub)</i>, where:
+<ul>
+<li><i>name</i> is the symbolic name of the repository e.g. TWiki.org</li>
+<li><i>list</i> is the URL of a TWiki page that lists the available
+extensions in a special parseable format (see the
+<a href="http://twiki.org/cgi-bin/view/Plugins/FastReport?raw=on">Plugins.FastReport</a> page), and</li>
+<li><i>pub</i> is the root of a download URL on the repository site.</li>
+</ul>
+For example,<code>
+twiki.org=(http://twiki.org/cgi-bin/view/Plugins/FastReport?skin=text&contenttype=text/plain,http://twiki.org/p/pub/Plugins/);
+wikiring.com=(http://wikiring.com/bin/view/Extensions/FastReport?skin=text&contenttype=text/plain,http://wikiring.com/bin/viewfile/Extensions/)</code><p />
+HELP
+    return $page;
 }
 
 sub _getInstalledVersion {
