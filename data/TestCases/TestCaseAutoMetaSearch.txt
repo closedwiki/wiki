@@ -7,7 +7,7 @@ Description: tests for METASEARCH tags
 
 Designed by: Crawford Currie
 
----+ Search for parents
+---++ Search for parents
 Expected:
 <!-- expected expand -->
 <a href="%SCRIPTURLPATH{"view"}%/TestCases/%TOPIC%">%TOPIC%</a>
@@ -16,7 +16,8 @@ Actual:
 <!-- actual -->
 %METASEARCH{web="%WEB%" type="parent" topic="RecursiveInclude"}%
 <!-- /actual -->
----+ Search for moved topic
+
+---++ Search for moved topic
 Expected:
 <!-- expected expand -->
 Itwos <a href="%SCRIPTURLPATH{"view"}%/TestCases/DeliberatelyMoved">DeliberatelyMoved</a>
@@ -25,7 +26,8 @@ Actual:
 <!-- actual -->
 %METASEARCH{web="%WEB%" topic="MovedFrom" type="topicmoved" title="Itwos "}%
 <!-- /actual -->
----+ Search for field value
+
+---++ Search for field value
 Expected:
 <!-- expected expand -->
 <a href="%SCRIPTURLPATH{"view"}%/TestCases/DeliberatelyMoved">DeliberatelyMoved</a>
@@ -34,7 +36,8 @@ Actual:
 <!-- actual -->
 %METASEARCH{web="%WEB%" type="field" name="RubaDuba" value="Heeby.*by"}%
 <!-- /actual -->
----+ Search with no result
+
+---++ Search with no result
 Expected:
 <!-- expected -->
 Not a sausage
@@ -44,3 +47,33 @@ Actual:
 %METASEARCH{web="%WEB%" type="field" name="Not a field" value="Not a value" default="Not a sausage"}%
 <!-- /actual -->
 
+---++ Search with format parameters
+---+++ Parent with bullet list
+Expected:
+<!-- expected expand -->
+   * <a href="%SCRIPTURLPATH{"view"}%/TestCases/%TOPIC%">%TOPIC%</a>
+<!-- /expected -->
+Actual:
+<!-- actual -->
+%METASEARCH{type="parent" topic="RecursiveInclude" format="   * $topic" }%
+<!-- /actual -->
+
+---+++ Parent abbreviated
+Expected:
+<!-- expected expand -->
+<a href="%SCRIPTURLPATH{"view"}%/TestCases/%TOPIC%">Test...</a>
+<!-- /expected -->
+Actual:
+<!-- actual -->
+%METASEARCH{type="parent" topic="RecursiveInclude" format="[[$web.$topic][$topic(4,...)]]"}%
+<!-- /actual -->
+   
+---+++ Color
+Expected:
+<!-- expected expand -->
+<span style="background-color:#f00; color:#fff"><nop>%TOPIC%</span>
+<!-- /expected -->
+Actual:
+<!-- actual -->
+%METASEARCH{web="%WEB%" type="parent" topic="RecursiveInclude" format="<span style=\"background-color:#f00; color:#fff\">$topic</span>" }%
+<!-- /actual -->

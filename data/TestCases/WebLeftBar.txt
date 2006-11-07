@@ -1,28 +1,6 @@
 %META:TOPICINFO{author="TWikiContributor" date="1111930902" format="1.0" version="$Rev$"}%
-
-
 %META:TOPICPARENT{name="WebHome"}%
-</form>
-<script type="text/javascript">
-function toggleShowHide( e )
-{
-   var display = e.style.display;
-   if ( display == 'none' )
-   {
-      display = '';
-   }
-   else
-   {
-      display = 'none';
-   }
-   e.style.display = display;
-}
-</script>
-<a href="void:" onclick="javascript:toggleShowHide(document.getElementById('toggle_toc')); return false;"><b>Table of Contents</b></a>
-%INCLUDE{%TWIKIWEB%.WebLeftBarSearch}%
-<div id="toggle_toc">
-%TOC{ "%BASETOPIC%" depth="2" }%
-</div>
+
 [[%SCRIPTURL%/view/%WEB%/%BASETOPIC%?test=compare&debugenableplugins=TestFixturePlugin][Run Test]]<br/>
 [[http://validator.w3.org/check/referer][XHTML Validator]]
 
@@ -32,7 +10,8 @@ function toggleShowHide( e )
 <img src="%PUBURL%/TWiki/TWikiDocGraphics/home.gif" /> [[%HOMETOPIC%][%WEB%]] &middot; [[WebTopicList][Topics]]<br/>
 <img src="%PUBURL%/TWiki/TWikiDocGraphics/home.gif" /> [[TWiki.%HOMETOPIC%][TWiki]]
 
----++ Admin topics
-%SEARCH{"^Web.+" type="regex" scope="topic" nosearch="on" nototal="on" format="$topic<br/>"}%
----++ Test fixtures
-%SEARCH{"^(?!Web).+" type="regex" excludetopic="TestCase*" scope="topic" nosearch="on" nototal="on" format="$topic<br/>"}%
+   * *Admin topics*
+%SEARCH{"^Web.+" type="regex" scope="topic" nosearch="on" nototal="on" format="   * $topic"}%
+
+   * *Test fixtures*
+%SEARCH{"^(?!Web).+" type="regex" excludetopic="TestCase*" scope="topic" nosearch="on" nototal="on" format="   * $topic"}%

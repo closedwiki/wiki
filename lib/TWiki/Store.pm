@@ -1931,6 +1931,22 @@ sub searchMetaData {
     }
 
     my $text = '';
+    if ($params->{format}) {
+        $text = $this->{session}->{search}->searchWeb
+        (
+         format	       => $params->{format},
+         search        => $searchVal,
+         web           => $attrWeb,
+         type          => 'regex',
+         nosummary     => 'on',
+         nosearch      => 'on',
+         noheader      => 'on',
+         nototal       => 'on',
+         noempty       => 'on',
+         template      => 'searchmeta',
+         inline        => 1,
+        );
+    } else {
     $this->{session}->{search}->searchWeb
       (
        _callback     => \&_collate,
@@ -1946,7 +1962,7 @@ sub searchMetaData {
        template      => 'searchmeta',
        inline        => 1,
       );
-
+    }
     my $attrTitle = $params->{title} || '';
     if( $text ) {
         $text = $attrTitle.$text;
