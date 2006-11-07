@@ -41,7 +41,7 @@ use vars qw(
             $VERSION
             $RELEASE
             $interWeb
-            $suppressTooltip
+            $interLinkFormat
             $sitePattern
             $pagePattern
             %interSiteTable
@@ -81,11 +81,12 @@ sub initPlugin {
     my $man = TWiki::Func::getRegularExpression('mixedAlphaNum');
     my $ua = TWiki::Func::getRegularExpression('upperAlpha');
     $sitePattern    = "([$ua][$man]+)";
-    $pagePattern    = "([${man}_\/][$man" . '\.\/\+\_\,\;\:\!\?\%\#-]+?)';
+    $pagePattern    = "([${man}_\/][$man" . '\.\/\+\_\,\;\:\!\?\%\#\@\-]*?)';
 
     # Get plugin preferences from InterwikiPlugin topic
-    $suppressTooltip =
-      TWiki::Func::getPreferencesFlag( 'INTERWIKIPLUGIN_SUPPRESSTOOLTIP' );
+    $interLinkFormat =
+      TWiki::Func::getPreferencesValue( 'INTERWIKIPLUGIN_INTERLINKFORMAT' ) ||
+      '<a href="$url" title="$tooltip">$label</a>';
 
     my $interTopic =
       TWiki::Func::getPreferencesValue( 'INTERWIKIPLUGIN_RULESTOPIC' )
@@ -106,17 +107,17 @@ sub initPlugin {
 }
 
 sub _map {
-    my( $site, $url, $help ) = @_;
+    my( $site, $url, $tooltip ) = @_;
     if( $site ) {
         $interSiteTable{$site}{url} = $url || '';
-        $interSiteTable{$site}{help} = $help || '';
+        $interSiteTable{$site}{tooltip} = $tooltip || '';
     }
     return '';
 }
 
 sub preRenderingHandler {
     # ref in [[ref]] or [[ref][
-    $_[0] =~ s/(\[\[)$sitePattern:$pagePattern(\]\]|\]\[| )/_link($1,$2,$3,$4)/geo;
+    $_[0] =~ s/(\[\[)$sitePattern:$pagePattern(\]\]|\]\[[^\]]+\]\])/_link($1,$2,$3,$4)/geo;
     # ref in text
     $_[0] =~ s/(^|[\s\-\*\(])$sitePattern:$pagePattern(?=[\s\.\,\;\:\!\?\)\|]*(\s|$))/_link($1,$2,$3)/geo;
 }
@@ -129,32 +130,30 @@ sub _link {
     $page ||= '';
     $postfix ||= '';
 
-    my $text;
+    my $text = $prefix;
     if( defined( $interSiteTable{$site} ) ) {
+        my $tooltip = $interSiteTable{$site}{tooltip};
         my $url = $interSiteTable{$site}{url};
-        my $help = $interSiteTable{$site}{help};
-        my $title = '';
+        $url .= $page unless( $url =~ /\$page/ );
+        my $label = '$site:$page';
 
-        unless( $suppressTooltip ) {
-            $help =~ s/<nop>/&nbsp;/goi;
-            $help =~ s/[\"\<\>]*//goi;
-            $help =~ s/\$page/$page/go;
-            $title = " title=\"$help\"";
-        }
-
-        if( $url =~ s/\$page/$page/go ) {
-            $text = $url;
-        } else {
-            $text = $url.$page;
-        }
         if( $postfix ) {
-            $text = "$prefix$text][";
-            $text .= "$site\:$page]]" if( $postfix eq "]]" );
-        } else {
-            $text = "$prefix<a href=\"$text\"$title>$site\:$page</a>";
+            # [[...]] or [[...][...]] interwiki link
+            $text = '';
+            if( $postfix =~ /^\]\[([^\]]+)/ ) {
+                $label = $1;
+            }
         }
+
+        my $format = $interLinkFormat;
+        $format =~ s/\$url/$url/g;
+        $format =~ s/\$tooltip/$tooltip/g;
+        $format =~ s/\$label/$label/g;
+        $format =~ s/\$site/$site/g;
+        $format =~ s/\$page/$page/g;
+        $text .= $format;
     } else {
-        $text = "$prefix$site\:$page$postfix";
+        $text .= "$site\:$page$postfix";
     }
     return $text;
 }
