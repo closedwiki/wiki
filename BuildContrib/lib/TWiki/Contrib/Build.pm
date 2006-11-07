@@ -45,7 +45,7 @@ The following targets will always exist:
 | uninstall | uninstall from local installation defined by $TWIKI_HOME |
 | pod | build POD documentation of the package |
 | release | build, pod and package a release zip |
-| upload | build, pod, package and upload to twiki.org |
+| upload | build, pod, package and upload |
 | manifest | print a guess at the MANIFEST |
 | history | Update the history in the topic for an extension |
 | dependencies | Find and print missing dependencies (for DEPENDENCIES) |
@@ -173,6 +173,12 @@ $RELEASE = 'TWiki-4';
 $SHORTDESCRIPTION ='Automate build process for Plugins, Add-ons and Contrib modules';
 my $NL = "\n";
 
+my $TWIKIORGPUB = 'http://twiki.org/p/pub';
+my $TWIKIORGSCRIPT = 'http://twiki.org/cgi-bin';
+my $TWIKIORGSUFFIX = '';
+my $TWIKIORGBUGS = 'http://develop.twiki.org/~develop/cgi-bin/view/Bugs';
+my $TWIKIORGEXTENSIONSWEB = "Plugins";
+
 $SIG{__DIE__} = sub { Carp::confess $_[0] };
 
 sub _findRelativeTo {
@@ -227,14 +233,17 @@ and build file and dependency lists. Parse command line to get
 target and options.
 
 =cut
+
 sub new {
     my ( $class, $project, $rootModule ) = @_;
     my $this = bless({}, $class);
 
     # Constants with internet paths
-    $this->{TWIKIORGPUB} = 'http://twiki.org/p/pub';
-    $this->{TWIKIORGSCRIPT} = 'http://twiki.org/cgi-bin';
-    $this->{BUGSURL} = 'http://develop.twiki.org/~develop/cgi-bin/view/Bugs';
+    $this->{UPLOADTARGETPUB} = $TWIKIORGPUB;
+    $this->{UPLOADTARGETSCRIPT} = $TWIKIORGSCRIPT;
+    $this->{UPLOADTARGETSUFFIX} = $TWIKIORGSUFFIX;
+    $this->{UPLOADTARGETWEB} = $TWIKIORGEXTENSIONSWEB;
+    $this->{BUGSURL} = $TWIKIORGBUGS;
 
     $this->{project} = $project;
     $this->{target} = 'test';
@@ -359,19 +368,21 @@ You do not need to install anything in the browser to use this extension. The fo
 
 Like many other TWiki extensions, this module is shipped with a fully automatic installer script written using the Build<nop>Contrib.
    * If you have TWiki 4.1 or later, and Perl 5.8, you can install from the =configure= interface (Go to Plugins->Find More Extensions)
+      * The webserver user has to have permission to write to all areas of your installation for this to work.
    * If you have a permanent connection to the internet (and Perl 5.8), you are recommended to use the automatic installer script
       * Just download the =$this->{MODULE}_installer= perl script and run it.
-      * If the \$TWIKI_PACKAGES environment variable is set to point to a directory, the installer will try to get archives from there. Otherwise it will try to download from twiki.org or cpan.org, as appropriate.
-      * (Developers only: the script will look for twikiplugins/$this->{MODULE}/$this->{MODULE}.tgz before downloading from TWiki.org)
-   * If you don't have a permanent connection, you can still use the automatic installer, by downloading all required TWiki archives to a local directory.
-      * Point the environment variable =\$TWIKI_PACKAGES= to this directory, and the installer script will look there first for required TWiki packages.
-         * =\$TWIKI_PACKAGES= is actually a path; you can list several directories separated by :
-      * If you are behind a firewall that blocks access to CPAN, you can build a local CPAN mini-mirror, as described at http://twiki.org/cgi-bin/view/Codev/BuildingDakar#CPAN_local_minimirror
-   * The installer script will:
-      * Automatically resolve dependencies,
-      * Copy files into the right places in your local install even if you have renamed data directories,
-      * check in new versions of any installed files that have existing RCS histories files in your existing install.
-   * If you don't want to use the script, or have problems on your platform (e.g. you don't have Perl 5.8), then you can still install manually:
+   * *Notes:*
+      * The installer script will:
+         * Automatically resolve dependencies,
+         * Copy files into the right places in your local install (even if you have renamed data directories),
+         * check in new versions of any installed files that have existing RCS histories files in your existing install (such as topics).
+         * If the \$TWIKI_PACKAGES environment variable is set to point to a directory, the installer will try to get archives from there. Otherwise it will try to download from twiki.org or cpan.org, as appropriate.
+         * (Developers only: the script will look for twikiplugins/$this->{MODULE}/$this->{MODULE}.tgz before downloading from TWiki.org)
+      * If you don't have a permanent connection, you can still use the automatic installer, by downloading all required TWiki archives to a local directory.
+         * Point the environment variable =\$TWIKI_PACKAGES= to this directory, and the installer script will look there first for required TWiki packages.
+            * =\$TWIKI_PACKAGES= is actually a path; you can list several directories separated by :
+         * If you are behind a firewall that blocks access to CPAN, you can build a local CPAN mini-mirror, as described at http://twiki.org/cgi-bin/view/Codev/BuildingDakar#CPAN_local_minimirror
+   * If you don't want to use the installer script, or have problems on your platform (e.g. you don't have Perl 5.8), then you can still install manually:
       1 Download and unpack one of the =.zip= or =.tgz= archives to a temporary directory.
       1 Manually copy the contents across to the relevant places in your TWiki installation.
       1 Check in any installed files that have existing =,v= files in your existing install (take care *not* to lock the files when you check in)
@@ -750,8 +761,10 @@ Expands tokens. The following tokens are supported:
    * %$POSTINSTALL% - inserts script from POSTINSTALL
    * %$PREUNINSTALL% - inserts script from PREUNINSTALL
    * %$POSTUNINSTALL% - inserts script from POSTINSTALL
-   * %$TWIKIORGSCRIPT% - URL of twiki.org scripts dir
-   * %$TWIKIORGPUB% - URL of twiki.org pub dir
+   * %$UPLOADTARGETSCRIPT% - URL of upload scripts dir
+   * %$UPLOADTARGETSUFFIX% - Suffix for upload scripts
+   * %$UPLOADTARGETPUB% - URL of upload pub dir
+   * %$UPLOADTARGETWEB% - name f upload web dir
    * %$BUGSURL% - URL of bugs web
    * %$INSTALL_INSTRUCTIONS% - basic instructions for installing
 Three spaces is automatically translated to tab.
@@ -1032,39 +1045,53 @@ sub target_uninstall {
     $this->popd();
 }
 
-{   package TWiki::Contrib::Build::UserAgent;
-    @TWiki::Contrib::Build::UserAgent::ISA = qw(LWP::UserAgent);
+{
+    package TWiki::Contrib::Build::UserAgent;
 
-    my ( $knownUser, $knownPass );
+    use base qw(LWP::UserAgent);
+
+    sub new {
+        my ($class, $id) = @_;
+        my $this = $class->SUPER::new();
+        $this->{domain} = $id;
+        return $this;
+    }
+
+    use vars qw($VAR1);
 
     sub get_basic_credentials {
-        my($self, $realm, $uri) = @_;
-        unless ( $knownUser ) {
-            local $/ = "\n";
-            if( open(F, '<'.$ENV{HOME}.'/.buildcontriblogin')) {
-                $knownUser = <F>; chomp($knownUser);
-                $knownPass = <F>; chomp($knownPass);
-                print "using password for $knownUser saved in $ENV{HOME}/.buildcontriblogin \n";
-                close(F);
-            } else {
-                print 'Logon to ',$uri->host_port,$NL;
-                print 'Enter ',$realm,': ';
-                $knownUser = <STDIN>;
-                chomp($knownUser);
-                return (undef, undef) unless length $knownUser;
-                print 'Password on ',$uri->host_port,': ';
-                system('stty -echo');
-                $knownPass = <STDIN>;
-                system('stty echo');
-                print $NL;  # because we disabled echo
-                chomp($knownPass);
-                if( open(F, '>'.$ENV{HOME}.'/.buildcontriblogin')) {
-                    print F "$knownUser\n$knownPass\n";
-                    close(F);
-                }
+        my($this, $realm, $uri) = @_;
+        unless ($this->{passwords}) {
+            $this->{passwords} = {};
+            do $ENV{HOME}.'/.buildcontriblogin';
+            unless ($@) {
+                $this->{passwords} = $VAR1;
             }
         }
-        return ($knownUser, $knownPass);
+        my $pws = $this->{passwords}->{$this->{domain}};
+        if ($pws) {
+            print "Using credentials for $this->{domain} saved in $ENV{HOME}/.buildcontriblogin\n";
+        } else {
+            local $/ = "\n";
+            print 'Logon to ',$uri->host_port(),$NL;
+            print 'Enter username for ',$realm,': ';
+            my $knownUser = <STDIN>; chomp($knownUser);
+            die "Bollocks" unless length $knownUser;
+            print 'Password on ',$uri->host_port,': ';
+            system('stty -echo');
+            my $knownPass = <STDIN>;
+            system('stty echo');
+            print $NL;  # because we disabled echo
+            chomp($knownPass);
+            $pws = { user => $knownUser, pass => $knownPass };
+            $this->{passwords}->{$this->{domain}} = $pws;
+            require Data::Dumper;
+            if( open(F, '>'.$ENV{HOME}.'/.buildcontriblogin')) {
+                print F Data::Dumper->Dump([$this->{passwords}]);
+                close(F);
+            }
+        }
+        return ($pws->{user}, $pws->{pass});
     }
 }
 
@@ -1089,8 +1116,8 @@ sub _getTopicName {
 =pod
 
 ---++++ target_upload
-Upload to twiki.org. Prompts for username and password. Uploads the zip and
-the text topic to the appropriate places. Creates the topic on twiki.org if
+Upload to a repository. Prompts for username and password. Uploads the zip and
+the text topic to the appropriate places. Creates the topic if
 necessary.
 
 =cut
@@ -1105,15 +1132,35 @@ sub target_upload {
         return 0;
     }
 
-    my $userAgent = TWiki::Contrib::Build::UserAgent->new();
-    $userAgent->agent( 'TWikiContribBuild/'.$VERSION.' ' );
-
     my $to = $this->{project};
 
-    my $web = prompt("Name of web on twiki.org to upload to", "Plugins");
+    while (1) {
+        print <<END;
+Preparing to upload to:
+Web:     $this->{UPLOADTARGETWEB}
+PubDir:  $this->{UPLOADTARGETPUB}
+Scripts: $this->{UPLOADTARGETSCRIPT}
+Suffix:  $this->{UPLOADTARGETSUFFIX}
+END
+
+        last if ask("Is that correct? Answer 'n' to change", 1);
+        print "Enter the name of the TWiki web that contains the target repository\n";
+        $this->{UPLOADTARGETWEB} = prompt("Web", $this->{UPLOADTARGETWEB});
+        print "Enter the full URL path to the TWiki pub directory\n";
+        $this->{UPLOADTARGETPUB} = prompt("PubDir", $this->{UPLOADTARGETPUB});
+        print "Enter the full URL path to the TWiki bin directory\n";
+        $this->{UPLOADTARGETSCRIPT} = prompt("Scripts", $this->{UPLOADTARGETSCRIPT});
+        print "Enter the file suffix used on scripts in the TWiki bin directory (enter 'none' for none)\n";
+        $this->{UPLOADTARGETSUFFIX} = prompt("Suffix", $this->{UPLOADTARGETSUFFIX});
+        $this->{UPLOADTARGETSUFFIX} = ''
+          if $this->{UPLOADTARGETSUFFIX} eq 'none';
+    }
+
+    my $userAgent = TWiki::Contrib::Build::UserAgent->new($this->{UPLOADTARGETSCRIPT});
+    $userAgent->agent( 'TWikiContribBuild/'.$VERSION.' ' );
 
     my $topic = $this->_getTopicName();
-    my $url = $this->{TWIKIORGSCRIPT}."/view/$web/$topic";
+    my $url = "$this->{UPLOADTARGETSCRIPT}/view$this->{UPLOADTARGETSUFFIX}/$this->{UPLOADTARGETWEB}/$topic";
 
     # Get the old form data and attach it to the update
     print "Downloading $topic to recover form\n";
@@ -1154,7 +1201,7 @@ END
     die 'Update of topic failed ', $response->request->uri,
       ' -- ', $response->status_line, 'Aborting'
         unless $response->is_redirect &&
-          $response->headers->header('Location') =~ /view([\.\w]*)\/$web\/$topic/;
+          $response->headers->header('Location') =~ /view([\.\w]*)\/$this->{UPLOADTARGETWEB}\/$topic/;
 
     return if($this->{-topiconly});
 
@@ -1165,7 +1212,7 @@ END
     # Upload the standard files
     foreach my $ext ('.zip', '.tgz', '_installer', '.md5') {
 
-        $this->_uploadFile($userAgent, $response, $web, $to, $to.$ext,
+        $this->_uploadFile($userAgent, $response, $this->{UPLOADTARGETWEB}, $to, $to.$ext,
                            $this->{basedir}.'/'.$to.$ext,'');
         $uploaded{$to.$ext} = 1;
     }
@@ -1182,7 +1229,7 @@ END
         my $comment = $1;
 
         $this->_uploadFile(
-            $userAgent, $response, $web, $to, $name,
+            $userAgent, $response, $this->{UPLOADTARGETWEB}, $to, $name,
             $this->{basedir}.'/pub/TWiki/'.$this->{project}.'/'.$name,
             $comment);
     }
@@ -1192,14 +1239,14 @@ sub _uploadFile {
     my ($this, $userAgent, $response, $web, $to, $filename, $filepath, $filecomment) = @_;
 
     print "Uploading $filename from $filepath\n";
-    $response =
-      $userAgent->post( $this->{TWIKIORGSCRIPT}.'/upload/'.$web.'/'.$to,
-                        [
-                         'filename' => $filename,
-                         'filepath' => [ $filepath ],
-                         'filecomment' => $filecomment
-                        ],
-                        'Content_Type' => 'form-data' );
+    $response = $userAgent->post(
+        "$this->{UPLOADTARGETSCRIPT}/upload$this->{UPLOADTARGETSUFFIX}/$web/$to",
+        [
+            'filename' => $filename,
+            'filepath' => [ $filepath ],
+            'filecomment' => $filecomment
+           ],
+        'Content_Type' => 'form-data' );
 
     die 'Update of '.$filename.' failed ', $response->request->uri,
       ' -- ', $response->status_line, $NL, 'Aborting',$NL, $response->as_string
