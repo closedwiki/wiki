@@ -42,7 +42,7 @@ Refer to the documentation of =configure=
 package TWiki;
 
 # The root of package URLs
-my $PACKAGES_URL = "%$TWIKIORGPUB%/Plugins/";
+my $PACKAGES_URL = '%$UPLOADTARGETPUB%/%$UPLOADTARGETWEB%';
 
 my $noconfirm = 0;
 my $inactive = 0;
