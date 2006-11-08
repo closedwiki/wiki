@@ -161,6 +161,7 @@ the computed statistics:
    * $mean: mean occurence of a key in the result set
    * $keys: total number of keys found
    * $web: the web we search in
+   * $topics: the list of all topics where the keys where found
 
 For example if you want to extract all month/years from a database's =Date= field
 that has the format =dd mon yyyy= and then format a link to an archive using
@@ -277,10 +278,17 @@ following is the default paramenter (omitting the #)
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.MichaelDaum |
-|  Copyright &copy;: | 2005-2006, MichaelDaum http://wikiring.com |
+|  Copyright &copy;: | 2005-2006, Michael Daum http://wikiring.com |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | v1.29 |
+|  Plugin Version: | v1.30 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  09 Nov 2006: | fixed bug where a topic modification was not detected correctly resulting \
+                  in an outdated cache when using perl accelerators; \
+                  added pseudo-variable =$topics= to DBSTATS to list \
+                  all topics in a class; added DESTROY methods for caches fixing memory leakage; \
+                  fixed expansion order of pseudo-variable; \
+                  speed improved DBQUERY by first checking the match and access rights \
+                  afterwards (thanks to CDot) |
 |  13 Oct 2006: | don't use the separator for header and footer format strings; \
                   fix links in DBQUERY the same way we do it in DBCALL; \
 		  added =remote= parameter to switch on/off fixing links in \
@@ -322,4 +330,4 @@ following is the default paramenter (omitting the #)
 |  Feedback: | TWiki:Plugins/%TOPIC%Dev |
 |  Appraisal: | TWiki:Plugins/%TOPIC%Appraisal |
 
--- TWiki:Main.MichaelDaum - 13 Oct 2006
+-- TWiki:Main.MichaelDaum - 09 Nov 2006

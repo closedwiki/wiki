@@ -32,7 +32,9 @@ sub new {
   $cacheName = '_DBCachePluginDB' unless $cacheName;
 
   my $this = bless($class->SUPER::new($web, $cacheName), $class);
-  $this->{_loadTime} = '';
+  $this->{_loadTime} = 0;
+  $this->{web} = $this->{_web};
+  $this->{web} =~ s/\./\//go; 
   return $this;
 }
 
@@ -55,36 +57,33 @@ sub _getCacheFile {
   my $this = shift;
 
   return TWiki::Func::getDataDir() . '/' . 
-    $this->{_web} . '/' .  $this->{_cachename};
+    $this->{web} . '/' .  $this->{_cachename};
 }
 
 ###############################################################################
 sub _getModificationTime {
   my $this = shift;
-  
-  my @stat = stat($this->_getCacheFile());
 
-  return $stat[8] || $stat[9] || $stat[10] || 0;
+  my $filename = $this->_getCacheFile();
+  my @stat = stat($filename);
+
+  return $stat[9] || $stat[10] || 0;
 }
 
 ###############################################################################
 sub touch {
   my $this = shift;
+  
+  my $filename = $this->_getCacheFile();
 
-  my $atime = time;
-  my $mtime = $atime;
-  return utime $atime, $mtime, $this->_getCacheFile();
+  return utime undef, undef, $filename;
 }
 
 ###############################################################################
 sub isModified {
   my $this = shift;
-
-  if (!defined $this->{_loadTime} || 
-    $this->_getModificationTime() != $this->{_loadTime}) {
-    return 1;
-  } 
   
+  return 1 if $this->{_loadTime} < $this->_getModificationTime();
   return 0;
 }
 
@@ -100,12 +99,12 @@ sub onReload {
     my $topic = $this->fastget($topicName);
 
     # save web
-    $topic->set('web', $this->{_web});
+    $topic->set('web', $this->{web});
 
     #print STDERR "DEBUG: reloading $topicName\n";
 
     # createdate
-    my ($createDate) = &TWiki::Func::getRevisionInfo($this->{_web}, $topicName, 1);
+    my ($createDate) = &TWiki::Func::getRevisionInfo($this->{web}, $topicName, 1);
     $topic->set('createdate', $createDate);
 
     # stored procedures
@@ -159,7 +158,7 @@ sub dbQuery {
   $theReverse ||= '';
   $theSearch ||= '';
 
-  #print STDERR "DEBUG: called dbQuery($theSearch, $theTopics, $theSort, $theReverse) in $this->{_web}\n";
+  #print STDERR "DEBUG: called dbQuery($theSearch, $theTopics, $theSort, $theReverse) in $this->{web}\n";
 
   # get max hit set
   my @topicNames;
@@ -186,8 +185,8 @@ sub dbQuery {
     }
     foreach my $topicName (@topicNames) {
       my $topicObj = $this->fastget($topicName);
-      if (TWiki::Func::checkAccessPermission('VIEW', $wikiUserName, undef, $topicName, $this->{_web})) {
-	if ($search->matches($topicObj)) {
+      if ($search->matches($topicObj)) {
+        if (TWiki::Func::checkAccessPermission('VIEW', $wikiUserName, undef, $topicName, $this->{web})) {
 	  $hits{$topicName} = $topicObj;
 	}
       }
@@ -195,7 +194,7 @@ sub dbQuery {
   } else {
     foreach my $topicName (@topicNames) {
       my $topicObj = $this->fastget($topicName);
-      if (TWiki::Func::checkAccessPermission('VIEW', $wikiUserName, undef, $topicName, $this->{_web})) {
+      if (TWiki::Func::checkAccessPermission('VIEW', $wikiUserName, undef, $topicName, $this->{web})) {
 	$hits{$topicName} = $topicObj if $topicObj;
       }
     }
@@ -245,6 +244,7 @@ sub expandPath {
     return $result1.$result2;
   }
   if ($thePath =~ /^'([^']*)'$/) {
+    #print STDERR "DEBUG: result=$1\n";
     return $1;
   }
   if ($thePath =~ /^(.*?) or (.*)$/) {
@@ -258,22 +258,16 @@ sub expandPath {
   if ($thePath =~ m/^(\w+)(.*)$/o) {
     my $first = $1;
     my $tail = $2;
-    my $root = $theRoot->fastget($first);
-    unless ($root) {
-      # try form
-      # SMELL: try form _first_
-      my $form = $theRoot->fastget('form');
-      if ($form) {
-	$form = $theRoot->fastget($form);
-	$root = $form->fastget($first) if $form;
-      }
-    }
+    my $root;
+    my $form = $theRoot->fastget('form');
+    $form = $theRoot->fastget($form) if $form;
+    $root = $form->fastget($first) if $form;
+    $root = $theRoot->fastget($first) unless $root;
     return $this->expandPath($root, $tail) if ref($root);
-    if ($root) {
-      my $field = TWiki::urlDecode($root);
-      #print STDERR "DEBUG: result=$field\n";
-      return $field;
-    }
+    return '' unless $root;
+    my $field = TWiki::urlDecode($root);
+    #print STDERR "DEBUG: result=$field\n";
+    return $field;
   }
 
   if ($thePath =~ /^@([^\.]+)(.*)$/) {

@@ -21,7 +21,7 @@ use vars qw(
 );
 
 $VERSION = '$Rev$';
-$RELEASE = '1.29';
+$RELEASE = '1.30';
 $NO_PREFS_IN_TOPIC = 1;
 $SHORTDESCRIPTION = 'Lightweighted frontend to the DBCacheContrib';
 
@@ -53,20 +53,13 @@ sub initCore {
   eval 'use TWiki::Plugins::DBCachePlugin::Core;';
   die $@ if $@;
 
-  my $isScripted = &TWiki::Func::getContext()->{'command_line'};
-  unless ($isScripted) {
-    my $query = &TWiki::Func::getCgiQuery();
-    my $theAction = $ENV{'SCRIPT_NAME'} || '';
-    if ($theAction =~ /^.*\/(save|rename|attach|upload)/) {
-      # force reload
-      %TWiki::Plugins::DBCachePlugin::Core::webDB = ();
-    }
-  }
-
   # We don't initialize the webDB hash on every request, see getDB()!
-  #%TWiki::Plugins::DBCachePlugin::Core::webDB = ();# uncomment if you don't trust 
-
-  %TWiki::Plugins::DBCachePlugin::Core::webDBIsModified = ();
+  if (0) { # set this to 1 if you like
+    #&TWiki::Plugins::DBCachePlugin::Core::DESTROY_ALL();
+  } else {
+    # at least check for a changed _DB file on every turn
+    %TWiki::Plugins::DBCachePlugin::Core::webDBIsModified = ();
+  }
 
   $TWiki::Plugins::DBCachePlugin::Core::wikiWordRegex = 
     TWiki::Func::getRegularExpression('wikiWordRegex');
