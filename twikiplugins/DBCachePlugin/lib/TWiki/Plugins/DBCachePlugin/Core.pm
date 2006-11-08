@@ -49,13 +49,13 @@ sub afterSaveHandler {
 
 ###############################################################################
 sub handleDBQUERY {
-  my ($session, $params, undef, $thisWeb) = @_;
+  my ($session, $params, $theTopic, $theWeb) = @_;
 
   #writeDebug("called handleDBQUERY(" . $params->stringify() . ")");
 
   # params
   my $theSearch = $params->{_DEFAULT} || $params->{search};
-  my $theTopic = $params->{topic} || '';
+  my $thisTopic = $params->{topic} || '';
   my $theTopics = $params->{topics} || '';
   my $theFormat = $params->{format} || '$topic';
   my $theHeader = $params->{header} || '';
@@ -69,20 +69,20 @@ sub handleDBQUERY {
   my $theSkip = $params->{skip} || 0;
   my $theHideNull = $params->{hidenull} || 'off';
   my $theRemote = $params->remove('remote') || 'on';
-  $theRemote = ($theRemote eq 'on')?1:0;
+  $theRemote = ($theRemote eq 'on')?1:(($theRemote eq 'force')?2:0);
 
   # get web and topic(s)
   my @topicNames = ();
-  my $theWeb = $params->{web} || $thisWeb;
-  if ($theTopic) {
-    ($theWeb, $theTopic) = TWiki::Func::normalizeWebTopicName($theWeb, $theTopic);
-    push @topicNames, $theTopic;
+  my $thisWeb = $params->{web} || $theWeb;
+  if ($thisTopic) {
+    ($thisWeb, $thisTopic) = TWiki::Func::normalizeWebTopicName($thisWeb, $thisTopic);
+    push @topicNames, $thisTopic;
   } else {
     if ($theTopics) {
       @topicNames = split(/, /, $theTopics);
     }
   }
-  my $theDB = getDB($theWeb);
+  my $theDB = getDB($thisWeb);
 
   # normalize 
   $theSkip =~ s/[^-\d]//go;
@@ -127,7 +127,8 @@ sub handleDBQUERY {
 	$temp =~ s#\)#${TranslationToken}#g;
 	$temp/geo;
       $format =~ s/\$formatTime\((.*?)(?:,\s*'([^']*?)')?\)/TWiki::Func::formatTime($theDB->expandPath($topicObj, $1), $2)/geo; # single quoted
-      $format = _expandVariables($format, topic=>$topicName, web=>$topicWeb, index=>$index, count=>$count);
+      $format = _expandVariables($format, $topicWeb, $topicName,
+	topic=>$topicName, web=>$topicWeb, index=>$index, count=>$count);
       $format = &TWiki::Func::expandCommonVariables($format, $topicName, $topicWeb);
       $text .= $format;
       last if $index == $theLimit;
@@ -135,14 +136,14 @@ sub handleDBQUERY {
   }
   $text =~ s/${TranslationToken}/)/go;
 
-  $theHeader = _expandVariables($theHeader, count=>$count, web=>$theWeb) if $theHeader;
-  $theFooter = _expandVariables($theFooter, count=>$count, web=>$theWeb) if $theFooter;
+  $theHeader = _expandVariables($theHeader, $theWeb, $theTopic, count=>$count, web=>$thisWeb) if $theHeader;
+  $theFooter = _expandVariables($theFooter, $theWeb, $theTopic, count=>$count, web=>$thisWeb) if $theFooter;
 
   $text = &TWiki::Func::expandCommonVariables("$theHeader$text$theFooter", 
-    $TWiki::Plugins::DBCachePlugin::currentTopic, $theWeb);
+    $theTopic, $theWeb);
 
-  if($thisWeb ne $theWeb && !$theRemote) {
-    _fixInclude($session, $theWeb, $text);
+  if($theRemote == 2 || ($theRemote == 0 && $thisWeb ne $theWeb)) {
+    _fixInclude($session, $thisWeb, $text);
   }
 
   return $text;
@@ -166,9 +167,9 @@ sub handleDBCALL {
   my $warn = $params->remove('warn') || 'on';
   $warn = ($warn eq 'on')?1:0;
   my $remote = $params->remove('remote') || 'off';
-  $remote = ($remote eq 'on')?1:0;
+  $remote = ($remote eq 'on')?1:(($remote eq 'force')?2:0);
 
-  #writeDebug("thisWeb=$thisWeb thisTopic=$thisTopic");
+  #writeDebug("thisWeb=$thisWeb thisTopic=$thisTopic theWeb=$theWeb theTopic=$theTopic");
 
   # get web and topic
   my $thisDB = getDB($thisWeb);
@@ -224,7 +225,7 @@ sub handleDBCALL {
   $sectionText = TWiki::Func::expandCommonVariables($sectionText, $thisTopic, $thisWeb);
 
   # fix local linx
-  if($thisWeb ne $theWeb && !$remote) {
+  if($remote == 2 || ($remote == 0 && $thisWeb ne $theWeb)) {
     _fixInclude($session, $thisWeb, $sectionText);
   }
 
@@ -309,12 +310,14 @@ sub handleDBSTATS {
 	  $record->{count}++;
 	  $record->{from} = $createdate if $record->{from} > $createdate;
 	  $record->{to} = $createdate if $record->{to} < $createdate;
+	  push @{$record->{topics}}, $topicName;
 	} else {
 	  my %record = (
 	    count=>1,
 	    from=>$createdate,
 	    to=>$createdate,
 	    keyList=>[$key1, $key2, $key3, $key4, $key5],
+	    topics=>[$topicName],
 	  );
 	  $statistics{$key1} = \%record;
 	}
@@ -360,7 +363,10 @@ sub handleDBSTATS {
     $text = $theSep if $result;
     $text .= $theFormat;
     $result .= &_expandVariables($text, 
+      $thisWeb,
+      $theTopic,
       'web'=>$thisWeb,
+      'topics'=>join(', ', @{$record->{topics}}),
       'key'=>$key,
       'key1'=>$key1,
       'key2'=>$key2,
@@ -377,8 +383,8 @@ sub handleDBSTATS {
     );
     last if $theLimit && $index == $theLimit;
   }
-  $theHeader = &_expandVariables($theHeader);
-  $theFooter = &_expandVariables($theFooter);
+  $theHeader = &_expandVariables($theHeader, $thisWeb, $theTopic);
+  $theFooter = &_expandVariables($theFooter, $thisWeb, $theTopic);
   $result = &TWiki::Func::expandCommonVariables($theHeader.$result.$theFooter, $theTopic, $thisWeb);
 
   return $result;
@@ -449,16 +455,16 @@ sub getDB {
   unless (defined $webDB{$theWeb}) {
     # never loaded
     $isModified = 1;
-    #writeDebug("fresh reload");
+    writeDebug("fresh reload of $theWeb");
   } else {
     unless (defined $webDBIsModified{$theWeb}) {
       # never checked
       $webDBIsModified{$theWeb} = $webDB{$theWeb}->isModified();
       if ($debug) {
 	if ($webDBIsModified{$theWeb}) {
-	  #writeDebug("checking modified webdb for $theWeb");
+	  writeDebug("reloading modified $theWeb");
 	} else {
-	  #writeDebug("don't need to load webdb for $theWeb");
+	  writeDebug("don't need to load webdb for $theWeb");
 	}
       }
     }
@@ -472,6 +478,7 @@ sub getDB {
     $impl =~ s/\s+$//go;
     #writeDebug("loading new webdb for '$theWeb'");
     #writeDebug("impl='$impl'");
+    $webDB{$theWeb}->DESTROY() if $webDB{$theWeb};
     $webDB{$theWeb} = new $impl($theWeb);
     $webDB{$theWeb}->load();
     $webDBIsModified{$theWeb} = 0;
@@ -479,6 +486,18 @@ sub getDB {
 
   return $webDB{$theWeb};
 }
+
+###############################################################################
+sub DESTROY_ALL {
+  foreach my $web (keys %webDB) {
+    #writeDebug("closing db for $web");
+    $webDB{$web}->touch();
+    $webDB{$web}->DESTROY();
+  }
+  %webDB = ();
+  %webDBIsModified = ();
+}
+
 
 ###############################################################################
 # from TWiki::_INCLUDE
@@ -526,7 +545,7 @@ sub _fixIncludeLink {
 
 ###############################################################################
 sub _expandVariables {
-  my ($theFormat, %params) = @_;
+  my ($theFormat, $web, $topic, %params) = @_;
 
   return '' unless $theFormat;
   
@@ -536,13 +555,13 @@ sub _expandVariables {
     }
   }
   $theFormat =~ s/\$percnt/\%/go;
-  $theFormat =~ s/\$dollar/\$/go;
   $theFormat =~ s/\$nop//g;
   $theFormat =~ s/\$n/\n/go;
   $theFormat =~ s/\$t\b/\t/go;
   $theFormat =~ s/\$flatten\((.*?)\)/&_flatten($1)/ges;
-  $theFormat =~ s/\$encode\((.*?)\)/&_encode($1)/ges;
+  $theFormat =~ s/\$encode\((.*?)\)/&_encode($1, $web, $topic)/ges;
   $theFormat =~ s/\$trunc\((.*?),\s*(\d+)\)/substr($1,0,$2)/ges;
+  $theFormat =~ s/\$dollar/\$/go;
 
   return $theFormat;
 }
@@ -550,10 +569,10 @@ sub _expandVariables {
 ###############################################################################
 # for rss
 sub _encode {
-  my $text = shift;
+  my ($text, $web, $topic) = @_;
 
   $text = "\n<noautolink>\n$text\n</noautolink>\n";
-  $text = &TWiki::Func::expandCommonVariables($text);
+  $text = &TWiki::Func::expandCommonVariables($text, $topic, $web);
   $text = &TWiki::Func::renderText($text);
   $text =~ s/\b(onmouseover|onmouseout|style)=".*?"//go; # TODO filter out more not validating attributes
   $text =~ s/<nop>//go;
