@@ -24,7 +24,7 @@ If you want to learn how to create your own look or skin based on !PatternSkin, 
 !PatternSkin uses namespaces for templates, by adding one (sometimes two - multiple) class names to the template's body tag. 
 
    * The body tag in view.pattern.tmpl for instance has the class name "patternViewPage": =&lt;body class="patternViewPage"&gt;=. All CSS elements specific to the view template thus can be defined as =.patternViewPage .someClassName=.
-   * All templates that are _not_ the view template have the body class name "patternNoViewPage". That makes it easy to give all of these pages a different layout in one sweep (smaller or wider margins for instance). Template edit.pattern.tmpl uses =&lt;body class="patternNoViewPage patternEditPage"&gt;=.
+   * All templates that are _not_ the view template have the body class name "patternNoViewPage". That makes it easy to give all of these pages a different layout (smaller or wider margins for instance) in one sweep. Template edit.pattern.tmpl uses =&lt;body class="patternNoViewPage patternEditPage"&gt;=.
 
 ---+++ Page type classes
 
