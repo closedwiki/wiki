@@ -116,32 +116,32 @@ These tests require TWiki:Plugins.JSUnitContrib to run.
 ---++ twiki.Form
 <script language="javascript" src="%PUBURL%/%TWIKIWEB%/TWikiJavascripts/twikiForm.js"></script>
 
-<form id="testForm%TOPIC%" name="testForm%TOPIC%">
+<form id="testForm" name="testForm">
 
 <!-- text input -->
-<input type="text" name="testInput%TOPIC%" value="TESTTEXT" size="40" disabled=true />
+<input type="text" name="testInput" value="TESTTEXT" size="40" disabled=true />
 
 <!-- text input -->
-<input type="password" name="testPwd%TOPIC%" value="secret" size="40" disabled=true />
+<input type="password" name="testPwd" value="secret" size="40" disabled=true />
 
 <!-- radio buttons -->
-<input type="radio" name="testRadio%TOPIC%" value="text" checked="checked" disabled=true /><label for="textbody">Text body</label><br />
-<input type="radio" name="testRadio%TOPIC%" value="topic" disabled=true /><label for="topictitle">Topic title</label><br />
-<input type="radio" name="testRadio%TOPIC%" value="all" disabled=true /><label for="both">Both body and title</label>
+<input type="radio" name="testRadio" value="text" checked="checked" disabled=true /><label for="textbody">Text body</label><br />
+<input type="radio" name="testRadio" value="topic" disabled=true /><label for="topictitle">Topic title</label><br />
+<input type="radio" name="testRadio" value="all" disabled=true /><label for="both">Both body and title</label>
 
 <!-- checkboxes -->
-<input type="checkbox" name="testCbNoSearch%TOPIC%" checked="checked" disabled=true /><label for="nosearch">Search string</label><br />
-<input type="checkbox" name="testCbNoSummary%TOPIC%" checked="checked" disabled=true /><label for="nosummary">Summaries</label><br />
+<input type="checkbox" name="testCbNoSearch" checked="checked" disabled=true /><label for="nosearch">Search string</label><br />
+<input type="checkbox" name="testCbNoSummary" checked="checked" disabled=true /><label for="nosummary">Summaries</label><br />
 <input type="checkbox" name="nototal" disabled=true /><label for="nototal">Total matches</label>
 
 <!-- hidden field -->
-<input type=hidden name="testHidden%TOPIC%" value="classic" disabled=true  />
+<input type=hidden name="testHidden" value="classic" disabled=true  />
 
 <!-- textarea -->
-<textarea name="testTextArea%TOPIC%" disabled=true >COMMENTSTEXT</textarea>
+<textarea name="testTextArea" disabled=true >COMMENTSTEXT</textarea>
 
 <!-- select dropdown -->
-<select name="testSelect%TOPIC%" disabled=true >
+<select name="testSelect" disabled=true >
 <option value="volvo">Volvo</option>
 <option value="saab">Saab</option>
 <option value="fiat" selected="selected">Fiat</option>
@@ -149,7 +149,7 @@ These tests require TWiki:Plugins.JSUnitContrib to run.
 </select>
 
 <!-- select multile -->
-<select name="testSelectMultiple%TOPIC%" size="5" multiple disabled=true > 
+<select name="testSelectMultiple" size="5" multiple> 
 <option>[New Genre]</option> 
 <option selected="selected">Industrial</option> 
 <option selected="selected">Rock</option> 
@@ -165,23 +165,23 @@ These tests require TWiki:Plugins.JSUnitContrib to run.
     function testFormData2QueryStringWithValidArgs() {
     	{
 			var queryString = twiki.Form.formData2QueryString(
-				document.getElementById('testForm%TOPIC%')
+				document.getElementById('testForm')
 			);
-			assertEquals("Form values not collapsed", "testInput%TOPIC%=TESTTEXT;testPwd%TOPIC%=secret;testRadio%TOPIC%=text;testCbNoSearch%TOPIC%=on;testCbNoSummary%TOPIC%=on;testHidden%TOPIC%=classic;testTextArea%TOPIC%=COMMENTSTEXT;testSelect%TOPIC%=fiat;testSelectMultiple%TOPIC%=Industrial;testSelectMultiple%TOPIC%=Rock", queryString);
+			assertEquals("Form values not collapsed", "testInput=TESTTEXT;testPwd=secret;testRadio=text;testCbNoSearch=on;testCbNoSummary=on;testHidden=classic;testTextArea=COMMENTSTEXT;testSelect=fiat;testSelectMultiple=Industrial;testSelectMultiple=Rock", queryString);
 		}
 		{
 			var queryString = twiki.Form.formData2QueryString(
-				document.getElementById('testForm%TOPIC%'),
+				document.getElementById('testForm'),
 				{collapseMulti:false}
 			);
-			assertEquals("Form values; collapsed false", "testInput%TOPIC%=TESTTEXT;testPwd%TOPIC%=secret;testRadio%TOPIC%=text;testCbNoSearch%TOPIC%=on;testCbNoSummary%TOPIC%=on;testHidden%TOPIC%=classic;testTextArea%TOPIC%=COMMENTSTEXT;testSelect%TOPIC%=fiat;testSelectMultiple%TOPIC%=Industrial;testSelectMultiple%TOPIC%=Rock", queryString);
+			assertEquals("Form values; collapsed false", "testInput=TESTTEXT;testPwd=secret;testRadio=text;testCbNoSearch=on;testCbNoSummary=on;testHidden=classic;testTextArea=COMMENTSTEXT;testSelect=fiat;testSelectMultiple=Industrial;testSelectMultiple=Rock", queryString);
 		}
 		{
 			var queryString = twiki.Form.formData2QueryString(
-				document.getElementById('testForm%TOPIC%'),
+				document.getElementById('testForm'),
 				{collapseMulti:true}
 			);
-			assertEquals("Form values collapsed", "testInput%TOPIC%=TESTTEXT;testPwd%TOPIC%=secret;testRadio%TOPIC%=text;testCbNoSearch%TOPIC%=on;testCbNoSummary%TOPIC%=on;testHidden%TOPIC%=classic;testTextArea%TOPIC%=COMMENTSTEXT;testSelect%TOPIC%=fiat;testSelectMultiple%TOPIC%=Industrial,Rock", queryString);
+			assertEquals("Form values collapsed", "testInput=TESTTEXT;testPwd=secret;testRadio=text;testCbNoSearch=on;testCbNoSummary=on;testHidden=classic;testTextArea=COMMENTSTEXT;testSelect=fiat;testSelectMultiple=Industrial,Rock", queryString);
 		}
     }
 
@@ -193,10 +193,10 @@ These tests require TWiki:Plugins.JSUnitContrib to run.
 		}
 		{
 			var queryString = twiki.Form.formData2QueryString(
-				document.getElementById('testForm%TOPIC%'),
+				document.getElementById('testForm'),
 				{bla:true}
 			);
-			assertEquals("Non-existing options should do nothing", "testInput%TOPIC%=TESTTEXT;testPwd%TOPIC%=secret;testRadio%TOPIC%=text;testCbNoSearch%TOPIC%=on;testCbNoSummary%TOPIC%=on;testHidden%TOPIC%=classic;testTextArea%TOPIC%=COMMENTSTEXT;testSelect%TOPIC%=fiat;testSelectMultiple%TOPIC%=Industrial;testSelectMultiple%TOPIC%=Rock", queryString);
+			assertEquals("Non-existing options should do nothing", "testInput=TESTTEXT;testPwd=secret;testRadio=text;testCbNoSearch=on;testCbNoSummary=on;testHidden=classic;testTextArea=COMMENTSTEXT;testSelect=fiat;testSelectMultiple=Industrial;testSelectMultiple=Rock", queryString);
 		}
     }
 
@@ -215,7 +215,7 @@ These tests require TWiki:Plugins.JSUnitContrib to run.
 <script language="javascript">
 /*<![CDATA[*/
     function testSetHtmlOfElementWithIdWithValidArgs() {
-    	var html = "<span style=\"color:blue;\">Blue text<\/span>";
+    	var html = "<span style=\"color:#00f\">Blue text<\/span>";
 		var elem = twiki.HTML.setHtmlOfElementWithId(
 			"testSetHtmlOfElementWithId",
 			html
@@ -224,8 +224,8 @@ These tests require TWiki:Plugins.JSUnitContrib to run.
 		var result = twiki.HTML.getHtmlOfElementWithId("testSetHtmlOfElementWithId");
     	assertEquals(
     		"Result setHtmlOfElementWithId",
-    		html.toLowerCase(),
-    		result.toLowerCase()
+    		html.toLowerCase().replace(/\s*/g,''),
+    		result.toLowerCase().replace(/\s*/g,'')
     	);
     	
     	assertEquals(
@@ -236,7 +236,7 @@ These tests require TWiki:Plugins.JSUnitContrib to run.
 	}
 	
 	function testSetHtmlOfElementWithIdWithInvalidArgs() {
-		var html = "<span style=\"color:blue;\">Blue text<\/span>";
+		var html = "<span style=\"color:#00f\">Blue text<\/span>";
 		var newElem = twiki.HTML.setHtmlOfElementWithId(
 			"doesNotExist",
 			html
@@ -254,7 +254,7 @@ These tests require TWiki:Plugins.JSUnitContrib to run.
 <script language="javascript">
 /*<![CDATA[*/
     function testSetHtmlOfElementWithValidArgs() {
-    	var html = "<span style=\"color:blue;\">Blue text<\/span>";
+    	var html = "<span style=\"color:#00f\">Blue text<\/span>";
     	var elem = document.getElementById("setHtmlOfElement");
 		var newElem = twiki.HTML.setHtmlOfElement(
 			elem,
@@ -264,8 +264,8 @@ These tests require TWiki:Plugins.JSUnitContrib to run.
 		var result = twiki.HTML.getHtmlOfElementWithId("setHtmlOfElement");
     	assertEquals(
     		"Result setHtmlOfElement",
-    		html.toLowerCase(),
-    		result.toLowerCase()
+    		html.toLowerCase().replace(/\s*/g,''),
+    		result.toLowerCase().replace(/\s*/g,'')
     	);
     	
     	assertEquals(
@@ -277,7 +277,7 @@ These tests require TWiki:Plugins.JSUnitContrib to run.
 	}
 	
 	function testSetHtmlOfElementWithInvalidArgs() {
-		var html = "<span style=\"color:blue;\">Blue text<\/span>";
+		var html = "<span style=\"color:#00f\">Blue text<\/span>";
 		var newElem = twiki.HTML.setHtmlOfElement(
 			null,
 			html
@@ -396,8 +396,8 @@ These tests require TWiki:Plugins.JSUnitContrib to run.
     	var result = twiki.HTML.getHtmlOfElementWithId("testInsertAfterResult");
     	assertEquals(
     		"Result insert after",
-    		html.toLowerCase(),
-    		result.toLowerCase()
+    		html.toLowerCase().replace(/\s*/g,''),
+    		result.toLowerCase().replace(/\s*/g,'')
     	);
     	
     	assertEquals(
@@ -435,8 +435,8 @@ These tests require TWiki:Plugins.JSUnitContrib to run.
     	var result = twiki.HTML.getHtmlOfElementWithId("testInsertBeforeResult");
     	assertEquals(
     		"Result insert before",
-    		html.toLowerCase(),
-    		result.toLowerCase()
+    		html.toLowerCase().replace(/\s*/g,''),
+    		result.toLowerCase().replace(/\s*/g,'')
     	);
     	
     	assertEquals(
@@ -475,8 +475,8 @@ These tests require TWiki:Plugins.JSUnitContrib to run.
     	var result = twiki.HTML.getHtmlOfElementWithId("resultReplaced");
     	assertEquals(
     		"Result replaced",
-    		html.toLowerCase(),
-    		result.toLowerCase()
+    		html.toLowerCase().replace(/\s*/g,''),
+    		result.toLowerCase().replace(/\s*/g,'')
     	);
     	
     	assertEquals(

@@ -3,8 +3,10 @@ twiki.Form = {
 	KEYVALUEPAIR_DELIMITER : ";",
 	
 	/*
+	Original js filename: formdata2querystring.js
+	
 	Copyright 2005 Matthew Eernisse (mde@fleegix.org)
-
+	
 	Licensed under the Apache License, Version 2.0 (the "License");
 	you may not use this file except in compliance with the License.
 	You may obtain a copy of the License at
@@ -42,85 +44,85 @@ twiki.Form = {
 		var lastElemName = '';
 		
 		for (i = 0; i < inForm.elements.length; i++) {
-		formElem = inForm.elements[i];
-		
-		switch (formElem.type) {
-			// Text fields, hidden form elements
-			case 'text':
-			case 'hidden':
-			case 'password':
-			case 'textarea':
-			case 'select-one':
-			str += formElem.name
-				+ '='
-				+ encodeURI(formElem.value)
-				+ twiki.Form.KEYVALUEPAIR_DELIMITER;
-			break;
+			formElem = inForm.elements[i];
 			
-			// Multi-option select
-			case 'select-multiple':
-			var isSet = false;
-			for(var j = 0; j < formElem.options.length; j++) {
-				var currOpt = formElem.options[j];
-				if(currOpt.selected) {
-					if (opts.collapseMulti) {
-						if (isSet) {
-							str += ','
-								+ encodeURI(currOpt.value);
-						} else {
-							str += formElem.name
-								+ '='
-								+ encodeURI(currOpt.value);
-							isSet = true;
+			switch (formElem.type) {
+				// Text fields, hidden form elements
+				case 'text':
+				case 'hidden':
+				case 'password':
+				case 'textarea':
+				case 'select-one':
+					str += formElem.name
+						+ '='
+						+ encodeURI(formElem.value)
+						+ twiki.Form.KEYVALUEPAIR_DELIMITER;
+					break;
+				
+				// Multi-option select
+				case 'select-multiple':
+					var isSet = false;
+					for(var j = 0; j < formElem.options.length; j++) {
+						var currOpt = formElem.options[j];
+						if(currOpt.selected) {
+							if (opts.collapseMulti) {
+								if (isSet) {
+									str += ','
+										+ encodeURI(currOpt.text);
+								} else {
+									str += formElem.name
+										+ '='
+										+ encodeURI(currOpt.text);
+									isSet = true;
+								}
+							} else {
+								str += formElem.name
+									+ '='
+									+ encodeURI(currOpt.text)
+									+ twiki.Form.KEYVALUEPAIR_DELIMITER;
+							}
 						}
-					} else {
+					}
+					if (opts.collapseMulti) {
+						str += twiki.Form.KEYVALUEPAIR_DELIMITER;
+					}
+					break;
+				
+				// Radio buttons
+				case 'radio':
+					if (formElem.checked) {
 						str += formElem.name
 							+ '='
-							+ encodeURI(currOpt.value)
+							+ encodeURI(formElem.value)
 							+ twiki.Form.KEYVALUEPAIR_DELIMITER;
 					}
-				}
-			}
-			if (opts.collapseMulti) {
-				str += twiki.Form.KEYVALUEPAIR_DELIMITER;
-			}
-			break;
-			
-			// Radio buttons
-			case 'radio':
-			if (formElem.checked) {
-				str += formElem.name
-					+ '='
-					+ encodeURI(formElem.value)
-					+ twiki.Form.KEYVALUEPAIR_DELIMITER;
-			}
-			break;
-			
-			// Checkboxes
-			case 'checkbox':
-			if (formElem.checked) {
-				// Collapse multi-select into comma-separated list
-				if (opts.collapseMulti && (formElem.name == lastElemName)) {
-				// Strip of end ampersand if there is one
-				if (str.lastIndexOf('&') == str.length-1) {
-					str = str.substr(0, str.length - 1);
-				}
-				// Append value as comma-delimited string
-				str += ','
-					+ encodeURI(formElem.value);
-				}
-				else {
-				str += formElem.name
-					+ '='
-					+ encodeURI(formElem.value);
-				}
-				str += twiki.Form.KEYVALUEPAIR_DELIMITER;
-				lastElemName = formElem.name;
-			}
-			break;
-			
-		}
-		}
+					break;
+				
+				// Checkboxes
+				case 'checkbox':
+					if (formElem.checked) {
+						// Collapse multi-select into comma-separated list
+						if (opts.collapseMulti && (formElem.name == lastElemName)) {
+						// Strip of end ampersand if there is one
+						if (str.lastIndexOf('&') == str.length-1) {
+							str = str.substr(0, str.length - 1);
+						}
+						// Append value as comma-delimited string
+						str += ','
+							+ encodeURI(formElem.value);
+						}
+						else {
+						str += formElem.name
+							+ '='
+							+ encodeURI(formElem.value);
+						}
+						str += twiki.Form.KEYVALUEPAIR_DELIMITER;
+						lastElemName = formElem.name;
+					}
+					break;
+					
+				} // switch
+			} // for
 		// Remove trailing separator
 		str = str.substr(0, str.length - 1);
 		return str;
