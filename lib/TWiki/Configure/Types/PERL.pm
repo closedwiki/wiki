@@ -83,6 +83,9 @@ sub deep_equals {
     if (!defined($a) && !defined($b)) {
         return 1;
     }
+    if (!defined($a) || !defined($b)) {
+        return 0;
+    }
     if (ref($a) eq 'ARRAY' && ref($b) eq 'ARRAY') {
         return 0 unless scalar(@$a) == scalar(@$b);
         for (0..$#$a) {
