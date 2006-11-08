@@ -154,6 +154,10 @@ Behaviour.register(myrules);
 // ]]>
 </script>
 
+---++ Development
+   * [[http://groups.google.com/group/behaviour][Google Groups: Behaviour Javascript Library]]
+   * [[http://dean.edwards.name/weblog/2006/03/faster/][Dean Edwards: Faster DOM Queries]] - with a speed-up hack to Behaviour
+
 ---++ License
 Behaviour is freely distributable under the terms of an BSD license.
 For details, see the Behaviour website.
