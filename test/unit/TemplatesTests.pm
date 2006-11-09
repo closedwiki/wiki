@@ -41,6 +41,7 @@ sub set_up {
     
     $TWiki::cfg{TemplateDir} = $test_tmpls;
     $TWiki::cfg{DataDir} = $test_data;
+
 }
 
 sub tear_down {
@@ -238,19 +239,8 @@ sub test_WebTopicsC {
     $this->assert_str_equals("Web/ScriptTemplate", $data );
     $data = $tmpls->readTemplate('script', 'burnt', '' );
     $this->assert_str_equals("$sys/BurntSkinScriptTemplate", $data );
-
-    #FIXME
-    #This is against the spec, should return $sys/BurntSkinScriptTemplate
-    #The search path should be:
-    # 0 looks for topic =${skin}Skin${name}Template= (BurntSkinScriptTemplate)
-    #    0 in $web  (Web/BurntSkinScriptTemplate)
-    #    0 in =TWiki::cfg{SystemWebName}= ($sys/BurntSkinScriptTemplate)
-    # 0 looks for topic =${name}Template=
-    #     0 in $web (Web/ScriptTemplate)
-    #     0 in =TWiki::cfg{SystemWebName}= ($sys/ScriptTemplate)
-    #
     $data = $tmpls->readTemplate('script', 'burnt', 'web' );
-    $this->assert_str_equals("Web/ScriptTemplate", $data );
+    $this->assert_str_equals("$sys/BurntSkinScriptTemplate", $data );
 }
 
 sub test_WebTopicsD {
@@ -286,13 +276,13 @@ sub test_webTopicsE {
     write_topic( 'Web', 'BurntSkinScriptTemplate' );
     write_topic( 'Web', 'Script' );
     $data = $tmpls->readTemplate('Web.Script', '', '' );
-    $this->assert_str_equals("Web/Script", $data );
+    $this->assert_str_equals("Web/ScriptTemplate", $data );
     $data = $tmpls->readTemplate('Web.Script', '', 'web' );
-    $this->assert_str_equals("Web/Script", $data );
+    $this->assert_str_equals("Web/ScriptTemplate", $data );
     $data = $tmpls->readTemplate('Web.Script', 'burnt', '' );
-    $this->assert_str_equals("Web/Script", $data );
+    $this->assert_str_equals("Web/BurntSkinScriptTemplate", $data );
     $data = $tmpls->readTemplate('Web.Script', 'burnt', 'web' );
-    $this->assert_str_equals("Web/Script", $data );
+    $this->assert_str_equals("Web/BurntSkinScriptTemplate", $data );
 }
 
 #Wishlist
