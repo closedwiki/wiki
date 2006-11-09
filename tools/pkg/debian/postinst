@@ -158,6 +158,7 @@ case "$1" in
 	
 	chown -R $TWIKI_OWNER.www-data /var/log/twiki
 	chmod -R 755 /var/log/twiki
+	chown $TWIKI_OWNER.www-data /etc/twiki/LocalSite.cfg
 	
 	# reload apache configs
 	for server in $servers; do
