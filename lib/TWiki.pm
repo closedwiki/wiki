@@ -1632,6 +1632,7 @@ sub _includeUrl {
               unless $raw;
             $text = applyPatternToIncludedText( $text, $pattern )
               if( $pattern );
+            $text = "<literal>\n" . $text . "\n</literal>" if ( $options->{literal} );
             return $text;
         }
         # fall through; try to include file over http based on MIME setting
@@ -1681,6 +1682,7 @@ sub _includeUrl {
                 $warn, 'bad_content', $contentType );
         }
         $text = applyPatternToIncludedText( $text, $pattern ) if( $pattern );
+        $text = "<literal>\n" . $text . "\n</literal>" if ( $options->{literal} );
     } catch Error::Simple with {
         my $e = shift;
         $text = $this->_includeWarning( $warn, 'geturl_failed', $url );
