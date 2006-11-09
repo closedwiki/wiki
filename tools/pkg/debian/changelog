@@ -1,6 +1,6 @@
 twiki (1:4.0.5-1) unstable; urgency=high
 
-  * update to twiki release 4.0.5 (Closes: #324916)
+  * update to twiki release 4.0.5 (Closes: #324916, #307299, #308347)
   * following work by Amaya Rodrigo Sastre <amaya@debian.org> - Thankyou :)
   * Build-Depend on tardy instead of the soon to be removed tarcust (Closes: #390748).
   * Unfuzzy debian/po translations, thanks to Bubulle for guidance. Tampered a
