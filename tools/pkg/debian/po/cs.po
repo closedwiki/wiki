@@ -14,8 +14,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: twiki\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-01-17 21:38+1100\n"
+"Report-Msgid-Bugs-To: svenud@ozemail.com.au\n"
+"POT-Creation-Date: 2006-11-06 16:13+0100\n"
 "PO-Revision-Date: 2005-08-07 19:04+0200\n"
 "Last-Translator: Miroslav Kure <kurem@debian.cz>\n"
 "Language-Team: Czech <debian-l10n-czech@lists.debian.org>\n"
@@ -25,19 +25,19 @@ msgstr ""
 
 #. Type: string
 #. Default
-#: ../templates:3
+#: ../templates:1001
 msgid "http://localhost/"
 msgstr "http://localhost/"
 
 #. Type: string
 #. Description
-#: ../templates:4
+#: ../templates:1002
 msgid "What is the top-level URL of the server TWiki runs under?"
 msgstr "Jaké je vrcholové URL serveru, pod kterým TWiki poběží?"
 
 #. Type: string
 #. Description
-#: ../templates:4
+#: ../templates:1002
 msgid ""
 "For a normal install, this should be a URL for your web server's full name, "
 "which is used to construct urls on some pages.  The install will serve up "
@@ -51,19 +51,19 @@ msgstr ""
 
 #. Type: string
 #. Default
-#: ../templates:12
+#: ../templates:2001
 msgid "webmaster@localhost"
 msgstr "webmaster@localhost"
 
 #. Type: string
 #. Description
-#: ../templates:13
+#: ../templates:2002
 msgid "What is the email address of the webmaster for this TWiki?"
 msgstr "Jaká je e-mailová adresa správce tohoto TWiki?"
 
 #. Type: string
 #. Description
-#: ../templates:13
+#: ../templates:2002
 msgid ""
 "This email address gets mail for new user registration, and is listed on the "
 "\"oops\" page when things go wrong."
@@ -74,13 +74,13 @@ msgstr ""
 
 #. Type: boolean
 #. Description
-#: ../templates:20
+#: ../templates:3001
 msgid "Install sample wiki universe on initial install?"
 msgstr "Instalovat při prvotní instalaci vzorový wiki web?"
 
 #. Type: boolean
 #. Description
-#: ../templates:20
+#: ../templates:3001
 msgid ""
 "TWiki includes a complete \"starter kit\" which includes user registration "
 "pages, documentation, and tutorials.  If you're re-installing twiki after "
@@ -99,18 +99,18 @@ msgstr ""
 "první instalaci akceptujte, což vám nainstaluje vzorová data do /var/lib/"
 "twiki/data (a /var/www/twiki/pub). (Sada pro začátečníky se nerozbalí, pokud "
 "existuje soubor data/Main/WebHome.txt; budete-li ji chtít nainstalovat "
-"ručně, nachází se v souboru /usr/share/doc/twiki/twiki-data.tar.gz "
-"(a twiki-pub.tar.gz).)"
+"ručně, nachází se v souboru /usr/share/doc/twiki/twiki-data.tar.gz (a twiki-"
+"pub.tar.gz).)"
 
 #. Type: note
 #. Description
-#: ../templates:34
+#: ../templates:4001
 msgid "User Registration configuration required"
 msgstr "Vyžadována změna v nastavení registrace uživatelů"
 
 #. Type: note
 #. Description
-#: ../templates:34
+#: ../templates:4001
 msgid ""
 "The default debian installation of the TWiki is configured to create new "
 "users automatically when a user Registers. This is not as secure as the "
@@ -127,5 +127,5 @@ msgstr ""
 "Změnu, aby uživatele zakládal administrátor ručně, provedete pomocí TWiki "
 "RenameToppic, kde přejmenujete TWikiRegistration na TWikiRegistrationPub a "
 "poté TWikiRegistrationDefault na TWikiRegistration. DŮLEŽITÉ: Až si pro sebe "
-"vytvoříte uživatele, omezte administrátorská oprávnění úpravou "
-"Main.TWikiAdminGroup."
+"vytvoříte uživatele, omezte administrátorská oprávnění úpravou Main."
+"TWikiAdminGroup."

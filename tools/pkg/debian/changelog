@@ -1,6 +1,19 @@
+twiki (1:4.0.4-3.1) unstable; urgency=low
+
+  * Non-maintainer upload.
+  * Lovingly NMU twiki with maintainer's permission.
+  * Build-Depend on tarcust instead on (non-free) tardy (Closes: #390748).
+  * Unfuzzy debian/po translations, thanks to Bubulle for guidance. Tampered a
+    bit with the pt_BR translation to unfuzzy it for real. My excuses for my
+    poor Brazilian skills :)
+  * Relate Hotfix 4 with #389267 in changelog for completeness.
+  * Add debconf-updatepo to the debian/rules clean target 
+
+ -- Amaya Rodrigo Sastre <amaya@debian.org>  Tue,  7 Nov 2006 09:52:09 +0100
+
 twiki (1:4.0.4-3) unstable; urgency=high
 
-  * added Hotfix 4 for TWiki 4.0.4
+  * added Hotfix 4 for TWiki 4.0.4 (Closes: #389267).
 
  -- Sven Dowideit <svenud@ozemail.com.au>  Fri, 15 Sep 2006 00:00:01 -1000
 

@@ -38,6 +38,7 @@ clean:
 	test -f $(patches)      # maintainer sanity check
 	find . -name '*~' -print0 | xargs -0 rm -f
 	rm -f build-stamp configure-stamp
+	debconf-updatepo
 
 # Add here commands to clean up after the build process.
 #	-$(MAKE) clean
@@ -89,7 +90,7 @@ install: build
 	find debian/twiki/var/lib/twiki/data -type f -name '*,v' | \
 	  xargs -n1 perl -pi -e 's/^(\s)nobody:/\1$(TWIKI_OWNER):/ unless $$done; $$done=1 if /^\n$$/;'
 	tar -cf - -C debian/twiki var/lib/twiki/data \
-		| tarcust --owner=$(TWIKI_OWNER) --group=www-data \
+		| tardy -User_NAme=$(TWIKI_OWNER) -Group_NAme=www-data \
 		| gzip -c -9 > debian/twiki/usr/share/doc/twiki/twiki-data.tar.gz
 	rm -rf debian/twiki/var/lib/twiki/data
 
@@ -98,7 +99,7 @@ install: build
 	find debian/twiki/var/www/twiki/pub -type f -name '*,v' | \
 	  xargs -n1 perl -pi -e 's/^(\s)nobody:/\1$(TWIKI_OWNER):/ unless $$done; $$done=1 if /^\n$$/;'
 	tar -cf - -C debian/twiki var/www/twiki/pub \
-		| tarcust --owner=$(TWIKI_OWNER) --group=www-data \
+		| tardy -User_NAme=$(TWIKI_OWNER) -Group_NAme=www-data \
 		| gzip -c -9 > debian/twiki/usr/share/doc/twiki/twiki-pub.tar.gz
 	rm -rf debian/twiki/var/www/twiki/pub
 

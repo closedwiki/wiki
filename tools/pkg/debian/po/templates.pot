@@ -1,22 +1,14 @@
-#
-#    Translators, if you are not familiar with the PO format, gettext
-#    documentation is worth reading, especially sections dedicated to
-#    this format, e.g. by running:
-#         info -n '(gettext)PO Files'
-#         info -n '(gettext)Header Entry'
-#
-#    Some information specific to po-debconf are available at
-#            /usr/share/doc/po-debconf/README-trans
-#         or http://www.debian.org/intl/l10n/po-debconf/README-trans
-#
-#    Developers do not need to manually edit POT or PO files.
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-01-17 21:38+1100\n"
+"Report-Msgid-Bugs-To: svenud@ozemail.com.au\n"
+"POT-Creation-Date: 2006-11-06 16:13+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -26,19 +18,19 @@ msgstr ""
 
 #. Type: string
 #. Default
-#: ../templates:3
+#: ../templates:1001
 msgid "http://localhost/"
 msgstr ""
 
 #. Type: string
 #. Description
-#: ../templates:4
+#: ../templates:1002
 msgid "What is the top-level URL of the server TWiki runs under?"
 msgstr ""
 
 #. Type: string
 #. Description
-#: ../templates:4
+#: ../templates:1002
 msgid ""
 "For a normal install, this should be a URL for your web server's full name, "
 "which is used to construct urls on some pages.  The install will serve up "
@@ -48,19 +40,19 @@ msgstr ""
 
 #. Type: string
 #. Default
-#: ../templates:12
+#: ../templates:2001
 msgid "webmaster@localhost"
 msgstr ""
 
 #. Type: string
 #. Description
-#: ../templates:13
+#: ../templates:2002
 msgid "What is the email address of the webmaster for this TWiki?"
 msgstr ""
 
 #. Type: string
 #. Description
-#: ../templates:13
+#: ../templates:2002
 msgid ""
 "This email address gets mail for new user registration, and is listed on the "
 "\"oops\" page when things go wrong."
@@ -68,13 +60,13 @@ msgstr ""
 
 #. Type: boolean
 #. Description
-#: ../templates:20
+#: ../templates:3001
 msgid "Install sample wiki universe on initial install?"
 msgstr ""
 
 #. Type: boolean
 #. Description
-#: ../templates:20
+#: ../templates:3001
 msgid ""
 "TWiki includes a complete \"starter kit\" which includes user registration "
 "pages, documentation, and tutorials.  If you're re-installing twiki after "
@@ -89,13 +81,13 @@ msgstr ""
 
 #. Type: note
 #. Description
-#: ../templates:34
+#: ../templates:4001
 msgid "User Registration configuration required"
 msgstr ""
 
 #. Type: note
 #. Description
-#: ../templates:34
+#: ../templates:4001
 msgid ""
 "The default debian installation of the TWiki is configured to create new "
 "users automatically when a user Registers. This is not as secure as the "

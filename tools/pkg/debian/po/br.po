@@ -15,8 +15,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: TWiki\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-01-17 21:38+1100\n"
+"Report-Msgid-Bugs-To: svenud@ozemail.com.au\n"
+"POT-Creation-Date: 2006-11-06 16:13+0100\n"
 "PO-Revision-Date: 2004-08-23 00:00-0300\n"
 "Last-Translator: Tiago Bortoletto Vaz <tiagovaz@im.ufba.br>\n"
 "Language-Team: Debian-BR Project <debian-l10n-portuguese@lists.debian.org>\n"
@@ -26,19 +26,19 @@ msgstr ""
 
 #. Type: string
 #. Default
-#: ../templates:3
+#: ../templates:1001
 msgid "http://localhost/"
 msgstr ""
 
 #. Type: string
 #. Description
-#: ../templates:4
+#: ../templates:1002
 msgid "What is the top-level URL of the server TWiki runs under?"
 msgstr "Qual é a URL de mais alto nível do servidor que o TWiki irá rodar?"
 
 #. Type: string
 #. Description
-#: ../templates:4
+#: ../templates:1002
 msgid ""
 "For a normal install, this should be a URL for your web server's full name, "
 "which is used to construct urls on some pages.  The install will serve up "
@@ -52,19 +52,19 @@ msgstr ""
 
 #. Type: string
 #. Default
-#: ../templates:12
+#: ../templates:2001
 msgid "webmaster@localhost"
 msgstr ""
 
 #. Type: string
 #. Description
-#: ../templates:13
+#: ../templates:2002
 msgid "What is the email address of the webmaster for this TWiki?"
 msgstr "Qual o endereço de email do webmaster deste TWiki?"
 
 #. Type: string
 #. Description
-#: ../templates:13
+#: ../templates:2002
 msgid ""
 "This email address gets mail for new user registration, and is listed on the "
 "\"oops\" page when things go wrong."
@@ -74,14 +74,13 @@ msgstr ""
 
 #. Type: boolean
 #. Description
-#: ../templates:20
+#: ../templates:3001
 msgid "Install sample wiki universe on initial install?"
 msgstr "Instalar os exemplos padrão de wiki na instalação inicial?"
 
 #. Type: boolean
 #. Description
-#: ../templates:20
-#, fuzzy
+#: ../templates:3001
 msgid ""
 "TWiki includes a complete \"starter kit\" which includes user registration "
 "pages, documentation, and tutorials.  If you're re-installing twiki after "
@@ -106,13 +105,13 @@ msgstr ""
 
 #. Type: note
 #. Description
-#: ../templates:34
+#: ../templates:4001
 msgid "User Registration configuration required"
 msgstr ""
 
 #. Type: note
 #. Description
-#: ../templates:34
+#: ../templates:4001
 msgid ""
 "The default debian installation of the TWiki is configured to create new "
 "users automatically when a user Registers. This is not as secure as the "
