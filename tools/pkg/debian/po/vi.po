@@ -1,0 +1,100 @@
+# Vietnamese translation for twiki.
+# Copyright © 2005 Free Software Foundation, Inc.
+# Clytie Siddall <clytie@riverland.net.au>, 2005.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: twiki 20040902-3\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2005-01-17 21:38+1100\n"
+"PO-Revision-Date: 2005-08-10 22:45+0930\n"
+"Last-Translator: Clytie Siddall <clytie@riverland.net.au>\n"
+"Language-Team: Vietnamese <gnomevi-list@lists.sourceforge.net>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0\n"
+"X-Generator: LocFactoryEditor 1.2.2\n"
+
+#. Type: string
+#. Default
+#: ../templates:3
+msgid "http://localhost/"
+msgstr "http://localhost/"
+
+#. Type: string
+#. Description
+#: ../templates:4
+msgid "What is the top-level URL of the server TWiki runs under?"
+msgstr "TWiki chạy trên máy phục vụ có địa chỉ Mạng cấp đầu nào?"
+
+#. Type: string
+#. Description
+#: ../templates:4
+msgid ""
+"For a normal install, this should be a URL for your web server's full name, "
+"which is used to construct urls on some pages.  The install will serve up "
+"the data by adding \"twiki\" to the end of this setting; it is also needed "
+"for certain redirections."
+msgstr "Khi cài đặt một cách chuẩn, giá trị này nên là một địa chỉ Mạng cho tên đầy đủ của trình phục vụ Mạng bạn, mà được dùng để tạo địa chỉ Mạng trong một số trang. Việc cài đặt sẽ cung cấp dữ liệu bằng cách thêm « twiki » vào kết thức giá trị này; cũng cần thiết nó để chuyển hướng trong một số trường hợp."
+
+#. Type: string
+#. Default
+#: ../templates:12
+msgid "webmaster@localhost"
+msgstr "webmaster@localhost"
+
+#. Type: string
+#. Description
+#: ../templates:13
+msgid "What is the email address of the webmaster for this TWiki?"
+msgstr "Cho TWiki này, người chủ nơi Mạng có địa chỉ thư nào?"
+
+#. Type: string
+#. Description
+#: ../templates:13
+msgid ""
+"This email address gets mail for new user registration, and is listed on the "
+"\"oops\" page when things go wrong."
+msgstr "Địa chỉ thư này nhận thư khi người dùng mới đăng ký, và xuất hiện trong trang « ối » (oops) khi gặp lỗi."
+
+#. Type: boolean
+#. Description
+#: ../templates:20
+msgid "Install sample wiki universe on initial install?"
+msgstr "Cài đặt môi trường wiki mẫu khi cài đặt đầu tiên không?"
+
+#. Type: boolean
+#. Description
+#: ../templates:20
+msgid ""
+"TWiki includes a complete \"starter kit\" which includes user registration "
+"pages, documentation, and tutorials.  If you're re-installing twiki after "
+"deleting the package and want to keep the old data, or if you've got a twiki "
+"data set from your own manual install, you should say \"no\" here.  On a "
+"normal initial install, say \"yes\", and a sample data set will be installed "
+"in /var/lib/twiki/data (and /var/www/twiki/pub).  (In either case, if data/"
+"Main/WebHome.txt is present, the starter kit will not be unpacked; you can "
+"look in /usr/share/doc/twiki/twiki-data.tar.gz (and twiki-pub.tar.gz) if you "
+"wish to install it manually or compare a new version.)"
+msgstr "TWiki bao gồm một bộ dụng cụ bắt đầu hoàn thành, gồm trang đăng ký người dùng, tài liệu và trợ lý học tập. Nếu bạn đang cài đặt lại twiki sau khi xóa bỏ gói và muốn giữ các dữ liệu cũ, hoặc nếu bạn có dữ liệu twiki từ việc cài đặt thủ công, thì bạn nên nói « Không » (no) tại đây. Khi cài đặt đầu tiên một cách chuẩn, hãy nói « Có » (yes), và một bộ dữ liệu mẫu sẽ được cài đặt vào « /var/lib/twiki/data » (và vào « /var/www/twiki/pub »). (Trong cả hai trường hợp, nếu có « data/Main/WebHome.txt » thì sẽ không giải nén bộ dụng cụ bắt đầu; bạn có thể xem trong « /usr/share/doc/twiki/twiki-data.tar.gz » (và trong « twiki-pub.tar.gz ») nếu bạn muốn tự cài đặt nó, hoặc muốn so sánh với một phiên bản mới."
+
+#. Type: note
+#. Description
+#: ../templates:34
+msgid "User Registration configuration required"
+msgstr "Cần thiết cấu hình đăng ký người dùng"
+
+#. Type: note
+#. Description
+#: ../templates:34
+msgid ""
+"The default debian installation of the TWiki is configured to create new "
+"users automatically when a user Registers. This is not as secure as the "
+"default TWiki but is more useful for trying TWiki out. To change it so the "
+"users are created manually by the administrator use TWiki RenameTopic to "
+"rename the TWikiRegistration to TWikiRegistrationPub, and "
+"TWikiRegistrationDefault to TWikiRegistration. IMPORTANT: After you have "
+"created yourself a user, edit the Main.TWikiAdminGroup to restrict Admin "
+"privileges"
+msgstr "Bản cài đặt TWiki Debian mặc định được cấu hình để tự động tạo người dùng mới khi người ấy đăng ký. Cách này không phải bảo mật như TWiki mặc định, nhưng mà hữu ích hơn khi thử ra TWiki. Để thay đổi thiết lập này, để mà quản trị tự tạo người dùng, hãy dùng « TWiki RenameTopic » (TWiki thay đổi tên của chủ đề) để thay đổi tên của TWikiRegistration (đang ký TWiki) thành TWikiRegistrationPub (đang ký công TWiki), và TWikiRegistrationDefault (đang ký TWiki mặc định) thành TWikiRegistration (đang ký TWiki). QUAN TRỌNG: sau khi bạn đã tạo người dùng cho chính bạn, hãy hiệu chỉnh Main.TWikiAdminGroup (chính: nhóm quản lý TWiki) để giới hạn quyền truy cập quản lý."

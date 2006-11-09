@@ -1,3 +1,113 @@
+twiki (1:4.0.4-3) unstable; urgency=high
+
+  * added Hotfix 4 for TWiki 4.0.4
+
+ -- Sven Dowideit <svenud@ozemail.com.au>  Fri, 15 Sep 2006 00:00:01 -1000
+
+twiki (1:4.0.4-2) unstable; urgency=high
+
+  * added Hotfix 3 for TWiki 4.0.4
+    includes: 
+      Item 2714 - SECURITY ISSUE! - Topics with ALLOWTOPICVIEW 
+        defined in "Edit Settings" (META) can be read by anyone 
+        with a specially crafted SEARCH.
+      Item 2806 - Security Alert CVE-2006-4294 - viewfile doesn't 
+        follow rules for mapping attachment names
+
+ -- Sven Dowideit <svenud@ozemail.com.au>  Sat, 09 Sep 2006 00:00:01 -1000
+
+twiki (1:4.0.4-1) unstable; urgency=high
+
+  * added Hotfix 2 for TWiki 4.0.4
+    includes (CVE-2006-3819) - Configure robustness update
+
+ -- Sven Dowideit <svenud@ozemail.com.au>  Sun, 20 Aug 2006 00:00:01 -1000
+
+twiki (1:4.0.4-0.1) unstable; urgency=high
+
+  * new upstream version TWiki-4.0.4
+    includes prevent script execution of uploaded files (CVE-2006-3336)
+    (Closes: #381907)
+    4.0.2 includes CVE-2006-1387: DoS with INCLUDE
+    (Closes: #367973)
+  * restricted access to configure script
+  * added libcgi-session-perl dependency
+  * stopped failure when /etc/apache-foo/conf.d/twiki.conf_old doesn't
+    exist
+  * cleaned up handling of apache reload/restart calls
+
+ -- Andrew Moise <chops@demiurgestudios.com>  Fri, 11 Aug 2006 15:05:06 -0400
+
+twiki (1:4.0.1-1) unstable; urgency=high
+
+  * new upstream version TWiki-4.0.1 
+    (Closes: #255782, #221514, #338118, #311662, #305793, #345668)
+  * added brute force restart of apache & apache2 (Closes: #300601)
+  * fixed regex that was supposed to set WIKIWEBMASTER (Closes: #305034)
+  * removed data dir from apache.conf (Closes #307928)
+  * added debconf-2.0 dependancy (Closes: #332129)
+  * improved RedirectMatch (Closes: #293369)
+  * updated Czech translation of debconf (Closes: #321818)
+  * added Vietnamese translation of debconf (Closes: #322398)
+  * added Swedish translation of debconf (Closes: #341095)
+  * fixed up debconf spelling mistake (Closes: #322399)
+  * added dependancy option of apache-perl (Closes: #235603)
+  * cleaned up index.html (Closes: #228748)
+  * added extra test for existing data (Closes: #229036)
+  * added primitive test and use of htpasswd2 for apache2 (Closes: #233943)
+  * remove use of wwwconfig (Closes: 251340)
+
+ -- Sven Dowideit <svenud@ozemail.com.au>  Sun, 26 Feb 2006 00:00:01 -1000
+
+twiki (20040902-3) unstable; urgency=high
+  * update to include Paul Wise's RC fix
+
+ -- Sven Dowideit <svenud@ozemail.com.au>  Mon, 11 Apr 2005 00:00:01 -1000
+
+twiki (20040902-2) unstable; urgency=high
+  * set twikiLibPath to /usr/share/perl5 in setlib.cfg (Closes: #296461)
+  * applied robustness patch from Florian Weimer <fw@deneb.enyo.de>
+    CAN-2005-2877 - (Closes: #296655)
+  * added libunicode-maputf8-perl suggestion (Closes: #297031)
+  * default to use sendmail (Closes: #252439)
+  * updated fr.po file (Closes: #296149, #298750)
+
+ -- Sven Dowideit <svenud@ozemail.com.au>  Sun, 10 Mar 2005 00:00:01 -1000
+
+twiki (20040902-1.1) unstable; urgency=medium
+
+  * Non-maintainer upload.
+  * Urgency medium due to RC fix.
+  * Remove Text/Diff.pm and Algorithm/Diff.pm in debian/rules (Closes: #295221)
+
+ -- Paul Wise <pabs@zip.to>  Wed,  6 Apr 2005 23:56:57 +0800
+
+twiki (20040902-1) unstable; urgency=high
+  * upgraded to 02-Sept-2004 release (Cairo) 
+    (Closes :#270143, #283517, #281597)
+  * don't allow view on topics with empty ALLOW pref (Closes: #281624)
+  * applied ViewAfterSaveCachesOldPage-ugly-fix.patch (Closes: #218922)
+    - maybe!! (I could never re-produce it)
+  * corrected the permssions of log and .htpasswd (Closes: #281761)
+  * added another test to reduce the chance of over-writing an existing
+    universe (Closes: #282947)
+  * moved postinst backup files (~) to /tmp (Closes: #283812)
+  * postinst can now deal with remnant apache.conf files (Closes: #282006)
+  * added Czech translation of debconf messages - Thanks to Miroslav Kure
+    (Closes: #287432)
+  * added Brazilian Portuguese translation of debconf messages 
+    Thanks to Tiago Bortoletto Vaz (Closes: #267513)
+
+ -- Sven Dowideit <svenud@ozemail.com.au>  Sun, 16 Nov 2004 00:00:01 -1000
+
+twiki (20030201-6) unstable; urgency=emergency
+
+  * patched security vunerability in Search (Closes: #281005)
+  * removed apachectl restart as it fails in postrm (Closes: #276058)
+  * enable apache2 cgi using symlink (Closes: #266873)
+
+ -- Sven Dowideit <svenud@ozemail.com.au>  Sat, 13 Nov 2004 00:00:01 -1000
+
 twiki (20030201-5) unstable; urgency=low
 
   * added dependancy option of apache-perl (Closes: #235603)

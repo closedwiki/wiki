@@ -31,33 +31,46 @@ set -e
 
 db_get twiki/samplefiles
 if [ "$RET" = true ]; then
-#TODO: really should look into the TWiki.cfg and use that to find the %MAINWEB%
+#check for the existance of _any_ of the default webs
+#TODO: later this will be replaced by the upgrade script
     if [ ! -e /var/lib/twiki/data/Main/WebHome.txt ]; then
         if [ ! -e /var/lib/twiki/data/TWiki/WebHome.txt ]; then
-	    # only extract if they say so and there's no home there
-	    # and even then, fail on overwrite so we don't stomp.
-	    tar -zxk -C / -f /usr/share/doc/twiki/twiki-data.tar.gz
-	    # clean up the .mailnotify timestamps.
-	    webs="Know Main Sandbox TWiki Trash _default";
-	    for web in $webs; do
-	    	    date +%s > /var/lib/twiki/data/$web/.mailnotify
-    	    done
+	if [ ! -e /var/lib/twiki/data/Sandbox/WebHome.txt ]; then
+	if [ ! -e /var/lib/twiki/data/Trash/WebHome.txt ]; then
+	if [ ! -e /var/lib/twiki/data/_default/WebHome.txt ]; then
+		    # only extract if they say so and there's no home there
+		    # and even then, fail on overwrite so we don't stomp.
+		    tar -zxk -C / -f /usr/share/doc/twiki/twiki-data.tar.gz
+		    # clean up the .mailnotify timestamps.
+		    webs="Main Sandbox TWiki Trash _default";
+		    for web in $webs; do
+		    	    date +%s > /var/lib/twiki/data/$web/.mailnotify
+    		    done
+			if [ ! -e /var/www/twiki/pub/wikiHome.gif ]; then
+				tar -zxk -C / -f /usr/share/doc/twiki/twiki-pub.tar.gz
+			fi
+       	fi
+       	fi
+       	fi
         fi
-    fi
-    if [ ! -e /var/www/twiki/pub/wikiHome.gif ]; then
-	tar -zxk -C / -f /usr/share/doc/twiki/twiki-pub.tar.gz
     fi
 fi
 
 db_get twiki/defaultUrlHost
 # be more robust later:
-perl -pi~ -e '$U=q{'"$RET"'}; s/^(\$defaultUrlHost\s*=\s*").*(";\n)$/$1$U$2/;' /etc/twiki/TWiki.cfg
+perl -pi~ -e '$U=q{'"$RET"'}; s{http://your.domain.com}{$U}g;' /etc/twiki/LocalSite.cfg
 perl -pi~ -e '$U=q{'"$RET"'}; s{http://your.domain.com}{$U}g;' /etc/twiki/apache.conf
 #perl -pi~ -e '$U=q{'"$RET"'}; s{^(Redirect\s+/twiki/index.html\s+).*(cgi-bin/twiki/view\n)$}{$1$U$2};' /etc/twiki/apache.conf
+rm /etc/twiki/*~ 
 
 db_get twiki/wikiwebmaster
 # do rcs checkout first?
-perl -pi~ -e '$U=q{'"$RET"'}; s/^(\s*\*\s*Set\s*WIKIWEBMASTER\s*=\s*).*(\r\n)$/$1$U$2/;' /var/lib/twiki/data/TWiki/TWikiPreferences.txt
+#TODO: these settings should move to Main.TWikiPreferences
+perl -pi~ -e '$U=q{'"$RET"'}; s/^(.*\*\s*Set\s*WIKIWEBMASTER\s*=\s*).*(\r?\n)$/\1$U\2/;' /var/lib/twiki/data/TWiki/TWikiPreferences.txt
+
+#force default to use sendmail by setting SMTPMAILHOST to blank
+perl -pi~ -e 's/^(\s*\*\s*Set\s*SMTPMAILHOST\s*=\s*).*(\r\n)$/$1$2/;' /var/lib/twiki/data/TWiki/TWikiPreferences.txt
+
 
 # prevent further confusion: done with debconfig
 
@@ -80,12 +93,19 @@ case "$1" in
 	for server in $servers; do 
 		if [ -e /etc/$server/conf.d ]; then
 			includefile=/etc/twiki/apache.conf
+			if [ -e /etc/$server/conf.d/twiki.conf ]; then
+				rm -f /etc/$server/conf.d/twiki.conf_old
+				mv /etc/$server/conf.d/twiki.conf /etc/$server/conf.d/twiki.conf_old
+			fi
 			ln -s $includefile /etc/$server/conf.d/twiki.conf 
 		fi
 	done
 
-	if [ -e /usr/sbin/apachectl ]; then
-		/usr/sbin/apachectl restart
+	#add apache2 cgi
+	if [ -e /etc/apache2/mods-available/cgi.load ]; then
+		if [ ! -e /etc/apache2/mods-enabled/cgi.load ]; then
+			ln -s /etc/apache2/mods-available/cgi.load /etc/apache2/mods-enabled/cgi.load
+		fi
 	fi
 
 	# create initial htpasswd, if needed
@@ -103,7 +123,7 @@ case "$1" in
 			    touch /var/lib/twiki/data/.htpasswd
 		       	    $HTPASSWDCMD -b /var/lib/twiki/data/.htpasswd TWikiGuest guest
 			    chown $TWIKI_OWNER.www-data /var/lib/twiki/data/.htpasswd
-			    chmod og=rw /var/lib/twiki/data/.htpasswd
+			    chmod 664 /var/lib/twiki/data/.htpasswd
 			fi
 		fi
 	fi
@@ -137,7 +157,18 @@ case "$1" in
 	fi
 	
 	chown -R $TWIKI_OWNER.www-data /var/log/twiki
-	chmod -R og=rw /var/log/twiki
+	chmod -R 755 /var/log/twiki
+	
+	# reload apache configs
+	for server in $servers; do
+		if [ -e /etc/init.d/$server ]; then
+         	if which invoke-rc.d >/dev/null 2>&1; then
+         		invoke-rc.d $server reload
+         	else
+                /etc/init.d/$server reload
+			fi		
+		fi
+	done
     ;;
 
     abort-upgrade|abort-remove|abort-deconfigure)

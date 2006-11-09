@@ -1,0 +1,1392 @@
+diff -ru ./bin/configure ./bin/configure
+--- ./bin/configure	2006-06-26 02:19:09.000000000 +1000
++++ ./bin/configure	2006-07-26 03:26:22.000000000 +1000
+@@ -1094,6 +1094,9 @@
+     return '';
+ }
+ 
++# delicate; must constrain hard, as $1 will be fed to eval
++my $TYPEOF = qr/^TYPEOF:((?:{(?:'[-\w]*'|[A-Z0-9_]+)})+)$/i;
++
+ # Generates the appropriate HTML for getting a value to configure the
+ # entry. The opts are additional parameters, and by convention may
+ # be a number (for a string length), a comma separated list of values
+@@ -1386,12 +1389,11 @@
+     $output .= CGI::h2('Updating configuration');
+     my $languageChanged=0;
+     foreach $param ( $query->param ) {
+-        next unless $param =~ /^^TYPEOF:(.*)/;
++        next unless $param =~ /$TYPEOF/os;
++        my $keys = $1;
+         my $type = $query->param( $param );
+-        $param =~ s/^TYPEOF:(.*)$/$1/;
+-        my $basevar = $1;
+-        my $var = '$TWiki::cfg'.$basevar;
+-        my $val = $query->param( $param );
++        my $var = '$TWiki::cfg'.$keys;
++        my $val = $query->param( $keys );
+         my $def;
+         eval "\$def = defined( $var );";
+         if( $type ) {
+@@ -1407,9 +1409,9 @@
+               CGI::br().
+               CGI::strong('new ').
+               CGI::code($val||' ');
+-            $updates{$basevar} = _perlifyType($val, $type);
++            $updates{$keys} = _perlifyType($val, $type);
+             #SMELL: Not elegant, but works
+-            if ($basevar=~/\{Languages\}/) {
++            if ($keys=~/\{Languages\}/) {
+                 $languageChanged=1;
+             }
+             $changed++;
+@@ -1435,11 +1437,11 @@
+     my $param;
+     my $changed = 0;
+     foreach $param ( $query->param ) {
+-        next unless $param =~ /^^TYPEOF:(.*)/;
++        next unless $param =~ /$TYPEOF/os;
++        my $keys = $1;
+         my $type = $query->param( $param );
+-        $param =~ s/^TYPEOF:(.*$)/$1/;
+         my $var = '$TWiki::cfg'.$1;
+-        my $val = $query->param( $param );
++        my $val = $query->param( $keys );
+         my $def;
+         eval "\$def = defined( $var );";
+         if( $type ) {
+diff -ru ./bin/.htaccess.txt ./bin/.htaccess.txt
+--- ./bin/.htaccess.txt	2006-06-26 02:19:11.000000000 +1000
++++ ./bin/.htaccess.txt	2006-07-25 09:37:56.000000000 +1000
+@@ -65,17 +65,22 @@
+ # to register with the TWiki. Apache requires this to be a *local* path.
+ ErrorDocument 401 {ScriptUrlPath}/view/TWiki/TWikiRegistration
+ 
+-# Turn off directory indexing in this and sub directories
+-Options -Indexes
+-
+-<FilesMatch "[^/]*\.html$">
+-       SetHandler blabla
+-       allow from all
+-</FilesMatch>
+-
+-# configure should be restricted to a small number of users
++# Set options for excuting CGI and allow symlinks for e.g. viewauth
++# This also unsets any options allowing directory indexing etc.
++Options ExecCGI FollowSymLinks
++
++# Limit access to configure to specific IP addresses and or users.
++# Make sure configure is not open to the general public.
++# The configure script is designed for administrators only.
++# The script itself and the information it reveals can be abused by
++# attackers if not properly protected against public access.
+ <FilesMatch "configure.*">
+-       require user "{Administrators}"
++	SetHandler cgi-script
++	Order Deny,Allow
++	Deny from all
++	Allow from 127.0.0.1, 192.168.1.10
++	Require user {Administrators}
++	Satisfy Any
+ </FilesMatch>
+ 
+ # These are scripts that might change content. The regular expression uses ".*"
+diff -ru ./data/TWiki/CommentPluginTemplate.txt ./data/TWiki/CommentPluginTemplate.txt
+--- ./data/TWiki/CommentPluginTemplate.txt	2006-06-26 02:26:31.000000000 +1000
++++ ./data/TWiki/CommentPluginTemplate.txt	2006-07-24 00:36:44.000000000 +1000
+@@ -23,7 +23,7 @@
+ </verbatim>
+ Short comment, signed and dated
+ <verbatim>
+-%TMPL:DEF{outputoneliner}%<span class="commentPlugin commentPluginOutputOneliner">	* %URLPARAM{"comment"}% -- %WIKIUSERNAME% - %SERVERTIME%</span></span><!--/commentPlugin-->%TMPL:END%
++%TMPL:DEF{outputoneliner}%   * %URLPARAM{"comment"}% -- %WIKIUSERNAME% - %SERVERTIME%%TMPL:END%
+ </verbatim>
+ ---------------------------------------------------------------------------
+ ---++ User templates
+diff -ru ./data/TWiki/CommentPlugin.txt ./data/TWiki/CommentPlugin.txt
+--- ./data/TWiki/CommentPlugin.txt	2006-06-26 02:26:31.000000000 +1000
++++ ./data/TWiki/CommentPlugin.txt	2006-07-24 00:36:22.000000000 +1000
+@@ -150,11 +150,12 @@
+       * Unpack the archive in your twiki installation directory.
+       * You may need to correct file permissions.
+       * Run ==%TOPIC%_installer== to automatically check and install other modules that this module depends on. You can also do this step manually. Dependencies:
+-	None
++	%$DEPENDENCIES%
+       * Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
+ ---+ Plugin Info
+ |  Plugin Author: | TWiki:Main.DavidWeller, TWiki:Main.PeterMasiar, TWiki:Main.CrawfordCurrie http://www.c-dot.co.uk |
+ | Change History: | |
++| 11118 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item2322'>Item2322</a> removed span tag around oneliner bullet output |
+ | 8788 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1465'>Item1465</a>  Item1577: reverted 8433 to fix inclusion of correct user templates |
+ | 8787 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1573'>Item1573</a>  renamed standard templates topic to avoid naming clash on Windows, where filenames are case-insensitive |
+ | 8433 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1465'>Item1465</a>  Fix 'TWiki.' to '%TWIKIEB%.'; also fixed include 'UserComments' to 'UserCommentsTemplate' (at least that is what the doc suggests) |
+@@ -178,4 +179,4 @@
+ 
+ __Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
+ 
+--- TWiki:Main/CrawfordCurrie - 02:19:11 26 June 2006
++-- TWiki:Main/CrawfordCurrie - %$DATE%
+diff -ru ./data/TWiki/EditTablePlugin.txt ./data/TWiki/EditTablePlugin.txt
+--- ./data/TWiki/EditTablePlugin.txt	2006-06-26 02:26:31.000000000 +1000
++++ ./data/TWiki/EditTablePlugin.txt	2006-09-04 17:03:08.000000000 +1000
+@@ -1,4 +1,4 @@
+-%META:TOPICINFO{author="TWikiContributor" date="1095385227" format="1.0" version="11"}%
++%META:TOPICINFO{author="TWikiContributor" date="1156990155" format="1.0" version="$Rev: 11392 $"}%
+ ---+!! Edit Table Plugin
+ 
+ This plugin allows you to edit TWiki tables using edit fields and drop down boxes. Tables have an *[&nbsp;Edit&nbsp;table&nbsp;]* button if preceeded by an =%<nop>EDITTABLE{...}%= variable. Each column can be a text field, a drop down box, a date field, etc. Multiple tables per topic are editable, but only one at a time can be edited.
+@@ -150,6 +150,7 @@
+ 	  | ==pub/TWiki/%TOPIC%/calendar-system.css== | Mishoo DHTML calendar stylesheet |
+ 	* The Plugin depends on the =viewauth= script to authenticate the user. As described in %TWIKIWEB%.TWikiAccessControl, copy the =view= script to =viewauth= (or better, create a symbolic link) and add =viewauth= to the list of authenticated scripts in the =.htaccess= file. 
+ 	* The Mishoo DHTML calendar 0.9.5 is preinstalled and should work without any configuration. If you wish to use another language, specify the in the Plugin settings, or create a new language files, attach it to the Plugin topic, and change the Plugin settings
++	* (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
+ 	* Test if the Plugin is correctly installed:
+ 		* Check above example if there is an *[&nbsp;Edit&nbsp;table&nbsp;]* button below the table in above example
+ 		* Click on *[&nbsp;Edit&nbsp;table&nbsp;]*, make changes and save the table
+@@ -162,9 +163,13 @@
+ 
+ ---++ Plugin Info
+ 
+-|  Plugin Author: | TWiki:Main/PeterThoeny |
+-|  Plugin Version: | 9598 |
++|  Plugin Author: | [[http://www.structuredwikis.com/][Peter Thoeny]] |
++|  Copyright: | &copy; 2002-2006, TWiki:Main.PeterThoeny |
++|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
++|  Plugin Version: | %$VERSION% |
+ |  Change History: | <!-- specify latest version first -->&nbsp; |
++|  30 Aug 2006: | <a rel="nofollow" href="http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item2829">Item2829</a> Remove whitespace from select, radio and checkbox items; restored topic lock if $TWiki::Plugins::VERSION < 1.1 |
++|  29 Jul 2006: | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item2684'>Item2684</a> - Quietly ignore topic edit locks on table edit |
+ |  21 Jan 2006: | TWiki:Main.CrawfordCurrie ported to TWiki-4.0.0, changed to use JSCalendarContrib |
+ |  16 Sep 2004: | Added radio buttons and checkbox controls; escaped "&#124;" pipe symbol found in input fields to preserve tables |
+ |  01 Aug 2004: | Fixed bug where edittable did not work if at the end of a topic |
+@@ -188,19 +193,20 @@
+ |  18 Apr 2002: | Fixed bug where table was breaking when pasting multiple lines into an edit field using Netscape on Unix |
+ |  08 Apr 2002: | Check for change permission and edit lock of topic |
+ |  05 Apr 2002: | Initial version |
+-|  Dependencies: | None |
++|  Dependencies: | %$DEPENDENCIES% |
+ |  Perl Version: | 5.0 |
+ |  TWiki:Plugins/Benchmark: | %TWIKIWEB%.GoodStyle 98%, %TWIKIWEB%.FormattedSearch 98%, %TOPIC% 95% |
+ |  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
+ |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
++|  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
+ 
+ __Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
+ 
+--- TWiki:Main/PeterThoeny - 16 Sep 2004
++-- TWiki:Main/PeterThoeny - 30 Aug 2006
+ 
+ %META:FILEATTACHMENT{name="EditTablePluginCalendarExample.gif" attr="h" comment="" date="1071283396" path="EditTablePluginCalendarExample.gif" size="7823" user="PeterThoeny" version="1.1"}%
+ %META:FILEATTACHMENT{name="ScreenshotEditCell1.gif" attr="h" comment="Screenshot" date="1077050633" path="ScreenshotEditCell1.gif" size="2017" user="PeterThoeny" version="1.1"}%
+ %META:FILEATTACHMENT{name="ScreenshotEditCell2.gif" attr="h" comment="Screenshot" date="1077050702" path="ScreenshotEditCell2.gif" size="3199" user="PeterThoeny" version="1.1"}%
+-%META:FILEATTACHMENT{name="img.gif" attr="h" comment="Component of Mishoo DHTML calendar" date="1077813483" path="C:\Data\Temp\img.gif" size="145" user="PeterThoeny" version="1.1"}%
+-%META:FILEATTACHMENT{name="menuarrow.gif" attr="h" comment="Component of Mishoo DHTML calendar" date="1077813470" path="C:\Data\Temp\menuarrow.gif" size="68" user="PeterThoeny" version="1.1"}%
++%META:FILEATTACHMENT{name="img.gif" attr="h" comment="Component of Mishoo DHTML calendar" date="1077813483" path="img.gif" size="145" user="PeterThoeny" version="1.1"}%
++%META:FILEATTACHMENT{name="menuarrow.gif" attr="h" comment="Component of Mishoo DHTML calendar" date="1077813470" path="menuarrow.gif" size="68" user="PeterThoeny" version="1.1"}%
+ %META:FILEATTACHMENT{name="edittable.gif" attr="h" comment="Edit table image button" date="1077933805" path="edittable.gif" size="298" user="PeterThoeny" version="1.1"}%
+diff -ru ./data/TWiki/TWikiAccessControl.txt ./data/TWiki/TWikiAccessControl.txt
+--- ./data/TWiki/TWikiAccessControl.txt	2006-06-26 02:26:26.000000000 +1000
++++ ./data/TWiki/TWikiAccessControl.txt	2006-07-27 16:48:06.000000000 +1000
+@@ -1,4 +1,4 @@
+-%META:TOPICINFO{author="TWikiContributor" date="1131718988" format="1.1" version="31"}%
++%META:TOPICINFO{author="TWikiContributor" date="1131718988" format="1.1" version="$Rev: 9060 $"}%
+ %TOC%
+ %STARTINCLUDE%
+ 
+@@ -125,13 +125,13 @@
+ The easiest way to apply the same access control rules for attachments as apply to topics is to use the Apache =mod_rewrite= module, and configure your webserver to redirect accesses to attachments to the TWiki =viewfile= script. For example,
+ 
+ <verbatim>
+-  ScriptAlias /twiki/bin/ /filesystem/path/to/twiki/bin/
+-  Alias /twiki/pub/       /filesystem/path/to/twiki/pub/
++    ScriptAlias /twiki/bin/ /filesystem/path/to/twiki/bin/
++    Alias /twiki/pub/       /filesystem/path/to/twiki/pub/
+ 
+-  RewriteEngine on
+-  RewriteRule ^/twiki/pub/TWiki/(.*)$ /twiki/pub/TWiki/$1 [L,PT]
+-  RewriteRule ^/twiki/pub/([^\/]+)/([^\/]+)/([^\/]+)$ /twiki/bin/viewfile/$1/$2?filename=$3 [L,PT]
+-</verbatim>
++    RewriteEngine on
++    RewriteCond %{REQUEST_URI} !^/+twiki/+pub/+TWiki/+.+
++    RewriteRule ^/+twiki/+pub/+([^/]+)/+((([^/]+)/+)+)(.+) /twiki/bin/viewfile/$1/$4?filename=$5 [L,PT]
++</verbatim
+ 
+ That way all the controls that apply to the topic also apply to attachments to the topic. Other types of webserver have similar support.
+ 
+diff -ru ./data/TWiki/TWikiVariables.txt ./data/TWiki/TWikiVariables.txt
+--- ./data/TWiki/TWikiVariables.txt	2006-06-26 02:26:27.000000000 +1000
++++ ./data/TWiki/TWikiVariables.txt	2006-08-13 01:15:58.000000000 +1000
+@@ -35,7 +35,8 @@
+ 
+ ---+++ Setting Preferences Variables
+ You can set variables in all the following places:
+-   1 local site level in %LOCALSITEPREFS%
++   1 local site level in [[%TWIKIWEB%.TWikiPreferences][%TWIKIWEB%.TWikiPreferences]]
++   1 local site level in [[%LOCALSITEPREFS%][%LOCALSITEPREFS%]]
+    1 user level in individual user topics in %MAINWEB% web
+    1 web level in %WEBPREFSTOPIC% of each web
+    1 topic level in topics in webs
+diff -ru ./data/TWiki/VarSEARCH.txt ./data/TWiki/VarSEARCH.txt
+--- ./data/TWiki/VarSEARCH.txt	2006-06-26 02:26:29.000000000 +1000
++++ ./data/TWiki/VarSEARCH.txt	2006-07-30 21:00:22.000000000 +1000
+@@ -1,4 +1,4 @@
+-%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.2" version="1"}%
++%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.2" version="$Rev$"}%
+ %META:TOPICPARENT{name="TWikiVariables"}%
+ #VarSEARCH
+ 
+@@ -32,7 +32,8 @@
+      | =multiple="on"= | Multiple hits per topic. Each hit can be [[FormattedSearch][formatted]]. The last token is used in case of a regular expression ";" _and_ search | Only one hit per topic |
+      | =nofinalnewline="on"= | If =on=, the search variable does not end in a line by itself. Any text continuing immediately after the search variable on the same line will be rendered as part of the table generated by the search, if appropriate. | =off= |
+      | =recurse="on"= | Recurse into subwebs, if subwebs are enabled. | =off= |
+-     | =separator=", "= | Line separator between hits | Newline ="$n"= |
++     | =separator=", "= | Line separator _between_ search hits | ="$n"= (Newline) |
++     | =newline="%<nop>BR%"= | Line separator _within_ a search hit. Useful if the format="" parameter contains a $pattern() that captures more than one line, i.e. contents of a textfield in a form.| ="$n"= (Newline) |
+    * Example: =%<nop>SEARCH{"wiki" web="%MAINWEB%" scope="topic"}%=
+    * Example with format: =%<nop>SEARCH{"FAQ" scope="topic" nosearch="on" nototal="on" header="| *Topic: * | *Summary: * |" format="<nop>| $topic | $summary |"%= _(displays results in a table with header - [[FormattedSearch][details]])_
+    * %H% Hint: If the TWiki:Plugins.TablePlugin is installed, you may set a =%<nop>TABLE{}%= variable just before the =%<nop>SEARCH{}%= to alter the output of a search.  Example: =%<nop>TABLE{ tablewidth="90%" }%=
+diff -ru ./INSTALL.html ./INSTALL.html
+--- ./INSTALL.html	2006-07-04 10:48:26.000000000 +1000
++++ ./INSTALL.html	2006-07-25 08:50:34.000000000 +1000
+@@ -1933,7 +1933,7 @@
+      <br /> <img src="pub/TWiki/TWikiDocGraphics/help.gif" border="0" alt="HELP" width="16" height="16" /> If you need to install additional <a class="twikiLink" href="/cgi-bin/view/Codev/CPAN" title=" ComprehensivePerlArchiveNetwork, http://cpan.perl.org/ Basically, if you have written a perl module you can make it available to others by uploading it to this website ... (07 May 2003 - 11:28 - 1.5, RichardDonkin)">CPAN</a> modules, but can't update the main Perl installation files on the server, you can set <code>$CPANBASE</code> to point to your personal <a class="twikiLink" href="/cgi-bin/view/Codev/CPAN" title=" ComprehensivePerlArchiveNetwork, http://cpan.perl.org/ Basically, if you have written a perl module you can make it available to others by uploading it to this website ... (07 May 2003 - 11:28 - 1.5, RichardDonkin)">CPAN</a> install. Don't forget that the webserver user has to be able to read those files as well.
+ 
+ </li>
+-<li> <strong>Configure the webserver</strong> so you can execute the <code>bin/configure</code> script from your browser.
++<li> <strong>Configure the webserver</strong> so you can execute the <code>bin/configure</code> script from your browser. But limit the access to either localhost, an IP address or a specific user using basic Apache authentication. You should never leave the configure script open to the public.
+ <ul>
+ <li> If you are unsure about how to do this on your system, see <a href="http://twiki.org/cgi-bin/view/TWiki.InstallingTWiki#OtherPlatforms" title="'TWiki.InstallingTWiki#OtherPlatforms' on TWiki.org">TWiki:TWiki.InstallingTWiki#OtherPlatforms</a> for links to information about various server setups. There is an example Apache <code>httpd.conf</code> file in <code>twiki_httpd_conf.txt</code> at the root of the package. This file also contains advice on securing your installation. There's also a script called <code>tools/rewriteshebang.pl</code> to help you in fixing up the shebang lines in your CGI scripts.
+ </li>
+@@ -1949,7 +1949,7 @@
+ <h2><a name="Important_Server_Security_Settings"> </a>Important Server Security Settings</h2>
+ Before you continue any further there are some basic and very important security settings you have to make sure are set correctly.
+ <ul>
+-<li>You should protect the configure script from general access. The configure script cannot save any settings once the password has been saved the first time, but the script reveals many details about the webserver that you should not display in public
++<li>You should protect the configure script from general access. The configure script the tool is designed for use by administrators only and should be restricted to invocation by them only, by using the basic Apache authentication. Because of this there has not been put much effort into hardening the script. The configure script cannot save any settings once the password has been saved the first time, but the script could still be vulnerable to specially crafted field values and the script reveals many details about the webserver that you should not display in public.
+ </li>
+ <li>You absolutely must turn off any kind of PHP, Perl, Python, Server Side Includes etc in the <code>pub</code> directory. TWiki has some builtin protection which renames files with dangerous filenames by appending .txt to the filename. But this is a secondary security measure. The essential action that you must take is to turn off any possible execution of any of the attached files.<br /> Most Linux distributions have a default Apache installation which has PHP and server side include (SSI) enabled. The <code>twiki_httpd_conf.txt</code> file provided in the root of the twiki directory is an example of an Apache config file which you would normally include from httpd.conf. In many distributions this happens automatically if the file is copied to a specific directory (Example RedHat/Fedora/Centos: /etc/httpd/conf.d) and has suffix <code>.conf</code>. This example file shows how to protect the <code>pub</code> directory from executing both PHP scripts and server side includes.<br />
+ If you do not have access to the apache config files you can normally control control access by placing a file called <code>.htaccess</code> in the directory you want to protect. The <code>pub-htaccess.txt</code> file provided in the root of the twiki directory is an example of an Apache <code>.htaccess</code> file which protects against execusion of PHP and SSI scripts.
+diff -ru ./lib/TWiki/Access.pm ./lib/TWiki/Access.pm
+--- ./lib/TWiki/Access.pm	2006-06-26 02:19:11.000000000 +1000
++++ ./lib/TWiki/Access.pm	2006-09-05 03:14:48.000000000 +1000
+@@ -100,11 +100,12 @@
+ 
+ =pod
+ 
+----++ ObjectMethod checkAccessPermission( $action, $user, $text, $topic, $web ) -> $boolean
++---++ ObjectMethod checkAccessPermission( $action, $user, $text, $meta, $topic, $web ) -> $boolean
+ Check if user is allowed to access topic
+    * =$action=  - 'VIEW', 'CHANGE', 'CREATE', etc.
+    * =$user=    - User object
+    * =$text=    - If undef or '': Read '$theWebName.$theTopicName' to check permissions
++   * =$meta=    - If undef, but =$text= is defined, then metadata will be parsed from =$text=. If defined, then metadata embedded in =$text= will be ignored. Always ignored if =$text= is undefined. Settings in =$meta= override * Set settings in plain text.
+    * =$topic=   - Topic name to check, e.g. 'SomeTopic' *undef to check web perms only)
+    * =$web=     - Web, e.g. 'Know'
+ If the check fails, the reason can be recoveered using getReason.
+@@ -112,7 +113,7 @@
+ =cut
+ 
+ sub checkAccessPermission {
+-    my( $this, $mode, $user, $text, $topic, $web ) = @_;
++    my( $this, $mode, $user, $text, $meta, $topic, $web ) = @_;
+     ASSERT($this->isa( 'TWiki::Access')) if DEBUG;
+     ASSERT($user->isa( 'TWiki::User')) if DEBUG;
+ 
+@@ -135,14 +136,12 @@
+     my $denyText;
+ 
+     # extract the * Set (ALLOWTOPIC|DENYTOPIC)$mode
+-    if( $text ) {
+-        # override topic permissions. Note: ignores embedded metadata
+-        # SMELL: this is horrible! But it's inevitable given the dreadful
+-        # business of storing access controls embedded in topic text.
+-        $allowText = $prefs->getTextPreferencesValue( 'ALLOWTOPIC'.$mode,
+-                                                      $text, $web, $topic );
+-        $denyText = $prefs->getTextPreferencesValue( 'DENYTOPIC'.$mode,
+-                                                     $text, $web, $topic );
++    if( defined $text ) {
++        # override topic permissions.
++        $allowText = $prefs->getTextPreferencesValue(
++            'ALLOWTOPIC'.$mode, $text, $meta, $web, $topic );
++        $denyText = $prefs->getTextPreferencesValue(
++            'DENYTOPIC'.$mode, $text, $meta, $web, $topic );
+     } elsif( $topic ) {
+         $allowText = $prefs->getTopicPreferencesValue( 'ALLOWTOPIC'.$mode,
+                                                        $web, $topic );
+diff -ru ./lib/TWiki/Func.pm ./lib/TWiki/Func.pm
+--- ./lib/TWiki/Func.pm	2006-06-26 02:19:11.000000000 +1000
++++ ./lib/TWiki/Func.pm	2006-09-05 17:11:02.000000000 +1000
+@@ -649,7 +649,7 @@
+     ASSERT($TWiki::Plugins::SESSION) if DEBUG;
+     $user = $TWiki::Plugins::SESSION->{users}->findUser( $user );
+     return $TWiki::Plugins::SESSION->{security}->checkAccessPermission
+-      ( $type, $user, $text, $topic, $web );
++      ( $type, $user, $text, undef, $topic, $web );
+ }
+ 
+ =pod
+@@ -975,9 +975,9 @@
+ 
+     # check access permission
+     unless( $ignorePermissions ||
+-            $session->{security}->checkAccessPermission( 'change',
+-                                                     $session->{user}, undef,
+-                                                     $topic, $web )
++            $session->{security}->checkAccessPermission(
++                'change', $session->{user}, undef, undef,
++                $topic, $web )
+           ) {
+         my @plugin = caller();
+         return $session->getOopsUrl( 'accessdenied',
+@@ -1617,7 +1617,7 @@
+     return '' unless $wiki;
+     my $user = $TWiki::Plugins::SESSION->{users}->findUser( $wiki, undef, 1 );
+     return '' unless $user;
+-    return join( ',', @{$user->emails()} );
++    return join( ',', $user->emails() );
+ }
+ 
+ =pod
+diff -ru ./lib/TWiki/If.pm ./lib/TWiki/If.pm
+--- ./lib/TWiki/If.pm	2006-06-26 02:19:11.000000000 +1000
++++ ./lib/TWiki/If.pm	2006-07-11 23:30:32.000000000 +1000
+@@ -137,7 +137,9 @@
+     type => 1, # binary
+     exec => sub {
+         my( $twiki, $a, $b ) = @_;
+-        return  $a->evaluate($twiki ) eq $b->evaluate($twiki);
++        my $ea = $a->evaluate($twiki) || '';
++        my $eb = $b->evaluate($twiki) || '';
++        return $ea eq $eb;
+     }
+    };
+ $defOps{'!='} =
+@@ -146,7 +148,9 @@
+     type => 1, # binary
+     exec => sub {
+         my( $twiki, $a, $b ) = @_;
+-        return $a->evaluate($twiki) ne $b->evaluate($twiki);
++        my $ea = $a->evaluate($twiki) || '';
++        my $eb = $b->evaluate($twiki) || '';
++        return $ea ne $eb;
+     }
+    };
+ $defOps{'>='} =
+@@ -242,6 +246,7 @@
+     foreach my $opn ( keys %{$this->{operators}} ) {
+         my $re = $opn;
+         $re =~ s/(\W)/\\$1/g;
++        $re .= '\b' if $re =~ /\w$/;
+         $this->{RE}[$this->{operators}->{$opn}->{type}] .= $re.'|';
+     }
+     $this->{RE}[0] =~ s/\|$//;
+@@ -282,7 +287,7 @@
+         if ( $string =~ s/^\s*($this->{RE}[0])//i ||
+                $string =~ s/^\s*($this->{RE}[1])//i ) {
+ 
+-            my $op = $this->{operators}->{$1};
++            my $op = $this->{operators}->{lc($1)};
+             while( scalar( @opers ) > 0 &&
+                      $op->{prec} < $opers[$#opers]->{prec} ) {
+                 $this->_apply( \@opers, \@opands );
+diff -ru ./lib/TWiki/Net.pm ./lib/TWiki/Net.pm
+--- ./lib/TWiki/Net.pm	2006-06-26 02:19:11.000000000 +1000
++++ ./lib/TWiki/Net.pm	2006-09-04 17:03:18.000000000 +1000
+@@ -292,6 +292,13 @@
+ 
+     return undef unless( scalar @to );
+ 
++    # Change SMTP protocol recipient format from 
++    # "User Name <userid@domain>" to "userid@domain"
++    # for those SMTP hosts that need it just that way.
++    foreach (@to) {
++        s/^.*<(.*)>$/$1/;
++    }
++
+     my $smtp = 0;
+     if( $this->{HELLO_HOST} ) {
+         $smtp = Net::SMTP->new( $this->{MAIL_HOST},
+diff -ru ./lib/TWiki/Plugins/EditTablePlugin/Core.pm ./lib/TWiki/Plugins/EditTablePlugin/Core.pm
+--- ./lib/TWiki/Plugins/EditTablePlugin/Core.pm	2006-06-26 02:19:12.000000000 +1000
++++ ./lib/TWiki/Plugins/EditTablePlugin/Core.pm	2006-09-04 17:03:08.000000000 +1000
+@@ -93,7 +93,7 @@
+ 
+                } elsif( $query->param( 'etedit' ) ) {
+                    # [Edit table] button pressed
+-                   $doEdit = doEnableEdit( $theWeb, $theTopic, 1 );
++                   $doEdit = doEnableEdit( $theWeb, $theTopic, ($TWiki::Plugins::VERSION < 1.1) );
+                    # never return if locked or no permission
+                    return unless( $doEdit );
+                    $cgiRows = -1; # make sure to get the actual number of rows
+@@ -421,6 +421,8 @@
+         while( $i < @bits ) {
+             $val  = $bits[$i] || '';
+             $valExpanded  = $bitsExpanded[$i] || '';
++            $expandedValue =~ s/^\s+//;
++            $expandedValue =~ s/\s+$//;
+             if( $valExpanded eq $expandedValue ) {
+                 $text .= " <option selected=\"selected\">$val</option>";
+             } else {
+@@ -442,6 +444,8 @@
+         while( $i < @bits ) {
+             $val  = $bits[$i] || "";
+             $valExpanded  = $bitsExpanded[$i] || "";
++            $expandedValue =~ s/^\s+//;
++            $expandedValue =~ s/\s+$//;
+             $text .= " <input type=\"radio\" name=\"$theName\" value=\"$val\"";
+             $text .= " checked=\"checked\"" if( $valExpanded eq $expandedValue );
+             $text .= " /> $val";
+@@ -449,7 +453,7 @@
+                 if( ($i-1) % $lines ) {
+                     $text .= " <br />";
+                 } elsif( $i-1 < $elements ) {
+-                    $text .= "</td><td valign=\"top\">";
++                    $text .= " </td><td valign=\"top\">";
+                 }
+             }
+             $i++;
+@@ -469,6 +473,8 @@
+         while( $i < @bits ) {
+             $val  = $bits[$i] || "";
+             $valExpanded  = $bitsExpanded[$i] || "";
++            $expandedValue =~ s/^\s+//;
++            $expandedValue =~ s/\s+$//;
+             $names .= " ${theName}x$i";
+             $text .= " <input type=\"checkbox\" name=\"${theName}x$i\" value=\"$val\"";
+             $text .= " checked=\"checked\"" if( $expandedValue =~ /(^|, )\Q$valExpanded\E(,|$)/ );
+@@ -477,7 +483,7 @@
+                 if( ($i-1) % $lines ) {
+                     $text .= " <br />";
+                 } elsif( $i-1 < $elements ) {
+-                    $text .= "</td><td valign=\"top\">";
++                    $text .= " </td><td valign=\"top\">";
+                 }
+             }
+             $i++;
+diff -ru ./lib/TWiki/Prefs/Parser.pm ./lib/TWiki/Prefs/Parser.pm
+--- ./lib/TWiki/Prefs/Parser.pm	2006-06-26 02:19:11.000000000 +1000
++++ ./lib/TWiki/Prefs/Parser.pm	2006-09-05 17:03:48.000000000 +1000
+@@ -62,29 +62,29 @@
+ sub parseText {
+     my( $this, $text, $prefs, $keyPrefix ) = @_;
+ 
++    $text =~ tr/\r//d;
+     my $key = '';
+     my $value ='';
+     my $type;
+-    foreach my $line ( split( /\r?\n/, $text ) ) {
+-        if( $line =~ m/$TWiki::regex{setVarRegex}/o ) {
+-            if( $type ) {
++    foreach( split( "\n", $text ) ) {
++        if( m/$TWiki::regex{setVarRegex}/os ) {
++            if( defined $type ) {
+                 $prefs->insert( $type, $keyPrefix.$key, $value );
+             }
+             $type = $1;
+             $key = $2;
+             $value = (defined $3) ? $3 : '';
+-        } elsif( $type ) {
+-            if( $line =~ /^(\s{3}|\t)+\s*[^\s*]/ &&
+-                  $line !~ m/$TWiki::regex{bulletRegex}/o ) {
++        } elsif( defined $type ) {
++            if( /^(   |\t)+ *[^\s]/ && !/$TWiki::regex{bulletRegex}/o ) {
+                 # follow up line, extending value
+-                $value .= "\n$line";
++                $value .= "\n".$_;
+             } else {
+                 $prefs->insert( $type, $keyPrefix.$key, $value );
+                 undef $type;
+             }
+         }
+     }
+-    if( $type ) {
++    if( defined $type ) {
+         $prefs->insert( $type, $keyPrefix.$key, $value );
+     }
+ }
+diff -ru ./lib/TWiki/Prefs/PrefsCache.pm ./lib/TWiki/Prefs/PrefsCache.pm
+--- ./lib/TWiki/Prefs/PrefsCache.pm	2006-06-26 02:19:11.000000000 +1000
++++ ./lib/TWiki/Prefs/PrefsCache.pm	2006-09-05 03:13:52.000000000 +1000
+@@ -45,8 +45,11 @@
+ package TWiki::Prefs::PrefsCache;
+ 
+ use TWiki::Prefs::Parser;
++
+ use Assert;
+ 
++use vars qw( $parser );
++
+ =pod
+ 
+ ---++ ClassMethod new( $prefs, $parent, $type, $web, $topic, $prefix )
+@@ -133,7 +136,7 @@
+         my( $meta, $text ) =
+           $session->{store}->readTopic( undef, $web, $topic, undef );
+ 
+-        my $parser = new TWiki::Prefs::Parser();
++        $parser ||= new TWiki::Prefs::Parser();
+         $parser->parseText( $text, $this, $keyPrefix );
+         $parser->parseMeta( $meta, $this, $keyPrefix );
+     }
+@@ -141,10 +144,12 @@
+ 
+ =pod
+ 
+----++ ObjectMethod loadPrefsFromText( $text, $web, $topic )
++---++ ObjectMethod loadPrefsFromText( $text, $meta, $web, $topic )
+ 
+-Loads preferences from a topic. All settings loaded are prefixed
+-with the key prefix (default '').
++Loads preferences from text and optional metadata. All settings loaded
++are prefixed with the key prefix (default ''). If =$meta= is defined,
++then metadata will be taken from that object. Otherwise, =$text= will
++be parsed to extract meta-data.
+ 
+ =cut
+ 
+@@ -153,14 +158,16 @@
+ # stuck with.
+ 
+ sub loadPrefsFromText {
+-    my( $this, $text, $web, $topic ) = @_;
++    my( $this, $text, $meta, $web, $topic ) = @_;
+     ASSERT($this->isa( 'TWiki::Prefs::PrefsCache')) if DEBUG;
+ 
+     $this->{SOURCE} = $web.'.'.$topic;
+ 
+     my $session = $this->{MANAGER}->{session};
+-    my $meta = new TWiki::Meta( $session, $web, $topic );
+-    $session->{store}->extractMetaData( $meta, \$text );
++    unless( $meta ) {
++        $meta = new TWiki::Meta( $session, $web, $topic );
++        $session->{store}->extractMetaData( $meta, \$text );
++    }
+ 
+     my $parser = new TWiki::Prefs::Parser();
+     $parser->parseText( $text, $this, '' );
+@@ -183,10 +190,11 @@
+ 
+     return if $this->{CONTEXT}->isFinalised( $key );
+ 
+-    $value =~ s/\t/ /g;                 # replace TAB by space
++    $value =~ tr/\r//d;                 # Delete \r
++    $value =~ tr/\t/ /;                 # replace TAB by space
+     $value =~ s/([^\\])\\n/$1\n/g;      # replace \n by new line
+     $value =~ s/([^\\])\\\\n/$1\\n/g;   # replace \\n by \n
+-    $value =~ s/`//g;                   # filter out dangerous chars
++    $value =~ tr/`//d;                  # filter out dangerous chars
+     if( $type eq 'Local' ) {
+         $this->{locals}{$this->{SOURCE}.'-'.$key} = $value;
+     } else {
+diff -ru ./lib/TWiki/Prefs.pm ./lib/TWiki/Prefs.pm
+--- ./lib/TWiki/Prefs.pm	2006-06-26 02:19:11.000000000 +1000
++++ ./lib/TWiki/Prefs.pm	2006-09-05 03:14:14.000000000 +1000
+@@ -290,22 +290,20 @@
+ 
+ =pod
+ 
+----++ getTextPreferencesValue( $key, $text, $web, $topic ) -> $value
+-Get a preference value from the settings in the text. The values are
+-*not* cached.
++---++ getTextPreferencesValue( $key, $text, $meta, $web, $topic ) -> $value
++Get a preference value from the settings in the text (and/or optional $meta).
++The values read are *not* cached.
+ 
+ =cut
+ 
+-# SMELL: this is horrible! But it's inevitable given the truly dreadful
+-# business of storing access controls embedded in topic text.
+ sub getTextPreferencesValue {
+-    my( $this, $key, $text, $web, $topic ) = @_;
++    my( $this, $key, $text, $meta, $web, $topic ) = @_;
+ 
+     my $wtn = $web.'.'.$topic;
+ 
+     my $cache = 
+       new TWiki::Prefs::PrefsCache( $this, undef, 'TOPIC' );
+-    $cache->loadPrefsFromText( $text, $web, $topic );
++    $cache->loadPrefsFromText( $text, $meta, $web, $topic );
+ 
+     return $cache->{values}{$key};
+ }
+diff -ru ./lib/TWiki/Render.pm ./lib/TWiki/Render.pm
+--- ./lib/TWiki/Render.pm	2006-06-26 02:19:11.000000000 +1000
++++ ./lib/TWiki/Render.pm	2006-07-03 22:30:28.000000000 +1000
+@@ -215,7 +215,7 @@
+ =cut
+ 
+ sub renderFormField {
+-    my( $this, $web, $topic, $meta, $attrs ) = @_;
++    my( $this, $meta, $attrs ) = @_;
+     my $text = '';
+     my $name = $attrs->{name};
+     $text = renderFormFieldArg( $meta, $name ) if( $name );
+diff -ru ./lib/TWiki/Sandbox.pm ./lib/TWiki/Sandbox.pm
+--- ./lib/TWiki/Sandbox.pm	2006-06-26 02:19:11.000000000 +1000
++++ ./lib/TWiki/Sandbox.pm	2006-09-14 09:16:50.000000000 +1000
+@@ -113,9 +113,9 @@
+ 
+ =pod
+ 
+----++ StaticMethod normalizeFileName ( $string ) -> $filename
++---++ StaticMethod normalizeFileName( $string ) -> $filename
+ 
+-STATIC Errors out if $string contains filtered characters.
++Errors out if $string contains filtered characters.
+ 
+ The returned string is not tainted, but it may contain shell
+ metacharacters and even control characters.
+@@ -125,9 +125,9 @@
+ sub normalizeFileName {
+     my ($string) = @_;
+     return '' unless $string;
+-    my $absolute = $string =~ /^\//;
++    my $absolute = File::Spec->file_name_is_absolute($string);
+     my @result;
+-    for my $component (split /\//, $string) {
++    for my $component (File::Spec->splitdir($string)) {
+         next unless $component;
+         next if $component eq '.';
+         if ($component eq '..') {
+@@ -141,6 +141,7 @@
+                                    $component.' of filename '.$string );
+         }
+     }
++    # Convert to UNIX path and return
+     if (@result) {
+         if ($absolute) {
+             $result[0] = "/$result[0]";
+@@ -154,6 +155,45 @@
+     }
+ }
+ 
++=pod
++
++---++ StaticMethod sanitizeAttachmentName($fname) -> ($fileName, $origName)
++
++Given a file name received in a query parameter, sanitise it. Returns
++the sanitised name together with the basename before sanitisation.
++
++Sanitisation includes filtering illegal characters and mapping client
++file names to legal server names.
++
++=cut
++
++sub sanitizeAttachmentName {
++    my $fileName = shift;
++    
++    # homegrown split because File::Spec functions will assume that directory path
++    # is using / in UNIX and \ in Windows as defined in the HOST environment.
++    # And we don't know the client OS. Problem is specific to IE which sends the full
++    # original client path when you upload files. See Item2859 and Item2225 before
++    # trying again to use File::Spec functions and remember to test with IE.
++    # Cut path from filepath name (Windows '\' and Unix "/" format)
++    my @pathz = ( split( /\\/, $fileName ) );
++    my $filetemp = $pathz[$#pathz];
++    my @pathza = ( split( '/', $filetemp ) );
++    $filetemp = $pathza[$#pathza];
++
++    # untaint
++    $fileName = untaintUnchecked($filetemp);
++    my $origName = $fileName;
++    # Change spaces to underscore
++    $fileName =~ s/ /_/go;
++    # Remove problematic chars
++    $fileName =~ s/$TWiki::cfg{NameFilter}//goi;
++    # Append .txt to some files
++    $fileName =~ s/$TWiki::cfg{UploadFilter}/$1\.txt/goi;
++
++    return ($fileName, $origName);
++}
++
+ # $template is split at whitespace, and '%VAR%' strings contained in it
+ # are replaced with $params{VAR}.  %params may consist of scalars and
+ # array references as values.  Array references are dereferenced and the
+diff -ru ./lib/TWiki/Search.pm ./lib/TWiki/Search.pm
+--- ./lib/TWiki/Search.pm	2006-06-26 02:19:11.000000000 +1000
++++ ./lib/TWiki/Search.pm	2006-09-15 06:07:19.000000000 +1000
+@@ -236,7 +236,7 @@
+ 
+     if( $topic ) {
+         # limit search to topic list
+-        if( $topic =~ /^\^\([$TWiki::regex{mixedAlphaNum}\|]+\)\$$/ ) {
++        if( $topic =~ /^\^\([\_\-$TWiki::regex{mixedAlphaNum}\|]+\)\$$/ ) {
+             # topic list without wildcards
+             # for speed, do not get all topics in web
+             # but convert topic pattern into topic list
+@@ -328,7 +328,7 @@
+     my( $topic ) = @_ ;
+     return '' unless( $topic );
+     # 'Web*, FooBar' ==> ( 'Web*', 'FooBar' ) ==> ( 'Web.*', "FooBar" )
+-    my @arr = map { s/[^\*\_$TWiki::regex{mixedAlphaNum}]//go; s/\*/\.\*/go; $_ }
++    my @arr = map { s/[^\*\_\-$TWiki::regex{mixedAlphaNum}]//go; s/\*/\.\*/go; $_ }
+               split( /,\s*/, $topic );
+     return '' unless( @arr );
+     # ( 'Web.*', 'FooBar' ) ==> "^(Web.*|FooBar)$"
+@@ -1039,10 +1039,9 @@
+ 
+     $info->{allowView} =
+       $session->{security}->
+-        checkAccessPermission( 'view',
+-                               $session->{user},
+-                               $text, $topic,
+-                               $web );
++        checkAccessPermission( 'view', $session->{user},
++                               $text, $meta,
++                               $topic, $web );
+ 
+     return $info unless $sortfield;
+ 
+diff -ru ./lib/TWiki/Store/RcsFile.pm ./lib/TWiki/Store/RcsFile.pm
+--- ./lib/TWiki/Store/RcsFile.pm	2006-06-26 02:19:11.000000000 +1000
++++ ./lib/TWiki/Store/RcsFile.pm	2006-07-08 16:00:32.000000000 +1000
+@@ -281,9 +281,11 @@
+         my @tmpList =
+           sort
+             map { TWiki::Sandbox::untaintUnchecked( $_ ) }
+-              grep { !/$TWiki::cfg{NameFilter}/ &&
+-                       !/^\./ &&
+-                         -d $dir.'/'.$_ } readdir( DIR );
++              grep { !/\./ &&
++                     !/$TWiki::cfg{NameFilter}/ &&
++                     -d $dir.'/'.$_
++                   }
++                readdir( DIR );
+         closedir( DIR );
+         return @tmpList;
+     }
+diff -ru ./lib/TWiki/Store/RcsLite.pm ./lib/TWiki/Store/RcsLite.pm
+--- ./lib/TWiki/Store/RcsLite.pm	2006-06-26 02:19:11.000000000 +1000
++++ ./lib/TWiki/Store/RcsLite.pm	2006-09-12 03:00:32.000000000 +1000
+@@ -419,8 +419,11 @@
+ sub numRevisions {
+     my( $this ) = @_;
+     $this->_ensureProcessed();
+-    # if state is is nocommav, there is only one revision
+-    return 1 if $this->{state} eq 'nocommav';
++    # if state is nocommav, and the file exists, there is only one revision
++    if( $this->{state} eq 'nocommav' ) {
++        return 1 if( -e $this->{file} );
++        return 0;
++    }
+     return $this->{head};
+ }
+ 
+diff -ru ./lib/TWiki/Store.pm ./lib/TWiki/Store.pm
+--- ./lib/TWiki/Store.pm	2006-06-26 02:19:11.000000000 +1000
++++ ./lib/TWiki/Store.pm	2006-09-05 03:14:30.000000000 +1000
+@@ -193,9 +193,11 @@
+         $text = $handler->getRevision( $version );
+     }
+ 
++    # Note: passing undef as meta will cause extraction of the meta
++    # from the (raw) text passed
+     if( $user &&
+           !$this->{session}->{security}->checkAccessPermission
+-            ( 'view', $user, $text, $topic, $web )) {
++            ( 'view', $user, $text, undef, $topic, $web )) {
+         throw TWiki::AccessControlException(
+             'VIEW', $user, $web, $topic,
+             $this->{session}->{security}->getReason());
+@@ -227,7 +229,7 @@
+         my( $ometa, $otext ) = $this->readTopic( undef, $oldWeb, $oldTopic );
+         if( $user &&
+               !$this->{session}->{security}->checkAccessPermission
+-                ( 'change', $user, $otext, $oldTopic, $oldWeb )) {
++                ( 'change', $user, $otext, $ometa, $oldTopic, $oldWeb )) {
+             throw TWiki::AccessControlException(
+                 'CHANGE', $user, $oldWeb, $oldTopic,
+                 $this->{session}->{security}->getReason());
+@@ -236,7 +238,7 @@
+         my ( $nmeta, $ntext ) = $this->readTopic( undef, $newWeb, $newTopic );
+         if( $user &&
+               !$this->{session}->{security}->checkAccessPermission
+-                ( 'change', $user, $ntext, $newTopic, $newWeb )) {
++                ( 'change', $user, $ntext, $nmeta, $newTopic, $newWeb )) {
+             throw TWiki::AccessControlException(
+                 'CHANGE', $user, $newWeb, $newTopic,
+                 $this->{session}->{security}->getReason());
+@@ -300,7 +302,7 @@
+ 
+     if( $user &&
+           !$this->{session}->{security}->checkAccessPermission
+-            ( 'view', $user, undef, $topic, $web )) {
++            ( 'view', $user, undef, undef, $topic, $web )) {
+         throw TWiki::AccessControlException( 'VIEW', $user, $web, $topic,
+                                              $this->{session}->{security}->getReason());
+     }
+@@ -436,9 +438,10 @@
+     $this->lockTopic( $user, $oldWeb, $oldTopic );
+     try {
+         my $otext = $this->readTopicRaw( undef, $oldWeb, $oldTopic );
++        # Note: undef $meta param will cause $otext to be parsed for meta
+         if( $user &&
+               !$this->{session}->{security}->checkAccessPermission
+-                ( 'change', $user, $otext, $oldTopic, $oldWeb )) {
++                ( 'change', $user, $otext, undef, $oldTopic, $oldWeb )) {
+             throw TWiki::AccessControlException(
+                 'CHANGE', $user,
+                 $oldWeb, $oldTopic,
+@@ -451,7 +454,7 @@
+         }
+         if( $user &&
+               !$this->{session}->{security}->checkAccessPermission
+-                ( 'change', $user, $ntext, $newTopic, $newWeb )) {
++                ( 'change', $user, $ntext, $nmeta, $newTopic, $newWeb )) {
+             throw TWiki::AccessControlException(
+                 'CHANGE', $user, $newWeb, $newTopic,
+                 $this->{session}->{security}->getReason());
+@@ -567,7 +570,7 @@
+ 
+     if( $user &&
+           !$this->{session}->{security}->checkAccessPermission
+-            ( 'view', $user, undef, $topic, $web )) {
++            ( 'view', $user, undef, undef, $topic, $web )) {
+         throw TWiki::AccessControlException(
+             'VIEW', $user, $web, $topic,
+             $this->{session}->{security}->getReason());
+@@ -820,7 +823,7 @@
+ 
+     if( $user &&
+           !$this->{session}->{security}->checkAccessPermission
+-            ( 'change', $user, undef, $topic, $web )) {
++            ( 'change', $user, undef, undef, $topic, $web )) {
+ 
+         throw TWiki::AccessControlException(
+             'CHANGE', $user, $web, $topic,
+@@ -909,7 +912,7 @@
+ 
+         if( $user &&
+               !$this->{session}->{security}->checkAccessPermission
+-                ( 'change', $user, $text, $topic, $web )) {
++                ( 'change', $user, $text, $meta, $topic, $web )) {
+ 
+             throw TWiki::AccessControlException(
+                 'CHANGE', $user, $web, $topic,
+@@ -1594,7 +1597,8 @@
+         my $security = $this->{session}->{security};
+         @webList =
+           grep {
+-              $security->checkAccessPermission( 'view', $user, undef, undef, $_ )
++              $security->checkAccessPermission(
++                  'view', $user, undef, undef, undef, $_ )
+           } @webList;
+     }
+ 
+diff -ru ./lib/TWiki/Templates.pm ./lib/TWiki/Templates.pm
+--- ./lib/TWiki/Templates.pm	2006-06-26 02:19:11.000000000 +1000
++++ ./lib/TWiki/Templates.pm	2006-09-05 03:14:40.000000000 +1000
+@@ -412,7 +412,8 @@
+ sub validateTopic {
+    my( $session, $store, $user, $topic, $web ) = @_;
+    return $store->topicExists( $web, $topic ) && 
+-   $session->{security}->checkAccessPermission ('view', $user, undef, $topic, $web );
++   $session->{security}->checkAccessPermission(
++       'view', $user, undef, undef, $topic, $web );
+ }
+ 
+ sub retrieveTopic {
+diff -ru ./lib/TWiki/UI/ChangeForm.pm ./lib/TWiki/UI/ChangeForm.pm
+--- ./lib/TWiki/UI/ChangeForm.pm	2006-06-26 02:19:11.000000000 +1000
++++ ./lib/TWiki/UI/ChangeForm.pm	2006-09-12 22:30:32.000000000 +1000
+@@ -80,7 +80,9 @@
+            };
+         $props->{checked} = 'checked' if $form eq $formName;
+         $formList .= CGI::input( $props );
+-        my $formLabelContent = '&nbsp;' . ( $store->topicExists( $web, $form ) ? '[['.$form.']]' : $form );
++	my ($formWeb, $formTopic) = $session->normalizeWebTopicName($web, $form);
++        my $formLabelContent = '&nbsp;' . ( $store->topicExists( $formWeb, $formTopic ) ? 
++	  '[['.$formWeb.'.'.$formTopic.']['.$form.']]' : $form );
+         $formList .= CGI::label( { for => $formElemId}, $formLabelContent );
+     }
+     $page =~ s/%FORMLIST%/$formList/go;
+diff -ru ./lib/TWiki/UI/Manage.pm ./lib/TWiki/UI/Manage.pm
+--- ./lib/TWiki/UI/Manage.pm	2006-06-26 02:19:11.000000000 +1000
++++ ./lib/TWiki/UI/Manage.pm	2006-09-05 03:26:56.000000000 +1000
+@@ -282,7 +282,7 @@
+             throw TWiki::OopsException( 'attention',
+                                         web => $oldWeb,
+                                         topic => $oldTopic,
+-                                        def => 'rename_not_wikiword',
++                                        def => 'not_wikiword',
+                                         params => [ $newTopic ] );
+         }
+         # Filter out dangerous characters (. and / may cause
+@@ -525,7 +525,7 @@
+                 $webTopicInfo{modify}{$ref}{summary} = $refs{$ref};
+                 $webTopicInfo{modify}{$ref}{access} =
+                   $security->checkAccessPermission('change', $user,
+-                                                   undef, $webTopic,
++                                                   undef, undef, $webTopic,
+                                                    $webIter);
+                 if(!$webTopicInfo{modify}{$ref}{access}) {
+                     $webTopicInfo{modify}{$ref}{accessReason} =
+@@ -564,7 +564,7 @@
+                        $webTopicInfo{move}{$wit}{leaseuser} ne $user);
+                 $webTopicInfo{move}{$wit}{access} =
+                   $security->checkAccessPermission('rename', $user,
+-                                                   undef, $webTopic,
++                                                   undef, undef, $webTopic,
+                                                    $webIter);
+                 $webTopicInfo{move}{$wit}{accessReason} =
+                   $security->getReason();
+diff -ru ./lib/TWiki/UI/Preview.pm ./lib/TWiki/UI/Preview.pm
+--- ./lib/TWiki/UI/Preview.pm	2006-06-26 02:19:11.000000000 +1000
++++ ./lib/TWiki/UI/Preview.pm	2006-09-13 02:30:36.000000000 +1000
+@@ -89,7 +89,7 @@
+ 
+     # Disable links and inputs in the text
+     $dispText =~ s#<a\s[^>]*>(.*?)</a>#<span class="twikiEmulatedLink">$1</span>#gis;
+-    $dispText =~ s/<(input|button|textarea) /<$1 disabled="disabled"/gis;
++    $dispText =~ s/<(input|button|textarea) /<$1 disabled="disabled" /gis;
+     $dispText =~ s(</?form(|\s.*?)>)()gis;
+     $dispText =~ s/(<[^>]*\bon[A-Za-z]+=)('[^']*'|"[^"]*")/$1''/gis;
+ 
+diff -ru ./lib/TWiki/UI/Register.pm ./lib/TWiki/UI/Register.pm
+--- ./lib/TWiki/UI/Register.pm	2006-06-26 02:19:11.000000000 +1000
++++ ./lib/TWiki/UI/Register.pm	2006-07-07 02:30:22.000000000 +1000
+@@ -313,13 +313,13 @@
+ 
+     my $userTopic =
+       $session->{users}->addUserToMapping( $user, $session->{user} );
+-    $user->setEmails( $row->{Email} );
+ 
+     if( $doOverwriteTopics or !$session->{store}->topicExists( $row->{webName}, $row->{WikiName} ) ) {
+         $log .= _createUserTopic($session, 'NewUserTemplate', $row);
+     } else {
+         $log .= $b.' Not writing topic '.$row->{WikiName}."\n";
+ 	}
++    $user->setEmails( $row->{Email} );
+ 
+     #if ($TWiki::cfg{EmailUserDetails}) {
+         # If you want it, write it.
+@@ -794,13 +794,13 @@
+ 
+     my $userTopic = $session->{users}->addUserToMapping( $user, $agent);
+ 
+-    $user->setEmails( $data->{Email} );
+-
+     # inform user and admin about the registration.
+     my $status = _emailRegistrationConfirmations( $session, $data );
+ 
+     my $log = _createUserTopic($session, 'NewUserTemplate', $data);
+ 
++    $user->setEmails( $data->{Email} );
++
+     # write log entry
+     if ($TWiki::cfg{Log}{register}) {
+         $session->writeLog( 'register', $TWiki::cfg{UsersWebName}.'.'.$data->{WikiName},
+diff -ru ./lib/TWiki/UI/Save.pm ./lib/TWiki/UI/Save.pm
+--- ./lib/TWiki/UI/Save.pm	2006-06-26 02:19:11.000000000 +1000
++++ ./lib/TWiki/UI/Save.pm	2006-07-08 18:00:34.000000000 +1000
+@@ -457,6 +457,10 @@
+     my( $newMeta, $newText, $saveOpts, $merged ) =
+       TWiki::UI::Save::buildNewTopic($session, 'save');
+ 
++    if( $saveaction =~ /^(save|checkpoint)$/ ) {
++        $session->{plugins}->afterEditHandler( $newText, $topic, $web );
++    }
++
+     try {
+         $store->saveTopic( $user, $web, $topic,
+                            $newText, $newMeta, $saveOpts );
+diff -ru ./lib/TWiki/UI/Upload.pm ./lib/TWiki/UI/Upload.pm
+--- ./lib/TWiki/UI/Upload.pm	2006-06-26 02:19:11.000000000 +1000
++++ ./lib/TWiki/UI/Upload.pm	2006-09-14 08:53:28.000000000 +1000
+@@ -43,12 +43,11 @@
+ This method is designed to be
+ invoked via the =TWiki::UI::run= method.
+ 
+-Attach a file to a topic. CGI parameters are:
+-
+-| =filename= | Name of attachment |
+-| =skin= | Skin(s) to use in presenting pages |
++Adds the meta-data for an attachment to a toic. Does *not* upload
++the attachment itself, just modifies the meta-data.
+ 
+ =cut
++
+ sub attach {
+     my $session = shift;
+ 
+@@ -139,6 +138,11 @@
+ | =createlink= | if defined, will create a link to file at end of topic |
+ | =changeproperties= | |
+ 
++Does the work of uploading a file to a topic. Designed to be useable as
++a REST method (it will redirect to the 'view' script unless the 'noredirect'
++parameter is specified, in which case it will print a message to
++STDOUT, starting with 'OK' on success and 'ERROR' on failure.
++
+ =cut
+ 
+ sub upload {
+@@ -180,24 +184,8 @@
+     my $origName = $fileName;
+ 
+     unless( $doPropsOnly ) {
+-        # SMELL: homegrown split because we don't know the client OS
+-        # cut path from filepath name (Windows '\' and Unix "/" format)
+-        my @pathz = ( split( /\\/, $filePath ) );
+-        my $filetemp = $pathz[$#pathz];
+-        my @pathza = ( split( '/', $filetemp ) );
+-        $fileName = $pathza[$#pathza];
+-        $origName = $fileName;
+-
+-        # Sanitize filename
+-        # FIXME: Allow spaces and other chars by encoding them (and decoding on download)
+-        # SMELL: Safer to keep only permitted chars instead of filtering out cfg{NameFilter} chars
+-        $fileName =~ s/ /_/go;                                 # Change spaces to underscore
+-        $fileName =~ s/$TWiki::cfg{NameFilter}//goi;           # Remove problematic chars
+-        $fileName =~ s/$TWiki::cfg{UploadFilter}/$1\.txt/goi;  # Append .txt to some files
+-
+-        $fileName = TWiki::Sandbox::untaintUnchecked( $fileName );
+-
+-        ##$session->writeDebug ("Upload filename after cleanup is '$fileName'");
++        ( $fileName, $origName ) =
++          TWiki::Sandbox::sanitizeAttachmentName( $fileName );
+ 
+         # check if upload has non zero size
+         if( $stream ) {
+diff -ru ./lib/TWiki/UI/View.pm ./lib/TWiki/UI/View.pm
+--- ./lib/TWiki/UI/View.pm	2006-06-26 02:19:11.000000000 +1000
++++ ./lib/TWiki/UI/View.pm	2006-09-05 17:59:02.000000000 +1000
+@@ -353,6 +353,7 @@
+     my $topic = $session->{topicName};
+ 
+     my $fileName = $query->param( 'filename' );
++    $fileName = TWiki::Sandbox::sanitizeAttachmentName( $fileName );
+ 
+     my $rev = $session->{store}->cleanUpRevID( $query->param( 'rev' ) );
+ 
+diff -ru ./lib/TWiki/UI.pm ./lib/TWiki/UI.pm
+--- ./lib/TWiki/UI.pm	2006-06-26 02:19:11.000000000 +1000
++++ ./lib/TWiki/UI.pm	2006-09-05 03:14:04.000000000 +1000
+@@ -240,8 +240,8 @@
+     my ( $session, $web, $topic, $mode, $user ) = @_;
+     ASSERT($session->isa( 'TWiki')) if DEBUG;
+ 
+-    unless( $session->{security}->checkAccessPermission( $mode, $user, undef,
+-                                                         $topic, $web )) {
++    unless( $session->{security}->checkAccessPermission(
++        $mode, $user, undef, undef, $topic, $web )) {
+         throw TWiki::OopsException( 'accessdenied',
+                                     def => 'topic_access',
+                                     web => $web,
+diff -ru ./lib/TWiki/Users/TWikiUserMapping.pm ./lib/TWiki/Users/TWikiUserMapping.pm
+--- ./lib/TWiki/Users/TWikiUserMapping.pm	2006-06-26 02:19:11.000000000 +1000
++++ ./lib/TWiki/Users/TWikiUserMapping.pm	2006-09-04 17:03:18.000000000 +1000
+@@ -273,32 +273,28 @@
+     return if $this->{CACHED};
+     $this->{CACHED} = 1;
+ 
+-    my $text;
+     my $store = $this->{session}->{store};
+-    if( $TWiki::cfg{MapUserToWikiName} &&
+-       $store->topicExists($TWiki::cfg{UsersWebName},
+-                           $TWiki::cfg{UsersTopicName} )) {
+-        $text = $store->readTopicRaw( undef,
++    if( $store->topicExists($TWiki::cfg{UsersWebName},
++                            $TWiki::cfg{UsersTopicName} )) {
++        my $text = $store->readTopicRaw( undef,
+                                       $TWiki::cfg{UsersWebName},
+                                       $TWiki::cfg{UsersTopicName},
+                                       undef );
++        # Get the WikiNames and userids, and build hashes in both directions
++        # This matches:
++        #   * TWikiGuest - guest - 10 Mar 2005
++        #   * TWikiGuest - 10 Mar 2005
++        $text =~ s/^\s*\* ($TWiki::regex{webNameRegex}\.)?($TWiki::regex{wikiWordRegex})\s*(?:-\s*(\S+)\s*)?-.*$/$this->_cacheUser($1,$2,$3)/gome;
+     } else {
+-        # fix for Codev.SecurityAlertGainAdminRightWithTWikiUsersMapping
+-        # map only guest to TWikiGuest. CODE_SMELL on localization
+-        $text = "\t* $TWiki::cfg{DefaultUserWikiName} - $TWiki::cfg{DefaultUserLogin} - 01 Apr 1970";
++        # If there is no mapping topic, then
++        # map only guest to TWikiGuest.
++        $this->_cacheUser(undef, $TWiki::cfg{DefaultUserWikiName},
++                          $TWiki::cfg{DefaultUserLogin});
+     }
+-
+-    my $wUser;
+-    my $lUser;
+-    # Get the WikiName and userid, and build hashes in both directions
+-    # This matches:
+-    #   * TWikiGuest - guest - 10 Mar 2005
+-    #   * TWikiGuest - 10 Mar 2005
+-    $text =~ s/^\s*\* ($TWiki::regex{webNameRegex}\.)?(\w+)\s*(?:-\s*(\S+)\s*)?-\s*\d+ \w+ \d+\s*$/_cacheUser($this,$1,$2,$3)/gome;
+ }
+ 
+ sub _cacheUser {
+-    my($cacheHolder, $web, $wUser, $lUser) = @_;
++    my($this, $web, $wUser, $lUser) = @_;
+     $web ||= $TWiki::cfg{UsersWebName};
+     $lUser ||= $wUser;	# userid
+     # FIXME: Should filter in for security...
+@@ -306,8 +302,8 @@
+     # like the DOMAIN\username used in the swamp of despair.
+     $lUser =~ s/$TWiki::cfg{NameFilter}//go;
+     my $wwn = $web.'.'.$wUser;
+-    $cacheHolder->{U2W}{$lUser} = $wwn;
+-    $cacheHolder->{W2U}{$wwn} = $lUser;
++    $this->{U2W}{$lUser} = $wwn;
++    $this->{W2U}{$wwn} = $lUser;
+ }
+ 
+ =pod
+diff -ru ./lib/TWiki.pm ./lib/TWiki.pm
+--- ./lib/TWiki.pm	2006-07-05 08:48:34.000000000 +1000
++++ ./lib/TWiki.pm	2006-09-15 07:26:03.000000000 +1000
+@@ -162,9 +162,9 @@
+ 
+     # DO NOT CHANGE THE FORMAT OF $VERSION
+     # automatically expanded on checkin of this module
+-    $VERSION = '$Date: 2006-07-04 16:58:06 +0200 (Tue, 04 Jul 2006) $ $Rev: 10807 $ ';
+-    $RELEASE = '.';
+-    $VERSION =~ s/^.*?\((.*)\).*: (\d+) .*?$/$1 build $2/;
++    $VERSION = '$Date: 2006-09-14 23:25 +0200 (Wed, 14 Jul 2006) $ $Rev: 11482 $ ';
++    $RELEASE = '.';
++    $VERSION =~ s/^.*?\((.*)\).*: (\d+) .*?$/$RELEASE, $1, build $2/;
+ 
+     # Default handlers for different %TAGS%
+     %functionTags = (
+@@ -407,13 +407,12 @@
+     $regex{mixedAlphaNumRegex} = qr/[$regex{mixedAlphaNum}]*/o;
+ 
+     # %TAG% name
+-    $regex{tagNameRegex} = qr/[$regex{mixedAlpha}][$regex{mixedAlphaNum}_:]*/o;
++    $regex{tagNameRegex} = '['.$regex{mixedAlpha}.']['.$regex{mixedAlphaNum}.'_:]*';
+ 
+     # Set statement in a topic
+-    $regex{bulletRegex} = qr/^(?:\t|   )+\*/;
+-    $regex{setRegex} = qr/$regex{bulletRegex}\s+(Set|Local)\s+/o;
+-    # SMELL: this ought to use $regex{tagNameRegex}
+-    $regex{setVarRegex} = qr/$regex{setRegex}(\w+)\s*=\s*(.*)$/o;
++    $regex{bulletRegex} = '^(?:\t|   )+\*';
++    $regex{setRegex} = $regex{bulletRegex}.'\s+(Set|Local)\s+';
++    $regex{setVarRegex} = $regex{setRegex}.'('.$regex{tagNameRegex}.')\s*=\s*(.*)$';
+ 
+     # Character encoding regexes
+ 
+@@ -1457,7 +1456,7 @@
+ 
+ sub _removeNewlines {
+     my( $theTag ) = @_;
+-    $theTag =~ s/[\r\n]+//gs;
++    $theTag =~ s/[\r\n]+/ /gs;
+     return $theTag;
+ }
+ 
+@@ -1465,6 +1464,9 @@
+ sub _rewriteURLInInclude {
+     my( $theHost, $theAbsPath, $url ) = @_;
+ 
++    # leave out an eventual final non-directory component from the absolute path
++    $theAbsPath =~ s/(.*?)[^\/]*$/$1/;
++
+     if( $url =~ /^\// ) {
+         # fix absolute URL
+         $url = $theHost.$url;
+@@ -1563,7 +1565,7 @@
+             if( $web ne $theWeb || $topic ne $theTopic ) {
+                 # CODE_SMELL: Does not account for not yet authenticated user
+                 unless( $this->{security}->checkAccessPermission(
+-                    'view', $this->{user}, undef, $topic, $web ) ) {
++                    'view', $this->{user}, undef, undef, $topic, $web ) ) {
+                     return $this->inlineAlert( 'alerts', 'access_denied',
+                                                $web, $topic );
+                 }
+@@ -1656,6 +1658,8 @@
+     $defaultWeb =~ s#/#.#g;
+     my $web = $params->{web} || $defaultWeb;
+ 
++    my $isSameTopic = $web eq $defaultWeb  &&  $topic eq $defaultTopic;
++
+     $web =~ s#/#\.#g;
+     my $webPath = $web;
+     $webPath =~ s/\./\//g;
+@@ -1669,7 +1673,7 @@
+ 
+     if( $web ne $defaultWeb || $topic ne $defaultTopic ) {
+         unless( $this->{security}->checkAccessPermission
+-                ( 'view', $this->{user}, undef, $topic, $web ) ) {
++                ( 'view', $this->{user}, undef, undef, $topic, $web ) ) {
+             return $this->inlineAlert( 'alerts', 'access_denied',
+                                        $web, $topic );
+         }
+@@ -1722,8 +1726,10 @@
+             # Prevent manual links
+             $line =~ s/<[\/]?a\b[^>]*>//gi;
+             # create linked bullet item, using a relative link to anchor
+-            $line = $tabs.'* '.
+-              CGI::a( { href=>$this->getScriptUrl( 0, 'view', $web, $topic, '#'=>$anchor ) }, $line );
++            my $target = $isSameTopic ?
++                         "#$anchor"   :
++                         $this->getScriptUrl(0,'view',$web,$topic,'#'=>$anchor);
++            $line = $tabs.'* ' .  CGI::a({href=>$target},$line);
+             $result .= "\n".$line;
+         }
+     }
+@@ -2731,7 +2737,7 @@
+                                  $rev );
+ 
+     unless( $this->{security}->checkAccessPermission(
+-        'VIEW', $this->{user}, $text, $includedTopic, $includedWeb )) {
++        'VIEW', $this->{user}, $text, $meta, $includedTopic, $includedWeb )) {
+         if( isTrue( $warn )) {
+             return $this->inlineAlert( 'alerts', 'access_denied',
+                                        $includedTopic );
+diff -ru ./pub/TWiki/TWikiJavascripts/twiki.js ./pub/TWiki/TWikiJavascripts/twiki.js
+--- ./pub/TWiki/TWikiJavascripts/twiki.js	2006-06-26 02:19:10.000000000 +1000
++++ ./pub/TWiki/TWikiJavascripts/twiki.js	2006-07-23 18:14:22.000000000 +1000
+@@ -240,6 +240,54 @@
+ }
+ 
+ /**
++Javascript query string parsing.
++Author: djohnson@ibsys.com {{djohnson}} - you may use this file as you wish but please keep this header with it thanks
++@use 
++Pass location.search to the constructor:
++<code>var myPageQuery = new PageQuery(location.search)</code>
++Retrieve values
++<code>var myValue = myPageQuery.getValue("param1")</code>
++*/
++TWiki.PageQuery = function (q) {
++	if (q.length > 1) {
++		this.q = q.substring(1, q.length);
++	} else {
++		this.q = null;
++	}
++	this.keyValuePairs = new Array();
++	if (q) {
++		for(var i=0; i < this.q.split(/[&;]/).length; i++) {
++			this.keyValuePairs[i] = this.q.split(/[&;]/)[i];
++		}
++	}
++}
++TWiki.PageQuery.prototype.getKeyValuePairs = function() {
++	return this.keyValuePairs;
++}
++/**
++@return The query string value; if not found returns -1.
++*/
++TWiki.PageQuery.prototype.getValue = function (s) {
++	for(var j=0; j < this.keyValuePairs.length; j++) {
++		if(this.keyValuePairs[j].split(/=/)[0] == s)
++			return this.keyValuePairs[j].split(/=/)[1];
++	}
++	return -1;
++}
++TWiki.PageQuery.prototype.getParameters = function () {
++	var a = new Array(this.getLength());
++	for(var j=0; j < this.keyValuePairs.length; j++) {
++		a[j] = this.keyValuePairs[j].split(/=/)[0];
++	}
++	return a;
++}
++TWiki.PageQuery.prototype.getLength = function() {
++	return this.keyValuePairs.length;
++}
++
++// COOKIE FUNCTIONS
++
++/**
+ Add a cookie. If 'days' is set to a non-zero number of days, sets an expiry on the cookie.
+ @deprecated Use setPref.
+ */
+@@ -366,7 +414,7 @@
+ */
+ function _writePrefValues (inValues, inExpiryDate) {
+ 	var cookieString = (inValues != null) ? inValues.join(COOKIE_PREF_SEPARATOR) : '';
+-	var expdate = (inExpiryDate != null) ? inExpiryDate : new Date ();
++	var expdate = (inExpiryDate != null) ? new Date(inExpiryDate) : new Date ();
+ 	FixCookieDate (expdate); // Correct for Mac date bug - call only once for given Date object!
+ 	expdate.setTime (expdate.getTime() + COOKIE_EXPIRY_TIME);
+ 	SetCookie(TWIKI_PREF_COOKIE_NAME, cookieString, expdate);
+@@ -496,4 +544,3 @@
+       "; expires=Thu, 01-Jan-70 00:00:01 GMT";
+   }
+ }
+-
+diff -ru ./templates/messages.tmpl ./templates/messages.tmpl
+--- ./templates/messages.tmpl	2006-06-26 02:19:11.000000000 +1000
++++ ./templates/messages.tmpl	2006-09-05 03:26:56.000000000 +1000
+@@ -85,7 +85,7 @@
+ 
+ %TMPL:DEF{"not_wikiword"}%
+ ---+++ %MAKETEXT{"New topic name [_1] is not a [_2]" args="\"<nop>%PARAM1%\", %TWIKIWEB%.WikiWord"}%
+-%MAKETEXT{"Please go back in your browser and chose a topic name that is a [_1].WikiWord or check the allow non-Wiki Word box" args="%TWIKIWEB%"}%
++%MAKETEXT{"Please go back in your browser and choose a topic name that is a [_1].WikiWord or check the allow non-Wiki Word box" args="%TWIKIWEB%"}%
+ %TMPL:END%
+ %TMPL:DEF{"rename_err"}%
+ %MAKETEXT{"During rename of topic [_1] to [_2] an error ([_3]) was found. Please notify your [_4] administrator."  args="<nop>%WEB%.<nop>%TOPIC%,<nop>%PARAM2%,%PARAM1%,%WIKITOOLNAME%"}%
+diff -ru ./twiki_httpd_conf.txt ./twiki_httpd_conf.txt
+--- ./twiki_httpd_conf.txt	2006-07-04 09:04:19.000000000 +1000
++++ ./twiki_httpd_conf.txt	2006-07-25 10:05:22.000000000 +1000
+@@ -33,19 +33,56 @@
+ # BrowserMatchNoCase ^SiteSucker anonymous_spider
+ BrowserMatchNoCase ^$ anonymous_spider
+ 
++
+ # This specifies the options on the TWiki scripts directory. The ExecCGI
+ # and SetHandler tell apache that it contains scripts. "Allow from all"
+ # lets any IP address access this URL.
+ 
+ #### Change the path to match your local installation
+ <Directory "/home/httpd/twiki/bin">
+-	Options +ExecCGI FollowSymLinks
+-	SetHandler cgi-script
++	AllowOverride None
+ 	Order Allow,Deny
+ 	Allow from all
+ 	Deny from env=anonymous_spider
++
++	Options ExecCGI FollowSymLinks
++	SetHandler cgi-script
++
++	# Password file for TWiki users
++	AuthUserFile /var/www/twiki/data/.htpasswd
++	AuthName 'Enter your WikiName: (First name and last name, no space, no dots, capitalized, e.g. JohnSmith). Cancel to register if you do not have one.'
++	AuthType Basic
++	
++	# File to return on access control error (e.g. wrong password)
++	# By convention this is the TWikiRegistration page, that allows users
++	# to register with the TWiki. Apache requires this to be a *local* path.
++	ErrorDocument 401 /twiki/bin/view/TWiki/TWikiRegistration
++
++# Limit access to configure to specific IP addresses and or users.
++# Make sure configure is not open to the general public.
++# The configure script is designed for administrators only.
++# The script itself and the information it reveals can be abused by
++# attackers if not properly protected against public access.
++# Replace JohnDoe with the login name of the administrator
++<FilesMatch "^configure.*">
++	SetHandler cgi-script
++	Order Deny,Allow
++	Deny from all
++	Allow from 127.0.0.1, 192.168.1.10
++	Require user JohnDoe
++	Satisfy Any
++</FilesMatch>
++
++# When using Apache type login the following defines the TWiki scripts
++# that makes Apache ask the browser to authenticate. It is correct that
++# scripts such as view are not authenticated. (un-comment to activate)
++#<FilesMatch "(attach|edit|manage|rename|save|upload|mail|logon|.*auth).*">
++#	require valid-user
++#</FilesMatch>
++
+ </Directory>
+ 
++
+ # This sets the options on the pub directory, which contains attachments and
+ # other files like CSS stylesheets and icons. AllowOverride None stops a
+ # user installing a .htaccess file that overrides these options.
+@@ -59,7 +96,7 @@
+ #### Change the path to match your local installation
+ <Directory "/home/httpd/twiki/pub">
+ 	Options None
+-	AllowOverride None
++	AllowOverride Limit
+ 	Allow from all
+ 	
+ 	# If you have PHP4 or PHP5 installed make sure the directive below is enabled

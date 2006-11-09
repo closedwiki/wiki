@@ -4,34 +4,37 @@
 #    this format, e.g. by running:
 #         info -n '(gettext)PO Files'
 #         info -n '(gettext)Header Entry'
+#
 #    Some information specific to po-debconf are available at
 #            /usr/share/doc/po-debconf/README-trans
-#         or http://www.debian.org/intl/l10n/po-debconf/README-trans#
+#         or http://www.debian.org/intl/l10n/po-debconf/README-trans
+#
 #    Developers do not need to manually edit POT or PO files.
 #
+#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: twiki_20011201-2\n"
+"Project-Id-Version: TWiki\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2005-01-17 21:38+1100\n"
-"PO-Revision-Date: 2005-02-17 13:24+0100\n"
-"Last-Translator: Michel Grentzinger <mic.grentz@online.fr>\n"
-"Language-Team: French <debian-l10n-french@lists.debian.org>\n"
+"PO-Revision-Date: 2004-08-23 00:00-0300\n"
+"Last-Translator: Tiago Bortoletto Vaz <tiagovaz@im.ufba.br>\n"
+"Language-Team: Debian-BR Project <debian-l10n-portuguese@lists.debian.org>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=ISO-8859-15\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
 
 #. Type: string
 #. Default
 #: ../templates:3
 msgid "http://localhost/"
-msgstr "http://localhost/"
+msgstr ""
 
 #. Type: string
 #. Description
 #: ../templates:4
 msgid "What is the top-level URL of the server TWiki runs under?"
-msgstr "URL du serveur TWiki:"
+msgstr "Qual é a URL de mais alto nível do servidor que o TWiki irá rodar?"
 
 #. Type: string
 #. Description
@@ -42,22 +45,22 @@ msgid ""
 "the data by adding \"twiki\" to the end of this setting; it is also needed "
 "for certain redirections."
 msgstr ""
-"Pour une installation normale, vous devriez indiquer l'URL construite ï¿½"
-"partir du nom complet de votre serveur. Les donnï¿½s seront accessibles ï¿½"
-"l'adresse obtenue en ajoutant twiki ï¿½cette valeur. Celle-ci servira "
-"ï¿½alement pour certaines redirections."
+"Para uma instalação normal, isto deve ser uma URL do nome completo do seu "
+"servidor WEB, que é usada como base das urls de algumas páginas. A "
+"instalação irá prover os dados adicionando \"twiki\" no final desta URL; "
+"isso também é necessário para alguns redirecionamentos."
 
 #. Type: string
 #. Default
 #: ../templates:12
 msgid "webmaster@localhost"
-msgstr "webmaster@localhost"
+msgstr ""
 
 #. Type: string
 #. Description
 #: ../templates:13
 msgid "What is the email address of the webmaster for this TWiki?"
-msgstr "Adresse ï¿½ectronique du webmestre de TWiki:"
+msgstr "Qual o endereço de email do webmaster deste TWiki?"
 
 #. Type: string
 #. Description
@@ -66,20 +69,19 @@ msgid ""
 "This email address gets mail for new user registration, and is listed on the "
 "\"oops\" page when things go wrong."
 msgstr ""
-"L'adresse ï¿½ectronique indiquï¿½ recevra les demandes d'enregistrement des "
-"nouveaux utilisateurs. Elle est affichï¿½ sur la page oops lorsque un "
-"incident se produit."
+"Este endereço de email recebe os emails dos novos registros de usuários, e é "
+"listado na página \"oops\" quando algo der errado."
 
 #. Type: boolean
 #. Description
 #: ../templates:20
 msgid "Install sample wiki universe on initial install?"
-msgstr ""
-"Faut-il installer l'exemple d'univers wiki lors de l'installation initiale?"
+msgstr "Instalar os exemplos padrão de wiki na instalação inicial?"
 
 #. Type: boolean
 #. Description
 #: ../templates:20
+#, fuzzy
 msgid ""
 "TWiki includes a complete \"starter kit\" which includes user registration "
 "pages, documentation, and tutorials.  If you're re-installing twiki after "
@@ -91,24 +93,22 @@ msgid ""
 "look in /usr/share/doc/twiki/twiki-data.tar.gz (and twiki-pub.tar.gz) if you "
 "wish to install it manually or compare a new version.)"
 msgstr ""
-"TWiki comprend un kit de dï¿½arrage complet qui inclut des pages "
-"destinï¿½s ï¿½l'enregistrement des utilisateurs, de la documentation et des "
-"tutoriels. Si vous rï¿½nstallez twiki aprï¿½ avoir supprimï¿½le paquet et que "
-"vous souhaitez conserver vos anciennes donnï¿½s ou bien si vous avez un "
-"ensemble de donnï¿½s twiki provenant d'une installation que vous avez faite "
-"vous-mï¿½e, ne choisissez pas cette option. Pour une installation normale, "
-"vous pouvez la choisir et un ensemble simple de donnï¿½s sera installï¿½dans /"
-"var/lib/twiki/data (et /var/www/twiki/pub). Dans tous les cas, si data/Main/"
-"WebHome.txt existe, le kit de dï¿½arrage ne sera pas dï¿½ompactï¿½ Vous pourrez "
-"alors regarder dans /usr/share/doc/twiki/twiki-data.tar.gz (et twiki-pub.tar."
-"gz) si vous souhaitez l'installer vous-mï¿½e ou le comparer ï¿½une nouvelle "
-"version."
+"O TWiki inclui um completo \"kit de inicialização\" que inclui páginas de "
+"registro de usuário, documentação e tutoriais. Se você está reinstalando o "
+"twiki depois de ter removido o pacote anterior e quer preservar os dados "
+"antigos, ou se você tem os dados de configuração do twiki a partir do seu "
+"próprio manual de instalação, você deve recusar aqui. Numa instalação "
+"inicial normal, aceitando essa opção, dados de exemplo de configuração serão "
+"instalados em /var/lib/twiki/data. (Num outro caso, se data/Main/WebHome.txt "
+"está presente, o kit de inicialização não será desempacotado; você pode "
+"encontrá-lo em /usr/share/doc/twiki/twiki-data.tar.gz se quiser instalá-lo "
+"manualmente ou comparar com uma nova versão.)"
 
 #. Type: note
 #. Description
 #: ../templates:34
 msgid "User Registration configuration required"
-msgstr "Configuration obligatoire de l'enregistrement des utilisateurs"
+msgstr ""
 
 #. Type: note
 #. Description
@@ -123,12 +123,3 @@ msgid ""
 "created yourself a user, edit the Main.TWikiAdminGroup to restrict Admin "
 "privileges"
 msgstr ""
-"L'installation Debian par dï¿½aut est configurï¿½ pour crï¿½r de nouveaux "
-"utilisateurs automatiquement lorsqu'un utilisateur s'enregistre. Cela n'est "
-"pas aussi sï¿½urisï¿½que les paramï¿½res par dï¿½aut de Twiki mais c'est plus "
-"commode pour tester Twiki. Pour changer cela, afin des les utilisateurs "
-"soient crï¿½s par l'administrateur, veuillez utiliser TWiki RenameTopic "
-"pour renommer TWikiRegistration en TWikiRegistrationPub, et "
-"TWikiRegistrationDefault en  TWikiRegistration. Remarque importante: "
-"une fois que vous aurez crï¿½ vous-mï¿½e un utilisateur, veuillez modifier "
-"Main.TWikiAdminGroup afin de restreindre ses privilï¿½es d'administration."
