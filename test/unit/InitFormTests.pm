@@ -222,20 +222,20 @@ sub test_form {
   
   my @children = setup_formtests( $this, $testweb, $testtopic1, "formtemplate=\"$testweb.$testform\"" );
 
-  $this->assert_str_equals('<input class="twikiEditFormTextField" name="IssueName" size=73 type="text" value="My first defect">
+  $this->assert_str_equals('<input class="twikiEditFormTextField" name="IssueName" size="73" type="text" value="My first defect" />
 ', get_formfield(1, @children));
-  $this->assert_str_equals('<textarea class="twikiEditFormTextAreaField" cols=55 name="IssueDescription" rows=5>
+  $this->assert_str_equals('<textarea class="twikiEditFormTextAreaField" cols="55" name="IssueDescription" rows="5">
 Simple description of problem</textarea>
 ', get_formfield(2, @children));
-  $this->assert_str_equals('<select class="twikiEditFormSelect" name="IssueType" size=1><option class="twikiEditFormOption">Defect</option><option class="twikiEditFormOption">Enhancement</option><option class="twikiEditFormOption">Other</option></select>
+  $this->assert_str_equals('<select class="twikiEditFormSelect" name="IssueType" size="1"><option class="twikiEditFormOption">Defect</option><option class="twikiEditFormOption">Enhancement</option><option class="twikiEditFormOption">Other</option></select>
 ', get_formfield(3, @children));
-  $this->assert_str_equals('<input class="twikiEditFormLabelField" name="History1" type="hidden" value="' . $aurl . '">
+  $this->assert_str_equals('<input class="twikiEditFormLabelField" name="History1" type="hidden" value="' . $aurl . '" />
 ', get_formfield(4, @children));
-  $this->assert_str_equals('<input class="twikiEditFormTextField" name="History2" size=20 type="text" value="' . $aurl . '">
+  $this->assert_str_equals('<input class="twikiEditFormTextField" name="History2" size="20" type="text" value="' . $aurl . '" />
 ', get_formfield(5, @children));
-  $this->assert_str_equals('<input class="twikiEditFormLabelField" name="History3" type="hidden" value="%ATTACHURL%">
+  $this->assert_str_equals('<input class="twikiEditFormLabelField" name="History3" type="hidden" value="%ATTACHURL%" />
 ', get_formfield(6, @children));
-  $this->assert_str_equals('<input class="twikiEditFormTextField" name="History4" size=20 type="text" value="%ATTACHURL%">
+  $this->assert_str_equals('<input class="twikiEditFormTextField" name="History4" size="20" type="text" value="%ATTACHURL%" />
 ', get_formfield(7, @children));
 
 }
@@ -246,20 +246,20 @@ sub test_tmpl_form {
   
   my @children = setup_formtests( $this, $testweb, $testtopic1, "formtemplate=\"$testweb.$testform\" templatetopic=\"$testweb.$testtmpl\"" );
 
-  $this->assert_str_equals('<input class="twikiEditFormTextField" name="IssueName" size=73 type="text" value="My first defect">
+  $this->assert_str_equals('<input class="twikiEditFormTextField" name="IssueName" size="73" type="text" value="My first defect" />
 ', get_formfield(1, @children));
-  $this->assert_str_equals('<textarea class="twikiEditFormTextAreaField" cols=55 name="IssueDescription" rows=5>
+  $this->assert_str_equals('<textarea class="twikiEditFormTextAreaField" cols="55" name="IssueDescription" rows="5">
 Simple description of problem</textarea>
 ', get_formfield(2, @children));
-  $this->assert_str_equals('<select class="twikiEditFormSelect" name="IssueType" size=1><option class="twikiEditFormOption">Defect</option><option class="twikiEditFormOption">Enhancement</option><option class="twikiEditFormOption">Other</option></select>
+  $this->assert_str_equals('<select class="twikiEditFormSelect" name="IssueType" size="1"><option class="twikiEditFormOption">Defect</option><option class="twikiEditFormOption">Enhancement</option><option class="twikiEditFormOption">Other</option></select>
 ', get_formfield(3, @children));
-  $this->assert_str_equals('<input class="twikiEditFormLabelField" name="History1" type="hidden" value="' . $aurl . '">
+  $this->assert_str_equals('<input class="twikiEditFormLabelField" name="History1" type="hidden" value="' . $aurl . '" />
 ', get_formfield(4, @children));
-  $this->assert_str_equals('<input class="twikiEditFormTextField" name="History2" size=20 type="text" value="' . $aurl . '">
+  $this->assert_str_equals('<input class="twikiEditFormTextField" name="History2" size="20" type="text" value="' . $aurl . '" />
 ', get_formfield(5, @children));
-  $this->assert_str_equals('<input class="twikiEditFormLabelField" name="History3" type="hidden" value="%ATTACHURL%">
+  $this->assert_str_equals('<input class="twikiEditFormLabelField" name="History3" type="hidden" value="%ATTACHURL%" />
 ', get_formfield(6, @children));
-  $this->assert_str_equals('<input class="twikiEditFormTextField" name="History4" size=20 type="text" value="%ATTACHURL%">
+  $this->assert_str_equals('<input class="twikiEditFormTextField" name="History4" size="20" type="text" value="%ATTACHURL%" />
 ', get_formfield(7, @children));
 
 }
@@ -270,20 +270,20 @@ sub test_tmpl_form_new {
   
   my @children = setup_formtests( $this, $testweb, "${testtopic1}XXXXXXXXXX", "formtemplate=\"$testweb.$testform\" templatetopic=\"$testweb.$testtmpl\"" );
 
-  $this->assert_str_equals('<input class="twikiEditFormTextField" name="IssueName" size=73 type="text" value="_An issue_">
+  $this->assert_str_equals('<input class="twikiEditFormTextField" name="IssueName" size="73" type="text" value="_An issue_" />
 ', get_formfield(1, @children));
-  $this->assert_str_equals('<textarea class="twikiEditFormTextAreaField" cols=55 name="IssueDescription" rows=5>
+  $this->assert_str_equals('<textarea class="twikiEditFormTextAreaField" cols="55" name="IssueDescription" rows="5">
 ---+ Example problem</textarea>
 ', get_formfield(2, @children));
-  $this->assert_str_equals('<select class="twikiEditFormSelect" name="IssueType" size=1><option class="twikiEditFormOption" selected>Defect</option><option class="twikiEditFormOption">Enhancement</option><option class="twikiEditFormOption">Other</option></select>
+  $this->assert_str_equals('<select class="twikiEditFormSelect" name="IssueType" size="1"><option class="twikiEditFormOption" selected>Defect</option><option class="twikiEditFormOption">Enhancement</option><option class="twikiEditFormOption">Other</option></select>
 ', get_formfield(3, @children));
-  $this->assert_str_equals('<input class="twikiEditFormLabelField" name="History1" type="hidden" value="%SCRIPTURL%">
+  $this->assert_str_equals('<input class="twikiEditFormLabelField" name="History1" type="hidden" value="%SCRIPTURL%" />
 ', get_formfield(4, @children));
-  $this->assert_str_equals('<input class="twikiEditFormTextField" name="History2" size=20 type="text" value="%SCRIPTURL%">
+  $this->assert_str_equals('<input class="twikiEditFormTextField" name="History2" size="20" type="text" value="%SCRIPTURL%" />
 ', get_formfield(5, @children));
-  $this->assert_str_equals('<input class="twikiEditFormLabelField" name="History3" type="hidden" value="%SCRIPTURL%">
+  $this->assert_str_equals('<input class="twikiEditFormLabelField" name="History3" type="hidden" value="%SCRIPTURL%" />
 ', get_formfield(6, @children));
-  $this->assert_str_equals('<input class="twikiEditFormTextField" name="History4" size=20 type="text" value="%SCRIPTURL%">
+  $this->assert_str_equals('<input class="twikiEditFormTextField" name="History4" size="20" type="text" value="%SCRIPTURL%" />
 ', get_formfield(7, @children));
 
 }
@@ -294,20 +294,20 @@ sub test_tmpl_form_existingform {
   
   my @children = setup_formtests( $this, $testweb, "$testtopic2", "formtemplate=\"$testweb.$testform\" templatetopic=\"$testweb.$testtmpl\"" );
 
-  $this->assert_str_equals('<input class="twikiEditFormTextField" name="IssueName" size=73 type="text" value="_An issue_">
+  $this->assert_str_equals('<input class="twikiEditFormTextField" name="IssueName" size="73" type="text" value="_An issue_" />
 ', get_formfield(1, @children));
-  $this->assert_str_equals('<textarea class="twikiEditFormTextAreaField" cols=55 name="IssueDescription" rows=5>
+  $this->assert_str_equals('<textarea class="twikiEditFormTextAreaField" cols="55" name="IssueDescription" rows="5">
 ---+ Example problem</textarea>
 ', get_formfield(2, @children));
-  $this->assert_str_equals('<select class="twikiEditFormSelect" name="IssueType" size=1><option class="twikiEditFormOption" selected>Defect</option><option class="twikiEditFormOption">Enhancement</option><option class="twikiEditFormOption">Other</option></select>
+  $this->assert_str_equals('<select class="twikiEditFormSelect" name="IssueType" size="1"><option class="twikiEditFormOption" selected>Defect</option><option class="twikiEditFormOption">Enhancement</option><option class="twikiEditFormOption">Other</option></select>
 ', get_formfield(3, @children));
-  $this->assert_str_equals('<input class="twikiEditFormLabelField" name="History1" type="hidden" value="%SCRIPTURL%">
+  $this->assert_str_equals('<input class="twikiEditFormLabelField" name="History1" type="hidden" value="%SCRIPTURL%" />
 ', get_formfield(4, @children));
-  $this->assert_str_equals('<input class="twikiEditFormTextField" name="History2" size=20 type="text" value="%SCRIPTURL%">
+  $this->assert_str_equals('<input class="twikiEditFormTextField" name="History2" size="20" type="text" value="%SCRIPTURL%" />
 ', get_formfield(5, @children));
-  $this->assert_str_equals('<input class="twikiEditFormLabelField" name="History3" type="hidden" value="%SCRIPTURL%">
+  $this->assert_str_equals('<input class="twikiEditFormLabelField" name="History3" type="hidden" value="%SCRIPTURL%" />
 ', get_formfield(6, @children));
-  $this->assert_str_equals('<input class="twikiEditFormTextField" name="History4" size=20 type="text" value="%SCRIPTURL%">
+  $this->assert_str_equals('<input class="twikiEditFormTextField" name="History4" size="20" type="text" value="%SCRIPTURL%" />
 ', get_formfield(7, @children));
 
 }
@@ -318,20 +318,20 @@ sub test_tmpl_form_params {
   
   my @children = setup_formtests( $this, $testweb, "$testtopic1", "formtemplate=\"$testweb.$testform\" templatetopic=\"$testweb.$testtmpl\" IssueName=\"_An issue_\" IssueDescription=\"---+ Example problem\" IssueType=\"Defect\" History1=\"%SCRIPTURL%\" History2=\"%SCRIPTURL%\" History3=\"\$percntSCRIPTURL%\" History4=\"\$percntSCRIPTURL%\" " );
 
-  $this->assert_str_equals('<input class="twikiEditFormTextField" name="IssueName" size=73 type="text" value="_An issue_">
+  $this->assert_str_equals('<input class="twikiEditFormTextField" name="IssueName" size="73" type="text" value="_An issue_" />
 ', get_formfield(1, @children));
-  $this->assert_str_equals('<textarea class="twikiEditFormTextAreaField" cols=55 name="IssueDescription" rows=5>
+  $this->assert_str_equals('<textarea class="twikiEditFormTextAreaField" cols="55" name="IssueDescription" rows="5">
 ---+ Example problem</textarea>
 ', get_formfield(2, @children));
-  $this->assert_str_equals('<select class="twikiEditFormSelect" name="IssueType" size=1><option class="twikiEditFormOption" selected>Defect</option><option class="twikiEditFormOption">Enhancement</option><option class="twikiEditFormOption">Other</option></select>
+  $this->assert_str_equals('<select class="twikiEditFormSelect" name="IssueType" size="1"><option class="twikiEditFormOption" selected>Defect</option><option class="twikiEditFormOption">Enhancement</option><option class="twikiEditFormOption">Other</option></select>
 ', get_formfield(3, @children));
-  $this->assert_str_equals('<input class="twikiEditFormLabelField" name="History1" type="hidden" value="%SCRIPTURL%">
+  $this->assert_str_equals('<input class="twikiEditFormLabelField" name="History1" type="hidden" value="%SCRIPTURL%" />
 ', get_formfield(4, @children));
-  $this->assert_str_equals('<input class="twikiEditFormTextField" name="History2" size=20 type="text" value="%SCRIPTURL%">
+  $this->assert_str_equals('<input class="twikiEditFormTextField" name="History2" size="20" type="text" value="%SCRIPTURL%" />
 ', get_formfield(5, @children));
-  $this->assert_str_equals('<input class="twikiEditFormLabelField" name="History3" type="hidden" value="%SCRIPTURL%">
+  $this->assert_str_equals('<input class="twikiEditFormLabelField" name="History3" type="hidden" value="%SCRIPTURL%" />
 ', get_formfield(6, @children));
-  $this->assert_str_equals('<input class="twikiEditFormTextField" name="History4" size=20 type="text" value="%SCRIPTURL%">
+  $this->assert_str_equals('<input class="twikiEditFormTextField" name="History4" size="20" type="text" value="%SCRIPTURL%" />
 ', get_formfield(7, @children));
 
 }
@@ -342,20 +342,20 @@ sub test_tmpl_form_existingform_params {
   
   my @children = setup_formtests( $this, $testweb, "$testtopic2", "formtemplate=\"$testweb.$testform\" templatetopic=\"$testweb.$testtmpl\" IssueName=\"My first defect\" IssueDescription=\"Simple description of problem\" IssueType=\"Enhancement\" History1=\"%ATTACHURL%\" History2=\"%ATTACHURL%\" History3=\"\$percntATTACHURL%\" History4=\"\$percntATTACHURL%\" " );
 
-  $this->assert_str_equals('<input class="twikiEditFormTextField" name="IssueName" size=73 type="text" value="My first defect">
+  $this->assert_str_equals('<input class="twikiEditFormTextField" name="IssueName" size="73" type="text" value="My first defect" />
 ', get_formfield(1, @children));
-  $this->assert_str_equals('<textarea class="twikiEditFormTextAreaField" cols=55 name="IssueDescription" rows=5>
+  $this->assert_str_equals('<textarea class="twikiEditFormTextAreaField" cols="55" name="IssueDescription" rows="5">
 Simple description of problem</textarea>
 ', get_formfield(2, @children));
-  $this->assert_str_equals('<select class="twikiEditFormSelect" name="IssueType" size=1><option class="twikiEditFormOption">Defect</option><option class="twikiEditFormOption" selected>Enhancement</option><option class="twikiEditFormOption">Other</option></select>
+  $this->assert_str_equals('<select class="twikiEditFormSelect" name="IssueType" size="1"><option class="twikiEditFormOption">Defect</option><option class="twikiEditFormOption" selected>Enhancement</option><option class="twikiEditFormOption">Other</option></select>
 ', get_formfield(3, @children));
-  $this->assert_str_equals('<input class="twikiEditFormLabelField" name="History1" type="hidden" value="%ATTACHURL%">
+  $this->assert_str_equals('<input class="twikiEditFormLabelField" name="History1" type="hidden" value="%ATTACHURL%" />
 ', get_formfield(4, @children));
-  $this->assert_str_equals('<input class="twikiEditFormTextField" name="History2" size=20 type="text" value="%ATTACHURL%">
+  $this->assert_str_equals('<input class="twikiEditFormTextField" name="History2" size="20" type="text" value="%ATTACHURL%" />
 ', get_formfield(5, @children));
-  $this->assert_str_equals('<input class="twikiEditFormLabelField" name="History3" type="hidden" value="%ATTACHURL%">
+  $this->assert_str_equals('<input class="twikiEditFormLabelField" name="History3" type="hidden" value="%ATTACHURL%" />
 ', get_formfield(6, @children));
-  $this->assert_str_equals('<input class="twikiEditFormTextField" name="History4" size=20 type="text" value="%ATTACHURL%">
+  $this->assert_str_equals('<input class="twikiEditFormTextField" name="History4" size="20" type="text" value="%ATTACHURL%" />
 ', get_formfield(7, @children));
 
 }
@@ -366,20 +366,20 @@ sub test_tmpl_form_new_params {
   
   my @children = setup_formtests( $this, $testweb, "${testtopic1}XXXXXXXXXX", "formtemplate=\"$testweb.$testform\" templatetopic=\"$testweb.$testtmpl\" IssueName=\"My first defect\" IssueDescription=\"Simple description of problem\" IssueType=\"Enhancement\" History1=\"%ATTACHURL%\" History2=\"%ATTACHURL%\" History3=\"\$percntATTACHURL%\" History4=\"\$percntATTACHURL%\" " );
 
-  $this->assert_str_equals('<input class="twikiEditFormTextField" name="IssueName" size=73 type="text" value="My first defect">
+  $this->assert_str_equals('<input class="twikiEditFormTextField" name="IssueName" size="73" type="text" value="My first defect" />
 ', get_formfield(1, @children));
-  $this->assert_str_equals('<textarea class="twikiEditFormTextAreaField" cols=55 name="IssueDescription" rows=5>
+  $this->assert_str_equals('<textarea class="twikiEditFormTextAreaField" cols="55" name="IssueDescription" rows="5">
 Simple description of problem</textarea>
 ', get_formfield(2, @children));
-  $this->assert_str_equals('<select class="twikiEditFormSelect" name="IssueType" size=1><option class="twikiEditFormOption">Defect</option><option class="twikiEditFormOption" selected>Enhancement</option><option class="twikiEditFormOption">Other</option></select>
+  $this->assert_str_equals('<select class="twikiEditFormSelect" name="IssueType" size="1"><option class="twikiEditFormOption">Defect</option><option class="twikiEditFormOption" selected>Enhancement</option><option class="twikiEditFormOption">Other</option></select>
 ', get_formfield(3, @children));
-  $this->assert_str_equals('<input class="twikiEditFormLabelField" name="History1" type="hidden" value="%ATTACHURL%">
+  $this->assert_str_equals('<input class="twikiEditFormLabelField" name="History1" type="hidden" value="%ATTACHURL%" />
 ', get_formfield(4, @children));
-  $this->assert_str_equals('<input class="twikiEditFormTextField" name="History2" size=20 type="text" value="%ATTACHURL%">
+  $this->assert_str_equals('<input class="twikiEditFormTextField" name="History2" size="20" type="text" value="%ATTACHURL%" />
 ', get_formfield(5, @children));
-  $this->assert_str_equals('<input class="twikiEditFormLabelField" name="History3" type="hidden" value="%ATTACHURL%">
+  $this->assert_str_equals('<input class="twikiEditFormLabelField" name="History3" type="hidden" value="%ATTACHURL%" />
 ', get_formfield(6, @children));
-  $this->assert_str_equals('<input class="twikiEditFormTextField" name="History4" size=20 type="text" value="%ATTACHURL%">
+  $this->assert_str_equals('<input class="twikiEditFormTextField" name="History4" size="20" type="text" value="%ATTACHURL%" />
 ', get_formfield(7, @children));
 
 }
@@ -390,20 +390,20 @@ sub test_tmpl_form_notext_params {
   
   my @children = setup_formtests( $this, $testweb, "", "formtemplate=\"$testweb.$testform\" templatetopic=\"$testweb.$testtmpl\" IssueName=\"My first defect\" IssueDescription=\"Simple description of problem\" IssueType=\"Enhancement\" History1=\"%ATTACHURL%\" History2=\"%ATTACHURL%\" History3=\"\$percntATTACHURL%\" History4=\"\$percntATTACHURL%\" text=\"\"" );
 
-  $this->assert_str_equals('<input class="twikiEditFormTextField" name="IssueName" size=73 type="text" value="My first defect">
+  $this->assert_str_equals('<input class="twikiEditFormTextField" name="IssueName" size="73" type="text" value="My first defect" />
 ', get_formfield(1, @children));
-  $this->assert_str_equals('<textarea class="twikiEditFormTextAreaField" cols=55 name="IssueDescription" rows=5>
+  $this->assert_str_equals('<textarea class="twikiEditFormTextAreaField" cols="55" name="IssueDescription" rows="5">
 Simple description of problem</textarea>
 ', get_formfield(2, @children));
-  $this->assert_str_equals('<select class="twikiEditFormSelect" name="IssueType" size=1><option class="twikiEditFormOption">Defect</option><option class="twikiEditFormOption" selected>Enhancement</option><option class="twikiEditFormOption">Other</option></select>
+  $this->assert_str_equals('<select class="twikiEditFormSelect" name="IssueType" size="1"><option class="twikiEditFormOption">Defect</option><option class="twikiEditFormOption" selected>Enhancement</option><option class="twikiEditFormOption">Other</option></select>
 ', get_formfield(3, @children));
-  $this->assert_str_equals('<input class="twikiEditFormLabelField" name="History1" type="hidden" value="%ATTACHURL%">
+  $this->assert_str_equals('<input class="twikiEditFormLabelField" name="History1" type="hidden" value="%ATTACHURL%" />
 ', get_formfield(4, @children));
-  $this->assert_str_equals('<input class="twikiEditFormTextField" name="History2" size=20 type="text" value="%ATTACHURL%">
+  $this->assert_str_equals('<input class="twikiEditFormTextField" name="History2" size="20" type="text" value="%ATTACHURL%" />
 ', get_formfield(5, @children));
-  $this->assert_str_equals('<input class="twikiEditFormLabelField" name="History3" type="hidden" value="%ATTACHURL%">
+  $this->assert_str_equals('<input class="twikiEditFormLabelField" name="History3" type="hidden" value="%ATTACHURL%" />
 ', get_formfield(6, @children));
-  $this->assert_str_equals('<input class="twikiEditFormTextField" name="History4" size=20 type="text" value="%ATTACHURL%">
+  $this->assert_str_equals('<input class="twikiEditFormTextField" name="History4" size="20" type="text" value="%ATTACHURL%" />
 ', get_formfield(7, @children));
 
 }
