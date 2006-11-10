@@ -144,7 +144,7 @@ sub test_formatted_TML_in_forms {
 #### Why is access these fields different from above?
     $this->compare_field_from_form_fmt('<em>An issue</em>
 ', 1, @children);
-    $this->compare_field_from_form_fmt('<table border=1 cellpadding=0 cellspacing=0 class="twikiTable" style="border-width:1px;"><tr class="twikiTableEven"><td bgcolor="#edf4f9" class="twikiFirstCol" style="vertical-align:top;" valign="top"> abc </td><td bgcolor="#edf4f9" style="vertical-align:top;" valign="top"> 123 </td></tr><tr class="twikiTableOdd"><td bgcolor="#ffffff" class="twikiFirstCol twikiLast" style="vertical-align:top;" valign="top"> def </td><td bgcolor="#ffffff" class="twikiLast" style="vertical-align:top;" valign="top"> ghk </td></tr></table>
+    $this->compare_field_from_form_fmt('<table border="1" cellpadding="0" cellspacing="0" class="twikiTable" style="border-width:1px;"><tr class="twikiTableEven"><td bgcolor="#edf4f9" class="twikiFirstCol" style="vertical-align:top;" valign="top"> abc </td><td bgcolor="#edf4f9" style="vertical-align:top;" valign="top"> 123 </td></tr><tr class="twikiTableOdd"><td bgcolor="#ffffff" class="twikiFirstCol twikiLast" style="vertical-align:top;" valign="top"> def </td><td bgcolor="#ffffff" class="twikiLast" style="vertical-align:top;" valign="top"> ghk </td></tr></table>
 ', 2, @children);
     $this->compare_field_from_form_fmt('<strong>no web</strong>
 ', 3, @children);
@@ -176,7 +176,7 @@ sub test_render_formfield_raw {
 
     $res = $render->renderFormField( $meta, new TWiki::Attrs('name="IssueDescription" newline="$n" bar="|"') );
     $res = $render->getRenderedVersion($res, $testweb, $testtopic2);
-    $this->compare_formfield($res,'<table border=1 cellpadding=0 cellspacing=0 class="twikiTable" style="border-width:1px;"><tr class="twikiTableEven"><td bgcolor="#edf4f9" class="twikiFirstCol" style="vertical-align:top;" valign="top"> abc </td><td bgcolor="#edf4f9" style="vertical-align:top;" valign="top"> 123 </td></tr><tr class="twikiTableOdd"><td bgcolor="#ffffff" class="twikiFirstCol twikiLast" style="vertical-align:top;" valign="top"> def </td><td bgcolor="#ffffff" class="twikiLast" style="vertical-align:top;" valign="top"> ghk </td></tr></table>
+    $this->compare_formfield($res,'<table border="1" cellpadding="0" cellspacing="0" class="twikiTable" style="border-width:1px;"><tr class="twikiTableEven"><td bgcolor="#edf4f9" class="twikiFirstCol" style="vertical-align:top;" valign="top"> abc </td><td bgcolor="#edf4f9" style="vertical-align:top;" valign="top"> 123 </td></tr><tr class="twikiTableOdd"><td bgcolor="#ffffff" class="twikiFirstCol twikiLast" style="vertical-align:top;" valign="top"> def </td><td bgcolor="#ffffff" class="twikiLast" style="vertical-align:top;" valign="top"> ghk </td></tr></table>
 ');
     $res = $render->renderFormField( $meta, new TWiki::Attrs('name="Issue1" newline="$n" bar="|"') );
     $res = $render->getRenderedVersion($res, $testweb, $testtopic2);
