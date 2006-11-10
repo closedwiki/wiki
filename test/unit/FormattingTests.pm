@@ -48,6 +48,19 @@ sub do_test {
 
     $this->assert_html_equals($expected, $actual);
 }
+# current topic WikiWord
+sub test_seflLinkingWikiword {
+    my $this = shift;
+    my $expected = <<EXPECTED;
+<a href="$this->{sup}/$this->{test_web}/$this->{test_topic}" class="twikiCurrentTopicLink twikiLink" >$this->{test_topic}</a>
+EXPECTED
+
+    my $actual = <<ACTUAL;
+$this->{test_topic}
+ACTUAL
+    $this->do_test($expected, $actual);
+}
+
 
 # WikiWord
 sub test_simpleWikiword {
