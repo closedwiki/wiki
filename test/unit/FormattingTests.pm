@@ -53,7 +53,7 @@ sub do_test {
 sub test_simpleWikiword {
     my $this = shift;
     my $expected = <<EXPECTED;
-<a class="twikiLink" href="$this->{sup}/$this->{test_web}/$TWiki::cfg{HomeTopicName}">$TWiki::cfg{HomeTopicName}</a>
+<a class="twikiCurrentWebHomeLink twikiLink" href="$this->{sup}/$this->{test_web}/$TWiki::cfg{HomeTopicName}">$TWiki::cfg{HomeTopicName}</a>
 EXPECTED
 
     my $actual = <<ACTUAL;
@@ -66,7 +66,7 @@ ACTUAL
 sub test_squabbedWikiword {
     my $this = shift;
     my $expected = <<EXPECTED;
-<a class="twikiLink" href="$this->{sup}/$this->{test_web}/$TWiki::cfg{HomeTopicName}">$TWiki::cfg{HomeTopicName}</a>
+<a class="twikiCurrentWebHomeLink twikiLink" href="$this->{sup}/$this->{test_web}/$TWiki::cfg{HomeTopicName}">$TWiki::cfg{HomeTopicName}</a>
 EXPECTED
 
     my $actual = <<ACTUAL;
