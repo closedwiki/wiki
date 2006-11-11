@@ -1,7 +1,7 @@
 %META:TOPICINFO{author="TWikiGuest" date="1150662011" format="1.1" version="1.10"}%
 ---+ <nop>%TOPIC%
 
-This plugin allows the user to break a topic into sections which can be edited individually.
+This plugin allows the user to break a topic into sections which can be edited individually. A secondary usage of this plugin is to render text in portions of a topic where it ordinarily could not be placed. For example, one could place a table within a cell of a table, or bullet lists inside of table cells.
 
 This plugin leverages from TWiki:Plugins/SectionalEditPlugin and TWiki:Plugins/RecursiveRenderPlugin. From the former, it inherits the ability to edit sections of a topic individually; from the latter the ability to place these sections into arbitrary contexts, even if the inserted text could not ordinarily be placed in that context per TWiki ML.
 
@@ -30,7 +30,7 @@ The following topic
 
 will render as shown in the picture below and allow each section to be edited individually, when the edit button is clicked.
 
-<img src="%ATTACHURL%/multieditplugin_example.jgp">
+<img src="%ATTACHURL%/multieditplugin_example.jpg">
 
 ---++ <nop>%TOPIC% Settings
 
@@ -46,7 +46,7 @@ Plugin settings are stored as preferences variables. To reference a plugin setti
       * #Set LABEL = Edit
       * Set LABEL = %BR%<div align="right">%ICON{edittopic}% Edit</div>
 
-   * A comma separated list of skins *NOT* to allow editing(you'll probably want the print skin here):
+   * A comma separated list of skins *NOT* to allow editing (you'll probably want the =viewprint= template here as well):
       * Set SKIPSKIN = viewprint, print, plain
 
    * Placement of edit button =before= or =after= editable section
@@ -74,6 +74,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Plugin Author: | TWiki:Main/ThomasWeigert |
 |  Plugin Version: | 09 Sep 2006 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  11 Nov 2006: | Support editing of sections from included topics. Use =strict=. |
 |  09 Sep 2006: | Bug (disabled SectionalEditPlugin) fixed. |
 |  08 Sep 2006: | Allow embedded complex constructs without editing. |
 |  18 Aug 2006: | Fix handling of image tags in labels. Allow skipping of the new =viewprint= (or other) template in addition to skins. |
