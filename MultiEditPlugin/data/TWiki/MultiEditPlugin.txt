@@ -52,6 +52,10 @@ Plugin settings are stored as preferences variables. To reference a plugin setti
    * Placement of edit button =before= or =after= editable section
       * Set PLACEMENT = after
 
+---++ Bug Warning
+
+It is not possible based on the current TWiki rendering model to make this feature work when only part of a topic is included. If there are sections identified in an included topic which are before the %<nop>STARTINCLUDE% marker, then the sections in the included topic cannot be properly edited.
+
 ---++ Plugin Installation Instructions
 
 __Note:__ You do not need to install anything on the browser to use this plugin. The following instructions are for the administrator who installs the plugin on the server where TWiki is running. 
@@ -74,7 +78,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Plugin Author: | TWiki:Main/ThomasWeigert |
 |  Plugin Version: | 09 Sep 2006 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  11 Nov 2006: | Support editing of sections from included topics. Use =strict=. |
+|  11 Nov 2006: | Support (partially) editing of sections from included topics. Use =strict=. |
 |  09 Sep 2006: | Bug (disabled SectionalEditPlugin) fixed. |
 |  08 Sep 2006: | Allow embedded complex constructs without editing. |
 |  18 Aug 2006: | Fix handling of image tags in labels. Allow skipping of the new =viewprint= (or other) template in addition to skins. |
