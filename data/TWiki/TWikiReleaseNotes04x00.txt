@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1161732377" format="1.0" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1163306255" format="1.0" version="$Rev$"}%
 ---+!! TWiki Release 4.0 (Dakar)
 'Dakar' is the first major release of the TWiki Enterprise Collaboration Platform in over a year. The focus of this release has been on refactoring the code in the interests of *security*, *efficiency* and *maintainability*, though a range of powerful new features are also included. The refactoring work has included tightening up the specification of certain key TWiki behaviours, which has resulted in some specification changes. The impact on end users has been minimised as far as possible.
 
@@ -384,7 +384,7 @@ The new user registration process has been extensively reworked to improve usabi
 
 E-mail addresses for new users are no longer stored in home topics. Instead, the password manager API has been extended to support storing e-mails.
 
-The default password manager stores e-mails in the =.htpasswd= file - you can safely edit this file with a text editor to modify the info field that contains the e-mail addresses (the format of each line in this file is =username>:<password>:<info>=, and TWiki expects the info field to be a ;-separated list of e-mail addresses). Password managers for other systems e.g. LDAP can esily be extended to support the new API. If the password manager does not have an e-mail address for a user, then TWiki will still look in the users' personal topic.
+The default password manager stores e-mails in the =.htpasswd= file - you can safely edit this file with a text editor to modify the info field that contains the e-mail addresses (the format of each line in this file is =&lt;username>:&gt;password>:&lt;info>=, and TWiki expects the info field to be a ;-separated list of e-mail addresses). Password managers for other systems e.g. LDAP can esily be extended to support the new API. If the password manager does not have an e-mail address for a user, then TWiki will still look in the users' personal topic.
 
 The script =tools/upgrade_emails.pl= can be used to extract e-mail addresses for existing TWiki users from personal topics, and add them to the password manager.
    * You are strongly recommended to run this script if you are running a public site.
