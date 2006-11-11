@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1163306255" format="1.1" reprev="1.3" version="1.3"}%
+%META:TOPICINFO{author="TWikiContributor" date="1163309057" format="1.1" version="$Rev$"}%
 ---+ %MAKETEXT{"Note: This topic does not exist"}%
 
 <form name="jumpAgain" action="%SCRIPTURL{view}%/%BASEWEB%/%BASETOPIC%">
@@ -10,8 +10,8 @@
 </form>
 
 <b>%MAKETEXT{"Do you wish to navigate quickly to a similar topic?"}%</b>
-   * %MAKETEXT{"Similar topics in this web (if any):"}% <!-- %CALC{$SET(total,0)}% -->
-     %SEARCH{ "%BASETOPIC%" limit="16" scope="topic" nosearch="on" nototal="on" noheader="on" order="modified" reverse="on" format="     | [[$web.$topic][$topic]] | <span style=\"white-space: nowrap;\">r$rev - [[%SCRIPTURL%/rdiff%SCRIPTSUFFIX%/$web/$topic][$date]]</span> | [[$wikiusername][$wikiname]] |$n()     |<span class=\"twikiSmallish\">$summary</span><!-- $percntCALC{$SETM(total, +1)}$percnt -->|||" }%
+   * %MAKETEXT{"Similar topics in this web (if any):"}% %CALC{$SET(total,0)}%
+%IF{ "defined topic" then="%SEARCH" else="     <!--" }%{ "%BASETOPIC%" limit="16" scope="topic" web="%BASEWEB%" nosearch="on" nototal="on" noheader="on" order="modified" reverse="on" format="     | [[$web.$topic][$topic]] | <span style=\"white-space: nowrap;\">r$rev - [[%SCRIPTURL%/rdiff%SCRIPTSUFFIX%/$web/$topic][$date]]</span> | [[$wikiusername][$wikiname]] |$n()     |<span class=\"twikiSmallish\">$summary</span>$percntCALC{$SETM(total, +1)}$percnt|||" %IF{ "defined topic" then="}" else="-->" }%%IF{ "defined topic" then="%" }%
 %CALC{$IF($GET(total) < 16, <!--, <nop>)}%
    * [[%SCRIPTURLPATH{"view"}%/%BASEWEB%/WebSearch?scope=topic;search=%BASETOPIC%][%MAKETEXT{"List more similar topic in this web"}%]]
 %CALC{$IF($GET(total) < 16, -->, <nop>)}%
