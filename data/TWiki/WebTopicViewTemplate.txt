@@ -2,21 +2,22 @@
 ---+ %MAKETEXT{"Note: This topic does not exist"}%
 
 <form name="jumpAgain" action="%SCRIPTURL{view}%/%BASEWEB%/%BASETOPIC%">
-%MAKETEXT{"The topic [_1] you are trying to access does not exist, yet." args="'%BASETOPIC%'"}%
-%MAKETEXT{"Did you spell the [_1] correctly? Remember, a [_2] is case sensitive." args="%TWIKIWEB%.WikiWord,<nop>WikiWord"}%
+*%MAKETEXT{"The topic [_1] you are trying to access does not exist, yet." args="'%BASETOPIC%'"}%*
+
+*%MAKETEXT{"Did you spell the [_1] correctly?" args="%TWIKIWEB%.WikiWord"}%* %MAKETEXT{"Remember, a [_1] is case sensitive." args="<nop>WikiWord"}% %BR%
    * %MAKETEXT{"Topic:"}%
      <input type="text" class="twikiInputField" name="topic" size="36" value="%BASETOPIC%" />
      <input type="submit" class="twikiSubmit" value="Jump to topic" />
 </form>
 
-<b>%MAKETEXT{"Do you wish to navigate quickly to a similar topic?"}%</b>
+*%MAKETEXT{"Do you wish to navigate quickly to a similar topic?"}%*
    * %MAKETEXT{"Similar topics in this web (if any):"}% %CALC{$SET(total,0)}%
 %IF{ "defined topic" then="%SEARCH" else="     <!--" }%{ "%BASETOPIC%" limit="16" scope="topic" web="%BASEWEB%" nosearch="on" nototal="on" noheader="on" order="modified" reverse="on" format="     | [[$web.$topic][$topic]] | <span style=\"white-space: nowrap;\">r$rev - [[%SCRIPTURL%/rdiff%SCRIPTSUFFIX%/$web/$topic][$date]]</span> | [[$wikiusername][$wikiname]] |$n()     |<span class=\"twikiSmallish\">$summary</span>$percntCALC{$SETM(total, +1)}$percnt|||" %IF{ "defined topic" then="}" else="-->" }%%IF{ "defined topic" then="%" }%
 %CALC{$IF($GET(total) < 16, <!--, <nop>)}%
    * [[%SCRIPTURLPATH{"view"}%/%BASEWEB%/WebSearch?scope=topic;search=%BASETOPIC%][%MAKETEXT{"List more similar topic in this web"}%]]
 %CALC{$IF($GET(total) < 16, -->, <nop>)}%
-   * [[%SCRIPTURLPATH{"view"}%/%BASEWEB%/WebSearch?scope=topic;web=all;;search=%BASETOPIC%][%MAKETEXT{"Search similar topics in all public webs"}%]]
+   * [[%SCRIPTURLPATH{"view"}%/%BASEWEB%/WebSearch?scope=topic;web=all;search=%BASETOPIC%][%MAKETEXT{"Search similar topics in all public webs"}%]]
 %SEARCH{ "META.TOPICMOVED.*from\=\"%BASEWEB%.%BASETOPIC%\"" nosearch="on" nototal="on" regex="on" format="   * $percntRED% $percntMAKETEXT{\"This topic has moved to [_1].\" args=\"[[$web.$topic]]\"}$percnt $percntENDCOLOR%" }%
 
-<b>%MAKETEXT{"Do you wish to create the topic [_1]?" args="'%BASETOPIC%'"}%</b>
-   * [[%SCRIPTURL{view}%/%BASEWEB%/WebTopicCreator?newtopic=%BASETOPIC%][%MAKETEXT{"Create new topic"}%]].
+*%MAKETEXT{"Do you wish to create the topic [_1]?" args="'%BASETOPIC%'"}%*
+   * [[%SCRIPTURL{view}%/%BASEWEB%/WebTopicCreator?newtopic=%BASETOPIC%][%MAKETEXT{"Create '[_1]'" args="<nop>%BASETOPIC%"}%]]
