@@ -1,43 +1,22 @@
-%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
-%STARTSECTION{name="message"}%
----++ %MAKETEXT{"Jump to non-existing wiki topic"}%
+%META:TOPICINFO{author="PeterThoeny" date="1163304844" format="1.1" reprev="1.3" version="1.3"}%
+---+ %MAKETEXT{"Note: This topic does not exist"}%
 
----+++ %ICON{arrowright}% %MAKETEXT{"If you used the \"Jump\" feature to jump to this topic:"}%
-
-   * %MAKETEXT{"Make sure you spelled the [_1] correctly and try again. Remember, a [_2] is case sensitive" args="%TWIKIWEB%.WikiWord,<nop>WikiWord"}%
-   * %MAKETEXT{"Similar topics in this web (if any):"}%
-<blockquote>
-%SEARCH{ "%BASETOPIC%" limit="16" scope="topic" nosearch="on" nototal="on" noheader="on" }%
-</blockquote>
-   * [[%SCRIPTURLPATH{"view"}%/%BASEWEB%/WebSearch?scope=topic;search=%BASETOPIC%][%MAKETEXT{"List all similar topic in this web"}%]]
-   * [[%SCRIPTURLPATH{"view"}%/%BASEWEB%/WebSearch?scope=topic;web=all;;search=%BASETOPIC%][%MAKETEXT{"Search for similar topics in all public webs"}%]]
-%SEARCH{ "META.TOPICMOVED.*from\=.*%BASEWEB%.%BASETOPIC%.*" nosearch="on" nototal="on" regex="on" format="   * $percntRED% $percntMAKETEXT{\"This topic has moved to [_1].\" args=\"[[$web.$topic]]\"}$percnt $percntENDCOLOR%" }%
-
----+++ %ICON{searchtopic}% %MAKETEXT{"If you intend to do a full text search:"}%
-
-<form name="search" action="%SCRIPTURLPATH{view}%/%BASEWEB%/WebSearch">
-   * %MAKETEXT{"Use the [[WebSearch][Search]] link on top of this page, or do a simple"}%
-   * <input type="text" class="twikiInputField" name="search" size="32" value="%BASETOPIC%" />&nbsp;<input type="submit" class="twikiSubmit" value='%MAKETEXT{"Search"}%' />
-     <input type="hidden" name="scope" value="text" />
-     &nbsp;&nbsp; (%MAKETEXT{"More options in WebSearch"}%)
+<form name="jumpAgain" action="%SCRIPTURL{view}%/%BASEWEB%/%BASETOPIC%">
+%MAKETEXT{"The topic [_1] you are trying to access does not exist, yet." args="'%BASETOPIC%'"}%
+%MAKETEXT{"Did you spell the [_1] correctly? Remember, a [_2] is case sensitive." args="%TWIKIWEB%.WikiWord,<nop>WikiWord"}%
+   * %MAKETEXT{"Topic:"}%
+     <input type="text" class="twikiInputField" name="topic" size="36" value="%BASETOPIC%" />
+     <input type="submit" class="twikiSubmit" value="Jump to topic" />
 </form>
 
----+++ %ICON{newtopic}% %MAKETEXT{"If you would like to create this topic:"}%
-%ENDSECTION{name="message"}%
-<blockquote>
-%STARTSECTION{name="createtopicform"}%%INCLUDE{"%TWIKIWEB%.WebTopicCreator" section="formstart"}%
+<b>%MAKETEXT{"Do you wish to navigate quickly to a similar topic?"}%</b>
+   * %MAKETEXT{"Similar topics in this web (if any):"}% <!-- %CALC{$SET(total,0)}% -->
+     %SEARCH{ "%BASETOPIC%" limit="16" scope="topic" nosearch="on" nototal="on" noheader="on" order="modified" reverse="on" format="     | [[$topic]] | [[%SCRIPTURL%/rdiff%SCRIPTSUFFIX%/$web/$topic][$date]] | [[$wikiusername][$wikiname]] |$n()     |<span class=\"twikiSmallish\">$summary</span><!-- $percntCALC{$SETM(total, +1)}$percnt -->|||" }%
+%CALC{$IF($GET(total) < 16, <!--, <nop>)}%
+   * [[%SCRIPTURLPATH{"view"}%/%BASEWEB%/WebSearch?scope=topic;search=%BASETOPIC%][%MAKETEXT{"List more similar topic in this web"}%]]
+%CALC{$IF($GET(total) < 16, -->, <nop>)}%
+   * [[%SCRIPTURLPATH{"view"}%/%BASEWEB%/WebSearch?scope=topic;web=all;;search=%BASETOPIC%][%MAKETEXT{"Search similar topics in all public webs"}%]]
+%SEARCH{ "META.TOPICMOVED.*from\=\"%BASEWEB%.%BASETOPIC%\"" nosearch="on" nototal="on" regex="on" format="   * $percntRED% $percntMAKETEXT{\"This topic has moved to [_1].\" args=\"[[$web.$topic]]\"}$percnt $percntENDCOLOR%" }%
 
-*%MAKETEXT{"Topic name:"}%* <br />
-%INCLUDE{"%TWIKIWEB%.WebTopicCreator" section="topicname" PREFILLTOPIC="1"}%
-
-%INCLUDE{"%TWIKIWEB%.WebTopicCreator" section="allownonwikiword"}%
-
-*%MAKETEXT{"Topic parent:"}%* <br />
-%INCLUDE{"%TWIKIWEB%.WebTopicCreator" section="topicparent"}%
-
-*%MAKETEXT{"Use template:"}%* <br />
-%INCLUDE{"%TWIKIWEB%.WebTopicCreator" section="topictemplate"}%
-
-%INCLUDE{"%TWIKIWEB%.WebTopicCreator" section="submit"}%
-%INCLUDE{"%TWIKIWEB%.WebTopicCreator" section="formend"}%%ENDSECTION{name="createtopicform"}%
-</blockquote>
+<b>%MAKETEXT{"Do you wish to create the topic [_1]?" args="'%BASETOPIC%'"}%</b>
+   * [[%SCRIPTURL{view}%/%BASEWEB%/WebTopicCreator?newtopic=%BASETOPIC%][%MAKETEXT{"Create new topic"}%]].
