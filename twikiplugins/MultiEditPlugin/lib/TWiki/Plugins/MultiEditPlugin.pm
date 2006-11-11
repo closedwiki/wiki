@@ -57,7 +57,7 @@ sub initPlugin
     $placement = ($placement =~ /before/i ? 1 : 0);
 
     #initialize a few other things
-    $renderedText = [];
+    $renderedText = ();
     $prefix = "<_render_>";
 
     # Get plugin debug flag
@@ -81,20 +81,33 @@ sub initPlugin
 # delimited with '%' (then we would use $this->{SESSION_TAGS}{'TOPIC'}
 # to access the topic.
 
+# TW: BUG: Works only when a complete topic is included, as otherwise
+# the sections start from the wrong place (i.e., after the %STARTINCLUDE%
+# This could be solved by having a =beforeIncludeHandler= (see
+# TWiki:Codev.NeedBeforeIncludeHandler)
+
 sub commonTagsHandler {
     # do not uncomment, use $_[0], $_[1]... instead
     ### my ( $text, $topic, $web ) = @_;
 
-    TWiki::Func::writeDebug( "- ${pluginName}::beforeCommonTagsHandler( $_[2].$_[1] )" ) if $debug;
+    TWiki::Func::writeDebug( "- ${pluginName}::commonTagsHandler( $_[2].$_[1] )" ) if $debug;
 
-    $_[0] =~ s/<section((\s+[^>]+)?)>/&rememberTopic($_[1], $_[2], $1)/geo;
+    my $sec = 0;
+    $_[0] =~ s/<section((\s+[^>]+)?)>/&rememberTopic($_[1], $_[2], $1, $sec)/geo;
+
+    TWiki::Func::writeDebug( "- after ${pluginName}::commonTagsHandler( $_[2].$_[1] )" ) if $debug;
 
 }
 
 sub rememberTopic {
   my ( $topic, $web, $posattr ) = @_;
 
-  return ($posattr =~ / topic=/o) ? "<section$posattr>" : "<section$posattr topic=\"$topic\" web=\"$web\">";
+  if ($posattr =~ / topic=/o) {
+    return "<section$posattr>";
+  } else {
+    $_[3]++;
+    return "<section$posattr topic=\"$topic\" web=\"$web\" section=\"$_[3]\">";
+  }
 }
 
 # =========================
@@ -137,14 +150,13 @@ sub preRenderingHandler
       my $web;
       foreach my $sec (@sections) {
 	if ( $skip ) { $skip = 0; next; }
-	if ( $sec eq "<section>" ) 
-	  { $state='edit'; $dontedit = 0; $skip = 1; next; }
 	if ( $sec =~ m/<section(.*)>/i ) 
 	  { use TWiki::Attrs;
 	    my $attrs = new TWiki::Attrs($1, 1);
 	    $dontedit = ( defined $attrs->{edit} && ! $attrs->{edit} );
-	    $topic = $attrs->{topic} || $session->{topicName};
-	    $web = $attrs->{web} || $session->{webName};
+	    $topic = $attrs->{topic};
+	    $web = $attrs->{web};
+	    $pos = $attrs->{section};
 	    $state='edit'; $skip = 1; next; }
 	if ( $sec eq "</section>" ) {
 	  $skip = 1;
@@ -152,15 +164,14 @@ sub preRenderingHandler
 	  # restore verbatim markers
 	  $tmp =~ s/\<\!\-\-\!([a-z0-9]+)\!\-\-\>/\<\!\-\-$TWiki::TranslationToken$1$TWiki::TranslationToken\-\-\>/gio;
 	  my $rText = ( $dontedit )? $tmp : &editRow("$eurl/$web/$topic", $pos, $tmp);
-	  $$renderedText[$pos] = $rText;
+	  $$renderedText{"$pos$web$topic"} = $rText;
 	  $lastsec = '';
-	  $ret .= ($prefix . $pos);
+	  $ret .= "$prefix$pos$web$topic$prefix";
           $dontedit = 0;
 	  $state='noedit'; next; 
 	}
 	if ( $state eq 'edit' ) { $lastsec = $sec; }
 	else { $ret .= $sec; };
-	$pos++;
       }
       $_[0] = $ret . $lastsec;
 
@@ -197,8 +208,8 @@ sub postRenderingHandler
     my $session = $TWiki::Plugins::SESSION;
     TWiki::Func::writeDebug( "- ${pluginName}::postRenderingHandler( $session->{webName}.$session->{topicName} )" ) if $debug;
 
-    if (@$renderedText) {
-        while ($_[0] =~ s/$prefix([0-9]+)/$$renderedText[$1]/e) {}
+    if ( ref $renderedText ) {
+        while ($_[0] =~ s/$prefix(.*?)$prefix/$$renderedText{$1}/e) {}
     }
 }
 
@@ -228,19 +239,19 @@ sub doEdit
     $text =~ s/\r//g;
 
     if ( $text =~ m/<\/?section>/i ) { 
-	my @sections = split(/(<\/?section>)/i, $text); 
-	foreach my $s (@sections) {
-	    if ($pos < $theSec) {
-		if ( $s =~ m/<(\/?)section>/ ) { $pretxt .= "<$1section>"; next; }
-		$pretxt .= $s;
-	    } elsif ($pos > $theSec) {
-		if ( $s =~ m/<(\/?)section>/ ) { $postxt .= "<$1section>"; next; }
-		$postxt .= $s;
-	    } else {
-		if ( $s =~ m/<(\/?)section>/ ) { $pretxt .= "<$1section>"; next; }
-		$sectxt = $s;
-	    }
-	    $pos++;
+	my @sections = split(/(<\/?section\s*(\s+[^>]+)?>)/i, $text); 
+	$pretxt .= $sections[0];
+	for ( my $s = 1; $s<$#sections; $s+=6 ) {
+	  if ($pos < $theSec) {
+	    $pretxt .= $sections[$s] . $sections[$s+2] . $sections[$s+3] . $sections[$s+5];
+	  } elsif ($pos > $theSec) {
+	    $postxt .= $sections[$s] . $sections[$s+2] . $sections[$s+3] . $sections[$s+5];
+	  } else {
+	    $pretxt .= $sections[$s];
+	    $sectxt  = $sections[$s+2];
+	    $postxt .= $sections[$s+3] . $sections[$s+5];
+	  }
+	  $pos++;
 	}
     }
 
