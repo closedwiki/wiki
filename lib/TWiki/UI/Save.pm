@@ -345,7 +345,8 @@ sub save {
         $session->{topicName} = $topic;
     }
 
-    my $redirecturl = $session->getScriptUrl( 1, 'view', $web, $topic );
+    my $redirecturl = $query->param( 'origurl' );
+    $redirecturl = $session->getScriptUrl( 1, 'view', $web, $topic ) unless $redirecturl;
 
     my $saveaction = '';
     foreach my $action qw( save checkpoint quietsave cancel preview
@@ -374,16 +375,18 @@ sub save {
         }
 
         # redirect to a sensible place (a topic that exists)
-        my( $w, $t, $a ) = ( '', '', '?unlock=on' );
-        foreach my $test ( $topic,
-                     $query->param( 'topicparent' ),
-                     $TWiki::cfg{HomeTopicName} ) {
+        my $viewURL = $query->param( 'origurl' ) || '';
+	unless ( $viewURL ) {
+	  my( $w, $t ) = ( '', '' );
+	  foreach my $test ( $topic,
+			     $query->param( 'topicparent' ),
+			     $TWiki::cfg{HomeTopicName} ) {
             ( $w, $t ) =
               $session->normalizeWebTopicName( $web, $test );
             last if( $store->topicExists( $w, $t ));
-            $a = '';
-        }
-        my $viewURL = $session->getScriptUrl( 1, 'view', $w, $t );
+	  }
+	  $viewURL = $session->getScriptUrl( 1, 'view', $w, $t );
+	}
         $session->redirect( $viewURL );
 
         return;
@@ -414,6 +417,7 @@ sub save {
         $query->param( -name=>'dontnotify', -value=>'checked' );
         my $editURL = $session->getScriptUrl( 1, $edit, $web, $topic );
         $redirecturl = $editURL.'?t='.time();
+	$redirecturl .= '&origurl='.$query->param( 'origurl' ) if $query->param( 'origurl' );
 	# select the appropriate edit template
         $redirecturl .= '&action='.$editaction if $editaction;
         $redirecturl .= '&skin='.$query->param('skin') if $query->param('skin');
