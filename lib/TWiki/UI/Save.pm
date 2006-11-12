@@ -396,7 +396,10 @@ sub save {
     }
 
     my $editaction = lc($query->param( 'editaction' )) || '';
+    my $edit = $query->param( 'edit' ) || 'edit';
+    my $editparams = $query->param( 'editparams' ) || '';
 
+    ## SMELL: The form affecting actions do not preserve edit and editparams
     if( $saveaction eq 'addform' ||
           $saveaction eq 'replaceform' ||
             $saveaction eq 'preview' && $query->param( 'submitChangeForm' )) {
@@ -409,11 +412,13 @@ sub save {
 
     if( $saveaction eq 'checkpoint' ) {
         $query->param( -name=>'dontnotify', -value=>'checked' );
-        my $editURL = $session->getScriptUrl( 1, 'edit', $web, $topic );
+        my $editURL = $session->getScriptUrl( 1, $edit, $web, $topic );
         $redirecturl = $editURL.'?t='.time();
+	# select the appropriate edit template
         $redirecturl .= '&action='.$editaction if $editaction;
         $redirecturl .= '&skin='.$query->param('skin') if $query->param('skin');
         $redirecturl .= '&cover='.$query->param('cover') if $query->param('cover');
+	$redirecturl .= $editparams if $editparams;  # May contain anchor
         my $lease = $store->getLease( $web, $topic );
         if( $lease && $lease->{user}->equals( $user )) {
             $store->setLease( $web, $topic, $user, $TWiki::cfg{LeaseLength} );

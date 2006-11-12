@@ -95,12 +95,9 @@ sub generate {
 
     my $text = CGI::hidden( -name => 'text', -value => $q->param( 'text' ) );
     $page =~ s/%TEXT%/$text/go;
-    if ( $editaction ) {
-      #$text = CGI::hidden( -name => 'action', -value => $editaction );
-      $text = "<input type=\"hidden\" name=\"action\" value=\"$editaction\" />";
-    } else {
-      $text = '';
-    }
+    $text = '';
+    #$text = CGI::hidden( -name => 'action', -value => $editaction ) if $editaction;
+    $text .= "<input type=\"hidden\" name=\"action\" value=\"$editaction\" />" if $editaction;
     $page =~ s/%EDITACTION%/$text/go;
 
     return $page;

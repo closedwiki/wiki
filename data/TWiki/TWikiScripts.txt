@@ -220,9 +220,9 @@ Note that for Plugins to register REST handlers, they must be enabled in =config
 The =save= script performs a range of save-related functions, as selected by the =action= parameter.
 
 | *Parameter* | *Description* | *Default* |
-| =action_save=1= | *default*; save, return to view, dontnotify is OFF | |
-| =action_quietsave=1= | save, and return to view, =dontnotify= is ON | |
-| =action_checkpoint= | save and redirect to the edit script, =dontnotify= is ON | |
+| =action_save=1= | *default*; save, return to view, dontnotify is =off= | |
+| =action_quietsave=1= | save, and return to view, =dontnotify= is =on= | |
+| =action_checkpoint= | save and redirect to the edit script, =dontnotify= is =on= | |
 | =action_cancel= | exit without save, return to view | |
 | =action_preview= | preview edited text | |
 | =action_addform= | Redirect to the "change form" page. | |
@@ -239,6 +239,8 @@ The =save= script performs a range of save-related functions, as selected by the
 | =formtemplate= | if defined, use the named template for the form | |
 | =editaction= | When action is =checkpoint=, =add form= or =replace form...=, this is used as the =action= parameter to the =edit= script that is redirected to after the save is complete. | |
 | =originalrev= | Revision on which the edit started. | |
+| =edit= | The script to use to edit the topic when action is =checkpoint= | =edit= |
+| =editparams= | The parameter string to use to edit the topic |  |
 
 Any errors will cause a redirect to an =oops= page.
 
