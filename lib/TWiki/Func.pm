@@ -126,6 +126,8 @@ Compose fully qualified URL
    * =$web=    - Web name, e.g. ='Main'=
    * =$topic=  - Topic name, e.g. ='WebNotify'=
    * =$script= - Script name, e.g. ='view'=
+   * =...= - an arbitrary number of name,value parameter pairs that will be url-encoded and added to the url. The special parameter name '#' is reserved for specifying an anchor. e.g. <tt>getScriptUrl('x','y','view','#'=>'XXX',a=>1,b=>2)</tt> will give <tt>.../view/x/y?a=1&b=2#XXX</tt>
+
 Return: =$url=       URL, e.g. ="http://example.com:80/cgi-bin/view.pl/Main/WebNotify"=
 
 *Since:* TWiki::Plugins::VERSION 1.000 (7 Dec 2002)
@@ -133,10 +135,12 @@ Return: =$url=       URL, e.g. ="http://example.com:80/cgi-bin/view.pl/Main/WebN
 =cut
 
 sub getScriptUrl {
-    my( $web, $topic, $script ) = @_;
+    my $web = shift;
+    my $topic = shift;
+    my $script = shift;
     ASSERT($TWiki::Plugins::SESSION) if DEBUG;
 
-    return $TWiki::Plugins::SESSION->getScriptUrl( 1, $script, $web, $topic );
+    return $TWiki::Plugins::SESSION->getScriptUrl( 1, $script, $web, $topic, @_ );
 }
 
 =pod
