@@ -876,7 +876,6 @@ templates/changeform.tmpl 0440
 templates/changes.tmpl 0440
 templates/css.tmpl 0440
 templates/cssmediatypes.tmpl 0440
-templates/edit.iejs.tmpl 0440
 templates/edit.tmpl 0440
 templates/editform.tmpl 0440
 templates/edittext.tmpl 0440

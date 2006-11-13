@@ -16,7 +16,6 @@ templates/changes.classic.tmpl  0440
 templates/css.classic.tmpl  0440
 templates/cssmediatypes.classic.tmpl 0440
 templates/edit.classic.tmpl  0440
-templates/edit.iejs.classic.tmpl 0440
 templates/editform.classic.tmpl  0440
 templates/edittext.classic.tmpl  0440
 templates/form.classic.tmpl 0440
