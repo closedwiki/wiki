@@ -17,9 +17,13 @@ my %rename = (
     aclemens => "ArthurClemens",
     maphew => "MattWilkie",
     ethermage => "WalterMundt",
+    wmundt => "WalterMundt",
     sterbini => "AndreaSterbini",
     soronthar => "RafaelAlvarez",
     terceiro => "AntonioTerceiro",
+    crawfordcurrie => "CrawfordCurrie",
+    talintj => "JohnTalintyre",
+    dabright => "DavidBright",
    );
 
 my $coreExt = qr/ClassicSkin|CommentPlugin|EditTablePlugin|EmptyPlugin|InterwikiPlugin|JSCalendarContrib|MailerContrib|PatternSkin|TwistyContrib|BehaviourContrib|TwistyPlugin|PreferencesPlugin|RenderListPlugin|SlideShowPlugin|SmiliesPlugin|SpreadSheetPlugin|TablePlugin|TipsContrib|WysiwygPlugin/;
@@ -129,10 +133,10 @@ foreach my $zapper (sort { $counts{$b} <=> $counts{$a} } keys %counts) {
 }
 
 print F <<STUFF;
----+ Contributions Summary
+---+ Contributions
 Here's a full breakdown of individual contributions. The counts are the number
 of items (all priorities) in the database where the person contributed a
-checkin. This covers core and all plugins.
+checkin. This covers bugs, enhancements, core and all plugins.
 | *Who* | *Contributions* |
 STUFF
 my %dumps;
