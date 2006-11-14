@@ -30,13 +30,30 @@ sub close_html {
 Click here to consult the online plugins repository for
 new plugins. <b>Warning:</b>Unsaved changes will be lost!
 HERE
-    my $final_row =
-      CGI::Tr(CGI::td($button),
-              CGI::td(CGI::submit(-name => 'action',
-                                  -class=>'twikiSubmit',
-                                  -value=>'Find More Extensions',
-                                  -accesskey=>'P')));
-    return $final_row.$this->SUPER::close_html($section);
+    # Check that the extensions UI is loadable
+    my $bad = 0;
+    foreach my $module qw(TWiki::Configure::UIs::EXTEND TWiki::Configure::UIs::EXTENSIONS) {
+        eval "use $module";
+        if ($@) {
+            $bad = 1;
+            last;
+        }
+    }
+    my $actor;
+    if (!$bad) {
+        $actor = CGI::submit(-name => 'action',
+                             -class=>'twikiSubmit',
+                             -value=>'Find More Extensions',
+                             -accesskey=>'P');
+    } else {
+        $actor = $this->WARN(<<MESSAGE);
+Cannot load the extensions installer.
+Check 'Perl Modules' in the 'CGI Setup' section above, and install any
+missing modules required for the Extensions Installer.
+MESSAGE
+    }
+    return CGI::Tr(CGI::td($button),CGI::td($actor)).
+      $this->SUPER::close_html($section);
 }
 
 1;

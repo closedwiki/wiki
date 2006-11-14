@@ -136,7 +136,12 @@ sub ui {
         {colspan => 7},
         $installed . ' extension'.
           ($installed==1?'':'s').' out of '.$rows.' already installed'));
-    my $page = CGI::table({class=>'twikiForm'},$table);
+    my $page = <<INTRO;
+To install an extension from this page, click on the link in the 'Action' column.<p />Note that the webserver user has to be able to
+write files everywhere in your TWiki installation. Otherwise you may see
+'No permission to write' errors during extension installation.
+INTRO
+    $page .= CGI::table({class=>'twikiForm'},$table);
     $page .= <<'HELP';
 <p />
 You can add more repositories to the search path by defining the
