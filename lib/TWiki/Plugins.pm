@@ -253,11 +253,18 @@ Initialisation that is done after the user is known.
 sub enable {
     my $this = shift;
     ASSERT($this->isa( 'TWiki::Plugins')) if DEBUG;
+    my $prefs = $this->{session}->{prefs};
+    my $dissed = $prefs->getPreferencesValue('DISABLEDPLUGINS') || '';
+    my %disabled = map { $_ => 1 } split(/,\s*/, $dissed);
 
     # Set the session for this call stack
     local $TWiki::Plugins::SESSION = $this->{session};
 
     foreach my $plugin ( @{$this->{plugins}} ) {
+        if ($disabled{$plugin->{name}}) {
+            $plugin->{disabled} = 1;
+            push( @{$plugin->{errors}}, $plugin->{name}.' has been disabled' );
+        }
         $plugin->registerHandlers( $this );
         # Report initialisation errors
         if ( $plugin->{errors} ) {
