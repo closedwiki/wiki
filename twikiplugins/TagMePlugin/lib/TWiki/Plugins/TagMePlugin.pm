@@ -28,7 +28,7 @@ use vars qw(
         $alphaNum
     );
 
-$VERSION = '1.031';
+$VERSION = '1.032';
 $RELEASE = 'Any TWiki';
 $pluginName = 'TagMePlugin';  # Name of this Plugin
 $initialized = 0;
@@ -159,7 +159,7 @@ sub _showDefault
 
     my $webTopic = "$web.$topic";
     @tagInfo = _readTagInfo( $webTopic ) unless( scalar( @tagInfo ) );
-    my $text = '<div class="tagMePlugin" style="display:inline;"><form name="tags" '
+    my $text = '<div class="tagMePlugin" style="display:inline;"><form name="tagmeshow" '
              . 'action="%SCRIPTURL%/viewauth%SCRIPTSUFFIX%/%BASEWEB%/%BASETOPIC%" method="post">';
     my $tag = '';
     my $num = '';
