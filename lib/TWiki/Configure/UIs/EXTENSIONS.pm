@@ -49,7 +49,7 @@ sub new {
     my $this = bless({}, $class);
     my $replist = $ENV{TWIKI_REPOSITORIES} || '';
     $replist .= <<DEFAULTS;
-TWiki.org=(http://twiki.org/cgi-bin/view/Plugins/FastReport?skin=text&contenttype=text/plain,http://twiki.org/p/pub/Plugins/)
+TWiki.org=(http://twiki.org/cgi-bin/view/Plugins/,http://twiki.org/p/pub/Plugins/)
 DEFAULTS
     $replist = ";$replist;";
     while ($replist =~ s/[;\s]+(.*?)=\((.*?),(.*?)\)\s*;/;/so) {
@@ -72,7 +72,8 @@ sub _getListOfExtensions {
         $this->{list} = [];
         foreach my $place ( @{$this->{repositories}} ) {
             print CGI::div("Consulting $place->{name}...");
-            my $page = $this->getUrl($place->{data});
+            my $page = $this->getUrl(
+                $place->{data}.'FastReport?skin=text&contenttype=text/plain');
             # SMELL handle failure to connect
             $page =~ s/{(.*?)}/$this->_parseRow($1, $place)/ges;
         }

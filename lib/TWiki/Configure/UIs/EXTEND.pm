@@ -42,16 +42,10 @@ sub new {
 
 sub ui {
     my $this = shift;
-
-    my %ext = (
-        topic => $TWiki::query->param('extension'),
-        data => $TWiki::query->param('data'),
-        pub => $TWiki::query->param('pub'),
-        confirm => $TWiki::query->param('confirm'));
-
+    my $query = $TWiki::query;
     my $tgz;
-    my $extension = $ext{topic};
-    my $tgzf = $ext{pub}.$extension.'/'.$extension.'.tgz';
+    my $extension = $query->param('extension');
+    my $tgzf = $query->param('pub').$extension.'/'.$extension.'.tgz';
 
     print "<br/>Fetching $tgzf...<br />\n";
     eval {
@@ -91,7 +85,7 @@ HERE
     }
     my @names = $tar->list_files();
     # unzip the contents
-    unless ($ext{confirm}) {
+    unless ($query->param('confirm')) {
         my $sawInstaller = 0;
         foreach my $file (@names) {
             my $ef = $this->_findTarget($file);
