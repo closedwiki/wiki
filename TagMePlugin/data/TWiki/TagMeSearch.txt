@@ -1,9 +1,9 @@
-%META:TOPICINFO{author="PeterThoeny" date="1160871532" format="1.0" version="1.6"}%
+%META:TOPICINFO{author="PeterThoeny" date="1163536578" format="1.0" version="1.7"}%
 %META:TOPICPARENT{name="TagMeViewAllTags"}%
 ---+ Tag-me: Tag Search
 
 %STARTINCLUDE%
-<form name="tags" action="%SCRIPTURL%/view/%WEB%/%TOPIC%" method="get">
+<form name="tagmesearch" action="%SCRIPTURL%/view/%WEB%/%TOPIC%" method="get">
 <table border="0" cellpadding="3" cellspacing="0"><tr>
 <td>&nbsp; &nbsp;</td>
 <td bgcolor="#EEEEDD">&nbsp; [[TagMeViewAllTags][All Tags]] &nbsp;</td>
