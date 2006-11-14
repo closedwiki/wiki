@@ -429,15 +429,15 @@ sub numRevisions {
 
 # implements RcsFile
 sub addRevisionFromText {
-    shift->_addRevision( @_ );
+    shift->_addRevision( 0, @_ );
 }
 
 sub addRevisionFromStream {
-    shift->_addRevision( @_ );
+    shift->_addRevision( 1, @_ );
 }
 
 sub _addRevision {
-    my( $this, $data, $log, $author, $date ) = @_;
+    my( $this, $isStream, $data, $log, $author, $date ) = @_;
 
     $this->_ensureProcessed();
 
@@ -452,7 +452,7 @@ sub _addRevision {
         $this->_writeMe();
     }
 
-    if( $this->{attachment} ) {
+    if( $isStream ) {
         $this->_saveStream( $data );
         # SMELL: for big attachments, this is a dog
         $data = $this->_readFile( $this->{file} );
@@ -501,7 +501,7 @@ sub replaceRevision {
     my( $this, $text, $comment, $user, $date ) = @_;
     $this->_ensureProcessed();
     $this->_delLastRevision();
-    return $this->_addRevision( $text, $comment, $user, $date );
+    return $this->_addRevision( 0, $text, $comment, $user, $date );
 }
 
 # implements RcsFile

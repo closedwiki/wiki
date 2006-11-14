@@ -190,6 +190,9 @@ BEGIN {
 
         $sfn = $fn.'_Item2957';
         *$sfn = sub { shift->verify_Item2957( $class ) };
+
+        $sfn = $fn.'_Item3122';
+        *$sfn = sub { shift->verify_Item3122( $class ) };
     }
 }
 
@@ -532,6 +535,28 @@ HERE
     $rcs = $class->new( $twiki, $testWeb, 'Item2957', '' );
     $text = $rcs->getRevision(3);
     $this->assert_equals($rev3, $text);
+}
+
+sub verify_Item3122 {
+    my( $this, $class ) = @_;
+
+    $this->assert(open(F, ">/tmp/itme3122"), $!);
+    print F "old";
+    $this->assert(close(F), $!);
+
+    my $rcs = $class->new( $twiki, $testWeb, 'Item3122', 'itme3122' );
+    $rcs->addRevisionFromText("new", "more", "idiot", time());
+    my $text = $rcs->getRevision(1);
+    $this->assert_equals("new", $text);
+    $rcs = $class->new( $twiki, $testWeb, 'Item3122', 'itme3122' );
+    my $fh;
+    $this->assert(open($fh, "</tmp/itme3122"), $!);
+    $rcs->addRevisionFromStream($fh, "more", "idiot", time());
+    close($fh);
+    $text = $rcs->getRevision(1);
+    $this->assert_equals("new", $text);
+    $text = $rcs->getRevision(2);
+    $this->assert_equals("old", $text);
 }
 
 1;
