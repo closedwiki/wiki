@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1157045278" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1163619832" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiVariables"}%
 %TOC%
 %STARTINCLUDE%
@@ -93,7 +93,7 @@ Variables that can be used in the format string:
 In a web where there is a form that contains a =Topic<nop>Classification= field, an =Operating<nop>System= field and an =Os<nop>Version= field we could write:
 
 =| <nop>*Topic:*<nop> | <nop>*<nop>OperatingSystem:*<nop> | <nop>*<nop>OsVersion:*<nop> |= <br />
-=%<nop>SEARCH{ "[T]opicClassification.*?value=\"[P]ublicFAQ\"" scope="text" regex="on" nosearch="on" nototal="on" format="| [<nop>[$topic]] | $formfield(<nop>OperatingSystem) | $formfield(<nop>OsVersion) |" }%=
+=%<nop>SEARCH{ "[T]opicClassification.*?value=\"[P]ublicFAQ\"" scope="text" type="regex" nosearch="on" nototal="on" format="| [<nop>[$topic]] | $formfield(<nop>OperatingSystem) | $formfield(<nop>OsVersion) |" }%=
 
 To get this:
 
@@ -115,11 +115,11 @@ To get this:
 
 *Write this:*
 
-=%<nop>SEARCH{ "__Back to\:__ <nop>TWikiFAQ" scope="text" regex="on" nosearch="on" nototal="on" header="TWiki FAQs:" format="   * $pattern(.*?FAQ\:[\n\r]*([^\n\r]+).*) [<nop>[$topic][Answer...]]" }%=
+=%<nop>SEARCH{ "__Back to\:__ <nop>TWikiFAQ" scope="text" type="regex" nosearch="on" nototal="on" header="TWiki FAQs:" format="   * $pattern(.*?FAQ\:[\n\r]*([^\n\r]+).*) [<nop>[$topic][Answer...]]" }%=
 
 *To get this:*
 
-%SEARCH{ "__Back to\:__ TWikiFAQ" scope="text" regex="on" nosearch="on" nototal="on" header="TWiki FAQs:" format="   * $pattern(.*?FAQ\:[\n\r]*([^\n\r]+).*) [[$topic][Answer...]]" }%
+%SEARCH{ "__Back to\:__ TWikiFAQ" scope="text" type="regex" nosearch="on" nototal="on" header="TWiki FAQs:" format="   * $pattern(.*?FAQ\:[\n\r]*([^\n\r]+).*) [[$topic][Answer...]]" }%
 
 
 ---+++ Nested Search
@@ -152,11 +152,11 @@ __Note:__ Nested search can be slow, especially if you nest more then 3 times. N
 
 *Write this:*
 
-=%<nop>SEARCH{ "\.*" scope="topic" regex="on" nosearch="on" nototal="on" order="modified" reverse="on"  format="| [<nop>[$topic]] | $wikiusername  | $date |" limit="7" }%=
+=%<nop>SEARCH{ "\.*" scope="topic" type="regex" nosearch="on" nototal="on" order="modified" reverse="on"  format="| [<nop>[$topic]] | $wikiusername  | $date |" limit="7" }%=
 
 *To get this:*
 
-%SEARCH{ "\.*" scope="topic" regex="on" nosearch="on" nototal="on" order="modified" reverse="on"  format="| [[$topic]] | $wikiusername  | $date |" limit="7" }%
+%SEARCH{ "\.*" scope="topic" type="regex" nosearch="on" nototal="on" order="modified" reverse="on"  format="| [[$topic]] | $wikiusername  | $date |" limit="7" }%
 
 ---+++ Search with conditional output
 
@@ -171,7 +171,7 @@ This requires the TWiki:Plugins.SpreadSheetPlugin. The following example shows a
 *Write this:*
 
 =%<nop>CALC{$SET(weekold, $TIMEADD($TIME(), -7, day))}%= %BR%
-=%<nop>SEARCH{ "." scope="topic" regex="on" nosearch="on" nototal="on" order="modified" reverse="on" format="$percntCALC{$IF($TIME($date) &lt; $GET(weekold), &lt;nop&gt;, | [<nop>[$topic]] | $wikiusername | $date | $rev |)}$percnt" limit="100" }%=
+=%<nop>SEARCH{ "." scope="topic" type="regex" nosearch="on" nototal="on" order="modified" reverse="on" format="$percntCALC{$IF($TIME($date) &lt; $GET(weekold), &lt;nop&gt;, | [<nop>[$topic]] | $wikiusername | $date | $rev |)}$percnt" limit="100" }%=
 
    * The first line sets the =weekold= variable to the serialized date of exactly one week ago
    * The SEARCH has a deferred CALC. The =$percnt= makes sure that the CALC gets executed once for each search hit
@@ -182,7 +182,7 @@ This requires the TWiki:Plugins.SpreadSheetPlugin. The following example shows a
 *To get this:*
 
 %CALC{$SET(weekold, $TIMEADD($TIME(), -7, day))}%
-%SEARCH{ "." scope="topic" regex="on" nosearch="on" nototal="on" order="modified" reverse="on" format="$percntCALC{$IF($TIME($date) < $GET(weekold), <nop>, | [[$topic]] | $wikiusername | $date | $rev |)}$percnt" limit="100" }%
+%SEARCH{ "." scope="topic" type="regex" nosearch="on" nototal="on" order="modified" reverse="on" format="$percntCALC{$IF($TIME($date) < $GET(weekold), <nop>, | [[$topic]] | $wikiusername | $date | $rev |)}$percnt" limit="100" }%
 
 ---+++ Embedding search forms to return a formatted result
 

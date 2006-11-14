@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1163309057" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1163619832" format="1.1" version="$Rev$"}%
 ---+ %MAKETEXT{"Note: This topic does not exist"}%
 
 <form name="jumpAgain" action="%SCRIPTURL{view}%/%BASEWEB%/%BASETOPIC%">
@@ -17,7 +17,7 @@
    * [[%SCRIPTURLPATH{"view"}%/%BASEWEB%/WebSearch?scope=topic;search=%BASETOPIC%][%MAKETEXT{"List more similar topic in this web"}%]]
 %CALC{$IF($GET(total) < 16, -->, <nop>)}%
    * [[%SCRIPTURLPATH{"view"}%/%BASEWEB%/WebSearch?scope=topic;web=all;search=%BASETOPIC%][%MAKETEXT{"Search similar topics in all public webs"}%]]
-%SEARCH{ "META.TOPICMOVED.*from\=\"%BASEWEB%.%BASETOPIC%\"" nosearch="on" nototal="on" regex="on" format="   * $percntRED% $percntMAKETEXT{\"This topic has moved to [_1].\" args=\"[[$web.$topic]]\"}$percnt $percntENDCOLOR%" }%
+%SEARCH{ "META.TOPICMOVED.*from\=\"%BASEWEB%.%BASETOPIC%\"" nosearch="on" nototal="on" type="regex" format="   * $percntRED% $percntMAKETEXT{\"This topic has moved to [_1].\" args=\"[[$web.$topic]]\"}$percnt $percntENDCOLOR%" }%
 
 *%MAKETEXT{"Do you wish to create the topic [_1]?" args="'%BASETOPIC%'"}%*
    * [[%SCRIPTURL{view}%/%BASEWEB%/WebTopicCreator?newtopic=%BASETOPIC%][%MAKETEXT{"Create '[_1]'" args="<nop>%BASETOPIC%"}%]]

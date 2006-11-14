@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1122408596" format="1.1" version="$Rev $"}%
+%META:TOPICINFO{author="TWikiContributor" date="1163619832" format="1.1" version="$Rev $"}%
 ---+ List of all Category topics
 
-%SEARCH{".*Category\b" excludetopic="%TOPIC%" regex="on" scope="topic" nonoise="on" format="   * $web.$topic"}%
+%SEARCH{".*Category\b" excludetopic="%TOPIC%" type="regex" scope="topic" nonoise="on" format="   * $web.$topic"}%

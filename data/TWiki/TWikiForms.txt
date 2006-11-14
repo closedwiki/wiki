@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1117921800" format="1.0" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1163619832" format="1.0" version="$Rev$"}%
 %TOC%  
 %STARTINCLUDE%
 ---# TWiki Forms
@@ -63,7 +63,7 @@ You can also retrieve possible values for select, checkbox or radio types from o
 Field values can also be obtained as the result of a %TWIKIWEB%.FormattedSearch. For example,
 
 <blockquote>
-=%<nop>SEARCH{"Office$" scope="topic" web="%<nop>MAINWEB%" nototal="on" nosummary="on" nosearch="on" regex="on" format="$web.$topic" separator=", " }%=
+=%<nop>SEARCH{"Office$" scope="topic" web="%<nop>MAINWEB%" nototal="on" nosummary="on" nosearch="on" type="regex" format="$web.$topic" separator=", " }%=
 </blockquote>
 
 when used in the value field of the form definition, will take the set of field values to be all topic names in the Main web which end in "Office".
@@ -135,7 +135,7 @@ TWiki Forms accept user-input data, stored as TWikiMetaData. Meta data also cont
 TWiki users often want to have an overview of topics they contributed to. With the ==$formfield== parameter it is easy to display the value of a classification field next to the topic link:
 <verbatim>
 | *Topic* | *Classification* |
-%SEARCH{"%MAINWEB%.UserName" scope="text" regex="off" nosearch="on" nototal="on" order="modified" reverse="on"
+%SEARCH{"%MAINWEB%.UserName" scope="text" nosearch="on" nototal="on" order="modified" reverse="on"
 format="|<b>[[$web.$topic][$topic]]</b> |<nop>$formfield(TopicClassification) |" web="Sandbox"}%
 </verbatim>
 </blockquote> 

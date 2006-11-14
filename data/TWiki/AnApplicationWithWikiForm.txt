@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1098088852" format="1.0" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1163619832" format="1.0" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiFAQ"}%
 ---++ FAQ:
 How can I create a simple [[TWikiForms][TWiki Form]] based application?
@@ -32,7 +32,7 @@ New FAQ topic: &nbsp; (Use a name in TWiki.WikiNotation) <br />
 
 And the =SEARCH= function:
 <verbatim>
-%SEARCH{ "Back to\:__ TWikiFAQ" casesensitive="on" regex="on" nosearch="on" nototal="on"}%
+%SEARCH{ "Back to\:__ TWikiFAQ" casesensitive="on" type="regex" nosearch="on" nototal="on"}%
 </verbatim>
 
 
@@ -41,5 +41,4 @@ __Back to:__ TWikiFAQ
 
 __Related Topics:__ UserDocumentationCategory
 
--- TWiki:Main.MiyokoTakushima - 18 Oct 2004 <br />
-
+-- __Contributors:__ TWiki:Main.MiyokoTakushima - 18 Oct 2004

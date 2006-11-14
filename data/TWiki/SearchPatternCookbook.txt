@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1127406241" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1163619832" format="1.1" version="$Rev$"}%
 ---+!! Search Pattern Cookbook
 
 The Search function in TWiki is very powerful. Especially searches using a RegularExpression play an important part of tapping TWiki's full potential. Unfortunately RegularExpressions can be incredibly obscure to the uninitiated. 
@@ -27,7 +27,7 @@ The following search pattern can be employed:
 <verbatim>
 <form>
 <select>
-%SEARCH{ "^\|[^\|]*\| *option *\|" topic="%TOPIC%" regex="on" multiple="on" nosearch="on" nototal="on" format="<option>$pattern(^\| *(.*?) *\|.*)</option>" }%
+%SEARCH{ "^\|[^\|]*\| *option *\|" topic="%TOPIC%" type="regex" multiple="on" nosearch="on" nototal="on" format="<option>$pattern(^\| *(.*?) *\|.*)</option>" }%
 </select>
 </form>
 </verbatim>
@@ -35,7 +35,7 @@ The following search pattern can be employed:
 which is, in effect:
 <form>
 <select>
-%SEARCH{ "^\|[^\|]*\| *option *\|" topic="%TOPIC%" regex="on" multiple="on" nosearch="on" nototal="on" format="<option>$pattern(^\| *(.*?) *\|.*)</option>" }%
+%SEARCH{ "^\|[^\|]*\| *option *\|" topic="%TOPIC%" type="regex" multiple="on" nosearch="on" nototal="on" format="<option>$pattern(^\| *(.*?) *\|.*)</option>" }%
 </select>
 </form>
 %BR%
@@ -61,7 +61,7 @@ We will:
 
 <verbatim>
 %SEARCH{"[T]opicClassification.*value\=.*Two;[T]opicStatus.*value\=.*%URLPARAM{type}%"
-regex="on" casesensitive="on" nosearch="on" 
+type="regex" casesensitive="on" nosearch="on" 
 format="   * $topic - <font face=\"arial,helvetica\" size=\"1\"> 
 _last modified by_ $wikiusername _on_ $date </font> %BR% &nbsp;&nbsp;&nbsp; 
 <font face=\"arial,helvetica\" size=\"1\"> $formfield(TopicStatus) </font>" 
@@ -75,7 +75,7 @@ The filtering select dialogue is created as in Pattern 1:
 *Filter:* %BR%
 <form name="selectType" action="%SCRIPTURLPATH{"view"}%/%WEB%/" >
 <select name="type" size="1" onchange="document.location=this.value;"> 
-%SEARCH{ "^\|[^\|]*\| *option *\|" topic="TopicClassification" web="%WEB%" regex="on" 
+%SEARCH{ "^\|[^\|]*\| *option *\|" topic="TopicClassification" web="%WEB%" type="regex" 
 multiple="on" nosearch="on" nototal="on" format="<option value=%INCLUDINGTOPIC%?type=$pattern(^\| *(.*?) *\|.*)>$pattern(^\| *(.*?) *\|.*)</option>" }% 
 <option value=%INCLUDINGTOPIC%>All pages</option> </select>
 </form>
@@ -139,7 +139,7 @@ When the User information is stored in a UserForm (as is default in Dakar) then 
 <form name="testing" action="%SCRIPTURLPATH{"view"}%/%MAINWEB%" method="get">
 <select name="topic">
 <option>Select user...</option>
-%SEARCH{"%META:FORM.*[U]serForm" web="%MAINWEB%" regex="on" casesensitive="on" nosearch="on" format="<option>$topic</option>" sort="topic" excludetopic="Test*, TWiki*"}%
+%SEARCH{"%META:FORM.*[U]serForm" web="%MAINWEB%" type="regex" casesensitive="on" nosearch="on" format="<option>$topic</option>" sort="topic" excludetopic="Test*, TWiki*"}%
 </select>
 <input type="submit" value="Go" />
 </form>
@@ -229,7 +229,7 @@ Display the user name in the user's topic title
 Search for the =Name:= entry.
 
 <verbatim>
-%SEARCH{"   * [N]ame: " topic="%TOPIC%" regex="on" casesensitive="on" nosummary="on" nosearch="on" noheader="on" nototal="on" format="---+!! $pattern(.*   \* Name: ([^\n]*).*)"}%
+%SEARCH{"   * [N]ame: " topic="%TOPIC%" type="regex" casesensitive="on" nosummary="on" nosearch="on" noheader="on" nototal="on" format="---+!! $pattern(.*   \* Name: ([^\n]*).*)"}%
 </verbatim>
 
 ---+++ Test case
@@ -240,7 +240,7 @@ To create a test case, we will put a name entry here:
 
 Search result:
 
-%SEARCH{"   * [N]ame: " topic="%TOPIC%" regex="on" casesensitive="on" nosummary="on" nosearch="on" noheader="on" nototal="on" format="---+!! $pattern(.*   \* Name: ([^\n]*).*)"}%
+%SEARCH{"   * [N]ame: " topic="%TOPIC%" type="regex" casesensitive="on" nosummary="on" nosearch="on" noheader="on" nototal="on" format="---+!! $pattern(.*   \* Name: ([^\n]*).*)"}%
 
 ---++ Pattern 7: Search for Form and Meta data: explained
 ---+++ Problem
@@ -249,7 +249,7 @@ Below is an example of a search that searches form data. The questions are:
    * what is the meaning of the =td..td= in the search expression? 
 
 <pre>
-%<nop>SEARCH{ "[S]tatus.*(td..td|value\=).*[W]aiting" casesensitive="on" regex="on" 
+%<nop>SEARCH{ "[S]tatus.*(td..td|value\=).*[W]aiting" casesensitive="on" type="regex" 
 nosearch="on" nototal="on" format="| [[$topic]]&lt;br /> ($date - $rev - 
 [[%<nop>SCRIPTURLPATH{rdiff}%/$web/$topic][Diffs]]) |"}%
 </pre>
@@ -263,7 +263,7 @@ An example meta data form field is:
 </pre>
 So a search for a form field could look like:
 <pre>
-%<nop>SEARCH{ "[O]peratingSystem.*value\=.*[O]sWin" regex="on" ... }%
+%<nop>SEARCH{ "[O]peratingSystem.*value\=.*[O]sWin" type="regex" ... }%
 </pre>
    * Using square brackets is a trick to avoid a hit on the topic doing the search.
    * The =.*= indicate that there can be any number of any character between =OperatingSystem= and =value= in the (whole) file
@@ -274,7 +274,7 @@ Now the original file format of the category table (the predecessor of the TWiki
 </verbatim>
 The following search finds topics in the old and new format:
 <pre>
-%<nop>SEARCH{ "[O]peratingSystem.*(td..td|value\=).*[O]sWin" regex="on" ... }%
+%<nop>SEARCH{ "[O]peratingSystem.*(td..td|value\=).*[O]sWin" type="regex" ... }%
 </pre>
 
 The =td..td= matches =td&lt;&gt;td=; a simple search on ="[O]peratingSystem.*[O]sWin"= could find a hit in the topic text by coincidence.
@@ -288,11 +288,11 @@ How would I go about listing all moved topics ?
 ---+++ Solution
 Search for the META:TOPICMOVED meta data. Type this: 
 
-=Moved topics: %<nop>SEARCH{ "%META\:TOPICMOVED" regex="on" format="$topic, " nosearch="on" noheader="on" nosummary="on" }%=
+=Moved topics: %<nop>SEARCH{ "%META\:TOPICMOVED" type="regex" format="$topic, " nosearch="on" noheader="on" nosummary="on" }%=
 
 to get this (limited to 10 results):
 
-Moved topics: %SEARCH{ "%META\:TOPICMOVED" regex="on" format="$topic, " nosearch="on" noheader="on" nosummary="on" limit="10"}%
+Moved topics: %SEARCH{ "%META\:TOPICMOVED" type="regex" format="$topic, " nosearch="on" noheader="on" nosummary="on" limit="10"}%
 
 
 ---++ Contributors
