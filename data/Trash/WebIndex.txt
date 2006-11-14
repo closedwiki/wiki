@@ -1,5 +1,2 @@
-%META:TOPICINFO{author="TWikiContributor" date="1006602152" format="1.1" version="$Rev$"}%
-%META:TOPICPARENT{name="WebHome"}%
-%SEARCH{"\.*" scope="topic" regex="on" nosearch="on"}%
-
-%MAKETEXT{"See also the faster [_1]" args="WebTopicList"}%
+%META:TOPICINFO{author="TWikiContributor" date="1163619832" format="1.0" version="$Rev$"}%
+%INCLUDE{"%TWIKIWEB%.%TOPIC%"}%
