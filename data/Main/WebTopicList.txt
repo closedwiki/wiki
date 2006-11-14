@@ -1,5 +1,2 @@
-%META:TOPICINFO{author="TWikiContributor" date="1111931141" format="1.0" version="$Rev$"}%
-%META:TOPICPARENT{name="WebHome"}%
-%TOPICLIST{"   * [[$name]]"}%
-
-See also the verbose WebIndex.
+%META:TOPICINFO{author="TWikiContributor" date="1163619832" format="1.0" version="$Rev$"}%
+%INCLUDE{"%TWIKIWEB%.%TOPIC%"}%
