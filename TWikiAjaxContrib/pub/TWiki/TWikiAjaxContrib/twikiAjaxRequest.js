@@ -23,6 +23,8 @@ twiki.AjaxRequest = function () {
 	*/
 	var _storage = {};
 	
+	var SCRIPT_NODE_ID_PREFIX = "TWIKI_ADDED_SCRIPT_";
+	
 	/**
 	Inner property data class.
 	*/
@@ -34,7 +36,7 @@ twiki.AjaxRequest = function () {
 		this.handler = "_writeHtml"; // String
 		this.scope = twiki.AjaxRequest.getInstance(); // Object
 		this.container; // String; id of HTML container
-		this.type = "txt"; // String; possible values: "txt", "xml"
+		this.type = "text"; // String; possible values: "text", "xml", "script", "scriptfile"
 		this.cache = false; // Boolean
 		this.method = "GET"; // String
 		this.postData; // String
@@ -43,9 +45,7 @@ twiki.AjaxRequest = function () {
 		this.failScope = twiki.AjaxRequest.getInstance(); // Object
 		//
 		this.owner = twiki.AjaxRequest.getInstance(); // Object
-	}
-	Properties.prototype.isXml = function() {
-		return this.type == "xml";
+		this.scriptNodeIds = [];
 	}
 	/**
 	Debug string
@@ -77,11 +77,11 @@ twiki.AjaxRequest = function () {
 	@private
 	*/
 	function _wrapIndicator (inName, inHtml) {
-		return "<div style=\"display:inline;\" id=\""
+		return "<span id=\""
 			+ _getIndicatorId(inName)
 			+ "\">"
 			+ inHtml
-			+ "<\/div>";
+			+ "<\/span>";
 	}
 	
 	/**
@@ -89,7 +89,7 @@ twiki.AjaxRequest = function () {
 	@private
 	*/
 	function _hideLoadingIndicator (inName) {
-		twiki.HTML.clearElementWithId(_getIndicatorId(inName));
+		twiki.HTML.deleteElementWithId(_getIndicatorId(inName));
 	}
 	
 	/**
@@ -120,22 +120,127 @@ twiki.AjaxRequest = function () {
 		return null;
 	}
 	
+	/**
+	Creates a new script node with id inNodeName
+	@param inNodeName (String) : the id of the new script node
+	@return The new script node
+	*/
+	function _createScriptNode (inNodeName) {
+		var scriptNode = document.createElement('script');
+		scriptNode.id = inNodeName;
+		scriptNode.setAttribute('language', 'javascript');
+		scriptNode.setAttribute('type', 'text/javascript');
+		return scriptNode;
+	}
+	
+	/**
+	Dynamically adds script code to the head by first wrapping it inside a script node.
+	@param inHeadNode (Node) : (required) the head dom node
+	@param inNodeName (String) : (required) the id of the new node
+	@param inCode (String) : (required) the script code
+	@todo Safari seems to deal differently with script nodes. Shame we need an exception, perhaps there is another way.
+	*/
+	function _addScriptCodeToHead (inHeadNode, inNodeName, inCode) {
+		var scriptNode = _createScriptNode(inNodeName);
+		// if Safari:
+		if (navigator && 
+			navigator.vendor &&
+			navigator.vendor.search(/Apple/) != -1) {
+				var textNodeSafari = document.createTextNode(inCode);
+				scriptNode.appendChild(textNodeSafari);
+		} else {
+			// if Explorer or Firefox (possibly all the rest):
+			scriptNode.text = inCode;
+		}
+		inHeadNode.appendChild(scriptNode);
+	}
+	
+	/**
+	Adds a script source reference to the head by first wrapping it inside a script node.
+	@param inHeadNode (Node) : (required) the head dom node
+	@param inNodeName (String) : (required) the id of the new node
+	@param inUrl (String) : (required) the url to add
+	@return The script node if successfully appended to head.
+	*/
+	function _addScriptUrlToHead (inHeadNode, inNodeName, inUrl) {
+		var scriptNode = _createScriptNode(inNodeName);
+		scriptNode.setAttribute('src', inUrl);
+		var success = inHeadNode.appendChild(scriptNode);
+		return success;
+	}
+	
+	/**
+	Removes multiple script nodes from the head, based on stored ids in Properties.scriptNodeIds.
+	@param inName (String) : (required) unique identifier for the request
+	@return The cleared head node.
+	*/
+	function _removeScriptsFromHead (inName) {
+		var headNode = document.getElementsByTagName('head').item(0);
+		var ref = _storage[inName];
+		if (!ref) return;
+		for (var i=0; i<ref.scriptNodeIds.length; i++) {
+			var id = ref.scriptNodeIds[i];
+			_removeScriptFromHead(headNode, id); 
+		}
+		ref.scriptNodeIds = [];
+		return headNode;
+	}
+	
+	/**
+	Removes a script node from the head.
+	@param inHeadNode (Node) : (required) the head dom node
+	@param inId (String) : (required) the unique id of the element to remove
+	*/
+	function _removeScriptFromHead (inHeadNode, inId) {
+		var old = document.getElementById(inId);
+		if (old) {
+			inHeadNode.removeChild(old);
+		}
+	}
+	
+	/**
+	Creates a unique script node id based on the number of elements already in Property.scriptNodeIds and the Property name.
+	@param inRef (Property) : (required) reference to the Property object
+	@return (String) A new unique id.
+	*/
+	function _createScriptNodeId (inRef) {
+		var idNum = inRef.scriptNodeIds.length;
+		return SCRIPT_NODE_ID_PREFIX + inRef.name + "_" + idNum;
+	}
+	
 	// PRIVILEGED METHODS
 	// MAY BE INVOKED PUBLICLY AND MAY ACCESS PRIVATE ITEMS
 	
 	/**
 	See twiki.AjaxRequest.load
+	@return The YAHOO.util.Connect.asyncRequest object.
 	*/
 	this._load = function (inName, inProperties) {
 		
-		var ref = this._storeResponseProperties(inName, inProperties);
+		var ref = this._storeProperties(inName, inProperties);
+		if (!ref) return;
 		
 		// always stop loading possible previous request
 		this._stop(inName);
 		
 		// check if this data has been retrieved before and stored
 		if (ref.store) {
-			return this._writeHtml(ref.container, ref.store);
+			if (ref.type == 'text' || ref.type == 'xml') {
+				
+				return this._writeHtml(ref.container, ref.store);
+			}
+			if (ref.type == 'script' || ref.type == 'scriptfile') {
+				return null;
+			}
+		}
+		
+		// when writing a script url to the head no request is necessary
+		if (ref.type == 'scriptfile') {
+			var result = self._addScriptUrlToHead(ref.name, ref.url);
+			if (ref.cache) {
+				self._storeProcessedResponse(ref.name, result);
+			}
+			return null;
 		}
 		
 		// no stored data was found, so start loading
@@ -153,21 +258,21 @@ twiki.AjaxRequest = function () {
 		if (indicatorHtml == null) {
 			indicatorHtml = this._defaultIndicatorHtml;
 		}
-		
+
 		var wrappedIndicator = _wrapIndicator(inName, indicatorHtml);
 		twiki.HTML.setHtmlOfElementWithId(ref.container, wrappedIndicator);
-		
+
 		var cache = (ref.cache != undefined) ? ref.cache : false;
 		var callback = {
 			success: this._handleSuccess,
 			failure: this._handleFailure,
 			argument:{container:ref.container, cache:ref.cache}
 		};
-	
+
 		var method = (ref.method != undefined) ? ref.method : "GET";
 		var postData = (ref.postData != undefined) ? ref.postData : "";
 		var connectRequest = YAHOO.util.Connect.asyncRequest(method, ref.url, callback, postData);
-		this._storeResponseProperties(inName, {response:connectRequest});
+		this._storeProperties(inName, {response:connectRequest});
 		return connectRequest;
 	}
 	
@@ -176,7 +281,7 @@ twiki.AjaxRequest = function () {
 	@param inProperties (Object) : value object with the properties defined in inner class Properties
 	@privileged
 	*/
-	this._storeResponseProperties = function (inName, inProperties) {
+	this._storeProperties = function (inName, inProperties) {
 		// check if object with name already exists
 		// if so, update only the param values that are not null
 		var ref = _storage[inName];
@@ -215,9 +320,8 @@ twiki.AjaxRequest = function () {
 			return;
 		}		
 		var ref = _storage[inName];
-		if (!ref) {
-			return;
-		}
+		if (!ref) return;
+		
 		var i, ilen = inPropertyList.length;
 		for (i=0; i<ilen; i++) {
 			var property = inPropertyList[i];
@@ -233,9 +337,8 @@ twiki.AjaxRequest = function () {
 			return;
 		}
 		var ref = _storage[inName];
-		if (!ref) {
-			return;
-		}
+		if (!ref) return;
+		
 		var i, ilen = inPropertyList.length;
 		for (i=0; i<ilen; i++) {
 			var property = inPropertyList[i];
@@ -247,9 +350,10 @@ twiki.AjaxRequest = function () {
 	See twiki.AjaxRequest.stop
 	*/
 	this._stop = function (inName) {
-		var ref = _storage[inName];
 		_hideLoadingIndicator(inName);
-		if (ref && ref.response) YAHOO.util.Connect.abort(ref.response);
+		var ref = _storage[inName];		
+		if (!ref) return;
+		if (ref.response) YAHOO.util.Connect.abort(ref.response);
 	}
 
 	/**
@@ -259,14 +363,15 @@ twiki.AjaxRequest = function () {
 		if (inResponse.responseText !== undefined) {
 			var ref = _referenceForResponse(inResponse);
 			_hideLoadingIndicator(ref.name);
-			var text = (ref.isXml()) ? inResponse.responseXML : inResponse.responseText;
-			var result = ref.scope[ref.handler].apply(ref.scope, [inResponse.argument.container, text]);
-			var shouldCache = false;
-			if (inResponse.argument.cache == true) shouldCache = true;
-			if (inResponse.argument.cache == false) shouldCache = false;
-			if (shouldCache) {
-				// store response text
-				self._storeHtml(ref.name, result);
+			var result;
+			var text = (ref.type == 'xml') ? inResponse.responseXML : inResponse.responseText;
+			if (ref.type == 'script') {
+				result = self._addScriptToHead(ref.name, text);
+			} else {
+				result = ref.scope[ref.handler].apply(ref.scope, [ref.container, text]);
+			}
+			if (ref.cache) {
+				self._storeProcessedResponse(ref.name, result);
 			}
 		}	
 	}
@@ -276,6 +381,7 @@ twiki.AjaxRequest = function () {
 	*/
 	this._handleFailure = function(inResponse) {
 		var ref = _referenceForResponse(inResponse);
+		if (!ref) return;
 		ref.owner._stop(ref.name);
 		var result = ref.failScope[ref.failHandler].apply(ref.failScope, [ref.name, inResponse.status]);
 	}
@@ -291,15 +397,155 @@ twiki.AjaxRequest = function () {
 	}
 	
 	/**
+	Dynamically adds a script src reference to head in the format:
+	<pre>
+	<script type="text/javascript" src="myScriptUrl.js"></script>
+	</pre>
+	@param inName (String) : (required) unique identifier for the request
+	@param inUrl (String) : (required) url of the script; in the example above <code>myScriptUrl.js</code>
+	@return 1 if successfully added, 0 if not
+	*/
+	this._addScriptUrlToHead = function (inName, inUrl) {
+		var headNode = _removeScriptsFromHead(inName);
+		var ref = _storage[inName];
+		if (!ref) return;
+		
+		var id = _createScriptNodeId(ref);
+		var success = _addScriptUrlToHead(headNode, id, inUrl);
+		if (success) {
+			ref.scriptNodeIds.push(id);
+			return 1;
+		}
+		return 0;
+	}
+	
+	/**
+	Adds dynamically loaded script (code/code with tags/file reference) to the head.
+	@param inName (String) : (required) unique identifier for the request
+	@param inCode : (required) Script code to add. These formats are possible:
+	Just the code:
+	<pre>
+	function showAlert () {
+		alert("Hello"));
+	}
+	</pre>
+	
+	Or the code surrounded by <code><script></script></code> tags:
+	<pre>
+	<script language="javascript">
+	// <![CDATA[
+	function showAlert () {
+		alert("Hello");
+	}
+	showAlert();
+	// ]]>
+	</script>
+	</pre>
+	
+	Or a mixture of code and source urls:
+	<pre>
+	<script type="text/javascript" src="%PUBURLPATH%/%TWIKIWEB%/TWikiJavascripts/twiki.js"></script>
+	<script language="javascript">
+	// <![CDATA[
+	function showAlert () {
+		alert("Hello");
+	}
+	showAlert();
+	// ]]>
+	</script>
+	</pre>
+	
+	Note that all code is converted to a single line. Single line comments may make the code no longer work.
+	
+	@return The script text.
+	@todo Use the multiline js code as is; do not convert to single line
+	@todo Better handling of return values
+	*/
+	this._addScriptToHead = function (inName, inCode) {
+		var headNode = _removeScriptsFromHead(inName);
+		var ref = _storage[inName];
+		if (!ref) return;	
+		
+		// use the input text stripped from newlines
+		// remove newlines and spaces at start and end
+		var cleanedCode = inCode;
+		cleanedCode = cleanedCode.replace(new RegExp("^\\s*|\\s*$"), "");
+		
+		// I am not sure why I cannot use script including newlines in the regex
+		// below (see codeRegex)
+		// for now I will strip any newlines
+		// so make sure that CDATA tags with single line out-comments //
+		// are converted to multiline out-comments
+		
+		// replace // <![CDATA[ with /* <![CDATA[ */
+		cleanedCode = cleanedCode.replace(new RegExp("\/\/\\s*\<\!\\[CDATA\\[", "gmi"), "/* <![CDATA[ */");
+		// replace // ]]> with /* ]]> */
+		cleanedCode = cleanedCode.replace(new RegExp("\/\/\\s*\]\]\>", "gmi"), "/* ]]> */");
+		
+		// replace newlines in the middle with ;
+		cleanedCode = cleanedCode.replace(new RegExp( "\\n|\\r", "g"), ";");
+		
+		// find script urls
+		var urlRegex = new RegExp("\<script.*?src\\s*\=\\s*\"(.*?)\"\>.*?\<\/script\>", "gmi");
+
+		var result;
+		var hasUrls = 0;
+		while((result = urlRegex.exec(cleanedCode)) != null) {
+			var url = result[1];
+			if (url) {
+				var id = _createScriptNodeId(ref);
+				_addScriptUrlToHead(headNode, id, url);
+				ref.scriptNodeIds.push(id);
+				hasUrls = 1;
+			}
+		}
+		// strip text from script urls
+		cleanedCode = cleanedCode.replace(urlRegex, "");
+		if (cleanedCode.length == 0 && hasUrls) {
+			return 1;
+		}
+		
+		// find the code (not urls)
+		var codeRegex = new RegExp("\<script.*?\>\\s*(.*?)\\s*\<\/script\>", "gmi");
+		var hasCode = 0;
+		while((result = codeRegex.exec(cleanedCode)) != null) {
+			var scriptCode = result[1];
+			if (scriptCode.length > 0) {
+				var id = _createScriptNodeId(ref);
+				_addScriptCodeToHead(headNode, id, scriptCode);
+				ref.scriptNodeIds.push(id);
+				hasCode = 1;
+			}
+		}
+		if (!hasCode) {
+			// add all input text to head
+			var id = _createScriptNodeId(ref);
+			_addScriptCodeToHead(headNode, id, cleanedCode);
+			ref.scriptNodeIds.push(id);
+		}
+		return 1;
+	}
+	
+	/**
 	Stores HTML block inHtml for request name inName so it can be retrieved at a later time (to fetch the stored HTML pass parameter cache as true).
 	@param inName (String) : (required) unique identifier for the request
-	@param inHtml (String) : HTML to store with this request
+	@param inProcessed (Object) : HTML or script to store with this request
 	@public
 	*/
-	this._storeHtml = function(inName, inHtml) {
+	this._storeProcessedResponse = function(inName, inProcessed) {
 		var ref = _storage[inName];
-		ref.store = inHtml;
-	};
+		if (!ref) return;
+		ref.store = inProcessed;
+	}
+	
+	this._clearCache = function(inName) {
+		var ref = _storage[inName];
+		if (!ref) return;
+		this._storeProcessedResponse(inName, null);
+		if (ref.type == 'script' || ref.type == 'scriptfile') {
+			_removeScriptsFromHead(inName);
+		}
+	}
 
 	/**
 	@privileged
@@ -307,7 +553,7 @@ twiki.AjaxRequest = function () {
 	this._writeHtml = function(inContainer, inHtml) {
 		var element = twiki.HTML.setHtmlOfElementWithId(inContainer, inHtml);
 		return twiki.HTML.getHtmlOfElementWithId(inContainer);
-	};
+	}
 	
 	this._defaultIndicatorHtml = "<img src='indicator.gif' alt='' />"; // for local testing, as a static url makes no sense for TWiki
 	
@@ -341,7 +587,7 @@ Sets one or more properties of a request.
 	scope (Object) : owner of handler
 	container (String) : id of HTML element to load content into
 	url (String) : url to fetch HTML from
-	type (String) : "txt" (default) the fetched response will be returned as text; "xml": return as XML
+	type (String) : "text" (default) the fetched response will be returned as text; "xml": return as XML; "script": the script (code, or code with surrounding tags) will be added to the head; "scriptfile": the file reference will be added to the head and loaded automatically
 	cache (Boolean) : if true, the fetched response text will be cached for subsequent retrieval; default false
 	method (String) : either "GET" or "POST"; default "GET"
 	postData (String) : data to send
@@ -352,7 +598,7 @@ Required properties to load a request:
 @public static
 */
 twiki.AjaxRequest.setProperties = function(inName, inProperties) {
-	twiki.AjaxRequest.getInstance()._storeResponseProperties(inName, inProperties);
+	twiki.AjaxRequest.getInstance()._storeProperties(inName, inProperties);
 }
 
 /**
@@ -384,7 +630,7 @@ Removes the cached response text, if any.
 @public static
 */
 twiki.AjaxRequest.clearCache = function(inName) {
-	twiki.AjaxRequest.getInstance()._storeHtml(inName, null);
+	twiki.AjaxRequest.getInstance()._clearCache(inName);
 }
 
 /**

@@ -83,7 +83,7 @@ addLoadEvent(autoLoad);
 </blockquote>
 %ENDTWISTY%
 
----+++ Demo
+---+++!! Demo
 
 <div>
 	Autoload
@@ -106,9 +106,7 @@ addLoadEvent(autoLoad);
 
 
 
----++ Page parts / Named sections
-
-_This demo illustrates functionality that is available from TWiki SVN 11890._
+---++ Page parts / Named Sections
 
 %TWISTY{id="namedsections" mode="div" showlink=" Show example code" hidelink=" Hide example code"
 showimgleft="%ICONURLPATH{code}%" 
@@ -116,6 +114,18 @@ hideimgleft="%ICONURLPATH{code}%"}%
 <blockquote>
 <verbatim>
 function showNewTopicForm(el) {
+
+	// load javascript
+	var javascriptUrl = "%SCRIPTURL{"view"}%/%TWIKIWEB%/WebTopicCreator?skin=text"
+				+ ";section=" + "javascriptfunctions";
+				
+	twiki.AjaxRequest.load("NEWTOPICFORM_JS",
+		{
+			url:javascriptUrl,
+			type:"script",
+			cache:true
+		});
+		
 
 	var containerId = "newTopicFormContainer";
 	
@@ -135,8 +145,9 @@ function showNewTopicForm(el) {
 				}
 		}
 	);
-	var url = "%SCRIPTURL{"view"}%/%TWIKIWEB%/WebTopicCreator?section=newtopicform;skin=text;newtopic="
-				+ topicName
+	var url = "%SCRIPTURL{"view"}%/%TWIKIWEB%/WebTopicCreator?skin=text"
+				+ ";section=" + "newtopicform"
+				+ ";newtopic=" + topicName
 				+ ";parent=" + "<nop>%TOPIC%";
 	twiki.AjaxRequest.load("NEWTOPICFORM",
 		{
@@ -157,12 +168,11 @@ Behaviour.register(myrules);
 </blockquote>
 %ENDTWISTY%
 
----+++ Demo
+---+++!! Demo
 
-_This demo does not work entirely: javascript code within the included topic is not imported well._
+%ICON{hand}% Click on the "new topic link question mark" at =DoesNotExist= in the text below to retrieve the "Create new topic" form (located at WebTopicCreator):
 
-%ICON{hand}% Click on the "new topic link question mark" at =DoesNotExist= in the text below to view the "Create new topic" form:
-
+<div style="background:#FFEFF1; padding:.5em;">
 Good now, sit down, and tell me, he that knows,
 Why this same strict and most observant watch
 So nightly toils the subject of the land, DoesNotExist
@@ -173,11 +183,23 @@ Does not divide the Sunday from the week;
 What might be toward, that this sweaty haste
 Doth make the night joint-labourer with the day:
 Who is't that can inform me?
-
+</div>
 
 <script type="text/javascript">
 // <![CDATA[
 function showNewTopicForm(el) {
+
+	// load javascript
+	var javascriptUrl = "%SCRIPTURL{"view"}%/%TWIKIWEB%/WebTopicCreator?skin=text"
+				+ ";section=javascriptfunctions";
+				
+	twiki.AjaxRequest.load("NEWTOPICFORM_JS",
+		{
+			url:javascriptUrl,
+			type:"script",
+			cache:true
+		});
+		
 
 	var containerId = "newTopicFormContainer";
 	
@@ -197,8 +219,9 @@ function showNewTopicForm(el) {
 				}
 		}
 	);
-	var url = "%SCRIPTURL{"view"}%/%TWIKIWEB%/WebTopicCreator?section=newtopicform;skin=text;newtopic="
-				+ topicName
+	var url = "%SCRIPTURL{"view"}%/%TWIKIWEB%/WebTopicCreator?skin=text"
+				+ ";section=" + "newtopicform"
+				+ ";newtopic=" + topicName
 				+ ";parent=" + "<nop>%TOPIC%";
 	twiki.AjaxRequest.load("NEWTOPICFORM",
 		{
@@ -272,7 +295,7 @@ Behaviour.register(myrules);
 </blockquote>
 %ENDTWISTY%
 
----+++ Demo
+---+++!! Demo
 <div style="margin:1em 0;">
 <input id="loadSearchResultsButton" class="twikiButton" type="button" value="Load contents" />
 <br />
@@ -379,7 +402,7 @@ Behaviour.register(myrules);
 %ENDTWISTY%
 
 
----+++ Demo
+---+++!! Demo
 
 %TWISTY{id="example_caching_demo" mode="div" showlink="Show (cached)" hidelink="Hide"
 showimgleft="%ICONURLPATH{toggleopen-small}%" 
@@ -462,7 +485,7 @@ Behaviour.register(myrules);
 </blockquote>
 %ENDTWISTY%
 
----+++ Demo
+---+++!! Demo
 
 <input id="loadWithCustomIndicatorButton" class="twikiButton" type="button" value="Load contents" />
 <br />
@@ -517,27 +540,30 @@ twiki.AjaxRequest.setProperties(
 	});
 	
 function handleHtml (inId, inHtml) {
+
 	// example 1: wrap in styled container
 	var processedHtml = "<h2>Processed text:<\/h2>" + 
 		"<div style=\"font-style:italic;\">" +
 		inHtml +
 		"<\/div>";
 	var element = twiki.HTML.setHtmlOfElementWithId(inId, processedHtml);
-
-	// example 2: reverse texts
-	reverseNodeTextsInList(element.getElementsByTagName('p'));
-	
-	// example 3: style list elements
+		
+	// example 2: style list elements
 	var attributes = {
-		"class":"twikiSmall twikiGrayText",
-		"style":
-			{
-				"color":"#fff",
-				"backgroundColor":"#444"
-			}
-	};
+    		"class":"twikiSmall twikiGrayText",
+    		"style":
+    			{
+    				"fontSize":"20px",
+    				"backgroundColor":"#444",
+    				"borderLeft":"5px solid red",
+					"margin":"0 0 1em 0"
+    			}
+    	};
 	twiki.HTML.setNodeAttributesInList(element.getElementsByTagName('ul'), attributes);
 	
+	// example 3: reverse texts
+	reverseNodeTextsInList(element.getElementsByTagName('p'));
+
 	// return HTML to be cached
 	return twiki.HTML.getHtmlOfElementWithId(inId);
 }
@@ -594,7 +620,7 @@ Behaviour.register(myrules);
 </blockquote>
 %ENDTWISTY%
 
----+++ Demo
+---+++!! Demo
 
 %TWISTY{id="example_htmlProcessing_caching_demo" mode="div" showlink="Show (cached)" hidelink="Hide"
 showimgleft="%ICONURLPATH{toggleopen-small}%" 
@@ -619,34 +645,37 @@ twiki.AjaxRequest.setProperties(
 	});
 	
 function handleHtml (inId, inHtml) {
+
 	// example 1: wrap in styled container
 	var processedHtml = "<h2>Processed text:<\/h2>" + 
 		"<div style=\"font-style:italic;\">" +
 		inHtml +
 		"<\/div>";
 	var element = twiki.HTML.setHtmlOfElementWithId(inId, processedHtml);
-
-	// example 2: reverse texts
-	reverseNodeTextsInList(element.getElementsByTagName('p'));
-	
-	// example 3: style list elements
+		
+	// example 2: style list elements
 	var attributes = {
-		"class":"twikiSmall twikiGrayText",
-		"style":
-			{
-				"color":"#fff",
-				"backgroundColor":"#444"
-			}
-	};
+    		"class":"twikiSmall twikiGrayText",
+    		"style":
+    			{
+    				"fontSize":"20px",
+    				"backgroundColor":"#444",
+    				"borderLeft":"5px solid red",
+					"margin":"0 0 1em 0"
+    			}
+    	};
 	twiki.HTML.setNodeAttributesInList(element.getElementsByTagName('ul'), attributes);
 	
+	// example 3: reverse texts
+	reverseNodeTextsInList(element.getElementsByTagName('p'));
+
 	// return HTML to be cached
 	return twiki.HTML.getHtmlOfElementWithId(inId);
 }
 
 function reverseNodeTextsInList (inNodeList) {
 	var i, ilen = inNodeList.length;
-	for (i=0; i<ilen; ++i) {	
+	for (i=0; i<ilen; ++i) {
 		var node = inNodeList[i];
 		if (node && node.nodeType == 3) {
 			node.data = reverseText(node.data);
@@ -705,41 +734,44 @@ hideimgleft="%ICONURLPATH{code}%"}%
 <blockquote>
 <verbatim>
 twiki.AjaxRequest.setProperties(
-	"CITY_DATA",
+	"COUNTRIES",
 	{
 		url:"%PUBURL%/%TWIKIWEB%/TWikiAjaxContribExamples/test_cities.xml?",
-		handler:"processCityData",
+		handler:"processCountryData",
 		scope:this,
 		type:"xml",
-		container:"weatherContainer"
+		container:"countriesContainer"
 	});
 	
-function processCityData (inId, inXml) {
-	var cities = [];
-	var doc = inXml.firstChild; // world
-	for (var i=0; i<doc.childNodes.length; i++) {
-		if (doc.getElementsByTagName('airport')[i].hasChildNodes()) {
-			cities.push(doc.getElementsByTagName('airport')[i].firstChild.data);
-		}	
+function processCountryData (inContainerId, inXml) {
+	var countries = [];
+	var elems = inXml.getElementsByTagName("country");
+	if (elems) {
+		for (var i=0; i<elems.length; i++) {
+			countries[i] = elems[i].getAttribute("name");
+		}
+		countries.sort();
 	}
-	cities.sort();
 	var outText = "";
-	var ilen = cities.length;
+	var ilen = countries.length;
+	if (ilen == 0) return;
+	
 	for (var i=0; i<ilen; ++i) {
-		outText += "<li>" + cities[i] + "<\/li>"
+		outText += "<li>" + countries[i] + "<\/li>"
 	}
 	outText = "<ul>" + outText + "<\/ul>";
-	twiki.HTML.setHtmlOfElementWithId(inId, outText);
+	twiki.HTML.setHtmlOfElementWithId(inContainerId, outText);
 }
 
-function showCityData () {
-	twiki.AjaxRequest.load("CITY_DATA");
+
+function showCountries () {
+	twiki.AjaxRequest.load("COUNTRIES");
 }
 
 var myrules = {
 	'#loadXmlDataButton' : function(el) {
 		el.onclick = function() {
-			showCityData();
+			showCountries();
 			return false;
 		}
 	}
@@ -749,52 +781,54 @@ Behaviour.register(myrules);
 </blockquote>
 %ENDTWISTY%
 
----+++ Demo
+---+++!! Demo
 
 <input id="loadXmlDataButton" class="twikiButton" type="button" value="Load XML data" />
 <br />
 <div style="margin:1em 0 0 0;">
-	<div id="xmlDataContainer" style="width:300px; height:300px; overflow:auto; padding:10px; border:1px solid #999;">Airport cities</div>
+	<div id="xmlDataContainer" style="width:300px; height:300px; overflow:auto; padding:10px; border:1px solid #999;">Countries</div>
 </div>
 
 <script type="text/javascript">
 // <![CDATA[
 twiki.AjaxRequest.setProperties(
-	"CITY_DATA",
+	"COUNTRIES",
 	{
 		url:"%PUBURL%/%TWIKIWEB%/TWikiAjaxContribExamples/test_cities.xml?",
-		handler:"processCityData",
+		handler:"processCountryData",
 		scope:this,
 		type:"xml",
 		container:"xmlDataContainer"
 	});
 	
-function processCityData (inId, inXml) {
-	var cities = [];
-	var doc = inXml.firstChild; // world
-	for (var i=0; i<doc.childNodes.length; i++) {
-		if (doc.getElementsByTagName('airport')[i].hasChildNodes()) {
-			cities.push(doc.getElementsByTagName('airport')[i].firstChild.data);
-		}	
+function processCountryData (inContainerId, inXml) {
+	var countries = [];
+	var elems = inXml.getElementsByTagName("country");
+	if (elems) {
+		for (var i=0; i<elems.length; i++) {
+			countries[i] = elems[i].getAttribute("name");
+		}
+		countries.sort();
 	}
-	cities.sort();
 	var outText = "";
-	var ilen = cities.length;
+	var ilen = countries.length;
+	if (ilen == 0) return;
+	
 	for (var i=0; i<ilen; ++i) {
-		outText += "<li>" + cities[i] + "<\/li>"
+		outText += "<li>" + countries[i] + "<\/li>"
 	}
 	outText = "<ul>" + outText + "<\/ul>";
-	twiki.HTML.setHtmlOfElementWithId(inId, outText);
+	twiki.HTML.setHtmlOfElementWithId(inContainerId, outText);
 }
 
-function showCityData () {
-	twiki.AjaxRequest.load("CITY_DATA");
+function showCountries () {
+	twiki.AjaxRequest.load("COUNTRIES");
 }
 
 var myrules = {
 	'#loadXmlDataButton' : function(el) {
 		el.onclick = function() {
-			showCityData();
+			showCountries();
 			return false;
 		}
 	}
@@ -837,7 +871,7 @@ Behaviour.register(myrules);
 </blockquote>
 %ENDTWISTY%
 
----+++ Demo
+---+++!! Demo
 
 <div class="twikiPageForm">
 <form id="searchForm" name="searchForm" action="postSearchForm()">
@@ -937,7 +971,7 @@ Behaviour.register(myrules);
 </blockquote>
 %ENDTWISTY%
 
----+++ Demo
+---+++!! Demo
 
 <input id="failureButton" class="twikiButton" type="button" value="Load (failing) contents" />
 <br />

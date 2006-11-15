@@ -6,7 +6,7 @@
 Goals are:
    * To make it possible for *plugins and skins to cooperate* when dealing with AJAX requests without having to plan the order of processing javascript code (plugin code first or skin/template code first)
    * To make AJAX calls *easier to write,* for instance by simply appointing a target container plus data url
-   * Be able to fetch *HTML or XML*
+   * Be able to fetch *HTML, XML or Javascript*
       * The technique of fetching HTML with asynchronous communication is also known as [[Wikipedia:AHAH][AHAH]].
    * To be able to *cache* fetched and processed data
    * To facilitate *error feedback*
@@ -95,11 +95,27 @@ twiki.AjaxRequest.load("SEARCHRESULTS");
 
 
 
----+++ Page parts / Named sections
+---+++ Page parts / Named Sections
 
-_This demo illustrates functionality that is available from TWiki SVN 11890._
+_This demo illustrates functionality that is available since TWiki SVN 11890._
 
-%ICON{hand}% [[TWikiAjaxContribExamples#Page_parts_Named_sections][View demo Named sections]]
+A named section from a TWiki topic can be fetched using the url param =section= (combined with =skin=text= to get clean results).
+
+To fetch the secion named "updates":
+
+<blockquote>
+<verbatim>
+var url = "%SCRIPTURL{"view"}%/%WEB%/%TOPIC%?section=updates;skin=text";
+twiki.AjaxRequest.load("UPDATES", 
+	{
+		url:url,
+		container:"updatesDiv"
+	});
+</verbatim>
+</blockquote>
+
+%ICON{hand}% [[TWiki.TWikiVariables#STARTSECTION_marks_the_start_of][Documentation about STARTSECTION variable]] %BR%
+%ICON{hand}% [[TWikiAjaxContribExamples#Page_parts_Named_sections][View demo Named Sections]]
 
 
 
@@ -262,7 +278,7 @@ Loading ready HTML is the easiest use of !TWikiAjaxContrib as it requires no dat
 Assign a custom processing handler with the properties =handler= (the processing function) and =scope= (the function owner). %BR%
 The function itself should accept 2 parameters: =inId= and =inHtml=, and should return the processed HTML so it can be cached.
 
-To fetch XML instead of HTML, give property =type= the value ="xml"= (by default =type= is ="txt"=).
+To fetch XML instead of HTML, give property =type= the value ="xml"= (by default =type= is ="text"=).
 
 <blockquote>
 <verbatim>
@@ -309,6 +325,48 @@ twiki.AjaxRequest.load(
 </blockquote>
 
 %ICON{hand}% [[TWikiAjaxContribExamples#Sending_data_with_POST][View demo Sending data with POST]]
+
+
+---+++ Fetching javascript
+---++++ Javascript code
+If a page you are fetching contains javascript, you must load the javascript code separately.
+
+This is illustrated in the [[TWikiAjaxContribExamples#Page_parts_Named_sections][Named Sections demo]], where the fetched page section contains javascript calls to code on that same page. The javascript code will not work when fetched in the usual way.
+
+The solution is to create a separate request for the script section:
+
+<blockquote>
+<verbatim>
+var javascriptUrl = "%SCRIPTURL{"view"}%/%TWIKIWEB%/WebTopicCreator?skin=text"
+				+ ";section=javascriptfunctions";
+
+twiki.AjaxRequest.load("NEWTOPICFORM_JS",
+{
+	url:javascriptUrl,
+	type:"script"
+});
+</verbatim>
+</blockquote>
+
+The fetched code will be attached to the head node of the DOM.
+
+%ICON{hand}% [[TWikiAjaxContribExamples#Page_parts_Named_sections][View demo Named Sections]]
+
+---++++ Javascript files
+You can also load javascript files directly. A javascript file request is actually not sent using the =XMLHttpRequest= object, but attached to the head node directly. Retrieval is often very fast!
+
+To load a script file, use =type:"scriptfile"=:
+
+<blockquote>
+<verbatim>
+var url = "%PUBURL%/%WEB%/TopicWithScript/showAlert.js";
+twiki.AjaxRequest.load("LOADSCRIPT", 
+	{
+		url:url,
+		type:"scriptfile"
+	});
+</verbatim>
+</blockquote>
 
 
 ---+++ Dealing with failure
@@ -388,7 +446,7 @@ Properties that can be passed to a request:
 | =scope=        | Owner of =handler= | Object | =twiki.AjaxRequest= (singleton) instance |
 | =failHandler=  | Name of function to process the response data in case of failure | String | =_defaultFailHandler= (private&nbsp;method) |
 | =failScope=    | Owner of =failHandler= | Object | =twiki.AjaxRequest= (singleton) instance |
-| =type=         | Type of response data: text (=txt=) or XML (=xml=)  | String | =txt=  |
+| =type=         | Type of response data: text (=text=), XML (=xml=), javascript code (=script=) or javascript file reference (=scriptfile=)  | String | =text=  |
 | =cache=        | Cached state of response data | Boolean  | =false=  |
 | =method=       | Method of sending data: =GET= or =POST=  | String  | =GET=  |
 | =postData=     | Data to send with a POST request | String | none |
@@ -420,6 +478,7 @@ See TWikiAjaxContribExamples
 | Copyright &copy;: | 2006 Arthur Clemens |
 | License: | [[http://www.gnu.org/copyleft/gpl.html][GPL]] |
 | Dependencies: | %$DEPENDENCIES% |
+| 15 Nov 2006 | 0.8.4 Support for including topic sections. Allows javascript code to be included with =type="script"= or =type="scriptfile"=  |
 | 6 Nov 2006 | 0.8.3 Updated examples with twiki javascript class twiki.HTML  |
 | 5 Nov 2006 | 0.8.2 Updated with dependency on twiki javascript class twiki.Array  |
 | 4 Nov 2006 | 0.8.1 Changed package =TWiki= to lowercase =twiki=  |
