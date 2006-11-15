@@ -554,6 +554,9 @@ sub moveWeb {
     if( $TWiki::cfg{Log}{rename} ) {
         $this->{session}->writeLog( 'renameweb', $oldWeb, 'moved to '.$newWeb, $user );
     }
+
+    # alert plugins of web move
+    $this->{session}->{plugins}->afterRenameHandler( $oldWeb, '', '', $newWeb, '', '' );
 }
 
 =pod

@@ -663,14 +663,14 @@ sub afterSaveHandler {
 
 ---++ ObjectMethod afterRenameHandler ( $oldWeb, $oldTopic, $oldAttachment, $newWeb, $newTopic, $newAttachment )
 
-Called just after the rename/move/delete action of a topic or attachment.
+Called just after the rename/move/delete action of a web, topic or attachment.
 
    * =$oldWeb= - name of old web
-   * =$oldTopic= - name of old topic
-   * =$oldAttachment= - name of old attachment (empty string if topic rename)
+   * =$oldTopic= - name of old topic (empty string if web rename)
+   * =$oldAttachment= - name of old attachment (empty string if web or topic rename)
    * =$newWeb= - name of new web
-   * =$newTopic= - name of new topic
-   * =$newAttachment= - name of new attachment (empty string if topic rename)
+   * =$newTopic= - name of new topic (empty string if web rename)
+   * =$newAttachment= - name of new attachment (empty string if web or topic rename)
 
 =cut
 
