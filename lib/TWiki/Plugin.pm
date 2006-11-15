@@ -36,6 +36,7 @@ use vars qw( @registrableHandlers %deprecated );
    'afterAttachmentSaveHandler',   # 1.022
    'afterCommonTagsHandler',       # 1.024
    'afterEditHandler',             # 1.010
+   'afterRenameHandler',           # 1.110
    'afterSaveHandler',             # 1.020
    'beforeAttachmentSaveHandler',  # 1.022
    'beforeCommonTagsHandler',      # 1.024

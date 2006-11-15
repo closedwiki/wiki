@@ -276,6 +276,10 @@ sub moveAttachment {
         $this->unlockTopic( $user, $oldWeb, $oldTopic );
         $this->unlockTopic( $user, $newWeb, $newTopic );
     };
+
+    # alert plugins of attachment move
+    $this->{session}->{plugins}->afterRenameHandler( $oldWeb, $oldTopic, $oldAttachment,
+                                                     $newWeb, $newTopic, $newAttachment );
 }
 
 =pod
@@ -478,6 +482,10 @@ sub moveTopic {
         my $new = $newWeb.'.'.$newTopic;
         $this->{session}->writeLog( 'rename', $old, "moved to $new", $user );
     }
+
+    # alert plugins of topic move
+    $this->{session}->{plugins}->afterRenameHandler( $oldWeb, $oldTopic, '',
+                                                     $newWeb, $newTopic, '' );
 }
 
 # update .changes for statistics and mailer

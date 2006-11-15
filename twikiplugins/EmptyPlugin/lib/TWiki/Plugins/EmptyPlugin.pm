@@ -496,6 +496,31 @@ sub DISABLE_afterSaveHandler {
 
 =pod
 
+---++ afterRenameHandler( $oldWeb, $oldTopic, $oldAttachment, $newWeb, $newTopic, $newAttachment )
+
+   * =$oldWeb= - name of old web
+   * =$oldTopic= - name of old topic
+   * =$oldAttachment= - name of old attachment (empty string if topic rename)
+   * =$newWeb= - name of new web
+   * =$newTopic= - name of new topic
+   * =$newAttachment= - name of new attachment (empty string if topic rename)
+
+This handler is called just after the rename/move/delete action of a topic or attachment.
+
+__Since:__ TWiki::Plugins::VERSION = '1.110'
+
+=cut
+
+sub DISABLE_afterRenameHandler {
+    # do not uncomment, use $_[0], $_[1]... instead
+    ### my ( $oldWeb, $oldTopic, $oldAttachment, $newWeb, $newTopic, $newAttachment ) = @_;
+
+    TWiki::Func::writeDebug( "- ${pluginName}::afterRenameHandler( " .
+                             "$_[0].$_[1] $_[2] -> $_[3].$_[4] $_[5] )" ) if $debug;
+}
+
+=pod
+
 ---++ beforeAttachmentSaveHandler(\%attrHash, $topic, $web )
    * =\%attrHash= - reference to hash of attachment attribute values
    * =$topic= - the name of the topic in the current CGI query

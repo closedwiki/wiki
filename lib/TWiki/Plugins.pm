@@ -96,7 +96,7 @@ as kernel methods may change between TWiki releases.
 
 =cut
 
-$VERSION = '1.1';
+$VERSION = '1.11';
 
 $inited = 0;
 
@@ -657,6 +657,27 @@ sub afterSaveHandler {
     my $this = shift;
     #my ( $theText, $theTopic, $theWeb, $error, $meta ) = @_;
     $this->_dispatch( 'afterSaveHandler', @_ );
+}
+
+=pod
+
+---++ ObjectMethod afterRenameHandler ( $oldWeb, $oldTopic, $oldAttachment, $newWeb, $newTopic, $newAttachment )
+
+Called just after the rename/move/delete action of a topic or attachment.
+
+   * =$oldWeb= - name of old web
+   * =$oldTopic= - name of old topic
+   * =$oldAttachment= - name of old attachment (empty string if topic rename)
+   * =$newWeb= - name of new web
+   * =$newTopic= - name of new topic
+   * =$newAttachment= - name of new attachment (empty string if topic rename)
+
+=cut
+
+sub afterRenameHandler {
+    my $this = shift;
+    #my ( $oldWeb, $oldTopic, $oldAttachment, $newWeb, $newTopic, $newAttachment ) = @_;
+    $this->_dispatch( 'afterRenameHandler', @_ );
 }
 
 =pod
