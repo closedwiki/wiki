@@ -6,7 +6,7 @@
 %STARTSECTION{"javascriptfunctions"}%
 <script type="text/javascript" src="%PUBURLPATH%/%TWIKIWEB%/TWikiJavascripts/unicode_chars.js"></script>
 <script type="text/javascript">
-//<![CDATA[
+/* <![CDATA[ */
 /**
 Checks if the entered topic name is a valid WikiWord.
 If so, enables the submit button, if not: enables the submit button 
@@ -24,21 +24,23 @@ function canSubmit(inForm, inShouldConvertInput) {
 	
 	var inputForTopicName = inForm.topic.value;
 
-	// Topic names of zero length are not allowed
+	/* Topic names of zero length are not allowed */
 	if (inputForTopicName.length == 0) {
 		disableSubmit(inForm.submit);
-		// Update feedback field
+		/* Update feedback field */
 		insertHtml("", "webTopicCreatorFeedback");
 		return false;
 	}
 	
 	var userAllowsNonWikiWord = inForm.nonwikiword.checked;
 
-	// check if current input is a valid WikiWord
+	/* check if current input is a valid WikiWord */
 	var noSpaceName = removeSpacesAndPunctiation(inputForTopicName);
 
-	// if necessary, create a WikiWord from the input name
-	// (when a non-WikiWord is not allowed)
+	/*
+	if necessary, create a WikiWord from the input name
+	(when a non-WikiWord is not allowed)
+	*/
 	var wikiWordName = noSpaceName;
 	if (!userAllowsNonWikiWord) {
 		wikiWordName = removeSpacesAndPunctiation(capitalize(inputForTopicName));
@@ -49,13 +51,15 @@ function canSubmit(inForm, inShouldConvertInput) {
 		if (!userAllowsNonWikiWord) inForm.topic.value = wikiWordName;
 	}
 
-	// Update feedback field
+	/* Update feedback field */
 	feedbackHeader = "<strong>%MAKETEXT{"Topic will be named: "}%</strong>";
 	feedbackText = feedbackHeader + wikiWordName;
 	insertHtml(feedbackText, "webTopicCreatorFeedback");
 
-	// Update hidden field value
-	// Use the negative value of the checkbox. This is the ugly way but must be used until edit script parameter =allowsnonwikiword= is implemented.
+	/*
+	Update hidden field value
+	Use the negative value of the checkbox. This is the ugly way but must be used until edit script parameter =allowsnonwikiword= is implemented.
+	*/
 	inForm.onlywikiname.value = userAllowsNonWikiWord ? "off" : "on";
 
 	if (isWikiWord(wikiWordName) || userAllowsNonWikiWord) {
@@ -80,7 +84,7 @@ function disableSubmit(inButton) {
 	addClass(inButton, "twikiSubmitDisabled");
 	inButton.disabled = true;
 }
-//]]>
+/* ]]> */
 </script>
 %ENDSECTION{"javascriptfunctions"}%
 <form name="newtopic" id="newtopic" action="%SCRIPTURLPATH{edit}%/%BASEWEB%/" onsubmit="return canSubmit(this,true);">%ENDSECTION{"formstart"}%
