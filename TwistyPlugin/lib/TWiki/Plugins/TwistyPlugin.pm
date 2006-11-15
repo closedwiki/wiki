@@ -153,17 +153,11 @@ sub _ENDTWISTYTOGGLE {
     return $modeTag._twistyCloseDiv();
 }
 
-=pod
-Disables _TWISTYSCRIPT tags written in the topic text.
-=cut
-
-sub beforeCommonTagsHandler {
-	# do not uncomment, use $_[0], $_[1]... instead
-	$_[0] =~ s/%_TWISTYSCRIPT{\"(.*?)\"}%/$1/g;
-}
 
 =pod
+
 Convert the semi-variable tag to JavaScript.
+
 =cut
 
 sub postRenderingHandler {
