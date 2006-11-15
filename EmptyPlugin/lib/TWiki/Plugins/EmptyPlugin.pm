@@ -499,13 +499,13 @@ sub DISABLE_afterSaveHandler {
 ---++ afterRenameHandler( $oldWeb, $oldTopic, $oldAttachment, $newWeb, $newTopic, $newAttachment )
 
    * =$oldWeb= - name of old web
-   * =$oldTopic= - name of old topic
-   * =$oldAttachment= - name of old attachment (empty string if topic rename)
+   * =$oldTopic= - name of old topic (empty string if web rename)
+   * =$oldAttachment= - name of old attachment (empty string if web or topic rename)
    * =$newWeb= - name of new web
-   * =$newTopic= - name of new topic
-   * =$newAttachment= - name of new attachment (empty string if topic rename)
+   * =$newTopic= - name of new topic (empty string if web rename)
+   * =$newAttachment= - name of new attachment (empty string if web or topic rename)
 
-This handler is called just after the rename/move/delete action of a topic or attachment.
+This handler is called just after the rename/move/delete action of a web, topic or attachment.
 
 __Since:__ TWiki::Plugins::VERSION = '1.110'
 
