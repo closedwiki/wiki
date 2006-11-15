@@ -386,16 +386,29 @@ sub handleDecode
 {
     my( $theStr ) = @_;
 
-    # entity decode
+    # entity decode - Cairo: &#34;, Dakar: &#034;
+    $theStr =~ s/\&\#34;/\"/g;
     $theStr =~ s/\&\#034;/\"/g;
+    $theStr =~ s/\&\#37;/\%/g;
     $theStr =~ s/\&\#037;/\%/g;
+    $theStr =~ s/\&\#38;/\&/g;
+    $theStr =~ s/\&\#038;/\&/g;
+    $theStr =~ s/\&\#39;/\'/g;
+    $theStr =~ s/\&\#039;/\'/g;
+    $theStr =~ s/\&\#42;/\*/g;
     $theStr =~ s/\&\#042;/\*/g;
-    $theStr =~ s/\&\#095;/\_/g;
-    $theStr =~ s/\&\#061;/\=/g;
-    $theStr =~ s/\&\#091;/\[/g;
-    $theStr =~ s/\&\#093;/\]/g;
+    $theStr =~ s/\&\#60;/\</g;
     $theStr =~ s/\&\#060;/\</g;
+    $theStr =~ s/\&\#61;/\=/g;
+    $theStr =~ s/\&\#061;/\=/g;
+    $theStr =~ s/\&\#62;/\>/g;
     $theStr =~ s/\&\#062;/\>/g;
+    $theStr =~ s/\&\#91;/\[/g;
+    $theStr =~ s/\&\#091;/\[/g;
+    $theStr =~ s/\&\#93;/\]/g;
+    $theStr =~ s/\&\#093;/\]/g;
+    $theStr =~ s/\&\#95;/\_/g;
+    $theStr =~ s/\&\#095;/\_/g;
     $theStr =~ s/\&\#124;/\|/g;
 
     return $theStr;
