@@ -41,9 +41,6 @@ sub set_up {
     
     $TWiki::cfg{TemplateDir} = $test_tmpls;
     $TWiki::cfg{DataDir} = $test_data;
-    $TWiki::cfg{TemplatePath} = '$TWiki::cfg{PubDir}/$web/$name.$skin.tmpl,$TWiki::cfg{TemplateDir}/$web/$name.$skin.tmpl,$TWiki::cfg{TemplateDir}/$name.$skin.tmpl,$TWiki::cfg{TemplateDir}/$web/$name.tmpl,$TWiki::cfg{TemplateDir}/$name.tmpl,$web.$skinSkin$nameTemplate,$TWiki::cfg{SystemWebName}.$skinSkin$nameTemplate,$web.$nameTemplate,$TWiki::cfg{SystemWebName}.$nameTemplate';
-    $TWiki::cfg{TemplatePath} =~ s/\$TWiki::cfg{TemplateDir}/$TWiki::cfg{TemplateDir}/geo;
-    $TWiki::cfg{TemplatePath} =~ s/\$TWiki::cfg{SystemWebName}/$TWiki::cfg{SystemWebName}/geo;
 
 }
 
