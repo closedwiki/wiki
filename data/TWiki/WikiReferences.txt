@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1163743824" format="1.0" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiSite"}%
 ---+!! References on Wiki and Collaboration
 
@@ -10,7 +10,7 @@ Some useful articles and books around collaboration and the Wiki technology in p
 
    * Book: The Wiki Way, Quick Collaboration on the Web; by Bo Leuf and Ward Cunningham; Addison-Wesley Pub Co; ISBN:020171499X
 
-   * Book: Wiki Tools: Web Collaboration; by Anja Ebersbach, Markus Glaser, Richard Heigl; Springer; ISBN:3540259953 (the book is about TWiki and <nop>MediaWiki; German version is [[http://www.wiki-tools.de/]["WikiTools: Kooperation im Web"]])
+   * Book: Wiki: Web Collaboration; by Anja Ebersbach, Markus Glaser, Richard Heigl; Springer; ISBN:3540259953. The book is about TWiki and <nop>MediaWiki; [[http://www.springerlink.com/content/978-3-540-29267-8/][Free eBook]] is available; German version is "[[http://www.wiki-tools.de/][WikiTools: Kooperation im Web]]".
 
    * Presentation: Wiki Collaboration and Wiki Applications for the Enterprise; by Peter Thoeny; !LinuxWorld; 11 Aug 2005; http://TWiki.org/cgi-bin/view/Codev/TWikiPresentation11Aug2005
 
