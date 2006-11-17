@@ -19,6 +19,27 @@ This plugin has two standard modes:
 
 For the majority of users, these commands should be sufficient 
 
+---++++ Example
+
+<table width="600" align="center" border=1><tr><td>
+%PURPLE%This is an example of the %BEGINLATEX{inline="1" density="200" gamma="1.0" color="Purple"}%\LaTeX%ENDLATEX% rendering possibilities using the LatexModePlugin.%ENDCOLOR%
+
+<blockquote>
+The singular value decomposition of a matrix %$A$% is defined as
+%BEGINLATEX{label="one" color="Green"}%
+\begin{displaymath}
+A = U \Sigma V^H
+\end{displaymath}
+%ENDLATEX%
+where %$U$% and %$V$% are both matrices with orthonormal columns, %$\{\cdot\}^H$% indicates a complex-conjugate transpose, and %$\Sigma$% is a diagonal matrix with singular values %\[ \sigma_1 > \sigma_2 > \cdots > \sigma_n \geq 0 \]% along the main diagonal.  Eq. %REFLATEX{one}% is just one of the many matrix decompositions that exists for matrix %$A$%.  
+</blockquote>
+</table>
+
+After the plugin has been succesfully installed and configured, this example should render like this:
+<div align="center">
+    <img src="%ATTACHURLPATH%/expl-v1.4.png" alt="expl-v1.4.png"  width="673" height="237"  />
+</div>
+
 ---+++ Extended Syntax
 
 For those that are well familiar with <nop>LaTeX, a multi-line syntax allowing more complicated markup commands can be declared using
@@ -43,7 +64,7 @@ Additional options can be included to modify the rendered result.  These include
 | bgcolor | --- | 'white' | sets background color (details below) |
 | color | --- | 'black' | sets foreground font color (details below) |
 | attachment | alpha-numeric | --- | allows one to couple the latex command with an attached file.  Useful for latex graphics commands.  |
-| useps | 0 or 1 | --- | force the use of =dvips= and =convert= in-place of =dvipng= for packages than need it, e.g. tikz. |
+| engine | {"", "ps", "pdf"} | "" | switch to dynamically force the rendering engine to use the default rendering (e.g. =dvipng=),  =dvips+convert=, or =pdflatex+convert= for <nop>LaTeX packages than need it, e.g. tikz. |
 </div>
 
 For example, to declare an equation to be numbered by TWiki (not in the <nop>LaTeX image) with a larger font size and in red, use the following syntax:
@@ -58,7 +79,14 @@ For example, to declare an equation to be numbered by TWiki (not in the <nop>LaT
 
 HTML references to Latex equations with a defined =&lt;label&gt;= can be generated using %<nop>REFLATEX{&lt;label&gt;}%.
 
----++++ recent updates 
+Both DENSITY and SCALE alter the rendered image size and quality. For example, if one doubles the DENSITY and halves the SCALE, the rendered image resolution will improve but keep the same image size on the rendered page.  (Note: DENSITY * SCALE is the same in both cases)
+<div align="center">
+| density = 116, scale = 2.0 : | %BEGINLATEX{density="116" scale="2.0"}% \[ \mathcal{A } \] %ENDLATEX% |
+| density = 232, scale = 1.0 : | %BEGINLATEX{density="232" scale="1.0"}% \[\mathcal{A}\] %ENDLATEX% | 
+</div>
+
+For regular browser viewing, the SCALE parameter sould be set to 1.0.  However, one can use these parameters to improve print quality when printing a topic.  To do this, increase the DENSITY setting (a value of 300 will give roughly 300dpi) and then set the SCALE setting below 1.0.
+
 
 v3.0 introduced the ability to include attachments in the latex markup
 processing.  This is most useful for graphics, e.g.
@@ -71,20 +99,29 @@ processing.  This is most useful for graphics, e.g.
 %<nop>ENDLATEX%
 </blockquote>
 
-v3.3 introduced the ability to switch rendering dynamically between dvipng
-and dvips+convert.  Some latex packages are not supported by dvipng, for
-example [[http://sourceforge.net/projects/pgf/][Ti<em>k</em>Z and PGF]].
-Rather than force all rendering to use the slower backend, this flag allows
-one to use dvipng rendering as the default, but fall back to dvips+convert
-in certain cases.
+v3.3 introduced the ability to switch rendering dynamically between dvipng,
+dvips+convert, and pdflatex+convert.  Some latex packages are not supported
+by dvipng, for example [[http://sourceforge.net/projects/pgf/][Ti<em>k</em>Z and PGF]].  Rather than force all rendering to use a slower background
+rendering engine, this switch allows one to use dvipng rendering as the
+default, but fall back to 'ps' or 'pdf' intermediate files in certain cases.
 
 <blockquote>
-%<nop>BEGINLATEX{ useps="1"}%
+%<nop>BEGINLATEX{ engine="ps"}%
 
 \fbox{ \begin{tikzpicture}[auto,bend right] \node (a) at (0:1) {$0^\circ$}; \node (b) at (120:1) {$120^\circ$}; \node (c) at (240:1) {$240^\circ$}; \draw (a) to node {1} node [swap] {1'} (b) (b) to node {2} node [swap] {2'} (c) (c) to node {3} node [swap] {3'} (a); \end{tikzpicture} } 
 
 %<nop>ENDLATEX%
 </blockquote>
+
+These options can of course, be combined.  e.g.
+<blockquote>
+%<nop>BEGINLATEX{attachment="fig2.png" engine="pdf"}%
+
+  \includegraphics[angle=30,scale=0.25]{fig2.png}
+
+%<nop>ENDLATEX%
+</blockquote>
+
 
 ---+++ Common Symbols
 
@@ -115,7 +152,7 @@ Sections can be numbered and labeled, for easy cross-referencing.  To label
 a section, add a %<nop>SECLABEL{_label_}% tag after the TWiki section
 command. E.g.,
 <verbatim>
-   ---++ %<nop>SECLABEL{sec:intro}% Introduction
+   ---++ %SECLABEL{sec:intro}% Introduction
 </verbatim>
 Cross-references to the label can be generated using %<nop>REFLATEX{sec:intro}%.
 
@@ -191,35 +228,6 @@ point to set preamble settings globally.  In contrast, the tag declaration
 will _add_ to the preamble defined by either the default settings or the
 preference setting, allowing TWiki users to amend the preamble.
 
----++ Examples
-
-<table width="600" align="center" border=1><tr><td>
-%PURPLE%This is an example of the %BEGINLATEX{inline="1" density="200" gamma="1.0" color="Purple"}%\LaTeX%ENDLATEX% rendering possibilities using the LatexModePlugin.%ENDCOLOR%
-
-<blockquote>
-The singular value decomposition of a matrix %$A$% is defined as
-%BEGINLATEX{label="one" color="Green"}%
-\begin{displaymath}
-A = U \Sigma V^H
-\end{displaymath}
-%ENDLATEX%
-where %$U$% and %$V$% are both matrices with orthonormal columns, %$\{\cdot\}^H$% indicates a complex-conjugate transpose, and %$\Sigma$% is a diagonal matrix with singular values %\[ \sigma_1 > \sigma_2 > \cdots > \sigma_n \geq 0 \]% along the main diagonal.  Eq. %REFLATEX{one}% is just one of the many matrix decompositions that exists for matrix %$A$%.  
-</blockquote>
-</table>
-
-After the plugin has been succesfully installed and configured, this example should render like this:
-<div align="center">
-    <img src="%ATTACHURLPATH%/expl-v1.4.png" alt="expl-v1.4.png"  width="673" height="237"  />
-</div>
-
-[Note: the following may or may not be useful...]
-Both DENSITY and SCALE alter the rendered image size and quality. For example, if one doubles the DENSITY and halves the SCALE, the rendered image resolution will improve but keep the same image size on the rendered page.  (Note: DENSITY * SCALE is the same in both cases)
-<div align="center">
-| density = 116, scale = 2.0 : | %BEGINLATEX{density="116" scale="2.0"}% \[ \mathcal{A } \] %ENDLATEX% |
-| density = 232, scale = 1.0 : | %BEGINLATEX{density="232" scale="1.0"}% \[\mathcal{A}\] %ENDLATEX% | 
-</div>
-
-For regular browser viewing, the SCALE parameter sould be set to 1.0.  However, one can use these parameters to improve print quality when printing a topic.  To do this, increase the DENSITY setting (a value of 300 will give roughly 300dpi) and then set the SCALE setting below 1.0.
 
 ---++ Plugin Settings
 
@@ -343,13 +351,13 @@ This plugin is an enhanced version of the TWiki:Plugins.MathModePlugin maintaine
 |  Plugin Author: | TWiki:Main.ScottHoge |
 |  Plugin Version: | 8 Aug 2006 (v 3.3) |
 |  Change History: | %ICON{warning}% v3.0 and above requires TWiki 4.x.x and above %ICON{warning}% <!-- versions below in reverse order --> |
-|  11 Nov 2006 (v 3.3) | added dynamic switching of rendering engine between dvipng and dvips+convert, more Parse bug fixes |
+|  11 Nov 2006 (v 3.3) | added dynamic switching of rendering engine, more Parse bug fixes |
 |  06 Oct 2006 (v 3.2) | more bugs fixed: bgcolor option was missing from v3.0; verbatim mode fixed in Parse |
 |  04 Oct 2006 (v 3.1) | fixed two bugs: populating files to check under Dakar, and itemize env parsing in Parse |
 |  30 Sep 2006 (v 3.0) | Significant rewrite of module, including: section numbering/cross-links and mod_perl compatibility. |
 |  25 Sep 2006 (v 2.62) | fixed handleFloat to allow TWiki markup tags in captions. |
 |  8 Aug 2006 (v 2.61) | fixed INCLUDE-not-rendering bug introduced in v2.6.  Aded =bgcolor= option.  Split symbol list into 5 topics. |
-|  5 Aug 2006 (v 2.6) | added security description and expanded default =donotrenderlist=.  Reworked plugin init to reduce overhead when not in use.  Added =bypssattach= option.  Sandbox now used in place of system calls. |
+|  5 Aug 2006 (v 2.6) | added security description and expanded default =donotrenderlist=.  Reworked plugin init to reduce overhead when not in use.  Added =bypassattach= option.  Sandbox now used in place of system calls. |
 |  19 May 2006 (v 2.51) | bug fix: =rerender= hook block of mailnotify corrected |
 |  14 Mar 2006 (v 2.5) | added =rerender= hook, fixed '&gt; in =alt= field' bug. |
 |  21 Feb 2006 (v 2.4) | introduced =donotrenderlist= to patch a critical security hole.  Bug fixes include: disabling <nop>WikiWord link rendering in =alt= fields of =img= tags; improved in-line rendering alignment available; |
