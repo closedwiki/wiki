@@ -315,7 +315,8 @@ my %simple = ( '~' => '&nbsp;',
                '\\aa' => '&aring;',
                '\\ae' => '&aelig;',
                '\\AE' => '&AElig;',
-               '\mainmatter' => '',
+               '\\mainmatter' => '',
+               '\\clearpage' => '',
                '\\sloppy' => '' );
 
 foreach my $c (keys %entities) {
@@ -437,7 +438,10 @@ sub extractBlocks {
         printF( "\n++ ".scalar(@a)."\n".$b );
         ## BEGINLATEX .. ENDLATEX blocks are now grouped, proceed to treat
         ## remaining tex commands of the form '\cmd{}' and '\cmd'
-        $b =~ s/\s+(\n?)$/$1/;
+        my $NN = ($b =~ m/(\n+)$/) ? $1 : '';
+        $b =~ s/\s+$//;
+        $b .= $NN;
+
 
         my ($cmd,$star,$opts) = ('','','');
         ($cmd,$star,$opts) = ($1,$2,$3) if
@@ -525,7 +529,13 @@ sub extractBlocks {
                 &convertSimple($pre);
                 $opts .= shift(@a) if ($a[0]=~m/^\{/);
 
-                $txt .= convertEmbed( $pre.' %<nop>BEGINLATEX% '.$cmd.$opts.' %ENDLATEX% ' );
+                &convertSimple($cmd);
+                if ($cmd =~ m/\\/) {
+                    $txt .= convertEmbed( $pre.' %<nop>BEGINLATEX% '.$cmd.$opts.' %ENDLATEX% ' );
+                } else {
+                    $txt .= $cmd;
+                }
+                        
             } 
         # } elsif ( $b =~ m/^\s*\\/ ) {
         #     if ( $a[0] =~ m/\{/) {
@@ -1106,7 +1116,7 @@ providing the core parsing routines.
 
 sub storeVerbatim {
     my $t = $_[0];
-    $t =~ s/\s/_/g if ($_[1] eq '*');
+    $t =~ s/\s/_/g if ( ($_[1]) and ($_[1] eq '*'));
     $t =~ s/(^\s+)|(\s+$)//g;   # TWiki requires no spaces between '=' and verbatim line
 
     push( @{ TWiki::Func::getContext()->{'LMPcontext'}->{'verb'} }, $t );
@@ -1189,7 +1199,7 @@ __DATA__
 :\hspace*:1::
 :\hspace:1::
 :\name:1:&addToTitle('<div align="center">$1</div>'):
-:\includegraphics:1:%BEGINLATEX{attachment="$1"}% \includegraphics$o{$1} %ENDLATEX%:
+:\includegraphics:1:%BEGINLATEX{attachment="$1" engine="ps"}% \includegraphics$o{$1} %ENDLATEX%:
 :\label:1:$1:  # modifies a past-parsed string to insert %SECLABEL% above
 :\bibliographystyle:1:&formBib('bibstyle="$1"'):
 :\bibliography:1:&formBib('file="$1"'):
@@ -1204,3 +1214,4 @@ __DATA__
 :\textit:1: _$1_ :
 :\textbf:1: *$1* :
 :\centerline:1:<div align="center">$1</div>:
+:\thispagestyle:1: :

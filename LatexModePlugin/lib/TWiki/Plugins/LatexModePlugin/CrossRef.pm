@@ -190,7 +190,7 @@ sub handleFloat
         my %tblrefs = defined(%{ $LMPc{'tblrefs'} }) ? %{$LMPc{'tblrefs'}} : ();
 
         my $infrmt = '<tr><td><td align="center">%s</td><td></tr>';
-        my $cpfrmt = '<tr><td><td width="90%%" style="lmp-caption"> *%s %d*: %s</td><td></tr>';
+        my $cpfrmt = '<tr><td><td width="90%%" id="lmp-caption"> *%s %d*: %s</td><td></tr>';
 
         if ($_[2] eq 'fig') {
             $LMPc{'fig'}++;

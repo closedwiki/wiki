@@ -45,6 +45,8 @@ my $pathSep = ($^O =~ m/^Win/i) ? "\\" : '/' ;
 
 my $PATHTOLATEX = $TWiki::cfg{Plugins}{LatexModePlugin}{latex} ||
     '/usr/share/texmf/bin/latex';
+my $PATHTOPDFLATEX = $TWiki::cfg{Plugins}{LatexModePlugin}{pdflatex} ||
+    '/usr/share/texmf/bin/pdflatex';
 my $PATHTODVIPS = $TWiki::cfg{Plugins}{LatexModePlugin}{dvips} ||
     '/usr/share/texmf/bin/dvips';
 my $PATHTOCONVERT = $TWiki::cfg{Plugins}{LatexModePlugin}{convert} ||
@@ -128,7 +130,7 @@ sub handleLatex
                  'gamma' =>   $LMPc{'default_gamma'}, 
                  'scale' =>   $LMPc{'default_scale'},
                  'bgcolor' => 'white',
-                 'useps' => 0,
+                 'engine' => 0,
                  'color' => 'black' );
 
     my %opts2 = TWiki::Func::extractParameters( $prefs );
@@ -320,6 +322,143 @@ COLORS
     return($txt);
 }
 
+sub createTempLatexFiles {
+
+    my %hashed_math_strings = %{ $_[0] };
+
+    my %LMPc = %{ &TWiki::Func::getContext()->{'LMPcontext'} };
+    # print STDERR '-'x70; print STDERR "\n";
+
+    my $pdf_image_number = 0;   # initialize the image count
+    my $dvi_image_number = 0;   # initialize the image count
+
+    #this hash table maps the digest strings to the output filenames
+    my %pdf_hash_code_mapping = ();
+    my %dvi_hash_code_mapping = ();
+
+    #create the intermediate latex file
+    do { $_[0] .= "<BR>can't write $LATEXFILENAME: $!\n"; 
+         return; } unless open( DVIOUT, ">$LATEXFILENAME" );
+
+    my $PDFLATEXFILENAME = 'pdf_'.$LATEXFILENAME;
+    do { $_[0] .= "<BR>can't write $PDFLATEXFILENAME: $!\n"; 
+         return; } unless open( PDFOUT, ">$PDFLATEXFILENAME" );
+
+    # disable commands flagged as 'do not render'
+    # e.g. lock-out the inclusion of other files via input/include
+    foreach my $c (@norender) {
+        $LMPc{'preamble'} =~ s!\\$c\b!\\verb-\\-$c!g;
+    }
+
+    my $txt = '';
+    if ( TWiki::Func::getContext()->{'LMPcontext'}->{'docclass'} ) {
+        $txt .= TWiki::Func::getContext()->{'LMPcontext'}->{'docclass'}."\n";
+    } else {
+        $txt .= "\\documentclass{article}\n";
+    }
+    $txt .= $LMPc{'preamble'}."\n\\begin{document}\n\\pagestyle{empty}\n";
+    print DVIOUT $txt;
+    print PDFOUT $txt;
+    
+    while( (my $key, my $value) = each( %hashed_math_strings ) ) {
+        
+        # restore the declared rendering options
+        my %opts = %{ $markup_opts{$key} };
+        # my %opts = defined($LMPc{'markup_opts'}{$key}) ? %{$LMPc{'markup_opts'}{$key}} : ();
+
+        $value =~ s/\n\s*?\n/\n/gs;
+        # disable commands flagged as 'do not render'
+        # e.g. lock-out the inclusion of other files via input/include
+        foreach my $c (@norender) {
+            $value =~ s!\\$c\b!\\verb-\\-$c!g;
+        }
+
+        if( exists($opts{'attachment'}) ) {
+            # copy image attachments to the working directory
+
+            my ($ext,$af) = ('','');
+            my @extlist = ('','.eps','.eps.gz','.pdf');
+            if ( ( $TWiki::Plugins::VERSION < 1.1 ) or
+                 ( $TWiki::cfg{Plugins}{LatexModePlugin}{bypassattach}) ) { 
+                # Cairo interface
+                
+                $af = join( $pathSep, &TWiki::Func::getPubDir(),
+                            $LMPc{'web'}, $LMPc{'topic'},
+                            $opts{'attachment'} );
+                
+                $af = TWiki::Sandbox::normalizeFileName( $af );
+
+                foreach my $e (@extlist) {
+                    $ext = $e;
+                    if (-f $af.$ext) {
+                        &TWiki::Func::writeDebug( "LatexModePlugin: copy ".$af.$ext ) 
+                            if ($debug);
+                        # copy( $af.$ext, $LATEXWDIR ) || do {
+                        copy( $af.$ext, "." ) || do {
+                            &TWiki::Func::writeDebug( "LatexModePlugin: copy failed ".$! );
+                            $value = "attachment \{".$markup_opts{$key}->{'attachment'}."\} not found";
+                        };
+                        $markup_opts{$key}->{'attachment'} .= $ext;
+                        
+                        last;
+                    }
+                }                
+            } else {
+                # Dakar interface
+                my $ext;
+                my $af= $opts{'attachment'};
+                foreach my $e (@extlist) {
+                    $ext = $e;
+                    if ( TWiki::Func::attachmentExists( $LMPc{'web'},
+                                                        $LMPc{'topic'},
+                                                        $af.$ext ) ) {
+                        
+                        $markup_opts{$key}->{'attachment'} .= $ext;
+                        
+                        open(F,">".'.'.$pathSep.$af.$ext);
+                        print F TWiki::Func::readAttachment( $LMPc{'web'},
+                                                             $LMPc{'topic'},
+                                                             $af.$ext );
+                        close(F);
+                        last;
+                    }
+                }
+            }
+        } # end of copy attachment piece
+        $value = " (attachment not found) "
+            if ( exists($markup_opts{$key}->{'attachment'}) and
+                 !(-f $markup_opts{$key}->{'attachment'}) );
+
+
+        &TWiki::Func::writeDebug( "LatexModePlugin: ".
+                                  $value . " :: " .
+                                  join('; ', map{"$_=>$opts{$_}"} keys(%opts))
+                                  ) if ($debug);
+        $txt = "\n\\clearpage\n";
+        # $txt .= "% $LATEXBASENAME.$EXT.$image_number --> $key \n";
+        $txt .= "% $key \n";
+        $txt .= '\pagecolor{'.$opts{'bgcolor'}."} \n" if ($LMPc{'use_color'} == 1 );
+        $txt .= '\textcolor{'.$opts{'color'}.'}{' if ($LMPc{'use_color'} == 1 );
+        $txt .= " $value ";
+        $txt .= '}' if ($LMPc{'use_color'} == 1);
+
+        if ( $opts{'engine'} eq 'pdf' ) {
+            print PDFOUT $txt;
+            $pdf_image_number++;
+            $pdf_hash_code_mapping{$key} = $pdf_image_number;
+        } else {
+            print DVIOUT $txt;
+            $dvi_image_number++;
+            $dvi_hash_code_mapping{$key} = $dvi_image_number;
+        }
+    }
+    $txt = "\n\\clearpage\n(end)\n\\end{document}\n";
+    print DVIOUT $txt; close( DVIOUT );
+    print PDFOUT $txt; close( PDFOUT );
+
+    return( \%dvi_hash_code_mapping, \%pdf_hash_code_mapping );
+}
+
 # =========================
 
 sub renderEquations {
@@ -446,136 +585,66 @@ sub renderEquations {
     print LF "$LATEXWDIR\n\n";
     close(LF);
 
-
-    my $image_number = 0;   # initialize the image count
-    #this hash table maps the digest strings to the output filenames
-    my %hash_code_mapping = ();
-
-    #create the intermediate latex file
-    do { $_[0] .= "<BR>can't write $LATEXFILENAME: $!\n"; 
-         return; } unless open( MATHOUT, ">$LATEXFILENAME" );
-
-    # disable commands flagged as 'do not render'
-    # e.g. lock-out the inclusion of other files via input/include
-    foreach my $c (@norender) {
-        $LMPc{'preamble'} =~ s!\\$c\b!\\verb-\\-$c!g;
-    }
-
-    if ( TWiki::Func::getContext()->{'LMPcontext'}->{'docclass'} ) {
-        print MATHOUT TWiki::Func::getContext()->{'LMPcontext'}->{'docclass'}."\n";
-    } else {
-        print MATHOUT "\\documentclass{article}\n";
-    }
-    print MATHOUT $LMPc{'preamble'}."\n\\begin{document}\n\\pagestyle{empty}\n";
-    while( (my $key, my $value) = each( %hashed_math_strings ) ) {
-        
-        # restore the declared rendering options
-        my %opts = %{ $markup_opts{$key} };
-        # my %opts = defined($LMPc{'markup_opts'}{$key}) ? %{$LMPc{'markup_opts'}{$key}} : ();
-
-        $value =~ s/\n\s*?\n/\n/gs;
-        # disable commands flagged as 'do not render'
-        # e.g. lock-out the inclusion of other files via input/include
-        foreach my $c (@norender) {
-            $value =~ s!\\$c\b!\\verb-\\-$c!g;
-        }
-
-        if( exists($opts{'attachment'}) ) {
-            # copy image attachments to the working directory
-
-            my ($ext,$af) = ('','');
-            my @extlist = ('','.eps','.eps.gz','.pdf');
-            if ( ( $TWiki::Plugins::VERSION < 1.1 ) or
-                 ( $TWiki::cfg{Plugins}{LatexModePlugin}{bypassattach}) ) { 
-                # Cairo interface
-                
-                $af = join( $pathSep, &TWiki::Func::getPubDir(),
-                            $LMPc{'web'}, $LMPc{'topic'},
-                            $opts{'attachment'} );
-                
-                $af = TWiki::Sandbox::normalizeFileName( $af );
-
-                foreach my $e (@extlist) {
-                    $ext = $e;
-                    if (-f $af.$ext) {
-                        &TWiki::Func::writeDebug( "LatexModePlugin: copy ".$af.$ext ) 
-                            if ($debug);
-                        copy( $af.$ext, $LATEXWDIR ) || do {
-                            &TWiki::Func::writeDebug( "LatexModePlugin: copy failed ".$! );
-                            $value = "attachment \{".$markup_opts{$key}->{'attachment'}."\} not found";
-                        };
-                        $markup_opts{$key}->{'attachment'} .= $ext;
-                        
-                        last;
-                    }
-                }                
-            } else {
-                # Dakar interface
-                my $ext;
-                my $af= $opts{'attachment'};
-                foreach my $e (@extlist) {
-                    $ext = $e;
-                    if ( TWiki::Func::attachmentExists( $LMPc{'web'},
-                                                        $LMPc{'topic'},
-                                                        $af.$ext ) ) {
-                        
-                        $markup_opts{$key}->{'attachment'} .= $ext;
-                        
-                        open(F,">".$LATEXWDIR.$pathSep.$af.$ext);
-                        print F TWiki::Func::readAttachment( $LMPc{'web'},
-                                                             $LMPc{'topic'},
-                                                             $af.$ext );
-                        close(F);
-                        last;
-                    }
-                }
-            }
-        } # end of copy attachment piece
-
-        &TWiki::Func::writeDebug( "LatexModePlugin: ".
-                                  $value . " :: " .
-                                  join('; ', map{"$_=>$opts{$_}"} keys(%opts))
-                                  ) if ($debug);
-        
-        print MATHOUT "\n\\clearpage\n";
-        print MATHOUT "% $LATEXBASENAME.$EXT.$image_number --> $key \n";
-        print MATHOUT '\pagecolor{'.$opts{'bgcolor'}."} \n" if ($LMPc{'use_color'} == 1 );
-        print MATHOUT '\textcolor{'.$opts{'color'}.'}{' if ($LMPc{'use_color'} == 1 );
-        print MATHOUT " $value ";
-        print MATHOUT '}' if ($LMPc{'use_color'} == 1);
-
-        $hash_code_mapping{$key} = $image_number + 1;
-        $image_number++;
-    }
-    print MATHOUT "\n\\clearpage\n(end)\n\\end{document}\n";
-    close( MATHOUT );
+    my ($dvim, $pdfm) = createTempLatexFiles( \%hashed_math_strings );
+    my %dvi_hash_code_mapping = %{ $dvim };
+    my %pdf_hash_code_mapping = %{ $pdfm };
 
     # generate the output images by running latex-dvips-convert on the file
     # system("$PATHTOLATEX -interaction=nonstopmode $LATEXFILENAME >> $LATEXLOG 2>&1");
-    $sandbox->sysCommand("$PATHTOLATEX ".
-                         ' -interaction=nonstopmode %FILE|F% ',
-                         FILE => $LATEXFILENAME
-                         );
-
-    ### report errors on 'preview' and 'save'
-    if ( ( TWiki::Func::getContext()->{'preview'} ) || 
-         ( TWiki::Func::getContext()->{'save'} ) ) {
-        # my $resp = `$GREP -A 3 -i "!" $LATEXLOG`;
-        (my $log = $LATEXFILENAME) =~ s/\.tex$/\.log/;
-        $sandbox->{TRACE} = 1;
-        my ($resp,$ret) = $sandbox->sysCommand( $GREP.' -A 1 ! %LOG|F%',
+    if ( scalar(%pdf_hash_code_mapping) ) {
+        $sandbox->sysCommand("$PATHTOPDFLATEX ".
+                             ' -interaction=nonstopmode %FILE|F% ',
+                             FILE => 'pdf_'.$LATEXFILENAME
+                             );
+        (my $log = 'pdf_'.$LATEXFILENAME) =~ s/\.tex$/\.log/;
+        my ($resp,$ret) = $sandbox->sysCommand( $GREP.' -A 2 Error %LOG|F%',
                                                 LOG => $LATEXWDIR.$pathSep.$log );
-        $_[0] .= "\n<hr>Latex rendering error messages:<pre>$resp</pre>\n" 
-          if ( ( length($resp) > 0 ) or ( $ret > 0 ) );
-        $sandbox->{TRACE} = 0;
+        ### report errors on 'preview' and 'save'
+        if ( ( TWiki::Func::getContext()->{'preview'} ) || 
+             ( TWiki::Func::getContext()->{'save'} ) ) {
+            
+            $_[0] .= "\n<hr>Latex rendering error messages:<pre>$resp</pre>\n" 
+                if ( ( length($resp) > 0 ) or ( $ret > 0 ) );
+        }
+    }
+    if ( scalar(%dvi_hash_code_mapping) ) {
+        $sandbox->sysCommand("$PATHTOLATEX ".
+                             ' -interaction=nonstopmode %FILE|F% ',
+                             FILE => $LATEXFILENAME
+                             );
+
+        ### report errors on 'preview' and 'save'
+        if ( ( TWiki::Func::getContext()->{'preview'} ) || 
+             ( TWiki::Func::getContext()->{'save'} ) ) {
+            # my $resp = `$GREP -A 3 -i "!" $LATEXLOG`;
+            (my $log = $LATEXFILENAME) =~ s/\.tex$/\.log/;
+            $sandbox->{TRACE} = 1;
+            
+            my ($resp,$ret) = $sandbox->sysCommand( $GREP.' -A 1 ! %LOG|F%',
+                                                    LOG => $LATEXWDIR.$pathSep.$log );
+            $_[0] .= "\n<hr>Latex rendering error messages:<pre>$resp</pre>\n" 
+                if ( ( length($resp) > 0 ) or ( $ret > 0 ) );
+            $sandbox->{TRACE} = 0;
+        }
     }
 
-    if ( -f $LATEXBASENAME.".dvi" ) {
-        &makePNGsFromDVI( \%hash_code_mapping, 
-                          $LMPc{'topic'}, $LMPc{'web'}, 
-                          $LATEXLOG, $LATEXWDIR );
-    } else {
-	$_[0] .= "<br>Latex rendering error!! DVI file was not created.<br>";
+    if (%dvi_hash_code_mapping) {
+        if ( -f $LATEXBASENAME.".dvi" ) {
+            &makePNGs( \%dvi_hash_code_mapping, 
+                       $LMPc{'topic'}, $LMPc{'web'}, 
+                       $LATEXLOG, $LATEXWDIR );
+        } else {
+            $_[0] .= "<br>Latex rendering error!! dvi file was not created.<br>";
+        }
+    }
+    if (%pdf_hash_code_mapping) {
+        if ( -f 'pdf_'.$LATEXBASENAME.".pdf" ) {
+            &makePNGs( \%pdf_hash_code_mapping, 
+                       $LMPc{'topic'}, $LMPc{'web'}, 
+                       $LATEXLOG, $LATEXWDIR );
+        } else {
+            $_[0] .= "<br>Latex rendering error!! pdf file was not created.<br>"
+            }
     }
 
     #clean up the intermediate files
@@ -588,7 +657,7 @@ sub renderEquations {
             my %opts = %{ $markup_opts{$key} };
             
             if( exists($opts{'attachment'}) ) {
-                # copy image attachments to the working directory
+                # delete image attachments from the working directory
                 my $af = join( '/', $LATEXWDIR,
                                $opts{'attachment'} );
                 unlink($af);
@@ -626,14 +695,13 @@ sub renderEquations {
 }
 
 
-sub makePNGsFromDVI {
+sub makePNGs {
 
     my ($h,$topic,$web,$LATEXLOG,$LATEXWDIR) = @_;
 
     my %hash_code_mapping = %{ $h };
 
     my $path = &TWiki::Func::getPubDir() . "/".$web.'/'.$topic;
-
 
     #generate image files based on the hash code
     while( (my $key, my $value) = each( %hash_code_mapping ) ) {
@@ -648,8 +716,11 @@ sub makePNGsFromDVI {
         my $num = $hash_code_mapping{$key};
 
         my $outimg = "latex$key.$EXT";
-        
-        if (  (-x $PATHTODVIPNG) and ($opts{'useps'} eq 0) ) {
+
+        system("echo \"engine: $opts{'engine'}\" >> $LATEXLOG") if ($debug);
+        if (  (-x $PATHTODVIPNG) and 
+              ($opts{'engine'} ne 'ps') and 
+              ($opts{'engine'} ne 'pdf') ) {
             # if dvipng is installed ...
             # $EXT = lc($EXT);
             # my $cmd = "$PATHTODVIPNG -D ".$opts{'density'}." -T tight".
@@ -667,6 +738,23 @@ sub makePNGsFromDVI {
                                   OUTIMG => $outimg,
                                   LOG => $LATEXLOG
                                   );
+
+        } elsif ($opts{'engine'} eq 'pdf') {
+
+            my $ccmd = $convertargs;
+            $ccmd .= " -transparent %BGC|S% " 
+                unless ( ($markup_opts{$key}{'inline'} ne 0) and
+                         ($tweakinline ne 0) );
+            $ccmd .= " %OUTIMG|F%";
+
+            $sandbox->sysCommand( $PATHTOCONVERT." $ccmd",
+                                  DENSITY => $opts{'density'},
+                                  EPS => 'pdf_'.$LATEXBASENAME.".pdf[".($num-1)."]",
+                                  EXT => lc($EXT),
+                                  GAMMA => $opts{'gamma'},
+                                  BGC => $opts{'bgcolor'},
+                                  OUTIMG => $outimg,
+                                  LOG => $LATEXLOG );
 
         } else {
             # OTW, use dvips/convert ...
