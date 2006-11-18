@@ -775,7 +775,7 @@ $TWiki::cfg{RCS}{filePermission}= 0644;
 # be able to simply copy files into a directory and have them appear as
 # attachments, and that's what this feature allows you to do.
 # Considered experimental.
-$TWiki::cfg{AutoAttachPubFiles} = $TRUE;
+$TWiki::cfg{AutoAttachPubFiles} = $FALSE;
 
 # **REGEX EXPERT**
 # Perl regular expression matching suffixes valid on plain text files
