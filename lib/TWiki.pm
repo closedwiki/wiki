@@ -2833,7 +2833,7 @@ sub _INCLUDE {
     # handle sections
     my( $ntext, $sections ) = parseSections( $text );
 
-    my $interesting = 0;
+    my $interesting = ( defined $section );
     if( scalar( @$sections )) {
         # Rebuild the text from the sections
         $text = '';
