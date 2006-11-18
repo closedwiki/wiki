@@ -596,3 +596,46 @@ These tests require TWiki:Plugins.JSUnitContrib to run.
 	Behaviour.register(myrules);
 /*]]>*/
 </script>
+
+---++ twiki.Event
+<script language="javascript" src="%PUBURL%/%TWIKIWEB%/TWikiJavascripts/twikiEvent.js"></script>
+
+---+++ twiki.Event.addLoadEvent
+
+<div id="testAddLoadEventContainer">Here goes...</div>
+
+<script language="javascript">
+/*<![CDATA[*/
+twiki.Event.addLoadEvent(
+	function() {
+		document.body.style.backgroundColor = '#ffc';
+	});
+
+twiki.Event.addLoadEvent(
+	function() {
+		document.getElementById("testAddLoadEventContainer").appendChild(document.createTextNode(' monkeys!'));
+	});
+
+twiki.Event.addLoadEvent(
+	function() {
+		document.getElementById("testAddLoadEventContainer").appendChild(document.createTextNode('Hungry'));
+	},
+	true);
+
+twiki.Event.addLoadEvent("createTextNode");
+	
+    function testAddLoadEventWithValidArgs() {
+    	
+    	assertEquals(
+    		"Text contents", 
+    		document.getElementById("testAddLoadEventContainer").innerHTML,
+    		"Here goes...Hungry monkeys!"
+    	);
+    }
+    function testAddLoadEventWithInvalidArgs() {
+    	// see addLoadEvent No. 4
+    }
+    
+/*]]>*/
+</script>
+

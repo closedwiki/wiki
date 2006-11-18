@@ -79,9 +79,7 @@ twiki.HTML = {
 	*/
 	deleteElement:function(inElement) {
 		if (!inElement) return null;
-		while(inElement.hasChildNodes()) {
-			inElement.removeChild(inElement.firstChild);
-		}
+		inElement.parentNode.removeChild(inElement);
 		return inElement;
 	},
 	
