@@ -8,6 +8,9 @@ This contrib packages the third-party =prototype= Javascript framework, availabl
 Prototype is freely distributable under the terms of an MIT-style license.
 For details, see the Prototype web site.
 
+---++ Documentation
+   * [[http://blogs.ebusiness-apps.com/jordan/pages/Prototype%20Library%20Info.htm][Overview of the Prototype Javascript Library]]
+   
 ---++ Contrib Info
 
 | Author: | Contrib packaged by  TWiki:Main.ArthurClemens |
