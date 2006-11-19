@@ -115,10 +115,11 @@ sub view {
 
         # So we're reading an existing topic here.  It is about time
         # to apply the 'section' selection (and maybe others in the
-        # future as well).  $text is unchanged unless a named section
+        # future as well).  $text is cleared unless a named section
         # matching the 'section' URL parameter is found.
         if (my $section  =  $query->param('section')) {
             my ( $ntext, $sections ) = TWiki::parseSections( $text );
+            $text = ''; # in the beginning, there was ... NO section
           FINDSECTION:
             for my $s (@$sections) {
                 if ($s->{type} eq 'section'  &&  $s->{name} eq $section) {

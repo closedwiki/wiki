@@ -73,16 +73,12 @@ sub test_sectionInner {
 
 # ----------------------------------------------------------------------
 # Purpose:  Test a non-existing section
-# Verifies: with parameter section=notExisting returns the whole topic
+# Verifies: with parameter section=notExisting returns nothing
 sub test_sectionNotExisting {
     my $this = shift;
     $runner->addScriptOptions(section => 'notExisting');
     my $result  =  $runner->run;
-    $this->assert_matches(qr(^\s?This is outside any section)s,$result);
-    $this->assert_matches(qr(This is the start of the outer section)s,$result);
-    $this->assert_matches(qr(This is the whole content of the inner section)s,$result);
-    $this->assert_matches(qr(This is the end of the outer section)s,$result);
-    $this->assert_matches(qr(This is after firstoverlap\s?$)s,$result);
+    $this->assert_equals('',$result);
 }
 
 1;
