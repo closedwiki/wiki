@@ -33,3 +33,9 @@ Additional Test Topic: IncludeFixtures
 %INCLUDE{"IncludeFixtures" section="secondoverlap"}%
 
 ---
+
+---++ Test Non-existing Section
+
+---
+%INCLUDE{"IncludeFixtures" section="nonexisting"}%
+---
