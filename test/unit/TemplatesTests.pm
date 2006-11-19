@@ -41,6 +41,9 @@ sub set_up {
     
     $TWiki::cfg{TemplateDir} = $test_tmpls;
     $TWiki::cfg{DataDir} = $test_data;
+    $TWiki::cfg{TemplatePath} = '$TWiki::cfg{PubDir}/$web/$name.$skin.tmpl,$TWiki::cfg{TemplateDir}/$web/$name.$skin.tmpl,$TWiki::cfg{TemplateDir}/$name.$skin.tmpl,$TWiki::cfg{TemplateDir}/$web/$name.tmpl,$TWiki::cfg{TemplateDir}/$name.tmpl,$web.$skinSkin$nameTemplate,$TWiki::cfg{SystemWebName}.$skinSkin$nameTemplate,$web.$nameTemplate,$TWiki::cfg{SystemWebName}.$nameTemplate';
+    $TWiki::cfg{TemplatePath} =~ s/\$TWiki::cfg{TemplateDir}/$TWiki::cfg{TemplateDir}/geo;
+    $TWiki::cfg{TemplatePath} =~ s/\$TWiki::cfg{SystemWebName}/$TWiki::cfg{SystemWebName}/geo;
 
 }
 
@@ -181,6 +184,25 @@ sub test_skinPathsTwoSkins {
 
     $data = $tmpls->readTemplate('kibble', 'suede', '' );
     $this->assert_str_equals("kibble", $data );
+}
+
+sub test_pathOdd {
+    my $this = shift;
+    my $data;
+
+    write_template( 'script.skin','script-skin' );
+    write_template( 'script.skinA.skin','script-skinA-skin' );
+
+    $data = $tmpls->readTemplate('script.skin', '', '' );
+    $this->assert_str_equals('script-skin', $data );
+
+    $data = $tmpls->readTemplate('script.skinA', 'skin', '' );
+    $this->assert_str_equals('script-skinA-skin', $data );
+
+    # Works but should never be called in code
+    $data = $tmpls->readTemplate('script', 'skinA.skin', '' );
+    $this->assert_str_equals('script-skinA-skin', $data );
+
 }
 
 sub test_WebTopicsA {

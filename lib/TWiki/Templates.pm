@@ -289,111 +289,61 @@ sub _readTemplateFile {
     }
 
     my @skinList = split( /\,\s*/, $skins );
+    my $nrskins = $#skinList;
+    
+    my @templatePath = split (/\s*,\s*/, $TWiki::cfg{TemplatePath});
 
-    # Search the web dir and the root dir for the skinned version first
+    # Search the $TWiki::cfg{TemplatePath} for the skinned versions
     my @candidates;
 
-    foreach my $skin ( @skinList ) {
-       foreach my $tmplDir ( "$TWiki::cfg{TemplateDir}/$web",
-                             $TWiki::cfg{TemplateDir} ) {
-          my $file=$tmplDir."/$name.$skin.tmpl";
-          my $candidate;
-          $candidate->{name}=$file;
-          $candidate->{validate} = \&validateFile;
-          $candidate->{retrieve} = \&TWiki::readFile;
-
-          push @candidates, $candidate;
-       }
-    }
-
-    # now search the web dir and the root dir for the unskinned version
-    foreach my $tmplDir ( "$TWiki::cfg{TemplateDir}/$web",
-                          $TWiki::cfg{TemplateDir} ) {
-       my $file=$tmplDir."/$name.tmpl";
-       my $candidate;
-       $candidate->{name}=$file;
-       $candidate->{validate} = \&validateFile;
-       $candidate->{retrieve} = \&TWiki::readFile;
-
-       push @candidates, $candidate;
-    }
-
-    # See if it is web.topic
+    my $userdirweb = $web;
+    my $userdirname = $name;
     if( $name =~ /^(.+)\.(.+?)$/ ) {
-        my $web = $1;
-        my $topic = $2;
-        my $candidate;
-        $candidate->{name} = $web.'.'.$topic;
-        $candidate->{validate} =
-          sub {
-              return validateTopic(
-                  $session, $store,
-                  $session->{user}, $topic, $web)
-          };
-        $candidate->{retrieve} =
-          sub {
-              return retrieveTopic($store, $web, $topic)
-          };
-        push @candidates, $candidate;
-
+       $userdirweb = $1;
+       $userdirname = $2;
     }
+    $nrskins = 0 if $nrskins < 0;
+    foreach my $template ( @templatePath ) {
+      for ( my $idx=0; $idx<=$nrskins; $idx++ ) {
+	  my $file = $template;
+	  my $userdir = 0;
+	  # also need to do %PUBURL% etc.?
+	  # push the first time even if not modified
+	  my $skin = $skinList[$idx] || '';
+	  my $webName = $web || '';
+	  my $tmplName = $name || '';
+	  unless ( $file =~ m/.tmpl$/ ) {
+	    # Could also use $Skin, $Web, $Name to indicate uppercase
+	    $userdir = 1;
+	    $skin = ucfirst($skin);
+	    $webName = ucfirst($userdirweb);
+	    $tmplName = ucfirst($userdirname);
+	  }
+	  $file =~ s/\$skin/$skin/geo;
+	  $file =~ s/\$web/$webName/geo;
+	  $file =~ s/\$name/$tmplName/geo;
+ 
+          my ($candidatename, $candidatevalidate, $candidateretrieve);
 
-    # See if it is a user topic. Search first in current web, then
-    # twiki web.
-    # See if we can parse $name into $web.$topic
-    $web = ucfirst( $web );
-    my $topic = ucfirst( $name );
-    my $ttopic = $topic.'Template';
+	  if ( $userdir ) {
+	    # candidate in user directory
+	    my ($web1, $name1) = $session->normalizeWebTopicName($web, $file);
 
-    foreach my $lookWeb ( $web, $TWiki::cfg{SystemWebName} ) {
-        foreach my $skin ( @skinList ) {
-            my $skintopic = ucfirst( $skin ).'Skin'.$topic.'Template';
-            my $candidate;
-            $candidate->{name} = $lookWeb.'.'.$skintopic;
-            $candidate->{validate} =
-              sub {
-                  return validateTopic($session,
-                                       $store,
-                                       $session->{user},
-                                       $skintopic,
-                                       $lookWeb)
-              };
-            $candidate->{retrieve} =
-              sub {
-                  return retrieveTopic( $store, $lookWeb, $skintopic)
-              };
-            push @candidates, $candidate;
-        }
-
-        my $candidate;
-        $candidate->{name}=$lookWeb.'.'.$ttopic;
-        $candidate->{validate} =
-          sub {
-              return validateTopic($session,
-                                   $store,
-                                   $session->{user},
-                                   $ttopic,
-                                   $lookWeb)
-          };
-        $candidate->{retrieve} =
-          sub {
-              return retrieveTopic( $store, $lookWeb, $ttopic )
-          };
-        push @candidates, $candidate;
-
-    }
-
-    foreach my $candidate (@candidates) {
-        my $validate = $candidate->{validate};
-        my $retrieve = $candidate->{retrieve};
-        my $name = $candidate->{name};
-        if( &$validate( $name )) {
-            next if (defined($this->{files}->{$name}));
-            #recursion prevention.
-            $this->{files}->{$name} = 1;
-
-            return &$retrieve( $name );
-        }
+	    if( validateTopic($session,$store,$session->{user},$name1,$web1) ) {
+	      next if (defined($this->{files}->{$name1}));
+	      #recursion prevention.
+	      $this->{files}->{$name1} = 1;
+	      return retrieveTopic( $store, $web1, $name1 );
+	    }
+	  } else {
+	    if( validateFile( $file )) {
+	      next if (defined($this->{files}->{$name}));
+	      #recursion prevention.
+	      $this->{files}->{$name} = 1;
+            return TWiki::readFile( $file );
+	    }
+	  }
+       }
     }
 
     # SMELL: should really
