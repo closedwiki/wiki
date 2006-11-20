@@ -186,6 +186,35 @@ sub sanitizeAttachmentName {
     my $origName = $fileName;
     # Change spaces to underscore
     $fileName =~ s/ /_/go;
+    # If in iso8859 surroundings and Unicode::Normalize is available, let's get rid of 8-bit chars in filenames
+    if ( $TWiki::cfg{Site}{CharSet} =~ /^iso-?8859-?15?$/i ) {
+        if( $] >= 5.008 && eval { require Unicode::Normalize } ) {
+            require Encode;
+            use Unicode::Normalize;
+            # Some normalizations need to be intercepted early
+            $fileName =~ s/\xc4/AE/g;
+            $fileName =~ s/\xc5/AA/g;
+            $fileName =~ s/\xd6/OE/g;
+            $fileName =~ s/\xdc/UE/g;
+            $fileName =~ s/\xe4/ae/g;
+            $fileName =~ s/\xe5/aa/g;
+            $fileName =~ s/\xf6/oe/g;
+            $fileName =~ s/\xfc/ue/g;
+            #  convert to Unicode
+            $fileName = NFD( $fileName );  # decompose (Unicode Normalization Form D)
+            $fileName =~ s/\pM//g;         # strip combining characters
+            # normalizations, Latin-1
+            $fileName =~ s/\x{00c6}/AE/g;
+            $fileName =~ s/\x{00d8}/OE/g;
+            $fileName =~ s/\x{00df}/ss/g;
+            $fileName =~ s/\x{00e6}/ae/g;
+            $fileName =~ s/\x{00f8}/oe/g;
+            $fileName =~ s/\x{0152}/OE/g;
+            $fileName =~ s/\x{0153}/ae/g;
+            # clear everything left that is 8-bit
+            $fileName =~ s/[^\0-\x80]//g;
+        }
+    }
     # Remove problematic chars
     $fileName =~ s/$TWiki::cfg{NameFilter}//goi;
     # Append .txt to some files

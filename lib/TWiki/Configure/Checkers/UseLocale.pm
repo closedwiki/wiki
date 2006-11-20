@@ -73,6 +73,11 @@ my @perl58 = (
         usage => "I18N conversions (core module in Perl 5.8)",
         requiredVersion => 1,
     },
+    {
+        name => 'Unicode::Normalize',
+        usage => "I18N conversions (Replace 8-bit chars in uploaded files by US-ASCII equivalents)",
+        requiredVersion => 1,
+    },
    );
 
 sub check {
@@ -85,7 +90,7 @@ sub check {
     if ($] >= 5.008) {
         $n .= $this->checkPerlModules( \@perl56 );
     } else {
-        $n .= $this->checkperlModules( \@perl58 );
+        $n .= $this->checkPerlModules( \@perl58 );
     }
 
     if( $TWiki::cfg{OS} eq 'WINDOWS' ) {
