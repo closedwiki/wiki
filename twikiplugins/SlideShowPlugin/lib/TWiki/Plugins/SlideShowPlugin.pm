@@ -30,9 +30,11 @@ $VERSION = '$Rev$';
 # This is a free-form string you can use to "name" your own plugin version.
 # It is *not* used by the build automation tools, but is reported as part
 # of the version number in PLUGINDESCRIPTIONS.
-$RELEASE = 'Dakar';
+$RELEASE = 'Any TWiki';
 
-sub initPlugin {
+# =========================
+sub initPlugin
+{
     ( $topic, $web, $user, $installWeb ) = @_;
 
     # check for Plugins.pm versions
@@ -44,7 +46,9 @@ sub initPlugin {
     return 1;
 }
 
-sub commonTagsHandler {
+# =========================
+sub commonTagsHandler
+{
 ### my ( $text, $topic, $web ) = @_;   # do not uncomment, use $_[0], $_[1]... instead
     if( $_[0] =~ /%SLIDESHOWSTART/ ) {
         require TWiki::Plugins::SlideShowPlugin::SlideShow;
