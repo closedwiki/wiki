@@ -264,12 +264,30 @@ sub view {
     # %TEXT% tag marking the split point
     my( $start, $end );
     if( $tmpl =~ m/^(.*)%TEXT%(.*)$/s ) {
-        $start = $1;
-        $end = $2;
+        my @starts = split( /%STARTTEXT%/, $1 );
+	if ( $#starts ) {   # we know that there is something before %STARTTEXT%
+	  $start = $starts[0];
+	  $text = $starts[1] . $text;
+	} else {
+	  $start = $1;
+	}
+        my @ends = split( /%ENDTEXT%/, $2 );
+	if ( $#ends ) {  # we know that there is something after %ENDTEXT%
+	  $text .= $ends[0];
+	  $end = $ends[1];
+	} else {
+	  $end = $2;
+	}
     } else {
-        $start = $tmpl;
-        $end = '';
-	$text = '';
+        my @starts = split( /%STARTTEXT%/, $tmpl );
+	if ( $#starts ) {  # we know that there is something before %STARTTEXT%
+	  $start = $starts[0];
+	  $text = $starts[1];
+	} else {
+	  $start = $tmpl;
+	  $text = '';
+	}
+	$end = '';
     }
 
     # If minimalist is set, images and anchors will be stripped from text
