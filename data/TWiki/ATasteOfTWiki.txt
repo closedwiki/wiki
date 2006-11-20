@@ -1,12 +1,10 @@
-%META:TOPICINFO{author="TWikiContributor" date="1152149335" format="1.1" version="1.2"}%
+%META:TOPICINFO{author="TWikiContributor" date="1163993253" format="1.1" version="1.2"}%
 This is a short introductory training course for TWiki beginners.
 
-%SLIDESHOWSTART{template="ATasteOfTWikiTemplate"}%
+%SLIDESHOWSTART%
 
 ---++ A Taste of TWiki
-<table cellspacing="10"><tr><td>
-<img src="%ATTACHURL%/hula.gif" alt="Hula girl"  width="113" height="111" /></td>
-<td>
+<img src="%ATTACHURL%/hula.gif" alt="Hula girl"  width="113" height="111" align="right" />
 The basic function of TWiki is a Wiki (if that helps!)
 
 A Wiki is like a web site, except that you can edit the content in your browser
@@ -15,17 +13,13 @@ A Wiki is like a web site, except that you can edit the content in your browser
    * The idea originates from [[http://www.hyperdictionary.com/computing/hypercard][Macintosh Hypercard]], via [[http://www.c2.com/cgi/wiki?WardCunningham][Ward Cunningham]]
    * In Ward's words, Wiki is _"the simplest online database that could possibly work"_
    * A Wiki is basically a shared, online, persistent whiteboard
-</td></tr></table>
 
 ---++ TWiki Wiki
-<table cellspacing="10"><tr><td>
-<img src="%ATTACHURL%/whiteboard.gif" alt="Whiteboard" width="240" height="160" />
-</td>
-<td>TWiki implements the basic Wiki idea of a shared whiteboard
+<img src="%ATTACHURL%/whiteboard.gif" alt="Whiteboard" width="240" height="160" align="right" />
+TWiki implements the basic Wiki idea of a shared whiteboard
 
    * Anyone can add content<br />... or change what is written<br />... or change the organisation of the content
    * Whatever what you write is<br />... nicely presented<br />... remembered... and never forgotten
-</td></tr></table>
 
 TWiki also acts as an "application platform" to integrate a number of other functions.
 
