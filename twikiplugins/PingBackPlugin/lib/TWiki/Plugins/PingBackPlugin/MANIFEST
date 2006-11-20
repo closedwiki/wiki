@@ -5,4 +5,6 @@ lib/TWiki/Plugins/PingBackPlugin/Client.pm 0644
 lib/TWiki/Plugins/PingBackPlugin/Core.pm 0644
 lib/TWiki/Plugins/PingBackPlugin/DB.pm 0644
 lib/TWiki/Plugins/PingBackPlugin/Ping.pm 0644
+lib/TWiki/Plugins/PingBackPlugin/QueueManager.pm 0644
 lib/TWiki/Plugins/PingBackPlugin.pm 0644
+tools/pingbackmanager 0644

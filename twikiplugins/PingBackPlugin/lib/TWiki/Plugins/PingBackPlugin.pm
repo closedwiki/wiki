@@ -20,15 +20,21 @@ package TWiki::Plugins::PingBackPlugin;
 use strict;
 use vars qw( $VERSION $RELEASE $NO_PREFS_IN_TOPIC $SHORTDESCRIPTION
   $currentWeb $currentTopic $currentUser $xmlRpcLink $doneHeader
-  $enabledPingBack
+  $enabledPingBack $debug $doneInit
 );
 
 $VERSION = '$Rev$';
 $RELEASE = 'v0.05-alpha';
 $NO_PREFS_IN_TOPIC = 1;
 $SHORTDESCRIPTION = 'Pingback service for TWiki';
+$debug = 0; # toggle me
 
 use TWiki::Contrib::XmlRpcContrib;
+
+###############################################################################
+sub writeDebug {
+  print STDERR "- PingBackPlugin - " . $_[0] . "\n" if $debug;
+}
 
 ###############################################################################
 sub initPlugin {
@@ -40,7 +46,7 @@ sub initPlugin {
     return 0;
   }
   $doneHeader = 0;
-  $enabledPingBack = TWiki::Func::getPreferencesFlag('ENABLEPINGBACK');
+  $doneInit = 0;
   TWiki::Func::registerTagHandler('PINGBACK', \&handlePingbackTag);
   TWiki::Contrib::XmlRpcContrib::registerRPCHandler('pingback.ping', \&handlePingbackCall);
 
@@ -52,12 +58,26 @@ sub initPlugin {
 }
 
 ###############################################################################
+sub doInit {
+  return if $doneInit;
+  $doneInit = 1;
+  $enabledPingBack = TWiki::Func::getPreferencesFlag('ENABLEPINGBACK') || 0;
+}
+
+###############################################################################
+sub isPingBackEnabled {
+  doInit();
+  return $enabledPingBack;
+}
+
+###############################################################################
 # we can't use addToHEAD as the pingback specification to autodetect the
 # server only demands the link to be within the first 5KB. So some sources
 # might not detect the xmlrpc service if we add the pingback relation th the
 # _end_ of the <head>...</head> section rather than to the start
 sub commonTagsHandler {
-  if ($enabledPingBack) {
+
+  if (isPingBackEnabled()) {
     if (!$doneHeader && $_[0] =~ s/<head>(.*?[\r\n]+)/<head>$1$xmlRpcLink\n/o) {
       $doneHeader = 1;
     }
@@ -81,7 +101,9 @@ sub handlePingbackTag {
   eval 'use TWiki::Plugins::PingBackPlugin::Core';
   die $@ if $@;
 
-  return TWiki::Plugins::PingBackPlugin::Core::handlePingbackTag(@_);
+  my $result = TWiki::Plugins::PingBackPlugin::Core::handlePingbackTag(@_);
+  writeDebug("result=$result");
+  return $result;
 }
 
 ###############################################################################
