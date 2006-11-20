@@ -23,12 +23,16 @@ package TWiki::Plugins::SlideShowPlugin::SlideShow;
 
 use vars qw( $imgRoot $installWeb );
 
-sub init {
+# =========================
+sub init
+{
     $installWeb = shift;
     $imgRoot = '%PUBURLPATH%/'.$installWeb.'/SlideShowPlugin';
 }
 
-sub handler {
+# =========================
+sub handler
+{
     my( $text, $theTopic, $theWeb ) = @_;
 
     my $textPre = "";
@@ -52,11 +56,19 @@ sub handler {
     $text =~ s/%SLIDESHOW/%<nop>SLIDESHOW/g;
 
     my $query = TWiki::Func::getCgiQuery();
+
+    # Build query string based on existingURL parameters
+    my $qparams = '?slideshow=on;skin=print';
+    foreach my $name ( $query->param ) {
+        next if ( $name =~ /(keywords|web|topic|slideshow|skin|\#)/ );
+        $qparams .= ';' . $name . '=' . urlEncode( $query->param($name) );
+    }
+
     if( $query && $query->param( 'slideshow' ) ) {
         # in presentation mode
 
         $textPre .= "\n#StartPresentation\n";
-        $textPre .= renderSlideNav( $theWeb, $theTopic, 1, 1, "e" );
+        $textPre .= renderSlideNav( $theWeb, $theTopic, 1, 1, "e", $qparams );
 
         my $slideMax = 0;
 
@@ -80,8 +92,8 @@ sub handler {
             my @titles = ();
             foreach( @slides ) {
                 next unless /^([^\n\r]*)(.*)$/s;
-                $slideTitle = $1;
-                $slideBody  = $2;
+                $slideTitle = $1 || '';
+                $slideBody  = $2 || '';
                 $slideComment = '';
                 if( $hideComments && $slideBody =~ s/(\-\-\-+\+$level+\!*\s*Comments.*)//is ) {
                     $slideComment = $1;
@@ -92,12 +104,18 @@ sub handler {
                 $slideText =~ s/%SLIDETEXT%/$slideBody/go;
                 $slideText =~ s/%SLIDENUM%/$slideNum/go;
                 $slideText =~ s/%SLIDEMAX%/$slideMax/go;
-                $slideText =~ s/%SLIDENAV%/renderSlideNav(      $theWeb, $theTopic, $slideNum, $slideMax, "f p n" )/geo;
-                $slideText =~ s/%SLIDENAVALL%/renderSlideNav(   $theWeb, $theTopic, $slideNum, $slideMax, "f p n l" )/geo;
-                $slideText =~ s/%SLIDENAVFIRST%/renderSlideNav( $theWeb, $theTopic, $slideNum, $slideMax, "f" )/geo;
-                $slideText =~ s/%SLIDENAVPREV%/renderSlideNav(  $theWeb, $theTopic, $slideNum, $slideMax, "p" )/geo;
-                $slideText =~ s/%SLIDENAVNEXT%/renderSlideNav(  $theWeb, $theTopic, $slideNum, $slideMax, "n" )/geo;
-                $slideText =~ s/%SLIDENAVLAST%/renderSlideNav(  $theWeb, $theTopic, $slideNum, $slideMax, "l" )/geo;
+                $slideText =~ s/%SLIDENAV%/renderSlideNav(
+                    $theWeb, $theTopic, $slideNum, $slideMax, "f p n", $qparams )/geo;
+                $slideText =~ s/%SLIDENAVALL%/renderSlideNav(
+                    $theWeb, $theTopic, $slideNum, $slideMax, "f p n l", $qparams )/geo;
+                $slideText =~ s/%SLIDENAVFIRST%/renderSlideNav(
+                    $theWeb, $theTopic, $slideNum, $slideMax, "f", $qparams )/geo;
+                $slideText =~ s/%SLIDENAVPREV%/renderSlideNav(
+                    $theWeb, $theTopic, $slideNum, $slideMax, "p", $qparams )/geo;
+                $slideText =~ s/%SLIDENAVNEXT%/renderSlideNav(
+                    $theWeb, $theTopic, $slideNum, $slideMax, "n", $qparams )/geo;
+                $slideText =~ s/%SLIDENAVLAST%/renderSlideNav(
+                    $theWeb, $theTopic, $slideNum, $slideMax, "l", $qparams )/geo;
                 $text .= "\n\n-----\n#GoSlide$slideNum\n$slideText";
                 unless( $text =~ s/%SLIDECOMMENT%/\n$slideComment\n/go ) {
                     $text .= "\n$slideComment\n\n" if( $slideComment );
@@ -110,7 +128,7 @@ sub handler {
         }
 
         $text = "$textPre\n$text\n";
-        $text .= renderSlideNav( $theWeb, $theTopic, $slideMax + 1, $slideMax, "f p e" );
+        $text .= renderSlideNav( $theWeb, $theTopic, $slideMax + 1, $slideMax, "f p e", $qparams );
         $text .= "\n";
         $text .= "%BR%\n\n" x 30;
         $text =~ s/%BR%/<br \/>/go;
@@ -126,25 +144,27 @@ sub handler {
             $text =~ s/([\n\r]\-\-\-+$level\!*) ([^\n\r]+)/"$1 Slide " . $slideNum++ . ": $2"/ges;
         }
         $text = "$textPre \n#StartPresentation\n"
-              . renderSlideNav( $theWeb, $theTopic, 1, 1, "s" )
+              . renderSlideNav( $theWeb, $theTopic, 1, 1, "s", $qparams )
               . "\n$text $textPost";
     }
 
     return $text;
 }
 
-sub renderSlideNav {
-    my( $theWeb, $theTopic, $theNum, $theMax, $theButtons ) = @_;
+# =========================
+sub renderSlideNav
+{
+    my( $theWeb, $theTopic, $theNum, $theMax, $theButtons, $qstring ) = @_;
     my $prev = $theNum - 1 || 1;
     my $next = $theNum + 1;
-    my $text = '';
+    my $text = '<span style="white-space: nowrap">';
     my $viewUrl = "%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/$theWeb/$theTopic";
     if( $theButtons =~ /f/ ) {
         # first slide button
         if( $theButtons =~ / f/ ) {
             $text .= "&nbsp;";
         }
-        $text .= "<a href=\"$viewUrl?slideshow=on&amp;skin=print#GoSlide1\">"
+        $text .= "<a href=\"$viewUrl$qstring#GoSlide1\">"
                . "<img src=\"$imgRoot/first.gif\" border=\"0\""
                . " alt=\"First slide\" /></a>";
     }
@@ -153,7 +173,7 @@ sub renderSlideNav {
         if( $theButtons =~ / p/ ) {
             $text .= "&nbsp;";
         }
-        $text .= "<a href=\"$viewUrl?slideshow=on&amp;skin=print#GoSlide$prev\">"
+        $text .= "<a href=\"$viewUrl$qstring#GoSlide$prev\">"
                . "<img src=\"$imgRoot/prev.gif\" border=\"0\""
                . " alt=\"Previous\" /></a>";
     }
@@ -162,7 +182,7 @@ sub renderSlideNav {
         if( $theButtons =~ / n/ ) {
             $text .= "&nbsp;";
         }
-        $text .= "<a href=\"$viewUrl?slideshow=on&amp;skin=print#GoSlide$next\">"
+        $text .= "<a href=\"$viewUrl$qstring#GoSlide$next\">"
                . "<img src=\"$imgRoot/next.gif\" border=\"0\""
                . " alt=\"Next\" /></a>";
     }
@@ -171,7 +191,7 @@ sub renderSlideNav {
         if( $theButtons =~ / l/ ) {
             $text .= "&nbsp;";
         }
-        $text .= "<a href=\"$viewUrl?slideshow=on&amp;skin=print#GoSlide$theMax\">"
+        $text .= "<a href=\"$viewUrl$qstring#GoSlide$theMax\">"
                . "<img src=\"$imgRoot/last.gif\" border=\"0\""
                . " alt=\"Last slide\" /></a>";
     }
@@ -180,7 +200,7 @@ sub renderSlideNav {
         if( $theButtons =~ / e/ ) {
             $text .= "&nbsp;";
         }
-        $text .= "<a href=\"$viewUrl#StartPresentation\">"
+        $text .= "<a href=\"$viewUrl\">"
                . "<img src=\"$imgRoot/endpres.gif\" border=\"0\""
                . " alt=\"End Presentation\" /></a>";
     }
@@ -189,15 +209,17 @@ sub renderSlideNav {
         if( $theButtons =~ / s/ ) {
             $text .= "&nbsp;";
         }
-        $text .= "<a href=\"$viewUrl?slideshow=on&amp;skin=print#GoSlide1\">"
+        $text .= "<a href=\"$viewUrl$qstring#GoSlide1\">"
                . "<img src=\"$imgRoot/startpres.gif\" border=\"0\""
                . " alt=\"Start Presentation\" /></a>";
     }
-
+    $text .= '</span>';
     return $text;
 }
 
-sub renderSlideToc {
+# =========================
+sub renderSlideToc
+{
     my( $theWeb, $theTopic, @theTitles ) = @_;
 
     my $slideNum = 1;
@@ -212,7 +234,9 @@ sub renderSlideToc {
     return $text;
 }
 
-sub readTmplText {
+# =========================
+sub readTmplText
+{
     my( $theWeb, $theArgs ) = @_;
 
     my $tmplTopic =  TWiki::Func::extractNameValuePair( $theArgs, "template" );
@@ -245,6 +269,15 @@ sub readTmplText {
     $text =~ s/%WEB%/$theWeb/go;
     $text =~ s/%TOPIC%/$tmplTopic/go;
     $text =~ s/%ATTACHURL%/%PUBURL%\/$theWeb\/$tmplTopic/go;
+    return $text;
+}
+
+# =========================
+sub urlEncode
+{
+    my $text = shift;
+    $text =~ s/([^0-9a-zA-Z-_.:~!*'()\/%])/'%'.sprintf('%02x',ord($1))/ge;
+    $text =~ s/\%20/+/g;
     return $text;
 }
 
