@@ -159,18 +159,23 @@ How to get to the parent of the current topic to display on the page?
 
 You might think that the following Search would do the trick:
 <verbatim>
-%SEARCH{ "^%BASETOPIC%$" scope="topic" nosearch="on" type="regex" nototal="on" format="[[$parent][parent_link]]" }%
+%SEARCH{ "^%BASETOPIC%$" scope="topic" nosearch="on" type="regex" nonoise="on" format="   * $parent" }%
 </verbatim>
 
-However, the =[<nop>[$parent][parent_link]]= link fails if the topic has no parent set (=$parent= will be empty). You can use some Plugins.SpreadSheetPlugin magic to conditionally link to the parent or to =WebHome=: =[<nop>[$percntCALC{$IF($EXACT($parent,), %<nop>HOMETOPIC%, $parent)}$percnt][parent_link]]= 
+However, the =$parent= link fails if the topic has no parent set (=$parent= will be empty). You can use some Plugins.SpreadSheetPlugin magic to conditionally link to the parent or to =WebHome=:
+
+<verbatim>
+$percntCALC{$IF($EXACT($parent,),<nop>,$NOP(   * $parent))}$percnt
+</verbatim>
 
 So the total Search query to find a topic's parent topic is:
 <verbatim>
-%SEARCH{ "^%BASETOPIC%$" scope="topic" nosearch="on" type="regex" nototal="on" format="[<nop>[$percntCALC{$IF($EXACT($parent,), <nop>%HOMETOPIC%, $parent)}$percnt][parent_link]]" }%
+%SEARCH{ "^%BASETOPIC%$" scope="topic" type="regex" nonoise="on" format="$percntCALC{$IF($EXACT($parent,),<nop>,$NOP(   * $parent))}$percnt" }%
 </verbatim>
 
 ---+++ Test Case
-The parent topic of this topic is: %SEARCH{ "^%BASETOPIC%$" scope="topic" nosearch="on" type="regex" nototal="on" format="$percntCALC{$IF($EXACT($parent,), %HOMETOPIC%, $parent)}$percnt" }%
+The parent topic of this topic is:
+%SEARCH{ "^%BASETOPIC%$" scope="topic" type="regex" nonoise="on" format="$percntCALC{$IF($EXACT($parent,),<nop>,$NOP(   * $parent))}$percnt" }%
 
 ---++ Pattern 5: Search and display the home topics of public webs in a list
 
