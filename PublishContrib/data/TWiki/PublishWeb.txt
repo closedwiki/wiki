@@ -1,30 +1,32 @@
 %META:TOPICINFO{author="TWikiContributor" date="1144227587" format="1.1" version="$Rev$"}%
-<i>This is a template topic for use with the PublishAddOn. It illustrates how
-to set up a topic in a web to simplify publishing. To use it, take a copy of the raw text of this topic, and paste it into a new topic in your own web.</i>
+This is a template topic for use with PublishContrib. It illustrates how
+to set up a topic in a web to simplify publishing.
+
+To use it, take a copy of the raw text of this topic, and paste it into a new topic in your own web.
 
 ---+ Publish topics from the %WEB% web
-        * Name of the URL and folder space inside $TWiki::cfg{PublishContrib}{Dir} and $TWiki::cfg{PublishContrib}{URL}. e.g. test, prod. Defaults to '', so publishes to the top of those.
-		* Set INSTANCE =
-	* Comma-separated list of [[PublishAddOn#WildcardPattern][wildcard patterns]] that match the names of topics to *include* 
-		* Set INCLUSIONS = *
-	* Comma-separated list of [[PublishAddOn#WildcardPattern][wildcard patterns]] that match the names of topics to *exclude*
-		* Set EXCLUSIONS = Web*,Publish*
-	* A [[#RegularExpression][regular expression]] that will cause a topic to be *excluded* if the RE matches the topic content
-		*# Set FILTER =
-	* Skin for published HTML
-		* Set PUBLISHSKIN = text
-	* Set templates to use (defaults to view)
-		* Set TEMPLATES = view
-	* Format to publish in (file, pdf, tgz, zip)
-		* Set FORMAT = file
-	* Set whether to show debug output (defaults to '', for no)
-		* Set DEBUG = 
-	* If set, additional options that will be passed to the output generator
-		*# Set EXTRAS =
+   * Name of the URL and folder space inside =$TWiki::cfg{PublishContrib}{Dir}= and =$TWiki::cfg{PublishContrib}{URL}=. e.g. =test=, =prod=. Defaults to =''=, so publishes to the top of those.
+      * Set INSTANCE =
+   * Comma-separated list of [[PublishContrib#WildcardPattern][wildcard patterns]] that match the names of topics to *include* 
+      * Set INCLUSIONS = *
+   * Comma-separated list of [[PublishContrib#WildcardPattern][wildcard patterns]] that match the names of topics to *exclude*
+      * Set EXCLUSIONS = Web*,Publish*
+   * A [[#RegularExpression][regular expression]] that will cause a topic to be *excluded* if the RE matches the topic content
+      * #Set FILTER =
+   * Skin for published HTML
+      * Set PUBLISHSKIN = text
+   * Set templates to use (defaults to view)
+      * Set TEMPLATES = view
+   * Format to publish in (=file=, =pdf=, =tgz=, =zip=)
+      * Set FORMAT = file
+   * Set whether to show debug output (defaults to =''=, for no)
+      * Set DEBUG = 
+   * If set, additional options that will be passed to the output generator
+      * #Set EXTRAS =
 
 <form method="POST" name="rename" action="%SCRIPTURLPATH%/publish%SCRIPTSUFFIX%/%WEB%">
 <input type="hidden" name="configtopic" value="%TOPIC%" />
 <input type="hidden" name="ping" value="%SERVERTIME%" />
-<input type="submit" value="Publish using this topic" />
+<input type="submit" class="twikiSubmit" value="Publish using this topic" />
 </form>
 

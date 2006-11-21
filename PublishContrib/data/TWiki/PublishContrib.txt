@@ -27,7 +27,7 @@ When TWiki generates a view, it does so dynamically i.e. there's a CGI script th
 ---++ Features
 	* All standard TWiki tags are interpreted
 	* Plugins are called
-	* UnresolvedLinks to non-existant topics are silently ignored
+	* Unresolved links to non-existant topics are silently ignored
 	* Topic links internal to the TWiki are translated to relative links
 	* Powerful support for choosing what content gets published
 	* Any links to the 'pub' areas of topics in the web are automatically resolved and the referenced files copied.
@@ -49,61 +49,70 @@ The output is generated in a directory designated during installation. The progr
 
 You can also create a permanent topic in a web to help with the publishing process. See [[#PublishTopic][below]].
 
+<style type="text/css" media="all">
+.twikiPageForm table th,
+.twikiPageForm table td {
+vertical-align:top;
+border-bottom:1px solid #ddd;
+padding:.5em;
+}
+</style>
+
 <div class="twikiPageForm">
 <form method="POST" name="publish" action="%SCRIPTURL{publish}%/%URLPARAM{"web" default=""}%">
-<table class="twikiTable">
+<table class="twikiTable" cellpadding="0" cellspacing="0">
 <tr>
-  <th>Description</th><th>Value</th><th>Parameter Name</th>
+  <th>Description</th><th>Value</th><th>Parameter&nbsp;Name</th>
 </tr>
 <tr>
-  <td valign="top"> Web to publish </td>
+  <td> Web to publish </td>
   <td>
-   <select name="web">%WEBLIST{"<option $marker value='$name'>$name</option>" selection="%URLPARAM{"web" default="%WEB%"}%"}%</select>
+   <select name="web" class="twikiSelect">%WEBLIST{"<option $marker value='$name'>$name</option>" selection="%URLPARAM{"web" default="%WEB%"}%"}%</select>
   </td>
   <td>
    =web=
   </td>
 </tr>
 <tr>
-  <td valign="top"> 
+  <td> 
     Comma-separated list of [[#WildcardPattern][wildcard patterns]] that match
     the names of topics to *include* 
   </td>
   <td> 
-    <input type="text" name="inclusions" value="%URLPARAM{"inclusions" default="*"}%" size="50"/>
+    <input type="text" name="inclusions" class="twikiInputField" value="%URLPARAM{"inclusions" default="*"}%" size="50"/>
   </td>
   <td>
    =inclusions=
   </td>
 </tr>
 <tr>
-  <td valign="top"> 
+  <td> 
     Comma-separated list of [[#WildcardPattern][wildcard patterns]] that match
     the names of topics to *exclude* 
-  </td>
+  </td valign="top">
   <td> 
-    <input type="text" name="exclusions" value="%URLPARAM{"exclusions" default=""}%" size="50"/>
+    <input type="text" name="exclusions" class="twikiInputField" value="%URLPARAM{"exclusions" default=""}%" size="50"/>
   </td>
   <td>
    =exclusions=
   </td>
 </tr>
 <tr>
-  <td valign="top"> 
+  <td> 
     A [[#RegularExpression][regular expression]] that will cause a topic to be
     *excluded* if the RE matches the topic content 
   </td>
   <td> 
-    <input type="text" name="filter" value="%URLPARAM{"filter" default=""}%" size="50" />
+    <input type="text" name="filter" class="twikiInputField" value="%URLPARAM{"filter" default=""}%" size="50" />
   </td>
   <td>
    =filter=
   </td>
 </tr>
 <tr>
-  <td valign="top">Select skin for published HTML :</td>
+  <td>Select skin for published HTML :</td>
   <td>
-    <input type="text" name="skin" size="20" value="text" /><br />
+    <input type="text" name="skin" class="twikiInputField" size="20" value="text" /><br />
     You are recommended to pick =text=, or =plain=, or a =print= skin.
     Your installation may also offer a special =export= or =publish= skin.
   </td>
@@ -112,9 +121,9 @@ You can also create a permanent topic in a web to help with the publishing proce
   </td>
 </tr>
 <tr>
-  <td valign="top">Output format :</td>
+  <td>Output format :</td>
   <td>
-   <select name="format">
+   <select name="format" class="twikiSelect">
     <option value="">file</option>
     <option value="zip">zip</option>
     <option value="tgz">tgz</option>
@@ -128,18 +137,22 @@ You can also create a permanent topic in a web to help with the publishing proce
   </td>
 </tr>
 <tr>
-  <td valign="top">Extra options :</td>
+  <td>Extra options :</td>
   <td>
    Some output generators support extra options (e.g. PDF; you can add =htmldoc= command-line parameters here e.g =--linkstyle underline=)<br />
-   <textarea rows="5" cols="80">%URLPARAM{"genopt" default=""}%</textarea>
+   <textarea rows="5" cols="80"  class="twikiInputField">%URLPARAM{"genopt" default=""}%</textarea>
   </td>
   <td>
    =genopt=
   </td>
 </td>
+</tr>
+<tr>
+<td colspan="3" class="twikiLast">
+<input type="submit" class="twikiSubmit" value="Publish" />
+</td>
+</tr>
 </table>
-
-<input type="submit" value="Publish" />
 </form>
 </div>
 #WildcardPattern
@@ -185,7 +198,7 @@ Another good trick is to set up a special "publishing" web. Create topics in the
 
 ---+++ Known problems
 	* Doesn't handle revision info tags in templates
-	* Plugin tags that create complex HTML (sug as TWikiDraw DRAWING tags) are not handled correctly.
+	* Plugin tags that create complex HTML (such as TWiki:Plugins/TWikiDrawPlugin =DRAWING= tags) are not handled correctly.
 	* Links to excluded topics still get generated as links
 
 ---+++ Installation Instructions
