@@ -93,7 +93,7 @@ To see it work (if installed and the right Google key is set):
 %INCLUDE{"%TWIKIWEB%.GoogleAjaxSearchPlugin" section="default" query="" web="TWiki" label="twiki.org TWiki Web"}%
 
 
----++ Plugin Installation Instructions
+---++ Installation Instructions
 	* Download the ZIP file from the Plugin web (see below)
 	* Unzip ==%TOPIC%.zip== in your root ($TWIKI_ROOT) directory. Content:
    | *File:* | *Description:* |
@@ -103,7 +103,7 @@ To see it work (if installed and the right Google key is set):
    %$DEPENDENCIES%
 	* (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
 	
----++ Contrib Info
+---++ Plugin Info
 
 | Authors: | TWiki:Main.ArthurClemens |
 | Copyright &copy;: | 2006 Arthur Clemens |
