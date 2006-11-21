@@ -89,7 +89,7 @@ padding:.5em;
   <td> 
     Comma-separated list of [[#WildcardPattern][wildcard patterns]] that match
     the names of topics to *exclude* 
-  </td valign="top">
+  </td>
   <td> 
     <input type="text" name="exclusions" class="twikiInputField" value="%URLPARAM{"exclusions" default=""}%" size="50"/>
   </td>
