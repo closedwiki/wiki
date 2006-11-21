@@ -1,5 +1,5 @@
 ---+!! <nop>%TOPIC%
-Generates a static view of a web, as HTML files on disc, or as a PDF, or as a zip or tgz archive file.
+*Generates a static view of a web, as HTML files on disc, or as a =PDF=, or as a =zip= or =tgz= archive file.*
 
 <!--
 
@@ -13,41 +13,41 @@ Generates a static view of a web, as HTML files on disc, or as a PDF, or as a zi
 
 _Previously known as !GenHTMLAddOn, and then !PublishAddOn, this is the *original* publishing extension for TWiki_.
 
-*WARNING: TWiki-4 only. If you want to use this extension with an earlier version of TWiki, please see [[http://twiki.org/cgi-bin/view/Plugins/%TOPIC%?rev=1.2][here]]*
+<div class="twikiBroadcastMessage" style="background:#ffc;"> __NOTE:__ This version is TWiki 4.0 specific. Download the [[http://twiki.org/cgi-bin/viewfile/Plugins/PublishContrib?rev=1;filename=PublishContrib.tgz][previous version]] if you want to use this extension with an earlier version of TWiki.</div>
 
 %TOC%
 
 When TWiki generates a view, it does so dynamically i.e. there's a CGI script that runs, processes some files, and generates HTML that is displayed by the browser. There are circumstances in which this may not be desirable or even possible. For example:
-	1 TWiki is used to create documentation which has to be bundled into a product release,
-	1 Published versions of TWiki pages must be read-only,
-	1 The TWiki server is inaccessible to the audience (e.g. on the other side of a corporate firewall).
-
+	1 TWiki is used to create documentation which has to be bundled into a product release
+	1 Published versions of TWiki pages must be read-only
+	1 The TWiki server is inaccessible to the audience (e.g. on the other side of a corporate firewall)
+	
 !PublishContrib provides support for the generation of stand-alone HTML from a TWiki web. It will generate fully rendered versions of a set of TWiki pages together with any attached files.
 
 ---++ Features
 	* All standard TWiki tags are interpreted
 	* Plugins are called
-	* Unresolved links to non-existant topics are silently ignored
+	* Unresolved links to non-existent topics are silently ignored
 	* Topic links internal to the TWiki are translated to relative links
 	* Powerful support for choosing what content gets published
-	* Any links to the 'pub' areas of topics in the web are automatically resolved and the referenced files copied.
-	* Any links to images outside the TWiki are resolved, and the image is stored in the output (requires LWP).
-	* Output in HTML or PDF. HTML can be compressed.
+	* Any links to the 'pub' areas of topics in the web are automatically resolved and the referenced files copied
+	* Any links to images outside the TWiki are resolved, and the image is stored in the output (requires LWP)
+	* Output in HTML or PDF. HTML can be compressed
 	* Full support for hierarchical webs
 	* Multiple instances (e.g. dev, test, prod) can be specified
 	* Templates (such as viewprint) can also be generated, and the links are fixed up appropritately
-	* able to publish html and referenced files directly to a remote server via ftp (using the ftp publish format)
+	* Able to publish HTML and referenced files directly to a remote server via ftp (using the =ftp= publish format)
 	   * generates a sitemal.xml, default.htm, index.html and google site verification file
 	   * uses extra parameters (ftppublish, destinationftpserver, destinationftppath, destinationftpusername, destinationftppassword, googlefile, defaultpage)
 	   * requires Net::FTP to ftp, only if ftppublish=ftp
 
 ---++ Usage
-
+---+++ Publish Form
 The easiest way to publish a web is from this topic, by filling in the following form.
 
 The output is generated in a directory designated during installation. The progress messages printed during documentation generation tell you exactly where the output is.
 
-You can also create a permanent topic in a web to help with the publishing process. See [[#PublishTopic][below]].
+You can also create a [[#PublishTopic][permanent topic in a web]] to help with the publishing process.
 
 <style type="text/css" media="all">
 .twikiPageForm table th,
@@ -110,7 +110,7 @@ padding:.5em;
   </td>
 </tr>
 <tr>
-  <td>Select skin for published HTML :</td>
+  <td>Select skin for published HTML</td>
   <td>
     <input type="text" name="skin" class="twikiInputField" size="20" value="text" /><br />
     You are recommended to pick =text=, or =plain=, or a =print= skin.
@@ -121,7 +121,7 @@ padding:.5em;
   </td>
 </tr>
 <tr>
-  <td>Output format :</td>
+  <td>Output format</td>
   <td>
    <select name="format" class="twikiSelect">
     <option value="">file</option>
@@ -137,7 +137,7 @@ padding:.5em;
   </td>
 </tr>
 <tr>
-  <td>Extra options :</td>
+  <td>Extra options</td>
   <td>
    Some output generators support extra options (e.g. PDF; you can add =htmldoc= command-line parameters here e.g =--linkstyle underline=)<br />
    <textarea rows="5" cols="80"  class="twikiInputField">%URLPARAM{"genopt" default=""}%</textarea>
@@ -196,13 +196,13 @@ Another good trick is to set up a special "publishing" web. Create topics in the
    * Short description
       * Set SHORTDESCRIPTION = Generate static HTML for a TWiki Web
 
----+++ Known problems
+---++ Known problems
 	* Doesn't handle revision info tags in templates
 	* Plugin tags that create complex HTML (such as TWiki:Plugins/TWikiDrawPlugin =DRAWING= tags) are not handled correctly.
 	* Links to excluded topics still get generated as links
 
----+++ Installation Instructions
----++++ Dependencies
+---++ Installation Instructions
+---+++ Dependencies
 
 Note: If you want to generate PDF files, you will need an installation of =htmldoc=. =htmldoc= is available from http://www.easysw.com/htmldoc/ for free, but you are *strongly* recommended to buy the commercial version. Your support for OSS projects helps make OSS possible.
 
@@ -217,8 +217,8 @@ $TWiki::cfg{PublishContrib}{URL} = "url_path";
 </verbatim>
 Where =dir_path= is the file system path to your publish directory on the server, and =url_path= is the URL of the same directory.
 
----++++ Additional install steps
----+++++ =PDF= output
+---+++ Additional install steps
+---++++ =PDF= output
    1 install htmldoc from http://www.easysw.com/htmldoc/
    1 Add the following line to =LocalSite.cfg=
 <verbatim>
@@ -226,12 +226,12 @@ $TWiki::cfg{PublishContrib}{PDFCmd} = 'htmldoc --webpage --links --linkstyle pla
 </verbatim>
 Note that =htmldoc= can also be used to generate !PostScript by using the =-t= option in the =Generator Options= field above. See the =htmldoc= man pages for details.
 
----+++++ =.tgz= (tar) output
+---++++ =.tgz= (tar) output
    1 Install Archive::Tar and everything it depends on
----+++++ =.zip= output
+---++++ =.zip= output
    1 Install Archive::Zip and everything it depends on
 
----+++ Info
+---++ Info
 This add-on started as the TWiki:Plugins/GenHTMLAddon, written by TWiki:Main/CrawfordCurrie at Motorola. It was then rewritten by TWiki:Main/EricScouten, and then fixed and enhanced by TWiki:Main/CrawfordCurrie (http://c-dot.co.uk)
 
 |  Authors: | TWiki:Main/CrawfordCurrie, TWiki:Main/EricScouten |
@@ -261,13 +261,13 @@ This add-on started as the TWiki:Plugins/GenHTMLAddon, written by TWiki:Main/Cra
 |  11 Apr 2005 | 1.3 Crawford Currie - reworked the interface and code to work better |
 |  13 October 2004 | 1.200 Crawford Currie - Cairo compatible |
 |  7 Jan 2003 | 1.1 Initial version |
-|  Home: | TWiki:Plugins/%TOPIC% |
-|  Feedback: | TWiki:Plugins/%TOPIC%Dev |
+|  Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
+|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 |  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
 __Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
 
----++++ Copyright
+---+++ Copyright
 This code is a development of the Architectures and System Platforms group of Motorola Inc. and is protected by the following copyrights:
 	* Copyright &copy; 2001 Motorola. All Rights Reserved.
 	* Copyright &copy; 2002-2003, Eric Scouten.
@@ -278,7 +278,7 @@ The 2005 functionality improvements were sponsored by [[http://www.windriver.com
 
 The =pdf= and =tgz= output formats were made possible by [[http://www.sabiolabs.com][ =Sabio Labs= ]]
 
----++++ License
+---+++ License
 As required for the publication of all extensions to TWiki, the software is published under the terms of the GNU General Public License.
 
 This program is distributed in the hope that it will be useful,
