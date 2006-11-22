@@ -14,6 +14,8 @@ Note that this service (as stated by Google themselves):
 
 If you want to put this service on your own site you need to [[http://code.google.com/apis/ajaxsearch/signup.html][obtain a (free) unique key]] from Google.
 
+*NOTE*: the Google key must be valid for the directory/directories you will be searching in. 
+
 Set =GOOGLEKEY= below in [[%TOPIC%#Settings][Settings]].
 
 ---++ Restricting search to a site or Web
@@ -86,6 +88,8 @@ For an explanation of the following variables read above. These are example vari
    * Set GOOGLESEARCHSITE = http://twiki.org/cgi-bin/view/
    * Set GOOGLESEARCHLABEL = twiki.org
    * Set SHORTDESCRIPTION = Dynamic Google AJAX search service for public TWiki sites
+   
+You can set these values in this topic, or in any other topic where =%<nop>GOOGLEAJAXSEARCH%= is written.
 
 ---++ Example
 To see it work (if installed and the right Google key is set):
@@ -93,7 +97,7 @@ To see it work (if installed and the right Google key is set):
 %INCLUDE{"%TWIKIWEB%.GoogleAjaxSearchPlugin" section="default" query="" web="TWiki" label="twiki.org TWiki Web"}%
 
 
----++ Installation Instructions
+---++ Plugin Installation Instructions
 	* Download the ZIP file from the Plugin web (see below)
 	* Unzip ==%TOPIC%.zip== in your root ($TWIKI_ROOT) directory. Content:
    | *File:* | *Description:* |
@@ -103,12 +107,13 @@ To see it work (if installed and the right Google key is set):
    %$DEPENDENCIES%
 	* (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
 	
----++ Plugin Info
+---++ Contrib Info
 
 | Authors: | TWiki:Main.ArthurClemens |
 | Copyright &copy;: | 2006 Arthur Clemens |
 | License: | [[http://www.gnu.org/copyleft/gpl.html][GPL]] |
 | Dependencies: | %$DEPENDENCIES% |
+|  22 Nov 2006 | 1.0.3 Settings can now be written in any topic |
 |  22 Jul 2006 | 1.0.2 Added Lazy loading |
 |  22 Jul 2006 | 1.0.1 Added =GOOGLESEARCHLABEL=; various bug fixes |
 |  20 Jul 2006 | 1.0.0 First Version |

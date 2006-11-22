@@ -45,55 +45,54 @@ sub initPlugin {
         return 0;
     }
 
-    # Get plugin preferences, variables defined by:
-    #   * Set EXAMPLE = ...
+
     $debug = TWiki::Func::getPluginPreferencesFlag( "DEBUG" );
-	$googleSiteKey = TWiki::Func::getPluginPreferencesValue( "GOOGLEKEY" );
-	$searchSite = TWiki::Func::getPluginPreferencesValue( "GOOGLESEARCHSITE" ) || '';
-	$searchWeb = TWiki::Func::getPluginPreferencesValue( "GOOGLESEARCHWEB" ) || '';
-	$siteLabel = TWiki::Func::getPluginPreferencesValue( "GOOGLESEARCHLABEL" ) || '';
+    
+    $googleSiteKey = TWiki::Func::getPreferencesValue( 'GOOGLEKEY' ) || TWiki::Func::getPluginPreferencesValue( 'GOOGLEKEY' ) || '';
+   	$searchSite = TWiki::Func::getPreferencesValue( 'GOOGLESEARCHSITE' ) || TWiki::Func::getPluginPreferencesValue( "GOOGLESEARCHSITE" ) || '';
+	$searchWeb = TWiki::Func::getPreferencesValue( 'GOOGLESEARCHWEB' ) || TWiki::Func::getPluginPreferencesValue( "GOOGLESEARCHWEB" ) || '';
+	$siteLabel = TWiki::Func::getPreferencesValue( 'GOOGLESEARCHLABEL' ) || TWiki::Func::getPluginPreferencesValue( "GOOGLESEARCHLABEL" ) || '';
 		
     return 1;
 }
 
 sub _addToHead {
-
-    my $header = '<script src="http://www.google.com/uds/api?file=uds.js&amp;v=0.1&amp;key='.$googleSiteKey.'" type="text/javascript"></script>';
+    my $header = '<script src="http://www.google.com/uds/api?file=uds.js&amp;v=1.0&amp;key='.$googleSiteKey.'" type="text/javascript"></script>';
     $header .= '
-    <style type="text/css" media="all">
-@import url("http://www.google.com/uds/css/gsearch.css");
-@import url("%PUBURL%/%TWIKIWEB%/GoogleAjaxSearchPlugin/googleAjaxSearch.css");
+<style type="text/css" media="all">
+	@import url("http://www.google.com/uds/css/gsearch.css");
+	@import url("%PUBURL%/%TWIKIWEB%/GoogleAjaxSearchPlugin/googleAjaxSearch.css");
 </style>
 <script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/GoogleAjaxSearchPlugin/googleAjaxSearch.js"></script>
 <script type="text/javascript">
-//<![CDATA[
-GoogleAjaxSearch.prototype.getSearchSite = function () {
-	return "'.$searchSite.'" + this.getSearchWeb();
-}
-/**
-An input field with id \'googleAjaxSearchWeb\' may override GOOGLESEARCHWEB.
-*/
-GoogleAjaxSearch.prototype.getSearchWeb = function () {
-	var webElem = document.getElementById("googleAjaxSearchWeb");
-	if (webElem) {
-		var webName = webElem.value;
-		if (webName) return webName;
+	//<![CDATA[
+	GoogleAjaxSearch.prototype.getSearchSite = function () {
+		return "'.$searchSite.'" + this.getSearchWeb();
 	}
-	// else default
-	return "'.$searchWeb.'";
-}
-GoogleAjaxSearch.prototype.getUrlParam = function () {
-	return "%URLPARAM{"googleAjaxQuery" default=""}%";
-}
-GoogleAjaxSearch.prototype.getSiteLabel = function () {
-	var webElem = document.getElementById("googleAjaxSearchlabel");
-	if (webElem) {
-		var label = webElem.value;
-		if (label) return label;
+	/**
+	An input field with id \'googleAjaxSearchWeb\' may override GOOGLESEARCHWEB.
+	*/
+	GoogleAjaxSearch.prototype.getSearchWeb = function () {
+		var webElem = document.getElementById("googleAjaxSearchWeb");
+		if (webElem) {
+			var webName = webElem.value;
+			if (webName) return webName;
+		}
+		// else default
+		return "'.$searchWeb.'";
 	}
-	// else default
-	return "'.$siteLabel.'";
-}
+	GoogleAjaxSearch.prototype.getUrlParam = function () {
+		return "%URLPARAM{"googleAjaxQuery" default=""}%";
+	}
+	GoogleAjaxSearch.prototype.getSiteLabel = function () {
+		var webElem = document.getElementById("googleAjaxSearchlabel");
+		if (webElem) {
+			var label = webElem.value;
+			if (label) return label;
+		}
+		// else default
+		return "'.$siteLabel.'";
+	}
 //]]>
 </script>
 ';
