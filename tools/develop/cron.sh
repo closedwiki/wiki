@@ -18,3 +18,4 @@ for web in $WEBS; do
 done
 
 svn update
+perl pseudo-install.pl -link default

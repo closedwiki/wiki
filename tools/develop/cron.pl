@@ -6,7 +6,7 @@ my $BRANCH = $ARGV[0];
 my $ROOT = $ENV{HOME};
 my $COMMIT_FLAG = "$ROOT/svncommit";
 my $UPDATE_FLAG = "$ROOT/update_in_progress";
-my $LATEST = "$ROOT/twikisvn/pub/latest_$BRANCH.txt";
+my $LATEST = "$ROOT/twikisvn/pub/Bugs/latest_$BRANCH/rev.txt";
 
 chdir("$ROOT/twikisvn") || die $!;
 

@@ -34,6 +34,8 @@ EOF
     exit 1;
 }
 
+fail("$BRANCH is disabled for checkins") if $BRANCH =~ /^(TWikiRelease04x00|DEVELOP)$/;
+
 local $/ = undef;
 fail("No Bug item in log message")
   unless( $logmsg =~ /^Item[0-9]*:/ );
