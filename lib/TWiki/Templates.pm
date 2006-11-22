@@ -288,6 +288,19 @@ sub _readTemplateFile {
         return TWiki::readFile( $TWiki::cfg{TemplateDir}.'/'.$name );
     }
 
+    my $userdirweb = $web;
+    my $userdirname = $name;
+    if( $name =~ /^(.+)\.(.+?)$/ ) {
+       $userdirweb = $1;
+       $userdirname = $2;
+
+       # if the name can be parsed into $web.$name, then this is an attempt
+       # to explicit include that topic. No further searching required.
+       if( validateTopic($session,$store,$session->{user},$userdirname,$userdirweb )) {
+	   return retrieveTopic( $store, $userdirweb, $userdirname );
+       }
+    }
+
     my @skinList = split( /\,\s*/, $skins );
     my $nrskins = $#skinList;
     
@@ -296,12 +309,6 @@ sub _readTemplateFile {
     # Search the $TWiki::cfg{TemplatePath} for the skinned versions
     my @candidates;
 
-    my $userdirweb = $web;
-    my $userdirname = $name;
-    if( $name =~ /^(.+)\.(.+?)$/ ) {
-       $userdirweb = $1;
-       $userdirname = $2;
-    }
     $nrskins = 0 if $nrskins < 0;
     foreach my $template ( @templatePath ) {
       for ( my $idx=0; $idx<=$nrskins; $idx++ ) {
