@@ -1,24 +1,35 @@
 %META:TOPICINFO{author="mvlach" date="1063832959" format="1.0" version="1.8"}%
 ---+ <nop>%TOPIC%
 
-Use the ==#<nop>#.==, ==#<nop>#..== _etc._ notation (that is, hash-hash-dot-dot-dot...) to insert outline numbering sequences (1, 1.1, 2, 2.1) in topic's text. Multiple named sequences and sequence re-initialization is supported.
+Use the ==#<nop>#.==, ==#<nop>#..== _etc._ notation to insert outline numbering sequences (1, 1.1, 2, 2.1) in topic's text. 
+
+Use ==---#<nop>==, ==---#<nop>#==, _etc._, to generate numbered headings.
 
 ---++ Syntax Rules
 
-	* The default outline numbering sequence uses the notation =#<nop>#...= (with 1-6 dots). The notation is replaced anywhere in the topic. The level number corresponding to the number of dots increases with each use. Each time a level is used, all higher levels are reset to 0.
+---+++ Numbered sequences
 
-	* Named numbering sequences can be used with the notation =#<nop>#name#...= for sequence =name=. Named sequences have independent numbering.
+   * The default outline numbering sequence uses the notation =#<nop>#...= (with 1-6 dots). The notation is replaced anywhere in the topic. The level number corresponding to the number of dots increases with each use. Each time a level is used, all higher levels are reset to 0.
+   * Named numbering sequences can be used with the notation =#<nop>#name#...= for sequence =name=. Named sequences have independent numbering.
+   * The numbering of a sequence can be initialized or re-initialized by adding a number =n= into the tag. For example, =#<nop>#name#2...= resets numbering sequence =name= to =2=. The sequence is initialized from the indicated level on.
+      * As a concession to backwards compatibility, =0= re-initializes the sequence at all levels. This comes in handy when using a sequence within headers that are also used in a *%<nop>TOC%*. In that case, start the first heading using something like =---+ Chapter #<nop>#0. Introduction=. You can then safely use the number notation in headings.
+   * The rendering of the numbering sequence can be turned into an letter-labeled list by appending a lowercase letter to the notation: =#<nop>#...a=
 
-	* The numbering of a sequence can be initialized or re-initialized by adding a =0= into to notation: =#<nop>#name#0...= anywhere in the topic. All numbers are re-initialized. This is essential when using a sequence within headers that are also used in a *%<nop>TOC%*. In that case, start the first heading using something like =---+ Chapter #<nop>#0. Introduction=. You can then safely use the number notation in headings.
+---+++ Numbered headings
 
-	* The rendering of the numbering sequence can be turned into an letter-labeled list by appending a lowercase letter to the notation: =#<nop>#...a=
+   * When the =+= character in headings is replaced by =#=, the headings are numbered. Heading numbers are derived from the unnamed sequence and can, therefore, be affected by the syntax above.
+      * Tip: Avoid unnamed sequences when using numbered headings.
 
-	* The maximum number of levels is 6, and using levels higher than maximum implies the last level.
+---+++ General comments
+   * Numbering count is maintained throughout a single topic. Included topics are considered part of the topic and are numbered in sequence with the including topic.
+   * The maximum number of levels is 6, and using levels higher than maximum implies the last level.
+   * Non-consecutive increasing levels generate =0= for the skipped levels.
+   * Sequence numbering always starts at level 1. A missing first level will result in a =0= to indicate the skipped level.
+   * Non-numbered headers do not affect the numbering of numbered headings.
 
 ---++ Examples
 
-If you have the plugin installed, the *Rendered* and *Expected* columns should be identical.
-If you do not have the plugin installed, the *Rendered* column will be the same as the *Source* column.
+If you have the plugin installed, the *Rendered* and *Expected* columns should be identical. If you do not have the plugin installed, the *Rendered* column will be the same as the *Source* column.
 
 | *Source* | *Rendered* | *Expected* |
 | #<nop>#. | ##. | 1 |
@@ -48,36 +59,16 @@ If you do not have the plugin installed, the *Rendered* column will be the same 
 
 Plugin settings are stored as preferences variables. To reference a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>EXPLICITNUMBERINGPLUGIN_SHORTDESCRIPTION%==
 
-	* One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
-		* Set SHORTDESCRIPTION = Use the ==#<nop>#.==, ==#<nop>#..== _etc._ notation to insert outline numbering sequences (1, 1.1, 2, 2.1) in topic's text. Multiple named sequences and sequence re-initialization is supported.
-
-	* Debug plugin: (See output in =data/debug.txt=)
-		* Set DEBUG = 0
+   * One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
+      * Set SHORTDESCRIPTION = Use the ==#<nop>#.==, ==#<nop>#..== _etc._ notation to insert outline numbering sequences (1, 1.1, 2, 2.1) in topic's text. Support also numbered headings.
+   * Debug plugin: (See output in =data/debug.txt=)
+      * Set DEBUG = 0
 
 ---++ See also
 
-There is an active development going on using the ---### notation for numbered headers.
-See TWiki:Codev.NumberedHeadersAndLists.
+There is an active development going on using the ---### notation for numbered headers. See TWiki:Codev.NumberedHeadersAndLists.
 
 The TWiki:Plugin.TocPlugin provides a more complete table of contents and cross-reference management.
-
----++ Copyright
-
-This code is a development of Lynguent Inc. and is protected by the following
-copyrights:
-	* Copyright (C) 2003 Lynguent, Inc. All Rights Reserved.
-
----++ License
-
-As required for the publication of all extensions to TWiki, this
-software is published under the terms of the GNU General Public
-License.
-
-This program is distributed in the hope that it will be useful, but
-WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-General Public License for more details, published at
-http://www.gnu.org/copyleft/gpl.html
 
 ---++ Plugin Installation Instructions
 
@@ -94,12 +85,16 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 
 ---++ Plugin Info
 
-|  Plugin Author: | TWiki:Main/%USERNAME% |
-|  Plugin Version: | 17 Sep 2003 (V1.002) |
+|  Plugin Author: | TWiki:Main/MartinVlach, TWiki:Main.ThomasWeigert (21 Nov 2006) |
+|  Copyright: | &copy; 2003, Lynguent, Inc. &copy; 2006, %TWIKIWEB%.TWikiContributor |
+|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
+|  Plugin Version: | 21 Nov 2006 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  29 Jul 2003: | Initial version |
-|  12 Aug 2003: | Initialize sequences in startRenderingHandler. Thank you TWiki:Main.IngoKarkat. |
+|  21 Nov 2006: | Added reset to specific number based on suggestion by Main.SteveWampler. Added support of numbered headers. Proper handling in table of content. |
 |  17 Sep 2003: | Added alpha-labeled lists. |
+|  12 Aug 2003: | Initialize sequences in startRenderingHandler. Thank you TWiki:Main.IngoKarkat. |
+|  29 Jul 2003: | Initial version |
+|  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 |
 |  CPAN Dependencies: | none |
 |  Other Dependencies: | none |
 |  Perl Version: | 5.8.0 |
@@ -108,5 +103,5 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 
 __Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
 
--- TWiki:Main.MartinVlach - 17 Sep 2003
+-- TWiki:Main.ThomasWeigert - 21 Nov 2006
 

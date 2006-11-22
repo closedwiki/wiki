@@ -16,36 +16,6 @@
 #
 # =========================
 #
-# This is an empty TWiki plugin. Use it as a template
-# for your own plugins; see TWiki.TWikiPlugins for details.
-#
-# Each plugin is a package that may contain these functions:        VERSION:
-#
-#   initPlugin              ( $topic, $web, $user, $installWeb )    1.000
-#   initializeUserHandler   ( $loginName, $url, $pathInfo )         1.010
-#   registrationHandler     ( $web, $wikiName, $loginName )         1.010
-#   commonTagsHandler       ( $text, $topic, $web )                 1.000
-#   startRenderingHandler   ( $text, $web )                         1.000
-#   outsidePREHandler       ( $text )                               1.000
-#   insidePREHandler        ( $text )                               1.000
-#   endRenderingHandler     ( $text )                               1.000
-#   beforeEditHandler       ( $text, $topic, $web )                 1.010
-#   afterEditHandler        ( $text, $topic, $web )                 1.010
-#   beforeSaveHandler       ( $text, $topic, $web )                 1.010
-#   writeHeaderHandler      ( $query )                              1.010  Use only in one Plugin
-#   redirectCgiQueryHandler ( $query, $url )                        1.010  Use only in one Plugin
-#   getSessionValueHandler  ( $key )                                1.010  Use only in one Plugin
-#   setSessionValueHandler  ( $key, $value )                        1.010  Use only in one Plugin
-#
-# initPlugin is required, all other are optional. 
-# For increased performance, all handlers except initPlugin are
-# disabled. To enable a handler remove the leading DISABLE_ from
-# the function name. Remove disabled handlers you do not need.
-#
-# NOTE: To interact with TWiki use the official TWiki functions 
-# in the TWiki::Func module. Do not reference any functions or
-# variables elsewhere in TWiki!!
-
 
 # =========================
 package TWiki::Plugins::ExplicitNumberingPlugin; 
@@ -95,56 +65,55 @@ sub initPlugin
 }
 
 # =========================
-sub startRenderingHandler
-{
-### my ( $text, $web ) = @_;   # do not uncomment, use $_[0], $_[1] instead
+# Need to move =makeExplicitNumber= into =commonTagsHandler= to support
+# auto-numbering of heading levels, otherwise the TOC lines will have
+# different number than the heading line (must be done before TOC).
 
-    ##TWiki::Func::writeDebug( "- ${pluginName}::startRenderingHandler( $_[1] )" ) if $debug;
-
-    # This handler is called by getRenderedVersion just before the line loop
-
-    # do custom extension rule, like for example:
-    # $_[0] =~ s/old/new/g;
-    %Sequences = ();
-}
-
-# =========================
-sub outsidePREHandler
+sub commonTagsHandler
 {
 ### my ( $text ) = @_;   # do not uncomment, use $_[0] instead
 
-    ##TWiki::Func::writeDebug( "- ${pluginName}::outsidePREHandler( $web.$topic )" ) if $debug;
+    ##TWiki::Func::writeDebug( "- ${pluginName}::commonTagsHandler( $web.$topic )" ) if $debug;
 
-    # This handler is called by getRenderedVersion, once per line, before any changes,
-    # for lines outside <pre> and <verbatim> tags. 
-    # Use it to define customized rendering rules.
-    # Note: This is an expensive function to comment out.
-    # Consider startRenderingHandler instead
+    return if $_[3];   # Called in an include; do not number yet.
 
-    # do custom extension rule, like for example:
-    # $_[0] =~ s/old/new/g;
-    $_[0] =~ s/\#\#(\w+\#)?(0)?\.(\.*)([a-z]?)/&makeExplicitNumber($1,$2,length($3),$4)/geo;
+    %Sequences = ();
+
+    $_[0] =~ s/\-\-\-(\#\#*) /&makeHeading(length($1))/geo;
+    $_[0] =~ s/\#\#(\w+\#)?([0-9]+)?\.(\.*)([a-z]?)/&makeExplicitNumber($1,$2,length($3),$4)/geo;
 }
 
 # =========================
+
+sub makeHeading {
+    my $headerlvl = shift || 0;
+    my $headerlevel = ($headerlvl)?'---':'';
+    my $numlevel = '##';
+    for (my $i=0;$i<$headerlvl;$i++) {
+      $headerlevel .= '+';
+      $numlevel .= '.';
+    }
+    return $headerlevel . $numlevel . ' ';
+}
+
 # Build the explicit outline number
 sub makeExplicitNumber
 {
 
     ##TWiki::Func::writeDebug( "- ${pluginName}::makeExplicitNumber( $_[0], $_[1], $_[2], $_[3] )" ) if $debug;
 
-    my $name = "-default-";
-    my $init = "";
+    my $name = '-default-';
+    my $init = '';
     my $level = $_[2];
-    my $alist = "";
-    if ( defined( $_[0] ) ) { $name = $_[0]; }
-    if ( defined( $_[1] ) ) { $init = $_[1]; }
-    if ( defined( $_[3] ) ) { $alist = $_[3]; }
-    if ( $alist ne "" ) {
+    my $alist = '';
+    $name = $_[0] if defined $_[0];
+    $init = $_[1] if defined $_[1];
+    $alist = $_[3] if defined $_[3];
+    if ( $alist ne '' ) {
         $level++;
     }
 
-    my $text = "";
+    my $text = '';
 
     #...Truncate the level count to maximum allowed
     if ($level > $lastLevel) { $level = $lastLevel; }
@@ -156,8 +125,13 @@ sub makeExplicitNumber
     } else {
         @Numbering = split(':', $Sequences{$name} );
 	#...Re-initialize the sequence
-	if ( $init eq "0" ) {
+	if ( defined $_[1] ) {
+	  $init = (int $init);
+	  if ( $init ) {
+	    $Numbering[$level] = $init - 1;
+	  } else {
 	    for $i ( 0 .. $lastLevel ) { $Numbering[$i] = 0; }
+	}
 	}
     }
 
@@ -173,10 +147,10 @@ sub makeExplicitNumber
     $Sequences{$name} =  join( ':', @Numbering );
 
     #...Construct the number
-    if ( $alist eq "" ) {
+    if ( $alist eq '' ) {
 	for $i ( 0 .. $level ) {
 	    $text .= "$Numbering[$i]";
-	    $text .= "." if ( $i < $level );
+	    $text .= '.' if ( $i < $level );
 	}
     } else {
 	#...Level is 1-origin, indexing is 0-origin
