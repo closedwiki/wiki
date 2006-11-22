@@ -2,7 +2,7 @@ BODY {
 	margin: 0;
 	padding: 0;
 	line-height: 1.3em;
-	font-family: "Lucida Grande", verdana, arial, sans-serif;
+	font-family: verdana, arial, sans-serif;
 	font-size: small;
 }
 FORM {
@@ -93,7 +93,7 @@ OL LI, UL LI {
 }
 .PageTitle {
 	font-size: 130%;
-	font-family: "Lucida Grande", Verdana, Arial, sans-serif;
+	font-family: Verdana, Arial, sans-serif;
 	color: #333333;
 	text-align: center;
 	padding: 6px;
@@ -108,13 +108,12 @@ OL LI, UL LI {
 	font-size: 70%;
 }
 .MenuBar {
-	height: 19px;
-	font: 12px/18px "Lucida Grande", Verdana, Arial, sans-serif;
+	padding:2px 10px;
+	font: 12px/18px Verdana, Arial, sans-serif;
 	background: url("menubar.gif");
-	padding: 2px 10px;
 }
 .MenuBar CENTER {
-	padding-top: 1px;
+	padding-top:1px;
 	font-weight: bold;
 }
 .MenuBarRight {
@@ -412,5 +411,5 @@ TABLE#twikiSearchTable TD.first {
 	font: 100% "Courier New", courier, monaco, monospace;
 }
 .twikiEditboxStyleProportional {
-	font: 100% "Lucida Grande", verdana, arial, sans-serif;
+	font: 100% verdana, arial, sans-serif;
 }
