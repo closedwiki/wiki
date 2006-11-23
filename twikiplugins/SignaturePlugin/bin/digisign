@@ -28,6 +28,6 @@ BEGIN {
 }
 
 use TWiki::UI;
-use TWiki::Plugins::SignaturePlugin;
-TWiki::UI::run( \&TWiki::Plugins::SignaturePlugin::sign );
+use TWiki::Plugins::SignaturePlugin::Signature;
+TWiki::UI::run( \&TWiki::Plugins::SignaturePlugin::Signature::sign );
 

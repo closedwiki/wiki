@@ -8,18 +8,16 @@ This plugin supports a simple tag which appears as a button with the label given
 
 Insert the tag %<nop>SIGNATURE% anywhere in the topic, as many times as you like. Each such tag will create a signature button.
 
----++ Improvement Suggestions
-
-It would be nice to extend the above tag by the following parameter:
+The following parameters are supported for the %<nop>SIGNATURE% tag.
 
    | *Parameter:* | *Description:* | *Default:* |
-   | ="name"= | The wiki name of a user. Only this user is allowed to sign at this location. |  |
+   | ="name"= | The wiki name of a user or group or a list of users/groups. Only these users or members of these groups are allowed to sign here. |  |
    | ="format"= | The signature format for this particular signature. The syntax is the same as for the setting variable =SIGNATUREFORMAT=. |  |
 
 ---++ Plugin Settings
 
 Plugin settings are stored as preferences variables. To reference
-a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>EMPTYPLUGIN_SHORTDESCRIPTION%==
+a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>SIGNATUREPLUGIN_SHORTDESCRIPTION%==
    * Format of the signature line. The variables =$wikiusername=, =$wikiname=, $username, and =$date= can be used, indicating the WikiName of the logged in user prefixed with the user web, the WikiName of the logged in user, the login name of the logged in user, and the date of signing, respectively.
       * Set SIGNATUREFORMAT = $wikiusername - $date
    * Label of the signature button
@@ -40,18 +38,21 @@ a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>E
 | ==data/TWiki/%TOPIC%.txt== | Plugin topic | 
 | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module | 
 | ==lib/bin/digisign== | Support script |
+| ==templates/oopsgeneric.tmpl== | Only for TWiki 4.0 |
+| ==templates/oopsgeneric.pattern.tmpl== | Only for TWiki 4.0 |
 	* Ensure that the script =lib/bin/digisign= is executable and authorized as desired.
 	* If installed correctly you should see a button with the label indicated by the setting below.
 
-%SIGNATURE%
+%SIGNATURE{name="TWikiAdminGroup"}%
 
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main/ThomasWeigert |
 |  Copyright: | &copy; 2006, Motorola |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 01 Aug 2006 |
+|  Plugin Version: | 19 Nov 2006 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  19 Nov 2006: | Support user designation and user-specific format. |
 |  01 Aug 2006: | Initial release |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 |
 |  CPAN Dependencies: | none |
@@ -63,4 +64,4 @@ a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>E
 
 __Related Topics:__ %TWIKIWEB%.TWikiPlugins, %TWIKIWEB%.DeveloperDocumentationCategory, %TWIKIWEB%.AdminDocumentationCategory, %TWIKIWEB%.TWikiPreferences
 
--- Main.ThomasWeigert - 01 Aug 2006
+-- Main.ThomasWeigert - 19 Nov 2006

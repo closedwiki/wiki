@@ -14,7 +14,7 @@ my $PACKAGES_URL = "http://www.twiki.org/p/pub/Plugins/";
 my $noconfirm = 0;
 my $twiki;
 my $NL = "\n";
-my %manifest = ( 'data/TWiki/SignaturePlugin.txt'=>0660,'lib/TWiki/Plugins/SignaturePlugin.pm'=>0440,'bin/digisign'=>0550, );
+my %manifest = ( 'data/TWiki/SignaturePlugin.txt'=>0660,'lib/TWiki/Plugins/SignaturePlugin.pm'=>0440,'lib/TWiki/Plugins/SignaturePlugin/Signature.pm'=>0440,'bin/digisign'=>0550,'templates/oopsgeneric.pattern.tmpl'=>0440,'templates/oopsgeneric.tmpl'=>0440, );
 my @deps = (  );
 my $dakar;
 my %available;
