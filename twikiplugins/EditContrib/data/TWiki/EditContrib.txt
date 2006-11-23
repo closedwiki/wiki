@@ -116,6 +116,7 @@ __Note:__ You do not need to install anything on the browser to use this contrib
 |  Dependencies: | none  |
 |  Version: | 20 Sep 2006 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  19 Nov 2006: | Fix for incorrect rendering of pre and post text by TWiki:Main.ScottHoge. |
 |  20 Sep 2006: | Move cursor to textarea upon edit. |
 |  15 Aug 2006: | Remove deprecated functions from =savesection=. |
 |  14 Aug 2006: | Support adding of text to a topic. |

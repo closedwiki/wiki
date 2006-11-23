@@ -50,11 +50,7 @@ sub save {
 	$query->param( 'text' ) .
 	  TWiki::Contrib::EditContrib::unprotect($query->param( 'postxt' ));
 
-  my $editaction = $query->param ( 'editaction' );
-  $editaction .= $query->param ( 'editparams' );
-
   $session->{cgiQuery}->param( -name=>"text", -value=>$text);
-  $session->{cgiQuery}->param( -name=>"editaction", -value=>$editaction);
 
   TWiki::UI::Save::save( $session );
 
