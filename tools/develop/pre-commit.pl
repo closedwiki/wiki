@@ -12,6 +12,8 @@ my $REPOS = $ARGV[0];
 my $TXN = $ARGV[1];
 my $BRANCH = $ARGV[2];
 
+my $logmsg = `/usr/bin/svnlook log -t $TXN $REPOS`;
+
 sub fail {
     my $message = shift;
     print STDERR <<EOF;
@@ -33,8 +35,6 @@ fail("$BRANCH is disabled for checkins") if $BRANCH =~ /^(TWikiRelease04x00|DEVE
 # See if this checkin is changing our branch
 my $paths = `/usr/bin/svnlook changed -t $TXN $REPOS`;
 exit 0 unless( $paths =~ m#\stwiki/branches/$BRANCH/#s );
-
-my $logmsg = `/usr/bin/svnlook log -t $TXN $REPOS`;
 
 local $/ = undef;
 fail("No Bug item in log message")
