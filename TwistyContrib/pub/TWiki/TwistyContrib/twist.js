@@ -60,12 +60,12 @@ TWiki.TwistyPlugin = new function () {
 			// show content
 			addClass(showControl, 'twistyHidden');	// hide 'show'
 			removeClass(hideControl, 'twistyHidden'); // show 'hide'
-			removeClass(contentElem, 'twistyHidden'); // show content
+			if (contentElem) removeClass(contentElem, 'twistyHidden'); // show content
 		} else {
 			// hide content
 			removeClass(showControl, 'twistyHidden'); // show 'show'	
 			addClass(hideControl, 'twistyHidden'); // hide 'hide'
-			addClass(contentElem, 'twistyHidden'); // hide content
+			if (contentElem) addClass(contentElem, 'twistyHidden'); // hide content
 		}
 		if (inMaySave && ref.saveSetting) {
 	        setPref(TWiki.TwistyPlugin.COOKIE_PREFIX + ref.name, ref.state);
