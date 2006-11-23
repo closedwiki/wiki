@@ -72,10 +72,10 @@ sub write_topic {
 
     File::Path::mkpath("$test_data/$web") unless -d "$test_data/$web";
     open(F, ">$test_data/$web/$topic.txt") || die;
-    print F "$web/$topic";
+    $content = $content || "$web/$topic";
+    print F $content;
     close(F);
 }
-
 
 sub test_skinPathBasic {
     my $this = shift;
@@ -205,6 +205,42 @@ sub test_pathOdd {
 
 }
 
+sub test_pathOtherUses {
+    my $this = shift;
+    my $data;
+
+    # To verify a concern by SvenDowideit on fallback to "default" templates
+    write_template( 'scriptA.skin','the scriptA.skin.tmpl template' );
+    write_template( 'scriptC.pattern','the scriptC.pattern.tmpl template' );
+    write_template( 'scriptB','the scriptB.tmpl template' );
+
+    $data = $tmpls->readTemplate('scriptB', 'skin,pattern', '' );
+    $this->assert_str_equals('the scriptB.tmpl template', $data );
+
+    $data = $tmpls->readTemplate('scriptC', 'skin,pattern', '' );
+    $this->assert_str_equals('the scriptC.pattern.tmpl template', $data );
+}
+
+sub test_direct_lookup_in_usertopic {
+    my $this = shift;
+    my $data;
+
+    # To verify a use case raised by Michael Daum
+    write_template( 'web/scriptA.skin','the web/scriptA.skin.tmpl template' );
+    write_template( 'web/scriptA','the web/scriptA.tmpl template' );
+    write_template( 'web/scriptB','the web/scriptB.tmpl template' );
+    write_topic( 'Web', 'ScriptA', 'the Web.ScriptA template' );
+    write_topic( 'Web', 'PatternSkinScriptBTemplate', 'the Web.PatternSkinScriptBTemplate template' );
+    write_topic( 'Web', 'ScriptBTemplate', 'the Web.ScriptBTemplate template' );
+
+    $data = $tmpls->readTemplate('web.scriptA', 'skin', '' );
+    $this->assert_str_equals('the Web.ScriptA template', $data );
+
+    $data = $tmpls->readTemplate('web.scriptA', '', '' );
+    $this->assert_str_equals('the Web.ScriptA template', $data );
+
+}
+
 sub test_WebTopicsA {
    my $this = shift;
    my $data;
@@ -298,13 +334,13 @@ sub test_webTopicsE {
     write_topic( 'Web', 'BurntSkinScriptTemplate' );
     write_topic( 'Web', 'Script' );
     $data = $tmpls->readTemplate('Web.Script', '', '' );
-    $this->assert_str_equals("Web/ScriptTemplate", $data );
+    $this->assert_str_equals("Web/Script", $data );
     $data = $tmpls->readTemplate('Web.Script', '', 'web' );
-    $this->assert_str_equals("Web/ScriptTemplate", $data );
+    $this->assert_str_equals("Web/Script", $data );
     $data = $tmpls->readTemplate('Web.Script', 'burnt', '' );
-    $this->assert_str_equals("Web/BurntSkinScriptTemplate", $data );
+    $this->assert_str_equals("Web/Script", $data );
     $data = $tmpls->readTemplate('Web.Script', 'burnt', 'web' );
-    $this->assert_str_equals("Web/BurntSkinScriptTemplate", $data );
+    $this->assert_str_equals("Web/Script", $data );
 }
 
 #Wishlist

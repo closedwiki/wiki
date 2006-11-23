@@ -291,8 +291,8 @@ sub _readTemplateFile {
     my $userdirweb = $web;
     my $userdirname = $name;
     if( $name =~ /^(.+)\.(.+?)$/ ) {
-       $userdirweb = $1;
-       $userdirname = $2;
+       $userdirweb = ucfirst($1);
+       $userdirname = ucfirst($2);
 
        # if the name can be parsed into $web.$name, then this is an attempt
        # to explicit include that topic. No further searching required.
@@ -323,8 +323,8 @@ sub _readTemplateFile {
 	    # Could also use $Skin, $Web, $Name to indicate uppercase
 	    $userdir = 1;
 	    $skin = ucfirst($skin);
-	    $webName = ucfirst($userdirweb);
-	    $tmplName = ucfirst($userdirname);
+	    $webName = $userdirweb;
+	    $tmplName = $userdirname;
 	  }
 	  $file =~ s/\$skin/$skin/geo;
 	  $file =~ s/\$web/$webName/geo;
