@@ -1,6 +1,19 @@
 # Partially derived from bin/edit and /lib/TWiki/UI/Edit.pm; omitted topic
 # creation related code
 
+=pod
+# Rewrite slightly so that it uses the refactored TWiki::UI::Edit;
+# we can do:
+
+sub edit {
+    my $session = shift;
+    my ( $text, $tmpl ) = init_edit( $session, 'editsection' );
+    ( $text, $tmpl ) = HANDLE_PRE_AND_POST();
+    finalize_edit ( $session, $text, $tmpl );
+}
+
+=cut
+
 package TWiki::Contrib::EditContrib;
 
 use vars qw( $VERSION );
@@ -368,16 +381,16 @@ sub finalize_edit {
 
     # do not allow click on link before save: (mods by TedPavlic)
     my $oopsUrl = '%SCRIPTURLPATH%/oops%SCRIPTSUFFIX%/%WEB%/%TOPIC%';
-    $oopsUrl = $session->handleCommonTags( $oopsUrl, $topic );
+    $oopsUrl = $session->handleCommonTags( $oopsUrl, $webName, $topic );
 
     if ( $pretxtRender ) {
       #### quoteForXml included in entityEncode
       #### $pretxtRender = &TWiki::Contrib::EditContrib::quoteForXml($pretxtRender);
       #### don't think we still do the tab encoding
       $pretxtRender =~ s/ {3}/\t/go;
-      $pretxtRender = $session->handleCommonTags( $pretxtRender, $topic );
+      $pretxtRender = $session->handleCommonTags( $pretxtRender, $webName, $topic );
       # Same as TWiki::Func::renderText( $pretxtRender )
-      $pretxtRender = $session->{renderer}->getRenderedVersion( $pretxtRender );
+      $pretxtRender = $session->{renderer}->getRenderedVersion( $pretxtRender, $webName, $topic );
       # Disable links and inputs in the text
       $pretxtRender =~ s#<a\s[^>]*>(.*?)</a>#<span class="twikiEmulatedLink">$1</span>#gis;
       $pretxtRender =~ s/<(input|button|textarea) /<$1 disabled="disabled"/gis;
@@ -394,9 +407,9 @@ sub finalize_edit {
       #### $postxtRender = &TWiki::Contrib::EditContrib::quoteForXml($postxtRender);
       #### don't think we still do the tab encoding
       $postxtRender =~ s/ {3}/\t/go;
-      $postxtRender = $session->handleCommonTags( $postxtRender, $topic );
+      $postxtRender = $session->handleCommonTags( $postxtRender, $webName, $topic );
       # Same as TWiki::Func::renderText( $pretxtRender )
-      $postxtRender = $session->{renderer}->getRenderedVersion( $postxtRender );
+      $postxtRender = $session->{renderer}->getRenderedVersion( $postxtRender, $webName, $topic );
 
       # Disable links and inputs in the text
       $postxtRender =~ s#<a\s[^>]*>(.*?)</a>#<span class="twikiEmulatedLink">$1</span>#gis;
