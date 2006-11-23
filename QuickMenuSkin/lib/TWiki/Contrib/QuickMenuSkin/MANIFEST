@@ -3,6 +3,7 @@ data/TWiki/QuickMenuBarLanguage.txt 0644
 data/TWiki/QuickMenuBarLogin.txt 0644
 data/TWiki/QuickMenuBarUtilities.txt 0644
 data/TWiki/QuickMenuBarWebs.txt 0644
+data/TWiki/QuickMenuDisabled.txt 0644
 data/TWiki/QuickMenuSkin.txt 0644
 lib/TWiki/Contrib/QuickMenuSkin.pm 0444
 pub/TWiki/QuickMenuSkin/arrow.gif 0444
