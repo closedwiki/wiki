@@ -190,18 +190,22 @@ sub test_pathOdd {
     my $this = shift;
     my $data;
 
-    write_template( 'script.skin','script-skin' );
-    write_template( 'script.skinA.skin','script-skinA-skin' );
+    # To verify that a name with dot in it is also considered
+    write_template( 'script.skin','the script.skin.tmpl template' );
+    write_template( 'script.skinA.skin','the script.skinA.skin.tmpl template' );
 
     $data = $tmpls->readTemplate('script.skin', '', '' );
-    $this->assert_str_equals('script-skin', $data );
+    $this->assert_str_equals('the script.skin.tmpl template', $data );
+
+    $data = $tmpls->readTemplate('script.skin', 'pattern', '' );
+    $this->assert_str_equals('the script.skin.tmpl template', $data );
 
     $data = $tmpls->readTemplate('script.skinA', 'skin', '' );
-    $this->assert_str_equals('script-skinA-skin', $data );
+    $this->assert_str_equals('the script.skinA.skin.tmpl template', $data );
 
     # Works but should never be called in code
     $data = $tmpls->readTemplate('script', 'skinA.skin', '' );
-    $this->assert_str_equals('script-skinA-skin', $data );
+    $this->assert_str_equals('the script.skinA.skin.tmpl template', $data );
 
 }
 
@@ -221,11 +225,12 @@ sub test_pathOtherUses {
     $this->assert_str_equals('the scriptC.pattern.tmpl template', $data );
 }
 
-sub test_direct_lookup_in_usertopic {
+sub test_directLookupInUsertopic {
     my $this = shift;
     my $data;
 
-    # To verify a use case raised by Michael Daum
+    # To verify a use case raised by Michael Daum: $web.$script looks up
+    # template topic $script in $web, no further searching is done
     write_template( 'web/scriptA.skin','the web/scriptA.skin.tmpl template' );
     write_template( 'web/scriptA','the web/scriptA.tmpl template' );
     write_template( 'web/scriptB','the web/scriptB.tmpl template' );
@@ -239,6 +244,34 @@ sub test_direct_lookup_in_usertopic {
     $data = $tmpls->readTemplate('web.scriptA', '', '' );
     $this->assert_str_equals('the Web.ScriptA template', $data );
 
+}
+
+sub test_WebDotTopicQuestions {
+    my $this = shift;
+    my $data;
+
+    # To further verify the $web.$script use case. Note the order in
+    # which templates are found. It sure is counter-intuitive.
+    write_topic( 'Web', 'TestTemplate', 'the Web.TestTemplate template' );
+    $data = $tmpls->readTemplate('web.test', 'skin', '' );
+    $this->assert_str_equals('the Web.TestTemplate template', $data );
+
+    write_topic( 'Web', 'SkinSkinTestTemplate', 'the Web.SkinSkinTestTemplate template' );
+    $data = $tmpls->readTemplate('web.test', 'skin', '' );
+    $this->assert_str_equals('the Web.SkinSkinTestTemplate template', $data );
+
+    write_template( 'web.test','the web.test.tmpl template' );
+    $data = $tmpls->readTemplate('web.test', 'skin', '' );
+    $this->assert_str_equals('the web.test.tmpl template', $data );
+
+    write_template( 'web.test.skin','the web.test.skin.tmpl template' );
+    $data = $tmpls->readTemplate('web.test', 'skin', '' );
+    $this->assert_str_equals('the web.test.skin.tmpl template', $data );
+
+
+    write_topic( 'Web', 'Test', 'the Web.Test template' );
+    $data = $tmpls->readTemplate('web.test', 'pattern', '' );
+    $this->assert_str_equals('the Web.Test template', $data );
 }
 
 sub test_WebTopicsA {
