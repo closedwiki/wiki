@@ -231,27 +231,8 @@ sub test_directLookupInUsertopic {
 
     # To verify a use case raised by Michael Daum: $web.$script looks up
     # template topic $script in $web, no further searching is done
-    write_template( 'web/scriptA.skin','the web/scriptA.skin.tmpl template' );
-    write_template( 'web/scriptA','the web/scriptA.tmpl template' );
-    write_template( 'web/scriptB','the web/scriptB.tmpl template' );
-    write_topic( 'Web', 'ScriptA', 'the Web.ScriptA template' );
-    write_topic( 'Web', 'PatternSkinScriptBTemplate', 'the Web.PatternSkinScriptBTemplate template' );
-    write_topic( 'Web', 'ScriptBTemplate', 'the Web.ScriptBTemplate template' );
-
-    $data = $tmpls->readTemplate('web.scriptA', 'skin', '' );
-    $this->assert_str_equals('the Web.ScriptA template', $data );
-
-    $data = $tmpls->readTemplate('web.scriptA', '', '' );
-    $this->assert_str_equals('the Web.ScriptA template', $data );
-
-}
-
-sub test_WebDotTopicQuestions {
-    my $this = shift;
-    my $data;
-
-    # To further verify the $web.$script use case. Note the order in
-    # which templates are found. It sure is counter-intuitive.
+    # Note the order in which templates are found. It sure is 
+    # counter-intuitive to not consider the skin templates first.
     write_topic( 'Web', 'TestTemplate', 'the Web.TestTemplate template' );
     $data = $tmpls->readTemplate('web.test', 'skin', '' );
     $this->assert_str_equals('the Web.TestTemplate template', $data );
@@ -268,9 +249,11 @@ sub test_WebDotTopicQuestions {
     $data = $tmpls->readTemplate('web.test', 'skin', '' );
     $this->assert_str_equals('the web.test.skin.tmpl template', $data );
 
-
     write_topic( 'Web', 'Test', 'the Web.Test template' );
-    $data = $tmpls->readTemplate('web.test', 'pattern', '' );
+    $data = $tmpls->readTemplate('web.test', 'skin', '' );
+    $this->assert_str_equals('the Web.Test template', $data );
+
+    $data = $tmpls->readTemplate('web.test', '', '' );
     $this->assert_str_equals('the Web.Test template', $data );
 }
 
