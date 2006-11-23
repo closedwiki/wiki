@@ -74,7 +74,7 @@
 <tr><td class="twikiRevInfo">%REVINFO% </td>
 </table>
 <div id="MenuBar" class="MenuBar"><div class="MenuBarRight"><table cellspacing="0" cellpadding="0"><tr id="MenuBarRightTR"><td style="padding: 1px 5px 0 2px"><form action="%SCRIPTURLPATH{"view"}%/%BASEWEB%/%BASETOPIC%"><input type="text" name="topic" value="%MAKETEXT{"Jump"}%" class="twikiInputBox twikiInputBoxDefault" size="15" onfocus="clearDefaultandCSS(this)" onblur="setDefaultandCSS(this)"></form></td>
-<td style="padding: 1px 5px 0 2px"><form action="%SCRIPTURLPATH{view}%/%INCLUDINGWEB%/WebSearch"><input type="text" name="search" value="%MAKETEXT{"Search"}%" class="twikiInputBox twikiInputBoxDefault" size="15" onfocus="clearDefaultandCSS(this)" onblur="setDefaultandCSS(this)"></form></td></tr></table></div></div>
+<td style="padding: 1px 5px 0 2px"><form action="%SCRIPTURLPATH{view}%/%INCLUDINGWEB%/WebSearch"><input type="text" name="search" value="%MAKETEXT{"Search"}%" class="twikiInputBox twikiInputBoxDefault" size="15" onfocus="clearDefaultandCSS(this)" onblur="setDefaultandCSS(this)"></form></td></tr></table></div><noscript><small style="float:left">Webs: %WEBLIST{format="[[$name]]" separator=", "}%</small><center style="color:#f00">QuickMenu is disabled! <a href="%SCRIPTURLPATH{view}%/%TWIKIWEB%/QuickMenuDisabled?skin=plain.quickmenu" style="font-weight:normal;font-size:80%;vertical-align:top">Why?</a></center></noscript></div>
 <script type="text/javascript" src="%PUBURLPATH%/%TWIKIWEB%/QuickMenuSkin/qmenu.js"></script>
 <script type="text/javascript">
 QuickMenu.Set.ShowOnHover =%IF{"defined CLICKMENU and $ CLICKMENU" then=" 0" else=" 1"}%;
