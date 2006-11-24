@@ -110,6 +110,21 @@ This allows for several levels of customisation:
 
 %X% Templates are picked up by following the [[TWikiTemplates#Finding_Templates][standard TWiki rules]] for locating template files. Note that you can use =%TMPL:INCLUDE= to include other files of templates.
 
+---+++ Customisation example
+Provide both a =PROMPT= and an =OUTPUT= definition:
+
+<verbatim>
+%TMPL:DEF{PROMPT:myComment}%%TMPL:P{promptbox}%%TMPL:END%
+%TMPL:DEF{OUTPUT:myComment}%%TMPL:P{outputoneliner}%%POS:TOP%
+%TMPL:END%
+</verbatim>
+
+Call your custom comment with:
+
+<verbatim>
+%COMMENT{type="myComment"}%
+</verbatim>
+
 ---+++ The =PROMPT= template
 The =PROMPT= template defines the contents of an HTML form that is used to capture the comment. This form invokes the comment generator when submitted. Parameters to the comment generator are defined using standard HTML input fields, such as =input=, =textarea= and =select=. The user enters values for these parameters, and these are then available when the =OUTPUT= template is expanded, in the form of <code>%<nop>URLPARAM%</code>s.
 
