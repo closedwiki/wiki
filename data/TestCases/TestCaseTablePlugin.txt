@@ -140,10 +140,21 @@ no initdirection specified, column 3
 | 3 | ghi | pqr | 15 Jan 2006 |
 
 ---++ =tableborder=
+---+++ tableborder="5"
 <verbatim>
 %TABLE{tableborder="5"}%
 </verbatim>
 %TABLE{tableborder="5"}%
+| *One* | *Two* | *Three* | *Four* |
+| 1 | abc | vwx | 01 Jan 1900 |
+| 2 | def | stu | 31 Dec 1999 |
+| 3 | ghi | pqr | 15 Jan 2006 |
+
+---+++ tableborder="0"
+<verbatim>
+%TABLE{tableborder="0"}%
+</verbatim>
+%TABLE{tableborder="0"}%
 | *One* | *Two* | *Three* | *Four* |
 | 1 | abc | vwx | 01 Jan 1900 |
 | 2 | def | stu | 31 Dec 1999 |
@@ -168,6 +179,29 @@ no initdirection specified, column 3
 | 1 | abc | vwx | 01 Jan 1900 |
 | 2 | def | stu | 31 Dec 1999 |
 | 3 | ghi | pqr | 15 Jan 2006 |
+
+---++ =cellborder=
+---+++ cellborder="0"
+<verbatim>
+%TABLE{cellborder="0" tableborder="0"}%
+</verbatim>
+%TABLE{cellborder="0" tableborder="0"}%
+| *One* | *Two* | *Three* | *Four* |
+| 1 | abc | vwx | 01 Jan 1900 |
+| 2 | def | stu | 31 Dec 1999 |
+| 3 | ghi | pqr | 15 Jan 2006 |
+
+---+++ cellborder="3"
+<verbatim>
+%TABLE{cellborder="3" tableborder="3"}%
+</verbatim>
+%TABLE{cellborder="3" tableborder="3"}%
+| *One* | *Two* | *Three* | *Four* |
+| 1 | abc | vwx | 01 Jan 1900 |
+| 2 | def | stu | 31 Dec 1999 |
+| 3 | ghi | pqr | 15 Jan 2006 |
+
+
 
 ---++ =valign=
 <verbatim>
