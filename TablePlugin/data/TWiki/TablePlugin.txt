@@ -78,6 +78,7 @@ Attributes are defined as a =TABLEATTRIBUTES= Plugin setting in this topic, a =T
 | =tablerules=     | Table rules, set to ="none"= (no rules), ="groups"= (rules will appear between row groups and column groups only), ="rows"= (rules will appear between rows only), ="cols"= (rules will appear between columns only), ="all"= (rules will appear between all rows and columns). | <span class="twikiGrayText">unspecified</span>  | =tablerules="rows"= |		  
 | =cellpadding=    | Cell padding (pixels). | ="0"= | =cellpadding="0"= |
 | =cellspacing=    | Cell spacing (pixels). | ="0"= | =cellspacing="3"= |
+| =cellborder=     | Cell border width (pixels). | ="1"= | =cellborder="0"= |
 | =valign=         | Vertical alignment of cells and headers, set to ="top"=, ="middle"=, ="bottom"= or ="baseline"=. | <span class="twikiGrayText">unspecified</span>  | =valign="top"= |
 | =headervalign=   | Vertical alignment of header cells; overrides =valign=. | <span class="twikiGrayText">unspecified</span>  | =headervalign="top"= |
 | =datavalign=     | Vertical alignment of data cells; overrides =valign=. | <span class="twikiGrayText">unspecified</span>  | =datavalign="top"= |
@@ -97,9 +98,9 @@ The =%<nop>TABLE{...}%= settings override =TABLEATTRIBUTES= preferences settings
 
 ---+++ Use of %<nop>TABLE{...}%
 
-Line before table: =%<nop>TABLE{ sort="on" tableborder="0" cellpadding="4" cellspacing="3" headerbg="#D5CCB1" headercolor="#666666" databg="#FAF0D4, #F3DFA8" headerrows="2" footerrows="1" }%=
+Line before table: =%<nop>TABLE{ sort="on" tableborder="0" cellpadding="4" cellspacing="3" cellborder="0" headerbg="#D5CCB1" headercolor="#666666" databg="#FAF0D4, #F3DFA8" headerrows="2" footerrows="1" }%=
 
-%TABLE{ sort="on" tableborder="0" cellpadding="4" cellspacing="3" headerbg="#D5CCB1" headercolor="#666666" databg="#FAF0D4, #F3DFA8" headerrows="2" footerrows="1" }%
+%TABLE{ sort="on" tableborder="0" cellpadding="4" cellspacing="3" cellborder="0" headerbg="#D5CCB1" headercolor="#666666" databg="#FAF0D4, #F3DFA8" headerrows="2" footerrows="1" }%
 | *Table with two Header Rows and Footer Row* ||||||
 | *Num* | *Status* | *Action* | *Who* | *When* | *Progress* |
 | 1 | C | Chose new colours | John | 1-Dec-02 | |
@@ -136,11 +137,12 @@ This plugin is pre-installed with your TWiki release. You should not have to ins
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main/JohnTalintyre, TWiki:Main/PeterThoeny |
-|  Plugin Version: | 1.015 |
+|  Plugin Version: | 1.016 |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
+|  24 Nov 2006 | 1.016: Arthur Clemens: Added new attribute =cellborder=.  |
 |  25 Oct 2006 | 1.015: Arthur Clemens: Added support for background colors of sorted column. Columns can be unsorted - sorting order is now: sort ascending, sort descending, unsort. Added attributes =headervalign= and =datavalign=. |
 |  16 Aug 2006 | Michael Daum: Added CSS support for even/odd table rows |
-|  13 Dec 2005 | Arthur Clemens: Added support for id, summary and caption |
+|  13 Dec 2005 | Arthur Clemens: Added support for =id=, =summary= and =caption= |
 |  5 Mar 2005 | 1.014: Crawford Currie eliminated deprecated handlers for Dakar |
 |  01 Aug 2004: | Arthur Clemens: Added CSS support for first column and ascending/descending table headers |
 |  21 Mar 2004: | PTh: Internal change: Fixed reference to unofficial variable |

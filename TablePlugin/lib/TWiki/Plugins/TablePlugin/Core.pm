@@ -28,7 +28,7 @@ use vars qw( $translationToken
              $insideTABLE $tableCount @curTable $sortCol $requestedTable $up
              $sortTablesInText $sortAttachments $currTablePre
              $tableWidth @columnWidths
-             $tableBorder $tableFrame $tableRules $cellPadding $cellSpacing 
+             $tableBorder $tableFrame $tableRules $cellPadding $cellSpacing $cellBorder
              @headerAlign @dataAlign $vAlign $headerVAlign $dataVAlign
              $headerBg $headerBgSorted $headerColor $sortAllTables $twoCol @dataBg @dataBgSorted @dataColor
              @isoMonth
@@ -72,6 +72,7 @@ sub _setDefaults {
     $tableRules     = '';
     $cellSpacing    = 0;
     $cellPadding    = 0;
+    $cellBorder     = 1;
     $tableWidth     = '';
     @columnWidths   = ( );
     $headerRows     = 1;
@@ -134,6 +135,9 @@ sub _parseParameters {
 
     $tmp = $params{cellspacing};
     $cellSpacing = $tmp if( defined $tmp && $tmp ne '' );
+
+    $tmp = $params{cellborder};
+    $cellBorder = $tmp if( defined $tmp && $tmp ne '' );
 
     $tmp = $params{headeralign};
     @headerAlign = split( /,\s*/, $tmp ) if( defined $tmp );
@@ -316,6 +320,8 @@ sub _processTableRow {
 					$attr->{class} = _appendSortedDescendingCssClass( $attr->{class} );
 				}
 			}
+			
+			$attr->{style} .= 'border-width:'.$cellBorder.'px;';
 			
 			if( /^\s*\*(.*)\*\s*$/ ) {
                 $value = $1;
