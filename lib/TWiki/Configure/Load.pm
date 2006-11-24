@@ -113,6 +113,24 @@ sub expand {
     }
 }
 
+
+=pod
+
+---++ StaticMethod expandValue($string) -> $boolean
+
+Expands references to TWiki configuration items which occur in the
+value of other configuration items.  Use expand($hashref) if the item
+is not a plain scalar.
+
+Happens to return true if something has been expanded, though I don't
+know whether you would want that.  The replacement is done in-place,
+
+=cut
+
+sub expandValue {
+    $_[0] =~ s/(\$TWiki::cfg{[[A-Za-z0-9{}]+})/eval $1||'undef'/ge;
+}
+
 =pod
 
 ---++ StaticMethod readDefaults() -> \@errors

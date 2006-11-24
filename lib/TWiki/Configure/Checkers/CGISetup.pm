@@ -101,7 +101,9 @@ HERE
     # load errors in browser in some environments.
     $CGI::Carp::WRAP = 0;    # Avoid warnings...
 
-    # Check that the TWiki.pm module can be found
+    # Check that the TWiki.pm module can be found, but don't croak on
+    # bogus configuration settings
+    $TWiki::cfg{ConfigurationFinished}  =  1;
     eval 'require TWiki';
     my $mess = '';
     if ($@) {
