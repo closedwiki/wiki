@@ -15,7 +15,7 @@
 }
 #patternLeftBar, #patternLeftBarContents { /* don't set a background here; use patternWrapper */ }
 #patternWrapper {
-	background-color:#f6fafd;
+	background-color:#f7fafc;
 }
 #patternBottomBar {
 	background-color:#fff;
@@ -49,7 +49,7 @@ pre, code, tt {
 }
 blockquote {
 	border-color:#D5E6F3;
-	background-color:#F6FAFD;
+	background-color:#F8FBFC;
 }
 h1, h2, h3, h4, h5, h6 {
 	color:#a00;
@@ -103,7 +103,7 @@ h3, h4, h5, h6 {
 :visited:hover img {
 	background-color:transparent;
 }
-/* fix for hover over transparent logo: */
+/* fix for hover over transparent logo:*/
 #patternTopBar :link:hover img,
 #patternTopBar :visited:hover img {
 	background:#fff;
@@ -225,7 +225,7 @@ table.twikiFormTable td.twikiFormTableRow {
 .twikiEditForm .twikiFormTable td {
 	border-color:#e2e7eb;
 }
-/* use a different table background color mix: no odd/even rows, no white background */
+/* use a different table background color mix:no odd/even rows, no white background */
 .twikiEditForm .twikiFormTable td  {
 	background-color:#f7fafc;
 }
@@ -255,7 +255,7 @@ table.twikiFormTable th.twikiFormTableHRow font {
 }
 
 .twikiFormSteps {
-	background-color:#f6fafd;
+	background-color:#F8FBFC;
 	border-color:#E2DCC8;
 }
 .twikiFormStep {
@@ -345,15 +345,21 @@ a:hover .twikiAccessKey {
 	color:#8E9195;
 }
 #patternLeftBarContents .patternLeftBarPersonal {
-	border-color:#ccc;
+	background-color:#e6eff5;
 }
 #patternLeftBarContents .patternLeftBarPersonal a:link,
-#patternLeftBarContents .patternLeftBarPersonal a:visited {
+#patternLeftBarContents .patternLeftBarPersonal a:visited,
+#patternLeftBarContents .twikiHierarchicalNavigation a:link,
+#patternLeftBarContents .twikiHierarchicalNavigation a:visited {
 	color:#06c;
 }
-#patternLeftBarContents .patternLeftBarPersonal a:hover {
+#patternLeftBarContents .patternLeftBarPersonal a:hover,
+#patternLeftBarContents .twikiHierarchicalNavigation a:hover {
 	color:#FBF7E8;
 	background-color:#D6000F;
+}
+#patternLeftBarContents .twikiHierarchicalNavigation {
+	background:#fff;
 }
 .patternTopicActions {
 	border-color:#E2DCC8;
@@ -579,4 +585,80 @@ tr.twikiDiffDebug .twikiDiffUnchangedText {
 .twikiDiffUnchangedTextContents { }
 .twikiDiffLineNumberHeader {
 	background-color:#6b7f93;
+}
+
+
+/* IMAGES */
+.twikiInputField {
+	background-image:url(background_input.gif);
+	background-repeat:repeat-x;
+}
+.twikiInputFieldDisabled {
+	background-image:none;
+	border:none;
+}
+.twikiButton {
+	background-image:url(background_button.gif);
+	background-repeat:repeat-x;
+}
+.patternToolBarButtons .patternButton a {
+	/*
+	background-image:url(background_button.gif);
+	background-repeat:repeat-x;
+	*/
+}
+.twikiSubmit {
+	background-image:url(background_submit.gif);
+	background-repeat:repeat-x;
+}
+.twikiSubmitDisabled {
+	background-image:none;
+}
+.twikiToc li {
+	background-image:url(bullet-child-black.gif);
+	background-repeat:no-repeat;
+	background-position:0 .35em;
+}
+/*#patternLeftBarContents .patternLeftBarPersonal,*/
+#twikiLogin,
+#patternLeftBarContents .tipsOfTheDayContents {
+	background-image:url(gradient_blue.gif);
+	background-repeat:repeat-x;
+}
+#patternOuter {
+	/* gradient yellow of left bar and main */
+	background-image:url(gradient_yellow.gif);
+	background-repeat:repeat-x;
+}
+.patternPrintPage #patternOuter {
+	background:#fff;
+}
+.twikiPageForm table {
+	background-image:url(form_gradient.gif);
+	background-repeat:repeat-x;
+}
+
+
+/* commong settings */
+#patternLeftBarContents .patternLeftBarPersonal li,
+.twikiHierarchicalNavigation .twikiChildTopics li,
+.twikiHierarchicalNavigation .twikiParentTopic li,
+#patternLeftBarContents li.patternLogOut,
+#patternLeftBarContents li.patternLogIn {
+	padding-left:13px;
+	background-position:0 .25em;
+	background-repeat:no-repeat;
+}
+.patternLeftBarPersonal li,
+.twikiHierarchicalNavigation .twikiChildTopics li {
+	background-image:url(bullet-blue.gif);
+}
+.twikiHierarchicalNavigation .twikiParentTopic li {
+	background-image:url(bullet-parent.gif);
+}
+.patternLeftBarPersonal li.patternLogOut {
+	background-image:url(bullet-lock.gif);
+}
+.patternLeftBarPersonal li.patternLogIn {
+	background-image:url(bullet-lock.gif);
 }
