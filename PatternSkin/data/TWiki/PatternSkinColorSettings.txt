@@ -810,12 +810,11 @@ tr.twikiDiffDebug .twikiDiffUnchangedText {
 
 
 /* commong settings */
-#patternLeftBarContents .patternLeftBarPersonal li,
-.twikiHierarchicalNavigation .twikiCurrentTopic li,
+.patternLeftBarPersonal li,
 .twikiHierarchicalNavigation .twikiChildTopics li,
 .twikiHierarchicalNavigation .twikiParentTopic li,
-#patternLeftBarContents li.patternLogOut,
-#patternLeftBarContents li.patternLogIn {
+li.patternLogOut,
+li.patternLogIn {
 	padding-left:13px;
 	background-position:0 .25em;
 	background-repeat:no-repeat;
@@ -828,6 +827,9 @@ tr.twikiDiffDebug .twikiDiffUnchangedText {
 	background-image:url(bullet-parent.gif);
 }
 .patternLeftBarPersonal li.patternLogOut {
+	background-image:url(bullet-lock.gif);
+}
+.patternLeftBarPersonal li.patternLogIn {
 	background-image:url(bullet-lock.gif);
 }
 %ENDATTACH%

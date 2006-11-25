@@ -329,9 +329,8 @@ blockquote {
 	-----------------------------------------------------------	*/
 
 .twikiLast,
-.patternTopic .twikiLast,
-.twikiForm .twikiLast {
-	border-bottom:0;
+.patternTopic .twikiLast {
+	border-bottom:0px;
 }
 #twikiLogin {
 	width:40em;
