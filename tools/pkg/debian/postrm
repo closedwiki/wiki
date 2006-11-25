@@ -30,10 +30,18 @@ case "$1" in
 		fi
 	done
 
-#	if [ -e /usr/sbin/apachectl ]; then
-#		/usr/sbin/apachectl restart
-#	fi
-        ;;
+	# reload apache configs
+	for server in $servers; do
+		if [ -e /etc/init.d/$server ]; then
+         	if which invoke-rc.d >/dev/null 2>&1; then
+         		invoke-rc.d $server reload
+         	else
+                /etc/init.d/$server reload
+			fi		
+		fi
+	done
+    ;;
+
 
     *)
         echo "postrm called with unknown argument \`$1'" >&2

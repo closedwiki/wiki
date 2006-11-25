@@ -76,14 +76,30 @@ install: build
 	cp -pR templates debian/twiki/var/lib/twiki/
 	cp -pR locale debian/twiki/var/lib/twiki/
 	cp -pR data/* debian/twiki/var/lib/twiki/data
+	
+	#create mailnotify timestamps
+	date +%s > debian/twiki/var/lib/twiki/data/TWiki/.mailnotify
+	date +%s > debian/twiki/var/lib/twiki/data/Main/.mailnotify
+	date +%s > debian/twiki/var/lib/twiki/data/Sandbox/.mailnotify
+	
 # change the unix owners -- don't bother, tar --owner does it
 # so now we don't even care if TWIKI_OWNER exists at build time
 #	chown -R $(TWIKI_OWNER) debian/twiki/var/lib/twiki/data
 # and change the RCS lock owners to match
 
-	#distribute the UpgradeTwiki script
+	#distribute the tools scripts
 	cp UpgradeTwiki debian/twiki/var/lib/twiki
 	chmod 777 debian/twiki/var/lib/twiki/UpgradeTwiki
+    	
+	mkdir debian/twiki/var/lib/twiki/tools
+	cp tools/* debian/twiki/var/lib/twiki/tools/
+	chmod 777 debian/twiki/var/lib/twiki/tools/*
+
+    #SVEN - you should probably make this a patch file.
+	perl -piOLD -e 's{#! perl}{#!/usr/bin/perl}g;' debian/twiki/var/lib/twiki/tools/rewriteshbang.pl
+	perl -piOLD -e 's{#!perl}{#!/usr/bin/perl}g;' debian/twiki/var/lib/twiki/tools/upgrade_emails.pl
+	
+	rm debian/twiki/var/lib/twiki/tools/*OLD
 
 	chmod -R 644 debian/twiki/var/lib/twiki/templates/*
 

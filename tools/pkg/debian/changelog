@@ -1,3 +1,13 @@
+twiki (1:4.0.5-2) unstable; urgency=low
+
+  * add tools scripts to /var/lib/twiki/tools (Closes: #400226)
+  * fix apache.conf setup to backup in the /etc/twiki dir (Closes: #333679, #400213)
+  * add dependancy on apache2.2-common (Closes: #40212)
+  * added default .mailnotify files to stop sending out change 
+    emails for distributed topics (Closes: #211237)
+
+ -- Sven Dowideit <svenud@ozemail.com.au>  Sun,  26 Nov 2006 09:52:09 +0100
+
 twiki (1:4.0.5-1) unstable; urgency=high
 
   * update to twiki release 4.0.5 (Closes: #324916, #307299, #308347)
