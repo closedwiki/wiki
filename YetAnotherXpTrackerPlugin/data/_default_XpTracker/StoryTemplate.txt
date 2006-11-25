@@ -14,4 +14,4 @@
 %META:FIELD{name="Storylead" title="Story lead" value=""}%
 %META:FIELD{name="State" title="State" value="Submitted"}%
 %META:PREFERENCE{name="VIEW_TEMPLATE" title="VIEW_TEMPLATE" type="Set" value="Trackingview"}%
-%META:PREFERENCE{name="EDIT_TEMPLATE" title="VIEW_TEMPLATE" type="Set" value="Trackingedit"}%
+%META:PREFERENCE{name="EDIT_TEMPLATE" title="EDIT_TEMPLATE" type="Set" value="Trackingedit"}%

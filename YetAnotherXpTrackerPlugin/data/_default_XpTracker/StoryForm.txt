@@ -11,7 +11,7 @@
 | Issue type      | select| 1 | Enhancement, Defect found in internal development, Defect found by test, Defect found in engineering release, Defect found in final release | | |
 | Priority      | select   | 1 | , 1-Resolve Immediately, 2-Give High Attention, 3-Normal Queue, 4-Low Priority |  | Yes |
 | Severity      | select   | 1 | , 1-System crashed/Showstopper, 2-Functionality failure, 3-Workaround possible, 4-Cosmetic/Documentation error |  | |
-| State      | select   | 1 | , Submitted, Assigned, Opened, Resolved, Approved, Verified, Closed, Terminated, Postponed, Duplicated |  | Yes |
+| State      | select   | 1 | , Submitted, Assigned, Opened, Resolved, Approved, Verified, Closed, Terminated, Postponed, Duplicated |  | M |
 | Submit date      | text   | 15     | |  | |
-| [[TeamMembers][Submitter]]      | select   | 1 |  |  | Yes |
+| [[TeamMembers][Submitter]]      | select   | 1 |  |  | M |
 | URL         | text  | 60      | |  | |
