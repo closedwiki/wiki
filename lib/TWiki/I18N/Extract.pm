@@ -128,57 +128,5 @@ sub extract {
     }
 }
 
-=pod
-
----++ ObjectMethod extract ( $msgid ) -> $formated
-
-This method overrides the one with same name in =Locale::Maketext::Extract=, as
-a workaround for [[http://rt.cpan.org/Public/Bug/Display.html?id=14629][a bug]]
-in the =Locale::Maketext::Lexicon= Perl package, and was not fixed up to the
-0.53 release.
-
-What it does is to call an alternative version of the _format function, which
-avoids [[http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1500][double-escaping]]
-the extracted strings.
-
-This method was tested only under the circumstances of TWiki's needs, i.e.,
-extracting strings from source and topics and generating a brand new POT file.
-Merging with previous PO files is done with GNU gettext tools, so maybe if it's
-used for merging it can 
-
-Once that bug is fixed, in future TWiki versions this method may be removed.
-
-=cut
-
-sub msg_out {
-    my ($self, $msgid) = @_;
-
-    return "msgid "  . _my_format($msgid) .
-           "msgstr " . _my_format($self->msgstr($msgid));
-}
-
-# this function is an copy of the _format function in
-# Locale::Maketext::Extract, and only differs from the original in the fact
-# that 
-
-sub _my_format {
-    my $str = shift;
-
-    # these two statements caused the bug in Locale::Make
-    # $str =~ s/\\/\\\\/g;
-    # $str =~ s/"/\\"/g;
-
-    return "\"$str\"\n" unless $str =~ /\n/;
-    my $multi_line = ($str =~ /\n(?!\z)/);
-    $str =~ s/\n/\\n"\n"/g;
-    if ($str =~ /\n"$/) {
-        chop $str;
-    }
-    else {
-        $str .= "\"\n";
-    }
-    return $multi_line ? qq(""\n"$str) : qq("$str);
-}
-
 
 1;

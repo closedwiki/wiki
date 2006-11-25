@@ -14,6 +14,13 @@ chomp($cwd);
 unshift(@INC, File::Spec->catfile($cwd, 'lib')); 
 eval "use TWiki::I18N::Extract";
 die($@) if $@;
+eval "use Locale::Maketext::Lexicon";
+die($@) if $@;
+
+die('You need at least version 0.61 of Locale::Maketext::Lexicon to run this utility') unless $Locale::Maketext::Lexicon::VERSION >= 0.61;
+
+die('The msgmerge command is required, it must be in your path. Try installing GNU gettext tools.') unless `which msgmerge`; 
+
 
 # config
 my $localesDir = "locale";
@@ -40,87 +47,83 @@ sub read_MANIFEST {
 
             push(@files, read_MANIFEST($included_manifest, "twikiplugins/$included/"));
         }
-        
+
         my @fields = split(/\s/, $source);
         $source = $fields[0];
         if( $source =~ m/^bin\/[a-z]/ ||
             ($source =~ m/^lib\/.*\.pm$/ && (! ($source =~ m/^lib\/CPAN\/.*\.pm$/))) ||
             $source =~ m/^templates\/.*\.tmpl$/ ||
-            $source =~ m/^data\/.*\.txt$/
-            ) {
-            push(@files, $prefix . $source);
-       }
+            $source =~ m/^data\/.*\.txt$/) {
+            my $file = $prefix . $source;
+            if (-e $file) {
+                push(@files, $prefix . $source);
+            } else {
+                print "W: $file is listed in MANIFEST and does not exist!\n";
+            }
+        }
     }
     close(R);
 
   return @files;
 }
 
+sub extract {
+    my ($target, @sources) = @_;
+    print "I: Extracting strings into $target.\n";
+
+    my $extractor = new TWiki::I18N::Extract;
+    die("Could not create an extractor. Is Locale::Maketext installed? (see above messages)") unless $extractor;
+
+    my $progress = undef;
+    eval "use Term::ProgressBar;";
+    if ( $@ ) {
+        print "W: (You could have a nice progress bar if you had Term::ProgressBar installed.)\n";
+    } else {
+        $progress = Term::ProgressBar->new (scalar(@sources));
+    }
+     
+    my $counter = 0;
+    foreach my $file (@sources) {
+        $extractor->extract_file($file) ;
+        $counter++;
+        $progress->update($counter) if $progress;
+    }
+    $extractor->compile();
+    $extractor->write_po($target);
+}
+
+sub merge {
+    my ($old, $new) = @_;
+    print("I: Merging new strings in $new into $old.\n");
+    system("msgmerge --update $old $new");
+}
+
+
 # read the top-level MANIFEST, and any other included by it
 my @sources = read_MANIFEST('tools/MANIFEST', '');
 
 # handle --list: only list files to be scanned
 if ($ARGV[0] eq '--list') {
-  foreach my $file (@sources) {
-    print $file, "\n";
-  }
-  exit 0;
+    foreach my $file (@sources) {
+        print $file, "\n";  
+    }
+    exit 0;
 }
 
 
-# extract the strings in a new potfile.
-print("I: scanning sources, it may take some time...\n");
+# extract the strings to the template POT file.
+extract($newpotfile, @sources);
 
-my $progress = undef;
-eval "use Term::ProgressBar;";
-if ( $@ ) {
-    print "(You could have a nice progress bar if you had Term::ProgressBar installed.)\n";
+# merge with old POT file
+if (-e $potfile) {
+    merge($potfile, $newpotfile);
 } else {
-    $progress = Term::ProgressBar->new (scalar(@sources));
-}
- 
-my $extractor = new TWiki::I18N::Extract;
-die("Could not create an extractor. Is Locale::Maketext installed? (see above messages)") unless $extractor;
-my $counter = 0;
-foreach my $file (@sources) {
-  if ( -e $file ) {
-    $extractor->extract_file($file) ;
-  } else {
-    print "W: $file is listed in MANIFEST and does not exist!\n";
-  }
-  $counter++;
-  $progress->update($counter) if $progress;
-}
-$extractor->compile();
-$extractor->write_po($newpotfile);
-
-if (! -e $newpotfile) {
-  # no extracted strings
-  system("echo | xgettext --force-po --language=Perl --output=$newpotfile -"); #empty potfile
-  print("W: no strings extracted from source: $newpotfile was not created.\n");
-  exit 1;
-}
-
-#unify duplicates:
-system("cp $newpotfile $newpotfile.orig && ( cat $newpotfile.orig | sed -e 's/CHARSET/UTF-8/' | msguniq --force-po --output=$newpotfile - ) && rm -f $newpotfile.orig"); 
-print("I: unified duplicated strings.\n");
-
-# merge with $potfile if it already exists, copy to it otherwise
-if (-e "$potfile") {
-  print("W: merging generated potfile ($newpotfile) with existing one ($potfile)\n");
-  system("msgmerge --update $potfile $newpotfile");
-} else {
-  system("cp $newpotfile $potfile");
+    system("cp $newpotfile $potfile");
 }
 
 # merge with existing translations:
-my @translations = `find ${localesDir}/ -name '*.po'`;
-foreach my $translation (@translations) {
-  chomp($translation);
-  print("I: Merging $potfile into $translation.\n");
-  system("msgmerge --update $translation $potfile");
-}
+my @translations = <${localesDir}/*.po>;
+merge($_, $potfile) for @translations;
 
-# cleanup after generating base POT
-print("I: Removing intermediate files\n");
-system("rm -f $newpotfile");
+# cleanup
+system("rm -rf $newpotfile");
