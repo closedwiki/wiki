@@ -640,11 +640,11 @@ tr.twikiDiffDebug .twikiDiffUnchangedText {
 
 
 /* commong settings */
-#patternLeftBarContents .patternLeftBarPersonal li,
+.patternLeftBarPersonal li,
 .twikiHierarchicalNavigation .twikiChildTopics li,
 .twikiHierarchicalNavigation .twikiParentTopic li,
-#patternLeftBarContents li.patternLogOut,
-#patternLeftBarContents li.patternLogIn {
+li.patternLogOut,
+li.patternLogIn {
 	padding-left:13px;
 	background-position:0 .25em;
 	background-repeat:no-repeat;
