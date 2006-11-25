@@ -92,7 +92,7 @@ Edit this topic, and change the color variables as you like.
 ---++++ FORM_BORDER Form (same as twikiTable border)
    * Set FORM_BORDER = #ccc
 ---++++ ACTIVE_FORM_BACKGROUND Edit form, form steps
-   * Set ACTIVE_FORM_BACKGROUND = #F6FAFD
+   * Set ACTIVE_FORM_BACKGROUND = #f8fbfc
 ---++++ FORMFIELD_ACTIVE Active form field (not implemented yet)
    * Set FORMFIELD_ACTIVE = #ffc
    
@@ -117,7 +117,9 @@ Edit this topic, and change the color variables as you like.
 ---++++ GENERAL_BACKGROUND General background color (if not set in  MAIN_BACKGROUND_COLOR) (white)
    * Set GENERAL_BACKGROUND = #fff
 ---++++ SIDE_BAR_BACKGROUND Side bar background
-   * Set SIDE_BAR_BACKGROUND = #f6fafd
+   * Set SIDE_BAR_BACKGROUND = #f7fafc
+---++++ SIDE_BAR_PERSONAL_BACKGROUND Side bar personal background
+   * Set SIDE_BAR_PERSONAL_BACKGROUND = #e6eff5;
 ---++++ INFO_BACKGROUND Info (very light blue) (placeholder for background image)
    * Set INFO_BACKGROUND = #f8fbfc
 ---++++ TOPIC_ACTION_BACKGROUND Topic action row (light yellow)
@@ -513,15 +515,21 @@ a:hover .twikiAccessKey {
 	color:%GRAYED_OUT_TEXT%;
 }
 #patternLeftBarContents .patternLeftBarPersonal {
-	border-color:%LAYOUT_ELEMENT_BORDER%;
+	background-color:%SIDE_BAR_PERSONAL_BACKGROUND%
 }
 #patternLeftBarContents .patternLeftBarPersonal a:link,
-#patternLeftBarContents .patternLeftBarPersonal a:visited {
+#patternLeftBarContents .patternLeftBarPersonal a:visited,
+#patternLeftBarContents .twikiHierarchicalNavigation a:link,
+#patternLeftBarContents .twikiHierarchicalNavigation a:visited {
 	color:%LINK_TEXT_NORMAL%;
 }
-#patternLeftBarContents .patternLeftBarPersonal a:hover {
+#patternLeftBarContents .patternLeftBarPersonal a:hover,
+#patternLeftBarContents .twikiHierarchicalNavigation a:hover {
 	color:%LINK_TEXT_HOVER%;
 	background-color:%LINK_BACKGROUND_HOVER%;
+}
+#patternLeftBarContents .twikiHierarchicalNavigation {
+	background:%MAIN_BACKGROUND_COLOR%;
 }
 .patternTopicActions {
 	border-color:%SEPARATOR_BORDER%;
@@ -747,6 +755,80 @@ tr.twikiDiffDebug .twikiDiffUnchangedText {
 .twikiDiffUnchangedTextContents { }
 .twikiDiffLineNumberHeader {
 	background-color:%TABLE_HEADER_BACKGROUND%;
+}
+
+
+/* IMAGES */
+.twikiInputField {
+	background-image:url(background_input.gif);
+	background-repeat:repeat-x;
+}
+.twikiInputFieldDisabled {
+	background-image:none;
+	border:none;
+}
+.twikiButton {
+	background-image:url(background_button.gif);
+	background-repeat:repeat-x;
+}
+.patternToolBarButtons .patternButton a {
+	/*
+	background-image:url(background_button.gif);
+	background-repeat:repeat-x;
+	*/
+}
+.twikiSubmit {
+	background-image:url(background_submit.gif);
+	background-repeat:repeat-x;
+}
+.twikiSubmitDisabled {
+	background-image:none;
+}
+.twikiToc li {
+	background-image:url(bullet-child-black.gif);
+	background-repeat:no-repeat;
+	background-position:0 .35em;
+}
+/*#patternLeftBarContents .patternLeftBarPersonal,*/
+#twikiLogin,
+#patternLeftBarContents .tipsOfTheDayContents {
+	background-image:url(gradient_blue.gif);
+	background-repeat:repeat-x;
+}
+#patternOuter {
+	/* gradient yellow of left bar and main */
+	background-image:url(gradient_yellow.gif);
+	background-repeat:repeat-x;
+}
+.patternPrintPage #patternOuter {
+	background:#fff;
+}
+.twikiPageForm table {
+	background-image:url(form_gradient.gif);
+	background-repeat:repeat-x;
+}
+
+
+/* commong settings */
+#patternLeftBarContents .patternLeftBarPersonal li,
+.twikiHierarchicalNavigation .twikiCurrentTopic li,
+.twikiHierarchicalNavigation .twikiChildTopics li,
+.twikiHierarchicalNavigation .twikiParentTopic li,
+#patternLeftBarContents li.patternLogOut,
+#patternLeftBarContents li.patternLogIn {
+	padding-left:13px;
+	background-position:0 .25em;
+	background-repeat:no-repeat;
+}
+.patternLeftBarPersonal li,
+.twikiHierarchicalNavigation .twikiChildTopics li {
+	background-image:url(bullet-blue.gif);
+}
+.twikiHierarchicalNavigation .twikiParentTopic li {
+	background-image:url(bullet-parent.gif);
+}
+.patternLeftBarPersonal li.patternLogOut {
+	background-image:url(bullet-lock.gif);
 }
 %ENDATTACH%
 </verbatim>

@@ -33,7 +33,11 @@ pub/TWiki/PatternSkin/background_form_element.gif 0660
 pub/TWiki/PatternSkin/background_input.gif 0660
 pub/TWiki/PatternSkin/background_submit.gif 0660
 pub/TWiki/PatternSkin/bullet-blue.gif 0660
+pub/TWiki/PatternSkin/bullet-child.gif 0660
+pub/TWiki/PatternSkin/bullet-child-black.gif 0660
 pub/TWiki/PatternSkin/bullet-down.gif 0660
+pub/TWiki/PatternSkin/bullet-lock.gif 0660
+pub/TWiki/PatternSkin/bullet-parent.gif 0660
 pub/TWiki/PatternSkin/colors.css 0660
 pub/TWiki/PatternSkin/form_gradient.gif 0660
 pub/TWiki/PatternSkin/gradient_blue.gif 0660

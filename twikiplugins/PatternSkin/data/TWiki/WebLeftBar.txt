@@ -1,5 +1,7 @@
 %META:TOPICINFO{author="TWikiContributor" date="1121074151" format="1.1" version="$Rev: 7654 $"}%
 %INCLUDE{"%IF{"context can_login" then="%TWIKIWEB%.WebLeftBarLogin" else="<nop>"}%" warn="off"}%
+%INCLUDE{"%TWIKIWEB%.HierarchicalNavigation" section="all"}%
+
    * <b>[[%INCLUDINGWEB%.%HOMETOPIC%][ %ICON{"home"}% <nop>%MAKETEXT{"[_1] Web" args="%INCLUDINGWEB%"}%]]</b>
    * [[%MAINWEB%.TWikiUsers][ %ICON{"person"}% %MAKETEXT{"Users"}%]]
    * [[%MAINWEB%.TWikiGroups][ %ICON{"group"}% %MAKETEXT{"Groups"}%]]
@@ -9,7 +11,7 @@
    * [[WebNotify][ %ICON{"notify"}% %MAKETEXT{"Notifications"}%]]
    * [[WebStatistics][ %ICON{"statistics"}% %MAKETEXT{"Statistics"}%]]
    * [[WebPreferences][ %ICON{"wrench"}% %MAKETEXT{"Preferences"}%]]
----
+
    * <b>%MAKETEXT{"User Reference"}%</b>
    * ATasteOfTWiki
    * TextFormattingRules
@@ -18,7 +20,7 @@
    * TWikiDocGraphics
    * TWikiSkinBrowser
    * InstalledPlugins
----
+
    * <b>%MAKETEXT{"Admin Maintenance"}%</b>
    * [[TWikiReferenceManual][Reference Manual]]
    * AdminToolsCategory
@@ -27,12 +29,12 @@
    * TWikiSiteTools
    * %WIKIPREFSTOPIC%
    * %WEBPREFSTOPIC%
----
+
    * <b>%MAKETEXT{"Categories"}%</b>
    * [[AdminDocumentationCategory][Admin Documentation]]
    * [[AdminToolsCategory][Admin Tools]]
    * [[DeveloperDocumentationCategory][Developer Doc]]
    * [[UserDocumentationCategory][User Documentation]]
    * [[UserToolsCategory][User Tools]]
----
+
 %INCLUDE{ "%TWIKIWEB%.WebLeftBarWebsList" }%
