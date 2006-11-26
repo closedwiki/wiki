@@ -189,13 +189,13 @@ All the usual TWikiVariables that can be used in a topic template can also be us
 		* Set SHORTDESCRIPTION = Allows users to quickly post comments to a page without an edit/preview/save cycle.
 	* Name of file in the 'templates' directory that contains the comment templates. The default 'comments.tmpl' automatically includes user templates from %TWIKIWEB%.CommentPluginTemplate
 		* Set TEMPLATES = comments
-	* default template type (if not present, defaults to "below")
-		* Set DEFAULT_TYPE = below
+	* Default template type (if not present, defaults to "below")
+		* Set DEFAULT_TYPE = above
 -->
 Two TWiki Preference variables are recognised by the CommentPlugin:
 | *Preference* | *Default* | *Description* |
 | =%<nop>COMMENTPLUGIN_TEMPLATES%= | =comments= | Name of template file in the 'templates' directory that contains the comment templates. The default 'comments.tmpl' automatically includes user templates from %TWIKIWEB%.CommentPluginTemplate, which in turn includes %TWIKIWEB%.UserCommentsTemplate. |
-| =%<nop>COMMENTPLUGIN_DEFAULT_TYPE%= | =below= | Default template type |
+| =%<nop>COMMENTPLUGIN_DEFAULT_TYPE%= | =above= | Default template type |
 These can be set in !TWikiPreferences, in !WebPreferences or in individual topics.
 
 ---++ Plugin Installation Instructions
