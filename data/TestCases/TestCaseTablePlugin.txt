@@ -424,9 +424,9 @@ no initdirection specified, column 3
 ---++ =tablerules=
 ---+++ =none=
 <verbatim>
-%TABLE{tableborder="5" tablerules="none"}%
+%TABLE{tablerules="none" headerbg="#ffffff" headercolor="#ff0000"}%
 </verbatim>
-%TABLE{tableborder="5" tablerules="none"}%
+%TABLE{tablerules="none" headerbg="#ffffff" headercolor="#ff0000"}%
 | *One* | *Two* | *Three* | *Four* |
 | 1 | abc | vwx | 01 Jan 1900 |
 | 2 | def | stu | 31 Dec 1999 |
@@ -434,9 +434,43 @@ no initdirection specified, column 3
 
 ---+++ =groups=
 <verbatim>
-%TABLE{tableborder="5" tablerules="groups"}%
+%TABLE{tablerules="groups" headerbg="#ffffff" headercolor="#ff0000"}%
 </verbatim>
-%TABLE{tableborder="5" tablerules="groups"}%
+%TABLE{tablerules="groups" headerbg="#ffffff" headercolor="#ff0000"}%
+| *One* | *Two* | *Three* | *Four* |
+| 1 | abc | vwx | 01 Jan 1900 |
+| 2 | def | stu | 31 Dec 1999 |
+| 3 | ghi | pqr | 15 Jan 2006 |
+
+Should render as:
+<table border=1 rules=groups>
+<thead>
+<tr> <th>One</th> <th>Two</th> <th>Three</th> <th>Four</th></tr>
+</thead>
+<tbody>
+<tr> <td>1</td> <td>abc</td> <td>vwx</td> <td>01 Jan 1900</td> </tr>
+<tr> <td>2</td> <td>def</td> <td>stu</td> <td>31 Dec 1999</td> </tr>
+<tr> <td>3</td> <td>ghi</td> <td>pqr</td> <td>15 Jan 2006</td> </tr>
+</tbody>
+</table>
+_Note that each browser renders this differently, so its quite impossible to get it right._
+
+---++++ With =footerrows=
+<verbatim>
+%TABLE{footerrows="1" tablerules="groups" headerbg="#ffffff" headercolor="#ff0000"}%
+</verbatim>
+%TABLE{footerrows="1" tablerules="groups" headerbg="#ffffff" headercolor="#ff0000"}%
+| *One* | *Two* | *Three* | *Four* |
+| 1 | abc | vwx | 01 Jan 1900 |
+| 2 | def | stu | 31 Dec 1999 |
+| 3 | ghi | pqr | 15 Jan 2006 |
+| *Footer row* ||||||
+
+---+++ =cols=
+<verbatim>
+%TABLE{tablerules="cols"}%
+</verbatim>
+%TABLE{tablerules="cols"}%
 | *One* | *Two* | *Three* | *Four* |
 | 1 | abc | vwx | 01 Jan 1900 |
 | 2 | def | stu | 31 Dec 1999 |
@@ -444,9 +478,9 @@ no initdirection specified, column 3
 
 ---+++ =rows=
 <verbatim>
-%TABLE{tableborder="5" tablerules="rows"}%
+%TABLE{tablerules="rows"}%
 </verbatim>
-%TABLE{tableborder="5" tablerules="rows"}%
+%TABLE{tablerules="rows"}%
 | *One* | *Two* | *Three* | *Four* |
 | 1 | abc | vwx | 01 Jan 1900 |
 | 2 | def | stu | 31 Dec 1999 |
@@ -454,9 +488,9 @@ no initdirection specified, column 3
 
 ---+++ =all=
 <verbatim>
-%TABLE{tableborder="5" tablerules="all"}%
+%TABLE{tablerules="all"}%
 </verbatim>
-%TABLE{tableborder="5" tablerules="all"}%
+%TABLE{tablerules="all"}%
 | *One* | *Two* | *Three* | *Four* |
 | 1 | abc | vwx | 01 Jan 1900 |
 | 2 | def | stu | 31 Dec 1999 |
@@ -465,9 +499,9 @@ no initdirection specified, column 3
 ---++ =tableframe=
 ---+++ =void=
 <verbatim>
-%TABLE{tableborder="5" tableframe="void"}%
+%TABLE{tableframe="void" tablerules="none"}%
 </verbatim>
-%TABLE{tableborder="5" tableframe="void"}%
+%TABLE{tableframe="void" tablerules="none"}%
 | *One* | *Two* | *Three* | *Four* |
 | 1 | abc | vwx | 01 Jan 1900 |
 | 2 | def | stu | 31 Dec 1999 |
@@ -475,9 +509,9 @@ no initdirection specified, column 3
 
 ---+++ =above=
 <verbatim>
-%TABLE{tableborder="5" tableframe="above"}%
+%TABLE{tableframe="above" tablerules="none"}%
 </verbatim>
-%TABLE{tableborder="5" tableframe="above"}%
+%TABLE{tableframe="above" tablerules="none"}%
 | *One* | *Two* | *Three* | *Four* |
 | 1 | abc | vwx | 01 Jan 1900 |
 | 2 | def | stu | 31 Dec 1999 |
@@ -485,19 +519,9 @@ no initdirection specified, column 3
 
 ---+++ =below=
 <verbatim>
-%TABLE{tableborder="5" tableframe="below"}%
+%TABLE{tableframe="below" tablerules="none"}%
 </verbatim>
-%TABLE{tableborder="5" tableframe="below"}%
-| *One* | *Two* | *Three* | *Four* |
-| 1 | abc | vwx | 01 Jan 1900 |
-| 2 | def | stu | 31 Dec 1999 |
-| 3 | ghi | pqr | 15 Jan 2006 |
-
----+++ =hsides=
-<verbatim>
-%TABLE{tableborder="5" tableframe="hsides"}%
-</verbatim>
-%TABLE{tableborder="5" tableframe="hsides"}%
+%TABLE{tableframe="below" tablerules="none"}%
 | *One* | *Two* | *Three* | *Four* |
 | 1 | abc | vwx | 01 Jan 1900 |
 | 2 | def | stu | 31 Dec 1999 |
@@ -505,9 +529,9 @@ no initdirection specified, column 3
 
 ---+++ =lhs=
 <verbatim>
-%TABLE{tableborder="5" tableframe="lhs"}%
+%TABLE{tableframe="lhs" tablerules="none"}%
 </verbatim>
-%TABLE{tableborder="5" tableframe="lhs"}%
+%TABLE{tableframe="lhs" tablerules="none"}%
 | *One* | *Two* | *Three* | *Four* |
 | 1 | abc | vwx | 01 Jan 1900 |
 | 2 | def | stu | 31 Dec 1999 |
@@ -515,9 +539,19 @@ no initdirection specified, column 3
 
 ---+++ =rhs=
 <verbatim>
-%TABLE{tableborder="5" tableframe="rhs"}%
+%TABLE{tableframe="rhs" tablerules="none"}%
 </verbatim>
-%TABLE{tableborder="5" tableframe="rhs"}%
+%TABLE{tableframe="rhs" tablerules="none"}%
+| *One* | *Two* | *Three* | *Four* |
+| 1 | abc | vwx | 01 Jan 1900 |
+| 2 | def | stu | 31 Dec 1999 |
+| 3 | ghi | pqr | 15 Jan 2006 |
+
+---+++ =hsides=
+<verbatim>
+%TABLE{tableframe="hsides" tablerules="none"}%
+</verbatim>
+%TABLE{tableframe="hsides" tablerules="none"}%
 | *One* | *Two* | *Three* | *Four* |
 | 1 | abc | vwx | 01 Jan 1900 |
 | 2 | def | stu | 31 Dec 1999 |
@@ -525,9 +559,9 @@ no initdirection specified, column 3
 
 ---+++ =vsides=
 <verbatim>
-%TABLE{tableborder="5" tableframe="vsides"}%
+%TABLE{tableframe="vsides" tablerules="none"}%
 </verbatim>
-%TABLE{tableborder="5" tableframe="vsides"}%
+%TABLE{tableframe="vsides" tablerules="none"}%
 | *One* | *Two* | *Three* | *Four* |
 | 1 | abc | vwx | 01 Jan 1900 |
 | 2 | def | stu | 31 Dec 1999 |
@@ -535,9 +569,9 @@ no initdirection specified, column 3
 
 ---+++ =box=
 <verbatim>
-%TABLE{tableborder="5" tableframe="box"}%
+%TABLE{tableframe="box" tablerules="none"}%
 </verbatim>
-%TABLE{tableborder="5" tableframe="box"}%
+%TABLE{tableframe="box" tablerules="none"}%
 | *One* | *Two* | *Three* | *Four* |
 | 1 | abc | vwx | 01 Jan 1900 |
 | 2 | def | stu | 31 Dec 1999 |
@@ -545,9 +579,9 @@ no initdirection specified, column 3
 
 ---+++ =border=
 <verbatim>
-%TABLE{tableborder="5" tableframe="border"}%
+%TABLE{tableframe="border" tablerules="none"}%
 </verbatim>
-%TABLE{tableborder="5" tableframe="border"}%
+%TABLE{tableframe="border" tablerules="none"}%
 | *One* | *Two* | *Three* | *Four* |
 | 1 | abc | vwx | 01 Jan 1900 |
 | 2 | def | stu | 31 Dec 1999 |
@@ -647,4 +681,6 @@ no initdirection specified, column 3
 | 1 | abc | vwx | 01 Jan 1900 |
 | 2 | def | stu | 31 Dec 1999 |
 | 3 | ghi | pqr | 15 Jan 2006 |
+
+
 

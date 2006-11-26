@@ -138,7 +138,7 @@ sub _parseParameters {
 
     $tmp = $params{cellborder};
     $cellBorder = $tmp if( defined $tmp && $tmp ne '' );
-
+	
     $tmp = $params{headeralign};
     @headerAlign = split( /,\s*/, $tmp ) if( defined $tmp );
 
@@ -321,8 +321,7 @@ sub _processTableRow {
 				}
 			}
 			
-			$attr->{style} .= 'border-width:'.$cellBorder.'px;';
-			
+			my $type = '';
 			if( /^\s*\*(.*)\*\s*$/ ) {
                 $value = $1;
                 if( @headerAlign ) {
@@ -337,7 +336,7 @@ sub _processTableRow {
                 	$attr->{valign} = $vAlign;
                 	$attr->{style} .= 'vertical-align:'.$vAlign.';';
                 }           
-                push @row, { text => $value, attrs => $attr, type => 'th' };
+                $type = 'th';
             } else {
                 if( /^\s*(.*?)\s*$/ ) {   # strip white spaces
                     $_ = $1;
@@ -355,8 +354,27 @@ sub _processTableRow {
                 	$attr->{valign} = $vAlign;
                 	$attr->{style} .= 'vertical-align:'.$vAlign.';';
                 }
-                push @row, { text => $value, attrs => $attr, type => 'td' };
+                $type = 'td';
             }
+            
+            my $theCellBorder = $cellBorder;
+			if ($tableRules eq 'none') {
+				$theCellBorder = 0;
+			}
+			if ($tableRules eq 'cols') {
+				$theCellBorder = 0;
+			}
+			if ($tableRules eq 'groups' && $type eq 'th') {
+				$attr->{style} .= 'border-bottom-style:solid;';
+				$attr->{style} .= 'border-top-style:solid;';
+				$attr->{style} .= 'border-left-style:none;';
+			}
+			if ($tableRules eq 'groups' && $type eq 'td') {
+				$theCellBorder = 0;
+			}
+			$attr->{style} .= 'border-width:'.$theCellBorder.'px;';
+			
+            push @row, { text => $value, attrs => $attr, type => $type };
         }
         while( $span > 1 ) {
             push @row, { text => $value, type => 'X' };
