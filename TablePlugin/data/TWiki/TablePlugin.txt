@@ -68,7 +68,7 @@ Attributes are defined as a =TABLEATTRIBUTES= Plugin setting in this topic, a =T
 | =initsort=       | Column to sort initially (="1"= to number of columns). | <span class="twikiGrayText">unspecified</span> | =initsort="2"= |
 | =initdirection=  | Initial sorting direction for =initsort=, set to  ="up"= (descending) or ="down"= (ascending). | <span class="twikiGrayText">unspecified</span> | =initdirection="up"= |
 | =headerbg=       | Header cell background colour. | ="#6b7f93"= | =headerbg="#999999"= |
-| =headerbgsorted= | Header cell background colour of a sorted column. | the values of =headerbg= | =headerbgsorted="#32596c"= |
+| =headerbgsorted= | Header cell background colour of a sorted column. | the value of =headerbg= | =headerbgsorted="#32596c"= |
 | =headercolor=    | Header cell text colour. | ="#ffffff"= | =headercolor="#0000cc"= |
 | =databg=	       | Data cell background colour, a comma separated list. Specify ="none"= for no colour, that is to use the colour/background of the page the table is on. | ="#edf4f9,#ffffff"= | =databg="#f2f2f2,#ffffff"= |
 | =databgsorted=   | Data cell background colour of a sorted column; see =databg=. | the values of =databg= | =databgsorted="#d4e8e4,#e5f5ea"= |
@@ -139,6 +139,7 @@ This plugin is pre-installed with your TWiki release. You should not have to ins
 |  Plugin Author: | TWiki:Main/JohnTalintyre, TWiki:Main/PeterThoeny |
 |  Plugin Version: | 1.016 |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
+|  26 Nov 2006 | 1.017: Arthur Clemens: Better support for =tablerules=.  |
 |  24 Nov 2006 | 1.016: Arthur Clemens: Added new attribute =cellborder=.  |
 |  25 Oct 2006 | 1.015: Arthur Clemens: Added support for background colors of sorted column. Columns can be unsorted - sorting order is now: sort ascending, sort descending, unsort. Added attributes =headervalign= and =datavalign=. |
 |  16 Aug 2006 | Michael Daum: Added CSS support for even/odd table rows |
