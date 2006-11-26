@@ -329,8 +329,11 @@ blockquote {
 	-----------------------------------------------------------	*/
 
 .twikiLast,
-.patternTopic .twikiLast {
-	border-bottom:0px;
+.patternTopic .twikiLast,
+.twikiForm .twikiLast,
+.twikiTable .twikiLast {
+	border-bottom-style:none;
+	border-bottom-width:0;
 }
 #twikiLogin {
 	width:40em;
@@ -356,6 +359,9 @@ blockquote {
 }
 .twikiFormTable th {
 	font-weight:normal;
+}
+.twikiFormTable .twikiTable th {
+	font-weight:bold;
 }
 .patternEditPage .twikiFormTable td,
 .patternEditPage .twikiFormTable th {
