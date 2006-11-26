@@ -18,7 +18,13 @@
 # =========================
 #
 #
+# For debugging
+=pod
 
+# Debug new topic creation
+perl -dT view "Trackingtest.OngoingIteration" -user guest -sequence "checked" -topic "MyNew" -parent "OngoingIteration" -templatetopic "StoryTemplate" -xpsave "1"
+
+=cut
 
 # =========================
 package TWiki::Plugins::XpTrackerPlugin;
@@ -47,6 +53,7 @@ use vars qw(
 
 use vars qw ( @timeRec %defaults
         $cacheFileName
+	$cacheInitialized
         %cachedProjectTeams
         %cachedTeamIterations
         %cachedIterationStories
@@ -185,8 +192,10 @@ sub initPlugin
     TWiki::Func::registerTagHandler( 'XPVELOCITIES', \&xpVelocities,
                                      'context-free' );
     # Dumps an iteration for printing
-    TWiki::Func::registerTagHandler( 'XPDUMPITERATION', \&xpDumpIteration,
-                                     'context-free' );
+    # TJW: Not currently supported, as it does not consider the task
+    #      tables, nor custom templates.
+    #TWiki::Func::registerTagHandler( 'XPDUMPITERATION', \&xpDumpIteration,
+    #                                 'context-free' );
     # Show open tasks by developer
     TWiki::Func::registerTagHandler( 'XPSHOWDEVELOPERTASKS', \&xpShowDeveloperTasks,
                                      'context-free' );
@@ -220,12 +229,15 @@ sub initPlugin
     # 
     TWiki::Func::registerTagHandler( 'XPSHOWDEVELOPERESTIMATE', \&xpShowDeveloperEstimate,
                                      'context-free' );
+    #
+    TWiki::Func::registerTagHandler( 'XPCREATETOPIC', \&xpCreateTopic,
+                                     'context-free' );
 
 
     # Plugin correctly initialized
     &TWiki::Func::writeDebug( "- TWiki::Plugins::XpTrackerPlugin::initPlugin( $web.$topic ) is OK" ) if $debug;
 
-    &xpCacheRead( $web );
+    $cacheInitialized = 0;
 
     return 1;
 }
@@ -304,6 +316,7 @@ sub xpround {
 
 sub xpDumpIteration {
 
+    &xpCacheRead( $web ) unless $cacheInitialized;
     my( $session, $params, $theTopic, $web ) = @_;
 
     my $iterationName = $params->{_DEFAULT} || $params->{iteration};
@@ -335,13 +348,14 @@ sub xpDumpIteration {
 
 sub xpShowIteration {
 
+    &xpCacheRead( $web ) unless $cacheInitialized;
     my( $session, $params, $theTopic, $web ) = @_;
 
     my $iterationName = $params->{_DEFAULT} || $params->{iteration};
 
-    my $list = CGI::h3( 'Iteration details' );
-    $list .= CGI::start_table( { border=>'1' } );
-    $list .= CGI::Tr( { bgcolor=>$defaults{headercolor} }, CGI::th( { align=>'left' }, 'Story<br>&nbsp; Tasks ') . CGI::th( { align=>'center' }, [ 'Estimate', 'Who', 'Spent', 'To do', 'Status' ] ) );
+    my $list = '';
+    my @colors = ();
+    $list .= '|*Story<br>&nbsp; Tasks*|*Estimate*|*Who*|*Spent*|*To do*|*Status*|' . "\n";
 
     my @allStories = &xpGetIterStories($iterationName, $web);  
 
@@ -432,12 +446,13 @@ sub xpShowIteration {
         }
         
         # Show story line
-	my $cells = CGI::td(" $story ") . CGI::td( { align=>'center' }, [ CGI::b(xpShowRounded($storyCalcEst)), ' '.$storyLead.' ', CGI::b(xpShowRounded($storySpent)), CGI::b(xpShowRounded($storyOngoing?'':$storyEtc)) ] ) . CGI::td( { nowrap=>undef }, $storyStatS );
+	my $cells = '| '.$story.' | '.xpShowRounded($storyCalcEst).' | '.$storyLead.' | '.xpShowRounded($storySpent).' | '.xpShowRounded($storyOngoing?'':$storyEtc).' | '.$storyStatS. '|';
         if ($color) {
-	  $list .= CGI::Tr( { bgcolor=>$color }, $cells );
+	  push @colors, $color;
         } else {
-	  $list .= CGI::Tr( $cells );
+	  push @colors, 'none';
 	}
+	$list .= $cells . "\n";
         
         # Show each task
         for (my $i=0; $i<$taskCount; $i++) {
@@ -463,17 +478,16 @@ sub xpShowIteration {
             my @spent = xpRipWords($taskSpent[$i]);
             my @etc = xpRipWords($taskEtc[$i]);
             for (my $x=0; $x<@who; $x++) {
-                $list .= CGI::Tr( { bgcolor=>$taskBG }, 
-				  CGI::td( ($doName)?"&nbsp;&nbsp;&nbsp;".$taskName[$i]:'&nbsp;' ) .
-				  CGI::td( { align=>'center' }, [ xpShowRounded($est[$x]), ' '.$who[$x].' ', xpShowRounded($spent[$x]), xpShowRounded($storyOngoing?'':$etc[$x]) ] ) .
-				  CGI::td( { nowrap=>undef }, $statusLiterals[$taskStat[$i]] ) );
+		push @colors, $taskBG;
+                $list .= '| '.($doName?'&nbsp;&nbsp;&nbsp; '.$taskName[$i]:'&nbsp;').' | '.xpShowRounded($est[$x]).' | '.$who[$x].' | '.xpShowRounded($spent[$x]).' | '.xpShowRounded($storyOngoing?'':$etc[$x]).' | '.$statusLiterals[$taskStat[$i]]."|\n";
                 $doName = 0;
             }
             
         }
         
         # Add a spacer
-        $list .= CGI::Tr( CGI::td( { colspan=>'6' }, '&nbsp;' ) ) if $addSpacer;
+	push @colors, 'none' if $addSpacer;
+        $list .= "| &nbsp; ||||||\n" if $addSpacer;
         
         # Add to totals
         $totalSpent += $storySpent;
@@ -484,10 +498,14 @@ sub xpShowIteration {
     
     # Do iteration totals
     
-    my $cells = CGI::td( CGI::b("$teamLbl totals") );
-    $cells .= CGI::td( { align=>'center' }, [ CGI::b(xpShowRounded($totalEst)), '&nbsp;', CGI::b(xpShowRounded($totalSpent)), CGI::b(xpShowRounded($totalEtc)), '&nbsp;' ] );
-    $list .= CGI::Tr( { bgcolor=>$defaults{headercolor} }, $cells );
-    $list .= CGI::end_table();
+    my $cells = "|*$teamLbl totals*|";
+    $cells .= '*'.xpShowRounded($totalEst).'*|*&nbsp;*|*'.xpShowRounded($totalSpent).'*|*'.xpShowRounded($totalEtc).'*|*&nbsp;*|';
+    $list .= $cells . "\n";
+
+    unshift @colors, pop @colors;  # defect in TablePlugin
+    my $color = join ',', @colors;
+    $list = "---+++ Iteration details\n%TABLE{headerrows=\"1\" footerrows=\"1\" dataalign=\"left,center,left,center,center,center\" headeralign=\"left,center,left,center,center,center\" databg=\"$color\"}%\n" . $list;
+
     return $list;
 }
 
@@ -515,20 +533,20 @@ sub gaugeLite
 
 sub xpShowIterationTerse {
 
+    &xpCacheRead( $web ) unless $cacheInitialized;
     my( $session, $params, $theTopic, $web ) = @_;
 
     my $iterationName = $params->{_DEFAULT} || $params->{iteration};
 
     my $showTasks = "N";
 
-    my $list = CGI::h3( 'Iteration summary' );
-    $list .= CGI::start_table( { border=>'1' } );
-    my $cells = CGI::th( { align=>'left' }, 'Story' );
+    my $list = '';
+    my @colors = ();
+    my $list = '|*Story*|';
     foreach my $fld (@addtlStoryFields) {
-      $cells .= CGI::th( { align=>'center' }, $fld);
+      $list .= "*$fld*|";
     }
-    $cells .= CGI::th( { align=>'center' }, [ 'Estimate', 'Spent', 'ToDo', 'Progress', 'Done', 'Overrun', 'Completion' ] );
-    $list .= CGI::Tr( { bgcolor=>$defaults{headercolor} }, $cells );
+    $list .= "*Estimate*|*Spent*|*ToDo*|*Progress*|*Done*|*Overrun*|*Completion*|\n";
 
     my @allStories = &xpGetIterStories($iterationName, $web);  
 
@@ -630,37 +648,38 @@ sub xpShowIterationTerse {
     }
     
     # Show story line
-    $cells = CGI::td( " $story <br> ".$storySummary );
+    my $cells = "| $story <br> $storySummary |";
     foreach my $fld (@fldvals) {
-      $cells .= CGI::td( { align=>'center' }, " $fld " );
+      $cells .= " $fld |";
     }
-    $cells .= CGI::td( { align=>'center' }, [ CGI::b(xpShowRounded($storyCalcEst)), CGI::b(xpShowRounded($storySpent)) ] );
+    $cells .= ' '.xpShowRounded($storyCalcEst).' | '.xpShowRounded($storySpent).' |';
     if ($storyOngoing) {
-      $cells .= CGI::td( [ '&nbsp;', '&nbsp;', '&nbsp;', '&nbsp;' ] );
+      $cells .= ' |  |  |  |';
     } else {
-    $cells .= CGI::td( { align=>'center' }, CGI::b(xpShowRounded($storyEtc)) );
+    $cells .= ' '.xpShowRounded($storyEtc).' |';
     my $done = 0;
     if(($storySpent + $storyEtc) > 0) {
       $done = int(100 * $storySpent / ($storySpent + $storyEtc));
     } elsif((($storySpent + $storyEtc) == 0) && !($storyStatS eq $statusLiterals[0])) {
       $done = 100;
     }
-    $cells .= CGI::td( gaugeLite($done) );
+    $cells .= ' '.gaugeLite($done).' |';
 
-    $cells .= CGI::td( { align=>'right' }, $done."%" );
+    $cells .= " ${done}% |";
 
     my $cfEst = 0;
     if($storyCalcEst > 0) {
       $cfEst = int(100*(($storySpent + $storyEtc) / $storyCalcEst) - 100);
     }
     if($cfEst >= 0) {
-      $cells .= CGI::td( { align=>'right' }, '+'.$cfEst.'%' );
+      $cells .= " +${cfEst}% |";
     } else {
-      $cells .= CGI::td( { align=>'right' }, $cfEst.'%' );
+      $cells .= " ${cfEst}% |";
     }
     }
-    $cells .= CGI::td($storyStatS);
-    $list .= CGI::Tr( { bgcolor=>$color }, $cells );
+    $cells .= " $storyStatS |";
+    push @colors, $color;
+    $list .= "$cells\n";
 
     # Show each task
     if($showTasks eq "Y") {
@@ -685,18 +704,16 @@ sub xpShowIterationTerse {
         my @spent = xpRipWords($taskSpent[$i]);
         my @etc = xpRipWords($taskEtc[$i]);
         for (my $x=0; $x<@who; $x++) {
-            $list .= CGI::Tr( { bgcolor=>$taskBG }, 
-			      CGI::td( ($doName)?("&nbsp;&nbsp;&nbsp;".$taskName[$i]):'&nbsp;' ) .
-			      CGI::td( { align=>'center' }, [ $est[$x], $spent[$x], $etc[$x] ] ) .
-			      CGI::td( { colspan=>'3' }, $who[$x] ) .
-			      CGI::td( { nowrap=>undef }, $statusLiterals[$taskStat[$i]] ) );
+	    push @colors, $taskBG;
+	    $list .= '| '.($doName?('&nbsp;&nbsp;&nbsp; '.$taskName[$i]):'&nbsp;').' | '.xpShowRounded($est[$x]).' | '.xpShowRounded($spent[$x]).' | '.xpShowRounded($etc[$x]).' | '.$who[$x].' |||'.$statusLiterals[$taskStat[$i]].' |'."\n";
             $doName = 0; 
         }
         
         }
         
         # Add a spacer if showing tasks
-        $list .= CGI::Tr( CGI::td( { colspan=>'8' }, '&nbsp;' ) ) if $addSpacer;
+	push @colors, 'none' if $addSpacer;
+        $list .= "| &nbsp; ||||||||\n" if $addSpacer;
     }
 
     # Add to totals
@@ -710,11 +727,11 @@ sub xpShowIterationTerse {
 
     # Do iteration totals
 
-    $cells = CGI::td( CGI::b("$teamLbl totals") );
+    my $cells = "|*$teamLbl totals*|";
     foreach my $fld (@addtlStoryFields) {
-      $cells .= CGI::th('&nbsp;');
+      $cells .= '*&nbsp;*|';
     }
-    $cells .= CGI::td( { align=>'center' }, [ CGI::b(xpShowRounded($totalEst)), CGI::b(xpShowRounded($totalSpent)) ] );
+    $cells .= '*'.xpShowRounded($totalEst).'*|*'.xpShowRounded($totalSpent).'*|';
 
     # refactor this code! (mwatt)
     my $totDone = 0;
@@ -734,28 +751,31 @@ sub xpShowIterationTerse {
     }
 
     if (($totalOngoing && $totalOngoing != $totalSpent) || !$totalOngoing) {
-      $cells .= CGI::td( { align=>'center' }, CGI::b(xpShowRounded($totalEtc)) ) . CGI::td($gaugeTxt) . CGI::td( { align=>'right' }, $totDone.'%' );
+      $cells .= '*'.xpShowRounded($totalEtc).'*|*'.$gaugeTxt.'*|*'.$totDone.'%*|';
       if($cfTotEst >= 0) {
-	$cells .= CGI::td( { align=>'right' }, '+'.$cfTotEst.'%' );
+	$cells .= '*+'.$cfTotEst.'%*|';
       } else {
-	$cells .= CGI::td( { align=>'right' }, $cfTotEst.'%' );
+	$cells .= '*'.$cfTotEst.'%*|';
       }
-      $cells .= CGI::td( '&nbsp;' );
-      $list .= CGI::Tr( { bgcolor=>$defaults{headercolor} }, $cells );
-      $list .= CGI::end_table() . "\n";
+      $cells .= '*&nbsp;*|';
+      $list .= $cells . "\n";
+
       # dump summary information into a comment for extraction by xpShowTeamIterations
       $list .= "<!--SUMMARY |  ".xpround($totalEst)."  |  ".xpround($totalSpent)."  |  ".xpround($totalEtc)."  |  ".$gaugeTxt."  |  ".$totDone."%  |  ".$cfTotEst."%  | END -->\n";
     } else {
-      $cells .= CGI::td( { align=>'center' }, [ '&nbsp;', '&nbsp;', '&nbsp;', '&nbsp;', '&nbsp;' ] );
-      $list .= CGI::Tr( { bgcolor=>$defaults{headercolor} }, $cells );
-      $list .= CGI::end_table() . "\n";
+      $cells .= '*&nbsp;*|*&nbsp;*|*&nbsp;*|*&nbsp;*|*&nbsp;*|';
+      $list .= $cells . "\n";
+
       # dump summary information into a comment for extraction by xpShowTeamIterations
       $list .= "<!--SUMMARY |  ".xpround($totalEst)."  |  ".xpround($totalSpent)."  |  |  |  | | END -->\n";
     }
 
+    unshift @colors, pop @colors;  # defect in TablePlugin
+    my $color = join ',', @colors;
+    my $list = "---+++ Iteration summary\n%TABLE{headerrows=\"1\" footerrows=\"1\" dataalign=\"left,left,center,center,center,center,center,center,left\" headeralign=\"left,left,center,center,center,center,center,center,left\" databg=\"$color\"}%\n" . $list;
 
     # append "create new story" form
-    $list .= &xpCreateHtmlForm("StoryTemplate", "Create new story in this iteration");
+    $list .= &xpCreateHtmlForm("Story", "---++++ Create new story in this iteration");
 
     return $list;
 }
@@ -768,9 +788,10 @@ sub xpShowIterationTerse {
 
 sub xpShowAllIterations {
 
+    &xpCacheRead( $web ) unless $cacheInitialized;
     my( $session, $params, $theTopic, $web ) = @_;
 
-    my $list = CGI::h3( 'All iterations' ) . "\n\n";
+    my $list = "---+++ All iterations\n\n";
     $list .= "| *$projectLbl* | *$teamLbl* | *Iter* | *Summary* |\n";
 
     my @projects = &xpGetAllProjects($web);
@@ -812,11 +833,12 @@ sub xpShowAllIterations {
 
 sub xpShowProjectIterations {
 
+    &xpCacheRead( $web ) unless $cacheInitialized;
     my( $session, $params, $theTopic, $web ) = @_;
 
     my $project = $params->{_DEFAULT} || $params->{project};
 
-    my $list = CGI::h3( "All iterations for this ".lcfirst $projectLbl ) . "\n\n";
+    my $list = "---+++ All iterations for this ".lcfirst $projectLbl. "\n\n";
 
     $list .= "| *$teamLbl* | *Iter* | *Summary* | *Start* | *End* | *Est* | *Spent* | *ToDo* | *Progress* | *Done* | *Overrun* |\n";
 
@@ -869,18 +891,19 @@ sub xpShowProjectIterations {
 
 sub xpShowProjectStories {
 
+    &xpCacheRead( $web ) unless $cacheInitialized;
     my( $session, $params, $theTopic, $web ) = @_;
 
     my $project = $params->{_DEFAULT} || $params->{project};
 
-    my $listComplete = CGI::h3( "All completed stories for this ".lcfirst $projectLbl ) . "\n\n";
+    my $listComplete = "---+++ All completed stories for this ".lcfirst $projectLbl."\n\n";
     $listComplete .= "| *$teamLbl* | *Iteration* | *Story* | *Summary* |";
     foreach my $fld (@addtlStoryFields) {
       $listComplete .= " *".$fld."* |";
     }
     $listComplete .= " *Completion Date* |\n";
 
-    my $listIncomplete = CGI::h3( 'All uncompleted stories for this project' ) . "\n\n";
+    my $listIncomplete = "---+++ All uncompleted stories for this ".lcfirst $projectLbl."\n\n";
     $listIncomplete .= "| *$teamLbl* | *Iteration* | *Story* | *Summary* |";
     foreach my $fld (@addtlStoryFields) {
       $listIncomplete .= " *".$fld."* |";
@@ -943,13 +966,14 @@ sub xpShowProjectStories {
 
 sub xpShowTeamIterations {
 
+    &xpCacheRead( $web ) unless $cacheInitialized;
     my( $session, $params, $theTopic, $web ) = @_;
 
     my $team = $params->{_DEFAULT} || $params->{team};
 
     my @teamIters = &xpGetTeamIterations($team, $web);
 
-    my $list = CGI::h3( "All iterations for this " .lcfirst $teamLbl ) . "\n\n";
+    my $list = "---+++ All iterations for this ".lcfirst $teamLbl. "\n\n";
 
     $list .= "| *Iter* | *Summary* | *Start* | *End* | *Est* | *Spent* | *ToDo* | *Progress* | *Done* | *Overrun* |\n";
 
@@ -982,7 +1006,7 @@ sub xpShowTeamIterations {
     }
 
     # append CreateNewIteration form
-    $list .= &xpCreateHtmlForm("IterationTemplate", "Create new iteration for this " .lcfirst $teamLbl);
+    $list .= &xpCreateHtmlForm("Iteration", "---++++ Create new iteration for this " .lcfirst $teamLbl);
 
     return $list;
 }
@@ -995,11 +1019,12 @@ sub xpShowTeamIterations {
 
 sub xpShowAllTeams {
 
+    &xpCacheRead( $web ) unless $cacheInitialized;
     my( $session, $params, $theTopic, $web ) = @_;
 
     my @projects = &xpGetAllProjects($web);
 
-    my $list = CGI::h3( "List of all ".lcfirst $projectLbl."s and ".lcfirst $teamLbl."s:" ) . "\n\n";
+    my $list = "---+++ All ".lcfirst $projectLbl."s and ".lcfirst $teamLbl."s\n\n";
     $list .= "| *$projectLbl* | *$teamLbl* |\n";
 
     foreach my $project (@projects) {
@@ -1009,7 +1034,7 @@ sub xpShowAllTeams {
     }
 
     # append form to allow creation of new projects
-    $list .= &xpCreateHtmlForm("${projectLbl}Template", "Create new ".lcfirst $projectLbl);
+    $list .= &xpCreateHtmlForm(${projectLbl}, "---++++ Create new ".lcfirst $projectLbl);
 
     return $list;
 }
@@ -1021,20 +1046,21 @@ sub xpShowAllTeams {
 
 sub xpShowProjectTeams {
 
+    &xpCacheRead( $web ) unless $cacheInitialized;
     my( $session, $params, $theTopic, $web ) = @_;
 
     my $project = $params->{_DEFAULT} || $params->{project};
 
     my @projTeams = &xpGetProjectTeams($project, $web);
 
-    my $list = CGI::h3( "All ".lcfirst $teamLbl."s for this ".lcfirst $projectLbl ) . "\n\n";
+    my $list = "---+++ All ".lcfirst $teamLbl."s for this ".lcfirst $projectLbl."\n\n";
     $list .= "| *$teamLbl* |\n";
 
     # write out all teams
     $list .= "| @projTeams |\n";
 
     # append CreateNewTeam form
-    $list .= &xpCreateHtmlForm("${teamLbl}Template", "Create new ". lcfirst $teamLbl." for this ".lcfirst $projectLbl);
+    $list .= &xpCreateHtmlForm(${teamLbl}, "---++++ Create new ". lcfirst $teamLbl." for this ".lcfirst $projectLbl);
 
     return $list;
 }
@@ -1051,18 +1077,34 @@ sub xpCreateHtmlForm {
     my $list = "";
 
     # append form for new page creation
-    $list .= "<p>\n";
+    $list .= $prompt . "\n";
     $list .= "<form name=\"new\">\n";
+    $list .= '<table><tr><td>';
     $list .= "<input type=\"text\" name=\"topic\" size=\"30\" />\n";
+    $list .= '</td><td>';
+    $list .= "<input type=\"checkbox\" name=\"sequence\" /> Add sequence number&nbsp;\n";
+    $list .= '</td><td>';
     $list .= "<input type=\"hidden\" name=\"parent\" value=\"%TOPIC%\" />\n";
 #    $list .= "<input type=\"hidden\" name=\"templatetopic\" value=\"".$template."\" />\n";
-    $list .= "%CONTROL{\"templatetopic\" topic=\"${template}Options\" }%\n";
-    $list .= "<input type=\"submit\" name =\"xpsave\" value=\"".$prompt."\" />\n";
+    $list .= "%CONTROL{\"templatetopic\" topic=\"${template}TemplateOptions\" }%\n";
+    $list .= '</td></tr><tr><td>';
+    $list .= "<input type=\"submit\" name =\"xpsave\" value=\"Create\" />\n";
+    $list .= '</td></tr></table>';
     $list .= "</form>\n";
     $list .= "\n";
 
     return $list;
 }
+
+sub xpCreateTopic {
+
+    my( $session, $params, $theTopic, $web ) = @_;
+    my $tmpl = $params->{_DEFAULT} || $params->{template} || 'Story';
+    my $prompt = $params->{prompt};
+    return xpCreateHtmlForm( $tmpl, $prompt );
+
+}
+
 
 ###########################
 # xpGetProjectTeams
@@ -1082,6 +1124,7 @@ sub xpGetProjectTeams {
 
 sub xpShowProjectCompletionByStories{
 
+    &xpCacheRead( $web ) unless $cacheInitialized;
     my( $session, $params, $theTopic, $web ) = @_;
 
     my $project = $params->{_DEFAULT} || $params->{project};
@@ -1089,7 +1132,7 @@ sub xpShowProjectCompletionByStories{
     my @projectStories = &xpGetProjectStories($project, $web);
 
     # Show the list
-    my $list = CGI::h3( "$projectLbl stories status" ) . "\n\n";
+    my $list = "---+++ $projectLbl stories status\n\n";
 
     $list .= "| *Iteration* | *Total Stories* | *Not Started* | *In Progress* | *Completed* | *Accepted* | *Percent accepted* |\n";
 
@@ -1172,6 +1215,7 @@ sub xpShowProjectCompletionByStories{
 
 sub xpShowProjectCompletionByTasks {
 
+    &xpCacheRead( $web ) unless $cacheInitialized;
     my( $session, $params, $theTopic, $web ) = @_;
 
     my $project = $params->{_DEFAULT} || $params->{project};
@@ -1179,7 +1223,7 @@ sub xpShowProjectCompletionByTasks {
     my @projectStories = &xpGetProjectStories($project, $web);
 
     # Show the list
-    my $list = CGI::h3( "$projectLbl tasks status" ) . "\n\n";
+    my $list = "---+++ $projectLbl tasks status\n\n";
     $list .= "| *Iteration* |  *Total tasks* | *Not Started* | *In progress* | *Complete* | *Percent complete* |\n";
 
     # Iterate over each, and build iteration hash
@@ -1353,18 +1397,18 @@ sub xpPivotByField {
 
 sub xpShowPivotByField {
 
+    &xpCacheRead( $web ) unless $cacheInitialized;
     my( $session, $web, $iteration, $field, $title, $doSplit ) = @_;
 
     my @allStories = &xpGetIterStories($iteration, $web);
 
     # title
-    my $list = CGI::h3($title) . "\n";
+    my $list = "---+++ $title\n";
 
-    # Show the list
-    $list .= CGI::start_table( { border=>'1' } );
-    $list .= CGI::Tr( { bgcolor=>$defaults{headercolor} }, [ 
-		CGI::th( { rowspan=>'2' }, 'Category' ) . CGI::th( { colspan=>'3' }, 'Ideals' ) . CGI::th( { colspan=>'2' }, 'Tasks' ), 
-		CGI::th( [ 'Assigned', 'Spent', 'Remaining', 'Assigned', 'Remaining' ] ) ] );
+    # Show the table
+    $list .= '%TABLE{dataalign="left,center,center,center,center,center" headeralign="left,center,center,center,center,center"}%'."\n";
+    $list .= "|*Category*|*Ideals*|||*Tasks*||\n";
+    $list .= "|^|*Assigned*|*Spent*|*Remaining*|*Assigned*|*Remaining*|\n";
 
     # Iterate over each story
     my (%whoAssigned,%whoSpent,%whoEtc,%whoTAssigned,%whoTRemaining) = ();
@@ -1404,14 +1448,10 @@ sub xpShowPivotByField {
     }
     }
     
-    # Show them
     foreach my $who (sort { $whoEtc{$b} <=> $whoEtc{$a} } keys %whoSpent) {
-    $list .= CGI::Tr( CGI::td($who) . CGI::td( { align=>'center' }, [ xpShowRounded($whoAssigned{$who}), xpShowRounded($whoSpent{$who}), xpShowRounded($whoEtc{$who}), $whoTAssigned{$who}, $whoTRemaining{$who} ] ) );
+     $list .= '| '.$who.' | '.xpShowRounded($whoAssigned{$who}).' | '.xpShowRounded($whoSpent{$who}).' | '.xpShowRounded($whoEtc{$who}).' | '.$whoTAssigned{$who}.' | '.$whoTRemaining{$who}." |\n";
     }
-    $list .= CGI::Tr( { bgcolor=>$defaults{headercolor} }, CGI::th( { align=>'left' }, 'Total' ) . CGI::th( { align=>'center' }, [ xpShowRounded($totalAssigned), xpShowRounded($totalSpent), xpShowRounded($totalEtc), $totalTAssigned, $totalTRemaining ] ) );
-
-    # Close it off
-    $list .= CGI::end_table();
+    $list .= '|*Total*|*'.xpShowRounded($totalAssigned).'*|*'.xpShowRounded($totalSpent).'*|*'.xpShowRounded($totalEtc).'*|*'.$totalTAssigned.'*|*'.$totalTRemaining."*|\n";
 
     return $list;
 }
@@ -1619,11 +1659,12 @@ sub xpGetTeamIterations {
 
 sub xpShowAllProjects {
 
+    &xpCacheRead( $web ) unless $cacheInitialized;
     my( $session, $params, $theTopic, $web ) = @_;
 
     my @projects = &xpGetAllProjects($web);
 
-    my $list = CGI::h3( "All ".lcfirst $projectLbl."s" ) . "\n\n";
+    my $list = "---+++ All ".lcfirst $projectLbl."s\n\n";
     $list .= "| *$projectLbl* |\n";
 
     # write out all iterations to table
@@ -1632,7 +1673,7 @@ sub xpShowAllProjects {
     }
 
     # append form to allow creation of new projects
-    $list .= &xpCreateHtmlForm("${projectLbl}Template", "Create new ".lcfirst $projectLbl);
+    $list .= &xpCreateHtmlForm(${projectLbl}, "---++++ Create new ".lcfirst $projectLbl);
 
     return $list;
 }
@@ -1734,9 +1775,7 @@ sub xpCacheBuild
         }
     }
 
-    my $cacheText = $projCache.$teamCache.$iterCache;
-#    TWiki::Func::saveTopicText($web, $cacheFileName, $cacheText, 1, 1);
-    TWiki::Func::saveFile( $cacheFileName, $cacheText );
+    TWiki::Func::saveFile( $cacheFileName, $projCache.$teamCache.$iterCache );
 }
 
 ###########################
@@ -1747,7 +1786,6 @@ sub xpCacheBuild
 sub xpCacheRead
 {
     my $web = shift;
-#    my $cacheFile = "$TWiki::cfg{DataDir}/$web/$cacheFileName.txt";
 
     # if there is no disk cache file, build one
     if (! (-e $cacheFileName )) {
@@ -1782,6 +1820,8 @@ sub xpCacheRead
     while($cacheText =~ s/ITER : (.*?) : (.*?)\n//) {
         $cachedIterationStories{$1} = "$2";
     }
+
+    $cacheInitialized = 1;
 }
 
 sub xpSavePage()
@@ -1791,6 +1831,8 @@ sub xpSavePage()
     # check the user has entered a non-null string
     my $query = TWiki::Func::getCgiQuery();
     my $title = $query->param( 'topic' );
+    $title .= 'XXXXXXXXXX' if $query->param( 'sequence' );
+
     if($title eq "") {
         TWiki::Func::redirectCgiQuery( $query, &TWiki::Func::getOopsUrl( $web, "Unknown topic", "oopssaveerr", "No topic name." ) );
         return;
@@ -1812,8 +1854,8 @@ sub xpSavePage()
     my $template = $query->param( 'templatetopic' );
     if( ($template eq "StoryTemplate") ) {
         if(!($title =~ /^[\w]*Story$/)) {
-	    TWiki::Func::redirectCgiQuery( $query, &TWiki::Func::getOopsUrl( $web, "Unknown topic", "oopssaveerr", "Story name should end in 'Story'" ) );
-            return;
+	  TWiki::Func::writeWarning("${pluginName} - Story name should end in 'Story'; converting to ${title}Story");
+	  $title .= 'Story';
         }
     }
 
@@ -1849,28 +1891,19 @@ sub xpSavePage()
       $meta->putKeyed( "FIELD", { "name" => "State", "title" => "State", "value" => "Submitted" } );
     }
 
+
     # save new page in a temp file and open in browser
-    #my $tempFile = "TmpTopic";
-    $title = TWiki::Sandbox::untaintUnchecked( $title );
-    my $error = &TWiki::Func::saveTopic( $web, $title, $meta, $text );
-    #my $error = &TWiki::Func::saveTopic( $web, $tempFile, $meta, $text );
+    my $tmpFile = TWiki::Sandbox::untaintUnchecked( 'TemporaryTopic' );
+    my $error = &TWiki::Func::saveTopic( $web, $tmpFile, $meta, $text );
     # TJW: delete the cache file to work around a problem of cache file being
     # TJW: not read due to timestamp problem
-#    my $cacheFile = "$TWiki::cfg{DataDir}/$web/$cacheFileName.txt";
     unlink("$cacheFileName");
 
     # open in edit mode
     my $url = &TWiki::Func::getScriptUrl ( $web, $title, 'edit' );
-    #$url .= "\?templatetopic=$tempFile";
-    #$url .= "\&topicparent=ProjectTopics";
+    $url .= "\?templatetopic=$tmpFile";
     TWiki::Func::redirectCgiQuery( $query, $url );
 
-    
-#    &TWiki::Func::setTopicEditLock( $web, $title, 1 );
-#    if( $error ) {
-#        $url = &TWiki::Func::getOopsUrl( $web, $title, "oopssaveerr", $error );
-#        TWiki::Func::redirectCgiQuery( $query, $url );
-#    }
 }
 
 ###########################
@@ -1880,6 +1913,7 @@ sub xpSavePage()
 
 sub xpShowDeveloperTasks {
 
+    &xpCacheRead( $web ) unless $cacheInitialized;
     my( $session, $params, $theTopic, $web ) = @_;
 
     my $developer = $params->{_DEFAULT} || $params->{developer};
@@ -1889,10 +1923,9 @@ sub xpShowDeveloperTasks {
     my @projects = &xpGetAllProjects($web);
 
     # Show the list
-    my $list = CGI::h3( "Open project tasks by developer $developer" ) . "\n\n";
-    $list .= CGI::start_table({ class=>'twikiTable', border => 1 });
-    my $cells = CGI::th( { align=>'left' }, "Iteration Story<br>&nbsp; Task " ) . CGI::th( [ 'Estimate', 'Spent', 'To do', 'Status', 'Iteration due' ] );
-    $list .= CGI::Tr({ bgcolor=>$defaults{headercolor} }, $cells );
+    my $list = '';
+    my @colors = ();
+    $list .= "|*Iteration Story<br>&nbsp; Task*|*Estimate*|*Spent*|*To do*|*Status*|*Iteration due*|\n";
 
     # todo: build a list of projects/iterations sorted by date
 
@@ -2047,13 +2080,8 @@ sub xpShowDeveloperTasks {
 		my $iterationcolor = ($iterDate)?$iterDatecolor:$color;
 
                 # Show project / iteration line
-		$cells = CGI::td( " $iterationName&nbsp; $story" )
-		  . CGI::td( { align=>'center' }, 
-			     [ CGI::b(xpShowRounded($storyEst)), CGI::b(xpShowRounded($storySpent)), CGI::b(xpShowRounded($storyEtc)) ] )
-		    . CGI::td( { nowrap=>undef }, $storyStatS )
-		      . CGI::td( { nowrap=>undef, bgcolor=>$iterationcolor },
-				     xpShowCell($iterDate, $storyOngoing) );
-		$list .= CGI::Tr( { bgcolor=>$color }, $cells );
+		push @colors, $color;
+		$list .= "| $iterationName&nbsp; $story | ".xpShowRounded($storyEst).' | '.xpShowRounded($storySpent).' | '.xpShowRounded($storyEtc).' | <div style="white-space:nowrap"> '.$storyStatS." </div> |<div style=\"background:$iterationcolor;margin:0;padding:0;border:0;white-space:nowrap\">".xpShowCell($iterDate, ! $storyOngoing)."</div>|\n";
 
                 # Show each task
                 for (my $i=0; $i<$taskCount; $i++) {
@@ -2082,22 +2110,17 @@ sub xpShowDeveloperTasks {
                       # taskEtc is an array
                       next if (($etc[$x] == 0) && (! $storyOngoing));
 
-		      my $cell = '';
-		      if ($doName) {
-			$cell .= "&nbsp;&nbsp;&nbsp; ".$taskName[$i];
-		      }
-		      $cell = CGI::td( '&nbsp;' . $cell );
-		      $cell .= CGI::td( { align=>'center' }, [ xpShowRounded($est[$x]), xpShowRounded($spent[$x]), xpShowRounded($etc[$x]) ] )
-			. CGI::td( { nowrap=>undef }, $statusLiterals[$taskStat[$i]] )
-			  . CGI::td( '&nbsp;' );
-		      $list .= CGI::Tr( { bgcolor=>$taskBG }, $cell );
+		      ## TW: originally did not differentiate for ongoing stories on $etc
+		      push @colors, $taskBG;
+		      $list .= '| '.($doName?'&nbsp;&nbsp;&nbsp; '.$taskName[$i]:'&nbsp;').' | '.xpShowRounded($est[$x]).' | '.xpShowRounded($spent[$x]).' | '.xpShowRounded($storyOngoing?'':$etc[$x]).' |<div style="white-space:nowrap"> '.$statusLiterals[$taskStat[$i]]." </div>| &nbsp; |\n";
 		      $doName = 0;
                     }
                     
                 }
                 
                 # Add a spacer
-		$list .= CGI::Tr( CGI::td( { colspan=>'6' }, '&nbsp;' ) ) if $addSpacer;
+		push @colors, 'none' if $addSpacer;
+		$list .= "| &nbsp; ||||||\n" if $addSpacer;
     
                 # Add to totals
                 $totalSpent += $storySpent;
@@ -2111,11 +2134,11 @@ sub xpShowDeveloperTasks {
     }
 
     # Do iteration totals
-    $cells = CGI::td( CGI::b( 'Developer totals' ) )
-      . CGI::td( { align=>'center' }, [ CGI::b(xpShowRounded($totalEst)), CGI::b(xpShowRounded($totalSpent)), CGI::b(xpShowRounded($totalEtc)) ] )
-	. CGI::td( [ '&nbsp;', '&nbsp;' ] );
-    $list .= CGI::Tr( { bgcolor=>$defaults{headercolor} }, $cells );
-    $list .= CGI::end_table();
+    $list .= '|*Developer totals*|*'.xpShowRounded($totalEst).'*|*'.xpShowRounded($totalSpent).'*|*'.xpShowRounded($totalEtc)."*|*&nbsp;*|*&nbsp;*|\n";
+    unshift @colors, pop @colors;  # defect in TablePlugin
+    my $color = join ',', @colors;
+    $list = "---+++ Open project tasks by developer $developer\n%TABLE{headerrows=\"1\" footerrows=\"1\" dataalign=\"left,center,center,center,left,center\" headeralign=\"left,center,center,center,left,center\" databg=\"$color\"}%\n" . $list;
+
     $list .= CGI::start_table();
     $list .= CGI::Tr (
 		      CGI::td( 'task' )
@@ -2139,6 +2162,7 @@ sub xpShowDeveloperTasks {
 
 sub xpShowLoad {
 
+    &xpCacheRead( $web ) unless $cacheInitialized;
     my( $session, $params, $theTopic, $web ) = @_;
 
     my $dev = $params->{_DEFAULT} || $params->{developer};
@@ -2148,8 +2172,6 @@ sub xpShowLoad {
     my (@projiter, @projiterDate, @projiterSec, @nobodiesStories, %devDays);
 
     my @projects = &xpGetAllProjects($web);
-
-    my $list = CGI::h3( "Workload by developer and project iteration in $web" ) . "\n\n";
 
     # Collect data
     my $count = 0;
@@ -2222,18 +2244,19 @@ sub xpShowLoad {
     }
     }
 
+    my $list = '';
+
     # Show the list
-    $list .= CGI::start_table({ class=>'twikiTable', border => 1 });
-    my $cells = CGI::th( { align=>'left' }, 'Developer' );
+    my $cells = '|*Developer*|';
     for my $pi (sort {$projiterSec[$a] <=> $projiterSec[$b]} (1..$count)) {
-      $cells .= CGI::th( $projiter[$pi]." <br> " );
+      $cells .= ''.$projiter[$pi].'|';
     }
-    $list .= CGI::Tr({ bgcolor=>$defaults{headercolor} }, $cells );
+    $list .= $cells . "\n";
 
 
     for my $who (sort keys %devDays) {
         my $cumulLoad = 0;
-	$cells = CGI::td( { bgcolor=>$defaults{headercolor} }, $who );
+	$cells = '|*'.$who.'*|';
         for my $pi (sort {$projiterSec[$a] <=> $projiterSec[$b]} (1..$count)) {
             my $color = "";
             $cumulLoad += $devDays{$who}[$pi]*24*3600;
@@ -2258,6 +2281,8 @@ sub xpShowLoad {
 	    }
             if ($load < 0) {
                 $color = '#FF6666';
+            } elsif ($load > 1) {
+                $color = '#FF6666';
             } elsif ($load > 0.6) {
                 $color = '#FFCCCC';
             } elsif ($load > 0.45) {
@@ -2267,19 +2292,19 @@ sub xpShowLoad {
             } else {
                 $color = '#CCCCFF';
             }
-	    my $cell = CGI::b( xpShowCell($devDays{$who}[$pi]) );
+	    my $cell = ' *'.xpShowCell($devDays{$who}[$pi]).'*';
             if ( defined $devDays{$who}[$pi] && ($devDays{$who}[$pi] > 0) ) {
                 if ( $load > 0 ) {
-                    $cell .= " <br> ".sprintf("%d \%\%",100*$load)." ";
+                    $cell .= ' <br> '.sprintf("%d \%",100*$load).' ';
                 } else {
-                    $cell .= " <br> (late!) ";
+                    $cell .= ' <br> (late!) ';
                 }
             }
-	    $cells .= CGI::td( { bgcolor=>$color, align=>'center' }, $cell );
+	    $cells .= "<div style=\"background:$color\">$cell</div>|";
         }
-	$list .= CGI::Tr( $cells );
+	$list .= $cells . "\n";
     }
-    $list .= CGI::end_table();
+    $list = "---+++ Workload by developer and project iteration in $web\n%TABLE{headerrows=\"1\" dataalign=\"center\" sort=\"off\"}%\n" . $list;
 
     $list .= CGI::start_table();
     $list .= CGI::Tr(
@@ -2287,7 +2312,8 @@ sub xpShowLoad {
 		     . CGI::td( { bgcolor=>'#CCCCFF' }, '0-30' )
 		     . CGI::td( { bgcolor=>'#CCFFCC' }, '30-45' )
 		     . CGI::td( { bgcolor=>'#FFFFCC' }, '45-60' )
-		     . CGI::td( { bgcolor=>'#FFCCCC' }, '60...' )
+		     . CGI::td( { bgcolor=>'#FFCCCC' }, '60-100' )
+		     . CGI::td( { bgcolor=>'#FF6666' }, '100+' )
 		     . CGI::td( 'estimated on a 5/7, 8/24 basis' ) );
     $list .= CGI::end_table();
     return $list;
@@ -2320,6 +2346,8 @@ sub xpShowColours {
 # Insert the task table in story topics
 #
 sub xpShowTaskTable {
+
+  &xpCacheRead( $web ) unless $cacheInitialized;
   my( $session, $params, $theTopic, $web ) = @_;
   my $topic = $params->{_DEFAULT} || $params->{story};
   $topic = "" . $topic;
@@ -2342,6 +2370,7 @@ sub xpShowTaskTable {
 
 sub xpShowDeveloperTimeSheet {
 
+    &xpCacheRead( $web ) unless $cacheInitialized;
     my( $session, $params, $topic, $web ) = @_;
 
     my $query = $session->{cgiQuery};
@@ -2380,22 +2409,16 @@ sub xpShowDeveloperTimeSheet {
     my $viewUrl = &TWiki::Func::getScriptUrl ( $web, $topic, "view" ) ;
 
     # Show the list
-    my $list = "";
-    $list .= "<noautolink>\n" if $doEdit;
-    $list .= CGI::a( { name=>"timesheet$tableNr" }, '') . "\n";
-    $list .= "<form name=\"timesheet$tableNr\" action=\"$viewUrl\" method=\"post\">\n";
-    $list .= "<input type=\"hidden\" name=\"ettablenr\" value=\"$tableNr\" />\n";
-    $list .= "<input type=\"hidden\" name=\"etedit\" value=\"on\" />\n" unless $doEdit;
+    my $timesheet;
+    $timesheet .= "<noautolink>\n" if $doEdit;
+    $timesheet .= CGI::a( { name=>"timesheet$tableNr" }, '') . "\n";
+    $timesheet .= "<form name=\"timesheet$tableNr\" action=\"$viewUrl\" method=\"post\">\n";
+    $timesheet .= "<input type=\"hidden\" name=\"ettablenr\" value=\"$tableNr\" />\n";
+    $timesheet .= "<input type=\"hidden\" name=\"etedit\" value=\"on\" />\n" unless $doEdit;
 
-    $list .= CGI::h3( "Open tasks by developer $developer" ) . "\n\n";
-    $list .= CGI::start_table( { border=>'1', cellspacing=>'1', cellpadding=>'0' } );
-    my $cells = CGI::th( { align=>'left' }, 'Iteration Story<br>&nbsp; Task ' ). CGI::th( [ 'Estimate', 'Spent', 'To do' ] );
-    if ($doEdit) {
-      $cells .= CGI::th( [ 'Add to<br>Spent', 'Update<br>To do' ] );
-    } else {
-      $cells .= CGI::th( [ 'Status', 'Iteration due' ] );
-    }
-    $list .= CGI::Tr( { bgcolor=>$defaults{headercolor} }, $cells );
+    my $list = '';
+    my @colors = ();
+    my $list = '|*Iteration Story<br>&nbsp; Task*|*Estimate*|*Spent*|*To do*|'.($doEdit?'*Add to<br>Spent*|*Update<br>To do*|':'*Status*|*Iteration due*|')."\n";
 
     # todo: build a list of projects/iterations sorted by date
 
@@ -2551,12 +2574,13 @@ sub xpShowDeveloperTimeSheet {
 		my $iterationcolor = ($iterDate)?$iterDatecolor:$color;
 
                 # Show project / iteration line
-                $list .= CGI::Tr( { bgcolor=>$color }, CGI::td( " $storyiteration&nbsp; $story: $storysummary" ) . CGI::td( { align=>'center' }, [ CGI::b(xpShowRounded($storyEst)), CGI::b(xpShowRounded($storySpent)), CGI::b(xpShowRounded($storyEtc)) ]) . CGI::td( { nowrap=>undef }, $storyStatS ) . CGI::td( { nowrap=>undef, bgcolor=>$iterationcolor }, xpShowCell($iterDate, $storyOngoing) ) );
+		push @colors, $color;
+		$list .= "| $storyiteration&nbsp; $story: $storysummary | ".xpShowRounded($storyEst).' | '.xpShowRounded($storySpent).' | '.xpShowRounded($storyEtc).' |<div style="white-space:nowrap"> '.$storyStatS." </div>|<div style=\"background:$iterationcolor;margin:0;padding:0;border:0;white-space:nowrap\">".xpShowCell($iterDate, ! $storyOngoing)."</div>|\n";
 
                 # Show each task
                 for (my $i=0; $i<$taskCount; $i++) {
 
-                    my $taskBG = "";
+                    my $taskBG = '';
                     if ($taskStat[$i] == 4) {
                         $taskBG = $defaults{ongoingcolor};
                     }
@@ -2582,40 +2606,37 @@ sub xpShowDeveloperTimeSheet {
 
 		      $rowNr++;
 
+		      my $cells = '| &nbsp;';
 		      if ($doEdit) {
-			my $cells = '';
-			my $cell = '&nbsp;';
-			$cell .= "<input type=\"hidden\" name=\"etcell".$rowNr."x0\" value=\"".$story."\" />";
+			$cells .= "<input type=\"hidden\" name=\"etcell".$rowNr."x0\" value=\"".$story."\" />";
 			if ($doName) {
-			  $cell .= "&nbsp;&nbsp;&nbsp; ".$taskName[$i]." <input type=\"hidden\" name=\"etcell".$rowNr."x1\" value=\"".$taskName[$i]."\" />";
-			  $cells .= CGI::td($cell);
+			  $cells .= '&nbsp;&nbsp;&nbsp; '.$taskName[$i]." <input type=\"hidden\" name=\"etcell".$rowNr."x1\" value=\"".$taskName[$i]."\" />";
+
 			}
-			$cells .= CGI::td( { align=>'center' }, xpShowRounded($est[$x])." <input type=\"hidden\" name=\"etcell".$rowNr."x2\" value=\"".$est[$x]."\" />" );
-			$cells .= CGI::td( { align=>'center' }, xpShowRounded($spent[$x])." <input type=\"hidden\" name=\"etcell".$rowNr."x3\" value=\"".$spent[$x]."\" />");
-			$cells .= CGI::td( { align=>'center' }, xpShowRounded($etc[$x])." <input type=\"hidden\" name=\"etcell".$rowNr."x4\" value=\"".$etc[$x]."\" />" );
-			$cells .= CGI::td( { align=>'center' }, " <input type=\"text\" name=\"etcell".$rowNr."x5\" size=\"5\" value=\"\" />");
+			$cells .= ' |';
+
+			$cells .= ' '.xpShowRounded($est[$x])." <input type=\"hidden\" name=\"etcell".$rowNr."x2\" value=\"".$est[$x]."\" /> |";
+			$cells .= ' '.xpShowRounded($spent[$x])." <input type=\"hidden\" name=\"etcell".$rowNr."x3\" value=\"".$spent[$x]."\" /> |";
+			$cells .= ' '.xpShowRounded($etc[$x])." <input type=\"hidden\" name=\"etcell".$rowNr."x4\" value=\"".$etc[$x]."\" /> |";
+			$cells .= " <input type=\"text\" name=\"etcell".$rowNr."x5\" size=\"5\" value=\"\" /> |";
 			if (! $storyOngoing) {
-			  $cells .= CGI::td( { align=>'center' }, CGI::table( { cellspacing=>'0', cellpadding=>'0' }, CGI::Tr( CGI::td( [ "<input type=\"text\" name=\"etcell".$rowNr."x6\" size=\"5\" value=\"\" />" , CGI::table( { cellspacing=>'0', cellpadding=>'0' }, CGI::Tr( { align=>'left' }, [ CGI::td( "<input type=\"radio\" name=\"etcell".$rowNr."x7\" value=\"1\"  checked />To do" ), CGI::td( "<input type=\"radio\" name=\"etcell".$rowNr."x7\" value=\"0\"  />% done" ) ] ) ) ] ) ) ) );
+			  $cells .= ' '.CGI::table( { cellspacing=>'0', cellpadding=>'0' }, CGI::Tr( CGI::td( "<input type=\"text\" name=\"etcell".$rowNr."x6\" size=\"5\" value=\"\" />"), CGI::td( { nowrap=>undef }, "<input type=\"radio\" name=\"etcell".$rowNr."x7\" value=\"1\"  checked />To do" ), CGI::td( { nowrap=>undef }, "<input type=\"radio\" name=\"etcell".$rowNr."x7\" value=\"0\"  />% done" ) ) )." |";
 			} else {
-			  $cells .= CGI::td( { align=>'center' }, '&nbsp;');
+			  $cells .= ' &nbsp; |';
 			}
-			$list .= CGI::Tr( { bgcolor=>$taskBG }, $cells );
 		      } else {
-			my $cells = '';
-			my $cell = '&nbsp;';
-			if ($doName) {
-			  $cell .= "&nbsp;&nbsp;&nbsp; ".$taskName[$i];
-			}
-			$cells .= CGI::td($cell) . CGI::td( { align=>'center' }, xpShowRounded($est[$x]) ) . CGI::td( { align=>'center' }, xpShowRounded($spent[$x]) ) . CGI::td( { align=>'center' }, &xpShowRounded($etc[$x]) ) . CGI::td( { nowrap=>undef } , $statusLiterals[$taskStat[$i]] ) . CGI::td( '&nbsp;' );
-			$list .= CGI::Tr( { bgcolor=>$taskBG }, $cells );
+			$cells .= ($doName?'&nbsp;&nbsp;&nbsp; '.$taskName[$i]:'&nbsp;').' | '.xpShowRounded($est[$x]).' | '.xpShowRounded($spent[$x]).' | '.xpShowRounded($storyOngoing?'':$etc[$x]).' |<div style="white-space:nowrap"> '.$statusLiterals[$taskStat[$i]].' </div>| &nbsp; |';
 		        $doName = 0;
 		      }
+		      push @colors, $taskBG;
+		      $list .= $cells . "\n";
 		    }
                     
                 }
                 
                 # Add a spacer
-                $list .= CGI::Tr( CGI::td( { colspan=>'6' }, '&nbsp;' ) ) if $addSpacer;
+		push @colors, 'none' if $addSpacer;
+		$list .= "| &nbsp; ||||||\n" if $addSpacer;
     
                 # Add to totals
                 $totalSpent += $storySpent;
@@ -2629,29 +2650,31 @@ sub xpShowDeveloperTimeSheet {
     }
 
     # Do developer totals
-    $list .= CGI::Tr( { bgcolor=>$defaults{headercolor} },
-		      CGI::td( CGI::b('Developer totals') ) . CGI::td( { align=>'center' }, [ CGI::b(xpShowRounded($totalEst)), CGI::b(xpShowRounded($totalSpent)), CGI::b(xpShowRounded($totalEtc)) ] ) . CGI::td( [ '&nbsp;', '&nbsp;' ] ) );
-    $list .= CGI::end_table();
+    $list .= '|*Developer totals*|*'.xpShowRounded($totalEst).'*|*'.xpShowRounded($totalSpent).'*|*'.xpShowRounded($totalEtc)."*|*&nbsp;*|*&nbsp;*|\n";
+    unshift @colors, pop @colors;  # defect in TablePlugin
+    my $color = join ',', @colors;
+    $list = "---+++ Open tasks by developer $developer\n%TABLE{headerrows=\"1\" footerrows=\"1\" dataalign=\"left,center,center,center,left,center\" headeralign=\"left,center,center,center,left,center\" databg=\"$color\"}%\n" . $list;
     $list .= CGI::table( CGI::Tr( CGI::td( 'task' ) . CGI::td( { bgcolor=>$defaults{taskunstartedcolor} }, 'not started' ) . CGI::td( { bgcolor=>$defaults{taskprogresscolor} }, 'in progress' ) . CGI::td('due within') . CGI::td( { bgcolor=>'#FFFFCC' }, '3 days' ) . CGI::td( { bgcolor=>'#FFCCCC' }, '2 days' ) . CGI::td( { bgcolor=>'#FF6666' }, '1 day' ) ) );
 
     # end the table
-    $list .= "<input type=\"hidden\" name=\"etrows\"   value=\"$rowNr\" />\n";
-    $list .= "<input type=\"hidden\" name=\"developer\"   value=\"$developer\" />\n";
+    $timesheet .= $list;
+    $timesheet .= "<input type=\"hidden\" name=\"etrows\"   value=\"$rowNr\" />\n";
+    $timesheet .= "<input type=\"hidden\" name=\"developer\"   value=\"$developer\" />\n";
     if ($doEdit) {
       # Choose units
       # we could use CGI for forms also...
       # CGI::radio_group(-name=>'etunits', -values=>['1', '0'], -default=>'1', -labels=>{ '1' => 'Hours&nbsp;&nbsp;', '0' => 'Days&nbsp;&nbsp;' })
-      $list .= "Updates in <input type=\"radio\" name=\"etunits\" value=\"1\" checked />Hours &nbsp;&nbsp;<input type=\"radio\" name=\"etunits\" value=\"0\" />Days &nbsp;&nbsp;<br>";
-      $list .= "<input type=\"submit\" name=\"etsave\" value=\"Submit Timesheet\" />\n";
-      $list .= "<input type=\"submit\" name=\"etcancel\" value=\"Cancel\" />\n";
-      $list .= "&nbsp;&nbsp;<input type=\"checkbox\" name=\"etreport\" value=\"1\" checked />  Generate report\n";
+      $timesheet .= "Updates in <input type=\"radio\" name=\"etunits\" value=\"1\" checked />Hours &nbsp;&nbsp;<input type=\"radio\" name=\"etunits\" value=\"0\" />Days &nbsp;&nbsp;<br>";
+      $timesheet .= "<input type=\"submit\" name=\"etsave\" value=\"Submit Timesheet\" />\n";
+      $timesheet .= "<input type=\"submit\" name=\"etcancel\" value=\"Cancel\" />\n";
+      $timesheet .= "&nbsp;&nbsp;<input type=\"checkbox\" name=\"etreport\" value=\"1\" checked />  Generate report\n";
     } else {
-      $list .= "<input type=\"submit\" value=\"Create Timesheet\" />\n";
+      $timesheet .= "<input type=\"submit\" value=\"Create Timesheet\" />\n";
     }
-    $list .= "</form>\n";
-    $list .= "</noautolink>\n" if $doEdit;
+    $timesheet .= "</form>\n";
+    $timesheet .= "</noautolink>\n" if $doEdit;
 
-    return $list;
+    return $timesheet;
 }
 
 sub doCancelEdit
@@ -2666,53 +2689,50 @@ sub doCancelEdit
 sub doSaveTable
 {
     my ( $session, $web, $topic, $query, $theTableNr ) = @_;
-    my $units = $query->param("etunits");
-    my $updates = "";  # For error reporting during update
-    my $errors = "(in ".(($units)?"hours":"days").")";   # For error reporting during update
-    my $wantReport = $query->param("etreport");
+    my $units = $query->param('etunits');
+    my $wantReport = $query->param('etreport');
     my $foundErrors = 0;
     
-    $errors .= CGI::h3('Failed to update from timesheet') . "\n";
-    $errors .= CGI::start_table( { border=>'1', cellspacing=>'1', cellpadding=>'0' } );
-    $errors .= CGI::Tr( { bgcolor=>$defaults{headercolor} } , CGI::th( { align=>'left' }, 'Story' ). CGI::th( [ 'Task', 'Add spent', 'Update to do', 'Status' ] ) ). "\n";
-    $updates .= CGI::h3('Successfully updated from timesheet') . "\n(in " . (($units)?"hours":"days") . ')';  
-    $updates .= CGI::start_table( { border=>'1', cellspacing=>'1', cellpadding=>'0' } );
-    $updates .= CGI::Tr( { bgcolor=>$defaults{headercolor} }, CGI::th( { align=>'left' }, 'Story' ) . CGI::th( [ 'Task', 'Add spent', 'Update to do', 'Status' ] ) ) . "\n";
+    my $errors = "---+++ Failed to update from timesheet\n";
+    $errors .= "|*Story*|*Task*|*Add spent*|*Update to do*|*Status*|\n";
+    my $updates = "---+++ Successfully updated from timesheet\n";
+    $updates .= "|*Story*|*Task*|*Add spent*|*Update to do*|*Status*|\n"; 
 
     my $row = $query->param('etrows');
     my $developer = $query->param('developer');
     while ($row) {
-      my $story = $query->param("etcell".$row."x0");
-      my $task = $query->param("etcell".$row."x1");
-      my $spent = $query->param("etcell".$row."x5");
-      my $etc1 = $query->param("etcell".$row."x6");
+      my $story = $query->param('etcell'.$row.'x0');
+      my $task = $query->param('etcell'.$row.'x1');
+      my $spent = $query->param('etcell'.$row.'x5');
+      my $etc1 = $query->param('etcell'.$row.'x6');
       my $etc = $etc1 unless ($etc1 eq '');
-      my $update = $query->param("etcell".$row."x7");
+      my $update = $query->param('etcell'.$row.'x7');
 
       my ($lockStatus, $lockUser, $editLock, $lockTime) = &xpUpdateTimeSheet($web, $developer, $story, $task, $spent, $etc, $update, $units);
       if ($lockStatus) {
 	if ($spent || $etc) {
-	  $updates .= CGI::Tr( CGI::td( [ $story, $task, &xpShowRounded($spent), xpShowCell($update ? "$etc to do" : "$etc % done", $etc), 'Entered' ] ) ) . "\n";
+	  $updates .= "| $story | $task | ".xpShowRounded($spent).' | '.xpShowCell($update ? "$etc to do" : "$etc % done", $etc)." | Entered |\n";
 	}
       } else {
 	$foundErrors = 1;
-	$errors .= CGI::Tr( CGI::td( [ $story, $task, &xpShowRounded($spent), xpShowCell( $update ? "$etc to do" : "$etc % done", $etc), ( ($lockUser)? "Locked by $lockUser for $lockTime more minutes" : "No permission to update $story" ) ] ) ) . "\n";
+	$errors .= "| $story | $task | ".xpShowRounded($spent).' | '.xpShowCell( $update ? "$etc to do" : "$etc % done", $etc).' | '.( ($lockUser)? "Locked by $lockUser for $lockTime more minutes" : "No permission to update $story" )." |\n";
       }
       $row--;
     }
-    $errors .= CGI::end_table();
-    $updates .= CGI::end_table();
+    $errors .= '(in '.(($units)?'hours':'days').')';
+    $updates .= '(in '.(($units)?'hours':'days').')';
+
 
     #log the submission
-    $session->writeLog( "submit", "$web.$topic", ($foundErrors)?"errors":"" );
+    $session->writeLog( 'submit', "$web.$topic", ($foundErrors)?'errors':'' );
 
 
     my $url = &TWiki::Func::getViewUrl( $web, $topic );
     # Cause error and report those topics that failed to save...
     if( $foundErrors ) {
-        $url = &TWiki::Func::getOopsUrl( $web, $topic, "oopstimesheet", $developer, $errors . $updates );
+        $url = &TWiki::Func::getOopsUrl( $web, $topic, 'oopstimesheet', $developer, $errors . $updates );
       } elsif ($wantReport) {
-        $url = &TWiki::Func::getOopsUrl( $web, $topic, "oopstimesheetreport", $developer, $updates );
+        $url = &TWiki::Func::getOopsUrl( $web, $topic, 'oopstimesheetreport', $developer, $updates );
       }
     &TWiki::Func::redirectCgiQuery( $query, $url );
 }
@@ -2868,16 +2888,20 @@ sub xpTeamPivotByField {
 
 }
 
+## SMELL: How is this different from xpShowPivotByField?
 sub xpTeamReportByField {
+
+    &xpCacheRead( $web ) unless $cacheInitialized;
     my ($session,$web,$team,$field,$title,$doSplit,$skipOngoing) = @_;
 
     my @teamIters = &xpGetTeamIterations($team, $web);
 
-    my $list = CGI::h3($title) . "\n";
-
-    # Show the list
-    $list .= CGI::start_table( { border=>'1' } );
-    $list .= CGI::Tr( { bgcolor=>$defaults{headercolor} }, [ CGI::th( { rowspan=>'2' }, 'Category' ) . CGI::th( { colspan=>'3' }, 'Ideals' ) . CGI::th( { colspan=>'2' }, 'Tasks' ), CGI::th( [ 'Assigned', 'Spent', 'Remaining', 'Assigned', 'Remaining' ] ) ] );
+    my $list = "---+++ $title\n";
+    
+    # Show the table
+    $list .= '%TABLE{dataalign="left,center,center,center,center,center" headeralign="left,center,center,center,center,center"}%'."\n";
+    $list .= "|*Category*|*Ideals*|||*Tasks*||\n";
+    $list .= "|^|*Assigned*|*Spent*|*Remaining*|*Assigned*|*Remaining*|\n";
 
     my (%whoAssigned,%whoSpent,%whoEtc,%whoTAssigned,%whoTRemaining) = ();
     my ($totalSpent,$totalEtc,$totalAssigned,$totalVelocity,$totalTAssigned,$totalTRemaining) = (0,0,0,0,0,0);
@@ -2930,13 +2954,11 @@ sub xpTeamReportByField {
 
     # Show them
     foreach my $who (sort { $whoEtc{$b} <=> $whoEtc{$a} } keys %whoSpent) {
-    $list .= CGI::Tr( CGI::td( $who ) . CGI::td( { align=>'center' }, [ $whoAssigned{$who}, $whoSpent{$who}, $whoEtc{$who}, $whoTAssigned{$who}, $whoTRemaining{$who} ] ) );
+     $list .= '| '.$who.' | '.xpShowRounded($whoAssigned{$who}).' | '.xpShowRounded($whoSpent{$who}).' | '.xpShowRounded($whoEtc{$who}).' | '.$whoTAssigned{$who}.' | '.$whoTRemaining{$who}." |\n";
     }
-    $list .= CGI::Tr( { bgcolor=>$defaults{headercolor} }, CGI::th( { align=>'left' }, 'Total' ) . CGI::th( [ $totalAssigned, $totalSpent, $totalEtc, $totalTAssigned, $totalTRemaining ] ) );
+    $list .= '|*Total*|*'.xpShowRounded($totalAssigned).'*|*'.xpShowRounded($totalSpent).'*|*'.xpShowRounded($totalEtc).'*|*'.$totalTAssigned.'*|*'.$totalTRemaining."*|\n";
 
-    # Close it off
-    $list .= CGI::end_table();
-
+    return $list;
 }
 
 # -------------------- Estimates -----------------------
@@ -2947,6 +2969,7 @@ sub xpTeamReportByField {
 
 sub xpShowDeveloperEstimate {
 
+    &xpCacheRead( $web ) unless $cacheInitialized;
     my( $session, $params, $topic, $web ) = @_;
 
     my $query = $session->{cgiQuery};
@@ -2983,16 +3006,16 @@ sub xpShowDeveloperEstimate {
     my $viewUrl = &TWiki::Func::getScriptUrl ( $web, $topic, "view" ) ;
 
     # Show the list
-    my $list = "";
-    $list .= "<noautolink>\n" if $doEdit;
-    $list .= CGI::a( { name=>"estimates$tableNr" } ) . "\n";
-    $list .= "<form name=\"estimates$tableNr\" action=\"$viewUrl\" method=\"post\">\n";
-    $list .= "<input type=\"hidden\" name=\"ettablenr\" value=\"$tableNr\" />\n";
-    $list .= "<input type=\"hidden\" name=\"etedit\" value=\"on\" />\n" unless $doEdit;
+    my $timesheet = '';
+    $timesheet .= "<noautolink>\n" if $doEdit;
+    $timesheet .= CGI::a( { name=>"estimates$tableNr" } ) . "\n";
+    $timesheet .= "<form name=\"estimates$tableNr\" action=\"$viewUrl\" method=\"post\">\n";
+    $timesheet .= "<input type=\"hidden\" name=\"ettablenr\" value=\"$tableNr\" />\n";
+    $timesheet .= "<input type=\"hidden\" name=\"etedit\" value=\"on\" />\n" unless $doEdit;
 
-    $list .= CGI::h3( "Missing estimates for developer $developer" ) . "\n\n";
-    $list .= CGI::start_table( { border=>'1', cellspacing=>'1', cellpadding=>'0' } );
-    $list .= CGI::Tr( { bgcolor=>$defaults{headercolor} }, CGI::th( { align=>'left' } , "Iteration Story<br>&nbsp; Task " ) . CGI::th( ($doEdit)?'Estimate':'Iteration due' ) );
+    my $list = '';
+    my @colors = ();
+    $list .= '|*Iteration Story<br>&nbsp; Task*|*'.($doEdit?'Estimate':'Iteration due')."*|\n";
 
     # todo: build a list of projects/iterations sorted by date
 
@@ -3101,14 +3124,13 @@ sub xpShowDeveloperEstimate {
 		$storyid =~ s/^\s*//;
 		$storyid = CGI::a( { href=>$storyid }, '...' ) if $storyid;
 		# Note: if the URL below has a leading space, it messes up the page
-                $list .= CGI::Tr( { bgcolor=>$color },
-			   CGI::td( " $storyiteration&nbsp; $story: $storysummary $storyid" ) .
-			   CGI::td( { nowrap=>undef, bgcolor=>$iterationcolor }, xpShowCell($iterDate, $storyOngoing) ) );
+		push @colors, $color;
+                $list .= "| $storyiteration&nbsp; $story: $storysummary $storyid | <div style=\"background:$iterationcolor;margin:0;padding:0;border:0;white-space:nowrap\">".xpShowCell($iterDate, ! $storyOngoing)."</div>|\n";
 
                 # Show each task
                 for (my $i=0; $i<$taskCount; $i++) {
 
-                    my $taskBG = "";
+                    my $taskBG = $defaults{ongoingcolor};
 
                     # Line for each engineer
                     my $doName = 1;
@@ -3119,30 +3141,29 @@ sub xpShowDeveloperEstimate {
 		      $rowNr++;
 
 		      
-		      my $cells = '&nbsp;';
+		      my $cells = '| &nbsp;';
 		      if ($doEdit) {
 			$cells .= "<input type=\"hidden\" name=\"etcell".$rowNr."x0\" value=\"".$story."\" />";
 			if ($doName) {
-			  $cells .= "&nbsp;&nbsp;&nbsp; ".$taskName[$i]." <input type=\"hidden\" name=\"etcell".$rowNr."x1\" value=\"".$taskName[$i]."\" />";
+			  $cells .= '&nbsp;&nbsp;&nbsp; '.$taskName[$i]." <input type=\"hidden\" name=\"etcell".$rowNr."x1\" value=\"".$taskName[$i]."\" />";
 			    
 			}
-			$cells = CGI::td( $cells );
+			$cells .= ' |';
 
-			$cells .= CGI::td( " <input type=\"text\" name=\"etcell".$rowNr."x5\" size=\"5\" value=\"\" />" );
+			$cells .= " <input type=\"text\" name=\"etcell".$rowNr."x5\" size=\"5\" value=\"\" /> |";
 		      } else {
-			if ($doName) {
-			  $cells .= '&nbsp;&nbsp;&nbsp; ' . $taskName[$i];
-			}
-                        $cells = CGI::td( $cells ) . CGI::td( '&nbsp;' );
+			$cells .= ($doName?'&nbsp;&nbsp;&nbsp; '.$taskName[$i]:'&nbsp;').' |  &nbsp; |';
 		        $doName = 0;
 		      }
-		      $list .= CGI::Tr( { bgcolor=>$taskBG }, $cells );
+		      push @colors, $taskBG;
+		      $list .= $cells . "\n";
 		    }
                     
                 }
                 
                 # Add a spacer
-                $list .= CGI::Tr( CGI::td( { colspan=>'6' }, '&nbsp;' ) ) if $addSpacer;
+		push @colors, 'none' if $addSpacer;
+		$list .= "| &nbsp; ||||||\n" if $addSpacer;
     
             }
 
@@ -3151,81 +3172,79 @@ sub xpShowDeveloperEstimate {
     }
 
     # Do iteration totals
-    $list .= CGI::end_table();
+    unshift @colors, pop @colors;  # defect in TablePlugin
+    my $color = join ',', @colors;
+    $list = "---+++ Missing estimates for developer $developer\n%TABLE{headerrows=\"1\" dataalign=\"left,center\" headeralign=\"left,center\" databg=\"$color\"}%\n" . $list;
     $list .= CGI::table( CGI::Tr( CGI::td( 'due within' ) . CGI::td( { bgcolor=>'#FFFFCC' }, '3 days' ) . CGI::td( { bgcolor=>'#FFCCCC' }, '2 days' ) . CGI::td( { bgcolor=>'#FF6666' }, '1 day' ) ) );
 
     # end the table
-    $list .= "<input type=\"hidden\" name=\"etrows\"   value=\"$rowNr\" />\n";
-    $list .= "<input type=\"hidden\" name=\"developer\"   value=\"$developer\" />\n";
+    $timesheet .= $list;
+    $timesheet .= "<input type=\"hidden\" name=\"etrows\"   value=\"$rowNr\" />\n";
+    $timesheet .= "<input type=\"hidden\" name=\"developer\"   value=\"$developer\" />\n";
     if ($doEdit) {
       # Choose units
-      $list .= "Updates in <input type=\"radio\" name=\"etunits\" value=\"1\" checked />Hours &nbsp;&nbsp;<input type=\"radio\" name=\"etunits\" value=\"0\" />Days &nbsp;&nbsp;<br>";
-      $list .= "<input type=\"submit\" name=\"etsave\" value=\"Submit Estimate\" />\n";
-      $list .= "<input type=\"submit\" name=\"etcancel\" value=\"Cancel\" />\n";
-      $list .= "&nbsp;&nbsp;<input type=\"checkbox\" name=\"etreport\" value=\"1\" checked />  Generate report\n";
+      $timesheet .= "Updates in <input type=\"radio\" name=\"etunits\" value=\"1\" checked />Hours &nbsp;&nbsp;<input type=\"radio\" name=\"etunits\" value=\"0\" />Days &nbsp;&nbsp;<br>";
+      $timesheet .= "<input type=\"submit\" name=\"etsave\" value=\"Submit Estimate\" />\n";
+      $timesheet .= "<input type=\"submit\" name=\"etcancel\" value=\"Cancel\" />\n";
+      $timesheet .= "&nbsp;&nbsp;<input type=\"checkbox\" name=\"etreport\" value=\"1\" checked />  Generate report\n";
     } else {
-      $list .= "<input type=\"submit\" value=\"Create Estimate\" />\n";
+      $timesheet .= "<input type=\"submit\" value=\"Create Estimate\" />\n";
     }
-    $list .= "</form>\n";
-    $list .= "</noautolink>\n" if $doEdit;
+    $timesheet .= "</form>\n";
+    $timesheet .= "</noautolink>\n" if $doEdit;
 
-    return $list;
+    return $timesheet;
 }
 
 sub doSaveEstimate
 {
     my ( $session, $web, $topic, $query, $theTableNr ) = @_;
-    my $units = $query->param("etunits");
-    my $updates = "";  # For error reporting during update
-    my $errors = "(in ".(($units)?"hours":"days").")";   # For error reporting during update
-    my $wantReport = $query->param("etreport");
+    my $units = $query->param('etunits');
+    my $wantReport = $query->param('etreport');
     my $foundErrors = 0;
     
-    $errors .= CGI::h3( 'Failed to update estimate' ) . "\n";
-    $errors .= CGI::start_table( { border=>'1', cellspacing=>'1', cellpadding=>'0' } );
-    $errors .= CGI::Tr( { bgcolor=>$defaults{headercolor} }, CGI::th( { align=>'left'}, 'Story' ) . CGI::th( [ 'Task', 'Estimate', 'Status' ] ) ) . "\n";
-    $updates .= CGI::h3( 'Successfully updated estimate' ) . "\n";
-    $updates .= CGI::start_table( { border=>'1', cellspacing=>'1', cellpadding=>'0' } );
-    $updates .= CGI::Tr( { bgcolor=>$defaults{headercolor} }, CGI::th( { align=>'left' }, 'Story' ) . CGI::th( [ 'Task', 'Estimate' ] ) ) . "\n";
+    my $errors = "---+++ Failed to update estimate\n";
+    $errors .= "*Story*|*Task*|*Estimate*|*Status*|\n";
+    my $updates = "---+++ Successfully updated estimate\n";
+    $updates .= "*Story*|*Task*|*Estimate*|\n";
 
     my $row = $query->param('etrows');
     my $developer = $query->param('developer');
     while ($row) {
-      my $story = $query->param("etcell".$row."x0");
-      my $task = $query->param("etcell".$row."x1");
-      my $estimate = $query->param("etcell".$row."x5");
+      my $story = $query->param('etcell'.$row.'x0');
+      my $task = $query->param('etcell'.$row.'x1');
+      my $estimate = $query->param('etcell'.$row.'x5');
 
       my ($lockStatus, $lockUser, $editLock, $lockTime) = &xpUpdateEstimate($web, $developer, $story, $task, $estimate, $units);
       if ($lockStatus) {
 	if ($estimate) {
-	  $updates .= CGI::Tr( CGI::td( [ $story, $task, &xpShowRounded($estimate) ] ) ) . "\n";
+	  $updates .= "| $story | $task | ".xpShowRounded($estimate)."|\n";
 	}
       } else {
 	$foundErrors = 1;
-	my $cell = CGI::td( [ $story, $task, &xpShowRounded($estimate) ] );
+	$errors = "| $story | $task | ".xpShowRounded($estimate)." |";
 	if ($lockUser) {
-	  $cell .= CGI::td( "Locked by $lockUser for $lockTime more minutes" );
+	  $errors .= " Locked by $lockUser for $lockTime more minutes |\n";
 	} else {
-	  $cell .= CGI::td( "No permission to update $story" );
+	  $errors .= " No permission to update $story |\n";
 	}
-	$errors .= CGI::Tr( $cell ) . "\n";
       }
       $row--;
     }
-    $errors .= CGI::end_table();
-    $updates .= CGI::end_table();
+    $updates .= '(in '.(($units)?'hours':'days').')';
+    $errors .= '(in '.(($units)?'hours':'days').')';   # For error reporting during update
 
     #log the submission
-    $session->writeLog( "estimate", "$web.$topic", ($foundErrors)?"errors":"" );
+    $session->writeLog( 'estimate', "$web.$topic", ($foundErrors)?'errors':'' );
 
     # TJW: why lock?
     #&TWiki::Func::setTopicEditLock( $web, $topic, 1 );
     my $url = &TWiki::Func::getViewUrl( $web, $topic );
     # Cause error and report those topics that failed to save...
     if( $foundErrors ) {
-        $url = &TWiki::Func::getOopsUrl( $web, $topic, "oopstimesheet", $developer, $errors . $updates );
+        $url = &TWiki::Func::getOopsUrl( $web, $topic, 'oopstimesheet', $developer, $errors . $updates );
       } elsif ($wantReport) {
-        $url = &TWiki::Func::getOopsUrl( $web, $topic, "oopstimesheetreport", $developer, $updates );
+        $url = &TWiki::Func::getOopsUrl( $web, $topic, 'oopstimesheetreport', $developer, $updates );
       }
     &TWiki::Func::redirectCgiQuery( $query, $url );
 }

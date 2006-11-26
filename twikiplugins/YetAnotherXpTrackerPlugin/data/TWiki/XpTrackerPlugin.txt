@@ -58,9 +58,9 @@ Below are examples of the generated tables produced by parsing the story pages:
 <b>Show all iterations in a project</b> - <tt>XPSHOWPROJECTITERATIONS</tt>
 <noautolink>
 <table border="1" cellspacing="1" cellpadding="0">
-<tr><th  bgcolor="#99CCCC"> Team  </th><th  bgcolor="#99CCCC"> Iter </th><th  bgcolor="#99CCCC"> Summary </th><th  bgcolor="#99CCCC"> Start </th><th  bgcolor="#99CCCC"> End </th><th  bgcolor="#99CCCC"> Est</th><th  bgcolor="#99CCCC"> Spent </th><th  bgcolor="#99CCCC"> ToDo  </th><th  bgcolor="#99CCCC"> Progress  </th><th  bgcolor="#99CCCC"> Done  </th><th  bgcolor="#99CCCC"> Overrun  </th></tr>
+<tr bgcolor="#CCCCCC"><th> Team  </th><th> Iter </th><th> Summary </th><th> Start </th><th> End </th><th> Est</th><th> Spent </th><th> ToDo  </th><th> Progress  </th><th> Done  </th><th> Overrun  </th></tr>
 
-<tr><td  bgcolor="#FFFEE4"> <a href="/twiki/bin/view.pl/Green/DemoTeam">DemoTeam</a>  </td><td  bgcolor="#FFFEE4"> <a href="/twiki/bin/view.pl/Green/DemoIter">DemoIter</a>  </td><td  bgcolor="#FFFEE4"> One line summary  </td><td  bgcolor="#FFFEE4"> 16 Sep 2002  </td><td  bgcolor="#FFFEE4"> 27 Sep 2002	</td><td  bgcolor="#FFFEE4"> 7  </td><td  bgcolor="#FFFEE4"> 4.5  </td><td  bgcolor="#FFFEE4"> 3.5  </td><td  bgcolor="#FFFEE4"> <table height=100% width=100%><tr><td width=56% bgcolor="#00cc00">&nbsp;</td><td width=44% bgcolor="#cc0000">&nbsp;</td></tr></table>  </td><td  bgcolor="#FFFEE4"> 56%  </td><td  bgcolor="#FFFEE4"> 14%  </td></tr>
+<tr><td> <a href="/twiki/bin/view.pl/Green/DemoTeam">DemoTeam</a>  </td><td> <a href="/twiki/bin/view.pl/Green/DemoIter">DemoIter</a>  </td><td> One line summary  </td><td> 16 Sep 2002  </td><td> 27 Sep 2002	</td><td> 7  </td><td> 4.5  </td><td> 3.5  </td><td> <table height=100% width=100%><tr><td width=56% bgcolor="#00cc00">&nbsp;</td><td width=44% bgcolor="#cc0000">&nbsp;</td></tr></table>  </td><td> 56%  </td><td> 14%  </td></tr>
 
 </table>
 </noautolink>
@@ -82,7 +82,7 @@ Below are examples of the generated tables produced by parsing the story pages:
 
 <b>Show details of iterations in a project</b> - <tt>XPSHOWITERATION</tt>
 <noautolink>
-<table border="1"><tr bgcolor="#CCCCCC"><th align="left">Story<br>&nbsp; Tasks </th><th>Estimate</th><th>Who</th><th>Spent</th><th>To do</th><th>Status</th></tr><tr bgcolor=#99FF99><td> <a href="/twiki/bin/view.pl/Green/DemoStory">DemoStory</a> </td><td align="center"><b>3</b></td><td> <nop>DevOne </td><td align="center"><b>1.5</b></td><td align="center"><b>2.5</b></td><td nowrap>In progress</td></tr><tr bgcolor="#99FF99"><td>&nbsp;&nbsp;&nbsp;&nbsp;do the first task</td><td align="center">2</td><td> DevOne </td><td align="center">1</td><td align="center">2</td><td nowrap>In progress</td></tr><tr bgcolor="#99FF99"><td>&nbsp;&nbsp;&nbsp;&nbsp;do the second task</td><td align="center">1</td><td> DevTwo </td><td align="center">.5</td><td align="center">0.5</td><td nowrap>In progress</td></tr><tr><td colspan="6">&nbsp;</td></tr><tr bgcolor=#99FF99><td> <a href="/twiki/bin/view.pl/Green/SecondDemoStory">SecondDemoStory</a> </td><td align="center"><b>4</b></td><td> <nop>DevOne </td><td align="center"><b>3</b></td><td align="center"><b>1</b></td><td nowrap>In progress</td></tr><tr><td>&nbsp;&nbsp;&nbsp;&nbsp;Do some more stuff</td><td align="center">3</td><td> DevOne </td><td align="center">3</td><td align="center">0</td><td nowrap>Complete</td></tr><tr bgcolor="#FFCCCC"><td>&nbsp;&nbsp;&nbsp;&nbsp;Do other things</td><td align="center">1</td><td> DevTwo </td><td align="center">0</td><td align="center">1</td><td nowrap>Waiting</td></tr><tr><td colspan="6">&nbsp;</td></tr><tr bgcolor="#CCCCCC"><td><b>Team totals</b></td><td align="center"><b>7</b></td><td></td><td align="center"><b>4.5</b></td><td align="center"><b>3.5</b></td><td> &nbsp; </td></tr></table>
+<table border="1"><tr bgcolor="#CCCCCC"><th align="left">Story<br>&nbsp; Tasks </th><th>Estimate</th><th>Who</th><th>Spent</th><th>To do</th><th>Status</th></tr><tr bgcolor=#99FF99><td> <a href="/twiki/bin/view.pl/Green/DemoStory">DemoStory</a> </td><td align="center"><b>3</b></td><td> <nop>DevOne </td><td align="center"><b>1.5</b></td><td align="center"><b>2.5</b></td><td nowrap>In progress</td></tr><tr bgcolor="#99FF99"><td>&nbsp;&nbsp;&nbsp;&nbsp;do the first task</td><td align="center">2</td><td> DevOne </td><td align="center">1</td><td align="center">2</td><td nowrap>In progress</td></tr><tr bgcolor="#99FF99"><td>&nbsp;&nbsp;&nbsp;&nbsp;do the second task</td><td align="center">1</td><td> DevTwo </td><td align="center">.5</td><td align="center">0.5</td><td nowrap>In progress</td></tr><tr><td colspan="6">&nbsp;</td></tr><tr bgcolor=#99FF99><td> <a href="/twiki/bin/view.pl/Green/SecondDemoStory">SecondDemoStory</a> </td><td align="center"><b>4</b></td><td> <nop>DevOne </td><td align="center"><b>3</b></td><td align="center"><b>1</b></td><td nowrap>In progress</td></tr><tr><td>&nbsp;&nbsp;&nbsp;&nbsp;Do some more stuff</td><td align="center">3</td><td> DevOne </td><td align="center">3</td><td align="center">0</td><td nowrap>Complete</td></tr><tr bgcolor="#FFCCCC"><td>&nbsp;&nbsp;&nbsp;&nbsp;Do other things</td><td align="center">1</td><td> DevTwo </td><td align="center">0</td><td align="center">1</td><td nowrap>Waiting</td></tr><tr><td colspan="6">&nbsp;</td></tr><tr bgcolor="#CCCCCC"><td><b>Team totals</b></td><td align="center"><b>7</b></td><td>&nbsp;</td><td align="center"><b>4.5</b></td><td align="center"><b>3.5</b></td><td> &nbsp; </td></tr></table>
 </noautolink>
 
 <b>Developer velocity</b> - <tt>XPVELOCITIES</tt>
@@ -108,7 +108,7 @@ This is a list of all the tables available. The names should be self-explanatory
 | XPSHOWPROJECTCOMPLETIONBYTASKS	 | =project=	| |
 | XPPIVOTBYFIELD | =iteration=, =field=, =split=, =skip= | Creates a pivot table of all tasks in the iteration. =field= is the field in the task which serves as the pivot. The Boolean =split= indicates whether the field should be split into its components (useful only when this is the developer field and more than one developer are assigned to a task). The Boolean =skip= indicates whether to omitt ongoing tasks in the table.  |
 | XPTEAMPIVOTBYFIELD | =team=, =field=, =split=, =skip= | Creates a pivot table of all tasks assigned to team. =field= is the field in the task which serves as the pivot. The Boolean =split= indicates whether the field should be split into its components (useful only when this is the developer field and more than one developer are assigned to a task). The Boolean =skip= indicates whether to omitt ongoing tasks in the table.  |
-| XPDUMPITERATION	 | =iteration=	 | |
+| XPCREATETOPIC | =Team= / =Project= / =Iteration= / =Story= (default: =Story=), =Prompt= | Creates a form that will construct a new topic of the indicated kind, the prompt is a heading preceding the form (a heading level could be indicated by putting it into the prompt). |
 
 %X% Remember that the actual display of the hierarchy of activities can be configured by settings and may differ from the terminology reflected by these tags.
 
@@ -192,12 +192,13 @@ The distribution contains a set of template files in directory =data/_default_Xp
 
 Due to a defect in Twiki 4.0 (fixed in TWiki 4.1) please copy the preference settings in the "<nop>XpTrackerPlugin" section of the !WebPreferences sample topic into your the !WebPrefernces topic of the tracking web.
 
-As illustration, in the sample tracking web configures the hierarchy of work different from the default discussed.
+To illustrate the customization of the work breakdown structure, in the sample tracking web the hierarchy of work is configured differently from the default.
 
 ---+++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.RichardBennett, TWiki:Main.MartinWatt, TWiki:Main.ThomasWeigert |
-|  Plugin Version: | 19 Nov 2006 |
+|  Plugin Version: | 24 Nov 2006 |
+|  24 Nov 2006:    | Allow creation of topics based on a base with sequence numbers affixed. Added XPCREATETOPIC tag. Use TWiki tables for formatting. |
 |  19 Nov 2006:    | Cleaned up some of the table layout when empty cells are present. Apply rounding to numbers in generated tables. |
 |  31 Jul 2006:    | Dakar port of branch developed and maintained by TWiki:Main.ThomasWeigert. Includes time tracking and recording capabilities built on ideas by TWiki:Main.ThomasEschner. Better task table control via TWiki:Plugins/EditHiddenTablePlugin |
 |  19 Nov 2002:    | 3.0 Updated version |

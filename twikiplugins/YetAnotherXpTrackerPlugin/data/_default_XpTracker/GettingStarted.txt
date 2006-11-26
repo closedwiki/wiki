@@ -4,19 +4,17 @@
 
 ---++ Teams
 
-%SEARCH{search="Team$" scope="topic" regex="on" order="modified" casesensitive="on" nosummary="on" nosearch="on" nototal="on" format="	* $topic"}%
-
 %XPSHOWALLTEAMS%
 
 ---++ Iterations
 
 %XPSHOWALLITERATIONS%
 
----++ New unassigned story
+---++ %XPCREATETOPIC{"Story" prompt="Submit new unassigned story"}%
 
-<form name="new">
-<input type="text" name="topic" size="30" />
-%CONTROL{"templatetopic" topic="StoryTemplateOptions" }%
-<input type="hidden" name="parent" value="WebHome" />
-<input type="submit" name ="xpsave" value="Submit new story" />
-</form>
+---++ Introduction to XP tracking
+
+This is the home page for XP project tracking web. Currently iterations for all products are tracked in this one web.
+
+   * TrackingIntro - introduction to the organization of this web.
+   * SetupHowto - how to set up tracking for a project
