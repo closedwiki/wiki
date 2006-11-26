@@ -2265,7 +2265,7 @@ sub formatGmTime {
 
 ---+++ getDataDir( ) -> $dir
 
-*DEPRECATED* since 1.1 - use the [[#Functions_Content_Handling][content handling functions]] to manipulate topics instead
+*DEPRECATED* since 1.1 - use the "Webs, Topics and Attachments" functions to manipulate topics instead
 
 Get data directory (topic file root)
 
@@ -2285,7 +2285,7 @@ sub getDataDir {
 
 ---+++ getPubDir( ) -> $dir
 
-*DEPRECATED* since 1.1 - use the [[#Functions_Content_Handling][content handling functions]] to manipulateattachments instead
+*DEPRECATED* since 1.1 - use the "Webs, Topics and Attachments" functions to manipulateattachments instead
 
 Get pub directory (file attachment root). Attachments are in =$dir/Web/TopicName=
 
