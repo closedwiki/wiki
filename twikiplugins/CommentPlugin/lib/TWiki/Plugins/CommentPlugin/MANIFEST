@@ -1,5 +1,6 @@
 data/TWiki/CommentPlugin.txt 0660 Plugin doc page (this page) 
 data/TWiki/CommentPluginTemplate.txt 0660 Standard templates
+data/TWiki/CommentPluginExamples.txt 0660 Examples of standard templates
 templates/comments.tmpl 0440 Master comment templates 
 lib/TWiki/Plugins/CommentPlugin.pm 0440 Plugin Perl module 
 lib/TWiki/Plugins/CommentPlugin/Comment.pm 0440 Plugin Perl module 
