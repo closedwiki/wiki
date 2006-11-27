@@ -377,7 +377,7 @@ sub createTempLatexFiles {
             # copy image attachments to the working directory
 
             my ($ext,$af) = ('','');
-            my @extlist = ('','.eps','.eps.gz','.pdf');
+            my @extlist = ('','.eps','.eps.gz','.pdf','.png','.jpg');
             if ( ( $TWiki::Plugins::VERSION < 1.1 ) or
                  ( $TWiki::cfg{Plugins}{LatexModePlugin}{bypassattach}) ) { 
                 # Cairo interface
@@ -400,6 +400,16 @@ sub createTempLatexFiles {
                         };
                         $markup_opts{$key}->{'attachment'} .= $ext;
                         
+                        if ($ext ne '') {
+                            # if the Plugin chooses the extension, then
+                            # set the rendering engine as well.
+                            if ($ext =~ m/\.eps/) {
+                                $markup_opts{$key}->{'engine'} = 'ps';
+                            } else {
+                                $markup_opts{$key}->{'engine'} = 'pdf';
+                            }
+                        }
+
                         last;
                     }
                 }                
@@ -414,7 +424,16 @@ sub createTempLatexFiles {
                                                         $af.$ext ) ) {
                         
                         $markup_opts{$key}->{'attachment'} .= $ext;
-                        
+                        if ($ext ne '') {
+                            # if the Plugin chooses the extension, then
+                            # set the rendering engine as well.
+                            if ($ext =~ m/\.eps/) {
+                                $markup_opts{$key}->{'engine'} = 'ps';
+                            } else {
+                                $markup_opts{$key}->{'engine'} = 'pdf';
+                            }
+                        }
+
                         open(F,">".'.'.$pathSep.$af.$ext);
                         print F TWiki::Func::readAttachment( $LMPc{'web'},
                                                              $LMPc{'topic'},
@@ -425,7 +444,7 @@ sub createTempLatexFiles {
                 }
             }
         } # end of copy attachment piece
-        $value = " (attachment not found) "
+        $value = " (attachment ".$markup_opts{$key}->{'attachment'}."not found) "
             if ( exists($markup_opts{$key}->{'attachment'}) and
                  !(-f $markup_opts{$key}->{'attachment'}) );
 
@@ -442,7 +461,7 @@ sub createTempLatexFiles {
         $txt .= " $value ";
         $txt .= '}' if ($LMPc{'use_color'} == 1);
 
-        if ( $opts{'engine'} eq 'pdf' ) {
+        if ( $markup_opts{$key}->{'engine'} eq 'pdf' ) {
             print PDFOUT $txt;
             $pdf_image_number++;
             $pdf_hash_code_mapping{$key} = $pdf_image_number;
@@ -717,7 +736,7 @@ sub makePNGs {
 
         my $outimg = "latex$key.$EXT";
 
-        system("echo \"engine: $opts{'engine'}\" >> $LATEXLOG") if ($debug);
+        system("echo \"engine: $opts{'attachment'} $opts{'engine'}\" >> $LATEXLOG") if ($debug);
         if (  (-x $PATHTODVIPNG) and 
               ($opts{'engine'} ne 'ps') and 
               ($opts{'engine'} ne 'pdf') ) {

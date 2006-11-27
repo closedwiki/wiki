@@ -77,7 +77,9 @@ For example, to declare an equation to be numbered by TWiki (not in the <nop>LaT
 %<nop>ENDLATEX%
 </blockquote>
 
-HTML references to Latex equations with a defined =&lt;label&gt;= can be generated using %<nop>REFLATEX{&lt;label&gt;}%.
+HTML references to <nop>LaTeX equations with a defined =&lt;label&gt;= can be generated using %<nop>REFLATEX{&lt;label&gt;}%.
+
+---++++ Rendering options
 
 Both DENSITY and SCALE alter the rendered image size and quality. For example, if one doubles the DENSITY and halves the SCALE, the rendered image resolution will improve but keep the same image size on the rendered page.  (Note: DENSITY * SCALE is the same in both cases)
 <div align="center">
@@ -87,83 +89,7 @@ Both DENSITY and SCALE alter the rendered image size and quality. For example, i
 
 For regular browser viewing, the SCALE parameter sould be set to 1.0.  However, one can use these parameters to improve print quality when printing a topic.  To do this, increase the DENSITY setting (a value of 300 will give roughly 300dpi) and then set the SCALE setting below 1.0.
 
-
-v3.0 introduced the ability to include attachments in the latex markup
-processing.  This is most useful for graphics, e.g.
-
-<blockquote>
-%<nop>BEGINLATEX{attachment="fig1.eps"}%
-
-  \includegraphics{fig1.eps}
-
-%<nop>ENDLATEX%
-</blockquote>
-
-v3.3 introduced the ability to switch rendering dynamically between dvipng,
-dvips+convert, and pdflatex+convert.  Some latex packages are not supported
-by dvipng, for example [[http://sourceforge.net/projects/pgf/][Ti<em>k</em>Z and PGF]].  Rather than force all rendering to use a slower background
-rendering engine, this switch allows one to use dvipng rendering as the
-default, but fall back to 'ps' or 'pdf' intermediate files in certain cases.
-
-<blockquote>
-%<nop>BEGINLATEX{ engine="ps"}%
-
-\fbox{ \begin{tikzpicture}[auto,bend right] \node (a) at (0:1) {$0^\circ$}; \node (b) at (120:1) {$120^\circ$}; \node (c) at (240:1) {$240^\circ$}; \draw (a) to node {1} node [swap] {1'} (b) (b) to node {2} node [swap] {2'} (c) (c) to node {3} node [swap] {3'} (a); \end{tikzpicture} } 
-
-%<nop>ENDLATEX%
-</blockquote>
-
-These options can of course, be combined.  e.g.
-<blockquote>
-%<nop>BEGINLATEX{attachment="fig2.png" engine="pdf"}%
-
-  \includegraphics[angle=30,scale=0.25]{fig2.png}
-
-%<nop>ENDLATEX%
-</blockquote>
-
-
----+++ Common Symbols
-
-   * [[http://www.math.utep.edu/temp/Epoch/nasaepoch/node51.html][Math Symbols Commonly Used in Latex]] 
-
-Since the !LatexModePlugin is not installed on TWiki.org the above external html reference is given so that you can see what the symbols are.  For those who do use Latex in your TWiki install, you can copy the tables formatted for TWiki from the following topics (the symbols won't actually display without the plugin).
-
-What to type to get a variety of symbols using Latex.  Due to page loading constraints, the symbols tables are split up into 5 different topics.
-   * LatexSymbols (Greek Letters)
-   * LatexSymbols2 (Relationship and Operator Symbols)
-   * LatexSymbols3 (Arrows, Spacing, Accents)
-   * LatexSymbols4 (Function names and anlaytic symbols)
-   * LatexSymbols5 (Delimiters and other symbols)
-
-
----+++ Tables, Figures, and back-references
-
-To round out the functionality available in standard <nop>LaTeX, the automatic generation of Figure and Table reference links is also available.  These are declared using
-	* %<nop>BEGINFIGURE{label="fig:label" caption="this is a figure" span="twocolumn"}% ... %<nop>ENDFIGURE%, and
-	* %<nop>BEGINTABLE{label="tbl:label" caption="this is a table" span="twocolumn"}% ... %<nop>ENDTABLE%. 
-
-These commands will create an HTML table with a numbered caption either above (TABLE) or below (FIGURE) the included text.  Back-references to these declared environments can be accessed through %<nop>REFLATEX{&lt;label&gt;}%.
-To keep the counters/back-references seperate for each of the three types of references, use =eq:= or =eqn:=, =fig:=, and =tbl:= as the first characters in any declared label.
-
-The =span= option is used only by TWiki:Plugins.GenPDFLatex, giving the ability to designate the width of a table or figure in two-column styles. (e.g. for Figures, it expands to =\begin{figure*} ... \end{figure*}=.)  The default span is one-column. 
-
-Sections can be numbered and labeled, for easy cross-referencing.  To label
-a section, add a %<nop>SECLABEL{_label_}% tag after the TWiki section
-command. E.g.,
-<verbatim>
-   ---++ %SECLABEL{sec:intro}% Introduction
-</verbatim>
-Cross-references to the label can be generated using %<nop>REFLATEX{sec:intro}%.
-
-To add automatic numbering to the sections, set the following parameter to a
-non-zero number.  Sections up to this depth will be numbered.
-<blockquote>
-   * Set <nop>LATEXMODEPLUGIN_MAXSECDEPTH = 3
-</blockquote>
-The default setting is '0', which disables the numbering.
-
----+++ Font Color 
+---++++ Font Color 
 
 As of v1.3, one can now directly control the foreground font color in the
 rendered mathematics.  This is achieved through use of the =color.sty=
@@ -207,7 +133,123 @@ For convenience, the following TWiki colors are pre-defined in the LatexModePlug
 
 To use additional colors, they need to be defined in the Latex preamble, as described in the next section.
 
----+++ Defining the <nop>LaTeX preamble
+
+---++++ Including images in <nop>LaTeX markup
+
+
+v3.0 introduced the ability to include attachments in the latex markup
+processing.  This is most useful for graphics, e.g.
+
+<verbatim>
+%BEGINLATEX{attachment="fig1.eps"}%
+
+  \includegraphics{fig1.eps}
+
+%ENDLATEX%
+</verbatim>
+
+It is common practice in <nop>LaTeX, however, to _not_ specify the filename
+extension.  This is implemented in the Plugin as well, so one could type:
+<verbatim>
+%BEGINLATEX{attachment="fig1"}%
+
+  \includegraphics{fig1}
+
+%ENDLATEX%
+</verbatim>
+
+and the plugin will search for an attachment with extension '.eps',
+'.eps.gz', '.pdf', '.png', or '.jpg'.  The first extension match will be
+used, and the rendering engine that can recognize the attachment will also
+be automatically determined.  So for the example above, if a file 'fig1.eps
+is attached to the topic, it will be used as the attachment and
+dvips+convert will be automatically chosen as the rendering engine.
+
+
+---++++ Switching between =dvipng=, =dvips=, or =pdflatex= rendering on the fly
+
+v3.3 introduced the ability to switch rendering dynamically between dvipng,
+dvips+convert, and pdflatex+convert.  Some latex packages are not supported
+by dvipng, for example [[http://sourceforge.net/projects/pgf/][Ti<em>k</em>Z and PGF]].  Rather than force all rendering to use a slower background
+rendering engine, this switch allows one to use dvipng rendering as the
+default, but fall back to 'ps' or 'pdf' intermediate files in certain cases.
+
+<table>
+<tr><td width="70%">
+If you type:
+<verbatim>
+%BEGINLATEX{ engine="ps"}%
+
+\fbox{ 
+  \begin{tikzpicture}[auto,bend right] 
+    \node (a) at (0:1) {$0^\circ$}; 
+    \node (b) at (120:1) {$120^\circ$}; 
+    \node (c) at (240:1) {$240^\circ$}; 
+    \draw (a) to node {1} node [swap] {1'} (b) 
+          (b) to node {2} node [swap] {2'} (c) 
+          (c) to node {3} node [swap] {3'} (a); 
+  \end{tikzpicture} 
+} 
+
+%ENDLATEX%
+</verbatim>
+</td>
+<td>&nbsp;&nbsp;&nbsp;
+<td valign="top">
+It will render as:<br><br>
+<img src="%ATTACHURL%/tikz-expl.png" alt="TiKZ example">
+</table>
+
+This enables a wide variety of <nop>LaTeX packages to be used within TWiki.
+For example: simple image manipulations using the =graphicx= package.
+Note that the package must be declared in the <nop>LaTeX preamble.
+<table>
+<tr><td width="70%">
+If you type:
+<verbatim>
+%BEGINLATEX{attachment="fig2.png" engine="pdf"}%
+
+  \includegraphics[angle=30,scale=0.25]{fig2.png}
+
+%ENDLATEX%
+</verbatim>
+</td>
+<td>&nbsp;&nbsp;&nbsp;
+<td valign="top">
+It will render as:<br><br>
+<img src="%ATTACHURL%/rot-expl.png" alt="rotation example">
+</table>
+
+
+
+---++++ Tables, Figures, and cross-references
+
+To round out the functionality available in standard <nop>LaTeX, the automatic generation of Figure and Table reference links is also available.  These are declared using
+	* %<nop>BEGINFIGURE{label="fig:label" caption="this is a figure" span="twocolumn"}% ... %<nop>ENDFIGURE%, and
+	* %<nop>BEGINTABLE{label="tbl:label" caption="this is a table" span="twocolumn"}% ... %<nop>ENDTABLE%. 
+
+These commands will create an HTML table with a numbered caption either above (TABLE) or below (FIGURE) the included text.  Cross-references to these declared environments can be accessed through %<nop>REFLATEX{&lt;label&gt;}%.
+To keep the counters/cross-references seperate for each of the three types of references, use =eq:= or =eqn:=, =fig:=, and =tbl:= as the first characters in any declared label.
+
+The =span= option is used only by TWiki:Plugins.GenPDFLatex, giving the ability to designate the width of a table or figure in two-column styles. (e.g. for Figures, it expands to =\begin{figure*} ... \end{figure*}=.)  The default span is one-column. 
+
+Sections can be numbered and labeled, for easy cross-referencing.  To label
+a section, add a %<nop>SECLABEL{_label_}% tag after the TWiki section
+command. E.g.,
+<verbatim>
+   ---++ %SECLABEL{sec:intro}% Introduction
+</verbatim>
+Cross-references to the label can be generated using %<nop>REFLATEX{sec:intro}%.
+
+To add automatic numbering to the sections, set the following parameter to a
+non-zero number.  Sections up to this depth will be numbered.
+<blockquote>
+   * Set <nop>LATEXMODEPLUGIN_MAXSECDEPTH = 3
+</blockquote>
+The default setting is '0', which disables the numbering and section labels.
+
+
+---++++ Defining the <nop>LaTeX preamble
 
 In <nop>LaTeX, the preamble is used to customize the latex processing,
 allowing one to add custom styles and declare new commands.
@@ -227,6 +269,20 @@ default settings, and is intended to provide site administrators a central
 point to set preamble settings globally.  In contrast, the tag declaration
 will _add_ to the preamble defined by either the default settings or the
 preference setting, allowing TWiki users to amend the preamble.
+
+
+---+++ Common Symbols
+
+   * [[http://www.math.utep.edu/temp/Epoch/nasaepoch/node51.html][Math Symbols Commonly Used in Latex]] 
+
+Since the !LatexModePlugin is not installed on TWiki.org the above external html reference is given so that you can see what the symbols are.  For those who do use Latex in your TWiki install, you can copy the tables formatted for TWiki from the following topics (the symbols won't actually display without the plugin).
+
+What to type to get a variety of symbols using Latex.  Due to page loading constraints, the symbols tables are split up into 5 different topics.
+   * LatexSymbols (Greek Letters)
+   * LatexSymbols2 (Relationship and Operator Symbols)
+   * LatexSymbols3 (Arrows, Spacing, Accents)
+   * LatexSymbols4 (Function names and anlaytic symbols)
+   * LatexSymbols5 (Delimiters and other symbols)
 
 
 ---++ Plugin Settings
@@ -349,9 +405,9 @@ This plugin is an enhanced version of the TWiki:Plugins.MathModePlugin maintaine
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.ScottHoge |
-|  Plugin Version: | 8 Aug 2006 (v 3.3) |
+|  Plugin Version: | 27 Nov 2006 (v 3.3) |
 |  Change History: | %ICON{warning}% v3.0 and above requires TWiki 4.x.x and above %ICON{warning}% <!-- versions below in reverse order --> |
-|  11 Nov 2006 (v 3.3) | added dynamic switching of rendering engine, more Parse bug fixes |
+|  27 Nov 2006 (v 3.3) | added dynamic switching of rendering engine, more Parse bug fixes |
 |  06 Oct 2006 (v 3.2) | more bugs fixed: bgcolor option was missing from v3.0; verbatim mode fixed in Parse |
 |  04 Oct 2006 (v 3.1) | fixed two bugs: populating files to check under Dakar, and itemize env parsing in Parse |
 |  30 Sep 2006 (v 3.0) | Significant rewrite of module, including: section numbering/cross-links and mod_perl compatibility. |
@@ -393,6 +449,8 @@ __Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins, TWiki:
 %META:FILEATTACHMENT{name="latex303abc4184b439b709dcefbc28d2ac3c.png" attr="h" autoattached="1" comment="" date="1153937035" path="latex303abc4184b439b709dcefbc28d2ac3c.png" size="569" user="Main.ScottHoge" version="1"}%
 %META:FILEATTACHMENT{name="latexad099cee8f77fa265ce6ac0508afb536.png" attr="h" autoattached="1" comment="" date="1153937034" path="latexad099cee8f77fa265ce6ac0508afb536.png" size="349" user="Main.ScottHoge" version="1"}%
 %META:FILEATTACHMENT{name="latex342aa8d8ddd4f2a293bd4e2dea1d4c5b.png" attr="h" autoattached="1" comment="" date="1153937034" path="latex342aa8d8ddd4f2a293bd4e2dea1d4c5b.png" size="364" user="Main.ScottHoge" version="1"}%
+%META:FILEATTACHMENT{name="tikz-expl.png" attr="" autoattached="1" comment="" date="1128355022" path="tikz-expl.png" size="23603" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="fig2.png" attr="" autoattached="1" comment="" date="1128355022" path="fig2.png" size="23603" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="expl-v1.4.png" attr="" autoattached="1" comment="" date="1128355022" path="expl-v1.4.png" size="23603" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="latex21106add16bef3b90eafbce49b902ebd.png" attr="h" autoattached="1" comment="" date="1153937033" path="latex21106add16bef3b90eafbce49b902ebd.png" size="320" user="Main.ScottHoge" version="1"}%
 %META:FILEATTACHMENT{name="latex6d1277b3e7687b4b19d66e8980996a0f.png" attachment="latex6d1277b3e7687b4b19d66e8980996a0f.png" attr="h" comment="" stream="GLOB(0x8be51ec)" user="Main.ScottHoge" version="1"}%
