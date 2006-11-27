@@ -107,7 +107,8 @@ sub initPlugin
         storyprogresscolor      => '#FFFF99',
         storyacceptancecolor    => '#CCFFFF',
         storycompletecolor      => '#99FF99',
-	ongoingcolor            => '#FFFFFF'
+	ongoingcolor            => '#FFFFFF',
+	sort                    => 'Submitdate'
     );
 
     # now get defaults from XpTrackerPlugin topic
@@ -202,6 +203,8 @@ sub initPlugin
     # Show workload by developer and project/iteration
     # "all" means all developers; subsumes %XPSHOWLOADALL%
     TWiki::Func::registerTagHandler( 'XPSHOWLOAD', \&xpShowLoad,
+                                     'context-free' );
+    TWiki::Func::registerTagHandler( 'XPSHOWLOADALL', \&xpShowLoadAll,
                                      'context-free' );
     # Service procedure to show current colours
     TWiki::Func::registerTagHandler( 'XPSHOWCOLOURS', \&xpShowColours,
@@ -366,7 +369,7 @@ sub xpShowIteration {
         $targetStories{$story} = $storyText;
 	$targetMeta{$story} = $meta;
         # Get the ordering and save it
-        $targetOrder{$story} = substr(&xpGetMetaValue($meta, "Priority"),0,1);
+        $targetOrder{$story} = substr(&xpGetMetaValue($meta, $defaults{sort}),0,1);
     }
 
     my ($totalSpent,$totalEtc,$totalEst) = 0;
@@ -379,9 +382,6 @@ sub xpShowIteration {
         
         # Get acceptance test status
         my $storyComplete = &xpStoryComplete($meta);
-        
-        # Get story lead
-        my $storyLead = &xpGetMetaValue($meta, "Storylead");
         
         # Set up other story stats
         my ($storySpent,$storyEtc,$storyCalcEst) = 0;
@@ -446,7 +446,7 @@ sub xpShowIteration {
         }
         
         # Show story line
-	my $cells = '| '.$story.' | '.xpShowRounded($storyCalcEst).' | '.$storyLead.' | '.xpShowRounded($storySpent).' | '.xpShowRounded($storyOngoing?'':$storyEtc).' | '.$storyStatS. '|';
+	my $cells = '| '.$story.' | '.xpShowRounded($storyCalcEst).' | &nbsp; | '.xpShowRounded($storySpent).' | '.xpShowRounded($storyOngoing?'':$storyEtc).' | '.$storyStatS. '|';
         if ($color) {
 	  push @colors, $color;
         } else {
@@ -557,7 +557,7 @@ sub xpShowIterationTerse {
     $targetStories{$story} = $storyText;
     $targetMeta{$story} = $meta;
     # Get the ordering and save it
-    $targetOrder{$story} = substr(&xpGetMetaValue($meta, "Priority"),0,1);
+    $targetOrder{$story} = substr(&xpGetMetaValue($meta, $defaults{sort}),0,1);
     }
 
     my ($totalSpent,$totalEtc,$totalEst,$totalOngoing, $totalOngoingEst) = 0;
@@ -928,7 +928,7 @@ sub xpShowProjectStories {
               my ($meta, $storyText) = &TWiki::Func::readTopic($web, $story);
 	      unless (&xpYNtoBool(&xpGetMetaValue($meta, "Ongoing"))) {
 	      #TW: Not used?
-              #$targetOrder{$story} = substr(&xpGetMetaValue($meta, "Priority"),0,1);
+              #$targetOrder{$story} = substr(&xpGetMetaValue($meta, $defaults{sort}),0,1);
               
               my $storySummary = &xpGetMetaValue($meta, "Storysummary");
 	      my @fldvals = ();
@@ -1619,7 +1619,7 @@ sub sort_unique(@) {
 # xpGetIterDevelopers
 #
 # Returns a list of all developers in this iteration in this web.
-# Note: only returns developers who are story leads!
+
 sub xpGetIterDevelopers {
 
     my ($iteration,$web) = @_;
@@ -1628,18 +1628,18 @@ sub xpGetIterDevelopers {
 
     my @dev = ();
     foreach my $story (@iterStories) {
-    my ($meta, $storyText) = &TWiki::Func::readTopic($web, $story);      
+      my ($meta, $storyText) = &TWiki::Func::readTopic($web, $story);      
 
-    # search for text matching a developer
-    my $ret = "";
-    while ($ret = &xpGetMetaValue($meta, "Storylead")) {
-        push @dev, $ret;
+      foreach my $theTask ( $meta->find("TABLE") ) {
+	(my $status,my $name,my $est,my $who) = xpGetTaskDetail($theTask); 
+	push @dev, $who;
+      }
     }
-    }
+
     @dev = sort_unique(@dev);
-
     return @dev;
 }
+
 
 ###########################
 # xpGetTeamIterations
@@ -1929,37 +1929,45 @@ sub xpShowDeveloperTasks {
 
     # todo: build a list of projects/iterations sorted by date
 
+    my %iterKeys = ();
+    my %iterDates = ();
+    my @iterations = ();
     foreach my $project (@projects) {
         my @teams = &xpGetProjectTeams($project, $web);
         foreach my $team (@teams){
             my @teamIters = &xpGetTeamIterations($team, $web);
 
             # Get date of each iteration
-            my %iterKeys = ();
             foreach my $iter (@teamIters) {
                 my ($meta, $iterText) = &TWiki::Func::readTopic($web, $iter);
                 my $iterDate = &xpGetMetaValue($meta, "End");
-                my $iterSec = HTTP::Date::str2time( $iterDate ) - time;
-                $iterKeys{$iter} = $iterSec;
+                my $iterDays;
+		if ( $iterDate ) {
+		  $iterDays = HTTP::Date::str2time( $iterDate ) - time;
+		} else {
+		  # Schedule for out in the future
+		  $iterDays = time;
+		}
+		$iterDays = $iterDays / (24*3600);
+                $iterKeys{$iter} = $iterDays;
+                $iterDates{$iter} = $iterDate;
+		push @iterations, $iter;  # Could build up a sorted data structure
             }
+	  }
+      }
 
             # write out all iterations to table
-            foreach my $iterationName (sort { $iterKeys{$a} <=> $iterKeys{$b} } @teamIters) {
+            foreach my $iterationName (sort { $iterKeys{$a} <=> $iterKeys{$b} } @iterations) {
 
-            # Get date of iteration
-            my ($meta, $iterText) = &TWiki::Func::readTopic($web, $iterationName);
-            my $iterDate = &xpGetMetaValue($meta, "End");
             my $iterDatecolor = "";
+	    my $iterDays = $iterKeys{$iterationName};
+	    my $iterDate = $iterDates{$iterationName};
 
-            # something undefined on the next line
-            my $iterSec = HTTP::Date::str2time( $iterDate ) - time;
-
-	    my $secinday = 24*3600;
-            if ($iterSec < $secinday)
+            if ($iterDays < 1)
                 { $iterDatecolor = '#FF6666'; }
-            elsif ($iterSec < 2*$secinday)
+            elsif ($iterDays < 2)
                 { $iterDatecolor = '#FFCCCC'; }
-            elsif ($iterSec < 3*$secinday)
+            elsif ($iterDays < 3)
                 { $iterDatecolor = '#FFFFCC'; }
 
             my @allStories = &xpGetIterStories($iterationName, $web);
@@ -1971,7 +1979,7 @@ sub xpShowDeveloperTasks {
                 $targetStories{$story} = $storyText;
 		$targetMeta{$story} = $meta;
                 # Get the ordering and save it
-                $targetOrder{$story} = substr(&xpGetMetaValue($meta, "Priority"),0,1);
+                $targetOrder{$story} = substr(&xpGetMetaValue($meta, $defaults{sort}),0,1);
             }
 
 	    #TW: These appear not used
@@ -1988,8 +1996,7 @@ sub xpShowDeveloperTasks {
 
                 # Get acceptance test status
                 my $storyComplete = &xpStoryComplete($meta);
-                # Get story lead
-                my $storyLead = &xpGetMetaValue($meta, "Storylead");
+
                 # Set up other story stats
                 my ($storySpent) = 0;
                 my ($storyEtc) = 0;
@@ -2130,8 +2137,6 @@ sub xpShowDeveloperTasks {
             }
 
         }
-        }
-    }
 
     # Do iteration totals
     $list .= '|*Developer totals*|*'.xpShowRounded($totalEst).'*|*'.xpShowRounded($totalSpent).'*|*'.xpShowRounded($totalEtc)."*|*&nbsp;*|*&nbsp;*|\n";
@@ -2160,16 +2165,23 @@ sub xpShowDeveloperTasks {
 # left including current project by the deadline of current project
 # (might cause miss of earlier project dates).
 
+sub xpShowLoadAll {
+    my( $session, $params, $theTopic, $web ) = @_;
+    use TWiki::Attrs;
+    return xpShowLoad( $session, new TWiki::Attrs('developer="all"'), $theTopic, $web );
+}
+
 sub xpShowLoad {
 
     &xpCacheRead( $web ) unless $cacheInitialized;
     my( $session, $params, $theTopic, $web ) = @_;
 
     my $dev = $params->{_DEFAULT} || $params->{developer};
-    $dev = 0 if ($dev == "all");
+    my $showOngoing = ( $params->{ongoing} eq 'on' ) || 0;
+    $dev = 0 if ($dev eq 'all');
 
     my $now = time;
-    my (@projiter, @projiterDate, @projiterSec, @nobodiesStories, %devDays);
+    my (@projiter, @projiterDate, @projiterSec, @projiterOngoing, %devDays);
 
     my @projects = &xpGetAllProjects($web);
 
@@ -2195,10 +2207,14 @@ sub xpShowLoad {
             my ($storyEst) = 0;
 
             my @allStories = &xpGetIterStories($iterationName, $web);  
+	    my $onlyOngoing = 1;
 
             # Iterate over each story and task
             foreach my $story (@allStories) {
                 my ($meta, $storyText) = &TWiki::Func::readTopic($web, $story);
+		my $storyOngoing = &xpYNtoBool(&xpGetMetaValue($meta, "Ongoing"));
+		$onlyOngoing = 0 unless $storyOngoing;
+
 
                 # Suck in the tasks
 		foreach my $theTask ( $meta->find("TABLE") ) {
@@ -2233,12 +2249,22 @@ sub xpShowLoad {
                 $count--;
                 next;
             }
+	    # no display if iterations contains only ongoing stories
+	    if ( $onlyOngoing && ! $showOngoing ) {
+	        $count--;
+		next;
+	    }
             
             $projiter[$count] = " $team <br> $iterationName <br> $iterDate ";
-            $projiterSec[$count] = 
+	    if ( $iterDate ) {
+	      $projiterSec[$count] = 
                 HTTP::Date::str2time($iterDate) - $now;
 	        #Alternative:
 	        #Time::ParseDate::parsedate($iterDate,%pdopt) - $now;
+	    } else {
+	      # Take some far out date for undefined dates
+	      $projiterSec[$count] = $now;
+	    }
             $projiterDate[$count] = $iterDate;
         }
     }
@@ -2247,7 +2273,7 @@ sub xpShowLoad {
     my $list = '';
 
     # Show the list
-    my $cells = '|*Developer*|';
+    my $cells = '| Developer |';
     for my $pi (sort {$projiterSec[$a] <=> $projiterSec[$b]} (1..$count)) {
       $cells .= ''.$projiter[$pi].'|';
     }
@@ -2256,28 +2282,32 @@ sub xpShowLoad {
 
     for my $who (sort keys %devDays) {
         my $cumulLoad = 0;
-	$cells = '|*'.$who.'*|';
+	$cells = "| $who |";
         for my $pi (sort {$projiterSec[$a] <=> $projiterSec[$b]} (1..$count)) {
-            my $color = "";
+            my $color = '';
             $cumulLoad += $devDays{$who}[$pi]*24*3600;
 	    my $load;
 	    my $left;
-	    my $useBusinessDate = 1;
-	    if (! $useBusinessDate) {
-	      $left = $projiterSec[$pi];
-	      $left = 0.0001 if ($left==0);
-	      $load = ($projiterSec[$pi]==0)?0.0001:((7*$cumulLoad) / (5*$left)); 
-	      $left = $left /(3600*24);
+	    if ( $projiterDate[$pi] ) {
+	      my $useBusinessDate = 1;
+	      if (! $useBusinessDate) {
+		$left = $projiterSec[$pi];
+		$left = 0.0001 if ($left==0);
+		$load = ($projiterSec[$pi]==0)?0.0001:((7*$cumulLoad) / (5*$left)); 
+		$left = $left /(3600*24);
+	      } else {
+		#alternatively, using business dates
+		my $d1 = new TWiki::Plugins::Business();
+		my( $sec, $min, $hour, $mday, $mon, $year) = localtime(HTTP::Date::str2time($projiterDate[$pi]));
+		my $d2a = sprintf "%4d%2d%2d", 1900+$year, $mon+1, $mday;
+		#my $d2a = 1900+$year.(($mon<10)?"0":"").$mon+1 .(($mday<10)?"0":"")."$mday";
+		my $d2 = new TWiki::Plugins::Business(DATE => $d2a);
+		$left = $d2->diffb($d1);
+		$left = 0.0001 if ($left==0);
+		$load = $cumulLoad / ($left*(3600*24));
+	      }
 	    } else {
-	      #alternatively, using business dates
-	      my $d1 = new TWiki::Plugins::Business();
-	      my( $sec, $min, $hour, $mday, $mon, $year) = localtime(HTTP::Date::str2time($projiterDate[$pi]));
-	      my $d2a = sprintf "%4d%2d%2d", 1900+$year, $mon+1, $mday;
-	      #my $d2a = 1900+$year.(($mon<10)?"0":"").$mon+1 .(($mday<10)?"0":"")."$mday";
-	      my $d2 = new TWiki::Plugins::Business(DATE => $d2a);
-	      $left = $d2->diffb($d1);
-	      $left = 0.0001 if ($left==0);
-	      $load = $cumulLoad / ($left*(3600*24));
+	      $load = 0;
 	    }
             if ($load < 0) {
                 $color = '#FF6666';
@@ -2292,16 +2322,22 @@ sub xpShowLoad {
             } else {
                 $color = '#CCCCFF';
             }
-	    my $cell = ' *'.xpShowCell($devDays{$who}[$pi]).'*';
-            if ( defined $devDays{$who}[$pi] && ($devDays{$who}[$pi] > 0) ) {
-                if ( $load > 0 ) {
-                    $cell .= ' <br> '.sprintf("%d \%",100*$load).' ';
-                } else {
-                    $cell .= ' <br> (late!) ';
-                }
-            }
+	    my $cell = $devDays{$who}[$pi];
+	    $cell = $cell?xpShowRounded($devDays{$who}[$pi]):'&nbsp;';
+	    $cell = " *$cell* ";
+	    if ( defined $devDays{$who}[$pi] && ($devDays{$who}[$pi] > 0) ) {
+	      if ( $load == 0 ) {
+		  $cell .= ' <br> &nbsp; ';
+	      } elsif ( $load > 0 ) {
+		  $cell .= ' <br> '.sprintf("%d \%",100*$load).' ';
+	      } else {
+                  $cell .= ' <br> (late!) ';
+	      }
+	    } else {
+	      $cell .= ' <br> &nbsp; ';
+	    }
 	    $cells .= "<div style=\"background:$color\">$cell</div>|";
-        }
+	}
 	$list .= $cells . "\n";
     }
     $list = "---+++ Workload by developer and project iteration in $web\n%TABLE{headerrows=\"1\" dataalign=\"center\" sort=\"off\"}%\n" . $list;
@@ -2420,37 +2456,47 @@ sub xpShowDeveloperTimeSheet {
     my @colors = ();
     my $list = '|*Iteration Story<br>&nbsp; Task*|*Estimate*|*Spent*|*To do*|'.($doEdit?'*Add to<br>Spent*|*Update<br>To do*|':'*Status*|*Iteration due*|')."\n";
 
-    # todo: build a list of projects/iterations sorted by date
+    # todo: build a list of projects/iterations sorted by date, make sort customizable
 
+    my %iterKeys = ();
+    my %iterDates = ();
+    my @iterations = ();
     foreach my $project (@projects) {
         my @teams = &xpGetProjectTeams($project, $web);
         foreach my $team (@teams){
             my @teamIters = &xpGetTeamIterations($team, $web);
 
             # Get date of each iteration
-            my %iterKeys = ();
-	    my %iterDates = ();
             foreach my $iter (@teamIters) {
                 my ($meta, $iterText) = &TWiki::Func::readTopic($web, $iter);
                 my $iterDate = &xpGetMetaValue($meta, "End");
-                my $iterSec = HTTP::Date::str2time( $iterDate ) - time;
-                $iterKeys{$iter} = $iterSec;
+                my $iterDays;
+		if ( $iterDate ) {
+		  $iterDays = HTTP::Date::str2time( $iterDate ) - time;
+		} else {
+		  # Schedule for out in the future
+		  $iterDays = time;
+		}
+		$iterDays = $iterDays / (24*3600);
+                $iterKeys{$iter} = $iterDays;
                 $iterDates{$iter} = $iterDate;
+		push @iterations, $iter;  # Could build up a sorted data structure
             }
+	  }
+      }
 
             # write out all iterations to table
-            foreach my $iterationName (sort { $iterKeys{$a} <=> $iterKeys{$b} } @teamIters) {
+            foreach my $iterationName (sort { $iterKeys{$a} <=> $iterKeys{$b} } @iterations) {
             # Get date of iteration
             my $iterDatecolor = "";
-	    my $iterSec = $iterKeys{$iterationName};
+	    my $iterDays = $iterKeys{$iterationName};
 	    my $iterDate = $iterDates{$iterationName};
 
-	    my $secinday = 24*3600;
-            if ($iterSec < $secinday)
+            if ($iterDays < 1)
                 { $iterDatecolor = '#FF6666'; }
-            elsif ($iterSec < 2*$secinday)
+            elsif ($iterDays < 2)
                 { $iterDatecolor = '#FFCCCC'; }
-            elsif ($iterSec < 3*$secinday)
+            elsif ($iterDays < 3)
                 { $iterDatecolor = '#FFFFCC'; }
 
             my @allStories = &xpGetIterStories($iterationName, $web);
@@ -2462,7 +2508,7 @@ sub xpShowDeveloperTimeSheet {
                 $targetStories{$story} = $storyText;
 		$targetMeta{$story} = $meta;
                 # Get the ordering and save it
-                $targetOrder{$story} = substr(&xpGetMetaValue($meta, "Priority"),0,1);
+                $targetOrder{$story} = substr(&xpGetMetaValue($meta, $defaults{sort}),0,1);
             }
 
 	    # TW: These appear not used
@@ -2479,8 +2525,7 @@ sub xpShowDeveloperTimeSheet {
 
                 # Get acceptance test status
                 my $storyComplete = &xpStoryComplete($meta);
-                # Get story lead
-                my $storyLead = &xpGetMetaValue($meta, "Storylead");
+
                 # Set up other story stats
                 my ($storySpent) = 0;
                 my ($storyEtc) = 0;
@@ -2646,8 +2691,6 @@ sub xpShowDeveloperTimeSheet {
             }
 
         }
-        }
-    }
 
     # Do developer totals
     $list .= '|*Developer totals*|*'.xpShowRounded($totalEst).'*|*'.xpShowRounded($totalSpent).'*|*'.xpShowRounded($totalEtc)."*|*&nbsp;*|*&nbsp;*|\n";
@@ -3019,35 +3062,46 @@ sub xpShowDeveloperEstimate {
 
     # todo: build a list of projects/iterations sorted by date
 
+    my %iterKeys = ();
+    my %iterDates = ();
+    my @iterations = ();
     foreach my $project (@projects) {
         my @teams = &xpGetProjectTeams($project, $web);
         foreach my $team (@teams){
             my @teamIters = &xpGetTeamIterations($team, $web);
 
             # Get date of each iteration
-            my %iterKeys = ();
-	    my %iterDates = ();
             foreach my $iter (@teamIters) {
                 my ($meta, $iterText) = &TWiki::Func::readTopic($web, $iter);
                 my $iterDate = &xpGetMetaValue($meta, "End");
-                my $iterSec = HTTP::Date::str2time( $iterDate ) - time;
-                $iterKeys{$iter} = $iterSec;
+                my $iterDays;
+		if ( $iterDate ) {
+		  $iterDays = HTTP::Date::str2time( $iterDate ) - time;
+		} else {
+		  # Schedule for out in the future
+		  $iterDays = time;
+		}
+		$iterDays = $iterDays / (24*3600);
+                $iterKeys{$iter} = $iterDays;
                 $iterDates{$iter} = $iterDate;
+		push @iterations, $iter;  # Could build up a sorted data structure
             }
+	  }
+      }
 
             # write out all iterations to table
-            foreach my $iterationName (sort { $iterKeys{$a} <=> $iterKeys{$b} } @teamIters) {
+            foreach my $iterationName (sort { $iterKeys{$a} <=> $iterKeys{$b} } @iterations) {
 
             # Get date of iteration
             my $iterDatecolor = "";
-	    my $iterSec = $iterKeys{$iterationName};
+	    my $iterDays = $iterKeys{$iterationName};
 	    my $iterDate = $iterDates{$iterationName};
 
-            if ($iterSec < 1*24*3600)
+            if ($iterDays < 1)
                 { $iterDatecolor = '#FF6666'; }
-            elsif ($iterSec < 2*24*3600)
+            elsif ($iterDays < 2)
                 { $iterDatecolor = '#FFCCCC'; }
-            elsif ($iterSec < 3*24*3600)
+            elsif ($iterDays < 3)
                 { $iterDatecolor = '#FFFFCC'; }
 
             my @allStories = &xpGetIterStories($iterationName, $web);
@@ -3059,7 +3113,7 @@ sub xpShowDeveloperEstimate {
                 $targetStories{$story} = $storyText;
 		$targetMeta{$story} = $meta;
                 # Get the ordering and save it
-                $targetOrder{$story} = substr(&xpGetMetaValue($meta, "Priority"),0,1);
+                $targetOrder{$story} = substr(&xpGetMetaValue($meta, $defaults{sort}),0,1);
             }
 
             # Show them
@@ -3071,9 +3125,6 @@ sub xpShowDeveloperEstimate {
 
                 # Get acceptance test status
                 my $storyComplete = &xpStoryComplete($meta);
-                # Get story lead
-                my $storyLead = &xpGetMetaValue($meta, "Storylead");
-                # Set up other story stats
 
                 # Suck in the tasks
                 my (@taskName, @taskStat, @taskEst, @taskWho, @taskSpent, @taskEtc) = (); # arrays for each task
@@ -3112,20 +3163,11 @@ sub xpShowDeveloperEstimate {
                 # Get story summary
                 my $storysummary = &xpGetMetaValue($meta, "Storysummary") if (! $storyOngoing);
                 my $storyiteration = &xpGetMetaValue($meta, "Iteration");
-		# TW: This requires a fixed name for the storyid. Shouldn't
-		# this be configurable?
-                my $storyid = &xpGetMetaValue($meta, "id") if (! $storyOngoing);
-		# if anchor notation was used, delete that, just take the URL
-		$storyid =~ s/^.*\[\[(.*?)\].*/$1/;
-
 		my $iterationcolor = ($iterDate)?$iterDatecolor:$color;
 
                 # Show project / iteration line
-		$storyid =~ s/^\s*//;
-		$storyid = CGI::a( { href=>$storyid }, '...' ) if $storyid;
-		# Note: if the URL below has a leading space, it messes up the page
 		push @colors, $color;
-                $list .= "| $storyiteration&nbsp; $story: $storysummary $storyid | <div style=\"background:$iterationcolor;margin:0;padding:0;border:0;white-space:nowrap\">".xpShowCell($iterDate, ! $storyOngoing)."</div>|\n";
+                $list .= "| $storyiteration&nbsp; $story: $storysummary | <div style=\"background:$iterationcolor;margin:0;padding:0;border:0;white-space:nowrap\">".xpShowCell($iterDate, ! $storyOngoing)."</div>|\n";
 
                 # Show each task
                 for (my $i=0; $i<$taskCount; $i++) {
@@ -3168,8 +3210,6 @@ sub xpShowDeveloperEstimate {
             }
 
         }
-        }
-    }
 
     # Do iteration totals
     unshift @colors, pop @colors;  # defect in TablePlugin

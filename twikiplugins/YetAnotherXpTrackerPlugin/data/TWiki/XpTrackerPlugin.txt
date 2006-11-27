@@ -37,7 +37,7 @@ Example of hierarchy:
 ---+++ Usage
 
  Creation of pages is recursive, each page has an html form that uses a template to create child pages:
-	* *Projects/Teams*. You can create a new team page using the html form on the home page for the tracking web. At each level of the hierarchy, additional lower level entities can be created. You can add additional content to these pages if desired, but do not delete the existing content. This is used to provide high level overviews of schedule progress.
+	* *Projects/Teams*. You can create a new team page using the html form on the home page for the tracking web. At each level of the hierarchy, additional lower level entities can be created. You can add additional content to these pages if desired, but do not delete the fields indicated below. This is used to provide high level overviews of schedule progress.
 	* *Iterations* Create new iterations from the project pages.
 	* *Stories* Create new stories from the iteration page. The story name can be any unique name, *as long as it ends with the string "Story"*. Fill in the two tables for the story summary and task list respectively.
 
@@ -147,6 +147,8 @@ a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>E
 		* Set ACCEPTANCELITERAL =
 		* Set TEAMLABEL =
 		* Set PROJECTLABEL =
+		* Set SORT =
+		   * The field by which to sort stories in tables
    * Debug plugin: (See output in =data/debug.txt=)
       * Set DEBUG = 0
 
@@ -190,6 +192,12 @@ a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>E
 
 The distribution contains a set of template files in directory =data/_default_XpTracker=. The initial setup of a tracking web might be easiest if one starts from that example. Begin with !GettingStarted.
 
+When creating templates, do not delete the following fields, as they are internally used:
+   * Stories: Iteration, Submit Date, State, Story Summary
+   * Iterations: TEAMLABEL, Start, End, Actual, Summary
+   * TEAMLABEL: PROJECTLABEL
+(In above, TEAMLABEL stands for what was configured to be the hierarchy for "Team", and PROJECTLABEL for "Project".)
+
 Due to a defect in Twiki 4.0 (fixed in TWiki 4.1) please copy the preference settings in the "<nop>XpTrackerPlugin" section of the !WebPreferences sample topic into your the !WebPrefernces topic of the tracking web.
 
 To illustrate the customization of the work breakdown structure, in the sample tracking web the hierarchy of work is configured differently from the default.
@@ -197,14 +205,15 @@ To illustrate the customization of the work breakdown structure, in the sample t
 ---+++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.RichardBennett, TWiki:Main.MartinWatt, TWiki:Main.ThomasWeigert |
-|  Plugin Version: | 24 Nov 2006 |
+|  Plugin Version: | 25 Nov 2006 |
+|  25 Nov 2006:    | Make topic sort configurable. Sort all iterations together in time sheet. Remove unneeded internally used fields. |
 |  24 Nov 2006:    | Allow creation of topics based on a base with sequence numbers affixed. Added XPCREATETOPIC tag. Use TWiki tables for formatting. |
 |  19 Nov 2006:    | Cleaned up some of the table layout when empty cells are present. Apply rounding to numbers in generated tables. |
 |  31 Jul 2006:    | Dakar port of branch developed and maintained by TWiki:Main.ThomasWeigert. Includes time tracking and recording capabilities built on ideas by TWiki:Main.ThomasEschner. Better task table control via TWiki:Plugins/EditHiddenTablePlugin |
 |  19 Nov 2002:    | 3.0 Updated version |
 |  16 Oct 2002:    | 2.0 New version of Plugin by TWiki:Main.MartinWatt |
 |  29 Jul 2002:    | 1.0 Initial version of Plugin by TWiki:Main.MartinWatt based on code by TWiki:Main.RichardBennett |
-|  Dependencies: | <table border="1"><tr><th>Name</th><th>Version</th><th>Description</th></tr><tr><td align="left">TWiki::Plugins::EditHiddenTablePlugin</td><td align="left">Required. Download and install from [[TWiki:Plugins/EditHiddenTablePlugin][plugin library]].</td></tr><tr><td align="left">TWiki::Plugins::ControlPlugin</td><td align="left">Required. Download and install from [[TWiki:Plugins/ControlPlugin][plugin library]].</td></tr><tr><td align="left">HTTP::Date</td><td align="left">Required. Available from [[http://cpan.uwinnipeg.ca/dist/Time-modules][CPAN]].</td></tr><tr><td align="left">Time::CTime</td><td align="left">Required. Available from [[http://cpan.uwinnipeg.ca/dist/Time-modules][CPAN]].</td></tr></table> |
+|  Dependencies: | <table border="1"><tr><th>Name</th><th>Version</th><th>Description</th></tr><tr><td align="left">TWiki::Plugins::EditHiddenTablePlugin</td><td align="left">Required. Download and install from [[TWiki:Plugins/EditHiddenTablePlugin][plugin library]].</td></tr><tr><td align="left">TWiki::Plugins::ControlsPlugin</td><td align="left">Required. Download and install from [[TWiki:Plugins/ControlsPlugin][plugin library]].</td></tr><tr><td align="left">HTTP::Date</td><td align="left">Required. Available from [[http://cpan.uwinnipeg.ca/dist/Time-modules][CPAN]].</td></tr><tr><td align="left">Time::CTime</td><td align="left">Required. Available from [[http://cpan.uwinnipeg.ca/dist/Time-modules][CPAN]].</td></tr></table> |
 |  Perl Version: | 5.0 |
 |  Plugin Home: | TWiki:Plugins/%TOPIC% |
 |  Feedback: | TWiki:Plugins/%TOPIC%Dev |
