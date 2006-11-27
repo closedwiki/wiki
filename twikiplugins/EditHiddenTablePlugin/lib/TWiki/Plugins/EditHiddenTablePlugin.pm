@@ -17,10 +17,13 @@
 #
 # =========================
 #
-# Need to give same flexibilities as in EditTablerowPlugin in terms of config
+# Enhancements/Bugs
+# 1.Need to give same flexibilities as in EditTablerowPlugin in terms of config
 # Do we need to differentiate between changerows and addrows? Also, if no 
 # adding of rows is allowed, there should also be no copy/delete button?
-# No handling of footer yet
+# 2. No handling of footer yet
+# 3. Need to differntiate between update and add
+# 4. When changerows=off, should not delete or copy rows.
 
 # =========================
 package TWiki::Plugins::EditHiddenTablePlugin;
