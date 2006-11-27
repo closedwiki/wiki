@@ -48,12 +48,14 @@ hr {
 /* put overflow pre in a scroll area */
 pre {
     width:100%;
-    margin:0; /* Win IE tries to make this bigger otherwise */
-}
-html>body pre { /* hide from IE */
-	overflow-x:auto;
+	/*word-wrap:break-word;*/ /*will break formatted text, so not always desirable*/
+    margin:1em 0; /* Win IE tries to make this bigger otherwise */
 }
 /* IE behavior for pre is defined in twiki.pattern.tmpl in conditional comment */
+html>body pre { /* hide from IE */
+	/*\*/ overflow:auto !important; /* */ overflow:scroll; width:auto; /* for Mac Safari */
+}
+
 ol, ul {
 	margin-top:0;
 }
@@ -149,6 +151,7 @@ select {
 	vertical-align:middle;
 	border-width:1px;
 	border-style:solid;
+	font-family:"Lucida Grande", verdana, arial, sans-serif;
 }
 textarea {
 	padding:1px;
@@ -746,6 +749,9 @@ a.twikiLinkInHeaderRight {
 .patternMoved i,
 .patternMoved em {
 	font-style:normal;
+}
+.patternTopicFooter {
+	margin:1em 0 0 0;
 }
 
 /* WebSearch, WebSearchAdvanced */
