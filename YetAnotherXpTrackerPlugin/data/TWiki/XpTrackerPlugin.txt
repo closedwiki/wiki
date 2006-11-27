@@ -117,9 +117,9 @@ This is a list of all the tables available. The names should be self-explanatory
 Developers often work on more than one task at a time. We do want developers to keep their information up to date, which becomes tediuos if a developer works on many tasks. The following two tags simply this effort:
 
 | *Variable*  | *Parameters*	| *Comment*	|
-| XPSHOWDEVELOPERTIMESHEET | =developer= | Shows a table of all tasks that are assigned to the given developer. |
-| XPSHOWDEVELOPERESTIMATE | =developer= | Shows a table of all tasks that are assigned to the given developer for which the developer has not yet given an estimate (i.e., the estimated effort and effort to do fields are blank or contain a question mark). |
-| XPSHOWLOAD | =developer= | Shows the work load by developer and iteration. If =developer="all"=, shows the work load for all developers |
+| XPSHOWDEVELOPERTIMESHEET | =who= | Shows a table of all tasks that are assigned to the given developer. |
+| XPSHOWDEVELOPERESTIMATE | =who= | Shows a table of all tasks that are assigned to the given developer for which the developer has not yet given an estimate (i.e., the estimated effort and effort to do fields are blank or contain a question mark). |
+| XPSHOWLOAD | =project=, =who= | Shows the work load by developer and iteration for the selected project. If =who="all"= or omitted, shows the work load for all developers. If =project= is omitted, shows all projects. |
 
 Below the estimate or timesheet table is a button that puts the table into edit mode and allows the user to enter estimates or update the information about effort spent for all open tasks at once.
 
@@ -152,8 +152,32 @@ a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>E
    * Debug plugin: (See output in =data/debug.txt=)
       * Set DEBUG = 0
 
+---++ Getting Started with !XpTracking
+
+The distribution contains a set of template files in directory =data/_default_XpTracker=. The initial setup of a tracking web might be easiest if one starts from that example. Begin with !GettingStarted.
+
+When designing your own templates and tracking topics, there are a few rules that must be followed, lest the application will not work. (In the following, TEAMLABEL stands for what was configured to be the hierarchy for "Team", and PROJECTLABEL for "Project".)
+   * While templates instantiating the tracking topics may have any name, they must have attached the following forms:
+      * Stories: !StoryForm
+      * Iterations: !IterationForm
+      * TEAMLABEL: !TEAMLABELForm
+   * You can use arbitrary fields in forms defining the tracking topics, but the following fields must be present, as they are internally used:
+      * Stories: Iteration, Submit Date, State, Story Summary
+      * Iterations: !TEAMLABEL, Start, End, Actual, Summary
+      * TEAMLABEL: !PROJECTLABEL
+   * The templates that can be chosen to instantiate tracking topics must be listed in the following topics:
+      * Stories: !StoryTemplateOptions
+      * Iterations: !IterationTemplateOptions
+      * TEAMLABEL: !TEAMLABELTemplateOptions
+      * PROJECTLABEL: !PROJECTLABELTemplateOptions
+
+Due to a defect in Twiki 4.0 (fixed in TWiki 4.1) please copy the preference settings in the "<nop>XpTrackerPlugin" section of the !WebPreferences sample topic into your the !WebPrefernces topic of the tracking web.
+
+To illustrate the customization of the work breakdown structure, in the sample tracking web the hierarchy of work is configured differently from the default.
+
 ---++ Plugin Installation Instructions
 
+__Note:__ You do not need to install anything on the browser to use this plugin. The following instructions are for the administrator who installs the plugin on the TWiki server.
    * This plugin works only with TWiki 4 and beyond.
    * Download the ZIP file from the Plugin web (see below)
    * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
@@ -188,25 +212,13 @@ a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>E
    * Optionally, run ==%TOPIC%_installer.pl== to automatically check and install other TWiki modules that this module depends on. You can also do this step manually. Alternatively, manually make sure the dependencies listed in the table below are resolved.
    * Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
 
----++ Getting Started with !XpTracking
-
-The distribution contains a set of template files in directory =data/_default_XpTracker=. The initial setup of a tracking web might be easiest if one starts from that example. Begin with !GettingStarted.
-
-When creating templates, do not delete the following fields, as they are internally used:
-   * Stories: Iteration, Submit Date, State, Story Summary
-   * Iterations: TEAMLABEL, Start, End, Actual, Summary
-   * TEAMLABEL: PROJECTLABEL
-(In above, TEAMLABEL stands for what was configured to be the hierarchy for "Team", and PROJECTLABEL for "Project".)
-
-Due to a defect in Twiki 4.0 (fixed in TWiki 4.1) please copy the preference settings in the "<nop>XpTrackerPlugin" section of the !WebPreferences sample topic into your the !WebPrefernces topic of the tracking web.
-
-To illustrate the customization of the work breakdown structure, in the sample tracking web the hierarchy of work is configured differently from the default.
-
 ---+++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.RichardBennett, TWiki:Main.MartinWatt, TWiki:Main.ThomasWeigert |
+|  Copyright:     | &copy; 2001-2006,  TWiki:Main.RichardBennett, TWiki:Main.MartinWatt, TWiki:Main.ThomasWeigert |
+|  License:       | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | 25 Nov 2006 |
-|  25 Nov 2006:    | Make topic sort configurable. Sort all iterations together in time sheet. Remove unneeded internally used fields. |
+|  25 Nov 2006:    | Make topic sort configurable. Sort all iterations together in time sheet. Remove unneeded internally used fields. Add team argument to =XPSHOWLOAD=. |
 |  24 Nov 2006:    | Allow creation of topics based on a base with sequence numbers affixed. Added XPCREATETOPIC tag. Use TWiki tables for formatting. |
 |  19 Nov 2006:    | Cleaned up some of the table layout when empty cells are present. Apply rounding to numbers in generated tables. |
 |  31 Jul 2006:    | Dakar port of branch developed and maintained by TWiki:Main.ThomasWeigert. Includes time tracking and recording capabilities built on ideas by TWiki:Main.ThomasEschner. Better task table control via TWiki:Plugins/EditHiddenTablePlugin |
@@ -215,6 +227,7 @@ To illustrate the customization of the work breakdown structure, in the sample t
 |  29 Jul 2002:    | 1.0 Initial version of Plugin by TWiki:Main.MartinWatt based on code by TWiki:Main.RichardBennett |
 |  Dependencies: | <table border="1"><tr><th>Name</th><th>Version</th><th>Description</th></tr><tr><td align="left">TWiki::Plugins::EditHiddenTablePlugin</td><td align="left">Required. Download and install from [[TWiki:Plugins/EditHiddenTablePlugin][plugin library]].</td></tr><tr><td align="left">TWiki::Plugins::ControlsPlugin</td><td align="left">Required. Download and install from [[TWiki:Plugins/ControlsPlugin][plugin library]].</td></tr><tr><td align="left">HTTP::Date</td><td align="left">Required. Available from [[http://cpan.uwinnipeg.ca/dist/Time-modules][CPAN]].</td></tr><tr><td align="left">Time::CTime</td><td align="left">Required. Available from [[http://cpan.uwinnipeg.ca/dist/Time-modules][CPAN]].</td></tr></table> |
 |  Perl Version: | 5.0 |
+|  TWiki:Plugins/Benchmark: | %TWIKIWEB%.GoodStyle xx%, %TWIKIWEB%.FormattedSearch xx%, %TOPIC% xx% |
 |  Plugin Home: | TWiki:Plugins/%TOPIC% |
 |  Feedback: | TWiki:Plugins/%TOPIC%Dev |
 |  Appraisal: | TWiki:Plugins/%TOPIC%Appraisal |
