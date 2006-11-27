@@ -100,8 +100,10 @@
 	/* make sure that overflowing content is visible */
 	pre,
 	html>body pre {
-		overflow:visible;
+		overflow:visible !important;
+		word-wrap:break-word;
 	}
+
 	/*Some rules about Page breaks */
 	h1, h2, h3, h4, h5, h6 {
 		page-break-after:avoid;
