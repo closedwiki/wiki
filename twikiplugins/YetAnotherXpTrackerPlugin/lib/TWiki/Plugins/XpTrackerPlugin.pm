@@ -1850,9 +1850,11 @@ sub xpSavePage()
         return;
     }
 
+## SMELL: Rather than basing this on the name of the template, look into 
+## the content of the template for the form name (read form, check $meta)
     # if creating a story, check name ends in *Story
     my $template = $query->param( 'templatetopic' );
-    if( ($template eq "StoryTemplate") ) {
+    if( ($template =~ /StoryTemplate$/) ) {
         if(!($title =~ /^[\w]*Story$/)) {
 	  TWiki::Func::writeWarning("${pluginName} - Story name should end in 'Story'; converting to ${title}Story");
 	  $title .= 'Story';
@@ -1864,11 +1866,11 @@ sub xpSavePage()
 
     # determine parent field
     my $ownerName = "";
-    if ($template eq "StoryTemplate") {
+    if ($template =~ /StoryTemplate$/) {
       $ownerName = "Iteration";
-    } elsif ($template eq "IterationTemplate") {
+    } elsif ($template =~ /IterationTemplate$/) {
       $ownerName = "$teamLbl";
-    } elsif ($template eq "${teamLbl}Template") {
+    } elsif ($template =~ /${teamLbl}Template$/) {
       $ownerName = "$projectLbl";
     }
 
