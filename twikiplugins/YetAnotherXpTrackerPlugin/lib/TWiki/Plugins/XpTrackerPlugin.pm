@@ -265,9 +265,14 @@ sub commonTagsHandler
 # Return value from field passed in meta with passed in name
 
 sub xpGetMetaValue {
-  my $name = $_[1];
-  my $field = $_[0]->get( "FIELD", $name );
-  return $field->{value} || "";
+  my $field = $_[0]->get( 'FIELD', $_[1] );
+  return $field->{value} || '';
+}
+
+sub xpGetType {
+  my $field = $_[0]->get( 'FORM' );
+  $field->{name} =~ /(.*)Form$/;
+  return $1 || '';
 }
 
 
@@ -1834,72 +1839,68 @@ sub xpSavePage()
     $title .= 'XXXXXXXXXX' if $query->param( 'sequence' );
 
     if($title eq "") {
-        TWiki::Func::redirectCgiQuery( $query, &TWiki::Func::getOopsUrl( $web, "Unknown topic", "oopssaveerr", "No topic name." ) );
+        TWiki::Func::redirectCgiQuery( $query, &TWiki::Func::getOopsUrl( $web, 'Unknown topic', 'oopssaveerr', 'No topic name.' ) );
         return;
     }
 
     # check topic does not already exist
     if(TWiki::Func::topicExists($web, $title)) {
-        TWiki::Func::redirectCgiQuery( $query, &TWiki::Func::getOopsUrl( $web, "Unknown topic", "oopssaveerr", "Topic $topic already exists." ) );
+        TWiki::Func::redirectCgiQuery( $query, &TWiki::Func::getOopsUrl( $web, 'Unknown topic', 'oopssaveerr', "Topic $topic already exists." ) );
         return;
     }
 
     # check the user has entered a WIKI name
     if(!TWiki::Func::isValidWikiWord($title)) {
-        TWiki::Func::redirectCgiQuery( $query, &TWiki::Func::getOopsUrl( $web, "Unknown topic", "oopssaveerr", "$title is not a topic name." ) );
+        TWiki::Func::redirectCgiQuery( $query, &TWiki::Func::getOopsUrl( $web, 'Unknown topic', 'oopssaveerr', "$title is not a topic name." ) );
         return;
     }
 
-## SMELL: Rather than basing this on the name of the template, look into 
-## the content of the template for the form name (read form, check $meta)
-    # if creating a story, check name ends in *Story
+    # load template for page type requested
     my $template = $query->param( 'templatetopic' );
-    if( ($template =~ /StoryTemplate$/) ) {
+    my ($meta, $text) = &TWiki::Func::readTopic( $web, $template );
+
+    my $type = xpGetType($meta);
+
+    # if creating a story, check name ends in *Story
+    if( ($type eq 'Story') ) {
         if(!($title =~ /^[\w]*Story$/)) {
 	  TWiki::Func::writeWarning("${pluginName} - Story name should end in 'Story'; converting to ${title}Story");
 	  $title .= 'Story';
         }
     }
 
-    # load template for page type requested
-    my ($meta, $text) = &TWiki::Func::readTopic( $web, $template );
-
     # determine parent field
-    my $ownerName = "";
-    if ($template =~ /StoryTemplate$/) {
-      $ownerName = "Iteration";
-    } elsif ($template =~ /IterationTemplate$/) {
-      $ownerName = "$teamLbl";
-    } elsif ($template =~ /${teamLbl}Template$/) {
-      $ownerName = "$projectLbl";
+    my $ownerName = '';
+    if ($type eq 'Story') {
+      $ownerName = 'Iteration';
+    } elsif ($type eq 'Iteration') {
+      $ownerName = $teamLbl;
+    } elsif ($type eq ${teamLbl}) {
+      $ownerName = $projectLbl;
     }
 
     if (! $ownerName eq '' ) {
       # write parent name into page
       my $parent = $query->param( 'parent' );
-      #$text =~ s/XPPARENTPAGE/$parent/geo;
-      $meta->putKeyed( "FIELD", { "name" => $ownerName, "title" => $ownerName, "value" => $parent } );
+      $meta->putKeyed( 'FIELD', { 'name' => $ownerName, 'title' => $ownerName, 'value' => $parent } );
 
-      # this should be eliminated
-      # set TOPICPARENT to known value to eliminate unwanted hits
-      # on queries
-      $meta->put( "TOPICPARENT", { "name" => "ProjectTopics" } );
+      $meta->put( 'TOPICPARENT', { 'name' => 'ProjectTopics' } );
       
     }
     
     # write submission time into the page if we have a story page
-    if( $ownerName eq "Iteration" ) {
-      $meta->putKeyed( "FIELD", { "name" => "Submitdate", "title" => "Submit date", "value" => &TWiki::Time::formatTime(time(), '$day $mon $year', 'gmtime') } );
-      $meta->putKeyed( "FIELD", { "name" => "State", "title" => "State", "value" => "Submitted" } );
+    if( $ownerName eq 'Iteration' ) {
+      $meta->putKeyed( 'FIELD', { 'name' => 'Submitdate', 'title' => 'Submit date', 'value' => &TWiki::Time::formatTime(time(), '$day $mon $year', 'gmtime') } );
+      $meta->putKeyed( 'FIELD', { 'name' => 'State', 'title' => 'State', 'value' => 'Submitted' } );
     }
 
 
     # save new page in a temp file and open in browser
     my $tmpFile = TWiki::Sandbox::untaintUnchecked( 'TemporaryTopic' );
     my $error = &TWiki::Func::saveTopic( $web, $tmpFile, $meta, $text );
-    # TJW: delete the cache file to work around a problem of cache file being
-    # TJW: not read due to timestamp problem
-    unlink("$cacheFileName");
+    # SMELL: delete the cache file to work around a problem of cache file being
+    # not read due to timestamp problem
+    unlink($cacheFileName);
 
     # open in edit mode
     my $url = &TWiki::Func::getScriptUrl ( $web, $title, 'edit' );
@@ -2170,7 +2171,7 @@ sub xpShowDeveloperTasks {
 sub xpShowLoadAll {
     my( $session, $params, $theTopic, $web ) = @_;
     use TWiki::Attrs;
-    return xpShowLoad( $session, new TWiki::Attrs('developer="all"'), $theTopic, $web );
+    return xpShowLoad( $session, new TWiki::Attrs('who="all"'), $theTopic, $web );
 }
 
 sub xpShowLoad {
@@ -2178,14 +2179,15 @@ sub xpShowLoad {
     &xpCacheRead( $web ) unless $cacheInitialized;
     my( $session, $params, $theTopic, $web ) = @_;
 
-    my $dev = $params->{_DEFAULT} || $params->{developer};
+    my $proj = $params->{_DEFAULT} || $params->{project} || 0;
+    my $dev = $params->{who} || 0;  # default is all developers
     my $showOngoing = ( $params->{ongoing} eq 'on' ) || 0;
     $dev = 0 if ($dev eq 'all');
 
     my $now = time;
     my (@projiter, @projiterDate, @projiterSec, @projiterOngoing, %devDays);
 
-    my @projects = &xpGetAllProjects($web);
+    my @projects = ($proj)?($proj):xpGetAllProjects($web);
 
     # Collect data
     my $count = 0;
