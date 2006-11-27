@@ -107,7 +107,7 @@ msgstr ""
 #. Description
 #: ../templates:4001
 msgid "User Registration configuration required"
-msgstr ""
+msgstr "Configuração do Registro de Usuários necessária"
 
 #. Type: note
 #. Description
@@ -122,3 +122,12 @@ msgid ""
 "created yourself a user, edit the Main.TWikiAdminGroup to restrict Admin "
 "privileges"
 msgstr ""
+"A instalação default to TWiki no Debian está configurada para criar novos "
+"usuários automaticamente quando usuários se registram. Isto não é tão "
+"seguro quanto o TWiki default mas é mais útil para testar o TWiki. Para "
+"alterar isso de forma que os usuários sejam criados manualmente pelo "
+"administrador use a Renomeação de Tópicos do TWiki para renomear o tópico "
+"TWikiRegistration para TWikiRegistrationPub, e TWikiRegistrationDefault para "
+"TWikiRegistration. IMPORTANTE: depois de ter criado um usuário pra você, "
+"edite o Main.TWikiAdminGroup para restringir os privilégios de administrador."
+
