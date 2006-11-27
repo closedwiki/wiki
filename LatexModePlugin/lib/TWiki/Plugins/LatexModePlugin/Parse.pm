@@ -45,7 +45,7 @@ my %commands;
 
 # to prevent executing arbitrary code in the 'eval' below, allow
 # only registered commands to run.
-my @regSubs = ( '&addToTitle', '&formThanks', '&formBib' );
+my @regSubs = ( '&addToTitle', '&formThanks', '&handleAuthor', '&makeTitle', '&formBib', '&formInst' );
 
 # open(F,"/var/www/twiki/conf/latex2tml.cfg") or die $!;
 while (<DATA>) {
@@ -169,7 +169,7 @@ the text to be converted inbetween the tags %BEGINALLTEX% and
 
 \end{document}
 
-%<nop>ENDALLTEX%
+%ENDALLTEX%
 </verbatim>
 
 will be converted to
@@ -212,7 +212,13 @@ sub handleAlltex
 
     #get rid of comments
     # %  ... \n
-    $math_string =~ s!%.*?\n!!gis;
+    # $math_string =~ s!([^\\])%+.*?\n!$1!gs;
+    # $math_string =~ s!%\n!\n!g;
+    # while($math_string =~ s!\n\%+.*?\n!\n!g){};
+    $math_string =~ s!\\%!LMPpcntLMP!g;
+    $math_string =~ s!%.*?\n!!gs;
+    $math_string =~ s!LMPpcntLMP!%!g;
+
 
     my ($pre,$doc);
     #everything between \documentclass and \begin{doc..} is preamble
@@ -231,8 +237,12 @@ sub handleAlltex
     }
 
     if ( exists(TWiki::Func::getContext()->{'genpdflatex'}) ) {
-      # Note: needs improvement
-      return('<latex>'.$doc.'</latex>');
+        # protect latex new-lines at end of physical lines
+        $doc =~ s/(\\\\)$/$1  /gs;
+        #protect paragraph breaks
+        $doc =~ s/\n\n/\n\\par\n/gs;
+
+        return('<latex>'.$doc.'</latex>');
     }
 
     TWiki::Func::getContext()->{'LMPcontext'}->{'title'} = '';
@@ -246,8 +256,10 @@ sub handleAlltex
 
 The parsing is done in three stages:
    1. All environments, e.g. =\begin{env} .. \end{env}= are extracted.  Known environments are converted to HTML/TML.  Unknown environments are rendered as images.
-   2. All complex commands,  e.g. =\command{ .. }{ .. }=,  are extracted.  Known commands are converted to HTML/TML.  Unknown commands are maked as LATEX, for possible rendering in future version of the module or tranlations list.
-   3. All known simple commands remaining in text that falls outside of the previous two types are converted.
+   2. Remaining text is grouped into blocks, 
+   3. Blocks are searched for commands
+      a. Known commands are converted to HTML/TML.  
+      b. Unknown commands are marked as LATEX, for possible rendering in future version of the module or tranlations list.
 
 =end twiki
 
@@ -261,8 +273,9 @@ The parsing is done in three stages:
     $doc = extractBlocks( $doc )
         if ($TWiki::Plugins::LatexModePlugin::Parse::RELEASE > 0.01);
 
-    # convert simple commands to TML
-    # convertSimple($doc);
+    $doc = extractSimple( $doc )
+        if ($TWiki::Plugins::LatexModePlugin::Parse::RELEASE > 0.01);
+
 
 =pod
 
@@ -302,7 +315,7 @@ another topic to correct the rendering problems.
 }
 
 
-my %simple = ( '~' => '&nbsp;',
+my %simple = ( # '\~' => '&nbsp;',
                '\\noindent' => '',
                '\\\\' => "<br>",
                '\vfill' => '',
@@ -317,6 +330,7 @@ my %simple = ( '~' => '&nbsp;',
                '\\AE' => '&AElig;',
                '\\mainmatter' => '',
                '\\clearpage' => '',
+               '\\centering' => '', # clear it, if not caught in block proc
                '\\sloppy' => '' );
 
 foreach my $c (keys %entities) {
@@ -325,16 +339,58 @@ foreach my $c (keys %entities) {
     $simple{$c} = $m;
 }
 
+sub extractSimple {
+
+    my ($doc) = @_;
+
+    # convert simple commands to TML
+    # convertSimple($doc);
+    my ($pre,$block);
+    my $txt = '';
+    do {
+        ($pre,$block,$doc) = umbrellaHook( $doc,
+                                           '\%BEGINLATEX',
+                                           'ENDLATEX\%');
+        
+        if ( ($pre =~ m/\\/) and (length($pre)>0) ) {
+            convertSimple($pre);
+            # $pre =~ s/(\\\w+)\b/%BEGINLATEX{inline="1"}%$1%ENDLATEX%/g;
+            # $pre =~ s/(\\\w+)\b/% \$ $1 \$ %/g;
+        }
+        $txt .= $pre;
+        # $txt .= ($pre =~ m!\\!)? processBlock($pre,$n) : $pre ;
+        # $txt .= '||'.$pre.'||';
+        $txt .= $block;
+        
+    } while ($block ne '');
+    if ( ($doc =~ m/\\/) and (length($doc)>0) ) {
+        convertSimple($doc);
+        # $doc =~ s/(\\\w+)\b/% \$ $1 \$ %/g;
+    }
+    $txt .= $doc;
+    $doc = $txt;
+    $doc =~ s/~+/&nbsp;/g;
+
+    return($doc);
+}
+
 sub convertSimple
 {
     
-    $simple{'\\maketitle'} = TWiki::Func::getContext()->{'LMPcontext'}->{'title'}."\n<br>\n".TWiki::Func::getContext()->{'LMPcontext'}->{'thanks'}."\n<br>\n";
+    # $simple{'\\maketitle'} = TWiki::Func::getContext()->{'LMPcontext'}->{'title'}."\n<br>\n".TWiki::Func::getContext()->{'LMPcontext'}->{'thanks'}."\n<br>\n";
+
+    $_[0]=~s/\\maketitle/&makeTitle()/e;
 
     foreach my $c ( keys %simple ) {
         my $m  = $simple{$c}; 
         # printF( "$c --> $m\n" );
         $_[0] =~ s/\Q$c\E/$m/g;
     }
+    # my $s1 = "%BEGINLATEX<nop>%";
+    # my $s2 = "%<nop>ENDLATEX%";
+    # 
+    # $_[0] =~ s/(\\\w+)\b/$s1$1$s2/g; # mark all unkown commands 
+    
 }
 
 my %embed = ( '\\em' => [ '<em>', '</em>' ],
@@ -360,6 +416,8 @@ sub convertEmbed
     foreach my $c ( keys %embed) {
         # printF( "$c --> @{$embed{'$c'}}\n" );
         if ($b =~ s/\Q$c\E\b//g) {
+            $c = extractBlocks($c);
+                        
             $b = $embed{$c}[0].$b.$embed{$c}[1];
         }
     }
@@ -368,6 +426,168 @@ sub convertEmbed
 }
 
 # use base qw( TWiki::Plugins::LatexModePlugin );
+
+sub expandSpecialChars {
+    return;
+    my ($b,$cmd,$txt) = ('','','');
+    my (@a);
+
+    if ($cmd =~ m!\\[\`\"\'\^\~\.duvtbHc]$!) {
+        # map special text characters to html entities
+        $b =~ s/\\$cmd$//;
+        $txt .= $b;
+        my $t = $cmd.shift(@a);
+        $txt .= ( exists( $entities{$t} ) ) ? 
+            $entities{$t} : 
+            '%BEGINLATEX{inline="1"}%'.$t.'%ENDLATEX%';
+    }
+}
+
+sub expandComplexBlocks {
+    # elsif ( exists( $commands{$cmd} ) ) 
+    my ($cmd,$star,$opts,$aref) = @_;
+
+    my @a = @{$aref};           
+    # a big downside to this is that it makes a copy of the
+    # array... which is the entire text early on.
+
+    my $cnt = scalar(@a);
+    my $txt = '';
+
+    {
+
+        # if found command defined in %commands...
+        my $sz = 0;
+        my $str = $commands{$cmd}{'command'};
+        # print F $b." ";
+        while ($sz < $commands{$cmd}{'size'}) {
+            # grab the number of needed blocks of the stack
+            my $t = shift(@a);
+            if (length($t) > 0) {
+                $t = substr($t,1,length($t)-2);
+                printF( "  :".$t.": " );
+                
+                if ($t =~ m/([\d\.]+)\\linewidth/) {
+                    $t = sprintf("%4.2f",($1/1)*100)."\%";
+                }
+                $sz++;
+                $str =~ s/\$$sz/$t/gs;
+            }
+        }
+        $str =~ s/\$o/$opts/;
+        $str =~ s/\$c/$cmd/;
+        
+        # ensure that twiki section commands land at the start
+        # of a new line
+        $str = "\n\n".$str if ($str=~m/^\-\-\-/); 
+        
+        printF("\n$str\n-+-+-+-\n"); # debug output
+        
+        # process the command...
+        
+        my $cmd = $1 if ($str =~ s/^(&\w+)\((.*)\)$/$2/s);
+        
+        $str = extractBlocks($str) if ($str =~ m/\\/); 
+        # convertSimple($str) if ($str =~ m/\\/); 
+        
+        if (defined($cmd)) {
+            $str =~ s/^(\"|\')|(\"|\')$//g;
+            printF("Try dynamic command: $cmd($str)\n");
+            my @z = grep(@regSubs,$cmd);
+            
+            if ($cmd eq $z[0]) {
+                my $t;
+                eval('$t = '.$cmd.'($str);'); 
+                printF(" ".$@) if $@;
+                $txt .= $t;
+            }
+        } else {
+            $txt .= $str ; # convertEmbed( $str );
+        }
+        printF( "\n" );
+        
+        
+    }
+    return($txt,($cnt-scalar(@a)));
+}
+
+sub processBlock {
+    my ($b,$n) = @_;
+
+    my $txt = '';# " <b>BLOCK-$n:</b>";
+
+    $b = convertEmbed($b);
+
+    if ($b =~ m/^(.+?)%BEGINLATEX.*?ENDLATEX%/s)  {
+        my $g = $b;
+        my ($o2,$n2) = (undef,undef);
+        do {
+            # printF( "====".$g."=====\n" );
+            my $o1 = $1; $o2 = $2;
+            my $n1 = $o1; $n2 = $o2;
+            if ($n1=~m/\\\w+/) {
+                $n1 = extractBlocks($n1);
+            }
+            # printF( "==__".$n1."__===\n" );
+            $b =~ s/\Q$o1\E/$n1/;
+        } while ($g =~ s/\G(.*?)%BEGINLATEX.*?ENDLATEX%(.*)/$2/sg);
+        
+        if (length($o2)>0) {
+            # if ($n2=~m/\\\w+/) {
+            $n2 = extractBlocks($n2);
+            # }
+            # printF( "\n=+=+".$b."+=+= $o2\n" );
+            $b =~ s/\Q$o2\E/$n2/;
+            # printF( "\n=-=-".$b."-=-=\n" );
+        }
+    # } else {
+        # convertSimple($b);
+    }
+    
+    # printF("calling convertEmbed\n");
+    $b = convertEmbed($b);
+    $txt .= $b;
+
+    # $txt .= "<b>:BLOCK-$n</b> ";
+    return($txt);
+}
+
+# sub process_Block_Old {
+#     my ($b,$n) = @_;
+# 
+#     my $txt =  " <b>BLOCK-$n:</b>";
+# 
+#     $b = convertEmbed($b);
+# 
+#     # # examine everything outside of the BEGINLATEX .. ENDLATEX blocks
+#     # # 
+#     my ($pre,$block);
+#     do {
+#         ($pre,$block,$b) = umbrellaHook( $b,
+#                                          '\%BEGINLATEX',
+#                                          'ENDLATEX\%');
+#         
+#         if ( ($pre =~ m/\\/) and (length($pre)>0) ) {
+#             # $pre = extractBlocks($pre);
+#             convertSimple($pre);
+#             $txt .= ' <em>OB:</em>'.$pre.'<em>:OB </em>';
+#         } else {
+#             $txt .= $pre;
+#         }
+#         #  $txt .= ($pre =~ m!\\!)? processBlock($pre,$n) : $pre ;
+#         # $txt .= '||'.$pre.'||';
+#         $txt .= $block;
+#         
+#     } while ($block ne '');
+#     # $b = extractBlocks($b);
+#     convertSimple($b);
+# 
+#     $txt .= ' <em>OB:</em>'.$b.'<em>:OB </em>' if (length($b)>0);
+# 
+#     $txt .= "<b>:BLOCK-$n</b> ";
+#     return($txt);
+# }
+# 
 
 sub extractBlocks {
 
@@ -403,10 +623,6 @@ sub extractBlocks {
             push(@a,$pre);
         }
         push(@a,$block);
-	# $txt .= $pre;
-        # $txt .= "\n>>>> \n";
-        # $txt .= $block;
-        # $txt .= "\n<<<< \n";
 
     } while ($block ne '');
     #there is still some $doc left, so push it onto the stack:
@@ -419,10 +635,10 @@ sub extractBlocks {
 
         ## lump the BEGINLATEX .. ENDLATEX blocks together:
         my $cnt = 0; 
-        while ($b=~m/(BEGIN|END)LATEX/g) { 
+        while ($b=~m/\%(BEGIN|END)LATEX/g) { 
             ($1 eq 'BEGIN') ? $cnt++ : $cnt--;
         }
-        # printF( "\n-- ".scalar(@a)."  $cnt\n".$b );
+        printF( "\n-- ".scalar(@a)."  $cnt\nb: ".$b ) if ($cnt != 0);
         while ( ($cnt !=0) and (scalar(@a) >0) ) {
             my $c = shift(@a);
             if ($c =~ s/^(.*?ENDLATEX%)//s) {
@@ -435,154 +651,99 @@ sub extractBlocks {
                 $b .= $c;
             }
         }
-        printF( "\n++ ".scalar(@a)."\n".$b );
+        printF( "\n++ ".scalar(@a)."\nb: ''".$b."''\n" );
         ## BEGINLATEX .. ENDLATEX blocks are now grouped, proceed to treat
         ## remaining tex commands of the form '\cmd{}' and '\cmd'
         my $NN = ($b =~ m/(\n+)$/) ? $1 : '';
         $b =~ s/\s+$//;
         $b .= $NN;
 
+        if ($b=~m/\\[\"\'\`\^\~\.\[\]\*\=\,\\\w]+$/) {
+            # if the block is a command, it's a complex command
+            my ($cmd,$star,$opts) = ('','','');
+            ($cmd,$star,$opts) = ($1,$2,$3) if
+                (
+                 ($b =~ s!(\\[\"\'\`\^\~\.duvtbHc])$!!) # test for single char commands
+                 or 
+                 ($b =~ s!(\\\w+)\b(\*?)(\[
+                                         ([\\\w\d\.\=\,\s]+?)
+                                         \])?$!!xs) # test for a latex command;
+                 );
+            $star = '' unless defined($star);
+            printF( "\nFound command: $cmd$star ") if ($cmd ne '');
+            (defined($opts) and ($opts ne '') ) ?
+                printF(" opts = $opts \n") : printF("\n");
 
-        my ($cmd,$star,$opts) = ('','','');
-        ($cmd,$star,$opts) = ($1,$2,$3) if
-            (
-             ($b =~ m!(\\[\"\'\`\^\~\.duvtbHc])$!) # test for single char commands
-             or 
-             ($b =~ m!(\\\w+)\b(\*?)(\[
-                                     ([\\\w\d\.\=\,\s]+?)
-                                     \])?$!xs) # test for a latex command;
-             );
-        $star = '' unless defined($star);
-        printF( "\nFound command: $cmd$star ") if ($cmd ne '');
-        (defined($opts) and ($opts ne '') ) ?
-            printF(" opts = $opts \n") : printF("\n");
-        if ($cmd ne '') {
-            if ($cmd =~ m!\\[\`\"\'\^\~\.duvtbHc]$!) {
+            if ($cmd =~ m!\\[\`\"\'\^\~\.duvtbH]$!) {
                 # map special text characters to html entities
-                $b =~ s/\\$cmd$//;
+                # $b =~ s/\\$cmd$//;
                 $txt .= $b;
                 my $t = $cmd.shift(@a);
+                printF($t);
                 $txt .= ( exists( $entities{$t} ) ) ? 
                     $entities{$t} : 
                     '%BEGINLATEX{inline="1"}%'.$t.'%ENDLATEX%';
-            }
-            elsif ( exists( $commands{$cmd} ) ) {
-                # if found command defined in %commands...
-                my $sz = 0;
-                my $str = $commands{$cmd}{'command'};
-                # print F $b." ";
-                while ($sz < $commands{$cmd}{'size'}) {
-                    # grab the number of needed blocks of the stack
-                    my $t = shift(@a);
-                    if (length($t) > 0) {
+            } elsif ($cmd ne '') {
+                # $txt .= "<em>$cmd$star$opts</em>";
+                if ( exists( $commands{$cmd} ) ) {
+                    # $txt .= ' (K) '; # known command
+                    if ($cmd eq '\label') {
+                        my $t = shift(@a);
                         $t = substr($t,1,length($t)-2);
                         printF( "  :".$t.": " );
-
-                        if ($t =~ m/([\d\.]+)\\linewidth/) {
-                            $t = sprintf("%4.2f",($1/1)*100)."\%";
-                        }
-                        $sz++;
-                        $str =~ s/\$$sz/$t/gs;
-                    }
-                }
-                $str =~ s/\$o/$opts/;
-                $str =~ s/\$c/$cmd/;
-
-                # ensure that twiki section commands land at the start
-                # of a new line
-                $str = "\n\n".$str if ($str=~m/^\-\-\-/); 
-
-                printF("\n$str\n---\n"); # debug output
-
-                if ($cmd eq '\label') {
-                    my $t = ' %SECLABEL{'.$str.'}% ';
-                    $txt =~ s/(---\++\!?\s+)([\w\s\$\%\\]+)$/$1$t$2/s;
-                } else {
-                    # process the command...
-
-                    my $cmd = $1 if ($str =~ s/^(&\w+)\((.*)\)$/$2/s);
-
-                    $str = extractBlocks($str) if ($str =~ m/\\/); 
-                    convertSimple($str) if ($str =~ m/\\/); 
-
-                    if (defined($cmd)) {
-                        $str =~ s/^(\"|\')|(\"|\')$//g;
-                        printF("Try dynamic command: $cmd($str)\n");
-                        my @z = grep(@regSubs,$cmd);
-
-                        if ($cmd eq $z[0]) {
-                            my $t;
-                            eval('$t = '.$cmd.'($str);'); 
-                            printF(" ".$@) if $@;
-                            $txt .= $t;
-                        }
+                        $t = ' %SECLABEL{'.$t.'}% ';
+                        $txt =~ s/(---\++\!?\s+)([\w\s\$\%\\]+)$/$1$t$2/s;
                     } else {
-                        $txt .= convertEmbed( $str );
+                        # (defined($opts)) ?
+                        # $b =~ s/\$cmd\*?\Q$opts\E//;
+                        # $b =~ s/\$cmd\*?//;
+                        $txt .= $b;
+                        my($a,$trimcnt) = 
+                            expandComplexBlocks($cmd,$star,$opts,\@a);
+                        $txt .= $a;
+                        foreach (1 .. $trimcnt) { shift(@a); }
                     }
-                }
-                printF( "\n" );
-            } else {
-                my $lngth = length($b)-length($cmd);
-                $lngth = $lngth - length($opts) if defined($opts);
-                my $pre = substr($b,0,$lngth);
-
-                &convertSimple($pre);
-                $opts .= shift(@a) if ($a[0]=~m/^\{/);
-
-                &convertSimple($cmd);
-                if ($cmd =~ m/\\/) {
-                    $txt .= convertEmbed( $pre.' %<nop>BEGINLATEX% '.$cmd.$opts.' %ENDLATEX% ' );
                 } else {
-                    $txt .= $cmd;
-                }
-                        
-            } 
-        # } elsif ( $b =~ m/^\s*\\/ ) {
-        #     if ( $a[0] =~ m/\{/) {
-        #         $b .= shift(@a);
-        #     }
-        #     $txt .= '%BEGINLATEX%'.$b.'%ENDLATEX%';
-        } else {
-            #my $t = shift(@a);
-            #if ($t =~ m/^\s*\{/) {
-            #    print F "\ntesting: $b$t \n";
-            #}
-            # unshift(@a,$t);
-            $b = convertEmbed($b);
-
-            if ($b =~ m/^(.+?)%BEGINLATEX.*?ENDLATEX%/s)  {
-                my $g = $b;
-                my ($o2,$n2) = (undef,undef);
-                do {
-                    # printF( "====".$g."=====\n" );
-                    my $o1 = $1; $o2 = $2;
-                    my $n1 = $o1; $n2 = $o2;
-                    if ($n1=~m/\\\w+/) {
-                        $n1 = extractBlocks($n1);
-                        convertSimple($n1);
+                    # unknown command
+                    if ($cmd ne '\c') {
+                        my $s1 = "%BEGINLATEX<nop>% "; 
+                        # $b =~ s/(\\[\"\'\`\^\~\.\w]+)$/$s1$1/;
+                        $s1 .= $cmd;
+                        $s1 .= $star if defined($star);
+                        $s1 .= $opts if defined($opts);
+                        $b = $s1.$b;
+                        # if the first character of the next block is a brace, it
+                        # likely means we have a complex command...  So group
+                        # them.
+                        while ( (scalar(@a)>0) and
+                                (($a[0]=~m/^\s*(\{|\})/s) or (length($a[0])==0)) ){
+                            $b .= shift(@a);
+                        } 
+                        $b .= " %<nop>ENDLATEX% ";
                     }
-                    # printF( "==__".$n1."__===\n" );
-                    $b =~ s/\Q$o1\E/$n1/;
-                } while ($g =~ s/\G(.*?)%BEGINLATEX.*?ENDLATEX%(.*)/$2/sg);
-
-                if (length($o2)>0) {
-                    # if ($n2=~m/\\\w+/) {
-                        $n2 = extractBlocks($n2);
-                        convertSimple($n2);
-                    # }
-                    # printF( "\n=+=+".$b."+=+= $o2\n" );
-                    $b =~ s/\Q$o2\E/$n2/;
-                    # printF( "\n=-=-".$b."-=-=\n" );
+                    printF($b."\n");
+                    $txt .= $b; 
                 }
             } else {
-                convertSimple($b);
+                $txt .= $b;# . "<font size=\"+5\">Parse: shouldn't get here</font>";
             }
-
-            # printF("calling convertEmbed\n");
+        } elsif ($b=~m/\{/) {
+            #
             $b = convertEmbed($b);
+            (my $c=$b)=~s/%BEGINLATEX.*?ENDLATEX%//gs;
+            $c=~s/%\p{IsUpper}+?\{.*\}%//gs; # take out all twiki tags
+            # should probably look for nested tags
+            
+            $b = extractBlocks($b) if ($c=~m/\{/);
             $txt .= $b;
-            # printF( length($txt)."\n" );
+        } else {
+            (my $c=$b)=~s/%BEGINLATEX.*?ENDLATEX%//gs;
+            $txt .= ( ($c =~ m!\\!) and !($b=~m/^\s*$/)) ? 
+                processBlock($b,scalar(@a)) : $b ;
+            #$txt .= " <b>BLOCK+".scalar(@a).":</b>".$b.
+            #     "<b>:BLOCK+".scalar(@a)."</b> " if !( $b =~ m/^\s*$/);
         }
+
     } while (scalar(@a)>0);
 
     return($txt);
@@ -733,7 +894,7 @@ sub convertEnvironment
     elsif ($bname eq 'center') {
         $block =~ s!\\(begin|end)\{center\}!!g;
         $block =  extractEnvironments($block);
-        $block =  extractBlocks($block);
+        # $block =  extractBlocks($block);
 
         $txt .= '<div align="center">'.$block.'</div>';
     } 
@@ -748,14 +909,16 @@ sub convertEnvironment
         $block =~ s!\\end\{$bname\}$!</div>!;
         
         $block = extractEnvironments($block);
-        $txt .= extractBlocks( $block );
+        # $block = extractBlocks( $block );
+        $txt .= $block;
     }
     elsif ( ($bname eq 'quotation') || ($bname eq 'quote') ) {
         $block =~ s!^\\begin\{$bname\}!<blockquote>!;
         $block =~ s!\\end\{$bname\}$!</blockquote>!;
 
         $block = extractEnvironments($block);
-        $txt .= extractBlocks( $block );
+        # $block .= extractBlocks( $block );
+        $txt .= $block;
     }
     # elsif ($bname eq 'verbatim') {
     #     $block =~ s!^\\begin\{$bname\}!<verbatim>!;
@@ -797,6 +960,50 @@ sub convertEnvironment
         }
         $txt .= $block;
     }
+    elsif ($bname =~ /tabular/) {
+        printF("=====processing tabular=====\n");
+        $block =~ s!^\\begin\{$bname\*?\}(\[\w+\])?!!;
+        $block =~ s!\\end\{$bname\*?\}$!!; 
+        
+        $block =~ s/\x0d?\n//g;
+        $block =~ s/\{(\w+)\}//;
+        printF($block);
+
+        my $struct = $1;
+        $struct =~ s/\|//g;
+        printF("\nstruct: ".$struct."\n");
+        my @rows = split(/\\\\/,$block);
+        my $t = "<table>\n";
+        foreach my $r (@rows) {
+            $t .= "<tr>";
+            my @l = split(/\&/,$r);
+            if ($l[0]=~s/\\hline//){
+                $t .= '<tr><td colspan="'.length($struct).'">'.
+                    '<hr></td></tr>'."\n";
+            }
+            foreach my $cnt ( 0 .. (scalar(@l)-1) ) {
+                $t .= "\t".'<td align="';
+                my $a = substr($struct,$cnt,1);
+                if ($a eq 'c') {  $t .= 'center'; }
+                elsif ($a eq 'r') {  $t .= 'right'; }
+                else {  $t .= 'left'; }
+                $t .= '">';
+                $l[$cnt] =~ s/^\s+/ /;
+                $l[$cnt] =~ s/\s+$/ /;
+                if ($l[$cnt] =~ m/\\/) {
+                    $l[$cnt] = extractEnvironments($l[$cnt]);
+                    $l[$cnt] = extractBlocks($l[$cnt]);
+                }
+                $t .= $l[$cnt];
+                $t .= '</td>'."\n";
+            }
+            $t .= "</tr>\n";
+        }
+        $t .= "</table>\n";
+        $txt .= $t;
+        printF("\n$t\n");
+        printF("\n===== done with tabular ====\n");
+    }
     elsif ($bname =~ /(figure|table)(\*?)/) {
         my $type = uc($1);
         my $span = ($2 eq '*') ? ' span="twoc" ' : '';
@@ -814,15 +1021,19 @@ sub convertEnvironment
         if (length($caption) > 0) {
             $caption = substr($caption,1,length($caption)-2);
             if ($caption =~ m/\\/) {
+                # $caption = convertEmbed( $caption );
                 $caption = extractEnvironments($caption);
+                # captions are stored in the TWiki tag, which is not
+                # processed later... so process the contents now.
                 $caption = extractBlocks( $caption );
-                $caption =~ s/\"/\\\"/g;
+                $caption =~ s/([\"])/\\$1/g;
             }
             $caption = 'caption="'.$caption.'"';
         }
         $txt .= '%BEGIN'.$type.'{'.$label.' '.$caption.' '.$span.'}%';
 
         $env = extractEnvironments($env);
+        # $env = extractBlocks($env);
 
         $txt .= $env;
         $txt .= '%END'.$type.'%';
@@ -897,6 +1108,8 @@ sub umbrellaHook
 
     my $before = '';
 
+    my $cnt = 0;
+
     if($txt =~ s!^(.*?)($delim_l)!!is) {
 	$nleft++;
 	$before = $1;
@@ -906,8 +1119,7 @@ sub umbrellaHook
 #	my $pl = -1;
 #	my $pr = -1;
 
-	while($nright < $nleft) {
-
+	while ($nright < $nleft) {
 	    if($txt =~ s!^(.*?)($delim_r)!!is) {
 		$nright++;
                 $front = $1; 
@@ -977,13 +1189,13 @@ sub handleNewTheorem {
 
 =begin text
 
-use TWiki:Plugins.PerlDocPlugin to see list of supported commands
+use TWiki:Plugins.PerlDocPlugin to see a complete list of supported commands
 
 =end text
 
 =begin man
 
-use TWiki:Plugins.PerlDocPlugin to see list of supported commands
+use TWiki:Plugins.PerlDocPlugin to see a complete list of supported commands
 
 =end man
 
@@ -1001,6 +1213,7 @@ use TWiki:Plugins.PerlDocPlugin to see list of supported commands
    * commands with limited support
       * includegraphics, 
       * label (works with equations, figures, tables, and sections) 
+      * tabular (alignment and \hline works, vertical lines are ignored however.  multicolumn support needs to be added.)
       * title, address, name, maketitle (these work, but don&rsquo;t match the latex class output of the original document)
 
    * commands that are ignored
@@ -1103,7 +1316,12 @@ solution.
 
 =head3 Including Graphics
 
-There are many ways to include graphics in latex files.  So, I figured the most reasonable way to support them all is to render them using the backend image rendering.  This actually works OK, but introduces some minor complications.   For parsing and rendering raw latex files, the orginal _graphics_ files needs to be in .eps format in order to be understood by the =latex= command used during background rendering.  However, the =genpdflatex= script uses =pdflatex= instead, which works better with .pdf or .png image files.  One solution is to store .eps files and use =epstopdf= from the teTeX distribution to convert them to .pdf when using =genpdflatex=.   Alternatively, one can write a custom TWiki macro to handle attached .pdf images (e.g. %SHOWPDF{image.pdf}%), and then use a translation declaration to render the image (e.g. =:\includegraphics:1:%SHOWPDF{$1}%:=).
+There are many ways to include graphics in latex files.  So, I figured the most reasonable way to support them all is to render them using the backend image rendering.  As of TWiki:Plugins.LatexModePlugin v3.3, the rendering of images in TWiki can be done dynamically using =dvipng=, =dvips=, or =pdflatex=.  So, to render images in twiki, one can 
+   * use the =includegraphics= command from the =graphicx= package, but do not declare the filename extension.
+   * attach the image to the topic, with the file type extension stated. <br> The Plugin recognizes .eps, .pdf, .png, and .jpg file types.
+   * the correct rendering engine will be called based on the image filename extension.
+
+Alternatively, one can write a custom TWiki macro to handle attached .pdf images (e.g. %SHOWPDF{image.pdf}%), and then use a translation declaration to render the image (e.g. =:\includegraphics:1:%SHOWPDF{$1}%:=).
 
 
 =head2 Acknowledgements
@@ -1157,7 +1375,17 @@ sub formThanks {
 
     TWiki::Func::getContext()->{'LMPcontext'}->{'thankscnt'} = $cnt;
 
-    return( '%BEGINLATEX{inline="1"}% $^'.$cnt.'$ %ENDLATEX%' );
+    # return( '%BEGINLATEX{inline="1"}% $^'.$cnt.'$ %ENDLATEX%' );
+    return( '<sup>'.$cnt.'</sup>' );
+
+}
+
+sub makeTitle {
+    my $t = TWiki::Func::getContext()->{'LMPcontext'}->{'title'}.
+        "\n<br>\n".
+        TWiki::Func::getContext()->{'LMPcontext'}->{'thanks'}.
+        "\n<br>\n";
+    return( $t );
 }
 
 sub formBib {
@@ -1180,17 +1408,46 @@ sub formBib {
     }
 }
 
+
+sub handleAuthor {
+    my ($str) = @_;
+    my @a = split(/\\and/,$str);
+    if (scalar(@a)>1) {
+        $a[ $#a ] = ' and '.$a[ $#a  ];
+        $str = join(', ',@a );
+    }
+
+    addToTitle('<div align="center"><font size="+1">'.$str.'</font></div>');
+
+}
+
+sub formInst {
+    my ($str) = @_;
+    my @a = split(/\\and/,$str);
+
+    my $cnt =   TWiki::Func::getContext()->{'LMPcontext'}->{'thankscnt'};
+    foreach (@a) {
+        $cnt = $cnt + 1;
+
+        TWiki::Func::getContext()->{'LMPcontext'}->{'thanks'} .=
+            $cnt.'. '.$_."<br>\n";
+
+        TWiki::Func::getContext()->{'LMPcontext'}->{'thankscnt'} = $cnt;
+    }
+}
+
 # 
-# :\includegraphics:1:%SHOWPDF{$1}%:
+# 
 # :\title:1: <h1 align="center">$1</h1> :
 # 
+# :\includegraphics:1:%SHOWPDF{$1}%:
 __DATA__
 :\section:1:---+ $1 \n:
 :\subsection:1:---++ $1 \n::
 :\subsubsection:1:---+++ $1 \n::
-:\cite:1: %CITE{$1}%:
-!\ref!1! %REFLATEX{$1}%!
-!\eqref!1! %REFLATEX{$1}%!
+:\cite:1:~%CITE{$1}%:
+!\ref!1!~%REFLATEX{$1}%!
+!\eqref!1!~%REFLATEX{$1}%!
 !\parbox!2!<table align="left" width="$1"><tr><td>$2</table>!
 !\fbox!1!<table align="left" border="1"><tr><td>$1</table>!
 :\emph:1: <em>$1</em>:
@@ -1199,19 +1456,31 @@ __DATA__
 :\hspace*:1::
 :\hspace:1::
 :\name:1:&addToTitle('<div align="center">$1</div>'):
-:\includegraphics:1:%BEGINLATEX{attachment="$1" engine="ps"}% \includegraphics$o{$1} %ENDLATEX%:
+:\includegraphics:1:%BEGINLATEX{attachment="$1" engine="pdf"}% \includegraphics$o{$1} %ENDLATEX%:
 :\label:1:$1:  # modifies a past-parsed string to insert %SECLABEL% above
 :\bibliographystyle:1:&formBib('bibstyle="$1"'):
 :\bibliography:1:&formBib('file="$1"'):
-:\maketitle:0: \maketitle :
+:\maketitle:0:&makeTitle():
 :\thanks:1:&formThanks('$1'):
-!\footnote!1! <br><hr style="height:1px;width:90%"><font size="-3"> $1 </font><hr  style="height:1px;width:90%">!
+!\footnote!1! <br><blockquote><hr style="height:1px;"><font size="-3">Footnote: $1 </font><hr style="height:1px;"></blockquote>!
 :\runningtitle:2: :
 :\title:1:&addToTitle(<h1 align="center">$1</h1>):
-:\author:1:&addToTitle(<div align="center"><font size="+1">$1</font></div>):
+:\author:1:&handleAuthor('$1'):
 !\address!1!&addToTitle(<table align="center"><tr><td valign="top">Address correspondence to:<td valign="top">$1</table>)!
 :\url:1: $1:
 :\textit:1: _$1_ :
 :\textbf:1: *$1* :
 :\centerline:1:<div align="center">$1</div>:
 :\thispagestyle:1: :
+:\pagestyle:1: :
+:\frontmatter:0::
+:\mainmatter:0::
+!\titlerunning!1! *Running Title:* $1!
+!\authorrunning!1! *Authors:* $1!
+:\tocauthor:1::
+:\institute:1:&formInst('$1'):
+:\inst:1:<sup>$1</sup>:
+:\email:0: :
+:\AE:0: &AElig;:
+:\ae:0: &aelig;:
+:\tableofcontents:0:%TOC%:
