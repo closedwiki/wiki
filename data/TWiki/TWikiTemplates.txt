@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1159684864" format="1.1" version="1.2"}%
+%META:TOPICINFO{author="TWikiContributor" date="1164676388" format="1.1" version="$Rev$"}%
 %TOC%
 %STARTINCLUDE%
 ---# TWiki Templates
@@ -13,6 +13,8 @@ There are three types of template:
    * *Template Topics*: Define default text when you create a new topic
 
 All three types of template use the TWiki template system.
+
+__%T% Tip:__ TWiki:TWiki.TWikiTemplatesSupplement on TWiki.org has supplemental documentation on TWiki templates.
 
 ---++ The TWiki Template System
 
