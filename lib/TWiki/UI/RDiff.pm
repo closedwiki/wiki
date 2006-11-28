@@ -376,6 +376,7 @@ sub _renderRevisionDiff
 =pod
 
 ---++ StaticMethod diff( $session, $web, $topic, $query )
+
 =diff= command handler.
 This method is designed to be
 invoked via the =TWiki::UI::run= method.

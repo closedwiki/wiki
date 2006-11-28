@@ -64,6 +64,7 @@ Later again in TWiki::new, plugins are given a chance to *override* the username
 The last step in TWiki::new is to find the user, using whatever user mapping manager is in place.
 
 ---++ ObjectData =twiki=
+
 The TWiki object this login manager is attached to.
 
 =cut
@@ -94,6 +95,7 @@ $M3 = chr(7);
 =pod
 
 ---++ StaticMethod makeLoginManager( $twiki ) -> $TWiki::Client
+
 Factory method, used to generate a new TWiki::Client object
 for the given session.
 
@@ -302,6 +304,7 @@ sub loadSession {
 =pod
 
 ---++ ObjectMethod checkAccess()
+
 Check if the script being run in this session is authorised for execution.
 If not, throw an access control exception.
 
@@ -334,6 +337,7 @@ sub checkAccess {
 =pod
 
 ---++ ObjectMethod finish
+
 Complete processing after the client's HTTP request has been responded
 to. Flush the user's session (if any) to disk.
 
@@ -357,6 +361,7 @@ sub finish {
 =pod
 
 ---++ StaticMethod expireDeadSessions()
+
 Delete sessions and passthrough files that are sitting around but are really expired.
 This *assumes* that the sessions are stored as files.
 
@@ -534,6 +539,7 @@ sub _rewriteFORM {
 =pod
 
 ---++ ObjectMethod endRenderingHandler()
+
 This handler is called by getRenderedVersion just before the plugins
 postRenderingHandler. So it is passed all HTML text just before it is
 printed.
@@ -595,6 +601,7 @@ sub addCookie {
 =pod
 
 ---++ ObjectMethod modifyHeader( \%header )
+
 Modify a HTTP header
    * =\%header= - header entries
 
@@ -618,6 +625,7 @@ sub modifyHeader {
 =pod
 
 ---++ ObjectMethod redirectCgiQuery( $url )
+
 Generate an HTTP redirect on STDOUT, if you can. Return 1 if you did.
    * =$url= - target of the redirection.
 
@@ -661,6 +669,7 @@ sub redirectCgiQuery {
 =pod
 
 ---++ ObjectMethod getSessionValues() -> \%values
+
 Get a name->value hash of all the defined session variables
 
 =cut
@@ -676,6 +685,7 @@ sub getSessionValues {
 =pod
 
 ---++ ObjectMethod getSessionValue( $name ) -> $value
+
 Get the value of a session variable.
 
 =cut
@@ -690,6 +700,7 @@ sub getSessionValue {
 =pod
 
 ---++ ObjectMethod setSessionValue( $name, $value )
+
 Set the value of a session variable.
 We do not allow setting of AUTHUSER.
 
@@ -711,6 +722,7 @@ sub setSessionValue {
 =pod
 
 ---++ ObjectMethod clearSessionValue( $name )
+
 Clear the value of a session variable.
 We do not allow setting of AUTHUSER.
 

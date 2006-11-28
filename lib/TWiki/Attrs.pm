@@ -24,6 +24,7 @@
 =pod
 
 ---+ package TWiki::Attrs
+
 Class of attribute sets, designed for parsing and storing attribute values
 from a TWiki tag e.g. =%TAG{fred='bad' "sad" joe="mad"}%=
 
@@ -60,6 +61,7 @@ $RAWKEY     = '_RAW';
 =pod
 
 ---++ ClassMethod new ($string, $friendly) => \%attrsObjectRef
+
    * =$string= - String containing attribute specification
    * =$friendly= - if true, the parse will be according to the extended syntax pioneered by the original Contrib::Attrs. Otherwise it will be strict as per traditional TWiki syntax.
 
@@ -157,6 +159,7 @@ sub new {
 =pod
 
 ---++ ObjectMethod isEmpty() -> boolean
+
 Return false if attribute set is not empty.
 
 =cut
@@ -175,6 +178,7 @@ sub isEmpty {
 =pod
 
 ---++ ObjectMethod remove($key) -> $value
+
 | $key | Attribute to remove |
 Remove an attr value from the map, return old value. After a call to
 =remove= the attribute is no longer defined.
@@ -192,6 +196,7 @@ sub remove {
 =pod
 
 ---++ ObjectMethod stringify() -> $string
+
 Generate a printed form for the map, using standard
 attribute syntax, with only the single-quote extension
 syntax observed (no {} brackets, though).
@@ -218,6 +223,7 @@ sub stringify {
 =pod
 
 ---++ StaticMethod extractValue() -> $string
+
 Legacy support, formerly known as extractNameValuePair. This
 static method uses context information to determine how a value
 string is to be parsed. For example, if you have an attribute string
@@ -226,7 +232,6 @@ like this:
 "abc def="ghi" jkl" def="qqq"
 
 then call extractValue( "def" ), it will return "ghi".
-
 
 =cut
 
@@ -268,6 +273,7 @@ sub extractValue {
 =pod
 
 ---++ ObjectMethod get($key) -> $value
+
 | $key | Attribute to get |
 Get an attr value from the map.
 

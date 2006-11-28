@@ -34,7 +34,9 @@ use TWiki::UI;
 =pod
 
 ---++ StaticMethod search( $session )
+
 Perform a search as dictated by CGI parameters:
+
 | *Parameter:* | *Description:* | *Default:* |
 | ="text"= | Search term. Is a keyword search, literal search or regular expression search, depending on the =type= parameter. SearchHelp has more | required |
 | =search="text"= | (Alternative to above) | N/A |

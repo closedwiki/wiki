@@ -74,6 +74,7 @@ use vars qw( @registrableHandlers %deprecated );
 =pod
 
 ---++ ClassMethod new( $session, $name, $module )
+
    * =$session= - TWiki object
    * =$name= - name of the plugin e.g. MyPlugin
    * =$module= - (options) name of the plugin class. Default is TWiki::Plugins::$name

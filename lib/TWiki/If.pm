@@ -35,6 +35,7 @@ package TWiki::IfNode;
 =pod
 
 ---++ ClassMethod new( $l, $o, $r ) -> \$if
+
 Construct a new parse node,
 
 =cut
@@ -51,6 +52,7 @@ sub new {
 =pod
 
 ---++ ObjectMethod evaluate($twiki) -> $result
+
 Execute the parse node.
 
 =cut
@@ -231,8 +233,11 @@ $defOps{or} =
 =pod
 
 ---++ ClassMethod new( \%operators ) -> \%factory
+
 Construct a new if node factory.
+
    * =\%operators= reference to a hash of operators.
+
 Each operator must have the following fields: prec (precedence) type (0 unary 1 binary) exec (ref to a function to execute). If not provided, the default set of boolean operations supported by %IF is used.
 
 =cut
@@ -259,7 +264,9 @@ sub new {
 =pod
 
 ---++ ObjectMethod parse( $string ) -> \$if
+
    * =$string= - string containing an expression to parse
+
 Construct a new search node by parsing the passed expression. Return
 the new object.
 

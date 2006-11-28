@@ -140,6 +140,7 @@ sub parseTime {
 =pod
 
 ---++ StaticMethod formatTime ($epochSeconds, $formatString, $outputTimeZone) -> $value
+
    * =$epochSeconds= epochSecs GMT
    * =$formatString= twiki time date format, default =$day $month $year - $hour:$min=
    * =$outputTimeZone= timezone to display, =gmtime= or =servertime=, default is whatever is set in $TWiki::cfg{DisplayTimeValues}
@@ -159,6 +160,7 @@ sub parseTime {
    | $email | full email format date/time |
    | $rcs | full RCS format date/time |
    | $epoch | seconds since 1st January 1970 |
+
 =cut
 
 # previous known as TWiki::formatTime

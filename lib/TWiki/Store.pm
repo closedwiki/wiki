@@ -88,6 +88,7 @@ sub new {
 =pod
 
 ---++ ObjectMethod finish
+
 Complete processing after the client's HTTP request has been responded
 to.
    1 breaking circular references to allow garbage collection in persistent
@@ -285,6 +286,7 @@ sub moveAttachment {
 =pod
 
 ---++ ObjectMethod getAttachmentStream( $user, $web, $topic, $attName ) -> \*STREAM
+
    * =$user= - the user doing the reading, or undef if no access checks
    * =$web= - The web
    * =$topic= - The topic
@@ -411,8 +413,11 @@ sub _findAttachments {
 }
 
 =pod
+
 ---++ ObjectMethod _removeAutoAttachmentsFromMeta
+
 This is where we are going to remove from meta any entry that is marked as an automatic attachment.
+
 =cut
 
 sub _removeAutoAttachmentsFromMeta {
@@ -686,6 +691,7 @@ sub getRevisionDiff {
 =pod
 
 ---++ ObjectMethod getRevisionInfo($web, $topic, $rev, $attachment) -> ( $date, $user, $rev, $comment )
+
 Get revision info of a topic.
    * =$web= Web name, optional, e.g. ='Main'=
    * =$topic= Topic name, required, e.g. ='TokyoOffice'=
@@ -728,6 +734,7 @@ sub getRevisionInfo {
 =pod
 
 ---++ StaticMethod dataEncode( $uncoded ) -> $coded
+
 Encode meta-data fields, escaping out selected characters. The encoding
 is chosen to avoid problems with parsing the attribute values, while
 minimising the number of characters encoded so searches can still work
@@ -750,6 +757,7 @@ sub dataEncode {
 =pod
 
 ---++ StaticMethod dataDecode( $encoded ) -> $decoded
+
 Decode escapes in a string that was encoded using dataEncode
 
 The encoding has to be exported because TWiki (and plugins) use
@@ -803,6 +811,7 @@ sub _singleKey {
 =pod
 
 ---++ ObjectMethod saveTopic( $user, $web, $topic, $text, $meta, $options  )
+
    * =$user= - user doing the saving (object)
    * =$web= - web for topic
    * =$topic= - topic to atach to
@@ -884,6 +893,7 @@ sub saveTopic {
 =pod
 
 ---++ ObjectMethod saveAttachment ($web, $topic, $attachment, $user, $opts )
+
    * =$user= - user doing the saving
    * =$web= - web for topic
    * =$topic= - topic to atach to
@@ -1091,6 +1101,7 @@ sub _noHandlersSave {
 =pod
 
 ---++ ObjectMethod repRev( $user, $web, $topic, $text, $meta, $options )
+
 Replace last (top) revision with different text.
 
 Parameters and return value as saveTopic, except
@@ -1247,6 +1258,7 @@ sub lockTopic {
 =pod
 
 ---++ ObjectMethod unlockTopic( $user, $web, $topic )
+
 Release the topic lock on the given topic. A topic lock will cause other
 processes that also try to claim a lock to block. It is important to
 release a topic lock after a guard section is complete. This should
@@ -1723,6 +1735,7 @@ sub createWeb {
 =pod
 
 ---++ ObjectMethod removeWeb( $user, $web )
+
    * =$user= - user doing the removing (for the history)
    * =$web= - web being removed
 
@@ -1883,6 +1896,7 @@ sub cleanUpRevID {
 =pod
 
 ---++ ObjectMethod copyTopic($user, $fromweb, $fromtopic, $toweb, $totopic)
+
 Copy a topic and all it's attendant data from one web to another.
 
 SMELL: Does not fix up meta-data!
@@ -2029,6 +2043,7 @@ sub searchInWebContent {
 =pod
 
 ---++ ObjectMethod getRevisionAtTime( $web, $topic, $time ) -> $rev
+
    * =$web= - web for topic
    * =$topic= - topic
    * =$time= - time (in epoch secs) for the rev
@@ -2049,6 +2064,7 @@ sub getRevisionAtTime {
 =pod
 
 ---++ ObjectMethod getLease( $web, $topic ) -> $lease
+
    * =$web= - web for topic
    * =$topic= - topic
 

@@ -83,10 +83,12 @@ use vars qw ( $VERSION $SESSION $inited );
 =pod
 
 ---++ PUBLIC constant $VERSION
+
 This is the version number of the plugins package. Use it for checking
 if you have a recent enough version.
 
 ---++ PUBLIC $SESSION
+
 This is a reference to the TWiki session object. It can be used in
 plugins to get at the methods of the TWiki kernel.
 
@@ -300,6 +302,7 @@ sub getPluginVersion {
 =pod
 
 ---++ ObjectMethod addListener( $command, $handler )
+
    * =$command* - name of the event
    * =$handler= - the handler object.
 
@@ -339,6 +342,7 @@ sub _dispatch {
 =pod
 
 ---++ ObjectMethod haveHandlerFor( $handlerName ) -> $boolean
+
    * =$handlerName= - name of the handler e.g. preRenderingHandler
 Return: true if at least one plugin has registered a handler of
 this type.

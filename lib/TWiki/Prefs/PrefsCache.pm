@@ -94,6 +94,7 @@ sub new {
 =pod
 
 ---++ ObjectMethod finalise( $parent )
+
 Finalise preferences in this cache, by freezing any preferences
 listed in FINALPREFERENCES at their current value.
    * $parent = object that supports getPreferenceValue
@@ -177,6 +178,7 @@ sub loadPrefsFromText {
 =pod
 
 ---++ ObjectMethod insert($type, $key, $val)
+
 Adds a key-value pair of the given type to the object. Type is Set or Local.
 Callback used for the Prefs::Parser object, or can be used to add
 arbitrary new entries to a prefs cache.
@@ -206,6 +208,7 @@ sub insert {
 =pod
 
 ---++ ObjectMethod stringify($html, \%shown) -> $text
+
 Generate an (HTML if $html) representation of the content of this cache.
 
 =cut

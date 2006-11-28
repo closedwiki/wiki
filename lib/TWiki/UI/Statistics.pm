@@ -24,9 +24,11 @@
 =begin twiki
 
 ---+ package TWiki::UI::Statistics
+
 Statistics extraction and presentation
 
 =cut
+
 package TWiki::UI::Statistics;
 
 use strict;
@@ -48,6 +50,7 @@ BEGIN {
 =pod
 
 ---++ StaticMethod statistics( $session )
+
 =statistics= command handler.
 This method is designed to be
 invoked via the =TWiki::UI::run= method.

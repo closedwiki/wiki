@@ -47,6 +47,7 @@ use TWiki::Time;
 =pod
 
 ---++ ClassMethod new( $session )
+
 Constructor
 
 =cut

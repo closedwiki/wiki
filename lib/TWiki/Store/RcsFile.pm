@@ -19,6 +19,7 @@
 # As per the GPL, removal of this notice is prohibited.
 
 =pod
+
 ---+ package TWiki::Store::RcsFile
 
 This class is PACKAGE PRIVATE to Store, and should never be
@@ -47,6 +48,7 @@ use TWiki::Sandbox;
 =pod
 
 ---++ ClassMethod new($session, $web, $topic, $attachment)
+
 Constructor. There is one object per stored file.
 
 Note that $web, $topic and $attachment must be untainted!
@@ -141,6 +143,7 @@ sub _controlFileName {
 =pod
 
 ---++ ObjectMethod getRevisionInfo($version) -> ($rev, $date, $user, $comment)
+
    * =$version= if 0 or undef, or out of range (version number > number of revs) will return info about the latest revision.
 
 Returns (rev, date, user, comment) where rev is the number of the rev for which the info was recovered, date is the date of that rev (epoch s), user is the login name of the user who saved that rev, and comment is the comment associated with the rev.
@@ -160,6 +163,7 @@ sub getRevisionInfo {
 =pod
 
 ---++ ObjectMethod getLatestRevision() -> $text
+
 Get the text of the most recent revision
 
 =cut
@@ -172,6 +176,7 @@ sub getLatestRevision {
 =pod
 
 ---++ ObjectMethod getLatestRevisionTime() -> $text
+
 Get the time of the most recent revision
 
 =cut
@@ -184,6 +189,7 @@ sub getLatestRevisionTime {
 =pod
 
 ---++ ObjectMethod readMetaData($name) -> $text
+
 Get a meta-data block for this web
 
 =cut
@@ -270,6 +276,7 @@ sub getTopicNames {
 =pod
 
 ---++ ObjectMethod getWebNames() -> @webs
+
 Gets a list of names of subwebs in the current web
 
 =cut
@@ -363,6 +370,7 @@ sub searchInWebContent {
 =pod
 
 ---++ ObjectMethod moveWeb(  $newWeb )
+
 Move a web.
 
 =cut
@@ -380,6 +388,7 @@ sub moveWeb {
 =pod
 
 ---++ ObjectMethod getRevision($version) -> $text
+
    * =$version= if 0 or undef, or out of range (version number > number of revs) will return the latest revision.
 
 Get the text of the given revision.
@@ -397,6 +406,7 @@ sub getRevision {
 =pod
 
 ---++ ObjectMethod storedDataExists() -> $boolean
+
 Establishes if there is stored data associated with this handler.
 
 =cut
@@ -450,6 +460,7 @@ sub restoreLatestRevision {
 =pod
 
 ---++ ObjectMethod removeWeb( $web )
+
    * =$web= - web being removed
 
 Destroy a web, utterly. Removed the data and attachments in the web.
@@ -471,6 +482,7 @@ sub removeWeb {
 =pod
 
 ---++ ObjectMethod moveTopic( $newWeb, $newTopic )
+
 Move/rename a topic.
 
 =cut
@@ -503,6 +515,7 @@ sub moveTopic {
 =pod
 
 ---++ ObjectMethod copyTopic( $newWeb, $newTopic )
+
 Copy a topic.
 
 =cut
@@ -537,6 +550,7 @@ sub copyTopic {
 =pod
 
 ---++ ObjectMethod moveAttachment( $newWeb, $newTopic, $newAttachment )
+
 Move an attachment from one topic to another. The name is retained.
 
 =cut
@@ -558,6 +572,7 @@ sub moveAttachment {
 =pod
 
 ---++ ObjectMethod copyAttachment( $newWeb, $newTopic )
+
 Copy an attachment from one topic to another. The name is retained.
 
 =cut
@@ -642,6 +657,7 @@ sub isLocked {
 =pod
 
 ---++ ObjectMethod setLease( $lease )
+
    * =$lease= reference to lease hash, or undef if the existing lease is to be cleared.
 
 Set an lease on the topic.
@@ -909,6 +925,7 @@ Add new revision. Replace file with contents of stream.
 =pod
 
 ---++ ObjectMethod replaceRevision($text, $comment, $user, $date)
+
 Replace the top revision.
    * =$text= is the new revision
    * =$date= is in epoch seconds.
@@ -932,6 +949,7 @@ Delete the last revision - do nothing if there is only one revision
 =pod
 
 ---++ ObjectMethod revisionDiff (   $rev1, $rev2, $contextLines  ) -> \@diffArray
+
 rev2 newer than rev1.
 Return reference to an array of [ diffType, $right, $left ]
 
@@ -1045,6 +1063,7 @@ sub dirForTopicAttachments {
 =pod
 
 ---++ ObjectMethod stringify()
+
 Generate string representation for debugging
 
 =cut

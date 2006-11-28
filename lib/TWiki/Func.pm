@@ -300,6 +300,7 @@ sub clearSessionValue {
 =pod
 
 ---+++ getContext() -> \%hash
+
 Get a hash of context identifiers representing the currently active
 context.
 
@@ -679,6 +680,7 @@ sub checkAccessPermission {
 =pod
 
 ---+++ getListOfWebs( $filter ) -> @webs
+
    * =$filter= - spec of web types to recover
 Gets a list of webs, filtered according to the spec in the $filter,
 which may include one of:
@@ -836,6 +838,7 @@ sub topicExists {
 =pod
 
 ---+++ checkTopicEditLock( $web, $topic, $script ) -> ( $oopsUrl, $loginName, $unlockTime )
+
 Check if a lease has been taken by some other user.
    * =$web= Web name, e.g. ="Main"=, or empty
    * =$topic= Topic name, e.g. ="MyTopic"=, or ="Main.MyTopic"=
@@ -882,6 +885,7 @@ sub checkTopicEditLock {
 =pod
 
 ---+++ setTopicEditLock( $web, $topic, $lock )
+
    * =$web= Web name, e.g. ="Main"=, or empty
    * =$topic= Topic name, e.g. ="MyTopic"=, or ="Main.MyTopic"=
    * =$lock= 1 to lease the topic, 0 to clear the lease=
@@ -915,6 +919,7 @@ sub setTopicEditLock {
 =pod
 
 ---+++ saveTopic( $web, $topic, $meta, $text, $options ) -> $error
+
    * =$web= - web for the topic
    * =$topic= - topic name
    * =$meta= - reference to TWiki::Meta object
@@ -1036,6 +1041,7 @@ sub saveTopicText {
 =pod
 
 ---+++ moveTopic( $web, $topic, $newWeb, $newTopic )
+
    * =$web= source web - required
    * =$topic= source topic - required
    * =$newWeb= dest web
@@ -1084,6 +1090,7 @@ sub moveTopic {
 =pod
 
 ---+++ getRevisionInfo($web, $topic, $rev, $attachment ) -> ( $date, $user, $rev, $comment ) 
+
 Get revision info of a topic or attachment
    * =$web= - Web name, optional, e.g. ='Main'=
    * =$topic=   - Topic name, required, e.g. ='TokyoOffice'=
@@ -1231,6 +1238,7 @@ sub attachmentExists {
 =pod
 
 ---+++ readAttachment( $web, $topic, $name, $rev ) -> $data
+
    * =$web= - web for topic
    * =$topic= - topic
    * =$name= - attachment name
@@ -1277,6 +1285,7 @@ sub readAttachment {
 =pod
 
 ---+++ saveAttachment( $web, $topic, $attachment, $opts )
+
    * =$web= - web for topic
    * =$topic= - topic to atach to
    * =$attachment= - name of the attachment
@@ -1330,6 +1339,7 @@ sub saveAttachment {
 =pod
 
 ---+++ moveAttachment( $web, $topic, $attachment, $newWeb, $newTopic, $newAttachment )
+
    * =$web= source web - required
    * =$topic= source topic - required
    * =$attachment= source attachment - required
@@ -1436,6 +1446,7 @@ sub loadTemplate {
 =pod
 
 ---+++ expandTemplate( $def  ) -> $string
+
 Do a %TMPL:P{$def}%, only expanding the template (not expanding any variables other than %TMPL)
    * =$def= - template name
 Return: the text of the expanded template
@@ -1518,6 +1529,7 @@ sub redirectCgiQuery {
 =pod
 
 ---+++ addToHEAD( $id, $header )
+
 Adds =$header= to the HTML header (the <head> tag).
 This is useful for Plugins that want to include some javascript custom css.
    * =$id= - Unique ID to prevent the same HTML from being duplicated. Plugins should use a prefix to prevent name clashes (e.g EDITTABLEPLUGIN_JSCALENDAR)
@@ -1614,6 +1626,7 @@ sub internalLink {
 ---++ E-mail
 
 ---+++ sendEmail ( $text, $retries ) -> $error
+
    * =$text= - text of the mail, including MIME headers
    * =$retries= - number of times to retry the send (default 1)
 Send an e-mail specified as MIME format content. To specify MIME
@@ -1648,6 +1661,7 @@ sub sendEmail {
 =pod
 
 ---+++ wikiToEmail( $wikiName ) -> $email
+
    * =$wikiName= - wiki name of the user
 Get the e-mail address(es) of the named user. If the user has multiple
 e-mail addresses (for example, the user is a group), then the list will
@@ -1675,6 +1689,7 @@ sub wikiToEmail {
 =pod
 
 ---+++ expandVariablesOnTopicCreation ( $text ) -> $text
+
 Expand the limited set of variables that are always expanded during topic creation
    * =$text= - the text to process
 Return: text with variables expanded
@@ -1706,6 +1721,7 @@ sub expandVariablesOnTopicCreation {
 =pod
 
 ---++ Special handlers
+
 Special handlers can be defined to make functions in plugins behave as if they were built-in to TWiki.
 
 =cut
@@ -1713,6 +1729,7 @@ Special handlers can be defined to make functions in plugins behave as if they w
 =pod=
 
 ---+++ registerTagHandler( $var, \&fn, $syntax )
+
 Should only be called from initPlugin.
 
 Register a function to handle a simple variable. Handles both %<nop>VAR% and %<nop>VAR{...}%. Registered variables are treated the same as TWiki internal variables, and are expanded at the same time. This is a _lot_ more efficient than using the =commonTagsHandler=.
@@ -1773,6 +1790,7 @@ sub registerTagHandler {
 =pod=
 
 ---+++ registerRESTHandler( $alias, \&fn, )
+
 Should only be called from initPlugin.
 
 Adds a function to the dispatch table of the REST interface 
@@ -1842,6 +1860,7 @@ sub registerRESTHandler {
 =pod
 
 ---+++ searchInWebContent($searchString, $web, \@topics, \%options ) -> \%map
+
 Search for a string in the content of a web. The search is over all content, including meta-data. Meta-data matches will be returned as formatted lines within the topic content (meta-data matches are returned as lines of the format %META:\w+{.*}%)
    * =$searchString= - the search string, in egrep format
    * =$web= - The web to search in

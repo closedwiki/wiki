@@ -40,6 +40,7 @@ use TWiki::UI::Register;
 =pod
 
 ---++ StaticMethod manage( $session )
+
 =manage= command handler.
 This method is designed to be
 invoked via the =TWiki::UI::run= method.
@@ -212,6 +213,7 @@ sub _createWeb {
 =pod
 
 ---++ StaticMethod rename( $session )
+
 =rename= command handler.
 This method is designed to be
 invoked via the =TWiki::UI::run= method.
@@ -1075,6 +1077,7 @@ sub _getReferringTopicsListFromURL {
 =pod
 
 ---++ StaticMethod getReferringTopics($session, $web, $topic, $allWebs) -> \%matches
+
    * =$session= - the session
    * =$web= - web to search for
    * =$topic= - topic to search for

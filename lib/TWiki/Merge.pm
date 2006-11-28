@@ -36,6 +36,7 @@ use CGI qw( :html );
 =pod
 
 ---++ StaticMethod merge2( $arev, $a, $brev, $b, $sep, $session, $info )
+
    * =$arev= - rev for $a (string)
    * =$a= - first ('original') string
    * =$brev= - rev for $b (string)

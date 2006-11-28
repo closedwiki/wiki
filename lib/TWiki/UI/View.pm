@@ -24,6 +24,7 @@
 # As per the GPL, removal of this notice is prohibited.
 
 =pod
+
 ---+ package TWiki::UI::View
 
 UI delegate for view function
@@ -43,6 +44,7 @@ use TWiki::Time;
 =pod
 
 ---++ StaticMethod view( $session )
+
 =view= command handler.
 This method is designed to be
 invoked via the =TWiki::UI::run= method.
@@ -387,6 +389,7 @@ sub _prepare {
 =pod
 
 ---++ StaticMethod viewfile( $session, $web, $topic, $query )
+
 =viewfile= command handler.
 This method is designed to be
 invoked via the =TWiki::UI::run= method.

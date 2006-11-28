@@ -194,6 +194,7 @@ sub _installMailHandler {
 =pod
 
 ---++ setMailHandler( \&fn )
+
    * =\&fn= - reference to a function($) (see _sendEmailBySendmail for proto)
 Install a handler function to take over mail sending from the default
 SMTP or sendmail methods. This is provided mainly for tests that
@@ -211,6 +212,7 @@ sub setMailHandler {
 =pod
 
 ---++ ObjectMethod sendEmail ( $text, $retries ) -> $error
+
    * =$text= - text of the mail, including MIME headers
    * =$retries= - number of times to retry the send (default 1)
 

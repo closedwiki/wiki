@@ -101,6 +101,7 @@ sub getReason {
 =pod
 
 ---++ ObjectMethod checkAccessPermission( $action, $user, $text, $meta, $topic, $web ) -> $boolean
+
 Check if user is allowed to access topic
    * =$action=  - 'VIEW', 'CHANGE', 'CREATE', etc.
    * =$user=    - User object

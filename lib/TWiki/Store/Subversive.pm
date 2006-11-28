@@ -55,6 +55,7 @@ sub new {
 =pod
 
 ---++ ObjectMethod finish
+
 Complete processing after the client's HTTP request has been responded
 to.
    1 breaking circular references to allow garbage collection in persistent
@@ -119,6 +120,7 @@ sub _mkPathTo {
 =pod
 
 ---++ ObjectMethod getRevisionInfo($version) -> ($rev, $date, $user, $comment)
+
    * =$version= if 0 or undef, or out of range (version number > number of revs) will return info about the latest revision.
 
 Returns (rev, date, user, comment) where rev is the number of the rev for which the info was recovered, date is the date of that rev (epoch s), user is the login name of the user who saved that rev, and comment is the comment associated with the rev.
@@ -138,6 +140,7 @@ sub getRevisionInfo {
 =pod
 
 ---++ ObjectMethod getLatestRevision() -> $text
+
 Get the text of the most recent revision
 
 =cut
@@ -150,6 +153,7 @@ sub getLatestRevision {
 =pod
 
 ---++ ObjectMethod getLatestRevisionTime() -> $text
+
 Get the time of the most recent revision
 
 =cut
@@ -161,6 +165,7 @@ sub getLatestRevisionTime {
 =pod
 
 ---++ ObjectMethod readMetaData($name) -> $text
+
 Get a meta-data block for this web
 
 =cut
@@ -219,6 +224,7 @@ sub getTopicNames {
 =pod
 
 ---++ ObjectMethod getWebNames() -> @webs
+
 Gets a list of names of subwebs in the current web
 
 =cut
@@ -308,6 +314,7 @@ sub searchInWebContent {
 =pod
 
 ---++ ObjectMethod moveWeb(  $newWeb )
+
 Move a web.
 
 =cut
@@ -325,6 +332,7 @@ sub moveWeb {
 =pod
 
 ---++ ObjectMethod getRevision($version) -> $text
+
    * =$version= if 0 or undef, or out of range (version number > number of revs) will return the latest revision.
 
 Get the text of the given revision.
@@ -342,6 +350,7 @@ sub getRevision {
 =pod
 
 ---++ ObjectMethod storedDataExists() -> $boolean
+
 Establishes if there is stored data associated with this handler.
 
 =cut
@@ -390,6 +399,7 @@ sub restoreLatestRevision {
 =pod
 
 ---++ ObjectMethod removeWeb( $web )
+
    * =$web= - web being removed
 
 Destroy a web, utterly. Removed the data and attachments in the web.
@@ -411,6 +421,7 @@ sub removeWeb {
 =pod
 
 ---++ ObjectMethod moveTopic( $newWeb, $newTopic )
+
 Move/rename a topic.
 
 =cut
@@ -437,6 +448,7 @@ sub moveTopic {
 =pod
 
 ---++ ObjectMethod copyTopic( $newWeb, $newTopic )
+
 Copy a topic.
 
 =cut
@@ -736,12 +748,14 @@ sub getRevisionAtTime {
 }
 
 =pod
+
 ---++ ObjectMethod getAttachmentAttributes($web, $topic, $attachment)
 
 returns [stat] for any given web, topic, $attachment
 SMELL - should this return a hash of arbitrary attributes so that 
 SMELL + attributes supported by the underlying filesystem are supported
 SMELL + (eg: windows directories supporting photo "author", "dimension" fields)
+
 =cut
 
 sub getAttachmentAttributes {
@@ -757,9 +771,11 @@ sub getAttachmentAttributes {
 }
 
 =pod
+
 ---++ ObjectMethod getAttachmentList($web, $topic)
 
 returns @($attachmentName => [stat]) for any given web, topic
+
 =cut
 
 sub getAttachmentList {

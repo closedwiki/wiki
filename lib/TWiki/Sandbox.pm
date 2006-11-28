@@ -21,6 +21,7 @@
 =pod
 
 ---+ package TWiki::Sandbox
+
 This object provides an interface to the outside world. All calls to
 system functions, or handling of file names, should be brokered by
 this object.

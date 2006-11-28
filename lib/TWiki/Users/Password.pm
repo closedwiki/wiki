@@ -53,6 +53,7 @@ sub new {
 =pod
 
 ---++ ObjectMethod finish
+
 Complete processing after the client's HTTP request has been responded
 to.
    1 breaking circular references to allow garbage collection in persistent
@@ -68,6 +69,7 @@ sub finish {
 =pod
 
 ---++ ObjectMethod fetchPass( $login ) -> $passwordE
+
 Implements TWiki::Password
 
 Returns encrypted password if succeeds.  Returns 0 if login is invalid.

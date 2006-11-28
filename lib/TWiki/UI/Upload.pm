@@ -27,6 +27,7 @@
 UI delegate for attachment management functions
 
 =cut
+
 package TWiki::UI::Upload;
 
 use strict;
@@ -39,6 +40,7 @@ use File::Spec;
 =pod
 
 ---++ StaticMethod attach( $session )
+
 =upload= command handler.
 This method is designed to be
 invoked via the =TWiki::UI::run= method.

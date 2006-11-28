@@ -65,6 +65,7 @@ my %SKIPKEYS = (
 =pod
 
 ---++ StaticMethod register_cgi( $session )
+
 =register= command handler.
 This method is designed to be
 invoked via the =TWiki::UI::run= method.
@@ -125,6 +126,7 @@ sub register_cgi {
 =pod
 
 ---++ StaticMethod passwd_cgi( $session )
+
 =passwd= command handler.
 This method is designed to be
 invoked via the =TWiki::UI::run= method.

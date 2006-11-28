@@ -83,6 +83,7 @@ sub new {
 =pod
 
 ---++ ClassMethod web()
+
 Get the web name
 
 =cut
@@ -94,6 +95,7 @@ sub web {
 =pod
 
 ---++ ClassMethod topic()
+
 Get the topic name
 
 =cut
@@ -164,6 +166,7 @@ sub putKeyed {
 =pod
 
 ---++ ObjectMethod putAll
+
 Replaces all the items of a given key with a new array
 This is the logical inverse of the find method
 =cut
@@ -412,6 +415,7 @@ sub getRevisionInfo {
 =pod
 
 ---++ ObjectMethod merge( $otherMeta, $formDef )
+
    * =$otherMeta= - a block of meta-data to merge with $this
    * =$formDef= reference to a TWiki::Form that gives the types of the fields in $this
 
@@ -462,6 +466,7 @@ sub merge {
 =pod
 
 ---++ ObjectMethod stringify( $types ) -> $string
+
 Return a string version of the meta object. Uses \n to separate lines.
 If $types is specified, return only types specified by that RE.
 
@@ -486,6 +491,7 @@ sub stringify {
 =pod
 
 ---++ ObjectMethod forEachSelectedValue( $types, $keys, \&fn, \%options )
+
 Iterate over the values selected by the regular expressions in $types and
 $keys.
    * =$types= - regular expression matching the names of fields to be processed. Will default to qr/^[A-Z]+$/ if undef.
@@ -522,6 +528,7 @@ sub forEachSelectedValue {
 =pod
 
 ---++ ObjectMethod getParent() -> $parent
+
 Gets the TOPICPARENT name.
 
 =cut

@@ -20,6 +20,7 @@
 =pod
 
 ---+ package TWiki::Users
+
 Singleton object that handles mapping of users to wikinames and
 vice versa, and user authentication checking.
 
@@ -43,6 +44,7 @@ BEGIN {
 =pod
 
 ---++ ClassMethod new ($session, $impl)
+
 Construct the user management object
 
 =cut
@@ -81,6 +83,7 @@ sub new {
 =pod
 
 ---++ ObjectMethod finish
+
 Complete processing after the client's HTTP request has been responded
 to.
    1 breaking circular references to allow garbage collection in persistent
@@ -240,6 +243,7 @@ sub findUserByEmail {
 =pod
 
 ---++ ObjectMethod createUser( $login, $wikiname ) -> $userobject
+
 Create a user, and insert them in the maps (overwriting any current entry).
 Use this instead of findUser when you want to be sure you are not going to
 pick up any default user created by findUser. All parameters are required.

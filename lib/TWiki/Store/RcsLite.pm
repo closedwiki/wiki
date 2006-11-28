@@ -42,6 +42,7 @@ FIXME:
    * still have difficulty on line ending at end of sequences, consequence of doing a line based diff
 
 ---++ File format
+
 <verbatim>
 rcstext    ::=  admin {delta}* desc {deltatext}*
 admin      ::=  head {num};
@@ -155,6 +156,7 @@ sub new {
 =pod
 
 ---++ ObjectMethod finish
+
 Complete processing after the client's HTTP request has been responded
 to.
    1 breaking circular references to allow garbage collection in persistent

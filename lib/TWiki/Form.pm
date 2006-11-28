@@ -329,6 +329,7 @@ sub _link {
 =pod
 
 ---++ ObjectMethod renderForEdit( $web, $topic, $meta ) -> $html
+
    * =$web= the web of the topic being rendered
    * =$topic= the topic being rendered
    * =$meta= the meta data for the form
@@ -407,6 +408,7 @@ sub renderForEdit {
 =pod
 
 ---++ ObjectMethod renderFieldForEdit( $fieldDef, $web, $topic, $value) -> $html
+
    * =$fieldDef= the field being rendered
    * =$web= the web of the topic being rendered
    * =$topic= the topic being rendered
@@ -643,6 +645,7 @@ sub renderFieldForEdit {
 =pod
 
 ---++ ObjectMethod renderHidden( $meta ) -> $html
+
 Render form fields found in the meta as hidden inputs, so they pass
 through edits untouched.
 
@@ -682,6 +685,7 @@ sub renderHidden {
 =pod
 
 ---++ ObjectMethod cgiName( $field ) -> $string
+
 Generate the 'name' of the CGI parameter used to represent a field.
 
 =cut
@@ -696,14 +700,18 @@ sub cgiName {
 =pod
 
 ---++ ObjectMethod getFieldValuesFromQuery($query, $metaObject) -> ( $seen, \@missing )
+
 Extract new values for form fields from a query.
+
    * =$query= - the query
    * =$metaObject= - the meta object that is storing the form values
 
 For each field, if there is a value in the query, use it.
 Otherwise if there is already entry for the field in the meta, keep it.
 
-Returns the number of fields which had values provided by the query, and a references to an array of the names of mandatory fields that were missing from the query.
+Returns the number of fields which had values provided by the query, 
+and a references to an array of the names of mandatory fields that were 
+missing from the query.
 
 =cut
 
@@ -777,7 +785,9 @@ sub getFieldValuesFromQuery {
 =pod
 
 ---++ ObjectMethod isTextMergeable( $name ) -> $boolean
+
    * =$name= - name of a form field (value of the =name= attribute)
+
 Returns true if the type of the named field allows it to be text-merged.
 
 If the form does not define the field, it is assumed to be mergeable.
@@ -798,7 +808,9 @@ sub isTextMergeable {
 =pod
 
 ---++ ObjectMethod getField( $name ) -> \%row
+
    * =$name= - name of a form field (value of the =name= attribute)
+
 Returns the field, or undef if the form does not define the field.
 
 =cut
@@ -814,6 +826,7 @@ sub getField {
 =pod
 
 ---++ ObjectMethod getFields() -> \@fields
+
 Return a list containing references to field name/value pairs.
 Each entry in the list has a {name} field and a {value} field. It may
 have other fields as well, which caller should ignore. The
@@ -829,8 +842,10 @@ sub getFields {
 =pod
 
 ---++ StaticMethod renderForDisplay($templates, $meta )
+
    * =$templates= ref to templates singleton
    * =$meta= - meta object containing the form to be rendered
+
 Static because we want to be able to do this without a form definition.
 
 SMELL: Why? Is reading the form topic such a big burden?

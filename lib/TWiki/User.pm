@@ -254,6 +254,7 @@ sub changePassword {
 =pod
 
 ---++ ObjectMethod addPassword( $newPassword ) -> $boolean
+
 creates a password entry
 =$newUserPassword= unencrypted password
 '1' if success

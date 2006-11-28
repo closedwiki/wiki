@@ -212,6 +212,7 @@ sub checkWebExists {
 =pod
 
 ---++ StaticMethod topicExists( $session, $web, $topic, $op ) => boolean
+
 Check if the given topic exists, throwing an OopsException
 if it doesn't. $op is the user operation being performed.
 
@@ -233,6 +234,7 @@ sub checkTopicExists {
 =pod twiki
 
 ---++ StaticMethod checkMirror( $session, $web, $topic )
+
 Checks if this web is a mirror web, throwing an OopsException
 if it is.
 
@@ -257,6 +259,7 @@ sub checkMirror {
 =pod twiki
 
 ---++ StaticMethod checkAccess( $web, $topic, $mode, $user )
+
 Check if the given mode of access by the given user to the given
 web.topic is permissible, throwing a TWiki::OopsException if not.
 

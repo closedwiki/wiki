@@ -110,6 +110,7 @@ sub new {
 =pod
 
 ---++ ObjectMethod renderParent($web, $topic, $meta, $params) -> $text
+
 Render parent meta-data
 
 =cut
@@ -167,6 +168,7 @@ sub renderParent {
 =pod
 
 ---++ ObjectMethod renderMoved($web, $topic, $meta, $params) -> $text
+
 Render moved meta-data
 
 =cut
@@ -217,6 +219,7 @@ sub renderMoved {
 =pod
 
 ---++ ObjectMethod renderFormField($web, $topic, $meta, $params) -> $text
+
 Render meta-data for a single formfield
 
 =cut
@@ -1562,6 +1565,7 @@ sub renderRevisionInfo {
 =pod
 
 ---++ ObjectMethod summariseChanges($user, $web, $topic, $orev, $nrev, $tml) -> $text
+
    * =$user= - user (null to ignore permissions)
    * =$web= - web
    * =$topic= - topic
@@ -1709,6 +1713,7 @@ sub forEachLine {
 =pod
 
 ---++ StaticMethod replaceTopicReferences( $text, \%options ) -> $text
+
 Callback designed for use with forEachLine, to replace topic references.
 \%options contains:
    * =oldWeb= => Web of reference to replace
@@ -1759,6 +1764,7 @@ sub replaceTopicReferences {
 =pod
 
 ---++ StaticMethod replaceWebReferences( $text, \%options ) -> $text
+
 Callback designed for use with forEachLine, to replace web references.
 \%options contains:
    * =oldWeb= => Web of reference to replace
@@ -1899,6 +1905,7 @@ sub renderFormFieldArg {
 =pod
 
 ---++ StaticMethod breakName( $text, $args) -> $text
+
    * =$text= - text to "break"
    * =$args= - string of format (\d+)([,\s*]\.\.\.)?)
 Hyphenates $text every $1 characters, or if $2 is "..." then shortens to
