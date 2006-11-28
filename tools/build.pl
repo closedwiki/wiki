@@ -42,26 +42,47 @@ sub new {
 
 print <<END;
 
-You are about to build TWiki. If you are not building a release, or
-this release is just for testing purposes, you can leave it unnamed.
-In this case any packages generated will be called "TWiki". Alternatively
-you can provide a name (e.g. 4.0.0-beta6).
+You are about to build TWiki. If you are not building a release, for
+example you are building a package just for your own testing purposes,
+then you can leave it unnamed.
 
-If you provide a name, TWiki.pm will be automatically edited to insert the
-new name of the release. The updated TWiki.pm will be checked in before
-the build starts.
+Note: DO NOT ATTEMPT TO GENERATE A RELEASE UNLESS ALL UNIT TESTS PASS.
+The unit tests are a critical part of the release process, as they
+establish the correct baseline functionality. If a unit test fails,
+any release package generated from that code is USELESS.
+
+If you provide a release name, TWiki.pm will be automatically edited
+to insert the new name of the release. The updated TWiki.pm will be
+checked in before the build starts.
 
 The release *must* be named according to the standard scheme i.e
+
 major.minor.patch[-qualifier]
-where -qualifier is optional.
+
+where -qualifier is optional (it usually somthing like -beta).
 
 This will be translated to appropriate package and topic names.
 
-(The package name can optionally be passed in a *second* parameter
+(The release name can optionally be passed in a *second* parameter
 to the script e.g. perl build.pl release 4.6.5)
 
+I'm now looking in the tags for the designation of the *last* release....
+END
+    my @olds = sort grep { /^TWikiRelease\d+x\d+x\d+$/ }
+      split('/\n', `svn ls http://svn.twiki.org/svn/twiki/tags`);
+    my $lastName = pop(@olds);
+    my $last = $lastName;
+    $last =~ s/TWikiRelease//;
+    $last =~ s/^0+//;
+    $last =~ s/x0+(\d)/x$1/g;
+    $last =~ s/x/./g;
+    print <<END;
+
+I have detected that the last release was $last. I will automatically
+generate histories for any data or pub files that changed since then.
 
 END
+
     if( $name ||
           TWiki::Contrib::Build::ask("Do you want to name this release?",
                                      'n')) {
@@ -96,10 +117,14 @@ END
     } else {
         $name = 'TWiki';
     }
-    return bless( $class->SUPER::new( $name, "TWiki" ), $class );
+
+    my $this = $class->SUPER::new( $name, "TWiki" );
+    $this->{last} = $last;
+    $this->{lastName} = $lastName;
+    return $this;
 }
 
-# Overrider installer target; don't want an installer.
+# Override installer target; don't want an installer.
 sub target_installer {
     my $this = shift;
 }
@@ -123,6 +148,11 @@ sub _checkInFile {
 
     my $currentRevision = 0;
     print "Checking in $new/$file\r";
+
+    # Remember the permissions
+    my @s = stat("$new/$file");
+    my $perms = $s[2];
+
     if ( -e $old.'/'.$file.',v' ) {
         $this->cp($old.'/'.$file.',v', $new.'/'.$file.',v');
         #force unlock
@@ -166,6 +196,9 @@ sub _checkInFile {
         `rcs -u -M $new/$file,v 2>&1`;
     	print "nochange to $new/$file\n";
     }
+
+    # restore the permissions
+    chmod($perms, "$new/$file");
 }
 
 # recursively check in files to RCS
@@ -223,8 +256,8 @@ sub stage_rcsfiles() {
 
     $this->makepath($lastReleaseDir);
     $this->pushd($lastReleaseDir);
-    print 'Checking out last release to '.$lastReleaseDir."\n";
-    `svn co http://svn.twiki.org/svn/twiki/tags/TWikiRelease04x00x03/ .`;
+    print "Checking out release $this->{last} to $lastReleaseDir\n";
+    `svn co http://svn.twiki.org/svn/twiki/tags/$this->{lastName}/ .`;
     $this->popd();
     print "Creating ,v files.\n";
     $this->_checkInDir( $lastReleaseDir, $this->{tmpDir}, 'data',
