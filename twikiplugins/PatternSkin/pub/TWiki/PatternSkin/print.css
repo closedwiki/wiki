@@ -101,7 +101,6 @@
 	pre,
 	html>body pre {
 		overflow:visible !important;
-		word-wrap:break-word;
 	}
 
 	/*Some rules about Page breaks */
