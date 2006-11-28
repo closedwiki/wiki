@@ -471,6 +471,7 @@ use TWiki::I18N;      # i18n handler
 =pod
 
 ---++ ObjectMethod UTF82SiteCharSet( $utf8 ) -> $ascii
+
 Auto-detect UTF-8 vs. site charset in string, and convert UTF-8 into site
 charset.
 
@@ -737,6 +738,7 @@ sub redirect {
 =pod
 
 ---++ ObjectMethod cacheQuery() -> $queryString
+
 Caches the current query in the params cache, and returns a rewritten
 query string for the cache to be picked up again on the other side of a
 redirect.
@@ -1188,6 +1190,7 @@ sub normalizeWebTopicName {
 =pod
 
 ---++ ClassMethod new( $loginName, $query, \%initialContext )
+
 Constructs a new TWiki object. Parameters are taken from the query object.
 
    * =$loginName= is the username of the user you want to be logged-in if none is
@@ -1395,6 +1398,7 @@ sub new {
 =pod
 
 ---++ ObjectMethod finish
+
 Complete processing after the client's HTTP request has been responded
 to. Right now this does two things:
    1 calling TWiki::Client to flushing the user's session (if any) to disk,
@@ -1421,6 +1425,7 @@ sub finish {
 =pod
 
 ---++ ObjectMethod writeLog( $action, $webTopic, $extra, $user )
+
    * =$action= - what happened, e.g. view, save, rename
    * =$wbTopic= - what it happened to
    * =$extra= - extra info, such as minor flag
@@ -1821,6 +1826,7 @@ sub _TOC {
 =pod
 
 ---++ ObjectMethod inlineAlert($template, $def, ... ) -> $string
+
 Format an error for inline inclusion in rendered output. The message string
 is obtained from the template 'oops'.$template, and the DEF $def is
 selected. The parameters (...) are used to populate %PARAM1%..%PARAMn%
@@ -1949,6 +1955,7 @@ sub parseSections {
 =pod
 
 ---++ ObjectMethod expandVariablesOnTopicCreation ( $text, $user ) -> $text
+
    * =$text= - text to expand
    * =$user= - reference to user object. This is the user expanded in e.g. %USERNAME. Optional, defaults to logged-in user.
 Expand limited set of variables during topic creation. These are variables
@@ -2465,7 +2472,8 @@ sub registerTagHandler {
 
 =pod=
 
----+++ registerRESTHandler( $subject, $verb, \&fn )
+---++ StaticMethod registerRESTHandler( $subject, $verb, \&fn )
+
 Adds a function to the dispatch table of the REST interface 
 for a given subject. See TWikiScripts#rest for more info.
 
@@ -2492,7 +2500,8 @@ sub registerRESTHandler {
 
 =pod=
 
----+++ restDispatch( $subject, $verb) => \&fn
+---++ StaticMethod restDispatch( $subject, $verb) => \&fn
+
 Returns the handler  function associated to the given $subject and $werb,
 or undef if none is found.
 
@@ -2511,6 +2520,7 @@ sub restDispatch {
 =pod
 
 ---++ ObjectMethod handleCommonTags( $text, $web, $topic ) -> $text
+
 Processes %<nop>VARIABLE%, and %<nop>TOC% syntax; also includes
 'commonTagsHandler' plugin hook.
 
@@ -2577,6 +2587,7 @@ sub handleCommonTags {
 =pod
 
 ---++ ObjectMethod addToHEAD( $id, $html )
+
 Add =$html= to the HEAD tag of the page currently being generated.
 
 Note that TWiki variables may be used in the HEAD. They will be expanded
