@@ -637,16 +637,14 @@ sub getRevision {
 sub _patchN {
     my( $this, $text, $version, $target ) = @_;
 
-    my $deltaText = $this->{revs}[$version]->{text};
-    my $delta = _split( $deltaText );
-    _patch( $text, $delta );
-    #print STDERR "REV $version: '",join('\n',@$text),"'\n";
-    if( $version <= $target ) {
-        return join( "\n", @$text );
-    } else {
-        return $this->_patchN( $text, $version-1, $target );
+    while ($version >= $target) {
+        my $deltaText = $this->{revs}[$version--]->{text};
+        my $delta = _split( $deltaText );
+        _patch( $text, $delta );
     }
+    return join( "\n", @$text );
 }
+
 
 # Split a string on \n making sure we have all newlines. If the string
 # ends with \n there will be a '' at the end of the split.
