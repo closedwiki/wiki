@@ -111,15 +111,6 @@ my $OS = $TWiki::cfg{OS} || '';
 # Template directory e.g. /usr/local/twiki/templates
 # $TWiki::cfg{TemplateDir} = '/home/httpd/twiki/templates';
 
-# **STRING 80 EXPERT**
-# Template path. A comma-separated list of generic file names, containing
-# variables standing for part of the file name. When a template $name in $web
-# with $skin is requested, this path is instantiated into a sequence of file
-# names. The first file on this list that is found considered to be the 
-# requested template file. The file names can either be absolute file names
-# ending in ".tmpl" or a topic file in a TWiki web.
-$TWiki::cfg{TemplatePath} = '$TWiki::cfg{TemplateDir}/$web/$name.$skin.tmpl, $TWiki::cfg{TemplateDir}/$name.$skin.tmpl, $TWiki::cfg{TemplateDir}/$web/$name.tmpl, $TWiki::cfg{TemplateDir}/$name.tmpl, $web.$skinSkin$nameTemplate, $TWiki::cfg{SystemWebName}.$skinSkin$nameTemplate, $web.$nameTemplate, $TWiki::cfg{SystemWebName}.$nameTemplate';
-
 # **PATH M**
 # Topic files store (file path, not URL) e.g. /usr/local/twiki/data
 # $TWiki::cfg{DataDir} = '/home/httpd/twiki/data';
@@ -1003,6 +994,15 @@ $TWiki::cfg{Stats}{TopContrib} = 10;
 $TWiki::cfg{Stats}{TopicName} = 'WebStatistics';
 
 #---+ Miscellaneous settings
+
+# **STRING 120 EXPERT**
+# Template path. A comma-separated list of generic file names, containing
+# variables standing for part of the file name. When a template $name in $web
+# with $skin is requested, this path is instantiated into a sequence of file
+# names. The first file on this list that is found considered to be the 
+# requested template file. The file names can either be absolute file names
+# ending in ".tmpl" or a topic file in a TWiki web.
+$TWiki::cfg{TemplatePath} = '$TWiki::cfg{TemplateDir}/$web/$name.$skin.tmpl, $TWiki::cfg{TemplateDir}/$name.$skin.tmpl, $TWiki::cfg{TemplateDir}/$web/$name.tmpl, $TWiki::cfg{TemplateDir}/$name.tmpl, $web.$skinSkin$nameTemplate, $TWiki::cfg{SystemWebName}.$skinSkin$nameTemplate, $web.$nameTemplate, $TWiki::cfg{SystemWebName}.$nameTemplate';
 
 # **STRING 120 EXPERT**
 # List of protocols (URI schemes) that TWiki will 
