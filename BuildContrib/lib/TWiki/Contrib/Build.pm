@@ -932,18 +932,18 @@ sub target_archive {
                          $this->{basedir}.'/'.$project.'_installer")');
 
     $this->pushd($this->{basedir});
-    $this->sys_action('md5sum ' . $project . '.tgz '
-                        . $project . '_installer '
-                          . $project . '.zip '
-                            .'> ' . $project . '.md5');
+    my @fs;
+    foreach my $f qw(.tgz _installer .zip) {
+        push (@fs, "$project$f") if (-e "$project$f");
+    }
+    $this->sys_action('md5sum ' . join(' ', @fs) .' > ' . "$project.md5");
     $this->popd();
     $this->popd();
 
-    print 'Release ZIP is '.$this->{basedir}.'/'.$project.'.zip',$NL;
-    print 'Release TGZ is '.$this->{basedir}.'/'.$project.'.tgz',$NL;
-    print 'Release TOPIC is '.$this->{basedir}.'/'.$project.'.txt',$NL;
-    print 'Release INSTALLER is '.$this->{basedir}.'/'.$project.'_installer',$NL;
-    print 'MD5 checksums are in '.$this->{basedir}.'/'.$project.'.md5',$NL;
+    foreach my $f qw(.tgz .zip .txt _installer) {
+        print "Release $f is $this->{basedir}/$project$f\n";
+    }
+    print "MD5 checksums are in $this->{basedir}/$project.md5\n";
 }
 
 =pod
