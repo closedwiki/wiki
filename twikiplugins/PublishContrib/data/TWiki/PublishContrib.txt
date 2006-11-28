@@ -1,3 +1,4 @@
+%META:TOPICINFO{author="TWikiContributor" date="1164720531" format="1.1" reprev="1.2" version="1.2"}%
 ---+!! <nop>%TOPIC%
 *Generates a static view of a web, as HTML files on disc, or as a =PDF=, or as a =zip= or =tgz= archive file.*
 
@@ -238,6 +239,7 @@ This add-on started as the TWiki:Plugins/GenHTMLAddon, written by TWiki:Main/Cra
 |  Dependencies: | %$DEPENDENCIES% |
 |  Version: | %$VERSION% |
 |  Change History: | |
+|  12028 | Michael Daum - create a new TWiki object for every topic, don't reuse the current one (Bugs:Item3139) |
 |  10412 | Correction to the correction for anchors. |
 |  10345 | Correction to support anchors in URLs properly |
 |  10242 | Martin Cleaver - changes to allow generation of viewprint and viewxxx when specified by TEMPLATE; multiple INSTANCE (dev/test/prod); (Bugs:Item2269) |

@@ -229,6 +229,7 @@ sub publish {
         publishWeb($web, TWiki::Func::getWikiName(), $inclusions,
                    $exclusions, $skin, $template, $filter, $archive);
     }
+
     # check the $templatesReferenced, and that everything referenced has been generated.
     my @templatesReferenced = sort keys %templatesReferenced;
     @templatesWanted = sort @templatesWanted;
@@ -336,32 +337,13 @@ sub publishTopic {
 
     # REFACTOR OPPORTUNITY: start factor me into getTWikiRendering()
 
-    # SMELL: need a new prefs object for each topic
-    my $twiki = $TWiki::Plugins::SESSION;
-
-    #tell the session what topic we are currently rendering so the contexts are correct
+    # clone the current session
+    my $oldTWiki = $TWiki::Plugins::SESSION;
+    my $twiki = new TWiki($oldTWiki->{user}, $oldTWiki->{cgiQuery});
+    $TWiki::Plugins::SESSION = $twiki;
+    # tell the session what topic we are currently rendering so the contexts are correct
     $twiki->{topicName} = $topic;
     $twiki->{webName} = $web;
-
-    $twiki->{prefs} = new TWiki::Prefs($twiki);
-
-#    $twiki->{prefs}->pushGlobalPreferences();
-    my $prefs = $twiki->{prefs}->pushPreferences(
-            $TWiki::cfg{SystemWebName},
-	            $TWiki::cfg{SitePrefsTopicName},
-	            'DEFAULT' );
-
-     # Then local site prefs
-     if( $TWiki::cfg{LocalSitePreferences} ) {
-             my( $lweb, $ltopic ) = $twiki->normalizeWebTopicName(
-                        undef, $TWiki::cfg{LocalSitePreferences} );
-             $twiki->{prefs}->pushPreferences( $lweb, $ltopic, 'SITE' );
-    }
-
-    $twiki->{prefs}->pushPreferences($TWiki::cfg{UsersWebName}, $wikiName, 'USER '.$wikiName);
-    $twiki->{prefs}->pushWebPreferences($web);
-    $twiki->{prefs}->pushPreferences($web, $topic, 'TOPIC');
-    $twiki->{prefs}->pushPreferenceValues('SESSION', $twiki->{client}->getSessionValues());
 
     my ($revdate, $revuser, $maxrev);
     ($revdate, $revuser, $maxrev) = $meta->getRevisionInfo();
@@ -440,6 +422,8 @@ sub publishTopic {
 
     # Write the resulting HTML.
     $archive->addString( $tmpl, $topic.$filetype);
+
+    $TWiki::Plugins::SESSION = $oldTWiki; # restore twiki object
 }
 
 # rewrite 
