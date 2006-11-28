@@ -48,7 +48,6 @@ hr {
 /* put overflow pre in a scroll area */
 pre {
     width:100%;
-	/*word-wrap:break-word;*/ /*will break formatted text, so not always desirable*/
     margin:1em 0; /* Win IE tries to make this bigger otherwise */
 }
 /* IE behavior for pre is defined in twiki.pattern.tmpl in conditional comment */
@@ -589,8 +588,7 @@ a.twikiLinkInHeaderRight {
 #patternLeftBarContents li {
 	margin:2px 0 3px 0;
 	line-height:1.1em;
-	overflow:hidden;
-	text-overflow:ellipsis;
+	overflow:hidden;	
 }
 #patternLeftBarContents h2 {
 	border:none;
@@ -617,8 +615,14 @@ a.twikiLinkInHeaderRight {
 	margin:0 0 0 -.3em;
 	width:100%;
 	overflow:hidden;
-	text-overflow:ellipsis;
 }
+html*#patternLeftBarContents li,
+#patternLeftBarContents .twikiHierarchicalNavigation {
+[;/*necessary to hide from Mozilla*/
+text-overflow:ellipsis;/*read by Safari*/
+]text-overflow:ellipsis;/*only read by IE6*/
+}
+
 .twikiHierarchicalNavigation ul {
 	padding:0;
 	margin:0;
