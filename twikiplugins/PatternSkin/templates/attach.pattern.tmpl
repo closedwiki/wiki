@@ -82,7 +82,7 @@
 
 %{ These templates define the tables used to display attachments. }%
 
-%TMPL:DEF{"commonattachtableattributes"}%tableborder="1" cellpadding="0" cellspacing="0" valign="middle" dataalign="center,left,left,right,left,left, left,center" headercolor="#0066cc" databg="#ffffff" headerbg="#ffffff" headerbgsorted="#eeeeee" databgsorted="#f5f5f5" %TMPL:END%
+%TMPL:DEF{"commonattachtableattributes"}%tablerules="rows" valign="middle" dataalign="center,left,left,right,left,left, left,center" headercolor="#0066cc" databg="#ffffff" headerbg="#ffffff" headerbgsorted="#eeeeee" databgsorted="#f5f5f5" %TMPL:END%
 
 %TMPL:DEF{"topicattachmentwisty"}%%TWISTYSHOW{id="attachmentslist" firststart="show" link="%MAKETEXT{"Show attachments"}%" imgleft="%ICONURLPATH{toggleopen}%"}%%TWISTYHIDE{id="attachmentslist" link="%MAKETEXT{"Hide attachments"}%" imgleft="%ICONURLPATH{toggleclose}%"}%<span class="twikiGrayText" id="attachTableAttachmentCount"></span>
 %TWISTYTOGGLE{id="attachmentslist" mode="div" remember="on"}%%TMPL:END%

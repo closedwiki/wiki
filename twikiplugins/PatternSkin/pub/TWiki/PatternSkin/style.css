@@ -261,11 +261,11 @@ blockquote {
 .twikiTable td {
 	padding:.25em .5em;
 	border-style:none none solid none;
-	border-width:1px;
+	border-width:0 0 1px 0;
 }
 .twikiTable th {
 	border-style:none none none solid;
-	border-width:1px;
+	border-width:0 0 0 1px;
 	padding:.4em .5em;
 }
 .twikiTable th.twikiFirstCol {
@@ -399,9 +399,8 @@ table.twikiFormTable {
 	voice-family:inherit;
 	width:100%;
 }
-.twikiAttachments td, 
 .twikiAttachments th {
-	border-style:solid;
+	border-style:none none solid solid;
 	border-width:1px;
 }
 .twikiAttachments th,
@@ -419,13 +418,6 @@ table.twikiFormTable td {
 	height:1.4em; /*S1*/
 	text-align:left;
 	vertical-align:top;
-}
-.twikiAttachments td {
-	/* don't show column lines in attachment listing */
-	border-width:0 0 1px 0;
-}
-.twikiAttachments th.twikiFirstCol {
-	border-width:1px;
 }
 .twikiAttachments th.twikiFirstCol,
 .twikiAttachments td.twikiFirstCol {
@@ -616,8 +608,8 @@ a.twikiLinkInHeaderRight {
 	width:100%;
 	overflow:hidden;
 }
-html* #patternLeftBarContents li,
-html* #patternLeftBarContents .twikiHierarchicalNavigation {
+#patternLeftBarContents li,
+#patternLeftBarContents .twikiHierarchicalNavigation {
 [;/*necessary to hide from Mozilla*/
 text-overflow:ellipsis;/*read by Safari*/
 ]text-overflow:ellipsis;/*only read by IE6*/
