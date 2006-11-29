@@ -13,7 +13,8 @@
 #
 # As per the GPL, removal of this notice is prohibited.
 
-# ---+ Contrib CliRunnerContrib
+# ---+ Extensions
+# ---++ CliRunnerContrib
 # **PATH M**
 # Path to the Perl executable.  Can be simply 'perl' if the perl interpreter is on the path.
 $TWiki::cfg{Contrib}{CliRunnerContrib}{perl} = $^X;
@@ -26,7 +27,7 @@ $TWiki::cfg{Contrib}{CliRunnerContrib}{LibPath} = '../lib';
 # **STRING 10**
 # Parameters always to be passed to your Perl when running
 # scripts. Usually includes <tt>-T</tt> for taint checking.
-$TWiki::cfg{Contrib}{CliRunnerContrib}{PerlOxptions} = '-T';
+$TWiki::cfg{Contrib}{CliRunnerContrib}{PerlOptions} = '-T';
 
 # **BOOLEAN**
 # If true, show some debugging information on STDERR.
