@@ -1,10 +1,3 @@
-// TWiki JavaScript Library
-// This library is under construction, don't rely on it until an official release 
-
-
-// TWiki namespace
-var twiki = {};
-
 /**
 Easy inheritance, see http://blogger.xs4all.nl/peterned/archive/2006/01/12/73948.aspx
 @use
@@ -12,6 +5,7 @@ Easy inheritance, see http://blogger.xs4all.nl/peterned/archive/2006/01/12/73948
 	function BThing(lorem, ipsum, dolor) {
 	}
 	BThing = BThing.extendsFrom(AThing);
+	// prototype functions here...
 </pre>
 */
 Function.prototype.extendsFrom = function(Super) {
