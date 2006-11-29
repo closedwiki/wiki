@@ -599,7 +599,7 @@ sub _patch {
                         $2 > $pos) {
                     pop(@toAdd);
                     push(@toAdd, <<'HERE');
-<div class="twikiAlert">WARNING: THIS TEXT WAS ADDED BY THE SYSTEM TO CORRECT A PROBABLE ERROR IN THE HISTORY OF THIS TOPIC. Edit and Save the topic again to clear this warning.</div>
+<div class="twikiAlert">WARNING: THIS TEXT WAS ADDED BY THE SYSTEM TO CORRECT A PROBABLE ERROR IN THE HISTORY OF THIS TOPIC.</div>
 HERE
                     $pos--; # so when we add $length we get to the right place
                 }
