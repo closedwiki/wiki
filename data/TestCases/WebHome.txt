@@ -26,7 +26,9 @@ Automatic testcases may be run by clicking on the =run= link for the testcase in
 
 %H% A good tip is to right-click each =run= link and open in a new tab (if your browser supports this; all good browsers do). That way you can run a whole bunch of testcases quickly without having to wait for each to finish loading.
 
-<table border=1><tr align=left><th>Testcase</th><th>Description</th><th>Tests</th></tr>
-%SEARCH{"^TestCaseAuto" type="regex" scope="topic" nosearch="on" nototal="on" format="<tr align=left><td> $topic </td><td> $pattern(.*Description:(.*?\n).*) </td><td>[[%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/$topic?test=compare&debugenableplugins=TestFixturePlugin,CommentPlugin,InterwikiPlugin,DefaultPlugin&skin=pattern][run]]</td></tr>"}%
-%SEARCH{"^TestCase(?!Auto)" type="regex" scope="topic" nosearch="on" nototal="on" format="<tr align=left><td> $topic </td><td> $pattern(.*Description:(.*?\n).*) </td><td>manual</td></tr>"}%
-</table>
+<!--
+%TABLE{}%
+-->
+|*Testcase* |*Description*  |*Tests*  |
+%SEARCH{"^TestCaseAuto" type="regex" scope="topic" nosearch="on" nototal="on" format="|$topic  |$pattern(.*Description:(.*?)\n.*)  |[[%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/$topic?test=compare&debugenableplugins=TestFixturePlugin,CommentPlugin,InterwikiPlugin,DefaultPlugin&skin=pattern][run]]  |"}%
+%SEARCH{"^TestCase(?!Auto)" type="regex" scope="topic" nosearch="on" nototal="on" format="|$topic  |$pattern(.*Description:(.*?)\n.*)  |manual  |"}%
