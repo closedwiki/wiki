@@ -15,10 +15,9 @@ twiki.Function = {
 	</pre>
 	*/
 	extendClass:function(inClass, inSuperClass) {
-		var Self = inClass;
 		var Func = function() {
-			inSuperClass.apply(inClass, arguments);
-			Self.apply(inClass, arguments);
+			inSuperClass.apply(this, arguments);
+			inClass.apply(this, arguments);
 		};
 		Func.prototype = new inSuperClass();
 		return Func;

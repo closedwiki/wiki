@@ -642,31 +642,33 @@ twiki.Event.addLoadEvent("createTextNode");
 ---++ twiki.Function
 <script language="javascript" src="%PUBURL%/%TWIKIWEB%/TWikiJavascripts/twikiFunction.js"></script>
 
----+++ twiki.Function.extendsFrom
+---+++ twiki.Function.extendClass
 <script language="javascript">
 /*<![CDATA[*/
-    function testExtendsFromWithValidArgs() {
+    function testExtendClassWithValidArgs() {
     	var conversation = "";
-    	var expectedConversation = "grmmpfmew";
+    	var expectedConversation = "poohgrmmpfgarfieldmew";
     	
-    	function Animal () {}
+    	function Animal (inName) {
+    		this.name = inName;
+    	}
     	Animal.prototype.yell = "...";
     	Animal.prototype.talk = function () {
-			conversation += this.yell;
+			conversation += this.name + this.yell;
     	}
     	function Grizzly () {}
     	Grizzly = twiki.Function.extendClass(Grizzly, Animal);
     	Grizzly.prototype.yell = "grmmpf";
-    	var pooh = new Grizzly();
+    	var pooh = new Grizzly("pooh");
     	pooh.talk();
     	
     	function Cat () {}
     	Cat = twiki.Function.extendClass(Cat, Animal);
     	Cat.prototype.yell = "mew";
-    	var garfield = new Cat();
+    	var garfield = new Cat("garfield");
     	garfield.talk();
-    	
     	assertEquals("Conversation result", expectedConversation, conversation);
     }
 /*]]>*/
 </script>
+
