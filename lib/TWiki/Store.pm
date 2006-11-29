@@ -941,12 +941,11 @@ sub saveAttachment {
         }
 
         if( $opts->{file} && !$opts->{stream} ) {
-            open($opts->{stream}, $opts->{file}) ||
+            open($opts->{stream}, "<$opts->{file}") ||
               throw Error::Simple('Could not open '.$opts->{file} );
             binmode($opts->{stream}) ||
               throw Error::Simple( $opts->{file}.' binmode failed: '.$! );
         }
-
         if ( $opts->{stream} ) {
             $action = 'upload';
 
@@ -986,7 +985,6 @@ sub saveAttachment {
                 open( $opts->{stream}, "<$tmpFile" );
                 binmode( $opts->{stream} );
             }
-
             my $error;
             try {
                 $handler->addRevisionFromStream( $opts->{stream},
