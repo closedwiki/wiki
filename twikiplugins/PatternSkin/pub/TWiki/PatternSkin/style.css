@@ -616,8 +616,8 @@ a.twikiLinkInHeaderRight {
 	width:100%;
 	overflow:hidden;
 }
-html*#patternLeftBarContents li,
-#patternLeftBarContents .twikiHierarchicalNavigation {
+html* #patternLeftBarContents li,
+html* #patternLeftBarContents .twikiHierarchicalNavigation {
 [;/*necessary to hide from Mozilla*/
 text-overflow:ellipsis;/*read by Safari*/
 ]text-overflow:ellipsis;/*only read by IE6*/
