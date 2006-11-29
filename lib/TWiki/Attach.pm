@@ -223,7 +223,7 @@ sub _expandAttrs {
         return $file;
     }
     elsif ( $attr eq 'DATE' ) {
-        return TWiki::Time::formatTime( $info->{date} );
+        return TWiki::Time::formatTime( $info->{date} || 0 );
     }
     elsif ( $attr eq 'USER' ) {
         my $user = $this->{session}->{users}->findUser($info->{user});
@@ -633,7 +633,7 @@ sub upgradeFrom1v0beta {
 
     my @attach = $meta->find( 'FILEATTACHMENT' );
     foreach my $att ( @attach ) {
-        my $date = $att->{date};
+        my $date = $att->{date} || 0;
         if( $date =~ /-/ ) {
             $date =~ s/&nbsp;/ /go;
             $date = TWiki::Time::parseTime( $date );
