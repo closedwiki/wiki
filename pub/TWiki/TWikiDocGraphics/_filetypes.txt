@@ -50,7 +50,7 @@ mde mdb
 mov mov
 mp2 wav
 mp3 wav
-mp4 wav
+mp4 mov
 mpa mov
 mpe mov
 mpeg mov
