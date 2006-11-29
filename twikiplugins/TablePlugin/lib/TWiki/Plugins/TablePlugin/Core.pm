@@ -72,7 +72,7 @@ sub _setDefaults {
     $tableRules     = '';
     $cellSpacing    = 0;
     $cellPadding    = 0;
-    $cellBorder     = 1;
+    $cellBorder     = '';
     $tableWidth     = '';
     @columnWidths   = ( );
     $headerRows     = 1;
@@ -357,22 +357,25 @@ sub _processTableRow {
                 $type = 'td';
             }
             
-            my $theCellBorder = $cellBorder;
-			if ($tableRules eq 'none') {
-				$theCellBorder = 0;
+            if ($cellBorder) {
+				my $theCellBorder = $cellBorder;
+				if ($tableRules eq 'none') {
+					# if tablerules are set to none we don't want cell borders anywhere
+					$theCellBorder = 0;
+				}
+				if ($tableRules eq 'cols') {
+					$theCellBorder = 0;
+				}
+				if ($tableRules eq 'groups' && $type eq 'th') {
+					$attr->{style} .= 'border-bottom-style:solid;';
+					$attr->{style} .= 'border-top-style:solid;';
+					$attr->{style} .= 'border-left-style:none;';
+				}
+				if ($tableRules eq 'groups' && $type eq 'td') {
+					$theCellBorder = 0;
+				}
+				$attr->{style} .= 'border-width:'.$theCellBorder.'px;';
 			}
-			if ($tableRules eq 'cols') {
-				$theCellBorder = 0;
-			}
-			if ($tableRules eq 'groups' && $type eq 'th') {
-				$attr->{style} .= 'border-bottom-style:solid;';
-				$attr->{style} .= 'border-top-style:solid;';
-				$attr->{style} .= 'border-left-style:none;';
-			}
-			if ($tableRules eq 'groups' && $type eq 'td') {
-				$theCellBorder = 0;
-			}
-			$attr->{style} .= 'border-width:'.$theCellBorder.'px;';
 			
             push @row, { text => $value, attrs => $attr, type => $type };
         }

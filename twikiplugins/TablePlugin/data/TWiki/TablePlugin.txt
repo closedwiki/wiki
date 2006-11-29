@@ -78,7 +78,7 @@ Attributes are defined as a =TABLEATTRIBUTES= Plugin setting in this topic, a =T
 | =tablerules=     | Table rules, set to ="none"= (no rules), ="groups"= (rules will appear between row groups and column groups only), ="rows"= (rules will appear between rows only), ="cols"= (rules will appear between columns only), ="all"= (rules will appear between all rows and columns). | <span class="twikiGrayText">unspecified</span>  | =tablerules="rows"= |		  
 | =cellpadding=    | Cell padding (pixels). | ="0"= | =cellpadding="0"= |
 | =cellspacing=    | Cell spacing (pixels). | ="0"= | =cellspacing="3"= |
-| =cellborder=     | Cell border width (pixels). | ="1"= | =cellborder="0"= |
+| =cellborder=     | Cell border width (pixels). | <span class="twikiGrayText">unspecified</span> | =cellborder="0"= |
 | =valign=         | Vertical alignment of cells and headers, set to ="top"=, ="middle"=, ="bottom"= or ="baseline"=. | <span class="twikiGrayText">unspecified</span>  | =valign="top"= |
 | =headervalign=   | Vertical alignment of header cells; overrides =valign=. | <span class="twikiGrayText">unspecified</span>  | =headervalign="top"= |
 | =datavalign=     | Vertical alignment of data cells; overrides =valign=. | <span class="twikiGrayText">unspecified</span>  | =datavalign="top"= |
