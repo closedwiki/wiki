@@ -46,16 +46,16 @@ generates:
 
 <div style="display:none;">
 %STARTSECTION{name="all"}%<div class="twikiHierarchicalNavigation"><div class="twikiParentTopic">
-%SEARCH{ "^%BASETOPIC%$" web="%BASEWEB%" scope="topic" type="regex" nonoise="on" format="$percntIF{$quot$parent$quot then=$quot   * $parent$quot else=$quot<nop>$quot}$percnt" }%
+%SEARCH{ "^%BASETOPIC%$" web="%BASEWEB%" scope="topic" type="regex" nonoise="on" format="$percntIF{$quot$parent$quot then=$quot   * [[$web.$parent][$parent]]$quot else=$quot<nop>$quot}$percnt" }%
 </div>
 <div class="twikiCurrentTopic">
    * <nop>%BASETOPIC%
 </div>
 <div class="twikiChildTopics">
-%METASEARCH{type="parent" topic="%BASETOPIC%" format="   * [[$web.$topic][$topic]]"}% </div><!--twikiChildTopics--></div><!--/twikiHierarchicalNavigation-->%ENDSECTION{name="all"}%
+%METASEARCH{type="parent" web="%BASEWEB%" topic="%BASETOPIC%" format="   * [[$web.$topic][$topic]]"}% </div><!--twikiChildTopics--></div><!--/twikiHierarchicalNavigation-->%ENDSECTION{name="all"}%
 
 %STARTSECTION{name="children"}%<div class="twikiHierarchicalNavigation">
 <div class="twikiChildTopics">
-%METASEARCH{type="parent" topic="%BASETOPIC%" format="   * [[$web.$topic][$topic]]"}% </div><!--twikiChildTopics--></div><!--/twikiHierarchicalNavigation-->%ENDSECTION{name="children"}%
+%METASEARCH{type="parent" topic="%BASETOPIC%" web="%BASEWEB%" format="   * [[$web.$topic][$topic]]"}% </div><!--twikiChildTopics--></div><!--/twikiHierarchicalNavigation-->%ENDSECTION{name="children"}%
 
 </div>
