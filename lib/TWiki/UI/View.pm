@@ -276,14 +276,14 @@ sub view {
     my( $start, $end );
     if( $tmpl =~ m/^(.*)%TEXT%(.*)$/s ) {
         my @starts = split( /%STARTTEXT%/, $1 );
-	if ( $#starts ) {   # we know that there is something before %STARTTEXT%
+	if ( $#starts > 0 ) {   # we know that there is something before %STARTTEXT%
 	  $start = $starts[0];
 	  $text = $starts[1] . $text;
 	} else {
 	  $start = $1;
 	}
         my @ends = split( /%ENDTEXT%/, $2 );
-	if ( $#ends ) {  # we know that there is something after %ENDTEXT%
+	if ( $#ends > 0 ) {  # we know that there is something after %ENDTEXT%
 	  $text .= $ends[0];
 	  $end = $ends[1];
 	} else {
@@ -291,7 +291,7 @@ sub view {
 	}
     } else {
         my @starts = split( /%STARTTEXT%/, $tmpl );
-	if ( $#starts ) {  # we know that there is something before %STARTTEXT%
+	if ( $#starts > 0 ) {  # we know that there is something before %STARTTEXT%
 	  $start = $starts[0];
 	  $text = $starts[1];
 	} else {
