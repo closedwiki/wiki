@@ -36,15 +36,15 @@ twiki.Pref = {
 	setPref:function(inPrefName, inPrefValue) {
 		var prefName = twiki.Pref._getSafeString(inPrefName);
 		var prefValue = (isNaN(inPrefValue)) ? twiki.Pref._getSafeString(inPrefValue) : inPrefValue;
-		var cookieString = _getPrefCookie();
-		var prefs = cookieString.split(COOKIE_PREF_SEPARATOR);
-		var index = _getKeyValueLoc(prefs, prefName);
+		var cookieString = twiki.Pref._getPrefCookie();
+		var prefs = cookieString.split(twiki.Pref.COOKIE_PREF_SEPARATOR);
+		var index = twiki.Pref._getKeyValueLoc(prefs, prefName);
 		if (index != -1) {
 			// updating this entry is done by removing the existing entry from the array and then pushing the new key-value onto it
 			prefs.splice(index, 1);
 		}
 		// else not found, so don't remove an existing entry
-		var keyvalueString = prefName + COOKIE_PREF_VALUE_SEPARATOR + prefValue;
+		var keyvalueString = prefName + twiki.Pref.COOKIE_PREF_VALUE_SEPARATOR + prefValue;
 		prefs.push(keyvalueString);
 		twiki.Pref._writePrefValues(prefs);
 	},
