@@ -714,7 +714,7 @@ sub emitTable {
                     }
                 } else {
                 	my $linkAttributes = { style => $linkColorStyle };
-                    $cell = CGI::span( $linkAttributes, ' *'.$cell.'* ' );
+                    $cell = CGI::span( $linkAttributes, ' <strong> '.$cell.' </strong> ' );
                 }
 
             } else {
