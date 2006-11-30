@@ -33,6 +33,8 @@ normal TWiki operation.
 
 package TWiki::Configure::Load;
 
+our $TRUE = 1;
+
 =pod
 
 ---++ StaticMethod readConfig()
@@ -56,7 +58,6 @@ provide defaults, and it would be silly to have them in two places anyway.
 
 sub readConfig {
     return if $TWiki::cfg{ConfigurationFinished};
-    local $TRUE = 1;
 
     # Read LocalSite.cfg
     unless (do 'TWiki.spec') {
