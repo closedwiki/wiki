@@ -756,3 +756,94 @@ twiki.Event.addLoadEvent("createTextNode");
 	}
 /*]]>*/
 </script>
+
+---++ twiki.CSS
+<script language="javascript" src="%PUBURL%/%TWIKIWEB%/TWikiJavascripts/twikiCSS.js"></script>
+
+---+++ twiki.CSS.removeClass, twiki.CSS.getClassList
+
+<div id="twikiCSSremoveClass" class="someClass twikiSmall otherClass">text</div>
+
+<script language="javascript">
+/*<![CDATA[*/
+    function testRemoveClassWithValidArgs() {
+    	var el = document.getElementById("twikiCSSremoveClass");
+    	twiki.CSS.removeClass(el, "twikiSmall");
+    	var classList = twiki.CSS.getClassList(el);
+    	var classListString = classList.join(",");
+    	var expectedClassListString = "someClass,otherClass";
+    	assertEquals("Remaining classes ", expectedClassListString, classListString);
+    }
+/*]]>*/
+</script>
+
+---+++ twiki.CSS.addClass
+
+<div id="twikiCSSaddClass">text</div>
+
+<script language="javascript">
+/*<![CDATA[*/
+    function testAddClassWithValidArgs() {
+    	var el = document.getElementById("twikiCSSaddClass");
+    	twiki.CSS.addClass(el, "twikiSmall");
+    	twiki.CSS.addClass(el, "secondClass");
+    	var classList = twiki.CSS.getClassList(el);
+    	var classListString = classList.join(",");
+    	var expectedClassListString = "twikiSmall,secondClass";
+    	assertEquals("Added classes ", expectedClassListString, classListString);
+    }
+/*]]>*/
+</script>
+
+---+++ twiki.CSS.replaceClass
+
+<div id="twikiCSSreplaceClass" class="someClass replaceThisClass otherClass">text</div>
+
+<script language="javascript">
+/*<![CDATA[*/
+    function testReplaceClassWithValidArgs() {
+    	var el = document.getElementById("twikiCSSreplaceClass");
+    	twiki.CSS.replaceClass(el, "replaceThisClass", "myClass");
+    	var classList = twiki.CSS.getClassList(el);
+    	var classListString = classList.join(",");
+    	var expectedClassListString = "someClass,otherClass,myClass";
+    	assertEquals("Replaced classes ", expectedClassListString, classListString);
+    }
+/*]]>*/
+</script>
+
+---+++ twiki.CSS.setClassList
+
+<div id="twikiCSSsetClassList">text</div>
+
+<script language="javascript">
+/*<![CDATA[*/
+    function testSetClassListWithValidArgs() {
+    	var el = document.getElementById("twikiCSSsetClassList");
+    	var classList = [];
+    	classList.push("classOne");
+    	classList.push("classTwo");
+    	classList.push("classThree");
+		twiki.CSS.setClassList(el, classList);
+    	var classListString = classList.join(",");
+    	var setClassListString = twiki.CSS.getClassList(el).join(",");
+    	assertEquals("Set classes ", classListString, setClassListString);
+    }
+/*]]>*/
+</script>
+
+---+++ twiki.CSS.hasClass
+
+<div id="twikiCSShasClass" class="classOne classTwo">text</div>
+
+<script language="javascript">
+/*<![CDATA[*/
+    function testHasClassWithValidArgs() {
+    	var el = document.getElementById("twikiCSShasClass");
+    	assertTrue("Has class 1", twiki.CSS.hasClass(el, "classOne"));
+    	assertTrue("Has class 2", twiki.CSS.hasClass(el, "classTwo"));
+    	assertFalse("Has class 3", twiki.CSS.hasClass(el, "classThree"));
+    }
+/*]]>*/
+</script>
+
