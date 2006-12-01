@@ -24,6 +24,13 @@ BEGIN {
     $SIG{__DIE__} = sub { Carp::confess $_[0] };
 };
 
+# Temporary directory to store log files in.
+# Will be cleaned up after running the tests unless the environment
+# variable TWIKI_DEBUG_KEEP is true
+use File::Temp;
+my $cleanup  =  $ENV{TWIKI_DEBUG_KEEP} ? 0 : 1;
+my $tempdir  =  File::Temp::tempdir( CLEANUP => $cleanup );
+
 sub new {
     my $self = shift()->SUPER::new(@_);
     return $self;
@@ -41,6 +48,10 @@ sub set_up {
     # This needs to be a deep copy
     $this->{__TWikiSafe} = Data::Dumper->Dump([\%TWiki::cfg], ['*TWiki::cfg']);
     $tmp->finish();
+
+    # Move logging into a temporary directory
+    $TWiki::cfg{LogFileName} = "$tempdir/TWikiTestCase.log";
+    $TWiki::cfg{WarningFileName} = "$tempdir/TWikiTestCase.warn";
 }
 
 # Restores TWiki::cfg from backup and deletes any fake users created
