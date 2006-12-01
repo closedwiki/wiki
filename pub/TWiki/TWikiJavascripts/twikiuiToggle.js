@@ -64,6 +64,22 @@ Other settings:
 
 See TwistyPlugin for examples.
 
+
+
+CSS classes
+
+Include these styles:
+
+.toggleHidden { display:none; }
+.toggleMakeHidden {}
+.toggleMakeVisible { display:none; }
+.toggleRememberSetting {}
+.toggleForgetSetting {}
+.toggleStartHide {}
+.toggleStartShow {}
+.toggleFirstStartShow {}
+.toggleFirstStartHide {}
+
 */
 
 if (twiki.ui == undefined) twiki.ui = {};

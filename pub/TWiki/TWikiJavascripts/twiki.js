@@ -1,4 +1,20 @@
-// Generally useful JavaScript used by TWiki
+/*
+This collection of javascript functions is deprecated.
+Use the new TWiki library classes instead:
+twikilib.js
+twikiArray.js
+twikiCSS.js
+twikiEvent.js
+twikiForm.js
+twikiFunction.js
+twikiHTML.js
+twikiPref.js
+twikiString.js, twikiStringUnicodeChars.js
+twikiWindow.js
+
+When converting to the new classes: some functions may have changed name or parameters.
+
+*/
 
 var POPUP_WINDOW_WIDTH = 500;
 var POPUP_WINDOW_HEIGHT = 480;

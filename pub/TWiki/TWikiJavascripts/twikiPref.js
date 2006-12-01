@@ -57,7 +57,7 @@ twiki.Pref = {
 	*/
 	getPref:function(inPrefName) {
 		var prefName = twiki.Pref._getSafeString(inPrefName);
-		return twiki.Pref.getPrefValueFromPrefList(prefName, getPrefList());
+		return twiki.Pref.getPrefValueFromPrefList(prefName, twiki.Pref.getPrefList());
 	},
 	
 	/**
