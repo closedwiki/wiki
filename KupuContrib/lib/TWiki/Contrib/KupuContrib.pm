@@ -12,7 +12,7 @@
 # GNU General Public License for more details, published at
 # http://www.gnu.org/copyleft/gpl.html
 
-package TWiki::Contrib::KupuEditorContrib;
+package TWiki::Contrib::KupuContrib;
 
 use strict;
 

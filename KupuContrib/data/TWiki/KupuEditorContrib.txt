@@ -1,5 +1,5 @@
 
----+!! KupuEditorContrib
+---+!! KupuContrib
 Integration of the [[http://kupu.oscom.org/][OSCOM Kupu Wysiwyg editor]] with TWiki.
 
 <img src="%ATTACHURL%/screenshot.jpg" alt="Screenshot" />
@@ -25,6 +25,7 @@ The version of Kupu shipped with this plugin is an uncustomised basic Kupu relea
 ---++ Installation Instructions
 
 %$INSTALL_INSTRUCTIONS%
+
 *Do not forget to enable the WysiwygPlugin in =configure= or it won't work*.
 	* To enable the editor in one of your skins, add the following link to the skin alongside or in place of the existing 'edit' link:<br /><code>&lt;a href="%<nop>SCRIPTURLPATH%/edit%<nop>SCRIPTSUFFIX%/%<nop>WEB%/%<nop>TOPIC%?skin=kupu"&gt;Kupu&lt;/a&gt;</code><br />As you can see this is just a standard edit link with the 'kupu' skin in place of the usual edit skin. Here it is for this topic: <a href="%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/%WEB%/%TOPIC%?skin=kupu">Kupu</a>. Try clicking on it, but _do not save_!
 
@@ -196,9 +197,9 @@ Because of limitations in the browsers, the editor does not support PRE blocks. 
 |  5693 | Initial commit; doesn't do much except run tests |
 |  Dependencies: | |
 %$DEPENDENCIES%
-|  Contrib Home: | http://twiki.org/cgi-bin/view/Plugins/KupuEditorContrib |
-|  Feedback: | http://twiki.org/cgi-bin/view/Plugins/KupuEditorContribDev |
-|  Appraisal: | http://twiki.org/cgi-bin/view/Plugins/KupuEditorContribAppraisal |
+|  Contrib Home: | http://twiki.org/cgi-bin/view/Plugins/KupuContrib |
+|  Feedback: | http://twiki.org/cgi-bin/view/Plugins/KupuContribDev |
+|  Appraisal: | http://twiki.org/cgi-bin/view/Plugins/KupuContribAppraisal |
 
 <!-- Do _not_ attempt to edit this topic; it is auto-generated. Please add comments/questions/remarks to the Dev topic instead. -->
 

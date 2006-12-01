@@ -6,7 +6,7 @@ BEGIN {
 use TWiki::Contrib::Build;
 
 # Create the build object
-$build = new TWiki::Contrib::Build('KupuEditorContrib');
+$build = new TWiki::Contrib::Build('KupuContrib');
 
 # Set the details of the repository for uploads.
 # This can be any web on any accessible TWiki installation.
