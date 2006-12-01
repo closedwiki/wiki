@@ -6,8 +6,6 @@ use base qw(TWikiTestCase);
 
 use strict;
 
-use TWiki::Contrib::CliRunnerContrib;
-
 sub new {
     my $self = shift()->SUPER::new(@_);
     return $self;
@@ -34,6 +32,17 @@ sub tear_down {
 # errors one at a time, because unit test cases are aborted after the
 # first failure.
 BEGIN {
+    # Don't break the test run if CliRunnerContrib isn't installed
+    eval { require TWiki::Contrib::CliRunnerContrib };
+
+    if ($@) {
+        my $package = __PACKAGE__;
+        my $message = "Warning: $package skipped.\nTests in $package can only be run with CliRunnerContrib installed.\n";
+        eval "sub test_nothing{ print '$message'; }";
+        return;
+    }
+
+
     # The configuration is available from our TWikiTestCase heritage
     my $dataDir  =  $TWiki::cfg{DataDir};
     opendir TCWEB,"$dataDir/TestCases"
@@ -64,7 +73,10 @@ sub _testAutoTestCase {
     $runner->addScriptOptions(test => 'compare', user=>'TWikiGuest');
     $runner->topic("TestCases.$topic");
     my $result  =  $runner->run();
-    $this->assert_matches(qr/ALL TESTS PASSED/,$result);
+    if ($result  !~  /ALL TESTS PASSED/) {
+        $this->assert(0,"$topic does not pass.  Run from a browser to see more.");
+    }
+    # $this->assert_matches(qr/ALL TESTS PASSED/,$result);
 
     # As a next step one could avoid to assert the binary ALL TESTS
     # PASSED result, and assert the individual expected/actual
