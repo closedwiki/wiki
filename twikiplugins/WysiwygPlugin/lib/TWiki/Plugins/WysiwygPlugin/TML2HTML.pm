@@ -649,7 +649,7 @@ sub _emitTR {
         $cell =~ s/^\s*$/&nbsp;/g;
 
         # Removed TH to avoid problems with handling table headers. TWiki
-        # allows TH anywhere, but Kupu assumes top row only, mostly.
+        # allows TH anywhere, but editors assume top row only, mostly.
         # See Item1185
         push( @tr, CGI::td( $attr, $cell ));
     }

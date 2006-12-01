@@ -23,16 +23,18 @@ This plugin is responsible for translating TML to HTML before an edit starts
 and translating the resultant HTML back into TML.
 The flow of control is as follows:
    1 User hits "edit"
-   2 The kupu 'edit' template is instantiated with all the js and css
-   3 kupu editor invokes view URL with the 'wysiwyg_edit=1' parameter to
+   2 if the skin is WYWIWYGPLUGIN_WYWIWYGSKIN, the beforeEditHandler
+      filters the edit
+   3 The 'edit' template is instantiated with all the js and css
+   4 editor invokes view URL with the 'wysiwyg_edit=1' parameter to
      obtain the clean document
       * The earliest possible handler is implemented by the plugin in this
         mode. This handler formats the text and then saves it so the rest
         of twiki rendering can't do anything to it. At the end of rendering
         it drops the saved text back in.
-   4 User edits
-   5 editor saves by posting to 'save' with the 'wysiwyg_edit=1' parameter
-   6 the beforeSaveHandler sees this and converts the HTML back to tml
+   5 User edits
+   6 editor saves by posting to 'save' with the 'wysiwyg_edit=1' parameter
+   7 the beforeSaveHandler sees this and converts the HTML back to tml
 Note: In the case of a new topic, you might expect to see the "create topic"
 screen in the editor when it goesback to twiki for the topic content. This
 doesn't happen because the earliest possible handler is called on the topic
@@ -52,18 +54,14 @@ use CGI qw( -any );
 use strict;
 use TWiki::Func;
 
-use vars qw( $VERSION $RELEASE $MODERN $SKIN );
+use vars qw( $VERSION $RELEASE $MODERN $SKIN $SHORTDESCRIPTION );
 use vars qw( $html2tml $tml2html $recursionBlock $imgMap $cairoCalled );
 use vars qw( %TWikiCompatibility );
 
-# This should always be $Rev$ so that TWiki can determine the checked-in
-# status of the plugin. It is used by the build automation tools, so
-# you should leave it alone.
+$SHORTDESCRIPTION = 'Translator framework for Wysiwyg editors';
+
 $VERSION = '$Rev$';
 
-# This is a free-form string you can use to "name" your own plugin version.
-# It is *not* used by the build automation tools, but is reported as part
-# of the version number in PLUGINDESCRIPTIONS.
 $RELEASE = 'Dakar';
 
 sub initPlugin {
@@ -79,7 +77,7 @@ sub initPlugin {
     $SKIN = TWiki::Func::getPreferencesValue( 'WYSIWYGPLUGIN_WYSIWYGSKIN' );
 
     # %OWEB%.%OTOPIC% is the topic where the initial content should be
-    # grabbed from, as defined in templates/edit.kupu.tmpl
+    # grabbed from, as defined in templates/edit.skin.tmpl
     TWiki::Func::registerTagHandler('OWEB',\&_OWEBTAG);
     TWiki::Func::registerTagHandler('OTOPIC',\&_OTOPICTAG);
 
@@ -93,7 +91,7 @@ sub _OWEBTAG {
     my $query = TWiki::Func::getCgiQuery();
 
     return "$theWeb" unless $query;
-  
+
     if(defined($query->param('templatetopic'))) {
         my @split=split(/\./,$query->param('templatetopic'));
 
@@ -113,7 +111,7 @@ sub _OTOPICTAG {
     my $query = TWiki::Func::getCgiQuery();
 
     return "$theTopic" unless $query;
-  
+
     if(defined($query->param('templatetopic'))) {
         my @split=split(/\./,$query->param('templatetopic'));
 

@@ -17,6 +17,7 @@
 !include twikiplugins/TablePlugin/lib/TWiki/Plugins/TablePlugin
 !include twikiplugins/TipsContrib/lib/TWiki/Contrib/TipsContrib
 !include twikiplugins/WysiwygPlugin/lib/TWiki/Plugins/WysiwygPlugin
+!include twikiplugins/WysiwygPlugin/lib/TWiki/Contrib/KupuContrib
 !include twikiplugins/NatSkin/lib/TWiki/Contrib/NatSkin
 AUTHORS 0440
 COPYING 0440

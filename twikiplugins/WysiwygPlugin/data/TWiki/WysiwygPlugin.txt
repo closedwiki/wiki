@@ -1,22 +1,15 @@
 ---+!! Wysiwyg Plugin
 
-Support for the integration of WYSIWYG (What-You-See-Is-What-You-Get) editors. Comes bundled with a complete integration of the feature-rich [[http://kupu.oscom.org][Kupu]] editor.
+Support for the integration of WYSIWYG (What-You-See-Is-What-You-Get) editors. On it's own, the only thing this plugin gives you is a stand-alone HTML to TWiki translator script. For WYSIWYG editing in TWiki, you will also need to install a specific editor package such as TWiki:Plugins.KupuEditorContrib or TWiki:Plugins.WikiwygContrib.
 
-<img src="%ATTACHURL%/screenshot.jpg" alt="Screenshot" />
-
-The plugin is a generic framework that supports editing of TWiki topics using any browser-based HTML editor. It works by transforming TML (TWiki Meta Language) into HTML for the editor and then transforming HTML back into TML on save. These steps can be separated to support the import of HTML from external sources such as existing web pages.
-
-The plugin should operate with TWiki20040904 as well as TWiki-4.0.0 and later.
-
-*Caveat*: WysiwygPlugin is designed for editing TWiki topics, not as a general purpose HTML editor. It will work fine on topics that contain text, TML formatting, and most HTML. However, because of the complexity of transforming TML into HTML and back, complex TML, and mixing HTML and TML may not give the results you expect. You are recommended to use the standard browser textarea editor for editing existing topics that contain mixed HTML and TML, or complex %<nop>TML%-type variables.
+This plugin provides a generic framework that supports editing of TWiki topics using any browser-based HTML editor. It works by transforming TML (TWiki Meta Language) into HTML for the editor, and then transforming HTML back into TML on save.
 
 %TOC%
 
 ---++ Features
 	* Supports the input of malformed HTML
 	* Full round-trip (TML -> XHTML -> TWiki syntax)
-	* Framework is editor agnostic
-	* Customised [[http://kupu.oscom.org][Kupu]] editor included
+	* Framework is editor-agnostic
 
 ---++ Details
 ---+++ What's in the package
@@ -24,84 +17,45 @@ The package includes the following pieces:
 	* TML (TWiki syntax) to HTML translator
 	* HTML to TML translator (with stand-alone script)
 	* Generic TWiki plugin for automating the translation during editing
-	* [[http://kupu.oscom.org][Kupu]] editor integration, implemented as a TWiki skin
----+++ How to use the editor
-Basic help for most of the functions in the toolbar is available by "hovering" the mouse over the button. 
-Some functions require a bit more explanation:
-	* "Insert No-Op" inserts a &lt;nop> region. Any TWiki syntax such as wikiwords or variables inside the region will be disabled in the rgeion. $lt;nop> regions may not extend over line breaks.
-	* The rightmost drop-down will give you a menu of TWiki variables that can be inserted. Any of these variables can be edited after they have been placed in the text, for example to add parameters.
-	* "Insert a WikiWord" will give you a menu of topics in the _current web_ that can be inserted. Topics are inserted as links, though typing wikiwords in plain text will work just as well.
-   * Watch out for the &lt;&gt; button on the right of the toolbar. It lets you switch into an HTML view, which can be very useful when you can't get your formatting right.
-   * In TWiki, a totally empty table cell causes the cell to be merged with the cell immediately to the left. To make this effect more transparent in the editor, these empty cells are shown with the text "%<nop>SPAN%" in them. In Kupu, if you add %<nop>SPAN% to a table cell, then all the rest of the content will be thrown away and the cell will be converted to an empty table cell. Note that this only applies to tables that are converted to TWiki syntax.
-
----++++ Kupu Notes
-The version of Kupu shipped with this plugin is an uncustomised basic Kupu release. All the TWiki customisation is done as plugins and extensions to Kupu - the basic kupu code is shipped completely intact.
 
 ---+++ How it works
-The plugin works by translating the topic text into HTML, which is then fed to the editor. The edited HTML is then run through the reverse translation before saving to the topic. TWiki syntax is used in preference to HTML in the stored topic wherever possible, though HTML may be used if the translator can't find a suitable TML equivalent..
+The plugin works by translating the topic text into HTML when someone edits a topic. The HTML is then fed to the WYSIWYG editor. On save, the edited HTML is run through the reverse translation before saving to the topic. TWiki syntax is used in preference to HTML in the stored topic wherever possible, though HTML may be used if the translator can't find a suitable TML equivalent..
 
-The default rendering that TWiki uses to generate HTML for browsers is 'lossy' - information in the TWiki syntax is lost in the HTML output, and a round-trip (recovering the original TWiki syntax from the HTML) is impossible. To solve this problem the plugin instead uses its own translation of TWiki syntax to pure XHTML. The generated XHTML is annotated with CSS classes that support the accurate recovery of the original TWiki syntax.
+The default rendering that TWiki uses to generate HTML for display in browsers is 'lossy' - information in the TWiki syntax is lost in the HTML output, and a round-trip (recovering the original TWiki syntax from the HTML) is impossible. To solve this problem the plugin instead uses its own translation of TWiki syntax to pure XHTML. The generated XHTML is annotated with CSS classes that support the accurate recovery of the original TWiki syntax.
 
-_(before you ask the obvious question, yes, the translator *could* be used to replace the TWiki rendering pipeline for generating HTML pages. In fact, the translator is taken almost directly from the implementation of the rendering pipeline for the TWiki 'Dakar' release)_
+_Before you ask the obvious question, yes, the translator *could* be used to replace the TWiki rendering pipeline for generating HTML pages. In fact, the translator is taken almost directly from the implementation of the rendering pipeline for the TWiki-4 release_
 
-Translation of the HTML back to TWiki syntax uses the CPAN:HTML::Parser. This parser is used in preference to a more modern XML parser, because the HTML may not generate fully compliant XHTML. A strict parser would risk losing content. CPAN:HTML::Parser is better at handling malformed syntax.
+Translation of the HTML back to TWiki syntax uses the CPAN:HTML::Parser. This parser is used in preference to a more modern XML parser, because the HTML may not generate fully compliant XHTML. A strict parser would risk losing content. CPAN:HTML::Parser is better at handling malformed HTML.
 
-There is also the advantage that the translator can be used to import HTML from other sources - for example, existing web pages. Due to the simple nature of TWiki syntax and the complexity of HTML, this translation is lossy - i.e there will be HTML features that can be entered by editors that will be lost in this translation step. This is especially noticeable with HTML tables.
+There is also the advantage that the translator can be used to import HTML from other sources - for example, existing web pages. Due to the simple nature of TWiki syntax and the potential complexity of web pages, this translation is often lossy - i.e there will be HTML features that can be entered by editors that will be lost in this translation step. This is especially noticeable with HTML tables.
 
 ---+++ Using the translators from Perl scripts
 
 Both translators can be used directly from Perl scripts, for example to build your own stand-alone translators.
 
-An example stand-alone convertor script for HTML to TWiki is included in the installation. It can be found in the top-level =tools= directory and is called =html2tml.pl=.
+A stand-alone convertor script for HTML to TWiki is included in the installation. It can be found in the top-level =tools= directory and is called =html2tml.pl=.
+
+---+++ Integrating a Wysiwyg Editor
+This section to be written. At the moment, the best advice is to read the header comment in =WysiwygPlugin.pm=, and look at TWiki:Plugins.KupuEditorContrib and TWiki:Plugins.WikiwygContrib and see how they do it. It's actually quite easy.
 
 ---++ Plugin Installation Instructions
 %$INSTALL_INSTRUCTIONS%
-	* To enable the editor in one of your skins, add the following link to the skin alongside or in place of the existing 'edit' link:<br /><code>&lt;a href="%<nop>SCRIPTURLPATH%/edit%<nop>SCRIPTSUFFIX%/%<nop>WEB%/%<nop>TOPIC%?skin=kupu"&gt;Kupu&lt;/a&gt;</code><br />As you can see this is just a standard edit link with the 'kupu' skin in place of the usual edit skin. Here it is for this topic: <a href="%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/%WEB%/%TOPIC%?skin=kupu">Kupu</a>. Try clicking on it, but _do not save_!
 
 ---++ Plugin Configuration Settings
-	* Set SHORTDESCRIPTION = Translator framework and WYSIWYG editor for TWiki topics
-	* The name of the skin used to invoke a Wysiwyg editor.
-		* Set WYSIWYGSKIN = kupu
-	* Web/Topic name of a help page. Change this to point to your local version of the help page, which is brought up when the .
-		* Set HELPPAGE = TWiki/WysiwygPlugin
+<!--
+	* Set SHORTDESCRIPTION = Translator framework for Wysiwyg editors
+-->
 
----++ Other Settings
+---+++ Translator control
+For any of the following controls to work, you must tell %TOPIC% the name of
+the skin used to invoke the Wysiwyg editor.
+This must be set to the name of the editor skin being used, for example
+=kupu= or =wikiwyg=. The plugin uses this to recognise when it has to apply the restrictions.
+	* Set WYSIWYGSKIN =
+Note that is can be set differently in different areas by defining
+=WYSWIYGPLUGIN_WYSIWYGSKIN= locally (e.g. in !WebPreferences).
 
-The editor template includes a number of files that can be used for other settings. These files are *not* defined in the distribution, so that you can create your own local content.
-
----+++ %TWIKIWEB%.<nop>WysiwygPluginIcons
-You can define a list of icons that will be available in the Kupu editor when the %ATTACHURL%/smiley.png toolbar button is pressed. This topic has to contain a list of &lt;IMG&gt; tags. If present, the 'alt' text will be used in place of the &lt;IMG&gt; tag when translating from HTML to TML. Example:
-<verbatim>
-	<img src="%PUBURL%/TWiki/TWikiDocGraphics/tip.gif" />
-	<img src="%PUBURL%/TWiki/TWikiDocGraphics/warning.gif" />
-	<img src="%PUBURL%/TWiki/TWikiDocGraphics/pencil.gif" />
-	<img src="%PUBURL%/TWiki/TWikiDocGraphics/choice-yes.gif" />
-	<img src="%PUBURL%/TWiki/TWikiDocGraphics/updated.gif" />
-	<img src="%PUBURL%/TWiki/TWikiDocGraphics/help.gif" />
-	<img src="%PUBURL%/TWiki/TWikiDocGraphics/new.gif" />
-	<img src="%PUBURL%/TWiki/TWikiDocGraphics/starred.gif" />
-	<img src="%PUBURL%/TWiki/TWikiDocGraphics/arrowright.gif" />
-</verbatim>
-
----+++ %TWIKIWEB%.<nop>WysiwygPluginStrings
-You can also define a list of strings that will be available for insertion in topics using the %ATTACHURL%/strings.png toolbar button. This topic has to contain a list of HTML 'option' tags. Example:
-<verbatim>
-	<option value='-- <nop>%WIKIUSERNAME% - %DATE%'>Signature</option>
-	<option value="%<nop>WIKINAME%">Wiki name (variable)</option>
-	<option value='%<nop>SEARCH{"search for"}%'>Inline search (variable)</option>
-	<option value='%<nop>INCLUDE{"topic or url"}%'>Include (variable)</option>
-	<option value="%<nop>TOC%"> Table of Contents (variable)</option>
-	<option value="%<nop>TOPIC%">Topic (variable)</option>
-	<option value="%<nop>WEB%">Web (variable)</option>
-	<option value="%<nop>DATE%"> Date (variable)</option>
-</verbatim>
-The bit between the &gt; &lt; =value= defines text in the drop-down box in the editor, and the =value= defines the actual string inserted in the topic.			
----+++ %TWIKIWEB%.<nop>WysiwygPluginLocalHelp
-If it exists, the contents of this topic will be included and shown on the edit screen below the status bar. It is intended to be used for site-specific quick help information.
-
----+++ Editor control
 The *global* TWiki Variable =WYSIWYG_EXCLUDE= can be set to make the plugin sensitive to what is in a topic before allowing it to be edited. You can set it up to refuse to edit if 
-
    * some or all of HTML tags (e.g. =&lt;br /&gt;= or =&lt;div&gt;=), or 
    * simple variables (e.g. =%<nop>VAR%=) or 
    * calls (e.g. =%<nop>VARIABLE{...}%=)
@@ -115,20 +69,14 @@ Set =WYSIWYG_EXCLUDE in %MAINWEB%.TWikiPreferences, or in %WEBPREFSTOPIC% for ea
 If you excluded =calls= in =WYSIWYG_EXCLUDE=, you can still define a subset of TWiki variables that do *not* block edits. this is done in the *global* preference variable =WYSIWYG_EDITABLE_CALLS=, which should be a list of TWiki variable names separated by vertical bars, with no spaces, e.g:
    * Set WYSIWYG_EDITABLE_CALLS = COMMENT|CALENDAR|INCLUDE
 
-If you are using this plugin with TWiki-4.0.0 or later with =pattern= skin, the =%<nop>COMPOSER%= global TWiki variable is used to control the skin used for the WYSIWYG editor link. You can define this variable to the empty string to disable WYSIWYG editing on a site, per-web, per-user or per-topic basis.
-
----++ Known Issues
-Most of the known problems with the plugin are actually problems with the Kupu editor or the browser rather than the plugin.
+---++ Known issues
 
 ---+++ Incompatible with "non-standard" syntax
-WysiwygPlugin is Incompatible with plugins that expand non-standard syntax e.g. TWiki:Plugins.MathModePlugin (WysiwygPlugin)
+WysiwygPlugin is incompatible with plugins that expand non-standard syntax e.g. TWiki:Plugins.MathModePlugin (WysiwygPlugin)
 
 Plugins that extend the syntax using TWiki variables, such as =%MYVARIABLE%=, should work fine.
 
----+++ Can't *undo* all functions (Kupu + browser)
-Due to limitations in the browser support for editing, not all functions can be undone. Also, the undo buffer can be cleared unexpectedly during editing, especially when using Internet Explorer.
-
----+++ Overlapping styles (WysiwygPlugin)
+---+++ Overlapping styles
 Because TWiki uses a "best guess" approach to some formatting, it allows overlapping of tags in a way forbidden by HTML, and it is impossible to guarantee 100% that formating in the original TWiki document will still be there when the same document is loaded and then saved through the WysiwygPlugin. The most obvious case of this is to do with styles. For example, the sentence
 <verbatim>
 *bold _bold-italic* italic_
@@ -143,17 +91,13 @@ which gets translated back to TML as
 </verbatim>
 which is correct by construction, but does not render correctly in TWiki. This problem is unfortunately unavoidable due to the way TWiki syntax works.
 
----+++ Support for PRE
-Because of limitations in the browsers, the editor does not support PRE blocks. All PRE blocks will be converted to TWiki verbatim blocks on save. This can cause some confusion, especially when editor formatting controls (such as "bold") have been used to format text in a PRE block. Users are advised to use only plain text in PRE (verbatim) blocks.
-
 ---++ Plugin Info
 
-This plugin is heavily based on the TWiki::Plugins.KupuEditorAddOn, and the authors of that add-on are therefore also credited as authors of this plugin.
-
-|  Plugin Authors: | TWiki:Main.CrawfordCurrie http://www.c-dot.co.uk (from original work by TWiki:Main.RomainRaugi, TWiki:Main.DamienMandrioli, TWiki:Main.FredericLuddeni, and TWiki:Main.ColasNahaboo)  |
+|  Plugin Authors: | TWiki:Main.CrawfordCurrie http://www.c-dot.co.uk |
 | Copyright | &copy; ILOG 2005 http://www.ilog.fr |
 |  Plugin Version: | %$VERSION% |
 | Change&nbsp;History: | |
+|  12119 | Split into WysiwygPlugin and KupuContrib |
 |  11538 | Minor doc updates, minor fixes to spacing in lists, integrated Koen Marten's template topic patch |
 |  9671 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item2025'>Item2025</a>  corrected handling of SPAN and FONT tags used for colour changes |
 |  9566 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1890'>Item1890</a>  doc update |
