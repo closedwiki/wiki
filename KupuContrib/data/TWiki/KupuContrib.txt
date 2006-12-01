@@ -1,4 +1,3 @@
-
 ---+!! KupuContrib
 Integration of the [[http://kupu.oscom.org/][OSCOM Kupu Wysiwyg editor]] with TWiki.
 
@@ -10,7 +9,7 @@ The integration uses the TWiki::Plugins.WysiwygPlugin to translate text to and f
 
 *Caveat*: %TOPIC% is designed for editing TWiki topics, not as a general purpose HTML editor. It will work fine on topics that contain text, TML formatting, and most HTML. However, because of the complexity of transforming TML into HTML and back, complex TML, and mixing HTML and TML may not give the results you expect. You are recommended to use the standard browser textarea editor for editing existing topics that contain mixed HTML and TML, or complex %<nop>TML%-type variables.
 
----+++ How to use the editor
+---++ How to use the editor
 Basic help for most of the functions in the toolbar is available by "hovering" the mouse over the button. 
 Some functions require a bit more explanation:
 	* "Insert No-Op" inserts a &lt;nop> region. Any TWiki syntax such as wikiwords or variables inside the region will be disabled in the rgeion. $lt;nop> regions may not extend over line breaks.
@@ -19,7 +18,7 @@ Some functions require a bit more explanation:
    * Watch out for the &lt;&gt; button on the right of the toolbar. It lets you switch into an HTML view, which can be very useful when you can't get your formatting right.
    * In TWiki, a totally empty table cell causes the cell to be merged with the cell immediately to the left. To make this effect more transparent in the editor, these empty cells are shown with the text "%<nop>SPAN%" in them. In Kupu, if you add %<nop>SPAN% to a table cell, then all the rest of the content will be thrown away and the cell will be converted to an empty table cell. Note that this only applies to tables that are converted to TWiki syntax.
 
----++++ Kupu Notes
+---++ Kupu Notes
 The version of Kupu shipped with this plugin is an uncustomised basic Kupu release. All the TWikification is done as plugins and extensions to Kupu - the basic kupu code is shipped completely intact.
 
 ---++ Installation Instructions
@@ -36,7 +35,7 @@ See also: WysiwygPlugin for other settings that affect this contrib. Note
 especially the WYSIWYGSKIN, which *must* be set to =kupu= for this contrib
 to work correctly.
 
-The editor template includes a number of files that can be used for other settings. These files are *not* defined in the distribution, so that you can create your own local content.
+The editor template includes a number of files that can be used for other settings. These files are *not* included in the distribution, so that you can easily create your own local content.
 
 ---+++ %TWIKIWEB%.<nop>WysiwygPluginIcons
 You can define a list of icons that will be available in the Kupu editor when the %ATTACHURL%/smiley.png toolbar button is pressed. This topic has to contain a list of &lt;IMG&gt; tags. If present, the 'alt' text will be used in place of the &lt;IMG&gt; tag when translating from HTML to TML. Example:
@@ -76,10 +75,12 @@ Because of limitations in the browsers, the editor does not support PRE blocks. 
 
 ---++ Contrib Info
 
+This contrib is heavily based on the TWiki::Plugins.KupuEditorAddOn, and the authors of that add-on are therefore also credited as authors of this plugin.
+
 |  Contrib Author: | TWiki:Main.CrawfordCurrie http://www.c-dot.co.uk (from original work by TWiki:Main.RomainRaugi, TWiki:Main.DamienMandrioli, TWiki:Main.FredericLuddeni, and TWiki:Main.ColasNahaboo)  |
 |  Contrib Version: | %$VERSION% |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|        | Split out of WysiwygPlugin |
+|  12119 | Split out of WysiwygPlugin |
 |  11538 | Minor doc updates, minor fixes to spacing in lists, integrated Koen Marten's template topic patch |
 |  9671 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item2025'>Item2025</a>  corrected handling of SPAN and FONT tags used for colour changes |
 |  9566 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1890'>Item1890</a>  doc update |
