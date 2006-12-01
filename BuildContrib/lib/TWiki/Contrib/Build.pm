@@ -782,8 +782,9 @@ sub filter_txt {
     local $/ = undef;
     my $text = <IF>;
     close(IF);
-    # remove topicinfo; it is just confusing
-    $text =~ s/^%META:TOPICINFO{.*}%$//m;
+    # Replace the SVN revision with rev 1.
+    # In TWiki builds this gets replaced by latest revision later.
+    $text =~ s/^(%META:TOPICINFO{.*)\$Rev:.*\$(.*}%)$/${1}1$2/m;
     $text =~ s/%\$(\w+)%/&_expand($this,$1)/geo;
 
     unless ($this->{-n}) {
