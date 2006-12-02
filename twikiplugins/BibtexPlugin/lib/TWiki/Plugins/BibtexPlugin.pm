@@ -97,7 +97,7 @@ sub doInit {
   # my $bibtexPrg =  $TWiki::cfg{Plugins}{BibtexPlugin}{bibtex} ||
   #   '/usr/bin/bibtex';
   $render_script = $TWiki::cfg{Plugins}{BibtexPlugin}{render} ||
-      '/var/www/twiki/tools/bibtex_render.sh ';
+      '/var/www/twiki/tools/bibtex_render.sh';
 
   # for getRegularExpression
   if ($TWiki::Plugins::VERSION < 1.020) {
@@ -119,12 +119,12 @@ sub doInit {
 
 #  $cmdTemplate = $pubDir .  '/TWiki/BibtexPlugin/bibtex_render.sh ' .
   $cmdTemplate = $render_script . 
-    '%MODE|U% ' .
-    '%BIBTOOLRSC|F% ' .
-    '%SELECT|U% ' .
-    '%BIBTEX2HTMLARGS|U% ' .
-    '%STDERR|F% ' .
-    '%BIBFILES|F% ';
+    ' %MODE|U%' .
+    ' %BIBTOOLRSC|F%' .
+    ' %SELECT|U%' .
+    ' %BIBTEX2HTMLARGS|U%' .
+    ' %STDERR|F%' .
+    ' %BIBFILES|F%';
   
   $currentBibWeb = "";
   $currentBibTopic = "";
@@ -245,7 +245,7 @@ sub handleBibtexBibliography
 
     my %opts = TWiki::Func::extractParameters( $args );
 
-    my $header = "---+ References";
+    my $header = "\n\n---+ References";
 
     my $style = $opts{'bibstyle'} || 'plain';
     my $files = $opts{'file'} || '.*\.bib';
