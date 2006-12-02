@@ -621,17 +621,22 @@ sub emitTable {
     my $rowCount = 0;
     my $numberOfRows = scalar(@curTable);
     my $dataColorCount = 0;
-    my $resetCountNeeded = 0;
+
     foreach my $row ( @curTable ) {
         my $rowtext = '';
         my $colCount = 0;
+         # keep track of header cells: if all cells are header cells, do not
+         # update the data color count
+        my $headerCellCount = 0;
+        my $isHeaderRow = 0;
+        
         foreach my $fcell ( @$row ) {
             my $tableAnchor = '';
             next if( $fcell->{type} eq 'X' ); # data was there so sort could work with col spanning
             my $type = $fcell->{type};
             my $cell = $fcell->{text};
             my $attr = $fcell->{attrs} || {};
-
+			
 			my $newDirection;
 			my $isSorted = 0;
 		 	if ( $currentDirection != $sortDirection{'NONE'} &&
@@ -646,10 +651,7 @@ sub emitTable {
 			}
 			
             if( $type eq 'th' ) {
-                # reset data color count to start with first color after
-                # each table heading
-                $dataColorCount = 0 if( $resetCountNeeded );
-                $resetCountNeeded = 0;
+                $headerCellCount++;
                 unless( $upchar ) {
                     $upchar = CGI::span( { class => 'tableSortIcon tableSortUp' },
                     	CGI::img(
@@ -719,7 +721,6 @@ sub emitTable {
 
             } else {
             	# $type is not 'th'
-                $resetCountNeeded = 1 if( $colCount == 0 );
                 if( @dataBg ) {
                     my $bgcolor;
                     if ( $isSorted ) {
@@ -752,11 +753,20 @@ sub emitTable {
             no strict 'refs';
             $rowtext .= &$fn($attr, " $cell ");
             use strict 'refs';
-        }
+        } # foreach my $fcell ( @$row )
+        
         $text .= $currTablePre.CGI::Tr( { class=> ($rowCount % 2)?'twikiTableOdd':'twikiTableEven'}, $rowtext )."\n";
         $rowCount++;
-        $dataColorCount++;
-    }
+        $isHeaderRow = 1 if ($headerCellCount == $colCount);
+        if ($isHeaderRow) {
+        	# reset data color count to start with first color after
+            # each table heading
+        	$dataColorCount = 0;
+        } else {
+        	$dataColorCount++;
+        }
+    } # foreach my $row ( @curTable )
+    
     $text .= $currTablePre.CGI::end_table()."\n";
     _setDefaults();
     return $text;
