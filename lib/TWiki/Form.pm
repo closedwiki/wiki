@@ -456,12 +456,12 @@ sub renderFieldForEdit {
 				id => 'id'.$name,
 				size=> $size,
 				value => $value,
-				class=> 'twikiEditFormDateField'});
+				class=> 'twikiInputField twikiEditFormDateField'});
       require TWiki::Contrib::JSCalendarContrib;
       unless ( $@ ) {
 	my $ifFormat = $TWiki::cfg{JSCalendarContrib}{format} || '%e %b %Y';
 	TWiki::Contrib::JSCalendarContrib::addHEAD( 'twiki' );
-	$value .= '%TWISTY{link="" noscript="hide" start="show"}%';
+	$value .= '%TWISTY{link="" noscript="hide" start="show" prefix="&nbsp;"}%';
 	$value .= CGI::image_button( -name => 'calendar',
 				     -onclick =>
 				     "return showCalendar('id$name','$ifFormat')",
@@ -469,12 +469,12 @@ sub renderFieldForEdit {
 				       $TWiki::cfg{SystemWebName} .
 				       '/JSCalendarContrib/img.gif',
 				     -alt => 'Calendar',
-				     -class => 'twikiEditFormCalendarButton' );
+				     -class => 'twikiButton twikiEditFormCalendarButton' );
 	$value .= '%ENDTWISTY%';
 	$value = $session->{renderer}->getRenderedVersion( $session->handleCommonTags( $value, $web, $topic ) );
       }
     } elsif( $type eq 'text' ) {
-        $value = CGI::textfield( -class => 'twikiEditFormTextField',
+        $value = CGI::textfield( -class => 'twikiInputField twikiEditFormTextField',
                                  -name => $name,
                                  -size => $size,
                                  -value => $value );
@@ -489,7 +489,6 @@ sub renderFieldForEdit {
         my $renderedValue = $session->{renderer}->getRenderedVersion
           ( $session->handleCommonTags( $value, $web, $topic ));
         $value = CGI::hidden( -name => $name,
-                              -class => 'twikiEditFormLabelField',
                               -value => $value );
         $value .= CGI::div( { class => 'twikiEditFormLabelField' },
                             $renderedValue );
@@ -501,7 +500,7 @@ sub renderFieldForEdit {
             $cols = $1;
             $rows = $2;
         }
-        $value = CGI::textarea( -class => 'twikiEditFormTextAreaField',
+        $value = CGI::textarea( -class => 'twikiInputField twikiEditFormTextAreaField',
                                 -cols => $cols,
                                 -rows => $rows,
                                 -name => $name,
@@ -576,12 +575,12 @@ sub renderFieldForEdit {
             my $boxes = scalar( @$options );
             $extra = CGI::br();
             $extra .= CGI::button
-              ( -class => 'twikiEditFormCheckboxButton',
+              ( -class => 'twikiCheckBox twikiEditFormCheckboxButton',
                 -value => $session->{i18n}->maketext('Set all'),
                 -onClick => 'checkAll(this,2,'.$boxes.',true)' );
             $extra .= '&nbsp;';
             $extra .= CGI::button
-              ( -class => 'twikiEditFormCheckboxButton',
+              ( -class => 'twikiCheckBox twikiEditFormCheckboxButton',
                 -value => $session->{i18n}->maketext('Clear all'),
                 -onClick => 'checkAll(this,1,'.$boxes.',false)');
         }
@@ -617,7 +616,7 @@ sub renderFieldForEdit {
         my $selected = '';
         foreach $item ( @$options ) {
             $attrs{$item} =
-              { class=>'twikiEditFormRadioField twikiRadioButton',
+              { class=>'twikiRadioButton twikiEditFormRadioField',
                 label=>$session->handleCommonTags( $item, $web, $topic ) };
 
             $selected = $item if( $item eq $value );
