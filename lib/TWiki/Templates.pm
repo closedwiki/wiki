@@ -300,6 +300,10 @@ sub _readTemplateFile {
 	   return retrieveTopic( $store, $userdirweb, $userdirname );
        }
     }
+    else {
+        $userdirweb = ucfirst($userdirweb);
+        $userdirname = ucfirst($userdirname);
+    }
 
     my @skinList = split( /\,\s*/, $skins );
     my $nrskins = $#skinList;
