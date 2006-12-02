@@ -24,6 +24,8 @@
 # Debug new topic creation
 perl -dT view "Trackingtest.OngoingIteration" -user guest -sequence "checked" -topic "MyNew" -parent "OngoingIteration" -templatetopic "StoryTemplate" -xpsave "1"
 
+# Debug estimate submission
+perl -dT view "Trackingworknew.FrankWeil" -ettablenr "2" -developer "FrankWeil" -etunits "1" -etsave "1" -etreport "1" -etcell3x5 "5" -etcell3x0 "FrankTemplateStory" -etcell3x1 "Development" -etrows "4"
 =cut
 
 # =========================
@@ -58,7 +60,7 @@ use vars qw ( @timeRec %defaults
         %cachedTeamIterations
         %cachedIterationStories
         $encodeStart $encodeEnd
-	@addtlStoryFields $storyCompleteInd
+	@addtlStoryFields @addtlTimesheetFields $storyCompleteInd
 	@statusLiterals
 	$teamLbl $projectLbl $addSpacer
 	$tableNr
@@ -123,8 +125,10 @@ sub initPlugin
     # Get plugin debug flag
     $debug = &TWiki::Func::getPreferencesFlag( "\U$pluginName\E_DEBUG" );
     # Get plugin field customization flag
-    my $addtlStoryFields = &TWiki::Func::getPreferencesValue( "\U$pluginName\E_ADDTLSTORYFIELDS" );
-    @addtlStoryFields = split(/[\s,]+/, $addtlStoryFields);
+    my $addtlFields = &TWiki::Func::getPreferencesValue( "\U$pluginName\E_ADDTLSTORYFIELDS" ) || '';
+    @addtlStoryFields = split(/[\s,]+/, $addtlFields);
+    my $addtlFields = &TWiki::Func::getPreferencesValue( "\U$pluginName\E_ADDTLTIMESHEETFIELDS" ) || '';
+    @addtlTimesheetFields = split(/[\s,]+/, $addtlFields);
     # Get plugin story complete indication
     $storyCompleteInd = &TWiki::Func::getPreferencesValue( "\U$pluginName\E_STORYACCEPTEDINDICATION" );
     my $storyAcceptLit = &TWiki::Func::getPreferencesValue( "\U$pluginName\E_ACCEPTANCELITERAL" );
@@ -1119,7 +1123,7 @@ sub xpCreateTopic {
 sub xpGetProjectTeams {
 
     my ($project, $web) = @_;
-    return defined($cachedProjectTeams{$project}) ? split( /\s+/, $cachedProjectTeams{$project} ) : ();
+    return defined($cachedProjectTeams{$project}) ? @{$cachedProjectTeams{$project}} : ();
 }
 
 ###########################
@@ -1513,7 +1517,7 @@ sub xpGetProjectStories {
 sub xpGetIterStories {
 
     my ($iteration,$web) = @_;
-    return defined($cachedIterationStories{$iteration}) ? split( /\s+/, $cachedIterationStories{$iteration} ) : ();
+    return defined($cachedIterationStories{$iteration}) ? @{$cachedIterationStories{$iteration}} : ();
 }
 
 ###########################
@@ -1654,7 +1658,7 @@ sub xpGetIterDevelopers {
 sub xpGetTeamIterations {
 
     my ($team, $web) = @_;
-    return defined($cachedTeamIterations{$team}) ? split( /\s+/, $cachedTeamIterations{$team} ) : ();
+    return defined($cachedTeamIterations{$team}) ? @{$cachedTeamIterations{$team}} : ();
 }
 
 ###########################
@@ -1730,7 +1734,6 @@ sub xpCacheBuild
     # Put the return in here, and suddenly, no caching.
     # return;
 
-
     # Get all the stories and their iterations:
     my @stories = &xpGetAllStories( $web );
     foreach $eachS ( @stories ) {
@@ -1738,7 +1741,7 @@ sub xpCacheBuild
 
         # To go from iteration -> story (multiple values)
         my $iter = &xpGetMetaValue($meta, "Iteration");
-        $cachedIterationStories{$iter} .= "$eachS " if $iter;
+        push @{$cachedIterationStories{$iter}}, $eachS if $iter;
     }
 
     foreach $eachI (keys %cachedIterationStories) {
@@ -1746,7 +1749,7 @@ sub xpCacheBuild
 
         # To go from team -> iteration (multiple values)
         my $team = &xpGetMetaValue($meta, "$teamLbl");
-        $cachedTeamIterations{$team} .= "$eachI " if $team;
+        push @{$cachedTeamIterations{$team}}, $eachI if $team;
 
     }
 
@@ -1755,7 +1758,7 @@ sub xpCacheBuild
 
         # To go from project -> team (multiple values)
         my $project =  &xpGetMetaValue($meta, "$projectLbl");
-        $cachedProjectTeams{$project} .= "$eachT " if $project;
+        push @{$cachedProjectTeams{$project}}, $eachT if $project;
     }
 
     # dump information to disk cache file
@@ -1815,15 +1818,18 @@ sub xpCacheRead
     my $cacheText = &TWiki::Func::readFile( $cacheFileName );
     
     while($cacheText =~ s/PROJ : (.*?) : (.*?)\n//) {
-        $cachedProjectTeams{$1} = "$2";
+        my @tmp = split(/\s+/, $2);
+        $cachedProjectTeams{$1} = \@tmp;
     }
 
     while($cacheText =~ s/TEAM : (.*?) : (.*?)\n//) {
-        $cachedTeamIterations{$1} = "$2";
+        my @tmp = split(/\s+/, $2);
+        $cachedTeamIterations{$1} = \@tmp;
     }
 
     while($cacheText =~ s/ITER : (.*?) : (.*?)\n//) {
-        $cachedIterationStories{$1} = "$2";
+        my @tmp = split(/\s+/, $2);
+        $cachedIterationStories{$1} = \@tmp;
     }
 
     $cacheInitialized = 1;
@@ -2021,8 +2027,7 @@ sub xpShowDeveloperTasks {
 		    # TJW: could use a flag of whether to do this
                     #$who =~ s/(Main\.)?(.*)/Main\.$2/;  #TJW
                     # no display unless selected
-                    my $test = eval { $who =~ /$developer/ };
-                    next unless $test;
+                    next unless ($who =~ /$developer/);
 
 		    $storyOngoingInvolved = 1 if $storyOngoing;
 
@@ -2236,8 +2241,7 @@ sub xpShowLoad {
 
                         # no display unless selected
 		        if ($dev) {
-			  my $test = eval { $who[$x] =~ /$dev/ };
-			  next unless $test;
+			  next unless ($who[$x] =~ /$dev/);
 			}
 
                         $devDays{$who[$x]}[$count] = 
@@ -2283,8 +2287,10 @@ sub xpShowLoad {
     }
     $list .= $cells . "\n";
 
+    my $hasLoad = 0;
 
     for my $who (sort keys %devDays) {
+        $hasLoad = 1;
         my $cumulLoad = 0;
 	$cells = "| $who |";
         for my $pi (sort {$projiterSec[$a] <=> $projiterSec[$b]} (1..$count)) {
@@ -2344,6 +2350,7 @@ sub xpShowLoad {
 	}
 	$list .= $cells . "\n";
     }
+    $list = '' unless $hasLoad;
     $list = "---+++ Workload by developer and project iteration in $web\n%TABLE{headerrows=\"1\" dataalign=\"center\" sort=\"off\"}%\n" . $list;
 
     $list .= CGI::start_table();
@@ -2390,11 +2397,11 @@ sub xpShowTaskTable {
   &xpCacheRead( $web ) unless $cacheInitialized;
   my( $session, $params, $theTopic, $web ) = @_;
   my $topic = $params->{_DEFAULT} || $params->{story};
-  $topic = "" . $topic;
+  $topic = '' . $topic;
   if ($topic =~ /^[\w]*Story$/) {
     return "%EDITHIDDENTABLE{template=\"TaskForm\" tablename=\"TaskTable\" topic=\"%TOPIC%\" changerows=\"on\"}%";
   } else { 
-    return "";
+    return '';
   }
 
 }
@@ -2418,6 +2425,7 @@ sub xpShowDeveloperTimeSheet {
     $tableNr++;
 
     my $doEdit = 0;
+    my $doEstimate = 0;
 
     my $cgiTableNr = $query->param( 'ettablenr' ) || 0;
 
@@ -2446,7 +2454,7 @@ sub xpShowDeveloperTimeSheet {
 
     my @projects = &xpGetAllProjects($web);
 
-    my $viewUrl = &TWiki::Func::getScriptUrl ( $web, $topic, "view" ) ;
+    my $viewUrl = &TWiki::Func::getScriptUrl ( $web, $topic, 'view', '#'=>"TimesheetStart$tableNr" ) ;
 
     # Show the list
     my $timesheet;
@@ -2455,10 +2463,15 @@ sub xpShowDeveloperTimeSheet {
     $timesheet .= "<form name=\"timesheet$tableNr\" action=\"$viewUrl\" method=\"post\">\n";
     $timesheet .= "<input type=\"hidden\" name=\"ettablenr\" value=\"$tableNr\" />\n";
     $timesheet .= "<input type=\"hidden\" name=\"etedit\" value=\"on\" />\n" unless $doEdit;
+    $timesheet .= "#TimesheetStart$tableNr\n";
 
     my $list = '';
     my @colors = ();
-    my $list = '|*Iteration Story<br>&nbsp; Task*|*Estimate*|*Spent*|*To do*|'.($doEdit?'*Add to<br>Spent*|*Update<br>To do*|':'*Status*|*Iteration due*|')."\n";
+    my $list = '|*Story<br>&nbsp; Task*|';
+    foreach my $fld (@addtlTimesheetFields) {
+      $list .= "*$fld*|";
+    }
+    $list .= '*Estimate*|*Spent*|*To do*|'.($doEdit?'*Add to<br>Spent*|*Update<br>To do*|':'*Status*|*Iteration due*|')."\n";
 
     # todo: build a list of projects/iterations sorted by date, make sort customizable
 
@@ -2527,6 +2540,12 @@ sub xpShowDeveloperTimeSheet {
                 my $storyText = $targetStories{$story};
 		my $meta = $targetMeta{$story};
 
+		# Get any additional fields
+		my @fldvals = ();
+		foreach my $fld (@addtlTimesheetFields) {
+		  push (@fldvals, &xpGetMetaValue($meta, $fld));
+		}
+
                 # Get acceptance test status
                 my $storyComplete = &xpStoryComplete($meta);
 
@@ -2552,8 +2571,7 @@ sub xpShowDeveloperTimeSheet {
 		    # TJW: could use a flag of whether to do this
                     #$who =~ s/(Main\.)?(.*)/Main\.$2/;  #TJW
                     # no display unless selected
-                    my $test = eval { $who =~ /$developer/ };
-                    next unless $test;
+                    next unless ($who =~ /$developer/);
 
 		    $storyOngoingInvolved = 1 if $storyOngoing;
 
@@ -2597,7 +2615,8 @@ sub xpShowDeveloperTimeSheet {
                 $iterEtc += $storyEtc;
 
                 # Calculate story status
-                my $color = "";
+		$doEstimate = 1;
+                my $color = '';
 		if ($storyOngoing) {
                     $color = $defaults{ongoingcolor};
                     $storyStatS = $statusLiterals[4];
@@ -2624,7 +2643,11 @@ sub xpShowDeveloperTimeSheet {
 
                 # Show project / iteration line
 		push @colors, $color;
-		$list .= "| $storyiteration&nbsp; $story: $storysummary | ".xpShowRounded($storyEst).' | '.xpShowRounded($storySpent).' | '.xpShowRounded($storyEtc).' |<div style="white-space:nowrap"> '.$storyStatS." </div>|<div style=\"background:$iterationcolor;margin:0;padding:0;border:0;white-space:nowrap\">".xpShowCell($iterDate, ! $storyOngoing)."</div>|\n";
+		$list .= "| $story: $storysummary |";
+		foreach my $fld (@fldvals) {
+		  $list .= "<b> $fld </b>|";
+		}
+                $list .= '<b>'.xpShowRounded($storyEst).'</b> | <b>'.xpShowRounded($storySpent).'</b> | <b>'.xpShowRounded($storyEtc).'</b> |<b><div style="white-space:nowrap"> '.$storyStatS." </div></b>|<b><div style=\"background:$iterationcolor;margin:0;padding:0;border:0;white-space:nowrap\">".xpShowCell($iterDate, ! $storyOngoing)."</div></b>|\n";
 
                 # Show each task
                 for (my $i=0; $i<$taskCount; $i++) {
@@ -2663,7 +2686,9 @@ sub xpShowDeveloperTimeSheet {
 
 			}
 			$cells .= ' |';
-
+			foreach my $fld (@fldvals) {
+			  $cells .= ' &nbsp; |';
+			}
 			$cells .= ' '.xpShowRounded($est[$x])." <input type=\"hidden\" name=\"etcell".$rowNr."x2\" value=\"".$est[$x]."\" /> |";
 			$cells .= ' '.xpShowRounded($spent[$x])." <input type=\"hidden\" name=\"etcell".$rowNr."x3\" value=\"".$spent[$x]."\" /> |";
 			$cells .= ' '.xpShowRounded($etc[$x])." <input type=\"hidden\" name=\"etcell".$rowNr."x4\" value=\"".$etc[$x]."\" /> |";
@@ -2674,7 +2699,11 @@ sub xpShowDeveloperTimeSheet {
 			  $cells .= ' &nbsp; |';
 			}
 		      } else {
-			$cells .= ($doName?'&nbsp;&nbsp;&nbsp; '.$taskName[$i]:'&nbsp;').' | '.xpShowRounded($est[$x]).' | '.xpShowRounded($spent[$x]).' | '.xpShowRounded($storyOngoing?'':$etc[$x]).' |<div style="white-space:nowrap"> '.$statusLiterals[$taskStat[$i]].' </div>| &nbsp; |';
+			$cells .= ($doName?'&nbsp;&nbsp;&nbsp; '.$taskName[$i]:'&nbsp;');
+			foreach my $fld (@fldvals) {
+			  $cells .= ' &nbsp; |';
+			}
+			$cells .= ' | '.xpShowRounded($est[$x]).' | '.xpShowRounded($spent[$x]).' | '.xpShowRounded($storyOngoing?'':$etc[$x]).' |<div style="white-space:nowrap"> '.$statusLiterals[$taskStat[$i]].' </div>| &nbsp; |';
 		        $doName = 0;
 		      }
 		      push @colors, $taskBG;
@@ -2697,7 +2726,11 @@ sub xpShowDeveloperTimeSheet {
         }
 
     # Do developer totals
-    $list .= '|*Developer totals*|*'.xpShowRounded($totalEst).'*|*'.xpShowRounded($totalSpent).'*|*'.xpShowRounded($totalEtc)."*|*&nbsp;*|*&nbsp;*|\n";
+    $list .= '|*Developer totals*|';
+    foreach my $fld ( @addtlTimesheetFields ) {
+      $list .= '*&nbsp;*|';
+    }
+    $list .= '*'.xpShowRounded($totalEst).'*|*'.xpShowRounded($totalSpent).'*|*'.xpShowRounded($totalEtc)."*|*&nbsp;*|*&nbsp;*|\n";
     unshift @colors, pop @colors;  # defect in TablePlugin
     my $color = join ',', @colors;
     $list = "---+++ Open tasks by developer $developer\n%TABLE{headerrows=\"1\" footerrows=\"1\" dataalign=\"left,center,center,center,left,center\" headeralign=\"left,center,center,center,left,center\" databg=\"$color\"}%\n" . $list;
@@ -2716,7 +2749,7 @@ sub xpShowDeveloperTimeSheet {
       $timesheet .= "<input type=\"submit\" name=\"etcancel\" value=\"Cancel\" />\n";
       $timesheet .= "&nbsp;&nbsp;<input type=\"checkbox\" name=\"etreport\" value=\"1\" checked />  Generate report\n";
     } else {
-      $timesheet .= "<input type=\"submit\" value=\"Create Timesheet\" />\n";
+      $timesheet .= "<input type=\"submit\" value=\"Create Timesheet\" />\n" if $doEstimate;
     }
     $timesheet .= "</form>\n";
     $timesheet .= "</noautolink>\n" if $doEdit;
@@ -2755,6 +2788,8 @@ sub doSaveTable
       my $etc = $etc1 unless ($etc1 eq '');
       my $update = $query->param('etcell'.$row.'x7');
 
+##SMELL: When $etc below is empty, 4th field is right-aligned
+##SMELL: If there is no item in $etc, it is still printed
       my ($lockStatus, $lockUser, $editLock, $lockTime) = &xpUpdateTimeSheet($web, $developer, $story, $task, $spent, $etc, $update, $units);
       if ($lockStatus) {
 	if ($spent || $etc) {
@@ -2777,9 +2812,9 @@ sub doSaveTable
     my $url = &TWiki::Func::getViewUrl( $web, $topic );
     # Cause error and report those topics that failed to save...
     if( $foundErrors ) {
-        $url = &TWiki::Func::getOopsUrl( $web, $topic, 'oopstimesheet', $developer, $errors . $updates );
+        $url = &TWiki::Func::getOopsUrl( $web, $topic, 'oopstimesheet', $developer, $errors . "\n" . $updates, 'timesheet' );
       } elsif ($wantReport) {
-        $url = &TWiki::Func::getOopsUrl( $web, $topic, 'oopstimesheetreport', $developer, $updates );
+        $url = &TWiki::Func::getOopsUrl( $web, $topic, 'oopstimesheetreport', $developer, $updates, 'timesheet' );
       }
     &TWiki::Func::redirectCgiQuery( $query, $url );
 }
@@ -2854,9 +2889,13 @@ sub doEnableEdit
     my ( $theWeb, $theTopic, $doCheckIfLocked ) = @_;
 
     my $wikiUserName = &TWiki::Func::getWikiUserName();
-    if( ! &TWiki::Func::checkAccessPermission( "change", $wikiUserName, "", $theTopic, $theWeb ) ) {
+    if( ! &TWiki::Func::checkAccessPermission( 'change', $wikiUserName, '', $theTopic, $theWeb ) ) {
         # user has not permission to change the topic
-        return 0;
+        throw TWiki::OopsException(
+            'accessdenied',
+            def => 'topic_access',
+            web => $theWeb, topic => $theTopic,
+            params => [ 'change', 'denied' ] );
     }
 
     my( $oopsUrl, $lockUser, $lockTime ) = &TWiki::Func::checkTopicEditLock( $theWeb, $theTopic );
@@ -2869,7 +2908,7 @@ sub doEnableEdit
 	my $editLock = 60;
         return (0, $lockUser, $editLock, $lockTime);
     }
-    &TWiki::Func::setTopicEditLock( $web, $theTopic, 1 );
+    TWiki::Func::setTopicEditLock( $theWeb, $theTopic, 1 );
 
     return 1;
 }
@@ -3024,6 +3063,7 @@ sub xpShowDeveloperEstimate {
     $tableNr++;
 
     my $doEdit = 0;
+    my $doEstimate = 0;
 
     my $cgiTableNr = $query->param( 'ettablenr' ) || 0;
 
@@ -3050,7 +3090,7 @@ sub xpShowDeveloperEstimate {
 
     my @projects = &xpGetAllProjects($web);
 
-    my $viewUrl = &TWiki::Func::getScriptUrl ( $web, $topic, "view" ) ;
+    my $viewUrl = &TWiki::Func::getScriptUrl ( $web, $topic, 'view', '#'=>"TimesheetStart$tableNr" ) ;
 
     # Show the list
     my $timesheet = '';
@@ -3059,10 +3099,11 @@ sub xpShowDeveloperEstimate {
     $timesheet .= "<form name=\"estimates$tableNr\" action=\"$viewUrl\" method=\"post\">\n";
     $timesheet .= "<input type=\"hidden\" name=\"ettablenr\" value=\"$tableNr\" />\n";
     $timesheet .= "<input type=\"hidden\" name=\"etedit\" value=\"on\" />\n" unless $doEdit;
+    $timesheet .= "#TimesheetStart$tableNr\n";
 
     my $list = '';
     my @colors = ();
-    $list .= '|*Iteration Story<br>&nbsp; Task*|*'.($doEdit?'Estimate':'Iteration due')."*|\n";
+    $list .= '|*Story<br>&nbsp; Task*|*'.($doEdit?'Estimate':'Iteration due')."*|\n";
 
     # todo: build a list of projects/iterations sorted by date
 
@@ -3147,10 +3188,9 @@ sub xpShowDeveloperEstimate {
 	            # no display if ongoing
 	            next if $storyOngoing;
                     # no display unless selected
-                    my $test = eval { $who =~ /$developer/ };
-                    next unless $test;
+                    next unless ($who =~ /$developer/);
                     # no display unless selected
-		    next unless ((($est eq "") && !($est eq "0")) || ($est eq "?"));
+		    next unless (! ($est || ($est eq '0')) || ($est eq '?'));
 
                     $taskName[$taskCount] = $name;
                     $taskWho[$taskCount] = $who;
@@ -3162,7 +3202,8 @@ sub xpShowDeveloperEstimate {
                 # no display if not involved
                 next if ($storyInvolved == 0);
 
-                my $color = "";
+		$doEstimate = 1;
+                my $color = '';
 
                 # Get story summary
                 my $storysummary = &xpGetMetaValue($meta, "Storysummary") if (! $storyOngoing);
@@ -3171,7 +3212,7 @@ sub xpShowDeveloperEstimate {
 
                 # Show project / iteration line
 		push @colors, $color;
-                $list .= "| $storyiteration&nbsp; $story: $storysummary | <div style=\"background:$iterationcolor;margin:0;padding:0;border:0;white-space:nowrap\">".xpShowCell($iterDate, ! $storyOngoing)."</div>|\n";
+                $list .= "| $story: $storysummary | <div style=\"background:$iterationcolor;margin:0;padding:0;border:0;white-space:nowrap\">".xpShowCell($iterDate, ! $storyOngoing)."</div>|\n";
 
                 # Show each task
                 for (my $i=0; $i<$taskCount; $i++) {
@@ -3232,7 +3273,7 @@ sub xpShowDeveloperEstimate {
       $timesheet .= "<input type=\"submit\" name=\"etcancel\" value=\"Cancel\" />\n";
       $timesheet .= "&nbsp;&nbsp;<input type=\"checkbox\" name=\"etreport\" value=\"1\" checked />  Generate report\n";
     } else {
-      $timesheet .= "<input type=\"submit\" value=\"Create Estimate\" />\n";
+      $timesheet .= "<input type=\"submit\" value=\"Create Estimate\" />\n" if $doEstimate;
     }
     $timesheet .= "</form>\n";
     $timesheet .= "</noautolink>\n" if $doEdit;
@@ -3248,9 +3289,9 @@ sub doSaveEstimate
     my $foundErrors = 0;
     
     my $errors = "---+++ Failed to update estimate\n";
-    $errors .= "*Story*|*Task*|*Estimate*|*Status*|\n";
+    $errors .= "|*Story*|*Task*|*Estimate*|*Status*|\n";
     my $updates = "---+++ Successfully updated estimate\n";
-    $updates .= "*Story*|*Task*|*Estimate*|\n";
+    $updates .= "|*Story*|*Task*|*Estimate*|\n";
 
     my $row = $query->param('etrows');
     my $developer = $query->param('developer');
@@ -3261,7 +3302,7 @@ sub doSaveEstimate
 
       my ($lockStatus, $lockUser, $editLock, $lockTime) = &xpUpdateEstimate($web, $developer, $story, $task, $estimate, $units);
       if ($lockStatus) {
-	if ($estimate) {
+	unless ($estimate eq '') {
 	  $updates .= "| $story | $task | ".xpShowRounded($estimate)."|\n";
 	}
       } else {
@@ -3281,14 +3322,12 @@ sub doSaveEstimate
     #log the submission
     $session->writeLog( 'estimate', "$web.$topic", ($foundErrors)?'errors':'' );
 
-    # TJW: why lock?
-    #&TWiki::Func::setTopicEditLock( $web, $topic, 1 );
     my $url = &TWiki::Func::getViewUrl( $web, $topic );
     # Cause error and report those topics that failed to save...
     if( $foundErrors ) {
-        $url = &TWiki::Func::getOopsUrl( $web, $topic, 'oopstimesheet', $developer, $errors . $updates );
+        $url = &TWiki::Func::getOopsUrl( $web, $topic, 'oopstimesheet', $developer, $errors . "\n" . $updates, 'estimates' );
       } elsif ($wantReport) {
-        $url = &TWiki::Func::getOopsUrl( $web, $topic, 'oopstimesheetreport', $developer, $updates );
+        $url = &TWiki::Func::getOopsUrl( $web, $topic, 'oopstimesheetreport', $developer, $updates, 'estimates' );
       }
     &TWiki::Func::redirectCgiQuery( $query, $url );
 }
@@ -3300,7 +3339,7 @@ sub xpUpdateEstimate {
   my ($meta, $text) = &TWiki::Func::readTopic($web, $story);
   if ($units) {
     # Should round to 1 digit
-    $est = xpround($est / 8);
+    $est = xpround($est / 8) if $est;
   }
 
   foreach my $theTask ($meta->find("TABLE")) {
@@ -3309,7 +3348,7 @@ sub xpUpdateEstimate {
     # The cases below are not really necessary...
     # WARNING: MUST NOT HAVE MORE THAN ONE TASKNAMExDEVELOPER TUPLE PER TASK
     if (($task eq $name) && ($developer eq $who)) {
-      if ( $est ) { # Don't update unless needed...
+      unless ( $est eq '' ) { # Don't update unless needed...
 	$theTask->{"Est"} = $est+$oldest;
 	$theTask->{"Todo"} = $est+$oldetc;
 	$meta->putKeyed( "TABLE", $theTask );
@@ -3318,6 +3357,7 @@ sub xpUpdateEstimate {
     }
   }
   if ($changed) {
+    $story = TWiki::Sandbox::untaintUnchecked( $story );
     # Need to ensure topic is accessible
     my ($lockStatus, $lockUser, $editLock, $lockTime) = &doEnableEdit($web, $story, 1);
     if ($lockStatus) {
@@ -3327,43 +3367,8 @@ sub xpUpdateEstimate {
       return (0, $lockUser, $editLock, $lockTime);
       }
   }
+  TWiki::Func::setTopicEditLock( $web, $story, 0 );
   return 1;
-}
-
-sub createTimesheet {
-
-  my $session = shift;
-  $TWiki::Plugins::SESSION = $session;
-
-  my $query = $session->{cgiQuery};
-  my $webName = $session->{webName};
-  my $topic = $session->{topicName};
-  my $user = $session->{user};
-
-  my $tmpl = ""; 
-  my $text = "";
-  my $ptext = "";
-  my $meta = "";
-  my $formFields = "";
-  my $wikiUserName = &TWiki::Func::userToWikiName( $user );
-
-  TWiki::UI::checkWebExists( $session, $webName, $topic, 'view' );
-  TWiki::UI::checkMirror( $session, $webName, $topic );
-
-  my $row = $query->param('etrows');
-  my $developer = $query->param('developer');
-  while ($row) {
-    my $story = $query->param("etcell".$row."x1");
-    my $task = $query->param("etcell".$row."x2");
-    my $spent = $query->param("etcell".$row."x4");
-    my $etc = $query->param("etcell".$row."x5");
-    my $update = $query->param("etcell".$row."x6");
-    xpUpdateTimeSheet($webName, $developer, $story, $task, $spent, $etc, $update);
-    $row--;
-  }
-  TWiki::Func::redirectCgiQuery( $query, &TWiki::Func::getViewUrl( "", $topic ) );
-  return;
-
 }
 
 1;
