@@ -1,6 +1,8 @@
 data/TWiki/WikiwygContrib.txt  Plugin doc page
 lib/TWiki/Contrib/WikiwygContrib.pm  Plugin Perl module 
 templates/edit.wikiwyg.tmpl
+pub/TWiki/WikiwygContrib/TWikitext.js
+pub/TWiki/WikiwygContrib/twikiwyg.css
 pub/TWiki/WikiwygContrib/wikiringlogo20x20.png
 pub/TWiki/WikiwygContrib/AUTHORS
 pub/TWiki/WikiwygContrib/Changes
