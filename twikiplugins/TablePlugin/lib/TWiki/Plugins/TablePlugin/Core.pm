@@ -357,7 +357,7 @@ sub _processTableRow {
                 $type = 'td';
             }
             
-            if ($cellBorder) {
+            if ($cellBorder ne '') {
 				my $theCellBorder = $cellBorder;
 				if ($tableRules eq 'none') {
 					# if tablerules are set to none we don't want cell borders anywhere
