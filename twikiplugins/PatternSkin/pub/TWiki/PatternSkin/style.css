@@ -37,6 +37,9 @@ table {
 th {
 	line-height:1.15em;
 }
+label {
+	padding:.15em 0; /* same vertical padding as twikiInputField */
+}
 strong, b {
 	font-weight:bold;
 }
