@@ -1,0 +1,16 @@
+%META:TOPICINFO{author="ArthurClemens" date="1165176010" format="1.1" reprev="1.2" version="1.2"}%
+---+!! Comments
+
+Example comment topic for [[%TWIKIWEB%.CommentPluginExamples#target][CommentPluginExamples - "target"]]
+---
+%STARTINCLUDE%
+
+
+Target comment output 1
+
+-- Main.ArthurClemens - 03 Dec 2006
+
+
+Target comment output 2
+
+-- Main.ArthurClemens - 03 Dec 2006
