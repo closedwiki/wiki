@@ -90,11 +90,13 @@ sub test_sectionInner {
 # ----------------------------------------------------------------------
 # Purpose:  Test a non-existing section
 # Verifies: with parameter section=notExisting returns nothing
+#           (allows one space because the current template ends with
+#           a newline)
 sub test_sectionNotExisting {
     my $this = shift;
 
     my $result  =  $this->_viewSection('notExisting');
-    $this->assert_equals('',$result);
+    $this->assert_matches(qr/\s?/,$result);
 }
 
 1;

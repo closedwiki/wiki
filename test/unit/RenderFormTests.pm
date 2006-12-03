@@ -82,8 +82,7 @@ sub get_HTML_tree {
     my ($res) = @_;
     eval 'use HTML::TreeBuilder; use HTML::Element;';
     if( $@ ) {
-        print STDERR "$@\nUNABLE TO RUN TEST\n";
-        return;
+        die "$@\nUNABLE TO RUN TEST\n";
     }
 
     my $tree = HTML::TreeBuilder->new_from_content($res);
