@@ -207,3 +207,14 @@ This contrib is heavily based on the TWiki::Plugins.KupuEditorAddOn, and the aut
 
 <!-- Do _not_ attempt to edit this topic; it is auto-generated. Please add comments/questions/remarks to the Dev topic instead. -->
 
+%META:FORM{name="PackageForm"}%
+%META:FIELD{name="TopicClassification" attributes="" title="TopicClassification" value="ContribPackage"}%
+%META:FIELD{name="TestedOnTWiki" attributes="" title="TestedOnTWiki" value="4.1, 4.0.0"}%
+%META:FIELD{name="TestedOnOS" attributes="" title="TestedOnOS" value="OsLinux"}%
+%META:FIELD{name="ShouldRunOnOS" attributes="" title="ShouldRunOnOS" value="AnyOS"}%
+%META:FIELD{name="InstalledOnTWikiOrg" attributes="" title="InstalledOnTWikiOrg" value="Yes"}%
+%META:FIELD{name="DemoUrl" attributes="" title="DemoUrl" value="<a href='http://twiki.org/cgi-bin/edit/Sandbox/KupuContribDemo?skin=kupu'>Kupu</a>"}%
+%META:FIELD{name="DevelopedInSVN" attributes="" title="DevelopedInSVN" value="Yes"}%
+%META:FIELD{name="ModificationPolicy" attributes="" title="ModificationPolicy" value="ContactAuthorFirst"}%
+%META:FIELD{name="RelatedTopics" attributes="" title="RelatedTopics" value="WysiwygPlugin, WikiwygContrib, CategoryWysiwygEditors"}%
+
