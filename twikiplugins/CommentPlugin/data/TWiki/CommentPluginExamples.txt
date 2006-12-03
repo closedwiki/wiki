@@ -179,7 +179,7 @@ Toctalk output message 2
 
 
 ---+++ =target=
-Post to a different topic and return to here. In this example comments are written to [[%COMMENT_TOPIC%]].
+Post to a different topic and return to here. In this example comments are written to [[%COMMENT_TOPIC%]]. %RED% Available with TWiki 4.1. %ENDCOLOR%
 
 <!--
    * Set COMMENT_TOPIC = Sandbox.CommentPluginExampleComments

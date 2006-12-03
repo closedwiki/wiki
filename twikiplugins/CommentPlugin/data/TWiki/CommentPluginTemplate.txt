@@ -267,7 +267,7 @@ Talk using TOC adding on end - TWiki:Main/FranzJosefSilli
 
 
 ---++++ target
-Post to a different topic and return to here. The comment =target= is set in the =PROMPT=. In the form below the =origurl= is set to the current (including) topic.
+Post to a different topic and return to here. The comment =target= is set in the =PROMPT=. In the form below the =origurl= is set to the current (including) topic. %RED% Available with TWiki 4.1. %ENDCOLOR%
 
 <verbatim>
 %TMPL:DEF{targetpromptbox}%
