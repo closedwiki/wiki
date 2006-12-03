@@ -153,6 +153,17 @@ sub _ENDTWISTYTOGGLE {
     return $modeTag._twistyCloseDiv();
 }
 
+=pod
+
+Removes _TWISTYSCRIPT tags written in the topic text, so users cannot use this
+construct to write Javascript even if {AllowInlineScript} has been set to false.
+
+=cut
+
+sub beforeCommonTagsHandler {
+	# do not uncomment, use $_[0], $_[1]... instead
+	$_[0] =~ s/%_TWISTYSCRIPT{\"(.*?)\"}%/$1/g;
+}
 
 =pod
 
