@@ -5,7 +5,7 @@ Integration of the [[http://kupu.oscom.org/][OSCOM Kupu Wysiwyg editor]] with TW
 
 %TOC%
 
-The integration uses the TWiki::Plugins.WysiwygPlugin to translate text to and from a format that Kupu can edit.
+The integration uses the TWiki:Plugins.WysiwygPlugin to translate text to and from a format that Kupu can edit.
 
 *Caveat*: %TOPIC% is designed for editing TWiki topics, not as a general purpose HTML editor. It will work fine on topics that contain text, TML formatting, and most HTML. However, because of the complexity of transforming TML into HTML and back, complex TML, and mixing HTML and TML may not give the results you expect. You are recommended to use the standard browser textarea editor for editing existing topics that contain mixed HTML and TML, or complex %<nop>TML%-type variables.
 
@@ -28,11 +28,11 @@ The version of Kupu shipped with this plugin is an uncustomised basic Kupu relea
 *Do not forget to enable the WysiwygPlugin in =configure= or it won't work*.
 	* To enable the editor in one of your skins, add the following link to the skin alongside or in place of the existing 'edit' link:<br /><code>&lt;a href="%<nop>SCRIPTURLPATH%/edit%<nop>SCRIPTSUFFIX%/%<nop>WEB%/%<nop>TOPIC%?skin=kupu"&gt;Kupu&lt;/a&gt;</code><br />As you can see this is just a standard edit link with the 'kupu' skin in place of the usual edit skin. Here it is for this topic: <a href="%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/%WEB%/%TOPIC%?skin=kupu">Kupu</a>. Try clicking on it, but _do not save_!
 
-If you are TWiki-4.0.0 or later with =pattern= skin, the =%<nop>COMPOSER%= global TWiki variable is used to control the skin used for the WYSIWYG editor link. You can define this variable to the empty string to disable WYSIWYG editing on a site, per-web, per-user or per-topic basis. Set =COMPOSER= to =kupu= to enable this module.
+If you are using TWiki-4.0.0 or later with =pattern= skin, the =%<nop>COMPOSER%= global TWiki variable is used to control the skin used for the WYSIWYG editor link. You can define this variable to the empty string to disable WYSIWYG editing on a site, per-web, per-user or per-topic basis. Set =COMPOSER= to =kupu= to enable this module.
 
 ---++ Other Settings
 See also: WysiwygPlugin for other settings that affect this contrib. Note
-especially the WYSIWYGSKIN, which *must* be set to =kupu= for this contrib
+especially the =WYSIWYGSKIN=, which should be set to =kupu= for this contrib
 to work correctly.
 
 The editor template includes a number of files that can be used for other settings. These files are *not* included in the distribution, so that you can easily create your own local content.
@@ -72,6 +72,9 @@ If it exists, the contents of this topic will be included and shown on the edit 
 Due to limitations in the browser support for editing, not all functions can be undone. Also, the undo buffer can be cleared unexpectedly during editing, especially when using Internet Explorer.
 
 Because of limitations in the browsers, the editor does not support PRE blocks. All PRE blocks will be converted to TWiki verbatim blocks on save. This can cause some confusion, especially when editor formatting controls (such as "bold") have been used to format text in a PRE block. Users are advised to use only plain text in PRE (verbatim) blocks.
+
+---+++ No Safari support
+Kupu does not work on Safari.
 
 ---++ Contrib Info
 
