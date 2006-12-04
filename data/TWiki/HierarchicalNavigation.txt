@@ -52,7 +52,8 @@ generates:
    * <nop>%BASETOPIC%
 </div>
 <div class="twikiChildTopics">
-%METASEARCH{type="parent" topic="%BASETOPIC%" format="   * [[$web.$topic][$topic]]"}% </div><!--twikiChildTopics--></div><!--/twikiHierarchicalNavigation-->%ENDSECTION{name="all"}%
+%METASEARCH{type="parent" topic="%BASETOPIC%" format="   * [[$web.$topic][$topic]]"}%
+</div><!--twikiChildTopics--></div><!--/twikiHierarchicalNavigation-->%ENDSECTION{name="all"}%
 
 %STARTSECTION{name="children"}%<div class="twikiHierarchicalNavigation">
 <div class="twikiChildTopics">
