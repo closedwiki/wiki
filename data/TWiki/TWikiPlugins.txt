@@ -61,7 +61,7 @@ By default, TWiki executes Plugins in alphabetical order on Plugin name. It is p
 
 ---+++ Plugin-Specific Settings
 
-Plugins are usually configured by variables accessible though the =configure= interface, but in some cases (usually older plugins) TWiki preferences are used. If a TWiki variable is defined in a Plugin topic e.g:
+Plugins are usually configured by variables accessible though the [[%SCRIPTURLPATH{"configure"}%][configure]] interface, but in some cases (usually older plugins) TWiki preferences are used. If a TWiki variable is defined in a Plugin topic e.g:
    * Set SETTING = Create dynamic foo bar reports
 Then these settings can be retrieved as preferences variables like =%&lt;pluginname&gt;_&lt;var&gt;%=. For example, =%<nop>RUBBERPLUGIN_SETTING%= shows the value of SETTING in the !RubberPlugin topic.
 

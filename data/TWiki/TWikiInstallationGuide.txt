@@ -23,7 +23,7 @@ __%H% Hint:__ TWiki:TWiki.InstallingTWiki on TWiki.org has supplemental document
       * Everybody else should be denied access to everything, always.
    1 *Make sure* Perl 5 and the Perl CGI library are installed on your system. 
      %BR% The default location of Perl is =/usr/bin/perl=. *If it's somewhere else*, change the path to Perl in the first line of each script in the =twiki/bin= directory.
-     %BR% %H% Some systems require a special extension on perl scripts (e.g. =.cgi= or =.pl=). If necessary, rename all files in =twiki/bin=  (i.e. rename =view= to =view.pl= etc). If you do this, make sure you set the =ScriptSuffix= option in =configure= (Step 6).
+     %BR% %H% Some systems require a special extension on perl scripts (e.g. =.cgi= or =.pl=). If necessary, rename all files in =twiki/bin=  (i.e. rename =view= to =view.pl= etc). If you do this, make sure you set the =ScriptSuffix= option in [[%SCRIPTURLPATH{"configure"}%][configure]] (Step 6).
    1 *Create the file* =/twiki/bin/LocalLib.cfg=.
      %BR% There is a template for this file in =/twiki/bin/LocalLib.cfg.txt=.
      %BR% The file must contain a setting for =$twikiLibPath=, which must point to the absolute file path of your =twiki/lib= e.g. =/home/httpd/twiki/lib=.

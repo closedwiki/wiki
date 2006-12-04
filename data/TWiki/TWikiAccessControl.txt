@@ -66,7 +66,7 @@ __%X% Note:__ TWiki has strict formatting rules. Make sure you have three spaces
 #SuperAdminGroup
 ---+++ The Super Admin Group
 
-By mistyping a user or group name in the settings, it's possible to lock a topic so that no-one can edit it from a browser. To avoid this, add the WikiNames of registered administrators to the super admin group topic called ==TWikiAdminGroup==. The name of this topic is defined by the {SuperAdminGroup} configure setting. Example group setting:
+By mistyping a user or group name in the settings, it's possible to lock a topic so that no-one can edit it from a browser. To avoid this, add the WikiNames of registered administrators to the super admin group topic called ==TWikiAdminGroup==. The name of this topic is defined by the {SuperAdminGroup} [[%SCRIPTURLPATH{"configure"}%][configure]] setting. Example group setting:
    * ==Set <nop>GROUP= <nop>%MAINWEB%.ElizabethWindsor, <nop>%MAINWEB%.TonyBlair==
 
 ---++ Restricting Access

@@ -20,7 +20,7 @@ TWiki user authentication is split into four sections; password management, user
 
 Once a user is logged on, they can be remembered using a _Client Session_ stored in a cookie in the browser (or by other less elegant means if the user has disabled cookies). This avoids them having to log on again and again.
 
-TWiki user authentication is configured through the Security Settings pane in the =configure= interface.
+TWiki user authentication is configured through the Security Settings pane in the [[%SCRIPTURLPATH{"configure"}%][configure]] interface.
 
 Please note FileAttachments are not protected by TWiki User Authentication. 
 
@@ -28,7 +28,7 @@ __%T% Tip:__ TWiki:TWiki.TWikiUserAuthenticationSupplement on TWiki.org has supp
 
 ---++ Password Management
 
-As shipped, TWiki supports the Apache 'htpasswd' password manager. This manager supports the use of =.htpasswd= files on the server. These files can be unique to TWiki, or can be shared with other applications (such as an Apache webserver). A variety of password encodings are supported for flexibility when re-using existing files. See the descriptive comments in the Security Settings section of the [[%SCRIPTURLPATH{"configure"}%][ =configure= ]] interface for more details.
+As shipped, TWiki supports the Apache 'htpasswd' password manager. This manager supports the use of =.htpasswd= files on the server. These files can be unique to TWiki, or can be shared with other applications (such as an Apache webserver). A variety of password encodings are supported for flexibility when re-using existing files. See the descriptive comments in the Security Settings section of the [[%SCRIPTURLPATH{"configure"}%][configure] interface for more details.
 
 You can easily plug in alternate password management modules to support interfaces to other third-party authentication databases.
 
@@ -59,7 +59,7 @@ __%X% Note:__ This setup is *not* recommended on public websites for security re
 Template Login asks for a username and password in a web page, and processes them using whatever Password Manager you choose. Users can log in and log out. Client Sessions are used to remember users.
 
 ---++++ Enabling Template Login
-   1 Use the [[%SCRIPTURLPATH{"configure"}%][ =configure= ]] interface to
+   1 Use the [[%SCRIPTURLPATH{"configure"}%][configure]] interface to
       1 select the =TWiki::Client::TemplateLogin= login manager (on the Security Settings pane).
       1 select the appropriate password manager for your system, or provide your own.
    1 Register yourself in the TWikiRegistration topic.
@@ -149,7 +149,7 @@ This section applies only if you are using authentication with existing login na
 
    * *TWiki Username:* Your name in WikiNotation, ex: ==PeterThoeny==, is recorded when you register using TWikiRegistration; doing so also generates a personal home page in the %MAINWEB% web.
 
-TWiki can automatically map an Intranet (Login) Username to a TWiki Username if the {AllowLoginName} is enabled in =configure=. The default is to use your WikiName as a login name.
+TWiki can automatically map an Intranet (Login) Username to a TWiki Username if the {AllowLoginName} is enabled in [[%SCRIPTURLPATH{"configure"}%][configure]]. The default is to use your WikiName as a login name.
 
 <blockquote>
 __NOTE:__ *To correctly enter a WikiName* - your own or someone else's - be sure to include the %MAINWEB% web name in front of the Wiki username, followed by a period, and no spaces, for example ==%MAINWEB%.<nop>WikiUsername== or ==%<nop>MAINWEB%.<nop>WikiUsername==.
@@ -174,7 +174,7 @@ If the active {PasswordManager} supports storage and retrieval of user e-mail ad
 #IndividualScripts
 ---++ Controlling access to individual scripts
 You may want to add or remove scripts from the list of scripts that require authentication. The method for doing this is different for each of Template Login and Apache Login.
-   * For Template Login, update the {AuthScripts} list using =configure=
+   * For Template Login, update the {AuthScripts} list using [[%SCRIPTURLPATH{"configure"}%][configure]]
    * For Apache Login, add/remove the script from =.htaccess=
 #HowTo
 ---++ How to choose an authentication method

@@ -51,7 +51,7 @@ To perform the upgrade, you need to:
    * Choose a directory for the new installation.  I will call this =new_twiki=.  This directory must not already exist.
    * Change directory to =distro/= and run: %BR%
      =./UpgradeTwiki &lt;full path to existing_twiki's setlib.cfg&gt; &lt;full path to new_twiki&gt;=
-   * confirm your system settings by pointing your browser to the =configure= script
+   * confirm your system settings by visiting [[%SCRIPTURLPATH{"configure"}%][configure]]
 
 Assuming all goes well, =UpgradeTwiki= will give you the final instructions.
 
@@ -78,8 +78,8 @@ The following steps are a rough guide to upgrading only. It is impossible to giv
    1 Unlock the rcs files in data and pub directories from the old installation using the following shell commands:
       * =find data -name '*,v' -exec rcs -u -M '{}' \;=
       * =find pub -name '*,v' -exec rcs -u -M '{}' \;=
-   1 Examine your old TWiki.cfg, and for each local setting, set the corresponding value in the =configure= interface for the new install.
-      *  If you can't use =configure=, then copy the *new* =TWiki.cfg= to =LocalSite.cfg=, and edit =LocalSite.cfg=. Remove all the settings that you didn't change in your previous install, and change the remaining settings to the values from your *old* TWiki.cfg.
+   1 Examine your old TWiki.cfg, and for each local setting, set the corresponding value in the [[%SCRIPTURLPATH{"configure"}%][configure]] interface for the new install.
+      *  If you can't use [[%SCRIPTURLPATH{"configure"}%][configure]], then copy the *new* =TWiki.cfg= to =LocalSite.cfg=, and edit =LocalSite.cfg=. Remove all the settings that you didn't change in your previous install, and change the remaining settings to the values from your *old* TWiki.cfg.
    1 Transfer any customized and local settings from [[%TWIKIWEB%.TWikiPreferences]] to the topic pointed at by {LocalSitePreferences} ([[%LOCALSITEPREFS%]]). This avoids having to write over files in the distribution.
    1 If you changed any of the topics in the original TWiki distribution, you will have to transfer your changes to the new install manually. There is no simple way to do this, though the following procedure may help:
       1 Install a copy of the original TWiki release you were using in a temporary directory

@@ -62,7 +62,7 @@ If you plan to rename the %MAINWEB% web, remember that TWiki stores user and gro
 
 ---++ Hierarchical Webs
 
-Hierarchical web support is enabled by turning on the ={EnableHierarchicalWebs}= setting in =configure=. Without this setting, TWiki will only allow a single level of hierarchy (webs). If you set this, you can use multiple levels, like a directory tree, i.e. webs within webs.
+Hierarchical web support is enabled by turning on the ={EnableHierarchicalWebs}= setting in [[%SCRIPTURLPATH{"configure"}%][configure]]. Without this setting, TWiki will only allow a single level of hierarchy (webs). If you set this, you can use multiple levels, like a directory tree, i.e. webs within webs.
 
 __%T% Note:__ You might not need hierarchical webs. TWiki topics already have a parent/child relationship within a web, which is shown in the breadcrumb. Try to keep the number of webs to a minimum in order to keep search and cross-referencing simple.
 
