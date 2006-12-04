@@ -1298,9 +1298,9 @@ sub makeTopicSummary {
     $nchar = $MINTRUNC if( $nchar < $MINTRUNC );
     $htext =~ s/^(.{$nchar}.*?)($TWiki::regex{mixedAlphaNumRegex}).*$/$1$2 \.\.\./s;
 
-    # newline conversion incl $n and $() to permit embedding in TWiki tables (Item2496)
+    # Convert standard excapes incl newline, $n and $n() to permit embedding in TWiki tables (Item2496)
+    $htext = TWiki::expandStandardEscapes($htext);
     $htext =~ s/\s+/ /g;
-    $htext =~ s/\$n(\(\))?/ /g;
 
     return $this->protectPlainText( $htext );
 }
