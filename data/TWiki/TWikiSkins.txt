@@ -1,9 +1,9 @@
-%META:TOPICINFO{author="TWikiContributor" date="1154970081" format="1.0" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1165260368" format="1.0" version="$Rev$"}%
 %TOC%
 %STARTINCLUDE%
 ---# TWiki Skins
 
-*Skins overlay regular templates to give different looks and feels to TWiki screens.*
+_Skins overlay regular templates to give different looks and feels to TWiki screens._
 
 ---++ Overview
 
@@ -13,7 +13,7 @@ TWiki ships with a default set of template files that give a basic look-and-feel
 
 Topic text is not affected by the choice of skin, though a skin can be defined to use a CSS (Cascading Style Sheet), which can sometimes give a radically different appearance to the text.
 
-*%T% Tip:* TWiki:TWiki.TWikiSkinsSupplement on TWiki.org has supplemental documentation on TWiki Skins.
+__%T% Tip:__ TWiki:TWiki.TWikiSkinsSupplement on TWiki.org has supplemental documentation on TWiki Skins.
 
 ---++ Changing the default TWiki skin
 
@@ -33,7 +33,7 @@ For your own TWiki skin you are encouraged to show a small 80x31 pixel <a href="
 
 The standard TWiki skins show the logo in the =%<nop>WEBCOPYRIGHT%= variable.
 
-*%X% Note:* Two skin names have _reserved_ meanings; =text= skin, and skin names starting with =rss= have [[#HardCodedSkins][hard-coded meanings]].
+__%X% Note:__ Two skin names have _reserved_ meanings; =text= skin, and skin names starting with =rss= have [[#HardCodedSkins][hard-coded meanings]].
 
 The following template files are used for TWiki screens, and are referenced in the TWiki core code. If a skin doesn't define its own version of a template file, then TWiki will fall back to the next skin in the skin path, or finally, to the default version of the template file.
 
@@ -80,7 +80,7 @@ The following template files are used for TWiki screens, and are referenced in t
    
 =twiki.tmpl= is a master template conventionally used by other templates, but not used directly by code.
 
-*%X% Note:* You are strongly recommended *not* to =TMPL:INCLUDE= the default templates, or templates from other skins, when you are defining your own skin. If you do, you run the risk that the included file might change and break your skin.
+__%X% Note:__ You are strongly recommended *not* to =TMPL:INCLUDE= the default templates, or templates from other skins, when you are defining your own skin. If you do, you run the risk that the included file might change and break your skin.
 
 ---++ Variables in Skins
 
@@ -111,7 +111,38 @@ You can use [[TWikiTemplates#TemplateVariables][template variables]], TWikiVaria
 | =%<nop>REVINFO%= | Revision info, ex: =r1.6 - 24 Dec 2002 - 08:12 GMT - %WIKIUSERNAME%= |
 | =%<nop>WEBCOPYRIGHT%= | Copyright notice, defined in the WebPreferences |
 | =%<nop>BROADCASTMESSAGE%= | Broadcast message at the beginning of your view template, can be used to alert users of scheduled downtimes; can be set in %LOCALSITEPREFS% |
- 
+
+#GoBox
+---++ The "Go" Box and Navigation Box
+
+The default skins include a [[GoBox]["Go" box]], also called "Jump" box, to jump to a topic.
+
+The box also understands URLs, e.g. you can type =http://www.google.com/= to jump to an external web site. The feature is handy if you build a skin that has a select box of frequently used links, like Intranet home, employee database, sales database and such. A little <nop>JavaScript gets into action on the =onchange= method of the select tag to fill the selected URL into the "Go" box field, then submits the form.
+
+Here is an example form that has a select box and the "Go" box for illustration purposes. You need to have <nop>JavaScript enabled for this to work:
+
+<form name="sample" action="%SCRIPTURLPATH{"view"}%/%WEB%/%TOPIC%">
+<table border="0" cellpadding="5" bgcolor="#DDDDDD"><tr><td colspan="2">
+Bare bones header, for demo only
+</td></tr><tr><td>
+Navigate:
+</td><td>
+<select name="sel" onchange="this.form.topic.value=this.options[this.selectedIndex].value; this.form.submit()">
+<option selected="selected" value="">...</option>
+<option value="http://www.twiki.org/">Intranet home</option>
+<option value="%MAINWEB%.%WIKIUSERSTOPIC%">Employee index</option>
+<option value="%MAINWEB%.%HOMETOPIC%">%MAINWEB% web</option>
+<option value="%TWIKIWEB%.%HOMETOPIC%">%TWIKIWEB% web</option>
+<option value="http://www.google.com/">Google</option>
+<option value="http://www.yahoo.com/">Yahoo!</option>
+</select>
+</td></tr><tr><td>
+Jump:
+</td><td>
+<input type="text" name="topic" size="16" />
+</td></tr></table>
+</form> 
+
 ---++ Using Cascading Style Sheets
 
 CSS files are gererally attachments to the skin topic that are included in the the skin templates - in the case of PatternSkin in the template =styles.pattern.tmpl=.
