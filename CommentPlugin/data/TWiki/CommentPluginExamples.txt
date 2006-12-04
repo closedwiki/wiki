@@ -191,7 +191,7 @@ _Comments:_
 </blockquote>
 
 ---
-%COMMENT{type="target" noform="on" target="%COMMENT_TOPIC%"}% %BR%
+%COMMENT{type="target" target="%COMMENT_TOPIC%"}% %BR%
 
 
 
