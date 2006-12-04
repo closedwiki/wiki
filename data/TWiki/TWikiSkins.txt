@@ -129,7 +129,7 @@ Navigate:
 </td><td>
 <select name="sel" onchange="this.form.topic.value=this.options[this.selectedIndex].value; this.form.submit()">
 <option selected="selected" value="">...</option>
-<option value="http://www.twiki.org/">Intranet home</option>
+<option value="http://twiki.org/">Intranet home</option>
 <option value="%MAINWEB%.%WIKIUSERSTOPIC%">Employee index</option>
 <option value="%MAINWEB%.%HOMETOPIC%">%MAINWEB% web</option>
 <option value="%TWIKIWEB%.%HOMETOPIC%">%TWIKIWEB% web</option>
