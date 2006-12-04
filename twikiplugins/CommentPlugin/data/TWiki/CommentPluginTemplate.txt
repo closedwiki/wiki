@@ -271,10 +271,8 @@ Post to a different topic and return to here. The comment =target= is set in the
 
 <verbatim>
 %TMPL:DEF{targetpromptbox}%
-<form method="post" action="%SCRIPTURL{save}%/%WEB%/%TOPIC%">
 <input type="hidden" name="origurl" value="%SCRIPTURL{view}%/%BASEWEB%/%BASETOPIC%" />
 %TMPL:P{promptbox}%
-</form>
 %TMPL:END%
 </verbatim>
 <verbatim>
