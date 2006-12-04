@@ -66,28 +66,45 @@ sub new {
 
 =pod
 
----++ ObjectMethod stringify() -> $string
+---++ ObjectMethod stringify( [$session] ) -> $string
 
-Generates a string representation for the object, mainly for debugging.
+Generates a string representation for the object. if a session is passed in, and
+the excpetion specifies a def, then that def is expanded. This is to allow
+internal expansion of oops exceptions for example when performing bulk operations.
 
 =cut
 
 sub stringify {
-    my $this = shift;
-    my $s = 'OopsException(';
-    $s .= $this->{template};
-    $s .= '/'.$this->{def} if $this->{def};
-    $s .= ' web=>'.$this->{web} if $this->{web};
-    $s .= ' topic=>'.$this->{topic} if $this->{topic};
-    $s .= ' keep=>1' if $this->{keep};
-    if( defined $this->{params} ) {
-        if( ref($this->{params}) eq 'ARRAY' ) {
-            $s .= ' params=>['.join( ",", @{$this->{params}} ).']';
-        } else {
-            $s .= ' params=>'.$this->{params};
+    my( $this, $session ) = @_;
+
+    if ($this->{template} && $this->{def} && $session) {
+        # load the defs
+        $session->{templates}->readTemplate( 'oops'.$this->{template},
+                                             $session->getSkin() );
+        my $message = $session->{templates}->expandTemplate( $this->{def} );
+        $message = $session->handleCommonTags( $message, $this->{web}, $this->{topic} );
+        my $n = 1;
+        foreach my $param ( @{$this->{params}} ) {
+            $message =~ s/%PARAM$n%/$param/g;
+            $n++;
         }
+        return $message;
+    } else {
+        my $s = 'OopsException(';
+        $s .= $this->{template};
+        $s .= '/'.$this->{def} if $this->{def};
+        $s .= ' web=>'.$this->{web} if $this->{web};
+        $s .= ' topic=>'.$this->{topic} if $this->{topic};
+        $s .= ' keep=>1' if $this->{keep};
+        if( defined $this->{params} ) {
+            if( ref($this->{params}) eq 'ARRAY' ) {
+                $s .= ' params=>['.join( ",", @{$this->{params}} ).']';
+            } else {
+                $s .= ' params=>'.$this->{params};
+            }
+        }
+        return $s.')';
     }
-    return $s.')';
 }
 
 1;

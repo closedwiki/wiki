@@ -230,6 +230,13 @@
 
 %MAKETEXT{"Please contact [_1] if you have any questions." args="<a href='mailto:%WIKIWEBMASTER%?subject=%ENCODE{"%WIKITOOLNAME% Registration Question"}%'>%WIKIWEBMASTER%</a>"}%
 %TMPL:END%
+%TMPL:DEF{"bad_loginname"}%
+---+++ %MAKETEXT{"Incorrect [_1]" args="%TWIKIWEB%.LoginName"}%
+%MAKETEXT{"'[_1]' is not a valid [_2] " args="%PARAM1%,%TWIKIWEB%.LoginName"}%
+%MAKETEXT{"The [_1] field must match the {LoginNameFilterIn} filter for this site" args="%PARAM1%,%TWIKIWEB%.LoginName"}%
+
+%MAKETEXT{"Please go back in your browser and try again."}%
+%TMPL:END%
 %TMPL:DEF{"bad_wikiname"}%
 ---+++ %MAKETEXT{"Incorrect [_1]" args="%TWIKIWEB%.WikiName"}%
 %MAKETEXT{"The [_1] field must be your first and last name in [_2], e.g. your capitalized first and last name with spaces removed." args="%TWIKIWEB%.WikiName,%TWIKIWEB%.WikiNotation"}%

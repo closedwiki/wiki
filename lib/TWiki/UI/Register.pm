@@ -226,7 +226,7 @@ sub bulkRegister {
       TWiki::Data::DelimitedFile::read(content => $text, delimiter => '|' );
 
     my $registrationsMade = 0;
-    my $log = '---+ Report for Bulk Register'."\n\n%TOC%\n";
+    my $log = '---++ Report for Bulk Register'."\n\n%TOC%\n";
 
     #-- Process each row, generate a log as we go
     ROW: foreach my $row ( values %data ) {
@@ -237,12 +237,20 @@ sub bulkRegister {
         $row->{WikiName} = TWiki::Sandbox::untaintUnchecked($row->{WikiName});
         next ROW if (length($row->{WikiName}) == 0);
 
-        my ($userTopic, $uLog) =
-          _registerSingleBulkUser($session, $row, $settings );
-        $log .= "\n---++ ". $row->{WikiName}."\n";
-        $log .= $b.' Added to users topic '.$userTopic.":\n".
-          join("\n".$indent,split /\r?\n/, $uLog)."\n";	
-        $registrationsMade++; # SMELL - no detection for failure
+        try {
+            _validateRegistration( $session, $row, $query, $topic, 0 );
+            my ($userTopic, $uLog) =
+              _registerSingleBulkUser($session, $row, $settings );
+            if( $userTopic ) {
+                $log .= "\n---+++ ". $row->{WikiName}."\n";
+                $log .= $b.' Added to users topic '.$userTopic.":\n".
+                  join("\n".$indent,split /\r?\n/, $uLog)."\n";	
+                $registrationsMade++;
+            }
+        } catch TWiki::OopsException with {
+            my $e = shift;
+            $log .= $e->stringify( $session )."\n";
+        };
     }
 
     $log .= "----\n";
@@ -253,9 +261,7 @@ sub bulkRegister {
     ( $logWeb, $logTopic ) = $session->normalizeWebTopicName( '', $logTopic );
 
     #-- Save the LogFile as designated, link back to the source topic 
-
     $meta->put( 'TOPICPARENT', { name => $web.'.'.$topic } );
-
     my $err = $session->{store}->saveTopic($user, $logWeb, $logTopic, $log, $meta );
 
     $session->leaveContext('absolute_urls');
@@ -291,20 +297,28 @@ sub _registerSingleBulkUser {
           $row->{LoginName}."\n";
     }
 
+    # Bugs:Item3214
+    unless( $row->{LoginName} =~ /$TWiki::cfg{LoginNameFilterIn}/ ) {
+        $log = $b.' Cannot register illegal login name \''.
+          $row->{LoginName}."'";
+        return (undef, $log);
+    }
+
     #-- Ensure every required field exists
     # NB. LoginName is OPTIONAL
     my @requiredFields = qw(WikiName FirstName LastName);
     if (_missingElements( $fieldNames, \@requiredFields )) {
-        throw Error::Simple( join(' ', @{$settings->{fieldNames}}).
-                             ' does not contain the full set of '.
-                             join(' ', @requiredFields) );
+        $log .= $b.join(' ', @{$settings->{fieldNames}}).
+          ' does not contain the full set of required fields '.
+            join(' ', @requiredFields);
+        return (undef, $log);
     }
 
     #-- Generation of the page is done from the {form} subhash, so align the two
     $row->{form} = _makeFormFieldOrderMatch( $fieldNames, $row);
 
     my $passResult = _addUserToPasswordSystem( $session, $row );
-    $log .= $b.' Password set: '.$passResult.' (1 = success)'."\n";
+    $log .= $b.' Password set '.($passResult?'OK':'FAILED')."\n";
     #TODO: need a path for if it doesn't succeed.
 
     $session->writeLog('bulkregister', $row->{webName}.'.'.$row->{WikiName},
@@ -403,7 +417,7 @@ sub register {
     $data->{webName} = $web;
     $data->{debug} = 1;
 
-    _validateRegistration( $session, $data, $query, $topic );
+    _validateRegistration( $session, $data, $query, $topic, 1 );
 }
 
 #   1 generates a activation password
@@ -995,19 +1009,11 @@ sub _buildConfirmationEmail {
     return $templateText;
 }
 
-# Returns a url if there is a problem.
+# Throws an Oops exception if there is a problem.
 sub _validateRegistration {
-    my ( $session, $data, $query, $topic ) = @_;
+    my ( $session, $data, $query, $topic, $requireForm ) = @_;
 
     # DELETED CHECK: check for wikiName field.
-
-    unless ( $data->{form} && ( $#{ $data->{form} } > 1 ) ) {
-        throw TWiki::OopsException( 'attention',
-                                    web => $data->{webName},
-                                    topic => $topic,
-                                    def => 'missing_fields',
-                                    params => [ '' ] );
-    }
 
     if($session->{store}->topicExists( $TWiki::cfg{UsersWebName}, $data->{WikiName} )) {
         throw TWiki::OopsException( 'attention',
@@ -1017,12 +1023,21 @@ sub _validateRegistration {
                                     params => [ $data->{WikiName} ] );
     }
 
+    # Check if login name matches expectations
+    unless( $data->{LoginName} =~ /$TWiki::cfg{LoginNameFilterIn}/ ) {
+        throw TWiki::OopsException( 'attention',
+                                    web => $data->{webName},
+                                    topic => $topic,
+                                    def => 'bad_loginname',
+                                    params => [ $data->{LoginName} ] );
+    }
+
     if ($session->{users}->lookupLoginName($data->{LoginName})) {
-      throw TWiki::OopsException( 'attention',
-				  web => $data->{webName},
-				  topic => $topic,
-				  def => 'already_exists',
-				  params => [ $data->{LoginName} ] );
+        throw TWiki::OopsException( 'attention',
+                                    web => $data->{webName},
+                                    topic => $topic,
+                                    def => 'already_exists',
+                                    params => [ $data->{LoginName},  ] );
     }
 
     my $user = $session->{users}->findUser( $data->{LoginName}, undef, 1 );
@@ -1034,28 +1049,13 @@ sub _validateRegistration {
                                     params => [ $data->{LoginName} ] );
     }
 
-    # check if required fields are filled in
-    my @missing = ();
-    foreach my $fd ( @{ $data->{form} } ) {
-        if ( ( $fd->{required} ) && ( !$fd->{value} ) ) {
-            push( @missing, $fd->{name} );
-        }
-    }
-
-    if( scalar( @missing )) {
-        throw TWiki::OopsException( 'attention',
-                                    web => $data->{webName},
-                                    topic => $topic,
-                                    def => 'missing_fields',
-                                    params => [ join(', ', @missing) ] );
-    }
-
     # check if WikiName is a WikiName
     if ( !TWiki::isValidWikiWord( $data->{WikiName} ) ) {
         throw TWiki::OopsException( 'attention',
                                     web => $data->{webName},
                                     topic => $topic,
-                                    def => 'bad_wikiname' );
+                                    def => 'bad_wikiname',
+                                    params => [ $data->{WikiName} ] );
     }
 
     my $doCheckPasswordLength  =
@@ -1090,6 +1090,31 @@ sub _validateRegistration {
                                     topic => $topic,
                                     def => 'bad_email',
                                     params => [ $data->{Email} ] );
+    }
+
+    return unless $requireForm;
+
+    # check if required fields are filled in
+    unless ( $data->{form} && ( $#{ $data->{form} } > 1 ) ) {
+        throw TWiki::OopsException( 'attention',
+                                    web => $data->{webName},
+                                    topic => $topic,
+                                    def => 'missing_fields',
+                                    params => [ 'form' ] );
+    }
+    my @missing = ();
+    foreach my $fd ( @{ $data->{form} } ) {
+        if ( ( $fd->{required} ) && ( !$fd->{value} ) ) {
+            push( @missing, $fd->{name} );
+        }
+    }
+
+    if( scalar( @missing )) {
+        throw TWiki::OopsException( 'attention',
+                                    web => $data->{webName},
+                                    topic => $topic,
+                                    def => 'missing_fields',
+                                    params => [ join(', ', @missing) ] );
     }
 }
 
@@ -1257,9 +1282,6 @@ sub _getDataFromQuery {
                 $data->{passwordA} = $value;
             } elsif ( $name eq 'Confirm' ) {
                 $data->{passwordB} = $value;
-            } elsif( $name eq 'LoginName' ) {
-                # Sanitise login name
-                $value =~ s/$TWiki::cfg{NameFilter}//go;
             }
 
             # 'WikiName' omitted because they can't
