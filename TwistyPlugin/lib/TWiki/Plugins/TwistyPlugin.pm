@@ -31,7 +31,7 @@ use strict;
 
 use vars qw( $VERSION $RELEASE $pluginName $debug @modes $doneHeader $twistyCount
 $prefMode $prefShowLink $prefHideLink $prefRemember
-$defaultMode $defaultShowLink $defaultHideLink $defaultRemember );
+$defaultMode $defaultShowLink $defaultHideLink $defaultRemember $needPostRenderingHandler );
 
 # This should always be $Rev$ so that TWiki can determine the checked-in
 # status of the plugin. It is used by the build automation tools, so
@@ -61,6 +61,7 @@ sub initPlugin {
 
     $doneHeader = 0;
     $twistyCount = 0;
+    $needPostRenderingHandler = 0;
     
     $prefMode = TWiki::Func::getPreferencesValue( 'TWISTYMODE' ) || TWiki::Func::getPluginPreferencesValue( 'TWISTYMODE' ) || $defaultMode;
     $prefShowLink = TWiki::Func::getPreferencesValue( 'TWISTYSHOWLINK' ) || TWiki::Func::getPluginPreferencesValue( 'TWISTYSHOWLINK' ) || $defaultShowLink;
@@ -161,8 +162,12 @@ construct to write Javascript even if {AllowInlineScript} has been set to false.
 =cut
 
 sub beforeCommonTagsHandler {
-	# do not uncomment, use $_[0], $_[1]... instead
-	$_[0] =~ s/%_TWISTYSCRIPT{\"(.*?)\"}%/$1/g;
+
+    return if $needPostRenderingHandler; # don't remove _TWISTYSCRIPT too early
+                                         # see Item3159
+
+    # do not uncomment, use $_[0], $_[1]... instead
+    $_[0] =~ s/\%_TWISTYSCRIPT{\"(.*?)\"}\%/$1/g;
 }
 
 =pod
@@ -173,7 +178,9 @@ Convert the semi-variable tag to JavaScript.
 
 sub postRenderingHandler {
     # do not uncomment, use $_[0], $_[1]... instead
-	$_[0] =~ s/%_TWISTYSCRIPT{\"(.*?)\"}%/<script type="text\/javascript\"\>$1<\/script>/g;
+    if ($_[0] =~ s/\%_TWISTYSCRIPT{\"(.*?)\"}\%/<script type="text\/javascript\"\>$1<\/script>/g) {
+      $needPostRenderingHandler = 0;
+    }
 }
 
 sub _twistyBtn {
@@ -270,6 +277,7 @@ So we create a semi-variable tag here and convert it to a JavaScript tag in #pos
 
 sub _createJavascriptTriggerCall {
 	my($idTag) = @_;
+        $needPostRenderingHandler = 1; # notifies postRenderingHandler and beforeCommonTagsHandler
 	return '%_TWISTYSCRIPT{"TWiki.TwistyPlugin.init("'.$idTag.'");"}%';
 }
 
