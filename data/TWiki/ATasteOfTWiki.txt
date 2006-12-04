@@ -312,7 +312,7 @@ You may see a comment box on a page in Thread<nop>Mode that makes it easy to qui
 Basic TWiki is rich with features, but is enriched even further by the addition of optional plug-in modules that may (or may not!) be installed in your TWiki. These are classified as either __skins__ (modules that change the look-and-feel) and __plugins__ (modules that enhance functionality).
 
 Here's a brief description of some of the more common plugins, together with the tags you might expect to see in topics if they are used. You can find out more by visiting the plugin pages.
-   * Action<nop>TrackerPlugin: Support *action tags* in topics, with *automatic notification* of action statii <code>%ACTION...</code>
+   * Action<nop>TrackerPlugin: Support *action tags* in topics, with *automatic notification* of action statuses <code>%ACTION...</code>
    * Calendar<nop>Plugin: Show a *monthly calendar* with highlighted events <code>%CALENDAR...%</code>
    * Comment<nop>Plugin: Support *rapid entry of short comments* (also known as <b>blogging</b>) <code>%COMMENT...</code>
    * Chart<nop>Plugin: Create PNG or GIF *charts to visualize data in TWiki tables* <code>%CHART...</code>
