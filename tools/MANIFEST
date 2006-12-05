@@ -925,6 +925,7 @@ templates/view.rssatom.tmpl 0440
 templates/view.text.tmpl 0440
 templates/view.tmpl 0440
 templates/view.xml.tmpl 0440
+templates/viewprint.tmpl 0440
 tools/geturl.pl 0550
 tools/rewriteshbang.pl 0550
 tools/tick_twiki.pl 0550
