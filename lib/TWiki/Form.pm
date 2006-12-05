@@ -862,7 +862,6 @@ sub renderForDisplay {
     my $name = $form->{name};
 
     my $text = $templates->expandTemplate('FORM:display:header');
-    $text =~ s/%A_TITLE%/$name/g;
 
 	my $rowTemplate = $templates->expandTemplate('FORM:display:row');
     my @fields = $meta->find( 'FIELD' );
@@ -879,6 +878,7 @@ sub renderForDisplay {
         }
     }
     $text .= $templates->expandTemplate('FORM:display:footer');
+    $text =~ s/%A_TITLE%/$name/g;
     return $text;
 }
 
