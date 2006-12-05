@@ -1,6 +1,6 @@
 ---+!! Wysiwyg Plugin
 
-Support for the integration of WYSIWYG (What-You-See-Is-What-You-Get) editors. On it's own, the only thing this plugin gives you is a stand-alone HTML to TWiki translator script. For WYSIWYG editing in TWiki, you will also need to install a specific editor package such as TWiki:Plugins.KupuEditorContrib or TWiki:Plugins.WikiwygContrib.
+Support for the integration of WYSIWYG (What-You-See-Is-What-You-Get) editors. On its own, the only thing this plugin gives you is a stand-alone HTML to TWiki translator script. For WYSIWYG editing in TWiki, you will also need to install a specific editor package such as TWiki:Plugins.KupuEditorContrib or TWiki:Plugins.WikiwygContrib.
 
 This plugin provides a generic framework that supports editing of TWiki topics using any browser-based HTML editor. It works by transforming TML (TWiki Meta Language) into HTML for the editor, and then transforming HTML back into TML on save.
 
@@ -43,21 +43,21 @@ This is the scenario used by the standard TWiki text editor, except that the tex
 
 The flow of control is as follows:
    1 User hits "edit".
-   1 The beforeEditHandler filters the edit, blocking any attempt to edit restricted content
-   1 The 'edit' template containing the JS editor is instantiated. A %<nop>WYSIWYG_TEXT% variable embedded in the template is expanded by the plugin to contain the HTML of the content-to-be-edited.
+   1 The =beforeEditHandler= filters the edit, blocking any attempt to edit restricted content
+   1 The =edit= template containing the JS editor is instantiated. A =%<nop>WYSIWYG_TEXT%= variable embedded in the template is expanded by the plugin to contain the HTML of the content-to-be-edited.
 
 =WYSIWYGPLUGIN_WYSIWYGSKIN= *must* be set for this to work.
 
 ---++++ Fetching content from a URL
-In this scenario, the edit template is generated *without* the content-to-be-edited. The content is retrieved from the server using a URL e.g. from an =IFRAME= or using a =xmlHttpRequest=.
+In this scenario, the edit template is generated *without* the content-to-be-edited. The content is retrieved from the server using a URL e.g. from an =IFRAME= or using a =XmlHttpRequest=.
 
 The flow of control is as follows:
    1 User hits "edit".
-   1 If the current skin = =WYWIWYGPLUGIN_WYWIWYGSKIN=, the beforeEditHandler
+   1 If the current skin = =WYWIWYGPLUGIN_WYWIWYGSKIN=, the =beforeEditHandler=
       filters the edit, blocking any attempt to edit restricted content.
-   1 The 'edit' template containing the JS editor is instantiated.
+   1 The =edit= template containing the JS editor is instantiated.
    1 JS editor invokes content URL to obtain the HTML document to be edited
-      * The content URL is just a TWiki =view= URL with the 'wysiwyg_edit=1'
+      * The content URL is just a TWiki =view= URL with the =wysiwyg_edit=
         parameter set.
       * The plugin recognises the =wysiwyg_edit= parameter and uses the
         TML2HTML translator to prepare the text, which is then returned
@@ -73,7 +73,7 @@ Once the save script has completed it responds with a redirect, either to an Oop
 
 ---++++ Handling Attachments
 Attachment uploads can be handled by URL requests from the editor to the TWiki
-=upload= script. The =upload= script normally redirects to the containing topic; a behaviour that you really don't want in an editor! There are two ways to handle this:
+=upload= script. The =upload= script normally redirects to the containing topic; a behaviour that you usually don't want in an editor! There are two ways to handle this:
    * If the uploads are done in an =IFRAME= or via =XmlHttpRequest=, then the
      302 redirect at the end of the upload can simply be ignored.
    * You can pass =noredirect= to the =upload= script to suppress the redirect. In this case
@@ -89,9 +89,7 @@ Attachment uploads can be handled by URL requests from the editor to the TWiki
 
 ---+++ Translator control
 For any of the following controls to work, you must tell %TOPIC% the name of
-the skin used to invoke the Wysiwyg editor.
-This must be set to the name of the editor skin being used, for example
-=kupu= or =wikiwyg=. The plugin uses this to recognise when it has to apply the restrictions.
+the skin being used to invoke the Wysiwyg editor, for example =kupu= or =wikiwyg=.
 	* Set WYSIWYGSKIN =
 Note that is can be set differently in different areas by defining
 =WYSWIYGPLUGIN_WYSIWYGSKIN= locally (e.g. in !WebPreferences).
@@ -105,7 +103,7 @@ The *global* TWiki Variable =WYSIWYG_EXCLUDE= can be set to make the plugin sens
    
 are used in the topic. If the plugin detects an excluded construct in the topic, it will redirect to the default editor. Comma-separated list of one or more of =html=, =variables=, =calls=, =pre= or =comments= e.g.
    * Set WYSIWYG_EXCLUDE = calls,html
-Set =WYSIWYG_EXCLUDE in %MAINWEB%.TWikiPreferences, or in %WEBPREFSTOPIC% for each web.
+Set =WYSIWYG_EXCLUDE= in %MAINWEB%.TWikiPreferences, or in %WEBPREFSTOPIC% for each web.
 
 If you excluded =calls= in =WYSIWYG_EXCLUDE=, you can still define a subset of TWiki variables that do *not* block edits. this is done in the *global* preference variable =WYSIWYG_EDITABLE_CALLS=, which should be a list of TWiki variable names separated by vertical bars, with no spaces, e.g:
    * Set WYSIWYG_EDITABLE_CALLS = COMMENT|CALENDAR|INCLUDE
@@ -138,6 +136,7 @@ which is correct by construction, but does not render correctly in TWiki. This p
 | Copyright | &copy; ILOG 2005 http://www.ilog.fr |
 |  Plugin Version: | %$VERSION% |
 | Change&nbsp;History: | |
+|  12161 | Added support for embedded editable HTML in the edit template |
 |  12119 | Split into WysiwygPlugin and KupuContrib |
 |  11538 | Minor doc updates, minor fixes to spacing in lists, integrated Koen Marten's template topic patch |
 |  9671 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item2025'>Item2025</a>  corrected handling of SPAN and FONT tags used for colour changes |
