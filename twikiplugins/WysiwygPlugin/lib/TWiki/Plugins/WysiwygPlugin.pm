@@ -80,6 +80,7 @@ sub initPlugin {
     # grabbed from, as defined in templates/edit.skin.tmpl
     TWiki::Func::registerTagHandler('OWEB',\&_OWEBTAG);
     TWiki::Func::registerTagHandler('OTOPIC',\&_OTOPICTAG);
+    TWiki::Func::registerTagHandler('WYSIWYG_TEXT',\&_WYSIWYG_TEXT);
 
     # Plugin correctly initialized
     return 1;
@@ -229,6 +230,9 @@ sub beforeSaveHandler {
     $_[0] =~ s/<!--META_(\d+)_META-->/\n$rescue[$1-1]/g;
 }
 
+# Handler used to process text in a =view= URL to generate text/html
+# containing the HTML of the topic to be edited.
+#
 # Invoked when the selected skin is in use to convert the text to HTML
 # We can't use the beforeEditHandler, because the editor loads up and then
 # uses a URL to fetch the text to be edited. This handler is designed to
@@ -260,29 +264,38 @@ sub beforeCommonTagsHandler {
     # are in the processing pipeline)
     return if( $_[0] =~ /^<!-- WysiwygPlugin Template/ );
 
+    # Have to re-read the topic because verbatim blocks have already been
+    # lifted out, and we need them.
+    my $topic = $_[1];
+    my $web = $_[2];
+    my( $meta, $text );
+    my $altText = $query->param( 'templatetopic' );
+    if( $altText && TWiki::Func::topicExists( $web, $altText )) {
+        ( $web, $topic ) = TWiki::Func::normalizeWebTopicName( $web, $altText );
+    }
+
+    $_[0] = _WYSIWYG_TEXT($TWiki::Plugins::SESSION, {}, $topic, $web);
+}
+
+# Handler used by editors that require pre-prepared HTML embedded in the
+# edit template.
+sub _WYSIWYG_TEXT {
+    my ($session, $params, $topic, $web) = @_;
+
+    # Have to re-read the topic because content has already been munged
+    # by other plugins, or by the extraction of verbatim blocks.
+    my( $meta, $text ) = TWiki::Func::readTopic( $web, $topic );
+
     # Translate the topic text to pure HTML.
     unless( $tml2html ) {
         require TWiki::Plugins::WysiwygPlugin::TML2HTML;
         $tml2html = new TWiki::Plugins::WysiwygPlugin::TML2HTML();
     }
-
-    # Have to re-read the topic because verbatim blocks have already been
-    # lifted out, and we need them.
-    my $web = $_[2];
-    my( $meta, $text );
-    my $altText = $query->param( 'templatetopic' );
-    if( $altText && TWiki::Func::topicExists( $web, $altText )) {
-        my( $w, $t ) = TWiki::Func::normalizeWebTopicName( $web, $altText );
-        ( $meta, $text ) = TWiki::Func::readTopicText( $w, $t );
-    } else {
-        ( $meta, $text ) = TWiki::Func::readTopic( $web, $_[1] );
-    }
-
-    $_[0] = $tml2html->convert(
+    return $tml2html->convert(
         $text,
         {
             web => $web,
-            topic => $_[1],
+            topic => $topic,
             getViewUrl => \&getViewUrl,
             expandVarsInURL => \&expandVarsInURL,
         }

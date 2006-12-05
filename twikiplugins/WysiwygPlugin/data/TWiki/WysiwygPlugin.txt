@@ -36,7 +36,48 @@ Both translators can be used directly from Perl scripts, for example to build yo
 A stand-alone convertor script for HTML to TWiki is included in the installation. It can be found in the top-level =tools= directory and is called =html2tml.pl=.
 
 ---+++ Integrating a Wysiwyg Editor
-This section to be written. At the moment, the best advice is to read the header comment in =WysiwygPlugin.pm=, and look at TWiki:Plugins.KupuEditorContrib and TWiki:Plugins.WikiwygContrib and see how they do it. It's actually quite easy.
+The plugin can be used to generate HTML for an editor in two ways; first, by generating the HTML for the content-to-be-edited directly in the edit template, and second, through a URL that can be used to fetch the content-to-be-edited from the server.
+
+---++++ Getting content in the edit template
+This is the scenario used by the standard TWiki text editor, except that the text is pre-converted to HTML before inclusion in the template.
+
+The flow of control is as follows:
+   1 User hits "edit".
+   1 The beforeEditHandler filters the edit, blocking any attempt to edit restricted content
+   1 The 'edit' template containing the JS editor is instantiated. A %<nop>WYSIWYG_TEXT% variable embedded in the template is expanded by the plugin to contain the HTML of the content-to-be-edited.
+
+=WYSIWYGPLUGIN_WYSIWYGSKIN= *must* be set for this to work.
+
+---++++ Fetching content from a URL
+In this scenario, the edit template is generated *without* the content-to-be-edited. The content is retrieved from the server using a URL e.g. from an =IFRAME= or using a =xmlHttpRequest=.
+
+The flow of control is as follows:
+   1 User hits "edit".
+   1 If the current skin = =WYWIWYGPLUGIN_WYWIWYGSKIN=, the beforeEditHandler
+      filters the edit, blocking any attempt to edit restricted content.
+   1 The 'edit' template containing the JS editor is instantiated.
+   1 JS editor invokes content URL to obtain the HTML document to be edited
+      * The content URL is just a TWiki =view= URL with the 'wysiwyg_edit=1'
+        parameter set.
+      * The plugin recognises the =wysiwyg_edit= parameter and uses the
+        TML2HTML translator to prepare the text, which is then returned
+        as =text/plain= to the browser.
+      * Two TWiki variables, =%<nop>OWEB%= and %<nop>OTOPIC%=, should be used in
+        the content URL to refer to the source topic for the content.
+
+---+++ Handling Saves
+Saves are invoked by the editor POSTing to the TWiki =save= script with the =wysiwyg_edit=
+parameter set to =1=. This parameter tells the =beforeSaveHandler= in the plugin to convert the HTML back to TML. See %TWIKIWEB%.TWikiScripts for details of the other parameters to the =save= script.
+
+Once the save script has completed it responds with a redirect, either to an Oops page if the save failed, or to the appropriate post-save URL (usually a =view=). The editor must be ready to handle this redirect.
+
+---++++ Handling Attachments
+Attachment uploads can be handled by URL requests from the editor to the TWiki
+=upload= script. The =upload= script normally redirects to the containing topic; a behaviour that you really don't want in an editor! There are two ways to handle this:
+   * If the uploads are done in an =IFRAME= or via =XmlHttpRequest=, then the
+     302 redirect at the end of the upload can simply be ignored.
+   * You can pass =noredirect= to the =upload= script to suppress the redirect. In this case
+     you will get a =text/plain= response of =OK= followed by a message if everything went well, or an error message if it did not.
 
 ---++ Plugin Installation Instructions
 %$INSTALL_INSTRUCTIONS%
