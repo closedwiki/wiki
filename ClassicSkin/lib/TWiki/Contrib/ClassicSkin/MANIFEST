@@ -51,3 +51,4 @@ templates/view.classic.tmpl  0440
 templates/view.plain.classic.tmpl  0440
 templates/view.print.classic.tmpl  0440
 templates/view.text.classic.tmpl 0440
+templates/viewprint.tmpl 0440
