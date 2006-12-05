@@ -260,8 +260,9 @@ $SHORTDESCRIPTION = '';
 
 ---++ Settings
 <!--
-One line description, is shown in the %TWIKIWEB%.TextFormattingRules.
-Required if this extension is to be installed in TWiki < 4.1
+One line description, required for extensions repository at 
+http://twiki.org/cgi-bin/view/Plugins/WebHome. Also shown in 
+the %TWIKIWEB%.TextFormattingRules for TWiki 4.0 and older.
     * Set SHORTDESCRIPTION = 
 -->
 
