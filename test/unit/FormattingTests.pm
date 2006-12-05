@@ -270,6 +270,86 @@ ACTUAL
     $this->do_test($expected, $actual);
 }
 
+
+# The following four test cases correspond to cases 1,3,6,7 from
+# Item3063.  Cases 2 is already done, 4 is equivalent to 3, and 5
+# always failed and won't work right now.
+#
+# Case 1: Link to an existing page
+sub test_wikiWordInsideSquabbedLink {
+    my $this = shift;
+    my $expected = <<EXPECTED;
+<a class="twikiLink" href="$this->{sup}/TWiki/WebRssBase">TWiki.WebRss <nop>Base</a>
+EXPECTED
+
+    my $actual = <<ACTUAL;
+[[TWiki.WebRss Base]]
+ACTUAL
+    $this->do_test($expected, $actual);
+}
+
+
+# Case 3: WikiWord (existence doesn't matter) in a text for an
+# external link
+sub test_wikiWordInsideHttpLink {
+    my $this = shift;
+    my $expected = <<EXPECTED;
+<a href="http://google.com/" target="_top">There is a <nop>WikiWord inside an external link</a>
+EXPECTED
+
+    my $actual = <<ACTUAL;
+[[http://google.com/][There is a WikiWord inside an external link]]
+ACTUAL
+    $this->do_test($expected, $actual);
+}
+
+
+# Case 6: WikiWord (existence doesn't matter) in a text for an
+# file link (more or less equivalent to case 3, but so what...)
+sub test_wikiWordInsideFileLink {
+    my $this = shift;
+    my $expected = <<EXPECTED;
+<a href="file://tmp/pam.gif" target="_top">There is a <nop>WikiWord inside a file: link</a>
+EXPECTED
+
+    my $actual = <<ACTUAL;
+[[file://tmp/pam.gif][There is a WikiWord inside a file: link]]
+ACTUAL
+    $this->do_test($expected, $actual);
+}
+
+
+# Case 7: WikiWord (existence doesn't matter) in a text for an
+# mailto link (with exception of stuffing equivalent to case 3)
+sub test_wikiWordInsideMailto {
+    my $this = shift;
+    my $expected = <<EXPECTED;
+<a href="mailto&#58;foo&#64;barSTUFFED&#46;com">There is a <nop>WikiWord inside a mailto link</a>
+EXPECTED
+
+    my $actual = <<'ACTUAL';
+[[mailto:foo@bar.com][There is a WikiWord inside a mailto link]]
+ACTUAL
+    $this->do_test($expected, $actual);
+}
+
+
+# Case x - in the spirit of 3063: WikiWord (existence doesn't matter)
+# in a text for a link beginning with '/'
+sub test_wikiWordInsideRelative {
+    my $this = shift;
+    my $expected = <<EXPECTED;
+<a href="/somewhere/on/this/host" target="_top">There is a <nop>WikiWord inside a relative link</a>
+EXPECTED
+
+    my $actual = <<'ACTUAL';
+[[/somewhere/on/this/host][There is a WikiWord inside a relative link]]
+ACTUAL
+    $this->do_test($expected, $actual);
+}
+# End of Testcases from Item3063
+
+
 # Numeric1Wikiword
 sub test_numericWikiWord {
     my $this = shift;
@@ -416,6 +496,7 @@ sub test_protocols {
         'ftp://bleem@snot.grumph:flibble' => 0,
         'gopher://go.for.it/' => 0,
         'http://flim.flam.example.com/path:8080' => 0,
+        'http://some.host/with/WikiName' => 0,
         'https://flim.flam.example.com/path' => 0,
         'irc://irc.com/' => 0,
         'mailto:pitiful@example.com' => '<a href="mailto:pitiful@exampleSTUFFED.com">mailto:pitiful@exampleSTUFFED.com</a>',

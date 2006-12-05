@@ -655,35 +655,25 @@ sub _handleSquareBracketedLink {
     my( $this, $web, $topic, $link, $text ) = @_;
 
     # Strip leading/trailing spaces
-    $link =~ s/^\s*//;
-    $link =~ s/\s*$//;
+    $link =~ s/^\s+//;
+    $link =~ s/\s+$//;
 
-    # Be friendly to file:-links, never alter them no matter what
-    if( $link =~ /^file\:/ ) {
-          # Prevent automatic WikiWord or CAPWORD linking in explicit links
-          $link =~ s/(?<=[\s\(])($TWiki::regex{wikiWordRegex}|[$TWiki::regex{upperAlpha}])/<nop>$1/go;
-          return $this->_externalLink( $link, $text );
-    }
-
-    # Spot other full explicit URLs
-    # (explicit external [[$link][$text]]-style, that can be handled directly)
-    if( $link =~ /^$TWiki::regex{linkProtocolPattern}\:/ ) {
-        if (defined $text && !($link eq $text)) {
+    # Explicit external [[$link][$text]]-style can be handled directly
+    if( $link =~ m!^($TWiki::regex{linkProtocolPattern}\:|/)! ) {
+        if (defined $text) {
+            # [[][]] style - protect text:
             # Prevent automatic WikiWord or CAPWORD linking in explicit links
-            $link =~ s/(?<=[\s\(])($TWiki::regex{wikiWordRegex}|[$TWiki::regex{upperAlpha}])/<nop>$1/go;
-            return $this->_externalLink( $link, $text );
-        }
-    }
-
-    # Spot URLs
-    if( $link =~ /^$TWiki::regex{linkProtocolPattern}\:/ ||
-          $link =~ /^\// ) {
-        # URL, absolute or relative
-        if ( $link =~ /^(\S+)\s+(.*)$/ ) {
-            # '[[URL#anchor display text]]' link:
-            $link = $1;
-            $text = $2;
             $text =~ s/(?<=[\s\(])($TWiki::regex{wikiWordRegex}|[$TWiki::regex{upperAlpha}])/<nop>$1/go;
+        }
+        else {
+            # [[]] style - take care for legacy:
+            # Prepare special case of '[[URL#anchor display text]]' link
+            if ( $link =~ /^(\S+)\s+(.*)$/ ) {
+                # '[[URL#anchor display text]]' link:
+                $link = $1;
+                $text = $2;
+                $text =~ s/(?<=[\s\(])($TWiki::regex{wikiWordRegex}|[$TWiki::regex{upperAlpha}])/<nop>$1/go;
+            }
         }
         return $this->_externalLink( $link, $text );
     }
