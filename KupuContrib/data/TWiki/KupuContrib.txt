@@ -1,5 +1,8 @@
----+!! KupuContrib
-Integration of the [[http://kupu.oscom.org/][OSCOM Kupu Wysiwyg editor]] with TWiki.
+---+!! !KupuContrib
+<!--
+   * Set SHORTDESCRIPTION = Integration of the [[http://kupu.oscom.org/][OSCOM Kupu WYSIWYG editor]] with TWiki.
+-->
+%SHORTDESCRIPTION%
 
 <img src="%ATTACHURL%/screenshot.jpg" alt="Screenshot" />
 
@@ -199,8 +202,7 @@ This contrib is heavily based on the TWiki::Plugins.KupuEditorAddOn, and the aut
 |  5699 | Checkpoint |
 |  5698 | Most of the toolboxes are working again |
 |  5693 | Initial commit; doesn't do much except run tests |
-|  Dependencies: | |
-%$DEPENDENCIES%
+|  Dependencies: | %$DEPENDENCIES% |
 |  Contrib Home: | http://twiki.org/cgi-bin/view/Plugins/KupuContrib |
 |  Feedback: | http://twiki.org/cgi-bin/view/Plugins/KupuContribDev |
 |  Appraisal: | http://twiki.org/cgi-bin/view/Plugins/KupuContribAppraisal |
