@@ -108,6 +108,7 @@ TWiki generates monthly log files which are used by the statistics script
      | passwd | =resetpasswd= | LoginName, WikiName, E-mail address, success code from addUserPassword |
      | passwd | =changepasswd= | LoginName, WikiName |
      | save | =save= | when replacing existing revision: =repRev 3= %BR% when user checks the minor changes box: =dontNotify= |
+     | save | =cmd= | special admin parameter used when saving |
      | search | =search= | search string |
      | upload | =upload= | filename |
      | view | =view= | when viewing non-existing topic: =(not exist)= %BR% when viewing previous topic revision: =r3= |
