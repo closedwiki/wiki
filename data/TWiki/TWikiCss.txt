@@ -76,6 +76,7 @@ A wide range of standard styles are used in the TWiki core code and topics, and 
 |.twikiFormTable  |formtables.tmpl, form.tmpl  |
 |.twikiFormTableHRow  |formtables.tmpl, form.tmpl  |
 |.twikiFormTableRow  |formtables.tmpl  |
+|.twikiFormTableFooter  |formtables.tmpl  |
 |.twikiAttachments  |attachtables.tmpl |
 |.twikiEditForm |form.tmpl |
 |.twikiSubmit  | |
