@@ -84,6 +84,8 @@ Kupu does not work on Safari.
 This contrib is heavily based on the TWiki::Plugins.KupuEditorAddOn, and the authors of that add-on are therefore also credited as authors of this plugin.
 
 |  Contrib Author: | TWiki:Main.CrawfordCurrie http://www.c-dot.co.uk (from original work by TWiki:Main.RomainRaugi, TWiki:Main.DamienMandrioli, TWiki:Main.FredericLuddeni, and TWiki:Main.ColasNahaboo)  |
+|  Copyright | &copy; ILOG 2005 http://www.ilog.fr |
+|  License | [[http://www.gnu.org/licenses/gpl.html][GPL (Gnu General Public License)]] |
 |  Contrib Version: | %$VERSION% |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
 |  12119 | Split out of WysiwygPlugin |
@@ -208,15 +210,3 @@ This contrib is heavily based on the TWiki::Plugins.KupuEditorAddOn, and the aut
 |  Appraisal: | http://twiki.org/cgi-bin/view/Plugins/KupuContribAppraisal |
 
 <!-- Do _not_ attempt to edit this topic; it is auto-generated. Please add comments/questions/remarks to the Dev topic instead. -->
-
-%META:FORM{name="PackageForm"}%
-%META:FIELD{name="TopicClassification" attributes="" title="TopicClassification" value="ContribPackage"}%
-%META:FIELD{name="TestedOnTWiki" attributes="" title="TestedOnTWiki" value="4.1, 4.0.0"}%
-%META:FIELD{name="TestedOnOS" attributes="" title="TestedOnOS" value="OsLinux"}%
-%META:FIELD{name="ShouldRunOnOS" attributes="" title="ShouldRunOnOS" value="AnyOS"}%
-%META:FIELD{name="InstalledOnTWikiOrg" attributes="" title="InstalledOnTWikiOrg" value="Yes"}%
-%META:FIELD{name="DemoUrl" attributes="" title="DemoUrl" value="<a href='http://twiki.org/cgi-bin/edit/Sandbox/KupuContribDemo?skin=kupu'>Kupu</a>"}%
-%META:FIELD{name="DevelopedInSVN" attributes="" title="DevelopedInSVN" value="Yes"}%
-%META:FIELD{name="ModificationPolicy" attributes="" title="ModificationPolicy" value="ContactAuthorFirst"}%
-%META:FIELD{name="RelatedTopics" attributes="" title="RelatedTopics" value="WysiwygPlugin, WikiwygContrib, CategoryWysiwygEditors"}%
-

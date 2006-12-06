@@ -230,41 +230,16 @@ $RELEASE = '';
 $SHORTDESCRIPTION = '';
 
 <<<< TXT >>>>
----+!! %$MODULE%
-%TOC%
-
----++ Usage
-
----++ Installation Instructions
-
-%$INSTALL_INSTRUCTIONS%
-
----++ %$TYPE% Info
-
-|  %$TYPE% Author: | |
-|  %$TYPE% Version: | %$VERSION% |
-|  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  Dependencies: | |
-%$DEPENDENCIES%
-|  %$TYPE% Home: | %$UPLOADTARGETSCRIPT%/view%$UPLOADTARGETSUFFIX%/%$UPLOADTARGETWEB%/%$MODULE% |
-|  Feedback: | %$UPLOADTARGETSCRIPT%/view%$UPLOADTARGETSUFFIX%/%$UPLOADTARGETWEB%/%$MODULE%Dev |
-|  Appraisal: | %$UPLOADTARGETSCRIPT%/view%$UPLOADTARGETSUFFIX%/%$UPLOADTARGETWEB%/%$MODULE%Appraisal |
-
-<!-- Do _not_ attempt to edit this topic; it is auto-generated. Please add comments/questions/remarks to the Dev topic instead. -->
-
-<<<< TXT_Plugin >>>>
----+!! %$MODULE%
-%TOC%
-
----++ Usage
-
----++ Settings
+---+!! !%$MODULE%
 <!--
-One line description, required for extensions repository at 
-http://twiki.org/cgi-bin/view/Plugins/WebHome. Also shown in 
-the %TWIKIWEB%.TextFormattingRules for TWiki 4.0 and older.
+One line description, required for extensions repository catalog.
     * Set SHORTDESCRIPTION = 
 -->
+%SHORTDESCRIPTION%
+
+%TOC%
+
+---++ Usage
 
 ---++ Installation Instructions
 
@@ -272,11 +247,12 @@ the %TWIKIWEB%.TextFormattingRules for TWiki 4.0 and older.
 
 ---++ %$TYPE% Info
 
-|  %$TYPE% Author: | |
+|  %$TYPE% Author(s): | |
 |  %$TYPE% Version: | %$VERSION% |
+|  Copyright: | &copy; |
+|  License: | [[http://www.gnu.org/licenses/gpl.html][GPL (Gnu General Public License)]] |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  Dependencies: | |
-%$DEPENDENCIES%
+|  Dependencies: | %$DEPENDENCIES% |
 |  %$TYPE% Home: | %$UPLOADTARGETSCRIPT%/view%$UPLOADTARGETSUFFIX%/%$UPLOADTARGETWEB%/%$MODULE% |
 |  Feedback: | %$UPLOADTARGETSCRIPT%/view%$UPLOADTARGETSUFFIX%/%$UPLOADTARGETWEB%/%$MODULE%Dev |
 |  Appraisal: | %$UPLOADTARGETSCRIPT%/view%$UPLOADTARGETSUFFIX%/%$UPLOADTARGETWEB%/%$MODULE%Appraisal |

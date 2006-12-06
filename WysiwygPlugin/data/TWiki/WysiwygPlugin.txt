@@ -1,4 +1,9 @@
 ---+!! Wysiwyg Plugin
+<!--
+	* Set SHORTDESCRIPTION = Translator framework for Wysiwyg editors
+-->
+<!-- Do _not_ attempt to edit this topic; it is auto-generated. Please add comments/questions/remarks to the Dev topic instead. -->
+%SHORTDESCRIPTION%
 
 Support for the integration of WYSIWYG (What-You-See-Is-What-You-Get) editors. On its own, the only thing this plugin gives you is a stand-alone HTML to TWiki translator script. For WYSIWYG editing in TWiki, you will also need to install a specific editor package such as TWiki:Plugins.KupuEditorContrib or TWiki:Plugins.WikiwygContrib.
 
@@ -83,9 +88,6 @@ Attachment uploads can be handled by URL requests from the editor to the TWiki
 %$INSTALL_INSTRUCTIONS%
 
 ---++ Plugin Configuration Settings
-<!--
-	* Set SHORTDESCRIPTION = Translator framework for Wysiwyg editors
--->
 
 ---+++ Translator control
 For any of the following controls to work, you must tell %TOPIC% the name of
@@ -133,9 +135,10 @@ which is correct by construction, but does not render correctly in TWiki. This p
 ---++ Plugin Info
 
 |  Plugin Authors: | TWiki:Main.CrawfordCurrie http://www.c-dot.co.uk |
-| Copyright | &copy; ILOG 2005 http://www.ilog.fr |
+|  Copyright | &copy; ILOG 2005 http://www.ilog.fr |
+|  License | [[http://www.gnu.org/licenses/gpl.html][GPL (Gnu Public License)]] |
 |  Plugin Version: | %$VERSION% |
-| Change&nbsp;History: | |
+|  Change&nbsp;History: | |
 |  12161 | Added support for embedded editable HTML in the edit template |
 |  12119 | Split into WysiwygPlugin and KupuContrib |
 |  11538 | Minor doc updates, minor fixes to spacing in lists, integrated Koen Marten's template topic patch |
@@ -253,9 +256,12 @@ which is correct by construction, but does not render correctly in TWiki. This p
 |  5699 | Checkpoint |
 |  5698 | Most of the toolboxes are working again |
 |  5693 | Initial commit; doesn't do much except run tests |
+|  Dependencies: | %$DEPENDENCIES% |
+|  Plugin Home: | http://twiki.org/cgi-bin/view/Plugins/%TOPIC% |
 |  Feedback: | TWiki:Plugins/%TOPIC%Dev |
+|  Appraisal: | http://twiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
 __Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
 
--- TWiki:Main/CrawfordCurrie - %$DATE%
- 
+<!-- Do _not_ attempt to edit this topic; it is auto-generated. Please add comments/questions/remarks to the Dev topic instead. -->
+

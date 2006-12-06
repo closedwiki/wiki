@@ -429,7 +429,8 @@ sub _loadDependenciesFrom {
     if (-f $deps) {
         open(PF, '<'.$deps) || die 'Failed to open '.$deps;
         while (my $line = <PF>) {
-            if ($line =~ /^ONLYIF\s*(\(.*\))\s*$/) {
+            if ($line =~ /^\s*$/ || $line =~ /^\s*#/) {
+            } elsif ($line =~ /^ONLYIF\s*(\(.*\))\s*$/) {
                 $condition = $1;
             } elsif ($line =~ m/^(\w+)\s+(\w*)\s*(.*)$/o) {
                 $this->_addDependency(
@@ -447,7 +448,7 @@ sub _loadDependenciesFrom {
                     description=>$4,
                     trigger=>$condition);
                 $condition='';
-            } elsif ($line !~ /^\s*$/ && $line !~ /^\s*#/) {
+            } else {
                 warn 'WARNING: LINE '.$line.' IN '.$deps.' IGNORED';
             }
         }
