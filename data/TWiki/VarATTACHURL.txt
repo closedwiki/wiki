@@ -6,5 +6,5 @@
    * Syntax: =%<nop>ATTACHURL%=
    * Expands to: =%ATTACHURL%=
    * Example: If you attach a file you can refer to it as =%<nop>ATTACHURL%/image.gif=
-   * Related: [[#VarATTACHURLPATH][ATTACHURLPATH]], [[#VarPUBURLPATH][PUBURLPATH]], [[#VarSCRIPTURL][SCRIPTURL]], FileAttachments
+   * Related: [[#VarATTACHURLPATH][ATTACHURLPATH]], [[#VarPUBURL][PUBURL]], [[#VarPUBURLPATH][PUBURLPATH]], [[#VarSCRIPTURL][SCRIPTURL]], [[#VarSCRIPTURL][SCRIPTURLPATH]], FileAttachments
 

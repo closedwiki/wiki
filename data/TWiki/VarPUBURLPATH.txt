@@ -5,5 +5,5 @@
 ---+++ PUBURLPATH -- the base URL path of attachments
    * Syntax: =%<nop>PUBURLPATH%=
    * Expands to: =%PUBURLPATH%=
-   * Related: [[#VarATTACHURL][ATTACHURL]], [[#VarPUBURL][PUBURL]], [[#VarSCRIPTURL][SCRIPTURL]], [[#VarSCRIPTURL][SCRIPTURLPATH]], FileAttachments
+   * Related: [[#VarATTACHURL][ATTACHURL]], [[#VarATTACHURLPATH][ATTACHURLPATH]], [[#VarPUBURL][PUBURL]], [[#VarSCRIPTURL][SCRIPTURL]], [[#VarSCRIPTURL][SCRIPTURLPATH]], FileAttachments
 

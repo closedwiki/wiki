@@ -1,6 +1,6 @@
 %META:TOPICINFO{author="TWikiContributor" date="1123279665" format="1.0" version="$Rev$"}%
 
-| Site-level preferences are located in [[%TWIKIWEB%.%TOPIC%]], however this [[%MAINWEB%.%TOPIC%]] prefs topic has overrride priority and should be used for local customisations. This allows for easier upgrades as you don't need to worry about the shipped preferences clobbering yours. It's easier to keep a handle on if you only copy over the settings you actually change.|
+| Site-level preferences are located in [[%TWIKIWEB%.%TOPIC%]], however this [[%MAINWEB%.%TOPIC%]] prefs topic has override priority and should be used for local customisations. This allows for easier upgrades as you don't need to worry about the shipped preferences clobbering yours. It's easier to keep a handle on if you only copy over the settings you actually change.|
 
 %EDITPREFERENCES{"TWikiPreferencesForm"}% 
 _(Click for form-based editing of existing preferences.)_

@@ -6,5 +6,5 @@
    * Syntax: =%<nop>PUBURL%=
    * Expands to: =%PUBURL%=
    * Example: You can refer to a file attached to another topic with =%<nop>PUBURL%/%<nop>WEB%/OtherTopic/image.gif=
-   * Related: [[#VarATTACHURL][ATTACHURL]], [[#VarPUBURLPATH][PUBURLPATH]], [[#VarSCRIPTURL][SCRIPTURL]], [[#VarSCRIPTURL][SCRIPTURLPATH]], FileAttachments
+   * Related: [[#VarATTACHURL][ATTACHURL]], [[#VarATTACHURLPATH][ATTACHURLPATH]], [[#VarPUBURLPATH][PUBURLPATH]], [[#VarSCRIPTURL][SCRIPTURL]], [[#VarSCRIPTURL][SCRIPTURLPATH]], FileAttachments
 

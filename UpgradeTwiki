@@ -160,7 +160,7 @@ elsif ( $mode eq 'moveTopics' )
 	use CGI;
         $query = new CGI( "" );
         $scripted = 1;
-        $user = "TWikiContibutor"; 	#TODO: this should be replaced by a generic AdminUser
+        $user = "TWikiContributor"; 	#TODO: this should be replaced by a generic AdminUser
         $url = "";
         $topic = "";
         $pathInfo = "";

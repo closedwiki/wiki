@@ -5,5 +5,5 @@
 ---+++ ATTACHURLPATH -- path of the attachment URL of the current topic
    * Syntax: =%<nop>ATTACHURLPATH%=
    * Expands to: =%ATTACHURLPATH%=
-   * Related: [[#VarATTACHURL][ATTACHURL]], [[#VarPUBURL][PUBURL]], FileAttachments
+   * Related: [[#VarATTACHURL][ATTACHURL]], [[#VarPUBURL][PUBURL]], [[#VarPUBURLPATH][PUBURLPATH]], [[#VarSCRIPTURL][SCRIPTURL]], [[#VarSCRIPTURL][SCRIPTURLPATH]], FileAttachments
 
