@@ -1157,7 +1157,7 @@ sub repRev {
         my $extra = "repRev $rev by " . $revuser->login() .
             ' '. TWiki::Time::formatTime( $revdate, '$rcs', 'gmtime' );
         $extra   .= ' minor' if( $options->{minor} );
-        $this->{session}->writeLog( 'cmd', $web.'.'.$topic, $extra, $user );
+        $this->{session}->writeLog( 'save', $web.'.'.$topic, $extra, $user );
     }
 }
 
