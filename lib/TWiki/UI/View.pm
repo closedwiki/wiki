@@ -231,7 +231,7 @@ sub view {
             use integer;
             $doingRev = $rev + $revsToShow / 2;
             $doingRev = $revsToShow if $revsToShow > $doingRev;
-            $revs .= ' |';
+            $revs .= ' | ';
             next;
         }
         if( $revsToShow ) {
