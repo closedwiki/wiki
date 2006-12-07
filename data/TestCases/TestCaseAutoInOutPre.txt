@@ -3,7 +3,7 @@
 Description: check the behaviour of the inside and outside PRE handlers
 This test is designed to be automatic; it cannot be performed manually.
 
-[[%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?test=compare&amp;debugenableplugins=TestFixturePlugin&skin=pattern][run this test]]
+[[%SCRIPTURL{"view"}%/%WEB%/%TOPIC%?test=compare&amp;debugenableplugins=TestFixturePlugin&skin=pattern][run this test]]
 
 The TestFixturePlugin has all the handlers defined. For each handler call, it will replace the text "%handlerNameN%" (where handlerName is the name of the handler and N is a digit) with a unique identifier. The identifier is composed as:
 

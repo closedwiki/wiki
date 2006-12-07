@@ -1,12 +1,12 @@
 %META:TOPICINFO{author="TWikiContributor" date="1111930902" format="1.0" version="$Rev$"}%
 %META:TOPICPARENT{name="WebHome"}%
 
-[[%SCRIPTURL%/view/%WEB%/%BASETOPIC%?test=compare&debugenableplugins=TestFixturePlugin][Run Test]]<br/>
+[[%SCRIPTURL{"view"}%/%WEB%/%BASETOPIC%?test=compare&debugenableplugins=TestFixturePlugin][Run Test]]<br/>
 [[http://validator.w3.org/check/referer][XHTML Validator]]
 
 %INCLUDE{CreateNewTestCaseForm}%
 
-<img src="%PUBURL%/TWiki/TWikiDocGraphics/recentchanges.gif" /> [[%SCRIPTURL%/changes%SCRIPTSUFFIX%/%WEB%/ Changes]]<br/>
+<img src="%PUBURL%/TWiki/TWikiDocGraphics/recentchanges.gif" /> [[%SCRIPTURL{"changes"}%/%WEB%/][Changes]]<br/>
 <img src="%PUBURL%/TWiki/TWikiDocGraphics/home.gif" /> [[%HOMETOPIC%][%WEB%]] &middot; [[WebTopicList][Topics]]<br/>
 <img src="%PUBURL%/TWiki/TWikiDocGraphics/home.gif" /> [[TWiki.%HOMETOPIC%][TWiki]]
 

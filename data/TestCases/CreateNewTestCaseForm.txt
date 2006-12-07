@@ -2,7 +2,7 @@
 
 
 
-<form action="%SCRIPTURL%/edit%SCRIPTSUFFIX%/%WEB%" >
+<form action="%SCRIPTURL{"edit"}%/%WEB%" >
 Create new testcase<br/>
 <input value="TestCaseAuto" name="topic" type="text" size="15" />
 <input type="hidden" name="web" value="%WEB%" />

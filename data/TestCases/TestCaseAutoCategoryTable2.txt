@@ -2,7 +2,7 @@
 
 Description: Test for category table and attachment upgrading from 1.0beta
 
-[[%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?test=compare&amp;debugenableplugins=TestFixturePlugin&skin=pattern][run this test]]
+[[%SCRIPTURL{"view"}%/%WEB%/%TOPIC%?test=compare&amp;debugenableplugins=TestFixturePlugin&skin=pattern][run this test]]
 
 Designed by: Crawford Currie
 

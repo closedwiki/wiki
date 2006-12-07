@@ -2,7 +2,7 @@
 
 Description: ensure emphases work correctly in different contexts
 
-[[%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?test=compare&amp;debugenableplugins=TestFixturePlugin&skin=pattern][run this test]]
+[[%SCRIPTURL{"view"}%/%WEB%/%TOPIC%?test=compare&amp;debugenableplugins=TestFixturePlugin&skin=pattern][run this test]]
 
 Designed by: Crawford Currie
 

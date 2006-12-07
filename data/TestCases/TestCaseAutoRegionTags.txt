@@ -1,6 +1,6 @@
 Description: testcases for TWiki extension tags verbatim, noautolink and pre
 
-[[%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?test=compare&amp;debugenableplugins=TestFixturePlugin&skin=pattern][run this test]]
+[[%SCRIPTURL{"view"}%/%WEB%/%TOPIC%?test=compare&amp;debugenableplugins=TestFixturePlugin&skin=pattern][run this test]]
 
 Designed by: Crawford Currie
 

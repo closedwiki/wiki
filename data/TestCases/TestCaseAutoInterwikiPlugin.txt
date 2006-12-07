@@ -2,7 +2,7 @@
 
 Description: Basic tests for Interwiki plugin
 
-[[%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?test=compare&amp;debugenableplugins=TestFixturePlugin,InterwikiPlugin&skin=pattern][run this test]]
+[[%SCRIPTURL{"view"}%/%WEB%/%TOPIC%?test=compare&amp;debugenableplugins=TestFixturePlugin,InterwikiPlugin&skin=pattern][run this test]]
 
 Designed by: Crawford Currie
 

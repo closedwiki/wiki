@@ -8,7 +8,7 @@
 </form>
 
 *%MAKETEXT{"Do you wish to navigate quickly to a similar topic?"}%*
-%IF{ "defined topic" then="   * %MAKETEXT{"Similar topics in this web (if any):"}% %CALC{$SET(total,0)}%}%%IF{ "defined topic" then="%SEARCH" else="     <!--" }%{ "%BASETOPIC%" limit="16" scope="topic" web="%BASEWEB%" nosearch="on" nototal="on" noheader="on" order="modified" reverse="on" format="     | [[$web.$topic][$topic]] | <span style=\"white-space: nowrap;\">r$rev - [[%SCRIPTURL%/rdiff%SCRIPTSUFFIX%/$web/$topic][$date]]</span> | [[$wikiusername][$wikiname]] |$n()     |<span class=\"twikiSmallish\">$summary</span>$percntCALC{$SETM(total, +1)}$percnt|||" %IF{ "defined topic" then="}" else="-->" }%%IF{ "defined topic" then="%" }%
+%IF{ "defined topic" then="   * %MAKETEXT{"Similar topics in this web (if any):"}% %CALC{$SET(total,0)}%}%%IF{ "defined topic" then="%SEARCH" else="     <!--" }%{ "%BASETOPIC%" limit="16" scope="topic" web="%BASEWEB%" nosearch="on" nototal="on" noheader="on" order="modified" reverse="on" format="     | [[$web.$topic][$topic]] | <span style=\"white-space: nowrap;\">r$rev - [[%SCRIPTURL{"rdiff"}%/%SCRIPTSUFFIX%/$web/$topic][$date]]</span> | [[$wikiusername][$wikiname]] |$n()     |<span class=\"twikiSmallish\">$summary</span>$percntCALC{$SETM(total, +1)}$percnt|||" %IF{ "defined topic" then="}" else="-->" }%%IF{ "defined topic" then="%" }%
 %CALC{$IF($GET(total) < 16, <!--, <nop>)}%
    * [[%SCRIPTURLPATH{"view"}%/%BASEWEB%/WebSearch?scope=topic;search=%BASETOPIC%][%MAKETEXT{"List more similar topic in this web"}%]]
 %CALC{$IF($GET(total) < 16, -->, <nop>)}%

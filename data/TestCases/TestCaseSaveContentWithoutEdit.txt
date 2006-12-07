@@ -28,7 +28,7 @@ The actual content is:
 
 ---++++ Test #1: Passing URL Params to update fields in an existing topic
 
-[[%SCRIPTURL%/save%SCRIPTSUFFIX%/TestCases?topic=SavedContentExistingTopic&Rubaduba=%ENCODE{"%GMTIME%"}%][Click here]] to run the test. Expected result:
+[[%SCRIPTURL{"save"}%/TestCases?topic=SavedContentExistingTopic&Rubaduba=%ENCODE{"%GMTIME%"}%][Click here]] to run the test. Expected result:
    * The topic should still contain the content shown above.
    * Rubaduba form field should contain current GMTIME. This variable is also in topic for comparison.
    * The other form fields should be unchanged. i.e.:
@@ -39,9 +39,9 @@ The actual content is:
 
 ---++++ Test #2: Passing URL Params to new topic with =templatetopic= specified
 
-Before running this test, check if SavedNewTopicNoEdit exist and, if so, [[%SCRIPTURL%/manage%SCRIPTSUFFIX%/%WEB%/SavedNewTopicNoEdit?action=rename;newweb=%TRASHWEB%;newtopic=SavedNewTopicNoEdit;breaklock=1][delete it]].
+Before running this test, check if SavedNewTopicNoEdit exist and, if so, [[%SCRIPTURL{"manage"}%/%WEB%/SavedNewTopicNoEdit?action=rename;newweb=%TRASHWEB%;newtopic=SavedNewTopicNoEdit;breaklock=1][delete it]].
 
-[[%SCRIPTURL%/save%SCRIPTSUFFIX%/TestCases?topic=SavedNewTopicNoEdit&templatetopic=TopicTemplateWithUrlParamFixture&testtext=text%20from%20the%20url&Rubaduba=%ENCODE{"%GMTIME%"}%][Click here]] to run the test and topic. Expected result:
+[[%SCRIPTURL{"save"}%/TestCases?topic=SavedNewTopicNoEdit&templatetopic=TopicTemplateWithUrlParamFixture&testtext=text%20from%20the%20url&Rubaduba=%ENCODE{"%GMTIME%"}%][Click here]] to run the test and topic. Expected result:
    * The topic should contain some content, including some text passed in url.
    * Rubaduba form field should contain current GMTIME. This variable is also in topic for comparison.
    * The other form fields should be unchanged. i.e.:
@@ -52,9 +52,9 @@ Before running this test, check if SavedNewTopicNoEdit exist and, if so, [[%SCRI
 
 ---++++ Test #3: Passing URL Params to new topic with =formtemplate= specified
 
-Before running this test, check if SavedNewTopicNoEdit exists and, if so, [[%SCRIPTURL%/manage%SCRIPTSUFFIX%/%WEB%/SavedNewTopicNoEdit?action=rename;newweb=%TRASHWEB%;newtopic=SavedNewTopicNoEdit;breaklock=1][delete it]].
+Before running this test, check if SavedNewTopicNoEdit exists and, if so, [[%SCRIPTURL{"manage"}%/%WEB%/SavedNewTopicNoEdit?action=rename;newweb=%TRASHWEB%;newtopic=SavedNewTopicNoEdit;breaklock=1][delete it]].
 
-[[%SCRIPTURL%/save%SCRIPTSUFFIX%/TestCases?topic=SavedNewTopicNoEdit&formtemplate=ThisForm&text=text%20from%20the%20url&Rubaduba=%ENCODE{"%GMTIME%"}%&Squeegle=Hugh][Click here]] to run the test and topic. Expected result:
+[[%SCRIPTURL{"save"}%/TestCases?topic=SavedNewTopicNoEdit&formtemplate=ThisForm&text=text%20from%20the%20url&Rubaduba=%ENCODE{"%GMTIME%"}%&Squeegle=Hugh][Click here]] to run the test and topic. Expected result:
    * The topic should contain some text passed in url.
    * The topic should have ThisForm assigned.
    * Rubaduba form field should contain current GMTIME.

@@ -25,7 +25,7 @@ Defaults
    * Set LIMIT =
    * Set CLASS = .*?
 -->
-<form name="listItems" action="%SCRIPTURL%/view/%INCLUDINGWEB%/%TOPIC%" method="get">
+<form name="listItems" action="%SCRIPTURL{"view"}%/%INCLUDINGWEB%/%TOPIC%" method="get">
 <table>
 
 <tr>

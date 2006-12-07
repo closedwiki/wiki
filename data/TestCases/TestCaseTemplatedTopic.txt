@@ -9,5 +9,5 @@ To test, click the link and manually verify that this topic has been used as a t
 
 *DO NOT SAVE THE NEW TOPIC* - hit 'Cancel' in the editor instead.
 
-%SCRIPTURL%/edit%SCRIPTSUFFIX%/%WEB%/%TOPIC%NewTopicFixture?templatetopic=%WEB%.%TOPIC%
+%SCRIPTURL{"edit"}%/%WEB%/%TOPIC%NewTopicFixture?templatetopic=%WEB%.%TOPIC%
 
