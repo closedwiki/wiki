@@ -129,7 +129,7 @@ Edit this topic, and change the color variables as you like.
 ---++++ ATTACHMENT_AND_FORM_BACKGROUND Attachment, form (light yellow)
    * Set ATTACHMENT_AND_FORM_BACKGROUND = #FEFCF6
 ---++++ DIFF_HEADER_BACKGROUND Diff header (dark gray) (same as GRAYED_OUT_TEXT)
-   * Set DIFF_HEADER_BACKGROUND = #8E9195
+   * Set DIFF_HEADER_BACKGROUND = #ccc
 
 ---++++ Table colors
 ---+++++ TABLE_DATA_BACKGROUND Table data background
@@ -714,28 +714,36 @@ table.patternDiffOptions img {
 /* rdiff.pattern.tmpl */
 
 .patternDiff {
-	border-color:%LAYOUT_ELEMENT_BORDER%;
+	border-color:%TABLE_HEADER_BACKGROUND%;
 }
 .patternDiff h4.patternSearchResultsHeader {
+	background-color:%TABLE_HEADER_BACKGROUND%;
 	color:%LIGHT_ON_DARK_TEXT_COLOR%;
-	background-color:%TABLE_SELECTED_COLUMN_HEADER_BACKGROUND%;
+}
+.patternDiff h4.patternSearchResultsHeader a:link,
+.patternDiff h4.patternSearchResultsHeader a:visited {
+	color:%LIGHT_ON_DARK_TEXT_COLOR%;
 }
 tr.twikiDiffDebug td {
 	border-color:%TABLE_BORDER%;
 }
 .patternDiffPage .twikiDiffTable th {
-	background-color:%TABLE_HEADER_BACKGROUND%;
+	background-color:%DIFF_HEADER_BACKGROUND%;
 }
+/* Changed */
+.twikiDiffChangedHeader,
 tr.twikiDiffDebug .twikiDiffChangedText,
 tr.twikiDiffDebug .twikiDiffChangedText {
 	background:#9f9; /* green - do not change */
 }
 /* Deleted */
+.twikiDiffDeletedHeader,
 tr.twikiDiffDebug .twikiDiffDeletedMarker,
 tr.twikiDiffDebug .twikiDiffDeletedText {
 	background-color:#f99; /* red - do not change */
 }
 /* Added */
+.twikiDiffAddedHeader,
 tr.twikiDiffDebug .twikiDiffAddedMarker,
 tr.twikiDiffDebug .twikiDiffAddedText {
 	background-color:#ccf; /* violet - do not change */
@@ -744,21 +752,15 @@ tr.twikiDiffDebug .twikiDiffAddedText {
 tr.twikiDiffDebug .twikiDiffUnchangedText {
 	color:%GRAYED_OUT_TEXT%;
 }
-/* Headers */
-.twikiDiffChangedHeader,
-.twikiDiffDeletedHeader,
-.twikiDiffAddedHeader {
-	color:%LIGHT_ON_DARK_TEXT_COLOR%;
-	background-color:%TABLE_SELECTED_COLUMN_HEADER_BACKGROUND%;
-}
-/* Unchanged */
 .twikiDiffUnchangedTextContents { }
 .twikiDiffLineNumberHeader {
-	background-color:%TABLE_HEADER_BACKGROUND%;
+	background-color:%DIFF_HEADER_BACKGROUND%;
 }
 
 
 /* IMAGES */
+/* image positions are set here as well as these are dependent on the image */
+
 .twikiInputField {
 	background-image:url(background_input.gif);
 	background-repeat:repeat-x;
@@ -801,7 +803,7 @@ tr.twikiDiffDebug .twikiDiffUnchangedText {
 	background-repeat:repeat-x;
 }
 .patternPrintPage #patternOuter {
-	background:#fff;
+	background:#fff; /* white - do not change */
 }
 .twikiPageForm table {
 	background-image:url(form_gradient.gif);
