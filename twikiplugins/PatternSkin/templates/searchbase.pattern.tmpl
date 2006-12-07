@@ -6,7 +6,8 @@
 <script type="text/javascript">
 // write results at the top
 //<![CDATA[
-	insertHtml('<br />%MAKETEXT{"Number of topics:"}% <b>%NTOPICS%</b>', 'twikiNumberOfResultsContainer');
+	var text = "<br />" + "%MAKETEXT{"Number of topics:"}%" + "<b>%NTOPICS%<\/b>";
+	insertHtml(text, 'twikiNumberOfResultsContainer');
 	var count = %NTOPICS%;
 	if (count < 10) {
 		insertHtml('', 'twikiBottomResultCount');
