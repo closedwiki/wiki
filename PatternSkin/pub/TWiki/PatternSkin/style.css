@@ -47,7 +47,6 @@ hr {
 	height:1px;
 	border:none;
 }
-
 /* put overflow pre in a scroll area */
 pre {
     width:100%;
@@ -57,7 +56,6 @@ pre {
 html>body pre { /* hide from IE */
 	/*\*/ overflow:auto !important; /* */ overflow:scroll; width:auto; /* for Mac Safari */
 }
-
 ol, ul {
 	margin-top:0;
 }
@@ -415,6 +413,7 @@ table.twikiFormTable th.twikiFormTableHRow {
 table.twikiFormTable th.twikiFormTableHRow {
 	text-align:center;
 }
+.twikiFormTableFooter {}
 .twikiAttachments td,
 table.twikiFormTable td {
 	padding:3px 6px;
@@ -612,11 +611,10 @@ a.twikiLinkInHeaderRight {
 }
 #patternLeftBarContents li,
 #patternLeftBarContents .twikiHierarchicalNavigation {
-[;/*necessary to hide from Mozilla*/
-text-overflow:ellipsis;/*read by Safari*/
-]text-overflow:ellipsis;/*only read by IE6*/
+	overflow:hidden;
+	text-overflow:ellipsis;
 }
-
+ 
 .twikiHierarchicalNavigation ul {
 	padding:0;
 	margin:0;
@@ -732,6 +730,10 @@ text-overflow:ellipsis;/*read by Safari*/
 }
 .patternTopicAction .patternActionButtons a:link,
 .patternTopicAction .patternActionButtons a:visited {
+	text-decoration:none;
+}
+.patternTopicAction .patternActionButtons .patternButton s,
+.patternTopicAction .patternActionButtons .patternButton strike {
 	text-decoration:none;
 }
 .patternTopicAction .patternSaveOptions {
