@@ -7,7 +7,7 @@
    * [[%SCRIPTURL{view}%/%WEB%/Lister?reporter=%WIKIUSERNAME%][ %ICON{"arrowbright"}% My Items]]
    * [[AppliesTo][%ICON{"gear"}% Applies To]]
    * [[RecentlyClosed][ %ICON{"choice-yes"}% Recently Closed]]
-   * [[WebChanges][ %ICON{"changes"}% Changes]] <!-- [[%SCRIPTURL%/view/%INCLUDINGWEB%/WebRss?skin=rss][ %ICON{"rss-small"}% ]] -->
+   * [[WebChanges][ %ICON{"changes"}% Changes]] <!-- [[%SCRIPTURL{"view"}%/%INCLUDINGWEB%/WebRss?skin=rss][ %ICON{"rss-small"}% ]] -->
    * [[WebSearch][ %ICON{"searchtopic"}% Search]]
 
    * *List by Item Status*
