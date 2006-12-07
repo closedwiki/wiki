@@ -980,6 +980,9 @@ table.patternDiffOptions input {
 	margin:.5em 0 1.5em -5px;
 	padding:0 0 0 5px;
 }
+.patternDiff h4.patternSearchResultsHeader {
+	padding:.5em;
+}
 .patternDiffPage .patternRevInfo ul {
 	padding:0;
 	margin:2em 0 0 0;
@@ -988,16 +991,18 @@ table.patternDiffOptions input {
 .patternDiffPage .twikiDiffTable {
 	margin:2em 0;
 }
-.patternDiffPage .twikiDiffTable th,
-.patternDiffPage .twikiDiffTable td {
-	padding:0 .2em 0 .3em;
-}
 tr.twikiDiffDebug td {
 	border-width:1px;
 	border-style:solid;
 }
 .patternDiffPage td.twikiDiffDebugLeft {
 	border-bottom:none;
+}
+.patternDiffPage .twikiDiffTable th {
+	padding:.25em .5em;
+}
+.patternDiffPage .twikiDiffTable td {
+	padding:.25em;
 }
 .twikiDiffLineNumberHeader {
 	padding:.3em 0;
