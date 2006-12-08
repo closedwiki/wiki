@@ -164,14 +164,14 @@ In the above example:
 
 How to get to the parent of the current topic to display on the page?
 
----+++ Solution
+---+++ Solution 1: using !SpreadSheetPlugin
 
 You might think that the following Search would do the trick:
 <verbatim>
 %SEARCH{ "^%BASETOPIC%$" scope="topic" nosearch="on" type="regex" nonoise="on" format="   * $parent" }%
 </verbatim>
 
-However, the =$parent= link fails if the topic has no parent set (=$parent= will be empty). You can use some Plugins.SpreadSheetPlugin magic to conditionally link to the parent or to =WebHome=:
+However, the =$parent= link fails if the topic has no parent set (=$parent= will be empty). You can use some TWiki:Plugins/SpreadSheetPlugin magic to conditionally link to the parent or to =WebHome=:
 
 <verbatim>
 $percntCALC{$IF($EXACT($parent,),<nop>,$NOP(   * $parent))}$percnt
@@ -182,10 +182,20 @@ So the total Search query to find a topic's parent topic is:
 %SEARCH{ "^%BASETOPIC%$" scope="topic" type="regex" nonoise="on" format="$percntCALC{$IF($EXACT($parent,),<nop>,$NOP(   * $parent))}$percnt" }%
 </verbatim>
 
----+++ Test Case
+---++++ Test Case
 
 The parent topic of this topic is:
 %SEARCH{ "^%BASETOPIC%$" scope="topic" type="regex" nonoise="on" format="$percntCALC{$IF($EXACT($parent,),<nop>,$NOP(   * $parent))}$percnt" }%
+
+---+++ Solution 2: using IF statement
+This pattern can be rewritten using =%<nop>IF%=, removing the dependency on !SpreadSheetPlugin:
+<verbatim>
+%SEARCH{ "^%BASETOPIC%$" web="%BASEWEB%" scope="topic" type="regex" nonoise="on" format="$percntIF{$quot$parent$quot then=$quot   * $parent$quot else=$quot<nop>$quot}$percnt" }%
+</verbatim>
+
+---++++ Test Case
+The parent topic of this topic is: %BR%
+%SEARCH{ "^%BASETOPIC%$" web="%BASEWEB%" scope="topic" type="regex" nonoise="on" format="$percntIF{$quot$parent$quot then=$quot   * $parent$quot else=$quot<nop>$quot}$percnt" }%
 
 
 ---++ Pattern 5: Search and display the home topics of public webs in a list
