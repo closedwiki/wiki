@@ -1014,6 +1014,7 @@ sub saveAttachment {
 
             $meta->putKeyed( 'FILEATTACHMENT', $attrs );
         } else {
+            $action = 'save';
             $attrs = $meta->get( 'FILEATTACHMENT', $attachment );
             $attrs->{name} = $attachment;
             $attrs->{attr} = ( $opts->{hide} ) ? 'h' : '';
@@ -1032,7 +1033,7 @@ sub saveAttachment {
         $this->unlockTopic( $user, $web, $topic );
     };
 
-    unless( $opts->{dontlog} ) {
+    if ( ( ! $opts->{dontlog} ) && ( $TWiki::cfg{Log}{$action} ) ) {
         $this->{session}->writeLog( $action, $web.'.'.$topic, $attachment, $user );
     }
 }
