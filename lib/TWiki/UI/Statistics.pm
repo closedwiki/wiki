@@ -255,6 +255,9 @@ sub _collectLogData {
 
         # ignore "renamed web" log lines
         next if( $opName && $opName =~ /(renameweb)/ );
+        
+        # ignore "change password" log lines
+        next if( $opName && $opName =~ /(changepasswd)/ );
 
         # .+ is used because topics name can contain stuff like !, (, ), =, -, _ and they should have stats anyway
         if( $opName && $webTopic =~ /(^$TWiki::regex{webNameRegex})\.($TWiki::regex{wikiWordRegex}$|$TWiki::regex{abbrevRegex}|.+)/ ) {
