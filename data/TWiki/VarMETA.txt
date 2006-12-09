@@ -17,7 +17,7 @@
      | ="parent"= | ==dontrecurse="on"==: By default recurses up tree, this has some cost. %BR% \
                     ==nowebhome="on"==: Suppress <nop>%HOMETOPIC%. %BR% \
 		    ==prefix="..."==: Prefix that goes before parents, but only if there are parents, default =""=. %BR% \
-		    ==format="..."==: Format string used to display each partent topic where =$web= expands to the web name, and =$topic= expands to the topic name. Default: ="[<nop>[$web.$topic][$topic]]"= %BR% \
+		    ==format="..."==: Format string used to display each parent topic where =$web= expands to the web name, and =$topic= expands to the topic name. Default: ="[<nop>[$web.$topic][$topic]]"= %BR% \
 		    ==suffix="..."==: Suffix, only appears if there are parents, default =""=. %BR% \
 		    ==separator="..."==: Separator between parents, default =" &gt; "=. \
                   | Generates the parent link |
