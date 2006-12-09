@@ -1,0 +1,55 @@
+#!/usr/bin/perl
+
+
+my $use = <<EOF
+Use:
+  $ tools/check_translations
+    Outputs TWiki translation status in TWikiML format, suitable for inclusion in a TWiki topic.
+  $ tools/check_translations --raw
+    Outputs TWiki translation status in raw gettext's msgfmt output format (old style)
+EOF
+;
+
+sub extract {
+  my ($input) = @_;
+  @types = (
+    'translated',
+    'fuzzy',
+    'untranslated',
+  );
+  my @result = ();
+  for my $type (@types) {
+    push(@result, ($input =~ m/([0-9]+)\s*$type/ ? $1 : 0 ));
+  }
+  return @result;
+}
+
+my $raw = undef;
+
+if ($ARGV[0] eq '--help') {
+  print $use;
+  exit 0;
+} else {
+  if ($ARGV[0] eq '--raw') {
+    $raw = 1;
+  } else {
+    if ($ARGV) {
+      print $use;
+      exit 1;
+    }
+  }
+}
+
+print "| *Language* | *Translated* | *Fuzzy* | *Unstranslated* | *% translated* ||\n" unless $raw;
+
+for my $file (<locale/*.po>) {
+  my $output = `LANG=C msgfmt --statistics --output=/dev/null $file 2>&1`;
+  if ($raw) {
+    print "$file: $output";
+    next;
+  }
+  $file =~ s/locale\/([\w-]*).po/\1/;
+  my ($translated, $fuzzy, $untranslated) = extract($output);
+  my $total_translated = 100 * $translated / ($translated + $fuzzy + $untranslated);
+  printf("| \%s | \%d | \%d | \%d | \%d%% | <div style='border: 1px solid black; background: red; height: 10px; width: 100px;'><div style='background: green; height: 10px; width:\%d%;'>&nbsp;</div>&nbsp;</div> |\n", $file, $translated, $fuzzy, $untranslated, $total_translated, $total_translated);
+}
