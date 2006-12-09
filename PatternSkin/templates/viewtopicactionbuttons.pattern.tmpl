@@ -25,7 +25,7 @@
 %TMPL:DEF{"more_link"}%<span class='patternButton'><a href='%SCRIPTURLPATH{"oops"}%/%WEB%/%TOPIC%?template=oopsmore&param1=%MAXREV%&param2=%CURRREV%' rel='nofollow' %MAKETEXT{"title='Delete or rename this topic; set parent topic; view and compare revisions' accesskey='m'>&More topic actions"}%</a></span>%TMPL:END%
 
 
-%TMPL:DEF{"printable_link"}%<span class='patternButton'><a href='%SCRIPTURLPATH{"view"}%/%WEB%/%TOPIC%?template=viewprint%QUERYPARAMSTRING%%REVARG%' rel='nofollow' %MAKETEXT{"title='Printable version of this topic' accesskey='p'>&Printable"}%</a></span>%TMPL:END%
+%TMPL:DEF{"printable_link"}%<span class='patternButton'><a href='%SCRIPTURLPATH{"view"}%/%WEB%/%TOPIC%?cover=printpattern%QUERYPARAMSTRING%%REVARG%' rel='nofollow' %MAKETEXT{"title='Printable version of this topic' accesskey='p'>&Printable"}%</a></span>%TMPL:END%
 
 
 %TMPL:DEF{"backlinks_web_link"}%<span class='patternButton'><a href='%SCRIPTURLPATH{"oops"}%/%WEB%/%TOPIC%?template=backlinksweb' rel='nofollow' %MAKETEXT{"title='Search the [_1] Web for topics that link to here' accesskey='b'>We&b" args="<nop>%WEB%"}%</a></span>%TMPL:END%

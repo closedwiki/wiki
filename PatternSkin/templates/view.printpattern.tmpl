@@ -30,7 +30,9 @@
 <div class="patternTopicInfo patternRevInfo">%MAKETEXT{"History:"}% %REVINFO%</div><!-- /patternTopicInfo --> </div> <!-- /patternTopicFooter --> %TMPL:END%
 
 
-%TMPL:DEF{"content"}%<div class="patternContent"><div class="patternTopic">
-%TEXT%</div>
-%TMPL:P{"form"}%%TMPL:P{"attachments"}%</div>
+%TMPL:DEF{"textcontent"}%<div class="patternTopic">%TEXT%</div><!-- /patternTopic-->%TMPL:END%
+
+%TMPL:DEF{"content"}%
+%TMPL:P{"beforetext"}%%TMPL:P{"formattop"}%%TMPL:P{"attachmentsattop"}%<div class="patternContent">%TMPL:P{"textcontent"}%
+%TMPL:P{"aftertext"}%%TMPL:P{"formatbottom"}%%TMPL:P{"attachmentsatbottom"}%</div><!-- /patternContent-->
 %TMPL:P{"topicinfo"}%%TMPL:END%
