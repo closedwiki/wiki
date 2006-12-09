@@ -76,7 +76,6 @@ The following template files are used for TWiki screens, and are referenced in t
    * =search= - used by the =search= CGI script
    * =settings=
    * =view= - used by the =view= CGI script
-   * =viewprint= - used to show the topic in a printable format
    
 =twiki.tmpl= is a master template conventionally used by other templates, but not used directly by code.
 
