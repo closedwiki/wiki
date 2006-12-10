@@ -80,6 +80,22 @@ Comments, signed and dated, added immediately before anchor
 
 
 
+---++++ bulletabove
+Bullet item added immediately before anchor
+<verbatim>
+%TMPL:DEF{PROMPT:bulletabove}%<input class="twikiInputField" name="bullet_above_item" id="bullet_above_item" type="text" size="50" value="%URLPARAM{"bullet_above_item"}%" />&nbsp;<input %DISABLED% type="submit" value="%button|Add item%" class="twikiButton" />%TMPL:END%
+</verbatim>
+<verbatim>
+%TMPL:DEF{OUTPUT:bulletabove}%%POS:BEFORE%
+   * %URLPARAM{"bullet_above_item"}%
+<nop>%TMPL:END%
+</verbatim>
+
+%ICON{"hand"}% See rendered template [[CommentPluginExamples#bulletabove][bulletabove]]
+
+
+
+
 ---++++ threadmode
 Wiki thread mode comment, signed and dated
 <verbatim>
