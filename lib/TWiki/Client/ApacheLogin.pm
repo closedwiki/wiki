@@ -113,7 +113,10 @@ sub getUser {
     my $this = shift;
     my $query = $this->{twiki}->{cgiQuery};
     my $authUser;
-    $authUser = $query->remote_user() if $query;
+    # Ignore remote user if we got here via an error
+    unless (($ENV{REDIRECT_STATUS} || 0) >= 400 ) {
+        $authUser = $query->remote_user() if $query;
+    }
     return $authUser;
 }
 
@@ -128,8 +131,8 @@ sub checkSession {
         defined($query) && defined( $query->remote_user() ) &&
         defined($authUserSessionVar) &&
         defined( $cgisession->param( $authUserSessionVar ) ) &&
-        "" ne $query->remote_user() &&
-        "" ne $cgisession->param( $authUserSessionVar ) &&
+        $query->remote_user() ne '' &&
+        $cgisession->param( $authUserSessionVar ) ne '' &&
         $query->remote_user() ne $cgisession->param( $authUserSessionVar ) );
 }
 
