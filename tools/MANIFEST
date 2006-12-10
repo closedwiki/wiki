@@ -83,6 +83,7 @@ data/Main/WebRss.txt 0660
 data/Main/WebSearch.txt 0660
 data/Main/WebSearchAdvanced.txt 0660
 data/Main/WebStatistics.txt 0660
+data/Main/WebTopicCreator.txt 0660
 data/Main/WebTopicList.txt 0660
 data/Sandbox/WebAtom.txt 0660
 data/Sandbox/WebChanges.txt 0660
