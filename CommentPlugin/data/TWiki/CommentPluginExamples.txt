@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1165786576" format="1.1" reprev="1.4" version="1.4"}%
+%META:TOPICINFO{author="TWikiContributor" date="1165787937" format="1.1" reprev="1.4" version="1.4"}%
 %META:TOPICPARENT{name="CommentPluginTemplate"}%
    * Top comment output 2 -- Main.TWikiContributor - 26 Nov 2006
    * Top comment output 1 -- Main.TWikiContributor - 26 Nov 2006
@@ -70,11 +70,9 @@ Above comment output 2
 
 ---+++ =bulletabove=
 
-
    * Bullet above comment output 1
-<nop>
    * Bullet above comment output 2
-<nop>%COMMENT{type="bulletabove"}%
+%COMMENT{type="bulletabove"}%
 
 
 
