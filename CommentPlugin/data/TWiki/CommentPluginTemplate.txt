@@ -87,8 +87,7 @@ Bullet item added immediately before anchor
 </verbatim>
 <verbatim>
 %TMPL:DEF{OUTPUT:bulletabove}%%POS:BEFORE%
-   * %URLPARAM{"bullet_above_item"}%
-%TMPL:END%
+   * %URLPARAM{"bullet_above_item"}%%TMPL:END%
 </verbatim>
 
 %ICON{"hand"}% See rendered template [[CommentPluginExamples#bulletabove][bulletabove]]
