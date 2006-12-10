@@ -25,7 +25,6 @@ use base 'TWiki::Configure::UI';
 use TWiki::Configure::Type;
 
 use Data::Dumper;
-use Archive::Tar;
 use Cwd;
 use File::Spec;
 use FindBin;
