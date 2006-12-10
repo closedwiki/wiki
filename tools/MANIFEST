@@ -437,15 +437,18 @@ lib/TWiki/Configure/Checkers/Htpasswd/FileName.pm 0440
 lib/TWiki/Configure/Checkers/LocalesDir.pm 0440
 lib/TWiki/Configure/Checkers/LogFileName.pm 0440
 lib/TWiki/Configure/Checkers/LoginManager.pm 0440
+lib/TWiki/Configure/Checkers/LoginNameFilterIn.pm 0440
 lib/TWiki/Configure/Checkers/LowerNational.pm 0440
 lib/TWiki/Configure/Checkers/MSWin32.pm 0440
 lib/TWiki/Configure/Checkers/MailProgram.pm 0440
 lib/TWiki/Configure/Checkers/MimeTypesFileName.pm 0440
 lib/TWiki/Configure/Checkers/MinPasswordLength.pm 0440
+lib/TWiki/Configure/Checkers/NameFilter.pm 0440
 lib/TWiki/Configure/Checkers/OS.pm 0440
 lib/TWiki/Configure/Checkers/PassthroughDir.pm 0440
 lib/TWiki/Configure/Checkers/PubDir.pm 0440
 lib/TWiki/Configure/Checkers/PubUrlPath.pm 0440
+lib/TWiki/Configure/Checkers/RCS/asciiFileSuffixes.pm 0440
 lib/TWiki/Configure/Checkers/RCS/Checker.pm 0440
 lib/TWiki/Configure/Checkers/RCS/ExtOption.pm 0440
 lib/TWiki/Configure/Checkers/RCS/ciCmd.pm 0440
@@ -470,6 +473,7 @@ lib/TWiki/Configure/Checkers/Site/CharSet.pm 0440
 lib/TWiki/Configure/Checkers/Site/Locale.pm 0440
 lib/TWiki/Configure/Checkers/StoreImpl.pm 0440
 lib/TWiki/Configure/Checkers/TemplateDir.pm 0440
+lib/TWiki/Configure/Checkers/UploadFilter.pm 0440
 lib/TWiki/Configure/Checkers/UpperNational.pm 0440
 lib/TWiki/Configure/Checkers/UseClientSessions.pm 0440
 lib/TWiki/Configure/Checkers/UseLocale.pm 0440

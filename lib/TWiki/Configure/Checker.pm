@@ -227,6 +227,23 @@ sub checkPerlModules {
     return $e;
 }
 
+# Check for a compilable RE
+sub checkRE {
+    my ($this, $keys) = @_;
+    my $str;
+    eval '$str = $TWiki::cfg'.$keys;
+    return '' unless defined $str;
+    eval "qr/$str/";
+    if ($@) {
+        return $this->ERROR(<<MESS);
+Invalid regular expression: $@ <p />
+See <a href="http://www.perl.com/doc/manual/html/pod/perlre.html">perl.com</a> for help with Perl regular expressions.
+MESS
+    }
+    return '';
+}
+
+# Entry point for the value check. Overridden by subclasses.
 sub check {
     my ($this, $value) = @_;
     # default behaviour; do nothing

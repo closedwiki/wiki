@@ -41,10 +41,12 @@ HERE
     }
     my $actor;
     if (!$bad) {
-        $actor = CGI::submit(-name => 'action',
-                             -class=>'twikiSubmit',
-                             -value=>'Find More Extensions',
-                             -accesskey=>'P');
+        # Can't use a submit here, because if we do, it is invoked when
+        # the user presses Enter in a text field.
+        $actor = CGI::a({ href => $ENV{SCRIPT_NAME}.'?action=FindMoreExtensions',
+                          class=>'twikiSubmit',
+                          accesskey => 'P' },
+                        'Find More Extensions');
     } else {
         $actor = $this->WARN(<<MESSAGE);
 Cannot load the extensions installer.

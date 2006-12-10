@@ -22,7 +22,8 @@ use TWiki::Configure::UI;
 
 use base 'TWiki::Configure::UI';
 use File::Temp;
-use Archive::Tar;
+use File::Copy;
+use Cwd;
 
 sub new {
     my $class = shift;
@@ -43,57 +44,85 @@ sub new {
 sub ui {
     my $this = shift;
     my $query = $TWiki::query;
-    my $tgz;
+    my $ar;
     my $extension = $query->param('extension');
-    my $tgzf = $query->param('pub').$extension.'/'.$extension.'.tgz';
+    my $ext = '.tgz';
+    my $arf = $query->param('pub').$extension.'/'.$extension.$ext;
 
-    print "<br/>Fetching $tgzf...<br />\n";
+    print "<br/>Fetching $arf...<br />\n";
     eval {
-        $tgz = $this->getUrl($tgzf);
+        $ar = $this->getUrl($arf);
     };
+
     if ($@) {
-        return $this->ERROR(<<HERE);
-Sorry, I can't install $extension because of the following error:
+        print $this->WARN(<<HERE);
+I can't download $arf because of the following error:
 <pre>$@</pre>
-Please follow the published process for manual installation from the
-command line.
 HERE
+        undef $ar;
+    } elsif ($ar !~ s!^.*Content-Type: application/x-gzip\r\n\r\n!!is) {
+        print $this->WARN(<<HERE);
+I can't install $arf because I don't recognise the download
+as a gzip file.
+HERE
+        undef $ar;
     }
 
-    unless ($tgz =~ s#^.*Content-Type: application/x-gzip\r\n\r\n##is) {
-        return $this->ERROR(<<HERE);
-Sorry, I can't install $extension because I don't recognise the download
-as a gzip file.
+    if (!defined($ar)) {
+        print $this->WARN(<<HERE);
+Extension may not have been packaged correctly.
+Trying for a .zip file instead.
+HERE
+        $ext = '.zip';
+        $arf = $query->param('pub').$extension.'/'.$extension.$ext;
+        print "<br/>Fetching $arf...<br />\n";
+        eval {
+            $ar = $this->getUrl($arf);
+        };
+        if ($@) {
+            print $this->WARN(<<HERE);
+I can't download $arf because of the following error:
+<pre>$@</pre>
+HERE
+            undef $ar;
+        } elsif ($ar !~ s#^.*Content-Type: application/zip\r\n\r\n##is) {
+            print $this->WARN(<<HERE);
+I can't install $arf because I don't recognise the download
+as a zip file.
+HERE
+            $ar = undef;
+        }
+    }
+
+    unless ($ar) {
+        return $this->ERROR(<<MESS);
 Please follow the published process for manual installation from the
 command line.
-HERE
+MESS
     }
 
     # Save it somewhere it will be cleaned up
-    my $tmp = new File::Temp(SUFFIX => '.tgz', UNLINK=>1);
+    my $tmp = new File::Temp(SUFFIX => $ext, UNLINK=>1);
     binmode($tmp);
-    print $tmp $tgz;
+    print $tmp $ar;
     $tmp->close();
-    print 'Unpacking...<br />'."\n";
-    my $tar = new Archive::Tar();
-    unless ($tar->read($tmp->filename(), 1)) {
-        return $this->ERROR(<<HERE);
-Archive is unreadable. It's possible that the archive is corrupt.
-Try following  the published process for manual installation from the
-command line.
-HERE
-    }
-    my @names = $tar->list_files();
-    # unzip the contents
+    print "Unpacking...<br />\n";
+    my $dir = _unpackArchive($tmp->filename());
+
+    my @names = _listDir($dir);
+    # install the contents
+    my $sawInstaller = 0;
     unless ($query->param('confirm')) {
-        my $sawInstaller = 0;
         foreach my $file (@names) {
             my $ef = $this->_findTarget($file);
             if (-e $ef && !-d $ef) {
-                print $this->WARN(
-                    "Existing $file overwritten<br />");
+                my $mess = "Note: Existing $file overwritten.";
+                if (File::Copy::move($ef, "$ef.bak")) {
+                    $mess .= " Backup saved in $ef.bak";
+                }
+                print $this->NOTE("$mess<br />");
             } else {
-                print $this->NOTE("$file<br />");
+                print "$file<br />";
             }
             if( $file =~ /^${extension}_installer.pl/) {
                 $sawInstaller = 1;
@@ -104,21 +133,25 @@ HERE
                 "No ${extension}_installer.pl script found in archive");
         }
     }
+
+    # foreach file in archive, move it to the correct place
     foreach my $file (@names) {
+        # The file may already have been moved along with its directory
+        next unless -e "$dir/$file";
+        # Find where it is meant to go
         my $ef = $this->_findTarget($file);
         if (-e $ef && !-d $ef && !-w $ef) {
             print $this->ERROR("No permission to write to $ef");
-        } else {
-            eval {
-                unless ($tar->extract_file($file, $ef)) {
-                    print $this->ERROR("Failed to extract file '$file' to $ef");
-                }
+        } elsif (!-d $ef) {
+            unless (File::Copy::move("$dir/$file", $ef)) {
+                print $this->ERROR("Failed to move file '$file' to $ef: $!");
             };
             die "$@ on $ef" if $@;
         }
     }
     if (-e "$this->{root}/${extension}_installer.pl") {
-        # invoke the installer script. Not sure yet how to handle
+        # invoke the installer script.
+        # SMELL: Not sure yet how to handle
         # interaction if the script ignores -a. At the moment it
         # will just hang :-(
         chdir($this->{root});
@@ -139,6 +172,7 @@ HERE
         }
         chdir($this->{bin});
     }
+
     if ($this->{warnings}) {
         print $this->NOTE(
             "Installation finished with $this->{errors} error".
@@ -148,12 +182,20 @@ HERE
     } else {
         print 'Installation finished.';
     }
-    if ($extension =~ /Plugin$/) {
+    unless ($sawInstaller) {
         print $this->WARN(<<HERE);
-Before you can use newly installed plugins, you must enable them in the
+You should test this installation very carefully, as there is no installer
+script. This suggests that $arf may have been generated manually, and may
+require further manual configuration.
+HERE
+    }
+    if ($extension =~ /Plugin$/) {
+        print $this->NOTE(<<HERE);
+Note: Before you can use newly installed plugins, you must enable them in the
 "Plugins" section in the main page.
 HERE
     }
+
     return '';
 }
 
@@ -174,6 +216,121 @@ sub _findTarget {
     }
     $file =~ /^(.*)$/;
     return $1;
+}
+
+# Recursively list a directory
+sub _listDir {
+    my ($dir, $path) = @_;
+    $path ||= '';
+    $dir .= '/' unless $dir =~ /\/$/;
+    my $d;
+    my @names = ();
+    if (opendir($d, "$dir/$path")) {
+        foreach my $f ( grep { !/^\.*$/ } readdir $d ) {
+            if (-d "$dir$path/$f") {
+                push(@names, "$path$f/");
+                push(@names, _listDir($dir, "$path$f/"));
+            } else {
+                push(@names, "$path$f");
+            }
+        }
+    }
+    return @names;
+}
+
+=pod
+
+---++ StaticMethod _unpackArchive($archive [,$dir] )
+Unpack an archive. The unpacking method is determined from the file
+extension e.g. .zip, .tgz. .tar, etc. If $dir is not given, unpack
+to a temporary directory, the name of which is returned.
+
+=cut
+
+sub _unpackArchive {
+    my ($name, $dir) = @_;
+
+    $dir ||= File::Temp::tempdir(CLEANUP=>1);
+    my $here = Cwd::getcwd();
+    chdir( $dir );
+    unless( $name =~ /\.zip/i && _unzip( $name ) ||
+              $name =~ /(\.tar\.gz|\.tgz|\.tar)/ && _untar( $name )) {
+        $dir = undef;
+        print "Failed to unpack archive $name\n";
+    }
+    chdir( $here );
+
+    return $dir;
+}
+
+sub _unzip {
+    my $archive = shift;
+
+    eval 'use Archive::Zip';
+    unless ( $@ ) {
+        my $zip = Archive::Zip->new( $archive );
+        unless ( $zip ) {
+            print "Could not open zip file $archive\n";
+            return 0;
+        }
+
+        my @members = $zip->members();
+        foreach my $member ( @members ) {
+            my $file = $member->fileName();
+            my $target = $file ;
+            my $err = $zip->extractMember( $file, $target );
+            if ( $err ) {
+                print "Failed to extract '$file' from zip file ",
+                  $zip,". Archive may be corrupt.\n";
+                return 0;
+            }
+        }
+    } else {
+        print "Archive::Zip is not installed; trying unzip on the command line\n";
+        print `unzip $archive`;
+        if ( $! ) {
+            print "unzip failed: $!\n";
+            return 0;
+        }
+    }
+
+    return 1;
+}
+
+sub _untar {
+    my $archive = shift;
+
+    my $compressed = ( $archive =~ /z$/i ) ? 'z' : '';
+
+    eval 'use Archive::Tar';
+    unless ( $@ ) {
+        my $tar = Archive::Tar->new( $archive, $compressed );
+        unless ( $tar ) {
+            print "Could not open tar file $archive\n";
+            return 0;
+        }
+
+        my @members = $tar->list_files();
+        foreach my $file ( @members ) {
+            my $target = $file;
+
+            my $err = $tar->extract_file( $file, $target );
+            unless ( $err ) {
+                print 'Failed to extract ',$file,' from tar file ',
+                  $tar,". Archive may be corrupt.\n";
+                return 0;
+            }
+        }
+    } else {
+        print "Archive::Tar is not installed; trying tar on the command-line\n";
+        print `tar xvf$compressed $archive`;
+        if ( $! ) {
+            print "tar failed: $!\n";
+            return 0;
+        }
+    }
+
+    return 1;
 }
 
 1;

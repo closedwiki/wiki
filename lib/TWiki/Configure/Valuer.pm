@@ -38,24 +38,32 @@ sub new {
     return $this;
 }
 
+# Get a value from one of the value sets (defaults or values)
+sub _getValue {
+    my ($this, $value, $set) = @_;
+    my $keys = $value->getKeys();
+    my $var = '$this->{'.$set.'}->'.$keys;
+    my $val;
+    eval '$val = '.$var.' if exists('.$var.')';
+    if (defined $val) {
+        # SMELL: Really shouldn't do this unless we are sure it's an RE,
+        # but the probability of this string occurring elsewhere than an
+        # RE is so low that we can afford to take the risk.
+        while ($val =~ s/^\(\?-xism:(.*)\)$/$1/) {};
+    }
+    return $val;
+}
+
 # get the current value
 sub currentValue {
     my ($this, $value) = @_;
-    my $keys = $value->getKeys();
-    my $var = '$this->{values}->'.$keys;
-    my $val;
-    eval '$val = '.$var.' if exists('.$var.')';
-    return $val;
+    return $this->_getValue($value, 'values');
 }
 
 # get the default value
 sub defaultValue {
     my ($this, $value) = @_;
-    my $keys = $value->getKeys();
-    my $var = '$this->{defaults}->'.$keys;
-    my $val;
-    eval '$val = '.$var.' if exists('.$var.')';
-    return $val;
+    return $this->_getValue($value, 'defaults');
 }
 
 # Get changed values from CGI. Each parameter is identified by a

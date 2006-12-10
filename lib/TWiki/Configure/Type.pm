@@ -14,7 +14,11 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #
 # As per the GPL, removal of this notice is prohibited.
-# Base class of all types
+#
+# Base class of all types. Types are involved *only* in the presentation
+# of values in the configure interface. They do not play any part in
+# loading, saving or checking configuration values.
+#
 package TWiki::Configure::Type;
 
 use strict;
@@ -43,6 +47,8 @@ sub load {
     return $typer;
 }
 
+# Generates a suitable HTML prompt for the type. Default behaviour
+# is a string 55% of the width of the display area.
 sub prompt {
     my( $this, $id, $opts, $value ) = @_;
 
@@ -57,6 +63,7 @@ sub prompt {
     return CGI::textfield( -name => $id, -size=>$size, -default=>$value );
 }
 
+# Test to determine if two values of this type are equal.
 sub equals {
     my ($this, $val, $def) = @_;
 
@@ -69,7 +76,10 @@ sub equals {
     return $val eq $def;
 }
 
-# Used to process input values from CGI
+# Used to process input values from CGI. Values taken from the query
+# are run through this method before being saved in the value store.
+# It should *not* be used to do validation - use a Checker to do that, or
+# JavaScript invoked from the prompt.
 sub string2value {
     my ($this, $val) = @_;
     return $val;

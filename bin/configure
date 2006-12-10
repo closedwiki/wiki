@@ -42,7 +42,7 @@
 # Model
 # The Model consists of a simple node tree, where each node represents a
 # structural element in the *presentation* of the configuration (this may
-# not be consistent with the structure of $TWiki:cfg, so be beware). Each
+# not be consistent with the structure of $TWiki:cfg, so beware). Each
 # leaf node has an associated Type (in the Types subdirectory) that has
 # collected model and view behaviours for the basic types.
 # The Model is independent of the language used to represent the
@@ -255,7 +255,11 @@ my $action = $query->param('action') || 'Configure';
 # Handle serving an image embedded in the configure page, before generating
 # any other output
 if( $action eq 'image' ) {
-    print CGI::header($query->param('type'));
+    # SMELL: this call is correct, but causes a perl error
+    # on some versions of CGI.pm
+    # print $query->header(-type => $query->param('type'));
+    # So use this instead:
+    print 'Content-type: '.$query->param('type')."\n\n";
     if( open(F, 'logos/'.$query->param('image' ))) {
         local $/ = undef;
         print <F>;
@@ -314,6 +318,10 @@ my $stub = new TWiki::Configure::Item();
 my $sanityUI = TWiki::Configure::UI::loadChecker('BasicSanity', $stub);
 print $sanityUI->ui();
 
+# This is the dispatcher; $action is the name of the action to perform,
+# this is concatenated to _action to determine the name of the procedure.
+# Dispatcher methods return a boolean to indicate whether to generate a
+# link back to the main page at the end.
 unless ($sanityUI->insane() || $query->param('abort')) {
 
     $action =~ s/\W//g;
@@ -365,12 +373,14 @@ HERE
     return $ui;
 }
 
+# Action invoked by 'Next' button on the main screen
 sub _actionNext {
     my $valuer = new TWiki::Configure::Valuer(
         $TWiki::defaultCfg, \%TWiki::cfg);
     my %updated;
     my $modified = $valuer->loadCGIParams($TWiki::query, \%updated);
 
+    # create the root of the UI
     my $root = new TWiki::Configure::Root();
     my $ui;
     if (!TWiki::Configure::UI::authorised()) {
@@ -384,6 +394,7 @@ sub _actionNext {
         return 1 unless $ui;
         print $ui->ui(1, 'Save');
     } else {
+        # Load the specs from the .spec files and generate the UI template
         TWiki::Configure::TWikiCfg::load($root);
 
         $ui = _checkLoadUI('UPDATE', $root);
@@ -393,6 +404,7 @@ sub _actionNext {
     return 1;
 }
 
+# Invoked by "find more extensions" button in the Extensions section
 sub _actionFindMoreExtensions {
     print CGI::h1( 'Find TWiki Extensions');
     print '<div class="patternContent"><div class="patternTopic">';
@@ -404,6 +416,7 @@ sub _actionFindMoreExtensions {
     return 1;
 }
 
+# Invoked when an extension is to be installed
 sub _actionInstallExtension {
     my $root = new TWiki::Configure::Root();
     my $ui;
@@ -419,6 +432,7 @@ sub _actionInstallExtension {
     return 1;
 }
 
+# This is the default screen
 sub _actionConfigure {
 
     $TWiki::Configure::UI::toterrors = 0;
@@ -439,7 +453,7 @@ sub _actionConfigure {
     $stub = new TWiki::Configure::Item();
     my $cgiui = TWiki::Configure::UI::loadChecker('CGISetup', $stub);
 
-    # Use a separate root for the saveable sections
+    # Use a separate root for the _saveable_ sections
     my $root = new TWiki::Configure::Root();
     my $valuer = new TWiki::Configure::Valuer(
         $TWiki::defaultCfg, \%TWiki::cfg);
@@ -549,7 +563,8 @@ HERE
         print CGI::div($mess);
     }
 
-    print CGI::p(CGI::submit(-class=>'twikiSubmit', -name=>'action',
+    print CGI::p(CGI::submit(-class=>'twikiSubmit',
+                             -name=>'action',
                              -value=>'Next',
                              -accesskey=>'N'));
     print CGI::end_form();
