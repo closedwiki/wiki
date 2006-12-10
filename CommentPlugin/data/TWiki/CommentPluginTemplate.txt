@@ -81,9 +81,13 @@ Comments, signed and dated, added immediately before anchor
 
 
 ---++++ bulletabove
-Bullet item added immediately before anchor
+Bullet item added immediately before anchor. The input field width is passed with variable =inputsize=, for example:
+<blockquote><verbatim>
+%COMMENT{type="bulletabove" inputsize="20"}%
+</verbatim></blockquote>
+
 <verbatim>
-%TMPL:DEF{PROMPT:bulletabove}%<input class="twikiInputField" name="bullet_above_item" id="bullet_above_item" type="text" size="50" value="%URLPARAM{"bullet_above_item"}%" />&nbsp;<input %DISABLED% type="submit" value="%button|Add item%" class="twikiButton" />%TMPL:END%
+%TMPL:DEF{PROMPT:bulletabove}%<input class="twikiInputField" name="bullet_above_item" id="bullet_above_item" type="text" size="%inputsize|40" value="%URLPARAM{"bullet_above_item"}%" />&nbsp;<input %DISABLED% type="submit" value="%button|Add item%" class="twikiButton" />%TMPL:END%
 </verbatim>
 <verbatim>
 %TMPL:DEF{OUTPUT:bulletabove}%   * %URLPARAM{"bullet_above_item"}%%POS:BEFORE%

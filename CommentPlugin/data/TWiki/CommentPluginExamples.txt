@@ -69,10 +69,11 @@ Above comment output 2
 
 
 ---+++ =bulletabove=
+Example with =inputsize="20"=:
 
    * Bullet above comment output 1
    * Bullet above comment output 2
-%COMMENT{type="bulletabove"}%
+%COMMENT{type="bulletabove" inputsize="20"}%
 
 
 
