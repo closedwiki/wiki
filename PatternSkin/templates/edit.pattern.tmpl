@@ -103,6 +103,13 @@
 
 
 
+%TMPL:DEF{"form"}%%FORMFIELDS%%TMPL:END%
+
+%TMPL:DEF{"formattop"}%%TMPL:END%
+%TMPL:DEF{"formatbottom"}%%TMPL:P{"form"}%%TMPL:END%
+
+
+
 %TMPL:DEF{"formstart"}%<div class="patternFormHolder twistyMakeHidden" id="formHolder">
 <form name="main" action="%SCRIPTURLPATH{"save"}%/%WEB%/%TOPIC%" method="post">%TMPL:END%
 
@@ -133,13 +140,12 @@
 
 
 %TMPL:DEF{"content"}%%TMPL:P{"pagetitle"}%
+%TMPL:P{"formstart"}%%TMPL:P{"formattop"}%
 %TMPL:P{"toolbar"}%
 %TMPL:P{"pagehelp"}%
-%TMPL:P{"formstart"}%
 %TMPL:P{"textarea"}%
 %TMPL:P{"sig_textareabuttons"}%
-%TMPL:P{"edittopicform"}%
-%TMPL:P{"topicaction"}%
+%TMPL:P{"formatbottom"}%%TMPL:P{"topicaction"}%
 %TMPL:P{"formend"}%
 %TMPL:P{"pagehelp_nojavascript"}%
 %TMPL:END%
