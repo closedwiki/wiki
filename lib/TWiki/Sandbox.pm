@@ -126,34 +126,33 @@ metacharacters and even control characters.
 sub normalizeFileName {
     my ($string) = @_;
     return '' unless $string;
-    my $absolute = File::Spec->file_name_is_absolute($string);
+    my ($volume, $dirs, $file) = File::Spec->splitpath($string);
     my @result;
-    for my $component (File::Spec->splitdir($string)) {
-        next unless $component;
+    my $first = 1;
+    foreach my $component (File::Spec->splitdir($dirs)) {
+        next unless (defined($component) && $component ne '' || $first);
+        $first = 0;
+        $component ||= '';
         next if $component eq '.';
         if ($component eq '..') {
             throw Error::Simple( 'relative path in filename '.$string );
-        } elsif ($component !~ /$TWiki::cfg{NameFilter}/) {
-            # We need to untaint the string explicitly.
-            # FIXME: This might be a Perl bug.
-            push @result, untaintUnchecked( $component );
-        } else {
+        } elsif ($component =~ /$TWiki::cfg{NameFilter}/) {
             throw Error::Simple( 'illegal characters in file name component '.
                                    $component.' of filename '.$string );
         }
+        push(@result, $component);
     }
-    # Convert to UNIX path and return
-    if (@result) {
-        if ($absolute) {
-            $result[0] = "/$result[0]";
-        } elsif ($result[0] =~ /^-/) {
-            $result[0] = "./$result[0]";
-        }
-        return join '/', @result;
+
+    if (scalar(@result)) {
+        $dirs = File::Spec->catdir(@result);
     } else {
-        return '/' if $absolute;
-        throw Error::Simple( 'empty filename '.$string );
+        $dirs = '';
     }
+    $string = File::Spec->catpath($volume, $dirs, $file);
+
+    # We need to untaint the string explicitly.
+    # FIXME: This might be a Perl bug.
+    return untaintUnchecked($string);
 }
 
 =pod
@@ -277,7 +276,9 @@ sub _buildCommandLine {
                     if ($flag =~ /U/) {
                         push @targs, untaintUnchecked($param);
                     } elsif ($flag =~ /F/) {
-                        push @targs, normalizeFileName($param);
+                        $param = normalizeFileName($param);
+                        $param = "./$param" if $param =~ /^-/;
+                        push @targs, $param;
                     } elsif ($flag =~ /N/) {
                         # Generalized number.
                         if ( $param =~ /^([0-9A-Fa-f.x+\-]{0,30})$/ ) {

@@ -50,10 +50,6 @@ sub test_normalize {
     $this->assert_str_equals( 'abc', TWiki::Sandbox::normalizeFileName ('abc'));
     $this->assert_str_equals('abc', TWiki::Sandbox::normalizeFileName ('./abc'));
     $this->assert_str_equals('abc', TWiki::Sandbox::normalizeFileName ('abc/.'));
-    $this->assert_str_equals('./-abc', TWiki::Sandbox::normalizeFileName ('-abc'));
-    $this->assert_str_equals('./-', TWiki::Sandbox::normalizeFileName ('-'));
-    $this->assert_str_equals('./--abc', TWiki::Sandbox::normalizeFileName ('--abc'));
-    $this->assert_str_equals('./--', TWiki::Sandbox::normalizeFileName ('--'));
     $this->assert_str_equals('/abc', TWiki::Sandbox::normalizeFileName ('/abc'));
     $this->assert_str_equals('/abc', TWiki::Sandbox::normalizeFileName ('//abc'));
     $this->assert_str_equals('/a/bc', TWiki::Sandbox::normalizeFileName ('/a/bc'));
