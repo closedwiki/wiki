@@ -1,0 +1,5547 @@
+# This file is distributed under the same license as TWiki itself
+# Copyright (C) 2005 Peter Thoeny, peter@thoeny.com and TWiki Contributors.
+# Translators:
+#   Andrey Tkachenko <falko-mail@inbox.ru>
+#   JSinx <jsinx@front.ru>
+msgid ""
+msgstr ""
+"Project-Id-Version: ru $Id\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2006-11-22 00:15+0300\n"
+"Last-Translator: Andrey Tkachenko <falko-mail@inbox.ru>\n"
+"Language-Team: Russian Team <falko-mail@inbox.ru, jsinx@front.ru>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Country: RUSSIAN FEDERATION\n"
+"X-Poedit-SourceCharset: utf-8\n"
+
+#: twikiplugins/NatSkin/templates/messages.nat.tmpl:78
+msgid "\"%1\" is an invalid name for a new web."
+msgstr "\"%1\" - неподходящее имя для нового раздела."
+
+#: twikiplugins/NatSkin/templates/messages.nat.tmpl:320
+msgid "\"%1\" topic does not exist"
+msgstr "Страница %1 не существует"
+
+#. ($days)
+#: lib/TWiki/Time.pm:267
+msgid "%*(%1,day) "
+msgstr "%*(%1,дн.) "
+
+#. ($hours)
+#: lib/TWiki/Time.pm:270
+msgid "%*(%1,hour) "
+msgstr "%*(%1,час.) "
+
+#. ($mins)
+#: lib/TWiki/Time.pm:273
+msgid "%*(%1,minute) "
+msgstr "%*(%1,мин.) "
+
+#. ($secs)
+#: lib/TWiki/Time.pm:276
+msgid "%*(%1,second) "
+msgstr "%*(%1,сек.) "
+
+#: twikiplugins/NatSkin/templates/mailnotify.nat.tmpl:3
+msgid "%1 - Automated notification of topic changes"
+msgstr "%1 - Автоматическое извещение об изменениях страницы"
+
+#: templates/registernotify.tmpl:3 templates/registernotifyadmin.tmpl:3
+#: twikiplugins/ClassicSkin/templates/registernotify.classic.tmpl:3
+#: twikiplugins/ClassicSkin/templates/registernotifyadmin.classic.tmpl:3
+msgid "%1 - Registration for %2 (%3)"
+msgstr "%1 - Регистрация для %2 (%3)"
+
+#: data/TWiki/NewUserTemplate.txt:68
+msgid "%1 - complete TWiki documentation, Quick Start to Reference"
+msgstr "%1 - полная документация по TWiki, Быстрый Старт по Ссылкам"
+
+#: data/TWiki/NewUserTemplate.txt:70
+msgid "%1 - just for me"
+msgstr "%1 - только для меня"
+
+#: data/TWiki/NewUserTemplate.txt:67
+msgid "%1 - starting points on TWiki"
+msgstr "%1 - с чего начать в TWiki"
+
+#: data/TWiki/NewUserTemplate.txt:69
+msgid "%1 - try out TWiki on your own"
+msgstr "%1 - попробуйте TWiki самостоятельно"
+
+#: data/TWiki/NewUserTemplate.txt:66
+msgid "%1 - view a short introductory presentation on TWiki for beginners"
+msgstr "%1 - посмотреть короткую вводную презентацию по TWiki для начинающих"
+
+#: data/TWiki/WebChanges.txt:2
+#, fuzzy
+msgid "%1 Recent Changes in %2 Web"
+msgstr "Обзор недавних изменений в:"
+
+#: twikiplugins/NatSkin/templates/search.nat.tmpl:8
+#: twikiplugins/PatternSkin/data/Main/WebLeftBar.txt:4
+#: twikiplugins/PatternSkin/data/Sandbox/WebLeftBar.txt:4
+#: twikiplugins/PatternSkin/data/TWiki/WebLeftBar.txt:4
+#: twikiplugins/PatternSkin/data/TWiki/WebLeftBarExample.txt:2
+#: twikiplugins/PatternSkin/data/Trash/WebLeftBar.txt:3
+#: twikiplugins/PatternSkin/data/_default/WebLeftBar.txt:3
+#: twikiplugins/PatternSkin/templates/view.pattern.tmpl:54
+msgid "%1 Web"
+msgstr "Раздел %1"
+
+#: twikiplugins/PatternSkin/data/TWiki/WebLeftBarExample.txt:3
+msgid "%1 Web Home"
+msgstr "%1 Главная страница"
+
+#: data/TWiki/NewUserTemplate.txt:92
+msgid "%1 for changing your email address"
+msgstr "%1 для смены вашего email адреса"
+
+#: data/TWiki/NewUserTemplate.txt:91
+msgid "%1 for changing your password"
+msgstr "%1 для смены вашего пароля"
+
+#: data/TWiki/NewUserTemplate.txt:93
+msgid "%1 has a list of other TWiki users"
+msgstr "%1 содержит список других пользователей TWiki"
+
+#: data/TWiki/ChangeEmailAddress.txt:17 data/TWiki/ChangePassword.txt:7
+#: data/TWiki/ResetPassword.txt:10
+msgid "%1 has a list of other TWiki users."
+msgstr "%1 содержит список других пользователей TWiki."
+
+#: templates/messages.tmpl:394
+#: twikiplugins/NatSkin/templates/oopsleaseconflict.nat.tmpl:7
+msgid ""
+"%1 has been editing the topic for %2 and the lease is still active for "
+"another %3."
+msgstr ""
+"%1 редактировал страницу для %2 и блокировка всё ещё активна для другого %3"
+
+#: templates/registernotifyadmin.tmpl:10
+#: twikiplugins/ClassicSkin/templates/registernotifyadmin.classic.tmpl:10
+msgid "%1 has been registered with e-mail %2"
+msgstr "%1 зарегистрирован с e-mail %2"
+
+#: twikiplugins/NatSkin/templates/messages.nat.tmpl:298
+msgid "%1 has no permission to %2 *%3*."
+msgstr "%1 не имеет прав для %2 *%3*."
+
+#: twikiplugins/NatSkin/templates/oopsaccesschange.nat.tmpl:7
+msgid "%1 has no permission to change topic [[%2]]."
+msgstr "%1 не имеет прав, для изменения страницы [[%2]]"
+
+#: twikiplugins/NatSkin/templates/oopsaccesscreateweb.nat.tmpl:6
+msgid "%1 has no permission to create a new <nop><b>%2 Web</b>."
+msgstr "%1 не имеет права создавать новый <b>раздел</b> <nop><b>%2</b>."
+
+#: twikiplugins/NatSkin/templates/oopsaccessrename.nat.tmpl:6
+msgid "%1 has no permission to rename topic [[%2]]."
+msgstr "%1 не имеет прав для переименования страницы [[%2]]"
+
+#: twikiplugins/NatSkin/templates/oopsaccessview.nat.tmpl:6
+msgid "%1 has no permission to view topic [[%2]]."
+msgstr "%1 не имеет прав для просмотра страницы [[%2]]"
+
+#: twikiplugins/NatSkin/templates/oopsaccessvote.nat.tmpl:6
+msgid "%1 has no permission to vote on topic [[%2]]."
+msgstr "%1 не имеет прав для голосования на странице [[%2]]"
+
+#: templates/messages.tmpl:23
+msgid "%1 home"
+msgstr "дом %1"
+
+#: data/TWiki/NewUserTemplate.txt:94
+msgid "%1 is a list of TWiki user documentation"
+msgstr "%1 - список пользовательской документации по TWiki "
+
+#: templates/messages.tmpl:106
+msgid "%1 is an invalid name for a new web"
+msgstr "%1 - неподходящее имя для нового раздела"
+
+#: twikiplugins/PatternSkin/templates/login.pattern.tmpl:46
+msgid "%1 is currently logged in"
+msgstr "%1 сейчас на сайте"
+
+#: templates/messages.tmpl:375
+#: twikiplugins/NatSkin/templates/messages.nat.tmpl:293
+msgid "%1 is currently set to %2"
+msgstr "%1 уже установлено на %2"
+
+#: templates/messages.tmpl:392
+#: twikiplugins/NatSkin/templates/oopsleaseconflict.nat.tmpl:5
+msgid "%1 is editing %2."
+msgstr "%1 редактирует %2."
+
+#: templates/messages.tmpl:49
+msgid "%1 is in at least one group and cannot be removed"
+msgstr "%1 входит как минимум в одну группу и не может быть удален"
+
+#: twikiplugins/PatternSkin/templates/renameattachmentdelete.pattern.tmpl:40
+#, fuzzy
+msgid "%1 is the default topic for deleted attachments."
+msgstr "%1 это умолчательная страничка для ликвидированных приложений"
+
+#: data/TWiki/NewUserTemplate.txt:95
+msgid "%1 lists all TWiki user tools"
+msgstr "%1 список пользовательского инструментария TWiki"
+
+#: templates/messages.tmpl:400
+#: twikiplugins/NatSkin/templates/oopsleaseconflict.nat.tmpl:18
+msgid "%1 may still be editing %2."
+msgstr "%1 возможно всё ещё редактирует %2."
+
+#. ("<nop>$toWeb.<nop>$toTopic",                                             "<nop>$fromWeb.<nop>$fromTopic",                                             $date,                                             $by)
+#: lib/TWiki/Render.pm:214
+msgid "%1 moved from %2 on %3 by %4"
+msgstr "%1 перемещенаиз %2 в %3 пользователем %4"
+
+#: templates/messages.tmpl:22
+msgid "%1 to create another web"
+msgstr "%1 создать другой раздел"
+
+#: templates/messages.tmpl:21
+msgid "%1 to customize the web specific preferences"
+msgstr "%1 чтобы настроить параметры для раздела"
+
+#: templates/messages.tmpl:20
+msgid "%1 to start working on the new web"
+msgstr "%1 начать работать в новом разделе"
+
+#: templates/messages.tmpl:459
+msgid "%1 topic does not exist"
+msgstr "страница %1 не существует"
+
+#: twikiplugins/NatSkin/templates/searchrenameview.nat.tmpl:9
+msgid "%1 web:"
+msgstr "Раздел %1:"
+
+#: twikiplugins/NatSkin/data/TWiki/MySideBarTemplate.txt:3
+msgid "%1's sidebar"
+msgstr "Панель %1"
+
+#: twikiplugins/PatternSkin/templates/constants.pattern.tmpl:11
+msgid "&Cancel"
+msgstr "Отменить"
+
+#: twikiplugins/PatternSkin/data/Main/PatternSkinUserViewTemplate.txt:14
+msgid "&Edit text"
+msgstr "Редактировать текст"
+
+#: templates/twiki.tmpl:164
+#: twikiplugins/ClassicSkin/templates/twiki.classic.tmpl:153
+msgid "&History"
+msgstr "История"
+
+#: twikiplugins/ClassicSkin/templates/view.classic.tmpl:28
+msgid "&WYSIWYG"
+msgstr "Визуальный редактор"
+
+#: templates/messages.tmpl:235
+msgid "'%1' is not a valid %2 "
+msgstr ""
+
+#: twikiplugins/PatternSkin/templates/rdiff.pattern.tmpl:9
+msgid "(%1 vs. %2)"
+msgstr "(%1 против %2)"
+
+#: data/TWiki/WebSearchAdvanced.txt:81
+msgid "(=all= to show all topics)"
+msgstr "(введите =all= для вывода без ограничений)"
+
+#: data/Sandbox/WebHome.txt:9
+msgid "(Use a topic name in TWiki.WikiNotation)"
+msgstr "(По использованию имён страниц см. TWiki.WikiNotation)"
+
+#: templates/messages.tmpl:136
+#, fuzzy
+msgid "(__Suggestion:__ How about uploading your picture to your topic?)"
+msgstr ""
+"(__Предложение:__ А как насчет приложить вашу фотографию к вашей странице?)"
+
+#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:18
+msgid "(attach)"
+msgstr "(приложить)"
+
+#: twikiplugins/PatternSkin/templates/backlinksweb.pattern.tmpl:5
+msgid "(backlinks in %1 Web)"
+msgstr "(обратные ссылки в разделе %1)"
+
+#: twikiplugins/PatternSkin/templates/backlinksallwebs.pattern.tmpl:5
+msgid "(backlinks in all Webs)"
+msgstr "(обратные ссылки во всех разделах)"
+
+#: twikiplugins/PatternSkin/templates/changeform.pattern.tmpl:7
+msgid "(change form)"
+msgstr "(изменить форму)"
+
+#: templates/oopschangelanguage.tmpl:2 templates/oopslanguagechanged.tmpl:2
+#: twikiplugins/NatSkin/templates/oopslanguagechanged.nat.tmpl:3
+#: twikiplugins/PatternSkin/templates/oopslanguagechanged.pattern.tmpl:6
+msgid "(change language)"
+msgstr "(изменить язык)"
+
+#: twikiplugins/PatternSkin/templates/changes.pattern.tmpl:5
+msgid "(changes)"
+msgstr "(изменения)"
+
+#: twikiplugins/PatternSkin/templates/renameattachmentdelete.pattern.tmpl:5
+msgid "(delete attachment)"
+msgstr "(удалить приложения)"
+
+#: twikiplugins/PatternSkin/templates/renamedelete.pattern.tmpl:9
+msgid "(delete)"
+msgstr "(удалить)"
+
+#: twikiplugins/NatSkin/templates/messages.nat.tmpl:295
+msgid "(don't forget to check your Topic Settings)"
+msgstr "(не забудьте проверить настройки вашей страницы)"
+
+#: twikiplugins/PatternSkin/templates/editform.pattern.tmpl:9
+msgid "(edit form)"
+msgstr "(редактировать форму)"
+
+#: twikiplugins/PatternSkin/templates/edittext.pattern.tmpl:10
+msgid "(edit text)"
+msgstr "(редактировать текст)"
+
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:23
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:31
+msgid "(edit)"
+msgstr "(редактировать)"
+
+#: data/TWiki/TWikiRegistration.txt:92
+msgid "(how you log in) LoginName:"
+msgstr "(вводится при входе) ИмяПользователя:"
+
+#: data/TWiki/TWikiRegistration.txt:87
+msgid "(identifies you to others) WikiName:"
+msgstr "(как вас видят другие пользватели) ВикиИмя:"
+
+#: twikiplugins/PatternSkin/templates/oopsmore.pattern.tmpl:12
+msgid "(more)"
+msgstr "(больше)"
+
+#: twikiplugins/PatternSkin/templates/moveattachment.pattern.tmpl:5
+msgid "(move attachment)"
+msgstr "(переместить приложение)"
+
+#: data/TWiki/WebTopicCreator.txt:120 data/TWiki/WebTopicCreator.txt:121
+msgid "(no parent, orphaned topic)"
+msgstr "(нет родителя, страница-сирота)"
+
+#: lib/TWiki/UI/Manage.pm:1031 lib/TWiki/UI/Manage.pm:1053
+#: lib/TWiki/UI/Manage.pm:606 lib/TWiki/UI/Manage.pm:609
+#: lib/TWiki/UI/Manage.pm:612 lib/TWiki/UI/Manage.pm:615
+#: lib/TWiki/UI/Manage.pm:859 lib/TWiki/UI/Manage.pm:882
+#: lib/TWiki/UI/Manage.pm:991 lib/TWiki/UI/Manage.pm:994
+#: lib/TWiki/UI/Manage.pm:997
+msgid "(none)"
+msgstr "(пусто)"
+
+#: templates/oopsaccessdenied.tmpl:3 templates/oopsleaseconflict.tmpl:3
+#: templates/oopssaveerr.tmpl:7
+#: twikiplugins/ClassicSkin/templates/oopsaccessdenied.classic.tmpl:3
+#: twikiplugins/ClassicSkin/templates/oopsleaseconflict.classic.tmpl:3
+#: twikiplugins/PatternSkin/templates/oopsaccessdenied.pattern.tmpl:7
+#: twikiplugins/PatternSkin/templates/oopsleaseconflict.pattern.tmpl:5
+#: twikiplugins/PatternSkin/templates/oopssaveerr.pattern.tmpl:4
+msgid "(oops)"
+msgstr "(ой)"
+
+#: data/TWiki/TWikiRegistration.txt:259
+msgid "(optional)"
+msgstr "(не обязательно)"
+
+#: data/TWiki/WebSearch.txt:38 data/TWiki/WebSearchAdvanced.txt:48
+msgid "(otherwise search %1 Web only)"
+msgstr "(иначе только в разделе %1)"
+
+#: templates/oopsmore.tmpl:15 templates/oopsmore.tmpl:9
+#: twikiplugins/ClassicSkin/templates/oopsmore.classic.tmpl:13
+#: twikiplugins/ClassicSkin/templates/oopsmore.classic.tmpl:7
+#: twikiplugins/PatternSkin/templates/oopsmoredelete.pattern.tmpl:4
+#: twikiplugins/PatternSkin/templates/oopsmorerename.pattern.tmpl:4
+msgid "(recommended)"
+msgstr "(рекомендуется)"
+
+#: twikiplugins/PatternSkin/templates/rename.pattern.tmpl:5
+#: twikiplugins/PatternSkin/templates/renameconfirm.pattern.tmpl:5
+#: twikiplugins/PatternSkin/templates/renameweb.pattern.tmpl:5
+#: twikiplugins/PatternSkin/templates/renamewebconfirm.pattern.tmpl:5
+msgid "(rename)"
+msgstr "(переименовать)"
+
+#: twikiplugins/PatternSkin/templates/search.pattern.tmpl:10
+msgid "(search results)"
+msgstr "(результаты поиска)"
+
+#: data/TWiki/WebSearchAdvanced.txt:64
+msgid "(semicolon =;= for and)"
+msgstr "(используйте точку с запятой =;= для логического *\"И\"*)"
+
+#: twikiplugins/PatternSkin/templates/settings.pattern.tmpl:16
+msgid "(set preferences)"
+msgstr "(установить параметры)"
+
+#: templates/messages.tmpl:248
+msgid "(single character first name)"
+msgstr "(один символ имени)"
+
+#: templates/messages.tmpl:247
+msgid "(single character last name)"
+msgstr "(один символ фамилии)"
+
+#: lib/TWiki/UI/Manage.pm:842
+msgid "(skipped)"
+msgstr "(пропущено)"
+
+#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:41
+msgid ""
+"*Bug:* Internet Explorer 4.0 or earlier: If you get an \"Internal Server "
+"Error\" message when you upload a file, you need to try again. It should "
+"work the second time."
+msgstr ""
+"*Ошибка:* Для Internet Explorer версии 4.0 или более ранней: Если вы "
+"получили сообщение \"Internal Server Error\" (внутренняя ошибка сервера) при "
+"загрузке файла, следует попытаться еще раз. Со второго раза должно сработать."
+
+#: twikiplugins/PatternSkin/templates/attachagain.pattern.tmpl:29
+msgid ""
+"*Change comment:* If you use _Change Properties_ to change a comment, the "
+"comment shown in the topic will change, but the comment shown against the "
+"attachment history will be the comment when the file was uploaded."
+msgstr ""
+"*Изменить комментарий:* Если вы используете _Изменить Свойства_ чтобы "
+"изменить комментарий, то комментарий, показанный на странице изменится, но "
+"напротив истории файловых приложений будет комментарий, созданный при "
+"загрузке файла."
+
+#: data/TWiki/WikiSyntaxSummary.txt:8
+msgid "*Formatting help:*"
+msgstr "*Помощь по форматированию:*"
+
+#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:40
+msgid ""
+"*Help:* Please see <a target='TWikiVariables' onclick=\"return launchWindow"
+"('%1','FileAttachment')\" href='' rel='nofollow'>FileAttachment</a> for more "
+"information about attaching files."
+msgstr ""
+"*Подсказка:* вы можете прочитать в <a target='TWikiVariables' onclick="
+"\"return launchWindow('%1','FileAttachment')\" href='' "
+"rel='nofollow'>FileAttachment</a> дополнительную информацию о прикреплении "
+"файлов."
+
+#: data/TWiki/TWikiRegistration.txt:10
+msgid ""
+"*Important:* the information provided in this form will be stored in a "
+"database on the TWiki server. This database is accessible to anyone who can "
+"access the server through the web (though passwords will be encrypted, and e-"
+"mail addresses will be obfusticated to help prevent spamming). Your country, "
+"or the country where the server is hosted, may have Data Protection laws "
+"governing the maintenance of such databases. If you are in doubt, you should "
+"contact %1 for details of the Data Protection Policy of this TWiki server "
+"before registering."
+msgstr ""
+"*Важно:* информация, указанная в этой форме будет сохранена в базе данных на "
+"сервере TWiki. База доступна всем, у кого есть доступ на сервер через web "
+"(пароли будут зашифрованы, и адрес e-mail будет немного изменен для защиты "
+"от спама). В вашей стране или стране, где расположен сервер, может быть "
+"закон о Защите Данных, регламентирующий поддержание подобных баз данных. "
+"Если у вас есть сомнения, вы должны связаться с %1 для консультации о "
+"Политике Защиты Данных на этом сервере, прежде чем зарегистрироваться."
+
+#: twikiplugins/PatternSkin/templates/attachagain.pattern.tmpl:30
+msgid ""
+"*Local file:* If you select a different file in _Local file:_, it is this "
+"that will be updated or added."
+msgstr ""
+"*Локальный файл:* Если вы выберете другой файл в поле _Локальный файл:_, то "
+"файл будет обновлен или добавлен."
+
+#: twikiplugins/NatSkin/templates/attachagain.nat.tmpl:20
+msgid ""
+"*Move attachment*: An attachment can be deleted by moving it to the Trash."
+"TrashAttachment."
+msgstr ""
+"*Перемещение приложения*: Приложение может быть удалено перемещением его в "
+"Trash.TrashAttachment."
+
+#: twikiplugins/NatSkin/templates/attachnew.nat.tmpl:14
+msgid ""
+"*Properties*: Click on _manage_ of an existing attachment to change its "
+"properties."
+msgstr ""
+"*Свойства*: Нажмите на ссылку _управление_ в существующем приложении чтобы "
+"изменить его свойства."
+
+#: twikiplugins/PatternSkin/templates/attachagain.pattern.tmpl:28
+msgid ""
+"*Properties:* The comment and visibility (i.e. is attachment hidden) can be "
+"changed without uploading a file by pressing \"Change Properties only\"; see "
+"<a target=\"HiddenAttachment\" onclick=\"return launchWindow('%"
+"1','HiddenAttachment')\" href=\"%2\" rel='nofollow'>HiddenAttachment</a>."
+msgstr ""
+"*Свойства:* Комментарий и видимость (т.е. скрыто ли приложение) могут быть "
+"изменены без загрузки файла нажатием \"Изменить только свойства\"; смотрите "
+"<a target=\"HiddenAttachment\" onclick=\"return launchWindow('%"
+"1','HiddenAttachment')\" href=\"%2\" rel='nofollow'>Скрытые приложения</a>."
+
+#: twikiplugins/NatSkin/templates/oopsnoweb.nat.tmpl:31
+#, fuzzy
+msgid "*Tip:* More options in WebSearch"
+msgstr "*Совет:* Подробнее о настройках в WebSearch"
+
+#: data/TWiki/WikiSyntaxSummary.txt:9
+msgid "*bold* put word/phrase in asterisks: =<nop>*your phrase*="
+msgstr "*жирно* выделить слово/фразу звездочками: =<nop>*ваша фраза*="
+
+#: data/TWiki/WikiSyntaxSummary.txt:10
+msgid ""
+"*bullet list* 3 spaces, asterisk, 1 space: =&&nbsp;&&nbsp;&&nbsp;*&&nbsp;"
+"your text="
+msgstr ""
+"*ненумерованный список* 3 пробела, звездочка, 1 пробел: =&&nbsp;&&nbsp;"
+"&&nbsp;*&&nbsp;ваш текст="
+
+#: data/TWiki/WikiSyntaxSummary.txt:11
+msgid "*headings* 3 dashes, 1 to 6 pluses, 1 space: =---++&&nbsp;Your Heading="
+msgstr ""
+"*заголовки* 3 тире, от 1 до 6 плюсов, 1 пробел: =---++&&nbsp;ваш заголовок="
+
+#: data/TWiki/WikiSyntaxSummary.txt:12
+msgid "*italic* put word/phrase in underscores: =_<nop>your words_="
+msgstr ""
+"*курсив* выделить слово/фразу знаками подчеркивания: =_<nop>ваши слова_="
+
+#: data/TWiki/WikiSyntaxSummary.txt:13
+msgid ""
+"*links* use topic name or URL: =%1=, =http://yahoo.com=, or =[<nop>[http://"
+"yahoo.com/][link to Yahoo]]="
+msgstr ""
+"*ссылки* используйте имя страницы или URL адрес: =%1=, =http://yandex.ru=, "
+"или =[<nop>[http://yandex.ru/][ссылка на Yandex]]="
+
+#: data/TWiki/WikiSyntaxSummary.txt:14
+msgid "*monospaced* put word/phrase in equal signs: =<nop>=your words=="
+msgstr ""
+"*моноширинный* выделить слово/фразу знаками равенства: =<nop>=ваша фраза=="
+
+#: data/TWiki/WikiSyntaxSummary.txt:15
+msgid "*paragraphs* separate with blank line"
+msgstr "*абзацы* необходимо разделять пустой строкой"
+
+#: lib/TWiki/I18N/Extract.pm:104
+msgid "..."
+msgstr "..."
+
+#: twikiplugins/NatSkin/templates/oopserrbase.nat.tmpl:11
+msgid "... don't know, it just happended."
+msgstr "... не знаю, что-то произошло."
+
+#: twikiplugins/NatSkin/templates/oopschangepasswd.nat.tmpl:7
+msgid "... for user %1."
+msgstr "... для пользователя %1."
+
+#: twikiplugins/NatSkin/templates/oopsnoformdef.nat.tmpl:8
+#, fuzzy
+msgid "1. Form definition missing"
+msgstr "Недостает Определения Формы %1"
+
+#: twikiplugins/NatSkin/templates/oopsnoformdef.nat.tmpl:18
+msgid "2. Topic can not be upgraded from old style category table"
+msgstr ""
+"2. Страница не может быть преобразована из таблицы категорий старого стиля"
+
+#: twikiplugins/PatternSkin/templates/oopsmoresettings.pattern.tmpl:3
+msgid "<a href='%1' rel='nofollow'>Edit settings</a> for this topic"
+msgstr "<a href='%1' rel='nofollow'>Редактировать настройки</a> для этой темы"
+
+#: twikiplugins/NatSkin/data/TWiki/MySideBar.txt:7
+msgid "<a href='%1' title='%2'>Create</a> your personalized sidebar."
+msgstr "<a href='%1' title='%2'>Создать</a> вашу персональную панель."
+
+#: data/TWiki/WebChanges.txt:8
+msgid ""
+"<a href='%1'>RSS feed</a>, recent changes with <a href='%2'>50</a>, <a "
+"href='%3' rel='nofollow'>100</a>, <a href='%4' rel='nofollow'>200</a>, <a "
+"href='%5' rel='nofollow'>500</a>, <a href='%6' rel='nofollow'>1000</a> "
+"topics, <a href='%7' rel='nofollow'>all changes</a>"
+msgstr ""
+
+#: twikiplugins/PatternSkin/templates/renamewebbase.pattern.tmpl:25
+#, fuzzy
+msgid ""
+"<a target='ManagingWebs' onclick=\"return launchWindow('%1','ManagingWebs')"
+"\" href='%2' rel='nofollow'>Get help on managing webs</a>"
+msgstr ""
+"<a target='ManagingРазделы' onclick=\"return launchWindow('%"
+"1','ManagingРазделы')\" href='%2' rel='nofollow'>Справка по управлению "
+"Разделами</a>"
+
+#: templates/oopsmore.tmpl:23
+#: twikiplugins/ClassicSkin/templates/oopsmore.classic.tmpl:21
+#: twikiplugins/PatternSkin/templates/oopsmorebacklinks.pattern.tmpl:6
+msgid "<em>in %1 web</em> only"
+msgstr "только <em>в разделе %1 </em>"
+
+#: templates/oopsmore.tmpl:21
+#: twikiplugins/ClassicSkin/templates/oopsmore.classic.tmpl:19
+#: twikiplugins/PatternSkin/templates/oopsmorebacklinks.pattern.tmpl:4
+msgid "<em>in all public webs</em>"
+msgstr "<em>во всех общедоступных разделах</em>"
+
+#: twikiplugins/PatternSkin/templates/preview.pattern.tmpl:58
+#, fuzzy
+msgid ""
+"<span class='twikiAlert'><b>Do not forget</b></span> to save your changes."
+msgstr ""
+"<span class='twikiAlert'><b>Не забудьте</b></span> сохранить ваши изменения."
+
+#: templates/messages.tmpl:448
+#, fuzzy
+msgid ""
+"A %1 is divided into webs; each one represents one subject, one area of "
+"collaboration. You are trying to %2 in a web that does not exist."
+msgstr ""
+"%1 подразделен на разделы; каждый представляет одну тематику или одну "
+"область взаимодействия. Вы пытаетесь %2 в несуществующем разделе."
+
+#: templates/messages.tmpl:327
+#, fuzzy
+msgid "A =.txt= extension is appended to some filenames for security reasons"
+msgstr ""
+"Расширение =.txt= добавлено к некоторым именам файлов по соображениям "
+"безопасности"
+
+#: templates/messages.tmpl:121
+#, fuzzy
+msgid ""
+"A color starts with a # sign, followed by 6 hexadecimal numbers, e.g. "
+"=#FFFF00=."
+msgstr ""
+"Цвет начинается с символа #, за которым следуют 6 шестнадцатиричных цифр, "
+"например, =#FFFF00=."
+
+#: twikiplugins/NatSkin/templates/oopsmngcreateweb.nat.tmpl:24
+msgid ""
+"A color starts with the number sign, followed by 6 hexadecimal numbers, e.g. "
+"yellow is =#FFFF00=."
+msgstr ""
+"Цвет начинается со знака решетки, за которым следуют шесть шестнадцатеричных "
+"чисел, например жёлтый будет =#FFFF00=."
+
+#. ($data->{Email})
+#: lib/TWiki/UI/Register.pm:831
+#: twikiplugins/NatSkin/templates/oopsregthanks.nat.tmpl:14
+msgid "A confirmation e-mail has been sent to %1"
+msgstr "Письмо подтверждения отправлено на e-mail: %1"
+
+#: templates/messages.tmpl:452
+#, fuzzy
+msgid ""
+"A link to a topic located in another web is written like %1. Make sure that "
+"the name of the web is not spelt wrongly on the previous page; fix the link "
+"if necessary."
+msgstr ""
+"Ссылка на страницу, расположенную в соседнем разделе, пишется как %1. "
+"Убедитесь, что имя раздела правильно указано на предыдущей странице; при "
+"необходимости поправьте ссылку."
+
+#: data/Sandbox/WebHome.txt:23
+msgid ""
+"A more extensive changes list is available via the [[%1][Recent Changes]] "
+"link in the navigation menu."
+msgstr ""
+"Более расширенный список изменений доступен по ссылке [[%1][Изменения]] в "
+"меню навигации."
+
+#: templates/messages.tmpl:423
+msgid ""
+"A new *system-generated* password for your login name %1 (<nop>WikiName %2) "
+"has been sent to your registered e-mail address. If your e-mail address is "
+"no longer valid, please contact %3"
+msgstr ""
+"Новый пароль *автоматически* сгенерированный для вашего ИмениПользователя %1 "
+"(<nop>Wiki-имя %2) выслан на введенный Вами при регистрации адрес "
+"электронной почты. Если этот адрес больше не действителен, то обратитесь, "
+"пожалуйста, к %3"
+
+#: twikiplugins/NatSkin/templates/edit.nat.tmpl:79
+#: twikiplugins/NatSkin/templates/edittoolbar.natedit.tmpl:67
+#: twikiplugins/NatSkin/templates/edittopicactions.nat.tmpl:9
+#: twikiplugins/NatSkin/templates/preview.nat.tmpl:40
+#: twikiplugins/NatSkin/templates/previewtoolbar.natedit.tmpl:12
+#: twikiplugins/NatSkin/templates/previewtopicactions.nat.tmpl:9
+#: twikiplugins/NatSkin/templates/settingstoolbar.natedit.tmpl:6
+msgid "Abandon your changes and exit"
+msgstr "Отказ от ваших изменений и выход"
+
+#: twikiplugins/NatSkin/templates/edit.nat.tmpl:76
+#: twikiplugins/NatSkin/templates/edittoolbar.natedit.tmpl:59
+#: twikiplugins/NatSkin/templates/edittoolbar.natedit.tmpl:60
+#: twikiplugins/NatSkin/templates/edittopicactions.nat.tmpl:8
+#: twikiplugins/NatSkin/templates/preview.nat.tmpl:37
+#: twikiplugins/NatSkin/templates/previewtoolbar.natedit.tmpl:6
+#: twikiplugins/NatSkin/templates/previewtoolbar.natedit.tmpl:7
+#: twikiplugins/NatSkin/templates/previewtopicactions.nat.tmpl:8
+msgid "Abandon your changes but continue editing"
+msgstr "Отказ от ваших изменений но продолжить редактирование"
+
+#: twikiplugins/NatSkin/templates/renamesidebar.nat.tmpl:4
+msgid "About Topics"
+msgstr "О темах"
+
+#: templates/oopsaccessdenied.tmpl:5
+#: twikiplugins/ClassicSkin/templates/oopsaccessdenied.classic.tmpl:5
+#: twikiplugins/NatSkin/templates/oopsaccessdenied.nat.tmpl:4
+#: twikiplugins/NatSkin/templates/oopsaccessgroup.nat.tmpl:4
+#: twikiplugins/PatternSkin/templates/oopsaccessdenied.pattern.tmpl:9
+msgid "Access Denied"
+msgstr "Доступ запрещён"
+
+#: templates/messages.tmpl:431
+msgid "Access check on %1 failed"
+msgstr "Проверка доступа для %1 закончилась неудачно"
+
+#: twikiplugins/NatSkin/templates/edit.nat.tmpl:84
+#: twikiplugins/NatSkin/templates/edit.natedit.tmpl:6
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:71
+#: twikiplugins/PatternSkin/templates/preview.pattern.tmpl:49
+msgid "Access keys"
+msgstr "Ключи доступа"
+
+#: twikiplugins/NatSkin/templates/attachtables.nat.tmpl:4
+#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:144
+#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:91
+#: twikiplugins/PatternSkin/templates/changeform.pattern.tmpl:12
+msgid "Action"
+msgstr "Действие"
+
+#: templates/messages.tmpl:432
+msgid "Action %1: %2."
+msgstr "Действие %1: %2."
+
+#: twikiplugins/NatSkin/templates/strings.nat.tmpl:19
+msgid "Add a new form to <nop>%1"
+msgstr "Добавить новую форму в <nop>%1"
+
+#: templates/addform.tmpl:1
+#: twikiplugins/ClassicSkin/templates/addform.classic.tmpl:1
+#: twikiplugins/NatSkin/templates/strings.nat.tmpl:18
+#: twikiplugins/PatternSkin/templates/addform.pattern.tmpl:1
+msgid "Add form"
+msgstr "Добавить форму"
+
+#: data/TWiki/TWikiRegistration.txt:276
+msgid "Add your name to the list of users in the %1 topic in the %2 web."
+msgstr "Добавит ваше имя к списку пользователей на странице %1 раздела %2."
+
+#: lib/TWiki/UI/RDiff.pm:264
+msgid "Added"
+msgstr "Добавлено"
+
+#: templates/messages.tmpl:315
+#, fuzzy
+msgid "Adding a %1 variable in WebPreferences"
+msgstr "Добавление переменной %1 в [[WebPreferences][Параметры]]"
+
+#: twikiplugins/NatSkin/templates/oopsnoformdef.nat.tmpl:22
+#, fuzzy
+msgid "Adding a =WEBFORMS= variable in WebPreferences"
+msgstr "Добавление переменной =WEBFORMS= в WebPreference"
+
+#: twikiplugins/PatternSkin/data/TWiki/WebLeftBar.txt:23
+msgid "Admin Maintenance"
+msgstr "Администрирование"
+
+#: twikiplugins/NatSkin/templates/oopsmanage.nat.tmpl:6
+msgid "Administration error"
+msgstr "Ошибка администрирвания"
+
+#: data/TWiki/WebSearchAdvanced.txt:3
+msgid "Advanced Search"
+msgstr "Расширенный писк"
+
+#: data/TWiki/WebSearch.txt:29
+msgid "Advanced search"
+msgstr "Расширенный писк"
+
+#: data/TWiki/ChangeEmailAddress.txt:31
+msgid ""
+"After submitting this form your e-mail will be changed, and you will be "
+"returned to this form."
+msgstr ""
+"После отправки этой формы ваш электронный адрес будет изменен и вы будете "
+"возвращены на эту же форму."
+
+#: data/TWiki/ChangePassword.txt:22
+msgid "After submitting this form your password will be changed."
+msgstr "После отправки этой формы ваш пароль будет изменен."
+
+#: data/TWiki/ResetPassword.txt:22
+msgid ""
+"After submitting this form, you will receive an e-mail with your new, "
+"*system-generated* password, and a link to a page where you can change it."
+msgstr ""
+"После отправки этой формы вы получите электронное письмо с вашим новым "
+"*сгенерированным системой* паролем, и ссылку на страницу, где вы можете "
+"сменить его."
+
+#: twikiplugins/NatSkin/templates/edittoolbar.natedit.tmpl:19
+msgid "Align left"
+msgstr "Выровнять по левому краю"
+
+#: twikiplugins/NatSkin/templates/edittoolbar.natedit.tmpl:23
+msgid "Align right"
+msgstr "Выровнять по правому краю"
+
+#: data/TWiki/WebSearch.txt:38 data/TWiki/WebSearchAdvanced.txt:48
+msgid "All public webs"
+msgstr "Во всех общедоступных разделах"
+
+#: data/TWiki/WebSearchAdvanced.txt:94
+msgid "All topics in %1"
+msgstr "Все страницы в %1"
+
+#: data/TWiki/WebTopicCreator.txt:107
+#: twikiplugins/NatSkin/templates/renamebase.nat.tmpl:21
+#: twikiplugins/PatternSkin/templates/renamebase.pattern.tmpl:27
+msgid "Allow non <nop>WikiWord for the new topic name"
+msgstr "Позволить не <nop>ВикиСлово для имени новой страницы"
+
+#: twikiplugins/NatSkin/templates/moveattachment.nat.tmpl:22
+msgid "Allow non <nop>WikiWord for the new topic name."
+msgstr "Позволить не <nop>ВикиСлово для имени новой страницы"
+
+#: twikiplugins/NatSkin/templates/messages.nat.tmpl:170
+msgid ""
+"Alternatively go <a href=\"javascript:history.back()\">back</a> in your "
+"browser and choose a different username."
+msgstr ""
+
+#: templates/messages.tmpl:229
+#, fuzzy
+msgid ""
+"Alternatively hit back to go back to TWiki.TWikiRegistration and choose a "
+"different username."
+msgstr ""
+"Либо можете вернуться к TWiki.TWikiRegistration и выбрать другое имя "
+"пользователя "
+
+#: twikiplugins/NatSkin/templates/messages.nat.tmpl:148
+msgid "An e-mail could not be delivered."
+msgstr "Не удалось доставить e-mail"
+
+#: templates/messages.tmpl:216
+#, fuzzy
+msgid ""
+"An e-mail could not be delivered. Please notify your %1 administrator, %2"
+msgstr ""
+"Сообщение по e-mail не может быть доставлено по e-mail. Известите вашего "
+"администратора %1, %2, пожалуйста"
+
+#: twikiplugins/NatSkin/templates/messages.nat.tmpl:208
+msgid "An email address is required before a password can be reset."
+msgstr "Для сброса пароля требуется e-mail адрес."
+
+#: twikiplugins/PatternSkin/templates/moveattachment.pattern.tmpl:39
+#, fuzzy
+msgid ""
+"An error page will be shown if either of the topics are locked by another "
+"user."
+msgstr ""
+"Сообщение об ошибке будет показано если одна из страниц заблокирована другим "
+"пользователем"
+
+#: templates/messages.tmpl:17
+msgid "And populated with topics from the base web"
+msgstr ""
+
+#: twikiplugins/NatSkin/templates/changeformsidebar.nat.tmpl:11
+#: twikiplugins/PatternSkin/templates/changeform.pattern.tmpl:27
+msgid "Any change you made to topic before coming to this page are preserved."
+msgstr ""
+"Все изменения, сделанные вами на странице перед заходом на неё, сохраняются"
+
+#: twikiplugins/NatSkin/templates/strings.nat.tmpl:10
+#: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:66
+msgid "Attach"
+msgstr "Прикрепить файл"
+
+#: twikiplugins/NatSkin/templates/attachnew.nat.tmpl:3
+#: twikiplugins/PatternSkin/templates/attachnew.pattern.tmpl:5
+msgid "Attach file to %1"
+msgstr "Прикрепить файл к %1"
+
+#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:24
+msgid "Attach image or document on %1"
+msgstr "Прикрепить изображение или документ к %1"
+
+#: twikiplugins/NatSkin/templates/strings.nat.tmpl:11
+msgid "Attach image or document to this topic"
+msgstr "Прикрепить картинку или документ к этой странице"
+
+#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:59
+msgid "Attach new file"
+msgstr "Прикрепить новый файл"
+
+#: twikiplugins/NatSkin/templates/attachtables.nat.tmpl:25
+#: twikiplugins/NatSkin/templates/attachtables.nat.tmpl:4
+#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:91
+msgid "Attachment"
+msgstr "Приложение"
+
+#: templates/messages.tmpl:468
+#: twikiplugins/NatSkin/templates/messages.nat.tmpl:326
+msgid "Attachment '%1' does not exist"
+msgstr "Приложение '%1' не существует"
+
+#: lib/TWiki/UI/Manage.pm:323
+msgid "Attachment already exists in new topic"
+msgstr "Приложение уже имеется на новой странице"
+
+#: templates/messages.tmpl:62
+#: twikiplugins/NatSkin/templates/messages.nat.tmpl:237
+msgid "Attachment delete failed"
+msgstr "Не удалось удалить приложение"
+
+#: lib/TWiki/UI/Manage.pm:303
+msgid "Attachment does not exist"
+msgstr "Приложение не существует"
+
+#: twikiplugins/NatSkin/templates/oopsmoveerr.nat.tmpl:3
+msgid "Attachment move error"
+msgstr "Не удалось переместить приложение"
+
+#: templates/messages.tmpl:54
+msgid "Attachment move failed"
+msgstr "Не удалось переместить приложение"
+
+#: twikiplugins/NatSkin/data/TWiki/TWikiWebSideBar.txt:47
+msgid "Attachments"
+msgstr "Приложения"
+
+#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:77
+msgid "Attachments will not be shown in topic view page."
+msgstr "(Приложения не будут показаны при просмотре страницы)."
+
+#: templates/oopsaccessdenied.tmpl:4 templates/oopsattention.tmpl:4
+#: templates/oopsleaseconflict.tmpl:4 templates/oopssaveerr.tmpl:8
+#: twikiplugins/ClassicSkin/templates/oopsaccessdenied.classic.tmpl:4
+#: twikiplugins/ClassicSkin/templates/oopsattention.classic.tmpl:4
+#: twikiplugins/ClassicSkin/templates/oopsleaseconflict.classic.tmpl:4
+#: twikiplugins/NatSkin/templates/oopsattention.nat.tmpl:4
+#: twikiplugins/PatternSkin/templates/oopsaccessdenied.pattern.tmpl:8
+#: twikiplugins/PatternSkin/templates/oopsattention.pattern.tmpl:5
+#: twikiplugins/PatternSkin/templates/oopslanguagechanged.pattern.tmpl:7
+#: twikiplugins/PatternSkin/templates/oopsleaseconflict.pattern.tmpl:6
+#: twikiplugins/PatternSkin/templates/oopssaveerr.pattern.tmpl:5
+msgid "Attention"
+msgstr "Внимание"
+
+#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:133
+msgid "Attribute"
+msgstr "Атрибут"
+
+#: twikiplugins/MailerContrib/templates/mailnotify.tmpl:62
+msgid "Automated notification of topic changes"
+msgstr "Автоматическое уведомление об изменении страницы"
+
+#: data/_default/WebHome.txt:4
+msgid "Available Information"
+msgstr "Доступная Информация"
+
+#: twikiplugins/PatternSkin/templates/constants.pattern.tmpl:11
+msgid "Back to topic"
+msgstr "Назад к странице"
+
+#: templates/oopsmore.tmpl:19
+#: twikiplugins/ClassicSkin/templates/oopsmore.classic.tmpl:17
+#: twikiplugins/NatSkin/templates/oopsmore.nat.tmpl:8
+#: twikiplugins/PatternSkin/templates/oopsmorebacklinks.pattern.tmpl:2
+#: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:90
+msgid "Backlinks"
+msgstr "Обратные ссылки"
+
+#: twikiplugins/PatternSkin/templates/backlinksweb.pattern.tmpl:10
+msgid "Backlinks to %1 in %2 Web"
+msgstr "Обратные ссылки на %1 в разделе %2"
+
+#: twikiplugins/PatternSkin/templates/backlinksallwebs.pattern.tmpl:10
+msgid "Backlinks to %1 in all Webs"
+msgstr "Обратные ссылки на %1 во всех разделах"
+
+#: templates/messages.tmpl:253
+msgid "Bad password"
+msgstr "Плохой пароль"
+
+#: templates/messages.tmpl:116
+#: twikiplugins/NatSkin/templates/messages.nat.tmpl:92
+msgid "Base web %1 is missing or does not exist"
+msgstr "Базовый раздел %1 отсутствует или не существует"
+
+#: twikiplugins/NatSkin/templates/oopsmngcreateweb.nat.tmpl:21
+msgid "Base web:"
+msgstr "Базовый раздел:"
+
+#: twikiplugins/NatSkin/templates/edittoolbar.natedit.tmpl:5
+msgid "Bold text"
+msgstr "Жирный текст"
+
+#: twikiplugins/NatSkin/data/TWiki/NatSkinStyleBrowser.txt:43
+msgid "Border Off"
+msgstr "Граница Выкл."
+
+#: twikiplugins/NatSkin/data/TWiki/NatSkinStyleBrowser.txt:42
+msgid "Border On"
+msgstr "Граница Вкл."
+
+#: data/TWiki/WebSearch.txt:36 data/TWiki/WebSearchAdvanced.txt:46
+msgid "Both body and title"
+msgstr "В тексте страницы и в заголовке"
+
+#: twikiplugins/NatSkin/data/TWiki/NatSkinStyleBrowser.txt:51
+#, fuzzy
+msgid "Both sidebars"
+msgstr "Панель %1"
+
+#: data/Trash/WebHome.txt:7
+msgid ""
+"By default, viewing the Trash web is restricted to %1. If you would like to "
+"allow all users to view the Trash web, remove the =ALLOWWEBVIEW= restriction "
+"in WebPreferences."
+msgstr ""
+"По умолчанию, просмотр раздела Мусор разрешен лишь %1. Если вы желаете "
+"разрешить всем пользователям просмотр этого раздела, удалите ограничение "
+"=ALLOWWEBVIEW= из [[WebPreferences][Параметров]]."
+
+#: twikiplugins/NatSkin/templates/oopstopicexists.nat.tmpl:5
+msgid "Can not rename to %1 as this already exists!"
+msgstr "Невозможно переименовать, т.к. %1 уже существует!"
+
+#: twikiplugins/NatSkin/templates/oopsnotwikiuser.nat.tmpl:5
+msgid "Can't find the username <b>%1</b>"
+msgstr "Не удалось найти имя пользователя <b>%1</b>"
+
+#: twikiplugins/NatSkin/templates/messages.nat.tmpl:22
+msgid "Can't find user \"%1\"."
+msgstr "Не удалось найти пользователя \"%1\"."
+
+#: templates/messages.tmpl:421 templates/messages.tmpl:44
+msgid "Can't find user %1"
+msgstr "Не удалось найти пользователя %1"
+
+#: templates/messages.tmpl:422
+msgid "Can't get an e-mail address for %1 (required for password reset)"
+msgstr "Не могу получить e-mail адрес для %1 (нужно для сброса пароля)"
+
+#: twikiplugins/NatSkin/templates/messages.nat.tmpl:207
+msgid "Can't get an email address for %1"
+msgstr "Не могу получить e-mail адрес для %1"
+
+#: twikiplugins/NatSkin/templates/attachagain.nat.tmpl:25
+#: twikiplugins/NatSkin/templates/attachnew.nat.tmpl:6
+#: twikiplugins/NatSkin/templates/changeform.nat.tmpl:24
+#: twikiplugins/NatSkin/templates/edit.nat.tmpl:79
+#: twikiplugins/NatSkin/templates/edittopicactions.nat.tmpl:9
+#: twikiplugins/NatSkin/templates/messages.nat.tmpl:282
+#: twikiplugins/NatSkin/templates/moveattachment.nat.tmpl:28
+#: twikiplugins/NatSkin/templates/oops.nat.tmpl:20
+#: twikiplugins/NatSkin/templates/oopsempty.nat.tmpl:13
+#: twikiplugins/NatSkin/templates/oopserrbase.nat.tmpl:13
+#: twikiplugins/NatSkin/templates/oopsleaseconflict.nat.tmpl:56
+#: twikiplugins/NatSkin/templates/oopslocked.nat.tmpl:16
+#: twikiplugins/NatSkin/templates/oopslockedrename.nat.tmpl:16
+#: twikiplugins/NatSkin/templates/oopslogonbase.nat.tmpl:25
+#: twikiplugins/NatSkin/templates/oopsmngcreateweb.nat.tmpl:46
+#: twikiplugins/NatSkin/templates/oopsmngcreateweb.nat.tmpl:66
+#: twikiplugins/NatSkin/templates/oopsmore.nat.tmpl:81
+#: twikiplugins/NatSkin/templates/oopsnoformdef.nat.tmpl:30
+#: twikiplugins/NatSkin/templates/oopsresetpasswd.nat.tmpl:21
+#: twikiplugins/NatSkin/templates/oopsrev.nat.tmpl:89
+#: twikiplugins/NatSkin/templates/preview.nat.tmpl:40
+#: twikiplugins/NatSkin/templates/previewtopicactions.nat.tmpl:9
+#: twikiplugins/NatSkin/templates/rename.nat.tmpl:8
+#: twikiplugins/NatSkin/templates/renameconfirm.nat.tmpl:8
+#: twikiplugins/NatSkin/templates/renamerefs.nat.tmpl:8
+#: twikiplugins/NatSkin/templates/renamewebbase.nat.tmpl:15
+#: twikiplugins/NatSkin/templates/renamewebconfirm.nat.tmpl:8
+#: twikiplugins/NatSkin/templates/searchtopicactions.nat.tmpl:2
+#: twikiplugins/NatSkin/templates/settingstopicactions.nat.tmpl:6
+msgid "Cancel"
+msgstr "Отменить"
+
+#: twikiplugins/NatSkin/templates/edittoolbar.natedit.tmpl:68
+#: twikiplugins/NatSkin/templates/previewtoolbar.natedit.tmpl:13
+#: twikiplugins/NatSkin/templates/settingstoolbar.natedit.tmpl:7
+msgid "Cancel and abandon changes"
+msgstr "Отменить и отказаться от изменений"
+
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:63
+#, fuzzy
+msgid "Cancel editing and discard changes"
+msgstr "Отменить и отказаться от изменений"
+
+#: templates/messages.tmpl:69
+#: twikiplugins/NatSkin/templates/messages.nat.tmpl:31
+msgid "Cannot create %1 because it already exists."
+msgstr "Невзможно создать %1 т.к. уже существует."
+
+#: templates/messages.tmpl:112
+#: twikiplugins/NatSkin/templates/messages.nat.tmpl:88
+msgid "Cannot create web %1 because it already exists"
+msgstr "Невозможно создать раздел %1 т.к. он уже существует"
+
+#: templates/messages.tmpl:75 templates/messages.tmpl:81
+#: twikiplugins/NatSkin/templates/messages.nat.tmpl:37
+#: twikiplugins/NatSkin/templates/messages.nat.tmpl:43
+msgid "Cannot rename %1 to %2 because it already exists."
+msgstr "Невозможно переименовать %1 в %2 т.к. %2 уже существует."
+
+#: data/TWiki/WebSearchAdvanced.txt:63
+msgid "Case sensitive"
+msgstr "С учётом регистра"
+
+#: twikiplugins/PatternSkin/data/TWiki/WebLeftBar.txt:32
+msgid "Categories"
+msgstr "Категории"
+
+#: twikiplugins/NatSkin/templates/edittoolbar.natedit.tmpl:21
+msgid "Center align"
+msgstr "Выровнять по центру"
+
+#: twikiplugins/NatSkin/templates/edittoolbar.natedit.tmpl:21
+msgid "Center text"
+msgstr "Редактировать текст"
+
+#: twikiplugins/NatSkin/templates/oopsaccesschange.nat.tmpl:5
+msgid "Change Access Denied"
+msgstr "Изменение страницы запрещено"
+
+#: data/TWiki/ChangePassword.txt:2
+msgid "Change Password"
+msgstr "Сменить  пароль"
+
+#: twikiplugins/PatternSkin/templates/attachagain.pattern.tmpl:17
+msgid "Change comment and properties only"
+msgstr "Изменить только комментарий и свойства"
+
+#: twikiplugins/NatSkin/templates/strings.nat.tmpl:20
+msgid "Change form"
+msgstr "Изменить форму"
+
+#: twikiplugins/PatternSkin/templates/rename.pattern.tmpl:13
+msgid "Change from:"
+msgstr "Изменить с:"
+
+#: data/TWiki/LanguageSelector.txt:16 templates/oopschangelanguage.tmpl:21
+#: templates/oopschangelanguage.tmpl:4 templates/oopslanguagechanged.tmpl:4
+#: twikiplugins/NatSkin/templates/oopslanguagechanged.nat.tmpl:4
+#: twikiplugins/NatSkin/templates/oopsmore.nat.tmpl:44
+msgid "Change language"
+msgstr "Заменить язык"
+
+#: twikiplugins/PatternSkin/templates/renamewebbase.pattern.tmpl:55
+#, fuzzy
+msgid "Change links in topics that refer to !%1 in any Web:"
+msgstr "Поменять ссылки в страницах которые упоминают !%1 в каждом Разделе"
+
+#: twikiplugins/PatternSkin/templates/renamewebbase.pattern.tmpl:51
+#, fuzzy
+msgid "Change links in topics that refer to !%1 in the %2 Web:"
+msgstr "Поменять ссылки в страницах которые упоминают !%1 в Разделе %2:"
+
+#: twikiplugins/NatSkin/templates/renamewebbase.nat.tmpl:34
+#: twikiplugins/PatternSkin/templates/renamebase.pattern.tmpl:105
+#, fuzzy
+msgid "Change links in topics that refer to %1 in any Web:"
+msgstr "Поменять ссылки в страницах которые упоминают %1 в каждом Разделе"
+
+#: twikiplugins/NatSkin/templates/renamewebbase.nat.tmpl:29
+#, fuzzy
+msgid "Change links in topics that refer to %1 in the %1 Web:"
+msgstr "Поменять ссылки в страницах которые упоминают !%1 в Разделе %2:"
+
+#: twikiplugins/NatSkin/templates/renamebase.nat.tmpl:25
+#: twikiplugins/PatternSkin/templates/renamebase.pattern.tmpl:101
+#, fuzzy
+msgid "Change links in topics that refer to %1 in the %2 Web:"
+msgstr "Поменять ссылки в страницах которые упоминают %1 в Разделе %2:"
+
+#: twikiplugins/NatSkin/templates/renamebase.nat.tmpl:28
+#, fuzzy
+msgid "Change links in topics that refer to %1.%2 in any Web:"
+msgstr "Поменять ссылки в страницах которые упоминают !%1 в каждом Разделе"
+
+#: data/TWiki/ChangePassword.txt:17
+msgid "Change password"
+msgstr "Сменить пароль"
+
+#: twikiplugins/NatSkin/templates/attachagain.nat.tmpl:24
+msgid "Change properties"
+msgstr "Изменить свойства"
+
+#: twikiplugins/NatSkin/templates/renamerefs.nat.tmpl:7
+msgid "Change references"
+msgstr "Изменить ссылки"
+
+#: twikiplugins/NatSkin/templates/strings.nat.tmpl:21
+msgid "Change the current form of <nop>%1"
+msgstr ""
+
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:27
+msgid "Change topic"
+msgstr "Сменить страницу"
+
+#: lib/TWiki/UI/RDiff.pm:278 lib/TWiki/UI/RDiff.pm:284
+#: twikiplugins/NatSkin/templates/changes.nat.tmpl:16
+#: twikiplugins/NatSkin/templates/search.nat.tmpl:9
+msgid "Changed"
+msgstr "Изменен(ы)"
+
+#: twikiplugins/MailerContrib/templates/mailnotify.tmpl:18
+#: twikiplugins/NatSkin/templates/changes.nat.tmpl:17
+#: twikiplugins/NatSkin/templates/search.nat.tmpl:10
+#: twikiplugins/NatSkin/templates/searchrenameview.nat.tmpl:11
+msgid "Changed by"
+msgstr "Изменен(ы) "
+
+#: twikiplugins/MailerContrib/templates/mailnotify.tmpl:16
+#: twikiplugins/NatSkin/templates/searchrenameview.nat.tmpl:10
+msgid "Changed:"
+msgstr "Изменен(ы):"
+
+#: twikiplugins/NatSkin/data/TWiki/TWikiWebLinks.txt:9
+#: twikiplugins/PatternSkin/data/Main/WebLeftBar.txt:8
+#: twikiplugins/PatternSkin/data/Sandbox/WebLeftBar.txt:8
+#: twikiplugins/PatternSkin/data/TWiki/WebLeftBar.txt:9
+#: twikiplugins/PatternSkin/data/TWiki/WebLeftBarExample.txt:4
+#: twikiplugins/PatternSkin/data/Trash/WebLeftBar.txt:6
+#: twikiplugins/PatternSkin/data/_default/WebLeftBar.txt:7
+msgid "Changes"
+msgstr "Изменения"
+
+#. ($r2, $r1)
+#: lib/TWiki/UI/RDiff.pm:476
+msgid "Changes from r%1 to r%2"
+msgstr "Изменеия с r%1 по r%2"
+
+#: twikiplugins/NatSkin/templates/renamewebbase.nat.tmpl:63
+msgid ""
+"Characters not allowed in topic names, such as spaces will automatically be "
+"removed."
+msgstr ""
+
+#: templates/messages.tmpl:373
+#, fuzzy
+msgid ""
+"Check your configuration setting for {TemplateDir}. If that's not the "
+"problem, it may be because you have a setting of %1 that is pointing to a "
+"template that doesn't exist."
+msgstr ""
+"Проверьте ваши конфигурационные установки для {TemplateDir}. Если проблема "
+"не в этом, то, возможно, в том, что ваша установка для %1 указывает на "
+"шаблон, который не существует."
+
+#: twikiplugins/PatternSkin/templates/rename.pattern.tmpl:41
+#: twikiplugins/PatternSkin/templates/renamedelete.pattern.tmpl:45
+#, fuzzy
+msgid "Checked topics will be updated to point to the new topic location."
+msgstr ""
+"Проверенные страницы будут обновлены чтобы указывать на новое расположение "
+"страницы"
+
+#: twikiplugins/PatternSkin/templates/renameweb.pattern.tmpl:31
+#, fuzzy
+msgid "Checked topics will be updated to point to the new web name."
+msgstr ""
+"Проверенные страницы будут обновлены чтобы указывать на новое имя раздела"
+
+#: templates/oopsmore.tmpl:25
+#: twikiplugins/ClassicSkin/templates/oopsmore.classic.tmpl:23
+#: twikiplugins/PatternSkin/templates/oopsmorechildtopics.pattern.tmpl:2
+msgid "Child topics in %1 web"
+msgstr "Дочерние страницы в %1 разделе"
+
+#: twikiplugins/NatSkin/templates/changeform.nat.tmpl:17
+#: twikiplugins/PatternSkin/templates/changeform.pattern.tmpl:10
+msgid "Choose a new form for %1"
+msgstr ""
+
+#: twikiplugins/NatSkin/templates/messages.nat.tmpl:49
+msgid "Chose a topic name that is a %1 or check the allow non-Wiki Word box."
+msgstr ""
+"Выберите каким будет имя страницы: %1 или укажите флажком использовать не "
+"ВикиСлова."
+
+#: twikiplugins/NatSkin/templates/oopslogonbase.nat.tmpl:24
+msgid "Clear"
+msgstr "Очистить"
+
+#: lib/TWiki/Form.pm:584 twikiplugins/NatSkin/templates/renamebase.nat.tmpl:31
+#: twikiplugins/NatSkin/templates/renamewebbase.nat.tmpl:39
+#: twikiplugins/PatternSkin/templates/renamebase.pattern.tmpl:94
+msgid "Clear all"
+msgstr "Очистить всё"
+
+#: templates/messages.tmpl:463
+msgid "Click here"
+msgstr "Нажмите здесь"
+
+#: templates/messages.tmpl:304
+msgid "Click on [[%1][Debug topic text]]."
+msgstr "Нажмите на [[%1][Текст страницы в отладке]]."
+
+#: lib/TWiki/Render.pm:197
+msgid ""
+"Click to move topic back to previous location, with option to change "
+"references."
+msgstr ""
+"Нажмите здесь, чтобы вернуть страницу на прежнее место с одновременным "
+"изменением ссылок."
+
+#: lib/TWiki/Form.pm:298
+msgid "Click to see details in separate window"
+msgstr "Нажмите здесь, чтобы увидеть детали в отдельном окне"
+
+#: twikiplugins/TwistyPlugin/data/TWiki/TwistyPlugin.txt:409
+#, fuzzy
+msgid "Close"
+msgstr "Очистить"
+
+#: templates/messages.tmpl:120
+#: twikiplugins/NatSkin/templates/messages.nat.tmpl:96
+msgid "Color %1 has an invalid format"
+msgstr "Цвет %1 имеет неправильный формат"
+
+#: twikiplugins/NatSkin/templates/attachtables.nat.tmpl:25
+#: twikiplugins/NatSkin/templates/attachtables.nat.tmpl:4
+#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:144
+#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:66
+#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:91
+msgid "Comment"
+msgstr "Коментарий"
+
+#: twikiplugins/NatSkin/templates/attach.nat.tmpl:26
+msgid "Comment:"
+msgstr "Комментарий"
+
+#: data/TWiki/TWikiRegistration.txt:259
+msgid "Comments:"
+msgstr "Комментарии:"
+
+#: twikiplugins/NatSkin/templates/oopsrev.nat.tmpl:3
+msgid "Compare Revisions of %1"
+msgstr "Сравнить версии %1"
+
+#: twikiplugins/PatternSkin/templates/oopsmorecompare.pattern.tmpl:3
+msgid "Compare revisions"
+msgstr "Сравнить версии"
+
+#: twikiplugins/NatSkin/templates/renameconfirm.nat.tmpl:5
+#: twikiplugins/NatSkin/templates/renamewebconfirm.nat.tmpl:3
+#: twikiplugins/PatternSkin/templates/renameconfirm.pattern.tmpl:9
+#: twikiplugins/PatternSkin/templates/renamewebconfirm.pattern.tmpl:9
+msgid "Confirm rename or move"
+msgstr "Подтвердить переименование или перемещение"
+
+#: templates/oopsleaseconflict.tmpl:5
+#: twikiplugins/ClassicSkin/templates/oopsleaseconflict.classic.tmpl:5
+#: twikiplugins/NatSkin/templates/oopsleaseconflict.nat.tmpl:3
+#: twikiplugins/PatternSkin/templates/oopsleaseconflict.pattern.tmpl:7
+msgid "Conflict"
+msgstr "Конфликт"
+
+#: templates/messages.tmpl:434 templates/messages.tmpl:441
+#: templates/messages.tmpl:465 templates/messages.tmpl:471
+#: twikiplugins/NatSkin/templates/oops.nat.tmpl:14
+msgid "Contact %1 if you have any questions."
+msgstr "Свяжитесь с %1 если у вас есть вопросы."
+
+#: templates/messages.tmpl:365
+#: twikiplugins/NatSkin/templates/messages.nat.tmpl:275
+msgid "Continue and try to rename web?"
+msgstr "Продолжить и попытаться переименовать раздел?"
+
+#: twikiplugins/NatSkin/templates/preview.nat.tmpl:34
+#: twikiplugins/NatSkin/templates/previewtoolbar.natedit.tmpl:4
+#: twikiplugins/NatSkin/templates/previewtopicactions.nat.tmpl:3
+msgid "Continue editing"
+msgstr "Продолжить редактирование"
+
+#: data/TWiki/TWikiPreferences.txt:42
+msgid ""
+"Copyright &&copy; by the contributing authors. All material on this "
+"collaboration platform is the property of the contributing authors."
+msgstr ""
+"Авторские права &&copy; закреплены за авторами проекта. Все материалы по "
+"этой платформе сотрудничества являются их собственностью."
+
+#: templates/messages.tmpl:130
+msgid "Could not create the new web %1"
+msgstr "Невозможно создать новый раздел %1"
+
+#: templates/messages.tmpl:371
+msgid "Could not find template"
+msgstr "Невозможно найти шаблон"
+
+#: twikiplugins/NatSkin/templates/messages.nat.tmpl:287
+msgid "Could not find template =%1="
+msgstr "Невозможно найти шаблон =%1="
+
+#: templates/messages.tmpl:285
+#: twikiplugins/NatSkin/templates/messages.nat.tmpl:212
+msgid "Could not save %1."
+msgstr "Не удалось сохранить %1."
+
+#: data/TWiki/TWikiRegistration.txt:112
+msgid "Country:"
+msgstr "Страна:"
+
+#: data/TWiki/WebTopicViewTemplate.txt:19
+#, fuzzy
+msgid "Create '%1'"
+msgstr "Создать"
+
+#: data/Sandbox/WebHome.txt:16
+msgid "Create <nop>TestTopic###"
+msgstr "Создать пробную страницу"
+
+#: twikiplugins/PatternSkin/data/Main/WebLeftBar.txt:5
+#: twikiplugins/PatternSkin/data/Sandbox/WebLeftBar.txt:5
+#: twikiplugins/PatternSkin/data/_default/WebLeftBar.txt:4
+msgid "Create New Topic"
+msgstr "Создать страницу"
+
+#: data/TWiki/WebTopicCreator.txt:3
+msgid "Create New Topic in %1 Web"
+msgstr "Создать страницу в разделе %1"
+
+#: twikiplugins/NatSkin/templates/oopsmngcreateweb.nat.tmpl:3
+msgid "Create New Web"
+msgstr "Создать новый раздел"
+
+#: twikiplugins/NatSkin/templates/oopsaccesscreateweb.nat.tmpl:4
+msgid "Create Web Access Denied"
+msgstr "Доступ на создание раздела закрыт"
+
+#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:75
+#, fuzzy
+msgid "Create a link to the attached file"
+msgstr "Создать ссылку к прикреплённому файлу в конце страницы."
+
+#: twikiplugins/NatSkin/templates/attach.nat.tmpl:35
+msgid "Create a link to the attached file at the end of the topic."
+msgstr "Создать ссылку к прикреплённому файлу в конце страницы."
+
+#: data/Sandbox/WebHome.txt:15
+msgid "Create a new auto-numbered test topic:"
+msgstr "Создать новую автоматически пронумерованную пробную страницу"
+
+#: data/Sandbox/WebHome.txt:9
+msgid "Create a new document by name:"
+msgstr "Создать новый документ по имени:"
+
+#: data/Sandbox/WebHome.txt:10
+msgid "Create by Name"
+msgstr "Создать по имени"
+
+#: twikiplugins/PatternSkin/data/TWiki/WebLeftBarExample.txt:11
+#: twikiplugins/PatternSkin/data/TWiki/WebLeftBarLogin.txt:4
+msgid "Create personal sidebar"
+msgstr "Создать личную панель"
+
+#: data/TWiki/TWikiPreferences.txt:302 data/TWiki/TWikiPreferences.txt:304
+#: data/TWiki/WebTopicCreator.txt:130 lib/TWiki/Render.pm:98
+msgid "Create this topic"
+msgstr "Создать эту страницу"
+
+#: data/TWiki/TWikiRegistration.txt:275
+msgid ""
+"Create your personal %1 topic using your WikiName as topic name, and add the "
+"data you submitted to the topic."
+msgstr ""
+"Создаст вашу личную страницу %1 используя [[WikiName][ВикиИмя]] в качестве "
+"её имени и добавит в неё введённые вами при регистрации данные."
+
+#: twikiplugins/NatSkin/templates/edit.nat.tmpl:64
+#: twikiplugins/NatSkin/templates/preview.nat.tmpl:45
+#: twikiplugins/NatSkin/templates/preview.natedit.tmpl:6
+msgid "Creates a new topic revision when saving"
+msgstr ""
+
+#: templates/messages.tmpl:314
+#: twikiplugins/NatSkin/templates/oopsnoformdef.nat.tmpl:21
+#, fuzzy
+msgid "Creating a suitable Form Definition topic"
+msgstr "Создается подходящая страница Определения Формы"
+
+#: twikiplugins/PatternSkin/templates/renameattachmentdelete.pattern.tmpl:9
+#: twikiplugins/PatternSkin/templates/renamedelete.pattern.tmpl:17
+msgid "Current location:"
+msgstr "Текущее размещение:"
+
+#: twikiplugins/PatternSkin/templates/oopsmoresetparent.pattern.tmpl:5
+msgid "Current parent:"
+msgstr "Текущий родитель:"
+
+#: data/TWiki/ChangePassword.txt:14
+msgid "Current password"
+msgstr "Текущий пароль"
+
+#: twikiplugins/NatSkin/templates/renamewebbase.nat.tmpl:48
+msgid "Currently being edited:"
+msgstr ""
+
+#: twikiplugins/NatSkin/templates/attachtables.nat.tmpl:25
+#: twikiplugins/NatSkin/templates/attachtables.nat.tmpl:4
+#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:144
+#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:91
+msgid "Date"
+msgstr "Дата"
+
+#: templates/mailresetpassword.tmpl:5
+#: twikiplugins/ClassicSkin/templates/mailresetpassword.classic.tmpl:5
+msgid "Dear %1"
+msgstr "Дорогой(ая) %1"
+
+#: twikiplugins/PatternSkin/templates/oopsmorecompare.pattern.tmpl:6
+msgid "Debug"
+msgstr "Отладка"
+
+#: data/TWiki/WebTopicCreator.txt:127
+#, fuzzy
+msgid "Default template"
+msgstr "Невозможно найти шаблон"
+
+#: twikiplugins/NatSkin/templates/renamewebdelete.nat.tmpl:4
+#: twikiplugins/PatternSkin/templates/attachagain.pattern.tmpl:35
+#: twikiplugins/PatternSkin/templates/renameattachmentdelete.pattern.tmpl:25
+#: twikiplugins/PatternSkin/templates/renamedelete.pattern.tmpl:13
+#: twikiplugins/PatternSkin/templates/renamedelete.pattern.tmpl:49
+msgid "Delete"
+msgstr "Удалить"
+
+#: twikiplugins/PatternSkin/templates/renameattachmentdelete.pattern.tmpl:28
+msgid "Delete attachment"
+msgstr "Удалить приложение"
+
+#: templates/oopsmore.tmpl:7
+#: twikiplugins/ClassicSkin/templates/oopsmore.classic.tmpl:5
+#: twikiplugins/PatternSkin/templates/oopsmoredelete.pattern.tmpl:2
+msgid "Delete topic"
+msgstr "Удалить страницу"
+
+#: templates/oopsmore.tmpl:10 templates/oopsmore.tmpl:8
+#: twikiplugins/ClassicSkin/templates/oopsmore.classic.tmpl:6
+#: twikiplugins/ClassicSkin/templates/oopsmore.classic.tmpl:8
+#: twikiplugins/PatternSkin/templates/oopsmoredelete.pattern.tmpl:3
+#: twikiplugins/PatternSkin/templates/oopsmoredelete.pattern.tmpl:5
+msgid "Delete topic..."
+msgstr "Удалить страницу..."
+
+#: lib/TWiki/UI/RDiff.pm:257
+msgid "Deleted"
+msgstr "Удалено"
+
+#: twikiplugins/NatSkin/templates/attachsidebar.nat.tmpl:6
+#: twikiplugins/NatSkin/templates/moveattachmentsidebar.nat.tmpl:6
+msgid "Deleting Attachments"
+msgstr "Удаление приложений"
+
+#: twikiplugins/NatSkin/templates/renamesidebar.nat.tmpl:6
+msgid "Deleting Topics"
+msgstr "Удалённых страниц"
+
+#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:68
+msgid "Describe the file so other people know what it is."
+msgstr "Опишите файл так, чтобы другие люди поняли что это."
+
+#: data/TWiki/WebTopicViewTemplate.txt:7
+msgid "Did you spell the %1 correctly?"
+msgstr ""
+
+#: twikiplugins/NatSkin/templates/oopsauth.nat.tmpl:12
+msgid ""
+"Did you type in your login name and password correctly? Remember, both are "
+"case sensitive."
+msgstr ""
+"Имя пользователя и пароль введены правильно? Помните, они чувствительны к "
+"регистру."
+
+#: data/TWiki/VarMAKETEXT.txt:20
+msgid "Did you want to [[%1][reset %2's password]]?"
+msgstr "Вы хотите [[%1][сбросить пароль %2]]?"
+
+#: twikiplugins/PatternSkin/templates/rdiff.pattern.tmpl:17
+msgid "Difference:"
+msgstr "Различия:"
+
+#: twikiplugins/NatSkin/templates/strings.nat.tmpl:14
+msgid "Diffs"
+msgstr "Расзличия"
+
+#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:77
+msgid "Do not show attachment in table"
+msgstr "Не оформлять приложение в виде таблицы"
+
+#: data/TWiki/WebSearchAdvanced.txt:75
+msgid "Do show:"
+msgstr "Показывать:"
+
+#: data/TWiki/WebTopicViewTemplate.txt:18
+#, fuzzy
+msgid "Do you wish to create the topic %1?"
+msgstr "Если вы хотите создать эту страницу"
+
+#: data/TWiki/WebTopicViewTemplate.txt:10
+msgid "Do you wish to navigate quickly to a similar topic?"
+msgstr ""
+
+#: twikiplugins/NatSkin/data/TWiki/MySideBarTemplate.txt:16
+msgid "Documentation"
+msgstr "Документация"
+
+#: data/TWiki/WebSearchAdvanced.txt:68
+msgid "Don't show:"
+msgstr "Не показывать:"
+
+#: twikiplugins/NatSkin/templates/edit.nat.tmpl:78
+#: twikiplugins/NatSkin/templates/edittopicactions.nat.tmpl:6
+#: twikiplugins/NatSkin/templates/preview.nat.tmpl:39
+#: twikiplugins/NatSkin/templates/previewtopicactions.nat.tmpl:6
+msgid "Done"
+msgstr "Готово"
+
+#: twikiplugins/NatSkin/templates/messages.nat.tmpl:238
+msgid "During deletion of attachment =%1= an error was found."
+msgstr ""
+
+#: templates/messages.tmpl:63
+#, fuzzy
+msgid ""
+"During deletion of attachment =%1= an error was found. Please notify your %2 "
+"administrator."
+msgstr ""
+"В процессе удаления приложения =%1= обнаружена ошибка. Пожалуйста, известите "
+"вашего администратора %2."
+
+#: templates/messages.tmpl:55
+#, fuzzy
+msgid ""
+"During move of attachment %1 to %2 an error was found. Please notify your %3 "
+"administrator."
+msgstr ""
+"В процессе перемещения приложения %1 в %2 обнаружена ошибка. Пожалуйста, "
+"известите вашего администратора %3."
+
+#: twikiplugins/NatSkin/templates/messages.nat.tmpl:54
+msgid "During rename of topic %1 to %2 an error (%3) was found."
+msgstr ""
+
+#: templates/messages.tmpl:91
+#, fuzzy
+msgid ""
+"During rename of topic %1 to %2 an error (%3) was found. Please notify your %"
+"4 administrator."
+msgstr ""
+"В ходе переименования страницы %1 в %2 обнаружена ошибка (%3). Пожалуйста, "
+"известите вашего администратора %4."
+
+#: twikiplugins/NatSkin/templates/oopsrenameerr.nat.tmpl:5
+msgid "During rename of topic %1 to %2 an error was found."
+msgstr ""
+
+#: twikiplugins/NatSkin/templates/messages.nat.tmpl:61
+msgid "During rename of web %1 to %2 an error (%3) was found."
+msgstr ""
+
+#: templates/messages.tmpl:94
+#, fuzzy
+msgid ""
+"During rename of web %1 to %2 an error (%3) was found. Please notify your %4 "
+"administrator."
+msgstr ""
+"В ходе переименования раздела %1 в %2 обнаружена ошибка (%3). Пожалуйста, "
+"известите вашего администратора %4."
+
+#: twikiplugins/NatSkin/templates/messages.nat.tmpl:224
+msgid "During save of %1 an error was found by the version control system."
+msgstr ""
+
+#: templates/messages.tmpl:344
+#, fuzzy
+msgid ""
+"During save of %1 an error was found by the version control system. Please "
+"notify your %2 administrator."
+msgstr ""
+"В ходе сохранения %1 Система Управления Версиями обнаружила ошибку. "
+"Пожалуйста, известите вашего администратора %2."
+
+#: twikiplugins/NatSkin/templates/oopssaveerr.nat.tmpl:5
+msgid ""
+"During save of file %1 an error was found by the version control system."
+msgstr ""
+
+#: templates/oopssaveerr.tmpl:11
+#: twikiplugins/PatternSkin/templates/oopssaveerr.pattern.tmpl:11
+#, fuzzy
+msgid ""
+"During save of file %1 an error was found by the version control system. "
+"Please notify your %2 administrator."
+msgstr ""
+"В ходе сохранения файла %1 Система Управления Версиями обнаружила ошибку. "
+"Пожалуйста, известите вашего администратора %2."
+
+#: data/TWiki/TWikiRegistration.txt:96
+msgid "E-mail address:"
+msgstr "Адрес E-mail:"
+
+#: templates/messages.tmpl:156
+msgid "E-mail changed successfully!"
+msgstr "E-mail успешно изменён!"
+
+#: twikiplugins/PatternSkin/templates/settings.pattern.tmpl:35
+#, fuzzy
+msgid "Each preference has the syntax"
+msgstr "Каждая настройка имеет синтакс"
+
+#: twikiplugins/NatSkin/templates/edittopicactions.nat.tmpl:3
+#: twikiplugins/NatSkin/templates/oopsmore.nat.tmpl:39
+#: twikiplugins/NatSkin/templates/preview.nat.tmpl:34
+#: twikiplugins/NatSkin/templates/previewtopicactions.nat.tmpl:3
+#: twikiplugins/NatSkin/templates/settingstopicactions.nat.tmpl:3
+#: twikiplugins/NatSkin/templates/strings.nat.tmpl:8
+#: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:48
+msgid "Edit"
+msgstr "Редактировать"
+
+#: templates/oopsleaseconflict.tmpl:26
+#: twikiplugins/ClassicSkin/templates/oopsleaseconflict.classic.tmpl:28
+#: twikiplugins/NatSkin/templates/oopsleaseconflict.nat.tmpl:44
+#: twikiplugins/NatSkin/templates/oopslocked.nat.tmpl:14
+#: twikiplugins/PatternSkin/templates/oopsleaseconflict.pattern.tmpl:27
+msgid "Edit Anyway"
+msgstr "Всё равно редактировать"
+
+#: twikiplugins/PatternSkin/data/Main/PatternSkinUserViewTemplate.txt:5
+msgid "Edit personal data"
+msgstr "Изменить личные данные"
+
+#: twikiplugins/NatSkin/templates/oopsmore.nat.tmpl:37
+msgid "Edit preference settings for %1"
+msgstr "Изменить параметры для %1"
+
+#: twikiplugins/PatternSkin/data/Main/PatternSkinUserViewTemplate.txt:10
+msgid "Edit text"
+msgstr "Редактировать текст"
+
+#: twikiplugins/NatSkin/templates/strings.nat.tmpl:9
+msgid "Edit this topic"
+msgstr "Редактировать эту страницу"
+
+#: twikiplugins/ClassicSkin/templates/view.classic.tmpl:28
+#: twikiplugins/PatternSkin/data/Main/PatternSkinUserViewTemplate.txt:18
+msgid "Edit this topic text"
+msgstr "Редактировать текст этой страницы"
+
+#: twikiplugins/PatternSkin/templates/oopsmoresettings.pattern.tmpl:2
+msgid "Edit topic preference settings"
+msgstr "Редактировать настройки страницы"
+
+#: templates/messages.tmpl:270
+msgid ""
+"Either the code is not valid, or you have already confirmed your "
+"registration using it."
+msgstr ""
+
+#: templates/messages.tmpl:335
+msgid ""
+"Either you did not specify a file name, or the file you are trying to upload "
+"%1 has no content. You may not upload an empty file."
+msgstr ""
+
+#: twikiplugins/NatSkin/templates/oopsauth.nat.tmpl:4
+msgid "Either you need to register or the authentication failed"
+msgstr ""
+
+#: twikiplugins/NatSkin/templates/edittoolbar.natedit.tmpl:33
+msgid "Embed image"
+msgstr ""
+
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:101
+msgid "Enlarge edit box"
+msgstr "Расширить область редактирования"
+
+#: twikiplugins/PatternSkin/templates/login.pattern.tmpl:50
+#, fuzzy
+msgid "Enter a new username and password to change identity:"
+msgstr "Введите новые имя пользователя и пароль для смены"
+
+#: twikiplugins/ClassicSkin/templates/login.classic.tmpl:18
+#: twikiplugins/PatternSkin/templates/login.pattern.tmpl:66
+msgid ""
+"Enter your TWiki.LoginName. (Typically First name and last name, no space, "
+"no dots, capitalized, e.g. !JohnSmith, unless you chose otherwise). Visit %"
+"TWIKIWEB%.TWikiRegistration if you do not have one."
+msgstr ""
+"Введите ваше [[TWiki.LoginName][ИмяПользователя]]. (Обычно имя и фамилия, "
+"без пробелов, без точек, начиная с прописной буквы, например: ВасилийПупкин "
+"или иначе). Посетите %TWIKIWEB%.TWikiRegistration если вы ещё не "
+"зарегистрирваны."
+
+#: twikiplugins/NatSkin/templates/oopsmngcreateweb.nat.tmpl:32
+#: twikiplugins/NatSkin/templates/oopsmngcreateweb.nat.tmpl:37
+#: twikiplugins/NatSkin/templates/oopsmngcreateweb.nat.tmpl:49
+msgid "Error message"
+msgstr "Сообщение об ошибке"
+
+#: templates/messages.tmpl:206
+#, fuzzy
+msgid "Error registering new user"
+msgstr "Ошибка регистрации пользователя %1"
+
+#: templates/messages.tmpl:197
+#: twikiplugins/NatSkin/templates/messages.nat.tmpl:141
+msgid "Error registering user %1"
+msgstr "Ошибка регистрации пользователя %1"
+
+#: templates/messages.tmpl:343
+#: twikiplugins/NatSkin/templates/messages.nat.tmpl:223
+msgid "Error saving topic"
+msgstr "Ошибка сохранения страницы"
+
+#: twikiplugins/NatSkin/templates/oopsmanage.nat.tmpl:8
+msgid "Error: %1 <span class=\"twikiAlert\">%2</span>"
+msgstr ""
+
+#: twikiplugins/NatSkin/templates/oopsmngcreateweb.nat.tmpl:17
+msgid "Error: Cannot create this web because it already exists"
+msgstr "Ошибка: Невозможно создать раздел, т.к он уже существует"
+
+#: twikiplugins/NatSkin/templates/oopsmngcreateweb.nat.tmpl:34
+msgid "Error: Could not copy topics to the new web"
+msgstr "Ошибка: Невозможно скопировать страницы в новый раздел"
+
+#: twikiplugins/NatSkin/templates/oopsmngcreateweb.nat.tmpl:30
+msgid "Error: Could not create the new web"
+msgstr "Ошибка: Невозможно создать новый раздел"
+
+# ,fuzzy
+#: twikiplugins/NatSkin/templates/oopsmngcreateweb.nat.tmpl:39
+msgid "Error: Could not update the <nop>WebPreferences"
+msgstr "Ошибка: Не могу обновить данные <nop>WebPreferences"
+
+#: templates/messages.tmpl:414
+#, fuzzy
+msgid "Error: File attachment at %1,%2 does not exist"
+msgstr "Ошибка: Файл приложения в %1,%2 не существует"
+
+#: twikiplugins/NatSkin/templates/oopsmngcreateweb.nat.tmpl:8
+msgid "Error: Invalid name of new web"
+msgstr "Ошибка: Неверное имя нового раздела"
+
+#: twikiplugins/NatSkin/templates/oopsmngcreateweb.nat.tmpl:20
+msgid "Error: Name of base web is missing or does not exist"
+msgstr "Ошибка: Имя основного раздела отсутвует или не существует"
+
+#: twikiplugins/NatSkin/templates/oopsmngcreateweb.nat.tmpl:5
+msgid "Error: Name of new web is missing"
+msgstr "Ошибка: Отсутствует имя нового раздела"
+
+#: templates/messages.tmpl:416
+#, fuzzy
+msgid ""
+"Error: Unsupported content type: %1 (Must be =text/html=, =text/plain= or "
+"=text/css=)"
+msgstr ""
+"Ошибка: Не поддерживаемый content type: %1 (Должно быть =text/html=, =text/"
+"plain= или =text/css=)"
+
+#: templates/messages.tmpl:415
+#, fuzzy
+msgid "Error: Unsupported protocol. (Must be 'http://domain/...')"
+msgstr "Ошибка: Не поддерживаемый протокол. (Должно быть 'http://domain/...')"
+
+#: twikiplugins/NatSkin/templates/oopsmngcreateweb.nat.tmpl:23
+msgid "Error: Web color is missing or has an invalid format"
+msgstr "Ошибка: Цвет раздела не задан или имеет неверный формат"
+
+#: templates/messages.tmpl:220
+#: twikiplugins/NatSkin/templates/messages.nat.tmpl:155
+msgid "Errors"
+msgstr "Ошибки"
+
+#: twikiplugins/NatSkin/templates/oopsmngcreateweb.nat.tmpl:18
+msgid "Existing Web:"
+msgstr "Существующий раздел:"
+
+#: twikiplugins/NatSkin/templates/attach.nat.tmpl:53
+msgid "Existing attachments for <nop>%1"
+msgstr "Существующие приложения в <nop>%1"
+
+#: twikiplugins/NatSkin/templates/changeformsidebar.nat.tmpl:10
+#: twikiplugins/PatternSkin/templates/changeform.pattern.tmpl:28
+msgid "Existing form data will be lost! (still available in old version)"
+msgstr ""
+"Имеющиеся в форме данные будут потеряны! (но будут доступны в старой версии)"
+
+#: twikiplugins/NatSkin/templates/oopsnoweb.nat.tmpl:5
+msgid "Explanation"
+msgstr "Объяснение"
+
+#: twikiplugins/NatSkin/templates/editsidebar.nat.tmpl:16
+msgid "External"
+msgstr "Внешний"
+
+#: twikiplugins/NatSkin/templates/edittoolbar.natedit.tmpl:29
+msgid "External link"
+msgstr "Внешние ссылки"
+
+#: twikiplugins/NatSkin/data/TWiki/MySideBarTemplate.txt:22
+msgid "FAQs"
+msgstr "ЧАВО"
+
+#: templates/messages.tmpl:424
+#, fuzzy
+msgid "Failed to include URL %1"
+msgstr "Не смог включить URL %1"
+
+#: data/TWiki/ChangeEmailAddress.txt:26 data/TWiki/ChangePassword.txt:17
+#: data/TWiki/ResetPassword.txt:17 data/TWiki/TWikiRegistration.txt:264
+msgid "Fields marked %1 are required"
+msgstr "Помеченные %1 поля обязательны для заполнения"
+
+#: twikiplugins/NatSkin/templates/oopsregrequ.nat.tmpl:5
+msgid "Fields with a =<span class=\"twikiAlert\">**</span>= mark are required."
+msgstr ""
+
+#: twikiplugins/NatSkin/data/TWiki/MySideBarTemplate.txt:26
+msgid "File Attachment"
+msgstr ""
+
+#: twikiplugins/NatSkin/templates/attachsidebar.nat.tmpl:4
+#: twikiplugins/NatSkin/templates/moveattachmentsidebar.nat.tmpl:4
+msgid "File Attachments"
+msgstr ""
+
+#: templates/messages.tmpl:320
+#: twikiplugins/NatSkin/templates/messages.nat.tmpl:249
+#, fuzzy
+msgid "File has been uploaded with different name"
+msgstr "Файл был загружен с другим именем"
+
+#: twikiplugins/NatSkin/templates/oopsmore.nat.tmpl:18
+msgid "Find"
+msgstr ""
+
+#: templates/oopsmore.tmpl:20 templates/oopsmore.tmpl:22
+#: twikiplugins/ClassicSkin/templates/oopsmore.classic.tmpl:18
+#: twikiplugins/ClassicSkin/templates/oopsmore.classic.tmpl:20
+#: twikiplugins/NatSkin/templates/oopsmore.nat.tmpl:15
+#: twikiplugins/PatternSkin/templates/oopsmorebacklinks.pattern.tmpl:3
+#: twikiplugins/PatternSkin/templates/oopsmorebacklinks.pattern.tmpl:5
+msgid "Find topics that link to %1 ..."
+msgstr "Найти страницы ссылающиеся на %1 ..."
+
+#: data/TWiki/TWikiRegistration.txt:274
+msgid ""
+"Finish creating an account for you, so that you can start editing pages "
+"using your WikiName."
+msgstr ""
+"Завершит создание учётной записи, после чего вы сможете редактировать "
+"страницы, используя своё [[WikiName][ВикиИмя]]."
+
+#: data/TWiki/TWikiRegistration.txt:80
+msgid "First Name:"
+msgstr "Имя:"
+
+#: twikiplugins/NatSkin/templates/edit.nat.tmpl:61
+#: twikiplugins/NatSkin/templates/preview.nat.tmpl:46
+#: twikiplugins/NatSkin/templates/preview.natedit.tmpl:7
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:43
+#: twikiplugins/PatternSkin/templates/preview.pattern.tmpl:24
+msgid "Force new revision"
+msgstr "Создать новую версию"
+
+#: data/TWiki/ChangePassword.txt:5
+msgid "Forgotten your password?"
+msgstr "Забыли пароль?"
+
+#: templates/messages.tmpl:292
+#, fuzzy
+msgid "Form Definition %1 missing"
+msgstr "Недостает Определения Формы %1"
+
+#: twikiplugins/NatSkin/templates/changeformsidebar.nat.tmpl:4
+#: twikiplugins/NatSkin/templates/editsidebar.nat.tmpl:8
+msgid "Form based input"
+msgstr ""
+
+#: templates/messages.tmpl:297
+#: twikiplugins/NatSkin/templates/oopsnoformdef.nat.tmpl:3
+#, fuzzy
+msgid "Form definition missing"
+msgstr "Недостает Определения Формы"
+
+#: twikiplugins/NatSkin/data/TWiki/MySideBarTemplate.txt:25
+#: twikiplugins/NatSkin/templates/editsidebar.nat.tmpl:7
+msgid "Formatted Search"
+msgstr "Форматированный поиск"
+
+#: twikiplugins/NatSkin/templates/search.nat.tmpl:27
+msgid "Found <span>%1</span> topics."
+msgstr ""
+
+#: twikiplugins/NatSkin/templates/renamebase.nat.tmpl:19
+msgid "From"
+msgstr "Из"
+
+#: twikiplugins/NatSkin/templates/moveattachment.nat.tmpl:19
+#: twikiplugins/NatSkin/templates/renamewebbase.nat.tmpl:23
+msgid "From:"
+msgstr "Из:"
+
+#: twikiplugins/NatSkin/templates/oopsmore.nat.tmpl:70
+msgid "Get a fresh page of the topic %1"
+msgstr ""
+
+#: twikiplugins/NatSkin/templates/renamesidebar.nat.tmpl:11
+msgid ""
+"Get help on <a href=\"%1\" target=\"_blank\">Renaming and moving topics</a>."
+msgstr ""
+
+#: twikiplugins/PatternSkin/templates/renamebase.pattern.tmpl:46
+#, fuzzy
+msgid ""
+"Get help on <a target='ManagingTopics' onclick=\"return launchWindow('%"
+"1','ManagingTopics')\" href=\"%2\" rel='nofollow'>Renaming and moving "
+"topics</a>."
+msgstr ""
+"Получить помощь по <a target='ManagingTopics' onclick=\"return launchWindow"
+"('%1','ManagingTopics')\" href=\"%2\" rel='nofollow'>Переименованию и "
+"перемещению страниц</a>."
+
+#: twikiplugins/PatternSkin/templates/settings.pattern.tmpl:34
+msgid ""
+"Get help on <a target='TWikiVariables' onclick=\"return launchWindow('%"
+"1','TWikiVariables')\" href='%2' rel='nofollow'>Setting topic preferences</"
+"a>."
+msgstr ""
+
+#: twikiplugins/NatSkin/templates/messages.nat.tmpl:233
+msgid ""
+"Go <a href=\"javascript:history.back()\">back</a> in your browser and save "
+"your changes locally."
+msgstr ""
+
+#: twikiplugins/PatternSkin/templates/changeform.pattern.tmpl:20
+msgid "Go back"
+msgstr "Вернуться"
+
+#: templates/messages.tmpl:289
+msgid ""
+"Go back in your browser and insert information for all mandatory fields."
+msgstr "Вернитесь назад в вашем браузере и заполните все обязательные поля."
+
+#: templates/messages.tmpl:348 templates/oopssaveerr.tmpl:15
+#: twikiplugins/PatternSkin/templates/oopssaveerr.pattern.tmpl:15
+#, fuzzy
+msgid "Go back in your browser and save your changes locally."
+msgstr "Вернитесь в вашем браузере и сохраните ваши изменения локально."
+
+#: twikiplugins/NatSkin/data/TWiki/MySideBarTemplate.txt:21
+#, fuzzy
+msgid "Good Style"
+msgstr "Руководство по хорошему стилю"
+
+#: templates/messages.tmpl:244
+#: twikiplugins/NatSkin/templates/messages.nat.tmpl:177
+#: twikiplugins/NatSkin/templates/oopsregwiki.nat.tmpl:8
+msgid "Good examples:"
+msgstr "Хорошие примеры:"
+
+#: twikiplugins/NatSkin/templates/editsidebar.nat.tmpl:4
+msgid "GoodStyle"
+msgstr "Хороший стиль"
+
+#: twikiplugins/NatSkin/data/Main/WebLinks.txt:11
+#: twikiplugins/PatternSkin/data/TWiki/WebLeftBar.txt:6
+msgid "Groups"
+msgstr "Группы"
+
+#: twikiplugins/ClassicSkin/data/TWiki/ClassicSkinLogin.txt:2
+#: twikiplugins/PatternSkin/data/TWiki/WebLeftBarLogin.txt:3
+msgid "Hello %1!"
+msgstr "Привет %1!"
+
+#: data/TWiki/WebSearch.txt:29 data/TWiki/WebSearchAdvanced.txt:37
+#: twikiplugins/NatSkin/templates/attachsidebar.nat.tmpl:3
+#: twikiplugins/NatSkin/templates/changeformsidebar.nat.tmpl:3
+#: twikiplugins/NatSkin/templates/edittoolbar.natedit.tmpl:53
+#: twikiplugins/NatSkin/templates/moveattachmentsidebar.nat.tmpl:3
+#: twikiplugins/NatSkin/templates/renamesidebar.nat.tmpl:3
+#: twikiplugins/NatSkin/templates/renamewebsidebar.nat.tmpl:3
+msgid "Help"
+msgstr "Помощь"
+
+#: twikiplugins/NatSkin/templates/attach.nat.tmpl:42
+msgid "Hide attachment in normal topic view."
+msgstr "Скрыть приложение при просмотре страницы."
+
+#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:87
+msgid "Hide attachments"
+msgstr "Скрыть приложения"
+
+#: twikiplugins/NatSkin/templates/attach.nat.tmpl:40
+msgid "Hide file:"
+msgstr "Скрыть файл:"
+
+#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:28
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:14
+#: twikiplugins/PatternSkin/templates/renamebase.pattern.tmpl:31
+msgid "Hide help"
+msgstr "Скрыть подсказку"
+
+#: twikiplugins/NatSkin/templates/attachsidebar.nat.tmpl:8
+#: twikiplugins/NatSkin/templates/moveattachmentsidebar.nat.tmpl:8
+msgid "Hiding Attachments"
+msgstr "Скрытые приложения"
+
+#: twikiplugins/PatternSkin/templates/viewprint.pattern.tmpl:30
+msgid "History:"
+msgstr "История:"
+
+#: data/TWiki/NewUserTemplate.txt:80
+msgid "Horizontal size of text edit box:"
+msgstr "Горищонтальный размер текстовой области:"
+
+#: templates/registernotify.tmpl:16
+#: twikiplugins/ClassicSkin/templates/registernotify.classic.tmpl:16
+msgid "How about attaching your photo?"
+msgstr "Как добавить ваше фото?"
+
+#: templates/registerconfirm.tmpl:4
+#: twikiplugins/ClassicSkin/templates/registerconfirm.classic.tmpl:4
+msgid "How to activate your %1 registration"
+msgstr "Как активировать вашу %1 регистрацию"
+
+#: templates/messages.tmpl:322
+msgid ""
+"However, the filename has been changed from %1 to %2. Please make a note of "
+"it."
+msgstr ""
+
+#: twikiplugins/PatternSkin/templates/login.pattern.tmpl:70
+msgid "I forgot my password"
+msgstr "Я забыл свой пароль"
+
+#: data/TWiki/TWikiPreferences.txt:42
+msgid "Ideas, requests, problems regarding %1? <a href='%2'>Send feedback</a>"
+msgstr ""
+"Есть идеи, вопросы или проблемы, связанные с %1? <a href='%2'>Свяжитесь с "
+"нами</a>"
+
+#: templates/messages.tmpl:306
+#: twikiplugins/NatSkin/templates/oopsnoformdef.nat.tmpl:13
+#, fuzzy
+msgid "If this line isn't present see _upgrade_ section below"
+msgstr "Если нет такой строки, смотрите, пожалуйста, далее раздел _Обновление_"
+
+#: templates/messages.tmpl:300
+#: twikiplugins/NatSkin/templates/oopsnoformdef.nat.tmpl:16
+#, fuzzy
+msgid "If this topic is missing create it, otherwise check it for errors."
+msgstr "Если этой страницы нет, создать ее, иначе проверить ее на ошибки."
+
+#: twikiplugins/NatSkin/templates/oopsleaseconflict.nat.tmpl:37
+msgid "If unsure, click 'Cancel'."
+msgstr ""
+
+#: data/TWiki/WebSearch.txt:48 data/TWiki/WebSearchAdvanced.txt:91
+msgid ""
+"If you already know the name of the topic, enter the name of the topic into "
+"the [[%1][Jump box]] at the top"
+msgstr ""
+"Если вы уже знаете имя страницы на которую хотите перейти, то введите его в "
+"поле  [[%1][Перейти]] вверху страницы"
+
+#: templates/messages.tmpl:385
+#, fuzzy
+msgid ""
+"If you are developing a <nop>TWikiApplication, see %1 for a description of "
+"the correct parameters."
+msgstr ""
+"Если вы разрабатываете <nop>TWikiApplication, то см. описание параметров в %1"
+
+#: templates/messages.tmpl:450
+#: twikiplugins/NatSkin/templates/oopsnoweb.nat.tmpl:11
+#, fuzzy
+msgid "If you came here by clicking on a question mark link"
+msgstr "Если вы попали сюда нажатием на ссылающийся вопросительный знак"
+
+#: twikiplugins/PatternSkin/templates/renameattachmentdelete.pattern.tmpl:40
+#, fuzzy
+msgid "If you enter a different name, make sure the topic does  exist."
+msgstr "Если вы ввели другое имя, то убедитесь, что страница существует."
+
+#: twikiplugins/NatSkin/templates/oopsauth.nat.tmpl:10
+msgid "If you expected to be logged in at this point:"
+msgstr ""
+
+#: templates/registerconfirm.tmpl:14 templates/registernotify.tmpl:23
+#: twikiplugins/ClassicSkin/templates/registerconfirm.classic.tmpl:14
+#: twikiplugins/ClassicSkin/templates/registernotify.classic.tmpl:23
+#, fuzzy
+msgid ""
+"If you got this e-mail by mistake: Somebody (%1) registered at the %2 site "
+"using your mail address %3. Contact %4 if this is in error."
+msgstr ""
+"Если вы не ждете этого письма: Кто-то (%1) зарегистрировался на %2, "
+"используя ваш электронный адрес: %3. Сообщите, пожалуйста, %4 если это не Вы."
+
+#: data/TWiki/TWikiRegistration.txt:284
+msgid "If you have any questions about registration, send an e-mail to %1."
+msgstr "Если у вас есть вопросы по регистрации, пишите на e-mail: %1"
+
+#: data/TWiki/ChangeEmailAddress.txt:33 data/TWiki/ChangePassword.txt:24
+#: data/TWiki/ResetPassword.txt:24 data/TWiki/VarMAKETEXT.txt:17
+#: templates/mailresetpassword.tmpl:14
+#: twikiplugins/ClassicSkin/templates/mailresetpassword.classic.tmpl:14
+#: twikiplugins/PatternSkin/templates/login.pattern.tmpl:76
+msgid "If you have any questions, please contact %1."
+msgstr "Если у вас есть какие-либо вопросы, пожалуйста, пишите %1."
+
+#: templates/registernotify.tmpl:25
+#: twikiplugins/ClassicSkin/templates/registernotify.classic.tmpl:25
+msgid "If you haven't set a password yet or you want to reset it, go to: %1"
+msgstr ""
+"Если вы не задали пароль или хотите его сбросить, перейдите по ссылке: %1"
+
+#: twikiplugins/NatSkin/templates/oopsnoweb.nat.tmpl:23
+#, fuzzy
+msgid "If you intend to do a full text search:"
+msgstr "Если вы намерены искать по полным текстам:"
+
+#: templates/messages.tmpl:383
+msgid ""
+"If you received a link to this topic in an e-mail or just want to look at "
+"the topic, [[%1][cancel save]] to go to %2."
+msgstr ""
+
+#: templates/messages.tmpl:462
+msgid "If you want to create the topic"
+msgstr "Если вы хотите создать эту страницу"
+
+#: twikiplugins/NatSkin/templates/messages.nat.tmpl:323
+msgid "If you want to create the topic then [[%1][click here]]."
+msgstr "Если вы желаете создать эту страницу, нажмите [[%1][здесь]]."
+
+#: templates/messages.tmpl:455
+#: twikiplugins/NatSkin/templates/oopsnoweb.nat.tmpl:17
+msgid "If you would like to create this web"
+msgstr "Если вы хотите создать этот раздел"
+
+#: data/TWiki/ChangeEmailAddress.txt:13
+msgid ""
+"If your old e-mail addresses are all invalid (you can't receive mail there "
+"any more) and you have forgotten your password, please contact %1 for help."
+msgstr ""
+
+#: data/TWiki/ChangeEmailAddress.txt:11
+msgid ""
+"If your user topic is not protected from changes by other people, and you "
+"don't register an e-mail address using this form, then your user account "
+"could be hijacked by someone else."
+msgstr ""
+
+#: twikiplugins/NatSkin/templates/edittoolbar.natedit.tmpl:37
+msgid "Ignore wiki formatting"
+msgstr "Игнорировать форматирование вики"
+
+#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:75
+msgid "Images will be displayed, for other attachments a link will be created."
+msgstr ""
+"(Изображения будут отображены, для остальных вложений будет создана ссылка)."
+
+#: twikiplugins/NatSkin/templates/oopssave.nat.tmpl:3
+msgid "Improper use of the \"<code>save</code>\" script"
+msgstr ""
+
+#: data/TWiki/WebSearchAdvanced.txt:58
+msgid "In reversed order"
+msgstr "В обратном порядке"
+
+#: templates/messages.tmpl:325
+msgid ""
+"In some cases, TWiki changes the name of the uploaded file to make it safe "
+"and accessible across all platforms:"
+msgstr ""
+
+#: twikiplugins/NatSkin/templates/editsidebar.nat.tmpl:9
+msgid "Including"
+msgstr ""
+
+#: templates/messages.tmpl:234 templates/messages.tmpl:241
+#: twikiplugins/NatSkin/templates/messages.nat.tmpl:173
+#: twikiplugins/NatSkin/templates/messages.nat.tmpl:177
+msgid "Incorrect %1"
+msgstr "Неверное %1"
+
+#: templates/messages.tmpl:244
+msgid "Incorrect %1.WikiNames:"
+msgstr "Неверные %1.WikiNames:"
+
+#: twikiplugins/NatSkin/templates/oopsregwiki.nat.tmpl:3
+#: twikiplugins/NatSkin/templates/oopsregwiki.nat.tmpl:8
+msgid "Incorrect <nop>WikiName"
+msgstr "Неверное <nop>WikiName"
+
+#: templates/messages.tmpl:97
+#: twikiplugins/NatSkin/templates/messages.nat.tmpl:68
+#: twikiplugins/NatSkin/templates/oopswrongpassword.nat.tmpl:4
+msgid "Incorrect Password"
+msgstr "Неверный пароль"
+
+#: twikiplugins/NatSkin/templates/oopsbadpwformat.nat.tmpl:5
+msgid "Incorrect format of submitted data: <b>%1</b>"
+msgstr ""
+
+#: templates/messages.tmpl:381
+#, fuzzy
+msgid "Incorrect parameters to the =%1= script"
+msgstr "Некорректные параметры скрипта =%1="
+
+#: twikiplugins/NatSkin/data/TWiki/TWikiWebLinks.txt:8
+#: twikiplugins/PatternSkin/data/Main/WebLeftBar.txt:6
+#: twikiplugins/PatternSkin/data/Sandbox/WebLeftBar.txt:6
+#: twikiplugins/PatternSkin/data/TWiki/WebLeftBar.txt:7
+#: twikiplugins/PatternSkin/data/TWiki/WebLeftBarExample.txt:5
+#: twikiplugins/PatternSkin/data/Trash/WebLeftBar.txt:4
+#: twikiplugins/PatternSkin/data/_default/WebLeftBar.txt:5
+msgid "Index"
+msgstr "Индекс"
+
+#: templates/messages.tmpl:208
+msgid "Internal error when sending email to %1."
+msgstr ""
+
+#: twikiplugins/NatSkin/templates/edittoolbar.natedit.tmpl:31
+msgid "Internal link"
+msgstr ""
+
+#: templates/messages.tmpl:329
+msgid ""
+"International (8-bit) characters are removed (replaced by US-ASCII "
+"equivalents for Latin-1)"
+msgstr ""
+
+#: templates/messages.tmpl:267
+#: twikiplugins/NatSkin/templates/messages.nat.tmpl:194
+msgid "Invalid Activation Code"
+msgstr "Неверный код активации"
+
+#: templates/messages.tmpl:259
+#: twikiplugins/NatSkin/templates/messages.nat.tmpl:186
+#: twikiplugins/NatSkin/templates/oopsregemail.nat.tmpl:3
+msgid "Invalid e-mail address"
+msgstr "Неверный e-mail"
+
+#: templates/messages.tmpl:396
+msgid ""
+"It is probably OK to go ahead and edit - unless you intend to change data in "
+"a form attached to the topic. If %1 actually _does_ save the topic while you "
+"are editing, your changes will be merged, and nothing will be lost. Form "
+"data cannot easily be merged though, so in this case you are recommended to "
+"check with %1 first."
+msgstr ""
+
+#: data/TWiki/WebTopicCreator.txt:108
+#: twikiplugins/PatternSkin/templates/rename.pattern.tmpl:33
+msgid ""
+"It's usually best to choose a <a target='WikiWord' onclick=\"return "
+"launchWindow('%1','WikiWord')\" href='%1' rel='nofollow'>WikiWord</a> for "
+"the new topic name, otherwise automatic linking may not work. Characters not "
+"allowed in topic names, such as spaces will automatically be removed."
+msgstr ""
+
+#: twikiplugins/PatternSkin/templates/renameweb.pattern.tmpl:19
+#, fuzzy
+msgid ""
+"It's usually best to choose a short name for the new web, as it is easier to "
+"link to them later on. Characters not allowed in web names, such as spaces "
+"will automatically be removed."
+msgstr ""
+"Обычно лучше выбрать для нового раздела короткое имя, чтобы облегчить "
+"дальнейшие ссылки в него. Недопустимые в именах раздела символы, в "
+"частности, пробелы, будут автоматически удалены."
+
+#: twikiplugins/NatSkin/templates/edittoolbar.natedit.tmpl:7
+msgid "Italic text"
+msgstr "Курсив"
+
+#: twikiplugins/PatternSkin/data/TWiki/WebLeftBarSearch.txt:2
+#: twikiplugins/PatternSkin/data/TWiki/WebTopBar.txt:7
+msgid "Jump"
+msgstr "Перейти"
+
+#: twikiplugins/NatSkin/templates/edittoolbar.natedit.tmpl:25
+msgid "Justify text"
+msgstr ""
+
+#: twikiplugins/PatternSkin/templates/oopslanguagechanged.pattern.tmpl:8
+msgid "Language Changed"
+msgstr "Язык изменен"
+
+#: data/TWiki/TWikiRegistration.txt:84
+msgid "Last Name:"
+msgstr "Фамилия:"
+
+#: data/TWiki/WebSearchAdvanced.txt:56
+msgid "Last editor"
+msgstr "Последнему кто редактировал"
+
+#: data/TWiki/WebSearchAdvanced.txt:55
+msgid "Last modified time"
+msgstr "Времени последнего изменения"
+
+#: twikiplugins/NatSkin/templates/edittoolbar.natedit.tmpl:43
+msgid "Level 1 headline"
+msgstr "Заголовок 1-го уровня"
+
+#: twikiplugins/NatSkin/templates/edittoolbar.natedit.tmpl:45
+msgid "Level 2 headline"
+msgstr "Заголовок 2-го уровня"
+
+#: twikiplugins/NatSkin/templates/edittoolbar.natedit.tmpl:47
+msgid "Level 3 headline"
+msgstr "Заголовок 3-го уровня"
+
+#: twikiplugins/NatSkin/templates/edittoolbar.natedit.tmpl:49
+msgid "Level 4 headline"
+msgstr "Заголовок 4-го уровня"
+
+#: data/TWiki/WebSearchAdvanced.txt:80
+msgid "Limit results to:"
+msgstr "Ограничить вывод результатов:"
+
+#. ($left)
+#. ($right)
+#: lib/TWiki/UI/RDiff.pm:158 lib/TWiki/UI/RDiff.pm:160
+msgid "Line: %1"
+msgstr "Строка: %1"
+
+#. ($left,$right)
+#: lib/TWiki/UI/RDiff.pm:293
+msgid "Line: %1 to %2"
+msgstr "Строка: с %1 по %2"
+
+#: twikiplugins/NatSkin/templates/attach.nat.tmpl:33
+msgid "Link:"
+msgstr "Ссылка:"
+
+#: twikiplugins/NatSkin/templates/attachsidebar.nat.tmpl:7
+#: twikiplugins/NatSkin/templates/moveattachmentsidebar.nat.tmpl:7
+msgid "Linking to Attachments"
+msgstr "Связь с приложениями"
+
+#: twikiplugins/NatSkin/data/TWiki/MySideBarTemplate.txt:8
+msgid "Links"
+msgstr "Cсылки"
+
+#: data/TWiki/WebSearch.txt:49 data/TWiki/WebSearchAdvanced.txt:92
+msgid "List all topics in the %1 web in alphabetical order"
+msgstr "Вывести все страницы раздела %1 в алфавитном порядке"
+
+#: data/TWiki/WebTopicViewTemplate.txt:13
+#, fuzzy
+msgid "List more similar topic in this web"
+msgstr "Похожие страницы в этом разделе (если есть):"
+
+#: data/TWiki/WebSearch.txt:50 data/TWiki/WebSearchAdvanced.txt:93
+msgid "List topics that start with the letter:"
+msgstr "Показать темы, начинающиеся с буквы:"
+
+#: twikiplugins/NatSkin/templates/attach.nat.tmpl:18
+msgid "Local file:"
+msgstr "Локальный файл"
+
+#: twikiplugins/NatSkin/templates/renamewebbase.nat.tmpl:42
+msgid "Locked Topics"
+msgstr "Блокирванных страниц"
+
+#: twikiplugins/PatternSkin/templates/constants.pattern.tmpl:7
+msgid "Log In"
+msgstr "Войти"
+
+#: twikiplugins/PatternSkin/templates/constants.pattern.tmpl:8
+msgid "Log Out"
+msgstr "Выйти"
+
+#: twikiplugins/NatSkin/templates/oopslogonbase.nat.tmpl:9
+#: twikiplugins/NatSkin/templates/strings.nat.tmpl:2
+msgid "Login"
+msgstr "Вход"
+
+#: templates/mailresetpassword.tmpl:9
+#: twikiplugins/ClassicSkin/templates/mailresetpassword.classic.tmpl:9
+msgid "Login name %1"
+msgstr "Имя пользователя %1"
+
+#: twikiplugins/NatSkin/data/TWiki/TWikiWebTopicActions.txt:4
+msgid "Login to %1"
+msgstr "Вход в %1"
+
+#: twikiplugins/PatternSkin/templates/login.pattern.tmpl:99
+msgid "Logon"
+msgstr "Вход"
+
+#: twikiplugins/NatSkin/templates/strings.nat.tmpl:3
+msgid "Logout"
+msgstr ""
+
+#: twikiplugins/NatSkin/data/TWiki/TWikiWebTopicActions.txt:8
+msgid "Logout of %1"
+msgstr ""
+
+#: twikiplugins/NatSkin/templates/messages.nat.tmpl:147
+msgid "Mail Error"
+msgstr "Ошибка электронной почты"
+
+#: templates/messages.tmpl:218
+#: twikiplugins/NatSkin/templates/messages.nat.tmpl:150
+msgid "Mail to"
+msgstr "Написать письмо"
+
+#: data/TWiki/WebSearchAdvanced.txt:62
+msgid "Make search:"
+msgstr "Провести поиск:"
+
+#: twikiplugins/NatSkin/templates/renamesidebar.nat.tmpl:5
+msgid "Managing Topics"
+msgstr "Управление страницами"
+
+#: twikiplugins/NatSkin/templates/renamewebsidebar.nat.tmpl:4
+msgid "Managing Webs"
+msgstr "Управление разделами"
+
+#: twikiplugins/NatSkin/templates/edittoolbar.natedit.tmpl:35
+msgid "Mathematical formula (<nop>LaTeX)"
+msgstr "Математическая формула (<nop>LaTeX)"
+
+#: twikiplugins/NatSkin/templates/edit.nat.tmpl:53
+#: twikiplugins/NatSkin/templates/preview.nat.tmpl:44
+#: twikiplugins/NatSkin/templates/preview.natedit.tmpl:5
+msgid "Minor changes"
+msgstr ""
+
+#: templates/messages.tmpl:185
+#: twikiplugins/NatSkin/templates/oopsregrequ.nat.tmpl:3
+msgid "Missing Fields"
+msgstr "Отсутствующие Поля"
+
+#: twikiplugins/NatSkin/templates/messages.nat.tmpl:129
+msgid "Missing Fields =<span class=\"twikiAlert\">**</span>="
+msgstr ""
+
+#: templates/messages.tmpl:36
+#: twikiplugins/NatSkin/templates/messages.nat.tmpl:14
+#: twikiplugins/NatSkin/templates/oopsmanage.nat.tmpl:3
+#, fuzzy
+msgid "Missing action command"
+msgstr "Отсутствующая команда действия"
+
+#: data/TWiki/WebSearch.txt:16 data/TWiki/WebSearchAdvanced.txt:24
+msgid "Modify search"
+msgstr "Изменить поиск"
+
+#: twikiplugins/NatSkin/templates/strings.nat.tmpl:16
+msgid "More"
+msgstr "Больше"
+
+#: twikiplugins/NatSkin/templates/oopsmore.nat.tmpl:4
+#: twikiplugins/PatternSkin/templates/oopsmore.pattern.tmpl:18
+msgid "More Actions on Topic %1"
+msgstr "Другие операции над %1"
+
+#: data/TWiki/WikiSyntaxSummary.txt:16
+msgid "More formatting help"
+msgstr "Дополнительная информация по разметке текста"
+
+#: twikiplugins/NatSkin/templates/strings.nat.tmpl:17
+msgid "More topic actions"
+msgstr "Другие операции"
+
+#: twikiplugins/PatternSkin/templates/rdiff.pattern.tmpl:32
+#: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:74
+msgid "More topic actions..."
+msgstr "Другие операции..."
+
+#: twikiplugins/TwistyPlugin/data/TWiki/TwistyPlugin.txt:407
+#, fuzzy
+msgid "More..."
+msgstr "больше..."
+
+#: twikiplugins/NatSkin/templates/strings.nat.tmpl:12
+#: twikiplugins/PatternSkin/templates/attachagain.pattern.tmpl:35
+#: twikiplugins/PatternSkin/templates/moveattachment.pattern.tmpl:44
+msgid "Move"
+msgstr "Переместить"
+
+#: twikiplugins/PatternSkin/templates/moveattachment.pattern.tmpl:13
+msgid "Move attachment"
+msgstr "Переместить приложение"
+
+#: twikiplugins/PatternSkin/templates/moveattachment.pattern.tmpl:29
+msgid "Move attachment to web:"
+msgstr "Переместить приложение в раздел:"
+
+#: twikiplugins/PatternSkin/templates/moveattachment.pattern.tmpl:9
+msgid "Move file attachment"
+msgstr "Переместить приложенный файл"
+
+#: twikiplugins/NatSkin/templates/moveattachment.nat.tmpl:15
+msgid "Move or Delete File \"%1\""
+msgstr "Переместить или удалить файл \"%1\""
+
+#: twikiplugins/NatSkin/templates/strings.nat.tmpl:13
+msgid "Move or rename this topic"
+msgstr "Переместить или переименовать страницу"
+
+#: twikiplugins/PatternSkin/templates/renameattachmentdelete.pattern.tmpl:21
+msgid "Move to web:"
+msgstr "Переместить в раздел:"
+
+#: twikiplugins/NatSkin/templates/oopsrenameerr.nat.tmpl:3
+msgid "Move topic error"
+msgstr ""
+
+#: twikiplugins/PatternSkin/templates/renamedelete.pattern.tmpl:25
+msgid "Move topic to web:"
+msgstr "Переместить страницу в раздел:"
+
+#: twikiplugins/NatSkin/templates/attachsidebar.nat.tmpl:5
+#: twikiplugins/NatSkin/templates/moveattachmentsidebar.nat.tmpl:5
+msgid "Moving Attachments"
+msgstr "Перемещение приложений"
+
+#: data/TWiki/NewUserTemplate.txt:64
+msgid "My Links"
+msgstr "Мои ссылки"
+
+#: twikiplugins/NatSkin/data/TWiki/MySideBar.txt:4
+msgid "MySideBar"
+msgstr ""
+
+#: twikiplugins/NatSkin/data/TWiki/MySideBarTemplate.txt:6
+msgid "MySidebar"
+msgstr ""
+
+#: lib/TWiki/Search.pm:794
+msgid "NEW"
+msgstr "НОВЫЙ(АЯ)"
+
+#: templates/messages.tmpl:103
+#: twikiplugins/NatSkin/templates/messages.nat.tmpl:74
+msgid "Name of new web is missing"
+msgstr "Отсутствует имя нового раздела"
+
+#: twikiplugins/NatSkin/data/TWiki/TWikiWebSideBar.txt:3
+msgid "Navigation"
+msgstr "Навигация"
+
+#: twikiplugins/NatSkin/templates/strings.nat.tmpl:22
+msgid "New"
+msgstr "Новый(ая)"
+
+#: data/TWiki/ChangeEmailAddress.txt:25
+msgid "New e-mails (space-separated list)"
+msgstr "Новые адреса e-mail (список разделенный пробелами)"
+
+#: twikiplugins/MailerContrib/templates/mailnotify.tmpl:73
+#: twikiplugins/MailerContrib/templates/mailnotify.tmpl:9
+#, fuzzy
+msgid "New or changed topics in %1, since %2:"
+msgstr "Новые или измененные страницы в %1, после %2:"
+
+#: twikiplugins/NatSkin/templates/mailnotify.nat.tmpl:15
+msgid "New or changed topics in the %1 web, since %2 GMT:"
+msgstr ""
+
+#: twikiplugins/PatternSkin/templates/renamewebbase.pattern.tmpl:13
+msgid "New parent web:"
+msgstr ""
+
+#: data/TWiki/ChangePassword.txt:15
+msgid "New password"
+msgstr "Новый пароль"
+
+#: templates/messages.tmpl:87
+#: twikiplugins/NatSkin/templates/messages.nat.tmpl:48
+msgid "New topic name %1 is not a %2"
+msgstr ""
+
+#: twikiplugins/NatSkin/templates/oopsrenamenotwikiword.nat.tmpl:3
+#, fuzzy
+msgid "New topic name is not a <nop>WikiWord"
+msgstr "Разрешить не <nop>ВикиСлово для нового имени страницы"
+
+#: twikiplugins/PatternSkin/templates/renamewebbase.pattern.tmpl:9
+msgid "New web name:"
+msgstr "Новое имя раздела"
+
+#: twikiplugins/NatSkin/templates/oopsrev.nat.tmpl:50
+msgid "Newer revision"
+msgstr "Более новая версия"
+
+#: twikiplugins/PatternSkin/templates/oopsmorecompare.pattern.tmpl:5
+msgid "Newer revision:"
+msgstr "Более новая версия:"
+
+#: templates/oopsmore.tmpl:26
+#: twikiplugins/ClassicSkin/templates/oopsmore.classic.tmpl:24
+#: twikiplugins/PatternSkin/templates/oopsmorechildtopics.pattern.tmpl:3
+#, fuzzy
+msgid "No child topics"
+msgstr "Нет младших страниц"
+
+#: templates/messages.tmpl:413
+msgid "No permission to view %1"
+msgstr "Нет прав для просмотра %1"
+
+#: twikiplugins/NatSkin/templates/renamewebbase.nat.tmpl:43
+msgid "No permission:"
+msgstr "Нет прав:"
+
+#: templates/messages.tmpl:178
+msgid "No users to reset passwords for."
+msgstr "Некому сбрасывать пароли."
+
+#: twikiplugins/PatternSkin/templates/renamedelete.pattern.tmpl:45
+msgid "Not recommended when deleting a topic."
+msgstr "Не рекомендовано при удалении страницы."
+
+#: twikiplugins/PatternSkin/templates/renameweb.pattern.tmpl:31
+msgid "Not recommended when deleting a web."
+msgstr "Не рекомендовано при удалении раздела."
+
+#: twikiplugins/PatternSkin/templates/moveattachment.pattern.tmpl:40
+msgid ""
+"Note that any URLs that refer to the attachment will be broken after this "
+"move."
+msgstr ""
+
+#: data/TWiki/ChangePassword.txt:31 data/TWiki/ResetPassword.txt:31
+msgid "Note to administrator"
+msgstr "Примечание администратору"
+
+#: twikiplugins/NatSkin/templates/oopslocked.nat.tmpl:10
+msgid "Note, that this will _break_ the lock"
+msgstr ""
+
+#: data/TWiki/ResetPassword.txt:8 data/TWiki/TWikiRegistration.txt:6
+#: templates/messages.tmpl:272 templates/messages.tmpl:324
+#: templates/registerconfirm.tmpl:13 templates/registernotify.tmpl:22
+#: twikiplugins/ClassicSkin/templates/registerconfirm.classic.tmpl:13
+#: twikiplugins/ClassicSkin/templates/registernotify.classic.tmpl:22
+#: twikiplugins/NatSkin/templates/messages.nat.tmpl:254
+msgid "Note:"
+msgstr "Примечание:"
+
+#: twikiplugins/NatSkin/templates/oopsmngcreateweb.nat.tmpl:51
+msgid ""
+"Note: The new web has been created successfully and populated with topics "
+"from the base web"
+msgstr ""
+"Примечание: Новый раздел успешно создан и наполнен страницами из базового "
+"раздела"
+
+#: data/TWiki/WebTopicViewTemplate.txt:2
+#, fuzzy
+msgid "Note: This topic does not exist"
+msgstr "ПРИМЕЧАНИЕ: Эта Wiki-страница еще не существует"
+
+#: twikiplugins/NatSkin/templates/attachsidebar.nat.tmpl:10
+#: twikiplugins/NatSkin/templates/changeformsidebar.nat.tmpl:8
+#: twikiplugins/NatSkin/templates/moveattachmentsidebar.nat.tmpl:10
+#: twikiplugins/NatSkin/templates/renamesidebar.nat.tmpl:9
+#: twikiplugins/NatSkin/templates/renamewebsidebar.nat.tmpl:7
+msgid "Notes"
+msgstr "Примечания"
+
+#: data/TWiki/VarMAKETEXT.txt:14
+msgid "Notes:"
+msgstr "Примечания:"
+
+#: twikiplugins/NatSkin/templates/strings.nat.tmpl:23
+msgid "Nothing found. Try again!"
+msgstr "Ничего не найдено. Попробуйте снова!"
+
+#: twikiplugins/PatternSkin/templates/renamebase.pattern.tmpl:99
+#: twikiplugins/PatternSkin/templates/renamewebbase.pattern.tmpl:39
+msgid "Notices:"
+msgstr "Заметки:"
+
+#: twikiplugins/NatSkin/data/TWiki/TWikiWebLinks.txt:10
+#: twikiplugins/PatternSkin/data/Main/WebLeftBar.txt:9
+#: twikiplugins/PatternSkin/data/Sandbox/WebLeftBar.txt:9
+#: twikiplugins/PatternSkin/data/TWiki/WebLeftBar.txt:10
+#: twikiplugins/PatternSkin/data/_default/WebLeftBar.txt:8
+msgid "Notifications"
+msgstr "Уведомления"
+
+#: twikiplugins/NatSkin/templates/searchformat.nat.tmpl:6
+#: twikiplugins/PatternSkin/templates/searchbase.pattern.tmpl:5
+#: twikiplugins/PatternSkin/templates/searchbase.pattern.tmpl:9
+msgid "Number of topics:"
+msgstr "Число страниц:"
+
+#: twikiplugins/NatSkin/templates/searchrenameview.nat.tmpl:34
+msgid "Number of topics: <span>%1</span>"
+msgstr "Количество страниц: <span>%1</span>"
+
+#: templates/messages.tmpl:33 templates/messages.tmpl:332
+#: templates/oopsaccessdenied.tmpl:6 templates/oopslanguagechanged.tmpl:5
+#: templates/oopssaveerr.tmpl:16
+#: twikiplugins/ClassicSkin/templates/oopsaccessdenied.classic.tmpl:6
+#: twikiplugins/NatSkin/templates/changeform.nat.tmpl:23
+#: twikiplugins/NatSkin/templates/messages.nat.tmpl:111
+#: twikiplugins/NatSkin/templates/messages.nat.tmpl:281
+#: twikiplugins/NatSkin/templates/moveattachment.nat.tmpl:27
+#: twikiplugins/NatSkin/templates/oops.nat.tmpl:19
+#: twikiplugins/NatSkin/templates/oopschangepasswd.nat.tmpl:10
+#: twikiplugins/NatSkin/templates/oopsempty.nat.tmpl:12
+#: twikiplugins/NatSkin/templates/oopserrbase.nat.tmpl:12
+#: twikiplugins/NatSkin/templates/oopslanguagechanged.nat.tmpl:16
+#: twikiplugins/NatSkin/templates/oopslogonbase.nat.tmpl:23
+#: twikiplugins/NatSkin/templates/oopsmngcreateweb.nat.tmpl:45
+#: twikiplugins/NatSkin/templates/oopsmngcreateweb.nat.tmpl:65
+#: twikiplugins/NatSkin/templates/oopsmore.nat.tmpl:55
+#: twikiplugins/NatSkin/templates/oopsnoformdef.nat.tmpl:28
+#: twikiplugins/NatSkin/templates/oopsresetpasswd.nat.tmpl:20
+#: twikiplugins/NatSkin/templates/rename.nat.tmpl:7
+#: twikiplugins/NatSkin/templates/renameconfirm.nat.tmpl:7
+#: twikiplugins/NatSkin/templates/renamewebbase.nat.tmpl:14
+#: twikiplugins/NatSkin/templates/renamewebconfirm.nat.tmpl:7
+#: twikiplugins/PatternSkin/templates/oopsaccessdenied.pattern.tmpl:10
+#: twikiplugins/PatternSkin/templates/oopssaveerr.pattern.tmpl:19
+msgid "OK"
+msgstr "OK"
+
+#: twikiplugins/NatSkin/templates/oopsrev.nat.tmpl:8
+msgid "Older revision"
+msgstr "Старшая версия"
+
+#: twikiplugins/PatternSkin/templates/oopsmorecompare.pattern.tmpl:4
+msgid "Older revision:"
+msgstr "Старшая версия:"
+
+#: data/TWiki/TWikiRegistration.txt:282
+msgid "Once registered you can login using your %1 and password."
+msgstr ""
+"Однажды зарегистрировавшись, вы сможете заходить используя ваши %1 и пароль."
+
+#: data/TWiki/WebTopicCreator.txt:146
+#, fuzzy
+msgid ""
+"Once you have created the topic, consider adding links in related topics to "
+"the new topic so that there are more ways people can discover it."
+msgstr "Добавьте ссылки на связанные страницы в текст созданной Вами страницы."
+
+#: templates/messages.tmpl:439
+#: twikiplugins/NatSkin/templates/messages.nat.tmpl:306
+#: twikiplugins/NatSkin/templates/oopsaccessgroup.nat.tmpl:6
+#, fuzzy
+msgid "Only members of the %1 are allowed to perform this action."
+msgstr "Только члены %1 могут выполнить это действие."
+
+#: templates/edit.tmpl:21 templates/preview.tmpl:10
+#: twikiplugins/ClassicSkin/templates/edit.classic.tmpl:18
+#: twikiplugins/ClassicSkin/templates/preview.classic.tmpl:10
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:39
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:43
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:71
+#: twikiplugins/PatternSkin/templates/preview.pattern.tmpl:20
+#: twikiplugins/PatternSkin/templates/preview.pattern.tmpl:24
+#: twikiplugins/PatternSkin/templates/preview.pattern.tmpl:49
+msgid "Opens page in new window"
+msgstr "Открыть страницу в новом окне"
+
+#: twikiplugins/PatternSkin/templates/renamedelete.pattern.tmpl:29
+#, fuzzy
+msgid "Optionally change topic name:"
+msgstr "При желании сменить название страницы:"
+
+#: twikiplugins/PatternSkin/templates/renameattachmentdelete.pattern.tmpl:32
+#, fuzzy
+msgid "Optionally enter a different topic name:"
+msgstr "Можно ввести другое имя страницы:"
+
+#: data/TWiki/TWikiRegistration.txt:109
+msgid "Organisation URL:"
+msgstr "URL организации:"
+
+#: data/TWiki/TWikiRegistration.txt:106
+msgid "Organisation name:"
+msgstr "Название организации:"
+
+#: data/TWiki/TWikiRegistration.txt:254
+msgid "Other Country"
+msgstr "Другая страна"
+
+#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:46
+msgid "Other attachments of %1"
+msgstr "Другие приложения к %1"
+
+#: data/TWiki/WebSearch.txt:47 data/TWiki/WebSearchAdvanced.txt:90
+msgid "Other search options:"
+msgstr "Другие параметры поиска:"
+
+#: data/TWiki/ResetPassword.txt:6
+msgid "Otherwise, use this form to get a new one e-mailed to you."
+msgstr ""
+"Иначе воспользуйтесь следующей формой, чтобы получить новый пароль по e-mail."
+
+#: twikiplugins/NatSkin/templates/edit.nat.tmpl:42
+msgid "Parent"
+msgstr ""
+
+#: twikiplugins/NatSkin/data/TWiki/TWikiWebSideBar.txt:26
+#, fuzzy
+msgid "Parrent web"
+msgstr "переименовать раздел"
+
+#: data/TWiki/ChangeEmailAddress.txt:24
+#: twikiplugins/NatSkin/data/Main/WebLinks.txt:12
+#: twikiplugins/NatSkin/templates/oopslogonbase.nat.tmpl:15
+#: twikiplugins/PatternSkin/templates/login.pattern.tmpl:94
+msgid "Password"
+msgstr "Пароль"
+
+#: twikiplugins/NatSkin/templates/oopsbadpwformat.nat.tmpl:3
+msgid "Password Format Error"
+msgstr "Ошибка формата пароля"
+
+#: templates/messages.tmpl:146
+#: twikiplugins/NatSkin/templates/messages.nat.tmpl:108
+#: twikiplugins/NatSkin/templates/oopschangepasswd.nat.tmpl:4
+msgid "Password changed successfully!"
+msgstr "Пароль успешно изменен!"
+
+#: templates/messages.tmpl:151
+msgid "Password could not be changed"
+msgstr "Пароль не может быть изменён"
+
+#: templates/messages.tmpl:177 templates/messages.tmpl:181
+msgid "Password reset failed"
+msgstr "Не удалось сбросить пароль"
+
+#: templates/messages.tmpl:191
+#: twikiplugins/NatSkin/templates/messages.nat.tmpl:135
+#: twikiplugins/NatSkin/templates/oopsregpasswd.nat.tmpl:3
+msgid "Passwords do not match"
+msgstr "Пароли не совпадают"
+
+#: data/TWiki/NewUserTemplate.txt:60 data/TWiki/NewUserTemplate.txt:74
+msgid "Personal Preferences"
+msgstr "Личные Параметры"
+
+#: templates/messages.tmpl:123
+#: twikiplugins/NatSkin/templates/messages.nat.tmpl:100
+#: twikiplugins/NatSkin/templates/oopsmngcreateweb.nat.tmpl:26
+msgid "Pick one of the %1."
+msgstr ""
+
+#: data/Trash/TrashAttachment.txt:3
+msgid "Placeholder for trashed attachments"
+msgstr "Место для удаленных приложений"
+
+#: twikiplugins/NatSkin/templates/oopsnoformdef.nat.tmpl:25
+msgid "Please ask your %1 administrator %2, to do this."
+msgstr "Пожалуйста, попросите вашего %1 администратора %2 сделать это."
+
+#: twikiplugins/NatSkin/templates/oopsmngcreateweb.nat.tmpl:43
+msgid "Please check out the WebPreferences or try again."
+msgstr ""
+
+#: twikiplugins/NatSkin/templates/oopsrenamenotwikiword.nat.tmpl:5
+msgid ""
+"Please chose a topic name that is a %1 or check the _Allow non-Wiki Word_ "
+"&nbsp;box."
+msgstr ""
+
+#: templates/messages.tmpl:231 templates/messages.tmpl:281
+msgid "Please contact %1 if you have any questions."
+msgstr "Если у вас есть вопросы, свяжитесь с %1."
+
+#: templates/messages.tmpl:201 templates/messages.tmpl:210
+msgid "Please contact %1."
+msgstr "Пожалуйста, свяжитесь с %1."
+
+#: twikiplugins/NatSkin/templates/oopsresetpasswd.nat.tmpl:15
+msgid "Please copy this information into a friendly e-mail to %1"
+msgstr ""
+
+#: twikiplugins/NatSkin/templates/messages.nat.tmpl:9
+msgid "Please email %1 to request this."
+msgstr ""
+
+#: twikiplugins/PatternSkin/templates/login.pattern.tmpl:42
+msgid "Please enter your username and password:"
+msgstr "Пожалуйста, введите имя пользователя и пароль:"
+
+#: twikiplugins/NatSkin/templates/oops.nat.tmpl:16
+msgid ""
+"Please go <a href=\"javascript:history.back()\">back</a> in your browser and "
+"try again."
+msgstr ""
+
+#: templates/messages.tmpl:71 templates/messages.tmpl:77
+#: templates/messages.tmpl:83
+#, fuzzy
+msgid "Please go _back_ in your browser and try a new name."
+msgstr "Вернитесь,·пожалуйста,·в·своем·браузере и попробуйте новое имя."
+
+#: templates/messages.tmpl:336
+#, fuzzy
+msgid "Please go back in your browser and check again."
+msgstr "Пожалуйста, вернитесь в браузере и сверьте снова."
+
+#: templates/messages.tmpl:88
+#, fuzzy
+msgid ""
+"Please go back in your browser and choose a topic name that is a %1.WikiWord "
+"or check the allow non-Wiki Word box"
+msgstr ""
+"Вернитесь, пожалуйста, в своем браузере выберите имя страницы типа %1."
+"WikiWord или пометьте в клеточке разрешить не-Wiki Word"
+
+#: templates/messages.tmpl:100 templates/messages.tmpl:104
+#: templates/messages.tmpl:109 templates/messages.tmpl:113
+#: templates/messages.tmpl:117 templates/messages.tmpl:127
+#: templates/messages.tmpl:188 templates/messages.tmpl:194
+#: templates/messages.tmpl:238 templates/messages.tmpl:250
+#: templates/messages.tmpl:256 templates/messages.tmpl:264
+#: templates/messages.tmpl:37 templates/messages.tmpl:41
+#: templates/messages.tmpl:59
+msgid "Please go back in your browser and try again."
+msgstr ""
+"Вернитесь, пожалуйста, <a href=\"javascript:history.go(-1)\">назад</a> и "
+"попробуйте снова."
+
+#: templates/messages.tmpl:45
+#: twikiplugins/NatSkin/templates/messages.nat.tmpl:23
+msgid ""
+"Please make sure you spelled the %1 correctly and try again. If you get "
+"stuck, please mail %2."
+msgstr ""
+
+#: twikiplugins/NatSkin/templates/messages.nat.tmpl:244
+msgid "Please notify your %1"
+msgstr "Пожалуйста, уведомите вашего %1"
+
+#: twikiplugins/NatSkin/templates/messages.nat.tmpl:160
+#: twikiplugins/NatSkin/templates/messages.nat.tmpl:57
+msgid "Please notify your %1 administrator %2"
+msgstr "Пожалуйста, уведомите вашего %1 администратора %2"
+
+#: twikiplugins/NatSkin/templates/messages.nat.tmpl:231
+#: twikiplugins/NatSkin/templates/messages.nat.tmpl:64
+msgid "Please notify your %1 administrator %2."
+msgstr "Пожалуйста, уведомите вашего %1 администратора %2."
+
+#: twikiplugins/NatSkin/templates/oopserrbase.nat.tmpl:5
+msgid "Please notify your %1 administrator and explain how to reproduce it:"
+msgstr ""
+"Пожалуйста, уведомите вашего %1 администратора и объясните как повторить это:"
+
+#: twikiplugins/NatSkin/templates/messages.nat.tmpl:143
+msgid "Please notify your %1 webmaster %2."
+msgstr "Пожалуйста, ведомите вашего %1 вебмастера %2."
+
+#: twikiplugins/NatSkin/templates/messages.nat.tmpl:197
+msgid "Please try again."
+msgstr "Пожалуйста, попробуйте ещё раз."
+
+#: templates/mailresetpassword.tmpl:12
+#: twikiplugins/ClassicSkin/templates/mailresetpassword.classic.tmpl:12
+#, fuzzy
+msgid ""
+"Please visit %1 to change your password to something more memorable for you."
+msgstr ""
+"Посетите, пожалуйста, %1 чтобы заменить ваш пароль на что-нибудь более "
+"запоминающееся для Вас."
+
+#: twikiplugins/NatSkin/data/TWiki/MySideBarTemplate.txt:29
+#: twikiplugins/NatSkin/data/TWiki/WebLinks.txt:3
+#: twikiplugins/NatSkin/templates/editsidebar.nat.tmpl:11
+msgid "Plugins"
+msgstr ""
+
+#: twikiplugins/PatternSkin/templates/changeform.pattern.tmpl:34
+msgid "Possible form templates"
+msgstr "Возможные шаблоны формы"
+
+#: twikiplugins/NatSkin/templates/oopsmanage.nat.tmpl:9
+msgid "Possibly caused by improper use of the =manage= script."
+msgstr ""
+
+#: twikiplugins/NatSkin/templates/settings.nat.tmpl:15
+msgid "Preference Settings for %1:"
+msgstr "Параметры для %1:"
+
+#: twikiplugins/NatSkin/data/TWiki/TWikiWebLinksForAdmins.txt:10
+#: twikiplugins/PatternSkin/data/Main/WebLeftBar.txt:11
+#: twikiplugins/PatternSkin/data/Sandbox/WebLeftBar.txt:11
+#: twikiplugins/PatternSkin/data/TWiki/WebLeftBar.txt:12
+#: twikiplugins/PatternSkin/data/_default/WebLeftBar.txt:10
+msgid "Preferences"
+msgstr "Параметры"
+
+#: twikiplugins/PatternSkin/templates/settings.pattern.tmpl:20
+msgid "Preferences for"
+msgstr "Параметры для"
+
+#: twikiplugins/NatSkin/templates/edit.nat.tmpl:74
+#: twikiplugins/NatSkin/templates/edittopicactions.nat.tmpl:4
+#: twikiplugins/NatSkin/templates/preview.nat.tmpl:35
+#: twikiplugins/PatternSkin/templates/preview.pattern.tmpl:16
+#: twikiplugins/PatternSkin/templates/preview.pattern.tmpl:8
+msgid "Preview"
+msgstr "Предварительный просмотр"
+
+#: twikiplugins/NatSkin/templates/edit.nat.tmpl:74
+#: twikiplugins/NatSkin/templates/edittoolbar.natedit.tmpl:57
+#: twikiplugins/NatSkin/templates/edittopicactions.nat.tmpl:4
+msgid "Preview your changes"
+msgstr "Предварительный просмотр ваших изменений"
+
+#: twikiplugins/NatSkin/data/TWiki/TWikiWebTopicActions.txt:10
+msgid "Print"
+msgstr ""
+
+#: twikiplugins/NatSkin/data/TWiki/TWikiWebTopicActions.txt:10
+msgid "Print this page"
+msgstr "Распечатать эту страницу"
+
+#: twikiplugins/NatSkin/templates/oopsnoformdef.nat.tmpl:7
+msgid "Problems could arise for two reasons:"
+msgstr "Проблемы могли возникнуть по двум причинам:"
+
+#: twikiplugins/NatSkin/templates/attachagain.nat.tmpl:8
+#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:73
+msgid "Properties"
+msgstr "Properties"
+
+#: twikiplugins/NatSkin/templates/strings.nat.tmpl:6
+msgid "Raw"
+msgstr "Исходный текст"
+
+#: templates/registernotify.tmpl:10
+#: twikiplugins/ClassicSkin/templates/registernotify.classic.tmpl:10
+msgid ""
+"Read %1 to get a quick overview of this collaboration platform. To learn "
+"more, study the TWikiTutorial, which is accessible from the same link."
+msgstr ""
+
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:43
+#: twikiplugins/PatternSkin/templates/preview.pattern.tmpl:24
+#, fuzzy
+msgid "Read new revision help text in new window"
+msgstr "Открыть справку по новой версии в отдельном окне"
+
+#: twikiplugins/TipsContrib/data/TWiki/TWikiTipsOfTheDayInclude.txt:22
+msgid "Read on"
+msgstr ""
+
+#: data/Sandbox/WebHome.txt:19 data/TWiki/WebSearch.txt:51
+#: data/TWiki/WebSearchAdvanced.txt:95
+msgid "Recently changed topics"
+msgstr "Недавно изменённые страницы"
+
+#: twikiplugins/NatSkin/data/TWiki/MySideBarTemplate.txt:20
+msgid "Reference Manual"
+msgstr "Справочник пользователя"
+
+#: twikiplugins/NatSkin/templates/renamewebbase.nat.tmpl:53
+msgid "Referring topics currently being edited:"
+msgstr ""
+
+#: twikiplugins/NatSkin/templates/oopsmore.nat.tmpl:75
+msgid "Refresh"
+msgstr "Обновить"
+
+#: twikiplugins/ClassicSkin/data/TWiki/ClassicSkinLogin.txt:2
+#: twikiplugins/NatSkin/data/TWiki/TWikiWebTopicActions.txt:5
+#: twikiplugins/PatternSkin/data/TWiki/WebLeftBarLogin.txt:3
+msgid "Register"
+msgstr "Зарегистрироваться"
+
+#: twikiplugins/NatSkin/data/TWiki/TWikiWebTopicActions.txt:5
+msgid "Register on %1"
+msgstr ""
+
+#: twikiplugins/NatSkin/templates/oopsauth.nat.tmpl:14
+msgid "Registered users can [%1[change]] and [%2[reset]] their passwords."
+msgstr ""
+"Зарегистрированные пользователи могут [[%1][изменять]] и [[%2][сбрасывать]] "
+"свои пароли."
+
+#: data/TWiki/TWikiRegistration.txt:6
+msgid "Registered users can [[%1][change]] and [[%2][reset]] their passwords."
+msgstr ""
+"Зарегистрированные пользователи могут [[%1][изменять]] и [[%2][сбрасывать]] "
+"свои пароли."
+
+#: data/TWiki/TWikiRegistration.txt:2
+#: twikiplugins/NatSkin/data/Main/WebLinks.txt:9
+msgid "Registration"
+msgstr "Регистрация"
+
+#: templates/messages.tmpl:270
+msgid "Registration codes can only be used once."
+msgstr ""
+
+#: data/TWiki/WebSearchAdvanced.txt:64
+msgid "Regular expression search"
+msgstr "С использованием регулярных выражений"
+
+#: data/TWiki/NewUserTemplate.txt:89
+msgid "Related Topics"
+msgstr "Связанные Разделы"
+
+#: data/Main/TWikiGroupTemplate.txt:10 data/Sandbox/WebNotify.txt:10
+#: data/TWiki/ChangeEmailAddress.txt:35 data/TWiki/ChangePassword.txt:28
+#: data/TWiki/ResetPassword.txt:28 data/Trash/WebNotify.txt:9
+#: data/_default/WebNotify.txt:8 templates/messages.tmpl:437
+#: templates/messages.tmpl:444
+msgid "Related topics:"
+msgstr "Связанные разделы:"
+
+#: templates/messages.tmpl:158
+#, fuzzy
+msgid ""
+"Remember to update your user topic if you want your e-mail change to be "
+"reflected there as well."
+msgstr ""
+"Не забудьте обновить свою личную страницу если вы хотите отразить в ней "
+"изменение своего электронного адреса."
+
+#: data/TWiki/ResetPassword.txt:6
+msgid "Remember your password?"
+msgstr "Вы помните свой пароль?"
+
+#: data/TWiki/WebTopicViewTemplate.txt:7
+msgid "Remember, a %1 is case sensitive."
+msgstr ""
+
+#: templates/messages.tmpl:51
+#, fuzzy
+msgid "Remove the user from the group(s) %1 first."
+msgstr "Сначала удалить пользователя из групп(ы) %1."
+
+#: twikiplugins/NatSkin/templates/renamewebbase.nat.tmpl:11
+#: twikiplugins/PatternSkin/templates/rename.pattern.tmpl:9
+#: twikiplugins/PatternSkin/templates/renameweb.pattern.tmpl:9
+msgid "Rename"
+msgstr "Переименовать"
+
+#: twikiplugins/NatSkin/templates/oopsaccessrename.nat.tmpl:4
+msgid "Rename Access Denied"
+msgstr "Нет доступа на переименование"
+
+#: twikiplugins/NatSkin/templates/renamewebbase.nat.tmpl:18
+msgid "Rename Web"
+msgstr "Переименовать раздел"
+
+#: twikiplugins/NatSkin/templates/oopslockedrename.nat.tmpl:14
+msgid "Rename anyway"
+msgstr "Все равно переименовать"
+
+#: templates/messages.tmpl:74 templates/messages.tmpl:80
+#: twikiplugins/NatSkin/templates/messages.nat.tmpl:36
+#: twikiplugins/NatSkin/templates/messages.nat.tmpl:42
+msgid "Rename failed"
+msgstr "Не удалось переименовать"
+
+#: templates/oopsmore.tmpl:13
+#: twikiplugins/ClassicSkin/templates/oopsmore.classic.tmpl:11
+#: twikiplugins/PatternSkin/templates/oopsmorerename.pattern.tmpl:2
+msgid "Rename or move topic"
+msgstr "Переименовать или переместить страницу"
+
+#: data/TWiki/RenameWeb.txt:1
+msgid "Rename, move or delete this web:"
+msgstr "Переименовать, переместить или удалить этот раздел:"
+
+#: twikiplugins/PatternSkin/templates/rename.pattern.tmpl:45
+#: twikiplugins/PatternSkin/templates/renameconfirm.pattern.tmpl:21
+#: twikiplugins/PatternSkin/templates/renameweb.pattern.tmpl:35
+msgid "Rename/Move"
+msgstr "Переименовать/переместить"
+
+#: templates/oopsmore.tmpl:14 templates/oopsmore.tmpl:16
+#: twikiplugins/ClassicSkin/templates/oopsmore.classic.tmpl:12
+#: twikiplugins/ClassicSkin/templates/oopsmore.classic.tmpl:14
+#: twikiplugins/PatternSkin/templates/oopsmorerename.pattern.tmpl:3
+#: twikiplugins/PatternSkin/templates/oopsmorerename.pattern.tmpl:5
+msgid "Rename/move topic..."
+msgstr "Переименовать/переместить страницу..."
+
+#: data/TWiki/RenameWeb.txt:2
+msgid "Rename/move/delete web..."
+msgstr "Переименовать/переместить/удалить раздел..."
+
+#: templates/form.tmpl:1
+#: twikiplugins/ClassicSkin/templates/form.classic.tmpl:1
+#: twikiplugins/PatternSkin/templates/form.pattern.tmpl:1
+#, fuzzy
+msgid "Replace form..."
+msgstr "Форма для замены..."
+
+#: twikiplugins/NatSkin/templates/oopsresetpasswd.nat.tmpl:5
+msgid "Request to reset your TWiki password"
+msgstr ""
+
+#: twikiplugins/NatSkin/templates/oopsmore.nat.tmpl:60
+msgid "Reset"
+msgstr "Сбросить"
+
+#: data/TWiki/ResetPassword.txt:3
+msgid "Reset Password"
+msgstr "Сбросить Пароль"
+
+#: data/TWiki/ResetPassword.txt:17
+msgid "Reset password"
+msgstr "Сбросить пароль"
+
+#: twikiplugins/NatSkin/data/TWiki/NatSkinStyleBrowser.txt:76
+msgid "Reset to defaults"
+msgstr "Сбросить поумалчанию"
+
+#: twikiplugins/PatternSkin/templates/searchbase.pattern.tmpl:23
+msgid "Results from %1 web"
+msgstr "Результаты по разделу \"%1\"."
+
+#: templates/messages.tmpl:162
+msgid "Return to %1."
+msgstr "Вернуться к %1."
+
+#: data/TWiki/ChangePassword.txt:16
+msgid "Retype new password"
+msgstr "Введите новый пароль повторно"
+
+#: data/TWiki/TWikiRegistration.txt:102
+msgid "Retype password:"
+msgstr "Введите пароль повторно:"
+
+#: templates/messages.tmpl:27
+#, fuzzy
+msgid "Rev %1 was saved by %2, while you were still editing."
+msgstr "Пока вы редактировали, %2 сохранил Rev %1."
+
+#: twikiplugins/MailerContrib/templates/mailnotify.tmpl:44
+#: twikiplugins/MailerContrib/templates/mailnotify.tmpl:76
+#: twikiplugins/NatSkin/templates/mailnotify.nat.tmpl:9
+msgid "Review recent changes in:"
+msgstr "Обзор недавних изменений в:"
+
+#: twikiplugins/NatSkin/templates/oopsrev.nat.tmpl:68
+#: twikiplugins/NatSkin/templates/rdiff.nat.tmpl:26
+#: twikiplugins/PatternSkin/templates/rdiff.pattern.tmpl:22
+msgid "Revision"
+msgstr "Версия"
+
+#: twikiplugins/PatternSkin/templates/oopsmorerevision.pattern.tmpl:4
+msgid "Revision:"
+msgstr "Версия:"
+
+#: twikiplugins/PatternSkin/templates/preview.pattern.tmpl:49
+msgid "S = Save, Q = Quiet save, K = Checkpoint, D = Discard"
+msgstr ""
+"S = Сохранить, Q = Сохранить \"тихо\", K = Смена версии, D = Отказаться"
+
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:71
+msgid "S = Save, Q = Quiet save, K = Checkpoint, P = Preview, C = Cancel"
+msgstr ""
+"S = Сохранить, Q = Сохранить \"тихо\", K = Смена версии, P = Предпросмотр, C "
+"= Отменить"
+
+#: twikiplugins/NatSkin/templates/edit.nat.tmpl:77
+#: twikiplugins/NatSkin/templates/edittopicactions.nat.tmpl:5
+#: twikiplugins/NatSkin/templates/preview.nat.tmpl:38
+#: twikiplugins/NatSkin/templates/previewtopicactions.nat.tmpl:5
+#: twikiplugins/NatSkin/templates/settingstopicactions.nat.tmpl:4
+#: twikiplugins/PatternSkin/templates/settings.pattern.tmpl:28
+msgid "Save"
+msgstr "Сохранить"
+
+#: twikiplugins/NatSkin/templates/edit.nat.tmpl:77
+#: twikiplugins/NatSkin/templates/edittoolbar.natedit.tmpl:62
+#: twikiplugins/NatSkin/templates/edittopicactions.nat.tmpl:5
+#: twikiplugins/NatSkin/templates/preview.nat.tmpl:38
+#: twikiplugins/NatSkin/templates/previewtoolbar.natedit.tmpl:9
+#: twikiplugins/NatSkin/templates/previewtopicactions.nat.tmpl:5
+msgid "Save and continue editing"
+msgstr "Сохранить и продолжить редактирование"
+
+#: twikiplugins/NatSkin/templates/edit.nat.tmpl:78
+#: twikiplugins/NatSkin/templates/edittoolbar.natedit.tmpl:66
+#: twikiplugins/NatSkin/templates/edittopicactions.nat.tmpl:6
+#: twikiplugins/NatSkin/templates/preview.nat.tmpl:39
+#: twikiplugins/NatSkin/templates/previewtoolbar.natedit.tmpl:11
+#: twikiplugins/NatSkin/templates/previewtopicactions.nat.tmpl:6
+#: twikiplugins/NatSkin/templates/settingstoolbar.natedit.tmpl:5
+msgid "Save and exit"
+msgstr "Сохранить и выйти"
+
+#: templates/registernotifyadmin.tmpl:16
+#: twikiplugins/ClassicSkin/templates/registernotifyadmin.classic.tmpl:16
+msgid "Saved to:"
+msgstr "Сохранено в:"
+
+#: data/TWiki/WebSearch.txt:29 data/TWiki/WebSearchAdvanced.txt:37
+#: data/_default/WebHome.txt:11
+#: twikiplugins/NatSkin/templates/oopsnoweb.nat.tmpl:27
+#: twikiplugins/NatSkin/templates/search.nat.tmpl:3
+#: twikiplugins/NatSkin/templates/searchbox.nat.tmpl:8
+#: twikiplugins/NatSkin/templates/searchformat.nat.tmpl:4
+#: twikiplugins/NatSkin/templates/searchrenameview.nat.tmpl:4
+#: twikiplugins/PatternSkin/data/Main/WebLeftBar.txt:7
+#: twikiplugins/PatternSkin/data/Sandbox/WebLeftBar.txt:7
+#: twikiplugins/PatternSkin/data/TWiki/WebLeftBar.txt:8
+#: twikiplugins/PatternSkin/data/TWiki/WebLeftBarExample.txt:6
+#: twikiplugins/PatternSkin/data/TWiki/WebLeftBarSearch.txt:3
+#: twikiplugins/PatternSkin/data/TWiki/WebTopBar.txt:8
+#: twikiplugins/PatternSkin/data/Trash/WebLeftBar.txt:5
+#: twikiplugins/PatternSkin/data/_default/WebLeftBar.txt:6
+msgid "Search"
+msgstr "Поиск"
+
+#: twikiplugins/PatternSkin/templates/backlinksallwebs.pattern.tmpl:10
+msgid "Search %1 We&b only"
+msgstr "Искать только в разделе %1 "
+
+#: twikiplugins/PatternSkin/templates/backlinksweb.pattern.tmpl:10
+msgid "Search a&ll webs"
+msgstr "Поиск по всем разделам"
+
+#: templates/oopsmore.tmpl:20
+#: twikiplugins/ClassicSkin/templates/oopsmore.classic.tmpl:18
+#: twikiplugins/PatternSkin/templates/backlinksallwebs.pattern.tmpl:10
+#: twikiplugins/PatternSkin/templates/backlinksweb.pattern.tmpl:10
+#: twikiplugins/PatternSkin/templates/oopsmorebacklinks.pattern.tmpl:3
+msgid "Search all webs for topics that link to here"
+msgstr "Найти ссылающиеся сюда страницы во всех разделах"
+
+#: twikiplugins/NatSkin/templates/oopsmore.nat.tmpl:23
+msgid "Search in all public webs"
+msgstr ""
+
+#: data/TWiki/WebTopicViewTemplate.txt:15
+#, fuzzy
+msgid "Search similar topics in all public webs"
+msgstr "Найти похожие страницы во всех открытых разделах"
+
+#: data/TWiki/WebSearchAdvanced.txt:69
+msgid "Search string"
+msgstr "Строку поиска"
+
+#: templates/oopsmore.tmpl:22
+#: twikiplugins/ClassicSkin/templates/oopsmore.classic.tmpl:20
+#: twikiplugins/PatternSkin/templates/oopsmorebacklinks.pattern.tmpl:5
+#, fuzzy
+msgid "Search the %1 Web for topics that link to here"
+msgstr "Поискать в разделе %1 страницы, ссылающиеся сюда"
+
+#: data/TWiki/WebSearch.txt:34 data/TWiki/WebSearchAdvanced.txt:42
+msgid "Search where:"
+msgstr "Где искать:"
+
+#: twikiplugins/NatSkin/data/TWiki/NatSkinStyleBrowser.txt:64
+msgid "Searchbox in pos. 1"
+msgstr ""
+
+#: twikiplugins/NatSkin/data/TWiki/NatSkinStyleBrowser.txt:65
+msgid "Searchbox in pos. 2"
+msgstr ""
+
+#: twikiplugins/NatSkin/data/TWiki/NatSkinStyleBrowser.txt:66
+msgid "Searchbox in pos. 3"
+msgstr ""
+
+#: twikiplugins/NatSkin/data/TWiki/NatSkinStyleBrowser.txt:63
+msgid "Searchbox in topbar"
+msgstr ""
+
+#: twikiplugins/NatSkin/data/TWiki/NatSkinStyleBrowser.txt:67
+msgid "Searchbox off"
+msgstr ""
+
+#: twikiplugins/PatternSkin/templates/searchbase.pattern.tmpl:1
+msgid "Searched:"
+msgstr "Найдено:"
+
+#: data/Trash/WebHome.txt:5
+msgid "Security Note:"
+msgstr "Примечание по безопасности:"
+
+#: templates/messages.tmpl:47
+#: twikiplugins/NatSkin/templates/messages.nat.tmpl:26
+msgid "See %1 for a list of existing users or register as new user in %2."
+msgstr ""
+"Смотрите в %1 список существующих пользователей или зарегистрируйтесь как "
+"новый в %2."
+
+#: templates/messages.tmpl:293
+#: twikiplugins/NatSkin/templates/oopsnoformdef.nat.tmpl:6
+msgid "See %1 for information about Form Definitions."
+msgstr ""
+
+#: data/TWiki/ChangePassword.txt:31 data/TWiki/ResetPassword.txt:31
+msgid "See %1 for more information."
+msgstr "Cмотрите подробнее в %1."
+
+#: data/TWiki/WebIndex.txt:4
+#, fuzzy
+msgid "See also the faster %1"
+msgstr "См. также the faster %1"
+
+#: data/TWiki/WebTopicList.txt:4
+msgid "See also the verbose %1."
+msgstr "Смотрите подробнее %1."
+
+#: data/TWiki/RenameWeb.txt:3 data/TWiki/WebChanges.txt:6
+#: twikiplugins/NatSkin/data/TWiki/MySideBar.txt:12
+#: twikiplugins/NatSkin/templates/login.nat.tmpl:16
+#: twikiplugins/NatSkin/templates/messages.nat.tmpl:302
+#: twikiplugins/NatSkin/templates/messages.nat.tmpl:310
+#: twikiplugins/NatSkin/templates/oopsaccesschange.nat.tmpl:11
+#: twikiplugins/NatSkin/templates/oopsaccesscreateweb.nat.tmpl:10
+#: twikiplugins/NatSkin/templates/oopsaccessgroup.nat.tmpl:10
+#: twikiplugins/NatSkin/templates/oopsaccessrename.nat.tmpl:10
+#: twikiplugins/NatSkin/templates/oopsaccessview.nat.tmpl:10
+#: twikiplugins/NatSkin/templates/oopsaccessvote.nat.tmpl:10
+#: twikiplugins/NatSkin/templates/oopslogon.nat.tmpl:10
+#: twikiplugins/NatSkin/templates/oopswrongpassword.nat.tmpl:10
+#: twikiplugins/PatternSkin/templates/login.pattern.tmpl:75
+msgid "See also:"
+msgstr "Смотрите также:"
+
+#: twikiplugins/PatternSkin/templates/changeform.pattern.tmpl:20
+msgid "Select"
+msgstr "Выбрать"
+
+#: twikiplugins/PatternSkin/templates/attachagain.pattern.tmpl:23
+msgid "Select a new local file to update attachment"
+msgstr "Выберите новый локальный файл, для обновления приложения"
+
+#: twikiplugins/PatternSkin/templates/renamebase.pattern.tmpl:94
+msgid "Select all"
+msgstr "Выбрать все"
+
+#: twikiplugins/NatSkin/templates/renamesidebar.nat.tmpl:15
+msgid "Select the [[Trash.WebHome][Trash]] web to delete the topic."
+msgstr ""
+
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:90
+#, fuzzy
+msgid "Select, copy and paste your signature text to the bottom of your entry"
+msgstr "Выделите, скопируйте и вставьте вашу подпись к вашей вставке"
+
+#: twikiplugins/NatSkin/templates/oopsmngcreateweb.nat.tmpl:60
+msgid "Select..."
+msgstr "Выбрать..."
+
+#: twikiplugins/NatSkin/templates/oopssendmailerr.nat.tmpl:3
+msgid "Send Mail Error"
+msgstr ""
+
+#: data/TWiki/TWikiRegistration.txt:277
+msgid "Send you a confirmation of your registration by e-mail."
+msgstr "Отправит подтверждение вашей регистрации по e-mail."
+
+#: twikiplugins/PatternSkin/templates/oopsmorecompare.pattern.tmpl:6
+msgid "Sequential"
+msgstr "Последовательно"
+
+#: lib/TWiki/Form.pm:579
+msgid "Set all"
+msgstr "Установить все"
+
+#: twikiplugins/PatternSkin/templates/oopsmoresetparent.pattern.tmpl:4
+msgid "Set new topic parent"
+msgstr "Установить нового родителя для страницы"
+
+#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:87
+msgid "Show attachments"
+msgstr "Показать приложения"
+
+#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:28
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:14
+#: twikiplugins/PatternSkin/templates/renamebase.pattern.tmpl:31
+msgid "Show help"
+msgstr "Показать подсказку"
+
+#: data/TWiki/NewUserTemplate.txt:78
+msgid "Show tool-tip topic info on mouse-over of %1 links, on or off:"
+msgstr ""
+
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:101
+msgid "Shrink edit box"
+msgstr "Сжать окно редактирования"
+
+#: twikiplugins/PatternSkin/templates/oopsmorecompare.pattern.tmpl:6
+msgid "Side by side"
+msgstr "В две колонки"
+
+#: twikiplugins/NatSkin/data/TWiki/NatSkinStyleBrowser.txt:49
+msgid "Sidebar Left"
+msgstr ""
+
+#: twikiplugins/NatSkin/data/TWiki/NatSkinStyleBrowser.txt:52
+msgid "Sidebar Off"
+msgstr ""
+
+#: twikiplugins/NatSkin/data/TWiki/NatSkinStyleBrowser.txt:50
+msgid "Sidebar Right"
+msgstr ""
+
+#: data/TWiki/WebTopicViewTemplate.txt:11
+#, fuzzy
+msgid "Similar topics in this web (if any):"
+msgstr "Похожие страницы в этом разделе (если есть):"
+
+#: data/TWiki/WebSearchAdvanced.txt:37
+msgid "Simple search"
+msgstr "Простой поиск"
+
+#: twikiplugins/NatSkin/templates/oopsauth.nat.tmpl:18
+msgid ""
+"Simply fill out the *[[%1][TWikiRegistration]]* form. It only takes a minute."
+msgstr ""
+
+#: twikiplugins/NatSkin/data/Main/WebLinksForAdmins.txt:8
+#: twikiplugins/NatSkin/data/TWiki/WebLinksForAdmins.txt:8
+msgid "SitePreferences"
+msgstr "Параметры сайта"
+
+#: twikiplugins/NatSkin/templates/attachtables.nat.tmpl:25
+#: twikiplugins/NatSkin/templates/attachtables.nat.tmpl:4
+#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:91
+msgid "Size"
+msgstr "Размер"
+
+#: twikiplugins/NatSkin/data/TWiki/MySideBarTemplate.txt:34
+msgid "Skin Styles"
+msgstr ""
+
+#: twikiplugins/NatSkin/templates/oopssoftwareerr.nat.tmpl:3
+msgid "Software Error"
+msgstr "Программная ошибка"
+
+#: templates/registernotify.tmpl:15
+#: twikiplugins/ClassicSkin/templates/registernotify.classic.tmpl:15
+#, fuzzy
+msgid "Some add schedule information and vacation notice."
+msgstr "Некоторые добавляют расписание и сообщения об отездах."
+
+#: templates/messages.tmpl:328
+#, fuzzy
+msgid "Some characters such as =&#126;=, =$=, =@=, =%= are removed"
+msgstr "Такие символы как =&#126;=, =$=, =@=, =%= удалены"
+
+#: templates/messages.tmpl:273
+msgid ""
+"Some mail tools have an error that causes them to send the same request "
+"twice when you click on a link. It you did this, it is possible that you "
+"actually *have* registered successfully."
+msgstr ""
+
+#: templates/registernotify.tmpl:14
+#: twikiplugins/ClassicSkin/templates/registernotify.classic.tmpl:14
+msgid ""
+"Some people turn it into a personal portal with favorite links, what they "
+"work on, what help they'd like, etc."
+msgstr ""
+
+#: data/TWiki/WebSearchAdvanced.txt:52
+msgid "Sort results by:"
+msgstr "Сортировать результаты по:"
+
+#: templates/messages.tmpl:326
+msgid "Spaces are replaced by underscores"
+msgstr "Пробелы заменены знаками подчёркивания"
+
+#: twikiplugins/NatSkin/data/TWiki/TWikiWebLinks.txt:11
+#: twikiplugins/PatternSkin/data/Main/WebLeftBar.txt:10
+#: twikiplugins/PatternSkin/data/Sandbox/WebLeftBar.txt:10
+#: twikiplugins/PatternSkin/data/TWiki/WebLeftBar.txt:11
+#: twikiplugins/PatternSkin/data/_default/WebLeftBar.txt:9
+msgid "Statistics"
+msgstr "Статистика"
+
+#: twikiplugins/PatternSkin/templates/oopsmoresetparent.pattern.tmpl:6
+msgid "Step 1: Select topic parent:"
+msgstr "Шаг 1: Выбрать родительскую страницу:"
+
+#: twikiplugins/PatternSkin/templates/oopsmoresetparent.pattern.tmpl:11
+msgid ""
+"Step 2: Continue to <input type='submit' class='twikiButton' value='Edit' /> "
+"and save %1 to activate the new parent"
+msgstr ""
+"Шаг 2 Продолжить <input type='submit' class='twikiButton' "
+"value='Редактировать' /> и сохранить %1 чтобы активировать нового родителя"
+
+#: twikiplugins/NatSkin/templates/edittoolbar.natedit.tmpl:11
+#, fuzzy
+msgid "Strike through text"
+msgstr "Редактировать текст этой страницы"
+
+#: data/TWiki/NewUserTemplate.txt:84
+#, fuzzy
+msgid ""
+"Style of text edit box. =width: 99%= for full window width (default), "
+"=width: auto= to disable."
+msgstr ""
+"Стиль окна редактирования текста. =width: 99%= от полной ширины окна "
+"(обычно), =width: auto= чтобы отменить."
+
+#: twikiplugins/NatSkin/data/TWiki/NatSkinStyleBrowser.txt:10
+msgid "Style:"
+msgstr "Стиль:"
+
+#: data/TWiki/TWikiRegistration.txt:268 templates/messages.tmpl:172
+#: templates/messages.tmpl:278
+#: twikiplugins/NatSkin/templates/messages.nat.tmpl:124
+#: twikiplugins/NatSkin/templates/messages.nat.tmpl:203
+msgid "Submit"
+msgstr "Применить"
+
+#: twikiplugins/NatSkin/data/TWiki/NatSkinStyleBrowser.txt:75
+msgid "Submit changes"
+msgstr "Применить изменения"
+
+#: templates/registernotify.tmpl:18 templates/registernotifyadmin.tmpl:12
+#: twikiplugins/ClassicSkin/templates/registernotify.classic.tmpl:18
+#: twikiplugins/ClassicSkin/templates/registernotifyadmin.classic.tmpl:12
+#, fuzzy
+msgid "Submitted content:"
+msgstr "Предоставленные сведения:"
+
+#: twikiplugins/MailerContrib/templates/mailnotify.tmpl:47
+#: twikiplugins/MailerContrib/templates/mailnotify.tmpl:79
+#: twikiplugins/MailerContrib/templates/newsletter.tmpl:19
+#: twikiplugins/NatSkin/templates/mailnotify.nat.tmpl:12
+msgid "Subscribe / Unsubscribe in:"
+msgstr "Подписаться / отписаться от:"
+
+#: twikiplugins/NatSkin/templates/edittoolbar.natedit.tmpl:13
+msgid "Subscript text"
+msgstr ""
+
+#: twikiplugins/PatternSkin/templates/renameweb.pattern.tmpl:27
+msgid "Subwebs must be enabled."
+msgstr "Подразделы должны быть разрешены."
+
+#: data/TWiki/WebSearchAdvanced.txt:70
+msgid "Summaries"
+msgstr "Выводы по результатам поиска"
+
+#: twikiplugins/NatSkin/templates/edittoolbar.natedit.tmpl:15
+msgid "Superscript text"
+msgstr ""
+
+#: twikiplugins/NatSkin/data/TWiki/NatSkinStyleBrowser.txt:20
+msgid "Switch to next style"
+msgstr ""
+
+#: twikiplugins/NatSkin/data/TWiki/NatSkinStyleBrowser.txt:12
+msgid "Switch to previous style"
+msgstr ""
+
+#: twikiplugins/NatSkin/data/TWiki/NatSkinStyleBrowser.txt:25
+#: twikiplugins/NatSkin/data/TWiki/NatSkinStyleBrowser.txt:33
+msgid "Switch to previous variation"
+msgstr ""
+
+#: twikiplugins/NatSkin/data/TWiki/NatSkinStyleBrowser.txt:37
+msgid "Switches:"
+msgstr ""
+
+#: twikiplugins/NatSkin/templates/defaultbody.nat.tmpl:50
+msgid "Syndicate this site"
+msgstr ""
+
+#: data/TWiki/WebSearch.txt:30 data/TWiki/WebSearchAdvanced.txt:38
+msgid ""
+"TIP: to search for all topics that contain =\"SOAP\"=, =\"WSDL\"=, a literal "
+"=\"web service\"=, but not =\"shampoo\"=, write:"
+msgstr ""
+"CОВЕТ: например, чтобы найти все страницы, содержащие слова =\"SOAP\"=, ="
+"\"WSDL\"=, а также словосочетание =\"web service\"=, без слова =\"shampoo"
+"\"=, введите:"
+
+#: twikiplugins/NatSkin/data/TWiki/MySideBarTemplate.txt:24
+msgid "TWiki Forms"
+msgstr ""
+
+#: twikiplugins/NatSkin/data/TWiki/MySideBarTemplate.txt:23
+msgid "TWiki Variables"
+msgstr ""
+
+#: templates/mailresetpassword.tmpl:3
+#: twikiplugins/ClassicSkin/templates/mailresetpassword.classic.tmpl:3
+msgid "TWiki password reset for %1"
+msgstr "Пароль TWiki сброшен для %1"
+
+#: templates/oopschangelanguage.tmpl:13
+msgid ""
+"TWiki's user interface is available in several languages. If you want to "
+"change the language for this session, choose one of the following and hit "
+"\"Change language\". Otherwise, follow the \"Cancel\" link on the bottom of "
+"the page to return to the previous topic."
+msgstr ""
+
+#: twikiplugins/NatSkin/templates/oopsregthanks.nat.tmpl:9
+msgid "Take a look at the [[%1][TWikiWeb]] to get help on the %2."
+msgstr ""
+
+#: data/Sandbox/WebHome.txt:6
+msgid "Test Topics"
+msgstr "Пробные страницы"
+
+#: data/TWiki/WebSearch.txt:36 data/TWiki/WebSearchAdvanced.txt:44
+msgid "Text body"
+msgstr "В тексте страницы"
+
+#: twikiplugins/NatSkin/templates/editsidebar.nat.tmpl:5
+msgid "TextFormatting"
+msgstr ""
+
+#: templates/messages.tmpl:134 templates/messages.tmpl:165
+#: twikiplugins/NatSkin/templates/messages.nat.tmpl:115
+#: twikiplugins/NatSkin/templates/oopsregthanks.nat.tmpl:5
+msgid "Thank you for registering"
+msgstr "Спасибо за регистрацию"
+
+#: templates/registernotify.tmpl:8
+#: twikiplugins/ClassicSkin/templates/registernotify.classic.tmpl:8
+#, fuzzy
+msgid ""
+"Thank you for registering in the %1 collaboration platform. Please save this "
+"e-mail for future reference."
+msgstr ""
+"Приветствуем вашу регистрацию на %1 платформе сотрудничества. Сохраните, "
+"пожалуйста, этот e-mail на будущее."
+
+#: templates/registerconfirm.tmpl:9
+#: twikiplugins/ClassicSkin/templates/registerconfirm.classic.tmpl:9
+#, fuzzy
+msgid ""
+"Thank you for registering in the %1 collaboration platform. Your "
+"verification code is %2."
+msgstr ""
+"Приветствуем вашу регистрацию на платформе сотрудничества %1. Ваш "
+"удостоверяющий код %2."
+
+#: templates/messages.tmpl:242
+#, fuzzy
+msgid ""
+"The %1 field must be your first and last name in %2, e.g. your capitalized "
+"first and last name with spaces removed."
+msgstr ""
+"Поле %1 должно быть вашими именем и фамилией в %2, т.е. записываться "
+"латинскими буквами, каждое начинаться с заглавной буквы и стыковаться без "
+"пробелов."
+
+#: twikiplugins/NatSkin/templates/messages.nat.tmpl:174
+#: twikiplugins/NatSkin/templates/oopsregwiki.nat.tmpl:5
+#, fuzzy
+msgid ""
+"The %1 field must be your first and lastname in %2, e.g. your capitalized "
+"first and lastname with spaces removed."
+msgstr ""
+"Поле %1 должно быть вашими именем и фамилией в %2, т.е. записываться "
+"латинскими буквами, каждое начинаться с заглавной буквы и стыковаться без "
+"пробелов."
+
+#: templates/messages.tmpl:236
+msgid "The %1 field must match the {LoginNameFilterIn} filter for this site"
+msgstr ""
+
+#: templates/messages.tmpl:68
+#: twikiplugins/NatSkin/templates/messages.nat.tmpl:30
+#: twikiplugins/NatSkin/templates/oopstopicexists.nat.tmpl:3
+msgid "The %1 topic already exists"
+msgstr "Страница %1 уже существует"
+
+#: templates/messages.tmpl:447
+#: twikiplugins/NatSkin/templates/messages.nat.tmpl:314
+#: twikiplugins/NatSkin/templates/oopsnoweb.nat.tmpl:3
+msgid "The %1 web does not exist"
+msgstr "Раздел %1 не существует"
+
+#: data/Sandbox/WebHome.txt:4
+msgid ""
+"The %1 web is the sandbox you can use for testing. Everybody is welcome to "
+"add or delete some stuff. It is recommended to walk through the %2 to get a "
+"jumpstart on the %3 tool. A good rule of thumb is to add at the end of the "
+"page and sign and date it with your %4."
+msgstr ""
+"Раздел %1 это песочница, где вы можете тренироваться. Здесь каждый может "
+"добавлять или удалять что хочет. Рекомендуем для начала прочесть %2, чтобы "
+"получить вводную информацию по инструментарию %3. Хорошим тоном считается "
+"добавлять заметку в конец страницы, а также ставить подпись в виде вашего "
+"ВикиИмени (%4) и даты."
+
+#: data/Sandbox/WebRss.txt:5 data/Trash/WebRss.txt:5
+#: data/_default/WebAtom.txt:3 data/_default/WebRss.txt:5
+#, fuzzy
+msgid ""
+"The %1 web of TWiki. TWiki is a Web-Based Collaboration Platform for the "
+"Enterprise."
+msgstr ""
+"Это раздел %1 из TWiki. TWiki — это основанная на WWW платформа "
+"сотрудничества."
+
+#: templates/messages.tmpl:268
+#: twikiplugins/NatSkin/templates/messages.nat.tmpl:195
+msgid "The activation code %1 is invalid."
+msgstr "%1 - Неверный код активации."
+
+#: twikiplugins/PatternSkin/templates/moveattachment.pattern.tmpl:38
+msgid "The attachment and any history will be moved to the new topic."
+msgstr "Приложнение и история будут перемещены на новую страницу."
+
+#: templates/messages.tmpl:404
+#: twikiplugins/NatSkin/templates/oopsleaseconflict.nat.tmpl:22
+msgid ""
+"The chances are good that %1 has simply navigated away from the edit page "
+"without saving."
+msgstr ""
+
+#: twikiplugins/PatternSkin/templates/renamebase.pattern.tmpl:49
+#, fuzzy
+msgid ""
+"The checkmarked topics will be updated (another form will appear which will "
+"_eventually_ allow you to rename any topics that were locked)"
+msgstr ""
+"Отмеченные страницы будут обновлены (another form will appear which will "
+"_eventually_ allow you to rename any topics that were locked)"
+
+#: twikiplugins/NatSkin/templates/renamewebbase.nat.tmpl:68
+#: twikiplugins/PatternSkin/templates/renamewebbase.pattern.tmpl:26
+msgid "The checkmarked topics will be updated."
+msgstr "Отмеченные страницы будут обновлены."
+
+#: twikiplugins/NatSkin/templates/oopsbadpwformat.nat.tmpl:7
+msgid "The correct format is =WikiName:&lt;encryptedpassword&gt;= (13 chars)."
+msgstr ""
+
+#: templates/messages.tmpl:260
+#: twikiplugins/NatSkin/templates/messages.nat.tmpl:187
+msgid "The e-mail address for this account is not valid."
+msgstr "У этой учетной записи неверный e-mail."
+
+#: twikiplugins/NatSkin/templates/oopssendmailerr.nat.tmpl:5
+msgid "The e-mail could not be delivered."
+msgstr ""
+
+#: twikiplugins/NatSkin/templates/oopsregemail.nat.tmpl:5
+msgid "The email address entered is not valid."
+msgstr "Введен неверный e-mail адрес."
+
+#: templates/messages.tmpl:420
+msgid "The entry for user %1 was missing in the password system."
+msgstr ""
+
+#: templates/messages.tmpl:321
+#, fuzzy
+msgid "The file has been uploaded and attached properly to the %1 topic."
+msgstr "Файл приложен к странице %1."
+
+#: twikiplugins/NatSkin/templates/oopsresetpasswd.nat.tmpl:8
+msgid "The following is your encrypted password entry:"
+msgstr ""
+
+#: templates/messages.tmpl:355
+#, fuzzy
+msgid "The following topics are locked for edit, and cannot be moved:"
+msgstr ""
+"Следующие страницы замкнуты для редактирования и не могут перемещаться:"
+
+#: templates/messages.tmpl:361
+#, fuzzy
+msgid "The following topics refer to topics in this web, but are being edited:"
+msgstr ""
+"Следующие страницы ссылаются на страницу в этом разделе, но редактируются:"
+
+#: templates/messages.tmpl:358
+#, fuzzy
+msgid ""
+"The following topics refer to topics in this web, but you are denied access "
+"to them:"
+msgstr ""
+"У вас нет доступа к следующим страницам, ссылающимся на страницы этого "
+"раздела:"
+
+#: templates/messages.tmpl:299
+msgid "The form should be defined in the topic %1"
+msgstr ""
+
+#: templates/messages.tmpl:402
+#: twikiplugins/NatSkin/templates/oopsleaseconflict.nat.tmpl:20
+msgid "The lease on this topic expired %1 ago."
+msgstr ""
+
+#: twikiplugins/PatternSkin/templates/moveattachment.pattern.tmpl:21
+msgid "The new topic chosen must already exist."
+msgstr ""
+
+#: templates/messages.tmpl:16
+msgid "The new web has been created"
+msgstr "Создан новый раздел"
+
+#: twikiplugins/NatSkin/templates/oopsmngcreateweb.nat.tmpl:35
+msgid ""
+"The new web has been created, however not all topics could be copied from "
+"the base web."
+msgstr ""
+"Новый раздел создан, однако не все страницы скопированы из базового раздела."
+
+#: twikiplugins/NatSkin/templates/oopsempty.nat.tmpl:15
+msgid ""
+"The other possibility is that someone sent you the preview URL of [[%1]] "
+"instead of the view URL."
+msgstr ""
+
+#: templates/messages.tmpl:98
+#: twikiplugins/NatSkin/templates/messages.nat.tmpl:69
+msgid "The password you entered in the *old password* field is incorrect."
+msgstr "Введенный пароль в поле *старый пароль* неверен."
+
+#: twikiplugins/NatSkin/templates/oopswrongpassword.nat.tmpl:6
+msgid ""
+"The password you entered in the *password* field is incorrect. Please try "
+"again."
+msgstr ""
+"Введенный пароль в поле *пароль* неверен. Пожалуйста, попробуйте еще раз."
+
+#: templates/messages.tmpl:287
+#: twikiplugins/NatSkin/templates/messages.nat.tmpl:130
+msgid "The required field %1 was not filled in."
+msgstr "Обязательное поле %1 не было заполнено."
+
+#: twikiplugins/NatSkin/templates/messages.nat.tmpl:214
+msgid ""
+"The required field =<span class=\"twikiAlert\">**</span>= *%1* was not "
+"filled in."
+msgstr ""
+"Обязательное поле =<span class=\"twikiAlert\">**</span>= *%1* не было "
+"заполнено."
+
+#: data/TWiki/WebTopicViewTemplate.txt:5
+#, fuzzy
+msgid "The topic %1 you are trying to access does not exist, yet."
+msgstr "Вы пытаетесь %1 несуществующую страницу."
+
+#: templates/messages.tmpl:302
+msgid "The topic is in an old format"
+msgstr "Страница в старом формате"
+
+#: templates/messages.tmpl:192
+#: twikiplugins/NatSkin/templates/messages.nat.tmpl:136
+#: twikiplugins/NatSkin/templates/oopsregpasswd.nat.tmpl:5
+msgid "The two passwords you entered do not match."
+msgstr "Два введенных Вами пароля не совпадают."
+
+#: templates/messages.tmpl:351
+#: twikiplugins/NatSkin/templates/messages.nat.tmpl:264
+#, fuzzy
+msgid "There are problems with renaming this web:"
+msgstr "Возникли проблемы с переименованием раздела:"
+
+#: templates/messages.tmpl:199
+#: twikiplugins/NatSkin/templates/messages.nat.tmpl:142
+#, fuzzy
+msgid "There has been a problem adding your user id to the Password system."
+msgstr ""
+"Возникла проблема с добавлением вашего пароля. Свяжитесь, пожалуйста, с %1."
+
+#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:61
+msgid "There is no size limit for uploaded files."
+msgstr "Нет ограничения на размер для загруженных файлов."
+
+#: templates/messages.tmpl:305
+msgid "There should be a line that includes %1, look for %2 (or %3)"
+msgstr ""
+
+#: twikiplugins/NatSkin/templates/oopsnoformdef.nat.tmpl:11
+msgid ""
+"There should be a line that includes =META:FORM=, look for name=\"&lt;"
+"formName&gt;\""
+msgstr ""
+
+#: twikiplugins/NatSkin/templates/oopsnoformdef.nat.tmpl:15
+msgid "There should be a topic &lt;formName&gt;"
+msgstr ""
+
+#: twikiplugins/NatSkin/data/TWiki/NatSkinStyleBrowser.txt:44
+msgid "Thin Layout"
+msgstr ""
+
+#: templates/messages.tmpl:312
+msgid "This can be automatically upgraded by:"
+msgstr ""
+
+#: templates/messages.tmpl:295
+msgid "This could be for several reasons:"
+msgstr "Это невозмножно по следующим причинам:"
+
+#: data/TWiki/ChangePassword.txt:31 data/TWiki/ResetPassword.txt:31
+msgid ""
+"This form applies only if TWiki uses a {PasswordManager} that supports "
+"changing passwords. Otherwise replace this topic with a note describing how "
+"to change the password in your organization."
+msgstr ""
+"Эта форма применяет только когда TWiki использует {PasswordManager}, который "
+"поддерживает смену паролей. В ином случае замените эту страницу примечанием, "
+"описывающим, как изменить пароль в вашей организации."
+
+#: data/TWiki/ChangeEmailAddress.txt:5
+msgid ""
+"This form is used to change your registered e-mail addresses. Your "
+"registered e-mails are used by TWiki for sending you e-mails, include "
+"notifications of password changes. The addresses you register via this form "
+"are kept secret and will *not* be published anywhere on this site."
+msgstr ""
+
+#: data/Sandbox/WebNotify.txt:4 data/Trash/WebNotify.txt:3
+#: data/_default/WebNotify.txt:2
+msgid ""
+"This is a subscription service to be automatically notified by e-mail when "
+"topics change in this %1 web. This is a convenient service, so you do not "
+"have to come back and check all the time if something has changed. To "
+"subscribe, please add a bullet with your %2 in alphabetical order to this "
+"list:"
+msgstr ""
+"Это сервис автоматической подписки, который отправит вам e-mail при "
+"изменении страниц в разделе %1. Этот сервис удобен тем, что у вас нет "
+"необходимости каждый раз проверять появились ли новые изменения. Чтобы "
+"подписаться, просто добавьте свое ВикиИмя %2 в этот список (в алфавитном "
+"порядке):"
+
+#: twikiplugins/MailerContrib/templates/mailnotify.tmpl:7
+#: twikiplugins/MailerContrib/templates/mailnotify.tmpl:71
+msgid "This is an automated e-mail from %1."
+msgstr "Это автоматический e-mail от %1."
+
+#: templates/registernotifyadmin.tmpl:8
+#: twikiplugins/ClassicSkin/templates/registernotifyadmin.classic.tmpl:8
+msgid "This is an automated e-mail notification of user registration in %1."
+msgstr ""
+"Это автоматическое уведомление по e-mail о регистрации пользователя в %1."
+
+#: twikiplugins/NatSkin/templates/mailnotify.nat.tmpl:7
+msgid "This is an automated email from %1."
+msgstr ""
+
+#: data/Trash/WebHome.txt:2
+msgid ""
+"This is the Trash. Here you can undelete topics; deleted attachments are in "
+"TrashAttachment."
+msgstr ""
+"Это Мусор. Здесь вы можете не удалять страницы; удалённые приложения "
+"находятся в TrashAttachment."
+
+#: twikiplugins/PatternSkin/templates/renamedelete.pattern.tmpl:37
+msgid ""
+"This name has been chosen so it doesn't conflict with any other topics "
+"already in the %1 web."
+msgstr ""
+
+#: templates/messages.tmpl:310
+msgid "This requires the form definition to be present."
+msgstr ""
+
+#: twikiplugins/NatSkin/templates/oopsnoformdef.nat.tmpl:19
+msgid ""
+"This requires the form definition to be present. This can be automatically "
+"upgraded by:"
+msgstr ""
+
+#: templates/messages.tmpl:254
+msgid "This site requires at least %1 character passwords"
+msgstr "Требуется ввести пароль длиной не менее %1 символов"
+
+#: data/TWiki/WebTopicViewTemplate.txt:16
+msgid "This topic has moved to %1."
+msgstr "Эта страница перемещена в %1"
+
+#: data/TWiki/WebTopicNonWikiTemplate.txt:2
+msgid ""
+"This topic name is not recommended because it will not be linked "
+"automatically. See %1 for details"
+msgstr ""
+
+#: twikiplugins/PatternSkin/templates/viewprint.pattern.tmpl:28
+msgid "This topic:"
+msgstr "Это страница:"
+
+#: templates/messages.tmpl:29
+msgid ""
+"Those changes have been merged with yours to create Rev %1. Text fields will "
+"have been merged, but other data such as form fields may have overwritten "
+"the other users changes. Please inspect the topic to make sure it is OK, "
+"especially if you made any changes to form fields."
+msgstr ""
+
+#: twikiplugins/NatSkin/templates/renamebase.nat.tmpl:20
+msgid "To"
+msgstr ""
+
+#: twikiplugins/PatternSkin/templates/preview.pattern.tmpl:62
+msgid "To *cancel* and discard any changes: Press the [Discard] button."
+msgstr "Для *отмены* и отказа от всех изменений: Нажмите кнопку [Отказаться]."
+
+#: twikiplugins/PatternSkin/templates/preview.pattern.tmpl:60
+#, fuzzy
+msgid "To *save* changes: Press the [Save Changes] button."
+msgstr "Чтобы *сохранить* изменения: Нажмите кнопку [Сохранить Изменения]."
+
+#: twikiplugins/NatSkin/templates/oopslockedrename.nat.tmpl:11
+msgid ""
+"To cancel go <a href=\"javscript:history.back()\">back</a> in your browser."
+msgstr ""
+
+#: twikiplugins/NatSkin/templates/oopslocked.nat.tmpl:11
+msgid ""
+"To cancel simply go <a href=\"javascript:history.back()\">back</a> in your "
+"browser."
+msgstr ""
+
+#: templates/renameweb.tmpl:10
+#, fuzzy
+msgid ""
+"To delete this web: move this web to the Trash web by renaming it to %1."
+msgstr ""
+"Чтобы удалить раздел: Отправьте этот раздел в Корзину переименуя его в %1."
+
+#: twikiplugins/NatSkin/templates/oopslocked.nat.tmpl:9
+msgid "To edit anyway click on the <a href=\"%1\">Edit anyway</a>."
+msgstr ""
+
+#: data/TWiki/TWikiRegistration.txt:4
+msgid ""
+"To edit pages on this TWikiSite, you must have a registered user name and "
+"password."
+msgstr ""
+"Чтобы редактировать страницы этого [[TWikiSite][сайта TWiki]], вы должны "
+"быть зарегистрированным пользователем."
+
+#: templates/oopsleaseconflict.tmpl:21
+msgid "To edit the topic anyway, click "
+msgstr "Если всёже хотите редактировать страницу, нажмите "
+
+#: twikiplugins/ClassicSkin/templates/oopsleaseconflict.classic.tmpl:13
+msgid "To edit the topic anyway, hit 'Edit Anyway'."
+msgstr ""
+"Если всёже хотите редактировать страницу, нажмите 'Всё равно редактировать'."
+
+#: twikiplugins/NatSkin/templates/oopsleaseconflict.nat.tmpl:35
+msgid "To edit the topic anyway, hit 'Edit&nbsp;Anyway'."
+msgstr ""
+
+#: twikiplugins/NatSkin/templates/oopsauth.nat.tmpl:6
+msgid ""
+"To edit topics on this %1 collaborative web, you must be registered as a "
+"user."
+msgstr ""
+
+#: twikiplugins/NatSkin/templates/oopslocked.nat.tmpl:8
+#: twikiplugins/NatSkin/templates/oopslockedrename.nat.tmpl:9
+msgid ""
+"To look at the text without editing the topic click on the [[%1][View raw "
+"text]]."
+msgstr ""
+
+#: twikiplugins/PatternSkin/templates/preview.pattern.tmpl:61
+msgid "To make *more changes*: Go back in your browser."
+msgstr "Чтобы *продолжить изменения*: Вернитесь с помощью вашего браузера."
+
+#: data/TWiki/TWikiRegistration.txt:8
+msgid "To register as a new user, simply fill out this form:"
+msgstr ""
+"Для регистрирации нового пользователя, просто заполните следующую форму:"
+
+#: twikiplugins/NatSkin/templates/oopsauth.nat.tmpl:16
+msgid "To register as a new user:"
+msgstr "Чтобы зарегистрироваться как новый пользватель:"
+
+#: twikiplugins/NatSkin/templates/oopslockedrename.nat.tmpl:10
+msgid "To rename anyway click on [[%1][Rename anyway]]"
+msgstr ""
+
+#: templates/oopsleaseconflict.tmpl:17
+#, fuzzy
+msgid "To see if %1 has finished editing yet, click "
+msgstr "Чтобы увидеть, закончил ли уже %1 редактировать, нажмите "
+
+#: twikiplugins/ClassicSkin/templates/oopsleaseconflict.classic.tmpl:11
+#, fuzzy
+msgid "To see if %1 has finished editing yet, click 'Try Again'."
+msgstr ""
+"Чтобы увидеть, закончил ли уже %1 редактировать, нажмите 'Попытайтесть "
+"снова'."
+
+#: twikiplugins/NatSkin/templates/oopsleaseconflict.nat.tmpl:36
+msgid "To see if they have finished their edit yet, click 'Try&nbsp;Again'"
+msgstr ""
+
+#: twikiplugins/PatternSkin/templates/rename.pattern.tmpl:25
+msgid "To topic:"
+msgstr "В страницу:"
+
+#: twikiplugins/PatternSkin/templates/rename.pattern.tmpl:17
+msgid "To web:"
+msgstr "В раздел:"
+
+#: twikiplugins/NatSkin/templates/moveattachment.nat.tmpl:20
+#: twikiplugins/NatSkin/templates/renamewebbase.nat.tmpl:25
+msgid "To:"
+msgstr ""
+
+#: twikiplugins/NatSkin/templates/changes.nat.tmpl:15
+#: twikiplugins/NatSkin/templates/moveattachment.nat.tmpl:18
+msgid "Topic"
+msgstr "Страница"
+
+#: twikiplugins/NatSkin/templates/oopsmore.nat.tmpl:66
+msgid "Topic Caching"
+msgstr ""
+
+#: twikiplugins/NatSkin/templates/changeformsidebar.nat.tmpl:5
+#, fuzzy
+msgid "Topic Meta data"
+msgstr "Редактировать личные сведения"
+
+#: templates/messages.tmpl:284
+#: twikiplugins/NatSkin/templates/messages.nat.tmpl:211
+msgid "Topic Save Error"
+msgstr "Ошибка сохранения страницы"
+
+#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:102
+msgid "Topic attachments"
+msgstr "Приложения страницы"
+
+#: templates/messages.tmpl:308
+msgid "Topic can not be upgraded from old style category table"
+msgstr ""
+
+#: twikiplugins/NatSkin/templates/oopsmissing.nat.tmpl:3
+msgid "Topic does not exist"
+msgstr "Страница не существует"
+
+#: twikiplugins/NatSkin/templates/oopslocked.nat.tmpl:3
+#: twikiplugins/NatSkin/templates/oopslockedrename.nat.tmpl:3
+msgid "Topic is locked by another user"
+msgstr "Страница заблокирована другим пользователем"
+
+#: twikiplugins/NatSkin/templates/oopspreview.nat.tmpl:3
+msgid "Topic is not saved yet"
+msgstr "Страница еще не сохранена"
+
+#: twikiplugins/NatSkin/templates/oopsempty.nat.tmpl:3
+msgid "Topic must not be empty"
+msgstr ""
+
+#: data/TWiki/WebSearchAdvanced.txt:54
+msgid "Topic name"
+msgstr "Названию страницы"
+
+#: data/TWiki/WebTopicCreator.txt:105
+msgid "Topic name:"
+msgstr "Название страницы:"
+
+#: data/TWiki/WebTopicCreator.txt:118
+msgid "Topic parent:"
+msgstr "Родительская страница:"
+
+#: twikiplugins/NatSkin/templates/oopsmore.nat.tmpl:32
+msgid "Topic preferences"
+msgstr "Параметры страницы"
+
+#: templates/oopssaveerr.tmpl:9
+#: twikiplugins/NatSkin/templates/oopssaveerr.nat.tmpl:3
+#: twikiplugins/PatternSkin/templates/oopssaveerr.pattern.tmpl:6
+msgid "Topic save error"
+msgstr "Ошибка сохранения страницы"
+
+#: data/TWiki/WebSearch.txt:36 data/TWiki/WebSearchAdvanced.txt:45
+msgid "Topic title"
+msgstr "В заголовке страницы"
+
+#: templates/messages.tmpl:26
+msgid "Topic was merged"
+msgstr "Страница собрана"
+
+#: data/TWiki/WebTopicCreator.txt:63
+msgid "Topic will be named: "
+msgstr "Страница будет названа: "
+
+#: twikiplugins/MailerContrib/templates/mailnotify.tmpl:14
+msgid "Topics in %1 web:"
+msgstr "Страницы в разделе %1:"
+
+#: data/TWiki/WebSearchAdvanced.txt:81
+msgid "Topics per web"
+msgstr "Страниц в разделе"
+
+#: twikiplugins/PatternSkin/templates/renamewebbase.pattern.tmpl:41
+#, fuzzy
+msgid "Topics which are currently being edited by other users in the %1 Web:"
+msgstr "Другими пользователями в разделе %1 сейчас·редактируются страницы:"
+
+#: twikiplugins/PatternSkin/templates/renamewebbase.pattern.tmpl:44
+#, fuzzy
+msgid ""
+"Topics which refer to this web and are are currently being edited by other "
+"users:"
+msgstr ""
+"Темы, которые ссылаются в этот раздел и сейчас редактируются другими "
+"пользователями:"
+
+#: twikiplugins/PatternSkin/templates/renamewebbase.pattern.tmpl:47
+msgid ""
+"Topics which refer to this web that you do not have permission to change:"
+msgstr "Страницы, ссылающиеся на этот раздел который вы не можете изменять:"
+
+#: data/TWiki/WebSearchAdvanced.txt:71
+msgid "Total matches"
+msgstr "Всего совпадений"
+
+#: templates/oopsleaseconflict.tmpl:18
+#: twikiplugins/ClassicSkin/templates/oopsleaseconflict.classic.tmpl:20
+#: twikiplugins/NatSkin/templates/oopsleaseconflict.nat.tmpl:50
+#: twikiplugins/PatternSkin/templates/oopsleaseconflict.pattern.tmpl:19
+msgid "Try Again"
+msgstr "Попытайтесть снова"
+
+#: lib/TWiki/UI/RDiff.pm:271
+msgid "Unchanged"
+msgstr "Не изменены"
+
+#: data/TWiki/NewUserTemplate.txt:76
+msgid ""
+"Uncomment preferences variables to activate them (remove the #-sign). Help "
+"and details on preferences variables are available in %1."
+msgstr ""
+"Раскомментируйте переменные предпчтения для их активации (удалите символ - "
+"#). Помощь и подрбноти по переменным параметров доступна здесь %1."
+
+#: twikiplugins/NatSkin/templates/edittoolbar.natedit.tmpl:9
+msgid "Underlined text"
+msgstr "Подчеркнутый текст"
+
+#: twikiplugins/NatSkin/templates/edit.nat.tmpl:76
+#: twikiplugins/NatSkin/templates/edittopicactions.nat.tmpl:8
+#: twikiplugins/NatSkin/templates/preview.nat.tmpl:37
+#: twikiplugins/NatSkin/templates/previewtopicactions.nat.tmpl:8
+#: twikiplugins/NatSkin/templates/settingstopicactions.nat.tmpl:5
+msgid "Undo"
+msgstr "Вернуть"
+
+#: twikiplugins/NatSkin/templates/login.nat.tmpl:7
+msgid "Unrecognised user and/or password."
+msgstr "Неправильный пользователь и/или пароль"
+
+#: templates/messages.tmpl:40
+#: twikiplugins/NatSkin/templates/messages.nat.tmpl:18
+msgid "Unrecognized action command %1"
+msgstr "Неопознанная комманда %1"
+
+#: twikiplugins/NatSkin/templates/oopsmanage.nat.tmpl:4
+msgid "Unrecognized action command:"
+msgstr "Неопознанная комманда:"
+
+#: twikiplugins/PatternSkin/templates/login.pattern.tmpl:54
+msgid "Unrecognized user and/or password"
+msgstr "Неизвестный пользователь и/или пароль"
+
+#: twikiplugins/NatSkin/templates/attachagain.nat.tmpl:3
+msgid "Update attachment"
+msgstr "Обновить приложение"
+
+#: twikiplugins/PatternSkin/templates/attachagain.pattern.tmpl:5
+msgid "Update attachment %1 on %2"
+msgstr "Обновление приложения %1 на %2"
+
+#: twikiplugins/NatSkin/templates/searchrenameview.nat.tmpl:8
+msgid "Update ref:"
+msgstr ""
+
+#: twikiplugins/NatSkin/templates/attachagain.nat.tmpl:23
+#: twikiplugins/NatSkin/templates/attachnew.nat.tmpl:5
+#: twikiplugins/PatternSkin/templates/attachagain.pattern.tmpl:39
+#: twikiplugins/PatternSkin/templates/attachnew.pattern.tmpl:13
+msgid "Upload file"
+msgstr "Загрузить файл"
+
+#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:61
+msgid "Upload up to %1 KB."
+msgstr "Максимальный размер %1 КБ."
+
+#: twikiplugins/NatSkin/templates/oopsupload.nat.tmpl:3
+msgid "Uploaded file \"%1\" does not exist or is empty"
+msgstr "Загруженный файл \"%1\" не существует или пуст"
+
+#: twikiplugins/NatSkin/templates/messages.nat.tmpl:219
+msgid "Uploaded file \"<nop>%1\" does not exist or is empty."
+msgstr "Загруженный файл \"<nop>%1\" не существует или пуст."
+
+#: templates/messages.tmpl:340
+#: twikiplugins/NatSkin/templates/messages.nat.tmpl:332
+msgid "Uploaded file %1 exceeds limit of %2 KB"
+msgstr "Загруженный файл %1 превысил допустимые  %2 KB"
+
+#: templates/messages.tmpl:339
+#: twikiplugins/NatSkin/templates/messages.nat.tmpl:331
+msgid "Uploaded file is too big"
+msgstr "Загружаемый файл слишком большой"
+
+#: data/TWiki/ChangePassword.txt:5 data/TWiki/ResetPassword.txt:6
+msgid "Use %1 instead."
+msgstr "Тогда воспользуйтесь [[%1][Изменить пароль]]. "
+
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:99
+msgid "Use monospace font"
+msgstr "Использовать моноширинный шрифт"
+
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:99
+#, fuzzy
+msgid "Use proportional spaced font"
+msgstr "Использовать пропорциональный  шрифт"
+
+#: data/TWiki/WebTopicCreator.txt:125
+#, fuzzy
+msgid "Use template:"
+msgstr "Возможные шаблоны формы"
+
+#: templates/messages.tmpl:10
+#: twikiplugins/NatSkin/templates/messages.nat.tmpl:4
+msgid "User Account %1 Deleted"
+msgstr "Учетная запись %1 удалена"
+
+#: twikiplugins/PatternSkin/data/TWiki/WebLeftBar.txt:14
+msgid "User Reference"
+msgstr "Руководство пользователя"
+
+#: twikiplugins/NatSkin/data/TWiki/MySideBarTemplate.txt:19
+msgid "User's Guide"
+msgstr "Руководство пользователя"
+
+#: twikiplugins/PatternSkin/templates/login.pattern.tmpl:88
+msgid "Username"
+msgstr "Имя пользователя"
+
+#: twikiplugins/NatSkin/data/Main/WebLinks.txt:10
+#: twikiplugins/PatternSkin/data/TWiki/WebLeftBar.txt:5
+msgid "Users"
+msgstr "Пользователи"
+
+#: templates/messages.tmpl:143
+msgid ""
+"Users with automatically generated passwords should proceed immediately to "
+"[[%1][change password]] to change their password to something memorable."
+msgstr ""
+"Пользователи с автоматически сгенерированными паролями должны немедленно [[%"
+"1][сменить пароль]] на лучше запоминающийся."
+
+#: twikiplugins/NatSkin/templates/changeformsidebar.nat.tmpl:6
+#: twikiplugins/NatSkin/templates/editsidebar.nat.tmpl:6
+msgid "Variables"
+msgstr "Переменные"
+
+# Разновидность
+# ,fuuzzy
+#: twikiplugins/NatSkin/data/TWiki/NatSkinStyleBrowser.txt:24
+msgid "Variation:"
+msgstr "Изменение:"
+
+#: twikiplugins/NatSkin/templates/attachtables.nat.tmpl:25
+#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:144
+msgid "Version"
+msgstr "Версия"
+
+#: twikiplugins/PatternSkin/templates/attachagain.pattern.tmpl:11
+#, fuzzy
+msgid "Version history"
+msgstr "История версий %1"
+
+#: twikiplugins/PatternSkin/templates/attachagain.pattern.tmpl:9
+msgid "Version history of %1"
+msgstr "История версий %1"
+
+#: data/TWiki/NewUserTemplate.txt:82
+msgid "Vertical size of text edit box:"
+msgstr "Вертикальный размер поля редактирования текста:"
+
+#: twikiplugins/NatSkin/templates/rdifftopicactions.nat.tmpl:2
+#: twikiplugins/NatSkin/templates/strings.nat.tmpl:4
+msgid "View"
+msgstr "Просмотреть"
+
+#: twikiplugins/NatSkin/templates/oopsaccessview.nat.tmpl:4
+msgid "View Access Denied"
+msgstr "Доступ для просмотра закрыт"
+
+#: twikiplugins/NatSkin/templates/oopsrev.nat.tmpl:65
+msgid "View Previous Topic Revision"
+msgstr "Просмотреть предыдущую версию страницы"
+
+#: twikiplugins/NatSkin/templates/oopsrev.nat.tmpl:88
+msgid "View all diffs"
+msgstr "Просмотреть все различия"
+
+#: twikiplugins/NatSkin/templates/oopsrev.nat.tmpl:59
+#: twikiplugins/PatternSkin/templates/oopsmorecompare.pattern.tmpl:7
+msgid "View difference"
+msgstr "Посмотреть различия"
+
+#: twikiplugins/NatSkin/templates/strings.nat.tmpl:5
+msgid "View formatted topic"
+msgstr "Просмотреть форматированную страницу"
+
+#: templates/oopsmore.tmpl:41
+#: twikiplugins/ClassicSkin/templates/oopsmore.classic.tmpl:39
+#: twikiplugins/PatternSkin/templates/oopsmorerevision.pattern.tmpl:3
+msgid "View previous topic revision"
+msgstr "Просмотреть предыдущую версию страницы"
+
+#: twikiplugins/NatSkin/templates/oopslocked.nat.tmpl:15
+#: twikiplugins/NatSkin/templates/oopslockedrename.nat.tmpl:15
+#: twikiplugins/NatSkin/templates/oopsnoformdef.nat.tmpl:29
+msgid "View raw"
+msgstr "Просмотреть исходный текст"
+
+#: twikiplugins/PatternSkin/templates/oopsleaseconflict.pattern.tmpl:34
+msgid "View raw text without formatting"
+msgstr "Просмотреть исходный текст, без форматирования"
+
+#: twikiplugins/NatSkin/templates/strings.nat.tmpl:7
+msgid "View raw topic"
+msgstr "Просмотреть исходный текст страницы"
+
+#: twikiplugins/NatSkin/templates/oopsnoformdef.nat.tmpl:10
+msgid "View raw topic text"
+msgstr "Просмотреть исходный текст"
+
+#: twikiplugins/NatSkin/templates/oopsrev.nat.tmpl:79
+#: twikiplugins/PatternSkin/templates/oopsmorerevision.pattern.tmpl:6
+msgid "View revision"
+msgstr "Просмотреть версию"
+
+#: data/TWiki/WebTopicCreator.txt:127
+#, fuzzy
+msgid "View templates"
+msgstr "Возможные шаблоны формы"
+
+#: templates/oopsleaseconflict.tmpl:30
+#: twikiplugins/ClassicSkin/templates/oopsleaseconflict.classic.tmpl:15
+#: twikiplugins/PatternSkin/data/Main/PatternSkinUserViewTemplate.txt:10
+#: twikiplugins/PatternSkin/templates/oopsleaseconflict.pattern.tmpl:35
+#: twikiplugins/PatternSkin/templates/rdiff.pattern.tmpl:32
+msgid "View topic"
+msgstr "Просмотреть страницу"
+
+#: twikiplugins/NatSkin/templates/strings.nat.tmpl:15
+msgid "View topic history"
+msgstr "Просмотреть историю страницы"
+
+#: templates/twiki.tmpl:164
+#: twikiplugins/ClassicSkin/templates/twiki.classic.tmpl:153
+msgid "View total topic history"
+msgstr "Просмотреть полную историю страницы"
+
+#: twikiplugins/NatSkin/templates/oopsaccessvote.nat.tmpl:4
+msgid "Vote Access Denied"
+msgstr "Доступ к голосованию закрыт"
+
+#: data/TWiki/WebTopicNonWikiTemplate.txt:2
+msgid "WARNING:"
+msgstr "ВНИМАНИЕ:"
+
+#: data/TWiki/TWikiPreferences.txt:64
+#: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:50
+msgid "WYSIWYG"
+msgstr "Визуальный редактор"
+
+#: templates/messages.tmpl:418
+msgid "Warning: Can't INCLUDE %1 repeatedly, topic is already included. %2"
+msgstr ""
+
+#: templates/messages.tmpl:417
+#, fuzzy
+msgid "Warning: Can't find topic %1.%2"
+msgstr "Внимание: Не могу найти страницу %1"
+
+#: lib/TWiki/UI/Register.pm:828
+msgid "Warning: Could not send confirmation email"
+msgstr "Внимание: Не удалось послать e-mail подтверждения"
+
+#: templates/messages.tmpl:425
+msgid "Warning: This site does not allow %<nop>INCLUDE% of URLs"
+msgstr ""
+"Внимание: Этот сайт не позволяет использовать %<nop>INCLUDE% для URL адресов"
+
+#: twikiplugins/NatSkin/data/TWiki/NatSkinStyleBrowser.txt:58
+msgid "Web Buttons Off"
+msgstr ""
+
+#: twikiplugins/NatSkin/data/TWiki/NatSkinStyleBrowser.txt:57
+msgid "Web Buttons On"
+msgstr ""
+
+#: data/TWiki/WebSearch.txt:3
+msgid "Web Search"
+msgstr "Поиск в разделе"
+
+#: twikiplugins/NatSkin/templates/moveattachment.nat.tmpl:18
+msgid "Web:"
+msgstr "Раздел:"
+
+#: twikiplugins/PatternSkin/data/TWiki/WebLeftBarExample.txt:8
+#: twikiplugins/PatternSkin/data/TWiki/WebLeftBarWebsList.txt:2
+msgid "Webs"
+msgstr "Разделы"
+
+#: twikiplugins/NatSkin/data/Main/WebLinks.txt:8
+msgid "Welcome"
+msgstr "Добро пожаловать"
+
+#: twikiplugins/NatSkin/templates/oopsregthanks.nat.tmpl:8
+msgid "Welcome %1, take a [[%2][first tour]] on the %3."
+msgstr "Добро пожаловать %1, пройдите [[%2][первое знакомство]] на %3."
+
+#: twikiplugins/NatSkin/data/TWiki/MySideBarTemplate.txt:18
+msgid "Welcome Guest"
+msgstr "Добро пожаловать Гость"
+
+#: twikiplugins/NatSkin/templates/login.nat.tmpl:8
+#: twikiplugins/NatSkin/templates/oopslogon.nat.tmpl:4
+msgid "Welcome to the %1"
+msgstr "Добро пожаловать в %1 "
+
+#: data/Sandbox/WebHome.txt:2 data/_default/WebHome.txt:2
+msgid "Welcome to the %1 web"
+msgstr "Добро пожаловать в раздел %1"
+
+#: data/TWiki/TWikiRegistration.txt:273
+msgid ""
+"When %1 receives the form, it will mail an account activation code to the e-"
+"mail address you gave above. Enter that activation code in the following "
+"screen, or follow the link in the e-mail, to activate your account. Once "
+"your account is activated, %1 will:"
+msgstr ""
+"Когда вы заполните эту форму, %1 отправит код активации по указанному Вами e-"
+"mail адресу. Введите этот код на следующей странице или откройте ссылку в "
+"полученном сообщении чтобы активировать вашу учетную запись, после этого %1:"
+
+#: twikiplugins/NatSkin/templates/attachtables.nat.tmpl:25
+#: twikiplugins/NatSkin/templates/attachtables.nat.tmpl:4
+#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:144
+#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:91
+msgid "Who"
+msgstr "Кто"
+
+#: twikiplugins/NatSkin/templates/renamesidebar.nat.tmpl:7
+#: twikiplugins/NatSkin/templates/renamewebsidebar.nat.tmpl:5
+msgid "WikiWord"
+msgstr "[[WikiWord][ВикиСлово]]"
+
+#: templates/messages.tmpl:19
+#: twikiplugins/NatSkin/templates/oopsmngcreateweb.nat.tmpl:52
+msgid "Would you like to go to:"
+msgstr "Куда бы вы хотели перейти:"
+
+#: data/TWiki/NewUserTemplate.txt:86
+#, fuzzy
+msgid "Write protect your home page: (set it to your %1)"
+msgstr "Защитить от записи ваше страничку: (установить право для %1)"
+
+#: templates/messages.tmpl:224
+#: twikiplugins/NatSkin/templates/messages.nat.tmpl:165
+#: twikiplugins/NatSkin/templates/oopsregexist.nat.tmpl:3
+msgid "You are already registered"
+msgstr "Вы уже зарегистрированы"
+
+#: templates/messages.tmpl:137
+#: twikiplugins/NatSkin/templates/oopsregthanks.nat.tmpl:13
+msgid "You are also listed in the %1 topic"
+msgstr "Вы также перечислены на странице %1"
+
+#: templates/messages.tmpl:352
+msgid "You are denied access to the following topics in the web:"
+msgstr "Вы не имеете доступа к следующим страницам этого раздела:"
+
+#: templates/messages.tmpl:406
+#, fuzzy
+msgid ""
+"You are encouraged to go ahead and edit - unless you intend to change data "
+"in a form attached to the topic. If %1 actually _does_ save while you are "
+"editing, your changes will be merged, and nothing will be lost. Form data "
+"cannot easily be merged though, so in this case you are recommended to check "
+"with %1 first."
+msgstr ""
+"Вы вправе не обращать внимание и редактировать - если только вы не "
+"собираетесь изменять сведения в форме, приложенной к странице. Если %1 "
+"действительно _сохранил пока вы редактировали, то ваши изменения будут "
+"объединены и ничто не будет потеряно. Данные в формах нельзя просто "
+"объединить, поэтому в таком случае Вам рекомендуется прежде сверить с %1."
+
+#: twikiplugins/PatternSkin/templates/view.pattern.tmpl:50
+msgid "You are here:"
+msgstr "Вы сейчас здесь:"
+
+#: twikiplugins/NatSkin/templates/oopsnotwikiuser.nat.tmpl:3
+msgid "You are not registered"
+msgstr "Вы не зарегистрированы"
+
+#: templates/messages.tmpl:107
+#, fuzzy
+msgid ""
+"You are recommended to choose short names, preferably less than 10 "
+"characters, starting with an upper-case alphabetic character and using only "
+"alphanumeric characters. If you want to create a template web (a web just "
+"used as a base to create new webs) choose a name that starts with an "
+"underscore and has only alphanumeric characters."
+msgstr ""
+"Рекомендуются короткие имена предпочтительно до 10 букв, начинающиеся с "
+"заглавной буквы и включающие лишь буквы и цифры. Для шаблона раздела "
+"(используемого при создании новых разделов) используйте начинающееся "
+"подчеркиванием имя, содержащее·лишь·буквы·и·цифры."
+
+#: templates/messages.tmpl:460
+#: twikiplugins/NatSkin/templates/messages.nat.tmpl:321
+msgid "You are trying to %1 a topic that does not exist."
+msgstr "Вы пытаетесь %1 несуществующую страницу."
+
+#: templates/messages.tmpl:469
+#: twikiplugins/NatSkin/templates/messages.nat.tmpl:327
+msgid "You are trying to %1 an attachment that does not exist."
+msgstr "Вы пытаетесь %1 несуществуещее приложение."
+
+#: twikiplugins/NatSkin/templates/messages.nat.tmpl:315
+msgid "You are trying to '%1' a topic in a web that does not exist."
+msgstr "Вы пытаетесь '%1' страницу в несуществующем разделе."
+
+#: templates/messages.tmpl:456
+msgid ""
+"You can [[%1][create a new web]] if you have permission. Contact %2 if you "
+"have any questions."
+msgstr ""
+"Вы можете [[%1][создать новый раздел] если у вас есть на это права. "
+"Свяжитесь с %2 если есть вопосы."
+
+#: twikiplugins/NatSkin/templates/oopsnoweb.nat.tmpl:19
+msgid ""
+"You can [[%1][create a new web]] if you have the permission. Contact %2 if "
+"you have any questions."
+msgstr ""
+"Вы можете [[%1][создать новый раздел] если у вас есть на это права. "
+"Свяжитесь с %2 если есть вопосы."
+
+#: twikiplugins/NatSkin/templates/messages.nat.tmpl:102
+msgid "You can also use the names of the standard HTML colors"
+msgstr "Также вы можете использовать имена стандартных цветов HTML"
+
+#: templates/messages.tmpl:125
+msgid ""
+"You can also use the names of the standard HTML colors (black, silver, gray, "
+"white, maroon, red, purple, fuchsia, green, lime, olive, yellow, navy, blue, "
+"teal, or aqua)"
+msgstr ""
+"Вы также можете использовать названия стандартных для цветов HTML (black, "
+"silver,  gray, white, maroon, red, purple, fuchsia, green, lime, olive, "
+"yellow, navy, blue, teal или aqua)"
+
+#: templates/registernotify.tmpl:24
+#: twikiplugins/ClassicSkin/templates/registernotify.classic.tmpl:24
+#, fuzzy
+msgid "You can change your password at via %1"
+msgstr "Вы можете изменить свой пароль на %1"
+
+#: twikiplugins/PatternSkin/templates/renameweb.pattern.tmpl:23
+msgid "You can give this web a different name."
+msgstr "Вы можете дать этому разделу другое имя."
+
+#: twikiplugins/PatternSkin/templates/rename.pattern.tmpl:37
+msgid "You can move the topic to a different web."
+msgstr "Вы можете переместить страницу в другой раздел."
+
+#: templates/messages.tmpl:135
+msgid "You can review your changes in your personal TWiki topic %1"
+msgstr "Вы можете просмотреть изменения в вашей персональной TWiki-странице %1"
+
+#: templates/messages.tmpl:31
+msgid "You can see the differences [[%1][here]]."
+msgstr "Вы можете посмотреть различия [[%1][здесь]]."
+
+#: templates/oopschangelanguage.tmpl:8
+msgid ""
+"You can set your favorite language permanently by setting the %1 variable in "
+"your user topic."
+msgstr ""
+"Вы можете непосредственно установить предпочитаемый язык, установив "
+"переменную %1 на вашей персональной странице."
+
+#: twikiplugins/NatSkin/templates/oopssave.nat.tmpl:5
+msgid "You cannot call this script directly, %1 uses it internally."
+msgstr ""
+"Вы не можете вызвать этот скрипт непосредственно, %1 использует его внутри."
+
+#: templates/messages.tmpl:225
+#: twikiplugins/NatSkin/templates/messages.nat.tmpl:166
+#: twikiplugins/NatSkin/templates/oopsregexist.nat.tmpl:5
+msgid "You cannot register twice, the name %1 is already registered."
+msgstr "Вы не можете зарегистрироваться дважды, имя %1 уже зарегистрированно."
+
+#: templates/messages.tmpl:203 templates/messages.tmpl:212
+#, fuzzy
+msgid "You have *not* been registered."
+msgstr "Вы не зарегистрированы"
+
+#: templates/messages.tmpl:330
+msgid ""
+"You may be able to get your TWiki administrator to change the settings if "
+"they are inappropriate for your environment."
+msgstr ""
+
+#: templates/messages.tmpl:148
+msgid "You may need to close your browser to make this change take effect."
+msgstr ""
+"Возможно, Вам прийдется закрыть окно вашего браузера чтобы эти изменения "
+"вступили в силу."
+
+#: twikiplugins/NatSkin/templates/oopssaveerr.nat.tmpl:7
+msgid ""
+"You might go <a href=\"javascript:history.back()\">back</a> in your browser "
+"and save your changes locally."
+msgstr ""
+
+#: templates/registerconfirm.tmpl:11
+#: twikiplugins/ClassicSkin/templates/registerconfirm.classic.tmpl:11
+#, fuzzy
+msgid ""
+"You now need to verify your e-mail address. You can do so by entering %1 in "
+"the form presented to you when this e-mail was sent, or by visiting %2"
+msgstr ""
+"Тепрь Вам надо подтвердить адрес e-mail. Вы можете сделать это, введя %1 в "
+"форму, представленную Вам когда это e-mail сообщение было послано, или "
+"посетив ссылку %2"
+
+#: data/TWiki/ChangeEmailAddress.txt:7
+msgid ""
+"You really ought to register a valid e-mail address. If TWiki can't find a "
+"registered e-mail for you in the secret database, it will look in your user "
+"topic for a line like this:"
+msgstr ""
+
+#: templates/messages.tmpl:317
+msgid "You will probably have to ask your administrator, %1, to do this."
+msgstr ""
+
+#: data/TWiki/ChangeEmailAddress.txt:23 data/TWiki/ChangePassword.txt:13
+#: data/TWiki/ResetPassword.txt:16
+msgid "Your %1.LoginName"
+msgstr "Ваше [[%1.LoginName][ИмяПользователя]]"
+
+#: twikiplugins/NatSkin/templates/messages.nat.tmpl:7
+msgid "Your [[%1][homepage]] has _not_ been removed yet."
+msgstr "Ваша [[%1][домашняя страница]] всё ещё _не_ удалена."
+
+#: templates/messages.tmpl:167
+msgid ""
+"Your activation code has been sent to %1.  Either click on the link in your "
+"e-mail or enter the code in the box below to activate your membership. (This "
+"code is of the form \"YourName.xxxxxxxxxx\")"
+msgstr ""
+"Ваш код подтверждения регистрации выслан по адресу %1.  Откройте ссылку в "
+"полученном Вами письме или введите код в текстовое поле ниже чтобы "
+"подтвердить вашу регистрацию. (Этот код имеет вид: \"ВашеИмя.xxxxxxxxxx\")"
+
+#: templates/oopslanguagechanged.tmpl:11
+#: twikiplugins/NatSkin/templates/oopslanguagechanged.nat.tmpl:12
+#: twikiplugins/PatternSkin/templates/oopslanguagechanged.pattern.tmpl:19
+msgid ""
+"Your language will be changed to %1 from the next screen. You will be "
+"redirected to there right now. If you aren't, [[%2][click here]] to proceed."
+msgstr ""
+"Язык интерфейса изменится на %1 со следующего экрана. Сейчас вы будете "
+"перенаправены туда. Если этого не произойдёт или вы не хотите ждать, [[%2]"
+"[жмите сюда]]."
+
+#: twikiplugins/NatSkin/templates/oopslanguagechanged.nat.tmpl:9
+msgid ""
+"Your language will be reset to the global default from the next screen on. "
+"You will be redirected to there right now. If you aren't, [[%1][click here]] "
+"to proceed."
+msgstr ""
+"Ваш язык интерфейса будет сброшен на значение по умолчанию начиная со "
+"следующего экрана. Сейчас вы будете переадресованы туда. Если не хотите "
+"ждать, [[%1][нажмите здесь]]."
+
+#: twikiplugins/NatSkin/templates/oopsauth.nat.tmpl:13
+msgid ""
+"Your login name is usually the %1, like *<nop>TomSawyer* and _not_ Tom "
+"Sawyer or tom or sawyer."
+msgstr ""
+
+#: templates/mailresetpassword.tmpl:10
+#: twikiplugins/ClassicSkin/templates/mailresetpassword.classic.tmpl:10
+msgid "Your password has been changed to %1."
+msgstr "Ваш пароль изменен на %1."
+
+#: data/TWiki/TWikiRegistration.txt:101
+msgid "Your password:"
+msgstr "Ваш пароль:"
+
+#: templates/registernotify.tmpl:12
+#: twikiplugins/ClassicSkin/templates/registernotify.classic.tmpl:12
+msgid ""
+"Your personal %1 topic is located at %2. You can customize it as you like:"
+msgstr ""
+"Ваша личная страница %1 расположена в %2. Вы можете изменить её по своему "
+"усмотрению:"
+
+#: templates/messages.tmpl:160
+msgid "Your registered e-mail address(es) are updated to: %1."
+msgstr "Ваш зарегистрирванный электронный адрес(а) обновлен на: %1."
+
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:90
+msgid "Your signature to copy/paste:"
+msgstr "Ваша подпись для копирования/вставки:"
+
+#: twikiplugins/NatSkin/templates/edittoolbar.natedit.tmpl:39
+#, fuzzy
+msgid "Your signature with timestamp"
+msgstr "Ваша подпись для копирования/вставки:"
+
+#: templates/messages.tmpl:153
+msgid ""
+"Your system may not support changing passwords through TWiki. Check with "
+"your TWiki administrator."
+msgstr ""
+"Ваша система возможно не поддерживает смену паролей через TWiki. Свяжитесь с "
+"администратором TWiki."
+
+#: templates/messages.tmpl:11
+#: twikiplugins/NatSkin/templates/messages.nat.tmpl:5
+msgid "Your user name has been removed from the Authentication System."
+msgstr "Ваше имя пользователя было удалено из Системы Аутентификации."
+
+#: templates/messages.tmpl:13
+msgid "Your user topic has not been renamed. Please e-mail %1 to request this."
+msgstr ""
+"Ваша страница пользователя не была переименована. Пожалуйста отправте e-mail "
+"на %1 с запросом."
+
+#: twikiplugins/PatternSkin/templates/settings.pattern.tmpl:36
+#, fuzzy
+msgid ""
+"[multiple of 3 spaces] * [space] Set [space] VARIABLENAME [space] = [value]"
+msgstr ""
+"[кратное 3 пробелов] * [пробел] Set [пробел] ИМЯПЕРЕМЕННОЙ [пробел] = "
+"[значение]"
+
+#: twikiplugins/NatSkin/templates/oopspreview.nat.tmpl:6
+msgid ""
+"__Note:__ Go back and click on Cancel if you would like to cancel the "
+"changes you did."
+msgstr ""
+"__Примечание:__ Если Вы хотите отменить изменения, сделанные вами, вернитесь "
+"назад и нажмите Отменить."
+
+#: twikiplugins/NatSkin/templates/oopslocked.nat.tmpl:18
+msgid ""
+"__Note:__ Locking gets reset after <b> %1 </b> minutes of inactivity, the "
+"earliest in <b>%2</b> minutes."
+msgstr ""
+
+#: lib/TWiki/I18N.pm:270
+msgid "_language_name"
+msgstr "Русский"
+
+#: data/TWiki/WebSearchAdvanced.txt:76 data/TWiki/WebSearchAdvanced.txt:94
+msgid "about !BookView"
+msgstr "о !BookView"
+
+#: data/TWiki/WebSearchAdvanced.txt:64
+msgid "about regular expression search"
+msgstr "о поиске с использованием регулярных выражений"
+
+#: lib/TWiki/Access.pm:207
+#, fuzzy
+msgid "access denied on root"
+msgstr "доступ к странице закрыт"
+
+#: lib/TWiki/Access.pm:156
+msgid "access denied on topic"
+msgstr "доступ к странице закрыт"
+
+#: lib/TWiki/Access.pm:184
+msgid "access denied on web"
+msgstr "доступ к разделу закрыт"
+
+#: lib/TWiki/Access.pm:216
+#, fuzzy
+msgid "access not allowed on root"
+msgstr "доступ к странице запрещён"
+
+#: lib/TWiki/Access.pm:173
+msgid "access not allowed on topic"
+msgstr "доступ к странице запрещён"
+
+#: lib/TWiki/Access.pm:196
+msgid "access not allowed on web"
+msgstr "доступ к разделу запрещён"
+
+#: twikiplugins/PatternSkin/templates/constants.pattern.tmpl:11
+msgid "accesskey='c'"
+msgstr "accesskey='c'"
+
+#: data/_default/WebHome.txt:11
+msgid "advanced search"
+msgstr "расширенный поиск"
+
+#: data/TWiki/WikiSyntaxSummary.txt:16
+msgid "and"
+msgstr "и"
+
+#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:99
+msgid "change, update, previous revisions, move, delete..."
+msgstr "изменить, обновить, предыдущая версия, переместить, удалить..."
+
+#: twikiplugins/NatSkin/templates/changes.nat.tmpl:9
+msgid "changes"
+msgstr "изменения"
+
+#: twikiplugins/PatternSkin/templates/renamebase.pattern.tmpl:94
+msgid "checkboxes of referenced topics"
+msgstr ""
+
+#: twikiplugins/NatSkin/templates/oopsrev.nat.tmpl:28
+#: twikiplugins/NatSkin/templates/oopsrev.nat.tmpl:43
+msgid "debug"
+msgstr "отладка"
+
+#: templates/messages.tmpl:377
+msgid "don't forget to check your Topic Settings"
+msgstr "не забудьте проверить свойства вашей страницы"
+
+#: twikiplugins/NatSkin/templates/changeform.nat.tmpl:10
+#: twikiplugins/NatSkin/templates/edit.nat.tmpl:11
+msgid "edit"
+msgstr "редактировать"
+
+#: twikiplugins/NatSkin/templates/editform.nat.tmpl:9
+msgid "edit form"
+msgstr "редактировать форму"
+
+#: templates/messages.tmpl:186
+msgid "fields are required."
+msgstr " - эти поля необходимо заполнить."
+
+#: twikiplugins/NatSkin/templates/searchtopicactions.nat.tmpl:2
+msgid "go back to <nop>%1"
+msgstr "вернуться к <nop>%1"
+
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:39
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:43
+#: twikiplugins/PatternSkin/templates/preview.pattern.tmpl:20
+#: twikiplugins/PatternSkin/templates/preview.pattern.tmpl:24
+msgid "help"
+msgstr "помощь"
+
+#: data/TWiki/WikiSyntaxSummary.txt:16
+msgid "hints on good style"
+msgstr "Руководство по хорошему стилю"
+
+#: twikiplugins/NatSkin/templates/oopsrev.nat.tmpl:73
+msgid "in <input type=\"checkbox\" name=\"raw\"> raw text format."
+msgstr ""
+
+#: twikiplugins/PatternSkin/templates/oopsmorerevision.pattern.tmpl:5
+msgid "in raw text format"
+msgstr "в виде исходного текста"
+
+#: templates/form.tmpl:3
+#: twikiplugins/ClassicSkin/templates/form.classic.tmpl:3
+#: twikiplugins/NatSkin/templates/form.nat.tmpl:3
+#: twikiplugins/PatternSkin/templates/form.pattern.tmpl:3
+msgid "indicates mandatory fields"
+msgstr "указывает обязательные поля"
+
+#: templates/oopsmore.tmpl:11 templates/oopsmore.tmpl:17
+#: twikiplugins/ClassicSkin/templates/oopsmore.classic.tmpl:15
+#: twikiplugins/ClassicSkin/templates/oopsmore.classic.tmpl:9
+#: twikiplugins/PatternSkin/templates/oopsmoredelete.pattern.tmpl:6
+#: twikiplugins/PatternSkin/templates/oopsmorerename.pattern.tmpl:6
+msgid "looking for references in _%1 web_ only"
+msgstr "поиск ссылок только в _разделе %1_"
+
+#: data/TWiki/RenameWeb.txt:3 templates/oopsmore.tmpl:15
+#: templates/oopsmore.tmpl:9
+#: twikiplugins/ClassicSkin/templates/oopsmore.classic.tmpl:13
+#: twikiplugins/ClassicSkin/templates/oopsmore.classic.tmpl:7
+#: twikiplugins/PatternSkin/templates/oopsmoredelete.pattern.tmpl:4
+#: twikiplugins/PatternSkin/templates/oopsmorerename.pattern.tmpl:4
+msgid "looking for references in _all public webs_"
+msgstr "поиск ссылок во _всех публичных разделах_"
+
+#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:99
+msgid "manage"
+msgstr "управление"
+
+#: twikiplugins/NatSkin/templates/attachtables.nat.tmpl:6
+msgid "manage properties of %1"
+msgstr "управлять свойствами %1"
+
+#: twikiplugins/NatSkin/templates/oopsmore.nat.tmpl:3
+msgid "more"
+msgstr "больше"
+
+#: data/Trash/WebHome.txt:10
+msgid "more..."
+msgstr "больше..."
+
+#: twikiplugins/NatSkin/templates/attachtables.nat.tmpl:6
+#: twikiplugins/NatSkin/templates/moveattachment.nat.tmpl:9
+msgid "move"
+msgstr "переместить"
+
+#: twikiplugins/NatSkin/templates/attachtables.nat.tmpl:6
+msgid "move or delete %1"
+msgstr "переместить или удалить %1"
+
+#: twikiplugins/NatSkin/data/TWiki/NatSkinStyleBrowser.txt:20
+msgid "next"
+msgstr "следующ."
+
+#: twikiplugins/PatternSkin/templates/oopsmoresetparent.pattern.tmpl:8
+#, fuzzy
+msgid "none (remove topic parent)"
+msgstr "none (удалить родительскую страницу)"
+
+#: twikiplugins/NatSkin/templates/oopschangepasswd.nat.tmpl:3
+#: twikiplugins/NatSkin/templates/oopslogon.nat.tmpl:3
+#: twikiplugins/NatSkin/templates/oopsregthanks.nat.tmpl:3
+#: twikiplugins/NatSkin/templates/oopsresetpasswd.nat.tmpl:3
+msgid "note"
+msgstr "примечание"
+
+#: twikiplugins/MailerContrib/templates/mailnotify.tmpl:16
+#, fuzzy
+msgid "now %1"
+msgstr "сейчас же %1"
+
+#: twikiplugins/NatSkin/templates/oops.nat.tmpl:9
+msgid "oops"
+msgstr "ой"
+
+#: twikiplugins/ClassicSkin/data/TWiki/ClassicSkinLogin.txt:2
+#: twikiplugins/PatternSkin/data/TWiki/WebLeftBarLogin.txt:3
+#: twikiplugins/PatternSkin/templates/attachagain.pattern.tmpl:35
+#: twikiplugins/PatternSkin/templates/attachagain.pattern.tmpl:39
+#: twikiplugins/PatternSkin/templates/attachnew.pattern.tmpl:13
+#: twikiplugins/PatternSkin/templates/changeform.pattern.tmpl:20
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:51
+#: twikiplugins/PatternSkin/templates/moveattachment.pattern.tmpl:44
+#: twikiplugins/PatternSkin/templates/oopsleaseconflict.pattern.tmpl:35
+#: twikiplugins/PatternSkin/templates/preview.pattern.tmpl:28
+#: twikiplugins/PatternSkin/templates/rename.pattern.tmpl:45
+#: twikiplugins/PatternSkin/templates/renameattachmentdelete.pattern.tmpl:25
+#: twikiplugins/PatternSkin/templates/renameconfirm.pattern.tmpl:21
+#: twikiplugins/PatternSkin/templates/renamedelete.pattern.tmpl:49
+#: twikiplugins/PatternSkin/templates/renameweb.pattern.tmpl:35
+#: twikiplugins/PatternSkin/templates/renamewebconfirm.pattern.tmpl:25
+#: twikiplugins/PatternSkin/templates/settings.pattern.tmpl:28
+msgid "or"
+msgstr "или"
+
+#: twikiplugins/NatSkin/templates/settings.nat.tmpl:11
+msgid "prefs"
+msgstr "парам"
+
+#: twikiplugins/NatSkin/data/TWiki/NatSkinStyleBrowser.txt:12
+#: twikiplugins/NatSkin/data/TWiki/NatSkinStyleBrowser.txt:25
+#: twikiplugins/NatSkin/data/TWiki/NatSkinStyleBrowser.txt:33
+msgid "prev"
+msgstr "предыдущ."
+
+#: twikiplugins/NatSkin/templates/preview.nat.tmpl:11
+msgid "preview"
+msgstr "предварительный просмотр"
+
+#: twikiplugins/NatSkin/templates/view.print.nat.tmpl:4
+msgid "printable"
+msgstr "печатная"
+
+#: twikiplugins/NatSkin/templates/attachtables.nat.tmpl:6
+msgid "props"
+msgstr "св-ва"
+
+#: lib/TWiki/Render.pm:207
+msgid "put it back"
+msgstr "вернуть на место"
+
+#: twikiplugins/NatSkin/templates/renamebase.nat.tmpl:10
+msgid "rename"
+msgstr "переименовать"
+
+#: twikiplugins/NatSkin/templates/renamewebbase.nat.tmpl:10
+#: twikiplugins/NatSkin/templates/renamewebdelete.nat.tmpl:3
+msgid "rename web"
+msgstr "переименовать раздел"
+
+#: data/TWiki/WebChanges.txt:2
+#: twikiplugins/PatternSkin/templates/searchbase.pattern.tmpl:23
+msgid "retrieved at %1"
+msgstr "Найдено в %1"
+
+#: twikiplugins/NatSkin/templates/searchbase.nat.tmpl:10
+msgid "search"
+msgstr "поиск"
+
+#: twikiplugins/NatSkin/templates/oopsrev.nat.tmpl:18
+#: twikiplugins/NatSkin/templates/oopsrev.nat.tmpl:35
+msgid "sequential"
+msgstr "последовательный"
+
+#: twikiplugins/NatSkin/templates/oopsrev.nat.tmpl:23
+#: twikiplugins/NatSkin/templates/oopsrev.nat.tmpl:39
+msgid "side by side"
+msgstr "в две колонки"
+
+#: twikiplugins/NatSkin/templates/messages.nat.tmpl:181
+#: twikiplugins/NatSkin/templates/oopsregwiki.nat.tmpl:12
+#, fuzzy
+msgid "single character first name"
+msgstr "(одна буква имени)"
+
+#: twikiplugins/NatSkin/templates/messages.nat.tmpl:180
+#: twikiplugins/NatSkin/templates/oopsregwiki.nat.tmpl:11
+#, fuzzy
+msgid "single character last name"
+msgstr "(одна буква фамилии)"
+
+#: twikiplugins/NatSkin/templates/oopsmngcreateweb.nat.tmpl:55
+msgid "the %1 home?"
+msgstr ""
+
+#: twikiplugins/NatSkin/templates/oopsmngcreateweb.nat.tmpl:54
+msgid "the %1 to customize the web specific preferences or"
+msgstr ""
+
+#: twikiplugins/NatSkin/templates/oopsmngcreateweb.nat.tmpl:53
+#, fuzzy
+msgid "the %1 to start working on the new web,"
+msgstr "%1 начать работать в новом разделе"
+
+#: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:22
+#, fuzzy
+msgid "title='Attach an image or document to this topic' accesskey='a'>&Attach"
+msgstr "Прикрепить изображение или документ к этой странице"
+
+#: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:7
+#, fuzzy
+msgid "title='Create new topic' accesskey='c'>&Create"
+msgstr "value='Отменить' accesskey='о'"
+
+#: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:25
+#, fuzzy
+msgid ""
+"title='Delete or rename this topic; set parent topic; view and compare "
+"revisions' accesskey='m'>&More topic actions"
+msgstr ""
+"Удалить или переименовать эту страницу; установить родительскую страницу; "
+"посмотреть и сравнить версии"
+
+#: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:10
+msgid "title='Edit this topic text' accesskey='e'>&Edit"
+msgstr ""
+
+#: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:13
+msgid "title='Edit this topic text' accesskey='w'>&WYSIWYG"
+msgstr ""
+
+#: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:16
+msgid "title='Edit this topic text' accesskey='w'>Create (&WYSIWYG)"
+msgstr ""
+
+#: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:28
+#, fuzzy
+msgid "title='Printable version of this topic' accesskey='p'>&Printable"
+msgstr "Печатная версия этой страницы"
+
+#: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:33
+#, fuzzy
+msgid ""
+"title='Search all webs for topics that link to here' accesskey='l'>A&ll Webs"
+msgstr "Найти ссылающиеся сюда страницы во всех разделах"
+
+#: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:31
+#, fuzzy
+msgid ""
+"title='Search the %1 Web for topics that link to here' accesskey='b'>We&b"
+msgstr "Поискать в разделе %1 страницы, ссылающиеся сюда"
+
+#: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:41
+#, fuzzy
+msgid "title='View raw text without formatting' accesskey='r'>&Raw View"
+msgstr "Просмотреть исходный текст, без форматирования"
+
+#: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:19
+msgid "title='View topic' accesskey='v'>&View topic"
+msgstr ""
+
+#: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:36
+#: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:38
+#, fuzzy
+msgid "title='View total topic history' accesskey='h'>&History"
+msgstr "Просмотреть полную историю страницы"
+
+#: twikiplugins/PatternSkin/templates/oopsleaseconflict.pattern.tmpl:27
+msgid "to edit the topic anyway."
+msgstr "всё равно редактировать эту страницу."
+
+#: twikiplugins/PatternSkin/templates/oopsleaseconflict.pattern.tmpl:19
+msgid "to see if %1 has finished editing yet."
+msgstr "посмотреть, не кончил ли %1 редактирование."
+
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:63
+msgid "value='Cancel' accesskey='c'"
+msgstr "value='Отменить' accesskey='о'"
+
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:59
+#: twikiplugins/PatternSkin/templates/preview.pattern.tmpl:36
+msgid "value='Checkpoint' accesskey='k'"
+msgstr "value='Контрольная точка' accesskey='к'"
+
+#: twikiplugins/PatternSkin/templates/preview.pattern.tmpl:38
+msgid "value='Discard' accesskey='d'"
+msgstr "value='Отказаться' accesskey='о'"
+
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:61
+msgid "value='Preview' accesskey='p'"
+msgstr "value='Предпросмотр' accesskey='п'"
+
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:57
+#: twikiplugins/PatternSkin/templates/preview.pattern.tmpl:34
+msgid "value='Quiet save' accesskey='q'"
+msgstr "value='Тихо сохранить' accesskey='т'"
+
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:55
+#: twikiplugins/PatternSkin/templates/preview.pattern.tmpl:32
+msgid "value='Save' accesskey='s'"
+msgstr "value='Сохранить' accesskey='с'"
+
+#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:148
+msgid "view"
+msgstr "Просмотреть"
+
+#: data/TWiki/ResetPassword.txt:8
+msgid ""
+"you *must* have at least one valid registered e-mail to be able to reset "
+"your password. If none of your registered e-mail addresses is valid, and you "
+"have forgotten your password, contact %1."
+msgstr ""
+"У вас *должен* быть хотя бы один правильно зарегистрированный адрес "
+"электронной почты, чтобы можно было сбросить ваш пароль. Если ни один из "
+"зарегистрирванных Вами адресов электронной почты не правилен, и вы забыли "
+"свой пароль, пишите %1."
+
+#~ msgid "&Attach"
+#~ msgstr "Приложить файл"
+
+#~ msgid "&Edit"
+#~ msgstr "Редактировать"
+
+#~ msgid "&More topic actions"
+#~ msgstr "Другие операции"
+
+#~ msgid "&Printable"
+#~ msgstr "Печатная версия"
+
+#~ msgid "&Raw View"
+#~ msgstr "Исходный текст"
+
+#~ msgid "&View topic"
+#~ msgstr "Просмор страницы"
+
+#~ msgid "A&ll Webs"
+#~ msgstr "Все разделы"
+
+#~ msgid "Create (&WYSIWYG)"
+#~ msgstr "Создать (в визуальном редакторе)"
+
+#~ msgid "Hide formatting help"
+#~ msgstr "Скрыть подсказку по форматированию"
+
+#, fuzzy
+#~ msgid "If you used the \"Jump\" feature to jump to this page:"
+#~ msgstr ""
+#~ "Если вы использовали возможность \"перейти\" для выхода на эту страничку:"
+
+#~ msgid "If you would like to create this page:"
+#~ msgstr "Если вы хотите создать эту страницу:"
+
+#, fuzzy
+#~ msgid ""
+#~ "Make sure you spelled the %1 correctly and try again. Remember, a %2 is "
+#~ "case sensitive"
+#~ msgstr ""
+#~ "Убедитесь, что вы набрали %1 безошибочно и попробуйте снова. Помните, %2 "
+#~ "чувствительно к регистру."
+
+#~ msgid "Note: Edit and save the topic to activate the new parent"
+#~ msgstr ""
+#~ "Примечание: Измените и сохраните ету страницу для назначения нового "
+#~ "родителя"
+
+#~ msgid "Registration for %1 (%2)"
+#~ msgstr "Регистрация для %1 (%2)"
+
+#, fuzzy
+#~ msgid "Release edit lock"
+#~ msgstr "Редактировать личные сведения"
+
+#~ msgid ""
+#~ "See <a href='%1'>100</a>, <a href='%2'>200</a>, <a href='%3'>400</a>, <a "
+#~ "href='%4'>800</a> most recent changes"
+#~ msgstr ""
+#~ "Смотреть <a href='%1'>100</a>, <a href='%2'>200</a>, <a href='%3'>400</"
+#~ "a>, <a href='%4'>800</a> последних изменений"
+
+#~ msgid "See <a href='%1'>all</a> changes"
+#~ msgstr "Смотреть <a href='%1'>все</a> изменения"
+
+#~ msgid "Set Parent Topic"
+#~ msgstr "Установить родителя для страницы"
+
+#~ msgid "Show formatting help"
+#~ msgstr "Показать подсказку по форматированию"
+
+#, fuzzy
+#~ msgid ""
+#~ "Use the [[WebSearch][Search]] link on top of this page, or do a simple"
+#~ msgstr ""
+#~ "Используйте ссылку [[WebSearch][Поиск]] вверху этой страницы или "
+#~ "используйте"
+
+#~ msgid "We&b"
+#~ msgstr "Раздел"
