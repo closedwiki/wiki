@@ -43,7 +43,7 @@
 
 %TMPL:DEF{"broadcastmessage"}%%TMPL:END%
 
-%TMPL:DEF{"textcontent"}%<div class="patternTopic">%BROADCASTMESSAGE% %TEXT%</div><!-- /patternTopic-->%TMPL:END%
+%TMPL:DEF{"textcontent"}%<div class="patternTopic">%TMPL:P{"broadcastmessage"}% %TEXT%</div><!-- /patternTopic-->%TMPL:END%
 
 %TMPL:DEF{"content"}%
 %TMPL:P{"beforetext"}%%TMPL:P{"formattop"}%%TMPL:P{"attachmentsattop"}%<div class="patternContent">%TMPL:P{"textcontent"}%
