@@ -1,6 +1,8 @@
 %TMPL:INCLUDE{"page"}%
 %TMPL:INCLUDE{"viewbottombar"}%
 
+%TMPL:DEF{"templatescript"}%%TMPL:END%
+%TMPL:DEF{"logo"}%%TMPL:END%
 
 
 %TMPL:DEF{"styles"}%
@@ -17,11 +19,15 @@
 
 %TMPL:DEF{"form"}%
 %META{"form"}%%TMPL:END%
+%TMPL:DEF{"formattop"}%%TMPL:END%
+%TMPL:DEF{"formatbottom"}%%TMPL:P{"form"}%%TMPL:END%
 
 
 
 %TMPL:DEF{"attachments"}%
 %META{"attachments"}%%TMPL:END%
+%TMPL:DEF{"attachmentsattop"}%%TMPL:END%
+%TMPL:DEF{"attachmentsatbottom"}%%TMPL:P{"attachments"}%%TMPL:END%
 
 
 
@@ -29,6 +35,13 @@
 <span class='sep'>&gt;</span> %TOPIC%</span>
 <div class="patternTopicInfo patternRevInfo">%MAKETEXT{"History:"}% %REVINFO%</div><!-- /patternTopicInfo --> </div> <!-- /patternTopicFooter --> %TMPL:END%
 
+%TMPL:DEF{"beforetextcontents"}%<nop>%TMPL:END%
+%TMPL:DEF{"beforetext"}%<div class="twikiBeforeText">%TMPL:P{"beforetextcontents"}%</div>%TMPL:END%
+
+%TMPL:DEF{"aftertextcontents"}%<nop>%TMPL:END%
+%TMPL:DEF{"aftertext"}%<div class="twikiAfterText">%TMPL:P{"aftertextcontents"}%</div>%TMPL:END%
+
+%TMPL:DEF{"broadcastmessage"}%%TMPL:END%
 
 %TMPL:DEF{"textcontent"}%<div class="patternTopic">%BROADCASTMESSAGE% %TEXT%</div><!-- /patternTopic-->%TMPL:END%
 

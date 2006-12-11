@@ -76,9 +76,10 @@
 %TMPL:P{"aftertext"}%%TMPL:P{"formatbottom"}%%TMPL:P{"attachmentsatbottom"}%</div><!-- /patternContent-->
 %TMPL:P{"topicaction"}%%TMPL:P{"topicinfo"}%%TMPL:END%
 
+%TMPL:DEF{"broadcastmessage"}%%BROADCASTMESSAGE%%TMPL:END%
 
 
-%TMPL:DEF{"textcontent"}%<div class="patternTopic">%BROADCASTMESSAGE% %TEXT%</div><!-- /patternTopic-->%TMPL:END%
+%TMPL:DEF{"textcontent"}%<div class="patternTopic">%TMPL:P{"broadcastmessage"}% %TEXT%</div><!-- /patternTopic-->%TMPL:END%
 
 
 
