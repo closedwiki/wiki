@@ -1,5 +1,8 @@
 @media print {
 	/* Layout */
+	.clear {
+		clear:none; /* otherwise firefox cuts off tables */
+	}	
 	#patternScreen,
 	#patternPageShadow, 
 	#patternPage {
@@ -60,6 +63,9 @@
 	table a:link:after,
 	table a:visited:after {
 		content:"";
+	}
+	table {
+		page-break-inside:avoid;
 	}
 	*/
 	
