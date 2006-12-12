@@ -51,6 +51,7 @@ There are 2 ways to change the logo in a web:
 <blockquote>
    * Create a new image named =logo.gif= and attach it to the web's WebPreferences topic. %TWIKIWEB%.PatternSkin's stylesheet assumes the logo is 40px high. More about that later.
    * You can also upload the image with FTP to =/pub/YourWeb/WebPreferences/=.
+   * Copy the above instructions ("Redefine your custom variables") and insert your logo name.
 </blockquote>
 *Using a new filename:*
 <blockquote>
@@ -58,6 +59,7 @@ There are 2 ways to change the logo in a web:
 <pre>
       * Set <nop>WEBLOGONAME = your-logo-name.gif-or-png
 </pre>
+   * Copy the above instructions ("Redefine your custom variables") and insert your logo name.
 </blockquote>
 
 ---+++ How do I set a site-wide logo?
