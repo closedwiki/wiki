@@ -153,11 +153,11 @@ sub checkGnuProgram {
         my $diffOut = ( `$prog --version 2>&1` || "");
         my $notFound = ( $? == -1 );
         if( $notFound ) {
-            $n = WARN("'$prog' program was not found on the",
+            $n = $this->WARN("'$prog' program was not found on the",
                       "current PATH.");
         } elsif ( $diffOut !~ /\bGNU\b/ ) {
             # Program found on path, complain if no GNU in version output
-            $n = WARN("'$prog' program was found on the PATH",
+            $n = $this->WARN("'$prog' program was found on the PATH",
                       "but is not GNU $prog - this may cause",
                       "problems. $diffOut");
         } else {
