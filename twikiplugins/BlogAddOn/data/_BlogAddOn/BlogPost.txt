@@ -1,0 +1,42 @@
+%META:TOPICINFO{author="TWikiContributor" date="1165927036" format="1.1" reprev="1.1" version="1.1"}%
+---+!! Blog posts
+
+%INCLUDE{"BlogAddOn" section="style"}%
+
+<div class="blogPostAddOnViewOptions">
+<div class="twikiLeft"><!-- Sort options -->
+*%MAKETEXT{"Sort on:"}%*
+&nbsp; %IF{"$ sort='formfield(Title)'" then='<strong>%MAKETEXT{"Title"}%</strong>' else="[[%SCRIPTURL{"view"}%/%BASEWEB%/%BASETOPIC%?category=%URLPARAM{category}%;limit=%URLPARAM{"limit"}%;maxcount=%URLPARAM{maxcount}%;sort=formfield(Title)][%MAKETEXT{"Title"}%]]"}% &nbsp; %IF{"$ sort='formfield(Category)'" then='<strong>%MAKETEXT{"Category"}%</strong>' else="[[%SCRIPTURL{"view"}%/%BASEWEB%/%BASETOPIC%?category=%URLPARAM{category"}%;limit=%URLPARAM{"limit"}%;maxcount=%URLPARAM{maxcount}%;sort=formfield(Category)][%MAKETEXT{"Category"}%]]"}%
+&nbsp; %IF{"$ sort='formfield(Author)'" then='<strong>%MAKETEXT{"Author"}%</strong>' else="[[%SCRIPTURL{"view"}%/%BASEWEB%/%BASETOPIC%?category=%URLPARAM{category}%;limit=%URLPARAM{"limit"}%;maxcount=%URLPARAM{maxcount}%;sort=formfield(Author)][%MAKETEXT{"Author"}%]]"}%
+&nbsp; %IF{"$ sort='created'" then='<strong>%MAKETEXT{"Date"}%</strong>' else="[[%SCRIPTURL{"view"}%/%BASEWEB%/%BASETOPIC%?category=%URLPARAM{category}%;limit=%URLPARAM{"limit"}%;maxcount=%URLPARAM{maxcount}%;sort=created;reverse=on][%MAKETEXT{"Date"}%]]"}%
+&nbsp; %IF{"$ sort='modified'" then='<strong>%MAKETEXT{"Last modified"}%</strong>' else="[[%SCRIPTURL{"view"}%/%BASEWEB%/%BASETOPIC%?category=%URLPARAM{category}%;limit=%URLPARAM{"limit"}%;maxcount=%URLPARAM{maxcount}%;sort=modified;reverse=on][%MAKETEXT{"Last modified"}%]]"}%
+</div>
+<div class="twikiRight"><!-- Filter options -->
+<form name="blogPostCategorySelection" action="%SCRIPTURL{"view"}%/%BASEWEB%/%BASETOPIC%" method="get">
+<input type="hidden" name="sort" value="%URLPARAM{"sort" encode="url"}%" />
+*%MAKETEXT{"Category:"}%* 
+&nbsp; <select name="category" onchange="document.forms.blogPostCategorySelection.submit()">
+%IF{"defined category and $ category != ''" then="<option></option><option selected>%URLPARAM{category}%</option>" else="<option></option>"}%
+%SEARCH{"   *\s*.*?" topic="BlogCategory" type="regex" multiple="on" casesensitive="on" nonoise="on" format="<option>$pattern(.*   \*\s([^\n]*).*)</option>"}%
+</select>
+&nbsp; *%MAKETEXT{"Limit to:"}%* 
+&nbsp; <select name="limit" onchange="document.forms.blogPostCategorySelection.submit()">
+%IF{"defined limit and $ limit != ''" then="<option></option><option selected>%URLPARAM{limit}%</option>" else="<option></option>"}%
+<option>10</option>
+<option>25</option>
+<option>50</option>
+<option>100</option>
+</select>
+</form>
+</div>
+<br class="twikiClear" />
+<div class="blogPostAddOnViewOptionsDivider"></div>
+</div>
+<div class="blogPostAddOnOverview">
+%SEARCH{"[T]opicType.*value\=.*(BlogPost);[C]ategory.*value\=.*(%URLPARAM{"category" encode="entity"}%)" web="%WEB%" excludetopic="*Template" type="regex" casesensitive="on" nonoise="on" format="<div class=\"blogPostAddOnItem\"><h3>[[$web.$topic][$formfield(Title)]]</h3><div class=\"twikiGrayText twikiSmallish blogPostAddOnHeaderInfo\">%MAKETEXT{"[_1] by [_2] in [_3]" args="$createdate, $formfield(Author), [[%SCRIPTURL{view}%/%BASEWEB%/%BASETOPIC%?category=<nop>$formfield(Category);sort=<nop>%URLPARAM{"sort" encode="url"}%;limit=%URLPARAM{"limit"}%][<nop>$formfield(Category)]], $createdate"}%</div><div class=\"blogPostAddOnSummary\">$summary</div></div>" order="%URLPARAM{"sort" encode="url" default="created"}%" reverse="%URLPARAM{"reverse" encode="url" default="off"}%" limit="%URLPARAM{"limit"}%" "}%
+</div>
+
+<p style="margin:3em 0 0 0;" />
+<form method="link" action="%SCRIPTURL{view}%/%WEB%/BlogPostCreator">
+<input type="submit" class="twikiButton" value="%MAKETEXT{"Write a new blog post"}%" />
+</form>
