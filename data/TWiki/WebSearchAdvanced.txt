@@ -61,7 +61,7 @@ zeroresults="off%URLPARAM{search}%"
 <tr>
 <th>%MAKETEXT{"Make search:"}%</th>
 <td><input type="checkbox" class="twikiCheckbox" id="casesensitive" name="casesensitive" %IF{" '%URLPARAM{casesensitive}%' = 'on' " then="checked=\"checked\"" else=""}% /><label for="casesensitive"> %MAKETEXT{"Case sensitive"}%</label><br />
-<input type="checkbox" class="twikiCheckbox" id="regex" name="regex"%IF{" '%URLPARAM{regex}%' = 'on' " then="checked=\"checked\"" else=""}% /><label for="regex"> %MAKETEXT{"Regular expression search"}%</label> <span class="twikiSmall">%MAKETEXT{"(semicolon =;= for and)"}% [[%TWIKIWEB%.RegularExpression][%MAKETEXT{"about regular expression search"}%]]</span>
+<input type="checkbox" class="twikiCheckbox" id="regex" name="regex"%IF{" '%URLPARAM{regex}%' = 'on' or '%URLPARAM{type}%' = 'regex'" then="checked=\"checked\"" else=""}% /><label for="regex"> %MAKETEXT{"Regular expression search"}%</label> <span class="twikiSmall">%MAKETEXT{"(semicolon =;= for and)"}% [[%TWIKIWEB%.RegularExpression][%MAKETEXT{"about regular expression search"}%]]</span>
 </td>
 </tr>
 <tr>
