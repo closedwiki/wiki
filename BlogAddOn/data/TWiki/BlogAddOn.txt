@@ -1,0 +1,34 @@
+%META:TOPICINFO{author="TWikiContributor" date="1165927211" format="1.1" reprev="1.1" version="1.1"}%
+---+!! Blog !AddOn
+
+*A simple weblog application.*
+
+If installed, see !_BlogAddOn.BlogAddOn for an overview.
+
+---++ Settings
+
+	* Set SHORTDESCRIPTION = Simple blogging application
+
+---++ Installation Instructions
+
+	* Download the ZIP file from the Plugin web (see below)
+	* Unzip ==%TOPIC%.zip== in your ($TWIKI_ROOT) directory.
+	* Copy the files from =/data/_BlogAddOn= to the web you want to blog in
+	* !BlogAddOn is based on TWiki 4.1.
+	<table border="1"><tr><th>Name</th><th>Version</th><th>Description</th></tr><tr><td align="left">TWiki::Plugins::CommentPlugin</td><td align="left">&gt;=1.000</td><td align="left">Required</td></tr></table>
+
+---++ !AddOn Info
+
+| Authors: | TWiki:Main.ArthurClemens |
+| Copyright &copy;: | 2006 Arthur Clemens |
+| License: | [[http://www.gnu.org/copyleft/gpl.html][GPL]] |
+| Dependencies: | <table border="1"><tr><th>Name</th><th>Version</th><th>Description</th></tr><tr><td align="left">TWiki::Plugins::CommentPlugin</td><td align="left">&gt;=1.000</td><td align="left">Required</td></tr></table> |
+| |!BlogAddOn is based on TWiki 4.1. |
+| 12 Dec 2006 | 1.0 First release  |
+| Demo url:  | http://twiki4.visiblearea.com/twiki4/MAIN/bin/view/_BlogAddOn/BlogPost  |
+| Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
+| Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
+| Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
+
+
+

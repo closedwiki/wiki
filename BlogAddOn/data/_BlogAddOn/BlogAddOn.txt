@@ -3,8 +3,6 @@
 
 *A simple weblog application.*
 
-%TOC{title="On this page:"}%
-
 ---++ Where to start
 
    * BlogPost - overview of all posts with filtering and sorting options
@@ -77,31 +75,4 @@ h1.blogAddOnTitle {
 }
 </style>
 %ENDSECTION{name="style"}%
-
----++ Settings
-
-	* Set SHORTDESCRIPTION = Simple blogging application
-
----++ Installation Instructions
-
-	* Download the ZIP file from the Plugin web (see below)
-	* Unzip ==%TOPIC%.zip== in your ($TWIKI_ROOT) directory.
-	* Copy the files from =/data/_BlogAddOn= to the web you want to blog in
-	* !BlogAddOn is based on TWiki 4.1.
-	%$DEPENDENCIES%
-
----++ !AddOn Info
-
-| Authors: | TWiki:Main.ArthurClemens |
-| Copyright &copy;: | 2006 Arthur Clemens |
-| License: | [[http://www.gnu.org/copyleft/gpl.html][GPL]] |
-| Dependencies: | %$DEPENDENCIES% |
-| |!BlogAddOn is based on TWiki 4.1. |
-| 12 Dec 2006 | 1.0 First release  |
-| Demo url:  | http://twiki4.visiblearea.com/twiki4/MAIN/bin/view/_BlogAddOn/BlogPost  |
-| Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
-| Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
-| Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
-
-
 
