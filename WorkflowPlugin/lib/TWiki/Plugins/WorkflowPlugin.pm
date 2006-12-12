@@ -26,7 +26,7 @@ use strict;
 
 # =========================
 use vars qw(
-            $web $topic $user $installWeb $VERSION $RELEASE $pluginName
+            $web $topic $user $VERSION $RELEASE $pluginName
             $debug 
             $prefWorkflow
             $prefWorkflowWeb
@@ -57,7 +57,7 @@ $pluginName = 'WorkflowPlugin';  # Name of this Plugin
 
 # =========================
 sub initPlugin {
-    ( $topic, $web, $user, $installWeb ) = @_;
+    ( $topic, $web ) = @_;
 
     # check for Plugins.pm versions
     if( $TWiki::Plugins::VERSION < 1.021 ) {
@@ -95,6 +95,8 @@ sub initPlugin {
     } else {
         $prefNeedsWorkflow = 0;
     }
+
+    TWiki::Func::registerTagHandler( 'WORKFLOWSTATE', \&currentState );
 
     # Plugin correctly initialized
     TWiki::Func::writeDebug( "- TWiki::Plugins::${pluginName}::initPlugin( $web.$topic ) is OK" ) if $debug;
@@ -207,6 +209,39 @@ sub commonTagsHandler {
 
 }
 
+sub currentState
+{
+  my ($session, $attributes, $topic, $web) = @_;
+  my $theWeb = $attributes->{web} || $web;
+  my $theTopic = $attributes->{"_DEFAULT"};
+    if( ! $theTopic ) {
+      $theTopic = $attributes->{topic} || $topic;
+    }
+  ( $theWeb, $theTopic ) = TWiki::Func::normalizeWebTopicName( $theWeb, $theTopic );
+
+  if ( $theWeb eq $web && $theTopic eq $topic ) {
+    return $globCurrentState->{name} if $globCurrentState;
+    return '';
+  }
+  my( $meta, $text ) = TWiki::Func::readTopic( $theWeb, $theTopic );
+  my $prefWorkflow;
+  if ((($prefWorkflow = TWiki::Func::getPreferencesValue( "WORKFLOW" )) &&
+       &TWiki::Func::topicExists( $theWeb, $prefWorkflow)) ||
+      (($prefWorkflow = $meta->get('PREFERENCE', 'WORKFLOW')) && ($prefWorkflow = $prefWorkflow->{value}) &&
+       &TWiki::Func::topicExists( $theWeb, $prefWorkflow))) {
+
+    (my $prefWorkflowWeb, $prefWorkflow) =
+	TWiki::Func::normalizeWebTopicName($theWeb, $prefWorkflow);
+
+      my $globCurrentState = getWorkflowState($meta);
+      (my $globWorkflow, $globCurrentState) = 
+	parseWorkflow($prefWorkflowWeb, $prefWorkflow, $TWiki::Plugins::SESSION->{user}) unless $globCurrentState;
+      return $globCurrentState->{name};
+    }
+  else {
+    return '';
+  }
+}
 
 # =========================
 sub beforeEditHandler {
