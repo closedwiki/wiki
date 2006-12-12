@@ -27,6 +27,7 @@ Edit this section to change the style sheets (see source).
 	color:#666;
 	background-color:#FCF8EC;
 	font-size:94%;
+	margin:0 0 .5em 0;
 }
 .blogPostAddOnViewOptions a:link,
 .blogPostAddOnViewOptions a:visited {
@@ -40,6 +41,9 @@ Edit this section to change the style sheets (see source).
 	font-size:.86em; /* use em instead of % for consistent size */
 	margin:0 .25em 0 0;
 }
+.blogPostCategoryFilterOption {
+	margin:0 0 0 1em;
+}
 .blogPostAddOnViewOptionsDivider {
 	padding:0 0 .5em 0;
 }
@@ -51,7 +55,7 @@ Edit this section to change the style sheets (see source).
 	margin:0;
 }
 .blogPostAddOnItem {
-	padding:1em 0;
+	padding:1em 0 1.25em 0;
 	border-bottom:1px solid #ddd;
 }
 .blogPostAddOnItem h3 {
