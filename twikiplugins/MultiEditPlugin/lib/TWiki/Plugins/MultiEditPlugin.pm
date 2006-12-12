@@ -81,21 +81,22 @@ sub initPlugin
 # delimited with '%' (then we would use $this->{SESSION_TAGS}{'TOPIC'}
 # to access the topic.
 
-# TW: BUG: Works only when a complete topic is included, as otherwise
-# the sections start from the wrong place (i.e., after the %STARTINCLUDE%
-# This could be solved by having a =beforeIncludeHandler= (see
+# NOTE: Requires patch to TWiki.pm. Otherwise sections in included topics
+# can only be edited if all sections are being included, as otherwise
+# the sections start from the wrong place (i.e., after the %STARTINCLUDE%)
+# This could be solved also by having a =beforeIncludeHandler= (see
 # TWiki:Codev.NeedBeforeIncludeHandler)
 
-sub commonTagsHandler {
+sub beforeCommonTagsHandler {
     # do not uncomment, use $_[0], $_[1]... instead
     ### my ( $text, $topic, $web ) = @_;
 
-    TWiki::Func::writeDebug( "- ${pluginName}::commonTagsHandler( $_[2].$_[1] )" ) if $debug;
+    TWiki::Func::writeDebug( "- ${pluginName}::beforeIncludeHandler( $_[2].$_[1] )" ) if $debug;
 
     my $sec = 0;
     $_[0] =~ s/<section((\s+[^>]+)?)>/&rememberTopic($_[1], $_[2], $1, $sec)/geo;
 
-    TWiki::Func::writeDebug( "- after ${pluginName}::commonTagsHandler( $_[2].$_[1] )" ) if $debug;
+    TWiki::Func::writeDebug( "- after ${pluginName}::beforeIncludeHandler( $_[2].$_[1] )" ) if $debug;
 
 }
 
@@ -133,7 +134,6 @@ sub preRenderingHandler
         }
     }
 
-    return if $skipit;
     my $ret = '';
     my $eurl = TWiki::Func::getScriptUrlPath() . '/editonesection';
 
@@ -148,15 +148,18 @@ sub preRenderingHandler
       my $lastsec = '';
       my $topic;
       my $web;
+      my $cnt = 0;
       foreach my $sec (@sections) {
 	if ( $skip ) { $skip = 0; next; }
 	if ( $sec =~ m/<section(.*)>/i ) 
 	  { use TWiki::Attrs;
 	    my $attrs = new TWiki::Attrs($1, 1);
-	    $dontedit = ( defined $attrs->{edit} && ! $attrs->{edit} );
+	    $dontedit = ( defined $attrs->{edit} && ! $attrs->{edit} ) || $skipit;
 	    $topic = $attrs->{topic};
 	    $web = $attrs->{web};
 	    $pos = $attrs->{section};
+	    $cnt++;
+	    $pos = $cnt unless $pos;
 	    $state='edit'; $skip = 1; next; }
 	if ( $sec eq "</section>" ) {
 	  $skip = 1;
@@ -182,7 +185,8 @@ sub preRenderingHandler
 sub editLink
 {
     my ($eurl,$pos,$title) = @_;
-    return "<a href=\"$eurl\?t=" . time() . "&sec=$pos#SECEDITBOX\"><small>$title</small></a>";
+    my $session = $TWiki::Plugins::SESSION;
+    return "<a href=\"$eurl\?t=" . time() . "&sec=$pos&origurl=" . $session->{webName}.'.'.$session->{topicName} . "#SECEDITBOX\"><small>$title</small></a>";
 }
 
 # =========================
@@ -226,9 +230,8 @@ sub doEdit
     my $webName = $session->{webName};
     my $topic = $session->{topicName};
     my $theSec = int($query->param('sec')) || 0;
-    my $editUrl = &TWiki::Func::getScriptUrl( $webName, $topic, 'editonesection' );
     my $editUrlParams = "&sec=$theSec#SECEDITBOX";
-    $tmpl =~ s/%EDIT%/$editUrl/go;
+    $tmpl =~ s/%EDIT%/editonesection/go;
     $tmpl =~ s/%EDITPARAMS%/$editUrlParams/go;
     my $sectxt = '';
     my $pretxt = '';
