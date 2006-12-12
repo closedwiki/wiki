@@ -1,0 +1,23 @@
+%META:TOPICINFO{author="TWikiContributor" date="1165851072" format="1.1" version="1.1"}%
+%TMPL:INCLUDE{"view"}%
+
+%TMPL:DEF{"textcontent"}%<div class="patternTopic">%BROADCASTMESSAGE%
+<h1 class="blogAddOnTitle"> %FORMFIELD{"Title"}% </h1>
+<div class="twikiGrayText twikiSmallish blogPostAddOnHeaderInfo">%MAKETEXT{"[_1] by [_2] in [_3]" args="%REVINFO{rev="1" format="$date - $time"}%, %FORMFIELD{"Author"}%, [[%SCRIPTURL{view}%/%BASEWEB%/BlogPost?category=%FORMFIELD{"Category"}%][%FORMFIELD{"Category"}%]]"}%</div>
+
+%TEXT%</div>
+%INCLUDE{"BlogAddOn" section="style"}%
+%TMPL:END%
+
+
+%TMPL:DEF{"aftertextcontents"}%
+---++ %MAKETEXT{"Comments"}%
+%INCLUDE{"%TOPIC%Comments" warn="off"}%
+
+           
+%COMMENT{type="target" target="%TOPIC%Comments" button="%MAKETEXT{"Add comment"}%"}%     
+%TMPL:END%
+
+
+%TMPL:DEF{"form"}%%TMPL:END%
+
