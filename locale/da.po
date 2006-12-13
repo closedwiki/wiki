@@ -658,10 +658,9 @@ msgstr ""
 "webbet ikke er stavet forkert på den foregående side; ret linket om "
 "nødvendigt."
 
-#: data/Sandbox/WebHome.txt:23
-msgid ""
-"A more extensive changes list is available via the [[%1][Recent Changes]] "
-"link in the navigation menu."
+#: data/Sandbox/WebHome.txt:24
+#, fuzzy
+msgid "A more extensive changes list is available via [[%1][Recent Changes]]."
 msgstr ""
 "En mere udførlig liste over ændringer er tilgængelig via linket [[%1]"
 "[Seneste ændringer]] i navigations-menuen."
@@ -1434,7 +1433,7 @@ msgstr "Land:"
 msgid "Create '%1'"
 msgstr "Opr&et"
 
-#: data/Sandbox/WebHome.txt:16
+#: data/Sandbox/WebHome.txt:17
 msgid "Create <nop>TestTopic###"
 msgstr "Opret <nop>TestTopic###"
 
@@ -1471,7 +1470,7 @@ msgstr ""
 "Lav et link til den vedhæftede fil (indsættes i bunden af siden, men kan "
 "flyttes rundt efterfølgende)"
 
-#: data/Sandbox/WebHome.txt:15
+#: data/Sandbox/WebHome.txt:16
 msgid "Create a new auto-numbered test topic:"
 msgstr "Opret en ny side (automatisk nummereret):"
 
@@ -2171,7 +2170,7 @@ msgstr "Skjul hjælp"
 msgid "Hiding Attachments"
 msgstr "Skjul vedhæftede filer"
 
-#: twikiplugins/PatternSkin/templates/viewprint.pattern.tmpl:30
+#: twikiplugins/PatternSkin/templates/view.printpattern.tmpl:36
 msgid "History:"
 msgstr "Historik:"
 
@@ -2581,6 +2580,7 @@ msgstr "Brugernavn %1"
 msgid "Login to %1"
 msgstr "Brugernavn %1"
 
+#: twikiplugins/PatternSkin/data/TWiki/PatternSkinElements.txt:206
 #: twikiplugins/PatternSkin/templates/login.pattern.tmpl:99
 msgid "Logon"
 msgstr "Log ind"
@@ -3018,6 +3018,7 @@ msgstr "Nyt forælder-web:"
 #: data/TWiki/ChangeEmailAddress.txt:24
 #: twikiplugins/NatSkin/data/Main/WebLinks.txt:12
 #: twikiplugins/NatSkin/templates/oopslogonbase.nat.tmpl:15
+#: twikiplugins/PatternSkin/data/TWiki/PatternSkinElements.txt:201
 #: twikiplugins/PatternSkin/templates/login.pattern.tmpl:94
 msgid "Password"
 msgstr "Password"
@@ -3281,7 +3282,7 @@ msgstr "Læs hjælpeteksten til Gennemtving nyt versionsnummer i et nyt vindue"
 msgid "Read on"
 msgstr "Læs mere"
 
-#: data/Sandbox/WebHome.txt:19 data/TWiki/WebSearch.txt:51
+#: data/Sandbox/WebHome.txt:20 data/TWiki/WebSearch.txt:51
 #: data/TWiki/WebSearchAdvanced.txt:95
 msgid "Recently changed topics"
 msgstr "Senest ændrede sider"
@@ -4336,7 +4337,7 @@ msgstr ""
 "Dette sidenavn anbefales ikke, da det ikke kan linkes automatisk. Se %1 for "
 "detaljer"
 
-#: twikiplugins/PatternSkin/templates/viewprint.pattern.tmpl:28
+#: twikiplugins/PatternSkin/templates/view.printpattern.tmpl:34
 msgid "This topic:"
 msgstr "Denne side:"
 
@@ -4707,6 +4708,7 @@ msgstr "Brugervejledninger"
 msgid "User's Guide"
 msgstr ""
 
+#: twikiplugins/PatternSkin/data/TWiki/PatternSkinElements.txt:195
 #: twikiplugins/PatternSkin/templates/login.pattern.tmpl:88
 msgid "Username"
 msgstr "Brugernavn"

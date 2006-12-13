@@ -648,10 +648,9 @@ msgstr ""
 "1. Let op dat de webnaam niet verkeerd is gespeld op de voorgaande pagina; "
 "repareer de link indien nodig."
 
-#: data/Sandbox/WebHome.txt:23
-msgid ""
-"A more extensive changes list is available via the [[%1][Recent Changes]] "
-"link in the navigation menu."
+#: data/Sandbox/WebHome.txt:24
+#, fuzzy
+msgid "A more extensive changes list is available via [[%1][Recent Changes]]."
 msgstr ""
 "Een meer uitgebreide lijst van wijzigingen is te zien in [[%1][Wijzigingen]]."
 
@@ -1424,7 +1423,7 @@ msgstr "Land:"
 msgid "Create '%1'"
 msgstr "Aan&maken"
 
-#: data/Sandbox/WebHome.txt:16
+#: data/Sandbox/WebHome.txt:17
 msgid "Create <nop>TestTopic###"
 msgstr "<nop>Testpagina### aanmaken"
 
@@ -1457,7 +1456,7 @@ msgstr "Maak een link naar de bijlage"
 msgid "Create a link to the attached file at the end of the topic."
 msgstr "Maak een link naar de bijlage"
 
-#: data/Sandbox/WebHome.txt:15
+#: data/Sandbox/WebHome.txt:16
 msgid "Create a new auto-numbered test topic:"
 msgstr "Maak een nieuwe automatisch genummerde testpagina aan:"
 
@@ -2160,7 +2159,7 @@ msgstr "Verberg help"
 msgid "Hiding Attachments"
 msgstr "Verberg bijlagen"
 
-#: twikiplugins/PatternSkin/templates/viewprint.pattern.tmpl:30
+#: twikiplugins/PatternSkin/templates/view.printpattern.tmpl:36
 msgid "History:"
 msgstr "Geschiedenis:"
 
@@ -2574,6 +2573,7 @@ msgstr "Inlognaam %1"
 msgid "Login to %1"
 msgstr "Inlognaam %1"
 
+#: twikiplugins/PatternSkin/data/TWiki/PatternSkinElements.txt:206
 #: twikiplugins/PatternSkin/templates/login.pattern.tmpl:99
 msgid "Logon"
 msgstr "Inloggen"
@@ -3013,6 +3013,7 @@ msgstr "Nieuw bovenliggend web:"
 #: data/TWiki/ChangeEmailAddress.txt:24
 #: twikiplugins/NatSkin/data/Main/WebLinks.txt:12
 #: twikiplugins/NatSkin/templates/oopslogonbase.nat.tmpl:15
+#: twikiplugins/PatternSkin/data/TWiki/PatternSkinElements.txt:201
 #: twikiplugins/PatternSkin/templates/login.pattern.tmpl:94
 msgid "Password"
 msgstr "Wachtwoord"
@@ -3272,7 +3273,7 @@ msgstr "Open de helptekst over nieuwe revisies in een nieuw venster"
 msgid "Read on"
 msgstr "Lees verder"
 
-#: data/Sandbox/WebHome.txt:19 data/TWiki/WebSearch.txt:51
+#: data/Sandbox/WebHome.txt:20 data/TWiki/WebSearch.txt:51
 #: data/TWiki/WebSearchAdvanced.txt:95
 msgid "Recently changed topics"
 msgstr "Recent gewijzigd"
@@ -4329,7 +4330,7 @@ msgstr ""
 "Deze paginanaam wordt niet aanbevolen omdat deze niet automatisch gelinkt "
 "zal worden. Zie %1 voor details."
 
-#: twikiplugins/PatternSkin/templates/viewprint.pattern.tmpl:28
+#: twikiplugins/PatternSkin/templates/view.printpattern.tmpl:34
 msgid "This topic:"
 msgstr "Deze pagina:"
 
@@ -4705,6 +4706,7 @@ msgstr "Gebruikershandleiding"
 msgid "User's Guide"
 msgstr ""
 
+#: twikiplugins/PatternSkin/data/TWiki/PatternSkinElements.txt:195
 #: twikiplugins/PatternSkin/templates/login.pattern.tmpl:88
 msgid "Username"
 msgstr "Gebruikersnaam"

@@ -653,10 +653,9 @@ msgstr ""
 "Assicurati che il nome del web sia scritto correttamente sulla pagina "
 "precedente; se necessario correggi il collegamento."
 
-#: data/Sandbox/WebHome.txt:23
-msgid ""
-"A more extensive changes list is available via the [[%1][Recent Changes]] "
-"link in the navigation menu."
+#: data/Sandbox/WebHome.txt:24
+#, fuzzy
+msgid "A more extensive changes list is available via [[%1][Recent Changes]]."
 msgstr ""
 "Una lista dei cambiamenti più dettagliata è disponibile usando [[%1]"
 "[Cambiamenti recenti]] nel menù di navigazione."
@@ -1434,7 +1433,7 @@ msgstr "Paese:"
 msgid "Create '%1'"
 msgstr "Cr&ea"
 
-#: data/Sandbox/WebHome.txt:16
+#: data/Sandbox/WebHome.txt:17
 msgid "Create <nop>TestTopic###"
 msgstr "Crea  il testo della pagina###"
 
@@ -1467,7 +1466,7 @@ msgstr "Crea un collegamento col file allegato"
 msgid "Create a link to the attached file at the end of the topic."
 msgstr "Crea un collegamento col file allegato"
 
-#: data/Sandbox/WebHome.txt:15
+#: data/Sandbox/WebHome.txt:16
 msgid "Create a new auto-numbered test topic:"
 msgstr "Crea una pagina di test con numerazione automatica"
 
@@ -2165,7 +2164,7 @@ msgstr "Nascondi aiuto"
 msgid "Hiding Attachments"
 msgstr "Nascondi allegato"
 
-#: twikiplugins/PatternSkin/templates/viewprint.pattern.tmpl:30
+#: twikiplugins/PatternSkin/templates/view.printpattern.tmpl:36
 msgid "History:"
 msgstr "Storia:"
 
@@ -2571,6 +2570,7 @@ msgstr "Login name %1"
 msgid "Login to %1"
 msgstr "Login name %1"
 
+#: twikiplugins/PatternSkin/data/TWiki/PatternSkinElements.txt:206
 #: twikiplugins/PatternSkin/templates/login.pattern.tmpl:99
 msgid "Logon"
 msgstr "Logon"
@@ -3005,6 +3005,7 @@ msgstr "Nuovo web genitore:"
 #: data/TWiki/ChangeEmailAddress.txt:24
 #: twikiplugins/NatSkin/data/Main/WebLinks.txt:12
 #: twikiplugins/NatSkin/templates/oopslogonbase.nat.tmpl:15
+#: twikiplugins/PatternSkin/data/TWiki/PatternSkinElements.txt:201
 #: twikiplugins/PatternSkin/templates/login.pattern.tmpl:94
 msgid "Password"
 msgstr "Password"
@@ -3267,7 +3268,7 @@ msgstr "Leggi l'aiuto sulla nuova revisione in una nuova finestra"
 msgid "Read on"
 msgstr "Leggi"
 
-#: data/Sandbox/WebHome.txt:19 data/TWiki/WebSearch.txt:51
+#: data/Sandbox/WebHome.txt:20 data/TWiki/WebSearch.txt:51
 #: data/TWiki/WebSearchAdvanced.txt:95
 msgid "Recently changed topics"
 msgstr "Pagine recentemente modificate"
@@ -4313,7 +4314,7 @@ msgstr ""
 "Questo nome di pagina non è consigliato perchè non sarebbe automaticamente "
 "collegato. Vedi %1 per i dettagli"
 
-#: twikiplugins/PatternSkin/templates/viewprint.pattern.tmpl:28
+#: twikiplugins/PatternSkin/templates/view.printpattern.tmpl:34
 msgid "This topic:"
 msgstr "Questa pagina:"
 
@@ -4684,6 +4685,7 @@ msgstr "User Reference"
 msgid "User's Guide"
 msgstr ""
 
+#: twikiplugins/PatternSkin/data/TWiki/PatternSkinElements.txt:195
 #: twikiplugins/PatternSkin/templates/login.pattern.tmpl:88
 msgid "Username"
 msgstr "Username"

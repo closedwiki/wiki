@@ -622,10 +622,9 @@ msgstr ""
 "相似%1的主題的鏈結位於另外一個目錄中，請確認目錄名沒有拼寫錯誤，如必要請修正"
 "錯誤鏈結"
 
-#: data/Sandbox/WebHome.txt:23
-msgid ""
-"A more extensive changes list is available via the [[%1][Recent Changes]] "
-"link in the navigation menu."
+#: data/Sandbox/WebHome.txt:24
+#, fuzzy
+msgid "A more extensive changes list is available via [[%1][Recent Changes]]."
 msgstr "更多擴展變更列表位於菜單的[[%1][最新修改]]中"
 
 #: templates/messages.tmpl:423
@@ -1374,7 +1373,7 @@ msgstr "國家:"
 msgid "Create '%1'"
 msgstr "創建"
 
-#: data/Sandbox/WebHome.txt:16
+#: data/Sandbox/WebHome.txt:17
 msgid "Create <nop>TestTopic###"
 msgstr "創建<nop>TestTopic###"
 
@@ -1407,7 +1406,7 @@ msgstr "創建一個附件鏈結"
 msgid "Create a link to the attached file at the end of the topic."
 msgstr "創建一個附件鏈結"
 
-#: data/Sandbox/WebHome.txt:15
+#: data/Sandbox/WebHome.txt:16
 msgid "Create a new auto-numbered test topic:"
 msgstr "創建一個新的自動編號測試主題"
 
@@ -2076,7 +2075,7 @@ msgstr "隱藏説明"
 msgid "Hiding Attachments"
 msgstr "隱藏附件"
 
-#: twikiplugins/PatternSkin/templates/viewprint.pattern.tmpl:30
+#: twikiplugins/PatternSkin/templates/view.printpattern.tmpl:36
 msgid "History:"
 msgstr "歷史:"
 
@@ -2465,6 +2464,7 @@ msgstr "登錄名 %1"
 msgid "Login to %1"
 msgstr "登錄名 %1"
 
+#: twikiplugins/PatternSkin/data/TWiki/PatternSkinElements.txt:206
 #: twikiplugins/PatternSkin/templates/login.pattern.tmpl:99
 msgid "Logon"
 msgstr "登錄為"
@@ -2904,6 +2904,7 @@ msgstr "新的父目錄:"
 #: data/TWiki/ChangeEmailAddress.txt:24
 #: twikiplugins/NatSkin/data/Main/WebLinks.txt:12
 #: twikiplugins/NatSkin/templates/oopslogonbase.nat.tmpl:15
+#: twikiplugins/PatternSkin/data/TWiki/PatternSkinElements.txt:201
 #: twikiplugins/PatternSkin/templates/login.pattern.tmpl:94
 msgid "Password"
 msgstr "密碼"
@@ -3155,7 +3156,7 @@ msgstr "再新視窗查看修訂幫助"
 msgid "Read on"
 msgstr "閱讀"
 
-#: data/Sandbox/WebHome.txt:19 data/TWiki/WebSearch.txt:51
+#: data/Sandbox/WebHome.txt:20 data/TWiki/WebSearch.txt:51
 #: data/TWiki/WebSearchAdvanced.txt:95
 msgid "Recently changed topics"
 msgstr "最新更改的主題"
@@ -4155,7 +4156,7 @@ msgid ""
 "automatically. See %1 for details"
 msgstr "主題名不被建議，因為無法自動鏈結，細節請參考：%1"
 
-#: twikiplugins/PatternSkin/templates/viewprint.pattern.tmpl:28
+#: twikiplugins/PatternSkin/templates/view.printpattern.tmpl:34
 msgid "This topic:"
 msgstr "本主題:"
 
@@ -4517,6 +4518,7 @@ msgstr "用戶屬性"
 msgid "User's Guide"
 msgstr ""
 
+#: twikiplugins/PatternSkin/data/TWiki/PatternSkinElements.txt:195
 #: twikiplugins/PatternSkin/templates/login.pattern.tmpl:88
 msgid "Username"
 msgstr "用戶名"

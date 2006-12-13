@@ -640,10 +640,9 @@ msgstr ""
 "En länk till en sida i en annan avdelning skrivs som %1. Kontrollera att  "
 "avdelningens namn inte är felstavat på föregående sida och rätta vid behov"
 
-#: data/Sandbox/WebHome.txt:23
-msgid ""
-"A more extensive changes list is available via the [[%1][Recent Changes]] "
-"link in the navigation menu."
+#: data/Sandbox/WebHome.txt:24
+#, fuzzy
+msgid "A more extensive changes list is available via [[%1][Recent Changes]]."
 msgstr ""
 "En mer utförlig lista på ändringar finns på [[%1][Senaste ändringar]] i "
 "navigationsmenyn."
@@ -1411,7 +1410,7 @@ msgstr "Land:"
 msgid "Create '%1'"
 msgstr "Skapa (&E)"
 
-#: data/Sandbox/WebHome.txt:16
+#: data/Sandbox/WebHome.txt:17
 msgid "Create <nop>TestTopic###"
 msgstr "Skapa <nop>TestTopic###"
 
@@ -1444,7 +1443,7 @@ msgstr "Skapa en länk till den bifogade filen"
 msgid "Create a link to the attached file at the end of the topic."
 msgstr "Skapa en länk till den bifogade filen"
 
-#: data/Sandbox/WebHome.txt:15
+#: data/Sandbox/WebHome.txt:16
 msgid "Create a new auto-numbered test topic:"
 msgstr "Skapa en ny automatiskt numrerad testsida:"
 
@@ -2140,7 +2139,7 @@ msgstr "Göm hjälp"
 msgid "Hiding Attachments"
 msgstr "Göm bifogade filer"
 
-#: twikiplugins/PatternSkin/templates/viewprint.pattern.tmpl:30
+#: twikiplugins/PatternSkin/templates/view.printpattern.tmpl:36
 msgid "History:"
 msgstr "Historik:"
 
@@ -2543,6 +2542,7 @@ msgstr "Användarnamn %1"
 msgid "Login to %1"
 msgstr "Användarnamn %1"
 
+#: twikiplugins/PatternSkin/data/TWiki/PatternSkinElements.txt:206
 #: twikiplugins/PatternSkin/templates/login.pattern.tmpl:99
 msgid "Logon"
 msgstr "Logga in"
@@ -2978,6 +2978,7 @@ msgstr "ny föräldraavdelning:"
 #: data/TWiki/ChangeEmailAddress.txt:24
 #: twikiplugins/NatSkin/data/Main/WebLinks.txt:12
 #: twikiplugins/NatSkin/templates/oopslogonbase.nat.tmpl:15
+#: twikiplugins/PatternSkin/data/TWiki/PatternSkinElements.txt:201
 #: twikiplugins/PatternSkin/templates/login.pattern.tmpl:94
 msgid "Password"
 msgstr "Lösenord"
@@ -3239,7 +3240,7 @@ msgstr "Läs hjälpen om ny version i nytt fönster"
 msgid "Read on"
 msgstr "Læs mere"
 
-#: data/Sandbox/WebHome.txt:19 data/TWiki/WebSearch.txt:51
+#: data/Sandbox/WebHome.txt:20 data/TWiki/WebSearch.txt:51
 #: data/TWiki/WebSearchAdvanced.txt:95
 msgid "Recently changed topics"
 msgstr "Senast ändrade sidor"
@@ -4282,7 +4283,7 @@ msgstr ""
 "Sidnamnet rekommenderas inte eftersom det inte länkas automatiskt. Se %1 för "
 "mer information."
 
-#: twikiplugins/PatternSkin/templates/viewprint.pattern.tmpl:28
+#: twikiplugins/PatternSkin/templates/view.printpattern.tmpl:34
 msgid "This topic:"
 msgstr "Denna sida:"
 
@@ -4650,6 +4651,7 @@ msgstr "Användarhandledning"
 msgid "User's Guide"
 msgstr ""
 
+#: twikiplugins/PatternSkin/data/TWiki/PatternSkinElements.txt:195
 #: twikiplugins/PatternSkin/templates/login.pattern.tmpl:88
 msgid "Username"
 msgstr "Användarnamn"

@@ -646,10 +646,9 @@ msgstr ""
 "vorherigen Seiten nicht falsch geschrieben ist; falls notwendig korrigieren "
 "Sie den Verweis."
 
-#: data/Sandbox/WebHome.txt:23
-msgid ""
-"A more extensive changes list is available via the [[%1][Recent Changes]] "
-"link in the navigation menu."
+#: data/Sandbox/WebHome.txt:24
+#, fuzzy
+msgid "A more extensive changes list is available via [[%1][Recent Changes]]."
 msgstr ""
 "Eine ausführlichere Änderungsliste steht über den [[%1][Aktuelle "
 "Änderungen]] Verweis im Navigations Menu zur Verfügung."
@@ -1396,7 +1395,7 @@ msgstr "Land:"
 msgid "Create '%1'"
 msgstr "A&nlegen"
 
-#: data/Sandbox/WebHome.txt:16
+#: data/Sandbox/WebHome.txt:17
 msgid "Create <nop>TestTopic###"
 msgstr "Ein <nop>TestTopic### anlegen"
 
@@ -1427,7 +1426,7 @@ msgstr "Verweis auf die angehängte Datei erzeugen."
 msgid "Create a link to the attached file at the end of the topic."
 msgstr "Verweis auf die angehängte Datei erzeugen."
 
-#: data/Sandbox/WebHome.txt:15
+#: data/Sandbox/WebHome.txt:16
 msgid "Create a new auto-numbered test topic:"
 msgstr "Ein neues, automatisch nummeriertes, Test Topic anlegen:"
 
@@ -2109,7 +2108,7 @@ msgstr "Hilfe verstecken"
 msgid "Hiding Attachments"
 msgstr "Anhänge verbergen"
 
-#: twikiplugins/PatternSkin/templates/viewprint.pattern.tmpl:30
+#: twikiplugins/PatternSkin/templates/view.printpattern.tmpl:36
 msgid "History:"
 msgstr "Historie:"
 
@@ -2511,6 +2510,7 @@ msgstr "Login Name %1"
 msgid "Login to %1"
 msgstr "Anmelden bei %1"
 
+#: twikiplugins/PatternSkin/data/TWiki/PatternSkinElements.txt:206
 #: twikiplugins/PatternSkin/templates/login.pattern.tmpl:99
 msgid "Logon"
 msgstr "Einloggen"
@@ -2935,6 +2935,7 @@ msgstr "Neues Ober-Web:"
 #: data/TWiki/ChangeEmailAddress.txt:24
 #: twikiplugins/NatSkin/data/Main/WebLinks.txt:12
 #: twikiplugins/NatSkin/templates/oopslogonbase.nat.tmpl:15
+#: twikiplugins/PatternSkin/data/TWiki/PatternSkinElements.txt:201
 #: twikiplugins/PatternSkin/templates/login.pattern.tmpl:94
 msgid "Password"
 msgstr "Passwort"
@@ -3185,7 +3186,7 @@ msgstr "Lesen Sie den Hilfetext zu neuen Revision in einem neuen Fenster"
 msgid "Read on"
 msgstr "Weiter lesen"
 
-#: data/Sandbox/WebHome.txt:19 data/TWiki/WebSearch.txt:51
+#: data/Sandbox/WebHome.txt:20 data/TWiki/WebSearch.txt:51
 #: data/TWiki/WebSearchAdvanced.txt:95
 msgid "Recently changed topics"
 msgstr "Kürzlich geänderte Topics"
@@ -4229,7 +4230,7 @@ msgstr ""
 "Dieser Topic Name wird nicht empfohlen, da er nicht automatisch verlinkt "
 "wird. Siehe %1 für Details"
 
-#: twikiplugins/PatternSkin/templates/viewprint.pattern.tmpl:28
+#: twikiplugins/PatternSkin/templates/view.printpattern.tmpl:34
 msgid "This topic:"
 msgstr "Dieses Topic:"
 
@@ -4602,6 +4603,7 @@ msgstr "Benutzer Referenz"
 msgid "User's Guide"
 msgstr "Benutzeranleitung"
 
+#: twikiplugins/PatternSkin/data/TWiki/PatternSkinElements.txt:195
 #: twikiplugins/PatternSkin/templates/login.pattern.tmpl:88
 msgid "Username"
 msgstr "Benutzername"
