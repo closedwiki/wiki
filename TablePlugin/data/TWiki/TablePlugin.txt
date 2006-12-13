@@ -139,13 +139,14 @@ This plugin is pre-installed with your TWiki release. You should not have to ins
 |  Plugin Author: | TWiki:Main/JohnTalintyre, TWiki:Main/PeterThoeny |
 |  Plugin Version: | 1.016 |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
-|  2 Dec 2006 | 1.018: Arthur Clemens: Data rows now start with first =datacolor= and =databgcolor=.  |
-|  26 Nov 2006 | 1.017: Arthur Clemens: Better support for =tablerules=.  |
-|  24 Nov 2006 | 1.016: Arthur Clemens: Added new attribute =cellborder=.  |
-|  25 Oct 2006 | 1.015: Arthur Clemens: Added support for background colors of sorted column. Columns can be unsorted - sorting order is now: sort ascending, sort descending, unsort. Added attributes =headervalign= and =datavalign=. |
-|  16 Aug 2006 | Michael Daum: Added CSS support for even/odd table rows |
-|  13 Dec 2005 | Arthur Clemens: Added support for =id=, =summary= and =caption= |
-|  5 Mar 2005 | 1.014: Crawford Currie eliminated deprecated handlers for Dakar |
+|  13 Dec 2006  | 1.019: Arthur Clemens: Prevent sorting of columns that do no exist.  |
+|  02 Dec 2006  | 1.018: Arthur Clemens: Data rows now start with first =datacolor= and =databgcolor=.  |
+|  26 Nov 2006  | 1.017: Arthur Clemens: Better support for =tablerules=.  |
+|  24 Nov 2006  | 1.016: Arthur Clemens: Added new attribute =cellborder=.  |
+|  25 Oct 2006  | 1.015: Arthur Clemens: Added support for background colors of sorted column. Columns can be unsorted - sorting order is now: sort ascending, sort descending, unsort. Added attributes =headervalign= and =datavalign=. |
+|  16 Aug 2006  | Michael Daum: Added CSS support for even/odd table rows |
+|  13 Dec 2005  | Arthur Clemens: Added support for =id=, =summary= and =caption= |
+|  05 Mar 2005  | 1.014: Crawford Currie eliminated deprecated handlers for Dakar |
 |  01 Aug 2004: | Arthur Clemens: Added CSS support for first column and ascending/descending table headers |
 |  21 Mar 2004: | PTh: Internal change: Fixed reference to unofficial variable |
 |  01 Jan 2004: | PTh: Alternating data row colors restart again after each header row |

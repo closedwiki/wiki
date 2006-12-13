@@ -57,7 +57,8 @@ BEGIN {
     				   'NONE', 2 );
     %columnType = ( 'TEXT', 'text',
     				'DATE', 'date', 
-    				'NUMBER', 'number' );
+    				'NUMBER', 'number',
+    				'UNDEFINED', 'undefined' );
    	$iconUrl = TWiki::Func::getPubUrlPath().
    		'/'.
 		$TWiki::Plugins::TablePlugin::installWeb.
@@ -412,7 +413,11 @@ sub _guessColumnType {
     my $isNum  = 1;
     my $num = '';
     my $date = '';
+    my $columnIsValid = 0;
     foreach my $row ( @curTable ) {
+    	next if (! $row->[$col]->{text} );
+    	# else
+    	$columnIsValid = 1;
         ( $num, $date ) = _convertToNumberAndDate( $row->[$col]->{text} );
         $isDate = 0 if( ! defined( $date ) );
         $isNum  = 0 if( ! defined( $num ) );
@@ -420,6 +425,7 @@ sub _guessColumnType {
         $row->[$col]->{date} = $date;
         $row->[$col]->{number} = $num;
     }
+    return $columnType{'UNDEFINED'} if ( !$columnIsValid );
     my $type = $columnType{'TEXT'};
     if( $isDate ) {
         $type = $columnType{'DATE'};
@@ -585,7 +591,11 @@ sub emitTable {
         }
 
         $stype = _guessColumnType( $sortCol );
-        if( $stype eq $columnType{'TEXT'} ) {
+        # invalidate sorting if no valid column
+        if ( $stype eq $columnType{'UNDEFINED'} ) {
+        	undef $initSort;
+        	undef $sortCol;
+        } elsif ( $stype eq $columnType{'TEXT'} ) {
             if( $currentDirection == $sortDirection{'DESCENDING'} ) {
                 # efficient way of sorting stripped HTML text
                 # SMELL: efficient? That's not efficient!
@@ -631,6 +641,8 @@ sub emitTable {
         my $isHeaderRow = 0;
         
         foreach my $fcell ( @$row ) {
+        	# check if cell exists
+        	next if (!$fcell || !$fcell->{type} );
             my $tableAnchor = '';
             next if( $fcell->{type} eq 'X' ); # data was there so sort could work with col spanning
             my $type = $fcell->{type};
