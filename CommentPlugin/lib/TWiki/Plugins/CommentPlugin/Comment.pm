@@ -55,9 +55,7 @@ sub save {
 sub prompt {
     #my ( $previewing, $text, $web, $topic ) = @_;
 
-    my $defaultType = 
-      TWiki::Func::getPreferencesValue('COMMENTPLUGIN_DEFAULT_TYPE') ||
-          'below';
+    my $defaultType = TWiki::Func::getPreferencesValue('COMMENTPLUGIN_DEFAULT_TYPE') || 'above';
 
     my $message = '';
     # Is commenting disabled?
@@ -78,6 +76,7 @@ sub _handleInput {
          $disable, $defaultType ) = @_;
 
     $attributes =~ s/^{(.*)}$/$1/o if ( $attributes );
+    
     my $attrs = new TWiki::Attrs( $attributes, 1 );
     my $type =
       $attrs->remove( 'type' ) || $attrs->remove( 'mode' ) || $defaultType;
@@ -86,7 +85,8 @@ sub _handleInput {
     my $remove = $attrs->remove( 'remove' );
     my $nopost = $attrs->remove( 'nopost' );
     my $default = $attrs->remove( 'default' );
-    $message ||= $default;
+    $message ||= $default || '';
+	$disable ||= '';
 
     # clean off whitespace
     $type =~ m/(\S*)/o;
@@ -151,7 +151,9 @@ sub _handleInput {
             }
         }
         unless ($noform eq 'on') {
-            $input = CGI::start_form( -name => $type.$n, -action=>$url,
+            $input = CGI::start_form( -name => $type.$n,
+                                      -id => $type.$n,
+                                      -action=>$url,
                                       -method=>'post' ).$input.CGI::end_form();
         }
     }
@@ -165,8 +167,7 @@ sub _getTemplate {
 
     # Get the templates.
     my $templateFile =
-      TWiki::Func::getPreferencesValue('COMMENTPLUGIN_TEMPLATES') ||
-          'comments';
+      TWiki::Func::getPreferencesValue('COMMENTPLUGIN_TEMPLATES') || 'comments';
 
     my $templates =
       TWiki::Func::loadTemplate( $templateFile );
