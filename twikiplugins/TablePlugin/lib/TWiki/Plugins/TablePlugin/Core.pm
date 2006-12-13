@@ -25,7 +25,7 @@ package TWiki::Plugins::TablePlugin::Core;
 use Time::Local;
 
 use vars qw( $translationToken
-             $insideTABLE $tableCount @curTable $sortCol $requestedTable $up
+             $insideTABLE $tableCount @curTable $sortCol $maxSortCols $requestedTable $up
              $sortTablesInText $sortAttachments $currTablePre
              $tableWidth @columnWidths
              $tableBorder $tableFrame $tableRules $cellPadding $cellSpacing $cellBorder
@@ -59,6 +59,8 @@ BEGIN {
     				'DATE', 'date', 
     				'NUMBER', 'number',
     				'UNDEFINED', 'undefined' );
+	# the maximum number of columns we will handle
+    $maxSortCols = 10000;
    	$iconUrl = TWiki::Func::getPubUrlPath().
    		'/'.
 		$TWiki::Plugins::TablePlugin::installWeb.
@@ -415,7 +417,7 @@ sub _guessColumnType {
     my $date = '';
     my $columnIsValid = 0;
     foreach my $row ( @curTable ) {
-    	next if (! $row->[$col]->{text} );
+    	next if ( !$row->[$col]->{text} );
     	# else
     	$columnIsValid = 1;
         ( $num, $date ) = _convertToNumberAndDate( $row->[$col]->{text} );
@@ -542,7 +544,9 @@ sub emitTable {
     my $text = $currTablePre.CGI::start_table( $tattrs );
     $text .= $currTablePre.CGI::caption( $tableCaption ) if( $tableCaption );
     my $stype = '';
-
+    # count the number of cols to prevent looping over non-existing columns
+	my $maxCols = 0;
+	
     #Flush out any remaining rowspans
     for (my $i = 0; $i < @rowspan; $i++) {
         if( defined($rowspan[$i]) && $rowspan[$i] ) {
@@ -561,6 +565,7 @@ sub emitTable {
         undef $initSort;
     } elsif( defined( $initSort ) ) {
         $sortCol = $initSort - 1;
+        $sortCol = $maxSortCols if ( $sortCol > $maxSortCols );
         $currentDirection = _getCurrentSortDirection( $initDirection );
         $requestedTable = $tableCount;
     }
@@ -578,6 +583,15 @@ sub emitTable {
             @trailer = splice( @curTable, -$footerRows );
         }
 
+        # Count the maximum number of columns of this table
+        for my $row (0..$#curTable) {
+        	my $thisRowMaxColCount = 0;
+            for my $col (0..$#{$curTable[$row]}) {
+            	$thisRowMaxColCount++;
+            }
+            $maxCols = $thisRowMaxColCount if ( $thisRowMaxColCount > $maxCols );
+        }
+        
         # Handle multi-row labels by killing rowspans in sorted tables
         for my $row (0..$#curTable) {
             for my $col (0..$#{$curTable[$row]}) {
@@ -589,8 +603,12 @@ sub emitTable {
                 }
             }
         }
-
-        $stype = _guessColumnType( $sortCol );
+		
+        $stype = $columnType{'UNDEFINED'};
+        # only get the column type if within bounds
+        if ( $sortCol < $maxCols ) {
+	        $stype = _guessColumnType( $sortCol );
+	    }
         # invalidate sorting if no valid column
         if ( $stype eq $columnType{'UNDEFINED'} ) {
         	undef $initSort;
@@ -627,7 +645,8 @@ sub emitTable {
         # DG 08 Aug 2002: Cleanup after the header/trailer splicing
         # this is probably awfully inefficient - but how big is a table?
         @curTable = ( @header, @curTable, @trailer );
-    }
+    } # if defined $sortCol ...
+    
     my $rowCount = 0;
     my $numberOfRows = scalar(@curTable);
     my $dataColorCount = 0;
@@ -641,8 +660,10 @@ sub emitTable {
         my $isHeaderRow = 0;
         
         foreach my $fcell ( @$row ) {
+        	
         	# check if cell exists
-        	next if (!$fcell || !$fcell->{type} );
+        	next if ( !$fcell || !$fcell->{type} );
+        	
             my $tableAnchor = '';
             next if( $fcell->{type} eq 'X' ); # data was there so sort could work with col spanning
             my $type = $fcell->{type};
@@ -682,7 +703,8 @@ sub emitTable {
                 # DG: allow headers without b.g too (consistent and yes,
                 # I use this)
                 $attr->{bgcolor} = $headerBg unless( $headerBg =~ /none/i );
-                
+                $attr->{maxCols} = $maxCols;
+
                 if ( $isSorted ) {
                     if( $currentDirection == $sortDirection{'ASCENDING'} ) {
                         $tableAnchor = CGI::a( { name=>'sorted_table' }, '<!-- -->') .
