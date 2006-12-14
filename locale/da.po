@@ -1,30 +1,29 @@
+# translation of da.po to Danish
+#   TWiki:Main/SteffenPoulsen, 2006.
+# Steffen Poulsen, 2006.
 # TWiki translation for Danish
 # This file is distributed under the same license as TWiki itself
 # Copyright (C) 2005 Peter Thoeny, peter@thoeny.com and TWiki Contributors.
-# Translators:
-#   TWiki:Main/SteffenPoulsen, 2006.
 msgid ""
 msgstr ""
 "Project-Id-Version: da\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2006-05-09 14:21+0200\n"
+"PO-Revision-Date: 2006-12-14 22:26+0100\n"
 "Last-Translator: Steffen Poulsen <N/A>\n"
 "Language-Team: Danish <N/A>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: KBabel 1.11.2\n"
+"X-Generator: KBabel 1.11.4\n"
 
 #: twikiplugins/NatSkin/templates/messages.nat.tmpl:78
-#, fuzzy
 msgid "\"%1\" is an invalid name for a new web."
-msgstr "%1 er ikke et lovligt navn til et nyt web"
+msgstr "\"%1\" er ikke et lovligt navn til et nyt web"
 
 #: twikiplugins/NatSkin/templates/messages.nat.tmpl:320
-#, fuzzy
 msgid "\"%1\" topic does not exist"
-msgstr "siden %1 eksisterer ikke"
+msgstr "siden \"%1\" eksisterer ikke"
 
 #. ($days)
 #: lib/TWiki/Time.pm:267
@@ -47,9 +46,8 @@ msgid "%*(%1,second) "
 msgstr "%*(%1,sekund)"
 
 #: twikiplugins/NatSkin/templates/mailnotify.nat.tmpl:3
-#, fuzzy
 msgid "%1 - Automated notification of topic changes"
-msgstr "Automatiseret besked om opdateringer"
+msgstr "%1 - Automatiseret notificering om side-opdateringer"
 
 #: templates/registernotify.tmpl:3 templates/registernotifyadmin.tmpl:3
 #: twikiplugins/ClassicSkin/templates/registernotify.classic.tmpl:3
@@ -80,9 +78,8 @@ msgid "%1 - view a short introductory presentation on TWiki for beginners"
 msgstr "%1 - se en kort introduktion til TWiki for begyndere"
 
 #: data/TWiki/WebChanges.txt:2
-#, fuzzy
 msgid "%1 Recent Changes in %2 Web"
-msgstr "Senest ændrede sider"
+msgstr "%1 senest ændrede sider i %2-webbet"
 
 #: twikiplugins/NatSkin/templates/search.nat.tmpl:8
 #: twikiplugins/PatternSkin/data/Main/WebLeftBar.txt:4
@@ -129,30 +126,28 @@ msgid "%1 has been registered with e-mail %2"
 msgstr "%1 er nu registreret med e-mail-adressen %2"
 
 #: twikiplugins/NatSkin/templates/messages.nat.tmpl:298
-#, fuzzy
 msgid "%1 has no permission to %2 *%3*."
-msgstr "Ingen rettigheder til at se %1"
+msgstr "%1 har ikke rettighed til at %2 *%3*."
 
 #: twikiplugins/NatSkin/templates/oopsaccesschange.nat.tmpl:7
 msgid "%1 has no permission to change topic [[%2]]."
-msgstr ""
+msgstr "%1 har ikke rettigheder til at ændre siden [[%2]]."
 
 #: twikiplugins/NatSkin/templates/oopsaccesscreateweb.nat.tmpl:6
 msgid "%1 has no permission to create a new <nop><b>%2 Web</b>."
-msgstr ""
+msgstr "%1 har ikke rettighed til at oprette et nyt <nop><b>%2 web</b>."
 
 #: twikiplugins/NatSkin/templates/oopsaccessrename.nat.tmpl:6
 msgid "%1 has no permission to rename topic [[%2]]."
-msgstr ""
+msgstr "%1 har ikke rettighed til at omdøbe siden [[%2]]."
 
 #: twikiplugins/NatSkin/templates/oopsaccessview.nat.tmpl:6
-#, fuzzy
 msgid "%1 has no permission to view topic [[%2]]."
-msgstr "Ingen rettigheder til at se %1"
+msgstr "%1 har ikke rettigheder til at se siden [[%2]]."
 
 #: twikiplugins/NatSkin/templates/oopsaccessvote.nat.tmpl:6
 msgid "%1 has no permission to vote on topic [[%2]]."
-msgstr ""
+msgstr "%1 har ikke rettighed til at stemme på siden [[%2]]."
 
 #: templates/messages.tmpl:23
 msgid "%1 home"
@@ -222,13 +217,12 @@ msgid "%1 topic does not exist"
 msgstr "siden %1 eksisterer ikke"
 
 #: twikiplugins/NatSkin/templates/searchrenameview.nat.tmpl:9
-#, fuzzy
 msgid "%1 web:"
-msgstr "%1 web"
+msgstr "%1 web:"
 
 #: twikiplugins/NatSkin/data/TWiki/MySideBarTemplate.txt:3
 msgid "%1's sidebar"
-msgstr ""
+msgstr "%1's sidebar"
 
 #: twikiplugins/PatternSkin/templates/constants.pattern.tmpl:11
 msgid "&Cancel"
@@ -249,7 +243,7 @@ msgstr "&WYSIWYG"
 
 #: templates/messages.tmpl:235
 msgid "'%1' is not a valid %2 "
-msgstr ""
+msgstr "'%1' er ikke en korrekt %2 "
 
 #: twikiplugins/PatternSkin/templates/rdiff.pattern.tmpl:9
 msgid "(%1 vs. %2)"
@@ -265,8 +259,7 @@ msgstr "(Brug et sidenavn i TWiki.WikiNotation)"
 
 #: templates/messages.tmpl:136
 msgid "(__Suggestion:__ How about uploading your picture to your topic?)"
-msgstr ""
-"(__Forslag:__ Hvad med at uploade et billede af dig selv til din side?)"
+msgstr "(__Forslag:__ Hvad med at uploade et billede af dig selv til din side?)"
 
 #: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:18
 msgid "(attach)"
@@ -304,7 +297,7 @@ msgstr "(slet)"
 
 #: twikiplugins/NatSkin/templates/messages.nat.tmpl:295
 msgid "(don't forget to check your Topic Settings)"
-msgstr ""
+msgstr "(glem ikke at tjekke dine side-indstillinger - Topic Settings)"
 
 #: twikiplugins/PatternSkin/templates/editform.pattern.tmpl:9
 msgid "(edit form)"
@@ -476,12 +469,14 @@ msgid ""
 "*Move attachment*: An attachment can be deleted by moving it to the Trash."
 "TrashAttachment."
 msgstr ""
+"*Flyt vedhæftet fil*: En vedhæftet fil kan slettes ved at flytte den til Trash."
+"TrashAttachment."
 
 #: twikiplugins/NatSkin/templates/attachnew.nat.tmpl:14
 msgid ""
 "*Properties*: Click on _manage_ of an existing attachment to change its "
 "properties."
-msgstr ""
+msgstr "*Attributter*: Klik på _opdater_ for en eksisterende vedhæftet fil for at opdatere dens attributter."
 
 #: twikiplugins/PatternSkin/templates/attachagain.pattern.tmpl:28
 msgid ""
@@ -497,9 +492,8 @@ msgstr ""
 "rel='nofollow'>HiddenAttachment</a>."
 
 #: twikiplugins/NatSkin/templates/oopsnoweb.nat.tmpl:31
-#, fuzzy
 msgid "*Tip:* More options in WebSearch"
-msgstr "(Flere valgmuligheder i WebSearch)"
+msgstr "*Hint:* Flere valgmuligheder i WebSearch"
 
 #: data/TWiki/WikiSyntaxSummary.txt:9
 msgid "*bold* put word/phrase in asterisks: =<nop>*your phrase*="
@@ -516,7 +510,7 @@ msgstr ""
 #: data/TWiki/WikiSyntaxSummary.txt:11
 msgid "*headings* 3 dashes, 1 to 6 pluses, 1 space: =---++&&nbsp;Your Heading="
 msgstr ""
-"*overskrifter* 3 mellemrum, 1 til 6 plusser, 1 mellemrum: =---++&&nbsp;Din "
+"*overskrifter* 3 streger, 1 til 6 plusser, 1 mellemrum: =---++&&nbsp;Din "
 "overskrift="
 
 #: data/TWiki/WikiSyntaxSummary.txt:12
@@ -549,31 +543,27 @@ msgstr "..."
 
 #: twikiplugins/NatSkin/templates/oopserrbase.nat.tmpl:11
 msgid "... don't know, it just happended."
-msgstr ""
+msgstr "... ved ikke hvorfor, det skete bare."
 
 #: twikiplugins/NatSkin/templates/oopschangepasswd.nat.tmpl:7
-#, fuzzy
 msgid "... for user %1."
-msgstr "Kan ikke finde brugeren %1"
+msgstr ".... for brugeren %1"
 
 #: twikiplugins/NatSkin/templates/oopsnoformdef.nat.tmpl:8
-#, fuzzy
 msgid "1. Form definition missing"
-msgstr "Formular-definition mangler"
+msgstr "1. Formular-definition mangler"
 
 #: twikiplugins/NatSkin/templates/oopsnoformdef.nat.tmpl:18
-#, fuzzy
 msgid "2. Topic can not be upgraded from old style category table"
-msgstr "Siden kan ikke opgraderes fra den gamle 'category table'-stil"
+msgstr "2. Siden kan ikke opgraderes fra den gamle 'category table'-stil"
 
 #: twikiplugins/PatternSkin/templates/oopsmoresettings.pattern.tmpl:3
 msgid "<a href='%1' rel='nofollow'>Edit settings</a> for this topic"
-msgstr ""
-"Opdatér <a href='%1' rel='nofollow'>side-præferencer</a> for denne side"
+msgstr "Opdatér <a href='%1' rel='nofollow'>side-præferencer</a> for denne side"
 
 #: twikiplugins/NatSkin/data/TWiki/MySideBar.txt:7
 msgid "<a href='%1' title='%2'>Create</a> your personalized sidebar."
-msgstr ""
+msgstr "<a href='%1' title='%2'>Opret</a> din personlige sidebar."
 
 #: data/TWiki/WebChanges.txt:8
 msgid ""
@@ -582,6 +572,10 @@ msgid ""
 "href='%5' rel='nofollow'>500</a>, <a href='%6' rel='nofollow'>1000</a> "
 "topics, <a href='%7' rel='nofollow'>all changes</a>"
 msgstr ""
+"<a href='%1'>RSS feed</a>, seneste ændringer med <a href='%2'>50</a>, <a "
+"href='%3' rel='nofollow'>100</a>, <a href='%4' rel='nofollow'>200</a>, <a "
+"href='%5' rel='nofollow'>500</a>, <a href='%6' rel='nofollow'>1000</a> "
+"sider, <a href='%7' rel='nofollow'>alle ændringer</a>"
 
 #: twikiplugins/PatternSkin/templates/renamewebbase.pattern.tmpl:25
 msgid ""
@@ -604,10 +598,8 @@ msgid "<em>in all public webs</em>"
 msgstr "<em>i alle offentlige webs</em>"
 
 #: twikiplugins/PatternSkin/templates/preview.pattern.tmpl:58
-msgid ""
-"<span class='twikiAlert'><b>Do not forget</b></span> to save your changes."
-msgstr ""
-"<span class='twikiAlert'><b>Glem ikke</b></span> at gemme dine ændringer."
+msgid "<span class='twikiAlert'><b>Do not forget</b></span> to save your changes."
+msgstr "<span class='twikiAlert'><b>Glem ikke</b></span> at gemme dine ændringer."
 
 #: templates/messages.tmpl:448
 msgid ""
@@ -619,8 +611,7 @@ msgstr ""
 
 #: templates/messages.tmpl:327
 msgid "A =.txt= extension is appended to some filenames for security reasons"
-msgstr ""
-"Nogle filnavne vil blive tilføjet =.txt= som endelse (af sikkerhedshensyn)"
+msgstr "Nogle filnavne vil blive tilføjet =.txt= som endelse (af sikkerhedshensyn)"
 
 #: templates/messages.tmpl:121
 msgid ""
@@ -631,12 +622,11 @@ msgstr ""
 "=#FFFF00=."
 
 #: twikiplugins/NatSkin/templates/oopsmngcreateweb.nat.tmpl:24
-#, fuzzy
 msgid ""
 "A color starts with the number sign, followed by 6 hexadecimal numbers, e.g. "
 "yellow is =#FFFF00=."
 msgstr ""
-"En farve starter med et #-tegn, efterfulgt af 6 hexadecimale tal, fx "
+"En farve starter med et #-tegn, efterfulgt af 6 hexadecimale tal, fx gul er"
 "=#FFFF00=."
 
 #. ($data->{Email})
@@ -656,7 +646,6 @@ msgstr ""
 "nødvendigt."
 
 #: data/Sandbox/WebHome.txt:24
-#, fuzzy
 msgid "A more extensive changes list is available via [[%1][Recent Changes]]."
 msgstr ""
 "En mere udførlig liste over ændringer er tilgængelig via linket [[%1]"
@@ -680,7 +669,7 @@ msgstr ""
 #: twikiplugins/NatSkin/templates/previewtopicactions.nat.tmpl:9
 #: twikiplugins/NatSkin/templates/settingstoolbar.natedit.tmpl:6
 msgid "Abandon your changes and exit"
-msgstr ""
+msgstr "Fortryd dine ændringer og afslut"
 
 #: twikiplugins/NatSkin/templates/edit.nat.tmpl:76
 #: twikiplugins/NatSkin/templates/edittoolbar.natedit.tmpl:59
@@ -691,12 +680,11 @@ msgstr ""
 #: twikiplugins/NatSkin/templates/previewtoolbar.natedit.tmpl:7
 #: twikiplugins/NatSkin/templates/previewtopicactions.nat.tmpl:8
 msgid "Abandon your changes but continue editing"
-msgstr ""
+msgstr "Fortryd dine ændringer men fortsæt editering"
 
 #: twikiplugins/NatSkin/templates/renamesidebar.nat.tmpl:4
-#, fuzzy
 msgid "About Topics"
-msgstr "Test-sider"
+msgstr "Om siderne"
 
 #: templates/oopsaccessdenied.tmpl:5
 #: twikiplugins/ClassicSkin/templates/oopsaccessdenied.classic.tmpl:5
@@ -729,9 +717,8 @@ msgid "Action %1: %2."
 msgstr "Handling %1: %2."
 
 #: twikiplugins/NatSkin/templates/strings.nat.tmpl:19
-#, fuzzy
 msgid "Add a new form to <nop>%1"
-msgstr "Vælg en ny formular"
+msgstr "Tilføj en ny formular til <nop>%1"
 
 #: templates/addform.tmpl:1
 #: twikiplugins/ClassicSkin/templates/addform.classic.tmpl:1
@@ -753,9 +740,8 @@ msgid "Adding a %1 variable in WebPreferences"
 msgstr "Tilføjer en %1 variabel til WebPreferences"
 
 #: twikiplugins/NatSkin/templates/oopsnoformdef.nat.tmpl:22
-#, fuzzy
 msgid "Adding a =WEBFORMS= variable in WebPreferences"
-msgstr "Tilføjer en %1 variabel til WebPreferences"
+msgstr "Tilføjelse af en  =WEBFORMS= variabel til WebPreferences"
 
 #: twikiplugins/PatternSkin/data/TWiki/WebLeftBar.txt:23
 msgid "Admin Maintenance"
@@ -763,7 +749,7 @@ msgstr "Administrative emner"
 
 #: twikiplugins/NatSkin/templates/oopsmanage.nat.tmpl:6
 msgid "Administration error"
-msgstr ""
+msgstr "Administrationsfejl"
 
 #: data/TWiki/WebSearchAdvanced.txt:3
 msgid "Advanced Search"
@@ -796,11 +782,11 @@ msgstr ""
 
 #: twikiplugins/NatSkin/templates/edittoolbar.natedit.tmpl:19
 msgid "Align left"
-msgstr ""
+msgstr "Venstrejustér"
 
 #: twikiplugins/NatSkin/templates/edittoolbar.natedit.tmpl:23
 msgid "Align right"
-msgstr ""
+msgstr "Højrejustér"
 
 #: data/TWiki/WebSearch.txt:38 data/TWiki/WebSearchAdvanced.txt:48
 msgid "All public webs"
@@ -817,16 +803,14 @@ msgid "Allow non <nop>WikiWord for the new topic name"
 msgstr "Tillad et ikke-WikiWord som nyt sidenavn"
 
 #: twikiplugins/NatSkin/templates/moveattachment.nat.tmpl:22
-#, fuzzy
 msgid "Allow non <nop>WikiWord for the new topic name."
-msgstr "Tillad et ikke-WikiWord som nyt sidenavn"
+msgstr "Tillad et ikke-WikiWord som nyt sidenavn."
 
 #: twikiplugins/NatSkin/templates/messages.nat.tmpl:170
-#, fuzzy
 msgid ""
 "Alternatively go <a href=\"javascript:history.back()\">back</a> in your "
 "browser and choose a different username."
-msgstr "Benyt venligst tilbage-knappen i browseren og forsøg igen."
+msgstr "Alternativt kan du bruge <a href=\"javascript:history.back()\">tilbage-knappen</a> i din browser og vælge et nyt brugernavn."
 
 #: templates/messages.tmpl:229
 msgid ""
@@ -837,30 +821,22 @@ msgstr ""
 "tilbage til TWiki.TWikiRegistration og vælge et nyt brugernavn."
 
 #: twikiplugins/NatSkin/templates/messages.nat.tmpl:148
-#, fuzzy
 msgid "An e-mail could not be delivered."
-msgstr ""
-"E-mailen kunne ikke afsendes. Informér venligst din %1-administrator, %2"
+msgstr "En e-mail kunne ikke afsendes."
 
 #: templates/messages.tmpl:216
-msgid ""
-"An e-mail could not be delivered. Please notify your %1 administrator, %2"
-msgstr ""
-"E-mailen kunne ikke afsendes. Informér venligst din %1-administrator, %2"
+msgid "An e-mail could not be delivered. Please notify your %1 administrator, %2"
+msgstr "E-mailen kunne ikke afsendes. Informér venligst din %1-administrator, %2"
 
 #: twikiplugins/NatSkin/templates/messages.nat.tmpl:208
-#, fuzzy
 msgid "An email address is required before a password can be reset."
-msgstr ""
-"Kunne ikke finde e-mail-adresse for %1 (en e-mail-adresse er nødvendig for "
-"at kunne nulstille et password)"
+msgstr "En e-mail-adresse er nødvendig for at kunne nulstille et password)"
 
 #: twikiplugins/PatternSkin/templates/moveattachment.pattern.tmpl:39
 msgid ""
 "An error page will be shown if either of the topics are locked by another "
 "user."
-msgstr ""
-"En fejlside vil blive vist, hvis en af siderne er låst af en anden bruger."
+msgstr "En fejlside vil blive vist, hvis en af siderne er låst af en anden bruger."
 
 #: templates/messages.tmpl:17
 msgid "And populated with topics from the base web"
@@ -869,8 +845,7 @@ msgstr "Og populeret med sider fra skabelon-webbet."
 #: twikiplugins/NatSkin/templates/changeformsidebar.nat.tmpl:11
 #: twikiplugins/PatternSkin/templates/changeform.pattern.tmpl:27
 msgid "Any change you made to topic before coming to this page are preserved."
-msgstr ""
-"Alle ændringer, som du har lavet før du skiftede til denne side er gemt."
+msgstr "Alle ændringer, som du har lavet før du skiftede til denne side er gemt."
 
 #: twikiplugins/NatSkin/templates/strings.nat.tmpl:10
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:66
@@ -887,7 +862,6 @@ msgid "Attach image or document on %1"
 msgstr "Vedhæft billede eller dokument til %1"
 
 #: twikiplugins/NatSkin/templates/strings.nat.tmpl:11
-#, fuzzy
 msgid "Attach image or document to this topic"
 msgstr "Vedhæft fx et billede eller et dokument til denne side"
 
@@ -920,7 +894,6 @@ msgid "Attachment does not exist"
 msgstr "Vedhæftet fil findes ikke."
 
 #: twikiplugins/NatSkin/templates/oopsmoveerr.nat.tmpl:3
-#, fuzzy
 msgid "Attachment move error"
 msgstr "Fejl under flytning af vedhæftet fil"
 
@@ -929,9 +902,8 @@ msgid "Attachment move failed"
 msgstr "Fejl under flytning af vedhæftet fil"
 
 #: twikiplugins/NatSkin/data/TWiki/TWikiWebSideBar.txt:47
-#, fuzzy
 msgid "Attachments"
-msgstr "Vedhæftet fil"
+msgstr "Vedhæftede filer"
 
 #: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:77
 msgid "Attachments will not be shown in topic view page."
@@ -957,7 +929,7 @@ msgstr "Attribut"
 
 #: twikiplugins/MailerContrib/templates/mailnotify.tmpl:62
 msgid "Automated notification of topic changes"
-msgstr "Automatiseret besked om opdateringer"
+msgstr "Automatiseret notificering om opdateringer"
 
 #: data/_default/WebHome.txt:4
 msgid "Available Information"
@@ -984,9 +956,8 @@ msgid "Backlinks to %1 in all Webs"
 msgstr "Referencer til %1 fra alle offentlige webs"
 
 #: templates/messages.tmpl:253
-#, fuzzy
 msgid "Bad password"
-msgstr "Nyt password"
+msgstr "Forkert password"
 
 #: templates/messages.tmpl:116
 #: twikiplugins/NatSkin/templates/messages.nat.tmpl:92
@@ -994,22 +965,20 @@ msgid "Base web %1 is missing or does not exist"
 msgstr "Basis-webbet %1 mangler eller er ikke oprettet"
 
 #: twikiplugins/NatSkin/templates/oopsmngcreateweb.nat.tmpl:21
-#, fuzzy
 msgid "Base web:"
-msgstr "%1 web"
+msgstr "Oprindeligt web:"
 
 #: twikiplugins/NatSkin/templates/edittoolbar.natedit.tmpl:5
-#, fuzzy
 msgid "Bold text"
-msgstr "Editér teksten"
+msgstr "Fed tekst"
 
 #: twikiplugins/NatSkin/data/TWiki/NatSkinStyleBrowser.txt:43
 msgid "Border Off"
-msgstr ""
+msgstr "Margin til"
 
 #: twikiplugins/NatSkin/data/TWiki/NatSkinStyleBrowser.txt:42
 msgid "Border On"
-msgstr ""
+msgstr "Margin fra"
 
 #: data/TWiki/WebSearch.txt:36 data/TWiki/WebSearchAdvanced.txt:46
 msgid "Both body and title"
@@ -1017,7 +986,7 @@ msgstr "Både kildetekst og sidenavn"
 
 #: twikiplugins/NatSkin/data/TWiki/NatSkinStyleBrowser.txt:51
 msgid "Both sidebars"
-msgstr ""
+msgstr "Begge sidebars"
 
 #: data/Trash/WebHome.txt:7
 msgid ""
@@ -1030,19 +999,16 @@ msgstr ""
 "=ALLOWWEBVIEW= begrænsningen i WebPreferences"
 
 #: twikiplugins/NatSkin/templates/oopstopicexists.nat.tmpl:5
-#, fuzzy
 msgid "Can not rename to %1 as this already exists!"
-msgstr "Kan ikke omdøbe %1 til %2, da siden allerede eksisterer"
+msgstr "Kan ikke omdøbe siden til %1 da denne side allerede eksisterer!"
 
 #: twikiplugins/NatSkin/templates/oopsnotwikiuser.nat.tmpl:5
-#, fuzzy
 msgid "Can't find the username <b>%1</b>"
-msgstr "Kan ikke finde brugeren %1"
+msgstr "Kan ikke finde brugernavnet <b>%1</b>"
 
 #: twikiplugins/NatSkin/templates/messages.nat.tmpl:22
-#, fuzzy
 msgid "Can't find user \"%1\"."
-msgstr "Kan ikke finde brugeren %1"
+msgstr "Kan ikke finde brugeren \"%1\"."
 
 #: templates/messages.tmpl:421 templates/messages.tmpl:44
 msgid "Can't find user %1"
@@ -1055,11 +1021,8 @@ msgstr ""
 "at kunne nulstille et password)"
 
 #: twikiplugins/NatSkin/templates/messages.nat.tmpl:207
-#, fuzzy
 msgid "Can't get an email address for %1"
-msgstr ""
-"Kunne ikke finde e-mail-adresse for %1 (en e-mail-adresse er nødvendig for "
-"at kunne nulstille et password)"
+msgstr "Kunne ikke finde e-mail-adresse for %1"
 
 #: twikiplugins/NatSkin/templates/attachagain.nat.tmpl:25
 #: twikiplugins/NatSkin/templates/attachnew.nat.tmpl:6
@@ -1090,16 +1053,14 @@ msgstr ""
 #: twikiplugins/NatSkin/templates/renamewebconfirm.nat.tmpl:8
 #: twikiplugins/NatSkin/templates/searchtopicactions.nat.tmpl:2
 #: twikiplugins/NatSkin/templates/settingstopicactions.nat.tmpl:6
-#, fuzzy
 msgid "Cancel"
-msgstr "Fortryd (&C)"
+msgstr "Fortryd"
 
 #: twikiplugins/NatSkin/templates/edittoolbar.natedit.tmpl:68
 #: twikiplugins/NatSkin/templates/previewtoolbar.natedit.tmpl:13
 #: twikiplugins/NatSkin/templates/settingstoolbar.natedit.tmpl:7
-#, fuzzy
 msgid "Cancel and abandon changes"
-msgstr "Fortryd editering og annulér ændringer"
+msgstr "Fortryd og annullér ændringer"
 
 #: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:63
 msgid "Cancel editing and discard changes"
@@ -1131,17 +1092,15 @@ msgstr "Kategorier"
 
 #: twikiplugins/NatSkin/templates/edittoolbar.natedit.tmpl:21
 msgid "Center align"
-msgstr ""
+msgstr "Midtjustér"
 
 #: twikiplugins/NatSkin/templates/edittoolbar.natedit.tmpl:21
-#, fuzzy
 msgid "Center text"
-msgstr "(editér tekst)"
+msgstr "Centrér tekst"
 
 #: twikiplugins/NatSkin/templates/oopsaccesschange.nat.tmpl:5
-#, fuzzy
 msgid "Change Access Denied"
-msgstr "Adgang nægtet"
+msgstr "Ændrings-adgang nægtet"
 
 #: data/TWiki/ChangePassword.txt:2
 msgid "Change Password"
@@ -1152,9 +1111,8 @@ msgid "Change comment and properties only"
 msgstr "Opdatér kun attributter"
 
 #: twikiplugins/NatSkin/templates/strings.nat.tmpl:20
-#, fuzzy
 msgid "Change form"
-msgstr "Ændr fra:"
+msgstr "Skift formular"
 
 #: twikiplugins/PatternSkin/templates/rename.pattern.tmpl:13
 msgid "Change from:"
@@ -1181,7 +1139,6 @@ msgid "Change links in topics that refer to %1 in any Web:"
 msgstr "Opdater links fra sider, der peger på %1 (i alle Webs)"
 
 #: twikiplugins/NatSkin/templates/renamewebbase.nat.tmpl:29
-#, fuzzy
 msgid "Change links in topics that refer to %1 in the %1 Web:"
 msgstr "Opdater links fra sider, der peger på %1 (kun i %2-webbet)"
 
@@ -1191,7 +1148,6 @@ msgid "Change links in topics that refer to %1 in the %2 Web:"
 msgstr "Opdater links fra sider, der peger på %1 (kun i %2-webbet)"
 
 #: twikiplugins/NatSkin/templates/renamebase.nat.tmpl:28
-#, fuzzy
 msgid "Change links in topics that refer to %1.%2 in any Web:"
 msgstr "Opdater links fra sider, der peger på %1 (i alle Webs)"
 
@@ -1200,19 +1156,16 @@ msgid "Change password"
 msgstr "Skift password"
 
 #: twikiplugins/NatSkin/templates/attachagain.nat.tmpl:24
-#, fuzzy
 msgid "Change properties"
-msgstr "Opdatér side"
+msgstr "Opdatér attributter"
 
 #: twikiplugins/NatSkin/templates/renamerefs.nat.tmpl:7
-#, fuzzy
 msgid "Change references"
-msgstr "Præferencer"
+msgstr "Opdatér præferencer"
 
 #: twikiplugins/NatSkin/templates/strings.nat.tmpl:21
-#, fuzzy
 msgid "Change the current form of <nop>%1"
-msgstr "Skjul vedhæftede filer"
+msgstr "Udskift den nuværende formular på <nop>%1"
 
 #: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:27
 msgid "Change topic"
@@ -1228,9 +1181,8 @@ msgstr "Ændret"
 #: twikiplugins/NatSkin/templates/changes.nat.tmpl:17
 #: twikiplugins/NatSkin/templates/search.nat.tmpl:10
 #: twikiplugins/NatSkin/templates/searchrenameview.nat.tmpl:11
-#, fuzzy
 msgid "Changed by"
-msgstr "Ændret af:"
+msgstr "Ændret af"
 
 #: twikiplugins/MailerContrib/templates/mailnotify.tmpl:16
 #: twikiplugins/NatSkin/templates/searchrenameview.nat.tmpl:10
@@ -1256,7 +1208,7 @@ msgstr "Ændringer fra r%1 til r%2"
 msgid ""
 "Characters not allowed in topic names, such as spaces will automatically be "
 "removed."
-msgstr ""
+msgstr "Karakterer der ikke er tilladt i sidenavne - fx mellemrum - bliver automatisk fjernet"
 
 #: templates/messages.tmpl:373
 msgid ""
@@ -1271,8 +1223,7 @@ msgstr ""
 #: twikiplugins/PatternSkin/templates/rename.pattern.tmpl:41
 #: twikiplugins/PatternSkin/templates/renamedelete.pattern.tmpl:45
 msgid "Checked topics will be updated to point to the new topic location."
-msgstr ""
-"Markerede sider vil blive opdateret til at pege på den nye sides lokation"
+msgstr "Markerede sider vil blive opdateret til at pege på den nye sides lokation"
 
 #: twikiplugins/PatternSkin/templates/renameweb.pattern.tmpl:31
 msgid "Checked topics will be updated to point to the new web name."
@@ -1286,21 +1237,18 @@ msgstr "Datter-sider i %1-webbet"
 
 #: twikiplugins/NatSkin/templates/changeform.nat.tmpl:17
 #: twikiplugins/PatternSkin/templates/changeform.pattern.tmpl:10
-#, fuzzy
 msgid "Choose a new form for %1"
-msgstr "Vælg en ny formular"
+msgstr "Vælg en ny formular for %1"
 
 #: twikiplugins/NatSkin/templates/messages.nat.tmpl:49
-#, fuzzy
 msgid "Chose a topic name that is a %1 or check the allow non-Wiki Word box."
 msgstr ""
-"Benyt venligst tilbage-knapppen i din browser, og vælg et sidenavn der er et "
-"%1.WikiWord eller afkryds non-<nop>WikiWord i afkrydsningsfeltet"
+"Vælg et sidenavn der er et "
+"%1 eller afkryds i non-<nop>WikiWord afkrydsningsfeltet"
 
 #: twikiplugins/NatSkin/templates/oopslogonbase.nat.tmpl:24
-#, fuzzy
 msgid "Clear"
-msgstr "Nulstil alle"
+msgstr "Nulstil"
 
 #: lib/TWiki/Form.pm:584 twikiplugins/NatSkin/templates/renamebase.nat.tmpl:31
 #: twikiplugins/NatSkin/templates/renamewebbase.nat.tmpl:39
@@ -1329,9 +1277,8 @@ msgid "Click to see details in separate window"
 msgstr "Klik for at se detaljer i et separat vindue"
 
 #: twikiplugins/TwistyPlugin/data/TWiki/TwistyPlugin.txt:409
-#, fuzzy
 msgid "Close"
-msgstr "Nulstil alle"
+msgstr "Luk"
 
 #: templates/messages.tmpl:120
 #: twikiplugins/NatSkin/templates/messages.nat.tmpl:96
@@ -1347,18 +1294,16 @@ msgid "Comment"
 msgstr "Kommentar"
 
 #: twikiplugins/NatSkin/templates/attach.nat.tmpl:26
-#, fuzzy
 msgid "Comment:"
-msgstr "Kommentarer:"
+msgstr "Kommentar:"
 
 #: data/TWiki/TWikiRegistration.txt:259
 msgid "Comments:"
 msgstr "Kommentarer:"
 
 #: twikiplugins/NatSkin/templates/oopsrev.nat.tmpl:3
-#, fuzzy
 msgid "Compare Revisions of %1"
-msgstr "Sammenlign versioner"
+msgstr "Sammenlign versioner af %1"
 
 #: twikiplugins/PatternSkin/templates/oopsmorecompare.pattern.tmpl:3
 msgid "Compare revisions"
@@ -1393,7 +1338,7 @@ msgstr "Fortsæt med at omdøbe webbet?"
 #: twikiplugins/NatSkin/templates/previewtoolbar.natedit.tmpl:4
 #: twikiplugins/NatSkin/templates/previewtopicactions.nat.tmpl:3
 msgid "Continue editing"
-msgstr ""
+msgstr "Fortsæt editering"
 
 #: data/TWiki/TWikiPreferences.txt:42
 msgid ""
@@ -1412,9 +1357,8 @@ msgid "Could not find template"
 msgstr "Kunne ikke finde skabelonen"
 
 #: twikiplugins/NatSkin/templates/messages.nat.tmpl:287
-#, fuzzy
 msgid "Could not find template =%1="
-msgstr "Kunne ikke finde skabelonen"
+msgstr "Kunne ikke finde skabelonen =%1="
 
 #: templates/messages.tmpl:285
 #: twikiplugins/NatSkin/templates/messages.nat.tmpl:212
@@ -1426,9 +1370,8 @@ msgid "Country:"
 msgstr "Land:"
 
 #: data/TWiki/WebTopicViewTemplate.txt:19
-#, fuzzy
 msgid "Create '%1'"
-msgstr "Opr&et"
+msgstr "Opret '%1'"
 
 #: data/Sandbox/WebHome.txt:17
 msgid "Create <nop>TestTopic###"
@@ -1445,14 +1388,12 @@ msgid "Create New Topic in %1 Web"
 msgstr "Opret ny side i %1-webbet"
 
 #: twikiplugins/NatSkin/templates/oopsmngcreateweb.nat.tmpl:3
-#, fuzzy
 msgid "Create New Web"
-msgstr "Opret ny side"
+msgstr "Opret nyt web"
 
 #: twikiplugins/NatSkin/templates/oopsaccesscreateweb.nat.tmpl:4
-#, fuzzy
 msgid "Create Web Access Denied"
-msgstr "Adgang nægtet"
+msgstr "'Opret web'-adgang nægtet"
 
 #: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:75
 msgid "Create a link to the attached file"
@@ -1461,7 +1402,6 @@ msgstr ""
 "flyttes rundt efterfølgende)"
 
 #: twikiplugins/NatSkin/templates/attach.nat.tmpl:35
-#, fuzzy
 msgid "Create a link to the attached file at the end of the topic."
 msgstr ""
 "Lav et link til den vedhæftede fil (indsættes i bunden af siden, men kan "
@@ -1501,7 +1441,7 @@ msgstr ""
 #: twikiplugins/NatSkin/templates/preview.nat.tmpl:45
 #: twikiplugins/NatSkin/templates/preview.natedit.tmpl:6
 msgid "Creates a new topic revision when saving"
-msgstr ""
+msgstr "Skaber en ny side-version når der gemmes"
 
 #: templates/messages.tmpl:314
 #: twikiplugins/NatSkin/templates/oopsnoformdef.nat.tmpl:21
@@ -1522,9 +1462,8 @@ msgid "Current password"
 msgstr "Nuværende password:"
 
 #: twikiplugins/NatSkin/templates/renamewebbase.nat.tmpl:48
-#, fuzzy
 msgid "Currently being edited:"
-msgstr "Nuværende forælder:"
+msgstr "Igangværende editering:"
 
 #: twikiplugins/NatSkin/templates/attachtables.nat.tmpl:25
 #: twikiplugins/NatSkin/templates/attachtables.nat.tmpl:4
@@ -1543,9 +1482,8 @@ msgid "Debug"
 msgstr "Debug"
 
 #: data/TWiki/WebTopicCreator.txt:127
-#, fuzzy
 msgid "Default template"
-msgstr "Kunne ikke finde skabelonen"
+msgstr "Default-skabelon"
 
 #: twikiplugins/NatSkin/templates/renamewebdelete.nat.tmpl:4
 #: twikiplugins/PatternSkin/templates/attachagain.pattern.tmpl:35
@@ -1579,14 +1517,12 @@ msgstr "Slettet"
 
 #: twikiplugins/NatSkin/templates/attachsidebar.nat.tmpl:6
 #: twikiplugins/NatSkin/templates/moveattachmentsidebar.nat.tmpl:6
-#, fuzzy
 msgid "Deleting Attachments"
-msgstr "Slet vedhæftet fil"
+msgstr "Slet vedhæftede filer"
 
 #: twikiplugins/NatSkin/templates/renamesidebar.nat.tmpl:6
-#, fuzzy
 msgid "Deleting Topics"
-msgstr "Slet side"
+msgstr "Slet sider"
 
 #: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:68
 msgid "Describe the file so other people know what it is."
@@ -1594,13 +1530,13 @@ msgstr "Beskriv filen så andre brugere kan læse hvad det er."
 
 #: data/TWiki/WebTopicViewTemplate.txt:7
 msgid "Did you spell the %1 correctly?"
-msgstr ""
+msgstr "Stavede du det brugte %1 korrekt?"
 
 #: twikiplugins/NatSkin/templates/oopsauth.nat.tmpl:12
 msgid ""
 "Did you type in your login name and password correctly? Remember, both are "
 "case sensitive."
-msgstr ""
+msgstr "Indtastede du dit loginnavn og password korrekt? Husk at der er forskel på store og små bogstaver for begges vedkommende."
 
 #: data/TWiki/VarMAKETEXT.txt:20
 msgid "Did you want to [[%1][reset %2's password]]?"
@@ -1612,7 +1548,7 @@ msgstr "Ændringer:"
 
 #: twikiplugins/NatSkin/templates/strings.nat.tmpl:14
 msgid "Diffs"
-msgstr ""
+msgstr "Differencer"
 
 #: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:77
 msgid "Do not show attachment in table"
@@ -1623,18 +1559,16 @@ msgid "Do show:"
 msgstr "Vis:"
 
 #: data/TWiki/WebTopicViewTemplate.txt:18
-#, fuzzy
 msgid "Do you wish to create the topic %1?"
-msgstr "Hvis du vil oprette siden"
+msgstr "Ønsker du at oprette siden %1?"
 
 #: data/TWiki/WebTopicViewTemplate.txt:10
 msgid "Do you wish to navigate quickly to a similar topic?"
-msgstr ""
+msgstr "Ønsker du at navigere nemt til en lignende side?"
 
 #: twikiplugins/NatSkin/data/TWiki/MySideBarTemplate.txt:16
-#, fuzzy
 msgid "Documentation"
-msgstr "Nuværende lokation:"
+msgstr "Dokumentation"
 
 #: data/TWiki/WebSearchAdvanced.txt:68
 msgid "Don't show:"
@@ -1644,16 +1578,12 @@ msgstr "Vis ikke:"
 #: twikiplugins/NatSkin/templates/edittopicactions.nat.tmpl:6
 #: twikiplugins/NatSkin/templates/preview.nat.tmpl:39
 #: twikiplugins/NatSkin/templates/previewtopicactions.nat.tmpl:6
-#, fuzzy
 msgid "Done"
-msgstr "(ingen)"
+msgstr "OK"
 
 #: twikiplugins/NatSkin/templates/messages.nat.tmpl:238
-#, fuzzy
 msgid "During deletion of attachment =%1= an error was found."
-msgstr ""
-"Under sletningen af den vedhæftede fil %1 blev der konstateret en fejl. "
-"Underret venligst din %2 administrator."
+msgstr "Under sletningen af den vedhæftede fil =%1= blev der konstateret en fejl."
 
 #: templates/messages.tmpl:63
 msgid ""
@@ -1672,11 +1602,8 @@ msgstr ""
 "fejl. Underret venligst din %3 administrator."
 
 #: twikiplugins/NatSkin/templates/messages.nat.tmpl:54
-#, fuzzy
 msgid "During rename of topic %1 to %2 an error (%3) was found."
-msgstr ""
-"Under omdøbningen af siden %1 til %2 blev der konstateret en fejl (%3). "
-"Underret venligst din %4 administrator."
+msgstr "Under omdøbningen af siden %1 til %2 blev der konstateret en fejl (%3)."
 
 #: templates/messages.tmpl:91
 msgid ""
@@ -1687,18 +1614,12 @@ msgstr ""
 "Underret venligst din %4 administrator."
 
 #: twikiplugins/NatSkin/templates/oopsrenameerr.nat.tmpl:5
-#, fuzzy
 msgid "During rename of topic %1 to %2 an error was found."
-msgstr ""
-"Under omdøbningen af siden %1 til %2 blev der konstateret en fejl (%3). "
-"Underret venligst din %4 administrator."
+msgstr "Under omdøbningen af siden %1 til %2 blev der konstateret en fejl."
 
 #: twikiplugins/NatSkin/templates/messages.nat.tmpl:61
-#, fuzzy
 msgid "During rename of web %1 to %2 an error (%3) was found."
-msgstr ""
-"Under omdøbningen af siden %1 til %2 blev der konstateret en fejl (%3). "
-"Underret venligst din %4 administrator."
+msgstr "Under omdøbningen af siden %1 til %2 blev der konstateret en fejl (%3)."
 
 #: templates/messages.tmpl:94
 msgid ""
@@ -1709,11 +1630,10 @@ msgstr ""
 "Underret venligst din %4 administrator."
 
 #: twikiplugins/NatSkin/templates/messages.nat.tmpl:224
-#, fuzzy
 msgid "During save of %1 an error was found by the version control system."
 msgstr ""
 "Under skrivningen af %1 blev der konstateret en fejl af "
-"versionsstyringssystemet. Underret venligst din %2 administrator."
+"versionsstyringssystemet."
 
 #: templates/messages.tmpl:344
 msgid ""
@@ -1724,12 +1644,10 @@ msgstr ""
 "versionsstyringssystemet. Underret venligst din %2 administrator."
 
 #: twikiplugins/NatSkin/templates/oopssaveerr.nat.tmpl:5
-#, fuzzy
-msgid ""
-"During save of file %1 an error was found by the version control system."
+msgid "During save of file %1 an error was found by the version control system."
 msgstr ""
 "Under skrivningen af filen %1 blev der konstateret en fejl af "
-"versionsstyringssystemet. Underret venligst din %2 administrator."
+"versionsstyringssystemet."
 
 #: templates/oopssaveerr.tmpl:11
 #: twikiplugins/PatternSkin/templates/oopssaveerr.pattern.tmpl:11
@@ -1775,16 +1693,14 @@ msgid "Edit personal data"
 msgstr "Opdater bruger-information"
 
 #: twikiplugins/NatSkin/templates/oopsmore.nat.tmpl:37
-#, fuzzy
 msgid "Edit preference settings for %1"
-msgstr "Editér præferencer for siden"
+msgstr "Editér præferencer for siden %1"
 
 #: twikiplugins/PatternSkin/data/Main/PatternSkinUserViewTemplate.txt:10
 msgid "Edit text"
 msgstr "Editér teksten"
 
 #: twikiplugins/NatSkin/templates/strings.nat.tmpl:9
-#, fuzzy
 msgid "Edit this topic"
 msgstr "Editér siden"
 
@@ -1801,7 +1717,7 @@ msgstr "Editér præferencer for siden"
 msgid ""
 "Either the code is not valid, or you have already confirmed your "
 "registration using it."
-msgstr ""
+msgstr "Enten er koden ikke valid, eller du har allerede bekræftet din registrering med den."
 
 #: templates/messages.tmpl:335
 msgid ""
@@ -1813,11 +1729,11 @@ msgstr ""
 
 #: twikiplugins/NatSkin/templates/oopsauth.nat.tmpl:4
 msgid "Either you need to register or the authentication failed"
-msgstr ""
+msgstr "Enten er det nødvendigt at registrere dig som bruger, eller authentikationen fejlede"
 
 #: twikiplugins/NatSkin/templates/edittoolbar.natedit.tmpl:33
 msgid "Embed image"
-msgstr ""
+msgstr "Indlejr billede"
 
 #: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:101
 msgid "Enlarge edit box"
@@ -1834,18 +1750,19 @@ msgid ""
 "no dots, capitalized, e.g. !JohnSmith, unless you chose otherwise). Visit %"
 "TWIKIWEB%.TWikiRegistration if you do not have one."
 msgstr ""
+"Indtast dit TWiki.LoginName. (Typisk dit fornavn og efternavn, ingen mellemrum, "
+"ingen punktummer, med store forbogstaver, fx !JensHansen, med mindre du har brugt et andet navn). Registrér dig på %"
+"TWIKIWEB%.TWikiRegistration hvis du ikke har et login."
 
 #: twikiplugins/NatSkin/templates/oopsmngcreateweb.nat.tmpl:32
 #: twikiplugins/NatSkin/templates/oopsmngcreateweb.nat.tmpl:37
 #: twikiplugins/NatSkin/templates/oopsmngcreateweb.nat.tmpl:49
-#, fuzzy
 msgid "Error message"
-msgstr "Fejl"
+msgstr "Fejlbesked"
 
 #: templates/messages.tmpl:206
-#, fuzzy
 msgid "Error registering new user"
-msgstr "Fejl ved registrering af brugeren %1"
+msgstr "Fejl ved registrering af ny bruger"
 
 #: templates/messages.tmpl:197
 #: twikiplugins/NatSkin/templates/messages.nat.tmpl:141
@@ -1859,46 +1776,39 @@ msgstr "Fejl ved gemning af siden"
 
 #: twikiplugins/NatSkin/templates/oopsmanage.nat.tmpl:8
 msgid "Error: %1 <span class=\"twikiAlert\">%2</span>"
-msgstr ""
+msgstr "Fejl: %1 <span class=\"twikiAlert\">%2</span>"
 
 #: twikiplugins/NatSkin/templates/oopsmngcreateweb.nat.tmpl:17
-#, fuzzy
 msgid "Error: Cannot create this web because it already exists"
-msgstr "Kan ikke oprette webbet %1 fordi det allerede eksisterer"
+msgstr "Fejl: Kan ikke oprette dette web fordi det allerede eksisterer"
 
 #: twikiplugins/NatSkin/templates/oopsmngcreateweb.nat.tmpl:34
-#, fuzzy
 msgid "Error: Could not copy topics to the new web"
-msgstr "Kunne ikke oprette det nye web %1"
+msgstr "Kunne ikke kopiere sider til det nye web"
 
 #: twikiplugins/NatSkin/templates/oopsmngcreateweb.nat.tmpl:30
-#, fuzzy
 msgid "Error: Could not create the new web"
-msgstr "Kunne ikke oprette det nye web %1"
+msgstr "Kunne ikke oprette det nye web"
 
 #: twikiplugins/NatSkin/templates/oopsmngcreateweb.nat.tmpl:39
-#, fuzzy
 msgid "Error: Could not update the <nop>WebPreferences"
-msgstr "Kunne ikke oprette det nye web %1"
+msgstr "Kunne ikke opdatere <nop>WebPreferences"
 
 #: templates/messages.tmpl:414
 msgid "Error: File attachment at %1,%2 does not exist"
 msgstr "Fejl: Den vedhæftede fil på siden %1, %2, eksisterer ikke"
 
 #: twikiplugins/NatSkin/templates/oopsmngcreateweb.nat.tmpl:8
-#, fuzzy
 msgid "Error: Invalid name of new web"
-msgstr "%1 er ikke et lovligt navn til et nyt web"
+msgstr "Fejl: Ulovligt navn til nyt web"
 
 #: twikiplugins/NatSkin/templates/oopsmngcreateweb.nat.tmpl:20
-#, fuzzy
 msgid "Error: Name of base web is missing or does not exist"
-msgstr "Basis-webbet %1 mangler eller er ikke oprettet"
+msgstr "Fejl: Navnet på det oprindelige web mangler eller er ikke oprettet"
 
 #: twikiplugins/NatSkin/templates/oopsmngcreateweb.nat.tmpl:5
-#, fuzzy
 msgid "Error: Name of new web is missing"
-msgstr "Navnet på det nye web mangler"
+msgstr "Fejl: Navnet på det nye web mangler"
 
 #: templates/messages.tmpl:416
 msgid ""
@@ -1913,9 +1823,8 @@ msgid "Error: Unsupported protocol. (Must be 'http://domain/...')"
 msgstr "Fejl: Ikke-understøttet protokol (skal være 'http://domain/...')"
 
 #: twikiplugins/NatSkin/templates/oopsmngcreateweb.nat.tmpl:23
-#, fuzzy
 msgid "Error: Web color is missing or has an invalid format"
-msgstr "Farven %1 er et ugyldigt format"
+msgstr "Fejl: Farven manger eller har et ugyldigt format"
 
 #: templates/messages.tmpl:220
 #: twikiplugins/NatSkin/templates/messages.nat.tmpl:155
@@ -1924,12 +1833,11 @@ msgstr "Fejl"
 
 #: twikiplugins/NatSkin/templates/oopsmngcreateweb.nat.tmpl:18
 msgid "Existing Web:"
-msgstr ""
+msgstr "Eksisterende web:"
 
 #: twikiplugins/NatSkin/templates/attach.nat.tmpl:53
-#, fuzzy
 msgid "Existing attachments for <nop>%1"
-msgstr "Skjul vedhæftede filer"
+msgstr "Eksisterende vedhæftede filer for <nop>%1"
 
 #: twikiplugins/NatSkin/templates/changeformsidebar.nat.tmpl:10
 #: twikiplugins/PatternSkin/templates/changeform.pattern.tmpl:28
@@ -1940,19 +1848,19 @@ msgstr ""
 
 #: twikiplugins/NatSkin/templates/oopsnoweb.nat.tmpl:5
 msgid "Explanation"
-msgstr ""
+msgstr "Forklaring"
 
 #: twikiplugins/NatSkin/templates/editsidebar.nat.tmpl:16
 msgid "External"
-msgstr ""
+msgstr "Ekstern"
 
 #: twikiplugins/NatSkin/templates/edittoolbar.natedit.tmpl:29
 msgid "External link"
-msgstr ""
+msgstr "Eksternt link"
 
 #: twikiplugins/NatSkin/data/TWiki/MySideBarTemplate.txt:22
 msgid "FAQs"
-msgstr ""
+msgstr "FAQs"
 
 #: templates/messages.tmpl:424
 msgid "Failed to include URL %1"
@@ -1965,18 +1873,16 @@ msgstr "Felter mærket med %1 er obligatoriske"
 
 #: twikiplugins/NatSkin/templates/oopsregrequ.nat.tmpl:5
 msgid "Fields with a =<span class=\"twikiAlert\">**</span>= mark are required."
-msgstr ""
+msgstr "Felter med en =<span class=\"twikiAlert\">**</span>= markering er obligatoriske"
 
 #: twikiplugins/NatSkin/data/TWiki/MySideBarTemplate.txt:26
-#, fuzzy
 msgid "File Attachment"
-msgstr "Skjul vedhæftede filer"
+msgstr "Vedhæftet fil"
 
 #: twikiplugins/NatSkin/templates/attachsidebar.nat.tmpl:4
 #: twikiplugins/NatSkin/templates/moveattachmentsidebar.nat.tmpl:4
-#, fuzzy
 msgid "File Attachments"
-msgstr "Skjul vedhæftede filer"
+msgstr "Vedhæftede filer"
 
 #: templates/messages.tmpl:320
 #: twikiplugins/NatSkin/templates/messages.nat.tmpl:249
@@ -1985,7 +1891,7 @@ msgstr "Filen er blevet uploadet under et ændret navn"
 
 #: twikiplugins/NatSkin/templates/oopsmore.nat.tmpl:18
 msgid "Find"
-msgstr ""
+msgstr "Find"
 
 #: templates/oopsmore.tmpl:20 templates/oopsmore.tmpl:22
 #: twikiplugins/ClassicSkin/templates/oopsmore.classic.tmpl:18
@@ -2027,7 +1933,7 @@ msgstr "Formular-definition %1 mangler"
 #: twikiplugins/NatSkin/templates/changeformsidebar.nat.tmpl:4
 #: twikiplugins/NatSkin/templates/editsidebar.nat.tmpl:8
 msgid "Form based input"
-msgstr ""
+msgstr "Formular-baseret indtastning"
 
 #: templates/messages.tmpl:297
 #: twikiplugins/NatSkin/templates/oopsnoformdef.nat.tmpl:3
@@ -2036,32 +1942,29 @@ msgstr "Formular-definition mangler"
 
 #: twikiplugins/NatSkin/data/TWiki/MySideBarTemplate.txt:25
 #: twikiplugins/NatSkin/templates/editsidebar.nat.tmpl:7
-#, fuzzy
 msgid "Formatted Search"
-msgstr "Avanceret søgning"
+msgstr "Formatted Search"
 
 #: twikiplugins/NatSkin/templates/search.nat.tmpl:27
 msgid "Found <span>%1</span> topics."
-msgstr ""
+msgstr "Fandt <span>%1</span> side(r)."
 
 #: twikiplugins/NatSkin/templates/renamebase.nat.tmpl:19
 msgid "From"
-msgstr ""
+msgstr "Fra"
 
 #: twikiplugins/NatSkin/templates/moveattachment.nat.tmpl:19
 #: twikiplugins/NatSkin/templates/renamewebbase.nat.tmpl:23
 msgid "From:"
-msgstr ""
+msgstr "Fra:"
 
 #: twikiplugins/NatSkin/templates/oopsmore.nat.tmpl:70
-#, fuzzy
 msgid "Get a fresh page of the topic %1"
-msgstr "Formularen skal defineres på siden %1"
+msgstr "Get a fresh page of the topic %1"
 
 #: twikiplugins/NatSkin/templates/renamesidebar.nat.tmpl:11
-msgid ""
-"Get help on <a href=\"%1\" target=\"_blank\">Renaming and moving topics</a>."
-msgstr ""
+msgid "Get help on <a href=\"%1\" target=\"_blank\">Renaming and moving topics</a>."
+msgstr "Få hjælp til <a href=\"%1\" target=\"_blank\">Omdøbning og flytning af sider</a>."
 
 #: twikiplugins/PatternSkin/templates/renamebase.pattern.tmpl:46
 msgid ""
@@ -2084,19 +1987,17 @@ msgstr ""
 "præferencer</a>."
 
 #: twikiplugins/NatSkin/templates/messages.nat.tmpl:233
-#, fuzzy
 msgid ""
 "Go <a href=\"javascript:history.back()\">back</a> in your browser and save "
 "your changes locally."
-msgstr "Gå tilbage i din browser, og gem dine opdateringer lokalt."
+msgstr "Gå <a href=\"javascript:history.back()\">tilbage </a> i din browser og gem dine opdateringer lokalt. "
 
 #: twikiplugins/PatternSkin/templates/changeform.pattern.tmpl:20
 msgid "Go back"
 msgstr "Go back"
 
 #: templates/messages.tmpl:289
-msgid ""
-"Go back in your browser and insert information for all mandatory fields."
+msgid "Go back in your browser and insert information for all mandatory fields."
 msgstr ""
 "Benyt tilbage-knappen i din browser og indtast relevant information for alle "
 "obligatoriske felter."
@@ -2108,7 +2009,7 @@ msgstr "Gå tilbage i din browser, og gem dine opdateringer lokalt."
 
 #: twikiplugins/NatSkin/data/TWiki/MySideBarTemplate.txt:21
 msgid "Good Style"
-msgstr ""
+msgstr "God stil"
 
 #: templates/messages.tmpl:244
 #: twikiplugins/NatSkin/templates/messages.nat.tmpl:177
@@ -2118,7 +2019,7 @@ msgstr "Gode eksempler:"
 
 #: twikiplugins/NatSkin/templates/editsidebar.nat.tmpl:4
 msgid "GoodStyle"
-msgstr ""
+msgstr "GodStil"
 
 #: twikiplugins/NatSkin/data/Main/WebLinks.txt:11
 #: twikiplugins/PatternSkin/data/TWiki/WebLeftBar.txt:6
@@ -2127,7 +2028,6 @@ msgstr "Grupper"
 
 #: twikiplugins/ClassicSkin/data/TWiki/ClassicSkinLogin.txt:2
 #: twikiplugins/PatternSkin/data/TWiki/WebLeftBarLogin.txt:3
-#, fuzzy
 msgid "Hello %1!"
 msgstr "Hej %1"
 
@@ -2142,18 +2042,16 @@ msgid "Help"
 msgstr "Hjælp"
 
 #: twikiplugins/NatSkin/templates/attach.nat.tmpl:42
-#, fuzzy
 msgid "Hide attachment in normal topic view."
-msgstr "Filen vil ikke blive vist ved almindelig sidevisning."
+msgstr "Skjul vedhæftet fil ved almindelig sidevisning."
 
 #: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:87
 msgid "Hide attachments"
 msgstr "Skjul vedhæftede filer"
 
 #: twikiplugins/NatSkin/templates/attach.nat.tmpl:40
-#, fuzzy
 msgid "Hide file:"
-msgstr "Skjul hjælp"
+msgstr "Skjul fil:"
 
 #: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:28
 #: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:14
@@ -2163,7 +2061,6 @@ msgstr "Skjul hjælp"
 
 #: twikiplugins/NatSkin/templates/attachsidebar.nat.tmpl:8
 #: twikiplugins/NatSkin/templates/moveattachmentsidebar.nat.tmpl:8
-#, fuzzy
 msgid "Hiding Attachments"
 msgstr "Skjul vedhæftede filer"
 
@@ -2197,8 +2094,7 @@ msgstr "Jeg har glemt mit password"
 
 #: data/TWiki/TWikiPreferences.txt:42
 msgid "Ideas, requests, problems regarding %1? <a href='%2'>Send feedback</a>"
-msgstr ""
-"Idéer, forespørgsler, problemer med %1? <a href='%2'>Send en e-mail</a>"
+msgstr "Idéer, forespørgsler, problemer med %1? <a href='%2'>Send en e-mail</a>"
 
 #: templates/messages.tmpl:306
 #: twikiplugins/NatSkin/templates/oopsnoformdef.nat.tmpl:13
@@ -2212,7 +2108,7 @@ msgstr "Hvis denne side mangler, opret den, eller tjek den for fejl."
 
 #: twikiplugins/NatSkin/templates/oopsleaseconflict.nat.tmpl:37
 msgid "If unsure, click 'Cancel'."
-msgstr ""
+msgstr "Hvis du er usikker, klik 'Fortryd' (Cancel)"
 
 #: data/TWiki/WebSearch.txt:48 data/TWiki/WebSearchAdvanced.txt:91
 msgid ""
@@ -2237,12 +2133,11 @@ msgstr "Hvis du kom hertil ved at klikke på et spørgsmålstegns-link"
 
 #: twikiplugins/PatternSkin/templates/renameattachmentdelete.pattern.tmpl:40
 msgid "If you enter a different name, make sure the topic does  exist."
-msgstr ""
-"Hvis du indtaster et nyt sidenavn, vær da sikker på at siden eksisterer."
+msgstr "Hvis du indtaster et nyt sidenavn, vær da sikker på at siden eksisterer."
 
 #: twikiplugins/NatSkin/templates/oopsauth.nat.tmpl:10
 msgid "If you expected to be logged in at this point:"
-msgstr ""
+msgstr "Hvis du forventede at være logget ind i øjeblikket"
 
 #: templates/registerconfirm.tmpl:14 templates/registernotify.tmpl:23
 #: twikiplugins/ClassicSkin/templates/registerconfirm.classic.tmpl:14
@@ -2257,8 +2152,7 @@ msgstr ""
 
 #: data/TWiki/TWikiRegistration.txt:284
 msgid "If you have any questions about registration, send an e-mail to %1."
-msgstr ""
-"Hvis du har spørgsmål angående registreringen, så send en e-mail til %1."
+msgstr "Hvis du har spørgsmål angående registreringen, så send en e-mail til %1."
 
 #: data/TWiki/ChangeEmailAddress.txt:33 data/TWiki/ChangePassword.txt:24
 #: data/TWiki/ResetPassword.txt:24 data/TWiki/VarMAKETEXT.txt:17
@@ -2292,9 +2186,8 @@ msgid "If you want to create the topic"
 msgstr "Hvis du vil oprette siden"
 
 #: twikiplugins/NatSkin/templates/messages.nat.tmpl:323
-#, fuzzy
 msgid "If you want to create the topic then [[%1][click here]]."
-msgstr "Hvis du vil oprette siden"
+msgstr "Hvis du vil oprette siden så [[%1][click here]]."
 
 #: templates/messages.tmpl:455
 #: twikiplugins/NatSkin/templates/oopsnoweb.nat.tmpl:17
@@ -2320,9 +2213,8 @@ msgstr ""
 "mulighed for at din brugerkonto kan overtages af andre."
 
 #: twikiplugins/NatSkin/templates/edittoolbar.natedit.tmpl:37
-#, fuzzy
 msgid "Ignore wiki formatting"
-msgstr "Mere formateringshjælp"
+msgstr "Ignorér wiki formattering"
 
 #: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:75
 msgid "Images will be displayed, for other attachments a link will be created."
@@ -2332,7 +2224,7 @@ msgstr ""
 
 #: twikiplugins/NatSkin/templates/oopssave.nat.tmpl:3
 msgid "Improper use of the \"<code>save</code>\" script"
-msgstr ""
+msgstr "Improper use of the \"<code>save</code>\" script"
 
 #: data/TWiki/WebSearchAdvanced.txt:58
 msgid "In reversed order"
@@ -2349,7 +2241,7 @@ msgstr ""
 
 #: twikiplugins/NatSkin/templates/editsidebar.nat.tmpl:9
 msgid "Including"
-msgstr ""
+msgstr "Including"
 
 #: templates/messages.tmpl:234 templates/messages.tmpl:241
 #: twikiplugins/NatSkin/templates/messages.nat.tmpl:173
@@ -2363,9 +2255,8 @@ msgstr "Forkert %1.WikiNames:"
 
 #: twikiplugins/NatSkin/templates/oopsregwiki.nat.tmpl:3
 #: twikiplugins/NatSkin/templates/oopsregwiki.nat.tmpl:8
-#, fuzzy
 msgid "Incorrect <nop>WikiName"
-msgstr "Forkert %1.WikiNames:"
+msgstr "Forkert <nop>WikiName"
 
 #: templates/messages.tmpl:97
 #: twikiplugins/NatSkin/templates/messages.nat.tmpl:68
@@ -2375,7 +2266,7 @@ msgstr "Forkert password"
 
 #: twikiplugins/NatSkin/templates/oopsbadpwformat.nat.tmpl:5
 msgid "Incorrect format of submitted data: <b>%1</b>"
-msgstr ""
+msgstr "Incorrect format of submitted data: <b>%1</b>"
 
 #: templates/messages.tmpl:381
 msgid "Incorrect parameters to the =%1= script"
@@ -2393,17 +2284,19 @@ msgstr "Index"
 
 #: templates/messages.tmpl:208
 msgid "Internal error when sending email to %1."
-msgstr ""
+msgstr "Intern fejl opstået i forsøget på at sende en e-mail til %1."
 
 #: twikiplugins/NatSkin/templates/edittoolbar.natedit.tmpl:31
 msgid "Internal link"
-msgstr ""
+msgstr "Internt link"
 
 #: templates/messages.tmpl:329
 msgid ""
 "International (8-bit) characters are removed (replaced by US-ASCII "
 "equivalents for Latin-1)"
 msgstr ""
+"Internationale (8-bit) karakterer fjernes (erstattes med tilsvarende US-ASCII "
+"karakterer for Latin-1)"
 
 #: templates/messages.tmpl:267
 #: twikiplugins/NatSkin/templates/messages.nat.tmpl:194
@@ -2454,9 +2347,8 @@ msgstr ""
 "navne, som fx mellemrum, fjernes automatisk."
 
 #: twikiplugins/NatSkin/templates/edittoolbar.natedit.tmpl:7
-#, fuzzy
 msgid "Italic text"
-msgstr "Editér teksten"
+msgstr "Kursiv tekst"
 
 #: twikiplugins/PatternSkin/data/TWiki/WebLeftBarSearch.txt:2
 #: twikiplugins/PatternSkin/data/TWiki/WebTopBar.txt:7
@@ -2465,7 +2357,7 @@ msgstr "Hop"
 
 #: twikiplugins/NatSkin/templates/edittoolbar.natedit.tmpl:25
 msgid "Justify text"
-msgstr ""
+msgstr "Juster text"
 
 #: twikiplugins/PatternSkin/templates/oopslanguagechanged.pattern.tmpl:8
 msgid "Language Changed"
@@ -2485,19 +2377,19 @@ msgstr "Sidst ændret"
 
 #: twikiplugins/NatSkin/templates/edittoolbar.natedit.tmpl:43
 msgid "Level 1 headline"
-msgstr ""
+msgstr "Level 1 headline"
 
 #: twikiplugins/NatSkin/templates/edittoolbar.natedit.tmpl:45
 msgid "Level 2 headline"
-msgstr ""
+msgstr "Level 2 headline"
 
 #: twikiplugins/NatSkin/templates/edittoolbar.natedit.tmpl:47
 msgid "Level 3 headline"
-msgstr ""
+msgstr "Level 3 headline"
 
 #: twikiplugins/NatSkin/templates/edittoolbar.natedit.tmpl:49
 msgid "Level 4 headline"
-msgstr ""
+msgstr "Level 4 headline"
 
 #: data/TWiki/WebSearchAdvanced.txt:80
 msgid "Limit results to:"
@@ -2515,27 +2407,23 @@ msgid "Line: %1 to %2"
 msgstr "Linie: %1 til %2"
 
 #: twikiplugins/NatSkin/templates/attach.nat.tmpl:33
-#, fuzzy
 msgid "Link:"
-msgstr "Linie: %1"
+msgstr "Link:"
 
 #: twikiplugins/NatSkin/templates/attachsidebar.nat.tmpl:7
 #: twikiplugins/NatSkin/templates/moveattachmentsidebar.nat.tmpl:7
-#, fuzzy
 msgid "Linking to Attachments"
 msgstr "Vis vedhæftede filer"
 
 #: twikiplugins/NatSkin/data/TWiki/MySideBarTemplate.txt:8
-#, fuzzy
 msgid "Links"
-msgstr "Linie: %1"
+msgstr "Links"
 
 #: data/TWiki/WebSearch.txt:49 data/TWiki/WebSearchAdvanced.txt:92
 msgid "List all topics in the %1 web in alphabetical order"
 msgstr "Vis alle sider i %1-webbet i alfabetisk orden"
 
 #: data/TWiki/WebTopicViewTemplate.txt:13
-#, fuzzy
 msgid "List more similar topic in this web"
 msgstr "Lignende sider i dette web (hvis nogen):"
 
@@ -2544,14 +2432,12 @@ msgid "List topics that start with the letter:"
 msgstr "Vis alle sider der starter med bogstavet: "
 
 #: twikiplugins/NatSkin/templates/attach.nat.tmpl:18
-#, fuzzy
 msgid "Local file:"
-msgstr "Upload fil"
+msgstr "Lokal fil:"
 
 #: twikiplugins/NatSkin/templates/renamewebbase.nat.tmpl:42
-#, fuzzy
 msgid "Locked Topics"
-msgstr "Test-sider"
+msgstr "Låste sider"
 
 #: twikiplugins/PatternSkin/templates/constants.pattern.tmpl:7
 msgid "Log In"
@@ -2563,7 +2449,6 @@ msgstr "Log ud"
 
 #: twikiplugins/NatSkin/templates/oopslogonbase.nat.tmpl:9
 #: twikiplugins/NatSkin/templates/strings.nat.tmpl:2
-#, fuzzy
 msgid "Login"
 msgstr "Log ind"
 
@@ -2573,9 +2458,8 @@ msgid "Login name %1"
 msgstr "Brugernavn %1"
 
 #: twikiplugins/NatSkin/data/TWiki/TWikiWebTopicActions.txt:4
-#, fuzzy
 msgid "Login to %1"
-msgstr "Brugernavn %1"
+msgstr "Login i %1"
 
 #: twikiplugins/PatternSkin/data/TWiki/PatternSkinElements.txt:206
 #: twikiplugins/PatternSkin/templates/login.pattern.tmpl:99
@@ -2583,19 +2467,16 @@ msgid "Logon"
 msgstr "Log ind"
 
 #: twikiplugins/NatSkin/templates/strings.nat.tmpl:3
-#, fuzzy
 msgid "Logout"
 msgstr "Log ud"
 
 #: twikiplugins/NatSkin/data/TWiki/TWikiWebTopicActions.txt:8
-#, fuzzy
 msgid "Logout of %1"
-msgstr "Log ud"
+msgstr "Log ud af %1"
 
 #: twikiplugins/NatSkin/templates/messages.nat.tmpl:147
-#, fuzzy
 msgid "Mail Error"
-msgstr "E-mail til"
+msgstr "E-mail fejl"
 
 #: templates/messages.tmpl:218
 #: twikiplugins/NatSkin/templates/messages.nat.tmpl:150
@@ -2608,22 +2489,21 @@ msgstr "Tilpas søgning:"
 
 #: twikiplugins/NatSkin/templates/renamesidebar.nat.tmpl:5
 msgid "Managing Topics"
-msgstr ""
+msgstr "Managing Topics"
 
 #: twikiplugins/NatSkin/templates/renamewebsidebar.nat.tmpl:4
 msgid "Managing Webs"
-msgstr ""
+msgstr "Managing Webs"
 
 #: twikiplugins/NatSkin/templates/edittoolbar.natedit.tmpl:35
 msgid "Mathematical formula (<nop>LaTeX)"
-msgstr ""
+msgstr "Mathematical formula (<nop>LaTeX)"
 
 #: twikiplugins/NatSkin/templates/edit.nat.tmpl:53
 #: twikiplugins/NatSkin/templates/preview.nat.tmpl:44
 #: twikiplugins/NatSkin/templates/preview.natedit.tmpl:5
-#, fuzzy
 msgid "Minor changes"
-msgstr "Ikke ændret"
+msgstr "Mindre ændringer"
 
 #: templates/messages.tmpl:185
 #: twikiplugins/NatSkin/templates/oopsregrequ.nat.tmpl:3
@@ -2631,9 +2511,8 @@ msgid "Missing Fields"
 msgstr "Manglende felter"
 
 #: twikiplugins/NatSkin/templates/messages.nat.tmpl:129
-#, fuzzy
 msgid "Missing Fields =<span class=\"twikiAlert\">**</span>="
-msgstr "Det obligatoriske felt %1 er ikke udfyldt."
+msgstr "Manglende felter =<span class=\"twikiAlert\">**</span>="
 
 #: templates/messages.tmpl:36
 #: twikiplugins/NatSkin/templates/messages.nat.tmpl:14
@@ -2646,9 +2525,8 @@ msgid "Modify search"
 msgstr "Tilpas søgning"
 
 #: twikiplugins/NatSkin/templates/strings.nat.tmpl:16
-#, fuzzy
 msgid "More"
-msgstr "Flyt"
+msgstr "Mere"
 
 #: twikiplugins/NatSkin/templates/oopsmore.nat.tmpl:4
 #: twikiplugins/PatternSkin/templates/oopsmore.pattern.tmpl:18
@@ -2660,9 +2538,8 @@ msgid "More formatting help"
 msgstr "Mere formateringshjælp"
 
 #: twikiplugins/NatSkin/templates/strings.nat.tmpl:17
-#, fuzzy
 msgid "More topic actions"
-msgstr "Flere &muligheder med denne side"
+msgstr "Flere muligheder med denne side"
 
 #: twikiplugins/PatternSkin/templates/rdiff.pattern.tmpl:32
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:74
@@ -2670,7 +2547,6 @@ msgid "More topic actions..."
 msgstr "Flere muligheder med denne side..."
 
 #: twikiplugins/TwistyPlugin/data/TWiki/TwistyPlugin.txt:407
-#, fuzzy
 msgid "More..."
 msgstr "mere..."
 
@@ -2694,21 +2570,19 @@ msgstr "Flyt vedhæftet fil"
 
 #: twikiplugins/NatSkin/templates/moveattachment.nat.tmpl:15
 msgid "Move or Delete File \"%1\""
-msgstr ""
+msgstr "Move or Delete File \"%1\""
 
 #: twikiplugins/NatSkin/templates/strings.nat.tmpl:13
-#, fuzzy
 msgid "Move or rename this topic"
-msgstr "Opret denne side"
+msgstr "Flyt eller omdøb denne side"
 
 #: twikiplugins/PatternSkin/templates/renameattachmentdelete.pattern.tmpl:21
 msgid "Move to web:"
 msgstr "Flyt til web:"
 
 #: twikiplugins/NatSkin/templates/oopsrenameerr.nat.tmpl:3
-#, fuzzy
 msgid "Move topic error"
-msgstr "Flyt side til web:"
+msgstr "Fejl under flytning af side"
 
 #: twikiplugins/PatternSkin/templates/renamedelete.pattern.tmpl:25
 msgid "Move topic to web:"
@@ -2716,9 +2590,8 @@ msgstr "Flyt side til web:"
 
 #: twikiplugins/NatSkin/templates/attachsidebar.nat.tmpl:5
 #: twikiplugins/NatSkin/templates/moveattachmentsidebar.nat.tmpl:5
-#, fuzzy
 msgid "Moving Attachments"
-msgstr "Flyt vedhæftet fil"
+msgstr "Flytning af vedhæftede filer"
 
 #: data/TWiki/NewUserTemplate.txt:64
 msgid "My Links"
@@ -2726,11 +2599,11 @@ msgstr "Mine links"
 
 #: twikiplugins/NatSkin/data/TWiki/MySideBar.txt:4
 msgid "MySideBar"
-msgstr ""
+msgstr "MySideBar"
 
 #: twikiplugins/NatSkin/data/TWiki/MySideBarTemplate.txt:6
 msgid "MySidebar"
-msgstr ""
+msgstr "MySidebar"
 
 #: lib/TWiki/Search.pm:794
 msgid "NEW"
@@ -2742,13 +2615,12 @@ msgid "Name of new web is missing"
 msgstr "Navnet på det nye web mangler"
 
 #: twikiplugins/NatSkin/data/TWiki/TWikiWebSideBar.txt:3
-#, fuzzy
 msgid "Navigation"
-msgstr "Beskeder"
+msgstr "Navigation"
 
 #: twikiplugins/NatSkin/templates/strings.nat.tmpl:22
 msgid "New"
-msgstr ""
+msgstr "Ny"
 
 #: data/TWiki/ChangeEmailAddress.txt:25
 msgid "New e-mails (space-separated list)"
@@ -2760,9 +2632,8 @@ msgid "New or changed topics in %1, since %2:"
 msgstr "Nye eller ændrede sider i %1-webbet, siden %2:"
 
 #: twikiplugins/NatSkin/templates/mailnotify.nat.tmpl:15
-#, fuzzy
 msgid "New or changed topics in the %1 web, since %2 GMT:"
-msgstr "Nye eller ændrede sider i %1-webbet, siden %2:"
+msgstr "Nye eller ændrede sider i %1-webbet, siden %2 GMT:"
 
 #: twikiplugins/PatternSkin/templates/renamewebbase.pattern.tmpl:13
 msgid "New parent web:"
@@ -2778,18 +2649,16 @@ msgid "New topic name %1 is not a %2"
 msgstr "Det nye sidenavn %1 er ikke et %2"
 
 #: twikiplugins/NatSkin/templates/oopsrenamenotwikiword.nat.tmpl:3
-#, fuzzy
 msgid "New topic name is not a <nop>WikiWord"
-msgstr "Det nye sidenavn %1 er ikke et %2"
+msgstr "Det nye sidenavn er ikke et <nop>WikiWord"
 
 #: twikiplugins/PatternSkin/templates/renamewebbase.pattern.tmpl:9
 msgid "New web name:"
 msgstr "Nyt web-navn:"
 
 #: twikiplugins/NatSkin/templates/oopsrev.nat.tmpl:50
-#, fuzzy
 msgid "Newer revision"
-msgstr "Ny version"
+msgstr "Nyere version"
 
 #: twikiplugins/PatternSkin/templates/oopsmorecompare.pattern.tmpl:5
 msgid "Newer revision:"
@@ -2806,9 +2675,8 @@ msgid "No permission to view %1"
 msgstr "Ingen rettigheder til at se %1"
 
 #: twikiplugins/NatSkin/templates/renamewebbase.nat.tmpl:43
-#, fuzzy
 msgid "No permission:"
-msgstr "Ingen rettigheder til at se %1"
+msgstr "Ingen rettigheder:"
 
 #: templates/messages.tmpl:178
 msgid "No users to reset passwords for."
@@ -2837,7 +2705,7 @@ msgstr "Note til administrator:"
 
 #: twikiplugins/NatSkin/templates/oopslocked.nat.tmpl:10
 msgid "Note, that this will _break_ the lock"
-msgstr ""
+msgstr "Note, that this will _break_ the lock"
 
 #: data/TWiki/ResetPassword.txt:8 data/TWiki/TWikiRegistration.txt:6
 #: templates/messages.tmpl:272 templates/messages.tmpl:324
@@ -2849,14 +2717,12 @@ msgid "Note:"
 msgstr "Note:"
 
 #: twikiplugins/NatSkin/templates/oopsmngcreateweb.nat.tmpl:51
-#, fuzzy
 msgid ""
 "Note: The new web has been created successfully and populated with topics "
 "from the base web"
-msgstr "Og populeret med sider fra skabelon-webbet."
+msgstr "Note: Det nye web er blevet oprettet og er blevet populeret med siderne fra skabelon-webbet."
 
 #: data/TWiki/WebTopicViewTemplate.txt:2
-#, fuzzy
 msgid "Note: This topic does not exist"
 msgstr "BEMÆRK: Denne Wiki-side er ikke oprettet endnu"
 
@@ -2865,9 +2731,8 @@ msgstr "BEMÆRK: Denne Wiki-side er ikke oprettet endnu"
 #: twikiplugins/NatSkin/templates/moveattachmentsidebar.nat.tmpl:10
 #: twikiplugins/NatSkin/templates/renamesidebar.nat.tmpl:9
 #: twikiplugins/NatSkin/templates/renamewebsidebar.nat.tmpl:7
-#, fuzzy
 msgid "Notes"
-msgstr "Noter:"
+msgstr "Noter"
 
 #: data/TWiki/VarMAKETEXT.txt:14
 msgid "Notes:"
@@ -2875,12 +2740,12 @@ msgstr "Noter:"
 
 #: twikiplugins/NatSkin/templates/strings.nat.tmpl:23
 msgid "Nothing found. Try again!"
-msgstr ""
+msgstr "Nothing found. Try again!"
 
 #: twikiplugins/PatternSkin/templates/renamebase.pattern.tmpl:99
 #: twikiplugins/PatternSkin/templates/renamewebbase.pattern.tmpl:39
 msgid "Notices:"
-msgstr "Beskeder:"
+msgstr "Notificeringer:"
 
 #: twikiplugins/NatSkin/data/TWiki/TWikiWebLinks.txt:10
 #: twikiplugins/PatternSkin/data/Main/WebLeftBar.txt:9
@@ -2888,7 +2753,7 @@ msgstr "Beskeder:"
 #: twikiplugins/PatternSkin/data/TWiki/WebLeftBar.txt:10
 #: twikiplugins/PatternSkin/data/_default/WebLeftBar.txt:8
 msgid "Notifications"
-msgstr "Beskeder"
+msgstr "Notificering"
 
 #: twikiplugins/NatSkin/templates/searchformat.nat.tmpl:6
 #: twikiplugins/PatternSkin/templates/searchbase.pattern.tmpl:5
@@ -2897,9 +2762,8 @@ msgid "Number of topics:"
 msgstr "Antal sider:"
 
 #: twikiplugins/NatSkin/templates/searchrenameview.nat.tmpl:34
-#, fuzzy
 msgid "Number of topics: <span>%1</span>"
-msgstr "Antal sider:"
+msgstr "Antal sider: <span>%1</span>"
 
 #: templates/messages.tmpl:33 templates/messages.tmpl:332
 #: templates/oopsaccessdenied.tmpl:6 templates/oopslanguagechanged.tmpl:5
@@ -2930,9 +2794,8 @@ msgid "OK"
 msgstr "OK"
 
 #: twikiplugins/NatSkin/templates/oopsrev.nat.tmpl:8
-#, fuzzy
 msgid "Older revision"
-msgstr "Tidligere version:"
+msgstr "Tidligere version"
 
 #: twikiplugins/PatternSkin/templates/oopsmorecompare.pattern.tmpl:4
 msgid "Older revision:"
@@ -3003,14 +2866,12 @@ msgstr ""
 "mail."
 
 #: twikiplugins/NatSkin/templates/edit.nat.tmpl:42
-#, fuzzy
 msgid "Parent"
-msgstr "&Printvenlig"
+msgstr "Forælder"
 
 #: twikiplugins/NatSkin/data/TWiki/TWikiWebSideBar.txt:26
-#, fuzzy
 msgid "Parrent web"
-msgstr "Nyt forælder-web:"
+msgstr "Forælder-web"
 
 #: data/TWiki/ChangeEmailAddress.txt:24
 #: twikiplugins/NatSkin/data/Main/WebLinks.txt:12
@@ -3021,9 +2882,8 @@ msgid "Password"
 msgstr "Password"
 
 #: twikiplugins/NatSkin/templates/oopsbadpwformat.nat.tmpl:3
-#, fuzzy
 msgid "Password Format Error"
-msgstr "Passwordene er ikke de samme"
+msgstr "Fejl i password-format "
 
 #: templates/messages.tmpl:146
 #: twikiplugins/NatSkin/templates/messages.nat.tmpl:108
@@ -3032,9 +2892,8 @@ msgid "Password changed successfully!"
 msgstr "Passwordet er opdateret!"
 
 #: templates/messages.tmpl:151
-#, fuzzy
 msgid "Password could not be changed"
-msgstr "Passwordene er ikke de samme"
+msgstr "Passwordet kunne ikke opdateres"
 
 #: templates/messages.tmpl:177 templates/messages.tmpl:181
 msgid "Password reset failed"
@@ -3061,24 +2920,20 @@ msgid "Placeholder for trashed attachments"
 msgstr "Siden hvor slettede vedhæftede filer gemmes"
 
 #: twikiplugins/NatSkin/templates/oopsnoformdef.nat.tmpl:25
-#, fuzzy
 msgid "Please ask your %1 administrator %2, to do this."
-msgstr ""
-"E-mailen kunne ikke afsendes. Informér venligst din %1-administrator, %2"
+msgstr "Bed venligst din %1-administrator, %2, om dette."
 
 #: twikiplugins/NatSkin/templates/oopsmngcreateweb.nat.tmpl:43
-#, fuzzy
 msgid "Please check out the WebPreferences or try again."
 msgstr "Benyt venligst tilbage-knappen i browseren og forsøg igen."
 
 #: twikiplugins/NatSkin/templates/oopsrenamenotwikiword.nat.tmpl:5
-#, fuzzy
 msgid ""
 "Please chose a topic name that is a %1 or check the _Allow non-Wiki Word_ "
 "&nbsp;box."
 msgstr ""
-"Benyt venligst tilbage-knapppen i din browser, og vælg et sidenavn der er et "
-"%1.WikiWord eller afkryds non-<nop>WikiWord i afkrydsningsfeltet"
+"Vælg et sidenavn der er et "
+"%1 eller afkryds non-<nop>WikiWord i afkrydsningsfeltet"
 
 #: templates/messages.tmpl:231 templates/messages.tmpl:281
 msgid "Please contact %1 if you have any questions."
@@ -3086,25 +2941,21 @@ msgstr "Kontakt venligst %1 hvis du har spørgsmål."
 
 #: templates/messages.tmpl:201 templates/messages.tmpl:210
 msgid "Please contact %1."
-msgstr ""
+msgstr "Kontakt venligst %1."
 
 #: twikiplugins/NatSkin/templates/oopsresetpasswd.nat.tmpl:15
 msgid "Please copy this information into a friendly e-mail to %1"
-msgstr ""
+msgstr "Please copy this information into a friendly e-mail to %1"
 
 #: twikiplugins/NatSkin/templates/messages.nat.tmpl:9
-#, fuzzy
 msgid "Please email %1 to request this."
-msgstr ""
-"Din personlige side er ikke blevet omdøbt. Send venligst en e-mail til %1, "
-"og bed om at få dette gjort."
+msgstr "Send venligst en e-mail til %1, og bed om dette."
 
 #: twikiplugins/PatternSkin/templates/login.pattern.tmpl:42
 msgid "Please enter your username and password:"
 msgstr "Angiv venligst dit brugernavn og password:"
 
 #: twikiplugins/NatSkin/templates/oops.nat.tmpl:16
-#, fuzzy
 msgid ""
 "Please go <a href=\"javascript:history.back()\">back</a> in your browser and "
 "try again."
@@ -3113,15 +2964,13 @@ msgstr "Benyt venligst tilbage-knappen i browseren og forsøg igen."
 #: templates/messages.tmpl:71 templates/messages.tmpl:77
 #: templates/messages.tmpl:83
 msgid "Please go _back_ in your browser and try a new name."
-msgstr ""
-"Benyt venligst tilbage-knappen i browseren og forsøg igen med et nyt navn."
+msgstr "Benyt venligst tilbage-knappen i browseren og forsøg igen med et nyt navn."
 
 #: templates/messages.tmpl:336
 msgid "Please go back in your browser and check again."
 msgstr "Benyt venligst tilbage-knappen i browseren og forsøg igen."
 
 #: templates/messages.tmpl:88
-#, fuzzy
 msgid ""
 "Please go back in your browser and choose a topic name that is a %1.WikiWord "
 "or check the allow non-Wiki Word box"
@@ -3151,31 +3000,25 @@ msgstr ""
 
 #: twikiplugins/NatSkin/templates/messages.nat.tmpl:244
 msgid "Please notify your %1"
-msgstr ""
+msgstr "Please notify your %1"
 
 #: twikiplugins/NatSkin/templates/messages.nat.tmpl:160
 #: twikiplugins/NatSkin/templates/messages.nat.tmpl:57
-#, fuzzy
 msgid "Please notify your %1 administrator %2"
-msgstr ""
-"E-mailen kunne ikke afsendes. Informér venligst din %1-administrator, %2"
+msgstr "Informér venligst din %1-administrator, %2"
 
 #: twikiplugins/NatSkin/templates/messages.nat.tmpl:231
 #: twikiplugins/NatSkin/templates/messages.nat.tmpl:64
-#, fuzzy
 msgid "Please notify your %1 administrator %2."
-msgstr ""
-"E-mailen kunne ikke afsendes. Informér venligst din %1-administrator, %2"
+msgstr "Informér venligst din %1-administrator, %2"
 
 #: twikiplugins/NatSkin/templates/oopserrbase.nat.tmpl:5
-#, fuzzy
 msgid "Please notify your %1 administrator and explain how to reproduce it:"
-msgstr ""
-"E-mailen kunne ikke afsendes. Informér venligst din %1-administrator, %2"
+msgstr "Informér venligst din %1-administrator, %2"
 
 #: twikiplugins/NatSkin/templates/messages.nat.tmpl:143
 msgid "Please notify your %1 webmaster %2."
-msgstr ""
+msgstr "Please notify your %1 webmaster %2."
 
 #: twikiplugins/NatSkin/templates/messages.nat.tmpl:197
 msgid "Please try again."
@@ -3183,8 +3026,7 @@ msgstr "Venligst forsøg igen."
 
 #: templates/mailresetpassword.tmpl:12
 #: twikiplugins/ClassicSkin/templates/mailresetpassword.classic.tmpl:12
-msgid ""
-"Please visit %1 to change your password to something more memorable for you."
+msgid "Please visit %1 to change your password to something more memorable for you."
 msgstr ""
 "Besøg venligst siden %1 for at ændre dit password til et der er lettere at "
 "huske."
@@ -3193,7 +3035,7 @@ msgstr ""
 #: twikiplugins/NatSkin/data/TWiki/WebLinks.txt:3
 #: twikiplugins/NatSkin/templates/editsidebar.nat.tmpl:11
 msgid "Plugins"
-msgstr ""
+msgstr "Plugins"
 
 #: twikiplugins/PatternSkin/templates/changeform.pattern.tmpl:34
 msgid "Possible form templates"
@@ -3201,12 +3043,11 @@ msgstr "Mulige formular-skabeloner"
 
 #: twikiplugins/NatSkin/templates/oopsmanage.nat.tmpl:9
 msgid "Possibly caused by improper use of the =manage= script."
-msgstr ""
+msgstr "Possibly caused by improper use of the =manage= script."
 
 #: twikiplugins/NatSkin/templates/settings.nat.tmpl:15
-#, fuzzy
 msgid "Preference Settings for %1:"
-msgstr "Præferencer for"
+msgstr "Præferencer for %1"
 
 #: twikiplugins/NatSkin/data/TWiki/TWikiWebLinksForAdmins.txt:10
 #: twikiplugins/PatternSkin/data/Main/WebLeftBar.txt:11
@@ -3225,29 +3066,24 @@ msgstr "Præferencer for"
 #: twikiplugins/NatSkin/templates/preview.nat.tmpl:35
 #: twikiplugins/PatternSkin/templates/preview.pattern.tmpl:16
 #: twikiplugins/PatternSkin/templates/preview.pattern.tmpl:8
-#, fuzzy
 msgid "Preview"
-msgstr "(vis udkast)"
+msgstr "Vis udkast"
 
 #: twikiplugins/NatSkin/templates/edit.nat.tmpl:74
 #: twikiplugins/NatSkin/templates/edittoolbar.natedit.tmpl:57
 #: twikiplugins/NatSkin/templates/edittopicactions.nat.tmpl:4
-#, fuzzy
 msgid "Preview your changes"
-msgstr "Senest ændrede sider"
+msgstr "Se udkast"
 
 #: twikiplugins/NatSkin/data/TWiki/TWikiWebTopicActions.txt:10
-#, fuzzy
 msgid "Print"
-msgstr "&Printvenlig"
+msgstr "Printvenlig"
 
 #: twikiplugins/NatSkin/data/TWiki/TWikiWebTopicActions.txt:10
-#, fuzzy
 msgid "Print this page"
-msgstr "Editér siden"
+msgstr "Print denne side"
 
 #: twikiplugins/NatSkin/templates/oopsnoformdef.nat.tmpl:7
-#, fuzzy
 msgid "Problems could arise for two reasons:"
 msgstr "Dette kan skyldes flere forskellige årsager:"
 
@@ -3258,7 +3094,7 @@ msgstr "Ekstra muligheder"
 
 #: twikiplugins/NatSkin/templates/strings.nat.tmpl:6
 msgid "Raw"
-msgstr ""
+msgstr "Rå"
 
 #: templates/registernotify.tmpl:10
 #: twikiplugins/ClassicSkin/templates/registernotify.classic.tmpl:10
@@ -3285,17 +3121,16 @@ msgid "Recently changed topics"
 msgstr "Senest ændrede sider"
 
 #: twikiplugins/NatSkin/data/TWiki/MySideBarTemplate.txt:20
-#, fuzzy
 msgid "Reference Manual"
 msgstr "Brugervejledninger"
 
 #: twikiplugins/NatSkin/templates/renamewebbase.nat.tmpl:53
 msgid "Referring topics currently being edited:"
-msgstr ""
+msgstr "Referring topics currently being edited:"
 
 #: twikiplugins/NatSkin/templates/oopsmore.nat.tmpl:75
 msgid "Refresh"
-msgstr ""
+msgstr "Referring topics currently being edited:"
 
 #: twikiplugins/ClassicSkin/data/TWiki/ClassicSkinLogin.txt:2
 #: twikiplugins/NatSkin/data/TWiki/TWikiWebTopicActions.txt:5
@@ -3304,12 +3139,10 @@ msgid "Register"
 msgstr "Registrér dig"
 
 #: twikiplugins/NatSkin/data/TWiki/TWikiWebTopicActions.txt:5
-#, fuzzy
 msgid "Register on %1"
-msgstr "Registrér dig"
+msgstr "Registrér dig i %1"
 
 #: twikiplugins/NatSkin/templates/oopsauth.nat.tmpl:14
-#, fuzzy
 msgid "Registered users can [%1[change]] and [%2[reset]] their passwords."
 msgstr ""
 "Allerede registrerede brugere kan [[%1][skifte]] og [[%2][nulstille]] deres "
@@ -3328,7 +3161,7 @@ msgstr "Registrering"
 
 #: templates/messages.tmpl:270
 msgid "Registration codes can only be used once."
-msgstr ""
+msgstr "Registreringskoder kan bruges én gang."
 
 #: data/TWiki/WebSearchAdvanced.txt:64
 msgid "Regular expression search"
@@ -3360,7 +3193,7 @@ msgstr "Kan du huske dit password?"
 
 #: data/TWiki/WebTopicViewTemplate.txt:7
 msgid "Remember, a %1 is case sensitive."
-msgstr ""
+msgstr "Husk, store og små bogstaver gør en forskel for et %1."
 
 #: templates/messages.tmpl:51
 msgid "Remove the user from the group(s) %1 first."
@@ -3373,19 +3206,16 @@ msgid "Rename"
 msgstr "Omdøb"
 
 #: twikiplugins/NatSkin/templates/oopsaccessrename.nat.tmpl:4
-#, fuzzy
 msgid "Rename Access Denied"
-msgstr "Adgang nægtet"
+msgstr "Rename-adgang nægtet"
 
 #: twikiplugins/NatSkin/templates/renamewebbase.nat.tmpl:18
-#, fuzzy
 msgid "Rename Web"
-msgstr "Omdøb"
+msgstr "Omdøb web"
 
 #: twikiplugins/NatSkin/templates/oopslockedrename.nat.tmpl:14
-#, fuzzy
 msgid "Rename anyway"
-msgstr "Omdøb"
+msgstr "Omdøb alligevel"
 
 #: templates/messages.tmpl:74 templates/messages.tmpl:80
 #: twikiplugins/NatSkin/templates/messages.nat.tmpl:36
@@ -3428,14 +3258,12 @@ msgid "Replace form..."
 msgstr "Udskift formular..."
 
 #: twikiplugins/NatSkin/templates/oopsresetpasswd.nat.tmpl:5
-#, fuzzy
 msgid "Request to reset your TWiki password"
-msgstr "Ingen brugere at nulstille passwords for."
+msgstr "Bed om at få nulstillet dit TWiki password"
 
 #: twikiplugins/NatSkin/templates/oopsmore.nat.tmpl:60
-#, fuzzy
 msgid "Reset"
-msgstr "Registrér dig"
+msgstr "Nulstil"
 
 #: data/TWiki/ResetPassword.txt:3
 msgid "Reset Password"
@@ -3447,7 +3275,7 @@ msgstr "Nulstil password"
 
 #: twikiplugins/NatSkin/data/TWiki/NatSkinStyleBrowser.txt:76
 msgid "Reset to defaults"
-msgstr ""
+msgstr "Reset to defaults"
 
 #: twikiplugins/PatternSkin/templates/searchbase.pattern.tmpl:23
 msgid "Results from %1 web"
@@ -3488,13 +3316,13 @@ msgstr "Version:"
 #: twikiplugins/PatternSkin/templates/preview.pattern.tmpl:49
 msgid "S = Save, Q = Quiet save, K = Checkpoint, D = Discard"
 msgstr ""
-"S = Gem (Save), Q = Gem uden besked (Quiet save), K = Checkpoint, D = "
+"S = Gem (Save), Q = Gem uden notificering (Quiet save), K = Checkpoint, D = "
 "Annullér (Discard)"
 
 #: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:71
 msgid "S = Save, Q = Quiet save, K = Checkpoint, P = Preview, C = Cancel"
 msgstr ""
-"S = Gem (Save), Q = Gem uden besked (Quiet save), K = Checkpoint, P = Udkast "
+"S = Gem (Save), Q = Gem uden notificering (Quiet save), K = Checkpoint, P = Udkast "
 "(Preview), C = Fortryd (Cancel)"
 
 #: twikiplugins/NatSkin/templates/edit.nat.tmpl:77
@@ -3513,7 +3341,7 @@ msgstr "Gem"
 #: twikiplugins/NatSkin/templates/previewtoolbar.natedit.tmpl:9
 #: twikiplugins/NatSkin/templates/previewtopicactions.nat.tmpl:5
 msgid "Save and continue editing"
-msgstr ""
+msgstr "Save and continue editing"
 
 #: twikiplugins/NatSkin/templates/edit.nat.tmpl:78
 #: twikiplugins/NatSkin/templates/edittoolbar.natedit.tmpl:66
@@ -3522,9 +3350,8 @@ msgstr ""
 #: twikiplugins/NatSkin/templates/previewtoolbar.natedit.tmpl:11
 #: twikiplugins/NatSkin/templates/previewtopicactions.nat.tmpl:6
 #: twikiplugins/NatSkin/templates/settingstoolbar.natedit.tmpl:5
-#, fuzzy
 msgid "Save and exit"
-msgstr "Gemt i:"
+msgstr "Gem og afslut"
 
 #: templates/registernotifyadmin.tmpl:16
 #: twikiplugins/ClassicSkin/templates/registernotifyadmin.classic.tmpl:16
@@ -3566,12 +3393,10 @@ msgid "Search all webs for topics that link to here"
 msgstr "Søg i alle webs efter sider der linker til denne side"
 
 #: twikiplugins/NatSkin/templates/oopsmore.nat.tmpl:23
-#, fuzzy
 msgid "Search in all public webs"
-msgstr "Søg i a&lle webs"
+msgstr "Søg i alle offentlige webs"
 
 #: data/TWiki/WebTopicViewTemplate.txt:15
-#, fuzzy
 msgid "Search similar topics in all public webs"
 msgstr "Søg efter lignende sider i alle offentlige webs"
 
@@ -3591,24 +3416,23 @@ msgstr "Søg hvor:"
 
 #: twikiplugins/NatSkin/data/TWiki/NatSkinStyleBrowser.txt:64
 msgid "Searchbox in pos. 1"
-msgstr ""
+msgstr "Searchbox in pos. 1"
 
 #: twikiplugins/NatSkin/data/TWiki/NatSkinStyleBrowser.txt:65
 msgid "Searchbox in pos. 2"
-msgstr ""
+msgstr "Searchbox in pos. 2"
 
 #: twikiplugins/NatSkin/data/TWiki/NatSkinStyleBrowser.txt:66
 msgid "Searchbox in pos. 3"
-msgstr ""
+msgstr "Searchbox in pos. 3"
 
 #: twikiplugins/NatSkin/data/TWiki/NatSkinStyleBrowser.txt:63
 msgid "Searchbox in topbar"
-msgstr ""
+msgstr "Searchbox in topbar"
 
 #: twikiplugins/NatSkin/data/TWiki/NatSkinStyleBrowser.txt:67
-#, fuzzy
 msgid "Searchbox off"
-msgstr "Søg"
+msgstr "Søgeboks fra"
 
 #: twikiplugins/PatternSkin/templates/searchbase.pattern.tmpl:1
 msgid "Searched:"
@@ -3673,20 +3497,19 @@ msgstr "Vælg alle"
 
 #: twikiplugins/NatSkin/templates/renamesidebar.nat.tmpl:15
 msgid "Select the [[Trash.WebHome][Trash]] web to delete the topic."
-msgstr ""
+msgstr "Select the [[Trash.WebHome][Trash]] web to delete the topic."
 
 #: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:90
 msgid "Select, copy and paste your signature text to the bottom of your entry"
 msgstr "Markér (triple-klik i feltet), og copy/paste din signatur til siden"
 
 #: twikiplugins/NatSkin/templates/oopsmngcreateweb.nat.tmpl:60
-#, fuzzy
 msgid "Select..."
-msgstr "Vælg"
+msgstr "Vælg..."
 
 #: twikiplugins/NatSkin/templates/oopssendmailerr.nat.tmpl:3
 msgid "Send Mail Error"
-msgstr ""
+msgstr "Send Mail Error"
 
 #: data/TWiki/TWikiRegistration.txt:277
 msgid "Send you a confirmation of your registration by e-mail."
@@ -3728,15 +3551,15 @@ msgstr "Side ved side"
 
 #: twikiplugins/NatSkin/data/TWiki/NatSkinStyleBrowser.txt:49
 msgid "Sidebar Left"
-msgstr ""
+msgstr "Sidebar Left"
 
 #: twikiplugins/NatSkin/data/TWiki/NatSkinStyleBrowser.txt:52
 msgid "Sidebar Off"
-msgstr ""
+msgstr "Sidebar Off"
 
 #: twikiplugins/NatSkin/data/TWiki/NatSkinStyleBrowser.txt:50
 msgid "Sidebar Right"
-msgstr ""
+msgstr "Sidebar Right"
 
 #: data/TWiki/WebTopicViewTemplate.txt:11
 msgid "Similar topics in this web (if any):"
@@ -3747,15 +3570,13 @@ msgid "Simple search"
 msgstr "Simpel søgning"
 
 #: twikiplugins/NatSkin/templates/oopsauth.nat.tmpl:18
-msgid ""
-"Simply fill out the *[[%1][TWikiRegistration]]* form. It only takes a minute."
-msgstr ""
+msgid "Simply fill out the *[[%1][TWikiRegistration]]* form. It only takes a minute."
+msgstr "Simply fill out the *[[%1][TWikiRegistration]]* form. It only takes a minute."
 
 #: twikiplugins/NatSkin/data/Main/WebLinksForAdmins.txt:8
 #: twikiplugins/NatSkin/data/TWiki/WebLinksForAdmins.txt:8
-#, fuzzy
 msgid "SitePreferences"
-msgstr "Præferencer"
+msgstr "Site-præferencer"
 
 #: twikiplugins/NatSkin/templates/attachtables.nat.tmpl:25
 #: twikiplugins/NatSkin/templates/attachtables.nat.tmpl:4
@@ -3765,10 +3586,9 @@ msgstr "Størrelse"
 
 #: twikiplugins/NatSkin/data/TWiki/MySideBarTemplate.txt:34
 msgid "Skin Styles"
-msgstr ""
+msgstr "Skin Styles"
 
 #: twikiplugins/NatSkin/templates/oopssoftwareerr.nat.tmpl:3
-#, fuzzy
 msgid "Software Error"
 msgstr "Fejl ved skrivning af siden"
 
@@ -3787,6 +3607,10 @@ msgid ""
 "twice when you click on a link. It you did this, it is possible that you "
 "actually *have* registered successfully."
 msgstr ""
+"Nogle e-mail-værktøjer har en fejl som gør at de sender den samme "
+"forespørgsel to gange når du klikker på et link. "
+"Såfremt dette er tilfældet er det muligt at du faktisk allerede "
+"*er* registreret succesfuldt."
 
 #: templates/registernotify.tmpl:14
 #: twikiplugins/ClassicSkin/templates/registernotify.classic.tmpl:14
@@ -3828,7 +3652,7 @@ msgstr ""
 
 #: twikiplugins/NatSkin/templates/edittoolbar.natedit.tmpl:11
 msgid "Strike through text"
-msgstr ""
+msgstr "Strike through text"
 
 #: data/TWiki/NewUserTemplate.txt:84
 msgid ""
@@ -3840,7 +3664,7 @@ msgstr ""
 
 #: twikiplugins/NatSkin/data/TWiki/NatSkinStyleBrowser.txt:10
 msgid "Style:"
-msgstr ""
+msgstr "Style:"
 
 #: data/TWiki/TWikiRegistration.txt:268 templates/messages.tmpl:172
 #: templates/messages.tmpl:278
@@ -3850,9 +3674,8 @@ msgid "Submit"
 msgstr "Send"
 
 #: twikiplugins/NatSkin/data/TWiki/NatSkinStyleBrowser.txt:75
-#, fuzzy
 msgid "Submit changes"
-msgstr "(ændringer)"
+msgstr "Gem ændringer"
 
 #: templates/registernotify.tmpl:18 templates/registernotifyadmin.tmpl:12
 #: twikiplugins/ClassicSkin/templates/registernotify.classic.tmpl:18
@@ -3868,9 +3691,8 @@ msgid "Subscribe / Unsubscribe in:"
 msgstr "Abonnér / afmeld i:"
 
 #: twikiplugins/NatSkin/templates/edittoolbar.natedit.tmpl:13
-#, fuzzy
 msgid "Subscript text"
-msgstr "Editér teksten"
+msgstr "Subscript tekst"
 
 #: twikiplugins/PatternSkin/templates/renameweb.pattern.tmpl:27
 msgid "Subwebs must be enabled."
@@ -3881,31 +3703,29 @@ msgid "Summaries"
 msgstr "Sammendrag"
 
 #: twikiplugins/NatSkin/templates/edittoolbar.natedit.tmpl:15
-#, fuzzy
 msgid "Superscript text"
-msgstr "Sikkerheds-notits:"
+msgstr "Superscript tekst"
 
 #: twikiplugins/NatSkin/data/TWiki/NatSkinStyleBrowser.txt:20
 msgid "Switch to next style"
-msgstr ""
+msgstr "Switch to next style"
 
 #: twikiplugins/NatSkin/data/TWiki/NatSkinStyleBrowser.txt:12
 msgid "Switch to previous style"
-msgstr ""
+msgstr "Switch to previous style"
 
 #: twikiplugins/NatSkin/data/TWiki/NatSkinStyleBrowser.txt:25
 #: twikiplugins/NatSkin/data/TWiki/NatSkinStyleBrowser.txt:33
 msgid "Switch to previous variation"
-msgstr ""
+msgstr "Switch to previous variation"
 
 #: twikiplugins/NatSkin/data/TWiki/NatSkinStyleBrowser.txt:37
 msgid "Switches:"
-msgstr ""
+msgstr "Switches:"
 
 #: twikiplugins/NatSkin/templates/defaultbody.nat.tmpl:50
-#, fuzzy
 msgid "Syndicate this site"
-msgstr "Editér siden"
+msgstr "Syndiker denne side"
 
 #: data/TWiki/WebSearch.txt:30 data/TWiki/WebSearchAdvanced.txt:38
 msgid ""
@@ -3917,12 +3737,11 @@ msgstr ""
 
 #: twikiplugins/NatSkin/data/TWiki/MySideBarTemplate.txt:24
 msgid "TWiki Forms"
-msgstr ""
+msgstr "TWiki Forms"
 
 #: twikiplugins/NatSkin/data/TWiki/MySideBarTemplate.txt:23
-#, fuzzy
 msgid "TWiki Variables"
-msgstr "&Printvenlig"
+msgstr "TWiki-variabler"
 
 #: templates/mailresetpassword.tmpl:3
 #: twikiplugins/ClassicSkin/templates/mailresetpassword.classic.tmpl:3
@@ -3943,7 +3762,7 @@ msgstr ""
 
 #: twikiplugins/NatSkin/templates/oopsregthanks.nat.tmpl:9
 msgid "Take a look at the [[%1][TWikiWeb]] to get help on the %2."
-msgstr ""
+msgstr "Take a look at the [[%1][TWikiWeb]] to get help on the %2."
 
 #: data/Sandbox/WebHome.txt:6
 msgid "Test Topics"
@@ -3954,7 +3773,6 @@ msgid "Text body"
 msgstr "Kildetekst"
 
 #: twikiplugins/NatSkin/templates/editsidebar.nat.tmpl:5
-#, fuzzy
 msgid "TextFormatting"
 msgstr "*Hjælp til formattering af teksten*"
 
@@ -3993,7 +3811,6 @@ msgstr ""
 
 #: twikiplugins/NatSkin/templates/messages.nat.tmpl:174
 #: twikiplugins/NatSkin/templates/oopsregwiki.nat.tmpl:5
-#, fuzzy
 msgid ""
 "The %1 field must be your first and lastname in %2, e.g. your capitalized "
 "first and lastname with spaces removed."
@@ -4004,7 +3821,7 @@ msgstr ""
 
 #: templates/messages.tmpl:236
 msgid "The %1 field must match the {LoginNameFilterIn} filter for this site"
-msgstr ""
+msgstr "Feltet %1 skal overholde {LoginNameFilterIn}-filteret for dette site"
 
 #: templates/messages.tmpl:68
 #: twikiplugins/NatSkin/templates/messages.nat.tmpl:30
@@ -4047,8 +3864,7 @@ msgstr "Aktiveringskoden %1 er forkert."
 
 #: twikiplugins/PatternSkin/templates/moveattachment.pattern.tmpl:38
 msgid "The attachment and any history will be moved to the new topic."
-msgstr ""
-"Den vedhæftede fil og tilhørende historik vil blive flyttet til den nye side."
+msgstr "Den vedhæftede fil og tilhørende historik vil blive flyttet til den nye side."
 
 #: templates/messages.tmpl:404
 #: twikiplugins/NatSkin/templates/oopsleaseconflict.nat.tmpl:22
@@ -4069,13 +3885,12 @@ msgstr ""
 
 #: twikiplugins/NatSkin/templates/renamewebbase.nat.tmpl:68
 #: twikiplugins/PatternSkin/templates/renamewebbase.pattern.tmpl:26
-#, fuzzy
 msgid "The checkmarked topics will be updated."
-msgstr "De afkrydsede sider vil blive opdateret"
+msgstr "De afkrydsede sider vil blive opdateret."
 
 #: twikiplugins/NatSkin/templates/oopsbadpwformat.nat.tmpl:7
 msgid "The correct format is =WikiName:&lt;encryptedpassword&gt;= (13 chars)."
-msgstr ""
+msgstr "The correct format is =WikiName:&lt;encryptedpassword&gt;= (13 chars)."
 
 #: templates/messages.tmpl:260
 #: twikiplugins/NatSkin/templates/messages.nat.tmpl:187
@@ -4084,10 +3899,9 @@ msgstr "E-mail-adressen for dette brugernavn er ikke gyldig."
 
 #: twikiplugins/NatSkin/templates/oopssendmailerr.nat.tmpl:5
 msgid "The e-mail could not be delivered."
-msgstr ""
+msgstr "The e-mail could not be delivered."
 
 #: twikiplugins/NatSkin/templates/oopsregemail.nat.tmpl:5
-#, fuzzy
 msgid "The email address entered is not valid."
 msgstr "E-mail-adressen for dette brugernavn er ikke gyldig."
 
@@ -4101,12 +3915,11 @@ msgstr "Filen er blevet uploadet og vedhæftet korrekt til %1-siden."
 
 #: twikiplugins/NatSkin/templates/oopsresetpasswd.nat.tmpl:8
 msgid "The following is your encrypted password entry:"
-msgstr ""
+msgstr "The following is your encrypted password entry:"
 
 #: templates/messages.tmpl:355
 msgid "The following topics are locked for edit, and cannot be moved:"
-msgstr ""
-"De følgende sider er låst (de editeres i øjeblikket), og kan ikke flyttes:"
+msgstr "De følgende sider er låst (de editeres i øjeblikket), og kan ikke flyttes:"
 
 #: templates/messages.tmpl:361
 msgid "The following topics refer to topics in this web, but are being edited:"
@@ -4140,17 +3953,20 @@ msgid "The new web has been created"
 msgstr "Det nye web er blevet oprettet"
 
 #: twikiplugins/NatSkin/templates/oopsmngcreateweb.nat.tmpl:35
-#, fuzzy
 msgid ""
 "The new web has been created, however not all topics could be copied from "
 "the base web."
-msgstr "Og populeret med sider fra skabelon-webbet."
+msgstr ""
+"The new web has been created, however not all topics could be copied from "
+"the base web."
 
 #: twikiplugins/NatSkin/templates/oopsempty.nat.tmpl:15
 msgid ""
 "The other possibility is that someone sent you the preview URL of [[%1]] "
 "instead of the view URL."
 msgstr ""
+"The other possibility is that someone sent you the preview URL of [[%1]] "
+"instead of the view URL."
 
 #: templates/messages.tmpl:98
 #: twikiplugins/NatSkin/templates/messages.nat.tmpl:69
@@ -4158,11 +3974,10 @@ msgid "The password you entered in the *old password* field is incorrect."
 msgstr "Passwordet, som du har indtastet i *Old password*-feltet er forkert."
 
 #: twikiplugins/NatSkin/templates/oopswrongpassword.nat.tmpl:6
-#, fuzzy
 msgid ""
 "The password you entered in the *password* field is incorrect. Please try "
 "again."
-msgstr "Passwordet, som du har indtastet i *Old password*-feltet er forkert."
+msgstr "Passwordet, som du har indtastet i *password* feltet er forkert."
 
 #: templates/messages.tmpl:287
 #: twikiplugins/NatSkin/templates/messages.nat.tmpl:130
@@ -4170,16 +3985,14 @@ msgid "The required field %1 was not filled in."
 msgstr "Det obligatoriske felt %1 er ikke udfyldt."
 
 #: twikiplugins/NatSkin/templates/messages.nat.tmpl:214
-#, fuzzy
 msgid ""
 "The required field =<span class=\"twikiAlert\">**</span>= *%1* was not "
 "filled in."
 msgstr "Det obligatoriske felt %1 er ikke udfyldt."
 
 #: data/TWiki/WebTopicViewTemplate.txt:5
-#, fuzzy
 msgid "The topic %1 you are trying to access does not exist, yet."
-msgstr "Du forsøger at udføre handlingen %1 på en side der ikke eksisterer."
+msgstr "Du forsøger at udføre handlingen på en side %1 der ikke eksisterer."
 
 #: templates/messages.tmpl:302
 msgid "The topic is in an old format"
@@ -4198,11 +4011,8 @@ msgstr "Der er problemer med at omdøbe dette web:"
 
 #: templates/messages.tmpl:199
 #: twikiplugins/NatSkin/templates/messages.nat.tmpl:142
-#, fuzzy
 msgid "There has been a problem adding your user id to the Password system."
-msgstr ""
-"Der opstod et problem med at tilføje dit brugernavn til password-systemet. "
-"Kontakt venligst %1."
+msgstr "Der opstod et problem med at tilføje dit brugernavn til password-systemet."
 
 #: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:61
 msgid "There is no size limit for uploaded files."
@@ -4210,24 +4020,23 @@ msgstr "Der er ingen begrænsning for størrelsen på vedhæftede filer."
 
 #: templates/messages.tmpl:305
 msgid "There should be a line that includes %1, look for %2 (or %3)"
-msgstr ""
-"Der formodes at være en linie der inkluderer %1, se efter %2 (eller %3)"
+msgstr "Der formodes at være en linie der inkluderer %1, se efter %2 (eller %3)"
 
 #: twikiplugins/NatSkin/templates/oopsnoformdef.nat.tmpl:11
-#, fuzzy
 msgid ""
 "There should be a line that includes =META:FORM=, look for name=\"&lt;"
 "formName&gt;\""
 msgstr ""
-"Der formodes at være en linie der inkluderer %1, se efter %2 (eller %3)"
+"There should be a line that includes =META:FORM=, look for name=\"&lt;"
+"formName&gt;\""
 
 #: twikiplugins/NatSkin/templates/oopsnoformdef.nat.tmpl:15
 msgid "There should be a topic &lt;formName&gt;"
-msgstr ""
+msgstr "There should be a topic &lt;formName&gt;"
 
 #: twikiplugins/NatSkin/data/TWiki/NatSkinStyleBrowser.txt:44
 msgid "Thin Layout"
-msgstr ""
+msgstr "Thin Layout"
 
 #: templates/messages.tmpl:312
 msgid "This can be automatically upgraded by:"
@@ -4284,11 +4093,9 @@ msgstr "Dette er en automatisk e-mail notifikation fra %1."
 #: templates/registernotifyadmin.tmpl:8
 #: twikiplugins/ClassicSkin/templates/registernotifyadmin.classic.tmpl:8
 msgid "This is an automated e-mail notification of user registration in %1."
-msgstr ""
-"Dette er en automatisk e-mail notifikation om en brugerregistrering i %1."
+msgstr "Dette er en automatisk e-mail notifikation om en brugerregistrering i %1."
 
 #: twikiplugins/NatSkin/templates/mailnotify.nat.tmpl:7
-#, fuzzy
 msgid "This is an automated email from %1."
 msgstr "Dette er en automatisk e-mail notifikation fra %1."
 
@@ -4304,15 +4111,13 @@ msgstr ""
 msgid ""
 "This name has been chosen so it doesn't conflict with any other topics "
 "already in the %1 web."
-msgstr ""
-"Dette navn er valgt så det ikke konflikter med andre sidenavne i %1-webbet."
+msgstr "Dette navn er valgt så det ikke konflikter med andre sidenavne i %1-webbet."
 
 #: templates/messages.tmpl:310
 msgid "This requires the form definition to be present."
 msgstr "Dette kræver at formular-definitionen er tilgængelig."
 
 #: twikiplugins/NatSkin/templates/oopsnoformdef.nat.tmpl:19
-#, fuzzy
 msgid ""
 "This requires the form definition to be present. This can be automatically "
 "upgraded by:"
@@ -4320,7 +4125,7 @@ msgstr "Dette kræver at formular-definitionen er tilgængelig."
 
 #: templates/messages.tmpl:254
 msgid "This site requires at least %1 character passwords"
-msgstr ""
+msgstr "Dette site kræver at et password er mindst%1 karakterer langt"
 
 #: data/TWiki/WebTopicViewTemplate.txt:16
 msgid "This topic has moved to %1."
@@ -4352,38 +4157,36 @@ msgstr ""
 "til formularfelterne."
 
 #: twikiplugins/NatSkin/templates/renamebase.nat.tmpl:20
-#, fuzzy
 msgid "To"
-msgstr "Til web:"
+msgstr "Til"
 
 #: twikiplugins/PatternSkin/templates/preview.pattern.tmpl:62
 msgid "To *cancel* and discard any changes: Press the [Discard] button."
-msgstr ""
-"For at *fortryde* og bortkaste alle ændringer: Klik på [Fortryd] knappen."
+msgstr "For at *fortryde* og bortkaste alle ændringer: Klik på [Fortryd] knappen."
 
 #: twikiplugins/PatternSkin/templates/preview.pattern.tmpl:60
 msgid "To *save* changes: Press the [Save Changes] button."
 msgstr "For at *gemme* ændringerne: Klik på [Gem opdateringer] knappen."
 
 #: twikiplugins/NatSkin/templates/oopslockedrename.nat.tmpl:11
-msgid ""
-"To cancel go <a href=\"javscript:history.back()\">back</a> in your browser."
-msgstr ""
+msgid "To cancel go <a href=\"javscript:history.back()\">back</a> in your browser."
+msgstr "To cancel go <a href=\"javscript:history.back()\">back</a> in your browser."
 
 #: twikiplugins/NatSkin/templates/oopslocked.nat.tmpl:11
 msgid ""
 "To cancel simply go <a href=\"javascript:history.back()\">back</a> in your "
 "browser."
 msgstr ""
+"To cancel simply go <a href=\"javascript:history.back()\">back</a> in your "
+"browser."
 
 #: templates/renameweb.tmpl:10
-msgid ""
-"To delete this web: move this web to the Trash web by renaming it to %1."
+msgid "To delete this web: move this web to the Trash web by renaming it to %1."
 msgstr "Flyt dette web til Trash webbet for at slette det (omdøb det til %1)."
 
 #: twikiplugins/NatSkin/templates/oopslocked.nat.tmpl:9
 msgid "To edit anyway click on the <a href=\"%1\">Edit anyway</a>."
-msgstr ""
+msgstr "To edit anyway click on the <a href=\"%1\">Edit anyway</a>."
 
 #: data/TWiki/TWikiRegistration.txt:4
 msgid ""
@@ -4399,22 +4202,18 @@ msgstr "For at fortsætte med at editere siden alligevel, klik "
 
 #: twikiplugins/ClassicSkin/templates/oopsleaseconflict.classic.tmpl:13
 msgid "To edit the topic anyway, hit 'Edit Anyway'."
-msgstr ""
-"For at fortsætte med at editere siden alligevel, klik på 'Editér alligevel'."
+msgstr "For at fortsætte med at editere siden alligevel, klik på 'Editér alligevel'."
 
 #: twikiplugins/NatSkin/templates/oopsleaseconflict.nat.tmpl:35
-#, fuzzy
 msgid "To edit the topic anyway, hit 'Edit&nbsp;Anyway'."
-msgstr ""
-"For at fortsætte med at editere siden alligevel, klik på 'Editér alligevel'."
+msgstr "For at fortsætte med at editere siden alligevel, klik på 'Editér alligevel'."
 
 #: twikiplugins/NatSkin/templates/oopsauth.nat.tmpl:6
-#, fuzzy
 msgid ""
 "To edit topics on this %1 collaborative web, you must be registered as a "
 "user."
 msgstr ""
-"For at kunne editere siderne på dette TWikiSite, skal du have et brugernavn "
+"For at kunne editere siderne på dette %1 TWikiSite, skal du have et brugernavn "
 "og et password."
 
 #: twikiplugins/NatSkin/templates/oopslocked.nat.tmpl:8
@@ -4423,6 +4222,8 @@ msgid ""
 "To look at the text without editing the topic click on the [[%1][View raw "
 "text]]."
 msgstr ""
+"To look at the text without editing the topic click on the [[%1][View raw "
+"text]]."
 
 #: twikiplugins/PatternSkin/templates/preview.pattern.tmpl:61
 msgid "To make *more changes*: Go back in your browser."
@@ -4433,13 +4234,12 @@ msgid "To register as a new user, simply fill out this form:"
 msgstr "For at registrere dig som ny bruger, udfyld venligst denne formular."
 
 #: twikiplugins/NatSkin/templates/oopsauth.nat.tmpl:16
-#, fuzzy
 msgid "To register as a new user:"
-msgstr "For at registrere dig som ny bruger, udfyld venligst denne formular."
+msgstr "For at registrere dig som ny bruger:"
 
 #: twikiplugins/NatSkin/templates/oopslockedrename.nat.tmpl:10
 msgid "To rename anyway click on [[%1][Rename anyway]]"
-msgstr ""
+msgstr "To rename anyway click on [[%1][Rename anyway]]"
 
 #: templates/oopsleaseconflict.tmpl:17
 msgid "To see if %1 has finished editing yet, click "
@@ -4450,9 +4250,8 @@ msgid "To see if %1 has finished editing yet, click 'Try Again'."
 msgstr "For at se om %1 har afsluttet redigeringen, klik 'Forsøg igen'."
 
 #: twikiplugins/NatSkin/templates/oopsleaseconflict.nat.tmpl:36
-#, fuzzy
 msgid "To see if they have finished their edit yet, click 'Try&nbsp;Again'"
-msgstr "For at se om %1 har afsluttet redigeringen, klik 'Forsøg igen'."
+msgstr "For at se om de har afsluttet redigeringen, klik 'Forsøg igen'."
 
 #: twikiplugins/PatternSkin/templates/rename.pattern.tmpl:25
 msgid "To topic:"
@@ -4464,25 +4263,21 @@ msgstr "Til web:"
 
 #: twikiplugins/NatSkin/templates/moveattachment.nat.tmpl:20
 #: twikiplugins/NatSkin/templates/renamewebbase.nat.tmpl:25
-#, fuzzy
 msgid "To:"
-msgstr "Til web:"
+msgstr "Til:"
 
 #: twikiplugins/NatSkin/templates/changes.nat.tmpl:15
 #: twikiplugins/NatSkin/templates/moveattachment.nat.tmpl:18
-#, fuzzy
 msgid "Topic"
-msgstr "Til side:"
+msgstr "Side"
 
 #: twikiplugins/NatSkin/templates/oopsmore.nat.tmpl:66
-#, fuzzy
 msgid "Topic Caching"
-msgstr "Vedhæftede filer"
+msgstr "Side-caching"
 
 #: twikiplugins/NatSkin/templates/changeformsidebar.nat.tmpl:5
-#, fuzzy
 msgid "Topic Meta data"
-msgstr "Sidenavn"
+msgstr "Sidens meta-data"
 
 #: templates/messages.tmpl:284
 #: twikiplugins/NatSkin/templates/messages.nat.tmpl:211
@@ -4498,23 +4293,21 @@ msgid "Topic can not be upgraded from old style category table"
 msgstr "Siden kan ikke opgraderes fra den gamle 'category table'-stil"
 
 #: twikiplugins/NatSkin/templates/oopsmissing.nat.tmpl:3
-#, fuzzy
 msgid "Topic does not exist"
-msgstr "siden %1 eksisterer ikke"
+msgstr "Siden eksisterer ikke endnu"
 
 #: twikiplugins/NatSkin/templates/oopslocked.nat.tmpl:3
 #: twikiplugins/NatSkin/templates/oopslockedrename.nat.tmpl:3
 msgid "Topic is locked by another user"
-msgstr ""
+msgstr "Topic is locked by another user"
 
 #: twikiplugins/NatSkin/templates/oopspreview.nat.tmpl:3
-#, fuzzy
 msgid "Topic is not saved yet"
-msgstr "Fejl ved skrivning af siden"
+msgstr "Denne side er ikke gemt endnu"
 
 #: twikiplugins/NatSkin/templates/oopsempty.nat.tmpl:3
 msgid "Topic must not be empty"
-msgstr ""
+msgstr "Topic must not be empty"
 
 #: data/TWiki/WebSearchAdvanced.txt:54
 msgid "Topic name"
@@ -4529,9 +4322,8 @@ msgid "Topic parent:"
 msgstr "Side-forælder:"
 
 #: twikiplugins/NatSkin/templates/oopsmore.nat.tmpl:32
-#, fuzzy
 msgid "Topic preferences"
-msgstr "Præferencer"
+msgstr "Side-præferencer"
 
 #: templates/oopssaveerr.tmpl:9
 #: twikiplugins/NatSkin/templates/oopssaveerr.nat.tmpl:3
@@ -4548,9 +4340,8 @@ msgid "Topic was merged"
 msgstr "Sidens kildetekst blev flettet"
 
 #: data/TWiki/WebTopicCreator.txt:63
-#, fuzzy
 msgid "Topic will be named: "
-msgstr "Sidenavn:"
+msgstr "Siden vil blive kaldt:"
 
 #: twikiplugins/MailerContrib/templates/mailnotify.tmpl:14
 msgid "Topics in %1 web:"
@@ -4568,12 +4359,10 @@ msgstr "Sider som i øjeblikket redigeres af andre brugere i %1-webbet:"
 msgid ""
 "Topics which refer to this web and are are currently being edited by other "
 "users:"
-msgstr ""
-"Sider, som referer til dette web, og som lige nu redigeres af andre brugere:"
+msgstr "Sider, som referer til dette web, og som lige nu redigeres af andre brugere:"
 
 #: twikiplugins/PatternSkin/templates/renamewebbase.pattern.tmpl:47
-msgid ""
-"Topics which refer to this web that you do not have permission to change:"
+msgid "Topics which refer to this web that you do not have permission to change:"
 msgstr ""
 "Sider, der refererer til dette web, og som du ikke har rettigheder til at "
 "ændre:"
@@ -4603,7 +4392,7 @@ msgstr ""
 
 #: twikiplugins/NatSkin/templates/edittoolbar.natedit.tmpl:9
 msgid "Underlined text"
-msgstr ""
+msgstr "Underlined text"
 
 #: twikiplugins/NatSkin/templates/edit.nat.tmpl:76
 #: twikiplugins/NatSkin/templates/edittopicactions.nat.tmpl:8
@@ -4611,12 +4400,11 @@ msgstr ""
 #: twikiplugins/NatSkin/templates/previewtopicactions.nat.tmpl:8
 #: twikiplugins/NatSkin/templates/settingstopicactions.nat.tmpl:5
 msgid "Undo"
-msgstr ""
+msgstr "Undo"
 
 #: twikiplugins/NatSkin/templates/login.nat.tmpl:7
-#, fuzzy
 msgid "Unrecognised user and/or password."
-msgstr "Ukendt brugernavn og/eller password"
+msgstr "Ukendt brugernavn og/eller password."
 
 #: templates/messages.tmpl:40
 #: twikiplugins/NatSkin/templates/messages.nat.tmpl:18
@@ -4624,18 +4412,16 @@ msgid "Unrecognized action command %1"
 msgstr "Ukendt action command %1"
 
 #: twikiplugins/NatSkin/templates/oopsmanage.nat.tmpl:4
-#, fuzzy
 msgid "Unrecognized action command:"
-msgstr "Ukendt action command %1"
+msgstr "Ukendt action command:"
 
 #: twikiplugins/PatternSkin/templates/login.pattern.tmpl:54
 msgid "Unrecognized user and/or password"
 msgstr "Ukendt brugernavn og/eller password"
 
 #: twikiplugins/NatSkin/templates/attachagain.nat.tmpl:3
-#, fuzzy
 msgid "Update attachment"
-msgstr "Opdatér den vedhæftede fil %1 på siden %2"
+msgstr "Opdatér den vedhæftede fil"
 
 #: twikiplugins/PatternSkin/templates/attachagain.pattern.tmpl:5
 msgid "Update attachment %1 on %2"
@@ -4643,7 +4429,7 @@ msgstr "Opdatér den vedhæftede fil %1 på siden %2"
 
 #: twikiplugins/NatSkin/templates/searchrenameview.nat.tmpl:8
 msgid "Update ref:"
-msgstr ""
+msgstr "Update ref:"
 
 #: twikiplugins/NatSkin/templates/attachagain.nat.tmpl:23
 #: twikiplugins/NatSkin/templates/attachnew.nat.tmpl:5
@@ -4657,13 +4443,12 @@ msgid "Upload up to %1 KB."
 msgstr "Upload op til %1 KB."
 
 #: twikiplugins/NatSkin/templates/oopsupload.nat.tmpl:3
-#, fuzzy
 msgid "Uploaded file \"%1\" does not exist or is empty"
-msgstr "Den angivne fil %1 overskrider upload-grænsen på %2 KB"
+msgstr "Den uploaded file \"%1\" eksisterer ikke eller er tom"
 
 #: twikiplugins/NatSkin/templates/messages.nat.tmpl:219
 msgid "Uploaded file \"<nop>%1\" does not exist or is empty."
-msgstr ""
+msgstr "Uploaded file \"<nop>%1\" does not exist or is empty."
 
 #: templates/messages.tmpl:340
 #: twikiplugins/NatSkin/templates/messages.nat.tmpl:332
@@ -4688,9 +4473,8 @@ msgid "Use proportional spaced font"
 msgstr "Brug en proprtional skrifttype"
 
 #: data/TWiki/WebTopicCreator.txt:125
-#, fuzzy
 msgid "Use template:"
-msgstr "Mulige formular-skabeloner"
+msgstr "Brug skabelon:"
 
 #: templates/messages.tmpl:10
 #: twikiplugins/NatSkin/templates/messages.nat.tmpl:4
@@ -4703,7 +4487,7 @@ msgstr "Brugervejledninger"
 
 #: twikiplugins/NatSkin/data/TWiki/MySideBarTemplate.txt:19
 msgid "User's Guide"
-msgstr ""
+msgstr "User's Guide"
 
 #: twikiplugins/PatternSkin/data/TWiki/PatternSkinElements.txt:195
 #: twikiplugins/PatternSkin/templates/login.pattern.tmpl:88
@@ -4725,13 +4509,12 @@ msgstr ""
 
 #: twikiplugins/NatSkin/templates/changeformsidebar.nat.tmpl:6
 #: twikiplugins/NatSkin/templates/editsidebar.nat.tmpl:6
-#, fuzzy
 msgid "Variables"
-msgstr "&Printvenlig"
+msgstr "Variabler"
 
 #: twikiplugins/NatSkin/data/TWiki/NatSkinStyleBrowser.txt:24
 msgid "Variation:"
-msgstr ""
+msgstr "Variation:"
 
 #: twikiplugins/NatSkin/templates/attachtables.nat.tmpl:25
 #: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:144
@@ -4739,9 +4522,8 @@ msgid "Version"
 msgstr "Version"
 
 #: twikiplugins/PatternSkin/templates/attachagain.pattern.tmpl:11
-#, fuzzy
 msgid "Version history"
-msgstr "Versionshistorik for %1"
+msgstr "Versionshistorik"
 
 #: twikiplugins/PatternSkin/templates/attachagain.pattern.tmpl:9
 msgid "Version history of %1"
@@ -4753,24 +4535,20 @@ msgstr "Højde på edit-boks:"
 
 #: twikiplugins/NatSkin/templates/rdifftopicactions.nat.tmpl:2
 #: twikiplugins/NatSkin/templates/strings.nat.tmpl:4
-#, fuzzy
 msgid "View"
-msgstr "vis"
+msgstr "Vis"
 
 #: twikiplugins/NatSkin/templates/oopsaccessview.nat.tmpl:4
-#, fuzzy
 msgid "View Access Denied"
-msgstr "Adgang nægtet"
+msgstr "Læse-adgang nægtet"
 
 #: twikiplugins/NatSkin/templates/oopsrev.nat.tmpl:65
-#, fuzzy
 msgid "View Previous Topic Revision"
 msgstr "Vis en tidligere version af siden"
 
 #: twikiplugins/NatSkin/templates/oopsrev.nat.tmpl:88
-#, fuzzy
 msgid "View all diffs"
-msgstr "Vis forskel"
+msgstr "Vis alle forskelle"
 
 #: twikiplugins/NatSkin/templates/oopsrev.nat.tmpl:59
 #: twikiplugins/PatternSkin/templates/oopsmorecompare.pattern.tmpl:7
@@ -4778,9 +4556,8 @@ msgid "View difference"
 msgstr "Vis forskel"
 
 #: twikiplugins/NatSkin/templates/strings.nat.tmpl:5
-#, fuzzy
 msgid "View formatted topic"
-msgstr "Vis side"
+msgstr "Vis formatteret side"
 
 #: templates/oopsmore.tmpl:41
 #: twikiplugins/ClassicSkin/templates/oopsmore.classic.tmpl:39
@@ -4792,21 +4569,19 @@ msgstr "Vis en tidligere version af siden"
 #: twikiplugins/NatSkin/templates/oopslockedrename.nat.tmpl:15
 #: twikiplugins/NatSkin/templates/oopsnoformdef.nat.tmpl:29
 msgid "View raw"
-msgstr ""
+msgstr "View raw"
 
 #: twikiplugins/PatternSkin/templates/oopsleaseconflict.pattern.tmpl:34
 msgid "View raw text without formatting"
 msgstr "Vis rå kildetekst uden formatering"
 
 #: twikiplugins/NatSkin/templates/strings.nat.tmpl:7
-#, fuzzy
 msgid "View raw topic"
-msgstr "Vis side"
+msgstr "Vis rå side"
 
 #: twikiplugins/NatSkin/templates/oopsnoformdef.nat.tmpl:10
-#, fuzzy
 msgid "View raw topic text"
-msgstr "Vis side"
+msgstr "Vis rå side-tekst"
 
 #: twikiplugins/NatSkin/templates/oopsrev.nat.tmpl:79
 #: twikiplugins/PatternSkin/templates/oopsmorerevision.pattern.tmpl:6
@@ -4814,9 +4589,8 @@ msgid "View revision"
 msgstr "Vis denne version"
 
 #: data/TWiki/WebTopicCreator.txt:127
-#, fuzzy
 msgid "View templates"
-msgstr "Mulige formular-skabeloner"
+msgstr "Vis mulige formular-skabeloner"
 
 #: templates/oopsleaseconflict.tmpl:30
 #: twikiplugins/ClassicSkin/templates/oopsleaseconflict.classic.tmpl:15
@@ -4827,9 +4601,8 @@ msgid "View topic"
 msgstr "Vis side"
 
 #: twikiplugins/NatSkin/templates/strings.nat.tmpl:15
-#, fuzzy
 msgid "View topic history"
-msgstr "Vis komplet historik for siden"
+msgstr "Vis historik for siden"
 
 #: templates/twiki.tmpl:164
 #: twikiplugins/ClassicSkin/templates/twiki.classic.tmpl:153
@@ -4837,9 +4610,8 @@ msgid "View total topic history"
 msgstr "Vis komplet historik for siden"
 
 #: twikiplugins/NatSkin/templates/oopsaccessvote.nat.tmpl:4
-#, fuzzy
 msgid "Vote Access Denied"
-msgstr "Adgang nægtet"
+msgstr "Stemme-adgang nægtet"
 
 #: data/TWiki/WebTopicNonWikiTemplate.txt:2
 msgid "WARNING:"
@@ -4857,13 +4629,12 @@ msgstr ""
 "%2"
 
 #: templates/messages.tmpl:417
-#, fuzzy
 msgid "Warning: Can't find topic %1.%2"
-msgstr "Advarsel: Kan ikke finde siden %1"
+msgstr "Advarsel: Kan ikke finde siden %1.%2"
 
 #: lib/TWiki/UI/Register.pm:828
 msgid "Warning: Could not send confirmation email"
-msgstr ""
+msgstr "Advarsel: Kunne ikke sende bekræftelses-e-mail"
 
 #: templates/messages.tmpl:425
 msgid "Warning: This site does not allow %<nop>INCLUDE% of URLs"
@@ -4873,20 +4644,19 @@ msgstr ""
 
 #: twikiplugins/NatSkin/data/TWiki/NatSkinStyleBrowser.txt:58
 msgid "Web Buttons Off"
-msgstr ""
+msgstr "Web-knapper fra"
 
 #: twikiplugins/NatSkin/data/TWiki/NatSkinStyleBrowser.txt:57
 msgid "Web Buttons On"
-msgstr ""
+msgstr "Web-knapper til"
 
 #: data/TWiki/WebSearch.txt:3
 msgid "Web Search"
 msgstr "Web-søgning"
 
 #: twikiplugins/NatSkin/templates/moveattachment.nat.tmpl:18
-#, fuzzy
 msgid "Web:"
-msgstr "We&b"
+msgstr "Web:"
 
 #: twikiplugins/PatternSkin/data/TWiki/WebLeftBarExample.txt:8
 #: twikiplugins/PatternSkin/data/TWiki/WebLeftBarWebsList.txt:2
@@ -4895,20 +4665,18 @@ msgstr "Webs"
 
 #: twikiplugins/NatSkin/data/Main/WebLinks.txt:8
 msgid "Welcome"
-msgstr ""
+msgstr "Velkommen"
 
 #: twikiplugins/NatSkin/templates/oopsregthanks.nat.tmpl:8
 msgid "Welcome %1, take a [[%2][first tour]] on the %3."
-msgstr ""
+msgstr "Velkommen %1, tag en [[%2][første tur]] på %3."
 
 #: twikiplugins/NatSkin/data/TWiki/MySideBarTemplate.txt:18
-#, fuzzy
 msgid "Welcome Guest"
-msgstr "Velkommen til %1-webbet"
+msgstr "Velkommen gæst"
 
 #: twikiplugins/NatSkin/templates/login.nat.tmpl:8
 #: twikiplugins/NatSkin/templates/oopslogon.nat.tmpl:4
-#, fuzzy
 msgid "Welcome to the %1"
 msgstr "Velkommen til %1-webbet"
 
@@ -4938,7 +4706,7 @@ msgstr "Hvem"
 #: twikiplugins/NatSkin/templates/renamesidebar.nat.tmpl:7
 #: twikiplugins/NatSkin/templates/renamewebsidebar.nat.tmpl:5
 msgid "WikiWord"
-msgstr ""
+msgstr "WikiWord"
 
 #: templates/messages.tmpl:19
 #: twikiplugins/NatSkin/templates/oopsmngcreateweb.nat.tmpl:52
@@ -4983,9 +4751,8 @@ msgid "You are here:"
 msgstr "Du er her:"
 
 #: twikiplugins/NatSkin/templates/oopsnotwikiuser.nat.tmpl:3
-#, fuzzy
 msgid "You are not registered"
-msgstr "Du er allerede registreret"
+msgstr "Du er ikke registreret"
 
 #: templates/messages.tmpl:107
 msgid ""
@@ -5009,13 +4776,11 @@ msgstr "Du forsøger at udføre handlingen %1 på en side der ikke eksisterer."
 #: templates/messages.tmpl:469
 #: twikiplugins/NatSkin/templates/messages.nat.tmpl:327
 msgid "You are trying to %1 an attachment that does not exist."
-msgstr ""
-"Du forsøger at udføre handlingen %1 på en vedhæftet fil der ikke eksisterer."
+msgstr "Du forsøger at udføre handlingen %1 på en vedhæftet fil der ikke eksisterer."
 
 #: twikiplugins/NatSkin/templates/messages.nat.tmpl:315
-#, fuzzy
 msgid "You are trying to '%1' a topic in a web that does not exist."
-msgstr "Du forsøger at udføre handlingen %1 på en side der ikke eksisterer."
+msgstr "Du forsøger at udføre handlingen %1 på et web der ikke eksisterer."
 
 #: templates/messages.tmpl:456
 msgid ""
@@ -5026,17 +4791,16 @@ msgstr ""
 "2 hvis du har spørgsmål."
 
 #: twikiplugins/NatSkin/templates/oopsnoweb.nat.tmpl:19
-#, fuzzy
 msgid ""
 "You can [[%1][create a new web]] if you have the permission. Contact %2 if "
 "you have any questions."
 msgstr ""
-"Du kan [[%1][oprette et nyt web]], hvis du har rettigheden til det. Kontakt %"
-"2 hvis du har spørgsmål."
+"Du kan [[%1][oprette et nyt web]], hvis du har rettigheden til det.  "
+"Kontakt %2 hvis du har spørgsmål."
 
 #: twikiplugins/NatSkin/templates/messages.nat.tmpl:102
 msgid "You can also use the names of the standard HTML colors"
-msgstr ""
+msgstr "Du kan også bruge navnene på standard-farverne i HTML"
 
 #: templates/messages.tmpl:125
 msgid ""
@@ -5079,7 +4843,7 @@ msgstr ""
 
 #: twikiplugins/NatSkin/templates/oopssave.nat.tmpl:5
 msgid "You cannot call this script directly, %1 uses it internally."
-msgstr ""
+msgstr "Du kan ikke kalde dette script direkte"
 
 #: templates/messages.tmpl:225
 #: twikiplugins/NatSkin/templates/messages.nat.tmpl:166
@@ -5088,9 +4852,8 @@ msgid "You cannot register twice, the name %1 is already registered."
 msgstr "Du kan ikke registrere to gange, navnet %1 er allerede registreret."
 
 #: templates/messages.tmpl:203 templates/messages.tmpl:212
-#, fuzzy
 msgid "You have *not* been registered."
-msgstr "Du er allerede registreret"
+msgstr "Du er *ikke* blevet registreret."
 
 #: templates/messages.tmpl:330
 msgid ""
@@ -5102,11 +4865,9 @@ msgstr ""
 
 #: templates/messages.tmpl:148
 msgid "You may need to close your browser to make this change take effect."
-msgstr ""
-"Alle browservinduer skal muligvis lukkes ned før denne ændring slår igennem."
+msgstr "Alle browservinduer skal muligvis lukkes ned før denne ændring slår igennem."
 
 #: twikiplugins/NatSkin/templates/oopssaveerr.nat.tmpl:7
-#, fuzzy
 msgid ""
 "You might go <a href=\"javascript:history.back()\">back</a> in your browser "
 "and save your changes locally."
@@ -5145,7 +4906,7 @@ msgstr "Dit %1.LoginName"
 
 #: twikiplugins/NatSkin/templates/messages.nat.tmpl:7
 msgid "Your [[%1][homepage]] has _not_ been removed yet."
-msgstr ""
+msgstr "Din [[%1][personlige side]] er ikke blevet slettet endnu."
 
 #: templates/messages.tmpl:167
 msgid ""
@@ -5170,21 +4931,20 @@ msgstr ""
 "fortsætte."
 
 #: twikiplugins/NatSkin/templates/oopslanguagechanged.nat.tmpl:9
-#, fuzzy
 msgid ""
 "Your language will be reset to the global default from the next screen on. "
 "You will be redirected to there right now. If you aren't, [[%1][click here]] "
 "to proceed."
 msgstr ""
-"Sproget bliver skiftet til %1 fra næste skærmbillede. Du bliver nu "
-"viderestillet. Hvis det ikke sker automatisk, så [[%2][klik her]] for at "
+"Sproget bliver skiftet til default fra næste skærmbillede. Du bliver nu "
+"viderestillet. Hvis det ikke sker automatisk, så [[%1][klik her]] for at "
 "fortsætte."
 
 #: twikiplugins/NatSkin/templates/oopsauth.nat.tmpl:13
 msgid ""
 "Your login name is usually the %1, like *<nop>TomSawyer* and _not_ Tom "
 "Sawyer or tom or sawyer."
-msgstr ""
+msgstr "Dit loginnavn er som regel et %1, som *<nop>JensHansen* og _ikke_ Jens Hansen eller jens eller hansen."
 
 #: templates/mailresetpassword.tmpl:10
 #: twikiplugins/ClassicSkin/templates/mailresetpassword.classic.tmpl:10
@@ -5197,8 +4957,7 @@ msgstr "Dit password:"
 
 #: templates/registernotify.tmpl:12
 #: twikiplugins/ClassicSkin/templates/registernotify.classic.tmpl:12
-msgid ""
-"Your personal %1 topic is located at %2. You can customize it as you like:"
+msgid "Your personal %1 topic is located at %2. You can customize it as you like:"
 msgstr ""
 "Din personlige side i %1 findes på adressen %2. Du er velkommen til at "
 "tilpasse den efter dine egne behov og ønsker:"
@@ -5212,15 +4971,16 @@ msgid "Your signature to copy/paste:"
 msgstr "Din signatur (til copy/paste)"
 
 #: twikiplugins/NatSkin/templates/edittoolbar.natedit.tmpl:39
-#, fuzzy
 msgid "Your signature with timestamp"
-msgstr "Din signatur (til copy/paste)"
+msgstr "Din signatur med tidsstempel (til copy/paste)"
 
 #: templates/messages.tmpl:153
 msgid ""
 "Your system may not support changing passwords through TWiki. Check with "
 "your TWiki administrator."
 msgstr ""
+"Dette system understøtter muligvis ikke skift af passwords gennem TWiki. "
+"Tjek med din TWiki administrator."
 
 #: templates/messages.tmpl:11
 #: twikiplugins/NatSkin/templates/messages.nat.tmpl:5
@@ -5234,8 +4994,7 @@ msgstr ""
 "og bed om at få dette gjort."
 
 #: twikiplugins/PatternSkin/templates/settings.pattern.tmpl:36
-msgid ""
-"[multiple of 3 spaces] * [space] Set [space] VARIABLENAME [space] = [value]"
+msgid "[multiple of 3 spaces] * [space] Set [space] VARIABLENAME [space] = [value]"
 msgstr ""
 "[3 mellemrum (et antal gange)] * [mellemrum] Set [mellemrum] VARIABELNAVN "
 "[mellemrum] = [værdi]"
@@ -5245,12 +5004,16 @@ msgid ""
 "__Note:__ Go back and click on Cancel if you would like to cancel the "
 "changes you did."
 msgstr ""
+"__Note:__ Go back and click on Cancel if you would like to cancel the "
+"changes you did."
 
 #: twikiplugins/NatSkin/templates/oopslocked.nat.tmpl:18
 msgid ""
 "__Note:__ Locking gets reset after <b> %1 </b> minutes of inactivity, the "
 "earliest in <b>%2</b> minutes."
 msgstr ""
+"__Note:__ Locking gets reset after <b> %1 </b> minutes of inactivity, the "
+"earliest in <b>%2</b> minutes."
 
 # please enter the name of your language here (written in the native language):
 #: lib/TWiki/I18N.pm:270
@@ -5266,9 +5029,8 @@ msgid "about regular expression search"
 msgstr "om søgning med regulære udtryk"
 
 #: lib/TWiki/Access.pm:207
-#, fuzzy
 msgid "access denied on root"
-msgstr "adgang til siden nægtet"
+msgstr "adgang til root nægtet"
 
 #: lib/TWiki/Access.pm:156
 msgid "access denied on topic"
@@ -5279,9 +5041,8 @@ msgid "access denied on web"
 msgstr "adgang til webbet nægtet"
 
 #: lib/TWiki/Access.pm:216
-#, fuzzy
 msgid "access not allowed on root"
-msgstr "adgang til siden ikke tilladt "
+msgstr "adgang til root ikke tilladt "
 
 #: lib/TWiki/Access.pm:173
 msgid "access not allowed on topic"
@@ -5308,9 +5069,8 @@ msgid "change, update, previous revisions, move, delete..."
 msgstr "ændr, opdatér, se tidligere versioner, flyt, slet..."
 
 #: twikiplugins/NatSkin/templates/changes.nat.tmpl:9
-#, fuzzy
 msgid "changes"
-msgstr "(ændringer)"
+msgstr "ændringer"
 
 #: twikiplugins/PatternSkin/templates/renamebase.pattern.tmpl:94
 msgid "checkboxes of referenced topics"
@@ -5318,24 +5078,21 @@ msgstr "flueben for sider med referencer"
 
 #: twikiplugins/NatSkin/templates/oopsrev.nat.tmpl:28
 #: twikiplugins/NatSkin/templates/oopsrev.nat.tmpl:43
-#, fuzzy
 msgid "debug"
-msgstr "Debug"
+msgstr "debug"
 
 #: templates/messages.tmpl:377
 msgid "don't forget to check your Topic Settings"
-msgstr ""
+msgstr "glem ikke at tjekke dine side-instillinger (Topic Settings)"
 
 #: twikiplugins/NatSkin/templates/changeform.nat.tmpl:10
 #: twikiplugins/NatSkin/templates/edit.nat.tmpl:11
-#, fuzzy
 msgid "edit"
-msgstr "(editér)"
+msgstr "editér"
 
 #: twikiplugins/NatSkin/templates/editform.nat.tmpl:9
-#, fuzzy
 msgid "edit form"
-msgstr "(editér formular)"
+msgstr "editér formular"
 
 #: templates/messages.tmpl:186
 msgid "fields are required."
@@ -5343,7 +5100,7 @@ msgstr "feltet / felterne er obligatoriske"
 
 #: twikiplugins/NatSkin/templates/searchtopicactions.nat.tmpl:2
 msgid "go back to <nop>%1"
-msgstr ""
+msgstr "tilbage til <nop>%1"
 
 #: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:39
 #: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:43
@@ -5358,7 +5115,7 @@ msgstr "hints til god stil i e-samarbejdet"
 
 #: twikiplugins/NatSkin/templates/oopsrev.nat.tmpl:73
 msgid "in <input type=\"checkbox\" name=\"raw\"> raw text format."
-msgstr ""
+msgstr "in <input type=\"checkbox\" name=\"raw\"> raw text format."
 
 #: twikiplugins/PatternSkin/templates/oopsmorerevision.pattern.tmpl:5
 msgid "in raw text format"
@@ -5394,12 +5151,11 @@ msgstr "opdatér"
 
 #: twikiplugins/NatSkin/templates/attachtables.nat.tmpl:6
 msgid "manage properties of %1"
-msgstr ""
+msgstr "manage properties of %1"
 
 #: twikiplugins/NatSkin/templates/oopsmore.nat.tmpl:3
-#, fuzzy
 msgid "more"
-msgstr "(mere)"
+msgstr "mere"
 
 #: data/Trash/WebHome.txt:10
 msgid "more..."
@@ -5407,19 +5163,16 @@ msgstr "mere..."
 
 #: twikiplugins/NatSkin/templates/attachtables.nat.tmpl:6
 #: twikiplugins/NatSkin/templates/moveattachment.nat.tmpl:9
-#, fuzzy
 msgid "move"
-msgstr "Flyt"
+msgstr "flyt"
 
 #: twikiplugins/NatSkin/templates/attachtables.nat.tmpl:6
-#, fuzzy
 msgid "move or delete %1"
-msgstr "Omdøb, flyt eller slet dette web:"
+msgstr "omdøb eller flyt %1"
 
 #: twikiplugins/NatSkin/data/TWiki/NatSkinStyleBrowser.txt:20
-#, fuzzy
 msgid "next"
-msgstr "Index"
+msgstr "næste"
 
 #: twikiplugins/PatternSkin/templates/oopsmoresetparent.pattern.tmpl:8
 msgid "none (remove topic parent)"
@@ -5429,18 +5182,16 @@ msgstr "ingen (fjern sidens forælder)"
 #: twikiplugins/NatSkin/templates/oopslogon.nat.tmpl:3
 #: twikiplugins/NatSkin/templates/oopsregthanks.nat.tmpl:3
 #: twikiplugins/NatSkin/templates/oopsresetpasswd.nat.tmpl:3
-#, fuzzy
 msgid "note"
-msgstr "Noter:"
+msgstr "notér"
 
 #: twikiplugins/MailerContrib/templates/mailnotify.tmpl:16
 msgid "now %1"
 msgstr "nu %1"
 
 #: twikiplugins/NatSkin/templates/oops.nat.tmpl:9
-#, fuzzy
 msgid "oops"
-msgstr "(advarsel)"
+msgstr "advarsel"
 
 #: twikiplugins/ClassicSkin/data/TWiki/ClassicSkinLogin.txt:2
 #: twikiplugins/PatternSkin/data/TWiki/WebLeftBarLogin.txt:3
@@ -5463,46 +5214,39 @@ msgid "or"
 msgstr "eller"
 
 #: twikiplugins/NatSkin/templates/settings.nat.tmpl:11
-#, fuzzy
 msgid "prefs"
-msgstr "Grupper"
+msgstr "præferencer"
 
 #: twikiplugins/NatSkin/data/TWiki/NatSkinStyleBrowser.txt:12
 #: twikiplugins/NatSkin/data/TWiki/NatSkinStyleBrowser.txt:25
 #: twikiplugins/NatSkin/data/TWiki/NatSkinStyleBrowser.txt:33
-#, fuzzy
 msgid "prev"
-msgstr "(vis udkast)"
+msgstr "forrige"
 
 #: twikiplugins/NatSkin/templates/preview.nat.tmpl:11
-#, fuzzy
 msgid "preview"
-msgstr "(vis udkast)"
+msgstr "vis udkast"
 
 #: twikiplugins/NatSkin/templates/view.print.nat.tmpl:4
-#, fuzzy
 msgid "printable"
-msgstr "&Printvenlig"
+msgstr "printvenlig"
 
 #: twikiplugins/NatSkin/templates/attachtables.nat.tmpl:6
-#, fuzzy
 msgid "props"
-msgstr "Grupper"
+msgstr "attributter"
 
 #: lib/TWiki/Render.pm:207
 msgid "put it back"
 msgstr "flyt siden tilbage"
 
 #: twikiplugins/NatSkin/templates/renamebase.nat.tmpl:10
-#, fuzzy
 msgid "rename"
-msgstr "(omdøb)"
+msgstr "omdøb"
 
 #: twikiplugins/NatSkin/templates/renamewebbase.nat.tmpl:10
 #: twikiplugins/NatSkin/templates/renamewebdelete.nat.tmpl:3
-#, fuzzy
 msgid "rename web"
-msgstr "Opret ny side"
+msgstr "omdøb web"
 
 #: data/TWiki/WebChanges.txt:2
 #: twikiplugins/PatternSkin/templates/searchbase.pattern.tmpl:23
@@ -5510,110 +5254,91 @@ msgid "retrieved at %1"
 msgstr "fremsøgt %1"
 
 #: twikiplugins/NatSkin/templates/searchbase.nat.tmpl:10
-#, fuzzy
 msgid "search"
-msgstr "Søg"
+msgstr "søg"
 
 #: twikiplugins/NatSkin/templates/oopsrev.nat.tmpl:18
 #: twikiplugins/NatSkin/templates/oopsrev.nat.tmpl:35
-#, fuzzy
 msgid "sequential"
-msgstr "Sekventiel"
+msgstr "sekventiel"
 
 #: twikiplugins/NatSkin/templates/oopsrev.nat.tmpl:23
 #: twikiplugins/NatSkin/templates/oopsrev.nat.tmpl:39
-#, fuzzy
 msgid "side by side"
-msgstr "Side ved side"
+msgstr "side ved side"
 
 #: twikiplugins/NatSkin/templates/messages.nat.tmpl:181
 #: twikiplugins/NatSkin/templates/oopsregwiki.nat.tmpl:12
-#, fuzzy
 msgid "single character first name"
-msgstr "(første bogstav i fornavn)"
+msgstr "første bogstav i fornavn"
 
 #: twikiplugins/NatSkin/templates/messages.nat.tmpl:180
 #: twikiplugins/NatSkin/templates/oopsregwiki.nat.tmpl:11
-#, fuzzy
 msgid "single character last name"
-msgstr "(første bogstav i efternavn)"
+msgstr "første bogstav i efternavn"
 
 #: twikiplugins/NatSkin/templates/oopsmngcreateweb.nat.tmpl:55
-#, fuzzy
 msgid "the %1 home?"
-msgstr "%1 forside"
+msgstr "%1-forsiden"
 
 #: twikiplugins/NatSkin/templates/oopsmngcreateweb.nat.tmpl:54
-#, fuzzy
 msgid "the %1 to customize the web specific preferences or"
 msgstr "%1 for at tilrette præferencer for det enkelte web"
 
 #: twikiplugins/NatSkin/templates/oopsmngcreateweb.nat.tmpl:53
-#, fuzzy
 msgid "the %1 to start working on the new web,"
 msgstr "%1 for at komme i gang med at arbejde med det nye web"
 
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:22
-#, fuzzy
 msgid "title='Attach an image or document to this topic' accesskey='a'>&Attach"
-msgstr "Vedhæft fx et billede eller et dokument til denne side"
+msgstr "title='Vedhæft fx et billede eller et dokument til denne side' accesskey='a'>Vedhæft (&A) "
 
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:7
-#, fuzzy
 msgid "title='Create new topic' accesskey='c'>&Create"
-msgstr "value='Cancel' accesskey='c'"
+msgstr "title='Opret ny side' accesskey='c'>Opret (&C)"
 
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:25
-#, fuzzy
 msgid ""
 "title='Delete or rename this topic; set parent topic; view and compare "
 "revisions' accesskey='m'>&More topic actions"
-msgstr ""
-"Slet eller omdøb denne side; sæt side-forælder; se og sammenlign versioner"
+msgstr "title='Slet eller omdøb denne side; sæt side-forælder; se og sammenlign revisioner' accesskey='m'>Flere side-&muligheder"
 
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:10
 msgid "title='Edit this topic text' accesskey='e'>&Edit"
-msgstr ""
+msgstr "title='Editér denne side' accesskey='e'>&Editér"
 
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:13
 msgid "title='Edit this topic text' accesskey='w'>&WYSIWYG"
-msgstr ""
+msgstr "title='Editér denne side' accesskey='w'>&WYSIWYG"
 
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:16
 msgid "title='Edit this topic text' accesskey='w'>Create (&WYSIWYG)"
-msgstr ""
+msgstr "title='Opret og editér denne side' accesskey='w'>Opret (&WYSIWYG)"
 
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:28
-#, fuzzy
 msgid "title='Printable version of this topic' accesskey='p'>&Printable"
-msgstr "Printvenlig version af denne side"
+msgstr "title='Printbar version af denne side' accesskey='p'>&Printable"
 
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:33
-#, fuzzy
-msgid ""
-"title='Search all webs for topics that link to here' accesskey='l'>A&ll Webs"
-msgstr "Søg i alle webs efter sider der linker til denne side"
+msgid "title='Search all webs for topics that link to here' accesskey='l'>A&ll Webs"
+msgstr "title='Søg i alle webs efter sider der linker til denne side ' accesskey='l'>A&lle webs"
 
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:31
-#, fuzzy
-msgid ""
-"title='Search the %1 Web for topics that link to here' accesskey='b'>We&b"
-msgstr "Søg i %1-webbet efter sider der linker til denne side"
+msgid "title='Search the %1 Web for topics that link to here' accesskey='b'>We&b"
+msgstr "title='Søg i %1-webbet efter sider der linker til denne side ' accesskey='b'>We&b"
 
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:41
-#, fuzzy
 msgid "title='View raw text without formatting' accesskey='r'>&Raw View"
-msgstr "Vis rå kildetekst uden formatering"
+msgstr "title='Vis rå kildetekst uden formatering' accesskey='r'>&Rå visning"
 
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:19
 msgid "title='View topic' accesskey='v'>&View topic"
-msgstr ""
+msgstr "title='Vis side' accesskey='v'>&Vis side"
 
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:36
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:38
-#, fuzzy
 msgid "title='View total topic history' accesskey='h'>&History"
-msgstr "Vis komplet historik for siden"
+msgstr "title='Vis komplet historik for siden' accesskey='h'>&Historik "
 
 #: twikiplugins/PatternSkin/templates/oopsleaseconflict.pattern.tmpl:27
 msgid "to edit the topic anyway."
@@ -5664,142 +5389,3 @@ msgstr ""
 "dit password. Hvis ingen af dine registrerede e-mail-adresser er valide, og "
 "du har glemt dit password, kontakt da %1."
 
-#~ msgid "&Attach"
-#~ msgstr "Vedhæft (&A)"
-
-#~ msgid "&Edit"
-#~ msgstr "&Editér"
-
-#~ msgid "&More topic actions"
-#~ msgstr "Flere &muligheder med denne side"
-
-#~ msgid "&Printable"
-#~ msgstr "&Printvenlig"
-
-#~ msgid "&Raw View"
-#~ msgstr "Kildetekst (&R)"
-
-#~ msgid "&View topic"
-#~ msgstr "&Vis side"
-
-#~ msgid "A&ll Webs"
-#~ msgstr "A&lle webs"
-
-#~ msgid "Cr&eate"
-#~ msgstr "Opr&et"
-
-#~ msgid "Create (&WYSIWYG)"
-#~ msgstr "Opret (&WYSIWYG)"
-
-#~ msgid "We&b"
-#~ msgstr "We&b"
-
-#, fuzzy
-#~ msgid "Topic:"
-#~ msgstr "Til side:"
-
-#~ msgid "Hide formatting help"
-#~ msgstr "Skjul formateringshjælp"
-
-#~ msgid "If you used the \"Jump\" feature to jump to this page:"
-#~ msgstr "Hvis du brugte \"Hop\"-funktionen for at komme til denne side:"
-
-#~ msgid "If you would like to create this page:"
-#~ msgstr "Hvis du vil oprette denne side:"
-
-#~ msgid ""
-#~ "Make sure you spelled the %1 correctly and try again. Remember, a %2 is "
-#~ "case sensitive"
-#~ msgstr ""
-#~ "Kontrollér at du har stavet sidens %1 korrekt, og prøv igen. Husk, et %2 "
-#~ "er case-sensitivt (forskel på STORE og små bogstaver)."
-
-#, fuzzy
-#~ msgid "More options in WebSearch"
-#~ msgstr "(Flere valgmuligheder i WebSearch)"
-
-#, fuzzy
-#~ msgid "Registration for %1 (%2)"
-#~ msgstr "%1 - Registrerings-information for %2 (%3)"
-
-#, fuzzy
-#~ msgid "Release edit lock"
-#~ msgstr "Forstør edit boks"
-
-#~ msgid ""
-#~ "See <a href='%1'>100</a>, <a href='%2'>200</a>, <a href='%3'>400</a>, <a "
-#~ "href='%4'>800</a> most recent changes"
-#~ msgstr ""
-#~ "Se de <a href='%1'>100</a>, <a href='%2'>200</a>, <a href='%3'>400</a> "
-#~ "eller <a href='%4'>800</a> seneste ændringer"
-
-#~ msgid "See <a href='%1'>all</a> changes"
-#~ msgstr "Se <a href='%1'>alle</a> ændringer"
-
-#, fuzzy
-#~ msgid "Set Parent Topic"
-#~ msgstr "Opret ny side"
-
-#~ msgid "Show formatting help"
-#~ msgstr "Vis formateringshjælp"
-
-#~ msgid ""
-#~ "Use the [[WebSearch][Search]] link on top of this page, or do a simple"
-#~ msgstr ""
-#~ "Benyt [[WebSearch][Søg]]-linket på denne side, eller indtast din søgning "
-#~ "direkte her:"
-
-#, fuzzy
-#~ msgid "Missing Fields =%1="
-#~ msgstr "Manglende felter"
-
-#, fuzzy
-#~ msgid "%1 (note)"
-#~ msgstr "(ingen)"
-
-#~ msgid "(More options in WebSearch)"
-#~ msgstr "(Flere valgmuligheder i WebSearch)"
-
-#~ msgid "Changed by:"
-#~ msgstr "Ændret af:"
-
-#~ msgid "Choose a new form template"
-#~ msgstr "Vælg en ny formular"
-
-#, fuzzy
-#~ msgid "Error:"
-#~ msgstr "Fejl"
-
-#, fuzzy
-#~ msgid "Pick one of the %1.StandardColors."
-#~ msgstr "Vælg en af %1."
-
-#~ msgid "The checkmarked topics will be updated"
-#~ msgstr "De afkrydsede sider vil blive opdateret"
-
-#~ msgid ""
-#~ "There has been a problem adding your user id to the Password system. "
-#~ "Please contact %1."
-#~ msgstr ""
-#~ "Der opstod et problem med at tilføje dit brugernavn til password-"
-#~ "systemet. Kontakt venligst %1."
-
-#, fuzzy
-#~ msgid "raw text format."
-#~ msgstr "i kildetekst-format"
-
-#, fuzzy
-#~ msgid "sidebyside"
-#~ msgstr "Side ved side"
-
-#~ msgid "Raw View"
-#~ msgstr "Kildetekst"
-
-#~ msgid ""
-#~ "Checked topics will be updated to point to the new attachment location."
-#~ msgstr ""
-#~ "Markerede sider vil blive opdateret til at pege på den vedhæftede fils "
-#~ "nye lokation"
-
-#~ msgid "Not recommended when deleting an attachment."
-#~ msgstr "Anbefales ikke når der slettes en vedhæftet fil."
