@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1166124327" format="1.0" version="$Rev$"}%
 %TOC%
 %STARTINCLUDE%
 ---# TWiki Plugins
@@ -242,7 +242,7 @@ You can create a Plugin "work area" using the =TWiki::Func::getWorkArea()= funct
 
 ---+++ Web Accessible Data
 
-__Topic-specific data__ such as generated images can be stored in the topics attachment area, which is web accessible. Use the =TWiki::Func::saveAttachment()= function to store the data.
+__Topic-specific data__ such as generated images can be stored in the topic's attachment area, which is web accessible. Use the =TWiki::Func::saveAttachment()= function to store the data.
 
 Recommendation for file name:
    * Prefix the filename with an underscore (the leading underscore avoids a nameclash with files attached to the same topic)
