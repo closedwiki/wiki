@@ -1,3 +1,4 @@
+# TWiki translation for Russian
 # This file is distributed under the same license as TWiki itself
 # Copyright (C) 2005 Peter Thoeny, peter@thoeny.com and TWiki Contributors.
 # Translators:
