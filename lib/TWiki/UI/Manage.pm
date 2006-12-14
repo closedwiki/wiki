@@ -267,11 +267,19 @@ sub rename {
 
     $newTopic =~ s/\s//go;
     $newTopic =~ s/$TWiki::cfg{NameFilter}//go;
+    $newTopic = ucfirst $newTopic;   # Item3270
 
     $attachment ||= '';
 
     TWiki::UI::checkWebExists( $session, $oldWeb, $oldTopic, 'rename' );
-    TWiki::UI::checkTopicExists( $session, $oldWeb, $oldTopic, 'rename');
+    # Item3270: Wrap topic existence into extra try/catch block to
+    #           check for the same name starting with a lower case letter.
+    try {
+        TWiki::UI::checkTopicExists( $session, $oldWeb, $oldTopic, 'rename');
+    } catch TWiki::OopsException with {
+        $oldTopic = lcfirst $oldTopic;
+        TWiki::UI::checkTopicExists( $session, $oldWeb, $oldTopic, 'rename');
+    };
 
     if( $newTopic && !TWiki::isValidWikiWord( $newTopic ) ) {
         unless( $doAllowNonWikiWord ) {

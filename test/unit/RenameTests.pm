@@ -312,4 +312,36 @@ THIS
     $this->check($oldweb, 'OtherTopic', undef, $expected, 6);
 }
 
+
+# Purpose:  Rename a topic which starts with a lowercase letter
+# Verifies:
+#    * Return status is a redirect
+#    * New script is view, not oops
+#    * New topic name is changed
+#    * In the new topic, the initial letter is changed to upper case
+sub test_rename_from_lowercase {
+    my $this       =  shift;
+    my $oldtopic   =  'lowercase';
+    my $newtopic   =  'upperCase';
+    my $meta       =  new TWiki::Meta($twiki, $oldweb, $oldtopic);
+    my $topictext  =  'Dummy';
+    $twiki->{store}->saveTopic( $twiki->{user}, $oldweb, $oldtopic,
+                                $topictext, $meta );
+    my $query = new CGI({
+                         action   => 'rename',
+                         topic    => $oldtopic,
+                         newweb   => $oldweb,
+                         newtopic => $newtopic,
+                        });
+
+    $query->path_info("/$oldweb" );
+    $twiki = new TWiki( "TestUser1", $query );
+    $TWiki::Plugins::SESSION = $twiki;
+    my ($text,$result)  =  $this->capture( \&TWiki::UI::Manage::rename, $twiki );
+    my $ext = $TWiki::cfg{ScriptSuffix};
+    $this->assert_matches(qr/^Status:\s+302/s,$text);
+    $this->assert_matches(qr(Location:\s+\S+?/view$ext/$oldweb/UpperCase)s,$text)
+}
+
+
 1;
