@@ -2,7 +2,7 @@
 # This file is distributed under the same license as TWiki itself
 # Copyright (C) 2005 Peter Thoeny, peter@thoeny.com and TWiki Contributors.
 # Translators:
-#   Ben Voui <intrigeri@boum.org>, 2005.
+#   TWiki:Main/BenVoui, 2005.
 msgid ""
 msgstr ""
 "Project-Id-Version: fr\n"

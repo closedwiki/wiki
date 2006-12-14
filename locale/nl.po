@@ -2,7 +2,7 @@
 # This file is distributed under the same license as TWiki itself
 # Copyright (C) 2005 Peter Thoeny, peter@thoeny.com and TWiki Contributors.
 # Translators:
-#   Arthur Clemens
+#   TWiki:Main/ArthurClemens, 2006
 msgid ""
 msgstr ""
 "Project-Id-Version: TWiki $Id\n"

@@ -2,7 +2,7 @@
 # This file is distributed under the same license as TWiki itself
 # Copyright (C) 2005 Peter Thoeny, peter@thoeny.com and TWiki Contributors.
 # Translators:
-# André Ulrich
+#   TWiki:Main/AndreUlrich
 # Oliver Krüger
 msgid ""
 msgstr ""
@@ -3669,7 +3669,7 @@ msgid ""
 "Some mail tools have an error that causes them to send the same request "
 "twice when you click on a link. It you did this, it is possible that you "
 "actually *have* registered successfully."
-
+msgstr ""
 "Manche Mail-Programme haben einen Fehler der bewirkt dass die gleiche Anfrage "
 "zweimal verschickt wird, wenn man auf einen Link klickt. Falls dies der Fall "
 "ist, könnte es sein, dass Sie bereits erfolgreich registriert wurden."

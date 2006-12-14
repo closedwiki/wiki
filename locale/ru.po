@@ -1,9 +1,9 @@
 # This file is distributed under the same license as TWiki itself
 # Copyright (C) 2005 Peter Thoeny, peter@thoeny.com and TWiki Contributors.
 # Translators:
-#   Sergej Znamenskij <svz@latex.pereslavl.ru>
-#   Andrey Tkachenko <falko-mail@inbox.ru>
-#   JSinx <jsinx@front.ru>
+#   TWiki:Main/SergejZnamenskij, 2006
+#   TWiki:Main/AndreyTkachenko, 2006
+#   TWiki:Main/SergeyJSinx, 2006
 msgid ""
 msgstr ""
 "Project-Id-Version: ru $Id\n"

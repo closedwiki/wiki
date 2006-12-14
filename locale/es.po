@@ -1,12 +1,10 @@
-# translation of es.po to
 # TWiki translation for Spanish
 # This file is distributed under the same license as TWiki itself
 # Copyright (C) 2005 Peter Thoeny, peter@thoeny.com and TWiki Contributors.
 # Translators:
-# Will Norris, 2005.
-# Miguel A. Bayona, mabayona@yahoo.com, 2006.
-# Will Norris, 2006.
-# Marco Antonio Gonzalez Parra, 2006
+#   TWiki:Main/MiguelABayona, 2006.
+#   TWiki:Main/WillNorris, 2005, 2006
+#   Marco Antonio Gonzalez Parra, 2006
 msgid ""
 msgstr ""
 "Project-Id-Version: es\n"

@@ -1,12 +1,9 @@
-# translation of it.po to 
-# translation of it402.po to
-# translation of it.po to
-# TWiki translation for <Language>
+# TWiki translation for Italian
 # This file is distributed under the same license as TWiki itself
 # Copyright (C) 2005 Peter Thoeny, peter@thoeny.com and TWiki Contributors.
 # Translators:
-#   <add-yourself-here>
-# m.mancini <mmancini@iol.it>, 2006.
+#   TWiki:Main/MassimoMancini, 2006.
+
 msgid ""
 msgstr ""
 "Project-Id-Version: it\n"

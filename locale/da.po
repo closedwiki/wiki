@@ -1,11 +1,8 @@
-# translation of da.po to Danish
 # TWiki translation for Danish
 # This file is distributed under the same license as TWiki itself
 # Copyright (C) 2005 Peter Thoeny, peter@thoeny.com and TWiki Contributors.
 # Translators:
-#
-#
-# Steffen Poulsen <N/A>, 2006.
+#   TWiki:Main/SteffenPoulsen, 2006.
 msgid ""
 msgstr ""
 "Project-Id-Version: da\n"

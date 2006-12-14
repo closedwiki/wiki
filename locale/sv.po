@@ -3,7 +3,7 @@
 # This file is distributed under the same license as TWiki itself
 # Copyright (C) 2005 Peter Thoeny, peter@thoeny.com and TWiki Contributors.
 # Translators:
-# Erik Åman <N/A>, 2006.
+#   TWiki:Main/ErikAman, 2006.
 msgid ""
 msgstr ""
 "Project-Id-Version: sv\n"
