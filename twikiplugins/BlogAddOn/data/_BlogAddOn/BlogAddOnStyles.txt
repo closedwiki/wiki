@@ -24,8 +24,8 @@
 	margin:0 .25em 0 0;
 }
 .blogPostViewOptionsFilter {
-	margin:0 0 0 .5em;
-	padding:0 1em;
+	margin:0 .5em;
+	padding:0 0 0 1em;
 	border-left:1px solid #ddd;
 }
 a.blogPostAddOnViewOptionsSubscribeLink:link,
