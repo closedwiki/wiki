@@ -1,12 +1,7 @@
 %TMPL:INCLUDE{"twiki"}%
 
-%TMPL:DEF{"head"}%
-<head>
- <title> %TOPIC% &lt; %WEB% &lt; <nop>%WIKITOOLNAME%</title>
- <meta http-equiv="Content-Type" content="text/html; charset=%CHARSET%" /> <meta name="robots" content="noindex" /> %HTTP_EQUIV_ON_VIEW%
- <base href="%SCRIPTURL{"view"}%/%WEB%/%TOPIC%" />
-</head>%TMPL:END%
-
+%TMPL:DEF{"form"}%%META{"form"}%%TMPL:END%
+%TMPL:DEF{"attachments"}%%META{"attachments"}%%TMPL:END%
 
 %TMPL:DEF{"main"}%
 <table width="100%" border="0" cellpadding="3" cellspacing="0">
@@ -19,10 +14,7 @@
 <p />%TMPL:P{"content"}%
 %TMPL:P{"standardfooter"}%%TMPL:END%
 
-%TMPL:DEF{"content"}%
-%TEXT%
-%META{"form"}%
-%META{"attachments"}%
+%TMPL:DEF{"topicinfo"}%%BR%
 <p />
 <table width="100%" border="0" cellpadding="3" cellspacing="0">
   <tr bgcolor="%WEBBGCOLOR%">
@@ -34,8 +26,14 @@
 %TMPL:P{"copyright"}%
 %TMPL:END%
 
+
+%TMPL:DEF{"content"}%%TEXT%
+#TopicEnd
+%TMPL:P{"form"}%%TMPL:P{"attachments"}%
+%TMPL:P{"topicinfo"}%%TMPL:END%
+
 %TMPL:P{"htmldoctype"}%
 %TMPL:P{"head"}%
 %TMPL:P{"bodystart"}%
 %TMPL:P{"main"}%
-%TMPL:P{"bodyend"}%
+%TMPL:P{"bodyend"}% 

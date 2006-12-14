@@ -48,6 +48,7 @@ templates/searchmeta.classic.tmpl  0440
 templates/settings.classic.tmpl  0440
 templates/twiki.classic.tmpl  0440
 templates/view.classic.tmpl  0440
+templates/viewprint.classic.tmpl  0440
 templates/view.plain.classic.tmpl  0440
 templates/view.print.classic.tmpl  0440
 templates/view.text.classic.tmpl 0440
