@@ -2,13 +2,10 @@
 # Sample debian/rules that uses debhelper.
 # GNU copyright 1997 to 1999 by Joey Hess.
 
-patches     = patches-applied
+#patches = patches-applied
 
 # Uncomment this to turn on verbose mode.
 #export DH_VERBOSE=1
-
-# This is the debhelper compatability version to use.
-export DH_COMPAT=4
 
 # not www-data.  remember to sync with postinst.
 TWIKI_OWNER=www-data
@@ -16,33 +13,20 @@ TWIKI_OWNER=www-data
 configure: configure-stamp
 configure-stamp:
 	dh_testdir
-# Add here commands to configure the package.
-
-
 	touch configure-stamp
 
 build: build-stamp
 
 build-stamp: configure-stamp 
 	dh_testdir
-
-# Add here commands to compile the package.
-#	$(MAKE)
-#/usr/bin/docbook-to-man debian/twiki.sgml > twiki.1
-
 	touch build-stamp
 
-clean:
+clean: 
 	dh_testdir
 	dh_testroot
-	test -f $(patches)      # maintainer sanity check
 	find . -name '*~' -print0 | xargs -0 rm -f
 	rm -f build-stamp configure-stamp
 	debconf-updatepo
-
-# Add here commands to clean up after the build process.
-#	-$(MAKE) clean
-
 	dh_clean
 
 install: build
@@ -51,9 +35,6 @@ install: build
 	dh_clean -k
 	dh_installdirs
 
-# Add here commands to install the package into debian/twiki.
-#	 $(MAKE) install DESTDIR=$(CURDIR)/debian/twiki
-# skips .htaccess.txt
 	cp -r bin/* debian/twiki/usr/lib/cgi-bin/twiki
 	cp -r debian/twiki/usr/lib/cgi-bin/twiki/LocalLib.cfg.txt debian/twiki/usr/lib/cgi-bin/twiki/LocalLib.cfg
 
@@ -180,22 +161,22 @@ binary-arch: build install
 	dh_builddeb
 
 # maintainer targets
-patch:
-	test ! -f $(patches) # already patched
-	ls debian/patches/* >$(patches)
-	cat `cat $(patches)` | patch -p0
-
-unpatch:
-	test -f $(patches) # not patched
-	cat `tac $(patches)` | patch -Rp0
-	rm -f $(patches)
-
-checkpo:
-	for i in po/*.po; do \
-		echo \"Checking: $$i\"; \
-		msgmerge -U $$i po/templates.pot; \
-		msgfmt -o /dev/null -c --statistics $$i; \
-	done
+#patch:
+#	test ! -f $(patches) # already patched
+#	ls debian/patches/* >$(patches)
+#	cat `cat $(patches)` | patch -p0
+#
+#unpatch:
+#	test -f $(patches) # not patched
+#	cat `tac $(patches)` | patch -Rp0
+#	rm -f $(patches)
+#
+#checkpo:
+#	for i in po/*.po; do \
+#		echo \"Checking: $$i\"; \
+#		msgmerge -U $$i po/templates.pot; \
+#		msgfmt -o /dev/null -c --statistics $$i; \
+#	done
 
 binary: binary-indep binary-arch
 .PHONY: build clean binary-indep binary-arch binary install configure patch unpatch

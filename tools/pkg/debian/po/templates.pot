@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: svenud@ozemail.com.au\n"
-"POT-Creation-Date: 2006-11-06 16:13+0100\n"
+"POT-Creation-Date: 2006-11-25 22:35+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -82,19 +82,13 @@ msgstr ""
 #. Type: note
 #. Description
 #: ../templates:4001
-msgid "User Registration configuration required"
+msgid "Admin User Registration configuration required"
 msgstr ""
 
 #. Type: note
 #. Description
 #: ../templates:4001
 msgid ""
-"The default debian installation of the TWiki is configured to create new "
-"users automatically when a user Registers. This is not as secure as the "
-"default TWiki but is more useful for trying TWiki out. To change it so the "
-"users are created manually by the administrator use TWiki RenameTopic to "
-"rename the TWikiRegistration to TWikiRegistrationPub, and "
-"TWikiRegistrationDefault to TWikiRegistration. IMPORTANT: After you have "
-"created yourself a user, edit the Main.TWikiAdminGroup to restrict Admin "
-"privileges"
+"After you have created yourself a user, edit the Main.TWikiAdminGroup to "
+"restrict Admin privileges to that user."
 msgstr ""

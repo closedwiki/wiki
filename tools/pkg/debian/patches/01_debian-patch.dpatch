@@ -1,0 +1,8 @@
+#! /bin/sh /usr/share/dpatch/dpatch-run
+## 01_debian-patch.dpatch by Amaya Rodrigo Sastre <amaya@debian.org>
+##
+## All lines beginning with `## DP:' are a description of the patch.
+## DP: New patch generated from twiki 4.0.5-2 diff.gz
+
+@DPATCH@
+
