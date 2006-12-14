@@ -1,3 +1,10 @@
+twiki (1:4.0.5-5) unstable; urgency=low
+
+  * fix prerm and postrm's
+    (Closes: #402817). 
+
+ -- Sven Dowideit <svenud@ozemail.com.au>  Thu,  14 Dec 2006 22:32:36 +0100
+
 twiki (1:4.0.5-4) unstable; urgency=low
 
   * Patch for debian/postinstall by Paul Szabo <psz@maths.usyd.edu.au>
