@@ -3,13 +3,14 @@
 # Copyright (C) 2005 Peter Thoeny, peter@thoeny.com and TWiki Contributors.
 # Translators:
 # André Ulrich
+# Oliver Krüger
 msgid ""
 msgstr ""
 "Project-Id-Version: TWiki $Id\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "PO-Revision-Date: 2006-08-18 17:22+0100\n"
-"Last-Translator: Oliver Krueger <oliver.krueger@kontextwork.de>\n"
+"Last-Translator: André Ulrich <andre.ulrich@kontextwork.de>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -74,9 +75,8 @@ msgid "%1 - view a short introductory presentation on TWiki for beginners"
 msgstr "%1 - eine kurze Einführungs-Präsentation für TWiki Anfänger ansehen"
 
 #: data/TWiki/WebChanges.txt:2
-#, fuzzy
 msgid "%1 Recent Changes in %2 Web"
-msgstr "Änderungen ansehen in:"
+msgstr "%1 aktuelle Änderungen im %2 Web"
 
 #: twikiplugins/NatSkin/templates/search.nat.tmpl:8
 #: twikiplugins/PatternSkin/data/Main/WebLeftBar.txt:4
@@ -242,7 +242,7 @@ msgstr "&WYSIWYG"
 
 #: templates/messages.tmpl:235
 msgid "'%1' is not a valid %2 "
-msgstr ""
+msgstr "'%1' ist kein gültiges %2 "
 
 #: twikiplugins/PatternSkin/templates/rdiff.pattern.tmpl:9
 msgid "(%1 vs. %2)"
@@ -571,6 +571,10 @@ msgid ""
 "href='%5' rel='nofollow'>500</a>, <a href='%6' rel='nofollow'>1000</a> "
 "topics, <a href='%7' rel='nofollow'>all changes</a>"
 msgstr ""
+"<a href='%1'>RSS Feed</a>, Aktuelle Änderungen mit <a href='%2'>50</a>, <a "
+"href='%3' rel='nofollow'>100</a>, <a href='%4' rel='nofollow'>200</a>, <a "
+"href='%5' rel='nofollow'>500</a>, <a href='%6' rel='nofollow'>1000</a> "
+"Topics, <a href='%7' rel='nofollow'>Alle Änderungen</a>"
 
 #: twikiplugins/PatternSkin/templates/renamewebbase.pattern.tmpl:25
 msgid ""
@@ -647,11 +651,10 @@ msgstr ""
 "Sie den Verweis."
 
 #: data/Sandbox/WebHome.txt:24
-#, fuzzy
 msgid "A more extensive changes list is available via [[%1][Recent Changes]]."
 msgstr ""
-"Eine ausführlichere Änderungsliste steht über den [[%1][Aktuelle "
-"Änderungen]] Verweis im Navigations Menu zur Verfügung."
+"Eine ausführlichere Änderungsliste steht über [[%1][Aktuelle "
+"Änderungen]] verfügbar."
 
 #: templates/messages.tmpl:423
 msgid ""
@@ -997,9 +1000,8 @@ msgid "Both body and title"
 msgstr "Beides, Text und Titel"
 
 #: twikiplugins/NatSkin/data/TWiki/NatSkinStyleBrowser.txt:51
-#, fuzzy
 msgid "Both sidebars"
-msgstr "%1s Seitenleiste"
+msgstr "Beide Seitenleisten"
 
 #: data/Trash/WebHome.txt:7
 msgid ""
@@ -1076,7 +1078,6 @@ msgid "Cancel and abandon changes"
 msgstr "Editieren abbrechen und Änderungen verwerfen"
 
 #: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:63
-#, fuzzy
 msgid "Cancel editing and discard changes"
 msgstr "Editieren abbrechen und Änderungen verwerfen"
 
@@ -1297,9 +1298,8 @@ msgid "Click to see details in separate window"
 msgstr "Anklicken, um Details in einem separaten Fenster anzusehen"
 
 #: twikiplugins/TwistyPlugin/data/TWiki/TwistyPlugin.txt:409
-#, fuzzy
 msgid "Close"
-msgstr "Formularinhalt löschen"
+msgstr "Schließen"
 
 #: templates/messages.tmpl:120
 #: twikiplugins/NatSkin/templates/messages.nat.tmpl:96
@@ -1391,9 +1391,8 @@ msgid "Country:"
 msgstr "Land:"
 
 #: data/TWiki/WebTopicViewTemplate.txt:19
-#, fuzzy
 msgid "Create '%1'"
-msgstr "A&nlegen"
+msgstr "'%1' A&nlegen"
 
 #: data/Sandbox/WebHome.txt:17
 msgid "Create <nop>TestTopic###"
@@ -1418,9 +1417,8 @@ msgid "Create Web Access Denied"
 msgstr "Das Anlegen von Webs wurde verweigert"
 
 #: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:75
-#, fuzzy
 msgid "Create a link to the attached file"
-msgstr "Verweis auf die angehängte Datei erzeugen."
+msgstr "Verweis auf die angehängte Datei erzeugen"
 
 #: twikiplugins/NatSkin/templates/attach.nat.tmpl:35
 msgid "Create a link to the attached file at the end of the topic."
@@ -1501,9 +1499,8 @@ msgid "Debug"
 msgstr "Fehler beheben"
 
 #: data/TWiki/WebTopicCreator.txt:127
-#, fuzzy
 msgid "Default template"
-msgstr "Template konnte nicht gefunden werden"
+msgstr "Standard Template"
 
 #: twikiplugins/NatSkin/templates/renamewebdelete.nat.tmpl:4
 #: twikiplugins/PatternSkin/templates/attachagain.pattern.tmpl:35
@@ -1551,7 +1548,7 @@ msgstr ""
 
 #: data/TWiki/WebTopicViewTemplate.txt:7
 msgid "Did you spell the %1 correctly?"
-msgstr ""
+msgstr "Haben Sie %1 richtig geschrieben?"
 
 #: twikiplugins/NatSkin/templates/oopsauth.nat.tmpl:12
 msgid ""
@@ -1582,13 +1579,12 @@ msgid "Do show:"
 msgstr "Anzeigen:"
 
 #: data/TWiki/WebTopicViewTemplate.txt:18
-#, fuzzy
 msgid "Do you wish to create the topic %1?"
-msgstr "Wenn Sie das Topic anlegen wollen"
+msgstr "Wollen Sie das Topic %1 anlegen?"
 
 #: data/TWiki/WebTopicViewTemplate.txt:10
 msgid "Do you wish to navigate quickly to a similar topic?"
-msgstr ""
+msgstr "Wollen Sie auf ein ähnliches Topic gelangen?"
 
 #: twikiplugins/NatSkin/data/TWiki/MySideBarTemplate.txt:16
 msgid "Documentation"
@@ -1745,7 +1741,7 @@ msgstr "Topic Einstellungen editieren"
 msgid ""
 "Either the code is not valid, or you have already confirmed your "
 "registration using it."
-msgstr ""
+msgstr "Entweder Ihr Code ist nicht gültig oder Sie haben Ihre Registrierung bereits bestätigt."
 
 #: templates/messages.tmpl:335
 msgid ""
@@ -1794,9 +1790,8 @@ msgid "Error message"
 msgstr "Fehler Meldung"
 
 #: templates/messages.tmpl:206
-#, fuzzy
 msgid "Error registering new user"
-msgstr "Fehler beim Registrieren von Benutzer %1"
+msgstr "Fehler beim Registrieren des neuen Benutzers"
 
 #: templates/messages.tmpl:197
 #: twikiplugins/NatSkin/templates/messages.nat.tmpl:141
@@ -2071,9 +2066,8 @@ msgstr "Gruppen"
 
 #: twikiplugins/ClassicSkin/data/TWiki/ClassicSkinLogin.txt:2
 #: twikiplugins/PatternSkin/data/TWiki/WebLeftBarLogin.txt:3
-#, fuzzy
 msgid "Hello %1!"
-msgstr "Hallo %1"
+msgstr "Hallo %1!"
 
 #: data/TWiki/WebSearch.txt:29 data/TWiki/WebSearchAdvanced.txt:37
 #: twikiplugins/NatSkin/templates/attachsidebar.nat.tmpl:3
@@ -2332,7 +2326,7 @@ msgstr "Index"
 
 #: templates/messages.tmpl:208
 msgid "Internal error when sending email to %1."
-msgstr ""
+msgstr "Interner Fehler beim Versenden der E-Mail an %1."
 
 #: twikiplugins/NatSkin/templates/edittoolbar.natedit.tmpl:31
 msgid "Internal link"
@@ -2342,7 +2336,7 @@ msgstr "Interner Verweis"
 msgid ""
 "International (8-bit) characters are removed (replaced by US-ASCII "
 "equivalents for Latin-1)"
-msgstr ""
+msgstr "Internationale (8-bit) Zeichen wurden entfernt (ersetzt durch entsprechende US-ASCII Zeichen für Latin-1)"
 
 #: templates/messages.tmpl:267
 #: twikiplugins/NatSkin/templates/messages.nat.tmpl:194
@@ -2472,9 +2466,8 @@ msgid "List all topics in the %1 web in alphabetical order"
 msgstr "Auflistung aller Topics in dem %1 Web in alphabetischer Reihenfolge"
 
 #: data/TWiki/WebTopicViewTemplate.txt:13
-#, fuzzy
 msgid "List more similar topic in this web"
-msgstr "Ähnliche Topics in diesem Web:"
+msgstr "Weitere Topics, die ähnlich sind, in diesem Web anzeigen"
 
 #: data/TWiki/WebSearch.txt:50 data/TWiki/WebSearchAdvanced.txt:93
 msgid "List topics that start with the letter:"
@@ -2598,9 +2591,8 @@ msgid "More topic actions..."
 msgstr "Mehr Topic Aktionen"
 
 #: twikiplugins/TwistyPlugin/data/TWiki/TwistyPlugin.txt:407
-#, fuzzy
 msgid "More..."
-msgstr "mehr..."
+msgstr "Mehr..."
 
 #: twikiplugins/NatSkin/templates/strings.nat.tmpl:12
 #: twikiplugins/PatternSkin/templates/attachagain.pattern.tmpl:35
@@ -2776,9 +2768,8 @@ msgstr ""
 "Web angereichert"
 
 #: data/TWiki/WebTopicViewTemplate.txt:2
-#, fuzzy
 msgid "Note: This topic does not exist"
-msgstr "HINWEIS: Dieses Wiki Topic existiert nicht"
+msgstr "Hinweis: Dieses Topic existiert nicht"
 
 #: twikiplugins/NatSkin/templates/attachsidebar.nat.tmpl:10
 #: twikiplugins/NatSkin/templates/changeformsidebar.nat.tmpl:8
@@ -2923,14 +2914,12 @@ msgstr ""
 "bekommen."
 
 #: twikiplugins/NatSkin/templates/edit.nat.tmpl:42
-#, fuzzy
 msgid "Parent"
-msgstr "Drucken"
+msgstr "Ober-Topic"
 
 #: twikiplugins/NatSkin/data/TWiki/TWikiWebSideBar.txt:26
-#, fuzzy
 msgid "Parrent web"
-msgstr "Neues Ober-Web:"
+msgstr "Ober-Web"
 
 #: data/TWiki/ChangeEmailAddress.txt:24
 #: twikiplugins/NatSkin/data/Main/WebLinks.txt:12
@@ -3037,7 +3026,6 @@ msgstr ""
 "Bitte gehen Sie mit Ihrem Browser zurück und überprüfen Sie es noch einmal."
 
 #: templates/messages.tmpl:88
-#, fuzzy
 msgid ""
 "Please go back in your browser and choose a topic name that is a %1.WikiWord "
 "or check the allow non-Wiki Word box"
@@ -3232,7 +3220,7 @@ msgstr "Registrierung"
 
 #: templates/messages.tmpl:270
 msgid "Registration codes can only be used once."
-msgstr ""
+msgstr "Der Registrierungs Code kann nur einmal verwendet werden."
 
 #: data/TWiki/WebSearchAdvanced.txt:64
 msgid "Regular expression search"
@@ -3264,7 +3252,7 @@ msgstr "Sie kennen Ihr Passwort?"
 
 #: data/TWiki/WebTopicViewTemplate.txt:7
 msgid "Remember, a %1 is case sensitive."
-msgstr ""
+msgstr "Beachten Sie die Groß- und Kleinschreibung von %1."
 
 #: templates/messages.tmpl:51
 msgid "Remove the user from the group(s) %1 first."
@@ -3392,7 +3380,7 @@ msgstr ""
 #: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:71
 msgid "S = Save, Q = Quiet save, K = Checkpoint, P = Preview, C = Cancel"
 msgstr ""
-"S = Speichern, Q = Stilles Speichern, K = Zwischenspeichern, C = Abbrechen"
+"S = Speichern, Q = Stilles Speichern, K = Zwischenspeichern, P = Vorschau, C = Abbrechen"
 
 #: twikiplugins/NatSkin/templates/edit.nat.tmpl:77
 #: twikiplugins/NatSkin/templates/edittopicactions.nat.tmpl:5
@@ -3466,7 +3454,6 @@ msgid "Search in all public webs"
 msgstr "In allen öffentlichen Webs suchen"
 
 #: data/TWiki/WebTopicViewTemplate.txt:15
-#, fuzzy
 msgid "Search similar topics in all public webs"
 msgstr "Nach ähnlichen Topics in allen öffentlichen Webs suchen"
 
@@ -3682,7 +3669,10 @@ msgid ""
 "Some mail tools have an error that causes them to send the same request "
 "twice when you click on a link. It you did this, it is possible that you "
 "actually *have* registered successfully."
-msgstr ""
+
+"Manche Mail-Programme haben einen Fehler der bewirkt dass die gleiche Anfrage "
+"zweimal verschickt wird, wenn man auf einen Link klickt. Falls dies der Fall "
+"ist, könnte es sein, dass Sie bereits erfolgreich registriert wurden."
 
 #: templates/registernotify.tmpl:14
 #: twikiplugins/ClassicSkin/templates/registernotify.classic.tmpl:14
@@ -3893,7 +3883,7 @@ msgstr ""
 
 #: templates/messages.tmpl:236
 msgid "The %1 field must match the {LoginNameFilterIn} filter for this site"
-msgstr ""
+msgstr "Das %1 Feld muss mit dem {LoginNameFilterIn} Filter dieser Seite übereinstimmen"
 
 #: templates/messages.tmpl:68
 #: twikiplugins/NatSkin/templates/messages.nat.tmpl:30
@@ -4072,9 +4062,8 @@ msgstr ""
 "ausgefüllt."
 
 #: data/TWiki/WebTopicViewTemplate.txt:5
-#, fuzzy
 msgid "The topic %1 you are trying to access does not exist, yet."
-msgstr "Sie versuchen ein Topic zu %1, das nicht existiert."
+msgstr "Das Topic %1, auf welches Sie zugreifen wollen, existiert noch nicht."
 
 #: templates/messages.tmpl:302
 msgid "The topic is in an old format"
@@ -4586,9 +4575,8 @@ msgid "Use proportional spaced font"
 msgstr "Proportionale Schrift verwenden"
 
 #: data/TWiki/WebTopicCreator.txt:125
-#, fuzzy
 msgid "Use template:"
-msgstr "Mögliche Formularvorlagen"
+msgstr "Vorlagen benutzen:"
 
 #: templates/messages.tmpl:10
 #: twikiplugins/NatSkin/templates/messages.nat.tmpl:4
@@ -4636,9 +4624,8 @@ msgid "Version"
 msgstr "Version"
 
 #: twikiplugins/PatternSkin/templates/attachagain.pattern.tmpl:11
-#, fuzzy
 msgid "Version history"
-msgstr "Versions-Historie von %1"
+msgstr "Versions-Historie"
 
 #: twikiplugins/PatternSkin/templates/attachagain.pattern.tmpl:9
 msgid "Version history of %1"
@@ -4704,9 +4691,8 @@ msgid "View revision"
 msgstr "Revision ansehen"
 
 #: data/TWiki/WebTopicCreator.txt:127
-#, fuzzy
 msgid "View templates"
-msgstr "Mögliche Formularvorlagen"
+msgstr "Vorlagen anzeigen"
 
 #: templates/oopsleaseconflict.tmpl:30
 #: twikiplugins/ClassicSkin/templates/oopsleaseconflict.classic.tmpl:15
@@ -4745,9 +4731,8 @@ msgstr ""
 "inkludiert. %2"
 
 #: templates/messages.tmpl:417
-#, fuzzy
 msgid "Warning: Can't find topic %1.%2"
-msgstr "Warnung: Konnte Topic %1 nicht finden"
+msgstr "Warnung: Konnte Topic %1.%2 nicht finden"
 
 #: lib/TWiki/UI/Register.pm:828
 msgid "Warning: Could not send confirmation email"
@@ -4973,9 +4958,8 @@ msgstr ""
 "registriert."
 
 #: templates/messages.tmpl:203 templates/messages.tmpl:212
-#, fuzzy
 msgid "You have *not* been registered."
-msgstr "Sie sind nicht registriert"
+msgstr "Sie wurden *nicht* registriert."
 
 #: templates/messages.tmpl:330
 msgid ""
@@ -5160,9 +5144,8 @@ msgid "about regular expression search"
 msgstr "Infos über Suchen mit regulären Ausdrücken"
 
 #: lib/TWiki/Access.pm:207
-#, fuzzy
 msgid "access denied on root"
-msgstr "Zugriff auf das Topic nicht gestattet"
+msgstr "Zugriff auf root verweigert"
 
 #: lib/TWiki/Access.pm:156
 msgid "access denied on topic"
@@ -5173,9 +5156,8 @@ msgid "access denied on web"
 msgstr "Zugriff zum Web nicht gestattet"
 
 #: lib/TWiki/Access.pm:216
-#, fuzzy
 msgid "access not allowed on root"
-msgstr "Zugriff auf das Topic nicht gestattet"
+msgstr "Zugriff auf root nicht gestattet"
 
 #: lib/TWiki/Access.pm:173
 msgid "access not allowed on topic"
@@ -5423,67 +5405,59 @@ msgid "the %1 to start working on the new web,"
 msgstr "zum %1, um im neuen Web anzufangen zu arbeiten,"
 
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:22
-#, fuzzy
 msgid "title='Attach an image or document to this topic' accesskey='a'>&Attach"
-msgstr "Ein Bild oder Dokument an dieses Topic anhängen"
+msgstr "title='Ein Bild oder Dokument an dieses Topic anhängen' accesskey='a'>&Anhang"
 
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:7
-#, fuzzy
 msgid "title='Create new topic' accesskey='c'>&Create"
-msgstr "value='Abbrechen' accesskey='c'"
+msgstr "title='Neues Topic anlegen' accesskey='c'>Anlegen (&c)"
 
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:25
-#, fuzzy
 msgid ""
 "title='Delete or rename this topic; set parent topic; view and compare "
 "revisions' accesskey='m'>&More topic actions"
 msgstr ""
-"Topic löschen oder umbenennen; Ober-Topic setzen; Revisionen anzeigen und "
-"vergleichen"
+"title='Topic löschen oder umbenennen; Ober-Topic setzen; Revisionen anzeigen und "
+"vergleichen' accesskey='m'>&Mehr Topic Aktionen"
 
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:10
 msgid "title='Edit this topic text' accesskey='e'>&Edit"
-msgstr ""
+msgstr "title='Topic Text editieren' accesskey='e'>&Editieren"
 
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:13
 msgid "title='Edit this topic text' accesskey='w'>&WYSIWYG"
-msgstr ""
+msgstr "title='Topic Text editieren' accesskey='w'>&WYSIWYG"
 
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:16
 msgid "title='Edit this topic text' accesskey='w'>Create (&WYSIWYG)"
-msgstr ""
+msgstr "title='Topic Text editieren' accesskey='w'>Anlegen (&WYSIWYG)"
 
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:28
-#, fuzzy
 msgid "title='Printable version of this topic' accesskey='p'>&Printable"
-msgstr "Druckversion von diesem Topic"
+msgstr "title='Druckversion von diesem Topic' accesskey='p'>Druckversion (&p)"
 
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:33
-#, fuzzy
 msgid ""
 "title='Search all webs for topics that link to here' accesskey='l'>A&ll Webs"
-msgstr "Alle Webs nach Topics durchsuchen, die hierher verweisen"
+msgstr "title='Alle Webs nach Topics durchsuchen, die hierher verweisen' accesskey='l'>A&lle Webs"
 
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:31
-#, fuzzy
 msgid ""
 "title='Search the %1 Web for topics that link to here' accesskey='b'>We&b"
-msgstr "Das %1 Web nach Topics durchsuchen, die hierher verweisen"
+msgstr "title='Das %1 Web nach Topics durchsuchen, die hierher verweisen' accesskey='b'>We&b"
 
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:41
-#, fuzzy
 msgid "title='View raw text without formatting' accesskey='r'>&Raw View"
-msgstr "Quelltext ohne Formatierung ansehen"
+msgstr "title='Quelltext ohne Formatierung ansehen' accesskey='r'>Quelltext (&r)"
 
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:19
 msgid "title='View topic' accesskey='v'>&View topic"
-msgstr ""
+msgstr "title='Topic anzeigen' accesskey='v'>Topic anzeigen (&v)"
 
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:36
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:38
-#, fuzzy
 msgid "title='View total topic history' accesskey='h'>&History"
-msgstr "Topic Historie ansehen"
+msgstr "title='Topic Historie ansehen' accesskey='h'>&Historie"
 
 #: twikiplugins/PatternSkin/templates/oopsleaseconflict.pattern.tmpl:27
 msgid "to edit the topic anyway."
