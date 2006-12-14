@@ -39,8 +39,9 @@ When installed, see !_BlogAddOn.BlogAddOnHome for additional details.
 | Dependencies: |
 %DEPENDENCIES%
 | |!BlogAddOn is based on TWiki 4.1 with !PatternSkin. |
-| 14 Dec 2006 | 1.0.1 Option to set defaults when including !BlogPost  |
-| 12 Dec 2006 | 1.0 First release  |
+| 15 Dec 2006 | Arthur Clemens: 1.0.2 RSS feed link to category filter, fixes to sorting/filtering.  |
+| 14 Dec 2006 | Arthur Clemens: 1.0.1 Option to set defaults when including !BlogPost.  |
+| 12 Dec 2006 | Arthur Clemens: 1.0 First release.  |
 | Demo url:  | http://twiki4.visiblearea.com/twiki4/MAIN/bin/view/_BlogAddOn/BlogPost  |
 | Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 | Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
