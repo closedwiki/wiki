@@ -27,6 +27,24 @@ sub extract {
   return @result;
 }
 
+sub list_translators {
+  for my $file (<locale/*.po>) {
+    open(PO, $file);
+    my $line;
+    while($line = <PO>, $line =~ /^#/) {
+      if ($line =~ m/^#\s*TWiki\s*translation\s*for\s*(.*)$/) {
+        print $1, ":\n";
+      }
+      if ($line =~ m/^#\s*(TWiki:Main\/\w*),/) {
+        my $topic = $1;
+        $topic =~ s#TWiki:#http://twiki.org/cgi-bin/view/#;
+        print "  $topic\n";
+      }
+    }
+    close(PO);
+  }
+}
+
 my $raw = undef;
 my $upload = undef;
 
@@ -40,6 +58,10 @@ if ($ARGV[0] eq '--help') {
     if ($ARGV[0] eq '--upload') {
       $upload = 1;
     } else {
+      if ($ARGV[0] eq '--translators') {
+        list_translators();
+        exit 0;
+      }
       if ($ARGV[0]) {
         print $use;
         exit 1;
