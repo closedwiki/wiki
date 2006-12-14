@@ -1,22 +1,29 @@
 %META:TOPICINFO{author="TWikiContributor" date="1165851072" format="1.1" version="1.1"}%
 %TMPL:INCLUDE{"view"}%
 
-%TMPL:DEF{"textcontent"}%<div class="patternTopic">%BROADCASTMESSAGE%
+
+
+%TMPL:DEF{"postinfo"}%%TMPL:P{context="TimeSincePluginEnabled" then="exactdate" else="exactdate"}%%TMPL:END%
+
+%TMPL:DEF{"exactdate"}%%MAKETEXT{"[_1] by [_2] in [_3]" args="%REVINFO{rev="1" format="$date - $time"}%, %FORMFIELD{"Author"}%, [[%SCRIPTURL{view}%/%BASEWEB%/BlogPost?category=%FORMFIELD{"Category"}%][%FORMFIELD{"Category"}%]]"}%%TMPL:END%
+
+%TMPL:DEF{"timesincedate"}%%MAKETEXT{"[_1] ago by [_2] in [_3]" args="%TIMESINCE{units="3" format="%REVINFO{rev="1" format="$iso"}%" null="%MAKETEXT{"Just posted"}%" }%, %FORMFIELD{"Author"}%, [[%SCRIPTURL{view}%/%BASEWEB%/BlogPost?category=%FORMFIELD{"Category"}%][%FORMFIELD{"Category"}%]]"}%%TMPL:END%
+
+
+
+%TMPL:DEF{"textcontent"}%%INCLUDE{"BlogAddOnStyles"}%
+<div class="patternTopic">%BROADCASTMESSAGE%
 <h1 class="blogAddOnTitle"> %FORMFIELD{"Title"}% </h1>
-<div class="twikiGrayText twikiSmallish blogPostAddOnHeaderInfo">%MAKETEXT{"[_1] by [_2] in [_3]" args="%REVINFO{rev="1" format="$date - $time"}%, %FORMFIELD{"Author"}%, [[%SCRIPTURL{view}%/%BASEWEB%/BlogPost?category=%FORMFIELD{"Category"}%][%FORMFIELD{"Category"}%]]"}%</div>
+<div class="twikiGrayText twikiSmallish blogPostAddOnHeaderInfo">%TMPL:P{"postinfo"}%</div>
 
-%TEXT%</div>
-%INCLUDE{"BlogAddOn" section="style"}%
-%TMPL:END%
+%TEXT%
 
-
-%TMPL:DEF{"aftertextcontents"}%
 ---++ %MAKETEXT{"Comments"}%
 %INCLUDE{"%TOPIC%Comments" warn="off"}%
 
            
-%COMMENT{type="target" target="%TOPIC%Comments" button="%MAKETEXT{"Add comment"}%"}%     
-%TMPL:END%
+%COMMENT{type="target" target="%TOPIC%Comments" button="%MAKETEXT{"Add comment"}%"}%</div>%TMPL:END%
+
 
 
 %TMPL:DEF{"form"}%%TMPL:END%
