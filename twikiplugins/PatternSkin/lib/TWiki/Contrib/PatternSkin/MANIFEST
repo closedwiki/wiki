@@ -124,7 +124,7 @@ templates/settings.pattern.tmpl 0440
 templates/styles.pattern.tmpl 0440
 templates/stylesdynamic.pattern.tmpl 0440
 templates/view.pattern.tmpl 0440
-templates/view.printpattern.tmpl 0440
+templates/viewprint.pattern.tmpl 0440
 templates/viewbottombar.pattern.tmpl 0440
 templates/viewleftbar.pattern.tmpl 0440
 templates/viewnoleftbar.pattern.tmpl 0440
