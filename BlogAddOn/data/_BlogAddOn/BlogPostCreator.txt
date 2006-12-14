@@ -22,11 +22,11 @@ function capitalizeSentence (inText) {
 <input type="text" class="twikiInputField" name="Title" id="Title" size="40" />
 </div>
 <div class="twikiFormStep">
-%MAKETEXT{"*Category:* (you may choose later)"}% <span class="twikiSmallish">[[BlogCategory][%MAKETEXT{"Add category..."}%]]</span> %BR%
+%MAKETEXT{"*Category:* (you may choose later)"}% %BR%
 <select name="Category">
 <option>%MAKETEXT{"Select..."}%</option>
 %SEARCH{"   *\s*.*?" topic="BlogCategory" type="regex" multiple="on" casesensitive="on" nonoise="on" format="<option>$pattern(.*   \*\s*([^\n]*).*)</option>"}%
-</select>
+</select> <span class="twikiSmallish">[[BlogCategory][%MAKETEXT{"Add categories..."}%]]</span>
 </div>
 <div class="twikiFormStep twikiLast">
 <input type="hidden" name="topic" id="topic" size="40" />

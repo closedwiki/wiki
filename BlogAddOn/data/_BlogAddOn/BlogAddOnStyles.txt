@@ -1,25 +1,7 @@
-%META:TOPICINFO{author="TWikiContributor" date="1165927211" format="1.1" reprev="1.1" version="1.1"}%
----+!! Blog !AddOn
+%META:TOPICINFO{author="TWikiContributor" date="1165927036" format="1.1" reprev="1.1" version="1.1"}%
+---+!! !BlogAddOn CSS styles
 
-*A simple weblog application.*
-
----++ Where to start
-
-   * BlogPost - overview of all posts with filtering and sorting options
-   * BlogPostCreator - form to start new posts
-   * BlogCategory - list of blog categories
-   
----++ Files for administrators
-
-   * BlogPostForm - form definition with post data fields
-   * BlogPostTemplate - every new post gets settings from this topic
-   * BlogPostViewTemplate - every post is displayed through this view template
-
----++ Custom styles
-
-Edit this section to change the style sheets (see source).
-
-%STARTSECTION{name="style"}%
+%STARTINCLUDE%
 <style type="text/css" media="all">
 /* sort and filter options */
 .blogPostAddOnViewOptions {
@@ -41,8 +23,16 @@ Edit this section to change the style sheets (see source).
 	font-size:.86em; /* use em instead of % for consistent size */
 	margin:0 .25em 0 0;
 }
-.blogPostCategoryFilterOption {
-	margin:0 0 0 1em;
+.blogPostViewOptionsFilter {
+	margin:0 0 0 .5em;
+	padding:0 1em;
+	border-left:1px solid #ddd;
+}
+a.blogPostAddOnViewOptionsSubscribeLink:link,
+a.blogPostAddOnViewOptionsSubscribeLink:visited {
+	text-decoration:none;
+	font-weight:normal;
+	font-size:94%;
 }
 .blogPostAddOnViewOptionsDivider {
 	padding:0 0 .5em 0;
@@ -78,5 +68,4 @@ h1.blogAddOnTitle {
 	margin:0 0 1em 0;
 }
 </style>
-%ENDSECTION{name="style"}%
-
+%STOPINCLUDE%

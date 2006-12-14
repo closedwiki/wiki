@@ -1,9 +1,24 @@
 %META:TOPICINFO{author="TWikiContributor" date="1165927211" format="1.1" reprev="1.1" version="1.1"}%
 ---+!! Blog !AddOn
 
-*A simple weblog application.*
+*A simple weblog application that:*
+   * Integrates blog posts with TWiki topics
+      * Writing a post is like writing a topic
+      * A blog author is just any TWiki user
+      * Attachments work the usual way
+      * Topics can be searched using default WebSearch and scripted =SEARCH=
+   * Relies just on one plugin (!CommentPlugin)
+   * Integrates with other plugins - for example, TWiki:Plugins/TagMePlugin can be used to tag posts
+   * Uses (editable) categories to group posts - or to define blogs with separate 'owners'
+   * Provides a handy interface with sorting and filtering options that can be INCLUDEd in any topic in the same Web
 
-If installed, see !_BlogAddOn.BlogAddOn for an overview.
+What's not provided:
+   * A calendar display of posts
+   * The comment count
+   * Paging controls to navigate lists of postings
+   * The ability to close or hide comments
+
+When installed, see !_BlogAddOn.BlogAddOnHome for additional details.
 
 ---++ Settings
 
@@ -14,21 +29,19 @@ If installed, see !_BlogAddOn.BlogAddOn for an overview.
 	* Download the ZIP file from the Plugin web (see below)
 	* Unzip ==%TOPIC%.zip== in your ($TWIKI_ROOT) directory.
 	* Copy the files from =/data/_BlogAddOn= to the web you want to blog in
-	* !BlogAddOn is based on TWiki 4.1.
-	<table border="1"><tr><th>Name</th><th>Version</th><th>Description</th></tr><tr><td align="left">TWiki::Plugins::CommentPlugin</td><td align="left">&gt;=1.000</td><td align="left">Required</td></tr></table>
+	* !BlogAddOn is based on TWiki 4.1 with !PatternSkin.
 
 ---++ !AddOn Info
 
 | Authors: | TWiki:Main.ArthurClemens |
 | Copyright &copy;: | 2006 Arthur Clemens |
 | License: | [[http://www.gnu.org/copyleft/gpl.html][GPL]] |
-| Dependencies: | <table border="1"><tr><th>Name</th><th>Version</th><th>Description</th></tr><tr><td align="left">TWiki::Plugins::CommentPlugin</td><td align="left">&gt;=1.000</td><td align="left">Required</td></tr></table> |
-| |!BlogAddOn is based on TWiki 4.1. |
+| Dependencies: |
+%DEPENDENCIES%
+| |!BlogAddOn is based on TWiki 4.1 with !PatternSkin. |
+| 14 Dec 2006 | 1.0.1 Option to set defaults when including !BlogPost  |
 | 12 Dec 2006 | 1.0 First release  |
 | Demo url:  | http://twiki4.visiblearea.com/twiki4/MAIN/bin/view/_BlogAddOn/BlogPost  |
 | Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 | Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 | Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
-
-
-
