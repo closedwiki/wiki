@@ -67,7 +67,7 @@ sub prompt {
     }
 
     my $idx = 0;
-    $_[1] =~ s/%COMMENT({.*?})?%/&_handleInput($1,$_[2],$_[3],\$idx,$message,$disable,$defaultType)/ego;
+    $_[1] =~ s/%COMMENT({.*?})?%/_handleInput($1,$_[2],$_[3],\$idx,$message,$disable,$defaultType)/eg;
 }
 
 # PRIVATE generate an input form for a %COMMENT tag
@@ -75,8 +75,8 @@ sub _handleInput {
     my ( $attributes, $web, $topic, $pidx, $message,
          $disable, $defaultType ) = @_;
 
-    $attributes =~ s/^{(.*)}$/$1/o if ( $attributes );
-    
+    $attributes =~ s/^{(.*)}$/$1/ if ( $attributes );
+
     my $attrs = new TWiki::Attrs( $attributes, 1 );
     my $type =
       $attrs->remove( 'type' ) || $attrs->remove( 'mode' ) || $defaultType;
@@ -86,10 +86,11 @@ sub _handleInput {
     my $nopost = $attrs->remove( 'nopost' );
     my $default = $attrs->remove( 'default' );
     $message ||= $default || '';
+    $message ||= $default || '';
 	$disable ||= '';
 
     # clean off whitespace
-    $type =~ m/(\S*)/o;
+    $type =~ m/(\S*)/;
     $type = $1;
 
     # Expand the template in the context of the web where the comment
@@ -99,7 +100,7 @@ sub _handleInput {
     return $input if $input =~ m/^%RED%/so;
 
     # Expand special attributes as required
-    $input =~ s/%([a-z]\w+)\|(.*?)%/&_expandPromptParams($1, $2, $attrs)/iego;
+    $input =~ s/%([a-z]\w+)\|(.*?)%/_expandPromptParams($1, $2, $attrs)/ieg;
 
     # see if this comment is targeted at a different topic, and
     # change the url if it is.
@@ -107,10 +108,10 @@ sub _handleInput {
     my $target = $attrs->remove( 'target' );
     if ( $target ) {
         # extract web and anchor
-        if ( $target =~ s/^(\w+)\.//o ) {
+        if ( $target =~ s/^(\w+)\.// ) {
             $web = $1;
         }
-        if ( $target =~ s/(#\w+)$//o ) {
+        if ( $target =~ s/(#\w+)$// ) {
             $anchor = $1;
         }
         if ( $target ne '' ) {
@@ -124,9 +125,8 @@ sub _handleInput {
     }
 
     my $noform = $attrs->remove('noform') || '';
-
-    if ( $input !~ m/^%RED%/o ) {
-        $input =~ s/%DISABLED%/$disable/go;
+    if ( $input !~ m/^%RED%/ ) {
+        $input =~ s/%DISABLED%/$disable/g;
         $input =~ s/%MESSAGE%/$message/g;
         my $n = $$pidx + 0;
 
@@ -201,22 +201,23 @@ sub _buildNewTopic {
     my $query = TWiki::Func::getCgiQuery();
     return unless $query;
 
-    my $type = $query->param( 'comment_type' );
-    my $index = $query->param( 'comment_index' );
+    my $type = $query->param( 'comment_type' ) ||
+      TWiki::Func::getPreferencesValue('COMMENTPLUGIN_DEFAULT_TYPE') ||
+          'below';
+    my $index = $query->param( 'comment_index' ) || 0;
     my $anchor = $query->param( 'comment_anchor' );
     my $location = $query->param( 'comment_location' );
-    my $silent = $query->param( 'comment_nonotify' );
     my $remove = $query->param( 'comment_remove' );
     my $nopost = $query->param( 'comment_nopost' );
 
     my $output = _getTemplate( "OUTPUT:$type", $topic, $web );
-    if ( $output =~ m/^%RED%/o ) {
+    if ( $output =~ m/^%RED%/ ) {
         die $output;
     }
 
     # Expand the template
     my $position = 'AFTER';
-    if( $output =~ s/%POS:(.*?)%//go ) {
+    if( $output =~ s/%POS:(.*?)%//g ) {
         $position = $1;
     }
 
