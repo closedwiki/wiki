@@ -1,6 +1,7 @@
 %META:TOPICINFO{author="TWikiContributor" date="1165927036" format="1.1" reprev="1.1" version="1.1"}%
 ---+!! !BlogAddOn CSS styles
 
+<verbatim>
 %STARTINCLUDE%
 <style type="text/css" media="all">
 /* sort and filter options */
@@ -69,3 +70,4 @@ h1.blogAddOnTitle {
 }
 </style>
 %STOPINCLUDE%
+</verbatim>
