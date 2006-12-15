@@ -22,7 +22,7 @@
 %INCLUDE{"%TOPIC%Comments" warn="off"}%
 
            
-%COMMENT{type="target" target="%TOPIC%Comments" button="%MAKETEXT{"Add comment"}%"}%</div>%TMPL:END%
+%COMMENT{type="return" target="%TOPIC%Comments" button="%MAKETEXT{"Add comment"}%"}%</div>%TMPL:END%
 
 
 
