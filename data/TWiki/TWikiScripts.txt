@@ -241,7 +241,7 @@ The =save= script performs a range of save-related functions, as selected by the
 | =originalrev= | Revision on which the edit started. | |
 | =edit= | The script to use to edit the topic when action is =checkpoint= | =edit= |
 | =editparams= | The parameter string to use to edit the topic |  |
-| =origurl= | The save process will redirect to this URL if it is successful. (Typically this would be the URL that was being viewed when edit was invoked.) | view topic being edited |
+| =redirecturl= | The save process will redirect to this URL if it is successful. (Typically this would be the URL that was being viewed when edit was invoked). *This parameter only works if it is enabled in =configure= (Miscellaneous/AllowRedirectUrl)* | view topic being edited |
 
 Any errors will cause a redirect to an =oops= page.
 

@@ -324,9 +324,9 @@ sub save {
         $nameFilter =~ s/AUTOINC([0-9]+)/([0-9]+)/;
         my @list =
           sort{ $a <=> $b }
-          map{ s/^$nameFilter$/$1/; s/^0*([0-9])/$1/; $_ }
-          grep{ /^$nameFilter$/ }
-          $store->getTopicNames( $web );
+            map{ s/^$nameFilter$/$1/; s/^0*([0-9])/$1/; $_ }
+              grep{ /^$nameFilter$/ }
+                $store->getTopicNames( $web );
         if( scalar @list ) {
             # find last one, and increment by one
             my $next = $list[$#list] + 1;
@@ -345,8 +345,10 @@ sub save {
         $session->{topicName} = $topic;
     }
 
-    my $redirecturl = $query->param( 'origurl' );
-    $redirecturl = $session->getScriptUrl( 1, 'view', $web, $topic ) unless $redirecturl;
+    my $redirecturl;
+    if ($TWiki::cfg{AllowRedirectUrl}) {
+        $redirecturl = $query->param( 'redirecturl' );
+    }
 
     my $saveaction = '';
     foreach my $action qw( save checkpoint quietsave cancel preview
@@ -361,7 +363,9 @@ sub save {
     # for compatibility with old templates.
     if( !$saveaction && $query->param( 'action' )) {
         $saveaction = lc($query->param( 'action' ));
-        $session->writeWarning('Use of deprecated "action" parameter to "save". Correct your templates!');
+        $session->writeWarning(<<WARN);
+Use of deprecated "action" parameter to "save". Correct your templates!
+WARN
 
         # handle old values for form-related actions:
         $saveaction = 'addform' if ( $saveaction eq 'add form');
@@ -375,18 +379,18 @@ sub save {
         }
 
         # redirect to a sensible place (a topic that exists)
-        my $viewURL = $query->param( 'origurl' ) || '';
-	unless ( $viewURL ) {
-	  my( $w, $t ) = ( '', '' );
-	  foreach my $test ( $topic,
-			     $query->param( 'topicparent' ),
-			     $TWiki::cfg{HomeTopicName} ) {
-            ( $w, $t ) =
-              $session->normalizeWebTopicName( $web, $test );
-            last if( $store->topicExists( $w, $t ));
-	  }
-	  $viewURL = $session->getScriptUrl( 1, 'view', $w, $t );
-	}
+        my $viewURL = $redirecturl || '';
+        unless ( $viewURL ) {
+            my( $w, $t ) = ( '', '' );
+            foreach my $test ( $topic,
+                               $query->param( 'topicparent' ),
+                               $TWiki::cfg{HomeTopicName} ) {
+                ( $w, $t ) =
+                  $session->normalizeWebTopicName( $web, $test );
+                last if( $store->topicExists( $w, $t ));
+            }
+            $viewURL = $session->getScriptUrl( 1, 'view', $w, $t );
+        }
         $session->redirect( $viewURL );
 
         return;
@@ -417,12 +421,16 @@ sub save {
         $query->param( -name=>'dontnotify', -value=>'checked' );
         my $editURL = $session->getScriptUrl( 1, $edit, $web, $topic );
         $redirecturl = $editURL.'?t='.time();
-	$redirecturl .= '&origurl='.$query->param( 'origurl' ) if $query->param( 'origurl' );
-	# select the appropriate edit template
+        $redirecturl .= '&redirecturl='.$query->param( 'redirecturl' )
+          if $query->param( 'redirecturl' );
+        # select the appropriate edit template
         $redirecturl .= '&action='.$editaction if $editaction;
-        $redirecturl .= '&skin='.$query->param('skin') if $query->param('skin');
-        $redirecturl .= '&cover='.$query->param('cover') if $query->param('cover');
-	$redirecturl .= $editparams if $editparams;  # May contain anchor
+        $redirecturl .= '&skin='.$query->param('skin')
+          if $query->param('skin');
+        $redirecturl .= '&cover='.$query->param('cover')
+          if $query->param('cover');
+        $redirecturl .= $editparams
+          if $editparams;  # May contain anchor
         my $lease = $store->getLease( $web, $topic );
         if( $lease && $lease->{user}->equals( $user )) {
             $store->setLease( $web, $topic, $user, $TWiki::cfg{LeaseLength} );
@@ -451,6 +459,8 @@ sub save {
                                     params => $TWiki::cfg{UsersWebName}.
                                       '.'.$TWiki::cfg{SuperAdminGroup} );
     }
+
+    $redirecturl ||= $session->getScriptUrl( 1, 'view', $web, $topic );
 
     if( $saveCmd eq 'delRev' ) {
         # delete top revision

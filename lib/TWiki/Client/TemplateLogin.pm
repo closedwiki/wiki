@@ -108,7 +108,7 @@ sub login {
     my $loginPass = $query->param( 'password' );
 
     # Eat these so there's no risk of accidental passthrough
-    $query->delete('username', 'password');
+    $query->delete('origurl', 'username', 'password');
 
     my $tmpl = $twiki->{templates}->readTemplate(
         'login', $twiki->getSkin() );
