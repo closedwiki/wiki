@@ -39,7 +39,7 @@ The following attributes are recognized (see also [[#MoreAttrs][additional attri
 	| =location= | Regular expression specifying the comment location in the target topic. Read _carefully_ below! |
 	| =mode= | For compatability with older versions only, synonymous with =type= |
 	| =nonotify= | Set to "on" to disable change notification for target topics |
-	| =noform= | Set to "on" to disable the automatic form that encloses your comment block - _remember_ to insert =&lt;form&gt;= tags yourself! |
+	| =noform= | Set to "on" to disable the automatic form that encloses your comment block - _remember_ to insert =&lt;form&gt;= tags yourself! See CommentPluginExamples#noform for an example. |
 	| =nopost= | Set to "on" to disable insertion of the posted text into the topic. |
 	| =remove= | Set to "on" to remove the comment prompt after the first time it is clicked. |
 	| =button= | Button label text; by default =Add comment=.  |
