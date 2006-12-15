@@ -188,8 +188,8 @@ Toctalk output message 2
 
 
 
----+++ =target=
-Post to a different topic and return to here. In this example comments are written to [[%COMMENT_TOPIC%]]. %RED% Available with TWiki 4.1. %ENDCOLOR%
+---+++ =return=
+Post to a different topic and return to here. In this example comments are written to [[%COMMENT_TOPIC%]]. %RED% Available with TWiki 4.1, with *<nop>AllowRedirectUrl* enabled (not for public sites). If not enabled, submitting will lead to the target page. %ENDCOLOR%
 
 <!--
    * Set COMMENT_TOPIC = Sandbox.CommentPluginExampleComments
@@ -201,7 +201,7 @@ _Comments:_
 </blockquote>
 
 ---
-%COMMENT{type="target" target="%COMMENT_TOPIC%"}% %BR%
+%COMMENT{type="return" target="%COMMENT_TOPIC%"}% %BR%
 
 
 
