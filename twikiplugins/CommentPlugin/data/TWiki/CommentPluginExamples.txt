@@ -206,6 +206,28 @@ _Comments:_
 
 
 
+---+++ =noform=
+Example of a custom form to save a comment to a new topic. When the topic is created the parent will be our Sandbox [[Sandbox.CommentPluginExampleComments][example topic]].
+
+<form method="post" action="%SCRIPTURL{save}%/Sandbox/" enctype="application/x-www-form-urlencoded" name="noformcomment0" id="noformcomment0">
+<input type="hidden" name="topicparent" value="CommentPluginExampleComments" />
+<input type="hidden" name="comment_action" value="save" />
+<input type="hidden" name="nonwikiword" value="off" />
+<input type="hidden" name="onlywikiname" value="on" />
+<div class="twikiFormSteps">
+<div class="twikiFormStep">
+*New topic name:* %BR%
+<input class="twikiInputField" %DISABLED% type="text" size="40" name="topic" id="topic" value="" /> <span class="twikiGrayText">Enter a !WikiWord topic name</span>
+</div>
+<div class="twikiFormStep twikiLast">
+*Topic text:* %BR%
+%COMMENT{noform="on" button="Save"}%
+</div>
+</div>
+</form>
+
+
+
 ---
    * Bottom comment output 1 -- Main.TWikiContributor - 26 Nov 2006
    * Bottom comment output 2 -- Main.TWikiContributor - 26 Nov 2006
