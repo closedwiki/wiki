@@ -1941,6 +1941,7 @@ If you need help, ask a question in the <a href="http://twiki.org/cgi-bin/view/S
 </li>
 <li> <strong>Run the <code>configure</code> script</strong> from your browser (i.e. enter <code>http://yourdomain/twiki/bin/configure</code> into your browser address bar) and resolve any errors or warnings it tells you about.
       <br /> <img src="pub/TWiki/TWikiDocGraphics/warning.gif" border="0" alt="ALERT!" width="16" height="16" /> When you run <code>configure</code> for the first time, remember to <em>first</em> set the <code>General Path Settings</code>, save these settings, and then return to <code>configure</code> to continue configuration.
+      <br />When you return to configure you now need to setup <em>Mail and Proxies</em>. Especially the <code>{WebMasterEmail}</code>, and <code>{SMTP}{MAILHOST}</code> must be defined to enable TWiki to send registration emails. Many ISPs have introduced authentication when sending emails to fight spam so you may also have to set <code>{SMTP}{Username}</code> and <code>{SMTP}{Password}</code>. 
 </li>
 </ol>
 <p />
@@ -1982,8 +1983,6 @@ These are the steps for enabling "Template Login" which asks for a username and 
 <li> Save your <code>configure</code> settings.
 </li>
 </ol>
-</li>
-<li> Create an empty file called <code>.htpasswd</code> in the <code>data</code> directory.
 </li>
 <li> Register yourself using the <code>TWiki.TWikiRegistration</code> topic.
      <br /> <img src="pub/TWiki/TWikiDocGraphics/help.gif" border="0" alt="HELP" width="16" height="16" /> Check that the password manager recognizes the new user. Check that a new line with the username and encrypted password is added to the <code>data/.htpasswd</code> file. If not, you probably got a path wrong, or the permissions may not allow the webserver user to write to that file.
@@ -2038,8 +2037,11 @@ TWiki now supports displaying of national (non-ascii) characters and presentatio
 
 <p />
 <h2><a name="Install_Plugins"> </a> Install Plugins </h2>
-<a href="http://twiki.org/cgi-bin/view/Plugins" title="'Plugins' on TWiki.org">TWiki:Plugins</a> is an extensive library of Plugins for TWiki, that enhance functionality in a huge number of ways. A few plugins are pre-installed in the TWiki distribution. For more information on these, see <code>TWiki.InstalledPlugins</code>. Installation instructions for the other plugins can be found in the plugin topics on TWiki.org. Additional documenation on TWiki plugins can be found at <a href="http://twiki.org/cgi-bin/view/TWiki.TWikiPluginsSupplement" title="'TWiki.TWikiPluginsSupplement' on TWiki.org">TWiki:TWiki.TWikiPluginsSupplement</a>.
+<a href="http://twiki.org/cgi-bin/view/Plugins" title="'Plugins' on TWiki.org">TWiki:Plugins</a> is an extensive library of Plugins for TWiki, that enhance functionality in a huge number of ways. A few plugins are pre-installed in the TWiki distribution. For more information on these, see <code>TWiki.InstalledPlugins</code>.
 <p />
+You activate installed plugin in the <em>Plugins</em> section of <code>configure</code>. In this section you also find a <em>Find More Extensions</em> button which opens an application which can install additional plugins from the TWiki.org website. If you are behind a firewall or your server has no access to the Internet it is also possible to install plugins manually. Manual installation instructions for the plugins can be found in the plugin topics on TWiki.org. Additional documenation on TWiki plugins can be found at <a href="http://twiki.org/cgi-bin/view/TWiki.TWikiPluginsSupplement" title="'TWiki.TWikiPluginsSupplement' on TWiki.org">TWiki:TWiki.TWikiPluginsSupplement</a>.
+<p />
+Some plugins require that you define their settings in <code>configure</code>. You fill find these under the <em>Extensions</em> section of configure.
 <h2><a name="Customize_your_TWiki"> </a><a name="Customize_your_TWiki_"> </a> Customize your TWiki! </h2>
 
 The real power of TWiki lies in it's flexibility to be customized to meet your needs. A good place to start for exploring what's possible is <a href="http://twiki.org/cgi-bin/view/TWiki/TWikiAdminCookBook" title="'TWiki/TWikiAdminCookBook' on TWiki.org">TWiki:TWiki.TWikiAdminCookBook</a> which offers tips and tricks for customizing your TWiki site. Many of these are appropriate to implement immediately after installing TWiki and before adding content so now's a good time to look at these. If you would like to customize the look of your TWiki, see <a href="http://twiki.org/cgi-bin/view/TWiki.TWikiSkinsSupplement" title="'TWiki.TWikiSkinsSupplement' on TWiki.org">TWiki:TWiki.TWikiSkinsSupplement</a>.
@@ -2123,9 +2125,10 @@ The following Perl <a href="http://cpan.perl.org/" rel="nofollow" target="_top">
 The following Perl modules may be used by TWiki:
 <table border="0" cellspacing="2" cellpadding="1">
 <tr><th class="twikiFirstCol" bgcolor="#2E414E"> <strong><font color="#F3EDE7">Module</font></strong> </th><th bgcolor="#2E414E"> <strong><font color="#F3EDE7">Preferred version</font></strong> </th><th bgcolor="#2E414E"> <strong><font color="#F3EDE7">Description</font></strong> </th></tr>
+<tr><td class="twikiFirstCol" bgcolor="#E2E2E2"> Archive::Tar </td><td bgcolor="#E2E2E2"> &nbsp; </td><td bgcolor="#E2E2E2"> May be required by the Extensions Installer in configure if command line tar or unzip is not available </td></tr>
 <tr><td class="twikiFirstCol" bgcolor="#F8F8F8"> CGI::Cookie </td><td bgcolor="#F8F8F8"> &gt;=1.24 </td><td bgcolor="#F8F8F8"> Used for session support </td></tr>
 
-<tr><td class="twikiFirstCol" bgcolor="#E2E2E2"> CGI::Session </td><td bgcolor="#E2E2E2"> &gt;=3.95 </td><td bgcolor="#E2E2E2"> Used for session support </td></tr>
+<tr><td class="twikiFirstCol" bgcolor="#E2E2E2"> CGI::Session </td><td bgcolor="#E2E2E2"> &gt;=3.95 </td><td bgcolor="#E2E2E2"> Highly recommended! Used for session support </td></tr>
 <tr><td class="twikiFirstCol" bgcolor="#F8F8F8"> Digest::base </td><td bgcolor="#F8F8F8"> &nbsp; </td><td bgcolor="#F8F8F8"> &nbsp; </td></tr>
 <tr><td class="twikiFirstCol" bgcolor="#E2E2E2"> Digest::SHA1 </td><td bgcolor="#E2E2E2"> &nbsp; </td><td bgcolor="#E2E2E2"> &nbsp; </td></tr>
 
