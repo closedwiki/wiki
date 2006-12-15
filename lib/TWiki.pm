@@ -1198,7 +1198,6 @@ Constructs a new TWiki object. Parameters are taken from the query object.
    * =$query= the CGI query (may be undef, in which case an empty query is used)
    * =\%initialContext= - reference to a hash containing context name=value pairs
      to be pre-installed in the context hash
-
 =cut
 
 sub new {
@@ -1305,10 +1304,6 @@ sub new {
     if ( $topicNameTemp ) {
         $this->{topicName} = $topicNameTemp;
     }
-
-    # Item3270 - here's the appropriate place to enforce TWiki spec:
-    # All topic name sources are evaluated, site charset applied
-    $this->{topicName}  =  ucfirst $this->{topicName};
 
     $this->{scriptUrlPath} = $TWiki::cfg{ScriptUrlPath};
 
@@ -2496,7 +2491,6 @@ where:
    * =$verb= - The invoked verb (may be ignored)
 
 *Since:* TWiki::Plugins::VERSION 1.1
-
 =cut=
 
 sub registerRESTHandler {
@@ -2512,9 +2506,7 @@ Returns the handler  function associated to the given $subject and $werb,
 or undef if none is found.
 
 *Since:* TWiki::Plugins::VERSION 1.1
-
 =cut=
-
 sub restDispatch {
    my ( $subject, $verb) = @_;
    my $s=$restDispatch{$subject};
@@ -3143,7 +3135,6 @@ are handled:
 | =$quot= | Double quote (="=) |
 | =$percnt= | Percent sign (=%=) |
 | =$dollar= | Dollar sign (=$=) |
-
 =cut
 
 sub expandStandardEscapes {
