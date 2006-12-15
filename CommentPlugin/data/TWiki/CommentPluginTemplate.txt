@@ -285,23 +285,23 @@ Talk using TOC adding on end - TWiki:Main/FranzJosefSilli
 
 
 
----++++ target
-Post to a different topic and return to here. The comment =target= is set in the =PROMPT=. In the form below the =origurl= is set to the current (including) topic. %RED% Available with TWiki 4.1. %ENDCOLOR%
+---++++ return
+Post to a different topic and return to here. The comment =target= is set in the =PROMPT=. In the form below the =redirecturl= is set to the current (including) topic. %RED% Available with TWiki 4.1, with *<nop>AllowRedirectUrl* enabled (not for public sites). If not enabled, submitting will lead to the target page. %ENDCOLOR%
 
 <verbatim>
-%TMPL:DEF{targetpromptbox}%
-<input type="hidden" name="origurl" value="%SCRIPTURL{view}%/%BASEWEB%/%BASETOPIC%" />
+%TMPL:DEF{returnpromptbox}%
+<input type="hidden" name="redirecturl" value="%SCRIPTURL{view}%/%BASEWEB%/%BASETOPIC%" />
 %TMPL:P{promptbox}%
 %TMPL:END%
 </verbatim>
 <verbatim>
-%TMPL:DEF{PROMPT:target}%%TMPL:P{targetpromptbox}%%TMPL:END%
+%TMPL:DEF{PROMPT:return}%%TMPL:P{returnpromptbox}%%TMPL:END%
 </verbatim>
 <verbatim>
-%TMPL:DEF{OUTPUT:target}%%POS:BEFORE%%TMPL:P{OUTPUT:threadmode}%%TMPL:END%
+%TMPL:DEF{OUTPUT:return}%%POS:BEFORE%%TMPL:P{OUTPUT:threadmode}%%TMPL:END%
 </verbatim>
 
-%ICON{"hand"}% See rendered template [[CommentPluginExamples#target][target]]
+%ICON{"hand"}% See rendered template [[CommentPluginExamples#return][return]]
 
 
 
