@@ -37,18 +37,18 @@ To put the overview in a topic, write:
 You may set display defaults, for example for category and sort field, using  additional parameters. Possible values are:
 
 %TABLE{sort="off"}%
-| *Parameter* | *Possible values* |
-| =category=   | =%SEARCH{"   *\s*.*?" topic="BlogCategory" type="regex" multiple="on" casesensitive="on" nonoise="on" separator="=, =" format="$pattern(.*   \*\s*([^\n]*).*)"}%= (categories can be defined in BlogCategory) |
-| =sort=     | =formfield(Title)=, =formfield(Category)=, =formfield(Author)=, =created=, =modified=  |
-| =limit=     | any number  |
-| =reverse=   | =on=, =off=  |
+| *Parameter* | *Possible values* | *Default value* |
+| =category=   | =%SEARCH{"   *\s*.*?" topic="BlogCategory" type="regex" multiple="on" casesensitive="on" nonoise="on" separator="=, =" format="$pattern(.*   \*\s*([^\n]*).*)"}%= (categories can be defined in BlogCategory) | none |
+| =sort=     | =formfield(Title)=, =formfield(Category)=, =formfield(Author)=, =created=, =modified=  | none |
+| =limit=     | any number  | no limit |
+| =sortdirection=   | =ascending=, =descending=  | =ascending= |
 
-For example, to show the list with the latest post on top, write:
+For example, to show latest 10 posts, sorted latest post on top, write:
 
 <verbatim>
-%INCLUDE{"BlogPost" reverse="on" sort="created"}%
+%INCLUDE{"BlogPost" sortdirection="descending" sort="created" limit="10"}%
 </verbatim>
 
 This will generate:
 
-%INCLUDE{"BlogPost" reverse="on" sort="created"}%
+%INCLUDE{"BlogPost" sortdirection="descending" sort="created" limit="10"}%

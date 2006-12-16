@@ -21,10 +21,12 @@
 ---++ %MAKETEXT{"Comments"}%
 %INCLUDE{"%TOPIC%Comments" warn="off"}%
 
-           
-%COMMENT{type="return" target="%TOPIC%Comments" button="%MAKETEXT{"Add comment"}%"}%</div>%TMPL:END%
+<form method="post" action="%SCRIPTURL{save}%/%WEB%/%TOPIC%Comments" enctype="application/x-www-form-urlencoded" name="blogpostcomment" id="blogpostcomment">
+<input type="hidden" name="topicparent" value="%TOPIC%" />
+<input type="hidden" name="comment_action" value="save" />
+%COMMENT{noform="on" type="return" target="%TOPIC%" button="%MAKETEXT{"Add comment"}%"}%</form>
+</div>%TMPL:END%
 
 
 
 %TMPL:DEF{"form"}%%TMPL:END%
-
