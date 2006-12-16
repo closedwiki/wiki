@@ -151,6 +151,7 @@ sub set_up {
     TWiki::Func::saveTopicText( $testweb, $testform, $testform1, 1, 1 );
     TWiki::Func::saveTopicText( $testweb, $testtmpl, $testtmpl1, 1, 1 );
     TWiki::Func::saveTopicText( $testweb, "MyeditTemplate", $edittmpl1, 1, 1 );
+    $twiki->enterContext('edit');
 }
 
 sub tear_down {

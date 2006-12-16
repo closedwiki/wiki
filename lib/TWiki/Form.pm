@@ -736,7 +736,9 @@ sub getFieldValuesFromQuery {
 
         if (defined $value) {
             $seen++;
-            $value  =  TWiki::expandStandardEscapes( $value );
+            if ($this->{session}->inContext('edit')) {
+                $value  =  TWiki::expandStandardEscapes( $value );
+            }
         }
 
         # checkbox and multi both allow multiple values
