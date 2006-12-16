@@ -759,6 +759,7 @@ sub searchWeb {
 
                 if( $format ) {
                     $out = $format;
+                    $out = TWiki::expandStandardEscapes( $out );
                     $out =~ s/\$web/$web/gs;
                     $out =~ s/\$topic\(([^\)]*)\)/TWiki::Render::breakName( $topic, $1 )/ges;
                     $out =~ s/\$topic/$topic/gs;
@@ -838,7 +839,6 @@ sub searchWeb {
                         # SMELL: why?
                         $out =~ s/([^\n])$/$1\n/s;
                     }
-                    $out = TWiki::expandStandardEscapes( $out );
 
                 } elsif( $noSummary ) {
                     $out =~ s/%TEXTHEAD%//go;
