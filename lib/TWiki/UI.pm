@@ -35,6 +35,11 @@ use CGI qw( :cgi -any );
 use TWiki;
 use TWiki::OopsException;
 
+sub TRACE_PASSTHRU {
+    # Change to a 1 to trace passthrough
+    0;
+};
+
 =pod
 
 ---++ StaticMethod run( \&method, ... )
@@ -101,15 +106,21 @@ sub run {
             # Read cached post parameters
             if (open(F, '<'.$cache)) {
                 local $/;
-                #print STDERR "Loading ",<F>,"\n";
-                #close(F);
-                #open(F, '<'.$cache);
+                if (TRACE_PASSTHRU) {
+                    print STDERR "Passthru: Loading cache for ",
+                      $query->url(),'?',$query->query_string(),"\n";
+                    print STDERR <F>,"\n";
+                    close(F);
+                    open(F, '<'.$cache);
+                }
                 $query = new CGI(\*F);
                 close(F);
                 unlink($cache);
-                #print STDERR "Loaded and unlinked $cache\n";
+                print STDERR "Passtrhru: Loaded and unlinked $cache\n"
+                  if TRACE_PASSTHRU;
             } else {
-                #print STDERR "Could not find $cache\n";
+                print STDERR "Passtrhru: Could not find $cache\n"
+                  if TRACE_PASSTHRU;
             }
         }
     } else {
