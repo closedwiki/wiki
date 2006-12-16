@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1166310108" format="1.0" version="$Rev$"}%
 %META:TOPICPARENT{name="CommentPlugin"}%
 
 ---+!! Templates for CommentPlugin
@@ -282,11 +282,11 @@ Talk using TOC adding on end - TWiki:Main/FranzJosefSilli
 
 
 ---++++ return
-Post to a different topic and return to here. The comment =target= is set in the =PROMPT=. In the form below the =redirecturl= is set to the current (including) topic. %RED% Available with TWiki 4.1, with *<nop>AllowRedirectUrl* enabled (not for public sites). If not enabled, submitting will lead to the target page. %ENDCOLOR%
+Post to a different topic and return to here. The comment =target= is set in the =PROMPT=. In the form below the =redirectto= is set to the current (including) topic. %RED% Available with TWiki 4.1, with *<nop>AllowRedirectUrl* enabled (not for public sites). If not enabled, submitting will lead to the target page. %ENDCOLOR%
 
 <verbatim>
 %TMPL:DEF{returnpromptbox}%
-<input type="hidden" name="redirecturl" value="%SCRIPTURL{view}%/%BASEWEB%/%BASETOPIC%" />
+<input type="hidden" name="redirectto" value="%SCRIPTURL{view}%/%BASEWEB%/%BASETOPIC%" />
 %TMPL:P{promptbox}%
 %TMPL:END%
 </verbatim>
