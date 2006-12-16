@@ -347,8 +347,9 @@ sub save {
 
     my $redirecturl;
     if ($TWiki::cfg{AllowRedirectUrl}) {
-        $redirecturl = $query->param( 'redirecturl' );
+        $redirecturl = $query->param( 'redirectto' );
     }
+    # FIXME: Support for web.topics, not depending on {AllowRedirectUrl} flag
 
     my $saveaction = '';
     foreach my $action qw( save checkpoint quietsave cancel preview
@@ -421,8 +422,8 @@ WARN
         $query->param( -name=>'dontnotify', -value=>'checked' );
         my $editURL = $session->getScriptUrl( 1, $edit, $web, $topic );
         $redirecturl = $editURL.'?t='.time();
-        $redirecturl .= '&redirecturl='.$query->param( 'redirecturl' )
-          if $query->param( 'redirecturl' );
+        $redirecturl .= '&redirectto='.$query->param( 'redirectto' )
+          if $query->param( 'redirectto' );
         # select the appropriate edit template
         $redirecturl .= '&action='.$editaction if $editaction;
         $redirecturl .= '&skin='.$query->param('skin')

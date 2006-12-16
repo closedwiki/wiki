@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1162514654" format="1.0" version="$Rev: 7555 $"}%
+%META:TOPICINFO{author="TWikiContributor" date="1166310108" format="1.0" version="$Rev: 7555 $"}%
 %TOC%
 %STARTINCLUDE%
 ---# TWiki CGI and Command Line Scripts
@@ -241,7 +241,7 @@ The =save= script performs a range of save-related functions, as selected by the
 | =originalrev= | Revision on which the edit started. | |
 | =edit= | The script to use to edit the topic when action is =checkpoint= | =edit= |
 | =editparams= | The parameter string to use to edit the topic |  |
-| =redirecturl= | The save process will redirect to this URL if it is successful. (Typically this would be the URL that was being viewed when edit was invoked). *This parameter only works if it is enabled in =configure= (Miscellaneous/AllowRedirectUrl)* | view topic being edited |
+| =redirectto= | The save process will redirect to this URL if it is successful. (Typically this would be the URL that was being viewed when edit was invoked). *This parameter only works if it is enabled in =configure= (Miscellaneous/AllowRedirectUrl)* | view topic being edited |
 
 Any errors will cause a redirect to an =oops= page.
 
