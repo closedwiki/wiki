@@ -386,10 +386,10 @@ sub renderForEdit {
                 if( defined( $value )) {
                     $value = $session->handleCommonTags( $value, $web,
                                                          $topic );
+                    $value = TWiki::expandStandardEscapes( $value ); # Item2837
                 }
             }
             $value = '' unless defined $value;  # allow 0 values
-	    $value = TWiki::expandStandardEscapes( $value );
             ( $extra, $value ) =
               $this->renderFieldForEdit( $fieldDef, $web, $topic, $value );
 
@@ -734,7 +734,10 @@ sub getFieldValuesFromQuery {
 
         my $value = $query->param( $param );
 
-        $seen++ if defined( $value );
+        if (defined $value) {
+            $seen++;
+            $value  =  TWiki::expandStandardEscapes( $value );
+        }
 
         # checkbox and multi both allow multiple values
         if( $fieldDef->{type} =~ /^checkbox|\+multi/ ) {

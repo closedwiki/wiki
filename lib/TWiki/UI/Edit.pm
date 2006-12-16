@@ -281,6 +281,12 @@ sub init_edit {
         $meta->remove( 'FORM' );
         if( $formTemplate ne 'none' ) {
             $meta->put( 'FORM', { name => $formTemplate } );
+            # Because the form has been expanded from a Template, we
+            # want to expand $percnt-style content right now
+            $meta->forEachSelectedValue(qr/FIELD/,
+                                        qr/value/,
+                                        sub {TWiki::expandStandardEscapes(@_)},
+                                    );
         } else {
             $meta->remove( 'FORM' );
         }

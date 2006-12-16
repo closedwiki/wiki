@@ -43,6 +43,7 @@ use Error qw( :try );
 my $testweb = "TestWeb";
 my $testtopic1 = "InitTestTopic1";
 my $testtopic2 = "InitTestTopic2";
+my $testtopic3 = "InitTestTopic3";
 my $testform = "InitTestForm";
 my $testtmpl = "InitTestTemplate";
 
@@ -109,6 +110,17 @@ Then call <a href="%SCRIPTURL{"edit"}%/%WEB%/%TOPIC%?formtemplate=$testform">Edi
 %META:FIELD{name="History4" attributes="" title="History4" value="$percntSCRIPTURL%"}%
 HERE
 
+my $testtext3 = <<'HERE';
+%META:TOPICINFO{author="TWikiGuest" date="1159721050" format="1.1" reprev="1.3" version="1.3"}%
+...no text...
+%META:FORM{name="InitTestForm"}%
+%META:FIELD{name="IssueName" attributes="M" title="Issue Name" value="My first defect"}%
+%META:FIELD{name="IssueDescription" attributes="" title="Issue Description" value="Simple description of problem"}%
+%META:FIELD{name="IssueType" attributes="" title="Issue Type" value="Defect"}%
+%META:FIELD{name="History1" attributes="" title="History1" value="%SCRIPTURL%"}%
+%META:FIELD{name="History3" attributes="" title="History3" value="$percntSCRIPTURL%"}%
+HERE
+
 my $edittmpl1 = <<'HERE';
 %FORMFIELDS%
 HERE
@@ -135,6 +147,7 @@ sub set_up {
     $TWiki::Plugins::SESSION = $twiki;
     TWiki::Func::saveTopicText( $testweb, $testtopic1, $testtext1, 1, 1 );
     TWiki::Func::saveTopicText( $testweb, $testtopic2, $testtext2, 1, 1 );
+    TWiki::Func::saveTopicText( $testweb, $testtopic3, $testtext3, 1, 1 );
     TWiki::Func::saveTopicText( $testweb, $testform, $testform1, 1, 1 );
     TWiki::Func::saveTopicText( $testweb, $testtmpl, $testtmpl1, 1, 1 );
     TWiki::Func::saveTopicText( $testweb, "MyeditTemplate", $edittmpl1, 1, 1 );
@@ -406,6 +419,28 @@ Simple description of problem</textarea>
   $this->assert_str_equals('<input class="twikiInputField twikiEditFormTextField" name="History4" size="20" type="text" value="%ATTACHURL%" />
 ', get_formfield(7, @children));
 
+}
+
+
+# Purpose:  Just edit the form topic, do not provide any init values
+# Verifies: All values are kept intact, in particular:
+#              * No expansion of TWiki variables (%SCRIPTURL%)
+#              * No expansion if $percnt
+sub test_dont_expand_on_edit {
+  my $this = shift;
+  
+  my @children = setup_formtests( $this, $testweb, $testtopic3 );
+
+  $this->assert_str_equals('<input class="twikiInputField twikiEditFormTextField" name="IssueName" size="73" type="text" value="My first defect" />
+', get_formfield(1, @children));
+  $this->assert_str_equals('<textarea class="twikiInputField twikiEditFormTextAreaField" cols="55" name="IssueDescription" rows="5">
+Simple description of problem</textarea>
+', get_formfield(2, @children));
+  $this->assert_matches(qr/<select [^>]+><option ([^>]+| selected)>Defect<\/option>/, get_formfield(3, @children));
+  $this->assert_str_equals('<input name="History1" type="hidden" value="%SCRIPTURL%" />
+', get_formfield(4, @children));
+  $this->assert_str_equals('<input name="History3" type="hidden" value="$percntSCRIPTURL%" />
+', get_formfield(6, @children));
 }
 
 1;
