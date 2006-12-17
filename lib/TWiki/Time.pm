@@ -344,7 +344,7 @@ sub parseInterval{
 
     my @lt = localtime();
     my $today = sprintf('%04d-%02d-%02d',$lt[5]+1900, $lt[4]+1, $lt[3]);
-    my $now = $today . sprintf('T%02d:%02d:02d',$lt[2], $lt[1], $lt[0]);
+    my $now = $today . sprintf('T%02d:%02d:%02d',$lt[2], $lt[1], $lt[0]);
 
     # replace $now and $today shortcuts
     $theInterval =~ s/\$today/$today/g;
