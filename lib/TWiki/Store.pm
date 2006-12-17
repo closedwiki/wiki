@@ -98,7 +98,6 @@ to.
 
 sub finish {
     my $this = shift;
-    
     $this->{IMPL}->finish();
 }
 
@@ -2130,6 +2129,21 @@ sub clearLease {
 
     my $handler = $this->_getHandler( $web, $topic );
     $handler->setLease( undef );
+}
+
+=pod
+
+---++ ObjectMethod removeSpuriousLeases( $web )
+
+Remove leases that are not related to a topic. These can get left behind in
+some store implementations when a topic is created, but never saved.
+
+=cut
+
+sub removeSpuriousLeases {
+    my( $this, $web ) = @_;
+    my $handler = $this->_getHandler( $web );
+    $handler->removeSpuriousLeases();
 }
 
 1;

@@ -696,6 +696,30 @@ sub getLease {
     return undef;
 }
 
+=pod
+
+---++ ObjectMethod removeSpuriousLeases( $web )
+
+Remove leases that are not related to a topic. These can get left behind in
+some store implementations when a topic is created, but never saved.
+
+=cut
+
+sub removeSpuriousLeases {
+    my( $this ) = @_;
+    my $web = $TWiki::cfg{DataDir}.'/'.$this->{web}.'/';
+    if (opendir(W, $web)) {
+        foreach my $f (readdir(W)) {
+            if ($f =~ /^(.*)\.lease$/) {
+                if (! -e "$1.txt,v") {
+                    unlink($f);
+                }
+            }
+        }
+        closedir(W);
+    }
+}
+
 sub _saveStream {
     my( $this, $fh ) = @_;
 

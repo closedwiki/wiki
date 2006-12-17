@@ -56,6 +56,7 @@ my $twiki = new TWiki();
 my $store = $twiki->{store};
 my $now = time();
 foreach my $web ( $store->getListOfWebs()) {
+    $store->removeSpuriousLeases($web);
     foreach my $topic ( $store->getTopicNames( $web )) {
         my $lease = $store->getLease( $web, $topic );
         if( $lease && $lease->{expires} < $now) {
