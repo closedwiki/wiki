@@ -1,2 +1,2 @@
-data/TWiki/FileListPlugin.txt NEW
-lib/TWiki/Plugins/FileListPlugin.pm NEW
+data/TWiki/FileListPlugin.txt 0660
+lib/TWiki/Plugins/FileListPlugin.pm 0440
