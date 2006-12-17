@@ -1240,8 +1240,13 @@ sub new {
         if( $topic =~ /^$regex{linkProtocolPattern}\:\/\//o &&
             $this->{cgiQuery} ) {
             # redirect to URI
-            print $this->redirect( $topic );
-            return;
+            if ($TWiki::cfg{AllowRedirectUrl}) {
+                print $this->redirect( $topic );
+                return;
+            } else {
+                # for security, ignore redirect to URL
+                $topic = '';
+            }
         } elsif( $topic =~ /((?:.*[\.\/])+)(.*)/ ) {
             # is 'bin/script?topic=Webname.SomeTopic'
             $web   = $1;
