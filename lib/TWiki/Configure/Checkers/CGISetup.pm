@@ -22,7 +22,6 @@ use strict;
 use base 'TWiki::Configure::Checker';
 
 use File::Spec;
-use FindBin;
 
 sub ui {
     my $this = shift;
@@ -255,8 +254,7 @@ HERE
 sub _loadDEPENDENCIES {
     my $this = shift;
 
-    $FindBin::Bin =~ /^(.*)$/;
-    my @dir = File::Spec->splitdir($1);
+    my @dir = File::Spec->splitdir( $TWiki::cfg{DataDir} );
     pop(@dir);
 
     local $/ = "\n";
