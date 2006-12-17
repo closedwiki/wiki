@@ -12,14 +12,17 @@
                        =bar="..."=: by default, each vertical bar is rewritten to an HTML entity so as to not be mistaken for a table separator. \
                     | Show a single form field |
      | ="form"= | _none_ | Generates the table showing the form fields. See [[TWikiDocumentation#Form_Templates][Form Templates]] |
-     | ="attachments"= | =all="on"= to show hidden attachments | Generates the table showing the attachments |
+     | ="attachments"= | =all="on"= to show hidden attachments. %BR% \
+     					 =title="..."= to show a title - only if attachments are displayed. %BR% \
+     					 =template="..."= to use a custom template for the rendering of attachments; default =attachtables= is used. \
+      			| Generates the list of attachments |
      | ="moved"= | _none_ | Details of any topic moves |
-     | ="parent"= | ==dontrecurse="on"==: By default recurses up tree, this has some cost. %BR% \
-                    ==nowebhome="on"==: Suppress <nop>%HOMETOPIC%. %BR% \
-		    ==prefix="..."==: Prefix that goes before parents, but only if there are parents, default =""=. %BR% \
-		    ==format="..."==: Format string used to display each parent topic where =$web= expands to the web name, and =$topic= expands to the topic name. Default: ="[<nop>[$web.$topic][$topic]]"= %BR% \
-		    ==suffix="..."==: Suffix, only appears if there are parents, default =""=. %BR% \
-		    ==separator="..."==: Separator between parents, default =" &gt; "=. \
+     | ="parent"= | =dontrecurse="on"=: By default recurses up tree, this has some cost. %BR% \
+                    =nowebhome="on"=: Suppress <nop>%HOMETOPIC%. %BR% \
+		    =prefix="..."=: Prefix that goes before parents, but only if there are parents, default =""=. %BR% \
+		    =format="..."=: Format string used to display each parent topic where =$web= expands to the web name, and =$topic= expands to the topic name; default: ="[<nop>[$web.$topic][$topic]]"= %BR% \
+		    =suffix="..."=: Suffix, only appears if there are parents; default =""=. %BR% \
+		    =separator="..."=: Separator between parents; default =" &gt; "=. \
                   | Generates the parent link |
    * Related: [[#VarMETASEARCH][METASEARCH]]
 

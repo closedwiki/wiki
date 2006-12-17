@@ -81,12 +81,13 @@ sub renderMetaData {
     my $showAttr = $showAll ? 'h' : '';
 	my $A = ( $showAttr ) ? ':A' : '';
     my $title = $attrs->{title} || '';
+	my $tmplname = $attrs->{template} || 'attachtables';
 
 	my @attachments = $meta->find( 'FILEATTACHMENT' );
     return '' unless @attachments;
 
     my $templates = $this->{session}->{templates};
-    $templates->readTemplate('attachtables');
+    $templates->readTemplate($tmplname);
 
 	my $rows = '';
     my $row = $templates->expandTemplate('ATTACH:files:row'.$A);
