@@ -491,10 +491,10 @@ $TWiki::cfg{GetScriptUrlFromCgi} = $FALSE;
 $TWiki::cfg{RemovePortNumber}  = $FALSE;
 
 # **BOOLEAN EXPERT**
-# Allow the use of the <tt>redirectto</tt> parameter to the <tt>save</tt>
-# script. <b>WARNING:</b> Enabling this feature makes it very easy to build
-# phishing pages using the wiki, so in general public sites should
-# <b>not</b> enable it.
+# Allow the use of URLs in the <tt>redirectto</tt> parameter to the 
+# <tt>save</tt> script. <b>WARNING:</b> Enabling this feature makes it 
+# very easy to build phishing pages using the wiki, so in general 
+# public sites should <b>not</b> enable it.
 $TWiki::cfg{AllowRedirectUrl}  = $FALSE;
 
 #---+ Anti-spam measures
