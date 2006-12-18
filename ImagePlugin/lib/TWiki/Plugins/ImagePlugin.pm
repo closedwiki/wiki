@@ -28,7 +28,7 @@ use strict;
 use vars qw( $VERSION $RELEASE $imageCore $doneHeader $imgStyle $baseWeb $baseTopic);
 
 $VERSION = '$Rev$';
-$RELEASE = '0.3'; # please increase on every upload to twiki.org
+$RELEASE = '0.4'; # please increase on every upload to twiki.org
 
 ###############################################################################
 sub initPlugin {

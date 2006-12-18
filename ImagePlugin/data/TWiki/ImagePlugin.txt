@@ -61,7 +61,7 @@ The image name is mandatory.  Further arguments are optional.
 | =align=  | left&#124;center&#124;right&#124;none  | right |
 | =alt= | alt text | image filename |
 | =caption=  | caption text  | empty  |
-| =class= | (see html specs) | imgPlain |
+| =class= | (see html specs) | imageFrame, imageFloat, ... depending on the type |
 | =desc= | description text | title text |
 | =footer= | text to be appended to the html output | empty |
 | =format= | image layout format string | set by type argument |
@@ -164,8 +164,9 @@ order is left-to-right-inside-out.
 |  Plugin Author: | TWiki:Main.CraigMeyer |
 |  Copyright: | &copy; 2006, TWiki:Main.CraigMeyer, MichaelDaum@WikiRing.com |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 0.3 |
+|  Plugin Version: | 0.4 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  18 Dec 2006: | fixed image lookup order; fixed html formats; added I18N workaround |
 |  18 Aug 2006: | fixed html errors; \
                   removed references to <nop>ImgPlugin thus not showing the magnify-clip; \
 		  some html and css fixes to resemble closer to the <nop>MediaWiki examples |
@@ -183,4 +184,4 @@ order is left-to-right-inside-out.
 
 
 -- TWiki:Main.CraigMeyer %BR%
--- TWiki:Main.MichaelDaum - 18 Aug 2006
+-- TWiki:Main.MichaelDaum - 18 Dec 2006

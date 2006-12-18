@@ -23,7 +23,7 @@
   float:right;
 }
 .imageFrame_right {
-  margin:10px 0px 10px 10px;
+  margin:3px 0px 3px 10px;
 }
 .imageFloat_right {
   margin:0px 0px 0px 10px;
@@ -34,7 +34,7 @@
   float:left;
 }
 .imageFrame_left {
-  margin:10px 10px 10px 0px;
+  margin:3px 10px 3px 0px;
 }
 .imageFloat_left {
   margin:0px 10px 0px 0px;

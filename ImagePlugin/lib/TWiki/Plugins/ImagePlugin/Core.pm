@@ -27,6 +27,17 @@ package TWiki::Plugins::ImagePlugin::Core;
 use strict;
 use Image::Magick;
 
+BEGIN {
+  # coppied over from TWiki.pm to cure Item3087
+  # Image::Magick seems to override locale usage
+  if ( $TWiki::cfg{UseLocale} ) {
+    $ENV{LC_CTYPE} = $TWiki::cfg{Site}{Locale};
+    require POSIX;
+    import POSIX qw( locale_h LC_CTYPE );
+    setlocale(&LC_CTYPE, $TWiki::cfg{Site}{Locale});
+  }
+};
+
 use vars qw(
   $debug $frameFormat $linkFormat $simpleFormat 
   $magnifyFormat $captionFormat $floatFormat
@@ -40,22 +51,22 @@ $linkFormat =
   '<a id="$id" class="imageLink" href="$href" title="$title">$text</a>';
 
 $simpleFormat = 
-  '<a href="$href" id="$id" class="imageSimple $class" title="$title" style="$style">'.
-    '<img border="0" align="absmiddle" src="$src" alt="$alt" width="$width" height="$height" longdesc="$desc" onmouseover="$mousein" onmouseout="$mouseout" />'.
+  '<a href="$href" id="$id" class="imageHref imageSimple $class" title="$title" style="$style">'.
+    '<img border="0" align="middle" src="$src" alt="$alt" width="$width" height="$height" longdesc="$desc" $mousein $mouseout/>'.
   '</a>';
   
 $frameFormat = 
-  '<div id="$id" class="imageFrame imageFrame_$align" style="_width:$framewidthpx;max-width:$framewidthpx;$style">'.
+  '<div id="$id" class="imageFrame imageFrame_$align $class" style="_width:$framewidthpx;max-width:$framewidthpx;$style">'.
     '<a href="$href" class="imageHref" title="$title">'.
-      '<img border="0" align="absmiddle" src="$src" alt="$alt" width="$width" height="$height" longdesc="$desc" onmouseover="$mousein" onmouseout="$mouseout" />'.
+      '<img border="0" align="middle" src="$src" alt="$alt" width="$width" height="$height" longdesc="$desc" $mousein $mouseout/>'.
     '</a>'.
     '$captionFormat'.
   '</div>';
 
 $floatFormat = 
-  '<div id="$id" class="imageFloat imageFloat_$align" style="$style">'.
+  '<div id="$id" class="imageFloat imageFloat_$align $class" style="$style">'.
     '<a href="$href" class="imageHref" title="$title">'.
-      '<img border="0" align="absmiddle" src="$src" alt="$alt" width="$width" height="$height" longdesc="$desc" onmouseover="$mousein" onmouseout="$mouseout" />'.
+      '<img border="0" align="middle" src="$src" alt="$alt" width="$width" height="$height" longdesc="$desc" $mousein $mouseout/>'.
     '</a>'.
     '$captionFormat'.
   '</div>';
@@ -70,15 +81,15 @@ $captionFormat =
 $magnifyFormat =
   '<div class="imageMagnify">'.
     '<a href="$href" title="Enlarge">'.
-      '<img border="0" align="absmiddle" src="$magnifyIcon" width="$magnifyWidth" height="$magnifyHeight" alt="Enlarge" />'.
+      '<img border="0" align="middle" src="$magnifyIcon" width="$magnifyWidth" height="$magnifyHeight" alt="Enlarge" />'.
     '</a>'.
   '</div>';
 
 ###############################################################################
 # static
 sub writeDebug {
-  &TWiki::Func::writeDebug("ImagePlugin - $_[0]") if $debug;
-  #print STDERR "ImagePlugin - $_[0]\n" if $debug;
+  #&TWiki::Func::writeDebug("ImagePlugin - $_[0]") if $debug;
+  print STDERR "ImagePlugin - $_[0]\n" if $debug;
 }
 
 ###############################################################################
@@ -95,26 +106,17 @@ sub new {
 
   $this->{thumbSize} = 
     TWiki::Func::getPluginPreferencesValue('THUMBNAIL_SIZE') || 180;
-  $this->{albumTopic} = TWiki::Func::getPreferencesValue('IMAGEALBUM') || '';
   $this->{baseWeb} = $baseWeb;
   $this->{baseTopic} = $baseTopic;
   $this->{mage} = undef;
   $this->{errorMsg} = ''; # from image mage
-  $this->{albumWeb} = '';
-
-  if ($this->{albumTopic}) {
-    ($this->{albumWeb}, $this->{albumTopic}) = 
-      TWiki::Func::normalizeWebTopicName($baseWeb, $this->{albumTopic});
-  }
-
-  #writeDebug("IMAGEALBUM=$this->{albumWeb}.$this->{albumTopic}");
 
   return $this;
 }
 
 ###############################################################################
 sub handleIMAGE {
-  my($this, $session, $params, $theTopic, $theWeb) = @_;
+  my ($this, $session, $params, $theTopic, $theWeb) = @_;
 
   #writeDebug("called handleIMAGE(params, $theTopic, $theWeb)");
 
@@ -130,36 +132,106 @@ sub handleIMAGE {
   $this->parseWikipediaParams($params, $argsStr);
 
   # default and fix parameters
+  $params->{warn} ||= '';
   $params->{size} ||= '';
   $params->{width} ||= '';
   $params->{height} ||= '';
-  if ($params->{size} =~ /^(\d+)(px)?x?(\d+)?(px)?$/) {
-    $params->{size} = $3?"$1x$3":$1;
-  }
-
-  my $origFile = $params->{file} || $params->{_DEFAULT};
-  my $imgWeb = $params->{web} || $this->{albumWeb} || $theWeb;
-  my $imgTopic = $params->{topic} || $this->{albumTopic} || $theTopic;
-  ($imgWeb, $imgTopic) = TWiki::Func::normalizeWebTopicName($imgWeb, $imgTopic);
-
-  #writeDebug("origFile=$origFile, imgWeb=$imgWeb, imgTopic=$imgTopic");
-
   $params->{caption} ||= '';
   $params->{align} ||= 'right';
-  my $pubUrlPath = TWiki::Func::getPubUrlPath();
-  my $origFileUrl = $pubUrlPath.'/'.$imgWeb.'/'.$imgTopic.'/'.$origFile;
-  $params->{alt} ||= $origFile;
   $params->{class} ||= '';
-  $params->{title} ||= $params->{caption} || $origFile;
-  $params->{desc} ||= $params->{title};
   $params->{footer} ||= '';
   $params->{header} ||= '';
-  $params->{href} ||= $origFileUrl;
   $params->{id} ||= '';
   $params->{mousein} ||= '';
   $params->{mouseout} ||= '';
   $params->{style} ||= '';
   $params->{type} = 'thumb' if $params->{type} eq 'thumbnail';
+  if ($params->{size} =~ /^(\d+)(px)?x?(\d+)?(px)?$/) {
+    $params->{size} = $3?"$1x$3":$1;
+  }
+
+  my $origFile = $params->{file} || $params->{_DEFAULT};
+  my $imgWeb = $params->{web} || $theWeb;
+  my $imgTopic;
+  my $imgPath;
+  my $pubDir = TWiki::Func::getPubDir();
+  my $pubUrlPath = TWiki::Func::getPubUrlPath();
+  my $albumTopic;
+
+  # search image
+  if ($origFile =~ /^(.*)\/(.*?)$/) {
+    # part of the filename
+    $origFile = $2;
+    ($imgWeb, $imgTopic) = TWiki::Func::normalizeWebTopicName($imgWeb, $1);
+    $imgPath = $pubDir.'/'.$imgWeb.'/'.$imgTopic.'/'.$origFile;
+
+    # you said so but it still is not there
+    unless (-e $imgPath) {
+      $this->{errorMsg} = "(1) can't find <nop>$origFile at <nop>$imgWeb.$imgTopic";
+      return $this->inlineError($params);
+    }
+  } else {
+    my $testWeb;
+    my $testTopic;
+
+    if ($params->{topic}) {
+      # topic parameter is known
+      $imgTopic = $params->{topic};
+      ($testWeb, $testTopic) = 
+	TWiki::Func::normalizeWebTopicName($imgWeb, $imgTopic);
+      $imgPath = $pubDir.'/'.$testWeb.'/'.$testTopic.'/'.$origFile;
+
+      # you said so but it still is not there
+      unless (-e $imgPath) {
+	$this->{errorMsg} = "(2) can't find <nop>$origFile at <nop>$testWeb.$testTopic";
+	return $this->inlineError($params);
+      }
+      # found at given web-topic
+      $imgWeb = $testWeb;
+      $imgTopic = $testTopic;
+    } else {
+      # check current topic and then the album topic
+      ($testWeb, $testTopic) =
+	TWiki::Func::normalizeWebTopicName($imgWeb, $theTopic);
+      $imgPath = $pubDir.'/'.$testWeb.'/'.$testTopic.'/'.$origFile;
+      unless (-e $imgPath) {
+	# no, then look in the album
+	$albumTopic = TWiki::Func::getPreferencesValue('IMAGEALBUM', 
+	  ($testWeb eq $theWeb)?undef:$testWeb);
+	unless ($albumTopic) {
+	  # not found, and no album
+	  $this->{errorMsg} = "(3) can't find <nop>$origFile in <nop>$imgWeb";
+	  return $this->inlineError($params);
+	}
+	$albumTopic = 
+	  TWiki::Func::expandCommonVariables($albumTopic, $testTopic, $testWeb);
+	($testWeb, $testTopic) =
+	  TWiki::Func::normalizeWebTopicName($imgWeb, $albumTopic);
+	$imgPath = $pubDir.'/'.$testWeb.'/'.$testTopic.'/'.$origFile;
+
+	# not found in album
+	unless (-e $imgPath) {
+	  $this->{errorMsg} = "(4) can't find <nop>$origFile in <nop>$testWeb.$testTopic";
+	  return $this->inlineError($params);
+	}
+	# found in album
+	$imgWeb = $testWeb;
+	$imgTopic = $testTopic;
+      } else {
+	# found at current topic
+	$imgWeb = $testWeb;
+	$imgTopic = $testTopic;
+      }
+    }
+  }
+
+  writeDebug("origFile=$origFile, imgWeb=$imgWeb, imgTopic=$imgTopic");
+
+  my $origFileUrl = $pubUrlPath.'/'.$imgWeb.'/'.$imgTopic.'/'.$origFile;
+  $params->{alt} ||= $origFile;
+  $params->{title} ||= $params->{caption} || $origFile;
+  $params->{desc} ||= $params->{title};
+  $params->{href} ||= $origFileUrl;
 
   #writeDebug("type=$params->{type}, align=$params->{align}");
   #writeDebug("size=$params->{size}, width=$params->{width}, height=$params->{height}");
@@ -170,7 +242,8 @@ sub handleIMAGE {
       $params->{size}, $params->{width}, $params->{height});
 
   unless ($imgInfo) {
-    return "<span class=\"twikiAlert\">$this->{errorMsg}</span>";
+    #TWiki::Func::writeWarning("ImagePlugin - $this->{errorMsg}");
+    return $this->inlineError($params);
   }
   my $thumbFileUrl = $pubUrlPath.'/'.$imgWeb.'/'.$imgTopic.'/'.$imgInfo->{file};
 
@@ -206,8 +279,16 @@ sub handleIMAGE {
   $result =~ s/\$magnifyWidth/$this->{magnifyWidth}/g;
   $result =~ s/\$magnifyHeight/$this->{magnifyHeight}/g;
 
-  $result =~ s/\$mousein/$params->{mousein}/g;
-  $result =~ s/\$mouseout/$params->{mouseout}/g;
+  if ($params->{mousein}) {
+    $result =~ s/\$mousein/onmouseover="$params->{mousein}"/g;
+  } else {
+    $result =~ s/\$mousein//go;
+  }
+  if ($params->{mouseout}) {
+    $result =~ s/\$mouseout/onmouseout="$params->{mouseout}"/g;
+  } else {
+    $result =~ s/\$mouseout//go;
+  }
   $result =~ s/\$href/$params->{href}/g;
   $result =~ s/\$src/$thumbFileUrl/g;
   $result =~ s/\$height/$imgInfo->{height}/g;
@@ -248,7 +329,7 @@ sub handleIMAGE {
 sub getImageInfo {
   my ($this, $imgWeb, $imgTopic, $imgFile, $size, $width, $height) = @_;
 
-  #writeDebug("called getImageInfo($imgWeb, $imgTopic, $imgFile, $size, $width, $height)");
+  writeDebug("called getImageInfo($imgWeb, $imgTopic, $imgFile, $size, $width, $height)");
 
   unless ($this->{mage}) {
     $this->{mage} = new Image::Magick;
@@ -261,6 +342,8 @@ sub getImageInfo {
   $imgInfo{origFile} = $imgFile;
 
   my $imgPath = TWiki::Func::getPubDir().'/'.$imgWeb.'/'.$imgTopic;
+
+  writeDebug("pinging $imgPath/$imgFile");
   ($imgInfo{origWidth}, $imgInfo{origHeight}) = $this->{mage}->Ping($imgPath.'/'.$imgFile);
 
   if ($size || $width || $height) {
@@ -340,6 +423,15 @@ sub parseWikipediaParams {
   $params->{type} = 'simple' if !$params->{align} && !$params->{type};
   $params->{size} = $this->{thumbSize}
     if $params->{type} eq 'thumb' && !$params->{size};
+}
+
+###############################################################################
+sub inlineError {
+  my ($this, $params) = @_;
+
+  return '' if $params->{warn} eq 'off';
+  return "<span class=\"twikiAlert\">Error: $this->{errorMsg}</span>" unless $params->{warn};
+  return $params->{warn};
 }
 
 
