@@ -18,7 +18,7 @@ use strict;
 use vars qw($VERSION $RELEASE $debug $NO_PREFS_IN_TOPIC $SHORTDESCRIPTION);
 
 $VERSION = '$Rev$';
-$RELEASE = 'v0.05';
+$RELEASE = 'v0.10';
 $NO_PREFS_IN_TOPIC = 1;
 $SHORTDESCRIPTION = 'A flexible way to display breadcrumbs navigation';
 
@@ -46,7 +46,7 @@ sub renderBreadCrumbs {
   # get parameters
   my $webTopic = $params->{_DEFAULT} || "$currentWeb.$currentTopic";
   my $header = $params->{header} || '';
-  my $format = $params->{format} || '[[$target][$name]]';
+  my $format = $params->{format} || '[[$webtopic][$name]]';
   my $footer = $params->{footer} || '';
   my $separator = $params->{separator} || ' ';
   $separator = '' if $separator eq 'none';
@@ -70,8 +70,12 @@ sub renderBreadCrumbs {
     next if $exclude ne '' && $item->{name} =~ /^($exclude)$/;
     next if $include ne '' && $item->{name} !~ /^($include)$/;
     my $line = $format;
+    my $webtopic = $item->{target};
+    $webtopic =~ s/\//./go;
     $line =~ s/\$name/$item->{name}/g;
     $line =~ s/\$target/$item->{target}/g;
+    $line =~ s/\$webtopic/$webtopic/g;
+    writeDebug("... added");
     push @lines, $line;
   }
   my $result = $header.join($separator, @lines).$footer;
