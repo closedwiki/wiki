@@ -37,7 +37,7 @@ use vars qw( $translationToken
              @isoMonth %mon2num $initSort $initDirection
              @rowspan $pluginAttrs $prefsAttrs $tableId $tableSummary $tableCaption
              $iconUrl $unsortEnabled
-		  	 %sortDirection %columnType );
+             %sortDirection %columnType );
 
 BEGIN {
     $translationToken = "\0";
@@ -53,19 +53,19 @@ BEGIN {
         %mon2num = map { $_ => $count++ } @isoMonth;
     }
     %sortDirection = ( 'ASCENDING', 0, 
-    				   'DESCENDING', 1,
-    				   'NONE', 2 );
+                       'DESCENDING', 1,
+                       'NONE', 2 );
     %columnType = ( 'TEXT', 'text',
-    				'DATE', 'date', 
-    				'NUMBER', 'number',
-    				'UNDEFINED', 'undefined' );
-	# the maximum number of columns we will handle
+                    'DATE', 'date', 
+                    'NUMBER', 'number',
+                    'UNDEFINED', 'undefined' );
+    # the maximum number of columns we will handle
     $maxSortCols = 10000;
-   	$iconUrl = TWiki::Func::getPubUrlPath().
-   		'/'.
-		$TWiki::Plugins::TablePlugin::installWeb.
-		'/TablePlugin/';
-	$unsortEnabled = 1; # if true, table columns can be unsorted
+    $iconUrl = TWiki::Func::getPubUrlPath().
+               '/'.
+               $TWiki::Plugins::TablePlugin::installWeb.
+               '/TablePlugin/';
+    $unsortEnabled = 1; # if true, table columns can be unsorted
 };
 
 sub _setDefaults {
@@ -173,14 +173,14 @@ sub _parseParameters {
     my $tmpheaderbg = $params{headerbg};
     $headerBg = $tmpheaderbg if( defined $tmpheaderbg );
 
-	# only set headerbgsorted color if it is defined in %TABLE{}% attributes
-	# otherwise use headerbg
-	$tmp = $params{headerbgsorted};
-	if ( defined $tmp ) {
-		$headerBgSorted = $tmp;
-	} elsif ( defined $tmpheaderbg ) {
-		$headerBgSorted = $tmpheaderbg;
-	}
+    # only set headerbgsorted color if it is defined in %TABLE{}% attributes
+    # otherwise use headerbg
+    $tmp = $params{headerbgsorted};
+    if ( defined $tmp ) {
+        $headerBgSorted = $tmp;
+    } elsif ( defined $tmpheaderbg ) {
+        $headerBgSorted = $tmpheaderbg;
+    }
     
     $tmp = $params{headercolor};
     $headerColor = $tmp if( defined $tmp );
@@ -188,14 +188,14 @@ sub _parseParameters {
     my $tmpdatabg = $params{databg};
     @dataBg = split( /,\s*/, $tmpdatabg ) if( defined $tmpdatabg );
 
-	# only set databgsorted color if it is defined in %TABLE{}% attributes
-	# otherwise use databg
-	$tmp = $params{databgsorted};
-	if ( defined $tmp ) {
-		@dataBgSorted = split( /,\s*/, $tmp );
-	} elsif ( defined $tmpdatabg ) {
-		@dataBgSorted = split( /,\s*/, $tmpdatabg );
-	}
+    # only set databgsorted color if it is defined in %TABLE{}% attributes
+    # otherwise use databg
+    $tmp = $params{databgsorted};
+    if ( defined $tmp ) {
+        @dataBgSorted = split( /,\s*/, $tmp );
+    } elsif ( defined $tmpdatabg ) {
+        @dataBgSorted = split( /,\s*/, $tmpdatabg );
+    }
     
     $tmp = $params{datacolor};
     @dataColor = split( /,\s*/, $tmp ) if( defined $tmp );
@@ -285,8 +285,8 @@ sub _processTableRow {
         }
         if( defined $columnWidths[$colCount] &&
               $columnWidths[$colCount] && $span <= 2 ) {
-        	$attr->{width} = $columnWidths[$colCount];
-        	# CSS style
+            $attr->{width} = $columnWidths[$colCount];
+            # CSS style
             $attr->{style} .= 'width:'.$columnWidths[$colCount].';';
         }
         if( /^\s*\^\s*$/ ) { # row span above
@@ -298,34 +298,33 @@ sub _processTableRow {
                     my $nRows = scalar(@curTable);
                     my $rspan = $rowspan[$col]+1;
                     if ( $rspan > 1 ) {
-	                    $curTable[$nRows - $rspan][$col]->{attrs}->{rowspan} =
-                      		$rspan;
+                        $curTable[$nRows - $rspan][$col]->{attrs}->{rowspan} = $rspan;
                     }
                     undef($rowspan[$col]);
                 }
             }
 
-			my $currentDirection;
-			if( defined $sortCol && $colCount == $sortCol ) {
-				$currentDirection = _getCurrentSortDirection( $up );
-			}
+            my $currentDirection;
+            if( defined $sortCol && $colCount == $sortCol ) {
+                $currentDirection = _getCurrentSortDirection( $up );
+            }
 
-			if( defined $requestedTable &&
-				$requestedTable == $tableCount &&
-				defined $sortCol && 
-				$colCount == $sortCol) {
-				
-				# CSS class name
-				if( $currentDirection == $sortDirection{'ASCENDING'} ) {
-					$attr->{class} = _appendSortedAscendingCssClass( $attr->{class} );
-				}
-				if( $currentDirection == $sortDirection{'DESCENDING'} ) {
-					$attr->{class} = _appendSortedDescendingCssClass( $attr->{class} );
-				}
-			}
-			
-			my $type = '';
-			if( /^\s*\*(.*)\*\s*$/ ) {
+            if( defined $requestedTable &&
+                $requestedTable == $tableCount &&
+                defined $sortCol && 
+                $colCount == $sortCol) {
+
+                # CSS class name
+                if( $currentDirection == $sortDirection{'ASCENDING'} ) {
+                    $attr->{class} = _appendSortedAscendingCssClass( $attr->{class} );
+                }
+                if( $currentDirection == $sortDirection{'DESCENDING'} ) {
+                    $attr->{class} = _appendSortedDescendingCssClass( $attr->{class} );
+                }
+            }
+
+            my $type = '';
+            if( /^\s*\*(.*)\*\s*$/ ) {
                 $value = $1;
                 if( @headerAlign ) {
                     my $align = @headerAlign[$colCount % ($#headerAlign + 1) ];
@@ -333,11 +332,11 @@ sub _processTableRow {
                     $attr->{style} .= 'text-align:'.$align.';'
                 }
                 if ( $headerVAlign ) {
-                	$attr->{valign} = $headerVAlign if $headerVAlign;
-                	$attr->{style} .= 'vertical-align:'.$headerVAlign.';';
+                    $attr->{valign} = $headerVAlign if $headerVAlign;
+                    $attr->{style} .= 'vertical-align:'.$headerVAlign.';';
                 } elsif ( $vAlign ) {
-                	$attr->{valign} = $vAlign;
-                	$attr->{style} .= 'vertical-align:'.$vAlign.';';
+                    $attr->{valign} = $vAlign;
+                    $attr->{style} .= 'vertical-align:'.$vAlign.';';
                 }           
                 $type = 'th';
             } else {
@@ -351,35 +350,35 @@ sub _processTableRow {
                     $attr->{style} .= 'text-align:'.$align.';';
                 }
                 if ( $dataVAlign ) {
-                	$attr->{valign} = $dataVAlign if $dataVAlign;
-                	$attr->{style} .= 'vertical-align:'.$dataVAlign.';';
+                    $attr->{valign} = $dataVAlign if $dataVAlign;
+                    $attr->{style} .= 'vertical-align:'.$dataVAlign.';';
                 } elsif ( $vAlign ) {
-                	$attr->{valign} = $vAlign;
-                	$attr->{style} .= 'vertical-align:'.$vAlign.';';
+                    $attr->{valign} = $vAlign;
+                    $attr->{style} .= 'vertical-align:'.$vAlign.';';
                 }
                 $type = 'td';
             }
             
             if ($cellBorder ne '') {
-				my $theCellBorder = $cellBorder;
-				if ($tableRules eq 'none') {
-					# if tablerules are set to none we don't want cell borders anywhere
-					$theCellBorder = 0;
-				}
-				if ($tableRules eq 'cols') {
-					$theCellBorder = 0;
-				}
-				if ($tableRules eq 'groups' && $type eq 'th') {
-					$attr->{style} .= 'border-bottom-style:solid;';
-					$attr->{style} .= 'border-top-style:solid;';
-					$attr->{style} .= 'border-left-style:none;';
-				}
-				if ($tableRules eq 'groups' && $type eq 'td') {
-					$theCellBorder = 0;
-				}
-				$attr->{style} .= 'border-width:'.$theCellBorder.'px;';
-			}
-			
+                my $theCellBorder = $cellBorder;
+                if ($tableRules eq 'none') {
+                    # if tablerules are set to none we don't want cell borders anywhere
+                    $theCellBorder = 0;
+                }
+                if ($tableRules eq 'cols') {
+                    $theCellBorder = 0;
+                }
+                if ($tableRules eq 'groups' && $type eq 'th') {
+                    $attr->{style} .= 'border-bottom-style:solid;';
+                    $attr->{style} .= 'border-top-style:solid;';
+                    $attr->{style} .= 'border-left-style:none;';
+                }
+                if ($tableRules eq 'groups' && $type eq 'td') {
+                    $theCellBorder = 0;
+                }
+                $attr->{style} .= 'border-width:'.$theCellBorder.'px;';
+            }
+
             push @row, { text => $value, attrs => $attr, type => $type };
         }
         while( $span > 1 ) {
@@ -417,9 +416,9 @@ sub _guessColumnType {
     my $date = '';
     my $columnIsValid = 0;
     foreach my $row ( @curTable ) {
-    	next if ( !$row->[$col]->{text} );
-    	# else
-    	$columnIsValid = 1;
+        next if ( !$row->[$col]->{text} );
+        # else
+        $columnIsValid = 1;
         ( $num, $date ) = _convertToNumberAndDate( $row->[$col]->{text} );
         $isDate = 0 if( ! defined( $date ) );
         $isNum  = 0 if( ! defined( $num ) );
@@ -452,72 +451,72 @@ sub _stripHtml {
 # Append space if class names already exist
 # 'firstClass' becomes 'firstClass ' so 'secondClass' can be appended safely
 sub _makeCssClassListSafeToAppend {
-	my ( $classList ) = @_;
-	$classList ||= '';
-	$classList .= ' ' if length( $classList ) > 0;
-	return $classList;
+    my ( $classList ) = @_;
+    $classList ||= '';
+    $classList .= ' ' if length( $classList ) > 0;
+    return $classList;
 }
 
 # Append CSS class name for "first column" to (possibly) already defined class names
 sub _appendFirstColumnCssClass {
-	my $classList = _makeCssClassListSafeToAppend( @_ );
-	return $classList.'twikiFirstCol';
+    my $classList = _makeCssClassListSafeToAppend( @_ );
+    return $classList.'twikiFirstCol';
 }
 
 # Append CSS class name for "last row" to (possibly) already defined class names
 sub _appendLastRowCssClass {
-	my $classList = _makeCssClassListSafeToAppend( @_ );
-	return $classList.'twikiLast';
+    my $classList = _makeCssClassListSafeToAppend( @_ );
+    return $classList.'twikiLast';
 }
 
 # Append CSS class name for "sorted ascending" to (possibly) already defined
 # class names.
 sub _appendSortedAscendingCssClass {
-	my $classList = _makeCssClassListSafeToAppend( @_ );
-	return $classList.'twikiSortedAscendingCol';
+    my $classList = _makeCssClassListSafeToAppend( @_ );
+    return $classList.'twikiSortedAscendingCol';
 }
 
 # Append CSS class name for "sorted descending" to (possibly) already defined
 # class names.
 sub _appendSortedDescendingCssClass {
-	my $classList = _makeCssClassListSafeToAppend( @_ );
-	return $classList.'twikiSortedDescendingCol';
+    my $classList = _makeCssClassListSafeToAppend( @_ );
+    return $classList.'twikiSortedDescendingCol';
 }
 
 # The default sort direction.
 sub _getDefaultSortDirection {
-	return $sortDirection{'ASCENDING'};
+    return $sortDirection{'ASCENDING'};
 }
 
 # Gets the current sort direction.
 sub _getCurrentSortDirection {
-	my ( $currentDirection ) = @_;
-	$currentDirection ||= _getDefaultSortDirection();
-	return $currentDirection;
+    my ( $currentDirection ) = @_;
+    $currentDirection ||= _getDefaultSortDirection();
+    return $currentDirection;
 }
 
 # Gets the new sort direction (needed for sort button) based on the current sort
 # direction.
 sub _getNewSortDirection {
-	my ( $currentDirection ) = @_;
-	if ( !defined $currentDirection ) {
-		return _getDefaultSortDirection();
-	}
-	my $newDirection;
-	if ( $currentDirection == $sortDirection{'ASCENDING'} ) {
-		$newDirection = $sortDirection{'DESCENDING'};
-	}
-	if ( $currentDirection == $sortDirection{'DESCENDING'} ) {
-		if ( $unsortEnabled) {
-			$newDirection = $sortDirection{'NONE'};
-		} else {
-			$newDirection = $sortDirection{'ASCENDING'};
-		}
-	}
-	if ( $currentDirection == $sortDirection{'NONE'} ) {
-		$newDirection = $sortDirection{'ASCENDING'};
-	}
-	return $newDirection;
+    my ( $currentDirection ) = @_;
+    if ( !defined $currentDirection ) {
+        return _getDefaultSortDirection();
+    }
+    my $newDirection;
+    if ( $currentDirection == $sortDirection{'ASCENDING'} ) {
+        $newDirection = $sortDirection{'DESCENDING'};
+    }
+    if ( $currentDirection == $sortDirection{'DESCENDING'} ) {
+        if ( $unsortEnabled) {
+            $newDirection = $sortDirection{'NONE'};
+        } else {
+            $newDirection = $sortDirection{'ASCENDING'};
+        }
+    }
+    if ( $currentDirection == $sortDirection{'NONE'} ) {
+        $newDirection = $sortDirection{'ASCENDING'};
+    }
+    return $newDirection;
 }
 
 sub emitTable {
@@ -545,8 +544,8 @@ sub emitTable {
     $text .= $currTablePre.CGI::caption( $tableCaption ) if( $tableCaption );
     my $stype = '';
     # count the number of cols to prevent looping over non-existing columns
-	my $maxCols = 0;
-	
+    my $maxCols = 0;
+
     #Flush out any remaining rowspans
     for (my $i = 0; $i < @rowspan; $i++) {
         if( defined($rowspan[$i]) && $rowspan[$i] ) {
@@ -585,9 +584,9 @@ sub emitTable {
 
         # Count the maximum number of columns of this table
         for my $row (0..$#curTable) {
-        	my $thisRowMaxColCount = 0;
+            my $thisRowMaxColCount = 0;
             for my $col (0..$#{$curTable[$row]}) {
-            	$thisRowMaxColCount++;
+                $thisRowMaxColCount++;
             }
             $maxCols = $thisRowMaxColCount if ( $thisRowMaxColCount > $maxCols );
         }
@@ -603,16 +602,16 @@ sub emitTable {
                 }
             }
         }
-		
+
         $stype = $columnType{'UNDEFINED'};
         # only get the column type if within bounds
         if ( $sortCol < $maxCols ) {
-	        $stype = _guessColumnType( $sortCol );
-	    }
+            $stype = _guessColumnType( $sortCol );
+        }
         # invalidate sorting if no valid column
         if ( $stype eq $columnType{'UNDEFINED'} ) {
-        	undef $initSort;
-        	undef $sortCol;
+            undef $initSort;
+            undef $sortCol;
         } elsif ( $stype eq $columnType{'TEXT'} ) {
             if( $currentDirection == $sortDirection{'DESCENDING'} ) {
                 # efficient way of sorting stripped HTML text
@@ -621,7 +620,7 @@ sub emitTable {
                   sort { $b->[1] cmp $a->[1] }
                     map { [ $_, _stripHtml( $_->[$sortCol]->{text} ) ] }
                       @curTable;
-            } 
+            }
             if( $currentDirection == $sortDirection{'ASCENDING'} ) {
                 @curTable = map { $_->[0] }
                   sort { $a->[1] cmp $b->[1] }
@@ -660,44 +659,38 @@ sub emitTable {
         my $isHeaderRow = 0;
         
         foreach my $fcell ( @$row ) {
-        	
-        	# check if cell exists
-        	next if ( !$fcell || !$fcell->{type} );
-        	
+            # check if cell exists
+            next if ( !$fcell || !$fcell->{type} );
+            
             my $tableAnchor = '';
             next if( $fcell->{type} eq 'X' ); # data was there so sort could work with col spanning
             my $type = $fcell->{type};
             my $cell = $fcell->{text};
             my $attr = $fcell->{attrs} || {};
-			
-			my $newDirection;
-			my $isSorted = 0;
-		 	if ( $currentDirection != $sortDirection{'NONE'} &&
-		 		   defined $sortCol &&
-				   $colCount == $sortCol &&
-				   $requestedTable == $tableCount && 
-				   $stype ne '' ) {
-				$isSorted = 1;
-				$newDirection = _getNewSortDirection( $currentDirection );
-			} else {
-				$newDirection = _getDefaultSortDirection();
-			}
-			
+
+            my $newDirection;
+            my $isSorted = 0;
+            if ( $currentDirection != $sortDirection{'NONE'} &&
+                    defined $sortCol &&
+                    $colCount == $sortCol &&
+                    $requestedTable == $tableCount && 
+                    $stype ne '' ) {
+                $isSorted = 1;
+                $newDirection = _getNewSortDirection( $currentDirection );
+            } else {
+                $newDirection = _getDefaultSortDirection();
+            }
+            
             if( $type eq 'th' ) {
                 $headerCellCount++;
                 unless( $upchar ) {
                     $upchar = CGI::span( { class => 'tableSortIcon tableSortUp' },
-                    	CGI::img(
-                    	{ src=> $iconUrl.'up.gif',
-                          alt => 'up'} ));
+                                         CGI::img( { src=> $iconUrl.'up.gif', alt => 'up'} ) );
                     $downchar = CGI::span( { class => 'tableSortIcon tableSortDown' },
-                    	CGI::img(
-                    	{ src =>$iconUrl.'down.gif',
-                          alt => 'down'} ));
+                                           CGI::img( { src =>$iconUrl.'down.gif', alt => 'down'} ) );
                     $diamondchar = CGI::span( { class => 'tableSortIcon tableSortUp' },
-                    	CGI::img(
-                    	{ src => $iconUrl.'diamond.gif',
-                          border => 0, alt => 'sort'} ));
+                                              CGI::img( { src => $iconUrl.'diamond.gif',
+                                                        border => 0, alt => 'sort'} ) );
                 }
 
                 # DG: allow headers without b.g too (consistent and yes,
@@ -713,13 +706,12 @@ sub emitTable {
                     }
                     if( $currentDirection == $sortDirection{'DESCENDING'} ) {
                         $tableAnchor = CGI::a( { name=>'sorted_table' }, '<!-- -->') .
-                            			       CGI::span({ title=>'Sorted descending'},
-                                      		   $downchar);
+                                       CGI::span({ title=>'Sorted descending'},
+                                       $downchar);
                     }
                 }
                 if ( $currentDirection == $sortDirection{'NONE'} ) {
-                	$tableAnchor = CGI::a( { name=>'sorted_table' },
-                						   '<!-- -->' );
+                    $tableAnchor = CGI::a( { name=>'sorted_table' }, '<!-- -->' );
                 }
                 
                 my $linkColorStyle = '';
@@ -728,59 +720,60 @@ sub emitTable {
                     $linkColorStyle = 'color:'.$headerColor;
                 }
                 if( $sortThisTable && $rowCount == $headerRows - 1 ) {
-                	if ( $isSorted ) {
-	                	$attr->{bgcolor} = $headerBgSorted unless( $headerBgSorted =~ /none/i );
-	                }
-                	#my $debugText = CGI::span( { class => 'twikiSmall' }, 'requestedTable='.$requestedTable.'; sortCol='.$sortCol.'; colCount='.$colCount.'; initSort='.$initSort.'; sorted='.$isSorted.'; currDir='.$currentDirection.'; newdir='.$newDirection.' ');
-                	my $debugText = '';
-                	my $linkAttributes = { href => $url.
-                                             'sortcol='.$colCount.
-                                             ';table='.$tableCount.
-                                             ';up='.$newDirection.
-                                             '#sorted_table',
-                                             style => $linkColorStyle,
-                                             rel => 'nofollow',
-                                             title => 'Sort by this column' };
+                    if ( $isSorted ) {
+                        $attr->{bgcolor} = $headerBgSorted unless( $headerBgSorted =~ /none/i );
+                }
+                #my $debugText = CGI::span( { class => 'twikiSmall' }, 'requestedTable='.$requestedTable.'; sortCol='.$sortCol.'; colCount='.$colCount.'; initSort='.$initSort.'; sorted='.$isSorted.'; currDir='.$currentDirection.'; newdir='.$newDirection.' ');
+                my $debugText = '';
+                my $linkAttributes = { href => $url.
+                                       'sortcol='.$colCount.
+                                       ';table='.$tableCount.
+                                       ';up='.$newDirection.
+                                       '#sorted_table',
+                                       style => $linkColorStyle,
+                                       rel => 'nofollow',
+                                       title => 'Sort by this column' };
                     if( $cell =~ /\[\[|href/o ) {
                         $cell .= $debugText.' '.CGI::a(
-                        	$linkAttributes, $diamondchar).$tableAnchor;
+                            $linkAttributes, $diamondchar).$tableAnchor;
                     } else {
                         $cell = $debugText.CGI::a(
-	                        $linkAttributes, $cell ).$tableAnchor;
+                            $linkAttributes, $cell ).$tableAnchor;
                     }
                 } else {
-                	my $linkAttributes = { style => $linkColorStyle };
+                    my $linkAttributes = { style => $linkColorStyle };
                     $cell = CGI::span( $linkAttributes, ' <strong> '.$cell.' </strong> ' );
                 }
 
             } else {
-            	# $type is not 'th'
+                # $type is not 'th'
                 if( @dataBg ) {
                     my $bgcolor;
                     if ( $isSorted ) {
-                    	$bgcolor = $dataBgSorted[$dataColorCount % ($#dataBgSorted+1) ];
+                        $bgcolor = $dataBgSorted[$dataColorCount % ($#dataBgSorted+1) ];
                     } else {
-                    	$bgcolor = $dataBg[$dataColorCount % ($#dataBg+1) ];
+                        $bgcolor = $dataBg[$dataColorCount % ($#dataBg+1) ];
                     }
                     $attr->{bgcolor} = $bgcolor unless( $bgcolor =~ /none/i );
                 }
                 if( @dataColor ) {
                     my $color = $dataColor[$dataColorCount % ($#dataColor+1) ];
+                    
                     $cell = CGI::span({ style => 'color:'.$color }, ' '.$cell.' ')
-                      unless $color =~ /^(|none)$/i;
+                        unless $color =~ /^(|none)$/i;
                 }
                 $type = 'td' unless $type eq 'Y';
             } ###if( $type eq 'th' )
             
             my $isLastRow = ($rowCount == $numberOfRows - 1);
             if ( $attr->{rowspan} ) {
-            	$isLastRow = (($rowCount + ($attr->{rowspan} - 1)) == $numberOfRows - 1);
+                $isLastRow = (($rowCount + ($attr->{rowspan} - 1)) == $numberOfRows - 1);
             }
             
             # CSS class name
             $attr->{class} = _appendFirstColumnCssClass( $attr->{class} ) if $colCount == 0;
             $attr->{class} = _appendLastRowCssClass( $attr->{class} ) if $isLastRow;
-			
+            
             $colCount++;
             next if( $type eq 'Y' );
             my $fn = 'CGI::'.$type;
@@ -793,11 +786,11 @@ sub emitTable {
         $rowCount++;
         $isHeaderRow = 1 if ($headerCellCount == $colCount);
         if ($isHeaderRow) {
-        	# reset data color count to start with first color after
+            # reset data color count to start with first color after
             # each table heading
-        	$dataColorCount = 0;
+            $dataColorCount = 0;
         } else {
-        	$dataColorCount++;
+            $dataColorCount++;
         }
     } # foreach my $row ( @curTable )
     
