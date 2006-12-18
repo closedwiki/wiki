@@ -52,9 +52,9 @@ The =header=, =format= and =footer= format strings may contain the following var
    * $&lt;attr-name>: the value of the record attribute &lt;attr-name>
  
 ---++ Examples
-%LDAP{"(objectClass=posixAccount)" base="(ou=people)" header="| *Nr* | *Name* | *Mail* | *Photo* |" format="| $index | $cn | $mail | <img src=\"$jpegPhoto\" alt=\"$cn\" title=\"$cn\" width=\"100px\"> |" footer="<br/><font color='red'>$count users</font>" sort="cn"}%
+%LDAP{"(objectClass=posixAccount)" base="(ou=people)" limit="10" header="| *Nr* | *Name* | *Mail* | *Photo* |" format="| $index | $cn | $mail | <img src=\"$jpegPhoto\" alt=\"$cn\" title=\"$cn\" width=\"100px\"> |" footer="<br/><font color='red'>$count users</font>" sort="cn"}%
 
-%LDAP{"(objectClass=posixGroup)" base="(ou=group)" header="| *Nr* | *Group* | *Members* |" format="| $index | $cn | $memberUid |" sort="cn"}%
+%LDAP{"(objectClass=posixGroup)" base="(ou=group)" limit="10" header="| *Nr* | *Group* | *Members* |" format="| $index | $cn | $memberUid |" sort="cn"}%
 
 ---++ Plugin Settings
 <!-- provided for compatibility only
@@ -90,16 +90,19 @@ The %TOPIC% will use the default configuration of the LdapContrib in your =Local
 |  Copyright &copy;: | 2006 Michael Daum http://wikiring.com %BR% \
    This work was partly funded by Spanlink Communications |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | v0.02 |
+|  Plugin Version: | v0.20 |
 |  Change History: | &nbsp; |
+|  18 Dec 2006: | added support for addresses as specified in RFC4517 |
+|  04 Dec 2006: | map utf8 strings from LDAP to the site's encoding and vice versa |
+|  30 Nov 2006: | replaced commonTagsHandler with a properly registered LDAP tag |
 |  31 Aug 2006: | added NO_PREFS_IN_TOPIC |
 |  19 Jul 2006: | public release |
 |  25 April 2006: | Initial (internal) version |
-|  CPAN Dependencies: | none |
+|  CPAN Dependencies: | CPAN:Unicode::MapUTF8 |
 |  Other Dependencies: | TWiki:Plugins/LdapContrib |
 |  Perl Version: | 5.8 |
 |  TWiki:Plugins/Benchmark: | %TWIKIWEB%.GoodStyle nn%, %TWIKIWEB%.FormattedSearch nn%, %TOPIC% nn% |
 |  Plugin Home: | TWiki:Plugins/%TOPIC% |
 |  Feedback: | TWiki:Plugins/%TOPIC%Dev |
 
--- TWiki:Main/MichaelDaum - 31 Aug 2006
+-- TWiki:Main/MichaelDaum - 18 Dec 2006
