@@ -278,7 +278,8 @@ sub _getRedirectUrl {
     my $session = shift;
 
     my $query = $session->{cgiQuery};
-    my $redirecturl = $query->param( 'redirectto' ) || '';
+    my $redirecturl = $query->param( 'redirectto' );
+    return '' unless $redirecturl;
     if( $redirecturl =~ /^$TWiki::regex{linkProtocolPattern}\:\/\//o ) {
         # assuming URL
         if ($TWiki::cfg{AllowRedirectUrl}) {
