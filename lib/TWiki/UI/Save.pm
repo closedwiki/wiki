@@ -274,6 +274,24 @@ sub buildNewTopic {
     return( $newMeta, $newText, $saveOpts, $merged );
 }
 
+sub _getRedirectUrl {
+    my $session = shift;
+
+    my $query = $session->{cgiQuery};
+    my $redirecturl = $query->param( 'redirectto' ) || '';
+    if( $redirecturl =~ /^$TWiki::regex{linkProtocolPattern}\:\/\//o ) {
+        # assuming URL
+        if ($TWiki::cfg{AllowRedirectUrl}) {
+            return $redirecturl;
+        } else {
+            return '';
+        }
+    }
+    # assuming 'web.topic' or 'topic'
+    my ( $w, $t ) = $session->normalizeWebTopicName( $session->{webName}, $redirecturl );
+    $redirecturl = $session->getScriptUrl( 1, 'view', $w, $t );
+}
+
 =pod
 
 ---++ StaticMethod save($session)
@@ -345,12 +363,7 @@ sub save {
         $session->{topicName} = $topic;
     }
 
-    my $redirecturl;
-    if ($TWiki::cfg{AllowRedirectUrl}) {
-        $redirecturl = $query->param( 'redirectto' );
-    }
-    # FIXME: Support for web.topics, not depending on {AllowRedirectUrl} flag
-
+    my $redirecturl = _getRedirectUrl( $session );
     my $saveaction = '';
     foreach my $action qw( save checkpoint quietsave cancel preview
                            addform replaceform delRev repRev ) {
