@@ -347,10 +347,10 @@ PREAMBLE
   $latex2ImgCmd .= ' -D '.int(100)*$this->{scaleFactor};
   $latex2ImgCmd .= ' --'.$this->{imageType};
 
-  writeDebug("executing $latex2ImgCmd");
+  #writeDebug("executing $latex2ImgCmd");
   my ($data, $exit) = $this->{sandbox}->sysCommand($latex2ImgCmd, FILENAME=>"$tempFile");
-  writeDebug("exit=$exit");
-  writeDebug("data=$data");
+  #writeDebug("exit=$exit");
+  #writeDebug("data=$data");
   if ($exit) {
     $msg = '<div class="twikiAlert">Error during latex2img:<pre>'.
       $data.'</pre></div>';
