@@ -49,8 +49,8 @@ sub new {
     fgColors => {},
       # contains the foreground color of a math string
 
-    bgColors => {},
-      # contains the background color of a math string
+    bgColor => {},
+      # contains the background color for all formulas
 
     sizes => {},
       # font size of a math string, can be; can be
@@ -183,17 +183,17 @@ sub handleMath {
   $text =~ s/^\s+//go;
   $text =~ s/\s+$//go;
   # extract latex options
-  my $color = TWiki::Func::extractNameValuePair($args, 'color') || '';
-  $this->{fgColors}{$text} = $color if $color;
+  $this->{fgColors}{$text} = TWiki::Func::extractNameValuePair($args, 'color') 
+    || $this->{latexFGColor};
 
-  my $bgcolor = TWiki::Func::extractNameValuePair($args, 'bgcolor') || '';
-  $this->{bgColors}{$text} = $bgcolor if $bgcolor;
+  $this->{bgColor} = TWiki::Func::extractNameValuePair($args, 'bgcolor') 
+    || $this->{latexBGColor};
 
   my $size = TWiki::Func::extractNameValuePair($args, 'size') || '';
   $this->{sizes}{$text} = $size if $size;
 
   # TODO: add global settings to hash
-  my $hashCode = md5_hex($text.$color.$bgcolor.$size);
+  my $hashCode = md5_hex($text.$this->{fgColors}{$text}.$this->{bgColor}.$size);
   $this->{hashedMathStrings}{$hashCode} = $text;
   #writeDebug("hasing '$text' as $hashCode");
 
@@ -300,28 +300,25 @@ sub renderImages {
   # create the latex file on the fly
   print $tempFile "\\documentclass[fleqn,12pt]{article}\n";
   print $tempFile <<'PREAMBLE';
-    \usepackage{amsmath}
-    \usepackage[normal]{xcolor}
-    \setlength{\mathindent}{0cm}
-    \definecolor{teal}{rgb}{0,0.5,0.5}
-    \definecolor{navy}{rgb}{0,0,0.5}
-    \definecolor{aqua}{rgb}{0,1,1}
-    \definecolor{lime}{rgb}{0,1,0}
-    \definecolor{maroon}{rgb}{0.5,0,0}
-    \definecolor{silver}{gray}{0.75}
+\usepackage{amsmath}
+\usepackage[normal]{xcolor}
+\setlength{\mathindent}{0cm}
+\definecolor{teal}{rgb}{0,0.5,0.5}
+\definecolor{navy}{rgb}{0,0,0.5}
+\definecolor{aqua}{rgb}{0,1,1}
+\definecolor{lime}{rgb}{0,1,0}
+\definecolor{maroon}{rgb}{0.5,0,0}
+\definecolor{silver}{gray}{0.75}
 PREAMBLE
   print $tempFile $this->{latexPreamble}."\n";
   print $tempFile '\begin{document}'."\n";
   print $tempFile '\pagestyle{empty}'."\n";
-  print $tempFile "\\color".formatColorSpec($this->{latexFGColor})."\n";
-  print $tempFile "\\pagecolor".formatColorSpec($this->{latexBGColor})."\n";
+  print $tempFile "\\pagecolor".formatColorSpec($this->{bgColor})."\n";
   while (my ($key, $value) = each(%{$this->{hashedMathStrings}})) {
     $imageNumber++;
     print $tempFile "{\n";
     print $tempFile "\\color".formatColorSpec($this->{fgColors}{$value})."\n"
       if $this->{fgColors}{$value};
-    print $tempFile "\\pagecolor".formatColorSpec($this->{bgColors}{$value})."\n"
-      if $this->{bgColors}{$value};
     if ($this->{sizes}{$value}) {
       print $tempFile "\\$this->{sizes}{$value}\n";
     } else {
@@ -346,14 +343,14 @@ PREAMBLE
 
   # run latex2html on the latex file we generated
   my $latex2ImgCmd = $this->{latex2Img} . ' %FILENAME|F%';
-  $latex2ImgCmd .= " $this->{latexBGColor}";
+  $latex2ImgCmd .= " $this->{bgColor}";
   $latex2ImgCmd .= ' -D '.int(100)*$this->{scaleFactor};
   $latex2ImgCmd .= ' --'.$this->{imageType};
 
-  #writeDebug("executing $latex2ImgCmd");
+  writeDebug("executing $latex2ImgCmd");
   my ($data, $exit) = $this->{sandbox}->sysCommand($latex2ImgCmd, FILENAME=>"$tempFile");
-  #writeDebug("exit=$exit");
-  #writeDebug("data=$data");
+  writeDebug("exit=$exit");
+  writeDebug("data=$data");
   if ($exit) {
     $msg = '<div class="twikiAlert">Error during latex2img:<pre>'.
       $data.'</pre></div>';
