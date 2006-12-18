@@ -19,21 +19,16 @@ use strict;
 use vars qw($VERSION $RELEASE $isInitialized $NO_PREFS_IN_TOPIC $SHORTDESCRIPTION);
 
 $VERSION = '$Rev$';
-$RELEASE = 'v0.02';
+$RELEASE = 'v0.20';
 $NO_PREFS_IN_TOPIC = 1;
 $SHORTDESCRIPTION = 'Query and display data from an LDAP directory';
 
 ###############################################################################
 sub initPlugin { 
   $isInitialized = 0;
+
+  TWiki::Func::registerTagHandler('LDAP', \&handleLdap);
   return 1; 
-}
-
-###############################################################################
-sub commonTagsHandler {
-### my ( $text, $topic, $web ) = @_;
-
-  $_[0] =~ s/%LDAP{(.*?)}%/&handleLdap($_[2], $_[1], $1)/ge;
 }
 
 ###############################################################################

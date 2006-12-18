@@ -16,40 +16,42 @@
 package TWiki::Plugins::LdapNgPlugin::Core;
 
 use strict;
-use vars qw($ldap);
-
+use vars qw($ldap $debug);
+use Unicode::MapUTF8 qw(to_utf8 from_utf8);
 use TWiki::Contrib::LdapContrib;
+
+$debug = 0; # toggle me
 
 ###############################################################################
 sub writeDebug {
   # comment me in/out
-  #&TWiki::Func::writeDebug('- LdapNgPlugin - '.$_[0]);
+  #&TWiki::Func::writeDebug('- LdapNgPlugin - '.$_[0]) if $debug;
+  print STDERR 'LdapNgPlugin - '.$_[0]."\n" if $debug;
 }
 
 ###############################################################################
 sub handleLdap {
-  my ($web, $topic, $args) = @_;
+  my ($session, $params, $topic, $web) = @_;
 
-  writeDebug("called handleLdap($web, $topic, $args)");
+  writeDebug("called handleLdap($web, $topic)");
 
   # get args
-  my $theFilter = &TWiki::Func::extractNameValuePair($args) ||
-		  &TWiki::Func::extractNameValuePair($args, 'filter') || '';
-  my $theBase = &TWiki::Func::extractNameValuePair($args, 'base') || $TWiki::cfg{Ldap}{Base} || '';
-  my $theHost = &TWiki::Func::extractNameValuePair($args, 'host') || $TWiki::cfg{Ldap}{Host} || 'localhost';
-  my $thePort = &TWiki::Func::extractNameValuePair($args, 'host') || $TWiki::cfg{Ldap}{Port} || '389';
-  my $theVersion = &TWiki::Func::extractNameValuePair($args, 'version') || $TWiki::cfg{Ldap}{Version} || 3;
-  my $theSSL = &TWiki::Func::extractNameValuePair($args, 'ssl') || $TWiki::cfg{Ldap}{SSL} || 0;
-  my $theScope = &TWiki::Func::extractNameValuePair($args, 'scope') || 'sub';
-  my $theFormat = &TWiki::Func::extractNameValuePair($args, 'format') || '$dn';
-  my $theHeader = &TWiki::Func::extractNameValuePair($args, 'header') || '';
-  my $theFooter = &TWiki::Func::extractNameValuePair($args, 'footer') || '';
-  my $theSep = &TWiki::Func::extractNameValuePair($args, 'sep') || '$n';
-  my $theSort = &TWiki::Func::extractNameValuePair($args, 'sort') || '';
-  my $theReverse = &TWiki::Func::extractNameValuePair($args, 'reverse') || 'off';
-  my $theLimit = &TWiki::Func::extractNameValuePair($args, 'limit') || 0;
-  my $theSkip = &TWiki::Func::extractNameValuePair($args, 'skip') || 0;
-  my $theHideNull = &TWiki::Func::extractNameValuePair($args, 'hidenull') || 'off';
+  my $theFilter = $params->{'filter'} || $params->{_DEFAULT} || '';
+  my $theBase = $params->{'base'} || $TWiki::cfg{Ldap}{Base} || '';
+  my $theHost = $params->{'host'} || $TWiki::cfg{Ldap}{Host} || 'localhost';
+  my $thePort = $params->{'port'} || $TWiki::cfg{Ldap}{Port} || '389';
+  my $theVersion = $params->{version} || $TWiki::cfg{Ldap}{Version} || 3;
+  my $theSSL = $params->{ssl} || $TWiki::cfg{Ldap}{SSL} || 0;
+  my $theScope = $params->{scope} || 'sub';
+  my $theFormat = $params->{format} || '$dn';
+  my $theHeader = $params->{header} || ''; 
+  my $theFooter = $params->{footer} || '';
+  my $theSep = $params->{sep} || '$n';
+  my $theSort = $params->{sort} || '';
+  my $theReverse = $params->{reverse} || 'off';
+  my $theLimit = $params->{limit} || 0;
+  my $theSkip = $params->{skip} || 0;
+  my $theHideNull = $params->{hidenull} || 'off';
 
   my $query = &TWiki::Func::getCgiQuery();
   my $theRefresh = $query->param('refresh') || 0;
@@ -61,6 +63,7 @@ sub handleLdap {
   my @theSort = split(/[\s,]+/, $theSort);
   $theBase = $1.','.$TWiki::cfg{Ldap}{Base} if $theBase =~ /^\((.*)\)$/;
   #writeDebug("base=$theBase");
+  writeDebug("format=$theFormat");
 
   # new connection
   $ldap->disconnect() if $ldap;
@@ -72,9 +75,16 @@ sub handleLdap {
     ssl=>$theSSL,
   );
 
+  # encode theFilter string
+  $theFilter = to_utf8(-string=> $theFilter, -charset=>$TWiki::cfg{Site}{CharSet});
+
   # search 
-  my $search = $ldap->search($theFilter, $theBase, $theScope, 
-    ($theReverse eq 'on')?0:$theLimit);
+  my $search = $ldap->search(
+    filter=>$theFilter, 
+    base=>$theBase, 
+    scope=>$theScope, 
+    limit=>($theReverse eq 'on')?0:$theLimit
+  );
   unless (defined $search) {
     return &inlineError('ERROR: '.$ldap->getError());
   }
@@ -111,14 +121,13 @@ sub handleLdap {
   $theHeader = expandVars($theHeader.$theSep,count=>$count) if $theHeader;
   $theFooter = expandVars($theSep.$theFooter,count=>$count) if $theFooter;
 
+  #$result = $session->UTF82SiteCharSet($result) || $result;
+  $result = from_utf8(-string=>$result, -charset=>$TWiki::cfg{Site}{CharSet});
   $result = &TWiki::Func::expandCommonVariables("$theHeader$result$theFooter", 
     $topic, $web);
 
-  # cleanup leftovers
-  $result =~ s/\$[\S]+\b//go;
-
   writeDebug("done handleLdap()");
-  #writeDebug("result=$result");
+  writeDebug("result=$result");
 
   return $result;
 }
@@ -137,22 +146,28 @@ sub inlineError {
 sub expandVars {
   my ($format, %data) = @_;
 
-  #writeDebug("called expandVars($format, '".join(',',keys %data));
+  #writeDebug("called expandVars($format, '".join(',',keys %data).")");
 
   foreach my $key (keys %data) {
     my $value = $data{$key};
-    if ($data{$key} =~ /^ARRAY/) {
-      $value = join(', ', sort @$value);
-    }
-    $format =~ s/\$$key/$value/g;
+    $value = join(', ', sort @$value) if ref($data{$key}) eq 'ARRAY';
+
+    # Format list values using the '$' delimiter in multiple lines; see rfc4517
+    $value =~ s/([^\\])\$/$1<br \/>/go; 
+    $value =~ s/\\\$/\$/go;
+    $value =~ s/\\\\/\\/go;
+
+    $format =~ s/\$$key\b/$value/g;
     #writeDebug("$key=$value");
   }
 
+  $format =~ s/\n/<br \/>/go; # multi-line values, e.g. for postalAddress
+
+  $format =~ s/\$nop/\n/go;
   $format =~ s/\$n/\n/go;
   $format =~ s/\$quot/\"/go;
   $format =~ s/\$percnt/\%/go;
   $format =~ s/\$dollar/\$/go;
-  $format =~ s/\\/\//go;
 
   #writeDebug("done expandVars()");
   return $format;
