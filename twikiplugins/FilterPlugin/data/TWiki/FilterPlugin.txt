@@ -127,8 +127,9 @@ This is a second comment.
 |  Plugin Author: | TWiki:Main.MichaelDaum |
 |  Copyright &copy;: | 2005-2006, MichaelDaum http://wikiring.com |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | v0.97 |
+|  Plugin Version: | v0.98 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  18 Dec 2006: | using registerTagHandler for FORMATLIST |
 |  13 Oct 2006: | fixed =limit= parameter in FORMATLIST |
 |  31 Aug 2006: | added NO_PREFS_IN_TOPIC |
 |  15 Aug 2006: | added =use strict;= and fixed revealed errors |
@@ -146,4 +147,4 @@ This is a second comment.
 |  Feedback: | TWiki:Plugins/%TOPIC%Dev |
 |  Appraisal: | TWiki:Plugins/%TOPIC%Appraisal |
 
--- TWiki:Main.MichaelDaum - 13 Oct 2006
+-- TWiki:Main.MichaelDaum - 18 Dec 2006
