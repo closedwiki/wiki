@@ -107,7 +107,7 @@ This is a list of all the tables available. The names should be self-explanatory
 | XPSHOWPROJECTCOMPLETIONBYSTORIES  | =project=	| |
 | XPSHOWPROJECTCOMPLETIONBYTASKS	 | =project=	| |
 | XPPIVOTBYFIELD | =iteration=, =field=, =split=, =skip= | Creates a pivot table of all tasks in the iteration. =field= is the field in the task which serves as the pivot. The Boolean =split= indicates whether the field should be split into its components (useful only when this is the developer field and more than one developer are assigned to a task). The Boolean =skip= indicates whether to omitt ongoing tasks in the table.  |
-| XPTEAMPIVOTBYFIELD | =team=, =field=, =split=, =skip= | Creates a pivot table of all tasks assigned to team. =field= is the field in the task which serves as the pivot. The Boolean =split= indicates whether the field should be split into its components (useful only when this is the developer field and more than one developer are assigned to a task). The Boolean =skip= indicates whether to omitt ongoing tasks in the table.  |
+| XPTEAMPIVOTBYFIELDREPORT | =team=, =field=, =split=, =skip= | Creates a pivot table of all tasks assigned to team. =field= is the field in the task which serves as the pivot. The Boolean =split= indicates whether the field should be split into its components (useful only when this is the developer field and more than one developer are assigned to a task). The Boolean =skip= indicates whether to omitt ongoing tasks in the table.  |
 | XPCREATETOPIC | =Team= / =Project= / =Iteration= / =Story= (default: =Story=), =Prompt= | Creates a form that will construct a new topic of the indicated kind, the prompt is a heading preceding the form (a heading level could be indicated by putting it into the prompt). |
 
 %X% Remember that the actual display of the hierarchy of activities can be configured by settings and may differ from the terminology reflected by these tags.
@@ -185,15 +185,16 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
    * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
       | ==data/TWiki/XpTrackerPlugin.txt== |  |
    | ==lib/TWiki/Plugins/XpTrackerPlugin.pm== |  |
-   | ==bin/timesheet== |  |
+   | ==lib/TWiki/Plugins/XpTrackerPlugin/HiddenTableDef.pm== |  |
+   | ==lib/TWiki/Plugins/XpTrackerPlugin/WebDB.pm== |  |
    | ==templates/oopstimesheet.tmpl== |  |
    | ==templates/oopstimesheetreport.tmpl== |  |
+   | ==lib/TWiki/Plugins/XpTrackerPlugin/build.pl== |  |
+   | ==lib/TWiki/Plugins/XpTrackerPlugin/Business.pm== |  |
    | ==data/_default_XpTracker/PatternSkinTrackingviewTemplate.txt== |  |
    | ==data/_default_XpTracker/PatternSkinTrackingeditTemplate.txt== |  |
    | ==data/_default_XpTracker/PatternSkinTrackinggenericviewTemplate.txt== |  |
    | ==data/_default_XpTracker/PatternSkinTrackinggenericeditTemplate.txt== |  |
-   | ==lib/TWiki/Plugins/XpTrackerPlugin/build.pl== |  |
-   | ==lib/TWiki/Plugins/XpTrackerPlugin/Business.pm== |  |
    | ==data/_default_XpTracker/IterationTemplate.txt== |  |
    | ==data/_default_XpTracker/IterationTemplateOptions.txt== |  |
    | ==data/_default_XpTracker/ProjectTemplate.txt== |  |
@@ -206,6 +207,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
    | ==data/_default_XpTracker/IterationForm.txt== |  |
    | ==data/_default_XpTracker/StoryForm.txt== |  |
    | ==data/_default_XpTracker/ProjectForm.txt== |  |
+   | ==data/_default_XpTracker/TeamForm.txt== |  |
    | ==data/_default_XpTracker/ProjectTopics.txt== |  |
    | ==data/_default_XpTracker/TaskForm.txt== |  |
    | ==data/_default_XpTracker/ATeamMember.txt== |  |
@@ -213,7 +215,8 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
    | ==data/_default_XpTracker/AllIterations.txt== |  |
    | ==data/_default_XpTracker/GettingStarted.txt== |  |
 
-   * Optionally, run ==%TOPIC%_installer.pl== to automatically check and install other TWiki modules that this module depends on. You can also do this step manually. Alternatively, manually make sure the dependencies listed in the table below are resolved.
+   * Download the other TWiki and CPAN modules that this plugin depends on.
+   * Alternatively, run ==%TOPIC%_installer.pl== to automatically check and install other TWiki modules that this module depends on. Make sure that the DBCacheContrib from TWiki:Plugins.YetAnotherDBCacheContrib is used.
    * Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
 
 ---+++ Plugin Info
@@ -221,16 +224,17 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Plugin Author: | TWiki:Main.RichardBennett, TWiki:Main.MartinWatt, TWiki:Main.ThomasWeigert |
 |  Copyright:     | &copy; 2001-2006,  TWiki:Main.RichardBennett, TWiki:Main.MartinWatt, TWiki:Main.ThomasWeigert |
 |  License:       | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 1 Dec 2006 |
+|  Plugin Version: | 15 Dec 2006 |
+|  15 Dec 2006:    | Leverage the cache mechanism of TWiki:Plugins.YetAnotherDBCacheContrib to speed up expensive searches; small performance hit on very simple topics. Some refactoring.   |
 |   1 Dec 2006:    | Optional additional fields in timesheet. Do not generate timesheets, estimate tables, or load tables if not applicable. |
 |  25 Nov 2006:    | Make topic sort configurable. Sort all iterations together in time sheet. Remove unneeded internally used fields. Add team argument to =XPSHOWLOAD=. |
 |  24 Nov 2006:    | Allow creation of topics based on a base with sequence numbers affixed. Added XPCREATETOPIC tag. Use TWiki tables for formatting. |
 |  19 Nov 2006:    | Cleaned up some of the table layout when empty cells are present. Apply rounding to numbers in generated tables. |
-|  31 Jul 2006:    | Dakar port of branch developed and maintained by TWiki:Main.ThomasWeigert. Includes time tracking and recording capabilities built on ideas by TWiki:Main.ThomasEschner. Better task table control via TWiki:Plugins/EditHiddenTablePlugin |
+|  31 Jul 2006:    | Dakar port of branch developed and maintained by TWiki:Main.ThomasWeigert. Includes time tracking and recording capabilities built on ideas by TWiki:Main.ThomasEschner. Better task table control via TWiki:Plugins.EditHiddenTablePlugin |
 |  19 Nov 2002:    | 3.0 Updated version |
 |  16 Oct 2002:    | 2.0 New version of Plugin by TWiki:Main.MartinWatt |
 |  29 Jul 2002:    | 1.0 Initial version of Plugin by TWiki:Main.MartinWatt based on code by TWiki:Main.RichardBennett |
-|  Dependencies: | <table border="1"><tr><th>Name</th><th>Version</th><th>Description</th></tr><tr><td align="left">TWiki::Plugins::EditHiddenTablePlugin</td><td align="left">Required. Download and install from [[TWiki:Plugins/EditHiddenTablePlugin][plugin library]].</td></tr><tr><td align="left">TWiki::Plugins::ControlsPlugin</td><td align="left">Required. Download and install from [[TWiki:Plugins/ControlsPlugin][plugin library]].</td></tr><tr><td align="left">HTTP::Date</td><td align="left">Required. Available from [[http://cpan.uwinnipeg.ca/dist/Time-modules][CPAN]].</td></tr><tr><td align="left">Time::CTime</td><td align="left">Required. Available from [[http://cpan.uwinnipeg.ca/dist/Time-modules][CPAN]].</td></tr></table> |
+|  Dependencies: | <table border="1"><tr><th>Name</th><th>Version</th><th>Description</th></tr><tr><td align="left">TWiki::Plugins::EditHiddenTablePlugin</td><td align="left">&gt;=0</td><td align="left">Required. Download and install from [[TWiki:Plugins/EditHiddenTablePlugin][plugin library]].</td></tr><tr><td align="left">TWiki::Plugins::DBCacheContrib</td><td align="left">&gt;=0</td><td align="left">Required. Download and install from [[TWiki:Plugins/YetAnotherDBCacheContrib][plugin library]].</td></tr><tr><td align="left">TWiki::Plugins::ControlsPlugin</td><td align="left">&gt;=0</td><td align="left">Required. Download and install from [[TWiki:Plugins/ControlsPlugin][plugin library]].</td></tr><tr><td align="left">HTTP::Date</td><td align="left">&gt;=1</td><td align="left">Required. Available from [[http://cpan.uwinnipeg.ca/dist/Time-modules][CPAN]].</td></tr><tr><td align="left">Time::CTime</td><td align="left">&gt;=1</td><td align="left">Required. Available from [[http://cpan.uwinnipeg.ca/dist/Time-modules][CPAN]].</td></tr></table> |
 |  Perl Version: | 5.0 |
 |  TWiki:Plugins/Benchmark: | %TWIKIWEB%.GoodStyle xx%, %TWIKIWEB%.FormattedSearch xx%, %TOPIC% xx% |
 |  Plugin Home: | TWiki:Plugins/%TOPIC% |
