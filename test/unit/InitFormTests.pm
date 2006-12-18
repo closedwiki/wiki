@@ -167,7 +167,7 @@ sub get_formfield {
   my ($fld, @children) = @_;
   # Return HTML for field number $fld (an integer); the header row is 0
   my $form = (($children[$fld]->content_list())[1]->content_list())[0]->as_HTML();
-  $form =~ s/\s*tabindex=\d+//gos;  # get rid of tabindex
+  $form =~ s/\s*tabindex="?\d+"?//gos;  # get rid of tabindex
   return $form;
 }
 
