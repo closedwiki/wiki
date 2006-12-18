@@ -9,3 +9,6 @@
 %XPSHOWPROJECTCOMPLETIONBYTASKS{"%TOPIC%"}%
 
 %XPSHOWPROJECTSTORIES{"%TOPIC%"}%
+
+%META:FORM{name="TeamForm"}%
+%META:FIELD{name="Organization" attributes="H" title="Organization" value="ROOT"}%
