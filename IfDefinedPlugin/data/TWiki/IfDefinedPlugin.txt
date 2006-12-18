@@ -67,7 +67,7 @@ This plugin has been externalized from the TWiki:Plugins/NatSkinPlugin.
 </verbatim>
 
 returns the "then or "else" content depending on the "test"
-expression expanding to the emtpy string or to the string given in "as".
+expression expanding to the emtpy string or matching the string given in "as".
 Optionally the current topic action is checked to match the one given in "action".  
 Normally, all surrounding whitespaces are removed, that is the resulting content
 is glued together in a way. You may switch that off by setting "glue" to "off"
@@ -100,39 +100,67 @@ the ELSIFDEFINED parts can be repeated arbitrarily.  Before rendering the
 Thereby nested <nop>TWikiML expressions can be prevented from being expanded in
 advance.
 
+---+++ IFACCESS
+*Syntax*:
+<verbatim>
+%IFACCESS%
+
+%IFACCESS{"<webtopic>" 
+  [type="view|change"] 
+  [user="<WikiName>"] 
+  [then="<then-clause>"] 
+  [else="<else-clause>"] 
+  [glue="on|off"]}%
+</verbatim>
+
+This checks the access permissions a user has on a given topic and then renders
+the =&lt;then-clause>= if access is granted and =lt;else-clause>= otherwise.
+By default, the current user's view access will be checked on the current topic (=%<nop>IFACCESS%=).
+The other parameters are:
+
+   * =&lt;webtopic>=: the name of the topic to be checked, defaults to current
+   * =user="&lt;WikiName>"=: the name of the user to be checked, defaults to the current user
+   * =type="view|change"=: the type of access to be checked, either view access or change/edit access, defaults to "view"
+   * =then="&lt;then-clause>"=: the string to be returned on granted access, defaults to "1"
+   * =else="&lt;else-clause>"=: the string to be returned if no access is granted, defaults to "0"
+   * =glue="on|off"=: apply glue around the IFACCESS tag or not, defaults to "on"
+
+
 ---++ Demo
-	* Set FOO = foo
-	* FOO is %IFDEFINED{"%FOO%" then=" " else="not" glue="off"}% defined.
-	* FOO is %IFDEFINED{"%FOO%" as="bar" then=" " else="not" glue="off"}% defined as "bar".
-	* BAR is %IFDEFINED{"%BAR%" then=" " else="not" glue="off"}% defined.
-   
+   * Set FOO = foo
+   * FOO is %IFDEFINED{"%FOO%" then=" " else="not" glue="off"}% defined.
+   * FOO is %IFDEFINED{"%FOO%" as="bar" then=" " else="not" glue="off"}% defined as "bar".
+   * BAR is %IFDEFINED{"%BAR%" then=" " else="not" glue="off"}% defined.
+   * %WIKIUSERNAME% has %IFACCESS{type="change" then=" " else=" no "}% write access to %TOPIC%
+   * %MAINWEB%.TWikiGuest has %IFACCESS{user="TWikiGuest" type="change" then=" " else=" no "}% write access to %TOPIC%
 
 
 ---++ Plugin Installation Instructions
 
-	* [[http://twiki.org/p/pub/Plugins/%TOPIC%/%TOPIC%.zip][Download]] the ZIP file
-	* Unzip it in your twiki installation directory. Content: 
-	  | *File:* | *Description:* |
-	  | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
-	  | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
-	* (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
+   * [[http://twiki.org/p/pub/Plugins/%TOPIC%/%TOPIC%.zip][Download]] the ZIP file
+   * Unzip it in your twiki installation directory. Content: 
+   | *File:* | *Description:* |
+   | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
+   | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
+   * (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
 
 ---++ Plugin Info
 <!-- provided for compatibility only
-	* Set SHORTDESCRIPTION = Render content conditionally
+   * Set SHORTDESCRIPTION = Render content conditionally
 -->
 |  Plugin Author: | TWiki:Main.MichaelDaum |
 |  Copyright &copy;: | 2006, MichaelDaum@WikiRing.com |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | v0.95 |
+|  Plugin Version: | v0.96 |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
+|  18 Dec 2006: | removed support for cairo and beijing; added IFACCESS tag: checks access of some user on a topic |
 |  18 Sep 2006: | allow multinline values to be checked |
 |  31 Aug 2006: | added NO_PREFS_IN_TOPIC |
 |  15 Aug 2006: | added =$test= and =$value= |
 |  07 Aug 2006: | be smarter to detect the cgi action wrt to different apache setups |
 |  10 Mar 2006: | added =as= parameter; \
                   added escape parameters and recursive variable expansion to the condition argument \
-		  which helps to circumvent problems due to different plugin orders |
+                  which helps to circumvent problems due to different plugin orders |
 |  21 Feb 2006: | Initial version |
 |  CPAN Dependencies: | none |
 |  Other Dependencies: | none |
@@ -142,4 +170,4 @@ advance.
 |  Feedback: | TWiki:Plugins/%TOPIC%Dev |
 
 
--- TWiki:Main.MichaelDaum - 18 Sep 2006
+-- TWiki:Main.MichaelDaum - 18 Dec 2006
