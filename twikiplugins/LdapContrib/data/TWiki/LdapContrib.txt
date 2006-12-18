@@ -17,7 +17,7 @@ groups into TWiki's access control. Note, however that you need at least
 TWiki-4.0.3 for that.
 Optionally, if you need an interface to query your LDAP directory and display
 the results in a TWiki topic install the TWiki:Plugins/LdapNgPlugin
-which will make use of the LdapContrib services. 
+which will make use of the <nop>LdapContrib services. 
 This work is a rewrite of the TWiki:Plugins/LdapPlugin by
 TWiki:Main/GerardHickey while bringing authentication, user management and
 other LDAP applications onto a common base.
@@ -40,10 +40,12 @@ Tip: You can add this button on any page by adding
 
 
 ---++ Configuration
-The LdapContrib package is configured using a set of variables that need to be
-added to the =lib/LocalSite.cfg= configuration file. Have a look at the
-=lib/ldap.cfg= example that comes with this package. These allow to accomodate
-your TWiki installation to your specifc LDAP installation and user accounting.
+The <nop>LdapContrib package is configured using a set of variables that need to be
+added to the =lib/LocalSite.cfg= configuration file. Either configure them using the
+<a href="%SCRIPTURLPATH{"configure"}%">configure</a> tool or 
+have a look at the =lib/ldap.cfg= example that comes with this package. These
+allow to accomodate your TWiki installation to your specifc LDAP installation
+and user accounting.
 
 ---+++ Simple Example 
 For the sake of this documentation we assume that users accounts in your
@@ -128,8 +130,8 @@ These are:
      <verbatim> $TWiki::cfg{Ldap}{MemberIndirection} = 0; </verbatim>
    *  define the <nop>WikiUserName attribute
      <verbatim> $TWiki::cfg{Ldap}{WikiNameAttribute} = 'cn'; </verbatim>
-   * flag to indicate removall of whitespaces <nop>WikiUserNames that come from ldap;
-     <verbatim> $TWiki::cfg{Ldap}{WikiNameRemoveWhiteSpace} = 1; </verbatim>
+   * flag to indicate normalization of <nop>WikiUserNames that come from ldap;
+     <verbatim> $TWiki::cfg{Ldap}{NormalizeWikiNames} = 1; </verbatim>
    * flag indicating wether we fallback to <nop>TWikiGroups;
      <verbatim> $TWiki::cfg{Ldap}{TWikiGroupsBackoff} = 1; </verbatim>
    * the dn to use when binding to the LDAP server; if undefined anonymous binding
@@ -146,27 +148,28 @@ These are:
      <verbatim> $TWiki::cfg{Ldap}{MaxCacheHits} = -1; </verbatim>
    * enable/disable mapping ldap groups; default is 0
      <verbatim> $TWiki::cfg{Ldap}{MapGroups} = 0; </verbatim>
+   * prevent certain names from being looked up in ldap
+     <verbatim> $TWiki::cfg{Ldap}{Exclude} = 'TWikiGuest, TWikiContributor, TWikiRegistrationAgent, TWikiAdminGroup, NobodyGroup'; </verbatim>
 
 ---+++ Membership
-Ldap servers follow different schemata to define "membership". They store the
-information which users are in a group either by storing a set of unique ids in
+LDAP servers follow different schemata to define "membership". They store the
+information either by storing a set of unique ids in
 the group object (posixGroup) or the full DNs of the user objects
-(groupOfNames). In the latter case the user object a DN points to has to be
-fetched in a secondary search. This mode may be switched on the
-using the =MemberIndirection= option (see above). 
+(groupOfNames). In the latter case the user objects' unique ids have to be
+fetched separately based on their distinguished name. This mode may be switched on the
+using the =MemberIndirection= option. 
 
 Note, that the reverse relation where the _user objects_ store in
 which group they participate (for example using a =memberOf= attribute) is
 maintained by some ldap servers automatically. Those that encode membership this
-way only are not supported by the LdapContrib yet.
+way _only_ are not supported by the <nop>LdapContrib yet.
 
 Furthermore, user objects may have a _primary_ group attribute (posixAccount).
 This is a simple value (vs. multi-value) and stores the id of a default group
-that user is member of. This information is not used by the LdapContrib. 
+that user is member of. This information is not used by the <nop>LdapContrib. 
 
-In short, the LdapContrib reads membership information reading the group
-objects only and may fetch member objects indirectly using a secondary search
-for the users' DN.
+In short, the <nop>LdapContrib reads membership information reading the group
+objects only, and may map the member object indirectly to the login name.
 
 ---+++ Authentication
 If you want to authenticate TWiki users by binding to an LDAP server that stores
@@ -176,9 +179,10 @@ their credentials you have to register the <nop>LdapUser class as the so called
 <verbatim>
 $TWiki::cfg{PasswordManager} = 'TWiki::Users::LdapUser';
 $TWiki::cfg{Ldap}{WikiNameAttribute} = 'cn';
-$TWiki::cfg{Ldap}{WikiNameRemoveWhiteSpace} = 1;
+$TWiki::cfg{Ldap}{NormalizeWikiNames} = 1;
 </verbatim>
 This will use the 'cn' attribute of an ldap user account and remove whitespaces
+and other characters not part of a proper <nop>WikiName
 in its value to derive <nop>WikiUserNames (eg. remove whitespaces in =cn=John Smith= 
 and  get <nop>JohnSmith).
 
@@ -200,32 +204,43 @@ take precedence. If switched off <nop>TWikiGroups are ignored.
 
 ---++ Installation Instructions
 
-	* Download the ZIP file from the Plugin web (see below)
-	* Unzip ==%TOPIC%.zip== in your twiki installation directory. Content: 
-	| *File:* | *Description:* |
+   * Download the ZIP file from the Plugin web (see below)
+   * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content: 
+   | *File:* | *Description:* |
 %$MANIFEST%
-	* Optionally, run ==%TOPIC%_installer== to automatically check and install other 
-	  TWiki modules that this module depends on. You can also do this step manually.
-	* Alternatively, manually make sure the dependencies listed in the table below 
-	  are resolved.
-	* Copy the content of the file =lib/ldap.cfg= into =lib/LocalSite.cfg= and edit
-	  the settings to your needs (see the [[#Configuration][Configuration]] chapter)
+   * Optionally, run ==%TOPIC%_installer== to automatically check and install other 
+     TWiki modules that this module depends on. You can also do this step manually.
+   * Alternatively, manually make sure the dependencies listed in the table below 
+     are resolved.
+   * Use <a href="%SCRIPTURLPATH{"configure"}%">configure</a> to set the LDAP settings.
+   * Optionally, copy the content of the file =lib/ldap.cfg= into =lib/LocalSite.cfg= and edit
+     the settings to your needs (see the [[#Configuration][Configuration]] chapter)
 
 ---++ Contrib Info
-	* Set SHORTDESCRIPTION = LDAP services for TWiki
+   * Set SHORTDESCRIPTION = LDAP services for TWiki
 
 |  Author: | TWiki:Main/MichaelDaum |
 |  Copyright &copy;: | 2006 Michael Daum http://wikiring.com %BR% \
-   This work was partly funded by Spanlink Communications |
+   This work was partly funded by [[http://www.spanlink.com][Spanlink Communications]] and \
+   [[http://www.trivadis.com][Trivadis]] |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Version: | v0.7 |
+|  Version: | v0.88 |
 |  CPAN Dependencies: | CPAN:Net::LDAP, CPAN:Digest::MD5 | 
 |  Dependencies: | None |
 |  Change History: | |
+|  18 Dec 2006: | various performance improvements; \
+                  fixed usage of =limit= argument; \
+                  renamed configuration option "<nop>WikiNameRemoveWhiteSpace" to "<nop>NormalizeWikiNames"; \
+                  support for large databases using paged ldap search results; \
+                  new configuration option "Exclude" to exclude standard TWiki user accounts, e.g. <nop>TWikiRegistrationAgent, \
+                  from being looked up in LDAP; \
+                  added support for faster API implementing =isMemberOf=;\
+                  added Config.spec file to integrate the <nop>LadpContrib into Twiki's "configure" tool; \
+                  added support for <nop>WikiNames derived from mail attributes |
 |  03 Nov 2006: | fixed binding to the server by first searching the full dn instead of assuming a fixed one \
                   (issue found by Cederic Weber); \
-		  added new feature <nop>MapGroup to be able to switch off group mapping and have ;\
-		  login-to-wikiname conversion only |
+                  added new feature <nop>MapGroup to be able to switch off group mapping and have ;\
+                  login-to-wikiname conversion only |
 |  02 Aug 2006: | added a user accounts in memory cache |
 |  19 July 2006: | public release |
 |  24 May 2006: | api adjustments, improved wikiname generation |
@@ -235,4 +250,4 @@ take precedence. If switched off <nop>TWikiGroups are ignored.
 |  Appraisal: | TWiki:Plugins/%TOPIC%Appraisal |
 
 
--- TWiki:Main/MichaelDaum - 03 Nov 2006
+-- TWiki:Main/MichaelDaum - 18 Dec 2006
