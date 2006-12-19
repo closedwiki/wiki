@@ -112,16 +112,18 @@ sub beforeSaveHandler {
     # do not uncomment, use $_[0], $_[1]... instead
     ## my ( $text, $topic, $web, $meta ) = @_;
 
+    my $query = TWiki::Func::getCgiQuery();
     return unless (pluginApplies('save'));
-
-   my $query = TWiki::Func::getCgiQuery();
-   
-#   print STDERR 'beforeSaveHandler - $query->keywords = '.join(', ', $query->keywords)."\n";
-#   print STDERR 'beforeSaveHandler - $query->param = '.join(', ', $query->param)."\n";
-#   print STDERR 'beforeSaveHandler - $query->url_param = '.join(', ', $query->url_param)."\n";
-#   print STDERR 'beforeSaveHandler - $query->param(data) = '.join(', ', $query->param('data'))."\n";
    
    return unless defined($query->param('inlineeditsave'));
+
+   print STDERR 'beforeSaveHandler - $query->keywords = '.join(', ', $query->keywords)."\n";
+   print STDERR 'beforeSaveHandler - $query->param = '.join(', ', $query->param)."\n";
+   print STDERR 'beforeSaveHandler - $query->url_param = '.join(', ', $query->url_param)."\n";
+   print STDERR 'beforeSaveHandler - $query->param(data) = '.join(', ', $query->param('data'))."\n";
+   print STDERR 'beforeSaveHandler - $query->param(dataType) = '.join(', ', $query->param('dataType'))."\n";
+   
+
 #detect if we've been sent a JSON package, and un-ravel that.
     my $dataType = $query->param('dataType') || '';
     if ($dataType eq 'JSON') {
@@ -134,6 +136,7 @@ sub beforeSaveHandler {
             my $sectionName = $obj->{topicSection};
             $sectionName =~ s/"//g; #"gedit does dumb syntax highlighting
             $changedSections{$sectionName} = $obj;
+print STDERR "section $sectionName = |||".$changedSections{$sectionName}->{value}."|||\n";
         }
         my ($meta,$text) = TWiki::Func::readTopic($_[2],$_[1]);
         $text =~ s/^%META:TOPICINFO{.*}%$//g;
@@ -196,17 +199,46 @@ sub afterSaveHandler() {
         print $query->header(
                     -content_type => 'text',
              );
-        my $data = $query->param('data') || '';
-        my @jsons = split('####', $data);
-        foreach my $json (@jsons) {
-            my $obj = jsonToObj($json);
-            print "\n<p />".$obj->{topicSection};
-            print "\n<p />".$obj->{value};
-        }
-        my $sectionOrder = jsonToObj($query->param('sectionOrder') || '');
-        print "\n<p />order: ".join(', ', @$sectionOrder);
+        my $data = $query->param('data');
+        if (defined($data)) {
+	        my @jsons = split('####', $data);
+	        foreach my $json (@jsons) {
+	            my $obj = jsonToObj($json);
+	            print "\n<p />".$obj->{topicSection};
+	            print "\n<p />".$obj->{value};
+	        }
+        		my $sectionOrder = jsonToObj($query->param('sectionOrder') || '');
+        		print "\n<p />order: ".join(', ', @$sectionOrder);
+        		print $errors;
+		} else {
+			my ($response, $date, $user, $rev, $comment, $oopsUrl, $loginName, $unlockTime) = _getTopicSectionState($web, $topic);
 
-        print $errors;
+			 my $obj = {
+			    topicName   => $web.$topic,
+			    topicRev   =>$rev ,
+			    topicDate   => $date,
+			    topicUser   =>$user ,
+#			    topicSection   => $section,
+				theTml => $text,
+#			    theTml => TWiki::entityEncode( $text ),       #can't pass it here, json does not do ><'s'   
+#			    sectionName   => $sectionName,
+#			    leasedBy   => $leaseduserWikiName,
+			    leasedByLogin   => $loginName,
+			    leasedFor   => $unlockTime,
+			    oopsUrl   => $oopsUrl,
+#			    viewUrl   => $viewUrl ,
+#			    saveUrl   => $saveUrl,
+#			    restUrl   => $restUrl,
+#			    authedRestUrl   =>$authedRestUrl ,
+#			    me   => $wikiusername,
+#			    browserLogin => $browserLogin,
+			    Infoend => 0
+			 };
+
+   			print (objToJson($obj));
+
+		}
+        
         exit 1;
     }
 }
@@ -249,8 +281,10 @@ sub postRenderingHandler {
             my $section = $key;
             my $tml = $sectionIds{$key};
             my ($response, $date, $user, $rev, $comment, $oopsUrl, $loginName, $unlockTime, $viewUrl, $saveUrl, $restUrl, $sectionName) = _getTopicSectionState($WEB, $TOPIC, $section, $tml);
-            #send the tml in a textarea to stop the browser from closing xml fragments
-            $output .= '<textarea rows="1" cols="1" disabled readonly class="inlineeditTopicTML hideElement" id="inlineeditTopicTML_'.$section.'" '.'>'.$tml.'</textarea>';
+            #send escaped tml in an textarea to stop the browser from closing xml fragments
+            #problems in safari http://twiki.org/cgi-bin/view/Codev/SomeBrowsersLoseInitialNewlineInTextArea
+            my $encodedtml = 'SVEN';#TWiki::entityEncode( $tml );
+            $output .= '<textarea rows="1" cols="1" wrap="off" disabled readonly class="inlineeditTopicTML hideElement" id="inlineeditTopicTML_'.$section.'" '.'>'.$encodedtml.'</textarea>';
 
             #these need to remain in seperate divs to avoid needing to escape them
     	   if ( $sendHTML == 1) {
@@ -322,7 +356,7 @@ sub REST_getTopicState {
    my ($web, $topic) = ('', $topicName);
    ($web, $topic) = normalizeWebTopicName($web, $topic);
 
-    my ($response, $date, $user, $rev, $comment, $oopsUrl, $loginName, $unlockTime) = _getTopicState($web, $topic, $section);
+    my ($response, $date, $user, $rev, $comment, $oopsUrl, $loginName, $unlockTime) = _getTopicSectionState($web, $topic, $section);
    return $response;
 }
 
@@ -422,7 +456,7 @@ sub _getTopicSectionState {
     topicDate   => $date,
     topicUser   =>$user ,
     topicSection   => $section,
-#    tml => $tml,       #can't pass it here, json does not do ><'s'
+    theTml => TWiki::entityEncode( $tml ),       #can't pass it here, json does not do ><'s'   
     sectionName   => $sectionName,
     leasedBy   => $leaseduserWikiName,
     leasedByLogin   => $loginName,
@@ -468,7 +502,7 @@ sub getSection {
     	$text = $renderer->takeOutBlocks( $text, 'verbatim', $removedVerbatims );
     	$text = $renderer->takeOutBlocks( $text, 'pre', $removedPres );
 
-        my @rawSections = split(/(\n\n+)/, $text, -1);
+        my @rawSections = split(/\n(\n+)/, $text, -1);
 		my $preAmble = ''; #where we store \n that preceed the first block        
         #re-combine sections that are just made up of newlines
         for my $sec (@rawSections) {
