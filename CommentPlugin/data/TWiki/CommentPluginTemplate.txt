@@ -282,7 +282,7 @@ Talk using TOC adding on end - TWiki:Main/FranzJosefSilli
 
 
 ---++++ return
-Post to a different topic and return to here. The comment =target= is set in the =PROMPT=. In the form below the =redirectto= is set to the current (including) topic. %RED% Available with TWiki 4.1, with *<nop>AllowRedirectUrl* enabled you can redirect to a URL. Otherwise only links to TWiki Topics are allowed as shown in the example.%ENDCOLOR%
+Post to a different topic and return to here. The comment =target= is set in the =PROMPT=. In the form below the =redirectto= is set to the current (including) topic. %RED% Available with TWiki 4.1. %ENDCOLOR%
 
 <verbatim>
 %TMPL:DEF{returnpromptbox}%
