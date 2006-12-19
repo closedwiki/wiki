@@ -1,9 +1,33 @@
 # Analyse who fixed what
 use strict;
+use Data::Dumper;
 
 my $REPOS = '/home/svn/repos';
 my $BUGS = '/home/twiki4/twikisvn/data/Bugs';
+my $MANIFEST = '/home/twiki4/twikisvn/tools/MANIFEST';
 my $verbose = 0;
+my $releases;
+foreach my $release (
+    split("\n",
+          `svn ls --verbose http://svn.twiki.org/svn/twiki/tags`)) {
+    if ($release =~ s/^\s*(\d+).*TWikiRelease(\d\d)x(\d\d)x(\d\d)\/$//) {
+        $releases->{0+$2}->{0+$3}->{0+$4} = $1;
+    }
+}
+
+my @a = sort { $a <=> $b } keys(%$releases);
+my $major = pop(@a);
+my @a = sort { $a <=> $b } keys(%{$releases->{$major}});
+my $minor = pop(@a);
+my @a = sort { $a <=> $b } keys(%{$releases->{$major}->{$minor}});
+my $patch = pop(@a);
+my $patchcin = $releases->{$major}->{$minor}->{$patch};
+my $minorcin = $releases->{$major}->{$minor}->{0};
+my $majorcin = $releases->{$major}->{0}->{0};
+
+if ($verbose) {
+    print "Last release $major/$majorcin.$minor/$minorcin.$patch/$patchcin\n";
+}
 
 my %rename = (
     peterthoeny => "PeterThoeny",
@@ -26,7 +50,10 @@ my %rename = (
     dabright => "DavidBright",
    );
 
-my $coreExt = qr/ClassicSkin|CommentPlugin|EditTablePlugin|EmptyPlugin|InterwikiPlugin|JSCalendarContrib|MailerContrib|PatternSkin|TwistyContrib|BehaviourContrib|TwistyPlugin|PreferencesPlugin|RenderListPlugin|SlideShowPlugin|SmiliesPlugin|SpreadSheetPlugin|TablePlugin|TipsContrib|WysiwygPlugin/;
+my $coreExt = join ('|',
+                    map { $_ =~ s/^.*\///; $_ }
+                      split("\n", `grep '!include ' $MANIFEST`));
+print "$coreExt\n";
 
 # First load and update WhoDunnit.dat, the list of checkers-in for each rev
 my $topSid = `svnlook youngest $REPOS`;
@@ -80,53 +107,85 @@ foreach my $item (sort { $a <=> $b }
              $field{Extension} =~ /\b($coreExt)\b/)) {
         foreach my $cin (split(/\s+/, $field{Checkins})) {
             #print "$cin Zapped by $sid2who{$cin}\n";
-            $zappedBy{$sid2who{$cin}}{$item} = 1;
-            $contributedBy{$sid2who{$cin}}{$item} = 1;
+            my $who = $sid2who{$cin};
+            $zappedBy{$who}{$item} = $cin;
+            $contributedBy{$who}{$item} = 1;
         }
         if ($field{ReportedBy} =~ /Main\.(.*)$/) {
             $reportedBy{$1}++;
         }
     } else {
         foreach my $cin (split(/\s+/, $field{Checkins})) {
-            $contributedBy{$sid2who{$cin}}{$item} = 1;
+            my $who = $sid2who{$cin};
+            $contributedBy{$who}{$item} = $cin;
         }
     }
 
 }
 closedir(D);
-my %counts;
+my (%majorc, %minorc, %patchc, %counts);
 foreach my $zapper (keys %zappedBy) {
-    $counts{$zapper} = scalar(keys %{$zappedBy{$zapper}}), "\n";
+    while (my ($item, $cin) = each %{$zappedBy{$zapper}}) {
+        if ($cin > $majorcin) {
+            if ($cin > $minorcin) {
+                if ($cin > $patchcin) {
+                    $patchc{$zapper}++;
+                }
+                $minorc{$zapper}++;
+            }
+            $majorc{$zapper}++;
+        }
+        $counts{$zapper}++;
+    }
 }
 print "\n" if $verbose;
 open(F, ">$BUGS/HallOfFame.txt") || die $!;
 print F <<HEADING;
-The following tables show contributions to the TWiki core since the
-inception of this database. The tables are refreshed once a week
+The following tables show contributions to the TWiki core.
+The tables are refreshed once a week
 by a cron job. *THIS TOPIC IS AUTO_GENERATED*. Do not attempt to edit it!
 %TOC%
 ---+ Bug Zapping Summary
 This table shows the top 5 most active contributors to the
-TWiki core since the inception of this database. 
+TWiki core in different timeframes.
 
-The count is of the number of closed bugs (not enhancements) where a checkin
+The count is of the number of closed and waiting for release bugs
+(not enhancements) where a checkin
 was done by the person (i.e. they contributed to the fix).
 %STARTINCLUDE%
-| *Who* | *Bugs fixed* |
+| Top 5 bug zappers since the last: ||||||
+| *Patch release* || *Minor release* || *Major release* ||
+| _Who_ | _Fixes_ | _Who_ | _Fixes_ | _Who_ | _Fixes_ |
 HEADING
-my $n = 0;
-foreach my $zapper (sort { $counts{$b} <=> $counts{$a} } keys %counts) {
-    next unless $zapper;
-    print F "| [[TWiki:Main.$zapper][$zapper]] | $counts{$zapper} |\n";
-    last if ++$n == 5;
+my @pzs = sort { $patchc{$b} <=> $patchc{$a} } keys %patchc;
+my @mzs = sort { $minorc{$b} <=> $minorc{$a} } keys %minorc;
+my @Mzs = sort { $majorc{$b} <=> $majorc{$a} } keys %majorc;
+for my $n (0..4) {
+    if ($n < scalar(@pzs)) {
+        print F "| [[TWiki:Main.$pzs[$n]][$pzs[$n]]] | $patchc{$pzs[$n]} ";
+    } else {
+        print F "| | ";
+    }
+    if ($n < scalar(@mzs)) {
+        print F "| [[TWiki:Main.$mzs[$n]][$mzs[$n]]] | $minorc{$mzs[$n]} ";
+    } else {
+        print F "| | ";
+    }
+    if ($n < scalar(@Mzs)) {
+        print F "| [[TWiki:Main.$Mzs[$n]][$Mzs[$n]]] | $majorc{$Mzs[$n]} |\n";
+    } else {
+        print F "| | |\n";
+    }
+
 }
 print F "%STOPINCLUDE%\n";
+
 print F <<STUFF;
 ---+ Bug Zapping Full Story
-Here's the full story of core bug zapper contributions
+Here's the full story of core bug zapper contributions since the inception
+of this database.
 | *Who* | *Bugs reported* | *Core bugs fixed* |
 STUFF
-$n = 0;
 foreach my $zapper (sort { $counts{$b} <=> $counts{$a} } keys %counts) {
     next unless $zapper;
     print F "| [[TWiki:Main.$zapper][$zapper]] | $reportedBy{$zapper} | $counts{$zapper} |\n";
@@ -164,4 +223,5 @@ foreach my $who (values %sid2who) {
 foreach my $zapper (sort { $sins{$b} <=> $sins{$a} } keys %sins) {
     print F "| [[TWiki:Main.$zapper][$zapper]] | $sins{$zapper} |\n";
 }
+
 close(F);
