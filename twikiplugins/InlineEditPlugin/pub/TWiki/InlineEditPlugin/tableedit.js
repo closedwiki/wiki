@@ -86,7 +86,8 @@ TWiki.InlineEditPlugin.TableEdit.prototype.getSaveData = function() {
         serialzationObj.value = "\n\n"+serialzationObj.value+"\n\n";
 	}
 
-    serialzationObj.value = serialzationObj.value + this.topicSectionObject.editDivSection.postLines;
+    //need to add a leading \n to stop the different browsers doing different things - see http://twiki.org/cgi-bin/view/Codev/SomeBrowsersLoseInitialNewlineInTextArea
+    serialzationObj.value = "\n"+serialzationObj.value + this.topicSectionObject.editDivSection.postLines;
 	
     return serialzationObj.toJSONString();
 }

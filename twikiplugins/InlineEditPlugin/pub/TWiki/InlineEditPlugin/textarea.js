@@ -70,7 +70,7 @@ TWiki.InlineEditPlugin.TextArea.prototype.getSaveData = function() {
     }
 
     serialzationObj.topicSection = textInput.topicSection;
-    serialzationObj.value = textInput.value;
+    serialzationObj.value = "\n"+textInput.value;
     if (this.topicSectionObject.newSection) {
         //make a real section of it
         serialzationObj.value = "\n\n"+serialzationObj.value+"\n\n";
@@ -109,7 +109,8 @@ newTextarea.onkeyup = "TWiki.InlineEditPlugin.TextArea.TextAreaResize(this)";
 newTextarea.onclick = "TWiki.InlineEditPlugin.TextArea.showComponentEdit(event)";
 newTextarea.rows = defaultNumberOfRows;
 newTextarea.cols = defaultNumberOfCols;
-newTextarea.innerHTML = this.topicSectionObject.tml;
+newTextarea.value = this.topicSectionObject.theTml;
+newTextarea.wrap = 'hard';
 var hr1 = document.createElement('HR');
 newForm.appendChild(hr1);
 newForm.appendChild(newTextarea);

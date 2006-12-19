@@ -45,25 +45,40 @@ function addLoadEvent(func){
 }
 
 //create the TWiki namespace if needed
-if ( typeof( TWiki ) == "undefined" ) {
-    TWiki = {};
-}
+if ( typeof( TWiki ) == "undefined" ) {    TWiki = {}; }
 //create the TWiki.InlineEditPlugin namespace if needed
-if ( typeof( TWiki.InlineEditPlugin ) == "undefined" ) {
-    TWiki.InlineEditPlugin = {};
+if ( typeof( TWiki.InlineEditPlugin ) == "undefined" ) {    TWiki.InlineEditPlugin = {}; }
+
+
+TWiki.InlineEditPlugin.requestTopicState = function(topic, success_func) {
+	if (success_func == undefined) {
+		success_func = showTopicState;
+	}
+    var callback = { 
+	  success: success_func, 
+	  failure: function(o) {
+	  			alert('Error!\nStatusText='+o.statusText+'\nContents='+o.responseText);
+		}
+        ,argument: ['svenwashere'] 
+	};
+	var restUrl = TWikiScriptUrl+'/rest/InlineEditPlugin/getTopicState';
+    //have to URI encode the data - to allow + signs in topic text..
+	var postParams = 'replywitherrors=1;dataType=JSON;topicName='+topic;
+	var transaction = YAHOO.util.Connect.asyncRequest('POST', restUrl, callback, postParams); 
+	return transaction;
 }
 
 //show the current state of the topic
-showTopicState = function(stateJSON) {
+showTopicState = function(o) { //where o is the return obj from YAHOO.util.Connect.asyncRequest
+	var stateJSON = o.responseText;
     var state= eval('('+stateJSON+')');
 
-    var currentState = topicSections[state.topicSection];
-
 //TODO: make a status bar?
-    if (state.topicRevision != currentState.topicRevision) {
-        alert(state.topicUser+' updated this topic on '+state.topicDate+'\n It might be safer to refresh before editing');
-        //replace with custom popup window, with ability to refresh, cancel....
-    } else if ((state.leasedBy != '') && (state.leasedBy != state.me)) {
+//    if (state.topicRevision != currentState.topicRevision) {
+//        alert(state.topicUser+' updated this topic on '+state.topicDate+'\n It might be safer to refresh before editing');
+//        //replace with custom popup window, with ability to refresh, cancel....
+//    } else 
+	if ((state.leasedBy != '') && (state.leasedBy != state.me)) {
         alert('Sorry, this topic is being locked / leased for edit by '+state.leasedBy+' for the next '+state.leasedFor+' minutes');
         //replace with custom popup window, with ability to wait for lock, or to cancel - re-request every now and then, and then re-fresh view
     } else {
@@ -161,19 +176,18 @@ InlineEditOnload = function() {
 
         if (typeof topicInfo == 'undefined')
             continue;
+        if (typeof (divs[i]) == 'undefined')
+            continue; //no HTML to anchor to
 
         var topicSectionObject = topicInfo.parseJSON();
-//        if (!topicSectionObject) {
-//            alert(topicInfo)
-//        }
+        if (!topicSectionObject) {
+            //alert(topicInfo);	//TODO: buggo - there are some section that don't get JSON parseable info.
+			continue;
+        }
 
         topicSectionObject.tml = tmldivs[i];
-
         topicSectionObject.HTMLdiv = divs[i];
-//        if (topicSectionObject.HTMLdiv != divs[i]) {
-//            alert(divs[i] + '>----<'+i+'>'+divs[i].id)
-//            alert(topicSectionObject.HTMLdiv);
-//        }
+
         topicSectionObject.HTMLdiv.topicSectionObject = topicSectionObject;
         topicSectionObject.topicinfoSrc = topicInfo;
 

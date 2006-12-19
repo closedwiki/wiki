@@ -1,0 +1,15 @@
+%META:TOPICINFO{author="SvenDowideit" date="1166480376" format="1.1" reprev="1.2" version="1.2"}%
+Run all the Unit tests in order
+
+*[[%PUBURL%/%TWIKIWEB%/JSUnitContrib/testRunner.html?testpage=%SCRIPTURL{"view"}%/%WEB%/%TOPIC%][Run JsTestSuite with TestRuner]]*
+
+<script language="javascript" src="%PUBURL%/%TWIKIWEB%/JSUnitContrib/app/jsUnitCore.js"></script>
+<script language="javascript">
+function suite() {
+            var testSuite = new top.jsUnitTestSuite();
+            testSuite.addTestPage("%SCRIPTURL{view}%/%WEB%/JsTestRequestTopicStateOK");
+            testSuite.addTestPage("%SCRIPTURL{view}%/%WEB%/JsTestRequestTopicStateMissingTopic");
+            testSuite.addTestPage("%SCRIPTURL{view}%/%WEB%/SaveFullTopicText");
+            return testSuite;
+}
+</script>
