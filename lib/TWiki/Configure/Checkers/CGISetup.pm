@@ -253,13 +253,16 @@ HERE
 # The perl modules that are required by TWiki.
 sub _loadDEPENDENCIES {
     my $this = shift;
-
-    my @dir = File::Spec->splitdir( $TWiki::cfg{DataDir} );
-    pop(@dir);
-
+    
+    my $from = TWiki::findFileOnPath('TWiki.spec');
+    my @dir = File::Spec->splitdir( $from );
+    pop(@dir); # Getting rid of TWiki.spec
+    pop(@dir); # Leave lib dir
     local $/ = "\n";
+    # SMELL: Assuming tools dir is parallel to lib dir
+    # DEPENDENCIES should be moved to the lib dir
     push(@dir, 'tools');
-    my $from = File::Spec->catfile(@dir, 'DEPENDENCIES');
+    $from = File::Spec->catfile(@dir, 'DEPENDENCIES');
     my $d;
     open($d, '<'.$from) || return 'Failed to load DEPENDENCIES: '.$!;
     my @perlModules;
