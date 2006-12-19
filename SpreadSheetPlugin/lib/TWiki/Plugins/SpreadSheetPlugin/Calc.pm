@@ -72,7 +72,7 @@ sub CALC
     $cPos = -1;
     $rPos = -1;
 
-    my $result = "";
+    my @result = ();
     my $insidePRE = 0;
     my $insideTABLE = 0;
     my $line = "";
@@ -104,7 +104,7 @@ sub CALC
                 $line =~ s/^(\s*\|)(.*)\|\s*$/$2/o;
                 $before = $1;
                 @row  = split( /\|/o, $line, -1 );
-                push @tableMatrix, [ @row ];
+                push( @tableMatrix, [ @row ] );
                 $rPos++;
                 $line = "$before";
                 for( $cPos = 0; $cPos < @row; $cPos++ ) {
@@ -122,9 +122,9 @@ sub CALC
                 s/%CALC\{(.*?)\}%/&doCalc($1)/geo;
             }
         }
-        $result .= "$_\n";
+        push( @result, $_ );
     }
-    $_[0] = $result;
+    $_[0] = join( "\n", @result );
 }
 
 # =========================
@@ -690,6 +690,7 @@ sub doFunc
 
     } elsif( $theFunc eq "TIMEDIFF" ) {
        my( $time1, $time2, $scale ) = split( /,\s*/, $theAttr, 3 );
+       $scale ||= '';
        $time1 = 0 unless( $time1 );
        $time2 = 0 unless( $time2 );
        $time1 =~ s/.*?([0-9]+).*/$1/o || 0;
@@ -779,9 +780,47 @@ sub doFunc
         }
         $result = _listToDelimitedString( @arr );
 
+    } elsif( $theFunc eq "LISTSHUFFLE" ) {
+        my @arr = getList( $theAttr );
+        my $size = scalar @arr;
+        if( $size > 1 ) {
+            for( $i = $size; $i--; ) {
+                my $j = int( rand( $i + 1 ) );
+                next if( $i == $j );
+                @arr[$i, $j] = @arr[$j, $i];
+            }
+        }
+        $result = _listToDelimitedString( @arr );
+
+    } elsif( $theFunc eq "LISTRAND" ) {
+        my @arr = getList( $theAttr );
+        my $size = scalar @arr;
+        if( $size > 1 ) {
+            $i = int( rand( $size - 1 ) + 0.5 );
+            $result = $arr[$i];
+        } elsif( $size == 1 ) {
+            $result = $arr[0];
+        }
+
     } elsif( $theFunc eq "LISTREVERSE" ) {
         my @arr = reverse getList( $theAttr );
         $result = _listToDelimitedString( @arr );
+
+    } elsif( $theFunc eq "LISTTRUNCATE" ) {
+        my( $index, $str ) = _properSplit( $theAttr, 2 );
+        $index = int( _getNumber( $index ) );
+        $str = "" unless( defined( $str ) );
+        my @arr = getList( $str );
+        my $size = scalar @arr;
+        if( $index > 0 ) {
+            $index = $size if( $index > $size );
+            $#arr = $index - 1;
+            $result = _listToDelimitedString( @arr );
+        } elsif( $index < 0 ) {
+            $index = - $size if( $index < - $size );
+            splice( @arr, 0, $size + $index );
+            $result = _listToDelimitedString( @arr );
+        } #else result = '';
 
     } elsif( $theFunc eq "LISTUNIQUE" ) {
         my %seen = ();
