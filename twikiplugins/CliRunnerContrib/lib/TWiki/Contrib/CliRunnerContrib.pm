@@ -29,14 +29,6 @@ parameters to TWiki scripts as they are available as URL parameters,
 but in addition parameters to the Perl interpreter itself, for example
 to add extra libraries or modules.
 
-Typical use cases could be:
-   * Unit tests: Capture =view= results easily, or change Perl
-     environment.  A first demo is an automation of the
-     not-yet-so-automatic "Auto" tests in SVN's !TestCases web
-   * Benchmarking: Obtain benchmark results with different settings
-     again and again
-
-
 ---+++ Synopsis
 
 <verbatim>
@@ -51,6 +43,42 @@ sub test_someUnitTest {
     $this->assert_matches(qr/Hey! Where is My::Optional::Module\?/,$output);
 }
 </verbatim>
+
+---+++ The !CliRunner object
+
+---++++!! Object Attributes
+
+#AttributeCallingConvention
+---+++++!! Calling Convention
+
+TWiki scripts can be called from the command line using two different
+calling conventions:
+
+   1 The "usual" command line convention passes parameters as
+     space-separated key value pairs, indicated by a value of ='CLI'=.
+   2 The =CGI.pm= convention for calls to the command line passes
+     parameters in a query-string syntax, e.g. =?key=value=, appended 
+     to the path (topic in case of TWiki).  This is indicated
+     by an attribute value of ='CGI'=.
+
+Usually TWiki scripts discover their calling convention themselves,
+depending on the existence of the environment variable
+=$ENV{GATEWAY_INTERFACE}=.  One known exception is =configure=, which
+does not support TWiki's usual command line convention.
+
+If you chose ='CGI'= as calling convention, you have to take care
+yourself for setting the environment variables which may be needed by
+the script. =$ENV{GATEWAY_INTERFACE}= is a _must_ for all scripts,
+with exception of =configure= which always assumes ='CGI'= conventions.
+Others to check out are
+=$ENV{REMOTE_USER}= for running the script under a defined user id, or
+=$ENV{PATH_INFO}= and =$ENV{SCRIPT_NAME}=.
+   * Note to self: Or are they being set by =CGI.pm= correctly?  Must
+     check.
+
+The calling convention can be queried, and set, with the method
+[[#MethodCallingConvention][callingConvention]].
+
 
 ---+++ TODO
 
@@ -84,12 +112,13 @@ my $twikibindir_indicator  =  'setlib.cfg';
 TWiki::Configure::Load::readConfig();
 my $cfg = $TWiki::cfg{Contrib}{CliRunnerContrib};
 my %default_config = ('perl'            =>  $cfg->{perl}        || 'perl',
-                      'perl_options'    =>  $cfg->{PerlOptions} || '-T',
+                      'perlOptions'     =>  $cfg->{PerlOptions} || '-T',
                       'lib_path'        =>  $cfg->{LibPath}     || '../lib',
-                      'script'          =>  'view',
                       'output_options'  =>  '2>&1',
                   );
-my $default_topic = 'Main.WebHome';
+my $default_topic               =  'Main.WebHome';
+my $default_script              =  'view';
+my $default_callingConvention   =  'CLI';
 
 # ======================================================================
 
@@ -115,8 +144,10 @@ table.
 | *Key* | *Default* | *Description* |
 | =perl= | ='perl'= | \
 Location of the Perl interpreter. \
-The default assumes that the interpreter is accessible via the PATH. |
-| =perl_options= | '-T' | \
+The default should have been automatically (or manually) set by =configure=. \
+Otherwise it is assumed that the interpreter is accessible as =perl=, \
+somewhere on the PATH. |
+| =perlOptions=  | '-T' | \
 Options to pass to the Perl interpreter. \
 The default just switches on taint checking, \
 which is mandatory for most TWiki scripts. |
@@ -124,6 +155,8 @@ which is mandatory for most TWiki scripts. |
 Special developer options to pass to the Perl interpreter.  |
 | =script= | 'view' | \
 Which of the programs to call |
+| =callingConvention= | 'CLI' | \
+Calling conventions for parameter passing.  See [[#AttributeCallingConvention]]. |
 | =scriptOptions= | [] | \
 Options to pass to the script, e.g. an alternate user id.  |
 | =topic= | 'Main.WebHome' | \
@@ -145,13 +178,20 @@ sub new {
 
     my %config  =  (%default_config,%$config);
 
-    my $topic = delete $config{topic};
+    my $topic        =  delete $config{topic}  || $default_topic;
+    my $script       =  delete $config{script} || $default_script;
+    my $perlOptions  =  delete $config{perlOptions};
+    my $callingConvention  =  delete $config{callingConvention}
+                           || $default_callingConvention;
 
-    my $self = {config         =>  \%config,
-                twikiCfg       =>  [],
-                develOptions   =>  [],
-                scriptOptions  =>  [],
-                topic          =>  $topic,
+    my $self = {config             =>  \%config,
+                callingConvention  =>  $callingConvention,
+                twikiCfg           =>  [],
+                perlOptions        =>  $perlOptions,
+                develOptions       =>  [],
+                script             =>  $script,
+                scriptOptions      =>  [],
+                topic              =>  $topic,
             };
 
     bless $self,$class;
@@ -184,13 +224,12 @@ sub command {
     my %params  =  (%{$self->{config}},%$params);
     return join(" ",
                 $params{perl},
-                $params{perl_options},
+                $self->{perlOptions},
                 "-I" . $params{lib_path},
                 @{$self->{develOptions}},
                 $self->_twikiCfgExpand($params{doCreateFile}),
-                $params{script},
-                @{$self->{scriptOptions}},
-                ($self->{topic} || $default_topic),
+                $self->{script},
+                $self->_expandScriptParameters(),
                 $params{output_options},
             );
 }
@@ -210,16 +249,16 @@ as a result of a missing module.
 
 ---++++!! Parameters <!-- error_missing_module -->
 
----+++++!! =$module= <!-- error_missing_module -->
-
-Name of the module for which the error message is to be asserted.
+| *Parameter*       | *Type*      | *Description*                      |
+| =$module=         | scalar      | \
+Name of the module for which the error message is to be asserted.      |
 
 =cut
 
 sub error_missing_module {
     my $class  =  shift;
     my ($missing)  =  @_;
-    return qr/$missing\.pm.*BEGIN failed/s;
+    return qr/Can't locate $missing.*BEGIN failed/s;
 }
 
 
@@ -235,12 +274,16 @@ in the parameter list are not available.
 
 ---++++!! Parameters <!-- no -->
 
----+++++!! =@modules= <!-- no -->
+| *Parameter*       | *Type*      | *Description*                      |
+| =@modules=        | array       | \
+=@modules= is a list of strings containing module names as you would \
+use them in a =use= statement, i.e. with =::= as separator, and \
+without =.pm=. |
 
-=@modules= is a list of strings containing module names as you would
-use them in a =use= statement, i.e. without =.pm=.
-
-*Example:* ='CGI','Pretty::Strange::Module'=
+---++++!! Example
+<verbatim>
+    $runner->no('CGI','Pretty::Strange::Module');
+</verbatim>
 
 ---++++!! Bugs <!-- no -->
 
@@ -266,11 +309,14 @@ sub no {
 ---+++ ObjectMethod addScriptOptions(%options) = arrayref to options
 
 ---++++!! Parameters
+| *Parameter*       | *Type*      | *Description*                      |
+| =%options=        | hash        | \
+Hash of options to add to the script.  They usually come in "key \
+value" pairs and are described in TWiki.TWikiScripts for every script. |
 
----+++++!! =%options=
+---++++!! Bugs/Todo
 
-Hash of options to add to the script.  They usually come in "key
-value" pairs and are described in TWiki.TWikiScripts for every script.
+You can not remove, nor change script options right now.
 
 =cut
 
@@ -278,6 +324,68 @@ sub addScriptOptions {
     my $self  =  shift;
     push @{$self->{scriptOptions}},@_;
 }
+
+
+# ======================================================================
+
+=pod
+
+#MethodCallingConvention
+---+++ ObjectMethod callingConvention([$cC]) -> current cC
+
+Gets/sets the calling convention for the runner object (see
+[[#AttributeCallingConvention]] for a description of the attribute).
+
+---++++!! Parameters
+| *Parameter*       | *Type*      | *Description*                      |
+| =$cC=             | scalar      | Optional. \
+  New calling convention to be used by the script.  If missing, \
+  the calling convention remains unchanged.  Valid values are 'CLI' \
+  (for command line style) and 'CGI' (for =CGI.pm= style).             |
+| =$currentcC=      | scalar      | \
+  The current calling convention of the runner object.                 |
+
+=cut
+
+sub callingConvention {
+    my $self = shift;
+    if (scalar @_) {
+        $self->{callingConvention}  =  $_[0];
+    }
+    else {
+        $self->{callingConvention};
+    }
+}
+
+
+# ======================================================================
+
+=pod
+
+#MethodPerlOptions
+---+++ ObjectMethod perlOptions([$optionString]) -> $currentOptions
+
+---++++!! Parameters
+
+| *Parameter*       | *Type*      | *Description*                      |
+| =$optionString=   | scalar      | Optional. \
+  New options to be passed to the Perl interpreter.  If missing, \
+  the options remain unchanged.                                        |
+| =$currentOptions= | scalar      | \
+  The current perl options of the runner object.                       |
+
+=cut
+
+sub perlOptions {
+    my $self  =  shift;
+    if (scalar @_) {
+        $self->{perlOptions}  =  $_[0];
+    }
+    else {
+        $self->{perlOptions};
+    }
+}
+
 
 # ======================================================================
 
@@ -321,10 +429,46 @@ sub run {
 
 =pod
 
+#MethodScript
+---+++ ObjectMethod script([$script]) -> current script
+
+Gets/sets the script name for the runner object
+
+---++++!! Parameters
+| *Parameter*       | *Type*      | *Description*                      |
+| =$script=         | scalar      | Optional.                          \
+  script to be called.  If missing,                                    \
+  the script remains unchanged.  Defaults to ='view='.                 |
+| =$current=        | scalar      | The current script to be run.      |
+
+=cut
+
+sub script {
+    my $self = shift;
+    if (scalar @_) {
+        $self->{script}  =  $_[0];
+    }
+    else {
+        $self->{script};
+    }
+}
+
+
+# ======================================================================
+
+=pod
+
 #MethodTopic
----+++ ObjectMethod topic([$topic]) -> current topic
+---+++ ObjectMethod topic([$topic]) -> $current
 
 Gets/sets the topic for the runner object
+
+---++++!! Parameters
+| *Parameter*       | *Type*      | *Description*                      |
+| =$topic=          | scalar      | Optional.                          \
+  topic to be operated upon  If missing,                               \
+  the topic remains unchanged.  Defaults to ='Main.WebHome'=.          |
+| =$current=        | scalar      | The current topic to be run.       |
 
 =cut
 
@@ -350,8 +494,8 @@ sub topic {
 Define configuration items to change in the runner object.  Note that,
 in contrast to the finalized =%TWiki::cfg= _hash_, our deltas are
 _lists_.  This is due to the fact that we need to change individual
-entries in multi-level configuration settings, and to have cumulative
-changes where the ordering matters.
+entries in multi-level configuration settings, and we need to have
+cumulative changes where the ordering matters.
 
 The parameters with even indices (starting with 0) must be array
 references, consisting of the keys for each level in the =%TWiki::cfg=
@@ -435,6 +579,30 @@ sub _twiki_bin_dir {
     my $dir = $INC{$twikibindir_indicator};
     $dir =~ s/\W+$twikibindir_indicator$//;
     return $dir;
+}
+
+
+# ----------------------------------------------------------------------
+# Purpose: Expand parameters to be passed to the script,
+#          according to the object's callingConvention property
+# Parameters: none
+# Returns: string containing script parameters
+sub _expandScriptParameters {
+    my $self = shift;
+    if ($self->callingConvention()  eq  'CLI') {
+        return join(" ",@{$self->{scriptOptions}},$self->{topic});
+    }
+    elsif ($self->callingConvention()  eq  'CGI'){
+        my %options = @{$self->{scriptOptions}}; # make key/value pairs
+        # escape for shell
+        return "'" .  $self->topic  .  '?'
+                   .  join(";",map {"$_=$options{$_}"} keys %options)
+                   .  "'";
+    }
+    else {
+        Carp::Croak('Invalid calling convention: ',
+                    $self->callingConvention());
+    }
 }
 
 

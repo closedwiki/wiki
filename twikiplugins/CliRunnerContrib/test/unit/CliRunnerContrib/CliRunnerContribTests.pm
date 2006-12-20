@@ -128,4 +128,48 @@ sub test_runner_addScriptOptions {
 }
 
 
+# ----------------------------------------------------------------------
+# Purpose:  Test defaulting of script option
+# Verifies: Presence of default script in the command line generated
+sub test_runner_noScript {
+    my $this     =  shift;
+
+    my $runner  =  TWiki::Contrib::CliRunnerContrib->new();
+    $this->assert_matches(qr/\bview\b/,$runner->command());
+}
+
+
+# ----------------------------------------------------------------------
+# Purpose:  Test initial, and changed perl options
+# Verifies: initial option is -T
+#           changed option is -yadda
+sub test_perlOptions {
+    my $this     =  shift;
+
+    my $runner  =  TWiki::Contrib::CliRunnerContrib->new();
+    my $default =  $runner->command();
+    $this->assert_matches(qr/\s-T\s/,$default);
+    my $actual  =  $runner->perlOptions('-yadda');
+    $this->assert_equals($actual,'-yadda');
+    my $changed =  $runner->command();
+    $this->assert_matches(qr/\s-yadda\s/,$changed);
+}
+
+
+# ----------------------------------------------------------------------
+# Purpose:  Test syntax for CGI.pm parameter passing
+# Verifies: correct path construction
+sub test_CGIstyleParams {
+    my $this     =  shift;
+
+    my $runner  =  TWiki::Contrib::CliRunnerContrib->new();
+    $runner->callingConvention('CGI');
+    $this->assert_equals($runner->callingConvention(),'CGI');
+    $runner->addScriptOptions(action    => 'InstallExtension');
+    $runner->addScriptOptions(cfgAccess => 'Password');
+    $this->assert_matches(qr/(\?|;)action=InstallExtension/,$runner->command());
+    $this->assert_matches(qr/(\?|;)cfgAccess=Password/,$runner->command());
+}
+
+
 1;
