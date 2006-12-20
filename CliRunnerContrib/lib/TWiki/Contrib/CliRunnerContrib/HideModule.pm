@@ -44,8 +44,6 @@ use File::Temp;
 my @dirs_created   =  ();
 my @files_created  =  ();
 
-my $module_content = "0;";
-
 sub import {
     my $self = shift;
     my $tempdir  =  File::Temp::tempdir( CLEANUP => 1 );
@@ -56,7 +54,7 @@ sub import {
         pop @split;
         File::Path::mkpath(File::Spec->catdir($tempdir, @split));
         if (open FAKE,">",$path) {
-            print FAKE $module_content;
+            print FAKE qq(die "Can't locate $module in \\\@FAKE");
             close FAKE;
         }
         else {
@@ -64,3 +62,6 @@ sub import {
         }
     }
 }
+
+
+1;
