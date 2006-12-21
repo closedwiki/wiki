@@ -179,8 +179,9 @@ sub test_url_parameters {
 
     $twiki = new TWiki( $TWiki::cfg{DefaultUserName}, $topicquery );
 
-    $this->assert_str_equals($testWebSubWebPath, $twiki->{webName});
-    $this->assert_str_equals($TWiki::cfg{HomeTopicName}, $twiki->{topicName});
+    # Item3243:  PTh and haj suggested to change the spec
+    $this->assert_str_equals($testWeb, $twiki->{webName});
+    $this->assert_str_equals($testWebSubWeb, $twiki->{topicName});
 
     # make a topic with the same name as the subweb. Now the previous
     # query should hit that topic
