@@ -15,13 +15,14 @@ configure-stamp:
 	dh_testdir
 	touch configure-stamp
 
-build: build-stamp
+build: patch build-stamp
 
 build-stamp: configure-stamp 
 	dh_testdir
 	touch build-stamp
 
 clean: 
+#	unpatch
 	dh_testdir
 	dh_testroot
 	find . -name '*~' -print0 | xargs -0 rm -f

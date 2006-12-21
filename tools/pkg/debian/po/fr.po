@@ -1,107 +1,120 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<HTML><HEAD>
-<TITLE>#403532 - twiki: [INTL:fr] French debconf templates translation update - Debian Bug report logs</TITLE>
-<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
-<link rel="stylesheet" href="/css/bugs.css" type="text/css">
-<script type="text/javascript">
-<!--
-function toggle_infmessages(){
-       var styles = document.styleSheets;
-       var deleted = 0
-       for (var i = 0; i < styles.length; i++) {
-          for (var j = 0; j < styles[i].cssRules.length; j++) {
-            if (styles[i].cssRules[j].cssText == ".infmessage { display: none; }") {
-                 styles[i].deleteRule(j);
-                 deleted = 1;
-            }
-          }
-       }
-       if (!deleted) {
-            styles[0].insertRule(".infmessage { display: none; }",0);
-       }
-}
--->
-</script>
-</HEAD>
-<BODY>
-<H1>Debian Bug report logs - <A HREF="mailto:403532@bugs.debian.org">#403532</A><BR>twiki: [INTL:fr] French debconf templates translation update</H1>
-<div class="msgreceived">
-Package: <a href="pkgreport.cgi?pkg=twiki">twiki</a>;
-Maintainer for twiki is
-<a href="pkgreport.cgi?maint=svenud@ozemail.com.au">Sven Dowideit &lt;svenud@ozemail.com.au&gt;</a>;
-Source for twiki is
-<a href="pkgreport.cgi?src=twiki">twiki</a>.
-<br>Reported by: <a href="pkgreport.cgi?submitter=mic.grentz@online.fr">Michel Grentzinger &lt;mic.grentz@online.fr&gt;</a>;
-Date: Sun, 17 Dec 2006 19:48:06 UTC.
-</div>
-<h3>Severity: wishlist;
-Tags: l10n, patch;
-<br>Found in version n/a.
-</h3>
+#
+#    Translators, if you are not familiar with the PO format, gettext
+#    documentation is worth reading, especially sections dedicated to
+#    this format, e.g. by running:
+#         info -n '(gettext)PO Files'
+#         info -n '(gettext)Header Entry'
+#    Some information specific to po-debconf are available at
+#            /usr/share/doc/po-debconf/README-trans
+#         or http://www.debian.org/intl/l10n/po-debconf/README-trans#
+#    Developers do not need to manually edit POT or PO files.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: twiki_1:4.0.5-4\n"
+"Report-Msgid-Bugs-To: svenud@ozemail.com.au\n"
+"POT-Creation-Date: 2006-11-25 22:35+0100\n"
+"PO-Revision-Date: 2006-12-08 21:54+0100\n"
+"Last-Translator: Michel Grentzinger <mic.grentz@online.fr>\n"
+"Language-Team: French <debian-l10n-french@lists.debian.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-15\n"
+"Content-Transfer-Encoding: 8bit\n"
 
-<p><a href="mailto:403532@bugs.debian.org">Reply</a> or <a href="mailto:403532-subscribe@bugs.debian.org">subscribe</a> to this bug.</p>
-<p><a href="javascript:toggle_infmessages();">Toggle useless messages</a></p><div class="msgreceived"><p>View this report as an <a href="bugreport.cgi?bug=403532;mbox=yes">mbox folder</a>.</p></div>
-<div class="infmessage"><hr>
-<a name="1"></a>
-<strong>Report forwarded</strong> to <code>debian-bugs-dist@lists.debian.org, Sven Dowideit &lt;svenud@ozemail.com.au&gt;</code>:<br>
-<code>Bug#403532</code>; Package <code>twiki</code>.
-<a href="bugreport.cgi?bug=403532;msg=2">Full text</a> and <a href="bugreport.cgi?bug=403532;msg=2;mbox=yes">rfc822 format</a> available.</div>
+#. Type: string
+#. Default
+#: ../templates:1001
+msgid "http://localhost/"
+msgstr "http://localhost/"
 
-<div class="infmessage"><hr>
-<a name="3"></a>
-<strong>Acknowledgement sent</strong> to <code>Michel Grentzinger &lt;mic.grentz@online.fr&gt;</code>:<br>
-New Bug report received and forwarded.  Copy sent to <code>Sven Dowideit &lt;svenud@ozemail.com.au&gt;</code>.
-<a href="bugreport.cgi?bug=403532;msg=4">Full text</a> and <a href="bugreport.cgi?bug=403532;msg=4;mbox=yes">rfc822 format</a> available.</div>
+#. Type: string
+#. Description
+#: ../templates:1002
+msgid "What is the top-level URL of the server TWiki runs under?"
+msgstr "URL du serveur TWiki :"
 
-<hr><p class="msgreceived"><a name="5"><a name="msg5">Message received</a> at submit@bugs.debian.org (<a href="bugreport.cgi?bug=403532;msg=5">full text</a>, <a href="bugreport.cgi?bug=403532;msg=5;mbox=yes">mbox</a>):</p>
-<pre class="headers">
-<b>From:</b> Michel Grentzinger &lt;mic.grentz@online.fr&gt;
-<b>To:</b> Debian Bug Tracking System &lt;submit@bugs.debian.org&gt;
-<b>Subject:</b> twiki: [INTL:fr] French debconf templates translation update
-<b>Date:</b> Sun, 17 Dec 2006 20:42:42 +0100
-</pre>
-<pre class="mime">[<a href="bugreport.cgi?bug=403532;msg=5;att=0">Message part 1</a> (text/plain, inline)]</pre>
-<pre class="message">Package: twiki
-Version: N/A
-Severity: wishlist
-Tags: patch l10n
+#. Type: string
+#. Description
+#: ../templates:1002
+msgid ""
+"For a normal install, this should be a URL for your web server's full name, "
+"which is used to construct urls on some pages.  The install will serve up "
+"the data by adding \"twiki\" to the end of this setting; it is also needed "
+"for certain redirections."
+msgstr ""
+"Pour une installation normale, vous devriez indiquer l'URL construite à "
+"partir du nom complet de votre serveur. Les données seront accessibles à "
+"l'adresse indiquée en ajoutant twiki à cette valeur. Celle-ci servira "
+"également pour certaines redirections."
 
-Hello,
+#. Type: string
+#. Default
+#: ../templates:2001
+msgid "webmaster@localhost"
+msgstr "webmaster@localhost"
 
-Please find the attached fr.po file, which is an update of the french
-translation of the debconf templates. This file has been reviewed by
-the contributors of the debian-l10n-french mailing-list.
+#. Type: string
+#. Description
+#: ../templates:2002
+msgid "What is the email address of the webmaster for this TWiki?"
+msgstr "Adresse électronique du webmestre de TWiki :"
 
-Could you put this file to the debian/po/ directory of this package,
-in remplacement of the old fr.po file ?
+#. Type: string
+#. Description
+#: ../templates:2002
+msgid ""
+"This email address gets mail for new user registration, and is listed on the "
+"\"oops\" page when things go wrong."
+msgstr ""
+"L'adresse électronique indiqué recevra les demandes d'enregistrement des "
+"nouveaux utilisateurs. Elle est affichée sur la page oops lorsque un "
+"incident se produit."
 
-Regards,
+#. Type: boolean
+#. Description
+#: ../templates:3001
+msgid "Install sample wiki universe on initial install?"
+msgstr ""
+"Faut-il installer l'exemple d'univers wiki lors de l'installation initiale ?"
 
--- System Information:
-Debian Release: 4.0
-  APT prefers testing
-  APT policy: (500, 'testing')
-Architecture: i386 (i686)
-Shell:  /bin/sh linked to /bin/bash
-Kernel: Linux 2.6.19.1
-Locale: LANG=fr_FR.UTF-8, LC_CTYPE=fr_FR.UTF-8 (charmap=UTF-8)
-</pre>
+#. Type: boolean
+#. Description
+#: ../templates:3001
+msgid ""
+"TWiki includes a complete \"starter kit\" which includes user registration "
+"pages, documentation, and tutorials.  If you're re-installing twiki after "
+"deleting the package and want to keep the old data, or if you've got a twiki "
+"data set from your own manual install, you should say \"no\" here.  On a "
+"normal initial install, say \"yes\", and a sample data set will be installed "
+"in /var/lib/twiki/data (and /var/www/twiki/pub).  (In either case, if data/"
+"Main/WebHome.txt is present, the starter kit will not be unpacked; you can "
+"look in /usr/share/doc/twiki/twiki-data.tar.gz (and twiki-pub.tar.gz) if you "
+"wish to install it manually or compare a new version.)"
+msgstr ""
+"TWiki comprend un kit de démarrage complet qui inclut des pages destinées à "
+"l'enregistrement des utilisateurs, de la documentation et des tutoriels. Si "
+"vous réinstallez twiki après avoir supprimé le paquet et que vous souhaitez "
+"conserver vos anciennes données ou si vous avez un ensemble de données twiki "
+"provenant d'une installation que vous avez faite vous-même, ne choisissez "
+"pas cette option. Pour une installation normale, vous pouvez la choisir et "
+"un ensemble simple de données sera installé dans /var/lib/twiki/data (et /"
+"var/www/twiki/pub). Dans tous les cas, si data/Main/WebHome.txt existe, le "
+"kit de démarrage ne sera pas décompacté. Vous pourrez alors regarder dans /"
+"usr/share/doc/twiki/twiki-data.tar.gz (et twiki-pub.tar.gz) si vous "
+"souhaitez l'installer vous-même ou le comparer à une nouvelle version."
 
-<pre class="mime">[<a href="bugreport.cgi/fr.po?bug=403532;msg=5;att=1">fr.po</a> (text/plain, attachment)]</pre>
+#. Type: note
+#. Description
+#: ../templates:4001
+msgid "Admin User Registration configuration required"
+msgstr "Configuration obligatoire de l'enregistrement des utilisateurs"
 
-<HR><p class="msgreceived">Send a report that <a href="/cgi-bin/bugspam.cgi?bug=403532">this bug log contains spam</a>.</p>
-<HR>
-
- <ADDRESS>Debian bug tracking system administrator &lt;<A HREF="mailto:owner@bugs.debian.org">owner@bugs.debian.org</A>&gt;.
- Last modified:
- <!--timestamp-->
- Thu, 21 Dec 2006 14:02:53 UTC
- <!--timestamp-->
-	  
- <P>
- <A HREF="http://www.debian.org/Bugs/">Debian Bug tracking system</A><BR>
- copyright 1999 Darren O. Benham,
- 1997, 2003 nCipher Corporation Ltd,
- 1994-7 Ian Jackson.
- </ADDRESS>
-</BODY></HTML>
+#. Type: note
+#. Description
+#: ../templates:4001
+msgid ""
+"After you have created yourself a user, edit the Main.TWikiAdminGroup to "
+"restrict Admin privileges to that user."
+msgstr ""
+"Après avoir créé un utilisateur, veuillez éditer Main.TWikiAdminGroup pour "
+"restreindre les privilèges de l'administrateur à cet utilisateur."

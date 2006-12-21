@@ -21,7 +21,7 @@ find . -name .svn -exec rm -rf '{}' \;
 tar zxvf /tmp/build_deb/twiki_4.0.5.orig.tar.gz
 
 #patch it
-fakeroot debian/rules patch
+#fakeroot debian/rules patch
 
 #debuild
 #see http://www.debian.org/doc/maint-guide/ch-build.en.html
