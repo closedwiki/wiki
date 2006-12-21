@@ -1,8 +1,8 @@
-%META:TOPICINFO{author="SvenDowideit" date="1166477273" format="1.1" reprev="1.2" version="1.2"}%
+%META:TOPICINFO{author="SvenDowideit" date="1166579067" format="1.1" version="1.3"}%
 ---+!! %MAKETEXT{"Welcome to the [_1] web" args="<nop>%WEB%"}%
 
 ---++ %MAKETEXT{"Available Information"}%
-   * *[[%PUBURL%/%TWIKIWEB%/JSUnitContrib/testRunner.html?testpage=%SCRIPTURL{"view"}%/%WEB%/%TOPIC%][Run JsTestSuite with TestRuner]]*
+   * *[[%PUBURL%/%TWIKIWEB%/JSUnitContrib/testRunner.html?testpage=%SCRIPTURL{"view"}%/%WEB%/JsTestSuite][Run JsTestSuite with TestRuner]]*
 
 <form action='%SCRIPTURLPATH{"edit"}%/%WEB%/'> 
 %ICON{"newtopic"}% %MAKETEXT{"Create a new Test by name:"}% %MAKETEXT{"(Use a topic name in TWiki.WikiNotation)"}% <br /> 
