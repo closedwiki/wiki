@@ -1,3 +1,14 @@
+twiki (1:4.0.5-6) unstable; urgency=high
+
+  * made dependancy on apache-common | apache2-common | apache2.2-common
+    (Closes: #400212, #403464). 
+  * French debconf translation update - thankyou Michel Grentzinger
+    (Closes: #403532)
+  * prevent redirect code from allowing redirect to other hosts
+    (Closes: #)
+
+ -- Sven Dowideit <svenud@ozemail.com.au>  Thu,  21 Dec 2006 22:32:36 +0100
+
 twiki (1:4.0.5-5) unstable; urgency=low
 
   * fix prerm and postrm's
