@@ -28,6 +28,7 @@ use strict;
 package TWiki::Plugins::InlineEditPlugin;
 
 use JSON;
+use URI::Escape;
 
 use vars qw( $VERSION $pluginName $debug  $currentWeb %vars %sectionIds $lastSection
     $templateText $WEB $TOPIC $USER $EDITORSLIST @EDITORS $MODERN $sendHTML $minimumSectionLength $supportedSkins $tml2html $html2tml);
@@ -131,12 +132,14 @@ sub beforeSaveHandler {
         my %newSections = ();
         my $data = $query->param('data') || '';
         my @jsons = split('####', $data);
+#print STDERR "post split $#jsons = $data";
         foreach my $json (@jsons) {
             my $obj = jsonToObj($json);
+#print STDERR "post jsonToObj = ".join(',', keys(%$obj));
             my $sectionName = $obj->{topicSection};
             $sectionName =~ s/"//g; #"gedit does dumb syntax highlighting
             $changedSections{$sectionName} = $obj;
-print STDERR "section $sectionName = |||".$changedSections{$sectionName}->{value}."|||\n";
+#print STDERR "section $sectionName = |||".$changedSections{$sectionName}->{value}."|||\n";
         }
         my ($meta,$text) = TWiki::Func::readTopic($_[2],$_[1]);
         $text =~ s/^%META:TOPICINFO{.*}%$//g;
@@ -151,8 +154,9 @@ print STDERR "section $sectionName = |||".$changedSections{$sectionName}->{value
             $count++;
         }
         $_[0] = '';
-        my $sectionOrder = jsonToObj($query->param('sectionOrder') || '');
+        my $sectionOrder = jsonToObj($query->param('sectionOrder')) || [1..($count+1)];
         for my $sectionName (@$sectionOrder) {
+#print STDERR "save section $sectionName = |||".$changedSections{$sectionName}->{value}."|||\n";
             $_[0] .= $changedSections{$sectionName}->{value};
         }
         #TODO: SMELL: i don't know why twiki is loosing the meta if i don't change it at all
@@ -194,24 +198,35 @@ sub afterSaveHandler() {
     my ( $text, $topic, $web, $errors ) = @_;
 
    my $query = TWiki::Func::getCgiQuery();
+   
+   print STDERR 'beforeSaveHandler - $query->keywords = '.join(', ', $query->keywords)."\n";
+   print STDERR 'beforeSaveHandler - $query->param = '.join(', ', $query->param)."\n";
+   print STDERR 'beforeSaveHandler - $query->url_param = '.join(', ', $query->url_param)."\n";
+   print STDERR 'beforeSaveHandler - $query->param(replywitherrors) = '.join(', ', $query->param('replywitherrors'))."\n";
+   #print STDERR 'beforeSaveHandler - $query->param(dataType) = '.join(', ', $query->param('dataType'))."\n";
+ 
+   
    my $replywitherrors = $query->param('replywitherrors') || 0;
     if ($replywitherrors == 1) {
         print $query->header(
                     -content_type => 'text',
              );
-        my $data = $query->param('data');
-        if (defined($data)) {
-	        my @jsons = split('####', $data);
-	        foreach my $json (@jsons) {
-	            my $obj = jsonToObj($json);
-	            print "\n<p />".$obj->{topicSection};
-	            print "\n<p />".$obj->{value};
-	        }
-        		my $sectionOrder = jsonToObj($query->param('sectionOrder') || '');
-        		print "\n<p />order: ".join(', ', @$sectionOrder);
-        		print $errors;
-		} else {
-			my ($response, $date, $user, $rev, $comment, $oopsUrl, $loginName, $unlockTime) = _getTopicSectionState($web, $topic);
+#        my $data = $query->param('data');
+#        if (defined($data)) {
+#	        my @jsons = split('####', $data);
+#	        foreach my $json (@jsons) {
+#	            my $obj = jsonToObj($json);
+#	            print "\n<p />".$obj->{topicSection};
+#	            print "\n<p />".$obj->{value};
+#	        }
+#        		my $sectionOrder = jsonToObj($query->param('sectionOrder') || '');
+#        		print "\n<p />order: ".join(', ', @$sectionOrder);
+#        		print $errors;
+#		} else {
+
+#TODO: consider sending back all the modified sections, not just the entire topic?
+
+			my ($response, $date, $user, $rev, $comment, $oopsUrl, $loginName, $unlockTime) = _getTopicSectionState($web, $topic, 0, $text);
 
 			 my $obj = {
 			    topicName   => $web.$topic,
@@ -220,7 +235,8 @@ sub afterSaveHandler() {
 			    topicUser   =>$user ,
 #			    topicSection   => $section,
 				theTml => $text,
-#			    theTml => TWiki::entityEncode( $text ),       #can't pass it here, json does not do ><'s'   
+				inlineMeta => 1,
+#			    theTml => uri_escape( $text ),       #can't pass it here, json does not do ><'s'   
 #			    sectionName   => $sectionName,
 #			    leasedBy   => $leaseduserWikiName,
 			    leasedByLogin   => $loginName,
@@ -235,9 +251,9 @@ sub afterSaveHandler() {
 			    Infoend => 0
 			 };
 
-   			print (objToJson($obj));
+   			print ($response);
 
-		}
+#		}
         
         exit 1;
     }
@@ -246,7 +262,11 @@ sub afterSaveHandler() {
 sub postRenderingHandler {
     # do not uncomment, use $_[0], $_[1]... instead
     #my $text = shift;
+
     return unless (pluginApplies('view'));
+    #disable if the user does not have edit permissions
+    #TODO: need to check if this user is allowed to run the edit / save script (templateLogin makes the checkAccessPermission check a little less useful)
+    return if (TWiki::Func::checkAccessPermission( 'CHANGE', $USER, undef, $TOPIC, $WEB ) != 1);
 
     my $scriptHeader = '';
 
@@ -259,17 +279,6 @@ sub postRenderingHandler {
 
     my $output = '';
 
-    #disable if the user does not have edit permissions
-    #TODO: need to check if this user is allowed to run the edit / save script (templateLogin makes the checkAccessPermission check a little less useful)
-    if (TWiki::Func::checkAccessPermission( 'CHANGE', $USER, undef, $TOPIC, $WEB ) != 1) {
-        $scriptHeader .= TWiki::Func::readTemplate ( 'inlineeditplugin', 'nopermission' );
-
-        #lets add an InfoSection for the topic.
-        my $section = 0;
-        my ($response, $date, $user, $rev, $comment, $oopsUrl, $loginName, $unlockTime, $viewUrl, $saveUrl, $restUrl, $sectionName) = _getTopicSectionState($WEB, $TOPIC, $section);
-        my $topicState = '<div class="inlineeditTopicInfo hideElement" id="inlineeditTopicInfo_'.$section.'" '.'>'.$response.'</div>';
-        $output .= $topicState;
-    } else {
     	#add the inlineEdit JavaScript
         foreach my $EDITOR (@EDITORS) {
             $jscript = TWiki::Func::readTemplate ( 'inlineeditplugin', $EDITOR );
@@ -283,7 +292,7 @@ sub postRenderingHandler {
             my ($response, $date, $user, $rev, $comment, $oopsUrl, $loginName, $unlockTime, $viewUrl, $saveUrl, $restUrl, $sectionName) = _getTopicSectionState($WEB, $TOPIC, $section, $tml);
             #send escaped tml in an textarea to stop the browser from closing xml fragments
             #problems in safari http://twiki.org/cgi-bin/view/Codev/SomeBrowsersLoseInitialNewlineInTextArea
-            my $encodedtml = 'SVEN';#TWiki::entityEncode( $tml );
+            my $encodedtml = 'SVEN';#uri_escape( $tml );
             $output .= '<textarea rows="1" cols="1" wrap="off" disabled readonly class="inlineeditTopicTML hideElement" id="inlineeditTopicTML_'.$section.'" '.'>'.$encodedtml.'</textarea>';
 
             #these need to remain in seperate divs to avoid needing to escape them
@@ -307,7 +316,7 @@ sub postRenderingHandler {
             my $topicState = '<textarea rows="1" cols="1" disabled readonly class="inlineeditTopicInfo hideElement" id="inlineeditTopicInfo_'.$section.'" '.'>'.$response.'</textarea>';
             $output .= $topicState;
         }
-    }
+
     $_[0] =~ s/(<\/body>)/$output$1/g;
 
     #add the initialisation javascript
@@ -456,7 +465,9 @@ sub _getTopicSectionState {
     topicDate   => $date,
     topicUser   =>$user ,
     topicSection   => $section,
-    theTml => TWiki::entityEncode( $tml ),       #can't pass it here, json does not do ><'s'   
+    inlineMeta => 1,		#TODO: get rid of this - we should not pass twiki tradition file format to third parties
+    theTml => uri_escape($tml),       #TODO: need to escape this string properly, so JS unescape, or decodeURIComponent works   use URI::Escape;
+#    theTml => TWiki::entityEncode( $tml ),       #can't pass it here, json does not do ><'s'   
     sectionName   => $sectionName,
     leasedBy   => $leaseduserWikiName,
     leasedByLogin   => $loginName,
