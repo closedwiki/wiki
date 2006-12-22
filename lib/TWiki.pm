@@ -558,29 +558,33 @@ sub UTF82SiteCharSet {
 ---++ ObjectMethod writeCompletePage( $text, $pageType, $contentType )
 
 Write a complete HTML page with basic header to the browser.
-$text is the HTML of the page body (&lt;html&gt; to &lt;/html&gt;)
+   * =$text= is the text of the page body (&lt;html&gt; to &lt;/html&gt; if it's HTML)
+   * =$pageType= - May be "edit", which will cause headers to be generated that force
+     caching for 24 hours, to prevent Codev.BackFromPreviewLosesText bug, which caused
+     data loss with IE5 and IE6.
+   * =$contentType= - page content type | text/html
 
-This method removes noautolink and nop tags before outputting the page.
+This method removes noautolink and nop tags before outputting the page unless
+$contentType is text/plain.
 
 =cut
 
 sub writeCompletePage {
     my ( $this, $text, $pageType, $contentType ) = @_;
+    $contentType ||= 'text/html';
 
-    ASSERT($this->isa( 'TWiki')) if DEBUG;
-
-    if( ($contentType||'') ne 'text/plain' ) {
+    if( $contentType ne 'text/plain' ) {
         # Remove <nop> and <noautolink> tags
         $text =~ s/([\t ]?)[ \t]*<\/?(nop|noautolink)\/?>/$1/gis;
         $text .= "\n" unless $text =~ /\n$/s;
-    }
 
-    my $htmlHeader = join(
-        "\n",
-        map { '<!--'.$_.'-->'.$this->{htmlHeaders}{$_} }
-          keys %{$this->{htmlHeaders}} );
-    $text =~ s/([<]\/head[>])/$htmlHeader$1/i if $htmlHeader;
-    chomp($text);
+        my $htmlHeader = join(
+            "\n",
+            map { '<!--'.$_.'-->'.$this->{htmlHeaders}{$_} }
+              keys %{$this->{htmlHeaders}} );
+        $text =~ s!(</head>)!$htmlHeader$1!i if $htmlHeader;
+        chomp($text);
+    }
 
     unless( $this->inContext('command_line')) {
         # can't use simple length() in case we have UNICODE
@@ -702,16 +706,18 @@ Passthrough is only meaningful if the redirect target is on the same server.
 =cut
 
 sub redirect {
-    my ($this, $url, $passthru) = @_;
+    my( $this, $url, $passthru ) = @_;
 
     ASSERT($this->isa( 'TWiki')) if DEBUG;
 
     my $query = $this->{cgiQuery};
     # if we got here without a query, there's not much more we can do
     return unless $query;
+    # if noredirect is set, don't generate the redirect, throw an exception instead.
+    # This is a HACK used to support TWikiDrawPlugin. It is deprecated and must be
+    # replaced by REST handlers in the plugin.
     if( $query->param( 'noredirect' )) {
-        my $content = join(' ', @_) . "\n";
-        $this->writeCompletePage( $content );
+        die "ERROR: $url";
         return;
     }
 
