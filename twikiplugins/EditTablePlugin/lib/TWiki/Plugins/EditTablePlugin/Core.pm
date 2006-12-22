@@ -755,11 +755,14 @@ sub doEnableEdit {
 
     my $breakLock = $query->param( 'breaklock' ) || '';
     unless( $breakLock ) {
-      my( $oopsUrl ) = TWiki::Func::checkTopicEditLock( $theWeb, $theTopic, 'view' );
+      my( $oopsUrl, $lockUser ) = TWiki::Func::checkTopicEditLock( $theWeb, $theTopic, 'view' );
       if ( $oopsUrl ) {
-        # warn user that other person is editing this topic
-        TWiki::Func::redirectCgiQuery( $query, $oopsUrl, 1 );
-        return 0;
+        my $loginUser = TWiki::Func::wikiToUserName($wikiUserName);
+        if ($lockUser  ne  $loginUser) {
+          # warn user that other person is editing this topic
+          TWiki::Func::redirectCgiQuery( $query, $oopsUrl, 1 );
+          return 0;
+        }
       }
     }
     # We are allowed to edit
