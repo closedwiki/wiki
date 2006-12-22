@@ -76,7 +76,7 @@ EXAMPLE
     my $expectacle = <<'EXAMPLE';
 $TWiki::cfg{MandatoryBoolean} = 0;
 $TWiki::cfg{MandatoryPath} = 'fixed';
-$TWiki::cfg{OptionalRegex} = qr/(?-xism:^X*$)/;
+$TWiki::cfg{OptionalRegex} = '^X*$';
 $TWiki::cfg{DontIgnore} = 'now is';
 $TWiki::cfg{Types}{Chosen} = 'TWiki::Configure::Types::STRING';
 1;

@@ -43,7 +43,8 @@ HERE
     if (!$bad) {
         # Can't use a submit here, because if we do, it is invoked when
         # the user presses Enter in a text field.
-        $actor = CGI::a({ href => $ENV{SCRIPT_NAME}.'?action=FindMoreExtensions',
+        my $scriptName = $ENV{SCRIPT_NAME} || 'THISSCRIPT';
+        $actor = CGI::a({ href => $scriptName.'?action=FindMoreExtensions',
                           class=>'twikiSubmit',
                           accesskey => 'P' },
                         'Find More Extensions');
