@@ -15,7 +15,7 @@ To enable editing of:
    * *On all topics, by default,* set the preference flag =EDITSECTIONS= to true (in either user or web preferences). With this approach, the preference variable =SECTIONDEPTHMIN= and =SECTIONDEPTH= (again set in either user or web) controls the level of headings down to which SectionalEditPlugin will apply (with all lower headings/sections being included in that section); the former skips lower-level headings from sectioning. If =SECTIONDEPTH= is undefined or =all=, all levels of headings create sections. If =SECTIONDEPTHMIN= is undefined or =0=, a section is created also for the text preceeding the first encountered section.
       * SECTIONDEPTH = all
       * SECTIONDEPTHMIN = 1
-      * %X% I do not recommend turning sectional editing on globally, as this will also section topics that might not be desired to be presented in this form, e.g., email reports about web changes, various searches, etc. A much better approach is to put the =&lt;editsections/&gt= tag into a custom template and apply it to a topic by setting the =VIEW_TEMPLATE= for topic, web, or site.
+      * %X% I do not recommend turning sectional editing on globally, as this will also section topics that might not be desired to be presented in this form, e.g., email reports about web changes, various searches, etc. A much better approach is to put the =&lt;editsections/&gt;= tag into a custom template and apply it to a topic by setting the =VIEW_TEMPLATE= for topic, web, or site.
 
 *NOTE:* You *cannot* mix these three methods on a single page.
 
