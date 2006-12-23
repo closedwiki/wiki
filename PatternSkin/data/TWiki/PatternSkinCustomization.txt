@@ -180,7 +180,7 @@ See PatternSkinCssCookbookNoTopBar.
 
 *Using templates:*
 <blockquote>
-Omit =%<nop>TMPL:INCLUDE{"viewleftbar"}%= to hide the left bar, or in a view template clear it using =%<nop>TMPL:INCLUDE{"viewleftbar"}%%TMPL:END%=
+Omit =%<nop>TMPL:INCLUDE{"viewleftbar"}%= to hide the left bar, or in a view template clear it using =%<nop>TMPL:DEF{"viewleftbar"}%%TMPL:END%=
 </blockquote>
 
 *Using style sheets:*
