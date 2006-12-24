@@ -1,79 +1,71 @@
-%META:TOPICINFO{author="MartinCleaver" date="1099241512" format="1.0" version="1.1"}%
----+ %TOPIC%
+%META:TOPICINFO{author="TWikiContributor" date="1099241512" format="1.0" version="1.1"}%
+---+!! Batch Upload Plugin
 
-This plugin intercepts the TWiki:Codev.BeforeAttachmentSaveHandler to process a zip file, attaching each of the individual files to the designated topic instead of the zip file.
+*Attach multiple files at once by uploading a =zip= archive.* All files in the zip file will be attached to the topic.
 
----++ Syntax Rules
+---++ Usage
 
-	* None - it applies as long as it is enabled. (Off by default)
+   * Enable this plugin  - Test: %IF{"context BatchUploadPluginEnabled" then='%ICON{choice-yes}% !BatchUploadPlugin is enabled' else='%ICON{choice-no}% !BatchUploadPlugin is not enabled. Enable this plugin below.'}%
+   * Attach a =zip= file to a topic
+      * If a comment is entered with the zip file, the comment will be assigned to all contained files
 
----++ Examples
-
-	* N/A
 
 ---++ Plugin Settings
 
+   * Debug plugin
+      * Set DEBUG = 0
+   * Enabled state - if disabled, does nothing
+      * Set ENABLED = 1
+   * Set SHORTDESCRIPTION = Attach multiple files at once by uploading a zip archive
+
 Plugin settings are stored as preferences variables. To reference a plugin setting write ==%&lt;plugin&gt;_&lt;setting&gt;%==, e.g., ==%<nop>BATCHUPLOADPLUGIN_SHORTDESCRIPTION%==
 
-	* One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
-		* Set SHORTDESCRIPTION = Plugin implementing TWiki:Codev.MultipleAttachmentsAtOnce
-
-	* Debug plugin: (See output in =data/debug.txt=)
-		* Set DEBUG = 0
-
-	* If disabled, does nothing.
-		* Set ENABLED = 0
+---++ Caveats
+   * Doesn't carry through the hide or link flags
+   * Contents of nested zips will only be attached partially
+   
+---++ Further Development
+   * Support nested zips
+   * Support hide and link attributes
 
 
 ---++ Plugin Installation Instructions
 
 __Note:__ You do not need to install anything on the browser to use this plugin. The following instructions are for the administrator who installs the plugin on the server where TWiki is running. 
 
-	* Download the ZIP file from the Plugin web (see below)
-	* Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
-	  | *File:* | *Description:* |
+   * Download the ZIP file from the Plugin web (see below)
+   * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
+   | *File:* | *Description:* |
 %$MANIFEST%
-	* (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
-	* Flip ENABLED switch to 1
-	* Test if the installation was successful:
-		* try uploading a zip file
+   * (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
+   * Flip ENABLED switch to 1
+   * Test if the installation was successful:
+      * Try uploading a zip file
 
----++ Caveats
-		* Required support (add an attachment) not in TWiki::Func, so I call TWiki::UI::Upload
-		* UPLOADZIPLIMIT, UPLOADNOSPACES, UPLOADLOWERCASE features deleted - belong in upload
-		* PNG support deleted (should be in TWiki::UI::Upload)
-		* No longer uses oops templates (plugins can't use them)
-		* Dies instead of finishes, because otherwise it can't veto zip attach
-		* Doesn't carry through the hide or link flags
-		* Comment field on extracted files is not customisable
-
----++ Further Development
-		* Put back deleted functionality.
-		* TWiki:Codev.BeforeAttachmentSaveHandler needs veto capability
-		* Ugly die needs replacing
-		* Test what happens if you upload zips of zips
-		* There is a method - currently called findTopicForPicture which is disabled by default - this can be used to change the destination topic for each archive element. We need a TWiki:Codev.ExtensionInteractionPoint to allow plugins to have their functionality overridden.
 
 ---++ Plugin Info
 
-|  Plugin Author: | TWiki:Main.MartinCleaver |
-|  Plugin Version: | 31 Oct 2004 (V1.000) |
-|  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  31 Oct 2004 | TWiki:Main.MartinCleaver - initial version as plugin |
-|  09 Apr 2004 | TWiki:Main.DiabJerius |
-|  17 Nov 2003 | TWiki:Main.JohannesMartin |
-|  20 Mar 2003 | TWiki:Main.RonKellam |
-|  16 Aug 2002 | TWiki:Main.ThomasWeigert |
-|  14 Jan 2002 | TWiki:Main.RyanFreebern |
-|  30 Oct 2001 | TWiki:Main.VitoMiliano |
-|  TWiki Dependency: | $TWiki::Plugins::VERSION 1.024 |
-|  CPAN Dependencies: | CPAN:Archive::Zip |
-|  Other Dependencies: | none |
-|  Perl Version: | 5.005 |
-|  TWiki:Plugins/Benchmark: | %TWIKIWEB%.GoodStyle nn%, %TWIKIWEB%.FormattedSearch nn%, %TOPIC% nn% |
-|  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
-|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
+| Plugin Author: | TWiki:Main.MartinCleaver, TWiki:Main.ArthurClemens |
+| Copyright &copy;: | TWiki:Main.MartinCleaver, TWiki:Main.ArthurClemens |
+| License: | [[http://www.gnu.org/copyleft/gpl.html][GPL]] |
+| Dependencies: | %$DEPENDENCIES% |
+| Plugin Version: | 23 Dec 2006 (v1.100) |
+| Change History: | <!-- versions below in reverse order -->&nbsp; |
+| 23 Dec 2006 | 1.1: TWiki:Main.ArthurClemens: Cleaned up and repackaged. Zipped files are now checked against the TWiki upload filter - for instance =php= files will get a =.txt= extension; spaces in zipped filenames will be changed to underscores. If a comment is entered when uploading a zip, the comment text will be assigned to all new attachments. After successful upload you will no longer see an error screen. |
+| 31 Oct 2004 | TWiki:Main.MartinCleaver - initial version as plugin |
+| 09 Apr 2004 | TWiki:Main.DiabJerius |
+| 17 Nov 2003 | TWiki:Main.JohannesMartin |
+| 20 Mar 2003 | TWiki:Main.RonKellam |
+| 16 Aug 2002 | TWiki:Main.ThomasWeigert |
+| 14 Jan 2002 | TWiki:Main.RyanFreebern |
+| 30 Oct 2001 | TWiki:Main.VitoMiliano |
+| TWiki Dependency: | $TWiki::Plugins::VERSION 1.024 |
+| CPAN Dependencies: | CPAN:Archive::Zip |
+| Other Dependencies: | none |
+| Perl Version: | 5.008 |
+| TWiki:Plugins/Benchmark: | %TWIKIWEB%.GoodStyle nn%, %TWIKIWEB%.FormattedSearch nn%, %TOPIC% nn% |
+| Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
+| Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 
 __Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
 
--- TWiki:Main/MartinCleaver - 31 Oct 2004

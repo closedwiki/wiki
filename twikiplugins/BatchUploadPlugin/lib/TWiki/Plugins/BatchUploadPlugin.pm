@@ -1,4 +1,5 @@
 package TWiki::Plugins::BatchUploadPlugin;
+
 # Plugin for TWiki Collaboration Platform, http://TWiki.org/
 #
 # Copyright (C) 2000-2003 Andrea Sterbini, a.sterbini@flashnet.it
@@ -14,25 +15,24 @@ package TWiki::Plugins::BatchUploadPlugin;
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details, published at 
+# GNU General Public License for more details, published at
 # http://www.gnu.org/copyleft/gpl.html
 #
 
 # Originally by Vito Miliano EPIC Added 22 Mar 2003
-# Modified by ZacharyHamm, JohannesMartin, DiabJerius 
-# Converted to a plugin by MartinCleaver 
+# Modified by ZacharyHamm, JohannesMartin, DiabJerius
+# Converted to a plugin by MartinCleaver
+# Updated by ArthurClemens
 
-use Data::Dumper qw( Dumper );
 use strict;
 use Archive::Zip qw(:ERROR_CODES :CONSTANTS :PKZIP_CONSTANTS);
 use warnings;
 use diagnostics;
 
-# =========================
 use vars qw(
-        $web $topic $user $installWeb $VERSION $RELEASE $pluginName
-        $debug $pluginEnabled
-    );
+  $web $topic $user $installWeb $VERSION $RELEASE $pluginName
+  $debug $pluginEnabled $stack $stackDepth $MAX_STACK_DEPTH
+);
 
 # This should always be $Rev$ so that TWiki can determine the checked-in
 # status of the plugin. It is used by the build automation tools, so
@@ -42,344 +42,308 @@ $VERSION = '$Rev$';
 # This is a free-form string you can use to "name" your own plugin version.
 # It is *not* used by the build automation tools, but is reported as part
 # of the version number in PLUGINDESCRIPTIONS.
-$RELEASE = 'Dakar';
+$RELEASE = '1.1';
 
-$pluginName = 'BatchUploadPlugin';  # Name of this Plugin
+$pluginName = 'BatchUploadPlugin';    # Name of this Plugin
 
-# =========================
-sub initPlugin
-{
+BEGIN {
+
+    # keep track of depth level of nested zips
+    $stack = ();
+
+    $stackDepth = 0;
+
+    # maximum level of recursion of zips in zips
+    $MAX_STACK_DEPTH = 30;
+}
+
+sub initPlugin {
     ( $topic, $web, $user, $installWeb ) = @_;
 
     # check for Plugins.pm versions
-    if( $TWiki::Plugins::VERSION < 1.021 ) {
-        TWiki::Func::writeWarning( "Version mismatch between $pluginName and Plugins.pm" );
+    if ( $TWiki::Plugins::VERSION < 1.024 ) {
+        TWiki::Func::writeWarning(
+            "Version mismatch between $pluginName and Plugins.pm");
         return 0;
     }
 
     # Get plugin debug flag
-    $debug = TWiki::Func::getPluginPreferencesFlag( "DEBUG" );
+    $debug = TWiki::Func::getPluginPreferencesFlag("DEBUG");
 
-    $pluginEnabled = TWiki::Func::getPluginPreferencesValue( "ENABLED" ) || 0;
+    $pluginEnabled = TWiki::Func::getPluginPreferencesValue("ENABLED") || 0;
 
     # Plugin correctly initialized
-    TWiki::Func::writeDebug( "- TWiki::Plugins::${pluginName}::initPlugin( $web.$topic ) is OK" ) if $debug;
+    TWiki::Func::writeDebug("- ${pluginName}::initPlugin( $web.$topic ) is OK")
+      if $debug;
+
     return 1;
 }
 
 =pod
 
----++ sub beforeAttachmentSaveHandler ( $attrHashRef, $topic, $web )
-
-| Description: | This code provides Plugins with the opportunity to alter an uploaded attachment between the upload and save-to-s$
-| Parameter: =$attrHashRef= | Hash reference of attachment attributes (keys are indicated below) |
-| Parameter: =$topic=       | Topic name |
-| Parameter: =$web=         | Web name |
-| Return:                   | There is no defined return value for this call |
-
-Keys in $attrHashRef:
-| *Key*       | *Value* |
-| attachment  | Name of the attachment |
-| tmpFilename | Name of the local file that stores the upload |
-| comment     | Comment to be associated with the upload |
-| user        | Login name of the person submitting the attachment, e.g. "jsmith" |
-
- Note: All keys should be used read-only, except for comment which can be modified.
-
-Example usage:
-
-<pre>
-   my( $attrHashRef, $topic, $web ) = @_;
-   $$attrHashRef{"comment"} .= " (NOTE: Extracted from blah.tar.gz)";
-</pre>
-
- Note: we don't have access to:
-		 $createLink,
+Store callback called before the attachment is further processed.
+Preliminary attempt to tackle nested zips - does not actually work yet. Each time we fall through beforeAttachmentSaveHandler to the actual attaching, other
+attachments get lost.
 
 =cut
 
 sub beforeAttachmentSaveHandler {
-  my( $attrHashRef, $topic, $web ) = @_;
+    my ( $attrHashRef, $topic, $web ) = @_;
 
-  if ($pluginEnabled) {
-    my $createLink = 1;
-    updateAttachment($web, $topic, $attrHashRef->{user},
-		     $createLink, 
-		     $attrHashRef->{attachment},
-		     $attrHashRef->{"tmpFilename"},
-		     $attrHashRef->{"comment"} );
-  }
-};
+    TWiki::Func::writeDebug(
+"- ${pluginName}::beforeAttachmentSaveHandler( $_[2].$_[1] - attachment: $attrHashRef->{attachment})"
+    ) if $debug;
 
-sub updateAttachment
-{
-#  die "UA".Dumper(\@_);
-  my ($webName,
-      $topic,
-      $userName,
+    return if ( !$pluginEnabled );
 
-      $createLink,
-      $originalZipName, 
-      $tmpFilename,               # cgi name
-      $fileComment ) = @_;
+    my $attachmentName = $attrHashRef->{attachment};
 
-  my $archivefile = ($originalZipName =~ m/.zip$/);
-  unless ($archivefile) {
-    return;
-  }
-  
-  my ($zip, %processedFiles, $tmpDir);
-  
+    return if ( !isZip($attachmentName) );
 
-  $zip = openZipSanityCheck ( $tmpFilename, $webName, $topic, $originalZipName );
-  #    die Dumper(\$zip);
-    unless (ref $zip) {
-      die "Problem with ".$zip;
+    return if ( $stackDepth > $MAX_STACK_DEPTH );
+
+    $stack->{$attachmentName} = $stackDepth;
+    TWiki::Func::writeDebug(
+        "$pluginName - $attachmentName has stack depth $stackDepth")
+      if $debug;
+    $stackDepth++;
+    
+    my $result = updateAttachment(
+        $web, $topic, $attachmentName,
+        $attrHashRef->{"tmpFilename"},
+        $attrHashRef->{"comment"}
+    );
+
+    if ($result) {
+        if ( $stack->{$attachmentName} == 0 ) {
+            TWiki::Func::writeDebug(
+                "$pluginName - Result stack: " . $stack->{$attachmentName} )
+              if $debug;
+            my $url = TWiki::Func::getViewUrl( $web, $topic );
+            my $cgiQuery = TWiki::Func::getCgiQuery();
+            print $cgiQuery->redirect($url);
+            exit 0
+              ; # user won't see this, but if left out the zip file will be attached, overwriting the zipped files
+        }
     }
-  ($tmpDir, %processedFiles ) = doUnzip($zip, $tmpFilename, $fileComment);
-  #	TWiki::Func::writeDebug( "upload: tmpDir = $tmpDir" );
-  
 
-#  die Dumper(\%processedFiles);
-  
-  # Loop through processed files.
-  my $error;
-  foreach my $fileNameKey (sort keys %processedFiles) {
-    my ($fileName, $fileComment, $filePath ) = @{$processedFiles{$fileNameKey}};
-    
-    $filePath = $fileName unless defined $filePath ; # for archives
-    $fileName =~ /^(.*?)$/goi ; $fileName = $1;
-    $tmpFilename = $fileNameKey;
-    
-    #	TWiki::Func::writeDebug( "upload: fileName=$fileName, fileComment=$fileComment, tmpFilename=$fileNameKey" );
-    
-    my( $fileSize, $fileUser, $fileDate, $fileVersion ) = "";
-
-    $error .= addAttachment (
-			       $webName, $topic, $userName,
-			       $filePath, $tmpFilename,
-			       "Extracted from $originalZipName" ); 
-  }
-  die "DONE! ".$error;
 }
 
+=pod
 
-# EPIC
-# changed to work around a race condition where a symlink could be made in the temp
-# directory pointing to a file writable by the CGI and then a zip uploaded with
-# that filename, also solves the problem if two people are uploading zips with
-# some identical filenames.
-sub doUnzip
-{
-#  die "DU:". Dumper(\@_);
-    my ($zip, $archive, $archiveComment) = @_;
-    my $tmpDir = $archive; $tmpDir =~ s/(.*)\/.+/$1/;
-    $tmpDir = makeTempName( $tmpDir );
+Checks if a file is a zip file.
+Returns true if the file has a zip extension, false if not.
 
-    my (@memberNames, $mName, $member, $buffer, $comment, %good, $zipRet);
+=cut
+
+sub isZip {
+    my ($fileName) = @_;
+    return $fileName =~ m/.zip$/;
+}
+
+=pod
+
+Return: 1 if successful, 0 if not successful.
+
+=cut
+
+sub updateAttachment {
+
+    my (
+        $webName,
+        $topic,
+        $originalZipName,
+        $zipArchive,    # cgi name
+        $fileComment
+    ) = @_;
+
+    my ( $zip, %processedFiles, $tempDir );
+
+    $zip =
+      openZipSanityCheck( $zipArchive, $webName, $topic, $originalZipName );
+    unless ( ref $zip ) {
+        die "Problem with " . $zip;
+    }
+
+    # Create temp directory to unzip files into
+    # the unzipped files will be attached afterwards
+    my $workArea = TWiki::Func::getWorkArea($pluginName);
+
+    # Temp file in workarea
+    $tempDir = $workArea . '/' . int( rand(1000000000) );
+
+    mkdir($tempDir);
+
+    # Change to the new directory: on some systems with some versions of
+    # Archive::Zip extractMemberWithoutPaths() ignores the path given to it and
+    # tries to just write the file to the current directory.
+    chdir($tempDir);
+      
+    TWiki::Func::writeDebug("$pluginName - Created temp dir $tempDir")
+      if $debug;
+
+    %processedFiles = doUnzip( $tempDir, $zip );
+
+    # Loop through processed files.
+    foreach my $fileNameKey ( sort keys %processedFiles ) {
+        my ( $fileName ) =
+          @{ $processedFiles{$fileNameKey} };
+
+        my $tmpFilename = $fileNameKey;
+
+        my ( $fileSize, $fileUser, $fileDate, $fileVersion ) = "";
+
+        # get file size
+        my @stats = stat $tmpFilename;
+        $fileSize = $stats[7];
+
+        # use current time for upload
+        $fileDate = time();
+
+        my $hideFile = 0;
+        $fileComment = "Extracted from $originalZipName" unless $fileComment;
+
+        TWiki::Func::writeDebug(
+"$pluginName - Trying to attach: fileName=$fileName, fileSize=$fileSize, fileDate=$fileDate, fileComment=$fileComment, tmpFilename=$tmpFilename"
+        ) if $debug;
+
+        TWiki::Func::saveAttachment(
+            $webName, $topic,
+            my $result = $fileName,
+            {
+                file     => $fileName,
+                filepath => $tmpFilename,
+                hide     => $hideFile,
+                filesize => $fileSize,
+                filedate => $fileDate,
+                comment  => $fileComment
+            }
+        );
+
+        if ( $result eq $fileName ) {
+            TWiki::Func::writeDebug("$pluginName - Attaching $fileName went OK")
+              if $debug;
+        }
+        else {
+            TWiki::Func::writeDebug(
+                "$pluginName - An error occurred while attaching $fileName")
+              if $debug;
+            die "An error occurred while attaching $fileName";
+        }
+
+        # remove temp file
+        unlink($tmpFilename);
+    }
+
+    # remove temp dir
+    rmdir($tempDir);
+
+    return 1;
+}
+
+=pod
+
+changed to work around a race condition where a symlink could be made in the 
+temp directory pointing to a file writable by the CGI and then a zip uploaded 
+with that filename, also solves the problem if two people are uploading zips 
+with some identical filenames.
+=cut
+
+sub doUnzip {
+
+    my ( $tempDir, $zip ) = @_;
+
+    my ( @memberNames, $fileName, $member, $buffer, %good, $zipRet );
 
     @memberNames = $zip->memberNames();
 
-    mkdir( $tmpDir );
-
-    # on some systems with some versions of Archive::Zip extractMemberWithoutPaths()
-    # ignores the path given to it and tries to just write the file to the current directory.
-    chdir( $tmpDir );
-
-    foreach $mName (sort @memberNames) {
-        $member = $zip->memberNamed($mName);
+    foreach $fileName ( sort @memberNames ) {
+        $member = $zip->memberNamed($fileName);
         next if $member->isDirectory();
 
-        $comment = substr($member->fileComment(), 0, 50);
-        $comment = length($comment) ? $comment : $archiveComment;
+        $fileName =~ /\/?(.*\/)?(.+)/;
+        $fileName = $2;
 
-	$mName =~ /\/?(.*\/)?(.+)/; $mName = $2;
+        # Make filename safe:
+        my $origFileName = $fileName;
 
-	my $zipRet = $zip->extractMemberWithoutPaths( $member, "$tmpDir/$mName" );
-	if ($zipRet == AZ_OK) {
-	    $good{"$tmpDir/$mName"} = [ $mName, $comment ];
-	} else {
-	    # FIXME: oops here
-	    TWiki::Func::writeDebug( "upload: zip->extractMemberWithoutPaths = $zipRet" );
-	}
+        # Protect against evil filenames - especially for out temp file.
+        $fileName =~ /\.*([ \w_.\-]+)$/go;
+        $fileName = $1;
+
+        # Change spaces to underscore
+        $fileName =~ s/ /_/go;
+
+        # Remove problematic chars
+        $fileName =~ s/$TWiki::cfg{NameFilter}//goi;
+
+        # Append .txt to files like we do to normal attachments
+        $fileName =~ s/$TWiki::cfg{UploadFilter}/$1\.txt/goi;
+
+        if ( $debug && ( $fileName ne $origFileName ) ) {
+            TWiki::Func::writeDebug(
+                "$pluginName - Renamed file $origFileName to $fileName");
+        }
+
+        $zipRet =
+          $zip->extractMemberWithoutPaths( $member, "$tempDir/$fileName" );
+        if ( $zipRet == AZ_OK ) {
+            $good{"$tempDir/$fileName"} = [ $fileName ];
+        }
+        else {
+
+            # FIXME: oops here
+            TWiki::Func::writeDebug(
+"$pluginName - Something went wrong with uploading of zip file $fileName: $zipRet"
+            ) if $debug;
+        }
     }
 
-    return ( $tmpDir, %good ); # return the $tmpDir here so we can remove it
+    return %good;
 }
 
-sub zipErrorHandler
-{
-    TWiki::Func::writeDebug (@_);
-}
+=pod
 
-# EPIC
-# Open a zip and perform a sanity check on it.
-# Returns the opened zip object (to be passed to doUnzip) on success,
-# a string saying the reason for failure.
-#
-sub openZipSanityCheck
-{
-#  die "OZSC: ".Dumper(\@_);
+Open a zip and perform a sanity check on it.
+Returns the opened zip object (to be passed to doUnzip) on success,
+a string saying the reason for failure.
+
+=cut
+
+sub openZipSanityCheck {
+
     my ( $archive, $webName, $topic, $realname ) = @_;
-    my ( $lowerCase, $noSpaces, $noredirect) = (0,0,0);
-    my $zip = Archive::Zip->new ();
-    my (@memberNames, $mName, $member, %dupCheck, $sizeLimit, $size);
+    my ( $lowerCase, $noSpaces, $noredirect ) = ( 0, 0, 0 );
+    my $zip = Archive::Zip->new();
+    my ( @memberNames, $fileName, $member, %dupCheck, $sizeLimit );
 
-    if ( $zip->read( $archive ) != AZ_OK ) {
-         return "Zip read error or not a zip file. ". $archive ;
+    if ( $zip->read($archive) != AZ_OK ) {
+        return "Zip read error or not a zip file. " . $archive;
     }
-
-    my $nonAlphaNum = '[^'.$TWiki::mixedAlphaNum . '\._-]+';
 
     # Scan for duplicates
-    @memberNames = $zip->memberNames (); $size = 0;
-#    die Dumper($zip);
+    @memberNames = $zip->memberNames();
 
-    foreach $mName (@memberNames) {
-         $member = $zip->memberNamed ($mName);
-	 next if $member->isDirectory ();
+    foreach $fileName (@memberNames) {
+        $member = $zip->memberNamed($fileName);
+        next if $member->isDirectory();
 
-	 $mName =~ /\/?(.*\/)?(.+)/; $mName = $2;
+        $fileName =~ /\/?(.*\/)?(.+)/;
+        $fileName = $2;
 
-	 $size += $member->uncompressedSize ();
+        if ($lowerCase) { $fileName = lc($fileName); }
+        unless ($noSpaces) { $fileName =~ s/\s/_/go; }
 
-	 if ( $lowerCase ) { $mName = lc ($mName); }
-	 unless ( $noSpaces ) { $mName =~ s/\s/_/go; }
+        $fileName =~ s/$TWiki::cfg{UploadFilter}/$1\.txt/goi;
 
-#	 $mName =~ s/$nonAlphaNum//go;   # ----------- SMELL breaks.
-	 $mName =~ s/$TWiki::uploadFilter/$1\.txt/goi;
-
-	 ##TWiki::Func::writeDebug( "upload: zip member name: $mName" );
-	 if ( defined $dupCheck{"$mName"} ) {
-	      return "Duplicate file in archive ".$mName." in ".$archive;
-	 } else {
-	      $dupCheck{"$mName"} = $mName;
-	 }
+        if ( defined $dupCheck{"$fileName"} ) {
+            return "Duplicate file in archive " . $fileName . " in " . $archive;
+        }
+        else {
+            $dupCheck{"$fileName"} = $fileName;
+        }
     }
     return $zip;
 }
 
-sub makeTempName
-{
-    my $baseDir = shift;
-    my $tempName = sprintf( "%d-%d.%d", $$, time(), rand( 10000 ) );
-    return $baseDir ? $baseDir . "/" . $tempName : $tempName;
-}
-
-#thanks to forcer on #wiki for this.
-sub makeWikiWord {
-  my $w = $_[0];
-  $w =~ s/[^A-Za-z0-9]//g;
-  $w =~ tr/A-Z/a-z/;
-  $w =~ s/^(.)(.)(.)/\U$1\E$2\U$3/;
-  return $w
-}
-
-sub findTopicForPicture {
-  my ($fileName, $topic) = @_;
-  my $template = "";
-
-  my $newTopic;
-  if ($fileName =~ m/.jpg$/) {
-    $newTopic =~ s/img/poster/;
-    $newTopic = makeWikiWord($fileName);
-    $template = "$web.WebPosterTemplate";
-  } else {
-    $newTopic = $topic; # Can't move it.
-  }
-
-  unless (TWiki::Func::topicExists($web, $newTopic)) {
-    my ( $meta, $text ) = TWiki::Store::readTemplateTopic($template);
-    my $err = TWiki::Store::saveTopic($web, $newTopic, $text, $meta, "",  1 );
-  }
-  return $newTopic;
-}
-
-
-=pod 
-SMELL I break TWiki::Func encapsulation because this is by far the best routine to call
-
-Update an attachment, file or properties or both. This may also be used to
-create an attachment.
-| =$webName= | Web containing topic |
-| =$topic= | Topic |
-| =$userName= | Username of user doing upload/change - username, *not* wikiName |
-| =$createLink= | 1 if a link is to be created in the topic text |
-| =$filePath= | if !propsOnly, gives the remote path name of the file to upload. This is used to derive the attName. |
-| =$localFile= | Name of local file to replace attachment |
-| =$attName= | If propsOnly, the name of the attachment. Ignored if !propsOnly. |
-| =$comment= | (property) comment associated with file |
-| return | on error, a list of parameters to the TWiki::UI::oops function, not including the webName and topic. |
-|               |  If the first element in the list is the empty string, an error has already been printed to the browser, and no oops call is necessary. |
-
-=cut 
-
-sub addAttachment {
-  my ( $webName,
-       $topic, 
-       $userName,
-       $fileName,
-       $localFile,
-       $comment ) = @_;
-
-  my $propsOnly = 0;
-  my $hideFile = 0;
-  my $createLink = 0;
-  my $attName = "";
-  $fileName = lc $fileName;
-
-  # $topic = findTopicForPicture($fileName, $topic);
-
-
-#  die Dumper(\@_);
-  use TWiki::UI::Upload;
-  my $res = TWiki::UI::Upload::updateAttachment( $webName,
-						 $topic,
-						 $userName, 
-						 $createLink, # constant = 0
-						 $propsOnly, # constant = 0
-						 $fileName,
-						 $localFile,
-						 $attName,
-						 $hideFile, # constant = 0
-						 $comment );
-#  die Dumper(\@_);
-  return $res;
-}
-
-
-
-
-######################
-# This is stuff I deleted from here that probably needs 
-# to be in TWiki::UI::Upload
-
-# =========================
-#  pngsize : gets the width & height (in pixels) of a png file
-#  cor this program is on the cutting edge of technology! (pity it's blunt!)
-#  GRR 970619:  fixed bytesex assumption
-#  source: http://www.la-grange.net/2000/05/04-png.html
-# sub pngsize {
-
-
-# =========================
-# sub addLinkToEndOfTopic
-#    if( $fileName =~ /\.(gif|jpg|jpeg|png)$/i ) {
-
-
-# =========================
-# sub handleError
-
-
-# EPIC
-# Translates shorthand into actual bytes.
-# 1[Kk] is 1024 bytes, 1[Mm] is 1024K.
-# sub limitTranslate
-
-
-
-
-
-
 1;
-# EOF
