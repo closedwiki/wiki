@@ -2755,8 +2755,7 @@ sub _includeWarning {
     } elsif( isTrue( $warn )) {
         # different inlineAlerts need different argument counts
         my $argument = '';
-        if (($message  eq  'topic_not_found')  or
-            ($message  eq  'already_included')) {
+        if ($message  eq  'topic_not_found') {
             my ($web,$topic)  =  @_;
             $argument = "$web.$topic";
         }
