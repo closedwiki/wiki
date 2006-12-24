@@ -2744,6 +2744,7 @@ sub _IF {
 }
 
 # generate an include warning
+# SMELL: varying number of parameters idiotic to handle for customized $warn
 sub _includeWarning {
     my $this = shift;
     my $warn = shift;
@@ -2752,8 +2753,17 @@ sub _includeWarning {
     if( $warn eq 'on' ) {
         return $this->inlineAlert( 'alerts', $message, @_ );
     } elsif( isTrue( $warn )) {
-        my $topic = shift;
-        $warn =~ s/\$topic/$topic/go if $topic;
+        # different inlineAlerts need different argument counts
+        my $argument = '';
+        if (($message  eq  'topic_not_found')  or
+            ($message  eq  'already_included')) {
+            my ($web,$topic)  =  @_;
+            $argument = "$web.$topic";
+        }
+        else {
+            $argument = shift;
+        }
+        $warn =~ s/\$topic/$argument/go if $argument;
         return $warn;
     } # else fail silently
     return '';
@@ -2801,7 +2811,7 @@ sub _INCLUDE {
     unless( $path ) {
         # SMELL: could do with a different message here, but don't want to
         # add one right now because translators are already working
-        return $this->_includeWarning( $warn, 'topic_not_found' );
+        return $this->_includeWarning( $warn, 'topic_not_found', '""','""' );
     }
 
     my $text = '';
@@ -2827,7 +2837,7 @@ sub _INCLUDE {
     $key .= $args;
     if( $this->{includes}->{$key} || $count > 99) {
         return $this->_includeWarning( $warn, 'already_included',
-                                       $includedWeb, $includedTopic, '' );
+                                       "$includedWeb.$includedTopic", '' );
     }
 
     my %saveTags = %{$this->{SESSION_TAGS}};
