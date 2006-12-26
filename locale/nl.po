@@ -175,7 +175,7 @@ msgstr "%1 is %2 aan het bewerken."
 
 #: templates/messages.tmpl:49
 msgid "%1 is in at least one group and cannot be removed"
-msgstr "%1 is lid van tenminste √©√©n groep en kan niet worden verwijderd"
+msgstr "%1 is lid van tenminste âÂ©âÂ©n groep en kan niet worden verwijderd"
 
 #: twikiplugins/PatternSkin/templates/renameattachmentdelete.pattern.tmpl:40
 msgid "%1 is the default topic for deleted attachments."
@@ -557,7 +557,7 @@ msgstr "<a href='%1' rel='nofollow'>Bewerk instellingen</a> voor deze pagina"
 
 #: twikiplugins/NatSkin/data/TWiki/MySideBar.txt:7
 msgid "<a href='%1' title='%2'>Create</a> your personalized sidebar."
-msgstr "<a href='%1' title='%2'>Cre�er</a> je gepersonaliseerde zijbalk."
+msgstr "<a href='%1' title='%2'>Creër</a> je gepersonaliseerde zijbalk."
 
 #: data/TWiki/WebChanges.txt:8
 msgid ""
@@ -640,7 +640,8 @@ msgid ""
 "the name of the web is not spelt wrongly on the previous page; fix the link "
 "if necessary."
 msgstr ""
-"Een link naar een pagina die zich in een ander web bevindt wordt geschreven "als %1. Let op dat de naam van het web niet verkeerd is gespeld op de vorige " "pagina; repareer de link als het nodig mocht zijn."
+"Een link naar een pagina die zich in een ander web bevindt wordt geschreven "
+"als %1. Let op dat de naam van het web niet verkeerd is gespeld op de vorige " "pagina; repareer de link als het nodig mocht zijn."
 
 #: data/Sandbox/WebHome.txt:24
 msgid "A more extensive changes list is available via [[%1][Recent Changes]]."
@@ -1094,7 +1095,7 @@ msgstr "Hoofdlettergevoelig"
 
 #: twikiplugins/PatternSkin/data/TWiki/WebLeftBar.txt:32
 msgid "Categories"
-msgstr "Categoriën"
+msgstr "CategoriÃ«n"
 
 #: twikiplugins/NatSkin/templates/edittoolbar.natedit.tmpl:21
 msgid "Center align"
@@ -1449,7 +1450,7 @@ msgstr ""
 #: twikiplugins/NatSkin/templates/preview.nat.tmpl:45
 #: twikiplugins/NatSkin/templates/preview.natedit.tmpl:6
 msgid "Creates a new topic revision when saving"
-msgstr "Cre�ert een nieuwe paginarevisie bij het bewaren"
+msgstr "Creert een nieuwe paginarevisie bij het bewaren"
 
 #: templates/messages.tmpl:314
 #: twikiplugins/NatSkin/templates/oopsnoformdef.nat.tmpl:21
@@ -1799,7 +1800,7 @@ msgstr "Foutmelding: Kan dit web niet aanmaken omdat deze al bestaat"
 
 #: twikiplugins/NatSkin/templates/oopsmngcreateweb.nat.tmpl:34
 msgid "Error: Could not copy topics to the new web"
-msgstr "Foutmelding: Kon geen pagina's kopi�ren naar het nieuwe web"
+msgstr "Foutmelding: Kon geen pagina's kopiren naar het nieuwe web"
 
 #: twikiplugins/NatSkin/templates/oopsmngcreateweb.nat.tmpl:30
 msgid "Error: Could not create the new web"
@@ -2116,7 +2117,7 @@ msgstr "Ik ben mijn wachtwoord vergeten"
 #: data/TWiki/TWikiPreferences.txt:42
 msgid "Ideas, requests, problems regarding %1? <a href='%2'>Send feedback</a>"
 msgstr ""
-"Ideeën, verzoeken of problemen aangaande %1? <a href='%2'>Stuur feedback</a>"
+"IdeeÃ«n, verzoeken of problemen aangaande %1? <a href='%2'>Stuur feedback</a>"
 
 #: templates/messages.tmpl:306
 #: twikiplugins/NatSkin/templates/oopsnoformdef.nat.tmpl:13
@@ -2598,7 +2599,7 @@ msgstr "Verplaats bijlage"
 
 #: twikiplugins/NatSkin/templates/moveattachment.nat.tmpl:15
 msgid "Move or Delete File \"%1\""
-msgstr "Verplaats of verwijder bestand \"%1\"""
+msgstr "Verplaats of verwijder bestand \"%1\""
 
 #: twikiplugins/NatSkin/templates/strings.nat.tmpl:13
 msgid "Move or rename this topic"
@@ -4939,7 +4940,7 @@ msgid ""
 "You now need to verify your e-mail address. You can do so by entering %1 in "
 "the form presented to you when this e-mail was sent, or by visiting %2"
 msgstr ""
-"Je moet nu je e-mailadres verifiëren. Dit kan je doen door %1 in te vullen "
+"Je moet nu je e-mailadres verifiÃ«ren. Dit kan je doen door %1 in te vullen "
 "in het formulier dat je hebt gekregen toen je deze e-mail werd gestuurd, of "
 "door %2 te bezoeken."
 
@@ -5025,7 +5026,7 @@ msgstr "Je geregistreerde e-mailadres(sen) zijn vernieuwd naar: %1."
 
 #: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:90
 msgid "Your signature to copy/paste:"
-msgstr "Je signatuur om te kopiëren/plakken:"
+msgstr "Je signatuur om te kopiÃ«ren/plakken:"
 
 #: twikiplugins/NatSkin/templates/edittoolbar.natedit.tmpl:39
 msgid "Your signature with timestamp"
@@ -5351,7 +5352,7 @@ msgstr "title='Voeg een afbeelding of document toe aan deze pagina' accesskey='b
 
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:7
 msgid "title='Create new topic' accesskey='c'>&Create"
-msgstr "title='Cre�er nieuwe pagina' accesskey='c'>&Cre�er"
+msgstr "title='Creer nieuwe pagina' accesskey='c'>&Creer"
 
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:25
 msgid ""
@@ -5372,7 +5373,7 @@ msgstr "title='Bewerk deze paginatekst WYSIWYG' accesskey='b'>&Bewerken "
 
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:16
 msgid "title='Edit this topic text' accesskey='w'>Create (&WYSIWYG)"
-msgstr "title='Cre�er nieuwe pagina' accesskey='c'>&Cre�er (WYSIWYG)"
+msgstr "title='Creer nieuwe pagina' accesskey='c'>&Creer (WYSIWYG)"
 
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:28
 msgid "title='Printable version of this topic' accesskey='p'>&Printable"
