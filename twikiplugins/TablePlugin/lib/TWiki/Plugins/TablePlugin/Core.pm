@@ -2,7 +2,7 @@
 #
 # Copyright (C) 2001-2003 John Talintyre, jet@cheerful.com
 # Copyright (C) 2001-2004 Peter Thoeny, peter@thoeny.org
-# Copyright (C) 2005 TWiki Contributors
+# Copyright (C) 2005-2006 TWiki Contributors
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -26,7 +26,7 @@ use Time::Local;
 
 use vars qw( $translationToken
   $insideTABLE $tableCount @curTable $sortCol $maxSortCols $requestedTable $up
-  $sortTablesInText $sortAttachments $currTablePre
+  $sortTablesInText $sortAttachments $currTablePre $sortColFromUrl
   $tableWidth @columnWidths
   $tableBorder $tableFrame $tableRules $cellPadding $cellSpacing $cellBorder
   @headerAlign @dataAlign $vAlign $headerVAlign $dataVAlign
@@ -34,7 +34,7 @@ use vars qw( $translationToken
   @isoMonth
   $headerRows $footerRows
   $upchar $downchar $diamondchar $url
-  @isoMonth %mon2num $initSort $initDirection
+  @isoMonth %mon2num $initSort $initDirection $currentSortDirection
   @rowspan $pluginAttrs $prefsAttrs $tableId $tableSummary $tableCaption
   $iconUrl $unsortEnabled
   %sortDirection %columnType );
@@ -262,11 +262,27 @@ sub _processTableRow {
     my $span = 0;
     my $l1   = 0;
     my $l2   = 0;
+
     if ( !$insideTABLE ) {
         @curTable = ();
         @rowspan  = ();
         $tableCount++;
+        $currentSortDirection = $sortDirection{'NONE'};
+
+        if ( defined $requestedTable && $requestedTable == $tableCount
+            && defined $sortColFromUrl )
+        {
+            $sortCol              = $sortColFromUrl;
+            $sortCol              = $maxSortCols if ( $sortCol > $maxSortCols );
+            $currentSortDirection = _getCurrentSortDirection($up);
+        } elsif ( defined $initSort ) {
+            $sortCol              = $initSort - 1;
+            $sortCol              = $maxSortCols if ( $sortCol > $maxSortCols );
+            $currentSortDirection = _getCurrentSortDirection($initDirection);
+        }
+
     }
+
     $theRow =~ s/\t/   /go;    # change tabs to space
     $theRow =~ s/\s*$//o;      # remove trailing spaces
     $theRow =~ s/(\|\|+)/$translationToken.length($1)."\|"/geo;   # calc COLSPAN
@@ -326,23 +342,16 @@ sub _processTableRow {
                 }
             }
 
-            my $currentDirection;
-            if ( defined $sortCol && $colCount == $sortCol ) {
-                $currentDirection = _getCurrentSortDirection($up);
-            }
-
-            if (   defined $requestedTable
-                && $requestedTable == $tableCount
-                && defined $sortCol
-                && $colCount == $sortCol )
+            if (  ( (defined $requestedTable && $requestedTable == $tableCount ) 
+                   || defined $initSort )
+                && defined $sortCol && $colCount == $sortCol )
             {
-
                 # CSS class name
-                if ( $currentDirection == $sortDirection{'ASCENDING'} ) {
+                if ( $currentSortDirection == $sortDirection{'ASCENDING'} ) {
                     $attr->{class} =
                       _appendSortedAscendingCssClass( $attr->{class} );
                 }
-                if ( $currentDirection == $sortDirection{'DESCENDING'} ) {
+                if ( $currentSortDirection == $sortDirection{'DESCENDING'} ) {
                     $attr->{class} =
                       _appendSortedDescendingCssClass( $attr->{class} );
                 }
@@ -564,7 +573,6 @@ sub emitTable {
         $footerRows = @curTable - $headerRows;  # and footer to whatever is left
     }
 
-    my $currentDirection = _getCurrentSortDirection($up);
     my $sortThisTable = _shouldISortThisTable( $curTable[ $headerRows - 1 ] );
     my $tattrs        = {
         class       => 'twikiTable',
@@ -598,20 +606,8 @@ sub emitTable {
         }
     }
 
-    #Added to aid initial sorting direction and column
-    if ( defined($sortCol) ) {
-        undef $initSort;
-    }
-    elsif ( defined($initSort) ) {
-        $sortCol          = $initSort - 1;
-        $sortCol          = $maxSortCols if ( $sortCol > $maxSortCols );
-        $currentDirection = _getCurrentSortDirection($initDirection);
-        $requestedTable   = $tableCount;
-    }
-
     if (
-        (
-               defined $sortCol
+        (   defined $sortCol
             && defined $requestedTable
             && $requestedTable == $tableCount
         )
@@ -663,7 +659,7 @@ sub emitTable {
             undef $sortCol;
         }
         elsif ( $stype eq $columnType{'TEXT'} ) {
-            if ( $currentDirection == $sortDirection{'DESCENDING'} ) {
+            if ( $currentSortDirection == $sortDirection{'DESCENDING'} ) {
 
                 # efficient way of sorting stripped HTML text
                 # SMELL: efficient? That's not efficient!
@@ -672,7 +668,7 @@ sub emitTable {
                   map { [ $_, _stripHtml( $_->[$sortCol]->{text} ) ] }
                   @curTable;
             }
-            if ( $currentDirection == $sortDirection{'ASCENDING'} ) {
+            if ( $currentSortDirection == $sortDirection{'ASCENDING'} ) {
                 @curTable = map { $_->[0] }
                   sort { $a->[1] cmp $b->[1] }
                   map { [ $_, _stripHtml( $_->[$sortCol]->{text} ) ] }
@@ -680,12 +676,12 @@ sub emitTable {
             }
         }
         else {
-            if ( $currentDirection == $sortDirection{'DESCENDING'} ) {
+            if ( $currentSortDirection == $sortDirection{'DESCENDING'} ) {
                 @curTable =
                   sort { $b->[$sortCol]->{$stype} <=> $a->[$sortCol]->{$stype} }
                   @curTable;
             }
-            if ( $currentDirection == $sortDirection{'ASCENDING'} ) {
+            if ( $currentSortDirection == $sortDirection{'ASCENDING'} ) {
                 @curTable =
                   sort { $a->[$sortCol]->{$stype} <=> $b->[$sortCol]->{$stype} }
                   @curTable;
@@ -726,14 +722,16 @@ sub emitTable {
 
             my $newDirection;
             my $isSorted = 0;
-            if (   $currentDirection != $sortDirection{'NONE'}
-                && defined $sortCol
-                && $colCount == $sortCol
-                && $requestedTable == $tableCount
+
+            if (   $currentSortDirection != $sortDirection{'NONE'}
+                && defined $sortCol && $colCount == $sortCol
+                # Removing the line below hides the marking of sorted columns
+                # until the user clicks on a header (KJL)
+                # && defined $requestedTable && $requestedTable == $tableCount
                 && $stype ne '' )
             {
                 $isSorted     = 1;
-                $newDirection = _getNewSortDirection($currentDirection);
+                $newDirection = _getNewSortDirection($currentSortDirection);
             }
             else {
                 $newDirection = _getDefaultSortDirection();
@@ -770,20 +768,20 @@ sub emitTable {
                 $attr->{maxCols} = $maxCols;
 
                 if ($isSorted) {
-                    if ( $currentDirection == $sortDirection{'ASCENDING'} ) {
+                    if ( $currentSortDirection == $sortDirection{'ASCENDING'} ) {
                         $tableAnchor =
                           CGI::a( { name => 'sorted_table' }, '<!-- -->' )
                           . CGI::span( { title => 'Sorted ascending' },
                             $upchar );
                     }
-                    if ( $currentDirection == $sortDirection{'DESCENDING'} ) {
+                    if ( $currentSortDirection == $sortDirection{'DESCENDING'} ) {
                         $tableAnchor =
                           CGI::a( { name => 'sorted_table' }, '<!-- -->' )
                           . CGI::span( { title => 'Sorted descending' },
                             $downchar );
                     }
                 }
-                if ( $currentDirection == $sortDirection{'NONE'} ) {
+                if ( $currentSortDirection == $sortDirection{'NONE'} ) {
                     $tableAnchor =
                       CGI::a( { name => 'sorted_table' }, '<!-- -->' );
                 }
@@ -925,7 +923,7 @@ sub handler {
         $url = $cgi->url . $cgi->path_info() . '?' . $plist;
         $url =~ s/\&/\&amp;/go;
 
-        $sortCol = $cgi->param('sortcol');    # zero based: 0 is first column
+        $sortColFromUrl = $cgi->param('sortcol');    # zero based: 0 is first column
         $requestedTable = $cgi->param('table');
         $up             = $cgi->param('up');
 
