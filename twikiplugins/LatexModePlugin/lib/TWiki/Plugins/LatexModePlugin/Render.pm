@@ -53,6 +53,11 @@ my $PATHTOCONVERT = $TWiki::cfg{Plugins}{LatexModePlugin}{convert} ||
     '/usr/X11R6/bin/convert';
 my $PATHTODVIPNG = $TWiki::cfg{Plugins}{LatexModePlugin}{dvipng} ||
     '/usr/share/texmf/bin/dvipng';
+my $PATHTOMIMETEX = $TWiki::cfg{Plugins}{LatexModePlugin}{mimetex} ||
+    '/usr/local/bin/mimetex';
+
+my $DEFAULTENGINE = $TWiki::cfg{Plugins}{LatexModePlugins}{engine} ||
+    'dvipng';  # options: 'dvipng', 'ps', 'pdf', 'mimetex'
 
 my $DISABLE = $TWiki::cfg{Plugins}{LatexModePlugin}{donotrenderlist} ||
     'input,include,catcode';
@@ -130,7 +135,7 @@ sub handleLatex
                  'gamma' =>   $LMPc{'default_gamma'}, 
                  'scale' =>   $LMPc{'default_scale'},
                  'bgcolor' => 'white',
-                 'engine' => 0,
+                 'engine' => $DEFAULTENGINE,
                  'color' => 'black' );
 
     my %opts2 = TWiki::Func::extractParameters( $prefs );
@@ -335,6 +340,7 @@ sub createTempLatexFiles {
     #this hash table maps the digest strings to the output filenames
     my %pdf_hash_code_mapping = ();
     my %dvi_hash_code_mapping = ();
+    my %mimetex_hash_code_mapping = ();
 
     #create the intermediate latex file
     do { $_[0] .= "<BR>can't write $LATEXFILENAME: $!\n"; 
@@ -465,6 +471,21 @@ sub createTempLatexFiles {
             print PDFOUT $txt;
             $pdf_image_number++;
             $pdf_hash_code_mapping{$key} = $pdf_image_number;
+        } elsif ( $markup_opts{$key}->{'engine'} eq 'mimetex' ) {
+            ### mimetex just does math
+            my $MIMELATEXFILENAME = $key.'.txt';
+            do { $_[0] .= "<BR>can't write $MIMELATEXFILENAME: $!\n"; 
+                 return; } unless open( MIMEOUT, ">$MIMELATEXFILENAME" ) ;
+
+            # mimetex assumes all input is mathmode
+            $value =~ s/\$(.*?)\$/$1/;
+            $value =~ s/\$\$(.*?)\$\$/$1/;
+            $value =~ s/\\\[(.*?)\\\]/$1/;
+
+            print MIMEOUT '\\'.$opts{'color'}.' ' if ($LMPc{'use_color'} == 1);
+            print MIMEOUT $value;
+            close MIMEOUT;
+            $mimetex_hash_code_mapping{$key} = 1;
         } else {
             print DVIOUT $txt;
             $dvi_image_number++;
@@ -475,7 +496,8 @@ sub createTempLatexFiles {
     print DVIOUT $txt; close( DVIOUT );
     print PDFOUT $txt; close( PDFOUT );
 
-    return( \%dvi_hash_code_mapping, \%pdf_hash_code_mapping );
+    return( \%dvi_hash_code_mapping, \%pdf_hash_code_mapping, 
+            \%mimetex_hash_code_mapping );
 }
 
 # =========================
@@ -604,9 +626,10 @@ sub renderEquations {
     print LF "$LATEXWDIR\n\n";
     close(LF);
 
-    my ($dvim, $pdfm) = createTempLatexFiles( \%hashed_math_strings );
+    my ($dvim, $pdfm, $mimem) = createTempLatexFiles( \%hashed_math_strings );
     my %dvi_hash_code_mapping = %{ $dvim };
     my %pdf_hash_code_mapping = %{ $pdfm };
+    my %mimetex_hash_code_mapping = %{ $mimem };
 
     # generate the output images by running latex-dvips-convert on the file
     # system("$PATHTOLATEX -interaction=nonstopmode $LATEXFILENAME >> $LATEXLOG 2>&1");
@@ -655,6 +678,15 @@ sub renderEquations {
         } else {
             $_[0] .= "<br>Latex rendering error!! dvi file was not created.<br>";
         }
+    }
+    if (%mimetex_hash_code_mapping) {
+        &TWiki::Func::writeDebug( "mimetex: ".
+           join(' ',keys %mimetex_hash_code_mapping) ) if $debug;
+
+        &makePNGs( \%mimetex_hash_code_mapping, 
+                   $LMPc{'topic'}, $LMPc{'web'}, 
+                   $LATEXLOG, $LATEXWDIR );
+        
     }
     if (%pdf_hash_code_mapping) {
         if ( -f 'pdf_'.$LATEXBASENAME.".pdf" ) {
@@ -739,6 +771,7 @@ sub makePNGs {
         system("echo \"engine: $opts{'attachment'} $opts{'engine'}\" >> $LATEXLOG") if ($debug);
         if (  (-x $PATHTODVIPNG) and 
               ($opts{'engine'} ne 'ps') and 
+              ($opts{'engine'} ne 'mimetex') and 
               ($opts{'engine'} ne 'pdf') ) {
             # if dvipng is installed ...
             # $EXT = lc($EXT);
@@ -774,6 +807,22 @@ sub makePNGs {
                                   BGC => $opts{'bgcolor'},
                                   OUTIMG => $outimg,
                                   LOG => $LATEXLOG );
+
+        } elsif ($opts{'engine'} eq 'mimetex') {
+            my $ccmd = $PATHTOMIMETEX.' -d -f %IN|F% ';
+            # my $ccmd = $PATHTOMIMETEX.' -d -f '.$key.'.txt '; # > '.$outimg;
+            # `$ccmd`;
+            
+            my ($data,$ret) = $sandbox->sysCommand( $ccmd,
+                                            IN => $key.'.txt' );
+ 
+            if ($ret eq 0) {
+                open(OI,">$outimg");
+                print OI $data;
+                close(OI);
+            }
+
+            &TWiki::Func::writeDebug( $outimg ) if ($debug);
 
         } else {
             # OTW, use dvips/convert ...
