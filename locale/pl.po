@@ -328,12 +328,12 @@ msgstr "(przenieś załącznik)"
 msgid "(no parent, orphaned topic)"
 msgstr "(sierota-brak strony nadrzędnej)"
 
-#: lib/TWiki/UI/Manage.pm:1031 lib/TWiki/UI/Manage.pm:1053
-#: lib/TWiki/UI/Manage.pm:606 lib/TWiki/UI/Manage.pm:609
-#: lib/TWiki/UI/Manage.pm:612 lib/TWiki/UI/Manage.pm:615
-#: lib/TWiki/UI/Manage.pm:859 lib/TWiki/UI/Manage.pm:882
-#: lib/TWiki/UI/Manage.pm:991 lib/TWiki/UI/Manage.pm:994
-#: lib/TWiki/UI/Manage.pm:997
+#: lib/TWiki/UI/Manage.pm:1002 lib/TWiki/UI/Manage.pm:1005
+#: lib/TWiki/UI/Manage.pm:1039 lib/TWiki/UI/Manage.pm:1061
+#: lib/TWiki/UI/Manage.pm:614 lib/TWiki/UI/Manage.pm:617
+#: lib/TWiki/UI/Manage.pm:620 lib/TWiki/UI/Manage.pm:623
+#: lib/TWiki/UI/Manage.pm:867 lib/TWiki/UI/Manage.pm:890
+#: lib/TWiki/UI/Manage.pm:999
 msgid "(none)"
 msgstr "(brak)"
 
@@ -390,7 +390,7 @@ msgstr "(imię jednoznakowe)"
 msgid "(single character last name)"
 msgstr "(nazwisko jednoznakowe)"
 
-#: lib/TWiki/UI/Manage.pm:842
+#: lib/TWiki/UI/Manage.pm:850
 msgid "(skipped)"
 msgstr "(pominięto)"
 
@@ -459,15 +459,17 @@ msgstr ""
 msgid ""
 "*Move attachment*: An attachment can be deleted by moving it to the Trash."
 "TrashAttachment."
-msgstr "*Przenieś załącznik*: załącznik może zostać skasowany poprzez "
-"umieszczenie go w na stronie Trash.TrashAttachment"
+msgstr ""
+"*Przenieś załącznik*: załącznik może zostać skasowany poprzez umieszczenie "
+"go w na stronie Trash.TrashAttachment"
 
 #: twikiplugins/NatSkin/templates/attachnew.nat.tmpl:14
 msgid ""
 "*Properties*: Click on _manage_ of an existing attachment to change its "
 "properties."
-msgstr "Właściwości: Kliknij _zarządzaj_ przy danym załączniku "
-"aby zmienić jego właściwości."
+msgstr ""
+"Właściwości: Kliknij _zarządzaj_ przy danym załączniku aby zmienić jego "
+"właściwości."
 
 #: twikiplugins/PatternSkin/templates/attachagain.pattern.tmpl:28
 msgid ""
@@ -562,10 +564,10 @@ msgid ""
 "href='%5' rel='nofollow'>500</a>, <a href='%6' rel='nofollow'>1000</a> "
 "topics, <a href='%7' rel='nofollow'>all changes</a>"
 msgstr ""
-"<a href='%1'>RSS</a>, ostatnie zmiany: <a href='%2'>50</a>, <a "
-"href='%3' rel='nofollow'>100</a>, <a href='%4' rel='nofollow'>200</a>, <a "
-"href='%5' rel='nofollow'>500</a>, <a href='%6' rel='nofollow'>1000</a> "
-"stron, <a href='%7' rel='nofollow'>wszystkie zmiany</a>"
+"<a href='%1'>RSS</a>, ostatnie zmiany: <a href='%2'>50</a>, <a href='%3' "
+"rel='nofollow'>100</a>, <a href='%4' rel='nofollow'>200</a>, <a href='%5' "
+"rel='nofollow'>500</a>, <a href='%6' rel='nofollow'>1000</a> stron, <a "
+"href='%7' rel='nofollow'>wszystkie zmiany</a>"
 
 #: twikiplugins/PatternSkin/templates/renamewebbase.pattern.tmpl:25
 msgid ""
@@ -696,8 +698,8 @@ msgid "Access keys"
 msgstr "Klawisze skrótów"
 
 #: twikiplugins/NatSkin/templates/attachtables.nat.tmpl:4
-#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:144
-#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:91
+#: twikiplugins/PatternSkin/templates/attachtables.pattern.tmpl:62
+#: twikiplugins/PatternSkin/templates/attachtables.pattern.tmpl:9
 #: twikiplugins/PatternSkin/templates/changeform.pattern.tmpl:12
 msgid "Action"
 msgstr "Akcja"
@@ -802,8 +804,8 @@ msgstr ""
 msgid ""
 "Alternatively go <a href=\"javascript:history.back()\">back</a> in your "
 "browser and choose a different username."
-msgstr "Kliknij <a href=\"javascript:history.back()\">Wstecz</a> "
-"i spróbuj ponownie."
+msgstr ""
+"Kliknij <a href=\"javascript:history.back()\">Wstecz</a> i spróbuj ponownie."
 
 #: templates/messages.tmpl:229
 msgid ""
@@ -867,7 +869,7 @@ msgstr "Utwórz nowy załącznik"
 
 #: twikiplugins/NatSkin/templates/attachtables.nat.tmpl:25
 #: twikiplugins/NatSkin/templates/attachtables.nat.tmpl:4
-#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:91
+#: twikiplugins/PatternSkin/templates/attachtables.pattern.tmpl:9
 msgid "Attachment"
 msgstr "Załącznik"
 
@@ -876,7 +878,7 @@ msgstr "Załącznik"
 msgid "Attachment '%1' does not exist"
 msgstr "Załącznik '%1' nie istnieje"
 
-#: lib/TWiki/UI/Manage.pm:323
+#: lib/TWiki/UI/Manage.pm:331
 msgid "Attachment already exists in new topic"
 msgstr "Załącznik już istnieje na nowej stronie"
 
@@ -885,7 +887,7 @@ msgstr "Załącznik już istnieje na nowej stronie"
 msgid "Attachment delete failed"
 msgstr "Usunięcie załącznika nie powiodło się"
 
-#: lib/TWiki/UI/Manage.pm:303
+#: lib/TWiki/UI/Manage.pm:311
 msgid "Attachment does not exist"
 msgstr "Załącznik nie istnieje"
 
@@ -919,7 +921,7 @@ msgstr "(załącznik nie będzie wyświetlany w tabeli załączników)."
 msgid "Attention"
 msgstr "Uwaga"
 
-#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:133
+#: twikiplugins/PatternSkin/templates/attachtables.pattern.tmpl:51
 msgid "Attribute"
 msgstr "Atrybut"
 
@@ -1204,8 +1206,9 @@ msgstr "Zmiany w wersji r%2 w porównaniu do r%1"
 msgid ""
 "Characters not allowed in topic names, such as spaces will automatically be "
 "removed."
-msgstr "Niedozwolone znaki w nazwie stron takie, jak spacje, "
-"zostaną automatycznie usunięte."
+msgstr ""
+"Niedozwolone znaki w nazwie stron takie, jak spacje, zostaną automatycznie "
+"usunięte."
 
 #: templates/messages.tmpl:373
 msgid ""
@@ -1243,9 +1246,8 @@ msgstr "Wybierz nowy szablon formularza dla strony %1"
 #: twikiplugins/NatSkin/templates/messages.nat.tmpl:49
 msgid "Chose a topic name that is a %1 or check the allow non-Wiki Word box."
 msgstr ""
-"Podaj nazwę strony w formacie %1 lub zaznacz "
-"pole wyboru zezwalające na tworzenie nazw nie będących "
-"w formacie <nop>WikiWord."
+"Podaj nazwę strony w formacie %1 lub zaznacz pole wyboru zezwalające na "
+"tworzenie nazw nie będących w formacie <nop>WikiWord."
 
 #: twikiplugins/NatSkin/templates/oopslogonbase.nat.tmpl:24
 msgid "Clear"
@@ -1288,9 +1290,9 @@ msgstr "Format zapisu koloru %1 jest nieprawidłowy"
 
 #: twikiplugins/NatSkin/templates/attachtables.nat.tmpl:25
 #: twikiplugins/NatSkin/templates/attachtables.nat.tmpl:4
-#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:144
 #: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:66
-#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:91
+#: twikiplugins/PatternSkin/templates/attachtables.pattern.tmpl:62
+#: twikiplugins/PatternSkin/templates/attachtables.pattern.tmpl:9
 msgid "Comment"
 msgstr "Komentarz"
 
@@ -1439,8 +1441,9 @@ msgstr ""
 #: twikiplugins/NatSkin/templates/preview.nat.tmpl:45
 #: twikiplugins/NatSkin/templates/preview.natedit.tmpl:6
 msgid "Creates a new topic revision when saving"
-msgstr "Przy zapisie nowa wersja strony zostanie zarejestrowana "
-"w systemie kontroli wersji."
+msgstr ""
+"Przy zapisie nowa wersja strony zostanie zarejestrowana w systemie kontroli "
+"wersji."
 
 #: templates/messages.tmpl:314
 #: twikiplugins/NatSkin/templates/oopsnoformdef.nat.tmpl:21
@@ -1466,8 +1469,8 @@ msgstr "Strony obecnie edytowane:"
 
 #: twikiplugins/NatSkin/templates/attachtables.nat.tmpl:25
 #: twikiplugins/NatSkin/templates/attachtables.nat.tmpl:4
-#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:144
-#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:91
+#: twikiplugins/PatternSkin/templates/attachtables.pattern.tmpl:62
+#: twikiplugins/PatternSkin/templates/attachtables.pattern.tmpl:9
 msgid "Date"
 msgstr "Data"
 
@@ -1483,7 +1486,6 @@ msgstr "Wyświetl błędy"
 #: data/TWiki/WebTopicCreator.txt:127
 msgid "Default template"
 msgstr "Szablon domyślny"
-
 
 #: twikiplugins/NatSkin/templates/renamewebdelete.nat.tmpl:4
 #: twikiplugins/PatternSkin/templates/attachagain.pattern.tmpl:35
@@ -1536,8 +1538,8 @@ msgstr "%1 - sprawdź pisownię."
 msgid ""
 "Did you type in your login name and password correctly? Remember, both are "
 "case sensitive."
-msgstr "Czy prawidłowo wpisałeś nazwę konta i hasło? "
-"Zwróć uwagę na wielkość liter"
+msgstr ""
+"Czy prawidłowo wpisałeś nazwę konta i hasło? Zwróć uwagę na wielkość liter"
 
 #: data/TWiki/VarMAKETEXT.txt:20
 msgid "Did you want to [[%1][reset %2's password]]?"
@@ -1584,8 +1586,7 @@ msgstr "Zakończ"
 
 #: twikiplugins/NatSkin/templates/messages.nat.tmpl:238
 msgid "During deletion of attachment =%1= an error was found."
-msgstr ""
-"Wystąpił błąd przy usuwaniu załącznika =%1=."
+msgstr "Wystąpił błąd przy usuwaniu załącznika =%1=."
 
 #: templates/messages.tmpl:63
 msgid ""
@@ -1604,8 +1605,7 @@ msgstr ""
 
 #: twikiplugins/NatSkin/templates/messages.nat.tmpl:54
 msgid "During rename of topic %1 to %2 an error (%3) was found."
-msgstr ""
-"Wystąpił błąd (%3) przy zmianie nazwy strony z %1 na %2."
+msgstr "Wystąpił błąd (%3) przy zmianie nazwy strony z %1 na %2."
 
 #: templates/messages.tmpl:91
 msgid ""
@@ -1617,13 +1617,11 @@ msgstr ""
 
 #: twikiplugins/NatSkin/templates/oopsrenameerr.nat.tmpl:5
 msgid "During rename of topic %1 to %2 an error was found."
-msgstr ""
-"Wystąpił błąd przy zmianie nazwy strony z %1 na %2."
+msgstr "Wystąpił błąd przy zmianie nazwy strony z %1 na %2."
 
 #: twikiplugins/NatSkin/templates/messages.nat.tmpl:61
 msgid "During rename of web %1 to %2 an error (%3) was found."
-msgstr ""
-"Wystąpił błąd (%3) przy zmianie nazwy działu z %1 na %2."
+msgstr "Wystąpił błąd (%3) przy zmianie nazwy działu z %1 na %2."
 
 #: templates/messages.tmpl:94
 msgid ""
@@ -1635,8 +1633,7 @@ msgstr ""
 
 #: twikiplugins/NatSkin/templates/messages.nat.tmpl:224
 msgid "During save of %1 an error was found by the version control system."
-msgstr ""
-"Podczas zapisywania %1 wystąpił błąd w systemie kontroli wersji."
+msgstr "Podczas zapisywania %1 wystąpił błąd w systemie kontroli wersji."
 
 #: templates/messages.tmpl:344
 msgid ""
@@ -1649,8 +1646,7 @@ msgstr ""
 #: twikiplugins/NatSkin/templates/oopssaveerr.nat.tmpl:5
 msgid ""
 "During save of file %1 an error was found by the version control system."
-msgstr ""
-"Podczas zapisywania pliku %1 wystąpił błąd w systemie kontroli wersji."
+msgstr "Podczas zapisywania pliku %1 wystąpił błąd w systemie kontroli wersji."
 
 #: templates/oopssaveerr.tmpl:11
 #: twikiplugins/PatternSkin/templates/oopssaveerr.pattern.tmpl:11
@@ -1720,8 +1716,9 @@ msgstr "Edycja ustawień strony"
 msgid ""
 "Either the code is not valid, or you have already confirmed your "
 "registration using it."
-msgstr "Kod rejestracyjny jest niepoprawny lub został już wykorzystany "
-"do rejestracji konta."
+msgstr ""
+"Kod rejestracyjny jest niepoprawny lub został już wykorzystany do "
+"rejestracji konta."
 
 #: templates/messages.tmpl:335
 msgid ""
@@ -1753,11 +1750,11 @@ msgid ""
 "Enter your TWiki.LoginName. (Typically First name and last name, no space, "
 "no dots, capitalized, e.g. !JohnSmith, unless you chose otherwise). Visit %"
 "TWIKIWEB%.TWikiRegistration if you do not have one."
-msgstr "Wprowadź nazwę swojego konta w formacie TWiki.LoginName. "
-"Zwykle nazwa konta ma postać: ImieNazwisko - bez spacji i kropek. "
-"Imię i nazwisko są pisane wielką literą, np. JanKowalski. "
-"Jeśli jeszcze nie masz konta, to przejdź na stronę "
-"%TWIKIWEB%.TWikiRegistration"
+msgstr ""
+"Wprowadź nazwę swojego konta w formacie TWiki.LoginName. Zwykle nazwa konta "
+"ma postać: ImieNazwisko - bez spacji i kropek. Imię i nazwisko są pisane "
+"wielką literą, np. JanKowalski. Jeśli jeszcze nie masz konta, to przejdź na "
+"stronę %TWIKIWEB%.TWikiRegistration"
 
 #: twikiplugins/NatSkin/templates/oopsmngcreateweb.nat.tmpl:32
 #: twikiplugins/NatSkin/templates/oopsmngcreateweb.nat.tmpl:37
@@ -1877,8 +1874,8 @@ msgstr "Pola oznaczone za pomocą %1 są wymagane"
 
 #: twikiplugins/NatSkin/templates/oopsregrequ.nat.tmpl:5
 msgid "Fields with a =<span class=\"twikiAlert\">**</span>= mark are required."
-msgstr "Pola oznaczone znakiem =<span class=\"twikiAlert\">**</span>= "
-"są wymagane."
+msgstr ""
+"Pola oznaczone znakiem =<span class=\"twikiAlert\">**</span>= są wymagane."
 
 #: twikiplugins/NatSkin/data/TWiki/MySideBarTemplate.txt:26
 msgid "File Attachment"
@@ -1970,8 +1967,9 @@ msgstr "Utwórz nową stronę %1"
 #: twikiplugins/NatSkin/templates/renamesidebar.nat.tmpl:11
 msgid ""
 "Get help on <a href=\"%1\" target=\"_blank\">Renaming and moving topics</a>."
-msgstr "Pomoc: <a href=\"%1\" target=\"_blank\">Zmiana nazwy i "
-"przenoszenie stron</a>."
+msgstr ""
+"Pomoc: <a href=\"%1\" target=\"_blank\">Zmiana nazwy i przenoszenie stron</"
+"a>."
 
 #: twikiplugins/PatternSkin/templates/renamebase.pattern.tmpl:46
 msgid ""
@@ -1996,8 +1994,9 @@ msgstr ""
 msgid ""
 "Go <a href=\"javascript:history.back()\">back</a> in your browser and save "
 "your changes locally."
-msgstr "Kliknij <a href=\"javascript:history.back()\">Wstecz</a> "
-"i zapisz zmiany lokalnie."
+msgstr ""
+"Kliknij <a href=\"javascript:history.back()\">Wstecz</a> i zapisz zmiany "
+"lokalnie."
 
 #: twikiplugins/PatternSkin/templates/changeform.pattern.tmpl:20
 msgid "Go back"
@@ -2051,7 +2050,7 @@ msgstr "Pomoc"
 msgid "Hide attachment in normal topic view."
 msgstr "Ukryj załącznik w normalnym widoku strony."
 
-#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:87
+#: twikiplugins/PatternSkin/templates/attachtables.pattern.tmpl:5
 msgid "Hide attachments"
 msgstr "Ukryj załączniki"
 
@@ -2070,7 +2069,7 @@ msgstr "Ukryj pomoc"
 msgid "Hiding Attachments"
 msgstr "Ukryj załączniki"
 
-#: twikiplugins/PatternSkin/templates/view.printpattern.tmpl:36
+#: twikiplugins/PatternSkin/templates/viewprint.pattern.tmpl:36
 msgid "History:"
 msgstr "Wersje:"
 
@@ -2300,8 +2299,9 @@ msgstr "Skrót wewnętrzny"
 msgid ""
 "International (8-bit) characters are removed (replaced by US-ASCII "
 "equivalents for Latin-1)"
-msgstr "Znaki międzynarodowe (8-bitowe) zostały usunięte "
-"(zastąpione przez odpowiedniki US-ASCII ze strony kodowej Latin-1)"
+msgstr ""
+"Znaki międzynarodowe (8-bitowe) zostały usunięte (zastąpione przez "
+"odpowiedniki US-ASCII ze strony kodowej Latin-1)"
 
 #: templates/messages.tmpl:267
 #: twikiplugins/NatSkin/templates/messages.nat.tmpl:194
@@ -2518,8 +2518,9 @@ msgstr "Nie wypełniono pól"
 
 #: twikiplugins/NatSkin/templates/messages.nat.tmpl:129
 msgid "Missing Fields =<span class=\"twikiAlert\">**</span>="
-msgstr "Nie wypełniono pól oznaczonych za pomocą "
-"=<span class=\"twikiAlert\">**</span>="
+msgstr ""
+"Nie wypełniono pól oznaczonych za pomocą =<span class=\"twikiAlert\">**</"
+"span>="
 
 #: templates/messages.tmpl:36
 #: twikiplugins/NatSkin/templates/messages.nat.tmpl:14
@@ -2612,7 +2613,7 @@ msgstr "Mój pasek boczny"
 msgid "MySidebar"
 msgstr "Mój pasek boczny"
 
-#: lib/TWiki/Search.pm:794
+#: lib/TWiki/Search.pm:795
 msgid "NEW"
 msgstr "NOWA"
 
@@ -2939,8 +2940,8 @@ msgid ""
 "Please chose a topic name that is a %1 or check the _Allow non-Wiki Word_ "
 "&nbsp;box."
 msgstr ""
-"Podaj nazwę strony w formacie %1 lub zaznacz pole wyboru "
-"zezwalające na tworzenie nazw nie będących w formacie <nop>WikiWord"
+"Podaj nazwę strony w formacie %1 lub zaznacz pole wyboru zezwalające na "
+"tworzenie nazw nie będących w formacie <nop>WikiWord"
 
 #: templates/messages.tmpl:231 templates/messages.tmpl:281
 msgid "Please contact %1 if you have any questions."
@@ -2956,8 +2957,7 @@ msgstr "Proszę skopiować i przesłać tę informację do administratora: %1"
 
 #: twikiplugins/NatSkin/templates/messages.nat.tmpl:9
 msgid "Please email %1 to request this."
-msgstr ""
-"Poproś o pomoc administratora: %1."
+msgstr "Poproś o pomoc administratora: %1."
 
 #: twikiplugins/PatternSkin/templates/login.pattern.tmpl:42
 msgid "Please enter your username and password:"
@@ -2967,8 +2967,8 @@ msgstr "Podaj nazwę konta użytkownika i hasło:"
 msgid ""
 "Please go <a href=\"javascript:history.back()\">back</a> in your browser and "
 "try again."
-msgstr "Kliknij <a href= \"javascript:history.back()\">Wstecz</a> "
-"i spróbuj ponownie."
+msgstr ""
+"Kliknij <a href= \"javascript:history.back()\">Wstecz</a> i spróbuj ponownie."
 
 #: templates/messages.tmpl:71 templates/messages.tmpl:77
 #: templates/messages.tmpl:83
@@ -2984,9 +2984,8 @@ msgid ""
 "Please go back in your browser and choose a topic name that is a %1.WikiWord "
 "or check the allow non-Wiki Word box"
 msgstr ""
-"Kliknij Wstecz i podaj nazwę strony w formacie %1.WikiWord lub zaznacz "
-"pole wyboru zezwalające na tworzenie nazw nie będących "
-"w formacie <nop>WikiWord"
+"Kliknij Wstecz i podaj nazwę strony w formacie %1.WikiWord lub zaznacz pole "
+"wyboru zezwalające na tworzenie nazw nie będących w formacie <nop>WikiWord"
 
 #: templates/messages.tmpl:100 templates/messages.tmpl:104
 #: templates/messages.tmpl:109 templates/messages.tmpl:113
@@ -3150,13 +3149,8 @@ msgstr "Zarejestruj się"
 msgid "Register on %1"
 msgstr "Zarejestruj się na stronie %1"
 
-#: twikiplugins/NatSkin/templates/oopsauth.nat.tmpl:14
-msgid "Registered users can [%1[change]] and [%2[reset]] their passwords."
-msgstr ""
-"Zarejestrowani użytkownicy mogą [[%1][zmieniać]] oraz [[%2][resetować]] "
-"hasło."
-
 #: data/TWiki/TWikiRegistration.txt:6
+#: twikiplugins/NatSkin/templates/oopsauth.nat.tmpl:14
 msgid "Registered users can [[%1][change]] and [[%2][reset]] their passwords."
 msgstr ""
 "Zarejestrowani użytkownicy mogą [[%1][zmieniać]] oraz [[%2][resetować]] "
@@ -3534,7 +3528,7 @@ msgstr "Ustaw wszystko"
 msgid "Set new topic parent"
 msgstr "Ustaw nową stronę nadrzędną"
 
-#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:87
+#: twikiplugins/PatternSkin/templates/attachtables.pattern.tmpl:5
 msgid "Show attachments"
 msgstr "Wyświetl załączniki"
 
@@ -3579,8 +3573,9 @@ msgstr "Wyszukiwanie proste"
 #: twikiplugins/NatSkin/templates/oopsauth.nat.tmpl:18
 msgid ""
 "Simply fill out the *[[%1][TWikiRegistration]]* form. It only takes a minute."
-msgstr "Po prostu wypełnij formularz na stronie *[[%1][TWikiRegistration]]*. "
-"Nie zajmie to więcej niż kilka minut."
+msgstr ""
+"Po prostu wypełnij formularz na stronie *[[%1][TWikiRegistration]]*. Nie "
+"zajmie to więcej niż kilka minut."
 
 #: twikiplugins/NatSkin/data/Main/WebLinksForAdmins.txt:8
 #: twikiplugins/NatSkin/data/TWiki/WebLinksForAdmins.txt:8
@@ -3589,7 +3584,7 @@ msgstr "Ustawienia (SitePreferences)"
 
 #: twikiplugins/NatSkin/templates/attachtables.nat.tmpl:25
 #: twikiplugins/NatSkin/templates/attachtables.nat.tmpl:4
-#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:91
+#: twikiplugins/PatternSkin/templates/attachtables.pattern.tmpl:9
 msgid "Size"
 msgstr "Rozmiar"
 
@@ -3617,10 +3612,10 @@ msgid ""
 "Some mail tools have an error that causes them to send the same request "
 "twice when you click on a link. It you did this, it is possible that you "
 "actually *have* registered successfully."
-msgstr "Niektóre programy pocztowe działają błędnie "
-"i po kliknięciu danego skrótu wysyłają powiadomienie dwukrotnie. "
-"Jeśli tak się stało, to znaczy, że rejestracja przebiegła pomyślnie "
-"i twoje konto *jest* zarejestrowane."
+msgstr ""
+"Niektóre programy pocztowe działają błędnie i po kliknięciu danego skrótu "
+"wysyłają powiadomienie dwukrotnie. Jeśli tak się stało, to znaczy, że "
+"rejestracja przebiegła pomyślnie i twoje konto *jest* zarejestrowane."
 
 #: templates/registernotify.tmpl:14
 #: twikiplugins/ClassicSkin/templates/registernotify.classic.tmpl:14
@@ -3819,13 +3814,12 @@ msgid ""
 "The %1 field must be your first and lastname in %2, e.g. your capitalized "
 "first and lastname with spaces removed."
 msgstr ""
-"W pole %1 należy wpisać imię i nazwisko w formacie %2 bez żadnych "
-"spacji. Imię i nazwisko powinno być napisane wielką literą."
+"W pole %1 należy wpisać imię i nazwisko w formacie %2 bez żadnych spacji. "
+"Imię i nazwisko powinno być napisane wielką literą."
 
 #: templates/messages.tmpl:236
 msgid "The %1 field must match the {LoginNameFilterIn} filter for this site"
-msgstr "Format pola %1 musi się zgadzać z formatem filtru "
-"{LoginNameFilterIn}"
+msgstr "Format pola %1 musi się zgadzać z formatem filtru {LoginNameFilterIn}"
 
 #: templates/messages.tmpl:68
 #: twikiplugins/NatSkin/templates/messages.nat.tmpl:30
@@ -3890,8 +3884,7 @@ msgstr "Zaznaczone strony zostaną zaktualizowane."
 
 #: twikiplugins/NatSkin/templates/oopsbadpwformat.nat.tmpl:7
 msgid "The correct format is =WikiName:&lt;encryptedpassword&gt;= (13 chars)."
-msgstr "Poprawny format, to: =WikiName:&lt;zaszyfrowanehaslo&gt;= "
-"(13 znaków)."
+msgstr "Poprawny format, to: =WikiName:&lt;zaszyfrowanehaslo&gt;= (13 znaków)."
 
 #: templates/messages.tmpl:260
 #: twikiplugins/NatSkin/templates/messages.nat.tmpl:187
@@ -3957,15 +3950,15 @@ msgstr "Utworzono nowy dział"
 msgid ""
 "The new web has been created, however not all topics could be copied from "
 "the base web."
-msgstr "Utworzono nowy dział, jednak nie wszystkie strony działu bazowego "
-"zostały skopiowane."
+msgstr ""
+"Utworzono nowy dział, jednak nie wszystkie strony działu bazowego zostały "
+"skopiowane."
 
 #: twikiplugins/NatSkin/templates/oopsempty.nat.tmpl:15
 msgid ""
 "The other possibility is that someone sent you the preview URL of [[%1]] "
 "instead of the view URL."
-msgstr "Możliwe, że ktoś przesłał Ci podgląd, "
-"zamiast widoku strony [[%1]]."
+msgstr "Możliwe, że ktoś przesłał Ci podgląd, zamiast widoku strony [[%1]]."
 
 #: templates/messages.tmpl:98
 #: twikiplugins/NatSkin/templates/messages.nat.tmpl:69
@@ -3987,8 +3980,9 @@ msgstr "Nie wypełniono wymaganego pola: %1."
 msgid ""
 "The required field =<span class=\"twikiAlert\">**</span>= *%1* was not "
 "filled in."
-msgstr "Pole %1 zaznaczone za pomocą "
-"=<span class=\"twikiAlert\">**</span>= nie zostało wypełnione."
+msgstr ""
+"Pole %1 zaznaczone za pomocą =<span class=\"twikiAlert\">**</span>= nie "
+"zostało wypełnione."
 
 #: data/TWiki/WebTopicViewTemplate.txt:5
 msgid "The topic %1 you are trying to access does not exist, yet."
@@ -4013,8 +4007,7 @@ msgstr ""
 #: templates/messages.tmpl:199
 #: twikiplugins/NatSkin/templates/messages.nat.tmpl:142
 msgid "There has been a problem adding your user id to the Password system."
-msgstr ""
-"Wystąpił problem przy dodawaniu nowego użytkownika do bazy haseł."
+msgstr "Wystąpił problem przy dodawaniu nowego użytkownika do bazy haseł."
 
 #: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:61
 msgid "There is no size limit for uploaded files."
@@ -4028,8 +4021,9 @@ msgstr "Należy podać linię zawierającą %1; zobacz także: %2 (lub %3)"
 msgid ""
 "There should be a line that includes =META:FORM=, look for name=\"&lt;"
 "formName&gt;\""
-msgstr "Należy podać linię zawierającą =META:FORM=; zobacz także: "
-"name=\"&lt;formName&gt;\""
+msgstr ""
+"Należy podać linię zawierającą =META:FORM=; zobacz także: name=\"&lt;"
+"formName&gt;\""
 
 #: twikiplugins/NatSkin/templates/oopsnoformdef.nat.tmpl:15
 msgid "There should be a topic &lt;formName&gt;"
@@ -4125,8 +4119,9 @@ msgstr "Wymaga to wcześniejszego zdefiniowania formularza."
 msgid ""
 "This requires the form definition to be present. This can be automatically "
 "upgraded by:"
-msgstr "Wymaga to wcześniejszego zdefiniowania formularza. Może być "
-"automatycznie uaktualnione przez:"
+msgstr ""
+"Wymaga to wcześniejszego zdefiniowania formularza. Może być automatycznie "
+"uaktualnione przez:"
 
 #: templates/messages.tmpl:254
 msgid "This site requires at least %1 character passwords"
@@ -4144,7 +4139,7 @@ msgstr ""
 "Nie jest zalecana taka nazwa strony, gdyż uniemożliwia ona tworzenie "
 "automatycznych odwołań. Zobacz także: %1."
 
-#: twikiplugins/PatternSkin/templates/view.printpattern.tmpl:34
+#: twikiplugins/PatternSkin/templates/viewprint.pattern.tmpl:34
 msgid "This topic:"
 msgstr "Bieżąca strona:"
 
@@ -4175,15 +4170,15 @@ msgstr "Aby *zapisać* zmiany, kliknij [Zapisz]."
 #: twikiplugins/NatSkin/templates/oopslockedrename.nat.tmpl:11
 msgid ""
 "To cancel go <a href=\"javscript:history.back()\">back</a> in your browser."
-msgstr "Kliknij <a href=\"javascript:history.back()\">Wstecz</a>, "
-"aby zrezygnować."
+msgstr ""
+"Kliknij <a href=\"javascript:history.back()\">Wstecz</a>, aby zrezygnować."
 
 #: twikiplugins/NatSkin/templates/oopslocked.nat.tmpl:11
 msgid ""
 "To cancel simply go <a href=\"javascript:history.back()\">back</a> in your "
 "browser."
-msgstr "Kliknij <a href=\"javascript:history.back()\">Wstecz</a>, "
-"aby zrezygnować."
+msgstr ""
+"Kliknij <a href=\"javascript:history.back()\">Wstecz</a>, aby zrezygnować."
 
 #: templates/renameweb.tmpl:10
 msgid ""
@@ -4194,8 +4189,9 @@ msgstr ""
 
 #: twikiplugins/NatSkin/templates/oopslocked.nat.tmpl:9
 msgid "To edit anyway click on the <a href=\"%1\">Edit anyway</a>."
-msgstr "Kliknij <a href=\"%1\">Edycja mimo wszystko</a>, "
-"aby mimo wszystko wykonać edycję"
+msgstr ""
+"Kliknij <a href=\"%1\">Edycja mimo wszystko</a>, aby mimo wszystko wykonać "
+"edycję"
 
 #: data/TWiki/TWikiRegistration.txt:4
 msgid ""
@@ -4216,8 +4212,8 @@ msgstr ""
 #: twikiplugins/NatSkin/templates/oopsleaseconflict.nat.tmpl:35
 msgid "To edit the topic anyway, hit 'Edit&nbsp;Anyway'."
 msgstr ""
-"Aby mimo wszystko przeprowadzić edycję strony, kliknij "
-"'Edycja&nbsp;mimo&nbsp;wszystko'."
+"Aby mimo wszystko przeprowadzić edycję strony, kliknij 'Edycja&nbsp;"
+"mimo&nbsp;wszystko'."
 
 #: twikiplugins/NatSkin/templates/oopsauth.nat.tmpl:6
 msgid ""
@@ -4230,8 +4226,9 @@ msgstr "Musisz się zarejestrować, aby móc edytować strony."
 msgid ""
 "To look at the text without editing the topic click on the [[%1][View raw "
 "text]]."
-msgstr "Kliknij [[%1][Wyświetl kod źródłowy]], "
-"aby wyświetlić kod źródłowy (bez edycji)"
+msgstr ""
+"Kliknij [[%1][Wyświetl kod źródłowy]], aby wyświetlić kod źródłowy (bez "
+"edycji)"
 
 #: twikiplugins/PatternSkin/templates/preview.pattern.tmpl:61
 msgid "To make *more changes*: Go back in your browser."
@@ -4264,8 +4261,8 @@ msgstr ""
 #: twikiplugins/NatSkin/templates/oopsleaseconflict.nat.tmpl:36
 msgid "To see if they have finished their edit yet, click 'Try&nbsp;Again'"
 msgstr ""
-"Aby sprawdzić, czy użytkownicy zakończyli już edycję, kliknij "
-"'Spróbuj&nbsp;ponownie'."
+"Aby sprawdzić, czy użytkownicy zakończyli już edycję, kliknij 'Spróbuj&nbsp;"
+"ponownie'."
 
 #: twikiplugins/PatternSkin/templates/rename.pattern.tmpl:25
 msgid "To topic:"
@@ -4298,7 +4295,7 @@ msgstr "Meta dane strony"
 msgid "Topic Save Error"
 msgstr "Błąd zapisu strony"
 
-#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:102
+#: twikiplugins/PatternSkin/templates/attachtables.pattern.tmpl:20
 msgid "Topic attachments"
 msgstr "Załączniki"
 
@@ -4537,7 +4534,7 @@ msgid "Variation:"
 msgstr "Zmiana: "
 
 #: twikiplugins/NatSkin/templates/attachtables.nat.tmpl:25
-#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:144
+#: twikiplugins/PatternSkin/templates/attachtables.pattern.tmpl:62
 msgid "Version"
 msgstr "Wersja"
 
@@ -4715,8 +4712,8 @@ msgstr ""
 
 #: twikiplugins/NatSkin/templates/attachtables.nat.tmpl:25
 #: twikiplugins/NatSkin/templates/attachtables.nat.tmpl:4
-#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:144
-#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:91
+#: twikiplugins/PatternSkin/templates/attachtables.pattern.tmpl:62
+#: twikiplugins/PatternSkin/templates/attachtables.pattern.tmpl:9
 msgid "Who"
 msgstr "Kto załadował"
 
@@ -4820,8 +4817,7 @@ msgstr ""
 
 #: twikiplugins/NatSkin/templates/messages.nat.tmpl:102
 msgid "You can also use the names of the standard HTML colors"
-msgstr "Można także stosować standardowe nazwy kolorów "
-"w języku HTML."
+msgstr "Można także stosować standardowe nazwy kolorów w języku HTML."
 
 #: templates/messages.tmpl:125
 msgid ""
@@ -4864,8 +4860,9 @@ msgstr ""
 
 #: twikiplugins/NatSkin/templates/oopssave.nat.tmpl:5
 msgid "You cannot call this script directly, %1 uses it internally."
-msgstr "Nie można bezpośrednio użyć tego skryptu. "
-"Jest on wykorzystywany wewnętrznie przez %1."
+msgstr ""
+"Nie można bezpośrednio użyć tego skryptu. Jest on wykorzystywany wewnętrznie "
+"przez %1."
 
 #: templates/messages.tmpl:225
 #: twikiplugins/NatSkin/templates/messages.nat.tmpl:166
@@ -4893,8 +4890,9 @@ msgstr ""
 msgid ""
 "You might go <a href=\"javascript:history.back()\">back</a> in your browser "
 "and save your changes locally."
-msgstr "Kliknij <a href=\"javascript:history.back()\">Wstecz</a> "
-"i zapisz zmiany lokalnie."
+msgstr ""
+"Kliknij <a href=\"javascript:history.back()\">Wstecz</a> i zapisz zmiany "
+"lokalnie."
 
 #: templates/registerconfirm.tmpl:11
 #: twikiplugins/ClassicSkin/templates/registerconfirm.classic.tmpl:11
@@ -4958,16 +4956,16 @@ msgid ""
 "You will be redirected to there right now. If you aren't, [[%1][click here]] "
 "to proceed."
 msgstr ""
-"Za chwilę nastąpi zmiana języka zgodnie z ustawieniem globalnym. "
-"Nastąpi przekierowanie na następną stronę. "
-"Jeżeli przekierowanie nie nastąpi automatycznie, to kliknij [[%1][tutaj]]."
+"Za chwilę nastąpi zmiana języka zgodnie z ustawieniem globalnym. Nastąpi "
+"przekierowanie na następną stronę. Jeżeli przekierowanie nie nastąpi "
+"automatycznie, to kliknij [[%1][tutaj]]."
 
 #: twikiplugins/NatSkin/templates/oopsauth.nat.tmpl:13
 msgid ""
 "Your login name is usually the %1, like *<nop>TomSawyer* and _not_ Tom "
 "Sawyer or tom or sawyer."
-msgstr "Nazwa konta ma zwykle postać: %1, "
-"np. *<nop>TomekSawyer* a _nie_ Tomek "
+msgstr ""
+"Nazwa konta ma zwykle postać: %1, np. *<nop>TomekSawyer* a _nie_ Tomek "
 "Sawyer lub tomek lub sawyer."
 
 #: templates/mailresetpassword.tmpl:10
@@ -5003,8 +5001,9 @@ msgstr "Twój podpis"
 msgid ""
 "Your system may not support changing passwords through TWiki. Check with "
 "your TWiki administrator."
-msgstr "Prawdopodobnie ta instalacja TWiki nie pozwala zmieniać hasła. "
-"Skontaktuj się z administratorem."
+msgstr ""
+"Prawdopodobnie ta instalacja TWiki nie pozwala zmieniać hasła. Skontaktuj "
+"się z administratorem."
 
 #: templates/messages.tmpl:11
 #: twikiplugins/NatSkin/templates/messages.nat.tmpl:5
@@ -5026,15 +5025,17 @@ msgstr ""
 msgid ""
 "__Note:__ Go back and click on Cancel if you would like to cancel the "
 "changes you did."
-msgstr "__Uwaga:__ Kliknij Wstecz i wybierz Rezygnacja, jeśli chcesz "
-"zrezygnować z wprowadzonych zmian."
+msgstr ""
+"__Uwaga:__ Kliknij Wstecz i wybierz Rezygnacja, jeśli chcesz zrezygnować z "
+"wprowadzonych zmian."
 
 #: twikiplugins/NatSkin/templates/oopslocked.nat.tmpl:18
 msgid ""
 "__Note:__ Locking gets reset after <b> %1 </b> minutes of inactivity, the "
 "earliest in <b>%2</b> minutes."
-msgstr "__Uwaga:__ Blokada zostanie wyłączona po <b> %1 </b> minutach "
-"bezczynności, najwcześniej w ciągu <b>%2</b> minut(y)."
+msgstr ""
+"__Uwaga:__ Blokada zostanie wyłączona po <b> %1 </b> minutach bezczynności, "
+"najwcześniej w ciągu <b>%2</b> minut(y)."
 
 #: lib/TWiki/I18N.pm:270
 msgid "_language_name"
@@ -5084,7 +5085,7 @@ msgstr "wyszukiwanie zaawansowane"
 msgid "and"
 msgstr "i"
 
-#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:99
+#: twikiplugins/PatternSkin/templates/attachtables.pattern.tmpl:17
 msgid "change, update, previous revisions, move, delete..."
 msgstr "zmień, odśwież, poprzednie wersje, przenieś, usuń..."
 
@@ -5165,7 +5166,7 @@ msgstr "wyszukiwanie odwołań tylko w dziale %1"
 msgid "looking for references in _all public webs_"
 msgstr "wyszukiwanie odwołań we wszystkich działach"
 
-#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:99
+#: twikiplugins/PatternSkin/templates/attachtables.pattern.tmpl:17
 msgid "manage"
 msgstr "zarządzaj"
 
@@ -5317,14 +5318,13 @@ msgstr "title='Utwórz załącznik do strony' accesskey='a'>&Utwórz załącznik
 msgid "title='Create new topic' accesskey='c'>&Create"
 msgstr "title='Utwórz nową stronę' accesskey='u'>&Utwórz"
 
-
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:25
 msgid ""
 "title='Delete or rename this topic; set parent topic; view and compare "
 "revisions' accesskey='m'>&More topic actions"
-msgstr "title='Usuń lub zmień nazwę strony; ustaw stronę nadrzędną; "
-"przejrzyj zmiany' accesskey='i'>&Inne operacje"
-
+msgstr ""
+"title='Usuń lub zmień nazwę strony; ustaw stronę nadrzędną; przejrzyj "
+"zmiany' accesskey='i'>&Inne operacje"
 
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:10
 msgid "title='Edit this topic text' accesskey='e'>&Edit"
@@ -5345,13 +5345,15 @@ msgstr "title='Wersja do druku' accesskey='d'>&Do druku"
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:33
 msgid ""
 "title='Search all webs for topics that link to here' accesskey='l'>A&ll Webs"
-msgstr "title='Wyszukaj wszystkie strony z odwołaniami do bieżącej strony' "
+msgstr ""
+"title='Wyszukaj wszystkie strony z odwołaniami do bieżącej strony' "
 "accesskey='w'>We &wszystkich działach"
 
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:31
 msgid ""
 "title='Search the %1 Web for topics that link to here' accesskey='b'>We&b"
-msgstr "title='Wyszukaj strony w dziale %1 z odwołaniami do bieżącej strony' "
+msgstr ""
+"title='Wyszukaj strony w dziale %1 z odwołaniami do bieżącej strony' "
 "accesskey='d'>W &dziale"
 
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:41
@@ -5402,7 +5404,7 @@ msgstr "value='Zapisz bez powiadamiania' accesskey='q'"
 msgid "value='Save' accesskey='s'"
 msgstr "value='Zapisz' accesskey='z'"
 
-#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:148
+#: twikiplugins/PatternSkin/templates/attachtables.pattern.tmpl:66
 msgid "view"
 msgstr "wyświetl"
 
@@ -5415,6 +5417,11 @@ msgstr ""
 "Aby móc zresetować hasło, *musisz* mieć przynajmniej jeden poprawny adres "
 "email. Jeśli żaden z zarejestrowanych adresów email nie jest poprawny, to "
 "aby zresetować hasło, musisz skontaktować się z administratorem: %1."
+
+#~ msgid "Registered users can [%1[change]] and [%2[reset]] their passwords."
+#~ msgstr ""
+#~ "Zarejestrowani użytkownicy mogą [[%1][zmieniać]] oraz [[%2][resetować]] "
+#~ "hasło."
 
 #~ msgid "&Attach"
 #~ msgstr "&Załączniki"

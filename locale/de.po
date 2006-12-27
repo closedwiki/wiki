@@ -332,12 +332,12 @@ msgstr "(Anhang verschieben)"
 msgid "(no parent, orphaned topic)"
 msgstr "(kein Ober-Topic, verwaistes Topic)"
 
-#: lib/TWiki/UI/Manage.pm:1031 lib/TWiki/UI/Manage.pm:1053
-#: lib/TWiki/UI/Manage.pm:606 lib/TWiki/UI/Manage.pm:609
-#: lib/TWiki/UI/Manage.pm:612 lib/TWiki/UI/Manage.pm:615
-#: lib/TWiki/UI/Manage.pm:859 lib/TWiki/UI/Manage.pm:882
-#: lib/TWiki/UI/Manage.pm:991 lib/TWiki/UI/Manage.pm:994
-#: lib/TWiki/UI/Manage.pm:997
+#: lib/TWiki/UI/Manage.pm:1002 lib/TWiki/UI/Manage.pm:1005
+#: lib/TWiki/UI/Manage.pm:1039 lib/TWiki/UI/Manage.pm:1061
+#: lib/TWiki/UI/Manage.pm:614 lib/TWiki/UI/Manage.pm:617
+#: lib/TWiki/UI/Manage.pm:620 lib/TWiki/UI/Manage.pm:623
+#: lib/TWiki/UI/Manage.pm:867 lib/TWiki/UI/Manage.pm:890
+#: lib/TWiki/UI/Manage.pm:999
 msgid "(none)"
 msgstr "(nichts)"
 
@@ -394,7 +394,7 @@ msgstr "(Erster Buchstabe des Vornamens)"
 msgid "(single character last name)"
 msgstr "(Erster Buchstabe des Nachnamens)"
 
-#: lib/TWiki/UI/Manage.pm:842
+#: lib/TWiki/UI/Manage.pm:850
 msgid "(skipped)"
 msgstr "(übersprungen)"
 
@@ -653,8 +653,8 @@ msgstr ""
 #: data/Sandbox/WebHome.txt:24
 msgid "A more extensive changes list is available via [[%1][Recent Changes]]."
 msgstr ""
-"Eine ausführlichere Änderungsliste steht über [[%1][Aktuelle "
-"Änderungen]] verfügbar."
+"Eine ausführlichere Änderungsliste steht über [[%1][Aktuelle Änderungen]] "
+"verfügbar."
 
 #: templates/messages.tmpl:423
 msgid ""
@@ -711,8 +711,8 @@ msgid "Access keys"
 msgstr "Funktions-Tasten"
 
 #: twikiplugins/NatSkin/templates/attachtables.nat.tmpl:4
-#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:144
-#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:91
+#: twikiplugins/PatternSkin/templates/attachtables.pattern.tmpl:62
+#: twikiplugins/PatternSkin/templates/attachtables.pattern.tmpl:9
 #: twikiplugins/PatternSkin/templates/changeform.pattern.tmpl:12
 msgid "Action"
 msgstr "Aktion"
@@ -886,7 +886,7 @@ msgstr "Neue Datei anhängen"
 
 #: twikiplugins/NatSkin/templates/attachtables.nat.tmpl:25
 #: twikiplugins/NatSkin/templates/attachtables.nat.tmpl:4
-#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:91
+#: twikiplugins/PatternSkin/templates/attachtables.pattern.tmpl:9
 msgid "Attachment"
 msgstr "Anhang"
 
@@ -895,7 +895,7 @@ msgstr "Anhang"
 msgid "Attachment '%1' does not exist"
 msgstr "Anhang '%1' existiert nicht"
 
-#: lib/TWiki/UI/Manage.pm:323
+#: lib/TWiki/UI/Manage.pm:331
 msgid "Attachment already exists in new topic"
 msgstr "Der Anhang existiert bereits in dem neuen Topic"
 
@@ -904,7 +904,7 @@ msgstr "Der Anhang existiert bereits in dem neuen Topic"
 msgid "Attachment delete failed"
 msgstr "Löschen des Anhangs fehlgeschlagen"
 
-#: lib/TWiki/UI/Manage.pm:303
+#: lib/TWiki/UI/Manage.pm:311
 msgid "Attachment does not exist"
 msgstr "Anhang existiert nicht."
 
@@ -938,7 +938,7 @@ msgstr "Anhänge in der normalen Ansicht nicht angezeigen."
 msgid "Attention"
 msgstr "Achtung"
 
-#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:133
+#: twikiplugins/PatternSkin/templates/attachtables.pattern.tmpl:51
 msgid "Attribute"
 msgstr "Attribut"
 
@@ -1308,9 +1308,9 @@ msgstr "Farbe %1 hat ein ungültiges Format"
 
 #: twikiplugins/NatSkin/templates/attachtables.nat.tmpl:25
 #: twikiplugins/NatSkin/templates/attachtables.nat.tmpl:4
-#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:144
 #: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:66
-#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:91
+#: twikiplugins/PatternSkin/templates/attachtables.pattern.tmpl:62
+#: twikiplugins/PatternSkin/templates/attachtables.pattern.tmpl:9
 msgid "Comment"
 msgstr "Kommentar"
 
@@ -1484,8 +1484,8 @@ msgstr "Wird zurzeit bearbeitet:"
 
 #: twikiplugins/NatSkin/templates/attachtables.nat.tmpl:25
 #: twikiplugins/NatSkin/templates/attachtables.nat.tmpl:4
-#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:144
-#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:91
+#: twikiplugins/PatternSkin/templates/attachtables.pattern.tmpl:62
+#: twikiplugins/PatternSkin/templates/attachtables.pattern.tmpl:9
 msgid "Date"
 msgstr "Datum"
 
@@ -1741,7 +1741,9 @@ msgstr "Topic Einstellungen editieren"
 msgid ""
 "Either the code is not valid, or you have already confirmed your "
 "registration using it."
-msgstr "Entweder Ihr Code ist nicht gültig oder Sie haben Ihre Registrierung bereits bestätigt."
+msgstr ""
+"Entweder Ihr Code ist nicht gültig oder Sie haben Ihre Registrierung bereits "
+"bestätigt."
 
 #: templates/messages.tmpl:335
 msgid ""
@@ -2066,7 +2068,7 @@ msgstr "Gruppen"
 
 #: twikiplugins/ClassicSkin/data/TWiki/ClassicSkinLogin.txt:2
 #: twikiplugins/PatternSkin/data/TWiki/WebLeftBarLogin.txt:3
-msgid "Hello %1"
+msgid "Hello %1!"
 msgstr "Hallo %1"
 
 #: data/TWiki/WebSearch.txt:29 data/TWiki/WebSearchAdvanced.txt:37
@@ -2083,7 +2085,7 @@ msgstr "Hilfe"
 msgid "Hide attachment in normal topic view."
 msgstr "Anhänge in der normalen Ansicht nicht angezeigen"
 
-#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:87
+#: twikiplugins/PatternSkin/templates/attachtables.pattern.tmpl:5
 msgid "Hide attachments"
 msgstr "Anhänge verbergen"
 
@@ -2102,7 +2104,7 @@ msgstr "Hilfe verstecken"
 msgid "Hiding Attachments"
 msgstr "Anhänge verbergen"
 
-#: twikiplugins/PatternSkin/templates/view.printpattern.tmpl:36
+#: twikiplugins/PatternSkin/templates/viewprint.pattern.tmpl:36
 msgid "History:"
 msgstr "Historie:"
 
@@ -2336,7 +2338,9 @@ msgstr "Interner Verweis"
 msgid ""
 "International (8-bit) characters are removed (replaced by US-ASCII "
 "equivalents for Latin-1)"
-msgstr "Internationale (8-bit) Zeichen wurden entfernt (ersetzt durch entsprechende US-ASCII Zeichen für Latin-1)"
+msgstr ""
+"Internationale (8-bit) Zeichen wurden entfernt (ersetzt durch entsprechende "
+"US-ASCII Zeichen für Latin-1)"
 
 #: templates/messages.tmpl:267
 #: twikiplugins/NatSkin/templates/messages.nat.tmpl:194
@@ -2649,7 +2653,7 @@ msgstr "Meine Seitenleiste"
 msgid "MySidebar"
 msgstr "Meine Seitenleiste"
 
-#: lib/TWiki/Search.pm:794
+#: lib/TWiki/Search.pm:795
 msgid "NEW"
 msgstr "NEU"
 
@@ -3201,13 +3205,8 @@ msgstr "Registrieren"
 msgid "Register on %1"
 msgstr "Registrieren bei %1"
 
-#: twikiplugins/NatSkin/templates/oopsauth.nat.tmpl:14
-msgid "Registered users can [%1[change]] and [%2[reset]] their passwords."
-msgstr ""
-"Registrierte Benutzer können ihre Passwörter [%1[ändern]] und [%2"
-"[zurücksetzen]]."
-
 #: data/TWiki/TWikiRegistration.txt:6
+#: twikiplugins/NatSkin/templates/oopsauth.nat.tmpl:14
 msgid "Registered users can [[%1][change]] and [[%2][reset]] their passwords."
 msgstr ""
 "Registrierte Benutzer können ihre Passwörter [[%1][ändern]] und [[%2]"
@@ -3380,7 +3379,8 @@ msgstr ""
 #: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:71
 msgid "S = Save, Q = Quiet save, K = Checkpoint, P = Preview, C = Cancel"
 msgstr ""
-"S = Speichern, Q = Stilles Speichern, K = Zwischenspeichern, P = Vorschau, C = Abbrechen"
+"S = Speichern, Q = Stilles Speichern, K = Zwischenspeichern, P = Vorschau, C "
+"= Abbrechen"
 
 #: twikiplugins/NatSkin/templates/edit.nat.tmpl:77
 #: twikiplugins/NatSkin/templates/edittopicactions.nat.tmpl:5
@@ -3585,7 +3585,7 @@ msgstr "Alles auswählen"
 msgid "Set new topic parent"
 msgstr "Neues Ober-Topic zuordnen"
 
-#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:87
+#: twikiplugins/PatternSkin/templates/attachtables.pattern.tmpl:5
 msgid "Show attachments"
 msgstr "Anhänge anzeigen"
 
@@ -3643,7 +3643,7 @@ msgstr "System-Einstellungen"
 
 #: twikiplugins/NatSkin/templates/attachtables.nat.tmpl:25
 #: twikiplugins/NatSkin/templates/attachtables.nat.tmpl:4
-#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:91
+#: twikiplugins/PatternSkin/templates/attachtables.pattern.tmpl:9
 msgid "Size"
 msgstr "Größe"
 
@@ -3670,9 +3670,10 @@ msgid ""
 "twice when you click on a link. It you did this, it is possible that you "
 "actually *have* registered successfully."
 msgstr ""
-"Manche Mail-Programme haben einen Fehler der bewirkt dass die gleiche Anfrage "
-"zweimal verschickt wird, wenn man auf einen Link klickt. Falls dies der Fall "
-"ist, könnte es sein, dass Sie bereits erfolgreich registriert wurden."
+"Manche Mail-Programme haben einen Fehler der bewirkt dass die gleiche "
+"Anfrage zweimal verschickt wird, wenn man auf einen Link klickt. Falls dies "
+"der Fall ist, könnte es sein, dass Sie bereits erfolgreich registriert "
+"wurden."
 
 #: templates/registernotify.tmpl:14
 #: twikiplugins/ClassicSkin/templates/registernotify.classic.tmpl:14
@@ -3883,7 +3884,9 @@ msgstr ""
 
 #: templates/messages.tmpl:236
 msgid "The %1 field must match the {LoginNameFilterIn} filter for this site"
-msgstr "Das %1 Feld muss mit dem {LoginNameFilterIn} Filter dieser Seite übereinstimmen"
+msgstr ""
+"Das %1 Feld muss mit dem {LoginNameFilterIn} Filter dieser Seite "
+"übereinstimmen"
 
 #: templates/messages.tmpl:68
 #: twikiplugins/NatSkin/templates/messages.nat.tmpl:30
@@ -4219,7 +4222,7 @@ msgstr ""
 "Dieser Topic Name wird nicht empfohlen, da er nicht automatisch verlinkt "
 "wird. Siehe %1 für Details"
 
-#: twikiplugins/PatternSkin/templates/view.printpattern.tmpl:34
+#: twikiplugins/PatternSkin/templates/viewprint.pattern.tmpl:34
 msgid "This topic:"
 msgstr "Dieses Topic:"
 
@@ -4382,7 +4385,7 @@ msgstr "Topic Metadaten"
 msgid "Topic Save Error"
 msgstr "Topic-Speichern-Fehler"
 
-#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:102
+#: twikiplugins/PatternSkin/templates/attachtables.pattern.tmpl:20
 msgid "Topic attachments"
 msgstr "Topic Anhänge"
 
@@ -4619,7 +4622,7 @@ msgid "Variation:"
 msgstr "Variation:"
 
 #: twikiplugins/NatSkin/templates/attachtables.nat.tmpl:25
-#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:144
+#: twikiplugins/PatternSkin/templates/attachtables.pattern.tmpl:62
 msgid "Version"
 msgstr "Version"
 
@@ -4798,8 +4801,8 @@ msgstr ""
 
 #: twikiplugins/NatSkin/templates/attachtables.nat.tmpl:25
 #: twikiplugins/NatSkin/templates/attachtables.nat.tmpl:4
-#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:144
-#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:91
+#: twikiplugins/PatternSkin/templates/attachtables.pattern.tmpl:62
+#: twikiplugins/PatternSkin/templates/attachtables.pattern.tmpl:9
 msgid "Who"
 msgstr "Wer"
 
@@ -5179,7 +5182,7 @@ msgstr "erweiterte Suche"
 msgid "and"
 msgstr "und"
 
-#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:99
+#: twikiplugins/PatternSkin/templates/attachtables.pattern.tmpl:17
 msgid "change, update, previous revisions, move, delete..."
 msgstr "ändern, aktualisieren, vorherige Revisionen, verschieben, Löschen..."
 
@@ -5260,7 +5263,7 @@ msgstr "nach Querverweisen nur in _%1 Web_ suchen"
 msgid "looking for references in _all public webs_"
 msgstr "nach Querverweisen in _allen öffentlichen Webs_ suchen"
 
-#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:99
+#: twikiplugins/PatternSkin/templates/attachtables.pattern.tmpl:17
 msgid "manage"
 msgstr "verwalten"
 
@@ -5406,7 +5409,8 @@ msgstr "zum %1, um im neuen Web anzufangen zu arbeiten,"
 
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:22
 msgid "title='Attach an image or document to this topic' accesskey='a'>&Attach"
-msgstr "title='Ein Bild oder Dokument an dieses Topic anhängen' accesskey='a'>&Anhang"
+msgstr ""
+"title='Ein Bild oder Dokument an dieses Topic anhängen' accesskey='a'>&Anhang"
 
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:7
 msgid "title='Create new topic' accesskey='c'>&Create"
@@ -5417,8 +5421,8 @@ msgid ""
 "title='Delete or rename this topic; set parent topic; view and compare "
 "revisions' accesskey='m'>&More topic actions"
 msgstr ""
-"title='Topic löschen oder umbenennen; Ober-Topic setzen; Revisionen anzeigen und "
-"vergleichen' accesskey='m'>&Mehr Topic Aktionen"
+"title='Topic löschen oder umbenennen; Ober-Topic setzen; Revisionen anzeigen "
+"und vergleichen' accesskey='m'>&Mehr Topic Aktionen"
 
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:10
 msgid "title='Edit this topic text' accesskey='e'>&Edit"
@@ -5439,16 +5443,21 @@ msgstr "title='Druckversion von diesem Topic' accesskey='p'>Druckversion (&p)"
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:33
 msgid ""
 "title='Search all webs for topics that link to here' accesskey='l'>A&ll Webs"
-msgstr "title='Alle Webs nach Topics durchsuchen, die hierher verweisen' accesskey='l'>A&lle Webs"
+msgstr ""
+"title='Alle Webs nach Topics durchsuchen, die hierher verweisen' "
+"accesskey='l'>A&lle Webs"
 
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:31
 msgid ""
 "title='Search the %1 Web for topics that link to here' accesskey='b'>We&b"
-msgstr "title='Das %1 Web nach Topics durchsuchen, die hierher verweisen' accesskey='b'>We&b"
+msgstr ""
+"title='Das %1 Web nach Topics durchsuchen, die hierher verweisen' "
+"accesskey='b'>We&b"
 
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:41
 msgid "title='View raw text without formatting' accesskey='r'>&Raw View"
-msgstr "title='Quelltext ohne Formatierung ansehen' accesskey='r'>Quelltext (&r)"
+msgstr ""
+"title='Quelltext ohne Formatierung ansehen' accesskey='r'>Quelltext (&r)"
 
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:19
 msgid "title='View topic' accesskey='v'>&View topic"
@@ -5494,7 +5503,7 @@ msgstr "value='Stilles Speichern' accesskey='q'"
 msgid "value='Save' accesskey='s'"
 msgstr "value='Speichern' accesskey='s'"
 
-#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:148
+#: twikiplugins/PatternSkin/templates/attachtables.pattern.tmpl:66
 msgid "view"
 msgstr "Ansehen"
 
@@ -5507,6 +5516,11 @@ msgstr ""
 "Sie *müssen* zumindest eine gültige E-Mail registriert haben, um ihr "
 "Passwort zurücksetzen zu können. Falls keine ihrer E-Mail Adressen gültig "
 "ist und Sie ihr Passwort vergessen haben kontaktieren Sie %1."
+
+#~ msgid "Registered users can [%1[change]] and [%2[reset]] their passwords."
+#~ msgstr ""
+#~ "Registrierte Benutzer können ihre Passwörter [%1[ändern]] und [%2"
+#~ "[zurücksetzen]]."
 
 #~ msgid "&Attach"
 #~ msgstr "&Anhang"

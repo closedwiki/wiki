@@ -334,12 +334,12 @@ msgstr "(переместить приложение)"
 msgid "(no parent, orphaned topic)"
 msgstr "(нет родителя, страница-сирота)"
 
-#: lib/TWiki/UI/Manage.pm:1031 lib/TWiki/UI/Manage.pm:1053
-#: lib/TWiki/UI/Manage.pm:606 lib/TWiki/UI/Manage.pm:609
-#: lib/TWiki/UI/Manage.pm:612 lib/TWiki/UI/Manage.pm:615
-#: lib/TWiki/UI/Manage.pm:859 lib/TWiki/UI/Manage.pm:882
-#: lib/TWiki/UI/Manage.pm:991 lib/TWiki/UI/Manage.pm:994
-#: lib/TWiki/UI/Manage.pm:997
+#: lib/TWiki/UI/Manage.pm:1002 lib/TWiki/UI/Manage.pm:1005
+#: lib/TWiki/UI/Manage.pm:1039 lib/TWiki/UI/Manage.pm:1061
+#: lib/TWiki/UI/Manage.pm:614 lib/TWiki/UI/Manage.pm:617
+#: lib/TWiki/UI/Manage.pm:620 lib/TWiki/UI/Manage.pm:623
+#: lib/TWiki/UI/Manage.pm:867 lib/TWiki/UI/Manage.pm:890
+#: lib/TWiki/UI/Manage.pm:999
 msgid "(none)"
 msgstr "(пусто)"
 
@@ -396,7 +396,7 @@ msgstr "(один символ имени)"
 msgid "(single character last name)"
 msgstr "(один символ фамилии)"
 
-#: lib/TWiki/UI/Manage.pm:842
+#: lib/TWiki/UI/Manage.pm:850
 msgid "(skipped)"
 msgstr "(пропущено)"
 
@@ -715,8 +715,8 @@ msgid "Access keys"
 msgstr "Ключи доступа"
 
 #: twikiplugins/NatSkin/templates/attachtables.nat.tmpl:4
-#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:144
-#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:91
+#: twikiplugins/PatternSkin/templates/attachtables.pattern.tmpl:62
+#: twikiplugins/PatternSkin/templates/attachtables.pattern.tmpl:9
 #: twikiplugins/PatternSkin/templates/changeform.pattern.tmpl:12
 msgid "Action"
 msgstr "Действие"
@@ -891,7 +891,7 @@ msgstr "Прикрепить новый файл"
 
 #: twikiplugins/NatSkin/templates/attachtables.nat.tmpl:25
 #: twikiplugins/NatSkin/templates/attachtables.nat.tmpl:4
-#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:91
+#: twikiplugins/PatternSkin/templates/attachtables.pattern.tmpl:9
 msgid "Attachment"
 msgstr "Приложение"
 
@@ -900,7 +900,7 @@ msgstr "Приложение"
 msgid "Attachment '%1' does not exist"
 msgstr "Приложение '%1' не существует"
 
-#: lib/TWiki/UI/Manage.pm:323
+#: lib/TWiki/UI/Manage.pm:331
 msgid "Attachment already exists in new topic"
 msgstr "Приложение уже имеется на новой странице"
 
@@ -909,7 +909,7 @@ msgstr "Приложение уже имеется на новой страни�
 msgid "Attachment delete failed"
 msgstr "Не удалось удалить приложение"
 
-#: lib/TWiki/UI/Manage.pm:303
+#: lib/TWiki/UI/Manage.pm:311
 msgid "Attachment does not exist"
 msgstr "Приложение не существует"
 
@@ -943,7 +943,7 @@ msgstr "(Приложения не будут показаны при просм
 msgid "Attention"
 msgstr "Внимание"
 
-#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:133
+#: twikiplugins/PatternSkin/templates/attachtables.pattern.tmpl:51
 msgid "Attribute"
 msgstr "Атрибут"
 
@@ -1320,9 +1320,9 @@ msgstr "Цвет %1 имеет неправильный формат"
 
 #: twikiplugins/NatSkin/templates/attachtables.nat.tmpl:25
 #: twikiplugins/NatSkin/templates/attachtables.nat.tmpl:4
-#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:144
 #: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:66
-#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:91
+#: twikiplugins/PatternSkin/templates/attachtables.pattern.tmpl:62
+#: twikiplugins/PatternSkin/templates/attachtables.pattern.tmpl:9
 msgid "Comment"
 msgstr "Коментарий"
 
@@ -1499,8 +1499,8 @@ msgstr ""
 
 #: twikiplugins/NatSkin/templates/attachtables.nat.tmpl:25
 #: twikiplugins/NatSkin/templates/attachtables.nat.tmpl:4
-#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:144
-#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:91
+#: twikiplugins/PatternSkin/templates/attachtables.pattern.tmpl:62
+#: twikiplugins/PatternSkin/templates/attachtables.pattern.tmpl:9
 msgid "Date"
 msgstr "Дата"
 
@@ -2093,7 +2093,7 @@ msgstr "Помощь"
 msgid "Hide attachment in normal topic view."
 msgstr "Скрыть приложение при просмотре страницы."
 
-#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:87
+#: twikiplugins/PatternSkin/templates/attachtables.pattern.tmpl:5
 msgid "Hide attachments"
 msgstr "Скрыть приложения"
 
@@ -2112,7 +2112,7 @@ msgstr "Скрыть подсказку"
 msgid "Hiding Attachments"
 msgstr "Скрытые приложения"
 
-#: twikiplugins/PatternSkin/templates/view.printpattern.tmpl:36
+#: twikiplugins/PatternSkin/templates/viewprint.pattern.tmpl:36
 msgid "History:"
 msgstr "История:"
 
@@ -2642,7 +2642,7 @@ msgstr ""
 msgid "MySidebar"
 msgstr ""
 
-#: lib/TWiki/Search.pm:794
+#: lib/TWiki/Search.pm:795
 msgid "NEW"
 msgstr "НОВЫЙ(АЯ)"
 
@@ -3187,13 +3187,8 @@ msgstr "Зарегистрироваться"
 msgid "Register on %1"
 msgstr ""
 
-#: twikiplugins/NatSkin/templates/oopsauth.nat.tmpl:14
-msgid "Registered users can [%1[change]] and [%2[reset]] their passwords."
-msgstr ""
-"Зарегистрированные пользователи могут [[%1][изменять]] и [[%2][сбрасывать]] "
-"свои пароли."
-
 #: data/TWiki/TWikiRegistration.txt:6
+#: twikiplugins/NatSkin/templates/oopsauth.nat.tmpl:14
 msgid "Registered users can [[%1][change]] and [[%2][reset]] their passwords."
 msgstr ""
 "Зарегистрированные пользователи могут [[%1][изменять]] и [[%2][сбрасывать]] "
@@ -3579,7 +3574,7 @@ msgstr "Установить все"
 msgid "Set new topic parent"
 msgstr "Установить нового родителя для страницы"
 
-#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:87
+#: twikiplugins/PatternSkin/templates/attachtables.pattern.tmpl:5
 msgid "Show attachments"
 msgstr "Показать приложения"
 
@@ -3634,7 +3629,7 @@ msgstr "Параметры сайта"
 
 #: twikiplugins/NatSkin/templates/attachtables.nat.tmpl:25
 #: twikiplugins/NatSkin/templates/attachtables.nat.tmpl:4
-#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:91
+#: twikiplugins/PatternSkin/templates/attachtables.pattern.tmpl:9
 msgid "Size"
 msgstr "Размер"
 
@@ -4191,7 +4186,7 @@ msgid ""
 "automatically. See %1 for details"
 msgstr ""
 
-#: twikiplugins/PatternSkin/templates/view.printpattern.tmpl:34
+#: twikiplugins/PatternSkin/templates/viewprint.pattern.tmpl:34
 msgid "This topic:"
 msgstr "Это страница:"
 
@@ -4337,7 +4332,7 @@ msgstr "Редактировать личные сведения"
 msgid "Topic Save Error"
 msgstr "Ошибка сохранения страницы"
 
-#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:102
+#: twikiplugins/PatternSkin/templates/attachtables.pattern.tmpl:20
 msgid "Topic attachments"
 msgstr "Приложения страницы"
 
@@ -4577,7 +4572,7 @@ msgid "Variation:"
 msgstr "Изменение:"
 
 #: twikiplugins/NatSkin/templates/attachtables.nat.tmpl:25
-#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:144
+#: twikiplugins/PatternSkin/templates/attachtables.pattern.tmpl:62
 msgid "Version"
 msgstr "Версия"
 
@@ -4757,8 +4752,8 @@ msgstr ""
 
 #: twikiplugins/NatSkin/templates/attachtables.nat.tmpl:25
 #: twikiplugins/NatSkin/templates/attachtables.nat.tmpl:4
-#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:144
-#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:91
+#: twikiplugins/PatternSkin/templates/attachtables.pattern.tmpl:62
+#: twikiplugins/PatternSkin/templates/attachtables.pattern.tmpl:9
 msgid "Who"
 msgstr "Кто"
 
@@ -5126,7 +5121,7 @@ msgstr "расширенный поиск"
 msgid "and"
 msgstr "и"
 
-#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:99
+#: twikiplugins/PatternSkin/templates/attachtables.pattern.tmpl:17
 msgid "change, update, previous revisions, move, delete..."
 msgstr "изменить, обновить, предыдущая версия, переместить, удалить..."
 
@@ -5207,7 +5202,7 @@ msgstr "поиск ссылок только в _разделе %1_"
 msgid "looking for references in _all public webs_"
 msgstr "поиск ссылок во _всех публичных разделах_"
 
-#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:99
+#: twikiplugins/PatternSkin/templates/attachtables.pattern.tmpl:17
 msgid "manage"
 msgstr "управление"
 
@@ -5454,7 +5449,7 @@ msgstr "value='Тихо сохранить' accesskey='т'"
 msgid "value='Save' accesskey='s'"
 msgstr "value='Сохранить' accesskey='с'"
 
-#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:148
+#: twikiplugins/PatternSkin/templates/attachtables.pattern.tmpl:66
 msgid "view"
 msgstr "Просмотреть"
 
@@ -5468,6 +5463,11 @@ msgstr ""
 "электронной почты, чтобы можно было сбросить ваш пароль. Если ни один из "
 "зарегистрирванных Вами адресов электронной почты не правилен, и вы забыли "
 "свой пароль, пишите %1."
+
+#~ msgid "Registered users can [%1[change]] and [%2[reset]] their passwords."
+#~ msgstr ""
+#~ "Зарегистрированные пользователи могут [[%1][изменять]] и [[%2]"
+#~ "[сбрасывать]] свои пароли."
 
 #~ msgid "&Attach"
 #~ msgstr "Приложить файл"

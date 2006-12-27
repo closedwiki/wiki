@@ -259,7 +259,8 @@ msgstr "(Brug et sidenavn i TWiki.WikiNotation)"
 
 #: templates/messages.tmpl:136
 msgid "(__Suggestion:__ How about uploading your picture to your topic?)"
-msgstr "(__Forslag:__ Hvad med at uploade et billede af dig selv til din side?)"
+msgstr ""
+"(__Forslag:__ Hvad med at uploade et billede af dig selv til din side?)"
 
 #: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:18
 msgid "(attach)"
@@ -332,12 +333,12 @@ msgstr "(flyt vedhæftet fil)"
 msgid "(no parent, orphaned topic)"
 msgstr "(ingen forælder, forældreløs side)"
 
-#: lib/TWiki/UI/Manage.pm:1031 lib/TWiki/UI/Manage.pm:1053
-#: lib/TWiki/UI/Manage.pm:606 lib/TWiki/UI/Manage.pm:609
-#: lib/TWiki/UI/Manage.pm:612 lib/TWiki/UI/Manage.pm:615
-#: lib/TWiki/UI/Manage.pm:859 lib/TWiki/UI/Manage.pm:882
-#: lib/TWiki/UI/Manage.pm:991 lib/TWiki/UI/Manage.pm:994
-#: lib/TWiki/UI/Manage.pm:997
+#: lib/TWiki/UI/Manage.pm:1002 lib/TWiki/UI/Manage.pm:1005
+#: lib/TWiki/UI/Manage.pm:1039 lib/TWiki/UI/Manage.pm:1061
+#: lib/TWiki/UI/Manage.pm:614 lib/TWiki/UI/Manage.pm:617
+#: lib/TWiki/UI/Manage.pm:620 lib/TWiki/UI/Manage.pm:623
+#: lib/TWiki/UI/Manage.pm:867 lib/TWiki/UI/Manage.pm:890
+#: lib/TWiki/UI/Manage.pm:999
 msgid "(none)"
 msgstr "(ingen)"
 
@@ -394,7 +395,7 @@ msgstr "(første bogstav i fornavn)"
 msgid "(single character last name)"
 msgstr "(første bogstav i efternavn)"
 
-#: lib/TWiki/UI/Manage.pm:842
+#: lib/TWiki/UI/Manage.pm:850
 msgid "(skipped)"
 msgstr "(skippet)"
 
@@ -469,14 +470,16 @@ msgid ""
 "*Move attachment*: An attachment can be deleted by moving it to the Trash."
 "TrashAttachment."
 msgstr ""
-"*Flyt vedhæftet fil*: En vedhæftet fil kan slettes ved at flytte den til Trash."
-"TrashAttachment."
+"*Flyt vedhæftet fil*: En vedhæftet fil kan slettes ved at flytte den til "
+"Trash.TrashAttachment."
 
 #: twikiplugins/NatSkin/templates/attachnew.nat.tmpl:14
 msgid ""
 "*Properties*: Click on _manage_ of an existing attachment to change its "
 "properties."
-msgstr "*Attributter*: Klik på _opdater_ for en eksisterende vedhæftet fil for at opdatere dens attributter."
+msgstr ""
+"*Attributter*: Klik på _opdater_ for en eksisterende vedhæftet fil for at "
+"opdatere dens attributter."
 
 #: twikiplugins/PatternSkin/templates/attachagain.pattern.tmpl:28
 msgid ""
@@ -559,7 +562,8 @@ msgstr "2. Siden kan ikke opgraderes fra den gamle 'category table'-stil"
 
 #: twikiplugins/PatternSkin/templates/oopsmoresettings.pattern.tmpl:3
 msgid "<a href='%1' rel='nofollow'>Edit settings</a> for this topic"
-msgstr "Opdatér <a href='%1' rel='nofollow'>side-præferencer</a> for denne side"
+msgstr ""
+"Opdatér <a href='%1' rel='nofollow'>side-præferencer</a> for denne side"
 
 #: twikiplugins/NatSkin/data/TWiki/MySideBar.txt:7
 msgid "<a href='%1' title='%2'>Create</a> your personalized sidebar."
@@ -598,8 +602,10 @@ msgid "<em>in all public webs</em>"
 msgstr "<em>i alle offentlige webs</em>"
 
 #: twikiplugins/PatternSkin/templates/preview.pattern.tmpl:58
-msgid "<span class='twikiAlert'><b>Do not forget</b></span> to save your changes."
-msgstr "<span class='twikiAlert'><b>Glem ikke</b></span> at gemme dine ændringer."
+msgid ""
+"<span class='twikiAlert'><b>Do not forget</b></span> to save your changes."
+msgstr ""
+"<span class='twikiAlert'><b>Glem ikke</b></span> at gemme dine ændringer."
 
 #: templates/messages.tmpl:448
 msgid ""
@@ -611,7 +617,8 @@ msgstr ""
 
 #: templates/messages.tmpl:327
 msgid "A =.txt= extension is appended to some filenames for security reasons"
-msgstr "Nogle filnavne vil blive tilføjet =.txt= som endelse (af sikkerhedshensyn)"
+msgstr ""
+"Nogle filnavne vil blive tilføjet =.txt= som endelse (af sikkerhedshensyn)"
 
 #: templates/messages.tmpl:121
 msgid ""
@@ -626,8 +633,8 @@ msgid ""
 "A color starts with the number sign, followed by 6 hexadecimal numbers, e.g. "
 "yellow is =#FFFF00=."
 msgstr ""
-"En farve starter med et #-tegn, efterfulgt af 6 hexadecimale tal, fx gul er"
-"=#FFFF00=."
+"En farve starter med et #-tegn, efterfulgt af 6 hexadecimale tal, fx gul "
+"er=#FFFF00=."
 
 #. ($data->{Email})
 #: lib/TWiki/UI/Register.pm:831
@@ -706,8 +713,8 @@ msgid "Access keys"
 msgstr "Tastatur-genveje"
 
 #: twikiplugins/NatSkin/templates/attachtables.nat.tmpl:4
-#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:144
-#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:91
+#: twikiplugins/PatternSkin/templates/attachtables.pattern.tmpl:62
+#: twikiplugins/PatternSkin/templates/attachtables.pattern.tmpl:9
 #: twikiplugins/PatternSkin/templates/changeform.pattern.tmpl:12
 msgid "Action"
 msgstr "Handling"
@@ -810,7 +817,9 @@ msgstr "Tillad et ikke-WikiWord som nyt sidenavn."
 msgid ""
 "Alternatively go <a href=\"javascript:history.back()\">back</a> in your "
 "browser and choose a different username."
-msgstr "Alternativt kan du bruge <a href=\"javascript:history.back()\">tilbage-knappen</a> i din browser og vælge et nyt brugernavn."
+msgstr ""
+"Alternativt kan du bruge <a href=\"javascript:history.back()\">tilbage-"
+"knappen</a> i din browser og vælge et nyt brugernavn."
 
 #: templates/messages.tmpl:229
 msgid ""
@@ -825,8 +834,10 @@ msgid "An e-mail could not be delivered."
 msgstr "En e-mail kunne ikke afsendes."
 
 #: templates/messages.tmpl:216
-msgid "An e-mail could not be delivered. Please notify your %1 administrator, %2"
-msgstr "E-mailen kunne ikke afsendes. Informér venligst din %1-administrator, %2"
+msgid ""
+"An e-mail could not be delivered. Please notify your %1 administrator, %2"
+msgstr ""
+"E-mailen kunne ikke afsendes. Informér venligst din %1-administrator, %2"
 
 #: twikiplugins/NatSkin/templates/messages.nat.tmpl:208
 msgid "An email address is required before a password can be reset."
@@ -836,7 +847,8 @@ msgstr "En e-mail-adresse er nødvendig for at kunne nulstille et password)"
 msgid ""
 "An error page will be shown if either of the topics are locked by another "
 "user."
-msgstr "En fejlside vil blive vist, hvis en af siderne er låst af en anden bruger."
+msgstr ""
+"En fejlside vil blive vist, hvis en af siderne er låst af en anden bruger."
 
 #: templates/messages.tmpl:17
 msgid "And populated with topics from the base web"
@@ -845,7 +857,8 @@ msgstr "Og populeret med sider fra skabelon-webbet."
 #: twikiplugins/NatSkin/templates/changeformsidebar.nat.tmpl:11
 #: twikiplugins/PatternSkin/templates/changeform.pattern.tmpl:27
 msgid "Any change you made to topic before coming to this page are preserved."
-msgstr "Alle ændringer, som du har lavet før du skiftede til denne side er gemt."
+msgstr ""
+"Alle ændringer, som du har lavet før du skiftede til denne side er gemt."
 
 #: twikiplugins/NatSkin/templates/strings.nat.tmpl:10
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:66
@@ -871,7 +884,7 @@ msgstr "Vedhæft ny fil"
 
 #: twikiplugins/NatSkin/templates/attachtables.nat.tmpl:25
 #: twikiplugins/NatSkin/templates/attachtables.nat.tmpl:4
-#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:91
+#: twikiplugins/PatternSkin/templates/attachtables.pattern.tmpl:9
 msgid "Attachment"
 msgstr "Vedhæftet fil"
 
@@ -880,7 +893,7 @@ msgstr "Vedhæftet fil"
 msgid "Attachment '%1' does not exist"
 msgstr "Den vedhæftede fil '%1' findes ikke"
 
-#: lib/TWiki/UI/Manage.pm:323
+#: lib/TWiki/UI/Manage.pm:331
 msgid "Attachment already exists in new topic"
 msgstr "Den vedhæftede fil eksisterer allerede på den nye side"
 
@@ -889,7 +902,7 @@ msgstr "Den vedhæftede fil eksisterer allerede på den nye side"
 msgid "Attachment delete failed"
 msgstr "Fejl under sletning af vedhæftet fil"
 
-#: lib/TWiki/UI/Manage.pm:303
+#: lib/TWiki/UI/Manage.pm:311
 msgid "Attachment does not exist"
 msgstr "Vedhæftet fil findes ikke."
 
@@ -923,7 +936,7 @@ msgstr "Filen vil ikke blive vist ved almindelig sidevisning."
 msgid "Attention"
 msgstr "Bemærk"
 
-#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:133
+#: twikiplugins/PatternSkin/templates/attachtables.pattern.tmpl:51
 msgid "Attribute"
 msgstr "Attribut"
 
@@ -1208,7 +1221,9 @@ msgstr "Ændringer fra r%1 til r%2"
 msgid ""
 "Characters not allowed in topic names, such as spaces will automatically be "
 "removed."
-msgstr "Karakterer der ikke er tilladt i sidenavne - fx mellemrum - bliver automatisk fjernet"
+msgstr ""
+"Karakterer der ikke er tilladt i sidenavne - fx mellemrum - bliver "
+"automatisk fjernet"
 
 #: templates/messages.tmpl:373
 msgid ""
@@ -1223,7 +1238,8 @@ msgstr ""
 #: twikiplugins/PatternSkin/templates/rename.pattern.tmpl:41
 #: twikiplugins/PatternSkin/templates/renamedelete.pattern.tmpl:45
 msgid "Checked topics will be updated to point to the new topic location."
-msgstr "Markerede sider vil blive opdateret til at pege på den nye sides lokation"
+msgstr ""
+"Markerede sider vil blive opdateret til at pege på den nye sides lokation"
 
 #: twikiplugins/PatternSkin/templates/renameweb.pattern.tmpl:31
 msgid "Checked topics will be updated to point to the new web name."
@@ -1243,8 +1259,8 @@ msgstr "Vælg en ny formular for %1"
 #: twikiplugins/NatSkin/templates/messages.nat.tmpl:49
 msgid "Chose a topic name that is a %1 or check the allow non-Wiki Word box."
 msgstr ""
-"Vælg et sidenavn der er et "
-"%1 eller afkryds i non-<nop>WikiWord afkrydsningsfeltet"
+"Vælg et sidenavn der er et %1 eller afkryds i non-<nop>WikiWord "
+"afkrydsningsfeltet"
 
 #: twikiplugins/NatSkin/templates/oopslogonbase.nat.tmpl:24
 msgid "Clear"
@@ -1287,9 +1303,9 @@ msgstr "Farven %1 er et ugyldigt format"
 
 #: twikiplugins/NatSkin/templates/attachtables.nat.tmpl:25
 #: twikiplugins/NatSkin/templates/attachtables.nat.tmpl:4
-#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:144
 #: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:66
-#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:91
+#: twikiplugins/PatternSkin/templates/attachtables.pattern.tmpl:62
+#: twikiplugins/PatternSkin/templates/attachtables.pattern.tmpl:9
 msgid "Comment"
 msgstr "Kommentar"
 
@@ -1467,8 +1483,8 @@ msgstr "Igangværende editering:"
 
 #: twikiplugins/NatSkin/templates/attachtables.nat.tmpl:25
 #: twikiplugins/NatSkin/templates/attachtables.nat.tmpl:4
-#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:144
-#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:91
+#: twikiplugins/PatternSkin/templates/attachtables.pattern.tmpl:62
+#: twikiplugins/PatternSkin/templates/attachtables.pattern.tmpl:9
 msgid "Date"
 msgstr "Dato"
 
@@ -1536,7 +1552,9 @@ msgstr "Stavede du det brugte %1 korrekt?"
 msgid ""
 "Did you type in your login name and password correctly? Remember, both are "
 "case sensitive."
-msgstr "Indtastede du dit loginnavn og password korrekt? Husk at der er forskel på store og små bogstaver for begges vedkommende."
+msgstr ""
+"Indtastede du dit loginnavn og password korrekt? Husk at der er forskel på "
+"store og små bogstaver for begges vedkommende."
 
 #: data/TWiki/VarMAKETEXT.txt:20
 msgid "Did you want to [[%1][reset %2's password]]?"
@@ -1583,7 +1601,8 @@ msgstr "OK"
 
 #: twikiplugins/NatSkin/templates/messages.nat.tmpl:238
 msgid "During deletion of attachment =%1= an error was found."
-msgstr "Under sletningen af den vedhæftede fil =%1= blev der konstateret en fejl."
+msgstr ""
+"Under sletningen af den vedhæftede fil =%1= blev der konstateret en fejl."
 
 #: templates/messages.tmpl:63
 msgid ""
@@ -1603,7 +1622,8 @@ msgstr ""
 
 #: twikiplugins/NatSkin/templates/messages.nat.tmpl:54
 msgid "During rename of topic %1 to %2 an error (%3) was found."
-msgstr "Under omdøbningen af siden %1 til %2 blev der konstateret en fejl (%3)."
+msgstr ""
+"Under omdøbningen af siden %1 til %2 blev der konstateret en fejl (%3)."
 
 #: templates/messages.tmpl:91
 msgid ""
@@ -1619,7 +1639,8 @@ msgstr "Under omdøbningen af siden %1 til %2 blev der konstateret en fejl."
 
 #: twikiplugins/NatSkin/templates/messages.nat.tmpl:61
 msgid "During rename of web %1 to %2 an error (%3) was found."
-msgstr "Under omdøbningen af siden %1 til %2 blev der konstateret en fejl (%3)."
+msgstr ""
+"Under omdøbningen af siden %1 til %2 blev der konstateret en fejl (%3)."
 
 #: templates/messages.tmpl:94
 msgid ""
@@ -1644,7 +1665,8 @@ msgstr ""
 "versionsstyringssystemet. Underret venligst din %2 administrator."
 
 #: twikiplugins/NatSkin/templates/oopssaveerr.nat.tmpl:5
-msgid "During save of file %1 an error was found by the version control system."
+msgid ""
+"During save of file %1 an error was found by the version control system."
 msgstr ""
 "Under skrivningen af filen %1 blev der konstateret en fejl af "
 "versionsstyringssystemet."
@@ -1717,7 +1739,9 @@ msgstr "Editér præferencer for siden"
 msgid ""
 "Either the code is not valid, or you have already confirmed your "
 "registration using it."
-msgstr "Enten er koden ikke valid, eller du har allerede bekræftet din registrering med den."
+msgstr ""
+"Enten er koden ikke valid, eller du har allerede bekræftet din registrering "
+"med den."
 
 #: templates/messages.tmpl:335
 msgid ""
@@ -1729,7 +1753,9 @@ msgstr ""
 
 #: twikiplugins/NatSkin/templates/oopsauth.nat.tmpl:4
 msgid "Either you need to register or the authentication failed"
-msgstr "Enten er det nødvendigt at registrere dig som bruger, eller authentikationen fejlede"
+msgstr ""
+"Enten er det nødvendigt at registrere dig som bruger, eller authentikationen "
+"fejlede"
 
 #: twikiplugins/NatSkin/templates/edittoolbar.natedit.tmpl:33
 msgid "Embed image"
@@ -1750,9 +1776,10 @@ msgid ""
 "no dots, capitalized, e.g. !JohnSmith, unless you chose otherwise). Visit %"
 "TWIKIWEB%.TWikiRegistration if you do not have one."
 msgstr ""
-"Indtast dit TWiki.LoginName. (Typisk dit fornavn og efternavn, ingen mellemrum, "
-"ingen punktummer, med store forbogstaver, fx !JensHansen, med mindre du har brugt et andet navn). Registrér dig på %"
-"TWIKIWEB%.TWikiRegistration hvis du ikke har et login."
+"Indtast dit TWiki.LoginName. (Typisk dit fornavn og efternavn, ingen "
+"mellemrum, ingen punktummer, med store forbogstaver, fx !JensHansen, med "
+"mindre du har brugt et andet navn). Registrér dig på %TWIKIWEB%."
+"TWikiRegistration hvis du ikke har et login."
 
 #: twikiplugins/NatSkin/templates/oopsmngcreateweb.nat.tmpl:32
 #: twikiplugins/NatSkin/templates/oopsmngcreateweb.nat.tmpl:37
@@ -1873,7 +1900,9 @@ msgstr "Felter mærket med %1 er obligatoriske"
 
 #: twikiplugins/NatSkin/templates/oopsregrequ.nat.tmpl:5
 msgid "Fields with a =<span class=\"twikiAlert\">**</span>= mark are required."
-msgstr "Felter med en =<span class=\"twikiAlert\">**</span>= markering er obligatoriske"
+msgstr ""
+"Felter med en =<span class=\"twikiAlert\">**</span>= markering er "
+"obligatoriske"
 
 #: twikiplugins/NatSkin/data/TWiki/MySideBarTemplate.txt:26
 msgid "File Attachment"
@@ -1963,8 +1992,11 @@ msgid "Get a fresh page of the topic %1"
 msgstr "Get a fresh page of the topic %1"
 
 #: twikiplugins/NatSkin/templates/renamesidebar.nat.tmpl:11
-msgid "Get help on <a href=\"%1\" target=\"_blank\">Renaming and moving topics</a>."
-msgstr "Få hjælp til <a href=\"%1\" target=\"_blank\">Omdøbning og flytning af sider</a>."
+msgid ""
+"Get help on <a href=\"%1\" target=\"_blank\">Renaming and moving topics</a>."
+msgstr ""
+"Få hjælp til <a href=\"%1\" target=\"_blank\">Omdøbning og flytning af "
+"sider</a>."
 
 #: twikiplugins/PatternSkin/templates/renamebase.pattern.tmpl:46
 msgid ""
@@ -1990,14 +2022,17 @@ msgstr ""
 msgid ""
 "Go <a href=\"javascript:history.back()\">back</a> in your browser and save "
 "your changes locally."
-msgstr "Gå <a href=\"javascript:history.back()\">tilbage </a> i din browser og gem dine opdateringer lokalt. "
+msgstr ""
+"Gå <a href=\"javascript:history.back()\">tilbage </a> i din browser og gem "
+"dine opdateringer lokalt. "
 
 #: twikiplugins/PatternSkin/templates/changeform.pattern.tmpl:20
 msgid "Go back"
 msgstr "Go back"
 
 #: templates/messages.tmpl:289
-msgid "Go back in your browser and insert information for all mandatory fields."
+msgid ""
+"Go back in your browser and insert information for all mandatory fields."
 msgstr ""
 "Benyt tilbage-knappen i din browser og indtast relevant information for alle "
 "obligatoriske felter."
@@ -2045,7 +2080,7 @@ msgstr "Hjælp"
 msgid "Hide attachment in normal topic view."
 msgstr "Skjul vedhæftet fil ved almindelig sidevisning."
 
-#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:87
+#: twikiplugins/PatternSkin/templates/attachtables.pattern.tmpl:5
 msgid "Hide attachments"
 msgstr "Skjul vedhæftede filer"
 
@@ -2064,7 +2099,7 @@ msgstr "Skjul hjælp"
 msgid "Hiding Attachments"
 msgstr "Skjul vedhæftede filer"
 
-#: twikiplugins/PatternSkin/templates/view.printpattern.tmpl:36
+#: twikiplugins/PatternSkin/templates/viewprint.pattern.tmpl:36
 msgid "History:"
 msgstr "Historik:"
 
@@ -2094,7 +2129,8 @@ msgstr "Jeg har glemt mit password"
 
 #: data/TWiki/TWikiPreferences.txt:42
 msgid "Ideas, requests, problems regarding %1? <a href='%2'>Send feedback</a>"
-msgstr "Idéer, forespørgsler, problemer med %1? <a href='%2'>Send en e-mail</a>"
+msgstr ""
+"Idéer, forespørgsler, problemer med %1? <a href='%2'>Send en e-mail</a>"
 
 #: templates/messages.tmpl:306
 #: twikiplugins/NatSkin/templates/oopsnoformdef.nat.tmpl:13
@@ -2133,7 +2169,8 @@ msgstr "Hvis du kom hertil ved at klikke på et spørgsmålstegns-link"
 
 #: twikiplugins/PatternSkin/templates/renameattachmentdelete.pattern.tmpl:40
 msgid "If you enter a different name, make sure the topic does  exist."
-msgstr "Hvis du indtaster et nyt sidenavn, vær da sikker på at siden eksisterer."
+msgstr ""
+"Hvis du indtaster et nyt sidenavn, vær da sikker på at siden eksisterer."
 
 #: twikiplugins/NatSkin/templates/oopsauth.nat.tmpl:10
 msgid "If you expected to be logged in at this point:"
@@ -2152,7 +2189,8 @@ msgstr ""
 
 #: data/TWiki/TWikiRegistration.txt:284
 msgid "If you have any questions about registration, send an e-mail to %1."
-msgstr "Hvis du har spørgsmål angående registreringen, så send en e-mail til %1."
+msgstr ""
+"Hvis du har spørgsmål angående registreringen, så send en e-mail til %1."
 
 #: data/TWiki/ChangeEmailAddress.txt:33 data/TWiki/ChangePassword.txt:24
 #: data/TWiki/ResetPassword.txt:24 data/TWiki/VarMAKETEXT.txt:17
@@ -2295,8 +2333,8 @@ msgid ""
 "International (8-bit) characters are removed (replaced by US-ASCII "
 "equivalents for Latin-1)"
 msgstr ""
-"Internationale (8-bit) karakterer fjernes (erstattes med tilsvarende US-ASCII "
-"karakterer for Latin-1)"
+"Internationale (8-bit) karakterer fjernes (erstattes med tilsvarende US-"
+"ASCII karakterer for Latin-1)"
 
 #: templates/messages.tmpl:267
 #: twikiplugins/NatSkin/templates/messages.nat.tmpl:194
@@ -2605,7 +2643,7 @@ msgstr "MySideBar"
 msgid "MySidebar"
 msgstr "MySidebar"
 
-#: lib/TWiki/Search.pm:794
+#: lib/TWiki/Search.pm:795
 msgid "NEW"
 msgstr "NY"
 
@@ -2720,7 +2758,9 @@ msgstr "Note:"
 msgid ""
 "Note: The new web has been created successfully and populated with topics "
 "from the base web"
-msgstr "Note: Det nye web er blevet oprettet og er blevet populeret med siderne fra skabelon-webbet."
+msgstr ""
+"Note: Det nye web er blevet oprettet og er blevet populeret med siderne fra "
+"skabelon-webbet."
 
 #: data/TWiki/WebTopicViewTemplate.txt:2
 msgid "Note: This topic does not exist"
@@ -2932,8 +2972,8 @@ msgid ""
 "Please chose a topic name that is a %1 or check the _Allow non-Wiki Word_ "
 "&nbsp;box."
 msgstr ""
-"Vælg et sidenavn der er et "
-"%1 eller afkryds non-<nop>WikiWord i afkrydsningsfeltet"
+"Vælg et sidenavn der er et %1 eller afkryds non-<nop>WikiWord i "
+"afkrydsningsfeltet"
 
 #: templates/messages.tmpl:231 templates/messages.tmpl:281
 msgid "Please contact %1 if you have any questions."
@@ -2964,7 +3004,8 @@ msgstr "Benyt venligst tilbage-knappen i browseren og forsøg igen."
 #: templates/messages.tmpl:71 templates/messages.tmpl:77
 #: templates/messages.tmpl:83
 msgid "Please go _back_ in your browser and try a new name."
-msgstr "Benyt venligst tilbage-knappen i browseren og forsøg igen med et nyt navn."
+msgstr ""
+"Benyt venligst tilbage-knappen i browseren og forsøg igen med et nyt navn."
 
 #: templates/messages.tmpl:336
 msgid "Please go back in your browser and check again."
@@ -3026,7 +3067,8 @@ msgstr "Venligst forsøg igen."
 
 #: templates/mailresetpassword.tmpl:12
 #: twikiplugins/ClassicSkin/templates/mailresetpassword.classic.tmpl:12
-msgid "Please visit %1 to change your password to something more memorable for you."
+msgid ""
+"Please visit %1 to change your password to something more memorable for you."
 msgstr ""
 "Besøg venligst siden %1 for at ændre dit password til et der er lettere at "
 "huske."
@@ -3142,13 +3184,8 @@ msgstr "Registrér dig"
 msgid "Register on %1"
 msgstr "Registrér dig i %1"
 
-#: twikiplugins/NatSkin/templates/oopsauth.nat.tmpl:14
-msgid "Registered users can [%1[change]] and [%2[reset]] their passwords."
-msgstr ""
-"Allerede registrerede brugere kan [[%1][skifte]] og [[%2][nulstille]] deres "
-"passwords."
-
 #: data/TWiki/TWikiRegistration.txt:6
+#: twikiplugins/NatSkin/templates/oopsauth.nat.tmpl:14
 msgid "Registered users can [[%1][change]] and [[%2][reset]] their passwords."
 msgstr ""
 "Allerede registrerede brugere kan [[%1][skifte]] og [[%2][nulstille]] deres "
@@ -3322,8 +3359,8 @@ msgstr ""
 #: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:71
 msgid "S = Save, Q = Quiet save, K = Checkpoint, P = Preview, C = Cancel"
 msgstr ""
-"S = Gem (Save), Q = Gem uden notificering (Quiet save), K = Checkpoint, P = Udkast "
-"(Preview), C = Fortryd (Cancel)"
+"S = Gem (Save), Q = Gem uden notificering (Quiet save), K = Checkpoint, P = "
+"Udkast (Preview), C = Fortryd (Cancel)"
 
 #: twikiplugins/NatSkin/templates/edit.nat.tmpl:77
 #: twikiplugins/NatSkin/templates/edittopicactions.nat.tmpl:5
@@ -3527,7 +3564,7 @@ msgstr "Vælg alle"
 msgid "Set new topic parent"
 msgstr "Vælg ny side-forælder"
 
-#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:87
+#: twikiplugins/PatternSkin/templates/attachtables.pattern.tmpl:5
 msgid "Show attachments"
 msgstr "Vis vedhæftede filer"
 
@@ -3570,8 +3607,10 @@ msgid "Simple search"
 msgstr "Simpel søgning"
 
 #: twikiplugins/NatSkin/templates/oopsauth.nat.tmpl:18
-msgid "Simply fill out the *[[%1][TWikiRegistration]]* form. It only takes a minute."
-msgstr "Simply fill out the *[[%1][TWikiRegistration]]* form. It only takes a minute."
+msgid ""
+"Simply fill out the *[[%1][TWikiRegistration]]* form. It only takes a minute."
+msgstr ""
+"Simply fill out the *[[%1][TWikiRegistration]]* form. It only takes a minute."
 
 #: twikiplugins/NatSkin/data/Main/WebLinksForAdmins.txt:8
 #: twikiplugins/NatSkin/data/TWiki/WebLinksForAdmins.txt:8
@@ -3580,7 +3619,7 @@ msgstr "Site-præferencer"
 
 #: twikiplugins/NatSkin/templates/attachtables.nat.tmpl:25
 #: twikiplugins/NatSkin/templates/attachtables.nat.tmpl:4
-#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:91
+#: twikiplugins/PatternSkin/templates/attachtables.pattern.tmpl:9
 msgid "Size"
 msgstr "Størrelse"
 
@@ -3608,9 +3647,8 @@ msgid ""
 "actually *have* registered successfully."
 msgstr ""
 "Nogle e-mail-værktøjer har en fejl som gør at de sender den samme "
-"forespørgsel to gange når du klikker på et link. "
-"Såfremt dette er tilfældet er det muligt at du faktisk allerede "
-"*er* registreret succesfuldt."
+"forespørgsel to gange når du klikker på et link. Såfremt dette er tilfældet "
+"er det muligt at du faktisk allerede *er* registreret succesfuldt."
 
 #: templates/registernotify.tmpl:14
 #: twikiplugins/ClassicSkin/templates/registernotify.classic.tmpl:14
@@ -3864,7 +3902,8 @@ msgstr "Aktiveringskoden %1 er forkert."
 
 #: twikiplugins/PatternSkin/templates/moveattachment.pattern.tmpl:38
 msgid "The attachment and any history will be moved to the new topic."
-msgstr "Den vedhæftede fil og tilhørende historik vil blive flyttet til den nye side."
+msgstr ""
+"Den vedhæftede fil og tilhørende historik vil blive flyttet til den nye side."
 
 #: templates/messages.tmpl:404
 #: twikiplugins/NatSkin/templates/oopsleaseconflict.nat.tmpl:22
@@ -3919,7 +3958,8 @@ msgstr "The following is your encrypted password entry:"
 
 #: templates/messages.tmpl:355
 msgid "The following topics are locked for edit, and cannot be moved:"
-msgstr "De følgende sider er låst (de editeres i øjeblikket), og kan ikke flyttes:"
+msgstr ""
+"De følgende sider er låst (de editeres i øjeblikket), og kan ikke flyttes:"
 
 #: templates/messages.tmpl:361
 msgid "The following topics refer to topics in this web, but are being edited:"
@@ -4012,7 +4052,8 @@ msgstr "Der er problemer med at omdøbe dette web:"
 #: templates/messages.tmpl:199
 #: twikiplugins/NatSkin/templates/messages.nat.tmpl:142
 msgid "There has been a problem adding your user id to the Password system."
-msgstr "Der opstod et problem med at tilføje dit brugernavn til password-systemet."
+msgstr ""
+"Der opstod et problem med at tilføje dit brugernavn til password-systemet."
 
 #: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:61
 msgid "There is no size limit for uploaded files."
@@ -4020,7 +4061,8 @@ msgstr "Der er ingen begrænsning for størrelsen på vedhæftede filer."
 
 #: templates/messages.tmpl:305
 msgid "There should be a line that includes %1, look for %2 (or %3)"
-msgstr "Der formodes at være en linie der inkluderer %1, se efter %2 (eller %3)"
+msgstr ""
+"Der formodes at være en linie der inkluderer %1, se efter %2 (eller %3)"
 
 #: twikiplugins/NatSkin/templates/oopsnoformdef.nat.tmpl:11
 msgid ""
@@ -4093,7 +4135,8 @@ msgstr "Dette er en automatisk e-mail notifikation fra %1."
 #: templates/registernotifyadmin.tmpl:8
 #: twikiplugins/ClassicSkin/templates/registernotifyadmin.classic.tmpl:8
 msgid "This is an automated e-mail notification of user registration in %1."
-msgstr "Dette er en automatisk e-mail notifikation om en brugerregistrering i %1."
+msgstr ""
+"Dette er en automatisk e-mail notifikation om en brugerregistrering i %1."
 
 #: twikiplugins/NatSkin/templates/mailnotify.nat.tmpl:7
 msgid "This is an automated email from %1."
@@ -4111,7 +4154,8 @@ msgstr ""
 msgid ""
 "This name has been chosen so it doesn't conflict with any other topics "
 "already in the %1 web."
-msgstr "Dette navn er valgt så det ikke konflikter med andre sidenavne i %1-webbet."
+msgstr ""
+"Dette navn er valgt så det ikke konflikter med andre sidenavne i %1-webbet."
 
 #: templates/messages.tmpl:310
 msgid "This requires the form definition to be present."
@@ -4139,7 +4183,7 @@ msgstr ""
 "Dette sidenavn anbefales ikke, da det ikke kan linkes automatisk. Se %1 for "
 "detaljer"
 
-#: twikiplugins/PatternSkin/templates/view.printpattern.tmpl:34
+#: twikiplugins/PatternSkin/templates/viewprint.pattern.tmpl:34
 msgid "This topic:"
 msgstr "Denne side:"
 
@@ -4162,15 +4206,18 @@ msgstr "Til"
 
 #: twikiplugins/PatternSkin/templates/preview.pattern.tmpl:62
 msgid "To *cancel* and discard any changes: Press the [Discard] button."
-msgstr "For at *fortryde* og bortkaste alle ændringer: Klik på [Fortryd] knappen."
+msgstr ""
+"For at *fortryde* og bortkaste alle ændringer: Klik på [Fortryd] knappen."
 
 #: twikiplugins/PatternSkin/templates/preview.pattern.tmpl:60
 msgid "To *save* changes: Press the [Save Changes] button."
 msgstr "For at *gemme* ændringerne: Klik på [Gem opdateringer] knappen."
 
 #: twikiplugins/NatSkin/templates/oopslockedrename.nat.tmpl:11
-msgid "To cancel go <a href=\"javscript:history.back()\">back</a> in your browser."
-msgstr "To cancel go <a href=\"javscript:history.back()\">back</a> in your browser."
+msgid ""
+"To cancel go <a href=\"javscript:history.back()\">back</a> in your browser."
+msgstr ""
+"To cancel go <a href=\"javscript:history.back()\">back</a> in your browser."
 
 #: twikiplugins/NatSkin/templates/oopslocked.nat.tmpl:11
 msgid ""
@@ -4181,7 +4228,8 @@ msgstr ""
 "browser."
 
 #: templates/renameweb.tmpl:10
-msgid "To delete this web: move this web to the Trash web by renaming it to %1."
+msgid ""
+"To delete this web: move this web to the Trash web by renaming it to %1."
 msgstr "Flyt dette web til Trash webbet for at slette det (omdøb det til %1)."
 
 #: twikiplugins/NatSkin/templates/oopslocked.nat.tmpl:9
@@ -4202,19 +4250,21 @@ msgstr "For at fortsætte med at editere siden alligevel, klik "
 
 #: twikiplugins/ClassicSkin/templates/oopsleaseconflict.classic.tmpl:13
 msgid "To edit the topic anyway, hit 'Edit Anyway'."
-msgstr "For at fortsætte med at editere siden alligevel, klik på 'Editér alligevel'."
+msgstr ""
+"For at fortsætte med at editere siden alligevel, klik på 'Editér alligevel'."
 
 #: twikiplugins/NatSkin/templates/oopsleaseconflict.nat.tmpl:35
 msgid "To edit the topic anyway, hit 'Edit&nbsp;Anyway'."
-msgstr "For at fortsætte med at editere siden alligevel, klik på 'Editér alligevel'."
+msgstr ""
+"For at fortsætte med at editere siden alligevel, klik på 'Editér alligevel'."
 
 #: twikiplugins/NatSkin/templates/oopsauth.nat.tmpl:6
 msgid ""
 "To edit topics on this %1 collaborative web, you must be registered as a "
 "user."
 msgstr ""
-"For at kunne editere siderne på dette %1 TWikiSite, skal du have et brugernavn "
-"og et password."
+"For at kunne editere siderne på dette %1 TWikiSite, skal du have et "
+"brugernavn og et password."
 
 #: twikiplugins/NatSkin/templates/oopslocked.nat.tmpl:8
 #: twikiplugins/NatSkin/templates/oopslockedrename.nat.tmpl:9
@@ -4284,7 +4334,7 @@ msgstr "Sidens meta-data"
 msgid "Topic Save Error"
 msgstr "Fejl ved skrivning af siden"
 
-#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:102
+#: twikiplugins/PatternSkin/templates/attachtables.pattern.tmpl:20
 msgid "Topic attachments"
 msgstr "Vedhæftede filer"
 
@@ -4359,10 +4409,12 @@ msgstr "Sider som i øjeblikket redigeres af andre brugere i %1-webbet:"
 msgid ""
 "Topics which refer to this web and are are currently being edited by other "
 "users:"
-msgstr "Sider, som referer til dette web, og som lige nu redigeres af andre brugere:"
+msgstr ""
+"Sider, som referer til dette web, og som lige nu redigeres af andre brugere:"
 
 #: twikiplugins/PatternSkin/templates/renamewebbase.pattern.tmpl:47
-msgid "Topics which refer to this web that you do not have permission to change:"
+msgid ""
+"Topics which refer to this web that you do not have permission to change:"
 msgstr ""
 "Sider, der refererer til dette web, og som du ikke har rettigheder til at "
 "ændre:"
@@ -4517,7 +4569,7 @@ msgid "Variation:"
 msgstr "Variation:"
 
 #: twikiplugins/NatSkin/templates/attachtables.nat.tmpl:25
-#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:144
+#: twikiplugins/PatternSkin/templates/attachtables.pattern.tmpl:62
 msgid "Version"
 msgstr "Version"
 
@@ -4698,8 +4750,8 @@ msgstr ""
 
 #: twikiplugins/NatSkin/templates/attachtables.nat.tmpl:25
 #: twikiplugins/NatSkin/templates/attachtables.nat.tmpl:4
-#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:144
-#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:91
+#: twikiplugins/PatternSkin/templates/attachtables.pattern.tmpl:62
+#: twikiplugins/PatternSkin/templates/attachtables.pattern.tmpl:9
 msgid "Who"
 msgstr "Hvem"
 
@@ -4776,7 +4828,8 @@ msgstr "Du forsøger at udføre handlingen %1 på en side der ikke eksisterer."
 #: templates/messages.tmpl:469
 #: twikiplugins/NatSkin/templates/messages.nat.tmpl:327
 msgid "You are trying to %1 an attachment that does not exist."
-msgstr "Du forsøger at udføre handlingen %1 på en vedhæftet fil der ikke eksisterer."
+msgstr ""
+"Du forsøger at udføre handlingen %1 på en vedhæftet fil der ikke eksisterer."
 
 #: twikiplugins/NatSkin/templates/messages.nat.tmpl:315
 msgid "You are trying to '%1' a topic in a web that does not exist."
@@ -4795,8 +4848,8 @@ msgid ""
 "You can [[%1][create a new web]] if you have the permission. Contact %2 if "
 "you have any questions."
 msgstr ""
-"Du kan [[%1][oprette et nyt web]], hvis du har rettigheden til det.  "
-"Kontakt %2 hvis du har spørgsmål."
+"Du kan [[%1][oprette et nyt web]], hvis du har rettigheden til det.  Kontakt "
+"%2 hvis du har spørgsmål."
 
 #: twikiplugins/NatSkin/templates/messages.nat.tmpl:102
 msgid "You can also use the names of the standard HTML colors"
@@ -4865,7 +4918,8 @@ msgstr ""
 
 #: templates/messages.tmpl:148
 msgid "You may need to close your browser to make this change take effect."
-msgstr "Alle browservinduer skal muligvis lukkes ned før denne ændring slår igennem."
+msgstr ""
+"Alle browservinduer skal muligvis lukkes ned før denne ændring slår igennem."
 
 #: twikiplugins/NatSkin/templates/oopssaveerr.nat.tmpl:7
 msgid ""
@@ -4944,7 +4998,9 @@ msgstr ""
 msgid ""
 "Your login name is usually the %1, like *<nop>TomSawyer* and _not_ Tom "
 "Sawyer or tom or sawyer."
-msgstr "Dit loginnavn er som regel et %1, som *<nop>JensHansen* og _ikke_ Jens Hansen eller jens eller hansen."
+msgstr ""
+"Dit loginnavn er som regel et %1, som *<nop>JensHansen* og _ikke_ Jens "
+"Hansen eller jens eller hansen."
 
 #: templates/mailresetpassword.tmpl:10
 #: twikiplugins/ClassicSkin/templates/mailresetpassword.classic.tmpl:10
@@ -4957,7 +5013,8 @@ msgstr "Dit password:"
 
 #: templates/registernotify.tmpl:12
 #: twikiplugins/ClassicSkin/templates/registernotify.classic.tmpl:12
-msgid "Your personal %1 topic is located at %2. You can customize it as you like:"
+msgid ""
+"Your personal %1 topic is located at %2. You can customize it as you like:"
 msgstr ""
 "Din personlige side i %1 findes på adressen %2. Du er velkommen til at "
 "tilpasse den efter dine egne behov og ønsker:"
@@ -4994,7 +5051,8 @@ msgstr ""
 "og bed om at få dette gjort."
 
 #: twikiplugins/PatternSkin/templates/settings.pattern.tmpl:36
-msgid "[multiple of 3 spaces] * [space] Set [space] VARIABLENAME [space] = [value]"
+msgid ""
+"[multiple of 3 spaces] * [space] Set [space] VARIABLENAME [space] = [value]"
 msgstr ""
 "[3 mellemrum (et antal gange)] * [mellemrum] Set [mellemrum] VARIABELNAVN "
 "[mellemrum] = [værdi]"
@@ -5064,7 +5122,7 @@ msgstr "avanceret søgning"
 msgid "and"
 msgstr "og"
 
-#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:99
+#: twikiplugins/PatternSkin/templates/attachtables.pattern.tmpl:17
 msgid "change, update, previous revisions, move, delete..."
 msgstr "ændr, opdatér, se tidligere versioner, flyt, slet..."
 
@@ -5145,7 +5203,7 @@ msgstr "finder referencer (kun i _<nop/>%1-webbet_)"
 msgid "looking for references in _all public webs_"
 msgstr "finder referencer (i _alle offentlige webs_)"
 
-#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:99
+#: twikiplugins/PatternSkin/templates/attachtables.pattern.tmpl:17
 msgid "manage"
 msgstr "opdatér"
 
@@ -5291,7 +5349,9 @@ msgstr "%1 for at komme i gang med at arbejde med det nye web"
 
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:22
 msgid "title='Attach an image or document to this topic' accesskey='a'>&Attach"
-msgstr "title='Vedhæft fx et billede eller et dokument til denne side' accesskey='a'>Vedhæft (&A) "
+msgstr ""
+"title='Vedhæft fx et billede eller et dokument til denne side' "
+"accesskey='a'>Vedhæft (&A) "
 
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:7
 msgid "title='Create new topic' accesskey='c'>&Create"
@@ -5301,7 +5361,9 @@ msgstr "title='Opret ny side' accesskey='c'>Opret (&C)"
 msgid ""
 "title='Delete or rename this topic; set parent topic; view and compare "
 "revisions' accesskey='m'>&More topic actions"
-msgstr "title='Slet eller omdøb denne side; sæt side-forælder; se og sammenlign revisioner' accesskey='m'>Flere side-&muligheder"
+msgstr ""
+"title='Slet eller omdøb denne side; sæt side-forælder; se og sammenlign "
+"revisioner' accesskey='m'>Flere side-&muligheder"
 
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:10
 msgid "title='Edit this topic text' accesskey='e'>&Edit"
@@ -5320,12 +5382,18 @@ msgid "title='Printable version of this topic' accesskey='p'>&Printable"
 msgstr "title='Printbar version af denne side' accesskey='p'>&Printable"
 
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:33
-msgid "title='Search all webs for topics that link to here' accesskey='l'>A&ll Webs"
-msgstr "title='Søg i alle webs efter sider der linker til denne side ' accesskey='l'>A&lle webs"
+msgid ""
+"title='Search all webs for topics that link to here' accesskey='l'>A&ll Webs"
+msgstr ""
+"title='Søg i alle webs efter sider der linker til denne side ' "
+"accesskey='l'>A&lle webs"
 
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:31
-msgid "title='Search the %1 Web for topics that link to here' accesskey='b'>We&b"
-msgstr "title='Søg i %1-webbet efter sider der linker til denne side ' accesskey='b'>We&b"
+msgid ""
+"title='Search the %1 Web for topics that link to here' accesskey='b'>We&b"
+msgstr ""
+"title='Søg i %1-webbet efter sider der linker til denne side ' "
+"accesskey='b'>We&b"
 
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:41
 msgid "title='View raw text without formatting' accesskey='r'>&Raw View"
@@ -5375,7 +5443,7 @@ msgstr "value='Quiet save' accesskey='q'"
 msgid "value='Save' accesskey='s'"
 msgstr "value='Save' accesskey='s'"
 
-#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:148
+#: twikiplugins/PatternSkin/templates/attachtables.pattern.tmpl:66
 msgid "view"
 msgstr "vis"
 
@@ -5389,3 +5457,7 @@ msgstr ""
 "dit password. Hvis ingen af dine registrerede e-mail-adresser er valide, og "
 "du har glemt dit password, kontakt da %1."
 
+#~ msgid "Registered users can [%1[change]] and [%2[reset]] their passwords."
+#~ msgstr ""
+#~ "Allerede registrerede brugere kan [[%1][skifte]] og [[%2][nulstille]] "
+#~ "deres passwords."

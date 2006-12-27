@@ -339,12 +339,12 @@ msgstr "(移動附件)"
 msgid "(no parent, orphaned topic)"
 msgstr "(無父主題，孤立文章)"
 
-#: lib/TWiki/UI/Manage.pm:1031 lib/TWiki/UI/Manage.pm:1053
-#: lib/TWiki/UI/Manage.pm:606 lib/TWiki/UI/Manage.pm:609
-#: lib/TWiki/UI/Manage.pm:612 lib/TWiki/UI/Manage.pm:615
-#: lib/TWiki/UI/Manage.pm:859 lib/TWiki/UI/Manage.pm:882
-#: lib/TWiki/UI/Manage.pm:991 lib/TWiki/UI/Manage.pm:994
-#: lib/TWiki/UI/Manage.pm:997
+#: lib/TWiki/UI/Manage.pm:1002 lib/TWiki/UI/Manage.pm:1005
+#: lib/TWiki/UI/Manage.pm:1039 lib/TWiki/UI/Manage.pm:1061
+#: lib/TWiki/UI/Manage.pm:614 lib/TWiki/UI/Manage.pm:617
+#: lib/TWiki/UI/Manage.pm:620 lib/TWiki/UI/Manage.pm:623
+#: lib/TWiki/UI/Manage.pm:867 lib/TWiki/UI/Manage.pm:890
+#: lib/TWiki/UI/Manage.pm:999
 msgid "(none)"
 msgstr "(無)"
 
@@ -401,7 +401,7 @@ msgstr "(單字元名稱)"
 msgid "(single character last name)"
 msgstr "(單字元姓氏)"
 
-#: lib/TWiki/UI/Manage.pm:842
+#: lib/TWiki/UI/Manage.pm:850
 msgid "(skipped)"
 msgstr "(忽略)"
 
@@ -682,8 +682,8 @@ msgid "Access keys"
 msgstr "訪問快捷鍵"
 
 #: twikiplugins/NatSkin/templates/attachtables.nat.tmpl:4
-#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:144
-#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:91
+#: twikiplugins/PatternSkin/templates/attachtables.pattern.tmpl:62
+#: twikiplugins/PatternSkin/templates/attachtables.pattern.tmpl:9
 #: twikiplugins/PatternSkin/templates/changeform.pattern.tmpl:12
 msgid "Action"
 msgstr "變更"
@@ -849,7 +849,7 @@ msgstr "添加一個新檔"
 
 #: twikiplugins/NatSkin/templates/attachtables.nat.tmpl:25
 #: twikiplugins/NatSkin/templates/attachtables.nat.tmpl:4
-#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:91
+#: twikiplugins/PatternSkin/templates/attachtables.pattern.tmpl:9
 msgid "Attachment"
 msgstr "附件"
 
@@ -858,7 +858,7 @@ msgstr "附件"
 msgid "Attachment '%1' does not exist"
 msgstr "附件'%1'不存在"
 
-#: lib/TWiki/UI/Manage.pm:323
+#: lib/TWiki/UI/Manage.pm:331
 msgid "Attachment already exists in new topic"
 msgstr "在新主題中附件已經存在"
 
@@ -867,7 +867,7 @@ msgstr "在新主題中附件已經存在"
 msgid "Attachment delete failed"
 msgstr "附件刪除失敗"
 
-#: lib/TWiki/UI/Manage.pm:303
+#: lib/TWiki/UI/Manage.pm:311
 msgid "Attachment does not exist"
 msgstr "附件不存在"
 
@@ -903,7 +903,7 @@ msgstr "附件將不在主題的查看頁中顯示"
 msgid "Attention"
 msgstr "注意"
 
-#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:133
+#: twikiplugins/PatternSkin/templates/attachtables.pattern.tmpl:51
 msgid "Attribute"
 msgstr "屬性"
 
@@ -1285,9 +1285,9 @@ msgstr "顏色 %1包含非法的格式"
 
 #: twikiplugins/NatSkin/templates/attachtables.nat.tmpl:25
 #: twikiplugins/NatSkin/templates/attachtables.nat.tmpl:4
-#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:144
 #: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:66
-#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:91
+#: twikiplugins/PatternSkin/templates/attachtables.pattern.tmpl:62
+#: twikiplugins/PatternSkin/templates/attachtables.pattern.tmpl:9
 msgid "Comment"
 msgstr "評論"
 
@@ -1466,8 +1466,8 @@ msgstr ""
 
 #: twikiplugins/NatSkin/templates/attachtables.nat.tmpl:25
 #: twikiplugins/NatSkin/templates/attachtables.nat.tmpl:4
-#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:144
-#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:91
+#: twikiplugins/PatternSkin/templates/attachtables.pattern.tmpl:62
+#: twikiplugins/PatternSkin/templates/attachtables.pattern.tmpl:9
 msgid "Date"
 msgstr "日期"
 
@@ -2054,7 +2054,7 @@ msgstr "説明"
 msgid "Hide attachment in normal topic view."
 msgstr "附件將不在主題的查看頁中顯示"
 
-#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:87
+#: twikiplugins/PatternSkin/templates/attachtables.pattern.tmpl:5
 msgid "Hide attachments"
 msgstr "隱藏附件"
 
@@ -2075,7 +2075,7 @@ msgstr "隱藏説明"
 msgid "Hiding Attachments"
 msgstr "隱藏附件"
 
-#: twikiplugins/PatternSkin/templates/view.printpattern.tmpl:36
+#: twikiplugins/PatternSkin/templates/viewprint.pattern.tmpl:36
 msgid "History:"
 msgstr "歷史:"
 
@@ -2625,7 +2625,7 @@ msgstr ""
 msgid "MySidebar"
 msgstr ""
 
-#: lib/TWiki/Search.pm:794
+#: lib/TWiki/Search.pm:795
 msgid "NEW"
 msgstr "新"
 
@@ -3185,12 +3185,8 @@ msgstr "註冊"
 msgid "Register on %1"
 msgstr "註冊"
 
-#: twikiplugins/NatSkin/templates/oopsauth.nat.tmpl:14
-#, fuzzy
-msgid "Registered users can [%1[change]] and [%2[reset]] their passwords."
-msgstr "註冊用戶可以[[%1][修改密碼]] 和[[%2][重設密碼]]"
-
 #: data/TWiki/TWikiRegistration.txt:6
+#: twikiplugins/NatSkin/templates/oopsauth.nat.tmpl:14
 msgid "Registered users can [[%1][change]] and [[%2][reset]] their passwords."
 msgstr "註冊用戶可以[[%1][修改密碼]] 和[[%2][重設密碼]]"
 
@@ -3578,7 +3574,7 @@ msgstr "設置所有"
 msgid "Set new topic parent"
 msgstr "設置新父主題"
 
-#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:87
+#: twikiplugins/PatternSkin/templates/attachtables.pattern.tmpl:5
 msgid "Show attachments"
 msgstr "顯示附件"
 
@@ -3633,7 +3629,7 @@ msgstr "設置"
 
 #: twikiplugins/NatSkin/templates/attachtables.nat.tmpl:25
 #: twikiplugins/NatSkin/templates/attachtables.nat.tmpl:4
-#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:91
+#: twikiplugins/PatternSkin/templates/attachtables.pattern.tmpl:9
 msgid "Size"
 msgstr "大小"
 
@@ -4156,7 +4152,7 @@ msgid ""
 "automatically. See %1 for details"
 msgstr "主題名不被建議，因為無法自動鏈結，細節請參考：%1"
 
-#: twikiplugins/PatternSkin/templates/view.printpattern.tmpl:34
+#: twikiplugins/PatternSkin/templates/viewprint.pattern.tmpl:34
 msgid "This topic:"
 msgstr "本主題:"
 
@@ -4304,7 +4300,7 @@ msgstr "主題標題"
 msgid "Topic Save Error"
 msgstr "主題保存錯誤"
 
-#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:102
+#: twikiplugins/PatternSkin/templates/attachtables.pattern.tmpl:20
 msgid "Topic attachments"
 msgstr "主題附件"
 
@@ -4545,7 +4541,7 @@ msgid "Variation:"
 msgstr ""
 
 #: twikiplugins/NatSkin/templates/attachtables.nat.tmpl:25
-#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:144
+#: twikiplugins/PatternSkin/templates/attachtables.pattern.tmpl:62
 msgid "Version"
 msgstr "版本"
 
@@ -4735,8 +4731,8 @@ msgstr ""
 
 #: twikiplugins/NatSkin/templates/attachtables.nat.tmpl:25
 #: twikiplugins/NatSkin/templates/attachtables.nat.tmpl:4
-#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:144
-#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:91
+#: twikiplugins/PatternSkin/templates/attachtables.pattern.tmpl:62
+#: twikiplugins/PatternSkin/templates/attachtables.pattern.tmpl:9
 msgid "Who"
 msgstr "誰"
 
@@ -5079,7 +5075,7 @@ msgstr "高級搜索"
 msgid "and"
 msgstr ""
 
-#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:99
+#: twikiplugins/PatternSkin/templates/attachtables.pattern.tmpl:17
 msgid "change, update, previous revisions, move, delete..."
 msgstr "變更, 更新, 前一個版本, 移動, 刪除……"
 
@@ -5165,7 +5161,7 @@ msgstr "查看在 _%1 目錄_ 中的配置"
 msgid "looking for references in _all public webs_"
 msgstr "查看 _所有目錄_ 中的配置"
 
-#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:99
+#: twikiplugins/PatternSkin/templates/attachtables.pattern.tmpl:17
 msgid "manage"
 msgstr "管理"
 
@@ -5426,7 +5422,7 @@ msgstr "value='安靜保存' accesskey='q'"
 msgid "value='Save' accesskey='s'"
 msgstr "value='保存' accesskey='s'"
 
-#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:148
+#: twikiplugins/PatternSkin/templates/attachtables.pattern.tmpl:66
 msgid "view"
 msgstr "查看"
 
@@ -5436,6 +5432,10 @@ msgid ""
 "your password. If none of your registered e-mail addresses is valid, and you "
 "have forgotten your password, contact %1."
 msgstr ""
+
+#, fuzzy
+#~ msgid "Registered users can [%1[change]] and [%2[reset]] their passwords."
+#~ msgstr "註冊用戶可以[[%1][修改密碼]] 和[[%2][重設密碼]]"
 
 #~ msgid "&Attach"
 #~ msgstr "附件"
