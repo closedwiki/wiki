@@ -767,7 +767,8 @@ sub emitTable {
                 $attr->{bgcolor} = $headerBg unless ( $headerBg =~ /none/i );
                 $attr->{maxCols} = $maxCols;
 
-                if ($isSorted) {
+                if ( defined $sortCol && $colCount == $sortCol &&
+                     defined $requestedTable && $requestedTable == $tableCount ) {
                     if ( $currentSortDirection == $sortDirection{'ASCENDING'} ) {
                         $tableAnchor =
                           CGI::a( { name => 'sorted_table' }, '<!-- -->' )
@@ -780,12 +781,13 @@ sub emitTable {
                           . CGI::span( { title => 'Sorted descending' },
                             $downchar );
                     }
-                }
-                if ( $currentSortDirection == $sortDirection{'NONE'} ) {
-                    $tableAnchor =
-                      CGI::a( { name => 'sorted_table' }, '<!-- -->' );
-                }
 
+                    if ( $currentSortDirection == $sortDirection{'NONE'} ) {
+                        $tableAnchor =
+                          CGI::a( { name => 'sorted_table' }, '<!-- -->' );
+                    }
+                }
+                
                 my $linkColorStyle = '';
                 if ($headerColor) {
 
