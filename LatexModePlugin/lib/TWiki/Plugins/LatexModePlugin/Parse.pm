@@ -734,7 +734,7 @@ sub extractBlocks {
             $c=~s/%\p{IsUpper}+?\{.*\}%//gs; # take out all twiki tags
             # should probably look for nested tags
             
-            $b = extractBlocks($b) if ($c=~m/\{/);
+            $b = extractBlocks($b) if ($c=~m/\{.*\}/);
             $txt .= $b;
         } else {
             (my $c=$b)=~s/%BEGINLATEX.*?ENDLATEX%//gs;
@@ -1054,7 +1054,7 @@ sub convertEnvironment
         my $env = $block;
         $env =~ s!\\begin\{$bname\*?\}(\{\d+\})?!!;
         $env =~ s!\\end\{$bname\*?\}!!;
-        $txt .= "\n<h1>References</h1>\n<div class=\"bibtex\"><table><tr>";
+        $txt .= "\n\n---+ References\n\n<div class=\"bibtex\"><table><tr>";
         my $cnt = 1;
         while ($env =~ m!\\bibitem\{(.*?)\}!g) {
             my $t = "<tr valign=\"top\"><td>[<a name=\"$1\">".$cnt."</a>] </td>\n<td> ";

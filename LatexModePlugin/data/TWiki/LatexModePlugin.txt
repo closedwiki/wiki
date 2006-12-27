@@ -1,7 +1,7 @@
 %META:TOPICINFO{author="ScottHoge" date="1153937035" format="1.1" reprev="1.2" version="1.2"}%
 ---+!! <nop>%TOPIC%
 
-This <nop>LaTeX Mode TWiki Plugin allows you to include <nop>LaTeX mark up commands within a TWiki page.  It uses external programs (specifically latex, dvipng, or dvips-and-convert) to generate =png= images from the mark up.  These images are then included in the rendered TWiki page.  The first time a particular image is generated, there may be a significant lag in page rendering as the images are generated on the server.  Once rendered, the image is saved as an attached file for the page, so subsequent viewings will not require re-renders.  When you remove a math expression from a page, its image is deleted.  
+This <nop>LaTeX Mode TWiki Plugin allows you to include <nop>LaTeX mark up commands within a TWiki page.  It uses external programs (specifically latex, dvipng or dvips-and-convert, or mimetex) to generate =png= or =gif= images from the mark up.  These images are then included in the rendered TWiki page.  The first time a particular image is generated, there may be a significant lag in page rendering as the images are generated on the server.  Once rendered, the image is saved as an attached file for the page, so subsequent viewings will not require re-renders.  When you remove a math expression from a page, its image is deleted.  
 
 This plugin expands the functionality provided by the TWiki:Plugins.MathModePlugin.
 
@@ -64,7 +64,7 @@ Additional options can be included to modify the rendered result.  These include
 | bgcolor | --- | 'white' | sets background color (details below) |
 | color | --- | 'black' | sets foreground font color (details below) |
 | attachment | alpha-numeric | --- | allows one to couple the latex command with an attached file.  Useful for latex graphics commands.  |
-| engine | {"", "ps", "pdf"} | "" | switch to dynamically force the rendering engine to use the default rendering (e.g. =dvipng=),  =dvips+convert=, or =pdflatex+convert= for <nop>LaTeX packages than need it, e.g. tikz. |
+| engine | {"", "dvipng", "ps", "pdf", "mimetex"} | "" | switch to dynamically switch the rendering engine between the installation default (""), =dvipng=,  =dvips+convert=, =pdflatex+convert=, or =mimetex= for <nop>LaTeX packages than need it, e.g. tikz. (details below) |
 </div>
 
 For example, to declare an equation to be numbered by TWiki (not in the <nop>LaTeX image) with a larger font size and in red, use the following syntax:
@@ -161,18 +161,20 @@ extension.  This is implemented in the Plugin as well, so one could type:
 and the plugin will search for an attachment with extension '.eps',
 '.eps.gz', '.pdf', '.png', or '.jpg'.  The first extension match will be
 used, and the rendering engine that can recognize the attachment will also
-be automatically determined.  So for the example above, if a file 'fig1.eps
+be automatically determined.  So for the example above, if a file 'fig1.eps'
 is attached to the topic, it will be used as the attachment and
 dvips+convert will be automatically chosen as the rendering engine.
 
 
----++++ Switching between =dvipng=, =dvips=, or =pdflatex= rendering on the fly
+---++++ Switching the rendering on the fly
 
-v3.3 introduced the ability to switch rendering dynamically between dvipng,
-dvips+convert, and pdflatex+convert.  Some latex packages are not supported
-by dvipng, for example [[http://sourceforge.net/projects/pgf/][Ti<em>k</em>Z and PGF]].  Rather than force all rendering to use a slower background
-rendering engine, this switch allows one to use dvipng rendering as the
-default, but fall back to 'ps' or 'pdf' intermediate files in certain cases.
+v3.3 introduced the ability to switch rendering dynamically between
+=dvipng=, =dvips+convert=, and =pdflatex+convert=.  Some latex packages are not supported by the preferred
+method =dvipng=, for example
+[[http://sourceforge.net/projects/pgf/][Ti<em>k</em>Z and PGF]].  Rather than force
+all rendering to use a slower background rendering engine, this switch
+allows one to use dvipng rendering as the default, but fall back to 'ps' or
+'pdf' intermediate files in certain cases.
 
 <table>
 <tr><td width="70%">
@@ -314,14 +316,29 @@ these plugin settings write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<
 
 First, confirm that the external software needed by the plugin is installed on the TWiki server.  This includes:
 	* The =Digest::MD5= and =Image::Info= perl modules.
-	* A working <nop>LaTeX implementation ([[http://www.tug.org/tetex/][tetex]] and <nop>[[http://www.miktex.org/][MikTeX]] are two popular choices)
-	* [[http://sourceforge.net/projects/dvipng/][dvipng]], a fast dvi to png converter
-	* the [[http://www.cs.wisc.edu/~ghost/][Ghostscript]] package
-	* the 'convert' executable from either <nop>[[http://www.imagemagick.org/][ImageMagick]] or <nop>[[http://www.graphicsmagick.org/][GraphicsMagick]]
+	* A mechanism to convert !LaTeX markup to images.  This is either
+		* A working <nop>LaTeX implementation ([[http://www.tug.org/tetex/][tetex]] and <nop>[[http://www.miktex.org/][MikTeX]] are two popular choices)
+		* the 'convert' executable from either <nop>[[http://www.imagemagick.org/][ImageMagick]] or <nop>[[http://www.graphicsmagick.org/][GraphicsMagick]]
+		* [[http://sourceforge.net/projects/dvipng/][dvipng]] and/or [[http://www.cs.wisc.edu/~ghost/][Ghostscript]]
+	* or
+		* [[http://www.forkosh.com/mimetex.html][mimetex]]
 
-Rendering can be performed by _either_ (=dvipng=) or (=dvips= and =convert=).
-=dvipng= is significantly faster.  However, the =tweakinline= processing
-currently (v 2.5 and above) uses =convert=.  Installation requires at least one, and best results will be seen if all are installed.
+
+Rendering can be performed by (=latex= and =dvipng=) or (=latex= and =dvips=
+and =convert=) or (=pdflatex= and =convert=) or (=mimetex=).  The first
+three options allow one to include almost any !LaTeX markup in a TWiki
+topic, whereas =mimetex= has very limited functionality.  Among the first
+three options, =dvipng= is the fastest by a significant margin.  The
+=tweakinline= processing (v2.5 and above) to align the baseline of !LaTeX
+expressions with HTML text uses =convert=.
+
+=mimetex= can be used in server environments where a full !LaTeX
+installation is impractical (e.g. TWiki:Codev.TWikiOnMemoryStick).  mimetex
+provides rendering of equations independently of external font files.
+This provides a very lightweight and fast mechanism to show equations.  
+However, the number of colors is limited to 4 (black, red, blue, green)
+and only the mathmode and picture !LaTeX environments are supported.
+Also, the preamble, density, and gamma settings are ignored.
 
 Second,
 	* Download the ==%TOPIC%.zip== file from the Plugin web %BR%
@@ -343,15 +360,18 @@ Second,
       | ==pub/TWiki/LatexModePlugin/expl-v1.4.png== | example image of rendered latex |
 
 Finally, customize the installation specific variables.
-	* Set the local paths of =latex=, =dvips= and =convert=.  This can be done by adding the following lines to =lib/LocalSite.cfg= or =lib/TWiki.cfg=.
+	* Set the local disk paths for the rendering methods employed.  This can be done by copying the needed lines from the following list to =lib/LocalSite.cfg= or =lib/TWiki.cfg=.
 		*  $TWiki::cfg{Plugins}{LatexModePlugin}{latex} = '/usr/bin/latex';
+		*  $TWiki::cfg{Plugins}{LatexModePlugin}{pdflatex} = '/usr/bin/pdflatex';
 		*  $TWiki::cfg{Plugins}{LatexModePlugin}{dvips} = '/usr/bin/dvips';
 		*  $TWiki::cfg{Plugins}{LatexModePlugin}{dvipng} = '/usr/bin/dvipng';
 		*  $TWiki::cfg{Plugins}{LatexModePlugin}{convert} = '/usr/X11R6/bin/convert';
+		*  $TWiki::cfg{Plugins}{LatexModePlugin}{mimetex} = '/usr/bin/mimetex';
 	* Modify the following if needed. %BR% (These variables were introduced in version 2.4)
 		*  $TWiki::cfg{Plugins}{LatexModePlugin}{donotrenderlist} %BR% declare a comma-separated list of <nop>LaTeX commands that _will not be rendered_.  %BR% Default = ='input,include,catcode'=.
-		*  $TWiki::cfg{Plugins}{LatexModePlugin}{tweakinline} %BR% Turned off by default, setting this boolean variable to =1= will enable more complex in-line rendering.  See the TWiki:Plugins.LatexModePluginDev topic for more details.
+		*  $TWiki::cfg{Plugins}{LatexModePlugin}{tweakinline} %BR% Turned off by default, if this boolean variable to =1= the plugin will attempt to align the baseline of the rendered in-line math with the baseline of the HTML text.
 		*  $TWiki::cfg{Plugins}{LatexModePlugin}{bypassattach} %BR% Turned off by default, setting this boolean variable to =1= will force file creation to use direct file stores and bypass the saveAttach mechanism in TWiki4.  Saves a bit of processing overhead.
+		*  $TWiki::cfg{Plugins}{LatexModePlugins}{engine} %BR% This sets the default rendering engine %BR% Default: 'dvipng'
 
 ---+++ Security
 
@@ -390,7 +410,7 @@ This plugin is an enhanced version of the TWiki:Plugins.MathModePlugin maintaine
 	* equations, tables, and figures can be numbered, with automatic cross-links available
 	* if errors occur during the latex markup processing, they are reported during the editing =preview= screen, but not during the standard =view=.  The motivation for this is that, in general, _authors_ care about the error but _readers_ do not.
 	* as of version 2.5, one can force the recreation of all latex images in a topic.  To do this, add the following text (similar to raw text rendering) to the end of the URL: =?latex=rerender=.  E.g. changing =http<nop>://localhost/twiki/bin/view/TWiki/LatexModePlugin= to  =http<nop>://localhost/twiki/bin/view/TWiki/LatexModePlugin?latex=rerender= will force all of the images to be redrawn.
-	* as of version 2.6, one can bypass the file attachment code in Dakar.  TWiki 4.x.x and above is designed to accommodate non-filesystem-storage (i.e. databases) for attachments.  This plugin has supported this interface since v2.0.  However, using the TWiki4 attachment storage mechanism adds a significant delay in plugin response time.  So, a new configuration setting has been introduced to allow admins to bypass the TWiki4 interface and use direct file-system stores if they so choose.  To activate, set <verbatim>
+	* as of version 2.6, one can bypass the file attachment code in TWiki 4.x.x.  TWiki 4.x.x and above is designed to accommodate non-filesystem-storage (i.e. databases) for attachments.  This plugin has supported this interface since v2.0.  However, using the TWiki4 attachment storage mechanism adds a significant delay in plugin response time.  So, a new configuration setting has been introduced to allow admins to bypass the TWiki4 interface and use direct file-system stores if they so choose.  To activate, set <verbatim>
 	$TWiki::cfg{Plugins}{LatexModePlugin}{bypassattach} = 1;
 </verbatim> in =LocalSite.cfg=
 
@@ -405,8 +425,9 @@ This plugin is an enhanced version of the TWiki:Plugins.MathModePlugin maintaine
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.ScottHoge |
-|  Plugin Version: | 27 Nov 2006 (v 3.3) |
+|  Plugin Version: | 27 Dec 2006 (v 3.4) |
 |  Change History: | %ICON{warning}% v3.0 and above requires TWiki 4.x.x and above %ICON{warning}% <!-- versions below in reverse order --> |
+|  27 Dec 2006 (v 3.4) | added mimetex to the rendering engine list |
 |  27 Nov 2006 (v 3.35) | improved dynamic rendering engine to auto-select on graphics files |
 |  17 Nov 2006 (v 3.3) | added dynamic switching of rendering engine, more Parse bug fixes |
 |  06 Oct 2006 (v 3.2) | more bugs fixed: bgcolor option was missing from v3.0; verbatim mode fixed in Parse |
@@ -441,17 +462,3 @@ This plugin was created and tested on the 02 Sep 2004 version of TWiki, using <n
 
 __Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins, TWiki:Plugins.MathModePlugin
 
-%META:FILEATTACHMENT{name="latexc113535e68b2641860c0d29c3c07a390.png" attr="h" autoattached="1" comment="" date="1153937034" path="latexc113535e68b2641860c0d29c3c07a390.png" size="459" user="Main.ScottHoge" version="1"}%
-%META:FILEATTACHMENT{name="latexdf8cbc6cb4d63f342b27a8de06afb366.png" attr="h" autoattached="1" comment="" date="1153937035" path="latexdf8cbc6cb4d63f342b27a8de06afb366.png" size="580" user="Main.ScottHoge" version="1"}%
-%META:FILEATTACHMENT{name="latexcf7a88cf33e5fece0894c4baff80833e.png" attr="h" autoattached="1" comment="" date="1153937035" path="latexcf7a88cf33e5fece0894c4baff80833e.png" size="215" user="Main.ScottHoge" version="1"}%
-%META:FILEATTACHMENT{name="latex023eefb22eccb872a43f71e55adf55d6.png" attr="h" autoattached="1" comment="" date="1153937033" path="latex023eefb22eccb872a43f71e55adf55d6.png" size="340" user="Main.ScottHoge" version="1"}%
-%META:FILEATTACHMENT{name="latex3b0f35d7b18ed7931539276a1f61c87d.png" attr="h" autoattached="1" comment="" date="1153937034" path="latex3b0f35d7b18ed7931539276a1f61c87d.png" size="1699" user="Main.ScottHoge" version="1"}%
-%META:FILEATTACHMENT{name="latexc52bc609bded78299ef604f9266110ba.png" attr="h" autoattached="1" comment="" date="1153937034" path="latexc52bc609bded78299ef604f9266110ba.png" size="1621" user="Main.ScottHoge" version="1"}%
-%META:FILEATTACHMENT{name="latex303abc4184b439b709dcefbc28d2ac3c.png" attr="h" autoattached="1" comment="" date="1153937035" path="latex303abc4184b439b709dcefbc28d2ac3c.png" size="569" user="Main.ScottHoge" version="1"}%
-%META:FILEATTACHMENT{name="latexad099cee8f77fa265ce6ac0508afb536.png" attr="h" autoattached="1" comment="" date="1153937034" path="latexad099cee8f77fa265ce6ac0508afb536.png" size="349" user="Main.ScottHoge" version="1"}%
-%META:FILEATTACHMENT{name="latex342aa8d8ddd4f2a293bd4e2dea1d4c5b.png" attr="h" autoattached="1" comment="" date="1153937034" path="latex342aa8d8ddd4f2a293bd4e2dea1d4c5b.png" size="364" user="Main.ScottHoge" version="1"}%
-%META:FILEATTACHMENT{name="tikz-expl.png" attr="" autoattached="1" comment="" date="1128355022" path="tikz-expl.png" size="23603" user="UnknownUser" version=""}%
-%META:FILEATTACHMENT{name="fig2.png" attr="" autoattached="1" comment="" date="1128355022" path="fig2.png" size="23603" user="UnknownUser" version=""}%
-%META:FILEATTACHMENT{name="expl-v1.4.png" attr="" autoattached="1" comment="" date="1128355022" path="expl-v1.4.png" size="23603" user="UnknownUser" version=""}%
-%META:FILEATTACHMENT{name="latex21106add16bef3b90eafbce49b902ebd.png" attr="h" autoattached="1" comment="" date="1153937033" path="latex21106add16bef3b90eafbce49b902ebd.png" size="320" user="Main.ScottHoge" version="1"}%
-%META:FILEATTACHMENT{name="latex6d1277b3e7687b4b19d66e8980996a0f.png" attachment="latex6d1277b3e7687b4b19d66e8980996a0f.png" attr="h" comment="" stream="GLOB(0x8be51ec)" user="Main.ScottHoge" version="1"}%
