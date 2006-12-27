@@ -386,15 +386,22 @@ sub _getSpamMergeText
         return TWiki::Func::readFile( $cacheFile );
     }
 
+    # read spam merge list via http
     $url =~ /http\:\/\/(.*?)(\/.*)/;
     my $host = $1;
     my $port = 0;
     my $path = $2;
-    # figure out how to get to TWiki::Net which is wide open in Cairo and before,
-    # but Dakar uses the session object.  
-    my $text = $TWiki::Plugins::SESSION->{net}
-        ? $TWiki::Plugins::SESSION->{net}->getUrl( $host, $port, $path )
-        : TWiki::Net::getUrl( $host, $port, $path );
+    my $text = '';
+    if( $TWiki::Plugins::VERSION < 1 ) {
+        # TWiki 01 Sep 2004 and older
+        $text = TWiki::Net::getUrl( $host, $port, $path );
+    } elsif( $TWiki::Plugins::VERSION < 1.1 ) {
+        # TWiki 4.0
+        $text = $TWiki::Plugins::SESSION->{net}->getUrl( $host, $port, $path );
+    } else {
+        # TWiki 4.1
+        $text = $TWiki::Plugins::SESSION->{net}->getUrl( 'http', $host, $port, $path );
+    } # else FIXME once TWiki::Func::getUrl is available
 
     if( $text =~ /text\/plain\s*ERROR\: (.*)/s ) {
         my $msg = $1;
