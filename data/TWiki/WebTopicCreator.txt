@@ -9,12 +9,11 @@
 /* <![CDATA[ */
 /**
 Checks if the entered topic name is a valid WikiWord.
-If so, enables the submit button, if not: enables the submit button 
-if the user allows non-WikiWords as topic name; otherwise disables the
-submit button and returns 'false'.
+If so, enables the submit button, if not: enables the submit button if the user allows non-WikiWords as topic name; otherwise disables the submit button and returns 'false'.
 Automatically removes spaces from entered name.
 Automatically strips illegal characters.
 If non-WikiWords are not allowed, capitalizes words (separated by space).
+If non-WikiWords _are_ allowed, capitalizes sentence.
 The generated topic name is written to a 'feedback' field.
 @param inForm : pointer to the form
 @param inShouldConvertInput : true: a new name is created from the entered name
@@ -49,7 +48,10 @@ function canSubmit(inForm, inShouldConvertInput) {
 	var wikiWordName = noSpaceName;
 	if (!userAllowsNonWikiWord) {
 		wikiWordName = removeSpacesAndPunctiation(capitalize(inputForTopicName));
-	}	
+	}
+	if (userAllowsNonWikiWord) {
+		wikiWordName = removeSpacesAndPunctiation(capitalizeSentence(inputForTopicName));
+	}
 	
 	if (inShouldConvertInput) {
 		if (hasNonWikiWordCheck && userAllowsNonWikiWord) {
@@ -78,6 +80,9 @@ function canSubmit(inForm, inShouldConvertInput) {
 		disableSubmit(inForm.submit);
 		return false;
 	}
+}
+function capitalizeSentence (inText) {
+	return inText.substr(0,1).toUpperCase() + inText.substr(1);
 }
 /**
 @param inState: true or false
