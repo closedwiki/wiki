@@ -5113,7 +5113,7 @@ msgstr "acesso à web não permitido"
 
 #: twikiplugins/PatternSkin/templates/constants.pattern.tmpl:11
 msgid "accesskey='c'"
-msgstr "Tecla de atalho='c'"
+msgstr "accesskey='c'"
 
 #: data/_default/WebHome.txt:11
 msgid "advanced search"
