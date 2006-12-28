@@ -397,10 +397,10 @@ sub _getSpamMergeText
     my $port = 0;
     my $path = $2;
     my $text = '';
-    if( $TWiki::Plugins::VERSION < 1 ) {
+    if( $TWiki::Plugins::VERSION < 1.1 ) {
         # TWiki 01 Sep 2004 and older
         $text = TWiki::Net::getUrl( $host, $port, $path );
-    } elsif( $TWiki::Plugins::VERSION < 1.1 ) {
+    } elsif( $TWiki::Plugins::VERSION < 1.11 ) {
         # TWiki 4.0
         $text = $TWiki::Plugins::SESSION->{net}->getUrl( $host, $port, $path );
     } else {
