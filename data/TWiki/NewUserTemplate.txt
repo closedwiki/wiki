@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1167346194" format="1.0" version="$Rev$"}%
 %SPLIT%
    * %KEY%: %VALUE%%SPLIT%
 
@@ -24,14 +24,6 @@ Uncomment preferences variables to activate them (remove the #-sign). Help and d
 
    * Show tool-tip topic info on mouse-over of %TWIKIWEB%.WikiWord links, on or off:
       * #Set LINKTOOLTIPINFO = off
-   * Horizontal size of text edit box:
-      * #Set EDITBOXWIDTH = 70
-   * Vertical size of text edit box:
-      * #Set EDITBOXHEIGHT = 22
-   * Style of text edit box. =width: 99%= for full window width (default), =width: auto= to disable.
-      * #Set EDITBOXSTYLE = width: 99%
-   * Write protect your home page: (set it to your %TWIKIWEB%.WikiName)
-      * #Set ALLOWTOPICCHANGE = %WIKIUSERNAME%
 
 ---++ Related Topics
 
@@ -77,14 +69,6 @@ Text for multilingual wiki community, copy from here to %<nop>ENDSECTION{type="t
 
    * %MAKETEXT{"Show tool-tip topic info on mouse-over of [_1] links, on or off:" args="%TWIKIWEB%.WikiWord"}%
       * #Set LINKTOOLTIPINFO = off
-   * %MAKETEXT{"Horizontal size of text edit box:"}%
-      * #Set EDITBOXWIDTH = 70
-   * %MAKETEXT{"Vertical size of text edit box:"}%
-      * #Set EDITBOXHEIGHT = 22
-   * %MAKETEXT{"Style of text edit box. =width: 99%= for full window width (default), =width: auto= to disable."}%
-      * #Set EDITBOXSTYLE = width: 99%
-   * %MAKETEXT{"Write protect your home page: (set it to your [_1])" args="%TWIKIWEB%.WikiName"}%
-      * Set ALLOWTOPICCHANGE = %WIKIUSERNAME%
 
 ---++ %MAKETEXT{"Related Topics"}%
 
