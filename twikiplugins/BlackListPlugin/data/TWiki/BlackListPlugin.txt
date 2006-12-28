@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1167207371" format="1.0" version="1.16"}%
+%META:TOPICINFO{author="PeterThoeny" date="1167267197" format="1.0" version="1.17"}%
 ---+!! Black List Plugin
 
 %TOC%
@@ -144,8 +144,9 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main/PeterThoeny |
-|  Plugin Version: | 27 Dec 2006 (r12345) |
+|  Plugin Version: | 28 Dec 2006 (r12348) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  28 Dec 2006: | Fixed bug where EXCLUDELIST pattern was removing only part of a wiki-spam pattern |
 |  27 Dec 2006: | Support for TWiki 4.1 |
 |  01 Jul 2006: | Added EXCLUDELIST; scan for evil script eval in attachments; scan also .js and .css attachments; fixed writeLog error on Cairo |
 |  02 Jun 2006: | Added wiki-spam filtering for HTML attachments to combat TWiki:Codev.HtmlAttachmentSpam |
@@ -173,5 +174,5 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 
 __Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins, [[http://directory.google.com/Top/Computers/Internet/Abuse/Spam/Wikispam/][Google wiki spam directory]]
 
--- TWiki:Main/PeterThoeny - 27 Dec 2006
+-- TWiki:Main/PeterThoeny - 28 Dec 2006
 

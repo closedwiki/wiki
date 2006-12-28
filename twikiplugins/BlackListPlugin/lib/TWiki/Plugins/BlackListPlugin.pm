@@ -271,6 +271,11 @@ sub beforeSaveHandler
     if( $_[0] =~ /$spamListRegex/ ) {
         _oopsMessage( "topic", $1, $remoteAddr );
     }
+
+    # check for 'no changes ... no changes' by ringtones scumbag
+    if( $_[0] =~ /no changes \.\.\. no changes/gis ) {
+        _oopsMessage( "topic", "ringtones scumbag", $remoteAddr );
+    }
 }
 
 # =========================
@@ -356,17 +361,17 @@ sub _getSpamListRegex
     # merge public and local spam list
     my $text = _getSpamMergeText() . "\n" . _handleSpamList( "read", "" );
     $text =~ s/ *\#.*//go;      # strip comments
-    $text =~ s/.*?[ <>].*//go;  # remove all lines that have spaces or HTML <tags>
+    $text =~ s/^.*?[ <>].*?$//gom;  # remove all lines that have spaces or HTML <tags>
 
     # Remove patterns in exclude list
     my $excludeRE = join( '|', map{ quotemeta } split( /[\n\r]+/, _handleExcludeList( "read", "" ) ) );
-    $text =~ s/\b($excludeRE)\b//gs;
+    $text =~ s/^.*?($excludeRE).*?$//gm if( $excludeRE );
 
     # Build regex
     $text =~ s/^[\n\r]+//os;
     $text =~ s/[\n\r]+$//os;
     $text =~ s/[\n\r]+/\|/gos;
-    $text = "http://[\\w\\.\\-:\\@/]*?($text)";
+    $text = "(http://[\\w\\.\\-:\\@/]*?($text))";
     TWiki::Func::saveFile( $cacheFile, $text );
     return $text;
 }
