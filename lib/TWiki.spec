@@ -485,6 +485,15 @@ $TWiki::cfg{ForceUnsafeRegexes} = $FALSE;
 $TWiki::cfg{GetScriptUrlFromCgi} = $FALSE;
 
 # **BOOLEAN EXPERT**
+# Draining STDIN may be necessary if the script is called due to a 
+# redirect and the original query was a POST. In this case the web 
+# server is waiting to write the POST data to this script's STDIN, 
+# but CGI.pm won't drain STDIN as it is seeing a GET because of the 
+# redirect, not a POST. Enable this <b>only</b> in case a TWiki script 
+# hangs.
+$TWiki::cfg{DrainStdin} = $FALSE;
+
+# **BOOLEAN EXPERT**
 # Remove port number from URL. If set, and a URL is given with a port
 # number e.g. http://my.server.com:8080/twiki/bin/view, this will strip
 # off the port number before using the url in links.
