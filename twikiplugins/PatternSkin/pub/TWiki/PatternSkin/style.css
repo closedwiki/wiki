@@ -613,9 +613,11 @@ a.twikiLinkInHeaderRight {
 	overflow:hidden;
 	text-overflow:ellipsis;
 }
-html>body #patternLeftBarContents li,
-html>body #patternLeftBarContents .twikiHierarchicalNavigation { /* Mozilla */
+html>body #patternLeftBarContents li { /* Mozilla */
 	overflow:visible;
+}
+html>body #patternLeftBarContents .twikiHierarchicalNavigation { /* Mozilla */
+	overflow:hidden;
 }
 
 .twikiHierarchicalNavigation ul {
