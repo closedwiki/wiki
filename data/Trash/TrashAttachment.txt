@@ -1,5 +1,6 @@
-%META:TOPICINFO{author="TWikiContributor" date="1092762941" format="1.0" version="$Rev$"}%
+%META:TOPICINFO{author="PeterThoeny" date="1163644564" format="1.1" version="1.2"}%
 %META:TOPICPARENT{name="WebHome"}%
 ---+ %MAKETEXT{"Placeholder for trashed attachments"}%
 
 
+%META:FILEATTACHMENT{name="smile.gif" attachment="smile.gif" attr="" comment="test attach" date="1163644510" moveby="Main.PeterThoeny" movedto="Trash.TrashAttachment.smile.gif" movedwhen="1163644564" movefrom="Sandbox.FooBar4.smile.gif" path="smile.gif" size="93" stream="smile.gif" tmpFilename="/tmp/4JQcCTAgro" user="Main.PeterThoeny" version="1"}%

@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1127401408" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="PeterThoeny" date="1152395411" format="1.1" version="1.3"}%
 ---+!! <nop>%WEB% Web Preferences
 
 The following settings are __web preferences__ of the [[%WEB%.%HOMETOPIC%][%WEB%]] web. These preferences overwrite the __site-level preferences__ in [[%TWIKIWEB%.%WIKIPREFSTOPIC%]] and [[%LOCALSITEPREFS%]], and can be overwritten by __user preferences__ (your personal topic, eg: %MAINWEB%.%WIKINAME% in the [[%MAINWEB%.%HOMETOPIC%][%MAINWEB%]] web).
@@ -38,5 +38,6 @@ These settings override the defaults for this web only. See [[%TWIKIWEB%.TWikiPr
       * Set FINALPREFERENCES = NOSEARCHALL, ATTACHFILESIZELIMIT, WIKIWEBMASTER, WEBCOPYRIGHT, WEBTOPICLIST, DENYWEBVIEW, ALLOWWEBVIEW, DENYWEBCHANGE, ALLOWWEBCHANGE, DENYWEBRENAME, ALLOWWEBRENAME
 
 %INCLUDE{"%TWIKIWEB%.WebPreferencesHelp"}%
-%META:FILEATTACHMENT{name="logo.gif" attr="" comment="" date="1126793019" path="logo.png" size="3362" user="TWikiContributor" version=""}%
-%META:FILEATTACHMENT{name="favicon.ico" attr="" comment="" date="1125867877" path="favicon.ico" size="1750" user="TWikiContributor" version=""}%
+
+%META:FILEATTACHMENT{name="logo.gif" attr="" autoattached="1" comment="" date="1149472783" path="logo.gif" size="2545" user="TWikiContributor" version=""}%
+%META:FILEATTACHMENT{name="favicon.ico" attr="" autoattached="1" comment="" date="1149472783" path="favicon.ico" size="1406" user="TWikiContributor" version=""}%

@@ -1,10 +1,11 @@
-%META:TOPICINFO{author="TWikiContributor" date="1111931141" format="1.0" version="$Rev$"}%
+%META:TOPICINFO{author="PeterThoeny" date="1149483843" format="1.1" version="1.2"}%
 ---+ TWiki Administrator Group
 
    * Member list:
-      * Set GROUP = ATWikiUser
+      * #Set GROUP = ATWikiUser
+      * Set GROUP = PeterThoeny, TWikiContributor
    * Persons/group who can change the list:
-      * #Set ALLOWTOPICCHANGE = TWikiAdminGroup
+      * Set ALLOWTOPICCHANGE = TWikiAdminGroup
 
 __Related topics:__ %WIKIUSERSTOPIC%, TWikiGroups, %TWIKIWEB%.TWikiAccessControl
 

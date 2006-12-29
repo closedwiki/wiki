@@ -1,12 +1,16 @@
-%META:TOPICINFO{author="TWikiContributor" date="1112660125" format="1.0" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiGuest" date="1159816877" format="1.1" reprev="1.2" version="1.2"}%
 %META:TOPICPARENT{name="WebHome"}%
 ---++ Statistics for <nop>%WEB% Web
 
 | *Month:* | *Topic <br /> views:* | *Topic <br /> saves:* | *File <br /> uploads:* | *Most popular <br /> topic views:* | *Top contributors for <br /> topic save and uploads:* |
 | <!--statDate--> | <!--statViews--> | <!--statSaves--> | <!--statUploads--> | <!--statTopViews--> | <!--statTopContributors--> |
+| Oct 2006 |  3 |  0 |  0 | &nbsp;&nbsp;3 [[WebHome]] |  |
+| Sep 2006 |  4 |  0 |  0 | &nbsp;&nbsp;4 [[TWikiPreferences]] |  |
+| Aug 2006 |  12 |  0 |  0 | &nbsp;10 [[WebHome]]<br />&nbsp;&nbsp;1 [[WebSearch]]<br />&nbsp;&nbsp;1 [[WebNotify]] |  |
+| Jul 2006 |  10 |  1 |  0 | &nbsp;&nbsp;6 [[WebHome]]<br />&nbsp;&nbsp;3 [[PeterThoeny]] | &nbsp;&nbsp;1 Main.PeterThoeny |
+| Jun 2006 |  39 |  4 |  0 | &nbsp;17 [[WebHome]]<br />&nbsp;&nbsp;9 [[TWikiPreferences]]<br />&nbsp;&nbsp;3 [[PtestGroup]]<br />&nbsp;&nbsp;3 [[TWikiAdminGroup]]<br />&nbsp;&nbsp;3 [[TWikiGroups]]<br />&nbsp;&nbsp;2 [[TestLargeGroup]]<br />&nbsp;&nbsp;1 [[WebPreferences]] | &nbsp;&nbsp;4 Main.PeterThoeny |
 
 __Notes:__
    * This topic is updated by the statistics script. (You can also [[%SCRIPTURLPATH{"statistics"}%/%WEB%][force]] an update)
    * %TWIKIWEB%.TWikiDocumentation tells you how to enable the automatic updates of the statistics.
    * Suggestion: You could archive this topic once a year and delete the previous year's statistics from the table.
-

@@ -127,7 +127,8 @@ image/x-cmu-raster              ras
 image/x-coreldraw               cdr
 image/x-coreldrawpattern        pat
 image/x-coreldrawtemplate       cdt
-image/x-corelphotopaint         cpt 
+image/x-corelphotopaint         cpt
+image/x-icon                    ico
 image/x-photoshop               psd
 image/x-portable-anymap         pnm
 image/x-portable-bitmap         pbm
