@@ -504,12 +504,11 @@ table.twikiFormTable th.twikiFormTableHRow a:visited {
 }
 .twikiPageForm table {
 	width:100%;
-	margin:0 0 2em 0;
 }
 .twikiPageForm th,
 .twikiPageForm td {
 	border:0;
-	padding:.15em 1em;
+	padding:.5em 1em;
 }
 .twikiPageForm td {}
 .twikiPageForm td.first {
@@ -760,25 +759,22 @@ html>body #patternLeftBarContents .twikiHierarchicalNavigation { /* Mozilla */
 }
 
 /* WebSearch, WebSearchAdvanced */
-table#twikiSearchTable {
+#twikiSearchTable {
 	background:none;
 	border-bottom:0;
 } 
-table#twikiSearchTable th,
-table#twikiSearchTable td {
-	padding:.5em;
+#twikiSearchTable th,
+#twikiSearchTable td {
+	padding:1em;
 	border-width:0 0 1px 0;
 	border-style:solid;
 } 
-table#twikiSearchTable th {
+#twikiSearchTable th {
 	width:20%;
 	text-align:right;
 }
-table#twikiSearchTable td {
+#twikiSearchTable td {
 	width:80%;
-}
-table#twikiSearchTable td.first {
-	padding:1em;
 }
 
 /*	-----------------------------------------------------------
@@ -815,8 +811,10 @@ h4.patternSearchResultsHeader {
 }
 .patternSearchResult .twikiTopRow {
 	padding-top:.2em;
+	margin-top:.1em;
 }
 .patternSearchResult .twikiBottomRow {
+	margin-bottom:.1em;
 	padding-bottom:.25em;
 	border-width:0 0 1px 0;
 	border-style:solid;
