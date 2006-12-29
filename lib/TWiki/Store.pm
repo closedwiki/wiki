@@ -1105,6 +1105,7 @@ Replace last (top) revision with different text.
 Parameters and return value as saveTopic, except
    * =$options= - as for saveTopic, with the extra option:
       * =timetravel= - if we want to force the deposited revision to look as much like the revision specified in =$rev= as possible.
+      * =operation= - set to the name of the operation performing the save. This is used only in the log, and is normally =cmd= or =save=. It defaults to =save=.
 
 Used to try to avoid the deposition of 'unecessary' revisions, for example
 where a user quickly goes back and fixes a spelling error.
@@ -1117,7 +1118,7 @@ to a normal save or not.
 =cut
 
 sub repRev {
-    my( $this, $user, $web, $topic, $text, $meta, $options, $logType ) = @_;
+    my( $this, $user, $web, $topic, $text, $meta, $options ) = @_;
 
     ASSERT($meta && $meta->isa('TWiki::Meta')) if DEBUG;
 
@@ -1157,8 +1158,8 @@ sub repRev {
         my $extra = "repRev $rev by " . $revuser->login() .
             ' '. TWiki::Time::formatTime( $revdate, '$rcs', 'gmtime' );
         $extra   .= ' minor' if( $options->{minor} );
-        $logType = 'save' unless( $logType );
-        $this->{session}->writeLog( $logType, $web.'.'.$topic, $extra, $user );
+        $this->{session}->writeLog( $options->{operation} || 'save',
+                                    $web.'.'.$topic, $extra, $user );
     }
 }
 

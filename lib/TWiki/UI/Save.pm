@@ -500,10 +500,13 @@ WARN
         my $textQueryParam = $query->param( 'text' );
         my $meta = new TWiki::Meta( $session, $web, $topic );
         $store->extractMetaData( $meta, \$textQueryParam );
-        my $saveOpts = { timetravel => 1 };
+        my $saveOpts = {
+            timetravel => 1,
+            operation => 'cmd',
+           };
         try {
             $store->repRev( $user, $web, $topic,
-                            $textQueryParam, $meta, $saveOpts, 'cmd' );
+                            $textQueryParam, $meta, $saveOpts );
         } catch Error::Simple with {
             throw TWiki::OopsException( 'attention',
                                         def => 'save_error',
