@@ -1,19 +1,32 @@
 %META:TOPICINFO{author="TWikiContributor" date="1163619832" format="1.1" version="$Rev$"}%
 ---+ %MAKETEXT{"Note: This topic does not exist"}%
 
-<form name="jumpAgain" action="%SCRIPTURL{view}%/%BASEWEB%/%BASETOPIC%">
 *%MAKETEXT{"The topic [_1] you are trying to access does not exist, yet." args="'%BASETOPIC%'"}%*
 
+<div class="twikiPageForm">
+<table id="twikiSearchTable" border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td class="first">
+<form name="jumpAgain" action="%SCRIPTURL{view}%/%BASEWEB%/%BASETOPIC%">
 *%MAKETEXT{"Did you spell the [_1] correctly?" args="%TWIKIWEB%.WikiWord"}%* %MAKETEXT{"Remember, a [_1] is case sensitive." args="<nop>WikiWord"}% %BR%     <input type="text" class="twikiInputField" name="topic" size="36" value="%BASETOPIC%" /> <input type="submit" class="twikiSubmit" value="Jump to topic" />
 </form>
+</td>
+</tr>
+</table>
+</div>
+<style type="text/css" media="all">
+span.twikiNewRev {display:none;}
+span.twikiNewRev0 {display:inline;}
+span.twikiNewRevNum {display:inline;}
+span.twikiNewRevNum0 {display:none;}
+</style>
 
-*%MAKETEXT{"Do you wish to navigate quickly to a similar topic?"}%*
-%IF{ "defined topic" then="   * %MAKETEXT{"Similar topics in this web (if any):"}% %CALC{$SET(total,0)}%}%%IF{ "defined topic" then="%SEARCH" else="     <!--" }%{ "%BASETOPIC%" limit="16" scope="topic" web="%BASEWEB%" nosearch="on" nototal="on" noheader="on" order="modified" reverse="on" format="     | [[$web.$topic][$topic]] | <span style=\"white-space: nowrap;\">r$rev - [[%SCRIPTURL{"rdiff"}%/%SCRIPTSUFFIX%/$web/$topic][$date]]</span> | [[$wikiusername][$wikiname]] |$n()     |<span class=\"twikiSmallish\">$summary</span>$percntCALC{$SETM(total, +1)}$percnt|||" %IF{ "defined topic" then="}" else="-->" }%%IF{ "defined topic" then="%" }%
-%CALC{$IF($GET(total) < 16, <!--, <nop>)}%
-   * [[%SCRIPTURLPATH{"view"}%/%BASEWEB%/WebSearch?scope=topic;search=%BASETOPIC%][%MAKETEXT{"List more similar topic in this web"}%]]
+---+++ %MAKETEXT{"Do you wish to navigate quickly to a similar topic?"}%
+%IF{ "defined topic" then="%CALC{$SET(total,0)}% "}% %IF{ "defined topic" then="%SEARCH" else="<!--" }%{ "%BASETOPIC%" limit="16" scope="topic" web="%BASEWEB%" nosearch="on" nototal="on" noheader="on" order="modified" reverse="on" header="%MAKETEXT{"Similar topics in this web (if any):"}%%BR%" format="<div class=\"patternSearchResult\"><div class=\"twikiTopRow\"><div class=\"twikiLeft\"> *[[$web.$topic][$topic]]* </div><div class=\"twikiRight twikiSRAuthor\">[[$wikiusername][$wikiname]]</div><div class=\"twikiRight twikiSRRev\"><span style=\"white-space: nowrap;\"><span class=\"twikiNew twikiNewRev twikiNewRev$rev \">NEW</span><span class=\"twikiNewRevNum twikiNewRevNum$rev \">r$rev</span> - [[%SCRIPTURL{"rdiff"}%/%SCRIPTSUFFIX%/$web/$topic][$date]]</span></div><br class=\"twikiClear\" /></div><div class=\"twikiBottomRow\"><div class=\"twikiSummary twikiGrayText\">$summary</div></div></div>$percntCALC{$SETM(total, +1)}$percnt" %IF{ "defined topic" then="}" else="-->" }%%IF{ "defined topic" then="%" }% %CALC{$IF($GET(total) > 0, %BR%, <nop>)}% %CALC{$IF($GET(total) < 16, <!--, <nop>)}%
+%ICON{arrowbright}% [[%SCRIPTURLPATH{"view"}%/%BASEWEB%/WebSearch?scope=topic;search=%BASETOPIC%][%MAKETEXT{"List more similar topic in this web"}%]] %BR% 
 %CALC{$IF($GET(total) < 16, -->, <nop>)}%
-   * [[%SCRIPTURLPATH{"view"}%/%BASEWEB%/WebSearch?scope=topic;web=all;search=%BASETOPIC%][%MAKETEXT{"Search similar topics in all public webs"}%]]
-%SEARCH{ "META.TOPICMOVED.*from\=\"%BASEWEB%.%BASETOPIC%\"" nosearch="on" nototal="on" type="regex" format="   * $percntRED% $percntMAKETEXT{\"This topic has moved to [_1].\" args=\"[[$web.$topic]]\"}$percnt $percntENDCOLOR%" }%
+%ICON{arrowbright}% [[%SCRIPTURLPATH{"view"}%/%BASEWEB%/WebSearch?scope=topic;web=all;search=%BASETOPIC%][%MAKETEXT{"Search similar topics in all public webs"}%]]
+%SEARCH{ "META.TOPICMOVED.*from\=\"%BASEWEB%.%BASETOPIC%\"" nosearch="on" nototal="on" type="regex" format="%BR%%ICON{arrowbright}% $percntRED% $percntMAKETEXT{\"This topic has moved to [_1].\" args=\"[[$web.$topic]]\"}$percnt $percntENDCOLOR%" }%
 
-*%MAKETEXT{"Do you wish to create the topic [_1]?" args="'%BASETOPIC%'"}%*
-   * [[%SCRIPTURL{view}%/%BASEWEB%/WebTopicCreator?newtopic=%BASETOPIC%][%MAKETEXT{"Create '[_1]'" args="<nop>%BASETOPIC%"}%]]
+---+++ %MAKETEXT{"Do you wish to create the topic [_1]?" args="'%BASETOPIC%'"}%
+%ICON{arrowbright}% [[%SCRIPTURL{view}%/%BASEWEB%/WebTopicCreator?newtopic=%BASETOPIC%][%MAKETEXT{"Create '[_1]'" args="<nop>%BASETOPIC%"}%]]
