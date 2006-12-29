@@ -1768,6 +1768,12 @@ sub boo {
 would let you do this:
 =%<nop>EXEC{"ps -Af" silent="on"}%=
 
+Registered tags differ from tags implemented using the old TWiki approach (text substitution in =commonTagsHandler=) in the following ways:
+   * registered tags are evaluated at the same time as system tags, such as %SERVERTIME. =commonTagsHandler= is only called later, when all system tags have already been expanded (though they are expanded _again_ after =commonTagsHandler= returns).
+   * registered tag names can only contain alphanumerics and _ (underscore)
+   * registering a tag =FRED= defines both =%<nop>FRED{...}%= *and also* =%FRED%=.
+   * registered tag handlers *cannot* return another tag as their only result (e.g. =return '%<nop>SERVERTIME%';=). It won't work.
+
 =cut
 
 sub registerTagHandler {
