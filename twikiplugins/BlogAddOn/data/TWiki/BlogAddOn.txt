@@ -22,15 +22,18 @@ When installed, see !_BlogAddOn.BlogAddOnHome for additional details.
 
 ---++ Settings
 
-	* Set SHORTDESCRIPTION = Simple blogging application
+   * Set SHORTDESCRIPTION = Simple blogging application
 
 ---++ Installation Instructions
 
-	* Download the ZIP file from the Plugin web (see below)
-	* Unzip ==%TOPIC%.zip== in your ($TWIKI_ROOT) directory.
-	* Copy the files from =/data/_BlogAddOn= to the web you want to blog in
-	* !BlogAddOn is based on TWiki 4.1 with !PatternSkin.
-
+   * Download the ZIP file from the Plugin web (see below)
+   * Unzip ==%TOPIC%.zip== in your ($TWIKI_ROOT) directory.
+   * Copy the files from =/data/_BlogAddOn= to the web you want to blog in
+   * !BlogAddOn is based on TWiki 4.1 with !PatternSkin plus !CommentPlugin.
+   * Alternatively,
+      * Manually resolve the dependencies listed below.
+      %$DEPENDENCIES%
+      
 ---++ !AddOn Info
 
 | Authors: | TWiki:Main.ArthurClemens |
