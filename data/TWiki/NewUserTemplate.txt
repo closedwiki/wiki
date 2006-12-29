@@ -24,6 +24,8 @@ Uncomment preferences variables to activate them (remove the #-sign). Help and d
 
    * Show tool-tip topic info on mouse-over of %TWIKIWEB%.WikiWord links, on or off:
       * #Set LINKTOOLTIPINFO = off
+   * Write protect your home page: (set it to your %TWIKIWEB%.WikiName)
+      * #Set ALLOWTOPICCHANGE = %WIKIUSERNAME%
 
 ---++ Related Topics
 
