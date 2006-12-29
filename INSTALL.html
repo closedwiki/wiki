@@ -1847,6 +1847,8 @@ tr.twikiDiffDebug .twikiDiffUnchangedText {
 </li>
 <li> <a href="#Enable_Localisation">Enable Localisation</a>
 </li>
+<li> <a href="#Tailor_New_Users_Home_Topic">Tailor New Users Home Topic</a>
+</li>
 
 <li> <a href="#Install_Plugins">Install Plugins</a>
 </li>
@@ -2021,9 +2023,6 @@ Each TWiki web has an automatic email notification service that sends you an ema
 <ol>
 <li> Confirm the Mail and Proxies settings in the Configure interface.
 </li>
-<li> Confirm the Email and Proxy Server Settings in the <code>TWikiPreferences</code> topic.
-
-</li>
 <li> Setup a cron job (or equivalent) to call the <code>bin/mailnotify</code> script as described in the <code>TWiki.MailerContrib</code> topic.
 </li>
 </ol>
@@ -2037,6 +2036,16 @@ You can generate a listing manually, or on an automated schedule, of visits to i
 TWiki now supports displaying of national (non-ascii) characters and presentation of basic interface elements in different languages. To enable these features, see the <code>Localisation</code> section of <code>configure</code>. For more information about these features, see <a href="http://twiki.org/cgi-bin/view/TWiki.InternationalizationSupplement" title="'TWiki.InternationalizationSupplement' on TWiki.org">TWiki:TWiki.InternationalizationSupplement</a>.
 
 <p />
+<h2><a name="Tailor_New_Users_Home_Topic"> </a> Tailor New Users Home Topic </h2>
+<p />
+When a new users registers on your TWiki a home topic is created for him based on the <code>TWiki/NewUserTemplate</code> template topic. This can be tailored. It contains additional resources you can use to:
+<li> Localise the user topic.
+</li>
+<li> Add a default ALLOWTOPICCHANGE so only the user can edit his own home topic. We do not encourage this for Intranet sites as it sends a wrong signal to new users, but it can be necessary on a public TWiki to avoid that the user topics get spammed.
+</li>
+
+<p />
+
 <h2><a name="Install_Plugins"> </a> Install Plugins </h2>
 <a href="http://twiki.org/cgi-bin/view/Plugins" title="'Plugins' on TWiki.org">TWiki:Plugins</a> is an extensive library of Plugins for TWiki, that enhance functionality in a huge number of ways. A few plugins are pre-installed in the TWiki distribution. For more information on these, see <code>TWiki.InstalledPlugins</code>.
 <p />

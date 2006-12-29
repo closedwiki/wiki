@@ -24,8 +24,6 @@ Uncomment preferences variables to activate them (remove the #-sign). Help and d
 
    * Show tool-tip topic info on mouse-over of %TWIKIWEB%.WikiWord links, on or off:
       * #Set LINKTOOLTIPINFO = off
-   * Write protect your home page: (set it to your %TWIKIWEB%.WikiName)
-      * #Set ALLOWTOPICCHANGE = %WIKIUSERNAME%
 
 ---++ Related Topics
 
@@ -34,10 +32,18 @@ Uncomment preferences variables to activate them (remove the #-sign). Help and d
    * %MAINWEB%.%WIKIUSERSTOPIC% has a list of other TWiki users
    * %TWIKIWEB%.UserDocumentationCategory is a list of TWiki user documentation
    * %TWIKIWEB%.UserToolsCategory lists all TWiki user tools
-%STARTSECTION{type="templateonly"}%
-Note to TWiki Administrator:
 
-Above text is for English speaking users. If you have a multilingual wiki community you can replace the "My Links", "Personal Preferences" and "Related Topics" sections above with the localized text below. Text enclosed in %MAKETEXT will be shown in the language selected by the user. Please note that the %MAKETEXT can be quite intimidating to new users. Consider translating above text to your own language if your community uses a non-English language. (Remove all text from =%<nop>STARTSECTION{type="templateonly"}%= to =%<nop>ENDSECTION{type="templateonly"}%= when you are done)
+%STARTSECTION{type="templateonly"}%
+----
+Notes to TWiki Administrator:
+
+Anything inside this "templateonly" section will not be copied to the home topic of the new user. It is a resource for the administrator to tailor the users home topic.
+
+On public TWiki's on the Internet user topics are often subject to spam so you may want to limit editing to the user himself. You can do this by moving these two lines to the Personal Preferences section above. Remove the small # in front of the "Set".
+   * Write protect your home page: (set it to your %TWIKIWEB%.WikiName)
+      * #Set ALLOWTOPICCHANGE = %WIKIUSERNAME%
+
+The default topic text above is for English speaking users. If you have a multilingual wiki community you can replace the "My Links", "Personal Preferences" and "Related Topics" sections above with the localized text below. Text enclosed in %MAKETEXT will be shown in the language selected by the user. Please note that the %MAKETEXT can be quite intimidating to new users. Consider translating above text to your own language if your community uses a non-English language. (Remove all text from =%<nop>STARTSECTION{type="templateonly"}%= to =%<nop>ENDSECTION{type="templateonly"}%= when you are done)
 
 Text for multilingual wiki community, copy from here to %<nop>ENDSECTION{type="templateonly"}%
 
