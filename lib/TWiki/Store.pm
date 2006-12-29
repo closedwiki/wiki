@@ -1117,7 +1117,7 @@ to a normal save or not.
 =cut
 
 sub repRev {
-    my( $this, $user, $web, $topic, $text, $meta, $options ) = @_;
+    my( $this, $user, $web, $topic, $text, $meta, $options, $logType ) = @_;
 
     ASSERT($meta && $meta->isa('TWiki::Meta')) if DEBUG;
 
@@ -1157,7 +1157,8 @@ sub repRev {
         my $extra = "repRev $rev by " . $revuser->login() .
             ' '. TWiki::Time::formatTime( $revdate, '$rcs', 'gmtime' );
         $extra   .= ' minor' if( $options->{minor} );
-        $this->{session}->writeLog( 'save', $web.'.'.$topic, $extra, $user );
+        $logType = 'save' unless( $logType );
+        $this->{session}->writeLog( $logType, $web.'.'.$topic, $extra, $user );
     }
 }
 

@@ -503,7 +503,7 @@ WARN
         my $saveOpts = { timetravel => 1 };
         try {
             $store->repRev( $user, $web, $topic,
-                            $textQueryParam, $meta, $saveOpts );
+                            $textQueryParam, $meta, $saveOpts, 'cmd' );
         } catch Error::Simple with {
             throw TWiki::OopsException( 'attention',
                                         def => 'save_error',
