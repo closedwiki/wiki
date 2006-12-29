@@ -1,1 +1,2 @@
-TWiki::Plugins::CommentPlugin,>=1.000,perl,Required
+TWiki::Plugins::CommentPlugin,>=12063,perl,Required
+TWiki::Plugins::PatternSkin,>=2.0.5,perl,Required
