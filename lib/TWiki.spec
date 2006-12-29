@@ -647,6 +647,7 @@ $TWiki::cfg{Languages}{it}{Enabled} = 1;
 $TWiki::cfg{Languages}{nl}{Enabled} = 1;
 $TWiki::cfg{Languages}{pl}{Enabled} = 1;
 $TWiki::cfg{Languages}{pt}{Enabled} = 1;
+$TWiki::cfg{Languages}{ru}{Enabled} = 1;
 $TWiki::cfg{Languages}{sv}{Enabled} = 1;
 $TWiki::cfg{Languages}{'zh-cn'}{Enabled} = 1;
 $TWiki::cfg{Languages}{'zh-tw'}{Enabled} = 1;
