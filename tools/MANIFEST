@@ -18,7 +18,6 @@
 !include twikiplugins/TipsContrib/lib/TWiki/Contrib/TipsContrib
 !include twikiplugins/WysiwygPlugin/lib/TWiki/Plugins/WysiwygPlugin
 !include twikiplugins/KupuContrib/lib/TWiki/Contrib/KupuContrib
-!include twikiplugins/NatSkin/lib/TWiki/Contrib/NatSkin
 AUTHORS 0444
 COPYING 0444
 COPYRIGHT 0444
