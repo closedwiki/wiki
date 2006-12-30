@@ -1,9 +1,9 @@
-lib/TWiki/Plugins/WysiwygPlugin/HTML2TML/WC.pm 0440 Perl module
-lib/TWiki/Plugins/WysiwygPlugin/HTML2TML/Leaf.pm 0440 Perl module
-lib/TWiki/Plugins/WysiwygPlugin/HTML2TML/Node.pm 0440 Perl module
-lib/TWiki/Plugins/WysiwygPlugin/HTML2TML.pm 0440 Perl module
-lib/TWiki/Plugins/WysiwygPlugin.pm 0440 Perl module
-lib/TWiki/Plugins/WysiwygPlugin/TML2HTML.pm 0440 Perl module
-data/TWiki/WysiwygPlugin.txt 0660 Documentation and settings
-data/TWiki/WysiwygPluginTopicLister.txt 0660 Special AJAX topic
+lib/TWiki/Plugins/WysiwygPlugin/HTML2TML/WC.pm 0444 Perl module
+lib/TWiki/Plugins/WysiwygPlugin/HTML2TML/Leaf.pm 0444 Perl module
+lib/TWiki/Plugins/WysiwygPlugin/HTML2TML/Node.pm 0444 Perl module
+lib/TWiki/Plugins/WysiwygPlugin/HTML2TML.pm 0444 Perl module
+lib/TWiki/Plugins/WysiwygPlugin.pm 0444 Perl module
+lib/TWiki/Plugins/WysiwygPlugin/TML2HTML.pm 0444 Perl module
+data/TWiki/WysiwygPlugin.txt 0644 Documentation and settings
+data/TWiki/WysiwygPluginTopicLister.txt 0644 Special AJAX topic
 tools/html2tml.pl 0440 Stand-alone convertor script
