@@ -18,16 +18,6 @@ msgstr ""
 "X-Poedit-Country: CHINA\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: twikiplugins/NatSkin/templates/messages.nat.tmpl:78
-#, fuzzy
-msgid "\"%1\" is an invalid name for a new web."
-msgstr "%1 是个非法的新目录名称"
-
-#: twikiplugins/NatSkin/templates/messages.nat.tmpl:320
-#, fuzzy
-msgid "\"%1\" topic does not exist"
-msgstr "%1 主题不存在"
-
 #. ($days)
 #: lib/TWiki/Time.pm:267
 msgid "%*(%1,day) "
@@ -47,11 +37,6 @@ msgstr "%*(%1,分钟) "
 #: lib/TWiki/Time.pm:276
 msgid "%*(%1,second) "
 msgstr "%*(%1,秒)"
-
-#: twikiplugins/NatSkin/templates/mailnotify.nat.tmpl:3
-#, fuzzy
-msgid "%1 - Automated notification of topic changes"
-msgstr "自动提示主题更改"
 
 #: templates/registernotify.tmpl:3 templates/registernotifyadmin.tmpl:3
 #: twikiplugins/ClassicSkin/templates/registernotify.classic.tmpl:3
@@ -84,7 +69,6 @@ msgstr "%1 - 查看一个为TWiki新用户做的简短介绍"
 msgid "%1 Recent Changes in %2 Web"
 msgstr "检查最新更改的主题："
 
-#: twikiplugins/NatSkin/templates/search.nat.tmpl:8
 #: twikiplugins/PatternSkin/data/Main/WebLeftBar.txt:4
 #: twikiplugins/PatternSkin/data/Sandbox/WebLeftBar.txt:4
 #: twikiplugins/PatternSkin/data/TWiki/WebLeftBar.txt:4
@@ -99,25 +83,24 @@ msgstr "%1 目录"
 msgid "%1 Web Home"
 msgstr "%1 首页"
 
-#: data/TWiki/NewUserTemplate.txt:92
+#: data/TWiki/NewUserTemplate.txt:84
 msgid "%1 for changing your email address"
 msgstr "你可以通过 %1 修改密码"
 
-#: data/TWiki/NewUserTemplate.txt:91
+#: data/TWiki/NewUserTemplate.txt:83
 msgid "%1 for changing your password"
 msgstr "你可以通过 %1 修改密码"
 
-#: data/TWiki/NewUserTemplate.txt:93
+#: data/TWiki/NewUserTemplate.txt:85
 msgid "%1 has a list of other TWiki users"
 msgstr "其他TWiki用户的列表位于 %1"
 
-#: data/TWiki/ChangeEmailAddress.txt:17 data/TWiki/ChangePassword.txt:7
-#: data/TWiki/ResetPassword.txt:10
+#: data/TWiki/ChangeEmailAddress.txt:40 data/TWiki/ChangePassword.txt:30
+#: data/TWiki/ResetPassword.txt:28
 msgid "%1 has a list of other TWiki users."
 msgstr "其他TWiki用户的列表 %1"
 
 #: templates/messages.tmpl:394
-#: twikiplugins/NatSkin/templates/oopsleaseconflict.nat.tmpl:7
 msgid ""
 "%1 has been editing the topic for %2 and the lease is still active for "
 "another %3."
@@ -128,37 +111,11 @@ msgstr "%1 已经被编辑了 %2 ， %3 后将被释放"
 msgid "%1 has been registered with e-mail %2"
 msgstr "%1 已经用E-Mail %2 注册过"
 
-#: twikiplugins/NatSkin/templates/messages.nat.tmpl:298
-#, fuzzy
-msgid "%1 has no permission to %2 *%3*."
-msgstr "无权限查看 %1"
-
-#: twikiplugins/NatSkin/templates/oopsaccesschange.nat.tmpl:7
-msgid "%1 has no permission to change topic [[%2]]."
-msgstr ""
-
-#: twikiplugins/NatSkin/templates/oopsaccesscreateweb.nat.tmpl:6
-msgid "%1 has no permission to create a new <nop><b>%2 Web</b>."
-msgstr ""
-
-#: twikiplugins/NatSkin/templates/oopsaccessrename.nat.tmpl:6
-msgid "%1 has no permission to rename topic [[%2]]."
-msgstr ""
-
-#: twikiplugins/NatSkin/templates/oopsaccessview.nat.tmpl:6
-#, fuzzy
-msgid "%1 has no permission to view topic [[%2]]."
-msgstr "无权限查看 %1"
-
-#: twikiplugins/NatSkin/templates/oopsaccessvote.nat.tmpl:6
-msgid "%1 has no permission to vote on topic [[%2]]."
-msgstr ""
-
 #: templates/messages.tmpl:23
 msgid "%1 home"
 msgstr "%1首页"
 
-#: data/TWiki/NewUserTemplate.txt:94
+#: data/TWiki/NewUserTemplate.txt:86
 msgid "%1 is a list of TWiki user documentation"
 msgstr "%1 有TWiki用户文档列表"
 
@@ -171,12 +128,10 @@ msgid "%1 is currently logged in"
 msgstr "%1 已经登录"
 
 #: templates/messages.tmpl:375
-#: twikiplugins/NatSkin/templates/messages.nat.tmpl:293
 msgid "%1 is currently set to %2"
 msgstr "%1 现在被设置为 %2"
 
 #: templates/messages.tmpl:392
-#: twikiplugins/NatSkin/templates/oopsleaseconflict.nat.tmpl:5
 msgid "%1 is editing %2."
 msgstr "%1 正在编辑 %2"
 
@@ -188,12 +143,11 @@ msgstr "%1 列在最新的组中，无法删除"
 msgid "%1 is the default topic for deleted attachments."
 msgstr "%1 是被删除附件指向的主题。"
 
-#: data/TWiki/NewUserTemplate.txt:95
+#: data/TWiki/NewUserTemplate.txt:87
 msgid "%1 lists all TWiki user tools"
 msgstr "%1 有个完整的TWiki用户工具列表"
 
 #: templates/messages.tmpl:400
-#: twikiplugins/NatSkin/templates/oopsleaseconflict.nat.tmpl:18
 msgid "%1 may still be editing %2."
 msgstr "%1 可能仍在编辑 %2 。"
 
@@ -220,15 +174,6 @@ msgstr "%1 开始在新目录上工作"
 #: templates/messages.tmpl:459
 msgid "%1 topic does not exist"
 msgstr "%1 主题不存在"
-
-#: twikiplugins/NatSkin/templates/searchrenameview.nat.tmpl:9
-#, fuzzy
-msgid "%1 web:"
-msgstr "%1 目录"
-
-#: twikiplugins/NatSkin/data/TWiki/MySideBarTemplate.txt:3
-msgid "%1's sidebar"
-msgstr ""
 
 #: twikiplugins/PatternSkin/templates/constants.pattern.tmpl:11
 msgid "&Cancel"
@@ -284,7 +229,6 @@ msgid "(change form)"
 msgstr "(变更表单)"
 
 #: templates/oopschangelanguage.tmpl:2 templates/oopslanguagechanged.tmpl:2
-#: twikiplugins/NatSkin/templates/oopslanguagechanged.nat.tmpl:3
 #: twikiplugins/PatternSkin/templates/oopslanguagechanged.pattern.tmpl:6
 msgid "(change language)"
 msgstr "(变更语言)"
@@ -301,10 +245,6 @@ msgstr "(删除附件)"
 msgid "(delete)"
 msgstr "(删除)"
 
-#: twikiplugins/NatSkin/templates/messages.nat.tmpl:295
-msgid "(don't forget to check your Topic Settings)"
-msgstr ""
-
 #: twikiplugins/PatternSkin/templates/editform.pattern.tmpl:9
 msgid "(edit form)"
 msgstr "(编辑表单)"
@@ -318,11 +258,11 @@ msgstr "(文本编辑)"
 msgid "(edit)"
 msgstr "(编辑)"
 
-#: data/TWiki/TWikiRegistration.txt:92
+#: data/TWiki/TWikiRegistration.txt:98
 msgid "(how you log in) LoginName:"
 msgstr "(如何登录) LoginName:"
 
-#: data/TWiki/TWikiRegistration.txt:87
+#: data/TWiki/TWikiRegistration.txt:93
 msgid "(identifies you to others) WikiName:"
 msgstr "(将您和其他人区别开) WikiName:"
 
@@ -334,7 +274,7 @@ msgstr "(更多)"
 msgid "(move attachment)"
 msgstr "(移动附件)"
 
-#: data/TWiki/WebTopicCreator.txt:120 data/TWiki/WebTopicCreator.txt:121
+#: data/TWiki/WebTopicCreator.txt:125 data/TWiki/WebTopicCreator.txt:126
 msgid "(no parent, orphaned topic)"
 msgstr "(无父主题，孤立文章)"
 
@@ -357,7 +297,7 @@ msgstr "(无)"
 msgid "(oops)"
 msgstr "(哎)"
 
-#: data/TWiki/TWikiRegistration.txt:259
+#: data/TWiki/TWikiRegistration.txt:265
 msgid "(optional)"
 msgstr "（可选）"
 
@@ -436,7 +376,7 @@ msgstr ""
 "1','FileAttachment')\" href='' rel='nofollow'>文件附件</a>条目，获得更多关于"
 "文件上传的信息。"
 
-#: data/TWiki/TWikiRegistration.txt:10
+#: data/TWiki/TWikiRegistration.txt:8
 msgid ""
 "*Important:* the information provided in this form will be stored in a "
 "database on the TWiki server. This database is accessible to anyone who can "
@@ -458,18 +398,6 @@ msgid ""
 "that will be updated or added."
 msgstr "*本地文件:* 如果您选择了另外的 _本地文件:_ 这个文件将被更新或者添加."
 
-#: twikiplugins/NatSkin/templates/attachagain.nat.tmpl:20
-msgid ""
-"*Move attachment*: An attachment can be deleted by moving it to the Trash."
-"TrashAttachment."
-msgstr ""
-
-#: twikiplugins/NatSkin/templates/attachnew.nat.tmpl:14
-msgid ""
-"*Properties*: Click on _manage_ of an existing attachment to change its "
-"properties."
-msgstr ""
-
 #: twikiplugins/PatternSkin/templates/attachagain.pattern.tmpl:28
 msgid ""
 "*Properties:* The comment and visibility (i.e. is attachment hidden) can be "
@@ -481,11 +409,6 @@ msgstr ""
 "变文件属性\"按钮 参见<a target=\"HiddenAttachment\" onclick=\"return "
 "launchWindow('%1','HiddenAttachment')\" href=\"%2\" rel='nofollow'>隐藏附件</"
 "a>."
-
-#: twikiplugins/NatSkin/templates/oopsnoweb.nat.tmpl:31
-#, fuzzy
-msgid "*Tip:* More options in WebSearch"
-msgstr "(更多搜索选项)"
 
 #: data/TWiki/WikiSyntaxSummary.txt:9
 msgid "*bold* put word/phrase in asterisks: =<nop>*your phrase*="
@@ -525,32 +448,9 @@ msgstr "*段落* 用空行分割"
 msgid "..."
 msgstr "…"
 
-#: twikiplugins/NatSkin/templates/oopserrbase.nat.tmpl:11
-msgid "... don't know, it just happended."
-msgstr ""
-
-#: twikiplugins/NatSkin/templates/oopschangepasswd.nat.tmpl:7
-#, fuzzy
-msgid "... for user %1."
-msgstr "无法找到用户%1"
-
-#: twikiplugins/NatSkin/templates/oopsnoformdef.nat.tmpl:8
-#, fuzzy
-msgid "1. Form definition missing"
-msgstr "表单定义缺失"
-
-#: twikiplugins/NatSkin/templates/oopsnoformdef.nat.tmpl:18
-#, fuzzy
-msgid "2. Topic can not be upgraded from old style category table"
-msgstr "主题无法从旧风格的目录表格更新"
-
 #: twikiplugins/PatternSkin/templates/oopsmoresettings.pattern.tmpl:3
 msgid "<a href='%1' rel='nofollow'>Edit settings</a> for this topic"
 msgstr "本主题 <a href='%1' rel='nofollow'>编辑设置</a>"
-
-#: twikiplugins/NatSkin/data/TWiki/MySideBar.txt:7
-msgid "<a href='%1' title='%2'>Create</a> your personalized sidebar."
-msgstr ""
 
 #: data/TWiki/WebChanges.txt:8
 msgid ""
@@ -601,16 +501,8 @@ msgid ""
 "=#FFFF00=."
 msgstr "颜色以 # 标记开始 后面是个6位16进制数字组成 例如： =#FFFF00=."
 
-#: twikiplugins/NatSkin/templates/oopsmngcreateweb.nat.tmpl:24
-#, fuzzy
-msgid ""
-"A color starts with the number sign, followed by 6 hexadecimal numbers, e.g. "
-"yellow is =#FFFF00=."
-msgstr "颜色以 # 标记开始 后面是个6位16进制数字组成 例如： =#FFFF00=."
-
 #. ($data->{Email})
 #: lib/TWiki/UI/Register.pm:831
-#: twikiplugins/NatSkin/templates/oopsregthanks.nat.tmpl:14
 msgid "A confirmation e-mail has been sent to %1"
 msgstr "确认电子邮件已经被发送到 %1 "
 
@@ -637,36 +529,8 @@ msgstr ""
 "系统为 %1 (Wikiname %2 )*自动*生成的新密码已经被发送到你注册的电子邮件地址，"
 "如果你的注册电子邮件不生效，请联系 %3 "
 
-#: twikiplugins/NatSkin/templates/edit.nat.tmpl:79
-#: twikiplugins/NatSkin/templates/edittoolbar.natedit.tmpl:67
-#: twikiplugins/NatSkin/templates/edittopicactions.nat.tmpl:9
-#: twikiplugins/NatSkin/templates/preview.nat.tmpl:40
-#: twikiplugins/NatSkin/templates/previewtoolbar.natedit.tmpl:12
-#: twikiplugins/NatSkin/templates/previewtopicactions.nat.tmpl:9
-#: twikiplugins/NatSkin/templates/settingstoolbar.natedit.tmpl:6
-msgid "Abandon your changes and exit"
-msgstr ""
-
-#: twikiplugins/NatSkin/templates/edit.nat.tmpl:76
-#: twikiplugins/NatSkin/templates/edittoolbar.natedit.tmpl:59
-#: twikiplugins/NatSkin/templates/edittoolbar.natedit.tmpl:60
-#: twikiplugins/NatSkin/templates/edittopicactions.nat.tmpl:8
-#: twikiplugins/NatSkin/templates/preview.nat.tmpl:37
-#: twikiplugins/NatSkin/templates/previewtoolbar.natedit.tmpl:6
-#: twikiplugins/NatSkin/templates/previewtoolbar.natedit.tmpl:7
-#: twikiplugins/NatSkin/templates/previewtopicactions.nat.tmpl:8
-msgid "Abandon your changes but continue editing"
-msgstr ""
-
-#: twikiplugins/NatSkin/templates/renamesidebar.nat.tmpl:4
-#, fuzzy
-msgid "About Topics"
-msgstr "测试主题"
-
 #: templates/oopsaccessdenied.tmpl:5
 #: twikiplugins/ClassicSkin/templates/oopsaccessdenied.classic.tmpl:5
-#: twikiplugins/NatSkin/templates/oopsaccessdenied.nat.tmpl:4
-#: twikiplugins/NatSkin/templates/oopsaccessgroup.nat.tmpl:4
 #: twikiplugins/PatternSkin/templates/oopsaccessdenied.pattern.tmpl:9
 msgid "Access Denied"
 msgstr "禁止访问"
@@ -675,14 +539,11 @@ msgstr "禁止访问"
 msgid "Access check on %1 failed"
 msgstr "访问检查%1失败"
 
-#: twikiplugins/NatSkin/templates/edit.nat.tmpl:84
-#: twikiplugins/NatSkin/templates/edit.natedit.tmpl:6
 #: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:71
 #: twikiplugins/PatternSkin/templates/preview.pattern.tmpl:49
 msgid "Access keys"
 msgstr "访问快捷键"
 
-#: twikiplugins/NatSkin/templates/attachtables.nat.tmpl:4
 #: twikiplugins/PatternSkin/templates/attachtables.pattern.tmpl:62
 #: twikiplugins/PatternSkin/templates/attachtables.pattern.tmpl:9
 #: twikiplugins/PatternSkin/templates/changeform.pattern.tmpl:12
@@ -693,19 +554,13 @@ msgstr "变更"
 msgid "Action %1: %2."
 msgstr "变更 %1: %2."
 
-#: twikiplugins/NatSkin/templates/strings.nat.tmpl:19
-#, fuzzy
-msgid "Add a new form to <nop>%1"
-msgstr "从表单模板中选择一个新的"
-
 #: templates/addform.tmpl:1
 #: twikiplugins/ClassicSkin/templates/addform.classic.tmpl:1
-#: twikiplugins/NatSkin/templates/strings.nat.tmpl:18
 #: twikiplugins/PatternSkin/templates/addform.pattern.tmpl:1
 msgid "Add form"
 msgstr "添加表单"
 
-#: data/TWiki/TWikiRegistration.txt:276
+#: data/TWiki/TWikiRegistration.txt:274
 msgid "Add your name to the list of users in the %1 topic in the %2 web."
 msgstr "将您的名字添加到%2目录%1主题的用户列表中。"
 
@@ -717,18 +572,9 @@ msgstr "添加完成"
 msgid "Adding a %1 variable in WebPreferences"
 msgstr "添加 %1 参数到WebPreferences中"
 
-#: twikiplugins/NatSkin/templates/oopsnoformdef.nat.tmpl:22
-#, fuzzy
-msgid "Adding a =WEBFORMS= variable in WebPreferences"
-msgstr "添加 %1 参数到WebPreferences中"
-
 #: twikiplugins/PatternSkin/data/TWiki/WebLeftBar.txt:23
 msgid "Admin Maintenance"
 msgstr "管理员维护"
-
-#: twikiplugins/NatSkin/templates/oopsmanage.nat.tmpl:6
-msgid "Administration error"
-msgstr ""
 
 #: data/TWiki/WebSearchAdvanced.txt:3
 msgid "Advanced Search"
@@ -738,31 +584,23 @@ msgstr "高级搜索"
 msgid "Advanced search"
 msgstr "高级搜索"
 
-#: data/TWiki/ChangeEmailAddress.txt:31
+#: data/TWiki/ChangeEmailAddress.txt:18
 msgid ""
 "After submitting this form your e-mail will be changed, and you will be "
 "returned to this form."
 msgstr "提交表单后，您的密码将被修改，并返回当前表单"
 
-#: data/TWiki/ChangePassword.txt:22
+#: data/TWiki/ChangePassword.txt:10
 msgid "After submitting this form your password will be changed."
 msgstr "提交表单后您的密码将被修改。"
 
-#: data/TWiki/ResetPassword.txt:22
+#: data/TWiki/ResetPassword.txt:10
 msgid ""
 "After submitting this form, you will receive an e-mail with your new, "
 "*system-generated* password, and a link to a page where you can change it."
 msgstr ""
 "提交表单后，您将收到一封新的邮件：包含一个新的由系统自动生成的密码并链接到一"
 "个修改密码页面。"
-
-#: twikiplugins/NatSkin/templates/edittoolbar.natedit.tmpl:19
-msgid "Align left"
-msgstr ""
-
-#: twikiplugins/NatSkin/templates/edittoolbar.natedit.tmpl:23
-msgid "Align right"
-msgstr ""
 
 #: data/TWiki/WebSearch.txt:38 data/TWiki/WebSearchAdvanced.txt:48
 msgid "All public webs"
@@ -772,23 +610,10 @@ msgstr "所有的公开目录"
 msgid "All topics in %1"
 msgstr "在%1中的所有主题"
 
-#: data/TWiki/WebTopicCreator.txt:107
-#: twikiplugins/NatSkin/templates/renamebase.nat.tmpl:21
+#: data/TWiki/WebTopicCreator.txt:112
 #: twikiplugins/PatternSkin/templates/renamebase.pattern.tmpl:27
 msgid "Allow non <nop>WikiWord for the new topic name"
 msgstr "允许使用非<nop>WikiWord 作为新主题名称"
-
-#: twikiplugins/NatSkin/templates/moveattachment.nat.tmpl:22
-#, fuzzy
-msgid "Allow non <nop>WikiWord for the new topic name."
-msgstr "允许使用非<nop>WikiWord 作为新主题名称"
-
-#: twikiplugins/NatSkin/templates/messages.nat.tmpl:170
-#, fuzzy
-msgid ""
-"Alternatively go <a href=\"javascript:history.back()\">back</a> in your "
-"browser and choose a different username."
-msgstr "请返回上一页再试"
 
 #: templates/messages.tmpl:229
 msgid ""
@@ -796,20 +621,10 @@ msgid ""
 "different username."
 msgstr "另外，也可以点击“返回”回到 TWiki.TWikiRegistration 选择另外一个用户名 "
 
-#: twikiplugins/NatSkin/templates/messages.nat.tmpl:148
-#, fuzzy
-msgid "An e-mail could not be delivered."
-msgstr "一封电子邮件已经被发送，请通知您的 %1 管理员 %2"
-
 #: templates/messages.tmpl:216
 msgid ""
 "An e-mail could not be delivered. Please notify your %1 administrator, %2"
 msgstr "一封电子邮件已经被发送，请通知您的 %1 管理员 %2"
-
-#: twikiplugins/NatSkin/templates/messages.nat.tmpl:208
-#, fuzzy
-msgid "An email address is required before a password can be reset."
-msgstr "在密码重置之前需要一个电子邮件地址"
 
 #: twikiplugins/PatternSkin/templates/moveattachment.pattern.tmpl:39
 msgid ""
@@ -821,17 +636,14 @@ msgstr "如果当前主题被另外一个用户锁定，会由错误页面提示
 msgid "And populated with topics from the base web"
 msgstr "并使用基本目录进行组装"
 
-#: twikiplugins/NatSkin/templates/changeformsidebar.nat.tmpl:11
 #: twikiplugins/PatternSkin/templates/changeform.pattern.tmpl:27
 msgid "Any change you made to topic before coming to this page are preserved."
 msgstr "所有您对当前主题的修改已经被保留。"
 
-#: twikiplugins/NatSkin/templates/strings.nat.tmpl:10
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:66
 msgid "Attach"
 msgstr "附件"
 
-#: twikiplugins/NatSkin/templates/attachnew.nat.tmpl:3
 #: twikiplugins/PatternSkin/templates/attachnew.pattern.tmpl:5
 msgid "Attach file to %1"
 msgstr "附一个文件到 %1"
@@ -840,23 +652,15 @@ msgstr "附一个文件到 %1"
 msgid "Attach image or document on %1"
 msgstr "附图到%1"
 
-#: twikiplugins/NatSkin/templates/strings.nat.tmpl:11
-#, fuzzy
-msgid "Attach image or document to this topic"
-msgstr "添加一个图片或者文档到这个主题"
-
 #: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:59
 msgid "Attach new file"
 msgstr "添加一个新文件"
 
-#: twikiplugins/NatSkin/templates/attachtables.nat.tmpl:25
-#: twikiplugins/NatSkin/templates/attachtables.nat.tmpl:4
 #: twikiplugins/PatternSkin/templates/attachtables.pattern.tmpl:9
 msgid "Attachment"
 msgstr "附件"
 
 #: templates/messages.tmpl:468
-#: twikiplugins/NatSkin/templates/messages.nat.tmpl:326
 msgid "Attachment '%1' does not exist"
 msgstr "附件'%1'不存在"
 
@@ -865,7 +669,6 @@ msgid "Attachment already exists in new topic"
 msgstr "在新主题中附件已经存在"
 
 #: templates/messages.tmpl:62
-#: twikiplugins/NatSkin/templates/messages.nat.tmpl:237
 msgid "Attachment delete failed"
 msgstr "附件删除失败"
 
@@ -873,19 +676,9 @@ msgstr "附件删除失败"
 msgid "Attachment does not exist"
 msgstr "附件不存在"
 
-#: twikiplugins/NatSkin/templates/oopsmoveerr.nat.tmpl:3
-#, fuzzy
-msgid "Attachment move error"
-msgstr "附件移动失败"
-
 #: templates/messages.tmpl:54
 msgid "Attachment move failed"
 msgstr "附件移动失败"
-
-#: twikiplugins/NatSkin/data/TWiki/TWikiWebSideBar.txt:47
-#, fuzzy
-msgid "Attachments"
-msgstr "附件"
 
 #: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:77
 msgid "Attachments will not be shown in topic view page."
@@ -896,7 +689,6 @@ msgstr "附件将不在主题的查看页中显示"
 #: twikiplugins/ClassicSkin/templates/oopsaccessdenied.classic.tmpl:4
 #: twikiplugins/ClassicSkin/templates/oopsattention.classic.tmpl:4
 #: twikiplugins/ClassicSkin/templates/oopsleaseconflict.classic.tmpl:4
-#: twikiplugins/NatSkin/templates/oopsattention.nat.tmpl:4
 #: twikiplugins/PatternSkin/templates/oopsaccessdenied.pattern.tmpl:8
 #: twikiplugins/PatternSkin/templates/oopsattention.pattern.tmpl:5
 #: twikiplugins/PatternSkin/templates/oopslanguagechanged.pattern.tmpl:7
@@ -923,7 +715,6 @@ msgstr "回到主题"
 
 #: templates/oopsmore.tmpl:19
 #: twikiplugins/ClassicSkin/templates/oopsmore.classic.tmpl:17
-#: twikiplugins/NatSkin/templates/oopsmore.nat.tmpl:8
 #: twikiplugins/PatternSkin/templates/oopsmorebacklinks.pattern.tmpl:2
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:90
 msgid "Backlinks"
@@ -943,35 +734,12 @@ msgid "Bad password"
 msgstr "新密码"
 
 #: templates/messages.tmpl:116
-#: twikiplugins/NatSkin/templates/messages.nat.tmpl:92
 msgid "Base web %1 is missing or does not exist"
 msgstr "基础目录%1丢失或不存在"
-
-#: twikiplugins/NatSkin/templates/oopsmngcreateweb.nat.tmpl:21
-#, fuzzy
-msgid "Base web:"
-msgstr "%1 目录"
-
-#: twikiplugins/NatSkin/templates/edittoolbar.natedit.tmpl:5
-#, fuzzy
-msgid "Bold text"
-msgstr "编辑文本"
-
-#: twikiplugins/NatSkin/data/TWiki/NatSkinStyleBrowser.txt:43
-msgid "Border Off"
-msgstr ""
-
-#: twikiplugins/NatSkin/data/TWiki/NatSkinStyleBrowser.txt:42
-msgid "Border On"
-msgstr ""
 
 #: data/TWiki/WebSearch.txt:36 data/TWiki/WebSearchAdvanced.txt:46
 msgid "Both body and title"
 msgstr "内容和标题"
-
-#: twikiplugins/NatSkin/data/TWiki/NatSkinStyleBrowser.txt:51
-msgid "Both sidebars"
-msgstr ""
 
 #: data/Trash/WebHome.txt:7
 msgid ""
@@ -982,21 +750,6 @@ msgstr ""
 "缺省情况下，只有 %1 成员有查看垃圾箱目录的权限，如果要允许所有用户有查看权"
 "限，请删除垃圾箱目录的 WebPreferences 中 =ALLOWWEBVIEW= 的相关限制"
 
-#: twikiplugins/NatSkin/templates/oopstopicexists.nat.tmpl:5
-#, fuzzy
-msgid "Can not rename to %1 as this already exists!"
-msgstr "无法重命名%1成%2，因为已经存在"
-
-#: twikiplugins/NatSkin/templates/oopsnotwikiuser.nat.tmpl:5
-#, fuzzy
-msgid "Can't find the username <b>%1</b>"
-msgstr "无法找到用户%1"
-
-#: twikiplugins/NatSkin/templates/messages.nat.tmpl:22
-#, fuzzy
-msgid "Can't find user \"%1\"."
-msgstr "无法找到用户%1"
-
 #: templates/messages.tmpl:421 templates/messages.tmpl:44
 msgid "Can't find user %1"
 msgstr "无法找到用户%1"
@@ -1005,67 +758,19 @@ msgstr "无法找到用户%1"
 msgid "Can't get an e-mail address for %1 (required for password reset)"
 msgstr "无法获得 %1 的电子邮件地址(用于密码重置) "
 
-#: twikiplugins/NatSkin/templates/messages.nat.tmpl:207
-#, fuzzy
-msgid "Can't get an email address for %1"
-msgstr "无法获得 %1 的电子邮件地址"
-
-#: twikiplugins/NatSkin/templates/attachagain.nat.tmpl:25
-#: twikiplugins/NatSkin/templates/attachnew.nat.tmpl:6
-#: twikiplugins/NatSkin/templates/changeform.nat.tmpl:24
-#: twikiplugins/NatSkin/templates/edit.nat.tmpl:79
-#: twikiplugins/NatSkin/templates/edittopicactions.nat.tmpl:9
-#: twikiplugins/NatSkin/templates/messages.nat.tmpl:282
-#: twikiplugins/NatSkin/templates/moveattachment.nat.tmpl:28
-#: twikiplugins/NatSkin/templates/oops.nat.tmpl:20
-#: twikiplugins/NatSkin/templates/oopsempty.nat.tmpl:13
-#: twikiplugins/NatSkin/templates/oopserrbase.nat.tmpl:13
-#: twikiplugins/NatSkin/templates/oopsleaseconflict.nat.tmpl:56
-#: twikiplugins/NatSkin/templates/oopslocked.nat.tmpl:16
-#: twikiplugins/NatSkin/templates/oopslockedrename.nat.tmpl:16
-#: twikiplugins/NatSkin/templates/oopslogonbase.nat.tmpl:25
-#: twikiplugins/NatSkin/templates/oopsmngcreateweb.nat.tmpl:46
-#: twikiplugins/NatSkin/templates/oopsmngcreateweb.nat.tmpl:66
-#: twikiplugins/NatSkin/templates/oopsmore.nat.tmpl:81
-#: twikiplugins/NatSkin/templates/oopsnoformdef.nat.tmpl:30
-#: twikiplugins/NatSkin/templates/oopsresetpasswd.nat.tmpl:21
-#: twikiplugins/NatSkin/templates/oopsrev.nat.tmpl:89
-#: twikiplugins/NatSkin/templates/preview.nat.tmpl:40
-#: twikiplugins/NatSkin/templates/previewtopicactions.nat.tmpl:9
-#: twikiplugins/NatSkin/templates/rename.nat.tmpl:8
-#: twikiplugins/NatSkin/templates/renameconfirm.nat.tmpl:8
-#: twikiplugins/NatSkin/templates/renamerefs.nat.tmpl:8
-#: twikiplugins/NatSkin/templates/renamewebbase.nat.tmpl:15
-#: twikiplugins/NatSkin/templates/renamewebconfirm.nat.tmpl:8
-#: twikiplugins/NatSkin/templates/searchtopicactions.nat.tmpl:2
-#: twikiplugins/NatSkin/templates/settingstopicactions.nat.tmpl:6
-msgid "Cancel"
-msgstr "取消"
-
-#: twikiplugins/NatSkin/templates/edittoolbar.natedit.tmpl:68
-#: twikiplugins/NatSkin/templates/previewtoolbar.natedit.tmpl:13
-#: twikiplugins/NatSkin/templates/settingstoolbar.natedit.tmpl:7
-#, fuzzy
-msgid "Cancel and abandon changes"
-msgstr "取消编辑并撤销更改"
-
 #: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:63
 msgid "Cancel editing and discard changes"
 msgstr "取消编辑并撤销更改"
 
 #: templates/messages.tmpl:69
-#: twikiplugins/NatSkin/templates/messages.nat.tmpl:31
 msgid "Cannot create %1 because it already exists."
 msgstr "无法创建%1 因为已经存在"
 
 #: templates/messages.tmpl:112
-#: twikiplugins/NatSkin/templates/messages.nat.tmpl:88
 msgid "Cannot create web %1 because it already exists"
 msgstr "无法创建%1目录，因为已经存在"
 
 #: templates/messages.tmpl:75 templates/messages.tmpl:81
-#: twikiplugins/NatSkin/templates/messages.nat.tmpl:37
-#: twikiplugins/NatSkin/templates/messages.nat.tmpl:43
 msgid "Cannot rename %1 to %2 because it already exists."
 msgstr "无法重命名%1成%2，因为已经存在"
 
@@ -1077,20 +782,6 @@ msgstr "区分字母大小写"
 msgid "Categories"
 msgstr "类目"
 
-#: twikiplugins/NatSkin/templates/edittoolbar.natedit.tmpl:21
-msgid "Center align"
-msgstr ""
-
-#: twikiplugins/NatSkin/templates/edittoolbar.natedit.tmpl:21
-#, fuzzy
-msgid "Center text"
-msgstr "(文本编辑)"
-
-#: twikiplugins/NatSkin/templates/oopsaccesschange.nat.tmpl:5
-#, fuzzy
-msgid "Change Access Denied"
-msgstr "禁止访问"
-
 #: data/TWiki/ChangePassword.txt:2
 msgid "Change Password"
 msgstr "修改密码"
@@ -1099,18 +790,12 @@ msgstr "修改密码"
 msgid "Change comment and properties only"
 msgstr "只改变属性"
 
-#: twikiplugins/NatSkin/templates/strings.nat.tmpl:20
-msgid "Change form"
-msgstr "更改表单"
-
 #: twikiplugins/PatternSkin/templates/rename.pattern.tmpl:13
 msgid "Change from:"
 msgstr "更改自："
 
 #: data/TWiki/LanguageSelector.txt:16 templates/oopschangelanguage.tmpl:21
 #: templates/oopschangelanguage.tmpl:4 templates/oopslanguagechanged.tmpl:4
-#: twikiplugins/NatSkin/templates/oopslanguagechanged.nat.tmpl:4
-#: twikiplugins/NatSkin/templates/oopsmore.nat.tmpl:44
 msgid "Change language"
 msgstr "更改语言"
 
@@ -1122,69 +807,35 @@ msgstr "在所有目录中改变所有指向!%1的主题中的链接"
 msgid "Change links in topics that refer to !%1 in the %2 Web:"
 msgstr "更改所有指向非 %1 主题中的链接(在 %2 目录中)"
 
-#: twikiplugins/NatSkin/templates/renamewebbase.nat.tmpl:34
 #: twikiplugins/PatternSkin/templates/renamebase.pattern.tmpl:105
 msgid "Change links in topics that refer to %1 in any Web:"
 msgstr "在所有目录中改变所有指向%1的主题中的链接"
 
-#: twikiplugins/NatSkin/templates/renamewebbase.nat.tmpl:29
-#, fuzzy
-msgid "Change links in topics that refer to %1 in the %1 Web:"
-msgstr "更改所有指向%1主题中的链接(在%2目录中)"
-
-#: twikiplugins/NatSkin/templates/renamebase.nat.tmpl:25
 #: twikiplugins/PatternSkin/templates/renamebase.pattern.tmpl:101
 msgid "Change links in topics that refer to %1 in the %2 Web:"
 msgstr "更改所有指向%1主题中的链接(在%2目录中)"
 
-#: twikiplugins/NatSkin/templates/renamebase.nat.tmpl:28
-#, fuzzy
-msgid "Change links in topics that refer to %1.%2 in any Web:"
-msgstr "在所有目录中改变所有指向%1的主题中的链接"
-
-#: data/TWiki/ChangePassword.txt:17
+#: data/TWiki/ChangePassword.txt:23
 msgid "Change password"
 msgstr "修改密码"
-
-#: twikiplugins/NatSkin/templates/attachagain.nat.tmpl:24
-#, fuzzy
-msgid "Change properties"
-msgstr "更改主题"
-
-#: twikiplugins/NatSkin/templates/renamerefs.nat.tmpl:7
-#, fuzzy
-msgid "Change references"
-msgstr "设置"
-
-#: twikiplugins/NatSkin/templates/strings.nat.tmpl:21
-#, fuzzy
-msgid "Change the current form of <nop>%1"
-msgstr "已存在附件"
 
 #: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:27
 msgid "Change topic"
 msgstr "更改主题"
 
 #: lib/TWiki/UI/RDiff.pm:278 lib/TWiki/UI/RDiff.pm:284
-#: twikiplugins/NatSkin/templates/changes.nat.tmpl:16
-#: twikiplugins/NatSkin/templates/search.nat.tmpl:9
 msgid "Changed"
 msgstr "更改过"
 
 #: twikiplugins/MailerContrib/templates/mailnotify.tmpl:18
-#: twikiplugins/NatSkin/templates/changes.nat.tmpl:17
-#: twikiplugins/NatSkin/templates/search.nat.tmpl:10
-#: twikiplugins/NatSkin/templates/searchrenameview.nat.tmpl:11
 #, fuzzy
 msgid "Changed by"
 msgstr "更改自："
 
 #: twikiplugins/MailerContrib/templates/mailnotify.tmpl:16
-#: twikiplugins/NatSkin/templates/searchrenameview.nat.tmpl:10
 msgid "Changed:"
 msgstr "更改过："
 
-#: twikiplugins/NatSkin/data/TWiki/TWikiWebLinks.txt:9
 #: twikiplugins/PatternSkin/data/Main/WebLeftBar.txt:8
 #: twikiplugins/PatternSkin/data/Sandbox/WebLeftBar.txt:8
 #: twikiplugins/PatternSkin/data/TWiki/WebLeftBar.txt:9
@@ -1198,12 +849,6 @@ msgstr "更新"
 #: lib/TWiki/UI/RDiff.pm:476
 msgid "Changes from r%1 to r%2"
 msgstr "从 r%1 更改到 r%2"
-
-#: twikiplugins/NatSkin/templates/renamewebbase.nat.tmpl:63
-msgid ""
-"Characters not allowed in topic names, such as spaces will automatically be "
-"removed."
-msgstr ""
 
 #: templates/messages.tmpl:373
 msgid ""
@@ -1229,26 +874,12 @@ msgstr "选定的主题将被更新指向新的目录名"
 msgid "Child topics in %1 web"
 msgstr "在%1目录中的子主题"
 
-#: twikiplugins/NatSkin/templates/changeform.nat.tmpl:17
 #: twikiplugins/PatternSkin/templates/changeform.pattern.tmpl:10
 #, fuzzy
 msgid "Choose a new form for %1"
 msgstr "从表单模板中选择一个新的"
 
-#: twikiplugins/NatSkin/templates/messages.nat.tmpl:49
-#, fuzzy
-msgid "Chose a topic name that is a %1 or check the allow non-Wiki Word box."
-msgstr ""
-"请在浏览器中返回上一页并选择一个主题名符合 %1.WikiWord 的主题名称或者选中允许"
-"非Wiki Word选项。"
-
-#: twikiplugins/NatSkin/templates/oopslogonbase.nat.tmpl:24
-#, fuzzy
-msgid "Clear"
-msgstr "清除所有"
-
-#: lib/TWiki/Form.pm:584 twikiplugins/NatSkin/templates/renamebase.nat.tmpl:31
-#: twikiplugins/NatSkin/templates/renamewebbase.nat.tmpl:39
+#: lib/TWiki/Form.pm:584
 #: twikiplugins/PatternSkin/templates/renamebase.pattern.tmpl:94
 msgid "Clear all"
 msgstr "清除所有"
@@ -1277,38 +908,23 @@ msgid "Close"
 msgstr "清除所有"
 
 #: templates/messages.tmpl:120
-#: twikiplugins/NatSkin/templates/messages.nat.tmpl:96
 msgid "Color %1 has an invalid format"
 msgstr "颜色 %1包含非法的格式"
 
-#: twikiplugins/NatSkin/templates/attachtables.nat.tmpl:25
-#: twikiplugins/NatSkin/templates/attachtables.nat.tmpl:4
 #: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:66
 #: twikiplugins/PatternSkin/templates/attachtables.pattern.tmpl:62
 #: twikiplugins/PatternSkin/templates/attachtables.pattern.tmpl:9
 msgid "Comment"
 msgstr "评论"
 
-#: twikiplugins/NatSkin/templates/attach.nat.tmpl:26
-#, fuzzy
-msgid "Comment:"
-msgstr "评论:"
-
-#: data/TWiki/TWikiRegistration.txt:259
+#: data/TWiki/TWikiRegistration.txt:265
 msgid "Comments:"
 msgstr "评论:"
-
-#: twikiplugins/NatSkin/templates/oopsrev.nat.tmpl:3
-#, fuzzy
-msgid "Compare Revisions of %1"
-msgstr "比较版本"
 
 #: twikiplugins/PatternSkin/templates/oopsmorecompare.pattern.tmpl:3
 msgid "Compare revisions"
 msgstr "比较版本"
 
-#: twikiplugins/NatSkin/templates/renameconfirm.nat.tmpl:5
-#: twikiplugins/NatSkin/templates/renamewebconfirm.nat.tmpl:3
 #: twikiplugins/PatternSkin/templates/renameconfirm.pattern.tmpl:9
 #: twikiplugins/PatternSkin/templates/renamewebconfirm.pattern.tmpl:9
 msgid "Confirm rename or move"
@@ -1316,27 +932,18 @@ msgstr "确认重命名和移动"
 
 #: templates/oopsleaseconflict.tmpl:5
 #: twikiplugins/ClassicSkin/templates/oopsleaseconflict.classic.tmpl:5
-#: twikiplugins/NatSkin/templates/oopsleaseconflict.nat.tmpl:3
 #: twikiplugins/PatternSkin/templates/oopsleaseconflict.pattern.tmpl:7
 msgid "Conflict"
 msgstr "冲突"
 
 #: templates/messages.tmpl:434 templates/messages.tmpl:441
 #: templates/messages.tmpl:465 templates/messages.tmpl:471
-#: twikiplugins/NatSkin/templates/oops.nat.tmpl:14
 msgid "Contact %1 if you have any questions."
 msgstr "如有问题，请联系 %1"
 
 #: templates/messages.tmpl:365
-#: twikiplugins/NatSkin/templates/messages.nat.tmpl:275
 msgid "Continue and try to rename web?"
 msgstr "继续并重命名目录？"
-
-#: twikiplugins/NatSkin/templates/preview.nat.tmpl:34
-#: twikiplugins/NatSkin/templates/previewtoolbar.natedit.tmpl:4
-#: twikiplugins/NatSkin/templates/previewtopicactions.nat.tmpl:3
-msgid "Continue editing"
-msgstr ""
 
 #: data/TWiki/TWikiPreferences.txt:42
 msgid ""
@@ -1352,21 +959,15 @@ msgstr "无法创建新目录%1"
 msgid "Could not find template"
 msgstr "找不到模板"
 
-#: twikiplugins/NatSkin/templates/messages.nat.tmpl:287
-#, fuzzy
-msgid "Could not find template =%1="
-msgstr "找不到模板"
-
 #: templates/messages.tmpl:285
-#: twikiplugins/NatSkin/templates/messages.nat.tmpl:212
 msgid "Could not save %1."
 msgstr "无法保存%1"
 
-#: data/TWiki/TWikiRegistration.txt:112
+#: data/TWiki/TWikiRegistration.txt:118
 msgid "Country:"
 msgstr "国家:"
 
-#: data/TWiki/WebTopicViewTemplate.txt:19
+#: data/TWiki/WebTopicViewTemplate.txt:26
 #, fuzzy
 msgid "Create '%1'"
 msgstr "创建"
@@ -1385,23 +986,8 @@ msgstr "创建新主题"
 msgid "Create New Topic in %1 Web"
 msgstr "Neues Topic im %1 Web anlegen"
 
-#: twikiplugins/NatSkin/templates/oopsmngcreateweb.nat.tmpl:3
-#, fuzzy
-msgid "Create New Web"
-msgstr "创建新主题"
-
-#: twikiplugins/NatSkin/templates/oopsaccesscreateweb.nat.tmpl:4
-#, fuzzy
-msgid "Create Web Access Denied"
-msgstr "禁止访问"
-
 #: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:75
 msgid "Create a link to the attached file"
-msgstr "创建一个附件链接"
-
-#: twikiplugins/NatSkin/templates/attach.nat.tmpl:35
-#, fuzzy
-msgid "Create a link to the attached file at the end of the topic."
 msgstr "创建一个附件链接"
 
 #: data/Sandbox/WebHome.txt:16
@@ -1422,24 +1008,17 @@ msgid "Create personal sidebar"
 msgstr "创建个人工具栏"
 
 #: data/TWiki/TWikiPreferences.txt:302 data/TWiki/TWikiPreferences.txt:304
-#: data/TWiki/WebTopicCreator.txt:130 lib/TWiki/Render.pm:98
+#: data/TWiki/WebTopicCreator.txt:135 lib/TWiki/Render.pm:98
 msgid "Create this topic"
 msgstr "创建这个主题"
 
-#: data/TWiki/TWikiRegistration.txt:275
+#: data/TWiki/TWikiRegistration.txt:273
 msgid ""
 "Create your personal %1 topic using your WikiName as topic name, and add the "
 "data you submitted to the topic."
 msgstr "根据您的WikiName创建个人%1主题 并在主题上添加数据."
 
-#: twikiplugins/NatSkin/templates/edit.nat.tmpl:64
-#: twikiplugins/NatSkin/templates/preview.nat.tmpl:45
-#: twikiplugins/NatSkin/templates/preview.natedit.tmpl:6
-msgid "Creates a new topic revision when saving"
-msgstr ""
-
 #: templates/messages.tmpl:314
-#: twikiplugins/NatSkin/templates/oopsnoformdef.nat.tmpl:21
 msgid "Creating a suitable Form Definition topic"
 msgstr "创建适当的表单定义主题"
 
@@ -1452,17 +1031,10 @@ msgstr "当前位置："
 msgid "Current parent:"
 msgstr "当前父主题："
 
-#: data/TWiki/ChangePassword.txt:14
+#: data/TWiki/ChangePassword.txt:16
 msgid "Current password"
 msgstr "当前的密码"
 
-#: twikiplugins/NatSkin/templates/renamewebbase.nat.tmpl:48
-#, fuzzy
-msgid "Currently being edited:"
-msgstr "当前父主题："
-
-#: twikiplugins/NatSkin/templates/attachtables.nat.tmpl:25
-#: twikiplugins/NatSkin/templates/attachtables.nat.tmpl:4
 #: twikiplugins/PatternSkin/templates/attachtables.pattern.tmpl:62
 #: twikiplugins/PatternSkin/templates/attachtables.pattern.tmpl:9
 msgid "Date"
@@ -1477,12 +1049,11 @@ msgstr "尊敬的 %1"
 msgid "Debug"
 msgstr "调试"
 
-#: data/TWiki/WebTopicCreator.txt:127
+#: data/TWiki/WebTopicCreator.txt:132
 #, fuzzy
 msgid "Default template"
 msgstr "找不到模板"
 
-#: twikiplugins/NatSkin/templates/renamewebdelete.nat.tmpl:4
 #: twikiplugins/PatternSkin/templates/attachagain.pattern.tmpl:35
 #: twikiplugins/PatternSkin/templates/renameattachmentdelete.pattern.tmpl:25
 #: twikiplugins/PatternSkin/templates/renamedelete.pattern.tmpl:13
@@ -1512,29 +1083,12 @@ msgstr "删除主题..."
 msgid "Deleted"
 msgstr "删除完成"
 
-#: twikiplugins/NatSkin/templates/attachsidebar.nat.tmpl:6
-#: twikiplugins/NatSkin/templates/moveattachmentsidebar.nat.tmpl:6
-#, fuzzy
-msgid "Deleting Attachments"
-msgstr "删除附件"
-
-#: twikiplugins/NatSkin/templates/renamesidebar.nat.tmpl:6
-#, fuzzy
-msgid "Deleting Topics"
-msgstr "删除主题"
-
 #: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:68
 msgid "Describe the file so other people know what it is."
 msgstr "说明一下文件，方便别人了解其中内容。"
 
-#: data/TWiki/WebTopicViewTemplate.txt:7
+#: data/TWiki/WebTopicViewTemplate.txt:11
 msgid "Did you spell the %1 correctly?"
-msgstr ""
-
-#: twikiplugins/NatSkin/templates/oopsauth.nat.tmpl:12
-msgid ""
-"Did you type in your login name and password correctly? Remember, both are "
-"case sensitive."
 msgstr ""
 
 #: data/TWiki/VarMAKETEXT.txt:20
@@ -1545,10 +1099,6 @@ msgstr "您是否想 [[%1][重新设置%2的密码]]?"
 msgid "Difference:"
 msgstr "差异："
 
-#: twikiplugins/NatSkin/templates/strings.nat.tmpl:14
-msgid "Diffs"
-msgstr ""
-
 #: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:77
 msgid "Do not show attachment in table"
 msgstr "在表格中不显示附件"
@@ -1557,36 +1107,18 @@ msgstr "在表格中不显示附件"
 msgid "Do show:"
 msgstr "Anzeigen:"
 
-#: data/TWiki/WebTopicViewTemplate.txt:18
+#: data/TWiki/WebTopicViewTemplate.txt:25
 #, fuzzy
 msgid "Do you wish to create the topic %1?"
 msgstr "如果您希望创建主题"
 
-#: data/TWiki/WebTopicViewTemplate.txt:10
+#: data/TWiki/WebTopicViewTemplate.txt:18
 msgid "Do you wish to navigate quickly to a similar topic?"
 msgstr ""
-
-#: twikiplugins/NatSkin/data/TWiki/MySideBarTemplate.txt:16
-#, fuzzy
-msgid "Documentation"
-msgstr "当前位置："
 
 #: data/TWiki/WebSearchAdvanced.txt:68
 msgid "Don't show:"
 msgstr "不要显示:"
-
-#: twikiplugins/NatSkin/templates/edit.nat.tmpl:78
-#: twikiplugins/NatSkin/templates/edittopicactions.nat.tmpl:6
-#: twikiplugins/NatSkin/templates/preview.nat.tmpl:39
-#: twikiplugins/NatSkin/templates/previewtopicactions.nat.tmpl:6
-#, fuzzy
-msgid "Done"
-msgstr "(无)"
-
-#: twikiplugins/NatSkin/templates/messages.nat.tmpl:238
-#, fuzzy
-msgid "During deletion of attachment =%1= an error was found."
-msgstr "在删除附件=%1=期间发生错误： 请通知%2管理员"
 
 #: templates/messages.tmpl:63
 msgid ""
@@ -1600,25 +1132,10 @@ msgid ""
 "administrator."
 msgstr "在移动附件%1期间发成错误，请通知%2管理员"
 
-#: twikiplugins/NatSkin/templates/messages.nat.tmpl:54
-#, fuzzy
-msgid "During rename of topic %1 to %2 an error (%3) was found."
-msgstr "在将%1重命名成%2期间发生(%3)错误 请通知%4管理员"
-
 #: templates/messages.tmpl:91
 msgid ""
 "During rename of topic %1 to %2 an error (%3) was found. Please notify your %"
 "4 administrator."
-msgstr "在将%1重命名成%2期间发生(%3)错误 请通知%4管理员"
-
-#: twikiplugins/NatSkin/templates/oopsrenameerr.nat.tmpl:5
-#, fuzzy
-msgid "During rename of topic %1 to %2 an error was found."
-msgstr "在将%1重命名成%2期间发生(%3)错误 请通知%4管理员"
-
-#: twikiplugins/NatSkin/templates/messages.nat.tmpl:61
-#, fuzzy
-msgid "During rename of web %1 to %2 an error (%3) was found."
 msgstr "在将%1重命名成%2期间发生(%3)错误 请通知%4管理员"
 
 #: templates/messages.tmpl:94
@@ -1627,21 +1144,10 @@ msgid ""
 "administrator."
 msgstr "在将%1重命名成%2期间发生(%3)错误 请通知%4管理员"
 
-#: twikiplugins/NatSkin/templates/messages.nat.tmpl:224
-#, fuzzy
-msgid "During save of %1 an error was found by the version control system."
-msgstr "在保存%1期间，发现一个版本控制错误 请通知%2管理员"
-
 #: templates/messages.tmpl:344
 msgid ""
 "During save of %1 an error was found by the version control system. Please "
 "notify your %2 administrator."
-msgstr "在保存%1期间，发现一个版本控制错误 请通知%2管理员"
-
-#: twikiplugins/NatSkin/templates/oopssaveerr.nat.tmpl:5
-#, fuzzy
-msgid ""
-"During save of file %1 an error was found by the version control system."
 msgstr "在保存%1期间，发现一个版本控制错误 请通知%2管理员"
 
 #: templates/oopssaveerr.tmpl:11
@@ -1651,7 +1157,7 @@ msgid ""
 "Please notify your %2 administrator."
 msgstr "在保存%1期间，发现一个版本控制错误 请通知%2管理员"
 
-#: data/TWiki/TWikiRegistration.txt:96
+#: data/TWiki/TWikiRegistration.txt:102
 msgid "E-mail address:"
 msgstr "电子邮件地址："
 
@@ -1663,20 +1169,12 @@ msgstr "电子邮件修改成功!"
 msgid "Each preference has the syntax"
 msgstr "每个属性都符合语法"
 
-#: twikiplugins/NatSkin/templates/edittopicactions.nat.tmpl:3
-#: twikiplugins/NatSkin/templates/oopsmore.nat.tmpl:39
-#: twikiplugins/NatSkin/templates/preview.nat.tmpl:34
-#: twikiplugins/NatSkin/templates/previewtopicactions.nat.tmpl:3
-#: twikiplugins/NatSkin/templates/settingstopicactions.nat.tmpl:3
-#: twikiplugins/NatSkin/templates/strings.nat.tmpl:8
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:48
 msgid "Edit"
 msgstr "编辑"
 
 #: templates/oopsleaseconflict.tmpl:26
 #: twikiplugins/ClassicSkin/templates/oopsleaseconflict.classic.tmpl:28
-#: twikiplugins/NatSkin/templates/oopsleaseconflict.nat.tmpl:44
-#: twikiplugins/NatSkin/templates/oopslocked.nat.tmpl:14
 #: twikiplugins/PatternSkin/templates/oopsleaseconflict.pattern.tmpl:27
 msgid "Edit Anyway"
 msgstr "强制编辑"
@@ -1685,19 +1183,9 @@ msgstr "强制编辑"
 msgid "Edit personal data"
 msgstr "编辑个人数据"
 
-#: twikiplugins/NatSkin/templates/oopsmore.nat.tmpl:37
-#, fuzzy
-msgid "Edit preference settings for %1"
-msgstr "编辑属性设置"
-
 #: twikiplugins/PatternSkin/data/Main/PatternSkinUserViewTemplate.txt:10
 msgid "Edit text"
 msgstr "编辑文本"
-
-#: twikiplugins/NatSkin/templates/strings.nat.tmpl:9
-#, fuzzy
-msgid "Edit this topic"
-msgstr "编辑这个主题的文本"
 
 #: twikiplugins/ClassicSkin/templates/view.classic.tmpl:28
 #: twikiplugins/PatternSkin/data/Main/PatternSkinUserViewTemplate.txt:18
@@ -1720,14 +1208,6 @@ msgid ""
 "%1 has no content. You may not upload an empty file."
 msgstr "由于没有提供文件名称或您上传的文件 %1 没有内容。不能上传空文件。"
 
-#: twikiplugins/NatSkin/templates/oopsauth.nat.tmpl:4
-msgid "Either you need to register or the authentication failed"
-msgstr ""
-
-#: twikiplugins/NatSkin/templates/edittoolbar.natedit.tmpl:33
-msgid "Embed image"
-msgstr ""
-
 #: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:101
 msgid "Enlarge edit box"
 msgstr "扩大编辑框"
@@ -1744,70 +1224,22 @@ msgid ""
 "TWIKIWEB%.TWikiRegistration if you do not have one."
 msgstr ""
 
-#: twikiplugins/NatSkin/templates/oopsmngcreateweb.nat.tmpl:32
-#: twikiplugins/NatSkin/templates/oopsmngcreateweb.nat.tmpl:37
-#: twikiplugins/NatSkin/templates/oopsmngcreateweb.nat.tmpl:49
-#, fuzzy
-msgid "Error message"
-msgstr "错误"
-
 #: templates/messages.tmpl:206
 #, fuzzy
 msgid "Error registering new user"
 msgstr "注册 %1 发生错误"
 
 #: templates/messages.tmpl:197
-#: twikiplugins/NatSkin/templates/messages.nat.tmpl:141
 msgid "Error registering user %1"
 msgstr "注册 %1 发生错误"
 
 #: templates/messages.tmpl:343
-#: twikiplugins/NatSkin/templates/messages.nat.tmpl:223
 msgid "Error saving topic"
 msgstr "保存主题失败"
-
-#: twikiplugins/NatSkin/templates/oopsmanage.nat.tmpl:8
-msgid "Error: %1 <span class=\"twikiAlert\">%2</span>"
-msgstr ""
-
-#: twikiplugins/NatSkin/templates/oopsmngcreateweb.nat.tmpl:17
-#, fuzzy
-msgid "Error: Cannot create this web because it already exists"
-msgstr "无法创建%1目录，因为已经存在"
-
-#: twikiplugins/NatSkin/templates/oopsmngcreateweb.nat.tmpl:34
-#, fuzzy
-msgid "Error: Could not copy topics to the new web"
-msgstr "无法创建新目录%1"
-
-#: twikiplugins/NatSkin/templates/oopsmngcreateweb.nat.tmpl:30
-#, fuzzy
-msgid "Error: Could not create the new web"
-msgstr "无法创建新目录%1"
-
-#: twikiplugins/NatSkin/templates/oopsmngcreateweb.nat.tmpl:39
-#, fuzzy
-msgid "Error: Could not update the <nop>WebPreferences"
-msgstr "无法创建新目录%1"
 
 #: templates/messages.tmpl:414
 msgid "Error: File attachment at %1,%2 does not exist"
 msgstr "错误： 文件附件于%1, %2不存在"
-
-#: twikiplugins/NatSkin/templates/oopsmngcreateweb.nat.tmpl:8
-#, fuzzy
-msgid "Error: Invalid name of new web"
-msgstr "%1 是个非法的新目录名称"
-
-#: twikiplugins/NatSkin/templates/oopsmngcreateweb.nat.tmpl:20
-#, fuzzy
-msgid "Error: Name of base web is missing or does not exist"
-msgstr "基础目录%1丢失或不存在"
-
-#: twikiplugins/NatSkin/templates/oopsmngcreateweb.nat.tmpl:5
-#, fuzzy
-msgid "Error: Name of new web is missing"
-msgstr "新目录名称缺失"
 
 #: templates/messages.tmpl:416
 msgid ""
@@ -1820,102 +1252,45 @@ msgstr ""
 msgid "Error: Unsupported protocol. (Must be 'http://domain/...')"
 msgstr "错误: 不支持的协议 (必须为'http://domain/..')"
 
-#: twikiplugins/NatSkin/templates/oopsmngcreateweb.nat.tmpl:23
-#, fuzzy
-msgid "Error: Web color is missing or has an invalid format"
-msgstr "颜色 %1包含非法的格式"
-
 #: templates/messages.tmpl:220
-#: twikiplugins/NatSkin/templates/messages.nat.tmpl:155
 msgid "Errors"
 msgstr "错误"
 
-#: twikiplugins/NatSkin/templates/oopsmngcreateweb.nat.tmpl:18
-#, fuzzy
-msgid "Existing Web:"
-msgstr "已存在附件"
-
-#: twikiplugins/NatSkin/templates/attach.nat.tmpl:53
-#, fuzzy
-msgid "Existing attachments for <nop>%1"
-msgstr "已存在附件"
-
-#: twikiplugins/NatSkin/templates/changeformsidebar.nat.tmpl:10
 #: twikiplugins/PatternSkin/templates/changeform.pattern.tmpl:28
 msgid "Existing form data will be lost! (still available in old version)"
 msgstr "目前表单中的数据将丢失(旧版本数据仍保留)"
-
-#: twikiplugins/NatSkin/templates/oopsnoweb.nat.tmpl:5
-msgid "Explanation"
-msgstr ""
-
-#: twikiplugins/NatSkin/templates/editsidebar.nat.tmpl:16
-msgid "External"
-msgstr ""
-
-#: twikiplugins/NatSkin/templates/edittoolbar.natedit.tmpl:29
-msgid "External link"
-msgstr ""
-
-#: twikiplugins/NatSkin/data/TWiki/MySideBarTemplate.txt:22
-msgid "FAQs"
-msgstr ""
 
 #: templates/messages.tmpl:424
 msgid "Failed to include URL %1"
 msgstr "包含URL %1 失败"
 
-#: data/TWiki/ChangeEmailAddress.txt:26 data/TWiki/ChangePassword.txt:17
-#: data/TWiki/ResetPassword.txt:17 data/TWiki/TWikiRegistration.txt:264
+#: data/TWiki/ChangeEmailAddress.txt:25 data/TWiki/ChangePassword.txt:14
+#: data/TWiki/ResetPassword.txt:16 data/TWiki/TWikiRegistration.txt:83
 msgid "Fields marked %1 are required"
 msgstr "标记为%1的字段必填"
 
-#: twikiplugins/NatSkin/templates/oopsregrequ.nat.tmpl:5
-msgid "Fields with a =<span class=\"twikiAlert\">**</span>= mark are required."
-msgstr ""
-
-#: twikiplugins/NatSkin/data/TWiki/MySideBarTemplate.txt:26
-#, fuzzy
-msgid "File Attachment"
-msgstr "隐藏附件"
-
-#: twikiplugins/NatSkin/templates/attachsidebar.nat.tmpl:4
-#: twikiplugins/NatSkin/templates/moveattachmentsidebar.nat.tmpl:4
-#, fuzzy
-msgid "File Attachments"
-msgstr "隐藏附件"
-
 #: templates/messages.tmpl:320
-#: twikiplugins/NatSkin/templates/messages.nat.tmpl:249
 msgid "File has been uploaded with different name"
 msgstr "文件已经用其他名称上传"
-
-#: twikiplugins/NatSkin/templates/oopsmore.nat.tmpl:18
-msgid "Find"
-msgstr ""
 
 #: templates/oopsmore.tmpl:20 templates/oopsmore.tmpl:22
 #: twikiplugins/ClassicSkin/templates/oopsmore.classic.tmpl:18
 #: twikiplugins/ClassicSkin/templates/oopsmore.classic.tmpl:20
-#: twikiplugins/NatSkin/templates/oopsmore.nat.tmpl:15
 #: twikiplugins/PatternSkin/templates/oopsmorebacklinks.pattern.tmpl:3
 #: twikiplugins/PatternSkin/templates/oopsmorebacklinks.pattern.tmpl:5
 msgid "Find topics that link to %1 ..."
 msgstr "找到链接到%1的主题..."
 
-#: data/TWiki/TWikiRegistration.txt:274
+#: data/TWiki/TWikiRegistration.txt:272
 msgid ""
 "Finish creating an account for you, so that you can start editing pages "
 "using your WikiName."
 msgstr "创建您的帐号完成，您可以开始使用您的WikiName编辑页面"
 
-#: data/TWiki/TWikiRegistration.txt:80
+#: data/TWiki/TWikiRegistration.txt:86
 msgid "First Name:"
 msgstr "姓："
 
-#: twikiplugins/NatSkin/templates/edit.nat.tmpl:61
-#: twikiplugins/NatSkin/templates/preview.nat.tmpl:46
-#: twikiplugins/NatSkin/templates/preview.natedit.tmpl:7
 #: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:43
 #: twikiplugins/PatternSkin/templates/preview.pattern.tmpl:24
 msgid "Force new revision"
@@ -1929,44 +1304,9 @@ msgstr "忘记您的密码了？"
 msgid "Form Definition %1 missing"
 msgstr "表单定义%1缺失"
 
-#: twikiplugins/NatSkin/templates/changeformsidebar.nat.tmpl:4
-#: twikiplugins/NatSkin/templates/editsidebar.nat.tmpl:8
-msgid "Form based input"
-msgstr ""
-
 #: templates/messages.tmpl:297
-#: twikiplugins/NatSkin/templates/oopsnoformdef.nat.tmpl:3
 msgid "Form definition missing"
 msgstr "表单定义缺失"
-
-#: twikiplugins/NatSkin/data/TWiki/MySideBarTemplate.txt:25
-#: twikiplugins/NatSkin/templates/editsidebar.nat.tmpl:7
-#, fuzzy
-msgid "Formatted Search"
-msgstr "高级搜索"
-
-#: twikiplugins/NatSkin/templates/search.nat.tmpl:27
-msgid "Found <span>%1</span> topics."
-msgstr ""
-
-#: twikiplugins/NatSkin/templates/renamebase.nat.tmpl:19
-msgid "From"
-msgstr ""
-
-#: twikiplugins/NatSkin/templates/moveattachment.nat.tmpl:19
-#: twikiplugins/NatSkin/templates/renamewebbase.nat.tmpl:23
-msgid "From:"
-msgstr ""
-
-#: twikiplugins/NatSkin/templates/oopsmore.nat.tmpl:70
-#, fuzzy
-msgid "Get a fresh page of the topic %1"
-msgstr "表单将被在%1中定义"
-
-#: twikiplugins/NatSkin/templates/renamesidebar.nat.tmpl:11
-msgid ""
-"Get help on <a href=\"%1\" target=\"_blank\">Renaming and moving topics</a>."
-msgstr ""
 
 #: twikiplugins/PatternSkin/templates/renamebase.pattern.tmpl:46
 msgid ""
@@ -1986,13 +1326,6 @@ msgstr ""
 "获得关于<a target='TWikiVariables' onclick=\"return launchWindow('%"
 "1','TWikiVariables')\" href='%2' rel='nofollow'>设置主题配置</a>的帮助."
 
-#: twikiplugins/NatSkin/templates/messages.nat.tmpl:233
-#, fuzzy
-msgid ""
-"Go <a href=\"javascript:history.back()\">back</a> in your browser and save "
-"your changes locally."
-msgstr "回到浏览器上一页并本地保存所有变更"
-
 #: twikiplugins/PatternSkin/templates/changeform.pattern.tmpl:20
 msgid "Go back"
 msgstr "返回"
@@ -2007,21 +1340,10 @@ msgstr "回到浏览器上一页并输入所有必填的字段"
 msgid "Go back in your browser and save your changes locally."
 msgstr "回到浏览器上一页并本地保存所有变更"
 
-#: twikiplugins/NatSkin/data/TWiki/MySideBarTemplate.txt:21
-msgid "Good Style"
-msgstr ""
-
 #: templates/messages.tmpl:244
-#: twikiplugins/NatSkin/templates/messages.nat.tmpl:177
-#: twikiplugins/NatSkin/templates/oopsregwiki.nat.tmpl:8
 msgid "Good examples:"
 msgstr "好的样例:"
 
-#: twikiplugins/NatSkin/templates/editsidebar.nat.tmpl:4
-msgid "GoodStyle"
-msgstr ""
-
-#: twikiplugins/NatSkin/data/Main/WebLinks.txt:11
 #: twikiplugins/PatternSkin/data/TWiki/WebLeftBar.txt:6
 msgid "Groups"
 msgstr "群组"
@@ -2033,28 +1355,12 @@ msgid "Hello %1!"
 msgstr "您好 %1"
 
 #: data/TWiki/WebSearch.txt:29 data/TWiki/WebSearchAdvanced.txt:37
-#: twikiplugins/NatSkin/templates/attachsidebar.nat.tmpl:3
-#: twikiplugins/NatSkin/templates/changeformsidebar.nat.tmpl:3
-#: twikiplugins/NatSkin/templates/edittoolbar.natedit.tmpl:53
-#: twikiplugins/NatSkin/templates/moveattachmentsidebar.nat.tmpl:3
-#: twikiplugins/NatSkin/templates/renamesidebar.nat.tmpl:3
-#: twikiplugins/NatSkin/templates/renamewebsidebar.nat.tmpl:3
 msgid "Help"
 msgstr "帮助"
-
-#: twikiplugins/NatSkin/templates/attach.nat.tmpl:42
-#, fuzzy
-msgid "Hide attachment in normal topic view."
-msgstr "附件将不在主题的查看页中显示"
 
 #: twikiplugins/PatternSkin/templates/attachtables.pattern.tmpl:5
 msgid "Hide attachments"
 msgstr "隐藏附件"
-
-#: twikiplugins/NatSkin/templates/attach.nat.tmpl:40
-#, fuzzy
-msgid "Hide file:"
-msgstr "隐藏文件"
 
 #: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:28
 #: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:14
@@ -2062,19 +1368,9 @@ msgstr "隐藏文件"
 msgid "Hide help"
 msgstr "隐藏帮助"
 
-#: twikiplugins/NatSkin/templates/attachsidebar.nat.tmpl:8
-#: twikiplugins/NatSkin/templates/moveattachmentsidebar.nat.tmpl:8
-#, fuzzy
-msgid "Hiding Attachments"
-msgstr "隐藏附件"
-
 #: twikiplugins/PatternSkin/templates/viewprint.pattern.tmpl:36
 msgid "History:"
 msgstr "历史:"
-
-#: data/TWiki/NewUserTemplate.txt:80
-msgid "Horizontal size of text edit box:"
-msgstr "编辑框高度:"
 
 #: templates/registernotify.tmpl:16
 #: twikiplugins/ClassicSkin/templates/registernotify.classic.tmpl:16
@@ -2101,18 +1397,12 @@ msgid "Ideas, requests, problems regarding %1? <a href='%2'>Send feedback</a>"
 msgstr "关于%1建议，需求，问题： 请<a href='%2'>发送反馈</a>"
 
 #: templates/messages.tmpl:306
-#: twikiplugins/NatSkin/templates/oopsnoformdef.nat.tmpl:13
 msgid "If this line isn't present see _upgrade_ section below"
 msgstr "如果这行不显示请看下面的 _升级_ "
 
 #: templates/messages.tmpl:300
-#: twikiplugins/NatSkin/templates/oopsnoformdef.nat.tmpl:16
 msgid "If this topic is missing create it, otherwise check it for errors."
 msgstr "如果此主题没有创建，请创建它。否则请检查错误"
-
-#: twikiplugins/NatSkin/templates/oopsleaseconflict.nat.tmpl:37
-msgid "If unsure, click 'Cancel'."
-msgstr ""
 
 #: data/TWiki/WebSearch.txt:48 data/TWiki/WebSearchAdvanced.txt:91
 msgid ""
@@ -2127,17 +1417,12 @@ msgid ""
 msgstr "如果你开发一个TWikiApplication 请参考%1查找适当的参数说明"
 
 #: templates/messages.tmpl:450
-#: twikiplugins/NatSkin/templates/oopsnoweb.nat.tmpl:11
 msgid "If you came here by clicking on a question mark link"
 msgstr "如果您来到这里是通过点击一个问号链接"
 
 #: twikiplugins/PatternSkin/templates/renameattachmentdelete.pattern.tmpl:40
 msgid "If you enter a different name, make sure the topic does  exist."
 msgstr "如果你输入一个不同的主题名称，请确认这个主题不重名。"
-
-#: twikiplugins/NatSkin/templates/oopsauth.nat.tmpl:10
-msgid "If you expected to be logged in at this point:"
-msgstr ""
 
 #: templates/registerconfirm.tmpl:14 templates/registernotify.tmpl:23
 #: twikiplugins/ClassicSkin/templates/registerconfirm.classic.tmpl:14
@@ -2149,12 +1434,12 @@ msgstr ""
 "如果您错误的收到这封邮件：某人( %1 )已经在 %2 网站上用电子邮件地址 %3 注册了 "
 "请联系 %4 说明。"
 
-#: data/TWiki/TWikiRegistration.txt:284
+#: data/TWiki/TWikiRegistration.txt:292
 msgid "If you have any questions about registration, send an e-mail to %1."
 msgstr "如果您有任何关于注册的问题请发送邮件给 %1。"
 
-#: data/TWiki/ChangeEmailAddress.txt:33 data/TWiki/ChangePassword.txt:24
-#: data/TWiki/ResetPassword.txt:24 data/TWiki/VarMAKETEXT.txt:17
+#: data/TWiki/ChangeEmailAddress.txt:39 data/TWiki/ChangePassword.txt:29
+#: data/TWiki/ResetPassword.txt:29 data/TWiki/VarMAKETEXT.txt:17
 #: templates/mailresetpassword.tmpl:14
 #: twikiplugins/ClassicSkin/templates/mailresetpassword.classic.tmpl:14
 #: twikiplugins/PatternSkin/templates/login.pattern.tmpl:76
@@ -2165,10 +1450,6 @@ msgstr "如果您有任何问题请联系%1."
 #: twikiplugins/ClassicSkin/templates/registernotify.classic.tmpl:25
 msgid "If you haven't set a password yet or you want to reset it, go to: %1"
 msgstr "如果您没有设置密码或者想重新设置密码，请到: %1"
-
-#: twikiplugins/NatSkin/templates/oopsnoweb.nat.tmpl:23
-msgid "If you intend to do a full text search:"
-msgstr "如果您想做全文检索:"
 
 #: templates/messages.tmpl:383
 msgid ""
@@ -2182,13 +1463,7 @@ msgstr ""
 msgid "If you want to create the topic"
 msgstr "如果您希望创建主题"
 
-#: twikiplugins/NatSkin/templates/messages.nat.tmpl:323
-#, fuzzy
-msgid "If you want to create the topic then [[%1][click here]]."
-msgstr "如果您希望创建主题"
-
 #: templates/messages.tmpl:455
-#: twikiplugins/NatSkin/templates/oopsnoweb.nat.tmpl:17
 msgid "If you would like to create this web"
 msgstr "如果您希望创建此目录"
 
@@ -2209,18 +1484,9 @@ msgstr ""
 "如果你的用户主题没有保护不被其他用户编辑，并且您未用这个表单注册一个邮件地"
 "址，你的帐户有可能被他人盗用。"
 
-#: twikiplugins/NatSkin/templates/edittoolbar.natedit.tmpl:37
-#, fuzzy
-msgid "Ignore wiki formatting"
-msgstr "更多格式帮助"
-
 #: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:75
 msgid "Images will be displayed, for other attachments a link will be created."
 msgstr "图片将被显示，其他附件链接将被创建"
-
-#: twikiplugins/NatSkin/templates/oopssave.nat.tmpl:3
-msgid "Improper use of the \"<code>save</code>\" script"
-msgstr ""
 
 #: data/TWiki/WebSearchAdvanced.txt:58
 msgid "In reversed order"
@@ -2232,13 +1498,7 @@ msgid ""
 "and accessible across all platforms:"
 msgstr "在某些情况下TWiki会修改上传的文件名以保证在各个平台上都可以访问："
 
-#: twikiplugins/NatSkin/templates/editsidebar.nat.tmpl:9
-msgid "Including"
-msgstr ""
-
 #: templates/messages.tmpl:234 templates/messages.tmpl:241
-#: twikiplugins/NatSkin/templates/messages.nat.tmpl:173
-#: twikiplugins/NatSkin/templates/messages.nat.tmpl:177
 msgid "Incorrect %1"
 msgstr "不正确的 %1"
 
@@ -2246,27 +1506,14 @@ msgstr "不正确的 %1"
 msgid "Incorrect %1.WikiNames:"
 msgstr "不正确的 %1.WikiNames"
 
-#: twikiplugins/NatSkin/templates/oopsregwiki.nat.tmpl:3
-#: twikiplugins/NatSkin/templates/oopsregwiki.nat.tmpl:8
-#, fuzzy
-msgid "Incorrect <nop>WikiName"
-msgstr "不正确的 %1.WikiNames"
-
 #: templates/messages.tmpl:97
-#: twikiplugins/NatSkin/templates/messages.nat.tmpl:68
-#: twikiplugins/NatSkin/templates/oopswrongpassword.nat.tmpl:4
 msgid "Incorrect Password"
 msgstr "不正确的密码"
-
-#: twikiplugins/NatSkin/templates/oopsbadpwformat.nat.tmpl:5
-msgid "Incorrect format of submitted data: <b>%1</b>"
-msgstr ""
 
 #: templates/messages.tmpl:381
 msgid "Incorrect parameters to the =%1= script"
 msgstr "=%1=脚本中的错误的参数"
 
-#: twikiplugins/NatSkin/data/TWiki/TWikiWebLinks.txt:8
 #: twikiplugins/PatternSkin/data/Main/WebLeftBar.txt:6
 #: twikiplugins/PatternSkin/data/Sandbox/WebLeftBar.txt:6
 #: twikiplugins/PatternSkin/data/TWiki/WebLeftBar.txt:7
@@ -2280,10 +1527,6 @@ msgstr "索引"
 msgid "Internal error when sending email to %1."
 msgstr ""
 
-#: twikiplugins/NatSkin/templates/edittoolbar.natedit.tmpl:31
-msgid "Internal link"
-msgstr ""
-
 #: templates/messages.tmpl:329
 msgid ""
 "International (8-bit) characters are removed (replaced by US-ASCII "
@@ -2291,13 +1534,10 @@ msgid ""
 msgstr ""
 
 #: templates/messages.tmpl:267
-#: twikiplugins/NatSkin/templates/messages.nat.tmpl:194
 msgid "Invalid Activation Code"
 msgstr "不正确的激活码"
 
 #: templates/messages.tmpl:259
-#: twikiplugins/NatSkin/templates/messages.nat.tmpl:186
-#: twikiplugins/NatSkin/templates/oopsregemail.nat.tmpl:3
 msgid "Invalid e-mail address"
 msgstr "不正确的电子邮件地址"
 
@@ -2313,7 +1553,7 @@ msgstr ""
 "候保存，您的修改将和他们的合并，，没有任何数据会丢失。但是表单数据无法简单地"
 "合并，所以在这种情况下建议您先和 %1 联系。"
 
-#: data/TWiki/WebTopicCreator.txt:108
+#: data/TWiki/WebTopicCreator.txt:113
 #: twikiplugins/PatternSkin/templates/rename.pattern.tmpl:33
 msgid ""
 "It's usually best to choose a <a target='WikiWord' onclick=\"return "
@@ -2335,25 +1575,16 @@ msgstr ""
 "一般情况下最好选择一个短名称作为新的目录名称，这样比较便于以后链接字符不允许"
 "作为目录名称，例如：空格将被自动删除"
 
-#: twikiplugins/NatSkin/templates/edittoolbar.natedit.tmpl:7
-#, fuzzy
-msgid "Italic text"
-msgstr "编辑文本"
-
 #: twikiplugins/PatternSkin/data/TWiki/WebLeftBarSearch.txt:2
 #: twikiplugins/PatternSkin/data/TWiki/WebTopBar.txt:7
 msgid "Jump"
 msgstr "跳转"
 
-#: twikiplugins/NatSkin/templates/edittoolbar.natedit.tmpl:25
-msgid "Justify text"
-msgstr ""
-
 #: twikiplugins/PatternSkin/templates/oopslanguagechanged.pattern.tmpl:8
 msgid "Language Changed"
 msgstr "语言变更"
 
-#: data/TWiki/TWikiRegistration.txt:84
+#: data/TWiki/TWikiRegistration.txt:90
 msgid "Last Name:"
 msgstr "名："
 
@@ -2364,22 +1595,6 @@ msgstr "最后编辑者"
 #: data/TWiki/WebSearchAdvanced.txt:55
 msgid "Last modified time"
 msgstr "最后更新时间"
-
-#: twikiplugins/NatSkin/templates/edittoolbar.natedit.tmpl:43
-msgid "Level 1 headline"
-msgstr ""
-
-#: twikiplugins/NatSkin/templates/edittoolbar.natedit.tmpl:45
-msgid "Level 2 headline"
-msgstr ""
-
-#: twikiplugins/NatSkin/templates/edittoolbar.natedit.tmpl:47
-msgid "Level 3 headline"
-msgstr ""
-
-#: twikiplugins/NatSkin/templates/edittoolbar.natedit.tmpl:49
-msgid "Level 4 headline"
-msgstr ""
 
 #: data/TWiki/WebSearchAdvanced.txt:80
 msgid "Limit results to:"
@@ -2396,27 +1611,11 @@ msgstr "行: %1"
 msgid "Line: %1 to %2"
 msgstr "行: %1 到 %2"
 
-#: twikiplugins/NatSkin/templates/attach.nat.tmpl:33
-#, fuzzy
-msgid "Link:"
-msgstr "链接"
-
-#: twikiplugins/NatSkin/templates/attachsidebar.nat.tmpl:7
-#: twikiplugins/NatSkin/templates/moveattachmentsidebar.nat.tmpl:7
-#, fuzzy
-msgid "Linking to Attachments"
-msgstr "已存在附件"
-
-#: twikiplugins/NatSkin/data/TWiki/MySideBarTemplate.txt:8
-#, fuzzy
-msgid "Links"
-msgstr "链接"
-
 #: data/TWiki/WebSearch.txt:49 data/TWiki/WebSearchAdvanced.txt:92
 msgid "List all topics in the %1 web in alphabetical order"
 msgstr "按字母顺序列出%1目录所有主题"
 
-#: data/TWiki/WebTopicViewTemplate.txt:13
+#: data/TWiki/WebTopicViewTemplate.txt:21
 #, fuzzy
 msgid "List more similar topic in this web"
 msgstr "在此目录中的相关主题(如有):"
@@ -2424,16 +1623,6 @@ msgstr "在此目录中的相关主题(如有):"
 #: data/TWiki/WebSearch.txt:50 data/TWiki/WebSearchAdvanced.txt:93
 msgid "List topics that start with the letter:"
 msgstr "列出所有以某个字母开头的:"
-
-#: twikiplugins/NatSkin/templates/attach.nat.tmpl:18
-#, fuzzy
-msgid "Local file:"
-msgstr "本地文件"
-
-#: twikiplugins/NatSkin/templates/renamewebbase.nat.tmpl:42
-#, fuzzy
-msgid "Locked Topics"
-msgstr "测试主题"
 
 #: twikiplugins/PatternSkin/templates/constants.pattern.tmpl:7
 msgid "Log In"
@@ -2443,20 +1632,9 @@ msgstr "登录"
 msgid "Log Out"
 msgstr "登出"
 
-#: twikiplugins/NatSkin/templates/oopslogonbase.nat.tmpl:9
-#: twikiplugins/NatSkin/templates/strings.nat.tmpl:2
-#, fuzzy
-msgid "Login"
-msgstr "登录为"
-
 #: templates/mailresetpassword.tmpl:9
 #: twikiplugins/ClassicSkin/templates/mailresetpassword.classic.tmpl:9
 msgid "Login name %1"
-msgstr "登录名 %1"
-
-#: twikiplugins/NatSkin/data/TWiki/TWikiWebTopicActions.txt:4
-#, fuzzy
-msgid "Login to %1"
 msgstr "登录名 %1"
 
 #: twikiplugins/PatternSkin/data/TWiki/PatternSkinElements.txt:206
@@ -2464,23 +1642,7 @@ msgstr "登录名 %1"
 msgid "Logon"
 msgstr "登录为"
 
-#: twikiplugins/NatSkin/templates/strings.nat.tmpl:3
-#, fuzzy
-msgid "Logout"
-msgstr "登出"
-
-#: twikiplugins/NatSkin/data/TWiki/TWikiWebTopicActions.txt:8
-#, fuzzy
-msgid "Logout of %1"
-msgstr "登出"
-
-#: twikiplugins/NatSkin/templates/messages.nat.tmpl:147
-#, fuzzy
-msgid "Mail Error"
-msgstr "邮寄给"
-
 #: templates/messages.tmpl:218
-#: twikiplugins/NatSkin/templates/messages.nat.tmpl:150
 msgid "Mail to"
 msgstr "邮寄给"
 
@@ -2488,38 +1650,11 @@ msgstr "邮寄给"
 msgid "Make search:"
 msgstr "搜索:"
 
-#: twikiplugins/NatSkin/templates/renamesidebar.nat.tmpl:5
-msgid "Managing Topics"
-msgstr ""
-
-#: twikiplugins/NatSkin/templates/renamewebsidebar.nat.tmpl:4
-msgid "Managing Webs"
-msgstr ""
-
-#: twikiplugins/NatSkin/templates/edittoolbar.natedit.tmpl:35
-msgid "Mathematical formula (<nop>LaTeX)"
-msgstr ""
-
-#: twikiplugins/NatSkin/templates/edit.nat.tmpl:53
-#: twikiplugins/NatSkin/templates/preview.nat.tmpl:44
-#: twikiplugins/NatSkin/templates/preview.natedit.tmpl:5
-#, fuzzy
-msgid "Minor changes"
-msgstr "无改动"
-
 #: templates/messages.tmpl:185
-#: twikiplugins/NatSkin/templates/oopsregrequ.nat.tmpl:3
 msgid "Missing Fields"
 msgstr "缺少多个字段"
 
-#: twikiplugins/NatSkin/templates/messages.nat.tmpl:129
-#, fuzzy
-msgid "Missing Fields =<span class=\"twikiAlert\">**</span>="
-msgstr "必填的字段%1没有填写"
-
 #: templates/messages.tmpl:36
-#: twikiplugins/NatSkin/templates/messages.nat.tmpl:14
-#: twikiplugins/NatSkin/templates/oopsmanage.nat.tmpl:3
 msgid "Missing action command"
 msgstr "缺少操作命令"
 
@@ -2527,12 +1662,6 @@ msgstr "缺少操作命令"
 msgid "Modify search"
 msgstr "修改搜索:"
 
-#: twikiplugins/NatSkin/templates/strings.nat.tmpl:16
-#, fuzzy
-msgid "More"
-msgstr "移动"
-
-#: twikiplugins/NatSkin/templates/oopsmore.nat.tmpl:4
 #: twikiplugins/PatternSkin/templates/oopsmore.pattern.tmpl:18
 msgid "More Actions on Topic %1"
 msgstr "关于主题%1的更多操作"
@@ -2540,11 +1669,6 @@ msgstr "关于主题%1的更多操作"
 #: data/TWiki/WikiSyntaxSummary.txt:16
 msgid "More formatting help"
 msgstr "更多格式帮助"
-
-#: twikiplugins/NatSkin/templates/strings.nat.tmpl:17
-#, fuzzy
-msgid "More topic actions"
-msgstr "更多主题操作"
 
 #: twikiplugins/PatternSkin/templates/rdiff.pattern.tmpl:32
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:74
@@ -2556,7 +1680,6 @@ msgstr "更多主题操作……"
 msgid "More..."
 msgstr "更多……"
 
-#: twikiplugins/NatSkin/templates/strings.nat.tmpl:12
 #: twikiplugins/PatternSkin/templates/attachagain.pattern.tmpl:35
 #: twikiplugins/PatternSkin/templates/moveattachment.pattern.tmpl:44
 msgid "Move"
@@ -2574,66 +1697,32 @@ msgstr "移动附件到目录："
 msgid "Move file attachment"
 msgstr "移动文件附件"
 
-#: twikiplugins/NatSkin/templates/moveattachment.nat.tmpl:15
-#, fuzzy
-msgid "Move or Delete File \"%1\""
-msgstr "移动或者删除文件 %1"
-
-#: twikiplugins/NatSkin/templates/strings.nat.tmpl:13
-#, fuzzy
-msgid "Move or rename this topic"
-msgstr "创建这个主题"
-
 #: twikiplugins/PatternSkin/templates/renameattachmentdelete.pattern.tmpl:21
 msgid "Move to web:"
 msgstr "移动到目录:"
-
-#: twikiplugins/NatSkin/templates/oopsrenameerr.nat.tmpl:3
-#, fuzzy
-msgid "Move topic error"
-msgstr "移动主题到目录："
 
 #: twikiplugins/PatternSkin/templates/renamedelete.pattern.tmpl:25
 msgid "Move topic to web:"
 msgstr "移动主题到目录："
 
-#: twikiplugins/NatSkin/templates/attachsidebar.nat.tmpl:5
-#: twikiplugins/NatSkin/templates/moveattachmentsidebar.nat.tmpl:5
-#, fuzzy
-msgid "Moving Attachments"
-msgstr "移动附件"
-
 #: data/TWiki/NewUserTemplate.txt:64
 msgid "My Links"
 msgstr "我的链接"
-
-#: twikiplugins/NatSkin/data/TWiki/MySideBar.txt:4
-msgid "MySideBar"
-msgstr ""
-
-#: twikiplugins/NatSkin/data/TWiki/MySideBarTemplate.txt:6
-msgid "MySidebar"
-msgstr ""
 
 #: lib/TWiki/Search.pm:795
 msgid "NEW"
 msgstr "新"
 
 #: templates/messages.tmpl:103
-#: twikiplugins/NatSkin/templates/messages.nat.tmpl:74
 msgid "Name of new web is missing"
 msgstr "新目录名称缺失"
 
-#: twikiplugins/NatSkin/data/TWiki/TWikiWebSideBar.txt:3
+#: data/Main/TWikiGroups.txt:13
 #, fuzzy
-msgid "Navigation"
-msgstr "布告"
+msgid "New Group"
+msgstr "群组"
 
-#: twikiplugins/NatSkin/templates/strings.nat.tmpl:22
-msgid "New"
-msgstr ""
-
-#: data/TWiki/ChangeEmailAddress.txt:25
+#: data/TWiki/ChangeEmailAddress.txt:28
 msgid "New e-mails (space-separated list)"
 msgstr "新邮件地址(空格分割的列表)"
 
@@ -2642,37 +1731,21 @@ msgstr "新邮件地址(空格分割的列表)"
 msgid "New or changed topics in %1, since %2:"
 msgstr "自从%2后 %1中新建或修改的主题"
 
-#: twikiplugins/NatSkin/templates/mailnotify.nat.tmpl:15
-#, fuzzy
-msgid "New or changed topics in the %1 web, since %2 GMT:"
-msgstr "自从%2后 %1中新建或修改的主题"
-
 #: twikiplugins/PatternSkin/templates/renamewebbase.pattern.tmpl:13
 msgid "New parent web:"
 msgstr "新的父目录:"
 
-#: data/TWiki/ChangePassword.txt:15
+#: data/TWiki/ChangePassword.txt:17
 msgid "New password"
 msgstr "新密码"
 
 #: templates/messages.tmpl:87
-#: twikiplugins/NatSkin/templates/messages.nat.tmpl:48
 msgid "New topic name %1 is not a %2"
-msgstr "新主题名%1不是%2"
-
-#: twikiplugins/NatSkin/templates/oopsrenamenotwikiword.nat.tmpl:3
-#, fuzzy
-msgid "New topic name is not a <nop>WikiWord"
 msgstr "新主题名%1不是%2"
 
 #: twikiplugins/PatternSkin/templates/renamewebbase.pattern.tmpl:9
 msgid "New web name:"
 msgstr "新目录名称:"
-
-#: twikiplugins/NatSkin/templates/oopsrev.nat.tmpl:50
-#, fuzzy
-msgid "Newer revision"
-msgstr "更新版本："
 
 #: twikiplugins/PatternSkin/templates/oopsmorecompare.pattern.tmpl:5
 msgid "Newer revision:"
@@ -2686,11 +1759,6 @@ msgstr "无子主题"
 
 #: templates/messages.tmpl:413
 msgid "No permission to view %1"
-msgstr "无权限查看 %1"
-
-#: twikiplugins/NatSkin/templates/renamewebbase.nat.tmpl:43
-#, fuzzy
-msgid "No permission:"
 msgstr "无权限查看 %1"
 
 #: templates/messages.tmpl:178
@@ -2711,57 +1779,32 @@ msgid ""
 "move."
 msgstr "主题：任何引用此附件的URL都将断掉"
 
-#: data/TWiki/ChangePassword.txt:31 data/TWiki/ResetPassword.txt:31
+#: data/TWiki/ChangePassword.txt:38 data/TWiki/ResetPassword.txt:36
 msgid "Note to administrator"
 msgstr "给管理员的提示"
 
-#: twikiplugins/NatSkin/templates/oopslocked.nat.tmpl:10
-msgid "Note, that this will _break_ the lock"
-msgstr ""
-
-#: data/TWiki/ResetPassword.txt:8 data/TWiki/TWikiRegistration.txt:6
-#: templates/messages.tmpl:272 templates/messages.tmpl:324
-#: templates/registerconfirm.tmpl:13 templates/registernotify.tmpl:22
+#: data/TWiki/TWikiRegistration.txt:6 templates/messages.tmpl:272
+#: templates/messages.tmpl:324 templates/registerconfirm.tmpl:13
+#: templates/registernotify.tmpl:22
 #: twikiplugins/ClassicSkin/templates/registerconfirm.classic.tmpl:13
 #: twikiplugins/ClassicSkin/templates/registernotify.classic.tmpl:22
-#: twikiplugins/NatSkin/templates/messages.nat.tmpl:254
 msgid "Note:"
 msgstr "注意:"
-
-#: twikiplugins/NatSkin/templates/oopsmngcreateweb.nat.tmpl:51
-#, fuzzy
-msgid ""
-"Note: The new web has been created successfully and populated with topics "
-"from the base web"
-msgstr "并使用基本目录进行组装"
 
 #: data/TWiki/WebTopicViewTemplate.txt:2
 #, fuzzy
 msgid "Note: This topic does not exist"
 msgstr "注意：这个Wiki主题尚不存在"
 
-#: twikiplugins/NatSkin/templates/attachsidebar.nat.tmpl:10
-#: twikiplugins/NatSkin/templates/changeformsidebar.nat.tmpl:8
-#: twikiplugins/NatSkin/templates/moveattachmentsidebar.nat.tmpl:10
-#: twikiplugins/NatSkin/templates/renamesidebar.nat.tmpl:9
-#: twikiplugins/NatSkin/templates/renamewebsidebar.nat.tmpl:7
-msgid "Notes"
-msgstr "注意"
-
 #: data/TWiki/VarMAKETEXT.txt:14
 msgid "Notes:"
 msgstr "注意:"
-
-#: twikiplugins/NatSkin/templates/strings.nat.tmpl:23
-msgid "Nothing found. Try again!"
-msgstr ""
 
 #: twikiplugins/PatternSkin/templates/renamebase.pattern.tmpl:99
 #: twikiplugins/PatternSkin/templates/renamewebbase.pattern.tmpl:39
 msgid "Notices:"
 msgstr "通知:"
 
-#: twikiplugins/NatSkin/data/TWiki/TWikiWebLinks.txt:10
 #: twikiplugins/PatternSkin/data/Main/WebLeftBar.txt:9
 #: twikiplugins/PatternSkin/data/Sandbox/WebLeftBar.txt:9
 #: twikiplugins/PatternSkin/data/TWiki/WebLeftBar.txt:10
@@ -2769,59 +1812,29 @@ msgstr "通知:"
 msgid "Notifications"
 msgstr "布告"
 
-#: twikiplugins/NatSkin/templates/searchformat.nat.tmpl:6
+#: twikiplugins/PatternSkin/templates/searchbase.pattern.tmpl:16
 #: twikiplugins/PatternSkin/templates/searchbase.pattern.tmpl:5
-#: twikiplugins/PatternSkin/templates/searchbase.pattern.tmpl:9
 msgid "Number of topics:"
-msgstr "主题数量:"
-
-#: twikiplugins/NatSkin/templates/searchrenameview.nat.tmpl:34
-#, fuzzy
-msgid "Number of topics: <span>%1</span>"
 msgstr "主题数量:"
 
 #: templates/messages.tmpl:33 templates/messages.tmpl:332
 #: templates/oopsaccessdenied.tmpl:6 templates/oopslanguagechanged.tmpl:5
 #: templates/oopssaveerr.tmpl:16
 #: twikiplugins/ClassicSkin/templates/oopsaccessdenied.classic.tmpl:6
-#: twikiplugins/NatSkin/templates/changeform.nat.tmpl:23
-#: twikiplugins/NatSkin/templates/messages.nat.tmpl:111
-#: twikiplugins/NatSkin/templates/messages.nat.tmpl:281
-#: twikiplugins/NatSkin/templates/moveattachment.nat.tmpl:27
-#: twikiplugins/NatSkin/templates/oops.nat.tmpl:19
-#: twikiplugins/NatSkin/templates/oopschangepasswd.nat.tmpl:10
-#: twikiplugins/NatSkin/templates/oopsempty.nat.tmpl:12
-#: twikiplugins/NatSkin/templates/oopserrbase.nat.tmpl:12
-#: twikiplugins/NatSkin/templates/oopslanguagechanged.nat.tmpl:16
-#: twikiplugins/NatSkin/templates/oopslogonbase.nat.tmpl:23
-#: twikiplugins/NatSkin/templates/oopsmngcreateweb.nat.tmpl:45
-#: twikiplugins/NatSkin/templates/oopsmngcreateweb.nat.tmpl:65
-#: twikiplugins/NatSkin/templates/oopsmore.nat.tmpl:55
-#: twikiplugins/NatSkin/templates/oopsnoformdef.nat.tmpl:28
-#: twikiplugins/NatSkin/templates/oopsresetpasswd.nat.tmpl:20
-#: twikiplugins/NatSkin/templates/rename.nat.tmpl:7
-#: twikiplugins/NatSkin/templates/renameconfirm.nat.tmpl:7
-#: twikiplugins/NatSkin/templates/renamewebbase.nat.tmpl:14
-#: twikiplugins/NatSkin/templates/renamewebconfirm.nat.tmpl:7
 #: twikiplugins/PatternSkin/templates/oopsaccessdenied.pattern.tmpl:10
 #: twikiplugins/PatternSkin/templates/oopssaveerr.pattern.tmpl:19
 msgid "OK"
 msgstr "OK"
 
-#: twikiplugins/NatSkin/templates/oopsrev.nat.tmpl:8
-#, fuzzy
-msgid "Older revision"
-msgstr "旧版本"
-
 #: twikiplugins/PatternSkin/templates/oopsmorecompare.pattern.tmpl:4
 msgid "Older revision:"
 msgstr "旧版本"
 
-#: data/TWiki/TWikiRegistration.txt:282
+#: data/TWiki/TWikiRegistration.txt:280
 msgid "Once registered you can login using your %1 and password."
 msgstr "注册后您可以使用%1和密码登录"
 
-#: data/TWiki/WebTopicCreator.txt:146
+#: data/TWiki/WebTopicCreator.txt:151
 msgid ""
 "Once you have created the topic, consider adding links in related topics to "
 "the new topic so that there are more ways people can discover it."
@@ -2829,8 +1842,6 @@ msgstr ""
 "您创建主题后，请在主题中添加相关链接以便于其他人能通过更多途径找到这个主题。"
 
 #: templates/messages.tmpl:439
-#: twikiplugins/NatSkin/templates/messages.nat.tmpl:306
-#: twikiplugins/NatSkin/templates/oopsaccessgroup.nat.tmpl:6
 msgid "Only members of the %1 are allowed to perform this action."
 msgstr "只有%1的成员允许进行这些操作"
 
@@ -2854,15 +1865,15 @@ msgstr "更改的主题"
 msgid "Optionally enter a different topic name:"
 msgstr "或者输入一个不同的主题名称："
 
-#: data/TWiki/TWikiRegistration.txt:109
+#: data/TWiki/TWikiRegistration.txt:115
 msgid "Organisation URL:"
 msgstr "组织链接："
 
-#: data/TWiki/TWikiRegistration.txt:106
+#: data/TWiki/TWikiRegistration.txt:112
 msgid "Organisation name:"
 msgstr "组织名称："
 
-#: data/TWiki/TWikiRegistration.txt:254
+#: data/TWiki/TWikiRegistration.txt:260
 msgid "Other Country"
 msgstr "其他国家"
 
@@ -2874,36 +1885,17 @@ msgstr "%1 的其他附件 "
 msgid "Other search options:"
 msgstr "其他搜索选项:"
 
-#: data/TWiki/ResetPassword.txt:6
+#: data/TWiki/ResetPassword.txt:5
 msgid "Otherwise, use this form to get a new one e-mailed to you."
 msgstr "否则，用这个表发送一封新的邮件给你。"
 
-#: twikiplugins/NatSkin/templates/edit.nat.tmpl:42
-#, fuzzy
-msgid "Parent"
-msgstr "打印"
-
-#: twikiplugins/NatSkin/data/TWiki/TWikiWebSideBar.txt:26
-#, fuzzy
-msgid "Parrent web"
-msgstr "新的父目录:"
-
-#: data/TWiki/ChangeEmailAddress.txt:24
-#: twikiplugins/NatSkin/data/Main/WebLinks.txt:12
-#: twikiplugins/NatSkin/templates/oopslogonbase.nat.tmpl:15
+#: data/TWiki/ChangeEmailAddress.txt:27
 #: twikiplugins/PatternSkin/data/TWiki/PatternSkinElements.txt:201
 #: twikiplugins/PatternSkin/templates/login.pattern.tmpl:94
 msgid "Password"
 msgstr "密码"
 
-#: twikiplugins/NatSkin/templates/oopsbadpwformat.nat.tmpl:3
-#, fuzzy
-msgid "Password Format Error"
-msgstr "密码不匹配"
-
 #: templates/messages.tmpl:146
-#: twikiplugins/NatSkin/templates/messages.nat.tmpl:108
-#: twikiplugins/NatSkin/templates/oopschangepasswd.nat.tmpl:4
 msgid "Password changed successfully!"
 msgstr "密码修改成功!"
 
@@ -2917,8 +1909,6 @@ msgid "Password reset failed"
 msgstr "密码重设失败"
 
 #: templates/messages.tmpl:191
-#: twikiplugins/NatSkin/templates/messages.nat.tmpl:135
-#: twikiplugins/NatSkin/templates/oopsregpasswd.nat.tmpl:3
 msgid "Passwords do not match"
 msgstr "密码不匹配"
 
@@ -2927,33 +1917,12 @@ msgid "Personal Preferences"
 msgstr "个人设置"
 
 #: templates/messages.tmpl:123
-#: twikiplugins/NatSkin/templates/messages.nat.tmpl:100
-#: twikiplugins/NatSkin/templates/oopsmngcreateweb.nat.tmpl:26
 msgid "Pick one of the %1."
 msgstr "从%1挑选一个."
 
 #: data/Trash/TrashAttachment.txt:3
 msgid "Placeholder for trashed attachments"
 msgstr "丢弃附件的存放地"
-
-#: twikiplugins/NatSkin/templates/oopsnoformdef.nat.tmpl:25
-#, fuzzy
-msgid "Please ask your %1 administrator %2, to do this."
-msgstr "一封电子邮件已经被发送，请通知您的 %1 管理员 %2"
-
-#: twikiplugins/NatSkin/templates/oopsmngcreateweb.nat.tmpl:43
-#, fuzzy
-msgid "Please check out the WebPreferences or try again."
-msgstr "请返回上一页再试"
-
-#: twikiplugins/NatSkin/templates/oopsrenamenotwikiword.nat.tmpl:5
-#, fuzzy
-msgid ""
-"Please chose a topic name that is a %1 or check the _Allow non-Wiki Word_ "
-"&nbsp;box."
-msgstr ""
-"请在浏览器中返回上一页并选择一个主题名符合 %1.WikiWord 的主题名称或者选中允许"
-"非Wiki Word选项。"
 
 #: templates/messages.tmpl:231 templates/messages.tmpl:281
 msgid "Please contact %1 if you have any questions."
@@ -2963,25 +1932,9 @@ msgstr "如有问题请联系%1."
 msgid "Please contact %1."
 msgstr ""
 
-#: twikiplugins/NatSkin/templates/oopsresetpasswd.nat.tmpl:15
-msgid "Please copy this information into a friendly e-mail to %1"
-msgstr ""
-
-#: twikiplugins/NatSkin/templates/messages.nat.tmpl:9
-#, fuzzy
-msgid "Please email %1 to request this."
-msgstr "您的用户主题尚未重命名 请发送电子邮件给 %1 申请。"
-
 #: twikiplugins/PatternSkin/templates/login.pattern.tmpl:42
 msgid "Please enter your username and password:"
 msgstr "请输入用户名和密码:"
-
-#: twikiplugins/NatSkin/templates/oops.nat.tmpl:16
-#, fuzzy
-msgid ""
-"Please go <a href=\"javascript:history.back()\">back</a> in your browser and "
-"try again."
-msgstr "请返回上一页再试"
 
 #: templates/messages.tmpl:71 templates/messages.tmpl:77
 #: templates/messages.tmpl:83
@@ -3013,40 +1966,10 @@ msgid "Please go back in your browser and try again."
 msgstr "请返回上一页再试"
 
 #: templates/messages.tmpl:45
-#: twikiplugins/NatSkin/templates/messages.nat.tmpl:23
 msgid ""
 "Please make sure you spelled the %1 correctly and try again. If you get "
 "stuck, please mail %2."
 msgstr "请确认您拼写%1正确并重试，如果仍不成功，请发邮件给%2。"
-
-#: twikiplugins/NatSkin/templates/messages.nat.tmpl:244
-msgid "Please notify your %1"
-msgstr ""
-
-#: twikiplugins/NatSkin/templates/messages.nat.tmpl:160
-#: twikiplugins/NatSkin/templates/messages.nat.tmpl:57
-#, fuzzy
-msgid "Please notify your %1 administrator %2"
-msgstr "一封电子邮件已经被发送，请通知您的 %1 管理员 %2"
-
-#: twikiplugins/NatSkin/templates/messages.nat.tmpl:231
-#: twikiplugins/NatSkin/templates/messages.nat.tmpl:64
-#, fuzzy
-msgid "Please notify your %1 administrator %2."
-msgstr "一封电子邮件已经被发送，请通知您的 %1 管理员 %2"
-
-#: twikiplugins/NatSkin/templates/oopserrbase.nat.tmpl:5
-#, fuzzy
-msgid "Please notify your %1 administrator and explain how to reproduce it:"
-msgstr "一封电子邮件已经被发送，请通知您的 %1 管理员 %2"
-
-#: twikiplugins/NatSkin/templates/messages.nat.tmpl:143
-msgid "Please notify your %1 webmaster %2."
-msgstr ""
-
-#: twikiplugins/NatSkin/templates/messages.nat.tmpl:197
-msgid "Please try again."
-msgstr "请再试."
 
 #: templates/mailresetpassword.tmpl:12
 #: twikiplugins/ClassicSkin/templates/mailresetpassword.classic.tmpl:12
@@ -3054,26 +1977,10 @@ msgid ""
 "Please visit %1 to change your password to something more memorable for you."
 msgstr "请访问%1将您的密码设置成一个容易记住的."
 
-#: twikiplugins/NatSkin/data/TWiki/MySideBarTemplate.txt:29
-#: twikiplugins/NatSkin/data/TWiki/WebLinks.txt:3
-#: twikiplugins/NatSkin/templates/editsidebar.nat.tmpl:11
-msgid "Plugins"
-msgstr ""
-
 #: twikiplugins/PatternSkin/templates/changeform.pattern.tmpl:34
 msgid "Possible form templates"
 msgstr "可能的表单模板"
 
-#: twikiplugins/NatSkin/templates/oopsmanage.nat.tmpl:9
-msgid "Possibly caused by improper use of the =manage= script."
-msgstr ""
-
-#: twikiplugins/NatSkin/templates/settings.nat.tmpl:15
-#, fuzzy
-msgid "Preference Settings for %1:"
-msgstr "设置"
-
-#: twikiplugins/NatSkin/data/TWiki/TWikiWebLinksForAdmins.txt:10
 #: twikiplugins/PatternSkin/data/Main/WebLeftBar.txt:11
 #: twikiplugins/PatternSkin/data/Sandbox/WebLeftBar.txt:11
 #: twikiplugins/PatternSkin/data/TWiki/WebLeftBar.txt:12
@@ -3085,45 +1992,15 @@ msgstr "设置"
 msgid "Preferences for"
 msgstr "设置"
 
-#: twikiplugins/NatSkin/templates/edit.nat.tmpl:74
-#: twikiplugins/NatSkin/templates/edittopicactions.nat.tmpl:4
-#: twikiplugins/NatSkin/templates/preview.nat.tmpl:35
 #: twikiplugins/PatternSkin/templates/preview.pattern.tmpl:16
 #: twikiplugins/PatternSkin/templates/preview.pattern.tmpl:8
 #, fuzzy
 msgid "Preview"
 msgstr "(预览)"
 
-#: twikiplugins/NatSkin/templates/edit.nat.tmpl:74
-#: twikiplugins/NatSkin/templates/edittoolbar.natedit.tmpl:57
-#: twikiplugins/NatSkin/templates/edittopicactions.nat.tmpl:4
-#, fuzzy
-msgid "Preview your changes"
-msgstr "检查最新更改的主题："
-
-#: twikiplugins/NatSkin/data/TWiki/TWikiWebTopicActions.txt:10
-#, fuzzy
-msgid "Print"
-msgstr "打印"
-
-#: twikiplugins/NatSkin/data/TWiki/TWikiWebTopicActions.txt:10
-#, fuzzy
-msgid "Print this page"
-msgstr "编辑这个主题的文本"
-
-#: twikiplugins/NatSkin/templates/oopsnoformdef.nat.tmpl:7
-#, fuzzy
-msgid "Problems could arise for two reasons:"
-msgstr "可能由很多问题引起:"
-
-#: twikiplugins/NatSkin/templates/attachagain.nat.tmpl:8
 #: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:73
 msgid "Properties"
 msgstr "属性"
-
-#: twikiplugins/NatSkin/templates/strings.nat.tmpl:6
-msgid "Raw"
-msgstr ""
 
 #: templates/registernotify.tmpl:10
 #: twikiplugins/ClassicSkin/templates/registernotify.classic.tmpl:10
@@ -3148,37 +2025,16 @@ msgstr "阅读"
 msgid "Recently changed topics"
 msgstr "最新更改的主题"
 
-#: twikiplugins/NatSkin/data/TWiki/MySideBarTemplate.txt:20
-#, fuzzy
-msgid "Reference Manual"
-msgstr "用户属性"
-
-#: twikiplugins/NatSkin/templates/renamewebbase.nat.tmpl:53
-msgid "Referring topics currently being edited:"
-msgstr ""
-
-#: twikiplugins/NatSkin/templates/oopsmore.nat.tmpl:75
-msgid "Refresh"
-msgstr ""
-
 #: twikiplugins/ClassicSkin/data/TWiki/ClassicSkinLogin.txt:2
-#: twikiplugins/NatSkin/data/TWiki/TWikiWebTopicActions.txt:5
 #: twikiplugins/PatternSkin/data/TWiki/WebLeftBarLogin.txt:3
 msgid "Register"
 msgstr "注册"
 
-#: twikiplugins/NatSkin/data/TWiki/TWikiWebTopicActions.txt:5
-#, fuzzy
-msgid "Register on %1"
-msgstr "注册"
-
 #: data/TWiki/TWikiRegistration.txt:6
-#: twikiplugins/NatSkin/templates/oopsauth.nat.tmpl:14
 msgid "Registered users can [[%1][change]] and [[%2][reset]] their passwords."
 msgstr "注册用户可以[[%1][修改密码]] 和[[%2][重设密码]]"
 
 #: data/TWiki/TWikiRegistration.txt:2
-#: twikiplugins/NatSkin/data/Main/WebLinks.txt:9
 msgid "Registration"
 msgstr "注册"
 
@@ -3190,13 +2046,13 @@ msgstr ""
 msgid "Regular expression search"
 msgstr "正则表达式搜索"
 
-#: data/TWiki/NewUserTemplate.txt:89
+#: data/TWiki/NewUserTemplate.txt:81
 msgid "Related Topics"
 msgstr "相关主题："
 
 #: data/Main/TWikiGroupTemplate.txt:10 data/Sandbox/WebNotify.txt:10
-#: data/TWiki/ChangeEmailAddress.txt:35 data/TWiki/ChangePassword.txt:28
-#: data/TWiki/ResetPassword.txt:28 data/Trash/WebNotify.txt:9
+#: data/TWiki/ChangeEmailAddress.txt:45 data/TWiki/ChangePassword.txt:35
+#: data/TWiki/ResetPassword.txt:33 data/Trash/WebNotify.txt:9
 #: data/_default/WebNotify.txt:8 templates/messages.tmpl:437
 #: templates/messages.tmpl:444
 msgid "Related topics:"
@@ -3208,11 +2064,11 @@ msgid ""
 "reflected there as well."
 msgstr "如果需要接受变更通知，请更新你的用户主题中的邮件地址"
 
-#: data/TWiki/ResetPassword.txt:6
+#: data/TWiki/ResetPassword.txt:5
 msgid "Remember your password?"
 msgstr "记住密码？"
 
-#: data/TWiki/WebTopicViewTemplate.txt:7
+#: data/TWiki/WebTopicViewTemplate.txt:11
 msgid "Remember, a %1 is case sensitive."
 msgstr ""
 
@@ -3220,30 +2076,12 @@ msgstr ""
 msgid "Remove the user from the group(s) %1 first."
 msgstr "请先将用户从 %1组删除"
 
-#: twikiplugins/NatSkin/templates/renamewebbase.nat.tmpl:11
 #: twikiplugins/PatternSkin/templates/rename.pattern.tmpl:9
 #: twikiplugins/PatternSkin/templates/renameweb.pattern.tmpl:9
 msgid "Rename"
 msgstr "重命名"
 
-#: twikiplugins/NatSkin/templates/oopsaccessrename.nat.tmpl:4
-#, fuzzy
-msgid "Rename Access Denied"
-msgstr "禁止访问"
-
-#: twikiplugins/NatSkin/templates/renamewebbase.nat.tmpl:18
-#, fuzzy
-msgid "Rename Web"
-msgstr "重命名"
-
-#: twikiplugins/NatSkin/templates/oopslockedrename.nat.tmpl:14
-#, fuzzy
-msgid "Rename anyway"
-msgstr "重命名"
-
 #: templates/messages.tmpl:74 templates/messages.tmpl:80
-#: twikiplugins/NatSkin/templates/messages.nat.tmpl:36
-#: twikiplugins/NatSkin/templates/messages.nat.tmpl:42
 msgid "Rename failed"
 msgstr "重命名失败"
 
@@ -3281,29 +2119,15 @@ msgstr "重命名/移动/删除目录..."
 msgid "Replace form..."
 msgstr "替换表单..."
 
-#: twikiplugins/NatSkin/templates/oopsresetpasswd.nat.tmpl:5
-#, fuzzy
-msgid "Request to reset your TWiki password"
-msgstr "你可以通过 %1 修改密码"
-
-#: twikiplugins/NatSkin/templates/oopsmore.nat.tmpl:60
-#, fuzzy
-msgid "Reset"
-msgstr "注册"
-
 #: data/TWiki/ResetPassword.txt:3
 msgid "Reset Password"
 msgstr "重新设置密码:"
 
-#: data/TWiki/ResetPassword.txt:17
+#: data/TWiki/ResetPassword.txt:22
 msgid "Reset password"
 msgstr "重新设置密码:"
 
-#: twikiplugins/NatSkin/data/TWiki/NatSkinStyleBrowser.txt:76
-msgid "Reset to defaults"
-msgstr ""
-
-#: twikiplugins/PatternSkin/templates/searchbase.pattern.tmpl:23
+#: twikiplugins/PatternSkin/templates/searchbase.pattern.tmpl:29
 msgid "Results from %1 web"
 msgstr "%1目录中的结果"
 
@@ -3311,11 +2135,11 @@ msgstr "%1目录中的结果"
 msgid "Return to %1."
 msgstr "回到%1"
 
-#: data/TWiki/ChangePassword.txt:16
+#: data/TWiki/ChangePassword.txt:18
 msgid "Retype new password"
 msgstr "重新输入新密码"
 
-#: data/TWiki/TWikiRegistration.txt:102
+#: data/TWiki/TWikiRegistration.txt:108
 msgid "Retype password:"
 msgstr "重新输入密码:"
 
@@ -3325,12 +2149,9 @@ msgstr "在您编辑期间，用户%2的版本%1被保存"
 
 #: twikiplugins/MailerContrib/templates/mailnotify.tmpl:44
 #: twikiplugins/MailerContrib/templates/mailnotify.tmpl:76
-#: twikiplugins/NatSkin/templates/mailnotify.nat.tmpl:9
 msgid "Review recent changes in:"
 msgstr "检查最新更改的主题："
 
-#: twikiplugins/NatSkin/templates/oopsrev.nat.tmpl:68
-#: twikiplugins/NatSkin/templates/rdiff.nat.tmpl:26
 #: twikiplugins/PatternSkin/templates/rdiff.pattern.tmpl:22
 msgid "Revision"
 msgstr "修订"
@@ -3347,34 +2168,9 @@ msgstr "S = 保存, Q = 安静保存, K = 修订点, D = 放弃"
 msgid "S = Save, Q = Quiet save, K = Checkpoint, P = Preview, C = Cancel"
 msgstr "S = 保存, Q = 安静保存, K = 修订点, P = 预览, C = 取消"
 
-#: twikiplugins/NatSkin/templates/edit.nat.tmpl:77
-#: twikiplugins/NatSkin/templates/edittopicactions.nat.tmpl:5
-#: twikiplugins/NatSkin/templates/preview.nat.tmpl:38
-#: twikiplugins/NatSkin/templates/previewtopicactions.nat.tmpl:5
-#: twikiplugins/NatSkin/templates/settingstopicactions.nat.tmpl:4
 #: twikiplugins/PatternSkin/templates/settings.pattern.tmpl:28
 msgid "Save"
 msgstr "保存"
-
-#: twikiplugins/NatSkin/templates/edit.nat.tmpl:77
-#: twikiplugins/NatSkin/templates/edittoolbar.natedit.tmpl:62
-#: twikiplugins/NatSkin/templates/edittopicactions.nat.tmpl:5
-#: twikiplugins/NatSkin/templates/preview.nat.tmpl:38
-#: twikiplugins/NatSkin/templates/previewtoolbar.natedit.tmpl:9
-#: twikiplugins/NatSkin/templates/previewtopicactions.nat.tmpl:5
-msgid "Save and continue editing"
-msgstr ""
-
-#: twikiplugins/NatSkin/templates/edit.nat.tmpl:78
-#: twikiplugins/NatSkin/templates/edittoolbar.natedit.tmpl:66
-#: twikiplugins/NatSkin/templates/edittopicactions.nat.tmpl:6
-#: twikiplugins/NatSkin/templates/preview.nat.tmpl:39
-#: twikiplugins/NatSkin/templates/previewtoolbar.natedit.tmpl:11
-#: twikiplugins/NatSkin/templates/previewtopicactions.nat.tmpl:6
-#: twikiplugins/NatSkin/templates/settingstoolbar.natedit.tmpl:5
-#, fuzzy
-msgid "Save and exit"
-msgstr "保存到:"
 
 #: templates/registernotifyadmin.tmpl:16
 #: twikiplugins/ClassicSkin/templates/registernotifyadmin.classic.tmpl:16
@@ -3383,11 +2179,6 @@ msgstr "保存到:"
 
 #: data/TWiki/WebSearch.txt:29 data/TWiki/WebSearchAdvanced.txt:37
 #: data/_default/WebHome.txt:11
-#: twikiplugins/NatSkin/templates/oopsnoweb.nat.tmpl:27
-#: twikiplugins/NatSkin/templates/search.nat.tmpl:3
-#: twikiplugins/NatSkin/templates/searchbox.nat.tmpl:8
-#: twikiplugins/NatSkin/templates/searchformat.nat.tmpl:4
-#: twikiplugins/NatSkin/templates/searchrenameview.nat.tmpl:4
 #: twikiplugins/PatternSkin/data/Main/WebLeftBar.txt:7
 #: twikiplugins/PatternSkin/data/Sandbox/WebLeftBar.txt:7
 #: twikiplugins/PatternSkin/data/TWiki/WebLeftBar.txt:8
@@ -3415,12 +2206,7 @@ msgstr "搜索所有目录"
 msgid "Search all webs for topics that link to here"
 msgstr "在所有目录中搜索链接到这里的主题"
 
-#: twikiplugins/NatSkin/templates/oopsmore.nat.tmpl:23
-#, fuzzy
-msgid "Search in all public webs"
-msgstr "搜索所有目录"
-
-#: data/TWiki/WebTopicViewTemplate.txt:15
+#: data/TWiki/WebTopicViewTemplate.txt:22
 #, fuzzy
 msgid "Search similar topics in all public webs"
 msgstr "在所有目录中搜索相似主题"
@@ -3439,27 +2225,6 @@ msgstr "在%1目录中搜索链接到这里的主题"
 msgid "Search where:"
 msgstr "搜索哪里:"
 
-#: twikiplugins/NatSkin/data/TWiki/NatSkinStyleBrowser.txt:64
-msgid "Searchbox in pos. 1"
-msgstr ""
-
-#: twikiplugins/NatSkin/data/TWiki/NatSkinStyleBrowser.txt:65
-msgid "Searchbox in pos. 2"
-msgstr ""
-
-#: twikiplugins/NatSkin/data/TWiki/NatSkinStyleBrowser.txt:66
-msgid "Searchbox in pos. 3"
-msgstr ""
-
-#: twikiplugins/NatSkin/data/TWiki/NatSkinStyleBrowser.txt:63
-msgid "Searchbox in topbar"
-msgstr ""
-
-#: twikiplugins/NatSkin/data/TWiki/NatSkinStyleBrowser.txt:67
-#, fuzzy
-msgid "Searchbox off"
-msgstr "搜索"
-
 #: twikiplugins/PatternSkin/templates/searchbase.pattern.tmpl:1
 msgid "Searched:"
 msgstr "搜索到:"
@@ -3469,16 +2234,14 @@ msgid "Security Note:"
 msgstr "安全提示："
 
 #: templates/messages.tmpl:47
-#: twikiplugins/NatSkin/templates/messages.nat.tmpl:26
 msgid "See %1 for a list of existing users or register as new user in %2."
 msgstr "查看%1完整用户列表或者在%2注册新用户"
 
 #: templates/messages.tmpl:293
-#: twikiplugins/NatSkin/templates/oopsnoformdef.nat.tmpl:6
 msgid "See %1 for information about Form Definitions."
 msgstr "查看%1获得更多关于表单定义的信息"
 
-#: data/TWiki/ChangePassword.txt:31 data/TWiki/ResetPassword.txt:31
+#: data/TWiki/ChangePassword.txt:38 data/TWiki/ResetPassword.txt:36
 msgid "See %1 for more information."
 msgstr "查看 %1 获得更多信息"
 
@@ -3491,18 +2254,6 @@ msgid "See also the verbose %1."
 msgstr "查看更全的%1."
 
 #: data/TWiki/RenameWeb.txt:3 data/TWiki/WebChanges.txt:6
-#: twikiplugins/NatSkin/data/TWiki/MySideBar.txt:12
-#: twikiplugins/NatSkin/templates/login.nat.tmpl:16
-#: twikiplugins/NatSkin/templates/messages.nat.tmpl:302
-#: twikiplugins/NatSkin/templates/messages.nat.tmpl:310
-#: twikiplugins/NatSkin/templates/oopsaccesschange.nat.tmpl:11
-#: twikiplugins/NatSkin/templates/oopsaccesscreateweb.nat.tmpl:10
-#: twikiplugins/NatSkin/templates/oopsaccessgroup.nat.tmpl:10
-#: twikiplugins/NatSkin/templates/oopsaccessrename.nat.tmpl:10
-#: twikiplugins/NatSkin/templates/oopsaccessview.nat.tmpl:10
-#: twikiplugins/NatSkin/templates/oopsaccessvote.nat.tmpl:10
-#: twikiplugins/NatSkin/templates/oopslogon.nat.tmpl:10
-#: twikiplugins/NatSkin/templates/oopswrongpassword.nat.tmpl:10
 #: twikiplugins/PatternSkin/templates/login.pattern.tmpl:75
 msgid "See also:"
 msgstr "也可查看:"
@@ -3519,25 +2270,11 @@ msgstr "选择一个新的文件，更新附件"
 msgid "Select all"
 msgstr "选择所有"
 
-#: twikiplugins/NatSkin/templates/renamesidebar.nat.tmpl:15
-#, fuzzy
-msgid "Select the [[Trash.WebHome][Trash]] web to delete the topic."
-msgstr "选择%1目录删除主题"
-
 #: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:90
 msgid "Select, copy and paste your signature text to the bottom of your entry"
 msgstr "选择/复制/粘贴您的签名文字到条目的底部"
 
-#: twikiplugins/NatSkin/templates/oopsmngcreateweb.nat.tmpl:60
-#, fuzzy
-msgid "Select..."
-msgstr "选择"
-
-#: twikiplugins/NatSkin/templates/oopssendmailerr.nat.tmpl:3
-msgid "Send Mail Error"
-msgstr ""
-
-#: data/TWiki/TWikiRegistration.txt:277
+#: data/TWiki/TWikiRegistration.txt:275
 msgid "Send you a confirmation of your registration by e-mail."
 msgstr "通过电子邮件发送您的注册确认。"
 
@@ -3575,19 +2312,7 @@ msgstr "缩小编辑框"
 msgid "Side by side"
 msgstr "并列"
 
-#: twikiplugins/NatSkin/data/TWiki/NatSkinStyleBrowser.txt:49
-msgid "Sidebar Left"
-msgstr ""
-
-#: twikiplugins/NatSkin/data/TWiki/NatSkinStyleBrowser.txt:52
-msgid "Sidebar Off"
-msgstr ""
-
-#: twikiplugins/NatSkin/data/TWiki/NatSkinStyleBrowser.txt:50
-msgid "Sidebar Right"
-msgstr ""
-
-#: data/TWiki/WebTopicViewTemplate.txt:11
+#: data/TWiki/WebTopicViewTemplate.txt:19
 msgid "Similar topics in this web (if any):"
 msgstr "在此目录中的相关主题(如有):"
 
@@ -3595,31 +2320,9 @@ msgstr "在此目录中的相关主题(如有):"
 msgid "Simple search"
 msgstr "简单搜索"
 
-#: twikiplugins/NatSkin/templates/oopsauth.nat.tmpl:18
-msgid ""
-"Simply fill out the *[[%1][TWikiRegistration]]* form. It only takes a minute."
-msgstr ""
-
-#: twikiplugins/NatSkin/data/Main/WebLinksForAdmins.txt:8
-#: twikiplugins/NatSkin/data/TWiki/WebLinksForAdmins.txt:8
-#, fuzzy
-msgid "SitePreferences"
-msgstr "设置"
-
-#: twikiplugins/NatSkin/templates/attachtables.nat.tmpl:25
-#: twikiplugins/NatSkin/templates/attachtables.nat.tmpl:4
 #: twikiplugins/PatternSkin/templates/attachtables.pattern.tmpl:9
 msgid "Size"
 msgstr "大小"
-
-#: twikiplugins/NatSkin/data/TWiki/MySideBarTemplate.txt:34
-msgid "Skin Styles"
-msgstr ""
-
-#: twikiplugins/NatSkin/templates/oopssoftwareerr.nat.tmpl:3
-#, fuzzy
-msgid "Software Error"
-msgstr "主题保存错误"
 
 #: templates/registernotify.tmpl:15
 #: twikiplugins/ClassicSkin/templates/registernotify.classic.tmpl:15
@@ -3652,7 +2355,6 @@ msgstr "对结果排序:"
 msgid "Spaces are replaced by underscores"
 msgstr "空格已经用下划线代替"
 
-#: twikiplugins/NatSkin/data/TWiki/TWikiWebLinks.txt:11
 #: twikiplugins/PatternSkin/data/Main/WebLeftBar.txt:10
 #: twikiplugins/PatternSkin/data/Sandbox/WebLeftBar.txt:10
 #: twikiplugins/PatternSkin/data/TWiki/WebLeftBar.txt:11
@@ -3672,32 +2374,10 @@ msgstr ""
 "步骤2：继续<input type='submit' class='twikiButton' value='Edit' />编辑并保"
 "存%1激活主题"
 
-#: twikiplugins/NatSkin/templates/edittoolbar.natedit.tmpl:11
-msgid "Strike through text"
-msgstr ""
-
-#: data/TWiki/NewUserTemplate.txt:84
-msgid ""
-"Style of text edit box. =width: 99%= for full window width (default), "
-"=width: auto= to disable."
-msgstr ""
-"编辑框样式. =width: 99%= 全屏窗口宽度(缺省), 设置为： =width: auto= 关闭"
-
-#: twikiplugins/NatSkin/data/TWiki/NatSkinStyleBrowser.txt:10
-msgid "Style:"
-msgstr ""
-
-#: data/TWiki/TWikiRegistration.txt:268 templates/messages.tmpl:172
+#: data/TWiki/TWikiRegistration.txt:286 templates/messages.tmpl:172
 #: templates/messages.tmpl:278
-#: twikiplugins/NatSkin/templates/messages.nat.tmpl:124
-#: twikiplugins/NatSkin/templates/messages.nat.tmpl:203
 msgid "Submit"
 msgstr "提交"
-
-#: twikiplugins/NatSkin/data/TWiki/NatSkinStyleBrowser.txt:75
-#, fuzzy
-msgid "Submit changes"
-msgstr "(变更)"
 
 #: templates/registernotify.tmpl:18 templates/registernotifyadmin.tmpl:12
 #: twikiplugins/ClassicSkin/templates/registernotify.classic.tmpl:18
@@ -3708,14 +2388,8 @@ msgstr "提交的内容:"
 #: twikiplugins/MailerContrib/templates/mailnotify.tmpl:47
 #: twikiplugins/MailerContrib/templates/mailnotify.tmpl:79
 #: twikiplugins/MailerContrib/templates/newsletter.tmpl:19
-#: twikiplugins/NatSkin/templates/mailnotify.nat.tmpl:12
 msgid "Subscribe / Unsubscribe in:"
 msgstr "订阅/退订"
-
-#: twikiplugins/NatSkin/templates/edittoolbar.natedit.tmpl:13
-#, fuzzy
-msgid "Subscript text"
-msgstr "编辑文本"
 
 #: twikiplugins/PatternSkin/templates/renameweb.pattern.tmpl:27
 msgid "Subwebs must be enabled."
@@ -3725,33 +2399,6 @@ msgstr "子目录必须启用."
 msgid "Summaries"
 msgstr "摘要"
 
-#: twikiplugins/NatSkin/templates/edittoolbar.natedit.tmpl:15
-#, fuzzy
-msgid "Superscript text"
-msgstr "安全提示："
-
-#: twikiplugins/NatSkin/data/TWiki/NatSkinStyleBrowser.txt:20
-msgid "Switch to next style"
-msgstr ""
-
-#: twikiplugins/NatSkin/data/TWiki/NatSkinStyleBrowser.txt:12
-msgid "Switch to previous style"
-msgstr ""
-
-#: twikiplugins/NatSkin/data/TWiki/NatSkinStyleBrowser.txt:25
-#: twikiplugins/NatSkin/data/TWiki/NatSkinStyleBrowser.txt:33
-msgid "Switch to previous variation"
-msgstr ""
-
-#: twikiplugins/NatSkin/data/TWiki/NatSkinStyleBrowser.txt:37
-msgid "Switches:"
-msgstr ""
-
-#: twikiplugins/NatSkin/templates/defaultbody.nat.tmpl:50
-#, fuzzy
-msgid "Syndicate this site"
-msgstr "编辑这个主题的文本"
-
 #: data/TWiki/WebSearch.txt:30 data/TWiki/WebSearchAdvanced.txt:38
 msgid ""
 "TIP: to search for all topics that contain =\"SOAP\"=, =\"WSDL\"=, a literal "
@@ -3759,15 +2406,6 @@ msgid ""
 msgstr ""
 "巧门: 搜索所有主题包含 =\"SOAP\"=, =\"WSDL\"= =\"web service\"= 但不包含 ="
 "\"shampoo\"= 的写, "
-
-#: twikiplugins/NatSkin/data/TWiki/MySideBarTemplate.txt:24
-msgid "TWiki Forms"
-msgstr ""
-
-#: twikiplugins/NatSkin/data/TWiki/MySideBarTemplate.txt:23
-#, fuzzy
-msgid "TWiki Variables"
-msgstr "打印"
 
 #: templates/mailresetpassword.tmpl:3
 #: twikiplugins/ClassicSkin/templates/mailresetpassword.classic.tmpl:3
@@ -3784,10 +2422,6 @@ msgstr ""
 "TWikis用户界面有多种语言，如果想在本次回话中改变语言，请从以下选择并点击\"改"
 "变语言\".否则 \"取消\" 回到前一个主题."
 
-#: twikiplugins/NatSkin/templates/oopsregthanks.nat.tmpl:9
-msgid "Take a look at the [[%1][TWikiWeb]] to get help on the %2."
-msgstr ""
-
 #: data/Sandbox/WebHome.txt:6
 msgid "Test Topics"
 msgstr "测试主题"
@@ -3796,14 +2430,7 @@ msgstr "测试主题"
 msgid "Text body"
 msgstr "文本内容"
 
-#: twikiplugins/NatSkin/templates/editsidebar.nat.tmpl:5
-#, fuzzy
-msgid "TextFormatting"
-msgstr "*格式帮助：*"
-
 #: templates/messages.tmpl:134 templates/messages.tmpl:165
-#: twikiplugins/NatSkin/templates/messages.nat.tmpl:115
-#: twikiplugins/NatSkin/templates/oopsregthanks.nat.tmpl:5
 msgid "Thank you for registering"
 msgstr "谢谢您注册"
 
@@ -3827,27 +2454,15 @@ msgid ""
 "first and last name with spaces removed."
 msgstr "%1 字段必须是姓名，姓氏在 %2 ，例如：大写的姓氏拼音和去掉空格的名字。 "
 
-#: twikiplugins/NatSkin/templates/messages.nat.tmpl:174
-#: twikiplugins/NatSkin/templates/oopsregwiki.nat.tmpl:5
-#, fuzzy
-msgid ""
-"The %1 field must be your first and lastname in %2, e.g. your capitalized "
-"first and lastname with spaces removed."
-msgstr "%1 字段必须是姓名，姓氏在 %2 ，例如：大写的姓氏拼音和去掉空格的名字。 "
-
 #: templates/messages.tmpl:236
 msgid "The %1 field must match the {LoginNameFilterIn} filter for this site"
 msgstr ""
 
 #: templates/messages.tmpl:68
-#: twikiplugins/NatSkin/templates/messages.nat.tmpl:30
-#: twikiplugins/NatSkin/templates/oopstopicexists.nat.tmpl:3
 msgid "The %1 topic already exists"
 msgstr "主题%1已经存在"
 
 #: templates/messages.tmpl:447
-#: twikiplugins/NatSkin/templates/messages.nat.tmpl:314
-#: twikiplugins/NatSkin/templates/oopsnoweb.nat.tmpl:3
 msgid "The %1 web does not exist"
 msgstr "%1目录不存在"
 
@@ -3869,7 +2484,6 @@ msgid ""
 msgstr "TWiki的 %1 目录. TWiki是一个基于WEB的企业级在线协作系统。"
 
 #: templates/messages.tmpl:268
-#: twikiplugins/NatSkin/templates/messages.nat.tmpl:195
 msgid "The activation code %1 is invalid."
 msgstr "激活码%1不合法."
 
@@ -3878,7 +2492,6 @@ msgid "The attachment and any history will be moved to the new topic."
 msgstr "附件和任何历史将移动到新主题."
 
 #: templates/messages.tmpl:404
-#: twikiplugins/NatSkin/templates/oopsleaseconflict.nat.tmpl:22
 msgid ""
 "The chances are good that %1 has simply navigated away from the edit page "
 "without saving."
@@ -3890,28 +2503,13 @@ msgid ""
 "_eventually_ allow you to rename any topics that were locked)"
 msgstr "被标记的主题将被更新(另外一个表格_实际上_允许您重命名任何锁定的主题)"
 
-#: twikiplugins/NatSkin/templates/renamewebbase.nat.tmpl:68
 #: twikiplugins/PatternSkin/templates/renamewebbase.pattern.tmpl:26
 #, fuzzy
 msgid "The checkmarked topics will be updated."
 msgstr "被标记选定的主题将被更新"
 
-#: twikiplugins/NatSkin/templates/oopsbadpwformat.nat.tmpl:7
-msgid "The correct format is =WikiName:&lt;encryptedpassword&gt;= (13 chars)."
-msgstr ""
-
 #: templates/messages.tmpl:260
-#: twikiplugins/NatSkin/templates/messages.nat.tmpl:187
 msgid "The e-mail address for this account is not valid."
-msgstr "这个帐号的电子邮件地址不合法。"
-
-#: twikiplugins/NatSkin/templates/oopssendmailerr.nat.tmpl:5
-msgid "The e-mail could not be delivered."
-msgstr ""
-
-#: twikiplugins/NatSkin/templates/oopsregemail.nat.tmpl:5
-#, fuzzy
-msgid "The email address entered is not valid."
 msgstr "这个帐号的电子邮件地址不合法。"
 
 #: templates/messages.tmpl:420
@@ -3921,10 +2519,6 @@ msgstr "用户%1在密码系统中缺失"
 #: templates/messages.tmpl:321
 msgid "The file has been uploaded and attached properly to the %1 topic."
 msgstr "文件已经被上传并附加在主题%1上"
-
-#: twikiplugins/NatSkin/templates/oopsresetpasswd.nat.tmpl:8
-msgid "The following is your encrypted password entry:"
-msgstr ""
 
 #: templates/messages.tmpl:355
 msgid "The following topics are locked for edit, and cannot be moved:"
@@ -3945,7 +2539,6 @@ msgid "The form should be defined in the topic %1"
 msgstr "表单将被在%1中定义"
 
 #: templates/messages.tmpl:402
-#: twikiplugins/NatSkin/templates/oopsleaseconflict.nat.tmpl:20
 msgid "The lease on this topic expired %1 ago."
 msgstr "主题占用已经于 %1 过期。"
 
@@ -3957,44 +2550,15 @@ msgstr "选择的新主题必须已经存在."
 msgid "The new web has been created"
 msgstr "新目录已经被创建"
 
-#: twikiplugins/NatSkin/templates/oopsmngcreateweb.nat.tmpl:35
-#, fuzzy
-msgid ""
-"The new web has been created, however not all topics could be copied from "
-"the base web."
-msgstr "并使用基本目录进行组装"
-
-#: twikiplugins/NatSkin/templates/oopsempty.nat.tmpl:15
-msgid ""
-"The other possibility is that someone sent you the preview URL of [[%1]] "
-"instead of the view URL."
-msgstr ""
-
 #: templates/messages.tmpl:98
-#: twikiplugins/NatSkin/templates/messages.nat.tmpl:69
 msgid "The password you entered in the *old password* field is incorrect."
 msgstr "在*旧密码*字段输入的密码不正确."
 
-#: twikiplugins/NatSkin/templates/oopswrongpassword.nat.tmpl:6
-#, fuzzy
-msgid ""
-"The password you entered in the *password* field is incorrect. Please try "
-"again."
-msgstr "在*旧密码*字段输入的密码不正确."
-
 #: templates/messages.tmpl:287
-#: twikiplugins/NatSkin/templates/messages.nat.tmpl:130
 msgid "The required field %1 was not filled in."
 msgstr "必填的字段%1没有填写"
 
-#: twikiplugins/NatSkin/templates/messages.nat.tmpl:214
-#, fuzzy
-msgid ""
-"The required field =<span class=\"twikiAlert\">**</span>= *%1* was not "
-"filled in."
-msgstr "必填的字段%1没有填写"
-
-#: data/TWiki/WebTopicViewTemplate.txt:5
+#: data/TWiki/WebTopicViewTemplate.txt:4
 #, fuzzy
 msgid "The topic %1 you are trying to access does not exist, yet."
 msgstr "您在%1目录上搜索的主题不存在."
@@ -4004,18 +2568,14 @@ msgid "The topic is in an old format"
 msgstr "主题是旧格式"
 
 #: templates/messages.tmpl:192
-#: twikiplugins/NatSkin/templates/messages.nat.tmpl:136
-#: twikiplugins/NatSkin/templates/oopsregpasswd.nat.tmpl:5
 msgid "The two passwords you entered do not match."
 msgstr "两次输入的密码不匹配."
 
 #: templates/messages.tmpl:351
-#: twikiplugins/NatSkin/templates/messages.nat.tmpl:264
 msgid "There are problems with renaming this web:"
 msgstr "重命名此目录时出错:"
 
 #: templates/messages.tmpl:199
-#: twikiplugins/NatSkin/templates/messages.nat.tmpl:142
 #, fuzzy
 msgid "There has been a problem adding your user id to the Password system."
 msgstr "在添加您的用户名和密码的时候出错，请联系%1."
@@ -4028,21 +2588,6 @@ msgstr "上传文件大小没有限制"
 msgid "There should be a line that includes %1, look for %2 (or %3)"
 msgstr "必须包含一行包含 %1 参考%2(或%3) "
 
-#: twikiplugins/NatSkin/templates/oopsnoformdef.nat.tmpl:11
-#, fuzzy
-msgid ""
-"There should be a line that includes =META:FORM=, look for name=\"&lt;"
-"formName&gt;\""
-msgstr "必须包含一行包含 %1 参考%2(或%3) "
-
-#: twikiplugins/NatSkin/templates/oopsnoformdef.nat.tmpl:15
-msgid "There should be a topic &lt;formName&gt;"
-msgstr ""
-
-#: twikiplugins/NatSkin/data/TWiki/NatSkinStyleBrowser.txt:44
-msgid "Thin Layout"
-msgstr ""
-
 #: templates/messages.tmpl:312
 msgid "This can be automatically upgraded by:"
 msgstr "这将被自动更新:"
@@ -4051,7 +2596,7 @@ msgstr "这将被自动更新:"
 msgid "This could be for several reasons:"
 msgstr "可能由很多问题引起:"
 
-#: data/TWiki/ChangePassword.txt:31 data/TWiki/ResetPassword.txt:31
+#: data/TWiki/ChangePassword.txt:38 data/TWiki/ResetPassword.txt:36
 msgid ""
 "This form applies only if TWiki uses a {PasswordManager} that supports "
 "changing passwords. Otherwise replace this topic with a note describing how "
@@ -4092,11 +2637,6 @@ msgstr "这是一个来自 %1 的自动发送电子邮件。"
 msgid "This is an automated e-mail notification of user registration in %1."
 msgstr "这是一个在 %1 注册用户的自动电子邮件提醒。"
 
-#: twikiplugins/NatSkin/templates/mailnotify.nat.tmpl:7
-#, fuzzy
-msgid "This is an automated email from %1."
-msgstr "这是一个来自 %1 的自动发送电子邮件。"
-
 #: data/Trash/WebHome.txt:2
 msgid ""
 "This is the Trash. Here you can undelete topics; deleted attachments are in "
@@ -4113,18 +2653,11 @@ msgstr "这个名称已经被选定，以便不会和其他在%1中的主题冲�
 msgid "This requires the form definition to be present."
 msgstr "这要求表单定义."
 
-#: twikiplugins/NatSkin/templates/oopsnoformdef.nat.tmpl:19
-#, fuzzy
-msgid ""
-"This requires the form definition to be present. This can be automatically "
-"upgraded by:"
-msgstr "这要求表单定义."
-
 #: templates/messages.tmpl:254
 msgid "This site requires at least %1 character passwords"
 msgstr ""
 
-#: data/TWiki/WebTopicViewTemplate.txt:16
+#: data/TWiki/WebTopicViewTemplate.txt:23
 msgid "This topic has moved to %1."
 msgstr "这个主题已经被移动到 %1 。"
 
@@ -4148,11 +2681,6 @@ msgstr ""
 "您的修改已经和版本%1的合并，文本字段被合并，但其他数据：如表单字段也许被其他"
 "用户覆盖，如果您修改了表单字段，请检查数据确认。"
 
-#: twikiplugins/NatSkin/templates/renamebase.nat.tmpl:20
-#, fuzzy
-msgid "To"
-msgstr "去目录:"
-
 #: twikiplugins/PatternSkin/templates/preview.pattern.tmpl:62
 msgid "To *cancel* and discard any changes: Press the [Discard] button."
 msgstr "*取消*并放弃修改 [取消] 按钮."
@@ -4161,25 +2689,10 @@ msgstr "*取消*并放弃修改 [取消] 按钮."
 msgid "To *save* changes: Press the [Save Changes] button."
 msgstr "*保存*: 请按[保存修改]按钮."
 
-#: twikiplugins/NatSkin/templates/oopslockedrename.nat.tmpl:11
-msgid ""
-"To cancel go <a href=\"javscript:history.back()\">back</a> in your browser."
-msgstr ""
-
-#: twikiplugins/NatSkin/templates/oopslocked.nat.tmpl:11
-msgid ""
-"To cancel simply go <a href=\"javascript:history.back()\">back</a> in your "
-"browser."
-msgstr ""
-
 #: templates/renameweb.tmpl:10
 msgid ""
 "To delete this web: move this web to the Trash web by renaming it to %1."
 msgstr "删除此目录：重命名这个目录为%1，移动这个目录到Trash目录，"
-
-#: twikiplugins/NatSkin/templates/oopslocked.nat.tmpl:9
-msgid "To edit anyway click on the <a href=\"%1\">Edit anyway</a>."
-msgstr ""
 
 #: data/TWiki/TWikiRegistration.txt:4
 msgid ""
@@ -4195,41 +2708,13 @@ msgstr "一定要编辑这个主题，请按"
 msgid "To edit the topic anyway, hit 'Edit Anyway'."
 msgstr "强制编辑这个主题，按'强制编辑'"
 
-#: twikiplugins/NatSkin/templates/oopsleaseconflict.nat.tmpl:35
-#, fuzzy
-msgid "To edit the topic anyway, hit 'Edit&nbsp;Anyway'."
-msgstr "强制编辑这个主题，按'强制编辑'"
-
-#: twikiplugins/NatSkin/templates/oopsauth.nat.tmpl:6
-#, fuzzy
-msgid ""
-"To edit topics on this %1 collaborative web, you must be registered as a "
-"user."
-msgstr "为了编辑这个TWikiSite页面，您必须注册用户名和密码."
-
-#: twikiplugins/NatSkin/templates/oopslocked.nat.tmpl:8
-#: twikiplugins/NatSkin/templates/oopslockedrename.nat.tmpl:9
-msgid ""
-"To look at the text without editing the topic click on the [[%1][View raw "
-"text]]."
-msgstr ""
-
 #: twikiplugins/PatternSkin/templates/preview.pattern.tmpl:61
 msgid "To make *more changes*: Go back in your browser."
 msgstr "为了*更多修改*，在浏览器中按上一页."
 
-#: data/TWiki/TWikiRegistration.txt:8
+#: data/TWiki/TWikiRegistration.txt:77
 msgid "To register as a new user, simply fill out this form:"
 msgstr "为了注册为新用户，请填写以下表格"
-
-#: twikiplugins/NatSkin/templates/oopsauth.nat.tmpl:16
-#, fuzzy
-msgid "To register as a new user:"
-msgstr "为了注册为新用户，请填写以下表格"
-
-#: twikiplugins/NatSkin/templates/oopslockedrename.nat.tmpl:10
-msgid "To rename anyway click on [[%1][Rename anyway]]"
-msgstr ""
 
 #: templates/oopsleaseconflict.tmpl:17
 msgid "To see if %1 has finished editing yet, click "
@@ -4237,11 +2722,6 @@ msgstr "检查 %1 是否已经编辑完毕，请按"
 
 #: twikiplugins/ClassicSkin/templates/oopsleaseconflict.classic.tmpl:11
 msgid "To see if %1 has finished editing yet, click 'Try Again'."
-msgstr "检查 %1 是否已经编辑完毕，请按'再试'."
-
-#: twikiplugins/NatSkin/templates/oopsleaseconflict.nat.tmpl:36
-#, fuzzy
-msgid "To see if they have finished their edit yet, click 'Try&nbsp;Again'"
 msgstr "检查 %1 是否已经编辑完毕，请按'再试'."
 
 #: twikiplugins/PatternSkin/templates/rename.pattern.tmpl:25
@@ -4252,30 +2732,7 @@ msgstr "到主题 "
 msgid "To web:"
 msgstr "去目录:"
 
-#: twikiplugins/NatSkin/templates/moveattachment.nat.tmpl:20
-#: twikiplugins/NatSkin/templates/renamewebbase.nat.tmpl:25
-#, fuzzy
-msgid "To:"
-msgstr "去目录:"
-
-#: twikiplugins/NatSkin/templates/changes.nat.tmpl:15
-#: twikiplugins/NatSkin/templates/moveattachment.nat.tmpl:18
-#, fuzzy
-msgid "Topic"
-msgstr "到主题 "
-
-#: twikiplugins/NatSkin/templates/oopsmore.nat.tmpl:66
-#, fuzzy
-msgid "Topic Caching"
-msgstr "主题附件"
-
-#: twikiplugins/NatSkin/templates/changeformsidebar.nat.tmpl:5
-#, fuzzy
-msgid "Topic Meta data"
-msgstr "主题标题"
-
 #: templates/messages.tmpl:284
-#: twikiplugins/NatSkin/templates/messages.nat.tmpl:211
 msgid "Topic Save Error"
 msgstr "主题保存错误"
 
@@ -4287,44 +2744,19 @@ msgstr "主题附件"
 msgid "Topic can not be upgraded from old style category table"
 msgstr "主题无法从旧风格的目录表格更新"
 
-#: twikiplugins/NatSkin/templates/oopsmissing.nat.tmpl:3
-#, fuzzy
-msgid "Topic does not exist"
-msgstr "%1 主题不存在"
-
-#: twikiplugins/NatSkin/templates/oopslocked.nat.tmpl:3
-#: twikiplugins/NatSkin/templates/oopslockedrename.nat.tmpl:3
-msgid "Topic is locked by another user"
-msgstr ""
-
-#: twikiplugins/NatSkin/templates/oopspreview.nat.tmpl:3
-#, fuzzy
-msgid "Topic is not saved yet"
-msgstr "主题保存错误"
-
-#: twikiplugins/NatSkin/templates/oopsempty.nat.tmpl:3
-msgid "Topic must not be empty"
-msgstr ""
-
 #: data/TWiki/WebSearchAdvanced.txt:54
 msgid "Topic name"
 msgstr "主题名称"
 
-#: data/TWiki/WebTopicCreator.txt:105
+#: data/TWiki/WebTopicCreator.txt:110
 msgid "Topic name:"
 msgstr "主题名称:"
 
-#: data/TWiki/WebTopicCreator.txt:118
+#: data/TWiki/WebTopicCreator.txt:123
 msgid "Topic parent:"
 msgstr "父主题:"
 
-#: twikiplugins/NatSkin/templates/oopsmore.nat.tmpl:32
-#, fuzzy
-msgid "Topic preferences"
-msgstr "设置"
-
 #: templates/oopssaveerr.tmpl:9
-#: twikiplugins/NatSkin/templates/oopssaveerr.nat.tmpl:3
 #: twikiplugins/PatternSkin/templates/oopssaveerr.pattern.tmpl:6
 msgid "Topic save error"
 msgstr "主题保存错误"
@@ -4337,7 +2769,7 @@ msgstr "主题标题"
 msgid "Topic was merged"
 msgstr "主题被合并"
 
-#: data/TWiki/WebTopicCreator.txt:63
+#: data/TWiki/WebTopicCreator.txt:65
 #, fuzzy
 msgid "Topic will be named: "
 msgstr "主题名称:"
@@ -4371,7 +2803,6 @@ msgstr "共匹配"
 
 #: templates/oopsleaseconflict.tmpl:18
 #: twikiplugins/ClassicSkin/templates/oopsleaseconflict.classic.tmpl:20
-#: twikiplugins/NatSkin/templates/oopsleaseconflict.nat.tmpl:50
 #: twikiplugins/PatternSkin/templates/oopsleaseconflict.pattern.tmpl:19
 msgid "Try Again"
 msgstr "再试"
@@ -4386,53 +2817,18 @@ msgid ""
 "and details on preferences variables are available in %1."
 msgstr "请将注释符号 # 删除以启用相应参数设置，更多参数说明请参考 %1"
 
-#: twikiplugins/NatSkin/templates/edittoolbar.natedit.tmpl:9
-msgid "Underlined text"
-msgstr ""
-
-#: twikiplugins/NatSkin/templates/edit.nat.tmpl:76
-#: twikiplugins/NatSkin/templates/edittopicactions.nat.tmpl:8
-#: twikiplugins/NatSkin/templates/preview.nat.tmpl:37
-#: twikiplugins/NatSkin/templates/previewtopicactions.nat.tmpl:8
-#: twikiplugins/NatSkin/templates/settingstopicactions.nat.tmpl:5
-msgid "Undo"
-msgstr ""
-
-#: twikiplugins/NatSkin/templates/login.nat.tmpl:7
-#, fuzzy
-msgid "Unrecognised user and/or password."
-msgstr "无法识别的用户名/密码"
-
 #: templates/messages.tmpl:40
-#: twikiplugins/NatSkin/templates/messages.nat.tmpl:18
 msgid "Unrecognized action command %1"
-msgstr "无法识别的操作%1"
-
-#: twikiplugins/NatSkin/templates/oopsmanage.nat.tmpl:4
-#, fuzzy
-msgid "Unrecognized action command:"
 msgstr "无法识别的操作%1"
 
 #: twikiplugins/PatternSkin/templates/login.pattern.tmpl:54
 msgid "Unrecognized user and/or password"
 msgstr "无法识别的用户名/密码"
 
-#: twikiplugins/NatSkin/templates/attachagain.nat.tmpl:3
-#, fuzzy
-msgid "Update attachment"
-msgstr "在 %2 更新附件 %1"
-
 #: twikiplugins/PatternSkin/templates/attachagain.pattern.tmpl:5
 msgid "Update attachment %1 on %2"
 msgstr "在 %2 更新附件 %1"
 
-#: twikiplugins/NatSkin/templates/searchrenameview.nat.tmpl:8
-#, fuzzy
-msgid "Update ref:"
-msgstr "更新"
-
-#: twikiplugins/NatSkin/templates/attachagain.nat.tmpl:23
-#: twikiplugins/NatSkin/templates/attachnew.nat.tmpl:5
 #: twikiplugins/PatternSkin/templates/attachagain.pattern.tmpl:39
 #: twikiplugins/PatternSkin/templates/attachnew.pattern.tmpl:13
 msgid "Upload file"
@@ -4442,27 +2838,15 @@ msgstr "上传文件"
 msgid "Upload up to %1 KB."
 msgstr "上传文件大小上限： %1 KB."
 
-#: twikiplugins/NatSkin/templates/oopsupload.nat.tmpl:3
-#, fuzzy
-msgid "Uploaded file \"%1\" does not exist or is empty"
-msgstr "上传的文件%1不存在或者为空"
-
-#: twikiplugins/NatSkin/templates/messages.nat.tmpl:219
-#, fuzzy
-msgid "Uploaded file \"<nop>%1\" does not exist or is empty."
-msgstr "上传的文件%1不存在或者为空"
-
 #: templates/messages.tmpl:340
-#: twikiplugins/NatSkin/templates/messages.nat.tmpl:332
 msgid "Uploaded file %1 exceeds limit of %2 KB"
 msgstr "上传的文件%1大小超过了%2 KB上限"
 
 #: templates/messages.tmpl:339
-#: twikiplugins/NatSkin/templates/messages.nat.tmpl:331
 msgid "Uploaded file is too big"
 msgstr "上传的文件过大"
 
-#: data/TWiki/ChangePassword.txt:5 data/TWiki/ResetPassword.txt:6
+#: data/TWiki/ChangePassword.txt:5 data/TWiki/ResetPassword.txt:5
 msgid "Use %1 instead."
 msgstr "用 %1 代替"
 
@@ -4474,13 +2858,12 @@ msgstr "使用等宽字体"
 msgid "Use proportional spaced font"
 msgstr "使用变宽字体"
 
-#: data/TWiki/WebTopicCreator.txt:125
+#: data/TWiki/WebTopicCreator.txt:130
 #, fuzzy
 msgid "Use template:"
 msgstr "可能的表单模板"
 
 #: templates/messages.tmpl:10
-#: twikiplugins/NatSkin/templates/messages.nat.tmpl:4
 msgid "User Account %1 Deleted"
 msgstr "用户帐号 %1 被删除"
 
@@ -4488,16 +2871,11 @@ msgstr "用户帐号 %1 被删除"
 msgid "User Reference"
 msgstr "用户属性"
 
-#: twikiplugins/NatSkin/data/TWiki/MySideBarTemplate.txt:19
-msgid "User's Guide"
-msgstr ""
-
 #: twikiplugins/PatternSkin/data/TWiki/PatternSkinElements.txt:195
 #: twikiplugins/PatternSkin/templates/login.pattern.tmpl:88
 msgid "Username"
 msgstr "用户名"
 
-#: twikiplugins/NatSkin/data/Main/WebLinks.txt:10
 #: twikiplugins/PatternSkin/data/TWiki/WebLeftBar.txt:5
 msgid "Users"
 msgstr "用户"
@@ -4508,17 +2886,6 @@ msgid ""
 "[[%1][change password]] to change their password to something memorable."
 msgstr "用户使用自动生成的密码可以到[[%1][修改密码]]改成容易记住的密码."
 
-#: twikiplugins/NatSkin/templates/changeformsidebar.nat.tmpl:6
-#: twikiplugins/NatSkin/templates/editsidebar.nat.tmpl:6
-#, fuzzy
-msgid "Variables"
-msgstr "打印"
-
-#: twikiplugins/NatSkin/data/TWiki/NatSkinStyleBrowser.txt:24
-msgid "Variation:"
-msgstr ""
-
-#: twikiplugins/NatSkin/templates/attachtables.nat.tmpl:25
 #: twikiplugins/PatternSkin/templates/attachtables.pattern.tmpl:62
 msgid "Version"
 msgstr "版本"
@@ -4532,40 +2899,9 @@ msgstr "%1 的版本历史"
 msgid "Version history of %1"
 msgstr "%1 的版本历史"
 
-#: data/TWiki/NewUserTemplate.txt:82
-msgid "Vertical size of text edit box:"
-msgstr "文本框的高度:"
-
-#: twikiplugins/NatSkin/templates/rdifftopicactions.nat.tmpl:2
-#: twikiplugins/NatSkin/templates/strings.nat.tmpl:4
-#, fuzzy
-msgid "View"
-msgstr "查看"
-
-#: twikiplugins/NatSkin/templates/oopsaccessview.nat.tmpl:4
-#, fuzzy
-msgid "View Access Denied"
-msgstr "禁止访问"
-
-#: twikiplugins/NatSkin/templates/oopsrev.nat.tmpl:65
-#, fuzzy
-msgid "View Previous Topic Revision"
-msgstr "查看主题的前一个版本"
-
-#: twikiplugins/NatSkin/templates/oopsrev.nat.tmpl:88
-#, fuzzy
-msgid "View all diffs"
-msgstr "查看差别"
-
-#: twikiplugins/NatSkin/templates/oopsrev.nat.tmpl:59
 #: twikiplugins/PatternSkin/templates/oopsmorecompare.pattern.tmpl:7
 msgid "View difference"
 msgstr "查看差别"
-
-#: twikiplugins/NatSkin/templates/strings.nat.tmpl:5
-#, fuzzy
-msgid "View formatted topic"
-msgstr "查看主题"
 
 #: templates/oopsmore.tmpl:41
 #: twikiplugins/ClassicSkin/templates/oopsmore.classic.tmpl:39
@@ -4573,32 +2909,15 @@ msgstr "查看主题"
 msgid "View previous topic revision"
 msgstr "查看主题的前一个版本"
 
-#: twikiplugins/NatSkin/templates/oopslocked.nat.tmpl:15
-#: twikiplugins/NatSkin/templates/oopslockedrename.nat.tmpl:15
-#: twikiplugins/NatSkin/templates/oopsnoformdef.nat.tmpl:29
-msgid "View raw"
-msgstr ""
-
 #: twikiplugins/PatternSkin/templates/oopsleaseconflict.pattern.tmpl:34
 msgid "View raw text without formatting"
 msgstr "查看没有格式的源代码"
 
-#: twikiplugins/NatSkin/templates/strings.nat.tmpl:7
-#, fuzzy
-msgid "View raw topic"
-msgstr "查看主题"
-
-#: twikiplugins/NatSkin/templates/oopsnoformdef.nat.tmpl:10
-#, fuzzy
-msgid "View raw topic text"
-msgstr "查看主题"
-
-#: twikiplugins/NatSkin/templates/oopsrev.nat.tmpl:79
 #: twikiplugins/PatternSkin/templates/oopsmorerevision.pattern.tmpl:6
 msgid "View revision"
 msgstr "查看修订"
 
-#: data/TWiki/WebTopicCreator.txt:127
+#: data/TWiki/WebTopicCreator.txt:132
 #, fuzzy
 msgid "View templates"
 msgstr "可能的表单模板"
@@ -4611,20 +2930,10 @@ msgstr "可能的表单模板"
 msgid "View topic"
 msgstr "查看主题"
 
-#: twikiplugins/NatSkin/templates/strings.nat.tmpl:15
-#, fuzzy
-msgid "View topic history"
-msgstr "主题完整修订历史"
-
 #: templates/twiki.tmpl:164
 #: twikiplugins/ClassicSkin/templates/twiki.classic.tmpl:153
 msgid "View total topic history"
 msgstr "主题完整修订历史"
-
-#: twikiplugins/NatSkin/templates/oopsaccessvote.nat.tmpl:4
-#, fuzzy
-msgid "Vote Access Denied"
-msgstr "禁止访问"
 
 #: data/TWiki/WebTopicNonWikiTemplate.txt:2
 msgid "WARNING:"
@@ -4652,52 +2961,20 @@ msgstr ""
 msgid "Warning: This site does not allow %<nop>INCLUDE% of URLs"
 msgstr "警告： 这个网站不允许 %<nop>INCLUDE% 链接"
 
-#: twikiplugins/NatSkin/data/TWiki/NatSkinStyleBrowser.txt:58
-msgid "Web Buttons Off"
-msgstr ""
-
-#: twikiplugins/NatSkin/data/TWiki/NatSkinStyleBrowser.txt:57
-msgid "Web Buttons On"
-msgstr ""
-
 #: data/TWiki/WebSearch.txt:3
 msgid "Web Search"
 msgstr "目录搜索"
-
-#: twikiplugins/NatSkin/templates/moveattachment.nat.tmpl:18
-#, fuzzy
-msgid "Web:"
-msgstr "目录"
 
 #: twikiplugins/PatternSkin/data/TWiki/WebLeftBarExample.txt:8
 #: twikiplugins/PatternSkin/data/TWiki/WebLeftBarWebsList.txt:2
 msgid "Webs"
 msgstr "目录"
 
-#: twikiplugins/NatSkin/data/Main/WebLinks.txt:8
-msgid "Welcome"
-msgstr ""
-
-#: twikiplugins/NatSkin/templates/oopsregthanks.nat.tmpl:8
-msgid "Welcome %1, take a [[%2][first tour]] on the %3."
-msgstr ""
-
-#: twikiplugins/NatSkin/data/TWiki/MySideBarTemplate.txt:18
-#, fuzzy
-msgid "Welcome Guest"
-msgstr "欢迎来到%1目录"
-
-#: twikiplugins/NatSkin/templates/login.nat.tmpl:8
-#: twikiplugins/NatSkin/templates/oopslogon.nat.tmpl:4
-#, fuzzy
-msgid "Welcome to the %1"
-msgstr "欢迎来到%1目录"
-
 #: data/Sandbox/WebHome.txt:2 data/_default/WebHome.txt:2
 msgid "Welcome to the %1 web"
 msgstr "欢迎来到%1目录"
 
-#: data/TWiki/TWikiRegistration.txt:273
+#: data/TWiki/TWikiRegistration.txt:271
 msgid ""
 "When %1 receives the form, it will mail an account activation code to the e-"
 "mail address you gave above. Enter that activation code in the following "
@@ -4707,35 +2984,20 @@ msgstr ""
 "当 %1 收到表单，将自动给相应用户发送激活码邮件，在下以屏输入激活码或者点击电"
 "子邮件的中激活帐号链接，您的帐号激活后， %1 将："
 
-#: twikiplugins/NatSkin/templates/attachtables.nat.tmpl:25
-#: twikiplugins/NatSkin/templates/attachtables.nat.tmpl:4
 #: twikiplugins/PatternSkin/templates/attachtables.pattern.tmpl:62
 #: twikiplugins/PatternSkin/templates/attachtables.pattern.tmpl:9
 msgid "Who"
 msgstr "谁"
 
-#: twikiplugins/NatSkin/templates/renamesidebar.nat.tmpl:7
-#: twikiplugins/NatSkin/templates/renamewebsidebar.nat.tmpl:5
-msgid "WikiWord"
-msgstr ""
-
 #: templates/messages.tmpl:19
-#: twikiplugins/NatSkin/templates/oopsmngcreateweb.nat.tmpl:52
 msgid "Would you like to go to:"
 msgstr "您喜欢去:"
 
-#: data/TWiki/NewUserTemplate.txt:86
-msgid "Write protect your home page: (set it to your %1)"
-msgstr "您的主页写保护: (设置您的 %1)"
-
 #: templates/messages.tmpl:224
-#: twikiplugins/NatSkin/templates/messages.nat.tmpl:165
-#: twikiplugins/NatSkin/templates/oopsregexist.nat.tmpl:3
 msgid "You are already registered"
 msgstr "您已经注册"
 
 #: templates/messages.tmpl:137
-#: twikiplugins/NatSkin/templates/oopsregthanks.nat.tmpl:13
 msgid "You are also listed in the %1 topic"
 msgstr "您也被列在了%1主题中"
 
@@ -4759,11 +3021,6 @@ msgstr ""
 msgid "You are here:"
 msgstr "您在这："
 
-#: twikiplugins/NatSkin/templates/oopsnotwikiuser.nat.tmpl:3
-#, fuzzy
-msgid "You are not registered"
-msgstr "您已经注册"
-
 #: templates/messages.tmpl:107
 msgid ""
 "You are recommended to choose short names, preferably less than 10 "
@@ -4776,36 +3033,18 @@ msgstr ""
 "使用模板目录(用来创建新目录的目录)选择一个名称以下划线和字母"
 
 #: templates/messages.tmpl:460
-#: twikiplugins/NatSkin/templates/messages.nat.tmpl:321
 msgid "You are trying to %1 a topic that does not exist."
 msgstr "您在%1目录上搜索的主题不存在."
 
 #: templates/messages.tmpl:469
-#: twikiplugins/NatSkin/templates/messages.nat.tmpl:327
 msgid "You are trying to %1 an attachment that does not exist."
 msgstr "您想%1的附件不存在。"
-
-#: twikiplugins/NatSkin/templates/messages.nat.tmpl:315
-#, fuzzy
-msgid "You are trying to '%1' a topic in a web that does not exist."
-msgstr "您在%1目录上搜索的主题不存在."
 
 #: templates/messages.tmpl:456
 msgid ""
 "You can [[%1][create a new web]] if you have permission. Contact %2 if you "
 "have any questions."
 msgstr "您如有有权限可以 [[%1][创建一个新目录]], 如有任何问题，联系%2."
-
-#: twikiplugins/NatSkin/templates/oopsnoweb.nat.tmpl:19
-#, fuzzy
-msgid ""
-"You can [[%1][create a new web]] if you have the permission. Contact %2 if "
-"you have any questions."
-msgstr "您如有有权限可以 [[%1][创建一个新目录]], 如有任何问题，联系%2."
-
-#: twikiplugins/NatSkin/templates/messages.nat.tmpl:102
-msgid "You can also use the names of the standard HTML colors"
-msgstr ""
 
 #: templates/messages.tmpl:125
 msgid ""
@@ -4843,13 +3082,7 @@ msgid ""
 "your user topic."
 msgstr "您在你的用户主题中通过 %1 的变量永久设置您喜欢的语言参数"
 
-#: twikiplugins/NatSkin/templates/oopssave.nat.tmpl:5
-msgid "You cannot call this script directly, %1 uses it internally."
-msgstr ""
-
 #: templates/messages.tmpl:225
-#: twikiplugins/NatSkin/templates/messages.nat.tmpl:166
-#: twikiplugins/NatSkin/templates/oopsregexist.nat.tmpl:5
 msgid "You cannot register twice, the name %1 is already registered."
 msgstr "您不能注册2次，%1已经注册过"
 
@@ -4867,13 +3100,6 @@ msgstr "如果您觉得环境设置不合适，可以让TWiki的管理员帮助�
 #: templates/messages.tmpl:148
 msgid "You may need to close your browser to make this change take effect."
 msgstr "您需要关闭浏览器以便让更改生效。"
-
-#: twikiplugins/NatSkin/templates/oopssaveerr.nat.tmpl:7
-#, fuzzy
-msgid ""
-"You might go <a href=\"javascript:history.back()\">back</a> in your browser "
-"and save your changes locally."
-msgstr "回到浏览器上一页并本地保存所有变更"
 
 #: templates/registerconfirm.tmpl:11
 #: twikiplugins/ClassicSkin/templates/registerconfirm.classic.tmpl:11
@@ -4897,14 +3123,10 @@ msgstr ""
 msgid "You will probably have to ask your administrator, %1, to do this."
 msgstr "您也许需要问一下管理员 %1 以进行这个操作"
 
-#: data/TWiki/ChangeEmailAddress.txt:23 data/TWiki/ChangePassword.txt:13
-#: data/TWiki/ResetPassword.txt:16
+#: data/TWiki/ChangeEmailAddress.txt:26 data/TWiki/ChangePassword.txt:15
+#: data/TWiki/ResetPassword.txt:17
 msgid "Your %1.LoginName"
 msgstr "你的 %1.LoginName"
-
-#: twikiplugins/NatSkin/templates/messages.nat.tmpl:7
-msgid "Your [[%1][homepage]] has _not_ been removed yet."
-msgstr ""
 
 #: templates/messages.tmpl:167
 msgid ""
@@ -4916,7 +3138,6 @@ msgstr ""
 "资格（激活码格式 \"YourName.xxxx\"）"
 
 #: templates/oopslanguagechanged.tmpl:11
-#: twikiplugins/NatSkin/templates/oopslanguagechanged.nat.tmpl:12
 #: twikiplugins/PatternSkin/templates/oopslanguagechanged.pattern.tmpl:19
 msgid ""
 "Your language will be changed to %1 from the next screen. You will be "
@@ -4925,28 +3146,12 @@ msgstr ""
 "您的语言将在下一个屏中被改成 %1 您马上将被转向到那里如果没有转向请[[%2][点击"
 "这里]]转向 "
 
-#: twikiplugins/NatSkin/templates/oopslanguagechanged.nat.tmpl:9
-#, fuzzy
-msgid ""
-"Your language will be reset to the global default from the next screen on. "
-"You will be redirected to there right now. If you aren't, [[%1][click here]] "
-"to proceed."
-msgstr ""
-"您的语言将在下一个屏中被改成 %1 您马上将被转向到那里如果没有转向请[[%2][点击"
-"这里]]转向 "
-
-#: twikiplugins/NatSkin/templates/oopsauth.nat.tmpl:13
-msgid ""
-"Your login name is usually the %1, like *<nop>TomSawyer* and _not_ Tom "
-"Sawyer or tom or sawyer."
-msgstr ""
-
 #: templates/mailresetpassword.tmpl:10
 #: twikiplugins/ClassicSkin/templates/mailresetpassword.classic.tmpl:10
 msgid "Your password has been changed to %1."
 msgstr "您的密码已经被改成 %1"
 
-#: data/TWiki/TWikiRegistration.txt:101
+#: data/TWiki/TWikiRegistration.txt:107
 msgid "Your password:"
 msgstr "您的密码:"
 
@@ -4964,11 +3169,6 @@ msgstr "您的注册邮箱地址已经被更新为 %1"
 msgid "Your signature to copy/paste:"
 msgstr "您用于复制/粘贴的签名"
 
-#: twikiplugins/NatSkin/templates/edittoolbar.natedit.tmpl:39
-#, fuzzy
-msgid "Your signature with timestamp"
-msgstr "您用于复制/粘贴的签名"
-
 #: templates/messages.tmpl:153
 msgid ""
 "Your system may not support changing passwords through TWiki. Check with "
@@ -4976,7 +3176,6 @@ msgid ""
 msgstr ""
 
 #: templates/messages.tmpl:11
-#: twikiplugins/NatSkin/templates/messages.nat.tmpl:5
 msgid "Your user name has been removed from the Authentication System."
 msgstr "您的用户名已经从认证系统中删除。"
 
@@ -4988,18 +3187,6 @@ msgstr "您的用户主题尚未重命名 请发送电子邮件给 %1 申请。"
 msgid ""
 "[multiple of 3 spaces] * [space] Set [space] VARIABLENAME [space] = [value]"
 msgstr "[3个空格] * [空格] Set [空格] VARIABLENNAME [空格] = [值]"
-
-#: twikiplugins/NatSkin/templates/oopspreview.nat.tmpl:6
-msgid ""
-"__Note:__ Go back and click on Cancel if you would like to cancel the "
-"changes you did."
-msgstr ""
-
-#: twikiplugins/NatSkin/templates/oopslocked.nat.tmpl:18
-msgid ""
-"__Note:__ Locking gets reset after <b> %1 </b> minutes of inactivity, the "
-"earliest in <b>%2</b> minutes."
-msgstr ""
 
 # please enter the name of your language here (written in the native language):
 #: lib/TWiki/I18N.pm:270
@@ -5056,44 +3243,17 @@ msgstr "和"
 msgid "change, update, previous revisions, move, delete..."
 msgstr "变更, 更新, 前一个版本, 移动, 删除……"
 
-#: twikiplugins/NatSkin/templates/changes.nat.tmpl:9
-#, fuzzy
-msgid "changes"
-msgstr "(变更)"
-
 #: twikiplugins/PatternSkin/templates/renamebase.pattern.tmpl:94
 msgid "checkboxes of referenced topics"
 msgstr "构选相关主题"
-
-#: twikiplugins/NatSkin/templates/oopsrev.nat.tmpl:28
-#: twikiplugins/NatSkin/templates/oopsrev.nat.tmpl:43
-#, fuzzy
-msgid "debug"
-msgstr "调试"
 
 #: templates/messages.tmpl:377
 msgid "don't forget to check your Topic Settings"
 msgstr ""
 
-#: twikiplugins/NatSkin/templates/changeform.nat.tmpl:10
-#: twikiplugins/NatSkin/templates/edit.nat.tmpl:11
-#, fuzzy
-msgid "edit"
-msgstr "(编辑)"
-
-#: twikiplugins/NatSkin/templates/editform.nat.tmpl:9
-#, fuzzy
-msgid "edit form"
-msgstr "(编辑表单)"
-
 #: templates/messages.tmpl:186
 msgid "fields are required."
 msgstr "字段必填"
-
-#: twikiplugins/NatSkin/templates/searchtopicactions.nat.tmpl:2
-#, fuzzy
-msgid "go back to <nop>%1"
-msgstr "回到顶部"
 
 #: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:39
 #: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:43
@@ -5106,17 +3266,12 @@ msgstr "帮助"
 msgid "hints on good style"
 msgstr "风格提示"
 
-#: twikiplugins/NatSkin/templates/oopsrev.nat.tmpl:73
-msgid "in <input type=\"checkbox\" name=\"raw\"> raw text format."
-msgstr ""
-
 #: twikiplugins/PatternSkin/templates/oopsmorerevision.pattern.tmpl:5
 msgid "in raw text format"
 msgstr "源代码模式"
 
 #: templates/form.tmpl:3
 #: twikiplugins/ClassicSkin/templates/form.classic.tmpl:3
-#: twikiplugins/NatSkin/templates/form.nat.tmpl:3
 #: twikiplugins/PatternSkin/templates/form.pattern.tmpl:3
 msgid "indicates mandatory fields"
 msgstr "指出必填字段"
@@ -5142,55 +3297,17 @@ msgstr "查看 _所有目录_ 中的配置"
 msgid "manage"
 msgstr "管理"
 
-#: twikiplugins/NatSkin/templates/attachtables.nat.tmpl:6
-msgid "manage properties of %1"
-msgstr ""
-
-#: twikiplugins/NatSkin/templates/oopsmore.nat.tmpl:3
-#, fuzzy
-msgid "more"
-msgstr "(更多)"
-
 #: data/Trash/WebHome.txt:10
 msgid "more..."
 msgstr "更多……"
-
-#: twikiplugins/NatSkin/templates/attachtables.nat.tmpl:6
-#: twikiplugins/NatSkin/templates/moveattachment.nat.tmpl:9
-#, fuzzy
-msgid "move"
-msgstr "移动"
-
-#: twikiplugins/NatSkin/templates/attachtables.nat.tmpl:6
-#, fuzzy
-msgid "move or delete %1"
-msgstr "移动或者删除文件 %1"
-
-#: twikiplugins/NatSkin/data/TWiki/NatSkinStyleBrowser.txt:20
-#, fuzzy
-msgid "next"
-msgstr "索引"
 
 #: twikiplugins/PatternSkin/templates/oopsmoresetparent.pattern.tmpl:8
 msgid "none (remove topic parent)"
 msgstr "无(删除父主题)"
 
-#: twikiplugins/NatSkin/templates/oopschangepasswd.nat.tmpl:3
-#: twikiplugins/NatSkin/templates/oopslogon.nat.tmpl:3
-#: twikiplugins/NatSkin/templates/oopsregthanks.nat.tmpl:3
-#: twikiplugins/NatSkin/templates/oopsresetpasswd.nat.tmpl:3
-#, fuzzy
-msgid "note"
-msgstr "注意:"
-
 #: twikiplugins/MailerContrib/templates/mailnotify.tmpl:16
 msgid "now %1"
 msgstr "现在 %1"
-
-#: twikiplugins/NatSkin/templates/oops.nat.tmpl:9
-#, fuzzy
-msgid "oops"
-msgstr "(哎)"
 
 #: twikiplugins/ClassicSkin/data/TWiki/ClassicSkinLogin.txt:2
 #: twikiplugins/PatternSkin/data/TWiki/WebLeftBarLogin.txt:3
@@ -5212,96 +3329,14 @@ msgstr "(哎)"
 msgid "or"
 msgstr "或"
 
-#: twikiplugins/NatSkin/templates/settings.nat.tmpl:11
-#, fuzzy
-msgid "prefs"
-msgstr "群组"
-
-#: twikiplugins/NatSkin/data/TWiki/NatSkinStyleBrowser.txt:12
-#: twikiplugins/NatSkin/data/TWiki/NatSkinStyleBrowser.txt:25
-#: twikiplugins/NatSkin/data/TWiki/NatSkinStyleBrowser.txt:33
-#, fuzzy
-msgid "prev"
-msgstr "(预览)"
-
-#: twikiplugins/NatSkin/templates/preview.nat.tmpl:11
-#, fuzzy
-msgid "preview"
-msgstr "(预览)"
-
-#: twikiplugins/NatSkin/templates/view.print.nat.tmpl:4
-#, fuzzy
-msgid "printable"
-msgstr "打印"
-
-#: twikiplugins/NatSkin/templates/attachtables.nat.tmpl:6
-#, fuzzy
-msgid "props"
-msgstr "群组"
-
 #: lib/TWiki/Render.pm:207
 msgid "put it back"
 msgstr "放回"
 
-#: twikiplugins/NatSkin/templates/renamebase.nat.tmpl:10
-#, fuzzy
-msgid "rename"
-msgstr "(重命名)"
-
-#: twikiplugins/NatSkin/templates/renamewebbase.nat.tmpl:10
-#: twikiplugins/NatSkin/templates/renamewebdelete.nat.tmpl:3
-#, fuzzy
-msgid "rename web"
-msgstr "创建新主题"
-
 #: data/TWiki/WebChanges.txt:2
-#: twikiplugins/PatternSkin/templates/searchbase.pattern.tmpl:23
+#: twikiplugins/PatternSkin/templates/searchbase.pattern.tmpl:29
 msgid "retrieved at %1"
 msgstr "在 %1 检索出"
-
-#: twikiplugins/NatSkin/templates/searchbase.nat.tmpl:10
-#, fuzzy
-msgid "search"
-msgstr "搜索"
-
-#: twikiplugins/NatSkin/templates/oopsrev.nat.tmpl:18
-#: twikiplugins/NatSkin/templates/oopsrev.nat.tmpl:35
-#, fuzzy
-msgid "sequential"
-msgstr "连续的"
-
-#: twikiplugins/NatSkin/templates/oopsrev.nat.tmpl:23
-#: twikiplugins/NatSkin/templates/oopsrev.nat.tmpl:39
-#, fuzzy
-msgid "side by side"
-msgstr "并列"
-
-#: twikiplugins/NatSkin/templates/messages.nat.tmpl:181
-#: twikiplugins/NatSkin/templates/oopsregwiki.nat.tmpl:12
-#, fuzzy
-msgid "single character first name"
-msgstr "(单字符名称)"
-
-#: twikiplugins/NatSkin/templates/messages.nat.tmpl:180
-#: twikiplugins/NatSkin/templates/oopsregwiki.nat.tmpl:11
-#, fuzzy
-msgid "single character last name"
-msgstr "(单字符姓氏)"
-
-#: twikiplugins/NatSkin/templates/oopsmngcreateweb.nat.tmpl:55
-#, fuzzy
-msgid "the %1 home?"
-msgstr "%1首页"
-
-#: twikiplugins/NatSkin/templates/oopsmngcreateweb.nat.tmpl:54
-#, fuzzy
-msgid "the %1 to customize the web specific preferences or"
-msgstr "%1 定制目录属性"
-
-#: twikiplugins/NatSkin/templates/oopsmngcreateweb.nat.tmpl:53
-#, fuzzy
-msgid "the %1 to start working on the new web,"
-msgstr "%1 开始在新目录上工作"
 
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:22
 #, fuzzy
@@ -5403,12 +3438,932 @@ msgstr "value='保存' accesskey='s'"
 msgid "view"
 msgstr "查看"
 
-#: data/TWiki/ResetPassword.txt:8
+#: data/TWiki/ResetPassword.txt:12
 msgid ""
 "you *must* have at least one valid registered e-mail to be able to reset "
 "your password. If none of your registered e-mail addresses is valid, and you "
 "have forgotten your password, contact %1."
 msgstr "您必须"
+
+#, fuzzy
+#~ msgid "\"%1\" is an invalid name for a new web."
+#~ msgstr "%1 是个非法的新目录名称"
+
+#, fuzzy
+#~ msgid "\"%1\" topic does not exist"
+#~ msgstr "%1 主题不存在"
+
+#, fuzzy
+#~ msgid "%1 - Automated notification of topic changes"
+#~ msgstr "自动提示主题更改"
+
+#, fuzzy
+#~ msgid "%1 has no permission to %2 *%3*."
+#~ msgstr "无权限查看 %1"
+
+#, fuzzy
+#~ msgid "%1 has no permission to view topic [[%2]]."
+#~ msgstr "无权限查看 %1"
+
+#, fuzzy
+#~ msgid "%1 web:"
+#~ msgstr "%1 目录"
+
+#, fuzzy
+#~ msgid "*Tip:* More options in WebSearch"
+#~ msgstr "(更多搜索选项)"
+
+#, fuzzy
+#~ msgid "... for user %1."
+#~ msgstr "无法找到用户%1"
+
+#, fuzzy
+#~ msgid "1. Form definition missing"
+#~ msgstr "表单定义缺失"
+
+#, fuzzy
+#~ msgid "2. Topic can not be upgraded from old style category table"
+#~ msgstr "主题无法从旧风格的目录表格更新"
+
+#, fuzzy
+#~ msgid ""
+#~ "A color starts with the number sign, followed by 6 hexadecimal numbers, e."
+#~ "g. yellow is =#FFFF00=."
+#~ msgstr "颜色以 # 标记开始 后面是个6位16进制数字组成 例如： =#FFFF00=."
+
+#, fuzzy
+#~ msgid "About Topics"
+#~ msgstr "测试主题"
+
+#, fuzzy
+#~ msgid "Add a new form to <nop>%1"
+#~ msgstr "从表单模板中选择一个新的"
+
+#, fuzzy
+#~ msgid "Adding a =WEBFORMS= variable in WebPreferences"
+#~ msgstr "添加 %1 参数到WebPreferences中"
+
+#, fuzzy
+#~ msgid "Allow non <nop>WikiWord for the new topic name."
+#~ msgstr "允许使用非<nop>WikiWord 作为新主题名称"
+
+#, fuzzy
+#~ msgid ""
+#~ "Alternatively go <a href=\"javascript:history.back()\">back</a> in your "
+#~ "browser and choose a different username."
+#~ msgstr "请返回上一页再试"
+
+#, fuzzy
+#~ msgid "An e-mail could not be delivered."
+#~ msgstr "一封电子邮件已经被发送，请通知您的 %1 管理员 %2"
+
+#, fuzzy
+#~ msgid "An email address is required before a password can be reset."
+#~ msgstr "在密码重置之前需要一个电子邮件地址"
+
+#, fuzzy
+#~ msgid "Attach image or document to this topic"
+#~ msgstr "添加一个图片或者文档到这个主题"
+
+#, fuzzy
+#~ msgid "Attachment move error"
+#~ msgstr "附件移动失败"
+
+#, fuzzy
+#~ msgid "Attachments"
+#~ msgstr "附件"
+
+#, fuzzy
+#~ msgid "Base web:"
+#~ msgstr "%1 目录"
+
+#, fuzzy
+#~ msgid "Bold text"
+#~ msgstr "编辑文本"
+
+#, fuzzy
+#~ msgid "Can not rename to %1 as this already exists!"
+#~ msgstr "无法重命名%1成%2，因为已经存在"
+
+#, fuzzy
+#~ msgid "Can't find the username <b>%1</b>"
+#~ msgstr "无法找到用户%1"
+
+#, fuzzy
+#~ msgid "Can't find user \"%1\"."
+#~ msgstr "无法找到用户%1"
+
+#, fuzzy
+#~ msgid "Can't get an email address for %1"
+#~ msgstr "无法获得 %1 的电子邮件地址"
+
+#~ msgid "Cancel"
+#~ msgstr "取消"
+
+#, fuzzy
+#~ msgid "Cancel and abandon changes"
+#~ msgstr "取消编辑并撤销更改"
+
+#, fuzzy
+#~ msgid "Center text"
+#~ msgstr "(文本编辑)"
+
+#, fuzzy
+#~ msgid "Change Access Denied"
+#~ msgstr "禁止访问"
+
+#~ msgid "Change form"
+#~ msgstr "更改表单"
+
+#, fuzzy
+#~ msgid "Change links in topics that refer to %1 in the %1 Web:"
+#~ msgstr "更改所有指向%1主题中的链接(在%2目录中)"
+
+#, fuzzy
+#~ msgid "Change links in topics that refer to %1.%2 in any Web:"
+#~ msgstr "在所有目录中改变所有指向%1的主题中的链接"
+
+#, fuzzy
+#~ msgid "Change properties"
+#~ msgstr "更改主题"
+
+#, fuzzy
+#~ msgid "Change references"
+#~ msgstr "设置"
+
+#, fuzzy
+#~ msgid "Change the current form of <nop>%1"
+#~ msgstr "已存在附件"
+
+#, fuzzy
+#~ msgid ""
+#~ "Chose a topic name that is a %1 or check the allow non-Wiki Word box."
+#~ msgstr ""
+#~ "请在浏览器中返回上一页并选择一个主题名符合 %1.WikiWord 的主题名称或者选中"
+#~ "允许非Wiki Word选项。"
+
+#, fuzzy
+#~ msgid "Clear"
+#~ msgstr "清除所有"
+
+#, fuzzy
+#~ msgid "Comment:"
+#~ msgstr "评论:"
+
+#, fuzzy
+#~ msgid "Compare Revisions of %1"
+#~ msgstr "比较版本"
+
+#, fuzzy
+#~ msgid "Could not find template =%1="
+#~ msgstr "找不到模板"
+
+#, fuzzy
+#~ msgid "Create New Web"
+#~ msgstr "创建新主题"
+
+#, fuzzy
+#~ msgid "Create Web Access Denied"
+#~ msgstr "禁止访问"
+
+#, fuzzy
+#~ msgid "Create a link to the attached file at the end of the topic."
+#~ msgstr "创建一个附件链接"
+
+#, fuzzy
+#~ msgid "Currently being edited:"
+#~ msgstr "当前父主题："
+
+#, fuzzy
+#~ msgid "Deleting Attachments"
+#~ msgstr "删除附件"
+
+#, fuzzy
+#~ msgid "Deleting Topics"
+#~ msgstr "删除主题"
+
+#, fuzzy
+#~ msgid "Documentation"
+#~ msgstr "当前位置："
+
+#, fuzzy
+#~ msgid "Done"
+#~ msgstr "(无)"
+
+#, fuzzy
+#~ msgid "During deletion of attachment =%1= an error was found."
+#~ msgstr "在删除附件=%1=期间发生错误： 请通知%2管理员"
+
+#, fuzzy
+#~ msgid "During rename of topic %1 to %2 an error (%3) was found."
+#~ msgstr "在将%1重命名成%2期间发生(%3)错误 请通知%4管理员"
+
+#, fuzzy
+#~ msgid "During rename of topic %1 to %2 an error was found."
+#~ msgstr "在将%1重命名成%2期间发生(%3)错误 请通知%4管理员"
+
+#, fuzzy
+#~ msgid "During rename of web %1 to %2 an error (%3) was found."
+#~ msgstr "在将%1重命名成%2期间发生(%3)错误 请通知%4管理员"
+
+#, fuzzy
+#~ msgid "During save of %1 an error was found by the version control system."
+#~ msgstr "在保存%1期间，发现一个版本控制错误 请通知%2管理员"
+
+#, fuzzy
+#~ msgid ""
+#~ "During save of file %1 an error was found by the version control system."
+#~ msgstr "在保存%1期间，发现一个版本控制错误 请通知%2管理员"
+
+#, fuzzy
+#~ msgid "Edit preference settings for %1"
+#~ msgstr "编辑属性设置"
+
+#, fuzzy
+#~ msgid "Edit this topic"
+#~ msgstr "编辑这个主题的文本"
+
+#, fuzzy
+#~ msgid "Error message"
+#~ msgstr "错误"
+
+#, fuzzy
+#~ msgid "Error: Cannot create this web because it already exists"
+#~ msgstr "无法创建%1目录，因为已经存在"
+
+#, fuzzy
+#~ msgid "Error: Could not copy topics to the new web"
+#~ msgstr "无法创建新目录%1"
+
+#, fuzzy
+#~ msgid "Error: Could not create the new web"
+#~ msgstr "无法创建新目录%1"
+
+#, fuzzy
+#~ msgid "Error: Could not update the <nop>WebPreferences"
+#~ msgstr "无法创建新目录%1"
+
+#, fuzzy
+#~ msgid "Error: Invalid name of new web"
+#~ msgstr "%1 是个非法的新目录名称"
+
+#, fuzzy
+#~ msgid "Error: Name of base web is missing or does not exist"
+#~ msgstr "基础目录%1丢失或不存在"
+
+#, fuzzy
+#~ msgid "Error: Name of new web is missing"
+#~ msgstr "新目录名称缺失"
+
+#, fuzzy
+#~ msgid "Error: Web color is missing or has an invalid format"
+#~ msgstr "颜色 %1包含非法的格式"
+
+#, fuzzy
+#~ msgid "Existing Web:"
+#~ msgstr "已存在附件"
+
+#, fuzzy
+#~ msgid "Existing attachments for <nop>%1"
+#~ msgstr "已存在附件"
+
+#, fuzzy
+#~ msgid "File Attachment"
+#~ msgstr "隐藏附件"
+
+#, fuzzy
+#~ msgid "File Attachments"
+#~ msgstr "隐藏附件"
+
+#, fuzzy
+#~ msgid "Formatted Search"
+#~ msgstr "高级搜索"
+
+#, fuzzy
+#~ msgid "Get a fresh page of the topic %1"
+#~ msgstr "表单将被在%1中定义"
+
+#, fuzzy
+#~ msgid ""
+#~ "Go <a href=\"javascript:history.back()\">back</a> in your browser and "
+#~ "save your changes locally."
+#~ msgstr "回到浏览器上一页并本地保存所有变更"
+
+#, fuzzy
+#~ msgid "Hide attachment in normal topic view."
+#~ msgstr "附件将不在主题的查看页中显示"
+
+#, fuzzy
+#~ msgid "Hide file:"
+#~ msgstr "隐藏文件"
+
+#, fuzzy
+#~ msgid "Hiding Attachments"
+#~ msgstr "隐藏附件"
+
+#~ msgid "Horizontal size of text edit box:"
+#~ msgstr "编辑框高度:"
+
+#~ msgid "If you intend to do a full text search:"
+#~ msgstr "如果您想做全文检索:"
+
+#, fuzzy
+#~ msgid "If you want to create the topic then [[%1][click here]]."
+#~ msgstr "如果您希望创建主题"
+
+#, fuzzy
+#~ msgid "Ignore wiki formatting"
+#~ msgstr "更多格式帮助"
+
+#, fuzzy
+#~ msgid "Incorrect <nop>WikiName"
+#~ msgstr "不正确的 %1.WikiNames"
+
+#, fuzzy
+#~ msgid "Italic text"
+#~ msgstr "编辑文本"
+
+#, fuzzy
+#~ msgid "Link:"
+#~ msgstr "链接"
+
+#, fuzzy
+#~ msgid "Linking to Attachments"
+#~ msgstr "已存在附件"
+
+#, fuzzy
+#~ msgid "Links"
+#~ msgstr "链接"
+
+#, fuzzy
+#~ msgid "Local file:"
+#~ msgstr "本地文件"
+
+#, fuzzy
+#~ msgid "Locked Topics"
+#~ msgstr "测试主题"
+
+#, fuzzy
+#~ msgid "Login"
+#~ msgstr "登录为"
+
+#, fuzzy
+#~ msgid "Login to %1"
+#~ msgstr "登录名 %1"
+
+#, fuzzy
+#~ msgid "Logout"
+#~ msgstr "登出"
+
+#, fuzzy
+#~ msgid "Logout of %1"
+#~ msgstr "登出"
+
+#, fuzzy
+#~ msgid "Mail Error"
+#~ msgstr "邮寄给"
+
+#, fuzzy
+#~ msgid "Minor changes"
+#~ msgstr "无改动"
+
+#, fuzzy
+#~ msgid "Missing Fields =<span class=\"twikiAlert\">**</span>="
+#~ msgstr "必填的字段%1没有填写"
+
+#, fuzzy
+#~ msgid "More"
+#~ msgstr "移动"
+
+#, fuzzy
+#~ msgid "More topic actions"
+#~ msgstr "更多主题操作"
+
+#, fuzzy
+#~ msgid "Move or Delete File \"%1\""
+#~ msgstr "移动或者删除文件 %1"
+
+#, fuzzy
+#~ msgid "Move or rename this topic"
+#~ msgstr "创建这个主题"
+
+#, fuzzy
+#~ msgid "Move topic error"
+#~ msgstr "移动主题到目录："
+
+#, fuzzy
+#~ msgid "Moving Attachments"
+#~ msgstr "移动附件"
+
+#, fuzzy
+#~ msgid "Navigation"
+#~ msgstr "布告"
+
+#, fuzzy
+#~ msgid "New or changed topics in the %1 web, since %2 GMT:"
+#~ msgstr "自从%2后 %1中新建或修改的主题"
+
+#, fuzzy
+#~ msgid "New topic name is not a <nop>WikiWord"
+#~ msgstr "新主题名%1不是%2"
+
+#, fuzzy
+#~ msgid "Newer revision"
+#~ msgstr "更新版本："
+
+#, fuzzy
+#~ msgid "No permission:"
+#~ msgstr "无权限查看 %1"
+
+#, fuzzy
+#~ msgid ""
+#~ "Note: The new web has been created successfully and populated with topics "
+#~ "from the base web"
+#~ msgstr "并使用基本目录进行组装"
+
+#~ msgid "Notes"
+#~ msgstr "注意"
+
+#, fuzzy
+#~ msgid "Number of topics: <span>%1</span>"
+#~ msgstr "主题数量:"
+
+#, fuzzy
+#~ msgid "Older revision"
+#~ msgstr "旧版本"
+
+#, fuzzy
+#~ msgid "Parent"
+#~ msgstr "打印"
+
+#, fuzzy
+#~ msgid "Parrent web"
+#~ msgstr "新的父目录:"
+
+#, fuzzy
+#~ msgid "Password Format Error"
+#~ msgstr "密码不匹配"
+
+#, fuzzy
+#~ msgid "Please ask your %1 administrator %2, to do this."
+#~ msgstr "一封电子邮件已经被发送，请通知您的 %1 管理员 %2"
+
+#, fuzzy
+#~ msgid "Please check out the WebPreferences or try again."
+#~ msgstr "请返回上一页再试"
+
+#, fuzzy
+#~ msgid ""
+#~ "Please chose a topic name that is a %1 or check the _Allow non-Wiki Word_ "
+#~ "&nbsp;box."
+#~ msgstr ""
+#~ "请在浏览器中返回上一页并选择一个主题名符合 %1.WikiWord 的主题名称或者选中"
+#~ "允许非Wiki Word选项。"
+
+#, fuzzy
+#~ msgid "Please email %1 to request this."
+#~ msgstr "您的用户主题尚未重命名 请发送电子邮件给 %1 申请。"
+
+#, fuzzy
+#~ msgid ""
+#~ "Please go <a href=\"javascript:history.back()\">back</a> in your browser "
+#~ "and try again."
+#~ msgstr "请返回上一页再试"
+
+#, fuzzy
+#~ msgid "Please notify your %1 administrator %2"
+#~ msgstr "一封电子邮件已经被发送，请通知您的 %1 管理员 %2"
+
+#, fuzzy
+#~ msgid "Please notify your %1 administrator %2."
+#~ msgstr "一封电子邮件已经被发送，请通知您的 %1 管理员 %2"
+
+#, fuzzy
+#~ msgid "Please notify your %1 administrator and explain how to reproduce it:"
+#~ msgstr "一封电子邮件已经被发送，请通知您的 %1 管理员 %2"
+
+#~ msgid "Please try again."
+#~ msgstr "请再试."
+
+#, fuzzy
+#~ msgid "Preference Settings for %1:"
+#~ msgstr "设置"
+
+#, fuzzy
+#~ msgid "Preview your changes"
+#~ msgstr "检查最新更改的主题："
+
+#, fuzzy
+#~ msgid "Print"
+#~ msgstr "打印"
+
+#, fuzzy
+#~ msgid "Print this page"
+#~ msgstr "编辑这个主题的文本"
+
+#, fuzzy
+#~ msgid "Problems could arise for two reasons:"
+#~ msgstr "可能由很多问题引起:"
+
+#, fuzzy
+#~ msgid "Reference Manual"
+#~ msgstr "用户属性"
+
+#, fuzzy
+#~ msgid "Register on %1"
+#~ msgstr "注册"
+
+#, fuzzy
+#~ msgid "Rename Access Denied"
+#~ msgstr "禁止访问"
+
+#, fuzzy
+#~ msgid "Rename Web"
+#~ msgstr "重命名"
+
+#, fuzzy
+#~ msgid "Rename anyway"
+#~ msgstr "重命名"
+
+#, fuzzy
+#~ msgid "Request to reset your TWiki password"
+#~ msgstr "你可以通过 %1 修改密码"
+
+#, fuzzy
+#~ msgid "Reset"
+#~ msgstr "注册"
+
+#, fuzzy
+#~ msgid "Save and exit"
+#~ msgstr "保存到:"
+
+#, fuzzy
+#~ msgid "Search in all public webs"
+#~ msgstr "搜索所有目录"
+
+#, fuzzy
+#~ msgid "Searchbox off"
+#~ msgstr "搜索"
+
+#, fuzzy
+#~ msgid "Select the [[Trash.WebHome][Trash]] web to delete the topic."
+#~ msgstr "选择%1目录删除主题"
+
+#, fuzzy
+#~ msgid "Select..."
+#~ msgstr "选择"
+
+#, fuzzy
+#~ msgid "SitePreferences"
+#~ msgstr "设置"
+
+#, fuzzy
+#~ msgid "Software Error"
+#~ msgstr "主题保存错误"
+
+#~ msgid ""
+#~ "Style of text edit box. =width: 99%= for full window width (default), "
+#~ "=width: auto= to disable."
+#~ msgstr ""
+#~ "编辑框样式. =width: 99%= 全屏窗口宽度(缺省), 设置为： =width: auto= 关闭"
+
+#, fuzzy
+#~ msgid "Submit changes"
+#~ msgstr "(变更)"
+
+#, fuzzy
+#~ msgid "Subscript text"
+#~ msgstr "编辑文本"
+
+#, fuzzy
+#~ msgid "Superscript text"
+#~ msgstr "安全提示："
+
+#, fuzzy
+#~ msgid "Syndicate this site"
+#~ msgstr "编辑这个主题的文本"
+
+#, fuzzy
+#~ msgid "TWiki Variables"
+#~ msgstr "打印"
+
+#, fuzzy
+#~ msgid "TextFormatting"
+#~ msgstr "*格式帮助：*"
+
+#, fuzzy
+#~ msgid ""
+#~ "The %1 field must be your first and lastname in %2, e.g. your capitalized "
+#~ "first and lastname with spaces removed."
+#~ msgstr ""
+#~ "%1 字段必须是姓名，姓氏在 %2 ，例如：大写的姓氏拼音和去掉空格的名字。 "
+
+#, fuzzy
+#~ msgid "The email address entered is not valid."
+#~ msgstr "这个帐号的电子邮件地址不合法。"
+
+#, fuzzy
+#~ msgid ""
+#~ "The new web has been created, however not all topics could be copied from "
+#~ "the base web."
+#~ msgstr "并使用基本目录进行组装"
+
+#, fuzzy
+#~ msgid ""
+#~ "The password you entered in the *password* field is incorrect. Please try "
+#~ "again."
+#~ msgstr "在*旧密码*字段输入的密码不正确."
+
+#, fuzzy
+#~ msgid ""
+#~ "The required field =<span class=\"twikiAlert\">**</span>= *%1* was not "
+#~ "filled in."
+#~ msgstr "必填的字段%1没有填写"
+
+#, fuzzy
+#~ msgid ""
+#~ "There should be a line that includes =META:FORM=, look for name=\"&lt;"
+#~ "formName&gt;\""
+#~ msgstr "必须包含一行包含 %1 参考%2(或%3) "
+
+#, fuzzy
+#~ msgid "This is an automated email from %1."
+#~ msgstr "这是一个来自 %1 的自动发送电子邮件。"
+
+#, fuzzy
+#~ msgid ""
+#~ "This requires the form definition to be present. This can be "
+#~ "automatically upgraded by:"
+#~ msgstr "这要求表单定义."
+
+#, fuzzy
+#~ msgid "To"
+#~ msgstr "去目录:"
+
+#, fuzzy
+#~ msgid "To edit the topic anyway, hit 'Edit&nbsp;Anyway'."
+#~ msgstr "强制编辑这个主题，按'强制编辑'"
+
+#, fuzzy
+#~ msgid ""
+#~ "To edit topics on this %1 collaborative web, you must be registered as a "
+#~ "user."
+#~ msgstr "为了编辑这个TWikiSite页面，您必须注册用户名和密码."
+
+#, fuzzy
+#~ msgid "To register as a new user:"
+#~ msgstr "为了注册为新用户，请填写以下表格"
+
+#, fuzzy
+#~ msgid "To see if they have finished their edit yet, click 'Try&nbsp;Again'"
+#~ msgstr "检查 %1 是否已经编辑完毕，请按'再试'."
+
+#, fuzzy
+#~ msgid "To:"
+#~ msgstr "去目录:"
+
+#, fuzzy
+#~ msgid "Topic"
+#~ msgstr "到主题 "
+
+#, fuzzy
+#~ msgid "Topic Caching"
+#~ msgstr "主题附件"
+
+#, fuzzy
+#~ msgid "Topic Meta data"
+#~ msgstr "主题标题"
+
+#, fuzzy
+#~ msgid "Topic does not exist"
+#~ msgstr "%1 主题不存在"
+
+#, fuzzy
+#~ msgid "Topic is not saved yet"
+#~ msgstr "主题保存错误"
+
+#, fuzzy
+#~ msgid "Topic preferences"
+#~ msgstr "设置"
+
+#, fuzzy
+#~ msgid "Unrecognised user and/or password."
+#~ msgstr "无法识别的用户名/密码"
+
+#, fuzzy
+#~ msgid "Unrecognized action command:"
+#~ msgstr "无法识别的操作%1"
+
+#, fuzzy
+#~ msgid "Update attachment"
+#~ msgstr "在 %2 更新附件 %1"
+
+#, fuzzy
+#~ msgid "Update ref:"
+#~ msgstr "更新"
+
+#, fuzzy
+#~ msgid "Uploaded file \"%1\" does not exist or is empty"
+#~ msgstr "上传的文件%1不存在或者为空"
+
+#, fuzzy
+#~ msgid "Uploaded file \"<nop>%1\" does not exist or is empty."
+#~ msgstr "上传的文件%1不存在或者为空"
+
+#, fuzzy
+#~ msgid "Variables"
+#~ msgstr "打印"
+
+#~ msgid "Vertical size of text edit box:"
+#~ msgstr "文本框的高度:"
+
+#, fuzzy
+#~ msgid "View"
+#~ msgstr "查看"
+
+#, fuzzy
+#~ msgid "View Access Denied"
+#~ msgstr "禁止访问"
+
+#, fuzzy
+#~ msgid "View Previous Topic Revision"
+#~ msgstr "查看主题的前一个版本"
+
+#, fuzzy
+#~ msgid "View all diffs"
+#~ msgstr "查看差别"
+
+#, fuzzy
+#~ msgid "View formatted topic"
+#~ msgstr "查看主题"
+
+#, fuzzy
+#~ msgid "View raw topic"
+#~ msgstr "查看主题"
+
+#, fuzzy
+#~ msgid "View raw topic text"
+#~ msgstr "查看主题"
+
+#, fuzzy
+#~ msgid "View topic history"
+#~ msgstr "主题完整修订历史"
+
+#, fuzzy
+#~ msgid "Vote Access Denied"
+#~ msgstr "禁止访问"
+
+#, fuzzy
+#~ msgid "Web:"
+#~ msgstr "目录"
+
+#, fuzzy
+#~ msgid "Welcome Guest"
+#~ msgstr "欢迎来到%1目录"
+
+#, fuzzy
+#~ msgid "Welcome to the %1"
+#~ msgstr "欢迎来到%1目录"
+
+#~ msgid "Write protect your home page: (set it to your %1)"
+#~ msgstr "您的主页写保护: (设置您的 %1)"
+
+#, fuzzy
+#~ msgid "You are not registered"
+#~ msgstr "您已经注册"
+
+#, fuzzy
+#~ msgid "You are trying to '%1' a topic in a web that does not exist."
+#~ msgstr "您在%1目录上搜索的主题不存在."
+
+#, fuzzy
+#~ msgid ""
+#~ "You can [[%1][create a new web]] if you have the permission. Contact %2 "
+#~ "if you have any questions."
+#~ msgstr "您如有有权限可以 [[%1][创建一个新目录]], 如有任何问题，联系%2."
+
+#, fuzzy
+#~ msgid ""
+#~ "You might go <a href=\"javascript:history.back()\">back</a> in your "
+#~ "browser and save your changes locally."
+#~ msgstr "回到浏览器上一页并本地保存所有变更"
+
+#, fuzzy
+#~ msgid ""
+#~ "Your language will be reset to the global default from the next screen "
+#~ "on. You will be redirected to there right now. If you aren't, [[%1][click "
+#~ "here]] to proceed."
+#~ msgstr ""
+#~ "您的语言将在下一个屏中被改成 %1 您马上将被转向到那里如果没有转向请[[%2][点"
+#~ "击这里]]转向 "
+
+#, fuzzy
+#~ msgid "Your signature with timestamp"
+#~ msgstr "您用于复制/粘贴的签名"
+
+#, fuzzy
+#~ msgid "changes"
+#~ msgstr "(变更)"
+
+#, fuzzy
+#~ msgid "debug"
+#~ msgstr "调试"
+
+#, fuzzy
+#~ msgid "edit"
+#~ msgstr "(编辑)"
+
+#, fuzzy
+#~ msgid "edit form"
+#~ msgstr "(编辑表单)"
+
+#, fuzzy
+#~ msgid "go back to <nop>%1"
+#~ msgstr "回到顶部"
+
+#, fuzzy
+#~ msgid "more"
+#~ msgstr "(更多)"
+
+#, fuzzy
+#~ msgid "move"
+#~ msgstr "移动"
+
+#, fuzzy
+#~ msgid "move or delete %1"
+#~ msgstr "移动或者删除文件 %1"
+
+#, fuzzy
+#~ msgid "next"
+#~ msgstr "索引"
+
+#, fuzzy
+#~ msgid "note"
+#~ msgstr "注意:"
+
+#, fuzzy
+#~ msgid "oops"
+#~ msgstr "(哎)"
+
+#, fuzzy
+#~ msgid "prefs"
+#~ msgstr "群组"
+
+#, fuzzy
+#~ msgid "prev"
+#~ msgstr "(预览)"
+
+#, fuzzy
+#~ msgid "preview"
+#~ msgstr "(预览)"
+
+#, fuzzy
+#~ msgid "printable"
+#~ msgstr "打印"
+
+#, fuzzy
+#~ msgid "props"
+#~ msgstr "群组"
+
+#, fuzzy
+#~ msgid "rename"
+#~ msgstr "(重命名)"
+
+#, fuzzy
+#~ msgid "rename web"
+#~ msgstr "创建新主题"
+
+#, fuzzy
+#~ msgid "search"
+#~ msgstr "搜索"
+
+#, fuzzy
+#~ msgid "sequential"
+#~ msgstr "连续的"
+
+#, fuzzy
+#~ msgid "side by side"
+#~ msgstr "并列"
+
+#, fuzzy
+#~ msgid "single character first name"
+#~ msgstr "(单字符名称)"
+
+#, fuzzy
+#~ msgid "single character last name"
+#~ msgstr "(单字符姓氏)"
+
+#, fuzzy
+#~ msgid "the %1 home?"
+#~ msgstr "%1首页"
+
+#, fuzzy
+#~ msgid "the %1 to customize the web specific preferences or"
+#~ msgstr "%1 定制目录属性"
+
+#, fuzzy
+#~ msgid "the %1 to start working on the new web,"
+#~ msgstr "%1 开始在新目录上工作"
 
 #, fuzzy
 #~ msgid "Registered users can [%1[change]] and [%2[reset]] their passwords."
