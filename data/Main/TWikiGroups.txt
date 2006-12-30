@@ -6,22 +6,18 @@ These groups can be used to define fine grained %TWIKIWEB%.TWikiAccessControl in
 %GROUPS%
 
 <form action="%SCRIPTURLPATH{"edit"}%/%WEB%/" method="get">
-<div class="twikiPageForm">
-<table border="0" cellspacing="0" cellpadding="0">
-<tr>
-<td class="first">
-	*New Group:* %BR%
-	 <input type="text" name="topic" value="NameGroup" size="30"/>&nbsp;<input class="twikiSubmit" type="submit" value="Add"/>
 
-	 %ICON{"warning"}% __Note:__ A group topic name must be a %TWIKIWEB%.WikiWord and __must__ end in =...Group=. New topics are based on TWikiGroupTemplate
-	
-	 <input type="hidden" name="templatetopic" value="TWikiGroupTemplate"/>
-	 <input type="hidden" name="topicparent" value="%TOPIC%"/>
-	 <input type="hidden" name="onlywikiname" value="on" />
-	 <input type="hidden" name="onlynewtopic" value="on" />
-</td>
-</tr>
-</table>
+<div class="twikiFormSteps">
+<div class="twikiFormStep twikiLast">
+%TABLE{databg="" cellborder="0" tableborder="0"}%
+| %MAKETEXT{"New Group"}%: |<input type="text" name="topic" value="NameGroup" size="40" class="twikiInputField" />&nbsp;<input class="twikiSubmit" type="submit" value="Add"/>  |
+| |%ICON{"warning"}% __Note:__ A group topic name must be a %TWIKIWEB%.WikiWord and __must__ end in =...Group=. New topics are based on TWikiGroupTemplate  |
+
+<input type="hidden" name="templatetopic" value="TWikiGroupTemplate"/>
+<input type="hidden" name="topicparent" value="%TOPIC%"/>
+<input type="hidden" name="onlywikiname" value="on" />
+<input type="hidden" name="onlynewtopic" value="on" />
+</div>
 </div>
 </form>
 

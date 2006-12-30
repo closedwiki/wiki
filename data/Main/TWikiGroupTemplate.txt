@@ -2,8 +2,8 @@
 %META:TOPICPARENT{name="TWikiGroups"}%
 ---+!! <nop>%URLPARAM{"topic"}%
 
-   * Member list:
-      * Set GROUP = %WIKIUSERNAME%, Main.Others...
+   * Member list (comma-separated list):
+      * Set GROUP = %WIKIUSERNAME%
    * Persons/group who can change the list:
       * Set ALLOWTOPICCHANGE = %URLPARAM{"topic"}%
 
