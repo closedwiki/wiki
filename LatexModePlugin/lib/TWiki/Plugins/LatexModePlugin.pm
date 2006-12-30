@@ -233,7 +233,7 @@ sub endRenderingHandler
 }
 	
 # =========================
-sub postRenderingHandler
+sub afterCommonTagsHandler # postRenderingHandler
 {
 # Here we check if we saw any math, try to delete old files, render new math, and clean up
 ### my ( $text ) = @_;   # do not uncomment, use $_[0] instead
