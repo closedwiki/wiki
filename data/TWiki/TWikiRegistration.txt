@@ -1,11 +1,9 @@
 %META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
 ---+ %MAKETEXT{"Registration"}%
 
-%MAKETEXT{"To edit pages on this TWikiSite, you must have a registered user name and password."}%
+*%MAKETEXT{"To edit pages on this TWikiSite, you must have a registered user name and password."}%*
 
 %H% *%MAKETEXT{"Note:"}%* %MAKETEXT{"Registered users can [[[_1]][change]] and [[[_2]][reset]] their passwords." args="%TWIKIWEB%.ChangePassword,%TWIKIWEB%.ResetPassword"}%
-
-%MAKETEXT{"To register as a new user, simply fill out this form:"}%
 
 %MAKETEXT{"*Important:* the information provided in this form will be stored in a database on the TWiki server. This database is accessible to anyone who can access the server through the web (though passwords will be encrypted, and e-mail addresses will be obfusticated to help prevent spamming). Your country, or the country where the server is hosted, may have Data Protection laws governing the maintenance of such databases. If you are in doubt, you should contact [_1] for details of the Data Protection Policy of this TWiki server before registering." args="<a href='mailto:%WIKIWEBMASTER%?subject=Data%20Protection%20Policy'>%WIKIWEBMASTER%</a>"}%
 
@@ -73,41 +71,49 @@ return sOut;
 //-->
 </script>
 
-<div class="twikiPageForm">
 <form action="%SCRIPTURLPATH{"register"}%/%MAINWEB%/%HOMETOPIC%" method="post">
-<table border="1">
+<div class="twikiFormSteps">
+<div class="twikiFormStep">
+*%MAKETEXT{"To register as a new user, simply fill out this form:"}%*
+</div>
+<div class="twikiFormStep">
+<table border="0" cellpadding="0" cellspacing="6">
+<tr>
+  <td></td>
+  <td>%MAKETEXT{"Fields marked [_1] are required" args="=<font color='red'>**</font>="}%</td>
+</tr>
 <tr>
   <td align="right"> %MAKETEXT{"First Name:"}% </td>
-  <td><input type="text" name="Twk1FirstName" size="40" value="" onblur="this.form.Twk1WikiName.value=capitalise(this.value)+capitalise(this.form.Twk1LastName.value)" /> =<font color="red">**</font>= </td>
+  <td><input type="text" name="Twk1FirstName" size="40" class="twikiInputField" value="" onblur="this.form.Twk1WikiName.value=capitalise(this.value)+capitalise(this.form.Twk1LastName.value)" /> =<font color="red">**</font>= </td>
 </tr>
 <tr>
   <td align="right"> %MAKETEXT{"Last Name:"}% </td>
-  <td><input type="text" name="Twk1LastName" size="40" value="" onblur="this.form.Twk1WikiName.value=capitalise(this.form.Twk1FirstName.value)+capitalise(this.value)" /> =<font color="red">**</font>= </td>
+  <td><input type="text" name="Twk1LastName" size="40" class="twikiInputField" value="" onblur="this.form.Twk1WikiName.value=capitalise(this.form.Twk1FirstName.value)+capitalise(this.value)" /> =<font color="red">**</font>= </td>
 </tr>
   <td align="right"> %MAKETEXT{"(identifies you to others) WikiName:"}% </td>
-  <td><input type="text" name="Twk1WikiName" size="40" value="" onblur="" /> =<font color="red">**</font>= </td>
+  <td><input type="text" name="Twk1WikiName" size="40" class="twikiInputField" value="" onblur="" /> =<font color="red">**</font>= </td>
 </tr>
 <!--
    # optional row for login name, enabled by {Register}{AllowLoginName} option in =configure=
-   * Set BESPOKE_AUTH = <tr><td align=\"right\"> %MAKETEXT{"(how you log in) LoginName:"}% </td><td><input type=\"text\" name=\"Twk1LoginName\" size=\"40\" value=\"%REMOTE_USER%\" /> =<font color='red'>**</font>= </td></tr>
+   * Set BESPOKE_AUTH = <tr><td align=\"right\"> %MAKETEXT{"(how you log in) LoginName:"}% </td><td><input type=\"text\" name=\"Twk1LoginName\" size=\"40\" class=\"twikiInputField\" value=\"%REMOTE_USER%\" /> =<font color='red'>**</font>= </td></tr>
 -->
 %IF{"$ ALLOWLOGINNAME" then="%BESPOKE_AUTH%"}%
 <tr>
   <td align="right"> %MAKETEXT{"E-mail address:"}% </td>
-  <td><input type="text" name="Twk1Email" size="40" value="" /> =<font color="red">**</font>= </td>
+  <td><input type="text" name="Twk1Email" size="40" class="twikiInputField" value="" /> =<font color="red">**</font>= </td>
 </tr>
 <!--
    # optional rows for password, enabled by {Register}{AllowLoginName} option in =configure=, we assume that login name means that TWiki does not handle passwords
-   * Set BESPOKE_PASSWORD = <tr><td align=\"right\"> %MAKETEXT{"Your password:"}% </td><td><input type=\"password\" name=\"Twk0Password\" size=\"40\" value=\"\" /> =<font color=\"red\">**</font>= </td></tr>\
-     <tr><td align=\"right\"> %MAKETEXT{"Retype password:"}% </td><td><input type=\"password\" name=\"Twk0Confirm\" size=\"40\" value=\"\" /> =<font color=\"red\">**</font>= </td></tr>
+   * Set BESPOKE_PASSWORD = <tr><td align=\"right\"> %MAKETEXT{"Your password:"}% </td><td><input type=\"password\" name=\"Twk0Password\" size=\"40\" class=\"twikiInputField\" value=\"\" /> =<font color=\"red\">**</font>= </td></tr>\
+     <tr><td align=\"right\"> %MAKETEXT{"Retype password:"}% </td><td><input type=\"password\" name=\"Twk0Confirm\" size=\"40\" class=\"twikiInputField\" value=\"\" /> =<font color=\"red\">**</font>= </td></tr>
 -->
 %IF{"$ ALLOWLOGINNAME < 1" then="%BESPOKE_PASSWORD%"}%
 <tr>
   <td align="right"> %MAKETEXT{"Organisation name:"}% </td>
-  <td><input type="text" name="Twk0OrganisationName" size="40" value="" /></td>
+  <td><input type="text" name="Twk0OrganisationName" size="40" class="twikiInputField" value="" /></td>
 </tr><tr>
   <td align="right"> %MAKETEXT{"Organisation URL:"}% </td>
-  <td><input type="text" name="Twk0OrganisationURL" size="40" onBlur="if(this.value=='http://') { this.value='' }" onFocus="if(this.value=='') { this.value='http://' }" /></td>
+  <td><input type="text" name="Twk0OrganisationURL" size="40" class="twikiInputField" onBlur="if(this.value=='http://') { this.value='' }" onFocus="if(this.value=='') { this.value='http://' }" /></td>
 </tr><tr>
   <td align="right"> %MAKETEXT{"Country:"}% </td>
   <td>
@@ -257,20 +263,11 @@ return sOut;
 </tr>
 <tr>
   <td valign="top" align="right"> %MAKETEXT{"Comments:"}%<br /> %MAKETEXT{"(optional)"}% </td>
-  <td><textarea name="Twk0Comment" wrap="virtual" rows="4" cols="38"></textarea></td>
-</tr>
-<tr>
-  <td></td>
-  <td><span class="twikiSmall">%MAKETEXT{"Fields marked [_1] are required" args="=<font color='red'>**</font>="}%</span></td>
-</tr>
-<tr>
-  <td valign="top" align="right"> &nbsp; <input type="hidden" name="rx" value='%BLACKLISTPLUGIN{ action="magic" }%' /><input type="hidden" name="topic" value="%TOPIC%" /><input type="hidden" name="action" value="register" /></td>
-  <td><input type="submit" class="twikiSubmit" value=' %MAKETEXT{"Submit"}% ' /></td>
+  <td><textarea name="Twk0Comment" wrap="virtual" rows="4" cols="38" class="twikiInputField"></textarea></td>
 </tr>
 </table>
-</form>
-</div>
-
+</div><!-- /twikiFormStep-->
+<div class="twikiFormStep">
 %MAKETEXT{"When [_1] receives the form, it will mail an account activation code to the e-mail address you gave above. Enter that activation code in the following screen, or follow the link in the e-mail, to activate your account. Once your account is activated, [_1] will:" args="%WIKITOOLNAME%"}%
    * %MAKETEXT{"Finish creating an account for you, so that you can start editing pages using your WikiName."}%
    * %MAKETEXT{"Create your personal [_1] topic using your WikiName as topic name, and add the data you submitted to the topic." args="<nop>%WIKITOOLNAME%"}%
@@ -281,8 +278,19 @@ return sOut;
    * Set LOGIN_METHOD_IN_THIS_SITE = %IF{"$ ALLOWLOGINNAME" then="LoginName" else="WikiName"}%
 -->
 %MAKETEXT{"Once registered you can login using your [_1] and password." args="%LOGIN_METHOD_IN_THIS_SITE%"}%
+</div>
+<div class="twikiFormStep twikiLast">
+<input type="hidden" name="rx" value='%BLACKLISTPLUGIN{ action="magic" }%' />
+<input type="hidden" name="topic" value="%TOPIC%" />
+<input type="hidden" name="action" value="register" />
+<input type="submit" class="twikiSubmit" value=' %MAKETEXT{"Submit"}% ' />
+</div><!-- /twikiFormStep-->
+</div><!-- /twikiFormSteps-->
+</form>
 
-%MAKETEXT{"If you have any questions about registration, send an e-mail to [_1]." args="<a href='mailto:%WIKIWEBMASTER%?subject=%TOPIC%&#32;Question'>%WIKIWEBMASTER%</a>"}%
+<div class="twikiHelp">
+   * %ICON{info}% %MAKETEXT{"If you have any questions about registration, send an e-mail to [_1]." args="<a href='mailto:%WIKIWEBMASTER%?subject=%TOPIC%&#32;Question'>%WIKIWEBMASTER%</a>"}%
+</div>
 
 <table bgcolor="yellow"><tr><td>
 __Note to administrator:__ The form fields can be customized to the needs of your organization. See also TWikiUserAuthentication. In case you are registering users through other means, replace this topic with a note describing how to get registered in TWiki. In any case, remove this note.
