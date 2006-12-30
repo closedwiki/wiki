@@ -634,7 +634,7 @@ sub renderEquations {
             
         } else { 
             # Dakar interface
-            if ( attachmentExists($w,$t,'latex'.$key.'.'.$EXT) and 
+            if ( TWiki::Func::attachmentExists($w,$t,'latex'.$key.'.'.$EXT) and 
                  !($LMPc{'rerender'}) ) {
                 delete( $hashed_math_strings{$key} ); }
 
