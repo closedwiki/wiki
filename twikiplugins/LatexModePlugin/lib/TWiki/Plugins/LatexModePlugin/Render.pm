@@ -108,6 +108,21 @@ my %markup_opts = ();
 
 my $sandbox = $TWiki::Plugins::LatexModePlugin::sandbox;
 
+# sub _writeOpts {
+# ## 
+#     my ($web,$topic,$s1,$s2) = @_;
+#     my $fn = &TWiki::Func::getPubDir() . "/".$web.'/'.$topic.'/mapping.txt';
+#     open(F, ">>$fn") or return;
+#     print F `date`;
+#     print F "\t".$s1."\n";
+#     print F "-"x70;
+#     print F "\n".$s2."\n";
+#     print F "x"x70;
+#     print F "\n";
+#     close(F);
+#          
+# }
+
 # =========================
 sub handleLatex
 {
@@ -136,7 +151,10 @@ sub handleLatex
                  'scale' =>   $LMPc{'default_scale'},
                  'bgcolor' => 'white',
                  'engine' => $DEFAULTENGINE,
-                 'color' => 'black' );
+                 'color' => 'black',
+                 'web' => $LMPc{'web'},
+                 'topic' => $LMPc{'topic'}
+                 );
 
     my %opts2 = TWiki::Func::extractParameters( $prefs );
     # map { $opts{$_} = $opts2{$_} } keys %opts2;
@@ -241,11 +259,17 @@ COLORS
         # compute the MD5 hash of this string, using both the markup text
         # and the declared options.
         my $hash_code = md5_hex( $math_string . 
-                                 join('; ', map{"$_=>$opts{$_}"} keys(%opts)) );
+                                 join('; ', sort map{"$_=>$opts{$_}"} keys(%opts)) );
+        # _writeOpts($LMPc{"web"},$LMPc{"topic"},$hash_code,
+        #            $math_string .' :: '. 
+        #            join('; ', sort map{"$_=>$opts{$_}"} keys(%opts)));
 
         if ( ($opts{'inline'} eq 1) and ($tweakinline) ) {
-            $math_string = '\fbox{ ' . $math_string . 
-                '\vphantom{$\sqrt{\{ \}^{T^T}}$} }'; 
+            $math_string = '\fbox{ \ ' . $math_string;
+            if ($opts{'engine'} ne 'mimetex') {
+                $math_string .= '\vphantom{$\sqrt{\{ \}^{T^T}}$}' ;
+            }
+            $math_string .= ' \ }';
         }
         #store the string in a hash table, indexed by the MD5 hash
         $LMPc{'hashed_math_strings'}->{$hash_code} = $math_string;
@@ -457,7 +481,7 @@ sub createTempLatexFiles {
 
         &TWiki::Func::writeDebug( "LatexModePlugin: ".
                                   $value . " :: " .
-                                  join('; ', map{"$_=>$opts{$_}"} keys(%opts))
+                                  join('; ', sort map{"$_=>$opts{$_}"} keys(%opts))
                                   ) if ($debug);
         $txt = "\n\\clearpage\n";
         # $txt .= "% $LATEXBASENAME.$EXT.$image_number --> $key \n";
@@ -513,7 +537,7 @@ sub renderEquations {
 
     my $path;
 
-    &TWiki::Func::writeDebug( "- LatexModePlugin::postRenderingHandler( ".$LMPc{'web'}.'.'.$LMPc{'topic'}." )" ) if $debug;
+    &TWiki::Func::writeDebug( " TWiki::LatexModePlugin::renderEquations( ".$LMPc{'web'}.'.'.$LMPc{'topic'}." )" ) if $debug;
 
     #my @revinfo = &TWiki::Func::getRevisionInfo($web, $topic, "", 0);
     #&TWiki::Func::writeDebug( "- LatexModePlugin: @revinfo" ) if $debug;
@@ -522,6 +546,10 @@ sub renderEquations {
     return unless defined( $LMPc{'hashed_math_strings'} );
     # return unless scalar( keys( %hashed_math_strings ) );
     my %hashed_math_strings = %{ $LMPc{'hashed_math_strings'} };
+
+    &TWiki::Func::writeDebug( join(" ", keys(%hashed_math_strings) ) );
+
+    return unless length(keys(%hashed_math_strings)) > 0;
 
 
     $_[0] .= "\n<hr>TWiki LatexModePlugin error messages:<br>\n".
@@ -590,8 +618,34 @@ sub renderEquations {
         }
     }
 
+    # for INCLUDED pages, check to see if each image exists already on TWiki. 
+    # remove from list of strings to create if it does.
+    foreach my $key (keys %hashed_math_strings) {
+        my $w = $markup_opts{$key}->{'web'};
+        my $t = $markup_opts{$key}->{'topic'};
+
+        my $path = &TWiki::Func::getPubDir() .$pathSep.$w.$pathSep.$t.$pathSep;
+        if ( ( $TWiki::Plugins::VERSION < 1.1 )  or
+             ( $TWiki::cfg{Plugins}{LatexModePlugin}{bypassattach}) ) {
+            # Cairo interface
+            if ( (-f $path.'latex'.$key.'.'.$EXT ) and 
+                 !($LMPc{'rerender'}) ) {
+                delete( $hashed_math_strings{$key} ); }
+            
+        } else { 
+            # Dakar interface
+            if ( attachmentExists($w,$t,'latex'.$key.'.'.$EXT) and 
+                 !($LMPc{'rerender'}) ) {
+                delete( $hashed_math_strings{$key} ); }
+
+        }
+    }  
+
     #check if there are any new images to render
-    return unless scalar( keys( %hashed_math_strings ) );
+    if ( scalar( keys( %hashed_math_strings ) ) == 0 ) {
+        TWiki::Func::getContext()->{'LMPcontext'}->{'hashed_math_strings'} = ();
+        return;
+    }
 
     # create a temporary working directory
     my $LATEXWDIR = File::Temp::tempdir();
@@ -713,6 +767,11 @@ sub renderEquations {
                                $opts{'attachment'} );
                 unlink($af);
             }
+            
+            if ( $opts{'engine'} eq 'mimetex' ) {
+                unlink( $key.'.txt' ) if (-f $key.'.txt');
+            }
+
         }
 
 	foreach my $fn ( @files ) { 
@@ -751,8 +810,6 @@ sub makePNGs {
     my ($h,$topic,$web,$LATEXLOG,$LATEXWDIR) = @_;
 
     my %hash_code_mapping = %{ $h };
-
-    my $path = &TWiki::Func::getPubDir() . "/".$web.'/'.$topic;
 
     #generate image files based on the hash code
     while( (my $key, my $value) = each( %hash_code_mapping ) ) {
@@ -871,7 +928,7 @@ sub makePNGs {
                 my $tmpfile = File::Temp::tempnam( $LATEXWDIR, 'tmp' ).".$EXT";
                 move($outimg,$tmpfile);
                 
-                my $args = "$tmpfile -background black -trim $outimg";
+                # my $args = "$tmpfile -background black -trim $outimg";
                 # system("$PATHTOCONVERT $args");
                 # system("echo \"$PATHTOCONVERT $args\" >> $LATEXLOG") if ($debug);
 
@@ -887,7 +944,7 @@ sub makePNGs {
                 my $img2 = image_info($outimg);
 
                 my ($nw,$nh) = ( $img2->{width}-round(8*$ptsz), 
-                                  $img2->{height} );
+                                  $img2->{height}-round(4*$ptsz) );
                 $nw = $1 if ($nw =~ m/(\d+)/); # untaint
                 $nh = $1 if ($nh =~ m/(\d+)/); # untaint
                 $nh = round(15*$ptsz)
@@ -955,6 +1012,8 @@ sub makePNGs {
                  ( $TWiki::cfg{Plugins}{LatexModePlugin}{bypassattach}) )
             {
                 # Cairo interface
+                my $path = &TWiki::Func::getPubDir() . 
+                    "/".$opts{'web'}.'/'.$opts{'topic'};
 
                 mkdir( $path.$pathSep )unless (-e $path.$pathSep);
 
@@ -962,8 +1021,8 @@ sub makePNGs {
                     $_[0] .= "<br> LatexModePlugin error: Move of $outimg failed: $!";
             } else {
                 # Dakar interface
-                TWiki::Func::saveAttachment( $web,
-                                             $topic,
+                TWiki::Func::saveAttachment( $opts{'web'},
+                                             $opts{'topic'},
                                              $outimg,
                                              { file => $outimg,
                                                comment => '',

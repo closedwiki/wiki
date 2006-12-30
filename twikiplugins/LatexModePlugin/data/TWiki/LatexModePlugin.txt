@@ -64,7 +64,7 @@ Additional options can be included to modify the rendered result.  These include
 | bgcolor | --- | 'white' | sets background color (details below) |
 | color | --- | 'black' | sets foreground font color (details below) |
 | attachment | alpha-numeric | --- | allows one to couple the latex command with an attached file.  Useful for latex graphics commands.  |
-| engine | {"", "dvipng", "ps", "pdf", "mimetex"} | "" | switch to dynamically switch the rendering engine between the installation default (""), =dvipng=,  =dvips+convert=, =pdflatex+convert=, or =mimetex= for <nop>LaTeX packages than need it, e.g. tikz. (details below) |
+| engine | {"", "dvipng", "ps", "pdf", "mimetex"} | "" | dynamically switch the rendering engine between the installation default (""), =dvipng=,  =dvips+convert=, =pdflatex+convert=, or =mimetex= for <nop>LaTeX packages than need it, e.g. tikz. (details below) |
 </div>
 
 For example, to declare an equation to be numbered by TWiki (not in the <nop>LaTeX image) with a larger font size and in red, use the following syntax:
@@ -425,8 +425,9 @@ This plugin is an enhanced version of the TWiki:Plugins.MathModePlugin maintaine
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.ScottHoge |
-|  Plugin Version: | 27 Dec 2006 (v 3.4) |
+|  Plugin Version: | 30 Dec 2006 (v 3.5) |
 |  Change History: | %ICON{warning}% v3.0 and above requires TWiki 4.x.x and above %ICON{warning}% <!-- versions below in reverse order --> |
+|  30 Dec 2006 (v 3.5) | modified how rendering of math from included topics is handled.  Fixed mimetex inline processing |
 |  27 Dec 2006 (v 3.4) | added mimetex to the rendering engine list |
 |  27 Nov 2006 (v 3.35) | improved dynamic rendering engine to auto-select on graphics files |
 |  17 Nov 2006 (v 3.3) | added dynamic switching of rendering engine, more Parse bug fixes |
