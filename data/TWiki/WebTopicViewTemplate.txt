@@ -14,17 +14,11 @@
 </tr>
 </table>
 </div>
-<style type="text/css" media="all">
-span.twikiNewRev {display:none;}
-span.twikiNewRev0 {display:inline;}
-span.twikiNewRevNum {display:inline;}
-span.twikiNewRevNum0 {display:none;}
-</style>
 
 ---+++ %MAKETEXT{"Do you wish to navigate quickly to a similar topic?"}%
-%IF{ "defined topic" then="%CALC{$SET(total,0)}% "}% %IF{ "defined topic" then="%SEARCH" else="<!--" }%{ "%BASETOPIC%" limit="16" scope="topic" web="%BASEWEB%" nosearch="on" nototal="on" noheader="on" order="modified" reverse="on" header="%MAKETEXT{"Similar topics in this web (if any):"}%%BR%" format="<div class=\"patternSearchResult\"><div class=\"twikiTopRow\"><div class=\"twikiLeft\"> *[[$web.$topic][$topic]]* </div><div class=\"twikiRight twikiSRAuthor\">[[$wikiusername][$wikiname]]</div><div class=\"twikiRight twikiSRRev\"><span style=\"white-space: nowrap;\"><span class=\"twikiNew twikiNewRev twikiNewRev$rev \">NEW</span><span class=\"twikiNewRevNum twikiNewRevNum$rev \">r$rev</span> - [[%SCRIPTURL{"rdiff"}%/%SCRIPTSUFFIX%/$web/$topic][$date]]</span></div><br class=\"twikiClear\" /></div><div class=\"twikiBottomRow\"><div class=\"twikiSummary twikiGrayText\">$summary</div></div></div>$percntCALC{$SETM(total, +1)}$percnt" %IF{ "defined topic" then="}" else="-->" }%%IF{ "defined topic" then="%" }% %CALC{$IF($GET(total) > 0, %BR%, <nop>)}% %CALC{$IF($GET(total) < 16, <!--, <nop>)}%
+%MAKETEXT{"Similar topics in this web (if any):"}%%BR%
+%IF{ "defined topic" then="%SEARCH" else="<!--" }%{ "%BASETOPIC%" limit="16" scope="topic" web="%BASEWEB%" nosearch="on" nototal="on" noheader="on" order="modified" reverse="on" header=""  %IF{ "defined topic" then="}" else="-->" }%%IF{ "defined topic" then="%" }%
 %ICON{arrowbright}% [[%SCRIPTURLPATH{"view"}%/%BASEWEB%/WebSearch?scope=topic;search=%BASETOPIC%][%MAKETEXT{"List more similar topic in this web"}%]] %BR% 
-%CALC{$IF($GET(total) < 16, -->, <nop>)}%
 %ICON{arrowbright}% [[%SCRIPTURLPATH{"view"}%/%BASEWEB%/WebSearch?scope=topic;web=all;search=%BASETOPIC%][%MAKETEXT{"Search similar topics in all public webs"}%]]
 %SEARCH{ "META.TOPICMOVED.*from\=\"%BASEWEB%.%BASETOPIC%\"" nosearch="on" nototal="on" type="regex" format="%BR%%ICON{arrowbright}% $percntRED% $percntMAKETEXT{\"This topic has moved to [_1].\" args=\"[[$web.$topic]]\"}$percnt $percntENDCOLOR%" }%
 
