@@ -80,7 +80,7 @@ sub tear_down {
 
 sub get_HTML_tree {
     my ($res) = @_;
-    eval 'use HTML::TreeBuilder; use HTML::Element;';
+    eval 'use HTML::TreeBuilder; use HTML::Element 3.23;';
     if( $@ ) {
         die "$@\nUNABLE TO RUN TEST\n";
     }
