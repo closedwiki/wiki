@@ -115,12 +115,15 @@ The development team has done everything to maintain full compatibility with top
 
 The full list of bug fixes can be seen below
 
----++ Detailed List Of Enhancements
-_List of enhancement bug items from [[http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/WebHome][TWiki's Bugs Web]]_
+---++  TWiki 4.1.0 Minor Release - Details
+
+The 4.1.0 release was built from SVN http://svn.twiki.org/svn/twiki/branches/TWikiRelease04x01 revision *FIXME*.
+
+---+++ TWiki 4.1.0 Fixes
 
 FIXME. Paste in the list from http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/ReleaseNotes?type=n%2Fa%7Cpatch%7Cminor at the day of release
 
----++ Detailed List Of Bug Fixes
-_List of bug fix items from [[http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/WebHome][TWiki's Bugs Web]]_
+---+++ TWiki 4.1.0 Enhancements
 
 FIXME. Paste in the list from http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/ReleaseNotes?type=n%2Fa%7Cpatch%7Cminor at the day of release
+
