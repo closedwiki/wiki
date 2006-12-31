@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1120843468" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1167527363" format="1.1" version="$Rev$"}%
 ---+!! %MAKETEXT{"Welcome to the [_1] web" args="<nop>%WEB%"}%
 
 %MAKETEXT{"The [_1] web is the sandbox you can use for testing. Everybody is welcome to add or delete some stuff. It is recommended to walk through the [_2] to get a jumpstart on the [_3] tool. A good rule of thumb is to add at the end of the page and sign and date it with your [_4]." args="<b><nop>%WEB%</b>,%TWIKIWEB%.TWikiTutorial,<nop>%WIKITOOLNAME%,%TWIKIWEB%.WikiName"}%
@@ -12,7 +12,7 @@
 <input type="hidden" name="onlynewtopic" value="on" />
 </form>
 
-<form action='%SCRIPTURLPATH{"edit"}%/%BASEWEB%/TestTopicXXXXXXXXXX' name="createNewTestTopic">
+<form action='%SCRIPTURLPATH{"edit"}%/%BASEWEB%/TestTopicAUTOINC0' name="createNewTestTopic">
 %ICON{"newtopic"}% %MAKETEXT{"Create a new auto-numbered test topic:"}%
 <input type="submit" class="twikiSubmit" value='%MAKETEXT{"Create <nop>TestTopic###"}%' />
 </form>
