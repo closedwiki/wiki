@@ -478,8 +478,11 @@ sub getComponent {
         foreach my $type ( @$types ) { # .tgz preferred
             $f = $dir.'/'.$module.$type;
             if( -e $f ) {
+                my @st = stat($f);
+                my $credate = localtime($st[9]);
                 print <<HERE;
-An existing $f exists; would you like me to use it?
+$f exists on this machine; would you like me to use it?
+It was created on $credate.
 If not, I will try to download a new one.
 HERE
                 if (ask("Use existing $f?")) {
