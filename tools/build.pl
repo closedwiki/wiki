@@ -233,7 +233,7 @@ sub stage_gendocs {
     for my $script qw( view rdiff ) {
         $this->cp( "$this->{tmpDir}/bin/$script",
                    "$this->{tmpDir}/bin/${script}auth" );
-        $this->prot( "0550", "$this->{tmpDir}/bin/${script}auth");
+        $this->prot( "0555", "$this->{tmpDir}/bin/${script}auth");
     }
 
     #SMELL: these should probably abort the build if they return errors / oopies
