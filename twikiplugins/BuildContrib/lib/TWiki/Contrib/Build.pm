@@ -1126,7 +1126,6 @@ necessary.
 
 sub target_upload {
     my $this = shift;
-    $this->build('release');
 
     require LWP;
     if ( $@ ) {
@@ -1158,6 +1157,7 @@ END
           if $this->{UPLOADTARGETSUFFIX} eq 'none';
     }
 
+    $this->build('release');
     my $userAgent = TWiki::Contrib::Build::UserAgent->new($this->{UPLOADTARGETSCRIPT});
     $userAgent->agent( 'TWikiContribBuild/'.$VERSION.' ' );
 

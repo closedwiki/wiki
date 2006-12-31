@@ -517,7 +517,7 @@ HERE
         $response = $lwp->get( $url.$type );
 
         if( $response->is_success() ) {
-            $f = $downloadDir.'/'.$module.'.'.$type;
+            $f = $downloadDir.'/'.$module.$type;
             open(F, ">$f" ) || die "Failed to open $f for write: $!";
             print F $response->content();
             close(F);
@@ -556,15 +556,21 @@ sub installPackage {
 
     my $script = getInstaller( $module );
     if( $script && -e $script ) {
-        my $cmd = 'perl $script';
+        my $cmd = "perl $script";
         $cmd .= ' -a' if $noconfirm;
         $cmd .= ' -n' if $inactive;
         $cmd .= ' install';
         local $| = 0;
-        print `$cmd`;
-        if( $? ) {
-            print STDERR "Installation of $module failed\n";
-            return 0;
+        # Fork the installation of the downloaded package.
+        my $pid = fork();
+        if ($pid) {
+            wait();
+            if( $? ) {
+                print STDERR "Installation of $module failed: $?\n";
+                return 0;
+            }
+        } else {
+            exec($cmd);
         }
     } else {
         print STDERR <<HERE;
