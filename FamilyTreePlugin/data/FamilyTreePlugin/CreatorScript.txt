@@ -1,3 +1,6 @@
+This script is used in the NewUnion and NewPerson topics.
+<verbatim>
+%STARTINCLUDE%
 <script lang="JavaScript">
 function fillet(a) {
  var b = '';
@@ -31,4 +34,5 @@ function buildName(field1,sep,field2) {
  document.spec.topic.value = name;
 }
 </script>
-
+%STOPINCLUDE%
+</verbatim>

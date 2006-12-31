@@ -10,9 +10,11 @@ package TWiki::Plugins::FamilyTreePlugin;
 
 use strict;
 
-use vars qw( $VERSION $pluginName $debug $exampleCfgVar );
+use vars qw( $VERSION $RELEASE $pluginName $debug $exampleCfgVar );
 
-$VERSION = '1.000';
+$VERSION = '$Rev$';
+$RELEASE = 'TWiki-4';
+
 $pluginName = 'FamilyTreePlugin';  # Name of this Plugin
 
 sub initPlugin {
@@ -28,10 +30,10 @@ sub initPlugin {
     TWiki::Func::registerTagHandler( 'FANCESTORS', \&_FANCESTORS );
     TWiki::Func::registerTagHandler( 'DESCENDANTS', \&_DESCENDANTS );
 
-    # Plugin correctly initialized
     return 1;
 }
 
+# Handle the %MANCESTORS% tag
 sub _MANCESTORS {
     my($session, $params, $topic, $web) = @_;
 
@@ -61,6 +63,7 @@ sub _MANCESTORS {
     return CGI::table( {border=>1}, $row );
 }
 
+# Handle the %FANCESTORS% tag
 sub _FANCESTORS {
     my($session, $params, $topic, $web) = @_;
 
@@ -90,6 +93,7 @@ sub _FANCESTORS {
     return CGI::table( {border=>1}, $row );
 }
 
+# Handle the %DESCENDANTS% tag
 sub _DESCENDANTS {
     my($session, $params, $topic, $web) = @_;
 
@@ -98,6 +102,7 @@ sub _DESCENDANTS {
     return _expandDescendants( $to );
 }
 
+# Generate a table representing all descendants of $who
 sub _expandDescendants {
     my $who = shift;
 
@@ -136,6 +141,7 @@ sub _expandDescendants {
       CGI::Tr({valign=>'top' }, $martable ));
 }
 
+# Find out who $who married
 sub _getMarriages {
     my $who = shift;
     my $list = TWiki::Func::expandCommonVariables(
@@ -150,6 +156,7 @@ sub _getMarriages {
     return \@names;
 }
 
+# Get the name of the union record that $of is logged as the issue of
 sub _getParents {
     my $of = shift;
 
@@ -163,6 +170,7 @@ sub _getParents {
     return $parents;
 }
 
+# Get the value of the "Male" field from a union record
 sub _getMale {
     my $of = shift;
 
@@ -170,6 +178,7 @@ sub _getMale {
         '%FORMFIELD{"Male" topic="'.$of.'"}%');
 }
 
+# Get the value of the "Female" field from a union record
 sub _getFemale {
     my $of = shift;
 
@@ -177,6 +186,7 @@ sub _getFemale {
         '%FORMFIELD{"Female" topic="'.$of.'"}%');
 }
 
+# Get the siblings of a person record, as an array ref
 sub _getSiblings {
     my( $parents, $child ) = @_;
 
@@ -185,6 +195,7 @@ sub _getSiblings {
     return \@names;
 }
 
+# Get all the offspring of a union, as an array ref
 sub _getOffspring {
     my $marriage = shift;
     my $list = TWiki::Func::expandCommonVariables(
