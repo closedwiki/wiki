@@ -49,7 +49,4 @@ templates/settings.classic.tmpl  0444
 templates/twiki.classic.tmpl  0444
 templates/view.classic.tmpl  0444
 templates/viewprint.classic.tmpl  0444
-templates/view.plain.classic.tmpl  0444
-templates/view.print.classic.tmpl  0444
-templates/view.text.classic.tmpl 0444
 templates/viewprint.tmpl 0444
