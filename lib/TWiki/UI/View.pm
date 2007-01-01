@@ -151,6 +151,12 @@ sub view {
         $logEntry .= ' raw='.$raw;
         if( $raw eq 'debug' || $raw eq 'all' ) {
             $text = $store->getDebugText( $meta, $text );
+        } else {
+            # Escape entities
+            $text =~ s/&/&amp\;/go;
+            $text =~ s/%/&\#037\;/go;
+            $text =~ s/</&lt\;/go;
+            $text =~ s/>/&gt\;/go;
         }
     }
 
