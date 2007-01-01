@@ -39,14 +39,14 @@ first." args="%PARAM1%"}%
 
 <table border="0"><tr>
 <td valign="top">
-<form style="margin-bottom:0px" action="%SCRIPTURLPATH{"edit"}%/%WEB%/%TOPIC%" method="post">
+<form style="margin-bottom:0px" action="%SCRIPTURLPATH{"%PARAM4%"}%/%WEB%/%TOPIC%" method="post">
   <input type="hidden" name="breaklock" value="on" />
   <input type="submit" class="natOkButton" value='%MAKETEXT{"Edit Anyway"}%' />
 %QUERYPARAMS% 
 </form>
 </td> 
 <td valign="top">
-<form style="margin-bottom:0px" class="natOopsButtons" action="%SCRIPTURLPATH{"edit"}%/%WEB%/%TOPIC%" method="post">
+<form style="margin-bottom:0px" class="natOopsButtons" action="%SCRIPTURLPATH{"%PARAM4%"}%/%WEB%/%TOPIC%" method="post">
   <input type="submit" class="natAltButton" value='%MAKETEXT{"Try Again"}%' />
 %QUERYPARAMS% 
 </form>
