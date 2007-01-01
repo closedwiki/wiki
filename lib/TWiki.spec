@@ -639,6 +639,7 @@ $TWiki::cfg{LogFileName} = '$TWiki::cfg{DataDir}/log%DATE%.txt';
 $TWiki::cfg{UserInterfaceInternationalisation} = $FALSE;
 
 # *LANGUAGES* Marker used by bin/configure script - do not remove!
+$TWiki::cfg{Languages}{cs}{Enabled} = 1;
 $TWiki::cfg{Languages}{da}{Enabled} = 1;
 $TWiki::cfg{Languages}{de}{Enabled} = 1;
 $TWiki::cfg{Languages}{es}{Enabled} = 1;
