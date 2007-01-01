@@ -13,14 +13,14 @@
 %MAKETEXT{"To edit the topic anyway, hit 'Edit Anyway'."}%
 %TMPL:END%
 %TMPL:DEF{"topicaction"}%[[%WEB%.%TOPIC%][%MAKETEXT{"View topic"}%]] %TMPL:P{"sep"}%<a href="%SCRIPTURLPATH{"view"}%/%WEB%/%TOPIC%?raw=on">View raw text without formatting</a> %TMPL:P{"sep"}%
-<form action="%SCRIPTURLPATH{"edit"}%/%WEB%/%TOPIC%" method="post">
+<form action="%SCRIPTURLPATH{"%PARAM4%"}%/%WEB%/%TOPIC%" method="post">
 <literal>
 %QUERYPARAMS{format="<input type='hidden' name='$name' value='$percntENCODE{$quot()$value$quot type=$quot()html$quot}$percnt' />"}%
 </literal>
 <input type="submit" value='%MAKETEXT{"Try Again"}%' />
 </form>
 %TMPL:P{"sep"}%
-<form action="%SCRIPTURLPATH{"edit"}%/%WEB%/%TOPIC%" method="post">
+<form action="%SCRIPTURLPATH{"%PARAM4%"}%/%WEB%/%TOPIC%" method="post">
 <input type="hidden" name="breaklock" value="on" />
 <literal>
 %QUERYPARAMS{format="<input type='hidden' name='$name' value='$percntENCODE{$quot()$value$quot type=$quot()html$quot}$percnt' />"}%
