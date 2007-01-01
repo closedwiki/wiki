@@ -297,7 +297,7 @@ msgstr "(无)"
 msgid "(oops)"
 msgstr "(哎)"
 
-#: data/TWiki/TWikiRegistration.txt:265
+#: data/TWiki/TWikiRegistration.txt:266
 msgid "(optional)"
 msgstr "（可选）"
 
@@ -560,7 +560,7 @@ msgstr "变更 %1: %2."
 msgid "Add form"
 msgstr "添加表单"
 
-#: data/TWiki/TWikiRegistration.txt:274
+#: data/TWiki/TWikiRegistration.txt:275
 msgid "Add your name to the list of users in the %1 topic in the %2 web."
 msgstr "将您的名字添加到%2目录%1主题的用户列表中。"
 
@@ -917,7 +917,7 @@ msgstr "颜色 %1包含非法的格式"
 msgid "Comment"
 msgstr "评论"
 
-#: data/TWiki/TWikiRegistration.txt:265
+#: data/TWiki/TWikiRegistration.txt:266
 msgid "Comments:"
 msgstr "评论:"
 
@@ -1012,7 +1012,7 @@ msgstr "创建个人工具栏"
 msgid "Create this topic"
 msgstr "创建这个主题"
 
-#: data/TWiki/TWikiRegistration.txt:273
+#: data/TWiki/TWikiRegistration.txt:274
 msgid ""
 "Create your personal %1 topic using your WikiName as topic name, and add the "
 "data you submitted to the topic."
@@ -1281,7 +1281,7 @@ msgstr "文件已经用其他名称上传"
 msgid "Find topics that link to %1 ..."
 msgstr "找到链接到%1的主题..."
 
-#: data/TWiki/TWikiRegistration.txt:272
+#: data/TWiki/TWikiRegistration.txt:273
 msgid ""
 "Finish creating an account for you, so that you can start editing pages "
 "using your WikiName."
@@ -1434,7 +1434,7 @@ msgstr ""
 "如果您错误的收到这封邮件：某人( %1 )已经在 %2 网站上用电子邮件地址 %3 注册了 "
 "请联系 %4 说明。"
 
-#: data/TWiki/TWikiRegistration.txt:292
+#: data/TWiki/TWikiRegistration.txt:293
 msgid "If you have any questions about registration, send an e-mail to %1."
 msgstr "如果您有任何关于注册的问题请发送邮件给 %1。"
 
@@ -1717,11 +1717,6 @@ msgstr "新"
 msgid "Name of new web is missing"
 msgstr "新目录名称缺失"
 
-#: data/Main/TWikiGroups.txt:13
-#, fuzzy
-msgid "New Group"
-msgstr "群组"
-
 #: data/TWiki/ChangeEmailAddress.txt:28
 msgid "New e-mails (space-separated list)"
 msgstr "新邮件地址(空格分割的列表)"
@@ -1830,7 +1825,7 @@ msgstr "OK"
 msgid "Older revision:"
 msgstr "旧版本"
 
-#: data/TWiki/TWikiRegistration.txt:280
+#: data/TWiki/TWikiRegistration.txt:281
 msgid "Once registered you can login using your %1 and password."
 msgstr "注册后您可以使用%1和密码登录"
 
@@ -1873,7 +1868,7 @@ msgstr "组织链接："
 msgid "Organisation name:"
 msgstr "组织名称："
 
-#: data/TWiki/TWikiRegistration.txt:260
+#: data/TWiki/TWikiRegistration.txt:261
 msgid "Other Country"
 msgstr "其他国家"
 
@@ -2274,7 +2269,7 @@ msgstr "选择所有"
 msgid "Select, copy and paste your signature text to the bottom of your entry"
 msgstr "选择/复制/粘贴您的签名文字到条目的底部"
 
-#: data/TWiki/TWikiRegistration.txt:275
+#: data/TWiki/TWikiRegistration.txt:276
 msgid "Send you a confirmation of your registration by e-mail."
 msgstr "通过电子邮件发送您的注册确认。"
 
@@ -2374,7 +2369,7 @@ msgstr ""
 "步骤2：继续<input type='submit' class='twikiButton' value='Edit' />编辑并保"
 "存%1激活主题"
 
-#: data/TWiki/TWikiRegistration.txt:286 templates/messages.tmpl:172
+#: data/TWiki/TWikiRegistration.txt:287 templates/messages.tmpl:172
 #: templates/messages.tmpl:278
 msgid "Submit"
 msgstr "提交"
@@ -2974,7 +2969,7 @@ msgstr "目录"
 msgid "Welcome to the %1 web"
 msgstr "欢迎来到%1目录"
 
-#: data/TWiki/TWikiRegistration.txt:271
+#: data/TWiki/TWikiRegistration.txt:272
 msgid ""
 "When %1 receives the form, it will mail an account activation code to the e-"
 "mail address you gave above. Enter that activation code in the following "
@@ -3444,6 +3439,10 @@ msgid ""
 "your password. If none of your registered e-mail addresses is valid, and you "
 "have forgotten your password, contact %1."
 msgstr "您必须"
+
+#, fuzzy
+#~ msgid "New Group"
+#~ msgstr "群组"
 
 #, fuzzy
 #~ msgid "\"%1\" is an invalid name for a new web."

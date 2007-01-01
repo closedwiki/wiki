@@ -294,7 +294,7 @@ msgstr "(ingen)"
 msgid "(oops)"
 msgstr "(varning)"
 
-#: data/TWiki/TWikiRegistration.txt:265
+#: data/TWiki/TWikiRegistration.txt:266
 msgid "(optional)"
 msgstr "(frivilligt)"
 
@@ -580,7 +580,7 @@ msgstr "Åtgärd %1: %2."
 msgid "Add form"
 msgstr "Lägg till formulär"
 
-#: data/TWiki/TWikiRegistration.txt:274
+#: data/TWiki/TWikiRegistration.txt:275
 msgid "Add your name to the list of users in the %1 topic in the %2 web."
 msgstr ""
 "Lägg till ditt namn på listan över användare på sidan %1 i avdelningen %2."
@@ -945,7 +945,7 @@ msgstr "Färgen %1 har ogiltigt format"
 msgid "Comment"
 msgstr "Kommentar"
 
-#: data/TWiki/TWikiRegistration.txt:265
+#: data/TWiki/TWikiRegistration.txt:266
 msgid "Comments:"
 msgstr "Kommentarer:"
 
@@ -1041,7 +1041,7 @@ msgstr "Skapa en personlig sidomeny"
 msgid "Create this topic"
 msgstr "Skapa denna sida"
 
-#: data/TWiki/TWikiRegistration.txt:273
+#: data/TWiki/TWikiRegistration.txt:274
 msgid ""
 "Create your personal %1 topic using your WikiName as topic name, and add the "
 "data you submitted to the topic."
@@ -1331,7 +1331,7 @@ msgstr "Filen har laddats upp under annat namn"
 msgid "Find topics that link to %1 ..."
 msgstr "Hitta sidor som refererar till %1 ..."
 
-#: data/TWiki/TWikiRegistration.txt:272
+#: data/TWiki/TWikiRegistration.txt:273
 msgid ""
 "Finish creating an account for you, so that you can start editing pages "
 "using your WikiName."
@@ -1492,7 +1492,7 @@ msgstr ""
 "Om du fått detta brev av misstag: En person (%1) har försökt registrera sig "
 "på '%2' med din e-postadress, %3. Kontakta %4 om detta är fel."
 
-#: data/TWiki/TWikiRegistration.txt:292
+#: data/TWiki/TWikiRegistration.txt:293
 msgid "If you have any questions about registration, send an e-mail to %1."
 msgstr "Eventuella frågor om registreringen skickas till %1."
 
@@ -1782,11 +1782,6 @@ msgstr "NY"
 msgid "Name of new web is missing"
 msgstr "Namnet på den nya avdelningen saknas"
 
-#: data/Main/TWikiGroups.txt:13
-#, fuzzy
-msgid "New Group"
-msgstr "Grupper"
-
 #: data/TWiki/ChangeEmailAddress.txt:28
 msgid "New e-mails (space-separated list)"
 msgstr "Nya e-postaddresser (avgränasde med mellanslag)"
@@ -1896,7 +1891,7 @@ msgstr "OK"
 msgid "Older revision:"
 msgstr "Tidligere version:"
 
-#: data/TWiki/TWikiRegistration.txt:280
+#: data/TWiki/TWikiRegistration.txt:281
 msgid "Once registered you can login using your %1 and password."
 msgstr "När du registrerat dig kan du logga in med ditt %1 och lösenord."
 
@@ -1940,7 +1935,7 @@ msgstr "Organisationens <br />hemsida:"
 msgid "Organisation name:"
 msgstr "Organisationsnamn:"
 
-#: data/TWiki/TWikiRegistration.txt:260
+#: data/TWiki/TWikiRegistration.txt:261
 msgid "Other Country"
 msgstr "Annat land"
 
@@ -2352,7 +2347,7 @@ msgid "Select, copy and paste your signature text to the bottom of your entry"
 msgstr ""
 "Välj texten i fältet och kopiera din signatur till botten av ditt inlägg"
 
-#: data/TWiki/TWikiRegistration.txt:275
+#: data/TWiki/TWikiRegistration.txt:276
 msgid "Send you a confirmation of your registration by e-mail."
 msgstr "Sänd bekräftelse per e-post om din registrering."
 
@@ -2457,7 +2452,7 @@ msgstr ""
 "Steg 2: Välj <input type='submit' class='twikiSubmit' value='Redigera' /> "
 "och spara %1 för att aktivera den nya föräldern."
 
-#: data/TWiki/TWikiRegistration.txt:286 templates/messages.tmpl:172
+#: data/TWiki/TWikiRegistration.txt:287 templates/messages.tmpl:172
 #: templates/messages.tmpl:278
 msgid "Submit"
 msgstr "Skicka"
@@ -3095,7 +3090,7 @@ msgstr "Avdelningar"
 msgid "Welcome to the %1 web"
 msgstr "Välkommen till avdelning %1"
 
-#: data/TWiki/TWikiRegistration.txt:271
+#: data/TWiki/TWikiRegistration.txt:272
 msgid ""
 "When %1 receives the form, it will mail an account activation code to the e-"
 "mail address you gave above. Enter that activation code in the following "
@@ -3592,6 +3587,10 @@ msgstr ""
 "du *måste* ha minst en registrerad e-postadress för att kunna nollställa "
 "ditt lösenord. Om ingen av dina registrerade e-postadresser är giltig och du "
 "glömt ditt lösenord så kontakta %1."
+
+#, fuzzy
+#~ msgid "New Group"
+#~ msgstr "Grupper"
 
 #~ msgid "\"%1\" is an invalid name for a new web."
 #~ msgstr "\"%1\" är inte ett tillåtet namn på en ny avdelning."

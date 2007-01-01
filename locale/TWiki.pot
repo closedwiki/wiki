@@ -290,7 +290,7 @@ msgstr ""
 msgid "(oops)"
 msgstr ""
 
-#: data/TWiki/TWikiRegistration.txt:265
+#: data/TWiki/TWikiRegistration.txt:266
 msgid "(optional)"
 msgstr ""
 
@@ -529,7 +529,7 @@ msgstr ""
 msgid "Add form"
 msgstr ""
 
-#: data/TWiki/TWikiRegistration.txt:274
+#: data/TWiki/TWikiRegistration.txt:275
 msgid "Add your name to the list of users in the %1 topic in the %2 web."
 msgstr ""
 
@@ -876,7 +876,7 @@ msgstr ""
 msgid "Comment"
 msgstr ""
 
-#: data/TWiki/TWikiRegistration.txt:265
+#: data/TWiki/TWikiRegistration.txt:266
 msgid "Comments:"
 msgstr ""
 
@@ -970,7 +970,7 @@ msgstr ""
 msgid "Create this topic"
 msgstr ""
 
-#: data/TWiki/TWikiRegistration.txt:273
+#: data/TWiki/TWikiRegistration.txt:274
 msgid ""
 "Create your personal %1 topic using your WikiName as topic name, and add the "
 "data you submitted to the topic."
@@ -1235,7 +1235,7 @@ msgstr ""
 msgid "Find topics that link to %1 ..."
 msgstr ""
 
-#: data/TWiki/TWikiRegistration.txt:272
+#: data/TWiki/TWikiRegistration.txt:273
 msgid ""
 "Finish creating an account for you, so that you can start editing pages "
 "using your WikiName."
@@ -1381,7 +1381,7 @@ msgid ""
 "using your mail address %3. Contact %4 if this is in error."
 msgstr ""
 
-#: data/TWiki/TWikiRegistration.txt:292
+#: data/TWiki/TWikiRegistration.txt:293
 msgid "If you have any questions about registration, send an e-mail to %1."
 msgstr ""
 
@@ -1647,10 +1647,6 @@ msgstr ""
 msgid "Name of new web is missing"
 msgstr ""
 
-#: data/Main/TWikiGroups.txt:13
-msgid "New Group"
-msgstr ""
-
 #: data/TWiki/ChangeEmailAddress.txt:28
 msgid "New e-mails (space-separated list)"
 msgstr ""
@@ -1758,7 +1754,7 @@ msgstr ""
 msgid "Older revision:"
 msgstr ""
 
-#: data/TWiki/TWikiRegistration.txt:280
+#: data/TWiki/TWikiRegistration.txt:281
 msgid "Once registered you can login using your %1 and password."
 msgstr ""
 
@@ -1800,7 +1796,7 @@ msgstr ""
 msgid "Organisation name:"
 msgstr ""
 
-#: data/TWiki/TWikiRegistration.txt:260
+#: data/TWiki/TWikiRegistration.txt:261
 msgid "Other Country"
 msgstr ""
 
@@ -2193,7 +2189,7 @@ msgstr ""
 msgid "Select, copy and paste your signature text to the bottom of your entry"
 msgstr ""
 
-#: data/TWiki/TWikiRegistration.txt:275
+#: data/TWiki/TWikiRegistration.txt:276
 msgid "Send you a confirmation of your registration by e-mail."
 msgstr ""
 
@@ -2291,7 +2287,7 @@ msgid ""
 "and save %1 to activate the new parent"
 msgstr ""
 
-#: data/TWiki/TWikiRegistration.txt:286 templates/messages.tmpl:172
+#: data/TWiki/TWikiRegistration.txt:287 templates/messages.tmpl:172
 #: templates/messages.tmpl:278
 msgid "Submit"
 msgstr ""
@@ -2869,7 +2865,7 @@ msgstr ""
 msgid "Welcome to the %1 web"
 msgstr ""
 
-#: data/TWiki/TWikiRegistration.txt:271
+#: data/TWiki/TWikiRegistration.txt:272
 msgid ""
 "When %1 receives the form, it will mail an account activation code to the e-"
 "mail address you gave above. Enter that activation code in the following "

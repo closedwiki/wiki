@@ -298,7 +298,7 @@ msgstr "(無)"
 msgid "(oops)"
 msgstr "(哎)"
 
-#: data/TWiki/TWikiRegistration.txt:265
+#: data/TWiki/TWikiRegistration.txt:266
 msgid "(optional)"
 msgstr "（可選）"
 
@@ -559,7 +559,7 @@ msgstr "變更 %1: %2."
 msgid "Add form"
 msgstr "添加表單"
 
-#: data/TWiki/TWikiRegistration.txt:274
+#: data/TWiki/TWikiRegistration.txt:275
 msgid "Add your name to the list of users in the %1 topic in the %2 web."
 msgstr "將您的名字添加到%2目錄%1主題的用戶列表中。"
 
@@ -918,7 +918,7 @@ msgstr "顏色 %1包含非法的格式"
 msgid "Comment"
 msgstr "評論"
 
-#: data/TWiki/TWikiRegistration.txt:265
+#: data/TWiki/TWikiRegistration.txt:266
 msgid "Comments:"
 msgstr "評論:"
 
@@ -1013,7 +1013,7 @@ msgstr "創建個人工具欄"
 msgid "Create this topic"
 msgstr "創建這個主題"
 
-#: data/TWiki/TWikiRegistration.txt:273
+#: data/TWiki/TWikiRegistration.txt:274
 msgid ""
 "Create your personal %1 topic using your WikiName as topic name, and add the "
 "data you submitted to the topic."
@@ -1286,7 +1286,7 @@ msgstr "檔已經用其他名稱上傳"
 msgid "Find topics that link to %1 ..."
 msgstr "找到鏈結到%1的主題..."
 
-#: data/TWiki/TWikiRegistration.txt:272
+#: data/TWiki/TWikiRegistration.txt:273
 msgid ""
 "Finish creating an account for you, so that you can start editing pages "
 "using your WikiName."
@@ -1442,7 +1442,7 @@ msgstr ""
 "如果您錯誤的收到這封郵件：某人( %1 )已經在 %2 網站上用電子郵件位址 %3 註冊了 "
 "請聯繫 %4 說明。"
 
-#: data/TWiki/TWikiRegistration.txt:292
+#: data/TWiki/TWikiRegistration.txt:293
 msgid "If you have any questions about registration, send an e-mail to %1."
 msgstr "如果您有任何關於註冊的問題請發送郵件給 %1。"
 
@@ -1727,11 +1727,6 @@ msgstr "新"
 msgid "Name of new web is missing"
 msgstr "新目錄名稱缺失"
 
-#: data/Main/TWikiGroups.txt:13
-#, fuzzy
-msgid "New Group"
-msgstr "群組"
-
 #: data/TWiki/ChangeEmailAddress.txt:28
 msgid "New e-mails (space-separated list)"
 msgstr ""
@@ -1841,7 +1836,7 @@ msgstr "OK"
 msgid "Older revision:"
 msgstr "舊版本"
 
-#: data/TWiki/TWikiRegistration.txt:280
+#: data/TWiki/TWikiRegistration.txt:281
 msgid "Once registered you can login using your %1 and password."
 msgstr "註冊後您可以使用%1和密碼登錄"
 
@@ -1885,7 +1880,7 @@ msgstr "組織鏈結："
 msgid "Organisation name:"
 msgstr "組織名稱："
 
-#: data/TWiki/TWikiRegistration.txt:260
+#: data/TWiki/TWikiRegistration.txt:261
 msgid "Other Country"
 msgstr "其他國家"
 
@@ -2295,7 +2290,7 @@ msgstr "選擇所有"
 msgid "Select, copy and paste your signature text to the bottom of your entry"
 msgstr "選擇/複製/粘貼您的簽名文字到條目的底部"
 
-#: data/TWiki/TWikiRegistration.txt:275
+#: data/TWiki/TWikiRegistration.txt:276
 msgid "Send you a confirmation of your registration by e-mail."
 msgstr "通過電子郵件發送您的註冊確認。"
 
@@ -2396,7 +2391,7 @@ msgstr ""
 "步驟2：繼續<input type='submit' class='twikiButton' value='Edit' />編輯並保"
 "存%1啟動主題"
 
-#: data/TWiki/TWikiRegistration.txt:286 templates/messages.tmpl:172
+#: data/TWiki/TWikiRegistration.txt:287 templates/messages.tmpl:172
 #: templates/messages.tmpl:278
 msgid "Submit"
 msgstr "提交"
@@ -2996,7 +2991,7 @@ msgstr "目錄"
 msgid "Welcome to the %1 web"
 msgstr "歡迎來到%1目錄"
 
-#: data/TWiki/TWikiRegistration.txt:271
+#: data/TWiki/TWikiRegistration.txt:272
 msgid ""
 "When %1 receives the form, it will mail an account activation code to the e-"
 "mail address you gave above. Enter that activation code in the following "
@@ -3467,6 +3462,10 @@ msgid ""
 "your password. If none of your registered e-mail addresses is valid, and you "
 "have forgotten your password, contact %1."
 msgstr ""
+
+#, fuzzy
+#~ msgid "New Group"
+#~ msgstr "群組"
 
 #, fuzzy
 #~ msgid "\"%1\" is an invalid name for a new web."

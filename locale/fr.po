@@ -293,7 +293,7 @@ msgstr "(aucun)"
 msgid "(oops)"
 msgstr "(argh)"
 
-#: data/TWiki/TWikiRegistration.txt:265
+#: data/TWiki/TWikiRegistration.txt:266
 msgid "(optional)"
 msgstr "(optionnel)"
 
@@ -590,7 +590,7 @@ msgstr "Action %1 : %2."
 msgid "Add form"
 msgstr "Ajouter le formulaire"
 
-#: data/TWiki/TWikiRegistration.txt:274
+#: data/TWiki/TWikiRegistration.txt:275
 msgid "Add your name to the list of users in the %1 topic in the %2 web."
 msgstr ""
 "Ajouter votre nom dans la liste des utilisateurs et utilisatrices, surla "
@@ -970,7 +970,7 @@ msgstr "La couleur %1 a un format invalide"
 msgid "Comment"
 msgstr "Commentaire"
 
-#: data/TWiki/TWikiRegistration.txt:265
+#: data/TWiki/TWikiRegistration.txt:266
 msgid "Comments:"
 msgstr "Commentaires :"
 
@@ -1066,7 +1066,7 @@ msgstr "Créer votre barre latérale personnelle"
 msgid "Create this topic"
 msgstr "Créer cette page"
 
-#: data/TWiki/TWikiRegistration.txt:273
+#: data/TWiki/TWikiRegistration.txt:274
 msgid ""
 "Create your personal %1 topic using your WikiName as topic name, and add the "
 "data you submitted to the topic."
@@ -1361,7 +1361,7 @@ msgstr "Ce fichier a été envoyé, sous un nom différent"
 msgid "Find topics that link to %1 ..."
 msgstr "Chercher les pages qui contiennent un lien pointant vers %1..."
 
-#: data/TWiki/TWikiRegistration.txt:272
+#: data/TWiki/TWikiRegistration.txt:273
 msgid ""
 "Finish creating an account for you, so that you can start editing pages "
 "using your WikiName."
@@ -1535,7 +1535,7 @@ msgstr ""
 "inscrit·e sur le site %2 en fournissant votre adresse e-mail %3. Dans ce "
 "cas, veuillez en informer %4."
 
-#: data/TWiki/TWikiRegistration.txt:292
+#: data/TWiki/TWikiRegistration.txt:293
 msgid "If you have any questions about registration, send an e-mail to %1."
 msgstr ""
 "Si vous avez des questions concernant l'inscription, vous pouvez écrire à %1."
@@ -1837,11 +1837,6 @@ msgstr "NOUVEAU"
 msgid "Name of new web is missing"
 msgstr "Le nom du nouveau web fait défaut"
 
-#: data/Main/TWikiGroups.txt:13
-#, fuzzy
-msgid "New Group"
-msgstr "Groupes"
-
 #: data/TWiki/ChangeEmailAddress.txt:28
 msgid "New e-mails (space-separated list)"
 msgstr "Nouvelles adresses e-mail (séparées par des espaces)"
@@ -1953,7 +1948,7 @@ msgstr "OK"
 msgid "Older revision:"
 msgstr "Ancienne version :"
 
-#: data/TWiki/TWikiRegistration.txt:280
+#: data/TWiki/TWikiRegistration.txt:281
 msgid "Once registered you can login using your %1 and password."
 msgstr ""
 "Une fois inscrit·e, vous pouvez vous connecter en utilisant votre %1 et "
@@ -2000,7 +1995,7 @@ msgstr "Site web de l'organisation :"
 msgid "Organisation name:"
 msgstr "Nom de l'organisation :"
 
-#: data/TWiki/TWikiRegistration.txt:260
+#: data/TWiki/TWikiRegistration.txt:261
 msgid "Other Country"
 msgstr "Autre pays"
 
@@ -2425,7 +2420,7 @@ msgstr ""
 "Sélectionnez, copiez et collez votre signature à la suite de vos "
 "modifications"
 
-#: data/TWiki/TWikiRegistration.txt:275
+#: data/TWiki/TWikiRegistration.txt:276
 msgid "Send you a confirmation of your registration by e-mail."
 msgstr "Vous envoyer par e-mail la confirmation de votre inscription."
 
@@ -2534,7 +2529,7 @@ msgstr ""
 "Étape 2 : Continuez de <input type='submit' class='twikiButton' "
 "value='Modifier' /> et enregistrez %1 pour activer la nouvelle page mère"
 
-#: data/TWiki/TWikiRegistration.txt:286 templates/messages.tmpl:172
+#: data/TWiki/TWikiRegistration.txt:287 templates/messages.tmpl:172
 #: templates/messages.tmpl:278
 msgid "Submit"
 msgstr "Envoyer"
@@ -3197,7 +3192,7 @@ msgstr "Webs"
 msgid "Welcome to the %1 web"
 msgstr "Bienvenue sur le web %1"
 
-#: data/TWiki/TWikiRegistration.txt:271
+#: data/TWiki/TWikiRegistration.txt:272
 msgid ""
 "When %1 receives the form, it will mail an account activation code to the e-"
 "mail address you gave above. Enter that activation code in the following "
@@ -3705,6 +3700,10 @@ msgstr ""
 "moins une adresse e-mail valide lors de votre inscription. Si aucune des "
 "adresses que vous avez fourni à ce moment-là n'est valide, et que vous avez "
 "oublié votre mot de passe, contactez %1."
+
+#, fuzzy
+#~ msgid "New Group"
+#~ msgstr "Groupes"
 
 #~ msgid "\"%1\" is an invalid name for a new web."
 #~ msgstr "\"%1\" est un nom de web invalide."

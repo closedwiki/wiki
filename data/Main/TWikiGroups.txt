@@ -10,7 +10,7 @@ These groups can be used to define fine grained %TWIKIWEB%.TWikiAccessControl in
 <div class="twikiFormSteps">
 <div class="twikiFormStep twikiLast">
 %TABLE{databg="" cellborder="0" tableborder="0"}%
-| %MAKETEXT{"New Group"}%: |<input type="text" name="topic" value="NameGroup" size="40" class="twikiInputField" />&nbsp;<input class="twikiSubmit" type="submit" value="Add"/>  |
+| New Group: |<input type="text" name="topic" value="NameGroup" size="40" class="twikiInputField" />&nbsp;<input class="twikiSubmit" type="submit" value="Add"/>  |
 | |%ICON{"warning"}% __Note:__ A group topic name must be a %TWIKIWEB%.WikiWord and __must__ end in =...Group=. New topics are based on TWikiGroupTemplate  |
 
 <input type="hidden" name="templatetopic" value="TWikiGroupTemplate"/>

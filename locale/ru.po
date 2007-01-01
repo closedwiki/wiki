@@ -297,7 +297,7 @@ msgstr "(не найдено)"
 msgid "(oops)"
 msgstr "(ой)"
 
-#: data/TWiki/TWikiRegistration.txt:265
+#: data/TWiki/TWikiRegistration.txt:266
 msgid "(optional)"
 msgstr "(не обязательно)"
 
@@ -592,7 +592,7 @@ msgstr "Действие %1: %2."
 msgid "Add form"
 msgstr "Добавить форму"
 
-#: data/TWiki/TWikiRegistration.txt:274
+#: data/TWiki/TWikiRegistration.txt:275
 msgid "Add your name to the list of users in the %1 topic in the %2 web."
 msgstr "Добавит ваше имя к списку пользователей на странице %1 раздела %2."
 
@@ -972,7 +972,7 @@ msgstr "Цвет %1 имеет неправильный формат"
 msgid "Comment"
 msgstr "Коментарий"
 
-#: data/TWiki/TWikiRegistration.txt:265
+#: data/TWiki/TWikiRegistration.txt:266
 msgid "Comments:"
 msgstr "Комментарии:"
 
@@ -1070,7 +1070,7 @@ msgstr "Создать личную панель"
 msgid "Create this topic"
 msgstr "Создать эту страницу"
 
-#: data/TWiki/TWikiRegistration.txt:273
+#: data/TWiki/TWikiRegistration.txt:274
 msgid ""
 "Create your personal %1 topic using your WikiName as topic name, and add the "
 "data you submitted to the topic."
@@ -1362,7 +1362,7 @@ msgstr "Файл был загружен с другим именем"
 msgid "Find topics that link to %1 ..."
 msgstr "Найти страницы ссылающиеся на %1 ..."
 
-#: data/TWiki/TWikiRegistration.txt:272
+#: data/TWiki/TWikiRegistration.txt:273
 msgid ""
 "Finish creating an account for you, so that you can start editing pages "
 "using your WikiName."
@@ -1528,7 +1528,7 @@ msgstr ""
 "Если вы не ждете этого письма: Кто-то (%1) зарегистрировался на %2, "
 "используя ваш e-mail адрес: %3. Сообщите, пожалуйста, %4 если это не Вы."
 
-#: data/TWiki/TWikiRegistration.txt:292
+#: data/TWiki/TWikiRegistration.txt:293
 msgid "If you have any questions about registration, send an e-mail to %1."
 msgstr "Если у вас есть вопросы по регистрации, пишите на e-mail: %1"
 
@@ -1810,11 +1810,6 @@ msgstr "НОВЫЙ(АЯ)"
 msgid "Name of new web is missing"
 msgstr "Отсутствует имя нового раздела"
 
-#: data/Main/TWikiGroups.txt:13
-#, fuzzy
-msgid "New Group"
-msgstr "Группы"
-
 #: data/TWiki/ChangeEmailAddress.txt:28
 msgid "New e-mails (space-separated list)"
 msgstr "Новые адреса e-mail (список разделенный пробелами)"
@@ -1923,7 +1918,7 @@ msgstr "OK"
 msgid "Older revision:"
 msgstr "Старшая версия:"
 
-#: data/TWiki/TWikiRegistration.txt:280
+#: data/TWiki/TWikiRegistration.txt:281
 msgid "Once registered you can login using your %1 and password."
 msgstr ""
 "Однажды зарегистрировавшись, вы сможете заходить используя ваши %1 и пароль."
@@ -1969,7 +1964,7 @@ msgstr "URL организации:"
 msgid "Organisation name:"
 msgstr "Название организации:"
 
-#: data/TWiki/TWikiRegistration.txt:260
+#: data/TWiki/TWikiRegistration.txt:261
 msgid "Other Country"
 msgstr "Другая страна"
 
@@ -2391,7 +2386,7 @@ msgstr "Выбрать все"
 msgid "Select, copy and paste your signature text to the bottom of your entry"
 msgstr "Выделите, скопируйте и вставьте вашу подпись к вашей вставке"
 
-#: data/TWiki/TWikiRegistration.txt:275
+#: data/TWiki/TWikiRegistration.txt:276
 msgid "Send you a confirmation of your registration by e-mail."
 msgstr "Отправит подтверждение вашей регистрации по e-mail."
 
@@ -2494,7 +2489,7 @@ msgstr ""
 "Шаг 2 Продолжите <input type='submit' class='twikiButton' "
 "value='Редактировать' /> и сохраните %1 чтобы установать нового родителя"
 
-#: data/TWiki/TWikiRegistration.txt:286 templates/messages.tmpl:172
+#: data/TWiki/TWikiRegistration.txt:287 templates/messages.tmpl:172
 #: templates/messages.tmpl:278
 msgid "Submit"
 msgstr "Применить"
@@ -3142,7 +3137,7 @@ msgstr "Разделы"
 msgid "Welcome to the %1 web"
 msgstr "Добро пожаловать в раздел %1"
 
-#: data/TWiki/TWikiRegistration.txt:271
+#: data/TWiki/TWikiRegistration.txt:272
 msgid ""
 "When %1 receives the form, it will mail an account activation code to the e-"
 "mail address you gave above. Enter that activation code in the following "
@@ -3649,6 +3644,10 @@ msgstr ""
 "электронной почты, чтобы можно было сбросить ваш пароль. Если ни один из "
 "зарегистрированных Вами адресов электронной почты не правилен, и вы забыли "
 "свой пароль, пишите %1."
+
+#, fuzzy
+#~ msgid "New Group"
+#~ msgstr "Группы"
 
 #~ msgid "%1 - Automated notification of topic changes"
 #~ msgstr "%1 - Автоматическое извещение об изменениях страницы"

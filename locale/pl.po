@@ -293,7 +293,7 @@ msgstr "(brak)"
 msgid "(oops)"
 msgstr "(oops)"
 
-#: data/TWiki/TWikiRegistration.txt:265
+#: data/TWiki/TWikiRegistration.txt:266
 msgid "(optional)"
 msgstr "(opcjonalnie)"
 
@@ -581,7 +581,7 @@ msgstr "Operacja %1: %2."
 msgid "Add form"
 msgstr "Dodaj formularz"
 
-#: data/TWiki/TWikiRegistration.txt:274
+#: data/TWiki/TWikiRegistration.txt:275
 msgid "Add your name to the list of users in the %1 topic in the %2 web."
 msgstr "Je naam toevoegen aan de lijst van gebruikers in pagina %1 in %2 web."
 
@@ -950,7 +950,7 @@ msgstr "Format zapisu koloru %1 jest nieprawidłowy"
 msgid "Comment"
 msgstr "Komentarz"
 
-#: data/TWiki/TWikiRegistration.txt:265
+#: data/TWiki/TWikiRegistration.txt:266
 msgid "Comments:"
 msgstr "Komentarze:"
 
@@ -1046,7 +1046,7 @@ msgstr "Utwórz własny pasek boczny"
 msgid "Create this topic"
 msgstr "Utwórz tę stronę"
 
-#: data/TWiki/TWikiRegistration.txt:273
+#: data/TWiki/TWikiRegistration.txt:274
 msgid ""
 "Create your personal %1 topic using your WikiName as topic name, and add the "
 "data you submitted to the topic."
@@ -1336,7 +1336,7 @@ msgstr "Plik załadowano i zapisano pod inną nazwą"
 msgid "Find topics that link to %1 ..."
 msgstr "Wyszukaj strony z odwołaniami do %1 ..."
 
-#: data/TWiki/TWikiRegistration.txt:272
+#: data/TWiki/TWikiRegistration.txt:273
 msgid ""
 "Finish creating an account for you, so that you can start editing pages "
 "using your WikiName."
@@ -1497,7 +1497,7 @@ msgstr ""
 "dokonywaniu rejestracji na stronie %2, podał Twój adres email: %3. Powiadom "
 "administratora: %4."
 
-#: data/TWiki/TWikiRegistration.txt:292
+#: data/TWiki/TWikiRegistration.txt:293
 msgid "If you have any questions about registration, send an e-mail to %1."
 msgstr "Pytania dotyczące rejestracji należy kierować do: %1."
 
@@ -1791,11 +1791,6 @@ msgstr "NOWA"
 msgid "Name of new web is missing"
 msgstr "Nie podano nazwy działu"
 
-#: data/Main/TWikiGroups.txt:13
-#, fuzzy
-msgid "New Group"
-msgstr "Grupy"
-
 #: data/TWiki/ChangeEmailAddress.txt:28
 msgid "New e-mails (space-separated list)"
 msgstr "Nowe adresy email (oddzielone spacjami)"
@@ -1905,7 +1900,7 @@ msgstr "OK"
 msgid "Older revision:"
 msgstr "Wersja:"
 
-#: data/TWiki/TWikiRegistration.txt:280
+#: data/TWiki/TWikiRegistration.txt:281
 msgid "Once registered you can login using your %1 and password."
 msgstr ""
 "Po zarejestrowaniu i utworzeniu konta użytkownika można się logować do TWiki."
@@ -1950,7 +1945,7 @@ msgstr "Adres URL organizacji:"
 msgid "Organisation name:"
 msgstr "Nazwa organizacji:"
 
-#: data/TWiki/TWikiRegistration.txt:260
+#: data/TWiki/TWikiRegistration.txt:261
 msgid "Other Country"
 msgstr "Inny kraj"
 
@@ -2360,7 +2355,7 @@ msgstr ""
 "Pod wpisem zamieść swój podpis, który poniżej możesz zaznaczyć, skopiować i "
 "wkleić"
 
-#: data/TWiki/TWikiRegistration.txt:275
+#: data/TWiki/TWikiRegistration.txt:276
 msgid "Send you a confirmation of your registration by e-mail."
 msgstr "Zostanie wysłany list z potwierdzeniem twojej rejestracji."
 
@@ -2467,7 +2462,7 @@ msgstr ""
 "Krok 2: kontynuuj <input type='submit' class='twikiButton' value='edycję' /> "
 "i zapisz %1 w celu uaktywnienia nowej strony nadrzędnej"
 
-#: data/TWiki/TWikiRegistration.txt:286 templates/messages.tmpl:172
+#: data/TWiki/TWikiRegistration.txt:287 templates/messages.tmpl:172
 #: templates/messages.tmpl:278
 msgid "Submit"
 msgstr "Prześlij"
@@ -3110,7 +3105,7 @@ msgstr "Działy"
 msgid "Welcome to the %1 web"
 msgstr "Witamy w dziale %1"
 
-#: data/TWiki/TWikiRegistration.txt:271
+#: data/TWiki/TWikiRegistration.txt:272
 msgid ""
 "When %1 receives the form, it will mail an account activation code to the e-"
 "mail address you gave above. Enter that activation code in the following "
@@ -3603,6 +3598,10 @@ msgstr ""
 "Aby móc zresetować hasło, *musisz* mieć przynajmniej jeden poprawny adres "
 "email. Jeśli żaden z zarejestrowanych adresów email nie jest poprawny, to "
 "aby zresetować hasło, musisz skontaktować się z administratorem: %1."
+
+#, fuzzy
+#~ msgid "New Group"
+#~ msgstr "Grupy"
 
 #~ msgid "\"%1\" is an invalid name for a new web."
 #~ msgstr "\"%1\" jest niepoprawną nazwą nowego działu"

@@ -293,7 +293,7 @@ msgstr "(geen)"
 msgid "(oops)"
 msgstr "(melding)"
 
-#: data/TWiki/TWikiRegistration.txt:265
+#: data/TWiki/TWikiRegistration.txt:266
 msgid "(optional)"
 msgstr "(optioneel)"
 
@@ -586,7 +586,7 @@ msgstr "Actie %1: %2."
 msgid "Add form"
 msgstr "Formulier toevoegen"
 
-#: data/TWiki/TWikiRegistration.txt:274
+#: data/TWiki/TWikiRegistration.txt:275
 msgid "Add your name to the list of users in the %1 topic in the %2 web."
 msgstr "Je naam toevoegen aan de lijst van gebruikers in pagina %1 in %2 web."
 
@@ -957,7 +957,7 @@ msgstr "Kleur %1 heeft een ongeldig formaat"
 msgid "Comment"
 msgstr "Toelichting"
 
-#: data/TWiki/TWikiRegistration.txt:265
+#: data/TWiki/TWikiRegistration.txt:266
 msgid "Comments:"
 msgstr "Opmerkingen:"
 
@@ -1053,7 +1053,7 @@ msgstr "Persoonlijk menu aanmaken"
 msgid "Create this topic"
 msgstr "Maak deze pagina aan"
 
-#: data/TWiki/TWikiRegistration.txt:273
+#: data/TWiki/TWikiRegistration.txt:274
 msgid ""
 "Create your personal %1 topic using your WikiName as topic name, and add the "
 "data you submitted to the topic."
@@ -1344,7 +1344,7 @@ msgstr "Het bestand is geupload met een andere naam"
 msgid "Find topics that link to %1 ..."
 msgstr "Zoek pagina's die linken naar %1 ..."
 
-#: data/TWiki/TWikiRegistration.txt:272
+#: data/TWiki/TWikiRegistration.txt:273
 msgid ""
 "Finish creating an account for you, so that you can start editing pages "
 "using your WikiName."
@@ -1512,7 +1512,7 @@ msgstr ""
 "geregistreerd op de %2 site met gebruik van uw e-mailadres %3. Neem contact "
 "op met %4 als dit niet goed is."
 
-#: data/TWiki/TWikiRegistration.txt:292
+#: data/TWiki/TWikiRegistration.txt:293
 msgid "If you have any questions about registration, send an e-mail to %1."
 msgstr "Als je vragen hebt over registratie, stuur een e-mail aan %1."
 
@@ -1808,11 +1808,6 @@ msgstr "NIEUW"
 msgid "Name of new web is missing"
 msgstr "Naam van het nieuwe web ontbreekt"
 
-#: data/Main/TWikiGroups.txt:13
-#, fuzzy
-msgid "New Group"
-msgstr "Groepen"
-
 #: data/TWiki/ChangeEmailAddress.txt:28
 msgid "New e-mails (space-separated list)"
 msgstr "Nieuwe e-mails (spatie-gescheiden lijst)"
@@ -1922,7 +1917,7 @@ msgstr "OK"
 msgid "Older revision:"
 msgstr "Oudere revisie"
 
-#: data/TWiki/TWikiRegistration.txt:280
+#: data/TWiki/TWikiRegistration.txt:281
 msgid "Once registered you can login using your %1 and password."
 msgstr ""
 "Wanneer je geregistreerd bent kun je inloggen met gebruik van je %1 en "
@@ -1969,7 +1964,7 @@ msgstr "URL van organisatie:"
 msgid "Organisation name:"
 msgstr "Naam van organisatie:"
 
-#: data/TWiki/TWikiRegistration.txt:260
+#: data/TWiki/TWikiRegistration.txt:261
 msgid "Other Country"
 msgstr "Ander land"
 
@@ -2382,7 +2377,7 @@ msgstr "Vink aan"
 msgid "Select, copy and paste your signature text to the bottom of your entry"
 msgstr "Kopieer en plak je signatuur onderaan je toevoeging"
 
-#: data/TWiki/TWikiRegistration.txt:275
+#: data/TWiki/TWikiRegistration.txt:276
 msgid "Send you a confirmation of your registration by e-mail."
 msgstr "Een bevestiging van je registratie versturen per e-mail."
 
@@ -2487,7 +2482,7 @@ msgstr ""
 "Stap 2: Ga door en <input type='submit' class='twikiButton' value='Bewerk' /"
 "> en bewaar %1 om de nieuwe bovenliggende pagina te activeren"
 
-#: data/TWiki/TWikiRegistration.txt:286 templates/messages.tmpl:172
+#: data/TWiki/TWikiRegistration.txt:287 templates/messages.tmpl:172
 #: templates/messages.tmpl:278
 msgid "Submit"
 msgstr "Versturen"
@@ -3148,7 +3143,7 @@ msgstr "Webs"
 msgid "Welcome to the %1 web"
 msgstr "Welkom in het %1 web"
 
-#: data/TWiki/TWikiRegistration.txt:271
+#: data/TWiki/TWikiRegistration.txt:272
 msgid ""
 "When %1 receives the form, it will mail an account activation code to the e-"
 "mail address you gave above. Enter that activation code in the following "
@@ -3644,6 +3639,10 @@ msgstr ""
 "wachtwoord opnieuw te kunnen instellen. Als geen van je geregistreerde e-"
 "mailadressen geldig zijn, en je je wachtwoord bent vergeten, neem dan "
 "contact op met %1."
+
+#, fuzzy
+#~ msgid "New Group"
+#~ msgstr "Groepen"
 
 #~ msgid "\"%1\" is an invalid name for a new web."
 #~ msgstr "%1 is geen geldige naam voor een nieuw web."
