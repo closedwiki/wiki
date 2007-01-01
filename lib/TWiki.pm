@@ -1818,6 +1818,7 @@ sub _TOC {
             $line =~ s/([\s\(])($regex{webNameRegex})\.($regex{wikiWordRegex})/$1<nop>$3/go;  # 'Web.TopicName'
             $line =~ s/([\s\(])($regex{wikiWordRegex})/$1<nop>$2/go;  # 'TopicName'
             $line =~ s/([\s\(])($regex{abbrevRegex})/$1<nop>$2/go;    # 'TLA'
+            $line =~ s/([\s\-\*\(])([$regex{mixedAlphaNum}]+\:)/$1<nop>$2/go; # 'Site:page' Interwiki link
             # Prevent manual links
             $line =~ s/<[\/]?a\b[^>]*>//gi;
             # create linked bullet item, using a relative link to anchor
