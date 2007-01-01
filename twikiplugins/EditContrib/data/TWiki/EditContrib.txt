@@ -93,7 +93,6 @@ Set the variables conrolling the size and style of the textara for editing in th
 ---++ Installation Instructions
 
 __Note:__ You do not need to install anything on the browser to use this contrib package. The following instructions are for the administrator who installs the package on the server where TWiki is running.
-
    * Download the ZIP file from the Plugin web (see below)
    * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
      | *File:* | *Description:* |
@@ -106,6 +105,8 @@ __Note:__ You do not need to install anything on the browser to use this contrib
      | ==templates/editsection.pattern.tmpl== |  |
    * Verify access and ownership settings for the new scripts.
    * Edit your .htaccess file to require a valid user for the =savesection= script (if needed).
+   * Ensure that this plugin is enabled by running =bin/configure=.
+   * _TWiki 4.1 and later only:_ Set =$TWiki::cfg{AllowRedirectUrl} = 1;= in local configuration (in Security/Misc section of =bin/configure=).
 
 
 ---++ Contrib Info
@@ -114,8 +115,9 @@ __Note:__ You do not need to install anything on the browser to use this contrib
 |  Copyright &copy;: |  |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Dependencies: | none  |
-|  Version: | 20 Sep 2006 |
+|  Version: | 31 Dec 2006 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  31 Dec 2006: | Support proper handling of embedded sections. In TWiki 4.1, also return to original page upon cancel. |
 |  19 Nov 2006: | Fix for incorrect rendering of pre and post text by TWiki:Main.ScottHoge. |
 |  20 Sep 2006: | Move cursor to textarea upon edit. |
 |  15 Aug 2006: | Remove deprecated functions from =savesection=. |
@@ -134,7 +136,5 @@ __Note:__ You do not need to install anything on the browser to use this contrib
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 
 __Related Topics:__ TWiki:Plugins/SectionalEditPlugin, TWiki:Plugins/MultiEditPlugin, TWiki:Plugins/ThreadedDiscussionPlugin, TWiki:Plugins/EditTablerowPlugin
-
--- TWiki:Main/ThomasWeigert 20 Aug 2006
 
 <!-- Do _not_ attempt to edit this topic; it is auto-generated. Please add comments/questions/remarks to the Dev topic instead. -->

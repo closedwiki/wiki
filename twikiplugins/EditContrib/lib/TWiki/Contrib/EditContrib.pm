@@ -28,6 +28,16 @@ use TWiki::OopsException;
 
 $VERSION = 1.001;
 
+BEGIN {
+   if ( substr($TWiki::RELEASE, 8) >= 1 ) {
+     require TWiki::Contrib::EditContrib::Include41;
+     $TWiki::functionTags{INCLUDE} = \&TWiki::Contrib::EditContrib::Include41::_INCLUDE;
+   } elsif ( substr($TWiki::RELEASE, 8) == 0 ) {
+     require TWiki::Contrib::EditContrib::Include40;
+     $TWiki::functionTags{INCLUDE} = \&TWiki::Contrib::EditContrib::Include40::_INCLUDE;
+   }
+}
+
 # =========================
 ##### Note done yet
 sub handleUrlParam {
@@ -145,6 +155,7 @@ sub edit {
     my $saveCmd = $query->param( 'cmd' ) || '';
     my $editaction = lc($query->param( 'action' )) || "";
     my $skin = $session->getSkin();
+    my $origurl = $query->param( 'redirectto' ) || '';
     my $templateTopic = $query->param( 'templatetopic' ) || '';
     my $formTemplate  = $query->param( 'formtemplate' ) || '';
     my $user = $session->{user};
@@ -316,6 +327,7 @@ sub edit {
     $tmpl =~ s/%SECTIONEDITBOXWIDTH%/$width/go;
     $tmpl =~ s/%SECTIONEDITBOXHEIGHT%/$height/go;
     $tmpl =~ s/%SECTIONEDITBOXSTYLE%/$style/go;
+    $tmpl =~ s/%ORIGURL%/$origurl/go;
 
     return ($session, $text, $tmpl);
 
