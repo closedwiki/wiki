@@ -112,10 +112,6 @@ sub processInbox {
 
     $TWiki::Plugins::SESSION = $this->{session};
 
-    if( $TWiki::Plugins::VERSION <= 1.1 ) {
-        eval 'use TWiki::Contrib::FuncUsersContrib';
-    }
-
     die "No folder specification" unless $box->{folder};
 
     my $ftype = Email::FolderType::folder_type($box->{folder});
@@ -172,7 +168,7 @@ sub processInbox {
           if $this->{debug};
 
         $from =~ s/^.*<(.*)>.*$/$1/;
-        my $targets = TWiki::Func::lookupUser( email => $from );
+        my $targets = $this->{session}->{users}->findUserByEmail( $from );
         if( $targets && scalar(@$targets)) {
             $user = $targets->[0];
         }
@@ -310,7 +306,6 @@ sub _extract {
     foreach my $part ( $mime->parts() ) {
         my $ct = $part->content_type || 'text/plain';
         my $dp = $part->header('Content-Disposition') || 'inline';
-
         if( $ct =~ m[text/plain] && $dp =~ /inline/ ) {
             $$text .= $part->body();
         } elsif ( $part->filename()) {
@@ -346,8 +341,10 @@ sub _saveTopic {
         $insert =~ s/%SUBJECT%/$subject/g;
         $body =~ s/\r//g;
 
+        my $attached = 0;
         my $atts = '';
         foreach my $att ( @$attachments ) {
+            $attached = 1;
             $err .= $this->_saveAttachment( $user, $web, $topic, $att );
             my $tmpl = TWiki::Func::expandTemplate(
                 'MAILIN:'.$opts->{template}.':ATTACHMENT' );
@@ -365,6 +362,12 @@ sub _saveTopic {
         $TWiki::Plugins::SESSION->{user} = $user;
         $insert = TWiki::Func::expandVariablesOnTopicCreation($insert);
         $TWiki::Plugins::SESSION->{user} = $curUser;
+
+        # Reload the topic if we added attachments.
+        if( $attached ) {
+            ( $meta, $text ) = $this->{session}->{store}->readTopic(
+                $user, $web, $topic );
+        }
 
         if( $opts->{where} eq 'top' ) {
             $text = $insert.$text;

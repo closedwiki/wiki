@@ -12,10 +12,10 @@ use TWiki::Contrib::MailInContrib;
 
 my $twiki;
 
-my $testWeb = 'TemporaryTestWeb';
+my $testWeb = 'MailInContribTests';
 my $testTopic = 'TestTopic';
-my $testUsersWeb = "TemporaryTestUsersUsersWeb";
-my $testSysWeb = "TemporaryTestTWikiWeb";
+my $testUsersWeb = "${testWeb}UsersWeb";
+my $testSysWeb = "${testWeb}TWikiWeb";
 
 my $box;
 
@@ -39,20 +39,20 @@ sub set_up {
 
     $this->SUPER::set_up();
 
-    my $query = new CGI("");
-    $query->path_info("/$testWeb/$testTopic");
-    $twiki = new TWiki(undef, $query);
-
-    $TWiki::cfg{UsersWebName} = $testUsersWeb;
     my $original = $TWiki::cfg{SystemWebName};
     $TWiki::cfg{SystemWebName} = $testSysWeb;
+    $TWiki::cfg{UsersWebName} = $testUsersWeb;
     $TWiki::cfg{MapUserToWikiName} = 1;
     $TWiki::cfg{Htpasswd}{FileName} = '/tmp/junkpasswd';
     $TWiki::cfg{PasswordManager} = 'TWiki::Users::HtPasswdUser';
     $TWiki::cfg{Htpasswd}{Encoding} = 'plain';
-
+    $TWiki::cfg{TemplatePath} =~ s/TWiki\./$testSysWeb\./g;
     open(F,">$TWiki::cfg{Htpasswd}{FileName}");
     close(F);
+    my $query = new CGI("");
+    $query->path_info("/$testWeb/$testTopic");
+
+    $twiki = new TWiki(undef, $query);
     $twiki->{store}->saveMetaData( '', 'mailincron', '0' );
     $twiki->{store}->createWeb( $twiki->{user}, $testWeb );
     $twiki->{store}->createWeb( $twiki->{user}, $testUsersWeb );
@@ -324,7 +324,7 @@ Message-ID: <b293fda70602270033u2665f098l872ecbc52aa8d27e@gmail.com>
 Date: Mon, 27 Feb 2006 00:33:58 -0800
 From: "Ally Gator" <ally@masai.mara>
 To: "Dick Head" <dhead@twiki.com>
-Subject: TemporaryTestWeb.AnotherTopic: attachment test
+Subject: $testWeb.AnotherTopic: attachment test
 Cc: another.idiot@twiki.com>
 MIME-Version: 1.0
 Content-Type: multipart/mixed; 
@@ -388,6 +388,7 @@ YQp0RjZMQXNIcUFLQ0VPZmxQTllrYXlTVllMVkNGdzBMZnhIQytidz09Cj0rSi84Ci0tLS0tRU5E
 IFBHUCBQVUJMSUMgS0VZIEJMT0NLLS0tLS0K
 ------=_Part_21658_5579231.1141029238540--
 HERE
+    $mail =~ s/\$testWeb/$testWeb/g;
     $this->sendTestMail($mail);
     $box->{topicPath} = 'subject';
     $box->{onError} = 'reply';
@@ -397,12 +398,12 @@ HERE
     $this->assert_equals(1, scalar(@mails));
     $this->assert_matches(qr/Thank you for your successful/, $mails[0]);
 
-    my( $m, $t ) = TWiki::Func::readTopic('TemporaryTestWeb','AnotherTopic');
+    my( $m, $t ) = TWiki::Func::readTopic($testWeb,'AnotherTopic');
     my @a = $m->get('FILEATTACHMENT');
     $this->assert_equals(1, scalar(@a));
     $this->assert_str_equals("data.asc", $a[0]->{attachment});
 
-    $this->assert(-e "$TWiki::cfg{PubDir}/TemporaryTestWeb/AnotherTopic/data.asc");
+    $this->assert(-e "$TWiki::cfg{PubDir}/$testWeb/AnotherTopic/data.asc");
 }
 
 # templates
@@ -428,6 +429,7 @@ Subject: %SUBJECT%
 Body: %TEXT%
 %TMPL:END%
 HERE
+
     $twiki->{store}->saveTopic(
         $twiki->{user}, $testWeb, 'TargetTopic', <<'HERE');
 BEGIN
@@ -439,8 +441,9 @@ HERE
     $this->assert_equals(1, scalar(@mails));
     $this->assert_matches(qr/Thank you for your successful/, $mails[0]);
 
-    my( $m, $t ) = TWiki::Func::readTopic('TemporaryTestWeb','TargetTopic');
-    $this->assert_matches(qr/Subject: Object\s*Body: Message 1 text here\s*<!--MAIL/, $t);
+    my( $m, $t ) = TWiki::Func::readTopic($testWeb,'TargetTopic');
+
+    $this->assert_matches(qr/BEGIN\s*Subject: Object\s*Body: Message 1 text here\s*<!--MAIL{/s, $t);
 }
 
 1;
