@@ -3545,7 +3545,7 @@ sub _USERINFO {
         $info =~ s/\$wikiusername/$wikiusername/g;
     }
     if ($info =~ /\$emails/) {
-        my $emails = join(',', $user->emails());
+        my $emails = join(', ', $user->emails());
         $info =~ s/\$emails/$emails/g;
     }
     if ($info =~ /\$groups/) {
