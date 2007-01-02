@@ -1,6 +1,6 @@
 Archive::Tar,>=0,cpan,Optional, may be required by the Extensions Installer in configure if command line tar or unzip is not available
 B::Deparse,>=0,cpan,Required, for base TWiki
-CGI,>=3.05,cpan,Required, for base TWiki
+CGI,>=0,cpan,Required, for base TWiki
 CGI::Carp,>=1.26,cpan,Required, for base TWiki
 Carp,>=0,cpan,Required, for base TWiki
 Config,>=0,cpan,Required, for base TWiki

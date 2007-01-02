@@ -66,21 +66,8 @@
 use strict;
 use warnings;
 
-# These are absolutely essential for error reporting. We load them using
+# This is absolutely essential for error reporting. We load it using
 # an eval so we can report the problem.
-eval "use CGI 3.05 qw(:any)";
-if ($@) {
-    print <<"REPORT";
-Content-type: text/plain
-
-Could not load CGI. Please install this module before continuing.
-It can be downloaded from http://www.cpan.org
-
-The error seen was:
-$@
-REPORT
-    exit 1;
-}
 eval "use CGI::Carp qw(fatalsToBrowser)";
 if ($@) {
     print <<"REPORT";
@@ -137,7 +124,9 @@ HERE
 
 foreach my $module ('FindBin',
                     'File::Spec',
-                    'Config') {
+                    'Config',
+                    'CGI qw(:any)'
+                   ) {
     _loadBasicModule($module);
 }
 
