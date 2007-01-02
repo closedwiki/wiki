@@ -932,9 +932,9 @@ templates/view.text.tmpl 0444
 templates/view.tmpl 0444
 templates/view.xml.tmpl 0444
 templates/viewprint.tmpl 0444
-tools/geturl.pl 0550
-tools/rewriteshbang.pl 0550
-tools/tick_twiki.pl 0550
-tools/upgrade_emails.pl 0550
+tools/geturl.pl 0555
+tools/rewriteshbang.pl 0555
+tools/tick_twiki.pl 0555
+tools/upgrade_emails.pl 0555
 tools/DEPENDENCIES 0444
 twiki_httpd_conf.txt 0444
