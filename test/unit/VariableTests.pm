@@ -111,8 +111,8 @@ FrankNurgle
 TemporaryTestVariablesUsersWeb.FrankNurgle
 %WEBCOLOR%
 %STARTSECTION{name="fred" type="section"}%
-fnurgle, TemporaryTestVariablesUsersWeb.FrankNurgle, frank@nurgle.org,mad@sad.com
-frank@nurgle.org,mad@sad.com,fnurgle,FrankNurgle,TemporaryTestVariablesUsersWeb.FrankNurgle
+fnurgle, TemporaryTestVariablesUsersWeb.FrankNurgle, frank@nurgle.org, mad@sad.com
+frank@nurgle.org, mad@sad.com,fnurgle,FrankNurgle,TemporaryTestVariablesUsersWeb.FrankNurgle
 %ENDSECTION{name="fred" type="section"}%
 END
     $this->assert_str_equals($xpect, $result);
@@ -140,8 +140,8 @@ END
 fnurgle
 FrankNurgle
 TemporaryTestVariablesUsersWeb.FrankNurgle
-fnurgle, TemporaryTestVariablesUsersWeb.FrankNurgle, frank@nurgle.org,mad@sad.com
-frank@nurgle.org,mad@sad.com,fnurgle,FrankNurgle,TemporaryTestVariablesUsersWeb.FrankNurgle
+fnurgle, TemporaryTestVariablesUsersWeb.FrankNurgle, frank@nurgle.org, mad@sad.com
+frank@nurgle.org, mad@sad.com,fnurgle,FrankNurgle,TemporaryTestVariablesUsersWeb.FrankNurgle
 ,guest,TWikiGuest,TemporaryTestVariablesUsersWeb.TWikiGuest
 END
     $this->assert_str_equals($xpect, $result);
