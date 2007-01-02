@@ -478,8 +478,8 @@ sub _actionConfigure {
    </div>
    <ul>
     <li><b>If your TWiki site is already working</b>, continue to
-     <a rel="nofollow" href="$TWiki::cfg{ScriptUrlPath}/view$TWiki::cfg{ScriptSuffix}/$TWiki::cfg{SystemWebName}/TWikiReferenceManual">
-browse to the TWiki Reference Manual</a>.
+     <a rel="nofollow" href="$TWiki::cfg{ScriptUrlPath}/view$TWiki::cfg{ScriptSuffix}/$TWiki::cfg{SystemWebName}/WebHome">
+browse to the TWiki WebHome</a>.
      <ul>
       <li>You will now need to consider how you are going to manage
        authentication and access control. See the reference manual
