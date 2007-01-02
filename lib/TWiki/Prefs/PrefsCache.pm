@@ -154,9 +154,9 @@ be parsed to extract meta-data.
 
 =cut
 
-# SMELL: this is required because TWiki stores access control
-# information in topic text; a dreadful idea, but one we are
-# stuck with.
+# Note: this is required because TWiki stores access control
+# information in topic text. Useful because you get a complete
+# audit trail of access control settings for free.
 
 sub loadPrefsFromText {
     my( $this, $text, $meta, $web, $topic ) = @_;

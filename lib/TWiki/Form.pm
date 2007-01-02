@@ -193,7 +193,7 @@ sub _parseFormDefinition {
             $vals =~ s/^\s*//go;
             $vals =~ s/\s*$//go;
 
-            # SMELL: WTF is this??? This looks like a really bad hack!
+            # SMELL: What is this??? This looks like a hack!
             if( $vals eq '$users' ) {
                 $vals = $TWiki::cfg{UsersWebName} . '.' .
                   join( ", ${TWiki::cfg{UsersWebName}}.",

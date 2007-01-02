@@ -25,12 +25,10 @@ A singleton object of this class is used to deal with attachments to topics.
 
 =cut
 
-# SMELL: This is horrible. HORRIBLE!!!
-# Duplicating meta-data (it should not be stored in the topic, it should be under the
-# responsibility of the Store), having this as a singleton / package operating on otherwise
-# typeless meta-data, the whole approach is NASTY. You can't even drop files in the
-# attachments directory and expect TWiki to pick them up! Or expect TWiki to recover
-# if you delete files from pub! HORRIBLE.
+# Note: Meta-data is stored in topics fo performance. You need to use the
+# official API to manipulate attachments. Dropping files into the 
+# attachments directory works only if the {AutoAttachPubFiles} configure
+# setting is enabled.
 
 package TWiki::Attach;
 

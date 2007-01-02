@@ -40,8 +40,7 @@ use TWiki::Attrs ();
 use TWiki::Time ();
 
 # Used to generate unique placeholders for when we lift blocks out of the
-# text during rendering. SMELL: a horrible hack to get around the horrible
-# way the rendering engine works.
+# text during rendering. 
 use vars qw( $placeholderMarker );
 $placeholderMarker = 0;
 
@@ -385,7 +384,6 @@ sub makeAnchorName {
     }
 
     # strip out potential links so they don't get rendered.
-    # SMELL: Screws up header rendering.
     # remove double bracket link
     $anchorName =~ s/\s*\[\s*\[.*?\]\s*\[(.*?)\]\s*\]/$1/go;
     $anchorName =~ s/\s*\[\s*\[\s*(.*?)\s*\]\s*\]/$1/go;
@@ -463,8 +461,8 @@ sub _linkToolTipInfo {
 
 Generate a link. 
 
-SMELL: why can topic be spaced out? is this to support auto squishing of [[Spaced Topic Naming]]?
-and [[lowercase Spaced Topic Naming]]
+Note: Topic names may be spaced out. Spaced out names are converted to <nop>WikWords,
+for example, "spaced topic name" points to "SpacedTopicName".
    * =$theWeb= - the web containing the topic
    * =$theTopic= - the topic to be lunk
    * =$theLinkText= - text to use for the link

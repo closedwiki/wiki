@@ -1664,6 +1664,7 @@ sub _includeUrl {
       unless $TWiki::cfg{INCLUDE}{AllowURLs};
 
     # SMELL: should use the URI module from CPAN to parse the URL
+    # SMELL: but additional CPAN adds to code bloat
     my $path = $url;
     unless ($path =~ s!^(https?)://!!) {
         $text = $this->_includeWarning( $warn, 'bad_protocol', $url );
@@ -2306,7 +2307,7 @@ sub _processTags {
                     $stackTop .= $this->_processTags($e, $tagf, $depth-1, @_ );
                 } else { # expansion failed
                     #print STDERR ' ' x $tell++,"EXPAND $tag FAILED\n" if $tell;
-                    # Argh, horrible, horrible TML syntax. To handle %NOP
+                    # To handle %NOP
                     # correctly, we have to handle the %VAR% case differently
                     # to the %VAR{}% case when a variable expansion fails.
                     # This is so that recursively define variables e.g.
@@ -2593,8 +2594,8 @@ sub handleCommonTags {
 
     # Codev.FormattedSearchWithConditionalOutput: remove <nop> lines,
     # possibly introduced by SEARCHes with conditional CALC. This needs
-    # to be done after CALC and before table rendering
-    # SMELL: is this a hack? Looks like it....
+    # to be done after CALC and before table rendering in order to join
+    # table rows properly
     $text =~ s/^<nop>\r?\n//gm;
 
     $this->{renderer}->putBackBlocks( \$text, $verbatim, 'verbatim' );
@@ -2802,7 +2803,6 @@ sub _INCLUDE {
         $path =~ s/\.+/\./g;
     } else {
         # danger, could include .htpasswd with relative path
-        # SMELL: this hack is a bit pointless, really.
         $path =~ s/passwd//gi;    # filter out passwd filename
     }
 
@@ -2906,8 +2906,7 @@ sub _INCLUDE {
     $this->_expandAllTags( \$text, $includedTopic, $includedWeb );
 
     # If needed, fix all 'TopicNames' to 'Web.TopicNames' to get the
-    # right context
-    # SMELL: This is a hack.
+    # right context so that links continue to work properly
     if( $includedWeb ne $includingWeb ) {
 	    my $removed = {};
 
@@ -3192,7 +3191,7 @@ sub _URLPARAM {
         if( TWiki::isTrue( $multiple )) {
             my @valueArray = $this->{cgiQuery}->param( $param );
             if( @valueArray ) {
-                # SMELL: this is pretty foul
+                # join multiple values properly
                 unless( $multiple =~ m/^on$/i ) {
                     my $item = '';
                     @valueArray = map {

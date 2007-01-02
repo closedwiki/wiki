@@ -352,9 +352,9 @@ result is a string containing the rendered search results.
 If =inline= is set, then the results are *not* decorated with
 the search template head and tail blocks.
 
-SMELL: If =format= is set, =template= will be ignored.
+Note: If =format= is set, =template= will be ignored.
 
-SMELL: If =regex= is defined, it will force type='regex'
+Note: For legacy, if =regex= is defined, it will force type='regex'
 
 SMELL: If =template= is defined =bookview= will not work
 
@@ -387,7 +387,7 @@ sub searchWeb {
     # Note: a defined header overrides noheader
     my $noHeader =
       !defined($header) && TWiki::isTrue( $params{noheader}, $nonoise)
-        # SMELL: This is done for Cairo compatibility
+        # Note: This is done for Cairo compatibility
         || (!$header && $format && $inline);
 
     my $noSearch =      TWiki::isTrue( $params{nosearch}, $nonoise );
@@ -624,9 +624,9 @@ sub searchWeb {
             #   * sort by approx time (to get a rough list)
             #   * shorten list to the limit + some slack
             #   * sort by rev date on shortened list to get the accurate list
-            # This assumes that the store can return the approximate latest
-            # rev time of a topic in much less time than the actual rev time;
-            # otherwise it is pointless.
+            # SMELL: Ciaro had efficient two stage handling of modified sort.
+            # SMELL: In Dakar this seems to be pointless since latest rev
+            # time is taken from topic instead of dir list.
             my $slack = 10;
             if(  $limit + 2 * $slack < scalar( @topicList ) ) {
                 # sort by approx latest rev time
@@ -828,8 +828,8 @@ sub searchWeb {
                     $out =~ s/\$formname/$meta->getFormName()/ges;
                     $out =~ s/\$count\((.*?\s*\.\*)\)/_countPattern( $text, $1 )/ges;
                     # FIXME: Allow all regex characters but escape them
-                    # SMELL: wierd - this RE seems to require .* at the
-                    # end of a pattern - compulsory! Why?
+                    # Note: The RE requires a .* at the end of a pattern to avoid false positives
+                    # in pattern matching
                     $out =~ s/\$pattern\((.*?\s*\.\*)\)/getTextPattern( $text, $1 )/ges;
                     $out =~ s/\r?\n/$newLine/gos if( $newLine );
                     if( defined( $separator )) {

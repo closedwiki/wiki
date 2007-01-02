@@ -139,8 +139,7 @@ See the main comment for this package to understand how meta-data is
 represented.
 =cut
 
-#SMELL - why are we iterating down an array looking for a keyname instead of
-#SMELL - just using a hash ?
+# Note: Array is used instead of a hash to preserve sequence
 
 sub putKeyed {
     my( $this, $type, $args ) = @_;
@@ -327,8 +326,7 @@ If $type is undef, will copy ALL TYPES.
 If $nameFilter is defined (an RE), it will copy only data where
 {name} matches $nameFilter.
 
-SMELL: That spec absolutely _STINKS_ !!
-SMELL: this is a shallow copy
+SMELL: This is a shallow copy
 
 =cut
 

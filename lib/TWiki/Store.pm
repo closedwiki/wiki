@@ -404,7 +404,8 @@ sub _findAttachments {
 		
 	# SMELL Meta really ought index its attachments in a hash by attachment
     # name but this is not the case
-	# SMELL so fit the interface and return an ugly array instead
+	# SMELL: Do not change this from array to hash, you would lose the
+        # proper attachment sequence 
 	my @deindexedBecauseMetaDoesnotIndexAttachments =
       TWiki::Meta::deindexKeyed(%filesListedInPub);
 
