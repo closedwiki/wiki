@@ -68,7 +68,7 @@ use warnings;
 
 # These are absolutely essential for error reporting. We load them using
 # an eval so we can report the problem.
-eval "use CGI 3.17 qw(:any)";
+eval "use CGI 3.05 qw(:any)";
 if ($@) {
     print <<"REPORT";
 Content-type: text/plain
