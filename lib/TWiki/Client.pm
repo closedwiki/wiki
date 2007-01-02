@@ -721,7 +721,7 @@ sub setSessionValue {
 
 =pod
 
----++ ObjectMethod clearSessionValue( $name )
+---++ ObjectMethod clearSessionValue( $name ) -> $boolean
 
 Clear the value of a session variable.
 We do not allow setting of AUTHUSER.
@@ -729,7 +729,7 @@ We do not allow setting of AUTHUSER.
 =cut
 
 sub clearSessionValue {
-    my( $this,, $key ) = @_;
+    my( $this, $key ) = @_;
 
     # We do not allow clearing of AUTHUSER.
     if( $this->{_cgisession} &&

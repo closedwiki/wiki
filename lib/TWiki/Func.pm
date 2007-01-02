@@ -262,7 +262,7 @@ sub getSessionValue {
 
 ---+++ setSessionValue( $key, $value ) -> $boolean
 
-Set a session value via the client session module
+Set a session value.
    * =$key=   - Session key
    * =$value= - Value associated with key
 Return: true if function succeeded
@@ -282,19 +282,19 @@ sub setSessionValue {
 
 ---+++ clearSessionValue( $key ) -> $boolean
 
-Clear a session value via the client session module
-   * =$key=   - Session key
-Return: true if function succeeded
+Clear a session value that was set using =setSessionValue=.
+   * =$key= - name of value stored in session to be cleared. Note that
+   you *cannot* clear =AUTHUSER=.
+Return: true if the session value was cleared
 
 *Since:* TWiki::Plugins::VERSION 1.1
 
 =cut
 
 sub clearSessionValue {
-#   my( $key, $value ) = @_;
     ASSERT($TWiki::Plugins::SESSION) if DEBUG;
 
-    $TWiki::Plugins::SESSION->{loginManager}->clearSessionValue( @_ );
+    return $TWiki::Plugins::SESSION->{loginManager}->clearSessionValue( @_ );
 }
 
 =pod

@@ -232,6 +232,15 @@ sub findUser {
     return $this->createUser( $name, $wikiname );
 }
 
+=pod
+
+---++ ObjectMethod findUserByEmail( $email ) -> \@users
+   * =$email= - email address to look up
+Return a list of user objects for the users that have this email registered
+with the password manager.
+
+=cut
+
 sub findUserByEmail {
     my $this = shift;
     ASSERT($this->isa( 'TWiki::Users')) if DEBUG;
