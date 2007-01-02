@@ -105,6 +105,7 @@ This is a brand-new development, not related in any to the original TWiki:Plugin
 |  Dependencies: | %$DEPENDENCIES% |
 |  Version: | %$VERSION% |
 | Change History: | |
+|  12412 | Fixed Bugs:Item3334 by removing dependency on !FuncUsersContrib |
 |  10239 | Added support for listing attachments in-line with the mail |
 |  10182 | Fixed parser failures on multipart MIME messages |
 |  10111 | Fixed problem with spaces in attachment names |
