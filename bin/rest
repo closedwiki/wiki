@@ -29,12 +29,9 @@ BEGIN {
 use strict;
 use TWiki;
 
-use CGI::Carp qw( fatalsToBrowser );
-
 # Use unbuffered IO
 $| = 1;
 
-    print STDERR "Starting\n";
 my $initialContext = { rest => 1 };
 
 # Rest scripts are *always* CGI scripts.

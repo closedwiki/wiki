@@ -31,7 +31,7 @@ use strict;
 use Error qw( :try );
 use Assert;
 use CGI::Carp qw( fatalsToBrowser );
-use CGI qw( :cgi -any );
+use CGI 3.17 qw( :cgi -any );
 use TWiki;
 use TWiki::OopsException;
 
