@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1142354264" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1167863098" format="1.1" version="$Rev$"}%
 ---++ TWiki Variables Quickstart
 
 %STARTINCLUDE%
@@ -19,7 +19,7 @@ TWikiPreferences defines some site-wide variables. Among them are:
 
 There are many more variables. To see them all, go to *[[TWikiVariables]]*.
 
-*Documentation Graphics:* There are many graphics available to use in your topics. Use =%<nop>ICON{"help"}%=, =%<nop>ICON{"tip"|%=, and =%<nop>icon{"warning"}%= to get: %H%, %T%, and %X%. To see all of the graphics available, see TWikiDocGraphics.
+*Documentation Graphics:* There are many graphics available to use in your topics. Use =%<nop>ICON{"help"}%=, =%<nop>ICON{"tip"}%=, and =%<nop>ICON{"warning"}%= to get: %H%, %T%, and %X%, respectively. TWikiDocGraphics lists them all.
 
 
 %ICON{"tip"}% To "escape" a variable, prefix it with an exclamation mark. Write: =!%<nop>SOMEVARIABLE%= to get: !%SOMEVARIABLE%.
