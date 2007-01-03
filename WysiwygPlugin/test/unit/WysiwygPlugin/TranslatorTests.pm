@@ -1093,7 +1093,7 @@ sub compareTML_HTML {
             getViewUrl => \&TWiki::Plugins::WysiwygPlugin::getViewUrl,
             expandVarsInURL => \&TWiki::Plugins::WysiwygPlugin::expandVarsInURL,
         });
-    $txer->cleanup($tx);
+
     $this->_compareHTML($args->{html}, $tx, 1);
 }
 

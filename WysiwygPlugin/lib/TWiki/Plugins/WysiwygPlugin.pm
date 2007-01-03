@@ -56,7 +56,7 @@ use TWiki::Func;
 
 use vars qw( $VERSION $RELEASE $MODERN $SKIN $SHORTDESCRIPTION );
 use vars qw( $html2tml $tml2html $recursionBlock $imgMap $cairoCalled );
-use vars qw( %TWikiCompatibility );
+use vars qw( %TWikiCompatibility @refs );
 
 $SHORTDESCRIPTION = 'Translator framework for Wysiwyg editors';
 
@@ -81,6 +81,7 @@ sub initPlugin {
     TWiki::Func::registerTagHandler('OWEB',\&_OWEBTAG);
     TWiki::Func::registerTagHandler('OTOPIC',\&_OTOPICTAG);
     TWiki::Func::registerTagHandler('WYSIWYG_TEXT',\&_WYSIWYG_TEXT);
+    TWiki::Func::registerTagHandler('JAVASCRIPT_TEXT',\&_JAVASCRIPT_TEXT);
 
     # Plugin correctly initialized
     return 1;
@@ -291,7 +292,7 @@ sub _WYSIWYG_TEXT {
         require TWiki::Plugins::WysiwygPlugin::TML2HTML;
         $tml2html = new TWiki::Plugins::WysiwygPlugin::TML2HTML();
     }
-    return $tml2html->convert(
+    $text = $tml2html->convert(
         $text,
         {
             web => $web,
@@ -300,6 +301,24 @@ sub _WYSIWYG_TEXT {
             expandVarsInURL => \&expandVarsInURL,
         }
        );
+
+    # Lift out the text to protect it from further TWiki rendering. It will be
+    # put back in the postRenderingHandler.
+    return _liftOut( $text );
+}
+
+# Handler used to present the editable text in a javascript constant string
+sub _JAVASCRIPT_TEXT {
+    my ($session, $params, $topic, $web) = @_;
+
+    my $html = _dropBack( _WYSIWYG_TEXT( @_ ));
+
+    $html =~ s/([\\'])/\\$1/sg;
+    $html =~ s/\r/\\r/sg;
+    $html =~ s/\n/\\n/sg;
+    $html =~ s/script/scri'+'pt/g;
+
+    return _liftOut( "'$html'" );
 }
 
 # DEPRECATED in Dakar (postRenderingHandler does the job better)
@@ -313,11 +332,11 @@ sub endRenderingHandler {
 # Dakar handler, replaces endRenderingHandler above
 # This handler is required to re-insert blocks that were removed to protect
 # them from TWiki rendering, such as TWiki variables.
-# Would prefer to use the postRenderingHandler
 sub postRenderingHandler {
     return if( $recursionBlock || !$tml2html );
 
-    return $tml2html->cleanup( @_ );
+    # Replace protected content.
+    $_[0] = _dropBack($_[0]);
 }
 
 # Commented out because of Bugs:Item1176
@@ -478,6 +497,23 @@ sub convertImage {
     }
 
     return $imgMap->{$x};
+}
+
+# Replace content with a marker to prevent it being munged by TWiki
+sub _liftOut {
+    my( $text ) = @_;
+    my $n = scalar( @refs );
+    push( @refs, $text );
+    return "\05$n\05";
+}
+
+# Substitute marker
+sub _dropBack {
+    my( $text) = @_;
+    # Restore everything that was lifted out
+    while( $text =~ s/\05([0-9]+)\05/$refs[$1]/gi ) {
+    }
+    return $text;
 }
 
 1;

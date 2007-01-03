@@ -49,7 +49,9 @@ This is the scenario used by the standard TWiki text editor, except that the tex
 The flow of control is as follows:
    1 User hits "edit".
    1 The =beforeEditHandler= filters the edit, blocking any attempt to edit restricted content
-   1 The =edit= template containing the JS editor is instantiated. A =%<nop>WYSIWYG_TEXT%= variable embedded in the template is expanded by the plugin to contain the HTML of the content-to-be-edited.
+   1 The =edit= template containing the JS editor is instantiated. The following variables are available for expansion in the template:
+      * =%<nop>WYSIWYG_TEXT%= expands to the HTML of the content-to-be-edited. This is suitable for use in a =textarea=.
+      * =%<nop>JAVASCRIPT_TEXT%= expands to the HTML of the content-to-be-edited in a javascript constant.
 
 =WYSIWYGPLUGIN_WYSIWYGSKIN= *must* be set for this to work.
 
@@ -136,9 +138,10 @@ which is correct by construction, but does not render correctly in TWiki. This p
 
 |  Plugin Authors: | TWiki:Main.CrawfordCurrie http://www.c-dot.co.uk |
 |  Copyright | &copy; ILOG 2005 http://www.ilog.fr |
-|  License | [[http://www.gnu.org/licenses/gpl.html][GPL (Gnu Public License)]] |
+|  License | [[http://www.gnu.org/licenses/gpl.html][GPL (Gnu General Public License)]] |
 |  Plugin Version: | %$VERSION% |
 |  Change&nbsp;History: | |
+|  12422 | Added JAVASCRIPT_TEXT to support editors that require topic text in a JS var |
 |  12161 | Added support for embedded editable HTML in the edit template |
 |  12119 | Split into WysiwygPlugin and KupuContrib |
 |  11538 | Minor doc updates, minor fixes to spacing in lists, integrated Koen Marten's template topic patch |
