@@ -87,6 +87,9 @@ sub convert {
     # Render TML constructs to tagged HTML
     $content = $this->_getRenderedVersion( $content );
 
+    # Substitute back in protected elements
+    $content = $this->_dropBack( $content );
+
     # This should really use a template, but what the heck...
     return $content;
 }
@@ -454,12 +457,7 @@ sub _getRenderedVersion {
     # in case there are, convert them to <nop>s so they get removed.
     $text =~ s/<nopresult>/<nop>/g;
 
-    return $this->_liftOut( $text );
-}
-
-sub cleanup {
-    my $this = shift;
-    $_[0] = $this->_dropBack( $_[0] );
+    return $text;
 }
 
 sub _encodeEntities {
