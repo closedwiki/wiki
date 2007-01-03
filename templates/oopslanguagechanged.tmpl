@@ -4,7 +4,7 @@
 %TMPL:DEF{"heading"}%%MAKETEXT{"Change language"}%%TMPL:END%
 %TMPL:DEF{"topicaction"}% <a name="Actions"> </a><div class="patternTopicAction"><span class="patternActionButtons"> [[%WEB%.%TOPIC%][%MAKETEXT{"OK"}%]]</span></div>  %TMPL:END%
 
-%TMPL:DEF{"message"}%
+%TMPL:DEF{"content"}%
 
 %SESSION_VARIABLE{"LANGUAGE" set="%URLPARAM{language}%"}%
 
@@ -15,4 +15,3 @@ window.location.href = '%SCRIPTURLPATH{"view"}%/%WEB%/%TOPIC%';
 </script>
 
 %TMPL:END%
-%TMPL:P{"oops"}%

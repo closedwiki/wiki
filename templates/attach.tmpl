@@ -1,17 +1,9 @@
 %TMPL:INCLUDE{"twiki"}%
 
-
-
 %TMPL:DEF{"templatescript"}%
 <script type="text/javascript" src="%PUBURLPATH%/%TWIKIWEB%/TWikiJavascripts/twiki_attach.js"></script>
 %TMPL:END%
 
-
-
-%TMPL:DEF{"bodystart"}%
-<body bgcolor="#ffffff">
-#PageTop
-%TMPL:END%
 
 %TMPL:DEF{"notes"}%
 __Notes:__
@@ -31,7 +23,6 @@ __Notes:__
 %TMPL:END%
 
 %TMPL:DEF{"content"}%
-%TMPL:P{"simpleheader"}%
 <form name="main" enctype="multipart/form-data" action="%SCRIPTURLPATH{"upload"}%/%WEB%/%TOPIC%" method="post">
 %TMPL:P{"existingattachments"}%
 %TMPL:P{"previousdetails"}%
@@ -70,11 +61,3 @@ __Notes:__
 %TMPL:P{"notes"}%
 %TMPL:P{"extranotes"}%
 %TMPL:P{"topicinfo"}%</form>%TMPL:END%
-
-%TMPL:DEF{"attach"}%
-%TMPL:P{"htmldoctype"}%
-%TMPL:P{"head"}%
-%TMPL:P{"bodystart"}%
-%TMPL:P{"main"}%
-%TMPL:P{"bodyend"}%
-%TMPL:END%

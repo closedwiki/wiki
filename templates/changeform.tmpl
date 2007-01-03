@@ -6,7 +6,6 @@
 %TMPL:DEF{"webaction"}% *Action* %TMPL:END%
 
 %TMPL:DEF{"content"}%
-%TMPL:P{"simpleheader"}%
 <form name="main" action="%SCRIPTURLPATH{"edit"}%/%WEB%/%TOPIC%" method="post">
 <input type="hidden" name="t" value="t=%GMTIME{"$epoch"}%" />
 ---++ Choose a new form template
@@ -33,8 +32,3 @@
 <input type="hidden" name="cover" value="%URLPARAM{"cover"}%" />
 %TMPL:P{"topicinfo"}%</form>%TMPL:END%
 
-%TMPL:P{"htmldoctype"}%
-%TMPL:P{"head"}%
-%TMPL:P{"bodystart"}%
-%TMPL:P{"main"}%
-%TMPL:P{"bodyend"}%

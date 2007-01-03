@@ -7,15 +7,8 @@
 %TMPL:DEF{"NEW_USER_NOTE"}%Enter a new username and password to change identity%TMPL:END%
 %TMPL:DEF{"UNRECOGNISED_USER"}%Unrecognised user and/or password.%TMPL:END%
 
-%TMPL:DEF{"topbar"}%
-<div class="twikiTopBar">
- <div class="twikiTopBarContents">
-  <img src="%WIKILOGOIMG%" border="0" alt="%WIKILOGOALT%"/>
- </div>
-</div>%TMPL:END%
 
 %TMPL:DEF{"content"}%
-%TMPL:P{"simpleheader"}%
 ---+ %BANNER%
 %NOTE%
 %AUTHREALM%
@@ -35,11 +28,8 @@
 <p />
 %TMPL:END%
 
-%TMPL:DEF{"main"}%%TMPL:P{"topbar"}%<div class="twikiMiddleContainer"><div class="twikiMain">
-%TMPL:P{"content"}%
-%TMPL:P{"standardfooter"}%</div></div>%TMPL:END%
 
-%TMPL:P{"htmldoctype"}%
+%TMPL:DEF{"head"}%
 <head>
  <title><nop>%WIKITOOLNAME% User Authentication</title>
  <meta http-equiv="Content-Type" content="text/html; charset=%CHARSET%" />
@@ -50,6 +40,5 @@
  %TMPL:P{"templatecustomstyle"}%
  <!-- add JS script here -->
 </head>
-%TMPL:P{"bodystart"}%
-%TMPL:P{"main"}%
-%TMPL:P{"bodyend"}%
+%TMPL:END%
+

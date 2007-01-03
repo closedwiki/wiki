@@ -13,7 +13,6 @@
 <form method="post" name="renameweb" action="%SCRIPTURLPATH{"rename"}%/%WEB%">
 <input type="hidden" name="action" value="renameweb" />
 <input type="hidden" name="confirm" value="getlock" />
-%TMPL:P{"simpleheader"}%
 ---+ %TMPL:P{"webaction"}% <code>%WEB%</code>
 
 | |  *Web:* ||
@@ -48,10 +47,3 @@ __Note:__
 %TMPL:P{"topicinfo"}%
 </form>%TMPL:END%
 
-%TMPL:DEF{"renameweb"}%
-%TMPL:P{"htmldoctype"}%
-%TMPL:P{"head"}%
-%TMPL:P{"bodystart"}%
-%TMPL:P{"main"}%
-%TMPL:P{"bodyend"}%
-%TMPL:END%

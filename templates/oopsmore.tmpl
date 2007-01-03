@@ -2,7 +2,8 @@
 %TMPL:DEF{"titleaction"}%(more) %TMPL:END%
 %TMPL:DEF{"webaction"}% *Topic actions* %TMPL:END%
 %TMPL:DEF{"heading"}%More Actions on Topic [[%TOPIC%]]%TMPL:END%
-%TMPL:DEF{"message"}%
+
+%TMPL:DEF{"content"}%
 
    * *%MAKETEXT{"Delete topic"}%*
       * <b><a href="%SCRIPTURLPATH{"rename"}%/%WEB%/%TOPIC%?newweb=%TRASHWEB%&amp;nonwikiword=on" rel='nofollow'>%MAKETEXT{"Delete topic..."}%</a></b>,
@@ -52,6 +53,8 @@
 </form>
 
    * *Edit topic preference settings*
-      * <a href="%SCRIPTURLPATH{"manage"}%/%WEB%/%TOPIC%?action=editSettings" rel='nofollow'>Edit settings</a> for this topic %TMPL:END%
+      * <a href="%SCRIPTURLPATH{"manage"}%/%WEB%/%TOPIC%?action=editSettings" rel='nofollow'>Edit settings</a> for this topic 
+ %TMPL:P{"topicinfo"}%
+ %TMPL:END%
+
 %TMPL:DEF{"topicaction"}% [[%WEB%.%TOPIC%][Cancel]] %TMPL:END%
-%TMPL:P{"oops"}%

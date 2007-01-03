@@ -14,12 +14,8 @@
 %META{"moved"}%
 </div>%TMPL:END%
 
-%TMPL:DEF{"main"}%
-<form name="main" action="%SCRIPTURLPATH{"view"}%/%WEB%/%TOPIC%"> %BROADCASTMESSAGE%
-%TMPL:P{"standardheader"}%
-</form>
-%TMPL:P{"content"}%
-%TMPL:P{"standardfooter"}%%TMPL:END%
+%TMPL:DEF{"simpleheader"}%%BROADCASTMESSAGE%%TMPL:P{"standardheader"}%%TMPL:END%
+
 
 %TMPL:DEF{"inactive_edit"}%<strike>Edit</strike>%TMPL:END%
 %TMPL:DEF{"create_topic"}%Cr<span class="twikiAccessKey">e</span>ate%TMPL:END%
@@ -48,9 +44,3 @@
   %TMPL:P{"sep"}% <a href="%SCRIPTURLPATH{"view"}%/%WEB%/%TOPIC%?cover=print%REVARG%" rel='nofollow'>Printable</a>
   %TMPL:P{"sep"}% %TMPL:P{"revisions"}%
   %TMPL:P{context="inactive" then="inactive_more" else="active_more"}%%TMPL:END%
-
-%TMPL:P{"htmldoctype"}%
-%TMPL:P{"head"}%
-%TMPL:P{"bodystart"}%
-%TMPL:P{"main"}%
-%TMPL:P{"bodyend"}% 

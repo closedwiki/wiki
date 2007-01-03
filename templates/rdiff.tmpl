@@ -1,11 +1,6 @@
 %TMPL:INCLUDE{"twiki"}%
 %TMPL:INCLUDE{"search"}%
 
-
-%TMPL:DEF{"footernote"}%
-   Revision %REVTITLE% - %REVINFO%<br />
-%TMPL:END%
-
 %TMPL:DEF{"titleaction"}%(%REVTITLE2% vs. %REVTITLE1%) %TMPL:END%
 
 %TMPL:DEF{"topicaction"}% <a href="%SCRIPTURLPATH{"view"}%/%WEB%/%TOPIC%">View</a>
@@ -26,27 +21,24 @@
 %TEXT%
 <br clear="all" />%REPEAT%%TMPL:END%
 
-%TMPL:DEF{"topicinfo"}%
-%BR%
-<br clear="all" />
-<table width="100%" border="0" cellpadding="3" cellspacing="0">
- <tr bgcolor="%WEBBGCOLOR%">
-  <td valign="top">
-   Topic <b>%TOPIC%</b> . { %TMPL:P{"topicaction"}%
-   }
-  </td>
- </tr>
-</table>
+%TMPL:DEF{"standardfooter"}%
 <table width="100%" border="0" cellpadding="3" cellspacing="0">
  <tr>
   <td>
 %TAIL%
   </td>
-  <td width="50%">
+  <td width="50%" valign="top">
     %TMPL:P{"copyright"}%
   </td>
  </tr>
 </table>%TMPL:END%
+
+
+%TMPL:DEF{"revhistory"}%
+   Revision %REVTITLE% - %REVINFO%<br />
+%TMPL:END%
+
+
 %TMPL:DEF{"content"}%%TMPL:P{"searchbody"}%
 %TMPL:P{"topicinfo"}%%TMPL:END%
-%REPEAT%%TMPL:P{"footernote"}%
+%REPEAT%%TMPL:P{"revhistory"}%

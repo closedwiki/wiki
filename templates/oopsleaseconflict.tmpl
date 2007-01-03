@@ -5,7 +5,8 @@
 %TMPL:DEF{"heading"}%%MAKETEXT{"Conflict"}%%TMPL:END%
 %TMPL:DEF{"topicaction"}%%TMPL:END%
 %TMPL:INCLUDE{"messages"}%
-%TMPL:DEF{"message"}%
+
+%TMPL:DEF{"content"}%
 
 %{ Instantiate either lease_active or lease_old }%
 %INSTANTIATE%
@@ -26,7 +27,7 @@
 <input type="submit" class="twikiButton" value='%MAKETEXT{"Edit Anyway"}%' />
 </form> 
 %TMPL:END%
+
 %TMPL:DEF{"topicaction"}%
 [[%WEB%.%TOPIC%][%MAKETEXT{"View topic"}%]] %TMPL:P{"sep"}% <a href="%SCRIPTURLPATH{"view"}%/%WEB%/%TOPIC%?raw=on">View raw text without formatting</a>%TMPL:END%
 
-%TMPL:P{"oops"}%

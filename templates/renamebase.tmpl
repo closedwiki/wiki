@@ -11,7 +11,6 @@
 
 %TMPL:DEF{"content"}%
 <form method="post" name="rename" action="%SCRIPTURLPATH{"rename"}%/%WEB%/%TOPIC%">
-%TMPL:P{"simpleheader"}%
 ---+ %TMPL:P{"webaction"}% <code>%TOPIC%</code>
 
 | |  *Web:* | *&nbsp;Topic:* |
@@ -36,11 +35,3 @@ __Note:__
    * The checkmarked topics will be updated (another form will appear which will _eventually_ allow you to rename any topics that were locked)
 %TMPL:P{"topicinfo"}%
 </form>%TMPL:END%
-
-%TMPL:DEF{"rename"}%
-%TMPL:P{"htmldoctype"}%
-%TMPL:P{"head"}%
-%TMPL:P{"bodystart"}%
-%TMPL:P{"main"}%
-%TMPL:P{"bodyend"}%
-%TMPL:END%
