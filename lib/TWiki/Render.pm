@@ -1198,8 +1198,9 @@ sub TML2PlainText {
         # skip headings on top
         while( $text =~ s/^\s*\-\-\-+\+[^\n\r]*// ) {}; # remove heading
     }
-    # keep only link text of [[][]]
-    $text =~ s/\[\[([^\]]*\]\[|[^\s]*\s)(.*?)\]\]/$2/g;
+    # keep only link text of [[prot://uri.tld/ link text]] or [[][]]
+    $text =~ s/\[\[$TWiki::regex{linkProtocolPattern}\:([^\s<>"]+[^\s*.,!?;:)<|])\s+(.*?)\]\]/$3/g;
+    $text =~ s/\[\[([^\]]*\]\[)(.*?)\]\]/$2/g;
     # remove "Web." prefix from "Web.TopicName" link
     $text =~ s/$STARTWW(($TWiki::regex{webNameRegex})\.($TWiki::regex{wikiWordRegex}|$TWiki::regex{abbrevRegex}))/$3/g;
     $text =~ s/[\[\]\*\|=_\&\<\>]/ /g;  # remove Wiki formatting chars
