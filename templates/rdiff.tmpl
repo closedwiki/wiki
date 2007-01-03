@@ -21,8 +21,13 @@
 %TEXT%
 <br clear="all" />%REPEAT%%TMPL:END%
 
-%TMPL:DEF{"standardfooter"}%
-<table width="100%" border="0" cellpadding="3" cellspacing="0">
+%TMPL:DEF{"revhistory"}%
+   Revision %REVTITLE% - %REVINFO%<br />
+%TMPL:END%
+
+
+%TMPL:DEF{"content"}%%TMPL:P{"searchbody"}%
+%TMPL:P{"topicinfo"}%<table width="100%" border="0" cellpadding="3" cellspacing="0">
  <tr>
   <td>
 %TAIL%
@@ -32,13 +37,4 @@
   </td>
  </tr>
 </table>%TMPL:END%
-
-
-%TMPL:DEF{"revhistory"}%
-   Revision %REVTITLE% - %REVINFO%<br />
-%TMPL:END%
-
-
-%TMPL:DEF{"content"}%%TMPL:P{"searchbody"}%
-%TMPL:P{"topicinfo"}%%TMPL:END%
 %REPEAT%%TMPL:P{"revhistory"}%

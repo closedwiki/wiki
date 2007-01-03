@@ -8,10 +8,9 @@ try { document.main.text.focus(); } catch (er) {}
 %TMPL:END%
 
 
-%TMPL:DEF{"content"}%
-<form name="main" action="%SCRIPTURLPATH{"save"}%/%WEB%/%TOPIC%" method="post">
+%TMPL:DEF{"content"}%<form name="main" action="%SCRIPTURLPATH{"save"}%/%WEB%/%TOPIC%" method="post">
 <div class="twikiEditTextarea">
-<textarea id='topic' name='text' rows='%EDITBOXHEIGHT%' cols='%EDITBOXWIDTH%' style='%EDITBOXSTYLE%' onkeydown='handleKeyDown(event)'>%TEXT%</textarea><br />
+<textarea id='topic' name='text' rows='%EDITBOXHEIGHT%' cols='%EDITBOXWIDTH%' style='%EDITBOXSTYLE%' onkeydown='handleKeyDown(event)'>%TEXT%</textarea>
 </div>
 <input type="hidden" name="originalrev" value="%ORIGINALREV%" />
 <input type="hidden" name="skin" value="%URLPARAM{"skin"}%" />
@@ -26,16 +25,13 @@ See below for help in editing this page.
   <td><b>-- <nop>%WIKIUSERNAME% - %DATE%</b></td>
   <td> &nbsp;&nbsp; <code>&lt;==</code> Your signature for easy copy and paste (triple click to select)</td>
  </tr>
-</table>
-%FORMFIELDS%
-%TMPL:P{"topicinfo"}%</form>
+</table> %FORMFIELDS% %TMPL:P{"topicinfo"}%</form>
 <font color="#333333" size="-1"> 
 %INCLUDE{"%TWIKIWEB%.WikiSyntaxSummary"}% 
 </font> %TMPL:END%
 
  
-%TMPL:DEF{"topicaction"}%
-	<input type="submit" class="twikiSubmit" name="action_cancel" value="Cancel" id="cancel" />%TMPL:P{"sep"}%
+%TMPL:DEF{"topicaction"}%	<input type="submit" class="twikiSubmit" name="action_cancel" value="Cancel" id="cancel" />%TMPL:P{"sep"}%
     	<input type="submit" class="twikiSubmit" name="action_save" value="Save" id="save" />%TMPL:P{"sep"}% 
 	<input type="submit" class="twikiSubmit" name="action_preview" value="Preview" id="preview" />%TMPL:END%
 %TMPL:DEF{"titleaction"}%(edit) %TMPL:END%
