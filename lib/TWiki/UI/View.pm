@@ -348,7 +348,6 @@ sub view {
 	      my $p = $session->{prefs};
 	      $page .=
 		CGI::textarea( -readonly => 'readonly',
-			       -wrap => 'virtual',
 			       -rows => $p->getPreferencesValue('EDITBOXHEIGHT'),
 			       -cols => $p->getPreferencesValue('EDITBOXWIDTH'),
 			       -style => $p->getPreferencesValue('EDITBOXSTYLE'),
