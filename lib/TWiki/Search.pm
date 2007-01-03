@@ -587,6 +587,7 @@ sub searchWeb {
     }
 
     # Loop through webs
+    my $isAdmin = $session->{user}->isAdmin();
     foreach my $web ( @webs ) {
         $web =~ s/$TWiki::cfg{NameFilter}//go;
         $web = TWiki::Sandbox::untaintUnchecked( $web );
@@ -599,7 +600,8 @@ sub searchWeb {
         # make sure we can report this web on an 'all' search
         # DON'T filter out unless it's part of an 'all' search.
         next if ( $searchAllFlag
-                    && ( $thisWebNoSearchAll =~ /on/i || $web =~ /^[\.\_]/ )
+                  && ! $isAdmin
+                  && ( $thisWebNoSearchAll =~ /on/i || $web =~ /^[\.\_]/ )
                   && $web ne $session->{webName} );
 
         # Run the search on topics in this web
