@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1165615675" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1167863098" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="FormattedSearch"}%
 ---+!! Search Pattern Cookbook
 
@@ -164,7 +164,14 @@ In the above example:
 
 How to get to the parent of the current topic to display on the page?
 
----+++ Solution 1: using !SpreadSheetPlugin
+---+++ Solution 1: Using META
+
+Since TWiki 4.0 you can now use the META variable:
+
+=%<nop>META{ "parent" dontrecurse="on" }%=
+
+
+---+++ Solution 2: Using !SpreadSheetPlugin
 
 You might think that the following Search would do the trick:
 <verbatim>
@@ -187,7 +194,7 @@ So the total Search query to find a topic's parent topic is:
 The parent topic of this topic is:
 %SEARCH{ "^%BASETOPIC%$" scope="topic" type="regex" nonoise="on" format="$percntCALC{$IF($EXACT($parent,),<nop>,$NOP(   * $parent))}$percnt" }%
 
----+++ Solution 2: using IF statement
+---+++ Solution 3: Using IF statement
 This pattern can be rewritten using =%<nop>IF%=, removing the dependency on !SpreadSheetPlugin:
 <verbatim>
 %SEARCH{ "^%BASETOPIC%$" web="%BASEWEB%" scope="topic" type="regex" nonoise="on" format="$percntIF{$quot$parent$quot then=$quot   * $parent$quot else=$quot<nop>$quot}$percnt" }%
