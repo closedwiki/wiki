@@ -588,6 +588,7 @@ sub searchWeb {
 
     # Loop through webs
     my $isAdmin = $session->{user}->isAdmin();
+    my $ttopics = 0;
     foreach my $web ( @webs ) {
         $web =~ s/$TWiki::cfg{NameFilter}//go;
         $web = TWiki::Sandbox::untaintUnchecked( $web );
@@ -893,6 +894,7 @@ sub searchWeb {
             } while( @multipleHitLines ); # multiple=on loop
 
             $ntopics += 1;
+            $ttopics += 1;
 
             # delete topic info to clear any cached data
             undef $topicInfo->{$topic};
@@ -940,8 +942,8 @@ sub searchWeb {
                 }
             }
         }
-        return '' if ( $ntopics == 0 && $zeroResults );
-    }
+    } # end of: foreach my $web ( @webs )
+    return '' if ( $ttopics == 0 && $zeroResults );
 
     if( $format  && ! $finalTerm ) {
         if( $separator ) {
