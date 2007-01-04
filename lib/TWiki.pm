@@ -3028,12 +3028,15 @@ sub _REVINFO {
 
 sub _ENCODE {
     my( $this, $params ) = @_;
-    my $type = $params->{type};
+    my $type = $params->{type} || '';
     my $text = $params->{_DEFAULT} || '';
-    if ( $type && $type =~ /^entit(y|ies)$/i ) {
+    if ( $type =~ /^entit(y|ies)$/i ) {
         return entityEncode( $text );
-    } elsif ( $type && $type =~ /^html$/i ) {
+    } elsif ( $type =~ /^html$/i ) {
         return entityEncode( $text, "\n\r" );
+    } elsif ( $type =~ /^quotes?$/i ) {
+        $text =~ s/\"/\\"/go;    # escape quotes with backslash (Bugs:Item3383 fix)
+        return $text;
     } else {
         $text =~ s/\r*\n\r*/<br \/>/; # Legacy.
         return urlEncode( $text );
@@ -3210,8 +3213,10 @@ sub _URLPARAM {
     }
     $value =~ s/\r?\n/$newLine/go if( $newLine );
     if ( $encode ) {
-        if ( $encode =~ /^entit(y|ies)$/ ) {
+        if ( $encode =~ /^entit(y|ies)$/i ) {
             $value = entityEncode( $value );
+        } elsif ( $encode =~ /^quotes?$/i ) {
+            $value =~ s/\"/\\"/go;    # escape quotes with backslash (Bugs:Item3383 fix)
         } else {
             $value =~ s/\r*\n\r*/<br \/>/; # Legacy
             $value = urlEncode( $value );
