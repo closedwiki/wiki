@@ -1191,8 +1191,8 @@ sub TML2PlainText {
 
     # Format e-mail to add spam padding (HTML tags removed later)
     $text =~ s/$STARTWW((mailto\:)?[a-zA-Z0-9-_.+]+@[a-zA-Z0-9-_.]+\.[a-zA-Z0-9-_]+)$ENDWW/$this->_mailLink( $1 )/gem;
-    $text =~ s/<!--.*?-->//gs;     # remove all HTML comments
-    $text =~ s/<[^>]*>//g;              # remove all HTML tags
+    $text =~ s/<!--.*?-->//gs;          # remove all HTML comments
+    $text =~ s/<(?!nop)[^>]*>//g;       # remove all HTML tags except <nop>
     $text =~ s/\&[a-z]+;/ /g;           # remove entities
     if( $opts =~ /nohead/ ) {
         # skip headings on top
@@ -1203,6 +1203,7 @@ sub TML2PlainText {
     $text =~ s/\[\[([^\]]*\]\[)(.*?)\]\]/$2/g;
     # remove "Web." prefix from "Web.TopicName" link
     $text =~ s/$STARTWW(($TWiki::regex{webNameRegex})\.($TWiki::regex{wikiWordRegex}|$TWiki::regex{abbrevRegex}))/$3/g;
+    $text =~ s/<[^>]*>//g;              # remove all HTML tags
     $text =~ s/[\[\]\*\|=_\&\<\>]/ /g;  # remove Wiki formatting chars
     $text =~ s/^\-\-\-+\+*\s*\!*/ /gm;  # remove heading formatting and hbar
     $text =~ s/[\+\-]+/ /g;             # remove special chars
