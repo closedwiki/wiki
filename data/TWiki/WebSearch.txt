@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1167874036" format="1.0" version="$Rev$"}%
 %META:TOPICPARENT{name="WebHome"}%
 ---+ %MAKETEXT{"Web Search"}%
 
@@ -8,7 +8,7 @@ type="keyword"
 scope="%URLPARAM{scope}%" 
 web="%URLPARAM{web}%" 
 nosearch="%URLPARAM{nosearch}%" 
-zeroresults="off%URLPARAM{search}%"
+zeroresults="%IF{ "defined search" then="on" else="off" }%"
 }%
 
 <script type="text/javascript">
