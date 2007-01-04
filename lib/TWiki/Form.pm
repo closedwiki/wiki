@@ -744,16 +744,18 @@ sub getFieldValuesFromQuery {
         # checkbox and multi both allow multiple values
         if( $fieldDef->{type} =~ /^checkbox|\+multi/ ) {
             my @values = $query->param( $param );
-	    my %vset = ();
-	    foreach my $val (@values) {
-	      $vset{$val} = 1 if $val; # skip empty values (Item2410)
-	    }
-	    $value = '';
-	    foreach my $flditem (@{$fieldDef->{value}}) {
-	      # Maintain order of definition
-	      if ($vset{$flditem}) {
-		$value .= ', ' if $value;
-		$value .= $flditem;
+	    if ($#values>=0) {
+	      my %vset = ();
+	      foreach my $val (@values) {
+		$vset{$val} = (defined $val && $val =~ /\S/); # skip empty values
+	      }
+	      $value = '';
+	      foreach my $flditem (@{$fieldDef->{value}}) {
+		# Maintain order of definition
+		if ($vset{$flditem}) {
+		  $value .= ', ' if $value;
+		  $value .= $flditem;
+		}
 	      }
 	    }
         }
