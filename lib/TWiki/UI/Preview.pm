@@ -72,6 +72,9 @@ sub preview {
     my $saveCmd = $query->param( 'cmd' ) || '';
     $tmpl =~ s/%CMD%/$saveCmd/go;
 
+    my $redirectTo = $query->param( 'redirectto' ) || '';
+    $tmpl =~ s/%REDIRECTTO%/$redirectTo/go;
+
     $tmpl =~ s/%FORMTEMPLATE%/$form/g;
 
     my $parent = $meta->get('TOPICPARENT');

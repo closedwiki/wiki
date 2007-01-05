@@ -87,6 +87,7 @@ sub init_edit {
     my $editaction = lc($query->param( 'action' )) || "";
 
     my $saveCmd = $query->param( 'cmd' ) || '';
+    my $redirectTo = $query->param( 'redirectto' ) || '';
     my $onlyWikiName = TWiki::isTrue( $query->param( 'onlywikiname' ));
     my $onlyNewTopic = TWiki::isTrue( $query->param( 'onlynewtopic' ));
     my $formTemplate  = $query->param( 'formtemplate' ) || '';
@@ -250,6 +251,8 @@ sub init_edit {
         $tmpl =~ s/%NEWTOPIC%//;
     }
     $tmpl =~ s/%TEMPLATETOPIC%/$templateTopic/;
+
+    $tmpl =~ s/%REDIRECTTO%/$redirectTo/;
 
     # override with parameter if set
     $text = $ptext if defined $ptext;

@@ -90,6 +90,9 @@ sub generate {
     my $parent = $q->param( 'topicparent' ) || '';
     $page =~ s/%TOPICPARENT%/$parent/go;
 
+    my $redirectTo = $q->param( 'redirectto' ) || '';
+    $page =~ s/%REDIRECTTO%/$redirectTo/go;
+
     $page = $session->handleCommonTags( $page, $web, $topic );
     $page = $session->{renderer}->getRenderedVersion( $page, $web, $topic );
 
