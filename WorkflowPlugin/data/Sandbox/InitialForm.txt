@@ -4,5 +4,4 @@
 | Issue Name | text | 73 |  | Illustrative name of issue | M | 
 | Issue Description | textarea | 55x5 |  | Short description of issue |  | 
 | Issue Type | select | 1 | , Defect, Enhancement, Other |  |  | 
-| History | label | 1 | %<nop>WORKFLOWHISTORY%		 |  | |
-<!-- Do _not_ attempt to edit this topic; it is auto-generated. Please add comments/questions/remarks to the Dev topic instead. -->
+| History | label | 1 | $percntWORKFLOWHISTORY%		 |  | |
