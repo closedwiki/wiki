@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1128972895" format="1.0" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1167969723" format="1.0" version="$Rev$"}%
 ---+!! Tips Contrib Package
 
 Displays a rotating "TWiki Tip of the Day" to help familiarize new users with TWiki features. Includes an application for creating custom tips for local installation.
@@ -39,12 +39,13 @@ __Note:__ You do not need to install anything on the browser to use this contrib
 
 ---++ Contrib Info
 
-|  Author: | TWiki:Main.PeterThoeny |
-|  Copyright &copy;: | Copyright 2005 Peter Thoeny.  All Rights Reserved. |
+|  Author: | TWiki:Main.PeterThoeny, TWiki:Main.PaulineCheung |
+|  Copyright &copy;: | 2005-2007 [[http://www.structuredwikis.com/peter.html][Peter Thoeny]], All Rights Reserved. |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Dependencies: | none  |
-|  Version: | %$VERSION% |
+|  Dependencies: | TWiki:Plugins.SpreadSheetPlugin 18 Dec 2006 (r12315) |
+|  Version: | 2007-01-04 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2007-01-04: | Performance improvement |
 |  10 Oct 2005: | Initial version - Packaging by TWiki:Main.LynnwoodBrown |
 |  Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
@@ -52,4 +53,4 @@ __Note:__ You do not need to install anything on the browser to use this contrib
 
 __Related Topics:__ %TWIKIWEB%.TWikiPreferences
 
--- TWiki:Main.LynnwoodBrown - %$DATE%
+-- TWiki:Main.PeterThoeny - 2007-01-04
