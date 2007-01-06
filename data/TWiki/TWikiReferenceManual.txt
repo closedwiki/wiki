@@ -1,11 +1,11 @@
-%META:TOPICINFO{author="TWikiContributor" date="1158629297" format="1.1" version="$Rev $"}%
+%META:TOPICINFO{author="TWikiContributor" date="1168078377" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="WebHome"}%
 ---+ TWiki Reference Manual
 
 _Documentation for webmasters, system administrators, project managers, team leaders, and all other users of the TWiki Enterprise Collaboration Platform._
 
 All manual sections in one big page:
-   * [[TWikiDocumentation][TWiki Documentation]] (960k)
+   * [[TWikiDocumentation][TWiki Documentation]] (1MB size, 175 printed pages)
 
 Manual sections in separate pages:
    1. [[TWikiSystemRequirements][TWiki System Requirements]]
@@ -21,6 +21,8 @@ Manual sections in separate pages:
    1. [[TWikiTemplates][TWiki Templates]]
    1. [[TWikiSkins][TWiki Skins (visual layout)]]
    1. [[TWikiMetaData][TWiki MetaData]]
+   1. [[TWikiAddOns][TWiki Add-Ons]]
+   1. [[TWikiContribs][TWiki Contribs]]
    1. [[TWikiPlugins][TWiki Plugins]]
    1. [[TWikiFuncDotPm][TWiki::Func Module]]
    1. [[TWikiScripts][TWiki CGI and Command Line Scripts]]

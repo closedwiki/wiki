@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1166124327" format="1.0" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1168076964" format="1.1" version="$Rev$"}%
 %TOC%
 %STARTINCLUDE%
 ---# TWiki Plugins
@@ -17,7 +17,14 @@ Everything to do with TWiki Plugins - demos, new releases, downloads, developmen
 
 TWiki Plugins are developed and contributed by interested members of the community. Plugins are provided on an 'as is' basis; they are not a part of TWiki, but are independently developed and maintained.
 
-__%T% Tip:__ TWiki:TWiki.TWikiPluginsSupplement on TWiki.org has supplemental documentation on TWiki Plugins.
+__Relevant links on TWiki.org:__
+   * TWiki:TWiki.TWikiPluginsSupplement - __%T% tip:__ supplemental documentation on TWiki plugins
+   * TWiki:Plugins.PluginPackage - list of all contributed plugin packages
+   * TWiki:Plugins.PluginDevelopment - discussion and feedback on contributed plugins
+   * TWiki:Plugins.PluginBrainstorming - open forum for new plugin ideas
+   * TWiki:Plugins.PluginPackageHowTo - template to create a new plugin package
+
+__See other types of extensions:__ TWikiAddOns, TWikiContribs, TWikiSkins
 
 #InstallPlugin
 ---++ Installing Plugins

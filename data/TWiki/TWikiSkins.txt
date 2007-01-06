@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1165260368" format="1.0" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1168076910" format="1.1" version="$Rev$"}%
 %TOC%
 %STARTINCLUDE%
 ---# TWiki Skins
@@ -13,7 +13,14 @@ TWiki ships with a default set of template files that give a basic look-and-feel
 
 Topic text is not affected by the choice of skin, though a skin can be defined to use a CSS (Cascading Style Sheet), which can sometimes give a radically different appearance to the text.
 
-__%T% Tip:__ TWiki:TWiki.TWikiSkinsSupplement on TWiki.org has supplemental documentation on TWiki Skins.
+__Relevant links on TWiki.org:__
+   * TWiki:TWiki.TWikiSkinsSupplement - __%T% tip:__ supplemental documentation on TWiki skins
+   * TWiki:Plugins.SkinPackage - list of all contributed skin packages
+   * TWiki:Plugins.SkinDevelopment - discussion and feedback on contributed skins
+   * TWiki:Plugins.SkinBrainstorming - open forum for new skin ideas
+   * TWiki:Plugins.SkinPackageHowTo - template to create a new skin package
+
+__See other types of extensions:__ TWikiAddOns, TWikiContribs, TWikiPlugins
 
 ---++ Changing the default TWiki skin
 
