@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1168076910" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiGuest" date="1168187698" format="1.1" reprev="1.2" version="1.2"}%
 %TOC%
 %STARTINCLUDE%
 ---# TWiki Skins
@@ -83,6 +83,7 @@ The following template files are used for TWiki screens, and are referenced in t
    * =search= - used by the =search= CGI script
    * =settings=
    * =view= - used by the =view= CGI script
+   * =viewprint= - used to create the printable view
    
 =twiki.tmpl= is a master template conventionally used by other templates, but not used directly by code.
 
@@ -211,11 +212,13 @@ You can also add a parameter to the URL, such as =?skin=catskin,bearskin=:
 
    * %SCRIPTURL{view}%/%WEB%/%TOPIC%?skin=catskin,bearskin
 
-Setting =SKIN= (or the =?skin= parameter in the URL) replaces the existing skin path setting. You can also _extend_ the existing skin path as well, using _covers_.
+Setting =SKIN= (or the =?skin= parameter in the URL) replaces the existing skin path setting, for the current page only. You can also _extend_ the existing skin path as well, using _covers_.
 
    * =Set COVER = ruskin=
 
-This pushes a different skin to the front of the skin search path (so for our example above, that final skin path will be =ruskin, catskin, bearskin=). There is also an equivalent =cover= URL parameter.
+This pushes a different skin to the front of the skin search path (so for our example above, that final skin path will be =ruskin, catskin, bearskin=). There is also an equivalent =cover= URL parameter. The difference between setting =SKIN= vs. =COVER= is that if the chosen template is not found (e.g., for included templates), =SKIN= will fall back onto the next skin in line, or the default skin, if only one skin was present, while =COVER= will always fall back onto the current skin.
+
+An example would be invoking the printable mode, which is achieved by applying =?cover=print=. The =view.print.tmpl= simply invokes the =viewprint= template for the current skin which then can appropriately include all other used templates for the current skin. Where the printable mode be applied by using =SKIN=, all skins would have the same printable appearance.
 
 The full skin path is built up as follows: =SKIN= setting (or =?skin= if it is set), then =COVER= setting is added, then =?cover=.
 
