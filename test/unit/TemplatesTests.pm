@@ -217,12 +217,20 @@ sub test_pathOtherUses {
     write_template( 'scriptA.skin','the scriptA.skin.tmpl template' );
     write_template( 'scriptC.pattern','the scriptC.pattern.tmpl template' );
     write_template( 'scriptB','the scriptB.tmpl template' );
+    write_template( 'scriptD','the scriptD.tmpl template' );
+    write_template( 'scriptD.pattern','the scriptD.pattern.tmpl template' );
+    write_template( 'scriptD.override','the scriptD.override.tmpl template %TMPL:INCLUDE{"scriptD"}%' );
+   
 
     $data = $tmpls->readTemplate('scriptB', 'skin,pattern', '' );
     $this->assert_str_equals('the scriptB.tmpl template', $data );
 
     $data = $tmpls->readTemplate('scriptC', 'skin,pattern', '' );
     $this->assert_str_equals('the scriptC.pattern.tmpl template', $data );
+
+    $data = $tmpls->readTemplate('scriptD', 'override,pattern', '' );
+    $this->assert_str_equals('the scriptD.override.tmpl template the scriptD.pattern.tmpl template', $data );
+
 }
 
 sub test_directLookupInUsertopic {
