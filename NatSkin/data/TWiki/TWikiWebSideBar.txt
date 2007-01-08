@@ -23,7 +23,7 @@
 ~~~       recurse=\"once\"
 ~~~       exclude=\".*($name|%BASETOPIC%|WebHome).*\"
 ~~~       header=\"<ul>\"
-~~~       format=\"<li>[[$dollartarget][%MAKETEXT{"Parrent web"}%]]</li>\"
+~~~       format=\"<li>[[$dollartarget][%MAKETEXT{"Parent web"}%]]</li>\"
 ~~~       footer=\"</ul>\"
 ~~~     }$percnt
 ~~~     $percntFLEXWEBLIST{
