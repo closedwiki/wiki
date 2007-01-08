@@ -195,7 +195,6 @@ sub init_edit {
                                     '.'.$TWiki::cfg{SuperAdminGroup} );
     }
 
-    my $templateWeb = $webName;
 
     # Get edit template, standard or a different skin
     my $template = $query->param( 'template' ) ||
@@ -217,6 +216,7 @@ sub init_edit {
                                                 'EDIT_TEMPLATE' ] );
     }
 
+    my $templateWeb = $webName;
     unless( $topicExists ) {
         if( $templateTopic ) {
             ( $templateWeb, $templateTopic ) =
@@ -233,6 +233,7 @@ sub init_edit {
             ( $meta, $text ) =
               $store->readTopic( $session->{user}, $templateWeb,
                                         $templateTopic, undef );
+            $templateTopic = $templateWeb.'.'.$templateTopic;
         } else {
             ( $meta, $text ) = TWiki::UI::readTemplateTopic( $session, 'WebTopicEditTemplate' );
         }
@@ -251,7 +252,6 @@ sub init_edit {
         $tmpl =~ s/%NEWTOPIC%//;
     }
     $tmpl =~ s/%TEMPLATETOPIC%/$templateTopic/;
-
     $tmpl =~ s/%REDIRECTTO%/$redirectTo/;
 
     # override with parameter if set
@@ -277,6 +277,8 @@ sub init_edit {
             $theParent = $parentWeb.'.'.$theParent;
         }
         $meta->put( 'TOPICPARENT', { name => $theParent } );
+    } else {
+      $theParent = $meta->getParent();
     }
     $tmpl =~ s/%TOPICPARENT%/$theParent/;
 
