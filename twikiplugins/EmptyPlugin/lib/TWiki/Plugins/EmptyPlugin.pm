@@ -50,6 +50,12 @@ listed in %TWIKIWEB%.TWikiPlugins#FAILEDPLUGINS. See
 for information on regarding deprecated handlers that are defined for
 compatibility with older TWiki versions.
 
+__NOTE:__ When writing handlers, keep in mind that these may be invoked
+on included topics. For example, if a plugin generates links to the current
+topic, these need to be generated before the afterCommonTagsHandler is run,
+as at that point in the rendering loop we have lost the information that we
+the text had been included from another topic.
+
 =cut
 
 # change the package name and $pluginName!!!
@@ -235,6 +241,7 @@ sub DISABLE_registrationHandler {
    * =$text= - text to be processed
    * =$topic= - the name of the topic in the current CGI query
    * =$web= - the name of the web in the current CGI query
+   * =$included= - Boolean flag indicating whether the handler is invoked on an included topic
 This handler is called by the code that expands %TAGS% syntax in
 the topic body and in form fields. It may be called many times while
 a topic is being rendered.
@@ -285,6 +292,8 @@ rendering of a topic.
 
 __NOTE:__ meta-data is _not_ embedded in the text passed to this
 handler.
+
+__NOTE:__ This handler is not separately called on included topics.
 
 =cut
 
