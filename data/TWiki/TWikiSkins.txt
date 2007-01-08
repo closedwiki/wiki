@@ -87,7 +87,19 @@ The following template files are used for TWiki screens, and are referenced in t
    
 =twiki.tmpl= is a master template conventionally used by other templates, but not used directly by code.
 
-__%X% Note:__ You are strongly recommended *not* to =TMPL:INCLUDE= the default templates, or templates from other skins, when you are defining your own skin. If you do, you run the risk that the included file might change and break your skin.
+---+++ Partial customisation, or adding in new features to an existing skin
+
+You can use recusion in the TMPL:INCLUDE chain (eg twiki.classic.tmpl contains =%<nop>TMPL:INCLUDE{"twiki"}%=, the templating system will include the next twiki.SKIN in the skin path. 
+For example, to create a customisation of pattern skin, where you _only_ want to over-ride the breadcrumbs for the view script, you can create only a view.yourlocal.tmpl:
+<verbatim>
+%TMPL:INCLUDE{"view"}%
+%TMPL:DEF{"breadcrumb"}% We don't want any crumbs %TMPL:END%
+</verbatim>
+and then set SKIN=yourlocal,pattern
+
+This technique is used in TWiki:Plugins.WebPermissionsPlugin to add the Topic Permissions interface to the oopsmore page.
+
+__%X% Note:__ If you =TMPL:INCLUDE= the default templates, or templates from other skins, when you are defining your own skin, you run the risk that the included file might change and break your skin. 
 
 ---++ Variables in Skins
 
@@ -231,4 +243,3 @@ Skin names starting with =rss= also have a special meaning; if one or more of th
 
 *Related Topics:* TWikiSkinBrowser, AdminDocumentationCategory, DeveloperDocumentationCategory, TWiki:TWiki.TWikiSkinsSupplement
 
--- *Contributors:* TWiki:Main.PeterThoeny, TWiki:Main.MikeMannix, TWiki:Main.CrawfordCurrie
