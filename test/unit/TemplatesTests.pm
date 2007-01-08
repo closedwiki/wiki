@@ -215,12 +215,14 @@ sub test_pathOtherUses {
 
     # To verify a concern by SvenDowideit on fallback to "default" templates
     write_template( 'scriptA.skin','the scriptA.skin.tmpl template' );
-    write_template( 'scriptC.pattern','the scriptC.pattern.tmpl template' );
     write_template( 'scriptB','the scriptB.tmpl template' );
+    write_template( 'scriptC.pattern','the scriptC.pattern.tmpl template' );
     write_template( 'scriptD','the scriptD.tmpl template' );
     write_template( 'scriptD.pattern','the scriptD.pattern.tmpl template' );
     write_template( 'scriptD.override','the scriptD.override.tmpl template %TMPL:INCLUDE{"scriptD"}%' );
-   
+
+    $data = $tmpls->readTemplate('scriptA', 'noskin', '' );
+    $this->assert_str_equals('', $data );
 
     $data = $tmpls->readTemplate('scriptB', 'skin,pattern', '' );
     $this->assert_str_equals('the scriptB.tmpl template', $data );
@@ -230,6 +232,12 @@ sub test_pathOtherUses {
 
     $data = $tmpls->readTemplate('scriptD', 'override,pattern', '' );
     $this->assert_str_equals('the scriptD.override.tmpl template the scriptD.pattern.tmpl template', $data );
+
+    $data = $tmpls->readTemplate('scriptD', 'override', '' );
+    $this->assert_str_equals('the scriptD.override.tmpl template the scriptD.tmpl template', $data );
+
+    $data = $tmpls->readTemplate('scriptD', ', , ,, override,, , ,noskin,,', '' );
+    $this->assert_str_equals('the scriptD.override.tmpl template the scriptD.tmpl template', $data );
 
 }
 
