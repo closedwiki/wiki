@@ -341,16 +341,16 @@ sub _readTemplateFile {
 	    my ($web1, $name1) = $session->normalizeWebTopicName($web, $file);
 
 	    if( validateTopic($session,$store,$session->{user},$name1,$web1) ) {
-	      next if (defined($this->{files}->{$name1}));
+	      next if (defined($this->{files}->{'topic'.$session->{user},$name1,$web1}));
 	      #recursion prevention.
-	      $this->{files}->{$name1} = 1;
+	      $this->{files}->{'topic'.$session->{user},$name1,$web1} = 1;
 	      return retrieveTopic( $store, $web1, $name1 );
 	    }
 	  } else {
 	    if( validateFile( $file )) {
-	      next if (defined($this->{files}->{$name}));
+	      next if (defined($this->{files}->{$file}));
 	      #recursion prevention.
-	      $this->{files}->{$name} = 1;
+	      $this->{files}->{$file} = 1;
             return TWiki::readFile( $file );
 	    }
 	  }
