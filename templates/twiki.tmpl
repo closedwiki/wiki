@@ -81,8 +81,10 @@
   </td>
  </tr>
  <tr bgcolor="%WEBBGCOLOR%">
-  <td colspan="2">
+  <td>
    <nop>%WEB% . { %TMPL:P{"webaction"}% }
+  </td><td align="right">
+<font size="-2">%TMPL:P{"login"}%</font>
   </td>
  </tr>
 </table></form>%TMPL:END%
@@ -132,6 +134,10 @@
 %TMPL:P{"content"}% %TMPL:P{"standardfooter"}%</div></div>%TMPL:END%
 
 %TMPL:DEF{"revisions"}%<a href="%SCRIPTURLPATH{"rdiff"}%/%WEB%/%TOPIC%?type=history" title="%MAKETEXT{"View total topic history"}%" accesskey="H" rel="nofollow">%MAKETEXT{"&History"}%</a>: %REVISIONS% %TMPL:END%
+
+%TMPL:DEF{"login"}% %TMPL:P{context="can_login" then="login_actions"}% %TMPL:END%
+
+%TMPL:DEF{"login_actions"}%%IF{"context authenticated" then='%MAKETEXT{"Hello [_1]!" args="[[%WIKIUSERNAME%][%SPACEOUT{%WIKINAME%}%]]"}%%BR%%LOGOUT%' else='%LOGIN% %MAKETEXT{"or"}% [[%TWIKIWEB%.TWikiRegistration][%MAKETEXT{"Register"}%]]'}%%TMPL:END%
 
 
 %TMPL:P{"htmldoctype"}%
