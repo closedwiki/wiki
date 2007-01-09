@@ -66,11 +66,11 @@ TWiki uses the following search order to determine which template file or topic 
    1 templates/%RED%web%ENDCOLOR%/%RED%script%ENDCOLOR%.tmpl
       * %X% this usage is supported *for compatibility only* and is *deprecated*. Store web-specific templates in TWiki topics instead.
    1 templates/%RED%script%ENDCOLOR%.tmpl
-   1 The TWiki topic %RED%web%ENDCOLOR%.%RED%topic%ENDCOLOR% if the template name can be parsed into %RED%web%ENDCOLOR%.%RED%topic%ENDCOLOR%
+   1 The TWiki topic aweb.atopic if the template name can be parsed into aweb.atopic
    1 The TWiki topic %RED%web%ENDCOLOR%.%RED%Skin%ENDCOLOR%Skin%RED%Script%ENDCOLOR%Template for each %RED%skin%ENDCOLOR% on the skin path
    1 The TWiki topic %RED%web%ENDCOLOR%.%RED%Script%ENDCOLOR%Template
-   1 The TWiki topic %TWIKIWEB%.%RED%Skin%ENDCOLOR%Skin%RED%Script%ENDCOLOR%Template for each %RED%skin%ENDCOLOR% on the skin path
-   1 The TWiki topic %TWIKIWEB%.%RED%Script%ENDCOLOR%Template
+   1 The TWiki topic %<nop>TWIKIWEB%.%RED%Skin%ENDCOLOR%Skin%RED%Script%ENDCOLOR%Template for each %RED%skin%ENDCOLOR% on the skin path
+   1 The TWiki topic %<nop>TWIKIWEB%.%RED%Script%ENDCOLOR%Template
 *Legend:*
    * %RED%script%ENDCOLOR% refers to the script name, e.g =view=, =edit=
    * %RED%Script%ENDCOLOR% refers to the same, but with the first character capitalized, e.g =View=
