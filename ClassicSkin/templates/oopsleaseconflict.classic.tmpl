@@ -1,5 +1,5 @@
 %{ Templates for lease conflict messages. One DEF is selected and inserted at %INSTANTIATE }%
-%TMPL:INCLUDE{"twiki"}%
+%TMPL:INCLUDE{"twiki.classic"}%
 %TMPL:DEF{"titleaction"}%%MAKETEXT{"(oops)"}% %TMPL:END%
 %TMPL:DEF{"webaction"}% *%MAKETEXT{"Attention"}%* %TMPL:END%
 %TMPL:DEF{"heading"}%%MAKETEXT{"Conflict"}%%TMPL:END%
@@ -15,7 +15,7 @@
 <literal>
 %QUERYPARAMS{format="<input type='hidden' name='$name' value='$percntENCODE{$quot()$value$quot type=$quot()html$quot}$percnt' />"}%
 </literal>
-%MAKETEXT{"To see if [_1] has finished editing yet, click " args="%PARAM1%}%
+%MAKETEXT{"To see if [_1] has finished editing yet, click " args="%PARAM1%"}%
 <input type="submit" class="twikiButton" value='%MAKETEXT{"Try Again"}%' />
 </form>
 <form action="%SCRIPTURLPATH{"%PARAM4%"}%/%WEB%/%TOPIC%" method="post">
