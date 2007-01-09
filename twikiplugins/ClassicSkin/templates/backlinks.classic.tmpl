@@ -1,11 +1,6 @@
 %TMPL:INCLUDE{"search.classic"}%
 
 
-
-%TMPL:DEF{"standardheader"}%%TMPL:END%
-
-
-
 %TMPL:DEF{"searchweb"}%%SEARCH{ search="%TOPIC%([^A-Za-z0-9]|$)|%SPACEOUT{"%TOPIC%" sep=" *"}%([^A-Za-z0-9]|$)|%WEB%.%TOPIC%([^A-Za-z0-9]|$)" type="regex" scope="text" nosearch="on" excludetopic="%TOPIC%" web="%WEB%" }%%TMPL:END%
 
 

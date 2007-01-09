@@ -1,11 +1,11 @@
-%TMPL:INCLUDE{"twiki"}%
+%TMPL:INCLUDE{"twiki.classic"}%
 
 %TMPL:DEF{"topicaction"}% <input type="submit" class="twikiSubmit" name="submit" class="twikiSubmit" value=" &nbsp; Change form &nbsp; " /> %TMPL:END%
 
 %TMPL:DEF{"titleaction"}%(change form) %TMPL:END%
 %TMPL:DEF{"webaction"}% *Action* %TMPL:END%
 
-%TMPL:DEF{"content"}%%TMPL:P{"simpleheader"}%<form name="main" action="%SCRIPTURLPATH{"edit"}%/%WEB%/%TOPIC%" method="post">
+%TMPL:DEF{"content"}%<form name="main" action="%SCRIPTURLPATH{"edit"}%/%WEB%/%TOPIC%" method="post">
 <input type="hidden" name="t" value="t=%GMTIME{"$epoch"}%" />
 ---++ Choose a new form template
 
