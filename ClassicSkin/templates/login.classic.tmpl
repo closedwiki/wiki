@@ -1,4 +1,4 @@
-%TMPL:INCLUDE{"twiki"}%
+%TMPL:INCLUDE{"twiki.classic"}%
 
 %TMPL:DEF{"webaction"}% TWiki User Authentication %TMPL:END%
 %TMPL:DEF{"topicaction"}% %TMPL:END%
@@ -13,7 +13,7 @@
  </div>
 </div>%TMPL:END%
 
-%TMPL:DEF{"content"}%%TMPL:P{"simpleheader"}%---+ %BANNER%
+%TMPL:DEF{"content"}%---+ %BANNER%
 %NOTE%
 %MAKETEXT{"Enter your TWiki.LoginName. (Typically First name and last name, no space, no dots, capitalized, e.g. !JohnSmith, unless you chose otherwise). Visit %TWIKIWEB%.TWikiRegistration if you do not have one."}%
 <form action='%SCRIPTURLPATH{"login"}%/%WEB%/%TOPIC%' method='post'>

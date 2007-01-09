@@ -1,8 +1,8 @@
-%TMPL:INCLUDE{"twiki"}%
+%TMPL:INCLUDE{"twiki.classic"}%
 %TMPL:INCLUDE{"search.classic"}%
 
 
-%TMPL:DEF{"footernote"}%   Revision %REVTITLE% - %REVINFO%<br />
+%TMPL:DEF{"qqfooternote"}%   Revision %REVTITLE% - %REVINFO%<br />
 %TMPL:END%
 
 %TMPL:DEF{"titleaction"}%(%REVTITLE2% vs. %REVTITLE1%) %TMPL:END%
@@ -25,7 +25,7 @@
 %TEXT%
 <br clear="all" />%REPEAT%%TMPL:END%
 
-%TMPL:DEF{"topicinfo"}%%BR%
+%TMPL:DEF{"qqtopicinfo"}%%BR%
 <br clear="all" />
 <table width="100%" border="0" cellpadding="3" cellspacing="0">
  <tr bgcolor="%WEBBGCOLOR%">
@@ -45,5 +45,6 @@
   </td>
  </tr>
 </table>%TMPL:END%
+
 %TMPL:DEF{"content"}%%TMPL:P{"searchbody"}%%TMPL:P{"topicinfo"}%%TMPL:END%
-%REPEAT%%TMPL:P{"footernote"}%
+%{ REPEAT%%TMPL:P{"qfooternote" }%

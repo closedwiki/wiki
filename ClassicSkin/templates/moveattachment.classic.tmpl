@@ -1,4 +1,4 @@
-%TMPL:INCLUDE{"twiki"}%
+%TMPL:INCLUDE{"twiki.classic"}%
 %TMPL:INCLUDE{"rename.classic"}%
 %TMPL:DEF{"titleaction"}%(move attachment) %TMPL:END%
 
@@ -10,7 +10,7 @@
  %TMPL:P{"sep"}% [[%WEB%.%TOPIC%][Cancel]] %TMPL:END%
 
 
-%TMPL:DEF{"content"}%%TMPL:P{"simpleheader"}%
+%TMPL:DEF{"content"}%
 <form method="post" name="rename" action="%SCRIPTURLPATH{"rename"}%/%WEB%/%TOPIC%">
 ---+ Move or Delete File <code>%FILENAME%</code>
 
