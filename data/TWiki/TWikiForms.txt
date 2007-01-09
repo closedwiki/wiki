@@ -24,7 +24,7 @@ A Form Template specifies the fields in a form. A Form Template is simply a page
    1. Save the topic _(you can later choose to [[#EnablingForms][enable/disable]] individual forms)_.
 
 <blockquote>
-*Example: <nop>WebForm* %BR%
+*Example:* %BR%
 =| <nop>*Name* | <nop>*Type* | <nop>*Size* | <nop>*Values* | <nop>*Tooltip message* | <nop>*Attributes* |= %BR%
 =| !TopicClassification | select | 1 | !NoDisclosure, !PublicSupported, !PublicFAQ | blah blah... | &nbsp; |= %BR%
 =| !OperatingSystem | checkbox | 3 | !OsHPUX, !OsLinux, !OsSolaris, !OsWin | blah blah... | &nbsp; |= %BR%
@@ -38,10 +38,10 @@ A Form Template specifies the fields in a form. A Form Template is simply a page
 
 See [[#FormStructure][structure of a form]] for full details of what types are available and what all the columns mean.
 
-You can also retrieve possible values for select, checkbox or radio types from other topics:
+You can also retrieve possible values for =select=, =checkbox= or =radio= types from other topics:
 
 <blockquote>
-*Example: <nop>WebForm*
+*Example:*
 
    * In the <nop>WebForm topic, define the form:
      <br />
@@ -54,33 +54,23 @@ You can also retrieve possible values for select, checkbox or radio types from o
 
    * Then in the <nop>TopicClassification topic, define the possible values:
      <br />
-     | *Name* | *Type* | *Tooltip message* |
-     | <nop>NoDisclosure | option | blah blah... |
-     | Public Supported | option | blah blah... |
-     | Public FAQ | option | blah blah... |
+     =| <nop>*Name*            |= %BR%
+     =| <nop>NoDisclosure      |= %BR%
+     =| Public Supported  |= %BR%
+     =| Public FAQ        |= %BR%
+     | *Name* |
+     | <nop>NoDisclosure |
+     | Public Supported |
+     | Public FAQ |
 </blockquote>
 
 Field values can also be obtained as the result of a %TWIKIWEB%.FormattedSearch. For example,
 
 <blockquote>
-=%<nop>SEARCH{"Office$" scope="topic" web="%<nop>MAINWEB%" nototal="on" nosummary="on" nosearch="on" type="regex" format="$web.$topic" separator=", " }%=
+=%<nop>SEARCH{"Office$" scope="topic" web="%<nop>MAINWEB%" nonoise="on" type="regex" format="$web.$topic" separator=", " }%=
 </blockquote>
 
-when used in the value field of the form definition, will take the set of field values to be all topic names in the Main web which end in "Office".
-
-*Notes:*
-   * A very few field names are reserved. If you try to use one of these names, TWiki will automatically append an underscore to the name when the form is used.
-   * The field value will be used to initialize a field when a form is created, unless specific values are given by the topic template or query parameters. The first item in the list for a select or radio type is the default item. For =label=, =text=, and =textarea= fields the value may also contain commas. =checkbox= fields cannot be initialized through the form template.
-   * Leading and trailing spaces in the field value are insignificant.
-   * If a =label= field has no name (blank first column in the form definition) it will *not* be shown when the form is *viewed*, only when it is *edited*.
-   * The topic definition is not read when a topic is viewed.
-   * Field names can include any text, but you should stick to alphanumeric characters. If you want to use a non-wikiname for a =select=, =checkbox= or =radio= field, and want to get the values from another topic, you can use  ==[<nop>[...]]== links. This notation can also be used when referencing another topic to obtain field values, but a name other than the topic name is required as the name of the field. 
-   * Field names have to be unique. If the same name is necessary (as when the field values for several fields are obtained from the same topic), an alternative name must be assigned using the ==[<nop>[...]]== notation.
-   * The topic defining field values can also be generated through a %TWIKIWEB%.FormattedSearch, which must yield a suitable table as the result.
-   * Variables in the initial values of a form definition get expanded when form values are initialized from the form definition. The escape characters =$quot=, =$percnt=, =$dollar=, $n, and =$nop= can be used to prevent expansion.
-   * Form definition topics can be protected in the usual manner, using  TWikiAccessControl, to limit who can change the form template and/or individual value lists. Note that view access is required to be able to edit topics that use the form definition, though view access to the form definition is _not_ required to view a topic where the form has been used.
-
-</blockquote>
+when used in the value field of the form definition, this will find all topic names in the Main web which end in "Office" and use them as the legal field values.
 
 #EnablingForms
 ---++ Enabling Forms by Web
@@ -113,9 +103,6 @@ Forms have to be enabled for each individual web. The ==WEBFORMS== variable in W
 
    * __%X% Note:__ Initial values will not be submitted to the form of a new topic if you only use the formtemplate parameter.
 
----++ Build an HTML form to create new Form-based topics
-   * New topics with a form are created by simple HTML forms asking for a topic name. For example, you can have a =<nop>SubmitExpenseReport= topic where you can create new expense reports, a =<nop>SubmitVacationRequest= topic, and so on. These can specify the required template topic with its associated form. [[TWikiTemplates#TemplateTopics][Template topics]] has more.
-A Form Template specifies the fields in a form. A Form Template is simply a page containing a TWiki table, where each row of the table specifies one form field.
 ---++ Changing a form
    * You can change a form definition, and TWiki will try to make sure you don't lose any data from the topics that use that form. 
 
@@ -127,28 +114,14 @@ A Form Template specifies the fields in a form. A Form Template is simply a page
 
    * If two people edit the same topic containing a form at exactly the same time, and both change fields in the form, TWiki will try to merge the changes so that no data is lost.
 
-#UsingFormData
----++ Searching for Form Data
-TWiki Forms accept user-input data, stored as TWikiMetaData. Meta data also contains program-generated info about changes, attachments, etc. To find, format and display form and other meta data, see TWikiMetaData, ==FORMFIELD==, ==SEARCH== and ==METASEARCH== variables in TWikiVariables, and [[FormattedSearch][TWiki Formatted Search]].
-
-<blockquote>
-*Example* %BR%
-TWiki users often want to have an overview of topics they contributed to. With the ==$formfield== parameter it is easy to display the value of a classification field next to the topic link:
-<verbatim>
-| *Topic* | *Classification* |
-%SEARCH{"%MAINWEB%.UserName" scope="text" nosearch="on" nototal="on" order="modified" reverse="on"
-format="|<b>[[$web.$topic][$topic]]</b> |<nop>$formfield(TopicClassification) |" web="Sandbox"}%
-</verbatim>
-</blockquote> 
-
-Searching forms this way is obviously pretty inefficient, but it's easy to do. If you want better performance, take a look at some of the structured wiki extensions that support higher performance searching e.g. TWiki:Plugins.DBCachePlugin.
-
 #FormStructure
 ---++ Structure of a Form Template
 
 A Form Template specifies the fields in a form. A Form Template is simply a page containing a TWiki table, where each row of the table specifies one form field.
 
 Each *column* of the table is one element of an entry field: ==Name==, ==Type==, ==Size==, ==Values==, ==Tooltip message==, and ==Attributes==.
+
+The =Name=, =Type= and =Size= columns are required. Other columns are optional. The form *must* have a header row (e.g. =| <nop>*Name* | <nop>*Type* | <nop>*Size* |=).
 
 ==Name== is the name of the form field.
 
@@ -173,25 +146,76 @@ The ==Type==, ==Size== and ==Value== fields describe the legal values for this f
    * An attribute =H= indicates that this field should not be shown in view mode. However, the field is available for editing and storing information.
    * An attribute =M= indicates that this field is mandatory. The topic cannot be saved unless a value is provided for this field. If the field is found empty during topic save, an error is raised and the user is redirected to an =oops= page. Mandatory fields are indicated by an asterisks next to the field name.
 
+For example, a simple form just supporting entry of a name and a date would look as follows:
+<verbatim>
+| *Name* | *Type* | *Size* |
+| Name   | text   | 80     |
+| Date   | date   | 30     |
+</verbatim>
+*Field Name Notes:*
+   * Field names have to be unique.
+   * A very few field names are reserved. If you try to use one of these names, TWiki will automatically append an underscore to the name when the form is used.
+   * You can space out the title of the field, and it will still find the topic e.g. =Aeroplane Manufacturers= is equivalent to =AeroplaneManufacturers=.
+   * If a =label= field has no name, it will *not* be shown when the form is *viewed*, only when it is *edited*.
+   * Field names can in theory include any text, but you should stick to alphanumeric characters. If you want to use a non-wikiname for a =select=, =checkbox= or =radio= field, and want to get the values from another topic, you can use  ==[<nop>[...]]== links. This notation can also be used when referencing another topic to obtain field values, but a name other than the topic name is required as the name of the field. 
+   * Leading and trailing spaces are _not_ significant.
+*Field Value Notes:*
+   * The field value will be used to initialize a field when a form is created, unless specific values are given by the topic template or query parameters. The first item in the list for a select or radio type is the default item. For =label=, =text=, and =textarea= fields the value may also contain commas. =checkbox= fields cannot be initialized through the form template.
+   * Leading and trailing spaces are _not_ significant.
+   * Field values can also be generated through a %TWIKIWEB%.FormattedSearch, which must yield a suitable table as the result.
+   * Variables in the initial values of a form definition get expanded when form values are initialized from the form definition. The escape words =$quot= ("), =$percnt= (%), =$dollar= ($), =$n= (newline), and =$nop= can be used to prevent expansion.
+*General Notes:*
+   * The topic definition is not read when a topic is viewed.
+   * Form definition topics can be protected in the usual manner, using  TWikiAccessControl, to limit who can change the form template and/or individual value lists. Note that view access is required to be able to edit topics that use the form definition, though view access to the form definition is _not_ required to view a topic where the form has been used.
+
+---+++ Values in Other Topics
+As described above, you can also retrieve possible values for select, checkbox or radio types from other topics. For example, if you have a rows defined like this:
+<verbatim>
+| *Name*                 | *Type* | *Size* |
+| AeroplaneManufacturers | select |        |
+</verbatim>
+the TWiki will look for the topic !AeroplaneManufacturers to get the possible values for the =select=.
+
+The !AeroplaneManufacturers topic must contain a table, where each row of the table describes a possible value. The table only requires one column, ==Name==. Other columns may be present, but are ignored.
+
+For example:
+<verbatim>
+| *Name* |
+| Routan |
+| Focke-Wulf |
+| De Havilland |
+</verbatim>
+
+*Notes:*
+   * The ==Values== column *must be empty* in the referring form definition.
+ 
 ---++ Extending the range of form data types
-Several Plugins allow you to extend the range of data types accepted by forms. For example, the TWiki:Plugins.DateFieldPlugin lets you add a 'date' type to the available data types. All data types are single-valued (can only have one value) with the following exceptions:
+You can extend the range of data types accepted by forms by using TWikiPlugins. All such extended data types are single-valued (can only have one value) with the following exceptions:
    * any type name starting with =checkbox=
    * any type name with =+multi= anywhere in the name
 Types with names like this can both take multiple values.
 
----++ Gotcha!
+---++ Hints and Tips
+---+++ Build an HTML form to create new Form-based topics
+   * New topics with a form are created by simple HTML forms asking for a topic name. For example, you can have a =<nop>SubmitExpenseReport= topic where you can create new expense reports, a =<nop>SubmitVacationRequest= topic, and so on. These can specify the required template topic with its associated form. [[TWikiTemplates#TemplateTopics][Template topics]] has more.
+A Form Template specifies the fields in a form. A Form Template is simply a page containing a TWiki table, where each row of the table specifies one form field.
+#UsingFormData
+---+++ Searching for Form Data
+TWiki Forms accept user-input data, stored as TWikiMetaData. Meta data also contains program-generated info about changes, attachments, etc. To find, format and display form and other meta data, see TWikiMetaData, ==FORMFIELD==, ==SEARCH== and ==METASEARCH== variables in TWikiVariables, and [[FormattedSearch][TWiki Formatted Search]].
+
+<blockquote>
+*Example* %BR%
+TWiki users often want to have an overview of topics they contributed to. With the ==$formfield== parameter it is easy to display the value of a classification field next to the topic link:
+<verbatim>
+| *Topic* | *Classification* |
+%SEARCH{"%MAINWEB%.UserName" scope="text" nosearch="on" nototal="on" order="modified" reverse="on"
+format="|<b>[[$web.$topic][$topic]]</b> |<nop>$formfield(TopicClassification) |" web="Sandbox"}%
+</verbatim>
+</blockquote> 
+
+Searching forms this way is obviously pretty inefficient, but it's easy to do. If you want better performance, take a look at some of the structured wiki extensions that support higher performance searching e.g. TWiki:Plugins.DBCachePlugin.
+---+++ Gotcha!
    * Some browsers may strip linefeeds from =text= fields when a topic is saved. If you need linefeeds in a field, make sure it is a =textarea=.
-
-#FormsVsCategoryTables
----++ Importing Category Table Data
-
-Very, very old TWiki releases used a system called the "TWikiCategoryTable". Later releases support automatic import of this data.
-
-On upgrading from the previous TWiki, a Form Template topic has to be built for each web that used a Category Table, recreating the fields and values from the old ==twikicatitems.tmpl==. The replacement Form Template must be set as the first item in the WebPreferences variable =WEBFORMS=. If missing, pages will display, but attempting to edit results in an error message.
-
-The new Form Template system should work with old Category Table data with no special conversion. Data is assigned to Meta variables the first time an imported topic is edited and saved in the new system.
-
-%T% If things aren't working correctly, there may be useful entries in =data/warning.txt=.
 
 %STOPINCLUDE%
 

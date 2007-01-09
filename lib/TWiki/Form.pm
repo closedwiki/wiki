@@ -269,7 +269,7 @@ sub _getPossibleFieldValues {
     my @defn = ();
     my $inBlock = 0;
     foreach( split( /\r?\n/, $text ) ) {
-        if( /^\s*\|.*Name[^|]*\|/ ) {
+        if( /^\s*\|\s*\*Name\*\s*\|/ ) {
             $inBlock = 1;
         } else {
             if( /^\s*\|\s*([^|]*)\s*\|/ ) {
