@@ -35,6 +35,7 @@ use Cwd;
 my $testUserWikiName = 'TestUser';
 my $testUserLoginName = 'testuser';
 my $testUserEmail = 'kakapo@ground.dwelling.parrot.net';
+my $encodedTestUserEmail;
 
 my $guestLoginName = 'guest';
 
@@ -69,6 +70,8 @@ sub set_up {
     $session = new TWiki();
 
     $SIG{__DIE__} = sub { confess $_[0] };
+
+    $encodedTestUserEmail = TWiki::entityEncode($testUserEmail);
 
     try {
         $session->{store}->createWeb($session->{user}, $testWeb);
@@ -336,7 +339,7 @@ sub registerVerifyOk {
         my $e = shift;
         $this->assert_str_equals("attention", $e->{template},$e->stringify());
         $this->assert_str_equals("confirm", $e->{def}, $e->stringify());
-        $this->assert_matches(qr/$testUserEmail/, $e->stringify());
+        $this->assert_matches(qr/$encodedTestUserEmail/, $e->stringify());
     } catch TWiki::AccessControlException with {
         my $e = shift;
         $this->assert(0, $e->stringify);
@@ -427,7 +430,7 @@ sub test_registerBadVerify {
         TWiki::UI::Register::register_cgi($session);
     } catch TWiki::OopsException with {
         my $e = shift;
-        $this->assert_matches(qr/$testUserEmail/, $e->stringify());
+        $this->assert_matches(qr/$encodedTestUserEmail/, $e->stringify());
         $this->assert_str_equals("attention", $e->{template});
         $this->assert_str_equals("confirm", $e->{def});
     } catch TWiki::AccessControlException with {
