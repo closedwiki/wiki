@@ -235,6 +235,7 @@ sub bulkRegister {
         #-- Following two lines untaint WikiName as required and verify it is
         #-- not zero length
         $row->{WikiName} = TWiki::Sandbox::untaintUnchecked($row->{WikiName});
+        $row->{LoginName} = $row->{WikiName} unless $row->{LoginName};
         next ROW if (length($row->{WikiName}) == 0);
 
         try {
@@ -1063,22 +1064,23 @@ sub _validateRegistration {
                                     params => [ $data->{WikiName} ] );
     }
 
-    my $doCheckPasswordLength  =
-        ($TWiki::cfg{PasswordManager}  ne  'none')  &&
-	!$TWiki::cfg{Register}{AllowLoginName}      &&
-         $TWiki::cfg{MinPasswordLength};
-    if ($doCheckPasswordLength &&
-          (!$data->{passwordA} ||
-             length($data->{passwordA}) < $TWiki::cfg{MinPasswordLength})) {
-        throw TWiki::OopsException(
-            'attention',
-            web => $data->{webName},
-            topic => $topic,
-            def => 'bad_password',
-            params => [ $TWiki::cfg{MinPasswordLength} ] );
-    }
-
     if (exists $data->{passwordA}) {
+        # check password length
+        my $doCheckPasswordLength  =
+            ($TWiki::cfg{PasswordManager}  ne  'none')  &&
+            !$TWiki::cfg{Register}{AllowLoginName}      &&
+             $TWiki::cfg{MinPasswordLength};
+
+        if ($doCheckPasswordLength &&
+            length($data->{passwordA}) < $TWiki::cfg{MinPasswordLength}) {
+            throw TWiki::OopsException(
+                'attention',
+                web => $data->{webName},
+                topic => $topic,
+                def => 'bad_password',
+                params => [ $TWiki::cfg{MinPasswordLength} ] );
+        }
+
         # check if passwords are identical
         if ( $data->{passwordA} ne $data->{passwordB} ) {
             throw TWiki::OopsException( 'attention',
