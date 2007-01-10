@@ -87,6 +87,9 @@ The following template files are used for TWiki screens, and are referenced in t
    
 =twiki.tmpl= is a master template conventionally used by other templates, but not used directly by code.
 
+
+__%X% Note:__ It is best to create these templates for your skin. If you =TMPL:INCLUDE= the default templates, or templates from other skins, when you are defining your own skin, you run the risk that the included file might change and break your skin. 
+
 ---+++ Partial customisation, or adding in new features to an existing skin
 
 You can use recusion in the TMPL:INCLUDE chain (eg twiki.classic.tmpl contains =%<nop>TMPL:INCLUDE{"twiki"}%=, the templating system will include the next twiki.SKIN in the skin path. 
@@ -99,9 +102,6 @@ For example, to create a customisation of pattern skin, where you _only_ want to
 and then set =SKIN=yourlocal,pattern=.
 
 Because ClassicSkin and the default templates use the same Template definition names, you can over-ride the edit links in them (or any skin derived from them) using the same =view.yourlocal.tmpl= (just set SKIN=yourlocal,classic either in %MAINWEB%.TWikiPreferences for globally, or a Web's <nop>Webname.<nop>WebPreferences for a particular web) 
-
-
-__%X% Note:__ If you =TMPL:INCLUDE= the default templates, or templates from other skins, when you are defining your own skin, you run the risk that the included file might change and break your skin. 
 
 ---++ Variables in Skins
 
