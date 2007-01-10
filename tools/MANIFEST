@@ -23,7 +23,6 @@ COPYING 0444
 COPYRIGHT 0444
 INSTALL.html 0444
 LICENSE 0444
-UpgradeTwiki 0550
 bin/.htaccess.txt 0644
 bin/LocalLib.cfg.txt 644
 bin/attach 0555
@@ -562,14 +561,6 @@ lib/TWiki/UI/Search.pm 0444
 lib/TWiki/UI/Statistics.pm 0444
 lib/TWiki/UI/Upload.pm 0444
 lib/TWiki/UI/View.pm 0444
-lib/TWiki/Upgrade.pm 0444
-lib/TWiki/Upgrade/Cairo2DakarCfg.pm 0444
-lib/TWiki/Upgrade/MoveTopics.pm 0444
-lib/TWiki/Upgrade/TWikiCfg.pm 0444
-lib/TWiki/Upgrade/UpdateTopics.pm 0444
-lib/TWiki/Upgrade/UpdateTopicsManualSymlinks.pm 0444
-lib/TWiki/Upgrade/UpgradeToCairo.pm 0444
-lib/TWiki/Upgrade/UpgradeToDakar.pm 0444
 lib/TWiki/User.pm 0444
 lib/TWiki/Users.pm 0444
 lib/TWiki/Users/ApacheHtpasswdUser.pm 0444
