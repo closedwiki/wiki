@@ -221,6 +221,7 @@ sub _convertToNumberAndDate {
     my ($text) = @_;
 
     $text =~ s/&nbsp;/ /go;
+    $text =~ s/<\/?nobr>/ /go;
 
     my $num  = undef;
     my $date = undef;
