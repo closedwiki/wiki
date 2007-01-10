@@ -438,24 +438,27 @@ sub _requireVerification {
       $data->{WikiName}.'.'.TWiki::User::randomPassword();
     _putRegDetailsByCode( $data, $tmpDir );
 
-    $session->writeLog( 'regstart', $TWiki::cfg{UsersWebName}.'.'.$data->{WikiName},
-                        $data->{Email}, $data->{WikiName} );
+    $session->writeLog(
+        'regstart', $TWiki::cfg{UsersWebName}.'.'.$data->{WikiName},
+        $data->{Email}, $data->{WikiName} );
 
     my $err = _sendEmail( $session, 'registerconfirm', $data );
+    my $em = TWiki::entityEncode( $data->{Email} );
 
     if($err) {
         throw TWiki::OopsException( 'attention',
                                     def => 'registration_mail_failed',
                                     web => $data->{webName},
                                     topic => $topic,
-                                    params => [ $data->{Email}, $err ]);
+                                    params => [ $em, $err ]);
     };
+
 
     throw TWiki::OopsException( 'attention',
                                 def => 'confirm',
                                 web => $data->{webName},
                                 topic => $topic,
-                                params => [ $data->{Email} ] );
+                                params => [ $em ] );
 }
 
 =pod
@@ -819,8 +822,9 @@ sub finish {
 
     # write log entry
     if ($TWiki::cfg{Log}{register}) {
-        $session->writeLog( 'register', $TWiki::cfg{UsersWebName}.'.'.$data->{WikiName},
-                            $data->{Email}, $data->{WikiName} );
+        $session->writeLog(
+            'register', $TWiki::cfg{UsersWebName}.'.'.$data->{WikiName},
+            $data->{Email}, $data->{WikiName} );
     }
 
     if( $status ) {
@@ -828,7 +832,8 @@ sub finish {
             'Warning: Could not send confirmation email')."\n\n$status";
     } else {
         $status = $session->{i18n}->maketext(
-            'A confirmation e-mail has been sent to [_1]', $data->{Email} );
+            'A confirmation e-mail has been sent to [_1]',
+            TWiki::entityEncode( $data->{Email} ));
     }
 
     # and finally display thank you page
@@ -1085,11 +1090,12 @@ sub _validateRegistration {
 
     # check valid email address
     if ( $data->{Email} !~ $TWiki::regex{emailAddrRegex} ) {
-        throw TWiki::OopsException( 'attention',
-                                    web => $data->{webName},
-                                    topic => $topic,
-                                    def => 'bad_email',
-                                    params => [ $data->{Email} ] );
+        throw TWiki::OopsException(
+            'attention',
+            web => $data->{webName},
+            topic => $topic,
+            def => 'bad_email',
+            params => [ TWiki::entityEncode( $data->{Email} ) ] );
     }
 
     return unless $requireForm;
