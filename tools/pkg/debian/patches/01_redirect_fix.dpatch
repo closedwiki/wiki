@@ -18,7 +18,7 @@ diff -urNad un~/lib/TWiki.pm un/lib/TWiki.pm
 +        #remove trailing /'s to match
 +        $TWiki::cfg{DefaultUrlHost} =~ m!^([^:]*://[^/]*)/*(.*)?$!;
 +        my $expected = $1;
-+        unless ($host eq $TWiki::cfg{DefaultUrlHost}) {
++        unless ($host eq $expected) {
 +               $url = $this->getOopsUrl( 'accessdenied',
 +                                def => 'topic_access',
 +                                web => $this->{web} || $TWiki::cfg{UsersWebName},
