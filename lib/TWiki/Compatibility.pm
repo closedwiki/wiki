@@ -26,7 +26,7 @@ package TWiki::Compatibility;
 Support for compatibility with old TWiki versions. Packaged
 separately because 99.999999% of the time this won't be needed.
 
-=end
+=cut
 
 sub _upgradeCategoryItem {
     my ( $catitems, $ctext ) = @_;
