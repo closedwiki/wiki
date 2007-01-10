@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1167568097" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1168311166" format="1.1" version="$Rev$"}%
 %TOC%
 %STARTINCLUDE%
 ---# Appendix A: TWiki Development Timeline
@@ -610,7 +610,7 @@ __Major New Features__
    * *24 Sep 1998* - TWiki:Main.PeterThoeny
       * Corrected templates for automatic e-mail notification so that MS Outlook can display attachment as an HTML file. 
    * *13 Aug 1998* - TWiki:Main.PeterThoeny
-      * WikiNotation allows also numbers after the <code>AaA</code> sequence, e.g. <code>AaA1</code> is a valid WikiTopic name, but not <code>Aa1</code>. 
+      * WikiNotation allows also numbers after the <code>AaA</code> sequence, e.g. <code>AaA1</code> is a valid TWikiTopics name, but not <code>Aa1</code>. 
    * *07 Aug 1998* - TWiki:Main.PeterThoeny
       * Automatic e-mail notification when something has changed in a TWiki web. Each web has a topic WebNotify where one can subscribe and unsubscribe. 
    * *06 Aug 1998* - TWiki:Main.PeterThoeny

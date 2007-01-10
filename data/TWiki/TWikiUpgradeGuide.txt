@@ -3,7 +3,7 @@
 %STARTINCLUDE%
 ---# TWiki Upgrade Guide
 
-_Upgrade from the previous TWiki 01-Sep-2004 Prodcution Release to TWiki-4.X_
+_Upgrade from the previous TWiki 01-Sep-2004 Production Release to TWiki-4.X_
 
 ---++ Overview
 
@@ -54,6 +54,7 @@ The main steps are:
    * From TWiki-4.1.0 the [[%SCRIPTURLPATH{"configure"}%][configure]] script which you ran during installation supports installation of additional plugins.
    * Manual installation is possible. Follow the instruction on the Plugin page at twiki.org.
    * Check the plugin topics from your old TWiki installation. There may be plugin settings that you want to transfer to the new TWiki installation.
+     %BR% __%H% Hint:__ For an easier upgrade later on, set the plugin preferences settings in the [[%LOCALSITEPREFS%]] topic, not in the plugin topic. To identify the plugin, prefix the name of the setting with the capitalized name of the plugin. For example, to change the =DEFAULT_TYPE= setting of the CommentPlugin, create a =COMMENTPLUGIN_DEFAULT_TYPE= setting in <nop>%LOCALSITEPREFS%.
    * Typical plugin settings you may have altered.
       *  CommentPlugin - Set DEFAULT_TYPE
       * EditTablePlugin - Set CHANGEROWS, Set QUIETSAVE, and Set EDITBUTTON
@@ -91,7 +92,7 @@ The main steps are:
    
 ---+++ Apply Preferences From Old Installation
 
-   * Transfer any customized and local settings from [[%TWIKIWEB%.TWikiPreferences]] to the topic pointed at by {LocalSitePreferences} ([[%LOCALSITEPREFS%]]). Per default this is =Main.TWikiPreferences. This avoids having to write over files in the distribution.
+   * Transfer any customized and local settings from [[%TWIKIWEB%.TWikiPreferences]] to the topic pointed at by {LocalSitePreferences} ([[%LOCALSITEPREFS%]]). Per default this is =Main.TWikiPreferences=. This avoids having to write over files in the distribution on a later upgrade.
    * If you changed any of the topics in the original TWiki distribution, you will have to transfer your changes to the new install manually. There is no simple way to do this, though a suggestion is to use 'diff' to find changed files in the =data/TWiki= of the old and new TWiki installation, and transfer the changes into the new TWiki install.
    * Compare the =WebPreferences= topics in the old TWiki Installation with the default from the new TWiki installation and add any new Preferences that may be relevant.
    * Compare the =WebLeftBar= topics in the old TWiki Installation with the default from the new TWiki installation and add any new feature that you desire.
@@ -105,7 +106,7 @@ TWiki4's PatternSkin introduces the use of the favicon feature which most browse
 In TWiki4 it is assumed that each web has a favicon.ico file attached to the !WebPreferences topic. When you upgrade from Cairo to TWiki4 you do not have this file and you will get flooded with errors the error log of your web server. There are two solutions to this.
 
    * Attach a favicon.ico file to !WebPreferences in each web.
-   * Change the setting of the location of favicon.ico in !TWikiPreferences so all webs use the favicon.ico from the TWiki web. This is the fastest and easiest solution.
+   * Preferred: Change the setting of the location of favicon.ico in !TWikiPreferences so all webs use the favicon.ico from the TWiki web. This is the fastest and easiest solution.
 
 To change the location of favicon.ico in !TWikiPreferences to the TWiki web add this line to Main.TWikiPreferences
 
