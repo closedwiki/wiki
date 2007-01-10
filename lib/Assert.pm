@@ -12,6 +12,7 @@ package Assert;
 #
 # Usage is as for Carp::Assert except that you have to explicitly
 # enable asserts using the environment variable "TWIKI_ASSERTS"
+# add ENV{TWIKI_ASSERTS} = 1; to you bin/setlib.cfg or bin/LocalLib.cfg
 require 5.004;
 
 use strict qw(subs vars);
