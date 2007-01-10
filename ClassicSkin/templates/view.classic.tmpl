@@ -25,12 +25,12 @@
 %TMPL:DEF{"create_topic"}%Cr<span class="twikiAccessKey">e</span>ate%TMPL:END%
 %TMPL:DEF{"edit_topic"}%<span class="twikiAccessKey">E</span>dit%TMPL:END%
 
-%TMPL:DEF{"wysiwyg"}%%TMPL:P{"sep"}% <a href="%SCRIPTURLPATH{"edit"}%/%WEB%/%TOPIC%?cover=%COMPOSER%" rel="nofollow" title='%MAKETEXT{"Edit this topic text"}%'>%MAKETEXT{"&WYSIWYG"}%</a>%TMPL:END%
+%TMPL:DEF{"edit_wysiwyg_link"}%%TMPL:P{"sep"}% <a href="%SCRIPTURLPATH{"edit"}%/%WEB%/%TOPIC%?cover=%COMPOSER%" rel="nofollow" title='%MAKETEXT{"Edit this topic text"}%'>%MAKETEXT{"&WYSIWYG"}%</a>%TMPL:END%
 
 
-%TMPL:DEF{"editaction"}%%IF{"defined EDITACTION" then="&action=%EDITACTION%" else=""}%%TMPL:END%
+%TMPL:DEF{"url_param_editaction"}%%IF{"defined EDITACTION" then="&action=%EDITACTION%" else=""}%%TMPL:END%
 
-%TMPL:DEF{"active_edit"}%<a href='%SCRIPTURLPATH{"edit"}%/%WEB%/%TOPIC%?t=%GMTIME{"$epoch"}%%TMPL:P{"editaction"}%' rel='nofollow' title='Edit this topic text' accesskey='e'><b>%TMPL:P{context="new_topic" then="create_topic" else="edit_topic"}%</b></a> %TMPL:P{context="WysiwygPluginEnabled" then="wysiwyg"}%%TMPL:END%
+%TMPL:DEF{"edit_topic_link"}%<a href='%SCRIPTURLPATH{"edit"}%/%WEB%/%TOPIC%?t=%GMTIME{"$epoch"}%%TMPL:P{"url_param_editaction"}%' rel='nofollow' title='Edit this topic text' accesskey='e'><b>%TMPL:P{context="new_topic" then="create_topic" else="edit_topic"}%</b></a> %TMPL:P{context="WysiwygPluginEnabled" then="edit_wysiwyg_link"}%%TMPL:END%
 
 %TMPL:DEF{"inactive_attach"}%<strike>Attach</strike>%TMPL:END%
 %TMPL:DEF{"active_attach"}%<a href="%SCRIPTURLPATH{"attach"}%/%WEB%/%TOPIC%" title="Attach an image or document to this topic" rel='nofollow'>Attach</a>%TMPL:END%
@@ -44,7 +44,7 @@
 %TMPL:P{"form"}%%TMPL:P{"attachments"}%
 %TMPL:P{"topicinfo"}%%TMPL:END%
 
-%TMPL:DEF{"topicaction"}%  %TMPL:P{context="inactive" then="inactive_edit" else="active_edit"}%  %TMPL:P{"sep"}% %TMPL:P{context="inactive" then="inactive_attach" else="active_attach"}%
+%TMPL:DEF{"topicaction"}%  %TMPL:P{context="inactive" then="inactive_edit" else="edit_topic_link"}%  %TMPL:P{"sep"}% %TMPL:P{context="inactive" then="inactive_attach" else="active_attach"}%
   %TMPL:P{"sep"}% Backlinks: <a href="%SCRIPTURLPATH{"oops"}%/%WEB%/%TOPIC%?template=backlinksweb" title="Search the <nop>%WEB% Web for topics that link to here">Web</a> <a href="%SCRIPTURLPATH{"oops"}%/%WEB%/%TOPIC%?template=backlinksallwebs" title="Search all webs for topics that link to here">All webs</a>
   %TMPL:P{"sep"}% <a href="%SCRIPTURLPATH{"view"}%/%WEB%/%TOPIC%?cover=print%REVARG%" rel='nofollow'>Printable</a>
   %TMPL:P{"sep"}% %TMPL:P{"revisions"}%
