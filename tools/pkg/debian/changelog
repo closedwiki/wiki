@@ -4,7 +4,7 @@ twiki (1:4.0.5-8) unstable; urgency=medium
   * enable FormFields containing Name
     (Closes: #405571).
 
- -- Sven Dowideit <svenud@ozemail.com.au>  Thu,  14 Dec 2006 22:32:36 +0100
+ -- Sven Dowideit <svenud@ozemail.com.au>  Wed, 10 Jan 2007  22:32:36 +0100
 
 twiki (1:4.0.5-7) unstable; urgency=medium
 
