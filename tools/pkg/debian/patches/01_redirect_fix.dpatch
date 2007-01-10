@@ -13,8 +13,11 @@ diff -urNad un~/lib/TWiki.pm un/lib/TWiki.pm
      ASSERT($this->isa( 'TWiki')) if DEBUG;
  
 +    # prevent phishing byt only allowing redirect to configured host
-+    if( $url =~ m!^([^:]*://[^/]*)(/.*)?$! ) {
++    if( $url =~ m!^([^:]*://[^/]*)/*(.*)?$! ) {
 +        my $host = $1;
++        #remove trailing /'s to match
++        $TWiki::cfg{DefaultUrlHost} =~ m!^([^:]*://[^/]*)/*(.*)?$!;
++        my $expected = $1;
 +        unless ($host eq $TWiki::cfg{DefaultUrlHost}) {
 +               $url = $this->getOopsUrl( 'accessdenied',
 +                                def => 'topic_access',
