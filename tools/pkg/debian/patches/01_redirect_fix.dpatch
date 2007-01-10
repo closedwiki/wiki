@@ -20,7 +20,7 @@ diff -urNad un~/lib/TWiki.pm un/lib/TWiki.pm
 +                                def => 'topic_access',
 +                                web => $this->{web} || $TWiki::cfg{UsersWebName},
 +                                topic => $this->{topic} || $TWiki::cfg{HomeTopicName},
-+                                params => [ 'redirect', 'unsafe redirect to '.$url ]);
++                                params => [ 'redirect', 'unsafe redirect to '.$url.': '.$host.' does not match DefaultUrlHost' ]);
 +        }
 +    }
 +

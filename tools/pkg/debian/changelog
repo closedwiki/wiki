@@ -1,3 +1,15 @@
+twiki (1:4.0.5-7) unstable; urgency=medium
+
+  * Add a more useful error message in debian/patches/01_redirect_fix.dpatch
+    when fixing #404222, to prevent redirect to other hosts (phishing). 
+    (Closes: #405083). Urgency medium, because it makes twiki almost unusable.
+    Also, the $TWiki::cfg{DefaultUrlHost} in /etc/twiki/LocalSite.cfg must not
+    have a trailing slash, which was no problem before. 
+    Thanks to Kai Pastor Kai" <pastor@uni-mainz.de> and Marcus C. Gottwald
+    <gottwald@quantum-hydrometrie.de>. 
+
+ -- Amaya Rodrigo Sastre <amaya@debian.org>  Tue,  2 Jan 2007 12:17:36 +0100
+
 twiki (1:4.0.5-6) unstable; urgency=high
 
   [ Sven Dowideit ]
