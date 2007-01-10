@@ -137,7 +137,7 @@ sub statistics {
       _collectLogData( $session, $TMPFILE, $logMonthYear );
 
     my @weblist;
-    my $webSet = $session->{cgiQuery}->param( 'webs' );
+    my $webSet = TWiki::Sandbox::untaintUnchecked($session->{cgiQuery}->param( 'webs' )) || $session->{requestedWebName};
     if( $webSet) {
         # do specific webs
         push( @weblist, split( /,\s*/, $webSet ));

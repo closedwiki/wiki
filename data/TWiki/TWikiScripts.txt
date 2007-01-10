@@ -301,6 +301,16 @@ Refresh the WebStatistics topics in range of webs.
 | =webs= | comma-separated list of webs to run stats on | all accessible webs |
 | =logdate= | YYYYMM to generate statistics for | current month |
 
+for example:
+   1 from browser %SCRIPTURL{"statistics"}% updates _all user webs_
+   2 from browser %SCRIPTURL{"statistics"}%?webs=TWiki,Main,Sandbox updates _TWiki,Main,Sandbox_
+   3 from browser %SCRIPTURL{"statistics"}%/%WEB% updates %WEB%
+   4 from command line twiki/bin/statistics updates _all user webs_
+   5 from command line twiki/bin/statistics -webs=TWiki,Main,Sandbox updates _TWiki,Main,Sandbox_
+   6 from command line twiki/bin/statistics %WEB%.<nop>WebHome updates %WEB%
+
+see TWikiSiteTools#WebStatistics_site_statistics for updating statistics using cron.
+
 ---+++ =twiki=
 Single-script interface to the functionality of all the other scripts. Experimental, not for production use. Read the code if you want to know more.
 

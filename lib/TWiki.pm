@@ -1301,6 +1301,7 @@ sub new {
     $this->{topicName} = TWiki::Sandbox::untaintUnchecked( $topic );
 
     $web   =~ s/$TWiki::cfg{NameFilter}//go;
+    $this->{requestedWebName} = TWiki::Sandbox::untaintUnchecked( $web ); #can be an empty string
     $web = $TWiki::cfg{UsersWebName} unless $web;
     $this->{webName} = TWiki::Sandbox::untaintUnchecked( $web );
 
