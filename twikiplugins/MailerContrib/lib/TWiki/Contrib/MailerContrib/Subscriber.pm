@@ -73,7 +73,7 @@ sub getEmailAddresses {
             push( @{$this->{emails}}, $this->{name} );
         } else {
             my $user = $this->{session}->{users}->findUser
-              ( $this->{name}, $this->{name}, 1 );
+                       ( $this->{name}, undef, 1 );
             if( $user ) {
                 push( @{$this->{emails}}, $user->emails() );
             }
