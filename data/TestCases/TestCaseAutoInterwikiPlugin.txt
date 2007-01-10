@@ -1,5 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1111924545" version="$Rev$"}%
-
+%META:TOPICINFO{author="SvenDowideit" date="1168436357" format="1.1" version="1.2"}%
 Description: Basic tests for Interwiki plugin
 
 [[%SCRIPTURL{"view"}%/%WEB%/%TOPIC%?test=compare&amp;debugenableplugins=TestFixturePlugin,InterwikiPlugin&skin=pattern][run this test]]
@@ -10,9 +9,9 @@ Requires "TWiki" to be defined in InterWikis.
 
 ---+ Expected
 <!-- expected -->
-<a href="http://twiki.org/cgi-bin/view/Codev_Target" title="'Codev_Target' on TWiki.org">TWiki:Codev_Target</a>
-<a href="http://twiki.org/cgi-bin/view/Codev/Target" title="'Codev/Target' on TWiki.org">TWiki:Codev/Target</a>
-<a href="http://twiki.org/cgi-bin/view/Codev/m./+_,;:!?%#-" title="'Codev/m./+_,;:!?%#-' on TWiki.org">TWiki:Codev/m./+_,;:!?%#-</a>
+<a  class=interwikiLink href="http://twiki.org/cgi-bin/view/Codev_Target" title="'Codev_Target' on TWiki.org">TWiki:Codev_Target</a>
+<a  class=interwikiLink href="http://twiki.org/cgi-bin/view/Codev/Target" title="'Codev/Target' on TWiki.org">TWiki:Codev/Target</a>
+<a  class=interwikiLink href="http://twiki.org/cgi-bin/view/Codev/m./+_,;:!?%#-" title="'Codev/m./+_,;:!?%#-' on TWiki.org">TWiki:Codev/m./+_,;:!?%#-</a>
 <!-- /expected -->
 ---+ Actual
 <!-- actual -->
