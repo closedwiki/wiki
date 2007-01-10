@@ -90,7 +90,7 @@ sub renderMetaData {
 	my $rows = '';
     my $row = $templates->expandTemplate('ATTACH:files:row'.$A);
     foreach my $attachment (
-        sort { ( $a->{date} || 0) <=> ( $b->{date} || 0 )}
+        sort { ( $a->{name} || '') cmp ( $b->{name} || '' )}
           @attachments ) {
         my $attrAttr = $attachment->{attr};
 
