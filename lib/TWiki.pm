@@ -1145,7 +1145,7 @@ sub getOopsUrl {
     if( ref($PARAMS) eq "ARRAY" ) {
         my $n = 1;
         foreach my $p ( @$PARAMS ) {
-            $p ||= '';
+            $p = '' unless defined $p;
             push( @urlParams, "param$n" => $p );
             $query->param(-name => "param$n", -value => $p ) if $keep;
             $n++;
