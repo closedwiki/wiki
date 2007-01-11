@@ -88,6 +88,8 @@ sub handleDoxygen
 	/x;
     my ( $name, $alt ) = ( $1, $3 );
     $alt ||= $name;
+    my $classname = $name;
+    $classname =~ s/:/_1/g;
 
     my $thisProject = scalar &TWiki::Func::extractNameValuePair( $attributes, "project" ) || $project;
 
@@ -95,15 +97,16 @@ sub handleDoxygen
     ( $doxygen_docs_base = &TWiki::Func::getPreferencesValue( uc "DOXYGENPLUGIN_DOCS_BASE_$thisProject" ) . '/' ) =~ s|//$|/|;
     ( $doxygen_url_base = &TWiki::Func::getPreferencesValue( uc "DOXYGENPLUGIN_URL_BASE_$thisProject" ) . '/' ) =~ s|//$|/|;
 
-    &TWiki::Func::writeDebug( "project=[$thisProject]\ndocs_base=[$doxygen_docs_base] url_base=[$doxygen_url_base]\nname=[$name] alt=[$alt]\nattributes=[$attributes]" ) if $debug;
+
+    &TWiki::Func::writeDebug( "project=[$thisProject]\ndocs_base=[$doxygen_docs_base] url_base=[$doxygen_url_base]\nname=[$name] classname=[$classname] alt=[$alt]\nattributes=[$attributes]" ) if $debug;
 
     # check if we have a file instead of a class
     if ($name =~ /.+html?$/ ) {
         $text .= qq{<a href="${doxygen_url_base}$name">$alt</a>};
-    } elsif ( -f "$doxygen_docs_base/class$name.html" ) {
-        $text .= qq{<a href="${doxygen_url_base}class$name.html">$alt</a>};
+    } elsif ( -f "$doxygen_docs_base/class$classname.html" ) {
+        $text .= qq{<a href="${doxygen_url_base}class$classname.html">$alt </a>};
     } else {
-        $text .= qq{<a href="${doxygen_url_base}class$name.html">$alt [bad link?]</a>};
+        $text .= qq{<a href="${doxygen_url_base}class$classname.html">$alt [bad link?]</a>};
     }
 
     return $text;
