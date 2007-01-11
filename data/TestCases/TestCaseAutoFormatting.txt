@@ -1,7 +1,7 @@
 LinkAtStart
 <!-- /actual -->
 <!-- expected expand LINKATSTART -->
-<span class="twikiNewLink">LinkAtStart<a title="Create this topic" href="%SCRIPTURLPATH{"edit"}%/TestCases/LinkAtStart?topicparent=TestCases.TestCaseAutoFormatting" rel="nofollow"><sup>?</sup></a></span>
+<span class="twikiNewLink">LinkAtStart<a href="%SCRIPTURLPATH{"edit"}%/TestCases/LinkAtStart?topicparent=TestCases.TestCaseAutoFormatting" rel="nofollow" title="Create this topic" >?</a></span>
 <!-- /expected -->
 
 Description: Simple formatting, as described in TWiki.TextFormattingRules
@@ -215,7 +215,7 @@ class CatAnimal {
 
 ---+++ Expected
 <!-- expected expand WIKIWORDAFTER -->
-<span class="twikiNewLink">WikiWordBeforeList<a title="Create this topic" href="%SCRIPTURLPATH{"edit"}%/TestCases/WikiWordBeforeList?topicparent=TestCases.TestCaseAutoFormatting" rel="nofollow"><sup>?</sup></a></span>
+<span class="twikiNewLink">WikiWordBeforeList<a href="%SCRIPTURLPATH{"edit"}%/TestCases/WikiWordBeforeList?topicparent=TestCases.TestCaseAutoFormatting" rel="nofollow" title="Create this topic">?</a></span>
 <ol>
 <li>Things</li>
 <li>Stuff
@@ -227,7 +227,7 @@ class CatAnimal {
 <li>Something</li>
 <li>Hello kitty</li>
 </ol>
-<span class="twikiNewLink">WikiWordAfterList<a title="Create this topic" href="%SCRIPTURLPATH{"edit"}%/TestCases/WikiWordAfterList?topicparent=TestCases.TestCaseAutoFormatting" rel="nofollow"><sup>?</sup></a></span>
+<span class="twikiNewLink">WikiWordAfterList<a href="%SCRIPTURLPATH{"edit"}%/TestCases/WikiWordAfterList?topicparent=TestCases.TestCaseAutoFormatting" rel="nofollow" title="Create this topic">?</a></span>
 <!-- /expected -->
 ---+++ Actual
 <!-- actual -->
@@ -352,7 +352,7 @@ a@b.com
 <p />
 <a class="twikiLink" href="%SCRIPTURLPATH{"view"}%/%MAINWEB%/TWikiUsers">TWikiUsers</a>
 <p />
-<span class="twikiNewLink">CompleteAndUtterNothing<a title="Create this topic" href="%SCRIPTURLPATH{"edit"}%/TestCases/CompleteAndUtterNothing?topicparent=TestCases.TestCaseAutoFormatting" rel="nofollow"><sup>?</sup></a></span>
+<span class="twikiNewLink">CompleteAndUtterNothing<a href="%SCRIPTURLPATH{"edit"}%/TestCases/CompleteAndUtterNothing?topicparent=TestCases.TestCaseAutoFormatting" rel="nofollow" title="Create this topic">?</a></span>
 <p />
 <a class="twikiLink" href="%SCRIPTURLPATH{"view"}%/TestCases/LinkBox">LinkBox</a>
 <a class="twikiLink" href="%SCRIPTURLPATH{"view"}%/TestCases/LinkBox">LinkBoxs</a>
@@ -380,7 +380,7 @@ LinkBoxes
 ---++ Square Brackets
 ---+++ Expected
 <!-- expected expand SQUABS -->
-<span class="twikiNewLink">wiki syntax<a title="Create this topic" href="%SCRIPTURLPATH{"edit"}%/TestCases/WikiSyntax?topicparent=TestCases.TestCaseAutoFormatting" rel="nofollow"><sup>?</sup></a></span>
+<span class="twikiNewLink">wiki syntax<a href="%SCRIPTURLPATH{"edit"}%/TestCases/WikiSyntax?topicparent=TestCases.TestCaseAutoFormatting" rel="nofollow"  title="Create this topic">?</a></span>
 <p />
 <a class="twikiLink" href="%SCRIPTURLPATH{"view"}%/%MAINWEB%/TWikiUsers">Main.TWiki users</a>
 <p />
@@ -389,7 +389,7 @@ escaped:
 <p />
 <a href="/relative/URL" target="_top">relative url</a>
 <p />
-<span class="twikiNewLink">filter%rubbish;from'thelink<a title="Create this topic" rel="nofollow" href="%SCRIPTURLPATH{"edit"}%/TestCases/FilterRubbishFromThelink?topicparent=TestCases.TestCaseAutoFormatting"><sup>?</sup></a></span>
+<span class="twikiNewLink">filter%rubbish;from'thelink<a href="%SCRIPTURLPATH{"edit"}%/TestCases/FilterRubbishFromThelink?topicparent=TestCases.TestCaseAutoFormatting" rel="nofollow" title="Create this topic">?</a></span>
 <!-- /expected -->
 ---+++ Actual
 <!-- actual -->
@@ -408,7 +408,7 @@ escaped:
 ---++ Protocol Links
 ---+++ Expected
 <!-- expected expand PROTOCOL -->
-<span class="twikiNewLink">syntax<a title="Create this topic" href="%SCRIPTURLPATH{"edit"}%/TestCases/WikiSyntax?topicparent=TestCases.TestCaseAutoFormatting" rel="nofollow"><sup>?</sup></a></span>
+<span class="twikiNewLink">syntax<a href="%SCRIPTURLPATH{"edit"}%/TestCases/WikiSyntax?topicparent=TestCases.TestCaseAutoFormatting" rel="nofollow" title="Create this topic">?</a></span>
 <p />
 <a href="http://gnu.org" target="_top">GNU</a>
 <p />
@@ -426,9 +426,9 @@ escaped:
 ---++ Anchors
 ---+++ Expected
 <!-- expected expand ANCHOR -->
-<a class="twikiAnchorLink" href="%SCRIPTURLPATH{"view"}%/TestCases/TestCaseAutoFormatting#NotThere">TestCaseAutoFormatting#NotThere</a>
+<a class="twikiCurrentTopicLink twikiAnchorLink" href="%SCRIPTURLPATH{"view"}%/TestCases/TestCaseAutoFormatting#NotThere">TestCaseAutoFormatting#NotThere</a>
 <p />
-<a class="twikiAnchorLink" href="%SCRIPTURLPATH{"view"}%/TestCases/TestCaseAutoFormatting#MyAnchor">Jump</a>
+<a class="twikiCurrentTopicLink twikiAnchorLink" href="%SCRIPTURLPATH{"view"}%/TestCases/TestCaseAutoFormatting#MyAnchor">Jump</a>
 <p />
 <a name="MyAnchor"></a> To here
 <!-- /expected -->
@@ -468,7 +468,7 @@ nowt!%MAINWEB%
   <th bgcolor="#99CCCC"><strong>A0 all rows</strong></th>
   <th bgcolor="#99CCCC"><strong>B0</strong></th>
   <th bgcolor="#99CCCC"><strong>C0 widen this col</strong></th>
-  <th bgcolor="#99CCCC"><strong>D0LinkInColHeader</strong></th>
+  <th bgcolor="#99CCCC"><strong><span class="twikiNewLink">D0LinkInColHeader<a href="%SCRIPTURLPATH{"edit"}%/TestCases/D0LinkInColHeader?topicparent=TestCases.TestCaseAutoFormatting" rel="nofollow" title="Create this topic">?</a></span></strong></th>
   <th bgcolor="#99CCCC"><strong>E0 not a link this time</strong></th>
  </tr>
  <tr>
@@ -552,7 +552,7 @@ Note that when viewing this topic the table below may be formatted by <nop>Table
 ---++ Anchor links
 ---+++ Expected
 <!-- expected expand -->
-<span class="twikiNewLink">AnchorLink#AnchorName<a title="Create this topic" href="%SCRIPTURLPATH{"edit"}%/TestCases/AnchorLink?topicparent=TestCases.TestCaseAutoFormatting" rel="nofollow"><sup>?</sup></a></span>
+<span class="twikiNewLink">AnchorLink#AnchorName<a href="%SCRIPTURLPATH{"edit"}%/TestCases/AnchorLink?topicparent=TestCases.TestCaseAutoFormatting" rel="nofollow" title="Create this topic">?</a></span>
 <a class="twikiAnchorLink" href="%SCRIPTURLPATH{"view"}%/TWiki/TWikiVariables#VarWEBLIST">TWikiVariables#VarWEBLIST</a>
 <!-- /expected -->
 ---+++ Actual
@@ -564,7 +564,7 @@ TWiki.TWikiVariables#VarWEBLIST
 ---++ Link at end of topic
 ---+++ Expected
 <!-- expected expand LINKATEND -->
-<span class="twikiNewLink">LinkAtEnd<a title="Create this topic" href="%SCRIPTURLPATH{"edit"}%/TestCases/LinkAtEnd?topicparent=TestCases.TestCaseAutoFormatting" rel="nofollow"><sup>?</sup></a></span>
+<span class="twikiNewLink">LinkAtEnd<a href="%SCRIPTURLPATH{"edit"}%/TestCases/LinkAtEnd?topicparent=TestCases.TestCaseAutoFormatting" rel="nofollow" title="Create this topic">?</a></span>
 <!-- /expected -->
 ---+++ Actual
 <!-- actual -->
