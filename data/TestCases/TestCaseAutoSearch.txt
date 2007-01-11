@@ -11,7 +11,7 @@ Designed by: Crawford Currie
 ---+ Search _default
 ---++ Expected
 <!-- expected expand rex DEFAULT -->
-<span class="patternSearched">Searched: <b>hit me with your rhythm stick</b></span><span id="twikiNumberOfResultsContainer"></span><span id="twikiModifySearchContainer"></span>
+<span class="patternSearched">Searched: <b><noautolink>hit me with your rhythm stick</noautolink></b></span><span id="twikiNumberOfResultsContainer"></span><span id="twikiModifySearchContainer"></span>
 <h4 class="patternSearchResultsHeader" style="background-color:yellow"><span class="twikiLeft"><b>Results from TestCases web</b>retrieved at @TIME (GMT)</span><span class="twikiRight"></span><br class="twikiClear" /></h4>
 <div class="patternSearchResult"><div class="twikiTopRow"><div class="twikiLeft"><a href="%SCRIPTURLPATH{"view"}%/TestCases/TestCaseAutoSearch"><b>TestCaseAutoSearch</b></a> </div>
 <div class="twikiRight twikiSRAuthor">
@@ -28,11 +28,18 @@ Designed by: Crawford Currie
 <script type="text/javascript">
 // write results at the top
 //<![CDATA[
-	insertHtml('<br />Number of topics: <b>2</b>', 'twikiNumberOfResultsContainer');
-	var count = 2;
-	if (count < 10) {
-	   insertHtml('', 'twikiBottomResultCount');
-	   }
+	var results;
+	if (!results) results = [];
+	results.push(2);
+	var total=0;
+	for (var i=0; i<results.length; ++i) {
+		total += results[i];
+	}
+	var text = "<br />" + "Number of topics:" + " <b>" + total + " <\/b>";
+	insertHtml(text, 'twikiNumberOfResultsContainer');
+	if (total < 10) {
+		insertHtml('', 'twikiBottomResultCount');
+	}
 //]]>
 </script>
 <!-- /expected -->
