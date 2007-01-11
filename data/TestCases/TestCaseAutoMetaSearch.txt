@@ -9,7 +9,7 @@ Designed by: Crawford Currie
 
 ---++ Search for parents
 Expected:
-<!-- expected expand -->
+<!-- expected expand PARENT -->
 <a href="%SCRIPTURLPATH{"view"}%/TestCases/%TOPIC%">%TOPIC%</a>
 <!-- /expected -->
 Actual:
@@ -19,7 +19,7 @@ Actual:
 
 ---++ Search for moved topic
 Expected:
-<!-- expected expand -->
+<!-- expected expand MOVED -->
 Itwos <a href="%SCRIPTURLPATH{"view"}%/TestCases/DeliberatelyMoved">DeliberatelyMoved</a>
 <!-- /expected -->
 Actual: 
@@ -29,7 +29,7 @@ Actual:
 
 ---++ Search for field value
 Expected:
-<!-- expected expand -->
+<!-- expected expand VALUE -->
 <a href="%SCRIPTURLPATH{"view"}%/TestCases/DeliberatelyMoved">DeliberatelyMoved</a>
 <!-- /expected -->
 Actual: 
@@ -39,7 +39,7 @@ Actual:
 
 ---++ Search with no result
 Expected:
-<!-- expected -->
+<!-- expected NO RESULT -->
 Not a sausage
 <!-- /expected -->
 Actual:
@@ -50,8 +50,8 @@ Actual:
 ---++ Search with format parameters
 ---+++ Parent with bullet list
 Expected:
-<!-- expected expand -->
-   * <a href="%SCRIPTURLPATH{"view"}%/TestCases/%TOPIC%">%TOPIC%</a>
+<!-- expected expand BULLET -->
+<ul><li><a class="twikiCurrentTopicLink twikiLink" href="%SCRIPTURLPATH{"view"}%/TestCases/%TOPIC%">%TOPIC%</a></li></ul>
 <!-- /expected -->
 Actual:
 <!-- actual -->
@@ -60,8 +60,8 @@ Actual:
 
 ---+++ Parent abbreviated
 Expected:
-<!-- expected expand -->
-<a href="%SCRIPTURLPATH{"view"}%/TestCases/%TOPIC%">Test...</a>
+<!-- expected expand ABBR -->
+<a class="twikiCurrentTopicLink twikiLink" href="%SCRIPTURLPATH{"view"}%/TestCases/%TOPIC%">Test...</a>
 <!-- /expected -->
 Actual:
 <!-- actual -->
