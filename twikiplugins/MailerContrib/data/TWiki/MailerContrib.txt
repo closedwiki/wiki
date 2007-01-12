@@ -1,3 +1,4 @@
+%META:TOPICINFO{author="TWikiAdminGroup" date="1168425636" format="1.1" version="$Rev$"}%
 ---+!! %TOPIC%
 
 Add-on to the TWiki kernel that allows users to "subscribe" to regularly scheduled e-mails containing either:
@@ -141,24 +142,25 @@ Newsletters are sent after formatting using the standard =view= template, using 
 |  Copyright &copy;: | 2004, Wind River Systems; 2006, http://WikiRing.com |
 |  License: | GPL |
 |  Change History: | |
+|  12496 | <a rel='nofollow' href='http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item3415'>Item3415</a> mailnotify did not send notifications to intranet users because of wrong call to findUser. |
 |  11672 | Added newsletter support, after much harassment from TWiki:Main.LynnwoodBrown |
-|  11534 | Bugs:Item2153: Clarified docs. Bugs:Item2698: Improved error reporting. |
-|  8808 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1654'>Item1654</a>  mailnotify must enter the command_line context |
-|  8625 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1508'>Item1508</a>  Making the dashes in the separatator clearer |
-|  8606 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1508'>Item1508</a>  MailerContrib: Brushing up HTML mailnotify template |
-|  8602 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1508'>Item1508</a>  MailerContrib: Cleaning up plaintext e-mail template, removing TEXTAREA |
-|  8522 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1511'>Item1511</a>  arguments to getScriptUrl in wrong order :-( |
-|  8434 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1465'>Item1465</a>  Fix 'TWiki.' to '%TWIKIEB%.' |
-|  8398 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1460'>Item1460</a>  polished up the comment a bit |
-|  8308 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1362'>Item1362</a>  moving mailnotify cron script |
-|  7848 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1167'>Item1167</a>  forced all mail operations to generate absolute URLs |
-|  7568 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item910'>Item910</a>  use SCRIPTURL{view} instead of complex url expr |
-|  6864 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item624'>Item624</a>  mailer templates moved the the right places |
-|  6861 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item624'>Item624</a>  Added proper templates support for plain text mails |
-|  6809 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item623'>Item623</a>  don't print anything if verbosity is switched off. |
-|  6659 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item528'>Item528</a>  Updated MailerContrib. it's working and the sendmail parameter is used. |
-|  6474 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item420'>Item420</a>  removed spurious remove_obsolete_locks from MailerContrib |
-|  5924 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item153'>Item153</a>  fix mail URL-fixing scheme |
+|  11534 | <a rel='nofollow' href='http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item2153'>Item2153</a> Clarified docs.  <a rel='nofollow' href='http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item2698'>Item2698</a> Improved error reporting. |
+|  8808 | <a rel='nofollow' href='http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item1654'>Item1654</a>  mailnotify must enter the command_line context |
+|  8625 | <a rel='nofollow' href='http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item1508'>Item1508</a>  Making the dashes in the separatator clearer |
+|  8606 | <a rel='nofollow' href='http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item1508'>Item1508</a>  MailerContrib: Brushing up HTML mailnotify template |
+|  8602 | <a rel='nofollow' href='http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item1508'>Item1508</a>  MailerContrib: Cleaning up plaintext e-mail template, removing TEXTAREA |
+|  8522 | <a rel='nofollow' href='http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item1511'>Item1511</a>  arguments to getScriptUrl in wrong order :-( |
+|  8434 | <a rel='nofollow' href='http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item1465'>Item1465</a>  Fix 'TWiki.' to '%TWIKIEB%.' |
+|  8398 | <a rel='nofollow' href='http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item1460'>Item1460</a>  polished up the comment a bit |
+|  8308 | <a rel='nofollow' href='http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item1362'>Item1362</a>  moving mailnotify cron script |
+|  7848 | <a rel='nofollow' href='http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item1167'>Item1167</a>  forced all mail operations to generate absolute URLs |
+|  7568 | <a rel='nofollow' href='http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item910'>Item910</a>  use SCRIPTURL{view} instead of complex url expr |
+|  6864 | <a rel='nofollow' href='http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item624'>Item624</a>  mailer templates moved the the right places |
+|  6861 | <a rel='nofollow' href='http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item624'>Item624</a>  Added proper templates support for plain text mails |
+|  6809 | <a rel='nofollow' href='http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item623'>Item623</a>  don't print anything if verbosity is switched off. |
+|  6659 | <a rel='nofollow' href='http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item528'>Item528</a>  Updated MailerContrib. it's working and the sendmail parameter is used. |
+|  6474 | <a rel='nofollow' href='http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item420'>Item420</a>  removed spurious remove_obsolete_locks from MailerContrib |
+|  5924 | <a rel='nofollow' href='http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item153'>Item153</a>  fix mail URL-fixing scheme |
 |  5269 | Minor doc fixes |
 |  5266 | Doc tidy-ups, added filtering of _ webs, added obsolete lock script |
 |  5264 | Changed default to add web name to user name (I hope) |
