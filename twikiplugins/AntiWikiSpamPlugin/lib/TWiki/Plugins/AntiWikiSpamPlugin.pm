@@ -103,36 +103,17 @@ sub beforeSaveHandler {
     ### my ( $text, $topic, $web ) = @_;
 
     writeDebug("beforeSaveHandler( $_[2].$_[1] )");
-
-    #do localspamlist first
-    my $regexWeb;
-    my $regexTopic = TWiki::Func::getPluginPreferencesValue( 'LOCALANTISPAMREGEXLISTTOPIC' );
-    my $twikiWeb = TWiki::Func::getTwikiWebname();
-    ($regexWeb, $regexTopic) = TWiki::Func::normalizeWebTopicName($twikiWeb, $regexTopic);
-    if (TWiki::Func::topicExists($regexWeb, $regexTopic) ) {
-        if (($_[1] eq $regexTopic) && ($_[2] eq $regexWeb)) {
-            return; #don't check the anti-spam topic
-        }
-        my ( $meta, $regexs) = TWiki::Func::readTopic($regexWeb, $regexTopic);
-        checkTextUsingTopic($_[0], $regexs, $_[2], $_[1]);
-    }
-
-    my $timesUp;
-    my $topicExists = fileExists(${pluginName}.'_regexs');
-    if ($topicExists) {
-        my $getListTimeOut = TWiki::Func::getPluginPreferencesValue( 'GETLISTTIMEOUT' ) || 61;
-        #has it been more than $getListTimeOut minutes since the last get?
-        my $lastTimeWeCheckedForUpdate = readWorkFile(${pluginName}.'_timeOfLastCheck');
-        #print STDERR "time > ($lastTimeWeCheckedForUpdate + ($getListTimeOut * 60))";
-        $timesUp = time > ($lastTimeWeCheckedForUpdate + ($getListTimeOut * 60));
-    }
-    if ($timesUp || (!$topicExists)) {
-        getSharedSpamData();
-    }
-    #use the share spam regexs
-    my $regexs = readWorkFile(${pluginName}.'_regexs');
-    checkTextUsingTopic($_[0], $regexs, $_[2], $_[1]);
+    downloadRegexUpdate();
+    checkText($_[2], $_[1], $_[0]);
 }
+
+=pod
+
+---++ beforeAttachmentSaveHandler($attachmentAttr, $topic, $web)
+
+checks attachments for javascript exploits and spam
+
+=cut
 
 sub beforeAttachmentSaveHandler
 {
@@ -150,52 +131,10 @@ sub beforeAttachmentSaveHandler
             params => 'The attachment has been rejected as it contains a possible javascript eval exploit.');
     }
 
-    beforeSaveHandler($text, $_[1], $_[2]);
+    downloadRegexUpdate();
+    checkText($_[2], $_[1], $text);
 }
 
-
-sub checkTextUsingTopic {
-    #my ($text, $regexs, $web, $topic) = @_;
-
-    my $web = $_[2];
-    my $topic = $_[3];
-
-    writeDebug("checkTextUsingTopic( )");
-
-    #load text as a set of regex's, and eval
-    foreach my $regexLine (split(/\n/, $_[1])) {
-        $regexLine =~ /([^#]*)\s*#?/;
-        my $regex = $1;
-        $regex =~ s/^\s+//;
-        $regex =~ s/\s+$//;
-        if ($regex ne '') {
-            if ( $_[0] =~ /$regex/i ) {
-                TWiki::Func::writeWarning("detected spam at $web.$topic (regex=$regex)");
-                # TODO: make this a nicer error, or make its own template
-                throw TWiki::OopsException( 'attention', def=>'save_error', 
-                    params => "The topic $web.$topic has been rejected as it may contain spam.");
-            }
-        }
-    }
-}
-
-
-sub getSharedSpamData {
-    writeDebug("getSharedSpamData( )");
-
-    my $getSharedSpamLock = readWorkFile(${pluginName}.'_lock');
-
-    if ( $getSharedSpamLock eq '' ) {
-        saveWorkFile(${pluginName}.'_lock', 'lock');
-        my $listUrl = TWiki::Func::getPluginPreferencesValue( 'ANTISPAMREGEXLISTURL' );
-        my $list = includeUrl($listUrl);
-        if (defined ($list)) {
-            saveWorkFile(${pluginName}.'_regexs', $list);
-            saveWorkFile(${pluginName}.'_timeOfLastCheck', time);
-        }
-        saveWorkFile(${pluginName}.'_lock', '');
-    }
-}
 
 =pod
 
@@ -208,9 +147,9 @@ can be used to force an update of the spam list
 =cut
 
 sub forceUpdate {
-    writeDebug('about to forceUpdate');
-    getSharedSpamData();
-    writeDebug('forceUpdate complete');
+   writeDebug('about to forceUpdate');
+   downloadRegexUpdate(1);
+   writeDebug('forceUpdate complete');
 
    return ${pluginName}.': SharedSpamList forceUpdate complete ';
 }
@@ -235,7 +174,52 @@ sub fileExists($) {
     return (-e $workarea.'/'.$fileName);
 }
 
-#simplified version of INCLUDE, why we have policy mixed in with implementation is bejond me
+=pod 
+
+---++ downloadRegexUpdate ($forceFlag)
+
+downloads a new set of regexes if it is time to do so
+
+=cut
+
+sub downloadRegexUpdate {
+  my $forceFlag = shift;
+
+  unless ($forceFlag) {
+    my $timesUp;
+    my $topicExists = fileExists(${pluginName}.'_regexs');
+    if ($topicExists) {
+        my $getListTimeOut = TWiki::Func::getPluginPreferencesValue( 'GETLISTTIMEOUT' ) || 61;
+        #has it been more than $getListTimeOut minutes since the last get?
+        my $lastTimeWeCheckedForUpdate = readWorkFile(${pluginName}.'_timeOfLastCheck');
+        #print STDERR "time > ($lastTimeWeCheckedForUpdate + ($getListTimeOut * 60))";
+        $timesUp = time > ($lastTimeWeCheckedForUpdate + ($getListTimeOut * 60));
+    }
+    return unless $timesUp || !$topicExists;
+  }
+
+  writeDebug("downloading new spam data");
+  my $lock = readWorkFile(${pluginName}.'_lock'); # SMELL: that's no good way to do locking
+  if ( $lock eq '' ) {
+      saveWorkFile(${pluginName}.'_lock', 'lock');
+      my $listUrl = TWiki::Func::getPluginPreferencesValue( 'ANTISPAMREGEXLISTURL' );
+      my $list = includeUrl($listUrl);
+      if (defined ($list)) {
+          saveWorkFile(${pluginName}.'_regexs', $list);
+          saveWorkFile(${pluginName}.'_timeOfLastCheck', time);
+      }
+      saveWorkFile(${pluginName}.'_lock', '');
+  }
+}
+
+=pod
+
+---++ includeUrl()
+
+simplified version of INCLUDE
+
+=cut
+
 sub includeUrl($) {
     my $theUrl = shift;
 
@@ -276,13 +260,12 @@ sub includeUrl($) {
 
 =pod
 
----++ getUrl() -> $text
+---++ getUrl($protocol, $host, $port, $path, $user, $pass) -> $text
 
 Local wrapper for different interfaces in TWiki<4.0, TWiki-4.0 and TWiki-4.1
 This would not be necessary if there was a TWiki::Func::getUrl() API
 
 =cut
-
 
 sub getUrl {
   my ($protocol, $host, $port, $path, $user, $pass) = @_;
@@ -298,5 +281,72 @@ sub getUrl {
   # TWiki 4.1
   return $TWiki::Plugins::SESSION->{net}->getUrl($protocol, $host, $port, $path, $user, $pass);
 }
+
+
+
+=pod 
+
+---++ checkText($text) 
+
+check a text for spam; throws an oops exception if so
+
+=cut
+
+sub checkText {
+  # my ($web, $topic, $text) = @_;
+  my $web = shift;
+  my $topic = shift;
+
+  writeDebug("checkText($web.$topic, ... )");
+
+  # do localspamlist first
+  my $regexWeb;
+  my $regexTopic = TWiki::Func::getPluginPreferencesValue( 'LOCALANTISPAMREGEXLISTTOPIC' );
+  my $twikiWeb = TWiki::Func::getTwikiWebname();
+  ($regexWeb, $regexTopic) = TWiki::Func::normalizeWebTopicName($twikiWeb, $regexTopic);
+  if (TWiki::Func::topicExists($regexWeb, $regexTopic) ) {
+      if (($topic eq $regexTopic) && ($web eq $regexWeb)) {
+          return; #don't check the anti-spam topic
+      }
+      my ( $meta, $regexs) = TWiki::Func::readTopic($regexWeb, $regexTopic);
+      checkTextUsingRegex($web, $topic, $regexs, $_[0]);
+  }
+
+  # use the share spam regexs
+  my $regexs = readWorkFile(${pluginName}.'_regexs');
+  checkTextUsingRegex($web, $topic, $regexs, $_[0]);
+}
+
+=pod
+
+---++ checkTextUsingRegex
+
+check a text for spam using a given regex; throws an oops exception if it detected spam
+
+=cut
+
+sub checkTextUsingRegex {
+    #my ($web, $topic, $regexs, $text) = @_;
+    my $web = shift;
+    my $topic = shift;
+
+    #load text as a set of regex's, and eval
+    foreach my $regexLine (split(/\n/, $_[0])) {
+        $regexLine =~ /([^#]*)\s*#?/;
+        my $regex = $1;
+        $regex =~ s/^\s+//;
+        $regex =~ s/\s+$//;
+        if ($regex ne '') {
+            if ( $_[1] =~ /$regex/i ) {
+                TWiki::Func::writeWarning("detected spam at $web.$topic (regex=$regex)");
+                # TODO: make this a nicer error, or make its own template
+                throw TWiki::OopsException( 'attention', def=>'save_error', 
+                    params => "The topic $web.$topic has been rejected as it may contain spam.");
+            }
+        }
+    }
+}
+
+
 
 1;
