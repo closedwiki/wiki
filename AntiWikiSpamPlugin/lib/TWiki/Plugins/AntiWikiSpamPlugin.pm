@@ -173,7 +173,7 @@ sub checkTextUsingTopic {
                 TWiki::Func::writeWarning("detected spam at $web.$topic (regex=$regex)");
                 # TODO: make this a nicer error, or make its own template
                 throw TWiki::OopsException( 'attention', def=>'save_error', 
-                    params => "The topic <nop>$web.$topic has been rejected as it may contain spam.");
+                    params => "The topic $web.$topic has been rejected as it may contain spam.");
             }
         }
     }
