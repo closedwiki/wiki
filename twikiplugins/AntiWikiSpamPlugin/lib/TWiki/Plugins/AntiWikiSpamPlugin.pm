@@ -102,6 +102,9 @@ sub beforeSaveHandler {
     # do not uncomment, use $_[0], $_[1]... instead
     ### my ( $text, $topic, $web ) = @_;
 
+    my $action = getCgiAction();
+    return unless $action =~ /^save/;
+
     writeDebug("beforeSaveHandler( $_[2].$_[1] )");
     downloadRegexUpdate();
     checkText($_[2], $_[1], $_[0]);
@@ -348,5 +351,29 @@ sub checkTextUsingRegex {
 }
 
 
+=pod 
+
+---++ getCgiAction() -> $script
+
+our version of getting the script action
+
+=cut
+
+sub getCgiAction {
+
+  my $pathInfo = $ENV{'PATH_INFO'} || '';
+  my $theAction = $ENV{'REQUEST_URI'} || '';
+  if ($theAction =~ /^.*?\/([^\/]+)$pathInfo.*$/) {
+    $theAction = $1;
+  } else {
+    $theAction = 'view';
+  }
+
+  #writeDebug("PATH_INFO=$ENV{'PATH_INFO'}");
+  #writeDebug("REQUEST_URI=$ENV{'REQUEST_URI'}");
+  #writeDebug("theAction=$theAction");
+
+  return $theAction;
+}
 
 1;
