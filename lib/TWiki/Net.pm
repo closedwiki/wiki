@@ -134,10 +134,11 @@ sub _LWPavailable {
 sub _getURLUsingLWP {
     my( $this, $protocol, $host, $port, $path, $user, $pass ) = @_;
 
-    $port ||= '';
+    $port ||= 80;
+    $port =~ s/^://;
     my $request;
     require HTTP::Request;
-    $request = HTTP::Request->new(GET => "$protocol://$host$port$path");
+    $request = HTTP::Request->new(GET => "$protocol://$host:$port$path");
     {
         package _UserCredAgent;
         @_UserCredAgent::ISA = qw(LWP::UserAgent);
