@@ -26,7 +26,7 @@ use Digest::MD5 qw( md5_hex );
 use vars qw($VERSION $RELEASE $debug $sharedLdapContrib);
 
 $VERSION = '$Rev$';
-$RELEASE = 'v0.88';
+$RELEASE = 'v0.91';
 $debug = 0; # toggle me
 
 =begin text
@@ -105,8 +105,10 @@ sub new {
     basePasswd=>$TWiki::cfg{Ldap}{BasePasswd} || '',
     baseGroup=>$TWiki::cfg{Ldap}{BaseGroup} || '',
     loginAttribute=>$TWiki::cfg{Ldap}{LoginAttribute} || 'uid',
-    wikiNameAttribute=>$TWiki::cfg{Ldap}{WikiNameAttribute} || 'cn',
-    normalizeWikiNames=>$TWiki::cfg{Ldap}{NormalizeWikiNames},
+    wikiNameAttribute=>$TWiki::cfg{Ldap}{WikiNameAttributes} 
+      || $TWiki::cfg{Ldap}{WikiNameAttribute} || 'cn',
+    normalizeWikiName=>$TWiki::cfg{Ldap}{NormalizeWikiNames}
+      || $TWiki::cfg{Ldap}{NormalizeWikiName},
     loginFilter=>$TWiki::cfg{Ldap}{LoginFilter} || 'objectClass=posixAccount',
     groupAttribute=>$TWiki::cfg{Ldap}{GroupAttribute} || 'cn',
     groupFilter=>$TWiki::cfg{Ldap}{GroupFilter} || 'objectClass=posixGroup',
@@ -122,7 +124,8 @@ sub new {
     pageSize=>$TWiki::cfg{Ldap}{PageSize} || 200,
     @_
   };
-  $this->{normalizeWikiNames} = 1 unless defined $this->{normalizeWikiNames};
+  $this->{normalizeWikiName} = 1 unless defined $this->{normalizeWikiName};
+  @{$this->{wikiNameAttributes}} = split(/,\s/, $this->{wikiNameAttribute});
 
   $this->{basePasswd} = 'ou=people,'.$this->{base} unless $this->{basePasswd};
   $this->{baseGroup} = 'ou=group,'.$this->{base} unless $this->{baseGroup};
@@ -275,36 +278,6 @@ sub getAccount {
   return undef if $this->{excludeMap}{$login};
 
   my $filter = '(&('.$this->{loginFilter}.')('.$this->{loginAttribute}.'='.$login.'))';
-  my $msg = $this->search(
-    filter=>$filter, 
-    base=>$this->{basePasswd}
-  );
-  return undef unless $msg;
-  if ($msg->count() != 1) {
-    $this->{error} = 'Login invalid';
-    return undef;
-  }
-
-  return $msg->entry(0);
-}
-
-=begin text
-
----++++ getAccountByWikiName($wikiName) -> $entry
-
-Fetches an account entry from the database and returns a Net::LDAP::Entry
-object on success and undef otherwise. This is similar to getAccount() but
-uses the wikiNameAttribute instead of the loginAttribute to search for the account.
-
-=cut
-
-sub getAccountByWikiName {
-  my ($this, $wikiName) = @_;
-
-  #writeDebug("called getAccountByWikiName($wikiName)");
-  return undef if $this->{excludeMap}{$wikiName};
-
-  my $filter = '(&('.$this->{loginFilter}.')('.$this->{wikiNameAttribute}.'='.$wikiName.'))';
   my $msg = $this->search(
     filter=>$filter, 
     base=>$this->{basePasswd}
