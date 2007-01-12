@@ -42,6 +42,8 @@ $RELEASE = '1.1';
 
 $pluginName = 'AntiWikiSpamPlugin';  # Name of this Plugin
 
+$debug = 0; # toggle me
+
 =pod
 
 ---++ initPlugin($topic, $web, $user, $installWeb) -> $boolean
@@ -72,6 +74,18 @@ sub initPlugin {
 
 =pod
 
+---++ writeDebug($text)
+
+write debug output if the debug flag is set
+
+=cut
+
+sub writeDebug {
+  TWiki::Func::writeDebug( "- $pluginName - ".$_[0]) if $debug;
+}
+
+=pod
+
 ---++ beforeSaveHandler($text, $topic, $web, $meta )
    * =$text= - text _with embedded meta-data tags_
    * =$topic= - the name of the topic in the current CGI query
@@ -88,18 +102,19 @@ sub beforeSaveHandler {
     # do not uncomment, use $_[0], $_[1]... instead
     ### my ( $text, $topic, $web ) = @_;
 
-    TWiki::Func::writeDebug( "- ${pluginName}::beforeSaveHandler( $_[2].$_[1] )" ) if $debug;
+    writeDebug("beforeSaveHandler( $_[2].$_[1] )");
 
     #do localspamlist first
     my $regexWeb;
     my $regexTopic = TWiki::Func::getPluginPreferencesValue( 'LOCALANTISPAMREGEXLISTTOPIC' );
-    ($regexWeb, $regexTopic) = TWiki::Func::normalizeWebTopicName('TWiki', $regexTopic);
+    my $twikiWeb = TWiki::Func::getTwikiWebname();
+    ($regexWeb, $regexTopic) = TWiki::Func::normalizeWebTopicName($twikiWeb, $regexTopic);
     if (TWiki::Func::topicExists($regexWeb, $regexTopic) ) {
         if (($_[1] eq $regexTopic) && ($_[2] eq $regexWeb)) {
             return; #don't check the anti-spam topic
         }
         my ( $meta, $regexs) = TWiki::Func::readTopic($regexWeb, $regexTopic);
-        checkTextUsingTopic($_[0], $regexs);
+        checkTextUsingTopic($_[0], $regexs, $_[2], $_[1]);
     }
 
     my $timesUp;
@@ -116,7 +131,7 @@ sub beforeSaveHandler {
     }
     #use the share spam regexs
     my $regexs = readWorkFile(${pluginName}.'_regexs');
-    checkTextUsingTopic($_[0], $regexs);
+    checkTextUsingTopic($_[0], $regexs, $_[2], $_[1]);
 }
 
 sub beforeAttachmentSaveHandler
@@ -130,9 +145,9 @@ sub beforeAttachmentSaveHandler
     #from BlackListPlugin
     # check for evil eval() spam in <script>
     if( $text =~ /<script.*?eval *\(.*?<\/script>/gis ) { #TODO: there's got to be a better way to do this.
+        TWiki::Func::writeWarning("detected possible javascript exploit at attachment in in $_[2].$_[1]");
         throw TWiki::OopsException( 'attention', def=>'attach_error',
-            params => 'the attach has been rejected by the %TWIKIWEB%.'.
-            ${pluginName}.' as it contains a possible javascript eval exploit');
+            params => 'The attachment has been rejected as it contains a possible javascript eval exploit.');
     }
 
     beforeSaveHandler($text, $_[1], $_[2]);
@@ -140,23 +155,25 @@ sub beforeAttachmentSaveHandler
 
 
 sub checkTextUsingTopic {
-my ($text, $regexs) = @_;
+    #my ($text, $regexs, $web, $topic) = @_;
 
-    TWiki::Func::writeDebug( "- ${pluginName}::checkTextUsingTopic( )" ) if $debug;
+    my $web = $_[2];
+    my $topic = $_[3];
+
+    writeDebug("checkTextUsingTopic( )");
 
     #load text as a set of regex's, and eval
-    foreach my $regexLine (split(/\n/, $regexs)) {
+    foreach my $regexLine (split(/\n/, $_[1])) {
         $regexLine =~ /([^#]*)\s*#?/;
         my $regex = $1;
         $regex =~ s/^\s+//;
         $regex =~ s/\s+$//;
         if ($regex ne '') {
             if ( $_[0] =~ /$regex/i ) {
-                TWiki::Func::writeWarning('MATCH]]'.$regex.'[[');
-#TODO: make this a nicer error, or make its own template
+                TWiki::Func::writeWarning("detected spam at $web.$topic (regex=$regex)");
+                # TODO: make this a nicer error, or make its own template
                 throw TWiki::OopsException( 'attention', def=>'save_error', 
-                    params => 'the topic save has been rejected by the %TWIKIWEB%.'.
-                    ${pluginName}.' as it matches content that may be WikiSpam ('.$regex.')');
+                    params => "The topic <nop>$web.$topic has been rejected as it may contain spam.");
             }
         }
     }
@@ -164,7 +181,7 @@ my ($text, $regexs) = @_;
 
 
 sub getSharedSpamData {
-    TWiki::Func::writeDebug( "- ${pluginName}::getSharedSpamData( )" ) if $debug;
+    writeDebug("getSharedSpamData( )");
 
     my $getSharedSpamLock = readWorkFile(${pluginName}.'_lock');
 
@@ -191,11 +208,11 @@ can be used to force an update of the spam list
 =cut
 
 sub forceUpdate {
-    TWiki::Func::writeDebug(${pluginName}.' about to forceUpdate') if $debug;
+    writeDebug('about to forceUpdate');
     getSharedSpamData();
-    TWiki::Func::writeDebug(${pluginName}.' forceUpdate complete') if $debug;
+    writeDebug('forceUpdate complete');
 
-   return ${pluginName}.' SharedSpamList forceUpdate complete ';
+   return ${pluginName}.': SharedSpamList forceUpdate complete ';
 }
 
 sub saveWorkFile($$) {
@@ -221,53 +238,65 @@ sub fileExists($) {
 #simplified version of INCLUDE, why we have policy mixed in with implementation is bejond me
 sub includeUrl($) {
     my $theUrl = shift;
-    my $text;
 
+    my $text = '';
     my $host = '';
     my $port = 80;
     my $path = '';
     my $user = '';
     my $pass = '';
+    my $protocol = 'http';
 
-    if( $theUrl =~ /http\:\/\/(.+)\:(.+)\@([^\:]+)\:([0-9]+)(\/.*)/ ) {
-        ( $user, $pass, $host, $port, $path ) = ( $1, $2, $3, $4, $5 );
-    } elsif( $theUrl =~ /http\:\/\/(.+)\:(.+)\@([^\/]+)(\/.*)/ ) {
-        ( $user, $pass, $host, $path ) = ( $1, $2, $3, $4 );
-    } elsif( $theUrl =~ /http\:\/\/([^\:]+)\:([0-9]+)(\/.*)/ ) {
-        ( $host, $port, $path ) = ( $1, $2, $3 );
-    } elsif( $theUrl =~ /http\:\/\/([^\/]+)(\/.*)/ ) {
-        ( $host, $path ) = ( $1, $2 );
+
+    if( $theUrl =~ /(https?)\:\/\/(.+)\:(.+)\@([^\:]+)\:([0-9]+)(\/.*)/ ) {
+        ( $protocol, $user, $pass, $host, $port, $path ) = ( $1, $2, $3, $4, $5, $6 );
+    } elsif( $theUrl =~ /(https?)\:\/\/(.+)\:(.+)\@([^\/]+)(\/.*)/ ) {
+        ( $protocol, $user, $pass, $host, $path ) = ( $1, $2, $3, $4, $5 );
+    } elsif( $theUrl =~ /(https?)\:\/\/([^\:]+)\:([0-9]+)(\/.*)/ ) {
+        ( $protocol, $host, $port, $path ) = ( $1, $2, $3, $4 );
+    } elsif( $theUrl =~ /(https?)\:\/\/([^\/]+)(\/.*)/ ) {
+        ( $protocol, $host, $path ) = ( $1, $2, $3 );
     } else {
 #        $text = TWiki::Plugins::SESSION->inlineAlert( 'alerts', 'bad_protocol', $theUrl );
         return $text;
     }
 
     try {
-        $text = $TWiki::Plugins::SESSION->{net}->getUrl( $host, $port, $path, $user, $pass );
+        $text = getUrl( $protocol, $host, $port, $path, $user, $pass );
         $text =~ s/\r\n/\n/gs;
         $text =~ s/\r/\n/gs;
         $text =~ s/^(.*?\n)\n(.*)/$2/s;
-        my $httpHeader = $1;
-        my $contentType = '';
-        if( $httpHeader =~ /content\-type\:\s*([^\n]*)/ois ) {
-            $contentType = $1;
-        }
-        if( $contentType =~ /^text\/html/ ) {
-            $path =~ s/[#?].*$//;
-            $host = 'http://'.$host;
-            if( $port != 80 ) {
-                $host .= ":$port";
-            }
-#            $text = $TWiki::Plugins::SESSION->_cleanupIncludedHTML( $text, $host, $path, $disableremoveheaders, $disableremovescript, $disableremovebody, $disablecompresstags, $disablerewriteurls ) unless $theRaw;
-        } elsif( $contentType =~ /^text\/(plain|css)/ ) {
-            # do nothing
-        } else {
-            #bad content
-        }
     } catch Error with {
+        my $e = shift->stringify();
+        TWiki::Func::writeWarning("$pluginName - $e");
     };
     
     return $text;
+}
+
+=pod
+
+---++ getUrl() -> $text
+
+Local wrapper for different interfaces in TWiki<4.0, TWiki-4.0 and TWiki-4.1
+This would not be necessary if there was a TWiki::Func::getUrl() API
+
+=cut
+
+
+sub getUrl {
+  my ($protocol, $host, $port, $path, $user, $pass) = @_;
+  
+  # TWiki 01 Sep 2004 and older
+  return TWiki::Net::getUrl($host, $port, $path, $user, $pass) 
+    if $TWiki::Plugins::VERSION < 1.1;
+  
+  # TWiki 4.0
+  return $TWiki::Plugins::SESSION->{net}->getUrl($host, $port, $path, $user, $pass) 
+    if $TWiki::Plugins::VERSION < 1.11;
+  
+  # TWiki 4.1
+  return $TWiki::Plugins::SESSION->{net}->getUrl($protocol, $host, $port, $path, $user, $pass);
 }
 
 1;
