@@ -720,8 +720,8 @@ sub _externalLink {
     my $opt = '';
     if( $url =~ /^mailto:/i ) {
         if( $TWiki::cfg{AntiSpam}{EmailPadding} ) {
-            $url =~ s/(@\w*)/$1$TWiki::cfg{AntiSpam}{EmailPadding}/;
-
+            $url =~  s/(\@[\w\_\-\+]+)(\.)/$1$TWiki::cfg{AntiSpam}{EmailPadding}$2/;
+            $text =~ s/(\@[\w\_\-\+]+)(\.)/$1$TWiki::cfg{AntiSpam}{EmailPadding}$2/;
         }
         if( $TWiki::cfg{AntiSpam}{HideUserDetails} ) {
             # Much harder obfuscation scheme
