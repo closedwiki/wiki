@@ -44,8 +44,9 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.ThomasWeigert |
-|  Plugin Version: | 08 May 2005 |
+|  Plugin Version: | 15 Apr 2006 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  15 Apr 2006: | Adding css classes to buttons. Removed debug print statement causing 500s on SunOne. Prevent extra space in settings on saves. Switched to earlier handler. Converted all SCRIPTURL to SCRIPTURLPATH, and added support. The only SCRIPTURLs should be the one in the BASE tag and those in mail notification templates. Because the forms package was throwing an exception when it failed to create a form, the edit preferences plugin was aborting the whole of the session whenever the form specified in EDITPREFERENCES didn't exist. Changed it so that the Form constructor does not throw, but returns undef on a non-existant form, and changed preferences plugin to be tolerant of missing forms (ie defaults all fields to text if the form is missing, of is a Set exists which is not in the form). | 
 |  26 May 2005: | Crawford Currie recoded to use code from Form.pm to render form fields. |
 |  08 May 2005: | Add plugin preference to define default input length  |
 |  07 May 2005: | Initial version |
