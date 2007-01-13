@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1168368717" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1168726854" format="1.1" version="$Rev$"}%
 %TOC%
 %STARTINCLUDE%
 ---# TWiki Upgrade Guide
@@ -30,7 +30,7 @@ The following steps are a rough guide to upgrading only. It is impossible to giv
 
 The main steps are:
 
-   1 Install the new TWiki version and get it to work similar to the old version
+   1 Install the new TWiki version, configure it, and get it to work similar to the old version
    1 Install additional extensions (Plugins). Make sure to use the latest versions
    1 Copy all the non-default webs from the old installation to the new
    1 Copy the users from old installation to the new incl all their topics from Main
@@ -40,6 +40,8 @@ The main steps are:
 ---+++ Installation
 
    * Follow the installation instructions in INSTALL.html which you find in the root of the new installation. Install the new release in a new directory. Do not install on top of the old release.
+   * Use the [[%SCRIPTURL{configure}%][configure]] script to configure TWiki.
+      * If you are upgrading from a 4.0.x release, carry over the configure settings from the old release.
    * Additional resources
       * TWiki:TWiki.UpgradingTWiki04x00PatchReleases
       * TWiki:TWiki.InstallingTWiki#OtherPlatforms
