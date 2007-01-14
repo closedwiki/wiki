@@ -1,5 +1,5 @@
 %META:TOPICINFO{author="TWikiContributor" date="1168754294" format="1.1" version="$Rev$"}%
----+!! TWiki Release 4.1 (Edinburgh)
+---+!! TWiki Release 4.1 (Edinburgh), 17 Jan 2007
 
 %TOC%
 
@@ -56,7 +56,7 @@ The development team has done everything to maintain full compatibility with top
       * WebTopicCreator - adding ability to select a template from any topic name ending in ...Template
       * Functionality of !DateFieldPlugin merged into core
 
-   * *Plugin Enhancements*
+   * *Enhancements of Pre-installed Plugins*
       * CommentPlugin: Supports removal of comment prompt after a comment is made.
       * EditTablePlugin: Default date format based on JSCalendarContrib instead of plugin topic.
       * InterwikiPlugin: Supports custom link formats.
@@ -129,3 +129,4 @@ The 4.1.0 release was built from SVN http://svn.twiki.org/svn/twiki/branches/TWi
 
 *FIXME*. Paste in the list from http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/ReleaseNotes?type=n%2Fa%7Cpatch%7Cminor at the day of release
 
+__Related Topic:__ TWikiHistory
