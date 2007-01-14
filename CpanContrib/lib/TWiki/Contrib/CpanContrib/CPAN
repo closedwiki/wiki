@@ -62,6 +62,7 @@
 	qw( Image::Magick ),
 	qw( GetOpt::Long ),
 	qw( JSON ),					# InlineEditPlugin
+	qw( Safe HTML::Mason ),				# MasonPlugin
 );
 
 #$, = "\n";
