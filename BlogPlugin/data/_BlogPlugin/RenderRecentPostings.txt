@@ -6,7 +6,7 @@
 ---++ Parameters
    * LIMIT: maximal number of BlogEntries to list
    * CAT: optionally render restrict list to this category
-   * AUTHOR: optionally restrict list to this autor
+   * AUTHOR: optionally restrict list to this author
 
 ---++ Implementation
 <verbatim>
