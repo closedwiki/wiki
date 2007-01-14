@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1168737391" format="1.1" version="$Rev$"}%
 %TOC%
 %STARTINCLUDE%
 #TWikiMetaData
@@ -68,7 +68,7 @@ Notes:
 ---+++ META:TOPICPARENT
 
 | *Key*   | *Comment* |
-| name    | The topic from which this was created, %HOMETOPIC% if done from =Go=, othewise topic where =?= or form used.  Normally just topic, but is full web.topic format if parent is in a different Web.  Renaming a Web will then only break a few of these references or they can be scanned and fixed. |
+| name    | The topic from which this was created, typically when clicking on a =?= questionmark link, or by filling out a form.  Normally just =TopicName=, but it can be a full =Web.TopicName= format if the parent is in a different Web. |
 
 ---+++ META:FILEATTACHMENT
 
@@ -149,6 +149,8 @@ Current support covers:
     ==suffix="..."==: Suffix, only appears if there are parents, default =""=. <br /> \
     ==separator="..."==: Separator between parents, default is =" &gt; "=. |
 
+__Note:__ SEARCH can also be used to render meta data, see examples in FormattedSearch and SearchPatternCookbook.
+
 ---++ Known Issues
 
 At present, there is no Meta Data support for Plugins. However, the format is readily extendable and the =Meta.pm= code that supports the format needs only minor alteration.
@@ -156,4 +158,4 @@ At present, there is no Meta Data support for Plugins. However, the format is re
 
 __Related Topics:__ DeveloperDocumentationCategory, UserDocumentationCategory
 
-
+-- __Contributors:__ TWiki:Main.JohnTalintyre, TWiki:Main.MikeMannix, TWiki:Main.PeterThoeny, TWiki:Main.CrawfordCurrie
