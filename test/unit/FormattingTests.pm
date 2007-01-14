@@ -488,6 +488,19 @@ ACTUAL
     $this->do_test($expected, $actual);
 }
 
+sub test_mailWithoutMailto {
+    my $this = shift;
+    $TWiki::cfg{AntiSpam}{HideUserDetails} = 0;
+    my $expected = <<EXPECTED;
+<a href="mailto:pitiful\@exampleSTUFFED.com">mailto:pitiful\@exampleSTUFFED.com</a>
+EXPECTED
+
+    my $actual = <<ACTUAL;
+mailto:pitiful\@example.com
+ACTUAL
+    $this->do_test($expected, $actual);
+}
+
 sub test_protocols {
     my $this = shift;
     $TWiki::cfg{AntiSpam}{HideUserDetails} = 0;
