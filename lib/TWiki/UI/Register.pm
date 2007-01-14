@@ -859,7 +859,7 @@ sub _createUserTopic {
     my $regLog = $text;
     $log .= join($b2.' ', split /\r?\n/, $regLog)."\n";
     $log .= $b2.' '.
-      join( $b2.' ',
+      join( "\n".$b2.' ',
             split( /\r?\n/,
                    _writeRegistrationDetailsToTopic( $session, $row,
                                                      $meta, $text )))."\n";
