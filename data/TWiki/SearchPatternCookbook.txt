@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1167863098" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1168735119" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="FormattedSearch"}%
 ---+!! Search Pattern Cookbook
 
@@ -8,7 +8,8 @@ Most people not familiar (enough) with Regular Expressions mostly cut and paste 
 
 %TOC{ depth="2" }%
 
-
+<!-- ============================== -->
+#SearchTables
 ---++ Pattern 1: Extract values from a table
 
 ---+++ Problem definition
@@ -44,6 +45,8 @@ which is, in effect:
 </form>
 
 
+<!-- ============================== -->
+#SearchFormClassification
 ---++ Pattern 2: List generated from form classification
 
 ---+++ Problem
@@ -91,6 +94,8 @@ multiple="on" nosearch="on" nototal="on" format="<option value=%INCLUDINGTOPIC%?
 This will create similar functionality as TWiki:Plugins.TopicClassificationAddOn
 
 
+<!-- ============================== -->
+#SearchUsernames
 ---++ Pattern 3: Creating lists of TWiki usernames
 
 ---+++ Problem
@@ -158,6 +163,8 @@ In the above example:
    * ==excludetopic="Test*, TWiki*"== allows to skip all topics starting with Test and TWiki, such as !TestUser or !TWikiAdmin. Use this if you have any special users who you do not want appearing in this list
 
 
+<!-- ============================== -->
+#SearchTopicParent
 ---++ Pattern 4: Extract the parent of a given topic
 
 ---+++ Problem
@@ -205,7 +212,29 @@ The parent topic of this topic is: %BR%
 %SEARCH{ "^%BASETOPIC%$" web="%BASEWEB%" scope="topic" type="regex" nonoise="on" format="$percntIF{$quot$parent$quot then=$quot   * $parent$quot else=$quot<nop>$quot}$percnt" }%
 
 
----++ Pattern 5: Search and display the home topics of public webs in a list
+<!-- ============================== -->
+#SearchTopicChildren
+---++ Pattern 5: Show all Children of a given topic
+
+---+++ Problem
+
+How to get to the list of all children of the current topic to display on the page?
+
+---+++ Solution
+
+The parent information is stored in the META:TOPICPARENT meta data. Do a SEARCH to find all topic parent meta data pointing to the current topic:
+
+<verbatim>
+Children:
+%SEARCH{ "META\:TOPICPARENT.*\"%TOPIC%\"" type="regex" nonoise="on" format="[[$topic]]" separator=", " }%
+</verbatim>
+
+__Note:__ Replace =%<nop>TOPIC%= with =%<nop>BASETOPIC%= if you put this SEARCH into the skin or a sidebar.
+
+
+<!-- ============================== -->
+#SearchPublicWebsList
+---++ Pattern 6: Search and display the home topics of public webs in a list
 
 ---+++ Problem
 
@@ -252,7 +281,9 @@ This result can also be accomplished with the %<nop>WEBLIST% variable.
 </form>
 
 
----++ Pattern 6: Create a select box with values from a bullet list
+<!-- ============================== -->
+#SearchBulletList
+---++ Pattern 7: Create a select box with values from a bullet list
 
 ---+++ Problem
 
@@ -281,7 +312,9 @@ To render the bullet list as a comma-separated list, use the =separator= paramet
 </verbatim>
 
 
----++ Pattern 7: Extract a value from a named bullet list item
+<!-- ============================== -->
+#SearchNamedBulletList
+---++ Pattern 8: Extract a value from a named bullet list item
 
 ---+++ Problem
 
@@ -306,7 +339,9 @@ Search result:
 %SEARCH{"   * [N]ame: " topic="%TOPIC%" type="regex" casesensitive="on" nosummary="on" nosearch="on" noheader="on" nototal="on" format="---+!! $pattern(.*   \* Name: ([^\n]*).*)"}%
 
 
----++ Pattern 8: Search for Form and Meta data: explained
+<!-- ============================== -->
+#SearchMetaData
+---++ Pattern 9: Search for Form and Meta data: explained
 
 ---+++ Problem
 
@@ -349,7 +384,9 @@ The =td..td= matches =td&lt;&gt;td=; a simple search on ="[O]peratingSystem.*[O]
 A simple =%<nop>SEARCH{ "[O]peratingSystem.*value\=<nop>.*[O]sWin" ...}%= search is sufficient if you do not have topics in the old format.
 
 
----++ Pattern 9: Search all topics that have been moved
+<!-- ============================== -->
+#MovedTopics
+---++ Pattern 10: Search all topics that have been moved
 
 ---+++ Problem
 
@@ -365,9 +402,6 @@ to get this (limited to 10 results):
 
 Moved topics: %SEARCH{ "%META\:TOPICMOVED" type="regex" format="$topic, " nosearch="on" noheader="on" nosummary="on" limit="10"}%
 
+__Related Topics:__ UserDocumentationCategory, SearchHelp, TWikiVariables#VarSEARCH, FormattedSearch, RegularExpression
 
----++ Contributors
-
-TWiki:Main.AntonAylward, TWiki:Main.ArthurClemens, TWiki:Main.JosMaccabiani, TWiki:Main.PeterThoeny, TWiki:Main.SueLocke
-
-__Related Topics:__ UserDocumentationCategory
+-- __Contributors:__ TWiki:Main.AntonAylward, TWiki:Main.ArthurClemens, TWiki:Main.JosMaccabiani, TWiki:Main.PeterThoeny, TWiki:Main.SueLocke

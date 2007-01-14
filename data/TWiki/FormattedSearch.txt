@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1163619832" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1168735492" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiVariables"}%
 %TOC%
 %STARTINCLUDE%
@@ -75,6 +75,7 @@ Variables that can be used in the format string:
 
 ---++ Examples
 
+Here are some samples of formatted searches. The SearchPatternCookbook has other examples, such as [[SearchPatternCookbook#SearchUsernames][creating a picklist of usernames]], [[SearchPatternCookbook#SearchTopicChildren][searching for topic children]] and more.
 
 #SearchBulletList
 ---+++ Bullet list showing topic name and summary
@@ -208,4 +209,6 @@ Find Topics:
 Result:
 %SEARCH{ search="%URLPARAM{"q"}%" format="   * $web.$topic: %BR% $summary" nosearch="on" }%
 
-__Related Topics:__ UserDocumentationCategory, SearchPatternCookbook
+__Related Topics:__ UserDocumentationCategory, SearchHelp, TWikiVariables#VarSEARCH, SearchPatternCookbook, RegularExpression
+
+-- __Contributors:__ TWiki:Main.PeterThoeny, TWiki:Main.CrawfordCurrie
