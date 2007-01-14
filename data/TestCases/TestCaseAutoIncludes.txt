@@ -8,13 +8,14 @@ Designed by: Crawford Currie
 
 ---+ Recursion detection and avoidance
 ---++ Expected
+<noautolink>
 <!-- expected RECUSS -->
 There was an old Man of the coast
 There was an old Man of the coast
 <p />
 <p />
 <p />
-<span class='twikiAlert'><dl><dt>Warning</dt><dd>Can't INCLUDE TestCases.<nop>RecursiveInclude repeatedly, topic is already included.</dd></dl></span>
+<span class='twikiAlert'><dl><dt>Warning</dt><dd>Can't INCLUDE TestCases.RecursiveInclude repeatedly, topic is already included.</dd></dl></span>
 <p />
 Who placidly sat on a post;
 But when it was cold
@@ -27,6 +28,7 @@ He relinquished his hold
 And called for some hot buttered toast.
 <p />
 <!-- /expected -->
+</noautolink>
 ---++ Actual
 <!-- actual -->
 %INCLUDE{"RecursiveInclude"}%
@@ -36,11 +38,13 @@ And called for some hot buttered toast.
 
 ---+ File not found
 ---++ Expected
+<noautolink>
 <!-- expected expand FNF -->
 <p></p><p /><p />
 <span class='twikiAlert'>Warning: Can't find topic TestCases.FileNotFound</span>
 <p></p>
 <!-- /expected -->
+</noautolink>
 ---++ Actual
 <!-- actual -->
 %INCLUDE{"FileNotFound"}%
