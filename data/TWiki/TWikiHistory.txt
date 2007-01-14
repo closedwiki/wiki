@@ -1,68 +1,103 @@
-%META:TOPICINFO{author="TWikiContributor" date="1168311166" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1168768620" format="1.1" version="$Rev$"}%
 %TOC%
 %STARTINCLUDE%
 ---# Appendix A: TWiki Development Timeline
 
 #EdinburghRelease
----++ TWiki Release 4.1 (Dakar), 07 Jan 2007  FIXME
+---++ TWiki Release 4.1 (Edinburgh), 17 Jan 2007
 
-   * *Installation made a bit easier*
-      * Configure no longer shows many unnecessary errors when run first time
-      * The webmaster email address is now defined in configure
-      * Plugins can now be installed from the configure script
-      * Plugin settings can now be defined in configure instead of in the plugin topic (requires that the individual plugin has implemented this). TWiki can save time not looking for prefs in plugin topic.
-      * Default file access rights in the distribution tgz have been changed to be more universally defined and inline with the default access rights for new topics.
+__New Features and Enhancements of TWiki Release 4.1__
 
-   * *Redirect to URL or TWiki topic when saving*
-      * The save script supports a =redirectto= parameter to redirect to a URL, if enabled with {AllowRedirectUrl} config flag.
+(*FIXME* Update with latest list from TWikiReleaseNotes04x00)
+
+   * *Easier Installation and Upgrade*
+      * Plugins can now be installed from the configure script.
+      * The loading of plugin preferences settings has been moved earlier in the preferences evaluation order so that plugin settings can be redefined in [[%LOCALSITEPREFS%]], !WebPreferences and in topics. To make TWiki upgrades easier, it is recommended to set the plugin settings in <nop>%LOCALSITEPREFS%, and not to customize the settings in the plugin topic. For example, to change the TEMPLATES setting of the CommentPlugin, create a new COMMENTPLUGIN_TEMPLATES setting in <nop>%LOCALSITEPREFS%.
+      * Plugin settings can now be defined in configure instead of in the plugin topic (requires that the individual plugin has implemented this). TWiki performs slightly better by not looking for preferences settings in plugin topics.
+      * Configure no longer shows many unnecessary errors when run first time.
+      * The webmaster email address is now defined in configure instead of !TWikiPreferences.
+      * Default file access rights in the distribution package have been changed to be more universally defined and in line with the default access rights for new topics.
+
+   * *Usability Enhancements*
+      * Redesigned result page when typing incomplete topic name into the Jump box, so that it is possible to quickly navigate to a topic, also in a very large TWiki installation. For example, "I know there is a topic about Ajax somewhere in the Eng web. OK, let my type =Eng.ajax= into the Jump box... Here we go, the third link is the !AjaxCookbook I was looking for."
+      * *FIXME* add more
+
+   * *Application Platform Enhancements*
+      * Auto-incremented topic name on save with AUTOINC&lt;n&gt; in topic name; used by TWiki applications to create topic based database records.
+      * The edit and save scripts support a =redirectto= parameter to redirect to a topic or a URL; for security, redirect to URL needs to be enabled with a ={AllowRedirectUrl}= configure flag.
       * CommentPlugin supports the =redirectto= parameter to redirect to a URL or link to TWiki topic after submitting comment.
-      * The topic="" parameter also respects the {AllowRedirectUrl} configure flag so you can disable redirecting to URLs which could be abused for phishing attacks.
+      * The =topic= URL parameter also respects the ={AllowRedirectUrl}= configure flag so redirects to URLs can be disabled which could be abused for phishing attacks.
+      * The view script supports a =section= URL parameter to view just a named section within a topic. Useful for simple AJAX type applications.
+      * New plugin handler for content move.
+      * *FIXME:* Mention Ajax extensions
 
-   * *Plugin Preferences*
-      * Preference loading of plugins has been moved earlier in the precedence so that plugin settings can be redefined both in !Main.TWikiPreferences, !WebPreferences and in topics.
+   * *Search Enhancements*
+      * METASEARCH handles a format parameter like SEARCH.
+      * Topic not found / WebTopicViewTemplate search now case insensitive.
+      * FormattedSearch header supporting =$nop=, =$quot=, =$percnt=, =$dollar=.
+      * Add search by createdate option to SEARCH.
+      * New newline option for SEARCH to protect e.g. formfields from being altered during rendering in SEARCH.
 
-   * *Plugin Enhancements*
-      * CommentPlugin now supports removal of comment prompt after a comment is made
-      * EditTablePlugin Date Format using JSCalendarContrib defined format instead of hard coded.
-      * InterwikiPlugin with link format
-      * RenderListPlugin enhancements
-      * SlideShowPlugin enhancements for TWiki 4.1 (preserving URL parameters in slideshow, and more)
-      * SpreadSheetPlugin: Add $LISTRAND(), $LISTSHUFFLE(), $LISTTRUNCATE()
-      * TablePlugin new attribute =cellborder=
-      * TablePlugin: Make the sorted column stand out from rest. New option defines colours for the sorted columns. A general cosmetic update of default colours was made.
-      * TablePlugin now allows initsort to work on more than one table. A table with the initsort option is initsorted UNLESS it is sorted by clicking on a column header. If you click on a header of another table all other tables goes back to the default sort defined by initsort or not sorted if no initsort, and the new table is sorted as the users wanted when he clicked the header.
+   * *Skins and Templates Enhancements*
+      * Support for templates to have text rendering affecting aspect outside of textarea.
+      * Pattern skin dependence on TwistyPlugin instead of TwistyContrib (performance improvement.)
+      * Don't strip newlines from the front of TMPL:DEFs.
 
-   * *Searching*
-      * METASEARCH to take a format parameter like SEARCH
-      * Topic not found / WebTopicViewTemplate search now case insensitive
-      * FormattedSearch header supporting $nop, $quot, $percnt, $dollar
-      * Add search by createdate option to SEARCH
-      * New newline option for SEARCH to protect e.g. formfields from being altered during rendering in SEARCH 
-
-   * *Miscellaneous Feature Updates*
-      * TWiki's definition of a wikiword now see numbers as lower case letters
+   * *Miscellaneous Feature Enhancements*
+      * Change in WikiWord definition: Numbers are treated as lower case letters, e.g. !Y2K is now a !WikiWord.
       * Configurable template load path. Advanced feature for those that work with customized templates.
-      * Added %<nop>VBAR% to TWikiPreferences for vertical bar symbol
-      * Prevent creation of all lowercase topic names.
-      * Enable selecting to view named section given by URL when viewing topic. Useful for simple AJAX type applications.
-      * Auto-incremented topic name on save with AUTOINCn. Much more flexible way to auto-increment topic names when you create new topics in a TWiki application.
-      * Allow date format in form fields
-      * Enhance REVINFO{} with same date qualifiers as GMTIME{}
-      * WebTopicCreator - adding ability to select a template from any topic matching .*Template
-      * Functions in !DateFieldPlugin merged into core
+      * Added %<nop>VBAR% to TWikiPreferences for vertical bar symbol.
+      * On topic creation, force initial letter of topic name to be upper case.
+      * Allow date format in form fields.
+      * Enhance REVINFO{} variable with same date qualifiers as GMTIME{}.
+      * WebTopicCreator - adding ability to select a template from any topic name ending in ...Template
+      * Functionality of !DateFieldPlugin merged into core
 
-   * *API, Skins and Templates*
-      * New plugin handler for content move
-      * Support for templates to have text rendering affecting aspect outside of textarea
-      * Pattern skin dependent on TwistyPlugin instead of TwistyContrib (performance improvement)
-      * Don't strip newlines from the front of TMPL:DEFs
+   * *Enhancements of Pre-installed Plugins*
+      * CommentPlugin: Supports removal of comment prompt after a comment is made.
+      * EditTablePlugin: Default date format based on JSCalendarContrib instead of plugin topic.
+      * InterwikiPlugin: Supports custom link formats.
+      * SlideShowPlugin: Preserves URL parameters in slideshow
+      * SpreadSheetPlugin: New functions =$LISTRAND()=, =$LISTSHUFFLE()=, =$LISTTRUNCATE()=.
+      * TablePlugin: New attribute =cellborder=.
+      * TablePlugin: Highlight the sorted column with custom colors; includes also a general cosmetic update of default colors.
+      * TablePlugin: Support for initsort on more than one table. A table with the initsort option is initsorted UNLESS it is sorted by clicking on a column header. If you click on a header of another table all other tables goes back to the default sort defined by initsort or not sorted if no initsort, and the new table is sorted based on the user clicking on a table header.
 
    * *Bugfixes*
       * More than 160 bugs fixed since 4.0.5
 
-Contributors for all updates since 4.0.5
+__Hall of Fame of TWiki Release 4.1__
 
-FIXME INSERT HALL OF FAME TABLE HERE
+Although many more people have been involved in creating TWiki-4.1, special thanks go to the most active contributors in the following areas:
+
+   * *Sponsor and facilitator:* TWiki:Main.PeterThoeny
+   * *Process improvement:* TWiki:Main.KennethLavrsen, TWiki:Main.PeterThoeny, TWiki:Main.SteffenPoulsen, TWiki:Main.CrawfordCurrie
+   * *Release management:* TWiki:Main.KennethLavrsen
+   * *Spec, code, testing:* TWiki:Main.CrawfordCurrie, TWiki:Main.ArthurClemens, TWiki:Main.SteffenPoulsen, TWiki:Main.PeterThoeny, TWiki:Main.ThomasWeigert, TWiki:Main.KennethLavrsen, TWiki:Main.SvenDowideit, TWiki:Main.HaraldJoerg, TWiki:Main.MichaelDaum, TWiki:Main.MeredithLesly, TWiki:Main.WillNorris, TWiki:Main.RafaelAlvarez, TWiki:Main.AntonioTerceiro
+   * *Templates and skins:* TWiki:Main.ArthurClemens, TWiki:Main.MichaelDaum, TWiki:Main.SvenDowideit
+   * *Documentation:* TWiki:Main.PeterThoeny, TWiki:Main.CrawfordCurrie, TWiki:Main.ArthurClemens, TWiki:Main.SteffenPoulsen, TWiki:Main.KennethLavrsen
+   * *Translations:* Coordinated by TWiki:Main.AntonioTerceiro
+      * Chinese: TWiki:Main.CheDong
+      * Czech: TWiki:Main.IvanKuncl
+      * Danish: TWiki:Main.SteffenPoulsen
+      * Dutch: TWiki:Main.ArthurClemens
+      * French: TWiki:Main.BenVoui
+      * German: TWiki:Main.AndreUlrich
+      * Italian: TWiki:Main.MassimoMancini
+      * Polish: TWiki:Main.ZbigniewKulesza
+      * Portuguese: TWiki:Main.AntonioTerceiro, TWiki:Main.CarlinhosCecconi
+      * Russian: TWiki:Main.AndreyTkachenko, TWiki:Main.SergejZnamenskij, TWiki:Main.SergeyJSinx, TWiki:Main.AlexTananaev
+      * Spanish: TWiki:Main.WillNorris, TWiki:Main.MiguelABayona
+      * Swedish: TWiki:Main.ErikAman
+   * *Public relations:* TWiki:Main.PeterThoeny, TWiki:Main.TomTansy
+   * *TWiki.org wiki champions:* TWiki:Main.PeterThoeny, TWiki:Main.CrawfordCurrie, TWiki:Main.KennethLavrsen, TWiki:Main.SteffenPoulsen, TWiki:Main.ArthurClemens, TWiki:Main.ThomasWeigert, TWiki:Main.MichaelDaum
+   * *Customer support:* TWiki:Main.PeterThoeny, TWiki:Main.CrawfordCurrie, TWiki:Main.ArthurClemens, TWiki:Main.SteffenPoulsen, TWiki:Main.SteveStark, TWiki:Main.MichaelDaum
+   * *System administration:* TWiki:Main.SvenDowideit, TWiki:Main.PeterThoeny, TWiki:Main.CrawfordCurrie
+
+If you find an omission please fix it at TWiki:TWiki.TWikiHistory. For the full list of contributors see TWikiContributor. 
+
+See more details on the TWiki 4.1 release at TWikiReleaseNotes04x01.
+
 
 #DakarRelease
 ---++ TWiki Release 4.0.0 (Dakar), 01 Feb 2006
