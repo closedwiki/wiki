@@ -1,7 +1,7 @@
 # Module of TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
 # Copyright (C) 2005 Sven Dowideit http://www.home.org.au
-# Copyright (C) 2004-2006 TWiki Contributors. All Rights Reserved.
+# Copyright (C) 2004-2007 TWiki Contributors. All Rights Reserved.
 # TWiki Contributors
 # are listed in the AUTHORS file in the root of this distribution.
 # NOTE: Please extend that file, not this notice.
