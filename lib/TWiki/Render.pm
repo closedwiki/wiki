@@ -726,8 +726,12 @@ sub _externalLink {
             }
         }
         if( $TWiki::cfg{AntiSpam}{HideUserDetails} ) {
-            # Much harder obfuscation scheme
+            # Much harder obfuscation scheme. For link text we only encode '@'
+            # See also Item2928 and Item3430 before touching this
             $url =~ s/(\W)/'&#'.ord($1).';'/ge;
+            if ($text) {
+                $text =~ s/\@/'&#'.ord('@').';'/ge;
+            }
         }
     } else {
         $opt = ' target="_top"';

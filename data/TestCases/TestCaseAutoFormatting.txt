@@ -326,11 +326,11 @@ Note: depends on setting of spam padding
 <!-- expected MAILTOS -->
 <a href="mailto&#58;a&#64;z&#46;com">Mail</a>
 <a href="mailto&#58;&#63;subject&#61;Hi">Hi</a>
-<a href="mailto&#58;a&#64;b&#46;com">a&#64;b&#46;com</a>
+<a href="mailto&#58;a&#64;b&#46;com">a&#64;b.com</a>
 <a href="mailto&#58;a&#64;b&#46;com">Mail</a>
-<a href="mailto&#58;a&#64;b&#46;com">Mail&#32;link</a>
+<a href="mailto&#58;a&#64;b&#46;com">Mail link</a>
 <a href="mailto&#58;&#63;subject&#61;Hi">Subject_only</a>
-<a href="mailto&#58;&#63;subject&#61;Hi">Subject&#32;only</a>
+<a href="mailto&#58;&#63;subject&#61;Hi">Subject only</a>
 <a href="mailto:?subject=Hi">Subject only</a>
 <!-- /expected -->
 ---+++ Actual
