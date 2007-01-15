@@ -8,8 +8,6 @@
 
 __New Features and Enhancements of TWiki Release 4.1__
 
-(*FIXME* Update with latest list from TWikiReleaseNotes04x00)
-
    * *Easier Installation and Upgrade*
       * Plugins can now be installed from the configure script.
       * The loading of plugin preferences settings has been moved earlier in the preferences evaluation order so that plugin settings can be redefined in [[%LOCALSITEPREFS%]], !WebPreferences and in topics. To make TWiki upgrades easier, it is recommended to set the plugin settings in <nop>%LOCALSITEPREFS%, and not to customize the settings in the plugin topic. For example, to change the TEMPLATES setting of the CommentPlugin, create a new COMMENTPLUGIN_TEMPLATES setting in <nop>%LOCALSITEPREFS%.
@@ -20,7 +18,11 @@ __New Features and Enhancements of TWiki Release 4.1__
 
    * *Usability Enhancements*
       * Redesigned result page when typing incomplete topic name into the Jump box, so that it is possible to quickly navigate to a topic, also in a very large TWiki installation. For example, "I know there is a topic about Ajax somewhere in the Eng web. OK, let my type =Eng.ajax= into the Jump box... Here we go, the third link is the !AjaxCookbook I was looking for."
-      * *FIXME* add more
+      * Many user documentation improvements.
+      * URL parameters maintained in Table of Contents links so you can stay in a temporary skin (e.g. print) and keep URLPARAM values when you click the TOC links
+      * Attachment tables now sorted alphabetically.
+      * Enhancements for Ajax based applications with TWiki:Plugins/YahooUserInterfaceContrib and TWiki:Plugins.TWikiAjaxContrib (available at twiki.org).
+      * Better printing of tables and verbatim text in PatternSkin.
 
    * *Application Platform Enhancements*
       * Auto-incremented topic name on save with AUTOINC&lt;n&gt; in topic name; used by TWiki applications to create topic based database records.
@@ -29,7 +31,6 @@ __New Features and Enhancements of TWiki Release 4.1__
       * The =topic= URL parameter also respects the ={AllowRedirectUrl}= configure flag so redirects to URLs can be disabled which could be abused for phishing attacks.
       * The view script supports a =section= URL parameter to view just a named section within a topic. Useful for simple AJAX type applications.
       * New plugin handler for content move.
-      * *FIXME:* Mention Ajax extensions
 
    * *Search Enhancements*
       * METASEARCH handles a format parameter like SEARCH.
@@ -64,7 +65,7 @@ __New Features and Enhancements of TWiki Release 4.1__
       * TablePlugin: Support for initsort on more than one table. A table with the initsort option is initsorted UNLESS it is sorted by clicking on a column header. If you click on a header of another table all other tables goes back to the default sort defined by initsort or not sorted if no initsort, and the new table is sorted based on the user clicking on a table header.
 
    * *Bugfixes*
-      * More than 160 bugs fixed since 4.0.5
+      * More than 200 bugs fixed since 4.0.5
 
 __Hall of Fame of TWiki Release 4.1__
 
