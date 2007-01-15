@@ -26,7 +26,6 @@ The development team has done everything to maintain full compatibility with top
       * Many user documentation improvements.
       * URL parameters maintained in Table of Contents links so you can stay in a temporary skin (e.g. print) and keep URLPARAM values when you click the TOC links
       * Attachment tables now sorted alphabetically.
-      * Enhancements for Ajax based applications with TWiki:Plugins/YahooUserInterfaceContrib and TWiki:Plugins.TWikiAjaxContrib (available at twiki.org).
       * Better printing of tables and verbatim text in PatternSkin.
 
    * *Application Platform Enhancements*
@@ -36,6 +35,7 @@ The development team has done everything to maintain full compatibility with top
       * The =topic= URL parameter also respects the ={AllowRedirectUrl}= configure flag so redirects to URLs can be disabled which could be abused for phishing attacks.
       * The view script supports a =section= URL parameter to view just a named section within a topic. Useful for simple AJAX type applications.
       * New plugin handler for content move.
+      * Enhancements for Ajax based applications with TWiki:Plugins/YahooUserInterfaceContrib and TWiki:Plugins.TWikiAjaxContrib (available at twiki.org).
 
    * *Search Enhancements*
       * METASEARCH handles a format parameter like SEARCH.
