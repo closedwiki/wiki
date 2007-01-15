@@ -77,8 +77,9 @@ For further troubleshooting and feedback, go to TWiki:Plugins/PatternSkinDev. Re
 |  Preview: | [[%SCRIPTURL{view}%/%WEB%/%TOPIC%?skin=pattern][Preview with this skin]] |
 |  Base Name: | pattern |
 |  Skin Author: | TWiki:Main/ArthurClemens |
-|  Skin Version: | 26 Sep 2006 (v2.0.4) | 
+|  Skin Version: | 15 Jan 2006 (v2.0.6) | 
 |  History: | <!-- specify latest version first -->&nbsp; |
+|  15 Jan 2006: | v.2.0.6 - TWiki 4.1.0 (Edinburgh) RELEASE VERSION |
 |  26 Sep 2006: | v.2.0.5 - Fixed form background colors |
 |  22 Jul 2006: | v.2.0.4 - Refactored info in colors.css; fixed textarea color |
 |  26 Jun 2006: | v.2.0.3 - TWiki 4.0.3 (Dakar) RELEASE VERSION |
