@@ -24,7 +24,7 @@ COPYRIGHT 0444
 INSTALL.html 0444
 LICENSE 0444
 bin/.htaccess.txt 0644
-bin/LocalLib.cfg.txt 644
+bin/LocalLib.cfg.txt 0644
 bin/attach 0555
 bin/changes 0555
 bin/configure 0555
