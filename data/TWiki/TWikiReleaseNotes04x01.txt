@@ -205,8 +205,8 @@ The 4.1.0 release was built from SVN http://svn.twiki.org/svn/twiki/branches/TWi
 | [[%BUGS%/Item3142][Item3142]]  | Documentation in code for TWiki::Func::getScriptUrl incorrect |
 | [[%BUGS%/Item3140][Item3140]]  | Cannot turn on or off plugins on a per-web basis |
 | [[%BUGS%/Item3130][Item3130]]  | edit url parameters not properly passed through change form screen and checkpoint |
-| [[%BUGS%/Item3129][Item3129]]  | Documentation of pattern parameter to %INCLUDE% incomprehensible |
-| [[%BUGS%/Item3123][Item3123]]  | New litteral option for %INCLUDE% (was: including external web page creates unwanted list items) |
+| [[%BUGS%/Item3129][Item3129]]  | Documentation of pattern parameter to %<nop>INCLUDE% incomprehensible |
+| [[%BUGS%/Item3123][Item3123]]  | New litteral option for %<nop>INCLUDE% (was: including external web page creates unwanted list items) |
 | [[%BUGS%/Item3122][Item3122]]  | RcsLite error when saving revision from text |
 | [[%BUGS%/Item3119][Item3119]]  | Remove edit.iejs.tmpl |
 | [[%BUGS%/Item3093][Item3093]]  | Spurious ?-xism: in LocalSite.cfg |
