@@ -80,7 +80,10 @@ $VERSION = '$Rev$';
 # of the version number in PLUGINDESCRIPTIONS.
 $RELEASE = 'Dakar';
 
-$REVISION = '1.018'; #dro# fixed notification bug reported by TWiki:Main.JosMaccabiani; fixed a minor whitespace bug; add static attribute
+$REVISION = '1.021'; #dro# improved performance (AJAX); fixed minor IE caching bug (AJAX related)
+#$REVISION = '1.020'; #dro# added AJAX feature (useajax attribute) requested by TWiki:Main.ShayPierce and TWiki:Main.KeithHelfrich
+#$REVISION = '1.019'; #dro# fixed major default options bug reported by TWiki:Main.RichardHitier 
+#$REVISION = '1.018'; #dro# fixed notification bug reported by TWiki:Main.JosMaccabiani; fixed a minor whitespace bug; add static attribute
 #$REVISION = '1.017'; #dro# fixed access right bug; disabled change/create mail notification (added attribute: notify)
 #$REVISION = '1.016'; #dro# fixed access right bug reported by TWiki:Main.SaschaVogt
 #$REVISION = '1.015'; #dro# fixed mod_perl preload bug (removed 'use warnings;') reported by TWiki:Main.KennethLavrsen
@@ -138,6 +141,7 @@ sub commonTagsHandler
 
     ###### we need exceptions since Dakar release therefore eval is bad
     ###eval {
+            $_[0] =~ s/<\/head>/<script src="%PUBURL%\/%TWIKIWEB%\/$pluginName\/itemstatechange.js" language="javascript"><\/script><\/head>/is unless ($_[0]=~/itemstatechange.js/);
 	    $_[0] =~ s/%CHECKLISTSTART%(.*?)%CHECKLISTEND%/&handleAutoChecklist("",$1,$_[0])/sge;
 	    $_[0] =~ s/%CHECKLISTSTART{(.*?)}%(.*?)%CHECKLISTEND%/&handleAutoChecklist($1,$2,$_[0])/sge;
 	    $_[0] =~ s/%CHECKLIST%/&handleChecklist("",$_[0])/ge;
@@ -170,6 +174,7 @@ sub initDefaults() {
 		'statetopic'=> $topic.'ChecklistItemState',
 		'notify'=> 0,
 		'static'=> 0,
+		'useajax'=>1,
 	);
 
 	@listOptions = ('states','stateicons');
@@ -177,7 +182,7 @@ sub initDefaults() {
 
 	@filteredOptions = ( 'id', 'name', 'states');
 
-	@flagOptions = ('showlegend', 'anchors', 'useforms', 'notify', 'static');
+	@flagOptions = ('showlegend', 'anchors', 'useforms', 'notify', 'static' , 'useajax');
 
 	$idMapRef = { };
 
@@ -196,6 +201,7 @@ sub initDefaults() {
 	%itemStatesRead = ( );
 
 	&collectAllChecklistItems() if (defined $query->param('clreset')) || (defined $query->param('clpsc'));
+
 }
 
 # =========================
@@ -294,12 +300,13 @@ sub initNamedDefaults {
 
 	# create named defaults (attributes>named defaults>global defaults):
 	foreach my $default (keys %globalDefaults) {
-		$namedDefaults{$name}{$default}=
-			(defined $params{$default})?
-					$params{$default}:
-					((defined $namedDefaults{$name}{$default})?
-						$namedDefaults{$name}{$default}:
-						$globalDefaults{$default});
+               $namedDefaults{$name}{$default}=
+                       (defined $params{$default})?
+                                       $params{$default}:
+                                       ((defined $namedDefaults{$name}{$default})?
+                                               $namedDefaults{$name}{$default}:
+						undef);
+                                               #$globalDefaults{$default});
 	}
 }
 # =========================
@@ -364,8 +371,9 @@ sub handleChecklist {
 
 
 		if ( ! $options{'useforms'} ) {
-			$action.="&clreset=".&urlEncode($name);
-			$action.="&clresetst=".&urlEncode($state);
+			$action.=($action=~/\?/?';':'?');
+			$action.="clreset=".&urlEncode($name);
+			$action.=";clresetst=".&urlEncode($state);
 		}
 
 		$action.="#reset${name}" if $options{'anchors'};
@@ -379,7 +387,11 @@ sub handleChecklist {
 			$$imgparams{src}=$imgsrc if (defined $imgsrc ) && ($imgsrc!~/^\s*$/s);
 			$linktext.=$query->img($imgparams);
 			$linktext.=qq@ ${title}@ if ($title!~/^\s*$/i)&&($imgsrc ne "");
-			$text.=$query->a({href=>$action}, $linktext);
+			if ($options{'useajax'}) {
+				$text.=$query->a({href=>"javascript:submitItemStateChange('$action')",id=>"CLP_A_".&urlEncode($name)."_".&urlEncode($state)}, $linktext);
+			} else {
+				$text.=$query->a({href=>$action}, $linktext);
+			}
 		} else {
 			my $form="";
 			$form.=$query->start_form({method=>'post', action=>$action});
@@ -602,15 +614,15 @@ sub renderChecklistItem {
 	my $uetId = &urlEncode($tId); # URL encoded tId
 
 	if ( ! $options{'useforms'} ) {
-		$action.=($action=~/\?/)?"&":"?";
+		$action.=($action=~/\?/)?";":"?";
 		$action.="clpsc=".&urlEncode("$stId");
-		$action.="&clpscn=".&urlEncode($name);
-		$action.="&clpscls=$ueState";
+		$action.=";clpscn=".&urlEncode($name);
+		$action.=";clpscls=$ueState";
 	}
 	my %queryVars = $query->Vars();
 	foreach my $p (keys %queryVars) {
-		$action.="&$p=".&urlEncode($queryVars{$p}) 
-			unless ($p =~ /^(clp.*|clreset.*|contenttype|)$/i)||(!$queryVars{$p});
+		$action.=";$p=".&urlEncode($queryVars{$p}) 
+			unless ($p =~ /^(clp.*|clreset.*|contenttype)$/i)||(!$queryVars{$p});
 	}
 	$action.="#$name$stId" if $options{'anchors'};
 
@@ -629,12 +641,20 @@ sub renderChecklistItem {
 			$linktext.=$options{'text'}.' ' unless $options{'text'} =~ /^(\s|\&nbsp\;)*$/;
 		}
 		$linktext.=qq@$textBef@ if $textBef;
-		$linktext.=$query->img({src=>$iconsrc, border=>0, title=>$heState, alt=>$heState});
+		$linktext.=$query->img({id=>"CLP_IMG_$name$uetId", src=>$iconsrc, border=>0, title=>$heState, alt=>$heState});
 		$linktext.=qq@$textAft@ if $textAft;
 		if (lc($options{'clipos'}) eq 'left') {
 			$linktext.=' '.$options{'text'} unless $options{'text'} =~ /^(\s|\&nbsp\;)*$/;
 		}
-		$text.=$options{'static'} ? $linktext : $query->a({-href=>$action},$linktext);
+		if ($options{'static'}) {
+			$text .= $linktext;
+		} else {
+			if ($options{'useajax'}) {
+				$text .= $query->a({-id=>"CLP_A_$name$uetId",-href=>"javascript:submitItemStateChange('$action')"}, $linktext);
+			} else {
+				$text .= $query->a({-href=>$action},$linktext);
+			}
+		}
 	} else {
 		my $form=$query->start_form(-method=>"POST", -action=>$action, -name=>"changeitemstate\[$stId\]");
 		$form.=$query->hidden(-name=>'clpscls', -value=>$heState);
@@ -739,7 +759,11 @@ sub saveChecklistItemStateTopic {
 	foreach my $n ( sort keys %{ $idMapRef } ) {
 		next if ($clisTopicName ne $globalDefaults{'statetopic'})&&($clisTopicName ne $namedDefaults{$n}{'statetopic'});
 		next if (($namedDefaults{$n}{'statetopic'})&&($clisTopicName ne $namedDefaults{$n}{'statetopic'}));
-		my $statesel = join ", ",  (split /\|/, ($namedDefaults{$n}{'states'}?$namedDefaults{$n}{'states'}:$globalDefaults{'states'}));
+
+		my $states = $namedDefaults{$n}{'states'};
+		$states = &TWiki::Func::getPluginPreferencesValue('STATES') unless defined $states && $states ne "";
+		$states = $globalDefaults{'states'} unless defined $states && $states ne "";
+		my $statesel = join ", ",  (split /\|/, $states);
 		$topicText.="\n";
 		$topicText.=qq@%EDITTABLE{format="|text,20,$n|text,10,|select,1,$statesel|"}%\n@;
 		$topicText.=qq@%TABLE{footerrows="1"}%\n@;
