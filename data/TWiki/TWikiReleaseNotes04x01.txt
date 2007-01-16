@@ -125,7 +125,7 @@ The full list of bug fixes can be seen below
 The 4.1.0 release was built from SVN http://svn.twiki.org/svn/twiki/branches/TWikiRelease04x01 revision *FIXME*.
 
 ---+++ TWiki 4.1.0 Fixes
-
+<noautolink>
 | [[%BUGS%/Item3442][Item3442]]  | PatternSkin: Make file upload input field larger |
 | [[%BUGS%/Item3430][Item3430]]  | Email addresses not always padded and encoded. |
 | [[%BUGS%/Item3422][Item3422]]  | Bulk registation data fails validation |
@@ -241,7 +241,7 @@ The 4.1.0 release was built from SVN http://svn.twiki.org/svn/twiki/branches/TWi
 | [[%BUGS%/Item3013][Item3013]]  | Uniform style for blockquotes |
 | [[%BUGS%/Item3008][Item3008]]  | Need clear documentation of the impact of spaces in form definitions |
 | [[%BUGS%/Item2998][Item2998]]  | can't create a topic of the same name as an already existing subweb |
-| [[%BUGS%/Item2985][Item2985]]  | SEARCH summary eats escaped [[...]] links |
+| [[%BUGS%/Item2985][Item2985]]  | SEARCH summary eats escaped [<nop>[...]] links |
 | [[%BUGS%/Item2981][Item2981]]  | Sandbox aggressively filters all but single-character strings |
 | [[%BUGS%/Item2979][Item2979]]  | PatternSkin: Verbatim Text not completly printing with IE6.0 |
 | [[%BUGS%/Item2967][Item2967]]  | %SEARCH does not work with + in topic="" parameter |
@@ -297,7 +297,7 @@ The 4.1.0 release was built from SVN http://svn.twiki.org/svn/twiki/branches/TWi
 | [[%BUGS%/Item2639][Item2639]]  | SpreadSheetPlugin: Fix in SHORTDESCRIPTION |
 | [[%BUGS%/Item2628][Item2628]]  | USERINFO incorrectly creates nonexistent user |
 | [[%BUGS%/Item2624][Item2624]]  | InterwikiPlugin: Doc enhancements |
-| [[%BUGS%/Item2620][Item2620]]  | Doc fix: Change %W% to %X% in TWikiDocGraphics |
+| [[%BUGS%/Item2620][Item2620]]  | Doc fix: Change %<nop>W% to %<nop>X% in TWikiDocGraphics |
 | [[%BUGS%/Item2614][Item2614]]  | checkTopicEditLock does not work for anything but Edit the main screen |
 | [[%BUGS%/Item2613][Item2613]]  | Spec for normalizeWebTopicName is inconsistent |
 | [[%BUGS%/Item2605][Item2605]]  | <code>WEBMANAGE</code> permission no longer required (removed) |
@@ -331,9 +331,9 @@ The 4.1.0 release was built from SVN http://svn.twiki.org/svn/twiki/branches/TWi
 | [[%BUGS%/Item2054][Item2054]]  | JSCalendarContrib only works with IE in PatternSkin |
 | [[%BUGS%/Item1992][Item1992]]  | MailerContrib: Mailnotify generates bogus links with {IDsInURLs} configure option |
 | [[%BUGS%/Item1705][Item1705]]  | PatternSkin: Topic action buttons have hard coded access keys |
-
+</noautolink>
 ---+++ TWiki 4.1.0 Enhancements
-
+<noautolink>
 | [[%BUGS%/Item3428][Item3428]]  | TablePlugin: taking out <nobr> before parsing date fields |
 | [[%BUGS%/Item3380][Item3380]]  | Support Javascript variables for content |
 | [[%BUGS%/Item3331][Item3331]]  | SpreadSheetPlugin: Add new functions $LISTRAND(), $LISTSHUFFLE(), $LISTTRUNCATE() |
@@ -382,6 +382,8 @@ The 4.1.0 release was built from SVN http://svn.twiki.org/svn/twiki/branches/TWi
 | [[%BUGS%/Item2000][Item2000]]  | Add search by createdate option to SEARCH |
 | [[%BUGS%/Item1704][Item1704]]  | PatternSkin: Dependence on TwistyPlugin instead of TwistyContrib (performance improvement) |
 | [[%BUGS%/Item1640][Item1640]]  | Don't strip newlines from the front of TMPL:DEFs |
+</noautolink>
+
 <!-- Note: Do not use Bugs: interwiki links because interwiki rule might not be defined
    * Set BUGS = http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs
 -->
