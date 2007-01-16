@@ -45,7 +45,7 @@ use strict;
 use Assert;
 use Error qw( :try );
 
-require 5.005;        # For regex objects and internationalisation
+require 5.005;       # For regex objects and internationalisation
 
 # Site configuration constants
 use vars qw( %cfg );
