@@ -38,7 +38,7 @@ while ( <> ) {
     s|($TWiki::cfg{DefaultUrlHost}$TWiki::cfg{ScriptUrlPath})/*|http://twiki.org/cgi-bin/|g;
     
     #This URL param is not wanted when we link to twiki.org 
-    s/href="\?skin=plain#/href=#/g;
+    s/href="\?skin=plain#/href="#/g;
     
     #Base URL just destroys the TOC. We do not really need this.
     s|<base href="http://twiki.org/cgi-bin/TWiki/.*?"></base>||g;
