@@ -122,7 +122,7 @@ The full list of bug fixes can be seen below
 
 ---++  TWiki 4.1.0 Minor Release - Details
 
-The 4.1.0 release was built from SVN http://svn.twiki.org/svn/twiki/branches/TWikiRelease04x01 revision *FIXME*.
+The 4.1.0 release was built from SVN http://svn.twiki.org/svn/twiki/tags/TWikiRelease04x01x00 revision 12562.
 
 ---+++ TWiki 4.1.0 Fixes
 <noautolink>
