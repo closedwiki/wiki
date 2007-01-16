@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1159975034" format="1.0" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1163604499" format="1.0" version="$Rev$}%
 ---+ <nop>RackPlannerPlugin
 The <nop>RackPlannerPlugin handles the tag =%<nop>RACKPLANNER%= and renders a rack overview (HTML table) with devices (computer, router, switches, ...). 
 ---++ Syntax Rules
@@ -20,7 +20,7 @@ This =%<nop>EDITTABLE%= tag is an example. Feel free to modify the attributes (=
 
 *Notes:*
 	* The device order in the table is not relevant (except there's a conflict) but the column order is relevant (because the table header will be ignored).
-	* If more than one device uses the same unit the conflict will be displayed with a icon (see =conflicticon= attribute, e.g. %S%). The tooltip of the icon contains the server names.
+	* If more than one device uses the same unit the conflict will be displayed with a icon (see =conflicticon= attribute, e.g. %S%). The tooltip of the icon contains the device names.
 	* If you have more than one device in the same unit you have to put them into a single table row and separate server names, 'connected to', owner, colors, notes with a =' / '= or a ' # ' (a whitespace before and after the separator is required).
 	
   
@@ -52,7 +52,7 @@ Usage: =%<nop>RACKPLANNER{attribute1="value" attribute2="value" ... }%=
 | emptybgcolor | default empty unit background color | =emptybgcolor="#f0f0f0"= |
 | emptyfgcolor | default empty unit foreground color | =emptyfgcolor="#000000"= |
 | emptytext | text for empty units (replacements: =%U= - unit number; =%R= - rack name) | =emptytext="empty"= |
-| fontsize | font size of the text (in percent, pt, em, ...); don't forget to reduce the =iconsize= if you reduce the =fontsize= | =fontsize="100%"= |
+| fontsize | font size of the text (in px, pt, em, ...); don't forget to reduce the =iconsize= if you reduce the =fontsize= | =fontsize=""= |
 | iconsize | icon size | =iconsize="16"= |
 | name | entry of the first cell (header of the unit row) | =name="U"= |
 | rackstatformat | rack statistics format (replacements: =%EU= - empty units; =%LEB= - largest empty block; =%OU= - occupied units) | =rackstatformat="Empty: %EUU %<nop>BR%Largest Empty Block: %LEBU %<nop>BR%Occupied: %OUU"= |
@@ -79,7 +79,7 @@ Usage: =%<nop>RACKPLANNER{attribute1="value" attribute2="value" ... }%=
 | server02 | rack1 | 5 | 4U | ConnectedToOtherTopic, ConnectedToAnotherTopic,And to a E100 |  |  | some notes |
 | server03 | rack1 | 4 | 1U |  |  |  | conflict with server02 |
 | server04 | rack2 | 40 | 5U | P123 | someone else | green,white | goes to .. |
-| a very very very very  long text | rack2 | 1 | 1U |  |  | yellow | [[MyNotes][with linked notes]] |
+| a very very very very  long text | rack2 | 1 | 1U |  |  | green | [[MyNotes][with linked notes]] |
 | server06 | rack1 | 5 | 1U |  |  |  |  |
 | server07 | rack1 | 5 | 3U |  |  |  | conflict with server02 and server06 |
 | ServerName | rack2 | 30 | 2U | ConnectedToOtherTopic |  |  |  |
@@ -97,7 +97,23 @@ a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>E
 	* Debug plugin: (See output in =data/debug.txt=)
 		* Set DEBUG = 0
 
-*Note:* Every attribute of =%<nop>RACKPLANNER%= can also be used as plugin setting. You only have to use capital letters.
+
+	* Rack units (default.: 46):
+		* Set UNITS = 46
+
+
+	* Device background/foreground colors:
+		* Set DEVICEBGCOLOR = #f0f0f0
+		* Set DEVICEFGCOLOR = #000000
+
+	* Empty unit text:
+		* Set EMPTYTEXT = empty
+
+	* Font and icon sizes:
+		* Set FONTSIZE =  
+		* Set ICONSIZE = 12px
+
+	* *Note:* Every attribute of =%<nop>RACKPLANNER%= can also be used as plugin setting. You only have to use capital letters.
 
 ---++ Plugin Installation Instructions
 
@@ -107,7 +123,6 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 	* Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
 	  | *File:* | *Description:* |
 	  | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
-	  | ==data/TWiki/%TOPIC%.txt,v== | Plugin topic repository |
 	  | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
 	  | ==lib/TWiki/Plugins/%TOPIC%/RackPlanner.pm== | Plugin Perl library |
 
@@ -121,9 +136,10 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Plugin Author: | TWiki:Main.DanielRohde |
 |  Copyright: | &copy; 2006, TWiki:Main.DanielRohde |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | V1.002 (BETA) |
+|  Plugin Version: | V1.003 (BETA) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  V1.002 (BETA): | TWiki:Main.DanielRohde: allowed multiple entries in a single unit |
+|  V1.003 (BETA) | TWiki:Main.DanielRohde: fixed displayowner/displaynotes bug reported by TWiki:Main.PatrickTuite |
+|  V1.002 (26 Oct 2006): | TWiki:Main.DanielRohde: allowed multiple entries in a single unit; fixed rendering bug reported by TWiki:Main.SteveWray; fixed link color bug reported by TWiki:Main.SteveWray |
 |  V1.001 (7 Aug 2006): | TWiki:Main.DanielRohde: improved some features (added statistics); added attributes (rackstatformat, displayunitcolumn, unitcolumn*); renamed attribute statformat; fixed documentation; fixed tooltip bug; fixed conflict bug;|
 |  V1.000 (4 Aug 2006): | TWiki:Main.DanielRohde: Initial version |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.021 |
