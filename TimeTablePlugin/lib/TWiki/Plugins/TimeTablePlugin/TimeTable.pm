@@ -506,7 +506,7 @@ sub _render {
 		$colfgcolor = $options{'todayfgcolor'} if ($options{'todayfgcolor'})&&($todayDays==$startDateDays+$day);
 		$colfgcolor = '' unless defined $colfgcolor;
 
-		$tr .= $cgi->td({-style=>(($colfgcolor ne '')?"color:$colfgcolor":''), -bgcolor=>$colbgcolor,-valign=>"top", -align=>"center"},&_mystrftime($yy1,$mm1,$dd1));
+		$tr .= $cgi->td({-style=>(($colfgcolor ne '')?"color:$colfgcolor":''), -bgcolor=>$colbgcolor,-valign=>"top", -align=>"center", -title=>&_mystrftime($yy1,$mm1,$dd1,'%A - %d %B %Y')},&_mystrftime($yy1,$mm1,$dd1));
 	}
 	$tr.=$cgi->td(&_renderNav(1));
 	$text .= $cgi->Tr($tr);
@@ -538,11 +538,13 @@ sub _render {
 			if ($#$wtentries > -1) {
 				$itr=$cgi->start_table({-bgcolor=>$colbgcolor, -cellpadding=>'0',-cellspacing=>'1', -tableheight=>"100%"});
 				foreach my $wtentry_ref ( @{$wtentries} ) {
+					my ($text, $title) = &_renderText($wtentry_ref, 1, 0);
 					$itr.=$cgi->Tr($cgi->td({-nowrap=>"",
 							-valign=>"top",
 							-bgcolor=>$$wtentry_ref{'bgcolor'}?$$wtentry_ref{'bgcolor'}:$options{eventbgcolor},
+							-title=>$title,
 							}, 
-								&_renderText($wtentry_ref, 1, 0)
+								$text
 							));
 				}
 				$itr.=$cgi->end_table();
@@ -571,20 +573,23 @@ sub _render {
 
 					$rs= &_getEntryRows($mentry_ref, $min, $starttime, $endtime, $options{'timeinterval'});
 
+					my ($text,$title) = &_renderText($mentry_ref, $rs, $fillRows);
 					$itr.=$cgi->td({-nowrap=>"",
 							-valign=>"top",
 							-bgcolor=>$$mentry_ref{'bgcolor'}?$$mentry_ref{'bgcolor'}:$options{eventbgcolor},
-							-rowspan=>$rs+$fillRows}, 
-							&_renderText($mentry_ref, $rs,$fillRows)
+							-rowspan=>$rs+$fillRows,
+							-title=>$title
+							}, 
+							$text
 							);
 				}
 				$td .=$cgi->Tr($itr)."\n";
-				$itr=$cgi->td('&nbsp;');
+				$itr=$cgi->td({-title=>&_renderTime($min)},'&nbsp;');
 				##$itr=$cgi->td({-valign=>'bottom', -align=>'left'}, '<font size="-4">'.&_renderTime($min).'</font>&nbsp;'); ## DEBUG
 				##$itr=$cgi->td('X'); ## DEBUG
 				$td .=$cgi->Tr($itr)."\n";	
 			} else {
-				$itr=$cgi->td('&nbsp;');
+				$itr=$cgi->td({-title=>&_renderTime($min)},'&nbsp;');
 				##$itr=$cgi->td({-valign=>'bottom', -align=>'left'}, '<font size="-4">'.&_renderTime($min).'</font>&nbsp;'); ## DEBUG
 				$td .=$cgi->Tr($itr)."\n";
 			}
@@ -727,7 +732,7 @@ sub _renderText {
 			-style=>'color:'.($$mentry_ref{'fgcolor'}?$$mentry_ref{'fgcolor'}:$options{'eventfgcolor'}).';'
 			}, $text);
 
-	return $tddata;
+	return ($tddata, $title);
 }
 # =========================
 sub _renderTimeline {
@@ -943,9 +948,9 @@ sub _getStartDate() {
         return ($dd,$mm,$yy);
 }
 # =========================
-sub _mystrftime($$$) {
-        my ($yy,$mm,$dd) = @_;
-        my $text = $options{'compatmode'}?$options{'cmheaderformat'}:$options{'headerformat'};
+sub _mystrftime {
+        my ($yy,$mm,$dd, $format) = @_;
+        my $text = $format?$format:($options{'compatmode'}?$options{'cmheaderformat'}:$options{'headerformat'});
 
         my $dow = Day_of_Week($yy,$mm,$dd);
         my $t_dow =  undef;
