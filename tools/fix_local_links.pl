@@ -22,20 +22,26 @@ my $BASE = {url=>'',};
 
 while ( <> ) {
     # <base href=".../view/TWiki/TWikiDocumentation" />
-    my ( @a ) = m|<base href="([^"]*)/view[^/]*/([A-Za-z]+)/([A-Za-z]+)"|i;
-    my %base;
-    @base{ 'url', 'web', 'topic' } = @a;
+#    my ( @a ) = m|<base href="([^"]*)/view[^/]*/([A-Za-z]+)/([A-Za-z]+)"|i;
+#    my %base;
+#    @base{ 'url', 'web', 'topic' } = @a;
 
-    if ( $base{url} ) {
-        $BASE = \%base;
-        next;
-    }
+#    if ( $base{url} ) {
+#        $BASE = \%base;
+#        next;
+#    }
 
     s|(?<=[?;&])TWIKISESSID=\w*[;&]?||g;
 
     s|$TWiki::cfg{DefaultUrlHost}$TWiki::cfg{PubUrlPath}/*|http://twiki.org/p/pub/|g;
 
     s|($TWiki::cfg{DefaultUrlHost}$TWiki::cfg{ScriptUrlPath})/*|http://twiki.org/cgi-bin/|g;
+    
+    #This URL param is not wanted when we link to twiki.org 
+    s/href="\?skin=plain#/href=#/g;
+    
+    #Base URL just destroys the TOC. We do not really need this.
+    s|<base href="http://twiki.org/cgi-bin/TWiki/.*?"></base>||g;
 
     # SMELL: do we really need this?
     s|(src=".*?/TWikiDocGraphics)Pattern(/)|$1$2|g;
