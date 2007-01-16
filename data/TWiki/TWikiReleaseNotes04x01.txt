@@ -382,5 +382,7 @@ The 4.1.0 release was built from SVN http://svn.twiki.org/svn/twiki/branches/TWi
 | [[%BUGS%/Item2000][Item2000]]  | Add search by createdate option to SEARCH |
 | [[%BUGS%/Item1704][Item1704]]  | PatternSkin: Dependence on TwistyPlugin instead of TwistyContrib (performance improvement) |
 | [[%BUGS%/Item1640][Item1640]]  | Don't strip newlines from the front of TMPL:DEFs |
-
+<!-- Note: Do not use Bugs: interwiki links because interwiki rule might not be defined
+   * Set BUGS = http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs
+-->
 __Related Topic:__ TWikiHistory
