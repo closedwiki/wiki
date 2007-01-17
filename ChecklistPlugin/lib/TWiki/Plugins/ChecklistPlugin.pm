@@ -80,7 +80,7 @@ $VERSION = '$Rev$';
 # of the version number in PLUGINDESCRIPTIONS.
 $RELEASE = 'Dakar';
 
-$REVISION = '1.021'; #dro# improved performance (AJAX); fixed minor IE caching bug (AJAX related)
+$REVISION = '1.021'; #dro# improved performance (AJAX); fixed minor IE caching bug (AJAX related); added new attributes (tooltip, descr) requested by TWiki:Main.KeithHelfrich; fixed installation instructions bug reported by TWiki:Main.KeithHelfrich
 #$REVISION = '1.020'; #dro# added AJAX feature (useajax attribute) requested by TWiki:Main.ShayPierce and TWiki:Main.KeithHelfrich
 #$REVISION = '1.019'; #dro# fixed major default options bug reported by TWiki:Main.RichardHitier 
 #$REVISION = '1.018'; #dro# fixed notification bug reported by TWiki:Main.JosMaccabiani; fixed a minor whitespace bug; add static attribute
@@ -146,8 +146,9 @@ sub commonTagsHandler
 	    $_[0] =~ s/%CHECKLISTSTART{(.*?)}%(.*?)%CHECKLISTEND%/&handleAutoChecklist($1,$2,$_[0])/sge;
 	    $_[0] =~ s/%CHECKLIST%/&handleChecklist("",$_[0])/ge;
 	    $_[0] =~ s/%CHECKLIST{(.*?)}%/&handleChecklist($1,$_[0])/sge;
-	    $_[0] =~ s/%CLI%/&handleChecklistItem("",$_[0])/ge;
-	    $_[0] =~ s/%CLI{(.*?)}%/&handleChecklistItem($1,$_[0])/sge;
+	    ##$_[0] =~ s/%CLI%/&handleChecklistItem("",$_[0])/ge;
+	    ##$_[0] =~ s/%CLI{(.*?)}%/&handleChecklistItem($1,$_[0])/sge;
+	    $_[0] =~ s/%CLI({(.*?)})?%/&handleChecklistItem((defined $2?$2:""),$_[0])/sge;
     ###};
     ###TWiki::Func::writeWarning("${pluginName}: $@") if $@;
 }
@@ -175,6 +176,9 @@ sub initDefaults() {
 		'notify'=> 0,
 		'static'=> 0,
 		'useajax'=>1,
+		'tooltip'=>'%STATE%',
+		'descr' => undef,
+		'_DEFAULT' => undef,
 	);
 
 	@listOptions = ('states','stateicons');
@@ -222,6 +226,9 @@ sub initOptions() {
 	
 	$name=&substIllegalChars($params{'name'}) if defined $params{'name'};
 	$name=$globalDefaults{'name'} unless defined $name;
+
+	# handle _DEFAULT option (_DEFAULT = descr)
+	$params{'descr'} = $params{'_DEFAULT'} if defined $params{'_DEFAULT'};
 
         # Setup options (attributes>named defaults>plugin preferences>global defaults):
 	%options = ( );
@@ -554,7 +561,7 @@ sub doChecklistItemStateReset {
 		$state=$states[0];
 	}
 	foreach my $id (keys %{$$idMapRef{$n}}) {
-		$$idMapRef{$n}{$id}=$state;
+		$$idMapRef{$n}{$id}{'state'}=$state;
 	}
 	&saveChecklistItemStateTopic($n,&extractPerms($text)) if (!$saveDone) && (($saveDone=!$saveDone));
 }
@@ -567,9 +574,9 @@ sub doChecklistItemStateChange {
 	return if ! &checkChangeAccessPermission($n, $text);
 	
 	# reload?
-	return if ((defined $$idMapRef{$n}{$id})&&($$idMapRef{$n}{$id} ne $lastState));
+	return if ((defined $$idMapRef{$n}{$id}{'state'})&&($$idMapRef{$n}{$id}{'state'} ne $lastState));
 
-	$$idMapRef{$n}{$id}=&getNextState($n, $$idMapRef{$n}{$id});
+	$$idMapRef{$n}{$id}{'state'}=&getNextState($n, $$idMapRef{$n}{$id}{'state'});
 
 	&saveChecklistItemStateTopic($n,&extractPerms($text)) if (!$saveDone) && (($saveDone=!$saveDone));
 }
@@ -586,10 +593,11 @@ sub renderChecklistItem {
 
 	### TWiki::Func::writeDebug("- ${pluginName}::stateicons=".$options{'stateicons'}) if $debug;
 
-	my $state = (defined $$idMapRef{$name}{$tId}) ? $$idMapRef{$name}{$tId} : $states[0];
+	my $state = (defined $$idMapRef{$name}{$tId}{'state'}) ? $$idMapRef{$name}{$tId}{'state'} : $states[0];
 	my $icon = $icons[0];
 
-	$$idMapRef{$name}{$tId}=$state unless defined $$idMapRef{$name}{$tId};
+	$$idMapRef{$name}{$tId}{'state'}=$state unless defined $$idMapRef{$name}{$tId}{'state'};
+	$$idMapRef{$name}{$tId}{'descr'}=$options{'descr'} if defined $options{'descr'};
 
 
 	for (my $i=0; $i<=$#states; $i++) {
@@ -640,8 +648,14 @@ sub renderChecklistItem {
 		if (lc($options{'clipos'}) ne 'left') {
 			$linktext.=$options{'text'}.' ' unless $options{'text'} =~ /^(\s|\&nbsp\;)*$/;
 		}
+
+		my $title = $options{'tooltip'};
+		$title = $heState unless defined $title;
+		$title=~s /%STATE%/$heState/sg;
+		$title=~s /%NEXTSTATE%/&getNextState($name,$state)/esg;
+
 		$linktext.=qq@$textBef@ if $textBef;
-		$linktext.=$query->img({id=>"CLP_IMG_$name$uetId", src=>$iconsrc, border=>0, title=>$heState, alt=>$heState});
+		$linktext.=$query->img({id=>"CLP_IMG_$name$uetId", src=>$iconsrc, border=>0, title=>$title, alt=>$title});
 		$linktext.=qq@$textAft@ if $textAft;
 		if (lc($options{'clipos'}) eq 'left') {
 			$linktext.=' '.$options{'text'} unless $options{'text'} =~ /^(\s|\&nbsp\;)*$/;
@@ -693,6 +707,7 @@ sub urlEncode {
 # =========================
 sub htmlEncode {
 	my ($txt)=@_;
+	return "" unless defined $txt;
 	$txt=~s/(["<>])/sprintf("&#%02X;", ord($1))/seg;
 	
 	return $txt;
@@ -731,8 +746,9 @@ sub readChecklistItemStateTopic {
 	}
 
 	foreach my $line (split /[\r\n]+/, $clisTopic) {
-		if ($line =~ /^\s*\|\s*([^\|\*\s]*)\s*\|\s*([^\|\*\s]*)\s*\|\s*([^\|\s]*)\s*\|\s*$/) {
-			$$idMapRef{$1}{$2}=$3;
+		if ($line =~ /^\s*\|\s*([^\|\*\s]*)\s*\|\s*([^\|\*\s]*)\s*\|\s*([^\|\s]*)\s*\|(\s*([^\|]+)\s*\|)?\s*$/) {
+			$$idMapRef{$1}{$2}{'state'}=$3;
+			$$idMapRef{$1}{$2}{'descr'}=$5;
 		}
 	}
 }
@@ -765,14 +781,14 @@ sub saveChecklistItemStateTopic {
 		$states = $globalDefaults{'states'} unless defined $states && $states ne "";
 		my $statesel = join ", ",  (split /\|/, $states);
 		$topicText.="\n";
-		$topicText.=qq@%EDITTABLE{format="|text,20,$n|text,10,|select,1,$statesel|"}%\n@;
+		$topicText.=qq@%EDITTABLE{format="|text,20,$n|text,10,|select,1,$statesel|textarea,2,|"}%\n@;
 		$topicText.=qq@%TABLE{footerrows="1"}%\n@;
-		$topicText.="|*context*|*id*|*state*|\n";
+		$topicText.="|*context*|*id*|*state*|*description*|\n";
 		
 		foreach my $id (sort keys %{ $$idMapRef{$n}}) {
-			$topicText.="|$n|".&htmlEncode($id)."|".&htmlEncode($$idMapRef{$n}{$id})."|\n";
+			$topicText.="|$n|".&htmlEncode($id)."|".&htmlEncode($$idMapRef{$n}{$id}{'state'})."| ".&htmlEncode($$idMapRef{$n}{$id}{'descr'})." |\n";
 		}
-		$topicText.=qq@| *$n* | *statistics:* | * %CALC{"\$COUNTITEMS(R2:C\$COLUMN()..R\$ROW(-1):C\$COLUMN())"}% * |\n@;
+		$topicText.=qq@| *$n* | *statistics:* | *%CALC{"\$COUNTITEMS(R2:C\$COLUMN()..R\$ROW(-1):C\$COLUMN())"}%* | *entries: %CALC{"\$ROW(-2)"}%* |\n@;
 	}
 	if ($perm) {
 		$topicText.="\nAccess rights inherited from $web.$topic:\n\n";
