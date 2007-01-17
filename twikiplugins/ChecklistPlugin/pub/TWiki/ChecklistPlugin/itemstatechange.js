@@ -31,10 +31,8 @@ function clpStripUrl(href) {
 function clpHandleNextObject(self) {
 	clpStateChangeObjectArray.shift(); // remove myself
 	while (self.changes.length>0) {
-		var oldLink = self.changes.shift();
-		var newLink = self.changesNew.shift();
-		var oldUrl = clpStripUrl(oldLink);
-		var newUrl = clpStripUrl(newLink);
+		var oldUrl = clpStripUrl(self.changes.shift());
+		var newUrl = clpStripUrl(self.changesNew.shift());
 		var n = clpGetStateChangeObject(oldUrl);
 		if (n) n.url=newUrl;
 	}
@@ -58,15 +56,15 @@ function clpHandleStateChange(self) {
 			link.match(/href="([^"]+)"/);
 			var href=RegExp.$1;
 			var e = document.getElementById(id);
-			if (!e) next;
+			if (!e) continue;
 			var oldHref = clpStripId(e.href);
 			var newHref = clpStripId(href);
-			if (oldHref!=newHref) {
-				self.changes.push(e.href);
-				self.changesNew.push(href);
-			} else {
-				continue;
-			}
+
+			if (oldHref==newHref) continue;
+
+			self.changes.push(e.href);
+			self.changesNew.push(href);
+
 			if (e) e.href = href; 
 			var realId = id.replace(/CLP_A_/i,"");
 			var imgExpr = new RegExp("<img[^>]+id=\"CLP_IMG_" + realId + "\"[^>]*>","i");
