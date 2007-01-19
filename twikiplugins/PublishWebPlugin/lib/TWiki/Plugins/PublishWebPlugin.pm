@@ -20,10 +20,12 @@
 # =========================
 package TWiki::Plugins::PublishWebPlugin;
 
+use strict;
+
 # =========================
 use vars qw(
         $web $topic $user $installWeb $VERSION $pluginName $debug
-        $initializedi $error $publishWeb $publishSkin $exludeTopic $homeLabel
+        $initialized $error $publishWeb $publishSkin $excludeTopic $homeLabel
         $publishPath $attachPath $publishDir $attachDir
     );
 
