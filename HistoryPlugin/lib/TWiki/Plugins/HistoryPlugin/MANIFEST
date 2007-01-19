@@ -1,5 +1,5 @@
-data/TWiki/HistoryPlugin.txt NEW
-lib/TWiki/Plugins/HistoryPlugin.pm NEW
-pub/TWiki/HistoryPlugin/screenshot.png NEW
-templates/oopshistory.tmpl NEW
-templates/oopshistory.pattern.tmpl NEW
+data/TWiki/HistoryPlugin.txt 0644
+lib/TWiki/Plugins/HistoryPlugin.pm 0444
+pub/TWiki/HistoryPlugin/screenshot.png 0644
+templates/oopshistory.tmpl 0444
+templates/oopshistory.pattern.tmpl 0444

@@ -132,8 +132,8 @@ sub handleHistory {
     my $web = $params{web} || $web;
     my $topic = $params{topic} || $topic;
     my $format = $params{format} ||
-		 $params{_DEFAULT} || 
-		 'r1.$rev - $date - $wikiusername%BR%';
+                 $params{_DEFAULT} || 
+                 'r1.$rev - $date - $wikiusername%BR%';
     my $header = $params{header} ;
     $header = "\$next{'...'}%BR%" unless defined($header);
     my $footer = $params{footer} ;
@@ -151,8 +151,8 @@ sub handleHistory {
     $rev2 = $params{rev2};
     $rev2 =~ s/1\.// if $rev2;
     $nrev = $params{nrev} ||
-	    TWiki::Func::getPluginPreferencesValue( "NREV" ) ||
-	    10;
+            TWiki::Func::getPluginPreferencesValue( "NREV" ) ||
+            10;
 
     $rev2 ||= $rev1 ? $rev1 + $nrev - 1 : $maxrev;
     $rev1 ||= $rev2 - $nrev + 1;
@@ -176,21 +176,22 @@ sub handleHistory {
 
     foreach my $rev (@revs) {
 
-	my ($date, $user, $revout, $comment) = 
-	    TWiki::Func::getRevisionInfo($web, $topic, $rev);
+        my ($date, $user, $revout, $comment) = 
+            TWiki::Func::getRevisionInfo($web, $topic, $rev);
 
         my $revinfo = $format;
-	$revinfo =~ s/\$web/$web/g;
-	$revinfo =~ s/\$topic/$topic/g;
-	$revinfo =~ s/\$rev/$revout/g;
-	$revinfo =~ s/\$date/TWiki::Func::formatTime($date)/ge;
-	$revinfo =~ s/\$username/$user/g;
-	$revinfo =~ s/\$wikiname/TWiki::Func::userToWikiName($user,1)/ge;
-	$revinfo =~ s/\$wikiusername/TWiki::Func::userToWikiName($user,0)/ge;
+        $revinfo =~ s/\$web/$web/g;
+        $revinfo =~ s/\$topic/$topic/g;
+        $revinfo =~ s/\$rev/$revout/g;
+        $revinfo =~ s/\$date/TWiki::Func::formatTime($date)/ge;
+        $revinfo =~ s/\$username/$user/g;
+        $revinfo =~ s/\$wikiname/TWiki::Func::userToWikiName($user,1)/ge;
+        $revinfo =~ s/\$wikiusername/TWiki::Func::userToWikiName($user,0)/ge;
 
-	$revinfo =~ s|^((   )+)|"\t" x length($1/3)|e;
+        # This space to tabs conversion must be for Cairo compatibility
+        $revinfo =~ s|^((   )+)|"\t" x (length($1)/3)|e;
 
-	$out .= $revinfo."\n";
+        $out .= $revinfo."\n";
 
         $rev--;
     }
@@ -204,60 +205,55 @@ sub handleHeadFoot {
     my ($text, $rev1, $rev2, $nrev, $maxrev) = @_;
 
     if ($rev2 >= $maxrev) {
-	$text =~ s/\$next({.*?})//g;
+        $text =~ s/\$next({.*?})//g;
     } else {
-	while ($text =~ /\$next({(.*?)})/ ) {
-	    my $args = $2 || '';
+        while ($text =~ /\$next({(.*?)})/ ) {
+            my $args = $2 || '';
 
-	    my $newrev1 = $rev2 < $maxrev ? $rev2 + 1 : $rev2;
-	    my $newrev2 = $newrev1 + $nrev - 1;
-	    $newrev2 = $maxrev if $newrev2 > $maxrev;
+            my $newrev1 = $rev2 < $maxrev ? $rev2 + 1 : $rev2;
+            my $newrev2 = $newrev1 + $nrev - 1;
+            $newrev2 = $maxrev if $newrev2 > $maxrev;
 
-	    $args =~ s/'/"/g;
-	    $args =~ s/\$rev1/$newrev1/g;
-	    $args =~ s/\$rev2/$newrev2/g;
-	    $args =~ s/\$nrev/$nrev/g;
+            $args =~ s/'/"/g;
+            $args =~ s/\$rev1/$newrev1/g;
+            $args =~ s/\$rev2/$newrev2/g;
+            $args =~ s/\$nrev/$nrev/g;
 
-	    my %params = TWiki::Func::extractParameters($args);
-	    my $newtext = $params{text} ||
-			  $params{_DEFAULT} || '';
-	    my $url = $params{url} || '';
-	    my $replace = $url ? "[[$url][$newtext]]" : $newtext;
-	    $text =~ s/\$next({.*?})/$replace/;
-	}
+            my %params = TWiki::Func::extractParameters($args);
+            my $newtext = $params{text} ||
+                          $params{_DEFAULT} || '';
+            my $url = $params{url} || '';
+            my $replace = $url ? "[[$url][$newtext]]" : $newtext;
+            $text =~ s/\$next({.*?})/$replace/;
+        }
     }
 
     if ($rev1 <= 1) {
-	$text =~ s/\$previous({.*?})//g;
+        $text =~ s/\$previous({.*?})//g;
     } else {
-	while ($text =~ /\$previous({(.*?)})/ ) {
-	    my $args = $2 || '';
+        while ($text =~ /\$previous({(.*?)})/ ) {
+            my $args = $2 || '';
 
-	    my $newrev2 = $rev1 > 1 ? $rev1 - 1 : 1;
-	    my $newrev1 = $newrev2 - $nrev + 1;
-	    $newrev1 = 1 if $newrev1 < 1;
+            my $newrev2 = $rev1 > 1 ? $rev1 - 1 : 1;
+            my $newrev1 = $newrev2 - $nrev + 1;
+            $newrev1 = 1 if $newrev1 < 1;
 
-	    $args =~ s/'/"/g;
-	    $args =~ s/\$rev1/$newrev1/g;
-	    $args =~ s/\$rev2/$newrev2/g;
-	    $args =~ s/\$nrev/$nrev/g;
+            $args =~ s/'/"/g;
+            $args =~ s/\$rev1/$newrev1/g;
+            $args =~ s/\$rev2/$newrev2/g;
+            $args =~ s/\$nrev/$nrev/g;
 
-	    my %params = TWiki::Func::extractParameters($args);
-	    my $newtext = $params{text} ||
-			  $params{_DEFAULT} || '';
-	    my $url = $params{url} || '';
-	    my $replace = $url ? "[[$url][$newtext]]" : $newtext;
-	    $text =~ s/\$previous({.*?})/$replace/;
-	}
+            my %params = TWiki::Func::extractParameters($args);
+            my $newtext = $params{text} ||
+                          $params{_DEFAULT} || '';
+            my $url = $params{url} || '';
+            my $replace = $url ? "[[$url][$newtext]]" : $newtext;
+            $text =~ s/\$previous({.*?})/$replace/;
+        }
     }
 
     return $text;
 }
-
-
-
-
-
 
 
 1;
