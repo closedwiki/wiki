@@ -178,7 +178,8 @@ sub initDefaults() {
 		'notify'=> 0,
 		'static'=> 0,
 		'useajax'=>1,
-		'tooltip'=>'%STATE%',
+		'tooltip'=>'Click me to change my state from \'%STATE%\' to \'%NEXTSTATE%\'',
+		'tooltipbgcolor'=>'%WEBBGCOLOR%',
 		'descr' => undef,
 		'_DEFAULT' => undef,
 	);
@@ -645,7 +646,7 @@ sub renderChecklistItem {
 	$text.=$heState;
 	$text.=$query->comment("\[/CLTABLEPLUGINSORTFIX\]");
 
-	$text.=$query->a({name=>"$name$uetId"}, "&nbsp;") if $options{'anchors'};
+	$text.=$query->a({name=>"$name$uetId"}, "&nbsp;") if $options{'anchors'} && !$options{'useajax'};
 
 	if ( ! $options{'useforms'} || $options{'static'}) {
 		
@@ -658,9 +659,14 @@ sub renderChecklistItem {
 		$title = $heState unless defined $title;
 		$title=~s /%STATE%/$heState/sg;
 		$title=~s /%NEXTSTATE%/&getNextState($name,$state)/esg;
+		$title=~s /%STATECOUNT%/($#states+1)/esg;
+		$title=~s /%STATES%/join(", ",@states)/esg;
 
 		$linktext.=qq@$textBef@ if $textBef;
-		$linktext.=$query->img({id=>"CLP_IMG_$name$uetId", src=>$iconsrc, border=>0, title=>$title, alt=>$title});
+
+		my $imgtitle=$options{'useajax'}?undef:$title;
+		my $imgalt=$options{'useajax'}?"":$title;
+		$linktext.=$query->img({-id=>"CLP_IMG_$name$uetId", -src=>$iconsrc, -border=>0, -title=>$imgtitle, -alt=>$imgalt});
 		$linktext.=qq@$textAft@ if $textAft;
 		if (lc($options{'clipos'}) eq 'left') {
 			$linktext.=' '.$options{'text'} unless $options{'text'} =~ /^(\s|\&nbsp\;)*$/;
@@ -669,9 +675,12 @@ sub renderChecklistItem {
 			$text .= $linktext;
 		} else {
 			if ($options{'useajax'}) {
-				$text .= $query->a({-id=>"CLP_A_$name$uetId",-href=>"javascript:submitItemStateChange('$action')"}, $linktext);
+				my $onmouseover=$options{'useajax'}?"clpTooltipShow('CLP_TT_$name$uetId','CLP_A_$name$uetId',20,20);" : "";
+				my $onmouseout=$options{'useajax'}?"clpTooltipHide('CLP_TT_$name$uetId');" : "";
+				$text .= $query->div({-id=>"CLP_TT_$name$uetId",-style=>"visibility:hidden;position:absolute;top:0;left:0;z-index:2;font: normal 8pt sans-serif;padding: 3px; border: solid 1px; background-color: $options{'tooltipbgcolor'};"},$title);
+				$text .= $query->a({-onmouseover=>$onmouseover,-onmouseout=>$onmouseout,-onmouseup=>$onmouseout,-id=>"CLP_A_$name$uetId",-href=>"javascript:submitItemStateChange('$action')"}, $linktext);
 			} else {
-				$text .= $query->a({-href=>$action},$linktext);
+				$text .= $query->a({-title=>$title,-href=>$action},$linktext);
 			}
 		}
 	} else {

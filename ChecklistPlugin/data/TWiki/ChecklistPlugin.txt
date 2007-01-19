@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1169056872" format="1.0" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1169213044" format="1.0" version="$Rev$"}%
 ---+!! Checklist Plugin
 
 <nop>ChecklistPlugin creates simple checklists. 
@@ -252,7 +252,8 @@ Examples:
 | statetopic | %<nop>CLI%<br/>%<nop>CHECKLIST%<br/>%<nop>CHECKLISTSTART% | set the checklist item state topic (default: =&lt;<nop>YourTopicName&gt;ChecklistItemState=) | =statetopic="MyItemStateTopic"= | 
 | static | %<nop>CLI%<br/>%<nop>CHECKLIST%<br/>%<nop>CHECKLISTSTART% | allow/disallow state changes of checklist items (usefull if you create summary pages of some items of different checklists) | =static="off"= |
 | text | %<nop>CLI% | allows to place text behind the button (default: =""=); useful to avoid the annoying line break between checklist button and text if HTML forms are used (related: useforms attribute) | =text="my first step"= |
-| tooltip | %<nop>CLI%<br/>%<nop>CHECKLIST%<br/>%<nop>CHECKLISTSTART% | sets the tooltip of the state icons (substituted variables: %STATE% - current state; %NEXTSTATE% - next state) | =tooltip="%<nop>STATE%"= |
+| tooltip | %<nop>CLI%<br/>%<nop>CHECKLIST%<br/>%<nop>CHECKLISTSTART% | sets the tooltip of the state icons (substituted variables: %STATE% - current state; %NEXTSTATE% - next state; %STATES% - comma separated list of all states; %STATECOUNT% - number of states) | =tooltip="%<nop>STATE%"= |
+| tooltipbgcolor | %<nop>CLI%<br/>%<nop>CHECKLIST%<br/>%<nop>CHECKLISTSTART% | tooltip background color (works only with useajax="on") | =tooltipbgcolor="%<nop>WEBBGCOLOR%"= |
 | useajax | %<nop>CLI%<br/>%<nop>CHECKLIST%<br/>%<nop>CHECKLISTSTART%  | enables/disables <nop>JavaScript/AJAX based item state changes (default: =on=) | =useajax="1"= |
 | useforms | %<nop>CLI%<br/>%<nop>CHECKLIST%<br/> %<nop>CHECKLISTSTART% | if enabled HTML forms are used instead of hyperlinks (default: =off=) | =useforms="off"= |
 ---++ Examples
