@@ -1188,6 +1188,9 @@ END
         print "Basing new topic on ".$this->{basedir}.'/'.$to.'.txt'."\n";
         $newform{'text'} = <IN_FILE>;
         close( IN_FILE );
+        #Hack to avoid revisions to be overwritten on twiki.org. Can be removed when
+        #it is upgraded to 4.1.0. Item3216, Item3454
+        $newform{'text'} =~ s/^%META:TOPICINFO{.*}%$//m;
     } else {
         print STDERR 'Failed to open base topic: '.$!;
         $newform{'text'} = <<END;
