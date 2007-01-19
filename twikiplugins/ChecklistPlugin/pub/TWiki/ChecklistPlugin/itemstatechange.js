@@ -71,14 +71,24 @@ function clpHandleStateChange(self) {
 			var img = "" + imgExpr.exec(responseText);
 			img.match(/src="([^"]+)"/);
 			var src = RegExp.$1;
-			img.match(/alt="([^"]+)"/);
-			var alt = RegExp.$1;
+			img.match(/title="([^"]+)"/);
+			// var title = RegExp.$1;
 			e = document.getElementById("CLP_IMG_"+realId);
 			if (e) {
 				e.src = src;
-				e.title = alt;
-				e.alt = alt;
+				// e.title = title;
+				// e.alt = title;
 			}
+
+			var divExpr = new RegExp("<div[^>]+id=\"CLP_TT_"+realId+"\"[^>]*>(.*?)</div>");
+			divExpr.exec(responseText);
+			var divTxt = RegExp.$1;
+			e = document.getElementById("CLP_TT_"+realId);
+			if (e) {
+				while (e.hasChildNodes()) e.removeChild(e.firstChild); 
+				e.appendChild(document.createTextNode(divTxt));
+			}
+			
 
 		}
 	} else {
@@ -126,3 +136,56 @@ function submitItemStateChange(url) {
 	if (clpStateChangeObjectArray.length==1) newStateChangeObject.clpDoIt();
 	clpSubmitItemStateChangeMutex--;
 }
+
+// --- tooltips (derived from http://www.texsoft.it/index.php?c=software&m=sw.js.htmltooltip&l=it) ---
+function clpTooltipFindPosX(obj) 
+{
+	var curleft = 0;
+	if (obj.offsetParent) {
+		while (obj.offsetParent) {
+			curleft += obj.offsetLeft
+			obj = obj.offsetParent;
+		}
+	} else if (obj.x) curleft += obj.x;
+	return curleft;
+}
+function clpTooltipFindPosY(obj) 
+{
+	var curtop = 0;
+	if (obj.offsetParent) {
+		while (obj.offsetParent) {
+			curtop += obj.offsetTop
+			obj = obj.offsetParent;
+		}
+	} else if (obj.y) curtop += obj.y;
+	return curtop;
+}
+function clpTooltipShow(tooltipId, parentId, posX, posY) {
+	var it = document.getElementById(tooltipId);
+    
+	if (!it) return;
+	//if ((it.style.top == '' || it.style.top == 0) && (it.style.left == '' || it.style.left == 0)) {
+		// need to fixate default size (MSIE problem)
+		// it.style.width = it.offsetWidth + 'px';
+		// it.style.height = it.offsetHeight + 'px';
+
+		var img = document.getElementById(parentId); 
+
+		// if tooltip is too wide, shift left to be within parent 
+		// if (posX + it.offsetWidth > img.offsetWidth) posX = img.offsetWidth - it.offsetWidth;
+		// if (posX < 0 ) posX = 0; 
+
+		var x = clpTooltipFindPosX(img) + posX;
+		var y = clpTooltipFindPosY(img) + posY;
+
+		it.style.left = x + 'px';
+		it.style.top = y + 'px';
+	//}
+	it.style.visibility = 'visible'; 
+}
+
+function clpTooltipHide(id) {
+    var it = document.getElementById(id); 
+    if (it) it.style.visibility = 'hidden'; 
+}
+
