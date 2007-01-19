@@ -1,10 +1,10 @@
-%META:TOPICINFO{author="TWikiContributor" date="1168768620" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1169170982" format="1.1" version="$Rev$"}%
 %TOC%
 %STARTINCLUDE%
 ---# Appendix A: TWiki Development Timeline
 
 #EdinburghRelease
----++ TWiki Release 4.1 (Edinburgh), 17 Jan 2007
+---++ TWiki Release 4.1 (Edinburgh), 16 Jan 2007
 
 __New Features and Enhancements of TWiki Release 4.1__
 
