@@ -312,7 +312,7 @@ Sandbox.%HOMETOPIC%
 <tr valign="top">
 <td>
  *Anchors:* %BR%
- You can define a reference inside a TWiki topic (called an anchor name) and link to that. To __define__ an anchor write =#AnchorName= at the beginning of a line. The anchor name must be a WikiWord. To __link to__ an anchor name use the =[<nop>[MyTopic#MyAnchor]]= syntax. You can omit the topic name if you want to link within the same topic.
+ You can define a reference inside a TWiki topic (called an anchor name) and link to that. To __define__ an anchor write =#AnchorName= at the beginning of a line. The anchor name must be a WikiWord of no more than 32 characters. To __link to__ an anchor name use the =[<nop>[MyTopic#MyAnchor]]= syntax. You can omit the topic name if you want to link within the same topic.
 </td><td>
 <verbatim>
 [[WikiWord#NotThere]]
