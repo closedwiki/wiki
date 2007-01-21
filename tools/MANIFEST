@@ -412,6 +412,7 @@ lib/CPAN/lib/Text/Diff.pm 0444
 lib/LocalSite.cfg.txt 0444
 lib/TWiki.spec 0444
 lib/TWiki.pm 0444
+lib/DEPENDENCIES 0444
 lib/TWiki/Access.pm 0444
 lib/TWiki/AccessControlException.pm 0444
 lib/TWiki/Attach.pm 0444
@@ -929,5 +930,4 @@ tools/geturl.pl 0555
 tools/rewriteshbang.pl 0555
 tools/tick_twiki.pl 0555
 tools/upgrade_emails.pl 0555
-tools/DEPENDENCIES 0444
 twiki_httpd_conf.txt 0444

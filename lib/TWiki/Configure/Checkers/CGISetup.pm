@@ -254,14 +254,10 @@ HERE
 sub _loadDEPENDENCIES {
     my $this = shift;
     
+    # File DEPENDENCIES is in the lib dir (Item3478)
     my $from = TWiki::findFileOnPath('TWiki.spec');
     my @dir = File::Spec->splitdir( $from );
-    pop(@dir); # Getting rid of TWiki.spec
-    pop(@dir); # Leave lib dir
-    local $/ = "\n";
-    # SMELL: Assuming tools dir is parallel to lib dir
-    # DEPENDENCIES should be moved to the lib dir
-    push(@dir, 'tools');
+    pop(@dir); # Cutting off trailing TWiki.spec gives us lib dir
     $from = File::Spec->catfile(@dir, 'DEPENDENCIES');
     my $d;
     open($d, '<'.$from) || return 'Failed to load DEPENDENCIES: '.$!;
