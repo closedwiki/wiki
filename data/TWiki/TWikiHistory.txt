@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1169170982" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1169338988" format="1.1" version="$Rev$"}%
 %TOC%
 %STARTINCLUDE%
 ---# Appendix A: TWiki Development Timeline
@@ -52,7 +52,7 @@ __New Features and Enhancements of TWiki Release 4.1__
       * Allow date format in form fields.
       * Enhance REVINFO{} variable with same date qualifiers as GMTIME{}.
       * WebTopicCreator - adding ability to select a template from any topic name ending in ...Template
-      * Functionality of !DateFieldPlugin merged into core
+      * Functionality of TWiki:Plugins.DateFieldPlugin merged into core
 
    * *Enhancements of Pre-installed Plugins*
       * CommentPlugin: Supports removal of comment prompt after a comment is made.
