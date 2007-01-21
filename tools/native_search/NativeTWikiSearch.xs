@@ -201,7 +201,7 @@ void XS_pack_charPtrPtr(SV* st, char **s, int n)
     safefree(s);
 }
 
-MODULE = FastSearch     PACKAGE = FastSearch
+MODULE = NativeTWikiSearch     PACKAGE = NativeTWikiSearch
 
 char**
 cgrep(argv)
