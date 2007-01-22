@@ -25,7 +25,7 @@ use vars qw(
     );
 
 $VERSION = '$Rev$';
-$RELEASE = '0.98';
+$RELEASE = '1.00';
 $NO_PREFS_IN_TOPIC = 1;
 $SHORTDESCRIPTION = 'Substitute and extract information from content by using regular expressions';
 $debug = 0; # toggle me
@@ -70,8 +70,9 @@ sub handleFilter {
   $theAttributes = "" if !$theAttributes;
 
   #writeDebug("called handleFilter");
-  #writeDebug("handleFilter - theAttributes = $theAttributes");
-  #writeDebug("handleFilter - theText = '$theText'") if $theText;
+  #writeDebug("theAttributes = $theAttributes");
+  #writeDebug("theMode = '$theMode'");
+  #writeDebug("theText = '$theText'") if $theText;
 
   # get parameters
   my $thePattern = &TWiki::Func::extractNameValuePair($theAttributes, "pattern") || '';
@@ -134,6 +135,7 @@ sub handleFilter {
   } elsif ($theMode == 1) {
     # substitution mode
     my $hits = $theMaxHits;
+    $result = $text;
     while($text =~ /$thePattern/gsi) {
       my $arg1 = $1 || '';
       my $arg2 = $2 || '';
@@ -149,12 +151,11 @@ sub handleFilter {
       $match =~ s/\$5/$arg5/g;
       $match =~ s/\$6/$arg6/g;
       #writeDebug("match=$match");
-      $text =~ s/$thePattern/$match/gmsi;
-      #writeDebug("($hits) text=$text");
+      $result =~ s/$thePattern/$match/gmsi;
+      #writeDebug("($hits) result=$result");
       $hits--;
       last if $theMaxHits && $hits <= 0;
     }
-    $result = $text;
   }
   &escapeParameter($result);
   $result = &TWiki::Func::expandCommonVariables($result, $currentTopic, $currentWeb);
@@ -179,6 +180,7 @@ sub handleFormatList {
   my $theSplit = $params->{split} || '[,\s]+';
   my $theSeparator = $params->{separator} || ', ';
   my $theLimit = $params->{limit} || -1; 
+  my $theSkip = $params->{skip} || 0; 
   my $theSort = $params->{sort} || 'off';
   my $theUnique = $params->{unique} || '';
   my $theExclude = $params->{exclude} || '';
@@ -192,6 +194,7 @@ sub handleFormatList {
   #writeDebug("theSplit='$theSplit'");
   #writeDebug("theSeparator='$theSeparator'");
   #writeDebug("theLimit='$theLimit'");
+  #writeDebug("theSkip='$theSkip'");
   #writeDebug("theSort='$theSort'");
   #writeDebug("theUnique='$theUnique'");
   #writeDebug("theExclude='$theExclude'");
@@ -200,6 +203,7 @@ sub handleFormatList {
   my %seen = ();
   my @result;
   my $count = 0;
+  my $skip = $theSkip;
   foreach my $item (split(/$theSplit/, $theList)) {
     #writeDebug("found '$item'");
     next if $theExclude && $item =~ /^($theExclude)$/;
@@ -224,10 +228,12 @@ sub handleFormatList {
       $seen{$line} = 1;
     }
     next if $line eq '';
-    $line =~ s/\$index/$count/g;
-    push @result, $line;
-    $count++;
-    last if $theLimit - $count == 0;
+    $line =~ s/\$index/$count+1/ge;
+    if ($skip-- <= 0) {
+      push @result, $line;
+      $count++;
+      last if $theLimit - $count == 0;
+    }
   }
   return '' if $count == 0;
 
