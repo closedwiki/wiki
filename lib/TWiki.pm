@@ -175,10 +175,11 @@ BEGIN {
         DATE              => \&_DATE,
         DISPLAYTIME       => \&_DISPLAYTIME,
         ENCODE            => \&_ENCODE,
+        ENV               => \&_ENV,
         FORMFIELD         => \&_FORMFIELD,
         GMTIME            => \&_GMTIME,
         GROUPS            => \&_GROUPS,
-        HTTP_HOST         => \&_HTTP_HOST,
+        HTTP_HOST         => \&_HTTP_HOST_deprecated,
         HTTP              => \&_HTTP,
         HTTPS             => \&_HTTPS,
         ICON              => \&_ICON,
@@ -198,9 +199,9 @@ BEGIN {
         QUERYPARAMS       => \&_QUERYPARAMS,
         QUERYSTRING       => \&_QUERYSTRING,
         RELATIVETOPICPATH => \&_RELATIVETOPICPATH,
-        REMOTE_ADDR       => \&_REMOTE_ADDR,
-        REMOTE_PORT       => \&_REMOTE_PORT,
-        REMOTE_USER       => \&_REMOTE_USER,
+        REMOTE_ADDR       => \&_REMOTE_ADDR_deprecated,
+        REMOTE_PORT       => \&_REMOTE_PORT_deprecated,
+        REMOTE_USER       => \&_REMOTE_USER_deprecated,
         REVINFO           => \&_REVINFO,
         SCRIPTNAME        => \&_SCRIPTNAME,
         SCRIPTURL         => \&_SCRIPTURL,
@@ -208,7 +209,7 @@ BEGIN {
         SEARCH            => \&_SEARCH,
         SEP               => \&_SEP,
         SERVERTIME        => \&_SERVERTIME,
-        SPACEDTOPIC       => \&_SPACEDTOPIC, # deprecated, use SPACEOUT
+        SPACEDTOPIC       => \&_SPACEDTOPIC_deprecated,
         SPACEOUT          => \&_SPACEOUT,
         'TMPL:P'          => \&_TMPLP,
         TOPICLIST         => \&_TOPICLIST,
@@ -1234,7 +1235,7 @@ sub new {
     # SMELL: can this be done in a BEGIN block? Or is the environment
     # set per-query?
     if( $TWiki::cfg{SafeEnvPath} ) {
-        $ENV{'PATH'} = $TWiki::cfg{SafeEnvPath};
+        $ENV{PATH} = $TWiki::cfg{SafeEnvPath};
     }
     delete @ENV{ qw( IFS CDPATH ENV BASH_ENV ) };
 
@@ -1279,7 +1280,7 @@ sub new {
     # PATH_INFO is '/Main/WebHome', i.e. the text after the script name;
     # invalid PATH_INFO is often a full path starting with '/cgi-bin/...'.
     my $pathInfo = $query->path_info();
-    my $cgiScriptName = $ENV{'SCRIPT_NAME'} || '';
+    my $cgiScriptName = $ENV{SCRIPT_NAME} || '';
     $pathInfo =~ s!$cgiScriptName/!/!i;
 
     # Get the web and topic names from PATH_INFO
@@ -1475,7 +1476,7 @@ sub writeLog {
        }
     }
 
-    my $remoteAddr = $ENV{'REMOTE_ADDR'} || '';
+    my $remoteAddr = $ENV{REMOTE_ADDR} || '';
     my $text = "$user | $action | $webTopic | $extra | $remoteAddr |";
 
     $this->_writeReport( $TWiki::cfg{LogFileName}, $text );
@@ -2964,19 +2965,27 @@ sub _HTTPS {
     return $res;
 }
 
-sub _HTTP_HOST {
+#deprecated functionality, now implemented using %ENV%
+#move to compatibility plugin in TWiki5
+sub _HTTP_HOST_deprecated {
     return $ENV{HTTP_HOST} || '';
 }
 
-sub _REMOTE_ADDR {
+#deprecated functionality, now implemented using %ENV%
+#move to compatibility plugin in TWiki5
+sub _REMOTE_ADDR_deprecated {
     return $ENV{REMOTE_ADDR} || '';
 }
 
-sub _REMOTE_PORT {
+#deprecated functionality, now implemented using %ENV%
+#move to compatibility plugin in TWiki5
+sub _REMOTE_PORT_deprecated {
     return $ENV{REMOTE_PORT} || '';
 }
 
-sub _REMOTE_USER {
+#deprecated functionality, now implemented using %ENV%
+#move to compatibility plugin in TWiki5
+sub _REMOTE_USER_deprecated {
     return $ENV{REMOTE_USER} || '';
 }
 
@@ -3042,6 +3051,17 @@ sub _ENCODE {
         $text =~ s/\r*\n\r*/<br \/>/; # Legacy.
         return urlEncode( $text );
     }
+}
+
+sub _ENV {
+    my ($this, $params) = @_;
+
+    return '' unless $params->{_DEFAULT} &&
+      defined $TWiki::cfg{AccessibleENV} &&
+        $params->{_DEFAULT} =~ /$TWiki::cfg{AccessibleENV}/o;
+    my $val = $ENV{$params->{_DEFAULT}};
+    return 'not set' unless defined $val;
+    return $val;
 }
 
 sub _SEARCH {
@@ -3244,7 +3264,8 @@ sub _INTURLENCODE {
 # and is maintained only for backward compatibility.
 # Spacing of WikiWords is now done with %SPACEOUT%
 # (and the private routine _SPACEOUT).
-sub _SPACEDTOPIC {
+# Move to compatibility module in TWiki5
+sub _SPACEDTOPIC_deprecated {
     my ( $this, $params, $theTopic ) = @_;
     my $topic = spaceOutWikiWord( $theTopic );
     $topic =~ s/ / */g;
@@ -3498,6 +3519,7 @@ sub _WIKINAME_deprecated {
 
     return $this->_USERINFO($params);
 }
+
 #deprecated functionality, now implemented using %USERINFO%
 #move to compatibility plugin in TWiki5
 sub _USERNAME_deprecated {
@@ -3509,6 +3531,7 @@ sub _USERNAME_deprecated {
 
     return $this->_USERINFO($params);
 }
+
 #deprecated functionality, now implemented using %USERINFO%
 #move to compatibility plugin in TWiki5
 sub _WIKIUSERNAME_deprecated {
