@@ -144,11 +144,82 @@ sub readTopic {
     my $meta = new TWiki::Meta( $this->{session}, $web, $topic);
     $this->extractMetaData( $meta, \$text );
 
-	# Override meta with that blended from pub.
-	$meta = $this->_extractMetaDataAutoAttachments($user, $web, $topic, $version, $meta );
+    # Override meta with that blended from pub.
+    if ($TWiki::cfg{AutoAttachPubFiles} &&
+        $web eq $this->{session}{webName} && # only check the currently requested topic
+        $topic eq $this->{session}{topicName}) {
+
+      my @knownAttachments = $meta->find('FILEATTACHMENT');
+      my @attachmentsFoundInPub = _findAttachments($this, $web, $topic, \@knownAttachments);
+      $meta->putAll('FILEATTACHMENT', @attachmentsFoundInPub) if @attachmentsFoundInPub;
+    }
 
     return( $meta, $text );
 }
+
+=pod 
+
+---++ ObjectMethod _findAttachments($session, $web, $topic, $knownAttachments) -> @attachmentsFoundInPub
+
+Synchronise the attachment list with what's actually on disk Returns an ARRAY
+of FILEATTACHMENTs. These can be put in the new meta using
+meta->put('FILEATTACHMENTS', $tree) 
+
+This function is only called when the AutoAttachPubFiles configuration option is set.
+
+IDEA On Windows machines where the underlying filesystem can store arbitary
+meta data against files, this might replace/fulfil the COMMENT purpose
+
+TODO consider logging when things are added to metadata
+
+=cut
+
+sub _findAttachments {
+    my ($this, $web, $topic, $attachmentsKnownInMeta) = @_;
+    my $session = $this->{session};
+    ASSERT($session->isa( 'TWiki' )) if DEBUG;
+
+    my $store = $this;
+
+    my %filesListedInPub = $store->getAttachmentList($web, $topic);
+    my %filesListedInMeta = ();
+
+    # You need the following lines if you want metadata to supplement
+    # the filesystem
+    if (defined $attachmentsKnownInMeta) {
+      %filesListedInMeta =
+        TWiki::Meta::indexByKey('name', @$attachmentsKnownInMeta);
+    }
+
+    foreach my $file (keys %filesListedInPub) {
+        if ($filesListedInMeta{$file}) {
+            # Bring forward any missing yet wanted attributes
+            #SMELL: this will over-write (empty) any meta data field not listed here :( 
+            foreach my $field qw(comment attr user version) {
+              if ($filesListedInMeta{$file}{$field}) {
+                $filesListedInPub{$file}{$field} =
+                $filesListedInMeta{$file}{$field};
+              }
+            }
+        # Develop:Bugs.Item452 - WHY IS USER STILL WRONG?
+      }
+    }
+
+    # A comparison of the keys of the $filesListedInMeta and %filesListedInPub 
+    # would show files that were in Meta but have disappeared from Pub.
+
+    # SMELL Meta really ought index its attachments in a hash by attachment
+    # name but this is not the case
+    #
+    # SMELL: Do not change this from array to hash, you would lose the
+    # proper attachment sequence 
+    #
+    my @deindexedBecauseMetaDoesnotIndexAttachments =
+      TWiki::Meta::deindexKeyed(%filesListedInPub);
+
+    return @deindexedBecauseMetaDoesnotIndexAttachments;
+}
+
 
 =pod
 
@@ -346,70 +417,6 @@ sub attachmentExists {
     ASSERT($this->isa('TWiki::Store')) if DEBUG;
     my $handler = $this->_getHandler( $web, $topic, $att );
     return $handler->storedDataExists();
-}
-
-# _findAttachments($session, $web, $topic, $knownAttachments)
-# Synchronise the attachment list with what's actually on disk
-# Returns an ARRAY of FILEATTACHMENTs- these can be put in the new meta using meta->put('FILEATTACHMENTS', $tree)
-#IDEA On Windows machines where the underlying filesystem can store
-#arbitary meta data against files, this might replace/fulfil the COMMENT
-# purpose
-#TODO consider logging when things are added to metadata
-
-
-sub _findAttachments {
-    my ($this, $web, $topic, $attachmentsKnownInMeta) = @_;
-    my $session = $this->{session};
-    ASSERT($session->isa( 'TWiki' )) if DEBUG;
-
-    my $store = $this;
-
-    my %filesListedInPub = $store->getAttachmentList($web, $topic);
-	my %filesListedInMeta = ();
-
-    # You need the following lines if you want metadata to supplement
-    # the filesystem	
-	if (defined $attachmentsKnownInMeta) {
-		%filesListedInMeta =
-          TWiki::Meta::indexByKey('name', @$attachmentsKnownInMeta);
-	}
-
-    # Please retain following print until this feature is out of beta
-#    	print "Topic: $web.$topic:\n";
-#    	use Data::Dumper;
-#    	$this->{session}->writeDebug("In Meta:".Dumper(\%filesListedInMeta). "\n\nIn Pub:\n".Dumper(\%filesListedInPub));
-
-    foreach my $file (keys %filesListedInPub) {
-        if ($filesListedInMeta{$file}) {
-            # Bring forward any missing yet wanted attributes
-            #SMELL: this will over-write (empty) any meta data field not listed here :( 
-            foreach my $field qw(comment attr user version) {
-              if ($filesListedInMeta{$file}{$field}) {
-#              		$this->{session}->writeDebug("$file: bringing forward field $field: was ".$filesListedInPub{$file}{$field});
-              		$filesListedInPub{$file}{$field} =
- 		            $filesListedInMeta{$file}{$field};
-# 		            $this->{session}->writeDebug(" now: ".$filesListedInPub{$file}{$field}."\n");
-              }
-            }
-         	# Develop:Bugs.Item452 - WHY IS USER STILL WRONG?
-	     }
-    }
-
-    # Please retain following print until this feature is out of beta
-    #	use Data::Dumper;
-# $this->{session}->writeDebug("Result:".Dumper(\%filesListedInPub)."\n");
-
-	# A comparison of the keys of the $filesListedInMeta and %filesListedInPub 
-	# would show files that were in Meta but have disappeared from Pub.
-		
-	# SMELL Meta really ought index its attachments in a hash by attachment
-    # name but this is not the case
-	# SMELL: Do not change this from array to hash, you would lose the
-        # proper attachment sequence 
-	my @deindexedBecauseMetaDoesnotIndexAttachments =
-      TWiki::Meta::deindexKeyed(%filesListedInPub);
-
-	return @deindexedBecauseMetaDoesnotIndexAttachments;
 }
 
 =pod
@@ -837,8 +844,8 @@ sub saveTopic {
     ASSERT($this->isa('TWiki::Store')) if DEBUG;
     ASSERT($user->isa('TWiki::User')) if DEBUG;
     $web =~ s#\.#/#go;
-	$meta = $this->_removeAutoAttachmentsFromMeta($meta);
-	
+    $meta = $this->_removeAutoAttachmentsFromMeta($meta);
+
     $options = {} unless defined( $options );
 
     if( $user &&
@@ -1395,42 +1402,6 @@ sub extractMetaData {
         $$rtext =~ s/\t/   /g;
     }
 
-    return $meta;
-}
-
-sub _extractMetaDataAutoAttachments {
-    my( $this, $user, $web, $topic, $version, $meta ) = @_;
-	if ($TWiki::cfg{AutoAttachPubFiles}) {
-
-#		$this->{session}->writeDebug("$web.$topic META: ".Dumper($meta->{'FILEATTACHMENT'})."\n".Dumper($this));  
-
-# TODO need to ensure that this is not called for every topic examined, but rather just the one we are specifically interested in
-#		return unless ("$web.$topic" eq $this->{session}{webName}.".".$this->{session}{topicName});
-
-	    my @knownAttachments = $meta->find('FILEATTACHMENT');
-	    my $ka = undef; #ugly I know
-	    if ($#knownAttachments) {
-	        $ka = \@knownAttachments;
-		} 
-
-
-
-#		use Data::Dumper;
-#		$Data::Dumper::Maxdepth = 2;
-#		$this->{session}->writeDebug("$web.$topic META =".Dumper($meta));
-#      	$this->{session}->writeDebug("AUTOATTACHING on $web.$topic\nFOUND BEFORE ".Dumper($ka)."\n");
-
-#       $this->{session}->writeDebug("KA2: ".Dumper(@knownAttachments));
-       my @attachmentsFoundInPub =
-         _findAttachments($this, $web, $topic, $ka);
-#       	$this->{session}->writeDebug("FOUND AFTER ".Dumper(\@attachmentsFoundInPub));
-
-		if ($#attachmentsFoundInPub) {
-			$meta->putAll('FILEATTACHMENT', @attachmentsFoundInPub);
-		};
-    } else {
-#       	$this->{session}->writeDebug("NOT AUTOATTACHING on $web.$topic\n ".Dumper($meta)."\n");
-    }
     return $meta;
 }
 
