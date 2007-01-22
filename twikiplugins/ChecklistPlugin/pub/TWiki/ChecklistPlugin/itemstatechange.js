@@ -185,7 +185,7 @@ function clpTooltipShow(tooltipId, parentId, posX, posY) {
 }
 
 function clpTooltipHide(id) {
-    var it = document.getElementById(id); 
-    if (it) it.style.visibility = 'hidden'; 
+	var it = document.getElementById(id); 
+	if (it) it.style.visibility = 'hidden'; 
 }
 

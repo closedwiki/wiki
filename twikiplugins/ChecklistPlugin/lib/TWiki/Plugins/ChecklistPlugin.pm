@@ -386,6 +386,7 @@ sub handleChecklist {
 			$action.=($action=~/\?/?';':'?');
 			$action.="clreset=".&urlEncode($name);
 			$action.=";clresetst=".&urlEncode($state);
+			$action.=';skin=print' if $options{'useajax'};
 		}
 
 		$action.="#reset${name}" if $options{'anchors'};
@@ -632,11 +633,12 @@ sub renderChecklistItem {
 		$action.="clpsc=".&urlEncode("$stId");
 		$action.=";clpscn=".&urlEncode($name);
 		$action.=";clpscls=$ueState";
+		$action.=";skin=print" if $options{'useajax'};
 	}
 	my %queryVars = $query->Vars();
 	foreach my $p (keys %queryVars) {
 		$action.=";$p=".&urlEncode($queryVars{$p}) 
-			unless ($p =~ /^(clp.*|clreset.*|contenttype)$/i)||(!$queryVars{$p});
+			unless ($p =~ /^(clp.*|clreset.*|contenttype|skin)$/i)||(!$queryVars{$p});
 	}
 	$action.="#$name$stId" if $options{'anchors'};
 
@@ -678,7 +680,7 @@ sub renderChecklistItem {
 				my $onmouseover=$options{'useajax'}?"clpTooltipShow('CLP_TT_$name$uetId','CLP_A_$name$uetId',20,20);" : "";
 				my $onmouseout=$options{'useajax'}?"clpTooltipHide('CLP_TT_$name$uetId');" : "";
 				$text .= $query->div({-id=>"CLP_TT_$name$uetId",-style=>"visibility:hidden;position:absolute;top:0;left:0;z-index:2;font: normal 8pt sans-serif;padding: 3px; border: solid 1px; background-color: $options{'tooltipbgcolor'};"},$title);
-				$text .= $query->a({-onmouseover=>$onmouseover,-onmouseout=>$onmouseout,-onmouseup=>$onmouseout,-id=>"CLP_A_$name$uetId",-href=>"javascript:submitItemStateChange('$action')"}, $linktext);
+				$text .= $query->a({-onmouseover=>$onmouseover,-onmouseout=>$onmouseout,-id=>"CLP_A_$name$uetId",-href=>"javascript:submitItemStateChange('$action')"}, $linktext);
 			} else {
 				$text .= $query->a({-title=>$title,-href=>$action},$linktext);
 			}
