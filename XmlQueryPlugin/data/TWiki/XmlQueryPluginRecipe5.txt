@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PatrickDiamond" date="1100098964" format="1.0" version="1.2"}%
+%META:TOPICINFO{author="PatrickDiamond" date="1141121979" format="1.0" version="1.3"}%
 %META:TOPICPARENT{name="XMLQueryPlugin"}%
 ---+ Recipe showing how to extract the values from a Table Column, sort them and produce a unique list
 %TOC%
@@ -47,13 +47,13 @@
  __Extract the first column from all rows but the first and procduce a distinct list of the items__
 <verbatim>
 
-	  <xsl:sort select="."/>
+			 <xsl:sort select="."/>
 
 </verbatim>
  __sort this list of items__
 <verbatim>
 
-	  <li><xsl:value-of select="."/></li>
+			 <li><xsl:value-of select="."/></li>
  </xsl:for-each>
  </ol>
 
@@ -76,8 +76,8 @@
 
  <ol>
  <xsl:for-each select="set:distinct(/twiki/web/topic/data/tables/table/row[position()>1]/field[1])">
-	  <xsl:sort select="."/>
-	  <li><xsl:value-of select="."/></li>
+			 <xsl:sort select="."/>
+			 <li><xsl:value-of select="."/></li>
  </xsl:for-each>
  </ol>
 

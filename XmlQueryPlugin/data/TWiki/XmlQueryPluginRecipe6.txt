@@ -1,8 +1,11 @@
-%META:TOPICINFO{author="PatrickDiamond" date="1141121943" format="1.0" version="1.10"}%
-%META:TOPICPARENT{name="XMLQueryPlugin"}%
----+ Recipe showing how to Transform a table or set of tables
+%META:TOPICINFO{author="PatrickDiamond" date="1141121992" format="1.0" version="1.6"}%
+%META:TOPICPARENT{name="XmlQueryPlugin"}%
+---+ Recipe showing how to output TWiki syntax from XSLT
 
 %TOC%
+
+		  * This is the same Recipe as XmlQueryPluginRecipe3  except that the output table is in TWiki syntax. This allows the TablePlugin to process the output enabling sortable columns etc
+		  * A cavate with this techinique is that if the TWiki tag being output by the XSLT is available via a Plugin then <nop>XmlQueryPlugin must be called before that plugin. In practise this means setting <nop>XmlQueryPlugin near the start of the plugin list described by the __INSTALLEDPLUGINS__ setting in Main.WebPreferences . 
 
 ---++Sample Tables
 
@@ -33,35 +36,34 @@
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
 <xsl:template match="/">
- <table border="1">
- <tr><th>Title</th><th>Author</th></tr>
+
+<!-- TWiki style Table header -->
+<xsl:text>%TABLE{name="test"}%
+| *Title* | *Author* |
+</xsl:text>
+
+<!-- Loop Over each Row > 1 in tables which match field at row 1 col 1 type is title-->
  <xsl:apply-templates select="/twiki/web/topic/data/tables/table/row[position()=1]/field[@type='title' and position()=1 and text()='Author']/../../row">
-</verbatim>
-__Select each row from all tables that have the first field in the first row equal to 'Title' and of type 'title'. Then apply the template that matchs "row"__
-<verbatim>
+			 <!-- Sort by the contents of the second field -->
 			 <xsl:sort select="field[2]"/>
-</verbatim>
-__Sort each row according to the contents of the second child tag named field__
-<verbatim>
  </xsl:apply-templates>
- </table>
+
+<!-- Add a newline at the end -->
+<xsl:text>
+</xsl:text>
 </xsl:template>
 
 
 <xsl:template match="row">
-</verbatim>
-__Executed from the apply-templates tag against each node in the select= list__
-<verbatim>
-
+			<!-- Process each line where at least the first field is of type data -->
 			<xsl:if test="./field[1][@type='data']">
-</verbatim>
-__If this is a data field then output it__
-<verbatim>
-
-			<tr>						 
-					  <td><xsl:value-of select="./field[2]"/></td>
-						<td><xsl:value-of select="./field[1]"/></td>
-			</tr>
+					  <xsl:text>| </xsl:text>								
+					  <xsl:value-of select="./field[2]"/>
+					  <xsl:text> | </xsl:text>
+					  <xsl:value-of select="./field[1]"/>
+					  <!-- add a new line at the end -->
+					  <xsl:text> |
+</xsl:text>
 			</xsl:if>
 
   </xsl:template>
@@ -77,26 +79,40 @@ The above tables has been transformed in 3 ways
 		  1 The __Author__ and __Title__ columns have been swapped
 		  1 The entries have been sorted by __Title__
 
+
 %XSLTSTART{id="%WEB%" benchmark="off" debug="off" }% 
  <xsl:stylesheet version="1.0" 
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
 <xsl:template match="/">
- <table border="1">
- <tr><th>Title</th><th>Author</th></tr>
+
+<!-- TWiki style Table header -->
+<xsl:text>%TABLE{name="test"}%
+| *Title* | *Author* |
+</xsl:text>
+
+<!-- Loop Over each Row > 1 in tables which match field at row 1 col 1 type is title-->
  <xsl:apply-templates select="/twiki/web/topic/data/tables/table/row[position()=1]/field[@type='title' and position()=1 and text()='Author']/../../row">
+			 <!-- Sort by the contents of the second field -->
 			 <xsl:sort select="field[2]"/>
  </xsl:apply-templates>
- </table>
+
+<!-- Add a newline at the end -->
+<xsl:text>
+</xsl:text>
 </xsl:template>
 
 
 <xsl:template match="row">
+			<!-- Process each line where at least the first field is of type data -->
 			<xsl:if test="./field[1][@type='data']">
-			<tr>						 
-					  <td><xsl:value-of select="./field[2]"/></td>
-						<td><xsl:value-of select="./field[1]"/></td>
-			</tr>
+					  <xsl:text>| </xsl:text>								
+					  <xsl:value-of select="./field[2]"/>
+					  <xsl:text> | </xsl:text>
+					  <xsl:value-of select="./field[1]"/>
+					  <!-- add a new line at the end -->
+					  <xsl:text> |
+</xsl:text>
 			</xsl:if>
 
   </xsl:template>

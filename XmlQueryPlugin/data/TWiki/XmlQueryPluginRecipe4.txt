@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PatrickDiamond" date="1100098796" format="1.0" version="1.4"}%
+%META:TOPICINFO{author="PatrickDiamond" date="1141121961" format="1.0" version="1.5"}%
 %META:TOPICPARENT{name="XMLQueryPlugin"}%
 ---+ Recipe showing how to restructure a table or set of tables
 %TOC%
