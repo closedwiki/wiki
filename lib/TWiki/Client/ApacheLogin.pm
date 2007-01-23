@@ -79,17 +79,19 @@ sub forceAuthentication {
         if( $url && $url =~ s/\/$scriptName/\/${scriptName}auth/ ) {
             # $url i.e. is "twiki/bin/view.cgi/Web/Topic?cms1=val1&cmd2=val2"
             $url = $twiki->{urlHost}.$url;
-        } elsif( $ENV{SCRIPT_NAME} &&
-                   $ENV{SCRIPT_NAME} =~ s/\/$scriptName/\/${scriptName}auth/ ) {
-            $url = $twiki->{urlHost}.$ENV{SCRIPT_NAME};
         } else {
-            # If SCRIPT_NAME does not contain the script name
-            # the last hope is to try building up the URL using
-            # the SCRIPT_FILENAME.
-            $url = $twiki->{urlhost}.$twiki->{scriptUrlPath}.'/'.
-              $scriptName.$TWiki::cfg{ScriptSuffix};
+            if( $ENV{SCRIPT_NAME} &&
+                   $ENV{SCRIPT_NAME} =~ s/\/$scriptName/\/${scriptName}auth/ ) {
+                $url = $twiki->{urlHost}.$ENV{SCRIPT_NAME};
+            } else {
+                # If SCRIPT_NAME does not contain the script name
+                # the last hope is to try building up the URL using
+                # the SCRIPT_FILENAME.
+                $url = $twiki->{urlHost}.$twiki->{scriptUrlPath}.'/'.
+                       $scriptName.'auth'.$TWiki::cfg{ScriptSuffix};
+            }
+            $url .= '/' . $ENV{PATH_INFO} if $ENV{PATH_INFO};
         }
-        $url .= '/' . $ENV{PATH_INFO} if $ENV{PATH_INFO};
         #print STDERR "Redirect to logon\n";
         # Redirect with passthrough so we don't lose the original query params
         $twiki->redirect( $url, 1 );
