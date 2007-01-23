@@ -689,13 +689,13 @@ sub searchWeb {
         my( $beforeText, $repeatText, $afterText ) =
           split( /%REPEAT%/, $tmplTable );
         if( defined $header ) {
-            $beforeText = TWiki::expandStandardEscapes($header);
             $beforeText =~ s/\$web/$web/gos;         # expand name of web
             if( defined( $separator )) {
                 $beforeText .= $separator;
             } else {
                 $beforeText =~ s/([^\n])$/$1\n/os;  # add new line at end if needed
             }
+            $beforeText = TWiki::expandStandardEscapes($header);
         }
 
         # output the list of topics in $web
@@ -762,7 +762,6 @@ sub searchWeb {
 
                 if( $format ) {
                     $out = $format;
-                    $out = TWiki::expandStandardEscapes( $out );
                     $out =~ s/\$web/$web/gs;
                     $out =~ s/\$topic\(([^\)]*)\)/TWiki::Render::breakName( $topic, $1 )/ges;
                     $out =~ s/\$topic/$topic/gs;
@@ -786,6 +785,7 @@ sub searchWeb {
                         $out =~ s/\$text/$text/gos;
                         $forceRendering = 1 unless( $doMultiple );
                     }
+                    $out = TWiki::expandStandardEscapes( $out );
                 } else {
                     $out = $repeatText;
                 }
