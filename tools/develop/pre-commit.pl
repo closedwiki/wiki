@@ -52,7 +52,7 @@ foreach my $item ( @items ) {
         $state = $1;
     }
     close(F);
-    if( $state !~ /^(New|Actioning|Waiting for Feedback)$/ ) {
+    if( $state =~ /^(Waiting for Release|Closed|No Action Required)$/ ) {
         fail("$item is in $state state; cannot check in");
     }
 }
