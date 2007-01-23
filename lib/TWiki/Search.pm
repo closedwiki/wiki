@@ -690,12 +690,12 @@ sub searchWeb {
           split( /%REPEAT%/, $tmplTable );
         if( defined $header ) {
             $beforeText =~ s/\$web/$web/gos;         # expand name of web
+            $beforeText = TWiki::expandStandardEscapes($header);
             if( defined( $separator )) {
                 $beforeText .= $separator;
             } else {
                 $beforeText =~ s/([^\n])$/$1\n/os;  # add new line at end if needed
             }
-            $beforeText = TWiki::expandStandardEscapes($header);
         }
 
         # output the list of topics in $web
