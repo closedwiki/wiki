@@ -21,7 +21,7 @@ use vars qw(
 );
 
 $VERSION = '$Rev$';
-$RELEASE = '1.30';
+$RELEASE = '1.40';
 $NO_PREFS_IN_TOPIC = 1;
 $SHORTDESCRIPTION = 'Lightweighted frontend to the DBCacheContrib';
 
@@ -39,6 +39,7 @@ sub initPlugin {
   TWiki::Func::registerTagHandler('DBCALL', \&_DBCALL);
   TWiki::Func::registerTagHandler('DBSTATS', \&_DBSTATS);
   TWiki::Func::registerTagHandler('DBDUMP', \&_DBDUMP); # for debugging
+  TWiki::Func::registerTagHandler('ATTACHMENTS', \&_ATTACHMENTS);
 
   $isInitialized = 0;
 
@@ -95,6 +96,10 @@ sub _DBSTATS {
 sub _DBDUMP {
   initCore();
   return TWiki::Plugins::DBCachePlugin::Core::handleDBDUMP(@_);
+}
+sub _ATTACHMENTS {
+  initCore();
+  return TWiki::Plugins::DBCachePlugin::Core::handleATTACHMENTS(@_);
 }
 
 ###############################################################################
