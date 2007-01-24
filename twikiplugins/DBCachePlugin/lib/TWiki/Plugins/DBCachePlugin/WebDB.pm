@@ -98,9 +98,6 @@ sub onReload {
   foreach my $topicName (@$topics) {
     my $topic = $this->fastget($topicName);
 
-    # save web
-    $topic->set('web', $this->{web});
-
     #print STDERR "DEBUG: reloading $topicName\n";
 
     # createdate
@@ -172,7 +169,7 @@ sub dbQuery {
   
   # parse & fetch
   my $wikiUserName = TWiki::Func::getWikiUserName();
-  my %hits;
+  my %hits = ();
   if ($theSearch) {
     my $search;
     try {

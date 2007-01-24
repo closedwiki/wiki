@@ -439,7 +439,147 @@ sub handleDBDUMP {
     $result .= "</table>\n";
   }
 
+  # read attachments
+  my $attachments = $topicObj->fastget('attachments');
+  $result .= "<p/>\n---++ Attachments = $attachments\n";
+  $result .= "<table class=\"twikiTable\">\n";
+  foreach my $attachment (sort $attachments->getValues()) {
+    $result .= "<tr><th valign='top'>".$attachment->fastget('name')."</th>";
+    $result .= '<td><table>';
+    foreach my $key (sort $attachment->getKeys()) {
+      next if $key eq 'name';
+      my $value = $attachment->fastget($key);
+      $result .= "<tr><th>$key</th><td>$value</td></tr>\n" if $value;
+    }
+    $result .= '</table></td></tr>';
+  }
+  $result .= "</table>\n";
+
   return $result."\n</noautolink>\n";
+}
+
+###############################################################################
+sub handleATTACHMENTS {
+  my ($session, $params, $theTopic, $theWeb) = @_;
+
+  # get parameters
+  my $thisTopic = $params->{_DEFAULT} || $params->{topic} || $theTopic;
+  my $thisWeb = $params->{web} || $theWeb;
+  ($thisWeb, $thisTopic) = TWiki::Func::normalizeWebTopicName($thisWeb, $thisTopic);
+
+  my $theNames = $params->{names} || $params->{name} || '.*';
+  my $theAttr = $params->{attr} || '.*';
+  my $theAutoAttached = $params->{autoattached} || 2;
+  $theAutoAttached = 0 if $theAutoAttached =~ /^(no|off)$/o;
+  $theAutoAttached = 1 if $theAutoAttached =~ /^(yes|on)$/o;
+  $theAutoAttached = 2 if $theAutoAttached eq 'undef';
+  my $theMinDate = $params->{mindate};
+  $theMinDate = TWiki::Time::parseTime($theMinDate) if $theMinDate;
+  my $theMaxDate = $params->{maxdate};
+  $theMaxDate = TWiki::Time::parseTime($theMaxDate) if $theMaxDate;
+  my $theMinSize = $params->{minsize} || 0;
+  my $theMaxSize = $params->{maxsize} || 0;
+  my $theUser = $params->{user} || '.*';
+  my $theHeader = $params->{header} || '| *Name* | *Size* | *Date* | *Who* | *Comment* |$n';
+  my $theFooter = $params->{footer} || '$n$count attachments$n';
+  my $theFormat = $params->{format} || '| [[$url][$name]] |  $sizeK | <nobr>$date</nobr> | $user | $comment |';
+  my $theSeparator = $params->{separator} || $params->{sep} || "\n";
+  my $theSort = $params->{sort} || $params->{order} || 'name';
+  my $theHideNull = $params->{hidenull} || 'off';
+  my $theComment = $params->{comment} = '.*';
+
+  # get topic
+  my $theDB = getDB($thisWeb);
+  my $topicObj = $theDB->fastget($thisTopic) || '';
+  return _inlineError("$thisWeb.$thisTopic not found") unless $topicObj;
+
+  # sort attachments
+  my $attachments = $topicObj->fastget('attachments');
+  return '' unless $attachments;
+
+  my @attachments;
+  if ($theSort eq 'name') {
+    @attachments = sort {$a->fastget('name') cmp $b->fastget('name')} 
+      $attachments->getValues();
+  } elsif ($theSort eq 'date') {
+    @attachments = sort {$a->fastget('date') <=> $b->fastget('date')} 
+      $attachments->getValues();
+  } elsif ($theSort eq 'size') {
+    @attachments = sort {$a->fastget('size') <=> $b->fastget('size')} 
+      $attachments->getValues();
+  } elsif ($theSort eq 'user') {
+    @attachments = sort {$a->fastget('user') cmp $b->fastget('user')} 
+      $attachments->getValues();
+  }
+
+  writeDebug("called handleATTACHMENTS($thisWeb, $thisTopic)");
+
+
+  # collect result
+  my @result;
+
+  my $index = 0;
+  foreach my $attachment (@attachments) {
+    my $name = $attachment->fastget('name');
+    writeDebug("name=$name");
+    next unless $name =~ /^($theNames)$/;
+
+    my $attr = $attachment->fastget('attr');
+    writeDebug("attr=$attr");
+    next unless $attr =~ /^($theAttr)$/;
+
+    my $autoattached = $attachment->fastget('autoattached') || 0;
+    writeDebug("autoattached=$autoattached");
+    next if $theAutoAttached == 0 && $autoattached != 0;
+    next if $theAutoAttached == 1 && $autoattached != 1;
+
+    my $date = $attachment->fastget('date');
+    writeDebug("date=$date");
+    next if $theMinDate && $date < $theMinDate;
+    next if $theMaxDate && $date > $theMaxDate;
+
+    my $user = $attachment->fastget('user');
+    writeDebug("user=$user");
+    next unless $user =~ /^($theUser)$/;
+
+    my $size = $attachment->fastget('size');
+    writeDebug("size=$size");
+    next if $theMinSize && $size < $theMinSize;
+    next if $theMaxSize && $size > $theMaxSize;
+
+    my $path = $attachment->fastget('path');
+    writeDebug("path=$path");
+
+    my $comment = $attachment->fastget('comment') || '';
+    next unless $comment =~ /^($theComment)$/;
+    
+    $index++;
+    my $text = _expandVariables($theFormat, $thisWeb, $thisTopic,
+      'attr'=>$attr,
+      'autoattached'=>$autoattached,
+      'comment'=>$comment,
+      'date'=>TWiki::Func::formatTime($date),
+      'index'=>$index,
+      'name'=>$name,
+      'path'=>$path,
+      'size'=>$size,
+      'sizeK'=>int($size/1024).'k',
+      'sizeM'=>int($size/1024/1024).'m',
+      'url'=>"\%PUBURL\%\/$thisWeb\/$thisTopic\/$path",
+      'urlpath'=>"\%PUBURLPATH\%\/$thisWeb\/$thisTopic\/$path",
+      'user'=>$user,
+    );
+    $text =~ s/\$date\(([^\)]+)\)/TWiki::Func::formatTime($date, $2)/ge;
+
+    push @result, $text;
+  }
+
+  return '' if $theHideNull eq 'on' && $index == 0;
+
+  $theHeader = _expandVariables($theHeader, $thisWeb, $thisTopic, count=>$index);
+  $theFooter = _expandVariables($theFooter, $thisWeb, $thisTopic, count=>$index);
+
+  return $theHeader.join($theSeparator,@result).$theFooter;
 }
 
 ###############################################################################
@@ -557,7 +697,6 @@ sub _expandVariables {
   $theFormat =~ s/\$percnt/\%/go;
   $theFormat =~ s/\$nop//g;
   $theFormat =~ s/\$n/\n/go;
-  $theFormat =~ s/\$t\b/\t/go;
   $theFormat =~ s/\$flatten\((.*?)\)/&_flatten($1)/ges;
   $theFormat =~ s/\$encode\((.*?)\)/&_encode($1, $web, $topic)/ges;
   $theFormat =~ s/\$trunc\((.*?),\s*(\d+)\)/substr($1,0,$2)/ges;
