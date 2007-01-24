@@ -39,16 +39,13 @@ sub checkRCSProgram {
         $err .= $key.' is not set';
     } else {
         my $version = `$prog -V` || '';
-        if( $@ ) {
-            $err .= $this->ERROR($prog.' returned an error: '.$@ );
-        } elsif ( $version ne '' ) {
-            $version =~ /(\d+(\.\d+)+)/;
+        if ( $version =~ /(\d+(\.\d+)+)/ ) {
             $version = $1;
             $mess .= " ($prog is version $version)";
         } else {
             $err .= $this->ERROR($prog.' did not return a version number (or might not exist..)');
         }
-        if( $version && $version < $rcsverRequired ) {
+        if( $version =~ /^\d/ && $version < $rcsverRequired ) {
             # RCS too old
             $err .= $prog.' is too old, upgrade to version '.
               $rcsverRequired.' or higher.';
