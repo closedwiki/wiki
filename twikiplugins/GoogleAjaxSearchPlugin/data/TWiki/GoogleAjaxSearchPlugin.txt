@@ -14,7 +14,7 @@ Note that this service (as stated by Google themselves):
 
 If you want to put this service on your own site you need to [[http://code.google.com/apis/ajaxsearch/signup.html][obtain a (free) unique key]] from Google.
 
-*NOTE*: the Google key must be valid for the directory/directories you will be searching in. 
+*NOTE*: the Google key must be valid for the directory/directories you will be searching in. If you are going to search all webs, pass =http://yourdomain/twiki/bin/view/= as url.
 
 Set =GOOGLEKEY= below in [[%TOPIC%#Settings][Settings]].
 
@@ -60,11 +60,11 @@ An input field with id 'googleAjaxSearchLabel' may override =GOOGLESEARCHLABEL=.
 </verbatim>
 
 ---++ Re-use
-To show the search box in another topic, put in an =INCLUDE= as follows:
+To show the search box in another topic, write this:
 <verbatim>
 %INCLUDE{"%TWIKIWEB%.GoogleAjaxSearchPlugin" section="default" query="" label="" web="TWiki"}%
 </verbatim>
-The included section is:
+This will include the following section (leave as is, no need to copy this):
 <verbatim>
 %STARTSECTION{"default"}%%GOOGLEAJAXSEARCH%<div class="googleAjaxSearch"><strong>Search %web% </strong><input class="twikiInputField" size="55" id="googleAjaxSearchInputElement" value="%query%" /><input type="hidden" id="googleAjaxSearchWeb" value="%web%" /><input type="hidden" id="googleAjaxSearchlabel" value="%label%" /> <span class="twikiGrayText twikiSmallish">(results by Google !AJAX - Beta)</span><div id="googleAjaxSearchControl"></div></div><!--//googleAjaxSearch-->%ENDSECTION{"default"}%
 </verbatim>
@@ -73,7 +73,9 @@ The included section is:
 To start off with a search, pass a default search string to the input field.
 
 ---++ Start search automatically by URL parameter
-Pass parameter =googleAjaxQuery= to the url to start off a default search. For example: =%SCRIPTURL{view}%/%WEB%/%TOPIC%?googleAjaxQuery=htaccess= (%SCRIPTURL{view}%/%WEB%/%TOPIC%?googleAjaxQuery=htaccess).
+Pass parameter =googleAjaxQuery= to the url to start off a default search. For example: =%SCRIPTURL{view}%/%WEB%/%TOPIC%?googleAjaxQuery=htaccess=
+
+Test this: %SCRIPTURL{view}%/%WEB%/%TOPIC%?googleAjaxQuery=htaccess
 
 A URL parameter will override a locally set search input value.
 
@@ -89,7 +91,7 @@ For an explanation of the following variables read above. These are example vari
    * Set GOOGLESEARCHLABEL = twiki.org
    * Set SHORTDESCRIPTION = Dynamic Google AJAX search service for public TWiki sites
    
-You can set these values in this topic, or in any other topic where =%<nop>GOOGLEAJAXSEARCH%= is written.
+You can set these values in this topic, or in any other topic where =%<nop>GOOGLEAJAXSEARCH%= is written. Note that you will need to use the syntax GOOGLEAJAXSEARCHPLUGIN_MYVARIABLE if you set the variable in a different web.
 
 ---++ Example
 To see it work (if installed and the right Google key is set):
@@ -110,10 +112,10 @@ To see it work (if installed and the right Google key is set):
 ---++ Contrib Info
 
 | Authors: | TWiki:Main.ArthurClemens |
-| Copyright &copy;: | 2006 Arthur Clemens |
+| Copyright &copy;: | 2006, 2007 Arthur Clemens |
 | License: | [[http://www.gnu.org/copyleft/gpl.html][GPL]] |
 | Dependencies: | %$DEPENDENCIES% |
-|  25 Jan 2007 | 1.0.4 Doc fix |
+|  25 Jan 2007 | 1.0.4 Doc fixes |
 |  22 Nov 2006 | 1.0.3 Settings can now be written in any topic |
 |  22 Jul 2006 | 1.0.2 Added Lazy loading |
 |  22 Jul 2006 | 1.0.1 Added =GOOGLESEARCHLABEL=; various bug fixes |
