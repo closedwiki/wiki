@@ -62,7 +62,7 @@ An input field with id 'googleAjaxSearchLabel' may override =GOOGLESEARCHLABEL=.
 ---++ Re-use
 To show the search box in another topic, put in an =INCLUDE= as follows:
 <verbatim>
-%INCLUDE{"%TWIKIWEB%.GoogleAjaxSearchPlugin" section="default" query="" web="TWiki"}%
+%INCLUDE{"%TWIKIWEB%.GoogleAjaxSearchPlugin" section="default" query="" label="" web="TWiki"}%
 </verbatim>
 The included section is:
 <verbatim>
@@ -113,6 +113,7 @@ To see it work (if installed and the right Google key is set):
 | Copyright &copy;: | 2006 Arthur Clemens |
 | License: | [[http://www.gnu.org/copyleft/gpl.html][GPL]] |
 | Dependencies: | %$DEPENDENCIES% |
+|  25 Jan 2007 | 1.0.4 Doc fix |
 |  22 Nov 2006 | 1.0.3 Settings can now be written in any topic |
 |  22 Jul 2006 | 1.0.2 Added Lazy loading |
 |  22 Jul 2006 | 1.0.1 Added =GOOGLESEARCHLABEL=; various bug fixes |
