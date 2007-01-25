@@ -61,12 +61,16 @@ An input field with id 'googleAjaxSearchLabel' may override =GOOGLESEARCHLABEL=.
 
 ---++ Re-use
 To show the search box in another topic, write this:
+
 <verbatim>
-%INCLUDE{"%TWIKIWEB%.GoogleAjaxSearchPlugin" section="default" query="" label="" web="TWiki"}%
+%INCLUDE{"%TWIKIWEB%.GoogleAjaxSearchPlugin" section="default" query="" web="%BASEWEB%" label="%BASEWEB% Web (results by Google)"}%
 </verbatim>
+
 This will include the following section (leave as is, no need to copy this):
+
 <verbatim>
-%STARTSECTION{"default"}%%GOOGLEAJAXSEARCH%<div class="googleAjaxSearch"><strong>Search %web% </strong><input class="twikiInputField" size="55" id="googleAjaxSearchInputElement" value="%query%" /><input type="hidden" id="googleAjaxSearchWeb" value="%web%" /><input type="hidden" id="googleAjaxSearchlabel" value="%label%" /> <span class="twikiGrayText twikiSmallish">(results by Google !AJAX - Beta)</span><div id="googleAjaxSearchControl"></div></div><!--//googleAjaxSearch-->%ENDSECTION{"default"}%
+%STARTSECTION{"default"}%%GOOGLEAJAXSEARCH%<div class="googleAjaxSearch"><strong>Search %BASEWEB% </strong><input class="twikiInputField" size="50" id="googleAjaxSearchInputElement" value="%query%" /><input type="hidden" id="googleAjaxSearchWeb" value="%BASEWEB%" /><input type="hidden" id="googleAjaxSearchlabel" value="%label%" />
+<div id="googleAjaxSearchControl"></div></div><!--//googleAjaxSearch-->%ENDSECTION{"default"}%
 </verbatim>
 
 ---++ Start search automatically
