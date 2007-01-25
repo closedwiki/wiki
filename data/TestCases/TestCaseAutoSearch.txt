@@ -292,22 +292,6 @@ NOOPED vars shouldn't expand in search results %<nop>DATE%
 %SEARCH{"[N]OOPED vars shouldn" type="regex" nonoise="on"}%
 <!-- /actual -->
 
----+ format="..." (very incomplete)
----++ Expected
-<!-- expected expand rex FORMAT -->
-%WEB% %TOPIC% <br /> 
-@WIKIWORD <img src="pingu.gif" alt="<nop>" > 
-<!-- /expected -->
----++ Actual
-<!-- actual -->
-%SEARCH{ "Pingu the Penguin" nototal="on" nosearch="on" format="<nop>$web <nop>$topic <br /> <nop>$wikiname <img src=\"pingu.gif\" alt=\"<nop>\" > " }%
-<!-- /actual -->
-
----+ order="created"
----+ order="modified"
----+ order="editby"
----+ order="formfield(name)"
-
 ---+ bookview="on"
 
 ---+ expandvariables="on"
