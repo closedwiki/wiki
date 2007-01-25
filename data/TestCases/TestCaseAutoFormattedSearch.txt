@@ -1,0 +1,32 @@
+%META:TOPICINFO{author="TWikiContributor" date="1117992408" format="1.0" version="$Rev: 12503 $"}%
+
+Description: Automated search function tests.
+
+Results dependent on templates used to render search results. Tests only make sense when this topic is viewed with "pattern" skin and standard search templates.
+
+[[%SCRIPTURLPATH{"view"}%/%WEB%/%TOPIC%?test=compare&debugenableplugins=TestFixturePlugin&skin=pattern][run this test]]
+
+Designed by: Kenneth Lavrsen
+
+---+ Basic formatted search 1
+---++ Expected
+<!-- expected simple formatted search -->
+I found <nop>FormattedSearch1<br>
+<!-- /expected -->
+---++ Actual
+<!-- actual -->
+%SEARCH{ search="[f]ormatteduniqueword" type="regex" nototal="on" nosearch="on" format="I found <nop>$topic<br>"}%
+<!-- /actual -->
+
+---+ Basic formatted search 2
+---++ Expected
+<!-- expected expand rex FORMAT -->
+%WEB% %TOPIC% <br /> 
+@WIKIWORD <img src="pingu.gif" alt="<nop>" > 
+<!-- /expected -->
+---++ Actual
+<!-- actual -->
+%SEARCH{ "Pingu the Penguin" nototal="on" nosearch="on" format="<nop>$web <nop>$topic <br /> <nop>$wikiname <img src=\"pingu.gif\" alt=\"<nop>\" > " }%
+<!-- /actual -->
+
+

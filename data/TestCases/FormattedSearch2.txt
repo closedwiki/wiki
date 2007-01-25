@@ -1,0 +1,9 @@
+%META:TOPICINFO{author="KennethLavrsen" date="1169714817" format="1.1" version="1.2"}%
+Michael Anchor and Anna Anchor lived in Skagen in Denmark. There is a very nice museum you can visit 
+
+This formatteduniqueotherword is only found in this topic.
+
+%META:FORM{name="FormattedSearchForm"}%
+%META:FIELD{name="Name" attributes="" title="Name" value="Anna Anchor"}%
+%META:FIELD{name="Role" attributes="" title="Role" value="Painter"}%
+%META:FIELD{name="Testsample" attributes="" title="Testsample" value="Friend of P.S. Kroeyer"}%
