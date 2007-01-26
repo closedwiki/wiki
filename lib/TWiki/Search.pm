@@ -689,8 +689,8 @@ sub searchWeb {
         my( $beforeText, $repeatText, $afterText ) =
           split( /%REPEAT%/, $tmplTable );
         if( defined $header ) {
-            $beforeText =~ s/\$web/$web/gos;         # expand name of web
             $beforeText = TWiki::expandStandardEscapes($header);
+            $beforeText =~ s/\$web/$web/gos;         # expand name of web
             if( defined( $separator )) {
                 $beforeText .= $separator;
             } else {
