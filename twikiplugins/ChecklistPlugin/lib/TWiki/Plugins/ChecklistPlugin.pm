@@ -79,7 +79,7 @@ $VERSION = '$Rev$';
 # This is a free-form string you can use to "name" your own plugin version.
 # It is *not* used by the build automation tools, but is reported as part
 # of the version number in PLUGINDESCRIPTIONS.
-$RELEASE = 'Dakar';
+$RELEASE = 'Cairo, Dakar, Edinburgh, ...';
 
 $REVISION = '1.021'; #dro# improved performance (AJAX); fixed minor IE caching bug (AJAX related); added new attributes (tooltip, descr) requested by TWiki:Main.KeithHelfrich; fixed installation instructions bug reported by TWiki:Main.KeithHelfrich
 #$REVISION = '1.020'; #dro# added AJAX feature (useajax attribute) requested by TWiki:Main.ShayPierce and TWiki:Main.KeithHelfrich
@@ -183,6 +183,7 @@ sub initDefaults() {
 		'descr' => undef,
 		'_DEFAULT' => undef,
 		'ajaxtopicstyle'=>'plain',
+		'descrcharlimit'=>100,
 	);
 
 	@listOptions = ('states','stateicons');
@@ -516,8 +517,11 @@ sub handleDescription  {
 		$options{'descr'}=~s/\s{2,}/ /g; ## remove multiple spaces
 		$options{'descr'}=~s/^\s*//g;  
 		$options{'descr'}=~s/\s*$//g;  
+		
 
 	};
+	$options{'descr'}=substr($options{'descr'},0,$options{'descrcharlimit'}) 
+		if (defined $options{'descr'})&&(length($options{'descr'})>$options{'descrcharlimit'});
 }
 
 # =========================
