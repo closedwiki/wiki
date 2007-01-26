@@ -334,7 +334,7 @@ sub searchInWebContent {
 
     if ($TWiki::cfg{SearchAlgorithm}) {
         # WikiRing native search
-        if ($TWiki::cfg{Store}{SearchAlgorithm} eq 'Native') {
+        if ($TWiki::cfg{SearchAlgorithm} eq 'Native') {
             eval 'use NativeTWikiSearch';
             die $@ if $@;
             my @fs;
