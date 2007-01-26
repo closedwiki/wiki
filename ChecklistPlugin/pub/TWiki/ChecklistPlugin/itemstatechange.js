@@ -1,4 +1,7 @@
 var clpStateChangeObjectArray = new Array(); // queue
+var clpCursorNormalStyle = "move";
+var clpCursorInProgressStyle = "wait";
+var clpInProgressDivText = "State is changing ... please wait ...";
 function ClpStateChangeObject(url, stateChangeRequest) {
 	this.stateChangeRequest = stateChangeRequest;
 	this.url = url;
@@ -62,6 +65,7 @@ function clpHandleStateChange(self) {
 			var newHref = clpStripId(href);
 
 			if (oldHref==newHref) continue;
+			e.style.cursor=clpCursorNormalStyle;
 
 			self.changes.push(e.href);
 			self.changesNew.push(href);
@@ -86,7 +90,7 @@ function clpHandleStateChange(self) {
 			var divTxt = RegExp.$1;
 
 			clpChangeDivText(realId, divTxt);
-			
+						
 
 		}
 	} else {
@@ -99,7 +103,7 @@ function clpDoIt() {
 		document.submit(url);
 		return;
 	}
-	document.getElementsByTagName('body')[0].style.cursor="wait";
+	document.getElementsByTagName('body')[0].style.cursor=clpCursorInProgressStyle;
 	var self = this;
 	this.stateChangeRequest.onreadystatechange=function() {
 		try {
@@ -140,7 +144,7 @@ function clpChangeDivText(id, text) {
 		e.appendChild(document.createTextNode(text));
 	}
 	e = document.getElementById("CLP_A_"+id);
-	if (e) e.style.cursor="wait";
+	if (e) e.style.cursor=clpCursorInProgressStyle;
 	
 }
 var clpSubmitItemStateChangeMutex = 0;
@@ -149,7 +153,7 @@ function submitItemStateChange(url) {
 	clpSubmitItemStateChangeMutex++;
 	var newStateChangeObject = new ClpStateChangeObject(url);
 	clpStateChangeObjectArray.push(newStateChangeObject);
-	clpChangeDivText(clpGetIdFromUrl(url),"State is changing ... please wait ...");
+	clpChangeDivText(clpGetIdFromUrl(url), clpInProgressDivText);
 	if (clpStateChangeObjectArray.length==1) newStateChangeObject.clpDoIt();
 	clpSubmitItemStateChangeMutex--;
 }
@@ -200,7 +204,7 @@ function clpTooltipShow(tooltipId, parentId, posX, posY) {
 		it.style.top = y + 'px';
 	//}
 	it.style.visibility = 'visible'; 
-	img.style.cursor='move';
+	img.style.cursor=clpCursorNormalStyle;
 }
 
 function clpTooltipHide(id) {
