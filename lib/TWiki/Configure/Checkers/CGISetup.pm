@@ -83,6 +83,9 @@ HERE
     # Perl version and type
     $n = $];
     $n .= " ($Config::Config{osname})";
+    $n .= $this->NOTE(<<HERE);
+Note that by convention "Perl version 5.008" is referred to as "Perl version 5.8" and "Perl 5.008004" as "Perl 5.8.4" (i.e. ignore the leading zeros after the .)
+HERE
     $block .= $this->setting('Perl version', $n);
 
     # Perl @INC (lib path)
