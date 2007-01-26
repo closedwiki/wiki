@@ -794,6 +794,15 @@ $TWiki::cfg{RCS}{dirPermission}= 0775;
 # representing the standard UNIX permissions (e.g. 644 == rw-r--r--)
 $TWiki::cfg{RCS}{filePermission}= 0644;
 
+# **SELECT Forking,PurePerl,Native EXPERT**
+# TWiki has three built-in search algorithms; the default Forking algorithm
+# which forks a 'grep' command, a PurePerl implementation, and a Native
+# code implementation. Different web server configurations behave differently
+# under load, and some servers - especially those running mod_perl - may
+# find benefit from selecting an alternate algorithm. The Native algorithm
+# requires that the tools/native_search module is built and installed. 
+$TWiki::cfg{SearchAlgorithm} = 'Forking';
+
 # **BOOLEAN EXPERT**
 # Some file-based Store implementations (RcsWrap and RcsLite for
 # example) store attachment meta-data separately from the actual attachments.

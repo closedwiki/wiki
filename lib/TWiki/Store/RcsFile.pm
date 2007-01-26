@@ -331,76 +331,90 @@ sub searchInWebContent {
     my $sDir = $TWiki::cfg{DataDir}.'/'.$this->{web}.'/';
     my $matches = '';
     my %seen;
-    # Use the WikiRing native search if it is available, it is faster
-    # than forking grep.
-    eval 'use NativeTWikiSearch qw(cgrep)';
-    unless ($@) {
-        my @fs;
-        push(@fs, "-i") unless $options->{casesensitive};
-        push(@fs, "-l") if $options->{files_without_match};
-        push(@fs, $searchString);
-        push(@fs, map { "$sDir/$_.txt" } @$topics);
-        my $matches = NativeTWikiSearch::cgrep(\@fs);
-        if (defined($matches)) {
-            for (@$matches) {
-                if (/([^\/]*)\.txt(:(.*))?$/) {
-                    push( @{$seen{$1}}, $3 );
+
+    if ($TWiki::cfg{SearchAlgorithm}) {
+        # WikiRing native search
+        if ($TWiki::cfg{Store}{SearchAlgorithm} eq 'Native') {
+            eval 'use NativeTWikiSearch';
+            die $@ if $@;
+            my @fs;
+            push(@fs, "-i") unless $options->{casesensitive};
+            push(@fs, "-l") if $options->{files_without_match};
+            push(@fs, $searchString);
+            push(@fs, map { "$sDir/$_.txt" } @$topics);
+            my $matches = NativeTWikiSearch::cgrep(\@fs);
+            if (defined($matches)) {
+                for (@$matches) {
+                    if (/([^\/]*)\.txt(:(.*))?$/) {
+                        push( @{$seen{$1}}, $3 );
+                    }
                 }
             }
-        }
-    } elsif (exists $ENV{MOD_PERL}) {
-        # Use pure-perl grep if MOD_PERL, as the fork() used by TWiki::Sandbox
-        # is horribly inefficient with mod_perl
-        local $/ = "\n";
-        if ($type eq 'regex') {
-            $searchString =~ s!/!\\/!g;
-        } else {
-            $searchString =~ s/(\W)/\\$1/g;
-        }
-        my $match_code = "/$searchString/o";
-        $match_code .= 'i' unless ($options->{casesensitive});
-        my $doMatch = eval "sub { $match_code }";
-      FILE:
-        foreach my $file ( @$topics ) {
-            next unless open(FILE, "$sDir/$file.txt");
-            while (<FILE>) {
-                if (&$doMatch()) {
-                    push( @{$seen{$file}}, $_ );
-                    next FILE if $options->{files_without_match};
-                }
-            }
-        }
-    } else {
-        # I18N: 'grep' must use locales if needed,
-        # for case-insensitive searching.  See TWiki::setupLocale.
-        my $program = '';
-        # FIXME: For Cygwin grep, do something about -E and -F switches
-        # - best to strip off any switches after first space in
-        # EgrepCmd etc and apply those as argument 1.
-        if( $type eq 'regex' ) {
-            $program = $TWiki::cfg{RCS}{EgrepCmd};
-        } else {
-            $program = $TWiki::cfg{RCS}{FgrepCmd};
+            return \%seen;
         }
 
-        $program =~ s/%CS{(.*?)\|(.*?)}%/$options->{casesensitive}?$1:$2/ge;
-        $program =~ s/%DET{(.*?)\|(.*?)}%/$options->{files_without_match}?$2:$1/ge;
-        # process topics in sets, fix for Codev.ArgumentListIsTooLongForSearch
-        my $maxTopicsInSet = 512; # max number of topics for a grep call
-        my @take = @$topics;
-        my @set = splice( @take, 0, $maxTopicsInSet );
-        my $sandbox = $this->{session}->{sandbox};
-        while( @set ) {
-            @set = map { "$sDir/$_.txt" } @set;
-            my ($m, $exit ) = $sandbox->sysCommand(
-                $program,
-                TOKEN => $searchString,
-                FILES => \@set);
-            $matches .= $m;
-            @set = splice( @take, 0, $maxTopicsInSet );
+        if ($TWiki::cfg{SearchAlgorithm} eq 'PurePerl') {
+            # Pure-perl grep
+            local $/ = "\n";
+            if ($type eq 'regex') {
+                $searchString =~ s!/!\\/!g;
+            } else {
+                $searchString =~ s/(\W)/\\$1/g;
+            }
+            my $match_code = "return \$_[0] =~ m/$searchString/o";
+            $match_code .= 'i' unless ($options->{casesensitive});
+            my $doMatch = eval "sub { $match_code }";
+          FILE:
+            foreach my $file ( @$topics ) {
+                next unless open(FILE, "<$sDir/$file.txt");
+                while (my $line = <FILE>) {
+                    if (&$doMatch($line)) {
+                        chomp($line);
+                        push( @{$seen{$file}}, $line );
+                        if ($options->{files_without_match}) {
+                            close(FILE);
+                            next FILE;
+                        }
+                    }
+                }
+                close(FILE);
+            }
+            return \%seen;
         }
-        $matches =~ s/([^\/]*)\.txt(:(.*))?$/push( @{$seen{$1}}, $3 ); ''/gem;
     }
+
+    # Default (Forking) search
+
+    # I18N: 'grep' must use locales if needed,
+    # for case-insensitive searching.  See TWiki::setupLocale.
+    my $program = '';
+    # FIXME: For Cygwin grep, do something about -E and -F switches
+    # - best to strip off any switches after first space in
+    # EgrepCmd etc and apply those as argument 1.
+    if( $type eq 'regex' ) {
+        $program = $TWiki::cfg{RCS}{EgrepCmd};
+    } else {
+        $program = $TWiki::cfg{RCS}{FgrepCmd};
+    }
+
+    $program =~ s/%CS{(.*?)\|(.*?)}%/$options->{casesensitive}?$1:$2/ge;
+    $program =~ s/%DET{(.*?)\|(.*?)}%/$options->{files_without_match}?$2:$1/ge;
+    # process topics in sets, fix for Codev.ArgumentListIsTooLongForSearch
+    my $maxTopicsInSet = 512; # max number of topics for a grep call
+    my @take = @$topics;
+    my @set = splice( @take, 0, $maxTopicsInSet );
+    my $sandbox = $this->{session}->{sandbox};
+    while( @set ) {
+        @set = map { "$sDir/$_.txt" } @set;
+        my ($m, $exit ) = $sandbox->sysCommand(
+            $program,
+            TOKEN => $searchString,
+            FILES => \@set);
+        $matches .= $m;
+        @set = splice( @take, 0, $maxTopicsInSet );
+    }
+    $matches =~ s/([^\/]*)\.txt(:(.*))?$/push( @{$seen{$1}}, $3 ); ''/gem;
+
     return \%seen;
 }
 
