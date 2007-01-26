@@ -195,7 +195,7 @@ Found 4
 ---++ Expected
 
 <!-- expected  header -->
-The header contains <nop>TestCases "Hey" <nop>%WEB% $summary
+The header contains <nop>TestCases "Hey" <nop>TestCases $summary
 <p />
 Formatted search result <nop>FormattedSearch1
 <p />
