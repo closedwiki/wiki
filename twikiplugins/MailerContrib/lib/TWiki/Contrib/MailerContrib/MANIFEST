@@ -6,5 +6,5 @@ lib/TWiki/Contrib/MailerContrib/UpData.pm 0444
 lib/TWiki/Contrib/Mailer.pm 0444
 data/TWiki/MailerContrib.txt 0644
 tools/mailnotify 0770
-templates/mailnotify.tmpl 0444
-templates/newsletter.tmpl 0444
+templates/mailnotify.tmpl 0555
+templates/newsletter.tmpl 0555
