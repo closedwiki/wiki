@@ -150,7 +150,7 @@ sub commonTagsHandler
 	    $_[0] =~ s/%CHECKLIST{(.*?)}%/&handleChecklist($1,$_[0])/sge;
 	    ##$_[0] =~ s/%CLI%/&handleChecklistItem("",$_[0])/ge;
 	    ##$_[0] =~ s/%CLI{(.*?)}%/&handleChecklistItem($1,$_[0])/sge;
-	    $_[0] =~ s/%CLI({(.*?)})?%/&handleChecklistItem($2,$_[0])/sge;
+	    $_[0] =~ s/([^\n\%]*)%CLI({(.*?)})?%([^\n\%]*)/$1.&handleChecklistItem($3,$_[0],$1,$4).$4/sge;
     ###};
     ###TWiki::Func::writeWarning("${pluginName}: $@") if $@;
 }
@@ -470,7 +470,7 @@ sub handleAutoChecklist {
 }
 # =========================
 sub handleChecklistItem {
-	my ($attributes, $text) = @_;
+	my ($attributes, $text,$textBefore,$textAfter) = @_;
 
 	TWiki::Func::writeDebug("- ${pluginName}::handleChecklistItem($attributes)") if $debug;
 
@@ -479,6 +479,8 @@ sub handleChecklistItem {
 	return &createUnknownParamsMessage() unless &initOptions($attributes);
 
 	$namedIds{$options{'name'}}++ unless defined $options{'id'};
+
+	&handleDescription($textBefore, $textAfter);
 
 	if ((defined $query->param('clpsc'))&&(!$stateChangeDone)) {
 		my ($id,$name,$lastState) = ($query->param('clpsc'),$query->param('clpscn'),$query->param('clpscls'));
@@ -492,6 +494,32 @@ sub handleChecklistItem {
 	return &renderChecklistItem();
 
 }
+# =========================
+sub handleDescription  {
+	my ($textBefore, $textAfter) = @_;
+	### TWiki::Func::writeWarning("textBefore='$textBefore', textAfter='$textAfter'");
+	my $descr = $$idMapRef{$options{'name'}}{$options{'id'}?$options{'id'}:$namedIds{$options{'name'}}}{'descr'};
+	unless ( (defined $options{'descr'}) || ((defined $descr)&&($descr!~/^\s*$/))) {
+		$options{'descr'}=$options{'text'} if (defined $options{'text'})&&($options{'text'}!~/^\s*$/s);
+
+		my $text = $textBefore;
+		$text.=" ... " if $textBefore !~ /^\s*$/;
+		$text.=$textAfter;
+		$text.=" ..." if $textAfter !~ /^\s*$/;
+		$options{'descr'}=$text unless defined $options{'descr'};
+		
+		$options{'descr'}=~s/^\s{3,}[\*\d]//sg; ## remove lists
+		$options{'descr'}=~s/\|/ /sg; ## remove tables
+		$options{'descr'}=~s/<[\/]?[^>]+>/ /sg; ## remove HTML tags
+		$options{'descr'}=~s/\%\w+[^\%]*\%/ /sg; ## remove variables
+
+		$options{'descr'}=~s/\s{2,}/ /g; ## remove multiple spaces
+		$options{'descr'}=~s/^\s*//g;  
+		$options{'descr'}=~s/\s*$//g;  
+
+	};
+}
+
 # =========================
 sub getNextState {
 	my ($name, $lastState) = @_;
