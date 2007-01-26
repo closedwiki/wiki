@@ -37,6 +37,7 @@ function clpHandleNextObject(self) {
 		if (n) n.url=newUrl;
 	}
 	if (clpStateChangeObjectArray.length>0) clpStateChangeObjectArray.shift().clpDoIt();
+	document.getElementsByTagName('body')[0].style.cursor="auto";
 }
 function clpHandleStateChange(self) {
 	if (self.stateChangeRequest.readyState!=4) return;
@@ -83,11 +84,8 @@ function clpHandleStateChange(self) {
 			var divExpr = new RegExp("<div[^>]+id=\"CLP_TT_"+realId+"\"[^>]*>(.*?)</div>");
 			divExpr.exec(responseText);
 			var divTxt = RegExp.$1;
-			e = document.getElementById("CLP_TT_"+realId);
-			if (e) {
-				while (e.hasChildNodes()) e.removeChild(e.firstChild); 
-				e.appendChild(document.createTextNode(divTxt));
-			}
+
+			clpChangeDivText(realId, divTxt);
 			
 
 		}
@@ -101,7 +99,7 @@ function clpDoIt() {
 		document.submit(url);
 		return;
 	}
-	
+	document.getElementsByTagName('body')[0].style.cursor="wait";
 	var self = this;
 	this.stateChangeRequest.onreadystatechange=function() {
 		try {
@@ -127,12 +125,31 @@ function clpGetStateChangeObject(url) {
 	}
 	return null;
 }
+function clpGetIdFromUrl(url) {
+	// clpscn + clpsc
+	url.match(/clpsc=([^\;]+)\;/);
+	var clpsc = RegExp.$1;
+	url.match(/clpscn=([^\;]+)\;/);
+	var clpscn = RegExp.$1;
+	return clpscn+clpsc;
+}
+function clpChangeDivText(id, text) {
+	var e = document.getElementById("CLP_TT_"+id);
+	if (e) {
+		while (e.hasChildNodes()) e.removeChild(e.firstChild); 
+		e.appendChild(document.createTextNode(text));
+	}
+	e = document.getElementById("CLP_A_"+id);
+	if (e) e.style.cursor="wait";
+	
+}
 var clpSubmitItemStateChangeMutex = 0;
 function submitItemStateChange(url) {
 	while (clpSubmitItemStateChangeMutex>0) { alert("You click to fast for me"); }
 	clpSubmitItemStateChangeMutex++;
 	var newStateChangeObject = new ClpStateChangeObject(url);
 	clpStateChangeObjectArray.push(newStateChangeObject);
+	clpChangeDivText(clpGetIdFromUrl(url),"State is changing ... please wait ...");
 	if (clpStateChangeObjectArray.length==1) newStateChangeObject.clpDoIt();
 	clpSubmitItemStateChangeMutex--;
 }
@@ -142,11 +159,12 @@ function clpTooltipFindPosX(obj)
 {
 	var curleft = 0;
 	if (obj.offsetParent) {
-		while (obj.offsetParent) {
+		//while (obj.offsetParent) {
 			curleft += obj.offsetLeft
 			obj = obj.offsetParent;
-		}
+		//}
 	} else if (obj.x) curleft += obj.x;
+	
 	return curleft;
 }
 function clpTooltipFindPosY(obj) 
@@ -172,8 +190,8 @@ function clpTooltipShow(tooltipId, parentId, posX, posY) {
 		var img = document.getElementById(parentId); 
 
 		// if tooltip is too wide, shift left to be within parent 
-		// if (posX + it.offsetWidth > img.offsetWidth) posX = img.offsetWidth - it.offsetWidth;
-		// if (posX < 0 ) posX = 0; 
+		//if (posX + it.offsetWidth > img.offsetWidth) posX = img.offsetWidth - it.offsetWidth;
+		//if (posX < 0 ) posX = 0; 
 
 		var x = clpTooltipFindPosX(img) + posX;
 		var y = clpTooltipFindPosY(img) + posY;
@@ -182,6 +200,7 @@ function clpTooltipShow(tooltipId, parentId, posX, posY) {
 		it.style.top = y + 'px';
 	//}
 	it.style.visibility = 'visible'; 
+	img.style.cursor='move';
 }
 
 function clpTooltipHide(id) {

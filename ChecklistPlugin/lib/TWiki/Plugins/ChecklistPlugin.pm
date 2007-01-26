@@ -182,6 +182,7 @@ sub initDefaults() {
 		'tooltipbgcolor'=>'%WEBBGCOLOR%',
 		'descr' => undef,
 		'_DEFAULT' => undef,
+		'ajaxtopicstyle'=>'plain',
 	);
 
 	@listOptions = ('states','stateicons');
@@ -386,7 +387,7 @@ sub handleChecklist {
 			$action.=($action=~/\?/?';':'?');
 			$action.="clreset=".&urlEncode($name);
 			$action.=";clresetst=".&urlEncode($state);
-			$action.=';skin=print' if $options{'useajax'};
+			$action.=';skin='.&urlEncode($options{'ajaxtopicstyle'}) if $options{'useajax'};
 		}
 
 		$action.="#reset${name}" if $options{'anchors'};
@@ -633,7 +634,7 @@ sub renderChecklistItem {
 		$action.="clpsc=".&urlEncode("$stId");
 		$action.=";clpscn=".&urlEncode($name);
 		$action.=";clpscls=$ueState";
-		$action.=";skin=print" if $options{'useajax'};
+		$action.=';skin='.&urlEncode($options{'ajaxtopicstyle'}) if $options{'useajax'};
 	}
 	my %queryVars = $query->Vars();
 	foreach my $p (keys %queryVars) {
