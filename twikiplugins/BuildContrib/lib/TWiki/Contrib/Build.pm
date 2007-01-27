@@ -1,4 +1,3 @@
-
 #
 # Copyright (C) 2004 C-Dot Consultants - All rights reserved
 #
@@ -89,8 +88,8 @@ The following permissions are recommended:
 
 | *File type* | *Permissions* | *Meaning* |
 | =.pm= module | 0444 | Anyone can read, but cannot write or execute |
-| =.txt= file | 0444 | ditto |
-| File in =/pub= | 0444 | ditto |
+| =.txt= file | 0644 | Anyone can read, only owner can write |
+| File in =/pub= | 0644 | ditto |
 | Script in =tools/= or =bin/= | 0555 | Anyone can read or execute, but not write |
 
 Do *not* include ==,v= files in your MANIFEST. If you include a =,v= file it will overwrite any existing =,v= file when an extension is upgraded, potentially wiping out local changes on the end users installation.
