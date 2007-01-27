@@ -785,7 +785,6 @@ sub searchWeb {
                         $out =~ s/\$text/$text/gos;
                         $forceRendering = 1 unless( $doMultiple );
                     }
-                    $out = TWiki::expandStandardEscapes( $out );
                 } else {
                     $out = $repeatText;
                 }
@@ -799,15 +798,6 @@ sub searchWeb {
                 }
                 $out =~ s/%REVISION%/$srev/o;
                 $out =~ s/%AUTHOR%/$revUser/o;
-
-                if( ( $inline || $format ) && ( ! ( $forceRendering ) ) ) {
-                    # do nothing
-                } else {
-                    # don't callback yet because of table
-                    # rendering
-                    #$out = $session->handleCommonTags( $out, $web, $topic );
-                    #$out = $renderer->getRenderedVersion( $out, $web, $topic );
-                }
 
                 if( $doBookView ) {
                     # BookView
@@ -842,6 +832,8 @@ sub searchWeb {
                         # SMELL: why?
                         $out =~ s/([^\n])$/$1\n/s;
                     }
+
+                    $out = TWiki::expandStandardEscapes( $out );
 
                 } elsif( $noSummary ) {
                     $out =~ s/%TEXTHEAD%//go;

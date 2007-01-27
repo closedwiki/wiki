@@ -1294,8 +1294,11 @@ sub makeTopicSummary {
     $nchar = $MINTRUNC if( $nchar < $MINTRUNC );
     $htext =~ s/^(.{$nchar}.*?)($TWiki::regex{mixedAlphaNumRegex}).*$/$1$2 \.\.\./s;
 
-    # Convert standard excapes incl newline, $n and $n() to permit embedding in TWiki tables (Item2496)
-    $htext = TWiki::expandStandardEscapes($htext);
+    # We do not want the summary to contain any $variable that formatted
+    # searches can interpret to anything (Item3489).
+    # Especially new lines (Item2496)
+    # To not waste performance we simply replace $ by $<nop>
+    $htext =~ s/\$/\$<nop>/g;
     $htext =~ s/\s+/ /g;
 
     return $this->protectPlainText( $htext );
@@ -1869,6 +1872,13 @@ sub _replaceInternalRefs {
 Parse the arguments to a $formfield specification and extract
 the relevant formfield from the given meta data.
 
+   * =args= string containing name of form field
+   
+In addition to the name of a field =args= can be appended with a commas
+followed by a string format (\d+)([,\s*]\.\.\.)?). This supports the formatted
+search function $formfield and is used to shorten the returned string or a 
+hyphenated string.        
+
 =cut
 
 sub renderFormFieldArg {
@@ -1888,11 +1898,13 @@ sub renderFormFieldArg {
         if( $name =~ /^($field->{name}|$title)$/ ) {
             $value = $field->{value};
             $value = '' unless defined( $value );
-	    if ( $breakArgs ) {
-	      $value =~ s/^\s*(.*?)\s*$/$1/go;
-	      $value = breakName( $value, $breakArgs );
-	    }
-
+            if ( $breakArgs ) {
+                $value =~ s/^\s*(.*?)\s*$/$1/go;
+                $value = breakName( $value, $breakArgs );
+            }
+            # Item3489, Item2837. Prevent $vars in formfields from
+            # being expanded in formatted searches.
+            $value =~ s/\$(n|nop|quot|percnt|dollar)/\$<nop>$1/go;
             return $value;
         }
     }
