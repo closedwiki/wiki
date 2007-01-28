@@ -785,7 +785,7 @@ $TWiki::cfg{RCS}{ExtOption} = "";
 # permissions to allow (or deny) users other than the webserver user access
 # to directories that TWiki creates. This is an *octal* number
 # representing the standard UNIX permissions (e.g. 755 == rwxr-xr-x)
-$TWiki::cfg{RCS}{dirPermission}= 0775;
+$TWiki::cfg{RCS}{dirPermission}= 0755;
 
 # **OCTAL**
 # File security for new files. You may have to adjust these
