@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1170016036" format="1.1" version="$Rev$"}%
 ---+ The 216 Standard Colors
 
 This table can be used to choose a color in %WEBPREFSTOPIC% of each web.
@@ -117,10 +117,9 @@ This table can be used to choose a color in %WEBPREFSTOPIC% of each web.
 See TWiki:Codev.ColorScheme for links to web sites with web safe palettes, scheme generators, and other color tools and reference.
 
 __Related web sites:__
-   * http://www.cloford.com/resources/colours/websafe2.htm
-   * http://html-color-codes.com/
-   * http://the-light.com/colclick.html
-   * http://www.triplecode.com/munsell/
+   * http://html-color-codes.com/ - map of hexadecimal color codes
+   * http://www.triplecode.com/munsell/ - color picker based on how people _perceive_ colors
+   * http://www.cloford.com/resources/colours/websafe2.htm - Web-safe colors
 
 __Related Topics:__ UserDocumentationCategory, AdminDocumentationCategory
 
