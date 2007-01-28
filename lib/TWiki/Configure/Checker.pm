@@ -151,7 +151,7 @@ sub checkGnuProgram {
         # check for taintedness
         die "$prog is tainted" unless eval { $n = $prog, kill 0; 1 };
         my $diffOut = ( `$prog --version 2>&1` || "");
-        my $notFound = ( $? == -1 );
+        my $notFound = ( $? != 0 );
         if( $notFound ) {
             $n = $this->WARN("'$prog' program was not found on the ",
                       "current PATH.");

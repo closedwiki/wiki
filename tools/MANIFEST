@@ -431,9 +431,7 @@ lib/TWiki/Configure/Checkers/DataDir.pm 0444
 lib/TWiki/Configure/Checkers/DebugFileName.pm 0444
 lib/TWiki/Configure/Checkers/DefaultUrlHost.pm 0444
 lib/TWiki/Configure/Checkers/DispScriptUrlPath.pm 0444
-lib/TWiki/Configure/Checkers/EgrepCmd.pm 0444
 lib/TWiki/Configure/Checkers/Environment.pm 0444
-lib/TWiki/Configure/Checkers/FgrepCmd.pm 0444
 lib/TWiki/Configure/Checkers/Htpasswd/Encoding.pm 0444
 lib/TWiki/Configure/Checkers/Htpasswd/FileName.pm 0444
 lib/TWiki/Configure/Checkers/LocalesDir.pm 0444
@@ -452,7 +450,9 @@ lib/TWiki/Configure/Checkers/PubDir.pm 0444
 lib/TWiki/Configure/Checkers/PubUrlPath.pm 0444
 lib/TWiki/Configure/Checkers/RCS/asciiFileSuffixes.pm 0444
 lib/TWiki/Configure/Checkers/RCS/Checker.pm 0444
+lib/TWiki/Configure/Checkers/RCS/EgrepCmd.pm 0444
 lib/TWiki/Configure/Checkers/RCS/ExtOption.pm 0444
+lib/TWiki/Configure/Checkers/RCS/FgrepCmd.pm 0444
 lib/TWiki/Configure/Checkers/RCS/ciCmd.pm 0444
 lib/TWiki/Configure/Checkers/RCS/ciDateCmd.pm 0444
 lib/TWiki/Configure/Checkers/RCS/coCmd.pm 0444

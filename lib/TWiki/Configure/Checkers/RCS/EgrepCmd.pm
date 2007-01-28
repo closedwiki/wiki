@@ -14,7 +14,7 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #
 # As per the GPL, removal of this notice is prohibited.
-package TWiki::Configure::Checkers::RCS_FgrepCmd;
+package TWiki::Configure::Checkers::RCS::EgrepCmd;
 
 use strict;
 
@@ -25,7 +25,7 @@ use base 'TWiki::Configure::Checker';
 sub check {
     my $this = shift;
 
-    return $this->checkGnuProgram($TWiki::cfg{RCS}{FgrepCmd});
+    return $this->checkGnuProgram($TWiki::cfg{RCS}{EgrepCmd});
 }
 
 1;
