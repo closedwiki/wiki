@@ -184,6 +184,7 @@ sub initDefaults() {
 		'_DEFAULT' => undef,
 		'ajaxtopicstyle'=>'plain',
 		'descrcharlimit'=>100,
+		'template' => undef,
 	);
 
 	@listOptions = ('states','stateicons');
@@ -237,10 +238,20 @@ sub initOptions() {
 	# handle _DEFAULT option (_DEFAULT = descr)
 	$params{'descr'} = $params{'_DEFAULT'} if defined $params{'_DEFAULT'};
 
+	# handle templates:
+	my $tmplName = $params{'template'};
+	$tmplName = $namedDefaults{$name}{'template'} unless defined $tmplName;
+	$tmplName = (&TWiki::Func::getPluginPreferencesValue("TEMPLATE") || undef) unless defined $tmplName;
+
         # Setup options (attributes>named defaults>plugin preferences>global defaults):
 	%options = ( );
         foreach my $option (@allOptions) {
                 my $v = $params{$option};
+		if ((defined $tmplName)&&(!defined $v)) {
+			$v = (&TWiki::Func::getPluginPreferencesFlag("TEMPLATE_\U${tmplName}_$option\E") || undef) if grep /^\Q$option\E/, @flagOptions;
+			$v = (&TWiki::Func::getPluginPreferencesValue("TEMPLATE_\U${tmplName}_$option\E") || undef)  unless defined $v;
+		}
+
 		$v = $namedDefaults{$name}{$option} unless defined $v;
                 if (defined $v) {
                         if (grep /^\Q$option\E$/, @flagOptions) {
@@ -258,6 +269,7 @@ sub initOptions() {
                 }
 
         }
+
         # Render some options:
         foreach my $option (@renderedOptions) {
 		next unless defined $options{$option};
