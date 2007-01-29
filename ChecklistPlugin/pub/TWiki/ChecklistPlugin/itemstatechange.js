@@ -89,13 +89,39 @@ function clpHandleStateChange(self) {
 			divExpr.exec(responseText);
 			var divTxt = RegExp.$1;
 
-			clpChangeDivText(realId, divTxt);
+			clpChangeDivText("CLP", realId, divTxt);
 						
+			var smlinks = responseText.match(/<a[^>]+id="CLP_SM_A_[^>]+>/ig);
+			if (smlinks && (smlinks.length>0)) {
+				for (var j=0; j<smlinks.length; ++j) {
+					var smlink = smlinks[j];
+					if (smlink.indexOf(realId)==-1) continue;
+					smlink.match(/id="([^"]+)"/i);
+					var smid = RegExp.$1;
+					smlink.match(/href="([^"]+)"/);
+					var smhref = RegExp.$1;
+					smlink.match(/title="([^"]+)"/);
+					var smtitle = RegExp.$1;
+					var sme = document.getElementById(smid);
+					if (sme) {
+						sme.style.cursor=clpCursorNormalStyle;
+						sme.href = smhref;
+						// sme.title = smtitle;
+					} // if
+					var smttid = smid.replace(/CLP_SM_A_/,"");
+					sme = document.getElementById("CLP_SM_IMG_"+smttid);
+					if (sme) sme.style.cursor=clpCursorNormalStyle;
+					var smDivExpr = new RegExp("<div[^>]+id=\"CLP_SM_TT_"+smttid+"\"[^>]*>(.*?)</div>");	
+					smDivExpr.exec(responseText);
+					var smDivTxt = RegExp.$1;
+					clpChangeDivText("CLP_SM",smttid, smDivTxt);
+				} // for
+			} // if
 
-		}
+		} // for 
 	} else {
 		document.write(responseText);
-	}
+	} // if
 	clpHandleNextObject(self);
 }
 function clpDoIt() {
@@ -137,13 +163,13 @@ function clpGetIdFromUrl(url) {
 	var clpscn = RegExp.$1;
 	return clpscn+clpsc;
 }
-function clpChangeDivText(id, text) {
-	var e = document.getElementById("CLP_TT_"+id);
+function clpChangeDivText(prefix,id, text) {
+	var e = document.getElementById(prefix+"_TT_"+id);
 	if (e) {
 		while (e.hasChildNodes()) e.removeChild(e.firstChild); 
 		e.appendChild(document.createTextNode(text));
 	}
-	e = document.getElementById("CLP_A_"+id);
+	e = document.getElementById(prefix+"_A_"+id);
 	if (e) e.style.cursor=clpCursorInProgressStyle;
 	
 }
@@ -182,8 +208,17 @@ function clpTooltipFindPosY(obj)
 	} else if (obj.y) curtop += obj.y;
 	return curtop;
 }
-function clpTooltipShow(tooltipId, parentId, posX, posY) {
+var clpTooltipLastVisibleId = new Array();
+function clpTooltipShow(tooltipId, parentId, posX, posY,closeAll) {
 	var it = document.getElementById(tooltipId);
+
+	if (closeAll) {
+		while (clpTooltipLastVisibleId.length>0) {
+			var lv = document.getElementById(clpTooltipLastVisibleId.shift());
+			if (lv) lv.style.visibility = 'hidden';
+		}
+	}
+	clpTooltipLastVisibleId.push(tooltipId);
     
 	if (!it) return;
 	//if ((it.style.top == '' || it.style.top == 0) && (it.style.left == '' || it.style.left == 0)) {

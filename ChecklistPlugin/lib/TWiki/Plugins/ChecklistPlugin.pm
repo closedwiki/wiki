@@ -81,7 +81,7 @@ $VERSION = '$Rev$';
 # of the version number in PLUGINDESCRIPTIONS.
 $RELEASE = 'Cairo, Dakar, Edinburgh, ...';
 
-$REVISION = '1.021'; #dro# improved performance (AJAX); fixed minor IE caching bug (AJAX related); added new attributes (tooltip, descr) requested by TWiki:Main.KeithHelfrich; fixed installation instructions bug reported by TWiki:Main.KeithHelfrich
+$REVISION = '1.021'; #dro# improved performance (AJAX); fixed minor IE caching bug (AJAX related); added new attributes (tooltip, descr, template, statesel) requested by TWiki:Main.KeithHelfrich; fixed installation instructions bug reported by TWiki:Main.KeithHelfrich
 #$REVISION = '1.020'; #dro# added AJAX feature (useajax attribute) requested by TWiki:Main.ShayPierce and TWiki:Main.KeithHelfrich
 #$REVISION = '1.019'; #dro# fixed major default options bug reported by TWiki:Main.RichardHitier 
 #$REVISION = '1.018'; #dro# fixed notification bug reported by TWiki:Main.JosMaccabiani; fixed a minor whitespace bug; add static attribute
@@ -185,6 +185,7 @@ sub initDefaults() {
 		'ajaxtopicstyle'=>'plain',
 		'descrcharlimit'=>100,
 		'template' => undef,
+		'statesel' => 0,
 	);
 
 	@listOptions = ('states','stateicons');
@@ -192,7 +193,7 @@ sub initDefaults() {
 
 	@filteredOptions = ( 'id', 'name', 'states');
 
-	@flagOptions = ('showlegend', 'anchors', 'useforms', 'notify', 'static' , 'useajax');
+	@flagOptions = ('showlegend', 'anchors', 'useforms', 'notify', 'static' , 'useajax', 'statesel');
 
 	$idMapRef = { };
 	
@@ -248,8 +249,8 @@ sub initOptions() {
         foreach my $option (@allOptions) {
                 my $v = $params{$option};
 		if ((defined $tmplName)&&(!defined $v)) {
-			$v = (&TWiki::Func::getPluginPreferencesFlag("TEMPLATE_\U${tmplName}_$option\E") || undef) if grep /^\Q$option\E/, @flagOptions;
-			$v = (&TWiki::Func::getPluginPreferencesValue("TEMPLATE_\U${tmplName}_$option\E") || undef)  unless defined $v;
+			$v = (&TWiki::Func::getPluginPreferencesFlag("TEMPLATE_\U${tmplName}_${option}\E") || undef) if grep /^\Q$option\E$/, @flagOptions;
+			$v = (&TWiki::Func::getPluginPreferencesValue("TEMPLATE_\U${tmplName}_${option}\E") || undef)  unless defined $v;
 		}
 
 		$v = $namedDefaults{$name}{$option} unless defined $v;
@@ -414,11 +415,8 @@ sub handleChecklist {
 			$$imgparams{src}=$imgsrc if (defined $imgsrc ) && ($imgsrc!~/^\s*$/s);
 			$linktext.=$query->img($imgparams);
 			$linktext.=qq@ ${title}@ if ($title!~/^\s*$/i)&&($imgsrc ne "");
-			if ($options{'useajax'}) {
-				$text.=$query->a({href=>"javascript:submitItemStateChange('$action')",id=>"CLP_A_".&urlEncode($name)."_".&urlEncode($state)}, $linktext);
-			} else {
-				$text.=$query->a({href=>$action}, $linktext);
-			}
+			$action="javascript:submitItemStateChange('$action')" if $options{'useajax'};
+			$text.=$query->a({href=>$action,id=>"CLP_A_".&urlEncode($name)."_".&urlEncode($state)}, $linktext);
 		} else {
 			my $form="";
 			$form.=$query->start_form({method=>'post', action=>$action});
@@ -496,9 +494,9 @@ sub handleChecklistItem {
 	&handleDescription($textBefore, $textAfter);
 
 	if ((defined $query->param('clpsc'))&&(!$stateChangeDone)) {
-		my ($id,$name,$lastState) = ($query->param('clpsc'),$query->param('clpscn'),$query->param('clpscls'));
+		my ($id,$name,$lastState,$nextstate) = ($query->param('clpsc'),$query->param('clpscn'),$query->param('clpscls'),$query->param('clpscns'));
 		if ($options{'name'} eq $name) {
-			&doChecklistItemStateChange($id, $name, $lastState, $text) ;
+			&doChecklistItemStateChange($id, $name, $lastState, $text, $nextstate) ;
 			$stateChangeDone=1;
 		}
 	}
@@ -618,7 +616,7 @@ sub doChecklistItemStateReset {
 }
 # =========================
 sub doChecklistItemStateChange {
-	my ($id, $n, $lastState, $text) = @_;
+	my ($id, $n, $lastState, $text, $nextstate) = @_;
 	TWiki::Func::writeDebug("- ${pluginName}::doChecklistItemStateChange($id,$n,$lastState,...text...)") if $debug;
 
 	# access granted?
@@ -627,9 +625,47 @@ sub doChecklistItemStateChange {
 	# reload?
 	return if ((defined $$idMapRef{$n}{$id}{'state'})&&($$idMapRef{$n}{$id}{'state'} ne $lastState));
 
-	$$idMapRef{$n}{$id}{'state'}=&getNextState($n, $$idMapRef{$n}{$id}{'state'});
+	$$idMapRef{$n}{$id}{'state'}=(defined $nextstate?$nextstate:&getNextState($n, $$idMapRef{$n}{$id}{'state'}));
 
 	&saveChecklistItemStateTopic($n,&extractPerms($text)) if (!$saveDone) && (($saveDone=!$saveDone));
+}
+# =========================
+sub createAction {
+	my ($id, $name, $state, $nextstate) = @_;
+	my $action=TWiki::Func::getViewUrl($web,$topic);
+
+	# remove anchor:
+	$action=~s/#.*$//i; 
+
+	$action.=getUniqueUrlParam($action);
+
+	if ( ! $options{'useforms'} ) {
+		$action.=($action=~/\?/)?";":"?";
+		$action.="clpsc=".&urlEncode("$id");
+		$action.=";clpscn=".&urlEncode($name);
+		$action.=";clpscls=".&urlEncode($state);
+		$action.=";clpscns=".&urlEncode($nextstate) if defined $nextstate;
+		$action.=';skin='.&urlEncode($options{'ajaxtopicstyle'}) if $options{'useajax'};
+	}
+	my %queryVars = $query->Vars();
+	foreach my $p (keys %queryVars) {
+		$action.=";$p=".&urlEncode($queryVars{$p}) 
+			unless ($p =~ /^(clp.*|clreset.*|contenttype|skin)$/i)||(!$queryVars{$p});
+	}
+	$action.="#$name$id" if $options{'anchors'} && (!$options{'useajax'});
+
+	return $action;
+}
+# =========================
+sub createTitle {
+	my ($name,$state,$statesRef, $nextstate) = @_;
+	my $title = $options{'tooltip'};
+	$title = $state unless defined $title;
+	$title=~s /%STATE%/$state/sg;
+	$title=~s /%NEXTSTATE%/($nextstate?$nextstate:&getNextState($name,$state))/esg;
+	$title=~s /%STATECOUNT%/($#$statesRef+1)/esg;
+	$title=~s /%STATES%/join(", ",@{$statesRef})/esg;
+	return &htmlEncode($title);
 }
 # =========================
 sub renderChecklistItem {
@@ -661,31 +697,13 @@ sub renderChecklistItem {
 
 	my ($iconsrc,$textBef,$textAft)=&getImageSrc($icon);
 
-	my $action=TWiki::Func::getViewUrl($web,$topic);
-
-	# remove anchor:
-	$action=~s/#.*$//i; 
-
-	$action.=getUniqueUrlParam($action);
-
 	my $stId = &substIllegalChars($tId); # substituted tId
 	my $heState = &htmlEncode($state); # HTML encoded state
 	my $ueState = &urlEncode($state); # URL encoded state
 	my $uetId = &urlEncode($tId); # URL encoded tId
 
-	if ( ! $options{'useforms'} ) {
-		$action.=($action=~/\?/)?";":"?";
-		$action.="clpsc=".&urlEncode("$stId");
-		$action.=";clpscn=".&urlEncode($name);
-		$action.=";clpscls=$ueState";
-		$action.=';skin='.&urlEncode($options{'ajaxtopicstyle'}) if $options{'useajax'};
-	}
-	my %queryVars = $query->Vars();
-	foreach my $p (keys %queryVars) {
-		$action.=";$p=".&urlEncode($queryVars{$p}) 
-			unless ($p =~ /^(clp.*|clreset.*|contenttype|skin)$/i)||(!$queryVars{$p});
-	}
-	$action.="#$name$stId" if $options{'anchors'};
+
+	my $action = &createAction($stId, $name, $state);
 
 	$text.=qq@<noautolink>@;
 	
@@ -702,12 +720,7 @@ sub renderChecklistItem {
 			$linktext.=$options{'text'}.' ' unless $options{'text'} =~ /^(\s|\&nbsp\;)*$/;
 		}
 
-		my $title = $options{'tooltip'};
-		$title = $heState unless defined $title;
-		$title=~s /%STATE%/$heState/sg;
-		$title=~s /%NEXTSTATE%/&getNextState($name,$state)/esg;
-		$title=~s /%STATECOUNT%/($#states+1)/esg;
-		$title=~s /%STATES%/join(", ",@states)/esg;
+		my $title = &createTitle($name, $state, \@states);
 
 		$linktext.=qq@$textBef@ if $textBef;
 
@@ -721,14 +734,17 @@ sub renderChecklistItem {
 		if ($options{'static'}) {
 			$text .= $linktext;
 		} else {
-			if ($options{'useajax'}) {
-				my $onmouseover=$options{'useajax'}?"clpTooltipShow('CLP_TT_$name$uetId','CLP_A_$name$uetId',20,20);" : "";
-				my $onmouseout=$options{'useajax'}?"clpTooltipHide('CLP_TT_$name$uetId');" : "";
-				$text .= $query->div({-id=>"CLP_TT_$name$uetId",-style=>"visibility:hidden;position:absolute;top:0;left:0;z-index:2;font: normal 8pt sans-serif;padding: 3px; border: solid 1px; background-color: $options{'tooltipbgcolor'};"},$title);
-				$text .= $query->a({-onmouseover=>$onmouseover,-onmouseout=>$onmouseout,-id=>"CLP_A_$name$uetId",-href=>"javascript:submitItemStateChange('$action')"}, $linktext);
+			my ($onmouseover, $onmouseout)=("","");
+			if ($options{'statesel'}) {
+				$onmouseover="clpTooltipShow('CLP_SM_DIV_$name$uetId','CLP_A_$name$uetId',10,10,true);";
+				$text .= &createHiddenDirectSelectionDiv($uetId, $name, $state, \@states, \@icons);
 			} else {
-				$text .= $query->a({-title=>$title,-href=>$action},$linktext);
+				$onmouseover="clpTooltipShow('CLP_TT_$name$uetId','CLP_A_$name$uetId',20,20,true);";
+				$onmouseout="clpTooltipHide('CLP_TT_$name$uetId');";
+				$text .= $query->div({-id=>"CLP_TT_$name$uetId",-style=>"visibility:hidden;position:absolute;top:0;left:0;z-index:2;font: normal 8pt sans-serif;padding: 3px; border: solid 1px; background-color: $options{'tooltipbgcolor'};"},$title);
 			}
+			$action="javascript:submitItemStateChange('$action')" if $options{'useajax'};
+			$text .= $query->a({-onmouseover=>$onmouseover,-onmouseout=>$onmouseout,-id=>"CLP_A_$name$uetId",-href=>$action}, $linktext);
 		}
 	} else {
 		my $form=$query->start_form(-method=>"POST", -action=>$action, -name=>"changeitemstate\[$stId\]");
@@ -749,6 +765,33 @@ sub renderChecklistItem {
 		$text.=$form;
 	}
 	$text.=qq@</noautolink>@;
+
+	return $text;
+}
+sub createHiddenDirectSelectionDiv {
+	my ($id, $name, $state, $statesRef, $iconsRef) =  @_;
+	my $text ="";
+	
+	my $sl="";
+	$sl.=$query->sup($query->a({-href=>"javascript:clpTooltipHide('CLP_SM_DIV_$name$id');", -title=>'close'},'[X]'));
+	for (my $i=0; $i<=$#$statesRef; $i++) {
+		my ($s, $ic) = ($$statesRef[$i], $$iconsRef[$i]);
+		my $action = &createAction($id, $name, $state, $s);
+		my $title = &createTitle($name,$state,$statesRef, $s);
+		$action="javascript:submitItemStateChange('$action');" if $options{'useajax'};
+		$text .= $query->div({-id=>"CLP_SM_TT_$name${id}_$i",-style=>"visibility:hidden;position:absolute;top:0;left:0;z-index:3;font: normal 8pt sans-serif;padding: 3px; border: solid 1px; background-color: $options{'tooltipbgcolor'};"},$title); 
+		$sl.=$query->a({
+					-id=>"CLP_SM_A_$name${id}_$i", -href=>"$action",
+					-style=>'vertical-align:bottom;',
+					-onmouseover=>"clpTooltipShow('CLP_SM_TT_$name${id}_$i','CLP_SM_IMG_$name${id}_$i',20,20);", 
+					-onmouseout=>"clpTooltipHide('CLP_SM_TT_$name${id}_$i');"
+				},
+				$query->img({-src=>&getImageSrc($ic),-id=>"CLP_SM_IMG_$name${id}_$i",-alt=>'',-border=>0, -style=>'vertical-align:bottom;cursor=move'}));
+		$sl.='&nbsp;';
+	}
+
+	$text.= $query->div({-id=>"CLP_SM_DIV_$name$id",
+			-style=>"visibility:hidden;position:absolute;top:0;left:0;z-index:2;font: normal 8pt sans-serif;padding: 3px; border: solid 1px; background-color: $options{'tooltipbgcolor'};"}, $sl);
 
 	return $text;
 }
