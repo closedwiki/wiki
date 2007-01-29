@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1169056932" format="1.0" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1169057112" format="1.0" version="$Rev$"}%
 ---+!! Checklist Plugin
 
 <nop>ChecklistPlugin creates simple checklists. 
@@ -250,12 +250,13 @@ Examples:
 | showlegend | %<nop>CHECKLIST%<br/>%<nop>CHECKLISTSTART% | if you set it to ="on"= a states legend with icons will be displayed (default: =off=),<br/> e.g: ( :-I - todo :ok: - done) | =showlegend="off"= |
 | states | %<nop>CLI%<br/>%<nop>CHECKLIST%<br/>%<nop>CHECKLISTSTART% | all known states (default: =todo&brvbar;done=; a list separated by a ='&brvbar;'=) | =states="todo&brvbar;done"= |
 | stateicons | %<nop>CLI%<br/>%<nop>CHECKLIST%<br/>%<nop>CHECKLISTSTART% | icons for all states separated by a ='&brvbar;'= (default: =<nop>:-I&brvbar;<nop>:ok:=); if you use common variables like =%<nop>Y%= in stateicons you have to use the =&lt;nop&gt;= tag after the first =%=, e.g: =%&lt;nop&gt;Y%=  | =stateicons="<nop>:-I&brvbar;<nop>:ok:"= |
+| statesel | %<nop>CLI%<br/>%<nop>CHECKLIST%<br/>%<nop>CHECKLISTSTART% | enables/disables state selection popup (default: off) | =statesel="on"= |
 | statetopic | %<nop>CLI%<br/>%<nop>CHECKLIST%<br/>%<nop>CHECKLISTSTART% | set the checklist item state topic (default: =&lt;<nop>YourTopicName&gt;ChecklistItemState=) | =statetopic="MyItemStateTopic"= | 
 | static | %<nop>CLI%<br/>%<nop>CHECKLIST%<br/>%<nop>CHECKLISTSTART% | allow/disallow state changes of checklist items (usefull if you create summary pages of some items of different checklists) | =static="off"= |
 | template | %<nop>CLI%<br/>%<nop>CHECKLIST%<br/>%<nop>CHECKLISTSTART% | template name (see Plugin settings / Templates ) | =template="patchday"= |
 | text | %<nop>CLI% | allows to place text behind the button (default: =""=); useful to avoid the annoying line break between checklist button and text if HTML forms are used (related: useforms attribute) | =text="my first step"= |
 | tooltip | %<nop>CLI%<br/>%<nop>CHECKLIST%<br/>%<nop>CHECKLISTSTART% | sets the tooltip of the state icons (substituted variables: %STATE% - current state; %NEXTSTATE% - next state; %STATES% - comma separated list of all states; %STATECOUNT% - number of states) | =tooltip="%<nop>STATE%"= |
-| tooltipbgcolor | %<nop>CLI%<br/>%<nop>CHECKLIST%<br/>%<nop>CHECKLISTSTART% | tooltip background color (works only with useajax="on") | =tooltipbgcolor="%<nop>WEBBGCOLOR%"= |
+| tooltipbgcolor | %<nop>CLI%<br/>%<nop>CHECKLIST%<br/>%<nop>CHECKLISTSTART% | tooltip background color (=statesel= popup background color is also effected) | =tooltipbgcolor="%<nop>WEBBGCOLOR%"= |
 | useajax | %<nop>CLI%<br/>%<nop>CHECKLIST%<br/>%<nop>CHECKLISTSTART%  | enables/disables <nop>JavaScript/AJAX based item state changes (default: =on=) | =useajax="1"= |
 | useforms | %<nop>CLI%<br/>%<nop>CHECKLIST%<br/> %<nop>CHECKLISTSTART% | if enabled HTML forms are used instead of hyperlinks (default: =off=) | =useforms="off"= |
 ---++ Examples
@@ -348,7 +349,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Plugin Author: | TWiki:Main.DanielRohde |
 |  Plugin Version: | v1.021 (BETA) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  v1.021 (BETA) | TWiki:Main.DanielRohde: improved performance (AJAX); fixed minor IE caching bug (AJAX related); added new attributes (tooltip, descr, template) requested by TWiki:Main.KeithHelfrich; fixed installation instructions bug reported by TWiki:Main.KeithHelfrich |
+|  v1.021 (BETA) | TWiki:Main.DanielRohde: improved performance (AJAX); fixed minor IE caching bug (AJAX related); added new attributes (tooltip, descr, template, statesel) requested by TWiki:Main.KeithHelfrich; fixed installation instructions bug reported by TWiki:Main.KeithHelfrich |
 |  v1.020 (15 Jan 2007) | TWiki:Main.DanielRohde: added AJAX feature (=useajax= attribute) requested by TWiki:Main.ShayPierce and TWiki:Main.KeithHelfrich |
 |  v1.019 (14 Dec 2006) | TWiki:Main.DanielRohde: fixed major default options bug reported by TWiki:Main.RichardHitier |
 |  v1.018 (30 Aug 2006) | TWiki:Main.DanielRohde: fixed notification bug reported by TWiki:Main.JosMaccabiani; fixed a minor whitespace bug; add static attribute |
