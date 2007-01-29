@@ -32,13 +32,10 @@ sub string2value {
     my ($this, $val) = @_;
     $val ||= 0;
     $val = '0'.$val unless $val =~ /^0/;
+    $val =~ s/[^\d]//g; # protect the eval, just in case
+    # Use eval to force octal-decimal conversion (Item3529)
+    eval "\$val = $val";
     return $val;
-}
-
-sub equals {
-    my ($this, $val, $def) = @_;
-
-    return sprintf('0%o', $def) =~ /^0*$val$/;
 }
 
 1;
