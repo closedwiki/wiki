@@ -7,7 +7,7 @@ and [[%TWIKIWEB%.TWikiPreferences]]). Replace this text with a description of yo
 %IF{"defined WIKITOOLNAME" then="<nop>%WIKITOOLNAME%" else="TWiki"}% site. 
 
 ---++ <nop>%WEB% Web Utilities
-<form action='%SCRIPTURLPATH{"search"}%/%WEB%/'>
+<form action="%SCRIPTURLPATH{view}%/%INCLUDINGWEB%/WebSearch">
    * %TWIKIWEB%.WelcomeGuest - for first time visitors
    * [[%TWIKIWEB%.TWikiRegistration][Registration]] - become a <nop>%WIKITOOLNAME% user
    * %WIKIUSERSTOPIC% - list of users of this <nop>%WIKITOOLNAME% site
