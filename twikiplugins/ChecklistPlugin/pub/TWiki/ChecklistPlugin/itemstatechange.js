@@ -64,8 +64,8 @@ function clpHandleStateChange(self) {
 			var oldHref = clpStripId(e.href);
 			var newHref = clpStripId(href);
 
-			if (oldHref==newHref) continue;
 			e.style.cursor=clpCursorNormalStyle;
+			// if (oldHref==newHref) continue;
 
 			self.changes.push(e.href);
 			self.changesNew.push(href);
@@ -169,8 +169,6 @@ function clpChangeDivText(prefix,id, text) {
 		while (e.hasChildNodes()) e.removeChild(e.firstChild); 
 		e.appendChild(document.createTextNode(text));
 	}
-	e = document.getElementById(prefix+"_A_"+id);
-	if (e) e.style.cursor=clpCursorInProgressStyle;
 	
 }
 var clpSubmitItemStateChangeMutex = 0;
@@ -179,7 +177,13 @@ function submitItemStateChange(url) {
 	clpSubmitItemStateChangeMutex++;
 	var newStateChangeObject = new ClpStateChangeObject(url);
 	clpStateChangeObjectArray.push(newStateChangeObject);
-	clpChangeDivText(clpGetIdFromUrl(url), clpInProgressDivText);
+
+	var id = clpGetIdFromUrl(url);
+	var e = document.getElementById("CLP_A_"+id);
+	if (e) e.style.cursor=clpCursorInProgressStyle;
+
+	clpChangeDivText("CLP", id, clpInProgressDivText);
+
 	if (clpStateChangeObjectArray.length==1) newStateChangeObject.clpDoIt();
 	clpSubmitItemStateChangeMutex--;
 }
