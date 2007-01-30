@@ -65,20 +65,21 @@ sub forceAuthentication {
     # See if there is an 'auth' version
     # of this script, may be a result of not being logged in.
     my $script = $ENV{SCRIPT_FILENAME};
-    $script =~ s/^(.*\/)([^\/]+)($TWiki::cfg{ScriptSuffix})?$/$1/o;
+    $script =~ s/^(.*\/)([^\/]+?)($TWiki::cfg{ScriptSuffix})?$/$1/o;
     my $scriptPath = $1;
     my $scriptName = $2;
-    #print STDERR "Forcing auth for $script\n";
     $script = $scriptPath.$scriptName.'auth'.$TWiki::cfg{ScriptSuffix};
+
     if( ! $query->remote_user() && -e $script ) {
         # Assemble the new URL using the host, the changed script name,
         # the path info, and the query string.  All three query
         # variables are in the list of the canonical request meta
         # variables in CGI 1.1.
         my $url = $ENV{REQUEST_URI};
-        if( $url && $url =~ s/\/$scriptName/\/${scriptName}auth/ ) {
-            # $url i.e. is "twiki/bin/view.cgi/Web/Topic?cms1=val1&cmd2=val2"
-            $url = $twiki->{urlHost}.$url;
+        if( $url && $url =~ m!(.*/$scriptName)([^?]*)! ) {
+            # $url should not contain query string as it gets appended
+            # in TWiki::redirect. Script gets 'auth' appended.
+            $url = "$twiki->{urlHost}${1}auth$2";
         } else {
             if( $ENV{SCRIPT_NAME} &&
                    $ENV{SCRIPT_NAME} =~ s/\/$scriptName/\/${scriptName}auth/ ) {
@@ -92,12 +93,9 @@ sub forceAuthentication {
             }
             $url .= '/' . $ENV{PATH_INFO} if $ENV{PATH_INFO};
         }
-        #print STDERR "Redirect to logon\n";
         # Redirect with passthrough so we don't lose the original query params
         $twiki->redirect( $url, 1 );
         return 1;
-    } else {
-        #print STDERR $query->remote_user()." is already logged in\n";
     }
 
     return 0;

@@ -164,7 +164,7 @@ BEGIN {
     # DO NOT CHANGE THE FORMAT OF $VERSION
     # automatically expanded on checkin of this module
     $VERSION = '$Date$ $Rev$ ';
-    $RELEASE = 'TWiki-4.1.0';
+    $RELEASE = 'TWiki-4.1.1';
     $VERSION =~ s/^.*?\((.*)\).*: (\d+) .*?$/$RELEASE, $1, build $2/;
 
     # Default handlers for different %TAGS%
@@ -723,8 +723,10 @@ sub redirect {
     }
 
     if ($passthru) {
-        $url =~ s/\?(.*)$//;
-        my $existing = $1;
+        my $existing = '';
+        if ($url =~ s/\?(.*)$//) {
+            $existing = $1;
+        }
         if ($ENV{REQUEST_METHOD} eq 'POST') {
             # Redirecting from a port to a get
             my $cache = $this->cacheQuery();
@@ -732,8 +734,17 @@ sub redirect {
                 $url .= "?$cache";
             }
         } else {
-            $url .= '?'.$query->query_string();
-	    $url .= (($url =~ /\?/) ? ';' : '?').$existing if $existing;
+            if ($query->query_string()) {
+                $url .= '?'.$query->query_string();
+            }
+            if ($existing) {
+                if ($url =~ /\?/) {
+                    $url .= ';';
+                } else {
+                    $url .= '?';
+                }
+                $url .= $existing;
+            }
         }
     }
 
