@@ -253,6 +253,9 @@ sub getActionees {
 
 # PUBLIC STATIC get all actions in topics in the given web that
 # match the search expression
+# $web - name of the web to search
+# $attrs - attributes to match
+# $internal - boolean true if topic permissions can be ignored
 sub allActionsInWeb {
     my ( $web, $attrs, $internal ) = @_;
     $internal = 0 unless defined ( $internal );
@@ -270,7 +273,12 @@ sub allActionsInWeb {
                                          casesensitive => 1 } );
 
     foreach my $topic ( keys %$grep ) {
-        my $text = TWiki::Func::readTopicText( $web, $topic, undef, $internal );
+        # SMELL: always read the text, because it's faster in the current
+        # impl to find the perms embedded in it
+        my $text = TWiki::Func::readTopicText(
+            $web, $topic, undef, $internal );
+        next unless $internal || TWiki::Func::checkAccessPermission(
+            'VIEW', TWiki::Func::getWikiName(), $text, $topic, $web);
         my $tacts = TWiki::Plugins::ActionTrackerPlugin::ActionSet::load(
             $web, $topic, $text );
         $tacts = $tacts->search( $attrs );
@@ -293,7 +301,7 @@ sub allActionsInWebs {
     my $actions = new TWiki::Plugins::ActionTrackerPlugin::ActionSet();
 
     foreach my $web ( @webs ) {
-        my $subacts = allActionsInWeb( $web, $attrs, $internal);
+        my $subacts = allActionsInWeb( $web, $attrs, $internal );
         $actions->concat( $subacts );
     }
     return $actions;

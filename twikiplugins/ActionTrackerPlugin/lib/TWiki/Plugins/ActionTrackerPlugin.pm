@@ -29,7 +29,7 @@ use TWiki::Plugins;
 # =========================
 use vars qw(
             $web $topic $user $installWeb $VERSION $RELEASE $initialised
-            $allActions $useNewWindow $debug
+            $allActions $useNewWindow $debug $SHORTDESCRIPTION
             $pluginName $defaultFormat
            );
 
@@ -41,7 +41,9 @@ $VERSION = '$Rev$';
 # This is a free-form string you can use to "name" your own plugin version.
 # It is *not* used by the build automation tools, but is reported as part
 # of the version number in PLUGINDESCRIPTIONS.
-$RELEASE = 'Dakar';
+$RELEASE = '30 Jan 2007';
+
+$SHORTDESCRIPTION = 'Adds support for action tags in topics, and automatic notification of action statuses';
 
 $initialised = 0;
 $pluginName = 'ActionTrackerPlugin';
@@ -166,7 +168,7 @@ sub commonTagsHandler {
 # This handler is called by the edit script just before presenting
 # the edit text in the edit box.
 # We use it to populate the actionform.tmpl template, which is then
-# inserted in the edit.action.tmpl as the %TEXT%.
+# inserted in the edit.action.tmpl as the %UNENCODED_TEXT%.
 # We process the %META fields from the raw text of the topic and
 # insert them as hidden fields in the form, so the topic is
 # fully populated. This allows us to call either 'save' or 'preview'
@@ -474,7 +476,7 @@ sub _handleActionSearch {
         $fmt = $defaultFormat;
     }
 
-    my $actions = TWiki::Plugins::ActionTrackerPlugin::ActionSet::allActionsInWebs( $web, $attrs );
+    my $actions = TWiki::Plugins::ActionTrackerPlugin::ActionSet::allActionsInWebs( $web, $attrs, 0 );
     $actions->sort( $sort );
     _addHEADTags();
     return $actions->formatAsHTML( $fmt, "href", $useNewWindow,

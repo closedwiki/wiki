@@ -299,6 +299,9 @@ sub _getMailAddress {
         if ( TWiki::Func::topicExists( $inweb, $intopic ) ) {
             my $text =
               TWiki::Func::readTopicText( $inweb, $intopic, undef, 1 );
+            # SMELL SMELL SMELL - handling of groups needs to be
+            # replaced with a proper API. This requires integration of
+            # the FuncUsersContrib and Michael Daum's user handling code.
             if ( $intopic =~ m/Group$/o ) {
                 # If it's a Group topic, match * Set GROUP = 
                 if ( $text =~ m/^\s+\*\s+Set\s+GROUP\s*=\s*([^\r\n]+)/mo ) {
@@ -415,9 +418,11 @@ sub _findChangesInTopic {
     my $oldrev =
       TWiki::Func::getRevisionAtTime( $theWeb, $theTopic, $theDate );
     return unless defined( $oldrev );
+
     $oldrev =~ s/\d+\.(\d+)/$1/o;
     # Recover the action set at that date
     my $text = TWiki::Func::readTopicText( $theWeb, $theTopic, $oldrev, 1 );
+
     my $oldActions =
       TWiki::Plugins::ActionTrackerPlugin::ActionSet::load( $theWeb,
                                                             $theTopic, $text );
@@ -426,6 +431,7 @@ sub _findChangesInTopic {
     my $currentActions =
       TWiki::Plugins::ActionTrackerPlugin::ActionSet::load( $theWeb,
                                                             $theTopic, $text );
+
     # find actions that have changed between the two dates. These
     # are added as text to a hash keyed on the names of people
     # interested in notification of that action.
