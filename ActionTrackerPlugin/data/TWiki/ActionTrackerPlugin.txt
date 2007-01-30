@@ -12,13 +12,11 @@
 
 This plugin provides support for tracking actions embedded in [[http://en.wikipedia.org/wiki/Minutes][meeting minutes]]. As you write the minutes during the meeting, you simply enter the actions into the text and as soon as the topic is saved, the actions "go live".
 
-*WARNING: TWiki-4 only. If you want to use this plugin with an earlier version of TWiki, please see [[http://twiki.org/cgi-bin/view/Plugins/%TOPIC%?rev=1.60][here]]*
+*WARNING:* TWiki-4 and later only. If you want to use this plugin with an earlier version of TWiki, you can try the old version from http://twiki.org/cgi-bin/viewfile/Plugins/ActionTrackerPlugin?rev=1.22;filename=ActionTrackerPlugin.zip
 
 Actions are nicely formatted for display, and automatic notification of actions is supported using 'cron'. The action tracker can also be used for private reminders, for example TODO lists and diary entries, and has been successfully applied to functions as diverse as risk management and bug tracking.
 
 _( Discussion in TWiki:Plugins/ActionTrackerPluginDev )_
-
-%X% This version is the 'Dakar' release version. It *will not work* with versions of TWiki released before 2005. Older versions of the plugin are available from TWiki:Plugins/ActionTrackerPlugin
 
 %TOC%
 
@@ -146,7 +144,7 @@ Valid _units_ are =minutes=, =hours=, =days=, =weeks=, =years=.
 
 People are identified to the action tracker using a wikiname (e.g. =%MAINWEB%.William<nop>Wallace= or simply =William<nop>Wallace=) or an e-mail address (e.g. =a_einstein@<nop>pto.co.ch=). The e-mail address is useful if you want to notify people who aren't registered in the wiki, but bear in mind that if they are outside your firewall, they'll get action notifications but the chances are they won't be able to edit pages and close actions. _Very_ annoying!
 
-E-mail addresses of people are found by the process [[#TranslatingNamesToEMailAddresses][described below]].
+E-mail addresses of people are found by the process [[#TranslatingNamesToEmailAddresses][described below]].
 
 You can also use the shorthand =me= for the currently logged-in user (this is =TWiki<nop>Guest= unless you have been prompted for a username and password). In actions, this will automatically be expanded when the topic is saved, and in searches it will match the currently logged in user. 
 
@@ -164,7 +162,7 @@ __Note__ in general you should *not* use these mechanisms for assigning actions,
 #UiDs
 ---+++ UIDs
 _For administrators only_:
-Each action is assigned a Unique Identifier (UID) when it is created. This UID is a six-digit number, and is generated when the action is first saved by incrementing a number in a special file (<code>data/atUidReg</code> under the TWiki installation). If this file is accidentally deleted, or is not writable, then you will have problems and you may get duplicate UIDs. Normally this won't matter a hoot, as UIDs only _have_ to be unique within a single topic, but if you are using UIDs for something else you will need to take care.
+Each action is assigned a Unique Identifier (UID) when it is created. This UID is a six-digit number, and is generated when the action is first saved by incrementing a number in a special file (<code>pub/_work_areas/ActionTrackerPlugin/UIDRegister</code> under the TWiki installation). If this file is accidentally deleted, or is not writable, then you will have problems and you may get duplicate UIDs. Normally this won't matter a hoot, as UIDs only _have_ to be unique within a single topic, but if the file is persistantly inaccessible it could be a bit of a nuisance.
 
 #NotiFication
 ---+ Notification
@@ -200,7 +198,7 @@ Crontab entry for geeks:<font size="-2"><pre>
 
 You can configure the fields which are scanned to detect state changes; see [[#SettingsNotify][Settings]].
 
-#TranslatingNamesToEMailAddresses
+#TranslatingNamesToEmailAddresses
 ---++ Translating names to e-mail addresses
 
 The wikiname of the user to be notified is translated to a mail address according to the following rules:
@@ -321,12 +319,10 @@ will match both of the following actions:
 #SettingsAnchor
 ---+ <nop>ActionTrackerPlugin Settings
 
-These settings can be overridden in the Web<nop>Preferences topic of the current web (by defining ACTIONTRACKERPLUGIN_TABLEHEADER or ACTIONTRACKERPLUGIN_TABLEFORMAT etc).
-	* Set to 1 to enable debug features, including the undocumented =%<nop>ACTIONNOTIFICATIONS{}%= and =%<nop>ACTIONTRACKERPREFS%= features.
-		* Set DEBUG = 0
-
-	* One line description, shown in the TextFormattingRules topic
-		* Set SHORTDESCRIPTION = Adds support for action tags in topics, and automatic notification of action statii
+These settings can be overridden in the Web<nop>Preferences topic of the current web, or individually in topics (by defining ACTIONTRACKERPLUGIN_TABLEHEADER or ACTIONTRACKERPLUGIN_TABLEFORMAT etc).
+<!--
+	* Set SHORTDESCRIPTION = Adds support for action tags in topics, and automatic notification of action statuses
+-->
 
 	* The format of an action output. The following fields can be output: web, topic, text, who, due, notify, uid, creator, state, edit, and any EXTRAS you may have. These settings can be overridden in an ACTIONSEARCH command using the =format= and =header= attributes. TABLEHEADER defines the column headings,  TABLEFORMAT defines the contents of the columns, and if TABLEORIENT is set to "rows", action tables will be aligned as rows of values instead of the default columns of values.
 		* Set TABLEHEADER = | Assigned to | Due date | Description | State | Notify ||
@@ -336,10 +332,6 @@ These settings can be overridden in the Web<nop>Preferences topic of the current
 	* The alternative text format of an action, as seen by a mail recipient who doesn't accept HTML in mail. Used when mailing action or change notifications.
 		* Set TEXTFORMAT = Action for $who, due $due, $state$n$text$n
 
-	* Important changes since the last release: Colours are now defined in the  stylesheet attached to this topic. The following settings are ignored:
-		* #Set LATECOL = yellow
-		* #Set BADDATECOL = red
-		* #Set HEADERCOL = orange
 	* Full URL of the CSS to use in formatting actions.
 	* Set CSS = %PUBURL%/%TWIKIWEB%/ActionTrackerPlugin/styles.css
 
@@ -361,11 +353,8 @@ These settings can be overridden in the Web<nop>Preferences topic of the current
 	* Non-standard attributes - see [[#NonStandardAttributes][Non-standard attributes]] above.
 		* Set EXTRAS = 
 
-	* Setup for Mishoo JSCalendar
-	* The following styles are available: system blue blue2 brown green tas win2k-1 win2k-2 win2k-cold-1 win2k-cold-2
-		* Set CAL_STYLE = system
-	* The following languages are available: af es ko-utf8 ru br fi lt si ca fr lt-utf8 sk cs-win hr nl sp da hr-utf8 no sv de hu pl tr du it pl-utf8 zh el jp pt en ko ro
-		* Set CAL_LANG = en
+	* Set to 1 to enable debug features, including the undocumented =%<nop>ACTIONNOTIFICATIONS{}%= and =%<nop>ACTIONTRACKERPREFS%= features.
+		* Set DEBUG = 0
 
 ---
 ---+ Plugin Installation Instructions
@@ -379,18 +368,19 @@ These settings can be overridden in the Web<nop>Preferences topic of the current
 ---++ Upgrade notes
 Earlier versions of this plugin installed a number of files that are no longer required. Relative to the root of the TWiki installation these are:
 | *File* | *What's happened* |
-| data/Plugins/ActionTrackerPlugin.txt | Moved to data/TWiki |
-| templates/actionchangenotify.tmpl | Merged with actionnotify.tmpl |
-| bin/editaction | Merged into plugin code, using hooks added in Feb 2003 TWiki release |
-| bin/previewaction | Merged into plugin code, using hooks added in Feb 2003 TWiki release |
+| =data/Plugins/ActionTrackerPlugin.txt= | Moved to data/TWiki |
+| =templates/actionchangenotify.tmpl= | Merged with actionnotify.tmpl |
+| =bin/editaction= | Merged into plugin code, using hooks added in Feb 2003 TWiki release |
+| =bin/previewaction= | Merged into plugin code, using hooks added in Feb 2003 TWiki release |
 
-The mechanism for defining notification groups as lists of "EMail" lines in a topic in Main is no longer supported. Please upgrade to the mechanism described herein.
+The mechanism for defining notification groups as lists of "Email" lines in a topic in Main is no longer supported. Please upgrade to the mechanism described herein.
 
 ---+ Plugin Info
 
 |  Plugin Author: | TWiki:Main/CrawfordCurrie, http://c-dot.co.uk |
 |  Plugin Version: | %$VERSION% |
 |  Change History: | |
+|  12652 | Fixes for [[http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item3446][Item3446]], [[http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item2127][Item2127]]. Updates to tests and templates for recent core changes. |
 |  11556 | QBE topic made much friendlier using TWiki-4 features; minor bugfixes |
 |  10919 | <a href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item2606'>Item2606</a>  actionnotify can now read email addresses from password manager as well as new TWiki4 style user topics. actionnotify requires TWiki-4.0.4 + hotfix-4.0.4-1 |
 |  8385 | <a href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1443'>Item1443</a>  style sheet bug makes yellow warning not show |

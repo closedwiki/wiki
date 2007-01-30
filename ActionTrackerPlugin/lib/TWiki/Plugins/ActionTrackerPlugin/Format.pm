@@ -148,13 +148,14 @@ sub _expandVar {
         return $object->$fn( $asHTML, @_ );
     }
     my $type = $object->getType( $vbl );
-    my $typename = $type->{type};
-    if ( defined( &{ref( $object ) . "::_formatType_$typename"} ) ) {
-        # special format for this type
-        my $fn = "_formatType_$typename";
-        return $object->$fn( $vbl, $asHTML, @_ );
+    if( $type ) {
+        my $typename = $type->{type};
+        if ( defined( &{ref( $object ) . "::_formatType_$typename"} ) ) {
+            # special format for this type
+            my $fn = "_formatType_$typename";
+            return $object->$fn( $vbl, $asHTML, @_ );
+        }
     }
-
     if ( defined( $object->{$vbl} ) ) {
         # just expand as a string
         return $object->{$vbl};

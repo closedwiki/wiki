@@ -242,12 +242,25 @@ sub getType {
     return $types{$name};
 }
 
-# Allocate a new UID for this action. This uses a file
-# in the data directory called "atUidReg" that contains the
-# highest UID allocated so far.
+# Allocate a new UID for this action.
 sub getNewUID {
     my $this = shift;
-    my $uidRegister = TWiki::Func::getDataDir() . '/atUidReg';
+
+    my $workArea = TWiki::Func::getWorkArea('ActionTrackerPlugin');
+    my $uidRegister = $workArea . '/UIDRegister';
+
+    # Compatibility code. Upgrade existing atUidReg to plugin work area.
+    if (!-e $uidRegister && -e TWiki::Func::getDataDir() . '/atUidReg') {
+        my $oldReg = TWiki::Func::getDataDir() . '/atUidReg';
+        open( FH, "<$oldReg" ) or die "Reading $oldReg: $!";
+        my $uid = <FH>;
+        close( FH );
+        open( FH, ">$uidRegister" ) or die "Writing $uidRegister: $!";
+        print FH "$uid\n";
+        close( FH );
+        unlink $oldReg;
+    }
+
     my $lockFile = $uidRegister.'.lock';
 
     # Could do this using flock but it's not guaranteed to be
@@ -329,7 +342,7 @@ sub stringify {
     my $this = shift;
     my $attrs = '';
     my $descr = '';
-    foreach my $key ( keys %$this ) {
+    foreach my $key ( sort keys %$this ) {
         my $type = $types{$key};
         if ( $key eq 'text') {
             $descr = $this->{text};
@@ -410,7 +423,7 @@ sub formatTime {
             $stime =~ s/(\w+)\s+(\w+)\s+(\w+)\s+([^\s]+)\s+(\w+).*/$1, $3 $2 $5/o;
         }
     } else {
-        $stime = "BAD DATE FORMAT see %TWIKIWEB%.ActionTrackerPlugin#DateFormats";
+        $stime = "BAD DATE see %TWIKIWEB%.ActionTrackerPlugin#DateFormats";
     }
     return $stime;
 }
@@ -458,6 +471,7 @@ sub _matchType_names {
 
     foreach my $name ( split( /\s*,\s*/, $val )) {
         my $who = _canonicalName( $name );
+
         $who =~ s/\./\\./go;
         my $r;
         eval {
