@@ -81,7 +81,7 @@ $VERSION = '$Rev$';
 # of the version number in PLUGINDESCRIPTIONS.
 $RELEASE = 'Cairo, Dakar, Edinburgh, ...';
 
-$REVISION = '1.021'; #dro# fixed major mod_perl bug; improved performance (AJAX); fixed minor IE caching bug (AJAX related); added new attributes (tooltip, descr, template, statesel) requested by TWiki:Main.KeithHelfrich; fixed installation instructions bug reported by TWiki:Main.KeithHelfrich
+$REVISION = '1.021'; #dro# fixed some major bug (mod_perl, plugin preferences); improved performance (AJAX); fixed minor IE caching bug (AJAX related); added new attributes (tooltip, descr, template, statesel) requested by TWiki:Main.KeithHelfrich; fixed installation instructions bug reported by TWiki:Main.KeithHelfrich
 #$REVISION = '1.020'; #dro# added AJAX feature (useajax attribute) requested by TWiki:Main.ShayPierce and TWiki:Main.KeithHelfrich
 #$REVISION = '1.019'; #dro# fixed major default options bug reported by TWiki:Main.RichardHitier 
 #$REVISION = '1.018'; #dro# fixed notification bug reported by TWiki:Main.JosMaccabiani; fixed a minor whitespace bug; add static attribute
@@ -121,7 +121,7 @@ sub initPlugin
     $debug = TWiki::Func::getPluginPreferencesFlag( "DEBUG" );
 
     # XXX
-    #### $debug = 1;
+    ####$debug = 1;
 
     $defaultsInitialized = 0;
 
@@ -143,7 +143,7 @@ sub commonTagsHandler
     $initText = $_[0];
     ###### we need exceptions since Dakar release therefore eval is bad
     ###eval {
-	    local(%namedIds,$resetDone,$stateChangeDone, %options, %namedDefaults);
+	    local(%options, %namedDefaults, %itemStatesRead, %namedIds, @unknownParams, $name);
             $_[0] =~ s/<\/head>/<script src="%PUBURL%\/%TWIKIWEB%\/$pluginName\/itemstatechange.js" language="javascript"><\/script><\/head>/is unless ($_[0]=~/itemstatechange.js/);
 	    $_[0] =~ s/%CHECKLISTSTART%(.*?)%CHECKLISTEND%/&handleAutoChecklist("",$1,$_[0])/sge;
 	    $_[0] =~ s/%CHECKLISTSTART{(.*?)}%(.*?)%CHECKLISTEND%/&handleAutoChecklist($1,$2,$_[0])/sge;
@@ -243,15 +243,16 @@ sub initOptions() {
 	# handle templates:
 	my $tmplName = $params{'template'};
 	$tmplName = $namedDefaults{$name}{'template'} unless defined $tmplName;
-	$tmplName = (&TWiki::Func::getPluginPreferencesValue("TEMPLATE") || undef) unless defined $tmplName;
+	$tmplName = ( &TWiki::Func::getPreferencesValue("\U${pluginName}_TEMPLATE\E") || undef) unless defined $tmplName;
 
         # Setup options (attributes>named defaults>plugin preferences>global defaults):
 	%options = ( );
         foreach my $option (@allOptions) {
                 my $v = $params{$option};
 		if ((defined $tmplName)&&(!defined $v)) {
-			$v = (&TWiki::Func::getPluginPreferencesFlag("TEMPLATE_\U${tmplName}_${option}\E") || undef) if grep /^\Q$option\E$/, @flagOptions;
-			$v = (&TWiki::Func::getPluginPreferencesValue("TEMPLATE_\U${tmplName}_${option}\E") || undef)  unless defined $v;
+			$v = (&TWiki::Func::getPreferencesFlag("\U${pluginName}_TEMPLATE_${tmplName}_${option}\E") || undef) if grep /^\Q$option\E$/, @flagOptions;
+			$v = (&TWiki::Func::getPreferencesValue("\U${pluginName}_TEMPLATE_${tmplName}_${option}\E") || undef)  unless defined $v;
+			$v = undef if (defined $v) && ($v eq "");
 		}
 
 		$v = $namedDefaults{$name}{$option} unless defined $v;
@@ -263,13 +264,13 @@ sub initOptions() {
                         }
                 } else {
                         if (grep /^\Q$option\E$/, @flagOptions) {
-                                $v = TWiki::Func::getPluginPreferencesFlag("\U$option\E") || undef;
+                                $v = ( TWiki::Func::getPreferencesFlag("\U${pluginName}_$option\E") || undef );
                         } else {
-                                $v = TWiki::Func::getPluginPreferencesValue("\U$option\E") || undef;
+                                $v = ( TWiki::Func::getPreferencesValue("\U${pluginName}_$option\E") || undef ); 
                         }
-                        $options{$option}=(defined $v)? $v : $globalDefaults{$option};
+			$v = undef if (defined $v) && ($v eq "");
+                        $options{$option}= (defined $v?$v:$globalDefaults{$option});
                 }
-
         }
 
         # Render some options:
@@ -328,13 +329,7 @@ sub initNamedDefaults {
 
 	# create named defaults (attributes>named defaults>global defaults):
 	foreach my $default (keys %globalDefaults) {
-               $namedDefaults{$name}{$default}=
-                       (defined $params{$default})?
-                                       $params{$default}:
-                                       ((defined $namedDefaults{$name}{$default})?
-                                               $namedDefaults{$name}{$default}:
-						undef);
-                                               #$globalDefaults{$default});
+               $namedDefaults{$name}{$default}= $params{$default} if defined $params{$default};
 	}
 }
 # =========================
@@ -736,15 +731,15 @@ sub renderChecklistItem {
 			$text .= $linktext;
 		} else {
 			my ($onmouseover, $onmouseout)=("","");
+			$action="javascript:submitItemStateChange('$action')" if $options{'useajax'};
 			if ($options{'statesel'}) {
-				$onmouseover="clpTooltipShow('CLP_SM_DIV_$name$uetId','CLP_A_$name$uetId',10,10,true);";
+				$action="javascript:clpTooltipShow('CLP_SM_DIV_$name$uetId','CLP_A_$name$uetId',10,10,true);";
 				$text .= &createHiddenDirectSelectionDiv($uetId, $name, $state, \@states, \@icons);
 			} else {
 				$onmouseover="clpTooltipShow('CLP_TT_$name$uetId','CLP_A_$name$uetId',20,20,true);";
 				$onmouseout="clpTooltipHide('CLP_TT_$name$uetId');";
 				$text .= $query->div({-id=>"CLP_TT_$name$uetId",-style=>"visibility:hidden;position:absolute;top:0;left:0;z-index:2;font: normal 8pt sans-serif;padding: 3px; border: solid 1px; background-color: $options{'tooltipbgcolor'};"},$title);
 			}
-			$action="javascript:submitItemStateChange('$action')" if $options{'useajax'};
 			$text .= $query->a({-onmouseover=>$onmouseover,-onmouseout=>$onmouseout,-id=>"CLP_A_$name$uetId",-href=>$action}, $linktext);
 		}
 	} else {
@@ -769,6 +764,7 @@ sub renderChecklistItem {
 
 	return $text;
 }
+# =========================
 sub createHiddenDirectSelectionDiv {
 	my ($id, $name, $state, $statesRef, $iconsRef) =  @_;
 	my $text ="";
@@ -779,15 +775,16 @@ sub createHiddenDirectSelectionDiv {
 		my ($s, $ic) = ($$statesRef[$i], $$iconsRef[$i]);
 		my $action = &createAction($id, $name, $state, $s);
 		my $title = &createTitle($name,$state,$statesRef, $s);
-		$action="javascript:submitItemStateChange('$action');" if $options{'useajax'};
+		$action="javascript:submitItemStateChange('$action');clpTooltipHide('CLP_SM_DIV_$name$id');" if $options{'useajax'};
 		$text .= $query->div({-id=>"CLP_SM_TT_$name${id}_$i",-style=>"visibility:hidden;position:absolute;top:0;left:0;z-index:3;font: normal 8pt sans-serif;padding: 3px; border: solid 1px; background-color: $options{'tooltipbgcolor'};"},$title); 
 		$sl.=$query->a({
-					-id=>"CLP_SM_A_$name${id}_$i", -href=>"$action",
+					-id=>"CLP_SM_A_$name${id}_$i", 
+					-href=>"$action",
 					-style=>'vertical-align:bottom;',
 					-onmouseover=>"clpTooltipShow('CLP_SM_TT_$name${id}_$i','CLP_SM_IMG_$name${id}_$i',20,20);", 
-					-onmouseout=>"clpTooltipHide('CLP_SM_TT_$name${id}_$i');"
+					-onmouseout=>"clpTooltipHide('CLP_SM_TT_$name${id}_$i');",
 				},
-				$query->img({-src=>&getImageSrc($ic),-id=>"CLP_SM_IMG_$name${id}_$i",-alt=>'',-border=>0, -style=>'vertical-align:bottom;cursor=move'}));
+				$query->img({-src=>&getImageSrc($ic),-id=>"CLP_SM_IMG_$name${id}_$i",-alt=>'',-border=>0, -style=>'vertical-align:bottom;cursor:move;'}));
 		$sl.='&nbsp;';
 	}
 
@@ -885,7 +882,7 @@ sub saveChecklistItemStateTopic {
 
 		my $states = ($name eq $n)?$options{'states'}:undef;
 		$states = $namedDefaults{$n}{'states'} unless defined $states && $states ne "";
-		$states = &TWiki::Func::getPluginPreferencesValue('STATES') unless defined $states && $states ne "";
+		$states = &TWiki::Func::getPreferencesValue("\U$pluginName\E_STATES") unless defined $states && $states ne "";
 		$states = $globalDefaults{'states'} unless defined $states && $states ne "";
 		my $statesel = join ", ",  (split /\|/, $states);
 		$topicText.="\n";
