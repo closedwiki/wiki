@@ -732,13 +732,12 @@ sub renderChecklistItem {
 		} else {
 			my ($onmouseover, $onmouseout)=("","");
 			$action="javascript:submitItemStateChange('$action')" if $options{'useajax'};
+			$onmouseover="clpTooltipShow('CLP_TT_$name$uetId','CLP_A_$name$uetId',20,20,true);";
+			$onmouseout="clpTooltipHide('CLP_TT_$name$uetId');";
+			$text .= $query->div({-id=>"CLP_TT_$name$uetId",-style=>"visibility:hidden;position:absolute;top:0;left:0;z-index:2;font: normal 8pt sans-serif;padding: 3px; border: solid 1px; background-color: $options{'tooltipbgcolor'};"},$title);
 			if ($options{'statesel'}) {
 				$action="javascript:clpTooltipShow('CLP_SM_DIV_$name$uetId','CLP_A_$name$uetId',10,10,true);";
 				$text .= &createHiddenDirectSelectionDiv($uetId, $name, $state, \@states, \@icons);
-			} else {
-				$onmouseover="clpTooltipShow('CLP_TT_$name$uetId','CLP_A_$name$uetId',20,20,true);";
-				$onmouseout="clpTooltipHide('CLP_TT_$name$uetId');";
-				$text .= $query->div({-id=>"CLP_TT_$name$uetId",-style=>"visibility:hidden;position:absolute;top:0;left:0;z-index:2;font: normal 8pt sans-serif;padding: 3px; border: solid 1px; background-color: $options{'tooltipbgcolor'};"},$title);
 			}
 			$text .= $query->a({-onmouseover=>$onmouseover,-onmouseout=>$onmouseout,-id=>"CLP_A_$name$uetId",-href=>$action}, $linktext);
 		}
