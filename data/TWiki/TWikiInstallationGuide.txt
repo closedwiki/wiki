@@ -3,7 +3,7 @@
 %STARTINCLUDE%
 ---# TWiki Installation Guide
 
-_Installation instructions for the TWiki 4.0 production release._
+_Installation instructions for the TWiki 4.1 production release._
 
 If you are upgrading from a previous version of TWiki, you probably want to read TWikiUpgradeGuide instead.
 
