@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1170183233" format="1.1" version="$Rev$"}%
 %TOC%
 %STARTINCLUDE%
 ---# TWiki Installation Guide
@@ -49,8 +49,9 @@ Once you have your TWiki running, you can move on to customise it for your users
    * *Enable e-mail notification* - read TWikiSiteTools#WebNotify to get WebChangesAlerts.
    * *Automate update of site statistics* - read TWikiSiteTools#WebStatistics
    * *Automate removal of expired sessions and lease files* - read TWikiScripts#tick_twiki_pl.
+   * *Enable internationalization* if needed - read TWiki:TWiki/InstallationWithI18N (supplemental documentation on TWiki.org)
    * *Install Plugins* if needed - TWiki:Plugins is an extensive library of Plugins for TWiki, that enhance functionality in a huge number of ways. A few Plugins are pre-installed in the TWiki distribution. Installation instructions are included in Plugins you download from TWiki:Plugins.PluginPackage on TWiki.org.
-   * *Review known issues* - visit TWiki:Codev.KnownIssuesOfTWiki04x00x00 and fix issues that apply to you.
+   * *Review known issues* - visit TWiki:Codev.KnownIssuesOfTWiki04x01 and fix issues that apply to you.
 
 ---++ Troubleshooting
    * The first step is to re-run the =configure= script and make sure you have resolved all errors, and are happy that you understand any warnings.
