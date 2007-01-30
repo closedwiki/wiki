@@ -1095,8 +1095,8 @@ sub getRenderedVersion {
     $text =~ s/(^|\s)\!\[\[/$1\[<nop>\[/gm;
     # Spaced-out Wiki words with alternative link text
     # i.e. [[$1][$3]]
-    $text =~ s/\[\[([^\]\n]+)\](\[([^\]\n]+)\])?\]/$this->_handleSquareBracketedLink($theWeb,$theTopic,$1,$3)/ge;
-
+    $text =~ s/\[\[([^\][\n]+)\](\[([^\]\n]+)\])?\]/$this->_handleSquareBracketedLink($theWeb,$theTopic,$1,$3)/ge;
+    
     unless( TWiki::isTrue( $prefs->getPreferencesValue('NOAUTOLINK')) ) {
         # Handle WikiWords
         $text = $this->takeOutBlocks( $text, 'noautolink', $removed );
