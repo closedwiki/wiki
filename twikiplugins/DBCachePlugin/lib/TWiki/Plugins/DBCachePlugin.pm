@@ -18,10 +18,11 @@ use strict;
 use vars qw( 
   $VERSION $RELEASE $SHORTDESCRIPTION $NO_PREFS_IN_TOPIC
   $currentWeb $currentTopic $currentUser $isInitialized
+  $addDependency
 );
 
 $VERSION = '$Rev$';
-$RELEASE = '1.40';
+$RELEASE = '1.50';
 $NO_PREFS_IN_TOPIC = 1;
 $SHORTDESCRIPTION = 'Lightweighted frontend to the DBCacheContrib';
 
@@ -39,7 +40,15 @@ sub initPlugin {
   TWiki::Func::registerTagHandler('DBCALL', \&_DBCALL);
   TWiki::Func::registerTagHandler('DBSTATS', \&_DBSTATS);
   TWiki::Func::registerTagHandler('DBDUMP', \&_DBDUMP); # for debugging
+  TWiki::Func::registerTagHandler('DBRECURSE', \&_DBRECURSE);
   TWiki::Func::registerTagHandler('ATTACHMENTS', \&_ATTACHMENTS);
+
+  # SMELL: remove this when TWiki::Cache got into the core
+  if (defined $TWiki::Plugins::SESSION->{cache}) {
+    $addDependency = \&addDependencyHandler;
+  } else {
+    $addDependency = \&nullHandler;
+  }
 
   $isInitialized = 0;
 
@@ -101,12 +110,23 @@ sub _ATTACHMENTS {
   initCore();
   return TWiki::Plugins::DBCachePlugin::Core::handleATTACHMENTS(@_);
 }
+sub _DBRECURSE {
+  initCore();
+  return TWiki::Plugins::DBCachePlugin::Core::handleDBRECURSE(@_);
+}
 
 ###############################################################################
 # perl api
 sub getDB {
   initCore();
   return TWiki::Plugins::DBCachePlugin::Core::getDB(@_);
+}
+
+###############################################################################
+# SMELL: remove this when TWiki::Cache got into the core
+sub nullHandler { }
+sub addDependencyHandler {
+  return $TWiki::Plugins::SESSION->{cache}->addDependency(@_);
 }
 
 ###############################################################################
