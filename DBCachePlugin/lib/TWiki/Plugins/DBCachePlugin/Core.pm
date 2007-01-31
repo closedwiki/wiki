@@ -131,6 +131,9 @@ sub handleDBQUERY {
 	topic=>$topicName, web=>$topicWeb, index=>$index, count=>$count);
       $format = &TWiki::Func::expandCommonVariables($format, $topicName, $topicWeb);
       $text .= $format;
+
+      $TWiki::Plugins::DBCachePlugin::addDependency->($topicWeb, $topicName);
+
       last if $index == $theLimit;
     }
   }
@@ -157,6 +160,8 @@ sub handleDBCALL {
   return '' unless $thisTopic;
   my $thisWeb;
   ($thisWeb, $thisTopic) = &TWiki::Func::normalizeWebTopicName($theWeb, $thisTopic);
+
+  $TWiki::Plugins::DBCachePlugin::addDependency->($thisWeb, $thisTopic);
 
   # remember args for the key before mangling the params
   my $args = $params->stringify();
@@ -321,6 +326,7 @@ sub handleDBSTATS {
 	  );
 	  $statistics{$key1} = \%record;
 	}
+        $TWiki::Plugins::DBCachePlugin::addDependency->($thisWeb, $topicName);
       }
     }
   }
@@ -381,6 +387,7 @@ sub handleDBSTATS {
       'mean'=>$mean,
       'keys'=>$numkeys,
     );
+
     last if $theLimit && $index == $theLimit;
   }
   $theHeader = &_expandVariables($theHeader, $thisWeb, $theTopic);
@@ -399,6 +406,9 @@ sub handleDBDUMP {
   my $thisTopic = $params->{_DEFAULT} || $theTopic;
   my $thisWeb = $params->{web} || $theWeb;
   ($thisWeb, $thisTopic) = TWiki::Func::normalizeWebTopicName($thisWeb, $thisTopic);
+
+  $TWiki::Plugins::DBCachePlugin::addDependency->($thisWeb, $thisTopic);
+
   my $theDB = getDB($thisWeb);
 
   my $topicObj = $theDB->fastget($thisTopic) || '';
@@ -441,19 +451,21 @@ sub handleDBDUMP {
 
   # read attachments
   my $attachments = $topicObj->fastget('attachments');
-  $result .= "<p/>\n---++ Attachments = $attachments\n";
-  $result .= "<table class=\"twikiTable\">\n";
-  foreach my $attachment (sort $attachments->getValues()) {
-    $result .= "<tr><th valign='top'>".$attachment->fastget('name')."</th>";
-    $result .= '<td><table>';
-    foreach my $key (sort $attachment->getKeys()) {
-      next if $key eq 'name';
-      my $value = $attachment->fastget($key);
-      $result .= "<tr><th>$key</th><td>$value</td></tr>\n" if $value;
+  if ($attachments) {
+    $result .= "<p/>\n---++ Attachments = $attachments\n";
+    $result .= "<table class=\"twikiTable\">\n";
+    foreach my $attachment (sort $attachments->getValues()) {
+      $result .= "<tr><th valign='top'>".$attachment->fastget('name')."</th>";
+      $result .= '<td><table>';
+      foreach my $key (sort $attachment->getKeys()) {
+        next if $key eq 'name';
+        my $value = $attachment->fastget($key);
+        $result .= "<tr><th>$key</th><td>$value</td></tr>\n" if $value;
+      }
+      $result .= '</table></td></tr>';
     }
-    $result .= '</table></td></tr>';
+    $result .= "</table>\n";
   }
-  $result .= "</table>\n";
 
   return $result."\n</noautolink>\n";
 }
@@ -466,6 +478,7 @@ sub handleATTACHMENTS {
   my $thisTopic = $params->{_DEFAULT} || $params->{topic} || $theTopic;
   my $thisWeb = $params->{web} || $theWeb;
   ($thisWeb, $thisTopic) = TWiki::Func::normalizeWebTopicName($thisWeb, $thisTopic);
+  $TWiki::Plugins::DBCachePlugin::addDependency->($thisWeb, $thisTopic);
 
   my $theNames = $params->{names} || $params->{name} || '.*';
   my $theAttr = $params->{attr} || '.*';
@@ -480,8 +493,8 @@ sub handleATTACHMENTS {
   my $theMinSize = $params->{minsize} || 0;
   my $theMaxSize = $params->{maxsize} || 0;
   my $theUser = $params->{user} || '.*';
-  my $theHeader = $params->{header} || '| *Name* | *Size* | *Date* | *Who* | *Comment* |$n';
-  my $theFooter = $params->{footer} || '$n$count attachments$n';
+  my $theHeader = $params->{header} || '';
+  my $theFooter = $params->{footer} || '';
   my $theFormat = $params->{format} || '| [[$url][$name]] |  $sizeK | <nobr>$date</nobr> | $user | $comment |';
   my $theSeparator = $params->{separator} || $params->{sep} || "\n";
   my $theSort = $params->{sort} || $params->{order} || 'name';
@@ -580,6 +593,161 @@ sub handleATTACHMENTS {
   $theFooter = _expandVariables($theFooter, $thisWeb, $thisTopic, count=>$index);
 
   return $theHeader.join($theSeparator,@result).$theFooter;
+}
+
+###############################################################################
+sub handleDBRECURSE {
+  my ($session, $params, $theTopic, $theWeb) = @_;
+
+  #writeDebug("called handleDBRECURSE(" . $params->stringify() . ")");
+
+  $theTopic = $params->{_DEFAULT} || $params->{topic} || $theTopic;
+  $theWeb = $params->{web} || $theWeb;
+  ($theWeb, $theTopic) = &TWiki::Func::normalizeWebTopicName($theWeb, $theTopic);
+
+  $params->{format} ||= '   $indent* [[$web.$topic][$topic]]';
+  $params->{single} ||= $params->{format};
+  $params->{separator} ||= $params->{sep} || "\n";
+  $params->{header} ||= '';
+  $params->{subheader} ||= '';
+  $params->{singleheader} ||= $params->{header};
+  $params->{footer} ||= '';
+  $params->{subfooter} ||= '';
+  $params->{singlefooter} ||= $params->{footer};
+  $params->{hidenull} ||= 'off';
+  $params->{filter} ||= 'parent=\'$name\'';
+  $params->{sort} ||= $params->{order} || 'name';
+  $params->{reverse} ||= 'off';
+  $params->{limit} ||= 0;
+  $params->{skip} ||= 0;
+  $params->{depth} ||= 0;
+
+  $params->{format} = '' if $params->{format} eq 'none';
+  $params->{single} = '' if $params->{single} eq 'none';
+  $params->{header} = '' if $params->{header} eq 'none';
+  $params->{footer} = '' if $params->{footer} eq 'none';
+  $params->{subheader} = '' if $params->{subheader} eq 'none';
+  $params->{subfooter} = '' if $params->{subfooter} eq 'none';
+  $params->{singleheader} = '' if $params->{singleheader} eq 'none';
+  $params->{singlefooter} = '' if $params->{singlefooter} eq 'none';
+  $params->{separator} = '' if $params->{separator} eq 'none';
+
+  # query topics
+  my $theDB = getDB($theWeb);
+  $params->{_count} = 0;
+  my $result = _formatRecursive($theDB, $theWeb, $theTopic, $params);
+  return '' unless $result;
+
+  # render result
+  return '' if $params->{hidenull} eq 'on' && $params->{_count} == 0;
+
+  return 
+    _expandVariables(
+      ($params->{_count} == 1)?$params->{singleheader}:$params->{header}, 
+      $theWeb, $theTopic, 
+      count=>$params->{_count}).
+    join($params->{separator},@$result).
+    _expandVariables(
+      ($params->{_count} == 1)?$params->{singlefooter}:$params->{footer}, 
+      $theWeb, $theTopic, 
+      count=>$params->{_count});
+}
+
+###############################################################################
+sub _formatRecursive {
+  my ($theDB, $theWeb, $theTopic, $params, $seen, $depth, $number) = @_;
+
+  # protection agains infinite recursion
+  my %thisSeen;
+  $seen ||= \%thisSeen;
+  return if $seen->{$theTopic};
+  $seen->{$theTopic} = 1;
+  $depth ||= 0;
+  $number ||= '';
+
+  return if $params->{depth} && $depth >= $params->{depth};
+
+  #writeDebug("called _formatRecursive($theWeb, $theTopic)");
+  return unless $theTopic;
+
+  # search sub topics
+  my $queryString = $params->{filter};
+  $queryString =~ s/\$ref\b/$theTopic/g; # backwards compatibility
+  $queryString =~ s/\$name\b/$theTopic/g;
+
+  #writeDebug("queryString=$queryString");
+  my ($topicNames, $hits, $errMsg) = $theDB->dbQuery($queryString, undef, 
+    $params->{sort},
+    $params->{reverse},
+    $params->{include},
+    $params->{exclude});
+  die $errMsg if $errMsg; # never reach
+
+  # format this round
+  my @result = ();
+  my $index = 0;
+  my $nrTopics = scalar(@$topicNames);
+  foreach my $topicName (@$topicNames) {
+    next if $topicName eq $theTopic; # cycle, kind of
+    $params->{_count}++;
+    next if $params->{_count} <= $params->{skip};
+
+    # format this
+    my $numberString = ($number)?"$number.$index":$index;
+
+    my $text = ($nrTopics == 1)?$params->{single}:$params->{format};
+    $text = _expandVariables($text, $theWeb, $theTopic,
+      'web'=>$theWeb,
+      'topic'=>$topicName,
+      'number'=>$numberString,
+      'index'=>$index,
+      'count'=>$params->{_count},
+    );
+    $text =~ s/\$indent\((.+?)\)/$1 x $depth/ge;
+    $text =~ s/\$indent/'   ' x $depth/ge;
+
+    # from DBQUERY
+    my $topicObj = $hits->{$topicName};
+    $text =~ s/\$formfield\((.*?)\)/
+      my $temp = $theDB->getFormField($topicName, $1);
+      $temp =~ s#\)#${TranslationToken}#g;
+      $temp/geo;
+    $text =~ s/\$expand\((.*?)\)/
+      my $temp = $theDB->expandPath($topicObj, $1);
+      $temp =~ s#\)#${TranslationToken}#g;
+      $temp/geo;
+    $text =~ s/\$formatTime\((.*?)(?:,\s*'([^']*?)')?\)/TWiki::Func::formatTime($theDB->expandPath($topicObj, $1), $2)/geo; # single quoted
+
+    push @result, $text;
+
+    # recurse
+    my $subResult = 
+      _formatRecursive($theDB, $theWeb, $topicName, $params, $seen, 
+        $depth+1, $numberString);
+    
+    if (($subResult && @$subResult) || !($params->{hidenull} eq 'off')) {
+      push @result, 
+        _expandVariables($params->{subheader}, $theWeb, $topicName, 
+          'web'=>$theWeb,
+          'topic'=>$topicName,
+          'number'=>$numberString,
+          'index'=>$index,
+          'count'=>$params->{_count},
+        ).
+        join($params->{separator},@$subResult).
+        _expandVariables($params->{subfooter}, $theWeb, $topicName, 
+          'web'=>$theWeb,
+          'topic'=>$topicName,
+          'number'=>$numberString,
+          'index'=>$index,
+          'count'=>$params->{_count},
+        );
+    }
+
+    last if $params->{limit} && $params->{_count} >= $params->{limit};
+  }
+
+  return \@result;
 }
 
 ###############################################################################

@@ -98,6 +98,9 @@ sub onReload {
   foreach my $topicName (@$topics) {
     my $topic = $this->fastget($topicName);
 
+    # save web
+    $topic->set('web', $this->{web});
+
     #print STDERR "DEBUG: reloading $topicName\n";
 
     # createdate
@@ -212,7 +215,7 @@ sub dbQuery {
       } @topicNames;
     } else {
       @topicNames = sort {
-	$this->expandPath($hits{$a}, $theSort) cmp $this->expandPath($hits{$b}, $theSort)
+	flexCmp($this->expandPath($hits{$a}, $theSort), $this->expandPath($hits{$b}, $theSort))
       } @topicNames;
     }
     @topicNames = reverse @topicNames if $theReverse eq 'on';
@@ -221,6 +224,18 @@ sub dbQuery {
 
   return (\@topicNames, \%hits, undef);
 }
+
+###############################################################################
+sub flexCmp {
+
+  return $_[0] <=> $_[1] 
+    if $_[0] =~ /^[+-]?\d+(\.\d+)?$/ && 
+       $_[1] =~ /^[+-]?\d+(\.\d+)?$/;
+
+  return $_[0] cmp $_[1];
+}
+
+
 
 ###############################################################################
 sub expandPath {
