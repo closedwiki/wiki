@@ -43,7 +43,10 @@ sub writePdf {
     my( $data, $exit ) =
       $TWiki::Plugins::SESSION->{sandbox}->sysCommand( $cmd, @args );
 
-    File::Path::rmtree("$this->{path}/$this->{web}", 0, 1 );
+    # Dangerous to the point of being suicidal! Commented out by CC
+    # in response to Item3515. $this->{path} and $this->{web} are
+    # never set!
+    #File::Path::rmtree("$this->{path}/$this->{web}", 0, 1 );
 
     die "htmldoc failed: $exit $data" if $exit;
 }
