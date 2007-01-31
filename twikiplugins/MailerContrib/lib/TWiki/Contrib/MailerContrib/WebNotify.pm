@@ -325,7 +325,7 @@ sub _parsePages {
         }
     }
     if ( $spec =~ m/\S/ ) {
-        print STDERR "Badly formatted subscription list $ospec";
+        print STDERR "Badly formatted subscription list $ospec\n";
     }
 }
 
