@@ -481,7 +481,7 @@ sub handleAutoChecklist {
 
 	return &createUnknownParamsMessage() unless &initOptions($attributes);
 
-	$text=~s/\%CLI(\{[^\}]*\})?\%/&substAttributes($attributes, $1)/meg;
+	$text=~s/\%CLI(\{([^\}]*)\})?\%/&substAttributes($attributes, $2)/meg;
 	$text=~s/^(\s+[\d\*]+.*?)$/&substItemLine($1,$attributes)/meg;
 
 	if (lc($options{'pos'}) eq 'top' ) {
