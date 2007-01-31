@@ -1,4 +1,5 @@
 %META:TOPICINFO{author="TWikiContributor" date="1160971176" format="1.0" version="$Rev: 8023 $"}%
+%META:TOPICPARENT{name="TWikiFAQ"}%
 ---++ FAQ:
 
 What does the "T" in TWiki stand for?
