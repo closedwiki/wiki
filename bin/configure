@@ -145,6 +145,7 @@ my @root = File::Spec->splitdir($1);
 pop(@root);
 my @script = File::Spec->splitdir($0);
 my $scriptName = pop(@script);
+$scriptName =~ s/.*[\/\\]//;  # Fix for Item3511, on Win XP
 
 # Try to load the LocalLib.cfg optional overload
 
