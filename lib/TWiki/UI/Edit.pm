@@ -114,9 +114,10 @@ sub init_edit {
     TWiki::UI::checkAccess( $session, $webName, $topic, 'change', $user );
 
     # Check lease, unless we have been instructed to ignore it
-    # or if we are using the 10X's topic name for dynamic topic names
+    # or if we are using the 10X's or AUTOINC topic name for
+    # dynamic topic names.
     my $breakLock = $query->param( 'breaklock' ) || '';
-    unless( $breakLock || ($topic =~ /X{10}/ )) {
+    unless( $breakLock || $topic =~ /X{10}/ || $topic =~ /AUTOINC\d+/) {
         my $lease = $store->getLease( $webName, $topic );
         if( $lease ) {
             my $who = $lease->{user}->webDotWikiName();
