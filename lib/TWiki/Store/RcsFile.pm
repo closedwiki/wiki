@@ -226,7 +226,7 @@ sub getWorkArea {
 
     unless( -d $dir ) {
         mkdir( $dir ) || throw Error::Simple(
-            'RCS: failed to create '.$key.'work area: '.$! );
+            'RCS: failed to create '.$key.' work area. Check that {RCS}{WorkAreaDir} points to a valid directory that I can read and write to');
     }
     return $dir;
 }
