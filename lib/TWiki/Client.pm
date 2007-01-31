@@ -362,8 +362,8 @@ sub finish {
 
 ---++ StaticMethod expireDeadSessions()
 
-Delete sessions and passthrough files that are sitting around but are really expired.
-This *assumes* that the sessions are stored as files.
+Delete sessions and passthrough files that are sitting around but are
+really expired. This *assumes* that the sessions are stored as files.
 
 This is a static method, but requires TWiki::cfg. It is designed to be
 run from a session or from a cron job.
@@ -374,39 +374,51 @@ sub expireDeadSessions {
 	my $time = time() || 0;
     my $exp = $TWiki::cfg{Sessions}{ExpireAfter} || 36000; # 10 hours
     $exp = -$exp if $exp < 0;
+    local $/ = undef;
 
 	opendir(D, $TWiki::cfg{Sessions}{Dir}) || return;
 	foreach my $file ( grep { /^(passthru|cgisess)_[0-9a-f]{32}/ } readdir(D) ) {
         $file = TWiki::Sandbox::untaintUnchecked(
             $TWiki::cfg{Sessions}{Dir}.'/'.$file );
+
 		my @stat = stat( $file );
-        # Kill old files.
-		# Ignore tiny new files. They can't be complete sessions.
-        if( defined($stat[7]) ) {
-            my $lat = $stat[8] || $stat[9] || $stat[10] || 0;
-            unlink $file if( $time - $lat >= $exp );
+
+        # Kill old files. 'Old' is judged from the atime, then the mtime
+        # if the atime is not available, then the ctime if there is no
+        # mtime (unlikely, even in The Swamp of Despair (a.k.a Windows))
+        my $lat = $stat[8] || $stat[9] || $stat[10] || $time;
+        if( $time - $lat >= $exp ) {
+            unlink($file);
             next;
 		}
 
-        # Just kill passthru files
+        # Just ignore unexpired passthru files
         next if $file =~ /^passthru_/;
+
+        # The file is a session, with a file date younger than the
+        # expiry time. Read the session and expire it if the contents
+        # dictate.
 
 		open(F, $file) || next;
 		my $session = <F>;
 		close F;
 
-        # SMELL: security hazard?
-        $session = TWiki::Sandbox::untaintUnchecked( $session );
+        if ($session =~ /SESSION_ATIME\s*=>\s*(\d+)/s) {
+            my $atime = $1;
+            # check last accessed time
+            if( $atime && $time >= $atime + $exp ) {
+                unlink($file);
+                next;
+            }
+        }
 
-        my $D;
-		eval $session;
-		next if ( $@ );
-        # The session is expired if it is empty, hasn't been accessed in ages
-        # or has exceeded its registered expiry time.
-        if( !$D || $time >= $D->{_SESSION_ATIME} + $exp ||
-              $D->{_SESSION_ETIME} && $time >= $D->{_SESSION_ETIME} ) {
-            unlink( $file );
-            next;
+        if ($session =~ /SESSION_ETIME\s*=>\s*(\d+)/s) {
+            # test explicit expiry time
+            my $etime = $1;
+            if( $etime && $time >= $etime) {
+                unlink($file);
+                next;
+            }
         }
 	}
 	closedir D;
