@@ -91,8 +91,22 @@ REPORT
 # Warnings are fatal
 $SIG{'__WARN__'} = sub { die @_ };
 
-eval 'require 5.008';
+eval 'require 5.00503';
 die $@ if $@;
+
+# We warn against running TWiki on an older Perl version then 5.8.0
+# but we will not let configure die in this situation. The user
+# may have updated manylibraries and tweaked TWiki so let us give
+# him a chance.
+my $perlversion = $];
+if ($perlversion < 5.008) {
+    print STDERR <<HERE;
+Your perl version is older than 5.8.0.
+TWiki has only successfully been tested been tested with Perl revision 5.8.X.
+Running TWiki with an older Perl version requires upgrading of modules and
+tweaking of the TWiki code.
+HERE
+}
 
 my $localLibFailure;
 

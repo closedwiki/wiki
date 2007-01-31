@@ -86,6 +86,16 @@ HERE
     $n .= $this->NOTE(<<HERE);
 Note that by convention "Perl version 5.008" is referred to as "Perl version 5.8" and "Perl 5.008004" as "Perl 5.8.4" (i.e. ignore the leading zeros after the .)
 HERE
+
+    if ( $] < 5.008 ) {
+        $n .= $this->WARN(<<HERE);
+Perl version is older than 5.8.0.
+TWiki has only been successfully tested on Perl 5.8.X.
+You will need to upgrade Perl libraries and tweak the TWiki
+code to make TWiki work on older versions of Perl
+HERE
+    }
+
     $block .= $this->setting('Perl version', $n);
 
     # Perl @INC (lib path)
@@ -95,6 +105,8 @@ HERE
 This is the Perl library path, used to load TWiki modules,
 third-party modules used by some plugins, and Perl built-in modules.
 HERE
+
+
 
     $block .= $this->setting(
         'CGI bin directory', $this->_checkBinDir());
