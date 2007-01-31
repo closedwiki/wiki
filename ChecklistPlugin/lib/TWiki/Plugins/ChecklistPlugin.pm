@@ -435,6 +435,23 @@ sub handleChecklist {
 	return $text;
 }
 # =========================
+sub substAttributes {
+	my ($attributes, $p) = @_;
+	
+	my %attrHash = &TWiki::Func::extractParameters($attributes);
+	my %pHash = (defined $p?&TWiki::Func::extractParameters($p):());
+	
+	foreach my $a (keys %attrHash) {
+		$pHash{$a}=$attrHash{$a};
+	}
+	my $attr ="";
+	foreach my $a (keys %pHash) {
+		$attr .= ' '.$a.'="'.$pHash{$a}.'"';
+	}
+	
+	return '%CLI{'.$attr.'}%';
+}
+# =========================
 sub substItemLine {
 	my ($l,$attribs)=@_;
 	if ($l=~s/(\#\S+)//) {
@@ -464,6 +481,7 @@ sub handleAutoChecklist {
 
 	return &createUnknownParamsMessage() unless &initOptions($attributes);
 
+	$text=~s/\%CLI(\{[^\}]*\})?\%/&substAttributes($attributes, $1)/meg;
 	$text=~s/^(\s+[\d\*]+.*?)$/&substItemLine($1,$attributes)/meg;
 
 	if (lc($options{'pos'}) eq 'top' ) {
