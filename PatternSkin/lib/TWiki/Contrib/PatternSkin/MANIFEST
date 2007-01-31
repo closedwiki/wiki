@@ -123,6 +123,7 @@ templates/searchmeta.pattern.tmpl 0444
 templates/settings.pattern.tmpl 0444
 templates/styles.pattern.tmpl 0444
 templates/stylesdynamic.pattern.tmpl 0444
+templates/twiki.pattern.tmpl 0444
 templates/view.pattern.tmpl 0444
 templates/viewprint.pattern.tmpl 0444
 templates/viewbottombar.pattern.tmpl 0444
