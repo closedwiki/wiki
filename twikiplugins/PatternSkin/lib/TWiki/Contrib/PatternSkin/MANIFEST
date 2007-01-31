@@ -69,6 +69,7 @@ pub/TWiki/PatternSkinCssCookbookNoLeftBar/hideleftbar.css 0644
 pub/TWiki/PatternSkinCssCookbookNoTopBar/notopbar.css 0644
 pub/TWiki/PatternSkinCustomization/LowRes.css 0644
 templates/addform.pattern.tmpl 0444
+templates/app.pattern.tmpl 0444
 templates/attach.pattern.tmpl 0444
 templates/attachagain.pattern.tmpl 0444
 templates/attachnew.pattern.tmpl 0444
