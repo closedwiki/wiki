@@ -195,7 +195,7 @@ The 4.1.0 release was built from SVN http://svn.twiki.org/svn/twiki/tags/TWikiRe
 | [[%BUGS%/Item3187][Item3187]]  | Document how to get plugin settings into and from configure |
 | [[%BUGS%/Item3167][Item3167]]  | TWiki.TWikiSkins documentation and templates don't match with respect to printing |
 | [[%BUGS%/Item3165][Item3165]]  | PatternSkin: Using incorrect template names in include |
-| [[%BUGS%/Item3163][Item3163]]  | I18N: Strip uploaded filenames for 8-bit characters (Allow only US-ASCII) |
+| [[%BUGS%/Item3163][Item3163]]  | <nop>I18N: Strip uploaded filenames for 8-bit characters (Allow only US-ASCII) |
 | [[%BUGS%/Item3161][Item3161]]  | Usability: Attachment table default sort order |
 | [[%BUGS%/Item3158][Item3158]]  | Don't include anything when trying to include a non existing section |
 | [[%BUGS%/Item3153][Item3153]]  | INSTALL.html need to document new configure features |
@@ -325,7 +325,7 @@ The 4.1.0 release was built from SVN http://svn.twiki.org/svn/twiki/tags/TWikiRe
 | [[%BUGS%/Item2396][Item2396]]  | Need to distinguish between follow-up save and admin repRev |
 | [[%BUGS%/Item2363][Item2363]]  | perl accelerators closing STDERR will inhibit any further error log |
 | [[%BUGS%/Item2295][Item2295]]  | TemplateLogin login screen eats POST parameters |
-| [[%BUGS%/Item2168][Item2168]]  | I18N: Allow international characters in form field names |
+| [[%BUGS%/Item2168][Item2168]]  | <nop>I18N: Allow international characters in form field names |
 | [[%BUGS%/Item2156][Item2156]]  | PatternSkin: SCRIPTURL{"script"} and SCRIPTURLPATH{"script"} are not implemented everywhere |
 | [[%BUGS%/Item2153][Item2153]]  | MailerContrib: Mailnotify not running from tools directory & docs need updating |
 | [[%BUGS%/Item2054][Item2054]]  | JSCalendarContrib only works with IE in PatternSkin |

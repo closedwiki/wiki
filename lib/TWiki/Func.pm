@@ -1996,7 +1996,7 @@ Return: String or precompiled regular expression matching as described below.
 *Since:* TWiki::Plugins::VERSION 1.020 (9 Feb 2004)
 
 __Note:__ TWiki internally precompiles several regular expressions to
-represent various string entities in an I18N-compatible manner. Plugins
+represent various string entities in an <nop>I18N-compatible manner. Plugins
 authors are encouraged to use these in matching where appropriate. The
 following are guaranteed to be present. Others may exist, but their use
 is unsupported and they may be removed in future TWiki versions.

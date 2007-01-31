@@ -608,7 +608,7 @@ The following fixes and minor enhancements have been addressed in this release:
 | [[%BUGS%/Item1803][Item1803]] | Sorting bugs by merge field causes an internal error |
 | [[%BUGS%/Item1789][Item1789]] | User::isAdmin can create an empty SuperAdminGroup |
 | [[%BUGS%/Item1788][Item1788]] | Formatted search does not return values that are zero |
-| [[%BUGS%/Item1787][Item1787]] | I18N: Translation updates for 4.0.2 / new PatternSkin |
+| [[%BUGS%/Item1787][Item1787]] | <nop>I18N: Translation updates for 4.0.2 / new PatternSkin |
 | [[%BUGS%/Item1781][Item1781]] | Allow admin users to change passwords and mail addresses |
 | [[%BUGS%/Item1778][Item1778]] | Registration gives strange TWiki vars in user topic |
 | [[%BUGS%/Item1771][Item1771]] | Error message 'Oh dear' in warnyyyymm.txt isn't helpful |
@@ -689,12 +689,12 @@ The following fixes and minor enhancements have been addressed in this release:
 | [[%BUGS%/Item2422][Item2422]] | Inconsistent LocalSite.cfg.txt settings |
 | [[%BUGS%/Item2421][Item2421]] | Rename: Referrer topics need to be linked explicit |
 | [[%BUGS%/Item2409][Item2409]] | Form field checkbox option lost on topic edit |
-| [[%BUGS%/Item2402][Item2402]] | Sandbox not aware of I18N for user names |
+| [[%BUGS%/Item2402][Item2402]] | Sandbox not aware of <nop>I18N for user names |
 | [[%BUGS%/Item2399][Item2399]] | statistics does not like date variable sent to it because its tainted |
 | [[%BUGS%/Item2395][Item2395]] | Always show e-mail addresses to admins (USERINFO / HideUserDetails setting) |
 | [[%BUGS%/Item2394][Item2394]] | Allow registration without a running e-mail service (error during registration using TWiki::Net::_sendEmailBySendmail) |
 | [[%BUGS%/Item2390][Item2390]] | beforeAttachmentSaveHandler is broken on Solaris and RedHat |
-| [[%BUGS%/Item2380][Item2380]] | Logins / logouts with template login does not work with I18N topic names |
+| [[%BUGS%/Item2380][Item2380]] | Logins / logouts with template login does not work with <nop>I18N topic names |
 | [[%BUGS%/Item2379][Item2379]] | Inconsistent meta data in registration |
 | [[%BUGS%/Item2369][Item2369]] | WIKIUSERNAME incorrectly expanded |
 | [[%BUGS%/Item2365][Item2365]] | Email address handling for registration and in users homepage is confusing and not working |
@@ -724,7 +724,7 @@ The following fixes and minor enhancements have been addressed in this release:
 | [[%BUGS%/Item2287][Item2287]] | When printing a view page, the print style is not called |
 | [[%BUGS%/Item2286][Item2286]] | When you move an attachment the rename screen shows all topics that refers to the topic name |
 | [[%BUGS%/Item2278][Item2278]] | userToWikiName broken |
-| [[%BUGS%/Item2274][Item2274]] | I18N: Non US-ASCII chars in usernames breaks groups |
+| [[%BUGS%/Item2274][Item2274]] | <nop>I18N: Non US-ASCII chars in usernames breaks groups |
 | [[%BUGS%/Item2271][Item2271]] | Cannot "put back" a moved non-wikiword topic |
 | [[%BUGS%/Item2261][Item2261]] | Error in Apache log due to TWikiWebPreferences (File does not exist / ATTACHEDFILELINKFORMAT preference) |
 | [[%BUGS%/Item2259][Item2259]] | TWiki::UI::Save::buildNewTopic does not treat onlywikiname as a Boolean |
@@ -746,7 +746,7 @@ The following fixes and minor enhancements have been addressed in this release:
 | [[%BUGS%/Item2140][Item2140]] | AUTHORS missing translators' credits |
 | [[%BUGS%/Item2133][Item2133]] | Editform templates are missing some save parameters (templatetopic and text) |
 | [[%BUGS%/Item2126][Item2126]] | Bulk register shouldn't change passwords of existing users |
-| [[%BUGS%/Item2116][Item2116]] | I18N: updated translations for TWiki 4.0.3 |
+| [[%BUGS%/Item2116][Item2116]] | <nop>I18N: updated translations for TWiki 4.0.3 |
 | [[%BUGS%/Item2109][Item2109]] | Add css classes to PreferencesPlugin buttons |
 | [[%BUGS%/Item2105][Item2105]] | A form field defined as [[topic][name]] assumes that the topic is in the same web as the form |
 | [[%BUGS%/Item2102][Item2102]] | Clicking Upload without choosing a file gives error |

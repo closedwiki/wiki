@@ -206,7 +206,7 @@ __Major New Features__
 | Install: Remove office locations from registration. [[http://TWiki.org/cgi-bin/view/Codev/RemoveOfficeFromRegistration][Details]] | TWiki:Main.PeterThoeny |
 | Install: Changes to support shorter URLs with Apache Rewrite rules. [[http://TWiki.org/cgi-bin/view/Codev/ShorterURLs][Details]] | TWiki:Main.AntonioBellezza TWiki:Main.WalterMundt |
 | Install: Remove the Know web from the distribution. [[http://TWiki.org/cgi-bin/view/Codev/StopDistributingKnowWeb][Details]] | TWiki:Main.PeterThoeny |
-| Internationalization: Support use of UTF-8 URLs for I18N characters in TWiki page and attachment names. [[http://TWiki.org/cgi-bin/view/Codev/EncodeURLsWithUTF8][Details]] | TWiki:Main.RichardDonkin |
+| Internationalization: Support use of UTF-8 URLs for <nop>I18N characters in TWiki page and attachment names. [[http://TWiki.org/cgi-bin/view/Codev/EncodeURLsWithUTF8][Details]] | TWiki:Main.RichardDonkin |
 | Authentication: Authenticate users when creating new topic in view restricted web. [[http://TWiki.org/cgi-bin/view/Codev/VariousAuthBugsFixed][Details]] | TWiki:Main.JonathanGraehl TWiki:Main.SvenDowideit |
 | Preferences: TWiki Preferences need to be secured properly. [[http://TWiki.org/cgi-bin/view/Codev/SecureTWikiPreferences][Details]] | TWiki:Main.PeterThoeny |
 | Preferences: Use TWiki Forms to set user preferences. [[http://TWiki.org/cgi-bin/view/Codev/UsingFormsForSettings][Details]] | TWiki:Main.JohnTalintyre |
