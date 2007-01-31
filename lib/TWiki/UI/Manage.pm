@@ -815,7 +815,8 @@ sub _newTopicScreen {
     $nonWikiWordFlag = 'checked="checked"' if( $doAllowNonWikiWord );
 
     if( $attachment ) {
-        $tmpl = $session->{templates}->readTemplate( $tmplname || 'moveattachment', $skin );
+        $tmpl = $session->{templates}->readTemplate(
+            $tmplname || 'moveattachment', $skin );
         $tmpl =~ s/%FILENAME%/$attachment/go;
     } elsif( $confirm ) {
         $tmpl = $session->{templates}->readTemplate( 'renameconfirm', $skin );
@@ -826,8 +827,8 @@ sub _newTopicScreen {
         $tmpl = $session->{templates}->readTemplate( 'rename', $skin );
     }
 
-    # Trashing a topic; look for a non-conflicting name
-    if( $newWeb eq $TWiki::cfg{TrashWebName} ) {
+    if( !$attachment && $newWeb eq $TWiki::cfg{TrashWebName} ) {
+        # Trashing a topic; look for a non-conflicting name
         $newTopic = $oldWeb.$newTopic;
         my $n = 1;
         my $base = $newTopic;
@@ -841,57 +842,59 @@ sub _newTopicScreen {
     $tmpl =~ s/%NEW_TOPIC%/$newTopic/go;
     $tmpl =~ s/%NONWIKIWORDFLAG%/$nonWikiWordFlag/go;
 
-    my $refs;
-    my %attributes;
-    my %labels;
-    my @keys;
-    my $search = '';
-    if( $currentWebOnly ) {
-        $search = $session->{i18n}->maketext('(skipped)');
-    } else {
-        $refs = getReferringTopics( $session, $oldWeb, $oldTopic, 1 );
-        @keys = sort keys %$refs;
-        foreach my $entry ( @keys ) {
+    if( !$attachment ) {
+        my $refs;
+        my $search = '';
+        if( $currentWebOnly ) {
+            $search = $session->{i18n}->maketext('(skipped)');
+        } else {
+            $refs = getReferringTopics( $session, $oldWeb, $oldTopic, 1 );
+            foreach my $entry ( sort keys %$refs ) {
+                $search .= CGI::Tr
+                  (CGI::td(
+                      { class => 'twikiTopRow' },
+                      CGI::input(
+                          { type => 'checkbox',
+                            class => 'twikiCheckBox',
+                            name => 'referring_topics',
+                            value => $entry,
+                            checked => 'checked' } ). " [[$entry]] " ) .
+                              CGI::td(
+                                  { class => 'twikiSummary twikiGrayText' },
+                                  $refs->{$entry} ));
+            }
+            unless( $search ) {
+                $search = ($session->{i18n}->maketext('(none)'));
+            } else {
+                $search = CGI::start_table().$search.CGI::end_table();
+            }
+        }
+        $tmpl =~ s/%GLOBAL_SEARCH%/$search/o;
+
+        $refs = getReferringTopics( $session, $oldWeb, $oldTopic, 0 );
+
+        $search = '';;
+        foreach my $entry ( sort keys %$refs ) {
             $search .= CGI::Tr
-              (CGI::td
-               ( { class => 'twikiTopRow' },
-                 CGI::input( { type => 'checkbox',
-                               class => 'twikiCheckBox',
-                               name => 'referring_topics',
-                               value => $entry,
-                               checked => 'checked' } ). " [[$entry]] " ) .
-               CGI::td( { class => 'twikiSummary twikiGrayText' },
-                        $refs->{$entry} ));
+              (CGI::td(
+                  { class => 'twikiTopRow' },
+                  CGI::input(
+                      { type => 'checkbox',
+                        class => 'twikiCheckBox',
+                        name => 'referring_topics',
+                        value => $entry,
+                        checked => 'checked' } ). " [[$entry]] " ) .
+                          CGI::td(
+                              { class => 'twikiSummary twikiGrayText' },
+                              $refs->{$entry} ));
         }
         unless( $search ) {
             $search = ($session->{i18n}->maketext('(none)'));
         } else {
             $search = CGI::start_table().$search.CGI::end_table();
         }
+        $tmpl =~ s/%LOCAL_SEARCH%/$search/go;
     }
-    $tmpl =~ s/%GLOBAL_SEARCH%/$search/o;
-
-    $refs = getReferringTopics( $session, $oldWeb, $oldTopic, 0 );
-    @keys = sort keys %$refs;
-    $search = '';;
-    foreach my $entry ( @keys ) {
-        $search .= CGI::Tr
-          (CGI::td
-           ( { class => 'twikiTopRow' },
-             CGI::input( { type => 'checkbox',
-                           class => 'twikiCheckBox',
-                           name => 'referring_topics',
-                           value => $entry,
-                           checked => 'checked' } ). " [[$entry]] " ) .
-           CGI::td( { class => 'twikiSummary twikiGrayText' },
-                    $refs->{$entry} ));
-    }
-    unless( $search ) {
-        $search = ($session->{i18n}->maketext('(none)'));
-    } else {
-        $search = CGI::start_table().$search.CGI::end_table();
-    }
-    $tmpl =~ s/%LOCAL_SEARCH%/$search/go;
 
     $tmpl = $session->handleCommonTags( $tmpl, $oldWeb, $oldTopic );
     $tmpl = $session->{renderer}->getRenderedVersion( $tmpl, $oldWeb, $oldTopic );
@@ -1013,14 +1016,10 @@ sub _newWebScreen {
     $tmpl =~ s/%RENAMEWEB_SUBMIT%/\%$submitAction\%/go;
 
     my $refs;
-    my %attributes;
-    my %labels;
-    my @keys;
     my $search = '';
 
     $refs = ${$webTopicInfoRef}{referring}{refs1};
-    @keys = sort keys %$refs;
-    foreach my $entry ( @keys ) {
+    foreach my $entry ( sort keys %$refs ) {
         $search .= CGI::Tr(
             CGI::td(
                 { class => 'twikiTopRow' },
@@ -1030,10 +1029,11 @@ sub _newWebScreen {
                       name => 'referring_topics',
                       value => $entry,
                       checked => 'checked' } ). " [[$entry]] " ) .
-                 CGI::td( { class => 'twikiSummary twikiGrayText' },
-                          $refs->{$entry}
-                         )
-                  );
+                        CGI::td(
+                            { class => 'twikiSummary twikiGrayText' },
+                            $refs->{$entry}
+                           )
+                         );
     }
     unless( $search ) {
         $search = ($session->{i18n}->maketext('(none)'));
@@ -1043,19 +1043,20 @@ sub _newWebScreen {
     $tmpl =~ s/%GLOBAL_SEARCH%/$search/o;
 
     $refs = $webTopicInfoRef->{referring}{refs0};
-    @keys = sort keys %$refs;
     $search = '';
-    foreach my $entry ( @keys ) {
-        $search .= CGI::Tr
-        (CGI::td
-          ( { class => 'twikiTopRow' },
-            CGI::input( { type => 'checkbox',
-                          class => 'twikiCheckBox',
-                          name => 'referring_topics',
-                          value => $entry,
-                          checked => 'checked' } ). " [[$entry]] " ) .
-                        CGI::td( { class => 'twikiSummary twikiGrayText' },
-                                 $refs->{$entry} ));
+    foreach my $entry ( sort keys %$refs ) {
+        $search .= CGI::Tr(
+            CGI::td(
+                { class => 'twikiTopRow' },
+                CGI::input(
+                    { type => 'checkbox',
+                      class => 'twikiCheckBox',
+                      name => 'referring_topics',
+                      value => $entry,
+                      checked => 'checked' } ). " [[$entry]] " ) .
+                        CGI::td(
+                            { class => 'twikiSummary twikiGrayText' },
+                            $refs->{$entry} ));
     }
     unless( $search ) {
         $search = ($session->{i18n}->maketext('(none)'));
