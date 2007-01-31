@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1170157837" format="1.0" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1170250751" format="1.0" version="$Rev$"}%
 ---+!! Checklist Plugin
 
 <nop>ChecklistPlugin creates simple checklists. 
@@ -314,7 +314,7 @@ Plugin settings are stored as preferences variables. To reference a plugin setti
 ---+++ Templates
 Templates allows you to setup all plugin attributes bounded to a template name. Only uppercase letters are allowed for a <i>template name</i>.
 
-Syntax: =&nbsp;&nbsp;&nbsp;Set TEMPLATE_<i>template name</i>_<i>attribute name</i> = <i>attribute value</i>
+Syntax: =&nbsp;&nbsp;&nbsp;Set TEMPLATE_<i>template name</i>_<i>attribute name</i> = <i>attribute value</i>=
 
 Template Usage: =%<nop>CLI{template="<i>template name</i>"}%= (the same for =%<nop>CHECKLISTSTART%=, =%<nop>CHECKLIST%=).
 
@@ -350,9 +350,9 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.DanielRohde |
-|  Plugin Version: | v1.021 (BETA) |
+|  Plugin Version: | v1.021 (31 Jan 2007) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  v1.021 (BETA) | TWiki:Main.DanielRohde: fixed some major bugs (mod_perl, plugin preferences); improved performance (AJAX); fixed minor IE caching bug (AJAX related); added new attributes (tooltip, descr, template, statesel) requested by TWiki:Main.KeithHelfrich; fixed installation instructions bug reported by TWiki:Main.KeithHelfrich |
+|  v1.021 (31 Jan 2007) | TWiki:Main.DanielRohde: fixed some major bugs (mod_perl, plugin preferences); improved performance (AJAX); fixed minor IE caching bug (AJAX related); added new attributes (tooltip, descr, template, statesel) requested by TWiki:Main.KeithHelfrich; fixed installation instructions bug reported by TWiki:Main.KeithHelfrich |
 |  v1.020 (15 Jan 2007) | TWiki:Main.DanielRohde: added AJAX feature (=useajax= attribute) requested by TWiki:Main.ShayPierce and TWiki:Main.KeithHelfrich |
 |  v1.019 (14 Dec 2006) | TWiki:Main.DanielRohde: fixed major default options bug reported by TWiki:Main.RichardHitier |
 |  v1.018 (30 Aug 2006) | TWiki:Main.DanielRohde: fixed notification bug reported by TWiki:Main.JosMaccabiani; fixed a minor whitespace bug; add static attribute |

@@ -40,7 +40,7 @@ function clpHandleNextObject(self) {
 		if (n) n.url=newUrl;
 	}
 	if (clpStateChangeObjectArray.length>0) clpStateChangeObjectArray.shift().clpDoIt();
-	document.getElementsByTagName('body')[0].style.cursor="auto";
+	clpSetCursorByTagName("body", "auto");
 }
 function clpHandleStateChange(self) {
 	if (self.stateChangeRequest.readyState!=4) return;
@@ -129,7 +129,7 @@ function clpDoIt() {
 		document.submit(url);
 		return;
 	}
-	document.getElementsByTagName('body')[0].style.cursor=clpCursorInProgressStyle;
+	clpSetCursorByTagName("body", clpCursorInProgressStyle);
 	var self = this;
 	this.stateChangeRequest.onreadystatechange=function() {
 		try {
@@ -170,6 +170,10 @@ function clpChangeDivText(prefix,id, text) {
 		e.appendChild(document.createTextNode(text));
 	}
 	
+}
+function clpSetCursorByTagName(tagName, cursor) {
+	var eArr = document.getElementsByTagName(tagName);
+	if (eArr && eArr.length>0) eArr[0].style.cursor=cursor;
 }
 var clpSubmitItemStateChangeMutex = 0;
 function submitItemStateChange(url) {
