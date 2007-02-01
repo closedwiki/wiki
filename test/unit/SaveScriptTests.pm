@@ -39,6 +39,10 @@ my $testform3 = <<'HERE';
 | Textfield | text | 60 | test | |
 HERE
 
+my $testform4 = $testform1 . <<'HERE';
+| Textarea | textarea | 4X2 | Green eggs and ham |
+HERE
+
 my $testtext1 = <<'HERE';
 %META:TOPICINFO{author="TWikiContributor" date="1111931141" format="1.0" version="$Rev: 4579 $"}%
 
@@ -89,10 +93,13 @@ sub set_up {
 	$twiki->{store}->saveTopic( $testuser1, $testweb, 'TestForm3',
                                 $testform3, undef );
 
+	$twiki->{store}->saveTopic( $testuser1, $testweb, 'TestForm4',
+                                $testform4, undef );
+
 	$twiki->{store}->saveTopic(
         $testuser2, $testweb, $TWiki::cfg{WebPrefsTopicName},
                                 '
-   * Set WEBFORMS = TestForm1,TestForm2,TestForm3
+   * Set WEBFORMS = TestForm1,TestForm2,TestForm3,TestForm4
 ', undef );
 
     $TWiki::Plugins::SESSION = $twiki;
@@ -120,7 +127,7 @@ sub test_AUTOINC {
     foreach my $t ($twiki->{store}->getTopicNames( $testweb)) {
         if($t eq 'TestAuto00') {
             $seen = 1;
-        } elsif( $t !~ /^(Web.*|TestForm[123])$/) {
+        } elsif( $t !~ /^(Web.*|TestForm[1234])$/) {
             $this->assert(0, $t);
         }
     }
@@ -131,7 +138,7 @@ sub test_AUTOINC {
     foreach my $t ($twiki->{store}->getTopicNames( $testweb)) {
         if($t =~ /^TestAuto0[01]$/) {
             $seen++;
-        } elsif( $t !~ /^(Web.*|TestForm[123])$/) {
+        } elsif( $t !~ /^(Web.*|TestForm[1234])$/) {
             $this->assert(0, $t);
         }
     }
@@ -153,7 +160,7 @@ sub test_XXXXXXXXXX {
     foreach my $t ($twiki->{store}->getTopicNames( $testweb)) {
         if($t eq 'TestTopic0') {
             $seen = 1;
-        } elsif( $t !~ /^(Web.*|TestForm[123])$/) {
+        } elsif( $t !~ /^(Web.*|TestForm[1234])$/) {
             $this->assert(0, $t);
         }
     }
@@ -164,7 +171,7 @@ sub test_XXXXXXXXXX {
     foreach my $t ($twiki->{store}->getTopicNames( $testweb)) {
         if($t =~ /^TestTopic[01]$/) {
             $seen++;
-        } elsif( $t !~ /^(Web.*|TestForm[123])$/) {
+        } elsif( $t !~ /^(Web.*|TestForm[1234])$/) {
             $this->assert(0, $t);
         }
     }
@@ -188,7 +195,7 @@ sub test_XXXXXXXXX {
     foreach my $t ($twiki->{store}->getTopicNames( $testweb)) {
         if($t eq 'TestTopicXXXXXXXXX') {
             $seen = 1;
-        } elsif( $t !~ /^(Web.*|TestForm[123])$/) {
+        } elsif( $t !~ /^(Web.*|TestForm[1234])$/) {
             $this->assert(0, $t);
         }
     }
@@ -209,7 +216,7 @@ sub test_XXXXXXXXXXX {
     foreach my $t ($twiki->{store}->getTopicNames( $testweb)) {
         if($t eq 'TestTopic0') {
             $seen = 1;
-        } elsif( $t !~ /^(Web.*|TestForm[123])$/) {
+        } elsif( $t !~ /^(Web.*|TestForm[1234])$/) {
             $this->assert(0, $t);
         }
     }
@@ -500,48 +507,60 @@ sub test_merge {
     my $this = shift;
     $twiki = new TWiki();
 
+    # Set up the original topic that the two edits started on
     my $oldmeta = new TWiki::Meta( $twiki, $testweb, 'MergeSave');
     my $oldtext = $testtext1;
     $twiki->{store}->extractMetaData( $oldmeta, \$oldtext );
     $twiki->{store}->saveTopic( $testuser2, $testweb, 'MergeSave',
-                                $testform1, $oldmeta );
+                                $testform4, $oldmeta );
     my($meta, $text) = $twiki->{store}->readTopic(undef, $testweb,
                                                   'MergeSave');
     my( $orgDate, $orgAuth, $orgRev ) = $meta->getRevisionInfo();
     my $original = "${orgRev}_$orgDate";
 
+    # Now build a query for the save at the end of the testuser1 edit
     my $query1 = new CGI(
         {
             action => [ 'save' ],
             text   => [ "Soggy bat" ],
             originalrev => $original,
-            formtemplate => [ 'TestForm1' ],
+            formtemplate => [ 'TestForm4' ],
             TWiki::Form::cgiName(undef,'Select') => [ 'Value_2' ],
             TWiki::Form::cgiName(undef,'Radio') => [ '3' ],
             TWiki::Form::cgiName(undef,'Checkbox') => [ 'red' ],
             TWiki::Form::cgiName(undef,'CheckboxandButtons') => [ 'hamster' ],
             TWiki::Form::cgiName(undef,'Textfield') => [ 'Bat' ],
+            TWiki::Form::cgiName(undef,'Textarea') => [ <<GUMP ],
+Glug
+Glog
+Glaggie
+GUMP
             topic  => [ $testweb.'.MergeSave' ]
            });
+    # Do the save
     $twiki = new TWiki( $testuser1->login(), $query1);
     $this->capture( \&TWiki::UI::Save::save, $twiki);
 
-    ($meta, $text) = $twiki->{store}->readTopic(undef, $testweb,
-                                                  'MergeSave');
-    ( $orgDate, $orgAuth, $orgRev ) = $meta->getRevisionInfo();
+    # Build a second query for the other save, based on the same original
+    # version
     my $query2 = new CGI(
         {
             action => [ 'save' ],
             text   => [ "Wet rat" ],
             originalrev => $original,
-            formtemplate => [ 'TestForm1' ],
+            formtemplate => [ 'TestForm4' ],
             TWiki::Form::cgiName(undef,'Select') => [ 'Value_2' ],
             TWiki::Form::cgiName(undef,'Radio') => [ '3' ],
             TWiki::Form::cgiName(undef,'Checkbox') => [ 'red' ],
             TWiki::Form::cgiName(undef,'CheckboxandButtons') => [ 'hamster' ],
             TWiki::Form::cgiName(undef,'Textfield') => [ 'Rat' ],
+            TWiki::Form::cgiName(undef,'Textarea') => [ <<GUMP ],
+Spletter
+Splut
+GUMP
             topic  => [ $testweb.'.MergeSave' ]
            });
+    # Do the save. This time we expect a merge exception
     $twiki = new TWiki( $testuser2->login(), $query2);
     try {
         $this->capture( \&TWiki::UI::Save::save, $twiki);
@@ -551,6 +570,8 @@ sub test_merge {
     } otherwise {
         $this->assert(0, shift);
     };
+
+    # Get the merged topic and pick it apart
     ($meta, $text) = $twiki->{store}->readTopic(undef, $testweb,
                                                   'MergeSave');
     my $e = <<'END';
@@ -574,6 +595,12 @@ END
     $this->assert_str_equals('hamster', $v->{value});
     $v = $meta->get('FIELD', 'Textfield');
     $this->assert_str_equals('<del>Bat</del><ins>Rat</ins>', $v->{value});
+    $v = $meta->get('FIELD', 'Textarea');
+    $this->assert_str_equals(<<ZIS, $v->{value});
+<del>Glug</del><ins>Spletter</ins>
+<del>Glog</del><ins>Splut</ins>
+Glaggie
+ZIS
 }
 
 # test interaction with reprev. Testcase:
