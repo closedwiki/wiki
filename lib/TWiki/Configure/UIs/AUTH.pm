@@ -59,7 +59,7 @@ sub ui {
         	CGI::p( CGI::strong('Forgotten your password?' )) .
         	CGI::p(<<'HERE'));
 To reset the password, log in to the server and delete the
-<code>$TWiki::cfg{Password} = \'...\';</code> line in
+<code>$TWiki::cfg{Password} = '...';</code> line in
 <code>lib/LocalSite.cfg</code>
 HERE
     }
