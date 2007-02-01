@@ -124,8 +124,9 @@ my $OS = $TWiki::cfg{OS} || '';
 # are used by TWiki to work around the limitations of HTTP.
 # <b>Security Note:</b> The directory must <b>not</b> be
 # browseable from the web, otherwise it could be used to intercept parameters
-# used when someone logs in!
-$TWiki::cfg{PassthroughDir} = '/tmp';
+# used when someone logs in! Additionally it is recommended to setup access rights
+# to this directory so only the web server user can create files.
+$TWiki::cfg{PassthroughDir} = '/tmp/twiki';
 
 # **STRING 10**
 # Suffix of TWiki CGI scripts (e.g. .cgi or .pl). You may need to set this
@@ -168,8 +169,9 @@ $TWiki::cfg{UseClientSessions} = 1;
 # users - for example, whether they are logged in or not.
 # <b>Security Note:</b> The directory must <b>not</b> be
 # browseable from the web, otherwise it could be used to mount an attack on
-# the server!
-$TWiki::cfg{Sessions}{Dir} = '/tmp';
+# the server! Additionally it is recommended to setup access rights
+# to this directory so only the web server user can create files.
+$TWiki::cfg{Sessions}{Dir} = '/tmp/twiki';
 
 # **STRING 20 EXPERT**
 # Set the session timeout, in seconds. The session will be cleared after this
