@@ -18,18 +18,15 @@ use strict;
 
 package TWiki::Contrib::PublishContrib::file;
 
-use Error qw( :try );
+use File::Copy;
+use File::Path;
 
 sub new {
-    my( $class, $path, $web ) = @_;
+    my( $class, $path, $web, $genopt ) = @_;
     my $this = bless( {}, $class );
     $this->{path} = $path;
     $this->{web} = $web;
-    $this->{id} = $web;
-    $this->{root} = "$this->{path}/$web/WebHome.html";
-
-    eval "use File::Copy;use File::Path;";
-    die $@ if $@;
+    $this->{genopt} = $genopt;
 
     File::Path::mkpath("$this->{path}/$web");
 
@@ -40,6 +37,7 @@ sub addDirectory {
     my( $this, $name ) = @_;
     my $d = "$this->{web}/$name";
     File::Path::mkpath("$this->{path}/$d");
+    push( @{$this->{dirs}}, $d );
 }
 
 sub addString {
@@ -48,14 +46,22 @@ sub addString {
     open(F, ">$this->{path}/$f") || die "Cannot write $f: $!";
     print F $string;
     close(F);
+    push( @{$this->{files}}, $f );
 }
 
 sub addFile {
     my( $this, $from, $to ) = @_;
-    File::Copy::copy( $from, "$this->{path}/$this->{web}/$to" );
+    my $f = "$this->{web}/$to";
+    File::Copy::copy( $from, "$this->{path}/$f" );
+    push( @{$this->{files}}, $f );
 }
 
 sub close {
+    my $this = shift;
+    # Generate sitemap.html
+    my $links = join("<br />\n",
+        map { "<a href='$_'>$_</a>" }  @{$this->{files}} );
+    return $this->{web};
 }
 
 1;

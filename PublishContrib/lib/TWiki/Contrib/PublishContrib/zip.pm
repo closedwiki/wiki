@@ -19,6 +19,7 @@ use strict;
 package TWiki::Contrib::PublishContrib::zip;
 
 use TWiki::Func;
+use File::Path;
 
 sub new {
     my( $class, $path, $web ) = @_;
@@ -29,7 +30,6 @@ sub new {
     eval "use Archive::Zip qw( :ERROR_CODES :CONSTANTS )";
     die $@ if $@;
     $this->{zip} = Archive::Zip->new();
-    $this->{id} = $this->{web}.'.zip';
 
     return $this;
 }
@@ -51,7 +51,15 @@ sub addFile {
 
 sub close {
     my $this = shift;
-    $this->{zip}->writeToFileNamed( "$this->{path}/$this->{id}" );
+    my $dir = $this->{path};
+    if ($this->{web} =~ m!^(.*)/.*?$!) {
+        $dir .= $1;
+    }
+    eval { File::Path::mkpath($dir) };
+    die $@ if ($@);
+    my $landed = "$this->{web}.zip";
+    $this->{zip}->writeToFileNamed( "$this->{path}$landed" );
+    return $landed;
 }
 
 1;

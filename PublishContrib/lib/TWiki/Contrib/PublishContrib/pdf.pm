@@ -18,40 +18,50 @@
 use strict;
 
 package TWiki::Contrib::PublishContrib::pdf;
+use base 'TWiki::Contrib::PublishContrib::file';
 
-use Error qw( :try );
-use TWiki::Contrib::PublishContrib::file;
-use TWiki::Contrib::PublishContrib::PDFWriter;
- 
-@TWiki::Contrib::PublishContrib::pdf::ISA = qw( TWiki::Contrib::PublishContrib::file );
-
-my $publishWeb;
+use File::Path;
 
 sub new {
     my( $class, $path, $web, $genopt ) = @_;
-    my $this = bless( $class->SUPER::new( $path, "${web}_$$" ), $class );
-    $this->{genopt} = $genopt;
-    $publishWeb = $web;
-    return $this;
-}
-
-sub addString {
-    my( $this, $string, $file) = @_;
-    $this->SUPER::addString( $string, $file );
-    push( @{$this->{files}}, "$this->{path}/$this->{web}/$file" )
-      if( $file =~ /\.html$/ );
-}
-
-sub addFile {
-    my( $this, $from, $to ) = @_;
-    $this->SUPER::addFile( $from, $to );
-    push( @{$this->{files}}, "$this->{path}/$this->{web}/$to" )
-      if( $to =~ /\.html$/ );
+    return $class->SUPER::new( $path, "${web}_$$", $genopt );
 }
 
 sub close {
     my $this = shift;
-    TWiki::Contrib::PublishContrib::PDFWriter->writePdf( "$this->{path}/$publishWeb.pdf", \@{$this->{files}} );
+    my $dir = $this->{path};
+    if ($this->{web} =~ m!^(.*)/.*?$!) {
+        $dir .= $1;
+    }
+    eval { File::Path::mkpath($dir) };
+    die $@ if ($@);
+
+    my @files = map { "$this->{path}/$_" }
+      grep { /\.html$/ } @{$this->{files}};
+
+    my $cmd = $TWiki::cfg{PublishContrib}{PDFCmd};
+    die "{PublishContrib}{PDFCmd} not defined" unless $cmd;
+
+    my $landed = "$this->{web}.pdf";
+    my @extras = split( /\s+/, $this->{genopt} );
+
+    $ENV{HTMLDOC_DEBUG} = 1; # see man htmldoc - goes to apache err log
+    $ENV{HTMLDOC_NOCGI} = 1; # see man htmldoc
+	$TWiki::Plugins::SESSION->{sandbox}->{TRACE} = 1;
+
+    my( $data, $exit ) =
+      $TWiki::Plugins::SESSION->{sandbox}->sysCommand(
+          $cmd,
+          FILE => "$this->{path}$landed",
+          FILES => \@files,
+          EXTRAS => \@extras );
+    die "htmldoc failed: $exit/$data/$@" if $exit;
+
+    # Get rid of the temporaries
+    unlink(@{$this->{files}});
+
+    die "htmldoc failed: $exit $data" if $exit;
+    return $landed;
 }
 
 1;

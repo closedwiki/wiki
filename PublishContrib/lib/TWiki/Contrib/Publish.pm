@@ -12,7 +12,7 @@
 # Copyright (C) 2001 Peter Thoeny, Peter@Thoeny.com
 # Copyright (C) 2001 Sven Dowideit, svenud@ozemail.com.au
 # Copyright (C) 2001 Motorola Ltd.
-# Copyright (C) 2005 Crawford Currie, http://c-dot.co.uk
+# Copyright (C) 2005-2007 Crawford Currie, http://c-dot.co.uk
 # Copyright (C) 2006 Martin Cleaver, http://www.cleaver.org
 #
 # This program is free software; you can redistribute it and/or
@@ -37,9 +37,6 @@ use strict;
 
 use vars qw( $VERSION $RELEASE $ob $cb $br $os $cs );
 
-# This should always be $Rev$ so that TWiki can determine the checked-in
-# status of the plugin. It is used by the build automation tools, so
-# you should leave it alone.
 $VERSION = '$Rev$';
 
 $ob = '';
@@ -52,12 +49,9 @@ my $pub = TWiki::Func::getPubUrlPath();
 my $debug = 0;
 my $templatesWanted = 'view';
 my $templateLocation = ""; #_PublishContrib"; # used to prefix alternate template renderings
-my %templatesReferenced = (); # this determine which templates (e.g. view, viewprint, viuehandheld, etc) have been referred to and thus should be generated.
+my %templatesReferenced = (); # this determines which templates (e.g. view, viewprint, viuehandheld, etc) have been referred to and thus should be generated.
 
-# This is a free-form string you can use to "name" your own plugin version.
-# It is *not* used by the build automation tools, but is reported as part
-# of the version number in PLUGINDESCRIPTIONS.
-$RELEASE = 'Dakar';
+$RELEASE = 'TWiki-4';
 
 #  Main rendering loop.
 sub publish {
@@ -80,12 +74,12 @@ sub publish {
     $session->{webName} = $web;
 
     $TWiki::Plugins::SESSION = $session;
-    
+
     #don't add extra markup for topics we're not linking too
-    #NEWTOPICBGCOLOR, NEWTOPICFONTCOLOR NEWTOPICLINKSYMBOL LINKTOOLTIPINFO    
-    $TWiki::Plugins::SESSION->{renderer}->{NEWLINKSYMBOL} = '';    
-    $TWiki::Plugins::SESSION->{renderer}->{NEWTOPICBGCOLOR} = '';    
-    $TWiki::Plugins::SESSION->{renderer}->{NEWTOPICFONTCOLOR} = '';    
+    #NEWTOPICBGCOLOR, NEWTOPICFONTCOLOR NEWTOPICLINKSYMBOL LINKTOOLTIPINFO
+    $TWiki::Plugins::SESSION->{renderer}->{NEWLINKSYMBOL} = '';
+    $TWiki::Plugins::SESSION->{renderer}->{NEWTOPICBGCOLOR} = '';
+    $TWiki::Plugins::SESSION->{renderer}->{NEWTOPICFONTCOLOR} = '';
 
     my ($inclusions, $exclusions, $filter, $skin, $genopt, $format);
     $genopt = '';
@@ -168,8 +162,8 @@ sub publish {
         mkdir($TWiki::cfg{PublishContrib}{Dir}, 0777);
         $ok = !($!);
     }
-    die "Can't publish because no useable publish directory was found. Please notify your TWiki administrator" unless -d $TWiki::cfg{PublishContrib}{Dir};
-    die "Can't publish because publish URL was not set. Please notify your TWiki administrator" unless $TWiki::cfg{PublishContrib}{URL};
+    die "Can't publish because no useable {PublishContrib}{Dir} was found. Please notify your TWiki administrator" unless -d $TWiki::cfg{PublishContrib}{Dir};
+    die "Can't publish because {PublishContrib}{URL} was not set. Please notify your TWiki administrator" unless $TWiki::cfg{PublishContrib}{URL};
 
     my $tmp = TWiki::Func::formatTime(time());
     $tmp =~s/^(\d+)\s+(\w+)\s+(\d+).*/$1_$2_$3/g;
@@ -211,7 +205,9 @@ sub publish {
     my @templatesWanted = split /,/, $templatesWanted;
 
     foreach my $template (@templatesWanted) {
-	$template =~ s/^\s+//, s/\s+\z//;
+        next unless $template;
+        $template =~ s/^\s+//;
+        $template =~ s/\s+$//;
         $templatesReferenced{$template} = 1;
         print "-- template=$template$br" if $debug;
         my $dir = $TWiki::cfg{PublishContrib}{Dir}._dirForTemplate($template);
@@ -223,7 +219,7 @@ sub publish {
             '("'.$dir.'","'.$web.'","'.
               $genopt.'")';
         die $@ if $@;
-        
+
         $archive->{params} = $query->Vars;
 
         publishWeb($web, TWiki::Func::getWikiName(), $inclusions,
@@ -238,14 +234,20 @@ sub publish {
     if ($#difference > 0) {
         print "${ob}Templates Used = ",join(",", @templatesReferenced), "$br".
           "Templates Specified = ".join(",", @templatesWanted)."$br";
-        print "${os}WARNING: there is a difference between what you specified and what you needed. Consider changing the TEMPLATES setting so it has all Templates Used.${cs}$br";
+        print <<BLAH;
+${os}WARNING: there is a difference between what you specified and what you
+needed. Consider changing the TEMPLATES setting so it has all Templates
+Used. $cs$br
+BLAH
     }
 
-    my $text = 'Published to <a href="'.
-      $TWiki::cfg{PublishContrib}{URL}.'/'.$archive->{id}.'">'.
-        $archive->{id}.'</a>'."$br$br";
+    my $landed = $archive->close();
 
-    $archive->close();
+    my $text = <<TEXT;
+Published to <a href="$TWiki::cfg{PublishContrib}{URL}$landed">
+$landed
+</a>$br$br
+TEXT
 
     $text = TWiki::Func::expandCommonVariables( $text, $topic, $web );
     $text = TWiki::Func::renderText( $text, $web );
@@ -255,8 +257,8 @@ sub publish {
     print $footer;
 }
 
-sub arrayDiff { 
 # from http://perl.active-venture.com/pod/perlfaq4-dataarrays.html
+sub arrayDiff {
     my ($array1, $array2) = @_;
     my (@union, @intersection, @difference);
     @union = @intersection = @difference = ();
@@ -265,7 +267,7 @@ sub arrayDiff {
     foreach my $element (keys %count) {
         push @union, $element;
         push @{ $count{$element} > 1 ? \@intersection : \@difference }, $element;
-    }  
+    }
     return @difference;
 }
 
@@ -308,7 +310,6 @@ sub publishWeb {
         }
         print $br;
     }
-    return 
 }
 
 #  Publish one topic from web.
@@ -453,7 +454,6 @@ sub _rewriteTemplateReferences {
       "---- Changed to $newLink$br" if $debug;
     $templatesReferenced{$template} = 1;
 	return "href='$newLink'";
-
 }
 
 # Where alternative templates (e.g. viewprint) renderings end up
@@ -620,7 +620,6 @@ sub _handleNewLink {
     my $link = shift;
     $link =~ s!<a .*?>!!gi;
     $link =~ s!</a>!!gi;
-    
     return $link;
 }
 
