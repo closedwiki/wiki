@@ -19,6 +19,7 @@ use strict;
 package TWiki::Contrib::PublishContrib::tgz;
 
 use TWiki::Func;
+use File::Path;
 
 sub new {
     my( $class, $path, $web ) = @_;
@@ -29,7 +30,6 @@ sub new {
     eval "use Archive::Tar";
     die $@ if $@;
     $this->{tar} = Archive::Tar->new();
-    $this->{id} = $this->{web}.'.tgz';
 
     return $this;
 }
@@ -54,7 +54,15 @@ sub addFile {
 
 sub close {
     my $this = shift;
-    $this->{tar}->write( "$this->{path}/$this->{id}", 1 );
+    my $dir = $this->{path};
+    if ($this->{web} =~ m!^(.*)/.*?$!) {
+        $dir .= $1;
+    }
+    eval { File::Path::mkpath($dir) };
+    die $@ if ($@);
+    my $landed = "$this->{web}.tgz";
+    $this->{tar}->write( "$this->{path}$landed", 1 );
+    return $landed;
 }
 
 1;

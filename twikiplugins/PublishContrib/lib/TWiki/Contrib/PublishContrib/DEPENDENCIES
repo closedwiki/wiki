@@ -1,6 +1,8 @@
-File::Spec,>=3.12,cpan,Required. Used to analyse URL paths.
-Archive::Zip,>=1.05,cpan,Optional. Required to generate .zip output
-Archive::Tar,>=1.29,cpan,Optional. Required to generate .tgz output
-LWP,>=5.805,cpan,Optional. Used to include images referenced by absolute URL
-Net::FTP,>=2.75,cpan,Optional. Used by ftp publishing to upload to ftp
+File::Spec,>0,cpan,Required. Used to analyse URL paths.
+File::Copy,>0,cpan,Required. Used to move files around.
+File::Path,>0,cpan,Required to manipulate directories.
+LWP,>0,cpan,Optional. Used to include images referenced by absolute URLs
+Archive::Zip,>=0,cpan,Optional. Required to generate .zip output
+Archive::Tar,>=0,cpan,Optional. Required to generate .tgz output
+Net::FTP,>0,cpan,Optional. Required for ftp publishing.
 htmldoc,,c,Optional. Required to generate .pdf output
