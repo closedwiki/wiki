@@ -95,8 +95,9 @@ The menu bar is built by default from %TWIKIWEB%.QuickMenuBar, which in turn inc
 |  Preview: | [[%SCRIPTURL{"view"}%/%WEB%/%TOPIC%?skin=quickmenu][Preview with this topic]] |
 |  Base Name: | quickmenu |
 |  Skin Author: | TWiki:Main/VernonLyon |
-|  Skin Version: | 21 Nov 2006 (v1.06) |
+|  Skin Version: | 1 Feb 2007 (v1.07) |
 | Change&nbsp;History: | <!-- specify latest version first -->&nbsp; |
+|  1 Feb 2007: | Added a missing template for TWiki 4.1.0 (v1.07) |
 |  21 Nov 2006: | Added backlinks template, Fixed IE "select" bug, Menu items are actual links, Cleaner interface (v1.06) |
 |  13 Sep 2006: | Fixed IE bug (v1.05) |
 |  18 Jul 2006: | Added language support (v1.04) |
