@@ -195,29 +195,8 @@ sub _GETUsingLWP {
     my $request;
     require HTTP::Request;
     $request = HTTP::Request->new(GET => $url);
-    {
-        package _UserCredAgent;
-        use base 'LWP::UserAgent';
-        sub new {
-            my ($class, $user, $pass) = @_;
-            my $this = $class->SUPER::new();
-            $this->{user} = $user;
-            $this->{pass} = $pass;
-            if ($TWiki::cfg{PROXY}{HOST}) {
-                my $proxy = $TWiki::cfg{PROXY}{HOST};
-                if ($TWiki::cfg{PROXY}{PORT}) {
-                    $proxy .= ':'.$TWiki::cfg{PROXY}{PORT};
-                }
-                $this->proxy([ 'http', 'https' ], $proxy);
-            }
-            return $this;
-        }
-        sub get_basic_credentials {
-            my($this, $realm, $uri) = @_;
-            return ($this->{user}, $this->{pass});
-        };
-    };
-    my $ua = new _UserCredAgent($user, $pass);
+    require TWiki::Net::UserCredAgent;
+    my $ua = new TWiki::Net::UserCredAgent($user, $pass);
     my $response = $ua->request($request);
     return $response;
 }
