@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1170250751" format="1.0" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1170427463" format="1.0" version="$Rev$"}%
 ---+!! Checklist Plugin
 
 <nop>ChecklistPlugin creates simple checklists. 
@@ -246,7 +246,7 @@ Examples:
 | name | %<nop>CLI%<br/>%<nop>CHECKLIST%<br/>%<nop>CHECKLISTSTART% | a naming context (default: =_default=) - useful and recommended if you define more than one checklist on a topic (%X% if you use it in =%<nop>CHECKLIST%= you must use it in all related =%<nop>CLI%= tags too) | =name="mychecklist1"= |
 | notify | %<nop>CLI%<br/>%<nop>CHECKLIST%<br/>%<nop>CHECKLISTSTART% | enables/disables mail notification if a item state was changed | =notify="off"= |
 | pos | %<nop>CHECKLISTSTART% | defines the reset button and legend position (default: =bottom=); if you use another value than ="top"= the button position falls back to default | =pos="bottom"= |
-| reset | %<nop>CHECKLIST%<br/>%<nop>CHECKLISTSTART% | it enables a reset image button with a given text or icon (default: undefined); if you put a =@&lt;state&gt;= into the reset value, you can reset a checklist to the given =&lt;state&gt;=, e.g: =reset="@done <nop>:ok: set all done"= | =reset="Reset all"= | 
+| reset | %<nop>CHECKLIST%<br/>%<nop>CHECKLISTSTART% | it enables a reset image button with a given text or icon (default: undefined); if you put a =@&lt;state&gt;= into the reset value, you can reset a checklist to the given =&lt;state&gt;=, e.g: =reset="@done <nop>:ok: set all done"=; if you put a =@STATESEL= into the =reset= value you get a state selection popup with all states | =reset="Reset all @STATESEL"= | 
 | showlegend | %<nop>CHECKLIST%<br/>%<nop>CHECKLISTSTART% | if you set it to ="on"= a states legend with icons will be displayed (default: =off=),<br/> e.g: ( :-I - todo :ok: - done) | =showlegend="off"= |
 | states | %<nop>CLI%<br/>%<nop>CHECKLIST%<br/>%<nop>CHECKLISTSTART% | all known states (default: =todo&brvbar;done=; a list separated by a ='&brvbar;'=) | =states="todo&brvbar;done"= |
 | stateicons | %<nop>CLI%<br/>%<nop>CHECKLIST%<br/>%<nop>CHECKLISTSTART% | icons for all states separated by a ='&brvbar;'= (default: =<nop>:-I&brvbar;<nop>:ok:=); if you use common variables like =%<nop>Y%= in stateicons you have to use the =&lt;nop&gt;= tag after the first =%=, e.g: =%&lt;nop&gt;Y%=  | =stateicons="<nop>:-I&brvbar;<nop>:ok:"= |
@@ -350,8 +350,9 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.DanielRohde |
-|  Plugin Version: | v1.021 (31 Jan 2007) |
+|  Plugin Version: | v1.022 (BETA) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  v1.022 (BETA) | TWiki:Main.DanielRohde: improved AJAX performance; added new feature (state selection for reset button); |
 |  v1.021 (31 Jan 2007) | TWiki:Main.DanielRohde: fixed some major bugs (mod_perl, plugin preferences); improved performance (AJAX); fixed minor IE caching bug (AJAX related); added new attributes (tooltip, descr, template, statesel) requested by TWiki:Main.KeithHelfrich; fixed installation instructions bug reported by TWiki:Main.KeithHelfrich |
 |  v1.020 (15 Jan 2007) | TWiki:Main.DanielRohde: added AJAX feature (=useajax= attribute) requested by TWiki:Main.ShayPierce and TWiki:Main.KeithHelfrich |
 |  v1.019 (14 Dec 2006) | TWiki:Main.DanielRohde: fixed major default options bug reported by TWiki:Main.RichardHitier |
