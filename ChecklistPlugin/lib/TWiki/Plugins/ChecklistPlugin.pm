@@ -59,7 +59,7 @@ use vars qw(
         $debug %TWikiCompatibility
 	$defaultsInitialized 
     	%globalDefaults %namedDefaults @renderedOptions @flagOptions @filteredOptions @listOptions
-	%namedIds $idMapRef $idOrderRef $query
+	%namedIds $idMapRef $idOrderRef $query %namedResetIds
 	%itemStatesRead 
 	%options  @unknownParams $name
     	$resetDone $stateChangeDone $saveDone
@@ -81,7 +81,8 @@ $VERSION = '$Rev$';
 # of the version number in PLUGINDESCRIPTIONS.
 $RELEASE = 'Cairo, Dakar, Edinburgh, ...';
 
-$REVISION = '1.021'; #dro# fixed some major bug (mod_perl, plugin preferences); improved performance (AJAX); fixed minor IE caching bug (AJAX related); added new attributes (tooltip, descr, template, statesel) requested by TWiki:Main.KeithHelfrich; fixed installation instructions bug reported by TWiki:Main.KeithHelfrich
+$REVISION = '1.022'; #dro#  added new feature (state selection for reset button);
+#$REVISION = '1.021'; #dro# fixed some major bug (mod_perl, plugin preferences); improved performance (AJAX); fixed minor IE caching bug (AJAX related); added new attributes (tooltip, descr, template, statesel) requested by TWiki:Main.KeithHelfrich; fixed installation instructions bug reported by TWiki:Main.KeithHelfrich
 #$REVISION = '1.020'; #dro# added AJAX feature (useajax attribute) requested by TWiki:Main.ShayPierce and TWiki:Main.KeithHelfrich
 #$REVISION = '1.019'; #dro# fixed major default options bug reported by TWiki:Main.RichardHitier 
 #$REVISION = '1.018'; #dro# fixed notification bug reported by TWiki:Main.JosMaccabiani; fixed a minor whitespace bug; add static attribute
@@ -143,8 +144,8 @@ sub commonTagsHandler
     $initText = $_[0];
     ###### we need exceptions since Dakar release therefore eval is bad
     ###eval {
-	    local(%options, %namedDefaults, %itemStatesRead, %namedIds, @unknownParams, $name);
-            $_[0] =~ s/<\/head>/<script src="%PUBURL%\/%TWIKIWEB%\/$pluginName\/itemstatechange.js" language="javascript"><\/script><\/head>/is unless ($_[0]=~/itemstatechange.js/);
+	    local(%options, %namedDefaults, %itemStatesRead, %namedIds, %namedResetIds, @unknownParams, $name);
+            $_[0] =~ s/<\/head>/<script src="%PUBURL%\/%TWIKIWEB%\/$pluginName\/itemstatechange.js" language="javascript" type="text\/javascript"><\/script><\/head>/is unless ($_[0]=~/itemstatechange.js/);
 	    $_[0] =~ s/%CHECKLISTSTART%(.*?)%CHECKLISTEND%/&handleAutoChecklist("",$1,$_[0])/sge;
 	    $_[0] =~ s/%CHECKLISTSTART{(.*?)}%(.*?)%CHECKLISTEND%/&handleAutoChecklist($1,$2,$_[0])/sge;
 	    $_[0] =~ s/%CHECKLIST%/&handleChecklist("",$_[0])/ge;
@@ -201,6 +202,8 @@ sub initDefaults() {
 	$idOrderRef = { };
 
 	%namedIds = ( );
+
+	%namedResetIds = ( );
 
 	$query = TWiki::Func::getCgiQuery();
 
@@ -347,6 +350,7 @@ sub handleChecklist {
 	return &createUnknownParamsMessage() unless &initOptions($attributes);
 
 	my @states = split /\|/, $options{'states'};
+	my @icons = split /\|/, $options{'stateicons'};
 
 	if ((defined $query->param("clreset"))&&(!$resetDone)) {
 		my $n=$query->param("clreset");
@@ -373,6 +377,7 @@ sub handleChecklist {
 	}
 
 	if (defined $options{'reset'} && !$options{'static'}) {
+		$namedResetIds{$name}++;
 		my $reset = $options{'reset'};
 		my $state = (split /\|/, $options{'states'})[0];
 
@@ -388,31 +393,24 @@ sub handleChecklist {
 		$title=~s/<\S+[^>]*\>//sg; # strip HTML
 		$title=&htmlEncode($title);
 
-		my $action=&TWiki::Func::getViewUrl($web,$topic);
-		$action=~s/#.*$//s;
-		$action.=&getUniqueUrlParam($action);
-
-
-		if ( ! $options{'useforms'} ) {
-			$action.=($action=~/\?/?';':'?');
-			$action.="clreset=".&urlEncode($name);
-			$action.=";clresetst=".&urlEncode($state);
-			$action.=';skin='.&urlEncode($options{'ajaxtopicstyle'}) if $options{'useajax'};
-		}
-
-		$action.="#reset${name}" if $options{'anchors'};
-
+		my $action = &createResetAction($name, $state);
+ 
 		$text.=qq@<noautolink>@;
 		if ( ! $options{'useforms'}) {
-			$text.=$query->a({name=>"reset${name}"}, '&nbsp;') if $options{'anchors'};
+			$text.=$query->a({name=>"reset${name}"}, '&nbsp;') if $options{'anchors'} && !$options{'useajax'};
 			$text.=$legend;
 			my $linktext="";
 			my $imgparams = {title=>$title, alt=>$title, border=>0};
 			$$imgparams{src}=$imgsrc if (defined $imgsrc ) && ($imgsrc!~/^\s*$/s);
 			$linktext.=$query->img($imgparams);
 			$linktext.=qq@ ${title}@ if ($title!~/^\s*$/i)&&($imgsrc ne "");
-			$action="javascript:submitItemStateChange('$action')" if $options{'useajax'};
-			$text.=$query->a({href=>$action,id=>"CLP_A_".&urlEncode($name)."_".&urlEncode($state)}, $linktext);
+			$action="javascript:submitItemStateChange('$action')" if $options{'useajax'} && ($state ne 'STATESEL');
+			my $id = &urlEncode("${name}_${state}_".$namedResetIds{$name});
+			if ($state eq 'STATESEL') {
+				$text.=&createHiddenDirectResetSelectionDiv($namedResetIds{$name},$name,\@states,\@icons); 
+				$action="javascript:clpTooltipShow('CLP_SM_DIV_RESET_${name}_$namedResetIds{$name}', 'CLP_A_$id',10,10,true);";
+			}
+			$text.=$query->a({href=>$action,id=>'CLP_A_'.$id}, $linktext);
 		} else {
 			my $form="";
 			$form.=$query->start_form({method=>'post', action=>$action});
@@ -433,6 +431,40 @@ sub handleChecklist {
 	}
 
 	return $text;
+}
+# =========================
+sub createResetAction {
+	my ($name, $state) = @_;
+	my $action=&TWiki::Func::getViewUrl($web,$topic);
+	$action=~s/#.*$//s;
+	$action.=&getUniqueUrlParam($action);
+
+
+	if ( ! $options{'useforms'} ) {
+		$action.=($action=~/\?/?';':'?');
+		$action.="clreset=".&urlEncode($name);
+		$action.=";clresetst=".&urlEncode($state);
+		$action.=';skin='.&urlEncode($options{'ajaxtopicstyle'}) if $options{'useajax'};
+	}
+
+	$action.="#reset${name}" if $options{'anchors'} && (!($options{'useajax'}||$options{'useforms'}));
+	return $action;
+}
+# =========================
+sub createHiddenDirectResetSelectionDiv {
+	my ($id, $name, $statesRef, $iconsRef) = @_;
+	my $selTxt ="";
+	$selTxt=$query->a({-href=>"javascript:clpTooltipHide('CLP_SM_DIV_RESET_${name}_$id');"},$query->sup('[X]'));
+	for (my $i=0; $i<=$#$statesRef; $i++) {
+		my $s = $$statesRef[$i];
+		my $action = &createResetAction($name, $s);
+		$action="javascript:submitItemStateChange('$action');clpTooltipHide('CLP_SM_DIV_RESET_${name}_$id');" if $options{'useajax'};
+		$selTxt.=$query->a({-href=>$action,-title=>$s,-style=>'vertical-align:bottom;'}, 
+			$query->img({-src=>&getImageSrc($$iconsRef[$i]),-alt=>'',-border=>0,-style=>'cursor:move;vertical-align:bottom'}));
+	}
+
+	return $query->div({-id=>"CLP_SM_DIV_RESET_${name}_$id",
+			    -style=>"visibility:hidden;position:absolute;top:0;left:0;z-index:2;font: normal 8pt sans-serif;padding: 3px; border: solid 1px; background-color: $options{'tooltipbgcolor'};" }, $selTxt);
 }
 # =========================
 sub substAttributes {
@@ -738,7 +770,7 @@ sub renderChecklistItem {
 
 		$linktext.=qq@$textBef@ if $textBef;
 
-		my $imgtitle=$options{'useajax'}?undef:$title;
+		my $imgtitle=$options{'useajax'}?"":$title;
 		my $imgalt=$options{'useajax'}?"":$title;
 		$linktext.=$query->img({-id=>"CLP_IMG_$name$uetId", -src=>$iconsrc, -border=>0, -title=>$imgtitle, -alt=>$imgalt});
 		$linktext.=qq@$textAft@ if $textAft;

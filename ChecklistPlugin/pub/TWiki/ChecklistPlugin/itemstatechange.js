@@ -7,6 +7,8 @@ function ClpStateChangeObject(url, stateChangeRequest) {
 	this.url = url;
 	this.clpDoIt=clpDoIt;
 	this.clpHandleNextObject=clpHandleNextObject;
+	this.clpHandleXMLResponse=clpHandleXMLResponse;
+	this.clpHandleTextResponse=clpHandleTextResponse;
 	this.clpInit = clpInit;
 	this.changes = new Array();
 	this.changesNew = new Array();
@@ -14,6 +16,7 @@ function ClpStateChangeObject(url, stateChangeRequest) {
 function clpInit() {
 	try { // Firefox, Opera 8.0+, Safari
 		this.stateChangeRequest = new XMLHttpRequest();
+		if (this.stateChangeRequest.overrideMimeType) this.stateChangeRequest.overrideMimeType("text/xml");
 	} catch (e) { // Internet Explorer
 		try {
 			this.stateChangeRequest = new ActiveXObject("Msxml2.XMLHTTP");
@@ -24,6 +27,7 @@ function clpInit() {
 				alert("Your browser does not support AJAX!\nPlease disable AJAX (e.g. use attribute: useajax=\"off\") ");
 			}
 		}
+
 	}
 	return this.stateChangeRequest;
 }
@@ -50,52 +54,134 @@ function clpHandleStateChange(self) {
 	}
 
 	var responseText = self.stateChangeRequest.responseText;
+	var responseXML = self.stateChangeRequest.responseXML;
+	if ((!responseXML.hasChildNodes) && (typeof(XMLHttpRequest)=="undefined")) {
+		var text = self.stateChangeRequest.responseText;
+		responseXML = new ActiveXObject("Msxml2.DOMDocument");
+		text = responseText.replace(/<\/html>/,"");
+		text = responseText.slice(text.indexOf("<body"));
+		responseXML.loadXML(text);
+		if (responseXML.parseError.errorCode != 0) responseXML=null;
+		if (responseXML!=null) responseXML.setProperty("SelectionLanguage", "XPath");
+	}
+	
+	//if (responseXML!=null) {
+		//clpHandleXMLResponse(self, responseXML, responseText);
+	//} else {
+		clpHandleTextResponse(self, responseText);
+	//}
+}
+function clpHandleXMLResponse(self, responseXML, responseText) {
+	var imgs = responseText.match(/<img[^>]+id="CLP_IMG_[^>]+>/ig);
+	
+	if (imgs && imgs.length>0) {
+		for (var i = 0; i< imgs.length; i++) {	
+			var img = imgs[i];
+			
+			if (!img.match(/id="CLP_IMG_([^\"]+)/)) continue;
+			var id = RegExp.$1;
 
+			var e;
+			if (responseXML.getElementById) e = responseXML.getElementById("CLP_IMG_"+id);
+			else e = responseXML.selectNodes("img[@id = \"CLP_IMG_"+id+"\"]");
+			if (!e || (e.length && e.length==0)) {
+				alert("Shit");
+				clpHandleTextResponse(self,responseText);
+				return;
+			}
+			if (e.length && e.length>0) e=e[0];
+			var d = document.getElementById("CLP_IMG_"+id);
+
+			if (d && e && (e.getAttribute("src")==d.getAttribute("src"))) continue;
+
+			if (d && e) d.setAttribute("src", e.getAttribute("src"));
+
+			if (responseXML.getElementById) e = responseXML.getElementById("CLP_A_"+id);
+			else e = responseXML.selectNodes("a[@id=CLP_A_"+id+"]");
+			d = document.getElementById("CLP_A_"+id);
+			if (e && d)  {
+				if (e.length) e=e[0];
+				d.setAttribute("href",e.getAttribute("href"));
+				d.style.cursor = clpCursorNormalStyle;
+			}
+
+			var smlinks = responseText.match(new RegExp("<a[^>]+id=\"CLP_SM_A_"+id+"_[^>]+>","ig"));
+			if (!smlinks || (smlinks.length==0)) continue;
+			for (var j=0; j<smlinks.length; j++) {
+				var smlink = smlinks[j];
+				smlink.match(/id="CLP_SM_A_([^"]+)"/i);
+				id = RegExp.$1;
+
+				if (resopnseXML.getElementById) e = responseXML.getElementById("CLP_SM_A_"+id);
+				else e = responseXML.selectNodes("a[@id=CLP_SM_A_"+id+"]");
+				if (e && e.length) e=e[0];
+				d = document.getElementById("CLP_SM_A_"+id);
+				if (e && d) d.setAttribute("href",e.getAttribute("href"));
+
+				if (responseXML.getElementById) e = responseXML.getElementById("CLP_SM_IMG_"+id);
+				else e = responseXML.selectNodes("img[@id=CLP_SM_IMG_"+id+"]");
+				if (e && e.length) e=e[0];
+				d = document.getElementById("CLP_SM_IMG_"+id);
+				if (e && d) d.setAttribute("src", e.getAttribute("src"));
+
+				if (reponseXML.getElementById) e = responseXML.getElementById("CLP_SM_TT_"+id);
+				else e = responseXML.selectNodes("div[@id=CLP_SM_TT_"+id+"]");
+				d = document.getElementById("CLP_SM_TT_"+id);
+				if (e && d) {
+					if (e.length) e=e[0];
+					while (d.hasChildNodes) d.removeChild(d.firstChild);
+					var cn = e.childNodes;
+					for (var k=0; k<cn.length; k++) {
+						d.appendChild(cn[k]);
+					}
+				}
+				
+			} // for k
+		} // for i	
+		clpHandleNextObject(self);
+	} else {
+		clpHandleTextResponse(self, responseText);
+	}
+}
+function clpHandleTextResponse(self, responseText) {
 	var links = responseText.match(/<a[^>]+id="CLP_A_[^>]+>/ig);
 	if (links && (links.length>0)) {
 		for (var i = 0 ; i < links.length; ++i) {
+			var e;
 			var link = links[i];
-			link.match(/id="([^"]+)"/);
+			link.match(/id="CLP_A_([^"]+)"/);
 			var id = RegExp.$1;
-			link.match(/href="([^"]+)"/);
-			var href=RegExp.$1;
-			var e = document.getElementById(id);
-			if (!e) continue;
-			var oldHref = clpStripId(e.href);
-			var newHref = clpStripId(href);
 
-			e.style.cursor=clpCursorNormalStyle;
-			// if (oldHref==newHref) continue;
-
-			self.changes.push(e.href);
-			self.changesNew.push(href);
-
-			if (e) e.href = href; 
-			var realId = id.replace(/CLP_A_/i,"");
-			var imgExpr = new RegExp("<img[^>]+id=\"CLP_IMG_" + realId + "\"[^>]*>","i");
+			var imgExpr = new RegExp("<img[^>]+id=\"CLP_IMG_" + id + "\"[^>]*>","i");
 			var img = "" + imgExpr.exec(responseText);
 			img.match(/src="([^"]+)"/);
 			var src = RegExp.$1;
-			img.match(/title="([^"]+)"/);
-			// var title = RegExp.$1;
-			e = document.getElementById("CLP_IMG_"+realId);
+			e = document.getElementById("CLP_IMG_"+id);
+			if (e && (e.src == src)) continue;
+			if (e) e.src = src;
+
+			e = document.getElementById("CLP_A_"+id);
 			if (e) {
-				e.src = src;
-				// e.title = title;
-				// e.alt = title;
+				link.match(/href="([^"]+)"/);
+				var href=RegExp.$1;
+				e.style.cursor=clpCursorNormalStyle;
+				self.changes.push(e.href);
+				self.changesNew.push(href);
+				e.href = href; 
 			}
 
-			var divExpr = new RegExp("<div[^>]+id=\"CLP_TT_"+realId+"\"[^>]*>(.*?)</div>");
+			var divExpr = new RegExp("<div[^>]+id=\"CLP_TT_"+id+"\"[^>]*>(.*?)</div>");
 			divExpr.exec(responseText);
 			var divTxt = RegExp.$1;
 
-			clpChangeDivText("CLP", realId, divTxt);
+			clpChangeDivText("CLP", id, divTxt);
 						
-			var smlinks = responseText.match(/<a[^>]+id="CLP_SM_A_[^>]+>/ig);
+			var smlinksRegExp = new RegExp("<a[^>]+id=\"CLP_SM_A_"+id+"_[^>]+>","gi");
+			var smlinks = responseText.match(smlinksRegExp);
+			
 			if (smlinks && (smlinks.length>0)) {
 				for (var j=0; j<smlinks.length; ++j) {
 					var smlink = smlinks[j];
-					if (smlink.indexOf(realId)==-1) continue;
 					smlink.match(/id="([^"]+)"/i);
 					var smid = RegExp.$1;
 					smlink.match(/href="([^"]+)"/);
@@ -106,7 +192,6 @@ function clpHandleStateChange(self) {
 					if (sme) {
 						sme.style.cursor=clpCursorNormalStyle;
 						sme.href = smhref;
-						// sme.title = smtitle;
 					} // if
 					var smttid = smid.replace(/CLP_SM_A_/,"");
 					sme = document.getElementById("CLP_SM_IMG_"+smttid);
@@ -117,7 +202,6 @@ function clpHandleStateChange(self) {
 					clpChangeDivText("CLP_SM",smttid, smDivTxt);
 				} // for
 			} // if
-
 		} // for 
 	} else {
 		document.write(responseText);
@@ -144,6 +228,8 @@ function clpDoIt() {
 		};
 	}
 	this.stateChangeRequest.open("GET", this.url, true);
+	this.stateChangeRequest.setRequestHeader('Content-Type', 'text/xml'); 
+	this.stateChangeRequest.setRequestHeader('Cache-Control', 'no-cache'); 
 	this.stateChangeRequest.send(null);
 }
 function clpStripId(url) {
