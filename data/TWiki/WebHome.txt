@@ -17,11 +17,11 @@ TWiki is a flexible, powerful, secure, yet simple web-based collaboration platfo
    * [[TWikiFAQ][Frequently Asked Questions]] - about TWiki
    * [[TWikiReferenceManual][Reference Manual]] - documentation for system administrators
    * [[AdminToolsCategory][Admin Tools]] - manage the TWiki site
-   * [[TWikiReleaseNotes04x00][TWiki-4.0 Release Notes]] - describes what's new in this release
+   * [[TWikiReleaseNotes04x01][TWiki-4.1 Release Notes]] - describes what's new in this release
 
 ---++ <nop>%WEB% Web Utilities
-<form action="%SCRIPTURLPATH{view}%/%INCLUDINGWEB%/WebSearch">
-   * <input class="twikiInputField" type="text" name="search" size="22" />&nbsp;<input type="submit" class="twikiSubmit" value="Search" /> - [[WebSearchAdvanced][advanced search]]
+<form action='%SCRIPTURLPATH{"search"}%/%WEB%/'>
+   * <input type="text" name="search" size="22" />&nbsp;<input type="submit" class="twikiSubmit" value="Search" /> - [[WebSearchAdvanced][advanced search]]
    * WebTopicList - all topics in alphabetical order
    * WebChanges - recent topic changes in this web
    * WebNotify - subscribe to an e-mail alert sent when topics change
