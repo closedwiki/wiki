@@ -365,7 +365,9 @@ sub isAdmin {
         } else {
             my $sag = $this->{session}->{users}->findUser(
                  $TWiki::cfg{SuperAdminGroup} );
-            $this->{isKnownAdmin} = $this->isInList( $sag->groupMembers() );
+            $this->{isKnownAdmin} =
+              $this->{session}->{users}->{usermappingmanager}->isInGroup(
+                  $this, $sag );
         }
     }
     return $this->{isKnownAdmin};
@@ -450,9 +452,38 @@ called on groups.
 
 sub groupMembers {
     my $this = shift;
-    ASSERT($this->isGroup());
+    ASSERT($this->isGroup()) if DEBUG;
 
     return $this->{session}->{users}->{usermappingmanager}->groupMembers($this);
+}
+
+=pod
+
+---++ ObjectMethod getMyGroups() -> @groups
+
+Return a list of user objects that are groups that I belong to.
+
+=cut
+
+sub getMyGroups {
+    my $this = shift;
+
+    return $this->{session}->{users}->{usermappingmanager}->groupMemberships(
+        $this);
+}
+
+=pod
+
+---++ ObjectMethod isInGroup( $group ) -> $boolean
+
+Tets if I'm in the given group
+
+=cut
+
+sub isInGroup {
+    my( $this, $group ) = @_;
+    return $this->{session}->{users}->{usermappingmanager}->isInGroup(
+        $this, $group );
 }
 
 1;

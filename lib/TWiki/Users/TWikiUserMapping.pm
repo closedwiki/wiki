@@ -84,7 +84,6 @@ to.
 
 sub finish {
     my $this = shift;
-    
 }
 
 # callback for search function to collate results
@@ -112,7 +111,7 @@ Returns a list of TWiki::User objects, one per group.
 
 sub getListOfGroups {
     my $this = shift;
-    ASSERT($this->isa( 'TWiki::Users::TWikiUserMapping')) if DEBUG;
+    ASSERT(ref($this) eq 'TWiki::Users::TWikiUserMapping') if DEBUG;
 
     my @list;
     my $users = $this->{session}->{users};
@@ -368,6 +367,45 @@ sub isGroup {
     ASSERT($user->isa( 'TWiki::User')) if DEBUG;
 
     return $user->wikiName() =~ /Group$/;
+}
+
+=pod
+
+---++ ObjectMethod groupMemberships($user) -> \@list
+
+Get a list of the user objects for the groups that $user is a member of.
+
+This is pretty inefficient, as it requires loading all groups.
+
+LAB,ATYD.
+
+=cut
+
+sub groupMemberships {
+    my ($this, $user) = @_;
+    my @groups = ();
+
+    foreach my $group ($this->getListOfGroups()) {
+        if ($user->isInList( $group->groupMembers())) {
+            push(@groups, $group);
+        }
+    }
+    return \@groups;
+}
+
+=pod
+
+---++ ObjectMethod isInGroup( $user, $group ) -> $boolean
+
+Test if user is in the given group. Default implementation loads
+the group and checks the members.
+
+=cut
+
+sub isInGroup {
+    my( $this, $user, $group ) = @_;
+    ASSERT($group->isGroup()) if DEBUG;
+    return $user->isInList( $group->groupMembers() );
 }
 
 1;
