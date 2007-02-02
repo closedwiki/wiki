@@ -1678,50 +1678,36 @@ sub _includeUrl {
 
     # SMELL: should use the URI module from CPAN to parse the URL
     # SMELL: but additional CPAN adds to code bloat
-    my $path = $url;
-    unless ($path =~ s!^(https?)://!!) {
+    unless ($url =~ m!^https?:!) {
         $text = $this->_includeWarning( $warn, 'bad_protocol', $url );
         return $text;
     }
-    my $protocol = $1;
-    my ( $user, $pass );
-    if ($path =~ s!([^/\@:]+)(?::([^/\@:]+))?@!!) {
-        ( $user, $pass ) = ( $1, $2 );
-    }
-    unless ($path =~ s!([^:/]+)(?::([0-9]+))?!! ) {
-        return $this->_includeWarning( $warn, 'geturl_failed', $url );
-    }
-    my( $host, $port ) = ( $1, $2 );
 
     try {
-        $text = $this->{net}->getUrl( $protocol, $host, $port, $path, $user, $pass );
-        $text =~ s/\r\n/\n/gs;
-        $text =~ s/\r/\n/gs;
-        $text =~ s/^(.*?\n)\n//s;
-        my $httpHeader = $1;
-        # Trap 4xx and 5xx
-        die $text if ($httpHeader =~ /^HTTP\/[\d.]+\s[45]\d\d\s/s);
-        my $contentType = '';
-        if( $httpHeader =~ /content\-type\:\s*([^\n]*)/ois ) {
-            $contentType = $1;
-        }
-        if( $contentType =~ /^text\/html/ ) {
-            $path =~ s/[#?].*$//;
-            $host = $protocol.'://'.$host;
-            $host .= ":$port" if $port;
-            $text = _cleanupIncludedHTML( $text, $host, $path, $options )
-              unless $raw;
-        } elsif( $contentType =~ /^text\/(plain|css)/ ) {
-            # do nothing
+        my $response = $this->{net}->GET( $url );
+        if( $response->is_success()) {
+            my $contentType = $response->header('content-type');
+            $text = $response->content();
+            if( $contentType =~ /^text\/html/ ) {
+                if (!$raw) {
+                    $url =~ m!^([a-z]+:/*[^/]*)(/[^#?]*)!;
+                    $text = _cleanupIncludedHTML( $text, $1, $2, $options );
+                }
+            } elsif( $contentType =~ /^text\/(plain|css)/ ) {
+                # do nothing
+            } else {
+                $text = $this->_includeWarning(
+                    $warn, 'bad_content', $contentType );
+            }
+            $text = applyPatternToIncludedText( $text, $pattern ) if( $pattern );
+            $text = "<literal>\n" . $text . "\n</literal>" if ( $options->{literal} );
         } else {
-            $text = $this->_includeWarning(
-                $warn, 'bad_content', $contentType );
+            $text = $this->_includeWarning( $warn, 'geturl_failed',
+                                            $url.' '.$response->message() );
         }
-        $text = applyPatternToIncludedText( $text, $pattern ) if( $pattern );
-        $text = "<literal>\n" . $text . "\n</literal>" if ( $options->{literal} );
     } catch Error::Simple with {
-        my $e = shift;
-        $text = $this->_includeWarning( $warn, 'geturl_failed', $url );
+        my $e = shift->stringify();
+        $text = $this->_includeWarning( $warn, 'geturl_failed', "$url $e" );
     };
 
     return $text;

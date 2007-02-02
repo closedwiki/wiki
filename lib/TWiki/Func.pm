@@ -223,6 +223,63 @@ sub getPubUrlPath {
 
 =pod
 
+---+++ GET( $url ) -> $response
+
+Get whatever is at the other end of a URL (using an HTTP GET request). Will
+only work for encrypted protocols such as =https= if the =LWP= CPAN module is
+installed (it will throw an exception if it is not).
+
+Note that the =$url= may have an optional user and password, as specified by
+the relevant RFC. Any proxy set in =configure= is honoured.
+
+The =$response= is an object that is known to implement the following subset of
+the methods of =LWP::Response=. It may in fact be an =LWP::Response= object,
+but it may also not be if =LWP= is not available, so callers may only assume
+the following subset of methods is available:
+| =code()= |
+| =message()= |
+| =header($field)= |
+| =content()= |
+| =is_error()= |
+| =is_redirect()= |
+
+The method may throw an =Error::Simple= exception if the url cannot be parsed,
+or if it specifies an unsupported protocol. The exception can be caught as
+shown in the example, below, or using a =try= block (see the CPAN =Error=
+module).
+
+Note that if LWP is *not* available, this function:
+   1 can only really be trusted for HTTP/1.0 urls. If HTTP/1.1 or another
+     protocol is required, you are *strongly* recommended to =require LWP=.
+   1 Will not parse multipart content
+In the event that the response cannot be parsed, this method may enable
+=is_error()= and set an explanatory message().
+
+Callers can easily check the availability of other HTTP::Response methods
+as follows:
+
+<verbatim>
+eval {
+    my $response = TWiki::Net::getUrl($url);
+    if ($response->isa('HTTP::Response')) {
+        ... other methods of HTTP::Response may be called
+    } else {
+        ... only the methods listed above may be called
+    }
+};
+if ($@) {
+    my $error = shift->stringify(); # get error string
+    ... bad URL, or unsupported protocol ...
+}
+</verbatim>
+
+=cut
+
+sub GET {
+}
+
+=pod
+
 ---+++ getCgiQuery( ) -> $query
 
 Get CGI query object. Important: Plugins cannot assume that scripts run under CGI, Plugins must always test if the CGI query object is set

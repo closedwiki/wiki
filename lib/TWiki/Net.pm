@@ -48,38 +48,79 @@ sub new {
 
 =pod
 
----++ ObjectMethod getUrl($protocol, $host, $port, $url, $user, $pass ) -> $text
+---++ ObjectMethod GET( $url ) -> $response
 
-Get the text at the other end of a URL
+Get whatever is at the other end of a URL. Will always work for HTTP and
+other unencrypted protocols. Will only work for encrypted protocols such
+as HTTPS if LWP is installed (it will throw an exception if it is not).
+
+Note that the URL may have an optional user and password, as specified by
+RFC (I forget which)
+
+The =$response= is an object that is known to implement the following subset of
+the methods of =LWP::Response=. It may in fact be an =LWP::Response= object,
+but it may also not be if LWP is not available, so callers may only assume
+the methods of =TWiki::Net::HTTPResponse= are available.
+
+The method may throw Error::Simple if the url cannot be parsed, or if it
+specifies an unsupported protocol.
+
+Note that if LWP is *not* available, this method:
+   1 can only really be trusted for HTTP/1.0 urls. If HTTP/1.1 or another
+     protocol is required, you are *strongly* recommended to =require LWP=.
+   1 Will not parse multipart content
+In the event that the response cannot be parsed, this method may set the
+is_success() to 400 and set an explanatory message().
+
+Callers can check the availability of other HTTP::Response methods as follows:
+
+<verbatim>
+my $response = TWiki::Net::GET($protocol, $host, $port, $url, $user, $pass);
+if ($response->isa('HTTP::Response')) {
+   ... other methods of HTTP::Response may be called
+} else {
+   ... only the methods listed above may be called
+}
+</verbatim>
 
 =cut
 
-sub getUrl {
-    my $this = shift;
-    my $protocol = shift;
+sub GET {
+    my ($this, $url) = @_;
+
+    my $protocol;
+    if( $url =~ m!^([a-z]+):! ) {
+        $protocol = $1;
+    } else {
+        die "Bad URL: $url";
+    }
 
     if( $this->_LWPavailable()) {
-        return $this->_getURLUsingLWP( $protocol, @_ );
+        return $this->_GETUsingLWP( $url );
+    } elsif( $protocol eq 'https') {
+        die "LWP not available for handling protocol: $url";
     }
 
     # Fallback mechanism
-    my( $host, $port, $url, $user, $pass ) = @_;
-    die "LWP not available for reading https: URLs: $@"
-      if( $protocol eq 'https');
+    $url =~ s!^\w+://!!; # remove protocol
+    my ( $user, $pass );
+    if ($url =~ s!([^/\@:]+)(?::([^/\@:]+))?@!!) {
+        ( $user, $pass ) = ( $1, $2 || '');
+    }
 
-    # Run-time use of Socket module when needed
+    unless ($url =~ s!([^:/]+)(?::([0-9]+))?!! ) {
+        die "Bad URL: $url";
+    }
+    my( $host, $port ) = ( $1, $2 || 80);
+
     require Socket;
     import Socket qw(:all);
 
-    $port ||= 80;
-    $port =~ s/^://;
-
-    my $result = '';
-    $url = "/" unless( $url );
+    $url = '/' unless( $url );
     my $req = "GET $url HTTP/1.0\r\n";
 
     $req .= "Host: $host:$port\r\n";
-    if( $user && $pass ) {
+    if( $user ) {
         # Use MIME::Base64 at run-time if using outbound proxy with
         # authentication
         require MIME::Base64;
@@ -102,25 +143,37 @@ sub getUrl {
     $req .= "\r\n\r\n";
 
     my ( $iaddr, $paddr, $proto );
-    $iaddr   = inet_aton( $host );
-    $paddr   = sockaddr_in( $port, $iaddr );
-    $proto   = getprotobyname( 'tcp' );
+    $iaddr = inet_aton( $host );
+    $paddr = sockaddr_in( $port, $iaddr );
+    $proto = getprotobyname( 'tcp' );
     unless( socket( *SOCK, &PF_INET, &SOCK_STREAM, $proto ) ) {
-        $this->{session}->writeWarning( "TWiki::Net::getUrl socket: $!" );
-        return "content-type: text/plain\n\nERROR: TWiki::Net::getUrl socket: $!.";
+        die "socket failed: $!";
     }
     unless( connect( *SOCK, $paddr ) ) {
-        $this->{session}->writeWarning( "TWiki::Net::getUrl connect: $!" );
-        return "content-type: text/plain\n\nERROR: TWiki::Net::getUrl connect: $!. \n$req";
+        die "connect failed: $!";
     }
     select SOCK; $| = 1;
+    local $/ = undef;
     print SOCK $req;
-    while( <SOCK> ) { $result .= $_; }
-    unless( close( SOCK ) ) {
-        $this->{session}->writeWarning( "TWiki::Net::getUrl close: $!" );
+    my $result = '';
+    $result = <SOCK>;
+    unless( close( SOCK )) {
+        die "close failed: $!";
     }
     select STDOUT;
-    return $result;
+
+    my $response;
+    # No LWP, but may have HTTP::Response which would make life easier
+    eval 'use HTTP::Response';
+    if ($@) {
+        # Nope, no HTTP::Response, have to do things the hard way :-(
+        require TWiki::Net::HTTPResponse;
+        $response = TWiki::Net::HTTPResponse->parse($result);
+    } else {
+        $response = HTTP::Response->parse($result);
+    }
+
+    return $response;
 }
 
 sub _LWPavailable {
@@ -131,21 +184,32 @@ sub _LWPavailable {
     return $LWPavailable
 }
 
-sub _getURLUsingLWP {
-    my( $this, $protocol, $host, $port, $path, $user, $pass ) = @_;
+sub _GETUsingLWP {
+    my( $this, $url ) = @_;
 
-    $port ||= 80;
-    $port =~ s/^://;
+    my ( $user, $pass );
+    if ($url =~ s!([^/\@:]+)(?::([^/\@:]+))?@!!) {
+        ( $user, $pass ) = ( $1, $2 );
+    }
+
     my $request;
     require HTTP::Request;
-    $request = HTTP::Request->new(GET => "$protocol://$host:$port$path");
+    $request = HTTP::Request->new(GET => $url);
     {
         package _UserCredAgent;
-        @_UserCredAgent::ISA = qw(LWP::UserAgent);
+        use base 'LWP::UserAgent';
         sub new {
-            my $this = bless( new LWP::UserAgent(), $_[0] );
-            $this->{user} = $_[1];
-            $this->{pass} = $_[2];
+            my ($class, $user, $pass) = @_;
+            my $this = $class->SUPER::new();
+            $this->{user} = $user;
+            $this->{pass} = $pass;
+            if ($TWiki::cfg{PROXY}{HOST}) {
+                my $proxy = $TWiki::cfg{PROXY}{HOST};
+                if ($TWiki::cfg{PROXY}{PORT}) {
+                    $proxy .= ':'.$TWiki::cfg{PROXY}{PORT};
+                }
+                $this->proxy([ 'http', 'https' ], $proxy);
+            }
             return $this;
         }
         sub get_basic_credentials {
@@ -155,7 +219,7 @@ sub _getURLUsingLWP {
     };
     my $ua = new _UserCredAgent($user, $pass);
     my $response = $ua->request($request);
-    return $response->as_string();
+    return $response;
 }
 
 # pick a default mail handler
