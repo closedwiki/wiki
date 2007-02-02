@@ -102,7 +102,8 @@ my $perlversion = $];
 if ($perlversion < 5.008) {
     print STDERR <<HERE;
 Your perl version is older than 5.8.0.
-TWiki has only successfully been tested been tested with Perl revision 5.8.X.
+TWiki has only been successfully tested on Perl 5.8.X,
+and there has been reports that it does not run on 5.6.and 5.5.
 Running TWiki with an older Perl version requires upgrading of modules and
 tweaking of the TWiki code.
 HERE

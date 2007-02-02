@@ -90,7 +90,8 @@ HERE
     if ( $] < 5.008 ) {
         $n .= $this->WARN(<<HERE);
 Perl version is older than 5.8.0.
-TWiki has only been successfully tested on Perl 5.8.X.
+TWiki has only been successfully tested on Perl 5.8.X,
+and there have been reports that it does not run on 5.6.and 5.5.
 You will need to upgrade Perl libraries and tweak the TWiki
 code to make TWiki work on older versions of Perl
 HERE
