@@ -3082,7 +3082,7 @@ msgid "title='Edit this topic text' accesskey='w'>&WYSIWYG"
 msgstr "title='Редактировать текст этой темы в визуальном редакторе' accesskey='w'>Визуально"
 
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:16
-msgid "title='Create this topic text' accesskey='w'>Create (&WYSIWYG)"
+msgid "title='Create this topic' accesskey='w'>Create (&WYSIWYG)"
 msgstr "title='Редактировать текст этой темы в визуальном редакторе' accesskey='w'>Создать (в визуальном редакторе)"
 
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:28

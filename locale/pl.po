@@ -3516,7 +3516,7 @@ msgid "title='Edit this topic text' accesskey='w'>&WYSIWYG"
 msgstr "title='Edytuj stronę (WYSIWYG)' accesskey='y'>W&YSIWYG"
 
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:16
-msgid "title='Create this topic text' accesskey='w'>Create (&WYSIWYG)"
+msgid "title='Create this topic' accesskey='w'>Create (&WYSIWYG)"
 msgstr "title='Utwórz stronę (WYSIWYG)' accesskey='y'>Utwórz (W&YSIWYG)"
 
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:28
