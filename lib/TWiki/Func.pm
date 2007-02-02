@@ -749,24 +749,7 @@ sub getAllUsers {
     my $session = $TWiki::Plugins::SESSION;
     my $users = $session->{users};
 
-    #if we have the UserMapping changes (post 4.0.2)
-    if (defined (&TWiki::Users::getAllUsers)) {
-        $users = $session->{users}->getAllUsers();
-    } else {
-        $users->lookupLoginName('guest'); # load the cache
-
-        unless( $users->{_LIST_OF_REGISTERED_USERS} ) {
-            my @list =
-              grep { $_ }
-                map {
-                    my( $w, $t ) = normalizeWebTopicName(
-                        $TWiki::cfg{UsersWebName}, $_);
-                    $users->findUser( $t, "$w.$t");
-                } values %{$users->{U2W}};
-            $users->{_LIST_OF_REGISTERED_USERS} = \@list;
-        }
-        $users = $users->{_LIST_OF_REGISTERED_USERS};
-    }
+    $users = $session->{users}->getAllUsers();
     return map { $_->wikiName() } @$users;
 }
 
@@ -812,33 +795,7 @@ sub getAllGroups {
     my $users = $session->{users};
     my $groups;
 
-    # if we have the UserMapping changes (post 4.0.2)
-    if (defined (&TWiki::Users::getAllGroups)) {
-        $groups = $session->{users}->getAllGroups();
-    } else {
-        # This code assumes we are using TWiki topic based Group mapping
-        unless( $users->{_LIST_OF_GROUPS} ) {
-            my @list;
-            $session->{search}->searchWeb(
-                _callback     => \&_collateGroups,
-                _cbdata       =>  { list => \@list, users => $users },
-                inline        => 1,
-                search        => "Set GROUP =",
-                web           => 'all',
-                topic         => "*Group",
-                type          => 'regex',
-                nosummary     => 'on',
-                nosearch      => 'on',
-                noheader      => 'on',
-                nototal       => 'on',
-                noempty       => 'on',
-                format	     => "\$web.\$topic",
-                separator     => '',
-               );
-            $users->{_LIST_OF_GROUPS} = \@list;
-        }
-        $groups = $users->{_LIST_OF_GROUPS};
-    }
+    $groups = $session->{users}->getAllGroups();
     return map { $_->wikiName() } @$groups;
 }
 
