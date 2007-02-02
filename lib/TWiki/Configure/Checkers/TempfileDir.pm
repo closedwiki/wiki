@@ -14,7 +14,7 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #
 # As per the GPL, removal of this notice is prohibited.
-package TWiki::Configure::Checkers::Sessions::Dir;
+package TWiki::Configure::Checkers::TempfileDir;
 
 use strict;
 
@@ -25,12 +25,10 @@ use base 'TWiki::Configure::Checker';
 sub check {
     my $this = shift;
 
-    return '' unless $TWiki::cfg{UseClientSessions};
-
     my $e = '';
-    unless( -d $TWiki::cfg{Sessions}{Dir}) {
-        my $e2 = $this->checkTreePerms( $TWiki::cfg{Sessions}{Dir}, 'rw' );
-        $e .= $this->WARN($e2) if $e2;
+    unless( -d $TWiki::cfg{TempfileDir}) {
+        my $e2 = $this->checkTreePerms( $TWiki::cfg{TempfileDir}, 'rw' );
+        $e .= $this->ERROR($e2) if $e2;
     }
     return $e;
 }

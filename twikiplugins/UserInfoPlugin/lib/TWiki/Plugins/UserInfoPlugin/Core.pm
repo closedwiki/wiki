@@ -42,6 +42,7 @@ sub new {
 
   # figure out where the sessions are
   $this->{sessionDir} = 
+    $TWiki::cfg{TempfileDir} ||
     $TWiki::cfg{Sessions}{Dir} ||
     &TWiki::Func::getDataDir() . "/.session"; 
   if (! -e $this->{sessionDir}) {

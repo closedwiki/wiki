@@ -778,8 +778,8 @@ sub cacheQuery {
     require Digest::MD5;
     my $md5 = new Digest::MD5();
     $md5->add($$, time(), rand(time));
-    my $uid = $TWiki::cfg{PassthroughDir}.'/passthru_'.$md5->hexdigest();
-    open(F, ">$uid") || die "{PassthroughDir} cache not writable $!";
+    my $uid = $TWiki::cfg{TempfileDir}.'/passthru_'.$md5->hexdigest();
+    open(F, ">$uid") || die "{TempfileDir} cache not writable $!";
     $query->save(\*F);
     close(F);
     return 'twiki_redirect_cache='.$uid;

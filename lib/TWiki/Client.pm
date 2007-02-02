@@ -181,7 +181,7 @@ sub _IP2SID {
     return undef unless $ip; # no IP address, can't map
 
     my %ips;
-    if( open( IPMAP, '<', $TWiki::cfg{Sessions}{Dir}.'/ip2sid' )) {
+    if( open( IPMAP, '<', $TWiki::cfg{TempfileDir}.'/ip2sid' )) {
         local $/ = undef;
         %ips = map { split( /:/, $_ ) } split( /\r?\n/, <IPMAP> );
         close(IPMAP);
@@ -189,7 +189,7 @@ sub _IP2SID {
     if( $sid ) {
         # known SID, map the IP addr to it
         $ips{$ip} = $sid;
-        open( IPMAP, '>', $TWiki::cfg{Sessions}{Dir}.'/ip2sid') ||
+        open( IPMAP, '>', $TWiki::cfg{TempfileDir}.'/ip2sid') ||
           die "Failed to open ip2sid map for write. Ask your administrator to make sure that the {Sessions}{Dir} is writable by the webserver user.";
         print IPMAP map { "$_:$ips{$_}\n" } keys %ips;
         close(IPMAP);
@@ -246,18 +246,18 @@ sub loadSession {
         my $sid = _IP2SID();
         if( $sid ) {
             $this->{_cgisession} = CGI::Session->new(
-                undef, $sid, { Directory => $TWiki::cfg{Sessions}{Dir} } );
+                undef, $sid, { Directory => $TWiki::cfg{TempfileDir} } );
         } else {
             $this->{_cgisession} = CGI::Session->new(
                 undef, undef,
-                { Directory => $TWiki::cfg{Sessions}{Dir} } );
+                { Directory => $TWiki::cfg{TempfileDir} } );
             _trace($this, "New IP2SID session");
             _IP2SID( $this->{_cgisession}->id() );
         }
     } else {
         $this->{_cgisession} = CGI::Session->new(
             undef, $query,
-            { Directory => $TWiki::cfg{Sessions}{Dir} } );
+            { Directory => $TWiki::cfg{TempfileDir} } );
     }
 
     die CGI::Session->errstr() unless $this->{_cgisession};
@@ -375,10 +375,10 @@ sub expireDeadSessions {
     my $exp = $TWiki::cfg{Sessions}{ExpireAfter} || 36000; # 10 hours
     $exp = -$exp if $exp < 0;
 
-    opendir(D, $TWiki::cfg{Sessions}{Dir}) || return;
+    opendir(D, $TWiki::cfg{TempfileDir}) || return;
     foreach my $file ( grep { /^(passthru|cgisess)_[0-9a-f]{32}/ } readdir(D) ) {
         $file = TWiki::Sandbox::untaintUnchecked(
-            $TWiki::cfg{Sessions}{Dir}.'/'.$file );
+            $TWiki::cfg{TempfileDir}.'/'.$file );
         my @stat = stat( $file );
         # CGI::Session updates the session file each time a browser views a
         # topic setting the access and expiry time as values in the file. This 
@@ -418,7 +418,7 @@ sub userLoggedIn {
             $this->{_cgisession} =
               CGI::Session->new(
                   undef, $twiki->{cgiQuery},
-                  { Directory => $TWiki::cfg{Sessions}{Dir} } );
+                  { Directory => $TWiki::cfg{TempfileDir} } );
             die CGI::Session->errstr() unless $this->{_cgisession};
         }
     }

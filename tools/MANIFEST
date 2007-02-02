@@ -445,7 +445,7 @@ lib/TWiki/Configure/Checkers/MimeTypesFileName.pm 0444
 lib/TWiki/Configure/Checkers/MinPasswordLength.pm 0444
 lib/TWiki/Configure/Checkers/NameFilter.pm 0444
 lib/TWiki/Configure/Checkers/OS.pm 0444
-lib/TWiki/Configure/Checkers/PassthroughDir.pm 0444
+lib/TWiki/Configure/Checkers/TempfileDir.pm 0444
 lib/TWiki/Configure/Checkers/PubDir.pm 0444
 lib/TWiki/Configure/Checkers/PubUrlPath.pm 0444
 lib/TWiki/Configure/Checkers/RCS/asciiFileSuffixes.pm 0444
@@ -469,7 +469,6 @@ lib/TWiki/Configure/Checkers/RCS/unlockCmd.pm 0444
 lib/TWiki/Configure/Checkers/RegistrationApprovals.pm 0444
 lib/TWiki/Configure/Checkers/ScriptSuffix.pm 0444
 lib/TWiki/Configure/Checkers/ScriptUrlPath.pm 0444
-lib/TWiki/Configure/Checkers/Sessions/Dir.pm 0444
 lib/TWiki/Configure/Checkers/Sessions/ExpireAfter.pm 0444
 lib/TWiki/Configure/Checkers/Site/CharSet.pm 0444
 lib/TWiki/Configure/Checkers/Site/Locale.pm 0444
