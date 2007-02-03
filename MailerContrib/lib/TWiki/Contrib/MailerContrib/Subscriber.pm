@@ -72,14 +72,14 @@ sub getEmailAddresses {
         if ( $this->{name} =~ /^$TWiki::regex{emailAddrRegex}/o ) {
             push( @{$this->{emails}}, $this->{name} );
         } else {
-            my $user = $this->{session}->{users}->findUser
-                       ( $this->{name}, undef, 1 );
+            my $user = $this->{session}->{users}->findUser(
+                $this->{name}, undef, 1 );
             if( $user ) {
                 push( @{$this->{emails}}, $user->emails() );
             }
             else {
                 # unknown - can't find an email
-                $this->{emails} = ();
+                $this->{emails} = [];
             }
         }
     }
