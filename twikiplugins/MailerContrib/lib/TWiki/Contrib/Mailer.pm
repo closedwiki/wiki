@@ -262,7 +262,7 @@ sub _sendChangesMails {
             print STDERR "Error sending mail: $error\n";
             $report .= $error."\n";
         } else {
-            print "Notified $mail of changes in $web\n" if $verbose;
+            print "Notified $email of changes in $web\n" if $verbose;
             $sentMails++;
         }
     }
