@@ -86,7 +86,7 @@ sub mailNotify {
     $twiki->enterContext( 'absolute_urls' );
 
     my $report = '';
-    foreach my $web ( grep( /$webstr/,
+    foreach my $web ( grep( /^($webstr)$/,
                             $twiki->{store}->getListOfWebs( 'user ') )) {
         $report .= _processWeb( $twiki, $web );
     }
@@ -153,7 +153,7 @@ sub _processSubscriptions {
     my $changes = $twiki->{store}->readMetaData( $web, 'changes' );
 
     unless ( $changes ) {
-        print "No changes\n" if ( $verbose );
+        print "No changes in $web\n" if ( $verbose );
         return '';
     }
 
@@ -232,7 +232,6 @@ sub _sendChangesMails {
     foreach my $email ( keys %{$changeset} ) {
         my $html = '';
         my $plain = '';
-
         foreach my $change (sort { $a->{TIME} cmp $b->{TIME} }
                             @{$changeset->{$email}} ) {
 
@@ -263,10 +262,11 @@ sub _sendChangesMails {
             print STDERR "Error sending mail: $error\n";
             $report .= $error."\n";
         } else {
+            print "Notified $mail of changes in $web\n" if $verbose;
             $sentMails++;
         }
     }
-    $report .= "\t$sentMails change notifications\n";
+    $report .= "\t$sentMails change notifications from $web\n";
 
     return $report;
 }
@@ -406,10 +406,11 @@ sub _sendNewsletterMail {
             print STDERR "Error sending mail: $error\n";
             $report .= $error."\n";
         } else {
+            print "Sent newletter for $web to $email\n" if $verbose;
             $sentMails++;
         }
     }
-    $report .= "\t$sentMails newsletters\n";
+    $report .= "\t$sentMails newsletters from $web\n";
 
     return $report;
 }

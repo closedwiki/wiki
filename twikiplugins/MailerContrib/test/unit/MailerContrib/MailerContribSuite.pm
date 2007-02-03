@@ -1,15 +1,11 @@
 use strict;
 
 package MailerContribTests;
-
 use base qw(TWikiFnTestCase);
 
-use TWiki::Contrib::Mailer;
+my $twiki;
 
-sub new {
-    my $self = shift()->SUPER::new(@_);
-    return $self;
-}
+use TWiki::Contrib::Mailer;
 
 my $testWeb2;
 
@@ -43,14 +39,9 @@ my %finalText =
       TestTopic21 => "smoke me a kipper, I'll be back for breakfast",
      );
 
-my $twiki;
-my @mails;
-
-# callback used by Net.pm
-sub sentMail {
-    my($net, $mess ) = @_;
-    push( @mails, $mess );
-    return undef;
+sub new {
+    my $class = shift;
+    return $class->SUPER::new('MailerContribTests', @_);
 }
 
 sub set_up {
@@ -58,89 +49,96 @@ sub set_up {
     $this->SUPER::set_up();
 
     $twiki = new TWiki();
-    $TWiki::cfg{UsersWebName} = $this->{users_web};
     $TWiki::cfg{EnableHierarchicalWebs} = 1;
-    $twiki->{net}->setMailHandler(\&sentMail);
+    $TWiki::cfg{MapUserToWikiName} = 1;
+    $twiki->{net}->setMailHandler(\&TWikiFnTestCase::sentMail);
 
     my $user = $twiki->{user};
     my $text;
 
     $testWeb2 = "$this->{test_web}/SubWeb";
+    # Will get torn down when the parent web dies
     $twiki->{store}->createWeb($user, $testWeb2);
     $this->registerUser("tu1", "Test", "User1", "test1\@example.com");
     $this->registerUser("tu2", "Test", "User2", "test2\@example.com");
+
+    # Must create a new twiki to force re-registration of users
+    $twiki = new TWiki();
+    $twiki->{net}->setMailHandler(\&TWikiFnTestCase::sentMail);
+    @TWikiFnTestCase::mails = ();
 
     @specs =
       (
           # traditional subscriptions
           {
-              entry => "$this->{users_web}.TWikiGuest - example\@test.email",
-              email => "example\@test.email",
+              entry => "$this->{users_web}.TWikiGuest - example\@example.com",
+              email => "example\@example.com",
               topicsout => ""
              },
           {
-              entry => "$this->{users_web}.NonPerson - nonperson\@test.email",
-              email => "nonperson\@test.email",
+              entry => "$this->{users_web}.NonPerson - nonperson\@example.com",
+              email => "nonperson\@example.com",
               topicsout => "*"
              },
+
           # email subscription
           {
-              entry => "person\@test.email",
-              email => "person\@test.email",
+              entry => "person\@example.com",
+              email => "person\@example.com",
               topicsout => "*"
              },
           # wikiname subscription
           {
               entry => "TestUser1",
-              email => "TestUser1\@test.email",
+              email => "test1\@example.com",
               topicsout => "*"
              },
           # wikiname subscription
           {
               entry => "%MAINWEB%.TestUser2",
-              email => "TestUser2\@test.email",
+              email => "test2\@example.com",
               topicsout => "*"
              },
           # single topic with one level of children
           {
-              entry => "email1\@test.email: TestTopic1 (1)",
-              email => "email1\@test.email",
+              entry => "email1\@example.com: TestTopic1 (1)",
+              email => "email1\@example.com",
               topicsout => "TestTopic1 TestTopic11 TestTopic12",
           },
           # single topic with 2 levels of children
           {
               entry => "TestUser1 : TestTopic1 (2)",
-              email => "TestUser1\@test.email",
+              email => "test1\@example.com",
               topicsout => "TestTopic1 TestTopic11 TestTopic111 TestTopic112 TestTopic12 TestTopic121 TestTopic122"
              },
           # single topic with 3 levels of children
           {
-              email => "email3\@test.email",
-              entry => "email3\@test.email : TestTopic1 (3)",
+              email => "email3\@example.com",
+              entry => "email3\@example.com : TestTopic1 (3)",
               topicsout => "TestTopic1 TestTopic11 TestTopic111 TestTopic112 TestTopic12 TestTopic121 TestTopic122 TestTopic1221"
              },
           # Comma separated list of subscriptions
           {
-              email => "email4\@test.email",
-              entry => "email4\@test.email: TestTopic1 (0), TestTopic2 (3)",
+              email => "email4\@example.com",
+              entry => "email4\@example.com: TestTopic1 (0), TestTopic2 (3)",
               topicsout => "TestTopic1 TestTopic2 TestTopic21"
              },
           # mix of commas, pluses and minuses
           {
-              email => "email5\@test.email",
-              entry => "email5\@test.email: TestTopic1 + TestTopic2(3), -TestTopic21",
+              email => "email5\@example.com",
+              entry => "email5\@example.com: TestTopic1 + TestTopic2(3), -TestTopic21",
               topicsout => "TestTopic1 TestTopic2"
              },
           # wildcard
           {
-              email => "email6\@test.email",
-              entry => "email6\@test.email: TestTopic1*1",
+              email => "email6\@example.com",
+              entry => "email6\@example.com: TestTopic1*1",
               topicsout => "TestTopic11 TestTopic111"
              },
           # wildcard unsubscription
           {
-              email => "email7\@test.email",
-              entry => "email7\@test.email: TestTopic*1 - \\\n   TestTopic2*",
+              email => "email7\@example.com",
+              entry => "email7\@example.com: TestTopic*1 - \\\n   TestTopic2*",
               topicsout => "TestTopic1 TestTopic11 TestTopic121"
              },
          );
@@ -279,19 +277,9 @@ sub set_up {
                                     $finalText{TestTopic1}, $meta,
                                     { forcenewrevision=>1 });
     }
-    @mails = ();
-
     # OK, we should have a bunch of changes
     #print "MN: ",cat $TWiki::cfg{DataDir}/$this->{test_web}/.mailnotify;
     #print cat $TWiki::cfg{DataDir}/$this->{test_web}/.changes;
-}
-
-sub tear_down {
-    my $this = shift;
-    $this->SUPER::tear_down();
-    $twiki->{store}->removeWeb($twiki->{user}, $testWeb2);
-    $twiki->{store}->removeWeb($twiki->{user}, $this->{test_web});
-    $twiki->{store}->removeWeb($twiki->{user}, $this->{users_web});
 }
 
 sub testSimple {
@@ -299,17 +287,17 @@ sub testSimple {
 
     my @webs = ( $this->{test_web}, $this->{users_web} );
     TWiki::Contrib::Mailer::mailNotify( \@webs, $twiki, 0 );
-    #print "REPORT\n",join("\n\n", @mails);
+    #print "REPORT\n",join("\n\n", @TWikiFnTestCase::mails);
 
     my %matched;
-    foreach my $message ( @mails ) {
+    foreach my $message ( @TWikiFnTestCase::mails ) {
         next unless $message;
         $message =~ /^To: (.*)$/m;
         my $mailto = $1;
         $this->assert($mailto, $message);
         foreach my $spec (@specs) {
             if ($mailto eq $spec->{email}) {
-                $this->assert(!$matched{$mailto});
+                $this->assert(!$matched{$mailto}, $mailto);
                 $matched{$mailto} = 1;
                 my $xpect = $spec->{topicsout};
                 if ($xpect eq '*') {
@@ -328,11 +316,12 @@ sub testSimple {
     foreach my $spec (@specs) {
         if ($spec->{topicsout} ne "") {
             $this->assert($matched{$spec->{email}},
-                          "Expected mails for ".$spec->{email} . " got " .
-                            join(" ", keys %matched));
+                          "Expected mails for ".$spec->{email} .
+                            " but only got " .
+                              join(" ", keys %matched));
         } else {
             $this->assert(!$matched{$spec->{email}},
-                          "Unexpected mails for ".$spec->{email} . " got " .
+                          "Unexpected mails for ".$spec->{email} . " (got " .
                             join(" ", keys %matched));
         }
     }
@@ -343,10 +332,10 @@ sub testSubweb {
 
     my @webs = ( $testWeb2, $this->{users_web} );
     TWiki::Contrib::Mailer::mailNotify( \@webs, $twiki, 0 );
-    #print "REPORT\n",join("\n\n", @mails);
+    #print "REPORT\n",join("\n\n", @TWikiFnTestCase::mails);
 
     my %matched;
-    foreach my $message ( @mails ) {
+    foreach my $message ( @TWikiFnTestCase::mails ) {
         next unless $message;
         $message =~ /^To: (.*)$/m;
         my $mailto = $1;

@@ -204,7 +204,7 @@ sub processChange {
         my $subs = $subscriber->isSubscribedTo( $topic, $db );
         if ($subs && !$subscriber->isUnsubscribedFrom( $topic, $db )) {
             my $emails = $subscriber->getEmailAddresses();
-            if( $emails ) {
+            if( $emails && scalar( @$emails )) {
                 foreach my $email ( @$emails ) {
                     if ($subs->getMode()) { # ? or !
                         push( @{$allSet->{$topic}}, $email );
@@ -218,6 +218,9 @@ sub processChange {
                         }
                     }
                 }
+            } else {
+                print STDERR "WARNING: Failed to find email for ".
+                  $subscriber->stringify()."\n";
             }
         }
     }
