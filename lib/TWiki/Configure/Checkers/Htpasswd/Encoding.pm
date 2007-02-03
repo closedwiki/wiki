@@ -41,8 +41,8 @@ sub check {
             minimumVersion => 1,
             disposition => 'required');
     }
-    $e .= $this->checkTreePerms($TWiki::cfg{Htpasswd}{FileName}, 'r');
-    $e = $this->ERROR($e) if $e;
+    my $pe = $this->checkTreePerms($TWiki::cfg{Htpasswd}{FileName}, 'r');
+    $e .= $this->ERROR($pe) if $pe;
     return $e;
 }
 

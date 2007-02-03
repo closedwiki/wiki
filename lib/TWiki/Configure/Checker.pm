@@ -181,10 +181,10 @@ sub checkGnuProgram {
 sub checkPerlModules {
     my $this = shift;
     my $mods;
-    if (ref($_[0])) {
+    if (ref($_[0]) eq 'ARRAY') {
         $mods = $_[0];
     } else {
-        %$mods = (@_);
+        $mods = [ { @_ } ];
     }
 
     my $e = '';
