@@ -921,9 +921,14 @@ sub _populateUserTopicForm {
         foreach my $fd (@{$data->{form}}) {
             next unless $fd->{name} eq $field->{name};
             next if $SKIPKEYS{$fd->{name}};
-            my $item = $meta->get( 'FIELD', $fd->{name} );
-            $item->{value} = $fd->{value};
-            $meta->putKeyed( 'FIELD', $item );
+            $meta->putKeyed(
+                'FIELD',
+                {
+                    name => $fd->{name},
+                    attributes => '',
+                    title => $fd->{name},
+                    value => $fd->{value},
+                } );
             $inform{$fd->{name}} = 1;
             last;
         }
