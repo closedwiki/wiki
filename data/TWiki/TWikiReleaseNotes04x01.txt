@@ -438,11 +438,12 @@ The 4.1.0 release was built from SVN http://svn.twiki.org/svn/twiki/tags/TWikiRe
 
 ---++  TWiki 4.1.1 Patch Release - Details
 
-The 4.1.1 release was built from SVN http://svn.twiki.org/svn/twiki/Patch04x01 revision 12762.
+The 4.1.1 release was built from SVN http://svn.twiki.org/svn/twiki/Patch04x01 revision 12764.
 
 ---+++ TWiki 4.1.1 Fixes
 
 <noautolink>
+| [[%BUGS%/Item3561][Item3561]]  | Missing js and template files in MANIFEST |
 | [[%BUGS%/Item3547][Item3547]]  | Passthrough files not cleaned up if not stored in same directory as session files |
 | [[%BUGS%/Item3546][Item3546]]  | Session files should not be mixed with normal tmp files from other applications |
 | [[%BUGS%/Item3545][Item3545]]  | Configure dies with: Not an ARRAY reference at Checker.pm line 191 |
