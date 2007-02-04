@@ -438,7 +438,7 @@ sub merge {
                 if( $formDef->isTextMergeable( $thisD->{name} )) {
                     my $merged = TWiki::Merge::merge2(
                         'A', $otherD->{value}, 'B', $thisD->{value},
-                        qr/(\s+)/,
+                        '.*?\s+',
                         $this->{_session},
                         $formDef->getField( $thisD->{name} ) );
                     # SMELL: we don't merge attributes or title

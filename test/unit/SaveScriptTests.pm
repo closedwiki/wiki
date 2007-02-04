@@ -531,8 +531,9 @@ sub test_merge {
             TWiki::Form::cgiName(undef,'CheckboxandButtons') => [ 'hamster' ],
             TWiki::Form::cgiName(undef,'Textfield') => [ 'Bat' ],
             TWiki::Form::cgiName(undef,'Textarea') => [ <<GUMP ],
-Glug
-Glog
+Glug Glug
+Blog Glog
+Bungdit Din
 Glaggie
 GUMP
             topic  => [ $testweb.'.MergeSave' ]
@@ -555,8 +556,9 @@ GUMP
             TWiki::Form::cgiName(undef,'CheckboxandButtons') => [ 'hamster' ],
             TWiki::Form::cgiName(undef,'Textfield') => [ 'Rat' ],
             TWiki::Form::cgiName(undef,'Textarea') => [ <<GUMP ],
-Spletter
-Splut
+Spletter Glug
+Blog Splut
+Bungdit Din
 GUMP
             topic  => [ $testweb.'.MergeSave' ]
            });
@@ -597,8 +599,10 @@ END
     $this->assert_str_equals('<del>Bat</del><ins>Rat</ins>', $v->{value});
     $v = $meta->get('FIELD', 'Textarea');
     $this->assert_str_equals(<<ZIS, $v->{value});
-<del>Glug</del><ins>Spletter</ins>
-<del>Glog</del><ins>Splut</ins>
+<del>Glug </del><ins>Spletter </ins>Glug
+Blog <del>Glog
+</del><ins>Splut
+</ins>Bungdit Din
 Glaggie
 ZIS
 }
