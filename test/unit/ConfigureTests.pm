@@ -55,7 +55,7 @@ EXAMPLE
         $defaultCfg{$k} = $cfg{$k};
     }
 
-    TWiki::Configure::TWikiCfg::_parse($fh->filename(), $root);
+    TWiki::Configure::TWikiCfg::_parse($fh->filename(), $root, 1);
 
     # nothing should have changed
     my $saver = new TWiki::Configure::TWikiCfg();
@@ -213,7 +213,7 @@ $cfg{Three} = 'Three';
 1;
 EXAMPLE
     $f1->close();
-    TWiki::Configure::TWikiCfg::_parse($f1->filename(), $root);
+    TWiki::Configure::TWikiCfg::_parse($f1->filename(), $root, 1);
     foreach my $k (keys %cfg) {
         $defaultCfg{$k} = $cfg{$k};
     }
