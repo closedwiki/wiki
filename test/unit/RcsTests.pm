@@ -81,30 +81,6 @@ sub verifyRepRev {
     $this->assert_equals( "then this", $rcs->getRevision(2) );
 }
 
-sub verifyRepRev2839 {
-    my ($this, $class) = @_;
-    my $topic = "RcsRepRev";
-
-    my $rcs = $class->new( $twiki, $testWeb, $topic, "" );
-    $rcs->addRevisionFromText( "there was a man", "in once", "JohnTalintyre" );
-    $this->assert_equals( "there was a man", $rcs->getRevision(1) );
-    $this->assert_equals( 1, $rcs->numRevisions() );
-
-    $rcs->replaceRevision( "there was a cat", "1st replace",
-                           "NotJohnTalintyre", time() );
-    $this->assert_equals( 1, $rcs->numRevisions() );
-    $this->assert_equals( "there was a cat", $rcs->getRevision(1) );
-    $rcs->addRevisionFromText( "and now this", "2nd entry", "J1" );
-    $this->assert_equals( 2, $rcs->numRevisions() );
-    $this->assert_equals( "there was a cat", $rcs->getRevision(1) );
-    $this->assert_equals( "and now this", $rcs->getRevision(2) );
-
-    $rcs->replaceRevision( "then this", "2nd replace", "J2", time() );
-    $this->assert_equals( 2, $rcs->numRevisions );
-    $this->assert_equals( "there was a cat", $rcs->getRevision(1) );
-    $this->assert_equals( "then this", $rcs->getRevision(2) );
-}
-
 # Tests locking - Wrap only
 sub test_RcsWrapOnly_ciLocked {
     my $this = shift;
