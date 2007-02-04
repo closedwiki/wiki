@@ -446,6 +446,31 @@ END
         'VIEW', $TWiki::cfg{DefaultUserWikiName}, "Please me, let me go",
         $topic, $testweb);
     $this->assert($access);
+    # make sure meta overrides text, as documented - Item2953
+    my $meta = new TWiki::Meta($twiki, $testweb, $topic);
+    $meta->putKeyed('PREFERENCE', {
+        name => 'ALLOWTOPICVIEW',
+        title => 'ALLOWTOPICVIEW',
+        type => 'Set',
+        value => $TWiki::cfg{DefaultUserWikiName}});
+    $access = TWiki::Func::checkAccessPermission(
+        'VIEW',
+        $TWiki::cfg{DefaultUserWikiName},
+        "   * Set ALLOWTOPICVIEW = NotASoul\n",
+        $topic, $testweb, $meta);
+    $this->assert($access);
+    $meta = new TWiki::Meta($twiki, $testweb, $topic);
+    $meta->putKeyed('PREFERENCE', {
+        name => 'DENYTOPICVIEW',
+        title => 'DENYTOPICVIEW',
+        type => 'Set',
+        value => $TWiki::cfg{DefaultUserWikiName} });
+    $access = TWiki::Func::checkAccessPermission(
+        'VIEW',
+        $TWiki::cfg{DefaultUserWikiName},
+        "   * Set ALLOWTOPICVIEW = $TWiki::cfg{DefaultUserWikiName}\n",
+        $topic, $testweb, $meta);
+    $this->assert(!$access);
 }
 
 1;
