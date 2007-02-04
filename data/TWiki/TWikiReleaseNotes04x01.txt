@@ -438,12 +438,45 @@ The 4.1.0 release was built from SVN http://svn.twiki.org/svn/twiki/tags/TWikiRe
 
 ---++  TWiki 4.1.1 Patch Release - Details
 
-The 4.1.1 release was built from SVN http://svn.twiki.org/svn/twiki/Patch04x01 revision FIXME.
+The 4.1.1 release was built from SVN http://svn.twiki.org/svn/twiki/Patch04x01 revision 12762.
 
 ---+++ TWiki 4.1.1 Fixes
 
 <noautolink>
-FIXME
+| [[%BUGS%/Item3547][Item3547]]  | Passthrough files not cleaned up if not stored in same directory as session files |
+| [[%BUGS%/Item3546][Item3546]]  | Session files should not be mixed with normal tmp files from other applications |
+| [[%BUGS%/Item3545][Item3545]]  | Configure dies with: Not an ARRAY reference at Checker.pm line 191 |
+| [[%BUGS%/Item3544][Item3544]]  | Deleting an attachment can cause TWiki to hang almost forever |
+| [[%BUGS%/Item3543][Item3543]]  | Some TWikiFAQs don't the have correct TOPICPARENT |
+| [[%BUGS%/Item3534][Item3534]]  | In INSTALL.html, add link to InstallingTWiki supplemental docs |
+| [[%BUGS%/Item3533][Item3533]]  | Redirect to viewauth broken when using script suffix and apache login |
+| [[%BUGS%/Item3529][Item3529]]  | configure stores access octals as string |
+| [[%BUGS%/Item3528][Item3528]]  | BlackListPlugin: Redirects to an empty classic style screen when you get caught |
+| [[%BUGS%/Item3523][Item3523]]  | CGI session files may contain newlines |
+| [[%BUGS%/Item3520][Item3520]]  | TWiki.spec has wrong default for directory access rights. Is 775. Must be 755. |
+| [[%BUGS%/Item3517][Item3517]]  | configure no longer warns against non-existing store settings |
+| [[%BUGS%/Item3513][Item3513]]  | AUTOINCn produces unwanted lease file, breaking the workflow |
+| [[%BUGS%/Item3511][Item3511]]  | Can't go to "next" screen in configure, using Win XP |
+| [[%BUGS%/Item3510][Item3510]]  | CommentPlugin templates newline issue - doc updates needed |
+| [[%BUGS%/Item3508][Item3508]]  | The mailnotify script has too restrictive access permission |
+| [[%BUGS%/Item3507][Item3507]]  | In formatted search $web is not expanded in header |
+| [[%BUGS%/Item3500][Item3500]]  | Several attachments missing in TWikiDocGraphics |
+| [[%BUGS%/Item3496][Item3496]]  | SpreadSheetPlugin doc work for 4.2 |
+| [[%BUGS%/Item3489][Item3489]]  | Formatted search breaks with formfield variables and when using nested search |
+| [[%BUGS%/Item3488][Item3488]]  | Autoattaching a single file does not work |
+| [[%BUGS%/Item3483][Item3483]]  | Error logging in when there is apache login and DENYWEBVIEW |
+| [[%BUGS%/Item3478][Item3478]]  | Move DEPENDENCIES file from tools to lib |
+| [[%BUGS%/Item3477][Item3477]]  | Erroneous display of Perl version in configure |
+| [[%BUGS%/Item3476][Item3476]]  | Configure should warn instead of dying when perl is older then v5.8.0 |
+| [[%BUGS%/Item3473][Item3473]]  | RCS error when running configure |
+| [[%BUGS%/Item3472][Item3472]]  | WebLeftBar in PatternSkin does not display first bullet correctly if first line |
+| [[%BUGS%/Item3471][Item3471]]  | Jump feature broken when a web does not have the WebTopicCreator topic |
+| [[%BUGS%/Item3461][Item3461]]  | Make sure that the latest release notes are distinguished from old ones |
+| [[%BUGS%/Item3452][Item3452]]  | Merge messes up complex form fields |
+| [[%BUGS%/Item3352][Item3352]]  | Wrong title text for button in PatternSkin (patch candidate) |
+| [[%BUGS%/Item3303][Item3303]]  | Multiple addresses in WIKIWEBMASTER causes email send fail |
+| [[%BUGS%/Item3201][Item3201]]  | Remove exclamation mark from welcoming "Hello XXX!" |
+| [[%BUGS%/Item2838][Item2838]]  | Documentation on %WEB% is ambiguous |
 </noautolink>
 
 ---+++ TWiki 4.1.0 Enhancements
