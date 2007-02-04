@@ -54,9 +54,9 @@ sub ui {
 
     if (!$this->{LocalSiteDotCfg} ) {
         $this->{errors}++;
-        $result .= $this->ERROR(<<HERE);
+        $result .= <<HERE;
 Could not find where LocalSite.cfg is supposed to go.
-Use your LocalLib.cfg to set \$twikiLibPath to the 'lib' directory
+Edit your LocalLib.cfg and set \$twikiLibPath to point to the 'lib' directory
 for your install.
 Please correct this error before continuing.
 HERE
@@ -65,8 +65,8 @@ HERE
             TWiki::Configure::Load::readConfig();
         };
         if ($@) {
-            $result .= $this->WARN(<<HERE);
-Existing configuration file has a configuration problem
+            $result .= <<HERE;
+Existing configuration file has a problem
 that is causing a Perl error - the following message(s) was generated:
 <pre>$@</pre>
 You can continue, but configure will not pick up any of the existing
@@ -74,7 +74,7 @@ settings from this file unless you correct the perl error.
 HERE
             $badLSC = 1;
         } elsif (!-w $this->{LocalSiteDotCfg} ) {
-            $result .= $this->WARN(<<HERE);
+            $result .= <<HERE;
 Cannot write to existing configuration file<br />
 $this->{LocalSiteDotCfg} is not writable.
 You can view the configuration, but you will not be able to save.
@@ -88,7 +88,7 @@ HERE
             $this->{LocalSiteDotCfg});
 
         if ($errs) {
-            $result .= $this->WARN(<<HERE);
+            $result .= <<HERE;
 Configuration file $this->{LocalSiteDotCfg} does not exist, and I cannot
 write a new configuration file due to these errors:
 <pre/>$errs<pre>
@@ -96,12 +96,16 @@ You can view the default configuration, but you will not be able to save.
 HERE
             $badLSC = 1;
         } else {
-            $result .= $this->WARN(<<HERE);
-Could not find existing configuration file $this->{LocalSiteDotCfg}.<br />
-This may be because this is the first time you have run configure. In this
-case you can simply ignore this warning until you have filled in your
+            $result .= <<HERE;
+Could not find existing configuration file $this->{LocalSiteDotCfg}.
+<p />
+This may be because this is the first time you have run configure.
+<p />
+If so, please fill in the required paths in the
 <a rel="nofollow" href="#" onclick="foldBlock('GeneralPathSettings'); return false;">
-General path settings</a>.
+General path settings</a> section below and click 'Next' to save before returning to configure to complete configuration.
+<p />
+If you previously ran configure and saved the configuration, then please check for the existence of lib/LocalSite.cfg, and make sure the webserver user can read it.
 HERE
             $badLSC = 1;
         }
@@ -126,7 +130,7 @@ HERE
     }
     delete @ENV{ qw( IFS CDPATH ENV BASH_ENV ) };
 
-    return $result;
+    return ($result, $badLSC);
 }
 
 sub _copy {

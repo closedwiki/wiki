@@ -88,17 +88,18 @@ sub new {
 #
 # SEE ALSO TWiki::Configure::Load::readDefaults
 sub load {
-    my $root = shift;
+    my ($root, $haveLSC) = @_;
 
     my $file = TWiki::findFileOnPath('TWiki.spec');
     if ($file) {
-        _parse($file, $root);
+        _parse($file, $root, $haveLSC);
     }
-    my @modules;
-    my %read;
-    foreach my $dir (@INC) {
-        _loadSpecsFrom("$dir/TWiki/Plugins", $root, \%read);
-        _loadSpecsFrom("$dir/TWiki/Contrib", $root, \%read);
+    if ($haveLSC) {
+        my %read;
+        foreach my $dir (@INC) {
+            _loadSpecsFrom("$dir/TWiki/Plugins", $root, \%read);
+            _loadSpecsFrom("$dir/TWiki/Contrib", $root, \%read);
+        }
     }
 }
 
@@ -192,18 +193,21 @@ sub _getValueObject {
 # Parse the config declaration file and return a root node for the
 # configuration it describes
 sub _parse {
-    my ($file, $root) = @_;
+    my ($file, $root, $haveLSC) = @_;
 
     open(F, "<$file") || return '';
     local $/ = "\n";
     my $open = undef;
     my @settings;
+    my $sectionNum = 0;
 
     foreach my $l (<F>) {
         if( $l =~ /^#\s*\*\*\s*([A-Z]+)\s*(.*?)\s*\*\*\s*$/ ) {
             pusht(\@settings, $open) if $open;
             $open = new TWiki::Configure::Value(typename=>$1, opts=>$2);
-        } elsif ($l =~ /^#?\s*\$(TWiki::)?cfg([^=\s]*)\s*=/) {
+        }
+
+        elsif ($l =~ /^#?\s*\$(TWiki::)?cfg([^=\s]*)\s*=/) {
             my $keys = $2;
             if ($open && $open->isa('SectionMarker')) {
                 pusht(\@settings, $open);
@@ -221,7 +225,9 @@ sub _parse {
             $open->set(keys => $keys);
             pusht(\@settings, $open);
             $open = undef;
-        } elsif( $l =~ /^#\s*\*([A-Z]+)\*/ ) {
+        }
+
+        elsif( $l =~ /^#\s*\*([A-Z]+)\*/ ) {
             my $pluggable = $1;
             my $p = TWiki::Configure::Pluggable::load($pluggable);
             if ($p) {
@@ -231,10 +237,17 @@ sub _parse {
                 $l =~ s/^#\s?//;
                 $open->addToDesc($l);
             }
-        } elsif( $l =~ /^#\s*---\+(\+*) *(.*?)$/ ) {
+        }
+
+        elsif( $l =~ /^#\s*---\+(\+*) *(.*?)$/ ) {
+            # Only load the first section if we don't have LocalSite.cfg
+            last if ($sectionNum && !$haveLSC);
+            $sectionNum++;
             pusht(\@settings, $open) if $open;
             $open = new SectionMarker(length($1), $2);
-        } elsif( $l =~ /^#\s?(.*)$/ ) {
+        }
+
+        elsif( $l =~ /^#\s?(.*)$/ ) {
             $open->addToDesc($1) if $open;
         }
     }
