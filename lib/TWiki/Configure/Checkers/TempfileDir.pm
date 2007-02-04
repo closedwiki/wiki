@@ -25,11 +25,8 @@ use base 'TWiki::Configure::Checker';
 sub check {
     my $this = shift;
 
-    my $e = '';
-    unless( -d $TWiki::cfg{TempfileDir}) {
-        my $e2 = $this->checkTreePerms( $TWiki::cfg{TempfileDir}, 'rw' );
-        $e .= $this->ERROR($e2) if $e2;
-    }
+    my $e = $this->checkCanCreateFile("$TWiki::cfg{TempfileDir}/testfile");
+    $e = $this->ERROR($e) if $e;
     return $e;
 }
 
