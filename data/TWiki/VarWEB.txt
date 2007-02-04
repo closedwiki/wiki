@@ -1,9 +1,8 @@
-%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.2" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1170582473" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiVariables"}%
 #VarWEB
-
 ---+++ WEB -- name of current web
+   * =%<nop>WEB%= expands to the name of the web where the topic is located. If you are looking at the text of an included topic, it is the web where the included topic is located.
    * Syntax: =%<nop>WEB%=
    * Expands to: =<nop>%WEB%=
    * Related: [[#VarBASEWEB][BASEWEB]], [[#VarINCLUDINGWEB][INCLUDINGWEB]], [[#VarTOPIC][TOPIC]]
-
