@@ -414,7 +414,7 @@ sub _actionNext {
         print $ui->ui(1, 'Save');
     } else {
         # Load the specs from the .spec files and generate the UI template
-        TWiki::Configure::TWikiCfg::load($root);
+        TWiki::Configure::TWikiCfg::load($root, 1);
 
         $ui = _checkLoadUI('UPDATE', $root);
         return 1 unless $ui;
