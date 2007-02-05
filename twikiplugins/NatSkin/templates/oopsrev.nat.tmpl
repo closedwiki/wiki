@@ -1,6 +1,6 @@
 %TMPL:INCLUDE{"oops"}%
 <!-- template: oopsrev.nat.tmpl -->
-%TMPL:DEF{"heading"}%%MAKETEXT{"Compare Revisions of [_1]" args="%WEB%.%TOPIC%"}%%TMPL:END%
+%TMPL:DEF{"heading"}%%MAKETEXT{"Compare Revisions of [_1]" args="<nop>%WEB%.%TOPIC%"}%%TMPL:END%
 %TMPL:DEF{"message"}%<!-- -->
 <p>
 <table border="0" cellspacing="0" cellpadding="0">
@@ -69,7 +69,7 @@
 <td>
 <form style="margin:0px" name="main" action="%SCRIPTURLPATH{"view"}%/%WEB%/%TOPIC%">
   <input type="text" name="rev" size="6" value="%PARAM1%" /> <br />
-  (1.1 ... %PARAM3%) </td>
+  (1 ... %PARAM3%) </td>
 <td valign=top style="padding-left:1em"> %MAKETEXT{"in <input type=\"checkbox\" name=\"raw\"> raw text format."}%</td>
 </tr>
 <tr>

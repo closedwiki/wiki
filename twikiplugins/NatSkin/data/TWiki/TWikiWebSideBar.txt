@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1147166156" format="1.1" reprev="1.5" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1160831695" format="1.1" reprev="1.2" version="1.1"}%
 %STARTINCLUDE%<div class="natSideBarTitle">
   <h1>%MAKETEXT{"Navigation"}%</h1>
 </div>
@@ -21,10 +21,8 @@
 ~~~     </h2>
 ~~~     $percntBREADCRUMBS{\"%BASEWEB%.WebHome\"
 ~~~       recurse=\"once\"
-~~~       exclude=\".*($name|%BASETOPIC%|WebHome).*\"
-~~~       header=\"<ul>\"
-~~~       format=\"<li>[[$dollartarget][%MAKETEXT{"Parent web"}%]]</li>\"
-~~~       footer=\"</ul>\"
+~~~       exclude=\".*($name|$web|%BASETOPIC%|WebHome).*\"
+~~~       format=\"<ul><li>[[$dollartarget][%MAKETEXT{"Parent web"}%]]</li></ul>\"
 ~~~     }$percnt
 ~~~     $percntFLEXWEBLIST{
 ~~~       include=\"$web/\w+\"
@@ -39,7 +37,7 @@
 ~~~       format=\"<li> $dollarpercntWEBLINK{name=\\"$dollarname\\" web=\\"$dollarweb\\"}$dollarpercnt</li>\"
 ~~~       footer=\"</ul>$dollarpercntENDTWISTY$dollarpercnt</li></ul>\"
 ~~~     }$percnt
-~~~     $percntWEBCOMPONENT{\"WebLinks\"}$percnt
+~~~     $percntWEBCOMPONENT{\"WebLinks\"}$percnt$n<!-- -->
 ~~~     </div>"
 ~~~ }%
 %IFDEFINEDTHEN{"%BASEWEB%" as="Trash"}%
@@ -52,11 +50,11 @@
 %TMPL:P{"searchbox"}%
 </div>
 %FISKINSTATE%
-<div class="natSideBarPersonal" style="%IFDEFINED{"%BASEWEB%.%BASETOPIC%" as="%MAINWEB%.%WIKINAME%SideBar" then="display:none"}%"> 
+<div class="natSideBarPersonal"> 
 %IFDEFINEDTHEN{"$percntINCLUDE{\"%MAINWEB%.%WIKINAME%SideBar\" warn=\"off\"}$percnt"}%
 $test
 %ELSEDEFINED%
-%$nopINCLUDE{"%TWIKIWEB%.MySideBar" warn="off"}%
+%$nopWEBCOMPONENT{"MySideBar"}%
 %FIDEFINED%
 </div>
 %STOPINCLUDE%

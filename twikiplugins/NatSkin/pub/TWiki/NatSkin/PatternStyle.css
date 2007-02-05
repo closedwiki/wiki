@@ -232,22 +232,23 @@ label {
   color:#8490A1; 
 }
 
+
 /* topbar */
 .natHeaderArt {
   background-color:#F8F4F1;
   background-color:#f8f8f8;
 }
-.natTopBarSizer {
-  height:130px;
-}
 .natTopLeftContents {
   margin:25px 5px 10px 20px
 }
 .natTopRightContents {
-  margin:30px 10px 5px 12px;
-  line-height:1.4em;
+  margin:25px 20px 10px 5px;
   font-family:arial, sans-serif;
-  font-size:90%;
+  font-size:12px;
+  line-height:135%;
+}
+.natSearchBox input {
+  border:1px solid #eee;
 }
 .natSearchBoxTop input {
   line-height:1em;
@@ -258,15 +259,11 @@ label {
   margin-bottom:0.4em;
 }
 .natSearchBoxPos1 input {
-  width:210px;
+  width:190px;
   margin:20px 0px 10px;
 }
 .natWebSlogan {
   font-size:95%;
-}
-.natWebSlogan,
-.natWebTitle {
-  line-height:1em;
 }
 .natWebTitle {
   color:#1e5bbd;
@@ -281,16 +278,35 @@ label {
   background:transparent;
 }
 
+/* login */
+.natLoginBody .natTopBar {
+  display:none;
+}
+.natLoginBody .natMainContents {
+  margin-top:20px;
+}
+.natLoginMessage {
+  background-color:#F8F4F1;
+  border:1px solid #ddd;
+  color:#800;
+  padding:20px;
+}
+
 /* sidebar */
 .natTopRight {
   width:250px;
   min-width:250px;
   max-width:250px;
 }
-.natSideBar,
-.natSideBarContents {
+.natSideBar {
   width:223px;
   padding:0px;
+}
+.natSideBarContents {
+  font-size:95%;
+  font-weight:normal;
+  margin:0;
+  padding:1em 1em 1.7em 1em;
 }
 
 .natSideBar {
@@ -334,12 +350,6 @@ label {
   background:#efefef; 
   display:block;
   line-height:200%;
-}
-.natSideBarContents {
-  font-size:95%;
-  font-weight:normal;
-  margin:0;
-  padding:1em 1em 1.7em 1em;
 }
 .natSideBar strong a:link,
 .natSideBar strong a:visited {
@@ -502,10 +512,11 @@ html>body .natSideBar li a {
   background:#b4d5ff;
 }
 .twikiTable th,
+.twikiTable th span,
 .twikiTable th font,
 .twikiTable th a {
   color:#444444;
-  color:#1e5bbd;
+  color:#1e5bbd !important; /* SMELL: breaks %TABLE{}% */
 }
 .twikiTable th a:hover {
   background-color:transparent;

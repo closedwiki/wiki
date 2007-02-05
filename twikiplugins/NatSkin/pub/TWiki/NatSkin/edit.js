@@ -136,7 +136,47 @@ function natEditSignatureButtonAction(date, wikiUserName) {
   natInsertTags('=--= ',date,wikiUserName);
 }
 
-function natSetupToolbar() {
+function getWindowHeight () {
+  if( typeof( window.innerWidth ) == 'number' ) {
+    //Non-IE
+    return window.innerHeight;
+  } else if( document.documentElement && ( document.documentElement.clientWidth || document.documentElement.clientHeight ) ) {
+    //IE 6+ in 'standards compliant mode'
+    return document.documentElement.clientHeight;
+  } else if( document.body && ( document.body.clientWidth || document.body.clientHeight ) ) {
+    //IE 4 compatible
+    return document.body.clientHeight;
+  }
+  return 0; // outch
+}
+
+function getWindowWidth () {
+  if( typeof( window.innerWidth ) == 'number' ) {
+    //Non-IE
+    return window.innerWidth;
+  } else if( document.documentElement && ( document.documentElement.clientWidth || document.documentElement.clientHeight ) ) {
+    //IE 6+ in 'standards compliant mode'
+    return document.documentElement.clientWidth;
+  } else if( document.body && ( document.body.clientWidth || document.body.clientHeight ) ) {
+    //IE 4 compatible
+    return document.body.clientWidth;
+  }
+  return 0; // outch
+}
+
+function fixHeightOfTheText() {
+  var height = getWindowHeight();
+  var offset;
+  if (height) {
+    offset = txtarea.offsetTop;
+    height = height-offset-60;
+    txtarea.style.height = height + "px";
+  }
+  //alert("height="+height+", offset="+offset);
+  return height;
+}
+
+function natSetupEdit() {
   if (document.EditForm) {
     txtarea = document.EditForm.natEditTextArea;
   } else {
@@ -144,8 +184,12 @@ function natSetupToolbar() {
     var areas = document.getElementsByTagName('textarea');
     txtarea = areas[0];
   }
+  window.onresize = fixHeightOfTheText;
+  fixHeightOfTheText();
+
 
   return true;
 }
 
-addLoadEvent(natSetupToolbar);
+ 
+addLoadEvent(natSetupEdit);

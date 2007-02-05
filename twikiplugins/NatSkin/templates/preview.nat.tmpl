@@ -10,7 +10,7 @@
 %TMPL:DEF{"meta"}% %HTTP_EQUIV_ON_PREVIEW% %TMPL:END%
 %TMPL:DEF{"title"}%%TOPIC% (%MAKETEXT{"preview"}%)%TMPL:END%
 %TMPL:DEF{"locator"}%<span class="natSep">&middot;</span>[[WebHome][%WEB%]]<span class="natSep">&middot;</span><b>%TOPIC%</b>%TMPL:END%
-%TMPL:DEF{"contentheader"}%<div class="natBreadCrumbs">%BREADCRUMBS{"%BASEWEB%.%BASETOPIC%" exclude="%BASETOPIC%" separator="<span class='natSep'>&#187;</span>" footer="<span class='natSep'>&#187;</span><nop>%BASETOPIC%"}%</div>%TMPL:END%
+%TMPL:DEF{"contentheader"}%<div class="natBreadCrumbs">%BREADCRUMBS{"%BASEWEB%.%BASETOPIC%" exclude="%BASETOPIC%" separator="<span class='natSep'>&nbsp;&#187; </span>" footer="<span class='natSep'>&#187;</span><nop>%BASETOPIC%"}%</div>%TMPL:END%
 %TMPL:DEF{"content"}%%TMPL:P{"previewtoolbar"}% 
 %TEXT%
 %META{"form"}%
@@ -25,24 +25,14 @@
   %FORMFIELDS% 
   <input type="hidden" name="formtemplate" value="%FORMTEMPLATE%" />
   <input type="hidden" name="originalrev" value="%URLPARAM{"originalrev"}%" />
+  <input type="hidden" name="redirectto" value="%REDIRECTTO%" />
   <input type="hidden" name="topicparent" value="%TOPICPARENT%" />
   <input type="hidden" name="cmd" value="%CMD%" />
   <textarea name="text" rows="10" cols="80" style="display:none">%HIDDENTEXT%</textarea>
   %TMPL:P{"bottomtopicactions"}% </form> %TMPL:END%
-%TMPL:DEF{"bottomtopicactions"}%
-<div class="natBottomTopicActions">
-  <span class="natEditAction"><a href="javascript:history.back();" accesskey="e" title='%MAKETEXT{"Continue editing"}%'>%MAKETEXT{"Edit"}%</a></span><!-- 
-  --><span class="natCurrentAction natPreviewAction">%MAKETEXT{"Preview"}%</span><!--
-  -->%FORMBUTTON{"<span class='natFormAction'>$1</span>"}%<!--
-  --><span class="natUndoAction"><a href="%SCRIPTURLPATH{"edit"}%/%WEB%/%TOPIC%?t=%GMTIME{"$year$mo$day$hours$minutes$seconds"}%" accesskey="u" title='%MAKETEXT{"Abandon your changes but continue editing"}%'>%MAKETEXT{"Undo"}%</a></span><!--
-  --><span class="natSaveAction"><a href="javascript:submitEditForm('save','checkpoint');" accesskey="s" title='%MAKETEXT{"Save and continue editing"}%'>%MAKETEXT{"Save"}%</a></span><!--
-  --><span class="natDoneAction"><a href="javascript:submitEditForm('save', 'save');" accesskey="d" title='%MAKETEXT{"Save and exit"}%'>%MAKETEXT{"Done"}%</a></span><!--
-  --><span class="natCancelAction"><a href="javascript:submitEditForm('save', 'cancel');" accesskey="c" title='%MAKETEXT{"Abandon your changes and exit"}%'>%MAKETEXT{"Cancel"}%</a></span>
-</div>
-<div class="natSubmitOptions">
+%TMPL:DEF{"bottomtopicactions"}%<div class="natSubmitOptions">
   <input type="checkbox" id="dontnotify" name="dontnotify" %DONTNOTIFYCHECKBOX% />
   <label for="dontnotify">%MAKETEXT{"Minor changes"}%</label> <!-- -->
   <input type="checkbox" class="twikiCheckbox" title='%MAKETEXT{"Creates a new topic revision when saving"}%' id="forcenewrevision" name="forcenewrevision" %FORCENEWREVISIONCHECKBOX% />
   <label for="forcenewrevision">%MAKETEXT{"Force new revision"}%</label>
-</div>
-%TMPL:END%
+</div>%TMPL:END%

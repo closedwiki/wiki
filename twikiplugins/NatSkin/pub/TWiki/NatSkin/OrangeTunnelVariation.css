@@ -28,10 +28,6 @@
 .natTopBar {
   border-top:0px;
 }
-.natTopBarSizer {
-  height:160px;
-  max-height:200px;
-}
 
 .natAction {
   color:#731C00;

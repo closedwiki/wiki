@@ -41,13 +41,10 @@ hr {
   margin:10px;
 }
 .natTopLeftContents {
-  margin:20px 20px 30px 20px;
+  margin:20px 0px 15px 20px;
 }
 .natTopRightContents {
-  margin:30px 10px 20px 20px;
-}
-.natTopBarSizer {
-  height:130px;
+  margin:20px 20px 15px 0px;
 }
 .natMainHeaderContents a {
   text-decoration:none;
@@ -80,7 +77,7 @@ hr {
 }
 .natWebTitle {
   text-transform: none;
-  padding-top:10px;
+  padding-bottom:10px;
 }
 
 .natTopLeft,
@@ -91,7 +88,6 @@ hr {
 }
 
 .natWebSlogan {
-  padding-left:5px;
   color:#669966;
   font-size:12px;
 }
@@ -101,6 +97,7 @@ hr {
   color:white;
   border:1px dotted white; 
   _border:1px solid white; /* IE hack */
+  width:170px;
 }
 .natSearchBoxPos1 input,
 .natSearchBoxPos2 input,
@@ -116,10 +113,15 @@ hr {
 
 .natTopicActions {
   font-size:12px;
+  line-height:125%;
 }
 
 
 /* sidebar */
+.natTopRight,
+.natSideBarRight {
+  width:265px;
+}
 .natSideBarContents {
   font-family: 'Trebuchet MS', arial, sans-serif;
 }
@@ -141,12 +143,12 @@ hr {
 
 .natSideBar ol,
 .natSideBar ul {
-  margin:5px 20px;
+  margin:0px 20px;
   padding-left:15px;
   color:#666666;
 }
 .natSideBar ol {
-  margin-left:25px;
+  margin-left:10px;
 }
 
 .natSideBar ul ul {
@@ -258,6 +260,7 @@ hr {
   background:#99cc66;
 }
 .twikiTable th,
+.twikiTable th span,
 .twikiTable th font,
 .twikiTable th a {
   color:white;
@@ -315,6 +318,10 @@ hr {
 /* twiki page form */
 .twikiPageForm table {
   border:1px solid #669966;
+  border-collapse:collapse;
+}
+.twikiPageForm table table {
+  border:0px;
 }
 .twikiPageForm td {
   border:1px ridge #999;
@@ -380,6 +387,26 @@ hr {
   color:#B22222;
 }
 
+/* TOC */
+.twikiToc {
+  padding-top:5px;
+  padding-bottom:5px;
+}
+.twikiToc ul {
+  padding-left:20px;
+  margin-top:0px;
+  margin-bottom:0px;
+}
+.twikiTocTitle {
+  display:block;
+  border-bottom:2px solid #6699cc;
+  color:#003366;
+  font-size:20px;
+  padding-bottom:3px;
+  font-family: 'Trebuchet MS', sans-serif;
+  margin-bottom:0px;
+}
+
 /* supported plugins and applications */
 
 /* RedDotPlugin */
@@ -389,7 +416,6 @@ hr {
 
 /* blogging */
 .blogAbout {
-  font-size:0.9em;
   line-height:1.3em;
 }
 .blogSideBarSection {
@@ -408,10 +434,6 @@ hr {
 }
 .blogHeadline {
   border-bottom:2px solid #6699cc;
-  margin-bottom:0.5em;
-}
-.blogInfo {
-  font-size:0.9em;
   margin-bottom:0.5em;
 }
 .blogEntry {

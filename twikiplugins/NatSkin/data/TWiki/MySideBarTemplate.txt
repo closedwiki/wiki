@@ -31,12 +31,8 @@
       %FORMATLIST{"%ACTIVATEDPLUGINS%" separator="$n" format="<li> $1 </li>" sort="on"}%
     </ul> %ENDTWISTY% 
   </li>
-  <li> %TWISTYBUTTON{id="mystyles" link="%MAKETEXT{"Skin Styles"}%"}% </li>
+  <li> [[%TWIKIWEB%.NatSkinStyleBrowser][Style Browser]] </li>
 </ul>
-%TWISTYTOGGLE{id="mystyles" remember="on" mode="div"}% 
-%INCLUDE{"TWiki.NatSkinStyleBrowser"}%
-%ENDTWISTYTOGGLE% 
-%STOPINCLUDE%
 
 <!--
    * Set ALLOWTOPICCHANGE = %WIKIUSERNAME%

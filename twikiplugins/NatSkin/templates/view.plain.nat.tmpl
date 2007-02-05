@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="%LANG%" lang="%LANG%">
 <head>
-<title>%WIKITOOLNAME% &middot; %WEB% &middot; %TOPIC% &middot;</title>
+<title>%TMPL:P{"title"}%&nbsp;-&nbsp;<nop>%WIKITOOLNAME%</title>
 <base href="%SCRIPTURL{"view"}%/%WEB%/%TOPIC%" />
 <meta http-equiv="Content-Type" content="text/html; charset=%CHARSET%" />
 <meta http-equiv="Content-Style-Type" content="text/css" /> 
@@ -16,7 +16,7 @@
 %WEBCOMPONENT{"WebCss"}%
 </style>
 </head>
-<body class="natBody natBodyPlain">
+<body class="natBody natBodyPlain %TMPL:P{"bodyclass"}%">
 <div class="natBodyContents">
   <div class="natMiddle natMain">
     <div class="natMainContents">
@@ -33,6 +33,7 @@
 </body>
 </html>
 <!-- template: view.plain.nat.tmpl -->
+%TMPL:DEF{"title"}%%IFDEFINED{"%PAGETITLE%" then="$test" else="%TOPIC% - %WEB%"}%%TMPL:END%
 %TMPL:DEF{"content"}%%STARTALIASAREA%%TEXT% 
 %META{"form"}% 
 %STOPALIASAREA% %TMPL:END%

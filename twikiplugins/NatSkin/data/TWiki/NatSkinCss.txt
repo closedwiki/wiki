@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1125075474" format="1.0" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1168359939" format="1.1" version="1.1"}%
 %META:TOPICPARENT{name="NatSkin"}%
 ---+!! %TOPIC%
 
@@ -170,161 +170,161 @@ the =natBottomBar= will be classified as =natBottomBarBoth=.
 | |
 | =natEditBody= | edit.nat.tmpl | html body during edit cgi action |
 | =natEditBoldButton= \
-| edittoolbar.natedit.tmpl \
+| edittoolbar.nat.tmpl \
 | |
 | =natEditBoldButtonAction= \
-| edittoolbar.natedit.tmpl \
+| edittoolbar.nat.tmpl \
 | |
 | =natEditButton= \
-| previewtoolbar.natedit.tmpl \
+| previewtoolbar.nat.tmpl \
 | |
 | =natEditCancelButton= \
-| edittoolbar.natedit.tmpl, %BR% \
-  previewtoolbar.natedit.tmpl \
+| edittoolbar.nat.tmpl, %BR% \
+  previewtoolbar.nat.tmpl \
 | |
 | =natEditCenterButton= \
-| edittoolbar.natedit.tmpl \
+| edittoolbar.nat.tmpl \
 | |
 | =natEditCenterButtonAction= \
-| edittoolbar.natedit.tmpl \
+| edittoolbar.nat.tmpl \
 | |
 | =natEditDoneButton= \
-| edittoolbar.natedit.tmpl, %BR% \
-  previewtoolbar.natedit.tmpl \
+| edittoolbar.nat.tmpl, %BR% \
+  previewtoolbar.nat.tmpl \
 | |
 | =natEditEditTools= \
-| edittoolbar.natedit.tmpl \
+| edittoolbar.nat.tmpl \
 | |
 | =natEditExtButton= \
-| edittoolbar.natedit.tmpl \
+| edittoolbar.nat.tmpl \
 | |
 | =natEditExtButtonAction= \
-| edittoolbar.natedit.tmpl \
+| edittoolbar.nat.tmpl \
 | |
 | =natEditH1Button= \
-| edittoolbar.natedit.tmpl \
+| edittoolbar.nat.tmpl \
 | |
 | =natEditH2Button= \
-| edittoolbar.natedit.tmpl \
+| edittoolbar.nat.tmpl \
 | |
 | =natEditH3Button= \
-| edittoolbar.natedit.tmpl \
+| edittoolbar.nat.tmpl \
 | |
 | =natEditH4Button= \
-| edittoolbar.natedit.tmpl \
+| edittoolbar.nat.tmpl \
 | |
 | =natEditHeadlineButtonAction= \
-| edittoolbar.natedit.tmpl \
+| edittoolbar.nat.tmpl \
 | |
 | =natEditHeadlineTools= \
-| edittoolbar.natedit.tmpl \
+| edittoolbar.nat.tmpl \
 | |
 | =natEditHelpButton= \
-| edittoolbar.natedit.tmpl \
+| edittoolbar.nat.tmpl \
 | |
 | =natEditHelpTools= \
-| edittoolbar.natedit.tmpl \
+| edittoolbar.nat.tmpl \
 | |
 | =natEditImageButton= \
-| edittoolbar.natedit.tmpl \
+| edittoolbar.nat.tmpl \
 | |
 | =natEditImageButtonAction= \
-| edittoolbar.natedit.tmpl \
+| edittoolbar.nat.tmpl \
 | |
 | =natEditIntButton= \
-| edittoolbar.natedit.tmpl \
+| edittoolbar.nat.tmpl \
 | |
 | =natEditIntButtonAction= \
-| edittoolbar.natedit.tmpl \
+| edittoolbar.nat.tmpl \
 | |
 | =natEditItalicButton= \
-| edittoolbar.natedit.tmpl \
+| edittoolbar.nat.tmpl \
 | |
 | =natEditItalicButtonAction= \
-| edittoolbar.natedit.tmpl \
+| edittoolbar.nat.tmpl \
 | |
 | =natEditJustifyButton= \
-| edittoolbar.natedit.tmpl \
+| edittoolbar.nat.tmpl \
 | |
 | =natEditJustifyButtonAction= \
-| edittoolbar.natedit.tmpl \
+| edittoolbar.nat.tmpl \
 | |
 | =natEditLeftButton= \
-| edittoolbar.natedit.tmpl \
+| edittoolbar.nat.tmpl \
 | |
 | =natEditLeftButtonAction= \
-| edittoolbar.natedit.tmpl \
+| edittoolbar.nat.tmpl \
 | |
 | =natEditMathButton= \
-| edittoolbar.natedit.tmpl \
+| edittoolbar.nat.tmpl \
 | |
 | =natEditMathButtonAction= \
-| edittoolbar.natedit.tmpl \
+| edittoolbar.nat.tmpl \
 | |
 | =natEditObjectTools= \
-| edittoolbar.natedit.tmpl \
+| edittoolbar.nat.tmpl \
 | |
 | =natEditParagraphTools= \
-| edittoolbar.natedit.tmpl \
+| edittoolbar.nat.tmpl \
 | |
 | =natEditPreviewButton= \
-| edittoolbar.natedit.tmpl \
+| edittoolbar.nat.tmpl \
 | |
 | =natEditRightButton= \
-| edittoolbar.natedit.tmpl \
+| edittoolbar.nat.tmpl \
 | |
 | =natEditRightButtonAction= \
-| edittoolbar.natedit.tmpl \
+| edittoolbar.nat.tmpl \
 | |
 | =natEditSaveButton= \
-| edittoolbar.natedit.tmpl, %BR% \
-  previewtoolbar.natedit.tmpl \
+| edittoolbar.nat.tmpl, %BR% \
+  previewtoolbar.nat.tmpl \
 | |
 | =natEditSignatureButton= \
-| edittoolbar.natedit.tmpl \
+| edittoolbar.nat.tmpl \
 | |
 | =natEditSignatureButtonAction= \
-| edittoolbar.natedit.tmpl \
+| edittoolbar.nat.tmpl \
 | |
 | =natEditStrikeButton= \
-| edittoolbar.natedit.tmpl \
+| edittoolbar.nat.tmpl \
 | |
 | =natEditStrikeButtonAction= \
-| edittoolbar.natedit.tmpl \
+| edittoolbar.nat.tmpl \
 | |
 | =natEditSubButton= \
-| edittoolbar.natedit.tmpl \
+| edittoolbar.nat.tmpl \
 | |
 | =natEditSubButtonAction= \
-| edittoolbar.natedit.tmpl \
+| edittoolbar.nat.tmpl \
 | |
 | =natEditSupButton= \
-| edittoolbar.natedit.tmpl \
+| edittoolbar.nat.tmpl \
 | |
 | =natEditSupButtonAction= \
-| edittoolbar.natedit.tmpl \
+| edittoolbar.nat.tmpl \
 | |
 | =natEditTextTools= \
-| edittoolbar.natedit.tmpl \
+| edittoolbar.nat.tmpl \
 | |
 | =natEditToolBar= \
-| edittoolbar.natedit.tmpl \
+| edittoolbar.nat.tmpl \
 | |
 | =natEditUnderlinedButton= \
-| edittoolbar.natedit.tmpl \
+| edittoolbar.nat.tmpl \
 | |
 | =natEditUnderlinedButtonAction= \
-| edittoolbar.natedit.tmpl \
+| edittoolbar.nat.tmpl \
 | |
 | =natEditUndoButton= \
-| edittoolbar.natedit.tmpl, %BR% \
-  previewtoolbar.natedit.tmpl \
+| edittoolbar.nat.tmpl, %BR% \
+  previewtoolbar.nat.tmpl \
 | |
 | =natEditVerbatimButton= \
-| edittoolbar.natedit.tmpl \
+| edittoolbar.nat.tmpl \
 | |
 | =natEditVerbatimButtonAction= \
-| edittoolbar.natedit.tmpl \
+| edittoolbar.nat.tmpl \
 | |
 | =natErrorMsg= \
 | oopsmngcreateweb.nat.tmpl, %BR% \
@@ -477,7 +477,7 @@ the =natBottomBar= will be classified as =natBottomBarBoth=.
 | |
 | =natPreviewBody= | preview.nat.tmpl | html body during preview action |
 | =natPreviewToolBar= \
-| previewtoolbar.natedit.tmpl \
+| previewtoolbar.nattmpl \
 | |
 | =natRdiffBody= | rdiff.nat.tmpl | html body during rdiff action |
 | =natRevision= \
@@ -581,9 +581,9 @@ the =natBottomBar= will be classified as =natBottomBarBoth=.
 | |
 | =natSubmitOptions= \
 | edit.nat.tmpl, %BR% \
-  edit.natedit.tmpl, %BR% \
+  edit.nattmpl, %BR% \
   preview.nat.tmpl, %BR% \
-  preview.natedit.tmpl \
+  preview.nat.tmpl \
 | |
 | =natSyndicate= \
 | defaultbody.nat.tmpl \
@@ -619,7 +619,7 @@ the =natBottomBar= will be classified as =natBottomBarBoth=.
 | =natTopicEditForm= \
 | form.nat.tmpl \
 | |
-| =natTopicForm= \
+| =natTWikiTopic= \
 | formtables.nat.tmpl \
 | |
 | =natTopicFormFirstCol= \

@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1156516487" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1166704746" format="1.1" version="1.1"}%
 %META:TOPICPARENT{name="NatSkin"}%
 
 ---+!! %TOPIC%
@@ -65,6 +65,7 @@ Besides the NOSEARCHALL feature of every web that excludes a web from search the
 | =NATSEARCHEXCLUDEWEB= | a regular expression that must not match a web |
 | =NATSEARCHINCLUDETOPIC= | a regular expression that must match a topic in the hit set |
 | =NATSEARCHEXCLUDETOPIC= | a regular expression that excludes a topic from the hit set |
+| =NATSEARCHIGNORECASE= | 'on' or 'off', the default case match mode |
 
 Furthermore, the WebPreferences variable =NATSEARCHTEMPLATE= can be set to a template topic that
 is used instead of the skin's =search= template. This can be used in <nop>TWikiApplications to

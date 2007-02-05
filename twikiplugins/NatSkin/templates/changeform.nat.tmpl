@@ -11,6 +11,7 @@
 %TMPL:DEF{"content"}% <!-- -->
 <form name="EditForm" method="post" action="%SCRIPTURLPATH{"edit"}%/%WEB%/%TOPIC%?t=%GMTIME{"$year$mo$day$hours$minutes$seconds"}%">
   <input type="hidden" name="topicparent" value="%TOPICPARENT%" />
+  <input type="hidden" name="redirectto" value="%REDIRECTTO%" />
 %TEXT%
   <input type="hidden" name="skin" value="%URLPARAM{"skin"}%" />
   <input type="hidden" name="cover" value="%URLPARAM{"cover"}%" />

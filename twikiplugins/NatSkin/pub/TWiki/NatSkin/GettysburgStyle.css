@@ -32,18 +32,7 @@ hr {
 }
 .natTopRightContents,
 .natTopLeftContents {
-  margin:25px 5px 25px 20px;
-}
-.natTopRightContents {
-  margin:35px 10px 25px 20px;
-}
-.natWebTitle,
-.natWebTitle a {
-  line-height:100%;
-}
-
-.natTopBarSizer {
-  height:140px;
+  margin:10px 20px 20px 20px;
 }
 
 .natSideBar {
@@ -56,6 +45,15 @@ hr {
   width:250px;
   min-width:250px;
   max-width:250px;
+}
+
+/* login */
+.natLoginBody .natMainHeaderContents {
+  display:none;
+}
+.natLoginBody .natLoginMessage {
+  margin:0px auto;
+  width:500px;
 }
 
 /* twiki table */
@@ -76,9 +74,10 @@ hr {
   padding:0px 5px;
 }
 .twikiTable th,
+.twikiTable th span,
 .twikiTable th font,
 .twikiTable th a {
-  color:#003366;
+  color:#003366 !important; /* SMELL: breaks %TABLE% */
 }
 .twikiTable th a:hover {
   color:#ffcc66;
@@ -88,6 +87,9 @@ hr {
 }
 .twikiDiffTable td {
   border:0px;
+}
+.twikiTableEven td {
+  background:#eeeeee;
 }
 
 /* topic form */
@@ -123,10 +125,15 @@ hr {
 }
 
 /* twiki page form */
-.twikiPageForm table,
-.twikiPageForm th,
-.twikiPageForm td {
+.twikiPageForm table {
   border:1px #aaaaaa solid;
+  border-collapse:collapse;
+}
+.twikiPageForm table table {
+  border:0px;
+}
+.twikiPageForm td {
+  border-bottom:1px #aaaaaa ridge;
 }
 
 .twikiPageForm th {
@@ -232,17 +239,15 @@ hr {
 .natSearchBoxPos3 input {
   color:#333333;
   background:#999999;
+  font-weight:bold;
 }
 
 .natSearchBoxPos1 {
-  margin-top:10px;
 }
-.natSearchBoxPos1 input,
-.natSearchBoxPos2 input,
-.natSearchBoxPos3 input {
-  color:#333333;
-  background:#999999;
-  font-weight:bold;
+.natSearchBoxPos1,
+.natSearchBoxPos2,
+.natSearchBoxPos3 {
+  padding:10px 0px;
 }
 
 /* sidebar */
@@ -263,7 +268,6 @@ hr {
   color:#ffffff;
   font:normal 20px georgia,serif;
   letter-spacing:.1em;
-  margin-top:10px;
   padding-bottom:2px;
   text-align:left;
   text-transform:none;
@@ -281,14 +285,11 @@ hr {
   font:bold 14px georgia,serif;
   padding:0px;
   color:#003366;
-  margin-top:10px;
 }
 
 .natSideBar ol,
 .natSideBar ul {
   color:#003366;
-  margin-top:0px;
-  margin-bottom:5px;
   padding-left:1.2em;
 }
 .natSideBar ol {
@@ -297,6 +298,13 @@ hr {
 
 .natNotes {
   padding-top:5px;
+}
+
+.natSideBar a.natFeedIcon {
+  margin:0px;
+}
+.natSideBar a:hover.natFeedIcon {
+  background-color:#999999;
 }
 
 /* main area */
@@ -313,6 +321,9 @@ hr {
   margin:20px;
   color:#444444;
   font:normal 15px/150% georgia,serif
+}
+.natMainHeaderContents {
+  font-size:95%;
 }
 
 .natMain a,
@@ -387,8 +398,7 @@ hr {
   padding-top:3px;
   vertical-align:top;
 }
-.blogSideBarLatest h1,
-.blogSideBarComments h1 {
+.natSideBar .blogSideBarHeader h1 {
   border-bottom:0px;
   margin-bottom:0px;
 }

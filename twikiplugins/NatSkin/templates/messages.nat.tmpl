@@ -24,7 +24,7 @@
  args="%TWIKIWEB%.LoginName,%WIKIWEBMASTER%"}%
 
 %MAKETEXT{"See [_1] for a list of existing users or register as new user in [_2]."
-args="%MAINWEB%.TWikiUsers,%TWIKIWEB%.TWikiRegistration"}%
+args="%MAINWEB%.TWikiUsers,%TWIKIREGISTRATION%"}%
 %TMPL:END%
 %TMPL:DEF{"topic_exists"}%<!-- uses goback def -->
 ---+++ %MAKETEXT{"The [_1] topic already exists" args="\"%TOPIC%\""}%
@@ -127,7 +127,9 @@ link in your email or enter the code in the box below to activate your membershi
 %TMPL:END%
 %TMPL:DEF{"missing_fields"}%<!-- better dialog, uses goback def -->
 ---+++ %MAKETEXT{"Missing Fields =<span class=\"twikiAlert\">**</span>="}%
+<noautolink>
 %MAKETEXT{"The required field [_1] was not filled in." args="*%PARAM1%*"}%
+</noautolink>
 
 %TMPL:P{"goback"}%
 %TMPL:END%
@@ -295,12 +297,12 @@ template that doesn't exist." args="%PARAM2%"}%
 %MAKETEXT{"(don't forget to check your Topic Settings)"}%
 %TMPL:END%
 %TMPL:DEF{"topic_access"}% <!-- -->
-%MAKETEXT{"[_1] has no permission to [_2] *[_3]*." args="<nop>%WIKINAME%,%PARAM1%,%TOPIC%"}%
+%MAKETEXT{"[_1] has no permission to [_2] [_3]." args="<nop>%SPACEOUT{"%WIKINAME%"}%,%PARAM1%,%TOPIC%"}%
 
 %TMPL:P{"logon"}%
 
 %MAKETEXT{"See also:"}% %MAINWEB%.TWikiGroups, %TWIKIWEB%.TWikiAccessControl,
-%TWIKIWEB%.TWikiRegistration
+%TWIKIREGISTRATION%
 %TMPL:END%
 %TMPL:DEF{"only_group"}% <!-- -->
 %MAKETEXT{"Only members of the [_1] are allowed to perform this action." args="%PARAM1%"}%
@@ -308,7 +310,7 @@ template that doesn't exist." args="%PARAM2%"}%
 %TMPL:P{"logon"}%
 
 %MAKETEXT{"See also:"}% %MAINWEB%.TWikiGroups, %TWIKIWEB%.TWikiAccessControl,
-%TWIKIWEB%.TWikiRegistration
+%TWIKIREGISTRATION%
 %TMPL:END%
 %TMPL:DEF{"no_such_web"}% <!-- -->
 ---++ %MAKETEXT{"The [_1] web does not exist" args="\"%WEB%\""}%
