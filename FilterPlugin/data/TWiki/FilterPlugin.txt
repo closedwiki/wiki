@@ -23,8 +23,8 @@ insert a topic by processing its content.
    * =topic="..."=: name of the topic text to be processed 
    * =pattern="..."=: pattern to be extracted or substituted 
    * =format="..."=: format expression or pattern substitute 
-   * =hits="&lt;n>"= number of occurences to extract or substitute counted from the 
-     start of the text (defaults to =0= aka all hits) 
+   * =hits="&lt;n>"= maximum number of occurences to extract or substitute counted from the 
+     start of the text (defaults to =100000= aka all hits) 
    * =expand="on,off"=: toggle expansion of TWiki markup before filtering
      (defaults to =on=) 
 
@@ -126,10 +126,13 @@ This is a second comment.
 -->
 
 |  Plugin Author: | TWiki:Main.MichaelDaum |
-|  Copyright &copy;: | 2005-2006, MichaelDaum http://wikiring.com |
+|  Copyright &copy;: | 2005-2007, MichaelDaum http://wikiring.com |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | v1.00 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  05 Feb 2007: | fixed escapes in format strings; \
+                  added better default value for max number of hits to prevent deep recursions \
+                  on bad regexpressions |
 |  22 Jan 2007: | fixed SUBST, added skip parameter to FORMATLIST |
 |  18 Dec 2006: | using registerTagHandler for FORMATLIST |
 |  13 Oct 2006: | fixed =limit= parameter in FORMATLIST |
@@ -149,4 +152,4 @@ This is a second comment.
 |  Feedback: | TWiki:Plugins/%TOPIC%Dev |
 |  Appraisal: | TWiki:Plugins/%TOPIC%Appraisal |
 
--- TWiki:Main.MichaelDaum - 22 Jan 2006
+-- TWiki:Main.MichaelDaum - 05 Feb 2007

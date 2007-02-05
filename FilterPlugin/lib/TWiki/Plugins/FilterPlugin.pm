@@ -1,6 +1,6 @@
 # Plugin for TWiki Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 2005-2006 Michael Daum <micha@nats.informatik.uni-hamburg.de>
+# Copyright (C) 2005-2007 Michael Daum <micha@nats.informatik.uni-hamburg.de>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -25,7 +25,7 @@ use vars qw(
     );
 
 $VERSION = '$Rev$';
-$RELEASE = '1.00';
+$RELEASE = '1.10';
 $NO_PREFS_IN_TOPIC = 1;
 $SHORTDESCRIPTION = 'Substitute and extract information from content by using regular expressions';
 $debug = 0; # toggle me
@@ -77,7 +77,8 @@ sub handleFilter {
   # get parameters
   my $thePattern = &TWiki::Func::extractNameValuePair($theAttributes, "pattern") || '';
   my $theFormat = &TWiki::Func::extractNameValuePair($theAttributes, "format") || '';
-  my $theMaxHits = &TWiki::Func::extractNameValuePair($theAttributes, "hits") || 0;
+  my $theMaxHits = &TWiki::Func::extractNameValuePair($theAttributes, "hits") 
+    || 100000; # some big number to prevent deep recursion
   my $theTopic = &TWiki::Func::extractNameValuePair($theAttributes, "topic") || $currentTopic;
   my $theWeb = $currentWeb;
   if ($theTopic =~ /^(.*)\.(.*)$/) { # TODO : put normalizeWebTopicName() into the DakarContrib
@@ -259,12 +260,12 @@ sub handleFormatList {
 sub escapeParameter {
   return '' unless $_[0];
 
-  $_[0] =~ s/\\n/\n/g;
-  $_[0] =~ s/\$n/\n/g;
-  $_[0] =~ s/\\%/%/g;
-  $_[0] =~ s/\$nop//g;
-  $_[0] =~ s/\$percnt/%/g;
-  $_[0] =~ s/\$dollar/\$/g;
+  my $mixedAlphaNum = TWiki::Func::getRegularExpression('mixedAlphaNum');
+
+  $_[0] =~ s/\$percnt/\%/go;
+  $_[0] =~ s/\$dollar/\$/go;
+  $_[0] =~ s/\$nop//go;
+  $_[0] =~ s/\$n([^$mixedAlphaNum]|$)/\n$1/go;
 }
 
 ###############################################################################
