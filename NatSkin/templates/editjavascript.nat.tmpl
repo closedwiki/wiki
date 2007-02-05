@@ -1,5 +1,7 @@
 <!-- template: editjavascript.nat.tmpl -->
-%TMPL:DEF{"editjavascript"}%<script type="text/javascript">
+%TMPL:DEF{"editjavascript"}%
+<script type="text/javascript" src="%PUBURLPATH%/%TWIKIWEB%/NatSkin/edit.js"></script>
+<script type="text/javascript">
 <!--
 function submitEditForm(script, action) {
   if (action == 'add form') {
@@ -13,6 +15,14 @@ function submitEditForm(script, action) {
   document.EditForm.elements['action_cancel'].value = '';
   document.EditForm.elements['action_' + action].value = 'foobar';
   document.EditForm.submit();
+}
+/* testing ImagePlugin: %IMAGE{"clear"}% */
+function natEditImageButtonAction() {
+  %IFDEFINEDTHEN{"$percntIMAGE{\"clear\"}$percnt" as="<br.*"}%
+    natEditImageButtonActionImagePlugin();
+  %ELSEDEFINED%
+    natEditImageButtonActionStandard();
+  %FIDEFINED%
 }
 //-->
 </script>%TMPL:END%

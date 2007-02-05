@@ -1,5 +1,19 @@
-%META:TOPICINFO{author="TWikiContributor" date="1160574799" format="1.1" reprev="1.2" version="1.1"}%
-<div class="natSideBarContents">
+%META:TOPICINFO{author="TWikiContributor" date="1168359961" format="1.1" version="1.1"}%
+---+ Style Browser
+Explore the style variations of the %TWIKIWEB%.NatSkin by changing the base
+_style_ and a _variation_ of it. In general style variations are used to change
+the header art but also adapt colors to match the graphics. Various elements of
+the style can be relocated using style switches or even be switched off. Use
+the "reset" button whenever you want to revert your selection and come back to
+the site's default settings. Note that each web may have its own defaults build
+in. If you select different style options they have precedence over those.
+
+Register [[%TWIKIREGISTRATION%][here]] to make your settings persistent.
+See the TWiki.NatSkinPlugin documentation on how to use style settings in your personal
+<nop>%WIKITOOLNAME% account.
+
+
+<div class="alt">
 %STARTINCLUDE%<div class="natSkinStyleBrowser">
 %IFSKINSTATETHEN{final="all"}%
 <!-- %RED%all styles and switches are final%ENDCOLOR% -->
@@ -7,7 +21,7 @@
 <form method="post" action="%SCRIPTURLPATH{"view"}%/%BASEWEB%/%BASETOPIC%">
 <table border="0">
 %IFSKINSTATETHEN{final="style"}% %ELSESKINSTATE%
-<tr><td colspan="3"> *%MAKETEXT{"Style:"}%* </td></tr>
+<tr><td colspan="3"> *%MAKETEXT{"Style"}%:* </td></tr>
 <tr>
 <td><a href="?switchstyle=prev&refresh=on" title="%MAKETEXT{"Switch to previous style"}%"><img src="%PUBURLPATH%/%TWIKIWEB%/TWikiDocGraphics/arrowleft.gif" border="0" alt="%MAKETEXT{"prev"}%"/></a></td>
 <td>
@@ -17,11 +31,11 @@
 </noautolink>
 </select>
 </td>
-<td><a href="?switchstyle=next&refresh=on" title="%MAKETEXT{"Switch to next style"}%"><img src="%PUBURLPATH%/%TWIKIWEB%/TWikiDocGraphics/arrowright.gif" border="0" alt="%MAKETEXT{"next"}%"/></a></td>
+<td align="right"><a href="?switchstyle=next&refresh=on" title="%MAKETEXT{"Switch to next style"}%"><img src="%PUBURLPATH%/%TWIKIWEB%/TWikiDocGraphics/arrowright.gif" border="0" alt="%MAKETEXT{"next"}%"/></a></td>
 </tr>
 %FISKINSTATE%
 %IFSKINSTATETHEN{final="variation"}% %ELSESKINSTATE%
-<tr><td colspan="2"> *%MAKETEXT{"Variation:"}%* </td></tr>
+<tr><td colspan="2"> *%MAKETEXT{"Variation"}%:* </td></tr>
 <tr><td><a href="?switchvariation=prev&refresh=on" title="%MAKETEXT{"Switch to previous variation"}%"><img src="%PUBURLPATH%/%TWIKIWEB%/TWikiDocGraphics/arrowleft.gif" border="0" alt="%MAKETEXT{"prev"}%"/></a></td>
 <td>
 <select name="stylevariation">
@@ -30,11 +44,11 @@
 </noautolink>
 </select>
 </td>
-<td><a href="?switchvariation=next&refresh=on" title="%MAKETEXT{"Switch to previous variation"}%"><img src="%PUBURLPATH%/%TWIKIWEB%/TWikiDocGraphics/arrowright.gif" border="0" alt="%MAKETEXT{"prev"}%"/></a></td>
+<td align="right"><a href="?switchvariation=next&refresh=on" title="%MAKETEXT{"Switch to next variation"}%"><img src="%PUBURLPATH%/%TWIKIWEB%/TWikiDocGraphics/arrowright.gif" border="0" alt="%MAKETEXT{"prev"}%"/></a></td>
 </tr>
 %FISKINSTATE%
 %IFSKINSTATETHEN{final="switches"}% %ELSESKINSTATE%
-<tr><td colspan="3"> <p /> *%MAKETEXT{"Switches:"}%* </td></tr>
+<tr><td colspan="3"> <p /> *%MAKETEXT{"Switches"}%:* </td></tr>
 <tr>
 <td colspan="3">
 %IFSKINSTATETHEN{final="border"}% %ELSESKINSTATE%
@@ -69,6 +83,37 @@
 %FISKINSTATE%
 </td></tr>
 %FISKINSTATE%
+<tr><td colspan="3"> *%MAKETEXT{"Presets"}%:* </td></tr>
+<tr><td colspan="3">
+   * <a href="%SCRIPTURLPATH{"view"}%/%BASEWEB%/%BASETOPIC%?refresh=on&
+*~~ style=JotSpot&
+*~~ stylevariation=none&
+*~~ styleborder=off&
+*~~ stylesidebar=left&
+*~~ stylesearchbox=pos1&
+*~~ stylebuttons=on">Jotspot</a>
+   * <a href="%SCRIPTURLPATH{"view"}%/%BASEWEB%/%BASETOPIC%?refresh=on&
+*~~ style=SeaGreen&
+*~~ stylevariation=none&
+*~~ styleborder=thin&
+*~~ stylesidebar=right&
+*~~ stylesearchbox=top&
+*~~ stylebuttons=on">MovableType</a>
+   * <a href="%SCRIPTURLPATH{"view"}%/%BASEWEB%/%BASETOPIC%?refresh=on&
+*~~ style=Pattern&
+*~~ stylevariation=none&
+*~~ styleborder=off&
+*~~ stylesidebar=left&
+*~~ stylesearchbox=top&
+*~~ stylebuttons=off">TWiki</a>
+   * <a href="%SCRIPTURLPATH{"view"}%/%BASEWEB%/%BASETOPIC%?refresh=on&
+*~~ style=Kubrick&
+*~~ stylevariation=none&
+*~~ styleborder=thin&
+*~~ stylesidebar=right&
+*~~ stylesearchbox=pos1&
+*~~ stylebuttons=on">Wordpress</a>
+</td></tr>
 <tr>
 <td colspan="3" align="center">
 <div style="white-space:nowrap">
@@ -81,10 +126,12 @@
 <input type="hidden" name="search" value="%URLPARAM{search}%" />
 <input type="hidden" name="refresh" value="on" />
 </form>
+%ENDSECTION{"presets"}%
 </div>
 %FISKINSTATE%
 %STOPINCLUDE%
 </div>
+
 <!--
    * Set SKIN = nat
 -->

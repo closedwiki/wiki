@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1156530555" format="1.1" reprev="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1170346939" format="1.1" reprev="1.1" version="1.1"}%
 <!--
 
    PLEASE DO NOT EDIT THIS TOPIC
@@ -16,7 +16,8 @@ NatSkin is a skin driven by cascading stylesheets shipping 12 predefined styles
 (themes) and 11 variations that can be applied to each of it. Most of these are
 inspired by [[http://www.movabletype.org][MovableType]] and
 [[http://wordpress.org][WordPress]], among others a port of the Kubrick style by
-[[http://binarybonsai.com][Michael Heilemann]]. In addition a PatternSkin
+[[http://binarybonsai.com][Michael Heilemann]] and an immitation of <nop>JotSpot. 
+In addition, a PatternSkin
 style is provided that emulates the look&amp;feel of the PatternSkin as it is known from
 the TWiki/Cairo release. While offering a decent appearance NatSkin offers an increased
 TWiki usability and customizability in several respects to quickly accomplish a
@@ -46,7 +47,8 @@ TWiki:Main/EstebanManchado (<nop>PhotonSearch) renamed to =natsearch= .
 ---++ Feature Overview
 *Conditional markup and skin states:* 
 
-The NatSkinPlugin maintaines an internal representation of different ways to render the NatSkin concerning
+The NatSkinPlugin maintaines an internal representation of different ways to
+render the NatSkin concerning
    * the skin style,
    * style variants,
    * the sidebar location,
@@ -73,6 +75,7 @@ the templates by using the NatSkin as a base skin to create template modificatio
    * <nop>MySideBar: every user can extend the sidebar with a personalized navigation
    * <nop>WebCss: additional css code per web
    * <nop>WebTopicActions: actions to manipulate TWiki topics
+   * <nop>WebMoreTopicActions: actions when clicking on "More"
 
 *Search &amp; GO* 
 
@@ -84,20 +87,12 @@ as well as the appearance of listed search hits.
 
 *Wikiwyg editor:* 
 
-<nop>NatEdit: optional javascript enabled wikiwyg editor
+javascript enabled wikiwyg editor
 
 *Email Obfuscation:* 
 
 Optionally, all email addresses can be obfuscated by use of javascript. Email
 links are still clickable while automatic email extraction is hampert.
-
-*Application based authentication:* 
-
-<nop>NatLogon: An independent implementation of an html login page is provided for
-maximal compatibility with old TWiki releases.  This is similar to the
-<nop>TemplateLogin authentication mechanism available since TWiki-4. There are
-usability differences between <nop>TemplateLogin and <nop>NatLogon trying
-to ease the authorization-authentication workflow.
 
 *External link detection:*
 
@@ -140,12 +135,10 @@ allways open an extra window.
 | ==pub/TWiki/NatSkin/Base(Border,Buttons,Shadow,StylemThin).css== | base style files |
 | ==pub/TWiki/NatSkin/*(Border,Buttons,Shadow,StylemThin).css== | style files |
 | ==pub/TWiki/NatSkin/*Variation.css== | style variation files |
-| ==pub/TWiki/NatSkin/TablePlugin_Core_pm.diff== | TablePlugin patch |
 | ==pub/TWiki/NatSkin/*.png,jpeg,gif== | various graphics resources |
-| ==pub/TWiki/NatSkin/edit.js== | natedit javascript code |
+| ==pub/TWiki/NatSkin/edit.js== | edit javascript code |
 | ==pub/TWiki/NatSkin/obfuscator.js== | email obfuscation code |
 | ==templates/*.nat.tmpl== | <nop>NatSkin template files |
-| ==templates/*.natedit.tmpl== | <nop>NatEdit template files |
    * Test if installed: [[%SCRIPTURLPATH{"view"}%/%WEB%/%TOPIC%?skin=nat&style=Kubrick][click here]]
 
 ---++ Skin Info
@@ -164,7 +157,7 @@ allways open an extra window.
 |  Skin Author: | TWiki:Main/MichaelDaum |
 |  Copyright &copy;: | 2003-2006, MichaelDaum@WikiRing.com |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Skin Version: | v3.0-pre10 |
+|  Skin Version: | v3.0-pre11 |
 |  Dependencies: | TWiki:Plugins/NatSkinPlugin |
 |  Description: | Driven by cascading stylesheets, Comes with 12 alternative styles, <nop>MoveableType and Wordpress Look-n-Feel |
 |  Base Name: | nat |
@@ -180,30 +173,57 @@ allways open an extra window.
    <div class="screenshotter"><a href="%ATTACHURL%/SquashThin.jpeg"><img src="%ATTACHURL%/SquashThin.jpeg" title="SquashThin" /></a></div>\
    <div class="screenshotter"><a href="%ATTACHURL%/StormyThin.jpeg"><img src="%ATTACHURL%/StormyThin.jpeg" title="StormyThin" /></a></div> |
 |  Change&nbsp;History: | <!-- specify latest version first -->&nbsp; |
+|  05 Feb 2007: | removed =...ForAdmins= components again; \
+                  natedit is now the default; \
+                  natedit detects the screen height and adusts the height of the \
+                  textarea automatically now; \
+                  edit is fullscreen now; \
+                  removed reparenting from oopsmore and integrated it to edit; \
+                  moved editsidebar content into a twisty under the textarea; \
+                  new templates to customize the login screen; \
+                  new <nop>JotSpot theme; \
+                  increased the skin's css priority for the <nop>TWikiTable layout \
+                  to counter newer versions of the <nop>TablePlugin that inlines css \
+                  by default; \
+                  repositoned broadcast area above the main area and \
+                  put it into a twisty ; \
+                  fixed sidebar navigation within hierarchical webs; \
+                  added presets to the <nop>NatSkinStyleBrowsers to switch the look&feel \
+                  to that of some well-known CMS systems; \
+                  added support for <nop>SectionalEditPlugin; \
+                  added support for redirectto urlparam of TWiki-4.1.1; \
+                  disabled css in print view as firefox can't print pages otherwise; \
+                  added support for the forthcomming TWiki::Cache; \
+                  fixed templates for renaming a web; \
+                  fixed lease conflict template's use of QUERYPARAMS; \
+                  new variable %<nop>TWIKIREGISTRAION% to make the registration form \
+                  customizable (should go into the core); \
+                  lots of css font and spacing improvements to default themes; \
+                  made oopsmore a WEBCOMPONENT |
 |  13 Oct 2006: | improved usability of natedit toolbar; \
                   fixed broadcast message for IE; \
-		  improved subweb-parentweb navigation in sidebar; \
-		  more separation of admin from non-admin navigation; \
-		  added help text to edit screens; \
-		  added support to alter the topic parent during edit \
-		  and removed it from the oopsmore dialog |
+                  improved subweb-parentweb navigation in sidebar; \
+                  more separation of admin from non-admin navigation; \
+                  added help text to edit screens; \
+                  added support to alter the topic parent during edit \
+                  and removed it from the oopsmore dialog |
 |  02 Oct 2006: | hide links for admins in the sidebar navigation;\
                   don't include the <nop>WebSideBar twice;\
-		  added css classes to the &lt;body> to distinguish different cgi actions (view, edit, preview, ...) |
+                  added css classes to the &lt;body> to distinguish different cgi actions (view, edit, preview, ...) |
 |  18 Sep 2006: | removed private registerconfirm template which whas broken anyway; \
                   fixed breadcrumbs on edit page; \
-		  some minor formtable cleanups |
+                  some minor formtable cleanups |
 |  29 Aug 2006: | removed spaghetti template code for beijing and cairo; \
                   removed NATSCRIPTURL; \
-		  fixed <nop>MySideBar localization;\
-		  adjusted usage of IFSKINSTATE due to its new evaluation priority |
+                  fixed <nop>MySideBar localization;\
+                  adjusted usage of IFSKINSTATE due to its new evaluation priority |
 |  25 Aug 2006: | first release dropping beijing and cairo support; \
                   major documentation rewrite; \
                   added a default <nop>WebRightBar to exemplify 3 columns layout; \
-		  added 3 columns layout switch to <nop>NatSkinStyleBrowser; \
+                  added 3 columns layout switch to <nop>NatSkinStyleBrowser; \
                   fixed template messages used in oopsaccessdenied and oopsattention; \
-		  normalized some css class naming; \
-		  added <nop>ImagePlugin css support |
+                  normalized some css class naming; \
+                  added <nop>ImagePlugin css support |
 |  21 Aug 2006: | complete rework of fonts in all styles not to rely on font preference settings in \
                   browsers; enhanced twikiTable appearance; \
                   added support for TWiki:Plugins.ImagePlugin in natedit; \
@@ -381,27 +401,153 @@ allways open an extra window.
 
 __Note:__ The Description, Screenshot and Base Name rows are needed by the TWiki:TWiki/TWikiSkinBrowser
 
--- TWiki:Main/MichaelDaum - 13 Oct 2006
+-- TWiki:Main/MichaelDaum - 05 Feb 2007
 
-%META:FILEATTACHMENT{name="favicon.ico" attr="h" comment="" date="1113468984" path="favicon.ico" size="4710" user="TWikiContributor" version="1.1"}%
-%META:FILEATTACHMENT{name="previewbg.png" attr="h" comment="" date="1114174051" path="previewbg.png" size="19334" user="TWikiContributor" version="1.1"}%
-%META:FILEATTACHMENT{name="Independence.jpeg" attr="h" comment="" date="1124706583" path="Independence.jpeg" size="53113" user="TWikiContributor" version="1.1"}%
-%META:FILEATTACHMENT{name="Squash.jpeg" attr="h" comment="" date="1124706784" path="Squash.jpeg" size="50940" user="TWikiContributor" version="1.1"}%
-%META:FILEATTACHMENT{name="Kubrick.jpeg" attr="h" comment="" date="1124706654" path="Kubrick.jpeg" size="35719" user="TWikiContributor" version="1.1"}%
-%META:FILEATTACHMENT{name="external.png" attachment="external.png" attr="h" comment="" date="1123862151" path="external.png" size="165" tmpFilename="/var/tmp/CGItemp25437" user="TWikiContributor" version="1.1"}%
-%META:FILEATTACHMENT{name="Clean.jpeg" attr="h" comment="" date="1124706451" path="Clean.jpeg" size="56887" user="TWikiContributor" version="1.1"}%
-%META:FILEATTACHMENT{name="CleanThin.jpeg" attr="h" comment="" date="1124706478" path="CleanThin.jpeg" size="51905" user="TWikiContributor" version="1.1"}%
-%META:FILEATTACHMENT{name="GeorgiaBlue.jpeg" attr="h" comment="" date="1124706508" path="GeorgiaBlue.jpeg" size="53646" user="TWikiContributor" version="1.1"}%
-%META:FILEATTACHMENT{name="GeorgiaBlueThin.jpeg" attr="h" comment="" date="1124706527" path="GeorgiaBlueThin.jpeg" size="49838" user="TWikiContributor" version="1.1"}%
-%META:FILEATTACHMENT{name="Gettysburg.jpeg" attr="h" comment="" date="1124706558" path="Gettysburg.jpeg" size="55745" user="TWikiContributor" version="1.1"}%
-%META:FILEATTACHMENT{name="GettysburgThin.jpeg" attr="h" comment="" date="1124706570" path="GettysburgThin.jpeg" size="52234" user="TWikiContributor" version="1.1"}%
-%META:FILEATTACHMENT{name="IndependenceThin.jpeg" attr="h" comment="" date="1124706638" path="IndependenceThin.jpeg" size="50108" user="TWikiContributor" version="1.1"}%
-%META:FILEATTACHMENT{name="PlainJane.jpeg" attr="h" comment="" date="1124706668" path="PlainJane.jpeg" size="50928" user="TWikiContributor" version="1.1"}%
-%META:FILEATTACHMENT{name="PlainJaneThin.jpeg" attr="h" comment="" date="1124706685" path="PlainJaneThin.jpeg" size="44181" user="TWikiContributor" version="1.1"}%
-%META:FILEATTACHMENT{name="Rusty.jpeg" attr="h" comment="" date="1124706699" path="Rusty.jpeg" size="56897" user="TWikiContributor" version="1.1"}%
-%META:FILEATTACHMENT{name="RustyThin.jpeg" attr="h" comment="" date="1124706717" path="RustyThin.jpeg" size="50184" user="TWikiContributor" version="1.1"}%
-%META:FILEATTACHMENT{name="SeaGreen.jpeg" attr="h" comment="" date="1124706729" path="SeaGreen.jpeg" size="56265" user="TWikiContributor" version="1.1"}%
-%META:FILEATTACHMENT{name="SeaGreenThin.jpeg" attr="h" comment="" date="1124706749" path="SeaGreenThin.jpeg" size="52702" user="TWikiContributor" version="1.1"}%
-%META:FILEATTACHMENT{name="SquashThin.jpeg" attr="h" comment="" date="1124706795" path="SquashThin.jpeg" size="49337" user="TWikiContributor" version="1.1"}%
-%META:FILEATTACHMENT{name="Stormy.jpeg" attr="h" comment="" date="1124706818" path="Stormy.jpeg" size="52029" user="TWikiContributor" version="1.1"}%
-%META:FILEATTACHMENT{name="StormyThin.jpeg" attr="h" comment="" date="1124706827" path="StormyThin.jpeg" size="51154" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="GettysburgStyle.css" attr="" autoattached="0" comment="" date="1168633161" path="GettysburgStyle.css" size="6914" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="button_h1.png" attr="" autoattached="0" comment="" date="1162586917" path="button_h1.png" size="605" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="OrangeTunnelVariation.css" attr="" autoattached="0" comment="" date="1162586917" path="OrangeTunnelVariation.css" size="1505" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="Border.gif" attr="" autoattached="0" comment="" date="1162586917" path="Border.gif" size="66" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="feed-icon-12x12-gray.gif" attr="" autoattached="0" comment="" date="1162586917" path="feed-icon-12x12-gray.gif" size="946" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="SubwayBar.jpg" attr="" autoattached="0" comment="" date="1162586917" path="SubwayBar.jpg" size="13404" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="BaseBorder.css" attr="" autoattached="0" comment="" date="1162586917" path="BaseBorder.css" size="76" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="SeaGreenStyle.css" attr="" autoattached="0" comment="" date="1168633161" path="SeaGreenStyle.css" size="7762" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="RustyBorder.css" attr="" autoattached="0" comment="" date="1162586917" path="RustyBorder.css" size="64" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="RedWomanVariation.css" attr="" autoattached="0" comment="" date="1162586917" path="RedWomanVariation.css" size="363" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="IndependenceBorder.css" attr="" autoattached="0" comment="" date="1162586917" path="IndependenceBorder.css" size="113" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="WikiRingButtons.css" attr="" autoattached="0" comment="" date="1162586615" path="WikiRingButtons.css" size="1334" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="button_done.png" attr="" autoattached="0" comment="" date="1162586917" path="button_done.png" size="1333" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="Squash.jpeg" attr="h" autoattached="0" comment="" date="1162586917" path="Squash.jpeg" size="21442" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="PlainJaneThin.css" attr="" autoattached="0" comment="" date="1162586917" path="PlainJaneThin.css" size="186" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="button_bold.png" attr="" autoattached="0" comment="" date="1162586917" path="button_bold.png" size="738" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="PatternThin.css" attr="" autoattached="0" comment="" date="1162586917" path="PatternThin.css" size="449" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="GettysburgThin.css" attr="" autoattached="0" comment="" date="1162586917" path="GettysburgThin.css" size="296" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="BaseStyle.css" attr="" autoattached="0" comment="" date="1170319392" path="BaseStyle.css" size="15118" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="PinkPantherBar.jpg" attr="" autoattached="0" comment="" date="1162586917" path="PinkPantherBar.jpg" size="20697" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="button_form.png" attr="" autoattached="0" comment="" date="1162586917" path="button_form.png" size="872" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="Independence.jpeg" attr="h" autoattached="0" comment="" date="1162586917" path="Independence.jpeg" size="22904" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="StormyStyle.css" attr="" autoattached="0" comment="" date="1168633161" path="StormyStyle.css" size="7064" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="StormyBorder.css" attr="" autoattached="0" comment="" date="1162586917" path="StormyBorder.css" size="170" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="obfuscator.js" attr="" autoattached="0" comment="" date="1162586917" path="obfuscator.js" size="776" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="SquashThin.css" attr="" autoattached="0" comment="" date="1162586917" path="SquashThin.css" size="60" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="BaseShadow.css" attr="" autoattached="0" comment="" date="1162586917" path="BaseShadow.css" size="1534" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="feed-icon-12x12-gray.png" attr="" autoattached="0" comment="" date="1162586917" path="feed-icon-12x12-gray.png" size="517" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="button_signature.png" attr="" autoattached="0" comment="" date="1162586917" path="button_signature.png" size="968" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="edit.js" attr="" autoattached="0" comment="" date="1168633162" path="edit.js" size="6165" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="PlasticLoveBar.jpg" attr="" autoattached="0" comment="" date="1162586917" path="PlasticLoveBar.jpg" size="20612" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="button_underlined.png" attr="" autoattached="0" comment="" date="1162586917" path="button_underlined.png" size="743" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="GeorgiaBlueButtons.css" attr="" autoattached="0" comment="" date="1162586917" path="GeorgiaBlueButtons.css" size="613" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="button_save.png" attr="" autoattached="0" comment="" date="1162586917" path="button_save.png" size="940" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="button_left.png" attr="" autoattached="0" comment="" date="1162586917" path="button_left.png" size="538" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="BlueFieldBar.jpg" attr="" autoattached="0" comment="" date="1162586917" path="BlueFieldBar.jpg" size="16349" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="GeorgiaBlueStyle.css" attr="" autoattached="0" comment="" date="1166884148" path="GeorgiaBlueStyle.css" size="8445" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="notspot.gif" attr="" autoattached="0" comment="" date="1166195596" path="notspot.gif" size="2941" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="button_ext.png" attr="" autoattached="0" comment="" date="1162586917" path="button_ext.png" size="1422" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="SeaGreenButtons.css" attr="" autoattached="0" comment="" date="1162586917" path="SeaGreenButtons.css" size="779" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="PatternStyle.css" attr="" autoattached="0" comment="" date="1166884148" path="PatternStyle.css" size="12599" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="RustyStyle.css" attr="" autoattached="0" comment="" date="1168633161" path="RustyStyle.css" size="7604" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="button_image.png" attr="" autoattached="0" comment="" date="1162586917" path="button_image.png" size="965" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="button_help.png" attr="" autoattached="0" comment="" date="1162586917" path="button_help.png" size="784" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="GeorgiaBlueThin.jpeg" attr="h" autoattached="0" comment="" date="1162586917" path="GeorgiaBlueThin.jpeg" size="21997" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="CleanThin.jpeg" attr="h" autoattached="0" comment="" date="1162586917" path="CleanThin.jpeg" size="23055" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="BorderLine.png" attr="" autoattached="0" comment="" date="1162586917" path="BorderLine.png" size="188" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="PatternBorder.css" attr="" autoattached="0" comment="" date="1162586917" path="PatternBorder.css" size="506" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="NuozekBar.jpg" attr="" autoattached="0" comment="" date="1162586917" path="NuozekBar.jpg" size="22540" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="BlueFieldVariation.css" attr="" autoattached="0" comment="" date="1162586917" path="BlueFieldVariation.css" size="299" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="RustyThin.css" attr="" autoattached="0" comment="" date="1162586917" path="RustyThin.css" size="58" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="Box.gif" attr="" autoattached="0" comment="" date="1162586917" path="Box.gif" size="936" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="button_edit.png" attr="" autoattached="0" comment="" date="1162586917" path="button_edit.png" size="975" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="BlueTechCherryBar.jpg" attr="" autoattached="0" comment="" date="1162586917" path="BlueTechCherryBar.jpg" size="15302" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="button_right.png" attr="" autoattached="0" comment="" date="1162586917" path="button_right.png" size="519" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="GettysburgBorder.css" attr="" autoattached="0" comment="" date="1162586917" path="GettysburgBorder.css" size="350" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="CleanThin.css" attr="" autoattached="0" comment="" date="1162586917" path="CleanThin.css" size="331" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="PlainJane.jpeg" attr="h" autoattached="0" comment="" date="1162586917" path="PlainJane.jpeg" size="21708" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="IndependenceThin.jpeg" attr="h" autoattached="0" comment="" date="1162586917" path="IndependenceThin.jpeg" size="22151" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="external.png" attr="h" autoattached="0" comment="" date="1162586917" path="external.png" size="165" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="button_h4.png" attr="" autoattached="0" comment="" date="1162586917" path="button_h4.png" size="663" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="StormyThin.css" attr="" autoattached="0" comment="" date="1162586917" path="StormyThin.css" size="240" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="RustyButtons.css" attr="" autoattached="0" comment="" date="1162586917" path="RustyButtons.css" size="777" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="previewbg.png" attr="h" autoattached="0" comment="" date="1162586917" path="previewbg.png" size="19334" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="SquashButtons.css" attr="" autoattached="0" comment="" date="1162586917" path="SquashButtons.css" size="830" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="KubrickThin.css" attr="" autoattached="0" comment="" date="1162586917" path="KubrickThin.css" size="189" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="IndependenceStyle.css" attr="" autoattached="0" comment="" date="1166884148" path="IndependenceStyle.css" size="7675" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="Gettysburg.jpeg" attr="h" autoattached="0" comment="" date="1162586917" path="Gettysburg.jpeg" size="24729" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="WaterVariation.css" attr="" autoattached="0" comment="" date="1162586917" path="WaterVariation.css" size="1747" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="Border.png" attr="" autoattached="0" comment="" date="1162586917" path="Border.png" size="158" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="JotSpotStyle.css" attr="" autoattached="0" comment="" date="1166884148" path="JotSpotStyle.css" size="8195" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="SquashStyle.css" attr="" autoattached="0" comment="" date="1168633161" path="SquashStyle.css" size="7200" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="SepiaFieldVariation.css" attr="" autoattached="0" comment="" date="1162586917" path="SepiaFieldVariation.css" size="513" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="JotSpotThin.css" attr="" autoattached="0" comment="" date="1166195596" path="JotSpotThin.css" size="703" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="SquashThin.jpeg" attr="h" autoattached="0" comment="" date="1162586917" path="SquashThin.jpeg" size="20957" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="Clean.jpeg" attr="h" autoattached="0" comment="" date="1162586917" path="Clean.jpeg" size="24981" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="PlainJaneButtons.css" attr="" autoattached="0" comment="" date="1162586917" path="PlainJaneButtons.css" size="614" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="quote-white.png" attr="" autoattached="0" comment="" date="1162586917" path="quote-white.png" size="882" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="StormyButtons.css" attr="" autoattached="0" comment="" date="1162586917" path="StormyButtons.css" size="731" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="button_strike.png" attr="" autoattached="0" comment="" date="1162586917" path="button_strike.png" size="851" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="OrangeTunnelBar.jpg" attr="" autoattached="0" comment="" date="1162586917" path="OrangeTunnelBar.jpg" size="18012" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="IndependenceThin.css" attr="" autoattached="0" comment="" date="1162586917" path="IndependenceThin.css" size="107" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="KubrickBorder.css" attr="" autoattached="0" comment="" date="1162586917" path="KubrickBorder.css" size="98" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="button_cancel.png" attr="" autoattached="0" comment="" date="1162586917" path="button_cancel.png" size="1628" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="KubrickStyle.css" attr="" autoattached="0" comment="" date="1168633161" path="KubrickStyle.css" size="13243" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="SupportVariation.css" attr="" autoattached="0" comment="" date="1166194669" path="SupportVariation.css" size="1015" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="SeaGreenThin.jpeg" attr="h" autoattached="0" comment="" date="1162586917" path="SeaGreenThin.jpeg" size="23695" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="Box.png" attr="" autoattached="0" comment="" date="1162586917" path="Box.png" size="1722" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="button_formula.png" attr="" autoattached="0" comment="" date="1162586917" path="button_formula.png" size="703" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="PinkPantherVariation.css" attr="" autoattached="0" comment="" date="1162586917" path="PinkPantherVariation.css" size="1504" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="BlueTechCherryVariation.css" attr="" autoattached="0" comment="" date="1162586917" path="BlueTechCherryVariation.css" size="370" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="BaseThin.css" attr="" autoattached="0" comment="" date="1168633161" path="BaseThin.css" size="165" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="SeaGreenBorder.css" attr="" autoattached="0" comment="" date="1162586917" path="SeaGreenBorder.css" size="104" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="PlainJaneStyle.css" attr="" autoattached="0" comment="" date="1166884148" path="PlainJaneStyle.css" size="7131" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="BaseButtons.css" attr="" autoattached="0" comment="" date="1162586917" path="BaseButtons.css" size="275" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="JotSpotBorder.css" attr="" autoattached="0" comment="" date="1166195596" path="JotSpotBorder.css" size="274" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="FireVariation.css" attr="" autoattached="0" comment="" date="1162586917" path="FireVariation.css" size="948" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="button_accept.png" attr="" autoattached="0" comment="" date="1162586917" path="button_accept.png" size="946" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="SeaGreen.jpeg" attr="h" autoattached="0" comment="" date="1162586917" path="SeaGreen.jpeg" size="24651" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="Fire.jpg" attr="" autoattached="0" comment="" date="1162586917" path="Fire.jpg" size="17868" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="KubrickButtons.css" attr="" autoattached="0" comment="" date="1162586917" path="KubrickButtons.css" size="716" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="CleanBorder.css" attr="" autoattached="0" comment="" date="1162586917" path="CleanBorder.css" size="474" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="StormyThin.jpeg" attr="h" autoattached="0" comment="" date="1162586917" path="StormyThin.jpeg" size="22482" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="NoSideBar.css" attr="" autoattached="0" comment="" date="1162586917" path="NoSideBar.css" size="57" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="button_center.png" attr="" autoattached="0" comment="" date="1162586917" path="button_center.png" size="528" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="RedWomanBar.jpg" attr="" autoattached="0" comment="" date="1162586917" path="RedWomanBar.jpg" size="19428" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="PlainJaneThin.jpeg" attr="h" autoattached="0" comment="" date="1162586917" path="PlainJaneThin.jpeg" size="19529" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="Kubrick.jpeg" attr="h" autoattached="0" comment="" date="1162586917" path="Kubrick.jpeg" size="16026" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="GeorgiaBlue.jpeg" attr="h" autoattached="0" comment="" date="1162586917" path="GeorgiaBlue.jpeg" size="23356" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="SquashBorder.css" attr="" autoattached="0" comment="" date="1162586917" path="SquashBorder.css" size="100" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="PatternButtons.css" attr="" autoattached="0" comment="" date="1162586917" path="PatternButtons.css" size="907" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="button_h3.png" attr="" autoattached="0" comment="" date="1162586917" path="button_h3.png" size="707" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="NuozekVariation.css" attr="" autoattached="0" comment="" date="1162586917" path="NuozekVariation.css" size="405" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="button_verbatim.png" attr="" autoattached="0" comment="" date="1162586917" path="button_verbatim.png" size="1123" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="button_super.png" attr="" autoattached="0" comment="" date="1162586917" path="button_super.png" size="731" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="SeaGreenThin.css" attr="" autoattached="0" comment="" date="1162586917" path="SeaGreenThin.css" size="98" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="notspot_back.gif" attr="" autoattached="0" comment="" date="1166195596" path="notspot_back.gif" size="2529" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="PlainJaneBorder.css" attr="" autoattached="0" comment="" date="1162586917" path="PlainJaneBorder.css" size="169" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="button_sub.png" attr="" autoattached="0" comment="" date="1162586917" path="button_sub.png" size="718" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="IndependenceButtons.css" attr="" autoattached="0" comment="" date="1162586917" path="IndependenceButtons.css" size="699" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="GettysburgThin.jpeg" attr="h" autoattached="0" comment="" date="1162586917" path="GettysburgThin.jpeg" size="22830" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="CleanButtons.css" attr="" autoattached="0" comment="" date="1162586917" path="CleanButtons.css" size="638" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="quote.png" attr="" autoattached="0" comment="" date="1162586917" path="quote.png" size="281" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="button_preview.png" attr="" autoattached="0" comment="" date="1162586917" path="button_preview.png" size="793" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="button_int.png" attr="" autoattached="0" comment="" date="1162586917" path="button_int.png" size="988" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="WaterBar.jpg" attr="" autoattached="0" comment="" date="1162586917" path="WaterBar.jpg" size="24175" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="SubwayVariation.css" attr="" autoattached="0" comment="" date="1162586917" path="SubwayVariation.css" size="1417" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="icon-doc-small.gif" attr="" autoattached="0" comment="" date="1166195596" path="icon-doc-small.gif" size="100" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="button_undo.png" attr="" autoattached="0" comment="" date="1162586917" path="button_undo.png" size="1048" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="GeorgiaBlueThin.css" attr="" autoattached="0" comment="" date="1162586917" path="GeorgiaBlueThin.css" size="347" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="SepiaFieldBar.jpg" attr="" autoattached="0" comment="" date="1162586917" path="SepiaFieldBar.jpg" size="17648" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="feed-icon-12x12.gif" attr="" autoattached="0" comment="" date="1162586917" path="feed-icon-12x12.gif" size="560" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="feed-icon-12x12.png" attr="" autoattached="0" comment="" date="1162586917" path="feed-icon-12x12.png" size="554" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="BoxLine.png" attr="" autoattached="0" comment="" date="1162586917" path="BoxLine.png" size="3272" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="button_justify.png" attr="" autoattached="0" comment="" date="1162586917" path="button_justify.png" size="525" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="RustyThin.jpeg" attr="h" autoattached="0" comment="" date="1162586917" path="RustyThin.jpeg" size="22590" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="button_h2.png" attr="" autoattached="0" comment="" date="1162586917" path="button_h2.png" size="662" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="Stormy.jpeg" attr="h" autoattached="0" comment="" date="1162586917" path="Stormy.jpeg" size="22313" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="JotSpotButtons.css" attr="" autoattached="0" comment="" date="1166195596" path="JotSpotButtons.css" size="605" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="button_italic.png" attr="" autoattached="0" comment="" date="1162586917" path="button_italic.png" size="676" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="SepiaTWiki.png" attr="" autoattached="0" comment="" date="1162586917" path="SepiaTWiki.png" size="27994" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="CleanStyle.css" attr="" autoattached="0" comment="" date="1168633161" path="CleanStyle.css" size="7571" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="GeorgiaBlueBorder.css" attr="" autoattached="0" comment="" date="1162586917" path="GeorgiaBlueBorder.css" size="353" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="PlasticLoveVariation.css" attr="" autoattached="0" comment="" date="1162586917" path="PlasticLoveVariation.css" size="2423" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="GettysburgButtons.css" attr="" autoattached="0" comment="" date="1162586917" path="GettysburgButtons.css" size="695" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="favicon.ico" attr="h" autoattached="0" comment="" date="1162586917" path="favicon.ico" size="3638" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="Rusty.jpeg" attr="h" autoattached="0" comment="" date="1162586917" path="Rusty.jpeg" size="25199" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="quote.gif" attr="" autoattached="0" comment="" date="1162586917" path="quote.gif" size="173" user="TWikiContributor" version="1.1"}%

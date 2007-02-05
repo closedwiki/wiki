@@ -1,4 +1,10 @@
-%META:TOPICINFO{author="TWikiContributor" date="1132161897" format="1.1" version="1.1"}%
-%STARTINCLUDE% <!-- -->
-   * [[%TWIKIWEB%.InstalledPlugins][%MAKETEXT{"Plugins"}%]]
-%WEBCOMPONENT{"TWikiWebLinks"}% %STOPINCLUDE%
+%META:TOPICINFO{author="TWikiContributor" date="1170329911" format="1.1" reprev="1.2" version="1.1"}%
+%STARTINCLUDE%
+   * [[%TWIKIWEB%.InstalledPlugins][%MAKETEXT{"Plugins"}%]] %WEBCOMPONENT{"TWikiWebLinks"}%
+%IFDEFINEDTHEN{"%IFACCESS{"%TWIKIWEB%.WebLinks" type="change"}%" as="1"}%
+<!-- -->
+   * [[%TWIKIWEB%.TWikiPreferences][%MAKETEXT{"SitePreferences"}%]]
+%FIDEFINED%
+%STOPINCLUDE%
+
+<!-- -->

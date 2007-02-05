@@ -27,9 +27,11 @@ hr {
   font-family:arial,sans-serif;
 }
 
-.natTopRightContents,
 .natTopLeftContents {
-  margin:1em 10px;
+  margin:10px 0px 10px 10px
+}
+.natTopRightContents {
+  margin:10px 10px 10px 0px
 }
 
 .natMain {
@@ -45,6 +47,14 @@ hr {
 }
 .natMainHeaderContents a {
   text-decoration:none;
+}
+
+/* login */
+.natLoginBody .natTopBar {
+  display:none;
+}
+.natLoginBody .natMainContents {
+  margin-top:30px;
 }
 
 /* misc twiki */
@@ -70,9 +80,10 @@ hr {
   background:#eeeeee;
 }
 .twikiTable th,
+.twikiTable th span,
 .twikiTable th font,
 .twikiTable th a {
-  color:#666666;
+  color:#666666 !important; /* SMELL: breaks %TABLE{}% */
 }
 .twikiTable th a:hover,
 .twikiTable th a {
@@ -106,10 +117,16 @@ hr {
 }
 
 /* twik page form */
-.twikiPageForm th,
-.twikiPageForm td,
 .twikiPageForm table {
   border:1px #aaaaaa solid;
+  border-collapse:collapse;
+}
+.twikiPageForm table table {
+  border:0px;
+}
+.twikiPageForm th,
+.twikiPageForm td {
+  border:1px #aaaaaa ridge;
 }
 .twikiPageForm th {
   color:#666666;
@@ -132,6 +149,42 @@ hr {
 /* twiki diff */
 .twikiDiffTable td {
   border:0px;
+}
+
+/* TOC */
+.twikiToc {
+  border:1px #aaaaaa solid;
+  margin:5px 0px;
+  padding-top:5px;
+  padding-bottom:5px;
+}
+.twikiTocTitle {
+  display:block;
+  padding:5px 25px 8px;
+  font-size:24px;
+  border-bottom:2px solid #3f59bb;
+  font-weight:bold;
+  margin-top:0px;
+  margin-bottom:0px;
+}
+.twikiToc a,
+.twikiToc a:link {
+  border:0px;
+  text-decoration:none;
+}
+.twikiToc ul {
+  margin-top:5px;
+  margin-bottom:5px;
+}
+.twikiToc ul ul {
+  margin-top:0px;
+  margin-bottom:0px;
+}
+.twikiToc li ul {
+  padding-left:20px;
+}
+.twikiToc li a {
+  line-height:110%;
 }
 
 /* search table */
@@ -191,6 +244,10 @@ hr {
 }
 
 /* sidebar */
+.natTopRight,
+.natSideBarRight {
+  width:230px;
+}
 .natSideBarTitle,
 .natSideBarTitle h1 {
   margin:0px;
@@ -217,6 +274,7 @@ hr {
 .natSideBar h2 {
   padding:0px;
   font-size:1em;
+  margin:0px;
 }
 .natSideBar ul {
   margin-left:0px;
@@ -355,9 +413,6 @@ hr {
 .blogCommentCount {
   width:2em;
   text-align:right;
-  font-size:0.9em;
-}
-.blogInfo {
   font-size:0.9em;
 }
 .blogText {

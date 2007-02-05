@@ -23,7 +23,6 @@ hr {
 }
 .twikiTable th {
   border:1px #aaaaaa solid;
-  text-align:left;
   background:#e5e5e5;
 }
 .twikiTable th a {
@@ -32,12 +31,16 @@ hr {
 }
 .twikiTable th,
 .twikiTable th a,
+.twikiTable th span,
 .twikiTable th font {
-  color:#444444;
+  color:#444444 !important; /* SMELL temporary hack */
 }
 .twikiTable td {
   border:1px #aaaaaa solid;
   background:white;
+}
+.twikiTableOdd td {
+  background:#eeeeee;
 }
 
 /* twikiDiff */
@@ -75,6 +78,9 @@ hr {
   border:1px #aaaaaa solid;
   border-collapse:collapse;
 }
+.twikiPageForm table table {
+  border:0px;
+}
 .twikiPageForm table th,
 .twikiPageForm table td {
   padding:2px;
@@ -93,7 +99,7 @@ hr {
   font-weight:bold;
 }
 .twikiPageForm td {
-  border:1px #aaaaaa solid;
+  border-bottom:1px #aaa ridge;
 }
 
 /* helpers */
@@ -107,12 +113,11 @@ hr {
   padding:0;
   background:#e5e5e5;
 }
-.natTopLeftContents,
-.natTopRightContents {
-  margin:20px 20px 25px 20px;
+.natTopLeftContents {
+  margin:15px 0px 15px 20px;
 }
 .natTopRightContents {
-  margin-top:30px;
+  margin:15px 20px 15px 0px;
 }
 .natMiddle {
   padding:20px 10px 20px 10px;
@@ -122,6 +127,16 @@ hr {
 .natSideBar {
   padding-left:20px;
   padding-right:20px;
+}
+
+/* login */
+.natLoginBody .natLoginMessage {
+  padding:20px;
+  border:1px #aaa dotted;
+  _border:1px #aaa solid; /* IE only */
+}
+.natLoginBody hr {
+  border-bottom:1px solid #eee;
 }
 
 /* top */
@@ -150,10 +165,25 @@ hr {
   margin-left:3px;
 }
 .natSearchBox input {
+  width:170px;
   background:white;
+  font-weight:normal;
+  border:1px solid #aaaaaa;
+}
+.natSearchBoxPos1 {
+  padding-bottom:5px;
+}
+.natSearchBoxPos2,
+.natSearchBoxPos3 {
+  padding:10px 0px;
 }
 
 /* sidebar */
+.natTopRight, 
+.natSideBarRight {
+  width:260px;
+  min-width:260px;
+}
 .natSideBarContents {
   color:#003366;
   font-family:arial,sans-serif;
@@ -239,6 +269,7 @@ hr {
 .natMain h1 a:hover, .natMain h2 a:hover, .natMain h3 a:hover,
 .natMain h4 a:hover, .natMain h5 a:hover, .natMain h6 a:hover {
   color:#003366;
+  font-weight:normal;
 }
 
 .natMain input,
@@ -322,6 +353,14 @@ hr {
   background:#eeeeee;
 }
 
+/* TOC */
+.twikiTocTitle {
+  color:#003366;
+}
+.twikiToc li {
+  line-height:110%;
+}
+
 
 /* supported plugins and applications */
 
@@ -358,6 +397,9 @@ hr {
 .blogSideBarComments h1 {
   border-bottom:0px;
   margin-bottom:0px;
+}
+.natSideBar .blogSideBarHeader h1 {
+  border:0px;
 }
 .blogSideBarHeader {
   border-bottom:1px dotted #444444;

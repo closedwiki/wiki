@@ -21,39 +21,6 @@ hr {
   margin:0;
   padding:0;
 }
-.natTopBar { 
-  border-top:1px solid white;
-}
-.natTopBar { 
-  border-top:1px dotted white;
-  _border-top:1px solid white; /* IE only */
-}
-.natWebButtons, 
-.natTopLeft {
-  border-left:1px dotted white;
-  _border-left:1px solid white; /* IE only */
-}
-.natWebButtons, 
-.natTopLeft {
-  border-left:1px dotted white;
-  _border-left:1px solid white; /* IE only */
-}
-.natWebButtons,
-.natTopRight{
-  border-right:1px dotted white;
-  _border-right:1px solid white; /* IE only */
-}
-.natTopBarSizer {
-  height:140px;
-  max-height:140px;
-}
-.natTopLeftContents,
-.natTopRightContents {
-  margin:20px;
-}
-.natTopRightContents {
-  margin-top:40px;
-}
 
 .natMiddle {
   border-bottom:1px dotted white;
@@ -68,6 +35,9 @@ hr {
 .natMainHeaderContents,
 .natMainFooterContents {
   margin:20px;
+}
+.natSideBar .natExternalLink:after {
+  display:none;
 }
 
 /* twiki table */
@@ -87,6 +57,7 @@ hr {
   text-transform:uppercase;
 }
 .twikiTable th,
+.twikiTable th span,
 .twikiTable th font,
 .twikiTable th a {
   color:white;
@@ -129,10 +100,16 @@ hr {
 }
 
 /* twiki page form */
-.twikiPageForm th,
-.twikiPageForm td,
 .twikiPageForm table {
   border:1px #ff9831 solid;
+  border-collapse:collapse;
+}
+.twikiPageForm table table {
+  border:0px;
+}
+.twikiPageForm th,
+.twikiPageForm td {
+  border:1px #ff9831 ridge;
 }
 .twikiPageForm th {
   border-bottom:1px #ff9831 solid;
@@ -182,7 +159,44 @@ hr {
   background:#ffefb9;
 }
 
+/* login */
+.natLoginMessage {
+  color:#9C3300;
+  padding:20px;
+}
+.natLoginBody .natLoginHeading {
+  color:#9C3300;
+}
+
 /* top */
+.natTopBar { 
+  border-top:1px solid white;
+}
+.natTopBar { 
+  border-top:1px dotted white;
+  _border-top:1px solid white; /* IE only */
+}
+.natWebButtons, 
+.natTopLeft {
+  border-left:1px dotted white;
+  _border-left:1px solid white; /* IE only */
+}
+.natWebButtons, 
+.natTopLeft {
+  border-left:1px dotted white;
+  _border-left:1px solid white; /* IE only */
+}
+.natWebButtons,
+.natTopRight{
+  border-right:1px dotted white;
+  _border-right:1px solid white; /* IE only */
+}
+.natTopLeftContents {
+  margin:10px 0px 20px 20px;
+}
+.natTopRightContents {
+  margin:10px 20px 20px 0px;
+}
 .natHeaderArt {
   background:#9C3300;
 }
@@ -196,6 +210,7 @@ hr {
 }
 
 .natSearchBox input { 
+  width:170px;
   border:1px dotted white;
   _border:1px solid white; /* IE only */
 }
@@ -214,6 +229,14 @@ hr {
   font-weight:bold;
   width:99%;
 }
+.natSearchBoxPos1 {
+  margin-bottom:10px;
+}
+.natSearchBoxPos2,
+.natSearchBoxPos3 {
+  margin:10px 0px;
+}
+
 
 .natWebTitle a {
   color:white;
@@ -251,7 +274,12 @@ hr {
 }
 
 /* sidebar */
-.natSideBar {
+.natTopRight,
+.natSideBarRight {
+  width:270px;
+}
+.natSideBar,
+.natSideBarPersonal h1 a {
   background:#ff9831;
   color:#9C3300;
 }
@@ -265,10 +293,11 @@ hr {
   color:white;
   font-family:verdana,arial,sans-serif;
   font-size:14px;
-  line-height:140%;
   text-transform:uppercase;
   letter-spacing:.2em;
   padding-left:0px;
+}
+.natSideBar .redDot a {
 }
 .natSideBar h1 {
   border-bottom:1px dotted white;
@@ -314,6 +343,8 @@ hr {
   font-weight:normal;
   font-size:1.0em;
 }
+
+
 
 /* main area */
 .natMain, .natMainFooter {
@@ -389,6 +420,9 @@ hr {
 .blogSideBarComments h1 {
   border-bottom:0px;
   margin-bottom:0px;
+}
+.natSideBar .blogSideBarHeader h1 {
+  border:0px;
 }
 .blogSideBarHeader {
   border-bottom:1px dotted white;

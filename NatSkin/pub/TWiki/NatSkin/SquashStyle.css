@@ -40,6 +40,7 @@ hr { border-bottom: 1px solid #999999; }
   font-size:90%;
   vertical-align:middle;
 }
+.twikiTable th span,
 .twikiTable th font,
 .twikiTable th a,
 .twikiTable th {
@@ -85,6 +86,10 @@ hr { border-bottom: 1px solid #999999; }
 /* twiki page form */
 .twikiPageForm table {
   border:1px solid #CC6600;
+  border-collapse:collapse;
+}
+.twikiPageForm table table {
+  border:0px;
 }
 .twikiPageForm th {
   margin-top:6px;
@@ -163,15 +168,12 @@ hr { border-bottom: 1px solid #999999; }
   padding:20px;
 }
 .natTopLeftContents {
-  margin:20px;
+  margin:20px 0px 20px 25px;
 }
 .natTopRightContents {
-  margin:25px 10px 5px 25px;
+  margin:20px 20px 20px 0px;
   font-size:12px;
   font-family:Arial, Sans-serif;
-}
-.natTopBarSizer {
-  height:130px;
 }
 
 /* top */
@@ -208,6 +210,7 @@ hr { border-bottom: 1px solid #999999; }
   border:1px dotted #CC6600;
   _border:1px solid #CC6600; /* IE only */
   color:white;
+  width:150px;
 }
 .natSearchBoxPos1 input,
 .natSearchBoxPos2 input,
@@ -218,6 +221,13 @@ hr { border-bottom: 1px solid #999999; }
   font-weight:bold;
   width:99%;
 }
+.natSearchBoxPos1 {
+  margin-bottom:10px;
+}
+.natSearchBoxPos2,
+.natSearchBoxPos3 {
+  margin:15px 0px;
+}
 
 .natTopicActions {
   font-size:12px;
@@ -225,6 +235,10 @@ hr { border-bottom: 1px solid #999999; }
 }
 
 /* sidebar */
+.natTopRight,
+.natSideBarRight {
+  width:255px;
+}
 .natSideBarContents {
   padding-left:5px;
   padding-right:5px;
@@ -243,6 +257,9 @@ hr { border-bottom: 1px solid #999999; }
   font-size:14px;
   text-transform: uppercase;
   letter-spacing: .3em;
+}
+.natSideBar .redDot a {
+  letter-spacing:0px;
 }
 
 .natSideBar h2 a,
@@ -337,6 +354,26 @@ hr { border-bottom: 1px solid #999999; }
 .natMain select,
 .natMain textarea {
   font-size:13px;
+}
+
+/* TOC */
+.twikiToc {
+  margin-bottom:10px;
+}
+.twikiToc ul {
+  margin-top:0px;
+  margin-bottom:0px;
+}
+.twikiToc ul ul {
+  padding-left:20px;
+}
+.twikiTocTitle {
+  display:block;
+  border-bottom:1px solid #CC6600;
+  font-size:20px;
+  padding-bottom:3px;
+  font-family: 'Trebuchet MS', sans-serif;
+  margin-bottom:0px;
 }
 
 /* supported plugins and applications */

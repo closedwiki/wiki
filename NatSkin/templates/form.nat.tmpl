@@ -5,6 +5,7 @@
 <tr>
 <td class="twikiFirstCol natTopicFormFirstCol">%ROWTITLE%: %ROWEXTRA%</td>
 <td>%ROWVALUE%</td>
-</tr>%REPEAT%<td>&nbsp;</td><td><div class="natTopicFormLabel">%ROWVALUE%</div></td></tr>%REPEAT% %TMPL:END%
+</tr>%REPEAT%<td>&nbsp;</td>
+<td><div class="natTopicFormLabel">%ROWVALUE%</div></td></tr>%REPEAT% %TMPL:END%
 %TMPL:DEF{"formtail"}% %TMPL:P{context="mandatoryfields" then="mandatory"}% %TMPL:END%
 <div class="natTopicEditForm"><table class="twikiTable"><tr><th class="natTopicFormTitle" colspan="2">%FORMTITLE%</th></tr>%TMPL:P{"repeatedformrows"}%%TMPL:P{"formtail"}%</table></div>

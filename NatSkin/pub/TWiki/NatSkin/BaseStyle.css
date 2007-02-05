@@ -2,7 +2,7 @@
 
 /* html elements */
 .twikiEmulatedLink,
-a, a:link {
+a {
   text-decoration:none; 
   color:#0065CD;
 }
@@ -53,7 +53,6 @@ body { font-size:14px; }
 .natBodyPrint {
   width:21cm; 
   margin:0px; 
-  padding:10px;
 }
 .natBodyPrint,
 .natBodyPrint .natMain,
@@ -68,6 +67,9 @@ body { font-size:14px; }
   table-layout:fixed;
   width:100%;
 }
+.natEditBody .natLayoutTable {
+  table-layout:auto; /* firefox fix to preven collapsing tables */
+}
 .natBoxBorderRight,
 .natBoxBorderTopRight,
 .natBoxBorderBottomRight {
@@ -78,10 +80,24 @@ body { font-size:14px; }
   padding-top:5px;
   font-size:12px;
 }
-.natSideBar, .natTopRight {
+.natSideBarLeft {
+  width:200px;
+  min-width:200px;
+}
+.natSideBarRight, .natTopRight {
   width:280px;
   min-width:280px;
   max-width:280px;
+}
+.natTopLeft,
+.natTopRight {
+  padding-bottom:10px;
+}
+.natTopRightContents {
+  float:right;
+}
+.natTopRight {
+  vertical-align:bottom;
 }
 .natSideBar {
   padding-bottom:5px;
@@ -89,23 +105,20 @@ body { font-size:14px; }
 .natMainFooter {
   vertical-align:bottom;
 }
-.natTopLeftContents {
-  margin-top:10px;
-}
-.natTopRightContents {
-  margin-top:29px;
-}
 .natSideBarContents, .natMainContents {
   min-height:50em;
   overflow:hidden;
 }
 
-.natTopBar > .natTopBarSizer { /* konqueror fix, but not IE */
-  border:1px solid transparent; 
+/* login */
+.natLoginBody .natMainHeaderContents {
+  display:none;
 }
-.natTopBarSizer {
-  height:110px;
+.natLoginBody .natLoginMessage {
+  margin:0px auto;
+  width:500px;
 }
+
 /* topbar */
 .natHeaderArt {
   background-repeat:no-repeat;
@@ -119,18 +132,17 @@ body { font-size:14px; }
 .natSearchBox {
   font-weight:bold;
 }
+.natSearchBox form {
+  margin:0px;
+}
 
 .natSearchBox,
 .natSearchBox input {
   font-size:12px;
 }
 
-.natSearchBox input {
-  font-weight:normal;
-  border:1px solid #aaaaaa;
-  margin:0px;
-  padding:0px;
-  width:170px;
+.natSearchBox {
+  margin:5px 0px;
 }
 
 .natWebTitle {
@@ -158,12 +170,14 @@ body { font-size:14px; }
   margin-bottom:10px;
 }
 .natSideBar h2 {
-  margin-top:10px;
+  margin-top:5px;
   margin-bottom:5px;
   padding-left:15px; 
 }
 
 .natSideBar ul {
+  margin-top:0px;
+  margin-bottom:0px;
   list-style-type:square;
 }
 
@@ -174,15 +188,17 @@ body { font-size:14px; }
 .natNotes p {
   margin-top:0px;
 }
+.natSideBar .twikiCurrentTopicLink {
+  color:red;
+}
 
 /* main area */
 .natMiddleLeft {
   padding-right:10px;
 }
 .natMainContents {
-  padding:1px 1px 1px 1px;
+  padding:1px;
 }
-.natRevision,
 .natMainFooterContents,
 .natMainHeaderContents {
   padding:1px;
@@ -225,6 +241,16 @@ body { font-size:14px; }
 */
 
 /* edit */
+.natEditBody .natSideBarContents, 
+.natEditBody .natMainContents {
+  min-height:0px;
+}
+.natEditBody .natWebButtons,
+.natEditBody .natMainFooter,
+.natEditBody .natBottomBar,
+.natEditBody .natTopBar {
+  display:none;
+}
 .natEditToolBar {
   margin-bottom:5px;
   padding:0px 2px;
@@ -306,11 +332,7 @@ body { font-size:14px; }
 .natMain h5 a, .natMain h6 a,
 .natMain h1 a:hover, .natMain h2 a:hover, .natMain h3 a:hover,
 .natMain h4 a:hover, .natMain h5 a:hover, .natMain h6 a:hover {
-  font-weight:normal;
   text-decoration:none;
-  line-height:140%;
-}
-.natMain li {
   line-height:140%;
 }
 .natMainContents > h1,
@@ -426,6 +448,8 @@ body { font-size:14px; }
 .natMain .natOopsHeading {
   color:red;
 }
+
+.natMain .natLoginHeading,
 .natMain .natNoteHeading {
   color:green;
 }
@@ -443,8 +467,8 @@ body { font-size:14px; }
 
 /* helpers */
 .natSep {
-  padding-left:5px;
-  padding-right:5px;
+  margin-left:-0.2ex;
+  margin-right:-0.2ex;
 }
 .natAction {
   color:red;
@@ -487,12 +511,12 @@ body { font-size:14px; }
 
 .natSideBar a.natFeedIcon:hover,
 a.natFeedIcon:hover {
-  background:#eee url("feed-icon-12x12.png") 3px center no-repeat;
+  background:#eee url("feed-icon-12x12.png") 3px center no-repeat !important
   text-decoration:none !important;
   color:#444 !important;
 }
 a.natFeedIcon {
-  background:url("feed-icon-12x12-gray.png") 3px center no-repeat;
+  background:url("feed-icon-12x12-gray.png") 3px center no-repeat !important
   text-decoration:none !important;
   color:#444;
   font-size:10px;
@@ -525,15 +549,8 @@ a.natFeedIcon {
 .twikiBroadcastMessage {
   background:yellow;
   color:black;
-  position:absolute;
-  left:2px;
-  top:0px;
   border:2px solid orange;
   padding:1px 5px 2px;
-  width:99%;
-  line-height:100%;
-  z-index:999; /* fixes opera issues, thanks to ktwilight */
-  text-align:left;
 }
 .twikiBroadcastMessage .twikiLink,
 .twikiBroadcastMessage a {
@@ -549,8 +566,10 @@ a.natFeedIcon {
 .twikiTable {
   width:100%;
   margin-top:1px;
-  border-collapse:collapse;
   empty-cells:show;
+  border:1px solid #d0d0d0;
+  border-spacing:0px;
+  border-collapse:collapse;
 }
 
 .twikiTable th, 
@@ -562,7 +581,8 @@ a.natFeedIcon {
 
 .twikiTable th {
   font-weight:bold;
-  text-align:left;
+  text-align:left !important; /* SMELL breaks %TABLE% */
+  background:#1875D5;
 }
 
 .twikiTable th img {
@@ -573,6 +593,16 @@ a.natFeedIcon {
 
 .twikiDiffTable td {
   border:0px;
+}
+.twikiTableEven td {
+  background:white;
+}
+.twikiTableOdd td {
+  background:#eee;
+}
+
+.twikiTable .twikiFirstCol {
+  width:10%;
 }
 
 /* twiki forms */
@@ -607,6 +637,10 @@ a.natFeedIcon {
 }
 .twikiPageForm form {
   margin-bottom:0px;
+}
+
+.twikiFormStep {
+  margin:1em 0px;
 }
 
 .natTopicForm table table,
@@ -670,10 +704,22 @@ td.twikiDiffChangedText {
   margin:0 0 0 1em;
 }
 
-/* CAIRO-HACK to use the FORMBUTTON of the NatSkin */
-.natTopicForm .twikiChangeFormButtonHolder,
-.natTopicForm .twikiChangeFormButton {
-  /*display:none;*/
+/* TOC */
+.twikiToc {
+  margin-top:5px;
+  margin-bottom:5px;
+  padding-top:5px;
+  padding-bottom:5px;
+}
+.twikiToc img {
+  display:none;
+}
+.twikiTocTitle {
+  font-size:20px;
+}
+.twikiToc ul {
+  margin-top:0px;
+  margin-bottom:0px;
 }
 
 /* see also page.nat.tmpl */

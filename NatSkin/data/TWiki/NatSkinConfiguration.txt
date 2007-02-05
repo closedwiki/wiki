@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1156530555" format="1.1" reprev="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1168359736" format="1.1" version="1.1"}%
 %META:TOPICPARENT{name="NatSkin"}%
 ---+!! %TOPIC%
 %TOC%
@@ -88,14 +88,6 @@ Css files must obey the following naming scheme to be recognized
    * =&lt;name>Thin.css=: definitions for style &lt;name> displayed using =STYLEBORDER = thin=
    * =&lt;name>Variation.css=: style variations that can be applied to any base style; this
      can be used to vary a base style, e.g. to add header art or change some fonts and colours
-
----++ Enabling the build-in Wikiwyg editor
-There is an additional set of templates that can be used to replace the normal text editor
-with a javascript based "wikiwyg" editor that will ease to write [[%TWIKIWEB%.TextFormattingRules][TWikiMarkUp]].
-To enable <nop>NatEdit add the following to your [[%MAINWEB%.TWikiPreferences]] or to your [[%WIKIUSERNAME%][HomeTopic]]:
-<verbatim>
-  * Set SKIN = natedit, nat
-</verbatim>
 
 ---+++ Email Obfuscation
 The standard TWiki engine tries to obfuscate email addresses by adding a phrase to the email url (like NOSPAM)

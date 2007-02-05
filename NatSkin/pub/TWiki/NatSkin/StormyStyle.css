@@ -27,10 +27,10 @@ hr {
 }
 
 .natTopLeftContents{
-  margin:20px;
+  margin:20px 0px 20px 20px;
 }
 .natTopRightContents {
-  margin:25px 10px 0px 20px;
+  margin:20px 20px 20px 0px;
 }
 .natMiddle {
   padding:20px 10px 20px 10px;
@@ -45,10 +45,6 @@ hr {
 .natTopRight,
 .natSideBar {
   width:250px;
-}
-
-.natTopBarSizer {
-  height:140px;
 }
 
 /* twiki styles */
@@ -73,9 +69,10 @@ hr {
 }
 .twikiTable th,
 .twikiTable th font,
+.twikiTable th span,
 .twikiTable th a {
   font-weight:bold;
-  color:#cccccc;
+  color:#cccccc !important; /* SMELL: breaks %TABLE{}% */
 }
 .twikiDiffTable td {
   border:0px;
@@ -127,9 +124,9 @@ hr {
   color:#cccccc;
 }
 /* twiki page form */
-.twikiPageForm td,
-.twikiPageForm th,
-.twikiPageForm table {
+.twikiPageForm {
+  margin:5px 0px;
+  padding:10px 0px;
   border:1px #aaaaaa solid;
 }
 
@@ -217,8 +214,31 @@ hr {
   width:160px;
 }
 
+.natSearchBoxPos1 {
+  margin-bottom:20px;
+}
+.natSearchBoxPos2,
+.natSearchBoxPos3 {
+  margin:10px 0px;
+}
+
 .natWebTitle {
   text-transform:none;
+}
+
+/* login */
+.natLoginMessage {
+  background:#000000;
+  padding:20px;
+  border-bottom:1px solid #999999;
+  border-top:1px solid #999999;
+  color:#ffffff;
+}
+.natLoginBody .natTopBar {
+  display:none;
+}
+.natLoginBody .natMainContents {
+  margin-top:20px;
 }
 
 /* sidebar */
@@ -238,6 +258,7 @@ hr {
 .natSideBar h2 {
   padding-left:0px;
   font-size:14px;
+  margin-top:5px;
 }
 .natSideBar ul {
   margin-left:0px;
@@ -287,13 +308,10 @@ hr {
 .natMain h4 a, .natMain h5 a, .natMain h6 a {
   color:#cccccc;
 }
-.natMain h2 {
-}
-
 .natMiddle input,
 .natMiddle select,
 .natMiddle textarea {
-  background:#555555;
+  background:#222222;
   color:#cccccc;
   border:1px solid #cccccc;
   font-size:13px;
@@ -301,6 +319,10 @@ hr {
 .natMiddle input[type="submit"] {
   background:white;
   color:black;
+}
+.natMiddle input.natOkButton {
+  background:#222222;
+  color:#cccccc;
 }
 .natMiddle input[type="checkbox"] {
   color:#333333;
@@ -321,6 +343,27 @@ hr {
   font-weight:bold;
   line-height:140%;
   font-size:12px;
+}
+
+/* TOC */
+.twikiToc {
+  margin-bottom:10px;
+}
+.twikiToc ul li {
+  line-height:130%;
+}
+.twikiToc ul {
+  margin-top:0px;
+  margin-bottom:0px;
+}
+.twikiToc ul ul {
+  padding-left:20px;
+}
+.twikiTocTitle {
+  font-size:20px;
+  font-weight:bold;
+  padding-bottom:3px;
+  margin-bottom:0px;
 }
 
 /* custom styles */
@@ -416,7 +459,6 @@ hr {
   margin-bottom:1em;
 }
 .blogInfo {
-  font-size:0.9em;
   margin-bottom:0.5em;
 }
 .blogCommentOdd {

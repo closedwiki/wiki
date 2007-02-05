@@ -35,9 +35,9 @@ hr {
   font-size: 80%;
   font-family: 'Trebuchet MS', Verdana, Arial, Sans-Serif;
 }
-.natSideBar,
+.natSideBarRight,
 .natTopRight {
-  width:250px;
+  width:240px;
 }
 
 .natSideBarContents,
@@ -59,13 +59,10 @@ hr {
   padding:0px;
 }
 .natTopLeftContents {
-  margin:45px 0px 10px 20px;
+  margin:40px 0px 30px 20px;
 }
 .natTopRightContents {
-  margin:55px 5px 0px 15px;
-}
-.natTopBarSizer {
-  height:160px;
+  margin:40px 20px 30px 0px;
 }
 .natSearchBox input {
   width:150px;
@@ -129,7 +126,7 @@ hr {
   font-size:1em;
 }
 .natSideBar h1 {
-  font-size: 1.8em;
+  font-size: 1.5em;
   font-family: 'Trebuchet MS', Verdana, Arial, Sans-Serif;
   /*text-shadow:2px 2px 2px #ccc;*/
   color:#444444;
@@ -311,9 +308,10 @@ html>body .natSideBar ol { /* hide from IE */
   text-align:center;
 }
 .twikiTable th,
+.twikiTable th span,
 .twikiTable th font,
 .twikiTable th a {
-  color:#0055aa;
+  color:#0055aa !important; /* SMELL breaks %TABLE{}% */
 }
 .twikiTable td {
   background:white;
@@ -438,17 +436,22 @@ html>body .natSideBar ol { /* hide from IE */
   background:#fff6bf;
   border-top:2px solid #ffd324;
   border-bottom:2px solid #ffd324;
-  line-height:1.7em;
 }
 
 .twikiToc ul {
   margin-top:0px;
   margin-bottom:0px;
 }
+.twikiToc li ul {
+  padding-left:20px;
+}
 
 .twikiToc li a {
   display:block;
   width:100%;
+}
+.twikiToc li {
+  line-height:1.1em;
 }
 .twikiToc a + a {
   display:inline;
@@ -456,6 +459,17 @@ html>body .natSideBar ol { /* hide from IE */
 .twikiToc li a:hover {
   background-color:#ffd324;
   text-decoration:none;
+}
+.twikiTocTitle {
+  background:ffd324;
+  display:block;
+  margin-top:-5px;
+  padding:2px 25px;
+  font-size:1.2em;
+  font-weight:bold;
+  font-family: 'Trebuchet MS', Verdana, Arial, Sans-Serif;
+  line-height:1.5em;
+  margin-bottom:5px;
 }
 
 /* CSS2 stuff to render proper section numbering

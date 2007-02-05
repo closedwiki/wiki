@@ -2,7 +2,6 @@
 <!-- template: edit.nat.tmpl -->
 <!-- -->%TMPL:INCLUDE{"editbody"}%
 <!-- -->%TMPL:INCLUDE{"edittopicactions"}%
-<!-- -->%TMPL:INCLUDE{"editsidebar"}%
 <!-- -->%TMPL:INCLUDE{"editjavascript"}%
 <!-- -->%TMPL:INCLUDE{"editstyles"}%
 <!-- -->%TMPL:INCLUDE{"edittoolbar"}%
@@ -11,7 +10,7 @@
 %TMPL:DEF{"title"}%%TOPIC% - (%MAKETEXT{"edit"}%)%TMPL:END%
 %TMPL:DEF{"onloadscript"}%document.EditForm.text.focus();%TMPL:END%
 %TMPL:DEF{"locator"}%<span class="natSep">&middot;</span>[[WebHome][%WEB%]]<span class="natSep">&middot;</span><b>%TOPIC%</b>%TMPL:END%
-%TMPL:DEF{"contentheader"}%<div class="natBreadCrumbs">%BREADCRUMBS{"%BASEWEB%.%BASETOPIC%" exclude="%BASETOPIC%" separator="<span class='natSep'>&#187;</span>" footer="<span class='natSep'>&#187;</span> <nop>%BASETOPIC%"}%</div>%TMPL:END%
+%TMPL:DEF{"contentheader"}%<div class="natBreadCrumbs">%BREADCRUMBS{"%BASEWEB%.%BASETOPIC%" exclude="%BASETOPIC%" separator="<span class='natSep'>&nbsp;&#187; </span>" footer="<span class='natSep'>&nbsp;&#187; </span> <nop>%BASETOPIC%"}%</div>%TMPL:END%
 %TMPL:DEF{"content"}% <!-- -->
 <div class="natEdit">
 <form name="EditForm" action="%SCRIPTURLPATH{"save"}%/%WEB%/%TOPIC%" method="post">
@@ -23,9 +22,12 @@
   <input type="hidden" name="action_cancel" value="" />
   <input type="hidden" name="submitChangeForm" value="" />
   <input type="hidden" name="formtemplate" value="%FORMTEMPLATE%" />
+  <input type="hidden" name="templatetopic" value="%TEMPLATETOPIC%" />
   <input type="hidden" name="originalrev" value="%ORIGINALREV%" />
+  <input type="hidden" name="redirectto" value="%REDIRECTTO%" />
   <input type="hidden" name="skin" value="%URLPARAM{"skin"}%" />
   <input type="hidden" name="cover" value="%URLPARAM{"cover"}%" />
+  <input type="hidden" name="newtopic" value="%NEWTOPIC%" />
   <input type="hidden" name="cmd" value="%CMD%" /> %TMPL:P{"edittoolbar"}%
   <textarea id="natEditTextArea" name="text" wrap="virtual" rows="%EDITBOXHEIGHT%" cols="%EDITBOXWIDTH%" style="%EDITBOXSTYLE%">%TEXT%</textarea>
 </div>
@@ -39,13 +41,21 @@
 ---+++ Options
 <table><tr>
 <td valign="middle" align="right" class="twikiFirstCol">
-  <b><label for="parent">%MAKETEXT{"Parent"}%:</b></label>
+  <b><label for="parent">%MAKETEXT{"Parent topic"}%:</b></label>
 </td>
 <td valign="middle">
   <select id="parent" name="topicparent">
     <option>none</option>
-    %TOPICLIST{"<option value='$name' $marker>$name</option>" separator="$n" selection="%META{"parent" format="$topic" dontrecurse="on"}%"}%
+    %TOPICLIST{"<option value='$name' $marker>$name</option>" 
+      separator="$n" 
+      selection="%BREADCRUMBS{"%URLPARAM{"topicparent"}%"
+	recurse="%IFDEFINED{"%URLPARAM{"topicparent"}%" then="off" else="once"}%"
+      	exclude="%WEBHOME%|%WEB%|%TOPIC%"
+    	format="$name"
+      }%"
+    }%
   </select>
+</pre>
 </td>
 </tr>
 <tr>
@@ -69,28 +79,77 @@
 %TMPL:P{"edithelp"}% 
 %ENDTWISTY% 
 %TMPL:END%
-%TMPL:DEF{"bottomtopicactions"}%<div class="natBottomTopicActions"><!--
---><span class="natEditAction natCurrentAction">Edit</span><!-- 
---><span class="natPreviewAction"><a href="javascript:submitEditForm('preview','preview');" accesskey="p" title='%MAKETEXT{"Preview your changes"}%'>%MAKETEXT{"Preview"}%</a></span><!--
--->%FORMBUTTON{"<span class='natFormAction'>$1</span>"}%<!--
---><span class="natUndoAction"><a href="javascript:self.location.reload();" accesskey="u" title='%MAKETEXT{"Abandon your changes but continue editing"}%'>%MAKETEXT{"Undo"}%</a></span><!--
---><span class="natSaveAction"><a href="javascript:submitEditForm('save','checkpoint');" accesskey="s" title='%MAKETEXT{"Save and continue editing"}%'>%MAKETEXT{"Save"}%</a></span><!--
---><span class="natDoneAction"><a href="javascript:submitEditForm('save', 'save');" accesskey="d" title='%MAKETEXT{"Save and exit"}%'>%MAKETEXT{"Done"}%</a></span><!--
---><span class="natCancelAction"><a href="javascript:submitEditForm('save', 'cancel');" accesskey="c" title='%MAKETEXT{"Abandon your changes and exit"}%'>%MAKETEXT{"Cancel"}%</a></span>
-</div>
-%TMPL:END%
 %TMPL:DEF{"edithelp"}%<!-- -->
 <div class="natEditHelp">
 ---+++ %MAKETEXT{"Access keys"}%
 <table cellpadding="10">
 <tr>
-<td>
+<td valign="top">
+   * B = Bold
+   * I = Bold
+   * _ = Underline
+   * - = Strike
+
+   * l = Subscript
+   * ^ = Superscript
+
+   * 1 = Level 1 headline 
+   * 2 = Level 2 headline 
+   * 3 = Level 3 headline 
+   * 4 = Level 4 headline 
+</td>
+<td valign="top">
+   * &lt; = Align left
+   * &gt; = Align right
+   * . = Center align
+   * J = Justify align
+
+   * / = External link
+   * [ = Internal link
+
+   * G = Embed image
+   * M = Mathematic formula
+   * V = Ignore wiki formatting
+   * Z = Your signature
+</td>
+<td valign="top">
    * C = Cancel
    * D = Done
    * F = Add form
    * P = Preview
    * S = Save
    * U = Undo
+
+   * ? = Help
+</td>
+</tr>
+</table>
+---+++ %MAKETEXT{"Documentation"}%
+<table cellpadding="10">
+<tr>
+<td valign="top">
+   * <a href="%SCRIPTURLPATH{"view"}%/%TWIKIWEB%/GoodStyle" target="_blank">%MAKETEXT{"GoodStyle"}%</a>
+   * <a href="%SCRIPTURLPATH{"view"}%/%TWIKIWEB%/TextFormattingRules" target="_blank">%MAKETEXT{"TextFormatting"}%</a> 
+   * <a href="%SCRIPTURLPATH{"view"}%/%TWIKIWEB%/TWikiVariables" target="_blank">%MAKETEXT{"Variables"}%</a>
+   * <a href="%SCRIPTURLPATH{"view"}%/%TWIKIWEB%/FormattedSearch" target="_blank">%MAKETEXT{"Formatted Search"}%</a>
+   * <a href="%SCRIPTURLPATH{"view"}%/%TWIKIWEB%/TWikiForms" target="_blank">%MAKETEXT{"Form based input"}%</a>
+   * <a href="%SCRIPTURLPATH{"view"}%/%TWIKIWEB%/IncludeTopicsAndWebPages" target="_blank">%MAKETEXT{"Including"}%</a>
+</td>
+</tr>
+</table>
+---+++ %MAKETEXT{"Plugins"}%
+<table cellpadding="10">
+<tr>
+<td valign="top">
+%FORMATLIST{
+  "%ACTIVATEDPLUGINS%" 
+  separator=" " 
+  header="<ul>"
+  format="<li><a href=\"$percntSCRIPTURLPATH{\"view\"}$percnt/%TWIKIWEB%/$1\" target=\"_blank\">$1</a></li>" 
+  footer="</ul>"
+  pattern="(\w+)$" 
+  sort="on"
+}%
 </td>
 </tr>
 </table>

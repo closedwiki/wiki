@@ -1,8 +1,6 @@
 <!-- template: defaultbody.nat.tmpl -->
 %TMPL:DEF{"defaultbody"}% 
-%IFDEFINEDTHEN{"$percntBROADCASTMESSAGE$percnt"}%
-<div class="twikiBroadcastMessage"> $test </div>
-%FIDEFINED%
+<a name="PageTop"></a>
 <table class="natPageBox" cellpadding="0" cellspacing="0" border="0" width="100%">
 <tr><td class="natBoxBorderTopLeft"> </td><td class="natBoxBorderTopRight"> </td></tr>
 <tr>
@@ -22,8 +20,11 @@
 	    </div>
 	  </td>
 	  %FISKINSTATE%
-	  <td class="natMiddle %IFSKINSTATE{sidebar="left|off" then="natMiddleRight natMainRight"}% %IFSKINSTATE{sidebar="right|off" then="natMiddleLeft natMainLeft"}% %IFSKINSTATE{action="oops" then="natMiddleLeft natMiddleRight natMainLeft natMainRight"}% natMain" valign="top">
-	    <div class="natMainHeaderContents">%TMPL:P{"contentheader"}%</div>
+	  <td class="natMain natMiddle %IFSKINSTATE{sidebar="right|off" then="natMiddleLeft natMainLeft"}% %IFSKINSTATE{sidebar="left|off" then="natMiddleRight natMainRight"}% %IFSKINSTATE{sidebar="off" then="natMiddleBoth natMainBoth"}%" valign="top">
+	    <div class="natMainHeaderContents">
+%TMPL:P{"contentheader"}%
+	    </div>
+%TMPL:P{"broadcast"}% <!-- -->
 	    <div class="natMainContents"> %TMPL:P{"content"}% </div>
 	  </td> 
 	  %IFSKINSTATETHEN{sidebar="right|both"}%
@@ -35,7 +36,7 @@
 	  %FISKINSTATE%
 	</tr>
 	<tr>
-	  <td class="natMiddle %IFSKINSTATE{sidebar="left|off" then="natMiddleRight natMainFooterRight"}% %IFSKINSTATE{sidebar="right|off" then="natMiddleLeft natMainFooterLeft"}% %IFSKINSTATE{action="oops" then="natMiddleLeft natMiddleRight natMainFooterLeft natMainFooterRight"}% natMainFooter" valign="bottom">
+	  <td class="natMainFooter natMiddle %IFSKINSTATE{sidebar="right|off" then="natMiddleLeft natMainFooterLeft"}% %IFSKINSTATE{sidebar="left|off" then="natMiddleRight natMainFooterRight"}%  %IFSKINSTATE{sidebar="off" then="natMiddleBoth natMainFooterBoth"}%" valign="bottom">
 	    <div class="natMainFooterContents">%TMPL:P{"contentfooter"}%</div>
 	  </td>
 	</tr>
@@ -55,9 +56,10 @@
       </div>
     </div>
   </td>
-  <td class="natBoxBorderRight"> </td>
+  <td class="natBoxBorderRight"></td>
 </tr>
 <tr><td class="natBoxBorderBottomLeft"> </td><td class="natBoxBorderBottomRight"> </td></tr>
 </table>
+<a name="PageBottom"></a>
 %TMPL:END%
 %TMPL:DEF{"body"}%%TMPL:P{"defaultbody"}%%TMPL:END%
