@@ -79,11 +79,12 @@ sub natSearch {
   my $searchTemplate;
 
   # get web preferences
-  $includeWeb = &TWiki::Func::getPreferencesValue('NATSEARCHINCLUDEWEB', $theWeb) || '';
-  $excludeWeb = &TWiki::Func::getPreferencesValue('NATSEARCHEXCLUDEWEB', $theWeb) || '';
-  $includeTopic = &TWiki::Func::getPreferencesValue('NATSEARCHINCLUDETOPIC', $theWeb) || '';
-  $excludeTopic = &TWiki::Func::getPreferencesValue('NATSEARCHEXCLUDETOPIC', $theWeb) || '';
-  $searchTemplate = &TWiki::Func::getPreferencesValue('NATSEARCHTEMPLATE', $theWeb) || '';
+  $includeWeb = &TWiki::Func::getPreferencesValue('NATSEARCHINCLUDEWEB') || '';
+  $excludeWeb = &TWiki::Func::getPreferencesValue('NATSEARCHEXCLUDEWEB') || '';
+  $includeTopic = &TWiki::Func::getPreferencesValue('NATSEARCHINCLUDETOPIC') || '';
+  $excludeTopic = &TWiki::Func::getPreferencesValue('NATSEARCHEXCLUDETOPIC') || '';
+  $searchTemplate = &TWiki::Func::getPreferencesValue('NATSEARCHTEMPLATE') || '';
+  $theIgnoreCase = &TWiki::Func::getPreferencesFlag('NATSEARCHIGNORECASE') unless $theIgnoreCase;
   $includeWeb =~ s/^\s*(.*)\s*$/$1/o;
   $excludeWeb =~ s/^\s*(.*)\s*$/$1/o;
   $includeTopic =~ s/^\s*(.*)\s*$/$1/o;
@@ -98,14 +99,14 @@ sub natSearch {
   }
   $searchTemplate =~ s/^\s*(.*)\s*$/$1/os;
   #writeDebug("searchTemplate='$searchTemplate'");
-  #writeDebug("search=$theSearchString");
-  #writeDebug("wikiUserName=$wikiUserName");
-  #writeDebug("theWeb=$theWeb");
-  #writeDebug("theIgnoreCase=$theIgnoreCase");
-  #writeDebug("includeWeb=$includeWeb");
-  #writeDebug("excludeWeb=$excludeWeb");
-  #writeDebug("includeTopic=$includeTopic");
-  #writeDebug("excludeTopic=$excludeTopic");
+  writeDebug("search=$theSearchString");
+  writeDebug("wikiUserName=$wikiUserName");
+  writeDebug("theWeb=$theWeb");
+  writeDebug("theIgnoreCase=$theIgnoreCase");
+  writeDebug("includeWeb=$includeWeb");
+  writeDebug("excludeWeb=$excludeWeb");
+  writeDebug("includeTopic=$includeTopic");
+  writeDebug("excludeTopic=$excludeTopic");
   
   # separate and process options
   my $options = "";
@@ -113,7 +114,7 @@ sub natSearch {
     $options = $1;
   }
   #writeDebug("options=$options");
-  my $doIgnoreCase = ($options =~ /u/ || $theIgnoreCase) ? '' : 'i';
+  my $doIgnoreCase = ($options =~ /u/ || $theIgnoreCase) ? 1 : 0;
 
   # construct the list of webs to search in
   my @webList = ($theWeb);
@@ -257,6 +258,7 @@ sub natTopicSearch {
   # collect the results for each web, put them in $results->{}
   foreach my $thisWebName (@$theWebList) {
     # get all topics
+    $thisWebName =~ s/\./\//go;
     my $webDir = TWiki::Sandbox::normalizeFileName("$dataDir/$thisWebName");
     opendir(DIR, $webDir) || die "can't opendir $webDir: $!";
     my @topics = map {s/\.txt$//; $_} grep {/\.txt$/} readdir(DIR);
@@ -333,6 +335,7 @@ sub natContentsSearch {
     #writeDebug("searching in $thisWebName");
 
     # get all topics
+    $thisWebName =~ s/\./\//go;
     my $webDir = TWiki::Sandbox::normalizeFileName("$dataDir/$thisWebName");
     opendir(DIR, $webDir) || die "can't opendir $webDir: $!";
     my @bag = grep {/\.txt$/} readdir(DIR);
@@ -411,7 +414,7 @@ sub _getSearchResult {
   my $result = '';
       
   # get hits in all webs
-  foreach my $thisWeb (keys %{$theResults}) {
+  foreach my $thisWeb (sort keys %{$theResults}) {
     my ($beforeText, $repeatText, $afterText) = split(/%REPEAT%/, $theTemplate);
 
     # get web header

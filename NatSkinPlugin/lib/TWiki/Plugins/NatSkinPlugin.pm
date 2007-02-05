@@ -1,7 +1,7 @@
 ###############################################################################
 # NatSkinPlugin.pm - Plugin handler for the NatSkin.
 # 
-# Copyright (C) 2003-2006 MichaelDaum@WikiRing.com
+# Copyright (C) 2003-2007 MichaelDaum@WikiRing.com
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -50,7 +50,7 @@ $STARTWW = qr/^|(?<=[\s\(])/m;
 $ENDWW = qr/$|(?=[\s\,\.\;\:\!\?\)])/m;
 
 $VERSION = '$Rev$';
-$RELEASE = '3.00-pre10';
+$RELEASE = '3.00-pre11';
 $NO_PREFS_IN_TOPIC = 1;
 $SHORTDESCRIPTION = 'Supplements the bare bones NatSkin theme for TWiki';
 
@@ -87,6 +87,7 @@ sub initPlugin {
   TWiki::Func::registerTagHandler('KNOWNVARIATIONS', \&renderKnownVariations);
   TWiki::Func::registerTagHandler('WEBCOMPONENT', \&renderWebComponent);
   TWiki::Func::registerTagHandler('IFSKINSTATE', \&renderIfSkinState);
+  TWiki::Func::registerTagHandler('TWIKIREGISTRATION', \&renderTWikiRegistration);
 
   # REVISIONS, MAXREV, CURREV only worked properly for the PatternSkin :/
   TWiki::Func::registerTagHandler('NATREVISIONS', \&renderRevisions);
@@ -153,11 +154,11 @@ sub postRenderingHandler {
 
   # remove leftover tags of supported plugins if they are not installed
   # so that they are remove from the NatSkin templates
+
   $_[0] =~ s/%STARTALIASAREA%//go;
   $_[0] =~ s/%STOPALIASAREA%//go;
   $_[0] =~ s/%ALIAS{.*?}%//go;
   $_[0] =~ s/%REDDOT{.*?}%//go;
-
 }
 
 ###############################################################################
@@ -211,7 +212,7 @@ sub doInit {
       # disable during register context
       my $theSkin = $query->param('skin') || TWiki::Func::getSkin();
       my $theContentType = $query->param('contenttype');
-      if ($skinState{'action'} =~ /^(register|mailnotif)/ || 
+      if ($skinState{'action'} =~ /^(register|mailnotif|resetpasswd)/ || 
 	  $theSkin =~ /^rss/ ||
 	  $theContentType) {
 	$useEmailObfuscator = 0;
@@ -578,8 +579,9 @@ sub initSkinState {
 
   # temporary toggles
   $theToggleSideBar = 'off' if $theRaw && $skinState{'border'} eq 'thin';
-  $theToggleSideBar = 'off' if $skinState{'border'} eq 'thin' && 
-    $skinState{'action'} =~ /^(login|logon|oops|edit|manage|rdiff|natsearch|changes|search)$/;
+  $theToggleSideBar = 'off' if 
+    $skinState{'action'} =~ /^(edit|editsection|manage|rdiff|natsearch|changes|search)$/;
+  $theToggleSideBar = 'off' if $skinState{'action'} =~ /^(login|logon|oops)$/;
 
   # switch the sidebar off if we need to authenticate
   if ($TWiki::cfg{AuthScripts} =~ /\b$skinState{'action'}\b/ &&
@@ -663,6 +665,18 @@ sub renderIfSkinStateThen {
   return $before.$after;
   
 }
+
+###############################################################################
+sub renderTWikiRegistration {
+  my $twikiWeb = &TWiki::Func::getTwikiWebname();
+
+  my $twikiRegistrationTopic = 
+    TWiki::Func::getPreferencesValue('TWIKIREGISTRATION') || 
+    "$twikiWeb.TWikiRegistration";
+  
+  return $twikiRegistrationTopic;
+}
+
 
 ###############################################################################
 sub renderIfSkinState {
@@ -1126,18 +1140,18 @@ sub renderNatWebLogo {
   my $natWebLogo;
 
   $natWebLogo = TWiki::Func::getPreferencesValue('NATWEBLOGONAME');
-  return $natWebLogo if $natWebLogo;
+  return '<span class="natWebLogo">'.$natWebLogo.'</span>' if $natWebLogo;
 
   $natWebLogo = TWiki::Func::getPreferencesValue('NATWEBLOGOIMG');
-  return '<img src="'.$natWebLogo.'" alt="%WEBLOGOALT%" align="absmiddle" border="0" />' 
+  return '<img class="natWebLogo" src="'.$natWebLogo.'" alt="%WEBLOGOALT%" align="absmiddle" border="0" />' 
     if $natWebLogo;
 
   $natWebLogo = TWiki::Func::getPreferencesValue('WEBLOGOIMG');
-  return '<img src="'.$natWebLogo.'" alt="%WEBLOGOALT%" align="absmiddle" border="0" />' 
+  return '<img class="natWebLogo" src="'.$natWebLogo.'" alt="%WEBLOGOALT%" align="absmiddle" border="0" />' 
     if $natWebLogo;
 
   $natWebLogo = TWiki::Func::getPreferencesValue('WIKITOOLNAME');
-  return $natWebLogo if $natWebLogo;
+  return '<span class="natWebLogo">'.$natWebLogo.'</span>' if $natWebLogo;
 
   return 'TWiki';
 }
@@ -1218,7 +1232,7 @@ sub renderExternalLink {
   $theUrl =~ /^http/i && ($addClass = 1); # only for http and hhtps
   $theUrl =~ /^$urlHost/i && ($addClass = 0); # not for own host
   $theUrl =~ /^$httpsUrlHost/i && ($addClass = 0); # not for own host
-  $thePrefix =~ /class="nop"/ && ($addClass = 0); # prevent adding it 
+  $thePrefix =~ /class="[^"]*\bnop\b/ && ($addClass = 0); # prevent adding it 
   $thePrefix =~ /class="natExternalLink"/ && ($addClass = 0); # prevent adding it twice
 
   if ($addClass) {
@@ -1304,6 +1318,14 @@ sub getMaxRevision {
 # paths for the same action depending on the apache configuration (rewrites, aliases)
 sub getCgiAction {
 
+  my $context = TWiki::Func::getContext();
+
+  # not all cgi actions we want to distinguish set their context
+  # so only use those we are sure of
+  return 'edit' if $context->{'edit'};
+  # TODO: more
+
+  # fall back to analyzing the path info
   my $pathInfo = $ENV{'PATH_INFO'} || '';
   my $theAction = $ENV{'REQUEST_URI'} || '';
   if ($theAction =~ /^.*?\/([^\/]+)$pathInfo.*$/) {
