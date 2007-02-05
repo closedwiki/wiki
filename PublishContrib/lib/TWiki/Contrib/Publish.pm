@@ -76,10 +76,8 @@ sub publish {
     $TWiki::Plugins::SESSION = $session;
 
     #don't add extra markup for topics we're not linking too
-    #NEWTOPICBGCOLOR, NEWTOPICFONTCOLOR NEWTOPICLINKSYMBOL LINKTOOLTIPINFO
+    # NEWTOPICLINKSYMBOL LINKTOOLTIPINFO
     $TWiki::Plugins::SESSION->{renderer}->{NEWLINKSYMBOL} = '';
-    $TWiki::Plugins::SESSION->{renderer}->{NEWTOPICBGCOLOR} = '';
-    $TWiki::Plugins::SESSION->{renderer}->{NEWTOPICFONTCOLOR} = '';
 
     my ($inclusions, $exclusions, $filter, $skin, $genopt, $format);
     $genopt = '';
