@@ -70,8 +70,7 @@ BEGIN {
 ---++ ClassMethod new ($session)
 
 Creates a new renderer with initial state from preference values
-(NEWTOPICBGCOLOR, NEWTOPICFONTCOLOR NEWTOPICLINKSYMBOL
- LINKTOOLTIPINFO)
+(NEWTOPICLINKSYMBOL LINKTOOLTIPINFO)
 
 =cut
 
@@ -82,12 +81,6 @@ sub new {
 
     $this->{session} = $session;
 
-    $this->{NEWTOPICBGCOLOR} =
-      $session->{prefs}->getPreferencesValue('NEWTOPICBGCOLOR')
-        || '#FFFFCE';
-    $this->{NEWTOPICFONTCOLOR} =
-      $session->{prefs}->getPreferencesValue('NEWTOPICFONTCOLOR')
-        || '#0000FF';
     $this->{NEWLINKSYMBOL} =
       $session->{prefs}->getPreferencesValue('NEWTOPICLINKSYMBOL')
         || CGI::sup('?');
