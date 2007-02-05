@@ -1,5 +1,5 @@
 %META:TOPICINFO{author="TWikiContributor" date="1169321835" format="1.1" version="$Rev$"}%
----+!! TWiki Release 4.1.1 (Edinburgh), 04 Feb 2007
+---+!! TWiki Release 4.1.1 (Edinburgh), 05 Feb 2007
 
 %TOC%
 
@@ -438,7 +438,7 @@ The 4.1.0 release was built from SVN http://svn.twiki.org/svn/twiki/tags/TWikiRe
 
 ---++  TWiki 4.1.1 Patch Release - Details
 
-The 4.1.1 release was built from SVN http://svn.twiki.org/svn/twiki/Patch04x01 revision 12764.
+The 4.1.1 release was built from SVN http://svn.twiki.org/svn/twiki/Patch04x01 revision 12768 (05 Feb 2007).
 
 ---+++ TWiki 4.1.1 Fixes
 
