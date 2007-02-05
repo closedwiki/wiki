@@ -7,7 +7,6 @@ function ClpStateChangeObject(url, stateChangeRequest) {
 	this.url = url;
 	this.clpDoIt=clpDoIt;
 	this.clpHandleNextObject=clpHandleNextObject;
-	this.clpHandleXMLResponse=clpHandleXMLResponse;
 	this.clpHandleTextResponse=clpHandleTextResponse;
 	this.clpInit = clpInit;
 	this.changes = new Array();
@@ -16,7 +15,7 @@ function ClpStateChangeObject(url, stateChangeRequest) {
 function clpInit() {
 	try { // Firefox, Opera 8.0+, Safari
 		this.stateChangeRequest = new XMLHttpRequest();
-		if (this.stateChangeRequest.overrideMimeType) this.stateChangeRequest.overrideMimeType("text/xml");
+		// if (this.stateChangeRequest.overrideMimeType) this.stateChangeRequest.overrideMimeType("text/xml");
 	} catch (e) { // Internet Explorer
 		try {
 			this.stateChangeRequest = new ActiveXObject("Msxml2.XMLHTTP");
@@ -54,7 +53,7 @@ function clpHandleStateChange(self) {
 	}
 
 	var responseText = self.stateChangeRequest.responseText;
-	var responseXML = self.stateChangeRequest.responseXML;
+	/* var responseXML = self.stateChangeRequest.responseXML;
 	if ((!responseXML.hasChildNodes) && (typeof(XMLHttpRequest)=="undefined")) {
 		var text = self.stateChangeRequest.responseText;
 		responseXML = new ActiveXObject("Msxml2.DOMDocument");
@@ -64,84 +63,8 @@ function clpHandleStateChange(self) {
 		if (responseXML.parseError.errorCode != 0) responseXML=null;
 		if (responseXML!=null) responseXML.setProperty("SelectionLanguage", "XPath");
 	}
-	
-	//if (responseXML!=null) {
-		//clpHandleXMLResponse(self, responseXML, responseText);
-	//} else {
-		clpHandleTextResponse(self, responseText);
-	//}
-}
-function clpHandleXMLResponse(self, responseXML, responseText) {
-	var imgs = responseText.match(/<img[^>]+id="CLP_IMG_[^>]+>/ig);
-	
-	if (imgs && imgs.length>0) {
-		for (var i = 0; i< imgs.length; i++) {	
-			var img = imgs[i];
-			
-			if (!img.match(/id="CLP_IMG_([^\"]+)/)) continue;
-			var id = RegExp.$1;
-
-			var e;
-			if (responseXML.getElementById) e = responseXML.getElementById("CLP_IMG_"+id);
-			else e = responseXML.selectNodes("img[@id = \"CLP_IMG_"+id+"\"]");
-			if (!e || (e.length && e.length==0)) {
-				alert("Shit");
-				clpHandleTextResponse(self,responseText);
-				return;
-			}
-			if (e.length && e.length>0) e=e[0];
-			var d = document.getElementById("CLP_IMG_"+id);
-
-			if (d && e && (e.getAttribute("src")==d.getAttribute("src"))) continue;
-
-			if (d && e) d.setAttribute("src", e.getAttribute("src"));
-
-			if (responseXML.getElementById) e = responseXML.getElementById("CLP_A_"+id);
-			else e = responseXML.selectNodes("a[@id=CLP_A_"+id+"]");
-			d = document.getElementById("CLP_A_"+id);
-			if (e && d)  {
-				if (e.length) e=e[0];
-				d.setAttribute("href",e.getAttribute("href"));
-				d.style.cursor = clpCursorNormalStyle;
-			}
-
-			var smlinks = responseText.match(new RegExp("<a[^>]+id=\"CLP_SM_A_"+id+"_[^>]+>","ig"));
-			if (!smlinks || (smlinks.length==0)) continue;
-			for (var j=0; j<smlinks.length; j++) {
-				var smlink = smlinks[j];
-				smlink.match(/id="CLP_SM_A_([^"]+)"/i);
-				id = RegExp.$1;
-
-				if (resopnseXML.getElementById) e = responseXML.getElementById("CLP_SM_A_"+id);
-				else e = responseXML.selectNodes("a[@id=CLP_SM_A_"+id+"]");
-				if (e && e.length) e=e[0];
-				d = document.getElementById("CLP_SM_A_"+id);
-				if (e && d) d.setAttribute("href",e.getAttribute("href"));
-
-				if (responseXML.getElementById) e = responseXML.getElementById("CLP_SM_IMG_"+id);
-				else e = responseXML.selectNodes("img[@id=CLP_SM_IMG_"+id+"]");
-				if (e && e.length) e=e[0];
-				d = document.getElementById("CLP_SM_IMG_"+id);
-				if (e && d) d.setAttribute("src", e.getAttribute("src"));
-
-				if (reponseXML.getElementById) e = responseXML.getElementById("CLP_SM_TT_"+id);
-				else e = responseXML.selectNodes("div[@id=CLP_SM_TT_"+id+"]");
-				d = document.getElementById("CLP_SM_TT_"+id);
-				if (e && d) {
-					if (e.length) e=e[0];
-					while (d.hasChildNodes) d.removeChild(d.firstChild);
-					var cn = e.childNodes;
-					for (var k=0; k<cn.length; k++) {
-						d.appendChild(cn[k]);
-					}
-				}
-				
-			} // for k
-		} // for i	
-		clpHandleNextObject(self);
-	} else {
-		clpHandleTextResponse(self, responseText);
-	}
+	*/
+	clpHandleTextResponse(self, responseText);
 }
 function clpHandleTextResponse(self, responseText) {
 	var links = responseText.match(/<a[^>]+id="CLP_A_[^>]+>/ig);
@@ -228,7 +151,7 @@ function clpDoIt() {
 		};
 	}
 	this.stateChangeRequest.open("GET", this.url, true);
-	this.stateChangeRequest.setRequestHeader('Content-Type', 'text/xml'); 
+	// this.stateChangeRequest.setRequestHeader('Content-Type', 'text/xml'); 
 	this.stateChangeRequest.setRequestHeader('Cache-Control', 'no-cache'); 
 	this.stateChangeRequest.send(null);
 }
@@ -252,8 +175,12 @@ function clpGetIdFromUrl(url) {
 function clpChangeDivText(prefix,id, text) {
 	var e = document.getElementById(prefix+"_TT_"+id);
 	if (e) {
-		while (e.hasChildNodes()) e.removeChild(e.firstChild); 
-		e.appendChild(document.createTextNode(text));
+		if (e.innerHTML) {
+			e.innerHTML = text;
+		} else {
+			while (e.hasChildNodes()) e.removeChild(e.firstChild); 
+			e.appendChild(document.createTextNode(text));
+		}
 	}
 	
 }

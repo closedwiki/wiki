@@ -81,7 +81,7 @@ $VERSION = '$Rev$';
 # of the version number in PLUGINDESCRIPTIONS.
 $RELEASE = 'Cairo, Dakar, Edinburgh, ...';
 
-$REVISION = '1.022'; #dro#  added new feature (state selection for reset button);
+$REVISION = '1.022'; #dro#  improved AJAX performance; added new feature (state selection for reset button);
 #$REVISION = '1.021'; #dro# fixed some major bug (mod_perl, plugin preferences); improved performance (AJAX); fixed minor IE caching bug (AJAX related); added new attributes (tooltip, descr, template, statesel) requested by TWiki:Main.KeithHelfrich; fixed installation instructions bug reported by TWiki:Main.KeithHelfrich
 #$REVISION = '1.020'; #dro# added AJAX feature (useajax attribute) requested by TWiki:Main.ShayPierce and TWiki:Main.KeithHelfrich
 #$REVISION = '1.019'; #dro# fixed major default options bug reported by TWiki:Main.RichardHitier 
@@ -336,6 +336,23 @@ sub initNamedDefaults {
 	}
 }
 # =========================
+sub renderLegend {
+	my @states = split /\|/, $options{'states'};
+	my @icons = split /\|/, $options{'stateicons'};
+	my $legend.=qq@<noautolink>@;
+	$legend.=qq@(@;
+	foreach my $state (@states) {
+		my $icon = shift @icons;
+		my ($iconsrc) = &getImageSrc($icon);
+		my $heState = &htmlEncode($state);
+		$legend.=$query->img({src=>$iconsrc, alt=>$heState, title=>$heState});
+		$legend.=qq@ - $heState @;
+	}
+	$legend.=qq@) @;
+	$legend.=qq@</noautolink>@;
+	return $legend;
+}
+# =========================
 sub handleChecklist {
 	my ($attributes, $refText) = @_;
 
@@ -360,21 +377,7 @@ sub handleChecklist {
 			$resetDone=1;
 		}
 	}
-	my $legend = "";
-	if ($options{'showlegend'}) {
-		my @icons = split /\|/, $options{'stateicons'};
-		$legend.=qq@<noautolink>@;
-		$legend.=qq@(@;
-		foreach my $state (@states) {
-			my $icon = shift @icons;
-			my ($iconsrc) = &getImageSrc($icon);
-			my $heState = &htmlEncode($state);
-			$legend.=$query->img({src=>$iconsrc, alt=>$heState, title=>$heState});
-			$legend.=qq@ - $heState @;
-		}
-		$legend.=qq@) @;
-		$legend.=qq@</noautolink>@;
-	}
+	my $legend = $options{'showlegend'}?&renderLegend():"";
 
 	if (defined $options{'reset'} && !$options{'static'}) {
 		$namedResetIds{$name}++;
@@ -404,7 +407,7 @@ sub handleChecklist {
 			$$imgparams{src}=$imgsrc if (defined $imgsrc ) && ($imgsrc!~/^\s*$/s);
 			$linktext.=$query->img($imgparams);
 			$linktext.=qq@ ${title}@ if ($title!~/^\s*$/i)&&($imgsrc ne "");
-			$action="javascript:submitItemStateChange('$action')" if $options{'useajax'} && ($state ne 'STATESEL');
+			$action="javascript:submitItemStateChange('$action');" if $options{'useajax'} && ($state ne 'STATESEL');
 			my $id = &urlEncode("${name}_${state}_".$namedResetIds{$name});
 			if ($state eq 'STATESEL') {
 				$text.=&createHiddenDirectResetSelectionDiv($namedResetIds{$name},$name,\@states,\@icons); 
@@ -460,7 +463,7 @@ sub createHiddenDirectResetSelectionDiv {
 		my $action = &createResetAction($name, $s);
 		$action="javascript:submitItemStateChange('$action');clpTooltipHide('CLP_SM_DIV_RESET_${name}_$id');" if $options{'useajax'};
 		$selTxt.=$query->a({-href=>$action,-title=>$s,-style=>'vertical-align:bottom;'}, 
-			$query->img({-src=>&getImageSrc($$iconsRef[$i]),-alt=>'',-border=>0,-style=>'cursor:move;vertical-align:bottom'}));
+			$query->img({id=>"CLP_SM_IMG_RESET_${name}_$id",src=>&getImageSrc($$iconsRef[$i]),alt=>"",border=>0,style=>'cursor:move;vertical-align:bottom'}));
 	}
 
 	return $query->div({-id=>"CLP_SM_DIV_RESET_${name}_$id",
@@ -711,7 +714,9 @@ sub createTitle {
 	$title=~s /%NEXTSTATE%/($nextstate?$nextstate:&getNextState($name,$state))/esg;
 	$title=~s /%STATECOUNT%/($#$statesRef+1)/esg;
 	$title=~s /%STATES%/join(", ",@{$statesRef})/esg;
-	return &htmlEncode($title);
+	$title=~s /%LEGEND%/&renderLegend()/esg;
+	##return &htmlEncode($title);
+	return $title;
 }
 # =========================
 sub renderChecklistItem {
@@ -770,9 +775,7 @@ sub renderChecklistItem {
 
 		$linktext.=qq@$textBef@ if $textBef;
 
-		my $imgtitle=$options{'useajax'}?"":$title;
-		my $imgalt=$options{'useajax'}?"":$title;
-		$linktext.=$query->img({-id=>"CLP_IMG_$name$uetId", -src=>$iconsrc, -border=>0, -title=>$imgtitle, -alt=>$imgalt});
+		$linktext.=$query->img({id=>"CLP_IMG_$name$uetId", -src=>$iconsrc, -border=>0, -alt=>""});
 		$linktext.=qq@$textAft@ if $textAft;
 		if (lc($options{'clipos'}) eq 'left') {
 			$linktext.=' '.$options{'text'} unless $options{'text'} =~ /^(\s|\&nbsp\;)*$/;
@@ -781,7 +784,7 @@ sub renderChecklistItem {
 			$text .= $linktext;
 		} else {
 			my ($onmouseover, $onmouseout)=("","");
-			$action="javascript:submitItemStateChange('$action')" if $options{'useajax'};
+			$action="javascript:submitItemStateChange('$action');" if $options{'useajax'};
 			$onmouseover="clpTooltipShow('CLP_TT_$name$uetId','CLP_A_$name$uetId',20,20,true);";
 			$onmouseout="clpTooltipHide('CLP_TT_$name$uetId');";
 			$text .= $query->div({-id=>"CLP_TT_$name$uetId",-style=>"visibility:hidden;position:absolute;top:0;left:0;z-index:2;font: normal 8pt sans-serif;padding: 3px; border: solid 1px; background-color: $options{'tooltipbgcolor'};"},$title);
@@ -833,7 +836,7 @@ sub createHiddenDirectSelectionDiv {
 					-onmouseover=>"clpTooltipShow('CLP_SM_TT_$name${id}_$i','CLP_SM_IMG_$name${id}_$i',20,20);", 
 					-onmouseout=>"clpTooltipHide('CLP_SM_TT_$name${id}_$i');",
 				},
-				$query->img({-src=>&getImageSrc($ic),-id=>"CLP_SM_IMG_$name${id}_$i",-alt=>'',-border=>0, -style=>'vertical-align:bottom;cursor:move;'}));
+				$query->img({src=>&getImageSrc($ic),id=>"CLP_SM_IMG_$name${id}_$i",alt=>"",border=>0,style=>'vertical-align:bottom;cursor:move;',alt=>""}));
 		$sl.='&nbsp;';
 	}
 
