@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1170687772" format="1.0" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1170698216" format="1.0" version="$Rev$"}%
 ---+!! Checklist Plugin
 
 <nop>ChecklistPlugin creates simple checklists. 
@@ -255,7 +255,7 @@ Examples:
 | static | %<nop>CLI%<br/>%<nop>CHECKLIST%<br/>%<nop>CHECKLISTSTART% | allow/disallow state changes of checklist items (usefull if you create summary pages of some items of different checklists) | =static="off"= |
 | template | %<nop>CLI%<br/>%<nop>CHECKLIST%<br/>%<nop>CHECKLISTSTART% | template name (see Plugin settings / Templates ) | =template="patchday"= |
 | text | %<nop>CLI% | allows to place text behind the button (default: =""=); useful to avoid the annoying line break between checklist button and text if HTML forms are used (related: useforms attribute) | =text="my first step"= |
-| tooltip | %<nop>CLI%<br/>%<nop>CHECKLIST%<br/>%<nop>CHECKLISTSTART% | sets the tooltip of the state icons (substituted variables: %<nop>STATE% - current state; %<nop>NEXTSTATE% - next state; %<nop>STATES% - comma separated list of all states; %<nop>STATECOUNT% - number of states; %<nop>LEGEND% - a legend of all states and state icons) | =tooltip="%<nop>STATE%"= |
+| tooltip | %<nop>CLI%<br/>%<nop>CHECKLIST%<br/>%<nop>CHECKLISTSTART% | sets the tooltip of the state icons (substituted variables: %<nop>STATE% - current state; %<nop>NEXTSTATE% - next state; %<nop>STATEICON% - state icon; %<nop>NEXTSTATEICON% - next state icon; %<nop>STATES% - comma separated list of all states; %<nop>STATECOUNT% - number of states; %<nop>LEGEND% - a legend of all states and state icons) | =tooltip="%<nop>STATE%"= |
 | tooltipbgcolor | %<nop>CLI%<br/>%<nop>CHECKLIST%<br/>%<nop>CHECKLISTSTART% | tooltip background color (=statesel= popup background color is also effected) | =tooltipbgcolor="%<nop>WEBBGCOLOR%"= |
 | useajax | %<nop>CLI%<br/>%<nop>CHECKLIST%<br/>%<nop>CHECKLISTSTART%  | enables/disables <nop>JavaScript/AJAX based item state changes (default: =on=) | =useajax="1"= |
 | useforms | %<nop>CLI%<br/>%<nop>CHECKLIST%<br/> %<nop>CHECKLISTSTART% | if enabled HTML forms are used instead of hyperlinks (default: =off=) | =useforms="off"= |
@@ -327,7 +327,9 @@ Examples:
 	* Patchday
 		* Set TEMPLATE_PATCHDAY_STATEICONS = :no:|:yes:|:skull:|%<nop>Y%
 		* Set TEMPLATE_PATCHDAY_STATES = notpatched|patched|reboot|done
+		* Set TEMPLATE_PATCHDAY_STATESEL = on
 		* Set TEMPLATE_PATCHDAY_CLIPOS = left
+		* Set TEMPLATE_PATCHDAY_TOOLTIP = Click me to change my state %STATE% %STATEICON% to %NEXTSTATE% %NEXTSTATEICON%.<br/> There are %STATECOUNT% states (%STATES%). <br/> %LEGEND%
 
 ---++ Plugin Installation Instructions
 

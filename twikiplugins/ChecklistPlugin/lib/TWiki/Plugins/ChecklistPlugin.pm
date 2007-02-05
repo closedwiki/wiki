@@ -58,10 +58,9 @@ use vars qw(
         $web $topic $user $installWeb $VERSION $RELEASE $REVISION $pluginName
         $debug %TWikiCompatibility
 	$defaultsInitialized 
-    	%globalDefaults %namedDefaults @renderedOptions @flagOptions @filteredOptions @listOptions
-	%namedIds $idMapRef $idOrderRef $query %namedResetIds
-	%itemStatesRead 
+    	%globalDefaults @renderedOptions @flagOptions @filteredOptions @listOptions
 	%options  @unknownParams $name
+	%namedDefaults %namedIds $idMapRef $idOrderRef %namedResetIds %itemStatesRead 
     	$resetDone $stateChangeDone $saveDone
 	$initText
     );
@@ -205,8 +204,6 @@ sub initDefaults() {
 
 	%namedResetIds = ( );
 
-	$query = TWiki::Func::getCgiQuery();
-
 	$resetDone = 0;
 	$stateChangeDone = 0;
 	$saveDone = 0;
@@ -217,6 +214,7 @@ sub initDefaults() {
 
 	%itemStatesRead = ( );
 
+	my $query = TWiki::Func::getCgiQuery();
 	&collectAllChecklistItems() if (defined $query->param('clreset')) || (defined $query->param('clpsc'));
 
 }
@@ -337,6 +335,7 @@ sub initNamedDefaults {
 }
 # =========================
 sub renderLegend {
+	my $query = &TWiki::Func::getCgiQuery();
 	my @states = split /\|/, $options{'states'};
 	my @icons = split /\|/, $options{'stateicons'};
 	my $legend.=qq@<noautolink>@;
@@ -357,6 +356,8 @@ sub handleChecklist {
 	my ($attributes, $refText) = @_;
 
 	TWiki::Func::writeDebug("- ${pluginName}::handleChecklist($attributes,...refText...)") if $debug;
+
+	my $query = &TWiki::Func::getCgiQuery();
 
 	my $text="";
 
@@ -457,6 +458,7 @@ sub createResetAction {
 sub createHiddenDirectResetSelectionDiv {
 	my ($id, $name, $statesRef, $iconsRef) = @_;
 	my $selTxt ="";
+	my $query = &TWiki::Func::getCgiQuery();
 	$selTxt=$query->a({-href=>"javascript:clpTooltipHide('CLP_SM_DIV_RESET_${name}_$id');"},$query->sup('[X]'));
 	for (my $i=0; $i<=$#$statesRef; $i++) {
 		my $s = $$statesRef[$i];
@@ -542,6 +544,8 @@ sub handleChecklistItem {
 
 	&handleDescription($textBefore, $textAfter);
 
+	my $query = &TWiki::Func::getCgiQuery();
+
 	if ((defined $query->param('clpsc'))&&(!$stateChangeDone)) {
 		my ($id,$name,$lastState,$nextstate) = ($query->param('clpsc'),$query->param('clpscn'),$query->param('clpscls'),$query->param('clpscns'));
 		if ($options{'name'} eq $name) {
@@ -587,19 +591,22 @@ sub handleDescription  {
 sub getNextState {
 	my ($name, $lastState) = @_;
 	my @states = split /\|/, $options{'states'};
+	my @icons = split /\|/, $options{'stateicons'};
 
 	$lastState=$states[0] if ! defined $lastState;
 
 	my $state = $states[0];
+	my $icon = $icons[0];
 	for (my $i=0; $i<=$#states; $i++) {
 		if ($states[$i] eq $lastState) {
 			$state=($i<$#states)?$states[$i+1]:$states[0];
+			$icon=($i<$#states)?$icons[$i+1]:$icons[0];
 			last;
 		}
 	}
 	TWiki::Func::writeDebug("- ${pluginName}::getNextState($name, $lastState)=$state; allstates=".$options{states}) if $debug;
 
-	return $state;
+	return ($state, $icon);
 	
 }
 # =========================
@@ -674,7 +681,7 @@ sub doChecklistItemStateChange {
 	# reload?
 	return if ((defined $$idMapRef{$n}{$id}{'state'})&&($$idMapRef{$n}{$id}{'state'} ne $lastState));
 
-	$$idMapRef{$n}{$id}{'state'}=(defined $nextstate?$nextstate:&getNextState($n, $$idMapRef{$n}{$id}{'state'}));
+	$$idMapRef{$n}{$id}{'state'}=(defined $nextstate?$nextstate:(&getNextState($n, $$idMapRef{$n}{$id}{'state'}))[0]);
 
 	&saveChecklistItemStateTopic($n,&extractPerms($text)) if (!$saveDone) && (($saveDone=!$saveDone));
 }
@@ -696,6 +703,7 @@ sub createAction {
 		$action.=";clpscns=".&urlEncode($nextstate) if defined $nextstate;
 		$action.=';skin='.&urlEncode($options{'ajaxtopicstyle'}) if $options{'useajax'};
 	}
+	my $query = &TWiki::Func::getCgiQuery();
 	my %queryVars = $query->Vars();
 	foreach my $p (keys %queryVars) {
 		$action.=";$p=".&urlEncode($queryVars{$p}) 
@@ -707,20 +715,23 @@ sub createAction {
 }
 # =========================
 sub createTitle {
-	my ($name,$state,$statesRef, $nextstate) = @_;
+	my ($name,$state,$icon,$statesRef, $nextstate, $nextstateicon) = @_;
+	my $query = &TWiki::Func::getCgiQuery();
 	my $title = $options{'tooltip'};
 	$title = $state unless defined $title;
-	$title=~s /%STATE%/$state/sg;
-	$title=~s /%NEXTSTATE%/($nextstate?$nextstate:&getNextState($name,$state))/esg;
-	$title=~s /%STATECOUNT%/($#$statesRef+1)/esg;
-	$title=~s /%STATES%/join(", ",@{$statesRef})/esg;
-	$title=~s /%LEGEND%/&renderLegend()/esg;
-	##return &htmlEncode($title);
+	$title=~s /\%STATE\%/$state/sg;
+	$title=~s /\%NEXTSTATE\%/($nextstate?$nextstate:(&getNextState($name,$state))[0])/esg;
+	$title=~s /\%STATECOUNT\%/($#$statesRef+1)/esg;
+	$title=~s /\%STATES\%/join(", ",@{$statesRef})/esg;
+	$title=~s /\%LEGEND\%/&renderLegend()/esg;
+	$title=~s /\%STATEICON\%/$query->img({src=>&getImageSrc($icon),alt=>$state})/esg;
+	$title=~s /\%NEXTSTATEICON\%/$query->img({src=>&getImageSrc($nextstateicon?$nextstateicon:(&getNextState($name,$state))[1]),alt=>$nextstate})/esg;
 	return $title;
 }
 # =========================
 sub renderChecklistItem {
 	TWiki::Func::writeDebug("- ${pluginName}::renderChecklistItem()") if $debug;
+	my $query = &TWiki::Func::getCgiQuery();
 	my $text = "";
 	my $name = $options{'name'};
 
@@ -771,7 +782,7 @@ sub renderChecklistItem {
 			$linktext.=$options{'text'}.' ' unless $options{'text'} =~ /^(\s|\&nbsp\;)*$/;
 		}
 
-		my $title = &createTitle($name, $state, \@states);
+		my $title = &createTitle($name, $state, $icon, \@states);
 
 		$linktext.=qq@$textBef@ if $textBef;
 
@@ -790,7 +801,7 @@ sub renderChecklistItem {
 			$text .= $query->div({-id=>"CLP_TT_$name$uetId",-style=>"visibility:hidden;position:absolute;top:0;left:0;z-index:2;font: normal 8pt sans-serif;padding: 3px; border: solid 1px; background-color: $options{'tooltipbgcolor'};"},$title);
 			if ($options{'statesel'}) {
 				$action="javascript:clpTooltipShow('CLP_SM_DIV_$name$uetId','CLP_A_$name$uetId',10,10,true);";
-				$text .= &createHiddenDirectSelectionDiv($uetId, $name, $state, \@states, \@icons);
+				$text .= &createHiddenDirectSelectionDiv($uetId, $name, $state, $icon, \@states, \@icons);
 			}
 			$text .= $query->a({-onmouseover=>$onmouseover,-onmouseout=>$onmouseout,-id=>"CLP_A_$name$uetId",-href=>$action}, $linktext);
 		}
@@ -818,15 +829,16 @@ sub renderChecklistItem {
 }
 # =========================
 sub createHiddenDirectSelectionDiv {
-	my ($id, $name, $state, $statesRef, $iconsRef) =  @_;
+	my ($id, $name, $state, $icon, $statesRef, $iconsRef) =  @_;
 	my $text ="";
 	
+	my $query = &TWiki::Func::getCgiQuery();
 	my $sl="";
 	$sl.=$query->sup($query->a({-href=>"javascript:clpTooltipHide('CLP_SM_DIV_$name$id');", -title=>'close'},'[X]'));
 	for (my $i=0; $i<=$#$statesRef; $i++) {
 		my ($s, $ic) = ($$statesRef[$i], $$iconsRef[$i]);
 		my $action = &createAction($id, $name, $state, $s);
-		my $title = &createTitle($name,$state,$statesRef, $s);
+		my $title = &createTitle($name,$state,$icon,$statesRef, $s, $ic);
 		$action="javascript:submitItemStateChange('$action');clpTooltipHide('CLP_SM_DIV_$name$id');" if $options{'useajax'};
 		$text .= $query->div({-id=>"CLP_SM_TT_$name${id}_$i",-style=>"visibility:hidden;position:absolute;top:0;left:0;z-index:3;font: normal 8pt sans-serif;padding: 3px; border: solid 1px; background-color: $options{'tooltipbgcolor'};"},$title); 
 		$sl.=$query->a({
@@ -988,6 +1000,7 @@ sub collectAllChecklistItems {
 }
 # =========================
 sub postRenderingHandler  {
+	my $query = TWiki::Func::getCgiQuery();
 	if (defined $query) {
 		my $startTag=$query->comment("\[CLTABLEPLUGINSORTFIX\]");
 		my $endTag=$query->comment("\[/CLTABLEPLUGINSORTFIX\]");
