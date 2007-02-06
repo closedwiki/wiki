@@ -5,9 +5,11 @@
 # include "/home/httpd/twiki/twiki_httpd.conf"
 # to the end of your main httpd.conf file.
 #
+# See also http://twiki.org/cgi-bin/view/TWiki.ApacheConfigGenerator
+# that helps you configure Apache
 
 # The first parameter will be part of the URL to your installation e.g.
-# http://my.co.uk/twiki/bin/view/...
+# http://example.com/twiki/bin/view/...
 # The second parameter must point to the physical path on your disk. Be
 # careful not to lose any trailing /'s.
 
@@ -21,18 +23,21 @@ ScriptAlias /twiki/bin/ "/home/httpd/twiki/bin/"
 #### Change the path to match your local installation
 Alias /twiki/ "/home/httpd/twiki/"
 
-
-# We set an environment variable called anonymous_spider
+# We set an environment variable called blockAccess.
+#
 # Setting a BrowserMatchNoCase to ^$ is important. It prevents TWiki from
 # including its own topics as URLs and also prevents other TWikis from
 # doing the same. This is important to prevent the most obvious
 # Denial of Service attacks.
+#
 # You can expand this by adding more BrowserMatchNoCase statements to
-# block evil browser agents trying the impossible task of mirroring a twiki
+# block evil browser agents trying the impossible task of mirroring a TWiki.
+# http://twiki.org/cgi-bin/view/TWiki.ApacheConfigGenerator has a good list
+# of bad spiders to block.
+#
 # Example:
-# BrowserMatchNoCase ^SiteSucker anonymous_spider
-BrowserMatchNoCase ^$ anonymous_spider
-
+# BrowserMatchNoCase ^SiteSucker blockAccess
+BrowserMatchNoCase ^$ blockAccess
 
 # This specifies the options on the TWiki scripts directory. The ExecCGI
 # and SetHandler tell apache that it contains scripts. "Allow from all"
@@ -43,7 +48,7 @@ BrowserMatchNoCase ^$ anonymous_spider
 	AllowOverride None
 	Order Allow,Deny
 	Allow from all
-	Deny from env=anonymous_spider
+	Deny from env=blockAccess
 
 	Options ExecCGI FollowSymLinks
 	SetHandler cgi-script
@@ -68,7 +73,7 @@ BrowserMatchNoCase ^$ anonymous_spider
 	SetHandler cgi-script
 	Order Deny,Allow
 	Deny from all
-	Allow from 127.0.0.1, 192.168.1.10
+	Allow from 127.0.0.1 192.168.1.10
 	Require user JohnDoe
 	Satisfy Any
 </FilesMatch>
