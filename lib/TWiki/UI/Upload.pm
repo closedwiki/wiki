@@ -136,9 +136,10 @@ CGI parameters, passed in $query:
 | =hidefile= | if defined, will not show file in attachment table |
 | =filepath= | |
 | =filename= | |
-| =filecomment= | Comment to associate with file in attachment table |
+| =filecomment= | comment to associate with file in attachment table |
 | =createlink= | if defined, will create a link to file at end of topic |
 | =changeproperties= | |
+| =redirectto= | URL to redirect to after upload. ={AllowRedirectUrl}= must be enabled in =configure=. The parameter value can be a =TopicName=, a =Web.TopicName=, or a URL. Redirect to a URL only works if it is enabled in =configure=. |
 
 Does the work of uploading a file to a topic. Designed to be useable as
 a REST method (it will redirect to the 'view' script unless the 'noredirect'
