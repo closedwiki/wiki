@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1170698216" format="1.0" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1170757195" format="1.0" version="$Rev$"}%
 ---+!! Checklist Plugin
 
 <nop>ChecklistPlugin creates simple checklists. 
@@ -269,6 +269,11 @@ Use this examples to check your installation:
 	| %CLI% | first step |
 	| %CLI% | next step |
 
+%CHECKLISTSTART{name="generated" template="patchday"}%
+	* System 1
+	* System 2
+%CHECKLISTEND%
+
 [[%TOPIC%ChecklistItemState]]
 ---++ Plugin Settings
 
@@ -327,7 +332,6 @@ Examples:
 	* Patchday
 		* Set TEMPLATE_PATCHDAY_STATEICONS = :no:|:yes:|:skull:|%<nop>Y%
 		* Set TEMPLATE_PATCHDAY_STATES = notpatched|patched|reboot|done
-		* Set TEMPLATE_PATCHDAY_STATESEL = on
 		* Set TEMPLATE_PATCHDAY_CLIPOS = left
 		* Set TEMPLATE_PATCHDAY_TOOLTIP = Click me to change my state %STATE% %STATEICON% to %NEXTSTATE% %NEXTSTATEICON%.<br/> There are %STATECOUNT% states (%STATES%). <br/> %LEGEND%
 

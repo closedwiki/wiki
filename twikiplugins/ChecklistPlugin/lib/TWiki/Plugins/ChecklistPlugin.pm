@@ -370,9 +370,9 @@ sub handleChecklist {
 	my @states = split /\|/, $options{'states'};
 	my @icons = split /\|/, $options{'stateicons'};
 
-	if ((defined $query->param("clreset"))&&(!$resetDone)) {
-		my $n=$query->param("clreset");
-		my $s=(defined $query->param("clresetst"))?$query->param("clresetst"):$states[0];
+	if ((defined $query->param('clreset'))&&(!$resetDone)) {
+		my $n=$query->param('clreset');
+		my $s=(defined $query->param('clresetst'))?$query->param('clresetst'):$states[0];
 		if (($options{'name'} eq $n)&&(grep(/^\Q$s\E$/s, @states))) {
 			&doChecklistItemStateReset($n,$s,$refText);
 			$resetDone=1;
@@ -405,7 +405,7 @@ sub handleChecklist {
 			$text.=$legend;
 			my $linktext="";
 			my $imgparams = {title=>$title, alt=>$title, border=>0};
-			$$imgparams{src}=$imgsrc if (defined $imgsrc ) && ($imgsrc!~/^\s*$/s);
+			$$imgparams{src}=$imgsrc if (defined $imgsrc ); # && ($imgsrc!~/^\s*$/s);
 			$linktext.=$query->img($imgparams);
 			$linktext.=qq@ ${title}@ if ($title!~/^\s*$/i)&&($imgsrc ne "");
 			$action="javascript:submitItemStateChange('$action');" if $options{'useajax'} && ($state ne 'STATESEL');
@@ -421,7 +421,7 @@ sub handleChecklist {
 			$form.=$legend;
 			$form.=$query->a({name=>"reset${name}"},'&nbsp;') if $options{'anchors'} ;
 			$form.=$query->hidden({name=>'clresetst', value=>&htmlEncode($state)});
-			$form.=$query->image_button({name=>"clreset", value=>&htmlEncode($name),
+			$form.=$query->image_button({name=>'clreset', value=>&htmlEncode($name),
 				src=>$imgsrc, title=>$title, alt=>$title});
 			$form.=" $title" if ($title!~/^\s*$/i)&&($imgsrc ne "");
 			$form.=' '.&htmlEncode($options{'text'}) if defined $options{'text'};
@@ -459,13 +459,14 @@ sub createHiddenDirectResetSelectionDiv {
 	my ($id, $name, $statesRef, $iconsRef) = @_;
 	my $selTxt ="";
 	my $query = &TWiki::Func::getCgiQuery();
-	$selTxt=$query->a({-href=>"javascript:clpTooltipHide('CLP_SM_DIV_RESET_${name}_$id');"},$query->sup('[X]'));
+	$selTxt=$query->sup($query->a({-href=>"javascript:clpTooltipHide('CLP_SM_DIV_RESET_${name}_$id');"},'[X]'));
 	for (my $i=0; $i<=$#$statesRef; $i++) {
 		my $s = $$statesRef[$i];
 		my $action = &createResetAction($name, $s);
 		$action="javascript:submitItemStateChange('$action');clpTooltipHide('CLP_SM_DIV_RESET_${name}_$id');" if $options{'useajax'};
 		$selTxt.=$query->a({-href=>$action,-title=>$s,-style=>'vertical-align:bottom;'}, 
-			$query->img({id=>"CLP_SM_IMG_RESET_${name}_$id",src=>&getImageSrc($$iconsRef[$i]),alt=>"",border=>0,style=>'cursor:move;vertical-align:bottom'}));
+			$query->img({src=>(&getImageSrc($$iconsRef[$i]))[0],alt=>"",border=>0,style=>'cursor:move;vertical-align:bottom'}));
+		$selTxt.='&nbsp;';
 	}
 
 	return $query->div({-id=>"CLP_SM_DIV_RESET_${name}_$id",
@@ -716,16 +717,17 @@ sub createAction {
 # =========================
 sub createTitle {
 	my ($name,$state,$icon,$statesRef, $nextstate, $nextstateicon) = @_;
+	($nextstate, $nextstateicon) = &getNextState($name,$state) unless defined $nextstate;
 	my $query = &TWiki::Func::getCgiQuery();
 	my $title = $options{'tooltip'};
 	$title = $state unless defined $title;
 	$title=~s /\%STATE\%/$state/sg;
-	$title=~s /\%NEXTSTATE\%/($nextstate?$nextstate:(&getNextState($name,$state))[0])/esg;
+	$title=~s /\%NEXTSTATE\%/$nextstate/esg;
 	$title=~s /\%STATECOUNT\%/($#$statesRef+1)/esg;
 	$title=~s /\%STATES\%/join(", ",@{$statesRef})/esg;
 	$title=~s /\%LEGEND\%/&renderLegend()/esg;
-	$title=~s /\%STATEICON\%/$query->img({src=>&getImageSrc($icon),alt=>$state})/esg;
-	$title=~s /\%NEXTSTATEICON\%/$query->img({src=>&getImageSrc($nextstateicon?$nextstateicon:(&getNextState($name,$state))[1]),alt=>$nextstate})/esg;
+	$title=~s /\%STATEICON\%/$query->img({alt=>$state,src=>(&getImageSrc($icon))[0]})/esg;
+	$title=~s /\%NEXTSTATEICON\%/$query->img({alt=>$nextstate,src=>(&getImageSrc($nextstateicon))[0]})/esg;
 	return $title;
 }
 # =========================
@@ -773,7 +775,7 @@ sub renderChecklistItem {
 	$text.=$heState;
 	$text.=$query->comment("\[/CLTABLEPLUGINSORTFIX\]");
 
-	$text.=$query->a({name=>"$name$uetId"}, "&nbsp;") if $options{'anchors'} && !$options{'useajax'};
+	$text.=$query->a({name=>"$name$uetId"}, '&nbsp;') if $options{'anchors'} && !$options{'useajax'};
 
 	if ( ! $options{'useforms'} || $options{'static'}) {
 		
@@ -848,7 +850,7 @@ sub createHiddenDirectSelectionDiv {
 					-onmouseover=>"clpTooltipShow('CLP_SM_TT_$name${id}_$i','CLP_SM_IMG_$name${id}_$i',20,20);", 
 					-onmouseout=>"clpTooltipHide('CLP_SM_TT_$name${id}_$i');",
 				},
-				$query->img({src=>&getImageSrc($ic),id=>"CLP_SM_IMG_$name${id}_$i",alt=>"",border=>0,style=>'vertical-align:bottom;cursor:move;',alt=>""}));
+				$query->img({src=>(&getImageSrc($ic))[0],id=>"CLP_SM_IMG_$name${id}_$i",alt=>"",border=>0,style=>'vertical-align:bottom;cursor:move;'}));
 		$sl.='&nbsp;';
 	}
 
