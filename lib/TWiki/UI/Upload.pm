@@ -239,7 +239,8 @@ sub upload {
     close( $stream ) if $stream;
 
     if( $fileName eq $origName ) {
-        $session->redirect( $session->getScriptUrl( 1, 'view', $webName, $topic ));
+	    my $redirecturl = _getRedirectUrl( $session ) || $session->getScriptUrl( 1, 'view', $webName, $topic );
+        $session->redirect( $redirecturl );
     } else {
         throw TWiki::OopsException( 'attention',
                                     def => 'upload_name_changed',
@@ -255,5 +256,32 @@ sub upload {
     print 'OK ',$message,"\n";
 }
 
-1;
+=pod
 
+Reads a redirect url from CGI parameter 'redirectto'.
+
+Note: this function also exists in Save.pm - perhaps a central place would
+be handy.
+
+=cut
+
+sub _getRedirectUrl {
+    my $session = shift;
+
+    my $query = $session->{cgiQuery};
+    my $redirecturl = $query->param( 'redirectto' );
+    return '' unless $redirecturl;
+    if( $redirecturl =~ /^$TWiki::regex{linkProtocolPattern}\:\/\//o ) {
+        # assuming URL
+        if ($TWiki::cfg{AllowRedirectUrl}) {
+            return $redirecturl;
+        } else {
+            return '';
+        }
+    }
+    # assuming 'web.topic' or 'topic'
+    my ( $w, $t ) = $session->normalizeWebTopicName( $session->{webName}, $redirecturl );
+    $redirecturl = $session->getScriptUrl( 1, 'view', $w, $t );
+}
+
+1;
