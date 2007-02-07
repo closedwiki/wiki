@@ -37,12 +37,12 @@ sub handleSections {
         $label = 'sec:'.$label unless ($label =~ m/^sec:/);
     }
 
+    my $ret = '---'.$l.' '.$text." \n";
     if (exists(TWiki::Func::getContext()->{'genpdflatex'})) {
-        my $ret = '---'.$l.' '.$text." \n";
         $ret .= '<latex>\label{'.$label."}</latex>\n" if ($label ne '');
         return($ret);
     }
-    return('---'.$l) if ( ($cl > $MAXDEPTH) );
+    return('---'.$ret) if ( ($cl > $MAXDEPTH) );
 
     
     TWiki::Func::getContext()->{'LMPcontext'}->{'sec'.$cl.'cnt'} += 1;
@@ -63,7 +63,7 @@ sub handleSections {
 
     TWiki::Func::getContext()->{'LMPcontext'}->{'secrefs'}->{$label} = $sn;
 
-    my $ret = "\n<!-- ";
+    $ret = "\n<!-- ";
     $ret .= '<nop>Sub' x ($cl-1);
     $ret .= "Section ";
     $ret .= "-->";
