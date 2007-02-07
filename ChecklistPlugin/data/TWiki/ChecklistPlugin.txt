@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1170768159" format="1.0" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1170837664" format="1.0" version="$Rev$"}%
 ---+!! Checklist Plugin
 
 <nop>ChecklistPlugin creates simple checklists. 
@@ -145,20 +145,41 @@ To change the state of a checklist item just click on it.
 | :-I | second step |
 </td>
 </tr>
-<tr><td colspan="2" bgcolor="#CCCCCC"> *Example 6: Create a checklist without annoying line breaks if HTML forms are used:* </td></tr>
+<tr><td colspan="2" bgcolor="#CCCCCC"> *Example 6: Create multiple lists with tables and hard linked item states to allow add/insert/remove items:*
+<br/>%X% The =%<nop>EDITTABLE%= and =%<nop>CHECKLISTSTART%= tag have to stay in the same line.
+ </td></tr>
 <tr>
-<td bgcolor="#EEEEEE" valign="top">
+<td bgcolor="#EEEEEE" valign="top" style="font-size:x-small;">
+<div style="font-size: x-small;">
 <verbatim>
-%CHECKLIST{useforms="yes"}%
-	1 %CLI{text="my first step"}%
-	1 %CLI{text="my second step"}%
+%EDITTABLE{changerows="on" format="|label,0,#%SERVERTIME{$year$month$day$hour$min$sec}%|text,50|"}%%CHECKLISTSTART{name="list1"}%
+| *STATUS<br>(click to change)* | *Item* | 
+| #2007Feb07093710 | testitem |
+
+%CHECKLISTEND%
+
+%EDITTABLE{changerows="on" format="|label,0,#%SERVERTIME{$year$month$day$hour$min$sec}%|text,50|"}%%CHECKLISTSTART{name="list2"}%
+| *STATUS<br>(click to change)* | *Item* |
+| #2007Feb07093712 | second |
+
+%CHECKLISTEND%
+
 </verbatim>
+</div>
 </td>
 <td bgcolor="#EEEEEE" valign="top">
-	1 my first step :-I
-	1 my second step :-I 
+
+%EDITTABLE{changerows="off" format="|label, 0, #%SERVERTIME{$year$month$day$hour$min$sec}% |text, 50|"}%
+| *STATUS<br>(click to change)* | *Item* | 
+| :-I | testitem |
+
+
+%EDITTABLE{changerows="off" format="|label, 0, #%SERVERTIME{$year$month$day$hour$min$sec}% |text, 50| "}%
+| *STATUS<br>(click to change)* | *Item* |
+| :ok: | second |
+
 </td>
-</tr>
+
 <tr><td colspan="2" bgcolor="#CCCCCC"> *Example 7: Create a legend and a reset button:*
 	* *Hint:* You can use multiple =%<nop>CHECKLIST%= tags to create more than one reset button or legend at any position of your checklist topic.
  </td></tr>
@@ -257,11 +278,10 @@ Examples:
 | statetopic | %<nop>CLI%<br/>%<nop>CHECKLIST%<br/>%<nop>CHECKLISTSTART% | set the checklist item state topic (default: =&lt;<nop>YourTopicName&gt;ChecklistItemState=) | =statetopic="MyItemStateTopic"= | 
 | static | %<nop>CLI%<br/>%<nop>CHECKLIST%<br/>%<nop>CHECKLISTSTART% | allow/disallow state changes of checklist items (usefull if you create summary pages of some items of different checklists) | =static="off"= |
 | template | %<nop>CLI%<br/>%<nop>CHECKLIST%<br/>%<nop>CHECKLISTSTART% | template name (see Plugin settings / Templates ) | =template="patchday"= |
-| text | %<nop>CLI% | allows to place text behind the button (default: =""=); useful to avoid the annoying line break between checklist button and text if HTML forms are used (related: useforms attribute) | =text="my first step"= |
+| text | %<nop>CLI% | text will be attached to the item and will be clickable  | =text="my first step"= |
 | tooltip | %<nop>CLI%<br/>%<nop>CHECKLIST%<br/>%<nop>CHECKLISTSTART% | sets the tooltip of the state icons (substituted variables: %<nop>STATE% - current state; %<nop>NEXTSTATE% - next state; %<nop>STATEICON% - state icon; %<nop>NEXTSTATEICON% - next state icon; %<nop>STATES% - comma separated list of all states; %<nop>STATECOUNT% - number of states; %<nop>LEGEND% - a legend of all states and state icons) | =tooltip="%<nop>STATE%"= |
 | tooltipbgcolor | %<nop>CLI%<br/>%<nop>CHECKLIST%<br/>%<nop>CHECKLISTSTART% | tooltip background color (=statesel= popup background color is also effected) | =tooltipbgcolor="%<nop>WEBBGCOLOR%"= |
 | useajax | %<nop>CLI%<br/>%<nop>CHECKLIST%<br/>%<nop>CHECKLISTSTART%  | enables/disables <nop>JavaScript/AJAX based item state changes (default: =on=) | =useajax="1"= |
-| useforms | %<nop>CLI%<br/>%<nop>CHECKLIST%<br/> %<nop>CHECKLISTSTART% | if enabled HTML forms are used instead of hyperlinks (default: =off=) | =useforms="off"= |
 ---++ Examples
 Use this examples to check your installation:
 
@@ -361,7 +381,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Plugin Author: | TWiki:Main.DanielRohde |
 |  Plugin Version: | v1.022 (BETA) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  v1.022 (BETA) | TWiki:Main.DanielRohde: improved AJAX performance; added new feature (state selection for reset button); |
+|  v1.022 (BETA) | TWiki:Main.DanielRohde: improved AJAX performance; added new feature (state selection for reset button); removed useforms feature |
 |  v1.021 (31 Jan 2007) | TWiki:Main.DanielRohde: fixed some major bugs (mod_perl, plugin preferences); improved performance (AJAX); fixed minor IE caching bug (AJAX related); added new attributes (tooltip, descr, template, statesel) requested by TWiki:Main.KeithHelfrich; fixed installation instructions bug reported by TWiki:Main.KeithHelfrich |
 |  v1.020 (15 Jan 2007) | TWiki:Main.DanielRohde: added AJAX feature (=useajax= attribute) requested by TWiki:Main.ShayPierce and TWiki:Main.KeithHelfrich |
 |  v1.019 (14 Dec 2006) | TWiki:Main.DanielRohde: fixed major default options bug reported by TWiki:Main.RichardHitier |

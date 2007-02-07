@@ -61,7 +61,7 @@ use vars qw(
 	%options  @unknownParams
 	%namedDefaults %namedIds $idMapRef $idOrderRef %namedResetIds %itemStatesRead 
     	$resetDone $stateChangeDone $saveDone
-	$initText %itemsCollected
+	$initText %itemsCollected $dryrun
         $web $topic $user
     );
 
@@ -80,7 +80,7 @@ $VERSION = '$Rev$';
 # of the version number in PLUGINDESCRIPTIONS.
 $RELEASE = 'Cairo, Dakar, Edinburgh, ...';
 
-$REVISION = '1.022'; #dro#  improved AJAX performance; added new feature (state selection for reset button);
+$REVISION = '1.022'; #dro#  improved AJAX performance; added new feature (state selection for reset button); removed useforms feature
 #$REVISION = '1.021'; #dro# fixed some major bug (mod_perl, plugin preferences); improved performance (AJAX); fixed minor IE caching bug (AJAX related); added new attributes (tooltip, descr, template, statesel) requested by TWiki:Main.KeithHelfrich; fixed installation instructions bug reported by TWiki:Main.KeithHelfrich
 #$REVISION = '1.020'; #dro# added AJAX feature (useajax attribute) requested by TWiki:Main.ShayPierce and TWiki:Main.KeithHelfrich
 #$REVISION = '1.019'; #dro# fixed major default options bug reported by TWiki:Main.RichardHitier 
@@ -140,7 +140,7 @@ sub commonTagsHandler
     # This is the place to define customized tags and variables
     # Called by TWiki::handleCommonTags, after %INCLUDE:"..."%
 
-    local(%namedDefaults, %itemStatesRead, %namedIds, %namedResetIds, @unknownParams,  $initText, $resetDone,$stateChangeDone,$saveDone,$idMapRef,$idOrderRef, %itemsCollected);
+    local(%namedDefaults, %itemStatesRead, %namedIds, %namedResetIds, @unknownParams,  $initText, $resetDone,$stateChangeDone,$saveDone,$idMapRef,$idOrderRef, %itemsCollected, $dryrun);
 	 
     $initText = $_[0] if $_[0] =~ /\%(CLI|CHECKLIST)/;
 
@@ -152,6 +152,8 @@ sub commonTagsHandler
     $resetDone = 0;
     $stateChangeDone = 0;
     $saveDone = 0;
+
+    $dryrun = 0;
 
     %namedDefaults = ( );
     %itemStatesRead = ( );
@@ -189,7 +191,6 @@ sub initDefaults {
 		'showlegend' => 0,
 		'anchors' => 1,
 		'unknownparamsmsg' => '%RED% Sorry, some parameters are unknown: %UNKNOWNPARAMSLIST% %ENDCOLOR% <br/> Allowed parameters are (see TWiki.ChecklistPlugin topic for more details): %KNOWNPARAMSLIST%',
-		'useforms' => 0,
 		'clipos'=> 'right',
 		'pos'=>'bottom',
 		'statetopic'=> $topic.'ChecklistItemState',
@@ -211,7 +212,7 @@ sub initDefaults {
 
 	@filteredOptions = ( 'id', 'name', 'states');
 
-	@flagOptions = ('showlegend', 'anchors', 'useforms', 'notify', 'static' , 'useajax', 'statesel');
+	@flagOptions = ('showlegend', 'anchors', 'notify', 'static' , 'useajax', 'statesel');
 
 
 }
@@ -325,6 +326,7 @@ sub initNamedDefaults {
 	
 	}
 }
+# =========================
 sub initStates {
 	my ($query) = @_;
 	if ((!defined $itemsCollected{"$web.$topic"}) &&((defined $query->param('clpsc'))||(defined $query->param('clreset')))) {
@@ -385,6 +387,9 @@ sub handleChecklist {
 			$resetDone=1;
 		}
 	}
+
+	return "" if $dryrun;
+
 	my $legend = $options{'showlegend'}?&renderLegend():"";
 
 	if (defined $options{'reset'} && !$options{'static'}) {
@@ -407,35 +412,22 @@ sub handleChecklist {
 		my $action = &createResetAction($name, $state);
  
 		$text.=qq@<noautolink>@;
-		if ( ! $options{'useforms'}) {
-			$text.=$query->a({name=>"reset${name}"}, '&nbsp;') if $options{'anchors'} && !$options{'useajax'};
-			$text.=$legend;
-			my $linktext="";
-			my $imgparams = {title=>$title, alt=>$title, border=>0};
-			$$imgparams{src}=$imgsrc if (defined $imgsrc ); # && ($imgsrc!~/^\s*$/s);
-			$linktext.=$query->img($imgparams);
-			$linktext.=qq@ ${title}@ if ($title!~/^\s*$/i)&&($imgsrc ne "");
-			$action="javascript:submitItemStateChange('$action');" if $options{'useajax'} && ($state ne 'STATESEL');
-			my $id = &urlEncode("${name}_${state}_".$namedResetIds{$name});
-			if ($state eq 'STATESEL') {
-				$text.=&createHiddenDirectResetSelectionDiv($namedResetIds{$name},$name,\@states,\@icons); 
-				$action="javascript:clpTooltipShow('CLP_SM_DIV_RESET_${name}_$namedResetIds{$name}', 'CLP_A_$id',10,10,true);";
-			}
-			$text.=$query->a({href=>$action,id=>'CLP_A_'.$id}, $linktext);
-		} else {
-			my $form="";
-			$form.=$query->start_form({method=>'post', action=>$action});
-			$form.=$legend;
-			$form.=$query->a({name=>"reset${name}"},'&nbsp;') if $options{'anchors'} ;
-			$form.=$query->hidden({name=>'clresetst', value=>&htmlEncode($state)});
-			$form.=$query->image_button({name=>'clreset', value=>&htmlEncode($name),
-				src=>$imgsrc, title=>$title, alt=>$title});
-			$form.=" $title" if ($title!~/^\s*$/i)&&($imgsrc ne "");
-			$form.=' '.&htmlEncode($options{'text'}) if defined $options{'text'};
-			$form.=$query->end_form();
-			$form=~s/[\r\n]+//sg;
-			$text.=$form;
+
+		$text.=$query->a({name=>"reset${name}"}, '&nbsp;') if $options{'anchors'} && !$options{'useajax'};
+		$text.=$legend;
+		my $linktext="";
+		my $imgparams = {title=>$title, alt=>$title, border=>0};
+		$$imgparams{src}=$imgsrc if (defined $imgsrc ); # && ($imgsrc!~/^\s*$/s);
+		$linktext.=$query->img($imgparams);
+		$linktext.=qq@ ${title}@ if ($title!~/^\s*$/i)&&($imgsrc ne "");
+		$action="javascript:submitItemStateChange('$action');" if $options{'useajax'} && ($state ne 'STATESEL');
+		my $id = &urlEncode("${name}_${state}_".$namedResetIds{$name});
+		if ($state eq 'STATESEL') {
+			$text.=&createHiddenDirectResetSelectionDiv($namedResetIds{$name},$name,\@states,\@icons); 
+			$action="javascript:clpTooltipShow('CLP_SM_DIV_RESET_${name}_$namedResetIds{$name}', 'CLP_A_$id',10,10,true);";
 		}
+		$text.=$query->a({href=>$action,id=>'CLP_A_'.$id}, $linktext);
+
 		$text.=qq@</noautolink>@;
 	} else {
 		$text.=$legend; 
@@ -450,14 +442,12 @@ sub createResetAction {
 	$action=~s/#.*$//s;
 	$action.=&getUniqueUrlParam($action);
 
-	if ( ! $options{'useforms'} ) {
-		$action.=($action=~/\?/?';':'?');
-		$action.="clreset=".&urlEncode($name);
-		$action.=";clresetst=".&urlEncode($state);
-		$action.=';skin='.&urlEncode($options{'ajaxtopicstyle'}) if $options{'useajax'};
-	}
+	$action.=($action=~/\?/?';':'?');
+	$action.="clreset=".&urlEncode($name);
+	$action.=";clresetst=".&urlEncode($state);
+	$action.=';skin='.&urlEncode($options{'ajaxtopicstyle'}) if $options{'useajax'};
 
-	$action.="#reset${name}" if $options{'anchors'} && (!($options{'useajax'}||$options{'useforms'}));
+	$action.="#reset${name}" if $options{'anchors'} && !$options{'useajax'};
 	return $action;
 }
 # =========================
@@ -560,6 +550,16 @@ sub handleChecklistItem {
 		}
 	}
 
+	my $name = $options{'name'};
+	my $id = $options{'id'}?$options{'id'}:$namedIds{$name};
+	my $state = (defined $$idMapRef{$name}{$id}{'state'}) ? $$idMapRef{$name}{$id}{'state'} : (split(/\|/, $options{'states'}))[0];
+
+	$$idMapRef{$name}{$id}{'state'}=$state unless defined $$idMapRef{$name}{$id}{'state'};
+	$$idMapRef{$name}{$id}{'descr'}=$options{'descr'} if defined $options{'descr'};
+
+	push(@{$$idOrderRef{$name}}, $id) unless grep(/^\Q$id\E$/,@{$$idOrderRef{$name}});
+
+	return "" if $dryrun;
 
 	return &renderChecklistItem();
 
@@ -700,14 +700,13 @@ sub createAction {
 
 	$action.=getUniqueUrlParam($action);
 
-	if ( ! $options{'useforms'} ) {
-		$action.=($action=~/\?/)?";":"?";
-		$action.="clpsc=".&urlEncode("$id");
-		$action.=";clpscn=".&urlEncode($name);
-		$action.=";clpscls=".&urlEncode($state);
-		$action.=";clpscns=".&urlEncode($nextstate) if defined $nextstate;
-		$action.=';skin='.&urlEncode($options{'ajaxtopicstyle'}) if $options{'useajax'};
-	}
+	$action.=($action=~/\?/)?";":"?";
+	$action.="clpsc=".&urlEncode("$id");
+	$action.=";clpscn=".&urlEncode($name);
+	$action.=";clpscls=".&urlEncode($state);
+	$action.=";clpscns=".&urlEncode($nextstate) if defined $nextstate;
+	$action.=';skin='.&urlEncode($options{'ajaxtopicstyle'}) if $options{'useajax'};
+
 	my $query = &TWiki::Func::getCgiQuery();
 	my %queryVars = $query->Vars();
 	foreach my $p (keys %queryVars) {
@@ -741,20 +740,13 @@ sub renderChecklistItem {
 	my $text = "";
 	my $name = $options{'name'};
 
-	my $tId = $options{'id'}?$options{'id'}:$namedIds{$name};
-
 	my @states = split /\|/, $options{'states'};
 	my @icons = split /\|/, $options{'stateicons'};
 
-	### TWiki::Func::writeDebug("- ${pluginName}::stateicons=".$options{'stateicons'}) if $debug;
+	my $tId = $options{'id'}?$options{'id'}:$namedIds{$name};
 
 	my $state = (defined $$idMapRef{$name}{$tId}{'state'}) ? $$idMapRef{$name}{$tId}{'state'} : $states[0];
 	my $icon = $icons[0];
-
-	$$idMapRef{$name}{$tId}{'state'}=$state unless defined $$idMapRef{$name}{$tId}{'state'};
-	$$idMapRef{$name}{$tId}{'descr'}=$options{'descr'} if defined $options{'descr'};
-
-	push(@{$$idOrderRef{$name}}, $tId) unless grep(/^\Q$tId\E$/,@{$$idOrderRef{$name}});
 
 	for (my $i=0; $i<=$#states; $i++) {
 		if ($states[$i] eq $state) {
@@ -781,54 +773,35 @@ sub renderChecklistItem {
 
 	$text.=$query->a({name=>"$name$uetId"}, '&nbsp;') if $options{'anchors'} && !$options{'useajax'};
 
-	if ( ! $options{'useforms'} || $options{'static'}) {
-		
-		my $linktext="";
-		if (lc($options{'clipos'}) ne 'left') {
-			$linktext.=$options{'text'}.' ' unless $options{'text'} =~ /^(\s|\&nbsp\;)*$/;
-		}
-
-		my $title = &createTitle($name, $state, $icon, \@states);
-
-		$linktext.=qq@$textBef@ if $textBef;
-		my $imgtitle = $options{'static'}?$title:"";
-		$linktext.=$query->img({id=>"CLP_IMG_$name$uetId", -src=>$iconsrc, -border=>0, -title=>$imgtitle, -alt=>$imgtitle});
-		$linktext.=qq@$textAft@ if $textAft;
-		if (lc($options{'clipos'}) eq 'left') {
-			$linktext.=' '.$options{'text'} unless $options{'text'} =~ /^(\s|\&nbsp\;)*$/;
-		}
-		if ($options{'static'}) {
-			$text .= $linktext;
-		} else {
-			my ($onmouseover, $onmouseout)=("","");
-			$action="javascript:submitItemStateChange('$action');" if $options{'useajax'};
-			$onmouseover="clpTooltipShow('CLP_TT_$name$uetId','CLP_A_$name$uetId',20,20,true);";
-			$onmouseout="clpTooltipHide('CLP_TT_$name$uetId');";
-			$text .= $query->div({-id=>"CLP_TT_$name$uetId",-style=>"visibility:hidden;position:absolute;top:0;left:0;z-index:2;font: normal 8pt sans-serif;padding: 3px; border: solid 1px; background-color: $options{'tooltipbgcolor'};"},$title);
-			if ($options{'statesel'}) {
-				$action="javascript:clpTooltipShow('CLP_SM_DIV_$name$uetId','CLP_A_$name$uetId',10,10,true);";
-				$text .= &createHiddenDirectSelectionDiv($uetId, $name, $state, $icon, \@states, \@icons);
-			}
-			$text .= $query->a({-onmouseover=>$onmouseover,-onmouseout=>$onmouseout,-id=>"CLP_A_$name$uetId",-href=>$action}, $linktext);
-		}
-	} else {
-		my $form=$query->start_form(-method=>"POST", -action=>$action, -name=>"changeitemstate\[$stId\]");
-		$form.=$query->hidden(-name=>'clpscls', -value=>$heState);
-		$form.=$query->hidden(-name=>'clpscn', -value=>&htmlEncode($name));
-		if (lc($options{'clipos'}) ne 'left') {
-			$form.=$options{'text'}.' ' unless $options{'text'} =~ /^(\s|\&nbsp\;)*$/;
-		}
-		$form.=qq@$textBef@ if $textBef;
-		$form.=$query->image_button(-name=>'clpsc', -src=>$iconsrc, 
-				-value=>$stId, -title=>$heState, -alt=>$heState);
-		$form.=qq@$textAft@ if $textAft;
-		if (lc($options{'clipos'}) eq 'left') {
-			$form.=' '.$options{'text'} unless $options{'text'} =~ /^(\s|\&nbsp\;)*$/;
-		}
-		$form.=$query->end_form();
-		$form=~s/[\r\n]+//gs;
-		$text.=$form;
+	my $linktext="";
+	if (lc($options{'clipos'}) ne 'left') {
+		$linktext.=$options{'text'}.' ' unless $options{'text'} =~ /^(\s|\&nbsp\;)*$/;
 	}
+
+	my $title = &createTitle($name, $state, $icon, \@states);
+
+	$linktext.=qq@$textBef@ if $textBef;
+	my $imgtitle = $options{'static'}?$title:"";
+	$linktext.=$query->img({id=>"CLP_IMG_$name$uetId", -src=>$iconsrc, -border=>0, -title=>$imgtitle, -alt=>$imgtitle});
+	$linktext.=qq@$textAft@ if $textAft;
+	if (lc($options{'clipos'}) eq 'left') {
+		$linktext.=' '.$options{'text'} unless $options{'text'} =~ /^(\s|\&nbsp\;)*$/;
+	}
+	if ($options{'static'}) {
+		$text .= $linktext;
+	} else {
+		my ($onmouseover, $onmouseout)=("","");
+		$action="javascript:submitItemStateChange('$action');" if $options{'useajax'};
+		$onmouseover="clpTooltipShow('CLP_TT_$name$uetId','CLP_A_$name$uetId',20,20,true);";
+		$onmouseout="clpTooltipHide('CLP_TT_$name$uetId');";
+		$text .= $query->div({-id=>"CLP_TT_$name$uetId",-style=>"visibility:hidden;position:absolute;top:0;left:0;z-index:2;font: normal 8pt sans-serif;padding: 3px; border: solid 1px; background-color: $options{'tooltipbgcolor'};"},$title);
+		if ($options{'statesel'}) {
+			$action="javascript:clpTooltipShow('CLP_SM_DIV_$name$uetId','CLP_A_$name$uetId',10,10,true);";
+			$text .= &createHiddenDirectSelectionDiv($uetId, $name, $state, $icon, \@states, \@icons);
+		}
+		$text .= $query->a({-onmouseover=>$onmouseover,-onmouseout=>$onmouseout,-id=>"CLP_A_$name$uetId",-href=>$action}, $linktext);
+	}
+
 	$text.=qq@</noautolink>@;
 
 	return $text;
@@ -997,7 +970,7 @@ sub createUnknownParamsMessage {
 # =========================
 sub collectAllChecklistItems {
 	## never ever local($initText, $idMapRef, $idOrderRef, %itemsCollected, %itemStatesRead, $web, $topic)
-	local(%namedDefaults, %namedIds, %namedResetIds, @unknownParams, $resetDone,$stateChangeDone,$saveDone );
+	local($dryrun, %namedDefaults, %namedIds, %namedResetIds, @unknownParams, $resetDone,$stateChangeDone,$saveDone );
  
 	TWiki::Func::writeDebug( "- ${pluginName}::collectAllChecklistItems()" ) if $debug;
 
@@ -1005,6 +978,9 @@ sub collectAllChecklistItems {
 
 	# prevent changes:
 	$resetDone=1; $stateChangeDone=1;
+
+	# prevent rendering:
+	$dryrun=1;
 
 	&handleAllTags($text, $topic, $web);
 
