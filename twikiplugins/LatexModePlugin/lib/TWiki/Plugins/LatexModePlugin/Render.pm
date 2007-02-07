@@ -92,7 +92,6 @@ my $HASH_CODE_LENGTH = 32;
 my $dvipngargs = " -D %DENSITY|N% -T tight".
     " --%EXT|S%".
     " -gamma %GAMMA|N%".
-    " -bg transparent ".
     " -pp %NUM|N% -o %OUTIMG|F% %DVIFILE|F% "; # >> %LOG|F% 2>&1";
 
 my $dvipsargs = " -E -pp %NUM|N% -o %EPS|F% %DVI|F% ";
@@ -158,6 +157,9 @@ sub handleLatex
 
     my %opts2 = TWiki::Func::extractParameters( $prefs );
     # map { $opts{$_} = $opts2{$_} } keys %opts2;
+    if( exists($opts2{'attachment'}) ){
+        $opts{'gamma'} = 1.0;   # use a different default gamma for images
+    }
     foreach my $k (keys %opts2) {
         my $b = $opts2{$k};
 
@@ -247,6 +249,11 @@ COLORS
                     "\\end{equation}\n";
             }
         }
+        # strip off all comments
+        $math_string =~ s!\\%!LMPpcntLMP!g;
+        $math_string =~ s!%.*?\n!!gs;
+        $math_string =~ s!LMPpcntLMP!%!g;
+
         # in Cairo (at least) latex new-lines, '\\', get translated to 
         # spaces, '\', if they appear at the end of the line.
         # So protect them here...
@@ -265,11 +272,15 @@ COLORS
         #            join('; ', sort map{"$_=>$opts{$_}"} keys(%opts)));
 
         if ( ($opts{'inline'} eq 1) and ($tweakinline) ) {
-            $math_string = '\fbox{ \ ' . $math_string;
-            if ($opts{'engine'} ne 'mimetex') {
-                $math_string .= '\vphantom{$\sqrt{\{ \}^{T^T}}$}' ;
+            # $math_string = '\fbox{ \ ' . $math_string;
+            if ($opts{'engine'} eq 'mimetex') {
+                $math_string = '\cdot \ '.$math_string.' \ \cdot ';
+            
+            } else {
+                # $math_string .= '\vphantom{$\sqrt{\{ \}^{T^T}}$}' ;
+                $math_string = '$\cdot$ '.$math_string.' $\cdot$';
             }
-            $math_string .= ' \ }';
+            # $math_string .= ' \ }';
         }
         #store the string in a hash table, indexed by the MD5 hash
         $LMPc{'hashed_math_strings'}->{$hash_code} = $math_string;
@@ -426,7 +437,7 @@ sub createTempLatexFiles {
                         # copy( $af.$ext, $LATEXWDIR ) || do {
                         copy( $af.$ext, "." ) || do {
                             &TWiki::Func::writeDebug( "LatexModePlugin: copy failed ".$! );
-                            $value = "attachment \{".$markup_opts{$key}->{'attachment'}."\} not found";
+                            $value = "attachment \{".$markup_opts{$key}->{'attachment'}."\} \ not found";
                         };
                         $markup_opts{$key}->{'attachment'} .= $ext;
                         
@@ -474,7 +485,7 @@ sub createTempLatexFiles {
                 }
             }
         } # end of copy attachment piece
-        $value = " (attachment ".$markup_opts{$key}->{'attachment'}."not found) "
+        $value = " (attachment ".$markup_opts{$key}->{'attachment'}." not found) "
             if ( exists($markup_opts{$key}->{'attachment'}) and
                  !(-f $markup_opts{$key}->{'attachment'}) );
 
@@ -547,7 +558,7 @@ sub renderEquations {
     # return unless scalar( keys( %hashed_math_strings ) );
     my %hashed_math_strings = %{ $LMPc{'hashed_math_strings'} };
 
-    &TWiki::Func::writeDebug( join(" ", keys(%hashed_math_strings) ) );
+    # &TWiki::Func::writeDebug( join(" ", keys(%hashed_math_strings) ) ) if ($debug);
 
     return unless length(keys(%hashed_math_strings)) > 0;
 
@@ -838,7 +849,10 @@ sub makePNGs {
             #     " -bg Transparent ".
             #     " -pp $num -o $outimg ".$LATEXBASENAME.".dvi >> $LATEXLOG 2>&1";
             # system($cmd);
-            $sandbox->sysCommand( "$PATHTODVIPNG $dvipngargs",
+            my $args = $dvipngargs;
+            $args .= ' -bg transparent ' unless ($tweakinline ne 0);
+
+            $sandbox->sysCommand( "$PATHTODVIPNG $args",
                                   DENSITY => $opts{'density'},
                                   EXT => lc($EXT),
                                   GAMMA => ($opts{'gamma'}+1.0),
@@ -879,6 +893,12 @@ sub makePNGs {
                 close(OI);
             }
 
+            # $sandbox->sysCommand( "$PATHTOCONVERT %F|F% -trim %O|F%",
+            #                       F => $outimg,
+            #                       O => '/tmp/mime.png'
+            #                       );
+            # move('/tmp/mime.png',$outimg);
+
             &TWiki::Func::writeDebug( $outimg ) if ($debug);
 
         } else {
@@ -905,8 +925,8 @@ sub makePNGs {
         # system("$PATHTOCONVERT $cmd");
             my $ccmd = $convertargs;
             $ccmd .= " -transparent %BGC|S% " 
-                unless ( ($markup_opts{$key}{'inline'} ne 0) and
-                         ($tweakinline ne 0) );
+                unless ( ($markup_opts{$key}{'inline'} ne 0) ); #and
+                         # ($tweakinline ne 0) );
             $ccmd .= " %OUTIMG|F%";
 
             $sandbox->sysCommand( $PATHTOCONVERT." $ccmd",
@@ -925,80 +945,8 @@ sub makePNGs {
                  and ($tweakinline) 
                  and (-x $PATHTOCONVERT) 
                  ) {
-                my $tmpfile = File::Temp::tempnam( $LATEXWDIR, 'tmp' ).".$EXT";
-                move($outimg,$tmpfile);
-                
-                # my $args = "$tmpfile -background black -trim $outimg";
-                # system("$PATHTOCONVERT $args");
-                # system("echo \"$PATHTOCONVERT $args\" >> $LATEXLOG") if ($debug);
-
-                my ($d,$e) = 
-                    $sandbox->sysCommand("$PATHTOCONVERT %IN|F% ".
-                                         " -background %BGC|S% -trim ".
-                                         " %OUT|F% ",
-                                         IN => $tmpfile,
-                                         BGC => $opts{'bgcolor'},
-                                         OUT => $outimg );
-                # print STDERR "convert: $d $e\n" if ($e > 0);
-
-                my $img2 = image_info($outimg);
-
-                my ($nw,$nh) = ( $img2->{width}-round(8*$ptsz), 
-                                  $img2->{height}-round(4*$ptsz) );
-                $nw = $1 if ($nw =~ m/(\d+)/); # untaint
-                $nh = $1 if ($nh =~ m/(\d+)/); # untaint
-                $nh = round(15*$ptsz)
-                    if ($nh < round(15*$ptsz) ); # set a minimum height
-
-                my ($sh,$sh2) = ( round(3.1*$ptsz), round(2.25*$ptsz) );
-                $sh = $1 if ($sh =~ m/(\d+)/); # untaint
-                $sh2 = $1 if ($sh2 =~ m/(\d+)/); # untaint
-                 
-                # my $cmd = " -crop ".$nw."x".$nh."+$sh+$sh2 -transparent white $outimg";
-                
-                move($outimg,$tmpfile);
-                # system("$PATHTOCONVERT $tmpfile $cmd");
-                # system("echo \"$PATHTOCONVERT $tmpfile $cmd\" >> $LATEXLOG") if ($debug);
-                ($d,$e) = 
-                    $sandbox->sysCommand("$PATHTOCONVERT %INIMG|F% ".
-                                         " -crop ".
-                                         '%NW|N%'.'x'.'%NH|N%'.
-                                         '+'.'%SH|N%'.'+'.'%SH2|N%'.
-                                         ' -transparent %BGC|S% %OUTIMG|F%',
-                                         INIMG => $tmpfile,
-                                         NW => $nw,
-                                         NH => $nh,
-                                         SH => $sh,
-                                         SH2 => $sh2,
-                                         BGC => $opts{'bgcolor'},
-                                         OUTIMG => $outimg
-                                         );
-                # print STDERR "convert: $d $e\n" if ($e > 0);
-                unlink("$tmpfile") unless ($debug);
-
-                ## Another strategy: trim gives better horizontal
-                ## results but is too aggressive vertically.
-                ##    * convert eps --> 1.png (with a border)
-                ##    * shave 1.png by border size 
-                ##    * copy 1.png --> 2.png
-                ##    * trim 2.png
-                ##    * extract off image and page size using identify
-                ##      (this gives crop coordinates).
-                ##      UPDATE: unfortunately, this is not robust.
-                ##    * crop 1.png, using width-coordinates from
-                ##      trim and hieght coordinates from shave
-
-### EXAMPLE:
-# /usr/X11R6/bin/convert -density 116 twiki_math.4.ps  -antialias -trim -gamma 0.6 -transparent white  t1.png
-# cp t1.png t2.png
-# mogrify -shave 2x2 t2.png
-# identify t2.png
-# "t2.png PNG 35x24+2+2 PseudoClass 256c 8-bit 365.0 0.000u 0:01"
-# mogrify -trim t2.png
-# identify t2.png
-# "tmp.png PNG 11x11+8+6 PseudoClass 256c 8-bit 306.0 0.000u 0:01"
-# mogrify -crop 11x24+10+3 t1.png
-# 
+                trimInlineImage($outimg,$sandbox,$opts{'bgcolor'},
+                                $LATEXWDIR,$ptsz);
             }
 
             my $img = image_info($outimg);
@@ -1034,6 +982,216 @@ sub makePNGs {
     }
 
 
+}
+
+
+sub trimInlineImage {
+
+    my ($in,$sandbox,$bgcolor,$LATEXWDIR,$ptsz) = @_;
+
+    (my $out = $in ) =~ s/\.(png|gif)/.xpm/;
+    $sandbox->sysCommand("$PATHTOCONVERT %IN|F% -trim %OUT|F%",
+                         IN => $in,
+                         OUT => $out );
+
+    my ($pre, $xpm);
+    my ($canvaschar,$cpp) = (' ',1);
+    my ($col, $flag, $cnt) = (0,0,0);
+    my ($midu, $midl, $sum)  = (0,0,'');
+    
+    open(F,"<$out") || print STDERR $!;
+
+    ## run through the XPM image line-by-line
+    ## counting the number of lines above and below the 'cdot'
+    while(<F>){
+        
+        if ($flag) { 
+            # print length($_);
+            if ($col == 0) {
+                $col = (length($_)-4)/$cpp;
+                $sum = '0' x $col;
+                # print $sum."\n";
+                $canvaschar = substr($_,1,$cpp);
+            }
+            # print '  '.$col.'  '.($col == 0);
+            $xpm .= $_;             # store the image as we go
+
+            # count of line above 'cdot'
+            $midu = $cnt if ( !(substr($_,1,$cpp) =~ m/$canvaschar|\;/) 
+                              and ($midu eq 0 ) );
+            # count ending line of 'cdot'
+            $midl = $cnt if ( !(substr($_,1,$cpp) =~ m/$canvaschar|\;/) );
+
+            $cnt += 1 if ( substr($_,0,1) eq "\""); # count the lines
+
+            # print substr($_,1,$cpp)." $midu $cnt\n";
+            
+            ### form a bit-map of the pixels used to
+            ### calculate the horizontal trim later.
+            $_ =~ s/^\"//; $_ =~ s/\"\,?\n$//;
+            # print $_."\n";
+            foreach my $c ( 0 .. (length($_)/$cpp-1) ) {
+                my $t = substr($_,$c*$cpp,$cpp);
+                if ( ($t ne $canvaschar) or substr($sum,$c,1) == 1 ) {
+                    substr($sum,$c,1,'1');
+                }
+            }
+            # print $sum."\n";
+            
+        } else {
+            $pre .= $_;
+            if ($_ =~ m/\"(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\"/) {
+                $cpp = $4;
+                # print "\t cpp: $cpp\n";
+            }
+            if ($_ =~ m/None/) {
+                $canvaschar = substr($_,1,$cpp);
+            }
+        }
+        $flag = 1 if m!/\*\spixels\s\*/!; # switch between 'pre' and the image
+    }
+    close(F);
+    # print $xpm;
+
+
+    # print "$cnt  $midu $midl $col\n";
+    # print "blank uptop: ".($midu)."\n";
+    # print "blank below: ".($cnt-$midl-1)."\n";
+
+    my $adt = ($cnt - $midl - 1 - $midu);
+    $adt = 0 if ($adt < 0);
+    # print "add to top: ".$adt."\n";
+
+    my $adb = $midu - ($cnt - $midl - 1) ;
+    $adb = 0 if ($adb < 3);
+    # print "add to bottom: ".$adb."\n";
+
+    ## calculate the amount of horizontal trim 
+    # print $sum ."\n";
+    my ($frnt,$back) = (0,0);
+    $frnt = length($1)*$cpp if ($sum =~ m/^(1+0+)/); # from the left 
+    $back = length($1)*$cpp if ($sum =~ m/(0+1+)$/); # and from the right
+    # print "frnt: $frnt back: $back\n";
+
+    $pre =~ m/\"$col\s+$cnt/;
+    my $nr = $cnt + $adt + $adb;      # calculate the new number of rows
+    my $nc = $col - ($frnt + $back)/$cpp;  # calculate the new number of columns
+    $pre =~ s/\"$col\s+$cnt/\"$nc $nr/;
+
+    ## output the image
+    open(F,">mod_$out") || print STDERR $!;
+    print F $pre;
+    for (1..$adt) {
+        print F '"';
+        print F $canvaschar x $nc;
+        print F "\",\n";
+    }
+    # print F $xpm;
+    foreach my $l (split(/\n/,$xpm)) {
+        $l =~ s/^\".{$frnt}/\"/;
+        $l =~ s/.{$back}\"(\,?)$/\"$1/;
+        $l .= ',' if ( !($l =~ m/\,$/) and ($adb > 0) );
+        
+        print F $l."\n" unless ( ($l =~ m/^\};/) and ($adb > 0) );
+    }
+    for (1..$adb) {
+        print F '"';
+        print F $canvaschar x $nc;
+        print F "\",\n";
+    }
+    print F "};\n" if ($adb > 0);
+    
+    close(F);
+
+
+    $sandbox->sysCommand("$PATHTOCONVERT mod_%OUT|F% -transparent %BGC|S% %IN|F%",
+                         OUT => $out,
+                         BGC => $bgcolor,
+                         IN  => $in);
+
+    unlink("mod_$out") unless ($debug);
+    unlink("$out") unless ($debug);
+    
+}
+
+sub trimInlineImageOld {
+
+    my ($outimg,$sandbox,$bgcolor,$LATEXWDIR,$ptsz) = @_;
+
+    my $tmpfile = File::Temp::tempnam( $LATEXWDIR, 'tmp' ).".$EXT";
+    move($outimg,$tmpfile);
+                
+    # my $args = "$tmpfile -background black -trim $outimg";
+    # system("$PATHTOCONVERT $args");
+    # system("echo \"$PATHTOCONVERT $args\" >> $LATEXLOG") if ($debug);
+
+    my ($d,$e) = 
+        $sandbox->sysCommand("$PATHTOCONVERT %IN|F% ".
+                             " -background %BGC|S% -trim ".
+                             " %OUT|F% ",
+                             IN => $tmpfile,
+                             BGC => $bgcolor,
+                             OUT => $outimg );
+    # print STDERR "convert: $d $e\n" if ($e > 0);
+    
+    my $img2 = image_info($outimg);
+    
+    my ($nw,$nh) = ( $img2->{width}-round(8*$ptsz), 
+                     $img2->{height}-round(4*$ptsz) );
+    $nw = $1 if ($nw =~ m/(\d+)/); # untaint
+    $nh = $1 if ($nh =~ m/(\d+)/); # untaint
+    $nh = round(15*$ptsz)
+        if ($nh < round(15*$ptsz) ); # set a minimum height
+    
+    my ($sh,$sh2) = ( round(3.1*$ptsz), round(2.25*$ptsz) );
+    $sh = $1 if ($sh =~ m/(\d+)/); # untaint
+    $sh2 = $1 if ($sh2 =~ m/(\d+)/); # untaint
+    
+    # my $cmd = " -crop ".$nw."x".$nh."+$sh+$sh2 -transparent white $outimg";
+    
+    move($outimg,$tmpfile);
+    # system("$PATHTOCONVERT $tmpfile $cmd");
+    # system("echo \"$PATHTOCONVERT $tmpfile $cmd\" >> $LATEXLOG") if ($debug);
+    ($d,$e) = 
+        $sandbox->sysCommand("$PATHTOCONVERT %INIMG|F% ".
+                             " -crop ".
+                             '%NW|N%'.'x'.'%NH|N%'.
+                             '+'.'%SH|N%'.'+'.'%SH2|N%'.
+                             ' -transparent %BGC|S% %OUTIMG|F%',
+                             INIMG => $tmpfile,
+                             NW => $nw,
+                             NH => $nh,
+                             SH => $sh,
+                             SH2 => $sh2,
+                             BGC => $bgcolor,
+                             OUTIMG => $outimg
+                             );
+    # print STDERR "convert: $d $e\n" if ($e > 0);
+    unlink("$tmpfile") unless ($debug);
+    
+    ## Another strategy: trim gives better horizontal
+    ## results but is too aggressive vertically.
+    ##    * convert eps --> 1.png (with a border)
+    ##    * shave 1.png by border size 
+    ##    * copy 1.png --> 2.png
+    ##    * trim 2.png
+    ##    * extract off image and page size using identify
+    ##      (this gives crop coordinates).
+    ##      UPDATE: unfortunately, this is not robust.
+    ##    * crop 1.png, using width-coordinates from
+    ##      trim and hieght coordinates from shave
+    
+### EXAMPLE:
+# /usr/X11R6/bin/convert -density 116 twiki_math.4.ps  -antialias -trim -gamma 0.6 -transparent white  t1.png
+# cp t1.png t2.png
+# mogrify -shave 2x2 t2.png
+# identify t2.png
+# "t2.png PNG 35x24+2+2 PseudoClass 256c 8-bit 365.0 0.000u 0:01"
+# mogrify -trim t2.png
+# identify t2.png
+# "tmp.png PNG 11x11+8+6 PseudoClass 256c 8-bit 306.0 0.000u 0:01"
+# mogrify -crop 11x24+10+3 t1.png
+# 
 }
 
 # =========================
