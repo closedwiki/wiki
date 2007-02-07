@@ -273,9 +273,16 @@ if ($@) {
 }
 </verbatim>
 
+*Since:* TWiki::Plugins::VERSION 1.12
+
 =cut
 
 sub GET {
+    my( $url ) = @_;
+    ASSERT($TWiki::Plugins::SESSION) if DEBUG;
+    ASSERT(defined $url) if DEBUG;
+
+    return $TWiki::Plugins::SESSION->{net}->GET( $url );
 }
 
 =pod
@@ -672,6 +679,61 @@ sub userToWikiName {
 
 =pod
 
+---+++ emailToWikiNames( $email, $dontAddWeb ) -> @wikiNames
+   * =$email= - email address to look up
+   * =$dontAddWeb= - Do not add web prefix if ="1"=
+Find the wikinames of all users who have the given email address as their
+registered address. Since several users could register with the same email
+address, this returns a list of wikinames rather than a single wikiname.
+
+*Since:* TWiki::Plugins::VERSION 1.12
+
+=cut
+
+sub emailToWikiNames {
+    my( $email, $dontAddWeb ) = @_;
+    ASSERT($email) if DEBUG;
+
+    my %matches;
+    my $ua = $TWiki::Plugins::SESSION->{users}->findUserByEmail( $email );
+    if ($ua) {
+        foreach my $user (@$ua) {
+            if( $dontAddWeb ) {
+                $matches{$user->wikiName()} = 1;
+            } else {
+                $matches{$user->webDotWikiName()} = 1;
+            }
+        }
+    }
+
+    return sort keys %matches;
+}
+
+=pod
+
+---+++ wikiNameToEmails( $wikiname ) -> @emails
+   * =$wikiname= - wikiname of user to look up
+Returns the registered email addresses of the named user. If $wikiname is
+undef, returns the registered email addresses for the logged-in user.
+
+*Since:* TWiki::Plugins::VERSION 1.12
+
+=cut
+
+sub wikinameToEmails {
+    my( $user ) = @_;
+
+    if( $user ) {
+        $user = $TWiki::Plugins::SESSION->{users}->findUser($user, undef, 1);
+    } else {
+        $user = $TWiki::Plugins::SESSION->{user};
+    }
+    return $user->emails();
+
+}
+
+=pod
+
 ---+++ isGuest( ) -> $boolean
 
 Test if logged in user is a guest (TWikiGuest)
@@ -692,13 +754,15 @@ sub isGuest {
 Find out if the user is an admin or not. If the user is not given,
 the currently logged-in user is assumed.
 
+*Since:* TWiki::Plugins::VERSION 1.12
+
 =cut
 
 sub isAdmin {
     my ($user) = @_;
 
     if ($user) {
-        $user = $TWiki::Plugins::SESSION->{users}->findUser($user, $user, 1);
+        $user = $TWiki::Plugins::SESSION->{users}->findUser($user, undef, 1);
     } else {
         $user = $TWiki::Plugins::SESSION->{user};
     }
@@ -711,11 +775,13 @@ sub isAdmin {
 
 Find out if the $user is in the named group. e.g.
 <verbatim>
-if( TWiki::Func::isInGroup( "PopGroup" )) {
+if( TWiki::Func::isInGroup( "HesperionXXGroup", "JordiSavall" )) {
     ...
 }
 </verbatim>
-If $user is not given, defaults to the currently logged-in user.
+If =$user= is =undef=, it defaults to the currently logged-in user.
+
+*Since:* TWiki::Plugins::VERSION 1.12
 
 =cut
 
@@ -734,38 +800,38 @@ sub isInGroup {
 
 =pod
 
----++ getAllUsers() -> @list
-Get a list of the registered users *not* including groups. Returns a list
-of wikinames (e.g. FredBloggs).
+---++ getAllUsers() -> $iterator
+Get an iterator over the list of all the registered users *not* including
+groups. The iterator will return each wikiname
+in turn (e.g. FredBloggs).
 
-To get a combined list of users and groups, you can do this:
+Use it as follows:
 <verbatim>
-@usersandgroups = ( @{TWiki::Func::getAllUsers()}, TWiki::Func::getAllGroups() );
+    my $iterator = TWiki::Func::getAllUsers();
+    while (my $user = $it->next()) {
+        # $user is a wikiname
+    }
 </verbatim>
+
+*WARNING* on large sites, this could be a long list!
+
+*Since:* TWiki::Plugins::VERSION 1.12
 
 =cut
 
 sub getAllUsers {
     my $session = $TWiki::Plugins::SESSION;
     my $users = $session->{users};
-
-    $users = $session->{users}->getAllUsers();
-    return map { $_->wikiName() } @$users;
-}
-
-sub _collateGroups {
-    my $ref = shift;
-    my $group = shift;
-    return unless $group;
-    my $groupObject = $ref->{users}->findUser( $group );
-    push (@{$ref->{list}}, $groupObject) if $groupObject;
+    return $users->getAllUsers();
 }
 
 =pod
 
 ---++ getUsersGroups($user) -> @list
 Get a list of the names of all groups that the user is a member of.
-If $user is omitted, defaults to the currently logged-in user.
+If =$user= is =undef=, defaults to the currently logged-in user.
+
+*Since:* TWiki::Plugins::VERSION 1.12
 
 =cut
 
@@ -784,295 +850,67 @@ sub getUsersGroups {
 
 =pod
 
----++ getAllGroups() -> @list
-Get a list of the simple names of all groups. The returned list is a list of all
-group names.
+---++ getAllGroups() -> $iterator
+Get an iterator over all groups.
+
+Use it as follows:
+<verbatim>
+    my $iterator = TWiki::Func::getAllGroups();
+    while (my $group = $it->next()) {
+        # $group is a group name e.g. TWikiAdminGroup
+    }
+</verbatim>
+
+*WARNING* on large sites, this could be a long list!
+
+*Since:* TWiki::Plugins::VERSION 1.12
 
 =cut
 
 sub getAllGroups {
     my $session = $TWiki::Plugins::SESSION;
     my $users = $session->{users};
-    my $groups;
-
-    $groups = $session->{users}->getAllGroups();
-    return map { $_->wikiName() } @$groups;
-}
-
-=pod
-
----++ lookupUsers( %spec ) -> @names
-Find users who match the given spec.
-   * =%spec= - the identifying marks of the user. The following options
-      are supported:
-      * =wikiname= - the wikiname of the user (web name optional, also
-        supports %MAINWEB%)
-      * =login= - login name of the user
-      * =email= - email address of the user **returns an array of users**
-For example,
-<verbatim>
-my @pa = TWiki::Func::lookupUsers( email => "pa@addams.org" );
-my @ma = TWiki::Func::lookupUsers( wikiname => "%MAINWEB%.MorticiaAddams" );
-</verbatim>
-
-The list returned is of the simple wikinames of the users found. The list
-is ASCII sorted.
-
-*Note* several users may have registered with the same email, or several
-login names may map to the same wiki name, so this function may return
-multiple users.
-
-You can specify more than one of wikiname, login and email. The match is an
-"or" match, so the user will be returned if any attribute matches.
-
-=cut
-
-sub lookupUsers {
-    my( %opts ) = @_;
-    my $user;
-    my $users = $TWiki::Plugins::SESSION->{users};
-    my %matches;
-
-    if( $opts{wikiname} ) {
-        if( $user = $users->findUser($opts{wikiname},$opts{wikiname},1)) {
-            $matches{$user->wikiName()} = 1;
-        }
-    }
-
-    if( $opts{login} ) {
-        if( $user = $users->findUser($opts{login},undef,1)) {
-            $matches{$user->wikiName()} = 1;
-        }
-    }
-
-    if( $opts{email} ) {
-        my $ua; # array of user objects
-        #if we have the UserMapping changes (post 4.0.3)
-        if (defined &TWiki::Users::findUserByEmail) {
-            $ua = $users->findUserByEmail( $opts{email} );
-        } else {
-            # SMELL: there is no way pre 4.0.3 to map from an email back
-            # to a user, so we have to use the user topic.
-            unless( $users->{_MAP_OF_EMAILS} ) {
-        	    $users->lookupLoginName('guest'); # load the cache
-                #SMELL: this will not work for non-topic based users
-            	foreach my $wn ( keys %{$users->{W2U}} ) {
-                    my $ou = $users->findUser( $users->{W2U}{$wn}, $wn, 1 );
-                    map { push( @{$users->{_MAP_OF_EMAILS}->{$_}}, $ou); }
-                      $ou->emails();
-
-            	}
-            }
-            $ua = $users->{_MAP_OF_EMAILS}->{$opts{email}};
-        }
-        if ($ua) {
-            foreach $user (@$ua) {
-                $matches{$user->wikiName()} = 1;
-            }
-        }
-    }
-
-    return sort keys %matches;
-}
-
-=pod
-
----++ getACLs( \@modes, $web, $topic ) -> \%acls
-Get the Access Control Lists controlling which registered users *and groups* are allowed to access the topic (web).
-   * =\@modes= - list of access modes you are interested in; e.g. [ "VIEW","CHANGE" ]
-   * =$web= - the web
-   * =$topic= - if =undef=  then the setting is taken as a web setting e.g. WEBVIEW. Otherwise it is taken as a topic setting e.g. TOPICCHANGE
-
-=\%acls= is a hash indexed by *user name* (wikiname). This maps to a hash indexed by *access mode* e.g. =VIEW=, =CHANGE= etc. This in turn maps to a boolean; 0 for access denied, non-zero for access permitted.
-<verbatim>
-my $acls = TWiki::Func::getACLs( [ 'VIEW', 'CHANGE', 'RENAME' ], $web, $topic );
-foreach my $user ( keys %$acls ) {
-    if( $acls->{$user}->{VIEW} ) {
-        print STDERR "$user can view $web.$topic\n";
-    }
-}
-</verbatim>
-The =\%acls= object may safely be written to e.g. for subsequent use with =setACLs=.
-
-__Note__ topic ACLs are *not* the final permissions used to control access to a topic. Web level restrictions may apply that prevent certain access modes for individual topics.
-
-*WARNING* when you use =setACLs= to set the ACLs of a web or topic, the change is not committed to the database until the current session exist. After =setACLs= has been called on a web or topic, the results of =getACLS= for that web/topic are *undefined*.
-
-=cut
-
-sub getACLs {
-    my( $modes, $web, $topic ) = @_;
-
-    my $context = 'TOPIC';
-    unless( $topic ) {
-        $context = 'WEB';
-        $topic = $TWiki::cfg{WebPrefsTopicName};
-    }
-
-    my @knownusers = ( getAllUsers(), getAllGroups() );
-
-    my %acls;
-
-    # By default, allow all to access all
-    foreach my $user ( @knownusers ) {
-        foreach my $mode ( @$modes ) {
-            $acls{$user}->{$mode} = 1;
-        }
-    }
-    #print STDERR "Got users ",join(',',keys %acls),"\n";
-    foreach my $mode ( @$modes ) {
-        foreach my $perm ( 'ALLOW', 'DENY' ) {
-            my $users;
-            if ($context eq 'WEB') {
-                $users = $TWiki::Plugins::SESSION->{prefs}->
-                  getWebPreferencesValue(
-                      $perm.$context.$mode, $web, $topic );
-                #print STDERR "$perm$context$mode ($web) is not defined\n" unless defined($users);
-            } else {
-                $users = $TWiki::Plugins::SESSION->{prefs}->
-                  getTopicPreferencesValue(
-                      $perm.$context.$mode, $web, $topic );
-                #print STDERR "$perm$context$mode ($web, $topic) is not defined\n" unless defined($users);
-            }
-            next unless defined($users);
-            #print STDERR "$perm$context$mode\n";
-
-            my @lusers = grep { $_ }
-              map {
-                  my( $w, $t ) = normalizeWebTopicName(
-                      $TWiki::cfg{UsersWebName}, $_);
-                  $t;
-              } split( /[ ,]+/, $users || '' );
-
-            # expand groups
-            my @users;
-            while( scalar( @lusers )) {
-                my $user = pop( @lusers );
-                $user = $TWiki::Plugins::SESSION->{users}->findUser(
-                    $user, $user, 1 );
-                if( $user ) {
-                    if ( $user->isGroup()) {
-                        # expand groups and add individual users
-                        my $group = $user->groupMembers();
-                        push( @lusers, @$group ) if $group;
-                    }
-                    push( @users, $user->wikiName() );
-                }
-            }
-
-            if( $perm eq 'ALLOW' ) {
-                # If ALLOW, only users in the ALLOW list are permitted,
-                # so change the default for all other users to 0.
-                foreach my $user ( @knownusers ) {
-                    #print STDERR "Disallow ",$user,"\n";
-                    $acls{$user}->{$mode} = 0;
-                }
-                foreach my $user ( @users ) {
-                    #print STDERR "Allow ",$user,"\n";
-                    $acls{$user}->{$mode} = 1;
-                }
-            } else {
-                foreach my $user ( @users ) {
-                    #print STDERR "Deny ",$user,"\n";
-                    $acls{$user}->{$mode} = 0;
-                }
-            }
-        }
-    }
-
-    return \%acls;
-}
-
-=pod
-
----++ setACLs( \@modes, \%acls, $web, $topic, $plainText )
-Set the access controls on the named topic.
-   * =\@modes= - list of access modes you want to set; e.g. [ "VIEW","CHANGE" ]
-   * =$web= - the web
-   * =$topic= - if =undef=, then this is the ACL for the web. otherwise it's for the topic.
-   * =\%acls= - must be a hash indexed by *user name* (wikiname). This maps to a hash indexed by *access mode* e.g. =VIEW=, =CHANGE= etc. This in turn maps to a boolean value; 1 for allowed, and 0 for denied. See =getACLs= for an example of this kind of object.
-   * =$plainText - if set, permissions will be written using plain text (* Set) in the topic body rather than being stored in meta-data (the default)
-
-Access modes used in \%acls that do not appear in \@modes are simply ignored.
-
-If there are any errors, then an =Error::Simple= will be thrown.
-
-*WARNING* when you use =setACLs= to set the ACLs of a web or topic, the change is not committed to the database until the current session exist. After =setACLs= has been called on a web or topic, the results of =getACLS= for that web/topic are *undefined*.
-
-=cut
-
-sub setACLs {
-    my( $modes, $acls, $web, $topic, $plainText ) = @_;
-
-    my $context = 'TOPIC';
-    unless( $topic ) {
-        $context = 'WEB';
-        $topic = $TWiki::cfg{WebPrefsTopicName};
-    }
-
-    my( $meta, $text ) = TWiki::Func::readTopic( $web, $topic );
-
-    my @knownusers = ( getAllUsers(), getAllGroups() );
-
-    if( $plainText ) {
-        $text .= "\n" unless $text =~ /\n$/s;
-    }
-
-    foreach my $op ( @$modes ) {
-        my @allowed = grep { $acls->{$_}->{$op} } @knownusers;
-        my @denied = grep { !$acls->{$_}->{$op} } @knownusers;
-        # Remove existing preferences of this type in text
-        $text =~ s/^(   |\t)+\* Set (ALLOW|DENY)$context$op =.*$//gm;
-        $meta->remove('PREFERENCE', 'DENY'.$context.$op);
-        $meta->remove('PREFERENCE', 'ALLOW'.$context.$op);
-
-        if( scalar( @denied )) {
-            # Work out the access modes
-            my $name;
-            my $set;
-            if( scalar( @denied ) <= scalar( @allowed )) {
-                $name = 'DENY'.$context.$op;
-                $set = \@denied;
-            } else {
-                $name = 'ALLOW'.$context.$op;
-                $set = \@allowed;
-            }
-            if ($plainText) {
-                $text .= "   * Set $name = ". join(' ', @$set)."\n";
-            } else {
-                $meta->putKeyed( 'PREFERENCE',
-                                 {
-                                     name => $name,
-                                     type => 'Set',
-                                     title => 'PREFERENCE_'.$name,
-                                     value => join(' ', @$set)
-                                    }
-                                );
-            }
-        }
-    }
-
-    # If there is an access control violation this will throw.
-    #SMELL: if you call setACLs from a plugin save handler, you will get an undefined mess as saveTopic calls them again
-    TWiki::Func::saveTopic( $web, $topic,
-                            $meta, $text, { minor => 1 } );
+    return $users->getAllGroups();
 }
 
 =pod
 
 ---+++ permissionsSet( $web ) -> $boolean
 
-Test if any access restrictions are set for this web, ignoring settings on individual pages
+Test if any access restrictions are set for this web, ignoring settings on
+individual pages
    * =$web= - Web name, required, e.g. ='Sandbox'=
 
 *Since:* TWiki::Plugins::VERSION 1.000 (27 Feb 2001)
 
+*DEPRECATED* since 1.12 - use =getPreferencesValue= instead to determine
+what permissions are set on the web, for example:
+<verbatim>
+foreach my $type qw( ALLOW DENY ) {
+    foreach my $action qw( CHANGE VIEW ) {
+        my $pref = $type . 'WEB' . $action;
+        my $val = getPreferencesValue( $pref, $web ) || '';
+        if( $val =~ /\S/ ) {
+            print "$pref is set to $val on $web\n";
+        }
+    }
+}
+</verbatim>
+
 =cut
 
 sub permissionsSet {
-#   my( $web ) = @_;
-    ASSERT($TWiki::Plugins::SESSION) if DEBUG;
-    return $TWiki::Plugins::SESSION->{security}->permissionsSet( @_ );
+    my( $web ) = @_;
+
+    foreach my $type qw( ALLOW DENY ) {
+        foreach my $action qw( CHANGE VIEW ) {
+            my $pref = $type . 'WEB' . $action;
+            my $val = getPreferencesValue( $pref, $web ) || '';
+            return 1 if( $val =~ /\S/ );
+        }
+    }
+
+    return 0;
 }
 
 =pod

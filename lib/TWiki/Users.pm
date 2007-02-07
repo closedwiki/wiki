@@ -93,7 +93,7 @@ to.
 
 sub finish {
     my $this = shift;
-    
+
     $this->{passwords}->finish();
     $this->{usermappingmanager}->finish();
 
@@ -104,25 +104,6 @@ sub finish {
     $this->{wikiname}  =  {};
     $this->{login}     =  {};
 }
-
-#returns a ref to an array of all group objects found.
-sub getAllGroups() {
-    my $this = shift;
-    ASSERT($this->isa( 'TWiki::Users')) if DEBUG;
-
-    unless (defined($this->{grouplist})) {
-        # Always add $cfg{SuperAdminGroup}
-        my $sawAdmin = 0;
-        @{$this->{grouplist}} =
-          map { $sawAdmin ||= ($_->wikiName() eq $TWiki::cfg{SuperAdminGroup}); $_ }
-            $this->{usermappingmanager}->getListOfGroups();
-        if (!$sawAdmin) {
-            push(@{$this->{grouplist}}, $this->findUser($TWiki::cfg{SuperAdminGroup}));
-        }
-    }
-    return \@{$this->{grouplist}};
-}
-
 
 # Get a list of user objects from a text string containing a
 # list of user names. Used by User.pm
@@ -242,11 +223,9 @@ with the password manager.
 =cut
 
 sub findUserByEmail {
-    my $this = shift;
-    ASSERT($this->isa( 'TWiki::Users')) if DEBUG;
-
-    my $user = $this->{passwords}->findUserByEmail(@_);
-    return $user;
+    my( $this, $email ) = @_;
+    ASSERT($email) if DEBUG;
+    return $this->{passwords}->findUserByEmail( $email );
 }
 
 =pod
@@ -312,46 +291,52 @@ sub lookupWikiName {
     return $this->{usermappingmanager}->lookupWikiName($wikiName);
 }
 
-#TODO: I was under the impression that this list would not contain every user, 
-#but i can't prove it..
-#using TWikiUserMapping, this hash will contain users listed in a group, that don't exist
-#Also, this list will contain a user that is in the current session file, even after it was removed from the system ( we don't check the validity of the user specified in the session - and thus a person can log in, then have their account removed, and until the session expires, they can still edit.)
-sub getAllLoadedUsers {
-    my $this = shift;
-    my $includeGroups = shift || 0;
+=pod
 
-    my @list = ();
-    foreach my $key (sort keys(%{$this->{wikiname}})) {
-        my $u = $this->{wikiname}{$key};
-	if ($u->isa( 'TWiki::User')) {
-	        push(@list, $u) unless (($includeGroups == 0) && ($u->isGroup()));
-	} else {
-		die $u;
-	}
+---++ ObjectMethod getAllUsers() -> $iterator
+
+Get an iterator over the list of all the registered users *not* including
+groups. The iterator will return each wikiname
+in turn (e.g. FredBloggs).
+
+Use it as follows:
+<verbatim>
+    my $iterator = $umm->getAllUsers();
+    while ($iterator->hasNext()) {
+        my $user = $it->next();
+        # $user is a wikiname
     }
+</verbatim>
 
-    return \@list;
-}
+=cut
 
-#TODO: we need to re-write and bring together the different UserCaches
-#this seems to be a safer list than getAllLoadedUsers()
-#however, if there is a non-existant user in the TWikiUsers topic, it will be here.
 sub getAllUsers {
     my( $this ) = @_;
 
-    my @list = $this->{usermappingmanager}->getListOfAllWikiNames();
-    @list = sort(@list);
-#    die join(', ', @list);
-
-    my @userlist= ();
-
-    foreach my $u (@list) {
-        my $user = $this->findUser($u);
-        push(@userlist, $user) if ($user->isa( 'TWiki::User'));
-    }
-
-    return \@userlist;
+    return $this->{usermappingmanager}->getAllUsers();
 }
 
+=pod
+
+---++ ObjectMethod getAllGroups() -> $iterator
+
+Get an iterator over the list of all the groups. The iterator will
+return each group name.
+
+Use it as follows:
+<verbatim>
+    my $iterator = $umm->getAllGroups();
+    while ($iterator->hasNext()) {
+        my $group = $it->next();
+        # $group is a group name
+    }
+</verbatim>
+
+=cut
+
+sub getAllGroups() {
+    my $this = shift;
+    return $this->{usermappingmanager}->getAllGroups();
+}
 
 1;

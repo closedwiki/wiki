@@ -21,8 +21,7 @@
 
 ---+ package TWiki::Users::TWikiUserMapping
 
-User mapping is the process by which TWiki maps from a username (a login name) to a wikiname and back. It is also
-where groups are maintained.
+User mapping is the process by which TWiki maps from a username (a login name) to a wikiname and back. It is also where groups are maintained.
 
 By default TWiki maintains user topics and group topics in the %MAINWEB% that
 define users and group. These topics are
@@ -32,8 +31,8 @@ define users and group. These topics are
 
 Many sites will want to override this behaviour, for example to get users and groups from a corporate database.
 
-This class implements the basic TWiki behaviour using topics to store users, but is also designed to be subclassed
-so that other services can be used.
+This class implements the basic TWiki behaviour using topics to store users,
+but is also designed to be subclassed so that other services can be used.
 
 Subclasses should be named 'XxxxUserMapping' so that configure can find them.
 
@@ -95,46 +94,35 @@ sub _collateGroups {
     push (@{$ref->{list}}, $groupObject) if $groupObject;
 }
 
-# get a list of groups defined in this TWiki 
-
-=pod
-
----++ ObjectMethod getListOfGroups( ) -> @listOfUserObjects
-
-Get a list of groups defined by the mapping manager. By default,
-TWiki defines groups using topics in the Main web. Subclasses should
-override this to list groups from their own databases.
-
-Returns a list of TWiki::User objects, one per group.
-
-=cut
-
-sub getListOfGroups {
+# get a list of groups defined in this TWiki
+sub _getListOfGroups {
     my $this = shift;
     ASSERT(ref($this) eq 'TWiki::Users::TWikiUserMapping') if DEBUG;
 
-    my @list;
-    my $users = $this->{session}->{users};
+    unless( $this->{groupsList} ) {
+        my $users = $this->{session}->{users};
+        $this->{groupsList} = [];
 
-    $this->{session}->{search}->searchWeb
-      (
-       _callback     => \&_collateGroups,
-       _cbdata       =>  { list => \@list, users => $users },
-       inline        => 1,
-       search        => "Set GROUP =",
-       web           => $TWiki::cfg{UsersWebName},
-       topic         => "*Group",
-       type          => 'regex',
-       nosummary     => 'on',
-       nosearch      => 'on',
-       noheader      => 'on',
-       nototal       => 'on',
-       noempty       => 'on',
-       format	     => '$web.$topic',
-       separator     => '',
-      );
-
-    return @list;
+        $this->{session}->{search}->searchWeb
+          (
+              _callback     => \&_collateGroups,
+              _cbdata       =>  { list => $this->{groupsList},
+                                  users => $users },
+              inline        => 1,
+              search        => "Set GROUP =",
+              web           => $TWiki::cfg{UsersWebName},
+              topic         => "*Group",
+              type          => 'regex',
+              nosummary     => 'on',
+              nosearch      => 'on',
+              noheader      => 'on',
+              nototal       => 'on',
+              noempty       => 'on',
+              format	     => '$web.$topic',
+              separator     => '',
+             );
+    }
+    return $this->{groupsList};
 }
 
 =pod
@@ -248,20 +236,79 @@ sub lookupWikiName {
     return $this->{W2U}{$wikiName};
 }
 
+# Iterator over a list
+{
+    package TWiki::Users::ListIterator;
+
+    sub new {
+        my ($class, $list) = @_;
+        my $this = bless({
+            list => $list,
+            index => 0
+           }, $class);
+        return $this;
+    }
+
+    sub next {
+        my $this = shift;
+        if( $this->{index} < scalar(@{$this->{list}}) ) {
+            $this->{next} = $this->{list}->[$this->{index}++];
+        } else {
+            $this->{next} = undef;
+        }
+        return $this->{next};
+    }
+}
+
 =pod
 
----++ ObjectMethod getListOfAllWikiNames() -> @wikinames
+---++ ObjectMethod getAllUsers() -> $iterator
 
-Returns a list of all wikinames of users known to the mapping manager.
+Get an iterator over the list of all the registered users *not* including
+groups. The iterator will return each wiki name.
+
+Use it as follows:
+<verbatim>
+    my $iterator = $umm->getAllUsers();
+    while (my $user = $it->next()) {
+        ...
+    }
+</verbatim>
 
 =cut
 
-sub getListOfAllWikiNames {
-    my ( $this ) = @_;
+sub getAllUsers {
+    my( $this ) = @_;
     ASSERT($this->isa( 'TWiki::Users::TWikiUserMapping')) if DEBUG;
 
     $this->_loadMapping();
-    return keys(%{$this->{W2U}});
+    my @list = map { s/^.*\.//; $_ } keys(%{$this->{W2U}});
+    return new TWiki::Users::ListIterator( \@list );
+}
+
+=pod
+
+---++ ObjectMethod getAllGroups() -> $iterator
+
+Get an iterator over the list of all the groups. The iterator will return
+each group name.
+
+Use it as follows:
+<verbatim>
+    my $iterator = $umm->getAllGroups();
+    while (my $user = $it->next()) {
+    }
+</verbatim>
+
+=cut
+
+sub getAllGroups {
+    my ( $this ) = @_;
+    ASSERT($this->isa( 'TWiki::Users::TWikiUserMapping')) if DEBUG;
+
+    $this->_getListOfGroups();
+    my @gns = map { $_->wikiName() } @{$this->{groupsList}};
+    return new TWiki::Users::ListIterator(\@gns);
 }
 
 # Build hash to translate between username (e.g. jsmith)
@@ -373,11 +420,7 @@ sub isGroup {
 
 ---++ ObjectMethod groupMemberships($user) -> \@list
 
-Get a list of the user objects for the groups that $user is a member of.
-
-This is pretty inefficient, as it requires loading all groups.
-
-LAB,ATYD.
+Get a list of the names of the groups that $user is a member of.
 
 =cut
 
@@ -385,7 +428,8 @@ sub groupMemberships {
     my ($this, $user) = @_;
     my @groups = ();
 
-    foreach my $group ($this->getListOfGroups()) {
+    $this->_getListOfGroups();
+    foreach my $group (@{$this->{groupsList}}) {
         if ($user->isInList( $group->groupMembers())) {
             push(@groups, $group);
         }

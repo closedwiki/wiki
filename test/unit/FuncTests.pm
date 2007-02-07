@@ -40,7 +40,7 @@ sub tear_down {
     $this->SUPER::tear_down();
 }
 
-sub test_web {
+sub detest_web {
     my $this = shift;
 
     TWiki::Func::createWeb($testweb."Blah");
@@ -60,7 +60,7 @@ sub test_web {
                                $TWiki::cfg{TrashWebName}.'.'.$testweb);
 }
 
-sub test_getViewUrl {
+sub detest_getViewUrl {
     my $this = shift;
 
     $TWiki::Plugins::SESSION = new TWiki();
@@ -83,7 +83,7 @@ sub test_getViewUrl {
     $this->assert_matches(qr!/$ss/Sausages/AndMash!, $result );
 }
 
-sub test_getScriptUrl {
+sub detest_getScriptUrl {
     my $this = shift;
 
     $TWiki::Plugins::SESSION = new TWiki();
@@ -105,7 +105,7 @@ sub test_getScriptUrl {
     $this->assert_matches(qr!/$ss/Main/AndMash!, $result );
 }
 
-sub test_leases {
+sub detest_leases {
     my $this = shift;
 
     my $testtopic = $TWiki::cfg{HomeTopicName};
@@ -146,7 +146,7 @@ sub test_leases {
     $this->assert_equals(0,$time);
 }
 
-sub test_attachments {
+sub detest_attachments {
     my $this = shift;
 
     my $data = "\0b\1l\2a\3h\4b\5l\6a\7h";
@@ -210,7 +210,7 @@ sub test_attachments {
     $this->assert_str_equals($data, $x);
 }
 
-sub test_getrevinfo {
+sub detest_getrevinfo {
     my $this = shift;
     my $topic = "RevInfo";
 
@@ -227,7 +227,7 @@ sub test_getrevinfo {
     $this->assert_str_equals( "PeterRabbit", $user );
 }
 
-sub test_moveTopic {
+sub detest_moveTopic {
     my $this = shift;
     my $twiki = new TWiki();
     $TWiki::Plugins::SESSION = $twiki;
@@ -263,7 +263,7 @@ sub test_moveTopic {
     $this->assert(TWiki::Func::topicExists( $testextra, "TargetTopic"));
 }
 
-sub test_moveAttachment {
+sub detest_moveAttachment {
     my $this = shift;
 
     my $twiki = new TWiki();
@@ -315,7 +315,7 @@ sub test_moveAttachment {
                                                  "Name1"));
 }
 
-sub test_workarea {
+sub detest_workarea {
     my $this = shift;
 
     my $twiki = new TWiki();
@@ -326,7 +326,7 @@ sub test_workarea {
     unlink $dir;
 }
 
-sub test_extractParameters {
+sub detest_extractParameters {
     my $this = shift;
 
     my $twiki = new TWiki();
@@ -341,7 +341,7 @@ sub test_extractParameters {
     }
 }
 
-sub test_w2em {
+sub detest_w2em {
     my $this = shift;
     my $twiki = new TWiki();
     $TWiki::Plugins::SESSION = $twiki;
@@ -351,7 +351,7 @@ sub test_w2em {
         $ems, TWiki::Func::wikiToEmail($twiki->{user}->wikiName()));
 }
 
-sub test_normalizeWebTopicName {
+sub detest_normalizeWebTopicName {
     my $this = shift;
     $TWiki::cfg{EnableHierarchicalWebs} = 1;
     my ($w, $t) = TWiki::Func::normalizeWebTopicName( 'Web',  'Topic' );
@@ -422,7 +422,7 @@ sub test_normalizeWebTopicName {
     $this->assert_str_equals( 'Topic', $t );
 }
 
-sub test_checkAccessPermission {
+sub detest_checkAccessPermission {
     my $this = shift;
     my $topic = "NoWayJose";
 
@@ -471,6 +471,34 @@ END
         "   * Set ALLOWTOPICVIEW = $TWiki::cfg{DefaultUserWikiName}\n",
         $topic, $testweb, $meta);
     $this->assert(!$access);
+}
+
+sub test_GET {
+    my $this = shift;
+
+    # Totally pathetic sanity test
+
+    # First check the LWP impl
+    # need a known, simple, robust URL to get
+    my $response = TWiki::Func::GET('http://www.example.com');
+    $this->assert_equals(200, $response->code());
+    $this->assert_str_equals('OK', $response->message());
+    $this->assert_str_equals('text/html; charset=UTF-8',
+                             $response->header('content-type'));
+    $this->assert_matches(qr/Example Web Page/s, $response->content());
+    $this->assert(!$response->is_error());
+    $this->assert(!$response->is_redirect());
+
+    # Now force the braindead sockets impl
+    $TWiki::Net::LWPAvailable = 0;
+    $response = TWiki::Func::GET('http://www.example.com');
+    $this->assert_equals(200, $response->code());
+    $this->assert_str_equals('OK', $response->message());
+    $this->assert_str_equals('text/html; charset=UTF-8',
+                             $response->header('content-type'));
+    $this->assert_matches(qr/Example Web Page/s, $response->content());
+    $this->assert(!$response->is_error());
+    $this->assert(!$response->is_redirect());
 }
 
 1;

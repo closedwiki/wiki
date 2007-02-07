@@ -52,39 +52,6 @@ sub new {
 
 =pod
 
----++ ObjectMethod permissionsSet (  $web  ) -> $boolean
-
-Are there any security restrictions for this Web
-(ignoring settings on individual pages).
-
-=cut
-
-sub permissionsSet {
-    my( $this, $web ) = @_;
-    ASSERT($this->isa( 'TWiki::Access')) if DEBUG;
-
-    my $permSet = 0;
-
-    my @types = qw/ALLOW DENY/;
-    my @actions = qw/CHANGE VIEW/;
-    my $prefs = $this->{session}->{prefs};
-
-  OUT: foreach my $type ( @types ) {
-        foreach my $action ( @actions ) {
-            my $pref = $type . 'WEB' . $action;
-            my $prefValue = $prefs->getWebPreferencesValue( $pref, $web ) || '';
-            if( $prefValue =~ /\S/ ) {
-                $permSet = 1;
-                last OUT;
-            }
-        }
-    }
-
-    return $permSet;
-}
-
-=pod
-
 ---++ ObjectMethod getReason() -> $string
 
 Return a string describing the reason why the last access control failure

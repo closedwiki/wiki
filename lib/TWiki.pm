@@ -3545,7 +3545,6 @@ sub _WIKIUSERNAME_deprecated {
 sub _USERINFO {
     my ( $this, $params ) = @_;
     my $format = $params->{format} || '$username, $wikiusername, $emails';
-    my $userDebug = $params->{'userdebug'} || '';
 
     my $user = $this->{user};
     if( $params->{_DEFAULT} ) {
@@ -3581,28 +3580,25 @@ sub _USERINFO {
         $info =~ s/\$groups/$groups/g;
     }
 
-    #don't give out userlists to non-admins
-    if ($userDebug ne '' && $user->isAdmin()) {
-        my $users = '';
-        $users .= "\n\nLoaded Users: ".join(" \n", map {$_->webDotWikiName()} @{$this->{users}->getAllLoadedUsers()});
-        $users .= "\n\nALL Users: ".join(" \n", map {$_->webDotWikiName()} @{$this->{users}->getAllUsers()});
-        $info .=  $users;
-    }
-
     return $info;
 }
 
 sub _GROUPS {
     my ( $this, $params ) = @_;
 
-    my @groupNames = map {
-      '| [['.$_->webDotWikiName().  ']['.$_->wikiName().']] |'.
-        join(', ', map {
-            '[['.$_->webDotWikiName().']['.$_->wikiName().']]'
-        } @{$_->groupMembers()}). ' |';
-    } sort {$a->wikiName() cmp $b->wikiName()} @{$this->{users}->getAllGroups()};
+    my $groups = $this->{users}->getAllGroups();
+    my @table;
+    while (my $group = $groups->next()) {
+        my $user = $this->{users}->findUser($group);
+        my $descr = '| [['.$user->webDotWikiName().']['.
+          $user->wikiName().']] |';
+        $descr .= join(', ', map {
+                  '[['.$_->webDotWikiName().']['.$_->wikiName().']]'
+              } @{$user->groupMembers()}). ' |';
+        push( @table, $descr );
+    }
 
-    return '| *Group* | *Members* |'."\n".join("\n", @groupNames);
+    return '| *Group* | *Members* |'."\n".join("\n", sort @table);
 }
 
 1;

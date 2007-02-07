@@ -32,6 +32,7 @@ to implement other password handling methods.
 package TWiki::Users::Password;
 
 use strict;
+use Assert;
 
 =pod
 
@@ -244,15 +245,17 @@ sub setEmails {
 
 #returns an array of user objects that relate to a email address
 sub findUserByEmail {
-    my $this = shift;
-    my $email = shift;
+    my( $this, $email ) = @_;
+    ASSERT($email) if DEBUG;
     # SMELL: there is no way in TWiki to map from an email back to a user, so
     # we have to cheat. We do this as follows:
     unless( $this->{_MAP_OF_EMAILS} ) {
         $this->{_MAP_OF_EMAILS} = ();
         my $users = $this->{session}->{users}->getAllUsers();
-        foreach my $user ( @{$users} ) {
-            map { push( @{$this->{_MAP_OF_EMAILS}->{$_}}, $user); } $user->emails();
+        while( my $user = $users->next() ) {
+            my $uo = $this->{session}->{users}->findUser($user);
+            map { push( @{$this->{_MAP_OF_EMAILS}->{$_}}, $uo); }
+              $uo->emails();
         }
     }
     return $this->{_MAP_OF_EMAILS}->{$email};
