@@ -26,19 +26,24 @@ use strict;
 
 sub handleSections {
 
-    my ($l,$e,$lbltag) = @_;
+    my ($l,$e,$lbltag,$text) = @_;
     my $cl = length($l);
 
     my $MAXDEPTH = TWiki::Func::getContext()->{'LMPcontext'}->{'maxdepth'};
-
-    return('---'.$l) if ( ($cl > $MAXDEPTH) ||
-                          (exists(TWiki::Func::getContext()->{'genpdflatex'})) );
 
     my $label = '';
     if ($lbltag and ($lbltag =~ m/\{(.*?)\}/)) {
         $label = $1;
         $label = 'sec:'.$label unless ($label =~ m/^sec:/);
     }
+
+    if (exists(TWiki::Func::getContext()->{'genpdflatex'})) {
+        my $ret = '---'.$l.' '.$text." \n";
+        $ret .= '<latex>\label{'.$label."}</latex>\n" if ($label ne '');
+        return($ret);
+    }
+    return('---'.$l) if ( ($cl > $MAXDEPTH) );
+
     
     TWiki::Func::getContext()->{'LMPcontext'}->{'sec'.$cl.'cnt'} += 1;
 
@@ -65,7 +70,7 @@ sub handleSections {
     $ret .= " <a name=\"$label\"></a> " if ($label ne '');
     $ret .= "\n---";
     $ret .= '+' x $cl;
-    $ret .= $e." $sn. ";
+    $ret .= $e." $sn. ".$text;
     return( $ret );
 
 }

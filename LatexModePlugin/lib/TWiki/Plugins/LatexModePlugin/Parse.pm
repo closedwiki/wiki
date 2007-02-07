@@ -400,6 +400,7 @@ my %embed = ( '\\em' => [ '<em>', '</em>' ],
               '\\footnotesize' => [ '<font size="-4">','</font>' ],
               '\\large' => [ '<font size="+1">','</font>' ],
               '\\raggedleft' => [ '<div style="text-align:right">', '</div>' ],
+              '\\raggedleft' => [ '', '' ],
               '\\centering' => [ '<div align="center">', '</div>' ]
               );
 
@@ -947,6 +948,9 @@ sub convertEnvironment
                 $block =~ s/^\\item/<li>/;
               }
             }
+            elsif ($match eq 'subitem') {
+                $block =~ s/^\\subitem/ %BR%&nbsp;&nbsp;&nbsp;&nbsp; /;
+            }
             elsif ($match eq 'begin') {
                 my ($pre,$blk2,$post);
                 ($pre,$block,$post) = umbrellaHook( $block, 
@@ -1481,6 +1485,7 @@ __DATA__
 :\institute:1:&formInst('$1'):
 :\inst:1:<sup>$1</sup>:
 :\email:0: :
+:\raggedright:0: :
 :\AE:0: &AElig;:
 :\ae:0: &aelig;:
 :\tableofcontents:0:%TOC%:

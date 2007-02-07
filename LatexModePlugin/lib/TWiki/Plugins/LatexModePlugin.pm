@@ -149,7 +149,7 @@ sub commonTagsHandler
 
     ### pass through text to assign labels to section numbers
     ###
-    $_[0] =~ s!---(\++)(\!*)\s*(%SECLABEL{.*?}%)?\s!&handleSections($1,$2,$3) !gseo;
+    $_[0] =~ s!---(\++)(\!*)\s*(%SECLABEL{.*?}%)?\s(.*?)\n!&handleSections($1,$2,$3,$4) !gseo;
 
     # handle floats first, in case of latex markup in captions.
     $_[0] =~ s!%BEGINFIGURE{(.*?)}%(.*?)%ENDFIGURE%!&handleFloat($2,$1,'fig')!giseo;

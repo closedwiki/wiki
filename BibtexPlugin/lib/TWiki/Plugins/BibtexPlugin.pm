@@ -295,7 +295,7 @@ sub handleBibtexBibliography
 
         # output result to a temporary bibtex file...
         my $tmpbib = getTempFileName("bib").'.bib';
-        print STDERR $tmpbib . "\n";
+        # print STDERR $tmpbib . "\n";
         open(T,">$tmpbib");
         print T $result;
         close(T);

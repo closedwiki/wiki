@@ -42,6 +42,8 @@ use strict;
 
 use vars qw( $VERSION $RELEASE $debug );
 
+use File::Copy;
+
 # use TWiki::Plugins::LatexModePlugin qw($preamble);
 
 # number the release version of this addon
@@ -73,9 +75,12 @@ and not called from outside the package.
 # path to location of local texmf tree, where custom style files are storedx
 $ENV{'HOME'} = $TWiki::cfg{Plugins}{GenPDFLatex}{home} ||
     '/home/nobody';
-# full path to pdflatex 
+# full path to pdflatex and bibtex
 my $pdflatex = $TWiki::cfg{Plugins}{GenPDFLatex}{pdflatex} ||
     '/usr/share/texmf/bin/pdflatex';
+my $bibtex = $TWiki::cfg{Plugins}{BibtexPlugin}{bibtex} || 
+    '/usr/share/texmf/bin/bibtex';
+
 # directory where the html2latex parser will store copies of
 # referenced images, if needed
 my $htmlstore = $TWiki::cfg{Plugins}{GenPDFLatex}{h2l_store} ||
@@ -142,25 +147,14 @@ sub genfile() {
     } elsif ( $action eq 'srczip' ) {
 
         my $tex = _genlatex( $webName, $topic, $userName, $query );
-        my ($meta,$text) = TWiki::Func::readTopic( $webName, $topic );
-        my @filelist;
-    
-        my %h = %{$meta};
+
+        my @filelist = _get_file_list($webName,$topic);
+
         if ($debug) {
             print $query->header( -TYPE => "text/html" );
         
             print "<p>Generating ZIP file of latex source + attached bib and fig files\n<p>";
     
-            print map {"$_ => $h{$_}\n"} keys %h;
-        }
-
-        foreach my $c (@{$h{'FILEATTACHMENT'}}) {
-            my %h2 = %{$c};
-            next if ($h2{'attr'} eq 'h');
-            push @filelist, $h2{'name'};
-        }
-
-        if ($debug) {
             print "<ul>";
             print map {"<li> $_"} @filelist;
             print "</ul>";
@@ -232,21 +226,37 @@ sub genfile() {
         my $SDIR = getcwd();
         $SDIR = $1 if ( ($SDIR) and ($SDIR =~ m/^(.*)$/) );
 
+        my @filelist = _get_file_list($webName,$topic);
+        foreach my $f (@filelist) {
+            copy( join('/',TWiki::Func::getPubDir(),$webName,$topic,$f), $path.'/'.$f );
+        }
+
         chdir($path);
         my $flag = 0;
         my $ret = "";
         do {
             $ret = `$pdflatex -interaction=nonstopmode $texrel`;
+            $ret .= `$bibtex $base` if ($tex =~ m/\\bibliography\{/);
             $flag++ unless ($ret =~ m/Warning.*?Rerun/i);
         } while ($flag < 2);
 
         my @errors = grep /^!/, $ret;
+
+        my $log = 
+        open(F,"$logfile");
+        while (<F>) {
+            $log .= $_."\n";
+            push(@errors, grep /Error\:/, $_);
+        }
+        close(F);
+
         if(@errors){
             print $query->header( -TYPE => "text/html" );
             print "<html><body>";
             print "pdflatex reported " . scalar(@errors) . " errors while creating PDF:";
-
-            print map {"<br>$_ "} @errors;
+            print "<ul>\n";
+            print map {"<li>$_ "} @errors;
+            print "</ul>\n";
 
             print "</html></body>";
 
@@ -260,6 +270,18 @@ sub genfile() {
                 print;
             }
             close(F);
+        } else {
+            print $query->header( -TYPE => "text/html" );
+            print "<html><body>\n";
+            print "<h1>PDFLATEX processing error:</h1>\n";
+            
+            if ($debug) {
+                print "Attached files: <ul>";
+                print map {"<li> $_"} @filelist;
+                print "</ul>";
+            }
+            print "<pre>".$log;
+            print "</pre></body></html>\n";
         }
 
         do {
@@ -271,6 +293,10 @@ sub genfile() {
                 unlink("$t") || print STDERR "genpdflatex: Can't remove $t: $!\n";
             }
             close(D);
+            # remove the attached files
+            foreach my $f (@filelist) {
+                unlink("$f") || print STDERR "genpdflatex: Can't remove $f: $!\n";
+            }
 
             chdir($SDIR) if ($SDIR ne "");
             rmdir($WDIR) || print STDERR "genpdflatex: Can't remove $WDIR: $!\n";
@@ -367,6 +393,20 @@ sub genfile() {
     
 }
 
+
+sub _get_file_list {
+    my ($meta,$text) = TWiki::Func::readTopic( $_[0], $_[1] ); # $webName, $topic
+    my @filelist;
+    
+    my %h = %{$meta};
+    foreach my $c (@{$h{'FILEATTACHMENT'}}) {
+        my %h2 = %{$c};
+        next if ($h2{'attr'} eq 'h');
+        push @filelist, $h2{'name'};
+    }
+    return(@filelist);
+}
+
 sub _list_possible_classes {
     # this is a debug subroutine to check if the latex environment is
     # operational on the server.
@@ -442,6 +482,10 @@ sub _genlatex {
     ### directives in TWiki::Func::getSkin)
     $text =~ s!<.*?section.*?>!!g;
 
+    # protect latex new-lines at end of physical lines
+    $text =~ s!(\\\\)$!$1    !g;  
+    $text =~ s!(\\\\)\n!$1    \n!g;  
+
     $text = TWiki::Func::renderText($text);
     
     $text =~ s/%META:\w+{.*?}%//gs; # clean out the meta-data
@@ -456,9 +500,10 @@ sub _genlatex {
 
     # use hard-disk path rather than relative url paths for images
     my $pdir = TWiki::Func::getPubDir();
-    my $purl = TWiki::Func::getUrlHost().TWiki::Func::getPubUrlPath();
+    my $purlh = TWiki::Func::getUrlHost();
+    my $purlp = TWiki::Func::getPubUrlPath();
 
-    $text =~ s!<img(.*?) src="$purl!<img$1 src="$pdir\/!sgi;
+    $text =~ s!<img(.*?) src="($purlh)?$purlp!<img$1 src="$pdir\/!sgi;
 
     # $url =~ s/$ptmp//;
     # $text =~ s!<img(.*?) src="\/!<img$1 src="$url\/!sgi;
@@ -529,7 +574,7 @@ sub _genlatex {
     $parser->ban_tag(@banned);
     $parser->set_option({ store => $htmlstore });
     # $parser->set_log('/tmp/LMP.log');
-
+    # open(F,">/tmp/LMP.html"); print F $text; close(F);
     my $tex = $parser->parse_string($text."<p>",1);
 
     $tex =~ s/(\\begin\{document\})/\n$preamble\n$1/;
@@ -567,7 +612,7 @@ __DATA__
     <option value="$style">$style</option>
     <option value="article">Generic Article</option>
     <option value="book">Book</option>
-    <option value="IEEEtran2e">IEEE Trans</option>
+    <option value="IEEEtran">IEEE Trans</option>
     <option value="ismrm">MRM / JMRI (ISMRM)</option>
     <option value="cmr">Concepts in MR</option>
     <option value="letter">Letter</option>

@@ -199,8 +199,8 @@ sub main
     
   $tmpl =~ s/%SEARCHSTRING%//go;
   $tmpl =~ s/%REVINFO%//go;
-  $tmpl =~ s/%REVTITLE%/search/go;
-  $tmpl =~ s/%REVTITLE%/search/go;
+  $tmpl =~ s/%REVTITLE%(<nop>)?/bibsearch /go;
+  $tmpl =~ s/%REVTITLE%(<nop>)?/bibsearch /go;
   $tmpl =~ s/%REVARG%//go;
 
   ##
