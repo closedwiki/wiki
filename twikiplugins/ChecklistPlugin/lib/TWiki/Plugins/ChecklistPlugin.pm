@@ -172,7 +172,8 @@ sub handleAllTags {
 	$_[0] =~ s/%CHECKLISTSTART{(.*?)}%(.*?)%CHECKLISTEND%/&handleAutoChecklist($1,$2,$_[0])/sge;
 	$_[0] =~ s/%CHECKLIST%/&handleChecklist("",$_[0])/ge;
 	$_[0] =~ s/%CHECKLIST{(.*?)}%/&handleChecklist($1,$_[0])/sge;
-	$_[0] =~ s/([^\n\%]*)%CLI({(.*?)})?%([^\n\%]*)/$1.&handleChecklistItem($3,$_[0],$1,$4).$4/sge;
+	$_[0] =~ s/%CLI({(.*?)})?%/&handleChecklistItem($2,$_[0],$-[0],$+[0])/sge;
+	##$_[0] =~ s/([^\n\%]*)%CLI({(.*?)})?%([^\n\%]*)/$1.&handleChecklistItem($3,$_[0],$1,$4).$4/sge;
 }
 
 # =========================
@@ -527,7 +528,7 @@ sub handleAutoChecklist {
 }
 # =========================
 sub handleChecklistItem {
-	my ($attributes, $text,$textBefore,$textAfter) = @_;
+	my ($attributes, $text,$startOffset,$endOffset) = @_;
 
 	TWiki::Func::writeDebug("- ${pluginName}::handleChecklistItem($attributes)") if $debug;
 
@@ -539,8 +540,8 @@ sub handleChecklistItem {
 	&initStates($query);
 
 	$namedIds{$options{'name'}}++ unless defined $options{'id'};
-
-	&handleDescription($textBefore, $textAfter);
+	
+	&handleDescription($text, $startOffset, $endOffset);
 
 	if ((defined $query->param('clpsc'))&&(!$stateChangeDone)) {
 		my ($id,$name,$lastState,$nextstate) = ($query->param('clpsc'),$query->param('clpscn'),$query->param('clpscls'),$query->param('clpscns'));
@@ -566,7 +567,19 @@ sub handleChecklistItem {
 }
 # =========================
 sub handleDescription  {
-	my ($textBefore, $textAfter) = @_;
+	my ($text, $startOffset, $endOffset) = @_;
+
+	my $si = $startOffset - $options{'descrcharlimit'};
+	$si = 0 if ($si < 0);
+	my $textBefore = substr( $text, $si, $startOffset-$si);
+	my $textAfter = substr($text, $endOffset+1, $options{'descrcharlimit'});
+
+	$textBefore =~ /([^>\n\%]*)$/;
+	$textBefore = $1 if defined $1;
+
+	$textAfter =~ /^([^<\n\%]*)/;
+	$textAfter = $1 if defined $1;
+
 	my $descr = $$idMapRef{$options{'name'}}{$options{'id'}?$options{'id'}:$namedIds{$options{'name'}}}{'descr'};
 	unless ( (defined $options{'descr'}) || ((defined $descr)&&($descr!~/^\s*$/))) {
 		$options{'descr'}=$options{'text'} if (defined $options{'text'})&&($options{'text'}!~/^\s*$/s);
