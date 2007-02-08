@@ -251,9 +251,10 @@ sub findUserByEmail {
     # we have to cheat. We do this as follows:
     unless( $this->{_MAP_OF_EMAILS} ) {
         $this->{_MAP_OF_EMAILS} = ();
-        my $users = $this->{session}->{users}->getAllUsers();
-        while( my $user = $users->next() ) {
-            my $uo = $this->{session}->{users}->findUser($user);
+        my $it = $this->{session}->{users}->eachUser();
+        while( $it->hasNext() ) {
+            my $uo = $it->next();
+ASSERT($uo->isa('TWiki::User'));
             map { push( @{$this->{_MAP_OF_EMAILS}->{$_}}, $uo); }
               $uo->emails();
         }

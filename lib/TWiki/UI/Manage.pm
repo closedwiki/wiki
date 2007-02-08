@@ -97,17 +97,18 @@ sub _removeUser {
     #check to see it the user we are trying to remove is a member of a group.
     #initially we refuse to delete the user
     #in a later implementation we will remove the from the group (if Access.pm implements it..)
-    my @groups = $user->getGroups();
-    if ( scalar( @groups ) > 0 ) { 
+    my $git = $user->eachMembership();
+    if( $git->hasNext() ) {
+        my $list = '';
+        while ($git->hasNext()) {
+            $list .= ' '.$git->next()->stringify();
+        }
         throw TWiki::OopsException( 'attention',
                                     web => $webName,
                                     topic => $topic,
                                     def => 'in_a_group',
                                     params =>
-                                    [ $user->stringify(),
-                                      join(', ',
-                                           map { $_->stringify() }
-                                           @groups ) ] );
+                                      [ $user->stringify(), $list ] );
     }
 
     unless( $user->checkPassword( $password ) ) {

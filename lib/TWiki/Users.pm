@@ -291,52 +291,34 @@ sub lookupWikiName {
     return $this->{usermappingmanager}->lookupWikiName($wikiName);
 }
 
-=pod
-
----++ ObjectMethod getAllUsers() -> $iterator
-
-Get an iterator over the list of all the registered users *not* including
-groups. The iterator will return each wikiname
-in turn (e.g. FredBloggs).
-
-Use it as follows:
-<verbatim>
-    my $iterator = $umm->getAllUsers();
-    while ($iterator->hasNext()) {
-        my $user = $it->next();
-        # $user is a wikiname
-    }
-</verbatim>
-
-=cut
-
-sub getAllUsers {
-    my( $this ) = @_;
-
-    return $this->{usermappingmanager}->getAllUsers();
+sub eachGroup {
+    my $this = shift;
+    return $this->{usermappingmanager}->eachGroup(@_);
 }
 
-=pod
-
----++ ObjectMethod getAllGroups() -> $iterator
-
-Get an iterator over the list of all the groups. The iterator will
-return each group name.
-
-Use it as follows:
-<verbatim>
-    my $iterator = $umm->getAllGroups();
-    while ($iterator->hasNext()) {
-        my $group = $it->next();
-        # $group is a group name
-    }
-</verbatim>
-
-=cut
-
-sub getAllGroups() {
+sub eachUser {
     my $this = shift;
-    return $this->{usermappingmanager}->getAllGroups();
+    return $this->{usermappingmanager}->eachUser(@_);
+}
+
+sub isGroup {
+    my $this = shift;
+    return $this->{usermappingmanager}->isGroup(@_);
+}
+
+sub eachGroupMember {
+    my $this = shift;
+    return $this->{usermappingmanager}->eachGroupMember(@_);
+}
+
+sub eachMembership {
+    my $this = shift;
+    return $this->{usermappingmanager}->eachMembership(@_);
+}
+
+sub isInGroup {
+    my $this = shift;
+    return $this->{usermappingmanager}->isInGroup(@_);
 }
 
 1;

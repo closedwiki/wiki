@@ -43,11 +43,11 @@ Subclasses should be named 'XxxxUserMapping' so that configure can find them.
 package TWiki::Users::TWikiUserMapping;
 
 use strict;
-use strict;
 use Assert;
+use Error qw( :try );
 use TWiki::User;
 use TWiki::Time;
-use Error qw( :try );
+use TWiki::ListIterator;
 
 =pod
 
@@ -236,86 +236,53 @@ sub lookupWikiName {
     return $this->{W2U}{$wikiName};
 }
 
-# Iterator over a list
-{
-    package TWiki::Users::ListIterator;
-
-    sub new {
-        my ($class, $list) = @_;
-        my $this = bless({
-            list => $list,
-            index => 0
-           }, $class);
-        return $this;
-    }
-
-    sub next {
-        my $this = shift;
-        if( $this->{index} < scalar(@{$this->{list}}) ) {
-            $this->{next} = $this->{list}->[$this->{index}++];
-        } else {
-            $this->{next} = undef;
-        }
-        return $this->{next};
-    }
-}
-
 =pod
 
----++ ObjectMethod getAllUsers() -> $iterator
+---++ ObjectMethod eachUser() -> $iterator
 
 Get an iterator over the list of all the registered users *not* including
-groups. The iterator will return each wiki name.
+groups. The iterator will return each user object.
 
 Use it as follows:
 <verbatim>
-    my $iterator = $umm->getAllUsers();
-    while (my $user = $it->next()) {
+    my $iterator = $umm->eachUser();
+    while ($it->hasNext()) {
+        my $user = $it->next();
         ...
     }
 </verbatim>
 
 =cut
 
-sub getAllUsers {
+sub eachUser {
     my( $this ) = @_;
     ASSERT($this->isa( 'TWiki::Users::TWikiUserMapping')) if DEBUG;
 
     $this->_loadMapping();
-    my @list = map { s/^.*\.//; $_ } keys(%{$this->{W2U}});
-    return new TWiki::Users::ListIterator( \@list );
+    my $users = $this->{session}->{users};
+    my @list = map { $users->findUser($_) } keys(%{$this->{W2U}});
+    return new TWiki::ListIterator( \@list );
 }
 
 =pod
 
----++ ObjectMethod getAllGroups() -> $iterator
+---++ ObjectMethod eachGroup() -> $iterator
 
 Get an iterator over the list of all the groups. The iterator will return
-each group name.
-
-Use it as follows:
-<verbatim>
-    my $iterator = $umm->getAllGroups();
-    while (my $user = $it->next()) {
-    }
-</verbatim>
+each group user object.
 
 =cut
 
-sub getAllGroups {
+sub eachGroup {
     my ( $this ) = @_;
-    ASSERT($this->isa( 'TWiki::Users::TWikiUserMapping')) if DEBUG;
-
     $this->_getListOfGroups();
-    my @gns = map { $_->wikiName() } @{$this->{groupsList}};
-    return new TWiki::Users::ListIterator(\@gns);
+    return new TWiki::ListIterator( \@{$this->{groupsList}} );
 }
 
 # Build hash to translate between username (e.g. jsmith)
 # and WikiName (e.g. Main.JaneSmith).
 sub _loadMapping {
     my $this = shift;
-    ASSERT($this->isa( 'TWiki::Users::TWikiUserMapping')) if DEBUG;
 
     return if $this->{CACHED};
     $this->{CACHED} = 1;
@@ -355,10 +322,10 @@ sub _cacheUser {
 
 =pod
 
----++ ObjectMethod groupMembers($group) -> @members
+---++ ObjectMethod eachGroupMember($group) -> $iterator
 
-Return a list of user objects that are members of this group. Should only be
-called on groups.
+Return a iterator of user objects that are members of this group.
+Should only be called on groups.
 
 Note that groups may be defined recursively, so a group may contain other
 groups. This method should *only* return users i.e. all contained groups
@@ -366,7 +333,7 @@ should be fully expanded.
 
 =cut
 
-sub groupMembers {
+sub eachGroupMember {
     my $this = shift;
     my $group = shift;
     ASSERT($this->isa( 'TWiki::Users::TWikiUserMapping')) if DEBUG;
@@ -393,7 +360,7 @@ sub groupMembers {
         }
     }
 
-    return $group->{members};
+    return new TWiki::ListIterator( \@{$group->{members}} );
 }
 
 =pod
@@ -418,23 +385,21 @@ sub isGroup {
 
 =pod
 
----++ ObjectMethod groupMemberships($user) -> \@list
+---++ ObjectMethod eachMembership($user) -> $iterator
 
-Get a list of the names of the groups that $user is a member of.
+Return an iterator over the user objects of the groups that $user (an object)
+is a member of.
 
 =cut
 
-sub groupMemberships {
+sub eachMembership {
     my ($this, $user) = @_;
     my @groups = ();
 
     $this->_getListOfGroups();
-    foreach my $group (@{$this->{groupsList}}) {
-        if ($user->isInList( $group->groupMembers())) {
-            push(@groups, $group);
-        }
-    }
-    return \@groups;
+    my $it = new TWiki::ListIterator( \@{$this->{groupsList}} );
+    $it->{filter} = sub { $this->isInGroup($user, $_[0]) };
+    return $it;
 }
 
 =pod
@@ -447,9 +412,22 @@ the group and checks the members.
 =cut
 
 sub isInGroup {
-    my( $this, $user, $group ) = @_;
+    my( $this, $user, $group, $scanning ) = @_;
+    ASSERT(ref($group) eq 'TWiki::User') if DEBUG;
     ASSERT($group->isGroup()) if DEBUG;
-    return $user->isInList( $group->groupMembers() );
+
+    my @users;
+    my $it = $group->eachGroupMember();
+    while ($it->hasNext()) {
+        my $u = $it->next();
+        next if $scanning->{$u};
+        $scanning->{$u} = 1;
+        return 1 if $u->equals($user);
+        if( $u->isGroup() ) {
+            return 1 if $this->isInGroup( $user, $u, $scanning);
+        }
+    }
+    return 0;
 }
 
 1;

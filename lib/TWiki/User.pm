@@ -319,8 +319,9 @@ sub emails {
     unless( defined $this->{emails} ) {
         @{$this->{emails}} = ();
         if ( $this->isGroup() ) {
-            foreach my $member ( @{$this->groupMembers()} ) {
-                push( @{$this->{emails}}, $member->emails() );
+            my $it = $this->eachGroupMember();
+            while( $it->hasNext() ) {
+                push( @{$this->{emails}}, $it->next()->emails() );
             }
         } else {
             my $passwordHandler = $this->{session}->{users}->{passwords};
@@ -365,9 +366,7 @@ sub isAdmin {
         } else {
             my $sag = $this->{session}->{users}->findUser(
                  $TWiki::cfg{SuperAdminGroup} );
-            $this->{isKnownAdmin} =
-              $this->{session}->{users}->{usermappingmanager}->isInGroup(
-                  $this, $sag );
+            $this->{isKnownAdmin} = $this->isInGroup( $sag );
         }
     }
     return $this->{isKnownAdmin};
@@ -384,9 +383,15 @@ Get a list of user objects for the groups a user is in
 sub getGroups {
     my $this = shift;
     ASSERT($this->isa( 'TWiki::User')) if DEBUG;
-    my @groupList = @{$this->{session}->{users}->getAllGroups()};
-    foreach my $groupObject (@groupList) {
-    	$groupObject->groupMembers(); 
+    return $this->{groups} if defined($this->{groups});
+    my $users = $this->{session}->{users};
+    my $it = $this->{session}->{users}->eachGroup();
+    while ($it->hasNext()) {
+        my $groupObject = $it->next();
+        my $it = $groupObject->eachGroupMember();
+        if( $users->isInGroup($this, $groupObject) ) {
+            push(@{$this->{groups}}, $groupObject);
+        }
 	}
 
     return @{$this->{groups}};
@@ -416,10 +421,10 @@ sub isInList {
         #don't check the same user twice
         next if $scanning->{$user};
         $scanning->{$user} = 1;
-        
+
         return 1 if $this->equals( $user );
         if( $user->isGroup() ) {
-            return 1 if $this->isInList( $user->groupMembers(), $scanning );
+            return 1 if $this->isInGroup( $user );
         }
     }
     return 0;
@@ -438,38 +443,36 @@ sub isGroup {
 
     return 1 if $this->{wikiname} eq $TWiki::cfg{SuperAdminGroup};
 
-    return $this->{session}->{users}->{usermappingmanager}->isGroup($this);
+    return $this->{session}->{users}->isGroup($this);
 }
 
 =pod
 
----++ ObjectMethod groupMembers() -> @members
+---++ ObjectMethod eachGroupMember() -> $iterator
 
-Return a list of  user objects that are members of this group. Should only be
-called on groups.
+Return an iterator over user objects that are members of this group.
+ Should only be called on groups.
 
 =cut
 
-sub groupMembers {
+sub eachGroupMember {
     my $this = shift;
     ASSERT($this->isGroup()) if DEBUG;
-
-    return $this->{session}->{users}->{usermappingmanager}->groupMembers($this);
+    return $this->{session}->{users}->eachGroupMember($this);
 }
 
 =pod
 
----++ ObjectMethod getMyGroups() -> @groups
+---++ ObjectMethod eachMembership() -> $iterator
 
-Return a list of user objects that are groups that I belong to.
+Return an iterator over the user objects that are groups that I belong to.
 
 =cut
 
-sub getMyGroups {
+sub eachMembership {
     my $this = shift;
 
-    return $this->{session}->{users}->{usermappingmanager}->groupMemberships(
-        $this);
+    return $this->{session}->{users}->eachMembership($this);
 }
 
 =pod
@@ -482,8 +485,7 @@ Tets if I'm in the given group
 
 sub isInGroup {
     my( $this, $group ) = @_;
-    return $this->{session}->{users}->{usermappingmanager}->isInGroup(
-        $this, $group );
+    return $this->{session}->{users}->isInGroup( $this, $group );
 }
 
 1;

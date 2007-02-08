@@ -75,22 +75,24 @@ sub test_wikiNameToEmails {
                              join(',', reverse sort @emails));
 }
 
-sub test_getAllUsers {
+sub test_eachUser {
     my $this = shift;
     my @list;
-    my $ite = TWiki::Func::getAllUsers();
-    while (my $u = $ite->next()) {
+    my $ite = TWiki::Func::eachUser();
+    while ($ite->hasNext()) {
+        my $u = $ite->next();
         push(@list, $u);
     }
     my $ulist = join(',', sort @list);
     $this->assert_str_equals("ScumBag,UserA,UserB,UserC", $ulist);
 }
 
-sub test_getAllGroups {
+sub test_eachGroup {
     my $this = shift;
     my @list;
-    my $ite = TWiki::Func::getAllGroups();
-    while (my $u = $ite->next()) {
+    my $ite = TWiki::Func::eachGroup();
+    while ($ite->hasNext()) {
+        my $u = $ite->next();
         push(@list, $u);
     }
     my $ulist = join(',', sort @list);
@@ -98,40 +100,77 @@ sub test_getAllGroups {
 }
 
 # SMELL: nothing tests if we are an admin!
-sub test_isAdmin {
+sub test_isAnAdmin {
     my $this = shift;
-    my @list = TWiki::Func::getAllUsers();
+    my @list = TWiki::Func::eachUser();
     foreach my $u ( @list ) {
         $u =~ /.*\.(.*)/;
         $TWiki::Plugins::SESSION->{user} = $TWiki::Plugins::SESSION->{users}->findUser(undef, $u);
-        $this->assert(!TWiki::Func::isAdmin(), $u);
+        $this->assert(!TWiki::Func::isAnAdmin(), $u);
     }
 }
 
-sub test_isInGroup {
+sub test_isGroupMember {
     my $this = shift;
     $TWiki::Plugins::SESSION->{user} = $TWiki::Plugins::SESSION->{users}->findUser('UserA', 'UserA');
-    $this->assert(TWiki::Func::isInGroup('AandBGroup'));
-    $this->assert(TWiki::Func::isInGroup('AandCGroup'));
-    $this->assert(!TWiki::Func::isInGroup('BandCGroup'));
-    $this->assert(TWiki::Func::isInGroup('BandCGroup', 'UserB'));
-    $this->assert(TWiki::Func::isInGroup('BandCGroup', 'UserC'));
+    $this->assert(TWiki::Func::isGroupMember('AandBGroup'));
+    $this->assert(TWiki::Func::isGroupMember('AandCGroup'));
+    $this->assert(!TWiki::Func::isGroupMember('BandCGroup'));
+    $this->assert(TWiki::Func::isGroupMember('BandCGroup', 'UserB'));
+    $this->assert(TWiki::Func::isGroupMember('BandCGroup', 'UserC'));
 }
 
-sub test_getUsersGroups {
+sub test_eachMembership {
     my $this = shift;
 
-    $this->assert_str_equals('AandBGroup,AandCGroup',
-                             join(',', TWiki::Func::getUsersGroups('UserA')));
-    $this->assert_str_equals('AandBGroup,BandCGroup',
-                             join(',', TWiki::Func::getUsersGroups('UserB')));
-    $this->assert_str_equals('AandCGroup,BandCGroup',
-                             join(',', TWiki::Func::getUsersGroups('UserC')));
+    my @list;
+    my $it = TWiki::Func::eachMembership('UserA');
+    while ($it->hasNext()) {
+        my $g = $it->next();
+        push(@list, $g);
+    }
+    $this->assert_str_equals('AandBGroup,AandCGroup', join(',', sort @list));
+    $it = TWiki::Func::eachMembership('UserB');
+    @list = ();
+    while ($it->hasNext()) {
+        my $g = $it->next();
+        push(@list, $g);
+    }
+    $this->assert_str_equals('AandBGroup,BandCGroup', join(',', sort @list));
+    $it = TWiki::Func::eachMembership('UserC');
+    @list = ();
+    while ($it->hasNext()) {
+        my $g = $it->next();
+        push(@list, $g);
+    }
+    $this->assert_str_equals('AandCGroup,BandCGroup', sort join(',', @list));
 
     $TWiki::Plugins::SESSION->{user} =
       $TWiki::Plugins::SESSION->{users}->findUser('UserA', 'UserA');
-    $this->assert_str_equals('AandBGroup,AandCGroup',
-                             join(',', TWiki::Func::getUsersGroups()));
+    $it = TWiki::Func::eachMembership();
+    @list = ();
+    while ($it->hasNext()) {
+        my $g = $it->next();
+        push(@list, $g);
+    }
+    $this->assert_str_equals('AandBGroup,AandCGroup', sort join(',', @list));
+}
+
+sub test_eachGroupMember {
+    my $this = shift;
+    my $it = TWiki::Func::eachGroupMember('AandBGroup');
+    my @list;
+    while ($it->hasNext()) {
+        my $g = $it->next();
+        push(@list, $g);
+    }
+    $this->assert_str_equals('UserA,UserB', sort join(',', @list));
+}
+
+sub test_isGroup {
+    my $this = shift;
+    $this->assert(TWiki::Func::isGroup('AandBGroup'));
+    $this->assert(!TWiki::Func::isGroup('UserA'));
 }
 
 1;

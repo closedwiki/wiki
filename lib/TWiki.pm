@@ -3586,10 +3586,10 @@ sub _USERINFO {
 sub _GROUPS {
     my ( $this, $params ) = @_;
 
-    my $groups = $this->{users}->getAllGroups();
+    my $groups = $this->{users}->eachGroup();
     my @table;
-    while (my $group = $groups->next()) {
-        my $user = $this->{users}->findUser($group);
+    while( $groups->hasNext() ) {
+        my $user = $groups->next();
         my $descr = '| [['.$user->webDotWikiName().']['.
           $user->wikiName().']] |';
         $descr .= join(', ', map {

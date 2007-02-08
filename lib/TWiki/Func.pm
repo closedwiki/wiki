@@ -749,7 +749,7 @@ sub isGuest {
 
 =pod
 
----++ isAdmin( $user ) -> $boolean
+---++ isAnAdmin( $user ) -> $boolean
 
 Find out if the user is an admin or not. If the user is not given,
 the currently logged-in user is assumed.
@@ -758,7 +758,7 @@ the currently logged-in user is assumed.
 
 =cut
 
-sub isAdmin {
+sub isAnAdmin {
     my ($user) = @_;
 
     if ($user) {
@@ -771,11 +771,11 @@ sub isAdmin {
 
 =pod
 
----++ isInGroup( $group, $user ) -> $boolean
+---++ isGroupMember( $group, $user ) -> $boolean
 
 Find out if the $user is in the named group. e.g.
 <verbatim>
-if( TWiki::Func::isInGroup( "HesperionXXGroup", "JordiSavall" )) {
+if( TWiki::Func::isGroupMember( "HesperionXXGroup", "JordiSavall" )) {
     ...
 }
 </verbatim>
@@ -785,7 +785,7 @@ If =$user= is =undef=, it defaults to the currently logged-in user.
 
 =cut
 
-sub isInGroup {
+sub isGroupMember {
     my ($group, $user) = @_;
 
     if ($user) {
@@ -800,15 +800,16 @@ sub isInGroup {
 
 =pod
 
----++ getAllUsers() -> $iterator
+---++ eachUser() -> $iterator
 Get an iterator over the list of all the registered users *not* including
 groups. The iterator will return each wikiname
 in turn (e.g. FredBloggs).
 
 Use it as follows:
 <verbatim>
-    my $iterator = TWiki::Func::getAllUsers();
-    while (my $user = $it->next()) {
+    my $iterator = TWiki::Func::eachUser();
+    while ($it->hasNext()) {
+        my $user = $it->next();
         # $user is a wikiname
     }
 </verbatim>
@@ -819,23 +820,25 @@ Use it as follows:
 
 =cut
 
-sub getAllUsers {
+sub eachUser {
     my $session = $TWiki::Plugins::SESSION;
-    my $users = $session->{users};
-    return $users->getAllUsers();
+    my $it = $session->{users}->eachUser();
+    # Get the name from the user object
+    $it->{process} = sub { return $_[0]->wikiName() };
+    return $it;
 }
 
 =pod
 
----++ getUsersGroups($user) -> @list
-Get a list of the names of all groups that the user is a member of.
+---++ eachMembership($user) -> $iterator
+Get an iterator over the names of all groups that the user is a member of.
 If =$user= is =undef=, defaults to the currently logged-in user.
 
 *Since:* TWiki::Plugins::VERSION 1.12
 
 =cut
 
-sub getUsersGroups {
+sub eachMembership {
     my ($user) = @_;
 
     if ($user) {
@@ -844,19 +847,22 @@ sub getUsersGroups {
         $user = $TWiki::Plugins::SESSION->{user};
     }
 
-    my $groups = $user->getMyGroups();
-    return map { $_->wikiName() } @$groups;
+    my $it = $user->eachMembership();
+    # Get the name from the user object
+    $it->{process} = sub { return $_[0]->wikiName() };
+    return $it;
 }
 
 =pod
 
----++ getAllGroups() -> $iterator
+---++ eachGroup() -> $iterator
 Get an iterator over all groups.
 
 Use it as follows:
 <verbatim>
-    my $iterator = TWiki::Func::getAllGroups();
-    while (my $group = $it->next()) {
+    my $iterator = TWiki::Func::eachGroup();
+    while ($it->hasNext()) {
+        my $group = $it->next();
         # $group is a group name e.g. TWikiAdminGroup
     }
 </verbatim>
@@ -867,10 +873,60 @@ Use it as follows:
 
 =cut
 
-sub getAllGroups {
+sub eachGroup {
     my $session = $TWiki::Plugins::SESSION;
-    my $users = $session->{users};
-    return $users->getAllGroups();
+    my $it = $session->{users}->eachGroup();
+    # Get the name from the user object
+    $it->{process} = sub { return $_[0]->wikiName() };
+    return $it;
+}
+
+=pod
+
+---++ isGroup( $group ) -> $boolean
+
+Checks if =$group= is the name of a group known to TWiki.
+
+=cut
+
+sub isGroup {
+    my( $group ) = @_;
+
+    my $users = $TWiki::Plugins::SESSION->{users};
+    my $uo = $users->findUser( $group );
+    return $users->isGroup( $uo );
+}
+
+=pod
+
+---++ eachGroupMember($group) -> $iterator
+Get an iterator over all the members of the named group. Returns undef if
+$group is not a valid group.
+
+Use it as follows:
+<verbatim>
+    my $iterator = TWiki::Func::eachGroupMember('RadioheadGroup');
+    while ($it->hasNext()) {
+        my $user = $it->next();
+        # $user is a user name e.g. 'ThomYorke', 'PhilSelway'
+    }
+</verbatim>
+
+*WARNING* on large sites, this could be a long list!
+
+*Since:* TWiki::Plugins::VERSION 1.12
+
+=cut
+
+sub eachGroupMember {
+    my $group = shift;
+    my $session = $TWiki::Plugins::SESSION;
+    my $user = $session->{users}->findUser($group);
+    return undef unless $user->isGroup();
+    my $it = $user->eachGroupMember();
+    # Get the name from the user object
+    $it->{process} = sub { return $_[0]->wikiName() };
+    return $it;
 }
 
 =pod
