@@ -154,14 +154,16 @@ sub _generateEditField {
     }
     unless( $html ) {
         # No form definition, default to text field.
-        $html = CGI::textfield( -class=>'twikiEditFormError', -name => $name,
-                                 -size => 80, -value => $value );
+        $html = CGI::textfield( -class=>'twikiEditFormError twikiInputField',
+                                -name => $name,
+                                -size => 80, -value => $value );
     }
 
     push( @shelter, $html );
 
-    return CGI::span({class=>'twikiAlert'},
-                    $name.' = SHELTER'.$MARKER.$#shelter);
+    return CGI::span({class=>'twikiAlert',
+                      style=>'font-weight:bold;'},
+                     $name . ' = SHELTER' . $MARKER . $#shelter);
 }
 
 # Generate the buttons that replace the EDITPREFERENCES tag, depending
@@ -173,9 +175,11 @@ sub _generateButtons {
     if ( $doEdit ) {
         $text .= CGI::submit(-name=>'prefsaction', -value=>'Edit', -class=>'twikiButton');
     } else {
-        $text .= CGI::submit(-name=>'prefsaction', -value=>'Save', -class=>'twikiSubmitButton');
-        $text .= '&nbsp;&nbsp;';
-        $text .= CGI::submit(-name=>'prefsaction', -value=>'Cancel', -class=>'twikiButton');
+        $text .= CGI::submit(-name=>'prefsaction', -value=>'Save new settings', -class=>'twikiSubmitButton',
+        -accesskey=>'s');
+        $text .= '&nbsp;';
+        $text .= CGI::submit(-name=>'prefsaction', -value=>'Cancel', -class=>'twikiButton',
+        -accesskey=>'c');
     }
     return $text;
 }
