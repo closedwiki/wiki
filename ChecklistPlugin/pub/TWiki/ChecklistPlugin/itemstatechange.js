@@ -69,7 +69,7 @@ function clpHandleStateChange(self) {
 function clpHandleTextResponse(self, responseText) {
 	var links = responseText.match(/<a[^>]+id="CLP_A_[^>]+>/ig);
 	if (links && (links.length>0)) {
-		for (var i = 0 ; i < links.length; ++i) {
+		AllLinks: for (var i = 0 ; i < links.length; ++i) {
 			var e;
 			var link = links[i];
 			link.match(/id="CLP_A_([^"]+)"/);
@@ -79,9 +79,16 @@ function clpHandleTextResponse(self, responseText) {
 			var img = "" + imgExpr.exec(responseText);
 			img.match(/src="([^"]+)"/);
 			var src = RegExp.$1;
+			/*
 			e = document.getElementById("CLP_IMG_"+id);
 			if (e && (e.src == src)) continue;
 			if (e) e.src = src;
+			*/
+			var els = document.getElementsByName("CLP_IMG_"+id);
+			for (var j=0; j<els.length; ++j) {
+				if (els[j].src == src) continue AllLinks;
+				els[j].src = src;
+			}
 
 			e = document.getElementById("CLP_A_"+id);
 			if (e) {
