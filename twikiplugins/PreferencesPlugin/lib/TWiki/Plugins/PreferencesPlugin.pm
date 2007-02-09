@@ -110,6 +110,7 @@ sub beforeCommonTagsHandler {
 
     my $viewUrl = TWiki::Func::getScriptUrl( $web, $topic, 'viewauth', 0 );
     $_[0] = CGI::start_form(-name => 'editpreferences', -method => 'post',
+                            -class => 'preferencesPluginForm',
                             -action => $viewUrl ).
                               $_[0].
                                 CGI::end_form();
@@ -175,7 +176,7 @@ sub _generateButtons {
     if ( $doEdit ) {
         $text .= CGI::submit(-name=>'prefsaction', -value=>'Edit', -class=>'twikiButton');
     } else {
-        $text .= CGI::submit(-name=>'prefsaction', -value=>'Save new settings', -class=>'twikiSubmitButton',
+        $text .= CGI::submit(-name=>'prefsaction', -value=>'Save new settings', -class=>'twikiSubmit',
         -accesskey=>'s');
         $text .= '&nbsp;';
         $text .= CGI::submit(-name=>'prefsaction', -value=>'Cancel', -class=>'twikiButton',
