@@ -2859,7 +2859,7 @@ sub _INCLUDE {
         'VIEW', $this->{user}, $text, $meta, $includedTopic, $includedWeb )) {
         if( isTrue( $warn )) {
             return $this->inlineAlert( 'alerts', 'access_denied',
-                                       $includedTopic );
+                                       "[[$includedWeb.$includedTopic]]" );
         } # else fail silently
         return '';
     }
