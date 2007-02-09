@@ -32,7 +32,7 @@
 
 
 
-%TMPL:DEF{"syntaxhelp"}%%INCLUDE{"%TWIKIWEB%.WikiSyntaxSummary"}%%TMPL:END%
+%TMPL:DEF{"help"}%%INCLUDE{"%TWIKIWEB%.WikiSyntaxSummary"}%%TMPL:END%
 
 
 
@@ -75,15 +75,11 @@
 %TMPL:DEF{"topicaction"}%<div class="patternTopicActions">%TMPL:P{"revCommentPluginOptions"}%<div class="patternTopicAction">%TMPL:P{"saveoptions"}%<div class="patternActionButtons">%TMPL:P{"action_buttons"}%</div><!--/patternActionButtons--></div><!--/patternTopicAction--></div><!--/patternTopicActions-->%TMPL:P{"actionbuttons_help"}%%TMPL:END%
 
 
-%TMPL:DEF{"pagehelp"}%%TWISTYTOGGLE{id="edithelp" mode="div" class="twikiHelp" remember="on" noscript="hide"}%%TMPL:P{"syntaxhelp"}%%ENDTWISTYTOGGLE%%TMPL:END%
+%TMPL:DEF{"pagehelp"}%%TWISTYTOGGLE{id="edithelp" mode="div" class="twikiHelp" remember="on" noscript="hide"}%%TMPL:P{"help"}%%ENDTWISTYTOGGLE%%TMPL:END%
 
 
 
-%TMPL:DEF{"sig_textareabuttons"}%<div class="patternSigLine">
-%TMPL:P{"sig"}%
-%TMPL:P{"textareabuttons"}%
-<br class="twikiClear" />
-</div><!-- /patternSigLine-->%TMPL:END%
+%TMPL:DEF{"sig_textareabuttons"}%<div class="patternSigLine">%TMPL:P{"sig"}%%TMPL:P{"textareabuttons"}%<br class="twikiClear" /></div><!-- /patternSigLine-->%TMPL:END%
 
 
 
@@ -91,10 +87,7 @@
 
 
 
-%TMPL:DEF{"textareabuttons"}%
-
-
-%TWISTY{id="textareabuttons1" mode="div" class="twikiRight" noscript="hide" start="show" link=""}%
+%TMPL:DEF{"textareabuttons"}%%TWISTY{id="textareabuttons1" mode="div" class="twikiRight" noscript="hide" start="show" link=""}%
 <div style="text-align:left;">
 <a href="#"><img width="16" alt="%MAKETEXT{"Use monospace font"}%" title="%MAKETEXT{"Use monospace font"}%" align="top" src="%PUBURLPATH%/%TWIKIWEB%/TWikiDocGraphics/monospace.gif" height="16" border="0" onclick="setEditBoxFontStyle('mono'); return false;" /></a> <a href="#"><img width="16" alt="%MAKETEXT{"Use proportional spaced font"}%" title="%MAKETEXT{"Use proportional spaced font"}%" align="top" src="%PUBURLPATH%/%TWIKIWEB%/TWikiDocGraphics/proportional.gif" height="16" border="0" onclick="setEditBoxFontStyle('proportional'); return false;" /></a>
 &nbsp;
@@ -136,7 +129,7 @@
 
 
 
-%TMPL:DEF{"pagehelp_nojavascript"}%<br />%TWISTYTOGGLE{id="pagehelp_nojavascript" mode="div" class="twikiHelp" start="hide"}%%TMPL:P{"syntaxhelp"}%%ENDTWISTYTOGGLE%%TMPL:END%
+%TMPL:DEF{"pagehelp_nojavascript"}%<br />%TWISTYTOGGLE{id="pagehelp_nojavascript" mode="div" class="twikiHelp" start="hide"}%%TMPL:P{"help"}%%ENDTWISTYTOGGLE%%TMPL:END%
 
 
 
