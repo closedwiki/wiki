@@ -795,7 +795,7 @@ sub renderChecklistItem {
 
 	$linktext.=qq@$textBef@ if $textBef;
 	my $imgtitle = $options{'static'}?$title:"";
-	$linktext.=$query->img({id=>"CLP_IMG_$name$uetId", -src=>$iconsrc, -border=>0, -title=>$imgtitle, -alt=>$imgtitle});
+	$linktext.=$query->img({id=>"CLP_IMG_$name$uetId", -name=>"CLP_IMG_$name$uetId", -src=>$iconsrc, -border=>0, -title=>$imgtitle, -alt=>$imgtitle});
 	$linktext.=qq@$textAft@ if $textAft;
 	if (lc($options{'clipos'}) eq 'left') {
 		$linktext.=' '.$options{'text'} unless $options{'text'} =~ /^(\s|\&nbsp\;)*$/;
