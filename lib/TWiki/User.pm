@@ -334,7 +334,7 @@ sub emails {
 
 =pod
 
----++ ObjectMethod setEmails($user, @emails)
+---++ ObjectMethod setEmails(@emails)
 
 Fetch the email address(es) for the given username
 
