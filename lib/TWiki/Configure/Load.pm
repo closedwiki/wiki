@@ -91,7 +91,7 @@ GOLLYGOSH
         # a LocalSite.cfg, which we don't want
         # die "$var must be defined in LocalSite.cfg"
         #  unless( defined $TWiki::cfg{$var} );
-        $TWiki::cfg{$var} ||= 'NOT SET';
+        $TWiki::cfg{$var} = 'NOT SET' unless defined $TWiki::cfg{$var};
     }
 
     # Expand references to $TWiki::cfg vars embedded in the values of
