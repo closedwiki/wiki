@@ -12,7 +12,7 @@
 <input type="hidden" name="onlynewtopic" value="on" />
 </form>
 
-<form action='%SCRIPTURLPATH{"edit"}%/%BASEWEB%/TestTopicAUTOINC0' name="createNewTestTopic">
+<form action='%SCRIPTURLPATH{"edit"}%/%BASEWEB%/TestTopicAUTOINC0?t=%SERVERTIME{$hou$min$sec}%' name="createNewTestTopic">
 %ICON{"newtopic"}% %MAKETEXT{"Create a new auto-numbered test topic:"}%
 <input type="submit" class="twikiSubmit" value='%MAKETEXT{"Create <nop>TestTopic###"}%' />
 </form>
