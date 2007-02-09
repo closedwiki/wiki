@@ -3589,13 +3589,16 @@ sub _GROUPS {
     my $groups = $this->{users}->eachGroup();
     my @table;
     while( $groups->hasNext() ) {
-        my $user = $groups->next();
-        my $descr = '| [['.$user->webDotWikiName().']['.
-          $user->wikiName().']] |';
-        $descr .= join(', ', map {
-                  '[['.$_->webDotWikiName().']['.$_->wikiName().']]'
-              } @{$user->groupMembers()}). ' |';
-        push( @table, $descr );
+        my $group = $groups->next();
+        my $descr = '| [['.$group->webDotWikiName().']['.
+          $group->wikiName().']] |';
+        my $it = $group->eachGroupMember();
+        while( $it->hasNext() ) {
+            my $user = $it->next();
+            $descr .= ' [['.$user->webDotWikiName().']['.
+              $user->wikiName().']]';
+        }
+        push( @table, "$descr |");
     }
 
     return '| *Group* | *Members* |'."\n".join("\n", sort @table);
