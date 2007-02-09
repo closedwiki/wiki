@@ -42,7 +42,6 @@
 #   $TWiki::cfg{ScriptUrlPaths}{register} = '/bin/twiki/register';
 #   $TWiki::cfg{ScriptUrlPaths}{rename} = '/bin/twikiauth/rename';
 #   $TWiki::cfg{ScriptUrlPaths}{resetpasswd} = '/bin/twiki/resetpasswd';
-#   $TWiki::cfg{ScriptUrlPaths}{rest} = '/bin/twiki/rest';
 #   $TWiki::cfg{ScriptUrlPaths}{save} = '/bin/twikiauth/save';
 #   $TWiki::cfg{ScriptUrlPaths}{search} = '/bin/twiki/search';
 #   $TWiki::cfg{ScriptUrlPaths}{statistics} = '/bin/twiki/statistics';
@@ -62,7 +61,6 @@
 #  
 #   # XmlRpcContrib
 #   $TWiki::cfg{SwitchBoard}{xmlrpc} = [TWiki::Contrib::XmlRpcContrib, dispatch] ;
-#
 #
 # SpeedyCGI:
 # ----------
@@ -108,7 +106,6 @@ BEGIN {
     'register' => [TWiki::UI::Register, 'register_cgi'],
     'rename' => [TWiki::UI::Manage, 'rename'],
     'resetpasswd' => [TWiki::UI::Register, 'resetPassword'],
-    'rest' => [TWiki::UI::Rest, 'gateway'],
     'save' => [TWiki::UI::Save, 'save'],
     'search' => [TWiki::UI::Search, 'search'],
     'statistics' => [TWiki::UI::Statistics, 'statistics'],
@@ -170,7 +167,8 @@ sub doRequest {
 
   # botch env
   $ENV{PATH_INFO} = $path;
-  $ENV{SCRIPT_NAME} =~ s/^(.*)\/twiki(auth)?$/$1\/$action/g;
+  $ENV{SCRIPT_FILENAME} =~ s/^(.*)\/twiki(auth)?$/$1\/$action/;
+  $ENV{SCRIPT_NAME} =~ s/^(.*)\/twiki(auth)?$/$1\/$action/g if defined $ENV{SCRIPT_NAME};
 
   # get package and function
   my ($package, $function) = @{$TWiki::cfg{SwitchBoard}{$action}};
