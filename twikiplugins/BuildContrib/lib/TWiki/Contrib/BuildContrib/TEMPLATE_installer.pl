@@ -1,6 +1,8 @@
 #!perl
 # Install script for %$MODULE%
 #
+# Note that *_installer and *_installer.pl are THE SAME FILE
+#
 # Copyright (C) 2004 Crawford Currie http://c-dot.co.uk
 #
 # NOTE TO THE DEVELOPER: THIS FILE IS GENERATED AUTOMATICALLY

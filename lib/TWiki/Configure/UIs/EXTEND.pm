@@ -111,7 +111,7 @@ MESS
 
     my @names = _listDir($dir);
     # install the contents
-    my $sawInstaller = 0;
+    my $installScript = undef;
     unless ($query->param('confirm')) {
         foreach my $file (@names) {
             my $ef = $this->_findTarget($file);
@@ -124,13 +124,13 @@ MESS
             } else {
                 print "$file<br />";
             }
-            if( $file =~ /^${extension}_installer.pl/) {
-                $sawInstaller = 1;
+            if( $file =~ /^${extension}_installer(\.pl)?$/) {
+                $installScript = $file;
             }
         }
-        unless ($sawInstaller) {
+        unless ($installScript) {
             print $this->WARN(
-                "No ${extension}_installer.pl script found in archive");
+                "No installer script found in archive");
         }
     }
 
@@ -149,7 +149,8 @@ MESS
             die "$@ on $ef" if $@;
         }
     }
-    if (-e "$this->{root}/${extension}_installer.pl") {
+
+    if (-e $installScript) {
         # invoke the installer script.
         # SMELL: Not sure yet how to handle
         # interaction if the script ignores -a. At the moment it
@@ -157,18 +158,18 @@ MESS
         chdir($this->{root});
         unshift(@ARGV, '-a');
         eval {
-            do '$this->{root}/${extension}_installer.pl';
+            do $installScript;
             die $@ if $@; # propagate
         };
         if ($@) {
             print $this->ERROR(<<HERE);
-${extension}_installer.pl returned errors:
+Installer returned errors:
 <pre>$@</pre>
 You may be able to resolve these errors and complete the installation
 from the command line, so I will leave the installed files where they are.
 HERE
         } else {
-            print $this->NOTE("${extension}_installer.pl ran without errors");
+            print $this->NOTE("Installer ran without errors");
         }
         chdir($this->{bin});
     }
@@ -182,7 +183,7 @@ HERE
     } else {
         print 'Installation finished.';
     }
-    unless ($sawInstaller) {
+    unless ($installScript) {
         print $this->WARN(<<HERE);
 You should test this installation very carefully, as there is no installer
 script. This suggests that $arf may have been generated manually, and may
