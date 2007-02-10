@@ -320,6 +320,7 @@ This add-on started as the TWiki:Plugins/GenHTMLAddon, written by TWiki:Main/Cra
 |  Dependencies: | %$DEPENDENCIES% |
 |  Version: | %$VERSION% |
 |  Change History: | |
+|  12824 | Added support for new internal api - no user changes |
 |  12708 | Added UI for FTP. Added .spec file. Fixed Bugs:Item3515 and Bugs:Item2725 |
 |  12028 | Michael Daum - create a new TWiki object for every topic, don't reuse the current one (Bugs:Item3139) |
 |  10412 | Correction to the correction for anchors. |
