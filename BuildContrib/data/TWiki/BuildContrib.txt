@@ -101,6 +101,7 @@ You are strongly recommended to use this Contrib to help split your code develop
 |  License: | [[http://www.gnu.org/copyleft/gpl.html][GPL]] |
 |  Version: | %$VERSION% |
 |  Change History: | |
+|  12821 | Bugs:Item3597 Duplicated _installer in _installer.pl, so that 4.1 extensions installer can use it |
 |  11505 | Added =twikiplugins/create_new_extension.pl= script |
 |  11492 | Fixed attachment upload. Will now upload attachments attached to the main topic |
 |  11478 | Install made easier to use for developers and end users; will now download an archive if it can't find one locally. Added dependencies target. |

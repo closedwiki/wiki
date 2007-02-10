@@ -950,16 +950,22 @@ sub target_archive {
                          $this->{tmpDir}.'/'.$project.'_installer","'.
                          $this->{basedir}.'/'.$project.'_installer")');
 
+    # Identical copy but with .pl extension; required because the extensions
+    # installer shipped with 4.1 expects it :-(
+    $this->perl_action('File::Copy::move("'.
+                         $this->{tmpDir}.'/'.$project.'_installer.pl","'.
+                         $this->{basedir}.'/'.$project.'_installer.pl")');
+
     $this->pushd($this->{basedir});
     my @fs;
-    foreach my $f qw(.tgz _installer .zip) {
+    foreach my $f qw(.tgz _installer _installer.pl .zip) {
         push (@fs, "$project$f") if (-e "$project$f");
     }
     $this->sys_action('md5sum ' . join(' ', @fs) .' > ' . "$project.md5");
     $this->popd();
     $this->popd();
 
-    foreach my $f qw(.tgz .zip .txt _installer) {
+    foreach my $f qw(.tgz .zip .txt _installer _installer.pl) {
         print "Release $f is $this->{basedir}/$project$f\n";
     }
     print "MD5 checksums are in $this->{basedir}/$project.md5\n";
@@ -1028,6 +1034,7 @@ sub target_handsoff_install {
                         $this->{basedir}.'/'.$this->{project}.'.tgz');
     # kill off the module installer
     $this->rm($twiki.'/'.$this->{project}.'_installer');
+    $this->rm($twiki.'/'.$this->{project}.'_installer.pl');
     $this->popd();
 }
 
@@ -1232,7 +1239,7 @@ END
     my @attachments;
     my %uploaded;
     # Upload the standard files
-    foreach my $ext ('.zip', '.tgz', '_installer', '.md5') {
+    foreach my $ext qw(.zip .tgz _installer .md5) {
 
         $this->_uploadFile($userAgent, $response, $this->{UPLOADTARGETWEB}, $to, $to.$ext,
                            $this->{basedir}.'/'.$to.$ext,'');
@@ -1382,7 +1389,11 @@ sub target_installer {
         push(@{$this->{files}},
              { name => $this->{project}.'_installer',
                description => 'Install script',
-               permissions => 0640 });
+               permissions => 0550 });
+        push(@{$this->{files}},
+             { name => $this->{project}.'_installer.pl',
+               description => 'Duplicate install script',
+               permissions => 0550 });
         print STDERR 'Auto-adding install script to manifest',$NL;
     }
 
@@ -1427,7 +1438,8 @@ sub target_installer {
 
     $this->filter_txt( $template, $installScript );
 
-    $this->prot(0755, $installScript);
+    # Copy it to .pl
+    $this->cp($installScript, "$installScript.pl");
 }
 
 =pod
