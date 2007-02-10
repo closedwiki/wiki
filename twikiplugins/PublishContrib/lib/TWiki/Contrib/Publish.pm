@@ -586,27 +586,32 @@ sub _topicURL {
 sub _handleURL {
     my( $src, $archive, $extras ) = @_;
 
-    return $src unless $src =~ /^[a-z]+:/;
+    return $src unless $src =~ m!^([a-z]+):([^/:]*)(:\d+)?(/.*)$!;
 
-    require LWP;
-    if ( $@ ) {
-        print "${ob}LWP not installed - cannot fetch $src${cb}$br";
-        return $src;
-    }
-    my $userAgent = LWP::UserAgent->new();
-    $userAgent->agent( 'TWikiPublishContrib' );
-
-    my $response = $userAgent->get( $src );
-    unless( $response->is_success ) {
-        print "${ob}failed to GET $src${cb}$br";
-        return $src;
+    # Use the LWP version if it's available
+    my $data;
+    if (defined(&{$TWiki::Plugins::SESSION->{new}->GET})) {
+        my $response;
+        eval {
+            $response = $TWiki::Plugins::SESSION->{new}->GET($src);
+        };
+        return $src if ($@ || $response->is_error());
+        $data = $response->content();
+    } else {
+        my $protocol = $1;
+        my $host = $2;
+        my $port = $3;
+        my $path = $4;
+        my $response = $TWiki::Plugins::SESSION->{new}->getUrl(
+            $protocol, $host, $port, $path);
+        $data = $response->content();
     }
 
     # Note: no extension; rely on file format.
     # Images are pretty good that way.
     my $file = '___extra'.$$extras++;
     $archive->addDirectory( "rsrc" );
-    $archive->addString( $response->content(), "rsrc/$file" );
+    $archive->addString( $data, "rsrc/$file" );
 
     return 'rsrc/'.$file;
 }
