@@ -6,6 +6,7 @@ twiki (1:4.0.5-9) unstable; urgency=emergency
   * add libhtml-parser-perl for WysiwygPlugin (Closes #408748)
   * secure the session files, and use file time to expire them 
     Arbitrary code execution in session files (CVE-2007-0669) (Closes #410256)
+  * update index.html to 4.0.5 version
 
  -- Sven Dowideit <svenud@ozemail.com.au>  Sun, 11 Feb 2007  22:32:36 +0100
 
