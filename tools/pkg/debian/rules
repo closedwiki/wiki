@@ -39,13 +39,6 @@ install: build
 	cp -r bin/* debian/twiki/usr/lib/cgi-bin/twiki
 	cp -r debian/twiki/usr/lib/cgi-bin/twiki/LocalLib.cfg.txt debian/twiki/usr/lib/cgi-bin/twiki/LocalLib.cfg
 
-	cp bin/.htaccess.txt debian/twiki/etc/twiki/.htaccess
-	#fix up the paths  in the .htaccess file
-	perl -pi~ -e 's|{DataDir}|/var/lib/twiki/data|;' debian/twiki/etc/twiki/.htaccess
-	perl -pi~ -e 's|{ScriptUrlPath}|/cgi-bin/twiki|;' debian/twiki/etc/twiki/.htaccess
-	perl -pi~ -e 's|{Administrators}|TWikiGuest|;' debian/twiki/etc/twiki/.htaccess
-	rm debian/twiki/etc/twiki/.htaccess~
-
 	# not needed, with statoverride?
 	chmod 755 debian/twiki/usr/lib/cgi-bin/twiki/*
 	chmod 644 debian/twiki/usr/lib/cgi-bin/twiki/setlib.cfg

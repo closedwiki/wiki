@@ -1,3 +1,10 @@
+twiki (1:4.0.5-9) unstable; urgency=emergency
+
+  * move cgi-bin/.htaccess content to apache.conf and remove // from end of defaultsiteurl
+    (Closes #408380)
+
+ -- Sven Dowideit <svenud@ozemail.com.au>  Sun, 11 Feb 2007  22:32:36 +0100
+
 twiki (1:4.0.5-8) unstable; urgency=medium
 
   * make patch for #404222 allow trailing slashes again

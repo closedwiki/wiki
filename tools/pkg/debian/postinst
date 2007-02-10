@@ -60,6 +60,8 @@ db_get twiki/defaultUrlHost
 # be more robust later:
 perl -pi~ -e '$U=q{'"$RET"'}; s{http://your.domain.com}{$U}g;' /etc/twiki/LocalSite.cfg
 perl -pi~ -e '$U=q{'"$RET"'}; s{http://your.domain.com}{$U}g;' /etc/twiki/apache.conf
+#remove the double //cgi-bin caused by putting a / at the end of the hostUrl
+perl -pi~ -e 's{/(/cgi-bin)}{$1}g;' /etc/twiki/apache.conf
 #perl -pi~ -e '$U=q{'"$RET"'}; s{^(Redirect\s+/twiki/index.html\s+).*(cgi-bin/twiki/view\n)$}{$1$U$2};' /etc/twiki/apache.conf
 rm /etc/twiki/*~ 
 
@@ -132,14 +134,12 @@ case "$1" in
 		ln -s /etc/twiki/TWiki.cfg /usr/share/perl5/TWiki.cfg 
 	fi
 
-	if [ ! -e /usr/lib/cgi-bin/twiki/.htaccess.old ]; then
-		#remove the old .htaccess file (from 2003-4 its a conffile in /etc/twiki)
-    	if [ -e /usr/lib/cgi-bin/twiki/.htaccess ]; then
-    		mv /usr/lib/cgi-bin/twiki/.htaccess /usr/lib/cgi-bin/twiki/.htaccess.old
-    	fi
+	#remove the  .htaccess file - moved to apache-twiki.conf
+	if [ -e /usr/lib/cgi-bin/twiki/.htaccess ]; then
+		rm /usr/lib/cgi-bin/twiki/.htaccess 
 	fi
-	if [ ! -e /usr/lib/cgi-bin/twiki/.htaccess ]; then
-		ln -s /etc/twiki/.htaccess /usr/lib/cgi-bin/twiki/.htaccess
+	if [ -e /etc/twiki/.htaccess ]; then
+		rm /etc/twiki/.htaccess 
 	fi
 
 	#add softlinks to make adding plugings easier ()
