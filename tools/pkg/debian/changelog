@@ -1,9 +1,11 @@
 twiki (1:4.0.5-9) unstable; urgency=emergency
 
-  * move cgi-bin/.htaccess content to apache.conf and remove // from end of defaultsiteurl
+  * move cgi-bin/.htaccess to apache.conf and remove // from end of defaultsiteurl
     (Closes #408380)
   * add liburi-perl dependancy for MailerContrib (Closes #408748)
   * add libhtml-parser-perl for WysiwygPlugin (Closes #408748)
+  * secure the session files, and use file time to expire them 
+    Arbitrary code execution in session files (CVE-2007-0669) (Closes #410256)
 
  -- Sven Dowideit <svenud@ozemail.com.au>  Sun, 11 Feb 2007  22:32:36 +0100
 
