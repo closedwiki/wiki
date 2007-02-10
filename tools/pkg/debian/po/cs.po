@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: twiki\n"
 "Report-Msgid-Bugs-To: svenud@ozemail.com.au\n"
 "POT-Creation-Date: 2006-11-25 22:35+0100\n"
-"PO-Revision-Date: 2005-08-07 19:04+0200\n"
+"PO-Revision-Date: 2007-01-27 17:34+0100\n"
 "Last-Translator: Miroslav Kure <kurem@debian.cz>\n"
 "Language-Team: Czech <debian-l10n-czech@lists.debian.org>\n"
 "MIME-Version: 1.0\n"
@@ -105,7 +105,6 @@ msgstr ""
 #. Type: note
 #. Description
 #: ../templates:4001
-#, fuzzy
 msgid "Admin User Registration configuration required"
 msgstr "Vyžadována změna v nastavení registrace uživatelů"
 
@@ -116,6 +115,8 @@ msgid ""
 "After you have created yourself a user, edit the Main.TWikiAdminGroup to "
 "restrict Admin privileges to that user."
 msgstr ""
+"Až si pro sebe vytvoříte uživatele, upravte Main.TWikiAdminGroup a omezte "
+"správcovská oprávnění na vytvořeného uživatele."
 
 #~ msgid ""
 #~ "The default debian installation of the TWiki is configured to create new "
