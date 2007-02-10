@@ -6,3 +6,4 @@ usr/lib/cgi-bin/twiki
 usr/share/perl5
 etc/twiki
 usr/share/doc/twiki
+tmp/twiki

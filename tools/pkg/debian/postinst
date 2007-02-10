@@ -145,9 +145,11 @@ case "$1" in
 	#create securer-twiki session dir
 	if [ ! -e /tmp/twiki ]; then
 		mkdir /tmp/twiki 
-		chown $TWIKI_OWNER.www-data /tmp/twiki 
-		chmod 0700 /tmp/twiki 
 	fi
+	#mmmm, mailnotify etc may be running _not_ as www-data
+	#and for some reason create a session
+	chmod 777 /tmp/twiki 
+	chown $TWIKI_OWNER.www-data /tmp/twiki 
 
 	#add softlinks to make adding plugins easier ()
 	if [ ! -e /var/lib/twiki/lib ]; then
