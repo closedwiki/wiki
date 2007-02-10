@@ -806,7 +806,7 @@ sub filter_txt {
     $text =~ s/%\$(\w+)%/&_expand($this,$1)/geo;
 
     unless ($this->{-n}) {
-        open(OF, '>'.$to) || die 'No dest topic '.$to.' for filter';
+        open(OF, '>'.$to) || die "$to: $!";
     }
     print OF $text unless ($this->{-n});
     close(OF) unless ($this->{-n});
@@ -843,7 +843,7 @@ sub filter_pm {
     my $text = <IF>;
     close(IF);
 
-    $text =~ s/\$Rev(: \d+)?\$/\$Rev: $this->{VERSION}\$/gso;
+    $text =~ s/\$Rev(:\s*\d+)?\s*\$/\$Rev: $this->{VERSION} \$/gso;
 
     unless ($this->{-n}) {
         open(OF, '>'.$to) || die 'Bad dest topic '.$to.' for filter:'.$!;
@@ -1389,11 +1389,11 @@ sub target_installer {
         push(@{$this->{files}},
              { name => $this->{project}.'_installer',
                description => 'Install script',
-               permissions => 0550 });
+               permissions => 0770 });
         push(@{$this->{files}},
              { name => $this->{project}.'_installer.pl',
                description => 'Duplicate install script',
-               permissions => 0550 });
+               permissions => 0770 });
         print STDERR 'Auto-adding install script to manifest',$NL;
     }
 
