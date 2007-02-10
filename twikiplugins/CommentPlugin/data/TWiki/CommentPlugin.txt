@@ -214,19 +214,18 @@ These can be set in !TWikiPreferences, in !WebPreferences or in individual topic
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.DavidWeller, TWiki:Main.PeterMasiar, TWiki:Main.CrawfordCurrie http://www.c-dot.co.uk |
-|  Copyright: | &copy; 2004, TWiki:Main.CrawfordCurrie<br />&copy; 2004-2007 TWiki:TWiki.TWikiContributor |
-|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 12750 (04 Feb 2007) |
-|  Change History: | <!-- specify latest version first -->&nbsp; |
-|  12750 | <a rel='nofollow' href='http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item3510'>Item3510</a> added a note about the changed template spec in TWiki 4.1.0. Code remains unchanged |
-|  11358 | <a rel='nofollow' href='http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item2802'>Item2802</a> moved SHORTDESCRIPTION to .pm. Coded up TWiki:main.PankajPant's suggestions as =nopost= and =remove=. Added default text for the %COMMENT as requested by TWiki:Main.AndyGlew |
-|  11118 | <a rel='nofollow' href='http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item2322'>Item2322</a> removed span tag around oneliner bullet output |
-|  8788 | <a rel='nofollow' href='http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item1465'>Item1465</a>  Item1577: reverted 8433 to fix inclusion of correct user templates |
-|  8787 | <a rel='nofollow' href='http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item1573'>Item1573</a>  renamed standard templates topic to avoid naming clash on Windows, where filenames are case-insensitive |
-|  8433 | <a rel='nofollow' href='http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item1465'>Item1465</a>  Fix 'TWiki.' to '%TWIKIWEB%.'; also fixed include 'UserComments' to 'UserCommentsTemplate' (at least that is what the doc suggests) |
-|  7427 | <a rel='nofollow' href='http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item845'>Item845</a>  removed duplicate date in default comments; stick with server time |
-|  7251 | <a rel='nofollow' href='http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item810'>Item810</a>  fix for user template inclusion; reorganised templates to make customisation easier |
-|  5906 | <a rel='nofollow' href='http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item143'>Item143</a>  apache warning from comment plugin when !CommentsTmpl.txt not found |
+|  Plugin Version: | %$VERSION% |
+|  Change History: | |
+|  12822 | Bugs:Item3598 minor doc fixes |
+|  12750 | Bugs:Item3510 added a note about the changed template spec in TWiki 4.1.0. Code remains unchanged |
+|  11358 | Bugs:Item2802 moved SHORTDESCRIPTION to .pm. Coded up TWiki:main.PankajPant's suggestions as =nopost= and =remove=. Added default text for the %COMMENT as requested by TWiki:Main.AndyGlew |
+|  11118 | Bugs:Item2322 removed span tag around oneliner bullet output |
+|  8788 | Bugs:Item1465  Item1577: reverted 8433 to fix inclusion of correct user templates |
+|  8787 | Bugs:Item1573  renamed standard templates topic to avoid naming clash on Windows, where filenames are case-insensitive |
+|  8433 | Bugs:Item1465  Fix 'TWiki.' to '%TWIKIWEB%.'; also fixed include 'UserComments' to 'UserCommentsTemplate' (at least that is what the doc suggests) |
+|  7427 | Bugs:Item845  removed duplicate date in default comments; stick with server time |
+|  7251 | Bugs:Item810  fix for user template inclusion; reorganised templates to make customisation easier |
+|  5906 | Bugs:Item143  apache warning from comment plugin when !CommentsTmpl.txt not found |
 |  5519 | !CommentPluginOnAnchorsBroken: incorporated !JacobEisinger's fix |
 |  5518 | !CommentPluginOnAnchorsBroken: incorporated !OlivierBerger's fix |
 |  5455 | On Niels Kodslo's prompting, removed the global recursion prevention that I believe is no longer needed. |
@@ -238,7 +237,8 @@ These can be set in !TWikiPreferences, in !WebPreferences or in individual topic
 |  4889 | Chopped down from !PeterMasiar version, removing several parameters, savecomment script, changing way templates are done. Major rewrite, atcherly. |
 |  4882 | Update from !PeterMasiar's 2.0 version, plus documentation and small code improvements. |
 |  4745 | 06 Mar 2002 initial commit |
-|  Perl Version: | >= 5.6.1 |
+|  Copyright: | &copy; 2004, TWiki:Main.CrawfordCurrie<br />&copy; 2004-2007 TWiki:TWiki.TWikiContributor |
+|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Home: | TWiki:Plugins/%TOPIC% |
 |  Feedback: | TWiki:Plugins/%TOPIC%Dev |
 
