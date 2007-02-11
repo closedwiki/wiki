@@ -56,7 +56,7 @@ __%X% Note:__ This setup is *not* recommended on public websites for security re
 
 ---+++ Template Login (select =TWiki::Client::TemplateLogin= in configure)
 
-Template Login asks for a username and password in a web page, and processes them using whatever Password Manager you choose. Users can log in and log out. Client Sessions are used to remember users.
+Template Login asks for a username and password in a web page, and processes them using whatever Password Manager you choose. Users can log in and log out. Client Sessions are used to remember users. Users can choose to have their session remembered so they will automatically be logged in the next time they start their browser.
 
 ---++++ Enabling Template Login
    1 Use the [[%SCRIPTURLPATH{"configure"}%][configure]] interface to

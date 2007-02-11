@@ -561,6 +561,30 @@ sub endRenderingHandler {
     $_[0] =~ s/%SKINSELECT%/$this->_skinSelect()/geo;
 }
 
+# Push the standard cookie
+sub _pushCookie {
+    my $this = shift;
+
+    my $cookie = CGI::Cookie->new( -name => $CGI::Session::NAME,
+                                   -value => $this->{_cgisession}->id(),
+                                   -path => '/' );
+    # An expiry time is only set if the session has the REMEMBER variable
+    # in it. This is to prevent accidentally remembering cookies with
+    # login managers where the authority is cached in the browser and
+    # *not* in the session. Otherwise another user might be able to login
+    # on the same machine and inherit the authorities of a prior user.
+    if ($TWiki::cfg{Sessions}{ExpireCookiesAfter} &&
+          $this->getSessionValue( 'REMEMBER' )) {
+        my $exp = TWiki::Time::formatTime(
+            time() + $TWiki::cfg{Sessions}{ExpireCookiesAfter},
+            '$dow, $day-$month-$ye $hours:$minutes:$seconds GMT');
+
+        $cookie->expires($exp);
+    }
+
+    $this->addCookie( $cookie );
+}
+
 =pod
 
 ---++ ObjectMethod addCookie($c)
@@ -596,11 +620,7 @@ sub modifyHeader {
     return if $TWiki::cfg{Sessions}{MapIP2SID};
 
     my $query = $this->{twiki}->{cgiQuery};
-    my $c = CGI::Cookie->new( -name => $CGI::Session::NAME,
-                              -value => $this->{_cgisession}->id(),
-                              -path => '/' );
-
-    push( @{$this->{_cookies}}, $c );
+    $this->_pushCookie();
     $hopts->{cookie} = $this->{_cookies};
 }
 
@@ -631,10 +651,7 @@ sub redirectCgiQuery {
         #
         # So this is just a big fat precaution, just like the rest of this
         # whole handler.
-        my $cookie = CGI::Cookie->new( -name => $CGI::Session::NAME,
-                                       -value => $this->{_cgisession}->id(),
-                                       -path => '/' );
-        push( @{$this->{_cookies}}, $cookie );
+        $this->_pushCookie();
     }
 
     if( $TWiki::cfg{Sessions}{MapIP2SID} ) {

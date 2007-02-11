@@ -48,6 +48,9 @@ sub new {
 
     my $this = bless( $class->SUPER::new($session), $class );
     $session->enterContext( 'can_login' );
+    if ($TWiki::cfg{Sessions}{ExpireCookiesAfter}) {
+        $session->enterContext( 'can_remember_login' );
+    }
     return $this;
 }
 
@@ -90,6 +93,10 @@ validates these and if authentic, redirects to the original
 script. If there is no username in the query or the username/password is
 invalid (validate returns non-zero) then it prompts again.
 
+If a flag to remember the login has been passed in the query, then the
+corresponding session variable will be set. This will result in the
+login cookie being preserved across browser sessions.
+
 The password handler is expected to return a perl true value if the password
 is valid. This return value is stored in a session variable called
 VALIDATION. This is so that password handlers can return extra information
@@ -106,6 +113,7 @@ sub login {
     my $origurl = $query->param( 'origurl' );
     my $loginName = $query->param( 'username' );
     my $loginPass = $query->param( 'password' );
+    my $remember = $query->param( 'remember' );
 
     # Eat these so there's no risk of accidental passthrough
     $query->delete('origurl', 'username', 'password');
@@ -118,8 +126,9 @@ sub login {
     my $topic = $twiki->{topicName};
     my $web = $twiki->{webName};
 
-    my $cgisession = $this->{cgisession};
+    my $cgisession = $this->{_cgisession};
 
+    $cgisession->param( 'REMEMBER', $remember ) if $cgisession;
     if( $cgisession && $cgisession->param( 'AUTHUSER' ) &&
           $loginName ne $cgisession->param( 'AUTHUSER' )) {
         $banner = $twiki->{templates}->expandTemplate( 'LOGGED_IN_BANNER' );

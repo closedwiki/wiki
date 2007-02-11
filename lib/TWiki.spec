@@ -182,6 +182,19 @@ $TWiki::cfg{UseClientSessions} = 1;
 # <tt>tools/tick_twiki.pl</tt> includes this function.
 $TWiki::cfg{Sessions}{ExpireAfter} = 21600;
 
+# **NUMBER EXPERT**
+# *TemplateLogin only*.
+# Normally the cookie that remembers a user session is set to expire
+# when the browser exits, but using this value you can make the cookie
+# expire after a set number of seconds instead. If you set it then
+# users will be able to tick a 'Remember me' box when logging in, and
+# their session cookie will be remembered even if the browser exits.<p />
+# This should always be the same as, or longer than, {Sessions}{ExpireAfter},
+# otherwise TWiki may delete the session from its memory even though the
+# cookie is still active.<p />
+# A value of 0 will cause the cookie to expire when the browser exits.
+$TWiki::cfg{Sessions}{ExpireCookiesAfter} = 0;
+
 # **BOOLEAN EXPERT**
 # If you have persistent sessions enabled, then TWiki will use a cookie in
 # the browser to store the session ID. If the client has cookies disabled,
