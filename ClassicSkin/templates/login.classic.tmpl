@@ -7,6 +7,8 @@
 %TMPL:DEF{"NEW_USER_NOTE"}%Enter a new username and password to change identity%TMPL:END%
 %TMPL:DEF{"UNRECOGNISED_USER"}%Unrecognised user and/or password.%TMPL:END%
 
+%TMPL:DEF{"rememberbox"}%</td></tr><tr><td colspan='2'><input id='remember' name='remember' type='checkbox' value='1' />&nbsp;<label for='remember'>%MAKETEXT{"Remember me"}%</label>%TMPL:END%
+
 %TMPL:DEF{"topbar"}%<div class="twikiTopBar">
  <div class="twikiTopBarContents">
   <img src="%WIKILOGOIMG%" border="0" alt="%WIKILOGOALT%"/>
@@ -22,6 +24,7 @@
 <input type='text' size='30' name='username' value='%URLPARAM{"username"}%' />
 </td></tr><tr><th>Password</th><td>
 <input type='password' size='30' name='password' value='' />
+%TMPL:P{context="can_remember_login" then="rememberbox"}%
 </td></tr></table>
 <literal>
 %QUERYPARAMS{format="<input type='hidden' name='$name' value='$percntENCODE{$quot()$value$quot type=$quot()html$quot}$percnt' />"}%

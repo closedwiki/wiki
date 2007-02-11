@@ -67,6 +67,29 @@
 
 
 
+%TMPL:DEF{"usernamestep"}%<div class="twikiFormStep">
+---+++ %MAKETEXT{"Username"}%
+
+<input class="twikiInputField" type="text" size="30" name="username" value="%URLPARAM{"username"}%" tabindex="1" />
+%TMPL:P{"authenticationnote"}%
+</div><!-- /twikiFormStep-->%TMPL:END%
+
+
+
+%TMPL:DEF{"rememberbox"}%<input id="remember" name="remember" type="checkbox" value="1" tabindex="3" />&nbsp;<label for="remember">%MAKETEXT{"Remember me"}%</label>%TMPL:END%
+
+
+
+%TMPL:DEF{"passwordstep"}%<div class="twikiFormStep">
+---+++ %MAKETEXT{"Password"}%
+
+<input class="patternFormFieldVerticalForm" type="password" size="30" class="twikiInputField" name="password" value="" tabindex="2" />%TMPL:P{"forgotpasswordnote"}%
+
+</div><!-- /twikiFormStep-->%TMPL:END%
+
+
+
+
 %TMPL:DEF{"forgotpasswordnote"}%&nbsp;<span class="twikiSmallish">[[%TWIKIWEB%.ResetPassword][%MAKETEXT{"I forgot my password"}%]]</span>%TMPL:END%
 
 
@@ -76,7 +99,7 @@
 %MAKETEXT{"If you have any questions, please contact [_1]." args="%WIKIWEBMASTER%"}%
 </div>%TMPL:END%
 
-
+%TMPL:DEF{"rememberbox"}%<span class="twikiSmallish"><input id='remember' name='remember' type='checkbox' value='1' />&nbsp;<label for='remember'>%MAKETEXT{"Remember me"}%</label></span>%TMPL:END%
 
 %TMPL:DEF{"content"}%<div class="patternTopic"><div id="twikiLogin">
 <form name="loginform" action="%SCRIPTURLPATH{"login"}%/%WEB%/%TOPIC%" method="post">
@@ -94,6 +117,8 @@
 ---+++ %MAKETEXT{"Password"}%
 
 %ICON{"key"}% <input class="patternFormFieldVerticalForm" type="password" size="30" class="twikiInputField" name="password" value="" tabindex="2" />%TMPL:P{"forgotpasswordnote"}%
+
+%TMPL:P{context="can_remember_login" then="rememberbox"}%
 </div><!-- /twikiFormStep-->
 <div class="twikiFormStep twikiLast">
 <input class="twikiSubmit" type="submit" value='%MAKETEXT{"Logon"}%' tabindex="3" />
