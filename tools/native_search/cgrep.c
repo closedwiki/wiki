@@ -57,14 +57,10 @@ char** cgrep(char** argv) {
     /* Check for UTF8 support using pcre_config */
     int erk;
     int reflags = PCRE_NO_AUTO_CAPTURE;
-    if (pcre_config(PCRE_CONFIG_UTF8, &erk) && erk) {
-        reflags |= PCRE_UTF8 | PCRE_NO_UTF8_CHECK;
-    }
     int justFiles = 0;
     FILE* f;
     pcre* pattern;
     pcre_extra* study;
-
     int linebufsize = DATABUFSIZE;
     char* linebuf;
     char* matchCache[MATCHBUFSIZE];
@@ -75,6 +71,9 @@ char** cgrep(char** argv) {
     const char* err;
     int errPos;
 
+    if (pcre_config(PCRE_CONFIG_UTF8, &erk) && erk) {
+        reflags |= PCRE_UTF8 | PCRE_NO_UTF8_CHECK;
+    }
     while (*argptr) {
         char* arg = *(argptr++);
         if (strcmp(arg, "-i") == 0) {
@@ -82,6 +81,13 @@ char** cgrep(char** argv) {
         } else if (strcmp(arg, "-l") == 0) {
             justFiles = 1;
         } else {
+            /* Convert \< and \> to \b in the pattern. GNU grep supports
+               them, but pcre doesn't :-( */
+            for (linebuf = arg; *linebuf; linebuf++) {
+                if (*linebuf == '\\' && *(linebuf-1) != '\\' &&
+                    *(linebuf+1) == '<' || *(linebuf+1) == '>')
+                    *(linebuf+1) = 'b';
+            }
             if (!(pattern = pcre_compile(arg, reflags, &err, &errPos, NULL))) {
                 warn(err);
             }
