@@ -1,0 +1,59 @@
+%META:TOPICINFO{author="PeterThoeny" date="1171191403" format="1.1" reprev="1.2" version="1.2"}%
+---+ Upload to TWiki Add-On
+
+This is a small Perl script to programmatically attach a file to any TWiki topic. Useful to create mashups with other applications.
+
+---++ Usage
+
+To attach a file to a TWiki topic, type this on the command line:
+<verbatim>
+./uploadtotwiki.pl <TWiki login name> <local file> <view url of twiki topic> <optional comment>
+</verbatim>
+and enter the password when prompted.
+
+Example:
+
+=% ./uploadtotwiki.pl <nop>%USERNAME% ./smile.gif <nop>http://twiki.org/cgi-bin/view/Sandbox/UploadTest= %BR%
+=Uploading ./smile.gif to <nop>http://twiki.org/cgi-bin/view/Sandbox/UploadTest= %BR%
+=Enter password for <nop>%USERNAME% at twiki.org:80:= %BR%
+=File upload finished.= %BR%
+=%=
+
+---++ Add-On Installation Instructions
+
+__Note:__ This is a command line tool for administrators; regular TWiki user can ignore this.
+
+   * Download the ZIP file from the Add-on Home (see below)
+   * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
+     | *File:* | *Description:* |
+     | ==data/TWiki/%TOPIC%.txt== | Add-on topic |
+     | ==tools/uploadtotwiki.pl= | Add-on script |
+   * If inclined, move =uploadtotwiki.pl= to a different location
+   * Run above example to test if the installation was successful
+   * Install CPAN:LWP if needed (see [[http://twiki.org/cgi-bin/view/TWiki/HowToInstallCpanModules][instructions]])
+
+---++ Limitations
+
+   * Upload of files with illegal characters (=$=, =@=, =^=, space, etc.) fail, and no error message is shown.
+
+---++ Add-On Info
+
+   * Set SHORTDESCRIPTION = Script to programmatically attach a file to any TWiki topic
+
+|  Add-on Author: | TWiki:Main.PeterThoeny |
+|  Copyright: | &copy; 2007, TWiki:Main.PeterThoeny, [[http://www.structuredwikis.com/][StructuredWikis LLC]] |
+|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
+|  Add-on Version: | uploadtotwiki/2007-02-11 |
+|  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2007-02-11: | Initial version |
+|  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 (TWiki 4.0) |
+|  CPAN Dependencies: | LWP |
+|  Other Dependencies: | none |
+|  Perl Version: | 5.005 |
+|  Add-on Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
+|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
+|  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
+
+__Related Topic:__ %TWIKIWEB%.TWikiAddOns
+
+-- TWiki:Main/PeterThoeny - 11 Feb 2007
