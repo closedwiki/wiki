@@ -790,15 +790,6 @@ $TWiki::cfg{RCS}{dirPermission}= 0755;
 # representing the standard UNIX permissions (e.g. 644 == rw-r--r--)
 $TWiki::cfg{RCS}{filePermission}= 0644;
 
-# **SELECT Forking,PurePerl,Native EXPERT**
-# TWiki has three built-in search algorithms; the default Forking algorithm
-# which forks a 'grep' command, a PurePerl implementation, and a Native
-# code implementation. Different web server configurations behave differently
-# under load, and some servers - especially those running mod_perl - may
-# find benefit from selecting an alternate algorithm. The Native algorithm
-# requires that the tools/native_search module is built and installed. 
-$TWiki::cfg{SearchAlgorithm} = 'Forking';
-
 # **BOOLEAN EXPERT**
 # Some file-based Store implementations (RcsWrap and RcsLite for
 # example) store attachment meta-data separately from the actual attachments.
@@ -825,18 +816,6 @@ $TWiki::cfg{RCS}{useSubDir} = $FALSE;
 # Set this if your RCS cannot check out using the -p option.
 # May be needed in some windows installations (not required for cygwin)
 $TWiki::cfg{RCS}{coMustCopy} = $FALSE;
-
-# **PATH**
-# Full path to GNU-compatible egrep program. This is used for searching.
-# %CS{|-i}% will be expanded
-# to -i for case-sensitive search or to the empty string otherwise.
-# Similarly for %DET, which controls whether matching lines are required.
-# (see the documentation on these options with GNU grep for details).
-$TWiki::cfg{RCS}{EgrepCmd} = "/bin/egrep" . ' %CS{|-i}% %DET{|-l}% -H -- %TOKEN|U% %FILES|F%';
-
-# **PATH**
-# Full path to GNU-compatible fgrep program. This is used for searching.
-$TWiki::cfg{RCS}{FgrepCmd} = "/bin/fgrep" . ' %CS{|-i}% %DET{|-l}% -H -- %TOKEN|U% %FILES|F%';
 
 # **COMMAND**
 # RcsWrap initialise a file as binary.
@@ -898,6 +877,33 @@ $TWiki::cfg{RCS}{breaklockCmd} =
 # RcsWrap delete a specific revision.
 $TWiki::cfg{RCS}{delRevCmd} =
     "$TWiki::cfg{RCS}{BinDir}/rcs $TWiki::cfg{RCS}{ExtOption} -o%REVISION|N% %FILENAME|F%";
+
+# **SELECT Forking,Native,PurePerl EXPERT**
+# TWiki has three built-in search algorithms
+# <ol><li> The default 'Forking' algorithm, which forks a subprocess that
+# runs a 'grep' command,
+# <li>the 'Native' implementation, which uses a search implemented in a
+# special library, </li>
+# </li><li> the 'PurePerl' implementation, which is written in Perl and
+# usually only used as a last resort.</li></ol>
+# Normally you will be just fine with the 'Forking' implementation. However
+# if you find searches run very slowly, you may want to try a different
+# algorithm.
+$TWiki::cfg{RCS}{SearchAlgorithm} = 'Forking';
+
+# **COMMAND EXPERT**
+# Full path to GNU-compatible egrep program. This is used for searching when
+# {SearchAlgorithm} is 'Forking'.
+# %CS{|-i}% will be expanded
+# to -i for case-sensitive search or to the empty string otherwise.
+# Similarly for %DET, which controls whether matching lines are required.
+# (see the documentation on these options with GNU grep for details).
+$TWiki::cfg{RCS}{EgrepCmd} = "/bin/egrep" . ' %CS{|-i}% %DET{|-l}% -H -- %TOKEN|U% %FILES|F%';
+
+# **COMMAND EXPERT**
+# Full path to GNU-compatible fgrep program. This is used for searching when
+# {SearchAlgorithm} is 'Forking'.
+$TWiki::cfg{RCS}{FgrepCmd} = "/bin/fgrep" . ' %CS{|-i}% %DET{|-l}% -H -- %TOKEN|U% %FILES|F%';
 
 # **PATH**
 # Path to the directory where the RCS store implementation will create

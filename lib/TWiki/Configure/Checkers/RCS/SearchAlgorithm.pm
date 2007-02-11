@@ -14,23 +14,23 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #
 # As per the GPL, removal of this notice is prohibited.
-package TWiki::Configure::Checkers::SearchAlgorithm;
+package TWiki::Configure::Checkers::RCS::SearchAlgorithm;
+use base 'TWiki::Configure::Checker';
 
 use strict;
 
 use TWiki::Configure::Checker;
 
-use base 'TWiki::Configure::Checker';
-
 sub check {
     my $this = shift;
 
     my $mess = '';
-    if( $TWiki::cfg{SearchAlgorithm} eq 'Native') {
+    if( $TWiki::cfg{RCS}{SearchAlgorithm} eq 'Native') {
         eval 'use NativeTWikiSearch';
         if ($@) {
             $mess .= $this->ERROR(<<EOF);
-NativeTWikiSearch cannot be used; $@
+Sorry, I could not find the required components for Native search. The
+error was: $@
 EOF
         }
     }

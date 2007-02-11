@@ -332,9 +332,9 @@ sub searchInWebContent {
     my $matches = '';
     my %seen;
 
-    if ($TWiki::cfg{SearchAlgorithm}) {
+    if ($TWiki::cfg{RCS}{SearchAlgorithm}) {
         # WikiRing native search
-        if ($TWiki::cfg{SearchAlgorithm} eq 'Native') {
+        if ($TWiki::cfg{RCS}{SearchAlgorithm} eq 'Native') {
             eval 'use NativeTWikiSearch';
             die $@ if $@;
             my @fs;
@@ -353,7 +353,7 @@ sub searchInWebContent {
             return \%seen;
         }
 
-        if ($TWiki::cfg{SearchAlgorithm} eq 'PurePerl') {
+        if ($TWiki::cfg{RCS}{SearchAlgorithm} eq 'PurePerl') {
             # Pure-perl grep
             local $/ = "\n";
             if ($type eq 'regex') {
@@ -361,6 +361,8 @@ sub searchInWebContent {
             } else {
                 $searchString =~ s/(\W)/\\$1/g;
             }
+            # Convert GNU grep \< \> syntax to \b
+            $searchString =~ s/(?<!\\)\\[<>]/\\b/g;
             my $match_code = "return \$_[0] =~ m/$searchString/o";
             $match_code .= 'i' unless ($options->{casesensitive});
             my $doMatch = eval "sub { $match_code }";
