@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1170837664" format="1.0" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1171292335" format="1.0" version="$Rev$"}%
 ---+!! Checklist Plugin
 
 <nop>ChecklistPlugin creates simple checklists. 
@@ -153,13 +153,13 @@ To change the state of a checklist item just click on it.
 <div style="font-size: x-small;">
 <verbatim>
 %EDITTABLE{changerows="on" format="|label,0,#%SERVERTIME{$year$month$day$hour$min$sec}%|text,50|"}%%CHECKLISTSTART{name="list1"}%
-| *STATUS<br>(click to change)* | *Item* | 
+| *STATUS<br/>(click to change)* | *Item* | 
 | #2007Feb07093710 | testitem |
 
 %CHECKLISTEND%
 
 %EDITTABLE{changerows="on" format="|label,0,#%SERVERTIME{$year$month$day$hour$min$sec}%|text,50|"}%%CHECKLISTSTART{name="list2"}%
-| *STATUS<br>(click to change)* | *Item* |
+| *STATUS<br/>(click to change)* | *Item* |
 | #2007Feb07093712 | second |
 
 %CHECKLISTEND%
@@ -379,9 +379,9 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.DanielRohde |
-|  Plugin Version: | v1.022 (BETA) |
+|  Plugin Version: | v1.022 (12 Feb 2007) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  v1.022 (BETA) | TWiki:Main.DanielRohde: improved AJAX performance; added new feature (state selection for reset button); removed useforms feature |
+|  v1.022 (12 Feb 2007) | TWiki:Main.DanielRohde: improved AJAX performance; added new feature (state selection for reset button); fixed %<nop>TOC% bug reported by TWiki:Main.HelenJohnstone; fixed some minor and major bugs (mod_perl, description stripping, =static= feature, 'text' icons);  removed useforms feature |
 |  v1.021 (31 Jan 2007) | TWiki:Main.DanielRohde: fixed some major bugs (mod_perl, plugin preferences); improved performance (AJAX); fixed minor IE caching bug (AJAX related); added new attributes (tooltip, descr, template, statesel) requested by TWiki:Main.KeithHelfrich; fixed installation instructions bug reported by TWiki:Main.KeithHelfrich |
 |  v1.020 (15 Jan 2007) | TWiki:Main.DanielRohde: added AJAX feature (=useajax= attribute) requested by TWiki:Main.ShayPierce and TWiki:Main.KeithHelfrich |
 |  v1.019 (14 Dec 2006) | TWiki:Main.DanielRohde: fixed major default options bug reported by TWiki:Main.RichardHitier |
