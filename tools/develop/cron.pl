@@ -37,6 +37,9 @@ eval {
     print `find $ROOT/twikisvn -name Bugs -prune -o -type l -exec rm -f \\{\\} \\;`;
     print `perl pseudo-install.pl -link default`;
 
+    # Copy the bin scripts over to cgi-bin
+    print `cp $ROOT/twikisvn/bin/* $ROOT/public_html/cgi-bin/`;
+
     print "Updated $rev";
     $rev =~ s/^.*revision (\d+).*?$/$1/s;
     open(F, ">$LATEST") || die $!;
