@@ -215,7 +215,7 @@ sub postRenderingHandler {
     my $fromPopup = $query->param('fromPopup');
     return if (defined($fromPopup));#avoid nesting popups
 
-    #add the ComponentEdit JavaScript
+    #add the  JavaScript
     my $jscript = TWiki::Func::readTemplate ( 'jspopupplugin', 'javascript' );
     $jscript =~ s/%PLUGINPUBURL%/$pluginPubUrl/g;
     addToHEAD($pluginName, $jscript);

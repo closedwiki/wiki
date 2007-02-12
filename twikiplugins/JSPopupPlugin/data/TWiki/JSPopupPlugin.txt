@@ -1,7 +1,7 @@
 %META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev: 9189 $"}%
 ---+ JSPopupPlugin TWiki Plugin
 
-JSPopupPlugin allows you to show dynamic content in a virtual popup.
+JSPopupPlugin allows you to show dynamic content in a virtual popup dialog.
 Good for status messages, or to show detailed information without causing the web browser's context to switch from the page that they requested.
 
 There is a running demo of JSPopupPlugin running at the [[http://demo.wikiring.com/twiki/bin/view/Demo/JSPopupPluginDemo][WikiRing demo site]]
@@ -10,6 +10,8 @@ There is a running demo of JSPopupPlugin running at the [[http://demo.wikiring.c
 
 It uses javascript to create a popup window containing either a hidden pre-rendered part of a topic, or a TWiki request that is dynamically requested and served.
 Popups are activated either on a mouse click, when the mouse passes over the anchor, or when the page is loaded.
+
+To make it easy for TWiki.TWikiSkin developers, any html link with the css  =twikiPopupLink= class will get a popup dialog. If the Javascript fails, or this plugin is disabled, the link will gracefully fall back to going to the link in the main browser window.
 
 This will allow you to create a popup Comment Edit box (don't forget to create the #<nop>Comments anchor):
 <verbatim>
@@ -53,6 +55,9 @@ url="%SCRIPTURL{rdiff}%/%WEB%/%TOPIC%?type=last"
 there is only one popup window at a time, so if the clicks on an anchor while another popup is up, it will be replaced by the new one.
 
 ---++ Syntax Rules
+
+---+++ css =twikiPopupLink= class
+Any element with the =twikiPopupLink= will get an onClick handler that will popup a YUI dialog. This dialog will be filled with content from the server (using the href attribute), requested dynamically.
 
 ---+++ !%POPUP{}%
 

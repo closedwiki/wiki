@@ -24,9 +24,14 @@ InitJSPopups = function() {
         if ((elements[i].className == 'JSPopupSpan')) {
             var anchor = elements[i].getAttribute('anchortype');
             if (anchor == 'anchorless') {
-                return twiki.JSPopupPlugin.openPopupSectional(null, elements[i].id)
+                twiki.JSPopupPlugin.openPopupSectional(null, elements[i].id)
             }
         }
+    }
+    var jspopupLinks = YAHOO.util.Dom.getElementsByClassName('twikiPopupLink');
+    for (var i = 0; i < jspopupLinks.length; i++) {
+        YAHOO.util.Event.addListener(jspopupLinks[i], 'click',  twiki.JSPopupPlugin.openThisAsPopup, jspopupLinks[i], true);
+//        addEvent(jspopupLinks[i], 'click',  twiki.JSPopupPlugin.openThisAsPopup);
     }
 }
 
@@ -56,6 +61,29 @@ twiki.JSPopupPlugin.CancelOpenPopup = function() {
 }
 
 //returns false to prevent the default action of the anchor..
+twiki.JSPopupPlugin.openThisAsPopup = function (e) {
+	var targ;
+	if (!e) var e = window.event;
+	if (e.target) targ = e.target;
+	else if (e.srcElement) targ = e.srcElement;
+	if (targ.nodeType == 3) // defeat Safari bug
+		targ = targ.parentNode;
+
+    var ret = true;
+
+    var url = targ.getAttribute('popupurl');
+    if (!url) { url = targ.getAttribute('href'); }
+    if (!url) { url = targ.innerHTML; }
+    //reset the text to a simple default
+    ret = twiki.JSPopupPlugin.openPopup(e, 'Please wait, requesting data from server', targ.getAttribute('location'), targ.getAttribute('border'), targ.getAttribute('title'));
+    twiki.JSPopupPlugin.ajaxCall(e, url);
+    
+    YAHOO.util.Event.stopEvent(e);
+
+    return ret;
+}
+
+//returns false to prevent the default action of the anchor..
 twiki.JSPopupPlugin.openPopupSectional = function (event, sectionName) {
     var ret = true;
     if ((sectionName) && (sectionName != '')) {
@@ -64,7 +92,7 @@ twiki.JSPopupPlugin.openPopupSectional = function (event, sectionName) {
         
             // use popupurl paramin preference to href in preference to innerHTML
             var url = sectionElem.getAttribute('popupurl');
-            if (!url) { url = sectionElem.getAttribute('popupurl'); }
+            if (!url) { url = sectionElem.getAttribute('href'); }
             if (!url) { url = sectionElem.innerHTML; }
             //reset the text to a simple default
             ret = twiki.JSPopupPlugin.openPopup(event, 'Please wait, requesting data from server', sectionElem.getAttribute('location'), sectionElem.getAttribute('border'), sectionElem.getAttribute('title'));
@@ -93,13 +121,13 @@ var handleCancel = function() {
 }; 
 
 twiki.JSPopupPlugin.openPopup = function (event, text, popuplocation, border, title) {
-    if ( typeof( popuplocation ) == "undefined" ) {
+    if (!popuplocation) {
         popuplocation = 'center';
     }
-    if ( typeof( border ) == "undefined" ) {
+    if ( ! border ) {
         border = 'on';
     }
-    if ( typeof( title ) == "undefined" ) {
+    if ( ! title ) {
         title = '';
     }
     
@@ -152,7 +180,7 @@ twiki.JSPopupPlugin.openPopup = function (event, text, popuplocation, border, ti
 //    postIt.callback.failure = onFailure;
     
     
-    if (title.length > 0) {
+    if ((title) && (title.length > 0)) {
         myPanel.setHeader(title);
     }
     myPanel.setBody('<div style="text-align:left;">'+text+'</div>');
@@ -230,48 +258,4 @@ twiki.JSPopupPlugin.ajaxCall = function(event, popupUrl, popupParams) {
 	};
 	var transaction = YAHOO.util.Connect.asyncRequest('GET', popupUrl, callback, null); 
 }    
-    
-/***********************************************************
-more generic tools - need to share at some stage
-*/
-/* http://www.quirksmode.org/blog/archives/2005/10/_and_the_winner_1.html#more */
-function addEvent( obj, type, fn )
-{
-	if (obj.addEventListener)
-		obj.addEventListener( type, fn, false );
-	else if (obj.attachEvent)
-	{
-		obj["e"+type+fn] = fn;
-		obj[type+fn] = function() { obj["e"+type+fn]( window.event ); }
-		obj.attachEvent( "on"+type, obj[type+fn] );
-	}
-}
-function removeEvent( obj, type, fn )
-{
-	if (obj.removeEventListener)
-		obj.removeEventListener( type, fn, false );
-	else if (obj.detachEvent)
-	{
-		obj.detachEvent( "on"+type, obj[type+fn] );
-		obj[type+fn] = null;
-		obj["e"+type+fn] = null;
-	}
-}
 
-
-//from http://weblogs.asp.net/asmith/archive/2003/10/06/30744.aspx
-//add an event handler so they chain, and cross browser
-function XBrowserAddHandler(target,eventName,handlerName) { 
-  if ( target.addEventListener ) { 
-    target.addEventListener(eventName, function(e){target[handlerName](e);}, false);
-  } else if ( target.attachEvent ) { 
-    target.attachEvent("on" + eventName, function(e){target[handlerName](e);});
-  } else { 
-    var originalHandler = target["on" + eventName]; 
-    if ( originalHandler ) { 
-      target["on" + eventName] = function(e){originalHandler(e);target[handlerName](e);}; 
-    } else { 
-      target["on" + eventName] = target[handlerName]; 
-    } 
-  } 
-}
