@@ -176,14 +176,6 @@ sub handlePopupLink {
     my $anchor = $params->{_DEFAULT} || $params->{anchor} || 'Popup';
     my $url = $params->{url};
     
-    my $popupUrl = $url;
-    if ($popupUrl =~ /\?/ ) {
-        $popupUrl .= ';';
-    } else {
-        $popupUrl .= '?';
-    }
-    $popupUrl .= 'skin=popup,default';
-    
     my $popuptitle = $params->{popuptitle} || '';
     my $popuplocation = $params->{popuplocation} || 'center';
     my $border = $params->{border} || 'on';
@@ -198,7 +190,7 @@ sub handlePopupLink {
                     {
                         id => 'popupSection'.$popupSectionNumber,
                         href =>     $url, 
-                        popupurl =>     $popupUrl, 
+                        popupurl =>     $url, 
                         type => 'rest',
                         location =>     $popuplocation,
                         delay =>    $delay,
