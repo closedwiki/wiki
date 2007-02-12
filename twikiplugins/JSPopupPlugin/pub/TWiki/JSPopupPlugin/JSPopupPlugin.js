@@ -93,7 +93,6 @@ var handleCancel = function() {
 }; 
 
 twiki.JSPopupPlugin.openPopup = function (event, text, popuplocation, border, title) {
-alert(popuplocation);
     if ( typeof( popuplocation ) == "undefined" ) {
         popuplocation = 'center';
     }
@@ -109,7 +108,6 @@ alert(popuplocation);
     var context = null;
     if (popuplocation == 'below') {
 	    if (!event) event = window.event;
-	    alert(event);
 	    if (event) {
           	var targ;
     	    if (event.target) targ = event.target;
@@ -118,7 +116,6 @@ alert(popuplocation);
 	        	targ = targ.parentNode;
             context = [targ, 'tl', 'bl'];
             fixedcenter = false;
-            alert(context);
         }
     }
     
@@ -136,13 +133,15 @@ alert(popuplocation);
 //        width:"75%", 
 //        height:"75%",
 //        width:"600px",
-        fixedcenter: fixedcenter, 
+//        height:"600px",
+//        fixedcenter: fixedcenter, 
         context: context,
         constraintoviewport: true, 
         underlay:"none", 
         close:true, 
         visible:false,
-        draggable:true
+        draggable:true,
+        xy: [100,100]
         } 
     );
 //	var myButtons = [ { text:"Submit", handler:handleSubmit, isDefault:true },
@@ -193,10 +192,11 @@ twiki.JSPopupPlugin.ajaxCall = function(event, popupUrl, popupParams) {
 //TODO: redo these as params in the Args
     //make sure there's no popup div in the reply
     if (popupUrl.indexOf('?') != -1) {
-        popupUrl = popupUrl+'&fromPopup=1';
+        popupUrl = popupUrl+';fromPopup=1';
     } else {
         popupUrl = popupUrl+'?fromPopup=1';
     }
+    popupUrl = popupUrl+';skin=popup,default';
 
     if ( typeof( popupParams ) != "undefined" ) {
          popupUrl = popupUrl+';'+popupParams;
