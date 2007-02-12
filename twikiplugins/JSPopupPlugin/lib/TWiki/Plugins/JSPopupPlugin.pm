@@ -61,6 +61,7 @@ sub initPlugin {
 
     setupTWiki4Compatibility();
     TWiki::Func::registerTagHandler( 'POPUP', \&handlePopup );
+    TWiki::Func::registerTagHandler( 'POPUPLINK', \&handlePopupLink );
 
     $WEB = $web;
     $TOPIC= $topic;
@@ -111,11 +112,15 @@ sub commonTagsHandler {
 sub handlePopup {
     my($session, $params, $theTopic, $theWeb) = @_;
 
+    my $query = TWiki::Func::getCgiQuery();
     my $default = $params->{_DEFAULT} || '';    #TODO: not sure what thus should be :)
 
     my $anchor = $params->{anchor};
     my $anchortype = $params->{anchortype} || 'onclick';
+    $anchortype = 'anchorless' unless ((defined($anchor)) && ($anchor ne ''));
     my $popuptext = $params->{popuptext};
+    my $fallbackurl = $params->{fallbackurl};
+    $fallbackurl = $popuptext unless (defined($fallbackurl));
     my $popuptitle = $params->{popuptitle} || '';
     my $popuptexttype = $params->{popuptexttype} || 'tml';
     my $popuplocation = $params->{popuplocation} || 'center';
@@ -128,14 +133,16 @@ sub handlePopup {
     my $event = '';
 
     my $output = '';
-    if ((defined($anchor)) && ($anchor ne '')) {
-        $event = 'onclick="TWiki.JSPopupPlugin.openPopupSectional(event, \'popupSection'.$popupSectionNumber.'\')"';#ASSUME onclick
+    if ($anchortype eq 'popuplink') {
+        $event = 'return twiki.JSPopupPlugin.openPopupSectional(event, \'popupSection'.$popupSectionNumber.'\');';#ASSUME onclick
+        $output = $query->a({href=>$fallbackurl, onclick=>$event}, $anchor);
+    } elsif ($anchortype eq 'anchorless') {
+    } else {
+        $event = 'onclick="return twiki.JSPopupPlugin.openPopupSectional(event, \'popupSection'.$popupSectionNumber.'\');"';#ASSUME onclick
         if ($anchortype eq 'onmouseover') {
-            $event = 'onmouseover="TWiki.JSPopupPlugin.DelayedOpenPopupSectional(event, \'popupSection'.$popupSectionNumber.'\')" onmouseout="TWiki.JSPopupPlugin.CancelOpenPopup()"';
+            $event = 'onmouseover="return twiki.JSPopupPlugin.DelayedOpenPopupSectional(event, \'popupSection'.$popupSectionNumber.'\');return false;" onmouseout="return twiki.JSPopupPlugin.CancelOpenPopup();"';
         }
         $output .= '<span '.$event.'>'."\n".$anchor."\n".'</span>';
-    } else {
-        $anchortype = 'anchorless';
     }
 
     #TODO: work out a way to mix tml mode in topic, and rest & delayedtml mode where it needs to be added in the postRenderingHandler (and can use JSON)
@@ -143,7 +150,9 @@ sub handlePopup {
         #nasty way to stop the url from getting TWiki'd
     } else {
         $popuptext = "\n".$popuptext."\n";
+        $popuptext =~ s/\$percnt/%/g;
     }
+    
     #TODO: this should really get added outside the topic like InlineEdit
     $output .= '<span class="JSPopupSpan"'.
         'style="'.$display.
@@ -159,6 +168,52 @@ sub handlePopup {
     $popupSectionNumber++;
     return $output;
 }
+
+sub handlePopupLink {
+    my($session, $params, $theTopic, $theWeb) = @_;
+
+    my $query = TWiki::Func::getCgiQuery();
+    my $anchor = $params->{_DEFAULT} || $params->{anchor} || 'Popup';
+    my $url = $params->{url};
+    
+    my $popupUrl = $url;
+    if ($popupUrl =~ /\?/ ) {
+        $popupUrl .= ';';
+    } else {
+        $popupUrl .= '?';
+    }
+    $popupUrl .= 'skin=popup,default';
+    
+    my $popuptitle = $params->{popuptitle} || '';
+    my $popuplocation = $params->{popuplocation} || 'center';
+    my $border = $params->{border} || 'on';
+    my $buttons = $params->{buttons};
+    my $evaluate = $params->{eval};
+    my $delay = $params->{delay} || '200';
+    
+
+    my $display = 'display:none;';
+    my $event = 'return twiki.JSPopupPlugin.openPopupSectional(event, \'popupSection'.$popupSectionNumber.'\');';#ASSUME onclick
+    my $output = $query->a(
+                    {
+                        id => 'popupSection'.$popupSectionNumber,
+                        href =>     $url, 
+                        popupurl =>     $popupUrl, 
+                        type => 'rest',
+                        location =>     $popuplocation,
+                        delay =>    $delay,
+                        border =>   $border,
+                        title =>    $popuptitle,
+                        
+                        onclick=>   $event
+                    }, 
+                $anchor);
+
+
+    $popupSectionNumber++;
+    return $output;
+}
+
 
 sub postRenderingHandler {
     # do not uncomment, use $_[0], $_[1]... instead

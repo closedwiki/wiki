@@ -1,7 +1,7 @@
 /*
 # Plugin for TWiki Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 2005 Sven Dowideit SvenDowideit@wikiring.com
+# Copyright (C) 2005-2007 Sven Dowideit - SvenDowideit@wikiring.com
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -24,57 +24,76 @@ InitJSPopups = function() {
         if ((elements[i].className == 'JSPopupSpan')) {
             var anchor = elements[i].getAttribute('anchortype');
             if (anchor == 'anchorless') {
-                TWiki.JSPopupPlugin.openPopupSectional(null, elements[i].id)
+                return twiki.JSPopupPlugin.openPopupSectional(null, elements[i].id)
             }
         }
     }
 }
 
+
+
 //create the TWiki namespace if needed
-if ( typeof( TWiki ) == "undefined" ) {
-    TWiki = {};
+if ( typeof( twiki ) == "undefined" ) {
+    twiki = {};
 }
 
 /**********************************************************************************/
-//create the TWiki.JSPopupPlugin namespace if needed
-if ( typeof( TWiki.JSPopupPlugin ) == "undefined" ) {
-    TWiki.JSPopupPlugin = {};
+//create the twiki.JSPopupPlugin namespace if needed
+if ( typeof( twiki.JSPopupPlugin ) == "undefined" ) {
+    twiki.JSPopupPlugin = {};
 }
 
-TWiki.JSPopupPlugin.DelayedOpenPopupSectional = function (event, sectionName) {
+twiki.JSPopupPlugin.DelayedOpenPopupSectional = function (event, sectionName) {
     var sectionElem = document.getElementById(sectionName);
     var delay = sectionElem.getAttribute('delay');
     
     //TODO: consider making this an array, indexed by sectionName
-    delayedPopup = window.setTimeout("TWiki.JSPopupPlugin.openPopupSectional(null, '"+sectionName+"')", delay);
+    delayedPopup = window.setTimeout("twiki.JSPopupPlugin.openPopupSectional(null, '"+sectionName+"')", delay);
 }
  
-TWiki.JSPopupPlugin.CancelOpenPopup = function() {
+twiki.JSPopupPlugin.CancelOpenPopup = function() {
     window.clearTimeout(delayedPopup);
 }
 
-
-TWiki.JSPopupPlugin.openPopupSectional = function (event, sectionName) {
+//returns false to prevent the default action of the anchor..
+twiki.JSPopupPlugin.openPopupSectional = function (event, sectionName) {
+    var ret = true;
     if ((sectionName) && (sectionName != '')) {
         var sectionElem = document.getElementById(sectionName);
         if (sectionElem.getAttribute('type') == 'rest') {
+        
+            // use popupurl paramin preference to href in preference to innerHTML
+            var url = sectionElem.getAttribute('popupurl');
+            if (!url) { url = sectionElem.getAttribute('popupurl'); }
+            if (!url) { url = sectionElem.innerHTML; }
             //reset the text to a simple default
-            TWiki.JSPopupPlugin.openPopup(event, 'Please wait, requesting data from server', sectionElem.getAttribute('location'), sectionElem.getAttribute('border'), sectionElem.getAttribute('title'));
-            TWiki.JSPopupPlugin.ajaxCall(event, sectionElem.innerHTML);
+            ret = twiki.JSPopupPlugin.openPopup(event, 'Please wait, requesting data from server', sectionElem.getAttribute('location'), sectionElem.getAttribute('border'), sectionElem.getAttribute('title'));
+            twiki.JSPopupPlugin.ajaxCall(event, url);
         } else {
-            TWiki.JSPopupPlugin.openPopup(event, sectionElem.innerHTML, sectionElem.getAttribute('location'), sectionElem.getAttribute('border'), sectionElem.getAttribute('title'));
+            ret = twiki.JSPopupPlugin.openPopup(event, sectionElem.innerHTML, sectionElem.getAttribute('location'), sectionElem.getAttribute('border'), sectionElem.getAttribute('title'));
         }
     } else {
-        TWiki.JSPopupPlugin.closePopup(event);
+        ret = twiki.JSPopupPlugin.closePopup(event);
     }
+    return ret;
 }
 
-TWiki.JSPopupPlugin.closePopup = function (event) {
+twiki.JSPopupPlugin.closePopup = function (event) {
     //var showControl = document.getElementById('popupwindow');
     //showControl.style.display = 'none';
+    return false;
 }
 
-TWiki.JSPopupPlugin.openPopup = function (event, text, popuplocation, border, title) {
+// Define various event handlers for Dialog 
+var handleSubmit = function() { 
+    this.submit(); 
+}; 
+var handleCancel = function() { 
+    this.cancel(); 
+}; 
+
+twiki.JSPopupPlugin.openPopup = function (event, text, popuplocation, border, title) {
+alert(popuplocation);
     if ( typeof( popuplocation ) == "undefined" ) {
         popuplocation = 'center';
     }
@@ -85,22 +104,59 @@ TWiki.JSPopupPlugin.openPopup = function (event, text, popuplocation, border, ti
         title = '';
     }
     
+    //use popuplocation = 'center' as default
+    var fixedcenter = true;
+    var context = null;
+    if (popuplocation == 'below') {
+	    if (!event) event = window.event;
+	    alert(event);
+	    if (event) {
+          	var targ;
+    	    if (event.target) targ = event.target;
+	        else if (event.srcElement) targ = event.srcElement;
+	        if (targ.nodeType == 3) // defeat Safari bug
+	        	targ = targ.parentNode;
+            context = [targ, 'tl', 'bl'];
+            fixedcenter = false;
+            alert(context);
+        }
+    }
+    
+    //TODO: not sure we _want_ to allow millions of dialogs
+//    var myDate = new Date();
+//	var dialogDiv = document.createElement('div');
+//	dialogDiv.id = 'JSPopup_'+myDate.getTime();
+//	document.body.appendChild(dialogDiv);
+//ONE dialog only
+    var dialogDiv = 'win';
+    
     //The second argument passed to the
     //constructor is a configuration object:
-    myPanel = new YAHOO.widget.Panel("win", {
-        width:"75%", 
-        fixedcenter: true, 
+    myPanel = new YAHOO.widget.Dialog(dialogDiv, {
+//        width:"75%", 
+//        height:"75%",
+//        width:"600px",
+        fixedcenter: fixedcenter, 
+        context: context,
         constraintoviewport: true, 
         underlay:"none", 
         close:true, 
-        visible:false, 
-        draggable:true} 
+        visible:false,
+        draggable:true
+        } 
     );
+//	var myButtons = [ { text:"Submit", handler:handleSubmit, isDefault:true },
+//				  { text:"Cancel", handler:handleCancel } ];
+//	 myPanel.cfg.queueProperty("buttons", myButtons);
+//    postIt.cfg.queueProperty("postmethod", "form");
+//    postIt.callback.success = onSuccess;
+//    postIt.callback.failure = onFailure;
+    
     
     if (title.length > 0) {
         myPanel.setHeader(title);
     }
-    myPanel.setBody(text);
+    myPanel.setBody('<div style="text-align:left;">'+text+'</div>');
     myPanel.render(document.body);
     
     if (border != 'on') {
@@ -126,10 +182,14 @@ TWiki.JSPopupPlugin.openPopup = function (event, text, popuplocation, border, ti
     }
     myPanel.show();
     
-    return myPanel;
+//    if (!event) var event = window.event;
+//	event.cancelBubble = true;
+//	if (event.stopPropagation) event.stopPropagation();
+    
+    return false;
 }
 
-TWiki.JSPopupPlugin.ajaxCall = function(event, popupUrl, popupParams) {
+twiki.JSPopupPlugin.ajaxCall = function(event, popupUrl, popupParams) {
 //TODO: redo these as params in the Args
     //make sure there's no popup div in the reply
     if (popupUrl.indexOf('?') != -1) {
@@ -162,7 +222,7 @@ TWiki.JSPopupPlugin.ajaxCall = function(event, popupUrl, popupParams) {
                     }
                 }
                 data = '<div>' + data + '</div>';
-                TWiki.JSPopupPlugin.openPopup(event, data);
+                twiki.JSPopupPlugin.openPopup(event, data);
 
 	      }, 
 	  failure: function(o) {alert('Error!\nStatusText='+o.statusText+'\nContents='+o.responseText);}
@@ -197,7 +257,6 @@ function removeEvent( obj, type, fn )
 		obj["e"+type+fn] = null;
 	}
 }
-
 
 
 //from http://weblogs.asp.net/asmith/archive/2003/10/06/30744.aspx
