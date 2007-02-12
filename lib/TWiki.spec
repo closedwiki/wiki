@@ -518,7 +518,7 @@ $TWiki::cfg{RemovePortNumber}  = $FALSE;
 # <tt>redirectto=OtherTopic</tt> or <tt>redirectto=Web.OtherTopic</tt>.
 $TWiki::cfg{AllowRedirectUrl}  = $FALSE;
 
-# **BOOLEAN EXPERT**
+# **REGEX EXPERT**
 # Defines the filter-in regexp that must match the names of environment
 # variables that can be seen using the %ENV{}% TWiki variable. Set it to
 # '^.*$' to allow all environment variables to be seen (not recommended).
