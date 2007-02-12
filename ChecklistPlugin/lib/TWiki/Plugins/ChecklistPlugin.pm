@@ -57,7 +57,7 @@ package TWiki::Plugins::ChecklistPlugin;
 use vars qw(
 	$installWeb $VERSION $RELEASE $REVISION $pluginName
         $debug %TWikiCompatibility
-    	%globalDefaults @renderedOptions @flagOptions @filteredOptions @listOptions
+    	%globalDefaults @renderedOptions @flagOptions @filteredOptions @listOptions @ignoreNamedDefaults
 	%options  @unknownParams
 	%namedDefaults %namedIds $idMapRef $idOrderRef %namedResetIds %itemStatesRead 
     	$resetDone $stateChangeDone $saveDone
@@ -80,7 +80,7 @@ $VERSION = '$Rev$';
 # of the version number in PLUGINDESCRIPTIONS.
 $RELEASE = 'Cairo, Dakar, Edinburgh, ...';
 
-$REVISION = '1.022'; #dro#  improved AJAX performance; added new feature (state selection for reset button); removed useforms feature
+$REVISION = '1.022'; #dro# improved AJAX performance; added new feature (state selection for reset button); fixed %TOC% bug reported by TWiki:Main.HelenJohnstone; fixed some minor and major bugs (mod_perl, description stripping, static feature, 'text' icons);  removed useforms feature
 #$REVISION = '1.021'; #dro# fixed some major bug (mod_perl, plugin preferences); improved performance (AJAX); fixed minor IE caching bug (AJAX related); added new attributes (tooltip, descr, template, statesel) requested by TWiki:Main.KeithHelfrich; fixed installation instructions bug reported by TWiki:Main.KeithHelfrich
 #$REVISION = '1.020'; #dro# added AJAX feature (useajax attribute) requested by TWiki:Main.ShayPierce and TWiki:Main.KeithHelfrich
 #$REVISION = '1.019'; #dro# fixed major default options bug reported by TWiki:Main.RichardHitier 
@@ -215,7 +215,7 @@ sub initDefaults {
 
 	@flagOptions = ('showlegend', 'anchors', 'notify', 'static' , 'useajax', 'statesel');
 
-
+	@ignoreNamedDefaults = ('showlegend','reset');
 }
 
 # =========================
@@ -322,6 +322,7 @@ sub initNamedDefaults {
 	$tmplName = ( &TWiki::Func::getPreferencesValue("\U${pluginName}_TEMPLATE\E") || undef) unless defined $tmplName;
 	# create named defaults (attributes>named defaults>global defaults):
 	foreach my $default (keys %globalDefaults) {
+		next if grep(/^\Q$default\E$/,@ignoreNamedDefaults);
 		$namedDefaults{$name}{$default}= $params{$default} if defined $params{$default};
 		$namedDefaults{$name}{$default}= (&TWiki::Func::getPreferencesValue("\U${pluginName}_TEMPLATE_${tmplName}_${default}\E") || undef)  unless (!defined $tmplName) || (defined $params{$default});
 	
@@ -351,6 +352,7 @@ sub renderLegend {
 		my $icon = shift @icons;
 		my ($iconsrc) = &getImageSrc($icon);
 		my $heState = &htmlEncode($state);
+		$iconsrc="" unless defined $iconsrc;
 		$legend.=$query->img({src=>$iconsrc, alt=>$heState, title=>$heState});
 		$legend.=qq@ - $heState @;
 	}
@@ -461,8 +463,11 @@ sub createHiddenDirectResetSelectionDiv {
 		my $s = $$statesRef[$i];
 		my $action = &createResetAction($name, $s);
 		$action="javascript:submitItemStateChange('$action');clpTooltipHide('CLP_SM_DIV_RESET_${name}_$id');" if $options{'useajax'};
+		my $imgsrc = (&getImageSrc($$iconsRef[$i]))[0];
+		my $imgalt = (defined $imgsrc)?"":$s;
+		$imgsrc="" unless defined $imgsrc;
 		$selTxt.=$query->a({-href=>$action,-title=>$s,-style=>'vertical-align:bottom;'}, 
-			$query->img({src=>(&getImageSrc($$iconsRef[$i]))[0],alt=>"",border=>0,style=>'cursor:move;vertical-align:bottom'}));
+			$query->img({src=>$imgsrc,alt=>$imgalt,border=>0,style=>'cursor:move;vertical-align:bottom'}));
 		$selTxt.='&nbsp;';
 	}
 
@@ -794,26 +799,25 @@ sub renderChecklistItem {
 	my $title = &createTitle($name, $state, $icon, \@states);
 
 	$linktext.=qq@$textBef@ if $textBef;
-	my $imgtitle = $options{'static'}?$title:"";
-	$linktext.=$query->img({id=>"CLP_IMG_$name$uetId", -name=>"CLP_IMG_$name$uetId", -src=>$iconsrc, -border=>0, -title=>$imgtitle, -alt=>$imgtitle});
+	my $imgalt = (!defined $iconsrc)?$state:"";
+	$iconsrc = "" unless defined $iconsrc;
+	$linktext.=$query->img({-name=>"CLP_IMG_$name$uetId", -src=>$iconsrc, -border=>0, -alt=>$imgalt});
 	$linktext.=qq@$textAft@ if $textAft;
 	if (lc($options{'clipos'}) eq 'left') {
 		$linktext.=' '.$options{'text'} unless $options{'text'} =~ /^(\s|\&nbsp\;)*$/;
 	}
-	if ($options{'static'}) {
-		$text .= $linktext;
-	} else {
-		my ($onmouseover, $onmouseout)=("","");
-		$action="javascript:submitItemStateChange('$action');" if $options{'useajax'};
-		$onmouseover="clpTooltipShow('CLP_TT_$name$uetId','CLP_A_$name$uetId',20,20,true);";
-		$onmouseout="clpTooltipHide('CLP_TT_$name$uetId');";
-		$text .= $query->div({-id=>"CLP_TT_$name$uetId",-style=>"visibility:hidden;position:absolute;top:0;left:0;z-index:2;font: normal 8pt sans-serif;padding: 3px; border: solid 1px; background-color: $options{'tooltipbgcolor'};"},$title);
-		if ($options{'statesel'}) {
-			$action="javascript:clpTooltipShow('CLP_SM_DIV_$name$uetId','CLP_A_$name$uetId',10,10,true);";
-			$text .= &createHiddenDirectSelectionDiv($uetId, $name, $state, $icon, \@states, \@icons);
-		}
-		$text .= $query->a({-onmouseover=>$onmouseover,-onmouseout=>$onmouseout,-id=>"CLP_A_$name$uetId",-href=>$action}, $linktext);
+
+	my ($onmouseover, $onmouseout)=("","");
+	$action="javascript:submitItemStateChange('$action');" if $options{'useajax'};
+	$onmouseover="clpTooltipShow('CLP_TT_$name$uetId','CLP_A_$name$uetId',20,20,true);";
+	$onmouseout="clpTooltipHide('CLP_TT_$name$uetId');";
+	$text .= $query->div({-id=>"CLP_TT_$name$uetId",-style=>"visibility:hidden;position:absolute;top:0;left:0;z-index:2;font: normal 8pt sans-serif;padding: 3px; border: solid 1px; background-color: $options{'tooltipbgcolor'};"},$title);
+	if ($options{'statesel'} && (!$options{'static'})) {
+		$action="javascript:clpTooltipShow('CLP_SM_DIV_$name$uetId','CLP_A_$name$uetId',10,10,true);";
+		$text .= &createHiddenDirectSelectionDiv($uetId, $name, $state, $icon, \@states, \@icons);
 	}
+	$action = "javascript:;" if $options{'static'};
+	$text .= $query->a({-onmouseover=>$onmouseover,-onmouseout=>$onmouseout,-id=>"CLP_A_$name$uetId",-name=>"CLP_A_$name$uetId",-href=>$action}, $linktext);
 
 	$text.=qq@</noautolink>@;
 
@@ -833,6 +837,9 @@ sub createHiddenDirectSelectionDiv {
 		my $title = &createTitle($name,$state,$icon,$statesRef, $s, $ic);
 		$action="javascript:submitItemStateChange('$action');clpTooltipHide('CLP_SM_DIV_$name$id');" if $options{'useajax'};
 		$text .= $query->div({-id=>"CLP_SM_TT_$name${id}_$i",-style=>"visibility:hidden;position:absolute;top:0;left:0;z-index:3;font: normal 8pt sans-serif;padding: 3px; border: solid 1px; background-color: $options{'tooltipbgcolor'};"},$title); 
+		my $imgsrc = (&getImageSrc($ic))[0];
+		my $imgalt = (defined $imgsrc)?"":$s;
+		$imgsrc="" if !defined $imgsrc;
 		$sl.=$query->a({
 					-id=>"CLP_SM_A_$name${id}_$i", 
 					-href=>"$action",
@@ -840,7 +847,7 @@ sub createHiddenDirectSelectionDiv {
 					-onmouseover=>"clpTooltipShow('CLP_SM_TT_$name${id}_$i','CLP_SM_IMG_$name${id}_$i',20,20);", 
 					-onmouseout=>"clpTooltipHide('CLP_SM_TT_$name${id}_$i');",
 				},
-				$query->img({src=>(&getImageSrc($ic))[0],id=>"CLP_SM_IMG_$name${id}_$i",alt=>"",border=>0,style=>'vertical-align:bottom;cursor:move;'}));
+				$query->img({src=>$imgsrc,id=>"CLP_SM_IMG_$name${id}_$i",alt=>$imgalt,border=>0,style=>'vertical-align:bottom;cursor:move;'}));
 		$sl.='&nbsp;';
 	}
 

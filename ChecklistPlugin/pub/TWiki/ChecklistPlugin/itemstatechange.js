@@ -67,37 +67,40 @@ function clpHandleStateChange(self) {
 	clpHandleTextResponse(self, responseText);
 }
 function clpHandleTextResponse(self, responseText) {
-	var links = responseText.match(/<a[^>]+id="CLP_A_[^>]+>/ig);
+	var links = responseText.match(/<a[^>]+name="CLP_A_[^>]+>/ig);
 	if (links && (links.length>0)) {
 		AllLinks: for (var i = 0 ; i < links.length; ++i) {
 			var e;
 			var link = links[i];
-			link.match(/id="CLP_A_([^"]+)"/);
+			link.match(/name="CLP_A_([^"]+)"/);
 			var id = RegExp.$1;
 
-			var imgExpr = new RegExp("<img[^>]+id=\"CLP_IMG_" + id + "\"[^>]*>","i");
+			var imgExpr = new RegExp("<img[^>]+name=\"CLP_IMG_" + id + "\"[^>]*>","i");
 			var img = "" + imgExpr.exec(responseText);
 			img.match(/src="([^"]+)"/);
 			var src = RegExp.$1;
-			/*
-			e = document.getElementById("CLP_IMG_"+id);
-			if (e && (e.src == src)) continue;
-			if (e) e.src = src;
-			*/
+			img.match(/alt="([^"]+)"/);
+			var alt = RegExp.$1;
 			var els = document.getElementsByName("CLP_IMG_"+id);
-			for (var j=0; j<els.length; ++j) {
-				if (els[j].src == src) continue AllLinks;
-				els[j].src = src;
+			if  (els && els.length) {
+				for (var j=0; j<els.length; ++j) {
+					if (src && (els[j].src == src)) continue AllLinks;
+					if ((!src || src == "") && (alt && alt!="" && els[j].alt == alt)) continue AllLinks;
+					els[j].src = src;
+					if (!src || src == "") els[j].alt = alt;
+				}
 			}
 
-			e = document.getElementById("CLP_A_"+id);
-			if (e) {
-				link.match(/href="([^"]+)"/);
-				var href=RegExp.$1;
-				e.style.cursor=clpCursorNormalStyle;
-				self.changes.push(e.href);
-				self.changesNew.push(href);
-				e.href = href; 
+			els = document.getElementsByName("CLP_A_"+id);
+			if (els && els.length) {
+				for (var j=0; j<els.length; ++j) {
+					link.match(/href="([^"]+)"/);
+					var href=RegExp.$1;
+					els[j].style.cursor=clpCursorNormalStyle;
+					self.changes.push(els[j].href);
+					self.changesNew.push(href);
+					els[j].href = href; 
+				}
 			}
 
 			var divExpr = new RegExp("<div[^>]+id=\"CLP_TT_"+id+"\"[^>]*>(.*?)</div>");
@@ -239,7 +242,6 @@ function clpTooltipFindPosY(obj)
 var clpTooltipLastVisibleId = new Array();
 function clpTooltipShow(tooltipId, parentId, posX, posY,closeAll) {
 	var it = document.getElementById(tooltipId);
-
 	if (closeAll) {
 		while (clpTooltipLastVisibleId.length>0) {
 			var lv = document.getElementById(clpTooltipLastVisibleId.shift());
