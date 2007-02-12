@@ -13,6 +13,9 @@ Popups are activated either on a mouse click, when the mouse passes over the anc
 
 To make it easy for TWiki.TWikiSkin developers, any html link with the css  =twikiPopupLink= class will get a popup dialog. If the Javascript fails, or this plugin is disabled, the link will gracefully fall back to going to the link in the main browser window.
 
+use the =twikiPopupLink= class to get popup dialog elements on urls
+   * =&lt;a class="twikiPopupLink" href="%<nop>SCRIPTURL{attach}%/%<nop>WEB%/%<nop>TOPIC%"&gt;Attach&lt;/a&gt;=
+
 This will allow you to create a popup Comment Edit box (don't forget to create the #<nop>Comments anchor):
 <verbatim>
 %POPUP{
