@@ -158,7 +158,7 @@ sub renderSlideNav
     my $prev = $theNum - 1 || 1;
     my $next = $theNum + 1;
     my $text = '<span style="white-space: nowrap">';
-    my $viewUrl = "%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/$theWeb/$theTopic";
+    my $viewUrl = TWiki::Func::getViewUrl($theWeb, $theTopic);
     if( $theButtons =~ /f/ ) {
         # first slide button
         if( $theButtons =~ / f/ ) {
@@ -224,7 +224,7 @@ sub renderSlideToc
 
     my $slideNum = 1;
     my $text = '';
-    my $viewUrl = "%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/$theWeb/$theTopic";
+    my $viewUrl = TWiki::Func::getViewUrl($theWeb, $theTopic);
     foreach( @theTitles ) {
         $text .= "\t\* ";
         $text .= "<a href=\"$viewUrl?slideshow=on&amp;skin=print#GoSlide$slideNum\">";
