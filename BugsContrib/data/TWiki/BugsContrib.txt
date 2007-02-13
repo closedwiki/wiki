@@ -37,6 +37,7 @@ See the Bugs.WebHome topic in the new web for help in configuring the applicatio
 |  Version: | %$VERSION% |
 |  License: | GPL |
 |  Change History: | |
+| 12856 | 13 Feb 2007 - Sven Dowideit - update with lessons learned from longer term use |
 |  9804 | Crawford Currie - packaged for release |
 |  Home: | TWiki:Plugins/%TOPIC% |
 |  Feedback: | TWiki:Plugins/%TOPIC%Dev |
