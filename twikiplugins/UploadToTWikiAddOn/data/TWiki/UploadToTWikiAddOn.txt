@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1171356033" format="1.1" reprev="1.3" version="1.3"}%
+%META:TOPICINFO{author="PeterThoeny" date="1171357473" format="1.1" reprev="1.3" version="1.3"}%
 ---+ Upload to TWiki Add-On
 
 This is a small Perl script to programmatically attach a file to any TWiki topic. The script can be executed on any computer, it does not have to be on the server where TWiki is installed. This is a useful script to create mashups of TWiki and other applications.
@@ -25,7 +25,7 @@ Example:
 
 =% ./uploadtotwiki.pl <nop>%USERNAME% ./smile.gif <nop>http://twiki.org/cgi-bin/view/Sandbox/UploadTest= %BR%
 =Uploading ./smile.gif to <nop>http://twiki.org/cgi-bin/view/Sandbox/UploadTest= %BR%
-=Enter password for <nop>%USERNAME% at twiki.org:80:= %BR%
+=Enter password for <nop>%USERNAME% at twiki.org:= %BR%
 =... upload finished.= %BR%
 =%=
 
