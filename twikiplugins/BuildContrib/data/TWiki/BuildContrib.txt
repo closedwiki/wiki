@@ -47,11 +47,11 @@ For example, assuming you are working in a Subversion checkout area (*strongly* 
       * =cd twikiplugins; perl create-new-extension.pl MyNewPlugin=
    1 Edit =.pm= files as required to create your plugin functionality
    1 =cd twikiplugins/MyPlugin/lib/TWiki/Plugins/MyPlugin; perl build.pl release= to build a release package and installer
-   1 Unzip and install<sup>%RED%1%ENDCOLOR%</sub> the built package in your *test* system (which may be your development system, or may be another TWiki install altogether)
+   1 Unzip and install<sup>%RED%1%ENDCOLOR%</sup> the built package in your *test* system (which may be your development system, or may be another TWiki install altogether)
    1 Repeat from step 2 until it works
-   1 =cd twikiplugins/MyPlugin/lib/TWiki/Plugins/MyPlugin; perl build.pl upload= to upload the module to TWiki.org<sup>%RED%*2%ENDCOLOR%</sub>
-<sup>%RED%1%ENDCOLOR%</sub> if you are working in Subversion, then you can use the =pseudo-install.pl= script to simplify this install step
-<sup>%RED%*2%ENDCOLOR%</sub> or other repository of your choice e.g. local company plugins repository
+   1 =cd twikiplugins/MyPlugin/lib/TWiki/Plugins/MyPlugin; perl build.pl upload= to upload the module to TWiki.org<sup>%RED%*2%ENDCOLOR%</sup>
+<sup>%RED%1%ENDCOLOR%</sup> if you are working in Subversion, then you can use the =pseudo-install.pl= script to simplify this install step
+<sup>%RED%*2%ENDCOLOR%</sup> or other repository of your choice e.g. local company plugins repository
 
 The build script is rather like a =Makefile=. It has several _targets_ that can be used to perform different stages of the development cycle. By default these targets are:
 | =build= | check that everything is perl |
