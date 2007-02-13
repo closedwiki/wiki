@@ -1,25 +1,30 @@
+
 ---+++ Recently Closed
 %INCLUDE{
-        "Tabulator" 
-        STATUS="Closed"
-        SUMMARY=".*?"
-        DETAIL=".*?"
-        PRIORITY=".*?"
-        REPORTEDBY=".*?"
-        LIMIT="20"
-        CLASS=".*?"
+"Bugs.Tabulator" 
+STATUS="Closed|Waiting for Release"
+SUMMARY=".*"
+DETAIL=".*"
+PRIORITY=".*"
+REPORTEDBY=".*"
+WAITINGFOR=".*"
+LIMIT="20"
+CLASS=".*"
+CODEBASE=".*"
 }%
 
----+++ Recently Discarded
+---+++ Recent No Action Items
 %INCLUDE{
-        "Tabulator" 
-        STATUS="Discarded"
-        SUMMARY=".*?"
-        DETAIL=".*?"
-        PRIORITY=".*?"
-        REPORTEDBY=".*?"
-        LIMIT="20"
-        CLASS=".*?"
+"Bugs.Tabulator" 
+STATUS="No Action Required"
+SUMMARY=".*"
+DETAIL=".*"
+PRIORITY=".*"
+WAITINGFOR=".*"
+REPORTEDBY=".*"
+LIMIT="20"
+CLASS=".*"
+CODEBASE=".*"
 }%
 
 

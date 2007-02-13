@@ -1,6 +1,0 @@
-| *Name* | *Type* | *ToolTip* |
-| Requirement | option | This is a non-negotiable requirement |
-| Urgent | option | This is seriously impacting customers |
-| Normal | option | This is irritating, but can be lived with |
-| Low | option | This should be fixed |
-| Enhancement | option | This would increase the product's value |

@@ -1,9 +1,4 @@
-<!-- Items used by the ItemTemplate form -->
-| *Name* | *Type* | *ToolTip* |
-| Web Site | option | The company web site |
-| Main Product | option | Our main product |
-| User Manual | option | End-user documentation for our main product |
-| Another Product | option | Another product |
+
 
 <!--
 Interactive lookup
@@ -11,31 +6,43 @@ Interactive lookup
    * Set CLASS = %URLPARAM{"class" default="Web Site"}%
 -->
 <div class="twikiPageForm">
-<form name="chooser" action="%SCRIPTURL{"view"}%/%WEB%/%TOPIC%" method="post">
+<form name="chooser" action="%SCRIPTURL{"view"}%/%WEB%/%TOPIC%" method="get">
 <h3>Active Items for
 <select name="class" onchange="chooser.submit()">
+%STARTSECTION{form_options}%
 <option %IF{"$class='Web Site'" then="selected"}%>Web Site</option>
 <option %IF{"$class='Main Product'" then="selected"}%>Main Product</option>
 <option %IF{"$class='User Manual'" then="selected"}%>User Manual</option>
 <option %IF{"$class='Another Product'" then="selected"}%>Another Product</option>
+%ENDSECTION{form_options}%
 </select>
 </h3>
-
 %INCLUDE{
-        "Tabulator"
-        CLASS="%CLASS%"
-        DETAIL=".*?"
-        LIMIT=""
-        PRIORITY=".*?"
-        REPORTEDBY=".*?"
-        STATUS="New|Actioning|Waiting for Feedback%IF{"defined closed" then="|Closed|Discarded"}%"
-        SUMMARY=".*?"
+	"Bugs.Tabulator" 
+        STATUS="New|Actioning|Waiting for Feedback|Confirmed|Being Worked On|Waiting for Release%IF{"defined closed" then="|Closed|No Action Required"}%"
+	SUMMARY=".*"
+	DETAIL=".*"
+	PRIORITY=".*"
+	CLASS="%CLASS%"
+	REPORTEDBY=".*"
+	WAITINGFOR=".*"
+	LIMIT=""
+	CODEBASE=".*"
 }%
-
-<input type="hidden" name="class" value="%CLASS%" />
 <input type="submit" name="%IF{"defined closed" then="other" else="closed"}%" value="%IF{"defined closed" then="Hide" else="Show"}% closed and discarded items" />
 </form>
 </div>
 
+%STARTINCLUDE%
+---+++ Applies To
+Select which area of development this applies to
 %STOPINCLUDE%
-</verbatim>
+
+
+
+<!-- Items used by the ItemTemplate form -->
+| *Name* | *Type* | *ToolTip* |
+| Web Site | option | The company web site |
+| Main Product | option | Our main product |
+| User Manual | option | End-user documentation for our main product |
+| Another Product | option | Another product |
