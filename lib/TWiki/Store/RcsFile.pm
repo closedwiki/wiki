@@ -345,7 +345,9 @@ sub searchInWebContent {
             my $matches = NativeTWikiSearch::cgrep(\@fs);
             if (defined($matches)) {
                 for (@$matches) {
-                    if (/([^\/]*)\.txt(:(.*))?$/) {
+                    # Note use of / and \ as dir separators, to support
+                    # Winblows
+                    if (/([^\/\\]*)\.txt(:(.*))?$/) {
                         push( @{$seen{$1}}, $3 );
                     }
                 }
@@ -415,7 +417,9 @@ sub searchInWebContent {
         $matches .= $m;
         @set = splice( @take, 0, $maxTopicsInSet );
     }
-    $matches =~ s/([^\/]*)\.txt(:(.*))?$/push( @{$seen{$1}}, $3 ); ''/gem;
+    # Note use of / and \ as dir separators, to support
+    # Winblows
+    $matches =~ s/([^\/\\]*)\.txt(:(.*))?$/push( @{$seen{$1}}, $3 ); ''/gem;
 
     return \%seen;
 }
