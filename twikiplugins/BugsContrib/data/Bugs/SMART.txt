@@ -1,8 +1,10 @@
-SMART means Specific, Measurable, Achievable, Realistic, Timeframed. It is usaually applied to actions from meetings, but applies almost as well to bug reports.
+
+
+SMART means Specific, Measurable, Accountable, Realistic, Timeframed
 
 All Items should be SMART. that means the reports must
-   1 *Specific*: Be clear enough that anyone can take a stab at solving the problem, and have individual names associated with the report and with the fixing process
-   1 *Measureable*: Have a clear statement of what is required to be able to close them (a testcase is always best!)
-   1 *Achievable*: Any time constraints must be thought about so that the fixers have a chance.
-   1 *Realistic*: Obvious, really
-   1 *Timeframed*: as soon as you know when a problem is going to be fixed, reflect it in the report.
+   1 Be clear enough that anyone can take a stab at solving the problem
+   1 Have a clear statement of what is required to be able to close them ("this must work")
+   1 Have individual names associated with the report and with the fixing process
+   1 Be realistic (obvious, really)
+   1 Be timeframed
