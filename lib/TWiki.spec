@@ -183,7 +183,7 @@ $TWiki::cfg{UseClientSessions} = 1;
 $TWiki::cfg{Sessions}{ExpireAfter} = 21600;
 
 # **NUMBER EXPERT**
-# *TemplateLogin only*.
+# TemplateLogin only.
 # Normally the cookie that remembers a user session is set to expire
 # when the browser exits, but using this value you can make the cookie
 # expire after a set number of seconds instead. If you set it then
@@ -193,6 +193,7 @@ $TWiki::cfg{Sessions}{ExpireAfter} = 21600;
 # otherwise TWiki may delete the session from its memory even though the
 # cookie is still active.<p />
 # A value of 0 will cause the cookie to expire when the browser exits.
+# One month is roughly equal to 2600000 seconds.
 $TWiki::cfg{Sessions}{ExpireCookiesAfter} = 0;
 
 # **BOOLEAN EXPERT**
