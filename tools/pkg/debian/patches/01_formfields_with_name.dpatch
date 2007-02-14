@@ -1,8 +1,10 @@
 #! /bin/sh /usr/share/dpatch/dpatch-run
-## formfields_with_name.dpatch by  <sven@localhost.localdomain>
+## formfields_with_name.dpatch by  <svenud@ozemail.com.au>
 ##
 ## All lines beginning with `## DP:' are a description of the patch.
-## DP: No description.
+## DP:   * enable FormFields containing Name
+## DP:       (Closes: #405571).
+
 
 @DPATCH@
 diff -urNad twiki-4.0.5~/lib/TWiki/Form.pm twiki-4.0.5/lib/TWiki/Form.pm

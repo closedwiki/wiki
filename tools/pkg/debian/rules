@@ -22,7 +22,7 @@ build-stamp: configure-stamp
 	touch build-stamp
 
 clean: 
-#	unpatch
+	#unpatch
 	dh_testdir
 	dh_testroot
 	find . -name '*~' -print0 | xargs -0 rm -f
@@ -83,7 +83,7 @@ install: build
 	  xargs -n1 perl -pi -e 's/^(\s)nobody:/\1$(TWIKI_OWNER):/ unless $$done; $$done=1 if /^\n$$/;'
 	tar -cf - -C debian/twiki var/lib/twiki/data \
 		| tardy -User_NAme=$(TWIKI_OWNER) -Group_NAme=www-data \
-		| gzip -c -9 > debian/twiki/usr/share/doc/twiki/twiki-data.tar.gz
+		| gzip -c -9 > debian/twiki/usr/share/twiki/twiki-data.tar.gz
 	rm -rf debian/twiki/var/lib/twiki/data
 
 #do the same with pub - it should also only be replaced if there is none there already
@@ -92,7 +92,7 @@ install: build
 	  xargs -n1 perl -pi -e 's/^(\s)nobody:/\1$(TWIKI_OWNER):/ unless $$done; $$done=1 if /^\n$$/;'
 	tar -cf - -C debian/twiki var/www/twiki/pub \
 		| tardy -User_NAme=$(TWIKI_OWNER) -Group_NAme=www-data \
-		| gzip -c -9 > debian/twiki/usr/share/doc/twiki/twiki-pub.tar.gz
+		| gzip -c -9 > debian/twiki/usr/share/twiki/twiki-pub.tar.gz
 	rm -rf debian/twiki/var/www/twiki/pub
 
 	cp -pR lib/* debian/twiki/usr/share/perl5/

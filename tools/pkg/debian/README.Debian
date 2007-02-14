@@ -1,10 +1,10 @@
 TWiki for Debian
 ----------------
 
-/usr/share/doc/twiki/twiki-data.tar.gz has the initial data set, if
+/usr/share/twiki/twiki-data.tar.gz has the initial data set, if
 you find you want to restore the data in /var/lib/twiki/data/ after
 experimenting.
-/usr/share/doc/twiki/twiki-pub.tar.gz has the initial pub data set.
+/usr/share/twiki/twiki-pub.tar.gz has the initial pub data set.
 It should also be unpacked to /var/www/twiki/pub
 
 

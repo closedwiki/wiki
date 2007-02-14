@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: TWiki\n"
 "Report-Msgid-Bugs-To: svenud@ozemail.com.au\n"
-"POT-Creation-Date: 2006-11-25 22:35+0100\n"
+"POT-Creation-Date: 2007-02-14 17:20+1100\n"
 "PO-Revision-Date: 2004-08-23 00:00-0300\n"
 "Last-Translator: Tiago Bortoletto Vaz <tiagovaz@im.ufba.br>\n"
 "Language-Team: Debian-BR Project <debian-l10n-portuguese@lists.debian.org>\n"
@@ -75,22 +75,23 @@ msgstr ""
 #. Type: boolean
 #. Description
 #: ../templates:3001
-msgid "Install sample wiki universe on initial install?"
+#, fuzzy
+msgid "Install default wiki Topic Set on initial install?"
 msgstr "Instalar os exemplos padrão de wiki na instalação inicial?"
 
 #. Type: boolean
 #. Description
 #: ../templates:3001
+#, fuzzy
 msgid ""
 "TWiki includes a complete \"starter kit\" which includes user registration "
-"pages, documentation, and tutorials.  If you're re-installing twiki after "
-"deleting the package and want to keep the old data, or if you've got a twiki "
-"data set from your own manual install, you should say \"no\" here.  On a "
-"normal initial install, say \"yes\", and a sample data set will be installed "
-"in /var/lib/twiki/data (and /var/www/twiki/pub).  (In either case, if data/"
-"Main/WebHome.txt is present, the starter kit will not be unpacked; you can "
-"look in /usr/share/doc/twiki/twiki-data.tar.gz (and twiki-pub.tar.gz) if you "
-"wish to install it manually or compare a new version.)"
+"pages, documentation, and tutorials.  Only decline if you're re-installing "
+"twiki after deleting the package and want to keep the old data, or if you've "
+"got a twiki data set from your own manual install. If data/Main/WebHome.txt "
+"is present, the starter kit will not be unpacked. The the starter kit files "
+"can be found in /usr/share/twiki/twiki-data.tar.gz  (and twiki-pub.tar.gz), "
+"if you want to install it manually or compare your  topics with the new "
+"version)"
 msgstr ""
 "O TWiki inclui um completo \"kit de inicialização\" que inclui páginas de "
 "registro de usuário, documentação e tutoriais. Se você está reinstalando o "

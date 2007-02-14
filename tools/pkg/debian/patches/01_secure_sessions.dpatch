@@ -1,8 +1,9 @@
 #! /bin/sh /usr/share/dpatch/dpatch-run
-## 01_secure_sessions.dpatch by  <sven@localhost.localdomain>
+## 01_secure_sessions.dpatch by  <svenud@ozemail.com.au>
 ##
 ## All lines beginning with `## DP:' are a description of the patch.
-## DP: No description.
+## DP:   * secure the session files, and use file time to expire them 
+## DP:       Arbitrary code execution in session files (CVE-2007-0669) (Closes #410256)
 
 @DPATCH@
 diff -urNad un~/lib/TWiki/Client.pm un/lib/TWiki/Client.pm

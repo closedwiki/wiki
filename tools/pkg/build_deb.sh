@@ -27,4 +27,6 @@ tar zxvf /tmp/build_deb/twiki_4.0.5.orig.tar.gz
 #see http://www.debian.org/doc/maint-guide/ch-build.en.html
 dpkg-buildpackage -rfakeroot
 
-
+#TODO
+#interdiff -z twiki_4.0.5-{8,9}.diff.gz
+#upload this too

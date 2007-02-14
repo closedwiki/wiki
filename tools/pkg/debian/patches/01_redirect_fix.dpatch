@@ -1,8 +1,9 @@
 #! /bin/sh /usr/share/dpatch/dpatch-run
-## 01_redirect_fix.dpatch by  <sven@localhost.localdomain>
+## 01_redirect_fix.dpatch by  <svenud@ozemail.com.au>
 ##
 ## All lines beginning with `## DP:' are a description of the patch.
-## DP: No description.
+## DP:   * prevent redirect code from allowing redirect to other hosts
+## DP:       (Closes: #404222)
 
 @DPATCH@
 diff -urNad un~/lib/TWiki.pm un/lib/TWiki.pm

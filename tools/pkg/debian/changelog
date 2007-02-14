@@ -8,8 +8,11 @@ twiki (1:4.0.5-9) unstable; urgency=emergency
     Arbitrary code execution in session files (CVE-2007-0669) (Closes #410256)
   * update index.html to 4.0.5 version
   * updated Czech (cs.po) translation (Closes #408659)
+  * moved twiki-pub.tar.gz to /usr/share/twiki (Closes #410803)
+  * changed samplefiles prompt to remove yes/no assumption
+  * unpatch on clean
 
- -- Sven Dowideit <svenud@ozemail.com.au>  Sun, 11 Feb 2007  22:32:36 +0100
+ -- Sven Dowideit <svenud@ozemail.com.au>  Wed, 14 Feb 2007  22:32:36 +0100
 
 twiki (1:4.0.5-8) unstable; urgency=medium
 
