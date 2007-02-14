@@ -190,7 +190,7 @@ sub sanitizeAttachmentName {
     if ( $TWiki::cfg{Site}{CharSet} =~ /^iso-?8859-?15?$/i ) {
         if( $] >= 5.008 && eval { require Unicode::Normalize } ) {
             require Encode;
-            eval { use Unicode::Normalize };
+            eval 'use Unicode::Normalize';
             # Some normalizations need to be intercepted early
             $fileName =~ s/\xc4/AE/g;
             $fileName =~ s/\xc5/AA/g;
