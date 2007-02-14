@@ -197,19 +197,18 @@ sub checkPerlModules {
         eval 'use '.$mod->{name};
         if ($@) {
             $n = 'Not installed. '. $mod->{usage};
-
         } else {
             no strict 'refs';
             eval '$mod_version = $'.$mod->{name}.'::VERSION';
-            $mod_version ||= '';
+            $mod_version ||= 0;
             $mod_version =~ s/(\d+(\.\d*)?).*/$1/; # keep 99.99 style only
             use strict 'refs';
-            if ( (!$mod_version) || ($mod_version < $mod->{minimumVersion}) ) {
+            if ( $mod_version < $mod->{minimumVersion} ) {
                 $n = $mod_version || 'Unknown version';
                 $n .= ' installed. Version '
                    . $mod->{minimumVersion}.' '
                    . $mod->{disposition};
-                $n .= ' for '.$mod->{usage} if $mod->{usage};
+                $n .= ' ' . $mod->{usage} if $mod->{usage};
             }
         }
         if ($n) {
@@ -221,6 +220,7 @@ sub checkPerlModules {
                 $n = $this->NOTE($n);
             }
         } else {
+            $mod_version ||= 'Unknown version';
             $n = $this->NOTE($mod_version.' installed');
         }
         $e .= $this->setting($mod->{name}, $n);
