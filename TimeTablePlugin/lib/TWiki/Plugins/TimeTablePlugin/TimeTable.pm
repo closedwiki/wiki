@@ -191,6 +191,10 @@ sub _initDefaults {
 		cuttext => '...',
 		timezone => 0,
 		timezoneabbr => undef,
+		tablecolumnwidth => undef,
+		tooltipformat => '%TIMERANGE%<br/>%DESCRIPTION% ',
+		tooltipfixleft=>-163,
+		tooltipfixtop=>0,
 	);
 
 	@renderedOptions = ('tablecaption', 'name' , 'navprev', 'navnext', 'wholetimerowtext');
@@ -260,16 +264,17 @@ sub _initOptions {
                 my $v = $params{$option};
                 if (defined $v) {
                         if (grep /^\Q$option\E$/, @flagOptions) {
-                                $options{$option} = ($v!=0)&&($v!~/no/i)&&($v!~/off/i);
+                                $options{$option} =  ($v!~/(false|no|off|0|disable)/i);
                         } else {
                                 $options{$option} = $v;
                         }
                 } else {
                         if (grep /^\Q$option\E$/, @flagOptions) {
-                                $v = &TWiki::Func::getPreferencesFlag("\U$pluginName\E_\U$option\E") || undef;
+                                $v = ( &TWiki::Func::getPreferencesFlag("\U${pluginName}_$option\E") || undef );
                         } else {
-                                $v = &TWiki::Func::getPreferencesValue("\U$pluginName\E_\U$option\E") || undef;
+                                $v = ( &TWiki::Func::getPreferencesValue("\U${pluginName}_$option\E") || undef );
                         }
+			$v = undef if (defined $v) && ($v eq "");
                         $options{$option}=(defined $v)? $v : $defaults{$option};
                 }
 
@@ -416,7 +421,8 @@ sub _fetch {
 							'fgcolor'=>$fgcolor,
 							'bgcolor'=>$bgcolor,
 							'setup'=>$setup,
-							'duration'=>$duration
+							'duration'=>$duration,
+							'longdescr'=>$line
 						};
 					&_fixEntryTime(\%entries, $entries{$day+1}[$#{$entries{$day+1}}], $day);
 				}
@@ -457,7 +463,8 @@ sub _fetch {
 							'fgcolor'=>$fgcolor,
 							'bgcolor'=>$bgcolor,
 							'setup'=>$setup,
-							'duration'=>$duration
+							'duration'=>$duration,
+							'longdescr'=>$line
 							};
 						&_fixEntryTime(\%entries, $entries{$day+1}[$#{$entries{$day+1}}], $day);
 					} 
@@ -484,6 +491,7 @@ sub _render {
 	my $todayDays = Date_to_Days($tyy,$tmm,$tdd);
 
 	my ($starttime,$endtime) = ( &_getTime($options{'starttime'}), &_getTime($options{'endtime'}));
+	my $tooltips = "";
 
 	my $text = "";
 
@@ -537,12 +545,19 @@ sub _render {
 			my $wtentries = &_getWholeTimeEntries($dowentries_ref);
 			if ($#$wtentries > -1) {
 				$itr=$cgi->start_table({-bgcolor=>$colbgcolor, -cellpadding=>'0',-cellspacing=>'1', -tableheight=>"100%"});
+				my $counter =0; 
 				foreach my $wtentry_ref ( @{$wtentries} ) {
+					$counter++;
 					my ($text, $title) = &_renderText($wtentry_ref, 1, 0);
-					$itr.=$cgi->Tr($cgi->td({-nowrap=>"",
+					$tooltips .= &_renderTooltip($wtentry_ref, $day, 'W', $counter);
+					$tooltips .= &_renderTooltip($wtentry_ref, $day, 'W2', $counter) if $options{'wholetimerow'} && ($options{'wholetimerowpos'}=~m/^(bottom|both)$/i);
+					$itr.=$cgi->Tr($cgi->td({-nowrap=>"nowrap",
 							-valign=>"top",
 							-bgcolor=>$$wtentry_ref{'bgcolor'}?$$wtentry_ref{'bgcolor'}:$options{eventbgcolor},
-							-title=>$title,
+							## -title=>$title,
+							-id=>"TTP_TD_${ttid}_${day}_W_${counter}",
+							-onmouseover=>"ttpTooltipShow('TTP_DIV_${ttid}_${day}_W_${counter}', 'TTP_TD_${ttid}_${day}_W_${counter}',$options{'tooltipfixleft'},$options{'tooltipfixtop'},true);",
+							-onmouseout=>"ttpTooltipHide('TTP_DIV_${ttid}_${day}_W_${counter}');",
 							}, 
 								$text
 							));
@@ -562,23 +577,29 @@ sub _render {
 		###$td = $cgi->start_table({-bgcolor=>"#fafafa", -cellpadding=>'0',-cellspacing=>'1', -tableheight=>"100%"});
 		$td = $cgi->start_table({-width=>'100%', -bgcolor=>$colbgcolor, -cellpadding=>'0',-cellspacing=>'1', -tableheight=>"100%"});
 
-
 		for (my $min=$starttime; $min <=$endtime; $min+=$options{'timeinterval'}) {
 			my $mentries = &_getMatchingEntries($dowentries_ref, $min, $options{'timeinterval'}, $starttime);
-			$itr="";
+			$itr=""; 
 			if ($#$mentries>-1) {
 				my $rs;
+				my $counter =0; 
 				foreach my $mentry_ref ( @{$mentries})  {
+					$counter++;
 					my $fillRows = &_countConflicts($mentry_ref,$dowentries_ref, $starttime, $options{'timeinterval'});
 
 					$rs= &_getEntryRows($mentry_ref, $min, $starttime, $endtime, $options{'timeinterval'});
 
 					my ($text,$title) = &_renderText($mentry_ref, $rs, $fillRows);
-					$itr.=$cgi->td({-nowrap=>"",
+					$tooltips .= &_renderTooltip($mentry_ref, $day, $min, $counter);
+					$itr.=$cgi->td({-nowrap=>"nowrap",
 							-valign=>"top",
 							-bgcolor=>$$mentry_ref{'bgcolor'}?$$mentry_ref{'bgcolor'}:$options{eventbgcolor},
 							-rowspan=>$rs+$fillRows,
-							-title=>$title
+							### -title=>$title,
+							-width=>$options{'tablecolumnwidth'},
+							-id=>"TTP_TD_${ttid}_${day}_${min}_${counter}",
+							-onmouseover=>"ttpTooltipShow('TTP_DIV_${ttid}_${day}_${min}_${counter}', 'TTP_TD_${ttid}_${day}_${min}_${counter}',$options{'tooltipfixleft'},$options{'tooltipfixtop'},true);",
+							-onmouseout=>"ttpTooltipHide('TTP_DIV_${ttid}_${day}_${min}_${counter}');",
 							}, 
 							$text
 							);
@@ -620,10 +641,14 @@ sub _render {
 	}
 	$text.= $cgi->Tr({-valign=>'top'},$wtrow) if $options{'wholetimerow'} && ($options{'wholetimerowpos'}=~m/^(top|both)$/i);
 	$text.= $cgi->Tr($tr);
-	$text.= $cgi->Tr({-valign=>'top'},$wtrow) if $options{'wholetimerow'} && ($options{'wholetimerowpos'}=~m/^(bottom|both)$/i);
+	if ($options{'wholetimerow'} && ($options{'wholetimerowpos'}=~m/^(bottom|both)$/i)) {
+		$wtrow=~s/_W_/_W2_/sg;
+		$text.= $cgi->Tr({-valign=>'top'},$wtrow);
+	}
 
 
 	$text .= $cgi->end_table();
+	$text .= $tooltips;
 	$text .= '</font>';
 
 
@@ -676,16 +701,13 @@ sub _parseInt {
 	return $val;
 }
 # =========================
-sub _renderText {
-	my ($mentry_ref, $rs, $fillRows) = @_;
-	my $tddata ="";
+sub _renderTimeRange {
+	my ($mentry_ref) =  @_;
 	my ($mst,$met,$md) = ($$mentry_ref{'starttime'},$$mentry_ref{'endtime'},$$mentry_ref{'duration'});
-
 	my $setup = $$mentry_ref{'setup'};
 	my $topicSetupRef = $topicDefaults{$setup} if defined $setup;
 	my $timezone = $$topicSetupRef{'timezone'} if defined $topicSetupRef;
 	$timezone = 0 unless defined $timezone;
-
 	my $tz = "";
 	if (defined $TIMEZONES{$timezone}) {
 		$tz=" $timezone";
@@ -693,22 +715,31 @@ sub _renderText {
 		my $otz = (defined $TIMEZONES{$options{'timezone'}})?$TIMEZONES{$options{'timezone'}}:$options{'timezone'};
 		$tz=($timezone-$otz!=0)&&(abs($timezone)<12)?sprintf(" DTZ%+.1f",$timezone-$otz):'';
 	}
+	return &_renderTime($mst) .(defined $met?'-':' ') .&_renderTime((defined $met?$met:$md)) .$tz;
 
-	my $trange = ' ('
-			.&_renderTime($mst)
-			.(defined $met?'-':' ')
-			.&_renderTime((defined $met?$met:$md))
-			.$tz
-			.')';
+}
+# =========================
+sub _renderText {
+	my ($mentry_ref, $rs, $fillRows) = @_;
+	my $tddata ="";
+
+	my $setup = $$mentry_ref{'setup'};
+	my $topicSetupRef = $topicDefaults{$setup} if defined $setup;
+
+ 	my $trange = ' ('. &_renderTimeRange($mentry_ref) .')';
+
 	my $title = ($$mentry_ref{'longdescr'}?$$mentry_ref{'longdescr'}:$$mentry_ref{'descr'});
 	$title .= $trange;
 
+
 	$title=TWiki::Func::renderText($title,$web);
-	$title=~s/<\/?[^>]+>//g;
+	$title=~s/<\/?\w[^>]*>//g;
 
 	### $title.=" (rows=$rs, fillRows=$fillRows)"; ## DEBUG
 
 	my $text = $$mentry_ref{'descr'};
+
+	$text=~s/<\/?\w[^>]*>//g;
 
 	$text.=$trange if $options{'displaytime'};
 	
@@ -725,14 +756,40 @@ sub _renderText {
 				: $sub;
 		$nt .='<br/>' unless $l==$rs-1;
 	}	
-	$text=$nt;
+	$text='<noautolink>'.$nt.'</noautolink>';
 
 	$tddata.= $cgi->div({
-			-title=>$title, 
+			## -title=>$title, 
 			-style=>'color:'.($$mentry_ref{'fgcolor'}?$$mentry_ref{'fgcolor'}:$options{'eventfgcolor'}).';'
 			}, $text);
 
 	return ($tddata, $title);
+}
+# =========================
+sub _renderTooltip {
+	my ($mentry_ref, $day, $min, $c) = @_;
+	my $tooltip = "";
+	my ($bgcolor,$fgcolor) = ($$mentry_ref{'bgcolor'}, $$mentry_ref{'fgcolor'});
+
+	$bgcolor = $options{'eventbgcolor'} unless defined $bgcolor;
+	$fgcolor = $options{'eventfgcolor'} unless defined $fgcolor;
+
+	my $text = $options{'tooltipformat'};
+	$text=~s/\%DESCRIPTION\%/$$mentry_ref{'descr'}/sg;
+	$text=~s/\%LONGDESCRIPTION\%/$$mentry_ref{'longdescr'}/sg;
+	$text=~s/\%TIMERANGE\%/&_renderTimeRange($mentry_ref)/esg;
+
+	$tooltip.= $cgi->div(
+			{
+				-id=>"TTP_DIV_${ttid}_${day}_${min}_${c}", 
+				-style=>"visibility:hidden;position:absolute;top:0;left:0;z-index:2;font: normal 8pt sans-serif;padding: 3px; border: solid 1px; color: $fgcolor; background-color: $bgcolor;" ,
+				-onmouseover=>"ttpTooltipShow('TTP_DIV_${ttid}_${day}_${min}_${c}', 'TTP_TD_${ttid}_${day}_${min}_${c}',$options{'tooltipfixleft'},$options{'tooltipfixtop'},true);",
+				-onmouseout=>"ttpTooltipHide('TTP_DIV_${ttid}_${day}_${min}_${c}');",
+			}, 
+				$text
+			);
+
+	return $tooltip;
 }
 # =========================
 sub _renderTimeline {
