@@ -38,7 +38,8 @@ $VERSION = '$Rev: 8670$';
 # of the version number in PLUGINDESCRIPTIONS.
 $RELEASE = 'Dakar';
  
-$REVISION = '1.009'; #dro# added duration feature; added time zone abbreviations; improved performance; fixed conflict rendering bug; fixed time zone bugs (whole-time event handling, topic include)
+$REVISION = '1.010'; #dro# added tablecolumnwidth attribute requested by TWiki:Main.VickiBrown;  added tooltipformat attribute;
+#$REVISION = '1.009'; #dro# added duration feature; added time zone abbreviations; improved performance; fixed conflict rendering bug; fixed time zone bugs (whole-time event handling, topic include)
 #$REVISION = '1.008'; #dro# added timezone feature requested by TWiki:Main.BenWatts; fixed major midday/midnight (12pm/12am) bug reported by TWiki:Main.BenWatts; fixed overlapping day bug; fixed periodic event bug; fixed minor bugs (stylesheet bug: annyoing JavaScript errors; empty event row) 
 #$REVISION = '1.007'; #dro# fixed major bug (wholetimerow: empty column)
 #$REVISION = '1.006'; #dro# fixed major mod_perl bug (paging in compatmode); added whole-time row feature; fixed minor bug (empty column color; cutted text)
@@ -230,7 +231,8 @@ sub commonTagsHandler {
 
     eval {
 	    require TWiki::Plugins::TimeTablePlugin::TimeTable;
-
+             
+	    $_[0] =~ s/<\/head>/<script src="%PUBURL%\/%TWIKIWEB%\/$pluginName\/timetabletooltips.js" language="javascript" type="text\/javascript"><\/script><\/head>/is unless ($_[0]=~/timetabletooltips.js/);
 	    $_[0] =~ s/%TIMETABLE%/&TWiki::Plugins::TimeTablePlugin::TimeTable::expand("",$_[0],$_[1],$_[2])/ge;
 	    $_[0] =~ s/%TIMETABLE{(.*?)}%/&TWiki::Plugins::TimeTablePlugin::TimeTable::expand($1, $_[0], $_[1], $_[2])/ge;
 	    $_[0] =~ s/%TTCM{(.*?)}%/&TWiki::Plugins::TimeTablePlugin::TimeTable::inflate($1, $_[0],$_[1],$_[2])/ge;
