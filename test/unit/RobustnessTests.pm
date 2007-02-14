@@ -2,7 +2,7 @@
 package RobustnessTests;
 
 use base qw(TWikiTestCase);
-require 5.008;
+require 5.006;
 
 use TWiki;
 use TWiki::Sandbox;
