@@ -87,11 +87,11 @@ HERE
 Note that by convention "Perl version 5.008" is referred to as "Perl version 5.8" and "Perl 5.008004" as "Perl 5.8.4" (i.e. ignore the leading zeros after the .)
 HERE
 
-    if ( $] < 5.008 ) {
+    if ( $] < 5.006 ) {
         $n .= $this->WARN(<<HERE);
-Perl version is older than 5.8.0.
-TWiki has only been successfully tested on Perl 5.8.X,
-and there have been reports that it does not run on 5.6.and 5.5.
+Perl version is older than 5.6.0.
+TWiki has only been successfully tested on Perl 5.6.X and 5.8.X,
+and there have been reports that it does not run on 5.5.
 You will need to upgrade Perl libraries and tweak the TWiki
 code to make TWiki work on older versions of Perl
 HERE
