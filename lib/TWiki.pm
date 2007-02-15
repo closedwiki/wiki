@@ -1784,6 +1784,7 @@ sub _TOC {
     foreach my $name ( $query->param ) {
       next if ($name eq 'keywords');
       next if ($name eq 'topic');
+      next if ($name eq 'text');
       push @qparams, $name => $query->param($name);
     }
 
