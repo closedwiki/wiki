@@ -6,7 +6,7 @@ package ActionTests;
 use base qw( TWikiTestCase );
 
 use TWiki;
-use TWiki::Plugins::TestFixturePlugin::HTMLDiffer;
+use HTMLDiffer;
 
 use TWiki::Plugins::ActionTrackerPlugin::Action;
 use TWiki::Plugins::ActionTrackerPlugin::Format;
@@ -312,7 +312,7 @@ sub testVerticalOrient {
     $s =~ s/<table class=\"atp\">//;
     $s =~ s/<\/table>//;
     $s =~ s/\n//g;
-    $this->assert_str_equals("<tr class=\"atp\"><th class=\"atp\">Who</th><td class=\"atp\"><a name=\"AcTion0\" />Main.JohnDoe</td></tr><tr class=\"atp\"><th class=\"atp\">Due</th><td class=\"atp\">Sun, 2 Jun 2002</td></tr>", $s);
+    $this->assert_str_equals("<tr><th>Who</th><td><a name=\"AcTion0\" />Main.JohnDoe</td></tr><tr><th>Due</th><td><span class=\"atpOpen\">Sun, 2 Jun 2002</span></td></tr>", $s);
 }
 
 sub testHTMLFormattingOpen {
@@ -322,40 +322,40 @@ sub testHTMLFormattingOpen {
     
     my $fmt = new TWiki::Plugins::ActionTrackerPlugin::Format("", "|\$who|");
     my $s = $fmt->formatHTMLTable([$action], "name", 0, 'atp');
-    $this->assert_html_matches("<td class=\"atp\"><a name=\"AcTion0\" />Main.JohnDoe</td>", $s);
+    $this->assert_html_matches("<td><a name=\"AcTion0\" />Main.JohnDoe</td>", $s);
     $fmt = new TWiki::Plugins::ActionTrackerPlugin::Format("", "| \$due |");
     # make it late
     TWiki::Plugins::ActionTrackerPlugin::Action::forceTime("3 Jun 2002");
     $s = $fmt->formatHTMLTable([$action], "href", 0, 'atp');
-    $this->assert_html_matches("<td class=\"atp\"> <span class=\"atpWarn\">Sun, 2 Jun 2002</span> </td>", $s);
+    $this->assert_html_matches("<td> <span class=\"atpWarn\">Sun, 2 Jun 2002</span> </td>", $s);
     
     # make it ontime
     TWiki::Plugins::ActionTrackerPlugin::Action::forceTime("1 Jun 2002");
     $fmt = new TWiki::Plugins::ActionTrackerPlugin::Format("", "| \$due |", "");
     $s = $fmt->formatHTMLTable([$action], "href", 0, 'atp');
-    $this->assert_html_matches("<td class=\"atp\"> Sun, 2 Jun 2002 </td>", $s);
+    $this->assert_html_matches("<td> <span class=\"atpOpen\">Sun, 2 Jun 2002</span>  </td>", $s);
     
     # Make it late again
     TWiki::Plugins::ActionTrackerPlugin::Action::forceTime("3 Jun 2002");
     $fmt = new TWiki::Plugins::ActionTrackerPlugin::Format("", "| \$state |", "");
     $s = $fmt->formatHTMLTable([$action], "href", 0, 'atp');
-    $this->assert_html_matches("<td class=\"atp\"> open </td>", $s );
+    $this->assert_html_matches("<td> open </td>", $s );
     
     $fmt = new TWiki::Plugins::ActionTrackerPlugin::Format("", "| \$notify |");
     $s = $fmt->formatHTMLTable([$action], "href", 0, 'atp');
-    $this->assert_html_matches("<td class=\"atp\"> Main.SamPeckinpah, Main.QuentinTarantino, Main.DavidLynch </td>", $s );
+    $this->assert_html_matches("<td> Main.SamPeckinpah, Main.QuentinTarantino, Main.DavidLynch </td>", $s );
     
     $fmt = new TWiki::Plugins::ActionTrackerPlugin::Format("", "| \$uid |");
     $s = $fmt->formatHTMLTable([$action], "href", 0, 'atp');
-    $this->assert_html_matches("<td class=\"atp\"> &nbsp; </td>", $s );
+    $this->assert_html_matches("<td> &nbsp; </td>", $s );
 
     $fmt = new TWiki::Plugins::ActionTrackerPlugin::Format("", "| \$creator |", "");
     $s = $fmt->formatHTMLTable([$action], "href", 0, 'atp');
-    $this->assert_html_matches("<td class=\"atp\"> Main.ThomasMoore </td>", $s );
+    $this->assert_html_matches("<td> Main.ThomasMoore </td>", $s );
     
     $fmt = new TWiki::Plugins::ActionTrackerPlugin::Format("", "| \$created |", "");
     $s = $fmt->formatHTMLTable([$action], "href", 0, 'atp');
-    $this->assert_html_matches("<td class=\"atp\"> Fri, 1 Jan 1999 </td>", $s );
+    $this->assert_html_matches("<td> Fri, 1 Jan 1999 </td>", $s );
     
     $fmt = new TWiki::Plugins::ActionTrackerPlugin::Format("", "| \$edit |", "");
     my $url = "$TWiki::cfg{DefaultUrlHost}$TWiki::cfg{ScriptUrlPath}/edit$TWiki::cfg{ScriptSuffix}/Test/Topic\\?skin=action,pattern;atp_action=AcTion0;t=";
@@ -367,31 +367,32 @@ sub testHTMLFormattingOpen {
     $fmt = new TWiki::Plugins::ActionTrackerPlugin::Format("", "| \$edit |", "");
     $s = $fmt->formatHTMLTable([$action], "href", 1, 'atp');
     $this->assert_not_null($s);
-    $this->assert($s =~ m(<td class="atp">\s*<a (.*?)>edit</a>\s*</td>), $s);
-    $this->assert_matches(qr/href="$url\d+"/, $1);
-    $this->assert_matches(qr/onclick="return editWindow\('$url\d+'\)"/, $1);
+    $this->assert($s =~ m(<td>\s*<a (.*?)>edit</a>\s*</td>), $s);
+    my $x = $1;
+    $this->assert_matches(qr/href="$url\d+"/, $x);
+    $this->assert_matches(qr/onclick="return editWindow\('$url\d+'\)"/, $x);
 
     $fmt = new TWiki::Plugins::ActionTrackerPlugin::Format("", "| \$web.\$topic |", "");
     $s = $fmt->formatHTMLTable([$action], "href", 0, 'atp');
     $this->assert_not_null($s);
-    $this->assert_html_matches('<td class="atp"> Test.Topic </td>', $s );
+    $this->assert_html_matches('<td> Test.Topic </td>', $s );
     
     $fmt = new TWiki::Plugins::ActionTrackerPlugin::Format("", "| \$text |", "");
     $s = $fmt->formatHTMLTable([$action], "href", 0, 'XXX');
-    $this->assert_html_matches('<td class="XXX"> A new action <a href="{*.*?*}/Test/Topic#AcTion0">(go to action)</a> </td>', $s );
+    $this->assert_html_matches('<td> A new action <a href="{*.*?*}/Test/Topic#AcTion0">(go to action)</a> </td>', $s );
     
     $fmt = new TWiki::Plugins::ActionTrackerPlugin::Format("", "| \$n\$n()\$nop()\$quot\$percnt\$dollar |", "");
     $s = $fmt->formatHTMLTable([$action], "href", 0, 'atp');
-    $this->assert_html_matches("<td class=\"atp\"> <br /><br />\"%\$ </td>", $s );
+    $this->assert_html_matches("<td> <br /><br />\"%\$ </td>", $s );
     
     TWiki::Plugins::ActionTrackerPlugin::Action::forceTime("1 Jun 2002");
     $fmt = new TWiki::Plugins::ActionTrackerPlugin::Format("", "| \$due |", "");
     $s = $fmt->formatHTMLTable([$action], "href", 0, 'atp');
-    $this->assert_html_matches("<td class=\"atp\"> Sun, 2 Jun 2002 </td>", $s );
+    $this->assert_html_matches("<td> <span class=\"atpOpen\">Sun, 2 Jun 2002</span> </td>", $s );
     
     $fmt = new TWiki::Plugins::ActionTrackerPlugin::Format("", "|\$who|\$creator|", "");
     $s = $fmt->formatHTMLTable([$action], "name", 0, 'atp');
-    $this->assert_html_matches("<td class=\"atp\"><a name=\"AcTion0\" />Main.JohnDoe</td><td class=\"atp\">Main.ThomasMoore</td>", $s
+    $this->assert_html_matches("<td><a name=\"AcTion0\" />Main.JohnDoe</td><td>Main.ThomasMoore</td>", $s
                               );
 }
 
@@ -401,7 +402,7 @@ sub testHTMLFormattingClose {
     my $action = TWiki::Plugins::ActionTrackerPlugin::Action->new( "Test", "Topic", 0, "who=JohnDoe due=\"2 Jun 02\" closed=\"1-Jan-03\" closer=\"LucBesson\"", "A new action");
     my $fmt = new TWiki::Plugins::ActionTrackerPlugin::Format("", "|\$closed|\$closer|", "");
     my $s = $fmt->formatHTMLTable([$action], "href", 0, 'atp');
-    $this->assert_html_matches("<td class=\"atp\">Wed, 1 Jan 2003</td><td class=\"atp\">Main.LucBesson</td>", $s );
+    $this->assert_html_matches("<td>Wed, 1 Jan 2003</td><td>Main.LucBesson</td>", $s );
 }
 
 sub testAutoPopulation {
@@ -530,7 +531,7 @@ sub testFindChanges {
     my $jane = $fmt->formatHTMLTable([$naction],"href",0, 'atpChanges');
     $this->assert_html_matches($jane, $text);
     $this->assert_html_matches("<tr class=\"atpChanges\"><td class=\"atpChanges\">who</td><td class=\"atpChanges\">Main.JohnDoe</td><td class=\"atpChanges\">Main.JaneDoe</td></tr>", $text);
-    $this->assert_html_matches("<tr class=\"atpChanges\"><td class=\"atpChanges\">due</td><td class=\"atpChanges\">Sun, 2 Jun 2002</td><td class=\"atpChanges\">Tue, 2 Jun 2009</td></tr>", $text);
+    $this->assert_html_matches("<tr class=\"atpChanges\"><td class=\"atpChanges\">due</td><td class=\"atpChanges\"><span class=\"atpOpen\">Sun, 2 Jun 2002</span></td><td class=\"atpChanges\"><span class=\"atpClosed\">Tue, 2 Jun 2009</span></td></tr>", $text);
     $this->assert_html_matches("<tr class=\"atpChanges\"><td class=\"atpChanges\">state</td><td class=\"atpChanges\">open</td><td class=\"atpChanges\">closed</td></tr>", $text);
     $this->assert_html_matches("<tr class=\"atpChanges\"><td class=\"atpChanges\">created</td><td class=\"atpChanges\">Fri, 1 Jan 1999</td><td class=\"atpChanges\"> *removed* </td></tr>", $text);
     $this->assert_html_matches("<tr class=\"atpChanges\"><td class=\"atpChanges\">creator</td><td class=\"atpChanges\"> *missing* </td><td class=\"atpChanges\">Main.ThomasMoore</td></tr>", $text);
@@ -561,19 +562,19 @@ sub testXtendTypes {
     $s = $fmt->formatStringTable([$action]);
     $this->assert_str_equals("fred.bloggs\@limp.net, Main.JoeShmoe\n", $s);
     $s = $fmt->formatHTMLTable([$action], "href", 0, 'atp');
-    $this->assert_matches(qr/<td class=\"atp\">fred.bloggs\@limp.net, Main.JoeShmoe<\/td>/, $s );
+    $this->assert_matches(qr/<td>fred.bloggs\@limp.net, Main.JoeShmoe<\/td>/, $s );
     
     $fmt = new TWiki::Plugins::ActionTrackerPlugin::Format("", "|\$decision|","","\$decision");
     $s = $fmt->formatStringTable([$action]);
     $this->assert_str_equals("cut off their heads\n", $s);
     $s = $fmt->formatHTMLTable([$action], "href", 0, 'atp');
-    $this->assert_matches(qr/<td class=\"atp\">cut off their heads<\/td>/, $s );
+    $this->assert_matches(qr/<td>cut off their heads<\/td>/, $s );
     
     $fmt = new TWiki::Plugins::ActionTrackerPlugin::Format("", "|\$sentence|","","\$sentence");
     $s = $fmt->formatStringTable([$action]);
     $this->assert_str_equals("5 years\n", $s);
     $s = $fmt->formatHTMLTable([$action], "href", 0, 'atp');
-    $this->assert_matches(qr/<td class=\"atp\">5 years<\/td>/, $s );
+    $this->assert_matches(qr/<td>5 years<\/td>/, $s );
     
     $fmt = new TWiki::Plugins::ActionTrackerPlugin::Format("", "","","\$sentencing");
     $s = $fmt->formatStringTable([$action]);
@@ -692,17 +693,17 @@ sub testFormatForEdit {
     my $fmt = new TWiki::Plugins::ActionTrackerPlugin::Format( $all, $bods, "","");
     my $s = $action->formatForEdit($fmt);
     foreach my $n (split(/\|/,$noexpand)) {
-        $this->assert($s =~ s/<th class=\"atpEdit\">$n<\/th>//, "$n in $s");
+        $this->assert($s =~ s/<th>$n<\/th>//, "$n in $s");
         $n = "\\\$" if ( $n eq "dollar" );
         $n = "<br />" if ( $n eq "n" );
         $n = "" if ( $n eq "nop" );
         $n = "%" if ( $n eq "percnt" );
         $n = "\"" if ( $n eq "quot" );
-        $this->assert($s =~ s/<td class=\"atpEdit\">$n<\/td>//s, $n.' in '.$s);
+        $this->assert($s =~ s/<td class="atpEdit">$n<\/td>//s, $n.' in '.$s);
     }
-    $this->assert($s =~ s/<th class=\"atpEdit\">state<\/th>//);
+    $this->assert($s =~ s/<th>state<\/th>//, $s);
     foreach my $n (split(/\|/,$expand)) {
-        $this->assert($s =~ s(<th class="atpEdit">$n<\/th>)(), $n);
+        $this->assert($s =~ s(<th>$n<\/th>)(), $n);
         require TWiki::Contrib::JSCalendarContrib;
         if (!$@ && ($n eq "closed" || $n eq "due" || $n eq "created")) {
             $this->assert($s =~ s(<td class="atpEdit"><input (.*?name="$n".*?)/><input (.*?)/></td>)(),$n.' in '.$s);
@@ -726,8 +727,8 @@ sub testFormatForEdit {
         }
     }
     $this->assert($s =~ s/^\s*<table class="atpEdit">//);
-    $this->assert($s =~ s/\s*<tr class="atpEdit"><\/tr>//);
-    $this->assert($s =~ s/\s*<tr class="atpEdit">//);
+    $this->assert($s =~ s/\s*<tr><\/tr>//, $s);
+    $this->assert($s =~ s/\s*<tr>//);
     $this->assert($s =~ s/\s*<td class="atpEdit">//);
     $this->assert($s =~ s/\s*<select (.*?name="state".*?)>//);
     $this->assert_matches(qr/size="1"/,$1);

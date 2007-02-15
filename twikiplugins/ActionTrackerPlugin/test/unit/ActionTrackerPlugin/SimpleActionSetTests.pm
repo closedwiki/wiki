@@ -73,27 +73,27 @@ sub testAHTable {
     my $t = $1;
     my $cmp = <<HERE;
 <table class="atp">
- <tr class="atp">
-  <th class="atp">Web</th>
-  <td class="atp">Test</td>
-  <td class="atp">Test</td>
-  <td class="atp">Test</td>
+ <tr>
+  <th>Web</th>
+  <td>Test</td>
+  <td>Test</td>
+  <td>Test</td>
  </tr>
- <tr class="atp">
-  <th class="atp">Topic</th>
-  <td class="atp">Topic</td>
-  <td class="atp">Topic</td>
-  <td class="atp">Topic</td>
+ <tr>
+  <th>Topic</th>
+  <td>Topic</td>
+  <td>Topic</td>
+  <td>Topic</td>
  </tr>
- <tr class="atp">
-  <th class="atp">Edit</th>
-  <td class="atp">
+ <tr>
+  <th>Edit</th>
+  <td>
    <a href="$sup/edit$ss/Test/Topic?skin=action,pattern;atp_action=AcTion0">edit</a>
   </td>
-  <td class="atp">
+  <td>
    <a href="$sup/edit$ss/Test/Topic?skin=action,pattern;atp_action=AcTion1">edit</a>
   </td>
-  <td class="atp">
+  <td>
    <a href="$sup/edit$ss/Test/Topic?skin=action,pattern;atp_action=AcTion2">edit</a>
   </td>
  </tr>
@@ -107,22 +107,22 @@ HERE
     $t = $1;
     $this->assert_html_equals(<<HERE, $s);
 <table class="atp">
-<tr class="atp">
-<th class="atp">Web</th>
-<td class="atp"><a name="AcTion0" />Test</td>
-<td class="atp"><a name="AcTion1" />Test</td>
-<td class="atp"><a name="AcTion2" />Test</td>
+<tr>
+<th>Web</th>
+<td><a name="AcTion0" />Test</td>
+<td><a name="AcTion1" />Test</td>
+<td><a name="AcTion2" />Test</td>
 </tr>
-<tr class="atp">
-<th class="atp">Topic</th>
-<td class="atp">Topic</td>
-<td class="atp">Topic</td>
-<td class="atp">Topic</td></tr>
-<tr class="atp">
-<th class="atp">Edit</th>
-<td class="atp"><a href="$sup/edit$ss/Test/Topic?skin=action,pattern;atp_action=AcTion0$t">edit</a></td>
-<td class="atp"><a href="$sup/edit$ss/Test/Topic?skin=action,pattern;atp_action=AcTion1$t">edit</a></td>
-<td class="atp"><a href="$sup/edit$ss/Test/Topic?skin=action,pattern;atp_action=AcTion2$t">edit</a></td></tr></table>
+<tr>
+<th>Topic</th>
+<td>Topic</td>
+<td>Topic</td>
+<td>Topic</td></tr>
+<tr>
+<th>Edit</th>
+<td><a href="$sup/edit$ss/Test/Topic?skin=action,pattern;atp_action=AcTion0$t">edit</a></td>
+<td><a href="$sup/edit$ss/Test/Topic?skin=action,pattern;atp_action=AcTion1$t">edit</a></td>
+<td><a href="$sup/edit$ss/Test/Topic?skin=action,pattern;atp_action=AcTion2$t">edit</a></td></tr></table>
 HERE
     $s = $actions->formatAsHTML( $fmt, "name", 1, 'atp' );
     $s =~ s/\n//go;
@@ -130,21 +130,21 @@ HERE
     $t = $1;
     $this->assert_html_equals(<<HERE, $s);
 <table class="atp">
-<tr class="atp">
-<th class="atp">Web</th>
-<td class="atp"><a name="AcTion0" />Test</td>
-<td class="atp"><a name="AcTion1" />Test</td>
-<td class="atp"><a name="AcTion2" />Test</td></tr>
-<tr class="atp">
-<th class="atp">Topic</th>
-<td class="atp">Topic</td>
-<td class="atp">Topic</td>
-<td class="atp">Topic</td></tr>
-<tr class="atp">
-<th class="atp">Edit</th>
-<td class="atp"><a href="$sup/edit$ss/Test/Topic?skin=action,pattern;atp_action=AcTion0$t" onclick="return editWindow('$sup/edit$ss/Test/Topic?skin=action,pattern;atp_action=AcTion0$t')">edit</a></td>
-<td class="atp"><a href="$sup/edit$ss/Test/Topic?skin=action,pattern;atp_action=AcTion1$t" onclick="return editWindow('$sup/edit$ss/Test/Topic?skin=action,pattern;atp_action=AcTion1$t')">edit</a></td>
-<td class="atp"><a href="$sup/edit$ss/Test/Topic?skin=action,pattern;atp_action=AcTion2$t" onclick="return editWindow('$sup/edit$ss/Test/Topic?skin=action,pattern;atp_action=AcTion2$t')">edit</a></td></tr></table>
+<tr>
+<th>Web</th>
+<td><a name="AcTion0" />Test</td>
+<td><a name="AcTion1" />Test</td>
+<td><a name="AcTion2" />Test</td></tr>
+<tr>
+<th>Topic</th>
+<td>Topic</td>
+<td>Topic</td>
+<td>Topic</td></tr>
+<tr>
+<th>Edit</th>
+<td><a href="$sup/edit$ss/Test/Topic?skin=action,pattern;atp_action=AcTion0$t" onclick="return editWindow('$sup/edit$ss/Test/Topic?skin=action,pattern;atp_action=AcTion0$t')">edit</a></td>
+<td><a href="$sup/edit$ss/Test/Topic?skin=action,pattern;atp_action=AcTion1$t" onclick="return editWindow('$sup/edit$ss/Test/Topic?skin=action,pattern;atp_action=AcTion1$t')">edit</a></td>
+<td><a href="$sup/edit$ss/Test/Topic?skin=action,pattern;atp_action=AcTion2$t" onclick="return editWindow('$sup/edit$ss/Test/Topic?skin=action,pattern;atp_action=AcTion2$t')">edit</a></td></tr></table>
 HERE
 }
 
@@ -162,22 +162,22 @@ sub testAVTable {
     my $t = $1;
     $this->assert_html_equals(<<HERE, $s);
 <table class="atp">
-<tr class="atp">
-<th class="atp">Web</th>
-<th class="atp">Topic</th>
-<th class="atp">Edit</th></tr>
-<tr class="atp">
-<td class="atp">Test</td>
-<td class="atp">Topic</td>
-<td class="atp"><a href="$sup/edit$ss/Test/Topic?skin=action,pattern;atp_action=AcTion0$t">edit</a></td></tr>
-<tr class="atp">
-<td class="atp">Test</td>
-<td class="atp">Topic</td>
-<td class="atp"><a href="$sup/edit$ss/Test/Topic?skin=action,pattern;atp_action=AcTion1$t">edit</a></td></tr>
-<tr class="atp">
-<td class="atp">Test</td>
-<td class="atp">Topic</td>
-<td class="atp"><a href="$sup/edit$ss/Test/Topic?skin=action,pattern;atp_action=AcTion2$t">edit</a></td></tr></table>
+<tr>
+<th>Web</th>
+<th>Topic</th>
+<th>Edit</th></tr>
+<tr>
+<td>Test</td>
+<td>Topic</td>
+<td><a href="$sup/edit$ss/Test/Topic?skin=action,pattern;atp_action=AcTion0$t">edit</a></td></tr>
+<tr>
+<td>Test</td>
+<td>Topic</td>
+<td><a href="$sup/edit$ss/Test/Topic?skin=action,pattern;atp_action=AcTion1$t">edit</a></td></tr>
+<tr>
+<td>Test</td>
+<td>Topic</td>
+<td><a href="$sup/edit$ss/Test/Topic?skin=action,pattern;atp_action=AcTion2$t">edit</a></td></tr></table>
 HERE
     $s = $actions->formatAsHTML( $fmt, "name", 0, 'atp' );
     $s =~ s/\n//go;
@@ -185,30 +185,30 @@ HERE
     $t = $1;
     $this->assert_html_equals(<<HERE, $s);
 <table class="atp">
-<tr class="atp">
-<th class="atp">Web</th>
-<th class="atp">Topic</th>
-<th class="atp">Edit</th></tr>
-<tr class="atp">
-<td class="atp">
+<tr>
+<th>Web</th>
+<th>Topic</th>
+<th>Edit</th></tr>
+<tr>
+<td>
 <a name="AcTion0" />
 Test</td>
-<td class="atp">Topic</td>
-<td class="atp">
+<td>Topic</td>
+<td>
 <a href="$sup/edit$ss/Test/Topic?skin=action,pattern;atp_action=AcTion0$t">edit</a>
 </td></tr>
-<tr class="atp">
-<td class="atp">
+<tr>
+<td>
 <a name="AcTion1" />
 Test</td>
-<td class="atp">Topic</td>
-<td class="atp"><a href="$sup/edit$ss/Test/Topic?skin=action,pattern;atp_action=AcTion1$t">edit</a></td></tr>
-<tr class="atp">
-<td class="atp">
+<td>Topic</td>
+<td><a href="$sup/edit$ss/Test/Topic?skin=action,pattern;atp_action=AcTion1$t">edit</a></td></tr>
+<tr>
+<td>
 <a name="AcTion2" />
 Test</td>
-<td class="atp">Topic</td>
-<td class="atp"><a href="$sup/edit$ss/Test/Topic?skin=action,pattern;atp_action=AcTion2$t">edit</a>
+<td>Topic</td>
+<td><a href="$sup/edit$ss/Test/Topic?skin=action,pattern;atp_action=AcTion2$t">edit</a>
 </td>
 </tr>
 </table>
@@ -219,22 +219,22 @@ HERE
     $t = $1;
     $this->assert_html_equals(<<HERE, $s);
 <table class="atp">
-<tr class="atp">
-<th class="atp">Web</th>
-<th class="atp">Topic</th>
-<th class="atp">Edit</th></tr>
-<tr class="atp">
-<td class="atp"><a name="AcTion0" />Test</td>
-<td class="atp">Topic</td>
-<td class="atp"><a href="$sup/edit$ss/Test/Topic?skin=action,pattern;atp_action=AcTion0$t" onclick="return editWindow('$sup/edit$ss/Test/Topic?skin=action,pattern;atp_action=AcTion0$t')">edit</a></td></tr>
-<tr class="atp">
-<td class="atp"><a name="AcTion1" />Test</td>
-<td class="atp">Topic</td>
-<td class="atp"><a href="$sup/edit$ss/Test/Topic?skin=action,pattern;atp_action=AcTion1$t" onclick="return editWindow('$sup/edit$ss/Test/Topic?skin=action,pattern;atp_action=AcTion1$t')">edit</a></td></tr>
-<tr class="atp">
-<td class="atp"><a name="AcTion2" />Test</td>
-<td class="atp">Topic</td>
-<td class="atp"><a href="$sup/edit$ss/Test/Topic?skin=action,pattern;atp_action=AcTion2$t" onclick="return editWindow('$sup/edit$ss/Test/Topic?skin=action,pattern;atp_action=AcTion2$t')">edit</a></td></tr></table>
+<tr>
+<th>Web</th>
+<th>Topic</th>
+<th>Edit</th></tr>
+<tr>
+<td><a name="AcTion0" />Test</td>
+<td>Topic</td>
+<td><a href="$sup/edit$ss/Test/Topic?skin=action,pattern;atp_action=AcTion0$t" onclick="return editWindow('$sup/edit$ss/Test/Topic?skin=action,pattern;atp_action=AcTion0$t')">edit</a></td></tr>
+<tr>
+<td><a name="AcTion1" />Test</td>
+<td>Topic</td>
+<td><a href="$sup/edit$ss/Test/Topic?skin=action,pattern;atp_action=AcTion1$t" onclick="return editWindow('$sup/edit$ss/Test/Topic?skin=action,pattern;atp_action=AcTion1$t')">edit</a></td></tr>
+<tr>
+<td><a name="AcTion2" />Test</td>
+<td>Topic</td>
+<td><a href="$sup/edit$ss/Test/Topic?skin=action,pattern;atp_action=AcTion2$t" onclick="return editWindow('$sup/edit$ss/Test/Topic?skin=action,pattern;atp_action=AcTion2$t')">edit</a></td></tr></table>
 HERE
 }
 
