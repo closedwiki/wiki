@@ -515,7 +515,7 @@ sub _render {
 		$colfgcolor = $options{'todayfgcolor'} if ($options{'todayfgcolor'})&&($todayDays==$startDateDays+$day);
 		$colfgcolor = '' unless defined $colfgcolor;
 
-		$tr .= $cgi->td({-style=>(($colfgcolor ne '')?"color:$colfgcolor":''), -bgcolor=>$colbgcolor,-valign=>"top", -align=>"center", -title=>&_mystrftime($yy1,$mm1,$dd1,'%A - %d %B %Y')},&_mystrftime($yy1,$mm1,$dd1));
+		$tr .= $cgi->td({-style=>(($colfgcolor ne '')?"color:$colfgcolor":''), -bgcolor=>$colbgcolor,-valign=>"top", -align=>"center", -title=>&_mystrftime($yy1,$mm1,$dd1,$options{'tooltipdateformat'})},&_mystrftime($yy1,$mm1,$dd1));
 	}
 	$tr.=$cgi->td(&_renderNav(1));
 	$text .= $cgi->Tr($tr);
