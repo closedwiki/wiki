@@ -1,5 +1,8 @@
 %META:TOPICINFO{author="TWikiContributor" date="1165927036" format="1.1" reprev="1.1" version="1.1"}%
 ---+!! Blog posts
+<form method="link" action="%SCRIPTURL{view}%/%WEB%/BlogPostCreator">
+<input type="submit" class="twikiButton" value="%MAKETEXT{"Write a new blog post"}%" />
+</form>
 
 %STARTINCLUDE%
 %INCLUDE{"BlogAddOnStyles"}%
@@ -44,7 +47,3 @@
 %SEARCH{"[T]opicType.*value\=.*(BlogPost)%IF{"defined category and $ category != ''" then=";[C]ategory.*value\=.*(%URLPARAM{"category" encode="entity" default="%category%"}%)"}%" web="%WEB%" excludetopic="*Template" type="regex" casesensitive="on" nonoise="on" format="<div class=\"blogPostAddOnItem\"><h3>[[$web.$topic#BlogPosts][$formfield(Title)]]</h3><div class=\"twikiGrayText twikiSmallish blogPostAddOnHeaderInfo\">%MAKETEXT{"[_1] by [_2] in [_3]" args="$createdate, $formfield(Author), [[%SCRIPTURL{view}%/%BASEWEB%/%BASETOPIC%?category=<nop>$formfield(Category);sort=<nop>%URLPARAM{"sort" encode="url"}%;limit=%URLPARAM{"limit"}%#BlogPosts][<nop>$formfield(Category)]], $createdate"}%</div><div class=\"blogPostAddOnSummary\">$summary</div></div>"  order="%IF{"defined sort" then="%URLPARAM{"sort" encode="url" default="%sort%"}%" else="created"}%" reverse="%IF{"defined sortdirection" then="%URLPARAM{"sortdirection" encode="url" default="%sortdirection%"}%" else=""}%" limit="%IF{"defined limit" then="%URLPARAM{"limit" encode="url" default="%limit%"}%" else="all"}%" "}%
 </div>
 %STOPINCLUDE%
-<p style="margin:3em 0 0 0;" />
-<form method="link" action="%SCRIPTURL{view}%/%WEB%/BlogPostCreator">
-<input type="submit" class="twikiButton" value="%MAKETEXT{"Write a new blog post"}%" />
-</form>

@@ -18,11 +18,11 @@ function capitalizeSentence (inText) {
 <form name="newtopic" id="newtopic" action="%SCRIPTURLPATH{edit}%/%BASEWEB%/" onsubmit="return canSubmit();">
 <div class="twikiFormSteps">
 <div class="twikiFormStep">
-*%MAKETEXT{"Title of new blog post:"}%* %BR%
+*%MAKETEXT{"Title of new blog post:"}%* %MAKETEXT{"(one or multiple words)"}% %BR%
 <input type="text" class="twikiInputField" name="Title" id="Title" size="40" />
 </div>
 <div class="twikiFormStep">
-%MAKETEXT{"*Category:* (you may choose later)"}% %BR%
+*%MAKETEXT{"Category:"}%* %MAKETEXT{"(you may choose later)"}% %BR%
 <select name="Category">
 <option>%MAKETEXT{"Select..."}%</option>
 %SEARCH{"   *\s*.*?" topic="BlogCategory" type="regex" multiple="on" casesensitive="on" nonoise="on" format="<option>$pattern(.*   \*\s*([^\n]*).*)</option>"}%
