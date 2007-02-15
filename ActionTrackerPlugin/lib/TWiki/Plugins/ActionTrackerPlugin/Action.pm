@@ -604,6 +604,14 @@ sub _formatField_due {
         } else {
             $text .= ' (LATE)';
         }
+    } else {
+        if( $asHTML ) {
+            if ($this->{state} eq 'closed') {
+              $text = CGI::span( { class=>'atpClosed' }, $text );
+            } else {
+              $text = CGI::span( { class=>'atpOpen' }, $text );
+            }
+        }
     }
 
     return $text;

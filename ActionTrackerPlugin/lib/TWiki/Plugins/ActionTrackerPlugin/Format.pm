@@ -249,7 +249,7 @@ sub formatHTMLTable {
                 $entry = CGI::a( { name=>$object->getAnchor() } ).$entry;
                 $anchored = 1;
             }
-            $entry = CGI::td( $a, $entry );
+            $entry = CGI::td($entry );
             $entry ||= '&nbsp;';
             push @cols, $entry;
         }
@@ -272,21 +272,21 @@ sub _generateHTMLTable {
     if ( $this->{ORIENTATION} eq "rows" ) {
         for ( $i = 0; $i <= $#{$this->{HEADINGS}}; $i++ ) {
             my $head = ${$this->{HEADINGS}}[$i];
-            my $row = CGI::th( $a, $head )."\n";
+            my $row = CGI::th($head )."\n";
             foreach my $col ( @$rows ) {
                 my $datum = @$col[$i];
                 $row .= $datum."\n";
             }
-            $text .= CGI::Tr( $a, $row )."\n";
+            $text .= CGI::Tr($row )."\n";
         }
     } else {
         my $row = '';
         foreach $i ( @{$this->{HEADINGS}} ) {
-            $row .= CGI::th( $a, $i);
+            $row .= CGI::th($i);
         }
-        $text .= CGI::Tr( $a, $row)."\n";
+        $text .= CGI::Tr($row)."\n";
         foreach my $r ( @$rows ) {
-            $text .= CGI::Tr($a, join( '', @$r) );
+            $text .= CGI::Tr(join( '', @$r) );
         }
     }
     $text .= CGI::end_table();

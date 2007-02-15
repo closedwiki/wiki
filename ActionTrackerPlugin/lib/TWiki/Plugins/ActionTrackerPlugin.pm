@@ -30,7 +30,7 @@ use TWiki::Plugins;
 use vars qw(
             $web $topic $user $installWeb $VERSION $RELEASE $initialised
             $allActions $useNewWindow $debug $SHORTDESCRIPTION
-            $pluginName $defaultFormat
+            $pluginName $defaultFormat $doneHeader
            );
 
 # This should always be $Rev$ so that TWiki can determine the checked-in
@@ -41,7 +41,7 @@ $VERSION = '$Rev$';
 # This is a free-form string you can use to "name" your own plugin version.
 # It is *not* used by the build automation tools, but is reported as part
 # of the version number in PLUGINDESCRIPTIONS.
-$RELEASE = '30 Jan 2007';
+$RELEASE = '15 Feb 2007';
 
 $SHORTDESCRIPTION = 'Adds support for action tags in topics, and automatic notification of action statuses';
 
@@ -64,12 +64,32 @@ sub initPlugin {
     # COVERAGE ON
 
     $initialised = 0;
+    $doneHeader = 0;
 
     return 1;
 };
 
 sub commonTagsHandler {
     my( $otext, $topic, $web ) = @_;
+
+    unless ($doneHeader) {
+      my $header = <<'HERE';
+<!-- ActionTrackerPlugin -->
+<link rel="stylesheet" href="%ACTIONTRACKERPLUGIN_CSS%" type="text/css" media="all" />
+<script type="text/javascript">
+  function editWindow(url) {
+    win=open(url,"none","titlebar=0,width=900,height=400,resizable,scrollbars");
+    if (win) {win.focus();}
+    return false;
+  }
+</script>
+<!-- /ActionTrackerPlugin -->
+HERE
+
+      if ($_[0] =~ s/<head>(.*?[\r\n]+)/<head>$1$header\n/o) {
+        $doneHeader = 1;
+      }
+    }
 
     return unless ( $_[0] =~ m/%ACTION.*{.*}%/o );
 
@@ -83,7 +103,6 @@ sub commonTagsHandler {
     my $actionNumber = 0;
     my $text = '';
     my $actionSet = undef;
-    my $headersRequired = 0;
     my $gathering;
     my $pre;
     my $attrs;
@@ -111,7 +130,6 @@ sub commonTagsHandler {
                                                 $useNewWindow,
                                                'atpDef') .
                                                  "\n";
-                    $headersRequired = 1;
                     $actionSet = undef;
                 }
                 $text .= $pre;
@@ -130,7 +148,6 @@ sub commonTagsHandler {
                   $actionSet->formatAsHTML( $defaultFormat, 'name',
                                             $useNewWindow, 'atpDef' ) .
                                               "\n";
-                $headersRequired = 1;
                 $actionSet = undef;
             }
             $text .= $line."\n";
@@ -151,10 +168,7 @@ sub commonTagsHandler {
         $text .=
           $actionSet->formatAsHTML( $defaultFormat, 'name',
                                     $useNewWindow, 'atpDef' );
-        $headersRequired = 1;
     }
-
-    _addHEADTags() if ( $headersRequired );
 
     $_[0] = $text;
     $_[0] =~ s/%ACTIONSEARCH{(.*)?}%/&_handleActionSearch($web, $1)/geo;
@@ -163,6 +177,7 @@ sub commonTagsHandler {
         $_[0] =~ s/%ACTIONNOTIFICATIONS{(.*?)}%/&_handleActionNotify($web, $1)/geo;
     }
     # COVERAGE ON
+
 }
 
 # This handler is called by the edit script just before presenting
@@ -478,7 +493,6 @@ sub _handleActionSearch {
 
     my $actions = TWiki::Plugins::ActionTrackerPlugin::ActionSet::allActionsInWebs( $web, $attrs, 0 );
     $actions->sort( $sort );
-    _addHEADTags();
     return $actions->formatAsHTML( $fmt, "href", $useNewWindow,
                                    'atpSearch' );
 }
@@ -536,26 +550,6 @@ sub _lazyInit {
     $initialised = 1;
 
     return 1;
-}
-
-# PRIVATE insert the styles and the JavaScript that opens an edit subwindow
-sub _addHEADTags {
-
-    TWiki::Func::addToHEAD(
-        'ATP_CSS',
-        '<style type="text/css" media="all">@import url("%ACTIONTRACKERPLUGIN_CSS%");</style>');
-
-    TWiki::Func::addToHEAD(
-        'ATP_JS', <<'HERE'
-<script type="text/javascript">
-function editWindow(url) {
-  win=open(url,"none","titlebar=0,width=900,height=400,resizable,scrollbars");
-  if (win) {win.focus();}
-  return false;
-}
-</script>
-HERE
-                    );
 }
 
 # PRIVATE return formatted actions that have changed in all webs
