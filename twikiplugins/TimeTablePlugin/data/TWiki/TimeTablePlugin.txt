@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1171463624" format="1.0" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1171555159" format="1.0" version="$Rev$"}%
 ---+!! <nop>%TOPIC%
 The <nop>%TOPIC% handles the tag =%<nop>TIMETABLE%= and creates a weekly timetable. 
 The timetable is rendered with HTML tables and should work with all modern web browsers.
@@ -109,9 +109,10 @@ Example: %<nop>TIMETABLE{lang="Deutsch" timeinterval="15" }%
 | tableheadercolor | color of the table header | tableheadercolor="%<nop>WEBBGCOLOR%" |
 | todaybgcolor | highlight today column with a background color | todaybgcolor="black" |
 | todayfgcolor | highlight today column with a foreground color | todayfgcolor="white" | 
+| tooltipdateformat| tooltip date format (for %<nop>DATE% substition of tooltipformat); a subset of strftime conversion specifiers is supported (only date not time specifiers; see manual page or TWiki:Codev.ConvergeDateTimeFormattingModels) | tooltipdateformat="%y/%d/%m" |
 | tooltipfixleft | positive or negative offset from the left to fix tooltip position | tooltipfixleft="-163" | 
 | tooltipfixtop | positive or negative offset from the top to fix tooltip position | tooltipfixtop="0" |
-| tooltipformat | format of a tooltip (substituted variables: %TIMERANGE% - time range, %DESCRIPTION% - description field, %LONGDESCRIPTION% - complete entry) | tooltipformat="%TIMERANGE%&lt;br/&gt;%DESCRIPTION% " |
+| tooltipformat | format of a tooltip (substituted variables: %<nop>DATE% - date (see tooltipdateformat attribute), %<nop>TIMERANGE% - time range, %<nop>DESCRIPTION% - description field, %<nop>LONGDESCRIPTION% - complete entry) | tooltipformat="%<nop>DATE%%lt;br/&gt;%<nop>TIMERANGE%&lt;br/&gt; %<nop>DESCRIPTION% " |
 | weekendbgcolor | highlight weekends with a column background color | weekendbgcolor="%<nop>WEBBGCOLOR%" |
 | weekendfgcolor | highlight weekends with a column foreground color | weekendfgcolor="black" |
 | wholetimerowpos | whole-time event row position (default: top), allowed values: top, bottom, both | wholetimerowpos="top" |
