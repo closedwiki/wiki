@@ -380,7 +380,7 @@ The mechanism for defining notification groups as lists of "Email" lines in a to
 |  Plugin Author: | TWiki:Main/CrawfordCurrie, http://c-dot.co.uk |
 |  Plugin Version: | %$VERSION% |
 |  Change History: | |
-|  12877 | putting styles.css file at the top of the html header so that skins have a chance to override the defaults; \
+|  12878 | putting styles.css file at the top of the html header so that skins have a chance to override the defaults; \
          fixed generation of css classes; \
          added aptOpen and aptClose;\
          render actions correctly in twiki lists (TWiki:Main/MichaelDaum) |
