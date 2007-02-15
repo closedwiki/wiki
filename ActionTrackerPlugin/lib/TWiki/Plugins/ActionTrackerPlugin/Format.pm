@@ -266,25 +266,25 @@ sub _generateHTMLTable {
     my ( $this, $rows, $class ) = @_;
     my $a = {};
     $a->{class} = $class if $class;
-    my $text = CGI::start_table( $a )."\n";
+    my $text = CGI::start_table( $a );
     my $i;
 
     if ( $this->{ORIENTATION} eq "rows" ) {
         for ( $i = 0; $i <= $#{$this->{HEADINGS}}; $i++ ) {
             my $head = ${$this->{HEADINGS}}[$i];
-            my $row = CGI::th($head )."\n";
+            my $row = CGI::th($head );
             foreach my $col ( @$rows ) {
                 my $datum = @$col[$i];
-                $row .= $datum."\n";
+                $row .= $datum;
             }
-            $text .= CGI::Tr($row )."\n";
+            $text .= CGI::Tr($row );
         }
     } else {
         my $row = '';
         foreach $i ( @{$this->{HEADINGS}} ) {
             $row .= CGI::th($i);
         }
-        $text .= CGI::Tr($row)."\n";
+        $text .= CGI::Tr($row);
         foreach my $r ( @$rows ) {
             $text .= CGI::Tr(join( '', @$r) );
         }
@@ -333,14 +333,14 @@ sub formatChangesAsHTML {
               CGI::td( $a, ' *missing* ').
                   CGI::td( $a, $newval );
         }
-        $tbl .= CGI::Tr( $a,  $row )."\n" if $row;
+        $tbl .= CGI::Tr( $a,  $row ) if $row;
     }
     if ( $tbl ne "" ) {
         return CGI::start_table( $a ).
           CGI::Tr( $a,
                   CGI::th( $a, 'Attribute').
                   CGI::th( $a, 'Old').
-                  CGI::th( $a, 'New').$tbl.CGI::end_table()."\n");
+                  CGI::th( $a, 'New').$tbl.CGI::end_table());
     }
     return $tbl;
 }
@@ -427,9 +427,9 @@ sub _formatFieldForEdit {
                  $object->{$attrname} eq $option ) {
                 push( @extras, selected => "selected" );
             }
-            $fields .= CGI::option({ value=>$option, @extras }, $option)."\n";
+            $fields .= CGI::option({ value=>$option, @extras }, $option);
         }
-        return CGI::Select( { name=>$attrname, size=>$size }, $fields )."\n";
+        return CGI::Select( { name=>$attrname, size=>$size }, $fields );
     } elsif ( $type->{type} !~ m/noload/ ) {
         my $val = _expandVar( $object, $attrname, 0 );
         my $content = '';
@@ -469,7 +469,7 @@ sub formatHidden {
 
     my $v = _expandVar( $object, $attrname, 0 );
     if ( defined( $v ) ) {
-        return CGI::hidden( { name=>$attrname, value=>$v } )."\n";
+        return CGI::hidden( { name=>$attrname, value=>$v } );
     }
     return "";
 }

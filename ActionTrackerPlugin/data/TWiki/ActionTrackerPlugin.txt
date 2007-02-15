@@ -380,9 +380,10 @@ The mechanism for defining notification groups as lists of "Email" lines in a to
 |  Plugin Author: | TWiki:Main/CrawfordCurrie, http://c-dot.co.uk |
 |  Plugin Version: | %$VERSION% |
 |  Change History: | |
-|  12876 | putting styles.css file at the top of the html header so that skins have a chance to override the defaults; \
+|  12877 | putting styles.css file at the top of the html header so that skins have a chance to override the defaults; \
          fixed generation of css classes; \
-         added aptOpen and aptClose (TWiki:Main/MichaelDaum) |
+         added aptOpen and aptClose;\
+         render actions correctly in twiki lists (TWiki:Main/MichaelDaum) |
 |  12652 | Fixes for [[http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item3446][Item3446]], [[http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item2127][Item2127]]. Updates to tests and templates for recent core changes. |
 |  11556 | QBE topic made much friendlier using TWiki-4 features; minor bugfixes |
 |  10919 | <a href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item2606'>Item2606</a>  actionnotify can now read email addresses from password manager as well as new TWiki4 style user topics. actionnotify requires TWiki-4.0.4 + hotfix-4.0.4-1 |
