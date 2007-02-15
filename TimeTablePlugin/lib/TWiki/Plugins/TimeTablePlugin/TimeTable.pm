@@ -192,9 +192,10 @@ sub _initDefaults {
 		timezone => 0,
 		timezoneabbr => undef,
 		tablecolumnwidth => undef,
-		tooltipformat => '%TIMERANGE%<br/>%DESCRIPTION% ',
+		tooltipformat => '%DATE%<br/>%TIMERANGE%<br/> %DESCRIPTION% ',
 		tooltipfixleft=>-163,
 		tooltipfixtop=>0,
+		tooltipdateformat => '%y/%d/%m',
 	);
 
 	@renderedOptions = ('tablecaption', 'name' , 'navprev', 'navnext', 'wholetimerowtext');
@@ -549,8 +550,8 @@ sub _render {
 				foreach my $wtentry_ref ( @{$wtentries} ) {
 					$counter++;
 					my ($text, $title) = &_renderText($wtentry_ref, 1, 0);
-					$tooltips .= &_renderTooltip($wtentry_ref, $day, 'W', $counter);
-					$tooltips .= &_renderTooltip($wtentry_ref, $day, 'W2', $counter) if $options{'wholetimerow'} && ($options{'wholetimerowpos'}=~m/^(bottom|both)$/i);
+					$tooltips .= &_renderTooltip($wtentry_ref, $day, 'W', $counter, $yy1, $mm1, $dd1);
+					$tooltips .= &_renderTooltip($wtentry_ref, $day, 'W2', $counter, $yy1,$mm1,$dd1) if $options{'wholetimerow'} && ($options{'wholetimerowpos'}=~m/^(bottom|both)$/i);
 					$itr.=$cgi->Tr($cgi->td({-nowrap=>"nowrap",
 							-valign=>"top",
 							-bgcolor=>$$wtentry_ref{'bgcolor'}?$$wtentry_ref{'bgcolor'}:$options{eventbgcolor},
@@ -590,7 +591,7 @@ sub _render {
 					$rs= &_getEntryRows($mentry_ref, $min, $starttime, $endtime, $options{'timeinterval'});
 
 					my ($text,$title) = &_renderText($mentry_ref, $rs, $fillRows);
-					$tooltips .= &_renderTooltip($mentry_ref, $day, $min, $counter);
+					$tooltips .= &_renderTooltip($mentry_ref, $day, $min, $counter, $yy1,$mm1,$dd1);
 					$itr.=$cgi->td({-nowrap=>"nowrap",
 							-valign=>"top",
 							-bgcolor=>$$mentry_ref{'bgcolor'}?$$mentry_ref{'bgcolor'}:$options{eventbgcolor},
@@ -767,7 +768,7 @@ sub _renderText {
 }
 # =========================
 sub _renderTooltip {
-	my ($mentry_ref, $day, $min, $c) = @_;
+	my ($mentry_ref, $day, $min, $c,$yy,$mm,$dd) = @_;
 	my $tooltip = "";
 	my ($bgcolor,$fgcolor) = ($$mentry_ref{'bgcolor'}, $$mentry_ref{'fgcolor'});
 
@@ -778,6 +779,7 @@ sub _renderTooltip {
 	$text=~s/\%DESCRIPTION\%/$$mentry_ref{'descr'}/sg;
 	$text=~s/\%LONGDESCRIPTION\%/$$mentry_ref{'longdescr'}/sg;
 	$text=~s/\%TIMERANGE\%/&_renderTimeRange($mentry_ref)/esg;
+	$text=~s/\%DATE\%/&_mystrftime($yy,$mm,$dd,$options{'tooltipdateformat'})/esg;
 
 	$tooltip.= $cgi->div(
 			{
