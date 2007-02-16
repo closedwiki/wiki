@@ -30,10 +30,6 @@ package TWiki::Access;
 use strict;
 use Assert;
 
-sub TRACE {
-    return 0; # return 1 to enable tracing; done this way to allow perl to optimise it out
-}
-
 =pod
 
 ---++ ClassMethod new()
@@ -91,12 +87,11 @@ sub checkAccessPermission {
 
     undef $this->{failure};
 
-    print STDERR "Check $mode access ", $user->stringify()," to ", ($web||'undef'), '.', ($topic||'undef'),"\n"
-      if TRACE;
+    #print STDERR "Check $mode access ", $user->stringify()," to ", ($web||'undef'), '.', ($topic||'undef'),"\n";
 
     # super admin is always allowed
     if( $user->isAdmin() ) {
-        print STDERR $user->stringify() . " - ADMIN\n" if TRACE;
+        #print STDERR $user->stringify() . " - ADMIN\n";
         return 1;
     }
 
@@ -126,7 +121,7 @@ sub checkAccessPermission {
         if( $denyText =~ /\S$/ ) {
             if( $user->isInList( $denyText )) {
                 $this->{failure} = $this->{session}->{i18n}->maketext('access denied on topic');
-                print STDERR $this->{failure},"\n" if TRACE;
+                #print STDERR $this->{failure},"\n";
                 return 0;
             }
         } else {
@@ -137,9 +132,9 @@ sub checkAccessPermission {
     }
 
     # Check ALLOWTOPIC. If this is defined the user _must_ be in it
-    if( defined( $allowText ) ) {
+    if( defined( $allowText ) && $allowText =~ /\S/ ) {
         if( $user->isInList( $allowText )) {
-            print STDERR "in ALLOWTOPIC\n" if TRACE;
+            #print STDERR "in ALLOWTOPIC\n";
             return 1;
         }
         $this->{failure} = $this->{session}->{i18n}->maketext('access not allowed on topic');
@@ -154,7 +149,7 @@ sub checkAccessPermission {
           $prefs->getWebPreferencesValue( 'DENYWEB'.$mode, $web );
         if( defined( $denyText ) && $user->isInList( $denyText )) {
             $this->{failure} = $this->{session}->{i18n}->maketext('access denied on web');
-            print STDERR $this->{failure},"\n" if TRACE;
+            #print STDERR $this->{failure},"\n";
             return 0;
         }
     }
@@ -163,10 +158,10 @@ sub checkAccessPermission {
     # ALLOWTOPIC, the user _must_ be in it.
     $allowText = $prefs->getWebPreferencesValue( 'ALLOWWEB'.$mode, $web );
 
-    if( defined( $allowText ) ) {
+    if( defined( $allowText ) && $allowText =~ /\S/ ) {
         unless( $user->isInList( $allowText )) {
             $this->{failure} = $this->{session}->{i18n}->maketext('access not allowed on web');
-            print STDERR $this->{failure},"\n" if TRACE;
+            #print STDERR $this->{failure},"\n";
             return 0;
         }
     }
@@ -177,7 +172,7 @@ sub checkAccessPermission {
           $prefs->getPreferencesValue( 'DENYROOT'.$mode, $web );
         if( defined( $denyText ) && $user->isInList( $denyText )) {
             $this->{failure} = $this->{session}->{i18n}->maketext('access denied on root');
-            print STDERR $this->{failure},"\n" if TRACE;
+            #print STDERR $this->{failure},"\n";
             return 0;
         }
 
@@ -186,17 +181,15 @@ sub checkAccessPermission {
         if( defined( $allowText ) && $allowText =~ /\S/ ) {
             unless( $user->isInList( $allowText )) {
                 $this->{failure} = $this->{session}->{i18n}->maketext('access not allowed on root');
-                print STDERR $this->{failure},"\n" if TRACE;
+                #print STDERR $this->{failure},"\n";
                 return 0;
             }
         }
     }
 
-    if (TRACE) {
-        print STDERR "OK, permitted\n";
-        print STDERR "ALLOW: $allowText\n" if defined $allowText;
-        print STDERR "DENY: $denyText\n" if defined $denyText;
-    }
+    #print STDERR "OK, permitted\n";
+    #print STDERR "ALLOW: $allowText\n" if defined $allowText;
+    #print STDERR "DENY: $denyText\n" if defined $denyText;
     return 1;
 }
 

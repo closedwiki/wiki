@@ -263,47 +263,6 @@ THIS
     $this->DENIED($testWeb,$testTopic,"view",$MrBlue);
 }
 
-sub test_allowtopicnone {
-    my $this = shift;
-    $twiki->{store}->saveTopic( $currUser, $testWeb, $testTopic,
-                                <<THIS
-If ALLOWTOPIC is set to empty
-   1. admins are PERMITTED
-   2. everyone else is DENIED
-\t* Set ALLOWTOPICVIEW = 
-THIS
-                                , undef);
-    $twiki->finish();
-    $twiki = new TWiki();
-    $this->PERMITTED($testWeb,$testTopic,"VIEW",$TWiki::cfg{SuperAdminGroup});
-    $this->DENIED($testWeb,$testTopic,"VIEW",$MrOrange);
-    $this->DENIED($testWeb,$testTopic,"VIEW",$MrGreen);
-    $this->DENIED($testWeb,$testTopic,"VIEW",$MrYellow);
-    $this->DENIED($testWeb,$testTopic,"VIEW",$MrWhite);
-    $this->DENIED($testWeb,$testTopic,"view",$MrBlue);
-}
-
-sub test_allowwebnone {
-    my $this = shift;
-    $twiki->{store}->saveTopic(
-        $currUser, $testWeb, $TWiki::cfg{WebPrefsTopicName},
-        <<THIS
-If ALLOWWEB is set to empty
-    * admins will be PERMITTED
-    * everyone else will be DENIED
-\t* Set ALLOWWEBVIEW = 
-THIS
-                                , undef);
-    $twiki->finish();
-    $twiki = new TWiki();
-    $this->PERMITTED($testWeb,$testTopic,"VIEW",$TWiki::cfg{SuperAdminGroup});
-    $this->DENIED($testWeb,$testTopic,"VIEW",$MrOrange);
-    $this->DENIED($testWeb,$testTopic,"VIEW",$MrGreen);
-    $this->DENIED($testWeb,$testTopic,"VIEW",$MrYellow);
-    $this->DENIED($testWeb,$testTopic,"VIEW",$MrWhite);
-    $this->DENIED($testWeb,$testTopic,"view",$MrBlue);
-}
-
 sub checkText {
     my ($this, $text, $meta) = @_;
 
