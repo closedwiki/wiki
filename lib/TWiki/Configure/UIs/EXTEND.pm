@@ -142,11 +142,12 @@ MESS
         my $ef = $this->_findTarget($file);
         if (-e $ef && !-d $ef && !-w $ef) {
             print $this->ERROR("No permission to write to $ef");
+            die "Installation terminated";
         } elsif (!-d $ef) {
             unless (File::Copy::move("$dir/$file", $ef)) {
                 print $this->ERROR("Failed to move file '$file' to $ef: $!");
+                die "Installation terminated";
             };
-            die "$@ on $ef" if $@;
         }
     }
 
@@ -211,7 +212,7 @@ sub _findTarget {
     } elsif ($file =~ s#^pub/#$TWiki::cfg{PubDir}/#) {
     } elsif ($file =~ s#^templates/#$TWiki::cfg{TemplateDir}/#) {
     } elsif ($file =~ s#^locale/#$TWiki::cfg{LocalesDir}/#) {
-    } elsif ($file =~ s#^(bin/\w+)$#$1$TWiki::cfg{ScriptSuffix}#) {
+    } elsif ($file =~ s#^(bin/\w+)$#$this->{root}$1$TWiki::cfg{ScriptSuffix}#) {
     } else {
         $file = File::Spec->catfile($this->{root}, $file);
     }
