@@ -7,12 +7,12 @@
 #include <pcre.h>
 #include <stdio.h>
 #include <string.h>
+#include <errno.h>
 
 #define DATABUFSIZE  4192
 #define ERRBUFSIZE   256
 #define MATCHBUFSIZE 1
 
-extern int errno;
 
 /* Copy the static match buffer into heap memory, resizing as required */
 char** _backup(int mc, char** m, char** r) {
