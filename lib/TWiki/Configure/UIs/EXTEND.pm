@@ -151,7 +151,7 @@ MESS
         }
     }
 
-    if (-e $installScript) {
+    if ($installScript && -e $installScript) {
         # invoke the installer script.
         # SMELL: Not sure yet how to handle
         # interaction if the script ignores -a. At the moment it
