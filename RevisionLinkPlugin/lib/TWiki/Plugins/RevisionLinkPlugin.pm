@@ -42,7 +42,7 @@ use vars qw( $VERSION $RELEASE $debug $pluginName );
 # This should always be $Rev$ so that TWiki can determine the checked-in
 # status of the plugin. It is used by the build automation tools, so
 # you should leave it alone.
-$VERSION = '$Rev$';
+$VERSION = '2.1 ($Rev$)';
 
 # This is a free-form string you can use to "name" your own plugin version.
 # It is *not* used by the build automation tools, but is reported as part
@@ -132,7 +132,7 @@ sub commonTagsHandler
   # This is the place to define customized tags and variables
   # Called by sub handleCommonTags, after %INCLUDE:"..."%
 
-  $_[0] =~ s/%REV[{\[](.*)[}\]]%/&handleRevision($1, $_[1], $_[2])/geo;
+  $_[0] =~ s/%REV[{\[](.*?)[}\]]%/&handleRevision($1, $_[1], $_[2])/geo;
 }
 
 sub handleRevision {
