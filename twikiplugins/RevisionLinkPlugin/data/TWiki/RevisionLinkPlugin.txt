@@ -69,8 +69,9 @@ Plugin settings are stored as preferences variables. The following variables are
 |  Plugin Author: | TWiki:Main.RichardBaar, TWiki:Main.KennethLavrsen |
 |  Copyright: | &copy; 2003 TWiki:Main.RichardBaar, 2006 TWiki:Main.KennethLavrsen |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 18 May 2006 (2.0 - SVN 10228) |
+|  Plugin Version: | %$VERSION%  |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  16 Feb 2007 (2.1)<br />SVN $Rev$ | TWiki:Main.KennethLavrsen<br />Fixed bug when having more than one REV tag in same topic |
 |  18 May 2006 (2.0)<br />SVN 10228 | TWiki:Main.KennethLavrsen<br />updated plugin to Dakar while maintaining Cairo compatibility.<br />Enhanced the syntax robustness.<br />Fixed some rendering errors when plugin was used several times on same topic.<br />Fixed the plugin so only official API is used. |
 |  27 Aug 2003 (1.11) | Repaired link when "web" attribute specified |
 |  14 Aug 2003 (1.1) | You can specify revision only with one number (ex. %<nop>REV{"5"}%)<br>You can use negative numbers for revision (ex. %<nop>REV{"-2"}%)<br>Enhanced syntax (added characters *[* and *'*)<br>Added variables $date, $user and $comment to format attribute |
