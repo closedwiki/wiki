@@ -2,7 +2,7 @@
 %META:TOPICPARENT{name="ManagingUsers"}%
 ---+ Bulk Registration
 
-The %MAINWEB%.TWikiAdminGroup can use %TOPIC% to register (i.e. create logins and UserTopics) for a group of people quickly. 
+Administrators can use this topic to register (i.e. create logins and UserTopics) for a group of people quickly. 
 Create a table in the REGISTERTOPIC named below, setting each row to represent each user and each column to correspond to the metadata.
 Then press the button on this page to perform registration for those users. 
 Unlike normal registration the administrator is assumed to have correct e-mail addresses for the users, so no verification is required.
@@ -49,7 +49,7 @@ To use this:
 Notes:
    1 The first row of the table dictates the heading format and that the fieldnames must be plain, i.e. *must not contain bolded* entries.
    2 You are responsible for ensuring that the fieldnames appear in the [[%MAINWEB%.UserForm]]
-   3 Only members of the %MAINWEB%.TWikiAdminGroup can run this.
+   3 Only administrators can run this.
 
 <form name="bulkRegister" action="%SCRIPTURLPATH{"manage"}%/%REGISTERTOPIC%" method="post">
 <input type="hidden" name="action" value="bulkRegister" />&nbsp;<input type="submit" class="twikiSubmit" value="Bulk Register these people" />

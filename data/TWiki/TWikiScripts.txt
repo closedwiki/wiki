@@ -184,7 +184,7 @@ Reset the password for a single or multiple users
 | =LoginName= | *list* of usernames to reset | none - error if not set |
 | =Introduction= | message to be sent alongside the reset, most often used to announce to the user that they have been given an account.  | '' |
 
-This is used by BulkResetPassword and ResetPassword. Only users belonging to the %MAINWEB%.TWikiAdminGroup can provide a list of LoginNames, non-admins can only provide a single LoginName. 
+This is used by BulkResetPassword and ResetPassword. Only administrators can provide a list of LoginNames, non-admins can only provide a single LoginName. 
 
 BulkRegistration provides the means to create multiple accounts but it does not announce those accounts to the users who own them. BulkResetPassword is used to assign the passwords, the Introduction is used to explain why they are receiving the mail.
 
@@ -228,8 +228,8 @@ The =save= script performs a range of save-related functions, as selected by the
 | =action_preview= | preview edited text | |
 | =action_addform= | Redirect to the "change form" page. | |
 | =action_replaceform...= | Redirect to the "change form" page. | |
-| =action_delRev= | *Administrators only* delete the most recent revision of the topic - all other parameters are ignored. You have to be a member of %MAINWEB%.TWikiAdminGroup to use this, and not all store implementations will support it. | |
-| =action_repRev= | *Administrators only* replace the text of the most recent revision of the topic with the text in the =text= parameter. =text= must included embedded meta-data tags. All other parameters are ignored. You have to be a member of %MAINWEB%.TWikiAdminGroup to use this, and not all store implementations will support it. | |
+| =action_delRev= | *Administrators only* delete the most recent revision of the topic - all other parameters are ignored. You have to be an administrator to use this, and not all store implementations will support it. | |
+| =action_repRev= | *Administrators only* replace the text of the most recent revision of the topic with the text in the =text= parameter. =text= must included embedded meta-data tags. All other parameters are ignored. You have to be an administrator to use this, and not all store implementations will support it. | |
 | =onlynewtopic= | If set, error if topic already exists | |
 | =onlywikiname= | If set, error if topic name is not a WikiWord | |
 | =dontnotify= | if defined, suppress change notification | |

@@ -169,7 +169,7 @@ The following variables get expanded when a user creates a new topic based on a 
 <verbatim>
 %STARTSECTION{type="templateonly"}%
 This template can only be changed by:
-   * Set ALLOWTOPICCHANGE = %MAINWEB%.TWikiAdminGroup
+   * Set ALLOWTOPICCHANGE = %MAINWEB%.TechnicalAuthorsGroup
 %ENDSECTION{type="templateonly"}%
 </verbatim>
 This will restrict who can edit the template topic, but will get removed when a new topic based on that template topic is created.

@@ -363,7 +363,7 @@ The standard webs shipped with this release have these settings disabled. Howeve
    * #Set ALLOWWEBVIEW =
    * _etc_
 
-%RED%Note:%ENDCOLOR% For security reasons, the [[Trash.WebHome][Trash]] web is shipped with =ALLOWWEBVIEW= set to %MAINWEB%.TWikiAdminGroup.
+%RED%Note:%ENDCOLOR% For security reasons, the [[Trash.WebHome][Trash]] web is shipped with =ALLOWWEBVIEW= set to empty (so it is only viewable by admins).
 
 ---++++ Site Permissions Overview
 

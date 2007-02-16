@@ -15,10 +15,10 @@ These settings override the defaults for this web only. See [[%TWIKIWEB%.TWikiPr
    * Set SITEMAPUSETO = ...get rid of unused stuff.
    * Set NOSEARCHALL = on
 
-   * Restricted to %MAINWEB%.TWikiAdminGroup so that deleted topics can't be viewed by spies.
-      * Set ALLOWWEBVIEW = %MAINWEB%.TWikiAdminGroup
-      * Set ALLOWTOPICCHANGE = %MAINWEB%.TWikiAdminGroup
-      * Set ALLOWTOPICRENAME = %MAINWEB%.TWikiAdminGroup
+   * Restricted to adminsso that deleted topics can't be viewed by spies.
+      * Set ALLOWWEBVIEW = 
+      * Set ALLOWTOPICCHANGE = 
+      * Set ALLOWTOPICRENAME = 
 
    * Set FINALPREFERENCES = NOSEARCHALL, ATTACHFILESIZELIMIT, WIKIWEBMASTER, WEBCOPYRIGHT, WEBTOPICLIST, DENYWEBVIEW, ALLOWWEBVIEW, DENYWEBCHANGE, ALLOWWEBCHANGE, DENYWEBRENAME, ALLOWWEBRENAME
 

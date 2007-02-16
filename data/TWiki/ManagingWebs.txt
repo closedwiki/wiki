@@ -7,7 +7,7 @@ _Adding, renaming and deleting webs are all web-based operations._
 
 ---++ Overview
 
-A TWikiSite is divided into webs; each one represents one subject, one area of collaboration. Administrators (in the %MAINWEB%.TWikiAdminGroup) can add/rename/delete webs.
+A TWikiSite is divided into webs; each one represents one subject, one area of collaboration. Administrators can add/rename/delete webs.
 
 #WebTemplate
 ---++ Choose Web Template
