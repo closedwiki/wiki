@@ -3,17 +3,23 @@
 <!--
 Interactive lookup
 
-   * Set CLASS = %URLPARAM{"class" default="Web Site"}%
+   * Set CLASS = %URLPARAM{"class" default=".*"}%
 -->
 <div class="twikiPageForm">
 <form name="chooser" action="%SCRIPTURL{"view"}%/%WEB%/%TOPIC%" method="get">
 <h3>Active Items for
 <select name="class" onchange="chooser.submit()">
 %STARTSECTION{form_options}%
-<option %IF{"$class='Web Site'" then="selected"}%>Web Site</option>
-<option %IF{"$class='Main Product'" then="selected"}%>Main Product</option>
-<option %IF{"$class='User Manual'" then="selected"}%>User Manual</option>
-<option %IF{"$class='Another Product'" then="selected"}%>Another Product</option>
+<option %IF{"not defined $class" else="selected"}% >.*</option>
+%SEARCH{ 
+    "^\|[^\|]*\| *option *\|" 
+    topic="%TOPIC%" 
+    type="regex" 
+    multiple="on" 
+    nosearch="on" 
+    nototal="on" 
+    format="<option $percntIF{\"$class='$pattern(^\| *(.*?) *\|.*)'\" then=\"selected\"}$percnt >$pattern(^\| *(.*?) *\|.*)</option>" 
+}%
 %ENDSECTION{form_options}%
 </select>
 </h3>
