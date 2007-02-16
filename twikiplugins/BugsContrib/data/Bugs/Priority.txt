@@ -2,17 +2,23 @@
 <!--
 Interactive lookup
 
-   * Set PRIORITY = %URLPARAM{"priority" default="Enhancement|Low|Normal|Urgent"}%
+   * Set PRIORITY = %URLPARAM{"priority" default=".*"}%
 -->
 <div class="twikiPageForm">
 <form name="chooser" action="%SCRIPTURL{"view"}%/%WEB%/%TOPIC%" method="get">
 <h3>Active Items with Priority
 <select name="priority" onchange="chooser.submit()">
 %STARTSECTION{form_options}%
-<option %IF{"$priority='Enhancement'" then="selected"}%>Enhancement</option>
-<option %IF{"$priority='Low'" then="selected"}%>Low</option>
-<option %IF{"$priority='Normal'" then="selected"}%>Normal</option>
-<option %IF{"$priority='Urgent'" then="selected"}%>Urgent</option>
+<option %IF{"not defined $priority" else="selected"}% >.*</option>
+%SEARCH{ 
+    "^\|[^\|]*\| *option *\|" 
+    topic="%TOPIC%" 
+    type="regex" 
+    multiple="on" 
+    nosearch="on" 
+    nototal="on" 
+    format="<option $percntIF{\"$priority='$pattern(^\| *(.*?) *\|.*)'\" then=\"selected\"}$percnt >$pattern(^\| *(.*?) *\|.*)</option>" 
+}%
 %ENDSECTION{form_options}%
 </select>
 </h3>
@@ -33,11 +39,16 @@ Interactive lookup
 </div>
 
 %STARTINCLUDE%
----+++ Priority
-   * =Enhancement= means the issue describes a WIBNIF (wouldn't it be nice if)
-   * =Low= means the issue is non-critical, and is really more of an annoyance than anything else
-   * =Normal= means that this is probably a bug, but can be lived with
-   * =Urgent= means it really is a bug, and can't be lived with
+---+++ %SPACEOUT{%TOPIC%}%
+%SEARCH{ 
+    "^\|[^\|]*\| *option *\|" 
+    topic="%TOPIC%" 
+    type="regex" 
+    multiple="on" 
+    nosearch="on" 
+    nototal="on" 
+    format="   * *$pattern(^\| *(.*?) *\|.*)* - $pattern(^\|[^\|]*\| *option *\| *(.*?) *\|.*)" 
+}%
 %STOPINCLUDE%
 
 | *Name* | *Type* | *ToolTip* |
