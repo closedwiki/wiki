@@ -72,7 +72,7 @@ sub attach {
     TWiki::UI::checkMirror( $session, $webName, $topic );
 
     TWiki::UI::checkAccess( $session, $webName, $topic,
-                            'change', $session->{user} );
+                            'CHANGE', $session->{user} );
     TWiki::UI::checkTopicExists( $session, $webName, $topic,
                                  'upload files to' );
 
@@ -177,7 +177,7 @@ sub upload {
     TWiki::UI::checkTopicExists( $session, $webName, $topic, 'attach files to' );
     TWiki::UI::checkMirror( $session, $webName, $topic );
     TWiki::UI::checkAccess( $session, $webName, $topic,
-                            'change', $user );
+                            'CHANGE', $user );
 
     my ( $fileSize, $fileDate, $tmpFileName );
 

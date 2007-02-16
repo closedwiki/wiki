@@ -348,13 +348,13 @@ sub rename {
     }
 
     TWiki::UI::checkAccess( $session, $oldWeb, $oldTopic,
-                            'rename', $session->{user} );
+                            'RENAME', $session->{user} );
 
     # Has user selected new name yet?
     if( ! $newTopic || $confirm ) {
         # Must be able to view the source to rename it
         TWiki::UI::checkAccess( $session, $oldWeb, $oldTopic,
-                                'view', $session->{user} );
+                                'VIEW', $session->{user} );
         _newTopicScreen( $session,
                          $oldWeb, $oldTopic,
                          $newWeb, $newTopic,
@@ -529,7 +529,7 @@ sub _renameweb {
                        $webTopicInfo{modify}{$ref}{leaseuser} ne $user);
                 $webTopicInfo{modify}{$ref}{summary} = $refs{$ref};
                 $webTopicInfo{modify}{$ref}{access} =
-                  $security->checkAccessPermission('change', $user,
+                  $security->checkAccessPermission('CHANGE', $user,
                                                    undef, undef, $webTopic,
                                                    $webIter);
                 if(!$webTopicInfo{modify}{$ref}{access}) {
@@ -568,7 +568,7 @@ sub _renameweb {
                   if(defined($webTopicInfo{move}{$wit}{leaseuser}) &&
                        $webTopicInfo{move}{$wit}{leaseuser} ne $user);
                 $webTopicInfo{move}{$wit}{access} =
-                  $security->checkAccessPermission('rename', $user,
+                  $security->checkAccessPermission('RENAME', $user,
                                                    undef, undef, $webTopic,
                                                    $webIter);
                 $webTopicInfo{move}{$wit}{accessReason} =

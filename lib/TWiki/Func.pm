@@ -959,7 +959,7 @@ sub permissionsSet {
     my( $web ) = @_;
 
     foreach my $type qw( ALLOW DENY ) {
-        foreach my $action qw( CHANGE VIEW ) {
+        foreach my $action qw( CHANGE VIEW RENAME ) {
             my $pref = $type . 'WEB' . $action;
             my $val = getPreferencesValue( $pref, $web ) || '';
             return 1 if( $val =~ /\S/ );
@@ -1347,7 +1347,7 @@ sub saveTopicText {
     # check access permission
     unless( $ignorePermissions ||
             $session->{security}->checkAccessPermission(
-                'change', $session->{user}, undef, undef,
+                'CHANGE', $session->{user}, undef, undef,
                 $topic, $web )
           ) {
         my @plugin = caller();

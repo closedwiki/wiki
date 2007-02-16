@@ -268,7 +268,7 @@ sub readTopicRaw {
     # from the (raw) text passed
     if( $user &&
           !$this->{session}->{security}->checkAccessPermission
-            ( 'view', $user, $text, undef, $topic, $web )) {
+            ( 'VIEW', $user, $text, undef, $topic, $web )) {
         throw TWiki::AccessControlException(
             'VIEW', $user, $web, $topic,
             $this->{session}->{security}->getReason());
@@ -300,7 +300,7 @@ sub moveAttachment {
         my( $ometa, $otext ) = $this->readTopic( undef, $oldWeb, $oldTopic );
         if( $user &&
               !$this->{session}->{security}->checkAccessPermission
-                ( 'change', $user, $otext, $ometa, $oldTopic, $oldWeb )) {
+                ( 'CHANGE', $user, $otext, $ometa, $oldTopic, $oldWeb )) {
             throw TWiki::AccessControlException(
                 'CHANGE', $user, $oldWeb, $oldTopic,
                 $this->{session}->{security}->getReason());
@@ -309,7 +309,7 @@ sub moveAttachment {
         my ( $nmeta, $ntext ) = $this->readTopic( undef, $newWeb, $newTopic );
         if( $user &&
               !$this->{session}->{security}->checkAccessPermission
-                ( 'change', $user, $ntext, $nmeta, $newTopic, $newWeb )) {
+                ( 'CHANGE', $user, $ntext, $nmeta, $newTopic, $newWeb )) {
             throw TWiki::AccessControlException(
                 'CHANGE', $user, $newWeb, $newTopic,
                 $this->{session}->{security}->getReason());
@@ -378,7 +378,7 @@ sub getAttachmentStream {
 
     if( $user &&
           !$this->{session}->{security}->checkAccessPermission
-            ( 'view', $user, undef, undef, $topic, $web )) {
+            ( 'VIEW', $user, undef, undef, $topic, $web )) {
         throw TWiki::AccessControlException( 'VIEW', $user, $web, $topic,
                                              $this->{session}->{security}->getReason());
     }
@@ -457,7 +457,7 @@ sub moveTopic {
         # Note: undef $meta param will cause $otext to be parsed for meta
         if( $user &&
               !$this->{session}->{security}->checkAccessPermission
-                ( 'change', $user, $otext, undef, $oldTopic, $oldWeb )) {
+                ( 'CHANGE', $user, $otext, undef, $oldTopic, $oldWeb )) {
             throw TWiki::AccessControlException(
                 'CHANGE', $user,
                 $oldWeb, $oldTopic,
@@ -470,7 +470,7 @@ sub moveTopic {
         }
         if( $user &&
               !$this->{session}->{security}->checkAccessPermission
-                ( 'change', $user, $ntext, $nmeta, $newTopic, $newWeb )) {
+                ( 'CHANGE', $user, $ntext, $nmeta, $newTopic, $newWeb )) {
             throw TWiki::AccessControlException(
                 'CHANGE', $user, $newWeb, $newTopic,
                 $this->{session}->{security}->getReason());
@@ -593,7 +593,7 @@ sub readAttachment {
 
     if( $user &&
           !$this->{session}->{security}->checkAccessPermission
-            ( 'view', $user, undef, undef, $topic, $web )) {
+            ( 'VIEW', $user, undef, undef, $topic, $web )) {
         throw TWiki::AccessControlException(
             'VIEW', $user, $web, $topic,
             $this->{session}->{security}->getReason());
@@ -850,7 +850,7 @@ sub saveTopic {
 
     if( $user &&
           !$this->{session}->{security}->checkAccessPermission
-            ( 'change', $user, undef, undef, $topic, $web )) {
+            ( 'CHANGE', $user, undef, undef, $topic, $web )) {
 
         throw TWiki::AccessControlException(
             'CHANGE', $user, $web, $topic,
@@ -940,7 +940,7 @@ sub saveAttachment {
 
         if( $user &&
               !$this->{session}->{security}->checkAccessPermission
-                ( 'change', $user, $text, $meta, $topic, $web )) {
+                ( 'CHANGE', $user, $text, $meta, $topic, $web )) {
 
             throw TWiki::AccessControlException(
                 'CHANGE', $user, $web, $topic,
@@ -1593,7 +1593,7 @@ sub getListOfWebs {
         @webList =
           grep {
               $security->checkAccessPermission(
-                  'view', $user, undef, undef, undef, $_ )
+                  'VIEW', $user, undef, undef, undef, $_ )
           } @webList;
     }
 

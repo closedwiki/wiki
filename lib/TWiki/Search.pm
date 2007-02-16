@@ -1029,7 +1029,7 @@ sub _extractTopicInfo {
 
     $info->{allowView} =
       $session->{security}->
-        checkAccessPermission( 'view', $session->{user},
+        checkAccessPermission( 'VIEW', $session->{user},
                                $text, $meta,
                                $topic, $web );
 

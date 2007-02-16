@@ -1655,7 +1655,7 @@ sub _includeUrl {
             if( $incWeb ne $web || $incTopic ne $topic ) {
                 # CODE_SMELL: Does not account for not yet authenticated user
                 unless( $this->{security}->checkAccessPermission(
-                    'view', $this->{user}, undef, undef, $incTopic, $incWeb ) ) {
+                    'VIEW', $this->{user}, undef, undef, $incTopic, $incWeb ) ) {
                     return $this->_includeWarning( $warn, 'access_denied',
                                                    "$incWeb.$incTopic" );
                 }
@@ -1759,7 +1759,7 @@ sub _TOC {
 
     if( $web ne $defaultWeb || $topic ne $defaultTopic ) {
         unless( $this->{security}->checkAccessPermission
-                ( 'view', $this->{user}, undef, undef, $topic, $web ) ) {
+                ( 'VIEW', $this->{user}, undef, undef, $topic, $web ) ) {
             return $this->inlineAlert( 'alerts', 'access_denied',
                                        $web, $topic );
         }

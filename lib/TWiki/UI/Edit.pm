@@ -110,8 +110,8 @@ sub init_edit {
     my $topicExists  = $store->topicExists( $webName, $topic );
 
     # If you want to edit, you have to be able to view and change.
-    TWiki::UI::checkAccess( $session, $webName, $topic, 'view', $user );
-    TWiki::UI::checkAccess( $session, $webName, $topic, 'change', $user );
+    TWiki::UI::checkAccess( $session, $webName, $topic, 'VIEW', $user );
+    TWiki::UI::checkAccess( $session, $webName, $topic, 'CHANGE', $user );
 
     # Check lease, unless we have been instructed to ignore it
     # or if we are using the 10X's or AUTOINC topic name for

@@ -374,7 +374,7 @@ sub validateTopic {
    my( $session, $store, $user, $topic, $web ) = @_;
    return $store->topicExists( $web, $topic ) && 
    $session->{security}->checkAccessPermission(
-       'view', $user, undef, undef, $topic, $web );
+       'VIEW', $user, undef, undef, $topic, $web );
 }
 
 sub retrieveTopic {

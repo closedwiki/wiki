@@ -89,7 +89,7 @@ sub buildNewTopic {
 
     my $user = $session->{user};
     TWiki::UI::checkAccess( $session, $webName, $topic,
-                            'change', $user );
+                            'CHANGE', $user );
 
     my $saveOpts = {};
     $saveOpts->{minor} = 1 if $query->param( 'dontnotify' );
