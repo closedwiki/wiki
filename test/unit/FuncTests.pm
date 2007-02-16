@@ -40,7 +40,7 @@ sub tear_down {
     $this->SUPER::tear_down();
 }
 
-sub detest_web {
+sub test_web {
     my $this = shift;
 
     TWiki::Func::createWeb($testweb."Blah");
@@ -60,7 +60,7 @@ sub detest_web {
                                $TWiki::cfg{TrashWebName}.'.'.$testweb);
 }
 
-sub detest_getViewUrl {
+sub test_getViewUrl {
     my $this = shift;
 
     $TWiki::Plugins::SESSION = new TWiki();
@@ -83,7 +83,7 @@ sub detest_getViewUrl {
     $this->assert_matches(qr!/$ss/Sausages/AndMash!, $result );
 }
 
-sub detest_getScriptUrl {
+sub test_getScriptUrl {
     my $this = shift;
 
     $TWiki::Plugins::SESSION = new TWiki();
@@ -105,7 +105,7 @@ sub detest_getScriptUrl {
     $this->assert_matches(qr!/$ss/Main/AndMash!, $result );
 }
 
-sub detest_leases {
+sub test_leases {
     my $this = shift;
 
     my $testtopic = $TWiki::cfg{HomeTopicName};
@@ -146,7 +146,7 @@ sub detest_leases {
     $this->assert_equals(0,$time);
 }
 
-sub detest_attachments {
+sub test_attachments {
     my $this = shift;
 
     my $data = "\0b\1l\2a\3h\4b\5l\6a\7h";
@@ -210,7 +210,7 @@ sub detest_attachments {
     $this->assert_str_equals($data, $x);
 }
 
-sub detest_getrevinfo {
+sub test_getrevinfo {
     my $this = shift;
     my $topic = "RevInfo";
 
@@ -227,7 +227,7 @@ sub detest_getrevinfo {
     $this->assert_str_equals( "PeterRabbit", $user );
 }
 
-sub detest_moveTopic {
+sub test_moveTopic {
     my $this = shift;
     my $twiki = new TWiki();
     $TWiki::Plugins::SESSION = $twiki;
@@ -263,7 +263,7 @@ sub detest_moveTopic {
     $this->assert(TWiki::Func::topicExists( $testextra, "TargetTopic"));
 }
 
-sub detest_moveAttachment {
+sub test_moveAttachment {
     my $this = shift;
 
     my $twiki = new TWiki();
@@ -315,7 +315,7 @@ sub detest_moveAttachment {
                                                  "Name1"));
 }
 
-sub detest_workarea {
+sub test_workarea {
     my $this = shift;
 
     my $twiki = new TWiki();
@@ -326,7 +326,7 @@ sub detest_workarea {
     unlink $dir;
 }
 
-sub detest_extractParameters {
+sub test_extractParameters {
     my $this = shift;
 
     my $twiki = new TWiki();
@@ -341,7 +341,7 @@ sub detest_extractParameters {
     }
 }
 
-sub detest_w2em {
+sub test_w2em {
     my $this = shift;
     my $twiki = new TWiki();
     $TWiki::Plugins::SESSION = $twiki;
@@ -351,7 +351,7 @@ sub detest_w2em {
         $ems, TWiki::Func::wikiToEmail($twiki->{user}->wikiName()));
 }
 
-sub detest_normalizeWebTopicName {
+sub test_normalizeWebTopicName {
     my $this = shift;
     $TWiki::cfg{EnableHierarchicalWebs} = 1;
     my ($w, $t) = TWiki::Func::normalizeWebTopicName( 'Web',  'Topic' );
@@ -422,7 +422,7 @@ sub detest_normalizeWebTopicName {
     $this->assert_str_equals( 'Topic', $t );
 }
 
-sub detest_checkAccessPermission {
+sub test_checkAccessPermission {
     my $this = shift;
     my $topic = "NoWayJose";
 
@@ -480,23 +480,23 @@ sub test_GET {
 
     # First check the LWP impl
     # need a known, simple, robust URL to get
-    my $response = TWiki::Func::GET('http://www.example.com');
+    my $response = TWiki::Func::GET('http://develop.twiki.org');
     $this->assert_equals(200, $response->code());
     $this->assert_str_equals('OK', $response->message());
     $this->assert_str_equals('text/html; charset=UTF-8',
                              $response->header('content-type'));
-    $this->assert_matches(qr/Example Web Page/s, $response->content());
+    $this->assert_matches(qr/Welcome to DevelopBranch TWiki/s, $response->content());
     $this->assert(!$response->is_error());
     $this->assert(!$response->is_redirect());
 
     # Now force the braindead sockets impl
     $TWiki::Net::LWPAvailable = 0;
-    $response = TWiki::Func::GET('http://www.example.com');
+    $response = TWiki::Func::GET('http://develop.twiki.org');
     $this->assert_equals(200, $response->code());
     $this->assert_str_equals('OK', $response->message());
     $this->assert_str_equals('text/html; charset=UTF-8',
                              $response->header('content-type'));
-    $this->assert_matches(qr/Example Web Page/s, $response->content());
+    $this->assert_matches(qr/Welcome to DevelopBranch TWiki/s, $response->content());
     $this->assert(!$response->is_error());
     $this->assert(!$response->is_redirect());
 }
