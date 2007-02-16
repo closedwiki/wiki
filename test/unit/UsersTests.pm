@@ -177,8 +177,10 @@ sub testLoad {
     $n = $twiki->{users}->lookupWikiName("AaronUser");
     $this->assert_str_equals("auser", $n);
 
-    my $l = $twiki->{users}->getAllUsers();
-    my $k = join(",",map { $_->wikiName() } @$l);
+    my $i = $twiki->{users}->eachUser();
+    my @l = ();
+    while ($i->hasNext()) { push(@l, $i->next()->wikiName()) };
+    my $k = join(",",sort @l);
     $this->assert($k =~ s/^AaronUser,//,$k);
     $this->assert($k =~ s/^AttilaTheHun,//,$k);
     $this->assert($k =~ s/^BungditDin,//,$k);
@@ -214,9 +216,11 @@ sub groupFix {
 sub test_getListOfGroups {
     my $this = shift;
     $this->groupFix();
-    my $l = $twiki->{users}->getAllGroups();
-    my $k = join(',',map{$_->wikiName()} @$l);
-    $this->assert_str_equals("AmishGroup,BaptistGroup,$TWiki::cfg{SuperAdminGroup}", $k);
+    my $i = $twiki->{users}->eachGroup();
+    my @l = ();
+    while ($i->hasNext()) { push(@l, $i->next()->wikiName()) };
+    my $k = join(',', sort @l);
+    $this->assert_str_equals("AmishGroup,BaptistGroup", $k);
 }
 
 sub test_groupMembers {
@@ -224,13 +228,18 @@ sub test_groupMembers {
     $this->groupFix();
     my $g = $twiki->{users}->findUser("AmishGroup");
     $this->assert($g->isGroup());
-    my $l = $g->groupMembers();
-    my $k = join(',',map{$_->wikiName()} @$l);
+    my $i = $g->eachGroupMember();
+    my @l = ();
+    while ($i->hasNext()) { push(@l, $i->next()->wikiName()) };
+    my $k = join(',', sort @l);
     $this->assert_str_equals("AaronUser,GeorgeUser", $k);
     $g = $twiki->{users}->findUser("BaptistGroup");
     $this->assert($g->isGroup());
-    $l = $g->groupMembers();
-    $k = join(',',map{$_->wikiName()} @$l);
+
+    $i = $g->eachGroupMember();
+    @l = ();
+    while ($i->hasNext()) { push(@l, $i->next()->wikiName()) };
+    $k = join(',', sort @l);
     $this->assert_str_equals("GeorgeUser,ZebediahUser", $k);
 
 }
