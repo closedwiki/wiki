@@ -129,7 +129,7 @@ _(Click for form-based editing of existing preferences.)_
       * #Set BROADCASTMESSAGE = <div class="twikiBroadcastMessage"> *NOTE:* Edit and Attach will be disabled today between 05:00 PM and 06:00 PM PDT (00:00 to 01:00 GMT) for a scheduled <nop>%WIKITOOLNAME% maintenance.</div>
 
    * Users or groups allowed to [[%TWIKIWEB%.ManagingWebs][create new top-level webs]]: (ex: %MAINWEB%.WebCreatorsGroup). If set to nothing, only administrators will be able to do this.
-      * Set ALLOWROOTCHANGE = 
+      * Set ALLOWROOTCHANGE = %MAINWEB%.TWikiAdminGroup
 
 ---+++ Search Settings
 
@@ -313,8 +313,8 @@ _(Click for form-based editing of existing preferences.)_
 ---++ Access Control Settings
 
    * No-one (except admins) should change this topic
-      * Set ALLOWTOPICCHANGE = 
-      * Set ALLOWTOPICRENAME = 
+      * Set ALLOWTOPICCHANGE = %MAINWEB%.TWikiAdminGroup
+      * Set ALLOWTOPICRENAME = %MAINWEB%.TWikiAdminGroup
 
 ---++ Creating New Preference Variables
  

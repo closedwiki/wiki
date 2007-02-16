@@ -24,11 +24,11 @@ These settings override the defaults for this web only. See [[%TWIKIWEB%.TWikiPr
       * Set WEBFORMS = TWikiPreferencesForm
 
    * Users or groups who __are not__ / __are__ allowed to __view__ / __change__ / __rename__ topics in the <nop>%WEB% web: (See %TWIKIWEB%.TWikiAccessControl).
-      * Set ALLOWWEBCHANGE = 
-      * Set ALLOWWEBRENAME = 
+      * Set ALLOWWEBCHANGE = %MAINWEB%.TWikiAdminGroup
+      * Set ALLOWWEBRENAME = %MAINWEB%.TWikiAdminGroup
 
    * Users or groups allowed to change or rename this <nop>%TOPIC% topic: (e.g., %MAINWEB%.WebAdministratorsGroup)
-      * Set ALLOWTOPICCHANGE = 
+      * Set ALLOWTOPICCHANGE = %MAINWEB%.TWikiAdminGroup
 
    * Web preferences that are *not* allowed to be overridden by user or topic preferences:
       * Set FINALPREFERENCES = NOSEARCHALL, ATTACHFILESIZELIMIT, WIKIWEBMASTER, WEBCOPYRIGHT, WEBTOPICLIST, DENYWEBVIEW, ALLOWWEBVIEW, DENYWEBCHANGE, ALLOWWEBCHANGE, ALLOWWEBRENAME, DENYWEBRENAME
