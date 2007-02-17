@@ -21,7 +21,7 @@ sub test_parseSave {
 
     my $valuer = new TWiki::Configure::Valuer(\%defaultCfg, \%cfg);
     my $root = new TWiki::Configure::Root();
-    my $fh = new File::Temp(UNLINK=>1);
+    my ($fh, $fhname) = File::Temp::tempfile(unlink=>1);
     print $fh <<'EXAMPLE';
 # Crud
 my $pubDir = $cfg{PubDir} || '';
@@ -49,13 +49,13 @@ $cfg{Types}{Chosen} = 'TWiki::Configure::Types::BOOLEAN';
 1;
 EXAMPLE
     $fh->close();
-    do $fh->filename;
+    do $fhname;
 
     foreach my $k (keys %cfg) {
         $defaultCfg{$k} = $cfg{$k};
     }
 
-    TWiki::Configure::TWikiCfg::_parse($fh->filename(), $root, 1);
+    TWiki::Configure::TWikiCfg::_parse($fhname, $root, 1);
 
     # nothing should have changed
     my $saver = new TWiki::Configure::TWikiCfg();
@@ -96,26 +96,26 @@ sub test_2parse {
     $this->assert_null($root->getValueObject('{One}'));
     $this->assert_null($root->getValueObject('{Two}'));
 
-    my $f1 = new File::Temp(UNLINK=>1);
+    my ($f1, $f1name) = File::Temp::tempfile(unlink=>1);
     print $f1 <<'EXAMPLE';
 # **STRING 10**
 $TWiki::cfg{One} = 'One';
 1;
 EXAMPLE
     $f1->close();
-    TWiki::Configure::TWikiCfg::_parse($f1->filename(), $root);
+    TWiki::Configure::TWikiCfg::_parse($f1name, $root);
 
     $this->assert_not_null($root->getValueObject('{One}'));
     $this->assert_null($root->getValueObject('{Two}'));
 
-    my $f2 = new File::Temp(UNLINK=>1);
+    my ($f2, $f2name) = File::Temp::tempfile(unlink=>1);
     print $f2 <<'EXAMPLE';
 # **STRING 10**
 $TWiki::cfg{Two} = 'Two';
 1;
 EXAMPLE
     $f2->close();
-    TWiki::Configure::TWikiCfg::_parse($f2->filename(), $root);
+    TWiki::Configure::TWikiCfg::_parse($f2name, $root);
 
     # make sure they are both present
     $this->assert_not_null($root->getValueObject('{One}'));
@@ -125,7 +125,7 @@ EXAMPLE
 sub test_loadpluggables {
     my $this = shift;
     my $root = new TWiki::Configure::Root();
-    my $f1 = new File::Temp(UNLINK=>1);
+    my ($f1, $f1name) = File::Temp::tempfile(unlink=>1);
     print $f1 <<'EXAMPLE';
 # *LANGUAGES*
 # *PLUGINS*
@@ -133,7 +133,7 @@ $TWiki::cfg{Plugins}{CommentPlugin}{Enabled} = 0;
 1;
 EXAMPLE
     $f1->close();
-    TWiki::Configure::TWikiCfg::_parse($f1->filename(), $root);
+    TWiki::Configure::TWikiCfg::_parse($f1name, $root);
     my $vo = $root->getValueObject('{Plugins}{CommentPlugin}{Enabled}');
     $this->assert_not_null($vo);
     $this->assert_str_equals('BOOLEAN', $vo->getType()->{name});
@@ -148,7 +148,7 @@ sub test_conflict {
 
     my $root = new TWiki::Configure::Root();
 
-    my $f1 = new File::Temp(UNLINK=>1);
+    my ($f1, $f1name) = File::Temp::tempfile(unlink=>1);
     print $f1 <<'EXAMPLE';
 # **STRING 10**
 # Good description
@@ -157,7 +157,7 @@ $TWiki::cfg{Two} = 'One';
 1;
 EXAMPLE
     $f1->close();
-    TWiki::Configure::TWikiCfg::_parse($f1->filename(), $root);
+    TWiki::Configure::TWikiCfg::_parse($f1name, $root);
 
     my $vo = $root->getValueObject('{One}');
     $this->assert_not_null($vo);
@@ -165,7 +165,7 @@ EXAMPLE
     $vo = $root->getValueObject('{Two}');
     $this->assert_not_null($vo);
 
-    my $f2 = new File::Temp(UNLINK=>1);
+    my ($f2, $f2name) = File::Temp::tempfile(unlink=>1);
     print $f2 <<'EXAMPLE';
 $TWiki::cfg{Two} = 'Two';
 # **BOOLEAN 10**
@@ -175,7 +175,7 @@ $TWiki::cfg{Three} = 'Three';
 1;
 EXAMPLE
     $f2->close();
-    TWiki::Configure::TWikiCfg::_parse($f2->filename(), $root);
+    TWiki::Configure::TWikiCfg::_parse($f2name, $root);
 
     $vo = $root->getValueObject('{One}');
     $this->assert_not_null($vo);
@@ -200,7 +200,7 @@ sub test_resection {
     my $valuer = new TWiki::Configure::Valuer(\%defaultCfg, \%cfg);
     my $root = new TWiki::Configure::Root();
 
-    my $f1 = new File::Temp(UNLINK=>1);
+    my ($f1, $f1name) = File::Temp::tempfile(unlink=>1);
     print $f1 <<'EXAMPLE';
 #---+ Section
 # ** STRING **
@@ -213,7 +213,7 @@ $cfg{Three} = 'Three';
 1;
 EXAMPLE
     $f1->close();
-    TWiki::Configure::TWikiCfg::_parse($f1->filename(), $root, 1);
+    TWiki::Configure::TWikiCfg::_parse($f1name, $root, 1);
     foreach my $k (keys %cfg) {
         $defaultCfg{$k} = $cfg{$k};
     }
@@ -241,7 +241,7 @@ sub test_UI {
     my %cfg = (Value=>"after");
     my $valuer = new TWiki::Configure::Valuer(\%defaultCfg, \%cfg);
 
-    my $f1 = new File::Temp(UNLINK=>1);
+    my ($f1, $f1name) = File::Temp::tempfile(unlink=>1);
     print $f1 <<'EXAMPLE';
 # **STRING 10**
 $TWiki::cfg{One} = 'One';
@@ -252,7 +252,7 @@ $TWiki::cfg{Two} = 'Two';
 1;
 EXAMPLE
     $f1->close();
-    TWiki::Configure::TWikiCfg::_parse($f1->filename(), $root);
+    TWiki::Configure::TWikiCfg::_parse($f1name, $root);
 
     foreach my $k (keys %cfg) {
         $defaultCfg{$k} = $cfg{$k};
