@@ -102,12 +102,12 @@ MESS
     }
 
     # Save it somewhere it will be cleaned up
-    my $tmp = new File::Temp(SUFFIX => $ext, UNLINK=>1);
+    my ($tmp, $tmpfilename) = File::Temp::tempfile(SUFFIX => $ext, UNLINK=>1);
     binmode($tmp);
     print $tmp $ar;
     $tmp->close();
     print "Unpacking...<br />\n";
-    my $dir = _unpackArchive($tmp->filename());
+    my $dir = _unpackArchive($tmpfilename);
 
     my @names = _listDir($dir);
     # install the contents
@@ -258,7 +258,7 @@ sub _unpackArchive {
     unless( $name =~ /\.zip/i && _unzip( $name ) ||
               $name =~ /(\.tar\.gz|\.tgz|\.tar)/ && _untar( $name )) {
         $dir = undef;
-        print "Failed to unpack archive $name\n";
+        print "Failed to unpack archive $name<br />\n";
     }
     chdir( $here );
 
@@ -272,7 +272,7 @@ sub _unzip {
     unless ( $@ ) {
         my $zip = Archive::Zip->new( $archive );
         unless ( $zip ) {
-            print "Could not open zip file $archive\n";
+            print "Could not open zip file $archive<br />\n";
             return 0;
         }
 
@@ -283,16 +283,23 @@ sub _unzip {
             my $err = $zip->extractMember( $file, $target );
             if ( $err ) {
                 print "Failed to extract '$file' from zip file ",
-                  $zip,". Archive may be corrupt.\n";
+                  $zip,". Archive may be corrupt.<br />\n";
                 return 0;
             }
         }
     } else {
-        print "Archive::Zip is not installed; trying unzip on the command line\n";
+        print "Archive::Zip is not installed; trying unzip on the command line<br />\n";
         print `unzip $archive`;
+        # On certain older versions of perl / unzip it seems the unzip results
+        # in an illegal seek error. But running the same command again often
+        # goes well. Seems like the 2nd pass works because the subdirectories
+        # are then created. A hack but it seems to work.
         if ( $! ) {
-            print "unzip failed: $!\n";
-            return 0;
+            print `unzip $archive`;
+            if ( $! ) {
+                print "unzip failed: $!\n";
+                return 0;
+            }
         }
     }
 
@@ -308,23 +315,21 @@ sub _untar {
     unless ( $@ ) {
         my $tar = Archive::Tar->new( $archive, $compressed );
         unless ( $tar ) {
-            print "Could not open tar file $archive\n";
+            print "Could not open tar file $archive<br />\n";
             return 0;
         }
 
         my @members = $tar->list_files();
         foreach my $file ( @members ) {
-            my $target = $file;
-
-            my $err = $tar->extract_file( $file, $target );
+            my $err = $tar->extract( $file );
             unless ( $err ) {
                 print 'Failed to extract ',$file,' from tar file ',
-                  $tar,". Archive may be corrupt.\n";
+                  $tar,". Archive may be corrupt.<br />\n";
                 return 0;
             }
         }
     } else {
-        print "Archive::Tar is not installed; trying tar on the command-line\n";
+        print "Archive::Tar is not installed; trying tar on the command-line<br />\n";
         print `tar xvf$compressed $archive`;
         if ( $! ) {
             print "tar failed: $!\n";
