@@ -722,8 +722,8 @@ Adding file: $file to installation ....
 (attaching it to $web.$topic)
 DONE
             # Need copy of file to upload it, use temporary location
-            my $tmp = new File::Temp( UNLINK => 1 );
-            my $tmpfilename = $tmp->filename;
+            # Use non object version of File::Temp for Perl 5.6.1 compatibility
+            my ($tmp, $tmpfilename)  = File::Temp::tempfile(unlink=>1);
             File::Copy::copy($origfile, $tmpfilename) ||
               die "$origfile could not be copied to tmp dir ($tmpfilename).";
             my @stats = stat $origfile;
