@@ -245,6 +245,36 @@ sub test_userTopicWithoutPMWithForm {
     # Change the new user topic to include the form
     my $m = new TWiki::Meta($session, $peopleWeb, 'NewUserTemplate' );
     $m->put('FORM', { name => "$peopleWeb.UserForm" });
+    $m->putKeyed('FIELD', {
+                              name => 'FirstName',
+                              title => '<nop>FirstName',
+                              attributes => '',
+                              value => '',
+                          } );
+    $m->putKeyed('FIELD', {
+                              name => 'LastName',
+                              title => '<nop>LastName',
+                              attributes => '',
+                              value => '',
+                          } );
+    $m->putKeyed('FIELD', {
+                              name => 'Email',
+                              title => 'Email',
+                              attributes => '',
+                              value => '',
+                          } );
+    $m->putKeyed('FIELD', {
+                              name => 'Name',
+                              title => 'Name',
+                              attributes => '',
+                              value => '',
+                          } );
+    $m->putKeyed('FIELD', {
+                              name => 'Comment',
+                              title => 'Comment',
+                              attributes => '',
+                              value => '',
+                          } );
     $session->{store}->saveTopic($session->{user}, $peopleWeb,
                                  'NewUserTemplate', <<'EOF',
 %SPLIT%
@@ -273,6 +303,36 @@ sub test_userTopicWithPMWithForm {
     # Change the new user topic to include the form
     my $m = new TWiki::Meta($session, $peopleWeb, 'NewUserTemplate' );
     $m->put('FORM', { name => "$peopleWeb.UserForm" });
+    $m->putKeyed('FIELD', {
+                              name => 'FirstName',
+                              title => '<nop>FirstName',
+                              attributes => '',
+                              value => '',
+                          } );
+    $m->putKeyed('FIELD', {
+                              name => 'LastName',
+                              title => '<nop>LastName',
+                              attributes => '',
+                              value => '',
+                          } );
+    $m->putKeyed('FIELD', {
+                              name => 'Email',
+                              title => 'Email',
+                              attributes => '',
+                              value => '',
+                          } );
+    $m->putKeyed('FIELD', {
+                              name => 'Name',
+                              title => 'Name',
+                              attributes => '',
+                              value => '',
+                          } );
+    $m->putKeyed('FIELD', {
+                              name => 'Comment',
+                              title => 'Comment',
+                              attributes => '',
+                              value => '',
+                          } );
     $session->{store}->saveTopic($session->{user}, $peopleWeb,
                                  'NewUserTemplate', <<'EOF',
 %SPLIT%
@@ -289,7 +349,7 @@ EOF
                              $meta->get('FIELD', 'FirstName')->{value});
     $this->assert_str_equals('User', $meta->get('FIELD', 'LastName')->{value});
     $this->assert_str_equals('', $meta->get('FIELD', 'Comment')->{value});
-    $this->assert_null($meta->get('FIELD', 'Email'));
+    $this->assert_str_equals('', $meta->get('FIELD', 'Email')->{value});
     $this->assert_matches(qr/^\s*$/s, $text);
 }
 
