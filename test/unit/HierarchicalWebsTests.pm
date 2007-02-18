@@ -271,7 +271,6 @@ sub test_squab_subweb_wih_topic {
     $query->path_info("/$testWeb/NonExistant");
     $twiki = new TWiki( $TWiki::cfg{DefaultUserName}, $query);
 
-    my $twiki = new TWiki();
     $twiki->{store}->saveTopic($twiki->{user}, $testWeb, $testWebSubWeb, "");
     $this->assert($twiki->{store}->topicExists($testWeb, $testWebSubWeb));
 
@@ -291,7 +290,6 @@ sub test_squab_full_path_with_topic {
     $query->path_info("/$testWeb/NonExistant");
     $twiki = new TWiki( $TWiki::cfg{DefaultUserName}, $query);
 
-    my $twiki = new TWiki();
     $twiki->{store}->saveTopic($twiki->{user}, $testWeb, $testWebSubWeb, "");
     $this->assert($twiki->{store}->topicExists($testWeb, $testWebSubWeb));
 
@@ -311,7 +309,6 @@ sub test_squab_path_to_topic_in_subweb {
     $query->path_info("/$testWeb/NonExistant");
     $twiki = new TWiki( $TWiki::cfg{DefaultUserName}, $query);
 
-    my $twiki = new TWiki();
     $twiki->{store}->saveTopic($twiki->{user}, $testWeb, $testWebSubWeb, "");
     $this->assert($twiki->{store}->topicExists($testWeb, $testWebSubWeb));
 
