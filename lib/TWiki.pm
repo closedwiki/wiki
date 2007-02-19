@@ -1362,7 +1362,7 @@ sub new {
     # setup the cgi session, from a cookie or the url. this may return
     # the login, but even if it does, plugins will get the chance to override
     # it below.
-    my $login = $this->{loginManager}->loadSession($loginName);
+    my $login = $this->{remoteUser} = $this->{loginManager}->loadSession($loginName);
     my $prefs = new TWiki::Prefs( $this );
     $this->{prefs} = $prefs;
 
