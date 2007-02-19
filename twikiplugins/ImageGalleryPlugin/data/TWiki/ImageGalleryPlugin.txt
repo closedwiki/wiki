@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1140533279" format="1.0" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1167759528" format="1.1" reprev="1.2" version="$Rev$"}%
 <!--
 
    PLEASE DO NOT EDIT THIS TOPIC
@@ -30,40 +30,40 @@ There are %NRIMAGES{"%TWIKIWEB%.TWikiDocGraphics"}% images at %TWIKIWEB%.TWikiDo
 ---++ Syntax
 ---+++ Arguments
 This plugin introduces two tags:
-	* %<nop>IMAGEGALLERY{...}%: render an image gallery
-	* %<nop>NRIMAGES%: returns the number of images attachted to a (list of) topics
+   * %<nop>IMAGEGALLERY{...}%: render an image gallery
+   * %<nop>NRIMAGES%: returns the number of images attachted to a (list of) topics
 that both take the following arguments:
 
 | *Argument* | *Description* |
 | topic | comma separated list of topics whose attachments should be displayed %BR% \
-			 (default: the current topic) |
+          (default: the current topic) |
 | limit | maximum number of images to display (default: 0, meaning no limit). |
 | include | regular expression an image must match to be part of the gallery |
 | exclude | regular expression an image must _not_ match to be part of the gallery |
 | field | specify which property of the image has to match using =include= or =exclude=; \
-			 possible values: name, comment (default: name) |
+          possible values: name, comment (default: name) |
 | size | the thumbnail size, the actual geometries of a size can be configured below; \
-			possible values: tiny, small, medium, large, huge  \
-			(default: medium) |
+         possible values: tiny, small, medium, large, huge  \
+         (default: medium) |
 | columns | number of thumbnails to be displayed in one row of the gallery %BR% \
-				(default: 4) |
+            (default: 4) |
 | docrels | flag to disable/enable document relations between images; \
-			possible values are on, off, 0, 1 (default: on) |
+         possible values are on, off, 0, 1 (default: on) |
 | maxwidth | maximal display width of an image; images are scaled not to exceed this limit \
-			 while preserving aspect ratio %BR% \
-			 (default: 640) |
+          while preserving aspect ratio %BR% \
+          (default: 640) |
 | maxheight | maximal display height of an image %BR% (default: 480) |
 | minwidth | minimal display width of an image; images are scaled not to fall below this \
-				limit while preserving aspect ratio %BR% (default: 0) |
+            limit while preserving aspect ratio %BR% (default: 0) |
 | minheight | minimal display height of an image %BR% (default: 0) |
 | format | html format of an image %BR% \
-			 (default: &lt;a href="$origurl"&gt;&lt;img src="$imageurl" title="$comment" width="$width" height="$height"/&gt;&lt;/a&gt;) |
+          (default: &lt;a href="$origurl"&gt;&lt;img src="$imageurl" title="$comment" width="$width" height="$height"/&gt;&lt;/a&gt;) |
 | titles | toggles image and thumnail titles on and off %BR% \
-			 (default: on) |
+          (default: on) |
 | title | html format of an image title; "off" will hide the image's title %BR% \
-			 (default: $comment ($imgnr/$nrimgs)&nbsp;$reddot) |
+          (default: $comment ($imgnr/$nrimgs)&nbsp;$reddot) |
 | thumbtitle  | html format of a thumbnail title; "off" will hide the thumbnail's title %BR% \
-			 (default: $comment&nbsp;$reddot) |
+          (default: $comment&nbsp;$reddot) |
 | sort | set the initial order of the images, can be name, date, size or comment (default:date) |
 | reverse | invert the initial order of the images, can be on or off (default:off) |
 
@@ -100,9 +100,9 @@ refer to image properties:
 
 ---+++ Query Parameters
 The IGP will check for certain query parameters in the url. These are:
-	* id=&lt;n;&gt;: distinguish multiple IMAGEGALLERYs in the same topic
-	* filename=&lt;name&gt;: display the given file of the image set
-	* refresh=on: recompute all images and thumbnails in the IGP cache
+   * id=&lt;n;&gt;: distinguish multiple IMAGEGALLERYs in the same topic
+   * filename=&lt;name&gt;: display the given file of the image set
+   * refresh=on: recompute all images and thumbnails in the IGP cache
 Each IMAGEGALLERY has an anchor, namely a &lt;a name="igp&lt;n&gt;"/&gt;, that
 is used to scroll the display appropriately.
 
@@ -110,11 +110,11 @@ is used to scroll the display appropriately.
 First of all this plugin should come with reasonable default values, so that
 you will get a nice image gallery (with regards to my taste) right on.
 There are several things that are customizable:
-	* customize a gallery using a compination of the arguments described above
-	* add custom cascading styles in a topic to format the gallery
-	* alter the default cascading styles in the [[%ATTACHURL%/style.css][style.css]]
-	  file attached to this topic
-	* customize the plugin settings below
+   * customize a gallery using a compination of the arguments described above
+   * add custom cascading styles in a topic to format the gallery
+   * alter the default cascading styles in the [[%ATTACHURL%/style.css][style.css]]
+     file attached to this topic
+   * customize the plugin settings below
 
 ---+++ Cascading Stylesheets
 The plugin emits the following css classes (see the comments in the [[%ATTACHURL%/style.css][style.css]] file):
@@ -152,37 +152,36 @@ Note, that the $comment variable will only display =&lt;comment&gt;= , that is w
  
 ---++ Plugin Settings
 
-	* Names and sizes for thumbnails (feel free to add additional entries or to modify these defaults)
-		* Set TINY = 25x25
-		* Set SMALL = 50x50
-		* Set MEDIUM = 95x95
-		* Set LARGE = 150x150
-		* Set HUGE = 250x250
-	
-	* cascading style sheets 
-		* Set STYLE = %PUBURLPATH%/%TWIKIWEB%/ImageGalleryPlugin/style.css
-
-	* One line description:
-		* Set SHORTDESCRIPTION = Displays image gallery with auto-generated thumbnails from attachments.
+   * Names and sizes for thumbnails (feel free to add additional entries or to modify these defaults)
+      * Set TINY = 25x25
+      * Set SMALL = 50x50
+      * Set MEDIUM = 95x95
+      * Set LARGE = 150x150
+      * Set HUGE = 250x250
+   
+   * One line description:
+      * Set SHORTDESCRIPTION = Displays image gallery with auto-generated thumbnails from attachments.
 
 ---++ Plugin Installation Instructions
 
-	* [[%ATTACHURL%/%TOPIC%.zip][Download]] the ZIP file
-	* Unzip it in your twiki installation directory. Content: 
-	  | *File:* | *Description:* |
-	  | ==data/TWiki/%TOPIC%.txt== | plugin topic |
-	  | ==pub/TWiki/%TOPIC%/style.css== | cascading style sheets |
-	  | ==lib/TWiki/Plugins/%TOPIC%.pm== | plugin interface |
-	  | ==lib/TWiki/Plugins/%TOPIC%/Core.pm== | core implementation |
-	* (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
+   * [[http://twiki.org/p/pub/Plugins/%TOPIC%/%TOPIC%.zip][Download]] the ZIP file
+   * Unzip it in your twiki installation directory. Content: 
+     | *File:* | *Description:* |
+     | ==data/TWiki/%TOPIC%.txt== | plugin topic |
+     | ==pub/TWiki/%TOPIC%/style.css== | cascading style sheets |
+     | ==lib/TWiki/Plugins/%TOPIC%.pm== | plugin interface |
+     | ==lib/TWiki/Plugins/%TOPIC%/Core.pm== | core implementation |
+   * (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
 
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main/MichaelDaum, TWiki:Main/WillNoris |
-|  Copyright &copy;: | 2002-2003, Will Noris; 2005-2006, Michael Daum |
+|  Copyright &copy;: | 2002-2003, Will Noris; 2005-2007, Michael Daum |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | v3.41 |
+|  Plugin Version: | v3.5 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  19 Feb 2006 | make proper use TWiki-4 API; \
+                 don't use inline css, put them into the html header instead |
 |  24 Jul 2006 | working around Image::Magick crashes reading svg image files |
 |  20 Mar 2006 | added =sort= and =reverse= arguments; \
                  fixed updating thumbnails when a new image version is created |
@@ -191,15 +190,15 @@ Note, that the $comment variable will only display =&lt;comment&gt;= , that is w
 |  14 Sep 2005 | don't strictly depend on normalizeFilename() |
 |  15 June 2005 | new release |
 |  10 May 2005 | fixed igp id clash error found by TWiki:Main/MartinCleaver; \
-					  capture <nop>ImageMagick error messages; \
-					  don't trust attachment info - check for attachment existence as well;\
-					  added refresh query parameter to recompute images |
+                 capture <nop>ImageMagick error messages; \
+                 don't trust attachment info - check for attachment existence as well;\
+                 added refresh query parameter to recompute images |
 |  09 May 2005 | fixed errors reported by TWiki:Main/MarcelTrap; \
-					  added support for multiple topics (proposed by TWiki:Main/MartinCleaver; \
-					  added %<nop>NRIMAGES% tag |
-|  &nbsp;		| fix error when called from within rename view |
+                 added support for multiple topics (proposed by TWiki:Main/MartinCleaver; \
+                 added %<nop>NRIMAGES% tag |
+|  &nbsp;      | fix error when called from within rename view |
 |  03 May 2005 | fixed thumbnail resizing; reintroduced =titles= parameter;  \
-					  support for multiple galleries per topic |
+                 support for multiple galleries per topic |
 |  27 Apr 2005 | complete rewrite |
 |  01 Aug 2003 | Updates from feedback from a Windows installation |
 |  25 Jul 2003 | Initial version posted to TWiki.org |
@@ -211,7 +210,7 @@ Note, that the $comment variable will only display =&lt;comment&gt;= , that is w
 |  Feedback: | TWiki:Plugins/%TOPIC%Dev |
 |  Appraisal: | TWiki:Plugins/%TOPIC%Appraisal |
 
--- TWiki:Main.MichaelDaum - 27 Jul 2006
+-- TWiki:Main.MichaelDaum - 19 Feb 2007
 
 
-%META:FILEATTACHMENT{name="style.css" attr="" comment="" date="1114698585" path="style.css" size="1039" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="style.css" attr="" comment="" date="1114698585" path="style.css" size="1039" user="Main.TWikiContributor" version="1"}%

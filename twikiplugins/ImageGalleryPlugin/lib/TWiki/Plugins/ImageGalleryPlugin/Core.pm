@@ -45,17 +45,11 @@ sub new {
   $this->{wikiUserName} = &TWiki::Func::getWikiUserName();
   $this->{pubDir} = &TWiki::Func::getPubDir();
   $this->{pubUrlPath} = &TWiki::Func::getPubUrlPath();
-  $this->{topicRegex} = &TWiki::Func::getRegularExpression('mixedAlphaNumRegex');
-  $this->{webRegex} = &TWiki::Func::getRegularExpression('webNameRegex');
   $this->{twikiWebName} = &TWiki::Func::getTwikiWebname();
   
   # get style url
   my $hostUrl = ($this->{isDakar})? $TWiki::cfg{DefaultUrlHost}:$TWiki::defaultUrlHost;
     
-  $this->{styleUrl} = TWiki::Func::getPreferencesValue("IMAGEGALLERYPLUGIN_STYLE") ||
-    $hostUrl .  $this->{pubUrlPath} . "/" . $this->{twikiWebName} . 
-    "/ImageGalleryPlugin/style.css";
-
   # get image mimes
   my $mimeTypesFilename = ($this->{isDakar})?
     $TWiki::cfg{MimeTypesFileName}:$TWiki::mimeTypesFilename;
@@ -72,6 +66,7 @@ sub new {
   }
 
   my $topicPubDir = $this->normalizeFileName($this->{pubDir} . "/$web/$topic");
+  mkdir "$this->{pubDir}/$web" unless -d "$this->{pubDir}/$web";
   mkdir $topicPubDir unless -d $topicPubDir;
 
   if ($this->{id}) {
@@ -101,13 +96,10 @@ sub isImage {
 
 # =========================
 sub init {
-  my ($this, $args) = @_;
+  my ($this, $params) = @_;
 
-  $args = '' unless $args;
-  #writeDebug("init($args) called");
-  
   # read attributes
-  $this->{size} = &TWiki::Func::extractNameValuePair($args, "size") || 'medium';
+  $this->{size} = $params->{size} || 'medium';
   my $thumbsize = TWiki::Func::getPreferencesValue(uc "IMAGEGALLERYPLUGIN_$this->{size}") 
     || $this->{size};
   my $thumbwidth = 95;
@@ -128,9 +120,9 @@ sub init {
   #writeDebug("size=$this->{size} thumbsize=$thumbsize thumbwidth=$thumbwidth thumbheight=$thumbheight");
   
   my $topics = 
-    &TWiki::Func::extractNameValuePair($args) 
-    || &TWiki::Func::extractNameValuePair($args, "topic") 
-    || &TWiki::Func::extractNameValuePair($args, "topics") 
+    $params->{_DEFAULT}
+    || $params->{topic}
+    || $params->{topics}
     || "$this->{web}.$this->{topic}";
 
   $this->{topics} = undef;
@@ -138,15 +130,7 @@ sub init {
   # normalize topic names
   foreach my $theTopic (split(/,\s*/, $topics)) {
     my $theWeb;
-    if ($theTopic =~ /^($this->{webRegex})\.($this->{topicRegex})$/) {
-      $theWeb = $1;
-      $theTopic = $2;
-    } elsif ($theTopic =~ /^($this->{topicRegex})$/) {
-      $theWeb = $this->{web};
-    } else {
-      #writeDebug("oops, skipping $theTopic");
-      next;
-    }
+    ($theWeb, $theTopic) = TWiki::Func::normalizeWebTopicName($this->{web}, $theTopic);
     push @{$this->{topics}}, "$theWeb.$theTopic";
   }
 
@@ -157,36 +141,29 @@ sub init {
   #writeDebug("topics=" . join(", ", @{$this->{topics}}));
 
 
-  $this->{columns} = &TWiki::Func::extractNameValuePair($args, "columns") || 4;
+  $this->{columns} = $params->{columns} || 4;
 
-  $this->{doDocRels} = &TWiki::Func::extractNameValuePair($args, "docrels") || 1;
+  $this->{doDocRels} = $params->{docrels} || 1;
   $this->{doDocRels} = ($this->{doDocRels} eq "off")?0:1;
-
-  $this->{maxheight} = &TWiki::Func::extractNameValuePair($args, "maxheight") || 480;
-  $this->{maxwidth} = &TWiki::Func::extractNameValuePair($args, "maxwidth") || 640;
-  
-  $this->{minheight} = &TWiki::Func::extractNameValuePair($args, "minheight") || 0;
+  $this->{maxheight} = $params->{maxheight} || 480;
+  $this->{maxwidth} = $params->{maxwidth} || 640;
+  $this->{minheight} = $params->{minheight} || 0;
   $this->{minheight} = $this->{maxheight} if $this->{minheight} > $this->{maxheight};
-  
-  $this->{minwidth} = &TWiki::Func::extractNameValuePair($args, "minwidth") || 0;
+  $this->{minwidth} = $params->{minwidth} || 0;
   $this->{minwidth} = $this->{maxwidth} if $this->{minwidth} > $this->{maxwidth};
-
-  $this->{format} = &TWiki::Func::extractNameValuePair($args, "format") || 
+  $this->{format} = $params->{format} || 
       '<a href="$origurl"><img src="$imageurl" title="$comment" width="$width" height="$height"/></a>';
-
-  $this->{title} = &TWiki::Func::extractNameValuePair($args, "title") || '$comment ($imgnr/$nrimgs)&nbsp;$reddot';
+  $this->{title} = $params->{title} || '$comment ($imgnr/$nrimgs)&nbsp;$reddot';
   $this->{doTitles} = ($this->{title} eq 'off')?0:1;
-
-  $this->{thumbtitle} = &TWiki::Func::extractNameValuePair($args, "thumbtitle") || '$comment&nbsp;$reddot';
+  $this->{thumbtitle} = $params->{thumbtitle} || '$comment&nbsp;$reddot';
   $this->{doThumbTitles} = ($this->{thumbtitle} eq 'off')?0:1;
-
-  $this->{titles} = &TWiki::Func::extractNameValuePair($args, "titles");
+  $this->{titles} = $params->{titles};
   if ($this->{titles}) {
     $this->{doTitles} = ($this->{titles} eq 'off')?0:1;
     $this->{doThumbTitles} = $this->{doTitles};
   }
 
-  $this->{limit} = &TWiki::Func::extractNameValuePair($args, "limit");
+  $this->{limit} = $params->{limit};
   unless ($this->{limit}) {
     $this->{limit} = 0;
   }
@@ -194,19 +171,18 @@ sub init {
   my $refresh = $this->{query}->param("refresh") || '';
   $this->{doRefresh} = ($refresh eq 'on')?1:0;
 
-  $this->{include} = &TWiki::Func::extractNameValuePair($args, "include") || '';
-  $this->{exclude} = &TWiki::Func::extractNameValuePair($args, "exclude") || '';
-  $this->{field} = &TWiki::Func::extractNameValuePair($args, "field") || 'name';
+  $this->{include} = $params->{include} || '';
+  $this->{exclude} = $params->{exclude} || '';
+  $this->{field} = $params->{field} || 'name';
 
   if ($this->{field} !~ /^(name|comment)$/) {
     $this->{field} = 'name';
   }
 
-  $this->{sort} = &TWiki::Func::extractNameValuePair($args, 'sort') || 'date';
+  $this->{sort} = $params->{sort} || 'date';
   $this->{sort} = 'date' unless $this->{sort} =~ /^date|name|comment|size$/;
 
-  $this->{reverse} = &TWiki::Func::extractNameValuePair($args, 'rev') ||
-    &TWiki::Func::extractNameValuePair($args, 'reverse') || 'off';
+  $this->{reverse} = $params->{rev} || $params->{reverse} || 'off';
   $this->{reverse} = 'off' unless $this->{reverse} =~ /^on|off$/;
 
   return 1;
@@ -215,9 +191,9 @@ sub init {
 # =========================
 # main 
 sub render {
-  my ($this, $args) = @_;
+  my ($this, $params) = @_;
 
-  if (!$this->init($args)) {
+  if (!$this->init($params)) {
     return '';
   }
 
@@ -230,8 +206,8 @@ sub render {
     my $found = 0;
     foreach my $image (@{$this->{images}}) {
       if ($image->{name} eq $entry->{name}) {
-	$found = 1;
-	last;
+        $found = 1;
+        last;
       }
     }
     next if $found;
@@ -271,8 +247,7 @@ sub render {
     $result .= $this->renderThumbnails();
   }
 
-  # add style
-  $result .= "</div><style type=\"text/css\">\@import url(\"$this->{styleUrl}\");</style>\n";
+  $result .= "</div>\n";
 
   $this->writeInfo();
   return $result;
@@ -315,22 +290,22 @@ sub renderImage {
   # document relations
   if ($this->{doDocRels}) {
     $result .=
-	"<link rel=\"parent\" href=\"$viewUrl\" title=\"Thumbnails\" />\n";
+      "<link rel=\"parent\" href=\"$viewUrl\" title=\"Thumbnails\" />\n";
     if ($firstFile && $firstFile ne $filename) {
       $result .=
-	  "<link rel=\"first\" href=\"$viewUrl?id=$this->{id}&filename=$firstFile#igp$this->{id}\" title=\"$firstFile\" />\n";
+        "<link rel=\"first\" href=\"$viewUrl?id=$this->{id}&filename=$firstFile#igp$this->{id}\" title=\"$firstFile\" />\n";
     }
     if ($lastFile && $lastFile ne $filename) {
       $result .=
-	  "<link rel=\"last\" href=\"$viewUrl?id=$this->{id}&filename=$lastFile#igp$this->{id}\" title=\"$lastFile\" />\n";
+          "<link rel=\"last\" href=\"$viewUrl?id=$this->{id}&filename=$lastFile#igp$this->{id}\" title=\"$lastFile\" />\n";
     }
     if ($nextFile && $lastFile ne $filename) {
       $result .=
-	  "<link rel=\"next\" href=\"$viewUrl?id=$this->{id}&filename=$nextFile#igp$this->{id}\" title=\"$nextFile\" />\n";
+          "<link rel=\"next\" href=\"$viewUrl?id=$this->{id}&filename=$nextFile#igp$this->{id}\" title=\"$nextFile\" />\n";
     }
     if ($prevFile && $firstFile ne $filename) {
       $result .=
-	"<link rel=\"previous\" href=\"$viewUrl?id=$this->{id}&filename=$prevFile#igp$this->{id}\" title=\"$prevFile\" />\n";
+        "<link rel=\"previous\" href=\"$viewUrl?id=$this->{id}&filename=$prevFile#igp$this->{id}\" title=\"$prevFile\" />\n";
     }
   }
 
@@ -427,8 +402,8 @@ sub renderThumbnails {
     if ($imageNr % $maxCols == 0) {
       $result .= "</tr>\n";
       if ($this->{doThumbTitles}) {
-	$result .= $this->renderTitleRow(\@rowOfImages);
-	@rowOfImages = ();
+        $result .= $this->renderTitleRow(\@rowOfImages);
+        @rowOfImages = ();
       }
     }
   }
@@ -484,23 +459,14 @@ sub renderRedDot {
 sub getImages {
   my $this = shift;
 
-  #writeDebug("getImages(" . join(', ', @{$this->{topics}}) . ") called");
+  writeDebug("getImages(" . join(', ', @{$this->{topics}}) . ") called");
 
   # collect images from all topics
   my @images;
   foreach my $webtopic (@{$this->{topics}}) {
-    my $theWeb;
-    my $theTopic;
-    if ($webtopic =~ /^($this->{webRegex})\.($this->{topicRegex})$/) {
-      $theWeb = $1;
-      $theTopic = $2;
-    } else {
-      #writeDebug("oops, skipping $webtopic");
-      next;
-    }
+    my ($theWeb, $theTopic) = TWiki::Func::normalizeWebTopicName($this->{web}, $webtopic);
     #writeDebug("reading from $theWeb.$theTopic}");
-
-    my $viewAccessOK = &TWiki::Func::checkAccessPermission("view", $this->{wikiUserName}, '', 
+    my $viewAccessOK = &TWiki::Func::checkAccessPermission("view", $this->{wikiUserName}, undef, 
       $theTopic, $theWeb);
 
     if (!$viewAccessOK) {
@@ -525,20 +491,20 @@ sub getImages {
       $image->{IGP_web} = $theWeb;
 
       $image->{IGP_filename} = $this->normalizeFileName(
-	$this->{pubDir} . "/$image->{IGP_web}/$image->{IGP_topic}/$image->{name}");
+        $this->{pubDir} . "/$image->{IGP_web}/$image->{IGP_topic}/$image->{name}");
       $image->{IGP_url} = 
-	$this->{pubUrlPath} . "/$image->{IGP_web}/$image->{IGP_topic}/$image->{name}";
+        $this->{pubUrlPath} . "/$image->{IGP_web}/$image->{IGP_topic}/$image->{name}";
       if ($image->{IGP_comment} =~ /^([0-9]+)\s*-\s*(.*)$/) {
-	$image->{IGP_imgnr} = $1;
-	$image->{IGP_comment} = $2;
+        $image->{IGP_imgnr} = $1;
+        $image->{IGP_comment} = $2;
       }
 
       # check for file existence
       if (! -e $image->{IGP_filename}) {
-	&TWiki::Func::writeWarning("attachment error in " .
-	  "$image->{IGP_web}.$image->{IGP_topic}: " .
-	  "no such file '$image->{IGP_filename}'");
-	next;
+        &TWiki::Func::writeWarning("attachment error in " .
+          "$image->{IGP_web}.$image->{IGP_topic}: " .
+          "no such file '$image->{IGP_filename}'");
+        next;
       }
 
       push @images, $image;
@@ -638,7 +604,7 @@ sub computeImageSize {
   # compute max image width and height
   my $width = $image->{IGP_origwidth};
   my $height = $image->{IGP_origheight};
-  my $aspect = $height / $width;
+  my $aspect = $width ? $height / $width : 0;
 
   if ($width < $this->{minwidth}) {
     $width = $this->{minwidth};
@@ -646,7 +612,7 @@ sub computeImageSize {
   } 
   if ($height < $this->{minheight}) {
     $height = $this->{minheight};
-    $width = $height / $aspect;
+    $width = $aspect ? $height / $aspect : 0;
   }
   if ($this->{maxwidth} && $width > $this->{maxwidth}) {
     $width = $this->{maxwidth};
@@ -654,7 +620,7 @@ sub computeImageSize {
   } 
   if ($this->{maxheight} && $height > $this->{maxheight}) {
     $height = $this->{maxheight};
-    $width = $height / $aspect;
+    $width = $aspect ? $height / $aspect : 0;
   }
   $image->{IGP_width} = int($width+0.5);
   $image->{IGP_height} = int($height+0.5);
@@ -664,7 +630,7 @@ sub computeImageSize {
   # compute max thumnail width and height
   $width = $image->{IGP_origwidth};
   $height = $image->{IGP_origheight};
-  $aspect = $height / $width;
+  $aspect = $width ? $height / $width : 0;
 
   if ($width > $this->{thumbwidth}) {
     $width = $this->{thumbwidth};
@@ -672,7 +638,7 @@ sub computeImageSize {
   } 
   if ($height > $this->{thumbheight}) {
     $height = $this->{thumbheight};
-    $width = $height / $aspect;
+    $width = $aspect ? $height / $aspect : 0;
   }
   $image->{IGP_thumbwidth} = int($width+0.5);
   $image->{IGP_thumbheight} = int($height+0.5);
@@ -888,21 +854,21 @@ sub readInfo {
     my $entry;
     if ($line =~ /^name=(.*), version=(.*), origwidth=(.*), origheight=(.*), width=(.*), height=(.*), thumbwidth=(.*), thumbheight=(.*)$/) {
       $entry = {
-	name=>$1,
-	version=>$2,
-	type=>'image',
-	origwidth=>$3,
-	origheight=>$4,
-	width=>$5,
-	height=>$6,
-	thumbwidth=>$7,
-	thumbheight=>$8,
+        name=>$1,
+        version=>$2,
+        type=>'image',
+        origwidth=>$3,
+        origheight=>$4,
+        width=>$5,
+        height=>$6,
+        thumbwidth=>$7,
+        thumbheight=>$8,
       };
     } elsif ($line =~ /^(thumbwidth|thumbheight|topics|web)=(.*)$/) {
       $entry = {
-	name=>$1,
-	type=>'global',
-	value=>$2,
+        name=>$1,
+        type=>'global',
+        value=>$2,
       };
     } else {
       next;
@@ -948,7 +914,8 @@ sub writeInfo {
 # static
 sub writeDebug {
   return unless $debug;
-  &TWiki::Func::writeDebug("ImageGalleryPlugin - $_[0]");
+  #&TWiki::Func::writeDebug("ImageGalleryPlugin - $_[0]");
+  print STDERR "ImageGalleryPlugin - $_[0]\n";
 }
 
 
