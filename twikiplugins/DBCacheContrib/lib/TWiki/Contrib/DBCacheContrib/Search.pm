@@ -8,14 +8,15 @@ use Time::ParseDate;
 
 =begin text
 
----++ class Search
+---++ package TWiki::Contrib::DBCacheContrib::Search
+
 Search operators work on the fields of a TWiki::Contrib::DBCacheContrib::Map. The fields are given by name, and the values by strings or numbers. Strings should always be surrounded by 'single-quotes'. Strings which are regular expressions (RHS of =, != =~ operators) use 'perl' re syntax (see =man perlre= for help). Numbers can be signed integers or decimals.
 
 *Warning* single and double quotes are not allowed in values!
 
 The following operators are available:
 
-| *Operator* | $Result* | *Meaning* |
+| *Operator* | *Result* | *Meaning* |
 | <code>=</code> | Boolean | LHS exactly matches the regular expression on the RHS. The expression must match the whole string. |
 | <code>!=</code> | Boolean | Inverse of = |
 | <code>=~</code> | Boolean | LHS contains RHS i.e. the RHS is found somewhere in the field value. |
@@ -160,6 +161,9 @@ sub _parse {
         } elsif ( $string =~ s/^\s*(-?\d+(\.\d*)?(e-?\d+)?)//io ) {
             push( @opands, new TWiki::Contrib::DBCacheContrib::Search(
                 undef, undef, "NUMBER", $1 ));
+        } elsif ( $string =~ s/^\s*(\@\w+(?:\.\w+)+)//o ) {
+            push( @opands, new TWiki::Contrib::DBCacheContrib::Search(
+                undef, undef, "REF", $1 ));
         } elsif ( $string =~ s/^\s*([\w\.]+)//o ) {
             push( @opands, new TWiki::Contrib::DBCacheContrib::Search(
                 undef, undef, "NODE", $1 ));
@@ -188,6 +192,7 @@ See if object matches the search. =$object= can actually be any object that prov
 the method "get" that returns a value given a string key.
 
 =cut
+
 sub matches {
     my ( $this, $map ) = @_;
 
@@ -201,11 +206,47 @@ sub matches {
 
     if ($op eq "NODE") {
         return 0 unless ($map && defined $r);
-        my $val = $map->get( $r );
-        # Compatibility: values have now moved down into the form for topics,
-        # but we need this just in case the search specifier is "old style"
+        my $val = $map->get($map->get("form"))->get( $r );
         unless ($val) {
-            $val = $map->get($map->get("form"))->get( $r );
+            $val = $map->get( $r );
+        }
+        return $val;
+    }
+
+    if ($op eq "REF") {
+        return 0 unless ($map && defined $r);
+        my %seen;
+
+        # get web db
+        my $web = $map->fastget('_web');
+
+        # parse reference chain
+        while ($r =~ /^\@(\w+)\.(.*)$/) {
+            my $ref = $1;
+            $r = $2;
+
+            # protect against infinite loops
+            return 0 if $seen{$ref}; # outch
+            $seen{$ref} = 1;
+
+            # get form
+            my $form = $map->fastget('form');
+            return 0 unless $form; # no form
+
+            # get refered topic
+            $form = $map->fastget($form);
+            $ref = $form->fastget($ref);
+            return 0 unless $ref; # unknown field
+
+            # get topic object
+            $map = $web->fastget($ref);
+            return 0 unless $map; # unknown ref
+        }
+
+        # the tail is a property of the referenced topic
+        my $val = $map->get($map->get("form"))->get( $r );
+        unless ($val) {
+            $val = $map->get( $r );
         }
         return $val;
     }
@@ -246,12 +287,11 @@ sub matches {
     if ( $op eq "<=" ) { return ( $lval <= $rval ) };
 
     $lval = Time::ParseDate::parsedate( $lval );
-    return 0 unless ( defined( $lval ));
+    return 0 unless( defined( $lval ));
 
     if ( $op eq "WITHIN_DAYS" ) {
         return ( $lval >= $now && workingDays( $now, $lval ) <= $rval );
     }
-
     $rval = Time::ParseDate::parsedate( $rval );
     return 0 unless ( defined( $rval ));
 

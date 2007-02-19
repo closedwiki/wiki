@@ -4,9 +4,9 @@
 use strict;
 use FileHandle;
 
-=begin text
+=pod
 
----++ class Archive
+---++ package TWiki::Contrib::DBCacheContrib::Archive
 Simple file archive storer and restorer. Handles serialising objects
 using their "write" and "read" methods. Serialisable objects must
 have a no-parameters constructor.
@@ -16,12 +16,12 @@ much faster, because it is implemented in C.
 
 =cut
 
-{ package TWiki::Contrib::DBCacheContrib::Archive;
+package TWiki::Contrib::DBCacheContrib::Archive;
 
-  # Must be first in an archive, or it isn't an archive
-  my $ARCHIVE_ID = 0x76549876;
+# Must be first in an archive, or it isn't an archive
+my $ARCHIVE_ID = 0x76549876;
 
-=begin text
+=pod
 
 ---+++ =new($file, $rw)=
    * =$file= - archive file path
@@ -34,7 +34,7 @@ is open. Throws an exception if the archive cannot be opened.
 
 =cut
 
-  sub new {
+sub new {
     my ( $class, $file, $rw ) = @_;
 
     my $this = bless( {}, $class );
@@ -43,44 +43,44 @@ is open. Throws an exception if the archive cannot be opened.
     $this->{OBJECTINDEX} = 0;
     $this->{lock} = $rw;
     if ( $rw eq "w" ) {
-      if ( !defined( $fh )) {
-	$fh = new FileHandle( $file, "w" );
-    die "Can't write $file" unless $fh;
-	$fh->close();
-	$this->{FH} = $fh;
-	$fh->open( $file, "r" ) || die( "Reopen failed" );
-      }
-      # get an exclusive lock on the file and write the ID (2==LOCK_EX)
-      #print STDERR "$$ Wait write lock\n";
-      flock( $fh, 2 ) || die( "LOCK_EX failed" );
-      if ( !$fh->open( $file, "w" )) {
-	die( "Open for write failed" );
-      };
-      #print STDERR "$$ Got write lock\n";
-      $this->writeInt( $ARCHIVE_ID );
+        if ( !defined( $fh )) {
+            $fh = new FileHandle( $file, "w" );
+            die "Can't write $file" unless $fh;
+            $fh->close();
+            $this->{FH} = $fh;
+            $fh->open( $file, "r" ) || die( "Reopen failed" );
+        }
+        # get an exclusive lock on the file and write the ID (2==LOCK_EX)
+        #print STDERR "$$ Wait write lock\n";
+        flock( $fh, 2 ) || die( "LOCK_EX failed" );
+        if ( !$fh->open( $file, "w" )) {
+            die( "Open for write failed" );
+        };
+        #print STDERR "$$ Got write lock\n";
+        $this->writeInt( $ARCHIVE_ID );
     } else {
-      if ( !defined( $fh )) {
-	die( "Open $file failed" );
-      }
-      # 1==LOCK_SH
-      #print STDERR "$$ Wait read lock\n";
-      flock( $fh, 1 ) || die( "LOCK_SH failed" );
-      #print STDERR "$$ Got read lock\n";
-      # Check the first integer to make sure it's the archive ID
-      my $id = $this->readInt();
-      if ( $id != $ARCHIVE_ID ) {
-	die( "$file is not a valid Archive" );
-      }
+        if ( !defined( $fh )) {
+            die( "Open $file failed" );
+        }
+        # 1==LOCK_SH
+        #print STDERR "$$ Wait read lock\n";
+        flock( $fh, 1 ) || die( "LOCK_SH failed" );
+        #print STDERR "$$ Got read lock\n";
+        # Check the first integer to make sure it's the archive ID
+        my $id = $this->readInt();
+        if ( $id != $ARCHIVE_ID ) {
+            die( "$file is not a valid Archive" );
+        }
     }
     return $this;
-  }
+}
 
-  sub DESTROY {
+sub DESTROY {
     my $this = shift;
     $this->close();
-  }
+}
 
-=begin text
+=pod
 
 ---+++ =close()=
 Close this archive. MUST be called to
@@ -88,17 +88,17 @@ close the file.
 
 =cut
 
-  sub close {
+sub close {
     my $this = shift;
     if ( defined( $this->{FH} )) {
-      flock( $this->{FH}, 8 ) || die( "LOCK_UN failed" );
-      #print STDERR "$$ released lock\n";
-      $this->{FH}->close();
-      $this->{FH} = undef;
+        flock( $this->{FH}, 8 ) || die( "LOCK_UN failed" );
+        #print STDERR "$$ released lock\n";
+        $this->{FH}->close();
+        $this->{FH} = undef;
     }
-  }
+}
 
-=begin text
+=pod
 
 ---+++ =writeByte($b)=
    * =$b= - byte to write
@@ -106,12 +106,12 @@ Write a byte to the archive
 
 =cut
 
-  sub writeByte {
+sub writeByte {
     my ( $this, $b ) = @_;
     syswrite( $this->{FH}, $b, 1 );
-  }
+}
 
-=begin text
+=pod
 
 ---+++ =writeString($s)=
    * =$s= - string to write
@@ -119,13 +119,13 @@ Write a string to the archive
 
 =cut
 
-  sub writeString {
+sub writeString {
     my ( $this, $s ) = @_;
     my $l = length( $s );
     syswrite( $this->{FH}, pack( "S", $l ).$s, 2 + $l );
-  }
-  
-=begin text
+}
+
+=pod
 
 ---+++ =writeInt($i)=
    * =$i= integer to write
@@ -133,12 +133,12 @@ Write a 32-bit integer to the archive
 
 =cut
 
-  sub writeInt {
+sub writeInt {
     my ( $this, $i ) = @_;
     syswrite( $this->{FH}, pack( "i", $i ), 4 );
-  }
+}
 
-=begin text
+=pod
 
 ---+++ =writeObject()=
 Write an object to the archive. An object must implement
@@ -147,111 +147,110 @@ are supported.
 
 =cut
 
-  sub writeObject {
+sub writeObject {
     my ( $this, $o ) = @_;
 
     if ( !defined( $o )) {
-      syswrite( $this->{FH}, 'U', 1 );
+        syswrite( $this->{FH}, 'U', 1 );
     } elsif ( defined( $this->{refs}{$o} )) {
-      syswrite( $this->{FH}, "R".pack( "i", $this->{refs}{$o} ), 5 );
+        syswrite( $this->{FH}, "R".pack( "i", $this->{refs}{$o} ), 5 );
     } else {
-      $this->{refs}{$o} = $this->{OBJECTINDEX}++;
-      if ( ref( $o )) {
-	my $s = ref( $o );
-	my $l = length( $s );
-	syswrite( $this->{FH},
-		  "O" . pack( "i", $this->{refs}{$o} ) . pack( "S", $l ) . $s,
-		  5 + 2 + $l );
-	$o->write( $this );
-      } else {
-	my $l = length( $o );
-	syswrite( $this->{FH},
-		  "S" . pack( "i", $this->{refs}{$o} ) . pack( "S", $l ) . $o,
-		  5 + 2 + $l );
-      }
+        $this->{refs}{$o} = $this->{OBJECTINDEX}++;
+        if ( ref( $o )) {
+            my $s = ref( $o );
+            my $l = length( $s );
+            syswrite( $this->{FH},
+                      "O" . pack( "i", $this->{refs}{$o} ) . pack( "S", $l ) . $s,
+                      5 + 2 + $l );
+            $o->write( $this );
+        } else {
+            my $l = length( $o );
+            syswrite( $this->{FH},
+                      "S" . pack( "i", $this->{refs}{$o} ) . pack( "S", $l ) . $o,
+                      5 + 2 + $l );
+        }
     }
-  }
+}
 
-=begin text
+=pod
 
 ---+++ =readByte()= -> byte
 Read a byte from the archive
 
 =cut
 
-  sub readByte {
+sub readByte {
     my $this = shift;
 
     my $b; sysread( $this->{FH}, $b, 1 );
     return $b;
-  }
+}
 
-=begin text
+=pod
 
 ---+++ =readString()= -> string
 Read a UTF8 string from the archive
 
 =cut
 
-  sub readString {
+sub readString {
     my $this = shift;
-    
+
     my $l; sysread( $this->{FH}, $l, 2 );
-    my $o; sysread( $this->{FH}, $o, unpack( "s", $l ));
+    my $o; sysread( $this->{FH}, $o, unpack( "s", $l ) );
 
     return $o;
-  }
-  
-=begin text
+}
+
+=pod
 
 ---+++ =readInt()= -> integer
 Read a 32-bit integer from the archive
 
 =cut
 
-  sub readInt {
+sub readInt {
     my $this = shift;
-    
+
     my $o; sysread( $this->{FH}, $o, 4 );
     return unpack( "i", $o );
-  }
-  
-=begin text
+}
+
+=pod
 
 ---+++ =readObject()= -> object
 Read an object from the archive
 
 =cut
 
-  sub readObject {
+sub readObject {
     my $this = shift;
     my $key; sysread( $this->{FH}, $key, 1 );
     if ( $key eq 'R' ) {
-      my $o; sysread( $this->{FH}, $o, 4 );
-      my $id = unpack( "i", $o );
-      return $this->{ids}[$id];
+        my $o; sysread( $this->{FH}, $o, 4 );
+        my $id = unpack( "i", $o );
+        return $this->{ids}[$id];
     } elsif ( $key eq 'S' ) {
-      my $o; sysread( $this->{FH}, $o, 4 );
-      my $id = unpack( "i", $o );
-      my $l; sysread( $this->{FH}, $l, 2 );
-      sysread( $this->{FH}, $o, unpack( "s", $l ));
-      $this->{ids}[$id] = $o;
-      return $o;
+        my $o; sysread( $this->{FH}, $o, 4 );
+        my $id = unpack( "i", $o );
+        my $l; sysread( $this->{FH}, $l, 2 );
+        sysread( $this->{FH}, $o, unpack( "s", $l ));
+        $this->{ids}[$id] = $o;
+        return $o;
     } elsif ( $key eq 'O' ) {
-      my $o; sysread( $this->{FH}, $o, 4 );
-      my $id = unpack( "i", $o );
-      my $l; sysread( $this->{FH}, $l, 2 );
-      my $class; sysread( $this->{FH}, $class, unpack( "s", $l ));
-      $o = $class->new();
-      $this->{ids}[$id] = $o;
-      $o->read( $this );
-      return $o;
+        my $o; sysread( $this->{FH}, $o, 4 );
+        my $id = unpack( "i", $o );
+        my $l; sysread( $this->{FH}, $l, 2 );
+        my $class; sysread( $this->{FH}, $class, unpack( "s", $l ));
+        $o = $class->new();
+        $this->{ids}[$id] = $o;
+        $o->read( $this );
+        return $o;
     } elsif ( $key eq 'U' ) {
-      return undef;
+        return undef;
     } else {
-      die( "Corrupt archive: Unrecognised key '$key'" );
+        die( "Corrupt archive: Unrecognised key '$key'" );
     }
-  }
 }
 
 1;

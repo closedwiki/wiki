@@ -6,13 +6,15 @@ use strict;
 
 =begin text
 
----++ class Array
+---++ package TWiki::Contrib::DBCacheContrib::Array
 
-Generic array object. This is required because perl arrays are not objects, and
-cannot be subclassed e.g. for serialisation. To avoid lots of horrid code to handle
-special cases of the different perl data structures, we use this array object instead.
+Generic array object. This is required because perl arrays are not objects,
+and cannot be subclassed e.g. for serialisation. To avoid lots of horrid
+code to handle special cases of the different perl data structures, we use
+this array object instead.
 
 =cut
+
 use TWiki::Contrib::DBCacheContrib::Search;
 
 package TWiki::Contrib::DBCacheContrib::Array;

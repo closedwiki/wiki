@@ -75,7 +75,7 @@ sub new {
     my $this = bless( $class->SUPER::new(), $class );
     $this->{_web} = $web;
     $this->{loaded} = 0;
-	$this->{_cachename} = $cacheName || "_DBCache";
+    $this->{_cachename} = $cacheName || "_DBCache";
 
     eval 'use Storable';
 
@@ -180,6 +180,7 @@ sub _loadTopic {
             my( $web, $name ) = TWiki::Func::normalizeWebTopicName('', $1);
             $form->set( "name", $name );
             $form->set( "_up", $meta );
+            $form->set( "_web", $this );
             $meta->set( "form", $name );
             $meta->set( $name, $form );
             $tailMeta = 1;
@@ -189,20 +190,24 @@ sub _loadTopic {
         } elsif ( $line =~ m/^%META:TOPICINFO{(.*)}%/o ) {
             my $att = new TWiki::Contrib::DBCacheContrib::Map($1);
             $att->set( "_up", $meta );
+            $att->set( "_web", $this );
             $meta->set( "info", $att );
         } elsif ( $line =~ m/^%META:TOPICMOVED{(.*)}%/o ) {
             my $att = new TWiki::Contrib::DBCacheContrib::Map($1);
             $att->set( "_up", $meta );
+            $att->set( "_web", $this );
             $meta->set( "moved", $att );
             $tailMeta = 1;
         } elsif ( $line =~ m/^%META:FIELD{(.*)}%/o ) {
             my $fs = new TWiki::Attrs($1);
             $form = new TWiki::Contrib::DBCacheContrib::Map() unless $form;
+            $form->set( "_web", $this );
             $form->set( $fs->get("name"), $fs->get("value"));
             $tailMeta = 1;
         } elsif ( $line =~ m/^%META:FILEATTACHMENT{(.*)}%/o ) {
             my $att = new TWiki::Contrib::DBCacheContrib::Map($1);
             $att->set( "_up", $meta );
+            $att->set( "_web", $this );
             my $atts = $meta->get( "attachments" );
             if ( !defined( $atts )) {
                 $atts = new TWiki::Contrib::DBCacheContrib::Array();
@@ -259,13 +264,27 @@ sub onReload {
 sub _onReload {
     my $this = shift;
 
-    # Fill in parent relations
     foreach my $topic ( $this->getValues() ) {
+        # Fill in parent relations
         unless ( $topic->get( "_up" )) {
             my $parent = $topic->get( "parent" );
-            $topic->set( "_up", $this->get( $parent ));
+            $parent = $this->get( $parent );
+
+            # prevent the _up to be undefined in case of
+            # a parent info to a non-existing topic;
+            # the parent chain ends at the web hash
+            if ($parent) {
+              $topic->set( "_up", $parent );
+            } else {
+              $topic->set( "_up", $this ); 
+            }
         }
+
+        # set pointer to web
+        $topic->set( "_web", $this );
+        $topic->set( "web", $this->{_web} );
     }
+
 
     $this->onReload(@_);
 }
