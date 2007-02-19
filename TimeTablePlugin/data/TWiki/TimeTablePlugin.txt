@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1171555159" format="1.0" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1171881445" format="1.0" version="$Rev$"}%
 ---+!! <nop>%TOPIC%
 The <nop>%TOPIC% handles the tag =%<nop>TIMETABLE%= and creates a weekly timetable. 
 The timetable is rendered with HTML tables and should work with all modern web browsers.
@@ -105,7 +105,8 @@ Example: %<nop>TIMETABLE{lang="Deutsch" timeinterval="15" }%
 | showtimeline | show timeline =left=, =right=, or on =both= sides | showtimeline="both" |
 | tablebgcolor | table background color | tablebgcolor="white" |
 | tablecaption | table caption shown above the timetable | tablecaption="Timetable" |
-| tablecolumnwidth | width of a table entry (default: undefined) | tablecolumnwidth="80px" | 
+| tablecolumnwidth | width of a table column (default: undefined) | tablecolumnwidth="80px" | 
+| tabledatacellwidth | width of an entry cell (default:undefined); %X% it has no effect if a tablecolumnwidth was set | tabledatacellwidth="80px" |
 | tableheadercolor | color of the table header | tableheadercolor="%<nop>WEBBGCOLOR%" |
 | todaybgcolor | highlight today column with a background color | todaybgcolor="black" |
 | todayfgcolor | highlight today column with a foreground color | todayfgcolor="white" | 
@@ -226,9 +227,9 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Plugin Author: | TWiki:Main.DanielRohde |
 |  Copyright: | &copy; 2006, TWiki:Main.DanielRohde |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | V1.010 (BETA) |
+|  Plugin Version: | V1.010 (19 Feb 2007) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  V1.010 (BETA) | TWiki:Main.DanielRohde: added tablecolumnwidth attribute requested by TWiki:Main.VickiBrown;  added tooltipformat attribute; |
+|  V1.010 (19 Feb 2007) | TWiki:Main.DanielRohde: added tablecolumnwidth and tabledatacellwidth attributes requested by TWiki:Main.VickiBrown;  added tooltip feature (tooltip... attributes); |
 |  V1.009 (7 Aug 2006) | TWiki:Main.DanielRohde: added duration feature; added time zone abbreviations; improved performance; fixed conflict rendering bug; fixed time zone bugs (whole-time event handling, topic include) |
 |  V1.008 (2 Aug 2006) | TWiki:Main.DanielRohde: added timezone feature requested by TWiki:Main.BenWatts; fixed major midday/midnight (12pm/12am) bug reported by TWiki:Main.BenWatts; fixed overlapping day bug; fixed periodic event bug; fixed minor bugs (stylesheet bug: annoying <nop>JavaScript errors; empty event row) |
 |  V1.007 (23 Jun 2006) | TWiki:Main.DanielRohde: fixed major bug (wholetimerow: empty column) |
