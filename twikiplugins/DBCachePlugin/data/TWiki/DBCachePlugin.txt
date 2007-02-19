@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1139587822" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1139587822" format="1.1" version="$Rev$"}%
 <!--
 
    PLEASE DO NOT EDIT THIS TOPIC
@@ -81,15 +81,29 @@ The following variables can be used in the format parameter:
    * $comment: the comment field
    * $date(&lt;format>): the attachment date using &lt;format> to format the date
    * $date: the attachment date
+   * $delete: the action to delete the current attachment
+   * $deleteUrl: the url used in the delete action
+   * $icon: img tag representing the filetype
+   * $iconUrl: the url pointing to the icon used in the img tag
    * $index: the position index of the attachment in the result
+   * $move: the action to move the current attachment
+   * $moveUrl: the url used in the move action
    * $name: the name of the attachment
    * $path: the path property of the attachment
+   * $props: the action to change the properties of the current attachment
+   * $propsUrl: the url used in the props action
    * $size: the size in bytes 
    * $sizeK: the size in kilo bytes 
    * $sizeM: the size in mega bytes 
+   * $topic: the name of the topic of whose attachments are listed
+   * $type: the file type of the current attachment
    * $url: the attachments url
    * $urlpath: the attachments urlpath
    * $user: the user that uploaded the attachment
+   * $web: the web name of the current topic
+   * $webdav: the action to edit the current attachment using the TWiki:Plugins/WebDavPlugin
+   * $webdavUrl: the url used in the webdav action
+   * $wikiuser: the user's home topic that recently changed the current attachment
 
 The header and footer format strings may only contain
    * $count: the number of attachments found
@@ -388,8 +402,9 @@ following is the default paramenter (omitting the #)
 |  Plugin Author: | TWiki:Main.MichaelDaum |
 |  Copyright &copy;: | 2005-2006, Michael Daum http://wikiring.com |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | v1.50 |
+|  Plugin Version: | v1.51 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  19 Feb 2007: | multiple enhancements to the ATTACHMENTS tag (e.g. icons, actions) |
 |  31 Jan 2007: | fixed caching "web" property of topics; \
                   fixed DBDUMP of topics w/o attachments;\
                   added numerical sorting of formfields; \
@@ -444,4 +459,4 @@ following is the default paramenter (omitting the #)
 |  Feedback: | TWiki:Plugins/%TOPIC%Dev |
 |  Appraisal: | TWiki:Plugins/%TOPIC%Appraisal |
 
--- TWiki:Main.MichaelDaum - 31 Jan 2007
+-- TWiki:Main.MichaelDaum - 19 Feb 2007
