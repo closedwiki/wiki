@@ -1,15 +1,14 @@
-
 <!--
 Interactive lookup
 
-   * Set STATE = %URLPARAM{"state" default=".*"}%
+   * Set STATE = %URLPARAM{"CurrentState" default=".*"}%
 -->
 <div class="twikiPageForm">
 <form name="chooser" action="%SCRIPTURL{"view"}%/%WEB%/%TOPIC%" method="get">
-<h3>Current State 
-<select name="state" onchange="chooser.submit()">
+<h3>%STARTSECTION{form_select}%Current State 
+<select name="CurrentState" onchange="chooser.submit()">
 %STARTSECTION{form_options}%
-<option %IF{"not defined $state" else="selected"}% >.*</option>
+<option %IF{"not defined $CurrentState" else="selected"}% >.*</option>
 %SEARCH{ 
     "^\|[^\|]*\| *option *\|" 
     topic="%TOPIC%" 
@@ -17,10 +16,11 @@ Interactive lookup
     multiple="on" 
     nosearch="on" 
     nototal="on" 
-    format="<option $percntIF{\"$state='$pattern(^\| *(.*?) *\|.*)'\" then=\"selected\"}$percnt >$pattern(^\| *(.*?) *\|.*)</option>" 
+    format="<option $percntIF{\"$CurrentState='$pattern(^\| *(.*?) *\|.*)'\" then=\"selected\"}$percnt >$pattern(^\| *(.*?) *\|.*)</option>" 
 }%
 %ENDSECTION{form_options}%
 </select>
+%ENDSECTION{form_select}%
 </h3>
 %INCLUDE{
 	"Bugs.Tabulator" 

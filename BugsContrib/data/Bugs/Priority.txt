@@ -1,15 +1,15 @@
-
 <!--
 Interactive lookup
 
-   * Set PRIORITY = %URLPARAM{"priority" default=".*"}%
+   * Set PRIORITY = %URLPARAM{"Priority" default=".*"}%
 -->
 <div class="twikiPageForm">
 <form name="chooser" action="%SCRIPTURL{"view"}%/%WEB%/%TOPIC%" method="get">
-<h3>Active Items with Priority
-<select name="priority" onchange="chooser.submit()">
+<h3>%STARTSECTION{form_select}%
+Active Items with Priority
+<select name="Priority" onchange="chooser.submit()">
 %STARTSECTION{form_options}%
-<option %IF{"not defined $priority" else="selected"}% >.*</option>
+<option %IF{"not defined $Priority" else="selected"}% >.*</option>
 %SEARCH{ 
     "^\|[^\|]*\| *option *\|" 
     topic="%TOPIC%" 
@@ -17,10 +17,11 @@ Interactive lookup
     multiple="on" 
     nosearch="on" 
     nototal="on" 
-    format="<option $percntIF{\"$priority='$pattern(^\| *(.*?) *\|.*)'\" then=\"selected\"}$percnt >$pattern(^\| *(.*?) *\|.*)</option>" 
+    format="<option $percntIF{\"$Priority='$pattern(^\| *(.*?) *\|.*)'\" then=\"selected\"}$percnt >$pattern(^\| *(.*?) *\|.*)</option>" 
 }%
 %ENDSECTION{form_options}%
 </select>
+%ENDSECTION{form_select}%
 </h3>
 %INCLUDE{
 	"Bugs.Tabulator" 
