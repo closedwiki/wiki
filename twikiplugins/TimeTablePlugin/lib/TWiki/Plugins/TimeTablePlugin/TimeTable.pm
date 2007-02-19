@@ -192,6 +192,7 @@ sub _initDefaults {
 		timezone => 0,
 		timezoneabbr => undef,
 		tablecolumnwidth => undef,
+		tabledatacellwidth => undef,
 		tooltipformat => '%DATE%<br/>%TIMERANGE%<br/> %DESCRIPTION% ',
 		tooltipfixleft=>-163,
 		tooltipfixtop=>0,
@@ -273,7 +274,7 @@ sub _initOptions {
                         if (grep /^\Q$option\E$/, @flagOptions) {
                                 $v = ( &TWiki::Func::getPreferencesFlag("\U${pluginName}_$option\E") || undef );
                         } else {
-                                $v = ( &TWiki::Func::getPreferencesValue("\U${pluginName}_$option\E") || undef );
+                                $v = &TWiki::Func::getPreferencesValue("\U${pluginName}_$option\E");
                         }
 			$v = undef if (defined $v) && ($v eq "");
                         $options{$option}=(defined $v)? $v : $defaults{$option};
@@ -515,7 +516,7 @@ sub _render {
 		$colfgcolor = $options{'todayfgcolor'} if ($options{'todayfgcolor'})&&($todayDays==$startDateDays+$day);
 		$colfgcolor = '' unless defined $colfgcolor;
 
-		$tr .= $cgi->td({-style=>(($colfgcolor ne '')?"color:$colfgcolor":''), -bgcolor=>$colbgcolor,-valign=>"top", -align=>"center", -title=>&_mystrftime($yy1,$mm1,$dd1,$options{'tooltipdateformat'})},&_mystrftime($yy1,$mm1,$dd1));
+		$tr .= $cgi->td({-style=>(($colfgcolor ne '')?"color:$colfgcolor":''), -bgcolor=>$colbgcolor,-valign=>"top", -align=>"center", -title=>&_mystrftime($yy1,$mm1,$dd1,$options{'tooltipdateformat'}), -width=>$options{'tablecolumnwidth'}},&_mystrftime($yy1,$mm1,$dd1));
 	}
 	$tr.=$cgi->td(&_renderNav(1));
 	$text .= $cgi->Tr($tr);
@@ -557,7 +558,7 @@ sub _render {
 							-bgcolor=>$$wtentry_ref{'bgcolor'}?$$wtentry_ref{'bgcolor'}:$options{eventbgcolor},
 							## -title=>$title,
 							-id=>"TTP_TD_${ttid}_${day}_W_${counter}",
-							-onmouseover=>"ttpTooltipShow('TTP_DIV_${ttid}_${day}_W_${counter}', 'TTP_TD_${ttid}_${day}_W_${counter}',$options{'tooltipfixleft'},$options{'tooltipfixtop'},true);",
+							-onmouseover=>"ttpTooltipShow('TTP_DIV_${ttid}_${day}_W_${counter}', 'TTP_TD_${ttid}_${day}_W_${counter}',".int($options{'tooltipfixleft'}).",".int($options{'tooltipfixtop'}).",true);",
 							-onmouseout=>"ttpTooltipHide('TTP_DIV_${ttid}_${day}_W_${counter}');",
 							}, 
 								$text
@@ -597,7 +598,7 @@ sub _render {
 							-bgcolor=>$$mentry_ref{'bgcolor'}?$$mentry_ref{'bgcolor'}:$options{eventbgcolor},
 							-rowspan=>$rs+$fillRows,
 							### -title=>$title,
-							-width=>$options{'tablecolumnwidth'},
+							-width=>$options{'tabledatacellwidth'},
 							-id=>"TTP_TD_${ttid}_${day}_${min}_${counter}",
 							-onmouseover=>"ttpTooltipShow('TTP_DIV_${ttid}_${day}_${min}_${counter}', 'TTP_TD_${ttid}_${day}_${min}_${counter}',$options{'tooltipfixleft'},$options{'tooltipfixtop'},true);",
 							-onmouseout=>"ttpTooltipHide('TTP_DIV_${ttid}_${day}_${min}_${counter}');",
