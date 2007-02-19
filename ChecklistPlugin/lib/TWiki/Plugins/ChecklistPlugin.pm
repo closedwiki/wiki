@@ -80,7 +80,7 @@ $VERSION = '$Rev$';
 # of the version number in PLUGINDESCRIPTIONS.
 $RELEASE = 'Cairo, Dakar, Edinburgh, ...';
 
-$REVISION = '1.023'; #dro# fixed minor anchor link bug reported by TWiki:Main.KeithHelfrich
+$REVISION = '1.023'; #dro# fixed minor anchor link bug reported by TWiki:Main.KeithHelfrich; fixed tooltip position bug
 #$REVISION = '1.022'; #dro# improved AJAX performance; added new feature (state selection for reset button); fixed %TOC% bug reported by TWiki:Main.HelenJohnstone; fixed some minor and major bugs (mod_perl, description stripping, static feature, 'text' icons);  removed useforms feature
 #$REVISION = '1.021'; #dro# fixed some major bug (mod_perl, plugin preferences); improved performance (AJAX); fixed minor IE caching bug (AJAX related); added new attributes (tooltip, descr, template, statesel) requested by TWiki:Main.KeithHelfrich; fixed installation instructions bug reported by TWiki:Main.KeithHelfrich
 #$REVISION = '1.020'; #dro# added AJAX feature (useajax attribute) requested by TWiki:Main.ShayPierce and TWiki:Main.KeithHelfrich
@@ -207,6 +207,8 @@ sub initDefaults {
 		'descrcharlimit'=>100,
 		'template' => undef,
 		'statesel' => 0,
+		'tooltipfixleft' => '-163',
+		'tooltipfixtop' => '0',
 	);
 
 	@listOptions = ('states','stateicons');
@@ -264,7 +266,7 @@ sub initOptions() {
                         if (grep /^\Q$option\E$/, @flagOptions) {
                                 $v = ( TWiki::Func::getPreferencesFlag("\U${pluginName}_$option\E") || undef );
                         } else {
-                                $v = ( TWiki::Func::getPreferencesValue("\U${pluginName}_$option\E") || undef ); 
+                                $v = TWiki::Func::getPreferencesValue("\U${pluginName}_$option\E"); 
                         }
 			$v = undef if (defined $v) && ($v eq "");
                         $options{$option}= (defined $v?$v:$globalDefaults{$option});
@@ -428,7 +430,7 @@ sub handleChecklist {
 		my $id = &urlEncode("${name}_${state}_".$namedResetIds{$name});
 		if ($state eq 'STATESEL') {
 			$text.=&createHiddenDirectResetSelectionDiv($namedResetIds{$name},$name,\@states,\@icons); 
-			$action="javascript:clpTooltipShow('CLP_SM_DIV_RESET_${name}_$namedResetIds{$name}', 'CLP_A_$id',10,10,true);";
+			$action="javascript:clpTooltipShow('CLP_SM_DIV_RESET_${name}_$namedResetIds{$name}', 'CLP_A_$id',".(10+int($options{'tooltipfixleft'})).",".(10+int($options{'tooltipfixtop'})).",true);";
 		}
 		$text.=$query->a({href=>$action,id=>'CLP_A_'.$id}, $linktext);
 
@@ -810,11 +812,11 @@ sub renderChecklistItem {
 
 	my ($onmouseover, $onmouseout)=("","");
 	$action="javascript:submitItemStateChange('$action');" if $options{'useajax'};
-	$onmouseover="clpTooltipShow('CLP_TT_$name$uetId','CLP_A_$name$uetId',20,20,true);";
+	$onmouseover="clpTooltipShow('CLP_TT_$name$uetId','CLP_A_$name$uetId',".(20+int($options{'tooltipfixleft'})).",".(20+int($options{'tooltipfixtop'})).",true);";
 	$onmouseout="clpTooltipHide('CLP_TT_$name$uetId');";
 	$text .= $query->div({-id=>"CLP_TT_$name$uetId",-style=>"visibility:hidden;position:absolute;top:0;left:0;z-index:2;font: normal 8pt sans-serif;padding: 3px; border: solid 1px; background-color: $options{'tooltipbgcolor'};"},$title);
 	if ($options{'statesel'} && (!$options{'static'})) {
-		$action="javascript:clpTooltipShow('CLP_SM_DIV_$name$uetId','CLP_A_$name$uetId',10,10,true);";
+		$action="javascript:clpTooltipShow('CLP_SM_DIV_$name$uetId','CLP_A_$name$uetId',".(10+int($options{'tooltipfixleft'})).",".(10+int($options{'tooltipfixtop'})).",true);";
 		$text .= &createHiddenDirectSelectionDiv($uetId, $name, $state, $icon, \@states, \@icons);
 	}
 	$action = "javascript:;" if $options{'static'};
@@ -845,7 +847,7 @@ sub createHiddenDirectSelectionDiv {
 					-id=>"CLP_SM_A_$name${id}_$i", 
 					-href=>"$action",
 					-style=>'vertical-align:bottom;',
-					-onmouseover=>"clpTooltipShow('CLP_SM_TT_$name${id}_$i','CLP_SM_IMG_$name${id}_$i',20,20);", 
+					-onmouseover=>"clpTooltipShow('CLP_SM_TT_$name${id}_$i','CLP_SM_IMG_$name${id}_$i',".(20+int($options{'tooltipfixleft'})).",".(20+int($options{'tooltipfixtop'})).";", 
 					-onmouseout=>"clpTooltipHide('CLP_SM_TT_$name${id}_$i');",
 				},
 				$query->img({src=>$imgsrc,id=>"CLP_SM_IMG_$name${id}_$i",alt=>$imgalt,border=>0,style=>'vertical-align:bottom;cursor:move;'}));
