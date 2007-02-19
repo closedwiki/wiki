@@ -86,6 +86,11 @@ Clients use the DBCache by defining a subclass of the =TWiki::Contrib::DBCache= 
 |  License: | As required for the publication of all extensions to TWiki, this software is published under the terms of the GNU General Public License. This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details, published at http://www.gnu.org/copyleft/gpl.html |
 |  Version: | %$VERSION% |
 |  Change History: | |
+|  12923 | added REF operator; \
+           added link to web object to hashes; \
+	   fixed parent relation to end in WebHome; \
+	   added "web" property to topic hashes; \
+           caching META:PREFERENCES now |
 |  11537 | Added lc and uc operators for case-insensitive searches |
 |  9303 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1844>'>Item1844</a> don't die on broken symlinks |
 |  8682 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1580'>Item1580</a>  one-char fix that makes the difference |

@@ -118,10 +118,10 @@ sub _writeCache {
 # PRIVATE read from cache file.
 # May throw an exception.
 sub _readCache {
-	my ( $this, $cache ) = @_;
-	my $data;
+    my ( $this, $cache ) = @_;
+    my $data;
 
-	return undef unless ( -e $cache );
+    return undef unless ( -e $cache );
 
     my $mayBeArchive = 1;
 
@@ -134,7 +134,7 @@ sub _readCache {
         } elsif ( $data ) {
             $mayBeArchive = 0;
         }
-	}
+    }
 
     if ( $mayBeArchive ) {
         eval {
@@ -146,9 +146,9 @@ sub _readCache {
             print STDERR "Retrieve of Archive $cache failed with $@\n";
             $data = undef;
         }
-	}
+    }
 
-	return $data;
+    return $data;
 }
 
 # PRIVATE load a single topic from the given data directory. This
@@ -158,7 +158,8 @@ sub _readCache {
 sub _loadTopic {
     my ( $this, $dataDir, $topic ) = @_;
     my $filename = "$dataDir/$topic.txt";
-	my $fh;
+    my $fh;
+
 
     unless (open( $fh, "<$filename" )) {
       print STDERR "WARNING: Failed to open $dataDir/$topic.txt\n";
@@ -168,10 +169,10 @@ sub _loadTopic {
     $meta->set( "name", $topic );
     $meta->set( "topic", $topic );
     $meta->set( ".cache_time", new TWiki::Contrib::DBCacheContrib::FileTime( $filename ));
-	
+
     my $line;
-	my $text = "";
-	my $form;
+    my $text = "";
+    my $form;
     my $tailMeta = 0;
     local $/ = "\n";
     while ( $line = <$fh> ) {
@@ -214,6 +215,17 @@ sub _loadTopic {
                 $meta->set( "attachments", $atts );
             }
             $atts->add( $att );
+            $tailMeta = 1;
+        } elsif ( $line =~ m/^%META:PREFERENCE{(.*)}%/o ) {
+            my $pref = new TWiki::Contrib::DBCacheContrib::Map($1);
+	    $pref->set( "_up", $meta);
+	    $pref->set( "_web", $this);
+	    my $prefs = $meta->get("preferences");
+	    if (!defined($prefs)) {
+	      $prefs = new TWiki::Contrib::DBCacheContrib::Array();
+	      $meta->set("preferences", $prefs);
+	    }
+	    $prefs->add($pref);
             $tailMeta = 1;
         } else {
             $line = $this->readTopicLine( $topic, $meta, $line, $fh );
@@ -258,7 +270,7 @@ read from disc rather than from the cache. Passed a list of topic names that hav
 =cut
 
 sub onReload {
-	#my ( $this, @$topics) = @_;
+    #my ( $this, @$topics) = @_;
 }
 
 sub _onReload {
@@ -266,6 +278,9 @@ sub _onReload {
 
     foreach my $topic ( $this->getValues() ) {
         # Fill in parent relations
+        unless ($topic->get('parent')) {
+          $topic->set('parent', $TWiki::cfg{HomeTopicName}); # last parent is WebHome
+        }
         unless ( $topic->get( "_up" )) {
             my $parent = $topic->get( "parent" );
             $parent = $this->get( $parent );
@@ -340,9 +355,9 @@ sub load {
         my @readTopic;
         foreach my $topic ( @topics ) {
             if ($this->_loadTopic( $dataDir, $topic )) {
-	      $readFromFile++;
-	      push( @readTopic, $topic );
-	    }
+              $readFromFile++;
+              push( @readTopic, $topic );
+            }
         }
         $this->_onReload( \@readTopic );
         $writeCache = 1;
@@ -390,15 +405,15 @@ sub _updateCache {
     }
 
     my $readFromFile = 0;
-	my @readTopic;
+    my @readTopic;
 
     # load topics that are missing from the cache
     foreach $topic ( @$topics ) {
         if ( !defined( $cache->fastget( $topic ))) {
             if ($cache->_loadTopic( $dataDir, $topic )) {
-	      $readFromFile++;
-	      push( @readTopic, $topic );
-	    }
+              $readFromFile++;
+              push( @readTopic, $topic );
+            }
         }
     }
     $this->{keys} = $cache->{keys};
