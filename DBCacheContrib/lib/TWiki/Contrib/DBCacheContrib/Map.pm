@@ -8,7 +8,7 @@ use TWiki::Contrib::DBCacheContrib::Array;
 
 =begin text
 
----++ class Map
+---++ package TWiki::Contrib::DBCacheContrib::Map
 Generic map object for mapping names to things. A name is defined as
   =name = \w+ | \w+ "." name=
 The . indicates a field reference in a sub-map.

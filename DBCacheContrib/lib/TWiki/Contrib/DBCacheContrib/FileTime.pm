@@ -6,14 +6,14 @@ use strict;
 
 =begin text
 
----++ class FileTime
+---++ package TWiki::Contrib::DBCacheContrib::FileTime
 
 Object that handles a file/time tuple for use in Storable and
 =TWiki::Contrib::DBCacheContrib::Archive=.
 
 =cut
 
-{ package TWiki::Contrib::DBCacheContrib::FileTime;
+package TWiki::Contrib::DBCacheContrib::FileTime;
 
 =begin text
 
@@ -23,7 +23,7 @@ Construct from a file name
 
 =cut
 
-  sub new {
+sub new {
     my ( $class, $file ) = @_;
     my $this = bless( {}, $class );
     return $this unless ( $file ); # needed for read()
@@ -31,27 +31,27 @@ Construct from a file name
     my @sinfo = stat( $file );
     $this->{time} = $sinfo[9];
     return $this;
-  }
+}
 
 =begin text
 
----+++ =uptodate()= -< boolean
+---+++ =uptodate()= -> boolean
 Check the file time against what is seen on disc. Return 1 if consistent, 0 if inconsistent.
 
 =cut
 
-  sub uptodate {
+sub uptodate {
     my $this = shift;
     my $file = $this->{file};
     if ( -r $file && defined( $this->{time} )) {
-      my @sinfo = stat( $file );
-      my $fileTime = $sinfo[9];
-      if ( defined( $fileTime) && $fileTime == $this->{time} ) {
-	return 1;
-      }
+        my @sinfo = stat( $file );
+        my $fileTime = $sinfo[9];
+        if ( defined( $fileTime) && $fileTime == $this->{time} ) {
+            return 1;
+        }
     }
     return 0;
-  }
+}
 
 =begin text
 
@@ -59,11 +59,12 @@ Check the file time against what is seen on disc. Return 1 if consistent, 0 if i
 Generates a string representation of the object.
 
 =cut
-  sub toString {
+
+sub toString {
     my $this = shift;
     my $stime = localtime( $this->{time} );
     return $this->{file} . ":$stime"
-  }
+}
 
 =begin text
 
@@ -72,12 +73,12 @@ TWiki::Contrib::DBCacheContrib::Archive hook
 
 =cut
 
-  sub write {
+sub write {
     my ( $this, $archive ) = @_;
 
     $archive->writeString( $this->{file} );
     $archive->writeInt( $this->{time} );
-  }
+}
 
 =begin text
 
@@ -86,12 +87,11 @@ TWiki::Contrib::DBCacheContrib::Archive hook
 
 =cut
 
-  sub read {
+sub read {
     my ( $this, $archive ) = @_;
 
     $this->{file} = $archive->readString();
     $this->{time} = $archive->readInt();
-  }
 }
 
 1;

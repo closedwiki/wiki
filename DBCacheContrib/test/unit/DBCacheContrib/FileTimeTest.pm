@@ -18,8 +18,8 @@ my $scache;
 my $twiki;
 
 sub new {
-  my $self = shift()->SUPER::new(@_);
-  return $self;
+    my $self = shift()->SUPER::new(@_);
+    return $self;
 }
 
 sub _readFile {
@@ -40,18 +40,18 @@ sub set_up {
 
     $twiki->{store}->createWeb($twiki->{user}, $testweb);
 
-  my $dbt = _readFile("./testDB.dat");
-  $root = TWiki::Func::getDataDir() . "/$testweb";
-  $files = new TWiki::Contrib::DBCacheContrib::Array();
-  foreach my $t ( split(/\<TOPIC\>/,$dbt)) {
-    if ( $t =~ m/\"(.*?)\"/o ) {
-        $twiki->{store}->saveTopic( $twiki->{user}, $testweb, $1,
-                                    $t, undef );
-        $files->add(new TWiki::Contrib::DBCacheContrib::FileTime( "$root/$1.txt" ));
+    my $dbt = _readFile("./testDB.dat");
+    $root = TWiki::Func::getDataDir() . "/$testweb";
+    $files = new TWiki::Contrib::DBCacheContrib::Array();
+    foreach my $t ( split(/\<TOPIC\>/,$dbt)) {
+        if ( $t =~ m/\"(.*?)\"/o ) {
+            $twiki->{store}->saveTopic( $twiki->{user}, $testweb, $1,
+                                        $t, undef );
+            $files->add(new TWiki::Contrib::DBCacheContrib::FileTime( "$root/$1.txt" ));
+        }
     }
-  }
-  $acache = "$root/cache.Archive";
-  $scache = "$root/cache.Storable";
+    $acache = "$root/cache.Archive";
+    $scache = "$root/cache.Storable";
 }
 
 sub tear_down {
@@ -61,38 +61,38 @@ sub tear_down {
 }
 
 sub test_OK {
-  my $this = shift;
-  # Make sure the file times reflect what's on disc
-  foreach my $ft ( $files->getValues() ) {
-    $this->assert($ft->uptodate());
-  }
+    my $this = shift;
+    # Make sure the file times reflect what's on disc
+    foreach my $ft ( $files->getValues() ) {
+        $this->assert($ft->uptodate());
+    }
 }
 
 sub test_touchOne {
-  my $this = shift;
-  sleep(1);# make sure file times are different
-  `touch $root/Dir4.txt`;
+    my $this = shift;
+    sleep(1);# make sure file times are different
+    `touch $root/Dir4.txt`;
 
-  foreach my $ft ( $files->getValues() ) {
-    if ( $ft->{file} eq "$root/Dir4.txt") {
-      $this->assert(!$ft->uptodate());
-    } else {
-      $this->assert($ft->uptodate());
+    foreach my $ft ( $files->getValues() ) {
+        if ( $ft->{file} eq "$root/Dir4.txt") {
+            $this->assert(!$ft->uptodate());
+        } else {
+            $this->assert($ft->uptodate());
+        }
     }
-  }
 }
 
 sub test_delOne {
-  my $this = shift;
-  `rm $root/Dir2.txt`;
+    my $this = shift;
+    `rm $root/Dir2.txt`;
 
-  foreach my $ft ( $files->getValues() ) {
-    if ( $ft->{file} eq "$root/Dir2.txt") {
-      $this->assert(!$ft->uptodate());
-    } else {
-      $this->assert($ft->uptodate());
+    foreach my $ft ( $files->getValues() ) {
+        if ( $ft->{file} eq "$root/Dir2.txt") {
+            $this->assert(!$ft->uptodate());
+        } else {
+            $this->assert($ft->uptodate());
+        }
     }
-  }
 }
 
 1;
