@@ -80,7 +80,8 @@ $VERSION = '$Rev$';
 # of the version number in PLUGINDESCRIPTIONS.
 $RELEASE = 'Cairo, Dakar, Edinburgh, ...';
 
-$REVISION = '1.022'; #dro# improved AJAX performance; added new feature (state selection for reset button); fixed %TOC% bug reported by TWiki:Main.HelenJohnstone; fixed some minor and major bugs (mod_perl, description stripping, static feature, 'text' icons);  removed useforms feature
+$REVISION = '1.023'; #dro# fixed minor anchor link bug reported by TWiki:Main.KeithHelfrich
+#$REVISION = '1.022'; #dro# improved AJAX performance; added new feature (state selection for reset button); fixed %TOC% bug reported by TWiki:Main.HelenJohnstone; fixed some minor and major bugs (mod_perl, description stripping, static feature, 'text' icons);  removed useforms feature
 #$REVISION = '1.021'; #dro# fixed some major bug (mod_perl, plugin preferences); improved performance (AJAX); fixed minor IE caching bug (AJAX related); added new attributes (tooltip, descr, template, statesel) requested by TWiki:Main.KeithHelfrich; fixed installation instructions bug reported by TWiki:Main.KeithHelfrich
 #$REVISION = '1.020'; #dro# added AJAX feature (useajax attribute) requested by TWiki:Main.ShayPierce and TWiki:Main.KeithHelfrich
 #$REVISION = '1.019'; #dro# fixed major default options bug reported by TWiki:Main.RichardHitier 
@@ -494,8 +495,8 @@ sub substAttributes {
 # =========================
 sub substItemLine {
 	my ($l,$attribs)=@_;
-	if ($l=~s/\#(\S+)//) {
-		$attribs.=" id=\"$1\"";
+	if ($l=~s/(\s+)\#(\S+)/$1/) {
+		$attribs.=" id=\"$2\"";
 	}
 	if ($l=~/\%CLI{.*?}\%/) {
 		$l=~s/\%CLI{(.*?)}\%/\%CLI{$1 $attribs}\%/g;
@@ -520,7 +521,7 @@ sub handleAutoChecklist {
 
 	$text=~s/\%CLI(\{([^\}]*)\})?\%/&substAttributes($attributes, $2)/meg;
 	$text=~s/^(\s+[\d\*]+.*?)$/&substItemLine($1,$attributes)/meg;
-	$text=~s/([^\n]+?)\#(\S+)/$1.&substAttributes($attributes, "id=\"$2\"")/meg;
+	$text=~s/([^\n]+?\s+)\#(\S+)/$1.&substAttributes($attributes, "id=\"$2\"")/meg;
 
 	if (lc($options{'pos'}) eq 'top' ) {
 		$text="\%CHECKLIST{$attributes}\%\n$text";

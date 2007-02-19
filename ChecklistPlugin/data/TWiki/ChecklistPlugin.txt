@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1171292335" format="1.0" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1171880326" format="1.0" version="$Rev$"}%
 ---+!! Checklist Plugin
 
 <nop>ChecklistPlugin creates simple checklists. 
@@ -225,7 +225,7 @@ To change the state of a checklist item just click on it.
 
 <tr><td colspan="2" bgcolor="#CCCCCC"> *Example 9: Insert new items in an existing checklist without state lost:*
 	* =first step= and =second step= was clicked before new items (=first new inserted item= and =second new inserted item=) were added
-	* *Hint:* You can put a =#&lt;ID&gt;= instead of =%<nop>CLI{id="&lt;ID&gt;"}%= into a bullet or ordered list item to add/insert a checklist item with own id. This works only between =%<nop>CHECKLISTSTART%...%<nop>CHECKLISTEND%=.
+	* *Hint:* You can put a =&lt;whitespace&gt;#&lt;ID&gt;= instead of =%<nop>CLI{id="&lt;ID&gt;"}%= into a bullet or ordered list item to add/insert a checklist item with own id. This works only between =%<nop>CHECKLISTSTART%...%<nop>CHECKLISTEND%=.
 </td></tr>
 <tr>
 <td bgcolor="#EEEEEE" valign="top">
@@ -379,8 +379,9 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.DanielRohde |
-|  Plugin Version: | v1.022 (12 Feb 2007) |
+|  Plugin Version: | v1.023 (BETA) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  v1.023 (BETA) | TWiki:Main.DanielRohde: fixed minor anchor link bug reported by TWiki:Main.KeithHelfrich |
 |  v1.022 (12 Feb 2007) | TWiki:Main.DanielRohde: improved AJAX performance; added new feature (state selection for reset button); fixed %<nop>TOC% bug reported by TWiki:Main.HelenJohnstone; fixed some minor and major bugs (mod_perl, description stripping, =static= feature, 'text' icons);  removed useforms feature |
 |  v1.021 (31 Jan 2007) | TWiki:Main.DanielRohde: fixed some major bugs (mod_perl, plugin preferences); improved performance (AJAX); fixed minor IE caching bug (AJAX related); added new attributes (tooltip, descr, template, statesel) requested by TWiki:Main.KeithHelfrich; fixed installation instructions bug reported by TWiki:Main.KeithHelfrich |
 |  v1.020 (15 Jan 2007) | TWiki:Main.DanielRohde: added AJAX feature (=useajax= attribute) requested by TWiki:Main.ShayPierce and TWiki:Main.KeithHelfrich |
