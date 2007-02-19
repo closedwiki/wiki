@@ -216,28 +216,23 @@ function submitItemStateChange(url) {
 }
 
 // --- tooltips (derived from http://www.texsoft.it/index.php?c=software&m=sw.js.htmltooltip&l=it) ---
-function clpTooltipFindPosX(obj) 
-{
-	var curleft = 0;
-	if (obj.offsetParent) {
-		//while (obj.offsetParent) {
-			curleft += obj.offsetLeft
-			obj = obj.offsetParent;
-		//}
-	} else if (obj.x) curleft += obj.x;
-	
-	return curleft;
-}
-function clpTooltipFindPosY(obj) 
-{
-	var curtop = 0;
-	if (obj.offsetParent) {
-		while (obj.offsetParent) {
-			curtop += obj.offsetTop
-			obj = obj.offsetParent;
-		}
-	} else if (obj.y) curtop += obj.y;
-	return curtop;
+function clpTooltipFindPos(obj) {
+        var curleft;
+        var curtop;
+        curleft = 0; curtop = 0;
+
+        if (obj.offsetParent) {
+                curleft = obj.offsetLeft;
+                curtop = obj.offsetTop;
+                while ((obj = obj.offsetParent)) {
+                        if (obj.offsetLeft) curleft += obj.offsetLeft;
+                        if (obj.offsetTop) curtop += obj.offsetTop;
+                }
+        } else if (obj.x && obj.y) {
+                curleft = obj.x;
+                curtop = obj.y;
+        }
+        return [curleft,curtop];
 }
 var clpTooltipLastVisibleId = new Array();
 function clpTooltipShow(tooltipId, parentId, posX, posY,closeAll) {
@@ -251,24 +246,16 @@ function clpTooltipShow(tooltipId, parentId, posX, posY,closeAll) {
 	clpTooltipLastVisibleId.push(tooltipId);
     
 	if (!it) return;
-	//if ((it.style.top == '' || it.style.top == 0) && (it.style.left == '' || it.style.left == 0)) {
-		// need to fixate default size (MSIE problem)
-		// it.style.width = it.offsetWidth + 'px';
-		// it.style.height = it.offsetHeight + 'px';
 
-		var img = document.getElementById(parentId); 
+	var img = document.getElementById(parentId); 
 
-		// if tooltip is too wide, shift left to be within parent 
-		//if (posX + it.offsetWidth > img.offsetWidth) posX = img.offsetWidth - it.offsetWidth;
-		//if (posX < 0 ) posX = 0; 
+	var pos = clpTooltipFindPos(img);
 
-		var x = clpTooltipFindPosX(img) + posX;
-		var y = clpTooltipFindPosY(img) + posY;
+	it.style.left = (pos[0]+posX) + 'px';
+	it.style.top = (pos[1]+posY) + 'px';
 
-		it.style.left = x + 'px';
-		it.style.top = y + 'px';
-	//}
 	it.style.visibility = 'visible'; 
+
 	img.style.cursor=clpCursorNormalStyle;
 }
 

@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1171880326" format="1.0" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1171893346" format="1.0" version="$Rev$"}%
 ---+!! Checklist Plugin
 
 <nop>ChecklistPlugin creates simple checklists. 
@@ -281,6 +281,8 @@ Examples:
 | text | %<nop>CLI% | text will be attached to the item and will be clickable  | =text="my first step"= |
 | tooltip | %<nop>CLI%<br/>%<nop>CHECKLIST%<br/>%<nop>CHECKLISTSTART% | sets the tooltip of the state icons (substituted variables: %<nop>STATE% - current state; %<nop>NEXTSTATE% - next state; %<nop>STATEICON% - state icon; %<nop>NEXTSTATEICON% - next state icon; %<nop>STATES% - comma separated list of all states; %<nop>STATECOUNT% - number of states; %<nop>LEGEND% - a legend of all states and state icons) | =tooltip="%<nop>STATE%"= |
 | tooltipbgcolor | %<nop>CLI%<br/>%<nop>CHECKLIST%<br/>%<nop>CHECKLISTSTART% | tooltip background color (=statesel= popup background color is also effected) | =tooltipbgcolor="%<nop>WEBBGCOLOR%"= |
+| tooltipfixleft | %<nop>CLI%<br/>%<nop>CHECKLIST%<br/>%<nop>CHECKLISTSTART% | offset to fix horizontal tooltip position | =tooltipfixleft="-163"= |
+| tooltipfixtop | %<nop>CLI%<br/>%<nop>CHECKLIST%<br/>%<nop>CHECKLISTSTART% | offset to fix vertical tooltip position | =tooltipfixtop="0"= |
 | useajax | %<nop>CLI%<br/>%<nop>CHECKLIST%<br/>%<nop>CHECKLISTSTART%  | enables/disables <nop>JavaScript/AJAX based item state changes (default: =on=) | =useajax="1"= |
 ---++ Examples
 Use this examples to check your installation:
@@ -324,9 +326,6 @@ Plugin settings are stored as preferences variables. To reference a plugin setti
 	* Set unknown parameter message (default: =%<nop>RED% Sorry, some parameters are unknown: %<nop>UNKNOWNPARAMSLIST% %<nop>ENDCOLOR% &lt;br/&gt; Allowed parameters are (see <nop>TWiki.ChecklistPlugin topic for more details): %<nop>KNOWNPARAMSLIST%= </verbatim>)
 		* # Set UNKNOWNPARAMSMSG = %RED% Following parameter(s) is/are unknown: %UNKNOWNPARAMSLIST% %ENDCOLOR%
 
-	* Enables/Disables HTML form usage (default: =off=; old behavior: =on=)
-		* # Set USEFORMS = on
-
 	* Enables/Disables mail notification (default: =off=; old bevavior: =on=)
 		* # Set NOTIFY = on
 	
@@ -335,6 +334,10 @@ Plugin settings are stored as preferences variables. To reference a plugin setti
 
 	* Sets the icon state tooltip:
 		* # Set TOOLTIP = Click me to change my state '%STATE%' to '%NEXTSTATE'.
+
+	* Sets offsets to fix horizontal/vertical tooltip position:
+		* # Set TOOLTIPFIXLEFT = 0
+		* # Set TOOLTIPFIXTOP = 0
 
 	* Enables/Disables state selection popup (default: =off=):
 		* # Set STATESEL = on
@@ -381,7 +384,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Plugin Author: | TWiki:Main.DanielRohde |
 |  Plugin Version: | v1.023 (BETA) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  v1.023 (BETA) | TWiki:Main.DanielRohde: fixed minor anchor link bug reported by TWiki:Main.KeithHelfrich |
+|  v1.023 (BETA) | TWiki:Main.DanielRohde: fixed minor anchor link bug reported by TWiki:Main.KeithHelfrich; fixed tooltip position bug |
 |  v1.022 (12 Feb 2007) | TWiki:Main.DanielRohde: improved AJAX performance; added new feature (state selection for reset button); fixed %<nop>TOC% bug reported by TWiki:Main.HelenJohnstone; fixed some minor and major bugs (mod_perl, description stripping, =static= feature, 'text' icons);  removed useforms feature |
 |  v1.021 (31 Jan 2007) | TWiki:Main.DanielRohde: fixed some major bugs (mod_perl, plugin preferences); improved performance (AJAX); fixed minor IE caching bug (AJAX related); added new attributes (tooltip, descr, template, statesel) requested by TWiki:Main.KeithHelfrich; fixed installation instructions bug reported by TWiki:Main.KeithHelfrich |
 |  v1.020 (15 Jan 2007) | TWiki:Main.DanielRohde: added AJAX feature (=useajax= attribute) requested by TWiki:Main.ShayPierce and TWiki:Main.KeithHelfrich |
