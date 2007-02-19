@@ -20,22 +20,25 @@ use strict;
 
 # =========================
 use vars qw(
-        $web $topic $user $installWeb $VERSION $RELEASE $isInitialized $igpId
+        $VERSION $RELEASE $isInitialized $igpId $doneHeader
     );
 
 $VERSION = '$Rev$';
-$RELEASE = '3.41';
+$RELEASE = '3.5';
 
 # =========================
 sub initPlugin {
-  ($topic, $web, $user, $installWeb) = @_;
+  #my ($topic, $web, $user, $installWeb) = @_;
 
   if ($TWiki::Plugins::VERSION < 1) {
     &TWiki::Func::writeWarning("Version mismatch between ImageGalleryPlugin and Plugins.pm");
     return 0;
   }
-  $isInitialized = 0;
   $igpId = 1;
+  $doneHeader = 0;
+
+  TWiki::Func::registerTagHandler('IMAGEGALLERY', \&renderImageGallery);
+  TWiki::Func::registerTagHandler('NRIMAGES', \&renderNrImages);
 
   return 1;
 }
@@ -43,62 +46,52 @@ sub initPlugin {
 # =========================
 sub commonTagsHandler {
 
-  $_[0] =~ s/%IMAGEGALLERY%/&renderImageGallery($igpId++)/geo;
-  $_[0] =~ s/%IMAGEGALLERY{(.*?)}%/&renderImageGallery($igpId++, $1)/geo;
-  $_[0] =~ s/%NRIMAGES{(.*?)}%/&renderNrImages($1)/geo;
+  if (!$doneHeader) {
+    # add css definitions, deliberately NOT using addToHEAD()
+    my $link = 
+      '<link rel="stylesheet" '.
+      'href="%PUBURL%/%TWIKIWEB%/ImageGalleryPlugin/style.css" '.
+      'type="text/css" media="all" />';
+
+    if ($_[0] =~ s/<head>(.*?[\r\n]+)/<head>$1$link\n/o) {
+      $doneHeader = 1;
+    }
+  }
+
 }
 
 # =========================
 sub doInit {
-
   return if $isInitialized;
-
-  if ($TWiki::Plugins::VERSION < 1.020) {
-    eval 'use TWiki::Contrib::CairoContrib;';
-    return "Error:\%BR\%\n<pre style=\"font-size:9pt\">\n$@</pre>\n"
-      if $@;
-  }
+  $isInitialized = 1;
 
   eval 'use TWiki::Plugins::ImageGalleryPlugin::Core();';
-  return "Error:\%BR\%\n<pre style=\"font-size:9pt\">\n$@</pre>\n"
-    if $@;
-
-  $isInitialized = 1;
+  die $@ if $@;
 
   return undef;
 }
 
 # =========================
 sub renderImageGallery {
-  my ($id, $args) = @_;
+  my ($session, $params, $theTopic, $theWeb) = @_;
 
-  my $error = &doInit();
+  doInit();
 
-  if ($error) {
-    &TWiki::Func::writeWarning("ImageGalleryPlugin::doInit() - $error");
-    return $error;
-  }
-
-  my $igp = TWiki::Plugins::ImageGalleryPlugin::Core->new($id, $topic, $web);
-  return $igp->render($args);
+  my $igp = TWiki::Plugins::ImageGalleryPlugin::Core->new($igpId++, $theTopic, $theWeb);
+  return $igp->render($params);
 }
 
 # =========================
 sub renderNrImages {
-  my ($args) = @_;
+  my ($session, $params, $theTopic, $theWeb) = @_;
 
-  my $error = &doInit();
+  doInit();
 
-  if ($error) {
-    &TWiki::Func::writeWarning("ImageGalleryPlugin::doInit() - $error");
-    return $error;
-  }
-
-  my $igp = TWiki::Plugins::ImageGalleryPlugin::Core->new(undef, $topic, $web);
-  if ($igp->init($args)) {
+  my $igp = TWiki::Plugins::ImageGalleryPlugin::Core->new(undef, $theTopic, $theWeb);
+  if ($igp->init($params)) {
     return scalar @{$igp->getImages()};
   } else {
-    return TWiki::Plugins::ImageGalleryPlugin::Core::renderError("can't initialize using '$args'");
+    return TWiki::Plugins::ImageGalleryPlugin::Core::renderError("can't initialize");
   }
 }
 
