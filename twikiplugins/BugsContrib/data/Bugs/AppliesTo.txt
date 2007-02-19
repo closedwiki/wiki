@@ -1,16 +1,14 @@
-
-
 <!--
 Interactive lookup
 
-   * Set CLASS = %URLPARAM{"class" default=".*"}%
+   * Set CLASS = %URLPARAM{"AppliesTo" default=".*"}%
 -->
 <div class="twikiPageForm">
 <form name="chooser" action="%SCRIPTURL{"view"}%/%WEB%/%TOPIC%" method="get">
-<h3>Active Items for
-<select name="class" onchange="chooser.submit()">
+<h3>%STARTSECTION{form_select}%Active Items for
+<select name="AppliesTo" onchange="chooser.submit()">
 %STARTSECTION{form_options}%
-<option %IF{"not defined $class" else="selected"}% >.*</option>
+<option %IF{"not defined $AppliesTo" else="selected"}% >.*</option>
 %SEARCH{ 
     "^\|[^\|]*\| *option *\|" 
     topic="%TOPIC%" 
@@ -18,10 +16,11 @@ Interactive lookup
     multiple="on" 
     nosearch="on" 
     nototal="on" 
-    format="<option $percntIF{\"$class='$pattern(^\| *(.*?) *\|.*)'\" then=\"selected\"}$percnt >$pattern(^\| *(.*?) *\|.*)</option>" 
+    format="<option $percntIF{\"$AppliesTo='$pattern(^\| *(.*?) *\|.*)'\" then=\"selected\"}$percnt >$pattern(^\| *(.*?) *\|.*)</option>" 
 }%
 %ENDSECTION{form_options}%
 </select>
+%ENDSECTION{form_select}%
 </h3>
 %INCLUDE{
 	"Bugs.Tabulator" 
