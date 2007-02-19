@@ -467,6 +467,24 @@ sub handleDBDUMP {
     $result .= "</table>\n";
   }
 
+  # read preferences
+  my $prefs = $topicObj->fastget('preferences');
+  if ($prefs) {
+    $result .= "<p/>\n---++ Preferences = $prefs\n";
+    $result .= "<table class=\"twikiTable\">\n";
+    $result .= '<tr><th>type</th><th>name</th><th>title</th><th>value</th><th>_up</th><th>_web</th></tr>'."\n";
+    foreach my $pref (sort {$a->fastget('name') cmp $b->fastget('name')} $prefs->getValues()) {
+      $result .= "<tr><td>".$pref->fastget('type')."</td>\n";
+      $result .= "<td>".$pref->fastget('name')."</td>\n";
+      $result .= "<td>".$pref->fastget('title')."</td>\n";
+      $result .= "<td>".$pref->fastget('value')."</td>\n";
+      $result .= "<td>".$pref->fastget('_up')."</td>\n";
+      $result .= "<td>".$pref->fastget('_web')."</td>\n";
+      $result .= "</tr>\n";
+    }
+    $result .= "</table>\n";
+  }
+
   return $result."\n</noautolink>\n";
 }
 
@@ -534,40 +552,89 @@ sub handleATTACHMENTS {
   my $index = 0;
   foreach my $attachment (@attachments) {
     my $name = $attachment->fastget('name');
-    writeDebug("name=$name");
+    #writeDebug("name=$name");
     next unless $name =~ /^($theNames)$/;
 
     my $attr = $attachment->fastget('attr');
-    writeDebug("attr=$attr");
+    #writeDebug("attr=$attr");
     next unless $attr =~ /^($theAttr)$/;
 
     my $autoattached = $attachment->fastget('autoattached') || 0;
-    writeDebug("autoattached=$autoattached");
+    #writeDebug("autoattached=$autoattached");
     next if $theAutoAttached == 0 && $autoattached != 0;
     next if $theAutoAttached == 1 && $autoattached != 1;
 
     my $date = $attachment->fastget('date');
-    writeDebug("date=$date");
+    #writeDebug("date=$date");
     next if $theMinDate && $date < $theMinDate;
     next if $theMaxDate && $date > $theMaxDate;
 
     my $user = $attachment->fastget('user');
-    writeDebug("user=$user");
+    #writeDebug("user=$user");
     next unless $user =~ /^($theUser)$/;
+    my ($userWeb, $userTopic) = TWiki::Func::normalizeWebTopicName('', $user);
 
     my $size = $attachment->fastget('size');
-    writeDebug("size=$size");
+    #writeDebug("size=$size");
     next if $theMinSize && $size < $theMinSize;
     next if $theMaxSize && $size > $theMaxSize;
 
+    my $sizeK = sprintf("%.2f",$size/1024);
+    my $sizeM = sprintf("%.2f",$sizeK/1024);
+
     my $path = $attachment->fastget('path');
-    writeDebug("path=$path");
+    #writeDebug("path=$path");
 
     my $comment = $attachment->fastget('comment') || '';
     next unless $comment =~ /^($theComment)$/;
+
+    my $fileType = $session->mapToIconFileName($path); # SMELL: no func api
+    my $iconUrl = $session->getIconUrl(0, $fileType);
+    my $icon = 
+      '<img src="'.$iconUrl.'" '.
+      'width="16" height="16" align="top" '.
+      'alt="'.$fileType.'" '.
+      'border="0" />';
+
+    # actions
+    my $webDavUrl = '%WIKIDAVPUBURL%/'.$thisWeb.'/'.$thisTopic.'/'.$name;
+    my $webDavAction = 
+      '<a rel="nofollow" href="'.$webDavUrl.'" '.
+      'title="%MATETEXT{"edit [_1] using webdav" args="<nop>'.$name.'"}%">'.
+      '%MAKETEXT{"edit"}%</a>';
+
+    my $propsUrl = '%SCRIPTURLPATH{"attach"}%/'.$thisWeb.'/'.$thisTopic.'?filename='.$name.'&revInfo=1';
+    my $propsAction =
+      '<a rel="nofollow" href="'.$propsUrl.'" '.
+      'title="%MAKETEXT{"manage properties of [_1]" args="<nop>'.$name.'"}%">'.
+      '%MAKETEXT{"props"}%</a>';
+
+    my $moveUrl = '%SCRIPTURLPATH{"rename"}%/'.$thisWeb.'/'.$thisTopic.'?attachment='.$name;
+    my $moveAction =
+      '<a rel="nofollow" href="'.$moveUrl.'" '.
+      'title="%MAKETEXT{"move or delete [_1]" args="<nop>'.$name.'"}%">'.
+      '%MAKETEXT{"move"}%</a>';
+
+    my $deleteUrl = '%SCRIPTURLPATH{"rename"}%/'.$thisWeb.'/'.$thisTopic.
+      '?attachment='.$name.'&newweb=Trash';
+    my $deleteAction =
+      '<a rel="nofollow" href="'.$deleteUrl.'" '.
+      'title="%MAKETEXT{"delete [_1]" args="<nop>'.$name.'"}%">'.
+      '%MAKETEXT{"delete"}%</a>';
     
     $index++;
     my $text = _expandVariables($theFormat, $thisWeb, $thisTopic,
+      'webdav'=>$webDavAction,
+      'webdavUrl'=>$webDavUrl,
+      'props'=>$propsAction,
+      'propsUrl'=>$propsUrl,
+      'move'=>$moveAction,
+      'moveUrl'=>$moveUrl,
+      'delete'=>$deleteAction,
+      'deleteUrl'=>$deleteUrl,
+      'icon'=>$icon,
+      'type'=>$fileType,
+      'iconUrl'=>$iconUrl,
       'attr'=>$attr,
       'autoattached'=>$autoattached,
       'comment'=>$comment,
@@ -576,11 +643,14 @@ sub handleATTACHMENTS {
       'name'=>$name,
       'path'=>$path,
       'size'=>$size,
-      'sizeK'=>int($size/1024).'k',
-      'sizeM'=>int($size/1024/1024).'m',
-      'url'=>"\%PUBURL\%\/$thisWeb\/$thisTopic\/$path",
-      'urlpath'=>"\%PUBURLPATH\%\/$thisWeb\/$thisTopic\/$path",
-      'user'=>$user,
+      'sizeK'=>$sizeK.'K',
+      'sizeM'=>$sizeM.'M',
+      'url'=>"\%PUBURL\%\/$thisWeb\/$thisTopic\/$name",
+      'urlpath'=>"\%PUBURLPATH\%\/$thisWeb\/$thisTopic\/$name",
+      'user'=>$userTopic,
+      'wikiuser'=>"$userWeb.$userTopic",
+      'web'=>$thisWeb,
+      'topic'=>$thisTopic,
     );
     $text =~ s/\$date\(([^\)]+)\)/TWiki::Func::formatTime($date, $2)/ge;
 
@@ -868,6 +938,7 @@ sub _expandVariables {
   $theFormat =~ s/\$flatten\((.*?)\)/&_flatten($1)/ges;
   $theFormat =~ s/\$encode\((.*?)\)/&_encode($1, $web, $topic)/ges;
   $theFormat =~ s/\$trunc\((.*?),\s*(\d+)\)/substr($1,0,$2)/ges;
+  $theFormat =~ s/\$t\b/\t/go;
   $theFormat =~ s/\$dollar/\$/go;
 
   return $theFormat;
