@@ -40,7 +40,7 @@ sub check {
         POSIX::setlocale(&POSIX::LC_CTYPE, $locale);
         my $currentLocale = POSIX::setlocale(&POSIX::LC_CTYPE);
         if ( $currentLocale ne $locale ) {
-            $e .= WARN(<<HERE);
+            $e .= $this->WARN(<<HERE);
 Unable to set locale to '$locale'. The actual locale is '$currentLocale'
 - please test your locale settings. This warning can be ignored if you are
 not planning to use locales (e.g. your site uses English only) - or you can
