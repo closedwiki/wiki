@@ -8,6 +8,7 @@ use strict;
 use TWiki;
 use TWiki::UI::Manage;
 use CGI;
+use Error ':try';
 
 my $oldweb = "TemporaryRenameOldWeb";
 my $newweb = "TemporaryRenameNewWeb";
@@ -343,5 +344,55 @@ sub test_rename_from_lowercase {
     $this->assert_matches(qr(Location:\s+\S+?/view$ext/$oldweb/UpperCase)s,$text)
 }
 
+sub test_accessRenameRestrictedTopic {
+    my $this       =  shift;
+    my $oldtopic   =  'lowercase';
+    my $newtopic   =  'upperCase';
+    my $meta       =  new TWiki::Meta($twiki, $oldweb, $oldtopic);
+    my $topictext  =  "   * Set ALLOWTOPICRENAME = GungaDin\n";
+    $twiki->{store}->saveTopic( $twiki->{user}, $oldweb, $oldtopic,
+                                $topictext, $meta );
+    my $query = new CGI({
+                         action   => 'rename',
+                         topic    => $oldtopic,
+                         newweb   => $oldweb,
+                         newtopic => $newtopic,
+                        });
+
+    $query->path_info("/$oldweb" );
+    $twiki = new TWiki( "TestUser1", $query );
+    $TWiki::Plugins::SESSION = $twiki;
+    try {
+        my ($text,$result) = TWiki::UI::Manage::rename( $twiki );
+        $this->assert(0);
+    } catch TWiki::OopsException with {
+        $this->assert_str_equals('OopsException(accessdenied/topic_access web=>TemporaryRenameOldWeb topic=>lowercase params=>[RENAME,access not allowed on topic])', shift->stringify());
+    }
+}
+
+sub test_accessRenameRestrictedWeb {
+    my $this       =  shift;
+    my $oldtopic   =  'WebPreferences';
+    my $meta       =  new TWiki::Meta($twiki, $oldweb, $oldtopic);
+    my $topictext  =  "   * Set ALLOWWEBRENAME = GungaDin\n";
+    $twiki->{store}->saveTopic( $twiki->{user}, $oldweb, $oldtopic,
+                                $topictext, $meta );
+    my $query = new CGI({
+                         action   => 'rename',
+                         topic    => $oldtopic,
+                         newweb   => $oldweb,
+                         newtopic => $newtopic,
+                        });
+
+    $query->path_info("/$oldweb" );
+    $twiki = new TWiki( "TestUser1", $query );
+    $TWiki::Plugins::SESSION = $twiki;
+    try {
+        my ($text,$result) = TWiki::UI::Manage::rename( $twiki );
+        $this->assert(0);
+    } catch TWiki::OopsException with {
+        $this->assert_str_equals('OopsException(accessdenied/topic_access web=>TemporaryRenameOldWeb topic=>WebPreferences params=>[RENAME,access not allowed on web])', shift->stringify());
+    }
+}
 
 1;
