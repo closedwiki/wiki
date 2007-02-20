@@ -1683,32 +1683,27 @@ sub _includeUrl {
         return $text;
     }
 
-    try {
-        my $response = $this->{net}->GET( $url );
-        if( $response->is_success()) {
-            my $contentType = $response->header('content-type');
-            $text = $response->content();
-            if( $contentType =~ /^text\/html/ ) {
-                if (!$raw) {
-                    $url =~ m!^([a-z]+:/*[^/]*)(/[^#?]*)!;
-                    $text = _cleanupIncludedHTML( $text, $1, $2, $options );
-                }
-            } elsif( $contentType =~ /^text\/(plain|css)/ ) {
-                # do nothing
-            } else {
-                $text = $this->_includeWarning(
-                    $warn, 'bad_content', $contentType );
+    my $response = $this->{net}->getExternalResource( $url );
+    if( !$response->is_error()) {
+        my $contentType = $response->header('content-type');
+        $text = $response->content();
+        if( $contentType =~ /^text\/html/ ) {
+            if (!$raw) {
+                $url =~ m!^([a-z]+:/*[^/]*)(/[^#?]*)!;
+                $text = _cleanupIncludedHTML( $text, $1, $2, $options );
             }
-            $text = applyPatternToIncludedText( $text, $pattern ) if( $pattern );
-            $text = "<literal>\n" . $text . "\n</literal>" if ( $options->{literal} );
+        } elsif( $contentType =~ /^text\/(plain|css)/ ) {
+            # do nothing
         } else {
-            $text = $this->_includeWarning( $warn, 'geturl_failed',
-                                            $url.' '.$response->message() );
+            $text = $this->_includeWarning(
+                $warn, 'bad_content', $contentType );
         }
-    } catch Error::Simple with {
-        my $e = shift->stringify();
-        $text = $this->_includeWarning( $warn, 'geturl_failed', "$url $e" );
-    };
+        $text = applyPatternToIncludedText( $text, $pattern ) if( $pattern );
+        $text = "<literal>\n" . $text . "\n</literal>" if ( $options->{literal} );
+    } else {
+        $text = $this->_includeWarning( $warn, 'geturl_failed',
+                                        $url.' '.$response->message() );
+    }
 
     return $text;
 }

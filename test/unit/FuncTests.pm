@@ -473,14 +473,14 @@ END
     $this->assert(!$access);
 }
 
-sub test_GET {
+sub test_getExternalResource {
     my $this = shift;
 
     # Totally pathetic sanity test
 
     # First check the LWP impl
     # need a known, simple, robust URL to get
-    my $response = TWiki::Func::GET('http://develop.twiki.org');
+    my $response = TWiki::Func::getExternalResource('http://develop.twiki.org');
     $this->assert_equals(200, $response->code());
     $this->assert_str_equals('OK', $response->message());
     $this->assert_str_equals('text/html; charset=UTF-8',
@@ -491,7 +491,7 @@ sub test_GET {
 
     # Now force the braindead sockets impl
     $TWiki::Net::LWPAvailable = 0;
-    $response = TWiki::Func::GET('http://develop.twiki.org');
+    $response = TWiki::Func::getExternalResource('http://develop.twiki.org');
     $this->assert_equals(200, $response->code());
     $this->assert_str_equals('OK', $response->message());
     $this->assert_str_equals('text/html; charset=UTF-8',

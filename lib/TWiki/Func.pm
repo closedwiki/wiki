@@ -223,11 +223,11 @@ sub getPubUrlPath {
 
 =pod
 
----+++ GET( $url ) -> $response
+---+++ getExternalResource( $url ) -> $response
 
 Get whatever is at the other end of a URL (using an HTTP GET request). Will
 only work for encrypted protocols such as =https= if the =LWP= CPAN module is
-installed (it will throw an exception if it is not).
+installed.
 
 Note that the =$url= may have an optional user and password, as specified by
 the relevant RFC. Any proxy set in =configure= is honoured.
@@ -243,33 +243,28 @@ the following subset of methods is available:
 | =is_error()= |
 | =is_redirect()= |
 
-The method may throw an =Error::Simple= exception if the url cannot be parsed,
-or if it specifies an unsupported protocol. The exception can be caught as
-shown in the example, below, or using a =try= block (see the CPAN =Error=
-module).
-
 Note that if LWP is *not* available, this function:
    1 can only really be trusted for HTTP/1.0 urls. If HTTP/1.1 or another
      protocol is required, you are *strongly* recommended to =require LWP=.
    1 Will not parse multipart content
-In the event that the response cannot be parsed, this method may enable
-=is_error()= and set an explanatory message().
 
-Callers can easily check the availability of other HTTP::Response methods
+In the event of the server returning an error, then =is_error()= will return
+true, =code()= will return a valid HTTP status code
+as specified in RFC 2616 and RFC 2518, and =message()= will return the
+message that was received from
+the server. In the event of a client-side error (e.g. an unparseable URL)
+then =is_error()= will return true and =message()= will return an explanatory
+message. =code()= will return 400 (BAD REQUEST).
+
+Note: Callers can easily check the availability of other HTTP::Response methods
 as follows:
 
 <verbatim>
-eval {
-    my $response = TWiki::Net::getUrl($url);
-    if ($response->isa('HTTP::Response')) {
-        ... other methods of HTTP::Response may be called
-    } else {
-        ... only the methods listed above may be called
-    }
-};
-if ($@) {
-    my $error = shift->stringify(); # get error string
-    ... bad URL, or unsupported protocol ...
+my $response = TWiki::Func::getExternalResource($url);
+if (!$response->is_error() && $response->isa('HTTP::Response')) {
+    ... other methods of HTTP::Response may be called
+} else {
+    ... only the methods listed above may be called
 }
 </verbatim>
 
@@ -277,12 +272,12 @@ if ($@) {
 
 =cut
 
-sub GET {
+sub getExternalResource {
     my( $url ) = @_;
     ASSERT($TWiki::Plugins::SESSION) if DEBUG;
     ASSERT(defined $url) if DEBUG;
 
-    return $TWiki::Plugins::SESSION->{net}->GET( $url );
+    return $TWiki::Plugins::SESSION->{net}->getExternalResource( $url );
 }
 
 =pod

@@ -29,9 +29,10 @@ package TWiki::Net;
 
 use strict;
 use Assert;
+use Error qw( :try );
+
 use TWiki::Time;
 use TWiki::Sandbox;
-use Error qw( :try );
 
 use vars qw( $LWPavailable );
 
@@ -48,131 +49,150 @@ sub new {
 
 =pod
 
----++ ObjectMethod GET( $url ) -> $response
+---+++ getExternalResource( $url ) -> $response
 
-Get whatever is at the other end of a URL. Will always work for HTTP and
-other unencrypted protocols. Will only work for encrypted protocols such
-as HTTPS if LWP is installed (it will throw an exception if it is not).
+Get whatever is at the other end of a URL (using an HTTP GET request). Will
+only work for encrypted protocols such as =https= if the =LWP= CPAN module is
+installed.
 
-Note that the URL may have an optional user and password, as specified by
-RFC (I forget which)
+Note that the =$url= may have an optional user and password, as specified by
+the relevant RFC. Any proxy set in =configure= is honoured.
 
 The =$response= is an object that is known to implement the following subset of
 the methods of =LWP::Response=. It may in fact be an =LWP::Response= object,
-but it may also not be if LWP is not available, so callers may only assume
-the methods of =TWiki::Net::HTTPResponse= are available.
+but it may also not be if =LWP= is not available, so callers may only assume
+the following subset of methods is available:
+| =code()= |
+| =message()= |
+| =header($field)= |
+| =content()= |
+| =is_error()= |
+| =is_redirect()= |
 
-The method may throw Error::Simple if the url cannot be parsed, or if it
-specifies an unsupported protocol.
-
-Note that if LWP is *not* available, this method:
+Note that if LWP is *not* available, this function:
    1 can only really be trusted for HTTP/1.0 urls. If HTTP/1.1 or another
      protocol is required, you are *strongly* recommended to =require LWP=.
    1 Will not parse multipart content
-In the event that the response cannot be parsed, this method may set the
-is_success() to 400 and set an explanatory message().
 
-Callers can check the availability of other HTTP::Response methods as follows:
+In the event of the server returning an error, then =is_error()= will return
+true, =code()= will return a valid HTTP status code
+as specified in RFC 2616 and RFC 2518, and =message()= will return the
+message that was received from
+the server. In the event of a client-side error (e.g. an unparseable URL)
+then =is_error()= will return true and =message()= will return an explanatory
+message. =code()= will return 400 (BAD REQUEST).
+
+Note: Callers can easily check the availability of other HTTP::Response methods
+as follows:
 
 <verbatim>
-my $response = TWiki::Net::GET($protocol, $host, $port, $url, $user, $pass);
-if ($response->isa('HTTP::Response')) {
-   ... other methods of HTTP::Response may be called
+my $response = TWiki::Func::getExternalResource($url);
+if (!$response->is_error() && $response->isa('HTTP::Response')) {
+    ... other methods of HTTP::Response may be called
 } else {
-   ... only the methods listed above may be called
+    ... only the methods listed above may be called
 }
 </verbatim>
 
 =cut
 
-sub GET {
+sub getExternalResource {
     my ($this, $url) = @_;
 
     my $protocol;
     if( $url =~ m!^([a-z]+):! ) {
         $protocol = $1;
     } else {
-        die "Bad URL: $url";
+        require TWiki::Net::HTTPResponse;
+        return new TWiki::Net::HTTPResponse("Bad URL: $url");
     }
 
     if( $this->_LWPavailable()) {
         return $this->_GETUsingLWP( $url );
-    } elsif( $protocol eq 'https') {
-        die "LWP not available for handling protocol: $url";
     }
 
     # Fallback mechanism
-    $url =~ s!^\w+://!!; # remove protocol
-    my ( $user, $pass );
-    if ($url =~ s!([^/\@:]+)(?::([^/\@:]+))?@!!) {
-        ( $user, $pass ) = ( $1, $2 || '');
+    if( $protocol ne 'http') {
+        require TWiki::Net::HTTPResponse;
+        return new TWiki::Net::HTTPResponse(
+            "LWP not available for handling protocol: $url");
     }
-
-    unless ($url =~ s!([^:/]+)(?::([0-9]+))?!! ) {
-        die "Bad URL: $url";
-    }
-    my( $host, $port ) = ( $1, $2 || 80);
-
-    require Socket;
-    import Socket qw(:all);
-
-    $url = '/' unless( $url );
-    my $req = "GET $url HTTP/1.0\r\n";
-
-    $req .= "Host: $host:$port\r\n";
-    if( $user ) {
-        # Use MIME::Base64 at run-time if using outbound proxy with
-        # authentication
-        require MIME::Base64;
-        import MIME::Base64 ();
-        my $base64 = encode_base64( "$user:$pass", "\r\n" );
-        $req .= "Authorization: Basic $base64";
-    }
-
-    my $prefs = $this->{session}->{prefs};
-    my $proxyHost = $prefs->getPreferencesValue('PROXYHOST') ||
-      $TWiki::cfg{PROXY}{HOST};
-    my $proxyPort = $prefs->getPreferencesValue('PROXYPORT') ||
-      $TWiki::cfg{PROXY}{PORT};
-    if($proxyHost && $proxyPort) {
-        $req = "GET http://$host:$port$url HTTP/1.0\r\n";
-        $host = $proxyHost;
-        $port = $proxyPort;
-    }
-
-    $req .= "\r\n\r\n";
-
-    my ( $iaddr, $paddr, $proto );
-    $iaddr = inet_aton( $host );
-    $paddr = sockaddr_in( $port, $iaddr );
-    $proto = getprotobyname( 'tcp' );
-    unless( socket( *SOCK, &PF_INET, &SOCK_STREAM, $proto ) ) {
-        die "socket failed: $!";
-    }
-    unless( connect( *SOCK, $paddr ) ) {
-        die "connect failed: $!";
-    }
-    select SOCK; $| = 1;
-    local $/ = undef;
-    print SOCK $req;
-    my $result = '';
-    $result = <SOCK>;
-    unless( close( SOCK )) {
-        die "close failed: $!";
-    }
-    select STDOUT;
 
     my $response;
-    # No LWP, but may have HTTP::Response which would make life easier
-    eval 'use HTTP::Response';
-    if ($@) {
-        # Nope, no HTTP::Response, have to do things the hard way :-(
-        require TWiki::Net::HTTPResponse;
-        $response = TWiki::Net::HTTPResponse->parse($result);
-    } else {
-        $response = HTTP::Response->parse($result);
-    }
+    try {
+        $url =~ s!^\w+://!!; # remove protocol
+        my ( $user, $pass );
+        if ($url =~ s!([^/\@:]+)(?::([^/\@:]+))?@!!) {
+            ( $user, $pass ) = ( $1, $2 || '');
+        }
 
+        unless ($url =~ s!([^:/]+)(?::([0-9]+))?!! ) {
+            die "Bad URL: $url";
+        }
+        my( $host, $port ) = ( $1, $2 || 80);
+
+        require Socket;
+        import Socket qw(:all);
+
+        $url = '/' unless( $url );
+        my $req = "GET $url HTTP/1.0\r\n";
+
+        $req .= "Host: $host:$port\r\n";
+        if( $user ) {
+            # Use MIME::Base64 at run-time if using outbound proxy with
+            # authentication
+            require MIME::Base64;
+            import MIME::Base64 ();
+            my $base64 = encode_base64( "$user:$pass", "\r\n" );
+            $req .= "Authorization: Basic $base64";
+        }
+
+        my $prefs = $this->{session}->{prefs};
+        my $proxyHost = $prefs->getPreferencesValue('PROXYHOST') ||
+          $TWiki::cfg{PROXY}{HOST};
+        my $proxyPort = $prefs->getPreferencesValue('PROXYPORT') ||
+          $TWiki::cfg{PROXY}{PORT};
+        if($proxyHost && $proxyPort) {
+            $req = "GET http://$host:$port$url HTTP/1.0\r\n";
+            $host = $proxyHost;
+            $port = $proxyPort;
+        }
+
+        $req .= "\r\n\r\n";
+
+        my ( $iaddr, $paddr, $proto );
+        $iaddr = inet_aton( $host );
+        $paddr = sockaddr_in( $port, $iaddr );
+        $proto = getprotobyname( 'tcp' );
+        unless( socket( *SOCK, &PF_INET, &SOCK_STREAM, $proto ) ) {
+            die "socket failed: $!";
+        }
+        unless( connect( *SOCK, $paddr ) ) {
+            die "connect failed: $!";
+        }
+        select SOCK; $| = 1;
+        local $/ = undef;
+        print SOCK $req;
+        my $result = '';
+        $result = <SOCK>;
+        unless( close( SOCK )) {
+            die "close faied: $!";
+        }
+        select STDOUT;
+
+        # No LWP, but may have HTTP::Response which would make life easier
+        # (it has a much more thorough parser)
+        eval 'use HTTP::Response';
+        if ($@) {
+            # Nope, no HTTP::Response, have to do things the hard way :-(
+            require TWiki::Net::HTTPResponse;
+            $response = TWiki::Net::HTTPResponse->parse($result);
+        } else {
+            $response = HTTP::Response->parse($result);
+        }
+    } catch Error::Simple with {
+        $response = new TWiki::Net::HTTPResponse(shift);
+    };
     return $response;
 }
 

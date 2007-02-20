@@ -35,13 +35,18 @@ See the documentation of HTTP::Response for information about the methods.
 
 package TWiki::Net::HTTPResponse;
 
-sub parse {
-    my ($class, $text) = @_;
-    my $this = bless( {
-        code => 400,
-        message => 'Incomplete headers',
+sub new {
+    my ($class, $message) = @_;
+    return bless( {
+        code => 400, # BAD REQUEST
+        message => $message,
         headers => {},
     }, $class);
+}
+
+sub parse {
+    my ($class, $text) = @_;
+    my $this = new($class, 'Incomplete headers');
 
     $text =~ s/\r\n/\n/gs;
     $text =~ s/\r/\n/gs;
@@ -57,9 +62,9 @@ sub parse {
         if ($header =~ /^.*?: (.*)$/s) {
             $this->{headers}->{lc($1)} = $2;
         } else {
-            $this->{internal_error} = 1;
+            $this->{code} = 400;
             $this->{message} =
-              "Unparseable header in this: $header";
+              "Unparseable header in response: $header";
         }
     }
 
@@ -85,11 +90,12 @@ sub content {
 
 sub is_error {
     my $this = shift;
-    return $this->{code} >= 400 || $this->{internal_error};
+    return $this->{code} >= 400;
 }
 
 sub is_redirect {
-    return shift->{code} == 307;
+    my $this = shift;
+    return $this->{code} >= 300 && $this->{code} < 400;
 }
 
 1;
