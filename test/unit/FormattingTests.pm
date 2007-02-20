@@ -33,6 +33,7 @@ sub set_up {
         'Numeric1Wikiword', "BLEEGLE");
     $TWiki::cfg{AntiSpam}{RobotsAreWelcome} = 1;
     $TWiki::cfg{AntiSpam}{EmailPadding} = 'STUFFED';
+    $TWiki::cfg{AllowInlineScript} = 1;
 }
 
 # This formats the text up to immediately before <nop>s are removed, so we
@@ -474,6 +475,61 @@ your words
 </verbatim>
 ACTUAL
     $this->do_test($expected, $actual);
+}
+
+sub test_Item3431 {
+    my $this = shift;
+
+    my $expected = <<EXPECTED;
+<pre>
+&lt;literal&gt;
+your words
+&lt;/literal&gt;
+</pre>
+EXPECTED
+
+    my $actual = <<ACTUAL;
+<verbatim>
+<literal>
+your words
+</literal>
+</verbatim>
+ACTUAL
+    $this->do_test($expected, $actual);
+}
+
+sub test_Item3431a {
+    my $this = shift;
+    $TWiki::cfg{AllowInlineScript} = 1;
+    my $expected = <<EXPECTED;
+<script>
+your words
+</script>
+EXPECTED
+
+    my $actual = <<ACTUAL;
+<script>
+your words
+</script>
+ACTUAL
+    $this->do_test($expected, $actual);
+
+    $TWiki::cfg{AllowInlineScript} = 0;
+    $expected = <<EXPECTED;
+<span class='twikiAlert'>&#60;script&#62; is not allowed on this site</span>
+EXPECTED
+    $this->do_test($expected, $actual);
+
+    $actual = <<ACTUAL;
+<literal>
+your words
+</literal>
+ACTUAL
+    $expected = <<EXPECTED;
+<span class='twikiAlert'>&#60;literal&#62; is not allowed on this site</span>
+EXPECTED
+    $this->do_test($expected, $actual);
+
 }
 
 sub test_USInHeader {

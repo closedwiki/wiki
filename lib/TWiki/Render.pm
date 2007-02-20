@@ -868,8 +868,9 @@ sub getRenderedVersion {
     my $removedVerbatim = {};
     my $removedLiterals = {};
 
-    $text = $this->takeOutBlocks( $text, 'literal', $removedLiterals );
+    # verbatim before literal - see Item3431
     $text = $this->takeOutBlocks( $text, 'verbatim', $removedVerbatim );
+    $text = $this->takeOutBlocks( $text, 'literal', $removedLiterals );
 
     $text = $this->takeOutProtected( $text, qr/<\?([^?]*)\?>/s,
                                      $removedComments );
@@ -1103,17 +1104,17 @@ sub getRenderedVersion {
     $plugins->endRenderingHandler( $text );
 
     # replace verbatim with pre in the final output
-    $this->putBackBlocks( \$text, $removedVerbatim, 'verbatim', 'pre', \&verbatimCallBack );
-    $this->putBackBlocks( \$text, $removedLiterals, 'literal', '');
-
+    $this->putBackBlocks( \$text, $removedVerbatim,
+                          'verbatim', 'pre', \&verbatimCallBack );
     $text =~ s|\n?<nop>\n$||o; # clean up clutch
 
-    # Only put script sections back if they are allowed by options
-    $this->putBackProtected( \$text, $removedScript )
-      if $TWiki::cfg{AllowInlineScript};
+    $this->putBackProtected( \$text, $removedScript, \&_filterScript );
+    $this->putBackBlocks( \$text, $removedLiterals,
+                          'literal', '', \&_filterLiteral );
 
     $this->putBackProtected( \$text, $removedHead );
     $this->putBackProtected( \$text, $removedComments );
+
     $this->{session}->{loginManager}->endRenderingHandler( $text );
 
     $plugins->postRenderingHandler( $text );
@@ -1139,6 +1140,20 @@ sub verbatimCallBack {
     return TWiki::entityEncode( $val );
 }
 
+# Only put script and literal sections back if they are allowed by options
+sub _filterLiteral {
+    my $val = shift;
+    return $val if( $TWiki::cfg{AllowInlineScript} );
+    return CGI::span({class => 'twikiAlert'},
+                     '&lt;literal&gt; is not allowed on this site');
+}
+
+sub _filterScript {
+    my $val = shift;
+    return $val if( $TWiki::cfg{AllowInlineScript} );
+    return CGI::span({class => 'twikiAlert'},
+                     '&lt;script&gt; is not allowed on this site');
+}
 
 =pod
 
@@ -1335,22 +1350,24 @@ sub _replaceBlock {
 
 =pod
 
----++ ObjectMethod putBackProtected( \$text, \%map, $tag, $newtag, $callBack ) -> $text
+---++ ObjectMethod putBackProtected( \$text, \%map, $callback ) -> $text
 
 Return value: $text with blocks added back
    * =\$text= - reference to text to process
    * =\%map= - map placeholders to blocks removed by takeOutBlocks
+   * =$callback= - Reference to function to call on each block being inserted (optional)
 
 Reverses the actions of takeOutProtected.
 
 =cut
 
 sub putBackProtected {
-    my( $this, $text, $map ) = @_;
+    my( $this, $text, $map, $callback ) = @_;
     ASSERT($this->isa( 'TWiki::Render')) if DEBUG;
 
     foreach my $placeholder ( keys %$map ) {
         my $val = $map->{$placeholder}{text};
+        $val = &$callback( $val ) if( defined( $callback ));
         $$text =~ s/<!--$TWiki::TranslationToken$placeholder$TWiki::TranslationToken-->/$val/;
         delete( $map->{$placeholder} );
     }
@@ -1483,10 +1500,12 @@ sub putBackBlocks {
             delete( $map->{$placeholder} );
         }
     }
-    
-	if ($newtag eq '') {
-		$$text =~ s/&#60;\/?$tag&#62;//ge;
-	}
+    # This was added by Sven in 7219, but without any clear explanation
+    # or tests. It removes perfectly valid content from inside verbatim
+    # tags, and causes the unit tests for <literal> to fail.
+    #	if ($newtag eq '') {
+    #		$$text =~ s/&#60;\/?$tag&#62;//g;
+    #	}
 }
 
 =pod
