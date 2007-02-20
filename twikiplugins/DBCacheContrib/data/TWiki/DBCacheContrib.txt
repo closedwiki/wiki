@@ -86,6 +86,7 @@ Clients use the DBCache by defining a subclass of the =TWiki::Contrib::DBCache= 
 |  License: | As required for the publication of all extensions to TWiki, this software is published under the terms of the GNU General Public License. This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details, published at http://www.gnu.org/copyleft/gpl.html |
 |  Version: | %$VERSION% |
 |  Change History: | |
+|  12943 | Bugs:Item3659: added automatic conversion of integers to dates |
 |  12923 | added REF operator; \
            added link to web object to hashes; \
 	   fixed parent relation to end in WebHome; \

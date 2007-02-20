@@ -25,7 +25,7 @@ The following operators are available:
 | <code>&gt;=</code> | Boolean | Numeric >= |
 | <code>&lt;=</code> | Boolean | Numeric <= |
 | =lc= | String | Unary lower case |
-| =uc= | String | unary UPPER CASE |
+| =uc= | String | Unary UPPER CASE |
 | =EARLIER_THAN= | BOOLEAN | Date is earlier than the given date |
 | =LATER_THAN= | Boolean | LHS is later than the given date (string containing a date e.g. '1 Apr 2003') |
 | =WITHIN_DAYS= | Boolean | Date (which must be in the future) is within n _working_ days of todays date |
@@ -34,7 +34,7 @@ The following operators are available:
 | =OR= | Boolean | OR |
 | <code>()</code> | any | Bracketed subexpression |
 
-Dates for =EARLIER_THAN=, =LATER_THAN= and =WITHIN_DAYS= must be dates in the format expected by =Time::ParseDate= (like the ActionTrackerPlugin). =WITHIN_DAYS= works out the number of _working_ days (i.e. excluding Saturday and Sunday). Apologies in advance if your weekend is offset &plusmn; a day!
+Dates for =EARLIER_THAN=, =LATER_THAN= and =WITHIN_DAYS= must be dates in the format expected by =Time::ParseDate= (like the ActionTrackerPlugin). =WITHIN_DAYS= works out the number of _working_ days (i.e. excluding Saturday and Sunday). Apologies in advance if your weekend is offset &plusmn; a day! Integers will automatically be converted to dates, by assuming they represent a number of seconds since 1st January 1970 (a.k.a "the epoch")
 
 A search object implements the "matches" method as its general
 contract with the rest of the world.
@@ -264,6 +264,10 @@ sub matches {
     if ($op eq "uc") {
         return uc( $r->matches( $map ));
     };
+    if ($op eq "i2d") {
+        return TWiki::Time::formatTime( $r->matches( $map ),
+                                        '$email', 'gmtime' );
+    };
 
     return 0 unless (defined $l);
 
@@ -286,13 +290,18 @@ sub matches {
     if ( $op eq ">=" ) { return ( $lval >= $rval ) };
     if ( $op eq "<=" ) { return ( $lval <= $rval ) };
 
-    $lval = Time::ParseDate::parsedate( $lval );
+    if ($lval !~ /^-?\d+$/) {
+        $lval = Time::ParseDate::parsedate( $lval );
+    }
     return 0 unless( defined( $lval ));
 
     if ( $op eq "WITHIN_DAYS" ) {
         return ( $lval >= $now && workingDays( $now, $lval ) <= $rval );
     }
-    $rval = Time::ParseDate::parsedate( $rval );
+    if ($rval !~ /^-?\d+$/) {
+        $rval = Time::ParseDate::parsedate( $rval );
+    }
+
     return 0 unless ( defined( $rval ));
 
     if ( $op eq "LATER_THAN" )   { return ( $lval > $rval ) };

@@ -29,14 +29,14 @@ sub tear_down {
     $this->{map} = undef;
 }
 
-sub test_empty {
+sub detest_empty {
     my $this = shift;
     my $search = new TWiki::Contrib::DBCacheContrib::Search("");
     $this->assert_not_null( $search );
     $this->assert_equals(1,$search->matches($this->{map}));
 }
 
-sub test_badparse {
+sub detest_badparse {
     my $this = shift;
     eval {  new TWiki::Contrib::DBCacheContrib::Search("WITHIN_DAYS"); };
     $this->assert_not_null($@,$@);
@@ -56,7 +56,7 @@ sub check {
                              $this->{map}->toString());
 }
 
-sub test_stringops {
+sub detest_stringops {
     my $this = shift;
     $this->check("string='String'",1);
     $this->check("string='String '",0);
@@ -69,7 +69,7 @@ sub test_stringops {
     $this->check("string!='String'", 0);
 }
 
-sub test_numops {
+sub detest_numops {
     my $this = shift;
     $this->check("number='99'",1);
     $this->check("number='98'", 0);
@@ -87,7 +87,7 @@ sub test_numops {
     $this->check("number>='100'", 0);
 }
 
-sub test_dateops {
+sub detest_dateops {
     my $this = shift;
     $this->check("date IS_DATE '3 jul 1960'", 1);
     $this->check("date IS_DATE '3-JUL-1960'", 1);
@@ -108,16 +108,20 @@ sub test_dateops2 {
     $this->check("date WITHIN_DAYS '2'", 1); # th & fri
     $this->check("date WITHIN_DAYS '1'", 0);
     $this->check("date WITHIN_DAYS '0'", 0);
-    my $now = TWiki::Time::formatTime(time, "\$email", "gmtime");
-    TWiki::Contrib::DBCacheContrib::Search::forceTime($now);#thursday
-    my $then = TWiki::Time::formatTime(time-2*24*60*60, "\$email", "gmtime");
+    my $nows = time();
+    my $now = TWiki::Time::formatTime($nows, "\$email", "gmtime");
+    TWiki::Contrib::DBCacheContrib::Search::forceTime($now);
+    my $then = TWiki::Time::formatTime($nows-2*24*60*60, "\$email", "gmtime");
     $this->{map}->set("date", $then);
     $this->check("date LATER_THAN 'now - 3 days'", 1);
     $this->check("date LATER_THAN '-3 days'", 1);
     $this->check("date LATER_THAN 'now - 1 days'", 0);
+    $this->{map}->set("date", $nows-2*24*60*60);
+    $this->check("'now - 3 days' EARLIER_THAN date", 1);
+    $this->check("'now - 1 days' LATER_THAN date", 1);
 }
 
-sub test_dateops3 {
+sub detest_dateops3 {
     my $this = shift;
     TWiki::Contrib::DBCacheContrib::Search::forceTime("3 jul 1960");
     $this->check("date WITHIN_DAYS '2'", 1);
@@ -125,7 +129,7 @@ sub test_dateops3 {
     $this->check("date WITHIN_DAYS '0'", 1);
 }
 
-sub test_dateops4 {
+sub detest_dateops4 {
     my $this = shift;
     TWiki::Contrib::DBCacheContrib::Search::forceTime("4 jul 1960");
     $this->check("date WITHIN_DAYS '2'", 0);
@@ -133,13 +137,13 @@ sub test_dateops4 {
     $this->check("date WITHIN_DAYS '0'", 0);
 }
 
-sub test_not {
+sub detest_not {
     my $this = shift;
     $this->check("!number='99'",0);
     $this->check("!number='98'", 1);
 }
 
-sub test_and {
+sub detest_and {
     my $this = shift;
     $this->check("number='99' AND string='String'",1);
     $this->check("number='98' AND string='String'", 0);
@@ -147,7 +151,7 @@ sub test_and {
     $this->check("number='99' AND string='String' AND date IS_DATE '3 jul 1960'", 1);
 }
 
-sub test_or {
+sub detest_or {
     my $this = shift;
     $this->check("number='99' OR string='Spring'",1);
     $this->check("number='98' OR string='String'", 1);
@@ -169,7 +173,7 @@ sub conjoin {
     $this->check($expr,$r);
 }
 
-sub test_brackets {
+sub detest_brackets {
     my $this = shift;
     for (my $a = 0; $a < 2; $a++) {
         for (my $b = 0; $b < 2; $b++) {
@@ -183,14 +187,14 @@ sub test_brackets {
     }
 }
 
-sub test_other {
+sub detest_other {
     my $this = shift;
     $this->check("mother.who='Mother'",1);
     $this->check("mother.who!='Mother'",0);
     $this->check("mother.mother.who='GrandMother'",1);
 }
 
-sub test_caseops {
+sub detest_caseops {
     my $this = shift;
     $this->check("string='String'",1);
     $this->check("string='string '",0);
