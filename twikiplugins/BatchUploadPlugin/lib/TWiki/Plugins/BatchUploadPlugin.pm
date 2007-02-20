@@ -42,7 +42,7 @@ $VERSION = '$Rev$';
 # This is a free-form string you can use to "name" your own plugin version.
 # It is *not* used by the build automation tools, but is reported as part
 # of the version number in PLUGINDESCRIPTIONS.
-$RELEASE = '1.1';
+$RELEASE = '1.2';
 
 $pluginName = 'BatchUploadPlugin';    # Name of this Plugin
 
@@ -94,7 +94,8 @@ sub beforeAttachmentSaveHandler {
 "- ${pluginName}::beforeAttachmentSaveHandler( $_[2].$_[1] - attachment: $attrHashRef->{attachment})"
     ) if $debug;
 
-    return if ( !$pluginEnabled );
+    my $cgiQuery = TWiki::Func::getCgiQuery();
+    return if ( !$pluginEnabled || !$cgiQuery->param('batchupload') );
 
     my $attachmentName = $attrHashRef->{attachment};
 
@@ -120,7 +121,6 @@ sub beforeAttachmentSaveHandler {
                 "$pluginName - Result stack: " . $stack->{$attachmentName} )
               if $debug;
             my $url = TWiki::Func::getViewUrl( $web, $topic );
-            my $cgiQuery = TWiki::Func::getCgiQuery();
             print $cgiQuery->redirect($url);
             exit 0
               ; # user won't see this, but if left out the zip file will be attached, overwriting the zipped files
