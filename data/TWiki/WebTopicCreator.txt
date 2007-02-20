@@ -39,7 +39,7 @@ function canSubmit(inForm, inShouldConvertInput) {
 	}
 	
 	/* check if current input is a valid WikiWord */
-	var noSpaceName = removeSpacesAndPunctiation(inputForTopicName);
+	var noSpaceName = removeSpacesAndPunctuation(inputForTopicName);
 
 	/*
 	if necessary, create a WikiWord from the input name
@@ -47,10 +47,10 @@ function canSubmit(inForm, inShouldConvertInput) {
 	*/
 	var wikiWordName = noSpaceName;
 	if (!userAllowsNonWikiWord) {
-		wikiWordName = removeSpacesAndPunctiation(capitalize(inputForTopicName));
+		wikiWordName = removeSpacesAndPunctuation(capitalize(inputForTopicName));
 	}
 	if (userAllowsNonWikiWord) {
-		wikiWordName = removeSpacesAndPunctiation(capitalizeSentence(inputForTopicName));
+		wikiWordName = removeSpacesAndPunctuation(capitalizeSentence(inputForTopicName));
 	}
 	
 	if (inShouldConvertInput) {
