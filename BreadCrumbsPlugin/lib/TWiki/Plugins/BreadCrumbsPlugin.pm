@@ -18,13 +18,11 @@ use strict;
 use vars qw($VERSION $RELEASE $debug $NO_PREFS_IN_TOPIC $SHORTDESCRIPTION);
 
 $VERSION = '$Rev$';
-$RELEASE = 'v0.11';
+$RELEASE = 'v0.12';
 $NO_PREFS_IN_TOPIC = 1;
 $SHORTDESCRIPTION = 'A flexible way to display breadcrumbs navigation';
 
 $debug = 0; # toggle me
-
-my @trail;
 
 ###############################################################################
 sub writeDebug {
@@ -34,15 +32,22 @@ sub writeDebug {
 
 ###############################################################################
 sub initPlugin {
-  TWiki::Func::registerTagHandler('BREADCRUMBS', \&renderBreadCrumbs);
 
-  # Record the path
-  my $context = TWiki::Func::getContext();
-  my ($topic, $web) = ($_[0], $_[1]);
+  TWiki::Func::registerTagHandler('BREADCRUMBS', \&renderBreadCrumbs);
+  recordTrail($_[1], $_[0]);
+  
+  return 1;
+}
+
+###############################################################################
+sub recordTrail {
+  my ($web, $topic) = @_;
+
   ($web, $topic) = TWiki::Func::normalizeWebTopicName($web, $topic);
   my $here = "$web.$topic";
-  @trail = split(
-      ',', TWiki::Func::getSessionValue('BREADCRUMB_TRAIL') || '');
+  my $trail = TWiki::Func::getSessionValue('BREADCRUMB_TRAIL') || '';
+  my @trail = split(',', $trail);
+
   # Detect cycles by scanning back along the trail to see if we've been here
   # before
   for (my $i = scalar(@trail) - 1; $i >= 0; $i--) {
@@ -54,8 +59,6 @@ sub initPlugin {
   }
   push(@trail, $here);
   TWiki::Func::setSessionValue('BREADCRUMB_TRAIL', join(',', @trail));
-
-  return 1;
 }
 
 ###############################################################################
@@ -85,13 +88,9 @@ sub renderBreadCrumbs {
   my ($web, $topic) = normalizeWebTopicName($currentWeb, $webTopic);
   my $breadCrumbs;
   if ($type eq 'path') {
-      my @trail = map {
-          /\.(.*?)$/;
-          { name => $1, target => $_ } } split(
-          ',', TWiki::Func::getSessionValue('BREADCRUMB_TRAIL') || '');
-      $breadCrumbs = \@trail;
+    $breadCrumbs = getPathBreadCrumbs();
   } else {
-      $breadCrumbs = getLocationBreadCrumbs($web, $topic, \%recurseFlags);
+    $breadCrumbs = getLocationBreadCrumbs($web, $topic, \%recurseFlags);
   }
 
   # format result
@@ -106,7 +105,7 @@ sub renderBreadCrumbs {
     $line =~ s/\$name/$item->{name}/g;
     $line =~ s/\$target/$item->{target}/g;
     $line =~ s/\$webtopic/$webtopic/g;
-    writeDebug("... added");
+    #writeDebug("... added");
     push @lines, $line;
   }
   my $result = $header.join($separator, @lines).$footer;
@@ -118,6 +117,19 @@ sub renderBreadCrumbs {
   return $result;
 }
 
+###############################################################################
+sub getPathBreadCrumbs {
+  
+  my $trail = TWiki::Func::getSessionValue('BREADCRUMB_TRAIL') || '';
+  my @trail = 
+    map {
+      /^(.*)\.(.*?)$/; 
+      my $name = ($2 eq 'WebHome')?$1:$2;
+      { name => $name, target => $_ }
+    } split(',', $trail);
+
+  return \@trail;
+}
 
 ###############################################################################
 sub getLocationBreadCrumbs {

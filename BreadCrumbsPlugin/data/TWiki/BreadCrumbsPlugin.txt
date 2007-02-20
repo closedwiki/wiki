@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1161099225" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1161099225" format="1.1" version="$Rev$"}%
 <!--
 
    PLEASE DO NOT EDIT THIS TOPIC
@@ -138,7 +138,7 @@ separator) may contain special variables:
 |  Plugin Author: | TWiki:Main.MichaelDaum |
 |  Copyright &copy;: | 2006, MichaelDaum@WikiRing.com |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | v0.11 (%$VERSION) |
+|  Plugin Version: | v0.12 (%$VERSION) |
 |  Change History: | &nbsp; |
 |  20 Feb 2007: | TWiki:Main.CrawfordCurrie added path breadcrumbs |
 |  18 Dec 2006: | added $webtopic pseudo-parameter |
@@ -156,4 +156,4 @@ separator) may contain special variables:
 |  Feedback: | TWiki:Plugins/%TOPIC%Dev |
 |  Appraisal: | TWiki:Plugins/%TOPIC%Appraisal |
 
--- TWiki:Main/MichaelDaum - 18 Dec 2006
+-- TWiki:Main/MichaelDaum - 20 Feb 2006
