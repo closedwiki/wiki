@@ -11,39 +11,42 @@
 ---+!! <nop>%TOPIC%
 %TOC%
 ---++ Description
-This plugin has the sole purpose to help you in locating where you are and how
+This plugin helps you to locate where you are, and shows you how
 you can escape from there using breadcrumbs navigation. 
 
-For now this plugin generates so called "location" breadcrumbs. Compare this to
-"path" breadcrumbs indicating the path a user has taken to arrive at a page which
-is a kind of page history without navigation circles.
-But this is not yet supported by the <nop>BreadCrumbsPlugin. 
+Two types of breadcrumb are supported; "location" breadcrumbs, which show you
+where you are in the site hierarchy, taking into account topic parent relationships, and "path" breadcrumbs, that simply show you where you have been, but without going in circles.
 
-In a way location breadcrumbs have always been supported by TWiki using the
-=META{"parent"}= variable to display the list of partent topics. Since version
-4.x  TWiki also supports hierarchical subwebs but the breadcrumbs support of
-TWiki does not allow to display the parent webs as part of of the location
-breadcrumbs.  Besides that this plugin adds more flexibility in deciding which
-parts of the breadcrumbs path should be rendered and how each
-individual breadcrumb is displayed
+In a way, location breadcrumbs have always been supported by TWiki using the
+=META{"parent"}= variable to display the list of parent topics. Since version
+4.x  TWiki also supports hierarchical subwebs, but the breadcrumbs support of
+TWiki does not allow the display of parent webs as part of of the location
+breadcrumbs. 
+
+Path breadcrumbs show you which topics you visited to reach the current topic. If you revisit a topic you visited earlier, the path is trimmed back to that topic, so it gives you a sort of visual history of where you have been on the site. Path breadcrumbs require that you have session support enabled.
+
+The plugin also gives a great deal of flexibility in deciding which
+parts of the breadcrumbs should be rendered, and how each
+individual breadcrumb is displayed.
 
 
 ---++ Syntax
 =%<nop>BREADCRUMBS%, %<nop>BREADCRUMBS{"&lt;web>.&lt;topic>" ...}%=
 
 *Parameters*:
-   * =&lt;web>.&lt;topic>=: the location to which breadcrumbs should be generated;
+   * =&lt;web>.&lt;topic>=: the location to which breadcrumbs should be generated (type="location" only, ignored if type="path")
      defaults to the current topic
+   * =type=: "location" (the default) or "path"
    * =header=: format string prepended to the output result
    * =format=: format string to render one item on the breadcrumbs path
      (defaults to '[<nop>[$webtopic][$name]]')
    * =footer=: format string appended to the output result
    * =separator=: format string to be put between items
      (defaults to one space char)
-   * =include=: regular expression items must match to be part of the path
-   * =exclude=: regular expression items must _not_ match to be part of the path
-   * =recurse=: can be one or more of the following values (comma separated) to
-     deside which parts of the breadcrumbs path should be included (defaults to 'on'):
+   * =include=: regular expression that items must match to be part of the path
+   * =exclude=: regular expression that items must _not_ match to be part of the path
+   * =recurse=:  (type="location" only)can be one or more of the following values (comma separated) to
+     decide which parts of the breadcrumbs path should be included (defaults to 'on'):
       * =on=: include all parent webs and all parent topics
       * =off=: include only the current web and the current topic
       * =weboff=: don't recurse on webs, include only the current web
@@ -70,6 +73,12 @@ separator) may contain special variables:
 %BREADCRUMBS%
 </verbatim>
 %BREADCRUMBS%
+
+---+++ path
+<verbatim>
+%BREADCRUMBS{type="path"}%
+</verbatim>
+%BREADCRUMBS{type="path"}%
 
 ---+++ breadcrumbs to a non-existent location
 <verbatim>
@@ -119,12 +128,7 @@ separator) may contain special variables:
 
 
 ---++ Plugin Installation Instructions
-
-   * Download the ZIP file from the Plugin web (see below)
-   * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
-     | *File:* | *Description:* |
-%$MANIFEST%
-   * (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
+%$INSTALL_INSTRUCTIONS%
 
 ---++ Plugin Info
 <!-- provided for compatibility only
@@ -134,8 +138,9 @@ separator) may contain special variables:
 |  Plugin Author: | TWiki:Main.MichaelDaum |
 |  Copyright &copy;: | 2006, MichaelDaum@WikiRing.com |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | v0.10 |
+|  Plugin Version: | v0.11 (%$VERSION) |
 |  Change History: | &nbsp; |
+|  20 Feb 2007: | TWiki:Main.CrawfordCurrie added path breadcrumbs |
 |  18 Dec 2006: | added $webtopic pseudo-parameter |
 |  31 Aug 2006: | added NO_PREFS_IN_TOPIC;\
                   removed commonTagsHandler thus dropping cairo support |
