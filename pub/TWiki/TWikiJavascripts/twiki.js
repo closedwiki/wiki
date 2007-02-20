@@ -262,7 +262,7 @@ function removePunctuation(inValue) {
 /**
 Combines removePunctuation and removeSpaces.
 */
-function removeSpacesAndPunctiation(inValue) {
+function removeSpacesAndPunctuation(inValue) {
 	return removePunctuation(removeSpaces(inValue));
 }
 
