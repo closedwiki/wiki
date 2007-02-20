@@ -18,11 +18,13 @@ use strict;
 use vars qw($VERSION $RELEASE $debug $NO_PREFS_IN_TOPIC $SHORTDESCRIPTION);
 
 $VERSION = '$Rev$';
-$RELEASE = 'v0.10';
+$RELEASE = 'v0.11';
 $NO_PREFS_IN_TOPIC = 1;
 $SHORTDESCRIPTION = 'A flexible way to display breadcrumbs navigation';
 
 $debug = 0; # toggle me
+
+my @trail;
 
 ###############################################################################
 sub writeDebug {
@@ -32,8 +34,27 @@ sub writeDebug {
 
 ###############################################################################
 sub initPlugin {
-
   TWiki::Func::registerTagHandler('BREADCRUMBS', \&renderBreadCrumbs);
+
+  # Record the path
+  my $context = TWiki::Func::getContext();
+  my ($topic, $web) = ($_[0], $_[1]);
+  ($web, $topic) = TWiki::Func::normalizeWebTopicName($web, $topic);
+  my $here = "$web.$topic";
+  @trail = split(
+      ',', TWiki::Func::getSessionValue('BREADCRUMB_TRAIL') || '');
+  # Detect cycles by scanning back along the trail to see if we've been here
+  # before
+  for (my $i = scalar(@trail) - 1; $i >= 0; $i--) {
+      my $place = $trail[$i];
+      if ($place eq $here) {
+          splice(@trail, $i);
+          last;
+      }
+  }
+  push(@trail, $here);
+  TWiki::Func::setSessionValue('BREADCRUMB_TRAIL', join(',', @trail));
+
   return 1;
 }
 
@@ -53,6 +74,7 @@ sub renderBreadCrumbs {
   my $recurse = $params->{recurse} || 'on';
   my $include = $params->{include} || '';
   my $exclude = $params->{exclude} || '';
+  my $type = $params->{type} || 'location';
 
   my %recurseFlags = map {$_ => 1} split (/,\s*/, $recurse);
   #foreach my $key (keys %recurseFlags) {
@@ -61,7 +83,16 @@ sub renderBreadCrumbs {
 
   # compute breadcrumbs
   my ($web, $topic) = normalizeWebTopicName($currentWeb, $webTopic);
-  my $breadCrumbs = getLocationBreadCrumbs($web, $topic, \%recurseFlags);
+  my $breadCrumbs;
+  if ($type eq 'path') {
+      my @trail = map {
+          /\.(.*?)$/;
+          { name => $1, target => $_ } } split(
+          ',', TWiki::Func::getSessionValue('BREADCRUMB_TRAIL') || '');
+      $breadCrumbs = \@trail;
+  } else {
+      $breadCrumbs = getLocationBreadCrumbs($web, $topic, \%recurseFlags);
+  }
 
   # format result
   my @lines = ();
