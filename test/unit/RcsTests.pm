@@ -32,8 +32,10 @@ sub set_up {
     # Switch off pipes to maximise debug opportunities
     # The following setting is for debugging and disabled
     # since it makes so much noise that normal tests drown
+    # Note enabling these makes later test cases fail when
+    # run as TWikiSuite
     #$twiki->{sandbox}->{REAL_SAFE_PIPE_OPEN} = 0;
-    $twiki->{sandbox}->{EMULATED_SAFE_PIPE_OPEN} = 0;
+    #$twiki->{sandbox}->{EMULATED_SAFE_PIPE_OPEN} = 0;
     $saveWF = $TWiki::cfg{WarningFileName};
     $TWiki::cfg{WarningFileName} = "/tmp/junk";
     die unless $twiki;
@@ -44,10 +46,6 @@ sub set_up {
 
 sub tear_down {
     my $this = shift;
-    # Next two are added as they influence next test cases run
-    # in the TWikiSuite
-    $twiki->{sandbox}->{REAL_SAFE_PIPE_OPEN} = 1;
-    $twiki->{sandbox}->{EMULATED_SAFE_PIPE_OPEN} = 1;
     File::Path::rmtree("$TWiki::cfg{DataDir}/$testWeb");
     File::Path::rmtree("$TWiki::cfg{PubDir}/$testWeb");
     eval {$twiki->finish()};
