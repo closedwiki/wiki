@@ -1,0 +1,567 @@
+head	1.22;
+access;
+symbols;
+locks; strict;
+comment	@# @;
+
+
+1.22
+date	2007.01.30.21.02.57;	author LynnwoodBrown;	state Exp;
+branches;
+next	1.21;
+
+1.21
+date	2007.01.29.18.48.08;	author LynnwoodBrown;	state Exp;
+branches;
+next	1.20;
+
+1.20
+date	2007.01.15.17.01.34;	author LynnwoodBrown;	state Exp;
+branches;
+next	1.19;
+
+1.19
+date	2006.12.28.19.05.10;	author LynnwoodBrown;	state Exp;
+branches;
+next	1.18;
+
+1.18
+date	2006.12.28.16.28.02;	author LynnwoodBrown;	state Exp;
+branches;
+next	1.17;
+
+1.17
+date	2006.11.16.00.34.03;	author LynnwoodBrown;	state Exp;
+branches;
+next	1.16;
+
+1.16
+date	2006.11.16.00.33.03;	author LynnwoodBrown;	state Exp;
+branches;
+next	1.15;
+
+1.15
+date	2006.11.16.00.26.48;	author LynnwoodBrown;	state Exp;
+branches;
+next	1.14;
+
+1.14
+date	2006.11.16.00.22.56;	author LynnwoodBrown;	state Exp;
+branches;
+next	1.13;
+
+1.13
+date	2006.11.16.00.20.07;	author LynnwoodBrown;	state Exp;
+branches;
+next	1.12;
+
+1.12
+date	2006.11.16.00.19.05;	author LynnwoodBrown;	state Exp;
+branches;
+next	1.11;
+
+1.11
+date	2006.11.13.20.59.04;	author LynnwoodBrown;	state Exp;
+branches;
+next	1.10;
+
+1.10
+date	2006.11.13.20.56.38;	author LynnwoodBrown;	state Exp;
+branches;
+next	1.9;
+
+1.9
+date	2006.10.27.22.03.14;	author LynnwoodBrown;	state Exp;
+branches;
+next	1.8;
+
+1.8
+date	2006.10.26.20.49.46;	author LynnwoodBrown;	state Exp;
+branches;
+next	1.7;
+
+1.7
+date	2006.10.16.04.51.44;	author LynnwoodBrown;	state Exp;
+branches;
+next	1.6;
+
+1.6
+date	2006.10.13.03.07.59;	author LynnwoodBrown;	state Exp;
+branches;
+next	1.5;
+
+1.5
+date	2006.10.13.01.18.14;	author LynnwoodBrown;	state Exp;
+branches;
+next	1.4;
+
+1.4
+date	2006.10.12.23.53.21;	author LynnwoodBrown;	state Exp;
+branches;
+next	1.3;
+
+1.3
+date	2006.10.03.19.30.53;	author LynnwoodBrown;	state Exp;
+branches;
+next	1.2;
+
+1.2
+date	2006.10.03.04.45.56;	author LynnwoodBrown;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2006.10.03.04.28.46;	author LynnwoodBrown;	state Exp;
+branches;
+next	;
+
+
+desc
+@none
+@
+
+
+1.22
+log
+@none
+@
+text
+@%META:TOPICINFO{author="LynnwoodBrown" date="1170190977" format="1.1" reprev="1.22" version="1.22"}%
+%META:TOPICPARENT{name="TopicFunction"}%
+---+!! Function: %TOPIC%
+%FORMFIELD{"Summary"}%
+
+%TOC{depth="2"}%
+
+---++ Documentation
+%STARTSECTION{"documentation"}%
+%TOPIC% provides the user interface for creating new topics utilizing the TopicClassification scheme. It is INCLUDED in the CreateNewTopic in each web that utilizes TopicClassificationAddOn.
+
+After the !TopicType is selected, the "new" section of that !TopicType in the local web is INCLUDED, which in turn INCLUDES RenderTopicCreator and sets it's parameters. The purpose for this arrangement is to allow customization of the options for that !TopicType within the particular web.
+
+---+++++ Parameters
+   * none needed.
+
+---+++++ Css
+   * n/a
+%ENDSECTION{"documentation"}%
+
+---++ Implementation
+<verbatim>
+%STARTINCLUDE%
+<form name="selectType" action="%SCRIPTURL{view}%/%BASEWEB%/%BASETOPIC%" />
+<h3> Create A New <nop>%URLPARAM{"type" default="... "}%  <select name="type" onchange="this.form.submit( )" ><option> _%IF{ "$'URLPARAM{step}'='two'" then="Change..." else="Select <nop>TopicType..." }%_ </option><option>Blank Topic</option>%DBQUERY{"Classification = 'TopicType'" web="%BASEWEB%" format="<option >$topic</option> separator=" " }% </select></h3>
+<input name="step" type="hidden" value="two">
+<input type="hidden" name="parent" value="<nop>%URLPARAM{parent}%" />
+</form>
+%BR% _%ICON{help}% For more information about how topics are organized within the <nop>%BASEWEB% web, see %BASEWEB%.TopicClassification._
+
+%IFDEFINEDTHEN{"%URLPARAM{step}%" as="two" glue="off"}%
+%INCLUDE{ %IFDEFINED{ "%URLPARAM{type}%" as="Blank Topic" then="\"%TCAOWEB%.RenderTopicCreator\" FORM=\"none\"" else="\"%BASEWEB%.%URLPARAM{type}%\" section=\"new\"" }% }%
+%FIDEFINED%
+%STOPINCLUDE%
+</verbatim>
+
+<!-- interrupt glue -->
+
+---++ Test
+<div class="alt">
+%DBCALL{"%TOPIC%"}%
+</div>
+
+%DBCALL{"RenderFunctionCallers"}%
+
+---++ Copyright
+<div style="text-align:justify;margin:1em;">
+(C) 2006 LynnwoodBrown@@Skyloom.com
+
+%DBCALL{"GnuGeneralPublicLicense" section="notice"}%
+</div>
+
+%META:FORM{name="TopicForm"}%
+%META:FIELD{name="TopicType" attributes="" title="TopicType" value="TopicFunction"}%
+%META:FIELD{name="SubjectArea" attributes="" title="SubjectArea" value="TcaoUse"}%
+%META:FIELD{name="Summary" attributes="" title="Summary" value="Provides interface for creating new classified topics"}%
+%META:REVCOMMENT{ncomments="0"}%
+@
+
+
+1.21
+log
+@none
+@
+text
+@d1 1
+a1 1
+%META:TOPICINFO{author="LynnwoodBrown" date="1170096488" format="1.1" reprev="1.21" version="1.21"}%
+d15 1
+a15 1
+   * none
+d18 1
+a18 1
+   * none
+@
+
+
+1.20
+log
+@none
+@
+text
+@d1 1
+a1 1
+%META:TOPICINFO{author="LynnwoodBrown" date="1168880494" format="1.1" reprev="1.20" version="1.20"}%
+d25 1
+a25 1
+<h3> Create A New <nop>%URLPARAM{"type" default="Topic"}%  <select name="type" onchange="this.form.submit( )" ><option> _%IF{ "$'URLPARAM{step}'='two'" then="Change..." else="Select <nop>TopicType..." }%_ </option><option>Blank Topic</option>%DBQUERY{"Classification = 'TopicType'" web="%BASEWEB%" format="<option >$topic</option> separator=" " }% </select></h3>
+@
+
+
+1.19
+log
+@none
+@
+text
+@d1 1
+a1 1
+%META:TOPICINFO{author="LynnwoodBrown" date="1167332710" format="1.1" reprev="1.19" version="1.19"}%
+a23 2
+---+++ Create A New Topic
+_For more information about how topics are organized within the <nop>%BASEWEB% web, see %BASEWEB%.TopicClassification._
+d25 1
+a25 2
+---+++ Select %BASEWEB%.TopicType
+<select name="type" onchange="this.form.submit( )" ><option value="%URLPARAM{"type" default="blank"}%">Select...</option><option value="blank" >Blank topic</option>%DBQUERY{"Classification = 'TopicType'" web="%BASEWEB%" format="<option $percntIF{\"$'URLPARAM{type}'='$topic'\" then=\"selected\" else=\" \"}$percnt >$topic</option> separator=" " }% </select>
+a27 1
+
+d29 1
+d31 3
+a33 5
+<div id="stepTwo" style="%IF{"'%URLPARAM{"step"}%' = 'two'" then="" else="display:none"}%"> 
+
+%INCLUDE{ %IF{ "%URLPARAM{type}%='blank'" then='"%TCAOWEB%.RenderTopicCreator" FORM="none"' else='"%BASEWEB%.%URLPARAM{type}%" section="new"' }% }%
+
+</div> 
+@
+
+
+1.18
+log
+@none
+@
+text
+@d1 1
+a1 1
+%META:TOPICINFO{author="LynnwoodBrown" date="1167323282" format="1.1" reprev="1.18" version="1.18"}%
+d10 1
+a10 1
+%TOPIC% provides the user interface for creating new topics utilizing the TopicClassification scheme. It is INCLUDED in the CreateNewTopic in each web that utilizes TopicClassificationApplication.
+d58 3
+a60 2
+%META:FORM{name="Applications.TopicForm"}%
+%META:FIELD{name="TopicType" attributes="" title="TopicType" value="BugItem"}%
+d62 1
+a62 1
+%META:REVCOMMENT{comment_1=" " minor_1="1" ncomments="1" rev_1="18" t_1="1167322731"}%
+@
+
+
+1.17
+log
+@none
+@
+text
+@d1 1
+a1 1
+%META:TOPICINFO{author="LynnwoodBrown" date="1163637243" format="1.1" version="1.17"}%
+a25 1
+---++++ Select %BASEWEB%.TopicType:
+d27 2
+a28 1
+*TopicType:* &nbsp;<select name="type" onchange="this.form.submit( )" ><option value="%URLPARAM{"type" default="blank"}%">%URLPARAM{"type" default="Select..."}%</option><option value="blank" >blank topic</option>%DBQUERY{"Classification = 'TopicType'" web="%BASEWEB%" format="<option>$topic</option> separator=" " }% </select>
+d31 1
+a34 1
+---++++ Enter New Topic Information
+d59 1
+a59 1
+%META:FIELD{name="TopicType" attributes="M" title="TopicType" value="TopicFunction"}%
+d61 1
+a61 2
+%META:FIELD{name="TWikiApplication" attributes="" title="TWikiApplication" value="TopicClassificationAddOn"}%
+%META:REVCOMMENT{comment_1=" " minor_1="1" ncomments="1" rev_1="16" t_1="1163637183"}%
+@
+
+
+1.16
+log
+@none
+@
+text
+@d1 1
+a1 1
+%META:TOPICINFO{author="LynnwoodBrown" date="1163637183" format="1.1" version="1.16"}%
+d62 1
+a62 1
+%META:REVCOMMENT{comment_1=" " minor_1="1" ncomments="1" rev_1="" t_1="1163637183"}%
+@
+
+
+1.15
+log
+@none
+@
+text
+@d1 1
+a1 1
+%META:TOPICINFO{author="LynnwoodBrown" date="1163636808" format="1.1" version="1.15"}%
+d28 1
+a28 1
+*TopicType:* &nbsp;<select name="type" onchange="this.form.submit( )" ><option value="%URLPARAM{"type" default="blank"}%">%URLPARAM{"type" default="Select..."}%</option><option value="blank" >blank topic</option>%DBQUERY{"Classification='TopicType'" web="%BASEWEB%" format="<option>$topic</option> separator=" " }%
+d62 1
+a62 1
+%META:REVCOMMENT{ncomments="0"}%
+@
+
+
+1.14
+log
+@none
+@
+text
+@d1 1
+a1 1
+%META:TOPICINFO{author="LynnwoodBrown" date="1163636576" format="1.1" version="1.14"}%
+d33 1
+a33 1
+<div id="stepTwo" style="%IF{"'%URLPARAM{"step"}%' = 'two'" then="display:block" else="display:none"}%"> 
+@
+
+
+1.13
+log
+@none
+@
+text
+@d1 1
+a1 1
+%META:TOPICINFO{author="LynnwoodBrown" date="1163636407" format="1.1" version="1.13"}%
+d62 1
+a62 1
+%META:REVCOMMENT{comment_1=" " minor_1="1" ncomments="1" rev_1="12" t_1="1163636344"}%
+@
+
+
+1.12
+log
+@none
+@
+text
+@d1 1
+a1 1
+%META:TOPICINFO{author="LynnwoodBrown" date="1163636344" format="1.1" version="1.12"}%
+d38 1
+a38 1
+</div> <!-- stepTwo -->
+d62 1
+a62 1
+%META:REVCOMMENT{comment_1=" " minor_1="1" ncomments="1" rev_1="" t_1="1163636344"}%
+@
+
+
+1.11
+log
+@none
+@
+text
+@d1 1
+a1 1
+%META:TOPICINFO{author="LynnwoodBrown" date="1163451544" format="1.1" version="1.11"}%
+d33 1
+a33 1
+<div id="stepTwo" style="%IF{"'%URLPARAM{"step"}%' = 'two'" then="" else="display:none"}%"> 
+d62 1
+@
+
+
+1.10
+log
+@none
+@
+text
+@d1 1
+a1 1
+%META:TOPICINFO{author="LynnwoodBrown" date="1163451398" format="1.1" version="1.10"}%
+d36 1
+a36 1
+%INCLUDE{ %IF{ "%URLPARAM{type}%='blank'" then='"%TCAOWEB%.RenderTopicCreator" FORM=""' else='"%BASEWEB%.%URLPARAM{type}%" section="new"' }% }%
+a57 2
+
+
+@
+
+
+1.9
+log
+@none
+@
+text
+@d1 1
+a1 1
+%META:TOPICINFO{author="LynnwoodBrown" date="1161986594" format="1.1" version="1.9"}%
+d36 1
+a36 1
+%INCLUDE{ %IF{ "%URLPARAM{type}%='blank'" then="%TCAOWEB%.RenderTopicCreator" else='"%BASEWEB%.%URLPARAM{type}%" section="new"' }% }%
+d49 1
+a49 1
+%DBCALL{"%APPLIB%.RenderFunctionCallers"}%
+d55 1
+a55 1
+%DBCALL{"%APPLIB%.GnuGeneralPublicLicense" section="notice"}%
+@
+
+
+1.8
+log
+@none
+@
+text
+@d1 1
+a1 1
+%META:TOPICINFO{author="LynnwoodBrown" date="1161895786" format="1.1" reprev="1.8" version="1.8"}%
+d34 1
+a34 1
+---++++ Enter <nop>%URLPARAM{"type"}% Topic Information
+@
+
+
+1.7
+log
+@none
+@
+text
+@d1 1
+a1 1
+%META:TOPICINFO{author="LynnwoodBrown" date="1160974303" format="1.1" version="1.7"}%
+d26 1
+a26 1
+---++++ Select %BASEWEB%.TopicType for new topic:
+d36 1
+a36 1
+%INCLUDE{ %IF{ "%URLPARAM{type}%='blank'" then='"%TCAOWEB%.%TOPIC%" section="name"' else='"%BASEWEB%.%URLPARAM{type}%" section="new"' }% }%
+@
+
+
+1.6
+log
+@none
+@
+text
+@d1 1
+a1 1
+%META:TOPICINFO{author="LynnwoodBrown" date="1160708879" format="1.1" reprev="1.6" version="1.6"}%
+@
+
+
+1.5
+log
+@none
+@
+text
+@d1 1
+a1 1
+%META:TOPICINFO{author="LynnwoodBrown" date="1160702293" format="1.1" version="1.5"}%
+d10 1
+a10 2
+%TOPIC% provides the user interface for creating new topics utilizing the classification scheme offered by TopicClassificationApplication. It is INCLUDED in the CreateNewTopic in each web that utilizes TopicClassificationApplication.
+
+d12 1
+d26 3
+a28 3
+---+++ Step 1: Select %BASEWEB%.TopicType for your new topic:
+<form name="selectType" action="%SCRIPTUR{view}%/%BASEWEB%/%BASETOPIC%">
+*TopicType:* &nbsp;<select name="type" ><option value="%URLPARAM{"type" default="blank"}%">%URLPARAM{"type" default="Select..."}%</option><option value="blank" >blank topic</option>%DBQUERY{"Classification='TopicType'" web="%BASEWEB%" format="<option>$topic</option> separator=" " onchange="document.form[0].submit()" }%
+d34 1
+a34 1
+---+++ Step 2: Enter <nop>%URLPARAM{"type"}% Topic Information
+a35 1
+<form name="newTopic" action='%SCRIPTURL{edit}%/%BASEWEB%/'>
+a36 6
+<select name="SubjectArea"><option value="">Select...</option> %DBQUERY{"Classification='SubjectArea'" web="%BASEWEB%" format="<option>$topic</option>" separator=" "}% </select> <checkbox name="subjectParent" onclick />
+%INCLUDE{"%TCAOWEB%.CreateNewTopicElements" section="%IF{ "defined par" then="subjectparent" else="selectparent" }%" }%
+<p />
+---+++ Step 3: Create Topic
+<p />Click: <input type="submit" value="  Create topic  ">  <checkbox name="action" value="save"> Save topic without editing.
+</form>
+@
+
+
+1.4
+log
+@none
+@
+text
+@d1 1
+a1 1
+%META:TOPICINFO{author="LynnwoodBrown" date="1160697201" format="1.1" reprev="1.4" version="1.4"}%
+d27 2
+a28 2
+<form name="selectType" action="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%BASEWEB%/%BASETOPIC%">
+*TopicType:* &nbsp;<select name="type" ><option value="%URLPARAM{"type" default="blank"}%">%URLPARAM{"type" default="Select..."}%</option><option value="blank" >blank topic</option>%DBQUERY{"Classification='TopicType'" web="%BASEWEB%" format="<option>$topic</option> separator=" " onchange="this.form.submit()" }%
+@
+
+
+1.3
+log
+@none
+@
+text
+@d1 1
+a1 1
+%META:TOPICINFO{author="LynnwoodBrown" date="1159903852" format="1.1" version="1.3"}%
+d12 2
+d28 1
+a28 1
+*TopicType:* &nbsp;<select name="type" ><option value="%URLPARAM{"type" default="blank"}%">%URLPARAM{"type" default="Select..."}%</option><option value="blank" >blank topic</option>%DBQUERY{"Classification='TopicType'" web="%BASEWEB%" format="<option>$topic</option> separator=" " onchange="this.form.submit()"}%
+d33 1
+a33 1
+<div style="%IF{"'%URLPARAM{"step"}%' = 'two'" then="" else="display:none"}%"> 
+d45 1
+a45 1
+
+@
+
+
+1.2
+log
+@none
+@
+text
+@d1 1
+a1 1
+%META:TOPICINFO{author="LynnwoodBrown" date="1159850756" format="1.1" reprev="1.2" version="1.2"}%
+@
+
+
+1.1
+log
+@none
+@
+text
+@d1 2
+a2 2
+%META:TOPICINFO{author="LynnwoodBrown" date="1158958646" format="1.1" version="1.2"}%
+%META:TOPICPARENT{name="TopicTemplate"}%
+a63 9
+<!--
+   * Set SIDEBAR = TopicType
+   * Set SIDEBARARG = TopicFunction
+-->
+%STARTSECTION{type="templateonly"}%
+%RED%Note, this is only a template.%ENDCOLOR%
+
+See also: TopicFunction
+%ENDSECTION{type="templateonly"}%
+d68 1
+a68 1
+%META:FIELD{name="TWikiApplication" attributes="" title="TWikiApplication" value="TopicClassificationApplication"}%
+@

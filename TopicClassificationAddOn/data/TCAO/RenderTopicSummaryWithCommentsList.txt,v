@@ -1,0 +1,129 @@
+head	1.2;
+access;
+symbols;
+locks; strict;
+comment	@# @;
+
+
+1.2
+date	2007.01.25.03.47.31;	author LynnwoodBrown;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2007.01.24.22.49.09;	author LynnwoodBrown;	state Exp;
+branches;
+next	;
+
+
+desc
+@none
+@
+
+
+1.2
+log
+@none
+@
+text
+@%META:TOPICINFO{author="LynnwoodBrown" date="1169696851" format="1.1" reprev="1.2" version="1.2"}%
+%META:TOPICPARENT{name="TopicFunction"}%
+---+!! Function: %TOPIC%
+%FORMFIELD{"Summary"}%
+
+%TOC{depth="2"}%
+
+---++ Documentation
+%STARTSECTION{name="documentation" type="section"}%
+%RED%TODO%ENDCOLOR%
+
+---+++++ Parameters
+   * TOPICTYPES - Which !TopicTypes to include. Enter with "bar" ("|") between.
+
+---+++++ Css
+   * 
+%ENDSECTION{name="documentation" type="section"}%
+
+---++ Implementation
+<verbatim>
+%STARTINCLUDE%
+
+<div class="patternTopicAction">
+<form name="listOptions" action="%SCRIPTURL{view}%/%BASEWEB%/%BASETOPIC%">
+| *Sort by:* <input type="radio" name="sort" value="created" 
+~~~   %IFDEFINED{"%URLPARAM{"sort" default="created"}%" as="created" then="checked" glue="off"}% >Date Created  
+~~~  <input type="radio" name="sort" value="modified" %IFDEFINED{"%URLPARAM{"sort"}%" as="modified" then="checked"}% >Date Modified  |
+~~~  *Limit # results:* <select name="limit"> 
+~~~         <option %IFDEFINED{"%URLPARAM{"limit" default="20"}%" as="20" then="selected" glue="off"}% >20</option>
+~~~         <option %IFDEFINED{"%URLPARAM{limit}%" as="50" then="selected" glue="off"}%>50</option>
+~~~         <option %IFDEFINED{"%URLPARAM{limit}%" as="100" then="selected" glue="off"}%>100</option>
+~~~         <option %IFDEFINED{"%URLPARAM{limit}%" as="all" then="selected" glue="off"}%>all</option>
+~~~    </select> |
+~~~  <input type="submit" value="Apply"> |
+ </form></div>
+
+%~~  SEARCH{"[T]opicType.*value\=.*(%TOPICTYPES%)" 
+~~~    web="%BASEWEB%" 
+~~~    type="regex" 
+~~~    nonoise="on" 
+~~~    order="%URLPARAM{"sort" default="created"}%"  
+~~~    reverse="on" 
+~~~    limit="%URLPARAM{"limit" default="20"}%" 
+~~~    newline="%BR%" 
+~~~    separator="$n$n"
+~~~    format="<h3>[[$web.$topic][$percntSPACEOUT{$topic}$percnt]] </h3>
+~~~       <span class=twikiSmall><em>
+~~~          Posted $createdate by $createwikiusername $percntIFDEFINED{\"$formfield(SubjectArea)\" then=\" 
+~~~          in <noautolink>$formfield(SubjectArea)</noautolink>\"}$percnt &nbsp; |  
+~~~          $percntIFDEFINED{\"$count(.*?(---[+][+][+][+]) .*)\" as=\"1\" then=\"$test comment\" else=\"$test comments\" glue=\"off\" }$percnt
+~~~       </em></span> $percntBR$percnt $percntBR$percnt
+~~~       $pattern(.*?---[+]*.*?[\n\r]+(.*?)[\n\r]+.*)  _[[$web.$topic][continued...]]_ " 
+~~~    }%
+%STOPINCLUDE%
+</verbatim>
+
+<!-- interrupt glue -->
+
+---++ Test
+<div class="alt">
+%DBCALL{"%TOPIC%" TOPICTYPES="HelpTopic|MasterTopic"}%
+</div>
+
+%DBCALL{"RenderFunctionCallers"}%
+
+---++ Copyright
+<div style="text-align:justify;margin:1em;">
+(C) 2006 LynnwoodBrown@@Skyloom.com
+
+%DBCALL{"GnuGeneralPublicLicense" section="notice"}%
+</div>
+
+
+<!--
+   * Set SIDEBAR = TopicType
+   * Set SIDEBARARG = TopicFunction
+-->
+
+%META:FORM{name="TCAO.TopicForm"}%
+%META:FIELD{name="TopicType" attributes="" title="TopicType" value="TopicFunction"}%
+%META:FIELD{name="Summary" attributes="" title="Summary" value="Displays short intro to topic with number of comments"}%
+%META:REVCOMMENT{ncomments="0"}%
+@
+
+
+1.1
+log
+@none
+@
+text
+@d1 1
+a1 1
+%META:TOPICINFO{author="LynnwoodBrown" date="1169678949" format="1.1" reprev="1.1" version="1.1"}%
+d23 1
+d35 1
+a35 1
+ </form>
+d49 1
+a49 1
+~~~          in <noautolink>$formfield(SubjectArea)<noautolink>\"}$percnt &nbsp; |  
+@

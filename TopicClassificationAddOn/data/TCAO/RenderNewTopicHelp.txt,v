@@ -1,0 +1,307 @@
+head	1.8;
+access;
+symbols;
+locks; strict;
+comment	@# @;
+
+
+1.8
+date	2007.02.09.16.57.33;	author LynnwoodBrown;	state Exp;
+branches;
+next	1.7;
+
+1.7
+date	2007.01.02.20.59.09;	author LynnwoodBrown;	state Exp;
+branches;
+next	1.6;
+
+1.6
+date	2006.10.10.22.09.40;	author LynnwoodBrown;	state Exp;
+branches;
+next	1.5;
+
+1.5
+date	2006.10.07.20.47.53;	author LynnwoodBrown;	state Exp;
+branches;
+next	1.4;
+
+1.4
+date	2006.10.07.17.44.01;	author LynnwoodBrown;	state Exp;
+branches;
+next	1.3;
+
+1.3
+date	2006.10.07.06.17.27;	author LynnwoodBrown;	state Exp;
+branches;
+next	1.2;
+
+1.2
+date	2006.10.06.05.31.59;	author LynnwoodBrown;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2006.10.06.02.42.10;	author LynnwoodBrown;	state Exp;
+branches;
+next	;
+
+
+desc
+@none
+@
+
+
+1.8
+log
+@none
+@
+text
+@%META:TOPICINFO{author="LynnwoodBrown" date="1171040253" format="1.1" reprev="1.8" version="1.8"}%
+%META:TOPICPARENT{name="TopicFunction"}%
+---+!! Function: %TOPIC%
+%FORMFIELD{"Summary"}%
+
+%TOC{depth="2"}%
+
+---++ Documentation
+%STARTSECTION{name="documentation" type="section"}%
+%TOPIC% displays a banner at the top of newly created classification topics using %TWIKIWEB%.UserCommentsTemplate#Removable_help_section. (See %TWIKIWEB%.TopicClassificationAddOn#Add_On_Installation_Instructions for notes on adding this required comment template.) 
+
+---+++++ Parameters
+   * HELPTOPIC - specify a HelpTopic to provide additional instructions related to the particular classification.
+---+++++ Css
+   * 
+%ENDSECTION{name="documentation" type="section"}%
+
+---++ Implementation
+<verbatim>
+%STARTINCLUDE%
+<div style="background-color:%HELP_BACKGROUND_COLOR%;">
+---+++ %Y% _Congradulations - <nop>%BASETOPIC% <nop>%FORMFIELD{"Classification" topic="%BASEWEB%.%BASETOPIC%" }% has been created!_
+
+Additional steps to complete installation of this <nop>%FORMFIELD{"Classification" topic="%BASEWEB%.%BASETOPIC%" }%:
+%INCLUDE{"%IFDEFINED{"%HELPTOPIC%" then="$variable" else="$percntTCAOWEB$percnt.GenericNewClassInstallHelp" glue="off"}%" }%
+
+__%ICON{help}% When you have completed the installation steps, click on the button below to remove this help message.__
+</div>
+%STOPINCLUDE%
+</verbatim>
+
+---++ Test
+
+<div class="alt">
+%DBCALL{"%TOPIC%"}%
+</div>
+
+%DBCALL{"RenderFunctionCallers"}%
+
+---++ Copyright
+<div style="text-align:justify;margin:1em;">
+(C) 2006 LynnwoodBrown@@Skyloom.com
+
+%DBCALL{"GnuGeneralPublicLicense" section="notice"}%
+</div>
+
+
+
+
+%META:FORM{name="TopicForm"}%
+%META:FIELD{name="TopicType" attributes="" title="TopicType" value="TopicFunction"}%
+%META:FIELD{name="SubjectArea" attributes="" title="SubjectArea" value=""}%
+%META:FIELD{name="Summary" attributes="" title="Summary" value="Renders the help banner at the topic of new Classification topics"}%
+%META:TOPICMOVED{by="LynnwoodBrown" date="1160099393" from="TCAO2.RenderNewClassTopicHelp" to="TCAO2.RenderNewTopicHelp"}%
+%META:REVCOMMENT{comment_1=" " minor_1="1" ncomments="1" rev_1="7" t_1="1167766608"}%
+@
+
+
+1.7
+log
+@none
+@
+text
+@d1 1
+a1 1
+%META:TOPICINFO{author="LynnwoodBrown" date="1167771549" format="1.1" reprev="1.7" version="1.7"}%
+d13 1
+a13 1
+   * none
+d21 1
+d28 1
+d52 1
+@
+
+
+1.6
+log
+@none
+@
+text
+@d1 1
+a1 1
+%META:TOPICINFO{author="LynnwoodBrown" date="1160518180" format="1.1" version="1.6"}%
+d10 1
+a10 1
+%TOPIC% displays  a banner at the topic newly created classification topics. It the basic formatting for the banner, general information and "next step" options. Further help on the particular classification topic is provided by topics specified by the HELP parameter.
+d13 1
+a13 3
+   * HELP - %RED% _Required_ %ENDCOLOR% Specifies the section of this topic that provides any installation or use instructions needed for the new topic.
+   * FROM - The topic from which user started in creating a new classification topic.
+
+d21 1
+a21 14
+<script type="text/javascript" language="JavaScript">
+var createTime = "%DBQUERY{"name = '%BASETOPIC%'" web="%BASEWEB%" format="$expand(createdate)" }%";
+var currentDate = new Date();
+
+document.write(currentDate.getTime());
+document.write("%BR%");
+document.write(createTime);
+
+function removeHelp() {
+   insertHtml((" "), "newTopicHelp");
+}
+</script>
+
+%DBQUERY{"name = '%BASETOPIC%'" web="%BASEWEB%" format="$expand(createdate)"}%
+d23 2
+a24 1
+<a href="javascript:removeHelp()">Remove help</a>
+d26 1
+d30 1
+a30 10
+---++ Help Sections
+
+---+++ Help box container
+
+<div style="background-color:yellow;padding:1em;">
+<p />
+<blockquote>
+---+++ %Y% _Congradulations - <noP>%BASETOPIC% %BASEWEB%.%FORMFIELD{"Classification" topic="%BASEWEB%.%BASETOPIC%" }% has been created!_
+
+%INCLUDE{"%TCAOWEB%.%TOPIC%" section="%HELP% warm="off"}%
+a31 23
+</blockquote>
+<p />
+</div>
+
+---+++ Generic Class Success Message
+
+%STARTSECTION{"successmsg"}%
+<table border="0" cellpadding="3" cellspacing="0" width="100%"><tr><td bgcolor="yellow">
+<blockquote>
+---+++ %Y% _Congradulations - <noP>%BASETOPIC% %BASEWEB%.%FORMFIELD{"TopicType" topic="%BASEWEB%.%BASETOPIC%" }% has been created!_
+
+%INCLUDE{"%IF{ "'%INSTRUCTIONS%' = 'no'" then="" else="%TCAOWEB%.NewTopicElements" }%" warn="off" section="%INSTRUCTIONS%" }%
+   * What would you like to do next?
+      * Return to %BASEWEB%.TopicClassificationSetUp.
+      * [[%SCRIPTURL{view}%/%BASEWEB%/CreateNewTopic?%TYPE%=%BASETOPIC%][CreateNewTopic]] with a <nop>%FORMFIELD{"TopicType" topic="%BASEWEB%.%BASETOPIC%" }% of <nop>%BASETOPIC%.
+      * Return to %BASEWEB%.WebHome
+
+_This instructional banner is only displayed the first time you view this topic. Reload the page to remove it._
+</blockquote>
+</td></tr></table>
+%ENDSECTION{"successmsg"}%
+
+---++ Test
+d49 1
+a49 1
+%META:FIELD{name="TopicType" attributes="M" title="TopicType" value="TopicFunction"}%
+a50 1
+%META:FIELD{name="TWikiApplication" attributes="" title="TWikiApplication" value="TopicClassificationAddOn"}%
+d52 1
+@
+
+
+1.5
+log
+@none
+@
+text
+@d1 1
+a1 1
+%META:TOPICINFO{author="LynnwoodBrown" date="1160254073" format="1.1" reprev="1.5" version="1.5"}%
+@
+
+
+1.4
+log
+@none
+@
+text
+@d1 1
+a1 1
+%META:TOPICINFO{author="LynnwoodBrown" date="1160243041" format="1.1" reprev="1.4" version="1.4"}%
+d25 1
+a25 1
+var currentDate = newDate();
+d27 2
+a28 1
+document.write(currentDate);
+d30 4
+d38 2
+@
+
+
+1.3
+log
+@none
+@
+text
+@d1 1
+a1 1
+%META:TOPICINFO{author="LynnwoodBrown" date="1160201847" format="1.1" reprev="1.3" version="1.3"}%
+d13 1
+a13 1
+   * HELP - Identifies a topic that provides additional information and instructions for setting up the particular classification topic.
+d23 17
+d45 1
+a45 1
+%INCLUDE{"%TCAOWEB%.%BASETOPIC%PostInstallHelp" warm="off"}%
+a46 4
+<form name="remove_instructions" action="%SCRIPTURL{save}%/%BASEWEB%/%BASETOPIC%" />
+<input type="hidden" name="Classification" value="%TYPE%" />
+<input type="submit" value=" Remove these instructions  " />
+</form>
+a49 2
+%STOPINCLUDE%
+</verbatim>
+d51 17
+a67 1
+<!-- interrupt glue -->
+@
+
+
+1.2
+log
+@none
+@
+text
+@d1 1
+a1 1
+%META:TOPICINFO{author="LynnwoodBrown" date="1160112719" format="1.1" reprev="1.2" version="1.2"}%
+d30 4
+a33 6
+   * What would you like to do next?
+      * [[%BASEWEB%.%FROM%][Return to %FROM%]]
+      * [[%SCRIPTURL{view}%/%BASEWEB%/CreateNewTopic?%FORMFIELD{"Classification" topic="%BASEWEB%.%BASETOPIC%=%BASETOPIC%][CreateNewTopic]] with a <nop>%FORMFIELD{"Classification" topic="%BASEWEB%.%BASETOPIC%" }% of <nop>%BASETOPIC%.
+      * Return to %BASEWEB%.WebHome
+
+_This instructional banner is only displayed the first time you view this topic. Reload the page to remove it._
+@
+
+
+1.1
+log
+@none
+@
+text
+@d1 1
+a1 1
+%META:TOPICINFO{author="LynnwoodBrown" date="1160102530" format="1.1" reprev="1.1" version="1.1"}%
+d23 2
+a24 1
+<table border="0" cellpadding="3" cellspacing="0" width="100%"><tr><td bgcolor="yellow">
+d37 2
+a38 1
+</td></tr></table>
+@

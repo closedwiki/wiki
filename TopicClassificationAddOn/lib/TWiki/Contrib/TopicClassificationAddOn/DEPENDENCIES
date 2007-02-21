@@ -1,0 +1,11 @@
+
+# Dependencies for TopicClassificationAddOn
+ TWiki::Plugins,>=1.15,perl,TWiki 4.1 release.
+ TWiki::Plugins.DBCacheContrib
+ TWiki::Plugins.DBCachePlugin
+ TWiki::Plugins.TopicCreatePlugin
+ TWiki::Plugins.TreePlugin
+ TWiki::Plugins.IfDefinedPlugin
+ TWiki::Plugins.FilterPlugin
+ TWiki::Plugins.GluePlugin
+

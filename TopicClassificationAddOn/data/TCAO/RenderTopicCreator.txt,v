@@ -1,0 +1,1377 @@
+head	1.47;
+access;
+symbols;
+locks; strict;
+comment	@# @;
+
+
+1.47
+date	2007.02.17.20.13.50;	author LynnwoodBrown;	state Exp;
+branches;
+next	1.46;
+
+1.46
+date	2007.02.17.04.54.34;	author LynnwoodBrown;	state Exp;
+branches;
+next	1.45;
+
+1.45
+date	2007.02.17.00.04.09;	author LynnwoodBrown;	state Exp;
+branches;
+next	1.44;
+
+1.44
+date	2007.02.06.00.26.01;	author LynnwoodBrown;	state Exp;
+branches;
+next	1.43;
+
+1.43
+date	2007.01.25.00.54.46;	author LynnwoodBrown;	state Exp;
+branches;
+next	1.42;
+
+1.42
+date	2007.01.15.17.22.37;	author LynnwoodBrown;	state Exp;
+branches;
+next	1.41;
+
+1.41
+date	2007.01.09.20.01.29;	author LynnwoodBrown;	state Exp;
+branches;
+next	1.40;
+
+1.40
+date	2006.12.28.22.18.41;	author LynnwoodBrown;	state Exp;
+branches;
+next	1.39;
+
+1.39
+date	2006.11.15.21.10.21;	author LynnwoodBrown;	state Exp;
+branches;
+next	1.38;
+
+1.38
+date	2006.11.15.20.21.28;	author LynnwoodBrown;	state Exp;
+branches;
+next	1.37;
+
+1.37
+date	2006.11.15.20.11.16;	author LynnwoodBrown;	state Exp;
+branches;
+next	1.36;
+
+1.36
+date	2006.11.15.20.11.08;	author LynnwoodBrown;	state Exp;
+branches;
+next	1.35;
+
+1.35
+date	2006.11.15.20.05.36;	author LynnwoodBrown;	state Exp;
+branches;
+next	1.34;
+
+1.34
+date	2006.11.15.20.03.19;	author LynnwoodBrown;	state Exp;
+branches;
+next	1.33;
+
+1.33
+date	2006.11.15.20.00.57;	author LynnwoodBrown;	state Exp;
+branches;
+next	1.32;
+
+1.32
+date	2006.11.15.19.57.43;	author LynnwoodBrown;	state Exp;
+branches;
+next	1.31;
+
+1.31
+date	2006.11.15.19.28.34;	author LynnwoodBrown;	state Exp;
+branches;
+next	1.30;
+
+1.30
+date	2006.11.15.19.09.57;	author LynnwoodBrown;	state Exp;
+branches;
+next	1.29;
+
+1.29
+date	2006.11.13.21.55.24;	author LynnwoodBrown;	state Exp;
+branches;
+next	1.28;
+
+1.28
+date	2006.11.13.21.39.37;	author LynnwoodBrown;	state Exp;
+branches;
+next	1.27;
+
+1.27
+date	2006.11.13.21.35.57;	author LynnwoodBrown;	state Exp;
+branches;
+next	1.26;
+
+1.26
+date	2006.11.13.21.32.00;	author LynnwoodBrown;	state Exp;
+branches;
+next	1.25;
+
+1.25
+date	2006.11.09.19.04.50;	author LynnwoodBrown;	state Exp;
+branches;
+next	1.24;
+
+1.24
+date	2006.11.04.17.34.57;	author LynnwoodBrown;	state Exp;
+branches;
+next	1.23;
+
+1.23
+date	2006.11.02.15.39.53;	author LynnwoodBrown;	state Exp;
+branches;
+next	1.22;
+
+1.22
+date	2006.11.02.05.08.59;	author LynnwoodBrown;	state Exp;
+branches;
+next	1.21;
+
+1.21
+date	2006.11.01.19.14.31;	author LynnwoodBrown;	state Exp;
+branches;
+next	1.20;
+
+1.20
+date	2006.10.19.06.18.01;	author LynnwoodBrown;	state Exp;
+branches;
+next	1.19;
+
+1.19
+date	2006.10.18.03.09.13;	author LynnwoodBrown;	state Exp;
+branches;
+next	1.18;
+
+1.18
+date	2006.10.16.18.02.15;	author LynnwoodBrown;	state Exp;
+branches;
+next	1.17;
+
+1.17
+date	2006.10.16.05.39.09;	author LynnwoodBrown;	state Exp;
+branches;
+next	1.16;
+
+1.16
+date	2006.10.15.20.24.58;	author LynnwoodBrown;	state Exp;
+branches;
+next	1.15;
+
+1.15
+date	2006.10.15.18.04.44;	author LynnwoodBrown;	state Exp;
+branches;
+next	1.14;
+
+1.14
+date	2006.10.15.05.06.58;	author LynnwoodBrown;	state Exp;
+branches;
+next	1.13;
+
+1.13
+date	2006.10.15.02.53.01;	author LynnwoodBrown;	state Exp;
+branches;
+next	1.12;
+
+1.12
+date	2006.10.14.22.57.04;	author LynnwoodBrown;	state Exp;
+branches;
+next	1.11;
+
+1.11
+date	2006.10.14.18.20.28;	author LynnwoodBrown;	state Exp;
+branches;
+next	1.10;
+
+1.10
+date	2006.10.13.23.20.54;	author LynnwoodBrown;	state Exp;
+branches;
+next	1.9;
+
+1.9
+date	2006.10.13.06.40.07;	author LynnwoodBrown;	state Exp;
+branches;
+next	1.8;
+
+1.8
+date	2006.10.06.01.28.34;	author LynnwoodBrown;	state Exp;
+branches;
+next	1.7;
+
+1.7
+date	2006.10.05.23.55.40;	author LynnwoodBrown;	state Exp;
+branches;
+next	1.6;
+
+1.6
+date	2006.10.05.20.45.50;	author LynnwoodBrown;	state Exp;
+branches;
+next	1.5;
+
+1.5
+date	2006.10.05.19.29.21;	author LynnwoodBrown;	state Exp;
+branches;
+next	1.4;
+
+1.4
+date	2006.10.05.17.27.38;	author LynnwoodBrown;	state Exp;
+branches;
+next	1.3;
+
+1.3
+date	2006.10.05.07.22.04;	author LynnwoodBrown;	state Exp;
+branches;
+next	1.2;
+
+1.2
+date	2006.10.05.04.35.53;	author LynnwoodBrown;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2006.10.04.20.36.12;	author LynnwoodBrown;	state Exp;
+branches;
+next	;
+
+
+desc
+@none
+@
+
+
+1.47
+log
+@none
+@
+text
+@%META:TOPICINFO{author="LynnwoodBrown" date="1171743230" format="1.1" reprev="1.47" version="1.47"}%
+%META:TOPICPARENT{name="TopicFunction"}%
+---+!! Function: %TOPIC%
+%FORMFIELD{"Summary"}%
+
+This !TopicFunction draws heavily on TWiki.WebTopicCreator, but adds additional form elements for classifying the topic.
+
+%TOC{depth="2"}%
+
+---++ Documentation
+%STARTSECTION{name="documentation" type="section"}%
+This TopicFunction is for creating new topics. It is mostly called indirectly from RenderCreateNewTopic.
+
+---+++++ Parameters
+   * NAME: Determines topic naming option. If set to "auto", then the topic is automatically named and no imput box is provided. 
+   * TEXT: button text; defaults to BASETOPIC name
+   * VALUE: initial value of the text input field (optional)
+   * FORM: TWikiForm to be used when creating a topic, defaults to TopicForm
+   * TEMPLATE: TopicTemplate to be used (optional)
+   * TOPICSUMMARY: If defined, a Summary input box will be included and the value of this parameter will be listed as a "tip" below the input box.
+   * FACETS: List of classifications or TopicTypes for which to provide select elements. 
+   * TYPE: initial TopicType value 
+   * EXTRA: additional =&lt;input ... />= . Note: quotes must be escaped with <em>double</em> backslashes ("\\").
+   * SAVE: Included "checkbox" option to directly save topic (skip "edit" screen"). If set to "checked" then checkbox will be checked by default. If set to "option" then the option will be provided but will not be checked.
+
+%ENDSECTION{name="documentation" type="section"}%
+---+++++ Css
+%STARTSECTION{name="css" type="section"}%
+   * None
+%ENDSECTION{name="documentation" type="section"}%
+
+---++ Implementation
+<verbatim>
+%STARTINCLUDE%
+<script type="text/javascript" src="%PUBURLPATH%/%TWIKIWEB%/TWikiJavascripts/unicode_chars.js"></script>
+<script type="text/javascript">
+//<![CDATA[
+/**
+Checks if the entered topic name is a valid WikiWord.
+If so, enables the submit button, if not: enables the submit button 
+if the user allows non-WikiWords as topic name; otherwise disables the
+submit button and returns 'false'.
+Automatically removes spaces from entered name.
+Automatically strips illegal characters.
+If non-WikiWords are not allowed, capitalizes words (separated by space).
+The generated topic name is written to a 'feedback' field.
+@@param inForm : pointer to the form
+@@param inShouldConvertInput : true: a new name is created from the entered name
+@@return True: submit is enabled and topic creation is allowed; false: submit is disabled and topic creation should be inhibited.
+*/
+function canSubmit(inForm, inShouldConvertInput) {
+	
+	var inputForTopicName = inForm.topic.value;
+
+	
+	// Topic names of zero length are not allowed
+	if (inputForTopicName.length == 0) {
+		disableSubmit(inForm.submit);
+		// Update feedback field
+		insertHtml("", "webTopicCreatorFeedback");
+		return false;
+	}
+
+	var userAllowsNonWikiWord = inForm.nonwikiword.checked;
+
+	// check if current input is a valid WikiWord
+	var noSpaceName = removeSpacesAndPunctiation(inputForTopicName);
+
+	// if necessary, create a WikiWord from the input name
+	// (when a non-WikiWord is not allowed)
+	var wikiWordName = noSpaceName;
+	if (!userAllowsNonWikiWord) {
+		wikiWordName = removeSpacesAndPunctiation(capitalize(inputForTopicName));
+	}	
+	
+	if (inShouldConvertInput) {
+		if (userAllowsNonWikiWord) inForm.topic.value = noSpaceName;
+		if (!userAllowsNonWikiWord) inForm.topic.value = wikiWordName;
+	}
+
+	// Update feedback field
+	feedbackText = wikiWordName;
+	insertHtml(feedbackText, "webTopicCreatorFeedback");
+
+	// Update hidden field value
+	// Use the negative value of the checkbox. This is the ugly way but must be used until edit script parameter =allowsnonwikiword= is implemented.
+	inForm.onlywikiname.value = userAllowsNonWikiWord ? "off" : "on";
+
+	if (isWikiWord(wikiWordName) || userAllowsNonWikiWord) {
+		enableSubmit(inForm.submit);
+		return true;
+	} else {
+		disableSubmit(inForm.submit);
+		return false;
+	}
+}
+/**
+@@param inState: true or false
+*/
+function setCheckBoxState (inCheckBox, inState) {
+	inCheckBox.checked = inState;
+}
+function enableSubmit(inButton) {
+	removeClass(inButton, "twikiSubmitDisabled");
+	inButton.disabled = false;
+}
+function disableSubmit(inButton) {
+	addClass(inButton, "twikiSubmitDisabled");
+	inButton.disabled = true;
+}
+
+%IFDEFINEDTHEN{"%SAVE%" glue="off"}%
+        // Incorporate "direct save" option - LB 11/15/06
+
+function toggleDirectSave(theForm) {
+        if (theForm.directSave.checked) { 
+           theForm.action = "%SCRIPTURLPATH{save}%/%BASEWEB%/";
+        } else {
+           theForm.action = "%SCRIPTURLPATH{edit}%/%BASEWEB%/";
+        }
+}
+
+%FIDEFINED% 
+
+//]]>
+</script>
+<form name="newtopic" id="newtopic" action="%SCRIPTURLPATH{edit}%/%BASEWEB%/" onsubmit="return canSubmit(this,true);" method="post">
+<div class="twikiFormSteps">
+<div class="twikiFormStep">
+<noautolink>
+---++++ Topic name:
+<div style="margin-bottom:1em">
+<p>%IFDEFINEDTHEN{ "%NAME%" as="auto" }%
+<input type="hidden" name="topic" value="%IFDEFINED{"%VALUE%"}%XXXXXXXXXX"/>
+<em>Your %IFDEFINED{"%TYPE%" then=" %TYPE% "}% topic will be auto-named.</em>  
+%ELSEDEFINED% 
+<input type="text" class="twikiInputField" name="topic" id="topic" size="40" 
+~~~    value="%IFDEFINED{"%VALUE%"}%" onkeyup="canSubmit(this.form,false);" 
+~~~    onchange="canSubmit(this.form,false);"  onblur="canSubmit(this.form,true);" /> <input type="checkbox" class="twikiCheckbox" id="nonwikiword" name="nonwikiword" tabindex="11" onchange="canSubmit(this.form,false);" onmouseup="canSubmit(this.form,false);" /><label for="nonwikiword">%MAKETEXT{"Allow non <nop>WikiWord for the new topic name"}%</label>
+<br>%ICON{help}% <em>Topic will be named: <span id="webTopicCreatorFeedback" class="twikiInputFieldDisabled"> </span></em>
+%FIDEFINED%
+<input type="hidden" name="templatetopic" value="%IFDEFINED{"%TEMPLATE%" then="%ENCODE{%TEMPLATE%}%" else=""}%" />
+<input type="hidden" name="formtemplate" value="%IFDEFINED{"%FORM%" then="%FORM%" else="TopicForm"}%" />
+<input type="hidden" name="TopicType" value="%IFDEFINED{"%TYPE%"}%" />
+</div></p>
+%IFDEFINEDTHEN{"%TOPICSUMMARY%" glue="off" }%
+<div style="margin-bottom:1em">
+---++++ Topic Summary: 
+<input type="text" name="Summary" size="40"  />  %BR%
+%ICON{help}% <em>%TOPICSUMMARY%</em>
+</div>%FIDEFINED%
+
+%IFDEFINEDTHEN{"%FACETS%" glue="off"}%
+---++++ %URLPARAM{type}% Options:
+<script type="text/javascript">
+function broadcastFacet( facet, value ) {
+   insertHtml(value, "insert"+facet);
+}
+</script>
+<div style="margin-bottom:1em"><noautolink>
+<table>
+%FORMATLIST{"%FACETS%" separator=" $n" format="<tr><td align=\"right\">   *Select $1:* </td><td> <select name=\"$1\" id=\"$1\" onchange=\"broadcastFacet(this.id, this.value)\" > <option value=$percntURLPARAM{$1}$percnt > $percntURLPARAM{\"$1\" default=\"Select...\" }$percnt </option> $percntDBQUERY{\"$percntDBQUERY{\".\" topic=\"$1\" web=\"$percntBASEWEB$percnt\" format=\"$formfield(Classification)\"}$percnt='$1'\" web=\"%BASEWEB%\" format=\"<option>$topic</option>\" separator=\" \" }$percnt </select></td></tr>  "}% 
+</table></noautolink></div>
+%FIDEFINED%
+%IFDEFINED{"%EXTRA%" then="<div style=\"margin-bottom:1em\"><noautolink>%EXTRA%</noautolink></div>" glue="off" }% 
+
+---++++ %MAKETEXT{"Topic parent:"}%
+<script type="text/javascript">
+function assignParent( form, parent ) {
+   for (var i = 0; i < form.topicparent.length; i++) {
+      if (form.topicparent[i].checked) {
+         break;
+      }
+   }
+   form.topicparent[i].checked = true;
+   form.topicparent[i].value = parent;
+}
+</script>
+<div style="margin-bottom:1em"><noautolink>
+   <input type="radio" name="topicparent" checked value="%URLPARAM{\"parent\"}%" onclick="this.form.topicparentList.disabled=true;" > %URLPARAM{"parent" default="no parent, orphaned topic"}%  %BR%
+%IFDEFINEDTHEN{"%FACETS%" as=".*SubjectArea"}% 
+  <input type="radio" name="topicparent" onclick="this.value=this.form.SubjectArea.value;this.form.topicparentList.disabled=true;" value="" > Selected !SubjectArea: <span id="insertSubjectArea" > </span> %BR% 
+%FIDEFINED%
+   <input type="radio" name="topicparent" value="" onclick="this.form.topicparentList.disabled=false"> Select topic parent: <select name="topicparentList" size="1"  diabled onchange="assignParent(this.form, this.value);" ><option value="" > Select... </option><option value="">%MAKETEXT{"(no parent, orphaned topic)"}%</option>%TOPICLIST{"<option>$name</option>" separator=" " }% </select>
+<br />%ICON{help}% _Topic "parentage" defines the hierarchy in [[%BASEWEB%.TopicTree][TopicTree]]._
+</div>
+</div>
+<div class="twikiFormStep twikiLast">
+%IFDEFINED{"%SAVE%" then="<input type=\"checkbox\" $variable name=\"directSave\" value=\"save\"> _Directly save topic without editing._ " glue="off" }%
+<input id="submit" type="submit" class="twikiSubmit" value='%MAKETEXT{"Create this topic"}%' />%ENDSECTION{"submit"}%</p>
+</div>
+</div>
+<input type="hidden" name="onlywikiname" />
+<input type="hidden" name="onlynewtopic" value="on" />
+</form>
+%IFDEFINEDTHEN{"%NAME%" as="auto" glue="off"}%
+%ELSEDEFINED%
+<script type="text/javascript">
+//<![CDATA[
+// Read url param 'allowsnonwikiword' to set the initial checkbox value
+var allowsNonWikiWord = "%URLPARAM{"allowsnonwikiword" default=off}%";
+setCheckBoxState(document.forms.newtopic.nonwikiword, allowsNonWikiWord.toBoolean() ? true : false);
+// start with a check
+canSubmit(document.forms.newtopic,false);
+// focus input field
+document.forms.newtopic.topic.focus();
+// set directSave option
+
+toggleDirectSave(document.forms.newtopic); 
+//]]>
+</script>
+%FIDEFINED%
+</noautolink>
+%STOPINCLUDE%
+</verbatim>
+
+---++ Test
+
+%DBCALL{"%TOPIC%" TEXT="Topic" TYPE="DiscussionTopic" VALUE="TWikiTopic" FACETS="TopicType, SubjectArea" SAVE="option" PARENT="topic" TOPICSUMMARY="Enter short summary statement about your new topic" }%
+
+
+%DBCALL{"RenderFunctionCallers"}%
+
+---++ Copyright
+<div style="text-align:justify;margin:1em;">
+(C) 2006 LynnwoodBrown@@Skyloom.com
+
+%DBCALL{"GnuGeneralPublicLicense" section="notice"}%
+</div>
+
+
+
+
+%META:FORM{name="TopicForm"}%
+%META:FIELD{name="TopicType" attributes="" title="TopicType" value="TopicFunction"}%
+%META:FIELD{name="SubjectArea" attributes="" title="SubjectArea" value="TcaoUse"}%
+%META:FIELD{name="Summary" attributes="" title="Summary" value="TopicFunction to display a form to create a new classified topic"}%
+%META:REVCOMMENT{ncomments="0"}%
+@
+
+
+1.46
+log
+@none
+@
+text
+@d1 1
+a1 1
+%META:TOPICINFO{author="LynnwoodBrown" date="1171688074" format="1.1" version="1.46"}%
+d143 1
+a143 1
+<input type="hidden" name="formtemplate" value="%IFDEFINED{"%FORM%" then="%FORM%" else="%BASEWEB%.TopicForm"}%" />
+d236 1
+a236 1
+%META:FIELD{name="SubjectArea" attributes="" title="SubjectArea" value=""}%
+@
+
+
+1.45
+log
+@none
+@
+text
+@d1 1
+a1 1
+%META:TOPICINFO{author="LynnwoodBrown" date="1171670649" format="1.1" version="1.45"}%
+d12 1
+a12 1
+This TopicFunction is for creating new topics. It is mostly called indirectly from such topics as RenderCreateNewTopic and RenderClassTopicCreator.
+@
+
+
+1.44
+log
+@none
+@
+text
+@d1 1
+a1 1
+%META:TOPICINFO{author="LynnwoodBrown" date="1170721561" format="1.1" reprev="1.44" version="1.44"}%
+d127 1
+a127 1
+<form name="newtopic" id="newtopic" action="%SCRIPTURLPATH{edit}%/%BASEWEB%/" onsubmit="return canSubmit(this,true);">
+@
+
+
+1.43
+log
+@none
+@
+text
+@d1 1
+a1 1
+%META:TOPICINFO{author="LynnwoodBrown" date="1169686486" format="1.1" reprev="1.43" version="1.43"}%
+a54 2
+        // Incorporate "direct save" option - LB 11/15/06
+        %IFDEFINED{"%SAVE%" then="if (document.newtopic.directSave.checked) { document.newtopic.action = \"%SCRIPTURLPATH{save}%/%BASEWEB%/\" }"}%
+d111 14
+d196 2
+d207 3
+d212 1
+@
+
+
+1.42
+log
+@none
+@
+text
+@d1 1
+a1 1
+%META:TOPICINFO{author="LynnwoodBrown" date="1168881757" format="1.1" reprev="1.42" version="1.42"}%
+@
+
+
+1.41
+log
+@none
+@
+text
+@d1 1
+a1 1
+%META:TOPICINFO{author="LynnwoodBrown" date="1168372889" format="1.1" version="1.41"}%
+d84 1
+a84 2
+	feedbackHeader = "<strong>%MAKETEXT{"Topic will be named: "}%</strong>";
+	feedbackText = feedbackHeader + wikiWordName;
+d119 2
+a120 1
+---+++ %MAKETEXT{"Topic name:"}%
+d127 2
+a128 3
+~~~    onchange="canSubmit(this.form,false);"  onblur="canSubmit(this.form,true);" /> 
+~~~  <span id="webTopicCreatorFeedback" class="twikiInputFieldDisabled"> </span>
+</p><p>%INCLUDE{ "%TWIKIWEB%.WebTopicCreator" section="allownonwikiword"}%
+d133 1
+a133 2
+</p></div><div class="twikiFormStep">
+
+d136 3
+a138 2
+---++++ Topic Summary <input type="text" name="Summary" size="40"  />  %BR%
+&nbsp;&nbsp;&nbsp;&nbsp; %ICON{help}% <em>%TOPICSUMMARY%</em>
+a166 1
+&nbsp;&nbsp;&nbsp;&nbsp;%ICON{help}% _Topic "parentage" defines the hierarchy in [[%BASEWEB%.TopicTree][TopicTree]]._
+d173 1
+@
+
+
+1.40
+log
+@none
+@
+text
+@d1 1
+a1 1
+%META:TOPICINFO{author="LynnwoodBrown" date="1167344321" format="1.1" reprev="1.40" version="1.40"}%
+d139 1
+a139 1
+&nbsp;&nbsp;&nbsp;&nbsp; %ICON{tip}% <em>%TOPICSUMMARY%</em>
+d143 1
+a143 1
+---++++ Facets:
+d168 1
+a168 1
+&nbsp;&nbsp;&nbsp;&nbsp;%ICON{tip}% _Topic "parentage" defines the hierarchy in [[%BASEWEB%.TopicTree][TopicTree]]._
+d219 1
+@
+
+
+1.39
+log
+@none
+@
+text
+@d1 1
+a1 1
+%META:TOPICINFO{author="LynnwoodBrown" date="1163625021" format="1.1" version="1.39"}%
+a9 3
+---++ Further development
+   * FixMe: Remove dependency on TWiki.WebTopicCreator and correct tab order.
+
+d12 1
+a12 1
+%RED%TODO%ENDCOLOR%
+d29 1
+a29 1
+   * 
+d56 1
+a56 3
+        if (document.newtopic.directSave.checked) {
+              document.newtopic.action = "%SCRIPTURLPATH{save}%/%BASEWEB%/";
+        }
+d125 1
+a125 1
+<input type="text" class="twikiInputField" name="topic" id="topic" size="40" tabindex="10" 
+d174 1
+a174 1
+   <input type="radio" name="topicparent" value=" " onclick="this.form.topicparentList.disabled=false"> Select topic parent: <select name="topicparentList" size="1"  diabled onchange="assignParent(this.form, this.value);" ><option value="" > Select... </option><option value="">%MAKETEXT{"(no parent, orphaned topic)"}%</option>%TOPICLIST{"<option>$name</option>" separator=" " }% </select>
+d179 1
+a179 1
+%INCLUDE{"%TWIKIWEB%.WebTopicCreator" section="submit"}%
+d182 14
+a195 1
+%INCLUDE{"%TWIKIWEB%.WebTopicCreator" section="formend"}%
+d218 1
+a218 1
+%META:FIELD{name="TopicType" attributes="M" title="TopicType" value="TopicFunction"}%
+a219 1
+%META:FIELD{name="TWikiApplication" attributes="" title="TWikiApplication" value="TopicClassification"}%
+@
+
+
+1.38
+log
+@none
+@
+text
+@d1 1
+a1 1
+%META:TOPICINFO{author="LynnwoodBrown" date="1163622088" format="1.1" version="1.38"}%
+@
+
+
+1.37
+log
+@none
+@
+text
+@d1 1
+a1 1
+%META:TOPICINFO{author="LynnwoodBrown" date="1163621476" format="1.1" version="1.37"}%
+d59 1
+a59 1
+        if (document.newtopic.directSave.value = "save") {
+@
+
+
+1.36
+log
+@none
+@
+text
+@d1 1
+a1 1
+%META:TOPICINFO{author="LynnwoodBrown" date="1163621468" format="1.1" version="1.36"}%
+d213 1
+a213 1
+%META:REVCOMMENT{comment_1=" " minor_1="1" ncomments="1" rev_1="35" t_1="1163621136"}%
+@
+
+
+1.35
+log
+@none
+@
+text
+@d1 1
+a1 1
+%META:TOPICINFO{author="LynnwoodBrown" date="1163621136" format="1.1" version="1.35"}%
+d58 5
+a70 5
+        // Incorporates "direct save" option
+        if (document.newtopic.directSave.value = save) {
+              document.newtopic.action = "%SCRIPTURLPATH{save}%/%BASEWEB%/";
+        }
+	
+d213 1
+a213 1
+%META:REVCOMMENT{comment_1=" " minor_1="1" ncomments="1" rev_1="" t_1="1163621136"}%
+@
+
+
+1.34
+log
+@none
+@
+text
+@d1 1
+a1 1
+%META:TOPICINFO{author="LynnwoodBrown" date="1163620999" format="1.1" version="1.34"}%
+d68 1
+a68 1
+              document.newtopic.action = %SCRIPTURLPATH{save}%/%BASEWEB%/;
+d213 1
+a213 1
+%META:REVCOMMENT{ncomments="0"}%
+@
+
+
+1.33
+log
+@none
+@
+text
+@d1 1
+a1 1
+%META:TOPICINFO{author="LynnwoodBrown" date="1163620856" format="1.1" version="1.33"}%
+d68 1
+a68 1
+              document.newtopic.action = %SCRIPTURLPATH{save}%/%BASEWEB%/
+d213 1
+a213 1
+%META:REVCOMMENT{comment_1=" " minor_1="1" ncomments="1" rev_1="32" t_1="1163620663"}%
+@
+
+
+1.32
+log
+@none
+@
+text
+@d1 1
+a1 1
+%META:TOPICINFO{author="LynnwoodBrown" date="1163620663" format="1.1" version="1.32"}%
+d67 1
+a67 1
+        if document.newtopic.directSave.value = save {
+d213 1
+a213 1
+%META:REVCOMMENT{comment_1=" " minor_1="1" ncomments="1" rev_1="" t_1="1163620663"}%
+@
+
+
+1.31
+log
+@none
+@
+text
+@d1 1
+a1 1
+%META:TOPICINFO{author="LynnwoodBrown" date="1163618914" format="1.1" version="1.31"}%
+d38 84
+a121 1
+%INCLUDE{"%TWIKIWEB%.WebTopicCreator" section="formstart"}%
+d183 1
+a183 1
+%IFDEFINED{"%SAVE%" then="<input type=\"checkbox\" $variable name=\"action\" value=\"save\"> _Directly save topic without editing._ " glue="off" }%
+d213 1
+a213 1
+%META:REVCOMMENT{comment_1=" " minor_1="1" ncomments="1" rev_1="30" t_1="1163617797"}%
+@
+
+
+1.30
+log
+@none
+@
+text
+@d1 1
+a1 1
+%META:TOPICINFO{author="LynnwoodBrown" date="1163617797" format="1.1" version="1.30"}%
+d130 1
+a130 1
+%META:REVCOMMENT{comment_1=" " minor_1="1" ncomments="1" rev_1="" t_1="1163617797"}%
+@
+
+
+1.29
+log
+@none
+@
+text
+@d1 1
+a1 1
+%META:TOPICINFO{author="LynnwoodBrown" date="1163454924" format="1.1" version="1.29"}%
+a25 1
+   * %ICON{wip}% WHITEBOARD: switch on/off the whiteboard textarea. _Not implemented currently._
+a52 1
+<input type="hidden" name="action" value="%IFDEFINED{"%WHITEBOARD%" as="off" then="form"}%" />
+d130 1
+@
+
+
+1.28
+log
+@none
+@
+text
+@d1 1
+a1 1
+%META:TOPICINFO{author="LynnwoodBrown" date="1163453977" format="1.1" version="1.28"}%
+@
+
+
+1.27
+log
+@none
+@
+text
+@d1 1
+a1 1
+%META:TOPICINFO{author="LynnwoodBrown" date="1163453757" format="1.1" version="1.27"}%
+d75 1
+a75 1
+%FORMATLIST{"%FACETS%" separator=" $n" format="<tr><td align=\"right\">   *Select $1:* </td><td> <select name=\"$1\" id=\"$1\" onchange=\"broadcastFacet(this.id, this.value)\" > <option value=\"%URLPARAM{$1}%\"> %URLPARAM{\"$1\" default=\"Select...\" }% </option> $percntDBQUERY{\"$percntDBQUERY{\".\" topic=\"$1\" web=\"$percntBASEWEB$percnt\" format=\"$formfield(Classification)\"}$percnt='$1'\" web=\"%BASEWEB%\" format=\"<option>$topic</option>\" separator=\" \" }$percnt </select></td></tr>  "}% 
+@
+
+
+1.26
+log
+@none
+@
+text
+@d1 1
+a1 1
+%META:TOPICINFO{author="LynnwoodBrown" date="1163453520" format="1.1" version="1.26"}%
+d75 1
+a75 1
+%FORMATLIST{"%FACETS%" separator=" $n" format="<tr><td align=\"right\">   *Select $1:* </td><td> <select name=\"$1\" id=\"$1\" onchange=\"broadcastFacet(this.id, this.value)\" > <option value=\"%URLPARAM{$1}%\"> %URLPARAM{\"$1\" default=\"Select...\"}% </option> $percntDBQUERY{\"$percntDBQUERY{\".\" topic=\"$1\" web=\"$percntBASEWEB$percnt\" format=\"$formfield(Classification)\"}$percnt='$1'\" web=\"%BASEWEB%\" format=\"<option>$topic</option>\" separator=\" \" }$percnt </select></td></tr>  "}% 
+@
+
+
+1.25
+log
+@none
+@
+text
+@d1 1
+a1 1
+%META:TOPICINFO{author="LynnwoodBrown" date="1163099090" format="1.1" reprev="1.25" version="1.25"}%
+d75 1
+a75 1
+%FORMATLIST{"%FACETS%" separator=" $n" format="<tr><td align=\"right\">   *Select $1:* </td><td> <select name=\"$1\" id=\"$1\" onchange=\"broadcastFacet(this.id, this.value)\" > <option value=\"\"> Select..</option> $percntDBQUERY{\"$percntDBQUERY{\".\" topic=\"$1\" web=\"$percntBASEWEB$percnt\" format=\"$formfield(Classification)\"}$percnt='$1'\" web=\"%BASEWEB%\" format=\"<option>$topic</option>\" separator=\" \" }$percnt </select></td></tr>  "}% 
+@
+
+
+1.24
+log
+@none
+@
+text
+@d1 1
+a1 1
+%META:TOPICINFO{author="LynnwoodBrown" date="1162661697" format="1.1" version="1.24"}%
+d51 1
+a51 1
+~~~  <span id="webTopicCreatorFeedback" class="twikiInputFieldDisabled"><!--generated name will be put here--></span>
+d58 1
+a58 1
+</p></div><!--/twikiFormStep--><div class="twikiFormStep">
+d96 1
+a96 1
+  <input type="radio" name="topicparent" onclick="this.value=this.form.SubjectArea.value;this.form.topicparentList.disabled=true;" value="" > Selected !SubjectArea: <span id="insertSubjectArea" ><!--generated subject area will be put here--></span> %BR% 
+d100 1
+a100 1
+</div><!--/twikiFormStep-->
+d104 2
+a105 2
+</div><!--/twikiFormStep-->
+</div><!--/twikiFormSteps-->
+@
+
+
+1.23
+log
+@none
+@
+text
+@d1 1
+a1 1
+%META:TOPICINFO{author="LynnwoodBrown" date="1162481993" format="1.1" version="1.23"}%
+a54 1
+<input type="hidden" name="onlywikiname" value="on" />
+@
+
+
+1.22
+log
+@none
+@
+text
+@d1 1
+a1 1
+%META:TOPICINFO{author="LynnwoodBrown" date="1162444139" format="1.1" version="1.22"}%
+@
+
+
+1.21
+log
+@none
+@
+text
+@d1 1
+a1 1
+%META:TOPICINFO{author="LynnwoodBrown" date="1162408471" format="1.1" reprev="1.21" version="1.21"}%
+d56 1
+a56 1
+<input type="hidden" name="templatetopic" value="%ENCODE{"%TEMPLATE%"}%" />
+@
+
+
+1.20
+log
+@none
+@
+text
+@d1 1
+a1 1
+%META:TOPICINFO{author="LynnwoodBrown" date="1161238681" format="1.1" reprev="1.20" version="1.20"}%
+d27 1
+a27 1
+   * EXTRA: additional =&lt;input ... />= . Note: quotes must be escaped with backslash ("\").
+d103 1
+a103 1
+%IFDEFINED{"%SAVE%" then="<input type=\"checkbox\" $value name=\"action\" value=\"save\"> _Directly save topic without editing._ " glue="off" }%
+d132 1
+a132 1
+%META:FIELD{name="TWikiApplication" attributes="" title="TWikiApplication" value="TopicClassificationAddOn"}%
+@
+
+
+1.19
+log
+@none
+@
+text
+@d1 1
+a1 1
+%META:TOPICINFO{author="LynnwoodBrown" date="1161140952" format="1.1" version="1.19"}%
+d76 1
+a76 1
+%FORMATLIST{"%FACETS%" separator=" $n" format="<tr><td align=\"right\">   *Select $1:* </td><td> <select name=\"$1\" id=\"$1\" onchange=\"broadcastFacet(this.id, this.value)\" > <option value=\"\"> Select..</option> $percntDBQUERY{\"Classification='$1'\" web=\"%BASEWEB%\" format=\"<option>$topic</option>\" separator=\" \" }$percnt </select></td></tr>  "}% 
+@
+
+
+1.18
+log
+@none
+@
+text
+@d1 1
+a1 1
+%META:TOPICINFO{author="LynnwoodBrown" date="1161021735" format="1.1" reprev="1.18" version="1.18"}%
+d25 3
+a27 3
+   * TYPE: initial TopicType value (optional)
+   * %ICON{wip}% WHITEBOARD: switch on/off the whiteboard textarea
+   * EXTRA: additional =&lt;input ... />=
+@
+
+
+1.17
+log
+@none
+@
+text
+@d1 1
+a1 1
+%META:TOPICINFO{author="LynnwoodBrown" date="1160977149" format="1.1" reprev="1.17" version="1.17"}%
+d10 3
+d24 1
+a24 1
+   * FACETS: List of classifications or TopicTypes for which to provide select elements. Defaults to the "Facets" formfield in BASETOPIC.
+a25 1
+   * PARENT: Determines options for setting topic's parent. If set to 
+d82 11
+d97 1
+a97 1
+  <input type="radio" name="topicparent" onclick="this.form.topicparentList.disabled=true;this.value=this.form.SubjectArea.value;" value="" > Selected !SubjectArea: <span id="insertSubjectArea" ><!--generated subject area will be put here--></span> %BR% 
+d99 1
+a99 1
+   <input type="radio" name="topicparent" value=" " onclick="this.form.topicparentList.disabled=false"> Select topic parent: <select name="topicparentList" size="1" disabled onchange="this.form.topicparent.value=this.value;" ><option value="" > Select... </option><option value="">%MAKETEXT{"(no parent, orphaned topic)"}%</option>%TOPICLIST{"<option>$name</option>" separator=" " }% </select>
+@
+
+
+1.16
+log
+@none
+@
+text
+@d1 1
+a1 1
+%META:TOPICINFO{author="LynnwoodBrown" date="1160943898" format="1.1" reprev="1.16" version="1.16"}%
+d75 1
+a75 1
+</table></div>
+d77 2
+a78 1
+%IFDEFINED{"%EXTRA%" then="<div style=\"margin-bottom:2em\">%EXTRA%</div> }% <noautolink>
+d80 2
+a81 2
+%BR% &nbsp;&nbsp;&nbsp;&nbsp;%ICON{tip}% _Topic "parentage" defines the hierarchy in %BASEWEB%.TopicTree._
+<div style="margin-bottom:1em">
+d84 1
+a84 1
+  <input type="radio" name="topicparent" onclick="this.form.topicparentList.disabled=true;document.newtopic.topicparent.value = document.newtopic.SubjectArea.value;" value=" " > Selected !SubjectArea: <span id="insertSubjectArea" ><!--generated subject area will be put here--></span> %BR% 
+d86 1
+a86 1
+   <input type="radio" name="topicparent" value=" " onclick="this.form.topicparentList.disabled=false"> Select topic parent: <select name="topicparentList" size="1" disabled onchange="this.form.topicparent.value=this.value" ><option value="" > Select... </option><option value="">%MAKETEXT{"(no parent, orphaned topic)"}%</option>%TOPICLIST{"<option $marker value='$name'>$name</option>" separator=" " }% </select>
+@
+
+
+1.15
+log
+@none
+@
+text
+@d1 1
+a1 1
+%META:TOPICINFO{author="LynnwoodBrown" date="1160935484" format="1.1" reprev="1.15" version="1.15"}%
+d54 2
+a55 3
+<input type="hidden" name="Summary" value="" />
+<input type="hidden" name="templatetopic" value="%IFDEFINED{"%TEMPLATE%"}%" />
+<input type="hidden" name="formtemplate" value="%IFDEFINED{"%FORM%" then="%FORM%" else="TopicForm"}%" />
+d62 1
+a62 1
+%ICON{tip}% <em>%TOPICSUMMARY%</em>
+a71 1
+
+d73 4
+a76 2
+%FORMATLIST{"%FACETS%" separator=" $n" format="|   *Select $1:* | <select name=\"$1\" id=\"$1\" onchange=\"broadcastFacet(this.id, this.value)\" > <option value=\"\"> Select..</option> $percntDBQUERY{\"Classification='$1'\" web=\"%BASEWEB%\" format=\"<option>$topic</option>\" separator=\" \" }$percnt </select>    |  "}% 
+</div>%FIDEFINED%
+d79 1
+d81 3
+a83 8
+%IFDEFINEDTHEN{"%PARENT%" as="subject" glue="off"}% 
+   Topic parent will be set to the !SubjectArea.
+   <script language="javascript" > document.newtopic.topicparent.value = 'document.newtopic.SubjectArea.value'; </script> 
+%ELSIFDEFINED{"%FACETS%" as=".*SubjectArea"}% 
+  <input type="radio" name="topicparent" onclick="this.form.topicparentList.disabled=true;" value=" " > *Selected !SubjectArea:* <span id="insertSubjectArea" ><!--generated name will be put here--></span> %BR% 
+   <input type="radio" name="topicparent" value=" " onclick="this.form.topicparentList.disabled=false"> Select topic parent: <select name="topicparentList" size="1" disabled onchange="this.form.topicparent.value=this.value" ><option value="%URLPARAM{ "parent" default="WebHome"}%" >%URLPARAM{ "parent" default="Select..."}%</option>%TOPICLIST{"<option $marker value='$name'>$name</option>" separator=" " }%<option value="">%MAKETEXT{"(no parent, orphaned topic)"}%</option></select>
+%ELSEDEFINED%   
+Select topic parent: <select name="topicparent" size="1"  ><option value="%URLPARAM{ "parent" default="WebHome"}%">%URLPARAM{ "parent" default="Select..."}%</option>%TOPICLIST{"<option $marker value='$name'>$name</option>" separator=" " }%<option value="">%MAKETEXT{"(no parent, orphaned topic)"}%</option></select>
+d85 1
+a85 1
+%BR% %ICON{tip}% _Topic "parentage" defines the hierarchy in %BASEWEB%.TopicTree._
+@
+
+
+1.14
+log
+@none
+@
+text
+@d1 1
+a1 1
+%META:TOPICINFO{author="LynnwoodBrown" date="1160888818" format="1.1" reprev="1.13" version="1.13"}%
+d61 1
+a61 1
+<div style="margin-bottom:2em">
+d74 1
+a74 1
+<div style="margin-bottom:2em"><noautolink>
+d79 1
+a79 1
+<div style="margin-bottom:2em">
+d88 3
+a90 2
+%FIDEFINED%</div>
+%ICON{tip}% _Topic "parentage" defines the hierarchy in %BASEWEB%.TopicTree._
+@
+
+
+1.13
+log
+@none
+@
+text
+@d1 1
+a1 1
+%META:TOPICINFO{author="LynnwoodBrown" date="1160880781" format="1.1" version="1.13"}%
+d84 1
+a84 1
+  <input type="radio" name="topicparent" onclick="this.form.topicparentList.disabled=true;" value="\<span id=\"insertSubjectArea\" ></span>" > *Selected !SubjectArea:* <span id="insertSubjectArea" ><!--generated name will be put here--></span> %BR% 
+@
+
+
+1.12
+log
+@none
+@
+text
+@d1 1
+a1 1
+%META:TOPICINFO{author="LynnwoodBrown" date="1160866624" format="1.1" reprev="1.12" version="1.12"}%
+@
+
+
+1.11
+log
+@none
+@
+text
+@d1 1
+a1 1
+%META:TOPICINFO{author="LynnwoodBrown" date="1160850028" format="1.1" reprev="1.11" version="1.11"}%
+a69 1
+   alert(facet+" = "+value);
+d84 1
+a84 1
+  <input type="radio" name="topicparent" value=" " onclick="this.form.topicparentList.disabled=true;this.value=document.newtopic.SubjectArea.value;this.form.topicparentFeedback.value=document.newtopic.SubjectArea.value;"> <span id="insertSubjectArea" ><!--generated name will be put here--></span> %BR% 
+@
+
+
+1.10
+log
+@none
+@
+text
+@d1 1
+a1 1
+%META:TOPICINFO{author="LynnwoodBrown" date="1160781654" format="1.1" reprev="1.10" version="1.10"}%
+d70 2
+a71 1
+   insertHtml(value, ["insert" + facet]);
+d74 1
+d76 1
+a76 1
+%FORMATLIST{"%FACETS%" separator=" $n" format="|   *Select $1:* | <select name=\"$1\" onchange=\"broadcastFacet(this, this.value)\" > <option value=\"\"> Select..</option> $percntDBQUERY{\"Classification='$1'\" web=\"%BASEWEB%\" format=\"<option>$topic</option>\" separator=\" \" }$percnt </select>    |  "}% 
+a84 14
+<script type="text/javascript" > 
+
+var parentValue = "SubjectArea";
+
+insertHtml(parentValue, "topicparentFeedback");
+
+function recordParent(evt) { 
+    parentValue = this.form.SubjectArea.value;
+    this.form.topicparent.value = parentValue;
+    insertHtml(parentValue, "topicparentFeedback");
+}
+
+document.getElementById("SubjectArea").addEventListener("onchange", recordParent, true);
+</script>
+@
+
+
+1.9
+log
+@none
+@
+text
+@d1 1
+a1 1
+%META:TOPICINFO{author="LynnwoodBrown" date="1160721607" format="1.1" reprev="1.9" version="1.9"}%
+d68 5
+d74 1
+a74 1
+%FORMATLIST{"%FACETS%" separator=" $n" format="|   *Select $1:* | <select name=\"$1\"> <option value=\"\"> Select..</option> $percntDBQUERY{\"Classification='$1'\" web=\"%BASEWEB%\" format=\"<option>$topic</option>\" separator=\" \" }$percnt </select>    |  "}% 
+d97 1
+a97 1
+  <input type="radio" name="topicparent" value=" " onclick="this.form.topicparentList.disabled=true;this.value=document.newtopic.SubjectArea.value;this.form.topicparentFeedback.value=document.newtopic.SubjectArea.value;"> <span id="topicparentFeedback" ><!--generated name will be put here--></span> %BR% 
+@
+
+
+1.8
+log
+@none
+@
+text
+@d1 1
+a1 1
+%META:TOPICINFO{author="LynnwoodBrown" date="1160098114" format="1.1" reprev="1.8" version="1.8"}%
+a59 2
+---+++ Topic Options:
+
+a71 1
+
+a72 1
+
+d77 21
+a97 10
+%ELSIFDEFINED{"%PARENT%" as="select"}% 
+   <script language="javascript" > document.getElementById('c1').style.display = " "; </script> Select topic parent
+%ELSEDEFINED% <b>Set topic parent to:</b>&nbsp;
+   <input type="radio" name="topicparent" checked value="%URLPARAM{\"parent\" default=\"WebHome\"}%" > %URLPARAM{"parent" default="WebHome"}%  
+   <input type="radio" name="topicparent" value=" " onclick="this.value=document.newtopic.SubjectArea.value"> !SubjectArea 
+   <input type="radio" name="topicparent" value=" " onclick="document.getElementById( 'c1' ).style.display = '' "> Select topic parent
+%FIDEFINED%
+<div id="c1" style="display: none;"  >
+<p> %INCLUDE{"%TWIKIWEB%.WebTopicCreator" section="topicparent"}% </p>
+</div><!--/c1--></div>
+@
+
+
+1.7
+log
+@none
+@
+text
+@d1 1
+a1 1
+%META:TOPICINFO{author="LynnwoodBrown" date="1160092540" format="1.1" reprev="1.7" version="1.7"}%
+d24 1
+a24 1
+   * %S% WHITEBOARD: switch on/off the whiteboard textarea
+d59 1
+d64 1
+a64 1
+*Topic Summary:* <input type="text" name="Summary" size="40"  />  %BR%
+d67 1
+d69 1
+d75 1
+a75 1
+---+++ %MAKETEXT{"Topic parent:"}%
+@
+
+
+1.6
+log
+@none
+@
+text
+@d1 1
+a1 1
+%META:TOPICINFO{author="LynnwoodBrown" date="1160081150" format="1.1" reprev="1.6" version="1.6"}%
+d20 1
+d61 5
+d68 1
+a68 1
+%FORMATLIST{"%FORMFIELD{"Facets" topic="%FACETS%"}%" separator=" $n" format="|   *Select $1:* | <select name=\"$1\"> <option value=\"\"> Select..</option> $percntDBQUERY{\"Classification='$1'\" web=\"%BASEWEB%\" format=\"<option>$topic</option>\" separator=\" \" }$percnt </select>    |  "}% 
+d101 1
+a101 1
+%DBCALL{"%TOPIC%" TEXT="Topic" TYPE="DiscussionTopic" VALUE="TWikiTopic" FACETS="%WEB%.HelpTopic" SAVE="option" PARENT="topic" }%
+@
+
+
+1.5
+log
+@none
+@
+text
+@d1 1
+a1 1
+%META:TOPICINFO{author="LynnwoodBrown" date="1160076561" format="1.1" version="1.5"}%
+d60 1
+d62 2
+a63 2
+%FORMATLIST{"%IFDEFINED{"%FACETS%" then="%FACETS%" else="%FORMFIELD{"Facets" topic="%BASEWEB%.%BASETOPIC%"}%"}%" separator=" $n" format="|   *Select $1:* | <select name=\"$1\"> <option value=\"\"> Select..</option> $percntDBQUERY{\"Classification='$1'\" web=\"%BASEWEB%\" format=\"<option>$topic</option>\" separator=\" \" }$percnt </select>    |  "}% 
+</div>
+d67 2
+a68 1
+< p/>
+d81 1
+a81 1
+</div><!--/c1-->
+d95 1
+a95 1
+%DBCALL{"%TOPIC%" TEXT="Topic" TYPE="DiscussionTopic" VALUE="TWikiTopic" FACETS="TopicType, SubjectArea" SAVE="option" PARENT="topic" }%
+@
+
+
+1.4
+log
+@none
+@
+text
+@d1 1
+a1 1
+%META:TOPICINFO{author="LynnwoodBrown" date="1160069258" format="1.1" reprev="1.4" version="1.4"}%
+d59 2
+a60 2
+<noautolink>
+<p /><div style="margin-bottom:2em">
+@
+
+
+1.3
+log
+@none
+@
+text
+@d1 1
+a1 1
+%META:TOPICINFO{author="LynnwoodBrown" date="1160032924" format="1.1" reprev="1.3" version="1.3"}%
+d48 1
+a48 1
+~~~ <span id="webTopicCreatorFeedback" class="twikiInputFieldDisabled"><!--generated name will be put here--></span>
+d60 4
+a63 3
+%FORMATLIST{"%IFDEFINED{"%FACETS%" then="%FACETS%" else="%FORMFIELD{"Facets" topic="%BASEWEB%.%BASETOPIC%"}%"}%" separator=" $n" format="<p> *Select $1:*  <select name=\"$1\"> <option value=\"\"> Select..</option> $percntDBQUERY{\"Classification='$1'\" web=\"%BASEWEB%\" format=\"<option>$topic</option>\" separator=\" \" }$percnt </select> </p>"}%
+
+%IFDEFINED{"%EXTRA%" then="%EXTRA%" }% <noautolink>
+d66 1
+a66 1
+<p/>
+@
+
+
+1.2
+log
+@none
+@
+text
+@d1 1
+a1 1
+%META:TOPICINFO{author="LynnwoodBrown" date="1160022953" format="1.1" reprev="1.2" version="1.2"}%
+d23 1
+a23 1
+   * WHITEBOARD: switch on/off the whiteboard textarea
+d25 1
+a56 1
+%IFDEFINEDTHEN{"%OPTIONS%" as="yes" glue="off"}%
+d61 2
+a62 3
+%FIDEFINED%
+%IFDEFINED{"%EXTRA%"}% <noautolink>
+</div><!--/twikiFormStep--><div class="twikiFormStep">
+d65 14
+a78 2
+
+%INCLUDE{"%TWIKIWEB%.WebTopicCreator" section="topicparent"}%
+d92 1
+a92 1
+%DBCALL{"%TOPIC%" TEXT="Topic" TYPE="DiscussionTopic" VALUE="TWikiTopic" FACETS="TopicType" SAVE="option" }%
+@
+
+
+1.1
+log
+@none
+@
+text
+@d1 1
+a1 1
+%META:TOPICINFO{author="LynnwoodBrown" date="1159994172" format="1.1" reprev="1.1" version="1.1"}%
+d70 1
+d81 1
+a81 1
+%DBCALL{"%TOPIC%" TEXT="Topic" TYPE="DiscussionTopic" VALUE="TWikiTopic" FACETS="TopicType"}%
+@

@@ -1,0 +1,79 @@
+head	1.2;
+access;
+symbols;
+locks; strict;
+comment	@# @;
+
+
+1.2
+date	2006.10.03.16.14.43;	author LynnwoodBrown;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2006.08.30.05.39.31;	author lynnwood;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.2
+log
+@none
+@
+text
+@%META:TOPICINFO{author="LynnwoodBrown" date="1159892083" format="1.1" version="1.2"}%
+%INCLUDE{%TCAOWEB%.WebLogHeading%}%
+[[%FORMFIELD{Url}%][%FORMFIELD{Title}%]]%XL%%BR%
+%STARTSECTION{"introtext"}%<!--start_introtext-->
+%URLPARAM{"entry"}%
+%ENDSECTION{"introtext"}%<!--end_introtext-->
+
+%STARTSECTION{"extendedtext"}%
+%URLPARAM{"extended"}%
+%STARTSECTION{"extendedtext"}%
+
+-- %WIKIUSERNAME% - %DATE%
+
+_Back to WebLog._
+
+%INCLUDE{"%TCAOWEB%.CommentElements" section="begincomments" }%
+
+#AddComments
+
+%INCLUDE{"%TCAOWEB%.CommentElements" section="endcomments" }%
+
+
+%META:FORM{name="WebLogForm"}%
+%META:FIELD{name="TopicType" title="TopicType" value="Select..."}%
+%META:FIELD{name="SubjectArea" title="SubjectArea" value=""}%
+%META:FIELD{name="Summary" title="Summary" value=""}%
+%META:FIELD{name="LogDate" title="LogDate" value=""}%
+%META:FIELD{name="Url" title="Url" value=""}%
+%META:FIELD{name="Title" title="Title" value=""}%
+%META:PREFERENCE{name="ALLOWTOPICCHANGE" title="ALLOWTOPICCHANGE" type="Set" value="%2525MAINWEB%2525.TWikiAdminGroup"}%
+%META:PREFERENCE{name="ALLOWTOPICRENAME" title="ALLOWTOPICRENAME" type="Set" value="%2525MAINWEB%2525.TWikiAdminGroup"}%
+@
+
+
+1.1
+log
+@Initial revision
+@
+text
+@d1 1
+a1 1
+%META:TOPICINFO{author="TWikiContributor" date="1106498646" format="1.0" version="$Rev$"}%
+d22 1
+d26 1
+a26 1
+%META:FIELD{name="TopicHeadline" title="TopicHeadline" value=""}%
+d30 2
+a31 3
+
+%META:PREFERENCE{name="ALLOWTOPICCHANGE" title="ALLOWTOPICCHANGE" type="Set" value="%25MAINWEB%25.TWikiAdminGroup"}%
+%META:PREFERENCE{name="ALLOWTOPICRENAME" title="ALLOWTOPICRENAME" type="Set" value="%25MAINWEB%25.TWikiAdminGroup"}%
+@

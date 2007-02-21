@@ -1,0 +1,184 @@
+head	1.6;
+access;
+symbols;
+locks; strict;
+comment	@# @;
+
+
+1.6
+date	2007.02.15.21.41.36;	author LynnwoodBrown;	state Exp;
+branches;
+next	1.5;
+
+1.5
+date	2007.01.03.00.21.21;	author LynnwoodBrown;	state Exp;
+branches;
+next	1.4;
+
+1.4
+date	2007.01.02.22.20.02;	author LynnwoodBrown;	state Exp;
+branches;
+next	1.3;
+
+1.3
+date	2006.12.28.18.51.57;	author LynnwoodBrown;	state Exp;
+branches;
+next	1.2;
+
+1.2
+date	2006.09.22.22.04.31;	author LynnwoodBrown;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2006.09.22.21.03.28;	author LynnwoodBrown;	state Exp;
+branches;
+next	;
+
+
+desc
+@none
+@
+
+
+1.6
+log
+@none
+@
+text
+@%META:TOPICINFO{author="LynnwoodBrown" date="1171575696" format="1.1" reprev="1.6" version="1.6"}%
+%META:TOPICPARENT{name="TopicType"}%
+<!-- Optional Topic Settings
+To enable any of these settings, replace the explanation with the value you want and remove the "#" before "Set". 
+   * Set CLASS_DESCRIPTION = %FORMFIELD{"Summary" topic="%BASEWEB%.%BASETOPIC%"}%
+   * #Set ADD_FILTER = %TCAOWEB%.RenderStandardFilter
+   * Set SEARCH_FORMAT = | $web.$topic  | <noautolink>$formfield(Summary)</noautolink>  |
+   * Set HEADER_FORMAT = | *<nop>TopicFunction* | *Description* |$n
+   * #Set FOOTER_FORMAT = Optional custom format for search results footer. Defaults to "Number of topics found = $count".
+   * #Set SEARCH_ORDER = Option for changing the default order for the search. Defaults to "name."
+   * #Set SEARCH_REVERSE = Option to reverse the search order. Defaults to "off."
+-->
+
+%INCLUDE{"%TCAOWEB%.RenderClassificationTopic" }%
+
+See also: %TOPIC%Template
+
+<!-- Hidden include for CreateNewTopic
+You can modify the options for creating new topics of this type by changing the parameters to RenderTopicCreator. See that topic for more info.
+%STARTSECTION{name="new" type="section"}%
+%DBCALL{"%TCAOWEB%.RenderTopicCreator"  TEMPLATE="%TOPIC%Template" TYPE="%TOPIC%"  VALUE="Render..." TOPICSUMMARY="Summarize what this TopicFunction does." }%
+%ENDSECTION{name="new" type="section"}%
+-->
+<!-- Topic Permissions
+	* Set ALLOWTOPICCHANGE = %MAINWEB%.ModeratorGroup
+	* Set ALLOWTOPICRENAME = %MAINWEB%.ModeratorGroup
+-->
+
+%META:FORM{name="TopicClassForm"}%
+%META:FIELD{name="Classification" attributes="" title="Classification" value="TopicType"}%
+%META:FIELD{name="Summary" attributes="" title="Summary" value="TopicType of topics to be called by a (parameterized) INCLUDE or DBCALL"}%
+%META:FIELD{name="Facets" attributes="" title="Facets" value=""}%
+%META:REVCOMMENT{ncomments="0"}%
+@
+
+
+1.5
+log
+@none
+@
+text
+@d1 1
+a1 1
+%META:TOPICINFO{author="LynnwoodBrown" date="1167783681" format="1.1" reprev="1.5" version="1.5"}%
+d8 1
+a8 1
+   * Set HEADER_FORMAT = | *<nop>TopicFunction* | *Description* |
+@
+
+
+1.4
+log
+@none
+@
+text
+@d1 1
+a1 1
+%META:TOPICINFO{author="LynnwoodBrown" date="1167776402" format="1.1" reprev="1.4" version="1.4"}%
+a2 4
+---+ %TOPIC%
+%FORMFIELD{"Summary"}%
+
+
+d5 1
+a5 1
+   * #Set CLASS_DESCRIPTION = Optional introductory information about the particular category.
+d7 2
+a8 2
+   * #Set SEARCH_FORMAT = Optional custom format for search results. Defaults to bulleted list with topic name and the !Summary formfield.
+   * #Set HEADER_FORMAT = Optional custom format for search results header. Defaults to empty header.
+@
+
+
+1.3
+log
+@none
+@
+text
+@d1 1
+a1 1
+%META:TOPICINFO{author="LynnwoodBrown" date="1167331917" format="1.1" reprev="1.3" version="1.3"}%
+a5 1
+See also: %TOPIC%Template
+d7 10
+a16 6
+%DBCALL{"RenderSimpleTopicCreator" 
+  TEXT="%TOPIC%" 
+  VALUE="Render..."
+  TYPE="%TOPIC%"
+  TEMPLATE="%TOPIC%Template"
+}%
+d18 1
+a18 1
+%DBCALL{"RenderTopicsOfType" }%
+d20 1
+d22 9
+a30 2
+<!--
+   * Set SIDEBAR = TopicType
+@
+
+
+1.2
+log
+@none
+@
+text
+@d1 1
+a1 1
+%META:TOPICINFO{author="LynnwoodBrown" date="1158962671" format="1.1" reprev="1.2" version="1.2"}%
+d22 2
+a23 3
+
+%META:FORM{name="Applications.TopicForm"}%
+%META:FIELD{name="TopicType" attributes="M" title="TopicType" value="TopicType"}%
+d25 2
+a26 1
+%META:FIELD{name="TWikiApplication" attributes="" title="TWikiApplication" value="TWikiWorkbench"}%
+@
+
+
+1.1
+log
+@none
+@
+text
+@d1 1
+a1 1
+%META:TOPICINFO{author="MichaelDaum" date="1158331849" format="1.1" version="1.3"}%
+d11 1
+a11 1
+  TYPE="%TOPIC%, DocuTopic"
+d15 1
+a15 1
+%DBCALL{"%APPLIB%.RenderTopicsOfType" THEWEB="%URLPARAM{"web"}%"}%
+@

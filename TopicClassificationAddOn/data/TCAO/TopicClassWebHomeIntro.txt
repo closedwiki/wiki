@@ -1,0 +1,16 @@
+%META:TOPICINFO{author="LynnwoodBrown" date="1168882693" format="1.1" reprev="1.6" version="1.6"}%
+%META:TOPICPARENT{name="WebHome"}%
+---+++ 10 most recently changed topics
+%SEARCH{"." web="%BASEWEB%" regex="on" noheader="on" nosearch="on" order="modified" reverse="on" limit="10" nototal="on" excludetopic="Web*" format="	* [[$web.$topic][$topic]] - <noautolink>$formfield(Summary)</noautolink> <font class=twikiSmall> _(Modified on $date by $wikiusername)_  </font>" }%
+   * _[[%BASEWEB%.WebChanges][More recent changes...]]_
+
+---+++ Browse content by %BASEWEB%.TopicClassification
+%SEARCH{ "FORM.name\=.TopicClassForm;[C]lassification.*value\=.*\b[C]lassification\b" web="%BASEWEB%" type="regex" nonoise="on" order="topic" format="	* [[$web.$topic][$percntSPACEOUT{$topic}$percnt]] - $formfield(Summary) $n()$percntSEARCH{\"FORM.name\=.TopicClassForm;[C]lassification.*value\=.*\b$topic\b\" type=\"regex\" format=\"      * [[$dollarweb.$dollartopic][$dollarpercntSPACEOUT{$dollartopic}$dollarpercnt]] - $dollarformfield(Summary)\" nonoise=\"on\" separator=\"$dollarn\" }$nop%"}% 
+
+%META:FORM{name="TopicForm"}%
+%META:FIELD{name="TopicType" attributes="" title="TopicType" value="MasterTopic"}%
+%META:FIELD{name="SubjectArea" attributes="" title="SubjectArea" value="TcaoUse"}%
+%META:FIELD{name="Summary" attributes="" title="Summary" value="Provides basic browsing of TopicClassification setup suitable for including in WebHome."}%
+%META:REVCOMMENT{ncomments="0"}%
+%META:PREFERENCE{name="ALLOWTOPICCHANGE" title="ALLOWTOPICCHANGE" type="Set" value="%25MAINWEB%25.TWikiAdminGroup"}%
+%META:PREFERENCE{name="ALLOWTOPICRENAME" title="ALLOWTOPICRENAME" type="Set" value="%25MAINWEB%25.TWikiAdminGroup"}%
