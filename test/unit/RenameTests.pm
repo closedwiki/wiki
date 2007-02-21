@@ -341,7 +341,7 @@ sub test_rename_from_lowercase {
     my ($text,$result)  =  $this->capture( \&TWiki::UI::Manage::rename, $twiki );
     my $ext = $TWiki::cfg{ScriptSuffix};
     $this->assert_matches(qr/^Status:\s+302/s,$text);
-    $this->assert_matches(qr(Location:\s+\S+?/view$ext/$oldweb/UpperCase)s,$text)
+    $this->assert_matches(qr([lL]ocation:\s+\S+?/view$ext/$oldweb/UpperCase)s,$text)
 }
 
 sub test_accessRenameRestrictedTopic {
