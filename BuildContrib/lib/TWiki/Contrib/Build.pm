@@ -256,10 +256,6 @@ sub new {
     my $this = bless({}, $class);
 
     # Constants with internet paths
-    $this->{UPLOADTARGETPUB} = $TWIKIORGPUB;
-    $this->{UPLOADTARGETSCRIPT} = $TWIKIORGSCRIPT;
-    $this->{UPLOADTARGETSUFFIX} = $TWIKIORGSUFFIX;
-    $this->{UPLOADTARGETWEB} = $TWIKIORGEXTENSIONSWEB;
     $this->{BUGSURL} = $TWIKIORGBUGS;
 
     $this->{project} = $project;
@@ -366,7 +362,8 @@ sub new {
           CGI::table({ border=>1}, CGI::Tr($cells).$deptable );
     }
 
-    $this->{VERSION} = $this->_get_svn_version();
+    $this->{VERSION} = $this->_get_svn_version().
+      ' ('.POSIX::strftime('%d %b %Y', localtime).')';
     $this->{DATE} = POSIX::strftime('%T %d %B %Y', localtime);
 
     local $/ = undef;
@@ -384,9 +381,9 @@ sub new {
 You do not need to install anything in the browser to use this extension. The following instructions are for the administrator who installs the extension on the server where TWiki is running.
 
 Like many other TWiki extensions, this module is shipped with a fully automatic installer script written using the Build<nop>Contrib.
-   * If you have TWiki 4.1 or later, and Perl 5.8, you can install from the =configure= interface (Go to Plugins->Find More Extensions)
+   * If you have TWiki 4.1 or later, you can install from the =configure= interface (Go to Plugins->Find More Extensions)
       * The webserver user has to have permission to write to all areas of your installation for this to work.
-   * If you have a permanent connection to the internet (and Perl 5.8), you are recommended to use the automatic installer script
+   * If you have a permanent connection to the internet, you are recommended to use the automatic installer script
       * Just download the =$this->{MODULE}_installer= perl script and run it.
    * *Notes:*
       * The installer script will:
@@ -407,12 +404,63 @@ Like many other TWiki extensions, this module is shipped with a fully automatic 
       1 Run =configure= and enable the module, if it is a plugin.
       1 Repeat from step 1 for any missing dependencies.
 HERE
+    my $config = $this->_loadConfig();
+    my $rep = $config->{repositories}->{$this->{project}};
+    if ($rep) {
+        $this->{UPLOADTARGETPUB} = $rep->{pub};
+        $this->{UPLOADTARGETSCRIPT} = $rep->{script};
+        $this->{UPLOADTARGETSUFFIX} = $rep->{suffix};
+        $this->{UPLOADTARGETWEB} = $rep->{web};
+    } else {
+        $this->{UPLOADTARGETPUB} = $TWIKIORGPUB;
+        $this->{UPLOADTARGETSCRIPT} = $TWIKIORGSCRIPT;
+        $this->{UPLOADTARGETSUFFIX} = $TWIKIORGSUFFIX;
+        $this->{UPLOADTARGETWEB} = $TWIKIORGEXTENSIONSWEB;
+    }
+
     return $this;
 }
 
 sub DESTROY {
     my $self = shift;
     File::Path::rmtree( $self->{tmpDir} ) if $self->{tmpDir};
+}
+
+# Load the config memory (passwords, repository locations etc)
+sub _loadConfig {
+    my $this = shift;
+
+    use vars qw($VAR1);
+
+    if (! defined $this->{config}) {
+        if (-r "$ENV{HOME}/.buildcontrib") {
+            do "$ENV{HOME}/.buildcontrib";
+            $this->{config} = $VAR1;
+            print "Loaded config from $this->{config}->{file}\n";
+        } else {
+        }
+        unless ($this->{config}) {
+            $this->{config} = {
+                file => "$ENV{HOME}/.buildcontrib",
+                passwords => {},
+                repositories => {},
+            }
+        }
+    }
+    return $this->{config};
+}
+
+# Save the config
+sub _saveConfig {
+    my $this = shift;
+    require Data::Dumper;
+    if( open(F, '>'.$this->{config}->{file})) {
+        print F Data::Dumper->Dump([$this->{config}]);
+        close(F);
+        print "Config saved in $this->{config}->{file}\n";
+    } else {
+        print STDERR "Could not write $this->{config}->{file}: $!";
+    }
 }
 
 sub _addDependency {
@@ -1073,52 +1121,50 @@ sub target_uninstall {
 
 {
     package TWiki::Contrib::Build::UserAgent;
-
     use base qw(LWP::UserAgent);
 
     sub new {
-        my ($class, $id) = @_;
-        my $this = $class->SUPER::new();
+        my ($class, $id, $bldr) = @_;
+        my $this = $class->SUPER::new(keep_alive => 1);
         $this->{domain} = $id;
+        $this->{builder} = $bldr;
+        require HTTP::Cookies;
+        $this->cookie_jar(new HTTP::Cookies(
+            file => "$ENV{HOME}/.lwpcookies",
+            autosave => 1,
+            ignore_discard => 1 ));
+
         return $this;
     }
 
-    use vars qw($VAR1);
-
     sub get_basic_credentials {
         my($this, $realm, $uri) = @_;
-        unless ($this->{passwords}) {
-            $this->{passwords} = {};
-            do $ENV{HOME}.'/.buildcontriblogin';
-            unless ($@) {
-                $this->{passwords} = $VAR1;
-            }
-        }
-        my $pws = $this->{passwords}->{$this->{domain}};
-        if ($pws) {
-            print "Using credentials for $this->{domain} saved in $ENV{HOME}/.buildcontriblogin\n";
-        } else {
-            local $/ = "\n";
-            print 'Logon to ',$uri->host_port(),$NL;
-            print 'Enter username for ',$realm,': ';
-            my $knownUser = <STDIN>; chomp($knownUser);
-            die "Bollocks" unless length $knownUser;
-            print 'Password on ',$uri->host_port,': ';
-            system('stty -echo');
-            my $knownPass = <STDIN>;
-            system('stty echo');
-            print $NL;  # because we disabled echo
-            chomp($knownPass);
-            $pws = { user => $knownUser, pass => $knownPass };
-            $this->{passwords}->{$this->{domain}} = $pws;
-            require Data::Dumper;
-            if( open(F, '>'.$ENV{HOME}.'/.buildcontriblogin')) {
-                print F Data::Dumper->Dump([$this->{passwords}]);
-                close(F);
-            }
-        }
-        return ($pws->{user}, $pws->{pass});
+        return $this->{builder}->getCredentials($uri->host());
     }
+}
+
+sub getCredentials {
+    my ($this, $host) = @_;
+    my $config = $this->_loadConfig();
+    my $pws = $config->{passwords}->{$host};
+    if ($pws) {
+        print "Using credentials for $host saved in $config->{file}\n";
+    } else {
+        local $/ = "\n";
+        print 'Enter username for ',$host,': ';
+        my $knownUser = <STDIN>; chomp($knownUser);
+        die "Inadequate user" unless length $knownUser;
+        print 'Password: ';
+        system('stty -echo');
+        my $knownPass = <STDIN>;
+        system('stty echo');
+        print $NL;  # because we disabled echo
+        chomp($knownPass);
+        $pws = { user => $knownUser, pass => $knownPass };
+        $config->{passwords}->{$host} = $pws;
+        $this->_saveConfig();
+    }
+    return ($pws->{user}, $pws->{pass});
 }
 
 sub _getTopicName {
@@ -1174,18 +1220,30 @@ END
         print "Enter the full URL path to the TWiki pub directory\n";
         $this->{UPLOADTARGETPUB} = prompt("PubDir", $this->{UPLOADTARGETPUB});
         print "Enter the full URL path to the TWiki bin directory\n";
-        $this->{UPLOADTARGETSCRIPT} = prompt("Scripts", $this->{UPLOADTARGETSCRIPT});
+        $this->{UPLOADTARGETSCRIPT} = prompt(
+            "Scripts", $this->{UPLOADTARGETSCRIPT});
         print "Enter the file suffix used on scripts in the TWiki bin directory (enter 'none' for none)\n";
-        $this->{UPLOADTARGETSUFFIX} = prompt("Suffix", $this->{UPLOADTARGETSUFFIX});
+        $this->{UPLOADTARGETSUFFIX} = prompt(
+            "Suffix", $this->{UPLOADTARGETSUFFIX});
         $this->{UPLOADTARGETSUFFIX} = ''
           if $this->{UPLOADTARGETSUFFIX} eq 'none';
+        my $rep = $this->{config}->{repositories}->{$this->{project}} || {};
+        $rep->{pub} = $this->{UPLOADTARGETPUB};
+        $rep->{script} = $this->{UPLOADTARGETSCRIPT};
+        $rep->{suffix} = $this->{UPLOADTARGETSUFFIX};
+        $rep->{web} = $this->{UPLOADTARGETWEB};
+        $this->{config}->{repositories}->{$this->{project}} = $rep;
+        $this->_saveConfig();
     }
 
     $this->build('release');
-    my $userAgent = TWiki::Contrib::Build::UserAgent->new($this->{UPLOADTARGETSCRIPT});
+    my $userAgent = new TWiki::Contrib::Build::UserAgent(
+        $this->{UPLOADTARGETSCRIPT}, $this);
     $userAgent->agent( 'TWikiContribBuild/'.$VERSION.' ' );
 
     my $topic = $this->_getTopicName();
+    my ($user, $pass) = $this->getCredentials($this->{UPLOADTARGETSCRIPT});
+
     my $url = "$this->{UPLOADTARGETSCRIPT}/view$this->{UPLOADTARGETSUFFIX}/$this->{UPLOADTARGETWEB}/$topic";
 
     # Get the old form data and attach it to the update
@@ -1226,11 +1284,28 @@ END
     print "Uploading new topic\n";
     $url =~ s./view/./save/.;
     $response = $userAgent->post( $url, \%newform );
+    if ($response->is_redirect() &&
+          $response->headers->header('Location') =~ /oopsaccessdenied/) {
+        # Try login if we got access denied despite passing creds
+        # with the user agent
+        $response = $userAgent->post(
+            "$this->{UPLOADTARGETSCRIPT}/login",
+            { username => $user, password => $pass });
+        #print STDERR "Fallthrough login attempt returned ".
+        #  $response->request->uri,' -- ', $response->status_line, $NL,
+        #    $response->headers->header('Location')."\n".
+        #      $response->content().$NL,
+        #        $response->headers->header('Set-Cookie').$NL;
+        # Post the upload again; we should be logged in
+        $response = $userAgent->post( $url, \%newform );
+    }
 
-    die 'Update of topic failed ', $response->request->uri,
-      ' -- ', $response->status_line, 'Aborting'
-        unless $response->is_redirect &&
-          $response->headers->header('Location') =~ /view([\.\w]*)\/$this->{UPLOADTARGETWEB}\/$topic/;
+    die 'Update of topic failed ', $response->request->uri(),
+      ' -- ', $response->status_line(), "\n",
+        $response->headers->header('Location')."\n".
+          $response->content()
+            unless $response->is_redirect() &&
+              $response->headers->header('Location') !~ /oops/;
 
     return if($this->{-topiconly});
 
@@ -1238,13 +1313,19 @@ END
     # attachments to the topic on t.o. will still be there.
     my @attachments;
     my %uploaded;
+    my $doup = ask("Do you want to upload the archives and installers?", 1);
+
     # Upload the standard files
     foreach my $ext qw(.zip .tgz _installer .md5) {
-
-        $this->_uploadFile($userAgent, $response, $this->{UPLOADTARGETWEB}, $to, $to.$ext,
-                           $this->{basedir}.'/'.$to.$ext,'');
+        if ($doup) {
+            $this->_uploadFile($userAgent, $response,
+                               $this->{UPLOADTARGETWEB}, $to, $to.$ext,
+                               $this->{basedir}.'/'.$to.$ext,'');
+        }
+        # Say it was uploaded to block the META:FILEATTACHMENT attempt
         $uploaded{$to.$ext} = 1;
     }
+
     # Upload other files described in the attachments list. They must be
     # in the pub directory.
     $newform{'text'} =~ s/%META:FILEATTACHMENT(.*)%/push(@attachments, $1)/ge;
@@ -1253,19 +1334,19 @@ END
         my $name = $1;
         next if $uploaded{$name};
         $a =~ /comment="([^"]*)"/;
-        my $path = $1;
-        $a =~ /path="([^"]*)"/;
         my $comment = $1;
+        $a =~ /attr="([^"]*)"/;
+        my $attrs = $1 || '';
 
         $this->_uploadFile(
             $userAgent, $response, $this->{UPLOADTARGETWEB}, $to, $name,
             $this->{basedir}.'/pub/TWiki/'.$this->{project}.'/'.$name,
-            $comment);
+            $comment, $attrs =~ /h/ ? 1 : 0);
     }
 }
 
 sub _uploadFile {
-    my ($this, $userAgent, $response, $web, $to, $filename, $filepath, $filecomment) = @_;
+    my ($this, $userAgent, $response, $web, $to, $filename, $filepath, $filecomment, $hide) = @_;
 
     print "Uploading $filename from $filepath\n";
     $response = $userAgent->post(
@@ -1273,14 +1354,15 @@ sub _uploadFile {
         [
             'filename' => $filename,
             'filepath' => [ $filepath ],
-            'filecomment' => $filecomment
+            'filecomment' => $filecomment,
+            'hidefile' => $hide || 0,
            ],
         'Content_Type' => 'form-data' );
 
     die 'Update of '.$filename.' failed ', $response->request->uri,
       ' -- ', $response->status_line, $NL, 'Aborting',$NL, $response->as_string
         unless $response->is_redirect &&
-          $response->headers->header('Location') =~ /view([\.\w]*)\/$web\/$to/;
+          $response->headers->header('Location') !~ /oops/;
 }
 
 sub _unhtml {
@@ -1310,6 +1392,7 @@ sub target_POD {
     foreach my $file (@{$this->{files}}) {
         my $pmfile = $file->{name};
         if ($pmfile =~ /\.p[ml]$/o) {
+            next if $pmfile =~ /^$this->{project}_installer.pl$/;
             $pmfile = $this->{basedir}.'/'.$pmfile;
             open(PMFILE,"<$pmfile") || die $!;
             my $inPod = 0;
