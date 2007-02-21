@@ -1,9 +1,0 @@
-%META:TOPICINFO{author="TWikiContributor" date="1130359936" format="1.1" version="$Rev$"}%
-%META:TOPICPARENT{name="NewsItem"}%
----++!! All news for %WIKITOOLNAME% 
-
-%SEARCH{"[T]opicType.*value\=.*[N]ewsItem"}" regex="on" web="all" casesensitive="on" nonoise="on" order="modified" format="---+++ $formfield(TopicHeadline) <span class=\"twikiSmall\"> _(Posted on $date by $wikiusername.)_ $n()  </span> $summary(noheader) <span class=\"twikiSmall\"> _[[$web.$topic][Read more...]]_ </span>$n() "  }%
-
-See also: %BASEWEB%.RecentNews, [[%BASEWEB%.NewsItem][News for %BASEWEB% web]] (with filter for SubjectArea)
-
-_Click [[%SCRIPTURL%/view%SCRIPTSUFFIX%/%BASEWEB%/CreateNewTopic?type=NewsItem][here]] to create a new %BASEWEB%.NewsItem for the %BASEWEB% web ._

@@ -1,7 +1,0 @@
-%META:TOPICINFO{author="TWikiContributor" date="1058795280" format="1.0" version="1.1"}%
-%META:TOPICPARENT{name="WebForm"}%
----+ %TOPIC%s
-
-%TOPIC%s are used in the WebForm to provide a short summary of a topic or highlight a recent change within the topic.
-
-

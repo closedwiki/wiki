@@ -1,7 +1,0 @@
-%META:TOPICINFO{author="LynnwoodBrown" date="1141361852" format="1.1" version="1.1"}%
-%META:TOPICPARENT{name="TcaoAdmin"}%
-_...short for TopicClassificationAddOn._
-%META:FORM{name="TCAO.WebForm"}%
-%META:FIELD{name="TopicType" attributes="" title="TopicType" value="HelpTopic"}%
-%META:FIELD{name="SubjectArea" attributes="" title="SubjectArea" value="TcaoAdmin"}%
-%META:FIELD{name="TopicHeadline" attributes="" title="TopicHeadline" value="Acronym for TopicClassificationAddOn"}%
