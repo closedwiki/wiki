@@ -32,7 +32,7 @@ sub read {
     my $rowend = $settings{rowend} || "\n";
     my %data;
     
-    $/ = "\x0d\x0a";
+    local $/ = "\x0d\x0a";
     unless ($content) {
         my $fh   = new FileHandle($filename);
         local $/;

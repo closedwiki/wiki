@@ -285,7 +285,7 @@ sub verify_releaselocksonsave {
     };
 
     open(F,"<$TWiki::cfg{DataDir}/$testweb/$topic.txt");
-    undef $/;
+    local $/ = undef;
     my $text = <F>;
     close(F);
     $this->assert_matches(qr/version="1.3"/, $text);

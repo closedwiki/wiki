@@ -286,7 +286,7 @@ sub verifyKeywords {
     my $rcs = $class->new( $twiki, $testWeb, $topic, undef );
     $rcs->addRevisionFromText( $check, "comment", "UserForRev0" );
     open(F,"<$rcs->{file}") || die "Failed to open $rcs->{file}";
-    undef $/;
+    local $/ = undef;
     $this->assert_str_equals($check, <F>);
     close(F);
 }
