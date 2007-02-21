@@ -1,0 +1,127 @@
+head	1.4;
+access;
+symbols;
+locks; strict;
+comment	@# @;
+
+
+1.4
+date	2007.01.10.14.09.06;	author LynnwoodBrown;	state Exp;
+branches;
+next	1.3;
+
+1.3
+date	2006.10.03.16.14.35;	author LynnwoodBrown;	state Exp;
+branches;
+next	1.2;
+
+1.2
+date	2006.10.03.05.15.03;	author LynnwoodBrown;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2006.08.30.05.39.31;	author lynnwood;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.4
+log
+@none
+@
+text
+@%META:TOPICINFO{author="LynnwoodBrown" date="1168438146" format="1.1" reprev="1.4" version="1.4"}%
+%META:TOPICPARENT{name="TopicType"}%
+<!-- Optional Topic Settings
+To enable any of these settings, replace the explanation with the value you want and remove the "#" before "Set". 
+   * Set CLASS_DESCRIPTION = %FORMFIELD{"Summary" topic="%BASETOPIC%"}% Also see TopicFunctions which are very similar but ususally include parameters.
+   * Set ADD_FILTER = %TCAOWEB%.RenderStandardFilter
+   * #Set SEARCH_FORMAT = Optional custom format for search results. Defaults to bulleted list with topic name and the !Summary formfield.
+   * #Set HEADER_FORMAT = Optional custom format for search results header. Defaults to empty header.
+   * #Set FOOTER_FORMAT = Optional custom format for search results footer. Defaults to "Number of topics found = $count".
+   * #Set SEARCH_ORDER = Option for changing the default order for the search. Defaults to "name."
+   * #Set SEARCH_REVERSE = Option to reverse the search order. Defaults to "off."
+-->
+
+%DBCALL{"%TCAOWEB%.RenderClassificationTopic"  }%
+
+<!-- Hidden include for CreateNewTopic
+%STARTSECTION{name="new" type="section"}%
+%INCLUDE{"%TCAOWEB%.CreateNewTopicElements" section="name" }%
+%INCLUDE{"%TCAOWEB%.CreateNewTopicElements" section="headline" }%
+<p />
+%ICON{tip}% _If useful, offer tips about creating this TopicType. If not, you can delete this line._
+<input type="hidden" name="formtemplate" value="%WEB%.WebForm" />
+<input type="hidden" name="templatetopic" value="%TOPIC%Template" />
+<input type="hidden" name="TopicType" value="%TOPIC%" />
+%ENDSECTION{name="new" type="section"}%
+-->
+New %TOPIC% topics will use the %TOPIC%Template if there is one defined. 
+
+<!-- Topic Permissions
+   * Set ALLOWTOPICCHANGE = %MAINWEB%.TWikiAdminGroup
+   * Set ALLOWTOPICRENAME = %MAINWEB%.TWikiAdminGroup
+-->
+
+
+%META:FORM{name="TopicClassForm"}%
+%META:FIELD{name="Classification" attributes="" title="Classification" value="TopicType"}%
+%META:FIELD{name="Summary" attributes="" title="Summary" value="Topics and Topic elements that are reused across installation using INCLUDE variable. Modifying these topics immediately affect the entire installation."}%
+%META:FIELD{name="Facets" attributes="" title="Facets" value="SubjectArea"}%
+%META:REVCOMMENT{ncomments="0"}%
+%META:PREFERENCE{name="ALLOWTOPICCHANGE" title="ALLOWTOPICCHANGE" type="Set" value="%2525MAINWEB%2525.TWikiAdminGroup"}%
+%META:PREFERENCE{name="ALLOWTOPICRENAME" title="ALLOWTOPICRENAME" type="Set" value="%2525MAINWEB%2525.TWikiAdminGroup"}%
+@
+
+
+1.3
+log
+@none
+@
+text
+@d1 1
+a1 1
+%META:TOPICINFO{author="LynnwoodBrown" date="1159892075" format="1.1" reprev="1.3" version="1.3"}%
+d3 12
+a14 1
+%DBCALL{"%TCAOWEB%.RenderClassificationTopic" FACETS="%FORMFIELD{Facets}%" }%
+d39 1
+@
+
+
+1.2
+log
+@none
+@
+text
+@d1 1
+a1 1
+%META:TOPICINFO{author="LynnwoodBrown" date="1159852503" format="1.1" version="1.2"}%
+d3 1
+a3 2
+%INCLUDE{ "%CALC{ $IF( $EVAL( $TIME() - 1141357264 ) < 60, %TCAOWEB%.NewTopicElements, ) }%" warn="off" section="successmsg" INSTRUCTIONS="topictype" TYPE="type" }% 
+%INCLUDE{%TCAOWEB%.TopicTypeMaster}%
+d25 3
+a27 2
+%META:FIELD{name="TopicType" attributes="" title="TopicType" value="TopicType"}%
+%META:FIELD{name="TopicHeadline" attributes="" title="TopicHeadline" value="Topics and Topic elements that are reused across installation using INCLUDE variable. Modifying these topics immediately affect the entire installation."}%
+@
+
+
+1.1
+log
+@Initial revision
+@
+text
+@d1 1
+a1 1
+%META:TOPICINFO{author="LynnwoodBrown" date="1141357264" format="1.1" version="1.1"}%
+d25 1
+a25 1
+%META:FORM{name="TopicTypeForm"}%
+@

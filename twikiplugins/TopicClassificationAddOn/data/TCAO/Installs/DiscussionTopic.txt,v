@@ -1,0 +1,283 @@
+head	1.11;
+access;
+symbols;
+locks; strict;
+comment	@# @;
+
+
+1.11
+date	2006.11.07.16.18.35;	author LynnwoodBrown;	state Exp;
+branches;
+next	1.10;
+
+1.10
+date	2006.10.27.22.41.39;	author LynnwoodBrown;	state Exp;
+branches;
+next	1.9;
+
+1.9
+date	2006.10.17.20.47.21;	author LynnwoodBrown;	state Exp;
+branches;
+next	1.8;
+
+1.8
+date	2006.10.07.20.42.28;	author LynnwoodBrown;	state Exp;
+branches;
+next	1.7;
+
+1.7
+date	2006.10.07.17.17.57;	author LynnwoodBrown;	state Exp;
+branches;
+next	1.6;
+
+1.6
+date	2006.10.07.06.18.10;	author LynnwoodBrown;	state Exp;
+branches;
+next	1.5;
+
+1.5
+date	2006.10.06.02.45.51;	author LynnwoodBrown;	state Exp;
+branches;
+next	1.4;
+
+1.4
+date	2006.10.05.21.27.00;	author LynnwoodBrown;	state Exp;
+branches;
+next	1.3;
+
+1.3
+date	2006.10.03.04.47.38;	author LynnwoodBrown;	state Exp;
+branches;
+next	1.2;
+
+1.2
+date	2006.09.03.17.01.09;	author LynnwoodBrown;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2006.09.03.16.32.14;	author LynnwoodBrown;	state Exp;
+branches;
+next	;
+
+
+desc
+@none
+@
+
+
+1.11
+log
+@none
+@
+text
+@%META:TOPICINFO{author="LynnwoodBrown" date="1162916315" format="1.1" reprev="1.11" version="1.11"}%
+%META:TOPICPARENT{name="WebHome"}%
+%TOPICCRE%NOP%ATE{ topic="%TOPIC%Template" template="%TCAOWEB%/Installs.%TOPIC%Template" }%
+
+<!-- Optional Topic Settings
+To enable any of these settings, replace the explanation with the value you want and remove the "#" before "Set". 
+   * #Set CATEGORY_DESCRIPTION = Optional introductory information about the particular category.
+   * #Set SEARCH_FORMAT = Optional custom format for search results. Defaults to bulleted list with topic name and the Summary formfield.
+   * #Set HEADER_FORMAT = Optional custom format for search results header. Defaults to empty header.
+   * #Set FOOTER_FORMAT = Optional custom format for search results footer. Defaults to "Number of topics found = $count".
+-->
+%INCLUDE{"%TCAOWEB%.RenderClassificationTopic" ADD_FILTER="RenderStandardFilter" }%
+
+<!-- Hidden include for CreateNewTopic
+You can modify the options for creating new topics of this type by changing the parameters to RenderTopicCreator. See that topic for more info.
+%STARTSECTION{"new" type="section"}%
+%DBCALL{"%TCAOWEB%.RenderTopicCreator"  TEMPLATE="%TOPIC%Template" TYPE="%TOPIC%"  FACETS="%FORMFIELD{Facets}%" TOPICSUMMARY="One-line summary/headline for question or proposition being discussed." EXTRA="<h4>One-paragraph opening statement for discussion:</h4> <textarea name=statement cols=60 rows=4></textarea> %BR% <em>You can add expand of this after the topic is created.</em>" }%
+%ENDSECTION{"new" type="section"}%
+-->
+<!-- Topic Permissions
+	* Set ALLOWTOPICCHANGE = %MAINWEB%.ModeratorGroup
+	* Set ALLOWTOPICRENAME = %MAINWEB%.ModeratorGroup
+-->
+ 
+
+%META:FORM{name="TopicClassForm"}%
+%META:FIELD{name="Classification" attributes="" title="Classification" value="TopicType"}%
+%META:FIELD{name="Summary" attributes="" title="Summary" value="General discussion topics related to the %25BASEWEB%25 web."}%
+%META:FIELD{name="Facets" attributes="" title="Facets" value="SubjectArea"}%
+@
+
+
+1.10
+log
+@none
+@
+text
+@d1 1
+a1 1
+%META:TOPICINFO{author="LynnwoodBrown" date="1161988899" format="1.1" version="1.10"}%
+d4 8
+d17 1
+a17 1
+%DBCALL{"%TCAOWEB%.RenderTopicCreator"  TEMPLATE="%TOPIC%Template" TYPE="%TOPIC%"  FACETS="%FORMFIELD{Facets}%" TOPICSUMMARY="Use *Summary* to summarize the question being asked or the answer offered." }%
+@
+
+
+1.9
+log
+@none
+@
+text
+@d1 1
+a1 1
+%META:TOPICINFO{author="LynnwoodBrown" date="1161118041" format="1.1" version="1.9"}%
+d3 2
+a4 1
+%INCLUDE{"%TCAOWEB%.RenderClassificationTopic" }%
+d9 1
+a9 1
+%DBCALL{"%TCAOWEB%.RenderTopicCreator"  TEMPLATE="%TOPIC%Template" TYPE="%TOPIC%"  FACETS="SubjectArea" TOPICSUMMARY="Use *Summary* to summarize the question being asked or the answer offered." }%
+d13 2
+a14 2
+	* Set ALLOWTOPICCHANGE = %MAINWEB%.TWikiAdminGroup
+	* Set ALLOWTOPICRENAME = %MAINWEB%.TWikiAdminGroup
+@
+
+
+1.8
+log
+@none
+@
+text
+@d1 1
+a1 1
+%META:TOPICINFO{author="LynnwoodBrown" date="1160253747" format="1.1" version="1.8"}%
+a2 2
+<div id="newTopicHelp">%INCLUDE{ "%TCAOWEB%.RenderNewTopicHelp" warn="off" HELP="genericTopicType" FROM="TopicType"  }% </div>
+
+@
+
+
+1.7
+log
+@none
+@
+text
+@d1 1
+a1 1
+%META:TOPICINFO{author="LynnwoodBrown" date="1160241477" format="1.1" reprev="1.7" version="1.7"}%
+d3 1
+a3 1
+%INCLUDE{ "%TCAOWEB%.RenderNewTopicHelp" warn="off" HELP="genericTopicType" FROM="TopicType"  }% 
+@
+
+
+1.6
+log
+@none
+@
+text
+@d1 1
+a1 1
+%META:TOPICINFO{author="LynnwoodBrown" date="1160201890" format="1.1" reprev="1.6" version="1.6"}%
+d3 1
+a3 1
+%INCLUDE{ "%IF{"$'FORMFIELD{Classification}' = 'newTopicType'" then="%TCAOWEB%.RenderNewTopicHelp"}%" warn="off" HELP="%TOPIC%PostInstallHelp" TYPE="TopicType" FROM="TopicType"  }% 
+@
+
+
+1.5
+log
+@none
+@
+text
+@d1 1
+a1 1
+%META:TOPICINFO{author="LynnwoodBrown" date="1160102751" format="1.1" version="1.5"}%
+d3 2
+a4 1
+%INCLUDE{ "%CALC{ $IF( $EVAL( $TIME() - %GMTIME{"$epoch"}% ) < 60, %TCAOWEB%.RenderNewTopicHelp, ) }% warn="off" HELP="%TOPIC%PostInstallHelp" FROM="TopicType"}% 
+d16 1
+a16 1
+
+@
+
+
+1.4
+log
+@none
+@
+text
+@d1 4
+a4 7
+%META:TOPICINFO{author="LynnwoodBrown" date="1160083620" format="1.1" version="1.4"}%
+%META:TOPICPARENT{name="Classification"}%
+%INCLUDE{ "%CALC{ $IF( $EVAL( $TIME() - %GMTIME{"$epoch"}% ) < 60, %TCAOWEB%.NewTopicElements, ) }%" warn="off" section="successmsg" INSTRUCTIONS="no" TYPE="type" }% 
+<!-- Topic settings:
+ -->
+
+ %INCLUDE{"%TCAOWEB%.RenderClassificationTopic" FACETS="%FORMFIELD{Facets}%" }%
+d7 4
+a10 6
+%STARTSECTION{name="new" type="section"}%
+%INCLUDE{"%TCAOWEB%.CreateNewTopicElements" section="name" }%
+%INCLUDE{"%TCAOWEB%.CreateNewTopicElements" section="headline" }%
+%ICON{tip}% _Use Summary to summarize initial statement or question for discussion._
+%INCLUDE{"%TCAOWEB%.CreateNewTopicElements" section="templates" }%
+%ENDSECTION{name="new" type="section"}%
+a14 1
+-->
+d16 1
+@
+
+
+1.3
+log
+@none
+@
+text
+@d1 1
+a1 1
+%META:TOPICINFO{author="LynnwoodBrown" date="1159850858" format="1.1" reprev="1.3" version="1.3"}%
+d13 1
+a13 1
+%ICON{tip}% _Use TopicHeadline to summarize initial statement or question for discussion._
+d25 1
+a25 1
+%META:FIELD{name="TopicHeadline" attributes="" title="TopicHeadline" value="General discussion topics related to the %25BASEWEB%25 web."}%
+@
+
+
+1.2
+log
+@none
+@
+text
+@d1 1
+a1 1
+%META:TOPICINFO{author="LynnwoodBrown" date="1157302869" format="1.1" reprev="1.2" version="1.2"}%
+d4 4
+a7 1
+%INCLUDE{%TCAOWEB%.TopicTypeMaster}%
+d10 1
+a10 1
+%STARTSECTION{"new"}%
+d15 1
+a15 1
+%ENDSECTION{"new"}%
+d22 2
+a23 1
+%META:FORM{name="CategoryForm"}%
+d26 1
+@
+
+
+1.1
+log
+@none
+@
+text
+@d1 2
+a2 2
+%META:TOPICINFO{author="TWikiContributor" date="1130731434" format="1.1" version="$Rev$"}%
+%META:TOPICPARENT{name="TopicType"}%
+d19 2
+a20 2
+%META:FORM{name="TopicTypeForm"}%
+%META:FIELD{name="TopicType" attributes="" title="TopicType" value="TopicType"}%
+@

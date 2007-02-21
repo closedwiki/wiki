@@ -1,0 +1,101 @@
+head	1.4;
+access;
+symbols;
+locks; strict;
+comment	@# @;
+
+
+1.4
+date	2006.10.10.22.13.07;	author LynnwoodBrown;	state Exp;
+branches;
+next	1.3;
+
+1.3
+date	2006.10.03.16.14.40;	author LynnwoodBrown;	state Exp;
+branches;
+next	1.2;
+
+1.2
+date	2006.10.03.05.15.05;	author LynnwoodBrown;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2006.08.30.05.39.31;	author lynnwood;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.4
+log
+@none
+@
+text
+@%META:TOPICINFO{author="LynnwoodBrown" date="1160518387" format="1.1" reprev="1.4" version="1.4"}%
+%META:TOPICPARENT{name="SubjectArea"}%
+%INCLUDE{%TCAOWEB%.RenderClassificationTopic}%
+
+<!-- Topic Permissions
+   * Set ALLOWTOPICCHANGE = %MAINWEB%.TWikiAdminGroup
+   * Set ALLOWTOPICRENAME = %MAINWEB%.TWikiAdminGroup
+-->
+
+
+%META:FORM{name="TopicClassForm"}%
+%META:FIELD{name="Classification" attributes="" title="Classification" value="SubjectArea"}%
+%META:FIELD{name="Summary" attributes="" title="Summary" value="Basic information about using TCAO"}%
+%META:FIELD{name="Facets" attributes="" title="Facets" value="TopicType"}%
+%META:PREFERENCE{name="ALLOWTOPICCHANGE" title="ALLOWTOPICCHANGE" type="Set" value="%2525MAINWEB%2525.TWikiAdminGroup"}%
+%META:PREFERENCE{name="ALLOWTOPICRENAME" title="ALLOWTOPICRENAME" type="Set" value="%2525MAINWEB%2525.TWikiAdminGroup"}%
+@
+
+
+1.3
+log
+@none
+@
+text
+@d1 1
+a1 1
+%META:TOPICINFO{author="LynnwoodBrown" date="1159892080" format="1.1" version="1.3"}%
+d3 1
+a3 2
+%INCLUDE{ "%CALC{ $IF( $EVAL( $TIME() - 1141357560 ) < 60, %TCAOWEB%.NewTopicElements, ) }%" warn="off" section="successmsg" INSTRUCTIONS="no" TYPE="subject" }% 
+%INCLUDE{%TCAOWEB%.SubjectAreaMaster}%
+d12 1
+a12 1
+%META:FIELD{name="TopicType" attributes="" title="TopicType" value="SubjectArea"}%
+d14 1
+@
+
+
+1.2
+log
+@none
+@
+text
+@d1 1
+a1 1
+%META:TOPICINFO{author="LynnwoodBrown" date="1159852504" format="1.1" version="1.2"}%
+d14 1
+a14 1
+%META:FIELD{name="TopicHeadline" attributes="" title="TopicHeadline" value="Basic information about using TCAO"}%
+@
+
+
+1.1
+log
+@Initial revision
+@
+text
+@d1 1
+a1 1
+%META:TOPICINFO{author="LynnwoodBrown" date="1141357560" format="1.1" version="1.1"}%
+d12 1
+a12 1
+%META:FORM{name="TopicTypeForm"}%
+@

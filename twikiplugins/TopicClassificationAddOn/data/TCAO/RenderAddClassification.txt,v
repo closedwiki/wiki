@@ -1,0 +1,931 @@
+head	1.24;
+access;
+symbols;
+locks; strict;
+comment	@# @;
+expand	@o@;
+
+
+1.24
+date	2007.02.17.04.48.17;	author LynnwoodBrown;	state Exp;
+branches;
+next	1.23;
+
+1.23
+date	2007.01.25.00.55.07;	author LynnwoodBrown;	state Exp;
+branches;
+next	1.22;
+
+1.22
+date	2007.01.02.22.07.22;	author LynnwoodBrown;	state Exp;
+branches;
+next	1.21;
+
+1.21
+date	2006.12.29.04.19.53;	author LynnwoodBrown;	state Exp;
+branches;
+next	1.20;
+
+1.20
+date	2006.12.28.23.20.00;	author LynnwoodBrown;	state Exp;
+branches;
+next	1.19;
+
+1.19
+date	2006.10.18.20.22.33;	author LynnwoodBrown;	state Exp;
+branches;
+next	1.18;
+
+1.18
+date	2006.10.18.15.11.02;	author LynnwoodBrown;	state Exp;
+branches;
+next	1.17;
+
+1.17
+date	2006.10.18.05.34.24;	author LynnwoodBrown;	state Exp;
+branches;
+next	1.16;
+
+1.16
+date	2006.10.17.23.48.23;	author LynnwoodBrown;	state Exp;
+branches;
+next	1.15;
+
+1.15
+date	2006.10.12.04.10.07;	author LynnwoodBrown;	state Exp;
+branches;
+next	1.14;
+
+1.14
+date	2006.10.10.22.21.40;	author LynnwoodBrown;	state Exp;
+branches;
+next	1.13;
+
+1.13
+date	2006.10.09.20.45.51;	author LynnwoodBrown;	state Exp;
+branches;
+next	1.12;
+
+1.12
+date	2006.10.09.06.11.17;	author LynnwoodBrown;	state Exp;
+branches;
+next	1.11;
+
+1.11
+date	2006.10.09.04.09.01;	author LynnwoodBrown;	state Exp;
+branches;
+next	1.10;
+
+1.10
+date	2006.10.09.00.22.45;	author LynnwoodBrown;	state Exp;
+branches;
+next	1.9;
+
+1.9
+date	2006.10.08.21.05.25;	author LynnwoodBrown;	state Exp;
+branches;
+next	1.8;
+
+1.8
+date	2006.10.03.16.14.36;	author LynnwoodBrown;	state Exp;
+branches;
+next	1.7;
+
+1.7
+date	2006.10.03.04.46.45;	author LynnwoodBrown;	state Exp;
+branches;
+next	1.6;
+
+1.6
+date	2006.10.02.22.52.49;	author LynnwoodBrown;	state Exp;
+branches;
+next	1.5;
+
+1.5
+date	2006.10.01.21.29.03;	author LynnwoodBrown;	state Exp;
+branches;
+next	1.4;
+
+1.4
+date	2006.10.01.17.34.36;	author LynnwoodBrown;	state Exp;
+branches;
+next	1.3;
+
+1.3
+date	2006.10.01.06.52.16;	author LynnwoodBrown;	state Exp;
+branches;
+next	1.2;
+
+1.2
+date	2006.10.01.00.57.39;	author LynnwoodBrown;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2006.09.30.17.35.31;	author LynnwoodBrown;	state Exp;
+branches;
+next	;
+
+
+desc
+@none
+@
+
+
+1.24
+log
+@none
+@
+text
+@%META:TOPICINFO{author="LynnwoodBrown" date="1171687697" format="1.1" version="1.24"}%
+%META:TOPICPARENT{name="TopicFunction"}%
+---+!! Function: %TOPIC%
+%FORMFIELD{"Summary"}%
+
+%TOC{depth="3"}%
+
+---++ Further Development
+   * Reduce decision steps:
+      * Make the "predefined" radio a drop down for selecting type and add name field after radio for "new".
+   * Disable create button unless a valid name is entered. Can take code from TWiki.WebTopicCreator.
+   * For new classification, pull in Facets from template topic.
+
+---++ Documentation
+%STARTSECTION{name="documentation" type="section"}%
+%TOPIC% is INCLUDED in TopicClassification and provides interface for adding new classifications to a web where TopicClassificationApplication is used.
+
+Restrict view to %MAINWEB%.ModeratorGroup. This makes this form invisible for anyone not authorized to add TopicClassifications.
+   * Set ALLOWTOPICVIEW = %MAINWEB%.ModeratorGroup
+
+---+++++ Parameters
+   * TYPE = %RED% Required %ENDCOLOR% - type of Classification form is form
+
+---+++++ Css
+   * None
+%ENDSECTION{name="documentation" type="section"}%
+
+---++ Implementation
+<verbatim>
+%STARTINCLUDE%
+<script type="text/javascript" language="JavaScript"><!--
+// The following section create a list of Classification Summary fields from the templates.
+<noautolink>
+%DBQUERY{ "Classification='%TYPE%'" web="%TCAOWEB%/Installs" format="var $topic$nop_summary = \"$formfield(Summary)\";" }%
+</noautolink>
+
+// This variable just a placeholder until select_predefined is filled.
+var null_summary;
+null_summary = " ";
+
+// These variables are for holding the Summary value when switching back and forth between predefined and new.
+var predefinedSummary, newSummary;
+predefinedSummary = " ";
+newSummary = " ";
+
+function choosePredefined() {
+   document.addType.topic.value=document.addType.select_predefined.value;
+   document.addType.templatetopic.value=('%TCAOWEB%/Installs.' + document.addType.select_predefined.value);
+  // Save any new Summary that may have been entered.
+   newSummary=document.addType.Summary.value; 
+   document.addType.Summary.value=eval(document.addType.select_predefined.value + '_summary');
+   document.getElementById("addNew").style.display = "none";
+   document.getElementById("addPredefined").style.display = "block";
+}
+
+function chooseNew() {
+   document.addType.topic.value=document.addType.new_type.value;
+%IFDEFINEDTHEN{"%TEMPLATE%" glue="off"}%
+   document.addType.templatetopic.value="%TEMPLATE%";
+%ELSEDEFINED%
+   document.addType.templatetopic.value="%TCAOWEB%/Installs.%TYPE%Template";
+%FIDEFINED%
+   predefinedSummary=document.addType.Summary.value;
+   document.addType.Summary.value=newSummary;
+   document.getElementById("addPredefined").style.display = "none";
+   document.getElementById("addNew").style.display = "block";
+}
+
+function selectPredefined() {
+   document.addType.topic.value=document.addType.select_predefined.value;
+   document.addType.templatetopic.value=('%TCAOWEB%/Installs.' + document.addType.select_predefined.value);
+   document.addType.Summary.value=eval(document.addType.select_predefined.value + '_summary');
+}
+
+function nameNew() {
+   document.addType.topic.value=removeSpacesAndPunctiation(capitalize(document.addType.new_type.value));
+   document.addType.new_type.value=document.addType.topic.value;
+   insertHtml((document.addType.topic.value + "Template"), "newTemplateFeedback");
+}
+
+function checkName() {
+   if (document.addType.topic.value == 0) {
+      alert("Please enter a new for your new <nop>%BASETOPIC%");
+      return false;
+   } else {
+      return true;
+   }
+}
+
+//--></script>
+
+---+++ Add A New <nop>%TYPE% to the <nop>%BASEWEB% Web
+
+<div class="twikiFormSteps">
+<div class="twikiFormStep">
+<p><form name="addType" action="%SCRIPTURLPATH%/save%SCRIPTSUFFIX%/%BASEWEB%/" onsubmit="return checkName()" >
+Add <input type="radio" name="defined_or_new" checked="on" onClick="choosePredefined()"> *predefined* or <input type="radio" name="defined_or_new" onClick="chooseNew()"> *new* <nop>%TYPE%:
+</p>
+</div><!--/twikiFormStep--><div class="twikiFormStep">
+<div id="addPredefined" style="display:block;"  >
+*Select predefined <nop>%TYPE% to add:* <select name="select_predefined" size="1"  onchange="selectPredefined()" > <option value="null"> Select... </option>%SEARCH{ "[C]lassification.*value\=.*%TYPE%" web="%TCAOWEB%/Installs" excludetopic="%DBQUERY{ "Classification='%TYPE%'" web="%BASEWEB%" order="topic" format="$topic" separator=", "}%" order="topic" type="regex"  nonoise="on" format="<option>$topic</option>" separator="" }% </select> %BR%
+</div>
+<div id="addNew" style="display:none;"  >
+*Create a new <nop>%TYPE% called:* <input type="text" name="new_type"  size="40" onblur="nameNew();" > %BR%
+%IFDEFINEDTHEN{"%NEWEXTRA%" glue="off"}%
+%INCLUDE{"%TOPIC%" section="%NEWEXTRA%" TYPE="%TYPE%"}% 
+%FIDEFINED%
+</div>
+<p />
+*Summary for this <nop>%TYPE%:* <input type="text" name="Summary" size="40" value=' ' /> 
+<p />
+*Optional: Specify Facets for this <nop>%TYPE%:* <input type="text" name="Facets" size="40" /> 
+<p />
+%IFDEFINEDTHEN{"%ALLEXTRA%" glue="off"}%
+%INCLUDE{"%TOPIC%" section="%ALLEXTRA%" TYPE="%TYPE%"}% 
+%FIDEFINED%
+<input type="hidden" name="new_headline" value="Enter summary for your new <nop>%TYPE%..." />
+<input type="hidden" name="topic" size="20" value=" " />
+<input type="hidden" name="templatetopic" size="40" value="Template" />
+<input type="hidden" name="formtemplate" value="TopicClassForm" />
+<input type="hidden" name="Classification" value="%TYPE%" />
+<p /><input type="submit" id="submit" value=" Create New <nop>%TYPE%  " />
+</form>
+</div><!--/twikiFormStep-->
+</div><!--/twikiFormSteps-->
+%STOPINCLUDE%
+</verbatim>
+
+---+++ noParent ALLEXTRA section
+Use this section for assigning no parent as is the default for !TopicTypes
+<verbatim>
+%STARTSECTION{name="noParent" type="section"}%
+<input type="hidden" name="topicparent" value="" />
+%ENDSECTION{"noParent"}%
+</verbatim>
+
+---+++ defaultTemplate NEWEXTRA section
+Use this section to create a new template topic based on the name of the new classification. Requires an accompanying CREATETOPIC tag in the template for the new class.
+<verbatim>
+%STARTSECTION{name="defaultTemplate" type="section"}%
+%I% A new template topic called <span id="newTemplateFeedback" class="twikiInputFieldDisabled">...<!--generated name will be put here--></span> will automatically be created. %BR%
+%ENDSECTION{"defaultTemplate"}%
+</verbatim>
+
+---+++ selectClassParent ALLEXTRA section
+Use this section to add a select element for assigning parent topic that list topics _of the same class_ as the one being created.
+<verbatim>
+%STARTSECTION{name="selectClassParent" type="section"}%
+<p />
+*Optional: Assign another <nop>%BASETOPIC% as parent:* <select name="topicparent"> <option>%BASETOPIC%</option> %DBQUERY{"Classification='%BASETOPIC%'" web="%BASEWEB%" format="<option>$topic</option>" separator=" "}%</select>
+%ENDSECTION{"selectClassParent"}%
+</verbatim>
+
+
+---++ Test
+<div class="alt">
+%DBCALL{"%TOPIC%" TYPE="SubjectArea" }%
+</div>
+
+
+%DBCALL{"%APPLIB%.RenderFunctionCallers"}%
+
+---++ Copyright
+<div style="text-align:justify;margin:1em;">
+(C) 2006 LynnwoodBrown@@Skyloom.com
+
+%DBCALL{"%APPLIB%.GnuGeneralPublicLicense" section="notice"}%
+</div>
+
+
+
+%META:FORM{name="TopicForm"}%
+%META:FIELD{name="TopicType" attributes="" title="TopicType" value="TopicFunction"}%
+%META:FIELD{name="Summary" attributes="" title="Summary" value="Provides interface to adding new Classifications."}%
+%META:TOPICMOVED{by="LynnwoodBrown" date="1159827949" from="TCAO2.RenderClassificationSetUp" to="TCAO2.RenderAddClassification"}%
+%META:REVCOMMENT{comment_1=" " minor_1="1" ncomments="1" rev_1="22" t_1="1167774973"}%
+@
+
+
+1.23
+log
+@none
+@
+text
+@d1 1
+a1 1
+%META:TOPICINFO{author="LynnwoodBrown" date="1169686507" format="1.1" reprev="1.23" version="1.23"}%
+d150 1
+a150 1
+*Optional: Assign another <nop>%BASETOPIC% as parent:* <select name="topicparent"> <option value="%BASEWEB%.%TYPE%"><nop>%BASETOPIC%</option> %DBQUERY{"Classification='%BASETOPIC%'" web="%BASEWEB%" format="<option>$topic</option>" separator=" "}%</select>
+@
+
+
+1.22
+log
+@none
+@
+text
+@d1 1
+a1 1
+%META:TOPICINFO{author="LynnwoodBrown" date="1167775642" format="1.1" reprev="1.22" version="1.22"}%
+@
+
+
+1.21
+log
+@none
+@
+text
+@d1 1
+a1 1
+%META:TOPICINFO{author="LynnwoodBrown" date="1167365993" format="1.1" version="1.21"}%
+d176 1
+a176 1
+%META:REVCOMMENT{comment_1=" " minor_1="1" ncomments="1" rev_1="20" t_1="1167347839"}%
+@
+
+
+1.20
+log
+@none
+@
+text
+@d1 1
+a1 1
+%META:TOPICINFO{author="LynnwoodBrown" date="1167348000" format="1.1" reprev="1.20" version="1.20"}%
+d9 2
+@
+
+
+1.19
+log
+@none
+@
+text
+@d1 1
+a1 1
+%META:TOPICINFO{author="LynnwoodBrown" date="1161202953" format="1.1" reprev="1.19" version="1.19"}%
+d16 3
+d79 9
+d90 1
+a90 1
+---+++ Add A New <nop>%TYPE% to the %BASEWEB% Web
+d94 1
+a94 1
+<p><form name="addType" action="%SCRIPTURLPATH%/save%SCRIPTSUFFIX%/%BASEWEB%/" >
+d102 1
+a102 1
+*Create a new <nop>%TYPE% called:* <input type="text" name="new_type"  size="40" onblur="nameNew()"> %BR%
+d120 1
+a120 1
+<p /><input type="submit" value=" Create New <nop>%TYPE%  " />
+a151 17
+---+++ Hold for now - older code.
+<verbatim>
+---++ Add a new Classification to the <nop>%BASEWEB% web
+
+<form name="addType" action="%SCRIPTURLPATH%/save%SCRIPTSUFFIX%/%BASEWEB%/" >
+*Name of new Classification:* <input type="topic" name="new_type"  size="40" onblur="this.value=removeSpacesAndPunctiation(capitalize(this.value));">  %BR% 
+*TopicHeadline for this !TopicType:* <input type="text" name="TopicHeadline" size="40" value=' ' /> %BR% 
+    %ICON{tip}% If this classification is a facet of a particular TopicType, reference it in the TopicHeadline.    %BR%
+<input type="hidden" name="topicparent" value="%BASEWEB%.WebHome" />
+<input type="hidden" name="templatetopic" size="40" value="%TCAOWEB%/Installs.ClassificationTemplate" />
+<input type="hidden" name="formtemplate" value="TopicClassForm" />
+<input type="hidden" name="Classification" value="Classification" />
+<input type="submit" value=" Create New Classification  " />
+</form>
+
+</verbatim>
+
+a167 6
+   * Set ALLOWTOPICVIEW = %MAINWEB%.ModeratorGroup
+
+<!--
+   * Set SIDEBAR = TopicType
+   * Set SIDEBARARG = TopicFunction
+-->
+d171 1
+a171 1
+%META:FIELD{name="TopicType" attributes="M" title="TopicType" value="TopicFunction"}%
+a172 1
+%META:FIELD{name="TWikiApplication" attributes="" title="TWikiApplication" value="TopicClassificationAddOn"}%
+d174 1
+@
+
+
+1.18
+log
+@none
+@
+text
+@d1 1
+a1 1
+%META:TOPICINFO{author="LynnwoodBrown" date="1161184262" format="1.1" reprev="1.18" version="1.18"}%
+d91 3
+a93 1
+%INCLUDE{"%TOPIC%" section="new%TYPE%" }%
+d100 3
+a102 1
+%INCLUDE{"%TOPIC%" section="extra%TYPE%"}%
+d108 1
+a108 1
+<input type="submit" value=" Create New <nop>%TYPE%  " />
+d115 2
+a116 2
+---+++ Additional form elements for defining *all* !TopicTypes
+This section is included if TYPE is !TopicType.
+d118 3
+a120 3
+%STARTSECTION{name="extraTopicType" type="section"}%
+<input type="hidden" name="topicparent" value="%BASEWEB%.WebHome" />
+%ENDSECTION{"extraTopicType"}%
+d123 2
+a124 2
+---+++ Additional form elements for defining *new* !TopicTypes
+This section is included if TYPE is !TopicType.
+d126 3
+a128 3
+%STARTSECTION{name="newTopicType" type="section"}%
+%I% A new template topic called <span id="newTemplateFeedback" class="twikiInputFieldDisabled"><!--generated name will be put here--></span> will automatically be created. %BR%
+%ENDSECTION{"newTopicType"}%
+d131 2
+a132 2
+---+++ Additional form elements for *all* !SubjectAreas
+This section is included if TYPE is !SubjectArea.
+d134 1
+a134 1
+%STARTSECTION{name="extraSubjectArea" type="section"}%
+d136 2
+a137 2
+*Optional: Create as child of another <nop>SubjectArea:* <select name="topicparent"> <option value="%BASEWEB%.SubjectArea"><nop>SubjectArea</option> %DBQUERY{"Classification='SubjectArea'" web="%BASEWEB%" format="<option>$topic</option>" separator=" "}%</select> _(Default parent is !SubjectArea.)_
+%ENDSECTION{"extraSubjectArea"}%
+a139 22
+---+++ Additional form elements for *new* !SubjectAreas
+This section is included if TYPE is !SubjectArea.
+<verbatim>
+%STARTSECTION{name="newSubjectArea" type="section"}%
+%ENDSECTION{"newSubjectArea"}%
+</verbatim>
+
+---+++ Additional form elements for *all* Classifications
+This section is included if TYPE is Classification.
+<verbatim>
+%STARTSECTION{name="extraClassification" type="section"}%
+%ENDSECTION{"extraClassification"}%
+</verbatim>
+
+---+++ Additional form elements for defining *new* Classifications
+This section is included if TYPE is Classification.
+<verbatim>
+%STARTSECTION{name="newClassification" type="section"}%
+%ENDSECTION{"newClassification"}%
+</verbatim>
+
+
+@
+
+
+1.17
+log
+@none
+@
+text
+@d1 1
+a1 1
+%META:TOPICINFO{author="LynnwoodBrown" date="1161149664" format="1.1" reprev="1.17" version="1.17"}%
+d53 3
+d57 1
+a153 1
+*Select an existing Classification to serve as template for new Classification:* <select></select>
+@
+
+
+1.16
+log
+@none
+@
+text
+@d1 1
+a1 1
+%META:TOPICINFO{author="LynnwoodBrown" date="1161128903" format="1.1" version="1.16"}%
+d9 1
+a10 1
+   * revise statement of parent for subject areas to make clear that parents are SAs.
+d53 1
+a53 1
+   document.addType.templatetopic.value='%TCAOWEB%/Installs.ClassificationTemplate';
+a68 1
+   insertHtml((document.addType.topic.value + "Form"), "newFormFeedback");
+d79 1
+a79 1
+Add <input type="radio" name="defined_or_new" checked="on" onClick="choosePredefined()"> *predefined* or <input type="radio" name="defined_or_new" onClick="chooseNew()"> *new* <nop>%TYPE% to the %BASEWEB% web:
+d92 1
+a92 1
+*Optional: Specify Facets for this <nop>%TYPE%:* <input type="text" name="facets" size="40" /> 
+a96 1
+<input type="hidden" name="topicparent" value="%BASEWEB%.WebHome" />
+d111 1
+a119 1
+<input type="checkbox" name="createform" value="yes"/> Also create a new webform called <span id="newFormFeedback" class="twikiInputFieldDisabled"><!--generated name will be put here--></span>
+d128 1
+a128 1
+*Optional: Specify parent for the new <nop>SubjectArea:* <select name="setparent" onchange="this.form.topicparent.value=this.value"> <option value="%BASEWEB%.SubjectArea">Select...</option> %DBQUERY{"Classification='SubjectArea'" web="%BASEWEB%" format="<option>$topic</option>" separator=" "}%</select>
+@
+
+
+1.15
+log
+@none
+@
+text
+@d1 1
+a1 1
+%META:TOPICINFO{author="LynnwoodBrown" date="1160626207" format="1.1" reprev="1.15" version="1.15"}%
+d8 4
+d152 1
+@
+
+
+1.14
+log
+@none
+@
+text
+@d1 1
+a1 1
+%META:TOPICINFO{author="LynnwoodBrown" date="1160518900" format="1.1" reprev="1.14" version="1.14"}%
+d80 1
+a80 1
+*Select predefined <nop>%TYPE% to add:* <select name="select_predefined" size="1"  onchange="selectPredefined()" > <option value="null"> Select... </option>%DBQUERY{ "Classification='%TYPE%'" web="%TCAOWEB%/Installs" order="topic" format= "<option>$topic</option>" separator=""}% </select> %BR%
+d126 1
+a126 1
+*Optional: Specify parent for the new <nop>SubjectArea:* <select name="setparent" onchange="this.form.topicparent.value=this.value"> <option value="%BASEWEB%.SubjectArea">Select...</option> %DBQUERY{"Classification='SubjectArea'" web="%BASEWEB%" format="<option> $topic </option>" separator=" "}%</select>
+@
+
+
+1.13
+log
+@none
+@
+text
+@d1 1
+a1 1
+%META:TOPICINFO{author="LynnwoodBrown" date="1160426751" format="1.1" reprev="1.13" version="1.13"}%
+d6 1
+a6 1
+%TOC{depth="2"}%
+a70 4
+<noautolink>
+%DBQUERY{ "Classification='%TYPE%'" web="%TCAOWEB%/Installs" format="var $topic$nop_summary = \"$formfield(Summary)\";" }%
+</noautolink>
+
+d87 1
+a87 1
+*Summary for this !TopicType:* <input type="text" name="Summary" size="40" value=' ' /> 
+d89 1
+a89 1
+*Optional: Specify Facets for this !TopicType:* <input type="text" name="facets" size="40" /> 
+d91 1
+d105 8
+a112 1
+---+++ Extra elements for new !TopicTypes
+d121 10
+a130 1
+---+++ Extra elements for new !SubjectAreas
+a133 1
+*Optional: Specify parent for the new <nop>SubjectArea:* <select name="setparent" onchange="this.form.topicparent.value=this.value"> <option value="%BASEWEB%.SubjectArea">Select...</option> %DBQUERY{"Classification='SubjectArea'" web="%BASEWEB%" format="<option> $topic </option>" separator=" "}%</select>
+d137 14
+@
+
+
+1.12
+log
+@none
+@
+text
+@d1 1
+a1 1
+%META:TOPICINFO{author="LynnwoodBrown" date="1160374277" format="1.1" reprev="1.12" version="1.12"}%
+d25 1
+a25 1
+%DBQUERY{ "Classification='%TYPE%'" web="%TCAOWEB%/Installs" format="var $topic_summary = \"$formfield(Summary)\";" }%
+d71 4
+@
+
+
+1.11
+log
+@none
+@
+text
+@d1 1
+a1 1
+%META:TOPICINFO{author="LynnwoodBrown" date="1160366941" format="1.1" reprev="1.11" version="1.11"}%
+d70 1
+a70 3
+<noautolink>
+%SEARCH{ "Classification='%TYPE%'" web="%TCAOWEB%/Installs" nonoise="on" format="var $topic_summary = \"$formfield(Summary)\";" }%
+</noautolink>
+d113 9
+d142 1
+a142 1
+%DBCALL{"%TOPIC%" TYPE="TopicType" }%
+@
+
+
+1.10
+log
+@none
+@
+text
+@d1 1
+a1 1
+%META:TOPICINFO{author="LynnwoodBrown" date="1160353365" format="1.1" reprev="1.10" version="1.10"}%
+d25 1
+a25 2
+var %DBQUERY{ "Classification='%TYPE%'" web="%TCAOWEB%/Installs" format= "$topic_summary" separator=", " }%;
+%DBQUERY{ "Classification='%TYPE%'" web="%TCAOWEB%/Installs" format="$topic_summary = \"$formfield(Summary)\";" }%
+d70 3
+d82 1
+a82 1
+*Select predefined !Topictype to add:* <select name="select_predefined" size="1"  onchange="selectPredefined()" > <option value="null"> Select... </option>%DBQUERY{ "Classification='%TYPE%'" web="%TCAOWEB%/Installs" order="topic" format= "<option>$topic</option>" separator=""}% </select> %BR%
+d86 1
+a86 1
+%INCLUDE{"%TOPIC%" section="%IFDEFINEDTHEN{\"%TYPE%\" as=\"TopicType\"}% newTopicType %ELSIFDEFINED{\"%TYPE%\" as=\"SubjectArea\"}% newSubjectArea %ELSEDEFINED% newClassification %FIDEFINED%" }%
+@
+
+
+1.9
+log
+@none
+@
+text
+@d1 1
+a1 1
+%META:TOPICINFO{author="LynnwoodBrown" date="1160341525" format="1.1" reprev="1.9" version="1.9"}%
+d83 2
+a84 3
+*Create a new !TopicType called:* <input type="text" name="new_type"  size="40" onblur="nameNew()"> %BR%
+%I% A new template topic called <span id="newTemplateFeedback" class="twikiInputFieldDisabled"><!--generated name will be put here--></span> will automatically be created. %BR%
+<input type="checkbox" name="createform" value="yes"/> Also create a new webform called <span id="newFormFeedback" class="twikiInputFieldDisabled"><!--generated name will be put here--></span>
+d91 1
+a91 1
+<input type="hidden" name="new_headline" value="Enter summary for your new !TopicType..." />
+d96 2
+a97 2
+<input type="hidden" name="Classification" value="TopicType" />
+<input type="submit" value=" Create New !TopicType  " />
+d104 9
+d133 1
+a133 1
+%DBCALL{"%TOPIC%"}%
+@
+
+
+1.8
+log
+@none
+@
+text
+@d1 1
+a1 1
+%META:TOPICINFO{author="LynnwoodBrown" date="1159892076" format="1.1" version="1.8"}%
+d13 1
+a13 1
+   * None
+a19 1
+---+++ Select type of classification to create
+d22 82
+d105 2
+d119 1
+a119 1
+%STOPINCLUDE%
+d122 1
+@
+
+
+1.7
+log
+@none
+@
+text
+@d1 1
+a1 1
+%META:TOPICINFO{author="LynnwoodBrown" date="1159850805" format="1.1" version="1.7"}%
+@
+
+
+1.6
+log
+@none
+@
+text
+@d1 1
+a1 1
+%META:TOPICINFO{author="LynnwoodBrown" date="1159829569" format="1.1" reprev="1.6" version="1.6"}%
+d64 2
+a65 2
+%META:FIELD{name="Summary" attributes="" title="Summary" value="Provides interface to adding new Classifications to webs using TopicClassificationApplication"}%
+%META:FIELD{name="TWikiApplication" attributes="" title="TWikiApplication" value="TopicClassification"}%
+@
+
+
+1.5
+log
+@none
+@
+text
+@d1 1
+a1 1
+%META:TOPICINFO{author="LynnwoodBrown" date="1159738143" format="1.1" version="1.5"}%
+d10 1
+a10 1
+%RED%TODO%ENDCOLOR%
+d13 1
+a13 1
+   * 
+d16 1
+a16 1
+   * 
+d22 1
+a22 16
+%STARTSECTION{name="select_type" type="section"}%
+<script type="text/javascript" language="JavaScript"><!--
+function removeContent(d) {
+document.getElementById(d).style.display = "none";
+}
+function insertContent(d) {
+document.getElementById(d).style.display = "";
+}
+//--></script>
+---++ Topic Classification Set-up for the <nop>%BASEWEB% web
+Use this topic to add topic classifications to the <nop>%BASEWEB% web. You can either add a predefined classification or define a new, custom classfication. You can also create completely new classification schemes (sets of classifications).
+
+<form name="selectType" action="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%BASEWEB%/%BASETOPIC%">
+*Type of !TopicClassification you want to create:* <select name="type" size="1"  onchange="removeContent(this.form.displayed.value);insertContent(this.value);this.form.displayed.value=this.value;" ><option value="nada">Select...</option>%DBQUERY{"Classification='Classification'" web="%BASEWEB%" format="<option>$topic</option>" separator=""}%<option value="Classification">New Classification</option></select>
+<input type="hidden" name="displayed" value="nada">
+</form>
+d24 1
+a24 5
+%FOREACH{"classification" in="%DBQUERY{"Classification='Classification'" web="%BASEWEB%" format="$topic" separator=", "}%"}%
+<div id="$classification" style="display:none;"  >
+$percntDBCALL{"%BASEWEB%.$classification" section="new" warn="on"}$percnt
+</div>
+%NEXT{"classification"}%
+d26 11
+a36 12
+<div id="Classification" style="font-size: 24px;display:none;"  >
+This is the Classification section.
+</div>
+
+<div id="nada" style="font-size: 24px;display:none;"  >
+Hello!
+</div>
+
+
+%ENDSECTION{name="select_type"%
+
+hold for now:
+a38 3
+---+++ TopicType Options
+This section is for setting options for a new !TopicType.
+
+d41 1
+a41 1
+%DBCALL{"%TOPIC%" section="select_type"}%
+d54 1
+d64 3
+a66 2
+%META:FIELD{name="Summary" attributes="" title="Summary" value="Provides interface to adding new Categories and Classifications to webs using TopicClassificationApplication"}%
+%META:FIELD{name="TWikiApplication" attributes="" title="TWikiApplication" value="TWikiWorkbench"}%
+@
+
+
+1.4
+log
+@none
+@
+text
+@d1 1
+a1 1
+%META:TOPICINFO{author="LynnwoodBrown" date="1159724076" format="1.1" reprev="1.4" version="1.4"}%
+@
+
+
+1.3
+log
+@none
+@
+text
+@d1 1
+a1 1
+%META:TOPICINFO{author="LynnwoodBrown" date="1159685536" format="1.1" reprev="1.3" version="1.3"}%
+a33 1
+---+++ Select !TopicClassification to create
+d35 2
+a36 1
+*Type of !TopicClassification you want to create:* <select name="type" size="1"  onchange="insertContent(this.value);" ><option>%URLPARAM{"type" default="Select..."}%</option>%DBQUERY{"Classification='Classification'" web="%BASEWEB%" format="<option>$topic</option>" separator=""}%<option value="Classification">New Classification</option></select>
+d39 11
+a49 1
+<div id="TopicType" style="font-size: 24px;display:none;"  >
+a56 1
+%INCLUDE{"%IF{"defined type" then="%TCAOWEB%.RenderClassificationSetUp"}%" section="%URLPARAM{type}%" }%
+a60 25
+<verbatim>
+%STARTSECTION{name="TopicType" type="section"}%
+<form name="addType" action="%SCRIPTURLPATH%/save%SCRIPTSUFFIX%/%BASEWEB%/" >
+<p /> 
+<input type="radio" name="defined_or_new" checked="on"> Create predefined !Topictype: <select name="predefined_type" size="1" > %DBQUERY{ "Classification='TopicType'" web="%TCAOWEB%/Installs" order="topic" format= "<option>$topic</option>" separator=""}% </select> 
+<p />
+<input type="radio" name="defined_or_new" > Create new !TopicType:  <input type="text" name="new_type"  size="35" >
+<p />
+Customise the headline or summary about use of *%URLPARAM{"selection"}%* <nop>%URLPARAM{"type"}% within the <nop>%BASEWEB% web: <br />
+<input type="text" name="TopicHeadline" size="40" value='%SEARCH{ "%URLPARAM{selection}%" scope="topic" web="%TCAOWEB%/Installs" regex="on" nonoise="on" format="$formfield(TopicHeadline)"}%' /> 
+<p /> 
+%SEARCH{ "[T]opicType.*value\=.*%URLPARAM{type}%" web="%BASEWEB%" regex="on" noheader="on" nosearch="on" nosummary="on" nototal="on" order="topic" format="<option>$topic</option>"}%
+</select>
+<input type="hidden" name="topicparent" value="%BASEWEB%.WebHome" />
+<input type="hidden" name="templatetopic" value="%TCAOWEB%/Installs.%URLPARAM{selection}%" />
+<input type="hidden" name="formtemplate" value="CategoryForm" />
+<input type="hidden" name="Classification" value="%URLPARAM{type}%" />
+<p />
+
+<input type="submit" value=" Make It So! " /> _You will go immediately to your new <nop>%URLPARAM{type}% topic._
+</form>
+
+%ENDSECTION{name="TopicType"}%
+</verbatim>
+
+a66 3
+<div class="alt">
+%INCLUDE{"%TOPIC%" section="topic_type"}%
+</div>
+@
+
+
+1.2
+log
+@none
+@
+text
+@d1 1
+a1 1
+%META:TOPICINFO{author="LynnwoodBrown" date="1159664259" format="1.1" reprev="1.2" version="1.2"}%
+d23 8
+d32 1
+a32 1
+Use this topic to add topic classifications to the <nop>%BASEWEB% web. You can either add a predefined classification or define a new, custom classfication. You can also create completed new classifications (i.e. new %BASEWEB%.CategoryGroups).
+d34 1
+a34 1
+---+++ Step 1: Select !TopicClassification to create
+d36 1
+a36 4
+*Type of !TopicClassification you want to create:* <select name="type" size="1" ><option>%URLPARAM{"type" default="Select..."}%</option>%DBQUERY{"Classification='Classification'" web="%BASEWEB%" format="<option><nop>$topic</option>" separator=""}%<option value="Classification">New Classification</option></select>
+<p />
+<input type="hidden" name="step" value="Two" >
+<input type="submit" value=" Proceed to Step 2 " /><p />
+d39 5
+d45 3
+d53 1
+a53 1
+%STARTSECTION{name="topic_type"%  type="section"}%
+d73 2
+a74 1
+%ENDSECTION{name="topic_type"}%
+d84 1
+a84 1
+%DBCALL{"%TOPIC%" section="topic_type"}%
+@
+
+
+1.1
+log
+@none
+@
+text
+@d1 1
+a1 1
+%META:TOPICINFO{author="LynnwoodBrown" date="1159637731" format="1.1" version="1.1"}%
+d20 1
+d22 1
+a22 1
+%STARTINCLUDE%
+d34 27
+a60 1
+%STOPINCLUDE%
+a62 1
+<!-- interrupt glue -->
+d66 5
+a70 1
+%DBCALL{"%TOPIC%"}%
+@

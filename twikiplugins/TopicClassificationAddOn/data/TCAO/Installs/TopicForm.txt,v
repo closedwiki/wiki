@@ -1,0 +1,134 @@
+head	1.5;
+access;
+symbols;
+locks; strict;
+comment	@# @;
+
+
+1.5
+date	2006.12.28.18.48.48;	author LynnwoodBrown;	state Exp;
+branches;
+next	1.4;
+
+1.4
+date	2006.10.16.05.08.48;	author LynnwoodBrown;	state Exp;
+branches;
+next	1.3;
+
+1.3
+date	2006.10.12.05.11.20;	author LynnwoodBrown;	state Exp;
+branches;
+next	1.2;
+
+1.2
+date	2006.10.05.21.27.06;	author LynnwoodBrown;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2006.10.05.21.27.06;	author LynnwoodBrown;	state Exp;
+branches;
+next	;
+
+
+desc
+@none
+@
+
+
+1.5
+log
+@none
+@
+text
+@%META:TOPICINFO{author="LynnwoodBrown" date="1167331728" format="1.1" version="1.5"}%
+---+ %TOPIC% for the %WEB% web
+
+| *Name:*| *Type:* | *Size:* | *Values:* | *Tooltip message:* | *Attributes:* |
+| TopicType | select | 1 | %DBQUERY{"Classification='TopicType'" format="$topic" separator=", "}%   | Classify a topic by function |  |
+| SubjectArea | checkbox | 3 | %DBQUERY{"Classification='SubjectArea'" format="$topic" separator=", "}%    | Classify a topic by subject |  |
+| Summary   | text   | 50  |   | Short summary or headline of topic  |  |
+
+Related Topic: TopicClassification, WebPreferences, %TWIKIWEB%.TWikiForms
+
+<!-- Topic Permissions
+   * Set ALLOWTOPICCHANGE = %MAINWEB%.TWikiAdminGroup
+   * Set ALLOWTOPICRENAME = %MAINWEB%.TWikiAdminGroup
+-->
+
+For more information about how you can use form to organize topics or create simple database applications, see TWiki.TWikiForms.
+
+
+%META:REVCOMMENT{ncomments="0"}%
+@
+
+
+1.4
+log
+@none
+@
+text
+@d1 1
+a1 1
+%META:TOPICINFO{author="LynnwoodBrown" date="1160975328" format="1.1" version="1.4"}%
+d4 4
+a7 4
+| *Name:*| *Type:* | *Size:* | *Values:* | *Tooltip message:* |
+| TopicType | select | 1 | %DBQUERY{"Classification='TopicType'" format="$topic" separator=", "}%   | Classify a topic by function |
+| SubjectArea | checkbox | 3 | %DBQUERY{"Classification='SubjectArea'" format="$topic" separator=", "}%    | Classify a topic by subject |
+| Summary   | text   | 50  |   | Short summary or headline of topic  |
+d18 2
+a19 3
+%META:TOPICMOVED{by="LynnwoodBrown" date="1160629875" from="TCAO2/Installs.WebForm" to="TCAO2/Installs.TopicForm"}%
+%META:PREFERENCE{name="ALLOWTOPICCHANGE" title="ALLOWTOPICCHANGE" type="Set" value="%2525MAINWEB%2525.TWikiAdminGroup"}%
+%META:PREFERENCE{name="ALLOWTOPICRENAME" title="ALLOWTOPICRENAME" type="Set" value="%2525MAINWEB%2525.TWikiAdminGroup"}%
+@
+
+
+1.3
+log
+@rename
+@
+text
+@d1 1
+a1 1
+%META:TOPICINFO{author="LynnwoodBrown" date="1160629880" format="1.1" version="1.3"}%
+d5 2
+a6 2
+| TopicType | select | 1 |  | Classify a topic by function |
+| SubjectArea | checkbox | 3 |  | Classify a topic by subject |
+@
+
+
+1.2
+log
+@none
+@
+text
+@d1 1
+a1 1
+%META:TOPICINFO{author="LynnwoodBrown" date="1160083626" format="1.1" version="1.2"}%
+d18 1
+@
+
+
+1.1
+log
+@none
+@
+text
+@d1 1
+a1 1
+%META:TOPICINFO{author="TWikiContributor" date="1095459780" format="1.0" version="$Rev$"}%
+d7 1
+a7 1
+| TopicHeadline	| text	| 50  |	| Short summary or headline of topic  |
+d12 2
+a13 2
+	* Set ALLOWTOPICCHANGE = %MAINWEB%.TWikiAdminGroup
+	* Set ALLOWTOPICRENAME = %MAINWEB%.TWikiAdminGroup
+d18 2
+a19 2
+%META:PREFERENCE{name="ALLOWTOPICCHANGE" title="ALLOWTOPICCHANGE" type="Set" value="%25MAINWEB%25.TWikiAdminGroup"}%
+%META:PREFERENCE{name="ALLOWTOPICRENAME" title="ALLOWTOPICRENAME" type="Set" value="%25MAINWEB%25.TWikiAdminGroup"}%
+@

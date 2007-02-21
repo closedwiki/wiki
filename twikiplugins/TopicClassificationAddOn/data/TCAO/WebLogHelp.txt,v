@@ -1,0 +1,59 @@
+head	1.2;
+access;
+symbols;
+locks; strict;
+comment	@# @;
+
+
+1.2
+date	2007.01.10.15.44.17;	author LynnwoodBrown;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2007.01.02.20.10.24;	author LynnwoodBrown;	state Exp;
+branches;
+next	;
+
+
+desc
+@none
+@
+
+
+1.2
+log
+@none
+@
+text
+@%META:TOPICINFO{author="LynnwoodBrown" date="1168443857" format="1.1" version="1.2"}%
+---+!! %SPACEOUT{%TOPIC%}%
+
+This topic provides help regarding the !WebLog TopicType included with %TWIKIWEB%.TopicClassificationAddOn.
+
+---++ Post-install help
+
+The following instructions are displayed when the !WebLog !TopicType is first installed within a web via RenderNewClassHelp.
+
+%STARTINCLUDE%
+   1 Add %BASEWEB%.WebLogForm to the list of !WebForms in %BASEWEB%.WebPreferences.
+   1 Confirm that %BASEWEB%.WebLogForm is consistent with the %BASEWEB%.TopicClassification scheme in use in the %BASEWEB% web. For example, you might be using "Categories" rather that "SubjectArea."
+%STOPINCLUDE%
+
+%META:FORM{name="TCAO.TopicForm"}%
+%META:FIELD{name="TopicType" attributes="" title="TopicType" value="HelpTopic"}%
+%META:FIELD{name="SubjectArea" attributes="" title="SubjectArea" value="TcaoUse"}%
+%META:FIELD{name="Summary" attributes="" title="Summary" value="Help regarding the !WebLog !TopicType."}%
+%META:REVCOMMENT{ncomments="0"}%
+@
+
+
+1.1
+log
+@none
+@
+text
+@d1 1
+a1 1
+%META:TOPICINFO{author="LynnwoodBrown" date="1167768624" format="1.1" reprev="1.1" version="1.1"}%
+@

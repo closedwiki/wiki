@@ -1,0 +1,153 @@
+head	1.6;
+access;
+symbols;
+locks; strict;
+comment	@# @;
+
+
+1.6
+date	2007.01.10.14.17.34;	author LynnwoodBrown;	state Exp;
+branches;
+next	1.5;
+
+1.5
+date	2007.01.02.17.24.16;	author LynnwoodBrown;	state Exp;
+branches;
+next	1.4;
+
+1.4
+date	2007.01.02.05.57.23;	author LynnwoodBrown;	state Exp;
+branches;
+next	1.3;
+
+1.3
+date	2007.01.01.22.56.26;	author LynnwoodBrown;	state Exp;
+branches;
+next	1.2;
+
+1.2
+date	2007.01.01.18.24.14;	author LynnwoodBrown;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2006.08.30.05.39.31;	author lynnwood;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.6
+log
+@none
+@
+text
+@%META:TOPICINFO{author="LynnwoodBrown" date="1168438654" format="1.1" version="1.6"}%
+---+!! <nop>%BASETOPIC%
+
+_This is an list of the weblinks recorded in %BASEWEB%.WebLogs, grouped by %BASEWEB%.SubjectArea. Clicking on the link title takes you directly to external web site._
+
+%INCLUDE{"%TCAOWEB%.RenderTableOfContent" TOGGLE="show" }%
+
+%DBQUERY{"Classification = 'SubjectArea'" web="%BASEWEB%" format="---++ $web.$topic $n$percntDBQUERY{\"TopicType = 'WebLog' AND SubjectArea = '$topic'\" web=\"$percntBASEWEB$percnt\" format=\"---++++!! [[$dollarformfield(Url)][$dollarformfield(Title)]]$dollarpercntICON{external}$dollarpercnt $dollarn $dollarexpand(_sectionintrotext) _[[$dollarweb.$dollartopic][read more...]]_ \" }$percnt" }%
+
+%META:FORM{name="TopicForm"}%
+%META:FIELD{name="TopicType" attributes="" title="TopicType" value="MasterTopic"}%
+%META:FIELD{name="Summary" attributes="" title="Summary" value="Used with <nop>WebLog TopicType"}%
+%META:REVCOMMENT{comment_1=" " minor_1="1" ncomments="1" rev_1="5" t_1="1167752408"}%
+%META:PREFERENCE{name="ALLOWTOPICCHANGE" title="ALLOWTOPICCHANGE" type="Set" value="Main.TWikiAdminGroup"}%
+%META:PREFERENCE{name="ALLOWTOPICRENAME" title="ALLOWTOPICRENAME" type="Set" value="%25MAINWEB%25.TWikiAdminGroup"}%
+@
+
+
+1.5
+log
+@none
+@
+text
+@d1 1
+a1 1
+%META:TOPICINFO{author="LynnwoodBrown" date="1167758656" format="1.1" reprev="1.5" version="1.5"}%
+d10 4
+a13 1
+
+a15 1
+%META:REVCOMMENT{comment_1=" " minor_1="1" ncomments="1" rev_1="5" t_1="1167752408"}%
+@
+
+
+1.4
+log
+@none
+@
+text
+@d1 1
+a1 5
+%META:TOPICINFO{author="LynnwoodBrown" date="1167717443" format="1.1" reprev="1.4" version="1.4"}%
+%STARTSIDEBAR%
+*Jump to !SubjectArea:*
+%TOC%
+%STOPSIDEBAR%
+d4 1
+a4 1
+_This is an simple list of the weblinks recorded in %BASEWEB%.WebLogs, grouped by %BASEWEB%.SubjectArea. Clicking on the link title takes you directly to external web site._
+d6 3
+a8 1
+%SEARCH{"[C]lassification.*value\=.*[S]ubjectArea" regex="on" web="%BASEWEB%" casesensitive="on" nosearch="on" noheader="on" nototal="on" format="--- $n()---++ $web.$topic $n()--- $n()$percntSEARCH{ \"[T]opicType.*value\=.*[W]ebLog;[S]ubjectArea.*value\=.*$topic\" regex=\"on\" web=\"$percntBASEWEB$percnt\" nonoise=\"on\" format=\"---++++!! [[$dollarpercntFORMFIELD{\\"Url\\" topic=\\"$dollarpercentBASEWEB$dollarpercent.$dollartopic\\"}$dollarpercnt][$dollarpercntFORMFIELD{\\"Title\\" topic=\\"$dollarpercentBASEWEB$dollarpercent.$dollartopic\\"}$dollarpercnt]] $dollarn() $percentINCLUDE{\\"$percentBASEWEB$percent.$dollartopic\\" section=\\"introtext\\" }$dollarpercent\" }$nop%" }%
+d13 1
+a13 1
+%META:REVCOMMENT{comment_1=" " minor_1="1" ncomments="1" rev_1="4" t_1="1167717178"}%
+@
+
+
+1.3
+log
+@none
+@
+text
+@d1 1
+a1 1
+%META:TOPICINFO{author="LynnwoodBrown" date="1167692186" format="1.1" reprev="1.3" version="1.3"}%
+d10 1
+a10 1
+%SEARCH{"[C]lassification.*value\=.*[S]ubjectArea" regex="on" web="%BASEWEB%" casesensitive="on" nosearch="on" noheader="on" nototal="on" format="--- $n()---++ $web.$topic $n()--- $n()$percntSEARCH{ \"[T]opicType.*value\=.*[W]ebLog;[S]ubjectArea.*value\=.*$topic\" regex=\"on\" web=\"$percntBASEWEB$percnt\" format=\"---++++!! [[$dollarpercntFORMFIELD{\\"Url\\" topic=\\"$dollarpercentBASEWEB$dollarpercent.$dollartopic\\"}$dollarpercnt][$dollarpercntFORMFIELD{\\"Title\\" topic=\\"$dollarpercentBASEWEB$dollarpercent.$dollartopic\\"}$dollarpercnt]] - $dollarpercentINCLUDE{\\"$dollarpercentBASEWEB$dollarpercent.$dollartopic\\" section=\\"introtext\\" }$dollarpercent" }$nop%" }%
+d15 1
+a15 1
+%META:REVCOMMENT{comment_1=" " minor_1="1" ncomments="1" rev_1="3" t_1="1167692038"}%
+@
+
+
+1.2
+log
+@none
+@
+text
+@d1 1
+a1 1
+%META:TOPICINFO{author="LynnwoodBrown" date="1167675854" format="1.1" reprev="1.2" version="1.2"}%
+d10 1
+a10 1
+%DBQUERY{"Classification = 'SubjectArea'" web="%BASEWEB%" separator="$n()--- $n()" format="---+++ $web.$topic $n() $percntDBQUERY{ \"Classification = 'WebLog' AND SubjectArea = '$topic'\" web=\"$percntBASEWEB$percnt\" separator=\"$dollarn()\" format=\"---++++!! [[$dollarpercntFORMFIELD{\\"Url\\" topic=\\"$dollarpercentBASEWEB$dollarpercent.$dollartopic\\"}$dollarpercnt][$dollarpercntFORMFIELD{\\"Title\\" topic=\\"$dollarpercentBASEWEB$dollarpercent.$dollartopic\\"}$dollarpercnt]] - $dollarpercentINCLUDE{\\"$dollarpercentBASEWEB$dollarpercent.$dollartopic\\" section=\\"introtext\\" }$dollarnop$dollarpercent" }$nop%" }%
+d15 1
+a15 1
+%META:REVCOMMENT{comment_1=" " minor_1="1" ncomments="1" rev_1="" t_1="1167675854"}%
+@
+
+
+1.1
+log
+@Initial revision
+@
+text
+@d1 1
+a1 2
+%META:TOPICINFO{author="TWikiContributor" date="1127948959" format="1.1" version="$Rev$"}%
+
+d10 1
+a10 1
+%SEARCH{"[T]opicType.*value\=.*[S]ubjectArea" regex="on" web="%BASEWEB%" casesensitive="on" nosearch="on" noheader="on" nototal="on" format="--- $n()---++ $web.$topic $n()--- $n()$percntSEARCH{ \"[T]opicType.*value\=.*[W]ebLog;[S]ubjectArea.*value\=.*$topic\" regex=\"on\" web=\"$percntBASEWEB$percnt\" format=\"---++++!! [[$dollarpattern(^.*?\[\[(.*?)\]\].*)]] - $dollarpattern(^.*?BR%(.*?)<!-- TEXTEND.*) \" nosearch=\"on\" nototal=\"header\" nototal=\"on\" }$nop%" }%
+d15 1
+@

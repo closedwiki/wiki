@@ -1,0 +1,55 @@
+head	1.2;
+access;
+symbols;
+locks; strict;
+comment	@# @;
+
+
+1.2
+date	2006.10.03.16.14.42;	author LynnwoodBrown;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2006.08.30.05.39.31;	author lynnwood;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.2
+log
+@none
+@
+text
+@%META:TOPICINFO{author="LynnwoodBrown" date="1159892082" format="1.1" version="1.2"}%
+---+ %TOPIC% for the %WEB% web
+
+| *Name:*| *Type:* | *Size:* | *Values:* | *Tooltip message:* |
+| TopicType | select | 1 |  | Classify a topic by function |
+| SubjectArea | checkbox | 3 |  | Classify a topic by subject |
+| Summary   | text   | 50  |   | Short summary or headline of topic  |
+
+Related Topic: WebPreferences, WebTopicEditTemplate, %TWIKIWEB%.TWikiForms
+
+
+For more information about how you can use form to organize topics or create simple database applications, see TWiki.TWikiForms.
+
+@
+
+
+1.1
+log
+@Initial revision
+@
+text
+@d1 1
+a1 1
+%META:TOPICINFO{author="TWikiContributor" date="1095459780" format="1.0" version="1.4"}%
+d7 1
+a7 1
+| TopicHeadline	| text	| 50  |	| Short summary or headline of topic  |
+@

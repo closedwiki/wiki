@@ -1,0 +1,54 @@
+head	1.2;
+access;
+symbols;
+locks; strict;
+comment	@# @;
+
+
+1.2
+date	2007.01.10.13.58.32;	author LynnwoodBrown;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2007.01.10.13.54.46;	author LynnwoodBrown;	state Exp;
+branches;
+next	;
+
+
+desc
+@none
+@
+
+
+1.2
+log
+@none
+@
+text
+@%META:TOPICINFO{author="LynnwoodBrown" date="1168437512" format="1.1" reprev="1.2" version="1.2"}%
+%META:TOPICPARENT{name="NewsItem"}%
+%INCLUDE{%TCAOWEB%.%TOPIC%}%
+<!-- Topic Permissions
+	* Set ALLOWTOPICCHANGE = %MAINWEB%.ModeratorGroup
+	* Set ALLOWTOPICRENAME = %MAINWEB%.ModeratorGroup
+-->
+
+%META:REVCOMMENT{ncomments="0"}%
+@
+
+
+1.1
+log
+@none
+@
+text
+@d1 1
+a1 1
+%META:TOPICINFO{author="TWikiContributor" date="1130358020" format="1.1" version="$Rev$"}%
+d5 2
+a6 2
+	* Set ALLOWTOPICCHANGE = %MAINWEB%.TWikiAdminGroup
+	* Set ALLOWTOPICRENAME = %MAINWEB%.TWikiAdminGroup
+d8 2
+@

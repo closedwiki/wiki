@@ -1,0 +1,102 @@
+head	1.4;
+access;
+symbols;
+locks; strict;
+comment	@# @;
+
+
+1.4
+date	2006.10.05.21.27.02;	author LynnwoodBrown;	state Exp;
+branches;
+next	1.3;
+
+1.3
+date	2006.10.03.03.57.52;	author LynnwoodBrown;	state Exp;
+branches;
+next	1.2;
+
+1.2
+date	2006.09.03.17.01.12;	author LynnwoodBrown;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2006.09.03.16.32.18;	author LynnwoodBrown;	state Exp;
+branches;
+next	;
+
+
+desc
+@none
+@
+
+
+1.4
+log
+@none
+@
+text
+@%META:TOPICINFO{author="LynnwoodBrown" date="1160083622" format="1.1" version="1.4"}%
+%META:TOPICPARENT{name="SubjectArea"}%
+%INCLUDE{ "%CALC{ $IF( $EVAL( $TIME() - %GMTIME{"$epoch"}% ) < 60, %TCAOWEB%.NewTopicElements, ) }%" warn="off" section="successmsg" INSTRUCTIONS="no" TYPE="subject" }% 
+%INCLUDE{%TCAOWEB%.SubjectAreaMaster}%
+
+<!-- Topic Permissions
+   * Set ALLOWTOPICCHANGE = %MAINWEB%.TWikiAdminGroup
+   * Set ALLOWTOPICRENAME = %MAINWEB%.TWikiAdminGroup
+-->
+
+
+%META:FORM{name="TopicClassForm"}%
+%META:FIELD{name="Classification" attributes="" title="Classification" value="SubjectArea"}%
+%META:FIELD{name="Summary" attributes="" title="Summary" value="Looking ahead to what's next"}%
+%META:PREFERENCE{name="ALLOWTOPICCHANGE" title="ALLOWTOPICCHANGE" type="Set" value="%252525MAINWEB%252525.TWikiAdminGroup"}%
+%META:PREFERENCE{name="ALLOWTOPICRENAME" title="ALLOWTOPICRENAME" type="Set" value="%252525MAINWEB%252525.TWikiAdminGroup"}%
+@
+
+
+1.3
+log
+@none
+@
+text
+@d1 1
+a1 1
+%META:TOPICINFO{author="LynnwoodBrown" date="1159847872" format="1.1" version="1.3"}%
+d14 1
+a14 1
+%META:FIELD{name="TopicHeadline" attributes="" title="TopicHeadline" value="Looking ahead to what's next"}%
+@
+
+
+1.2
+log
+@none
+@
+text
+@d1 1
+a1 1
+%META:TOPICINFO{author="LynnwoodBrown" date="1157302872" format="1.1" reprev="1.2" version="1.2"}%
+d12 1
+a12 1
+%META:FORM{name="CategoryForm"}%
+@
+
+
+1.1
+log
+@none
+@
+text
+@d1 1
+a1 1
+%META:TOPICINFO{author="TWikiContributor" date="1117756684" format="1.0" version="$Rev$"}%
+d12 2
+a13 2
+%META:FORM{name="TopicTypeForm"}%
+%META:FIELD{name="TopicType" attributes="" title="TopicType" value="SubjectArea"}%
+d15 2
+a16 2
+%META:PREFERENCE{name="ALLOWTOPICCHANGE" title="ALLOWTOPICCHANGE" type="Set" value="%2525MAINWEB%2525.TWikiAdminGroup"}%
+%META:PREFERENCE{name="ALLOWTOPICRENAME" title="ALLOWTOPICRENAME" type="Set" value="%2525MAINWEB%2525.TWikiAdminGroup"}%
+@
