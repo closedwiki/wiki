@@ -1,6 +1,0 @@
-%META:TOPICINFO{author="LynnwoodBrown" date="1134184619" format="1.1" version="1.2"}%
-%META:TOPICPARENT{name="TopicClassification"}%
-%INCLUDE{%TCAOWEB%.SetUp%URLPARAM{"step"}%}%
-
-%META:PREFERENCE{name="ALLOWTOPICCHANGE" title="ALLOWTOPICCHANGE" type="Set" value="%25MAINWEB%25.TWikiAdminGroup"}%
-%META:PREFERENCE{name="ALLOWTOPICRENAME" title="ALLOWTOPICRENAME" type="Set" value="%25MAINWEB%25.TWikiAdminGroup"}%

@@ -1,9 +1,0 @@
-%META:TOPICINFO{author="LynnwoodBrown" date="1145483763" format="1.1" version="1.2"}%
-%META:TOPICPARENT{}%
-__These topics need some work.__
-
-%SEARCH{"[F]ixMe" type="regex" nosearch="on" format="   * $topic - $pattern(.*[F]ixMe:([^\n]*).*) " }%
-
--- Main.LynnwoodBrown - 03 Mar 2006
-
-DeleteMe: After everything is fixed.
