@@ -338,11 +338,12 @@ sub publishTopic {
 
     # clone the current session
     my $oldTWiki = $TWiki::Plugins::SESSION;
-    my $twiki = new TWiki($oldTWiki->{user}, $oldTWiki->{cgiQuery});
-    $TWiki::Plugins::SESSION = $twiki;
+
     # tell the session what topic we are currently rendering so the contexts are correct
-    $twiki->{topicName} = $topic;
-    $twiki->{webName} = $web;
+    my $query = $oldTWiki->{cgiQuery};
+    $query->param('topic', "$web.$topic");
+    my $twiki = new TWiki($oldTWiki->{user}->wikiName, $oldTWiki->{cgiQuery});
+    $TWiki::Plugins::SESSION = $twiki;
 
     my ($revdate, $revuser, $maxrev);
     ($revdate, $revuser, $maxrev) = $meta->getRevisionInfo();
