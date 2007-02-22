@@ -197,6 +197,7 @@ sub _initDefaults {
 		tooltipfixleft=>-163,
 		tooltipfixtop=>0,
 		tooltipdateformat => '%y/%d/%m',
+		fontsize=>'xx-small',
 	);
 
 	@renderedOptions = ('tablecaption', 'name' , 'navprev', 'navnext', 'wholetimerowtext');
@@ -498,9 +499,8 @@ sub _render {
 	my $text = "";
 
 	my($tr,$td);
-	$text .= '<font size="-2">';
-	$text .= $cgi->a({-name=>"ttpa$ttid"});
-	$text .= $cgi->start_table({-bgcolor=>$options{'tablebgcolor'}, -cellpadding=>'0',-cellspacing=>'1', -id=>'timeTablePluginTable'});
+	$text .= $cgi->a({-name=>"ttpa$ttid"},"");
+	$text .= $cgi->start_table({-bgcolor=>$options{'tablebgcolor'}, -cellpadding=>'0',-cellspacing=>'1', -id=>'timeTablePluginTable'} );
 	$text .= $cgi->caption($options{'tablecaption'});
 
 	### render weekday header:
@@ -516,7 +516,7 @@ sub _render {
 		$colfgcolor = $options{'todayfgcolor'} if ($options{'todayfgcolor'})&&($todayDays==$startDateDays+$day);
 		$colfgcolor = '' unless defined $colfgcolor;
 
-		$tr .= $cgi->td({-style=>(($colfgcolor ne '')?"color:$colfgcolor":''), -bgcolor=>$colbgcolor,-valign=>"top", -align=>"center", -title=>&_mystrftime($yy1,$mm1,$dd1,$options{'tooltipdateformat'}), -width=>$options{'tablecolumnwidth'}},&_mystrftime($yy1,$mm1,$dd1));
+		$tr .= $cgi->td({-style=>(($colfgcolor ne '')?"color:$colfgcolor":''), -bgcolor=>$colbgcolor,-valign=>"top", -align=>"center", -title=>&_mystrftime($yy1,$mm1,$dd1,$options{'tooltipdateformat'}), -width=>$options{'tablecolumnwidth'}?$options{'tablecolumnwidth'}:""},&_mystrftime($yy1,$mm1,$dd1));
 	}
 	$tr.=$cgi->td(&_renderNav(1));
 	$text .= $cgi->Tr($tr);
@@ -546,7 +546,7 @@ sub _render {
 			$itr="";
 			my $wtentries = &_getWholeTimeEntries($dowentries_ref);
 			if ($#$wtentries > -1) {
-				$itr=$cgi->start_table({-bgcolor=>$colbgcolor, -cellpadding=>'0',-cellspacing=>'1', -tableheight=>"100%"});
+				$itr=$cgi->start_table({-bgcolor=>$colbgcolor, -cellpadding=>'0',-cellspacing=>'1', -height=>"100%"});
 				my $counter =0; 
 				foreach my $wtentry_ref ( @{$wtentries} ) {
 					$counter++;
@@ -575,9 +575,9 @@ sub _render {
 			$tr.=$cgi->td({-bgcolor=>$colbgcolor}, '&nbsp;');
 			next;
 		}
-		###$td = $cgi->start_table({-rules=>"rows", -border=>"1",-cellpadding=>'0',-cellspacing=>'0', -tableheight=>"100%"});
-		###$td = $cgi->start_table({-bgcolor=>"#fafafa", -cellpadding=>'0',-cellspacing=>'1', -tableheight=>"100%"});
-		$td = $cgi->start_table({-width=>'100%', -bgcolor=>$colbgcolor, -cellpadding=>'0',-cellspacing=>'1', -tableheight=>"100%"});
+		###$td = $cgi->start_table({-rules=>"rows", -border=>"1",-cellpadding=>'0',-cellspacing=>'0', -height=>"100%"});
+		###$td = $cgi->start_table({-bgcolor=>"#fafafa", -cellpadding=>'0',-cellspacing=>'1', -height=>"100%"});
+		$td = $cgi->start_table({-width=>'100%', -bgcolor=>$colbgcolor, -cellpadding=>'0',-cellspacing=>'1', -height=>"100%"});
 
 		for (my $min=$starttime; $min <=$endtime; $min+=$options{'timeinterval'}) {
 			my $mentries = &_getMatchingEntries($dowentries_ref, $min, $options{'timeinterval'}, $starttime);
@@ -598,7 +598,7 @@ sub _render {
 							-bgcolor=>$$mentry_ref{'bgcolor'}?$$mentry_ref{'bgcolor'}:$options{eventbgcolor},
 							-rowspan=>$rs+$fillRows,
 							### -title=>$title,
-							-width=>$options{'tabledatacellwidth'},
+							-width=>$options{'tabledatacellwidth'}?$options{'tabledatacellwidth'}:"",
 							-id=>"TTP_TD_${ttid}_${day}_${min}_${counter}",
 							-onmouseover=>"ttpTooltipShow('TTP_DIV_${ttid}_${day}_${min}_${counter}', 'TTP_TD_${ttid}_${day}_${min}_${counter}',$options{'tooltipfixleft'},$options{'tooltipfixtop'},true);",
 							-onmouseout=>"ttpTooltipHide('TTP_DIV_${ttid}_${day}_${min}_${counter}');",
@@ -651,7 +651,7 @@ sub _render {
 
 	$text .= $cgi->end_table();
 	$text .= $tooltips;
-	$text .= '</font>';
+	$text =$cgi->div({-style=>"font-size:$options{'fontsize'};"}, $text);
 
 
 	return $text;
@@ -785,6 +785,7 @@ sub _renderTooltip {
 	$tooltip.= $cgi->div(
 			{
 				-id=>"TTP_DIV_${ttid}_${day}_${min}_${c}", 
+				-class=>"timeTablePluginToolTips",
 				-style=>"visibility:hidden;position:absolute;top:0;left:0;z-index:2;font: normal 8pt sans-serif;padding: 3px; border: solid 1px; color: $fgcolor; background-color: $bgcolor;" ,
 				-onmouseover=>"ttpTooltipShow('TTP_DIV_${ttid}_${day}_${min}_${c}', 'TTP_TD_${ttid}_${day}_${min}_${c}',$options{'tooltipfixleft'},$options{'tooltipfixtop'},true);",
 				-onmouseout=>"ttpTooltipHide('TTP_DIV_${ttid}_${day}_${min}_${c}');",
