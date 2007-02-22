@@ -649,8 +649,10 @@ sub _formatField_edit {
     my $skin = join( ',', ( 'action', TWiki::Func::getSkin()));
 
     my $url = TWiki::Func::getScriptUrl(
-        $this->{web}, $this->{topic}, 'edit').
-          '?skin='.$skin.';atp_action=' . $this->getAnchor() . ';t='.time();
+        $this->{web}, $this->{topic}, 'edit',
+        skin => $skin,
+        atp_action => $this->getAnchor(),
+        t => time());
     my $attrs = { href => $url };
     if ( $newWindow ) {
         # Javascript window call
