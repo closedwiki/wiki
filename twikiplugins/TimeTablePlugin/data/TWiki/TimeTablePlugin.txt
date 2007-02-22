@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1171881445" format="1.0" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1172137756" format="1.0" version="$Rev$"}%
 ---+!! <nop>%TOPIC%
 The <nop>%TOPIC% handles the tag =%<nop>TIMETABLE%= and creates a weekly timetable. 
 The timetable is rendered with HTML tables and should work with all modern web browsers.
@@ -98,6 +98,7 @@ Example: %<nop>TIMETABLE{lang="Deutsch" timeinterval="15" }%
 | displaytime | display time in the event description of the timetable | displaytime="0" |
 | eventbgcolor | default background color of an event cell (you can overwrite this with an event entry) | eventbgcolor = "#AAAAAA" |
 | eventfgcolor | default text color of an event cell (you can overwrite this with an event entry) | eventfgcolor = "black" |
+| fontsize | default font size | fontsize="xx-small" | 
 | headerformat | table header format of a day; a subset of strftime conversion specifiers is supported (only date not time specifiers; see manual page or TWiki:Codev.ConvergeDateTimeFormattingModels) | headerformat="&lt;font&nbsp;title=\"%A - %d %b %Y\" size=\"-2\">%a&lt;/font&gt;" |
 | name | header content of the first column | name = "&amp;nbsp;" |
 | nowbgcolor | highlight current time in the timeline with a background color | nowbgcolor="black" | 
@@ -113,7 +114,7 @@ Example: %<nop>TIMETABLE{lang="Deutsch" timeinterval="15" }%
 | tooltipdateformat| tooltip date format (for %<nop>DATE% substition of tooltipformat); a subset of strftime conversion specifiers is supported (only date not time specifiers; see manual page or TWiki:Codev.ConvergeDateTimeFormattingModels) | tooltipdateformat="%y/%d/%m" |
 | tooltipfixleft | positive or negative offset from the left to fix tooltip position | tooltipfixleft="-163" | 
 | tooltipfixtop | positive or negative offset from the top to fix tooltip position | tooltipfixtop="0" |
-| tooltipformat | format of a tooltip (substituted variables: %<nop>DATE% - date (see tooltipdateformat attribute), %<nop>TIMERANGE% - time range, %<nop>DESCRIPTION% - description field, %<nop>LONGDESCRIPTION% - complete entry) | tooltipformat="%<nop>DATE%%lt;br/&gt;%<nop>TIMERANGE%&lt;br/&gt; %<nop>DESCRIPTION% " |
+| tooltipformat | format of a tooltip (substituted variables: %<nop>DATE% - date (see tooltipdateformat attribute), %<nop>TIMERANGE% - time range, %<nop>DESCRIPTION% - description field, %<nop>LONGDESCRIPTION% - complete entry) | tooltipformat="%<nop>DATE%&lt;br/&gt;%<nop>TIMERANGE%&lt;br/&gt; %<nop>DESCRIPTION% " |
 | weekendbgcolor | highlight weekends with a column background color | weekendbgcolor="%<nop>WEBBGCOLOR%" |
 | weekendfgcolor | highlight weekends with a column foreground color | weekendfgcolor="black" |
 | wholetimerowpos | whole-time event row position (default: top), allowed values: top, bottom, both | wholetimerowpos="top" |
@@ -227,8 +228,9 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Plugin Author: | TWiki:Main.DanielRohde |
 |  Copyright: | &copy; 2006, TWiki:Main.DanielRohde |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | V1.010 (19 Feb 2007) |
+|  Plugin Version: | V1.011 (BETA) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  V1.011 (BETA) | TWiki:Main.DanielRohde: added fontsize attribute; fixed HTML bug (validation); |
 |  V1.010 (19 Feb 2007) | TWiki:Main.DanielRohde: added tablecolumnwidth and tabledatacellwidth attributes requested by TWiki:Main.VickiBrown;  added tooltip feature (tooltip... attributes); |
 |  V1.009 (7 Aug 2006) | TWiki:Main.DanielRohde: added duration feature; added time zone abbreviations; improved performance; fixed conflict rendering bug; fixed time zone bugs (whole-time event handling, topic include) |
 |  V1.008 (2 Aug 2006) | TWiki:Main.DanielRohde: added timezone feature requested by TWiki:Main.BenWatts; fixed major midday/midnight (12pm/12am) bug reported by TWiki:Main.BenWatts; fixed overlapping day bug; fixed periodic event bug; fixed minor bugs (stylesheet bug: annoying <nop>JavaScript errors; empty event row) |
