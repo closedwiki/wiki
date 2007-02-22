@@ -9,12 +9,18 @@
 
    Instead, you could check your fix in, raise a bug in the Bugs web, or mail thge author.
 -->
+<img src="%ATTACHURLPATH%/juggle.gif" style="float:right">
+Never in history have people had more diverse demands on them as in the modern day, and it takes the skills of a juggler to keep track of it all. Wouldn't it be great if we could capture what we have to do _at the time we think of it_, and be able to get a to-do list on demand? No more fighting with post-it notes, no more forgetting actions from the minutes of obscure meetings, and remember your partners birthday every year into the bargain! 
 
-This plugin provides support for tracking actions embedded in [[http://en.wikipedia.org/wiki/Minutes][meeting minutes]]. As you write the minutes during the meeting, you simply enter the actions into the text and as soon as the topic is saved, the actions "go live".
+This plugin provides support for tracking actions embedded in TWiki topics. Actions captured this way can then be tracked from anywhere you want.
+
+This is particularly useful for [[http://en.wikipedia.org/wiki/Minutes][meeting minutes]]. As you write the minutes during the meeting, you simply enter the actions into the text and as soon as the topic is saved, the actions "go live". But that's not the only application. The action tracker can also be used:
+   * for personal to-do lists
+   * for highlighting things for attention
+   * for reminding you of important events
+Actions are nicely formatted for display, and automatic notification of actions is supported using 'cron'.
 
 *WARNING:* TWiki-4 and later only. If you want to use this plugin with an earlier version of TWiki, you can try the old version from http://twiki.org/cgi-bin/viewfile/Plugins/ActionTrackerPlugin?rev=1.22;filename=ActionTrackerPlugin.zip
-
-Actions are nicely formatted for display, and automatic notification of actions is supported using 'cron'. The action tracker can also be used for private reminders, for example TODO lists and diary entries, and has been successfully applied to functions as diverse as risk management and bug tracking.
 
 _( Discussion in TWiki:Plugins/ActionTrackerPluginDev )_
 
@@ -365,33 +371,25 @@ These settings can be overridden in the Web<nop>Preferences topic of the current
 	* ... and the result of a formatted search below:
 %ACTIONSEARCH{topic=ActionTrackerPlugin who=TWikiGuest header="|Who|Due|State|Description|" format="| $who |$due|$state|$text|" orient="rows" }%
 
----++ Upgrade notes
-Earlier versions of this plugin installed a number of files that are no longer required. Relative to the root of the TWiki installation these are:
-| *File* | *What's happened* |
-| =data/Plugins/ActionTrackerPlugin.txt= | Moved to data/TWiki |
-| =templates/actionchangenotify.tmpl= | Merged with actionnotify.tmpl |
-| =bin/editaction= | Merged into plugin code, using hooks added in Feb 2003 TWiki release |
-| =bin/previewaction= | Merged into plugin code, using hooks added in Feb 2003 TWiki release |
-
-The mechanism for defining notification groups as lists of "Email" lines in a topic in Main is no longer supported. Please upgrade to the mechanism described herein.
-
 ---+ Plugin Info
 
 |  Plugin Author: | TWiki:Main/CrawfordCurrie, http://c-dot.co.uk |
 |  Plugin Version: | %$VERSION% |
 |  Change History: | |
-|  12878 | putting styles.css file at the top of the html header so that skins have a chance to override the defaults; \
+|  12958 | Bugs:Item3638 Fixed edit link for IE7 |
+|  12878 | putting styles.css file at the top of the html header so that \
+         skins have a chance to override the defaults; \
          fixed generation of css classes; \
          added aptOpen and aptClose;\
          render actions correctly in twiki lists (TWiki:Main/MichaelDaum) |
-|  12652 | Fixes for [[http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item3446][Item3446]], [[http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item2127][Item2127]]. Updates to tests and templates for recent core changes. |
+|  12652 | Fixes for Bugs:Item3446, Bugs:Item2127. Updates to tests and templates for recent core changes. |
 |  11556 | QBE topic made much friendlier using TWiki-4 features; minor bugfixes |
-|  10919 | <a href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item2606'>Item2606</a>  actionnotify can now read email addresses from password manager as well as new TWiki4 style user topics. actionnotify requires TWiki-4.0.4 + hotfix-4.0.4-1 |
-|  8385 | <a href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1443'>Item1443</a>  style sheet bug makes yellow warning not show |
-|  8372 | <a href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1434'>Item1434</a>  moved actionnotify from bin into tools |
-|  8304 | <a href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1305'>Item1305</a>  removing dotted style from AT. Looks horrible in IE |
-|  8090 | <a href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1304'>Item1304</a>  removed unnecessary warning that may be breaking some sites |
-|  8089 | <a href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1305'>Item1305</a>  changed dotted to solid gray, as requested |
+|  10919 | Bugs:Item2606  actionnotify can now read email addresses from password manager as well as new TWiki4 style user topics. actionnotify requires TWiki-4.0.4 + hotfix-4.0.4-1 |
+|  8385 | Bugs:Item1443  style sheet bug makes yellow warning not show |
+|  8372 | Bugs:Item1434  moved actionnotify from bin into tools |
+|  8304 | Bugs:Item1305  removing dotted style from AT. Looks horrible in IE |
+|  8090 | Bugs:Item1304  removed unnecessary warning that may be breaking some sites |
+|  8089 | Bugs:Item1305  changed dotted to solid gray, as requested |
 |  26 Mar 2005 | 2.022 Corrected JSCalendar problems, and cleaned up lazy-loading of libraries. Added relative date specs to searches. |
 |  8 Feb 2005 | 2.021 Documentation fixes. |
 |  19 Nov 2004 | 2.020 Added conditions for date matching, and fixed config so that tests pass again. |
@@ -421,7 +419,7 @@ Developer discussion is in TWiki:Plugins/ActionTrackerPluginDev.
 
 This code is an original development of Motorola Inc. and is protected by the following copyrights:
 	* Copyright &copy; 2002-2003 Motorola. All Rights Reserved.
-	* Portions Copyright &copy; 2004,2005 Crawford Currie, http://c-dot.co.uk
+	* Portions Copyright &copy; 2004-2007 Crawford Currie, http://c-dot.co.uk
 
 ---++ License
 
@@ -435,7 +433,6 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 General Public License for more details, published at
 http://www.gnu.org/copyleft/gpl.html
 
--- TWiki:Main/CrawfordCurrie - %$DATE%
-
-%META:FILEATTACHMENT{name="styles.css" attachment="styles.css" attr="" comment="" date="1121939550" path="styles.css" size="659" user="Main.TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="styles.css" attr="" comment="Stylesheet for actions"}%
+%META:FILEATTACHMENT{name="juggle.gif" attr="h" comment="Logo"}%
 
