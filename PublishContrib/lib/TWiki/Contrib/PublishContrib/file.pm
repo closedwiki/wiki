@@ -22,11 +22,12 @@ use File::Copy;
 use File::Path;
 
 sub new {
-    my( $class, $path, $web, $genopt ) = @_;
+    my( $class, $path, $web, $genopt, $logger ) = @_;
     my $this = bless( {}, $class );
     $this->{path} = $path;
     $this->{web} = $web;
     $this->{genopt} = $genopt;
+    $this->{logger} = $logger;
 
     File::Path::mkpath("$this->{path}/$web");
 
@@ -36,23 +37,28 @@ sub new {
 sub addDirectory {
     my( $this, $name ) = @_;
     my $d = "$this->{web}/$name";
-    File::Path::mkpath("$this->{path}/$d");
+    eval { File::Path::mkpath("$this->{path}/$d") };
+    $this->{logger}->logError($@) if $@;
     push( @{$this->{dirs}}, $d );
 }
 
 sub addString {
     my( $this, $string, $file) = @_;
     my $f = "$this->{web}/$file";
-    open(F, ">$this->{path}/$f") || die "Cannot write $f: $!";
-    print F $string;
-    close(F);
-    push( @{$this->{files}}, $f );
+    if (open(F, ">$this->{path}/$f")) {
+        print F $string;
+        close(F);
+        push( @{$this->{files}}, $f );
+    } else {
+        $this->{logger}->logError("Cannot write $f: $!");
+    }
 }
 
 sub addFile {
     my( $this, $from, $to ) = @_;
     my $f = "$this->{web}/$to";
-    File::Copy::copy( $from, "$this->{path}/$f" );
+    eval { File::Copy::copy( $from, "$this->{path}/$f" ); };
+    $this->{logger}->logError($@) if $@;
     push( @{$this->{files}}, $f );
 }
 

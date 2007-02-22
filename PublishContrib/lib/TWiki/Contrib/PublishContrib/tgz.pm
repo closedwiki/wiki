@@ -40,16 +40,20 @@ sub addDirectory {
 
 sub addString {
     my( $this, $string, $file ) = @_;
-    my $res = $this->{tar}->add_data( $file, $string );
-    die $this->{tar}->error() unless defined $res;
+    unless ($this->{tar}->add_data( $file, $string )) {
+        $this->{logger}->logError($this->{tar}->error());
+    }
 }
 
 sub addFile {
     my( $this, $from, $to ) = @_;
     local $/ = undef;
-    open(R, "<$from") || die "Failed to open $from: $!";
-    $this->addString( <R>, $to );
-    close(R);
+    if (open(R, "<$from")) {
+        $this->addString( <R>, $to );
+        close(R);
+    } else {
+        $this->{logger}->logError("Failed to open $from: $!");
+    }
 }
 
 sub close {
@@ -59,9 +63,11 @@ sub close {
         $dir .= $1;
     }
     eval { File::Path::mkpath($dir) };
-    die $@ if ($@);
+    $this->{logger}->logError($@) if $@;
     my $landed = "$this->{web}.tgz";
-    $this->{tar}->write( "$this->{path}$landed", 1 );
+    unless ($this->{tar}->write( "$this->{path}$landed", 1 )) {
+        $this->{logger}->logError($this->{tar}->error())
+    };
     return $landed;
 }
 

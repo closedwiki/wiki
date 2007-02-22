@@ -23,8 +23,8 @@ use base 'TWiki::Contrib::PublishContrib::file';
 use File::Path;
 
 sub new {
-    my( $class, $path, $web, $genopt ) = @_;
-    return $class->SUPER::new( $path, "${web}_$$", $genopt );
+    my( $class, $path, $web, $genopt, $logger ) = @_;
+    return $class->SUPER::new( $path, "${web}_$$", $genopt, $logger );
 }
 
 sub close {
@@ -55,12 +55,12 @@ sub close {
           FILE => "$this->{path}$landed",
           FILES => \@files,
           EXTRAS => \@extras );
-    die "htmldoc failed: $exit/$data/$@" if $exit;
+    # htmldoc failsa lot, so log rather than dying
+    $this->{logger}->logError("htmldoc failed: $exit/$data/$@") if $exit;
 
     # Get rid of the temporaries
     unlink(@{$this->{files}});
 
-    die "htmldoc failed: $exit $data" if $exit;
     return $landed;
 }
 
