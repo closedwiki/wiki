@@ -500,7 +500,7 @@ sub _render {
 
 	my($tr,$td);
 	$text .= $cgi->a({-name=>"ttpa$ttid"},"");
-	$text .= $cgi->start_table({-bgcolor=>$options{'tablebgcolor'}, -cellpadding=>'0',-cellspacing=>'1', -id=>'timeTablePluginTable'} );
+	$text .= $cgi->start_table({-bgcolor=>$options{'tablebgcolor'}, -cellpadding=>'0',-cellspacing=>'1', -class=>'timeTablePluginTable', -id=>'timeTablePluginTable'.$ttid} );
 	$text .= $cgi->caption($options{'tablecaption'});
 
 	### render weekday header:
@@ -651,7 +651,7 @@ sub _render {
 
 	$text .= $cgi->end_table();
 	$text .= $tooltips;
-	$text =$cgi->div({-style=>"font-size:$options{'fontsize'};"}, $text);
+	$text =$cgi->div({-class=>'timeTablePluginTable', -style=>"font-size:$options{'fontsize'};"}, $text);
 
 
 	return $text;
