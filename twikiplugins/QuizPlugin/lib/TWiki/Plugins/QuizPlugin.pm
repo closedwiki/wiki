@@ -70,10 +70,10 @@ ANSWER
     }
 
     $result .= <<SUBMIT;
-<input type=button value="Submit" onClick="Submit${quizNumber}()">
+<input type=button value="Submit Answer" onClick="Submit${quizNumber}()">
 SUBMIT
     $result .= <<SHOW;
-<input type=button value="Show Solutions" onClick="Cheat${quizNumber}()">
+<input type=button value="Cheat" onClick="Cheat${quizNumber}()">
 SHOW
     $quizNumber++;
     return $result . "</form>";
@@ -92,12 +92,23 @@ sub cheatScript {
 
 sub submitScript{
     my ($quizNumber, $check, $jumpTopic) = @_;
-    my $result = "function Submit${quizNumber}() { first$quizNumber=0;
-	if ( $check ) {if (confirm(\"Correct!!! Click on OK to continue\"))";
+    my $result = <<JS;
+function Submit${quizNumber}() {
+ first$quizNumber=0;
+ if ( $check ) {
+  if (confirm("Correct!!! Click on OK to continue"))
+JS
     if ($jumpTopic) {
-	    $result .= "window.location.replace(\"$jumpTopic\")";
+	    $result .= "   window.location.replace('$jumpTopic');\n";
+    } else {
+        $result .= "   ;\n"
     }
-    return $result . ";} else {alert(\"Wrong! Try again...\\n\");}}";
+    return $result . <<MOREJS;
+ } else {
+  alert("Wrong! Try again...\\n");
+ }
+};
+MOREJS
 }
 
 # Generate script for someOf
@@ -131,7 +142,7 @@ sub someOfScript {
     }
 
     return $scriptHeader .
-      cheatScript($quizNumber, $set) .
+      cheatScript($quizNumber, $set) ."\n".
 	    submitScript($quizNumber, $check, $jumpTopic) .
           $scriptFooter;
 }
@@ -143,7 +154,7 @@ sub stringScript {
     return $scriptHeader .
       cheatScript($quizNumber,
                   "window.document.quiz" . $quizNumber .
-                    ".field.value=\"$correctAnswer\";") .
+                    ".field.value=\"$correctAnswer\";") ."\n".
                       submitScript($quizNumber,
                                    "window.document.quiz$quizNumber" . 
                                      ".field.value==\"$correctAnswer\"", $jumpTopic) .
