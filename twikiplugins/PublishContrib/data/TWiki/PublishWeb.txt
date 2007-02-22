@@ -12,18 +12,17 @@ To use it, take a copy of the raw text of this topic, and paste it into a new to
    * Comma-separated list of [[PublishContrib#WildcardPattern][wildcard patterns]] that match the names of topics to *exclude*
       * Set EXCLUSIONS = Web*,Publish*
    * A [[#RegularExpression][regular expression]] that will cause a topic to be *excluded* if the RE matches the topic content
-      * #Set FILTER =
+      * Set FILTER =
    * Skin for published HTML
       * Set PUBLISHSKIN = text
-   * Set templates to use (defaults to view)
+   * Comma-separated list of templates to use (defaults to view). Output will be generated for each template in this list (e.g. =view,print=)
       * Set TEMPLATES = view
    * Format to publish in (=file=, =pdf=, =tgz=, =zip=)
       * Set FORMAT = file
-   * Set whether to show debug output (defaults to =''=, for no)
-      * Set DEBUG = 
    * If set, additional options that will be passed to the output generator
-      * #Set EXTRAS =
-
+      * Set EXTRAS =
+   * Name of the publish history topic to us. Default is PublishContribHistory
+      * Set HISTORY =
 <form method="POST" name="rename" action="%SCRIPTURLPATH%/publish%SCRIPTSUFFIX%/%WEB%">
 <input type="hidden" name="configtopic" value="%TOPIC%" />
 <input type="hidden" name="ping" value="%SERVERTIME%" />

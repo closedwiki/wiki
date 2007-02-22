@@ -36,17 +36,20 @@ sub new {
 
 sub addDirectory {
     my( $this, $dir ) = @_;
-    $this->{zip}->addDirectory( $dir );
+    $this->{logger}->logError("Error adding $dir") unless
+      $this->{zip}->addDirectory( $dir );
 }
 
 sub addString {
     my( $this, $string, $file ) = @_;
-    $this->{zip}->addString( $string, $file );
+    $this->{logger}->logError("Error adding $string") unless
+      $this->{zip}->addString( $string, $file );
 }
 
 sub addFile {
     my( $this, $from, $to ) = @_;
-    $this->{zip}->addFile( $from, $to );
+    $this->{logger}->logError("Error adding $from") unless
+      $this->{zip}->addFile( $from, $to );
 }
 
 sub close {
@@ -56,9 +59,10 @@ sub close {
         $dir .= $1;
     }
     eval { File::Path::mkpath($dir) };
-    die $@ if ($@);
+    $this->{logger}->logError($@) if $@;
     my $landed = "$this->{web}.zip";
-    $this->{zip}->writeToFileNamed( "$this->{path}$landed" );
+    $this->{logger}->logError("Error writing $landed") if
+      $this->{zip}->writeToFileNamed( "$this->{path}$landed" );
     return $landed;
 }
 

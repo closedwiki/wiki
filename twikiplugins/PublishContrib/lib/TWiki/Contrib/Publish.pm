@@ -35,28 +35,32 @@ use Error qw( :try );
 
 use strict;
 
-use vars qw( $VERSION $RELEASE $ob $cb $br $os $cs );
+use vars qw( $VERSION $RELEASE );
 
 $VERSION = '$Rev$';
 
-$ob = '';
-$cb = '';
-$br = "\n";
-$os = '***';
-$cs = $os;
-
-my $pub = TWiki::Func::getPubUrlPath();
 my $debug = 0;
-my $templatesWanted = 'view';
-my $templateLocation = ""; #_PublishContrib"; # used to prefix alternate template renderings
-my %templatesReferenced = (); # this determines which templates (e.g. view, viewprint, viuehandheld, etc) have been referred to and thus should be generated.
 
 $RELEASE = 'TWiki-4';
 
-#  Main rendering loop.
 sub publish {
     my $session = shift;
 
+    my $publisher = new TWiki::Contrib::Publish($session);
+
+    $TWiki::Plugins::SESSION = $session;
+
+    my $query = TWiki::Func::getCgiQuery();
+    my $web = $query->param( 'web' ) || $session->{webName};
+    $web =~ /(\w*)/;
+
+    $publisher->publishWeb($1);
+
+    $publisher->finish();
+}
+
+sub new {
+    my ($class, $session) = @_;
 
     unless ( defined $TWiki::cfg{PublishContrib}{Dir} ) {
         die "{PublishContrib}{Dir} not defined; run install script";
@@ -67,106 +71,156 @@ sub publish {
     unless ( $TWiki::cfg{PublishContrib}{Dir} =~ m!/$!) {
         die "{PublishContrib}{Dir} must terminate in a slash";
     }
+    unless ($TWiki::cfg{PublishContrib}{URL}) {
+        die "Can't publish because {PublishContrib}{URL} was not set. Please notify your TWiki administrator";
+    }
+    if ( ! -d $TWiki::cfg{PublishContrib}{Dir} &&
+           ! -e $TWiki::cfg{PublishContrib}{Dir}) {
+        mkdir($TWiki::cfg{PublishContrib}{Dir}, 0777);
+    }
+    unless (-d $TWiki::cfg{PublishContrib}{Dir} &&
+              -w $TWiki::cfg{PublishContrib}{Dir}) {
+        die "Can't publish because no useable {PublishContrib}{Dir} was found. Please notify your TWiki administrator";
+    }
 
-    my $query = $session->{cgiQuery};
-    my $web = $query->param( 'web' ) || $session->{webName};
+    my $this = bless({}, $class);
+    $this->{session} = $session;
+    $this->{templatesWanted} = 'view';
+    # used to prefix alternate template renderings
+    $this->{templateLocation} = '';
+    # this records which templates (e.g. view, viewprint, viuehandheld,
+    # etc) have been referred to and thus should be generated.
+    $this->{templatesReferenced} = {};
+    $this->{historyTopic} = 'PublishContribHistory';
+    $this->{inclusions} = '.*';
+    $this->{exclusions} = '';
+    $this->{topicFilter} = '';
+    return $this;
+}
 
-    $session->{webName} = $web;
+sub finish {
+    my $this = shift;
+    $this->{session} = undef;
+}
 
-    $TWiki::Plugins::SESSION = $session;
+sub publishWeb {
+    my ($this, $web) = @_;
+
+    $this->{publisher} = TWiki::Func::getWikiName();
+    $this->{web} = $web;
 
     #don't add extra markup for topics we're not linking too
     # NEWTOPICLINKSYMBOL LINKTOOLTIPINFO
     $TWiki::Plugins::SESSION->{renderer}->{NEWLINKSYMBOL} = '';
 
-    my ($inclusions, $exclusions, $filter, $skin, $genopt, $format);
-    $genopt = '';
+    my $skin = '';
+    my $format = 'file';
+    my $genopt = '';
 
-    # Load defaults from a config topic if one was specified
+    my $query = $this->{session}->{cgiQuery};
     my $configtopic = $query->param('configtopic');
-    if ( $configtopic ) {
-        unless( TWiki::Func::topicExists($web, $configtopic) ) {
-            die "Specified configuration topic does not exist in $web!\n";
+    if ($configtopic) {
+        # Parameters are defined in config topic
+        unless( TWiki::Func::topicExists($this->{web}, $configtopic) ) {
+            die "Specified configuration topic does not exist in $this->{web}!\n";
         }
-        my $cfgt = TWiki::Func::readTopicText($web, $configtopic);
+        my $cfgt = TWiki::Func::readTopicText($this->{web}, $configtopic);
         unless( TWiki::Func::checkAccessPermission(
-            "VIEW", TWiki::Func::getWikiName(),
-            $cfgt, $configtopic, $web)) {
+            "VIEW", $this->{publisher}, $cfgt, $configtopic, $this->{web})) {
             die "Access to $configtopic denied";
         }
         $cfgt =~ s/\r//g;
 
-        #SMELL - parsing the topic directly for settings
-        while ( $cfgt =~ s/^\s+\*\s+Set\s+([A-Z]+)\s*=(.*?)$//m ) {
+        while ( $cfgt =~ s/^\s+\*\s+Set\s+([A-Z]+)\s*=\s*(.*?)\s*$//m ) {
             my $k = $1;
             my $v = $2;
-            $v =~ s/^\s*(.*?)\s*$/$1/go;
 
-            if ( $k eq 'INCLUSIONS' ) {
-                $inclusions = $v;
+            if ( $k eq 'HISTORY' ) {
+                $this->{historyTopic} = $v;
+            } elsif ( $k eq 'INCLUSIONS' ) {
+                $v =~ s/([*?])/.$1/g;
+                $v =~ s/,/|/g;
+                $this->{inclusions} = $v;
             } elsif ( $k eq 'EXCLUSIONS' ) {
-                $exclusions = $v;
-            } elsif ( $k eq 'TOPICSEARCH' ) {
-                $filter = $v;
-            } elsif ( $k eq 'PUBLISHSKIN' ) {
-                $skin = $v;
-            } elsif ( $k eq 'SKIN' ) {
+                $v =~ s/([*?])/.$1/g;
+                $v =~ s/,/|/g;
+                $this->{exclusions} = $v;
+            } elsif ( $k eq 'TOPICSEARCH' || $k eq 'FILTER' ) {
+                $this->{topicFilter} = $v;
+            } elsif ( $k eq 'PUBLISHSKIN' || $k eq 'SKIN' ) {
                 $skin = $v;
             } elsif( $k eq 'EXTRAS' ) {
                 $genopt = $v;
             } elsif( $k eq 'FORMAT' ) {
-                $format = $v;
+                $v =~ /(\w*)/;
+                $format = $1;
             } elsif ($k eq 'DEBUG' ) {
                 $debug = $v;
             } elsif ($k eq 'TEMPLATES' ) {
-                $templatesWanted = $v;
+                $v =~ /([\w,]*)/;
+                $this->{templatesWanted} = $1;
             } elsif ($k eq 'TEMPLATELOCATION' ) {
-                $templateLocation = $v if $v;
+                if (-d $v) {
+                    $v =~ /(.*)/;
+                    $this->{templateLocation} = $1;
+                }
             } elsif ($k eq 'INSTANCE' ) {
                 $TWiki::cfg{PublishContrib}{Dir} .= $v.'/' if $v;
                 $TWiki::cfg{PublishContrib}{URL} .= $v.'/' if $v;
             }
         }
     } else {
-        if ( defined($query->param('inclusions')) ) {
-            $inclusions = $query->param('inclusions');
-        } else {
-            $inclusions = '*';
+        # Parameters are defined in the query
+        if ( defined($query->param('history')) ) {
+            my $v = $query->param('history');
+            if ($v =~ /(\w+)/) {
+                $this->{historyTopic} = $1;
+            }
         }
-        $exclusions = $query->param('exclusions') || '';
-        $filter = $query->param('filter') ||
+        if ( defined($query->param('inclusions')) ) {
+            my $v = $query->param('inclusions');
+            $v =~ s/([*?])/.$1/g;
+            $v =~ s/,/|/g;
+            $this->{inclusions} = $v;
+        }
+        if ( defined($query->param('exclusions')) ) {
+            my $v = $query->param('exclusions');
+            $v =~ s/([*?])/.$1/g;
+            $v =~ s/,/|/g;
+            $this->{exclusions} = $v;
+        }
+        $this->{topicFilter} = $query->param('filter') ||
           $query->param('topicsearch') || '';
         $genopt = $query->param('genopt') || '';
         # 'compress' retained for compatibility
         if( defined $query->param('compress') ) {
-            $format = $query->param('compress');
-        } else {
-            $format = $query->param( 'format' );
+            my $v = $query->param('compress');
+            if ($v =~ /(\w+)/) {
+                $format = $1;
+            }
+        } elsif (defined $query->param( 'format' )) {
+            my $v = $query->param( 'format' );
+            if ($v =~ /(\w+)/) {
+                $format = $1;
+            }
         }
-        $format ||= 'file';
+        $skin = $query->param('skin') || $query->param('publishskin');
     }
-    # convert wildcard pattern to RE
-    $inclusions =~ s/([*?])/.$1/g;
-    $inclusions =~ s/,/|/g;
-    $exclusions =~ s/([*?])/.$1/g;
-    $exclusions =~ s/,/|/g;
 
-    $skin ||= $query->param('skin') || $query->param('publishskin') ||
-      TWiki::Func::getPreferencesValue("PUBLISHSKIN") || '';
+    $this->{skin} = $skin ||
+      TWiki::Func::getPreferencesValue('PUBLISHSKIN') || '';
 
-    my $ok = 1;
-    if ( ! -d $TWiki::cfg{PublishContrib}{Dir} &&
-           ! -e $TWiki::cfg{PublishContrib}{Dir}) {
-        mkdir($TWiki::cfg{PublishContrib}{Dir}, 0777);
-        $ok = !($!);
+    unless (TWiki::Func::checkAccessPermission(
+        'CHANGE', TWiki::Func::getWikiName(),
+        undef, $this->{historyTopic}, $this->{web})) {
+        die <<TEXT;
+Can't publish because $this->{publisher} can't CHANGE
+$this->{web}.$this->{historyTopic}.
+This topic must be editable by the user doing the publishing.
+TEXT
     }
-    die "Can't publish because no useable {PublishContrib}{Dir} was found. Please notify your TWiki administrator" unless -d $TWiki::cfg{PublishContrib}{Dir};
-    die "Can't publish because {PublishContrib}{URL} was not set. Please notify your TWiki administrator" unless $TWiki::cfg{PublishContrib}{URL};
 
-    my $tmp = TWiki::Func::formatTime(time());
-    $tmp =~s/^(\d+)\s+(\w+)\s+(\d+).*/$1_$2_$3/g;
-
-    my $topic = $query->param('publishtopic') || $session->{topicName};
+    my $topic = $query->param('publishtopic') || $this->{session}->{topicName};
     my($header, $footer) = '';
     unless( TWiki::Func::getContext()->{command_line} ) {
         TWiki::Func::writeHeader($query);
@@ -176,82 +230,78 @@ sub publish {
             $tmpl =~ s/%$tag%//g;
         }
         ($header, $footer) = split(/%TEXT%/, $tmpl);
-        $header = TWiki::Func::expandCommonVariables( $header, $topic, $web );
-        $header = TWiki::Func::renderText( $header, $web );
+        $header = TWiki::Func::expandCommonVariables( $header, $topic, $this->{web} );
+        $header = TWiki::Func::renderText( $header, $this->{web} );
         $header =~ s/<nop>//go;
         print $header;
-        my $url = $query->url().$query->path_info().'?'.$query->query_string();
-        $ob = '<b>';
-        $cb = '</b>';
-        $br = "<br />\n";
-        $os = '<span class="twikiAlert">';
-        $cs = '</span>';
-        print "${ob}URL: ${cb} $url$br";
+        #my $url = $query->url().$query->path_info().'?'.
+        #$query->query_string();
+        #$this->logInfo("URL", $url);
     }
-    print "${ob}\{PublishContrib}{Dir}: ${cb}$TWiki::cfg{PublishContrib}{Dir}$br";
-    print "${ob}\{PublishContrib}{URL}: ${cb}$TWiki::cfg{PublishContrib}{URL}$br";
-    print "${ob}Web: $web${cb}$br";
-    print "${ob}Config: $configtopic$br" if $configtopic;
-    print "${ob}Skin: ${cb}$skin$br";
-    print "${ob}Inclusions: ${cb}$inclusions$br";
-    print "${ob}Exclusions: ${cb}$exclusions$br";
-    print "${ob}Content Filter: ${cb}$filter$br";
-    print "${ob}Generator options: ${cb}$genopt$br";
 
-    my $archive;
+    $this->logInfo("Publisher", $this->{publisher});
+    $this->logInfo("Date", TWiki::Func::formatTime(time()));
+    $this->logInfo("{PublishContrib}{Dir}", $TWiki::cfg{PublishContrib}{Dir});
+    $this->logInfo("{PublishContrib}{URL}", $TWiki::cfg{PublishContrib}{URL});
+    $this->logInfo("Web", $this->{web});
+    $this->logInfo("Config", $configtopic) if $configtopic;
+    $this->logInfo("Skin", $this->{skin});
+    $this->logInfo("Inclusions", $this->{inclusions});
+    $this->logInfo("Exclusions", $this->{exclusions});
+    $this->logInfo("Content Filter", $this->{topicFilter});
+    $this->logInfo("Generator Options", $genopt);
 
-    my @templatesWanted = split /,/, $templatesWanted;
+    my @templatesWanted = split(/,/, $this->{templatesWanted});
 
     foreach my $template (@templatesWanted) {
         next unless $template;
-        $template =~ s/^\s+//;
-        $template =~ s/\s+$//;
-        $templatesReferenced{$template} = 1;
-        print "-- template=$template$br" if $debug;
-        my $dir = $TWiki::cfg{PublishContrib}{Dir}._dirForTemplate($template);
-        print "-- dir=$dir$br" if $debug;
+        $this->{templatesReferenced}->{$template} = 1;
+        my $dir = $TWiki::cfg{PublishContrib}{Dir}.
+          $this->_dirForTemplate($template);
 
         my $generator = 'TWiki::Contrib::PublishContrib::'.$format;
-        eval 'use '.$generator.
-          ';$archive = new '.$generator.
-            '("'.$dir.'","'.$web.'","'.
-              $genopt.'")';
+        eval "use $generator; \$this->{archive} = new $generator(\$dir,\$this->{web},\$genopt, \$this)";
         die $@ if $@;
 
-        $archive->{params} = $query->Vars;
+        $this->{archive}->{params} = $query->Vars;
 
-        publishWeb($web, TWiki::Func::getWikiName(), $inclusions,
-                   $exclusions, $skin, $template, $filter, $archive);
+        $this->publishTemplate($template);
     }
 
-    # check the $templatesReferenced, and that everything referenced has been generated.
-    my @templatesReferenced = sort keys %templatesReferenced;
+    # check the templates referenced, and that everything referenced
+    # has been generated.
+    my @templatesReferenced = sort keys %{$this->{templatesReferenced}};
     @templatesWanted = sort @templatesWanted;
 
     my @difference = arrayDiff(\@templatesReferenced, \@templatesWanted); 
     if ($#difference > 0) {
-        print "${ob}Templates Used = ",join(",", @templatesReferenced), "$br".
-          "Templates Specified = ".join(",", @templatesWanted)."$br";
-        print <<BLAH;
-${os}WARNING: there is a difference between what you specified and what you
+        $this->logInfo("Templates Used", join(",", @templatesReferenced));
+        $this->logInfo("Templates Specified", join(",", @templatesWanted));
+        $this->logWarn(<<BLAH);
+There is a difference between the templates you specified and what you
 needed. Consider changing the TEMPLATES setting so it has all Templates
-Used. $cs$br
+Used.
 BLAH
     }
 
-    my $landed = $archive->close();
+    my $landed = $this->{archive}->close();
 
-    my $text = <<TEXT;
-Published to <a href="$TWiki::cfg{PublishContrib}{URL}$landed">
-$landed
-</a>$br$br
-TEXT
+    $this->logInfo("Published To",<<LINK);
+<a href="$TWiki::cfg{PublishContrib}{URL}$landed">$landed</a>
+LINK
+    my ($meta, $text) =
+      TWiki::Func::readTopic($this->{web}, $this->{historyTopic});
+    $text =~ s/(^|\n)---\+ Last Published\n.*$//s;
+    TWiki::Func::saveTopic(
+        $this->{web}, $this->{historyTopic}, $meta,
+        "$text---+ Last Published\n$this->{history}\n",
+        { minor => 1, forcenewrevision => 1 });
+    my $url = TWiki::Func::getScriptUrl(
+        $this->{web}, $this->{historyTopic}, 'view');
+    $this->logInfo("History saved in", "<a href='$url'>$url</a>");
 
-    $text = TWiki::Func::expandCommonVariables( $text, $topic, $web );
-    $text = TWiki::Func::renderText( $text, $web );
-    print $text;
-    $footer = TWiki::Func::expandCommonVariables( $footer, $topic, $web );
-    $footer = TWiki::Func::renderText( $footer, $web );
+    $footer = TWiki::Func::expandCommonVariables( $footer, $topic, $this->{web} );
+    $footer = TWiki::Func::renderText( $footer, $this->{web} );
     print $footer;
 }
 
@@ -269,68 +319,86 @@ sub arrayDiff {
     return @difference;
 }
 
-#  Publish the contents of one web.
-#   * =$web= - which web to publish
-#   * =$inclusions= - REs describing which topics to include
-#   * =$exclusions= - REs describing which topics to exclude
-#   * =$skin= -
-#   * =$filter= -
-#   * =$archive= - archiver
+sub logInfo {
+    my ($this, $header, $body) = @_;
+    print CGI::b("$header:&nbsp;");
+    print $body;
+    print CGI::br();
+    $this->{history} .= "<b> $header </b>$body%BR%\n";
+}
 
-sub publishWeb {
-    my ($web, $wikiName, $inclusions, $exclusions, $skin, $template, $filter, $archive) = @_;
+sub logWarn {
+    my ($this, $message) = @_;
+    print CGI::span({class=>'twikiAlert'}, $message);
+    print CGI::br();
+    $this->{history} .= "%ORANGE% *WARNING* $message %ENDCOLOR%%BR%\n";
+}
+
+sub logError {
+    my ($this, $message) = @_;
+    print CGI::span({class=>'twikiAlert'}, "ERROR: $message");
+    print CGI::br();
+    $this->{history} .= "%RED% *ERROR* $message %ENDCOLOR%%BR%\n";
+}
+
+#  Publish the contents of one web.
+
+sub publishTemplate {
+    my ($this, $template) = @_;
 
     # Get list of topics from this web.
-    my @topics = TWiki::Func::getTopicList($web);
+    my @topics = TWiki::Func::getTopicList($this->{web});
 
     # Choose template.
-    my $tmpl = TWiki::Func::readTemplate($template, $skin);
+    my $tmpl = TWiki::Func::readTemplate($template, $this->{skin});
     die "Couldn't find template\n" if(!$tmpl);
 	my $filetype = _filetypeForTemplate($template);
 
     # Attempt to render each included page.
     my %copied;
     foreach my $topic (@topics) {
-        print "${ob}$topic: ${cb}\t";
-        if( $topic !~ /^($inclusions)$/ ) {
-            print "${os}not included$cs";
-        } elsif( $exclusions && $topic =~ /^($exclusions)$/ ) {
-            print "${os}excluded$cs";
-        } else {
-            try {
-		publishTopic($web, $topic, $wikiName, $skin, $filetype, $tmpl,
-                             \%copied, $filter, $archive);
-                print "published";
-            } catch Error::Simple with {
-                my $e = shift;
-                print "not published: ".$e->{-text};
-            };
-        }
-        print $br;
+        next if $topic eq $this->{historyTopic};
+        try {
+            my $dispo = '';
+            if( $topic !~ /^($this->{inclusions})$/ ) {
+                $dispo = 'not included';
+            } elsif( $this->{exclusions} && $topic =~ /^($this->{exclusions})$/ ) {
+                $dispo = 'excluded';
+            } else {
+                $this->publishTopic($topic, $filetype, $tmpl,
+                             \%copied);
+                my ( $date, $user, $rev, $comment ) =
+                  TWiki::Func::getRevisionInfo($this->{web}, $topic);
+                $dispo = "Rev $rev published";
+            }
+            $this->logInfo($topic, $dispo);
+        } catch Error::Simple with {
+            my $e = shift;
+            $this->logError("$topic not published: ".$e->{-text});
+        };
     }
 }
 
 #  Publish one topic from web.
-#   * =$web= - which web to publish
+#   * =$this->{web}= - which web to publish
 #   * =$topic= - which topic to publish
-#   * =$skin= - which skin to use
 #   * =$filetype= - which filetype (pdf, html) to use as a suffix on the file generated
 
 #   * =\%copied= - map of copied resources to new locations
 sub publishTopic {
-    my ($web, $topic, $wikiName, $skin, $filetype, $tmpl, $copied, $filter, $archive) = @_;
+    my ($this, $topic, $filetype, $tmpl, $copied) = @_;
 
     # Read topic data.
-    my ($meta, $text) = TWiki::Func::readTopic( $web, $topic );
+    my ($meta, $text) = TWiki::Func::readTopic( $this->{web}, $topic );
 
-    unless( TWiki::Func::checkAccessPermission( "VIEW", $wikiName,
-                                                $text, $topic, $web)) {
-        print "View access to $topic denied";
+    unless( TWiki::Func::checkAccessPermission( "VIEW", $this->{publisher},
+                                                $text, $topic, $this->{web})) {
+        $this->logError("View access to $this->{web}.$topic denied");
         return;
     }
 
-    if ( $filter && $text =~ /$filter/ ) {
-        print "$topic excluded by filter";
+    if ( $this->{topicFilter} && $text =~ /$this->{topicFilter}/ ) {
+        $this->logInfo($topic, "excluded by filter");
         return;
     }
 
@@ -339,10 +407,11 @@ sub publishTopic {
     # clone the current session
     my $oldTWiki = $TWiki::Plugins::SESSION;
 
-    # tell the session what topic we are currently rendering so the contexts are correct
+    # Create a new TWiki so that the contexts are correct. This is really,
+    # really inefficient, but is essential to maintain correct prefs
     my $query = $oldTWiki->{cgiQuery};
-    $query->param('topic', "$web.$topic");
-    my $twiki = new TWiki($oldTWiki->{user}->wikiName, $oldTWiki->{cgiQuery});
+    $query->param('topic', "$this->{web}.$topic");
+    my $twiki = new TWiki($this->{publisher}, $oldTWiki->{cgiQuery});
     $TWiki::Plugins::SESSION = $twiki;
 
     my ($revdate, $revuser, $maxrev);
@@ -350,10 +419,10 @@ sub publishTopic {
     $revuser = $revuser->wikiName();
 
     # Handle standard formatting.
-    $text = TWiki::Func::expandCommonVariables($text, $topic, $web);
+    $text = TWiki::Func::expandCommonVariables($text, $topic, $this->{web});
     $text = TWiki::Func::renderText($text);
 
-    $tmpl = TWiki::Func::expandCommonVariables($tmpl, $topic, $web);
+    $tmpl = TWiki::Func::expandCommonVariables($tmpl, $topic, $this->{web});
     $tmpl = TWiki::Func::renderText($tmpl, "", $meta);
 
     $tmpl =~ s/%TEXT%/$text/g;
@@ -391,37 +460,38 @@ sub publishTopic {
     $tmpl =~ s/<base[^>]+>.*?<\/base>//;
 
     # Clean up unsatisfied WikiWords.
-    $tmpl =~ s/<span class="twikiNewLink">(.*?)<\/span>/_handleNewLink($1)/ge;
+    $tmpl =~ s/<span class="twikiNewLink">(.*?)<\/span>/$this->_handleNewLink($1)/ge;
 
     # Copy files from pub dir to rsrc dir in static dir.
     my $hs = $ENV{HTTP_HOST} || "localhost";
 
-    $tmpl =~ s!(['"])($TWiki::cfg{DefaultUrlHost}|https?://$hs)?$pub/(.*?)\1!$1._copyResource($web, $3, $copied, $archive).$1!ge;
+    my $pub = TWiki::Func::getPubUrlPath();
+    $tmpl =~ s!(['"])($TWiki::cfg{DefaultUrlHost}|https?://$hs)?$pub/(.*?)\1!$1.$this->_copyResource($3, $copied).$1!ge;
 
     my $ilt;
 
     # Modify topic links relative to server base
     $ilt = $TWiki::Plugins::SESSION->getScriptUrl(0, 'view', 'NOISE', 'NOISE');
     $ilt =~ s!/NOISE/NOISE.*$!!;
-    $tmpl =~ s!href=(["'])$ilt/(.*?)\1!"href=$1"._topicURL($2,$web).$1!ge;
+    $tmpl =~ s!href=(["'])$ilt/(.*?)\1!"href=$1".$this->_topicURL($2).$1!ge;
 
     # Modify absolute topic links.
     $ilt = $TWiki::Plugins::SESSION->getScriptUrl(1, 'view', 'NOISE', 'NOISE');
     $ilt =~ s!/NOISE/NOISE.*$!!;
-    $tmpl =~ s!href=(["'])$ilt/(.*?)\1!"href=$1"._topicURL($2,$web).$1!ge; 
+    $tmpl =~ s!href=(["'])$ilt/(.*?)\1!"href=$1".$this->_topicURL($2).$1!ge; 
 
     # replace any external template references
-    $tmpl =~ s!href=["'](.*?)\?template=(\w*)(.*?)["']!_rewriteTemplateReferences($tmpl, $web, $1, $2, $3)!e;
+    $tmpl =~ s!href=["'](.*?)\?template=(\w*)(.*?)["']!$this->_rewriteTemplateReferences($tmpl, $1, $2, $3)!e;
 
     my $extras = 0;
 
     # Handle image tags using absolute URLs not otherwise satisfied
-    $tmpl =~ s!(<img\s+.*?\bsrc=)(["'])(.*?)\2(.*?>)!$1.$2._handleURL($3,$archive,\$extras).$2.$4!ge;
+    $tmpl =~ s!(<img\s+.*?\bsrc=)(["'])(.*?)\2(.*?>)!$1.$2.$this->_handleURL($3,\$extras).$2.$4!ge;
 
     $tmpl =~ s/<nop>//g;
 
     # Write the resulting HTML.
-    $archive->addString( $tmpl, $topic.$filetype);
+    $this->{archive}->addString( $tmpl, $topic.$filetype);
 
     $TWiki::Plugins::SESSION = $oldTWiki; # restore twiki object
 }
@@ -431,7 +501,7 @@ sub publishTopic {
 # to
 #   _viewprint/Topic.html
 #
-#   * =$web=
+#   * =$this->{web}=
 #   * =$tmpl=
 #   * =$topic=
 #   * =$template=
@@ -439,19 +509,18 @@ sub publishTopic {
 #   * 
 # side effects
 
-
 sub _rewriteTemplateReferences {
-    my ($tmpl, $web, $topic, $template, $redundantduplicate) = @_;
+    my ($this, $tmpl, $topic, $template, $redundantduplicate) = @_;
     # for an unknown reason, these come through with doubled up template= arg
     # e.g.
     # http://.../site/instance/Web/WebHome?template=viewprint%REVARG%.html?template=viewprint%REVARG%
     #$link:
     # Web/ContactUs?template=viewprint%REVARG%.html? "
 
-       my $newLink = $TWiki::cfg{PublishContrib}{URL}._dirForTemplate($template)."/".$web.'/'.$topic._filetypeForTemplate($template);
-    print "---- Found alternate template use on $topic template=$template $br".
-      "---- Changed to $newLink$br" if $debug;
-    $templatesReferenced{$template} = 1;
+    my $newLink = $TWiki::cfg{PublishContrib}{URL}.
+      $this->_dirForTemplate($template)."/".$this->{web}.'/'.
+        $topic._filetypeForTemplate($template);
+    $this->{templatesReferenced}->{$template} = 1;
 	return "href='$newLink'";
 }
 
@@ -460,10 +529,10 @@ sub _rewriteTemplateReferences {
 # The web is prefixed before this.
 # Do not prepend with a /
 sub _dirForTemplate {
-    my ($template) = @_;
+    my ($this, $template) = @_;
     return '' if ($template eq 'view');
-    return $template if ($templateLocation eq '');
-    return $templateLocation."/".$template;
+    return $template unless $this->{templateLocation};
+    return "$this->{templateLocation}/$template";
 }
 
 # SMELL this needs to be table driven
@@ -475,17 +544,15 @@ sub _filetypeForTemplate {
 
 #  Copy a resource (image, style sheet, etc.) from twiki/pub/%WEB% to
 #   static HTML's rsrc directory.
-#   * =$web= - name of web
+#   * =$this->{web}= - name of web
 #   * =$rsrcName= - name of resource (relative to pub/%WEB%)
 #   * =\%copied= - map of copied resources to new locations
 sub _copyResource {
-    my ($web, $rsrcName, $copied, $archive) = @_;
+    my ($this, $rsrcName, $copied) = @_;
 
     # Trim the resource name, as they can sometimes pick up whitespaces
-    $rsrcName =~ s/^\s+//;
-    $rsrcName =~ s/\s+$//;
-
-    print "-- Need dependency '$rsrcName' " if $debug;
+    $rsrcName =~ /^\s*(.*?)\s*$/;
+    $rsrcName = $1;
 
     # SMELL WARNING
     # This is covers up a case such as where rsrcname comes through like 
@@ -493,21 +560,15 @@ sub _copyResource {
     # this should be just WebPreferences/favicon.ico
     # I've searched for hours and so here's a workaround
     if ($rsrcName =~ m/configtopic/) {
-	print "\n--- INTERNAL ERROR: rsrcName '$rsrcName' contains literal 'configtopic'\n" if $debug;
-	$rsrcName =~ s!.*?/(.*)!$web/$1!;
-	print "--- FIXED UP to $rsrcName " if $debug;
+        $this->logError("rsrcName '$rsrcName' contains literal 'configtopic'");
+        $rsrcName =~ s!.*?/(.*)!$this->{web}/$1!;
+        $this->logError("--- FIXED UP to $rsrcName");
     }
 
     # See if we've already copied this resource.
-    if (exists $copied->{$rsrcName}) {
-        print "(got already)$br" if $debug;
-    } else {
+    unless (exists $copied->{$rsrcName}) {
         # Nope, it's new. Gotta copy it to new location.
         # Split resource name into path (relative to pub/%WEB%) and leaf name.
-
-	print "${os}Need it$cs $br" if $debug;
-
-
         my $file = $rsrcName;
         $file =~ s(^(.*)\/)()o;
         my $path = "";
@@ -518,52 +579,51 @@ sub _copyResource {
         # Copy resource to rsrc directory.
         my $TWikiPubDir = TWiki::Func::getPubDir();
         if ( -r "$TWikiPubDir/$rsrcName" ) {
-            $archive->addDirectory( "rsrc" );
-            $archive->addDirectory( "rsrc/$path" );
-            $archive->addFile( "$TWikiPubDir/$rsrcName" , "rsrc/$path/$file" );
-	    # Record copy so we don't duplicate it later.
-	    my $destURL = "rsrc/$path/$file";
-	    $destURL =~ s!//!/!g;
-	    $copied->{$rsrcName} = $destURL;
+            $this->{archive}->addDirectory( "rsrc" );
+            $this->{archive}->addDirectory( "rsrc/$path" );
+            $this->{archive}->addFile( "$TWikiPubDir/$rsrcName" , "rsrc/$path/$file" );
+            # Record copy so we don't duplicate it later.
+            my $destURL = "rsrc/$path/$file";
+            $destURL =~ s!//!/!g;
+            $copied->{$rsrcName} = $destURL;
         } else {
-            print "${os}--- $rsrcName not readable $br('$TWikiPubDir/$rsrcName' does not exist) $cs$br" if $debug;	    
+            $this->logError("$TWikiPubDir/$rsrcName is not readable");
         }
 
         # check css for additional resources, ie, url()
         if ($rsrcName =~ /\.css$/) {
             my @moreResources = ();
-            open(F, "$TWikiPubDir/$rsrcName") ||
-              die "${os}Cannot read $TWikiPubDir/$rsrcName: $!$cs$br";
-            while (my $line = <F>) {
-                if ($line =~ /url\(["']?(.*?)["']?\)/) {
-                    push @moreResources, $1;
-                }
-            }
-            close(F);
-            foreach my $resource (@moreResources) {
-                print "${os}--- importing url $resource $cs$br" if $debug;
-                # recurse
-                if ($resource !~ m!^/!) {
-                    # if the url is not absolute, assume its relative to the current path
-                    $resource = $path.'/'.$resource;
-                } else {
-                    print "---- $resource already prefixed with / - checking for $pub$br" if $debug;
-                    if ($resource =~ m!$pub/(.*)!) {
-                        my $old = $resource;
-                        $resource = $1;
-                        print "${os}---- $old had extraneous absolute reference to twikipubdir $pub (now $resource)$cs$br";
+            if (open(F, "$TWikiPubDir/$rsrcName")) {
+                while (my $line = <F>) {
+                    if ($line =~ /url\(["']?(.*?)["']?\)/) {
+                        push @moreResources, $1;
                     }
                 }
-                print "${os}--- ($resource) $cs$br" if $debug;
-                _copyResource($web, $resource, $copied, $archive);
+                close(F);
+                my $pub = TWiki::Func::getPubUrlPath();
+                foreach my $resource (@moreResources) {
+                    # recurse
+                    if ($resource !~ m!^/!) {
+                        # if the url is not absolute, assume its relative to the current path
+                        $resource = $path.'/'.$resource;
+                    } else {
+                        if ($resource =~ m!$pub/(.*)!) {
+                            my $old = $resource;
+                            $resource = $1;
+                        }
+                    }
+                    _copyResource($this->{web}, $resource, $copied);
+                }
             }
         }
     }
-    return $copied->{$rsrcName};
+    return $copied->{$rsrcName} if $copied->{$rsrcName};
+    $this->logError("MISSING RESOURCE $rsrcName");
+    return "MISSING RESOURCE $rsrcName";
 }
 
 sub _topicURL {
-    my( $path, $web ) = @_;
+    my( $this, $path ) = @_;
     my $extra = '';
 
     if( $path && $path =~ s/([#\?].*)$// ) {
@@ -574,45 +634,40 @@ sub _topicURL {
     $path .= $TWiki::cfg{HomeTopicName} if $path =~ /\/$/;
 
     # Normalise
-    $web = join('/', split( /[\/\.]+/, $web ));
+    $this->{web} = join('/', split( /[\/\.]+/, $this->{web} ));
     $path = join('/', split( /[\/\.]+/, $path ));
 
     # make a path relative to the web
-    $path = File::Spec->abs2rel( $path, $web );
+    $path = File::Spec->abs2rel( $path, $this->{web} );
     $path .= '.html';
 
     return $path.$extra;
 }
 
 sub _handleURL {
-    my( $src, $archive, $extras ) = @_;
+    my( $this, $src, $extras ) = @_;
 
     return $src unless $src =~ m!^([a-z]+):([^/:]*)(:\d+)?(/.*)$!;
 
-    # Use the LWP version if it's available
     my $data;
-    if (defined(&{$TWiki::Plugins::SESSION->{new}->GET})) {
-        my $response;
-        eval {
-            $response = $TWiki::Plugins::SESSION->{new}->GET($src);
-        };
-        return $src if ($@ || $response->is_error());
+    if (defined(&TWiki::Func::getExternalResource)) {
+        my $response = TWiki::Func::getExternalResource($src);
+        return $src if $response->is_error();
         $data = $response->content();
     } else {
         my $protocol = $1;
         my $host = $2;
         my $port = $3;
         my $path = $4;
-        my $response = $TWiki::Plugins::SESSION->{new}->getUrl(
+        $data = $TWiki::Plugins::SESSION->{net}->getUrl(
             $protocol, $host, $port, $path);
-        $data = $response->content();
     }
 
     # Note: no extension; rely on file format.
     # Images are pretty good that way.
     my $file = '___extra'.$$extras++;
-    $archive->addDirectory( "rsrc" );
-    $archive->addString( $data, "rsrc/$file" );
+    $this->{archive}->addDirectory( "rsrc" );
+    $this->{archive}->addString( $data, "rsrc/$file" );
 
     return 'rsrc/'.$file;
 }
@@ -621,7 +676,7 @@ sub _handleURL {
 # unsatisfied link. THIS IS NASTY, but I don't know how else to do it.
 # SMELL: another case for a WysiwygPlugin-style rendering engine
 sub _handleNewLink {
-    my $link = shift;
+    my ($this, $link) = @_;
     $link =~ s!<a .*?>!!gi;
     $link =~ s!</a>!!gi;
     return $link;
