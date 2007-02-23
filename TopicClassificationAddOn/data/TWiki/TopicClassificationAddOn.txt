@@ -1,7 +1,7 @@
 ---+!! %TOPIC%
 <!--
 One line description, required for extensions repository catalog.
-    * Set SHORTDESCRIPTION = Provides framework for organizing  content within a web according to different _types_ of topics (discussion, weblog, reference, etc) and hierarchical "categories". Includes sample topic types and categories. Provides basic framework to design and manage simple Codev.TWikiApplications.
+   * Set SHORTDESCRIPTION = Provides framework for organizing  content within a web according to different _types_ of topics (discussion, weblog, reference, etc) and hierarchical "categories". Includes sample topic types and categories. Provides basic framework to design and manage simple TWiki:Codev.TWikiApplications.
 -->
 %SHORTDESCRIPTION%
 
@@ -9,7 +9,7 @@ One line description, required for extensions repository catalog.
 
 ---+ Topic Classification Add-On 
 
-<b> %TOPIC% (aka TCAO) helps you organize the content in your wiki by classifying topics according to their _function_ and/or _subject matter._ </b> It also provides a user-friendly interface for creating new topics that automatically incorporates this classification system. Together, these basic elements provide a platform that allow you to create any number of simple TWikiApplications.
+<b> %TOPIC% (aka TCAO) helps you organize the content in your wiki by classifying topics according to their _function_ and/or _subject matter._ </b> It also provides a user-friendly interface for creating new topics that automatically incorporates this classification system. Together, these basic elements provide a platform that allow you to create any number of simple TWiki:Codev.TWikiApplications.
 
 Some of the features of %TOPIC% include:
    * Simple installation mechanism to add the TCAO framework to a web and install sample classifications.
@@ -21,24 +21,22 @@ Some of the features of %TOPIC% include:
 
 %$INSTALL_INSTRUCTIONS%
 
-__Note:__ You do not need to install anything on the browser to use this add-on. The following instructions are for the administrator who installs the add-on on the server where TWiki is running.
-
-   1 Download the ZIP file from the Add-on Home (see below)
-   1 Unpack the Add-on archive in the root of your TWiki installation.
-   1 Make sure ={EnableHierarchicalWebs}= is enabled in =configure= (under "Store settings" tab). 
-   1 Add the following preference section to [[Main.TWikiPreferences]]:
+---++ %TOPIC% Setup 
+After installing this add-on, there are a few additional steps needed before it will function properly:
+   * Make sure ={EnableHierarchicalWebs}= is enabled in =configure= (under "Store settings" tab). 
+   * Add the following preference section to [[Main.TWikiPreferences]]:
 <verbatim>
 ---++ TWiki.TopicClassificationAddOn Preferences 
    * TCAOWEB variable for identifying which web holds %TOPIC% infrastructure.
       * Set TCAOWEB = TCAO
       * Set HELP_BACKGROUND_COLOR = #E0B9A6
 </verbatim>
-   4 Go to %MAINWEB%.TWikiGroups and create a new group called ==ModeratorGroup==. This group can add new classifications within webs where TCAO is enabled. 
-   5 Add the following TWiki.CommentPlugin templates definitions to TWiki.UserCommentsTemplate (create this topic if you have not already).
+   * Go to %MAINWEB%.TWikiGroups and create a new group called ==ModeratorGroup==. This group can add new classifications within webs where TCAO is enabled. 
+   * Add the following %TWIKIWEB%.CommentPlugin templates definitions to %TWIKIWEB%.UserCommentsTemplate (create this topic if you have not already).
 <verbatim>
 ---------------------------------------------------------------------------
 ---+++ tocdiscuss
-Discussion with heading for Table of Content - People.LynnwoodBrown
+Discussion with heading for Table of Content - TWiki:Main.LynnwoodBrown
 <verbatim>
 %TMPL:DEF{PROMPT:tocdiscuss}%
 *Headline:* <span class="twikiSmall"> _Enter a short headline for your comment._ </span><br />
@@ -57,7 +55,7 @@ Discussion with heading for Table of Content - People.LynnwoodBrown
 </verbatim>
 ---------------------------------------------------------------------------
 ---+++ Removable help section 
-This template is used by %TWIKIWEB%.TopicClassificationAddOn
+This template is used by %TWIKIWEB%.TopicClassificationAddOn to display instructions for new !TopicTypes. - TWiki:Main.LynnwoodBrown
 <verbatim>
 %TMPL:DEF{PROMPT:removeable_help}%
 <div style="background-color:%HELP_BACKGROUND_COLOR%;padding:1em;">
@@ -74,9 +72,7 @@ This template is used by %TWIKIWEB%.TopicClassificationAddOn
 
 ---+++ Enabling %TOPIC% in a particular web
 
-%TOPIC% is designed to organize content within individual webs. There are two options for enabling TopicClassificationAddOn in a particular web:
-      * Create a new Web using the =_defaultTCAO= template web.
-      * Use the TCAO installer form below to add the core TopicClassificationAddOn components to an existing web. (This won't show up until you've completed the above steps.)
+%TOPIC% is designed to organize content within individual webs.To install the TCAO framework within a web, use the form below.(The won't show up until you've completed the above steps.)
 %INCLUDE{"%TCAOWEB%.RenderInstallTopicClassification" warm="off"}%
 
 ---+++ Setting up Topic Classification within a web
@@ -90,8 +86,8 @@ Once %TOPIC% is enabled within a web, you're ready to start defining *TopicTypes
 |  License: | [[http://www.gnu.org/licenses/gpl.html][GPL (Gnu General Public License)]] |
 | Change&nbsp;History: | |
 |  12949 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1715'>Item1715</a>  Uploading Version 2.0 of TopicClassificationAddOn |
-|  ?1'<!-- versions below in reverse order -->&nbsp;' | <!-- versions below in reverse order -->&nbsp; |
+|  <!-- versions below in reverse order -->&nbsp;' | <!-- versions below in reverse order -->&nbsp; |
 |  Dependencies: | %$DEPENDENCIES% |
 |  Add-on Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
-|  Demo url: | http://skyloom.com/Demo/TopicClassification |
+|  Demo url: |  |

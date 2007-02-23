@@ -1,6 +1,6 @@
 %META:TOPICINFO{author="LynnwoodBrown" date="1171039855" format="1.1" reprev="1.10" version="1.10"}%
 %TOPICCRE%NOP%ATE{ topic="TopicType" template="%TCAOWEB%/Installs.TopicType" }%
-%TOPICCRE%NOP%ATE{ topic="TopicType" template="%TCAOWEB%/Installs.SubjectArea" }%
+%TOPICCRE%NOP%ATE{ topic="SubjectArea" template="%TCAOWEB%/Installs.SubjectArea" }%
 %TOPICCRE%NOP%ATE{ topic="TopicClassForm" template="%TCAOWEB%/Installs.TopicClassForm" }%
 %TOPICCRE%NOP%ATE{ topic="TopicForm" template="%TCAOWEB%/Installs.TopicForm" }%
 %TOPICCRE%NOP%ATE{ topic="CreateNewTopic" template="%TCAOWEB%/Installs.CreateNewTopic" }%

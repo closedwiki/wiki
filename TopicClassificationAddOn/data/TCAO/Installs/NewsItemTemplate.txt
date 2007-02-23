@@ -3,9 +3,11 @@
 ---++ %FORMFIELD{Summary}%
 %URLPARAM{entry}%
 
--- %WIKIUSERNAME% - %DATE%
+-- %WIKIUS%NOP%ERNAME% - %DAT%NOP%E%
 
 See also: Recent News, [[NewsItem][All News for %INCLUDINGWEB%]], [[AllNews][All News for %WIKITOOLNAME%]]
 
----+++ Comments and discussion
-%COMMENT{type="threadmode"}%
+---+++ Comments
+
+#AddComments
+%INCLUDE{"%TCAOWEB%.RenderAddComment" }%
