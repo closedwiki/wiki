@@ -23,7 +23,7 @@ This topic function renders a right-hand sidebar.
 %STARTINCLUDE%
 <div style="position:relative;float:right;width:30%;background-color:white;border:2px dotted %WEBBGCOLOR%;padding:1em;margin:0.5em;display:inline;">
 %IFDEFINEDTHEN{"%CONTENT%" glue="off"}%
-%FORMATLIST{"$test" separator="$dollarn" format="$percntINCLUDE{\"$1\" }$percnt" }%
+%FORMATLIST{"%CONTENT%t" separator="$dollarn" format="$percntINCLUDE{\"$1\" }$percnt" }%
 %FIDEFINED%
 %IFDEFINEDTHEN{"%RECENT%" glue="off"}%
 ---+++++!! <font  FACE="arial,helvetica"> $test most recently changed topics: </font>
