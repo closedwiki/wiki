@@ -32,6 +32,7 @@ function capitalizeSentence (inText) {
 <input type="hidden" name="topic" id="topic" size="40" />
 <input type="hidden" name="nonwikiword" value="on" />
 <input type="hidden" name="onlywikiname" value="off" />
+<input type="hidden" name="onlynewtopic" value="on" />
 <input type="hidden" name="templatetopic" value="BlogPostTemplate" />
 <input type="hidden" name="topicparent" value="BlogPost" />
 <input type="submit" class="twikiSubmit" value='%MAKETEXT{"Start writing"}%' />
