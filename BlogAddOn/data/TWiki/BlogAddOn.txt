@@ -40,6 +40,7 @@ When installed, see !_BlogAddOn.BlogAddOnHome for additional details.
 | License: | [[http://www.gnu.org/copyleft/gpl.html][GPL]] |
 | Dependencies: | %$DEPENDENCIES% |
 | |!BlogAddOn is based on TWiki 4.1 with !PatternSkin. |
+| 25 Feb 2007 | Arthur Clemens: 1.0.6 URL param for limit setting now overrides INCLUDE parameter. |
 | 25 Feb 2007 | Arthur Clemens: 1.0.5 Prevents recreation/overwriting of existing topics. Added "No limit" label to filter dropdown. |
 | 15 Feb 2007 | Arthur Clemens: 1.0.4 Removed my name from the templates. |
 | 16 Dec 2006 | Arthur Clemens: 1.0.3 The comment topic will automatically be created as child topic of the blog post. Changed parameter =reverse= to =sortdirection=.  |
