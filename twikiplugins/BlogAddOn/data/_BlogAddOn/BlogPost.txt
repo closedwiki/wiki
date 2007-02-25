@@ -4,8 +4,7 @@
 <input type="submit" class="twikiButton" value="%MAKETEXT{"Write a new blog post"}%" />
 </form>
 
-%STARTINCLUDE%
-%INCLUDE{"BlogAddOnStyles"}%
+%STARTINCLUDE%%INCLUDE{"BlogAddOnStyles"}%
 #BlogPosts
 <div class="blogPostAddOnViewOptions">
 <!-- Sort options --><div class="twikiLeft">
@@ -23,7 +22,8 @@
 <div class="twikiLeft blogPostViewOptionsFilter">
 <strong>%MAKETEXT{"Limit to:"}%</strong>%BR%
 <select name="limit" onchange="document.forms.blogPostCategorySelection.submit()">
-%IF{"defined limit and $ limit != ''" then="<option></option><option selected>%URLPARAM{"limit" default="%limit%"}%</option>" else="<option></option>"}%
+%IF{"defined limit and $ limit != '' and $ limit != 'no_limit'" then='<option selected>%URLPARAM{"limit" default="%limit%"}%</option><option disabled value="">-----</option>'}%
+<option %IF{"defined limit and $ limit = ''" then='selected'}% value="no_limit">%MAKETEXT{"No limit"}%</option>'}%
 <option>10</option>
 <option>25</option>
 <option>50</option>
@@ -33,7 +33,8 @@
 <div class="twikiLeft blogPostViewOptionsFilter">
 <strong>%MAKETEXT{"Category:"}%</strong> <noautolink><a class="blogPostAddOnViewOptionsSubscribeLink" title='%IF{"defined category and $ category != ''" then="%MAKETEXT{"RSS newsfeed: subscribe to blog posts in category [_1]" args="%URLPARAM{"category" encode="entity"}%"}%" else="%MAKETEXT{"RSS newsfeed: subscribe to blog posts in all categories"}%"}%' href='%SCRIPTURL{"view"}%/%BASEWEB%/WebRss?search=%ENCODE{"[T]opicType.*value\=.*(BlogPost);[C]ategory.*value\=.*(%URLPARAM{"category"}%)" type="url"}%;regex=on;casesensitive=on;excludetopic=BlogPostTemplate,BlogPost;limit=16;scope=text'>%MAKETEXT{"Subscribe"}%</a></noautolink>%BR%
 <select name="category" onchange="document.forms.blogPostCategorySelection.submit()">
-%IF{"defined category and $ category != ''" then="<option></option><option selected>%URLPARAM{"category" default="%category%"}%</option>" else="<option></option>"}%
+%IF{"defined category and $ category != ''" then='<option selected>%URLPARAM{"category" default="%category%"}%</option><option disabled value="">-----</option>'"}%
+<option %IF{"defined category and $ category = ''" then='selected'}% value="">%MAKETEXT{"All categories"}%</option>
 %SEARCH{"   *\s*.*?" topic="BlogCategory" type="regex" multiple="on" casesensitive="on" nonoise="on" format="<option>$pattern(.*   \*\s([^\n]*).*)</option>"}%
 </select>
 </div>
@@ -44,6 +45,5 @@
 <div class="blogPostAddOnViewOptionsDivider"></div>
 </div>
 <div class="blogPostAddOnOverview">
-%SEARCH{"[T]opicType.*value\=.*(BlogPost)%IF{"defined category and $ category != ''" then=";[C]ategory.*value\=.*(%URLPARAM{"category" encode="entity" default="%category%"}%)"}%" web="%WEB%" excludetopic="*Template" type="regex" casesensitive="on" nonoise="on" format="<div class=\"blogPostAddOnItem\"><h3>[[$web.$topic#BlogPosts][$formfield(Title)]]</h3><div class=\"twikiGrayText twikiSmallish blogPostAddOnHeaderInfo\">%MAKETEXT{"[_1] by [_2] in [_3]" args="$createdate, $formfield(Author), [[%SCRIPTURL{view}%/%BASEWEB%/%BASETOPIC%?category=<nop>$formfield(Category);sort=<nop>%URLPARAM{"sort" encode="url"}%;limit=%URLPARAM{"limit"}%#BlogPosts][<nop>$formfield(Category)]], $createdate"}%</div><div class=\"blogPostAddOnSummary\">$summary</div></div>"  order="%IF{"defined sort" then="%URLPARAM{"sort" encode="url" default="%sort%"}%" else="created"}%" reverse="%IF{"defined sortdirection" then="%URLPARAM{"sortdirection" encode="url" default="%sortdirection%"}%" else=""}%" limit="%IF{"defined limit" then="%URLPARAM{"limit" encode="url" default="%limit%"}%" else="all"}%" "}%
-</div>
-%STOPINCLUDE%
+%SEARCH{"[T]opicType.*value\=.*(BlogPost)%IF{"defined category and $ category != ''" then=";[C]ategory.*value\=.*(%URLPARAM{"category" encode="entity" default="%category%"}%)"}%" web="%WEB%" nonoise="on" excludetopic="*Template" type="regex" casesensitive="on" format="<div class=\"blogPostAddOnItem\"><h3>[[$web.$topic#BlogPosts][$formfield(Title)]]</h3><div class=\"twikiGrayText twikiSmallish blogPostAddOnHeaderInfo\">%MAKETEXT{"[_1] by [_2] in [_3]" args="$createdate, $formfield(Author), [[%SCRIPTURL{view}%/%BASEWEB%/%BASETOPIC%?category=<nop>$formfield(Category);sort=<nop>%URLPARAM{"sort" encode="url"}%;limit=%URLPARAM{"limit"}%#BlogPosts][<nop>$formfield(Category)]]"}%</div><div class=\"blogPostAddOnSummary\">$summary</div></div>"  order="%IF{"defined sort" then="%URLPARAM{"sort" encode="url" default="%sort%"}%" else="created"}%" reverse="%IF{"defined sortdirection" then="%URLPARAM{"sortdirection" encode="url" default="%sortdirection%"}%" else=""}%" limit="%IF{"defined limit" then="%URLPARAM{"limit" encode="url" default="%limit%"}%" else="all"}%" "}%
+</div>%STOPINCLUDE%
