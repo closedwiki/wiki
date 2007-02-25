@@ -3,6 +3,6 @@
 
 %META:FORM{name="BlogPostForm"}%
 %META:FIELD{name="Title" attributes="M,H" title="Title" value="%25URLPARAM%7b%22Title%22%7d%25"}%
-%META:FIELD{name="Category" attributes="M" title="Category" value="Select"}%
+%META:FIELD{name="Category" attributes="M" title="Category" value=""}%
 %META:FIELD{name="TopicType" attributes="H" title="TopicType" value="BlogPost"}%
 %META:PREFERENCE{name="VIEW_TEMPLATE" title="VIEW_TEMPLATE" type="Local" value="BlogPostView"}%
