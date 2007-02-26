@@ -104,25 +104,27 @@ sub run {
             read(STDIN, my $buf, $content_length, 0 ) if $content_length;
         }
         my $cache = $query->param('twiki_redirect_cache');
-        if ($cache) {
-            $cache = TWiki::Sandbox::untaintUnchecked($cache);
+        # Never trust input data from a query. We will only accept an MD5 32 character string
+        if ($cache && $cache =~ /^([a-f0-9]{32})$/) {
+            $cache = $1;
             # Read cached post parameters
-            if (open(F, '<'.$cache)) {
+            my $passthruFilename = $TWiki::cfg{TempfileDir} . '/passthru_' . $cache;
+            if (open(F, '<'.$passthruFilename)) {
                 local $/;
                 if (TRACE_PASSTHRU) {
                     print STDERR "Passthru: Loading cache for ",
                       $query->url(),'?',$query->query_string(),"\n";
                     print STDERR <F>,"\n";
                     close(F);
-                    open(F, '<'.$cache);
+                    open(F, '<'.$passthruFilename);
                 }
                 $query = new CGI(\*F);
                 close(F);
-                unlink($cache);
-                print STDERR "Passtrhru: Loaded and unlinked $cache\n"
+                unlink($passthruFilename);
+                print STDERR "Passthru: Loaded and unlinked $passthruFilename\n"
                   if TRACE_PASSTHRU;
             } else {
-                print STDERR "Passtrhru: Could not find $cache\n"
+                print STDERR "Passthru: Could not find $passthruFilename\n"
                   if TRACE_PASSTHRU;
             }
         }

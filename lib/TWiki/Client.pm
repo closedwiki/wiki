@@ -239,6 +239,17 @@ sub loadSession {
         _trace($this, "No cookie ");
     }
 
+    # Item3568: CGI::Session from 4.0 already does the -d and creates the
+    # sessions directory if it does not exist. For performance reasons we
+    # only test for and create session file directory for older CGI::Session
+    if( $CGI::Session::VERSION < 4.0 ) {
+        unless ( -d $TWiki::cfg{TempfileDir} ) {
+            unless ( mkdir($TWiki::cfg{TempfileDir}) ) {
+                die "Could not create $TWiki::cfg{TempfileDir} for session files";
+            }
+        }
+    }
+
     # First, see if there is a cookied session, creating a new session
     # if necessary.
     if( $TWiki::cfg{Sessions}{MapIP2SID} ) {
