@@ -66,7 +66,9 @@ sub search {
             $program,
             TOKEN => $searchString,
             FILES => \@set);
-        throw Error::Simple("$program failed: $m") if $exit;
+        # SMELL: had to comment this out because getting exit code of
+        # 1 from a perfectly valid grep, on d.t.o :-(
+        #throw Error::Simple("$program failed: $m") if $exit;
         $matches .= $m;
         @set = splice( @take, 0, $maxTopicsInSet );
     }
