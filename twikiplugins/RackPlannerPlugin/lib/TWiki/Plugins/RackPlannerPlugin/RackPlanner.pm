@@ -270,6 +270,7 @@ sub _renderHorizontal {
 			} else {
 				if ($fillCols[$rackNumber]<=0) {
 					$rackRows[$rackNumber] .= $cgi->td({-align=>'center',-valign=>'top', -width=>$options{'columnwidth'},
+									-title=>&_encodeTitle(abs($unit)),
 									-style=>"background-color:$options{'emptybgcolor'};color:$options{'emptyfgcolor'}" },
 									&_renderEmptyText($rack,$unit));
 				}
