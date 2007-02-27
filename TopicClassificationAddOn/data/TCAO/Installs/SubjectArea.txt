@@ -10,7 +10,6 @@ To enable any of these settings, replace the explanation with the value you want
    * #Set SEARCH_ORDER = Option for changing the default order for the search. Defaults to "name."
    * #Set SEARCH_REVERSE = Option to reverse the search order. Defaults to "off."
  -->
- %COMMENT{type="removeable_help" remove="on"}%
 %INCLUDE{"%TCAOWEB%.RenderClassificationTopic" }%
 
 %DBCALL{"%TCAOWEB%.RenderAddClassification" TYPE="SubjectArea" ALLEXTRA="selectClassParent" warn="off"}%
