@@ -31,8 +31,8 @@ use base 'TWiki::Configure::Types::SELECT';
 sub prompt {
     my( $this, $id, $opts, $value ) = @_;
     my @ropts;
+    $opts =~ s/\s.*$//; # remove e.g. EXPERT
     foreach my $opt (split( /,/, $opts)) {
-        $opt =~ s/\s+//g;
         if ($opt eq 'none') {
             push(@ropts, 'none');
         } else {
@@ -49,8 +49,6 @@ sub prompt {
 sub findClasses {
     my ($this, $pattern) = @_;
 
-    $pattern =~ s/^\s+//;
-    $pattern =~ s/\s+$//;
     $pattern =~ s/\*/.*/g;
     my @path = split(/::/, $pattern);
 

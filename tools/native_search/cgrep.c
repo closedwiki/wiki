@@ -83,10 +83,12 @@ char** cgrep(char** argv) {
         } else {
             /* Convert \< and \> to \b in the pattern. GNU grep supports
                them, but pcre doesn't :-( */
-            for (linebuf = arg; *linebuf; linebuf++) {
-                if (*linebuf == '\\' && *(linebuf-1) != '\\' &&
-                    *(linebuf+1) == '<' || *(linebuf+1) == '>')
-                    *(linebuf+1) = 'b';
+            if (*arg) {
+                for (linebuf = arg + 1; *linebuf; linebuf++) {
+                    if (*linebuf == '\\' && *(linebuf-1) != '\\' &&
+                        *(linebuf+1) == '<' || *(linebuf+1) == '>')
+                        *(linebuf+1) = 'b';
+                }
             }
             if (!(pattern = pcre_compile(arg, reflags, &err, &errPos, NULL))) {
                 warn(err);

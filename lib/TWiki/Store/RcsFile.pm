@@ -327,101 +327,17 @@ match per topic, and will not return matching lines).
 sub searchInWebContent {
     my( $this, $searchString, $topics, $options ) = @_;
     ASSERT(defined $options) if DEBUG;
-    my $type = $options->{type} || '';
     my $sDir = $TWiki::cfg{DataDir}.'/'.$this->{web}.'/';
-    my $matches = '';
-    my %seen;
 
-    if ($TWiki::cfg{RCS}{SearchAlgorithm}) {
-        # WikiRing native search
-        if ($TWiki::cfg{RCS}{SearchAlgorithm} eq 'Native') {
-            eval 'use NativeTWikiSearch';
-            die $@ if $@;
-            my @fs;
-            push(@fs, "-i") unless $options->{casesensitive};
-            push(@fs, "-l") if $options->{files_without_match};
-            push(@fs, $searchString);
-            push(@fs, map { "$sDir/$_.txt" } @$topics);
-            my $matches = NativeTWikiSearch::cgrep(\@fs);
-            if (defined($matches)) {
-                for (@$matches) {
-                    # Note use of / and \ as dir separators, to support
-                    # Winblows
-                    if (/([^\/\\]*)\.txt(:(.*))?$/) {
-                        push( @{$seen{$1}}, $3 );
-                    }
-                }
-            }
-            return \%seen;
-        }
-
-        if ($TWiki::cfg{RCS}{SearchAlgorithm} eq 'PurePerl') {
-            # Pure-perl grep
-            local $/ = "\n";
-            if ($type eq 'regex') {
-                $searchString =~ s!/!\\/!g;
-            } else {
-                $searchString =~ s/(\W)/\\$1/g;
-            }
-            # Convert GNU grep \< \> syntax to \b
-            $searchString =~ s/(?<!\\)\\[<>]/\\b/g;
-            my $match_code = "return \$_[0] =~ m/$searchString/o";
-            $match_code .= 'i' unless ($options->{casesensitive});
-            my $doMatch = eval "sub { $match_code }";
-          FILE:
-            foreach my $file ( @$topics ) {
-                next unless open(FILE, "<$sDir/$file.txt");
-                while (my $line = <FILE>) {
-                    if (&$doMatch($line)) {
-                        chomp($line);
-                        push( @{$seen{$file}}, $line );
-                        if ($options->{files_without_match}) {
-                            close(FILE);
-                            next FILE;
-                        }
-                    }
-                }
-                close(FILE);
-            }
-            return \%seen;
-        }
+    unless ($this->{searchFn}) {
+        eval "require $TWiki::cfg{RCS}{SearchAlgorithm}";
+        die "Bad {RCS}{SearchAlgorithm}; suggest you run configure and select a different algorithm\n$@" if $@;
+        $this->{searchFn} = $TWiki::cfg{RCS}{SearchAlgorithm}.'::search';
     }
-
-    # Default (Forking) search
-
-    # I18N: 'grep' must use locales if needed,
-    # for case-insensitive searching.  See TWiki::setupLocale.
-    my $program = '';
-    # FIXME: For Cygwin grep, do something about -E and -F switches
-    # - best to strip off any switches after first space in
-    # EgrepCmd etc and apply those as argument 1.
-    if( $type eq 'regex' ) {
-        $program = $TWiki::cfg{RCS}{EgrepCmd};
-    } else {
-        $program = $TWiki::cfg{RCS}{FgrepCmd};
-    }
-
-    $program =~ s/%CS{(.*?)\|(.*?)}%/$options->{casesensitive}?$1:$2/ge;
-    $program =~ s/%DET{(.*?)\|(.*?)}%/$options->{files_without_match}?$2:$1/ge;
-    # process topics in sets, fix for Codev.ArgumentListIsTooLongForSearch
-    my $maxTopicsInSet = 512; # max number of topics for a grep call
-    my @take = @$topics;
-    my @set = splice( @take, 0, $maxTopicsInSet );
-    my $sandbox = $this->{session}->{sandbox};
-    while( @set ) {
-        @set = map { "$sDir/$_.txt" } @set;
-        my ($m, $exit ) = $sandbox->sysCommand(
-            $program,
-            TOKEN => $searchString,
-            FILES => \@set);
-        $matches .= $m;
-        @set = splice( @take, 0, $maxTopicsInSet );
-    }
-    # Note use of / and \ as dir separators, to support
-    # Winblows
-    $matches =~ s/([^\/\\]*)\.txt(:(.*))?$/push( @{$seen{$1}}, $3 ); ''/gem;
-
-    return \%seen;
+    no strict 'refs';
+    return &{$this->{searchFn}}($searchString, $topics, $options,
+               $sDir, $this->{session}->{sandbox});
+    use strict 'refs';
 }
 
 =pod

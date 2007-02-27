@@ -892,22 +892,22 @@ $TWiki::cfg{RCS}{breaklockCmd} =
 $TWiki::cfg{RCS}{delRevCmd} =
     "$TWiki::cfg{RCS}{BinDir}/rcs $TWiki::cfg{RCS}{ExtOption} -o%REVISION|N% %FILENAME|F%";
 
-# **SELECT Forking,Native,PurePerl EXPERT**
-# TWiki has three built-in search algorithms
+# **SELECTCLASS TWiki::Store::SearchAlgorithms::* **
+# TWiki RCS has three built-in search algorithms
 # <ol><li> The default 'Forking' algorithm, which forks a subprocess that
 # runs a 'grep' command,
 # <li>the 'Native' implementation, which uses a search implemented in a
-# special library, </li>
+# special library (see http://twiki.org/cgi-bin/view/Codev/NativeSearch), </li>
 # </li><li> the 'PurePerl' implementation, which is written in Perl and
 # usually only used as a last resort.</li></ol>
 # Normally you will be just fine with the 'Forking' implementation. However
 # if you find searches run very slowly, you may want to try a different
-# algorithm.
-$TWiki::cfg{RCS}{SearchAlgorithm} = 'Forking';
+# algorithm, which may work better on your configuration.
+$TWiki::cfg{RCS}{SearchAlgorithm} = 'TWiki::Store::SearchAlgorithms::Forking';
 
 # **COMMAND EXPERT**
 # Full path to GNU-compatible egrep program. This is used for searching when
-# {SearchAlgorithm} is 'Forking'.
+# {SearchAlgorithm} is 'TWiki::Store::SearchAlgorithms::Forking'.
 # %CS{|-i}% will be expanded
 # to -i for case-sensitive search or to the empty string otherwise.
 # Similarly for %DET, which controls whether matching lines are required.
@@ -916,7 +916,7 @@ $TWiki::cfg{RCS}{EgrepCmd} = "/bin/egrep" . ' %CS{|-i}% %DET{|-l}% -H -- %TOKEN|
 
 # **COMMAND EXPERT**
 # Full path to GNU-compatible fgrep program. This is used for searching when
-# {SearchAlgorithm} is 'Forking'.
+# {SearchAlgorithm} is 'TWiki::Store::SearchAlgorithms::Forking'.
 $TWiki::cfg{RCS}{FgrepCmd} = "/bin/fgrep" . ' %CS{|-i}% %DET{|-l}% -H -- %TOKEN|U% %FILES|F%';
 
 # **PATH**
