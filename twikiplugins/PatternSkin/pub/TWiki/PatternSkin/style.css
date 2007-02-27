@@ -549,6 +549,11 @@ a.twikiLinkInHeaderRight {
 	margin:0 0 0 5px;
 }
 .twikiLinkLabel {}
+.twikiImage img {
+	padding:3px;
+	border-width:1px;
+	border-style:solid;
+}
 
 /*	-----------------------------------------------------------
 	Pattern skin specific elements
