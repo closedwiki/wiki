@@ -25,7 +25,7 @@ sub check {
     my $this = shift;
 
     my $mess = '';
-    if( $TWiki::cfg{RCS}{SearchAlgorithm} eq 'Native') {
+    if( $TWiki::cfg{RCS}{SearchAlgorithm} =~ /Native$/) {
         eval 'use NativeTWikiSearch';
         if ($@) {
             $mess .= $this->ERROR(<<EOF);
