@@ -1,11 +1,23 @@
-%META:TOPICINFO{author="LynnwoodBrown" date="1168882693" format="1.1" reprev="1.6" version="1.6"}%
-%META:TOPICPARENT{name="WebHome"}%
----+++ 10 most recently changed topics
-%SEARCH{"." web="%BASEWEB%" regex="on" noheader="on" nosearch="on" order="modified" reverse="on" limit="10" nototal="on" excludetopic="Web*" format="	* [[$web.$topic][$topic]] - <noautolink>$formfield(Summary)</noautolink> <font class=twikiSmall> _(Modified on $date by $wikiusername)_  </font>" }%
-   * _[[%BASEWEB%.WebChanges][More recent changes...]]_
+%META:TOPICINFO{author="LynnwoodBrown" date="1172273123" format="1.1" reprev="1.11" version="1.11"}%
+---+!! %SPACEOUT{%TOPIC%}%
+_This topic is intended to be included in WebHome topics to provide a quick overview of the TopicClassification setup in the web._
 
----+++ Browse content by %BASEWEB%.TopicClassification
-%SEARCH{ "FORM.name\=.TopicClassForm;[C]lassification.*value\=.*\b[C]lassification\b" web="%BASEWEB%" type="regex" nonoise="on" order="topic" format="	* [[$web.$topic][$percntSPACEOUT{$topic}$percnt]] - $formfield(Summary) $n()$percntSEARCH{\"FORM.name\=.TopicClassForm;[C]lassification.*value\=.*\b$topic\b\" type=\"regex\" format=\"      * [[$dollarweb.$dollartopic][$dollarpercntSPACEOUT{$dollartopic}$dollarpercnt]] - $dollarformfield(Summary)\" nonoise=\"on\" separator=\"$dollarn\" }$nop%"}% 
+%STARTINCLUDE%
+---++ Browse %BASEWEB% Web Content by %BASEWEB%.TopicClassification
+
+%TABLE{ dataalign="right,left" columnwidths="15%, 85%"}%
+|  *[[%BASEWEB%.TopicType][Topic Types]]:* | %DBQUERY{"Classification = 'TopicType'" web="%BASEWEB%" format="[[$web.$topic][$percntSPACEOUT{$topic}$percnts <span class=\"twikiSmall\">($percntDBQUERY{\"TopicType='$topic'\" web=\"$web\" format=\"none\" footer=\"$dollarcount\"}$percnt)</span>]]" separator=", "}%   |
+%DBQUERY{"Classification = 'Classification'" exclude="TopicType" web="%BASEWEB%" separator="$n" format="|  *[[$web.$topic][$percntSPACEOUT{$topic}$percnt]]:* | $percntDBQUERY{\"Classification = '$topic'\" format=\"[[$web.$topic][$dollarpercntSPACEOUT{$dollartopic}$dollarpercnt <span class=\\"twikiSmall\\">($dollarpercntDBQUERY{\\"$topic='$dollartopic'\\" web=\\"$dollarweb\\" format=\\"none\\" footer=\\"$dollardollarcount\\"}$dollarpercnt)</span>]]\" separator=\", \" }$percnt   |" }%
+
+---++ Recent Changes
+
+%INCLUDE{"%TCAOWEB%.RenderBarFilterWithSort"  FACETS="TopicType, SubjectArea" INITSORT="modified" INITLIMIT="10"}%
+%DBQUERY{%INCLUDE{"%TCAOWEB%.RenderSearchString" FACETS="TopicType, SubjectArea" BASESEARCH="name = '.*'"  INITSORT="modified" INITLIMIT="10"}% web="%BASEWEB%" exclude="Web*" header="| *Topic* | *Summary* | *Modified by* | *On* |$n" format="| [[$web.$topic][$percntSPACEOUT{$topic}$percnt]] <span class=\"twikiSmall\"><em>$percntIFDEFINED{\"$expand(TopicType or Classification)\" then=\"($web.$expand(TopicType or Classification))\" glue=\"off\"}$percnt</em></span>  | <noautolink>$formfield(Summary)</noautolink>   | %MAINWEB%.$expand(info.author) | $formatTime(info.date, '$day $month') |" }%
+| _[[%BASEWEB%.WebChanges][More recent changes...]]_  ||||
+%STOPINCLUDE%
+
+---++ Notes for further development
+   * Change !SubjectArea to search that looks for all classifications (excluding !TopicType).
 
 %META:FORM{name="TopicForm"}%
 %META:FIELD{name="TopicType" attributes="" title="TopicType" value="MasterTopic"}%

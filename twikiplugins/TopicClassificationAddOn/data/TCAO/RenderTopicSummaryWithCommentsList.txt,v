@@ -1,9 +1,14 @@
-head	1.2;
+head	1.3;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.3
+date	2007.02.24.00.53.38;	author LynnwoodBrown;	state Exp;
+branches;
+next	1.2;
 
 1.2
 date	2007.01.25.03.47.31;	author LynnwoodBrown;	state Exp;
@@ -21,12 +26,12 @@ desc
 @
 
 
-1.2
+1.3
 log
 @none
 @
 text
-@%META:TOPICINFO{author="LynnwoodBrown" date="1169696851" format="1.1" reprev="1.2" version="1.2"}%
+@%META:TOPICINFO{author="LynnwoodBrown" date="1172278418" format="1.1" reprev="1.3" version="1.3"}%
 %META:TOPICPARENT{name="TopicFunction"}%
 ---+!! Function: %TOPIC%
 %FORMFIELD{"Summary"}%
@@ -38,7 +43,8 @@ text
 %RED%TODO%ENDCOLOR%
 
 ---+++++ Parameters
-   * TOPICTYPES - Which !TopicTypes to include. Enter with "bar" ("|") between.
+   * TOPICTYPES - %RED%Required%ENDCOLOR% Which !TopicTypes to include. Enter with "bar" ("|") between.
+   * FACETS - %RED%Required%ENDCOLOR% Which facets to provide filters for. 
 
 ---+++++ Css
    * 
@@ -47,38 +53,30 @@ text
 ---++ Implementation
 <verbatim>
 %STARTINCLUDE%
-
-<div class="patternTopicAction">
-<form name="listOptions" action="%SCRIPTURL{view}%/%BASEWEB%/%BASETOPIC%">
-| *Sort by:* <input type="radio" name="sort" value="created" 
-~~~   %IFDEFINED{"%URLPARAM{"sort" default="created"}%" as="created" then="checked" glue="off"}% >Date Created  
-~~~  <input type="radio" name="sort" value="modified" %IFDEFINED{"%URLPARAM{"sort"}%" as="modified" then="checked"}% >Date Modified  |
-~~~  *Limit # results:* <select name="limit"> 
-~~~         <option %IFDEFINED{"%URLPARAM{"limit" default="20"}%" as="20" then="selected" glue="off"}% >20</option>
-~~~         <option %IFDEFINED{"%URLPARAM{limit}%" as="50" then="selected" glue="off"}%>50</option>
-~~~         <option %IFDEFINED{"%URLPARAM{limit}%" as="100" then="selected" glue="off"}%>100</option>
-~~~         <option %IFDEFINED{"%URLPARAM{limit}%" as="all" then="selected" glue="off"}%>all</option>
-~~~    </select> |
-~~~  <input type="submit" value="Apply"> |
- </form></div>
-
-%~~  SEARCH{"[T]opicType.*value\=.*(%TOPICTYPES%)" 
-~~~    web="%BASEWEB%" 
-~~~    type="regex" 
+%INCLUDE{"%TCAOWEB%.RenderBarFilterWithSort" INITSORT="created" INITLIMIT="10"}% 
+%~~  SEARCH{ 
+*~~      
+%~~      INCLUDE{"%TCAOWEB%.RenderSearchString" 
+~~~           FORSEARCH="yes" 
+~~~           BASESEARCH="[T]opicType.*value\=.*
+*~~               %IFDEFINED{"%TOPICTYPES%" as=".*\|.*" then="($test)" else="$test" glue="off"}%
+*~~               " 
+~~~           INITSORT="created" 
+~~~           INITLIMIT="10" }%
 ~~~    nonoise="on" 
-~~~    order="%URLPARAM{"sort" default="created"}%"  
+~~~    web="%BASEWEB%" 
+~~~    type="regex"  
 ~~~    reverse="on" 
-~~~    limit="%URLPARAM{"limit" default="20"}%" 
 ~~~    newline="%BR%" 
 ~~~    separator="$n$n"
-~~~    format="<h3>[[$web.$topic][$percntSPACEOUT{$topic}$percnt]] </h3>
+~~~    format="<h4>[[$web.$topic][$percntSPACEOUT{$topic}$percnt]] </h4>
 ~~~       <span class=twikiSmall><em>
 ~~~          Posted $createdate by $createwikiusername $percntIFDEFINED{\"$formfield(SubjectArea)\" then=\" 
 ~~~          in <noautolink>$formfield(SubjectArea)</noautolink>\"}$percnt &nbsp; |  
 ~~~          $percntIFDEFINED{\"$count(.*?(---[+][+][+][+]) .*)\" as=\"1\" then=\"$test comment\" else=\"$test comments\" glue=\"off\" }$percnt
 ~~~       </em></span> $percntBR$percnt $percntBR$percnt
 ~~~       $pattern(.*?---[+]*.*?[\n\r]+(.*?)[\n\r]+.*)  _[[$web.$topic][continued...]]_ " 
-~~~    }%
+~~~    }% 
 %STOPINCLUDE%
 </verbatim>
 
@@ -86,7 +84,7 @@ text
 
 ---++ Test
 <div class="alt">
-%DBCALL{"%TOPIC%" TOPICTYPES="HelpTopic|MasterTopic"}%
+%INCLUDE{"%TOPIC%" TOPICTYPES="HelpTopic"}%
 </div>
 
 %DBCALL{"RenderFunctionCallers"}%
@@ -106,8 +104,58 @@ text
 
 %META:FORM{name="TCAO.TopicForm"}%
 %META:FIELD{name="TopicType" attributes="" title="TopicType" value="TopicFunction"}%
+%META:FIELD{name="SubjectArea" attributes="" title="SubjectArea" value=""}%
 %META:FIELD{name="Summary" attributes="" title="Summary" value="Displays short intro to topic with number of comments"}%
 %META:REVCOMMENT{ncomments="0"}%
+@
+
+
+1.2
+log
+@none
+@
+text
+@d1 1
+a1 1
+%META:TOPICINFO{author="LynnwoodBrown" date="1169696851" format="1.1" reprev="1.2" version="1.2"}%
+d13 2
+a14 1
+   * TOPICTYPES - Which !TopicTypes to include. Enter with "bar" ("|") between.
+d23 11
+a33 16
+
+<div class="patternTopicAction">
+<form name="listOptions" action="%SCRIPTURL{view}%/%BASEWEB%/%BASETOPIC%">
+| *Sort by:* <input type="radio" name="sort" value="created" 
+~~~   %IFDEFINED{"%URLPARAM{"sort" default="created"}%" as="created" then="checked" glue="off"}% >Date Created  
+~~~  <input type="radio" name="sort" value="modified" %IFDEFINED{"%URLPARAM{"sort"}%" as="modified" then="checked"}% >Date Modified  |
+~~~  *Limit # results:* <select name="limit"> 
+~~~         <option %IFDEFINED{"%URLPARAM{"limit" default="20"}%" as="20" then="selected" glue="off"}% >20</option>
+~~~         <option %IFDEFINED{"%URLPARAM{limit}%" as="50" then="selected" glue="off"}%>50</option>
+~~~         <option %IFDEFINED{"%URLPARAM{limit}%" as="100" then="selected" glue="off"}%>100</option>
+~~~         <option %IFDEFINED{"%URLPARAM{limit}%" as="all" then="selected" glue="off"}%>all</option>
+~~~    </select> |
+~~~  <input type="submit" value="Apply"> |
+ </form></div>
+
+%~~  SEARCH{"[T]opicType.*value\=.*(%TOPICTYPES%)" 
+d35 1
+a35 3
+~~~    type="regex" 
+~~~    nonoise="on" 
+~~~    order="%URLPARAM{"sort" default="created"}%"  
+a36 1
+~~~    limit="%URLPARAM{"limit" default="20"}%" 
+d39 1
+a39 1
+~~~    format="<h3>[[$web.$topic][$percntSPACEOUT{$topic}$percnt]] </h3>
+d46 1
+a46 1
+~~~    }%
+d54 1
+a54 1
+%DBCALL{"%TOPIC%" TOPICTYPES="HelpTopic|MasterTopic"}%
+d74 1
 @
 
 

@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="LynnwoodBrown" date="1171946322" format="1.1" reprev="1.3" version="1.3"}%
+%META:TOPICINFO{author="LynnwoodBrown" date="1172272861" format="1.1" reprev="1.4" version="1.4"}%
 %META:TOPICPARENT{name="TopicFunction"}%
 ---+!! Function: %TOPIC%
 %FORMFIELD{"Summary"}%
@@ -12,6 +12,10 @@
 ---+++++ Parameters
    * FORSEARCH - Specifies search string is to be formatted for ==%<nop>SEARCH{}%== rather than the default ==%<nop>DBQUERY{}%== format.
    * BASESEARCH - %RED%Required%ENDCOLOR% - Provides the base search, such as ==[T]opicType.*value\=.*%<nop>BASETOPIC%== (for SEARCH) or ==TopicType = '%<nop>BASETOPIC%'"== for DBQUERY
+   * FACETS - %RED%Required%ENDCOLOR% Specify what "facets" in include as filters. Defaults to the contents of "Facets" field in base topic.
+   * INITSORT -%RED%Required%ENDCOLOR%  Initial sort. set to either "created" or "modified"
+   * INITLIMIT - %RED%Required%ENDCOLOR%  Initial results # limit. Set to 10, 20, 50, 100, or all.
+   * Note: if you are using this in conjunction with RenderSearchString, you can simplify things by defining FACETS, INITSORT, and INITLIMIT within the base topic.
 
 
 ---+++++ Css
@@ -34,8 +38,8 @@
 ~~~          format="$percntIF{ \"$'URLPARAM{$1}'!=''\" then=\"AND $1 = '$percntURLPARAM{$1}$percnt'\" }$percnt"
 ~~~    }%" 
 ~~~   %FIDEFINED%
-~~~    order="%URLPARAM{"sort" default="created"}%"  
-~~~    limit="%URLPARAM{"limit" default="20"}%" 
+~~~    order="%URLPARAM{"sort" default="%INITSORT%"}%"  
+~~~    limit="%URLPARAM{"limit" default="%INITLIMIT%"}%" 
 ~~~    reverse="on"
 ~~~    %STOPINCLUDE%
 </verbatim>
