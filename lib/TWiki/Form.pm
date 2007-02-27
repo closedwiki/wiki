@@ -130,7 +130,7 @@ sub new {
             $fieldDef->{value} = \@posValues;
         }
 
-        if( $fieldDef->{mandatory} ) {
+        if( $fieldDef->{attributes} =~ /M/ ) {
             $this->{mandatoryFieldsPresent} = 1;
         }
     }
@@ -218,9 +218,6 @@ sub _parseFormDefinition {
                 $title .= '_';
             }
 
-	    my $mandatory = new TWiki::Attrs( $attributes, 1 );
-	    $mandatory = defined $mandatory->{'m'} || defined $mandatory->{'M'};
-
             push( @fields,
                   { name => $name,
                     title => $title,
@@ -229,7 +226,6 @@ sub _parseFormDefinition {
                     value => $vals,
                     tooltip => $tooltip,
                     attributes => $attributes,
-		    mandatory => $mandatory,
                     definingTopic => $definingTopic
                    } );
         } else {
@@ -432,7 +428,7 @@ sub renderFieldForEdit {
     my $extra = '';
     my $session = $this->{session};
 
-    if( $fieldDef->{mandatory} ) {
+    if( $attributes =~ /M/ ) {
         $extra = CGI::span( { class => 'twikiAlert' }, ' *' );
     }
 
@@ -775,7 +771,7 @@ sub getFieldValuesFromQuery {
             }
         }
 
-        if( $fieldDef->{mandatory} && !$value &&
+        if( $fieldDef->{attributes} =~ /M/ && !$value &&
               ( !$preDef || !$preDef->{value} ) ) {
             # Remember missing mandatory fields
             push( @missing, $fieldDef->{title} || "unnamed field" );
@@ -888,8 +884,8 @@ sub renderForDisplay {
 	my $rowTemplate = $templates->expandTemplate('FORM:display:row');
     my @fields = $meta->find( 'FIELD' );
     foreach my $field ( @fields ) {
-	my $fa = new TWiki::Attrs( $field->{attributes} || '', 1 );
-        unless ( defined $fa->{'h'} || defined $fa->{'H'} ) {
+        my $fa = $field->{attributes} || '';
+        unless ( $fa =~ /H/ ) {
             my $value = $field->{value};
             $value = '&nbsp;' unless defined($value);
             my $title = $field->{title} || $field->{name};

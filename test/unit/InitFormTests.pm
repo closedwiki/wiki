@@ -192,14 +192,6 @@ sub setup_formtests {
 
 }
 
-sub test_mandatory {
-  my $this = shift;
-  
-  my $text = setup_formtests( $this, $testweb, $testtopic1, "formtemplate=\"$testweb.$testform\"" );
-
-  $this->assert_html_matches('<span class="twikiAlert"> *</span>', $text);
-}
-
 sub test_form {
   my $this = shift;
   

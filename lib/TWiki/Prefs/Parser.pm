@@ -124,8 +124,8 @@ sub parseMeta {
         my @fields = $meta->find( 'FIELD' );
         foreach my $field ( @fields ) {
             my $title = $field->{title};
-	    my $attributes = new TWiki::Attrs( $field->{attributes} || '', 1 );
-            if( defined $attributes->{'s'} || defined $attributes->{'S'} ) {
+            my $attributes = $field->{attributes};
+            if( $attributes && $attributes =~ /S/o ) {
                 my $value = $field->{value};
                 my $name = $field->{name};
                 $prefs->insert( 'Set', 'FORM_'.$name, $value );

@@ -61,7 +61,6 @@ FORM
     $this->assert_str_equals('', $f->{value});
     $this->assert_str_equals('', $f->{tooltip});
     $this->assert_str_equals('', $f->{attributes});
-    $this->assert(!$f->{mandatory});
     $this->assert_str_equals('', $f->{definingTopic});
 }
 
@@ -86,7 +85,6 @@ FORM
     $this->assert_str_equals('a,b,c', join(',',@{$f->{value}}));
     $this->assert_str_equals('Tippity', $f->{tooltip});
     $this->assert_str_equals('M', $f->{attributes});
-    $this->assert($f->{mandatory});
     $this->assert_str_equals('', $f->{definingTopic});
     $f = $def->getField('CheckyEgg');
     $this->assert_str_equals('checkbox', $f->{type});
@@ -96,7 +94,6 @@ FORM
     $this->assert_str_equals('1;2;3;4', join(';',@{$f->{value}}));
     $this->assert_str_equals('Blip', $f->{tooltip});
     $this->assert_str_equals('', $f->{attributes});
-    $this->assert(!$f->{mandatory});
     $this->assert_str_equals('', $f->{definingTopic});
 }
 
