@@ -83,6 +83,14 @@ sub new {
             $this->{rcsFile} = $TWiki::cfg{DataDir}.'/'.
               $web.$rcsSubDir.'/'.$topic.'.txt,v';
         }
+        
+        # remove utf8 encodings from filenames
+        if( $] >= 5.008 ) {
+            utf8::downgrade($this->{attachment}) if $attachment && utf8::is_utf8($this->{attachment});
+            utf8::downgrade($this->{file}) if utf8::is_utf8($this->{file});
+            utf8::downgrade($this->{rcsFile}) if utf8::is_utf8($this->{rcsFile});
+        }
+
     }
 
     return $this;
@@ -334,6 +342,7 @@ sub searchInWebContent {
         die "Bad {RCS}{SearchAlgorithm}; suggest you run configure and select a different algorithm\n$@" if $@;
         $this->{searchFn} = $TWiki::cfg{RCS}{SearchAlgorithm}.'::search';
     }
+
     no strict 'refs';
     return &{$this->{searchFn}}($searchString, $topics, $options,
                $sDir, $this->{session}->{sandbox});
