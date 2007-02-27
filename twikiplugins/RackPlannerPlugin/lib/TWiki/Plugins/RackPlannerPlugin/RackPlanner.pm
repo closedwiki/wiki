@@ -47,15 +47,16 @@ sub expand {
 
 	&_initDefaults() unless $defaultsInitialized;
 
+	local(%options);
 	return &_createUnknownParamsMessage() unless &_initOptions($attributes);
 
 	if ($options{'autotopic'} && defined $options{'racks'}) {
 		$options{'topic'} .= ($options{'topic'} eq ""?'':','). $options{'racks'};
 	}
 
-
-        return &_render(&_fetch(&_getTopicText()));
-
+	return ($options{'dir'}=~/^(leftright|rightleft)$/) 
+			? &_renderHorizontal(&_fetch (&_getTopicText())) 
+			: &_render(&_fetch(&_getTopicText()));
 }
 # =========================
 sub _initDefaults {
@@ -66,9 +67,9 @@ sub _initDefaults {
 		'racks' => undef,
 		'units' => 46,
 		'steps' => 1,
-		'emptytext' => 'empty',
+		'emptytext' => '.',
 	 	'unknownparamsmsg'  => '%RED% Sorry, some parameters are unknown: %UNKNOWNPARAMSLIST% %ENDCOLOR% <br/> Allowed parameters are (see TWiki.$pluginName topic for more details): %KNOWNPARAMSLIST%',
-		'fontsize' => '',
+		'fontsize' => 'small',
 		'iconsize' => '12px',
 		'dir'=> 'bottomup', # or 'topdown'
 		'displayconnectedto' => 0,
@@ -90,6 +91,7 @@ sub _initDefaults {
 		'unitcolumnpos' => 'left',
 		'unitcolumnfgcolor' => undef,	
 		'unitcolumnbgcolor' => undef,
+		'columnwidth' => "",
 	);
 
 	@renderedOptions = ( 'name', 'notesicon','conflicticon', 'connectedtoicon', 'emptytext' );
@@ -129,8 +131,9 @@ sub _initOptions {
                         if (grep /^\Q$option\E$/, @flagOptions) {
                                 $v = &TWiki::Func::getPreferencesFlag("\U$pluginName\E_\U$option\E") || undef;
                         } else {
-                                $v = &TWiki::Func::getPreferencesValue("\U$pluginName\E_\U$option\E") || undef;
+                                $v = &TWiki::Func::getPreferencesValue("\U$pluginName\E_\U$option\E");
                         }
+			$v=undef if (defined $v) && ($v eq "");
                         $options{$option}=(defined $v)? $v : $defaults{$option};
                 }
 
@@ -163,6 +166,10 @@ sub _fetch {
 
 		next if $rack =~ /^\*[^\*]+\*$/; ### ignore header
 
+		my $bladeunit = undef;
+	
+		($bladeunit, $sunit) = split /\s*\@\s*/, $sunit if ($sunit =~ /\@/); 
+
 		my $arrRef = $entries{$rack}{$sunit};
 		unless (defined $arrRef) {
 			my @arr = ( );
@@ -171,7 +178,7 @@ sub _fetch {
 		};
 	
 		my $infosRef = { 'server' => $server, 'formfactor'=>$ff,  'rack'=>$rack, 'sunit'=>$sunit,
-				'connectedto'=>$connectedto, 'owner'=>$owner, 'colimg'=>$colimg, 'notes'=>$notes };
+				'connectedto'=>$connectedto, 'owner'=>$owner, 'colimg'=>$colimg, 'notes'=>$notes, 'bladeunit'=>$bladeunit };
 
 		push @{$arrRef}, $infosRef;
 
@@ -180,6 +187,121 @@ sub _fetch {
 	$options{'racks'} = join(',',keys %entries) unless defined $options{'racks'};
 
 	return \%entries;
+}
+# =========================
+sub _renderHorizontal {
+
+	my ($entriesRef) = @_;
+
+	my @racks = split /\s*\,\s*/, $options{'racks'};
+
+	my $startUnit = -abs($options{'units'});
+	my $endUnit = -1;
+	my $steps = abs($options{'steps'});
+
+	my $conflictIcon = &_resizeIcon($options{'conflicticon'});
+
+	if ($options{'dir'}=~/^leftright$/i) {
+		$endUnit=-$startUnit;
+		$startUnit = 1;
+	}
+
+
+	my @stats = ();
+	my $unitRow = "";
+	my @rackRows = ();
+	my @fillCols = ();
+	my @statsRefs = ();
+	for (my $unit=$startUnit; $unit<=$endUnit; $unit+=$steps) {
+
+		### unit row:
+		if ($options{'displayunitcolumn'}) {
+			my $f = $options{'unitcolumnformat'};
+			$f=~s/\%U/abs($unit)/esg;
+			$unitRow .= $cgi->td({-align=>'center', -width=>$options{'columnwidth'}}, $f);
+		}
+
+		### rack rows:
+		for (my $rackNumber=0; $rackNumber<=$#racks; $rackNumber++) {
+			my $rack = $racks[$rackNumber];
+			if ($unit == $startUnit) {
+				$statsRefs[$rackNumber] = &_getRackStatistics($$entriesRef{$rack});
+				push @stats, $statsRefs[$rackNumber];
+				$rackRows[$rackNumber] = $cgi->Td({-align=>'center' }, " $rack ");
+				$fillCols[$rackNumber] = 0;
+			}
+
+			my $entryListRef = $$entriesRef{$rack}{abs($unit)};
+			if ((defined $entryListRef) && ($#$entryListRef!=-1) && ($fillCols[$rackNumber]==0)) {
+				my $entryRef = shift @{ $entryListRef };
+
+				my $colspan = 1;
+				if ($$entryRef{'formfactor'} =~ m/(\d+)/) {
+					$colspan=$1 / $options{'steps'};
+					$colspan=1 unless $colspan>0;
+				}
+
+				if ($unit+$colspan<=$endUnit+1) {
+
+					$fillCols[$rackNumber]=$colspan-1;
+
+					my ($fgcolor, $bgcolor, $style) = &_getColorsAndStyle($$entryRef{'colimg'});
+
+					$rackRows[$rackNumber] .= $cgi->td({
+						-title=>&_encodeTitle($$entryRef{'formfactor'}).'('.abs($unit).'-'.(abs($unit+$colspan-1)).')', 
+						-align=>'left', 
+						-valign=>'top', 
+						-colspan=>$colspan, 
+						-style=>$style,
+						-bgcolor=>$bgcolor,
+						-width=>$options{'columnwidth'},
+						}, 
+						 &_renderTextContent($entryRef)
+						);
+				} else {
+					unshift @{ $entryListRef }, $entryRef;
+
+				}
+
+				if ($#$entryListRef!=-1) {
+					$rackRows[$rackNumber] .= &_renderConflictCell(abs($unit), $entryListRef, $conflictIcon);
+				}
+
+			} else {
+				if ($fillCols[$rackNumber]<=0) {
+					$rackRows[$rackNumber] .= $cgi->td({-align=>'center',-valign=>'top', -width=>$options{'columnwidth'},
+									-style=>"background-color:$options{'emptybgcolor'};color:$options{'emptyfgcolor'}" },
+									&_renderEmptyText($rack,$unit));
+				}
+				$fillCols[$rackNumber]-- if $fillCols[$rackNumber]>0;
+			}
+
+			if ($unit == $endUnit) {
+				$rackRows[$rackNumber] .= $cgi->th({-valign=>'top',-align=>'left'},&_renderRackStatistics($statsRefs[$rackNumber])) if $options{'displaystats'};
+
+				$rackRows[$rackNumber] = $cgi->Tr($rackRows[$rackNumber]);
+			}
+		}
+	}
+
+	### unit row:
+	$unitRow = $cgi->Tr({-style=>"background-color:$options{'unitcolumnbgcolor'};color:$options{'unitcolumnfgcolor'};", -align=>'center',-valign=>'middle'},
+				$cgi->td({-title=>&_encodeTitle($options{'units'}) }, $options{'name'}).$unitRow);
+
+
+	### table:
+	my $text = "";
+	$text .= $cgi->start_table({-cellpadding=>'1',-cellspacing=>'1',-class=>'rackPlannerPluginTable'});
+	$text.=$unitRow if $options{'displayunitcolumn'} && $options{'unitcolumnpos'}=~/^(both|all|top|left)$/i;
+	$text.=join(($options{'displayunitcolumn'}&&$options{'unitcolumnpos'}=~/^all$/i)?"$unitRow\n":"\n",@rackRows);
+	$text.=$unitRow if $options{'displayunitcolumn'} && $options{'unitcolumnpos'}=~/^(both|all|bottom|right)$/i;
+	$text.=$cgi->Tr($cgi->td().$cgi->td({-colspan=>$options{'units'}}, &_renderStatistics(\@stats))) if $options{'displaystats'} && ($#stats>0);
+
+	$text.=$cgi->end_table();
+
+	$text = $cgi->div({-style=>'font-size:'.$options{'fontsize'}}, $text);
+
+	return $text;
 }
 
 # =========================
@@ -198,7 +320,7 @@ sub _render {
 		$startUnit=1;
 	}
 	$text .= '<noautolink>';
-	$text .= $cgi->start_table({-cellpadding=>'0',-cellspacing=>'1',-id=>'rackPlannerPluginTable'});
+	$text .= $cgi->start_table({-cellpadding=>'0',-cellspacing=>'1',-class=>'rackPlannerPluginTable'});
 
 	### render table header:
 	my $tr = "";
@@ -207,14 +329,14 @@ sub _render {
 	$unitColumnStyle.='background-color:'.$options{'unitcolumnbgcolor'}.';'  if $options{'unitcolumnbgcolor'};
 	$unitColumnStyle.='color:'.$options{'unitcolumnfgcolor'}.';' if $options{'unitcolumnfgcolor'};
 	my $unitColumnHeader = $cgi->th({-style=>$unitColumnStyle, -align=>'center', -title=>&_encodeTitle($options{'units'})}, 
-			"<font size=\"$options{'fontsize'}\">$options{'name'}</font>"); 
+			$options{'name'}); 
 	my $unitColumn = ($options{'displayunitcolumn'}? $cgi->td({-style=>$unitColumnStyle,-valign=>'top'}, &_renderUnitColumn($startUnit,$endUnit,$steps)): undef);
 
 	$tr.= $unitColumnHeader if $options{'displayunitcolumn'} && $options{'unitcolumnpos'}=~/^(left|both|all)$/i;
 
 	for (my $rackNumber=0; $rackNumber<=$#racks; $rackNumber++) {
 		my $rack = $racks[$rackNumber];
-		$tr.=$cgi->th({-align=>'center'},"<font size=\"$options{'fontsize'}\">".&TWiki::Func::renderText($rack).'</font>');
+		$tr.=$cgi->th({-align=>'center'},&TWiki::Func::renderText($rack))."\n";
 		$tr.=$unitColumnHeader if $options{'displayunitcolumn'} && ($options{'unitcolumnpos'}=~/^all$/i) && ($rackNumber<$#racks);
 
 	}
@@ -269,12 +391,11 @@ sub _render {
 						-title=>&_encodeTitle($$entryRef{'formfactor'}).'('.abs($unit).'-'.(abs($unit+$rowspan-1)).')', 
 						-valign=>'top', 
 						-rowspan=>$rowspan, 
-						-nowrap=>'1',
+						-nowrap=>'nowrap',
 						-style=>$style,
 						-bgcolor=>$bgcolor,
-						-color=>$fgcolor
 						}, 
-						$itd);
+						$itd)."\n";
 				} else {
 					unshift @{ $entryListRef }, $entryRef;
 				}
@@ -282,7 +403,7 @@ sub _render {
 				if ($#$entryListRef!=-1) {
 					$itd .= &_renderConflictCell(abs($unit), $entryListRef, $conflictIcon);
 				} else {
-					$itd .= $cgi->td({-title=>&_encodeTitle(abs($unit))},"<font size=\"$options{'fontsize'}\">&nbsp;</font>") if ($rowspan>1);
+					$itd .= $cgi->td({-title=>&_encodeTitle(abs($unit))},'&nbsp;') if ($rowspan>1);
 				}
 
 			} else {
@@ -294,25 +415,22 @@ sub _render {
 					if (defined $entryListRef && $#$entryListRef!=-1) {
 						
 						my $title=&_renderConflictTitle(abs($unit),$entryListRef);
-						$itd.=$cgi->span({
-								-title=>$title,
-								-style=>'font-size:'.$options{'fontsize'},
-								}, "<font size=\"$options{'fontsize'}\">".&_retitleIcon($conflictIcon,$title).'&nbsp;</font>');
+						$itd.=$cgi->span({ -title=>$title, }, &_retitleIcon($conflictIcon,$title).'&nbsp;');
 						$bgcolor="white";
 						$fgcolor="red";
 					} else {
-						$itd.="<font size=\"$options{'fontsize'}\">&nbsp;</font>"; 
+						$itd.="&nbsp;"; 
 						$bgcolor="white";
 					}
 					$fillRows--;
 				}
 				$style="background-color:$bgcolor;color:$fgcolor";
-				$itd = $cgi->td({-title=>&_encodeTitle(abs($unit)), -style=>$style, -bgcolor=>$bgcolor, -color=>$fgcolor}, $itd);
+				$itd = $cgi->td({-title=>&_encodeTitle(abs($unit)), -style=>$style, -bgcolor=>$bgcolor}, $itd);
 			}
 			$td .= $cgi->Tr($itd);
 			
 		}
-		$td = '<noautolink>'.$cgi->start_table({-cellpadding=>'0',-cellspacing=>'1',-tableheight=>'100%', width=>'100%'})
+		$td = '<noautolink>'.$cgi->start_table({-cellpadding=>'0',-cellspacing=>'1',hight=>'100%', width=>'100%'})
 			.$td.$cgi->end_table().'</noautolink>';
 		
 		$tr.=$cgi->td({-valign=>'top',-align=>'left'},$td);
@@ -331,6 +449,7 @@ sub _render {
 
 	$text .= $cgi->end_table();
 	$text .= '</noautolink>';
+	$text = $cgi->div({-style=>"font-size:$options{'fontsize'};"}, $text);
 
 	return $text;
 }
@@ -341,10 +460,10 @@ sub _renderUnitColumn {
 		my $f = $options{'unitcolumnformat'};
 		my $u = abs($unit);
 		$f =~ s/%U/$u/g;
-		$f = "<font size=\"$options{'fontsize'}\" color=\"".(defined $options{'unitcolumnbgcolor'}?$options{'unitcolumnbgcolor'}:"")."\">$f</font>";
-		$text.=$cgi->Tr($cgi->td({-valign=>'top',-align=>'right',-rowspan=>'1',-nowrap=>'1'}, $f));
+		$f = "<span style=\"background-color:".(defined $options{'unitcolumnbgcolor'}?$options{'unitcolumnbgcolor'}:"")."\">$f</span>";
+		$text.=$cgi->Tr($cgi->td({-valign=>'top',-align=>'right',-rowspan=>'1',-nowrap=>'nowrap'}, $f));
 	}
-	$text = '<noautolink>'.$cgi->start_table({-cellspacing=>'1',-cellpadding=>'0',-tableheight=>'100%',-width=>'100%',})
+	$text = '<noautolink>'.$cgi->start_table({-cellspacing=>'1',-cellpadding=>'0',-height=>'100%',-width=>'100%',})
 		.$text.$cgi->end_table().'</noautolink>';
 	return $text;
 }
@@ -354,16 +473,15 @@ sub _renderEmptyText {
 
 	$text=~s/%R/$rack/ig;
 	$text=~s/%U/$unit/ig;
-	$text="<font size=\"$options{'fontsize'}\" color=\"$options{'emptyfgcolor'}\">$text</font>";
-	return $text;
+	return " $text ";
 }
 sub _renderConflictCell {
 	my ($unit, $entryListRef, $conflictIcon) = @_;
 	my $title=&_renderConflictTitle($unit, $entryListRef);
 	my $text=$cgi->td({-title=>$title, 
-				-bgcolor=>'white', -color=>'red',
+				-bgcolor=>'white', 
 				-style=>'background-color:white;color:red' },
-			"<font size=\"$options{'fontsize'}\">".&_retitleIcon($conflictIcon, $title).'&nbsp;</font>');
+			&_retitleIcon($conflictIcon, $title).'&nbsp;');
 	return $text;
 }
 
@@ -401,20 +519,19 @@ sub _renderTextContent {
 		$text =~ s/<sub[^>]*>(.*?)<\/sub[^>]*>/$1/igs;
 
 		my $fontsize=$options{'fontsize'};
-		if ($text =~ /<(a|div|span|font)\s+/i) { ## modify existing links/span/div/font styles/colors/sizes
-			foreach my $tag ( ('div','a','span','font') ) {
+		if ($text =~ /<(a|div|span)\s+/i) { ## modify existing links/span/div/font styles/colors/sizes
+			foreach my $tag ( ('div','a','span') ) {
 				unless ($text=~s/(<$tag\s+[^>]*?style=["'])[^"'>]*/$1$style/igs) {
 					$text=~s/(<$tag\s+)/$1style="$style" /igs;
 				}
 				$text=~s/(<$tag\s+[^>]*?color=['"])[^"'>]*/$1$fgcolor/igs;
-				$text=~s/(<$tag\s+[^>]*?size=['"])[^"'>]*/$1$fontsize/igs;
-
 			}
-			$text=~s/(<a[^>]+>)(.*?)(<\/a[^>]*>)/${1}<font color="$fgcolor" size="$fontsize">${2}<\/font>${3}/igs;
+			$text=~s/(<a[^>]+>)(.*?)(<\/a[^>]*>)/${1}<span style="color:$fgcolor">${2}<\/span>${3}/igs;
 		}
 
-		$text="<font color=\"$fgcolor\" size=\"$fontsize\">$text</font>";
-		$text = $cgi->span({-style=>'font-size:'.$options{'fontsize'}.";$style", -title=>&_encodeTitle($owner,1)}, $text);
+		#$text = $cgi->span({-style=>'font-size:'.$options{'fontsize'}.";$style", -title=>&_encodeTitle($owner,1)}, $text);
+		$text = $cgi->span({-style=>$style, -title=>&_encodeTitle($owner,1)}, $text);
+		$text .= '<br/>' if ($options{'dir'}=~/^(leftright|rightleft)$/i);
 		$ret.=$text;
 	}
 	return $ret;
@@ -513,7 +630,6 @@ sub _renderStatistics {
 	$text=~s/%OU/$countOccupiedUnits/ig;
 	$text=~s/%U/($options{'units'}*($#$statsRef+1))/egi;
 
-	$text="<font size=\"$options{'fontsize'}\">$text</font>";
 	return $text;
 }
 sub _renderRackStatistics {
@@ -525,7 +641,6 @@ sub _renderRackStatistics {
 	$text =~s/%LEB/$$statsRef{'maxContinuesUnits'}/g;
 	$text =~s/%OU/$$statsRef{'occupiedUnits'}/g;
  
-	$text="<font size=\"$options{'fontsize'}\">$text</font>";
 	return $text;
 }
 sub _getRackStatistics {
@@ -678,7 +793,7 @@ sub _encode_entities {
 
 sub _encodeTitle {
 	my ($title, $dontEncodeEntities) = @_;
-	return $title unless defined $title;
+	return "" unless defined $title;
 	$title =~ s/<[\/]?\w+[^>]*>//g;
 	$title =~ s/\[\[[^\]]+\]\[([^\]]+)\]\]/$1/g;
 	$title =~ s/\[\[([^\]]+)\]\]/$1/g;

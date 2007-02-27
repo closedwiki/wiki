@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1163604499" format="1.0" version="$Rev$}%
+%META:TOPICINFO{author="TWikiContributor" date="1172580171" format="1.0" version="$Rev$"}%
 ---+ <nop>RackPlannerPlugin
 The <nop>RackPlannerPlugin handles the tag =%<nop>RACKPLANNER%= and renders a rack overview (HTML table) with devices (computer, router, switches, ...). 
 ---++ Syntax Rules
@@ -32,7 +32,7 @@ Usage: =%<nop>RACKPLANNER{attribute1="value" attribute2="value" ... }%=
 | *Attribute* | *Description* | *Example/Default* |
 |  *Behavior:*  |||
 | autotopic | set it =on= and every rack name is automatically used as source topic for the device definition (=racks= attribute is required and the value is attached to the =topic= attribute value); useful if you define your racks and devices on topics with the same names as the racks | =autotopic="off"= |
-| dir | sets the direction of the units: =topdown= - unit 1 is at the top of the rack; =bottomup= - unit 1 is at the bottom of the rack | =dir="bottomup"= |
+| dir | sets the direction of the units: =topdown= - unit 1 is at the top of the rack; =bottomup= - unit 1 is at the bottom of the rack; =leftright= - units are shown horizontal with unit 1 at the left; =rightleft= - units are shown horizontal with unit 1 at the right | =dir="bottomup"= |
 | racks | a comma separated list of rack names to show; if omitted all racks found on topics (see =topic= attribute) are shown  | =racks="rack1,rack2"= |
 | steps | unit steps to display (useful if you use only every =steps= unit of a rack) | =steps="1"= |
 | topic | a comma separated list of source topics | =topic="%<nop>TOPIC%"= |
@@ -42,6 +42,7 @@ Usage: =%<nop>RACKPLANNER{attribute1="value" attribute2="value" ... }%=
 | connectedtoicon | if a 'connected to' entry exists this icon will be displayed with the entry as tooltip | =connectedtoicon="%<nop>M%"= |
 | notesicon | if a 'notes' entry exists this icon will be displayed with the note as tooltip | =notesicon="%<nop>P%"= |
 |  *Formatting:*  |||
+| columnwidth | column width | =columnwidth="50px"= |
 | devicebgcolor | default device background color | =devicebgcolor="#f0f0f0"= |
 | devicefgcolor | default device foreground color | =devicefgcolor="#000000"= |
 | displayconnectedto | if enabled the 'connected to' text entry will be displayed in the table cell instead of the 'connected to' icon | =displayconnectedto="off"= |
@@ -52,7 +53,7 @@ Usage: =%<nop>RACKPLANNER{attribute1="value" attribute2="value" ... }%=
 | emptybgcolor | default empty unit background color | =emptybgcolor="#f0f0f0"= |
 | emptyfgcolor | default empty unit foreground color | =emptyfgcolor="#000000"= |
 | emptytext | text for empty units (replacements: =%U= - unit number; =%R= - rack name) | =emptytext="empty"= |
-| fontsize | font size of the text (in px, pt, em, ...); don't forget to reduce the =iconsize= if you reduce the =fontsize= | =fontsize=""= |
+| fontsize | font size of the text (in px, pt, em, ... or xx-small, x-small, small, medium, large,x-large, xx-large, smaller, larger); don't forget to reduce the =iconsize= if you reduce the =fontsize= | =fontsize="small"= |
 | iconsize | icon size | =iconsize="16"= |
 | name | entry of the first cell (header of the unit row) | =name="U"= |
 | rackstatformat | rack statistics format (replacements: =%EU= - empty units; =%LEB= - largest empty block; =%OU= - occupied units) | =rackstatformat="Empty: %EUU %<nop>BR%Largest Empty Block: %LEBU %<nop>BR%Occupied: %OUU"= |
@@ -98,7 +99,7 @@ a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>E
 		* Set DEBUG = 0
 
 
-	* Rack units (default.: 46):
+	* Rack units (default: 46):
 		* Set UNITS = 46
 
 
@@ -107,10 +108,10 @@ a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>E
 		* Set DEVICEFGCOLOR = #000000
 
 	* Empty unit text:
-		* Set EMPTYTEXT = empty
+		* # Set EMPTYTEXT = empty
 
 	* Font and icon sizes:
-		* Set FONTSIZE =  
+		* Set FONTSIZE = small 
 		* Set ICONSIZE = 12px
 
 	* *Note:* Every attribute of =%<nop>RACKPLANNER%= can also be used as plugin setting. You only have to use capital letters.
@@ -138,7 +139,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | V1.003 (BETA) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  V1.003 (BETA) | TWiki:Main.DanielRohde: fixed displayowner/displaynotes bug reported by TWiki:Main.PatrickTuite |
+|  V1.003 (BETA) | TWiki:Main.DanielRohde: fixed displayowner/displaynotes bug reported by TWiki:Main.PatrickTuite; added horizontal rendering feature requested by TWiki:Main.OlofStockhaus; added new attribute (columnwidth); fixed HTML validation bug; |
 |  V1.002 (26 Oct 2006): | TWiki:Main.DanielRohde: allowed multiple entries in a single unit; fixed rendering bug reported by TWiki:Main.SteveWray; fixed link color bug reported by TWiki:Main.SteveWray |
 |  V1.001 (7 Aug 2006): | TWiki:Main.DanielRohde: improved some features (added statistics); added attributes (rackstatformat, displayunitcolumn, unitcolumn*); renamed attribute statformat; fixed documentation; fixed tooltip bug; fixed conflict bug;|
 |  V1.000 (4 Aug 2006): | TWiki:Main.DanielRohde: Initial version |
