@@ -1,9 +1,14 @@
-head	1.4;
+head	1.5;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.5
+date	2007.02.23.00.50.29;	author LynnwoodBrown;	state Exp;
+branches;
+next	1.4;
 
 1.4
 date	2007.01.02.22.24.03;	author LynnwoodBrown;	state Exp;
@@ -31,12 +36,12 @@ desc
 @
 
 
-1.4
+1.5
 log
 @none
 @
 text
-@%META:TOPICINFO{author="LynnwoodBrown" date="1167776643" format="1.1" version="1.4"}%
+@%META:TOPICINFO{author="LynnwoodBrown" date="1172191829" format="1.1" version="1.5"}%
 %META:TOPICPARENT{name="TopicFunction"}%
 ---+!! Function: %TOPIC%
 %FORMFIELD{"Summary"}%
@@ -61,7 +66,7 @@ This topic function renders a right-hand sidebar.
 %STARTINCLUDE%
 <div style="position:relative;float:right;width:30%;background-color:white;border:2px dotted %WEBBGCOLOR%;padding:1em;margin:0.5em;display:inline;">
 %IFDEFINEDTHEN{"%CONTENT%" glue="off"}%
-%FORMATLIST{"$test" separator="$dollarn" format="$percntINCLUDE{\"$1\" }$percnt" }%
+%FORMATLIST{"%CONTENT%" separator="$dollarn" format="$percntINCLUDE{\"$1\" }$percnt" }%
 %FIDEFINED%
 %IFDEFINEDTHEN{"%RECENT%" glue="off"}%
 ---+++++!! <font  FACE="arial,helvetica"> $test most recently changed topics: </font>
@@ -107,8 +112,24 @@ Create new:
 
 %META:FORM{name="TopicForm"}%
 %META:FIELD{name="TopicType" attributes="" title="TopicType" value="TopicFunction"}%
+%META:FIELD{name="SubjectArea" attributes="" title="SubjectArea" value=""}%
 %META:FIELD{name="Summary" attributes="" title="Summary" value="Renders a sidebar on right side of page."}%
 %META:REVCOMMENT{comment_1=" " minor_1="1" ncomments="1" rev_1="3" t_1="1167757738"}%
+@
+
+
+1.4
+log
+@none
+@
+text
+@d1 1
+a1 1
+%META:TOPICINFO{author="LynnwoodBrown" date="1167776643" format="1.1" version="1.4"}%
+d26 1
+a26 1
+%FORMATLIST{"$test" separator="$dollarn" format="$percntINCLUDE{\"$1\" }$percnt" }%
+d72 1
 @
 
 

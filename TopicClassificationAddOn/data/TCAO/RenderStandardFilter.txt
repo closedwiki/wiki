@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="LynnwoodBrown" date="1171575424" format="1.1" version="1.6"}%
+%META:TOPICINFO{author="LynnwoodBrown" date="1172273138" format="1.1" version="1.7"}%
 %META:TOPICPARENT{name="TopicFunction"}%
 ---+!! Function: %TOPIC%
 %FORMFIELD{"Summary"}%
@@ -18,8 +18,8 @@ This TopicFunction renders a user interface for filtering a list of classified t
 
 ---++ Implementation
 <verbatim>
-%STARTINCLUDE%<div class=patternTopicAction>%TWISTY{id="topicfilters" showlink=" *Show topic list filters* " showimg="%ICONURLPATH{toggleopen-small}%"
-hidelink=" *Hide topic list filters* " hideimg="%ICONURLPATH{toggleclose-small}%" mode="div" remember="on"}%
+%STARTINCLUDE%<div class=patternTopicAction>%TWISTY{id="topicfilters" showlink=" *Show list filters* " showimg="%ICONURLPATH{toggleopen-small}%"
+hidelink=" *Hide list filters* " hideimg="%ICONURLPATH{toggleclose-small}%" mode="div" remember="on"}%
 <noautolink>
 <form name="filterList" action="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%BASEWEB%/%BASETOPIC%" >
 %FORMATLIST{"%FORMFIELD{"Facets" topic="%BASEWEB%.%BASETOPIC%"}%" separator=" $n" format="|    Filter by $1: | <select name=\"$1\" size=\"1\"  > <option value=\"\">Select...</option> $percntDBQUERY{\"$percntFORMFIELD{\"Classification\" topic=\"%BASEWEB%.$1\" }$percnt='$1'\" web=\"%BASEWEB%\" format=\"<option $dollarpercntIF{\\"$'URLPARAM{$1}'='$topic'\\" then=\\"selected\\" else=\\" \\"}$dollarpercnt>$topic</option>\" separator=\" \" }$percnt</select>    | "}%
@@ -56,5 +56,6 @@ hidelink=" *Hide topic list filters* " hideimg="%ICONURLPATH{toggleclose-small}%
 
 %META:FORM{name="TopicForm"}%
 %META:FIELD{name="TopicType" attributes="" title="TopicType" value="TopicFunction"}%
+%META:FIELD{name="SubjectArea" attributes="" title="SubjectArea" value=""}%
 %META:FIELD{name="Summary" attributes="" title="Summary" value="Renders UI for filtering list of topics."}%
 %META:REVCOMMENT{comment_1=" " minor_1="1" ncomments="1" rev_1="4" t_1="1167671745"}%
