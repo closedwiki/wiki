@@ -83,14 +83,6 @@ sub new {
             $this->{rcsFile} = $TWiki::cfg{DataDir}.'/'.
               $web.$rcsSubDir.'/'.$topic.'.txt,v';
         }
-        
-        # remove utf8 encodings from filenames
-        if( $] >= 5.008 ) {
-            utf8::downgrade($this->{attachment}) if $attachment && utf8::is_utf8($this->{attachment});
-            utf8::downgrade($this->{file}) if utf8::is_utf8($this->{file});
-            utf8::downgrade($this->{rcsFile}) if utf8::is_utf8($this->{rcsFile});
-        }
-
     }
 
     return $this;
