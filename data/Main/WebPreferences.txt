@@ -28,9 +28,9 @@ These settings override the defaults for this web only. See [[%TWIKIWEB%.TWikiPr
       * Set DENYWEBVIEW = 
       * Set ALLOWWEBVIEW = 
       * Set DENYWEBCHANGE = 
-      * Set ALLOWWEBCHANGE = %MAINWEB%.TWikiAdminGroup
+      * Set ALLOWWEBCHANGE = 
       * Set DENYWEBRENAME = 
-      * Set ALLOWWEBRENAME = %MAINWEB%.TWikiAdminGroup
+      * Set ALLOWWEBRENAME = 
 
    * Users or groups allowed to change or rename this <nop>%TOPIC% topic: (e.g., %MAINWEB%.TWikiAdminGroup)
       * Set ALLOWTOPICCHANGE = %MAINWEB%.TWikiAdminGroup
