@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1111931141" format="1.0" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1172730733" format="1.0" version="$Rev$"}%
 %META:TOPICPARENT{name="WebHome"}%
 ---+!! <nop>%WEB% Web Preferences
 
@@ -25,15 +25,15 @@ These settings override the defaults for this web only. See [[%TWIKIWEB%.TWikiPr
       * Set WEBFORMS = UserForm
 
    * Users or groups who __are not__ / __are__ allowed to __view__ / __change__ / __rename__ topics in the <nop>%WEB% web: (See %TWIKIWEB%.TWikiAccessControl). Remove the # to enable any of these settings. Remember that an empty setting is a valid setting; setting DENYWEBVIEW to nothing means that anyone can view the web.
-      * #Set DENYWEBVIEW = 
-      * #Set ALLOWWEBVIEW = 
-      * #Set DENYWEBCHANGE = 
-      * #Set ALLOWWEBCHANGE = %MAINWEB%.TWikiAdminGroup
-      * #Set DENYWEBRENAME = 
-      * #Set ALLOWWEBRENAME = %MAINWEB%.TWikiAdminGroup
+      * Set DENYWEBVIEW = 
+      * Set ALLOWWEBVIEW = 
+      * Set DENYWEBCHANGE = 
+      * Set ALLOWWEBCHANGE = %MAINWEB%.TWikiAdminGroup
+      * Set DENYWEBRENAME = 
+      * Set ALLOWWEBRENAME = %MAINWEB%.TWikiAdminGroup
 
    * Users or groups allowed to change or rename this <nop>%TOPIC% topic: (e.g., %MAINWEB%.TWikiAdminGroup)
-      * #Set ALLOWTOPICCHANGE = %MAINWEB%.TWikiAdminGroup
+      * Set ALLOWTOPICCHANGE = %MAINWEB%.TWikiAdminGroup
       * Set ALLOWTOPICRENAME = %MAINWEB%.TWikiAdminGroup
 
    * Web preferences that are *not* allowed to be overridden by user or topic preferences:
