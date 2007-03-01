@@ -173,7 +173,7 @@ sub _initDefaults {
 		workingbgcolor => 'white',	
 		workingfgcolor => 'black',
 		compatmode => 0, 		# compatibility mode
-		cmheaderformat => '<font title="%A - %d %B %Y" size="-2">%b<br/>%a<br/>%e</font>',   # format of the header
+		cmheaderformat => '<font title="%A - %d %B %y" size="-2">%b<br/>%a<br/>%e</font>',   # format of the header
                 todaybgcolor    => undef,       # background color for today cells (usefull for a defined startdate)
                 todayfgcolor    => undef,       # foreground color for today cells (usefull for a dark todaybgcolor)
 		days	=> 7,			# XXX for later use
@@ -196,7 +196,7 @@ sub _initDefaults {
 		tooltipformat => '%DATE%<br/>%TIMERANGE%<br/> %DESCRIPTION% ',
 		tooltipfixleft=>-163,
 		tooltipfixtop=>0,
-		tooltipdateformat => '%y/%d/%m',
+		tooltipdateformat => '%d %B %Y',
 		fontsize=>'xx-small',
 	);
 
@@ -786,7 +786,7 @@ sub _renderTooltip {
 			{
 				-id=>"TTP_DIV_${ttid}_${day}_${min}_${c}", 
 				-class=>"timeTablePluginToolTips",
-				-style=>"visibility:hidden;position:absolute;top:0;left:0;z-index:2;font: normal 8pt sans-serif;padding: 3px; border: solid 1px; color: $fgcolor; background-color: $bgcolor;" ,
+				-style=>"visibility:hidden;position:absolute;top:0;left:0;z-index:2;font: normal $options{'fontsize'} sans-serif;padding: 3px; border: solid 1px; color: $fgcolor; background-color: $bgcolor;" ,
 				-onmouseover=>"ttpTooltipShow('TTP_DIV_${ttid}_${day}_${min}_${c}', 'TTP_TD_${ttid}_${day}_${min}_${c}',$options{'tooltipfixleft'},$options{'tooltipfixtop'},true);",
 				-onmouseout=>"ttpTooltipHide('TTP_DIV_${ttid}_${day}_${min}_${c}');",
 			}, 
