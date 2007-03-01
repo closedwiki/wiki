@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1172580171" format="1.0" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1172747189" format="1.0" version="$Rev$"}%
 ---+ <nop>RackPlannerPlugin
 The <nop>RackPlannerPlugin handles the tag =%<nop>RACKPLANNER%= and renders a rack overview (HTML table) with devices (computer, router, switches, ...). 
 ---++ Syntax Rules
@@ -58,6 +58,7 @@ Usage: =%<nop>RACKPLANNER{attribute1="value" attribute2="value" ... }%=
 | name | entry of the first cell (header of the unit row) | =name="U"= |
 | rackstatformat | rack statistics format (replacements: =%EU= - empty units; =%LEB= - largest empty block; =%OU= - occupied units) | =rackstatformat="Empty: %EUU %<nop>BR%Largest Empty Block: %LEBU %<nop>BR%Occupied: %OUU"= |
 | statformat | statistics format (replacements: =%R= - rack count; =%EU= - empty units; =%LEB= - largest empty block; =%OU= - occupied units; =%U= - # units) | =statformat="#Racks: %R, #Units: %U, Occupied: %OUU, Empty: %EUU, Largest Empty Block: %LEBU"= |
+| textdir | defines text direction; allowed values: =topdown=, =leftright= (%X% only supported for =dir="leftright"= and =dir="rightleft"= yet) | =textdir="leftright"= |
 | unitcolumnbgcolor | background color of the unit column | =unitcolumnbgcolor="white"= |
 | unitcolumnfgcolor | foreground color of the unit column | =unitcolumnfgcolor="black"= |
 | unitcolumnformat | format of the unit column (replacement: =%U= - unit) | =unitcolumnformat="%U"= |
@@ -139,7 +140,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | V1.003 (BETA) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  V1.003 (BETA) | TWiki:Main.DanielRohde: fixed displayowner/displaynotes bug reported by TWiki:Main.PatrickTuite; added horizontal rendering feature requested by TWiki:Main.OlofStockhaus; added new attribute (columnwidth); fixed HTML validation bug; |
+|  V1.003 (BETA) | TWiki:Main.DanielRohde: fixed displayowner/displaynotes bug reported by TWiki:Main.PatrickTuite; added horizontal rendering feature requested by TWiki:Main.OlofStockhaus; added new attributes (columnwidth, textdir); fixed HTML validation bug; |
 |  V1.002 (26 Oct 2006): | TWiki:Main.DanielRohde: allowed multiple entries in a single unit; fixed rendering bug reported by TWiki:Main.SteveWray; fixed link color bug reported by TWiki:Main.SteveWray |
 |  V1.001 (7 Aug 2006): | TWiki:Main.DanielRohde: improved some features (added statistics); added attributes (rackstatformat, displayunitcolumn, unitcolumn*); renamed attribute statformat; fixed documentation; fixed tooltip bug; fixed conflict bug;|
 |  V1.000 (4 Aug 2006): | TWiki:Main.DanielRohde: Initial version |

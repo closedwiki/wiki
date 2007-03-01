@@ -54,7 +54,7 @@ sub expand {
 		$options{'topic'} .= ($options{'topic'} eq ""?'':','). $options{'racks'};
 	}
 
-	return ($options{'dir'}=~/^(leftright|rightleft)$/) 
+	return ($options{'dir'}=~/^(leftright|rightleft)$/i) 
 			? &_renderHorizontal(&_fetch (&_getTopicText())) 
 			: &_render(&_fetch(&_getTopicText()));
 }
@@ -92,6 +92,7 @@ sub _initDefaults {
 		'unitcolumnfgcolor' => undef,	
 		'unitcolumnbgcolor' => undef,
 		'columnwidth' => "",
+		'textdir' => 'leftright',
 	);
 
 	@renderedOptions = ( 'name', 'notesicon','conflicticon', 'connectedtoicon', 'emptytext' );
@@ -249,7 +250,7 @@ sub _renderHorizontal {
 
 					$rackRows[$rackNumber] .= $cgi->td({
 						-title=>&_encodeTitle($$entryRef{'formfactor'}).'('.abs($unit).'-'.(abs($unit+$colspan-1)).')', 
-						-align=>'left', 
+						-align=>($options{'textdir'}=~/^topdown$/i)?'center':'left', 
 						-valign=>'top', 
 						-colspan=>$colspan, 
 						-style=>$style,
@@ -286,9 +287,11 @@ sub _renderHorizontal {
 	}
 
 	### unit row:
-	$unitRow = $cgi->Tr({-style=>"background-color:$options{'unitcolumnbgcolor'};color:$options{'unitcolumnfgcolor'};", -align=>'center',-valign=>'middle'},
-				$cgi->td({-title=>&_encodeTitle($options{'units'}) }, $options{'name'}).$unitRow);
-
+	my $fgcolor=defined $options{'unitcolumnfgcolor'}?$options{'unitcolumnfgcolor'}:"";
+	my $bgcolor=defined $options{'unitcolumnbgcolor'}?$options{'unitcolumnbgcolor'}:"";
+	$unitRow = $cgi->Tr({-style=>"background-color:$bgcolor;color:$fgcolor;", 
+				-align=>'center',-valign=>'middle'},
+				$cgi->td({-title=>&_encodeTitle($options{'units'}) }, $options{'name'}).$unitRow) if ($options{'displayunitcolumn'});
 
 	### table:
 	my $text = "";
@@ -535,6 +538,15 @@ sub _renderTextContent {
 		$text .= '<br/>' if ($options{'dir'}=~/^(leftright|rightleft)$/i);
 		$ret.=$text;
 	}
+	sub _insBreaks {
+		my ($bef,$t,$beh) = @_;
+		$t=~s/(\S)/$1<br\/>/gs;
+		$t=$bef.$t if defined $bef;
+		$t.=$beh if defined $beh;
+		return $t;
+	}
+	$ret=~s/(<\S+[^>]*>)?([^<]*)(<\/\w+[^>]*>)?/&_insBreaks($1,$2,$3)/egs
+			if ($options{'dir'}=~/^(leftright|rightleft)$/i && $options{'textdir'}=~/^topdown$/i);
 	return $ret;
 }
 sub _renderIconContent {
@@ -553,6 +565,7 @@ sub _renderIconContent {
 			} else  {
 				$text.=$cgi->span({-title=>$title},$icon);
 			}
+			$text.='<br/>' if $options{'dir'}=~/^(leftright|rightleft)$/i && $options{'textdir'}=~/^topdown$/i;
 		}
 	}
 
