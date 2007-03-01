@@ -80,18 +80,22 @@ sub mailNotify {
         $twiki = new TWiki();
     }
 
-    $twiki->enterContext( 'command_line');
+    my $context = TWiki::Func::getContext();
+
+    $context->{command_line} = 1;
+
+    $TWiki::Plugins::SESSION = $twiki;
 
     # absolute URL context for email generation
-    $twiki->enterContext( 'absolute_urls' );
+    $context->{absolute_urls} = 1;
 
     my $report = '';
     foreach my $web ( grep( /^($webstr)$/,
-                            $twiki->{store}->getListOfWebs( 'user ') )) {
+                            TWiki::Func::getListOfWebs( 'user ') )) {
         $report .= _processWeb( $twiki, $web );
     }
 
-    $twiki->leaveContext( 'absolute_urls' );
+    $context->{absolute_urls} = 0;
 
     return $report;
 }
@@ -100,7 +104,7 @@ sub mailNotify {
 sub _processWeb {
     my( $twiki, $web) = @_;
 
-    if( ! $twiki->{store}->webExists( $web ) ) {
+    if( ! TWiki::Func::webExists( $web ) ) {
         print STDERR "**** ERROR mailnotifier cannot find web $web\n";
         return '';
     }
@@ -165,7 +169,7 @@ sub _processSubscriptions {
         my ($topicName, $userName, $changeTime, $revision) =
           split( /\t/, $line);
 
-        next unless $twiki->{store}->topicExists( $web, $topicName );
+        next unless TWiki::Func::topicExists( $web, $topicName );
 
         $timeOfLastChange = $changeTime unless( $timeOfLastChange );
 
@@ -185,7 +189,7 @@ sub _processSubscriptions {
 
     # For each topic, see if there's a compulsory subscription independent
     # of the time since last notify
-    foreach my $topic ($twiki->{store}->getTopicNames($web)) {
+    foreach my $topic (TWiki::Func::getTopicList($web)) {
         $notify->processCompulsory( $topic, $db, \%allSet );
     }
 
@@ -206,21 +210,22 @@ sub _sendChangesMails {
     my ( $twiki, $web, $changeset, $lastTime ) = @_;
     my $report = '';
 
-    my $skin = $twiki->getSkin();
-    my $template = $twiki->{templates}->readTemplate( 'mailnotify', $skin );
+    my $skin = TWiki::Func::getSkin();
+    my $template = TWiki::Func::readTemplate( 'mailnotify', $skin );
 
     my $homeTopic = $TWiki::cfg{HomeTopicName};
 
-    my $before_html = $twiki->{templates}->expandTemplate( 'HTML:before' );
-    my $middle_html = $twiki->{templates}->expandTemplate( 'HTML:middle' );
-    my $after_html = $twiki->{templates}->expandTemplate( 'HTML:after' );
+    my $before_html = TWiki::Func::expandTemplate( 'HTML:before' );
+    my $middle_html = TWiki::Func::expandTemplate( 'HTML:middle' );
+    my $after_html = TWiki::Func::expandTemplate( 'HTML:after' );
 
-    my $before_plain = $twiki->{templates}->expandTemplate( 'PLAIN:before' );
-    my $middle_plain = $twiki->{templates}->expandTemplate( 'PLAIN:middle' );
-    my $after_plain = $twiki->{templates}->expandTemplate( 'PLAIN:after' );
+    my $before_plain = TWiki::Func::expandTemplate( 'PLAIN:before' );
+    my $middle_plain = TWiki::Func::expandTemplate( 'PLAIN:middle' );
+    my $after_plain = TWiki::Func::expandTemplate( 'PLAIN:after' );
 
-    my $mailtmpl = $twiki->{templates}->expandTemplate( 'MailNotifyBody' );
-    $mailtmpl = $twiki->handleCommonTags( $mailtmpl, $web, $homeTopic );
+    my $mailtmpl = TWiki::Func::expandTemplate( 'MailNotifyBody' );
+    $mailtmpl = TWiki::Func::expandCommonVariables(
+        $mailtmpl, $web, $homeTopic );
     if( $TWiki::cfg{RemoveImgInMailnotify} ) {
         # change images to [alt] text if there, else remove image
         $mailtmpl =~ s/<img\s[^>]*\balt=\"([^\"]+)[^>]*>/[$1]/goi;
@@ -247,7 +252,7 @@ sub _sendChangesMails {
         $mail =~ s/%HTML_TEXT%/$before_html$html$after_html/go;
         $mail =~ s/%PLAIN_TEXT%/$before_plain$plain$after_plain/go;
         $mail =~ s/%LASTDATE%/$lastTime/geo;
-        $mail = $twiki->handleCommonTags( $mail, $web, $homeTopic );
+        $mail = TWiki::Func::expandCommonVariables( $mail, $web, $homeTopic );
 
         my $base = $TWiki::cfg{DefaultUrlHost} . $TWiki::cfg{ScriptUrlPath};
         $mail =~ s/(href=\")([^"]+)/$1.relativeURL($base,$2)/goei;
@@ -256,7 +261,7 @@ sub _sendChangesMails {
         # remove <nop> and <noautolink> tags
         $mail =~ s/( ?) *<\/?(nop|noautolink)\/?>\n?/$1/gois;
 
-        my $error = $twiki->{net}->sendEmail( $mail, 5 );
+        my $error = TWiki::Func::sendEmail( $mail, 5 );
 
         if ($error) {
             print STDERR "Error sending mail: $error\n";
@@ -289,7 +294,7 @@ sub _sendNewsletterMails {
 
 sub _sendNewsletterMail {
     my ($twiki, $web, $topic, $emails) = @_;
-    my $wikiName = $twiki->{user}->wikiName();
+    my $wikiName = TWiki::Func::getWikiName();
 
     # SMELL: this code is almost identical to PublishContrib
 
@@ -323,16 +328,22 @@ sub _sendNewsletterMail {
     # and web preferences
     $twiki->{prefs}->pushWebPreferences($web);
     $twiki->{prefs}->pushPreferences($web, $topic, 'TOPIC');
-    $twiki->{prefs}->pushPreferenceValues(
-        'SESSION', $twiki->{client}->getSessionValues()) if $twiki->{client};
+    if( $twiki->{loginManager} ) {
+        $twiki->{prefs}->pushPreferenceValues(
+            'SESSION', $twiki->{loginManager}->getSessionValues());
+    } elsif( $twiki->{client} ) {
+        # old name was {client}
+        $twiki->{prefs}->pushPreferenceValues(
+            'SESSION', $twiki->{client}->getSessionValues());
+    }
     $twiki->enterContext( 'can_render_meta', $meta );
 
     # Get the skin for this topic
-    my $skin = $twiki->getSkin();
-    $twiki->{templates}->readTemplate( 'newsletter', $skin );
-    my $header = $twiki->{templates}->expandTemplate( 'NEWS:header' );
-    my $body = $twiki->{templates}->expandTemplate( 'NEWS:body' );
-    my $footer = $twiki->{templates}->expandTemplate( 'NEWS:footer' );
+    my $skin = TWiki::Func::getSkin();
+    TWiki::Func::readTemplate( 'newsletter', $skin );
+    my $header = TWiki::Func::expandTemplate( 'NEWS:header' );
+    my $body = TWiki::Func::expandTemplate( 'NEWS:body' );
+    my $footer = TWiki::Func::expandTemplate( 'NEWS:footer' );
 
     my ($revdate, $revuser, $maxrev);
     ($revdate, $revuser, $maxrev) = $meta->getRevisionInfo();
@@ -400,7 +411,7 @@ sub _sendNewsletterMail {
         # remove <nop> and <noautolink> tags
         $mail =~ s/( ?) *<\/?(nop|noautolink)\/?>\n?/$1/gois;
 
-        my $error = $twiki->{net}->sendEmail( $mail, 5 );
+        my $error = TWiki::Func::sendEmail( $mail, 5 );
 
         if ($error) {
             print STDERR "Error sending mail: $error\n";

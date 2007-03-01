@@ -76,10 +76,15 @@ sub getEmailAddresses {
                 $this->{name}, undef, 1 );
             if( $user ) {
                 push( @{$this->{emails}}, $user->emails() );
-            }
-            else {
-                # unknown - can't find an email
-                $this->{emails} = [];
+            } else {
+                $user = $this->{session}->{users}->findUser(
+                    $this->{name}, $this->{name}, 1 );
+                if( $user ) {
+                    push( @{$this->{emails}}, $user->emails() );
+                } else {
+                    # unknown - can't find an email
+                    $this->{emails} = [];
+                }
             }
         }
     }
