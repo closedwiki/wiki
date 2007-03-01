@@ -788,9 +788,9 @@ sub renderChecklistItem {
 
 	$text.=qq@<noautolink>@;
 	
-	$text.=$query->comment("\[CLTABLEPLUGINSORTFIX\]");
-	$text.=$heState;
-	$text.=$query->comment("\[/CLTABLEPLUGINSORTFIX\]");
+	$text.=$query->comment('CLTABLEPLUGINSORTFIX:');
+	$text.=$query->div({-style=>"visibility:hidden;position:absolute;top:0;left:0;z-index:2;" },$heState);
+	$text.=$query->comment(':CLTABLEPLUGINSORTFIX');
 
 	$text.=$query->a({name=>"$name$uetId"}, '&nbsp;') if $options{'anchors'} && !$options{'useajax'};
 
@@ -838,7 +838,11 @@ sub createHiddenDirectSelectionDiv {
 		my ($s, $ic) = ($$statesRef[$i], $$iconsRef[$i]);
 		my $action = &createAction($id, $name, $state, $s);
 		my $title = &createTitle($name,$state,$icon,$statesRef, $s, $ic);
-		$action="javascript:submitItemStateChange('$action');clpTooltipHide('CLP_SM_DIV_$name$id');" if $options{'useajax'};
+		my $submitAction = "";
+		if ($options{'useajax'}) {
+			$submitAction = "submitItemStateChange('$action');clpTooltipHide('CLP_SM_DIV_$name$id');";
+			$action="javascript:$submitAction";
+		}
 		$text .= $query->div({-id=>"CLP_SM_TT_$name${id}_$i",-style=>"visibility:hidden;position:absolute;top:0;left:0;z-index:3;font: normal 8pt sans-serif;padding: 3px; border: solid 1px; background-color: $options{'tooltipbgcolor'};"},$title); 
 		my $imgsrc = (&getImageSrc($ic))[0];
 		my $imgalt = (defined $imgsrc)?"":$s;
@@ -1013,8 +1017,8 @@ sub collectAllChecklistItems {
 sub postRenderingHandler  {
 	my $query = TWiki::Func::getCgiQuery();
 	if (defined $query) {
-		my $startTag=$query->comment("\[CLTABLEPLUGINSORTFIX\]");
-		my $endTag=$query->comment("\[/CLTABLEPLUGINSORTFIX\]");
+		my $startTag=$query->comment('CLTABLEPLUGINSORTFIX:');
+		my $endTag=$query->comment(':CLTABLEPLUGINSORTFIX');
 		$_[0]=~s/\Q$startTag\E.*?\Q$endTag\E//sg;
 	}
 }
