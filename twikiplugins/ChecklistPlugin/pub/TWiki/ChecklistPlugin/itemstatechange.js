@@ -81,6 +81,8 @@ function clpHandleTextResponse(self, responseText) {
 			var src = RegExp.$1;
 			img.match(/alt="([^"]+)"/);
 			var alt = RegExp.$1;
+			//img.match(/onclick="([^"]+)"/);
+			//var onclick = RegExp.$1;
 			var els = document.getElementsByName("CLP_IMG_"+id);
 			if  (els && els.length) {
 				for (var j=0; j<els.length; ++j) {
@@ -88,6 +90,8 @@ function clpHandleTextResponse(self, responseText) {
 					if ((!src || src == "") && (alt && alt!="" && els[j].alt == alt)) continue AllLinks;
 					els[j].src = src;
 					if (!src || src == "") els[j].alt = alt;
+				
+					//if (onclick) els[j].onclick=onclick;
 				}
 			}
 
