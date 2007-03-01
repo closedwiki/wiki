@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1160701186" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1172730733" format="1.1" version="$Rev$"}%
 %TOC%
 %STARTINCLUDE%
 
@@ -99,15 +99,11 @@ You can define restrictions on who is allowed to view a <nop>%WIKITOOLNAME% web.
       * ==Set <nop>DENYWEBRENAME = &lt; comma-delimited list of Users and Groups &gt;==
       * ==Set <nop>ALLOWWEBRENAME = &lt; comma-delimited list of Users and Groups &gt;==
 
-*Be careful* with empty values for any of these. In older versions of TWiki,
-   * ==Set <nop>ALLOWWEBVIEW = <nop>==
-meant the same as not setting it at all. However since TWiki-4.0.0, it means _allow no-one access_ i.e. prevent anyone from viewing the web. Similarly
-   * ==Set <nop>DENYWEBVIEW = <nop>==
-now means _do not deny anyone the right to view this web_. See "How TWiki evaluates ALLOW/DENY settings" below for more on this.
-
 If your site allows hierarchical webs, then access to sub-webs is determined from the access controls of the parent web, plus the access controls in the sub-web. So, if the parent web has ==ALLOWWEBVIEW== set, this will also apply to the subweb.
 
 Creation and renaming of sub-webs is controlled by the WEBCHANGE setting on the parent web (or ROOTCHANGE for [[#RootWebs][root webs]]). Renaming is additionally restricted by the setting of WEBRENAME in the web itself.
+
+__Note:__ Setting any of these settings to an empty value has the same effect as not setting them at all. Please note that the documentation of TWiki 4.0 and earlier versions of TWiki 4.1 did not reflect the actual implementation, e.g. an empty ALLOWWEBVIEW does _not_ prevent anyone from viewing the web, and an an empty DENYWEBVIEW does _not_ allow all to view the web.
 
 ---+++ Controlling access to a Topic
 
@@ -121,11 +117,7 @@ Creation and renaming of sub-webs is controlled by the WEBCHANGE setting on the 
 
 Remember when opening up access to specific topics within a restricted web that other topics in the web - for example, the WebLeftBar - may also be accessed when viewing the topics. The message you get when you are denied access should tell you what topic you were not permitted to access.
 
-*Be careful* with empty values for any of these. In older versions of TWiki,
-   * ==Set <nop>ALLOWTOPICVIEW = <nop>==
-meant the same as not setting it at all. However since TWiki-4.0.0, it means _allow no-one access_ i.e. prevent anyone from viewing the topic. Similarly
-   * ==Set <nop>DENYTOPICVIEW = <nop>==
-now means _do not deny anyone the right to view this topic_. See "How TWiki evaluates ALLOW/DENY settings" below for more on this.
+%X% __Attention:__ It is not recommended to use empty settings, e.g. do not write ==Set <nop>DENYTOPICVIEW =<nop>== (without anything after the equal sign.) In TWiki versions older than TWiki 4 it was the same as not setting anything, since TWiki 4.0 it means _allow no-one access_ (for ALLOWTOPICVIEW), and _allow anyone access_ (for DENYTOPICVIEW). This is __deprecated__ and will most like change in the next TWiki release.
 
 ---+++ Controlling access to Attachments
 
@@ -162,17 +154,16 @@ When deciding whether to grant access, TWiki evaluates the following rules in or
    1 If DENYTOPIC is set to a list of wikinames
       * people in the list will be *DENIED*.
    1 If DENYTOPIC is set to _empty_ ( i.e. <tt>Set DENYTOPIC =</tt> )
-      * access is *PERMITTED* _i.e_ no-one is denied access to this topic
+      * access is *PERMITTED* _i.e_ no-one is denied access to this topic.%BR%
+        %X% __Attention:__ Do not set empty values, this is __deprecated__ and will likely change in the next release.
    1 If ALLOWTOPIC is set
       1 people in the list are *PERMITTED*
       1 everyone else is *DENIED*
-         * Note that this means that setting ALLOWTOPIC to empty _denies access to everyone except admins_ (unless DENYTOPIC is also set to empty, as described above)
-   1 If DENYWEB is set to a list of wikiname
+   1 If DENYWEB is set to a list of wikinames
       * people in the list are *DENIED* access
    1 If ALLOWWEB is set to a list of wikinames
       * people in the list will be *PERMITTED*
       * everyone else will be *DENIED*
-         * Note that setting ALLOWWEB to empty _denies access to everyone except admins_
    1 If you got this far, access is *PERMITTED*
 
 ---++ Access Control quick recipes
