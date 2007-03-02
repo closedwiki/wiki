@@ -85,7 +85,7 @@ sub test_SEARCH_Native {
     # Need to try all three of the default algorithms
     eval "require TWiki::Store::SearchAlgorithms::Native";
     if ($@) {
-        print STDERR "WARNING: unable to test native search, extension module may not be installed: $@\n";
+        print STDERR "\nWARNING: unable to test native search, extension module may not be installed\n";
         return;
     }
 
