@@ -83,9 +83,21 @@ sub new {
             $this->{rcsFile} = $TWiki::cfg{DataDir}.'/'.
               $web.$rcsSubDir.'/'.$topic.'.txt,v';
         }
+
+        # remove utf8 encodings from filenames
+        downgrade($this->{attachment});
+        downgrade($this->{file});
+        downgrade($this->{rcsFile});
     }
 
     return $this;
+}
+
+# downgrade utf8 encoding of files
+sub downgrade {
+  return unless $_[0];
+  return unless $] >= 5.008;
+  utf8::downgrade($_[0]);
 }
 
 # Used in subclasses for late initialisation during object creation
