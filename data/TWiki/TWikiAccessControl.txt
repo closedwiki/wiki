@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1172730733" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1172865279" format="1.1" version="$Rev$"}%
 %TOC%
 %STARTINCLUDE%
 
@@ -17,7 +17,7 @@ Open, freeform editing is the essence of WikiCulture - what makes TWiki differen
    * *Peer influence* is enough to ensure that only relevant content is posted.
    * *Peer editing* - the ability for anyone to rearrange all content on a page - keeps topics focused.
    * In TWiki, content is transparently preserved under *revision control*:
-      * Edits can be undone by administrators.
+      * Edits can be undone by the administrator (per default a member of %MAINWEB%.TWikiAdminGroup; see [[#ManagingGroups]]).
       * Users are encouraged to edit and refactor (condense a long topic), since there's a safety net.
 As a *collaboration guideline*:
    * Create broad-based Groups (for more and varied input), and...
@@ -68,11 +68,11 @@ __%X% Note:__ TWiki has strict formatting rules. Make sure you have three spaces
 #SuperAdminGroup
 ---+++ The Super Admin Group
 
-A number of TWiki functions (for example, renaming webs) are only available to administrators. Administrators are simply users who belong to the *SuperAdminGroup*. This is a standard user group, the name of which is defined by {SuperAdminGroup} setting in [[%SCRIPTURLPATH{"configure"}%][configure]]. The usual name of this group is the =TWikiAdminGroup=.
+A number of TWiki functions (for example, renaming webs) are only available to administrators. Administrators are simply users who belong to the *SuperAdminGroup*. This is a standard user group, the name of which is defined by {SuperAdminGroup} setting in [[%SCRIPTURLPATH{"configure"}%][configure]]. The default name of this group is the =TWikiAdminGroup=. The system administrator may have chosen a different name for this group if your local TWiki uses an alternate group mapping manager but for simplicity we will use the default name !TWikiAdminGroup in the rest of this topic.
 
-If you are using standard TWiki groups, you can create new administrators simply by adding them to the %MAINWEB%.TWikiAdminGroup topic. For example,
+You can create new administrators simply by adding them to the %MAINWEB%.TWikiAdminGroup topic. For example,
    * ==Set <nop>GROUP= <nop>%MAINWEB%.ElizabethWindsor, <nop>%MAINWEB%.TonyBlair==
-A member of the Super Admin Group has unrestrict access throughout the TWiki, so treat this group with the respect it deserves!
+A member of the Super Admin Group has unrestricted access throughout the TWiki, so only trusted staff should be added to this group.
 
 ---++ Restricting Access
 
@@ -103,7 +103,7 @@ If your site allows hierarchical webs, then access to sub-webs is determined fro
 
 Creation and renaming of sub-webs is controlled by the WEBCHANGE setting on the parent web (or ROOTCHANGE for [[#RootWebs][root webs]]). Renaming is additionally restricted by the setting of WEBRENAME in the web itself.
 
-__Note:__ Setting any of these settings to an empty value has the same effect as not setting them at all. Please note that the documentation of TWiki 4.0 and earlier versions of TWiki 4.1 did not reflect the actual implementation, e.g. an empty ALLOWWEBVIEW does _not_ prevent anyone from viewing the web, and an an empty DENYWEBVIEW does _not_ allow all to view the web.
+__Note:__  For Web level access rights Setting any of these settings to an empty value has the same effect as not setting them at all. Please note that the documentation of TWiki 4.0 and earlier versions of TWiki 4.1 did not reflect the actual implementation, e.g. an empty ALLOWWEBVIEW does _not_ prevent anyone from viewing the web, and an an empty DENYWEBVIEW does _not_ allow all to view the web.
 
 ---+++ Controlling access to a Topic
 
@@ -117,7 +117,17 @@ __Note:__ Setting any of these settings to an empty value has the same effect as
 
 Remember when opening up access to specific topics within a restricted web that other topics in the web - for example, the WebLeftBar - may also be accessed when viewing the topics. The message you get when you are denied access should tell you what topic you were not permitted to access.
 
-%X% __Attention:__ It is not recommended to use empty settings, e.g. do not write ==Set <nop>DENYTOPICVIEW =<nop>== (without anything after the equal sign.) In TWiki versions older than TWiki 4 it was the same as not setting anything, since TWiki 4.0 it means _allow no-one access_ (for ALLOWTOPICVIEW), and _allow anyone access_ (for DENYTOPICVIEW). This is __deprecated__ and will most like change in the next TWiki release.
+*Be careful* with empty values for any of these.
+   * ==Set <nop>ALLOWTOPICVIEW = <nop>==
+meant the same as not setting it at all. (This was documented wrong in versions 4.0.X, 4.1.0 and 4.1.1)
+   * ==Set <nop>DENYTOPICVIEW = <nop>==
+Since TWiki 4.0 this means _do not deny anyone the right to view this topic_. If DENYTOPICVIEW is set to an empty value anyone has access even if ALLOWTOPICVIEW or ALLOWWEBVIEW is defined. This allows to have very restrictive default access rights to an entire web and still allow individual topics to have more open access.
+
+The same rules apply to ALLOWTOPICCHANGE/DENYTOPICCHANGE and APPLYTOPICRENAME/DENYTOPICRENAME. Setting ALLOWTOPICCHANGE or ALLOWTOPICRENAME to en empty value means the same as not defining it. Setting DENYTOPICCHANGE or DENYTOPICRENAME to an empty value means that anyone can edit or rename the topic.
+
+%X% _The setting to an empty has caused confusion and great debate and it has been decided that the empty setting syntax will be replaced by something which is easier to understand in the 4.2 version of TWiki. A method to upgrade will be provided. Please read the release notes carefully when you upgrade._
+
+See "How TWiki evaluates ALLOW/DENY settings" below for more on how ALLOW and DENY interacts.
 
 ---+++ Controlling access to Attachments
 
@@ -140,6 +150,7 @@ __Note:__ Images embedded in topics will load much slower since each image will 
 
 #RootWebs
 ---+++ Controlling who can manage top-level webs
+
 Top level webs are a special case, because they don't have a parent web with a %WEBPREFSTOPIC%. So there has to be a special control just for the root level.
    * You can define these settings in the %MAINWEB%.%TWIKIPREFSTOPIC% topic, preferable towards the end of the topic:
       * ==Set <nop>DENYROOTCHANGE = &lt; comma-delimited list of Users and Groups &gt;==
@@ -149,13 +160,14 @@ Note that you do *not* require =ROOTCHANGE= access to rename an existing top-lev
 ---+++ How TWiki evaluates ALLOW/DENY settings
 
 When deciding whether to grant access, TWiki evaluates the following rules in order (read from the top of the list; if the logic arrives at *PERMITTED* or *DENIED* that applies immediately and no more rules are applied). You need to read the rules bearing in mind that VIEW, CHANGE and RENAME access may be granted/denied separately.
-   1 If the user is a [[#SuperAdminGroup][super-user]]
+
+   1 If the user is an [[#SuperAdminGroup][administrator]]
       * access is *PERMITTED*.
    1 If DENYTOPIC is set to a list of wikinames
       * people in the list will be *DENIED*.
    1 If DENYTOPIC is set to _empty_ ( i.e. <tt>Set DENYTOPIC =</tt> )
       * access is *PERMITTED* _i.e_ no-one is denied access to this topic.%BR%
-        %X% __Attention:__ Do not set empty values, this is __deprecated__ and will likely change in the next release.
+        %X% __Attention:__ Use this with caution. This is __deprecated__ and will likely change in the next release.
    1 If ALLOWTOPIC is set
       1 people in the list are *PERMITTED*
       1 everyone else is *DENIED*
@@ -167,6 +179,15 @@ When deciding whether to grant access, TWiki evaluates the following rules in or
    1 If you got this far, access is *PERMITTED*
 
 ---++ Access Control quick recipes
+
+---+++ Obfuscating Webs
+
+Another way of hiding webs is to keep them hidden by not publishing the URL and by preventing the ==all webs== search option from accessing obfuscated webs. Do so by enabling the ==NOSEARCHALL== variable in %WEBPREFSTOPIC%:
+   * ==Set <nop>NOSEARCHALL = on==
+
+This setup can be useful to hide a new web until content its ready for deployment, or to hide view access restricted webs.
+
+__%X% Note:__ Obfuscating a web without view access control is *very* insecure, as anyone who knows the URL can access the web.
 
 ---+++ Authenticate all Webs and Restrict Selected Webs
 
