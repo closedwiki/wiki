@@ -336,6 +336,7 @@ Dependencies:
 	  | *Package:* | *Description:* |
 	  | Graphviz dot | Preprocessor for drawing directed graphs |
 	  | <nop>ImageMagick | Postprocessor for antialising rendered graphs (optional) |
+	  | <nop>gs | Ghostscript interpreter for antialising rendered graphs (optional) |
 	  | Digest::MD5 | MD5 Perl module |
 	  | Web fonts | Fonts required for dot's png creations |
 	* Customize paths to executables to your environment (in =DirectedGraphPlugin.pm= set =$enginePath=, =$dotHelperPath=, =$execCmd=, =$antialiasCmd= to correct paths for your environment)
@@ -348,6 +349,7 @@ To install the web fonts, download this [[http://biostat.mc.vanderbilt.edu/twiki
 |  Plugin Author: | TWiki:Main/ColeBeck |
 |  Plugin Version: | 27 Jul 2006 (V1.300) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  02 Mar 2007: | Updated link generation (img src) to be compatible with <nop>I18N webs and topics -- TWiki:Main.SteffenPoulsen |
 |  27 Jul 2006: | Error messages from graphviz binary now reported to topic. Check for succesful graphviz binary execution corrected (patch by TWiki:Main.JChristophFuchs). -- TWiki:Main.SteffenPoulsen |
 |  12 Jun 2006: | Optional antialias parameter added  (using <nop>ImageMagick). Support for custom icons (shapefiles) added. Support for five layout engines added. Support for attaching vectorbased renderings added. -- TWiki:Main.SteffenPoulsen |
 |  16 Apr 2006: | Minor fix for areamap (Firefox compatibility)  -- TWiki:Main.SteffenPoulsen |
