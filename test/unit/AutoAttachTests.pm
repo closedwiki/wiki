@@ -101,7 +101,7 @@ sub sneakAttachmentsAddedToTopic {
     my ($topic, @filenames) = @_;
     my $dir = $TWiki::cfg{PubDir};
     $dir = "$dir/$testweb/$topic";
-    print STDERR "DEBUG: dir=$dir\n";
+    #print STDERR "DEBUG: dir=$dir\n";
 
     foreach my $file (@filenames) {
       touchFile("$dir/$file");
