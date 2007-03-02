@@ -5,7 +5,7 @@
 
 use strict;
 
-my $debug = 0;
+my $debug = 1;
 
 if ($debug) {
     open( DEBUGFILE, ">>/tmp/DirectedGraphPlugin.pl.log" );

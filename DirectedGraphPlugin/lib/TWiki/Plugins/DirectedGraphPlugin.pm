@@ -418,12 +418,14 @@ sub handleDot
 
         # place map and "foo.png" at the source of the <dot> tag in $Web.$Topic
         my $loc = TWiki::Func::getPubUrlPath() . "/$web/$topic";
-      return "$mapfile<img usemap=\"#$hash_code\" src=\"$loc/graph$hash_code.png\"/>";
+        my $src = TWiki::urlEncode("$loc/graph$hash_code.png");
+      return "$mapfile<img usemap=\"#$hash_code\" src=\"$src\"/>";
     } else {
 
         # attach "foo.png" at the source of the <dot> tag in $Web.$Topic
         my $loc = TWiki::Func::getPubUrlPath() . "/$web/$topic";
-      return "<img src=\"$loc/graph$hash_code.png\"/>";
+        my $src = TWiki::urlEncode("$loc/graph$hash_code.png");
+      return "<img src=\"$src\"/>";
     } ### else [ if ($doMap)
 } ### sub handleDot
 
