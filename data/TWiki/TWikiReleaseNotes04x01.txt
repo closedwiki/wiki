@@ -1,5 +1,5 @@
 %META:TOPICINFO{author="TWikiContributor" date="1169321835" format="1.1" version="$Rev$"}%
----+!! TWiki Release 4.1.1 (Edinburgh), 05 Feb 2007
+---+!! TWiki Release 4.1.2 (Edinburgh), %$DATE%
 
 %TOC%
 
@@ -121,9 +121,27 @@ An upgrader should note the following important changes.
    * The directory for passthrough files and session files have been replaced by a common directory for temporary files used by TWiki. Previously the two configure settings ={PassthroughDir}= and ={Sessions}{Dir}= were by default set to =/tmp=. These config settings have been replaced by ={TempfileDir}= with the default setting value =/tmp/twiki=. If the =twiki= directory does not exist twiki will create it first time it needs it. It is highly recommended no longer to use the tmp directory common to other web applications and the new default will work fine for most. You may want to delete all the old session files in /tmp after the upgrade to 4.1.1. They all start with cgisess_. It is additionally highly recommended to limit write access to the ={TempfileDir}= for security reasons if you have non-admin users with login access to the webserver just like you would do with the other webserver directories.
    * Many bugs fixed. If you had to implement work arounds to make things work chances are that they are fixed now. See the detailed bugfix list below.
 
----++ Deprecation Notice
+---++ Important Changes since 4.1.1
+
+---+++ TWiki works again on Perl 5.6.X
+
+TWiki has now been tested and a few small code changes made so that TWiki now runs on Perl 5.6.X
+
+TWiki 4.1.2 has been confirmed working on the combination RedHat 7.3, Apache 1.3.23, Perl 5.6.1. Note that many plugins requires Perl 5.8 or at least additional CPAN libraries.
+
+---+++ An upgrader should note the following important changes.
+
+   * The twisty that used to hide the attachment table has been removed because the Javascript code triggers a bug in Internet Explorer when a topic is long making page rendering take up to 1 minute. The twisty may return in later versions of TWiki when the bug has been resolved.
+   * Users of mod_perl should notice a new experimental feature that speeds up searching by a large factor. The feature is described in the [[http://twiki.org/cgi-bin/view/Codev/NativeSearch][NativeSearch]] topic at the TWiki website. In configure look for the {RCS}{SearchAlgorithm} setting. Normal mode is Forking. The new mode for mod_perl is Native and is a C program which needs to be compiled with a C-compiler like gcc, and this new mode works faster than forking on mod_perl. If you do not run mod_perl stick to the default Forking.
+   * /tmp/twiki directory which was introduced with 4.1.1 is now auto created also with older versions of the CGI::Session library. This is important for distributions that cleans out /tmp when rebooting.
+   * Configure has gotten much better at installing extensions such as plugins.
+   * Configure is now more friendly to a new administator. Configure now only shows the important "General Path Settings" until you have saved and created the LocalSite.cfg file. This prevents a number of false errors from being wrongly fixed by a first time installer.
+   * The documented bahavior of "* Set ALLOWTOPICCHANGE = (nothing)" does not match the code. Documentation has been updated to match actual behavior in 4.1.2. See also deprecation notice below. You should review your use of access rights settings in topics.
+
+---++ Deprecation Notices
 
    * Usage of TWikiForms for setting preferences has been deprecated in favor of TWiki:Plugins.PreferencesPlugin. !PreferencesPlugin has been included since TWiki 4.0.0 to allow more convenient editing of preferences. This plugin provides input controls, such as menus, radio buttons, and checkboxes to select preference settings.
+   * From TWiki 4.0.0 the syntax "* Set DENYTOPICVIEW = " (nothing) in a topic means deny noone. Even if ALLOWTOPICVIEW is set to people or group setting DENYTOPICCHANGE to nothing means allow anyone. You have to remove the DENYTOPICVIEW or comment it out to have the ALLOWTOPICVIEW working. The reason for this behavior is that it enables limiting access to an entire web by setting a blank DENYTOPICVIEW setting. Same rule applies for DENYTOPICCHANGE and DENYTOPICRENAME. The rule does not apply for access rights defined for webs. Ie. "*Set DENYWEBCHANGE = " does not allow anyone to edit topics in the web. There has been strong oppinions against the _syntax_ "* Set DENYTOPICXXXX = " meaning giving all access. So please be warned that we will change the syntax to a more transparent and logical syntax in future but we will ensure that it is still possible to secure a web and open up individual topics in future also.
 
 ---++ Bug Fix Highlights
 
@@ -169,6 +187,7 @@ An upgrader should note the following important changes.
       * =WEBMANAGE= permission no longer required (removed.)
       * Context not authenticated despite Apache Require valid-user Login.
       * INCLUDE of URL on subdomain returns wrong pages.
+      * Combined hidden and mandatory form fields were not hidden in 4.1.0 and 4.1.1.
 
 The full list of bug fixes can be seen below
 
@@ -480,7 +499,53 @@ The 4.1.1 release was built from SVN http://svn.twiki.org/svn/twiki/Patch04x01 r
 | [[%BUGS%/Item2838][Item2838]]  | Documentation on %WEB% is ambiguous |
 </noautolink>
 
----+++ TWiki 4.1.0 Enhancements
+---+++ TWiki 4.1.1 Enhancements
+
+<noautolink>
+None
+</noautolink>
+
+---++ TWiki 4.1.2 Patch Release Details
+
+The 4.1.2 release was built from SVN http://svn.twiki.org/svn/twiki/Patch04x01 revision %$VERSION% (%$DATE%).
+
+TWiki 4.1.1 Fixes
+<noautolink>
+| [[%BUGS%/Item3687][Item3687]]  | Wrong table formatting in attachment version history |
+| [[%BUGS%/Item3685][Item3685]]  | Hidden mandatory form fields are no longer hidden in 4.1.1 |
+| [[%BUGS%/Item3666][Item3666]]  | Not declaring $/ local in unit test cases and DelimitedFile.pm causes errors in perl 5.6.1 |
+| [[%BUGS%/Item3664][Item3664]]  | error in regex for square bracket links |
+| [[%BUGS%/Item3663][Item3663]]  | Typo in twiki.js |
+| [[%BUGS%/Item3648][Item3648]]  | Configure extensions installer fails when plugin has no install script. |
+| [[%BUGS%/Item3642][Item3642]]  | Documentation of DENYWEBRENAME and ALLOWWEBRENAME is missing |
+| [[%BUGS%/Item3640][Item3640]]  | Configure extensions installer does not install anything |
+| [[%BUGS%/Item3629][Item3629]]  | Configure breaks when it is unable to set a locale. Suggestion for fix included. |
+| [[%BUGS%/Item3622][Item3622]]  | Changes and search broken on Windows install |
+| [[%BUGS%/Item3617][Item3617]]  | Deleting form values of type "select+values" (hot fix candidate) |
+| [[%BUGS%/Item3616][Item3616]]  | SlideShowPlugin: incompatible construction of view urls |
+| [[%BUGS%/Item3597][Item3597]]  | Extension installer not working |
+| [[%BUGS%/Item3590][Item3590]]  | Broken link in include warning |
+| [[%BUGS%/Item3588][Item3588]]  | Tinker with ENV{SCRIPT_FILENAME} to get the right %SCRIPTNAME% |
+| [[%BUGS%/Item3587][Item3587]]  | Don't override the empty string with 'NOT SET'  in TWiki::cfg (patch candidate) |
+| [[%BUGS%/Item3585][Item3585]]  | call docco for TWiki::User::setEmails is wrong |
+| [[%BUGS%/Item3584][Item3584]]  | Sandbox.WebHome create topic with AUTOINC is missing a hidden t field  |
+| [[%BUGS%/Item3582][Item3582]]  | Page loads unreasonable slow under IE with Twisty enabled |
+| [[%BUGS%/Item3576][Item3576]]  | When creating a new topic, the template is always "Default template", even when the web has a WebTopicEditTemplate properly configured in the preferences. |
+| [[%BUGS%/Item3573][Item3573]]  | Fatal Error Creating Wiki Group (Windows 2003) |
+| [[%BUGS%/Item3572][Item3572]]  | Typo in bin/.htaccess template that breaks authentication |
+| [[%BUGS%/Item3571][Item3571]]  | WebChanges shows TWiki web in headline instead of current Web. |
+| [[%BUGS%/Item3568][Item3568]]  | Not all Linuxes allows TWiki to create a /tmp/twiki |
+| [[%BUGS%/Item3564][Item3564]]  | TWiki should support at least Perl 5.6.1 |
+| [[%BUGS%/Item3559][Item3559]]  | The newbies experience in Configure is .... challenging |
+| [[%BUGS%/Item3557][Item3557]]  | TempfileDir checker is useless |
+| [[%BUGS%/Item3509][Item3509]]  | initializeUserHandler receives no loginName |
+| [[%BUGS%/Item3491][Item3491]]  | META:TOPICMOVED is copied from a topic template to any topic created from it |
+| [[%BUGS%/Item3443][Item3443]]  | SEARCH performance under mod_perl is awful |
+| [[%BUGS%/Item3431][Item3431]]  | The verbatim block munges text with &lt;literal&gt; tags |
+| [[%BUGS%/Item2953][Item2953]]  | Meta data ignored by TWiki::Func::checkAccessPermission |
+</noautolink>
+
+---+++ TWiki 4.1.2 Enhancements
 
 <noautolink>
 None
