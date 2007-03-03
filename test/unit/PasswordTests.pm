@@ -154,12 +154,16 @@ sub test_htpasswd_sha1 {
 
     eval 'use MIME::Base64';
     if( $@ ) {
-        print STDERR "SKIPPED SHA1 TESTS: $@";
+        my $mess = $@;
+        $mess =~ s/\(\@INC contains:.*$//s;
+        print STDERR "\nSKIPPED SHA1 TESTS: $mess\n";
         return;
     }
     eval 'use Digest::SHA1';
     if( $@ ) {
-        print STDERR "SKIPPED SHA1 TESTS: $@";
+        my $mess = $@;
+        $mess =~ s/\(\@INC contains:.*$//s;
+        print STDERR "\nSKIPPED SHA1 TESTS: $mess\n";
         return;
     }
 
@@ -173,7 +177,9 @@ sub detest_htpasswd_md5 {
     my $this = shift;
     eval 'use Digest::MD5';
     if( $@ ) {
-        print STDERR "SKIPPED SHA1 TESTS: $@";
+        my $mess = $@;
+        $mess =~ s/\(\@INC contains:.*$//s;
+        print STDERR "\nSKIPPED SHA1 TESTS: $mess\n";
         return;
     }
 
@@ -195,7 +201,9 @@ sub test_htpasswd_apache {
 
     eval "use TWiki::Users::ApacheHtpasswdUser";
     if( $@ ) {
-        print STDERR "SKIPPED APACHE HTPASSWD TESTS: $@";
+        my $mess = $@;
+        $mess =~ s/\(\@INC contains:.*$//s;
+        print STDERR "\nSKIPPED APACHE HTPASSWD TESTS: $mess\n";
         return;
     }
 
