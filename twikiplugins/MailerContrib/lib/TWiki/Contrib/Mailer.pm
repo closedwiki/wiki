@@ -225,7 +225,7 @@ sub _sendChangesMails {
 
     my $mailtmpl = TWiki::Func::expandTemplate( 'MailNotifyBody' );
     $mailtmpl = TWiki::Func::expandCommonVariables(
-        $mailtmpl, $web, $homeTopic );
+        $mailtmpl, $homeTopic, $web );
     if( $TWiki::cfg{RemoveImgInMailnotify} ) {
         # change images to [alt] text if there, else remove image
         $mailtmpl =~ s/<img\s[^>]*\balt=\"([^\"]+)[^>]*>/[$1]/goi;
@@ -252,7 +252,7 @@ sub _sendChangesMails {
         $mail =~ s/%HTML_TEXT%/$before_html$html$after_html/go;
         $mail =~ s/%PLAIN_TEXT%/$before_plain$plain$after_plain/go;
         $mail =~ s/%LASTDATE%/$lastTime/geo;
-        $mail = TWiki::Func::expandCommonVariables( $mail, $web, $homeTopic );
+        $mail = TWiki::Func::expandCommonVariables( $mail, $homeTopic, $web );
 
         my $base = $TWiki::cfg{DefaultUrlHost} . $TWiki::cfg{ScriptUrlPath};
         $mail =~ s/(href=\")([^"]+)/$1.relativeURL($base,$2)/goei;
