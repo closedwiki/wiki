@@ -1,9 +1,10 @@
-%META:TOPICINFO{author="TWikiContributor" date="1170592351" format="1.1" version="$Rev$"}%
-%TOC%
+%META:TOPICINFO{author="KennethLavrsen" date="1170592351" format="1.1" reprev="1.2" version="1.2"}%
 %STARTINCLUDE%
----# TWiki Upgrade Guide
+---+!! TWiki Upgrade Guide
 
-_Upgrade from the previous TWiki 01-Sep-2004 Production Release to TWiki-4.X_
+_This guide covers upgrading from a previous version of TWiki (such as Cairo or TWiki4.0) to TWiki 4.1__
+
+%TOC%
 
 ---++ Overview
 
