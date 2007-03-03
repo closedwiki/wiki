@@ -519,6 +519,7 @@ TWiki 4.1.1 Fixes
 | [[%BUGS%/Item3664][Item3664]]  | error in regex for square bracket links |
 | [[%BUGS%/Item3663][Item3663]]  | Typo in twiki.js |
 | [[%BUGS%/Item3654][Item3654]]  | Remove <code>lib/LocalSite.cfg.txt</code> |
+| [[%BUGS%/Item3652][Item3652]]  | I18N: Attachments to topic with umlauts in it are lost |
 | [[%BUGS%/Item3648][Item3648]]  | Configure extensions installer fails when plugin has no install script. |
 | [[%BUGS%/Item3642][Item3642]]  | Documentation of DENYWEBRENAME and ALLOWWEBRENAME is missing |
 | [[%BUGS%/Item3640][Item3640]]  | Configure extensions installer does not install anything |
