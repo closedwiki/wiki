@@ -241,8 +241,8 @@ sub stage_gendocs {
 #    print `cd $this->{basedir}/bin ; ./view TWiki.TWikiDocumentation skin plain | $this->{basedir}/tools/fix_local_links.pl > $this->{tmpDir}/TWikiDocumentation.html`;
     print `cd $this->{basedir}/bin ; ./view TWiki.TWikiHistory skin plain | $this->{basedir}/tools/fix_local_links.pl > $this->{tmpDir}/TWikiHistory.html`;
     print `cd $this->{basedir}/bin ; ./view TWiki.TWikiReleaseNotes04x01 skin plain | $this->{basedir}/tools/fix_local_links.pl > $this->{tmpDir}/TWikiReleaseNotes04x01.html`;
-    print `cd $this->{basedir}/bin ; ./view TWiki.TWikiUpgradeGuide skin plain | $this->{basedir}/tools/fix_local_links.pl > $this->{tmpDir}/INSTALL.html`;
-    print `cd $this->{basedir}/bin ; ./view TWiki.TWikiInstallationGuide skin plain | $this->{basedir}/tools/fix_local_links.pl > $this->{tmpDir}/TWikiInstallationGuide.html`;
+    print `cd $this->{basedir}/bin ; ./view TWiki.TWikiUpgradeGuide skin plain | $this->{basedir}/tools/fix_local_links.pl > $this->{tmpDir}/TWikiUpgradeGuide`;
+    print `cd $this->{basedir}/bin ; ./view TWiki.TWikiInstallationGuide skin plain | $this->{basedir}/tools/fix_local_links.pl > $this->{tmpDir}/INSTALL.html`;
     $this->filter_txt("$this->{tmpDir}/TWikiReleaseNotes04x01.html", "$this->{tmpDir}/TWikiReleaseNotes04x01.html");
     print "Automatic documentation built\n";
 }
