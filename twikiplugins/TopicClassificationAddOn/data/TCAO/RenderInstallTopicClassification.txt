@@ -22,9 +22,9 @@
 ---++ Implementation
 <verbatim>
 %STARTINCLUDE%
----++ Install TopicClassificationAddOn into a web
+---++ Install %TWIKIWEB%.TopicClassificationAddOn into a web
 
-Use the following form to install the core TopicClassificationAddOn components to an existing web.
+Use the following form to install the core %TWIKIWEB%.TopicClassificationAddOn components to an existing web.
 
 <div class="twikiFormSteps">
 <div class="twikiFormStep">
