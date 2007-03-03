@@ -511,11 +511,14 @@ The 4.1.2 release was built from SVN http://svn.twiki.org/svn/twiki/Patch04x01 r
 
 TWiki 4.1.1 Fixes
 <noautolink>
+| [[%BUGS%/Item3701][Item3701]]  | Mailing groups is broken |
+| [[%BUGS%/Item3699][Item3699]]  | Document ACLs as actually implemented |
 | [[%BUGS%/Item3687][Item3687]]  | Wrong table formatting in attachment version history |
 | [[%BUGS%/Item3685][Item3685]]  | Hidden mandatory form fields are no longer hidden in 4.1.1 |
 | [[%BUGS%/Item3666][Item3666]]  | Not declaring $/ local in unit test cases and DelimitedFile.pm causes errors in perl 5.6.1 |
 | [[%BUGS%/Item3664][Item3664]]  | error in regex for square bracket links |
 | [[%BUGS%/Item3663][Item3663]]  | Typo in twiki.js |
+| [[%BUGS%/Item3654][Item3654]]  | Remove <code>lib/LocalSite.cfg.txt</code> |
 | [[%BUGS%/Item3648][Item3648]]  | Configure extensions installer fails when plugin has no install script. |
 | [[%BUGS%/Item3642][Item3642]]  | Documentation of DENYWEBRENAME and ALLOWWEBRENAME is missing |
 | [[%BUGS%/Item3640][Item3640]]  | Configure extensions installer does not install anything |
