@@ -1,0 +1,114 @@
+%META:TOPICINFO{author="ArthurClemens" date="1173012480" format="1.1" reprev="1.2" version="1.2"}%
+---+!! !RenderTableDataPlugin
+
+*Render table data in a customizable way.*
+
+Main features:
+   * Pass a custom format to render the table data
+   * Choose a subsection of the table to be rendered: row and column ranges can be set
+   * Optionally render the data in a different topic the table is in
+   * Sort results on any table column
+
+%TOC{title="On this page:"}%
+
+---++ Motivation
+Our intranet shows an introductory page with all new employees. Each person is listed with a picture and a personally written message. I wanted these 'person' blocks to be nicely formatted in HTML and CSS, while at the same time keeping the data very easy to update.
+     
+So data entry and data display are separated, leading to:
+   * less bugs caused by mistyping or messing up complex variable blocks - anyone not familiar with TWiki can type some text in a table cell
+   * small display modules that can be moved around, for instance to the homepage
+
+<div class="twikiHelp">
+The same principle illustrated with information about Vermeer's paintings:
+
+<a href="%ATTACHURLPATH%/renderTableDataExample.png"><img style="border:1px solid ccc;" src="%ATTACHURLPATH%/renderTableDataExample_thumb.gif" alt="View edit and render example" width='198' height='203' /></a>
+
+[[%ATTACHURLPATH%/renderTableDataExample.png][View large image]] | see RenderTableDataPluginExample
+</div>
+
+---++ Limitations
+The current implementation has the following caveats:
+   * Only the first table in a topic will be read.
+   * Tables need to be uniform: merged cells (rowspans and colspans) are not supported
+   * Only tables created by TWiki syntax are supported
+   
+---++ Usage
+
+<verbatim>
+%TABLEDATA{
+   web="..."
+   topic="..."
+   format="..."
+   rows="..."
+   cols="..."
+   preservespaces="on"
+   sortdirection="descending"
+   sortcolumn="..."
+}%
+</verbatim>
+Any one of the parameters are optional.
+
+---+++ Parameters
+%TABLE{columnwidths="10%,50%,20%,20%"}%
+| *Parameter* | *Description* | *Default value* | *Examples* |
+| =topic=     | Topic the table is in. | =none= (the current topic) | =topic="WebHome"=, =topic="Main.WebHome"= |
+| =web=     | Web the table topic is in. | =none= (the current Web) | =web="Main"= |
+| =format=    | Format string to render the table row. %BR% \
+Format parameters: %BR% \
+- =$Cn= token for the cell data, indicated with the column number =n=; for example =$C1= or =$C2=. The first row is numbered 1. The column number always refers to the orignal table, even if cells are omitted with parameter =rows= or =cols=. %BR% \
+Token strings (to be used with variables): %BR% \
+- =$n= newline %BR% \
+- =$percnt= percent %BR% \
+- =$quot= double quote %BR% \
+- =$dollar= dollar sign \
+| =none= (the bare table cell data) | =format="Title: $C1"= |
+| =rows=      | Either a row number or a range of rows to display. A range is defined as two numbers separated by =..=. The end row number can be omitted, for example: =rows="2.."=. The first row is numbered 1. %BR% Use =rows="2.."= to skip the header row. | =none= (all rows) | =rows="2"=, =rows="2..6"=, =rows="2.."= |
+| =cols=      | Either a column number or a range of columns to display. A range is defined as two numbers separated by =..=. The end column number can be omitted, for example: =cols="2.."=. The first column is numbered 1. | =none= (all columns) | =cols="2"=, =cols="1..4"=, =cols="1.."= |
+| =preservespaces= | By default leading and trailing spaces of table cells are trimmed. Use =on= to preserve spaces. | =none= (spaces are trimmed) | =preservespaces="on"= |
+| =sortdirection= | The sort direction of the parsed data corresponding to the original table data. %BR% If no =sortcolumn= is passed and the direction is ="descending"=, the results are simply reversed. | =none= (no sorting) | =sortdirection="ascending"= (default direction), =sortdirection="descending"= |
+| =sortcolumn= | The table column data to sort upon. You may use a column with dates or sequential numbers to sort the results without showing that order data in the results. %BR% The first column is numbered 1. The column number always refers to the orignal table, even if cells are omitted with parameter =rows= or =cols=. | =none= (no sorting) | =sortcolumn="1"= |
+
+
+---++ Example
+
+%IF{"context RenderTablePluginEnabled" then="" else="!RenderTablePlugin is not installed. To see the example below follow the installation instructions."}%
+
+<verbatim>
+%TABLEDATA{ topic="%TWIKIWEB%.TWikiMetaData" rows="2.." format=" *$C1* $percntBR$percnt _$C2_ $percntBR$percnt$percntBR$percnt" sortcolumn="1" }%
+</verbatim>
+
+Results in:
+
+%TABLEDATA{ topic="%TWIKIWEB%.TWikiMetaData" rows="2.." format=" *$C1* $percntBR$percnt _$C2_ $percntBR$percnt$percntBR$percnt" sortcolumn="1" }%
+
+From [[%TWIKIWEB%.TWikiMetaData#META_TOPICINFO][TWikiMetaData]]
+
+---++ Settings
+
+   * Set SHORTDESCRIPTION = Render table data in a customizable way
+   * Set DEBUG = 0
+
+---++ Installation Instructions
+
+   * Download the ZIP file from the Plugin web (see below)
+   * Unzip ==%TOPIC%.zip== in your ($TWIKI_ROOT) directory.
+   * Alternatively,
+      * Manually resolve the dependencies listed below.
+      %$DEPENDENCIES%
+      
+---++ !AddOn Info
+
+| Authors: | TWiki:Main.ArthurClemens |
+| Copyright &copy;: | 2007 Arthur Clemens |
+| License: | [[http://www.gnu.org/copyleft/gpl.html][GPL]] |
+| Dependencies: | %$DEPENDENCIES% |
+| 04 Mar 2006 | Arthur Clemens: 1.0 First release.  |
+| Demo url:  |   |
+| Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
+| Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
+| Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
+
+
+
+%META:FILEATTACHMENT{name="renderTableDataExample.png" attachment="renderTableDataExample.png" attr="" comment="Edit and render example" date="1173012452" path="renderTableDataExample.png" size="217811" stream="renderTableDataExample.png" user="Main.ArthurClemens" version="1"}%
+%META:FILEATTACHMENT{name="renderTableDataExample_thumb.gif" attachment="renderTableDataExample_thumb.gif" attr="h" comment="Thumbnail to example image" date="1173012479" path="renderTableDataExample_thumb.gif" size="18396" stream="renderTableDataExample_thumb.gif" user="Main.ArthurClemens" version="1"}%
