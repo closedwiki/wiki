@@ -1,0 +1,59 @@
+%META:TOPICINFO{author="ArthurClemens" date="1173050334" format="1.1" reprev="1.1" version="1.1"}%
+---+!! Personal Info !AddOn
+
+*User personalisation and reference tool.*
+
+A set of elements to enhance user information on the user homepage:
+   * User picture
+   * Quick overview of the most common user information
+   * Quickly edit user information
+   * Search tools over this information
+
+When installed, see [[_PersonalInfoAddOn.PersonalInfoHome]] for additional details.
+
+%TOC{title="On this page:"}%
+
+---++ Examples (screenshots)
+
+<img src="%ATTACHURLPATH%/personalInfo.jpg" style="border:1px solid #ddd;"  alt="Screenshot of personalInfo block" width='858' height='249' />
+
+<img src="%ATTACHURLPATH%/personalInfo_edit.jpg" style="border:1px solid #ddd;" alt="Screenshot of personalInfo: edit data" width='858' height='284' />
+
+<img src="%ATTACHURLPATH%/personalInfo_set_picture.jpg" style="border:1px solid #ddd;" alt="Screenshot of personalInfo: set picture screen" width='936' height='350' />
+
+<img src="%ATTACHURLPATH%/phone_list.jpg" style="border:1px solid #ddd;" alt="Screenshot of phone list quick search" width='373' height='136' />
+
+---++ Settings
+
+   * Set SHORTDESCRIPTION = User personalisation and reference tool
+
+---++ Installation Instructions
+
+   * Download the ZIP file from the Plugin web (see below).
+   * Unzip ==%TOPIC%.zip== in your ($TWIKI_ROOT) directory.
+   * Copy the files from =/data/_PersonalInfoAddOn= to your user Web (by default Main).
+   * !PersonalInfoAddOn is based on TWiki 4.1 with !PatternSkin.
+   * Optional plugin: TWiki:Plugins/AttachContentPlugin TWiki:Plugins/AttachContentPlugin 
+   * Alternatively,
+      * Manually resolve the dependencies listed below.
+      %$DEPENDENCIES%
+      
+---++ !AddOn Info
+
+| Authors: | TWiki:Main.ArthurClemens |
+| Copyright &copy;: | 2007 Arthur Clemens |
+| License: | [[http://www.gnu.org/copyleft/gpl.html][GPL]] |
+| |!PersonalInfoAddOn is based on TWiki 4.1 with !PatternSkin. |
+| Dependencies: | %$DEPENDENCIES% |
+| 04 Mar 2007 | Arthur Clemens: 1.0 First release.  |
+| Demo url:  |   |
+| Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
+| Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
+| Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
+
+
+%META:FILEATTACHMENT{name="silhouette.gif" attachment="silhouette.gif" attr="" comment="Default silhouette image" date="1173044970" path="silhouette.gif" size="1177" stream="silhouette.gif" user="Main.TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="personalInfo.jpg" attachment="personalInfo.jpg" attr="" comment="Screenshot of personalInfo block" date="1173049752" path="personalInfo.jpg" size="36507" stream="personalInfo.jpg" user="Main.TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="personalInfo_set_picture.jpg" attachment="personalInfo_set_picture.jpg" attr="" comment="Screenshot of personalInfo: set picture screen" date="1173050036" path="personalInfo_set_picture.jpg" size="45162" stream="personalInfo_set_picture.jpg" user="Main.TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="personalInfo_edit.jpg" attachment="personalInfo_edit.jpg" attr="" comment="Screenshot of personalInfo: edit data" date="1173050247" path="personalInfo_edit.jpg" size="39498" stream="personalInfo_edit.jpg" user="Main.TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="phone_list.jpg" attachment="phone_list.jpg" attr="" comment="Screenshot of phone list quick search" date="1173050334" path="phone_list.jpg" size="8364" stream="phone_list.jpg" user="Main.TWikiContributor" version="1"}%

@@ -1,0 +1,56 @@
+%META:TOPICINFO{author="TWikiContributor" date="1172698757" format="1.1" reprev="1.1" version="1.1"}%
+---+!! Layout Modules
+
+<!-- HIDE AND DISABLE ON THIS PAGE --><pre style="display:none;">
+
+%STARTSECTION{"paragraphWithImageLeft"}%<div class="pIparagraphWithImageLeft">
+<div class="pIparagraphWithImageLeftImage">
+<div class="twikiImage"><img src="%imagePath%" alt="" /></div><!--/twikiImage-->
+</div><!--/pIparagraphWithImageLeftImage-->
+<div class="pIparagraphWithImageLeftText">
+%text%
+</div><!--/pIparagraphWithImageLeftText-->
+<br class="twikiClear" />
+</div><!--/pIparagraphWithImageLeft-->%ENDSECTION{"paragraphWithImageLeft"}%
+
+
+
+%STARTSECTION{"paragraphWithImageLeftStyle"}%%INCLUDE{"LayoutModules" section="imageStyle"}%
+<style type="text/css" media="all">
+.pIparagraphFrame {
+padding:1.1em 1.5em 1em 1.5em;
+background-color:#FEFCF6;
+}
+.pIparagraphWithImageLeft {
+padding-left:145px; /* img width 120px + spacing 25px */
+}
+.pIparagraphWithImageLeftImage {
+margin-bottom:1em;
+margin-left:-145px; /* see .paragraphWithImageLeft left padding */
+float:left;
+}
+</style>%ENDSECTION{"paragraphWithImageLeftStyle"}%
+
+
+
+
+%STARTSECTION{"imageStyle"}%<style type="text/css" media="all">
+/* twiki style for installations not up to date with the latest */
+.twikiImage img {
+padding:3px;
+border-width:1px;
+border-style:solid;
+}
+.twikiImage img {
+border-color:#eee;
+background-color:#fff;
+}
+/* */
+.twikiImage img {
+width:120px;
+vertical-align:middle;
+}
+</style>%ENDSECTION{"imageStyle"}%
+
+
+
