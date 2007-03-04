@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="ArthurClemens" date="1173012480" format="1.1" reprev="1.2" version="1.2"}%
+%META:TOPICINFO{author="Main.TWikiContributor" date="1173012480" format="1.1" reprev="1.1" version="1.1"}%
 ---+!! !RenderTableDataPlugin
 
 *Render table data in a customizable way.*
@@ -110,5 +110,5 @@ From [[%TWIKIWEB%.TWikiMetaData#META_TOPICINFO][TWikiMetaData]]
 
 
 
-%META:FILEATTACHMENT{name="renderTableDataExample.png" attachment="renderTableDataExample.png" attr="" comment="Edit and render example" date="1173012452" path="renderTableDataExample.png" size="217811" stream="renderTableDataExample.png" user="Main.ArthurClemens" version="1"}%
-%META:FILEATTACHMENT{name="renderTableDataExample_thumb.gif" attachment="renderTableDataExample_thumb.gif" attr="h" comment="Thumbnail to example image" date="1173012479" path="renderTableDataExample_thumb.gif" size="18396" stream="renderTableDataExample_thumb.gif" user="Main.ArthurClemens" version="1"}%
+%META:FILEATTACHMENT{name="renderTableDataExample.png" attachment="renderTableDataExample.png" attr="" comment="Edit and render example" date="1173012452" path="renderTableDataExample.png" size="217811" stream="renderTableDataExample.png" user="Main.TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="renderTableDataExample_thumb.gif" attachment="renderTableDataExample_thumb.gif" attr="h" comment="Thumbnail to example image" date="1173012479" path="renderTableDataExample_thumb.gif" size="18396" stream="renderTableDataExample_thumb.gif" user="Main.TWikiContributor" version="1"}%
