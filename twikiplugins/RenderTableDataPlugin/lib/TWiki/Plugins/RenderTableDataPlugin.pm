@@ -79,16 +79,19 @@ Renders out the rows and cells.
 sub _parseTableRows {
     my ( $session, $params, $inTopic, $inWeb ) = @_;
 
-	TWiki::Func::writeDebug( "- RenderTableDataPlugin::_parseTableRows" ) if $debug;
-	
+    TWiki::Func::writeDebug("- RenderTableDataPlugin::_parseTableRows")
+      if $debug;
+
     $shouldRenderTableData = 0;
 
     my $format         = $params->{'format'}         || '';
     my $topic          = $params->{'topic'}          || $inTopic;
     my $web            = $params->{'web'}            || $inWeb;
     my $preserveSpaces = $params->{'preservespaces'} || 'off';
-    my $sortCol        = $params->{'sortcolumn'} - 1
-      || -1;    # subtract 1 to use zero based indexing; -1 means "not set"
+    my $sortCol        = -1;
+    $sortCol = $params->{'sortcolumn'} - 1
+      if ( $params->{'sortcolumn'} )
+      ;    # subtract 1 to use zero based indexing; -1 means "not set"
     my $sortDirection = $params->{'sortdirection'} || 'ascending';
 
     my $rowStart   = 0;
@@ -133,6 +136,9 @@ sub _parseTableRows {
 
     $text =~ s/\r//go;
     $text =~ s/\\\n//go;    # Join lines ending in "\"
+    $text .= '\n'
+      ; # Help to find the end of the table if the table is the last item in the topic
+
     foreach ( split( /\n/, $text ) ) {
 
         # change state:
@@ -166,11 +172,11 @@ sub _parseTableRows {
                 my @row = ();
                 my @rowValues = split( /\|/o, $line, -1 );
                 for my $value (@rowValues) {
-                	if ( $preserveSpaces ne 'on' ) {
-                        $value =~ s/^\s*//;    # trim spaces at start
-                        $value =~ s/\s*$//;    # trim spaces at end
-                        $value =~ s/\"/\\"/go; # escape double quotes
-                        $value =~ s/\'/\\'/go; # escape single quotes
+                    if ( $preserveSpaces ne 'on' ) {
+                        $value =~ s/^\s*//;       # trim spaces at start
+                        $value =~ s/\s*$//;       # trim spaces at end
+                        $value =~ s/\"/\\"/go;    # escape double quotes
+                        $value =~ s/\'/\\'/go;    # escape single quotes
                     }
                     push @row, { text => $value, type => 'text' };
                 }
@@ -187,9 +193,11 @@ sub _parseTableRows {
                 }
             }
         }
-        
+
         if ($shouldRenderTableData) {
-			TWiki::Func::writeDebug( "- RenderTableDataPlugin::_parseTableRows - about to sort table data" ) if $debug;
+            TWiki::Func::writeDebug(
+"- RenderTableDataPlugin::_parseTableRows - about to sort table data"
+            ) if $debug;
             if ( $sortCol != -1 ) {
                 my $type =
                   _guessColumnType( $sortCol, $rowStart, @tableMatrix );
@@ -209,8 +217,10 @@ sub _parseTableRows {
             if ( $sortDirection eq 'descending' ) {
                 @tableMatrix = reverse @tableMatrix;
             }
-			
-			TWiki::Func::writeDebug( "- RenderTableDataPlugin::_parseTableRows - about to render table data" ) if $debug;
+
+            TWiki::Func::writeDebug(
+"- RenderTableDataPlugin::_parseTableRows - about to render table data"
+            ) if $debug;
             for my $rowPos ( 0 .. $#tableMatrix ) {
                 my $row       = $tableMatrix[$rowPos];
                 my $rowResult = $format;
@@ -232,11 +242,15 @@ sub _parseTableRows {
             $result =~ s/\$percnt/%/go;
             $result =~ s/\$dollar/\$/go;
             $result =~ s/\$quot/\"/go;
-            TWiki::Func::writeDebug( "- RenderTableDataPlugin::_parseTableRows - result A=$result" ) if $debug;
+            TWiki::Func::writeDebug(
+                "- RenderTableDataPlugin::_parseTableRows - result A=$result")
+              if $debug;
             return $result;
         }
     }
-    TWiki::Func::writeDebug( "- RenderTableDataPlugin::_parseTableRows - result B=$result" ) if $debug;
+    TWiki::Func::writeDebug(
+        "- RenderTableDataPlugin::_parseTableRows - result B=$result")
+      if $debug;
     return $result;
 }
 
@@ -250,8 +264,9 @@ Code copied from TablePlugin (Core.pm) and modified slightly.
 sub _guessColumnType {
     my ( $col, $rowStart, @tableMatrix ) = @_;
 
-	TWiki::Func::writeDebug( "- RenderTableDataPlugin::_guessColumnType" ) if $debug;
-	
+    TWiki::Func::writeDebug("- RenderTableDataPlugin::_guessColumnType")
+      if $debug;
+
     my $isDate = 1;
     my $isNum  = 1;
     my $num    = '';
@@ -288,7 +303,7 @@ Code copied from TablePlugin (Core.pm).
 
 sub _convertToNumberAndDate {
     my ($text) = @_;
-	
+
     $text =~ s/&nbsp;/ /go;
 
     my $num  = undef;
