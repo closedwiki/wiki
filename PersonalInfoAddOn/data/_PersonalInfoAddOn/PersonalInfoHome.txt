@@ -1,0 +1,175 @@
+%META:TOPICINFO{author="TWikiContributor" date="1172605768" format="1.1" version="1.2"}%
+---+!! Personal Info !AddOn Documentation
+
+*User personalisation and reference tool.*
+
+See %TWIKIWEB%.PersonalInfoAddOn for an introduction and installation instructions. %BR%
+This topic is meant for administrators and serves as introduction springboard to !PersonalInfoAddOn topics. Keep this topic as reference.
+
+%TOC%
+
+---++ Reference for administrators
+Distribution files:
+   * PersonalInfo - INCLUDE sections used by the application
+   * PersonalInfoHome - (this topic) documentation
+   * PersonalInfoCustom - custom display of info fields in the =personalInfo= block
+   * PersonalInfoUserViewTemplate - template for the display of user homepages,  including the =personalInfo= block
+   * PersonalInfoPictureViewTemplate - template for the selection screen of user pictures
+   * PersonalInfoPictureDeleteViewTemplate - template for the deletion of a user picture
+   * PersonalInfoPictureUploadViewTemplate - template for the upload of a new user picture
+
+All these files should be copied to the user web (by default Main).
+
+---++ Documentation of the INCLUDE sections in PersonalInfo.
+
+---+++ personalInfo
+*This block is included on every user page when PersonalInfoUserViewTemplate is set as view template.*
+
+This block is intended as a quick introduction of the user (picture!) and to provide the most common information at hand. It makes it easy to edit the data "on the fly".
+
+<div class="twikiHelp">
+*To set !PersonalInfoUserViewTemplate as view template, follow these steps:*
+   1 Include the personal info block in existing pages using either of these 2 methods:
+      * by editing files using the file system: add this line at the bottom: %BR%
+   <verbatim>
+   %META:PREFERENCE{name="VIEW_TEMPLATE" title="VIEW_TEMPLATE" type="Local" value="PersonalInfoUserView"}%
+</verbatim>
+   Make sure the topic ends with a newline.
+      * or by editing topics using a web interface: set the preference =* SET VIEW_TEMPLATE = <nop>PersonalInfoUserView=
+   1 To have this set automatically for new users, change the last line in <nop>%TWIKIWEB%.NewUserTemplate to %BR%
+   <verbatim>
+   %META:PREFERENCE{name="VIEW_TEMPLATE" title="VIEW_TEMPLATE" type="Local" value="PersonalInfoUserView"}%
+</verbatim>
+
+*To customize what fields are is displayed, follow these steps:*
+   1 Add the fields and field formats to the table in [[%MAINWEB%.UserForm]]. Below is an example, so change the fields as you like, but keep the fields =Picture= and =WorkStatus= (including the value 'Current') (both fields are not displayed to the user in topic view). In the current setup the value for =WorkStatus= can be set when editing the topic. %BR%
+   <verbatim>
+| Picture | label | 1 |  |  | H |
+| <nop>WorkStatus | select | 1 | Current, Former |  | H |
+| <nop>WorkEmail | text | 40 |  |  | H |
+| <nop>WorkPhone | text | 40 |  |  | H |
+| <nop>WorkPhoneMobile | text | 40 |  |  | H |
+| <nop>WorkLocation | text | 40 |  |  | H |
+</verbatim>
+   1 Edit PersonalInfoCustom and write the fields and field labels by editing the =INCLUDE= variables. The variable =fieldName= corresponds to the field names in %MAINWEB%.UserForm. The variable =label= can be any text you wish.
+   1 If you want to change the layout:
+      * The base style sheets are included from LayoutModules - install TWiki:Plugins/LayoutModulesAddOn if you haven't already and modify the styles in that topic.
+      * The styles for =personalInfo= are included from PersonalInfo.
+      * The default picture [[%PUBURL%/%TWIKIWEB%/PersonalInfoAddOn/silhouette.gif][silhouette.gif]] is attached to %TWIKIWEB%.PersonalInfoAddOn.
+   
+*Some more indepth information what happens when the user saves her data:*
+   * When =AttachContentPluginEnabled= is set in configure, topic PersonalInfo will be saved as well. This setting is not advisable for public installations, but is ok for intranets.
+   * If TWiki:Plugins/AttachContentPlugin is enabled, on saving !PersonalInfo the javascript attachment for [[#directSearch][directSearch]] will be saved as well.
+   * The javascript file will make directSearch quite a bit faster. If !AttachContentPlugin is not installed, the search will fall back on TWiki's (slower) live search.
+   * %ICON{warning}% On large intranets this will have a performance hit. Possibly a different timing of updating the javascript will be needed.
+</div>
+
+This include is written in PersonalInfoUserViewTemplate:
+<verbatim>
+%INCLUDE{"PersonalInfo" section="personalInfo"}%
+</verbatim>
+
+%ICON{hand}% Creates:
+
+%INCLUDE{"PersonalInfo" section="personalInfo"}%
+
+
+
+
+---+++ directSearch
+*Creates a search box to directly find users with their !WorkPhone number.*
+
+Usage:
+<verbatim>
+%INCLUDE{"PersonalInfo" section="directSearch" title="*Phone list*" maxresults="10"}%
+</verbatim>
+
+| *Parameter*  | *Description* |
+| =title=      | Title above the input box |
+| =maxresults= | The number of users that are displayed |
+
+
+%ICON{hand}% Creates:
+
+%INCLUDE{"PersonalInfo" section="directSearch" title="*Phone list*" maxresults="10"}%
+
+(try to find John Doe - the %MAINWEB%.PersonalInfoDemoUser - by either first or last name)
+
+
+
+
+---++++ userTopicsCommaDelimited
+Used by [[#directSearch][directSearch]]: Creates a comma-delimited list of user topics that have field =FirstName=, with the format "Web.Topic".
+
+Usage:
+<verbatim>
+%INCLUDE{"PersonalInfo" section="userTopicsCommaDelimited"}%
+</verbatim>
+
+%ICON{hand}% <a href="%SCRIPTURL{view}%/%WEB%/PersonalInfo?section=userTopicsCommaDelimited">View userTopicsCommaDelimited</a>
+
+
+
+
+---++++ phoneNumbersCommaDelimited
+Used by [[#directSearch][directSearch]]: Creates a comma-delimited list of values of field =WorkPhone= from topics that have field =FirstName=, with the format "value".
+
+Usage:
+<verbatim>
+%INCLUDE{"PersonalInfo" section="phoneNumbersCommaDelimited"}%
+</verbatim>
+
+%ICON{hand}% <a href="%SCRIPTURL{view}%/%WEB%/PersonalInfo?section=phoneNumbersCommaDelimited">View phoneNumbersCommaDelimited</a>
+
+
+
+
+---++++ firstNamesCommaDelimited
+Used by [[#directSearch][directSearch]]: Creates a comma-delimited list of values of field =FirstName= from topics that have field =FirstName=, with the format "value".
+
+Usage:
+<verbatim>
+%INCLUDE{"PersonalInfo" section="firstNamesCommaDelimited"}%
+</verbatim>
+
+%ICON{hand}% <a href="%SCRIPTURL{view}%/%WEB%/PersonalInfo?section=firstNamesCommaDelimited">View firstNamesCommaDelimited</a>
+
+
+
+
+---++++ lastNamesCommaDelimited
+Used by [[#directSearch][directSearch]]: Creates a comma-delimited list of values of field =LastName= from topics that have field =FirstName=, with the format "value".
+
+Usage:
+<verbatim>
+%INCLUDE{"PersonalInfo" section="lastNamesCommaDelimited"}%
+</verbatim>
+
+%ICON{hand}% <a href="%SCRIPTURL{view}%/%WEB%/PersonalInfo?section=lastNamesCommaDelimited">View lastNamesCommaDelimited</a>
+
+
+
+
+---+++ phoneList
+*Creates a bullet list of users.* Listed users have a field =WorkPhone= and have the value =Current= at field =WorkStatus=.
+
+Usage:
+<verbatim>
+%INCLUDE{"PersonalInfo" section="phoneList"}%
+</verbatim>
+
+%ICON{hand}% <a href="%SCRIPTURL{view}%/%WEB%/PersonalInfo?section=phoneList;skin=text">View phoneList</a>
+
+
+
+
+---+++ personalSearch
+*Creates a bullet list of all users in an empty page.* This might be useful for live searches using AJAX.
+
+Call the topic with url:
+<verbatim>
+PersonalInfo?section=personalSearch;skin=text;q=
+</verbatim>
+... where the search characters come after the <code>q=</code> 
+
+%ICON{hand}% <a href="%SCRIPTURL{view}%/%WEB%/PersonalInfo?section=personalSearch;skin=text;q=a">View personalSearch with the letter 'a'</a>
