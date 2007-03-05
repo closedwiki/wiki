@@ -1,7 +1,8 @@
 #!/usr/bin/perl -w
 #
 # Build for PersonalInfoAddOn
-#
+# version 1.0.1
+
 BEGIN {
   foreach my $pc (split(/:/, $ENV{TWIKI_LIBS})) {
     unshift @INC, $pc;

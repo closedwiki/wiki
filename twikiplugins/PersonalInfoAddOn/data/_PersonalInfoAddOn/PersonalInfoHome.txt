@@ -56,9 +56,10 @@ This block is intended as a quick introduction of the user (picture!) and to pro
       * The base style sheets are included from LayoutModules - install TWiki:Plugins/LayoutModulesAddOn if you haven't already and modify the styles in that topic.
       * The styles for =personalInfo= are included from PersonalInfo.
       * The default picture [[%PUBURL%/%TWIKIWEB%/PersonalInfoAddOn/silhouette.gif][silhouette.gif]] is attached to %TWIKIWEB%.PersonalInfoAddOn.
+      * Pictures are 120 px wide and may vary in height. This is set in LayoutModules.
    
 *Some more indepth information what happens when the user saves her data:*
-   * When =AttachContentPluginEnabled= is set in configure, topic PersonalInfo will be saved as well. This setting is not advisable for public installations, but is ok for intranets.
+   * When =AllowRedirectUrl= is enabled in configure, topic PersonalInfo will be saved as well. This setting is not advisable for public installations, but is ok for intranets.
    * If TWiki:Plugins/AttachContentPlugin is enabled, on saving !PersonalInfo the javascript attachment for [[#directSearch][directSearch]] will be saved as well.
    * The javascript file will make directSearch quite a bit faster. If !AttachContentPlugin is not installed, the search will fall back on TWiki's (slower) live search.
    * %ICON{warning}% On large intranets this will have a performance hit. Possibly a different timing of updating the javascript will be needed.
