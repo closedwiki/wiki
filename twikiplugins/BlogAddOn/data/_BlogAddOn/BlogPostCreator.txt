@@ -3,14 +3,28 @@
 
 <script type="text/javascript">
 /* <![CDATA[ */
+
+var didSwitchToJsField = false;
+
 function canSubmit() {
-   var wikiTitle = removeSpacesAndPunctiation(capitalize(document.forms.newtopic.Title.value));
-   document.forms.newtopic.topic.value = wikiTitle;
-   if (wikiTitle) return true;
-   return false;
-}
-function capitalizeSentence (inText) {
-	return inText.substr(0,1).toUpperCase() + inText.substr(1);
+  var inputField = (didSwitchToJsField) ? document.forms.newtopic.jstopic : document.forms.newtopic.topic;
+  
+  var inputTitle = inputField.value;
+  if (!inputTitle) return false;
+  document.forms.newtopic.Title.value = inputTitle;
+  var wikiTitle = removeSpacesAndPunctuation(capitalize(inputTitle));
+  document.forms.newtopic.topic.value = wikiTitle;
+  
+  /* no-js-fallback */
+  /* hide 'topic' field and show replacement field instead */
+  /* so field contents does not get suddenly wikiworded */
+  document.forms.newtopic.topic.style.display = 'none';
+  document.forms.newtopic.jstopic.style.display = 'inline';
+  document.forms.newtopic.jstopic.value = inputTitle;
+  didSwitchToJsField = true;
+  
+  if (wikiTitle) return true;
+  return false;
 }
 /* ]]> */
 </script>
@@ -19,7 +33,7 @@ function capitalizeSentence (inText) {
 <div class="twikiFormSteps">
 <div class="twikiFormStep">
 *%MAKETEXT{"Title of new blog post:"}%* %MAKETEXT{"(one or multiple words)"}% %BR%
-<input type="text" class="twikiInputField" name="Title" id="Title" size="40" />
+<input type="text" class="twikiInputField" name="topic" id="topic" size="40" /><input style="display:none;" type="text" class="twikiInputField" name="jstopic" id="jstopic" size="40" value="HA" />
 </div>
 <div class="twikiFormStep">
 *%MAKETEXT{"Category:"}%* %MAKETEXT{"(you may choose later)"}% %BR%
@@ -29,7 +43,7 @@ function capitalizeSentence (inText) {
 </select> <span class="twikiSmallish">[[BlogCategory][%MAKETEXT{"Add categories..."}%]]</span>
 </div>
 <div class="twikiFormStep twikiLast">
-<input type="hidden" name="topic" id="topic" size="40" />
+<input type="hidden" name="Title" />
 <input type="hidden" name="nonwikiword" value="on" />
 <input type="hidden" name="onlywikiname" value="off" />
 <input type="hidden" name="onlynewtopic" value="on" />
