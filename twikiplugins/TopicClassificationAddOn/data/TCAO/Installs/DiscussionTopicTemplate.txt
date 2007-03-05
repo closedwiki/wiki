@@ -5,11 +5,7 @@
 
 -- %WIKIUS%NOP%ERNAME% - %DA%NOP%TE%
 
----+++ Comments
-
-#AddComments
-%INCLUDE{"%TCAOWEB%.RenderAddComment" }%
-
+%DBCALL{"%TCAOWEB%.RenderCommentCountBar" warn="off"}% %COMMENT{type="comment"}%
 
 %STARTSECTION{type="templateonly"}% 
 <!-- Topic Permissions

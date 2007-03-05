@@ -18,7 +18,7 @@
 ---++ Implementation
 <verbatim>
 %STARTINCLUDE% <form action="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%BASEWEB%/CreateNewTopic">
-*Post New:*  <select name="type" onchange="this.form.submit()"> <option value="%URLPARAM{"type" default=""}%">%URLPARAM{"type" default="Select..."}%</option><option value="blank" >blank topic</option> %DBQUERY{ "Classification= 'TopicType'" web="%BASEWEB%" format= "<option>$topic</option>" separator=" "}%</select> </form>
+*Post New:*  <select name="type" onchange="this.form.submit()"> <option value="%URLPARAM{"type" default=""}%">%URLPARAM{"type" default="Select..."}%</option><option value="blank" >blank topic</option> %DBQUERY{ "Classification= 'TopicType'" web="%BASEWEB%" format= "<option>$topic</option>" separator=" "}%</select> <input type="hidden" name="step" value="two"></form>
 %STOPINCLUDE%
 </verbatim>
 

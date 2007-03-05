@@ -9,10 +9,12 @@ _This topic is intended to be included in WebHome topics to provide a quick over
 |  *[[%BASEWEB%.TopicType][Topic Types]]:* | %DBQUERY{"Classification = 'TopicType'" web="%BASEWEB%" format="[[$web.$topic][$percntSPACEOUT{$topic}$percnts <span class=\"twikiSmall\">($percntDBQUERY{\"TopicType='$topic'\" web=\"$web\" format=\"none\" footer=\"$dollarcount\"}$percnt)</span>]]" separator=", "}%   |
 %DBQUERY{"Classification = 'Classification'" exclude="TopicType" web="%BASEWEB%" separator="$n" format="|  *[[$web.$topic][$percntSPACEOUT{$topic}$percnt]]:* | $percntDBQUERY{\"Classification = '$topic'\" format=\"[[$web.$topic][$dollarpercntSPACEOUT{$dollartopic}$dollarpercnt <span class=\\"twikiSmall\\">($dollarpercntDBQUERY{\\"$topic='$dollartopic'\\" web=\\"$dollarweb\\" format=\\"none\\" footer=\\"$dollardollarcount\\"}$dollarpercnt)</span>]]\" separator=\", \" }$percnt   |" }%
 
+_See also %BASEWEB%.TopicTree for a tree-outline of topics._
+
 ---++ Recent Changes
 
 %INCLUDE{"%TCAOWEB%.RenderBarFilterWithSort"  FACETS="TopicType, SubjectArea" INITSORT="modified" INITLIMIT="10"}%
-%DBQUERY{%INCLUDE{"%TCAOWEB%.RenderSearchString" FACETS="TopicType, SubjectArea" BASESEARCH="name = '.*'"  INITSORT="modified" INITLIMIT="10"}% web="%BASEWEB%" exclude="Web*" header="| *Topic* | *Summary* | *Modified by* | *On* |$n" format="| [[$web.$topic][$percntSPACEOUT{$topic}$percnt]] <span class=\"twikiSmall\"><em>$percntIFDEFINED{\"$expand(TopicType or Classification)\" then=\"($web.$expand(TopicType or Classification))\" glue=\"off\"}$percnt</em></span>  | <noautolink>$formfield(Summary)</noautolink>   | %MAINWEB%.$expand(info.author) | $formatTime(info.date, '$day $month') |" }%
+%DBQUERY{%INCLUDE{"%TCAOWEB%.RenderSearchString" FACETS="TopicType, SubjectArea" BASESEARCH="name = '.*'"  INITSORT="modified" INITLIMIT="10"}% web="%BASEWEB%" exclude="\bWeb*" header="| *Topic* | *Summary* | *Modified by* | *On* |$n" format="| [[$web.$topic][$percntSPACEOUT{$topic}$percnt]] <span class=\"twikiSmall\"><em>$percntIFDEFINED{\"$expand(TopicType or Classification)\" then=\"(<nop>$expand(TopicType or Classification))\" glue=\"off\"}$percnt</em></span>  | <noautolink>$formfield(Summary)</noautolink>   | %MAINWEB%.$expand(info.author) | $formatTime(info.date, '$day $month') |" }%
 | _[[%BASEWEB%.WebChanges][More recent changes...]]_  ||||
 %STOPINCLUDE%
 
