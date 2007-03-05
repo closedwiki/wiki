@@ -35,22 +35,20 @@ After installing this add-on, there are a few additional steps needed before it 
    * Add the following %TWIKIWEB%.CommentPlugin templates definitions to %TWIKIWEB%.UserCommentsTemplate (create this topic if you have not already).
 <verbatim>
 ---------------------------------------------------------------------------
----+++ tocdiscuss
-Discussion with heading for Table of Content - TWiki:Main.LynnwoodBrown
+---+++ comment
+Simple comment box
 <verbatim>
-%TMPL:DEF{PROMPT:tocdiscuss}%
-*Headline:* <span class="twikiSmall"> _Enter a short headline for your comment._ </span><br />
-<input %DISABLED% type="text" size="60" name="comment_headline" /> <br /> *Comment:* <br />
-<textarea %DISABLED% rows="%rows|5%" cols="%cols|60%" name="comment_text" wrap="soft" onfocus="if(this.value=='%MESSAGE%')this.value=''" onblur="if(this.value=='')this.value='%MESSAGE%'">%MESSAGE%</textarea> <br /> <input %DISABLED% type="submit" value="%button|Add Comment%" /> 
+%TMPL:DEF{PROMPT:comment}%
+<div style="background: #f9f9f9;border-bottom: 1px solid #efefef;margin: 0 0 5px 0;clear: left;color: #333;padding: 5px;">
+<table border="0" cellpadding="0" cellspacing="0"><tr valign="middle"><td>%ICON{bubble}% <span style="margin: 0 0 10px 0;font-size: .9em;color: #666;padding: 3px 0;font-weight: normal;"> *%SPACEOUT{%WIKINAME%}% said...*  </span> %BR%<textarea %DISABLED% rows="%rows|7%" cols="%cols|80%" name="comment" class="twikiInputField" wrap="soft" onfocus="if(this.value=='%MESSAGE%')this.value=''" onblur="if(this.value=='')this.value='%MESSAGE%'">%MESSAGE%</textarea></td></tr><tr><td><input %DISABLED% type="submit" value="%button|Post this comment%" class="twikiButton" /></td></tr></table></div>
 %TMPL:END%
 </verbatim>
 <verbatim>
-%TMPL:DEF{OUTPUT:tocdiscuss}%
-%POS:BEFORE%---++++ %URLPARAM{"comment_headline"}% 
-%POS:BEFORE% <span class="twikiSmall"> _Posted by %WIKIUSERNAME% on %DATE% at %SERVERTIME{"$hour:$min"}%._ </span> 
+%TMPL:DEF{OUTPUT:comment}%%POS:BEFORE% <div style="background: #f9f9f9;border-bottom: 1px solid #efefef;margin: 0 0 5px 0;clear: left;color: #333;padding: 5px;">
+<span style="margin: 0 0 10px 0;font-size: .9em;color: #666;padding: 3px 0;font-weight: normal;" > <!-- COMMENT_TAG --> %ICON{bubble}% %GMTIME{"$day $month $hour:$min"}% | *%SPACEOUT{%WIKINAME%}% said...* </span> <p />
+%URLPARAM{"comment" }%
 
-%POS:BEFORE%%URLPARAM{"comment_text" }%
-%POS:BEFORE%
+</div>
 %TMPL:END%
 </verbatim>
 ---------------------------------------------------------------------------
