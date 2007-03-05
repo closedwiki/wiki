@@ -34,8 +34,8 @@ If this plugins is installed, the variable
 </verbatim>
 
 will expand as follows:
-<table border="0"><tr><td> *Output* </td><td> *Expected* </tr>
-<tr><td>%CONTROL{"firstInput" type="checkbox" size="1"}%</tc><td><table  cellspacing="0" cellpadding="0"><tr>
+<table border="0"><tr><td> *Output* </td><td> *Expected* </td></tr>
+<tr><td>%CONTROL{"firstInput" type="checkbox" size="1"}%</td><td><table  cellspacing="0" cellpadding="0"><tr>
 <td><input class="twikiEditFormCheckboxField" type="checkbox" name="firstInputNoDisclosure" />NoDisclosure &nbsp;&nbsp;</td>
 </tr><tr>
 <td><input class="twikiEditFormCheckboxField" type="checkbox" name="firstInputPublicSupported" />PublicSupported &nbsp;&nbsp;</td>
