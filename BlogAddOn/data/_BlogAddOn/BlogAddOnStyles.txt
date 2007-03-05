@@ -20,13 +20,14 @@
 .blogPostAddOnViewOptions a:hover {
 	color:#fff;
 }
-.blogPostAddOnViewOptions select {
+.blogPostAddOnViewOptions select,
+#noJsUpdateButton {
 	font-size:.86em; /* use em instead of % for consistent size */
 	margin:0 .25em 0 0;
 }
 .blogPostViewOptionsFilter {
 	margin:0 .5em;
-	padding:0 0 0 1em;
+	padding:0 0 0 .7em;
 	border-left:1px solid #ddd;
 }
 a.blogPostAddOnViewOptionsSubscribeLink:link,
