@@ -80,7 +80,8 @@ $VERSION = '$Rev$';
 # of the version number in PLUGINDESCRIPTIONS.
 $RELEASE = 'Cairo, Dakar, Edinburgh, ...';
 
-$REVISION = '1.023'; #dro# fixed minor anchor link bug reported by TWiki:Main.KeithHelfrich; fixed tooltip position bug
+$REVISION = '1.024'; #dro# fixed missing ')' in generated JavaScript commands
+#$REVISION = '1.023'; #dro# fixed minor anchor link bug reported by TWiki:Main.KeithHelfrich; fixed tooltip position bug
 #$REVISION = '1.022'; #dro# improved AJAX performance; added new feature (state selection for reset button); fixed %TOC% bug reported by TWiki:Main.HelenJohnstone; fixed some minor and major bugs (mod_perl, description stripping, static feature, 'text' icons);  removed useforms feature
 #$REVISION = '1.021'; #dro# fixed some major bug (mod_perl, plugin preferences); improved performance (AJAX); fixed minor IE caching bug (AJAX related); added new attributes (tooltip, descr, template, statesel) requested by TWiki:Main.KeithHelfrich; fixed installation instructions bug reported by TWiki:Main.KeithHelfrich
 #$REVISION = '1.020'; #dro# added AJAX feature (useajax attribute) requested by TWiki:Main.ShayPierce and TWiki:Main.KeithHelfrich
@@ -851,7 +852,7 @@ sub createHiddenDirectSelectionDiv {
 					-id=>"CLP_SM_A_$name${id}_$i", 
 					-href=>"$action",
 					-style=>'vertical-align:bottom;',
-					-onmouseover=>"clpTooltipShow('CLP_SM_TT_$name${id}_$i','CLP_SM_IMG_$name${id}_$i',".(20+int($options{'tooltipfixleft'})).",".(20+int($options{'tooltipfixtop'})).";", 
+					-onmouseover=>"clpTooltipShow('CLP_SM_TT_$name${id}_$i','CLP_SM_IMG_$name${id}_$i',".(20+int($options{'tooltipfixleft'})).",".(20+int($options{'tooltipfixtop'})).");", 
 					-onmouseout=>"clpTooltipHide('CLP_SM_TT_$name${id}_$i');",
 				},
 				$query->img({src=>$imgsrc,id=>"CLP_SM_IMG_$name${id}_$i",alt=>$imgalt,border=>0,style=>'vertical-align:bottom;cursor:move;'}));
