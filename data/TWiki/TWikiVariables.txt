@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1142799790" format="1.0" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1173217738" format="1.0" version="$Rev$"}%
 %META:TOPICPARENT{name="WebHome"}%
 %TOC%
 %STARTSECTION{type="include"}%
@@ -44,6 +44,8 @@ You can set variables in all the following places:
    1 session variables (if sessions are enabled)
 
 Settings at higher-numbered levels override settings of the same variable at lower numbered levels, unless the variable was included in the setting of FINALPREFERENCES at a lower-numbered level, in which case it is locked at the value it has at that level.
+
+If you are setting a variable and using it in the same topic, note that TWiki reads all the variable settings from the saved version of the topic before it displays anything.  This means you can use a variable anywhere in the topic, even if you set it somewhere inconspicuous near the end. *But beware:*  it also means that if you change the setting of a variable you are using in the same topic, ==Preview== will show the wrong thing, and you must ==Save== the topic to see it correctly.
 
 The syntax for setting Variables is the same anywhere in TWiki (on its own TWiki bullet line, including nested bullets): <br /> =[multiple of 3 spaces] * [space] Set [space] VARIABLENAME [space] = [space] value=
 <blockquote>
