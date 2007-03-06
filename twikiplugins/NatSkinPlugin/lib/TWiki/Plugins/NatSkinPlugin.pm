@@ -50,7 +50,7 @@ $STARTWW = qr/^|(?<=[\s\(])/m;
 $ENDWW = qr/$|(?=[\s\,\.\;\:\!\?\)])/m;
 
 $VERSION = '$Rev$';
-$RELEASE = '3.00-pre11';
+$RELEASE = '3.00-pre12';
 $NO_PREFS_IN_TOPIC = 1;
 $SHORTDESCRIPTION = 'Supplements the bare bones NatSkin theme for TWiki';
 
@@ -109,7 +109,7 @@ sub initPlugin {
   %maxRevs = (); # cache for getMaxRevision()
   %seenWebComponent = (); # used to prevent deep recursion
 
-  #writeDebug("done initPlugin");
+  #writeDebug("done initPlugin at $baseWeb.$baseTopic for $currentUser");
   return 1;
 }
 
@@ -318,7 +318,6 @@ sub initSkinState {
   
   # SMELL: we only get the WebPreferences' FINALPREFERENCES here
   my $finalPreferences = TWiki::Func::getPreferencesValue("FINALPREFERENCES") || '';
-  #writeDebug("finalPreferences=$finalPreferences"); 
   my $isFinalStyle = 0;
   my $isFinalBorder = 0;
   my $isFinalButtons = 0;
@@ -584,7 +583,8 @@ sub initSkinState {
   $theToggleSideBar = 'off' if $skinState{'action'} =~ /^(login|logon|oops)$/;
 
   # switch the sidebar off if we need to authenticate
-  if ($TWiki::cfg{AuthScripts} =~ /\b$skinState{'action'}\b/ &&
+  if ($skinState{'action'} ne 'publish' && # SMELL to please PublishContrib
+      $TWiki::cfg{AuthScripts} =~ /\b$skinState{'action'}\b/ &&
       !&TWiki::Func::getContext()->{authenticated}) {
       $theToggleSideBar = 'off';
   }
@@ -791,40 +791,46 @@ sub renderGetSkinStyle {
 # renderUserActions: render the USERACTIONS variable:
 # display advanced topic actions for non-guests
 sub renderUserActions {
+  my ($session, $params) = @_;
 
   &doInit(); 
-  return '' if $isGuest;
 
+  my $text = '';
+  my $sepString = $params->{sep} || $params->{separator} || '<span class="natSep">|</span>';
+  if ($isGuest) {
+    $text = $params->{guest} || '$login$sep$register$sep$print';
+    return '' unless $text;
+  } else {
+    $text = $params->{_DEFAULT} || $params->{format} || 
+    '$user$sep$logout$sep$print<br />'.
+    '$edit$sep$attach$sep$move$sep$raw$sep$diff$sep$more';
+  }
+
+  my $editString = '';
+  my $attachString = '';
+  my $moveString = '';
+  my $rawString = '';
+  my $diffString = '';
+  my $moreString = '';
+  my $printString = '';
+  my $loginString = '';
+  my $logoutString = '';
+  my $registerString = '';
+  my $userString = '';
+
+  # get change strings (edit, attach, move)
   my $curRev = '';
   my $theRaw;
   if ($query) {
     $curRev = $query->param('rev') || '';
     $theRaw = $query->param('raw');
   }
-
-  my $rev = &getCurRevision($baseWeb, $baseTopic, $curRev);
-
-  my $rawAction;
-  if ($theRaw) {
-    $rawAction =
-      '<a href="' . 
-      &TWiki::Func::getScriptUrl($baseWeb, $baseTopic, "view") . 
-      '?rev='.$rev.'" accesskey="r" title="%TMPL:P{"VIEW_HELP"}%">%TMPL:P{"VIEW"}%</a>';
-  } else {
-    $rawAction =
-      '<a href="' .  
-      &TWiki::Func::getScriptUrl($baseWeb, $baseTopic, "view") .  
-      '?raw=on&rev='.$rev.'" accesskey="r" title="%TMPL:P{"RAW_HELP"}%">%TMPL:P{"RAW"}%</a>';
-  }
-  
-  my $text;
   $curRev =~ s/r?1\.//go;
   my $maxRev = &getMaxRevision();
   if ($curRev && $curRev < $maxRev) {
-    $text =
-      '<strike>%TMPL:P{"EDIT"}%</strike>&nbsp;| ' .
-      '<strike>%TMPL:P{"ATTACH"}%</strike>&nbsp;| ' .
-      '<strike>%TMPL:P{"MOVE"}%</strike>&nbsp;| ';
+    $editString = '<strike>%TMPL:P{"EDIT"}%</strike>';
+    $attachString = '<strike>%TMPL:P{"ATTACH"}%</strike>';
+    $moveString = '<strike>%TMPL:P{"MOVE"}%</strike>';
   } else {
     my $whiteBoard = TWiki::Func::getPreferencesValue('WHITEBOARD');
     $whiteBoard = TWiki::isTrue($whiteBoard, 1); # too bad getPreferencesFlag does not have a default param
@@ -836,30 +842,84 @@ sub renderUserActions {
     }  else {
       $editUrlParams = '&action=form' unless $whiteBoard;
     }
-    $text = 
+    $editString = 
       '<a rel="nofollow" href="'
       . &TWiki::Func::getScriptUrl($baseWeb, $baseTopic, "edit") 
       . '?t=' . time() 
       . $editUrlParams
-      . '" accesskey="e" title="%TMPL:P{"EDIT_HELP"}%">%TMPL:P{"EDIT"}%</a>&nbsp;| ' .
+      . '" accesskey="e" title="%TMPL:P{"EDIT_HELP"}%">%TMPL:P{"EDIT"}%</a>';
+    $attachString =
       '<a rel="nofollow" href="'
       . &TWiki::Func::getScriptUrl($baseWeb, $baseTopic, "attach") 
-      . '" accesskey="a" title="%TMPL:P{"ATTACH_HELP"}%">%TMPL:P{"ATTACH"}%</a>&nbsp;| ' .
+      . '" accesskey="a" title="%TMPL:P{"ATTACH_HELP"}%">%TMPL:P{"ATTACH"}%</a>';
+    $moveString =
       '<a rel="nofollow" href="'
       . &TWiki::Func::getScriptUrl($baseWeb, $baseTopic, "rename")
-      . '" accesskey="m" title="%TMPL:P{"MOVE_HELP"}%">%TMPL:P{"MOVE"}%</a>&nbsp;| ';
+      . '" accesskey="m" title="%TMPL:P{"MOVE_HELP"}%">%TMPL:P{"MOVE"}%</a>';
+
   }
 
-  $text .=
-      $rawAction . '&nbsp;| ' .
+  # get string for raw/view action
+  my $rev = &getCurRevision($baseWeb, $baseTopic, $curRev);
+  if ($theRaw) {
+    $rawString =
+      '<a href="' . 
+      &TWiki::Func::getScriptUrl($baseWeb, $baseTopic, "view") . 
+      '?rev='.$rev.'" accesskey="r" title="%TMPL:P{"VIEW_HELP"}%">%TMPL:P{"VIEW"}%</a>';
+  } else {
+    $rawString =
+      '<a href="' .  
+      &TWiki::Func::getScriptUrl($baseWeb, $baseTopic, "view") .  
+      '?raw=on&rev='.$rev.'" accesskey="r" title="%TMPL:P{"RAW_HELP"}%">%TMPL:P{"RAW"}%</a>';
+  }
+  
+  # get strings for diff, print, more, login, register
+  $diffString =
       '<a rel="nofollow" href="' . 
       &TWiki::Func::getScriptUrl($baseWeb, $baseTopic, "oops") . 
       '?template=oopsrev&param1=%PREVREV%&param2=%CURREV%&param3=%NATMAXREV%" accesskey="d" title="'.
-      '%TMPL:P{"DIFF_HELP"}%">%TMPL:P{"DIFF"}%</a>&nbsp;| ' .
+      '%TMPL:P{"DIFF_HELP"}%">%TMPL:P{"DIFF"}%</a>';
+
+  $moreString =
       '<a rel="nofollow" href="' . 
       &TWiki::Func::getScriptUrl($baseWeb, $baseTopic, "oops") . 
       '?template=oopsmore" accesskey="x" title="'.
       '%TMPL:P{"MORE_HELP"}%">%TMPL:P{"MORE"}%</a>';
+
+  $printString =
+    '<a rel="nofollow" href="'.
+    &TWiki::Func::getScriptUrl($baseWeb, $baseTopic, 'view').
+    '?skin=print.nat" accesskey="p" title="%MAKETEXT{"Print this page"}%">%MAKETEXT{"Print"}%</a>';
+
+  $loginString =
+    '<a rel="nofollow" href="'.
+    renderLoginUrl().
+    '" accesskey="l" title="%MAKETEXT{"Login to [_1]" args="<nop>%WIKITOOLNAME%"}%">%TMPL:P{"LOG_IN"}%</a>';
+
+  $logoutString =
+    '<a rel="nofollow" href="'.
+    renderLogoutUrl().
+    '" accesskey="l" title="%MAKETEXT{"Logout of [_1]" args="<nop>%WIKITOOLNAME%"}%">%TMPL:P{"LOG_OUT"}%</a>';
+
+  $registerString =
+    '<a href="%SCRIPTURLPATH{"view"}%/%TWIKIREGISTRATION%" '.
+    'accesskey="r" title="%MAKETEXT{"Register on [_1]" args="<nop>%WIKITOOLNAME%"}%">%MAKETEXT{"Register"}%</a>';
+
+  $userString =
+    '[[%WIKIUSERNAME%][%SPACEOUT{"%WIKINAME%"}%]]';
+
+  $text =~ s/\$edit/$editString/go;
+  $text =~ s/\$attach/$attachString/go;
+  $text =~ s/\$move/$moveString/go;
+  $text =~ s/\$raw/$rawString/go;
+  $text =~ s/\$diff/$diffString/go;
+  $text =~ s/\$more/$moreString/go;
+  $text =~ s/\$print/$printString/go;
+  $text =~ s/\$login/$loginString/go;
+  $text =~ s/\$logout/$logoutString/go;
+  $text =~ s/\$register/$registerString/go;
+  $text =~ s/\$user/$userString/go;
+  $text =~ s/\$sep/$sepString/go;
 
   return $text;
 }
@@ -1143,11 +1203,11 @@ sub renderNatWebLogo {
   return '<span class="natWebLogo">'.$natWebLogo.'</span>' if $natWebLogo;
 
   $natWebLogo = TWiki::Func::getPreferencesValue('NATWEBLOGOIMG');
-  return '<img class="natWebLogo" src="'.$natWebLogo.'" alt="%WEBLOGOALT%" align="absmiddle" border="0" />' 
+  return '<img class="natWebLogo" src="'.$natWebLogo.'" alt="%WEBLOGOALT%" border="0" />' 
     if $natWebLogo;
 
   $natWebLogo = TWiki::Func::getPreferencesValue('WEBLOGOIMG');
-  return '<img class="natWebLogo" src="'.$natWebLogo.'" alt="%WEBLOGOALT%" align="absmiddle" border="0" />' 
+  return '<img class="natWebLogo" src="'.$natWebLogo.'" alt="%WEBLOGOALT%" border="0" />' 
     if $natWebLogo;
 
   $natWebLogo = TWiki::Func::getPreferencesValue('WIKITOOLNAME');
