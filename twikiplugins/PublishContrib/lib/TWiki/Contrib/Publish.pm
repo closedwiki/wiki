@@ -52,6 +52,7 @@ sub publish {
 
     my $query = TWiki::Func::getCgiQuery();
     my $web = $query->param( 'web' ) || $session->{webName};
+    $query->delete('web');
     $web =~ /(\w*)/;
 
     $publisher->publishWeb($1);
@@ -119,6 +120,7 @@ sub publishWeb {
 
     my $query = $this->{session}->{cgiQuery};
     my $configtopic = $query->param('configtopic');
+    $query->delete('configtopic');
     if ($configtopic) {
         # Parameters are defined in config topic
         unless( TWiki::Func::topicExists($this->{web}, $configtopic) ) {
@@ -206,6 +208,9 @@ sub publishWeb {
         }
         $skin = $query->param('skin') || $query->param('publishskin');
     }
+    foreach my $param qw(inclusions exclusions filter topicsearch genopt compress format configtopic history) {
+        $query->delete($param);
+    }
 
     $this->{skin} = $skin ||
       TWiki::Func::getPreferencesValue('PUBLISHSKIN') || '';
@@ -223,8 +228,8 @@ TEXT
     my $topic = $query->param('publishtopic') || $this->{session}->{topicName};
     my($header, $footer) = '';
     unless( TWiki::Func::getContext()->{command_line} ) {
-        TWiki::Func::writeHeader($query);
-        my $tmpl = TWiki::Func::readTemplate("view");
+        my $tmpl = TWiki::Func::readTemplate('view');
+
         $tmpl =~ s/%META{.*?}%//g;
         for my $tag qw( REVTITLE REVARG REVISIONS MAXREV CURRREV ) {
             $tmpl =~ s/%$tag%//g;
@@ -233,7 +238,13 @@ TEXT
         $header = TWiki::Func::expandCommonVariables( $header, $topic, $this->{web} );
         $header = TWiki::Func::renderText( $header, $this->{web} );
         $header =~ s/<nop>//go;
+        TWiki::Func::writeHeader($query);
         print $header;
+
+        $footer = TWiki::Func::expandCommonVariables( $footer, $topic,
+                                                      $this->{web} );
+        $footer = TWiki::Func::renderText( $footer, $this->{web} );
+
         #my $url = $query->url().$query->path_info().'?'.
         #$query->query_string();
         #$this->logInfo("URL", $url);
@@ -260,11 +271,18 @@ TEXT
           $this->_dirForTemplate($template);
 
         my $generator = 'TWiki::Contrib::PublishContrib::'.$format;
-        eval "use $generator; \$this->{archive} = new $generator(\$dir,\$this->{web},\$genopt, \$this)";
-        die $@ if $@;
+        eval 'use '.$generator;
+        unless ($@) {
+            eval {
+                $this->{archive} =
+                  $generator->new($dir, $this->{web}, $genopt, $this, $query);
+            };
+        }
+        if ($@) {
+            print "Failed to initialise '$format' generator: <pre>$@</pre>\n",$footer;
+            return;
 
-        $this->{archive}->{params} = $query->Vars;
-
+        }
         $this->publishTemplate($template);
     }
 
@@ -300,8 +318,6 @@ LINK
         $this->{web}, $this->{historyTopic}, 'view');
     $this->logInfo("History saved in", "<a href='$url'>$url</a>");
 
-    $footer = TWiki::Func::expandCommonVariables( $footer, $topic, $this->{web} );
-    $footer = TWiki::Func::renderText( $footer, $this->{web} );
     print $footer;
 }
 
@@ -408,10 +424,11 @@ sub publishTopic {
     my $oldTWiki = $TWiki::Plugins::SESSION;
 
     # Create a new TWiki so that the contexts are correct. This is really,
-    # really inefficient, but is essential to maintain correct prefs
+    # really inefficient, but is essential at the moment to maintain correct
+    # prefs
     my $query = $oldTWiki->{cgiQuery};
     $query->param('topic', "$this->{web}.$topic");
-    my $twiki = new TWiki($this->{publisher}, $oldTWiki->{cgiQuery});
+    my $twiki = new TWiki($this->{publisher}, $query);
     $TWiki::Plugins::SESSION = $twiki;
 
     my ($revdate, $revuser, $maxrev);
@@ -478,7 +495,10 @@ sub publishTopic {
     # Modify absolute topic links.
     $ilt = $TWiki::Plugins::SESSION->getScriptUrl(1, 'view', 'NOISE', 'NOISE');
     $ilt =~ s!/NOISE/NOISE.*$!!;
-    $tmpl =~ s!href=(["'])$ilt/(.*?)\1!"href=$1".$this->_topicURL($2).$1!ge; 
+    $tmpl =~ s!href=(["'])$ilt/(.*?)\1!"href=$1".$this->_topicURL($2).$1!ge;
+
+    # Modify topic-relative TOC links to strip out parameters (but not anchor)
+    $tmpl =~ s!href=(["'])\?.*?(\1|#)!href=$1$2!g;
 
     # replace any external template references
     $tmpl =~ s!href=["'](.*?)\?template=(\w*)(.*?)["']!$this->_rewriteTemplateReferences($tmpl, $1, $2, $3)!e;
@@ -612,7 +632,7 @@ sub _copyResource {
                             $resource = $1;
                         }
                     }
-                    _copyResource($this->{web}, $resource, $copied);
+                    $this->_copyResource($resource, $copied);
                 }
             }
         }
@@ -628,6 +648,9 @@ sub _topicURL {
 
     if( $path && $path =~ s/([#\?].*)$// ) {
         $extra = $1;
+        # no point in passing on script params; we are publishing
+        # to static HTML.
+        $extra =~ s/\?.*?(#|$)/$1/;
     }
 
     $path ||= $TWiki::cfg{HomeTopicName};
