@@ -173,7 +173,7 @@ padding:.1em .25em;
 
 ---++ phoneListXML
 <verbatim>
-%STARTATTACH{"phoneList.xml"}%%STARTSECTION{"phoneListXML"}%<?xml version="1.0" encoding="UTF-8"?>
+<nop>%STARTATTACH{"phoneList.xml"}%%STARTSECTION{"phoneListXML"}%<?xml version="1.0" encoding="UTF-8"?>
 <users>
 %SEARCH{ "[F]irstName.*value=.*();[W]orkStatus.*value=.*(Current)" web="%MAINWEB%" type="regex" nonoise="on" excludetopic="UserForm,PersonalInfo,PersonalInfoDocumentation,TWikiContributor,TWikiGuest,UnknownUser" format="<user><firstname>$formfield(FirstName)</firstname><lastname>$formfield(LastName)</lastname><phone>$formfield(WorkPhone)</phone><url>%SCRIPTURL{view}%/%WEB%/$topic</url></user>" "}%
 </users>
