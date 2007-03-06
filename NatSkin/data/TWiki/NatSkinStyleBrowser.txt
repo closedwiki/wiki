@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1168359961" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1171468359" format="1.1" reprev="1.7" version="$Rev$"}%
 ---+ Style Browser
 Explore the style variations of the %TWIKIWEB%.NatSkin by changing the base
 _style_ and a _variation_ of it. In general style variations are used to change
@@ -13,7 +13,7 @@ See the TWiki.NatSkinPlugin documentation on how to use style settings in your p
 <nop>%WIKITOOLNAME% account.
 
 
-<div class="alt">
+<div class="twikiPageForm">
 %STARTINCLUDE%<div class="natSkinStyleBrowser">
 %IFSKINSTATETHEN{final="all"}%
 <!-- %RED%all styles and switches are final%ENDCOLOR% -->
@@ -35,7 +35,7 @@ See the TWiki.NatSkinPlugin documentation on how to use style settings in your p
 </tr>
 %FISKINSTATE%
 %IFSKINSTATETHEN{final="variation"}% %ELSESKINSTATE%
-<tr><td colspan="2"> *%MAKETEXT{"Variation"}%:* </td></tr>
+<tr><td colspan="3"> *%MAKETEXT{"Variation"}%:* </td></tr>
 <tr><td><a href="?switchvariation=prev&refresh=on" title="%MAKETEXT{"Switch to previous variation"}%"><img src="%PUBURLPATH%/%TWIKIWEB%/TWikiDocGraphics/arrowleft.gif" border="0" alt="%MAKETEXT{"prev"}%"/></a></td>
 <td>
 <select name="stylevariation">

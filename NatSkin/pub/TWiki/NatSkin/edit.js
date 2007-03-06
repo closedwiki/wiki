@@ -166,13 +166,14 @@ function getWindowWidth () {
 
 function fixHeightOfTheText() {
   var height = getWindowHeight();
+  var topBarHeight = document.getElementById("natTopLeftBarSizer").clientHeight || 0;
   var offset;
   if (height) {
     offset = txtarea.offsetTop;
-    height = height-offset-60;
+    height = height-offset-80-topBarHeight;
     txtarea.style.height = height + "px";
   }
-  //alert("height="+height+", offset="+offset);
+  //alert("height="+height+", offset="+offset+", topBarHeight="+topBarHeight);
   return height;
 }
 
@@ -191,5 +192,4 @@ function natSetupEdit() {
   return true;
 }
 
- 
 addLoadEvent(natSetupEdit);

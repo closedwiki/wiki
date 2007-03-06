@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1147166156" format="1.1" reprev="1.5" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1147166156" format="1.1" reprev="1.5" version="$Rev$"}%
 ---+ %TOPIC%
 Default <nop>WebCss component for your <nop>%WIKITOOLNAME% site.
 Create a <nop>WebCss topic in your web to override the content of this topic.

@@ -320,38 +320,39 @@ hr {
 }
 
 /* twiki page form */
+.twikiPageForm {
+  background: #f8f8f8;
+  border-top: 1px solid #ddd;
+  border-bottom: 1px solid #ddd;
+  padding:10px;
+}
 .twikiPageForm table {
   border:1px #B22222 solid;
 }
-.twikiPageForm table table {
-  border:0px;
-}
-.twikiPageForm th,
-.twikiPageForm th a {
-  color:white;
-  background:#B22222;
-}
-.twikiPageForm th a {
-  text-decoration:none;
-}
-
-.twikiPageForm th a:hover {
-  color:#0F314E;
-  text-decoration:none;
-}
-
-.twikiPageForm th  {
-  font-family: 'Trebuchet MS', sans-serif;
-  letter-spacing: .3em;
-  vertical-align:middle;
-}
+.twikiPageForm .twikiFirstCol,
 .twikiPageForm th {
+  vertical-align:middle;
   border:1px dotted white;
   _border:1px solid white; /* IE only */
 }
-.twikiPageForm td {
-  border:1px ridge #999;
+.twikiPageForm .twikiFirstCol,
+.twikiPageForm th,
+.twikiPageForm th a {
+  letter-spacing: .3em;
+  font-family: 'Trebuchet MS', sans-serif;
+  background:#B22222;
+  text-decoration:none;
+  color:white;
+  background:#B22222;
+  font-weight:bold;
 }
+
+.twikiPageForm td a:hover,
+.twikiPageForm th a:hover {
+  color:white;
+  text-decoration:underline;
+}
+
 
 /* search table */
 .natSearchTable {

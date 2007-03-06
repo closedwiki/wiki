@@ -129,24 +129,14 @@ hr {
   border:1px #aaaaaa solid;
   border-collapse:collapse;
 }
-.twikiPageForm table table {
-  border:0px;
-}
-.twikiPageForm td {
-  border-bottom:1px #aaaaaa ridge;
-}
 
 .twikiPageForm th {
   font-weight:bold;
   font-family:georgia,serif;
   background: #eeeeee;
-  line-height:170%;
 }
 .twikiPageForm th a {
   color:#003366;
-}
-.twikiPageForm td {
-  line-height:170%;
 }
 
 /* search */

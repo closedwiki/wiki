@@ -16,15 +16,26 @@
 %TMPL:END%
 %TMPL:DEF{"content"}%<!-- -->
 ---+ %MAKETEXT{"Rename Web"}%
-<form method="post" name="renameweb" action="%SCRIPTURLPATH{"rename"}%/%WEB%">
+<div class="twikiPageForm">
+<form method="post" name="renameweb" action="%SCRIPTURLPATH{"rename"}%/%WEB%/%TOPIC%">
 <input type="hidden" name="action" value="renameweb" />
 <input type="hidden" name="confirm" value="getlock" />
-
-*%MAKETEXT{"From:"}%* <code>%WEB%</code>
-
-*%MAKETEXT{"To:"}%* %TMPL:P{"newparentweb"}% / %TMPL:P{"newsubweb"}%  
-
-%TMPL:P{"buttons"}%
+<table>
+<tr>
+  <th>%MAKETEXT{"From:"}%</th>
+  <td><nop>%WEB%</td>
+</tr>
+<tr>
+  <th>%MAKETEXT{"To:"}%</th>
+  <td>%TMPL:P{"newparentweb"}% / %TMPL:P{"newsubweb"}%  </td>
+</tr>
+<tr>
+  <th>&nbsp;</th>
+  <td>%TMPL:P{"buttons"}%</td>
+</tr>
+</table>
+</form>
+</div>
 
 ---++ %MAKETEXT{"Change links in topics that refer to [_1] in the [_1] Web:" args="<nop>%WEB%"}%
 <div class="natSearchRenameContents">
@@ -37,7 +48,6 @@
 </div>
 
 <input type="button" class="natAltButton" value='%MAKETEXT{"Clear all"}%' onClick="checkAll('renameweb', false);" />
-</form>
 
 ---++ %MAKETEXT{"Locked Topics"}%
 *%MAKETEXT{"No permission:"}%* 
@@ -57,13 +67,13 @@
 %TMPL:END%
 %TMPL:DEF{"notes"}%
 %MAKETEXT{"Get help on
-<a target=\"_blank\" href=\"[_1]\" rel='nofollow'>Renaming and moving webs</a>." args="%SCRIPTURLPATH{\"view\"}%/%TWIKIWEB%/ManagingWebs"}%
+<a target=\"_blank\" href=\"[_1]\" rel='nofollow'>Renaming and moving webs</a>." args="%SCRIPTURLPATH{"view"}%/%TWIKIWEB%/ManagingWebs"}%
 <p/>
 <p>
 %MAKETEXT{"Characters not allowed in topic names, such as spaces will automatically be removed."}%
 <p/>
 <p> %MAKETEXT{"Select the <a target='_blank' href='[_1]/[_2]/WebHome'>[_2]</a>
     web to *delete* this web, that is
-    rename it to [_2]/[_3]. " args="%SCRIPTURLPATH{\"view\"}%,%TRASHWEB%,%WEB%"}%</p>
+    rename it to [_2]/[_3]. " args="%SCRIPTURLPATH{"view"}%,%TRASHWEB%,%WEB%"}%</p>
 <p> %MAKETEXT{"The checkmarked topics will be updated."}% </p>
 %TMPL:END%
