@@ -100,7 +100,7 @@ sub _initDefaults {
 		'tooltipfixtop'=>0,
 		'tooltipbgcolor'=>"",
 		'tooltipfgcolor'=>"",
-		'tooltipformat'=>' %SERVER%: %FORMFACTOR% (%SUNIT%-%EUNIT%, %RACK%)<br/>Owner: %OWNER% <br/>Connected to: %CONNECTEDTO% <br/>Notes:<br/> %NOTES%',
+		'tooltipformat'=>'<b>%SERVER%:</b> %FORMFACTOR% (%SUNIT%-%EUNIT%, %RACK%)<br/>%ICON{persons}% Owner: %OWNER% <br/>%M% Connected to: %CONNECTEDTO% <br/>%P% Notes:<br/> %NOTES%',
 	);
 
 	@renderedOptions = ( 'name', 'notesicon','conflicticon', 'connectedtoicon', 'emptytext' );
@@ -206,7 +206,7 @@ sub _renderJSTooltipText {
 	$text =~s /\%SUNIT\%/$sunit/gs;
 	$text =~s /\%EUNIT\%/$eunit/gs;
 	$text =~s /\%DEVICE\%/\%SERVER\%/gs;
-	$text =~s /\%([^\%\s]+)%/$$entryRef{"\L$1\E"}/egs;
+	$text =~s /\%([^\%\s]+)%/(defined $$entryRef{"\L$1\E"}?$$entryRef{"\L$1\E"}:"\%$1\%")/egs;
 	return &TWiki::Func::renderText($text);
 }
 # =========================
