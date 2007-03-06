@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1173174857" format="1.0" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1173174917" format="1.0" version="$Rev$"}%
 ---+ <nop>RackPlannerPlugin
 The <nop>RackPlannerPlugin handles the tag =%<nop>RACKPLANNER%= and renders a rack overview (HTML table) with devices (computer, router, switches, ...). 
 ---++ Syntax Rules
@@ -33,7 +33,7 @@ Usage: =%<nop>RACKPLANNER{attribute1="value" attribute2="value" ... }%=
 |  *Behavior:*  |||
 | autotopic | set it =on= and every rack name is automatically used as source topic for the device definition (=racks= attribute is required and the value is attached to the =topic= attribute value); useful if you define your racks and devices on topics with the same names as the racks | =autotopic="off"= |
 | dir | sets the direction of the units: =topdown= - unit 1 is at the top of the rack; =bottomup= - unit 1 is at the bottom of the rack; =leftright= - units are shown horizontal with unit 1 at the left; =rightleft= - units are shown horizontal with unit 1 at the right | =dir="bottomup"= |
-| enablejstooltips | enables/disables <nop>>JavaScript tooltips | =enablejstooltips="1"= |
+| enablejstooltips | enables/disables <nop>JavaScript tooltips | =enablejstooltips="1"= |
 | racks | a comma separated list of rack names to show; if omitted all racks found on topics (see =topic= attribute) are shown  | =racks="rack1,rack2"= |
 | steps | unit steps to display (useful if you use only every =steps= unit of a rack) | =steps="1"= |
 | topic | a comma separated list of source topics | =topic="%<nop>TOPIC%"= |
@@ -120,6 +120,10 @@ a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>E
 	* Font and icon sizes:
 		* Set FONTSIZE = small 
 		* Set ICONSIZE = 12px
+
+	* Fix tooltip positions (skin dependent):
+		* # Set TOOLTIPFIXLEFT = -163
+		* # Set TOOLTIPFIXTOP = 0
 
 	* *Note:* Every attribute of =%<nop>RACKPLANNER%= can also be used as plugin setting. You only have to use capital letters.
 
