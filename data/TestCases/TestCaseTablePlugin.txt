@@ -202,8 +202,14 @@ no initdirection specified, column 3
 | 3 | ghi | pqr | 15 Jan 2006 |
 
 
+---++ Alignment
+---+++ Cell alignment using spaces
+|*Left aligned*  |*Not sure*|  *Middle*  |  *Right aligned*|
+|1  |abc|  vwxxxxxxxxx  |  01 Jan 1900|
+|2  |def|  stu  |  31 Dec 1999|
+|3 xxxxxxxxxxxxxx  |ghi xxxxxxxx  |  pqr  |  xxxxxxxxx 15 Jan 2006|
 
----++ =valign=
+---+++ =valign=
 <verbatim>
 %TABLE{valign="top"}%
 </verbatim>
@@ -240,7 +246,7 @@ no initdirection specified, column 3
 | 2 | def | Sed ut perspiciatis, unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam eaque ipsa, quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt, explicabo. | 31 Dec 1999 |
 | 3 | ghi | pqr | 15 Jan 2006 |
 
----++ =headervalign=
+---+++ =headervalign=
 <verbatim>
 %TABLE{headervalign="top"}%
 </verbatim>
@@ -277,7 +283,7 @@ no initdirection specified, column 3
 | 2 | def | Sed ut perspiciatis, unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam eaque ipsa, quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt, explicabo. | 31 Dec 1999 |
 | 3 | ghi | pqr | 15 Jan 2006 |
 
----++ =datavalign=
+---+++ =datavalign=
 <verbatim>
 %TABLE{datavalign="top"}%
 </verbatim>
@@ -314,7 +320,7 @@ no initdirection specified, column 3
 | 2 | def | Sed ut perspiciatis, unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam eaque ipsa, quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt, explicabo. | 31 Dec 1999 |
 | 3 | ghi | pqr | 15 Jan 2006 |
 
----++ Combined =headervalign= and =datavalign=
+---+++ Combined =headervalign= and =datavalign=
 <verbatim>
 %TABLE{headervalign="bottom" datavalign="top"}%
 </verbatim>
@@ -324,7 +330,7 @@ no initdirection specified, column 3
 | 2 | def | Sed ut perspiciatis, unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam eaque ipsa, quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt, explicabo. | 31 Dec 1999 |
 | 3 | ghi | pqr | 15 Jan 2006 |
 
----++ =headeralign=
+---+++ =headeralign=
 
 <verbatim>
 %TABLE{headeralign="left"}%
@@ -362,7 +368,7 @@ no initdirection specified, column 3
 | 2 | def | Sed ut perspiciatis, unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam eaque ipsa, quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt, explicabo. | 31 Dec 1999 |
 | 3 | ghi | pqr | 15 Jan 2006 |
 
----+++ Mixed =headeralign=
+---++++ Mixed =headeralign=
 
 <verbatim>
 %TABLE{headeralign="right,left,justify,right"}%
@@ -373,7 +379,7 @@ no initdirection specified, column 3
 | 2222 | defdefdefdefdefdefdefdef | Sed ut perspiciatis, unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam eaque ipsa, quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt, explicabo. Sed ut perspiciatis, unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam eaque ipsa, quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt, explicabo. | 31 Dec 1999 |
 | 33333333 | ghi | pqr | 15 Jan 2006 |
 
----++ =dataalign=
+---+++ =dataalign=
 
 <verbatim>
 %TABLE{dataalign="left"}%
@@ -411,7 +417,7 @@ no initdirection specified, column 3
 | 2 | def | Sed ut perspiciatis, unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam eaque ipsa, quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt, explicabo. Sed ut perspiciatis, unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam eaque ipsa, quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt, explicabo. | 31 Dec 1999 |
 | 3 | ghi | pqr | 15 Jan 2006 |
 
----+++ Mixed =dataalign=
+---++++ Mixed =dataalign=
 <verbatim>
 %TABLE{dataalign="right,left,justify,right"}%
 </verbatim>
