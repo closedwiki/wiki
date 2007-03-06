@@ -205,6 +205,7 @@ sub _renderJSTooltipText {
 	my $text = $options{'tooltipformat'};
 	$text =~s /\%SUNIT\%/$sunit/gs;
 	$text =~s /\%EUNIT\%/$eunit/gs;
+	$text =~s /\%DEVICE\%/\%SERVER\%/gs;
 	$text =~s /\%([^\%\s]+)%/$$entryRef{"\L$1\E"}/egs;
 	return &TWiki::Func::renderText($text);
 }
@@ -534,8 +535,8 @@ sub _renderConflictCell {
 sub _renderHiddenTooltip {
 	my ($id, $pId, $text, $fgcolor, $bgcolor) = @_;
 
-	$fgcolor=$options{'tooltipfgcolor'} unless defined $fgcolor;
-	$bgcolor=$options{'tooltipbgcolor'} unless defined $bgcolor;
+	$fgcolor=$options{'tooltipfgcolor'} if defined $options{'tooltipfgcolor'} && $options{'tooltipfgcolor'} ne "";
+	$fgcolor=$options{'tooltipfgcolor'} if defined $options{'tooltipbgcolor'} && $options{'tooltipbgcolor'} ne "";
 	
 
 	return $cgi->div(
