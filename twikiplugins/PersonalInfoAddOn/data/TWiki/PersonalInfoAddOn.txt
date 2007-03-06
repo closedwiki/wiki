@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="ArthurClemens" date="1173050334" format="1.1" reprev="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1173050334" format="1.1" reprev="1.1" version="1.1"}%
 ---+!! Personal Info !AddOn
 
 *User personalisation and reference tool.*
@@ -32,6 +32,7 @@ When installed, see [[_PersonalInfoAddOn.PersonalInfoHome]] for additional detai
    * Download the ZIP file from the Plugin web (see below).
    * Unzip ==%TOPIC%.zip== in your ($TWIKI_ROOT) directory.
    * Copy the files from =/data/_PersonalInfoAddOn= to your user Web (by default Main).
+   * Follow the instructions in !PersonalInfoHome.
    * !PersonalInfoAddOn is based on TWiki 4.1 with !PatternSkin.
    * Optional plugin: TWiki:Plugins/AttachContentPlugin for a faster quickSearch module 
    * Alternatively,
@@ -45,6 +46,7 @@ When installed, see [[_PersonalInfoAddOn.PersonalInfoHome]] for additional detai
 | License: | [[http://www.gnu.org/copyleft/gpl.html][GPL]] |
 | |!PersonalInfoAddOn is based on TWiki 4.1 with !PatternSkin. |
 | Dependencies: | %$DEPENDENCIES% |
+| 06 Mar 2007 | Arthur Clemens: 1.0.2 Added =phoneListXML= output.  |
 | 05 Mar 2007 | Arthur Clemens: 1.0.1 Small documentation updates.  |
 | 04 Mar 2007 | Arthur Clemens: 1.0 First release.  |
 | Demo url:  |   |

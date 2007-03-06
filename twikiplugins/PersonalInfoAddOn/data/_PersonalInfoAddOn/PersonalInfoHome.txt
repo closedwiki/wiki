@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1172605768" format="1.1" version="1.2"}%
+%META:TOPICINFO{author="TWikiContributor" date="1172605768" format="1.1" version="1.1"}%
 ---+!! Personal Info !AddOn Documentation
 
 *User personalisation and reference tool.*
@@ -62,6 +62,7 @@ This block is intended as a quick introduction of the user (picture!) and to pro
    * When =AllowRedirectUrl= is enabled in configure, topic PersonalInfo will be saved as well. This setting is not advisable for public installations, but is ok for intranets.
    * If TWiki:Plugins/AttachContentPlugin is enabled, on saving !PersonalInfo the javascript attachment for [[#directSearch][directSearch]] will be saved as well.
    * The javascript file will make directSearch quite a bit faster. If !AttachContentPlugin is not installed, the search will fall back on TWiki's (slower) live search.
+   * The same idea may be used to create an XML file, this is turned off for performance. See [[#phone_ListXML][phoneListXML]].
    * %ICON{warning}% On large intranets this will have a performance hit. Possibly a different timing of updating the javascript will be needed.
 </div>
 
@@ -95,6 +96,49 @@ Usage:
 %INCLUDE{"PersonalInfo" section="directSearch" title="*Phone list*" maxresults="10"}%
 
 (try to find John Doe - the %MAINWEB%.PersonalInfoDemoUser - by either first or last name)
+
+
+
+
+---+++ phoneList
+*Creates a bullet list of users.* Listed users have a field =WorkPhone= and have the value =Current= at field =WorkStatus=.
+
+Usage:
+<verbatim>
+%INCLUDE{"PersonalInfo" section="phoneList"}%
+</verbatim>
+
+%ICON{hand}% <a href="%SCRIPTURL{view}%/%WEB%/PersonalInfo?section=phoneList;skin=text">View phoneList</a>
+
+
+
+
+---+++ phoneListXML
+*Creates a list of users in XML format.* Listed users have a field =WorkPhone= and have the value =Current= at field =WorkStatus=.
+
+The auto-generation of an XML attachment is turned off for performance. To create the XML file, remove the =&lt;nop>= from the beginning of =STARTATTACH= at [[PersonalInfo#phone_ListXML][PersonalInfo:phoneListXML]].
+
+Usage:
+<verbatim>
+PersonalInfo?section=phoneListXML;skin=xml
+</verbatim>
+
+%ICON{hand}% <a href="%SCRIPTURL{view}%/%WEB%/PersonalInfo?section=phoneListXML;skin=xml">View phoneList XML</a>
+
+
+
+
+
+---+++ personalSearch
+*Creates a bullet list of all users in an empty page.* This might be useful for live searches using AJAX.
+
+Call the topic with url:
+<verbatim>
+PersonalInfo?section=personalSearch;skin=text;q=
+</verbatim>
+... where the search characters come after the <code>q=</code> 
+
+%ICON{hand}% <a href="%SCRIPTURL{view}%/%WEB%/PersonalInfo?section=personalSearch;skin=text;q=a">View personalSearch with the letter 'a'</a>
 
 
 
@@ -148,29 +192,3 @@ Usage:
 
 %ICON{hand}% <a href="%SCRIPTURL{view}%/%WEB%/PersonalInfo?section=lastNamesCommaDelimited">View lastNamesCommaDelimited</a>
 
-
-
-
----+++ phoneList
-*Creates a bullet list of users.* Listed users have a field =WorkPhone= and have the value =Current= at field =WorkStatus=.
-
-Usage:
-<verbatim>
-%INCLUDE{"PersonalInfo" section="phoneList"}%
-</verbatim>
-
-%ICON{hand}% <a href="%SCRIPTURL{view}%/%WEB%/PersonalInfo?section=phoneList;skin=text">View phoneList</a>
-
-
-
-
----+++ personalSearch
-*Creates a bullet list of all users in an empty page.* This might be useful for live searches using AJAX.
-
-Call the topic with url:
-<verbatim>
-PersonalInfo?section=personalSearch;skin=text;q=
-</verbatim>
-... where the search characters come after the <code>q=</code> 
-
-%ICON{hand}% <a href="%SCRIPTURL{view}%/%WEB%/PersonalInfo?section=personalSearch;skin=text;q=a">View personalSearch with the letter 'a'</a>

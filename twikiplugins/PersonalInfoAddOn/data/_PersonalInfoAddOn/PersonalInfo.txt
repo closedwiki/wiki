@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1173044971" format="1.1" reprev="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1173174107" format="1.1" reprev="1.1" version="1.1"}%
 ---+!! Personal Info !AddOn Application Sections
 
 *Admin topic for %TWIKIWEB%.PersonalInfoAddOn.* %BR%
@@ -9,13 +9,9 @@ See PersonalInfoHome for documentation and usage examples.
 
 ---++ personalInfo
 
-<!-- HIDE AND DISABLE ON THIS PAGE --><pre style="display:none;">
+<verbatim>
 
-%STARTSECTION{"personalInfoFields"}%
-Customized data in PersonalInfoCustom
-%ENDSECTION{"personalInfoFields"}%
-
-
+%STARTSECTION{"personalInfoFields"}% Customized data in PersonalInfoCustom %ENDSECTION{"personalInfoFields"}%
 
 %STARTSECTION{"personalInfoDataRow" fieldName=%FIELDNAME% label=%LABEL%}%<tr>
 <th> %label% </th><td> %IF{"defined editUserData" then="<input type='text' name='%fieldName%' id='%fieldName%' class='twikiInputField' size='40' value='%FORMFIELD{"%fieldName%" topic="%BASETOPIC%" format="<nop>$value"}%' />" else="%FORMFIELD{"%fieldName%" topic="%BASETOPIC%"}%" }% </td>
@@ -24,9 +20,6 @@ Customized data in PersonalInfoCustom
 %STARTSECTION{"personalInfoDataRowEmployeesDropdown" fieldName=%FIELDNAME% label=%LABEL%}%<tr>
 <th> %label% </th><td> %IF{"defined editUserData" then="%INCLUDE{"PersonalInfo"                                                                                                                             section="employeesSelectOptions"}%" else="%FORMFIELD{"%fieldName%" topic="%BASETOPIC%"}%" }% </td>
 </tr>%ENDSECTION{"personalInfoDataRow"}%
-
-
-
 
 %STARTSECTION{"personalInfoStyle"}%<style type="text/css" media="all">
 .personalInfo {
@@ -70,10 +63,8 @@ color:#ccc;
 }
 </style>%ENDSECTION{"personalInfoStyle"}%
 
-
-
 %STARTSECTION{"personalInfo"}%%INCLUDE{"PersonalInfo" section="personalInfoStyle"}%<div class="pIparagraphFrame personalInfo">
----+ %FORMFIELD{"FirstName" topic="%BASETOPIC%"}% %FORMFIELD{"LastName" topic="%BASETOPIC%"}%
+---+!! %FORMFIELD{"FirstName" topic="%BASETOPIC%"}% %FORMFIELD{"LastName" topic="%BASETOPIC%"}%
 %INCLUDE{"LayoutModules" section="paragraphWithImageLeftStyle"}%
 %INCLUDE{"LayoutModules" section="personalInfoStyle"}%
 <form name="main" action="%SCRIPTURLPATH{"save"}%/%BASEWEB%/%BASETOPIC%" method="post">
@@ -83,32 +74,29 @@ color:#ccc;
 %INCLUDE{"LayoutModules" section="paragraphWithImageLeft" imagePath="%FORMFIELD{"Picture" topic="%BASEWEB%.%BASETOPIC%" format="%PUBURL%/%BASEWEB%/%BASETOPIC%/$value" default="%PUBURL%/%TWIKIWEB%/PersonalInfoAddOn/silhouette.gif" alttext="%PUBURL%/%TWIKIWEB%/PersonalInfoAddOn/silhouette.gif" }%" text="%INCLUDE{"PersonalInfoCustom" section="personalInfoFields"}%
 %IF{"context authenticated and not defined editUserData" then="<div class='personalInfoFormDataActions'>[[%SCRIPTURL{view}%/%BASEWEB%/%BASETOPIC%?editUserData=on][Edit data]] <span class='twikiSeparator'>|</span> [[%SCRIPTURL{view}%/%BASEWEB%/%BASETOPIC%?template=PersonalInfoPictureView][Change picture]]</div>" }% %IF{"defined editUserData" then="<div class='personalInfoFormDataActions'><input type='submit' class='twikiSubmit' name='action_save' id='save' value='Save' /> <input type='submit' class='twikiButton' name='action_cancel' id='cancel' value='Cancel' /></div>" }%" }% </form></div><!--/pIparagraphFrame-->%ENDSECTION{"personalInfo"}%
 
-</pre><!-- END HIDE AND DISABLE ON THIS PAGE -->
-
+</verbatim>
 
 
 
 ---++ phoneList
 
-<!-- HIDE AND DISABLE ON THIS PAGE --><pre style="display:none;">
+<verbatim>
 %STARTSECTION{"phoneList"}%%SEARCH{ "[W]orkPhone;[W]orkStatus.*value=.*(Current)" web="%MAINWEB%" type="regex" nonoise="on" excludetopic="UserForm,PersonalInfo,PersonalInfoDocumentation" format="   * [[$web.$topic][$topic]] $formfield(WorkPhone)"}%%ENDSECTION{"phoneList"}%
-</pre><!-- END HIDE AND DISABLE ON THIS PAGE -->
-
+</verbatim>
 
 
 
 ---++ personalSearch
 
-<!-- HIDE AND DISABLE ON THIS PAGE --><pre style="display:none;">
+<verbatim>
 %STARTSECTION{"personalSearch"}%%SEARCH{ "[F]irstName.*value=.*(%URLPARAM{"q"}%)|[L]astName.*value=.*(%URLPARAM{"q"}%)" web="%MAINWEB%" type="regex" nonoise="on" excludetopic="UserForm,PersonalInfo,PersonalInfoDocumentation,TWikiContributor,TWikiGuest,UnknownUser" format="   * [[$web.$topic][$topic]] $formfield(WorkPhone)"}%%ENDSECTION{"personalSearch"}%
-</pre><!-- END HIDE AND DISABLE ON THIS PAGE -->
-
+</verbatim>
 
 
 
 ---++ directSearch
 
-<!-- HIDE AND DISABLE ON THIS PAGE --><pre style="display:none;">
+<verbatim>
 %STARTSECTION{"directSearch" title=%TITLE% maxresults=%MAXRESULTS%}% %title%  %BR%
 <input type="text" class="twikiInputField" size="12" id="personalInfoSearchBox" name="personalInfoSearchBox" onkeyup="showResults(); return false;" />
 <div id="personalInfoSearchResults"><!-- search results will be displayed here --></div>
@@ -161,27 +149,35 @@ padding:.1em .25em;
 	}
 // %ENDATTACH%
 </script>%ENDSECTION{"directSearchScript"}%
-</pre><!-- END HIDE AND DISABLE ON THIS PAGE -->
+</verbatim>
 
 
 ---+++ userTopicsCommaDelimited
-<!-- HIDE AND DISABLE ON THIS PAGE --><pre style="display:none;">
+<verbatim>
 %STARTSECTION{"userTopicsCommaDelimited"}%%SEARCH{ "[F]irstName.*value=.*();[W]orkStatus.*value=.*(Current)" web="%MAINWEB%" type="regex" nonoise="on" excludetopic="UserForm,PersonalInfo,PersonalInfoDocumentation,TWikiContributor,TWikiGuest,UnknownUser" format="\"$web.$topic\"" separator=", "}%%ENDSECTION{"userTopicsCommaDelimited"}%
-</pre><!-- END HIDE AND DISABLE ON THIS PAGE -->
+</verbatim>
 
 
 ---+++ phoneNumbersCommaDelimited
-<!-- HIDE AND DISABLE ON THIS PAGE --><pre style="display:none;">
+<verbatim>
 %STARTSECTION{"phoneNumbersCommaDelimited"}%%SEARCH{ "[F]irstName.*value=.*();[W]orkStatus.*value=.*(Current)" web="%MAINWEB%" type="regex" nonoise="on" excludetopic="UserForm,PersonalInfo,PersonalInfoDocumentation,TWikiContributor,TWikiGuest,UnknownUser" format="\"$formfield(WorkPhone)\"" separator=", "}%%ENDSECTION{"phoneNumbersCommaDelimited"}%
-</pre><!-- END HIDE AND DISABLE ON THIS PAGE -->
-
+</verbatim>
 
 ---+++ namesCommaDelimited
-<!-- HIDE AND DISABLE ON THIS PAGE --><pre style="display:none;">
+<verbatim>
 %STARTSECTION{"namesCommaDelimited"}%%SEARCH{ "[F]irstName.*value=.*();[W]orkStatus.*value=.*(Current)" web="%MAINWEB%" type="regex" nonoise="on" excludetopic="UserForm,PersonalInfo,PersonalInfoDocumentation,TWikiContributor,TWikiGuest,UnknownUser" format="\"$formfield(FirstName) $formfield(LastName)\"" separator=", "}%%ENDSECTION{"namesCommaDelimited"}%
-</pre><!-- END HIDE AND DISABLE ON THIS PAGE -->
+</verbatim>
 
 
 
 
-%META:FILEATTACHMENT{name="directSearch.js" attachment="directSearch.js" attr="" comment="Generated by !AttachContentPlugin" date="1173044388" path="directSearch.js" size="1126" stream="GLOB(0x1a9ec40)" user="Main.ArthurClemens" version="22"}%
+---++ phoneListXML
+<verbatim>
+%STARTSECTION{"phoneListXML"}%%STARTATTACH{"phoneList.xml"}%<?xml version="1.0" encoding="UTF-8"?>
+<users>
+%SEARCH{ "[F]irstName.*value=.*();[W]orkStatus.*value=.*(Current)" web="%MAINWEB%" type="regex" nonoise="on" excludetopic="UserForm,PersonalInfo,PersonalInfoDocumentation,TWikiContributor,TWikiGuest,UnknownUser" format="<user><firstname>$formfield(FirstName)</firstname><lastname>$formfield(LastName)</lastname><phone>$formfield(WorkPhone)</phone><url>%SCRIPTURL{view}%/%WEB%/$topic</url></user>" "}%
+</users>%ENDATTACH%%ENDSECTION{"phoneListXML"}%
+</verbatim>
+
+
+%META:FILEATTACHMENT{name="directSearch.js" attachment="directSearch.js" attr="" comment="Generated by !AttachContentPlugin" date="1173174106" path="directSearch.js" size="1172" stream="GLOB(0x1a8a548)" user="Main.TWikiContributor" version="1"}%
