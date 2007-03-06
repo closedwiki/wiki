@@ -77,6 +77,8 @@ sub natSearch {
   my $theIgnoreCase = $query->param('ignorecase') || '';
   my $origSearch = $theSearchString;
   my $searchTemplate;
+  my $theGlobalSearch;
+  my $theContentSearch;
 
   # get web preferences
   $includeWeb = &TWiki::Func::getPreferencesValue('NATSEARCHINCLUDEWEB') || '';
@@ -85,6 +87,8 @@ sub natSearch {
   $excludeTopic = &TWiki::Func::getPreferencesValue('NATSEARCHEXCLUDETOPIC') || '';
   $searchTemplate = &TWiki::Func::getPreferencesValue('NATSEARCHTEMPLATE') || '';
   $theIgnoreCase = &TWiki::Func::getPreferencesFlag('NATSEARCHIGNORECASE') unless $theIgnoreCase;
+  $theGlobalSearch = &TWiki::Func::getPreferencesFlag('NATSEARCHGLOBAL') || 0;
+  $theContentSearch = &TWiki::Func::getPreferencesFlag('NATSEARCHCONTENT') || 0;
   $includeWeb =~ s/^\s*(.*)\s*$/$1/o;
   $excludeWeb =~ s/^\s*(.*)\s*$/$1/o;
   $includeTopic =~ s/^\s*(.*)\s*$/$1/o;
@@ -118,7 +122,7 @@ sub natSearch {
 
   # construct the list of webs to search in
   my @webList = ($theWeb);
-  if ($options =~ /g/) {
+  if (($options =~ /g/ || $theGlobalSearch) && !($options =~ /l/)) {
     @webList = TWiki::Func::getPublicWebList();
     @webList = grep (/^$includeWeb$/, @webList) if $includeWeb;
     @webList = grep (!/^$excludeWeb$/, @webList) if $excludeWeb;
@@ -165,7 +169,7 @@ sub natSearch {
   } 
   
   # (2) content search
-  elsif ($theSearchString =~ /^\/(.+)$/) { # Normal search
+  elsif ($theSearchString =~ /^\/(.+)$/ || $theContentSearch) { # Normal search
     $theSearchString = $1; 
     ($results, $nrHits) = 
       natContentsSearch($theSearchString, \@webList, $doIgnoreCase, $wikiUserName);

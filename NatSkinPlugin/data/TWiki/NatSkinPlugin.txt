@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1139390158" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1139390158" format="1.1" version="$Rev$"}%
 <!--
 
    PLEASE DO NOT EDIT THIS TOPIC
@@ -207,10 +207,28 @@ The values to these keys will be commited into the skin state at once. Multiple
 invokations will override any former setting.
 
 ---+++ USERACTIONS
-*Syntax*: =%<nop>USERACTIONS%= 
+*Syntax*: =%<nop>USERACTIONS{"&lt;format>" ...}%= 
 
-display =Edit&#124;Attach&#124;Move&#124;Raw&#124;Diffs&#124;More= when 
-logged in and an empty string for <nop>TWikiGuest
+display separate sets of actions for anonymous or authenticated users.
+   * sep="&lt;span> class="natSep">|&lt;/span>": separator between actions
+   * guest="$login$sep$register$sep$print": format string of actions for guests
+   * format="$user$sep$logout$sep$print&lt;br />$edit$sep$attach$sep$move$sep$raw$sep$diff$sep$more":
+     format string of actions for authenticated users
+
+The "guest" and "format" format strings can use the following variables
+   * $attach: link to "attach" topic action
+   * $diff: link to diff
+   * $edit: link to edit
+   * $login: link to log in
+   * $logout: link to log out
+   * $more: link to more dialog
+   * $move: link to move dialog
+   * $print: link to print action
+   * $raw: link to display topic in raw format
+   * $register: link to registration
+   * $sep: separator string
+   * $user: name of current authenticated user
+
 
 ---+++ WEBCOMPONENT
 *Syntax*: =%<nop>WEBCOMPONENT{"name"}%=
@@ -305,8 +323,10 @@ returns "beijing", "cairo" or "dakar" depending on the TWiki engine this plugin 
 |  Plugin Author: | TWiki:Main/MichaelDaum |
 |  Copyright &copy;: | 2003-2006, MichaelDaum http://wikiring.com |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | v3.00-pre11 |
+|  Plugin Version: | v3.00-pre12 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  06 Mar 2007: | improved USERACTIONS tag for more flexibility; \
+                  added NATSEARCHGLOBAL and NATSEARCHCONTENT flags for NatSearch |
 |  05 Feb 2007: | new option NATSEARCHIGNORECASE; |
 |  13 Oct 2006: | prevent recursive expansion of WEBCOMPONENTs; \
                   fixed natsearch not to print to STDOUT but use standard apis |
@@ -440,4 +460,4 @@ returns "beijing", "cairo" or "dakar" depending on the TWiki engine this plugin 
 |  Appraisal: | TWiki:Plugins/%TOPIC%Appraisal |
 
 
--- TWiki:Main/MichaelDaum - 05 Feb 2007 
+-- TWiki:Main/MichaelDaum - 06 Mar 2007 
