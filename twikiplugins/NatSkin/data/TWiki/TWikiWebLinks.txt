@@ -1,10 +1,10 @@
-%META:TOPICINFO{author="TWikiContributor" date="1170329924" format="1.1" reprev="1.3" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1171350747" format="1.1" reprev="1.4" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiPreferences"}%
 ---+ %TOPIC%
 
 Standard links in sidebar navigation. 
 
-%STARTINCLUDE% 
+%STARTINCLUDE% <!-- -->
    * [[%BASEWEB%.WebTopicList][%MAKETEXT{"Index"}%]]
    * [[%BASEWEB%.WebChanges][%MAKETEXT{"Changes"}%]]
    * [[%BASEWEB%.WebNotify][%MAKETEXT{"Notifications"}%]]

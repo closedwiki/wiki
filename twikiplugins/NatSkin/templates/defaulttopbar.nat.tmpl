@@ -1,7 +1,7 @@
 <!-- template: defaulttopbar.nat.tmpl -->
 %TMPL:DEF{"defaulttopbar"}% <tr>
       <td class="natTopBar natTopLeft %IFSKINSTATE{action="oops" then="natTopRight"}%" valign="top">
-	<div class="natTopBarSizer">
+	<div class="natTopBarSizer natTopLeftBarSizer" id="natTopLeftBarSizer">
 	  <div class="natTopLeftContents">
 	    <h1 class="natWebTitle"><!--
       	      --><a href="%IFDEFINED{"%WEBLOGOURL%" then="%WEBLOGOURL%" else="%WIKILOGOURL%"}%" title="%WEBLOGOALT%" accesskey="h"><!--
@@ -13,7 +13,7 @@
 	</div>
       </td>
       <td class="natTopBar natTopRight" valign="top" style="%IFSKINSTATE{action="oops" then="display:none"}%" width="250px">
-	<div class="natTopBarSizer">
+	<div class="natTopBarSizer natTopRightBarSizer" id="natTopRightBarSizer">
 	  <div class="natTopRightContents">
 %IFSKINSTATETHEN{searchbox="top"}% 
 	    <div class="natSearchBox natSearchBoxTop">

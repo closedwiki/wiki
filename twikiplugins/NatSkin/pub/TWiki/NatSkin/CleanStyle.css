@@ -39,7 +39,7 @@ hr {
   border:1px #aaaaaa solid;
   background:white;
 }
-.twikiTableOdd td {
+.twikiTableEven td {
   background:#eeeeee;
 }
 
@@ -78,16 +78,13 @@ hr {
   border:1px #aaaaaa solid;
   border-collapse:collapse;
 }
-.twikiPageForm table table {
-  border:0px;
-}
 .twikiPageForm table th,
 .twikiPageForm table td {
-  padding:2px;
+  padding:5px;
 }
 
 .twikiPageForm th {
-  border:1px #aaaaaa solid;
+  border-right:1px #aaaaaa solid;
   color:#444444;
   background: #eeeeee;
   padding-top:2px;
@@ -99,7 +96,6 @@ hr {
   font-weight:bold;
 }
 .twikiPageForm td {
-  border-bottom:1px #aaa ridge;
 }
 
 /* helpers */
@@ -291,6 +287,9 @@ hr {
 .natCopyRight {
   display:inline;
 }
+.natRevision {
+  margin-top:10px;
+}
 
 /* forms */
 .natTopicForm td,
@@ -298,7 +297,6 @@ hr {
 .natTopicForm {
   font-size:12px;
 }
-
 .natTopicForm table {
   border:1px #aaaaaa solid;
 }
@@ -310,14 +308,12 @@ hr {
   background: #eeeeee;
   vertical-align:top;
   padding-top:2px;
+  border:0px;
 }
 .natTopicForm table th a {
   color:#444444;
   text-decoration:none;
   font-weight:bold;
-}
-.natTopicForm table td {
-  border:1px #aaaaaa solid;
 }
 
 .natTopicEditForm table td {
@@ -357,10 +353,6 @@ hr {
 .twikiTocTitle {
   color:#003366;
 }
-.twikiToc li {
-  line-height:110%;
-}
-
 
 /* supported plugins and applications */
 

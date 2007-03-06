@@ -37,7 +37,7 @@ hr {
 }
 .natSideBarRight,
 .natTopRight {
-  width:240px;
+  width:230px;
 }
 
 .natSideBarContents,
@@ -449,9 +449,6 @@ html>body .natSideBar ol { /* hide from IE */
 .twikiToc li a {
   display:block;
   width:100%;
-}
-.twikiToc li {
-  line-height:1.1em;
 }
 .twikiToc a + a {
   display:inline;

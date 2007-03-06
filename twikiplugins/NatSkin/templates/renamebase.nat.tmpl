@@ -15,12 +15,26 @@
 <!--input type="hidden" name="confirm" value="on"-->
 ---+ %TMPL:P{"webaction"}% Topic
 
-<table width="100%" cellspacing="5px">
-<tr><td align="right"><b>%MAKETEXT{"From"}%:</b></td><td><code>%WEB%.%TOPIC%</code></td></tr>
-<tr><td align="right"><b>%MAKETEXT{"To"}%:</b></td><td>%TMPL:P{"newweb"}% %TMPL:P{"newtopic"}%</td></tr>
-<tr><td>&nbsp;</td><td><p/><input type="checkbox" name="nonwikiword" %NONWIKIWORDFLAG% />%MAKETEXT{"Allow non <nop>WikiWord for the new topic name"}%<p/></td></tr>
-<tr><td>&nbsp;</td><td>%TMPL:P{"buttons"}%</td></tr>
+<div class="twikiPageForm">
+<table>
+<tr>
+  <th>%MAKETEXT{"From"}%:</th>
+  <td><nop>%WEB%.%TOPIC%</td>
+</tr>
+<tr>
+  <th>%MAKETEXT{"To"}%:</th>
+  <td>%TMPL:P{"newweb"}%&nbsp;%TMPL:P{"newtopic"}%</td>
+</tr>
+<tr>
+  <th>&nbsp;</th>
+  <td><input type="checkbox" name="nonwikiword" %NONWIKIWORDFLAG% />%MAKETEXT{"Allow non <nop>WikiWord for the new topic name"}%</td>
+</tr>
+<tr>
+  <th>&nbsp;</th>
+  <td>%TMPL:P{"buttons"}%</td>
+</tr>
 </table>
+</div>
 
 ---++ %MAKETEXT{"Change links in topics that refer to [_1] in the [_2] Web:" args="<nop>%TOPIC%,<nop>%WEB%"}%
 <div class="natSearchRenameContents">%LOCAL_SEARCH%</div>

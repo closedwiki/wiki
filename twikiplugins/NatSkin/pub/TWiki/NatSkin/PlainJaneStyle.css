@@ -183,9 +183,6 @@ hr {
 .twikiToc li ul {
   padding-left:20px;
 }
-.twikiToc li a {
-  line-height:110%;
-}
 
 /* search table */
 .natSearchTable {

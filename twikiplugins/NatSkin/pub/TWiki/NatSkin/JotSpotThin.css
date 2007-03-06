@@ -9,27 +9,6 @@
 .natBody {
   background:#eee;
 }
-.natMainFooterContents,
-.natMainHeaderContents,
-.natMainContents {
-  width:615px;
-}
-.natMainFooterBoth .natMainFooterContents,
-.natMainBoth .natMainHeaderContents,
-.natMainBoth .natMainContents {
-  width:855px;
-}
-.natMainBoth .natMainHeaderContents {
-  width:856px;
-}
-.natMainFooterRight .natMainFooterContents,
-.natMainRight .natMainHeaderContents,
-.natMainRight .natMainContents {
-  width:680px;
-}
-.natEditBody .natMainContents{
-  padding:20px 10px;
-}
 .natBottomBar {
   float:left;
   padding:20px;

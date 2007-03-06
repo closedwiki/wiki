@@ -34,7 +34,7 @@
 %TMPL:DEF{"rightsidebar"}%  
 %IFSKINSTATETHEN{sidebar="both"}%
 %$nopWEBCOMPONENT{"WebRightBar"}%
-%ELSESKINSTATE%
+%ELSIFSKINSTATE{sidebar="right"}%
 %$nopTMPL:P{"sidebar"}%
 %FISKINSTATE%
 %TMPL:END%

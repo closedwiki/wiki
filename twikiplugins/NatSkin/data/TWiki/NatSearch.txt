@@ -1,15 +1,17 @@
-%META:TOPICINFO{author="TWikiContributor" date="1166704746" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1171482576" format="1.1" reprev="1.3" version="$Rev$"}%
 %META:TOPICPARENT{name="NatSkin"}%
-
 ---+!! %TOPIC%
 Search facility for the NatSkin.
 
+%TOC%
+
+---++ Description
 <nop>NatSearch unifies the Seach and the Jump box known from the standard TWiki. You can 
 use one input field to either jump to a topic or start a content query.
 
 <nop>NatSearch is heavily inspired by the <nop>PhotonSearch of the TWiki:Plugins/PhotonSkin.
 
----+++ Usage
+---++ Usage
 This basically works in three modes: 
    1 GO: look up the named topic and jump to it immediately if found
    2 topic search: search a topic whose name matches the search string
@@ -32,7 +34,7 @@ This basically works in three modes:
 
 If only one topic was found in 2. or 3. then <nop>NatSearch jumps to that topic directly.
 
----+++ Options
+---++ Options
 The search string may be prepended with a set of options that are separated from the
 rest of the search string with a colon(:). Known options are:
 | *Option* | *Description* |
@@ -44,7 +46,7 @@ A search string may consist of a list of terms that are retrieved. If a term sha
 spaces it can be surrounded by double quotes. Each term may be preceded with a minus (-) to
 exclude this term from the hit set.
 
----+++ Examples
+---++ Examples
 | *Search* | *Description* |
 | <nop>TWikiUsers | if the current web is the %MAINWEB% go to the <nop>TWikiUsers  |
 |                 | if the current web is the %TWIKIWEB% go to the <nop>TWikiUsersGuide |
@@ -55,7 +57,7 @@ exclude this term from the hit set.
 | g:"Good morning" -natskin | list all topics that contain the term "Good morning" but not "natskin" |
 
 
----+++ Customization
+---++ Customization
 <nop>NatSearch can be restricted to certain webs and topics by setting WebPreferences.
 Besides the NOSEARCHALL feature of every web that excludes a web from search the following variables
  restrict the hit set:
@@ -66,10 +68,11 @@ Besides the NOSEARCHALL feature of every web that excludes a web from search the
 | =NATSEARCHINCLUDETOPIC= | a regular expression that must match a topic in the hit set |
 | =NATSEARCHEXCLUDETOPIC= | a regular expression that excludes a topic from the hit set |
 | =NATSEARCHIGNORECASE= | 'on' or 'off', the default case match mode |
+| =NATSEARCHGLOBAL= | 'on' searches in all public webs, 'off' restricts search to the current web (default) |
+| =NATSEARCHCONTENT= | 'on' searches content first, \
+  'off' tries to find a matching topic name first (default), \
+  it will still GO to the named topic if it exists |
 
 Furthermore, the WebPreferences variable =NATSEARCHTEMPLATE= can be set to a template topic that
 is used instead of the skin's =search= template. This can be used in <nop>TWikiApplications to
 define a customized look of search results.
-
-
--- Main.MichaelDaum - 25 Aug 2006
