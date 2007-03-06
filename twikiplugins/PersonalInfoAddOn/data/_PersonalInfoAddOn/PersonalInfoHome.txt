@@ -10,23 +10,22 @@ This topic is meant for administrators and serves as introduction springboard to
 
 ---++ Reference for administrators
 Distribution files:
-   * PersonalInfo - INCLUDE sections used by the application
    * PersonalInfoHome - (this topic) documentation
-   * PersonalInfoCustom - custom display of info fields in the =personalInfo= block
-   * PersonalInfoUserViewTemplate - template for the display of user homepages,  including the =personalInfo= block
+   * PersonalInfoModules - modules (INCLUDE sections) used by the !AddOn application
+   * PersonalInfo - Customizations of PersonalInfoModules. When making changes always change PersonalInfo only so PersonalInfoModules can stay intact. This makes future upgrades a lot easier.
+   * PersonalInfoUserViewTemplate - template for the display of user homepages that will show the =personalInfo= block
    * PersonalInfoPictureViewTemplate - template for the selection screen of user pictures
    * PersonalInfoPictureDeleteViewTemplate - template for the deletion of a user picture
    * PersonalInfoPictureUploadViewTemplate - template for the upload of a new user picture
 
-All these files should be copied to the user web (by default Main).
+All these files need to reside in your user web (by default Main).
 
 ---++ Documentation of the INCLUDE sections in PersonalInfo.
 
 ---+++ personalInfo
-*This block is included on every user page when PersonalInfoUserViewTemplate is set as view template.*
+*This block is intended as a quick introduction of the user (picture!) and to provide the most common information at hand. It makes it easy to edit the data "on the fly".*
 
-This block is intended as a quick introduction of the user (picture!) and to provide the most common information at hand. It makes it easy to edit the data "on the fly".
-
+This block is included on every user page when PersonalInfoUserViewTemplate is set as view template:
 <div class="twikiHelp">
 *To set !PersonalInfoUserViewTemplate as view template, follow these steps:*
    1 Include the personal info block in existing pages using either of these 2 methods:
@@ -41,8 +40,9 @@ This block is intended as a quick introduction of the user (picture!) and to pro
    %META:PREFERENCE{name="VIEW_TEMPLATE" title="VIEW_TEMPLATE" type="Local" value="PersonalInfoUserView"}%
 </verbatim>
 
-*To customize what fields are is displayed, follow these steps:*
-   1 Add the fields and field formats to the table in [[%MAINWEB%.UserForm]]. Below is an example, so change the fields as you like, but keep the fields =Picture= and =WorkStatus= (including the value 'Current') (both fields are not displayed to the user in topic view). In the current setup the value for =WorkStatus= can be set when editing the topic. %BR%
+*To customize which fields are displayed, follow these steps:*
+   1 Add the custom fields and field formats to the table in [[%MAINWEB%.UserForm]].%BR%
+   Below is an example, so change the fields as you like, but keep the fields =Picture= and =WorkStatus= (including the value 'Current') (both fields are not displayed to the user in topic view). In the current setup the value for =WorkStatus= can be set when editing the topic. %BR%
    <verbatim>
 | Picture | label | 1 |  |  | H |
 | <nop>WorkStatus | select | 1 | Current, Former |  | H |
@@ -51,9 +51,9 @@ This block is intended as a quick introduction of the user (picture!) and to pro
 | <nop>WorkPhoneMobile | text | 40 |  |  | H |
 | <nop>WorkLocation | text | 40 |  |  | H |
 </verbatim>
-   1 Edit PersonalInfoCustom and write the fields and field labels by editing the =INCLUDE= variables. The variable =fieldName= corresponds to the field names in %MAINWEB%.UserForm. The variable =label= can be any text you wish.
+   1 Edit PersonalInfo and write the fields and field labels by editing the =INCLUDE= variables. The variable =fieldName= corresponds to the field names in %MAINWEB%.UserForm. The variable =label= can be any text you wish.
    1 If you want to change the layout:
-      * The base style sheets are included from LayoutModules - install TWiki:Plugins/LayoutModulesAddOn if you haven't already and modify the styles in that topic.
+      * The base style sheets are included from LayoutModules - install TWiki:Plugins/LayoutModulesAddOn if you haven't already, and modify the styles in that topic.
       * The styles for =personalInfo= are included from PersonalInfo.
       * The default picture [[%PUBURL%/%TWIKIWEB%/PersonalInfoAddOn/silhouette.gif][silhouette.gif]] is attached to %TWIKIWEB%.PersonalInfoAddOn.
       * Pictures are 120 px wide and may vary in height. This is set in LayoutModules.
@@ -80,6 +80,10 @@ This include is written in PersonalInfoUserViewTemplate:
 
 ---+++ directSearch
 *Creates a search box to directly find users with their !WorkPhone number.*
+
+When !AttachContentPlugin is enabled, an updated javascript file attachment is created each time PersonalInfo is saved. This will make loading of the directSearch module a lot faster.
+
+To disable the auto-creation of the attachment, change PersonalInfo#createDirectSearchAttachment: change =%<nop>STARTATTACH{= to =%&lt;nop>STARTATTACH{=
 
 Usage:
 <verbatim>
@@ -114,9 +118,9 @@ Usage:
 
 
 ---+++ phoneListXML
-*Creates a list of users in XML format.* Listed users have a field =WorkPhone= and have the value =Current= at field =WorkStatus=.
+*Creates a list of user data in XML format.* Listed users have a field =WorkPhone= and have the value =Current= at field =WorkStatus=.
 
-The auto-generation of an XML attachment is turned off for performance. To create the XML file, remove the =&lt;nop>= from the beginning of =STARTATTACH= at [[PersonalInfo#phone_ListXML][PersonalInfo:phoneListXML]].
+The auto-generation of an XML attachment is turned off for performance. To create the XML file, remove the =&lt;nop>= from the beginning of =STARTATTACH= at [[PersonalInfo#create_PhoneListXMLAttachment][PersonalInfo:createPhoneListXMLAttachment]].
 
 Usage:
 <verbatim>
@@ -125,6 +129,12 @@ PersonalInfo?section=phoneListXML;skin=xml
 
 %ICON{hand}% <a href="%SCRIPTURL{view}%/%WEB%/PersonalInfo?section=phoneListXML;skin=xml">View phoneList XML</a>
 
+If the XML has been saved as file:
+<verbatim>
+%PUBURL%/%WEB%/PersonalInfo/phoneList.xml
+</verbatim>
+
+%ICON{hand}% [[%PUBURL%/%WEB%/PersonalInfo/phoneList.xml][PhoneList XML file]]
 
 
 
@@ -142,53 +152,4 @@ PersonalInfo?section=personalSearch;skin=text;q=
 
 
 
-
----++++ userTopicsCommaDelimited
-Used by [[#directSearch][directSearch]]: Creates a comma-delimited list of user topics that have field =FirstName=, with the format "Web.Topic".
-
-Usage:
-<verbatim>
-%INCLUDE{"PersonalInfo" section="userTopicsCommaDelimited"}%
-</verbatim>
-
-%ICON{hand}% <a href="%SCRIPTURL{view}%/%WEB%/PersonalInfo?section=userTopicsCommaDelimited">View userTopicsCommaDelimited</a>
-
-
-
-
----++++ phoneNumbersCommaDelimited
-Used by [[#directSearch][directSearch]]: Creates a comma-delimited list of values of field =WorkPhone= from topics that have field =FirstName=, with the format "value".
-
-Usage:
-<verbatim>
-%INCLUDE{"PersonalInfo" section="phoneNumbersCommaDelimited"}%
-</verbatim>
-
-%ICON{hand}% <a href="%SCRIPTURL{view}%/%WEB%/PersonalInfo?section=phoneNumbersCommaDelimited">View phoneNumbersCommaDelimited</a>
-
-
-
-
----++++ firstNamesCommaDelimited
-Used by [[#directSearch][directSearch]]: Creates a comma-delimited list of values of field =FirstName= from topics that have field =FirstName=, with the format "value".
-
-Usage:
-<verbatim>
-%INCLUDE{"PersonalInfo" section="firstNamesCommaDelimited"}%
-</verbatim>
-
-%ICON{hand}% <a href="%SCRIPTURL{view}%/%WEB%/PersonalInfo?section=firstNamesCommaDelimited">View firstNamesCommaDelimited</a>
-
-
-
-
----++++ lastNamesCommaDelimited
-Used by [[#directSearch][directSearch]]: Creates a comma-delimited list of values of field =LastName= from topics that have field =FirstName=, with the format "value".
-
-Usage:
-<verbatim>
-%INCLUDE{"PersonalInfo" section="lastNamesCommaDelimited"}%
-</verbatim>
-
-%ICON{hand}% <a href="%SCRIPTURL{view}%/%WEB%/PersonalInfo?section=lastNamesCommaDelimited">View lastNamesCommaDelimited</a>
 

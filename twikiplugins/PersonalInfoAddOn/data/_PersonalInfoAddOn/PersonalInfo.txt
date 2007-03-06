@@ -1,185 +1,86 @@
-%META:TOPICINFO{author="TWikiContributor" date="1173179479" format="1.1" reprev="1.1" version="1.1"}%
----+!! Personal Info !AddOn Application Sections
+%META:TOPICINFO{author="TWikiContributor" date="1173212370" format="1.1" reprev="1.1" version="1.1"}%
+---+!! Personal Info !AddOn Custom Data
 
-*Admin topic for %TWIKIWEB%.PersonalInfoAddOn.* %BR%
-This topic holds a number of INCLUDE sections to display and search user information. %BR%
-See PersonalInfoHome for documentation and usage examples.
+*Admin topic for %TWIKIWEB%.PersonalInfoAddOn.* See also PersonalInfoHome.
+
+This topic contains INCLUDE sections that are called by PersonalInfo. Use this topic for local site customizations, so !PersonalInfo can stay intact. This makes future upgrading a lot easier.
 
 %IF{"context AttachContentPluginEnabled" then='If you are using =directSearch= you may <a href="%SCRIPTURL{save}%/%WEB%/%TOPIC%?action_save=1">update the directSearch javascript file now</a> (by saving this topic the attachment will be updated)' else='!AttachContentPlugin is not enabled.%BR%To read javascript more efficiently in this section, please install and enable TWiki:Plugins/AttachContentPlugin.'}%
 
----++ personalInfo
+---++ How can I customize a section?
+   * To *replace* the default implementation: replace the =%<nop>INCLUDE{}%= variable by custom text.
+   * To *add to* the custom implementation: leave the INCLUDE variable in place and add text before or after
 
+---++ Customizable sections
+---+++ personalInfoFields
 <verbatim>
-
-%STARTSECTION{"personalInfoFields"}% Customized data in PersonalInfoCustom %ENDSECTION{"personalInfoFields"}%
-
-%STARTSECTION{"personalInfoDataRow" fieldName=%FIELDNAME% label=%LABEL%}%<tr>
-<th> %label% </th><td> %IF{"defined editUserData" then="<input type='text' name='%fieldName%' id='%fieldName%' class='twikiInputField' size='40' value='%FORMFIELD{"%fieldName%" topic="%BASETOPIC%" format="<nop>$value"}%' />" else="%FORMFIELD{"%fieldName%" topic="%BASETOPIC%"}%" }% </td>
-</tr>%ENDSECTION{"personalInfoDataRow"}%
-
-%STARTSECTION{"personalInfoDataRowEmployeesDropdown" fieldName=%FIELDNAME% label=%LABEL%}%<tr>
-<th> %label% </th><td> %IF{"defined editUserData" then="%INCLUDE{"PersonalInfo"                                                                                                                             section="employeesSelectOptions"}%" else="%FORMFIELD{"%fieldName%" topic="%BASETOPIC%"}%" }% </td>
-</tr>%ENDSECTION{"personalInfoDataRow"}%
-
-%STARTSECTION{"personalInfoStyle"}%<style type="text/css" media="all">
-.personalInfo {
-margin:0 0 1em 0;
-}
-.personalInfo .pIparagraphWithImageLeftText table {
-border-width:1px 0 0 0;
-}
-.personalInfo .pIparagraphWithImageLeftText th {
-font-weight:normal;
-text-align:left;
-color:#555;
-width:auto;
-white-space:nowrap;
-}
-.personalInfo .pIparagraphWithImageLeftText td {
-width:100%;
-}
-.personalInfo .pIparagraphWithImageLeftText td,
-.personalInfo .pIparagraphWithImageLeftText th {
-line-height:1.3em;
-border-width:0 0 1px 0;
-padding:.4em .8em;
-vertical-align:middle;
-}
-.personalInfo .pIparagraphWithImageLeftText table,
-.personalInfo .pIparagraphWithImageLeftText td,
-.personalInfo .pIparagraphWithImageLeftText th {
-border-style:solid;
-border-color:#e5e2db;
-}
-.personalInfoFormDataActions {
-margin:1.5em 0 0 0;
-padding:0 .8em; /* same as .pIparagraphWithImageLeftText td */
-}
-.personalInfoFormDataActions a {
-font-size:86%; /* same as .twikiSmall */
-}
-.personalInfoFormDataActions .twikiSeparator {
-color:#ccc;
-}
-</style>%ENDSECTION{"personalInfoStyle"}%
-
-%STARTSECTION{"personalInfo"}%%INCLUDE{"PersonalInfo" section="personalInfoStyle"}%<div class="pIparagraphFrame personalInfo">
----+!! %FORMFIELD{"FirstName" topic="%BASETOPIC%"}% %FORMFIELD{"LastName" topic="%BASETOPIC%"}%
-%INCLUDE{"LayoutModules" section="paragraphWithImageLeftStyle"}%
-%INCLUDE{"LayoutModules" section="personalInfoStyle"}%
-<form name="main" action="%SCRIPTURLPATH{"save"}%/%BASEWEB%/%BASETOPIC%" method="post">
-<input type="hidden" name="editaction" value="form" />
-<!-- if !AllowRedirectUrl is enabled in configure, !PersonalInfo is updated to save the search data as javascript file -->
-%IF{"context AttachContentPluginEnabled" then='<input type="hidden" name="redirectto" value="%SCRIPTURL{save}%/%WEB%/PersonalInfo?redirectto=%BASETOPIC%" />'}%
-%INCLUDE{"LayoutModules" section="paragraphWithImageLeft" imagePath="%FORMFIELD{"Picture" topic="%BASEWEB%.%BASETOPIC%" format="%PUBURL%/%BASEWEB%/%BASETOPIC%/$value" default="%PUBURL%/%TWIKIWEB%/PersonalInfoAddOn/silhouette.gif" alttext="%PUBURL%/%TWIKIWEB%/PersonalInfoAddOn/silhouette.gif" }%" text="%INCLUDE{"PersonalInfoCustom" section="personalInfoFields"}%
-%IF{"context authenticated and not defined editUserData" then="<div class='personalInfoFormDataActions'>[[%SCRIPTURL{view}%/%BASEWEB%/%BASETOPIC%?editUserData=on][Edit data]] <span class='twikiSeparator'>|</span> [[%SCRIPTURL{view}%/%BASEWEB%/%BASETOPIC%?template=PersonalInfoPictureView][Change picture]]</div>" }% %IF{"defined editUserData" then="<div class='personalInfoFormDataActions'><input type='submit' class='twikiSubmit' name='action_save' id='save' value='Save' /> <input type='submit' class='twikiButton' name='action_cancel' id='cancel' value='Cancel' /></div>" }%" }% </form></div><!--/pIparagraphFrame-->%ENDSECTION{"personalInfo"}%
-
+%STARTSECTION{"personalInfoFields"}%<table cellspacing='0' cellpadding='0'>
+%INCLUDE{"PersonalInfo" section="personalInfoDataRow" fieldName="WorkPhone" label="Work phone"}%
+%INCLUDE{"PersonalInfo" section="personalInfoDataRow" fieldName="WorkPhoneMobile" label="Work phone mobile"}%
+%INCLUDE{"PersonalInfo" section="personalInfoDataRow" fieldName="WorkEmail" label="E-mail"}%
+%INCLUDE{"PersonalInfo" section="personalInfoDataRow" fieldName="WorkLocation" label="Location"}%
+</table>%ENDSECTION{"personalInfoFields"}%
 </verbatim>
 
-
-
----++ phoneList
-
+---+++ personalInfoDataRow
 <verbatim>
-%STARTSECTION{"phoneList"}%%SEARCH{ "[W]orkPhone;[W]orkStatus.*value=.*(Current)" web="%MAINWEB%" type="regex" nonoise="on" excludetopic="UserForm,PersonalInfo,PersonalInfoDocumentation" format="   * [[$web.$topic][$topic]] $formfield(WorkPhone)"}%%ENDSECTION{"phoneList"}%
+To use a custom implementation: replace INCLUDE variable by custom text
+%STARTSECTION{"personalInfoDataRow" fieldName=%FIELDNAME% label=%LABEL%}%%INCLUDE{"PersonalInfoModules" section="personalInfoDataRow"}%%ENDSECTION{"personalInfoDataRow"}%
 </verbatim>
 
-
-
----++ personalSearch
-
+---+++ personalInfoStyle
 <verbatim>
-%STARTSECTION{"personalSearch"}%%SEARCH{ "[F]irstName.*value=.*(%URLPARAM{"q"}%)|[L]astName.*value=.*(%URLPARAM{"q"}%)" web="%MAINWEB%" type="regex" nonoise="on" excludetopic="UserForm,PersonalInfo,PersonalInfoDocumentation,TWikiContributor,TWikiGuest,UnknownUser" format="   * [[$web.$topic][$topic]] $formfield(WorkPhone)"}%%ENDSECTION{"personalSearch"}%
+%STARTSECTION{"personalInfoStyle"}%%INCLUDE{"PersonalInfoModules" section="personalInfoStyle"}%%ENDSECTION{"personalInfoStyle"}%
 </verbatim>
 
-
-
----++ directSearch
-
+---+++ personalInfo
 <verbatim>
-%STARTSECTION{"directSearch" title=%TITLE% maxresults=%MAXRESULTS%}% %title%  %BR%
-<input type="text" class="twikiInputField" size="12" id="personalInfoSearchBox" name="personalInfoSearchBox" onkeyup="showResults(); return false;" />
-<div id="personalInfoSearchResults"><!-- search results will be displayed here --></div>
-%IF{"context AttachContentPluginEnabled" then='%INCLUDE{"PersonalInfo" section="directSearchScriptFile" raw="on" literal="on"}%' else='%INCLUDE{"PersonalInfo" section="directSearchScript" raw="on" literal="on"}%'}%
-<style type="text/css" media="all">
-#personalInfoSearchResults td {
-padding:.1em .25em;
-}
-</style>%ENDSECTION{"directSearch"}%
-
-
-%STARTSECTION{"directSearchScriptFile"}%<script language="javascript" type="text/javascript" src="%ATTACHURL%/directSearch.js"></script>%ENDSECTION{"directSearchScriptFile"}%
-
-
-%STARTSECTION{"directSearchScript"}%<script language="javascript" type="text/javascript">
-// %STARTATTACH{"directSearch.js"}%
-	var MAX_RESULTS = %IF{"defined maxresults" then="%URLPARAM{"maxresults" default="%maxresults%"}%" else="12"}%;
-	function showResults() {
-		var userTopics = new Array(%INCLUDE{"PersonalInfo" section="userTopicsCommaDelimited"}%);
-		var names = new Array(%INCLUDE{"PersonalInfo" section="namesCommaDelimited"}%);
-		var phoneNumbers = new Array(%INCLUDE{"PersonalInfo" section="phoneNumbersCommaDelimited"}%);
-		//
-		var output = "";
-		var resultCount = 0;
-		var query = document.getElementById("personalInfoSearchBox").value.toLowerCase();
-		if (query.length != 0) {
-			var regex = new RegExp("\\b" + query, "gi");
-			output = "<table cellpadding=\u00270\u0027 cellspacing=\u00270\u0027>";
-			var i = 0;
-			while ( i < names.length && resultCount < MAX_RESULTS) {
-				var linkLabel = "";
-				if (names[i].match(regex)) {
-					linkLabel = names[i];
-				}
-				if (linkLabel != "") {
-					output += "<tr>";
-					output += "<td><a href=\u0027%SCRIPTURL{view}%/" + userTopics[i] + "\u0027>" + linkLabel + "</a></td>";
-					output += "<td>" + phoneNumbers[i] + "</td>";
-					output += "</tr>";
-					resultCount++;
-				}
-				i++;
-			}
-			output += "</table>";
-		}
-		if (query.length > 0 && resultCount == 0) {
-			output = "";
-		}
-		document.getElementById("personalInfoSearchResults").innerHTML = output;
-	}
-// %ENDATTACH%
-</script>%ENDSECTION{"directSearchScript"}%
+%STARTSECTION{"personalInfo"}%%INCLUDE{"PersonalInfoModules" section="personalInfo"}%%ENDSECTION{"personalInfo"}%
 </verbatim>
 
-
----+++ userTopicsCommaDelimited
+---+++ phoneList
 <verbatim>
-%STARTSECTION{"userTopicsCommaDelimited"}%%SEARCH{ "[F]irstName.*value=.*();[W]orkStatus.*value=.*(Current)" web="%MAINWEB%" type="regex" nonoise="on" excludetopic="UserForm,PersonalInfo,PersonalInfoDocumentation,TWikiContributor,TWikiGuest,UnknownUser" format="\"$web.$topic\"" separator=", "}%%ENDSECTION{"userTopicsCommaDelimited"}%
+%STARTSECTION{"phoneList"}%%INCLUDE{"PersonalInfoModules" section="phoneList"}%%ENDSECTION{"phoneList"}%
 </verbatim>
 
-
----+++ phoneNumbersCommaDelimited
+---+++ createPhoneListXMLAttachment
 <verbatim>
-%STARTSECTION{"phoneNumbersCommaDelimited"}%%SEARCH{ "[F]irstName.*value=.*();[W]orkStatus.*value=.*(Current)" web="%MAINWEB%" type="regex" nonoise="on" excludetopic="UserForm,PersonalInfo,PersonalInfoDocumentation,TWikiContributor,TWikiGuest,UnknownUser" format="\"$formfield(WorkPhone)\"" separator=", "}%%ENDSECTION{"phoneNumbersCommaDelimited"}%
+%<nop>STARTATTACH{"phoneList.xml"}%%INCLUDE{"%TOPIC%" section="phoneListXML"}%%ENDATTACH%
 </verbatim>
 
----+++ namesCommaDelimited
+---+++ phoneListXML
 <verbatim>
-%STARTSECTION{"namesCommaDelimited"}%%SEARCH{ "[F]irstName.*value=.*();[W]orkStatus.*value=.*(Current)" web="%MAINWEB%" type="regex" nonoise="on" excludetopic="UserForm,PersonalInfo,PersonalInfoDocumentation,TWikiContributor,TWikiGuest,UnknownUser" format="\"$formfield(FirstName) $formfield(LastName)\"" separator=", "}%%ENDSECTION{"namesCommaDelimited"}%
+%STARTSECTION{"phoneListXML"}%%INCLUDE{"PersonalInfoModules" section="phoneListXML"}%%ENDSECTION{"phoneListXML"}%
 </verbatim>
 
-
-
-
----++ phoneListXML
+---+++ personalSearch
 <verbatim>
-%<nop>STARTATTACH{"phoneList.xml"}%%STARTSECTION{"phoneListXML"}%<?xml version="1.0" encoding="UTF-8"?>
-<users>
-%SEARCH{ "[F]irstName.*value=.*();[W]orkStatus.*value=.*(Current)" web="%MAINWEB%" type="regex" nonoise="on" excludetopic="UserForm,PersonalInfo,PersonalInfoDocumentation,TWikiContributor,TWikiGuest,UnknownUser" format="<user><firstname>$formfield(FirstName)</firstname><lastname>$formfield(LastName)</lastname><phone>$formfield(WorkPhone)</phone><url>%SCRIPTURL{view}%/%WEB%/$topic</url></user>" "}%
-</users>
-%ENDSECTION{"phoneListXML"}%%ENDATTACH%
+%STARTSECTION{"personalSearch"}%%INCLUDE{"PersonalInfoModules" section="personalSearch"}%%ENDSECTION{"personalSearch"}%
 </verbatim>
 
+---+++ createDirectSearchAttachment
+<verbatim>
+%STARTATTACH{"directSearch.js"}%%INCLUDE{"PersonalInfoModules" section="directSearchScriptCode"}%%ENDATTACH%
+</verbatim>
 
+---+++ directSearch
+<verbatim>
+%STARTSECTION{"directSearch"}%%INCLUDE{"PersonalInfoModules" section="directSearch"}%%ENDSECTION{"directSearch"}%
+</verbatim>
 
-%META:FILEATTACHMENT{name="directSearch.js" attachment="directSearch.js" attr="" comment="Generated by !AttachContentPlugin" date="1173179479" path="directSearch.js" size="1172" stream="GLOB(0x1a6933c)" user="Main.TWikiContributor" version="1"}%
+---+++ directSearchScript
+<verbatim>
+%STARTSECTION{"directSearchScript"}%%INCLUDE{"PersonalInfoModules" section="directSearchScript"}%%ENDSECTION{"directSearchScript"}%
+</verbatim>
+
+---+++ directSearchScriptFile
+<verbatim>
+%STARTSECTION{"directSearchScriptFile"}%%INCLUDE{"PersonalInfoModules" section="directSearchScriptFile"}%%ENDSECTION{"directSearchScriptFile"}%
+</verbatim>
+
+---+++ directSearchData
+<verbatim>
+%STARTSECTION{"directSearchData"}%%INCLUDE{"PersonalInfoModules" section="directSearchData"}%%ENDSECTION{"directSearchData"}%
+</verbatim>
+
+%META:FILEATTACHMENT{name="directSearch.js" attachment="directSearch.js" attr="" comment="Generated by !AttachContentPlugin" date="1173212369" path="directSearch.js" size="1205" stream="GLOB(0x1a88718)" user="Main.TWikiContributor" version="1"}%
