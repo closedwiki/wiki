@@ -29,7 +29,7 @@ use POSIX qw(ceil);
 
 use vars qw( $session $theTopic $theWeb $topic $web $attributes $text $refText
              $defaultsInitialized %defaults %options @renderedOptions @flagOptions %months %daysofweek
-	     @processedTopics @unknownParams 
+	     @processedTopics @unknownParams $rpId
 	     $cgi $pluginName
 	 );
 
@@ -53,6 +53,8 @@ sub expand {
 	if ($options{'autotopic'} && defined $options{'racks'}) {
 		$options{'topic'} .= ($options{'topic'} eq ""?'':','). $options{'racks'};
 	}
+
+	$rpId++;
 
 	return ($options{'dir'}=~/^(leftright|rightleft)$/i) 
 			? &_renderHorizontal(&_fetch (&_getTopicText())) 
@@ -93,11 +95,18 @@ sub _initDefaults {
 		'unitcolumnbgcolor' => undef,
 		'columnwidth' => "",
 		'textdir' => 'leftright',
+		'enablejstooltips'=>1,
+		'tooltipfixleft'=>-163,
+		'tooltipfixtop'=>0,
+		'tooltipbgcolor'=>"",
+		'tooltipfgcolor'=>"",
+		'tooltipformat'=>' %SERVER%: %FORMFACTOR% (%SUNIT%-%EUNIT%, %RACK%)<br/>Owner: %OWNER% <br/>Connected to: %CONNECTEDTO% <br/>Notes:<br/> %NOTES%',
 	);
 
 	@renderedOptions = ( 'name', 'notesicon','conflicticon', 'connectedtoicon', 'emptytext' );
-	@flagOptions = ( 'autotopic', 'displaystats', 'displayconnectedto', 'displaynotes', 'displayowner', 'displayunitcolumn' );
+	@flagOptions = ( 'autotopic', 'displaystats', 'displayconnectedto', 'displaynotes', 'displayowner', 'displayunitcolumn','enablejstooltips' );
 
+	$rpId=0;
 
         $defaultsInitialized = 1;
 
@@ -189,6 +198,16 @@ sub _fetch {
 
 	return \%entries;
 }
+
+# =========================
+sub _renderJSTooltipText {
+	my ($entryRef, $sunit, $eunit) = @_;
+	my $text = $options{'tooltipformat'};
+	$text =~s /\%SUNIT\%/$sunit/gs;
+	$text =~s /\%EUNIT\%/$eunit/gs;
+	$text =~s /\%([^\%\s]+)%/$$entryRef{"\L$1\E"}/egs;
+	return &TWiki::Func::renderText($text);
+}
 # =========================
 sub _renderHorizontal {
 
@@ -246,18 +265,29 @@ sub _renderHorizontal {
 
 					$fillCols[$rackNumber]=$colspan-1;
 
+					my $unitId = "RPP_${rpId}_${rackNumber}_".abs($unit);
 					my ($fgcolor, $bgcolor, $style) = &_getColorsAndStyle($$entryRef{'colimg'});
 
+					my $title= $options{'enablejstooltips'}
+							? &_renderJSTooltipText($entryRef, abs($unit),abs($unit+$colspan-1))
+							: $$entryRef{'formfactor'}.'('.abs($unit).'-'.(abs($unit+$colspan-1)).')';
+
+					my $text = "";
+					$text .= &_renderHiddenTooltip("${unitId}_TT", $unitId, $title, $fgcolor, $bgcolor) if $options{'enablejstooltips'};
+					$text .= &_renderTextContent($entryRef);
 					$rackRows[$rackNumber] .= $cgi->td({
-						-title=>&_encodeTitle($$entryRef{'formfactor'}).'('.abs($unit).'-'.(abs($unit+$colspan-1)).')', 
+						-title=>($options{'enablejstooltips'}?"":&_encodeTitle($title)),
 						-align=>($options{'textdir'}=~/^topdown$/i)?'center':'left', 
 						-valign=>'top', 
 						-colspan=>$colspan, 
 						-style=>$style,
 						-bgcolor=>$bgcolor,
 						-width=>$options{'columnwidth'},
+						-id=>$unitId,
+						-onmouseover=>"rppTooltipShow('${unitId}_TT','$unitId',$options{'tooltipfixleft'},$options{'tooltipfixtop'},true);",
+						-onmouseout=>"rppTooltipHide('${unitId}_TT');",
 						}, 
-						 &_renderTextContent($entryRef)
+						$text
 						);
 				} else {
 					unshift @{ $entryListRef }, $entryRef;
@@ -386,18 +416,27 @@ sub _render {
 
 				if ($unit+$rowspan<=$endUnit+1) {
 
+					my $unitId = "RPP_${rpId}_${rackNumber}_".abs($unit);
 					$fillRows=$rowspan-1;
+					my $title= $options{'enablejstooltips'}
+							? &_renderJSTooltipText($entryRef, abs($unit),abs($unit+$rowspan-1))
+							: $$entryRef{'formfactor'}.'('.abs($unit).'-'.(abs($unit+$rowspan-1)).')';
 
-					$itd = &_renderTextContent($entryRef);
 					($fgcolor, $bgcolor, $style) = &_getColorsAndStyle($$entryRef{'colimg'});
 
+					$itd = &_renderHiddenTooltip("${unitId}_TT", $unitId, $title, $fgcolor, $bgcolor) if $options{'enablejstooltips'};
+					$itd .= &_renderTextContent($entryRef);
+
 					$itd = $cgi->td({
-						-title=>&_encodeTitle($$entryRef{'formfactor'}).'('.abs($unit).'-'.(abs($unit+$rowspan-1)).')', 
+						-title=>($options{'enablejstooltips'}?"":&_encodeTitle($title)),
 						-valign=>'top', 
 						-rowspan=>$rowspan, 
 						-nowrap=>'nowrap',
 						-style=>$style,
 						-bgcolor=>$bgcolor,
+						-id=>$unitId,
+						-onmouseover=>"rppTooltipShow('${unitId}_TT','$unitId',$options{'tooltipfixleft'},$options{'tooltipfixtop'},true);",
+						-onmouseout=>"rppTooltipHide('${unitId}_TT');",
 						}, 
 						$itd)."\n";
 				} else {
@@ -457,6 +496,7 @@ sub _render {
 
 	return $text;
 }
+# =========================
 sub _renderUnitColumn {
 	my ($startUnit,$endUnit,$steps) = @_;
 	my $text ="";
@@ -471,6 +511,7 @@ sub _renderUnitColumn {
 		.$text.$cgi->end_table().'</noautolink>';
 	return $text;
 }
+# =========================
 sub _renderEmptyText {
 	my ($rack,$unit) = @_;
 	my $text = $options{'emptytext'};
@@ -479,6 +520,7 @@ sub _renderEmptyText {
 	$text=~s/%U/$unit/ig;
 	return " $text ";
 }
+# =========================
 sub _renderConflictCell {
 	my ($unit, $entryListRef, $conflictIcon) = @_;
 	my $title=&_renderConflictTitle($unit, $entryListRef);
@@ -488,7 +530,25 @@ sub _renderConflictCell {
 			&_retitleIcon($conflictIcon, $title).'&nbsp;');
 	return $text;
 }
+# =========================
+sub _renderHiddenTooltip {
+	my ($id, $pId, $text, $fgcolor, $bgcolor) = @_;
 
+	$fgcolor=$options{'tooltipfgcolor'} unless defined $fgcolor;
+	$bgcolor=$options{'tooltipbgcolor'} unless defined $bgcolor;
+	
+
+	return $cgi->div(
+		{
+		 -id=>${id},
+		 -style=>"text-align:left;visibility:hidden;position:absolute;top:0;left:0;z-index:2;font: normal $options{'fontsize'} sans-serif;padding: 3px; border: solid 1px; background-color: $bgcolor; color: $fgcolor",
+		 -onmouseover=>"rppTooltipShow('$id','$pId',$options{'tooltipfixleft'},$options{'tooltipfixtop'},true);",
+		 -onmouseout=>"rppTooltipHide('$id');",
+		},
+		$text
+		);
+}
+# =========================
 sub _renderTextContent {
 	my ($entryRef) = @_;
 	my $ret ="";
@@ -549,6 +609,7 @@ sub _renderTextContent {
 			if ($options{'dir'}=~/^(leftright|rightleft)$/i && $options{'textdir'}=~/^topdown$/i);
 	return $ret;
 }
+# =========================
 sub _renderIconContent {
 	my ($connectedto, $note) = @_;
 	my $text="";
@@ -582,6 +643,7 @@ sub _renderIconContent {
 	}
 	return $text;
 }
+# =========================
 sub _getColorsAndStyle {
 	my ($colors) = @_;
 	my ($fgcolor,$bgcolor,$style) = ($options{'devicefgcolor'}, $options{'devicebgcolor'}, "");
@@ -603,6 +665,7 @@ sub _getColorsAndStyle {
 	}
 	return ($fgcolor,$bgcolor,$style);
 }
+# =========================
 sub _renderConflictTitle {
 	my ($unit, $entryListRef) = @_;
 	my $title = "$unit: conflict with";
@@ -612,12 +675,14 @@ sub _renderConflictTitle {
 
 	return &_encodeTitle($title);
 }
+# =========================
 sub _resizeIcon {
 	my ($icon) = @_;
 	$icon=~s/(<img\s+[^\>]*?width=")[^"]+"/$1$options{'iconsize'}"/;
 	$icon=~s/(<img\s+[^\>]*?height=")[^"]+"/$1$options{'iconsize'}"/;
 	return $icon;
 }
+# =========================
 sub _retitleIcon {
 	my ($icon, $title) = @_;
 	$icon=~s/(alt|title)="[^"]*"/$1="$title"/ig;
@@ -626,6 +691,7 @@ sub _retitleIcon {
 
 	return $icon;
 }
+# =========================
 sub _renderStatistics {
 	my ($statsRef) = @_;
 	my $text=$options{'statformat'};
@@ -646,6 +712,7 @@ sub _renderStatistics {
 
 	return $text;
 }
+# =========================
 sub _renderRackStatistics {
 	my ($statsRef) = @_;
 
@@ -657,6 +724,7 @@ sub _renderRackStatistics {
  
 	return $text;
 }
+# =========================
 sub _getRackStatistics {
 	my ($rackEntriesRef) = @_;
 
@@ -804,7 +872,7 @@ sub _encode_entities {
 	return $text;
 	
 }
-
+# =========================
 sub _encodeTitle {
 	my ($title, $dontEncodeEntities) = @_;
 	return "" unless defined $title;

@@ -23,6 +23,7 @@ package TWiki::Plugins::RackPlannerPlugin;
 
 # Always use strict to enforce variable scoping
 use strict;
+require TWiki::Plugins::RackPlannerPlugin::RackPlanner;
 
 # $VERSION is referred to by TWiki, and is the only global variable that
 # *must* exist in this package
@@ -99,7 +100,6 @@ sub initPlugin {
     ####TWiki::Func::registerRESTHandler('example', \&restExample);
 
     eval {
-       require TWiki::Plugins::RackPlannerPlugin::RackPlanner;
        &TWiki::Plugins::RackPlannerPlugin::RackPlanner::initPlugin;
     };
 
@@ -224,6 +224,8 @@ sub commonTagsHandler {
 
     eval {
 	    require TWiki::Plugins::RackPlannerPlugin::RackPlanner;
+
+            $_[0] =~ s/<\/head>/<script src="%PUBURL%\/%TWIKIWEB%\/$pluginName\/rackplannertooltips.js" language="javascript" type="text\/javascript"><\/script><\/head>/is unless ($_[0]=~/rackplannertooltips.js/);
 
 	    $_[0] =~ s/%RACKPLANNER%/&TWiki::Plugins::RackPlannerPlugin::RackPlanner::expand("",$_[0],$_[1],$_[2])/ge;
 	    $_[0] =~ s/%RACKPLANNER{(.*?)}%/&TWiki::Plugins::RackPlannerPlugin::RackPlanner::expand($1, $_[0], $_[1], $_[2])/ge;

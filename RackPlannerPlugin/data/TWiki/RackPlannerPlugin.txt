@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1172747189" format="1.0" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1173174857" format="1.0" version="$Rev$"}%
 ---+ <nop>RackPlannerPlugin
 The <nop>RackPlannerPlugin handles the tag =%<nop>RACKPLANNER%= and renders a rack overview (HTML table) with devices (computer, router, switches, ...). 
 ---++ Syntax Rules
@@ -33,6 +33,7 @@ Usage: =%<nop>RACKPLANNER{attribute1="value" attribute2="value" ... }%=
 |  *Behavior:*  |||
 | autotopic | set it =on= and every rack name is automatically used as source topic for the device definition (=racks= attribute is required and the value is attached to the =topic= attribute value); useful if you define your racks and devices on topics with the same names as the racks | =autotopic="off"= |
 | dir | sets the direction of the units: =topdown= - unit 1 is at the top of the rack; =bottomup= - unit 1 is at the bottom of the rack; =leftright= - units are shown horizontal with unit 1 at the left; =rightleft= - units are shown horizontal with unit 1 at the right | =dir="bottomup"= |
+| enablejstooltips | enables/disables <nop>>JavaScript tooltips | =enablejstooltips="1"= |
 | racks | a comma separated list of rack names to show; if omitted all racks found on topics (see =topic= attribute) are shown  | =racks="rack1,rack2"= |
 | steps | unit steps to display (useful if you use only every =steps= unit of a rack) | =steps="1"= |
 | topic | a comma separated list of source topics | =topic="%<nop>TOPIC%"= |
@@ -59,6 +60,11 @@ Usage: =%<nop>RACKPLANNER{attribute1="value" attribute2="value" ... }%=
 | rackstatformat | rack statistics format (replacements: =%EU= - empty units; =%LEB= - largest empty block; =%OU= - occupied units) | =rackstatformat="Empty: %EUU %<nop>BR%Largest Empty Block: %LEBU %<nop>BR%Occupied: %OUU"= |
 | statformat | statistics format (replacements: =%R= - rack count; =%EU= - empty units; =%LEB= - largest empty block; =%OU= - occupied units; =%U= - # units) | =statformat="#Racks: %R, #Units: %U, Occupied: %OUU, Empty: %EUU, Largest Empty Block: %LEBU"= |
 | textdir | defines text direction; allowed values: =topdown=, =leftright= (%X% only supported for =dir="leftright"= and =dir="rightleft"= yet) | =textdir="leftright"= |
+| tooltipbgcolor | tooltip background color (default: color from definition table) | =tooltipbgcolor=""= |
+| toolitpfgcolor | tooltip foreground color (default: color from definition table) | =tooltipfgcolor=""= |
+| tooltipfixleft | tooltip position fix (skin dependent) | =tooltipfixleft=-163= |
+| tooltipfixtop | tooltip position fix (skin dependent) | =tooltipfixtop=0= |
+| tooltipformat | tooltip format (replacements: =%<nop>SERVER%=: server name; =%<nop>FORMFACTOR%=: form factor; =%<nop>RACK%=: rack name; =%<nop>SUNIT%=: starting unit; =%<nop>EUNIT%=: ending unit; =%<nop>OWNER%=: onwer; =%<nop>NOTES%=: notes | =tooltipformat="%<nop>SERVER%: %<nop>FORMFACTOR% (%<nop>SUNIT%-%<nop>EUNIT%, %<nop>RACK%)&lt;br/&gt;Owner: %<nop>OWNER% &lt;br/&gt;Connected to: %<nop>CONNECTEDTO% &lt;br/&gt;Notes:&lt;br/&gt; %<nop>NOTES%"= |
 | unitcolumnbgcolor | background color of the unit column | =unitcolumnbgcolor="white"= |
 | unitcolumnfgcolor | foreground color of the unit column | =unitcolumnfgcolor="black"= |
 | unitcolumnformat | format of the unit column (replacement: =%U= - unit) | =unitcolumnformat="%U"= |
@@ -140,7 +146,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | V1.003 (BETA) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  V1.003 (BETA) | TWiki:Main.DanielRohde: fixed displayowner/displaynotes bug reported by TWiki:Main.PatrickTuite; added horizontal rendering feature requested by TWiki:Main.OlofStockhaus; added new attributes (columnwidth, textdir); fixed HTML validation bug; |
+|  V1.003 (BETA) | TWiki:Main.DanielRohde: fixed displayowner/displaynotes bug reported by TWiki:Main.PatrickTuite; added horizontal rendering feature requested by TWiki:Main.OlofStockhaus; added new attributes (tooltip..., columnwidth, textdir); fixed HTML validation bug; |
 |  V1.002 (26 Oct 2006): | TWiki:Main.DanielRohde: allowed multiple entries in a single unit; fixed rendering bug reported by TWiki:Main.SteveWray; fixed link color bug reported by TWiki:Main.SteveWray |
 |  V1.001 (7 Aug 2006): | TWiki:Main.DanielRohde: improved some features (added statistics); added attributes (rackstatformat, displayunitcolumn, unitcolumn*); renamed attribute statformat; fixed documentation; fixed tooltip bug; fixed conflict bug;|
 |  V1.000 (4 Aug 2006): | TWiki:Main.DanielRohde: Initial version |
