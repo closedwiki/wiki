@@ -1,4 +1,3 @@
-%META:TOPICINFO{author="TWikiAdminGroup" date="1170262421" format="1.1" version="1.2"}%
 ---+!! <nop>%TOPIC%
 *Generates a static view of a web, as HTML files on disc, or as a =PDF=, or as a =zip= or =tgz= archive file, or by uploading directly to an FTP server.*
 
@@ -10,11 +9,14 @@
    you make will simply be overwritten the next time a release is generated.
 
    Instead, you could check your fix in, raise a bug in the Bugs web, or mail thge author.
+
+   * Set STUB = %$STUB%
+   * Set SHORTDESCRIPTION = Generate static output (HTML, PDF) for a TWiki Web and optionally upload (FTP) the output to a publishing site.
 -->
 
 _Previously known as !GenHTMLAddOn, and then !PublishAddOn, this is the *original* publishing extension for TWiki_.
 
-<div class="twikiBroadcastMessage" style="background:#ffc;"> __NOTE:__ This version is TWiki 4.0 specific. Download the [[http://twiki.org/cgi-bin/viewfile/Plugins/PublishContrib?rev=1;filename=PublishContrib.tgz][previous version]] if you want to use this extension with an earlier version of TWiki.</div>
+<div class="twikiAlert"> __NOTE:__ This extension is designed to work with TWiki 4.0 and later. You can use revision 1 of the attached zip file if you want to use the extension with an earlier version of TWiki, but it is missing many features and bugfixes.</div>
 
 <img src="%ATTACHURLPATH%/publish.gif" style="float:right" />
 !PublishContrib provides support for the generation of stand-alone HTML from a TWiki web. It will generate fully rendered versions of a set of TWiki pages together with any attached files.
@@ -294,12 +296,6 @@ Note: the old &lt;nopublish> tag is deprecated and should be replaced in topics
 
 Another good trick is to set up a special "publishing" web. Create topics in the web that %INCLUDE the topics from *other* webs that you want to publish. You can use [[VarSTARTSECTION][STARTSECTION]] and [[VarENDSECTION][ENDSECTION]] to highlight what you want published. This way the "publishing" web gives you a view of exactly what will be in the published output, without the need for special publishing tags.
 
-<!--
-Required for admin
-   * Set STUB = %$STUB%
-   * Set SHORTDESCRIPTION = Generate static output (HTML, PDF) for a TWiki Web
--->
-
 ---++ Publishing History
 Every time a web is published, then the results of that publishing step are stored in a topic in the web. By default this topic is called =PublishContribHistory=, but you can choose another name (see the form, above). In order to publish a web, you have to be able to write to this topic. If you need to add access controls to the topic, then make sure you do that right at the beginning of the topic, or in the hidden preferences.
 
@@ -333,6 +329,7 @@ This add-on started as the TWiki:Plugins/GenHTMLAddon, written by TWiki:Main/Cra
 |  Dependencies: | %$DEPENDENCIES% |
 |  Version: | %$VERSION% |
 |  Change History: | |
+|  13059 | Bugs:Item3722 worked around core attaching URL params to internal URLs |
 |  12961 | Bugs:Item3671 cannot publish without write access to history topic, so \
   security now checked early. Bugs:Item3619 Cleaned up error handling from \
   writers. Bugs:Item3675 added history topic to record changeset. Plus major \

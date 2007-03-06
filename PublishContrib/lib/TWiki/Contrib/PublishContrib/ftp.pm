@@ -20,6 +20,24 @@ use strict;
 package TWiki::Contrib::PublishContrib::ftp;
 use base 'TWiki::Contrib::PublishContrib::file';
 
+sub new {
+    my( $class, $path, $web, $genopt, $logger, $query ) = @_;
+    my $this = $class->SUPER::new(@_);
+    foreach my $param qw(defaultpage googlefile destinationftpserver destinationftppath destinationftpusername destinationftppassword fastupload relativeurl) {
+        $this->{$param} = $query->param($param);
+        $query->delete($param);
+    }
+
+    if ($this->{destinationftpserver}) {
+        die "destinationftppath param not defined"
+          unless (defined($this->{destinationftppath}));
+        die "destinationftpusername param not defined"
+          unless (defined($this->{destinationftpusername}));
+        die "destinationftppassword param not defined"
+          unless (defined($this->{destinationftppassword}));
+    }
+}
+
 sub addString {
     my( $this, $string, $file) = @_;
     filterHtml(\$string) if( $file =~ /\.html$/ );
@@ -30,8 +48,8 @@ sub addString {
         my $topic = $1;
         push( @{$this->{urls}}, "$file" );
         #write link from index.html to actual topic
-        if ($this->{params}->{defaultpage} &&
-              $topic eq $this->{params}->{defaultpage}) {
+        if ($this->{defaultpage} &&
+              $topic eq $this->{defaultpage}) {
             $this->addString( $string, 'default.htm' );
             $this->addString( $string, 'index.html' );
             print '(default.htm, index.html)';
@@ -53,8 +71,8 @@ sub close {
     $this->addString($sitemap, 'sitemap.xml');
     print 'Published sitemap.xml<br />';
     #write google verification files (comma seperated list)
-    if ($this->{params}->{googlefile}) {
-        my @files = split(/[,\s]+/, $this->{params}->{googlefile});
+    if ($this->{googlefile}) {
+        my @files = split(/[,\s]+/, $this->{googlefile});
         for my $file (@files) {
             my $simplehtml = '<html><title>'.$file.'</title><body>just for google</body></html>';
             $this->addString($simplehtml, $file);
@@ -66,29 +84,22 @@ sub close {
 
     # use LWP to ftp to server
     # TODO: clean up ftp site, removing/archiving/backing up old version
-    if ($this->{params}->{destinationftpserver}) {
-        die "destinationftppath param not defined"
-          unless (defined($this->{params}->{destinationftppath}));
-        die "destinationftpusername param not defined"
-          unless (defined($this->{params}->{destinationftpusername}));
-        die "destinationftppassword param not defined"
-          unless (defined($this->{params}->{destinationftppassword}));
-
-        $landed = $this->{params}->{destinationftpserver};
+    if ($this->{destinationftpserver}) {
+        $landed = $this->{destinationftpserver};
 
         #well, i'd love to use LWP, but it tells me "400 Library does not
         #allow method POST for 'ftp:' URLs"
 
         require Net::FTP;
-        my $ftp = Net::FTP->new($this->{params}->{destinationftpserver},
+        my $ftp = Net::FTP->new($this->{destinationftpserver},
                                 Debug => 0)
-          or die "Cannot connect to $this->{params}->{destinationftpserver}: $@";
+          or die "Cannot connect to $this->{destinationftpserver}: $@";
 
-        $ftp->login($this->{params}->{destinationftpusername}, $this->{params}->{destinationftppassword})
+        $ftp->login($this->{destinationftpusername}, $this->{destinationftppassword})
           or die "Cannot login ", $ftp->message;
         $ftp->binary();
 
-        my $destinationftppath = $this->{params}->{destinationftppath};
+        my $destinationftppath = $this->{destinationftppath};
         if ( $destinationftppath =~ /^\/?(.*)$/ ) {
             $destinationftppath = $1;
         }
@@ -98,7 +109,7 @@ sub close {
               or die "Cannot change working directory ", $ftp->message;
         }
 
-        my $fastUpload = $this->{params}->{fastupload} || 0;
+        my $fastUpload = $this->{fastupload} || 0;
         print "fastUpload = $fastUpload <br />";
         for my $remoteFilename (@{$this->{remotefiles}}) {
             my $localfilePath = "$this->{path}/$this->{web}/$remoteFilename";
@@ -118,11 +129,11 @@ sub close {
             #print "($remoteMTime eq $mtime) && ($remoteSize eq $size) ";
             if (($fastUpload eq 1) && ($remoteSize eq $size) && (!( $remoteFilename =~ /(.*)\.html?$/ ))) {
                 #file's already there
-                print "<b>skipped</b> uploading $remoteFilename to $this->{params}->{destinationftpserver} <br />";
+                print "<b>skipped</b> uploading $remoteFilename to $this->{destinationftpserver} <br />";
             } else {
                 $ftp->put($localfilePath, $remoteFilename)
                   or die "put failed ", $ftp->message;
-                print "<b>FTPed</b> $remoteFilename to $this->{params}->{destinationftpserver} <br />";
+                print "<b>FTPed</b> $remoteFilename to $this->{destinationftpserver} <br />";
             }
         }
 
@@ -152,11 +163,11 @@ HERE
     my $topicTemplatePre = "<url>\n<loc>";
     my $topicTemplatePost = "</loc>\n</url>";
 
-    die "relativeurl param not defined" unless (defined($this->{params}->{relativeurl}));
+    die "relativeurl param not defined" unless (defined($this->{relativeurl}));
 
     my $urls = join("\n",
         map {
-            "$topicTemplatePre$this->{params}->{relativeurl}".
+            "$topicTemplatePre$this->{relativeurl}".
               "/$this->{path}/$_$topicTemplatePost\n"
           }  @$filesRef );
 
