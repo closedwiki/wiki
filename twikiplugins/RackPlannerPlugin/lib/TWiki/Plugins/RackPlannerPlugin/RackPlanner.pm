@@ -227,6 +227,7 @@ sub _renderHorizontal {
 		$startUnit = 1;
 	}
 
+	my $tooltips = "";
 
 	my @stats = ();
 	my $unitRow = "";
@@ -273,9 +274,7 @@ sub _renderHorizontal {
 							? &_renderJSTooltipText($entryRef, abs($unit),abs($unit+$colspan-1))
 							: $$entryRef{'formfactor'}.'('.abs($unit).'-'.(abs($unit+$colspan-1)).')';
 
-					my $text = "";
-					$text .= &_renderHiddenTooltip("${unitId}_TT", $unitId, $title, $fgcolor, $bgcolor) if $options{'enablejstooltips'};
-					$text .= &_renderTextContent($entryRef);
+					$tooltips .= &_renderHiddenTooltip("${unitId}_TT", $unitId, $title, $fgcolor, $bgcolor) if $options{'enablejstooltips'};
 					$rackRows[$rackNumber] .= $cgi->td({
 						-title=>($options{'enablejstooltips'}?"":&_encodeTitle($title)),
 						-align=>($options{'textdir'}=~/^topdown$/i)?'center':'left', 
@@ -285,10 +284,10 @@ sub _renderHorizontal {
 						-bgcolor=>$bgcolor,
 						-width=>$options{'columnwidth'},
 						-id=>$unitId,
-						-onmouseover=>"rppTooltipShow('${unitId}_TT','$unitId',$options{'tooltipfixleft'},$options{'tooltipfixtop'},true);",
-						-onmouseout=>"rppTooltipHide('${unitId}_TT');",
+						-onmouseover=>$options{'enablejstooltips'}?"rppTooltipShow('${unitId}_TT','$unitId',$options{'tooltipfixleft'},$options{'tooltipfixtop'},true);":"",
+						-onmouseout=>$options{'enablejstooltips'}?"rppTooltipHide('${unitId}_TT');":"",
 						}, 
-						$text
+						&_renderTextContent($entryRef)
 						);
 				} else {
 					unshift @{ $entryListRef }, $entryRef;
@@ -333,6 +332,7 @@ sub _renderHorizontal {
 	$text.=$cgi->Tr($cgi->td().$cgi->td({-colspan=>$options{'units'}}, &_renderStatistics(\@stats))) if $options{'displaystats'} && ($#stats>0);
 
 	$text.=$cgi->end_table();
+	$text.=$tooltips;
 
 	$text = $cgi->div({-style=>'font-size:'.$options{'fontsize'}}, $text);
 
@@ -383,6 +383,7 @@ sub _render {
 	## render table data:
 	$tr="";
 
+	my $tooltips = "";
 
 	$tr.=$unitColumn if $options{'displayunitcolumn'} && $options{'unitcolumnpos'}=~/^(left|both|all)$/ig; 
 
@@ -425,7 +426,7 @@ sub _render {
 
 					($fgcolor, $bgcolor, $style) = &_getColorsAndStyle($$entryRef{'colimg'});
 
-					$itd = &_renderHiddenTooltip("${unitId}_TT", $unitId, $title, $fgcolor, $bgcolor) if $options{'enablejstooltips'};
+					$tooltips .= &_renderHiddenTooltip("${unitId}_TT", $unitId, $title, $fgcolor, $bgcolor) if $options{'enablejstooltips'};
 					$itd .= &_renderTextContent($entryRef);
 
 					$itd = $cgi->td({
@@ -436,8 +437,8 @@ sub _render {
 						-style=>$style,
 						-bgcolor=>$bgcolor,
 						-id=>$unitId,
-						-onmouseover=>"rppTooltipShow('${unitId}_TT','$unitId',$options{'tooltipfixleft'},$options{'tooltipfixtop'},true);",
-						-onmouseout=>"rppTooltipHide('${unitId}_TT');",
+						-onmouseover=>$options{'enablejstooltips'}? "rppTooltipShow('${unitId}_TT','$unitId',$options{'tooltipfixleft'},$options{'tooltipfixtop'},true);":"",
+						-onmouseout=>$options{'enablejstooltips'}?"rppTooltipHide('${unitId}_TT');":"",
 						}, 
 						$itd)."\n";
 				} else {
@@ -493,6 +494,7 @@ sub _render {
 
 	$text .= $cgi->end_table();
 	$text .= '</noautolink>';
+	$text .= $tooltips;
 	$text = $cgi->div({-style=>"font-size:$options{'fontsize'};"}, $text);
 
 	return $text;
