@@ -32,7 +32,7 @@ border-width:1px 0 0 0;
 font-weight:normal;
 text-align:left;
 color:#555;
-width:auto;
+overflow:hidden;
 white-space:nowrap;
 }
 .personalInfo .pIparagraphWithImageLeftText td {
