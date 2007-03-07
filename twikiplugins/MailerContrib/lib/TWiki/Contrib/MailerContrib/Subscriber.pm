@@ -39,7 +39,8 @@ use Assert;
 
 =pod
 
----++ ClassMethod new($name)
+---++ new($session, $name)
+   * =$session= - TWiki object
    * =$name= - Wikiname, with no web, or email address, of user targeted for notification
 Create a new user.
 
@@ -58,7 +59,7 @@ sub new {
 
 =pod
 
----++ ObjectMethod getEmailAddresses() -> list
+---++ getEmailAddresses() -> \@list
 Get a list of email addresses for the user(s) represented by this
 subscription
 
@@ -93,23 +94,25 @@ sub getEmailAddresses {
 
 =pod
 
----++ ObjectMethod subscribe($subs)
+---++ subscribe($subs)
    * =$subs= - Subscription object
 Add a new subscription to this subscriber object.
-The subscription will always be added, even if there is
-a wildcard overlap with an existing subscription.
 
 =cut
 
 sub subscribe {
     my ( $this, $subs ) = @_;
 
+    # Don't add identical duplicates
+    foreach my $known (@{$this->{subscriptions}}) {
+        return if $known->equals($subs);
+    }
     push( @{$this->{subscriptions}}, $subs );
 }
 
 =pod
 
----++ ObjectMethod unsubscribe($subs)
+---++ unsubscribe($subs)
    * =$subs= - Subscription object
 Add a new unsubscription to this subscriber object.
 The unsubscription will always be added, even if there is
@@ -128,7 +131,7 @@ sub unsubscribe {
 
 =pod
 
----++ ObjectMethod isSubscribedTo($topic) -> $subscription
+---++ isSubscribedTo($topic, $db) -> $subscription
    * =$topic= - Topic object we are checking
    * =$db= - TWiki::Contrib::MailerContrib::UpData database of parents
 Check if we have a subscription to the given topic. Return the subscription
@@ -150,7 +153,7 @@ sub isSubscribedTo {
 
 =pod
 
----++ ObjectMethod isUnsubscribedFrom($topic) -> $subscription
+---++ isUnsubscribedFrom($topic) -> $subscription
    * =$topic= - Topic object we are checking
    * =$db= - TWiki::Contrib::MailerContrib::UpData database of parents
 Check if we have an unsubscription from the given topic. Return the subscription that matches if we do, undef otherwise.
@@ -171,7 +174,7 @@ sub isUnsubscribedFrom {
 
 =pod
 
----++ ObjectMethod stringify() -> string
+---++ stringify() -> string
 Return a string representation of this object, in Web<nop>Notify format.
 
 =cut

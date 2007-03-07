@@ -1,10 +1,10 @@
-%META:TOPICINFO{author="TWikiAdminGroup" date="1168425636" format="1.1" version="$Rev$"}%
 ---+!! %TOPIC%
 
 Add-on to the TWiki kernel that allows users to "subscribe" to regularly scheduled e-mails containing either:
    * A report on changes to all topics that have changed within a particular TWiki web.
    * A report on changes to a specific topic or set of topics the user can define flexibly.
    * The entire content of a specific topic or set of topics. This is referred to as "news mode."
+   * The companion plugin (SubscribePlugin) lets you trivially add a "Subscribe to changes" button to topics
 
 <!--
 

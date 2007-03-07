@@ -25,7 +25,7 @@ package TWiki::Contrib::MailerContrib::Subscription;
 
 =pod
 
----++ ClassMethod new($pages, $childDepth, $news)
+---++ new($pages, $childDepth, $news)
    * =$pages= - Wildcarded expression matching subscribed pages
    * =$childDepth= - Depth of children of $topic to notify changes for. Defaults to 0
    * =$mode= - ! if this is a non-changes subscription and the topics should
@@ -40,9 +40,9 @@ sub new {
 
     my $this = bless( {}, $class );
 
-    $this->{topics} = $topics;
-    $this->{depth} = $depth;
-    $this->{mode} = $mode;
+    $this->{topics} = $topics || '';
+    $this->{depth} = $depth || 0;
+    $this->{mode} = $mode || '';
 
     $topics =~ s/[^\w\*]//g;
     $topics =~ s/\*/\.\*\?/g;
@@ -53,7 +53,7 @@ sub new {
 
 =pod
 
----++ ObjectMethod stringify() -> string
+---++ stringify() -> string
 Return a string representation of this object, in Web<nop>Notify format.
 
 =cut
@@ -70,7 +70,7 @@ sub stringify {
 
 =pod
 
----++ ObjectMethod matches($topic, $db, $depth) -> boolean
+---++ matches($topic, $db, $depth) -> boolean
    * =$topic= - Topic object we are checking
    * =$db= - TWiki::Contrib::MailerContrib::UpData database of parent names
    * =$depth= - If non-zero, check if the parent of the given topic matches as well. undef = 0.
@@ -99,7 +99,7 @@ sub matches {
 
 =pod
 
----++ ObjectMethod getMode() -> $mode
+---++ getMode() -> $mode
 Return ! if this is a non-changes subscription and the topics should
 be mailed even if there are no changes. ? to mail the full topic only
 if there are changes. undef to mail changes only.
@@ -110,6 +110,20 @@ sub getMode {
     my $this = shift;
 
     return $this->{mode};
+}
+
+=pod
+
+---++ equals($other) -> $boolean
+Compare two subscriptions.
+
+=cut
+
+sub equals {
+    my( $this, $tother ) = @_;
+    return 0 unless ($this->{mode} eq $tother->{mode});
+    return 0 unless ($this->{depth} == $tother->{depth});
+    return 0 unless ($this->{topics} eq $tother->{topics});
 }
 
 1;

@@ -1,0 +1,45 @@
+---+ Subscribe Plugin
+
+This is a companion plugin to the MailerContrib. It allows you to trivially
+add a "Subscribe me" button to topics to get subscribed to changes.
+
+---++ Usage
+Anywhere in a topic or template:
+   * =%<nop>SUBSCRIBE{...}%= or simply =%<nop>SUBSCRIBE%=
+
+| *Parameter* | *Default* | *Meaning* |
+| =who= | Logged-in user | Who to subscribe |
+| =topic= | Current topic | Topic to subscribe to. Wildcards may be used e.g. =topic="Item*"= will subscribe to all topics starting with =Item=. If you specify a web, then the subscription will be added to the WebNotify for that web. |
+| =prompt= | =Subscribe me to changes= | What to put in the button |
+| =unsubscribe= | Not set | If set, will *unsubscribe* the user |
+
+---++ Access Controls
+You don't need VIEW access to the WebNotify topic in order to subscribe to changes in a web, but you must have CHANGE and SUBSCRIBE access. SUBSCRIBE access is like CHANGE and VIEW except it is specific to this plugin, and is provided for use when you want users to be able to subscribe or unsubscribe, but you don't want them to be able to modify their subscription or otherwise edit the WebNotify topic.
+
+%X% Note that permissions on individual topics are *not* checked when subscription mails are sent out, so be very careful about who you allow to subscribe.
+
+---++ Plugin Installation Instructions
+
+%$INSTALLATION_INSTRUCTIONS%
+
+The plugin is currently %IF{"context SubscribePluginEnabled" then="installed and enabled" else="not installed, or not enabled in [[%SCRIPTURLPATH{configure}%][configure]]"}%.
+
+When the plugin is installed and enabled, then you should see a button here, that you can click on to subscribe yourself:
+%SUBSCRIBE{who="%WIKINAME%" topic="Sandbox.SubscribeTestTopic" prompt="Subscribe to changes to Sandbox.<nop>SubscribeTestTopic"}%
+%SUBSCRIBE%
+
+---++ Plugin Info
+
+This plugin is brought to you by the [[http://wikiring.com][WikiRing]] - working together to improve your wiki experience!
+
+|  Plugin Author: | TWiki:Main.CrawfordCurrie |
+|  Copyright: | &copy; 2007, Crawford Currie http://c-dot.co.uk |
+|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
+|  Plugin Version: | %$VERSION% |
+|  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
+|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
+|  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
+
+__Related Topics:__ %TWIKIWEB%.TWikiPlugins, %TWIKIWEB%.DeveloperDocumentationCategory, %TWIKIWEB%.AdminDocumentationCategory, %TWIKIWEB%.TWikiPreferences
+
