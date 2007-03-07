@@ -2,6 +2,7 @@
 #
 # Copyright (C) 2000-2003 Andrea Sterbini, a.sterbini@flashnet.it
 # Copyright (C) 2001-2004 Peter Thoeny, peter@thoeny.com
+# Copyright (C) 2006-2007 Stéphane Lenclud, twiki@lenclud.com
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -38,7 +39,7 @@ use vars qw(
         $debug $js
     );
 
-$VERSION = 'v0.7';
+$VERSION = 'v0.8';
 $pluginName = 'TreeBrowserPlugin';
 
 # =========================
@@ -63,20 +64,36 @@ sub initPlugin
 }
 
 # =========================
-sub startRenderingHandler
-{
-### my ( $text, $web ) = @_;   # do not uncomment, use $_[0], $_[1] instead
+sub preRenderingHandler {
+# do not uncomment, use $_[0], $_[1]... instead
+#my( $text, $pMap ) = @_;
 
-    TWiki::Func::writeDebug( "- ${pluginName}::startRenderingHandler( $_[1] )" ) if $debug;
-
-    # This handler is called by getRenderedVersion just before the line loop
+    #TWiki::Func::writeDebug( "- ${pluginName}::preRenderingHandler-Before( $_[0] )" ) if $debug;
 
     # Render here, not in commonTagsHandler so that lists produced by
     # Plugins, TOC and SEARCH can be rendered
-    $_[0] =~ s/ {3}/\t/gs if $_[0] =~/%TREEBROWSER/;
-    $_[0] =~ s/%TREEBROWSER{(.*?)}%(([\n\r]+[^\t]{1}[^\n\r]*)*?)(([\n\r]+\t[^\n\r]*)+)/&handleTreeView($1, $2, $4)/ges;
+    $_[0] =~ s/ {3}/\t/gs if $_[0] =~/%TREEBROWSER/; #SL: As far as I can tell this replaces three space characters with tabulation, why?
+	 $_[0] =~ s/%TREEBROWSER{(.*?)}%(([\n\r]+[^\t]{1}[^\n\r]*)*?)(([\n\r]+\t[^\n\r]*)+)/&handleTreeView($1, $2, $4)/ges;
+	 #SL: Get ride of lonely TREEBROWSER tag.
+	 $_[0] =~ s/%TREEBROWSER{(.*?)}%/&handleLonelyTreeView($1)/ges;
 }
 
+=pod
+Get rides of unprocessed %TREEBROWSER{}% tags.
+A %TREEBROWSER{}% tag won't be processed if it is not followed by a tree.
+=cut
+sub handleLonelyTreeView {
+    my ( $theAttr) = @_;
+	TWiki::Func::writeDebug( "- ${pluginName}::handleLonelyTreeView( $theAttr )" ) if $debug;
+    # decode attributes if these are added
+    my $warn = &TWiki::Func::extractNameValuePair( $theAttr, "warn" );
+	return $warn;
+	}
+
+=pod
+Called when a %TREEBROWSER{}% tag need to be processed.
+It reads various settings and configurations from the tag argument list and the TWiki preferences.
+=cut
 sub handleTreeView {
     my ( $theAttr, $thePre, $theList ) = @_;
 
@@ -88,7 +105,10 @@ sub handleTreeView {
     my ( $type, $params ) = split( /, */, $theme, 2 );
     $type = lc( $type );
 
+
+
     unless ( $type eq "tree" || $type eq "icon" ) {
+		  #TWiki::Func::writeDebug( "- ${pluginName}::handleTreeView() returns $thePre$theList" ) if $debug;
         return "$thePre$theList";
     }
     my $theTitle = &TWiki::Func::extractNameValuePair( $theAttr, "title" );
@@ -99,6 +119,7 @@ sub handleTreeView {
     my $useLines = &TWiki::Func::extractNameValuePair( $theAttr, "uselines" );  
     my $usePlusMinus = &TWiki::Func::extractNameValuePair( $theAttr, "useplusminus" );
     my $noIndent = &TWiki::Func::extractNameValuePair( $theAttr, "noindent" );
+    my $noRoot = &TWiki::Func::extractNameValuePair( $theAttr, "noroot" );
     my $noCss = &TWiki::Func::extractNameValuePair( $theAttr, "nocss" );
     my $useStatusText = &TWiki::Func::extractNameValuePair( $theAttr, "usestatustext" );
     my $closeSameLevel = &TWiki::Func::extractNameValuePair( $theAttr, "closesamelevel" );    
@@ -111,12 +132,12 @@ sub handleTreeView {
     my $opento = 0;
     $opento = $open1 if (!$openall && $open1);
     
-    return $thePre . &renderTreeView( $type, $params, $useLines, $usePlusMinus, $useStatusText, $closeSameLevel, $noIndent, $noCss, $theTitle, $icons, $shared, $openall, $opento, $theList );
+    return $thePre . &renderTreeView( $type, $params, $useLines, $usePlusMinus, $useStatusText, $closeSameLevel, $noIndent, $noRoot, $noCss, $theTitle, $icons, $shared, $openall, $opento, $theList );
 }
 
 sub renderTreeView
 {
-    my ( $theType, $theParams, $useLines, $usePlusMinus, $useStatusText, $closeSameLevel, $noIndent, $noCss, $theTitle, $icons, $shared, $openAll, $openTo, $theText ) = @_;
+    my ( $theType, $theParams, $useLines, $usePlusMinus, $useStatusText, $closeSameLevel, $noIndent, $noRoot, $noCss, $theTitle, $icons, $shared, $openAll, $openTo, $theText ) = @_;
 
     $theText =~ s/^[\n\r]*//os;
     my @tree = ();
@@ -130,12 +151,14 @@ sub renderTreeView
     my $attachUrl = TWiki::Func::getUrlHost() . TWiki::Func::getPubUrlPath();
     
     $theParams="" unless defined $theParams; #Initialize if not defined to get ride of warnings in apache error logs       
-    $theParams =~ s/%PUBURL%/$attachUrl/go;
+	 #$theParams=TWiki::Func::expandCommonVariables($theParams); #SL: consider using that in future development
+	 $theParams =~ s/%PUBURL%/$attachUrl/go;
     $attachUrl .= "/$installWeb/$pluginName";
     $theParams =~ s/%ATTACHURL%/$attachUrl/go;
     $theParams =~ s/%WEB%/$installWeb/go;
     $theParams =~ s/%MAINWEB%/TWiki::Func::getMainWebname()/geo;
     $theParams =~ s/%TWIKIWEB%/TWiki::Func::getTwikiWebname()/geo;
+
     my ( $rooticon, $docicon, $fldricon, $fldropenicon )
        = split( /, */, $theParams );
     my $width   = 16;
@@ -188,6 +211,7 @@ $var = new dTree('$var');\n";
     $text .= "$var.config.usePlusMinus=false;\n" if ($usePlusMinus=~/false|0|off/i);
     $text .= "$var.config.closeSameLevel=true;\n" if ($closeSameLevel=~/true|1|on/i);
     $text .= "$var.config.noIndent=true;\n" if ($noIndent=~/true|1|on/i);
+    $text .= "$var.config.noRoot=true;\n" if ($noRoot=~/true|1|on/i);
 
 
     $text .= "$var.config.useStatusText=false;\n"; #Broken due to dtree usage if ($useStatusText=~/true|1|on/i);
@@ -201,14 +225,17 @@ $var = new dTree('$var');\n";
     for( my $i = 0; $i < scalar( @tree ); $i++ ) {
       my $label = $tree[$i]->{'text'};
       my $iconImg;
-      if ( $label =~ /^\s*(<b>)?\s*icon:([^\s]+)\s*(.*)/ ) {
-	$label = $3;
-	$label = "$1 $3" if ( $1 );
-	# SMELL: why are we forcing this to be a gif file? And in $attach?
-	$iconImg = "$attach/$2";
-      } else {
-	$iconImg = $docicon;
-      }
+      if ( $label =~ /^\s*(<b>)?\s*icon:([^\s]+)\s*(.*)/ )
+			{
+			$label = $3;
+			$label = "$1 $3" if ( $1 );
+			$iconImg = "$attach/$2";
+      	}
+		else
+			{
+			$iconImg = $docicon;
+      	}
+
       my $id = $i+1;
       $label = &TWiki::Func::renderText( $label, $web );
       $label =~ s/\"/\\\"/go;

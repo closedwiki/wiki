@@ -2,6 +2,8 @@
 | dTree 2.05 | www.destroydrop.com/javascript/tree/ |
 |---------------------------------------------------|
 | Copyright (c) 2002-2003 Geir Landrö               |
+| Copyright (c) 2006-2007 Stéphane Lenclud          |
+|                                                   |
 |                                                   |
 | This script can be used freely as long as all     |
 | copyright messages are intact.                    |
@@ -36,6 +38,7 @@ function dTree(objName) {
 		useLines : true,
 		usePlusMinus : true,
       noIndent : false,
+      noRoot : false,
 		useIcons : true,
 		useStatusText : false,
 		closeSameLevel	: false,
@@ -109,7 +112,7 @@ dTree.prototype.addNode = function(pNode) {
 	var str = '';
 	var n=0;
 	if (this.config.inOrder) n = pNode._ai;
-	for (n; n<this.aNodes.length; n++) {
+	for (n; n<this.aNodes.length; n++) {	
 		if (this.aNodes[n].pid == pNode.id) {
 			var cn = this.aNodes[n];
 			cn._p = pNode;
@@ -130,18 +133,25 @@ dTree.prototype.addNode = function(pNode) {
 	return str;
 };// Creates the node icon, url and text
 dTree.prototype.node = function(node, nodeId) {
-	var str = '<div class="dTreeNode">' + this.indent(node, nodeId);
+   var isRoot = (this.root.id == node.pid)?true:false; //Check if we are dealing with the tree root
+	//Set icons according to config and properties
 	if (this.config.useIcons) {
 		if (!node.icon) node.icon = (this.root.id == node.pid) ? this.icon.root : ((node._hc) ? this.icon.folder : this.icon.node);
 		if (!node.iconOpen) node.iconOpen = (node._hc) ? this.icon.folderOpen : this.icon.node;
-		if (this.root.id == node.pid) {
+		if (isRoot) {
 			node.icon = this.icon.root;
 			node.iconOpen = this.icon.root;
 		}
-		str += '<img id="i' + this.obj + nodeId + '" src="' + ((node._io) ? node.iconOpen : node.icon) + '" alt="" />';
 	}
-	str += node.name;
-	str += '</div>';
+	var str = '';
+	//Render node icon and text unless it's the root of the tree and noroot specified
+	if (!isRoot || (isRoot && !this.config.noRoot))	{
+		str += '<div class="dTreeNode">' + this.indent(node, nodeId);
+		if (this.config.useIcons) str += '<img id="i' + this.obj + nodeId + '" src="' + ((node._io) ? node.iconOpen : node.icon) + '" alt="" />';
+		str += node.name;
+		str += '</div>';
+	}
+	
 	if (node._hc) {
 		str += '<div id="d' + this.obj + nodeId + '" class="clip" style="display:' + ((this.root.id == node.pid || node._io) ? 'block' : 'none') + ';">';
 		str += this.addNode(node);

@@ -12,6 +12,7 @@
 	line-height:100%;
 }
 .dtree img {
+	display:inline;
 	border: 0px;
 	vertical-align: middle;
 }
