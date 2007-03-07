@@ -25,19 +25,13 @@
 
 %STARTSECTION{"paragraphWithImageLeftStyle"}%%INCLUDE{"%TOPIC%" section="imageStyle"}%
 <style type="text/css" media="all">
-.pIparagraphFrame {
-padding:1.1em 2em 1em 2em;
-background-color:#FEFCF6;
-clear:all;
-}
 .pIparagraphWithImageLeft {
 margin:1em 0 0 0;
-padding-left:145px; /* img width 120px + spacing 25px */
+}
+.pIparagraphWithImageLeftText {
+margin-left:145px; /* img width 120px + spacing 25px */
 }
 .pIparagraphWithImageLeftImage {
-position:absolute;
-margin-bottom:1em;
-margin-left:-145px; /* see .paragraphWithImageLeft left padding */
 float:left;
 }
 </style>%ENDSECTION{"paragraphWithImageLeftStyle"}%
@@ -68,4 +62,3 @@ vertical-align:middle;
 
 %META:FILEATTACHMENT{name="view_delft.jpg" attachment="view_delft.jpg" attr="h" comment="" date="1173011299" path="view_delft.jpg" size="6967" stream="view_delft.jpg" user="Main.TWikiContributor" version="1"}%
 %META:FILEATTACHMENT{name="wmn_blue.jpg" attachment="wmn_blue.jpg" attr="h" comment="" date="1173011321" path="wmn_blue.jpg" size="10527" stream="wmn_blue.jpg" user="Main.TWikiContributor" version="1"}%
-
