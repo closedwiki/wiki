@@ -301,41 +301,11 @@ sub _sendNewsletterMail {
     # Read topic data.
     my ($meta, $text) = TWiki::Func::readTopic( $web, $topic );
 
-    # tell the session what topic we are currently rendering so the
-    # contexts are correct
-    $twiki->{topicName} = $topic;
-    $twiki->{webName} = $web;
-
-    # SMELL: need a new prefs object for each topic
-    $twiki->{prefs} = new TWiki::Prefs($twiki);
-
-    my $prefs = $twiki->{prefs}->pushPreferences(
-            $TWiki::cfg{SystemWebName},
-	            $TWiki::cfg{SitePrefsTopicName},
-	            'DEFAULT' );
-
-     # Then local site prefs
-     if( $TWiki::cfg{LocalSitePreferences} ) {
-             my( $lweb, $ltopic ) = $twiki->normalizeWebTopicName(
-                        undef, $TWiki::cfg{LocalSitePreferences} );
-             $twiki->{prefs}->pushPreferences( $lweb, $ltopic, 'SITE' );
+    if (!defined( &TWiki::Func::pushTopicContext )) {
+        require TWiki::Contrib::MailerContrib::TopicContext;
     }
+    TWiki::Func::pushTopicContext( $web, $topic );
 
-    # Get individual user preferences
-    $twiki->{prefs}->pushPreferences(
-        $TWiki::cfg{UsersWebName}, $wikiName, 'USER '.$wikiName);
-
-    # and web preferences
-    $twiki->{prefs}->pushWebPreferences($web);
-    $twiki->{prefs}->pushPreferences($web, $topic, 'TOPIC');
-    if( $twiki->{loginManager} ) {
-        $twiki->{prefs}->pushPreferenceValues(
-            'SESSION', $twiki->{loginManager}->getSessionValues());
-    } elsif( $twiki->{client} ) {
-        # old name was {client}
-        $twiki->{prefs}->pushPreferenceValues(
-            'SESSION', $twiki->{client}->getSessionValues());
-    }
     $twiki->enterContext( 'can_render_meta', $meta );
 
     # Get the skin for this topic
@@ -422,6 +392,8 @@ sub _sendNewsletterMail {
         }
     }
     $report .= "\t$sentMails newsletters from $web\n";
+
+    TWiki::Func::popTopicContext();
 
     return $report;
 }

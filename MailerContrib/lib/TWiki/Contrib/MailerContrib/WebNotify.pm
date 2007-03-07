@@ -36,7 +36,10 @@ package TWiki::Contrib::MailerContrib::WebNotify;
 
 =pod
 
----++ ClassMethod new($web, $topic)
+---++ new($session, $web, $topic)
+   * =$session= - TWiki object
+   * =$web= - web name
+   * =$topic= - topic name
 Create a new object by parsing the content of the given topic in the
 given web. This is the normal way to load a %NOTIFYTOPIC% topic. If the
 topic does not exist, it will create an empty object.
@@ -50,7 +53,8 @@ sub new {
 
     $this->{web} = $web;
     $this->{topic} = $topic || $TWiki::cfg{NotifyTopicName};
-    $this->{text} = '';
+    $this->{pretext} = '';
+    $this->{posttext} = '';
     $this->{session} = $session;
 
     if( $session->{store}->topicExists( $web, $topic )) {
@@ -62,11 +66,10 @@ sub new {
 
 =pod
 
----++ ObjectMethod writeWebNotify()
+---++ writeWebNotify()
 Write the object to the %NOTIFYTOPIC% topic it was read from.
 If there is a problem writing the topic (e.g. it is locked),
-the method will return an error message. If everything is ok
-it will return undef.
+the method will throw an exception.
 
 =cut
 
@@ -76,14 +79,14 @@ sub writeWebNotify {
         $this->{session}->{user},
         $this->{web},
         $this->{topic},
-        $this->{text} . $this->stringify(),
+        $this->stringify(),
         undef, # meta
         { dontlog => 1, unlock => 1 });
 }
 
 =pod
 
----++ ObjectMethod getSubscriber($name, $noAdd)
+---++ getSubscriber($name, $noAdd)
    * =$name= - Name of subscriber (wikiname with no web or email address)
    * =$noAdd= - If false or undef, a new subscriber will be created for this name
 Get a subscriber from the list of subscribers, and return a reference
@@ -108,7 +111,7 @@ sub getSubscriber {
 
 =pod
 
----++ ObjectMethod getSubscribers()
+---++ getSubscribers()
 Get a list of all subscriber names (unsorted)
 
 =cut
@@ -121,7 +124,7 @@ sub getSubscribers {
 
 =pod
 
----++ ObjectMethod subscribe($name, $topics, $depth)
+---++ subscribe($name, $topics, $depth)
    * =$name= - Name of subscriber (wikiname with no web or email address)
    * =$topics= - wildcard expression giving topics to subscribe to
    * =$depth= - Child depth to scan (default 0)
@@ -142,7 +145,7 @@ sub subscribe {
 
 =pod
 
----++ ObjectMethod unsubscribe($name, $topics, $depth)
+---++ unsubscribe($name, $topics, $depth)
    * =$name= - Name of subscriber (wikiname with no web or email address)
    * =$topics= - wildcard expression giving topics to subscribe to
    * =$depth= - Child depth to scan (default 0)
@@ -162,7 +165,7 @@ sub unsubscribe {
 
 =pod
 
----++ ObjectMethod stringify() -> string
+---++ stringify() -> string
 Return a string representation of this object, in %NOTIFYTOPIC% format.
 
 =cut
@@ -170,19 +173,19 @@ Return a string representation of this object, in %NOTIFYTOPIC% format.
 sub stringify {
     my $this = shift;
 
-    my $page = $this->{text};
+    my $page = $this->{pretext};
 
     foreach my $name ( sort keys %{$this->{subscribers}} ) {
         my $subscriber = $this->{subscribers}{$name};
         $page .= $subscriber->stringify() . "\n";
     }
 
-    return $page;
+    return $page.$this->{posttext};
 }
 
 =pod
 
----++ ObjectMethod processChange($change, $db, $changeSet, $seenSet, $allSet)
+---++ processChange($change, $db, $changeSet, $seenSet, $allSet)
    * =$change= - ref of a TWiki::Contrib::Mailer::Change
    * =$db= - TWiki::Contrib::MailerContrib::UpData database of parent references
    * =$changeSet= - ref of a hash mapping emails to sets of changes
@@ -228,7 +231,7 @@ sub processChange {
 
 =pod
 
----++ ObjectMethod processCompulsory($topic, $db, \%allSet)
+---++ processCompulsory($topic, $db, \%allSet)
    * =$topic= - topic name
    * =$db= - TWiki::Contrib::MailerContrib::UpData database of parent references
    * =\%allSet= - ref of a hash that maps topics to email addresses for news subscriptions
@@ -257,7 +260,7 @@ sub processCompulsory {
 
 =pod
 
----++ ObjectMethod isEmpty() -> boolean
+---++ isEmpty() -> boolean
 Return true if there are no subscribers
 
 =cut
@@ -273,11 +276,14 @@ sub _load {
 
     my ( $meta, $text ) = $this->{session}->{store}->readTopic(
         undef, $this->{web}, $this->{topic} );
+    my $in_pre = 1;
+    $this->{pretext} = '';
+    $this->{posttext} = '';
     $this->{meta} = $meta;
     # join \ terminated lines
     $text =~ s/\\\r?\n//gs;
     my $webRE = qr/$TWiki::cfg{UsersWebName}\.|%MAINWEB%\./o;
-    foreach my $line ( split ( /\n/, $text )) {
+    foreach my $line ( split ( /\r?\n/, $text )) {
         if ( $line =~ /^\s+\*\s$webRE?($TWiki::regex{wikiWordRegex})\s+\-\s+($TWiki::regex{emailAddrRegex})/o ) {
             # * Main.WikiName - email@domain
             # * %MAINWEB%.WikiName - email@domain
@@ -285,20 +291,24 @@ sub _load {
                 # Add email address to list if non-guest and non-duplicate
                 $this->subscribe( $2, '*', 0 );
             }
+            $in_pre = 0;
         }
         elsif ( $line =~ /^\s+\*\s$webRE?($TWiki::regex{wikiWordRegex})\s*$/o ) {
             # * Main.WikiName
             # %MAINWEB%.WikiName
             # WikiName
             $this->subscribe($1, '*', 0 );
+            $in_pre = 0;
         }
         elsif ( $line =~ /^\s+\*\s($TWiki::regex{emailAddrRegex})\s*$/o ) {
             # * email@domain
             $this->subscribe($1, '*', 0 );
+            $in_pre = 0;
         }
         elsif ( $line =~ /^\s+\*\s($TWiki::regex{emailAddrRegex})\s*:(.*)$/o ) {
             # * email@domain: topics
             $this->_parsePages( $1, $3 );
+            $in_pre = 0;
         }
         elsif ( $line =~ /^\s+\*\s$webRE?($TWiki::regex{wikiWordRegex})\s*:(.*)$/o ) {
             # * Main.WikiName: topics
@@ -306,9 +316,14 @@ sub _load {
             if ( $2 ne $TWiki::cfg{DefaultUserWikiName} ) {
                 $this->_parsePages( $1, $2 );
             }
+            $in_pre = 0;
         }
         else {
-            $this->{text} .= "$line\n";
+            if( $in_pre ) {
+                $this->{pretext} .= "$line\n";
+            } else {
+                $this->{posttext} .=  "$line\n";
+            }
         }
     }
 }

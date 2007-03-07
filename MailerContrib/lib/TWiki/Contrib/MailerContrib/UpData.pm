@@ -32,7 +32,7 @@ package TWiki::Contrib::MailerContrib::UpData;
 
 =pod
 
----++ ClassMethod new($web)
+---++ new($web)
    * =$web= - Web we are building parent relationships for
 Constructor for a web; initially empty, will lazy-load as topics
 are referenced.
@@ -49,7 +49,7 @@ sub new {
 
 =pod
 
----++ ObjectMethod getParent($topic) -> string
+---++ getParent($topic) -> string
 Get the name of the parent topic of the given topic
 
 =cut

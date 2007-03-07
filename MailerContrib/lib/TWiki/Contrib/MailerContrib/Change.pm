@@ -22,7 +22,6 @@ use strict;
 
 =pod
 
----
 ---+ package TWiki::Contrib::MailerContrib::Change
 Object that represents a change to a topic.
 
@@ -37,7 +36,7 @@ use Assert;
 
 =pod
 
----++ ClassMethod new($web)
+---++ new($web)
    * =$web= - Web name
    * =$topic= - Topic name
    * =$author= - String author of change
@@ -69,7 +68,7 @@ sub new {
 
 =pod
 
----++ ObjectMethod merge($change)
+---++ merge($change)
    * =$change= - Change record to merge
 Merge another change record with this one, so that the combined
 record is a reflection of both changes.
@@ -93,7 +92,7 @@ sub merge {
 
 =pod
 
----++ ObjectMethod expandHTML($html) -> string
+---++ expandHTML($html) -> string
    * =$html= - Template to expand keys within
 Expand an HTML template using the values in this change. The following
 keys are expanded: %<nop>TOPICNAME%, %<nop>AUTHOR%, %<nop>TIME%,
@@ -137,7 +136,7 @@ sub expandHTML {
 
 =pod
 
----++ ObjectMethod expandPlain() -> string
+---++ expandPlain() -> string
 Generate a plaintext version of this change.
 
 =cut
