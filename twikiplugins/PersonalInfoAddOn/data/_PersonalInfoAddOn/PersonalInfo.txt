@@ -3,13 +3,17 @@
 
 *Admin topic for %TWIKIWEB%.PersonalInfoAddOn.* See also PersonalInfoHome.
 
-This topic contains INCLUDE sections that are called by PersonalInfo. Use this topic for local site customizations, so !PersonalInfo can stay intact. This makes future upgrading a lot easier.
+This current topic and PersonalInfoModules work in tandem:
+   * PersonalInfoModules contains the core modules
+   * PersonalInfo contains customizations for your site
 
+<div class="twikiHelp">
 %IF{"context AttachContentPluginEnabled" then='If you are using =directSearch= you may <a href="%SCRIPTURL{save}%/%WEB%/%TOPIC%?action_save=1">update the directSearch javascript file now</a> (by saving this topic the attachment will be updated)' else='!AttachContentPlugin is not enabled.%BR%To read javascript more efficiently in this section, please install and enable TWiki:Plugins/AttachContentPlugin.'}%
+</div>
 
 ---++ How can I customize a section?
    * To *replace* the default implementation: replace the =%<nop>INCLUDE{}%= variable by custom text.
-   * To *add to* the custom implementation: leave the INCLUDE variable in place and add text before or after
+   * To *add to* the custom implementation: leave the =%<nop>INCLUDE{}%= variable in place and add text before or after
 
 ---++ Customizable sections
 ---+++ personalInfoFields
