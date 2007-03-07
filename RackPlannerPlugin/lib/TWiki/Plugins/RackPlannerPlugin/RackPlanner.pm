@@ -100,7 +100,7 @@ sub _initDefaults {
 		'tooltipfixtop'=>0,
 		'tooltipbgcolor'=>"",
 		'tooltipfgcolor'=>"",
-		'tooltipformat'=>'<b>%SERVER%:</b> %FORMFACTOR% (%SUNIT%-%EUNIT%, %RACK%)<br/>%ICON{persons}% Owner: %OWNER% <br/>%M% Connected to: %CONNECTEDTO% <br/>%P% Notes:<br/> %NOTES%',
+		'tooltipformat'=>'<b>%SERVER%:</b> %FORMFACTOR% (%SUNIT%-%EUNIT%, %RACK%)<br/>%ICON{persons}% Owner: %OWNER% <br/>%M% Connected to: %CONNECTEDTO% <br/>%P% Notes:<br/> %NOTES% <div style="text-align:right;"><sub>%CLOSEBUTTON%</sub></div>',
 	);
 
 	@renderedOptions = ( 'name', 'notesicon','conflicticon', 'connectedtoicon', 'emptytext' );
@@ -201,8 +201,9 @@ sub _fetch {
 
 # =========================
 sub _renderJSTooltipText {
-	my ($entryRef, $sunit, $eunit) = @_;
+	my ($id, $entryRef, $sunit, $eunit) = @_;
 	my $text = $options{'tooltipformat'};
+	$text =~s /\%CLOSEBUTTON\%/$cgi->a({-href=>"javascript:rppTooltipHide('$id');"},'[X]')/egs;
 	$text =~s /\%SUNIT\%/$sunit/gs;
 	$text =~s /\%EUNIT\%/$eunit/gs;
 	$text =~s /\%DEVICE\%/\%SERVER\%/gs;
@@ -271,7 +272,7 @@ sub _renderHorizontal {
 					my ($fgcolor, $bgcolor, $style) = &_getColorsAndStyle($$entryRef{'colimg'});
 
 					my $title= $options{'enablejstooltips'}
-							? &_renderJSTooltipText($entryRef, abs($unit),abs($unit+$colspan-1))
+							? &_renderJSTooltipText("${unitId}_TT",$entryRef, abs($unit),abs($unit+$colspan-1))
 							: $$entryRef{'formfactor'}.'('.abs($unit).'-'.(abs($unit+$colspan-1)).')';
 
 					$tooltips .= &_renderHiddenTooltip("${unitId}_TT", $unitId, $title, $fgcolor, $bgcolor) if $options{'enablejstooltips'};
@@ -285,7 +286,7 @@ sub _renderHorizontal {
 						-width=>$options{'columnwidth'},
 						-id=>$unitId,
 						-onmouseover=>$options{'enablejstooltips'}?"rppTooltipShow('${unitId}_TT','$unitId',$options{'tooltipfixleft'},$options{'tooltipfixtop'},true);":"",
-						-onmouseout=>$options{'enablejstooltips'}?"rppTooltipHide('${unitId}_TT');":"",
+						##-onmouseout=>$options{'enablejstooltips'}?"rppTooltipHide('${unitId}_TT');":"",
 						}, 
 						&_renderTextContent($entryRef)
 						);
@@ -421,7 +422,7 @@ sub _render {
 					my $unitId = "RPP_${rpId}_${rackNumber}_".abs($unit);
 					$fillRows=$rowspan-1;
 					my $title= $options{'enablejstooltips'}
-							? &_renderJSTooltipText($entryRef, abs($unit),abs($unit+$rowspan-1))
+							? &_renderJSTooltipText("${unitId}_TT", $entryRef, abs($unit),abs($unit+$rowspan-1))
 							: $$entryRef{'formfactor'}.'('.abs($unit).'-'.(abs($unit+$rowspan-1)).')';
 
 					($fgcolor, $bgcolor, $style) = &_getColorsAndStyle($$entryRef{'colimg'});
@@ -438,7 +439,7 @@ sub _render {
 						-bgcolor=>$bgcolor,
 						-id=>$unitId,
 						-onmouseover=>$options{'enablejstooltips'}? "rppTooltipShow('${unitId}_TT','$unitId',$options{'tooltipfixleft'},$options{'tooltipfixtop'},true);":"",
-						-onmouseout=>$options{'enablejstooltips'}?"rppTooltipHide('${unitId}_TT');":"",
+						##-onmouseout=>$options{'enablejstooltips'}?"rppTooltipHide('${unitId}_TT');":"",
 						}, 
 						$itd)."\n";
 				} else {
@@ -545,8 +546,6 @@ sub _renderHiddenTooltip {
 		{
 		 -id=>${id},
 		 -style=>"text-align:left;visibility:hidden;position:absolute;top:0;left:0;z-index:2;font: normal $options{'fontsize'} sans-serif;padding: 3px; border: solid 1px; background-color: $bgcolor; color: $fgcolor",
-		 -onmouseover=>"rppTooltipShow('$id','$pId',$options{'tooltipfixleft'},$options{'tooltipfixtop'},true);",
-		 -onmouseout=>"rppTooltipHide('$id');",
 		},
 		$text
 		);
