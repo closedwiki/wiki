@@ -33,6 +33,7 @@ background-color:#FEFCF6;
 padding-left:145px; /* img width 120px + spacing 25px */
 }
 .pIparagraphWithImageLeftImage {
+position:absolute;
 margin-bottom:1em;
 margin-left:-145px; /* see .paragraphWithImageLeft left padding */
 float:left;

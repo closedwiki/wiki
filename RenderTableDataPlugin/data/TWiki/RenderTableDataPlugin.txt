@@ -102,6 +102,7 @@ From [[%TWIKIWEB%.TWikiMetaData#META_TOPICINFO][TWikiMetaData]]
 | Copyright &copy;: | 2007 Arthur Clemens |
 | License: | [[http://www.gnu.org/copyleft/gpl.html][GPL]] |
 | Dependencies: | %$DEPENDENCIES% |
+| 07 Mar 2006 | Arthur Clemens: 1.0.1 Fixed CSS bug in Win Explorer 6 in example.  |
 | 04 Mar 2006 | Arthur Clemens: 1.0 First release.  |
 | Demo url:  |   |
 | Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
