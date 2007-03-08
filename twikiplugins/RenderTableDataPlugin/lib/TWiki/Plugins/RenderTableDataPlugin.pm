@@ -67,7 +67,7 @@ sub initPlugin {
         return 0;
     }
 
-    $debug = TWiki::Func::getPluginPreferencesFlag( "DEBUG" );
+    $debug = TWiki::Func::getPluginPreferencesFlag("DEBUG");
     TWiki::Func::registerTagHandler( 'TABLEDATA', \&_parseTableRows );
 
     # Plugin correctly initialized
@@ -101,17 +101,17 @@ sub _parseTableRows {
       if ( $params->{'sortcolumn'} )
       ;    # subtract 1 to use zero based indexing; -1 means "not set"
     my $sortDirection = $params->{'sortdirection'} || 'ascending';
-	my $beforeText = $params->{'beforetext'} || '';
-	my $afterText = $params->{'aftertext'} || '';
-	
+    my $beforeText    = $params->{'beforetext'}    || '';
+    my $afterText     = $params->{'aftertext'}     || '';
+
     my $rowStart   = 0;
     my $rowEnd     = -1;
     my $rowsParams = $params->{'rows'};
     if ($rowsParams) {
         $rowsParams =~ /([0-9]*)(\.\.)*([0-9]*)/;
         if ($1) {
-	        $rowStart = $1 - 1;    # subtract 1 to use zero based indexing
-	    }
+            $rowStart = $1 - 1;    # subtract 1 to use zero based indexing
+        }
         if ($2) {
             $rowEnd = $3
               ? $3 - 1
@@ -127,8 +127,8 @@ sub _parseTableRows {
     if ($colsParams) {
         $colsParams =~ /([0-9]*)(\.\.)*([0-9]*)/;
         if ($1) {
-	        $colStart = $1 - 1;    # subtract 1 to use zero based indexing
-	    }
+            $colStart = $1 - 1;    # subtract 1 to use zero based indexing
+        }
         if ($2) {
             $colEnd = $3
               ? $3 - 1
@@ -138,14 +138,14 @@ sub _parseTableRows {
             $colEnd = $colStart;
         }
     }
-    
+
     my $showSetStart = 0;
-	my $showSetEnd = -1;
-	my $showParams = $params->{'show'};
-	if ($showParams) {
+    my $showSetEnd   = -1;
+    my $showParams   = $params->{'show'};
+    if ($showParams) {
         $showParams =~ /([0-9]*)(\.\.)*([0-9]*)/;
         if ($1) {
-        	$showSetStart = $1 - 1;    # subtract 1 to use zero based indexing
+            $showSetStart = $1 - 1;    # subtract 1 to use zero based indexing
         }
         if ($2) {
             $showSetEnd = $3
@@ -156,9 +156,9 @@ sub _parseTableRows {
             $showSetEnd = $showSetStart;
         }
     }
-    
-    my $condition = $params->{'condition'};
-	
+
+    my $condition = $params->{'condition'} || '';
+
     my $text = TWiki::Func::readTopicText( $web, $topic );
 
     my $result      = $beforeText;
@@ -215,7 +215,8 @@ sub _parseTableRows {
                     push @row, { text => $value, type => 'text' };
                 }
                 $colEnd = ( @row - 1 ) if $colEnd == -1;
-                push @tableMatrix, [ @row ]; # we must add the complete row to be able to sort later on
+                push @tableMatrix, [@row]
+                  ;   # we must add the complete row to be able to sort later on
 
             }
             else {
@@ -238,9 +239,12 @@ sub _parseTableRows {
                       sort { $a->[1] cmp $b->[1] }
                       map { [ $_, _stripHtml( $_->[$sortCol]->{text} ) ] }
                       @tableMatrix;
-                } elsif ( $type eq $columnType{'UNDEFINED'} ) {
-                	# nothing
-                } else {
+                }
+                elsif ( $type eq $columnType{'UNDEFINED'} ) {
+
+                    # nothing
+                }
+                else {
                     @tableMatrix = sort {
                         $a->[$sortCol]->{$type} <=> $b->[$sortCol]->{$type}
                     } @tableMatrix;
@@ -250,14 +254,17 @@ sub _parseTableRows {
             if ( $sortDirection eq 'descending' ) {
                 @tableMatrix = reverse @tableMatrix;
             }
-           
-           my $resultSetStart = $showSetStart;
-           my $resultSetEnd = $showSetEnd;
+
+            my $resultSetStart = $showSetStart;
+            my $resultSetEnd   = $showSetEnd;
             $resultSetEnd = $#tableMatrix if $resultSetEnd == -1;
-            if ($condition eq 'random') {
-            	my $random = int(rand($resultSetEnd - $resultSetStart));
-            	$resultSetStart = $random;
-            	$resultSetEnd = $resultSetStart;
+            if ( $condition eq 'random' ) {
+
+                my $resultCount = ( $resultSetEnd - $resultSetStart ) + 1;
+
+                my $random = int( rand($resultCount) );
+                $resultSetStart += $random;
+                $resultSetEnd = $resultSetStart;
             }
             for my $rowPos ( $resultSetStart .. $resultSetEnd ) {
                 my $row       = $tableMatrix[$rowPos];
@@ -265,11 +272,13 @@ sub _parseTableRows {
                 for my $colPos ( $colStart .. $colEnd ) {
                     my $cell = $row->[$colPos]->{text};
                     if ( $format eq '' ) {
+
                         # no format passed, so return the complete cell text
                         $rowResult .= $cell;
                         next;
                     }
-                    my $cellNumber = $colPos + 1; # param input is non-zero based
+                    my $cellNumber =
+                      $colPos + 1;    # param input is non-zero based
                     $rowResult =~ s/\$C$cellNumber/$cell/;
                 }
                 $result .= $rowResult;
@@ -279,18 +288,18 @@ sub _parseTableRows {
             $result =~ s/\$percnt/%/go;
             $result =~ s/\$dollar/\$/go;
             $result =~ s/\$quot/\"/go;
-            
+
             # feedback variables
             # translate back to input values
             $showSetStart += 1;
-            $showSetEnd += 1;
+            $showSetEnd   += 1;
             $showSetEnd = '' if $showSetEnd == 0;
             my $set = "$showSetStart..$showSetEnd";
             $result =~ s/\$set/$set/go;
             $result =~ s/\$set/$set/go;
-            
-            #TODO: format, topic, web, preserveSpaces, sortCol+1, sortDirection, beforeText, afterText, rows, cols, show
-            
+
+#TODO: format, topic, web, preserveSpaces, sortCol+1, sortDirection, beforeText, afterText, rows, cols, show
+
             TWiki::Func::writeDebug(
                 "- RenderTableDataPlugin::_parseTableRows - result A=$result")
               if $debug;
