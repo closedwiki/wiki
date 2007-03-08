@@ -499,18 +499,17 @@ body { font-size:14px; }
 .natTopicAttachments table {
   width:100%;
 }
+
 .natSideBar .natSkinStyleBrowser ul,
 .natSkinStyleBrowser ul {
   padding-left:0px;
-  margin-top:0px;
-  margin-bottom:10px;
-}
-.natSkinStyleBrowser li  {
+  margin:0px 0px 10px 0px;
   list-style-type: none;
 }
 
-.natSkinStyleBrowser td > select { /* IE freaks on that */
-  width:100%;
+.natSkinStyleBrowser select { 
+  width:100%;/* IE freaks on that */
+  _width:180px;
 }
 
 .natSideBar a.natFeedIcon:hover,
@@ -649,7 +648,7 @@ a.natFeedIcon {
 }
 .twikiPageForm {
   display:table;
-  width:0px; /* IE does not know display:table but this way it somewhat behaves like it */
+  _width:0px; /* IE does not know display:table but this way it somewhat behaves like it */
 }
 .twikiPageForm table th,
 .twikiPageForm table td {
