@@ -46,6 +46,8 @@ The current implementation has the following caveats:
    sortdirection="descending"
    sortcolumn="..."
    condition="random"
+   beforetext="..."
+   aftertext="..."
 }%
 </verbatim>
 Any one of the parameters are optional.
@@ -71,21 +73,33 @@ Token strings (to be used with variables): %BR% \
 | =sortdirection= | The sort direction of the parsed data corresponding to the original table data. %BR% If no =sortcolumn= is passed and the direction is ="descending"=, the results are simply reversed. | =none= (no sorting) | =sortdirection="ascending"= (default direction), =sortdirection="descending"= |
 | =sortcolumn= | The table column data to sort upon. You may use a column with dates or sequential numbers to sort the results without showing that order data in the results. %BR% The first column is numbered 1. The column number always refers to the orignal table, even if cells are omitted with parameter =rows= or =cols=. | =none= (no sorting) | =sortcolumn="1"= |
 | =condition= | Defines what will be displayed. At this time only condition paramater =random= is implemented. | =none= (no condition) | =condition="random"= |
-
+| =beforetext= | Text to display before the rendered data. | =none= | =beforetext="The list:$n"= |
+| =aftertext= | Text to display after the rendered data. | =none= | =aftertext="For more information see..."= |
 
 ---++ Example
 
 %IF{"context RenderTablePluginEnabled" then="" else="!RenderTablePlugin is not installed. To see the example below follow the installation instructions."}%
 
 <verbatim>
-%TABLEDATA{ topic="%TWIKIWEB%.TWikiMetaData" rows="2.." format=" *$C1* $percntBR$percnt _$C2_ $percntBR$percnt$percntBR$percnt" sortcolumn="1" }%
+%TABLEDATA{ topic="%TWIKIWEB%.TWikiMetaData"
+            rows="2.."
+            format=" *$C1* $percntBR$percnt _$C2_ $percntBR$percnt$percntBR$percnt"
+            sortcolumn="1"
+            beforetext="---+++!! TOPICINFO $n"
+            aftertext="From [[%TWIKIWEB%.TWikiMetaData#META_TOPICINFO][TWikiMetaData]]"
+          }%
 </verbatim>
 
 Results in:
 
-%TABLEDATA{ topic="%TWIKIWEB%.TWikiMetaData" rows="2.." format=" *$C1* $percntBR$percnt _$C2_ $percntBR$percnt$percntBR$percnt" sortcolumn="1" }%
+%TABLEDATA{ topic="%TWIKIWEB%.TWikiMetaData"
+            rows="2.."
+            format=" *$C1* $percntBR$percnt _$C2_ $percntBR$percnt$percntBR$percnt"
+            sortcolumn="1"
+            beforetext="---+++!! TOPICINFO $n"
+            aftertext="From [[%TWIKIWEB%.TWikiMetaData#META_TOPICINFO][TWikiMetaData]]"
+          }%
 
-From [[%TWIKIWEB%.TWikiMetaData#META_TOPICINFO][TWikiMetaData]]
 
 ---++ Settings
 
