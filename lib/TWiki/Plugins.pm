@@ -408,7 +408,7 @@ sub _handlePLUGINDESCRIPTIONS {
     my $this = shift->{plugins};
     my $text = '';
     foreach my $plugin ( @{$this->{plugins}} ) {
-        $text .= CGI::li( $plugin->getDescription() );
+        $text .= CGI::li( $plugin->getDescription() . ' ' );
     }
 
     return CGI::ul( $text );
