@@ -37,7 +37,7 @@ $VERSION = '$Rev: 11069$';
 # This is a free-form string you can use to "name" your own plugin version.
 # It is *not* used by the build automation tools, but is reported as part
 # of the version number in PLUGINDESCRIPTIONS.
-$RELEASE = '1.0.1';
+$RELEASE = '1.0.2';
 
 # Name of this Plugin, only used in this module
 $pluginName = 'RenderTableDataPlugin';
@@ -51,7 +51,10 @@ BEGIN {
         my $count = 0;
         %mon2num = map { $_ => $count++ } @isoMonth;
     }
-    %columnType = ( 'TEXT', 'text', 'DATE', 'date', 'NUMBER', 'number' );
+    %columnType = (
+        'TEXT',   'text',   'DATE',      'date',
+        'NUMBER', 'number', 'UNDEFINED', 'undefined'
+    );
 }
 
 sub initPlugin {
@@ -64,7 +67,7 @@ sub initPlugin {
         return 0;
     }
 
-    $debug = TWiki::Func::getPreferencesFlag("DEBUG");
+    $debug = TWiki::Func::getPluginPreferencesFlag( "DEBUG" );
     TWiki::Func::registerTagHandler( 'TABLEDATA', \&_parseTableRows );
 
     # Plugin correctly initialized
@@ -98,13 +101,17 @@ sub _parseTableRows {
       if ( $params->{'sortcolumn'} )
       ;    # subtract 1 to use zero based indexing; -1 means "not set"
     my $sortDirection = $params->{'sortdirection'} || 'ascending';
-
+	my $beforeText = $params->{'beforetext'} || '';
+	my $afterText = $params->{'aftertext'} || '';
+	
     my $rowStart   = 0;
     my $rowEnd     = -1;
     my $rowsParams = $params->{'rows'};
     if ($rowsParams) {
         $rowsParams =~ /([0-9]*)(\.\.)*([0-9]*)/;
-        $rowStart = $1 - 1;    # subtract 1 to use zero based indexing
+        if ($1) {
+	        $rowStart = $1 - 1;    # subtract 1 to use zero based indexing
+	    }
         if ($2) {
             $rowEnd = $3
               ? $3 - 1
@@ -119,7 +126,9 @@ sub _parseTableRows {
     my $colsParams = $params->{'cols'};
     if ($colsParams) {
         $colsParams =~ /([0-9]*)(\.\.)*([0-9]*)/;
-        $colStart = $1 - 1;    # subtract 1 to use zero based indexing
+        if ($1) {
+	        $colStart = $1 - 1;    # subtract 1 to use zero based indexing
+	    }
         if ($2) {
             $colEnd = $3
               ? $3 - 1
@@ -129,10 +138,30 @@ sub _parseTableRows {
             $colEnd = $colStart;
         }
     }
-
+    
+    my $showSetStart = 0;
+	my $showSetEnd = -1;
+	my $showParams = $params->{'show'};
+	if ($showParams) {
+        $showParams =~ /([0-9]*)(\.\.)*([0-9]*)/;
+        if ($1) {
+        	$showSetStart = $1 - 1;    # subtract 1 to use zero based indexing
+        }
+        if ($2) {
+            $showSetEnd = $3
+              ? $3 - 1
+              : -1;  # subtract 1 to use zero based indexing; -1 means "not set"
+        }
+        else {
+            $showSetEnd = $showSetStart;
+        }
+    }
+    
+    my $condition = $params->{'condition'};
+	
     my $text = TWiki::Func::readTopicText( $web, $topic );
 
-    my $result      = "";
+    my $result      = $beforeText;
     my $insidePRE   = 0;
     my $insideTABLE = 0;
     my $line        = "";
@@ -186,7 +215,7 @@ sub _parseTableRows {
                     push @row, { text => $value, type => 'text' };
                 }
                 $colEnd = ( @row - 1 ) if $colEnd == -1;
-                push @tableMatrix, [ @row[ $colStart .. $colEnd ] ];
+                push @tableMatrix, [ @row ]; # we must add the complete row to be able to sort later on
 
             }
             else {
@@ -200,9 +229,7 @@ sub _parseTableRows {
         }
 
         if ($shouldRenderTableData) {
-            TWiki::Func::writeDebug(
-"- RenderTableDataPlugin::_parseTableRows - about to sort table data"
-            ) if $debug;
+
             if ( $sortCol != -1 ) {
                 my $type =
                   _guessColumnType( $sortCol, $rowStart, @tableMatrix );
@@ -211,8 +238,9 @@ sub _parseTableRows {
                       sort { $a->[1] cmp $b->[1] }
                       map { [ $_, _stripHtml( $_->[$sortCol]->{text} ) ] }
                       @tableMatrix;
-                }
-                else {
+                } elsif ( $type eq $columnType{'UNDEFINED'} ) {
+                	# nothing
+                } else {
                     @tableMatrix = sort {
                         $a->[$sortCol]->{$type} <=> $b->[$sortCol]->{$type}
                     } @tableMatrix;
@@ -222,31 +250,47 @@ sub _parseTableRows {
             if ( $sortDirection eq 'descending' ) {
                 @tableMatrix = reverse @tableMatrix;
             }
-
-            TWiki::Func::writeDebug(
-"- RenderTableDataPlugin::_parseTableRows - about to render table data"
-            ) if $debug;
-            for my $rowPos ( 0 .. $#tableMatrix ) {
+           
+           my $resultSetStart = $showSetStart;
+           my $resultSetEnd = $showSetEnd;
+            $resultSetEnd = $#tableMatrix if $resultSetEnd == -1;
+            if ($condition eq 'random') {
+            	my $random = int(rand($resultSetEnd - $resultSetStart));
+            	$resultSetStart = $random;
+            	$resultSetEnd = $resultSetStart;
+            }
+            for my $rowPos ( $resultSetStart .. $resultSetEnd ) {
                 my $row       = $tableMatrix[$rowPos];
                 my $rowResult = $format;
-                for my $colPos ( 0 .. $#{$row} ) {
+                for my $colPos ( $colStart .. $colEnd ) {
                     my $cell = $row->[$colPos]->{text};
                     if ( $format eq '' ) {
-
                         # no format passed, so return the complete cell text
                         $rowResult .= $cell;
                         next;
                     }
-                    my $cellNumber = $colPos + $colStart;  # both are zero based
-                    $cellNumber += 1;    # param input is non-zero based
+                    my $cellNumber = $colPos + 1; # param input is non-zero based
                     $rowResult =~ s/\$C$cellNumber/$cell/;
                 }
                 $result .= $rowResult;
             }
+            $result .= $afterText;
             $result =~ s/\$n/\n/go;
             $result =~ s/\$percnt/%/go;
             $result =~ s/\$dollar/\$/go;
             $result =~ s/\$quot/\"/go;
+            
+            # feedback variables
+            # translate back to input values
+            $showSetStart += 1;
+            $showSetEnd += 1;
+            $showSetEnd = '' if $showSetEnd == 0;
+            my $set = "$showSetStart..$showSetEnd";
+            $result =~ s/\$set/$set/go;
+            $result =~ s/\$set/$set/go;
+            
+            #TODO: format, topic, web, preserveSpaces, sortCol+1, sortDirection, beforeText, afterText, rows, cols, show
+            
             TWiki::Func::writeDebug(
                 "- RenderTableDataPlugin::_parseTableRows - result A=$result")
               if $debug;
@@ -269,26 +313,24 @@ Code copied from TablePlugin (Core.pm) and modified slightly.
 sub _guessColumnType {
     my ( $col, $rowStart, @tableMatrix ) = @_;
 
-    TWiki::Func::writeDebug("- RenderTableDataPlugin::_guessColumnType")
-      if $debug;
-
-    my $isDate = 1;
-    my $isNum  = 1;
-    my $num    = '';
-    my $date   = '';
-    my $rowNum = 0;
+    my $isDate        = 1;
+    my $isNum         = 1;
+    my $num           = '';
+    my $date          = '';
+    my $columnIsValid = 0;
 
     foreach my $row (@tableMatrix) {
-        $rowNum++;
-        next if ( $rowNum < ( $rowStart + 1 ) );   # this should be more elegant
+        next if ( !$row->[$col]->{text} );
+
+        $columnIsValid = 1;
         ( $num, $date ) = _convertToNumberAndDate( $row->[$col]->{text} );
         $isDate = 0 if ( !defined($date) );
         $isNum  = 0 if ( !defined($num) );
         last if ( !$isDate && !$isNum );
         $row->[$col]->{date}   = $date;
         $row->[$col]->{number} = $num;
-
     }
+    return $columnType{'UNDEFINED'} if ( !$columnIsValid );
     my $type = $columnType{'TEXT'};
     if ($isDate) {
         $type = $columnType{'DATE'};
