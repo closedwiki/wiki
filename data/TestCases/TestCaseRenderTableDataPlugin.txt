@@ -12,8 +12,10 @@ We should skip this table:
 
 But we read this table:
 | *Text* | *Number* | *Date*      | *Hidden* |
-| ABC    | 123      | 30 Dec 2006 | 2        |
-| DEF    | 456      | 01 Jan 2007 | 1        |
+| ABC    | 123      | 30 Dec 2006 | 4        |
+| DEF    | 456      | 01 Jan 2007 | 3        |
+| GHI    | 789      | 01 Apr 2005 | 2        |
+| JKL    | 999      | 31 Mar 2005 | 1        |
 
 We do not read tables after the first one...
 | *No* | *Text*    |
@@ -109,3 +111,14 @@ The order of the table column cells is reversed on purpose.
 The order of the table column cells is reversed on purpose.
 
 %TABLEDATA{ rows="2.." sortcolumn="4" sortdirection="descending" format="$C1 $C2 $C3 $C4 $n$n" }%
+
+---++ Show (limit results)
+---+++ No sorting
+%TABLEDATA{preservespaces="on" format="$C1 $C2 $C3 $n$n" show="4.." }%
+
+---+++ After sorting
+%TABLEDATA{sortcolumn="4" preservespaces="on" format="$C1 $C2 $C3 $n$n" show="4.." }%
+
+---++ Conditions
+---+++ random
+%TABLEDATA{ cols="1" rows="2.." condition="random" format="$C1 <br />" beforetext="BEGIN<br />" aftertext="$nEND" }%
