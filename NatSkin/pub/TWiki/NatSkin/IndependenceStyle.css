@@ -143,7 +143,8 @@ hr {
 }
 
 .natSideBar ul {
-  padding-left:20px;
+  padding-left:0px;
+  margin:0px 0px 10px 1.2em;
 }
 
 .natNotes {

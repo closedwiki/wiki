@@ -84,11 +84,5 @@
 %DISPLAYDEPENDENCIES{header="---++ %MAKETEXT{"Dependencies"}%$n"}%
 </td>
 </tr>
-<tr style="%IF{"not {Cache}{Enabled}" then="display:none"}%">
-<td colspan="2">
-
-%DISPLAYDEPENDENCIES{header="---++ %MAKETEXT{"Reverse dependencies"}%$n" type="rev"}%
-</td>
-</tr>
 </table>
 </div>

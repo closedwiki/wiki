@@ -280,7 +280,8 @@ hr {
 .natSideBar ol,
 .natSideBar ul {
   color:#003366;
-  padding-left:1.2em;
+  padding-left:0px;
+  margin:0px 0px 10px 1.2em;
 }
 .natSideBar ol {
   padding-left:2em;
