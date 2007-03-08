@@ -206,6 +206,11 @@ For details see the Behaviour website.
    * [[%PUBURL%/%TWIKIWEB%/%TOPIC%/behaviour.compressed.js][compressed javascript file]] (3.6K) - processed by [[http://alex.dojotoolkit.org/shrinksafe/][ShrinkSafe]]
    * [[%PUBURL%/%TWIKIWEB%/%TOPIC%/behaviour.js][behaviour.js]] (9.7K) - original javascript source
 
+
+---++ Contrib Settings
+   * Set SHORTDESCRIPTION = =Behaviour= Javascript event library to create javascript based interactions that degrade well when javascript is not available
+   
+   
 ---++ Contrib Info
 | Author: | TWiki:Main.ArthurClemens |
 | Copyright: | Code: version 1.1 - Copyright (c) Ben Nolan and Simon Willison. Distribution and updates: TWiki:Main.ArthurClemens. |
