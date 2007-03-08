@@ -71,7 +71,7 @@ sub _initDefaults {
 		'steps' => 1,
 		'emptytext' => '.',
 	 	'unknownparamsmsg'  => '%RED% Sorry, some parameters are unknown: %UNKNOWNPARAMSLIST% %ENDCOLOR% <br/> Allowed parameters are (see TWiki.$pluginName topic for more details): %KNOWNPARAMSLIST%',
-		'fontsize' => 'small',
+		'fontsize' => 'x-small',
 		'iconsize' => '12px',
 		'dir'=> 'bottomup', # or 'topdown'
 		'displayconnectedto' => 0,
@@ -80,6 +80,7 @@ sub _initDefaults {
 		'notesicon'=>'%P%',
 		'connectedtoicon'=>'%M%',
 		'conflicticon'=>'%S%',
+		'ownericon'=>'%ICON{persons}%',
 		'devicefgcolor'=>'#000000',
 		'devicebgcolor'=>'#f0f0f0',
 		'emptyfgcolor'=> '#000000',
@@ -100,10 +101,10 @@ sub _initDefaults {
 		'tooltipfixtop'=>0,
 		'tooltipbgcolor'=>"",
 		'tooltipfgcolor'=>"",
-		'tooltipformat'=>'<b>%SERVER%:</b> %FORMFACTOR% (%SUNIT%-%EUNIT%, %RACK%)<br/>%ICON{persons}% Owner: %OWNER% <br/>%M% Connected to: %CONNECTEDTO% <br/>%P% Notes:<br/> %NOTES% <div style="text-align:right;"><sub>%CLOSEBUTTON%</sub></div>',
+		'tooltipformat'=>'<b><span title="Device name">%DEVICE%:</span></b> <span title="Form factor">%FORMFACTOR%</span> (<span title="Start-End units">%SUNIT%-%EUNIT%</span>, <span title="Rack name">%RACK%</span>)<div title="Owner">%OWNERICON% %OWNER%</div><div title="Connected to">%CONNECTEDTOICON% %CONNECTEDTO%</div><div title="Notes">%NOTESICON% %NOTES%</div> <div style="font-size:xx-small;text-align:right;"><span style="background-color:red;" title="Close tooltip">%CLOSEBUTTON%</span></div>',
 	);
 
-	@renderedOptions = ( 'name', 'notesicon','conflicticon', 'connectedtoicon', 'emptytext' );
+	@renderedOptions = ( 'name', 'notesicon','conflicticon', 'connectedtoicon', 'ownericon', 'emptytext' );
 	@flagOptions = ( 'autotopic', 'displaystats', 'displayconnectedto', 'displaynotes', 'displayowner', 'displayunitcolumn','enablejstooltips' );
 
 	$rpId=0;
@@ -207,7 +208,8 @@ sub _renderJSTooltipText {
 	$text =~s /\%SUNIT\%/$sunit/gs;
 	$text =~s /\%EUNIT\%/$eunit/gs;
 	$text =~s /\%DEVICE\%/\%SERVER\%/gs;
-	$text =~s /\%([^\%\s]+)%/(defined $$entryRef{"\L$1\E"}?$$entryRef{"\L$1\E"}:"\%$1\%")/egs;
+	$text =~s /\%([^\%\s]+?ICON)\%/(defined $options{"\L$1\E"}?$options{"\L$1\E"}:"\%$1\%")/egs;
+	$text =~s /\%([^\%\s]+)\%/(defined $$entryRef{"\L$1\E"}?$$entryRef{"\L$1\E"}:"\%$1\%")/egs;
 	return &TWiki::Func::renderText($text);
 }
 # =========================
