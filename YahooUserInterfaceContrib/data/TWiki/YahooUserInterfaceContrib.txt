@@ -5,7 +5,7 @@
 %TOC%
 
 ---++ Summary of Contents
-Contains an un-archived and ready for use copy of YUI 0.11.4 - see http://developer.yahoo.com/yui
+Contains an un-archived and ready for use copy of YUI 2.2.0a - see http://developer.yahoo.com/yui
 
 if you get the Contrib using svn, it will contain all the exampled and documentation that is in the original archive. the MANIFEST (and thus the zip file attached to this topic) only contains the actual javascript (both release and debug versions).
 
@@ -37,13 +37,14 @@ Settings are stored as preferences variables. To reference a setting write ==%<n
 
 ---++ Contrib Info
 
-|  Plugin Author: | TWiki:Main.SvenDowideit - SvenDowideit@wikiring.com - <img src="%ATTACHURLPATH%/wikiringlogo20x20.png" /> [[http://www.wikiring.com][WikiRing.com]] |
+|  Plugin Author: | TWiki:Main.SvenDowideit - SvenDowideit@DistributedINFORMATION.com [[http://DistributedINFORMATION.com][DistributedINFORMATION]] - a <img src="%ATTACHURLPATH%/wikiringlogo20x20.png" /> [[http://www.wikiring.com][WikiRing.com]] partner |
 |  Copyright &copy;: | Copyright Yahoo INC |
 |  License: | GPL ([[http://developer.yahoo.com/yui/license.txt][Yahoo BSD License]]) |
 |  Dependencies: | %$DEPENDENCIES% |
 |  Version: | %$VERSION% |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  %DATE%: | Initial version |
+|  %DATE%: | update to v2.2.0a version |
+|  24 Oct 2006: | Initial version |
 |  Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 |  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
