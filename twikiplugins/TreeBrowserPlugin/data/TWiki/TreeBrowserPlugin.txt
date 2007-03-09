@@ -1,9 +1,11 @@
-%META:TOPICINFO{author="StephaneLenclud" date="1173308327" format="1.1" version="1.11"}%
----+ Tree Browser Plugin
+%META:TOPICINFO{author="StephaneLenclud" date="1173413754" format="1.1" reprev="1.17" version="1.17"}%
+---+!! Tree Browser Plugin
 
-Renders a bulleted or numbered list as a collapsable/expandable tree of nodes.
+Renders a bulleted or numbered list as a collapsible/expandable tree of nodes.
 
----++ Acknowledgement
+%TOC%
+
+---++ Acknowledgment
 
 This plugin leverages the [[http://www.destroydrop.com/javascripts/tree/][dTree]] !JavaScript tree menu by [[mailto:drop@destroydrop.com][Geir Landrö]] as well as code borrowed from TWiki:Plugins.RenderListPlugin.
 
@@ -18,11 +20,12 @@ Place the tag =%<nop>TREEBROWSER{= _parameters_ =}%= immediately before a bullet
 | =shared= | Must be a string. If present, the state of the tree is shared across all trees using this string. For example, if the tree is used in the WebLeftBar, the state will hold at all topics with this WebLeftBar. It's basically the name of the JavaScript object representing your tree. | none |
 | =uselines= | Set to =false= if you don't want to show lines linking nodes and leafs in the tree | =true= |
 | =useplusminus= | Set to =false= if you don't want to show '-' and '+' signs. One can use something like =onclick='javascript: tree.o($index);'= in the tree item to trigger opening/closing of a node. | =true= |
-| =noindent= | Set to =true= to show children at the level their parent. It suppresses children indentation. | =false= |
+| =noindent= | Set to =true= to show children at the level of their parent. It suppresses children indentation. Enabling =noindent= will disable =uselines= and =useplusminus= | =false= |
 | =nocss= | Set to =true= to prevent inclusion of =dtree.css=. | =false= |
 | =closesamelevel= | If =true= only one node within a parent can be expanded at the same time. openAll() and closeAll() functions do not work when this is enabled. | =false= |
 | =noroot= | Prevents rendering of the title line. Useful if you don't want to show any title. | =false= |
 | =warn= | Text to be displayed if no tree was found. | none |
+| =style= | Name of the CSS file to include without the =.css= extension. The CSS file must be attached to this topic. | dtree |
 
 Rendering themes can be defined by =&lt;name&gt;_THEME= Plugin settings
    * Each theme is defined by a comma separated list containing the render type and parameters required by that render type
@@ -50,7 +53,24 @@ If !JavaScript is not enabled, the list is rendered as usual, and the =%<nop>TRE
       * Refer to an attached icon at the beginning of the bullet with:
          * =icon:myicon.gif Followed by normal bullet text=
 
----++ Example
+---++ CSS classes
+
+A number of classes are used to facilitate look and feel customizations through CSS.
+
+   * =dtree=: given to the =div= element encapsulating the whole tree. Since v0.1.
+   * =dtreeLeaf=: given to the =div= element encapsulating a tree item without children. Introduced in v0.9.
+   * =dtreeNodeOpened=: given to the =div= element encapsulating a tree item that is showing children. Introduced in v0.9.
+   * =dtreeNodeClosed=: given to the =div= element encapsulating a tree item that is hiding children. Introduced in v0.9.
+   * =dtreeChildren=: given to the =div= element encapsulating the children of a tree item. Changed in v0.9. Formerly =clip=.
+   * =dtreeLevel0=: given to the =div= element encapsulating the children of the tree root item. Introduced in v0.9.
+   * =dtreeLevel1=: given to the =div= element encapsulating the children of level 0 items. Introduced in v0.9.
+   * =dtreeLevel2=: given to the =div= element encapsulating the children of level 1 items. Introduced in v0.9.
+   * =dtreeLeveln=: given to the =div= element encapsulating the children of level n-1 items. Introduced in v0.9.
+
+
+---++ Examples
+
+---+++ Basic
 
 <verbatim>
 %TREEBROWSER{"file" title="[[%HOMETOPIC%][%INCLUDINGWEB% Web Home]]" shared="left"}%
@@ -89,6 +109,22 @@ To add _"collapse/expand all nodes"_ functionalities do something like:
 %TREEBROWSER{"file" title="[[%HOMETOPIC%][%INCLUDINGWEB% Web Home]]" shared="tree"}%
 ...</verbatim>
 
+---+++ Menu
+
+<verbatim>
+%TREEBROWSER{"thread" notitle="on" noindent="on" style="dmenu"}%
+   * Vegetables
+      * Carot
+      * Leek
+      * Tomato
+      * Potato 
+   * Fruits
+      * Banana 
+      * Grape fruit
+         * Pink
+         * Yellow 
+      * Peach
+</verbatim>
 
 ---++ Plugin Settings
 
@@ -160,9 +196,13 @@ a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>T
      | ==pub/TWiki/%TOPIC%/xls.gif== | icons from [[TWiki:Plugins.RenderListPlugin][RenderListPlugin]] |
      | ==pub/TWiki/%TOPIC%/zip.gif== | icons from [[TWiki:Plugins.RenderListPlugin][RenderListPlugin]] |
 
+---++ Know issues
+
+   * CSS problem with multiple trees of different style on one page. Could be fixed by using =style= as class prefix.
+
 ---++ Planned Enhancements
 
-   * Support configurable icons for each node (similar to TWiki:Plugins.RenderListPlugin). _SL: Sounds fun!_
+   * Support configurable icons for each node (similar to TWiki:Plugins.RenderListPlugin). _SL: I think it was done already_
    * Support configurable default icons. _SL: I think this was done sometimes ago._
    * Support wrapping of long node text. _SL: Not sure how to do that? Looks like it's not such a big problem with Firfox._
    * Support tree browser in other than view mode also. _SL: Not sure what's that?_
@@ -171,9 +211,10 @@ a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>T
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.ThomasWeigert |
-|  Plugin Version: | v0.8 |
+|  Plugin Version: | v0.9 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  07 Mar 2007: | (v0.8) - Adding =noroot= and =warn= parameters. Now using =preRenderingHandler= instead of the deprecated =startRenderingHandler= . =%<nop>TREEBROWSER%= are hidden if there is no tree to render. By [[TWiki:Main.StephaneLenclud][Stéphane Lenclud]]. |
+|  09 Mar 2007: | (v0.9) - Adding =style= parameter. Improved CSS. Fixes extra '\n' in dot pm. By [[TWiki:Main.StephaneLenclud][Stéphane Lenclud]]. |
+|  07 Mar 2007: | (v0.8) - Adding =noroot= and =warn= parameters. Now using =preRenderingHandler= instead of the deprecated =startRenderingHandler= . =%<nop>TREEBROWSER%= are hidden if there is no tree to render. Fixes TOC icons problem with TWiki:Plugins.NatSkin. By [[TWiki:Main.StephaneLenclud][Stéphane Lenclud]]. |
 |  01 Oct 2006: | (v0.7) - Adding =useplusminus= , =noindent= and =nocss= parameters. By [[TWiki:Main.StephaneLenclud][Stéphane Lenclud]]. |
 |  17 Sep 2006: | (v0.6) - Adding =closesamelevel= and =uselines= functionalities, fix rendering issues with Firefox and pattern skin, fix warnings in apache error logs. By [[TWiki:Main.StephaneLenclud][Stéphane Lenclud]] |
 |  12 Apr 2006: | (v0.5) - Minor update for TWiki:Codev.TWikiRelease04x00  |
@@ -191,10 +232,7 @@ a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>T
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 |  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
-__Related Topics:__ TWiki:Plugins.RenderListPlugin
-
--- TWiki:Main.ThomasWeigert - 16 Sep 2005
-
+__Related Topics:__ TWiki:Plugins.RenderListPlugin, TWiki:Plugins.TreePlugin
 
 %META:FILEATTACHMENT{name="empty.gif" attr="" autoattached="1" comment="" date="1151849905" path="empty.gif" size="62" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="email.gif" attr="" autoattached="1" comment="" date="1151849905" path="email.gif" size="183" user="UnknownUser" version=""}%
