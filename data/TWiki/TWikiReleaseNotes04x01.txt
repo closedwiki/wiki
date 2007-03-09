@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1169321835" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1173426057" format="1.1" version="$Rev$"}%
 ---+!! TWiki Release 4.1.2 (Edinburgh), %$DATE%
 
 %TOC%
@@ -135,7 +135,7 @@ TWiki 4.1.2 has been confirmed working on the combination RedHat 7.3, Apache 1.3
    * Users of mod_perl should notice a new experimental feature that speeds up searching by a large factor. The feature is described in the [[http://twiki.org/cgi-bin/view/Codev/NativeSearch][NativeSearch]] topic at the TWiki website. In configure look for the {RCS}{SearchAlgorithm} setting. Normal mode is Forking. The new mode for mod_perl is Native and is a C program which needs to be compiled with a C-compiler like gcc, and this new mode works faster than forking on mod_perl. If you do not run mod_perl stick to the default Forking.
    * /tmp/twiki directory which was introduced with 4.1.1 is now auto created also with older versions of the CGI::Session library. This is important for distributions that cleans out /tmp when rebooting.
    * Configure has gotten much better at installing extensions such as plugins.
-   * Configure is now more friendly to a new administator. Configure now only shows the important "General Path Settings" until you have saved and created the LocalSite.cfg file. This prevents a number of false errors from being wrongly fixed by a first time installer.
+   * Configure is now more friendly to a new administator. Configure now only shows the important "General Path Settings" until you have saved and created the =LocalSite.cfg= file. This prevents a number of false errors from being wrongly fixed by a first time installer.
    * The documented bahavior of "* Set ALLOWTOPICCHANGE = (nothing)" does not match the code. Documentation has been updated to match actual behavior in 4.1.2. See also deprecation notice below. You should review your use of access rights settings in topics.
 
 ---++ Deprecation Notices
@@ -280,7 +280,7 @@ The 4.1.0 release was built from SVN http://svn.twiki.org/svn/twiki/tags/TWikiRe
 | [[%BUGS%/Item3123][Item3123]]  | New litteral option for %<nop>INCLUDE% (was: including external web page creates unwanted list items) |
 | [[%BUGS%/Item3122][Item3122]]  | RcsLite error when saving revision from text |
 | [[%BUGS%/Item3119][Item3119]]  | Remove edit.iejs.tmpl |
-| [[%BUGS%/Item3093][Item3093]]  | Spurious ?-xism: in LocalSite.cfg |
+| [[%BUGS%/Item3093][Item3093]]  | Spurious ?-xism: in <nop>LocalSite.cfg |
 | [[%BUGS%/Item3091][Item3091]]  | Attachment changes create bad log entries |
 | [[%BUGS%/Item3089][Item3089]]  | Statistics creates lots of "bad log line... " errors |
 | [[%BUGS%/Item3075][Item3075]]  | Document deprecation of settings in forms |

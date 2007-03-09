@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1163306255" format="1.0" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1173426057" format="1.1" version="$Rev$"}%
 ---+!! TWiki Release 4.0 (Dakar)
 
 _Note: This is the release note for the previous major release version 4.0.X. It is included with 4.1.X because it contains valuable information for people upgrading from earlier versions. Both for the admin and the users. See TWikiReleaseNotes04x01 for the 4.1.X release notes_
@@ -689,7 +689,7 @@ The following fixes and minor enhancements have been addressed in this release:
 | [[%BUGS%/Item2436][Item2436]] | PatternSkin does not support PAGEBGCOLOR |
 | [[%BUGS%/Item2427][Item2427]] | viewfile delivers .tgz files as text (wrong mime type) |
 | [[%BUGS%/Item2426][Item2426]] | ICONTOPIC variable: Incorrect value deadlocks topic (no edit possible) |
-| [[%BUGS%/Item2422][Item2422]] | Inconsistent LocalSite.cfg.txt settings |
+| [[%BUGS%/Item2422][Item2422]] | Inconsistent <nop>LocalSite.cfg.txt settings |
 | [[%BUGS%/Item2421][Item2421]] | Rename: Referrer topics need to be linked explicit |
 | [[%BUGS%/Item2409][Item2409]] | Form field checkbox option lost on topic edit |
 | [[%BUGS%/Item2402][Item2402]] | Sandbox not aware of <nop>I18N for user names |
@@ -800,7 +800,7 @@ The following fixes and minor enhancements have been addressed in this release:
 
 | [[%BUGS%/Item2578][Item2578]] | SECURITY HOTFIX: Improved protection against attaching php scripts that can be executed afterwords by simple view |
 | [[%BUGS%/Item2568][Item2568]] | Fix potential script error when attachment twisty is removed |
-| [[%BUGS%/Item2558][Item2558]] | TWiki 4.0.3 distributed LocalSite.cfg.txt uses incorrect syntax |
+| [[%BUGS%/Item2558][Item2558]] | TWiki 4.0.3 distributed <nop>LocalSite.cfg.txt uses incorrect syntax |
 | [[%BUGS%/Item2546][Item2546]] | Handmade twisty buttons has underline under them |
 
 ---+++ TWiki 4.0.4 Enhancements
