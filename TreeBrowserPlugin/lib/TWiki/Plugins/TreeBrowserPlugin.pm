@@ -39,7 +39,7 @@ use vars qw(
         $debug $js
     );
 
-$VERSION = 'v0.9';
+$VERSION = 'v1.0';
 $pluginName = 'TreeBrowserPlugin';
 
 # =========================
@@ -72,10 +72,12 @@ sub preRenderingHandler {
 
     # Render here, not in commonTagsHandler so that lists produced by
     # Plugins, TOC and SEARCH can be rendered
-    $_[0] =~ s/ {3}/\t/gs if $_[0] =~/%TREEBROWSER/; #SL: As far as I can tell this replaces three space characters with tabulation, why?
-	 $_[0] =~ s/%TREEBROWSER{(.*?)}%(([\n\r]+[^\t]{1}[^\n\r]*)*?)(([\n\r]+\t[^\n\r]*)+)/&handleTreeView($1, $2, $4)/ges;
-	 #SL: Get ride of lonely TREEBROWSER tag.
-	 $_[0] =~ s/%TREEBROWSER{(.*?)}%/&handleLonelyTreeView($1)/ges;
+    if ($_[0] =~/%TREEBROWSER/o ) {
+        $_[0] =~ s/ {3}/\t/gs if $_[0] =~/%TREEBROWSER/; #SL: As far as I can tell this replaces three space characters with tabulation, why?
+	    $_[0] =~ s/%TREEBROWSER{(.*?)}%(([\n\r]+[^\t]{1}[^\n\r]*)*?)(([\n\r]+\t[^\n\r]*)+)/&handleTreeView($1, $2, $4)/ges; #original
+        #SL: Get ride of lonely TREEBROWSER tag.
+        $_[0] =~ s/%TREEBROWSER{(.*?)}%/&handleLonelyTreeView($1)/ges;
+    }
 }
 
 =pod
@@ -188,17 +190,21 @@ sub renderTreeView
         push( @tree, { level => $level, type => $type, text => $text } );
     }
 
+    #Debug    
+    TWiki::Func::writeDebug( "${pluginName} Tree item count:" . scalar(@tree) ) if $debug;
+
    $js++;
    my $var = ($shared)?$shared:"d$js";
    my $script = "";
    #Include javascript
    $script .= "<script type=\"text/javascript\" src=\"$attachUrl/dtree.js\"></script>";
-   $text = "<div class=\"dtree\">";
+   $text = "<div class=\"treeBrowserPlugin\">";
    #Include CSS unless no CSS specified
    $text .="<style type=\"text/css\" media=\"all\">\@import \"$attachUrl/$style.css\";</style>" unless ($noCss=~/true|1|on/i);    
    $text .="<script type=\"text/javascript\">
 <!--
 $var = new dTree('$var');\n";
+    $text .= "$var.config.style='$style';\n";
     $text .= "$var.config.inOrder=true;\n";
     $text .= "$var.config.iconPath='" . $attach . "/';\n";
     $text .= "$var.updateIconPath();\n";
@@ -213,6 +219,7 @@ $var = new dTree('$var');\n";
     $text .= "$var.config.usePlusMinus=false;\n" if (($usePlusMinus=~/false|0|off/i) || $noIndent);#noident override useplusminus, prevents java bug :)
     $text .= "$var.config.closeSameLevel=true;\n" if ($closeSameLevel=~/true|1|on/i);
     $text .= "$var.config.noRoot=true;\n" if ($noRoot=~/true|1|on/i);
+ 
 
 
     $text .= "$var.config.useStatusText=false;\n"; #Broken due to dtree usage if ($useStatusText=~/true|1|on/i);
@@ -265,7 +272,8 @@ $var = new dTree('$var');\n";
     $text .= "document.write($var);\n";
     $text .= "$var.openAll();\n" if $openAll;
     $text .= "$var.openTo($openTo);\n" if $openTo;
-    $text .= "//-->\n</script></div>";
+    $text .= "//-->\n</script>";
+    $text .= "</div>";
     # fall back if JavaScript is turned off
     $text .= "\n<noscript>\n$theText</noscript>";
     if ( $js == 1 ) {

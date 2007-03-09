@@ -39,14 +39,15 @@ function dTree(objName) {
 		useCookies : true,
 		useLines : true,
 		usePlusMinus : true,
-      noIndent : false,
-      noRoot : false,
+        noIndent : false,
+        noRoot : false,
 		useIcons : true,
 		useStatusText : false,
 		closeSameLevel	: false,
 		inOrder	: false,
 		iconPath : '',
-		shared : false
+		shared : false,
+        style : 'dtree'
 	}
 	this.icon = {
 	  root : 'base.gif',
@@ -110,7 +111,7 @@ dTree.prototype.closeAll = function() {
 
 // Outputs the tree to the page
 dTree.prototype.toString = function() {
-	var str = '<div class="dtree">\n';
+	var str = '<div class="'+ this.getClassTree() + '">\n';
 	if (document.getElementById) {
 		if (this.config.useCookies) this.selectedNode = this.getSelected();
       //SL: add the root node
@@ -171,8 +172,8 @@ dTree.prototype.node = function(node, nodeId) {
       //SL: Set the node class: 
       //If the node has children then it's either opened or closed
       //If the node has no children then it's a leaf
-      if (node._hc) {(node._io ? myClass = 'dtreeNodeOpened' : myClass = 'dtreeNodeClosed');}
-      else {myClass = 'dtreeLeaf';}
+      if (node._hc) {(node._io ? myClass = this.getClassNodeOpened() : myClass = this.getClassNodeClosed());}
+      else {myClass = this.getClassLeaf();}
 		str += '<div id="n' + this.obj + nodeId + '" class="'+ myClass +'">' + this.indent(node, nodeId);
 		if (this.config.useIcons) str += '<img id="i' + this.obj + nodeId + '" src="' + ((node._io) ? node.iconOpen : node.icon) + '" alt="" />';
 		//str += (node.name + this.level); //Debug level
@@ -183,7 +184,7 @@ dTree.prototype.node = function(node, nodeId) {
    //SL: If the node has children
 	if (node._hc) {
       //SL: Display that group of children if this node is root or this node is open.   
-      str += '<div id="d' + this.obj + nodeId + '" class="dtreeChildren dtreeLevel' + this.level + '" style="display:' + ((isRoot || node._io) ? 'block' : 'none') + ';">';
+      str += '<div id="d' + this.obj + nodeId + '" class="'+ this.getClassChildren() + ' ' + this.getClassLevel() + '" style="display:' + ((isRoot || node._io) ? 'block' : 'none') + ';">';
 		str += this.addNode(node);
 		str += '</div>';
 	}
@@ -322,7 +323,7 @@ dTree.prototype.nodeStatus = function(status, id, bottom) {
 	eDiv.style.display = (status) ? 'block': 'none';
    //SL: Change the class of the node div
    var eNodeDiv = document.getElementById('n' + this.obj + id);
-   eNodeDiv.className = (status) ? 'dtreeNodeOpened' : 'dtreeNodeClosed';
+   eNodeDiv.className = (status) ? this.getClassNodeOpened() : this.getClassNodeClosed();
 };
 
 // [Cookie] Clears a cookie
@@ -375,6 +376,32 @@ dTree.prototype.isOpen = function(id) {
 		if (aOpen[n] == id) return true;
 	return false;
 };
+
+//SL: The getClass functions are used to get the CSS class
+
+dTree.prototype.getClassTree = function() {
+    return this.config.style;
+}
+
+dTree.prototype.getClassLeaf = function() {
+    return this.config.style + 'Leaf';
+}
+
+dTree.prototype.getClassNodeOpened = function() {
+    return this.config.style + 'NodeOpened';
+}
+
+dTree.prototype.getClassNodeClosed = function() {
+    return this.config.style + 'NodeClosed';
+}
+
+dTree.prototype.getClassChildren = function() {
+    return this.config.style + 'Children';
+}
+
+dTree.prototype.getClassLevel = function() {
+    return this.config.style + 'Level' + this.level;
+}
 
 // If Push and pop is not implemented by the browser
 if (!Array.prototype.push) {

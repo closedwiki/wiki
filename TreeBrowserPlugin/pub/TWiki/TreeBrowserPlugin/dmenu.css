@@ -1,9 +1,9 @@
 /*
- Derived from dTree 2.05 | www.destroydrop.com/javascript/tree/
+ Derived from dmenu 2.05 | www.destroydrop.com/javascript/tree/
  Copyright (c) 2002-2003 Geir Landrö              
  Copyright (c) 2007 Stéphane Lenclud
 */
-.dtree {
+.dmenu {
 /*	
    font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
 	font-size: 11px;
@@ -12,13 +12,14 @@
 */
 	line-height:100%;
 }
-.dtree img {
+.dmenu img {
 	display:inline;
 	border: 0px;
 	vertical-align: middle;
 }
 
-.dtree a {
+
+.dmenu a {
 	/*color: #333;*/
    color: #EEEEEE;
 	text-decoration: none;
@@ -34,13 +35,17 @@
    overflow: hidden; /* prevents text to overflow*/
 }
 
-.dtree a:hover {
+.dmenu a:hover {
    border-color: #222222 #888888 #888888 #222222; /*grey*/
    background-color:#777777;
 	text-decoration: none;
 }
 
-.dtreeLevel1 a {
+.dmenuLevel0 a {
+   /*font-weight: bold!important;*/ /*so that we overide the leaf settings*/
+}
+
+.dmenuLevel1 a {
    opacity:0.90; 
    filter: alpha (opacity=90);
    /*position:relative;*/
@@ -50,23 +55,23 @@
    /*display:table-cell;*/
 }
 
-.dtreeLevel2 a {
+.dmenuLevel2 a {
    opacity:0.80; 
    filter: alpha (opacity=80);
 }
 
-.dtreeLevel2 a {
+.dmenuLevel2 a {
    opacity:0.70; 
    filter: alpha (opacity=70);
 }
 
-.dtreeNodeOpened a {
-   text-decoration: underline!important; /*Make it important so that it overrides the decoration defined in .detree a:hover*/
+.dmenuNodeOpened a {
+   /*text-decoration: underline!important;*/ /*Make it important so that it overrides the decoration defined in .detree a:hover*/
    font-weight: bold;
    /*color: red;*/
 }
 
-.dtreeNodeClosed a {
+.dmenuNodeClosed a {
    /*text-decoration: underline;*/
    font-weight: bold;
    /*color: red;*/
@@ -74,7 +79,7 @@
 
 
 
-.dtreeLeaf a {
+.dmenuLeaf a {
    font-weight: normal;
    /*position: relative;*/
 }
