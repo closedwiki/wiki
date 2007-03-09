@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="StephaneLenclud" date="1173413754" format="1.1" reprev="1.17" version="1.17"}%
+%META:TOPICINFO{author="StephaneLenclud" date="1173462905" format="1.1" reprev="1.20" version="1.20"}%
 ---+!! Tree Browser Plugin
 
 Renders a bulleted or numbered list as a collapsible/expandable tree of nodes.
@@ -57,6 +57,16 @@ If !JavaScript is not enabled, the list is rendered as usual, and the =%<nop>TRE
 
 A number of classes are used to facilitate look and feel customizations through CSS.
 
+---+++ Constant class
+
+This class won't change from one tree to the other:
+   * =treeBrowserPlugin=: given to the =div= element encapsulating the whole tree and javascript.
+
+---+++ Variable classes
+
+Those classes are prefixed with the =style= parameter. For clarity of the documentation we used the default =dtree= prefix. 
+Variable classes allows for multiple tree =style= support on one page.
+
    * =dtree=: given to the =div= element encapsulating the whole tree. Since v0.1.
    * =dtreeLeaf=: given to the =div= element encapsulating a tree item without children. Introduced in v0.9.
    * =dtreeNodeOpened=: given to the =div= element encapsulating a tree item that is showing children. Introduced in v0.9.
@@ -66,7 +76,6 @@ A number of classes are used to facilitate look and feel customizations through 
    * =dtreeLevel1=: given to the =div= element encapsulating the children of level 0 items. Introduced in v0.9.
    * =dtreeLevel2=: given to the =div= element encapsulating the children of level 1 items. Introduced in v0.9.
    * =dtreeLeveln=: given to the =div= element encapsulating the children of level n-1 items. Introduced in v0.9.
-
 
 ---++ Examples
 
@@ -85,7 +94,7 @@ generates
 <table borders="0">
 <tr><th align="left">If installed</th><th align="left">Simulated</th></tr>
 <tr><td>
-%TREEBROWSER{"file" title="[[%HOMETOPIC%][%INCLUDINGWEB% Web Home]]" shared="left"}%
+%TREEBROWSER{"file" title="[[%HOMETOPIC%][%INCLUDINGWEB% Web Home]]" shared="basicdemo"}%
    * [[WebChanges][Changes]] 
    * [[WebIndex][Index]]
    * [[WebSearch][Search]]
@@ -98,9 +107,48 @@ generates
    * *Webs*
 %WEBLIST{"      * [[$name.%HOMETOPIC%][$name]]"}%
 
-<a href="javascript: left.openAll();">open all</a> | <a href="javascript: left.closeAll();">close all</a>
+<a href="javascript: basicdemo.openAll();">open all</a> | <a href="javascript: basicdemo.closeAll();">close all</a>
 
-</td><td><image src="%ATTACHURL%/tree.jpg"></td></tr></table>
+</td><td>
+<script type="text/javascript" src="https://slion.net/pub/TWiki/TreeBrowserPlugin/dtree.js"></script>
+<div class="treeBrowserPlugin"><style type="text/css" media="all">@import "https://slion.net/pub/TWiki/TreeBrowserPlugin/dtree.css";</style><script type="text/javascript">
+
+<!--
+left = new dTree('left');
+left.config.style='dtree';
+left.config.inOrder=true;
+left.config.iconPath='/pub/TWiki/TreeBrowserPlugin/';
+left.updateIconPath();
+left.icon.root='https://slion.net/pub/TWiki/TreeBrowserPlugin/empty.gif';
+left.config.shared=true;
+left.config.useStatusText=false;
+left.config.useSelection=false;
+left.config.folderLinks=false;
+left.add(0,-1,"<a href=\"/view/TWiki/WebHome\" class=\"twikiCurrentWebHomeLink twikiLink\">TWiki Web Home</a>");
+left.add(1,0,"<a href=\"/view/TWiki/WebChanges\" class=\"twikiLink\">Changes</a> ",'','','','/pub/TWiki/TreeBrowserPlugin/page.gif');
+left.add(2,0,"<a href=\"/view/TWiki/WebIndex\" class=\"twikiLink\">Index</a>",'','','','/pub/TWiki/TreeBrowserPlugin/page.gif');
+left.add(3,0,"<a href=\"/view/TWiki/WebSearch\" class=\"twikiLink\">Search</a>",'','','','/pub/TWiki/TreeBrowserPlugin/page.gif');
+left.add(4,0,"this is a very very very long text",'','','','/pub/TWiki/TreeBrowserPlugin/page.gif');
+left.add(5,0,"Folder",'','','','/pub/TWiki/TreeBrowserPlugin/folder.gif','/pub/TWiki/TreeBrowserPlugin/folderopen.gif');
+left.add(6,5,"Leaf1",'','','','/pub/TWiki/TreeBrowserPlugin/page.gif');
+left.add(7,5,"Subfolder",'','','','/pub/TWiki/TreeBrowserPlugin/folder.gif','/pub/TWiki/TreeBrowserPlugin/folderopen.gif');
+left.add(8,7,"Leaf3",'','','','/pub/TWiki/TreeBrowserPlugin/page.gif');
+left.add(9,5,"Leaf2",'','','','/pub/TWiki/TreeBrowserPlugin/page.gif');
+left.add(10,0,"<strong>Webs</strong>",'','','','/pub/TWiki/TreeBrowserPlugin/folder.gif','/pub/TWiki/TreeBrowserPlugin/folderopen.gif');
+left.add(11,10,"<a href=\"/view/ChL/WebHome\" class=\"twikiLink\">ChL</a>",'','','','/pub/TWiki/TreeBrowserPlugin/page.gif');
+left.add(12,10,"<a href=\"/view/Dev/WebHome\" class=\"twikiLink\">Dev</a>",'','','','/pub/TWiki/TreeBrowserPlugin/page.gif');
+left.add(13,10,"<a href=\"/view/Issues/WebHome\" class=\"twikiLink\">Issues</a>",'','','','/pub/TWiki/TreeBrowserPlugin/page.gif');
+left.add(14,10,"<a href=\"/view/JMK/WebHome\" class=\"twikiLink\">JMK</a>",'','','','/pub/TWiki/TreeBrowserPlugin/page.gif');
+left.add(15,10,"<a href=\"/view/Main/WebHome\" class=\"twikiLink\">Main</a>",'','','','/pub/TWiki/TreeBrowserPlugin/page.gif');
+left.add(16,10,"<a href=\"/view/Sandbox/WebHome\" class=\"twikiLink\">Sandbox</a>",'','','','/pub/TWiki/TreeBrowserPlugin/page.gif');
+left.add(17,10,"<a href=\"/view/Spice/WebHome\" class=\"twikiLink\">Spice</a>",'','','','/pub/TWiki/TreeBrowserPlugin/page.gif');
+left.add(18,10,"<a href=\"/view/TWiki/WebHome\" class=\"twikiCurrentWebHomeLink twikiLink\">TWiki</a>",'','','','/pub/TWiki/TreeBrowserPlugin/page.gif');
+left.add(19,10,"<a href=\"/view/Trash/WebHome\" class=\"twikiLink\">Trash</a>",'','','','/pub/TWiki/TreeBrowserPlugin/page.gif');
+document.write(left);
+//-->
+</script></div>
+
+</td></tr></table>
 
 This tree could be used in the TWiki.WebLeftBar, for example. Clicking on the plus icon next to =Webs= will expand the subtree below that node.
 
@@ -112,19 +160,72 @@ To add _"collapse/expand all nodes"_ functionalities do something like:
 ---+++ Menu
 
 <verbatim>
-%TREEBROWSER{"thread" notitle="on" noindent="on" style="dmenu"}%
-   * Vegetables
-      * Carot
-      * Leek
-      * Tomato
-      * Potato 
-   * Fruits
-      * Banana 
-      * Grape fruit
-         * Pink
-         * Yellow 
-      * Peach
+%TREEBROWSER{"thread" notitle="on" shared="menudemo" noindent="on" style="dmenu"}%
+   * <a onclick='javascript: menudemo.o(1);'>Vegetables</a>
+      * <a>Carot</a>
+      * <a>Leek</a>
+      * <a>Tomato</a>
+      * <a>Potato</a> 
+   * <a onclick='javascript: menudemo.o(6);'>Fruits</a>
+      * <a>Banana</a> 
+      * <a onclick='javascript: menudemo.o(8);'>Grape fruit</a>       
+         * <a>Pink</a>
+         * <a>Yellow</a> 
+      * <a>Peach</a>
 </verbatim>
+
+<table borders="0">
+<tr><th align="left">If installed</th><th align="left">Simulated</th></tr>
+<tr><td style="padding:5px;">
+%TREEBROWSER{"thread" notitle="on" shared="realmenu" noindent="on" style="dmenu"}%
+   * <a onclick='javascript: realmenu.o(1);'>Vegetables</a>
+      * <a>Carot</a>
+      * <a>Leek</a>
+      * <a>Tomato</a>
+      * <a>Potato</a> 
+   * <a onclick='javascript: realmenu.o(6);'>Fruits</a>
+      * <a>Banana</a> 
+      * <a onclick='javascript: realmenu.o(8);'>Grape fruit</a>       
+         * <a>Pink</a>
+         * <a>Yellow</a> 
+      * <a>Peach</a>
+</td>
+<td style="padding:5px;">
+<script type="text/javascript" src="https://slion.net/pub/TWiki/TreeBrowserPlugin/dtree.js"></script>
+<div class="treeBrowserPlugin"><style type="text/css" media="all">@import "%ATTACHURL%/dmenu.css";</style><script type="text/javascript">
+<!--
+menudemo = new dTree('menudemo');
+menudemo.config.style='dmenu';
+menudemo.config.inOrder=true;
+menudemo.config.iconPath='/pub/TWiki/TreeBrowserPlugin/';
+menudemo.updateIconPath();
+menudemo.icon.root='/pub/TWiki/TreeBrowserPlugin/home.gif';
+menudemo.config.useIcons=false;
+menudemo.config.shared=true;
+menudemo.config.noIndent=true;
+menudemo.config.useLines=false;
+menudemo.config.usePlusMinus=false;
+menudemo.config.useStatusText=false;
+menudemo.config.useSelection=false;
+menudemo.config.folderLinks=false;
+menudemo.add(0,-1,"");
+menudemo.add(1,0,"<a onclick='javascript: menudemo.o(1);'>Vegetables</a>",'','','','/pub/TWiki/TreeBrowserPlugin/folder.gif','/pub/TWiki/TreeBrowserPlugin/folderopen.gif');
+menudemo.add(2,1,"<a>Carot</a>",'','','','/pub/TWiki/TreeBrowserPlugin/page.gif');
+menudemo.add(3,1,"<a>Leek</a>",'','','','/pub/TWiki/TreeBrowserPlugin/page.gif');
+menudemo.add(4,1,"<a>Tomato</a>",'','','','/pub/TWiki/TreeBrowserPlugin/page.gif');
+menudemo.add(5,1,"<a>Potato</a> ",'','','','/pub/TWiki/TreeBrowserPlugin/page.gif');
+menudemo.add(6,0,"<a onclick='javascript: menudemo.o(6);'>Fruits</a>",'','','','/pub/TWiki/TreeBrowserPlugin/folder.gif','/pub/TWiki/TreeBrowserPlugin/folderopen.gif');
+menudemo.add(7,6,"<a>Banana</a> ",'','','','/pub/TWiki/TreeBrowserPlugin/page.gif');
+menudemo.add(8,6,"<a onclick='javascript: menudemo.o(8);'>Grape fruit</a>		 ",'','','','/pub/TWiki/TreeBrowserPlugin/folder.gif','/pub/TWiki/TreeBrowserPlugin/folderopen.gif');
+menudemo.add(9,8,"<a>Pink</a>",'','','','/pub/TWiki/TreeBrowserPlugin/page.gif');
+menudemo.add(10,8,"<a>Yellow</a> ",'','','','/pub/TWiki/TreeBrowserPlugin/page.gif');
+menudemo.add(11,6,"<a>Peach</a>",'','','','/pub/TWiki/TreeBrowserPlugin/page.gif');
+document.write(menudemo);
+//-->
+</script>
+</td>
+</tr>
+</table>
 
 ---++ Plugin Settings
 
@@ -196,9 +297,9 @@ a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>T
      | ==pub/TWiki/%TOPIC%/xls.gif== | icons from [[TWiki:Plugins.RenderListPlugin][RenderListPlugin]] |
      | ==pub/TWiki/%TOPIC%/zip.gif== | icons from [[TWiki:Plugins.RenderListPlugin][RenderListPlugin]] |
 
----++ Know issues
+---++ Known issues
 
-   * CSS problem with multiple trees of different style on one page. Could be fixed by using =style= as class prefix.
+...
 
 ---++ Planned Enhancements
 
@@ -211,8 +312,9 @@ a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>T
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.ThomasWeigert |
-|  Plugin Version: | v0.9 |
+|  Plugin Version: | v1.0 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  09 Mar 2007: | (v1.0) - Improved CSS with variable class name allowing for multiple tree with different style on the same topic. By [[TWiki:Main.StephaneLenclud][Stéphane Lenclud]]. |
 |  09 Mar 2007: | (v0.9) - Adding =style= parameter. Improved CSS. Fixes extra '\n' in dot pm. By [[TWiki:Main.StephaneLenclud][Stéphane Lenclud]]. |
 |  07 Mar 2007: | (v0.8) - Adding =noroot= and =warn= parameters. Now using =preRenderingHandler= instead of the deprecated =startRenderingHandler= . =%<nop>TREEBROWSER%= are hidden if there is no tree to render. Fixes TOC icons problem with TWiki:Plugins.NatSkin. By [[TWiki:Main.StephaneLenclud][Stéphane Lenclud]]. |
 |  01 Oct 2006: | (v0.7) - Adding =useplusminus= , =noindent= and =nocss= parameters. By [[TWiki:Main.StephaneLenclud][Stéphane Lenclud]]. |
