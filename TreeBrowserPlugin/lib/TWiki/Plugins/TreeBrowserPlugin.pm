@@ -39,7 +39,7 @@ use vars qw(
         $debug $js
     );
 
-$VERSION = 'v0.8';
+$VERSION = 'v0.9';
 $pluginName = 'TreeBrowserPlugin';
 
 # =========================
@@ -85,7 +85,7 @@ A %TREEBROWSER{}% tag won't be processed if it is not followed by a tree.
 sub handleLonelyTreeView {
     my ( $theAttr) = @_;
 	TWiki::Func::writeDebug( "- ${pluginName}::handleLonelyTreeView( $theAttr )" ) if $debug;
-    # decode attributes if these are added
+    # Get the =warn= parameter if any. =warn= specifies a message to be displayed by unprocessed tag.
     my $warn = &TWiki::Func::extractNameValuePair( $theAttr, "warn" );
 	return $warn;
 	}
@@ -111,33 +111,37 @@ sub handleTreeView {
 		  #TWiki::Func::writeDebug( "- ${pluginName}::handleTreeView() returns $thePre$theList" ) if $debug;
         return "$thePre$theList";
     }
-    my $theTitle = &TWiki::Func::extractNameValuePair( $theAttr, "title" );
-    my $wraptext = &TWiki::Func::extractNameValuePair( $theAttr, "wraptext" );
-    my $open1 = &TWiki::Func::extractNameValuePair( $theAttr, "openTo" );
-    my $open2 = &TWiki::Func::extractNameValuePair( $theAttr, "openAll" );
-    my $shared = &TWiki::Func::extractNameValuePair( $theAttr, "shared" );
-    my $useLines = &TWiki::Func::extractNameValuePair( $theAttr, "uselines" );  
-    my $usePlusMinus = &TWiki::Func::extractNameValuePair( $theAttr, "useplusminus" );
-    my $noIndent = &TWiki::Func::extractNameValuePair( $theAttr, "noindent" );
-    my $noRoot = &TWiki::Func::extractNameValuePair( $theAttr, "noroot" );
-    my $noCss = &TWiki::Func::extractNameValuePair( $theAttr, "nocss" );
-    my $useStatusText = &TWiki::Func::extractNameValuePair( $theAttr, "usestatustext" );
-    my $closeSameLevel = &TWiki::Func::extractNameValuePair( $theAttr, "closesamelevel" );    
-    my $icons = 0;
-    $icons = 1 if ($type eq "icon");
-    my $wrap = 0;
-    $wrap = 1 if ($wraptext eq "on");
-    my $openall = 0;
-    $openall = 1 if ($open2 eq "on");
-    my $opento = 0;
-    $opento = $open1 if (!$openall && $open1);
+	
+   my $theTitle = &TWiki::Func::extractNameValuePair( $theAttr, "title" );
+   my $wraptext = &TWiki::Func::extractNameValuePair( $theAttr, "wraptext" );
+   my $open1 = &TWiki::Func::extractNameValuePair( $theAttr, "openTo" );
+   my $open2 = &TWiki::Func::extractNameValuePair( $theAttr, "openAll" );
+   my $shared = &TWiki::Func::extractNameValuePair( $theAttr, "shared" );
+   my $useLines = &TWiki::Func::extractNameValuePair( $theAttr, "uselines" );  
+   my $usePlusMinus = &TWiki::Func::extractNameValuePair( $theAttr, "useplusminus" );
+   my $noIndent = &TWiki::Func::extractNameValuePair( $theAttr, "noindent" );
+   my $noRoot = &TWiki::Func::extractNameValuePair( $theAttr, "noroot" );
+   my $noCss = &TWiki::Func::extractNameValuePair( $theAttr, "nocss" );
+   # =style= specifies the CSS file to be used.
+   my $style = &TWiki::Func::extractNameValuePair( $theAttr, "style" );
+   $style=dtree unless TWiki::Func::attachmentExists($installWeb,$pluginName,"$style.css"); #Default to dtree
+   my $useStatusText = &TWiki::Func::extractNameValuePair( $theAttr, "usestatustext" );
+   my $closeSameLevel = &TWiki::Func::extractNameValuePair( $theAttr, "closesamelevel" );    
+   my $icons = 0;
+   $icons = 1 if ($type eq "icon");
+   my $wrap = 0;
+   $wrap = 1 if ($wraptext eq "on");
+   my $openall = 0;
+   $openall = 1 if ($open2 eq "on");
+   my $opento = 0;
+   $opento = $open1 if (!$openall && $open1);
     
-    return $thePre . &renderTreeView( $type, $params, $useLines, $usePlusMinus, $useStatusText, $closeSameLevel, $noIndent, $noRoot, $noCss, $theTitle, $icons, $shared, $openall, $opento, $theList );
+   return $thePre . &renderTreeView( $type, $params, $useLines, $usePlusMinus, $useStatusText, $closeSameLevel, $noIndent, $noRoot, $noCss, $theTitle, $icons, $shared, $openall, $opento, $theList, $style );
 }
 
 sub renderTreeView
 {
-    my ( $theType, $theParams, $useLines, $usePlusMinus, $useStatusText, $closeSameLevel, $noIndent, $noRoot, $noCss, $theTitle, $icons, $shared, $openAll, $openTo, $theText ) = @_;
+    my ( $theType, $theParams, $useLines, $usePlusMinus, $useStatusText, $closeSameLevel, $noIndent, $noRoot, $noCss, $theTitle, $icons, $shared, $openAll, $openTo, $theText, $style ) = @_;
 
     $theText =~ s/^[\n\r]*//os;
     my @tree = ();
@@ -157,7 +161,7 @@ sub renderTreeView
     $theParams =~ s/%ATTACHURL%/$attachUrl/go;
     $theParams =~ s/%WEB%/$installWeb/go;
     $theParams =~ s/%MAINWEB%/TWiki::Func::getMainWebname()/geo;
-    $theParams =~ s/%TWIKIWEB%/TWiki::Func::getTwikiWebname()/geo;
+    $theParams =~ s/%TWIKIWEB%/TWiki::Func::getTwikiWebname()/geo;      
 
     my ( $rooticon, $docicon, $fldricon, $fldropenicon )
        = split( /, */, $theParams );
@@ -184,17 +188,14 @@ sub renderTreeView
         push( @tree, { level => $level, type => $type, text => $text } );
     }
 
-    $js++;
-    my $var = ($shared)?$shared:"d$js";
-    
-    my $script = "\n";
-   #add CSS unless no CSS specified
-    #$script .="<link rel=\"StyleSheet\" href=\"$attachUrl/dtree.css\" type=\"text/css\" />" unless ($noCss=~/true|1|on/i);  
-    $script .= "
-<script type=\"text/javascript\" src=\"$attachUrl/dtree.js\"></script>";
-    $text = "<div class=\"dtree\">";
-    #$text .="<link rel=\"StyleSheet\" href=\"$attachUrl/dtree.css\" type=\"text/css\" />" unless ($noCss=~/true|1|on/i);
-   $text .="<style type=\"text/css\" media=\"all\">\@import \"$attachUrl/dtree.css\";</style>" unless ($noCss=~/true|1|on/i);    
+   $js++;
+   my $var = ($shared)?$shared:"d$js";
+   my $script = "";
+   #Include javascript
+   $script .= "<script type=\"text/javascript\" src=\"$attachUrl/dtree.js\"></script>";
+   $text = "<div class=\"dtree\">";
+   #Include CSS unless no CSS specified
+   $text .="<style type=\"text/css\" media=\"all\">\@import \"$attachUrl/$style.css\";</style>" unless ($noCss=~/true|1|on/i);    
    $text .="<script type=\"text/javascript\">
 <!--
 $var = new dTree('$var');\n";
@@ -207,10 +208,10 @@ $var = new dTree('$var');\n";
 #    $text .= "$var.icon.node=\'$docicon\';\n";
     $text .= "$var.config.useIcons=false;\n" unless $icons;
     $text .= "$var.config.shared=true;\n" if $shared;
-    $text .= "$var.config.useLines=false;\n" if ($useLines=~/false|0|off/i);
-    $text .= "$var.config.usePlusMinus=false;\n" if ($usePlusMinus=~/false|0|off/i);
-    $text .= "$var.config.closeSameLevel=true;\n" if ($closeSameLevel=~/true|1|on/i);
     $text .= "$var.config.noIndent=true;\n" if ($noIndent=~/true|1|on/i);
+    $text .= "$var.config.useLines=false;\n" if (($useLines=~/false|0|off/i) || $noIndent); #noident override uselines, prevents java bug :)
+    $text .= "$var.config.usePlusMinus=false;\n" if (($usePlusMinus=~/false|0|off/i) || $noIndent);#noident override useplusminus, prevents java bug :)
+    $text .= "$var.config.closeSameLevel=true;\n" if ($closeSameLevel=~/true|1|on/i);
     $text .= "$var.config.noRoot=true;\n" if ($noRoot=~/true|1|on/i);
 
 

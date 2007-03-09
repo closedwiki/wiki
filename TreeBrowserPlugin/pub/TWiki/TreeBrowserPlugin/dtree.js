@@ -22,13 +22,15 @@ function Node(id, pid, name, url, title, target, icon, iconOpen, open) {
 	this.target = target;
 	this.icon = icon;
 	this.iconOpen = iconOpen;
-	this._io = open || false;
-	this._is = false;
-	this._ls = false;
-	this._hc = false;
+	this._io = open || false; //SL: meens "is open".
+	this._is = false; //SL: meens "is select"? Not used in by TreeBrowserPlugin.
+	this._ls = false; 
+	this._hc = false; //SL: meens "have children". 
 	this._ai = 0;
 	this._p;
-};// Tree object
+};
+
+// Tree object
 function dTree(objName) {
 	this.config = {
 		target	: null,
@@ -69,7 +71,10 @@ function dTree(objName) {
 	this.selectedNode = null;
 	this.selectedFound = false;
 	this.completed = false;
-};// Must be called if iconPath was changed
+	this.level = -1; //The current depth of the tree, -1==Not rendering, 0==root  
+};
+
+// Must be called if iconPath was changed
 dTree.prototype.updateIconPath = function() {
 	this.icon = {
 	  root : this.config.iconPath + 'base.gif',
@@ -87,33 +92,45 @@ dTree.prototype.updateIconPath = function() {
 	  nlPlus : this.config.iconPath + 'nolines_plus.gif',
 	  nlMinus : this.config.iconPath + 'nolines_minus.gif'
 	};
-}// Adds a new node to the node array
+};
+
+// Adds a new node to the node array
 dTree.prototype.add = function(id, pid, name, url, title, target, icon, iconOpen, open) {
 	this.aNodes[this.aNodes.length] = new Node(id, pid, name, url, title, target, icon, iconOpen, open);
-};// Open/close all nodes
+};
+
+// Open/close all nodes
 dTree.prototype.openAll = function() {
 	this.oAll(true);
 };
+
 dTree.prototype.closeAll = function() {
 	this.oAll(false);
-};// Outputs the tree to the page
+};
+
+// Outputs the tree to the page
 dTree.prototype.toString = function() {
 	var str = '<div class="dtree">\n';
 	if (document.getElementById) {
 		if (this.config.useCookies) this.selectedNode = this.getSelected();
+      //SL: add the root node
 		str += this.addNode(this.root);
 	} else str += 'Browser not supported.';
 	str += '</div>';
 	if (!this.selectedFound) this.selectedNode = null;
 	this.completed = true;
 	return str;
-};// Creates the tree structure
+};
+
+// Creates the tree structure
 dTree.prototype.addNode = function(pNode) {
 	var str = '';
 	var n=0;
+   this.level++; //increment level
 	if (this.config.inOrder) n = pNode._ai;
+   //SL: for each children
 	for (n; n<this.aNodes.length; n++) {	
-		if (this.aNodes[n].pid == pNode.id) {
+		if (this.aNodes[n].pid == pNode.id) { //SL: what's that magic?
 			var cn = this.aNodes[n];
 			cn._p = pNode;
 			cn._ai = n;
@@ -126,12 +143,16 @@ dTree.prototype.addNode = function(pNode) {
 					this.selectedNode = n;
 					this.selectedFound = true;
 			}
+         //SL: render this node
 			str += this.node(cn, n);
 			if (cn._ls) break;
 		}
 	}
+   this.level--; //decrement level
 	return str;
-};// Creates the node icon, url and text
+};
+
+// Creates the node icon, url and text
 dTree.prototype.node = function(node, nodeId) {
    var isRoot = (this.root.id == node.pid)?true:false; //Check if we are dealing with the tree root
 	//Set icons according to config and properties
@@ -144,22 +165,33 @@ dTree.prototype.node = function(node, nodeId) {
 		}
 	}
 	var str = '';
-	//Render node icon and text unless it's the root of the tree and noroot specified
+	//SL: Render node icon and text unless it's the root of the tree and noroot specified
 	if (!isRoot || (isRoot && !this.config.noRoot))	{
-		str += '<div class="dTreeNode">' + this.indent(node, nodeId);
+      var myClass='';
+      //SL: Set the node class: 
+      //If the node has children then it's either opened or closed
+      //If the node has no children then it's a leaf
+      if (node._hc) {(node._io ? myClass = 'dtreeNodeOpened' : myClass = 'dtreeNodeClosed');}
+      else {myClass = 'dtreeLeaf';}
+		str += '<div id="n' + this.obj + nodeId + '" class="'+ myClass +'">' + this.indent(node, nodeId);
 		if (this.config.useIcons) str += '<img id="i' + this.obj + nodeId + '" src="' + ((node._io) ? node.iconOpen : node.icon) + '" alt="" />';
-		str += node.name;
+		//str += (node.name + this.level); //Debug level
+      str += node.name;
 		str += '</div>';
 	}
 	
+   //SL: If the node has children
 	if (node._hc) {
-		str += '<div id="d' + this.obj + nodeId + '" class="clip" style="display:' + ((this.root.id == node.pid || node._io) ? 'block' : 'none') + ';">';
+      //SL: Display that group of children if this node is root or this node is open.   
+      str += '<div id="d' + this.obj + nodeId + '" class="dtreeChildren dtreeLevel' + this.level + '" style="display:' + ((isRoot || node._io) ? 'block' : 'none') + ';">';
 		str += this.addNode(node);
 		str += '</div>';
 	}
 	this.aIndent.pop();
 	return str;
-};// Adds the empty and line icons
+};
+
+// Adds the empty and line icons
 dTree.prototype.indent = function(node, nodeId) {
    var str = '';
    if (this.config.noIndent) return str;
@@ -180,7 +212,9 @@ dTree.prototype.indent = function(node, nodeId) {
 		} else str += '<img src="' + ( (this.config.useLines) ? ((node._ls) ? this.icon.joinBottom : this.icon.join ) : this.icon.empty) + '" alt="" />';
 	}
 	return str;
-};// Checks if a node has any children and if it is the last sibling
+};
+
+// Checks if a node has any children and if it is the last sibling
 dTree.prototype.setCS = function(node) {
 	var lastId;
 	for (var n=0; n<this.aNodes.length; n++) {
@@ -188,11 +222,15 @@ dTree.prototype.setCS = function(node) {
 		if (this.aNodes[n].pid == node.pid) lastId = this.aNodes[n].id;
 	}
 	if (lastId==node.id) node._ls = true;
-};// Returns the selected node
+};
+
+// Returns the selected node
 dTree.prototype.getSelected = function() {
 	var sn = this.getCookie('cs' + this.obj);
 	return (sn) ? sn : null;
-};// Highlights the selected node
+};
+
+// Highlights the selected node
 dTree.prototype.s = function(id) {
 	if (!this.config.useSelection) return;
 	var cn = this.aNodes[id];
@@ -207,14 +245,18 @@ dTree.prototype.s = function(id) {
 		this.selectedNode = id;
 		if (this.config.useCookies) this.setCookie('cs' + this.obj, cn.id);
 	}
-};// Toggle Open or close
+};
+
+// Toggle Open or close
 dTree.prototype.o = function(id) {
 	var cn = this.aNodes[id];
 	this.nodeStatus(!cn._io, id, cn._ls);
 	cn._io = !cn._io;
 	if (this.config.closeSameLevel) this.closeLevel(cn);
 	if (this.config.useCookies) this.updateCookie();
-};// Open or close all nodes
+};
+
+// Open or close all nodes
 dTree.prototype.oAll = function(status) {
 	for (var n=0; n<this.aNodes.length; n++) {
 		if (this.aNodes[n]._hc && this.aNodes[n].pid != this.root.id) {
@@ -223,7 +265,9 @@ dTree.prototype.oAll = function(status) {
 		}
 	}
 	if (this.config.useCookies) this.updateCookie();
-};// Opens the tree to a specific node
+};
+
+// Opens the tree to a specific node
 dTree.prototype.openTo = function(nId, bSelect, bFirst) {
 	if (!bFirst) {
 		for (var n=0; n<this.aNodes.length; n++) {
@@ -241,7 +285,9 @@ dTree.prototype.openTo = function(nId, bSelect, bFirst) {
 	if (this.completed && bSelect) this.s(cn._ai);
 	else if (bSelect) this._sn=cn._ai;
 	this.openTo(cn._p._ai, false, true);
-};// Closes all nodes on the same level as certain node
+};
+
+// Closes all nodes on the same level as certain node
 dTree.prototype.closeLevel = function(node) {
 	for (var n=0; n<this.aNodes.length; n++) {
 		if (this.aNodes[n].pid == node.pid && this.aNodes[n].id != node.id && this.aNodes[n]._hc) {
@@ -274,14 +320,20 @@ dTree.prototype.nodeStatus = function(status, id, bottom) {
 	((status)?((bottom)?this.icon.minusBottom:this.icon.minus):((bottom)?this.icon.plusBottom:this.icon.plus)):
 	((status)?this.icon.nlMinus:this.icon.nlPlus);
 	eDiv.style.display = (status) ? 'block': 'none';
+   //SL: Change the class of the node div
+   var eNodeDiv = document.getElementById('n' + this.obj + id);
+   eNodeDiv.className = (status) ? 'dtreeNodeOpened' : 'dtreeNodeClosed';
 };
+
 // [Cookie] Clears a cookie
 dTree.prototype.clearCookie = function() {
 	var now = new Date();
 	var yesterday = new Date(now.getTime() - 1000 * 60 * 60 * 24);
 	this.setCookie('co'+this.obj, 'cookieValue', yesterday);
 	this.setCookie('cs'+this.obj, 'cookieValue', yesterday);
-};// [Cookie] Sets value in a cookie
+};
+
+// [Cookie] Sets value in a cookie
 dTree.prototype.setCookie = function(cookieName, cookieValue, expires, path, domain, secure) {
 	document.cookie =
 		escape(cookieName) + '=' + escape(cookieValue)
@@ -289,7 +341,9 @@ dTree.prototype.setCookie = function(cookieName, cookieValue, expires, path, dom
 	        + ((this.config.shared) ? '; path=/' : (path ? '; path=' + path : ''))
 		+ (domain ? '; domain=' + domain : '')
 		+ (secure ? '; secure' : '');
-};// [Cookie] Gets a value from a cookie
+};
+
+// [Cookie] Gets a value from a cookie
 dTree.prototype.getCookie = function(cookieName) {
 	var cookieValue = '';
 	var posName = document.cookie.indexOf(escape(cookieName) + '=');
@@ -300,7 +354,9 @@ dTree.prototype.getCookie = function(cookieName) {
 		else cookieValue = unescape(document.cookie.substring(posValue));
 	}
 	return (cookieValue);
-};// [Cookie] Returns ids of open nodes as a string
+};
+
+// [Cookie] Returns ids of open nodes as a string
 dTree.prototype.updateCookie = function() {
 	var str = '';
 	for (var n=0; n<this.aNodes.length; n++) {
@@ -310,13 +366,17 @@ dTree.prototype.updateCookie = function() {
 		}
 	}
 	this.setCookie('co' + this.obj, str);
-};// [Cookie] Checks if a node id is in a cookie
+};
+
+// [Cookie] Checks if a node id is in a cookie
 dTree.prototype.isOpen = function(id) {
 	var aOpen = this.getCookie('co' + this.obj).split('.');
 	for (var n=0; n<aOpen.length; n++)
 		if (aOpen[n] == id) return true;
 	return false;
-};// If Push and pop is not implemented by the browser
+};
+
+// If Push and pop is not implemented by the browser
 if (!Array.prototype.push) {
 	Array.prototype.push = function array_push() {
 		for(var i=0;i<arguments.length;i++)

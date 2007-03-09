@@ -4,6 +4,12 @@
 | Copyright (c) 2002-2003 Geir Landrö               |
 |--------------------------------------------------*/
 
+/*
+SL:
+the classes 'node' and 'nodeSel' are not being used in TreeBrowserPlugin.
+I believe they were used in dtree to manage selection mode.
+*/
+
 .dtree {
 	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
 	font-size: 11px;
@@ -31,7 +37,7 @@
 .dtree a.nodeSel {
 	background-color: #c0d2ec;
 }
-.dtree .clip {
+.dtree .dtreeChildren {
 	overflow: hidden;
 }
 

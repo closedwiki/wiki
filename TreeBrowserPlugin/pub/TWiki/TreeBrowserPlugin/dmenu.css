@@ -1,0 +1,82 @@
+/*
+ Derived from dTree 2.05 | www.destroydrop.com/javascript/tree/
+ Copyright (c) 2002-2003 Geir Landrö              
+ Copyright (c) 2007 Stéphane Lenclud
+*/
+.dtree {
+/*	
+   font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	color: #666;
+	white-space: nowrap;
+*/
+	line-height:100%;
+}
+.dtree img {
+	display:inline;
+	border: 0px;
+	vertical-align: middle;
+}
+
+.dtree a {
+	/*color: #333;*/
+   color: #EEEEEE;
+	text-decoration: none;
+   display:block;
+   background-color:#555555;
+   width:100%;
+   border-style: solid;
+   /*border-color: top right bottom left;*/
+   border-color: #888888 #222222 #222222 #888888; /*grey*/
+   border-width: 1px;
+   /*margin: 2px 2px 2px 2px;*/ /* introduce white space */
+   padding: 2px 2px 2px 2px;
+   overflow: hidden; /* prevents text to overflow*/
+}
+
+.dtree a:hover {
+   border-color: #222222 #888888 #888888 #222222; /*grey*/
+   background-color:#777777;
+	text-decoration: none;
+}
+
+.dtreeLevel1 a {
+   opacity:0.90; 
+   filter: alpha (opacity=90);
+   /*position:relative;*/
+   /*position:absolute;*/
+   /*left:60px;*/
+   /*left:100%;*/
+   /*display:table-cell;*/
+}
+
+.dtreeLevel2 a {
+   opacity:0.80; 
+   filter: alpha (opacity=80);
+}
+
+.dtreeLevel2 a {
+   opacity:0.70; 
+   filter: alpha (opacity=70);
+}
+
+.dtreeNodeOpened a {
+   text-decoration: underline!important; /*Make it important so that it overrides the decoration defined in .detree a:hover*/
+   font-weight: bold;
+   /*color: red;*/
+}
+
+.dtreeNodeClosed a {
+   /*text-decoration: underline;*/
+   font-weight: bold;
+   /*color: red;*/
+}
+
+
+
+.dtreeLeaf a {
+   font-weight: normal;
+   /*position: relative;*/
+}
+
+
