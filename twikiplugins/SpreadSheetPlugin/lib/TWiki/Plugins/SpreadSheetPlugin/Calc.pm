@@ -343,6 +343,25 @@ sub doFunc
         $result =  1 if( $i > 0 );
         $result = -1 if( $i < 0 );
 
+    } elsif( $theFunc eq "LN" ) {
+        $result = log(_getNumber( $theAttr ) );
+
+    } elsif( $theFunc eq "LOG" ) {
+        my( $num, $base ) = split( /,\s*/, $theAttr, 2 );
+        $num = _getNumber( $num );
+        $base = _getNumber( $base );
+        $base = 10 if( $base <= 0 );
+        $result = log( $num ) / log( $base );
+
+    } elsif( $theFunc eq "EXP" ) {
+        $result = exp( _getNumber( $theAttr ) );
+
+    } elsif( $theFunc eq "PI" ) {
+        $result = 3.1415926535897932384;
+
+    } elsif( $theFunc eq "SQRT" ) {
+        $result = sqrt( _getNumber( $theAttr ) );
+
     } elsif( $theFunc eq "IF" ) {
         # IF(condition, value if true, value if false)
         my( $condition, $str1, $str2 ) = _properSplit( $theAttr, 3 );
@@ -932,6 +951,10 @@ sub _getNumber
     my( $theText ) = @_;
     return 0 unless( $theText );
     $theText =~ s/([0-9])\,(?=[0-9]{3})/$1/go;          # "1,234,567" ==> "1234567"
+    if ($theText =~ /[0-9]e/i) {                        # "1.5e-3"    ==> "0.0015"
+        $theText = sprintf "%.20f", $theText;
+        $theText =~ s/0+$//;
+    }
     unless( $theText =~ s/^.*?(\-?[0-9\.]+).*$/$1/o ) { # "xy-1.23zz" ==> "-1.23"
         $theText = 0;
     }
@@ -945,11 +968,10 @@ sub _getNumber
 sub safeEvalPerl
 {
     my( $theText ) = @_;
-
     # Allow only simple math with operators - + * / % ( )
     $theText =~ s/\%\s*[^\-\+\*\/0-9\.\(\)]+//go; # defuse %hash but keep modulus
     # keep only numbers and operators (shh... don't tell anyone, we support comparison operators)
-    $theText =~ s/[^\!\<\=\>\-\+\*\/\%0-9\.\(\)]*//go;
+    $theText =~ s/[^\!\<\=\>\-\+\*\/\%0-9e\.\(\)]*//go;
     $theText =~ /(.*)/;
     $theText = $1;  # untainted variable
     return "" unless( $theText );
