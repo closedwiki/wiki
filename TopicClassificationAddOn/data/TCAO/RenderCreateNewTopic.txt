@@ -22,7 +22,17 @@ After the !TopicType is selected, the "new" section of that !TopicType in the lo
 <verbatim>
 %STARTINCLUDE%
 <form name="selectType" action="%SCRIPTURL{view}%/%BASEWEB%/%BASETOPIC%" />
-<h3> Create A New <nop>%URLPARAM{"type" default="... "}%  <select name="type" onchange="this.form.submit( )" ><option> _%IF{ "$'URLPARAM{step}'='two'" then="Change..." else="Select <nop>TopicType..." }%_ </option><option>Blank Topic</option>%DBQUERY{"Classification = 'TopicType'" web="%BASEWEB%" format="<option >$topic</option> separator=" " }% </select></h3>
+<h3> Create A New 
+~~~    <select name="type" onchange="this.form.submit( )" >
+~~~    <option>Select<nop>TopicType...</option>
+~~~     <option %IFDEFINED{"%URLPARAM{"type"}%" as="Blank.*Topic" then="selected" glue="off"}% >Blank Topic</option>
+~~~
+%~~     DBQUERY{"Classification = 'TopicType'" 
+~~~         web="%BASEWEB%" 
+~~~         format="<option $percntIFDEFINED{\"%URLPARAM{type}%\" as=\"$topic\" then=\"selected\" glue=\"off\"}$percnt >$topic</option>" 
+~~~         separator=" " 
+~~~      }% 
+~~~      </select></span></h3>
 <input name="step" type="hidden" value="two">
 <input type="hidden" name="parent" value="<nop>%URLPARAM{parent}%" />
 </form>

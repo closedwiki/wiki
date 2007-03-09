@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="LynnwoodBrown" date="1172267201" format="1.1" reprev="1.3" version="1.3"}%
+%META:TOPICINFO{author="LynnwoodBrown" date="1173335574" format="1.1" version="1.5"}%
 ---+!! Function: %TOPIC%
 %FORMFIELD{"Summary"}%
 
@@ -18,7 +18,15 @@
 ---++ Implementation
 <verbatim>
 %STARTINCLUDE% <form action="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%BASEWEB%/CreateNewTopic">
-*Post New:*  <select name="type" onchange="this.form.submit()"> <option value="%URLPARAM{"type" default=""}%">%URLPARAM{"type" default="Select..."}%</option><option value="blank" >blank topic</option> %DBQUERY{ "Classification= 'TopicType'" web="%BASEWEB%" format= "<option>$topic</option>" separator=" "}%</select> <input type="hidden" name="step" value="two"></form>
+*Post New:*  <select name="type" onchange="this.form.submit()"> 
+~~~   <option value="%URLPARAM{"type" default=""}%">%URLPARAM{"type" default="Select..."}%</option><option >Blank Topic</option> 
+~~~   
+%~~   DBQUERY{ "Classification= 'TopicType'" 
+~~~        web="%BASEWEB%" 
+~~~        format= "<option>$topic</option>" separator=" "
+~~~    }%</select>
+~~~    <input type="hidden" name="step" value="two"> 
+~~~    </form>
 %STOPINCLUDE%
 </verbatim>
 
@@ -39,13 +47,7 @@
 </div>
 
 
-<!--
-   * Set SIDEBAR = TopicType
-   * Set SIDEBARARG = TopicFunction
--->
-
 %META:FORM{name="TCAO.TopicForm"}%
 %META:FIELD{name="TopicType" attributes="" title="TopicType" value="TopicFunction"}%
 %META:FIELD{name="SubjectArea" attributes="" title="SubjectArea" value=""}%
 %META:FIELD{name="Summary" attributes="" title="Summary" value="Renders a drop-down menu for creating new topics."}%
-%META:REVCOMMENT{ncomments="0"}%
