@@ -33,7 +33,7 @@ sub prompt {
         }
     }
 
-    return CGI::password_field( -name => $id, -size=>$size, -default=>$value );
+    return CGI::password_field( -name => $id, -size=>$size, -default=>$value, -autocomplete=>'off' );
 }
 
 1;
