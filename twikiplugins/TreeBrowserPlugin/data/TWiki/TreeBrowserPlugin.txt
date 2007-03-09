@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="StephaneLenclud" date="1173462905" format="1.1" reprev="1.20" version="1.20"}%
+%META:TOPICINFO{author="StephaneLenclud" date="1173475416" format="1.1" reprev="1.21" version="1.21"}%
 ---+!! Tree Browser Plugin
 
 Renders a bulleted or numbered list as a collapsible/expandable tree of nodes.
@@ -117,33 +117,28 @@ generates
 left = new dTree('left');
 left.config.style='dtree';
 left.config.inOrder=true;
-left.config.iconPath='/pub/TWiki/TreeBrowserPlugin/';
+left.config.iconPath='%ATTACHURLPATH%/';
 left.updateIconPath();
-left.icon.root='https://slion.net/pub/TWiki/TreeBrowserPlugin/empty.gif';
+left.icon.root='%ATTACHURLPATH%/empty.gif';
 left.config.shared=true;
 left.config.useStatusText=false;
 left.config.useSelection=false;
 left.config.folderLinks=false;
 left.add(0,-1,"<a href=\"/view/TWiki/WebHome\" class=\"twikiCurrentWebHomeLink twikiLink\">TWiki Web Home</a>");
-left.add(1,0,"<a href=\"/view/TWiki/WebChanges\" class=\"twikiLink\">Changes</a> ",'','','','/pub/TWiki/TreeBrowserPlugin/page.gif');
-left.add(2,0,"<a href=\"/view/TWiki/WebIndex\" class=\"twikiLink\">Index</a>",'','','','/pub/TWiki/TreeBrowserPlugin/page.gif');
-left.add(3,0,"<a href=\"/view/TWiki/WebSearch\" class=\"twikiLink\">Search</a>",'','','','/pub/TWiki/TreeBrowserPlugin/page.gif');
-left.add(4,0,"this is a very very very long text",'','','','/pub/TWiki/TreeBrowserPlugin/page.gif');
-left.add(5,0,"Folder",'','','','/pub/TWiki/TreeBrowserPlugin/folder.gif','/pub/TWiki/TreeBrowserPlugin/folderopen.gif');
-left.add(6,5,"Leaf1",'','','','/pub/TWiki/TreeBrowserPlugin/page.gif');
-left.add(7,5,"Subfolder",'','','','/pub/TWiki/TreeBrowserPlugin/folder.gif','/pub/TWiki/TreeBrowserPlugin/folderopen.gif');
-left.add(8,7,"Leaf3",'','','','/pub/TWiki/TreeBrowserPlugin/page.gif');
-left.add(9,5,"Leaf2",'','','','/pub/TWiki/TreeBrowserPlugin/page.gif');
-left.add(10,0,"<strong>Webs</strong>",'','','','/pub/TWiki/TreeBrowserPlugin/folder.gif','/pub/TWiki/TreeBrowserPlugin/folderopen.gif');
-left.add(11,10,"<a href=\"/view/ChL/WebHome\" class=\"twikiLink\">ChL</a>",'','','','/pub/TWiki/TreeBrowserPlugin/page.gif');
-left.add(12,10,"<a href=\"/view/Dev/WebHome\" class=\"twikiLink\">Dev</a>",'','','','/pub/TWiki/TreeBrowserPlugin/page.gif');
-left.add(13,10,"<a href=\"/view/Issues/WebHome\" class=\"twikiLink\">Issues</a>",'','','','/pub/TWiki/TreeBrowserPlugin/page.gif');
-left.add(14,10,"<a href=\"/view/JMK/WebHome\" class=\"twikiLink\">JMK</a>",'','','','/pub/TWiki/TreeBrowserPlugin/page.gif');
-left.add(15,10,"<a href=\"/view/Main/WebHome\" class=\"twikiLink\">Main</a>",'','','','/pub/TWiki/TreeBrowserPlugin/page.gif');
-left.add(16,10,"<a href=\"/view/Sandbox/WebHome\" class=\"twikiLink\">Sandbox</a>",'','','','/pub/TWiki/TreeBrowserPlugin/page.gif');
-left.add(17,10,"<a href=\"/view/Spice/WebHome\" class=\"twikiLink\">Spice</a>",'','','','/pub/TWiki/TreeBrowserPlugin/page.gif');
-left.add(18,10,"<a href=\"/view/TWiki/WebHome\" class=\"twikiCurrentWebHomeLink twikiLink\">TWiki</a>",'','','','/pub/TWiki/TreeBrowserPlugin/page.gif');
-left.add(19,10,"<a href=\"/view/Trash/WebHome\" class=\"twikiLink\">Trash</a>",'','','','/pub/TWiki/TreeBrowserPlugin/page.gif');
+left.add(1,0,"<a href=\"/view/TWiki/WebChanges\" class=\"twikiLink\">Changes</a> ",'','','','%ATTACHURLPATH%/page.gif');
+left.add(2,0,"<a href=\"/view/TWiki/WebIndex\" class=\"twikiLink\">Index</a>",'','','','%ATTACHURLPATH%/page.gif');
+left.add(3,0,"<a href=\"/view/TWiki/WebSearch\" class=\"twikiLink\">Search</a>",'','','','%ATTACHURLPATH%/page.gif');
+left.add(4,0,"this is a very very very long text",'','','','%ATTACHURLPATH%/page.gif');
+left.add(5,0,"Folder",'','','','%ATTACHURLPATH%/folder.gif','%ATTACHURLPATH%/folderopen.gif');
+left.add(6,5,"Leaf1",'','','','%ATTACHURLPATH%/page.gif');
+left.add(7,5,"Subfolder",'','','','%ATTACHURLPATH%/folder.gif','%ATTACHURLPATH%/folderopen.gif');
+left.add(8,7,"Leaf3",'','','','%ATTACHURLPATH%/page.gif');
+left.add(9,5,"Leaf2",'','','','%ATTACHURLPATH%/page.gif');
+left.add(10,0,"<strong>Webs</strong>",'','','','%ATTACHURLPATH%/folder.gif','%ATTACHURLPATH%/folderopen.gif');
+left.add(11,10,"<a href=\"%SCRIPTURLPATH{"view"}%/Sandbox/%HOMETOPIC%\" class=\"twikiLink\">Sandbox</a>",'','','','%ATTACHURLPATH%/page.gif');
+left.add(12,10,"<a href=\"%SCRIPTURLPATH{"view"}%/%MAINWEB%/%HOMETOPIC%\" class=\"twikiLink\">%MAINWEB%</a>",'','','','%ATTACHURLPATH%/page.gif');
+left.add(13,10,"<a href=\"%SCRIPTURLPATH{"view"}%/%TWIKIWEB%/%HOMETOPIC%\" class=\"twikiLink\">%TWIKIWEB%</a>",'','','','%ATTACHURLPATH%/page.gif');
+left.add(14,10,"<a href=\"%SCRIPTURLPATH{"view"}%/Trash/%HOMETOPIC%\" class=\"twikiLink\">Trash</a>",'','','','%ATTACHURLPATH%/page.gif');
 document.write(left);
 //-->
 </script></div>
@@ -336,46 +331,45 @@ a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>T
 
 __Related Topics:__ TWiki:Plugins.RenderListPlugin, TWiki:Plugins.TreePlugin
 
-%META:FILEATTACHMENT{name="empty.gif" attr="" autoattached="1" comment="" date="1151849905" path="empty.gif" size="62" user="UnknownUser" version=""}%
-%META:FILEATTACHMENT{name="email.gif" attr="" autoattached="1" comment="" date="1151849905" path="email.gif" size="183" user="UnknownUser" version=""}%
-%META:FILEATTACHMENT{name="dtree.js~" attr="" autoattached="1" comment="" date="1159656757" path="dtree.js~" size="12407" user="UnknownUser" version=""}%
-%META:FILEATTACHMENT{name="xls.gif" attr="" autoattached="1" comment="" date="1151849905" path="xls.gif" size="918" user="UnknownUser" version=""}%
-%META:FILEATTACHMENT{name="joinbottom.gif" attr="" autoattached="1" comment="" date="1151849905" path="joinbottom.gif" size="66" user="UnknownUser" version=""}%
-%META:FILEATTACHMENT{name="question.gif" attr="" autoattached="1" comment="" date="1151849905" path="question.gif" size="1044" user="UnknownUser" version=""}%
-%META:FILEATTACHMENT{name="file.gif" attr="" autoattached="1" comment="" date="1151849905" path="file.gif" size="151" user="UnknownUser" version=""}%
-%META:FILEATTACHMENT{name="musicfolder.gif" attr="" autoattached="1" comment="" date="1151849905" path="musicfolder.gif" size="633" user="UnknownUser" version=""}%
-%META:FILEATTACHMENT{name="person.gif" attr="" autoattached="1" comment="" date="1151849905" path="person.gif" size="153" user="UnknownUser" version=""}%
-%META:FILEATTACHMENT{name="doc.gif" attr="" autoattached="1" comment="" date="1151849905" path="doc.gif" size="922" user="UnknownUser" version=""}%
-%META:FILEATTACHMENT{name="virtualpersons.gif" attr="" autoattached="1" comment="" date="1151849905" path="virtualpersons.gif" size="160" user="UnknownUser" version=""}%
-%META:FILEATTACHMENT{name="imgfolder.gif" attr="" autoattached="1" comment="" date="1151849905" path="imgfolder.gif" size="622" user="UnknownUser" version=""}%
-%META:FILEATTACHMENT{name="folderopen.gif" attr="" autoattached="1" comment="" date="1151849905" path="folderopen.gif" size="376" user="UnknownUser" version=""}%
-%META:FILEATTACHMENT{name="cd.gif" attr="" autoattached="1" comment="" date="1151849905" path="cd.gif" size="239" user="UnknownUser" version=""}%
-%META:FILEATTACHMENT{name="virtualperson.gif" attr="" autoattached="1" comment="" date="1151849905" path="virtualperson.gif" size="149" user="UnknownUser" version=""}%
-%META:FILEATTACHMENT{name="group.gif" attr="" autoattached="1" comment="" date="1151849905" path="group.gif" size="162" user="UnknownUser" version=""}%
-%META:FILEATTACHMENT{name="dtree.css" attr="" autoattached="1" comment="" date="1159656429" path="dtree.css" size="817" user="Main.StephaneLenclud" version="1"}%
-%META:FILEATTACHMENT{name="minus.gif" attr="" autoattached="1" comment="" date="1151849905" path="minus.gif" size="86" user="UnknownUser" version=""}%
-%META:FILEATTACHMENT{name="ppt.gif" attr="" autoattached="1" comment="" date="1151849905" path="ppt.gif" size="921" user="UnknownUser" version=""}%
-%META:FILEATTACHMENT{name="join.gif" attr="" autoattached="1" comment="" date="1151849905" path="join.gif" size="69" user="UnknownUser" version=""}%
-%META:FILEATTACHMENT{name="page.gif" attr="" autoattached="1" comment="" date="1151849905" path="page.gif" size="582" user="UnknownUser" version=""}%
-%META:FILEATTACHMENT{name="nolines_minus.gif" attr="" autoattached="1" comment="" date="1151849905" path="nolines_minus.gif" size="861" user="UnknownUser" version=""}%
-%META:FILEATTACHMENT{name="plusbottom.gif" attr="" autoattached="1" comment="" date="1151849905" path="plusbottom.gif" size="88" user="UnknownUser" version=""}%
-%META:FILEATTACHMENT{name="pdf.gif" attr="" autoattached="1" comment="" date="1151849905" path="pdf.gif" size="938" user="UnknownUser" version=""}%
-%META:FILEATTACHMENT{name="minusbottom.gif" attr="" autoattached="1" comment="" date="1151849905" path="minusbottom.gif" size="85" user="UnknownUser" version=""}%
-%META:FILEATTACHMENT{name="nolines_plus.gif" attr="" autoattached="1" comment="" date="1151849905" path="nolines_plus.gif" size="870" user="UnknownUser" version=""}%
-%META:FILEATTACHMENT{name="persons.gif" attr="" autoattached="1" comment="" date="1151849905" path="persons.gif" size="164" user="UnknownUser" version=""}%
-%META:FILEATTACHMENT{name="dtree.js" attr="" autoattached="1" comment="" date="1159656769" path="dtree.js" size="12407" user="Main.StephaneLenclud" version="8"}%
-%META:FILEATTACHMENT{name="sound.gif" attr="" autoattached="1" comment="" date="1151849905" path="sound.gif" size="166" user="UnknownUser" version=""}%
-%META:FILEATTACHMENT{name="home.gif" attr="" autoattached="1" comment="" date="1151849905" path="home.gif" size="172" user="UnknownUser" version=""}%
-%META:FILEATTACHMENT{name="folder.gif" attr="" autoattached="1" comment="" date="1151849905" path="folder.gif" size="372" user="UnknownUser" version=""}%
-%META:FILEATTACHMENT{name="tree.jpg" attr="" autoattached="1" comment="" date="1151849905" path="tree.jpg" size="8115" user="UnknownUser" version=""}%
-%META:FILEATTACHMENT{name="zip.gif" attr="" autoattached="1" comment="" date="1151849905" path="zip.gif" size="940" user="UnknownUser" version=""}%
-%META:FILEATTACHMENT{name="image.gif" attr="" autoattached="1" comment="" date="1151849905" path="image.gif" size="943" user="UnknownUser" version=""}%
-%META:FILEATTACHMENT{name="base.gif" attr="" autoattached="1" comment="" date="1151849905" path="base.gif" size="1040" user="UnknownUser" version=""}%
-%META:FILEATTACHMENT{name="see.gif" attr="" autoattached="1" comment="" date="1151849905" path="see.gif" size="81" user="UnknownUser" version=""}%
-%META:FILEATTACHMENT{name="trend.gif" attr="" autoattached="1" comment="" date="1151849905" path="trend.gif" size="149" user="UnknownUser" version=""}%
-%META:FILEATTACHMENT{name="trash.gif" attr="" autoattached="1" comment="" date="1151849905" path="trash.gif" size="1051" user="UnknownUser" version=""}%
-%META:FILEATTACHMENT{name="line.gif" attr="" autoattached="1" comment="" date="1151849905" path="line.gif" size="66" user="UnknownUser" version=""}%
-%META:FILEATTACHMENT{name="dtree.css~" attr="" autoattached="1" comment="" date="1159398861" path="dtree.css~" size="821" user="UnknownUser" version=""}%
-%META:FILEATTACHMENT{name="virtualhome.gif" attr="" autoattached="1" comment="" date="1151849905" path="virtualhome.gif" size="162" user="UnknownUser" version=""}%
-%META:FILEATTACHMENT{name="plus.gif" attr="" autoattached="1" comment="" date="1151849905" path="plus.gif" size="89" user="UnknownUser" version=""}%
-%META:FILEATTACHMENT{name="globe.gif" attr="" autoattached="1" comment="" date="1151849905" path="globe.gif" size="1095" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="empty.gif" attr="h" autoattached="1" comment="" date="1151849905" path="empty.gif" size="62" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="email.gif" attr="h" autoattached="1" comment="" date="1151849905" path="email.gif" size="183" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="xls.gif" attr="h" autoattached="1" comment="" date="1151849905" path="xls.gif" size="918" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="joinbottom.gif" attr="h" autoattached="1" comment="" date="1151849905" path="joinbottom.gif" size="66" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="question.gif" attr="h" autoattached="1" comment="" date="1151849905" path="question.gif" size="1044" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="file.gif" attr="h" autoattached="1" comment="" date="1151849905" path="file.gif" size="151" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="musicfolder.gif" attr="h" autoattached="1" comment="" date="1151849905" path="musicfolder.gif" size="633" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="person.gif" attr="h" autoattached="1" comment="" date="1151849905" path="person.gif" size="153" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="doc.gif" attr="h" autoattached="1" comment="" date="1151849905" path="doc.gif" size="922" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="virtualpersons.gif" attr="h" autoattached="1" comment="" date="1151849905" path="virtualpersons.gif" size="160" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="imgfolder.gif" attr="h" autoattached="1" comment="" date="1151849905" path="imgfolder.gif" size="622" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="folderopen.gif" attr="h" autoattached="1" comment="" date="1151849905" path="folderopen.gif" size="376" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="cd.gif" attr="h" autoattached="1" comment="" date="1151849905" path="cd.gif" size="239" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="virtualperson.gif" attr="h" autoattached="1" comment="" date="1151849905" path="virtualperson.gif" size="149" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="group.gif" attr="h" autoattached="1" comment="" date="1151849905" path="group.gif" size="162" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="dtree.css" attr="h" autoattached="1" comment="" date="1159656429" path="dtree.css" size="817" user="Main.StephaneLenclud" version="1"}%
+%META:FILEATTACHMENT{name="minus.gif" attr="h" autoattached="1" comment="" date="1151849905" path="minus.gif" size="86" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="ppt.gif" attr="h" autoattached="1" comment="" date="1151849905" path="ppt.gif" size="921" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="join.gif" attr="h" autoattached="1" comment="" date="1151849905" path="join.gif" size="69" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="page.gif" attr="h" autoattached="1" comment="" date="1151849905" path="page.gif" size="582" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="nolines_minus.gif" attr="h" autoattached="1" comment="" date="1151849905" path="nolines_minus.gif" size="861" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="plusbottom.gif" attr="h" autoattached="1" comment="" date="1151849905" path="plusbottom.gif" size="88" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="pdf.gif" attr="h" autoattached="1" comment="" date="1151849905" path="pdf.gif" size="938" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="minusbottom.gif" attr="h" autoattached="1" comment="" date="1151849905" path="minusbottom.gif" size="85" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="nolines_plus.gif" attr="h" autoattached="1" comment="" date="1151849905" path="nolines_plus.gif" size="870" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="persons.gif" attr="h" autoattached="1" comment="" date="1151849905" path="persons.gif" size="164" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="dtree.js" attr="h" autoattached="1" comment="" date="1159656769" path="dtree.js" size="12407" user="Main.StephaneLenclud" version="8"}%
+%META:FILEATTACHMENT{name="sound.gif" attr="h" autoattached="1" comment="" date="1151849905" path="sound.gif" size="166" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="home.gif" attr="h" autoattached="1" comment="" date="1151849905" path="home.gif" size="172" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="folder.gif" attr="h" autoattached="1" comment="" date="1151849905" path="folder.gif" size="372" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="tree.jpg" attr="h" autoattached="1" comment="" date="1151849905" path="tree.jpg" size="8115" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="zip.gif" attr="h" autoattached="1" comment="" date="1151849905" path="zip.gif" size="940" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="image.gif" attr="h" autoattached="1" comment="" date="1151849905" path="image.gif" size="943" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="base.gif" attr="h" autoattached="1" comment="" date="1151849905" path="base.gif" size="1040" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="see.gif" attr="h" autoattached="1" comment="" date="1151849905" path="see.gif" size="81" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="trend.gif" attr="h" autoattached="1" comment="" date="1151849905" path="trend.gif" size="149" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="trash.gif" attr="h" autoattached="1" comment="" date="1151849905" path="trash.gif" size="1051" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="line.gif" attr="h" autoattached="1" comment="" date="1151849905" path="line.gif" size="66" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="virtualhome.gif" attr="h" autoattached="1" comment="" date="1151849905" path="virtualhome.gif" size="162" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="plus.gif" attr="h" autoattached="1" comment="" date="1151849905" path="plus.gif" size="89" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="globe.gif" attr="h" autoattached="1" comment="" date="1151849905" path="globe.gif" size="1095" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="dmenu.css" attr="h" autoattached="1" comment="" date="1151849905" path="globe.gif" size="1095" user="UnknownUser" version=""}%
