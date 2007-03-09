@@ -1,11 +1,11 @@
-%META:TOPICINFO{author="LynnwoodBrown" date="1160098488" format="1.1" version="1.6"}%
+%META:TOPICINFO{author="LynnwoodBrown" date="1173335267" format="1.1" version="1.7"}%
 %META:TOPICPARENT{name="TopicType"}%
 %INCLUDE{"%TCAOWEB%.RenderClassificationTopic" }%
 
 <!-- Hidden include for CreateNewTopic
 You can modify the options for creating new topics of this type by changing the parameters to RenderTopicCreator. See that topic for more info.
 %STARTSECTION{"new" type="section"}%
-%DBCALL{"%TCAOWEB%.RenderTopicCreator"  TEMPLATE="%TOPIC%Template" TYPE="%TOPIC%"  FACETS="SubjectArea" TOPICSUMMARY="Use *Summary* to summarize the question being asked or the answer offered." }%
+%DBCALL{"%TCAOWEB%.RenderTopicCreator"  TEMPLATE="%TOPIC%Template" TYPE="%TOPIC%"  FACETS="SubjectArea" TOPICSUMMARY="Summarize the content of this Help topic." }%
 %ENDSECTION{"new" type="section"}%
 -->
 <!-- Topic Permissions

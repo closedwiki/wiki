@@ -13,9 +13,7 @@
 
 _Back to WebLog._
 
----+++ Comments and Discussion
-
-#AddComments
-%INCLUDE{"%TCAOWEB%.RenderAddComment" }%
+%DBCALL{"%TCAOWEB%.RenderCommentCountBar" warn="off"}% 
+%COMMENT{type="comment"}%
 
 

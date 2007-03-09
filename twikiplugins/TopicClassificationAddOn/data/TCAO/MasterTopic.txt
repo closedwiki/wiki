@@ -1,28 +1,16 @@
-%META:TOPICINFO{author="LynnwoodBrown" date="1168438146" format="1.1" reprev="1.4" version="1.4"}%
+%META:TOPICINFO{author="LynnwoodBrown" date="1173335236" format="1.1" version="1.5"}%
 %META:TOPICPARENT{name="TopicType"}%
 <!-- Optional Topic Settings
 To enable any of these settings, replace the explanation with the value you want and remove the "#" before "Set". 
    * Set CLASS_DESCRIPTION = %FORMFIELD{"Summary" topic="%BASETOPIC%"}% Also see TopicFunctions which are very similar but ususally include parameters.
-   * Set ADD_FILTER = %TCAOWEB%.RenderStandardFilter
-   * #Set SEARCH_FORMAT = Optional custom format for search results. Defaults to bulleted list with topic name and the !Summary formfield.
-   * #Set HEADER_FORMAT = Optional custom format for search results header. Defaults to empty header.
-   * #Set FOOTER_FORMAT = Optional custom format for search results footer. Defaults to "Number of topics found = $count".
-   * #Set SEARCH_ORDER = Option for changing the default order for the search. Defaults to "name."
-   * #Set SEARCH_REVERSE = Option to reverse the search order. Defaults to "off."
 -->
 
 %DBCALL{"%TCAOWEB%.RenderClassificationTopic"  }%
 
 <!-- Hidden include for CreateNewTopic
 %STARTSECTION{name="new" type="section"}%
-%INCLUDE{"%TCAOWEB%.CreateNewTopicElements" section="name" }%
-%INCLUDE{"%TCAOWEB%.CreateNewTopicElements" section="headline" }%
-<p />
-%ICON{tip}% _If useful, offer tips about creating this TopicType. If not, you can delete this line._
-<input type="hidden" name="formtemplate" value="%WEB%.WebForm" />
-<input type="hidden" name="templatetopic" value="%TOPIC%Template" />
-<input type="hidden" name="TopicType" value="%TOPIC%" />
-%ENDSECTION{name="new" type="section"}%
+%DBCALL{"%TCAOWEB%.RenderTopicCreator"  TEMPLATE="%TOPIC%Template" TYPE="%TOPIC%"  FACETS="SubjectArea" TOPICSUMMARY="Summarize the content and purpose of this MasterTopic." }%
+%ENDSECTION{"new" type="section"}%
 -->
 New %TOPIC% topics will use the %TOPIC%Template if there is one defined. 
 
@@ -36,6 +24,3 @@ New %TOPIC% topics will use the %TOPIC%Template if there is one defined.
 %META:FIELD{name="Classification" attributes="" title="Classification" value="TopicType"}%
 %META:FIELD{name="Summary" attributes="" title="Summary" value="Topics and Topic elements that are reused across installation using INCLUDE variable. Modifying these topics immediately affect the entire installation."}%
 %META:FIELD{name="Facets" attributes="" title="Facets" value="SubjectArea"}%
-%META:REVCOMMENT{ncomments="0"}%
-%META:PREFERENCE{name="ALLOWTOPICCHANGE" title="ALLOWTOPICCHANGE" type="Set" value="%2525MAINWEB%2525.TWikiAdminGroup"}%
-%META:PREFERENCE{name="ALLOWTOPICRENAME" title="ALLOWTOPICRENAME" type="Set" value="%2525MAINWEB%2525.TWikiAdminGroup"}%
