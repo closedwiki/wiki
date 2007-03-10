@@ -11,16 +11,33 @@
 	white-space: nowrap;
 */
 	line-height:100%;
+    cursor:pointer;
 }
 .dmenu img {
-	display:inline;
+	display:inline; /*Important for compatibility with NatSkin*/
 	border: 0px;
 	vertical-align: middle;
 }
 
-
 .dmenu a {
-	/*color: #333;*/
+    color: #EEEEEE;
+    text-decoration: none;
+    display:block;    
+}
+
+.dmenu a:hover {
+    color: #EEEEEE;
+    text-decoration: none;
+    display:block;    
+}
+
+.dmenuRoot {
+    color: #FFFFEE!important; /*override dmenuNodeOpened and dmenuNodeClosed*/
+}
+
+.dmenuNodeOpened,
+.dmenuNodeClosed,
+.dmenuLeaf {
    color: #EEEEEE;
 	text-decoration: none;
    display:block;
@@ -35,17 +52,19 @@
    overflow: hidden; /* prevents text to overflow*/
 }
 
-.dmenu a:hover {
-   border-color: #222222 #888888 #888888 #222222; /*grey*/
+.dmenuNodeOpened:hover,
+.dmenuNodeClosed:hover,
+.dmenuLeaf:hover {
+   border-color: #222222 #888888 #888888 #222222; 
    background-color:#777777;
 	text-decoration: none;
 }
 
-.dmenuLevel0 a {
+.dmenuLevel0 {
    /*font-weight: bold!important;*/ /*so that we overide the leaf settings*/
 }
 
-.dmenuLevel1 a {
+.dmenuLevel1 {
    opacity:0.90; 
    filter: alpha (opacity=90);
    /*position:relative;*/
@@ -55,31 +74,29 @@
    /*display:table-cell;*/
 }
 
-.dmenuLevel2 a {
+.dmenuLevel2 {
    opacity:0.80; 
    filter: alpha (opacity=80);
 }
 
-.dmenuLevel2 a {
+.dmenuLevel2 {
    opacity:0.70; 
    filter: alpha (opacity=70);
 }
 
-.dmenuNodeOpened a {
+.dmenuNodeOpened {
    /*text-decoration: underline!important;*/ /*Make it important so that it overrides the decoration defined in .detree a:hover*/
    font-weight: bold;
    /*color: red;*/
 }
 
-.dmenuNodeClosed a {
+.dmenuNodeClosed {
    /*text-decoration: underline;*/
    font-weight: bold;
    /*color: red;*/
 }
 
-
-
-.dmenuLeaf a {
+.dmenuLeaf {
    font-weight: normal;
    /*position: relative;*/
 }

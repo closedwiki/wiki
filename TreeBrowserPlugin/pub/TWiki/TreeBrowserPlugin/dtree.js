@@ -15,7 +15,7 @@
 // Node object
 function Node(id, pid, name, url, title, target, icon, iconOpen, open) {
 	this.id = id;
-	this.pid = pid;
+	this.pid = pid; //parent id
 	this.name = name;
 	this.url = url;
 	this.title = title;
@@ -47,7 +47,8 @@ function dTree(objName) {
 		inOrder	: false,
 		iconPath : '',
 		shared : false,
-        style : 'dtree'
+        style : 'dtree',
+        autoToggle : false //Clicking on a node itself will open/close that node
 	}
 	this.icon = {
 	  root : 'base.gif',
@@ -169,12 +170,17 @@ dTree.prototype.node = function(node, nodeId) {
 	//SL: Render node icon and text unless it's the root of the tree and noroot specified
 	if (!isRoot || (isRoot && !this.config.noRoot))	{
       var myClass='';
+      var onClick='';  
       //SL: Set the node class: 
       //If the node has children then it's either opened or closed
       //If the node has no children then it's a leaf
-      if (node._hc) {(node._io ? myClass = this.getClassNodeOpened() : myClass = this.getClassNodeClosed());}
-      else {myClass = this.getClassLeaf();}
-		str += '<div id="n' + this.obj + nodeId + '" class="'+ myClass +'">' + this.indent(node, nodeId);
+        if (node._hc) {
+            (node._io ? myClass = this.getClassNodeOpened() : myClass = this.getClassNodeClosed());
+            if (this.config.autoToggle){ onClick='onclick="javascript: ' + this.obj + '.o(' + nodeId + ');"'}; //alert(\'debug\');  
+        }
+        else {myClass = this.getClassLeaf();}
+        if (isRoot) {myClass += ' ' + this.getClassRoot();}
+		str += '<div id="n' + this.obj + nodeId + '" class="'+ myClass +'" '+ onClick + '>' + this.indent(node, nodeId);
 		if (this.config.useIcons) str += '<img id="i' + this.obj + nodeId + '" src="' + ((node._io) ? node.iconOpen : node.icon) + '" alt="" />';
 		//str += (node.name + this.level); //Debug level
       str += node.name;
@@ -324,6 +330,7 @@ dTree.prototype.nodeStatus = function(status, id, bottom) {
    //SL: Change the class of the node div
    var eNodeDiv = document.getElementById('n' + this.obj + id);
    eNodeDiv.className = (status) ? this.getClassNodeOpened() : this.getClassNodeClosed();
+   if (this.root.id == this.aNodes[id].pid) { eNodeDiv.className += ' ' + this.getClassRoot(); } //Add root class to the root 
 };
 
 // [Cookie] Clears a cookie
@@ -402,6 +409,11 @@ dTree.prototype.getClassChildren = function() {
 dTree.prototype.getClassLevel = function() {
     return this.config.style + 'Level' + this.level;
 }
+
+dTree.prototype.getClassRoot = function() {
+    return this.config.style + 'Root';
+}
+
 
 // If Push and pop is not implemented by the browser
 if (!Array.prototype.push) {

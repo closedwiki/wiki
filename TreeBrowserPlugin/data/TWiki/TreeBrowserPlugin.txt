@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="StephaneLenclud" date="1173494587" format="1.1" reprev="1.22" version="1.22"}%
+%META:TOPICINFO{author="StephaneLenclud" date="1173517527" format="1.1" reprev="1.23" version="1.23"}%
 ---+!! Tree Browser Plugin
 
 Renders a bulleted or numbered list as a collapsible/expandable tree of nodes.
@@ -20,12 +20,13 @@ Place the tag =%<nop>TREEBROWSER{= _parameters_ =}%= immediately before a bullet
 | =shared= | Must be a string. If present, the state of the tree is shared across all trees using this string. For example, if the tree is used in the WebLeftBar, the state will hold at all topics with this WebLeftBar. It's basically the name of the JavaScript object representing your tree. | none |
 | =uselines= | Set to =false= if you don't want to show lines linking nodes and leafs in the tree | =true= |
 | =useplusminus= | Set to =false= if you don't want to show '-' and '+' signs. One can use something like =onclick='javascript: tree.o($index);'= in the tree item to trigger opening/closing of a node. | =true= |
-| =noindent= | Set to =true= to show children at the level of their parent. It suppresses children indentation. Enabling =noindent= will disable =uselines= and =useplusminus= | =false= |
+| =noindent= | Set to =true= to show children at the level of their parent. It suppresses children indentation. Enabling =noindent= will disable =uselines= and =useplusminus=. | =false= |
 | =nocss= | Set to =true= to prevent inclusion of =dtree.css=. | =false= |
 | =closesamelevel= | If =true= only one node within a parent can be expanded at the same time. openAll() and closeAll() functions do not work when this is enabled. | =false= |
 | =noroot= | Prevents rendering of the title line. Useful if you don't want to show any title. | =false= |
 | =warn= | Text to be displayed if no tree was found. | none |
 | =style= | Name of the CSS file to include without the =.css= extension. The CSS file must be attached to this topic. | dtree |
+| =autotoggle= | Set to =on= will enable node open/close when clicking the node item. Typically used for menu style tree along with =noindent=. | =off= |
 
 Rendering themes can be defined by =&lt;name&gt;_THEME= Plugin settings
    * Each theme is defined by a comma separated list containing the render type and parameters required by that render type
@@ -71,6 +72,7 @@ Those classes are prefixed with the =style= parameter. For clarity of the docume
 Variable classes allows for multiple tree =style= support on one page.
 
    * =dtree=: given to the =div= element encapsulating the whole tree. Since v0.1.
+   * =dtreeRoot=: given to the =div= element encapsulating the root or title of the tree. Introduced in v1.1.
    * =dtreeLeaf=: given to the =div= element encapsulating a tree item without children. Introduced in v0.9.
    * =dtreeNodeOpened=: given to the =div= element encapsulating a tree item that is showing children. Introduced in v0.9.
    * =dtreeNodeClosed=: given to the =div= element encapsulating a tree item that is hiding children. Introduced in v0.9.
@@ -158,35 +160,35 @@ To add _"collapse/expand all nodes"_ functionalities do something like:
 ---+++ Menu
 
 <verbatim>
-%TREEBROWSER{"thread" notitle="on" shared="menudemo" noindent="on" style="dmenu"}%
-   * <a onclick='javascript: menudemo.o(1);'>Vegetables</a>
-      * <a>Carot</a>
-      * <a>Leek</a>
-      * <a>Tomato</a>
-      * <a>Potato</a> 
-   * <a onclick='javascript: menudemo.o(6);'>Fruits</a>
-      * <a>Banana</a> 
-      * <a onclick='javascript: menudemo.o(8);'>Grape fruit</a>       
-         * <a>Pink</a>
-         * <a>Yellow</a> 
-      * <a>Peach</a>
+%TREEBROWSER{"thread" noroot="on" shared="menudemo" noindent="on" autotoggle="on" style="dmenu"}%
+   * Vegetables
+      * Carot
+      * Leek
+      * Tomato
+      * Potato 
+   * Fruits
+      * Banana 
+      * Grape fruit       
+         * Pink
+         * Yellow 
+      * Peach
 </verbatim>
 
 <table borders="0">
 <tr><th align="left">If installed</th><th align="left">Simulated</th></tr>
 <tr><td style="padding:5px;">
-%TREEBROWSER{"thread" notitle="on" shared="realmenu" noindent="on" style="dmenu"}%
-   * <a onclick='javascript: realmenu.o(1);'>Vegetables</a>
-      * <a>Carot</a>
-      * <a>Leek</a>
-      * <a>Tomato</a>
-      * <a>Potato</a> 
-   * <a onclick='javascript: realmenu.o(6);'>Fruits</a>
-      * <a>Banana</a> 
-      * <a onclick='javascript: realmenu.o(8);'>Grape fruit</a>       
-         * <a>Pink</a>
-         * <a>Yellow</a> 
-      * <a>Peach</a>
+%TREEBROWSER{"thread" noroot="on" shared="realmenu" noindent="on" autotoggle="on" style="dmenu"}%
+   * Vegetables
+      * Carot
+      * Leek
+      * Tomato
+      * Potato 
+   * Fruits
+      * Banana
+      * Grape fruit       
+         * Pink
+         * Yellow 
+      * Peach
 </td>
 <td style="padding:5px;">
 <script type="text/javascript" src="https://slion.net/pub/TWiki/TreeBrowserPlugin/dtree.js"></script>
@@ -206,18 +208,20 @@ menudemo.config.usePlusMinus=false;
 menudemo.config.useStatusText=false;
 menudemo.config.useSelection=false;
 menudemo.config.folderLinks=false;
+menudemo.config.noRoot=true;
+menudemo.config.autoToggle=true;
 menudemo.add(0,-1,"");
-menudemo.add(1,0,"<a onclick='javascript: menudemo.o(1);'>Vegetables</a>",'','','','/pub/TWiki/TreeBrowserPlugin/folder.gif','/pub/TWiki/TreeBrowserPlugin/folderopen.gif');
-menudemo.add(2,1,"<a>Carot</a>",'','','','/pub/TWiki/TreeBrowserPlugin/page.gif');
-menudemo.add(3,1,"<a>Leek</a>",'','','','/pub/TWiki/TreeBrowserPlugin/page.gif');
-menudemo.add(4,1,"<a>Tomato</a>",'','','','/pub/TWiki/TreeBrowserPlugin/page.gif');
-menudemo.add(5,1,"<a>Potato</a> ",'','','','/pub/TWiki/TreeBrowserPlugin/page.gif');
-menudemo.add(6,0,"<a onclick='javascript: menudemo.o(6);'>Fruits</a>",'','','','/pub/TWiki/TreeBrowserPlugin/folder.gif','/pub/TWiki/TreeBrowserPlugin/folderopen.gif');
-menudemo.add(7,6,"<a>Banana</a> ",'','','','/pub/TWiki/TreeBrowserPlugin/page.gif');
-menudemo.add(8,6,"<a onclick='javascript: menudemo.o(8);'>Grape fruit</a>		 ",'','','','/pub/TWiki/TreeBrowserPlugin/folder.gif','/pub/TWiki/TreeBrowserPlugin/folderopen.gif');
-menudemo.add(9,8,"<a>Pink</a>",'','','','/pub/TWiki/TreeBrowserPlugin/page.gif');
-menudemo.add(10,8,"<a>Yellow</a> ",'','','','/pub/TWiki/TreeBrowserPlugin/page.gif');
-menudemo.add(11,6,"<a>Peach</a>",'','','','/pub/TWiki/TreeBrowserPlugin/page.gif');
+menudemo.add(1,0,"Vegetables",'','','','/pub/TWiki/TreeBrowserPlugin/folder.gif','/pub/TWiki/TreeBrowserPlugin/folderopen.gif');
+menudemo.add(2,1,"Carot",'','','','/pub/TWiki/TreeBrowserPlugin/page.gif');
+menudemo.add(3,1,"Leek",'','','','/pub/TWiki/TreeBrowserPlugin/page.gif');
+menudemo.add(4,1,"Tomato",'','','','/pub/TWiki/TreeBrowserPlugin/page.gif');
+menudemo.add(5,1,"Potato",'','','','/pub/TWiki/TreeBrowserPlugin/page.gif');
+menudemo.add(6,0,"Fruits",'','','','/pub/TWiki/TreeBrowserPlugin/folder.gif','/pub/TWiki/TreeBrowserPlugin/folderopen.gif');
+menudemo.add(7,6,"Banana",'','','','/pub/TWiki/TreeBrowserPlugin/page.gif');
+menudemo.add(8,6,"Grape fruit",'','','','/pub/TWiki/TreeBrowserPlugin/folder.gif','/pub/TWiki/TreeBrowserPlugin/folderopen.gif');
+menudemo.add(9,8,"Pink",'','','','/pub/TWiki/TreeBrowserPlugin/page.gif');
+menudemo.add(10,8,"Yellow ",'','','','/pub/TWiki/TreeBrowserPlugin/page.gif');
+menudemo.add(11,6,"Peach",'','','','/pub/TWiki/TreeBrowserPlugin/page.gif');
 document.write(menudemo);
 //-->
 </script>
@@ -297,7 +301,13 @@ a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>T
 
 ---++ Known issues
 
-...
+---+++ Root status management problem
+
+When doing something like:
+<verbatim>
+%TREEBROWSER{"thread" title="Root" shared="menudemo" noindent="on" autotoggle="on" style="dmenu"}%
+</verbatim>
+The root shows and one can fold/unfold the entire tree from the root thanks to =autotoggle=. Yet since dtree was not designed for the root to be foldable it does not manage its status properly as with any other node. That ought to be fixed. 
 
 ---++ Planned Enhancements
 
@@ -310,8 +320,9 @@ a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>T
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.ThomasWeigert |
-|  Plugin Version: | v1.0 |
+|  Plugin Version: | v1.1 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  10 Mar 2007: | (v1.1) - Adding =autotoggle= parameter. It's useful for menu style. Improved =dmenu.css=. Added =dtreeRoot= CSS class. By [[TWiki:Main.StephaneLenclud][Stéphane Lenclud]]. |
 |  09 Mar 2007: | (v1.0) - Improved CSS with variable class name allowing for multiple tree with different style on the same topic. Now bullet =icon:= supports full URL or URI. By [[TWiki:Main.StephaneLenclud][Stéphane Lenclud]]. |
 |  09 Mar 2007: | (v0.9) - Adding =style= parameter. Improved CSS. Fixes extra '\n' in dot pm. By [[TWiki:Main.StephaneLenclud][Stéphane Lenclud]]. |
 |  07 Mar 2007: | (v0.8) - Adding =noroot= and =warn= parameters. Now using =preRenderingHandler= instead of the deprecated =startRenderingHandler= . =%<nop>TREEBROWSER%= are hidden if there is no tree to render. Fixes TOC icons problem with TWiki:Plugins.NatSkin. By [[TWiki:Main.StephaneLenclud][Stéphane Lenclud]]. |
