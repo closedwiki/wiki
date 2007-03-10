@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="StephaneLenclud" date="1173475416" format="1.1" reprev="1.21" version="1.21"}%
+%META:TOPICINFO{author="StephaneLenclud" date="1173494587" format="1.1" reprev="1.22" version="1.22"}%
 ---+!! Tree Browser Plugin
 
 Renders a bulleted or numbered list as a collapsible/expandable tree of nodes.
@@ -52,6 +52,9 @@ If !JavaScript is not enabled, the list is rendered as usual, and the =%<nop>TRE
       * Use one of the existing icons: %ATTACHURL%/globe.gif =%<nop>ATTACHURL%/globe.gif=, %ATTACHURL%/home.gif =%<nop>ATTACHURL%/home.gif=, %ATTACHURL%/virtualhome.gif =%<nop>ATTACHURL%/virtualhome.gif=, %ATTACHURL%/group.gif =%<nop>ATTACHURL%/group.gif=, %ATTACHURL%/persons.gif =%<nop>ATTACHURL%/persons.gif=, %ATTACHURL%/virtualpersons.gif =virtualpersons.gif=, %ATTACHURL%/person.gif =%<nop>ATTACHURL%/person.gif=, %ATTACHURL%/virtualperson.gif =%<nop>ATTACHURL%/virtualperson.gif=, %ATTACHURL%/email.gif =%<nop>ATTACHURL%/email.gif=, %ATTACHURL%/trend.gif =%<nop>ATTACHURL%/trend.gif=, %ATTACHURL%/folder.gif =%<nop>ATTACHURL%/folder.gif=, %ATTACHURL%/file.gif =%<nop>ATTACHURL%/file.gif=, %ATTACHURL%/doc.gif =%<nop>ATTACHURL%/doc.gif=, %ATTACHURL%/image.gif =%<nop>ATTACHURL%/image.gif=, %ATTACHURL%/pdf.gif =%<nop>ATTACHURL%/pdf.gif=, %ATTACHURL%/ppt.gif =%<nop>ATTACHURL%/ppt.gif=, %ATTACHURL%/sound.gif =%<nop>ATTACHURL%/sound.gif=, %ATTACHURL%/xls.gif =%<nop>ATTACHURL%/xls.gif=, %ATTACHURL%/zip.gif =%<nop>ATTACHURL%/zip.gif=, %ATTACHURL%/see.gif =%<nop>ATTACHURL%/see.gif=
       * Refer to an attached icon at the beginning of the bullet with:
          * =icon:myicon.gif Followed by normal bullet text=
+      * Refer to any icon at the beginning of the bullet using a full path or URL:
+         * =icon:%ICONURL{"xls"}% Followed by normal bullet text=
+
 
 ---++ CSS classes
 
@@ -309,7 +312,7 @@ a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>T
 |  Plugin Author: | TWiki:Main.ThomasWeigert |
 |  Plugin Version: | v1.0 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  09 Mar 2007: | (v1.0) - Improved CSS with variable class name allowing for multiple tree with different style on the same topic. By [[TWiki:Main.StephaneLenclud][Stéphane Lenclud]]. |
+|  09 Mar 2007: | (v1.0) - Improved CSS with variable class name allowing for multiple tree with different style on the same topic. Now bullet =icon:= supports full URL or URI. By [[TWiki:Main.StephaneLenclud][Stéphane Lenclud]]. |
 |  09 Mar 2007: | (v0.9) - Adding =style= parameter. Improved CSS. Fixes extra '\n' in dot pm. By [[TWiki:Main.StephaneLenclud][Stéphane Lenclud]]. |
 |  07 Mar 2007: | (v0.8) - Adding =noroot= and =warn= parameters. Now using =preRenderingHandler= instead of the deprecated =startRenderingHandler= . =%<nop>TREEBROWSER%= are hidden if there is no tree to render. Fixes TOC icons problem with TWiki:Plugins.NatSkin. By [[TWiki:Main.StephaneLenclud][Stéphane Lenclud]]. |
 |  01 Oct 2006: | (v0.7) - Adding =useplusminus= , =noindent= and =nocss= parameters. By [[TWiki:Main.StephaneLenclud][Stéphane Lenclud]]. |

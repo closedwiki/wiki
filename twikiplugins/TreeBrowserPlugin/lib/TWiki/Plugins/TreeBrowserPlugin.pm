@@ -237,7 +237,14 @@ $var = new dTree('$var');\n";
 			{
 			$label = $3;
 			$label = "$1 $3" if ( $1 );
-			$iconImg = "$attach/$2";
+            #If the icon name does not contains '/' then we prepend the attachurlpath 
+            #Else if the icon name contains at least one '/' then it must be a full path and we leave it alone 
+            if ( index("$2", "/") == -1 )  { 
+              $iconImg = "$attach/$2";
+            }
+            else {
+              $iconImg = "$2";
+            } 
       	}
 		else
 			{
