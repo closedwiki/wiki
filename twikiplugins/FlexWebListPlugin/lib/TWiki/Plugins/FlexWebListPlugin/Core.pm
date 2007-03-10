@@ -285,8 +285,8 @@ sub hashWebs {
 sub escapeParameter {
   return '' unless $_[0];
 
-  $_[0] =~ s/\$n/\n/g;
   $_[0] =~ s/\$nop//g;
+  $_[0] =~ s/\$n/\n/g;
   $_[0] =~ s/\$percnt/%/g;
   $_[0] =~ s/\$dollar/\$/g;
 }
