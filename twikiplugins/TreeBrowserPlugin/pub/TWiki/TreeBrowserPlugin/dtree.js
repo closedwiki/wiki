@@ -54,8 +54,8 @@ function dTree(objName) {
 		iconPath : '',
 		shared : false,
         style : 'dtree', //The CSS filename
-        autoToggle : false, //Clicking on a node itself will open/close that node, rename activeNode?
-	}
+        autoToggle : false //Clicking on a node itself will open/close that node, rename activeNode?
+	};
 	this.icon = {
 	  root : 'base.gif',
 	  folder : 'folder.gif',

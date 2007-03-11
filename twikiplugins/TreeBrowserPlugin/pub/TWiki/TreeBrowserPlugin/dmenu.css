@@ -65,11 +65,11 @@
 	text-decoration: none;
 }
 
-.dmenuLevel0 {
+.dmenuLevel0, .dmenuLevel0 a, .dmenuLevel0 div {
    /*font-weight: bold!important;*/ /*so that we overide the leaf settings*/
 }
 
-.dmenuLevel1 {
+.dmenuLevel1, .dmenuLevel1 a, .dmenuLevel1 div {
    opacity:0.90; 
    filter: alpha (opacity=90);
    /*position:relative;*/
@@ -79,12 +79,12 @@
    /*display:table-cell;*/
 }
 
-.dmenuLevel2 {
+.dmenuLevel2, .dmenuLevel2 a, .dmenuLevel2 div {
    opacity:0.80; 
    filter: alpha (opacity=80);
 }
 
-.dmenuLevel2 {
+.dmenuLevel3, .dmenuLevel3 a, .dmenuLevel3 div {
    opacity:0.70; 
    filter: alpha (opacity=70);
 }
