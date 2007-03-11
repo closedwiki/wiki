@@ -951,7 +951,7 @@ sub _getNumber
     my( $theText ) = @_;
     return 0 unless( $theText );
     $theText =~ s/([0-9])\,(?=[0-9]{3})/$1/go;          # "1,234,567" ==> "1234567"
-    if ($theText =~ /[0-9]e/i) {                        # "1.5e-3"    ==> "0.0015"
+    if( $theText =~ /[0-9]e/i ) {                       # "1.5e-3"    ==> "0.0015"
         $theText = sprintf "%.20f", $theText;
         $theText =~ s/0+$//;
     }
@@ -961,6 +961,7 @@ sub _getNumber
     $theText =~ s/^(\-?)0+([0-9])/$1$2/o;               # "-0009.12"  ==> "-9.12"
     $theText =~ s/^(\-?)\./${1}0\./o;                   # "-.25"      ==> "-0.25"
     $theText =~ s/^\-0$/0/o;                            # "-0"        ==> "0"
+    $theText =~ s/\.$//o;                               # "123."      ==> "123"
     return $theText;
 }
 
@@ -972,6 +973,7 @@ sub safeEvalPerl
     $theText =~ s/\%\s*[^\-\+\*\/0-9\.\(\)]+//go; # defuse %hash but keep modulus
     # keep only numbers and operators (shh... don't tell anyone, we support comparison operators)
     $theText =~ s/[^\!\<\=\>\-\+\*\/\%0-9e\.\(\)]*//go;
+    $theText =~ s/(^|[^0-9])e/$1/go;  # remove "e"-s unless in expression such as "123e-4"
     $theText =~ /(.*)/;
     $theText = $1;  # untainted variable
     return "" unless( $theText );
