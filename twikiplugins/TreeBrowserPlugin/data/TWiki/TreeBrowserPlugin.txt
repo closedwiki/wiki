@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="StephaneLenclud" date="1173517527" format="1.1" reprev="1.23" version="1.23"}%
+%META:TOPICINFO{author="StephaneLenclud" date="1173574605" format="1.1" reprev="1.24" version="1.24"}%
 ---+!! Tree Browser Plugin
 
 Renders a bulleted or numbered list as a collapsible/expandable tree of nodes.
@@ -25,8 +25,10 @@ Place the tag =%<nop>TREEBROWSER{= _parameters_ =}%= immediately before a bullet
 | =closesamelevel= | If =true= only one node within a parent can be expanded at the same time. openAll() and closeAll() functions do not work when this is enabled. | =false= |
 | =noroot= | Prevents rendering of the title line. Useful if you don't want to show any title. | =false= |
 | =warn= | Text to be displayed if no tree was found. | none |
-| =style= | Name of the CSS file to include without the =.css= extension. The CSS file must be attached to this topic. | dtree |
+| =style= | Name of the CSS file to include without the =.css= extension. The CSS file must be attached to this topic. | =dtree= |
 | =autotoggle= | Set to =on= will enable node open/close when clicking the node item. Typically used for menu style tree along with =noindent=. | =off= |
+| =nodeactions= | Defines node functionality in a comma separated list of HTML event and dTree function. Typically used for menu style tree along with =noindent=. Format: <verbatim><event> <function>[,...]</verbatim> =event= is an HTML event e.g. =onclick=, =ondblclick=, =onmouseover=, =onmouseout=... %BR% =function= is one of the three dTree functions: =open=, =close=, =toggle= | none |
+
 
 Rendering themes can be defined by =&lt;name&gt;_THEME= Plugin settings
    * Each theme is defined by a comma separated list containing the render type and parameters required by that render type
@@ -159,6 +161,8 @@ To add _"collapse/expand all nodes"_ functionalities do something like:
 
 ---+++ Menu
 
+---++++ =autotoggle= example
+
 <verbatim>
 %TREEBROWSER{"thread" noroot="on" shared="menudemo" noindent="on" autotoggle="on" style="dmenu"}%
    * Vegetables
@@ -228,6 +232,23 @@ document.write(menudemo);
 </td>
 </tr>
 </table>
+
+---++++ =nodeactions= example
+
+<verbatim>
+%TREEBROWSER{"thread" noroot="on" shared="memenudemo" noindent="on" style="dmenu" nodeactions="onmouseover open, onclick close"}%
+   * Vegetables
+      * Carot
+      * Leek
+      * Tomato
+      * Potato 
+   * Fruits
+      * Banana
+      * Grape fruit       
+         * Pink
+         * Yellow 
+      * Peach
+</verbatim>
 
 ---++ Plugin Settings
 
@@ -320,8 +341,9 @@ The root shows and one can fold/unfold the entire tree from the root thanks to =
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.ThomasWeigert |
-|  Plugin Version: | v1.1 |
+|  Plugin Version: | v1.2 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  11 Mar 2007: | (v1.2) - Adding =nodeactions= parameter. Improved =dmenu.css=. By [[TWiki:Main.StephaneLenclud][Stéphane Lenclud]]. |
 |  10 Mar 2007: | (v1.1) - Adding =autotoggle= parameter. It's useful for menu style. Improved =dmenu.css=. Added =dtreeRoot= CSS class. By [[TWiki:Main.StephaneLenclud][Stéphane Lenclud]]. |
 |  09 Mar 2007: | (v1.0) - Improved CSS with variable class name allowing for multiple tree with different style on the same topic. Now bullet =icon:= supports full URL or URI. By [[TWiki:Main.StephaneLenclud][Stéphane Lenclud]]. |
 |  09 Mar 2007: | (v0.9) - Adding =style= parameter. Improved CSS. Fixes extra '\n' in dot pm. By [[TWiki:Main.StephaneLenclud][Stéphane Lenclud]]. |

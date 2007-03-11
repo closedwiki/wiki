@@ -39,7 +39,7 @@ use vars qw(
         $debug $js
     );
 
-$VERSION = 'v1.1';
+$VERSION = 'v1.2';
 $pluginName = 'TreeBrowserPlugin';
 
 # =========================
@@ -129,7 +129,9 @@ sub handleTreeView {
    $style=dtree unless TWiki::Func::attachmentExists($installWeb,$pluginName,"$style.css"); #Default to dtree
    my $useStatusText = &TWiki::Func::extractNameValuePair( $theAttr, "usestatustext" );
    my $closeSameLevel = &TWiki::Func::extractNameValuePair( $theAttr, "closesamelevel" );
-   my $autoToggle = &TWiki::Func::extractNameValuePair( $theAttr, "autotoggle" );        
+   my $autoToggle = &TWiki::Func::extractNameValuePair( $theAttr, "autotoggle" );
+   my $nodeActions = &TWiki::Func::extractNameValuePair( $theAttr, "nodeactions" );
+        
    my $icons = 0;
    $icons = 1 if ($type eq "icon");
    my $wrap = 0;
@@ -139,12 +141,12 @@ sub handleTreeView {
    my $opento = 0;
    $opento = $open1 if (!$openall && $open1);
     
-   return $thePre . &renderTreeView( $type, $params, $useLines, $usePlusMinus, $useStatusText, $closeSameLevel, $noIndent, $noRoot, $noCss, $theTitle, $icons, $shared, $openall, $opento, $theList, $style, $autoToggle );
+   return $thePre . &renderTreeView( $type, $params, $useLines, $usePlusMinus, $useStatusText, $closeSameLevel, $noIndent, $noRoot, $noCss, $theTitle, $icons, $shared, $openall, $opento, $theList, $style, $autoToggle, $nodeActions );
 }
 
 sub renderTreeView
 {
-    my ( $theType, $theParams, $useLines, $usePlusMinus, $useStatusText, $closeSameLevel, $noIndent, $noRoot, $noCss, $theTitle, $icons, $shared, $openAll, $openTo, $theText, $style, $autoToggle ) = @_;
+    my ( $theType, $theParams, $useLines, $usePlusMinus, $useStatusText, $closeSameLevel, $noIndent, $noRoot, $noCss, $theTitle, $icons, $shared, $openAll, $openTo, $theText, $style, $autoToggle, $nodeActions ) = @_;
 
     $theText =~ s/^[\n\r]*//os;
     my @tree = ();
@@ -220,7 +222,13 @@ $var = new dTree('$var');\n";
     $text .= "$var.config.usePlusMinus=false;\n" if (($usePlusMinus=~/false|0|off/i) || $noIndent);#noident override useplusminus, prevents java bug :)
     $text .= "$var.config.closeSameLevel=true;\n" if ($closeSameLevel=~/true|1|on/i);
     $text .= "$var.config.noRoot=true;\n" if ($noRoot=~/true|1|on/i);
-    $text .= "$var.config.autoToggle=true;\n" if ($autoToggle=~/true|1|on/i);
+    $text .= "$var.config.autoToggle=true;\n" if (($autoToggle=~/true|1|on/i) || (defined $nodeActions && !($nodeActions eq "")));
+
+    #Parse nodeactions
+    foreach (split (/, */, $nodeActions)) {
+        my ($event, $function)=split(/ +/, $_, 2);        
+        $text .= "$var.addAction('$event','$function');\n";
+    }           
 
     $text .= "$var.config.useStatusText=false;\n"; #Broken due to dtree usage if ($useStatusText=~/true|1|on/i);
     $text .= "$var.config.useSelection=false;\n"; #Broken due to dtree usage

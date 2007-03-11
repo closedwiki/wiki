@@ -10,6 +10,11 @@
 	color: #666;
 	white-space: nowrap;
 */
+
+	line-height:100%;
+    max-width:200px;
+    overflow:hidden;
+
 	line-height:100%;
     cursor:pointer;
 }
@@ -84,13 +89,13 @@
    filter: alpha (opacity=70);
 }
 
-.dmenuNodeOpened {
+.dmenuNodeOpened, .dmenuNodeOpened a {
    /*text-decoration: underline!important;*/ /*Make it important so that it overrides the decoration defined in .detree a:hover*/
    font-weight: bold;
    /*color: red;*/
 }
 
-.dmenuNodeClosed {
+.dmenuNodeClosed, .dmenuNodeClosed a {
    /*text-decoration: underline;*/
    font-weight: bold;
    /*color: red;*/

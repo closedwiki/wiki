@@ -30,6 +30,12 @@ function Node(id, pid, name, url, title, target, icon, iconOpen, open) {
 	this._p;
 };
 
+// Action object, associate an HTML event with a dTree function e.g. onclick/o
+function Action(event, func) {
+	this.event = event; // an html event e.g. onclick, onmouseover.
+	this.func = func; // a dTree function e.g. o, openTo.
+};
+
 // Tree object
 function dTree(objName) {
 	this.config = {
@@ -47,8 +53,8 @@ function dTree(objName) {
 		inOrder	: false,
 		iconPath : '',
 		shared : false,
-        style : 'dtree',
-        autoToggle : false //Clicking on a node itself will open/close that node
+        style : 'dtree', //The CSS filename
+        autoToggle : false, //Clicking on a node itself will open/close that node, rename activeNode?
 	}
 	this.icon = {
 	  root : 'base.gif',
@@ -68,6 +74,7 @@ function dTree(objName) {
 	};
 	this.obj = objName;
 	this.aNodes = [];
+	this.aNodeActions = [];
 	this.aIndent = [];
 	this.root = new Node(-1);
 	this.selectedNode = null;
@@ -94,6 +101,11 @@ dTree.prototype.updateIconPath = function() {
 	  nlPlus : this.config.iconPath + 'nolines_plus.gif',
 	  nlMinus : this.config.iconPath + 'nolines_minus.gif'
 	};
+};
+
+// Adds a new action to the node actions array
+dTree.prototype.addAction = function(event, func) {
+	this.aNodeActions[this.aNodeActions.length] = new Action(event, func);
 };
 
 // Adds a new node to the node array
@@ -170,17 +182,27 @@ dTree.prototype.node = function(node, nodeId) {
 	//SL: Render node icon and text unless it's the root of the tree and noroot specified
 	if (!isRoot || (isRoot && !this.config.noRoot))	{
       var myClass='';
-      var onClick='';  
-      //SL: Set the node class: 
+      var nodeScript='';  
+      //SL: Set the node class & actions: 
       //If the node has children then it's either opened or closed
       //If the node has no children then it's a leaf
         if (node._hc) {
             (node._io ? myClass = this.getClassNodeOpened() : myClass = this.getClassNodeClosed());
-            if (this.config.autoToggle){ onClick='onclick="javascript: ' + this.obj + '.o(' + nodeId + ');"'}; //alert(\'debug\');  
+            if (this.config.autoToggle){
+                if (!(this.aNodeActions.length>0)) {
+                    //No specific actions defined, default is click for toggle
+                    nodeScript= 'onclick="javascript: ' + this.obj + '.o(' + nodeId + ');"';
+                }
+                else {
+                    //Build the event script according the defined actions
+                    for (var n=0; n<this.aNodeActions.length; n++)
+                        nodeScript+= this.aNodeActions[n].event + '="javascript: ' + this.obj + '.' + this.aNodeActions[n].func + '(' + nodeId + ');" ';
+                }
+            }; //alert(\'debug\');  
         }
         else {myClass = this.getClassLeaf();}
         if (isRoot) {myClass += ' ' + this.getClassRoot();}
-		str += '<div id="n' + this.obj + nodeId + '" class="'+ myClass +'" '+ onClick + '>' + this.indent(node, nodeId);
+		str += '<div id="n' + this.obj + nodeId + '" class="'+ myClass +'" '+ nodeScript + '>' + this.indent(node, nodeId);
 		if (this.config.useIcons) str += '<img id="i' + this.obj + nodeId + '" src="' + ((node._io) ? node.iconOpen : node.icon) + '" alt="" />';
 		//str += (node.name + this.level); //Debug level
       str += node.name;
@@ -254,6 +276,29 @@ dTree.prototype.s = function(id) {
 	}
 };
 
+// Toggle Open or close, synonym
+dTree.prototype.toggle = function(id) {
+    this.o(id);
+};
+
+// Opens a node, synonym
+dTree.prototype.open = function(id) {
+	var cn = this.aNodes[id];
+	this.nodeStatus(true, id, cn._ls);
+	cn._io = true;
+	if (this.config.closeSameLevel) this.closeLevel(cn);
+	if (this.config.useCookies) this.updateCookie();
+};
+
+// Closes a node, synonym
+dTree.prototype.close = function(id) {
+	var cn = this.aNodes[id];
+	this.nodeStatus(false, id, cn._ls);
+	cn._io = false;
+	if (this.config.closeSameLevel) this.closeLevel(cn);
+	if (this.config.useCookies) this.updateCookie();
+};
+
 // Toggle Open or close
 dTree.prototype.o = function(id) {
 	var cn = this.aNodes[id];
@@ -312,7 +357,9 @@ dTree.prototype.closeAllChildren = function(node) {
 			this.closeAllChildren(this.aNodes[n]);		
 		}
 	}
-}// Change the status of a node(open or closed)
+}
+
+// Change the status of a node(open or closed)
 dTree.prototype.nodeStatus = function(status, id, bottom) {
 	eDiv	= document.getElementById('d' + this.obj + id);
    var eJoin;
