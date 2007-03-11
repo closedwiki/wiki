@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1173428505" format="1.0" version="1.50"}%
+%META:TOPICINFO{author="PeterThoeny" date="1173655082" format="1.0" version="1.51"}%
 ---+!! TWiki Spreadsheet Plugin
 
 This Plugin adds spreadsheet capabilities to %WIKITOOLNAME% topics. Formulae like ==%<nop>CALC{"$INT(7/3)"}%== are evaluated at page view time. They can be placed in table cells and outside of tables. In other words, this Plugin provides general formula evaluation capability, not just classic spreadsheet functions.
@@ -692,8 +692,9 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Plugin Author: | TWiki:Main/PeterThoeny |
 |  Copyright: | &copy; 2001-2007, Peter@Thoeny.org, [[http://www.structuredwikis.com/][StructuredWikis LLC]] |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 09 Mar 2007 (r13108) |
+|  Plugin Version: | 11 Mar 2007 (r13123) |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
+|  11 Mar 2007: | Fixing bug in $VALUE() and $INT(), introduced by version 09 Mar 2007 |
 |  09 Mar 2007: | Added $EXP(), $LN(), $LOG(), $PI(), $SQRT(); fixed $ROUND() bug, contributed by TWiki:Main/SergejZnamenskij |
 |  23 Jan 2007: | Enhanced documentation |
 |  18 Dec 2006: | Added $LISTRAND(), $LISTSHUFFLE(), $LISTTRUNCATE(); fixed spurious newline at end of topic, contributed by TWiki:Main/MichaelDaum |
@@ -739,5 +740,5 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 
 __Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
 
--- TWiki:Main/PeterThoeny - 09 Mar 2007
+-- TWiki:Main/PeterThoeny - 11 Mar 2007
 
