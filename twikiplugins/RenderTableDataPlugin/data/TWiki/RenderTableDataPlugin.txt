@@ -62,6 +62,7 @@ Format parameters: %BR% \
 - =$Cn= token for the cell data, indicated with the column number =n=; for example =$C1= or =$C2=. The first row is numbered 1. The column number always refers to the orignal table, even if cells are omitted with parameter =rows= or =cols=. %BR% \
 Token strings (to be used with variables): %BR% \
 - =$n= newline %BR% \
+- =$nop= (nop) - prevents expanding of variables, for example: =format="$C1[$nop<nop>[WebHome][Home]]"= %BR% \
 - =$percnt= percent %BR% \
 - =$quot= double quote %BR% \
 - =$dollar= dollar sign \
@@ -120,6 +121,7 @@ Results in:
 | Copyright &copy;: | 2007 Arthur Clemens |
 | License: | [[http://www.gnu.org/copyleft/gpl.html][GPL]] |
 | Dependencies: | %$DEPENDENCIES% |
+| 11 Mar 2007 | Arthur Clemens: 1.0.3 Added =$nop= token. |
 | 08 Mar 2007 | Arthur Clemens: 1.0.2 Fixed sorting bug. Added params =beforetext=, =aftertext=, =show= and =condition="random"=.  |
 | 07 Mar 2007 | Arthur Clemens: 1.0.1 Fixed CSS bug in Win Explorer 6 in example.  |
 | 04 Mar 2007 | Arthur Clemens: 1.0 First release.  |
