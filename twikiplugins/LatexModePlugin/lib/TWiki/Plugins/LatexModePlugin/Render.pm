@@ -70,12 +70,12 @@ my $GREP =  $TWiki::cfg{Plugins}{LatexModePlugin}{fgrep} ||
     $TWiki::fgrepCmd ||
     '/usr/bin/fgrep';
 
+# This is the extension/type of the generated images. Valid types
+# are png, gif, and jpg.
+$EXT = $TWiki::cfg{Plugins}{LatexModePlugin}{imagetype} || 'png';
+
 ### The variables below this line will likely not need to be changed
 ######################################################################
-
-# this is the extension of the generated images.  gif or jpg are other
-# possibilities.
- $EXT = 'png';
 
 #this is the name of the latex file created by the program.  You shouldn't
 #need to change it unless for some bizarre reason you have a file attached to
