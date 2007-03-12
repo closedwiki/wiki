@@ -1,0 +1,59 @@
+
+---+!! !EditRowPlugin
+<!--
+One line description, required for extensions repository catalog.
+   * Set SHORTDESCRIPTION = Single table row inline edit
+-->
+%SHORTDESCRIPTION%
+
+%TOC%
+
+<img src="%ATTACHURLPATH%/screenshot.gif" alt="screenshot.gif" width='415' height='100' style="float:right" />
+Supports editing a single row in a table at a time, in-place in the table.
+Multiple tables in a topic are supported, but only once table at a time
+can be edited.
+
+Works like the !EditTablePlugin (it uses exactly the same =%EDITTABLE= tags)
+except that it only opens one row at a time. Closed rows are shown with
+an edit button.
+
+This solves the problem with the long page rendering times required to show all
+the HTML for a full table edit. At this time most, but possibly not all,
+features of !EditTablePlugin are supported; it's hard to tell exactly,
+because there are no tests for EditTablePlugin, the documentation is
+incomplete and the code is rather hard to read.
+
+The plugin doesn't use !JavaScript (except for the
+calendar) so it should work with all browsers.
+
+See also: !EditTablePlugin, !EditTableRowPlugin.
+
+---++ Usage
+
+See EditTablePlugin for information on the =%EDITTABLE= tag and its parameters.
+
+The plugin needs to be put on the INSTALLEDPLUGINS list before
+!EditTablePlugin if both are required. It is enabled by setting
+   * <nop>Set ENABLE_TABLE_ROW_EDIT = on
+in a topic or !WebPreferences. Where this variable is set, then row editing
+will be used instead of table editing.
+
+---++ Installation Instructions
+
+%$INSTALL_INSTRUCTIONS%
+
+---++ Plugin Info
+
+|  Plugin Author(s): | Crawford Currie |
+|  Plugin Version: | %$VERSION% |
+|  Copyright: | &copy; 2007 Wind<nop>River Inc. |
+|  License: | [[http://www.gnu.org/licenses/gpl.html][GPL (Gnu General Public License)]] |
+|  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  Dependencies: | %$DEPENDENCIES% |
+|  Plugin Home: | http://twiki.org/cgi-bin/view/Plugins/EditRowPlugin |
+|  Feedback: | http://twiki.org/cgi-bin/view/Plugins/EditRowPluginDev |
+|  Appraisal: | http://twiki.org/cgi-bin/view/Plugins/EditRowPluginAppraisal |
+
+<!-- Do _not_ attempt to edit this topic; it is auto-generated. Please add comments/questions/remarks to the Dev topic instead. -->
+
+%META:FILEATTACHMENT{name="screenshot.gif" attr="h" comment=""cversion="1"}%

@@ -1,0 +1,8 @@
+
+# Release manifest for EditRowPlugin
+data/TWiki/EditRowPlugin.txt 0644 Documentation
+lib/TWiki/Plugins/EditRowPlugin.pm 0644 Perl module
+lib/TWiki/Plugins/EditRowPlugin/Table.pm 0644 Perl module
+lib/TWiki/Plugins/EditRowPlugin/TableRow.pm 0644 Perl module
+lib/TWiki/Plugins/EditRowPlugin/TableCell.pm 0644 Perl module
+pub/TWiki/EditRowPlugin/screenshot.gif 0444 Image
