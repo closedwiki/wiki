@@ -37,7 +37,7 @@ $VERSION = '$Rev: 11069$';
 # This is a free-form string you can use to "name" your own plugin version.
 # It is *not* used by the build automation tools, but is reported as part
 # of the version number in PLUGINDESCRIPTIONS.
-$RELEASE = '1.0.3';
+$RELEASE = '1.0.4';
 
 # Name of this Plugin, only used in this module
 $pluginName = 'RenderTableDataPlugin';
@@ -279,7 +279,8 @@ sub _parseTableRows {
                     }
                     my $cellNumber =
                       $colPos + 1;    # param input is non-zero based
-                    $rowResult =~ s/\$C$cellNumber/$cell/;
+                    $rowResult =~
+s/\$C$cellNumber(\(([0-9]*),*(.*?)\))*/_getCellContents($session,$cell,$2,$3)/ges;
                 }
                 $result .= $rowResult;
             }
@@ -311,6 +312,25 @@ sub _parseTableRows {
         "- RenderTableDataPlugin::_parseTableRows - result B=$result")
       if $debug;
     return $result;
+}
+
+=pod
+
+=cut
+
+sub _getCellContents {
+    my ( $session, $cellText, $limit, $placeholder ) = @_;
+    if ( !$limit ) {
+        return $cellText;
+    }
+
+    # if limit:
+    $cellText =~ s/\<br\s*\/*\>/\$_BR/go
+      ;    # temporarily remove HTML linebreaks put in by EditTablePlugin
+    my $limitedText = substr( $cellText, 0, $limit );
+    $limitedText .= $placeholder if length $cellText > length $limitedText;
+    $limitedText =~ s/\$_BR/<br \/>/go;    # change temp back
+    return $limitedText;
 }
 
 =pod
