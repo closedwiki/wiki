@@ -18,7 +18,7 @@ $ADD_ROW = 'Add Row';
 $DELETE_ROW = 'Delete Row';
 $QUIET_SAVE = 'Quiet Save';
 $NOISY_SAVE = 'Save';
-$EDIT_ROW = '<button>edit</button>';
+$EDIT_ROW = 'Edit';
 
 sub initPlugin {
     my( $topic, $web, $user, $installWeb ) = @_;
@@ -35,6 +35,7 @@ sub initPlugin {
     return 1;
 }
 
+# Handler run when viewing a topic
 sub commonTagsHandler {
     # my ( $text, $topic, $web ) = @_;
 
@@ -89,7 +90,7 @@ HTML
     $_[0] = $nlines;
 }
 
-# REST handler for table row edit save
+# REST handler for table row edit save. Supports all four functions
 sub save {
     my $query = TWiki::Func::getCgiQuery();
 
