@@ -1,10 +1,10 @@
+# See bottom of file for copyright
 package TWiki::Plugins::EditRowPlugin::TableRow;
 
 use strict;
 
 use TWiki::Func;
 
-my $defCol ||= { type => 'text', size => 20, values => [] };
 my $erp = 'erp';
 
 sub new {
@@ -30,7 +30,7 @@ sub renderForEdit {
     my $col = 0;
     my $ct = $this->{table}->{colTypes};
     foreach (@{$this->{cols}}) {
-        push(@out, $_->renderForEdit($ct->[$col++] || $defCol));
+        push(@out, $_->renderForEdit($ct->[$col++]));
     }
     my $buttons = CGI::input({
         type => 'submit',
@@ -89,18 +89,26 @@ sub renderForDisplay {
         my $col = 0;
         my $ct = $this->{table}->{colTypes};
         foreach (@{$this->{cols}}) {
-            push(@out, $_->renderForDisplay($ct->[$col++] || $defCol));
+            push(@out, $_->renderForDisplay($ct->[$col++]));
         }
         my $id = "$this->{table}->{number}_$this->{number}";
-        my $url = TWiki::Func::getScriptUrl(
-            $this->{table}->{web}, $this->{table}->{topic}, 'view',
-            active_table => $this->{table}->{number},
-            active_row => $this->{number},
-            '#' => "$erp$id");
+        my $url;
+        if ($TWiki::Plugins::VERSION < 1.11) {
+            $url = TWiki::Func::getScriptUrl(
+                $this->{table}->{web}, $this->{table}->{topic}, 'view').
+                "?active_table=$this->{table}->{number}".
+                ";active_row=$this->{number}#$erp$id";
+        } else {
+            $url = TWiki::Func::getScriptUrl(
+                $this->{table}->{web}, $this->{table}->{topic}, 'view',
+                active_table => $this->{table}->{number},
+                active_row => $this->{number},
+                '#' => "$erp$id");
+        }
         unshift(@out,
              "<a href='$url'>".
                CGI::image_button(
-                   -name => '$erp_edit$id',
+                   -name => "${erp}_edit$id",
                    -src => '%PUBURLPATH%/TWiki/TWikiDocGraphics/edittopic.gif').
                      "</a>");
     }
@@ -113,3 +121,47 @@ sub finish {
 }
 
 1;
+__END__
+
+Author: Crawford Currie http://c-dot.co.uk
+
+Copyright (C) 2007 WindRiver Inc. and TWiki Contributors.
+All Rights Reserved. TWiki Contributors are listed in the
+AUTHORS file in the root of this distribution.
+NOTE: Please extend that file, not this notice.
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version. For
+more details read LICENSE in the root of this distribution.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+Do not remove this copyright notice.
+
+This is an object that represents a single row in a table.
+
+=pod
+
+---++ new(\$table, $rno)
+Constructor
+   * \$table - pointer to the table
+   * $rno - what row number this is (start at 1)
+
+---++ finish()
+Must be called to dispose of the object. This method disconnects internal pointers that would
+otherwise make a Table and its rows and cells self-referential.
+
+---++ stringify()
+Generate a TML representation of the row
+
+---++ renderForEdit() -> $text
+Render the row for editing. Standard TML is used to construct the table.
+
+---++ renderForDisplay() -> $text
+Render the row for display. Standard TML is used to construct the table.
+
+=cut

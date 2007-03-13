@@ -1,3 +1,4 @@
+# See bottom of file for copyright and pod
 package TWiki::Plugins::EditRowPlugin::Table;
 
 use strict;
@@ -6,9 +7,6 @@ use TWiki::Func;
 use TWiki::Plugins::EditRowPlugin::TableRow;
 use TWiki::Plugins::EditRowPlugin::TableCell;
 
-# Extract a topic into a list of lines and embedded table definitions.
-# Each table definition is an object of type EditTable, and contains
-# a set of attrs (read from the %EDITTABLE) and a list of rows.
 sub parseTables {
     #my $text, $topic, $web = @_
     my $active_table = undef;
@@ -125,8 +123,6 @@ sub changeRow {
     return $this->stringify();
 }
 
-# add a row after the active row containing the data just entered
-# in the active row.
 sub addRow {
     my ($this, $urps) = @_;
     my $arow = $this->{rows}->[$urps->{active_row} - 1];
@@ -143,13 +139,13 @@ sub addRow {
     return $this->stringify();
 }
 
-# delete the current row
 sub deleteRow {
     my ($this, $urps) = @_;
     splice(@{$this->{rows}}, $urps->{active_row} - 1, 1);
     return $this->stringify();
 }
 
+# Private method that parses a column type specification
 sub _parseFormat {
     my $format = shift;
     my @cols;
@@ -189,3 +185,79 @@ sub _parseFormat {
 }
 
 1;
+__END__
+
+Author: Crawford Currie http://c-dot.co.uk
+
+Copyright (C) 2007 WindRiver Inc. and TWiki Contributors.
+All Rights Reserved. TWiki Contributors are listed in the
+AUTHORS file in the root of this distribution.
+NOTE: Please extend that file, not this notice.
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version. For
+more details read LICENSE in the root of this distribution.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+Do not remove this copyright notice.
+
+This is an object that represents a table.
+
+=pod
+
+---+ package TWiki::Plugins::EditRowPlugin::Table
+Representation of an editable table
+
+=cut
+
+=pod
+
+---++ parseTables($text, $topic, $web) -> \@list
+Static function to extract a topic into a list of lines and embedded table definitions.
+Each table definition is an object of type EditTable, and contains
+a set of attrs (read from the %EDITTABLE) and a list of rows. You can spot the tables
+in the list by doing:
+if (ref($line) eq 'TWiki::Plugins::EditRowPlugin::Table') {
+
+---++ new($tno, $attrs, $web, $topic)
+Constructor
+   * $tno = table number (sequence in data, usually) (start at 1)
+   * $attrs - TWiki::Attrs of the relevant %EDITTABLE
+   * $web - the web
+   * $topic - the topic
+
+---++ finish()
+Must be called to dispose of a Table object. This method disconnects internal pointers that would
+otherwise make a Table and its rows and cells self-referential.
+
+---++ stringify()
+Generate a TML representation of the table
+
+---++ renderForEdit($activeRow) -> $text
+Render the table for editing. Standard TML is used to construct the table.
+   $activeRow - the number of the row being edited
+
+---++ renderForDisplay() -> $text
+Render the table for display. Standard TML is used to construct the table.
+
+---++ changeRow(\%urps)
+Commit changes from the query into the table.
+   * $urps - url parameters, usually the result of $query->Vars()
+
+---++ addRow(\%urps)
+Add a row after the active row containing the data from the query
+   * $urps - hash of parameters, usually the result of $query->Vars()
+      * =active_row= - the row to add after
+      * 
+
+---++ deleteRow(\%urps)
+Delete the current row, as defined by active_row in $urps
+   * $urps - url parameters, usualy the result of $query->Vars()
+
+=cut
+

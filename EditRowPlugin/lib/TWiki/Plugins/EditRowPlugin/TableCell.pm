@@ -1,8 +1,12 @@
+# See bottom of file for copyright
 package TWiki::Plugins::EditRowPlugin::TableCell;
 
 use strict;
 
 use TWiki::Func;
+
+# Default format if no other format is defined for a cell
+my $defCol ||= { type => 'text', size => 20, values => [] };
 
 sub new {
     my ($class, $row, $text, $number) = @_;
@@ -28,6 +32,7 @@ sub stringify {
 
 sub renderForDisplay {
     my ($this, $colDef) = @_;
+    $colDef ||= $defCol;
 
     if ($colDef->{type} eq 'row') {
         my $attrs = $this->{row}->{table}->{attrs};
@@ -44,6 +49,7 @@ sub renderForDisplay {
 
 sub renderForEdit {
     my ($this, $colDef) = @_;
+    $colDef ||= $defCol;
 
     my $expandedValue = TWiki::Func::expandCommonVariables(
         $this->{text} || '');
@@ -107,14 +113,17 @@ sub renderForEdit {
 
     } elsif( $colDef->{type} eq 'textarea' ) {
 
-        my ($rows, $cols) = split( /x/, $colDef->{size} );
+        my ($rows, $cols) = split( /x/i, $colDef->{size} );
+        $rows =~ s/[^\d]//;
+        $cols =~ s/[^\d]//;
         $rows = 3 if $rows < 1;
         $cols = 30 if $cols < 1;
 
         $text .= CGI::textarea({
             rows => $rows,
             cols => $cols,
-            name => $cellName }, $this->{text});
+            name => $cellName,
+            default => $this->{text}});
 
     } elsif( $colDef->{type} eq 'date' ) {
 
@@ -157,3 +166,47 @@ sub renderForEdit {
 }
 
 1;
+__END__
+
+Author: Crawford Currie http://c-dot.co.uk
+
+Copyright (C) 2007 WindRiver Inc. and TWiki Contributors.
+All Rights Reserved. TWiki Contributors are listed in the
+AUTHORS file in the root of this distribution.
+NOTE: Please extend that file, not this notice.
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version. For
+more details read LICENSE in the root of this distribution.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+Do not remove this copyright notice.
+
+This is an object that represents a single cell in a table.
+
+=pod
+
+---++ new(\$row, $cno)
+Constructor
+   * \$row - pointer to the row
+   * $cno - what cell number this is (start at 1)
+
+---++ finish()
+Must be called to dispose of the object. This method disconnects internal pointers that would
+otherwise make a Table and its rows and cells self-referential.
+
+---++ stringify()
+Generate a TML representation of the cell
+
+---++ renderForEdit() -> $text
+Render the cell for editing. Standard TML is used to construct the table.
+
+---++ renderForDisplay() -> $text
+Render the cell for display. Standard TML is used to construct the table.
+
+=cut
