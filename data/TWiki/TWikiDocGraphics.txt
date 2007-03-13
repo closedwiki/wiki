@@ -64,6 +64,7 @@ Other usage: [[%TOPIC%#Usage_extended][see below]].
 | <img src="%ATTACHURLPATH%/newtopic.gif" alt="New topic" title="New topic" />  | =newtopic.gif= | New topic | =%<nop>ICON{newtopic}%= |
 | <img src="%ATTACHURLPATH%/edittopic.gif" alt="Edit topic" title="Edit topic" />  | =edittopic.gif= | Edit topic | =%<nop>ICON{edittopic}%= |
 | <img src="%ATTACHURLPATH%/save.gif" alt="Save" title="Save" />  | =save.gif= | Save | =%<nop>ICON{save}%= |
+| <img src="%ATTACHURLPATH%/quiet.gif" alt="Quiet" title="Quiet" />  | =quiet.gif= | Quiet | =%<nop>ICON{quiet}%= |
 | <img src="%ATTACHURLPATH%/attachfile.gif" alt="Attach file" title="Attach file" />  | =attachfile.gif= | Attach file | =%<nop>ICON{attachfile}%= |
 | <img src="%ATTACHURLPATH%/download.gif" alt="Download" title="Download" />  | =download.gif= | Download | =%<nop>ICON{download}%= |
 | <img src="%ATTACHURLPATH%/trash.gif" alt="Trash" title="Trash" />  | =trash.gif= | Trash | =%<nop>ICON{trash}%= |
