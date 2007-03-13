@@ -5,38 +5,61 @@ One line description, required for extensions repository catalog.
    * Set SHORTDESCRIPTION = Single table row inline edit
 -->
 %SHORTDESCRIPTION%
+<img src="%ATTACHURLPATH%/screenshot.gif" alt="screenshot.gif" width='415' height='100' style="float:right" />
 
 %TOC%
 
-<img src="%ATTACHURLPATH%/screenshot.gif" alt="screenshot.gif" width='415' height='100' style="float:right" />
 Supports editing a single row in a table at a time, in-place in the table.
 Multiple tables in a topic are supported, but only once table at a time
 can be edited.
 
 Works like the !EditTablePlugin (it uses exactly the same =%EDITTABLE= tags)
 except that it only opens one row at a time. Closed rows are shown with
-an edit button.
+an edit %ICON{edittopic}% button.
 
 This solves the problem with the long page rendering times required to show all
-the HTML for a full table edit. At this time most, but possibly not all,
-features of !EditTablePlugin are supported; it's hard to tell exactly,
-because there are no tests for EditTablePlugin, the documentation is
-incomplete and the code is rather hard to read.
+the HTML for a full table edit on big tables.
 
-The plugin doesn't use !JavaScript (except for the
-calendar) so it should work with all browsers.
+At this time most features of !EditTablePlugin are supported. Known exceptions
+are:
+   * the =helptopic= and =editbutton= switches, which are ignored,
+   * the =EDITCELL= feature, which is not supported,
+   * access controls, which are only checked on topic save.
+
+The plugin doesn't use !JavaScript (except for the calendar) so it should
+work with all browsers.
 
 See also: !EditTablePlugin, !EditTableRowPlugin.
 
 ---++ Usage
 
-See EditTablePlugin for information on the =%EDITTABLE= tag and its parameters.
+See EditTablePlugin for information on the =%EDITTABLE= tag and its
+parameters. The same tag syntax is used for this plugin. When a table row is
+edited, then four buttons may be shown in the row depending on the settings
+of =changerows= and =quietsave=.
+   * %ICON{save}% saves the changes in the current row
+   * %ICON{quiet}% saves without notification
+   * %ICON{plus}% adds a new row after the current row (taking for its contents whatever you entered into the current row). 
+   * %ICON{minus}% deletes that row.
 
-The plugin needs to be put on the INSTALLEDPLUGINS list before
-!EditTablePlugin if both are required. It is enabled by setting
-   * <nop>Set ENABLE_TABLE_ROW_EDIT = on
-in a topic or !WebPreferences. Where this variable is set, then row editing
-will be used instead of table editing.
+If both !EditRowPlugin and !EditTablePlugin are required, then you have to put !EditRowPlugin into ={PluginsOrder}= in [[%SCRIPTURLPATH{configure}%][configure]]) before !EditTablePlugin.
+
+The assumption is that most of the time you will want to use EditTablePlugin, and will only enable this plugin in topics where there are large tables that it can't cope with. So this plugin has to be enabled specifically by setting
+   * Set ENABLE_TABLE_ROW_EDIT = on
+in a topic or !WebPreferences. It is enabled in this topic, so if it is working then the following
+examples will be editable.
+---+++ Example 1
+%EDITTABLE{ format="| row, -1 | text, 20, init | select, 1, one, two, three, four | radio, 3,:-),:-I,:-( | label, 0, %SERVERTIME{"$day $mon $year $hour:$min"}% |" changerows="on" quietsave="on" }%
+|*Nr*|*Text field*|*Drop down*|*Mood*|*Timestamp*|
+| 1 | hello table | one | :-) | 26 Jun 2002 12:30 |
+| 2 |  | two | :-( | 27 Jun 2002 12:40 |
+---+++ Example 2
+%EDITTABLE{ format="| label | text, 40 |" }%
+|*Key*|*Value*|
+| Name: | John Smith |
+| Gender: | M |
+| DOB: | 1999/12/31 |
+| City: | New York |
 
 ---++ Installation Instructions
 

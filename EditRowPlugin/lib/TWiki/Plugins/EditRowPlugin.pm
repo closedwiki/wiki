@@ -1,28 +1,4 @@
-# Author: Crawford Currie http://c-dot.co.uk
-#
-# Copyright (C) 2007 WindRiver Inc.
-# and TWiki Contributors. All Rights Reserved. TWiki Contributors
-# are listed in the AUTHORS file in the root of this distribution.
-# NOTE: Please extend that file, not this notice.
-#
-# This program is free software; you can redistribute it and/or
-# modify it under the terms of the GNU General Public License
-# as published by the Free Software Foundation; either version 2
-# of the License, or (at your option) any later version. For
-# more details read LICENSE in the root of this distribution.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-#
-# For licensing info read LICENSE file in the TWiki root.
-
-=pod
-
----+ package EditRowPlugin
-
-=cut
-
+# See bottom of file for copyright
 package TWiki::Plugins::EditRowPlugin;
 
 use strict;
@@ -30,7 +6,7 @@ use strict;
 use vars qw( $VERSION $RELEASE $SHORTDESCRIPTION $debug $pluginName $NO_PREFS_IN_TOPIC );
 
 $VERSION = '$Rev$';
-$RELEASE = 'Dakar';
+$RELEASE = '$Date$';
 $SHORTDESCRIPTION = 'Single table row inline edit';
 
 $NO_PREFS_IN_TOPIC = 1;
@@ -48,7 +24,7 @@ sub initPlugin {
     my( $topic, $web, $user, $installWeb ) = @_;
 
     # check for Plugins.pm versions
-    if( $TWiki::Plugins::VERSION < 1.026 ) {
+    if( $TWiki::Plugins::VERSION < 1.1 ) {
         TWiki::Func::writeWarning( "Version mismatch between $pluginName and Plugins.pm" );
         return 0;
     }
@@ -57,6 +33,60 @@ sub initPlugin {
 
     # Plugin correctly initialized
     return 1;
+}
+
+sub commonTagsHandler {
+    # my ( $text, $topic, $web ) = @_;
+
+    return unless
+      TWiki::Func::getPreferencesValue('ENABLE_TABLE_ROW_EDIT');
+
+    return unless $_[0] =~ /%EDITTABLE{(.*?)}%/;
+
+    my ($topic, $web) = ($_[1], $_[2]);
+
+    require TWiki::Plugins::EditRowPlugin::Table;
+    return if $@;
+
+    my $content = TWiki::Plugins::EditRowPlugin::Table::parseTables(@_);
+
+    $_[0] =~ s/\\\n//gs;
+
+    my $query = TWiki::Func::getCgiQuery();
+
+    return unless $query;
+
+    my $urps = $query->Vars();
+    $urps->{active_table} ||= 0;
+    $urps->{active_row} ||= 0;
+
+    my $nlines = '';
+    my $table = undef;
+    my $active_table = 0;
+
+    foreach my $line (@$content) {
+        if (ref($line) eq 'TWiki::Plugins::EditRowPlugin::Table') {
+            $table = $line;
+            $active_table++;
+            if ($active_table == $urps->{active_table}) {
+                my $saveUrl =
+                  TWiki::Func::getScriptUrl($pluginName, 'save', 'rest');
+                $line = <<HTML;
+<form name='roweditform_$active_table' method='post' action='$saveUrl'>
+<input type="hidden" name="topic" value="$web.$topic" />
+<input type="hidden" name="active_table" value="$active_table" />
+<input type="hidden" name="active_row" value="$urps->{active_row}" />
+HTML
+                $line .= $table->renderForEdit($urps->{active_row});
+                $line .= "\n</form>";
+            } else {
+                $line = $table->renderForDisplay();
+            }
+            $table->finish();
+        }
+        $nlines .= "$line\n";
+    }
+    $_[0] = $nlines;
 }
 
 # REST handler for table row edit save
@@ -119,58 +149,29 @@ sub save {
     return 0;
 }
 
-sub commonTagsHandler {
-    # my ( $text, $topic, $web ) = @_;
-
-    return unless
-      TWiki::Func::getPreferencesValue('ENABLE_TABLE_ROW_EDIT');
-
-    return unless $_[0] =~ /%EDITTABLE{(.*?)}%/;
-
-    my ($topic, $web) = ($_[1], $_[2]);
-
-    require TWiki::Plugins::EditRowPlugin::Table;
-    return if $@;
-
-    my $content = TWiki::Plugins::EditRowPlugin::Table::parseTables(@_);
-
-    $_[0] =~ s/\\\n//gs;
-
-    my $query = TWiki::Func::getCgiQuery();
-
-    return unless $query;
-
-    my $urps = $query->Vars();
-    $urps->{active_table} ||= 0;
-    $urps->{active_row} ||= 0;
-
-    my $nlines = '';
-    my $table = undef;
-    my $active_table = 0;
-
-    foreach my $line (@$content) {
-        if (ref($line) eq 'TWiki::Plugins::EditRowPlugin::Table') {
-            $table = $line;
-            $active_table++;
-            if ($active_table == $urps->{active_table}) {
-                my $saveUrl =
-                  TWiki::Func::getScriptUrl($pluginName, 'save', 'rest');
-                $line = <<HTML;
-<form name='roweditform_$active_table' method='post' action='$saveUrl'>
-<input type="hidden" name="topic" value="$web.$topic" />
-<input type="hidden" name="active_table" value="$active_table" />
-<input type="hidden" name="active_row" value="$urps->{active_row}" />
-HTML
-                $line .= $table->renderForEdit($urps->{active_row});
-                $line .= "\n</form>";
-            } else {
-                $line = $table->renderForDisplay();
-            }
-            $table->finish();
-        }
-        $nlines .= "$line\n";
-    }
-    $_[0] = $nlines;
-}
-
 1;
+__END__
+
+Author: Crawford Currie http://c-dot.co.uk
+
+Copyright (C) 2007 WindRiver Inc. and TWiki Contributors.
+All Rights Reserved. TWiki Contributors are listed in the
+AUTHORS file in the root of this distribution.
+NOTE: Please extend that file, not this notice.
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version. For
+more details read LICENSE in the root of this distribution.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+Do not remove this copyright notice.
+
+This plugin supports editing of a table row-by-row.
+
+It uses a fairly generic table object, and employs a REST handler
+for saving.

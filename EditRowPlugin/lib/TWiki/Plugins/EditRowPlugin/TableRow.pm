@@ -5,6 +5,7 @@ use strict;
 use TWiki::Func;
 
 my $defCol ||= { type => 'text', size => 20, values => [] };
+my $erp = 'erp';
 
 sub new {
     my ($class, $table, $number) = @_;
@@ -35,6 +36,7 @@ sub renderForEdit {
         type => 'submit',
         name => 'editrowplugin_save',
         value => $TWiki::Plugins::EditRowPlugin::NOISY_SAVE,
+        title => $TWiki::Plugins::EditRowPlugin::NOISY_SAVE,
         style => 'font-size:0;width:18px; height:18px; background-image:url(%PUBURLPATH%/TWiki/TWikiDocGraphics/save.gif)',
        }, '');
     my $attrs = $this->{table}->{attrs};
@@ -43,7 +45,8 @@ sub renderForEdit {
             type => 'submit',
             name => 'editrowplugin_save',
             value => $TWiki::Plugins::EditRowPlugin::QUIET_SAVE,
-            style => 'font-size:0;width:18px; height:18px; background-image:url(%PUBURLPATH%/TWiki/TWikiDocGraphics/save.gif)',
+            title => $TWiki::Plugins::EditRowPlugin::QUIET_SAVE,
+            style => 'font-size:0;width:18px; height:18px; background-image:url(%PUBURLPATH%/TWiki/TWikiDocGraphics/quiet.gif)',
         }, '');
     }
     # add save button
@@ -53,6 +56,7 @@ sub renderForEdit {
             type => 'submit',
             name => 'editrowplugin_save',
             value => $TWiki::Plugins::EditRowPlugin::ADD_ROW,
+            title => $TWiki::Plugins::EditRowPlugin::ADD_ROW,
             style => 'font-size:0;width:18px; height:18px; background-image:url(%PUBURLPATH%/TWiki/TWikiDocGraphics/plus.gif)',
         }, '');
         if ($attrs->{changerows} eq 'on') {
@@ -61,10 +65,12 @@ sub renderForEdit {
                 type => 'submit',
                 name => 'editrowplugin_save',
                 value => $TWiki::Plugins::EditRowPlugin::DELETE_ROW,
+                title => $TWiki::Plugins::EditRowPlugin::DELETE_ROW,
                 style => 'font-size:0;width:18px; height:18px; background-image:url(%PUBURLPATH%/TWiki/TWikiDocGraphics/minus.gif)',
             }, '');
         }
     }
+    $buttons .= "<a name='$erp$this->{table}->{number}_$this->{number}'></a>";
     unshift(@out, $buttons);
 
     return '| ' . join(' | ', @out) . '|';
@@ -85,14 +91,16 @@ sub renderForDisplay {
         foreach (@{$this->{cols}}) {
             push(@out, $_->renderForDisplay($ct->[$col++] || $defCol));
         }
+        my $id = "$this->{table}->{number}_$this->{number}";
         my $url = TWiki::Func::getScriptUrl(
             $this->{table}->{web}, $this->{table}->{topic}, 'view',
             active_table => $this->{table}->{number},
-            active_row => $this->{number});
+            active_row => $this->{number},
+            '#' => "$erp$id");
         unshift(@out,
              "<a href='$url'>".
                CGI::image_button(
-                   -name => 'editrowplugin_edit',
+                   -name => '$erp_edit$id',
                    -src => '%PUBURLPATH%/TWiki/TWikiDocGraphics/edittopic.gif').
                      "</a>");
     }
