@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="ScottHoge" date="1153937035" format="1.1" reprev="1.2" version="1.2"}%
+
 ---+!! <nop>%TOPIC%
 
 This <nop>LaTeX Mode TWiki Plugin allows you to include <nop>LaTeX mark up commands within a TWiki page.  It uses external programs (specifically latex, dvipng or dvips-and-convert, or mimetex) to generate =png=, =gif=, or =jpg= images from the mark up.  These images are then included in the rendered TWiki page.  The first time a particular image is generated, there may be a significant lag in page rendering as the images are generated on the server.  Once rendered, the image is saved as an attached file for the page, so subsequent viewings will not require re-renders.  When you remove a math expression from a page, its image is deleted.  
@@ -430,6 +430,7 @@ This plugin is an enhanced version of the TWiki:Plugins.MathModePlugin maintaine
 |  Plugin Version: | 12 Mar 2007 (v 3.6) |
 |  Change History: | %ICON{warning}% v3.0 and above requires TWiki 4.x.x and above %ICON{warning}% <!-- versions below in reverse order --> |
 |  12 Mar 2007 (v 3.6) | New option, imagetype, to set png, gif, or jpg rendering |
+|   2 Feb 2007 (unreleased) | Modified the section labeling to be more compatible =genpdflatex=, minor cleanup of html markup, new inline processing available (set =tweakinline= equal to '2' to enable) |
 |  30 Dec 2006 (v 3.51) | fixed call to attachmentExists in Render.pm, corrected version number |
 |  30 Dec 2006 (v 3.5) | modified how rendering of math from included topics is handled.  Fixed mimetex inline processing |
 |  27 Dec 2006 (v 3.4) | added mimetex to the rendering engine list |

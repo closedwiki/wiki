@@ -71,7 +71,7 @@ my $GREP =  $TWiki::cfg{Plugins}{LatexModePlugin}{fgrep} ||
     '/usr/bin/fgrep';
 
 # This is the extension/type of the generated images. Valid types
-# are png, gif, and jpg.
+# are png, and gif.
 $EXT = $TWiki::cfg{Plugins}{LatexModePlugin}{imagetype} || 'png';
 
 ### The variables below this line will likely not need to be changed
@@ -272,15 +272,24 @@ COLORS
         #            join('; ', sort map{"$_=>$opts{$_}"} keys(%opts)));
 
         if ( ($opts{'inline'} eq 1) and ($tweakinline) ) {
-            # $math_string = '\fbox{ \ ' . $math_string;
-            if ($opts{'engine'} eq 'mimetex') {
-                $math_string = '\cdot \ '.$math_string.' \ \cdot ';
-            
+
+            if ($tweakinline eq 2) {
+                ### this goes with the new trimInline code (v >= 3.6)
+                ### 
+                if ($opts{'engine'} eq 'mimetex') {
+                    $math_string = '\cdot \ '.$math_string.' \ \cdot ';
+                } else {
+                    $math_string = '$\cdot$ '.$math_string.' $\cdot$';
+                }
             } else {
-                # $math_string .= '\vphantom{$\sqrt{\{ \}^{T^T}}$}' ;
-                $math_string = '$\cdot$ '.$math_string.' $\cdot$';
-            }
-            # $math_string .= ' \ }';
+                ### this goes with the old trimInline code (v < 3.6)
+                ### 
+                $math_string = '\fbox{ \ ' . $math_string;
+                if ($opts{'engine'} ne 'mimetex') {
+                    $math_string .= '\vphantom{$\sqrt{\{ \}^{T^T}}$}' ;
+                }
+                $math_string .= ' \ }';
+            } 
         }
         #store the string in a hash table, indexed by the MD5 hash
         $LMPc{'hashed_math_strings'}->{$hash_code} = $math_string;
@@ -308,7 +317,7 @@ COLORS
         # if image currently exists, get its dimensions
         my $outimg = &TWiki::Func::getPubDir() . "/".$LMPc{'web'}.'/'.$LMPc{'topic'}."/"."latex$hash_code.$EXT";
         my $str = "";
-        if (-f $outimg) {
+        if ( !($LMPc{'rerender'}) and (-f $outimg) ) {
             my $img = image_info($outimg);
             $str = sprintf("width=\"%d\" height=\"%d\"",
                            ($opts{'scale'} * $img->{width} ),
@@ -893,12 +902,6 @@ sub makePNGs {
                 close(OI);
             }
 
-            # $sandbox->sysCommand( "$PATHTOCONVERT %F|F% -trim %O|F%",
-            #                       F => $outimg,
-            #                       O => '/tmp/mime.png'
-            #                       );
-            # move('/tmp/mime.png',$outimg);
-
             &TWiki::Func::writeDebug( $outimg ) if ($debug);
 
         } else {
@@ -949,12 +952,14 @@ sub makePNGs {
                                 $LATEXWDIR,$ptsz);
             }
 
-            my $img = image_info($outimg);
-
-            my $str = sprintf("width=\"%d.0\" height=\"%d.0\"",
-                              ($opts{'scale'} * $img->{width}),
-                              ($opts{'scale'} * $img->{height}) );
-            $_[0] =~ s/($outimg\")/$1 $str/;
+            ### this won't work from within makePNGs.  It should 
+            ### be returned to modify the rendered topic.
+            # my $img = image_info($outimg);
+            # 
+            # my $str = sprintf("width=\"%d.0\" height=\"%d.0\"",
+            #                   ($opts{'scale'} * $img->{width}),
+            #                   ($opts{'scale'} * $img->{height}) );
+            # $_[0] =~ s/($outimg\")/$1 $str/;
 
             if ( ( $TWiki::Plugins::VERSION < 1.1 ) ||
                  ( $TWiki::cfg{Plugins}{LatexModePlugin}{bypassattach}) )
@@ -966,7 +971,7 @@ sub makePNGs {
                 mkdir( $path.$pathSep )unless (-e $path.$pathSep);
 
                 move($outimg,$path.$pathSep.$outimg) or 
-                    $_[0] .= "<br> LatexModePlugin error: Move of $outimg failed: $!";
+                    $_[0] .= "<br> LatexModePlugin error: Move of $outimg failedg: $!";
             } else {
                 # Dakar interface
                 TWiki::Func::saveAttachment( $opts{'web'},
@@ -977,15 +982,26 @@ sub makePNGs {
                                                hide => 1 } );
                 unlink($outimg) unless $debug; # delete working copy
             }                
-            undef($img);
+            # undef($img);
         }
     }
 
 
 }
 
-
 sub trimInlineImage {
+    
+    if ($tweakinline eq 2) {
+        trimInlineImage_v2(@_);
+    } else {
+        trimInlineImage_v1(@_);
+    }
+
+}
+
+# =========================
+
+sub trimInlineImage_v2 {
 
     my ($in,$sandbox,$bgcolor,$LATEXWDIR,$ptsz) = @_;
 
@@ -1114,8 +1130,9 @@ sub trimInlineImage {
     
 }
 
-sub trimInlineImageOld {
+# =========================
 
+sub trimInlineImage_v1 {
     my ($outimg,$sandbox,$bgcolor,$LATEXWDIR,$ptsz) = @_;
 
     my $tmpfile = File::Temp::tempnam( $LATEXWDIR, 'tmp' ).".$EXT";
