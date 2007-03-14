@@ -1,4 +1,3 @@
-%META:TOPICPARENT{name="TWiki.TreePlugin"}%
 ---+!! %TWIKIWEB%.TreePlugin Samples
 
 %TOC%

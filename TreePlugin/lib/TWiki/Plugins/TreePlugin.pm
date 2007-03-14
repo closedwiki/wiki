@@ -128,7 +128,7 @@ sub _getSearchString {
 #	2) if two topics with identical names in different webs AND
 #		both have a TREEVIEW tag -> the second will be excluded
 
-$AGdebugmsg = "<br>AG debug message<br>";
+$AGdebugmsg = "<br \/>AG debug message<br \/>";
 
 # bugs re recursion:
 #	1) doesn't remember webs so: recursion across webs is problematic
@@ -322,16 +322,16 @@ sub _findUltimateParentBreakingCycles {
             $AGdebugmsg = $AGdebugmsg
               . "pre-rm:"
               . $parent->toStringNonRecursive()
-              . " <br>\n";
+              . " <br \/>\n";
             $parent->remove_child($node);
             $AGdebugmsg = $AGdebugmsg
               . "post-rm:"
               . $parent->toStringNonRecursive()
-              . " <br>\n";
+              . " <br \/>\n";
             $AGdebugmsg = $AGdebugmsg
               . $parent->name() . "<-"
               . $node->name()
-              . " \n<br>\n";
+              . " \n<br \/>\n";
             my $cycleroot =
               TWiki::Plugins::TreePlugin::TWikiNode->new(
                 $parent->name() . " cycle..." );
@@ -355,7 +355,7 @@ sub _findUltimateParentBreakingCycles {
     $AGdebugmsg = $AGdebugmsg
       . "findUltimateParent("
       . $orignode->name() . ")" . "="
-      . $node->name() . "<br>";
+      . $node->name() . "<br \/>";
     return $node;
 }
 
@@ -365,7 +365,7 @@ sub _findParent {
       . "findParent("
       . $node->name() . ")" . "="
       . ( $node->data("parent") ? $node->data("parent")->name() : "no-parent" )
-      . "<br>";
+      . "<br \/>";
     return $node->data("parent");
 }
 
