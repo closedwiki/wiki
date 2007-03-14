@@ -1,9 +1,8 @@
 package SearchTest;
+use base qw(Test::Unit::TestCase);
 
 use TWiki::Contrib::DBCacheContrib::Map;
 use TWiki::Contrib::DBCacheContrib::Search;
-use Time::ParseDate;
-use base qw(Test::Unit::TestCase);
 
 sub new {
     my $self = shift()->SUPER::new(@_);

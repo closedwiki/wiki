@@ -4,10 +4,8 @@
 #
 use strict;
 
-use TWiki::Contrib::DBCacheContrib::Archive;
 use TWiki::Contrib::DBCacheContrib::Array;
 use TWiki::Contrib::DBCacheContrib::FileTime;
-use TWiki::Contrib::DBCacheContrib::Map;
 use TWiki::Attrs;
 
 =begin text
@@ -44,7 +42,7 @@ package TWiki::Contrib::DBCacheContrib;
 
 # A DB is a hash keyed on topic name
 
-@TWiki::Contrib::DBCacheContrib::ISA = ("TWiki::Contrib::DBCacheContrib::Map");
+use base 'TWiki::Contrib::DBCacheContrib::Map';
 
 use vars qw( $initialised $storable $VERSION $RELEASE );
 
@@ -75,7 +73,7 @@ sub new {
     my $this = bless( $class->SUPER::new(), $class );
     $this->{_web} = $web;
     $this->{loaded} = 0;
-    $this->{_cachename} = $cacheName || "_DBCache";
+    $this->{_cachename} = $cacheName || '_DBCache';
 
     eval 'use Storable';
 
@@ -105,7 +103,8 @@ sub _writeCache {
 
     if ( $mayBeArchive ) {
         eval {
-            my $archive = new TWiki::Contrib::DBCacheContrib::Archive( $cache, "w" );
+            require TWiki::Contrib::DBCacheContrib::Archive;
+            my $archive = new TWiki::Contrib::DBCacheContrib::Archive( $cache, 'w' );
             $archive->writeObject( $this );
             $archive->close();
         };
@@ -138,7 +137,8 @@ sub _readCache {
 
     if ( $mayBeArchive ) {
         eval {
-            my $archive = new TWiki::Contrib::DBCacheContrib::Archive( $cache, "r" );
+            require TWiki::Contrib::DBCacheContrib::Archive;
+            my $archive = new TWiki::Contrib::DBCacheContrib::Archive( $cache, 'r' );
             $data = $archive->readObject();
             $archive->close();
         };
@@ -166,12 +166,12 @@ sub _loadTopic {
       return 0;
     }
     my $meta = new TWiki::Contrib::DBCacheContrib::Map();
-    $meta->set( "name", $topic );
-    $meta->set( "topic", $topic );
-    $meta->set( ".cache_time", new TWiki::Contrib::DBCacheContrib::FileTime( $filename ));
+    $meta->set( 'name', $topic );
+    $meta->set( 'topic', $topic );
+    $meta->set( '.cache_time', new TWiki::Contrib::DBCacheContrib::FileTime( $filename ));
 
     my $line;
-    my $text = "";
+    my $text = '';
     my $form;
     my $tailMeta = 0;
     local $/ = "\n";
@@ -179,65 +179,67 @@ sub _loadTopic {
         if ( $line =~ m/^%META:FORM{name=\"([^\"]*)\"}%/o ) {
             $form = new TWiki::Contrib::DBCacheContrib::Map() unless $form;
             my( $web, $name ) = TWiki::Func::normalizeWebTopicName('', $1);
-            $form->set( "name", $name );
-            $form->set( "_up", $meta );
-            $form->set( "_web", $this );
-            $meta->set( "form", $name );
+            $form->set( 'name', $name );
+            $form->set( '_up', $meta );
+            $form->set( '_web', $this );
+            $meta->set( 'form', $name );
             $meta->set( $name, $form );
             $tailMeta = 1;
         } elsif ( $line =~ m/^%META:TOPICPARENT{name=\"([^\"]*)\"}%/o ) {
-            $meta->set( "parent", $1 );
+            $meta->set( 'parent', $1 );
             $tailMeta = 1;
         } elsif ( $line =~ m/^%META:TOPICINFO{(.*)}%/o ) {
             my $att = new TWiki::Contrib::DBCacheContrib::Map($1);
-            $att->set( "_up", $meta );
-            $att->set( "_web", $this );
-            $meta->set( "info", $att );
+            $att->set( '_up', $meta );
+            $att->set( '_web', $this );
+            $meta->set( 'info', $att );
         } elsif ( $line =~ m/^%META:TOPICMOVED{(.*)}%/o ) {
             my $att = new TWiki::Contrib::DBCacheContrib::Map($1);
-            $att->set( "_up", $meta );
-            $att->set( "_web", $this );
-            $meta->set( "moved", $att );
+            $att->set( '_up', $meta );
+            $att->set( '_web', $this );
+            $meta->set( 'moved', $att );
             $tailMeta = 1;
         } elsif ( $line =~ m/^%META:FIELD{(.*)}%/o ) {
             my $fs = new TWiki::Attrs($1);
             $form = new TWiki::Contrib::DBCacheContrib::Map() unless $form;
-            $form->set( "_web", $this );
-            $form->set( $fs->get("name"), $fs->get("value"));
+            $form->set( '_web', $this );
+            $form->set( $fs->get('name'), $fs->get('value'));
             $tailMeta = 1;
         } elsif ( $line =~ m/^%META:FILEATTACHMENT{(.*)}%/o ) {
             my $att = new TWiki::Contrib::DBCacheContrib::Map($1);
-            $att->set( "_up", $meta );
-            $att->set( "_web", $this );
-            my $atts = $meta->get( "attachments" );
+            $att->set( '_up', $meta );
+            $att->set( '_web', $this );
+            my $atts = $meta->get( 'attachments' );
             if ( !defined( $atts )) {
                 $atts = new TWiki::Contrib::DBCacheContrib::Array();
-                $meta->set( "attachments", $atts );
+                $meta->set( 'attachments', $atts );
             }
             $atts->add( $att );
             $tailMeta = 1;
         } elsif ( $line =~ m/^%META:PREFERENCE{(.*)}%/o ) {
             my $pref = new TWiki::Contrib::DBCacheContrib::Map($1);
-	    $pref->set( "_up", $meta);
-	    $pref->set( "_web", $this);
-	    my $prefs = $meta->get("preferences");
-	    if (!defined($prefs)) {
-	      $prefs = new TWiki::Contrib::DBCacheContrib::Array();
-	      $meta->set("preferences", $prefs);
-	    }
-	    $prefs->add($pref);
+            $pref->set( '_up', $meta);
+            $pref->set( '_web', $this);
+            my $prefs = $meta->get('preferences');
+            if (!defined($prefs)) {
+                $prefs = new TWiki::Contrib::DBCacheContrib::Array();
+                $meta->set('preferences', $prefs);
+            }
+            $prefs->add($pref);
             $tailMeta = 1;
         } else {
-            $line = $this->readTopicLine( $topic, $meta, $line, $fh );
+            if ($this->can('readTopicLine')) {
+                $line = $this->readTopicLine( $topic, $meta, $line, $fh );
+            }
             $text .= $line if ( $line );
         }
     }
     close( $fh );
     $text =~ s/\n$//s if $tailMeta;
-    $meta->set( "text", $text );
+    $meta->set( 'text', $text );
     $this->set( $topic, $meta );
 
-    return 1;
+    return $meta;
 }
 
 =begin text
@@ -255,10 +257,10 @@ adding them to the hash for the topic.
 
 =cut
 
-sub readTopicLine {
-    #my ( $this, $topic, $meta, $line, $fh ) = @_;
-    return $_[3];
-}
+#sub readTopicLine {
+#    #my ( $this, $topic, $meta, $line, $fh ) = @_;
+#    return $_[3];
+#}
 
 =begin text
 
@@ -281,23 +283,23 @@ sub _onReload {
         unless ($topic->get('parent')) {
           $topic->set('parent', $TWiki::cfg{HomeTopicName}); # last parent is WebHome
         }
-        unless ( $topic->get( "_up" )) {
-            my $parent = $topic->get( "parent" );
+        unless ( $topic->get( '_up' )) {
+            my $parent = $topic->get( 'parent' );
             $parent = $this->get( $parent );
 
             # prevent the _up to be undefined in case of
             # a parent info to a non-existing topic;
             # the parent chain ends at the web hash
             if ($parent) {
-              $topic->set( "_up", $parent );
+              $topic->set( '_up', $parent );
             } else {
-              $topic->set( "_up", $this ); 
+              $topic->set( '_up', $this ); 
             }
         }
 
         # set pointer to web
-        $topic->set( "_web", $this );
-        $topic->set( "web", $this->{_web} );
+        $topic->set( '_web', $this );
+        $topic->set( 'web', $this->{_web} );
     }
 
 
@@ -306,10 +308,10 @@ sub _onReload {
 
 =begin text
 
----+++ load()
+---+++ load() -> @result
 
 Load the web into the database.
-Returns a string containing 3 numbers that give the number of topics
+Returns a list containing 3 numbers that give the number of topics
 read from the cache, the number read from file, and the number of previously
 cached topics that have been removed.
 
@@ -318,13 +320,12 @@ cached topics that have been removed.
 sub load {
     my $this = shift;
 
-    return "0 0 0" if ( $this->{loaded} );
+    return (0, 0, 0) if ( $this->{loaded} );
 
     my $web = $this->{_web};
     $web =~ s/\./\//go;
-    my @topics = TWiki::Func::getTopicList( $web );
     my $dataDir = TWiki::Func::getDataDir() . "/$web";
-    my $cacheFile = $dataDir . "/" . $this->{_cachename};
+    my $cacheFile = $dataDir . '/' . $this->{_cachename};
 
     my $time;
 
@@ -338,7 +339,7 @@ sub load {
     if ( $cache ) {
         eval {
             ( $readFromCache, $readFromFile, $removed ) =
-              $this->_updateCache( $cache, $dataDir, \@topics );
+              $this->_updateCache( $cache, $dataDir );
         };
 
         if ( $@ ) {
@@ -353,12 +354,15 @@ sub load {
 
     if ( !$cache ) {
         my @readTopic;
-        foreach my $topic ( @topics ) {
+        opendir(D, $dataDir) || return (0, 0, 0);
+        foreach my $topic ( readdir(D) ) {
+            next unless $topic =~ s/\.txt$//;
             if ($this->_loadTopic( $dataDir, $topic )) {
               $readFromFile++;
               push( @readTopic, $topic );
             }
         }
+        closedir(D);
         $this->_onReload( \@readTopic );
         $writeCache = 1;
     }
@@ -369,53 +373,56 @@ sub load {
 
     $this->{loaded} = 1;
 
-    return "$readFromCache $readFromFile $removed";
+    return ($readFromCache, $readFromFile, $removed);
 }
 
 # PRIVATE update the cache from files
 # return the number of files changed in a tuple
 sub _updateCache {
-    my ( $this, $cache, $dataDir, $topics ) = @_;
+    my ( $this, $cache, $dataDir ) = @_;
 
-    my $topic;
-    my %tophash;
-
-    foreach $topic ( @$topics ) {
-        $tophash{$topic} = 1;
-    }
-
-    my $removed = 0;
-    my @remove;
     my $readFromCache = $cache->size();
     foreach my $cached ( $cache->getValues()) {
-        $topic = $cached->fastget( "name" );
-        if ( !$tophash{$topic} ) {
-            # in the cache but are missing from @topics
-            push( @remove, $topic );
-            $removed++;
-        } elsif ( !$cached->fastget( ".cache_time" )->uptodate() ) {
-            push( @remove, $topic );
-        }
-    }
-
-    # remove bad topics
-    foreach $topic ( @remove ) {
-        $cache->remove( $topic );
-        $readFromCache--;
+        $cached->set( '.fresh', 0 );
     }
 
     my $readFromFile = 0;
     my @readTopic;
 
     # load topics that are missing from the cache
-    foreach $topic ( @$topics ) {
-        if ( !defined( $cache->fastget( $topic ))) {
-            if ($cache->_loadTopic( $dataDir, $topic )) {
-              $readFromFile++;
-              push( @readTopic, $topic );
+    opendir(D, $dataDir) || return (0, 0, 0);
+    foreach my $topic ( readdir(D) ) {
+        next unless $topic =~ s/\.txt$//;
+        my $topcache = $cache->fastget( $topic );
+        if ($topcache && !$topcache->fastget( '.cache_time' )->uptodate()) {
+            $cache->remove( $topic );
+            $readFromCache--;
+            $topcache = undef;
+        }
+        if ( !$topcache ) {
+            # Not in cache
+            $topcache = $cache->_loadTopic( $dataDir, $topic );
+            if ($topcache) {
+                $readFromFile++;
+                push( @readTopic, $topic );
             }
         }
+        $topcache->set( '.fresh', 1 ) if $topcache;
     }
+    closedir(D);
+
+    # Find smelly topics in the cache
+    my $removed = 0;
+    foreach my $cached ( $cache->getValues()) {
+        if( $cached->fastget( '.fresh' )) {
+            $cached->remove( '.fresh' );
+        } else {
+            $cache->remove( $cached->fastget( 'name' ) );
+            $readFromCache--;
+            $removed++;
+        }
+    }
+
     $this->{keys} = $cache->{keys};
 
     if ( $readFromFile || $removed ) {
