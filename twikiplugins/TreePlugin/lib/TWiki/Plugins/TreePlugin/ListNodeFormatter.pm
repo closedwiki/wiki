@@ -59,8 +59,7 @@ sub data {
 sub formatNode {
     my ( $this, $node, $count, $level ) = @_;
 
-    # no formatting applied
-    return &TWiki::Plugins::TreePlugin::getLinkName($node);
+    return "[[" . &TWiki::Plugins::TreePlugin::getLinkName($node) . "][" . $node->name() . "]]";
 }
 
 sub formatBranch {
