@@ -428,20 +428,26 @@ dTree.prototype.nodeStatus = function(status, id, bottom)
             }
         else 
             {
+            /*
+            eDiv.style.position = 'absolute';
+            eDiv.style.left = getAbsoluteLeft(nodeIdString) + eNodeDiv.offsetWidth + this.config.popupOffset.x + 'px'; 
+            eDiv.style.top = getAbsoluteTop(nodeIdString) + this.config.popupOffset.y + 'px';        
+            */
+
             var nodePos = Position.get(eNodeDiv);    
             eDiv.style.position = 'absolute';
             eDiv.style.left = nodePos.left + nodePos.width + this.config.popupOffset.x + 'px'; //4px padding + 2 px border
             eDiv.style.top = nodePos.top + this.config.popupOffset.y +'px';
             }
-        
+
+            /*        
         if (writeDebug)
             {
-            /*
+
             showDebug();
             writeDebug(navigator.appName);         
             writeDebug(eDiv.style.left);            
             writeDebug(eDiv.style.top);
-            */
 
             //writeDebug(eDiv.onmouseout);
             //writeDebug(nodePos.left);
@@ -457,6 +463,7 @@ dTree.prototype.nodeStatus = function(status, id, bottom)
             //writeDebug(eNodeDiv.offsetParent.offsetLeft);
             //writeDebug(eNodeDiv.offsetParent.offsetTop);          
             }    
+            */
         }
 
     //Do that last
@@ -657,9 +664,7 @@ var Position = (function() {
         writeDebug('absolute');
         return {'left':o.offsetLeft, 'top':o.offsetTop, 'width':o.offsetWidth, 'height':o.offsetHeight};
     }
-    */
-        
-            writeDebug('why:' + o.style.position);
+    */        
     
     var left = 0;
     var top = 0;
