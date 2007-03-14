@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="StephaneLenclud" date="1173574605" format="1.1" reprev="1.24" version="1.24"}%
+%META:TOPICINFO{author="StephaneLenclud" date="1173831620" format="1.1" reprev="1.25" version="1.25"}%
 ---+!! Tree Browser Plugin
 
 Renders a bulleted or numbered list as a collapsible/expandable tree of nodes.
@@ -28,7 +28,9 @@ Place the tag =%<nop>TREEBROWSER{= _parameters_ =}%= immediately before a bullet
 | =style= | Name of the CSS file to include without the =.css= extension. The CSS file must be attached to this topic. | =dtree= |
 | =autotoggle= | Set to =on= will enable node open/close when clicking the node item. Typically used for menu style tree along with =noindent=. | =off= |
 | =nodeactions= | Defines node functionality in a comma separated list of HTML event and dTree function. Typically used for menu style tree along with =noindent=. Format: <verbatim><event> <function>[,...]</verbatim> =event= is an HTML event e.g. =onclick=, =ondblclick=, =onmouseover=, =onmouseout=... %BR% =function= is one of the three dTree functions: =open=, =close=, =toggle= | none |
-
+| =popup= | Set to =on= to enable pop-up menu mode. Typically used with =closesamelevel=. See [[%TOPIC%#Pop_up_example][pop-up menu example]]. | =off= |
+| =closepopupdelay= | Pop-up mode only. Delay in millisecond before all popup close once the mouse cursor has left the menu structure. | =1000= |
+| =popupoffset= | Provides x and y offset from parent node for pop-up menus. Allows for fine tunning of pop-up position. | =0,0= |
 
 Rendering themes can be defined by =&lt;name&gt;_THEME= Plugin settings
    * Each theme is defined by a comma separated list containing the render type and parameters required by that render type
@@ -250,6 +252,65 @@ document.write(menudemo);
       * Peach
 </verbatim>
 
+---++++ Pop-up example
+
+<verbatim>
+%TREEBROWSER{"thread" noroot="on" shared="memenudemo" noindent="on" style="dmenu" nodeactions="onmouseover open, onclick close", closesamelevel="on" popup="on" popupoffset="-10,-4" }%
+   * Vegetables
+      * Carot
+      * Leek
+      * Tomato
+      * Potato 
+   * Fruits
+      * Banana
+      * Grape fruit       
+         * Pink
+         * Yellow 
+      * Peach
+</verbatim>
+
+*Simulated*
+
+<div class="treeBrowserPlugin"><style type="text/css" media="all">@import "%ATTACHURL%/dmenu.css";</style><script type="text/javascript">
+<!--
+popupdemo = new dTree('popupdemo');
+popupdemo.config.style='dmenu';
+popupdemo.config.inOrder=true;
+popupdemo.config.iconPath='/pub/TWiki/TreeBrowserPlugin/';
+popupdemo.updateIconPath();
+popupdemo.icon.root='/pub/TWiki/TreeBrowserPlugin/home.gif';
+popupdemo.config.useIcons=false;
+popupdemo.config.shared=true;
+popupdemo.config.noIndent=true;
+popupdemo.config.useLines=false;
+popupdemo.config.usePlusMinus=false;
+popupdemo.config.useStatusText=false;
+popupdemo.config.useSelection=false;
+popupdemo.config.folderLinks=false;
+popupdemo.config.noRoot=true;
+popupdemo.config.popup=true;
+popupdemo.config.closeSameLevel=true;
+popupdemo.config.autoToggle=true;
+popupdemo.addAction('onmouseover','open');
+popupdemo.addAction('onclick','close');
+popupdemo.config.closePopupDelay=1000;
+popupdemo.config.popupOffset={x:-10 , y:-4};
+popupdemo.add(0,-1,"");
+popupdemo.add(1,0,"Vegetables",'','','','/pub/TWiki/TreeBrowserPlugin/folder.gif','/pub/TWiki/TreeBrowserPlugin/folderopen.gif');
+popupdemo.add(2,1,"Carot",'','','','/pub/TWiki/TreeBrowserPlugin/page.gif');
+popupdemo.add(3,1,"Leek",'','','','/pub/TWiki/TreeBrowserPlugin/page.gif');
+popupdemo.add(4,1,"Tomato",'','','','/pub/TWiki/TreeBrowserPlugin/page.gif');
+popupdemo.add(5,1,"Potato",'','','','/pub/TWiki/TreeBrowserPlugin/page.gif');
+popupdemo.add(6,0,"Fruits",'','','','/pub/TWiki/TreeBrowserPlugin/folder.gif','/pub/TWiki/TreeBrowserPlugin/folderopen.gif');
+popupdemo.add(7,6,"Banana",'','','','/pub/TWiki/TreeBrowserPlugin/page.gif');
+popupdemo.add(8,6,"Grape fruit",'','','','/pub/TWiki/TreeBrowserPlugin/folder.gif','/pub/TWiki/TreeBrowserPlugin/folderopen.gif');
+popupdemo.add(9,8,"Pink",'','','','/pub/TWiki/TreeBrowserPlugin/page.gif');
+popupdemo.add(10,8,"Yellow ",'','','','/pub/TWiki/TreeBrowserPlugin/page.gif');
+popupdemo.add(11,6,"Peach",'','','','/pub/TWiki/TreeBrowserPlugin/page.gif');
+document.write(popupdemo);
+//-->
+</script>
+
 ---++ Plugin Settings
 
 Plugin settings are stored as preferences variables. To reference
@@ -322,6 +383,8 @@ a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>T
 
 ---++ Known issues
 
+   * Pop-up sub-menus not working on IE because of nested DIV clipping problem.
+
 ---+++ Root status management problem
 
 When doing something like:
@@ -341,8 +404,9 @@ The root shows and one can fold/unfold the entire tree from the root thanks to =
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.ThomasWeigert |
-|  Plugin Version: | v1.2 |
+|  Plugin Version: | v1.3 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  14 Mar 2007: | (v1.3) - Adding =popup=, =closepopudelay= and =popupoffset= parameters. Implemented pop-up menu. Improved =dmenu.css=. By [[TWiki:Main.StephaneLenclud][Stéphane Lenclud]]. |
 |  11 Mar 2007: | (v1.2) - Adding =nodeactions= parameter. Improved =dmenu.css=. By [[TWiki:Main.StephaneLenclud][Stéphane Lenclud]]. |
 |  10 Mar 2007: | (v1.1) - Adding =autotoggle= parameter. It's useful for menu style. Improved =dmenu.css=. Added =dtreeRoot= CSS class. By [[TWiki:Main.StephaneLenclud][Stéphane Lenclud]]. |
 |  09 Mar 2007: | (v1.0) - Improved CSS with variable class name allowing for multiple tree with different style on the same topic. Now bullet =icon:= supports full URL or URI. By [[TWiki:Main.StephaneLenclud][Stéphane Lenclud]]. |

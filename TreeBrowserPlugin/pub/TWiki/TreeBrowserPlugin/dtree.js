@@ -28,6 +28,7 @@ function Node(id, pid, name, url, title, target, icon, iconOpen, open) {
 	this._hc = false; //SL: meens "have children". 
 	this._ai = 0;
 	this._p;
+    this.level = 0; //Depth in the tree, 0 == root, 1 == first level...
 };
 
 // Action object, associate an HTML event with a dTree function e.g. onclick/o
@@ -54,7 +55,10 @@ function dTree(objName) {
 		iconPath : '',
 		shared : false,
         style : 'dtree', //The CSS filename
-        autoToggle : false //Clicking on a node itself will open/close that node, rename activeNode?
+        autoToggle : false, //Clicking on a node itself will open/close that node, rename activeNode?
+        popup : false, //Popup menu style
+        closePopupDelay : 1000, //Delay before closing all popup
+        popupOffset : {'x':0, 'y':0} //Allow fine tunning of popup position, in pixel  
 	};
 	this.icon = {
 	  root : 'base.gif',
@@ -81,6 +85,8 @@ function dTree(objName) {
 	this.selectedFound = false;
 	this.completed = false;
 	this.level = -1; //The current depth of the tree, -1==Not rendering, 0==root  
+    this.debug = 1;
+    this.popupTimeout = 0;
 };
 
 // Must be called if iconPath was changed
@@ -158,6 +164,7 @@ dTree.prototype.addNode = function(pNode) {
 					this.selectedFound = true;
 			}
          //SL: render this node
+            cn.level = this.level; //Set node level first
 			str += this.node(cn, n);
 			if (cn._ls) break;
 		}
@@ -211,8 +218,11 @@ dTree.prototype.node = function(node, nodeId) {
 	
    //SL: If the node has children
 	if (node._hc) {
-      //SL: Display that group of children if this node is root or this node is open.   
-      str += '<div id="d' + this.obj + nodeId + '" class="'+ this.getClassChildren() + ' ' + this.getClassLevel() + '" style="display:' + ((isRoot || node._io) ? 'block' : 'none') + ';">';
+      //SL: Display that group of children if this node is root OR this node is open BUT NOT in popup menu style.   
+      //We also add automatic popup closing functionality for popup menu 
+      str += '<div id="d' + this.obj + nodeId + '" class="'+ this.getClassChildren() + ' ' + this.getClassLevel() + '" style="display:' + ((isRoot || (node._io && !this.config.popup )) ? 'block' : 'none') + ';" ' + (this.config.popup? 'onmouseout="javascript: clearTimeout('+ this.obj +'.popupTimeout);' + this.obj + '.popupTimeout=setTimeout(\''+ this.obj +'.oAll(false)\',' + this.config.closePopupDelay + ');" onmouseover="clearTimeout('+ this.obj +'.popupTimeout);"' : '') + '>';
+        //Same as above line but with debug output built-in
+        //str += '<div id="d' + this.obj + nodeId + '" class="'+ this.getClassChildren() + ' ' + this.getClassLevel() + '" style="display:' + ((isRoot || (node._io && !this.config.popup )) ? 'block' : 'none') + ';" ' + (this.config.popup? 'onmouseout="javascript: writeDebug(\'onmouseout:' + this.obj + ' \');clearTimeout('+ this.obj +'.popupTimeout);' + this.obj + '.popupTimeout=setTimeout(\''+ this.obj +'.oAll(false)\',' + this.config.closePopupDelay + ');" onmouseover="javascript: writeDebug(\'onmouseover:' + this.obj + ' \');clearTimeout('+ this.obj +'.popupTimeout);"' : '') + '>';
 		str += this.addNode(node);
 		str += '</div>';
 	}
@@ -360,25 +370,98 @@ dTree.prototype.closeAllChildren = function(node) {
 }
 
 // Change the status of a node(open or closed)
-dTree.prototype.nodeStatus = function(status, id, bottom) {
+dTree.prototype.nodeStatus = function(status, id, bottom)
+    {
 	eDiv	= document.getElementById('d' + this.obj + id);
-   var eJoin;
-   if (this.config.usePlusMinus) 
-	  eJoin	= document.getElementById('j' + this.obj + id);
-	if (this.config.useIcons) {
+    var eJoin;
+    if (this.config.usePlusMinus) eJoin	= document.getElementById('j' + this.obj + id);
+	if (this.config.useIcons) 
+        {
 		eIcon	= document.getElementById('i' + this.obj + id);
 		eIcon.src = (status) ? this.aNodes[id].iconOpen : this.aNodes[id].icon;
-	}
-   if (this.config.usePlusMinus) 
-	eJoin.src = (this.config.useLines)?
+	    }
+    if (this.config.usePlusMinus) eJoin.src = (this.config.useLines)?
 	((status)?((bottom)?this.icon.minusBottom:this.icon.minus):((bottom)?this.icon.plusBottom:this.icon.plus)):
 	((status)?this.icon.nlMinus:this.icon.nlPlus);
-	eDiv.style.display = (status) ? 'block': 'none';
-   //SL: Change the class of the node div
-   var eNodeDiv = document.getElementById('n' + this.obj + id);
-   eNodeDiv.className = (status) ? this.getClassNodeOpened() : this.getClassNodeClosed();
-   if (this.root.id == this.aNodes[id].pid) { eNodeDiv.className += ' ' + this.getClassRoot(); } //Add root class to the root 
-};
+    //eDiv.style.display = (status) ? 'block': 'none'; //was there
+    //SL: Change the class of the node div
+    var nodeIdString = 'n' + this.obj + id; 
+    var eNodeDiv = document.getElementById('n' + this.obj + id);
+    eNodeDiv.className = (status) ? this.getClassNodeOpened() : this.getClassNodeClosed();
+    var isRoot=(this.root.id == this.aNodes[id].pid);
+    if (isRoot) { eNodeDiv.className += ' ' + this.getClassRoot(); } //Add root class to the root 
+    // Set position for popup menu
+    if (this.config.popup && status && !isRoot)
+        {    
+        //TODOs
+        //Decide which position API to use and move them to JavaScriptPlugin. extend HTMLElement class?
+        //Implement =popupoffset= parameter to easily adjust the postion of the popup menu
+        //Implement support for sub menu
+        
+        //If level>1 it means that we are dealing with a submenu i.e. a child from a popup menu
+        if (this.aNodes[id].level>1)
+            {
+            if (navigator.appName!='Microsoft Internet Explorer')
+                {
+                eDiv.style.position = 'absolute';
+                eDiv.style.left = eNodeDiv.offsetLeft + eNodeDiv.offsetWidth + this.config.popupOffset.x + 'px'; 
+                eDiv.style.top = eNodeDiv.offsetTop + this.config.popupOffset.y + 'px';    
+                }
+            else
+                {
+                //writeDebug('IE');
+                //eDiv.style.position = 'absolute';
+                //eDiv.style.left = getAbsoluteLeft(nodeIdString) + eNodeDiv.offsetWidth -6 + 'px'; //eNodeDiv.style.left + eNodeDiv.style.pixelWidth;
+                //eDiv.style.top = getAbsoluteTop(nodeIdString) + 'px';        
+                eDiv.style.position = 'absolute';
+                //Not working
+                //eDiv.style.left = eNodeDiv.offsetWidth + 'px'; //nodePos.left + nodePos.width -6 + 'px'; //4px padding + 2 px border
+                //eDiv.style.top = eNodeDiv.offsetHeight + 'px';    
+                //Show underneath
+                //eDiv.style.left = 0 + 'px'; //nodePos.left + nodePos.width -6 + 'px'; //4px padding + 2 px border
+                //eDiv.style.top = 0 + 'px';    
+                //Show but clipped
+                //eDiv.style.left = 50 + 'px'; //nodePos.left + nodePos.width -6 + 'px'; //4px padding + 2 px border
+                //eDiv.style.top = 20 + 'px';
+                //Possible workaround for IE: don't use nested div    
+                }
+            }
+        else 
+            {
+            var nodePos = Position.get(eNodeDiv);    
+            eDiv.style.position = 'absolute';
+            eDiv.style.left = nodePos.left + nodePos.width + this.config.popupOffset.x + 'px'; //4px padding + 2 px border
+            eDiv.style.top = nodePos.top + this.config.popupOffset.y +'px';
+            }
+        
+        if (writeDebug)
+            {
+            /*
+            showDebug();
+            writeDebug(navigator.appName);         
+            writeDebug(eDiv.style.left);            
+            writeDebug(eDiv.style.top);
+            */
+
+            //writeDebug(eDiv.onmouseout);
+            //writeDebug(nodePos.left);
+            //writeDebug(nodePos.top);
+            //writeDebugObject(eNodeDiv.style);
+            //writeDebug(eNodeDiv.style.paddingLeft);
+            //writeDebug(eNodeDiv.style.paddingRight);
+            //writeDebug(eNodeDiv.style.padding);
+            //writeDebug(eNodeDiv.parentNode.offsetLeft);
+            //writeDebug(eNodeDiv.parentNode.offsetTop);
+            // writeDebugObject(eNodeDiv.offsetParent.offsetLeft);
+            //writeDebugObject(eNodeDiv.offsetParent.offsetTop);
+            //writeDebug(eNodeDiv.offsetParent.offsetLeft);
+            //writeDebug(eNodeDiv.offsetParent.offsetTop);          
+            }    
+        }
+
+    //Do that last
+  	eDiv.style.display = (status) ? 'block': 'none'; //TODO: should really hide at the beginning if needed.
+    };
 
 // [Cookie] Clears a cookie
 dTree.prototype.clearCookie = function() {
@@ -477,3 +560,203 @@ if (!Array.prototype.pop) {
 		return lastElement;
 	}
 };
+
+/************************************************************/
+//Element position related code
+
+function getAbsoluteLeft(objectId) {
+	// Get an object left position from the upper left viewport corner
+	// Tested with relative and nested objects
+	o = document.getElementById(objectId)
+	oLeft = o.offsetLeft            // Get left position from the parent object
+	while(o.offsetParent!=null) {   // Parse the parent hierarchy up to the document element
+		oParent = o.offsetParent    // Get parent object reference
+		oLeft += oParent.offsetLeft // Add parent left position
+		o = oParent
+	}
+	// Return left postion
+	return oLeft
+}
+
+function getAbsoluteTop(objectId) {
+	// Get an object top position from the upper left viewport corner
+	// Tested with relative and nested objects
+	o = document.getElementById(objectId)
+	oTop = o.offsetTop            // Get top position from the parent object
+	while(o.offsetParent!=null) { // Parse the parent hierarchy up to the document element
+		oParent = o.offsetParent  // Get parent object reference
+		oTop += oParent.offsetTop // Add parent top position
+		o = oParent
+	}
+	// Return top position
+	return oTop
+}
+
+/// From www.javascripttoolbox.com
+
+var Position = (function() {
+  // Resolve a string identifier to an object
+  // ========================================
+  function resolveObject(s) {
+    if (document.getElementById && document.getElementById(s)!=null) {
+      return document.getElementById(s);
+    }
+    else if (document.all && document.all[s]!=null) {
+      return document.all[s];
+    }
+    else if (document.anchors && document.anchors.length && document.anchors.length>0 && document.anchors[0].x) {
+      for (var i=0; i<document.anchors.length; i++) {
+        if (document.anchors[i].name==s) { 
+          return document.anchors[i]
+        }
+      }
+    }
+  }
+  
+  var pos = {};
+  pos.$VERSION = 1.0;
+  
+  // Set the position of an object
+  // =============================
+  pos.set = function(o,left,top) {
+    if (typeof(o)=="string") {
+      o = resolveObject(o);
+    }
+    if (o==null || !o.style) {
+      return false;
+    }
+    
+    // If the second parameter is an object, it is assumed to be the result of getPosition()
+    if (typeof(left)=="object") {
+      var pos = left;
+      left = pos.left;
+      top = pos.top;
+    }
+    
+    o.style.left = left + "px";
+    o.style.top = top + "px";
+    return true;
+  };
+  
+  // Retrieve the position and size of an object
+  // ===========================================
+  pos.get = function(o) {
+    var fixBrowserQuirks = true;
+      // If a string is passed in instead of an object ref, resolve it
+    if (typeof(o)=="string") {
+      o = resolveObject(o);
+    }
+    
+    if (o==null) {
+      return null;
+    }
+    
+    //SL: that code won't work since o.style.position return no value!?!
+    /*
+    if (o.style.position=='absolute') {
+        writeDebug('absolute');
+        return {'left':o.offsetLeft, 'top':o.offsetTop, 'width':o.offsetWidth, 'height':o.offsetHeight};
+    }
+    */
+        
+            writeDebug('why:' + o.style.position);
+    
+    var left = 0;
+    var top = 0;
+    var width = 0;
+    var height = 0;
+    var parentNode = null;
+    var offsetParent = null;
+  
+    
+    offsetParent = o.offsetParent;
+    var originalObject = o;
+    var el = o; // "el" will be nodes as we walk up, "o" will be saved for offsetParent references
+    while (el.parentNode!=null) {
+      el = el.parentNode;
+      if (el.offsetParent==null) {
+      }
+      else {
+        var considerScroll = true;
+        /*
+        In Opera, if parentNode of the first object is scrollable, then offsetLeft/offsetTop already 
+        take its scroll position into account. If elements further up the chain are scrollable, their 
+        scroll offsets still need to be added in. And for some reason, TR nodes have a scrolltop value
+        which must be ignored.
+        */
+        if (fixBrowserQuirks && window.opera) {
+          if (el==originalObject.parentNode || el.nodeName=="TR") {
+            considerScroll = false;
+          }
+        }
+        if (considerScroll) {
+          if (el.scrollTop && el.scrollTop>0) {
+            top -= el.scrollTop;
+          }
+          if (el.scrollLeft && el.scrollLeft>0) {
+            left -= el.scrollLeft;
+          }
+        }
+      }
+      // If this node is also the offsetParent, add on the offsets and reset to the new offsetParent
+      if (el == offsetParent) {
+        left += o.offsetLeft;
+        if (el.clientLeft && el.nodeName!="TABLE") { 
+          left += el.clientLeft;
+        }
+        top += o.offsetTop;
+        if (el.clientTop && el.nodeName!="TABLE") {
+          top += el.clientTop;
+        }
+        o = el;
+        if (o.offsetParent==null) {
+          if (o.offsetLeft) {
+            left += o.offsetLeft;
+          }
+          if (o.offsetTop) {
+            top += o.offsetTop;
+          }
+        }
+        offsetParent = o.offsetParent;
+      }
+    }
+    
+  
+    if (originalObject.offsetWidth) {
+      width = originalObject.offsetWidth;
+    }
+    if (originalObject.offsetHeight) {
+      height = originalObject.offsetHeight;
+    }
+    
+    return {'left':left, 'top':top, 'width':width, 'height':height
+        };
+  };
+  
+  // Retrieve the position of an object's center point
+  // =================================================
+  pos.getCenter = function(o) {
+    var c = this.get(o);
+    if (c==null) { return null; }
+    c.left = c.left + (c.width/2);
+    c.top = c.top + (c.height/2);
+    return c;
+  };
+  
+  return pos;
+})();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
