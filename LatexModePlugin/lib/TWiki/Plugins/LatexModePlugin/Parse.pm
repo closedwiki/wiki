@@ -400,7 +400,6 @@ my %embed = ( '\\em' => [ '<em>', '</em>' ],
               '\\footnotesize' => [ '<font size="-4">','</font>' ],
               '\\large' => [ '<font size="+1">','</font>' ],
               '\\raggedleft' => [ '<div style="text-align:right">', '</div>' ],
-              '\\raggedleft' => [ '', '' ],
               '\\centering' => [ '<div align="center">', '</div>' ]
               );
 
@@ -964,18 +963,19 @@ sub convertEnvironment
         }
         $txt .= $block;
     }
-    elsif ($bname =~ /tabular/) {
+    elsif (0) { # ($bname =~ /tabular/) {
         printF("=====processing tabular=====\n");
         $block =~ s!^\\begin\{$bname\*?\}(\[\w+\])?!!;
         $block =~ s!\\end\{$bname\*?\}$!!; 
         
         $block =~ s/\x0d?\n//g;
-        $block =~ s/\{(\w+)\}//;
+        $block =~ s/\{([\@\{\.\}rlc]+)\}\s/ /; # peel off the table structure
         printF($block);
 
         my $struct = $1;
         $struct =~ s/\|//g;
         printF("\nstruct: ".$struct."\n");
+        $struct =~ s/\@\{.*?\}//g;
         my @rows = split(/\\\\/,$block);
         my $t = "<table>\n";
         foreach my $r (@rows) {
@@ -1485,7 +1485,8 @@ __DATA__
 :\institute:1:&formInst('$1'):
 :\inst:1:<sup>$1</sup>:
 :\email:0: :
-:\raggedright:0: :
 :\AE:0: &AElig;:
 :\ae:0: &aelig;:
 :\tableofcontents:0:%TOC%:
+!\keywords!1! <blockquote><b>Keywords:</b> $1 </blockquote> !
+!\multicolumn!3!<td span="$1">$3</td>!
