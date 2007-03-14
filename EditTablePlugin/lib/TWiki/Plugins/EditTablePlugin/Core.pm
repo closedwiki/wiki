@@ -325,6 +325,17 @@ sub handleTableEnd {
                 $text .= $helpText;
             }
         }
+        my $assetUrl  = '%PUBURL%/%TWIKIWEB%/EditTablePlugin';
+        my $scriptUrl = $assetUrl.'/edittable.js';
+
+        # Include javascript functionality for browsers that support it.
+        $text .= '<SCRIPT TYPE="text/javascript" SRC="'.$scriptUrl.'"></SCRIPT>'."\n";
+        my $tableNr = $query->param( 'ettablenr' );
+        $text .= "<SCRIPT TYPE=\"text/javascript\">\n"
+               . "<!-- -------- <pre> --------\n"
+               . "edittable_init('edittable$tableNr','$assetUrl');\n"
+               . "//   -------- </pre> -------- -->\n"
+               . "</SCRIPT>\n";
 
     } else {
         # View mode
@@ -494,7 +505,9 @@ sub inputElement {
 
     } elsif( $type eq 'row' ) {
         $size = $size + $theRowNr;
-        $text = "$size<input type=\"hidden\" name=\"$theName\" value=\"$size\" />";
+        $text = "<DIV class=\"et_rowlabel\">"
+              . "$size<input type=\"hidden\" name=\"$theName\" value=\"$size\" />"
+              . "</DIV>";
         $text .= saveEditCellFormat( $cellFormat, $theName );
 
     } elsif( $type eq 'label' ) {
@@ -575,6 +588,8 @@ sub handleTableRow {
 
     if( $doEdit ) {
         $theRow =~ s/\|\s*$//o;
+        my $rowID = $query->param("etrow_id$theRowNr");
+        if (! defined $rowID) { $rowID = $theRowNr; }
         my @cells = split( /\|/, $theRow );
         my $tmp = @cells;
         $nrCols = $tmp if( $tmp > $nrCols );  # expand number of cols
@@ -586,7 +601,7 @@ sub handleTableRow {
         while( $col < $nrCols ) {
             $col += 1;
             $cellDefined = 0;
-            $val = $query->param( "etcell${theRowNr}x$col" );
+            $val = $query->param( "etcell${rowID}x$col" );
             if( $val && $val =~ /^Chkbx: (etcell.*)/ ) {
                 # Multiple checkboxes, val has format "Chkbx: etcell4x2x2 etcell4x2x3 ..."
                 my $chkBoxeNames = $1;
@@ -598,7 +613,7 @@ sub handleTableRow {
                 $chkBoxVals =~ s/, $//;
                 $val = $chkBoxVals;
             }
-            $cellFormat = $query->param( "etformat${theRowNr}x$col" );
+            $cellFormat = $query->param( "etformat${rowID}x$col" );
             $val .= " %EDITCELL{$cellFormat}%" if( $cellFormat );
             if( defined $val ) {
                 # change any new line character sequences to <br />
