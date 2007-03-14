@@ -1,17 +1,14 @@
-
 %META:TOPICPARENT{name="TWiki.TreePlugin"}%
-Here are some ways of using %TWIKIWEB%.TreePlugin's =%<nop>TREEVIEW%= tag.
-
+---+!! %TWIKIWEB%.TreePlugin Samples
 
 %TOC%
-
 
 #SampleLists
 __Note:__ The links under <nop>TreeTop (included from HeadingOutlineSample) are not functional. They are only for demonstrational purpooses only. %BR%
 __Note:__ The children of each tree are presented in alphabetical order which is why a "Three" topic always preceeds a "Two" topic.  
 
 
----+ Lists
+---++ Lists
 
 
 #UlList
@@ -28,7 +25,7 @@ formatting="ullist"}%
 
 #OlList
 
----++ Numbered List
+---+++ Numbered List
 
 <code>
 %<nop>TREEVIEW{ topic="TreeTop" 
@@ -40,9 +37,9 @@ formatting="ollist"}%
 ----
 
 #SampleOutlines
----+ Outlines
+---++ Outlines
 
----++ Regular Outline
+---+++ Regular Outline
 <code>
 %<nop>TREEVIEW{topic="TreeTop" formatting="outline"}%
 </code>
@@ -54,7 +51,7 @@ This is also the default for the tag (when foramtting is not set).
 
 #SampleBookview
 
----++ Bookview Outline
+---+++ Bookview Outline
 
 <code>
 %<nop>TREEVIEW{topic="TreeTop" bookview="on"}%
@@ -64,7 +61,7 @@ Displays tree in bookview mode. See TreeBookviewOutlineSample.
 
 
 
----++ Outline with summaries
+---+++ Outline with summaries
 
 <verbatim>
 %TREEVIEW{topic="WebHome" topic="TreeTop" 
@@ -95,7 +92,7 @@ formatting="outline" format="  $outnum $topic
 
 ----
 
----++ Aligned outline with zooming
+---+++ Aligned outline with zooming
 <verbatim>
 %TABLE{tableborder="0"}%
 %TREEVIEW{formating="outline" topic="TreeTop" 
@@ -130,7 +127,7 @@ _In the rendered version, clicking on the outline numbers will display that topi
 
 #SampleHList
 
----+ Headings
+---++ Headings
 <code>
 %<nop>TREEVIEW{topic="TreeTop" formatting="hlist"}%
 </code>
@@ -141,7 +138,7 @@ See HeadingOutlineSample.
 
 #SampleNestedTables
 
----+ Nested tables
+---++ Nested tables
 
 
 You can also group branches within tables, like these three examples.
@@ -182,7 +179,7 @@ formatbranch="<table cellspacing=5><tr><td width=\"20%\"> $parent
 
 ----
 
----++ Nested tables, black brackets
+---+++ Nested tables, black brackets
 
 This is kinda neat....
 
@@ -218,7 +215,7 @@ formatbranch="<table cellspacing=5><tr><td width=\"20%\"> $parent
 
 ----
 
----++ Nested tables, colored brackets
+---+++ Nested tables, colored brackets
 
 <verbatim>
 %TREEVIEW{topic="TreeTop"
@@ -251,7 +248,7 @@ formatbranch="<table cellspacing=5><tr><td width=\"%20\"> $parent
 <!-- end nested color tables -->
 
 #SampleImageTrees
----+ Image Trees (new in 0.25!)
+---++ Image Trees (new in 0.25!)
 
 
 _version 0.25_
@@ -262,7 +259,7 @@ The general format is: imageoutline: _mode_ : _images_ : _imageformat_
 
 #ImageThread
 
----++  Thread-like trees
+---+++  Thread-like trees
 
 <verbatim>
 %TREEVIEW{topic="TreeTop" stoplevel="3" formatting="imageoutline:thread"}%
@@ -279,8 +276,8 @@ Because of defaults, this is the same as:
 
 <verbatim>
 %TREEVIEW{topic="TreeTop" stoplevel="3"
-formatting="imageoutline:thread:I.gif,white.gif,T.gif,L.gif:<img src='$image' border=0>"
-format="<table border=0 cellspacing=0 cellpadding=0><tr><td nowrap>$images</td><td style={font-size:12pt}>
+formatting="imageoutline:thread:I.gif,white.gif,T.gif,L.gif:<img src=\"$image\" border=\"0\">"
+format="<table border=0 cellspacing=0 cellpadding=0><tr><td nowrap>$images</td><td>
 $topic</td></tr></table>"}%
 </verbatim>
 
@@ -289,7 +286,7 @@ Go ahead swap in your own images....
 
 #ImageThreadExp
 
----++  Expanded thread-like trees
+---+++  Expanded thread-like trees
 
 <verbatim>
 %TREEVIEW{topic="TreeTop" stoplevel="3" formatting="imageoutline:threadexp"}%
@@ -327,7 +324,7 @@ format="<table border=0 cellspacing=0 cellpadding=0><tr><td nowrap>
 
 #ImageFolder
 
----++ Folder trees
+---+++ Folder trees
 
 These are pretty ugly (the default relies on Apache icons). But if you need it...
 
@@ -355,7 +352,7 @@ Go ahead swap in your own images....
 
 #ImageSingle
 
----++ Single Image
+---+++ Single Image
 
 I'm not sure why this would be interesting.....
 
