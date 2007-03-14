@@ -11,7 +11,7 @@
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details, published at 
+# GNU General Public License for more details, published at
 # http://www.gnu.org/copyleft/gpl.html
 #
 
@@ -20,12 +20,13 @@ use base qw(TWiki::Plugins::TreePlugin::NodeFormatter);
 
 use vars qw($RootOnum $OnumDelim);
 
-$RootOnum = " "; 	# what outline number we should assign to a web root when printing
-$OnumDelim = ".";	# delmitinater between outline numbers (eg, . makes  3.4.4)
+$RootOnum =
+  " ";    # what outline number we should assign to a web root when printing
+$OnumDelim = ".";    # delmitinater between outline numbers (eg, . makes  3.4.4)
 
 # class to format the nodes in a tree in an outline format
 # for example: Node1<ul><li>Child1</li><li>Child2</li></ul>
-# 
+#
 # each node is appended with its children
 #
 #
@@ -34,13 +35,13 @@ $OnumDelim = ".";	# delmitinater between outline numbers (eg, . makes  3.4.4)
 sub new {
     my ($class) = @_;
     my $this = {};
-    bless($this, $class);
+    bless( $this, $class );
     return $this;
 }
 
 sub data {
     my $this = shift;
-    my $key = shift;
+    my $key  = shift;
     return "" unless ($key);
     my $val = shift;
     return $this->{"_$key"} unless ($val);
@@ -48,52 +49,50 @@ sub data {
 }
 
 sub initNode {
-      my ($this, $node, $count) = @_;
-      $this->setOutNum($node, $count);
+    my ( $this, $node, $count ) = @_;
+    $this->setOutNum( $node, $count );
 }
 
 sub setOutNum {
-      my ($this, $node, $count) = @_;
-      my $onum;
-      #$count++;
-      if (ref $node->parent()){
-      		$onum = $node->parent()->onum();
-      		$onum .= $OnumDelim if ($onum); # add delimiter only if there's a real parent outNum
-      		$onum .= "$count" if ($count); # add number only if something there
-      } else {
-		$onum = "";
-      }      
-      $node->onum($onum);
+    my ( $this, $node, $count ) = @_;
+    my $onum;
+
+    #$count++;
+    if ( ref $node->parent() ) {
+        $onum = $node->parent()->onum();
+        $onum .= $OnumDelim
+          if ($onum);    # add delimiter only if there's a real parent outNum
+        $onum .= "$count" if ($count);    # add number only if something there
+    }
+    else {
+        $onum = "";
+    }
+    $node->onum($onum);
 }
 
 sub formatOutNum {
-      my ($this, $node) = @_;
-      my $onum = $node->onum();
-      return ($onum) ? $onum : $RootOnum ;
+    my ( $this, $node ) = @_;
+    my $onum = $node->onum();
+    return ($onum) ? $onum : $RootOnum;
 }
-      
+
 sub formatNode {
-	my ($this, $node, $count, $level) = @_;
-#	return $this->formatOutNum($node)." ".$node->name()."<br>\n";
-# AG Thu Jun 19 2003: expected to have to add [[ ]] for non-wikiword links,
-# but seems unnecessary, since OutlineNodeFormatter is inherited from
-# only by FormatOutlineNodeFormatter, which overrides formatNode.
-# I.e. OutlineNodeFormatter::formatNode seems to be unused.
-	return $node->name();
+    my ( $this, $node, $count, $level ) = @_;
+
+    # no formatting applied
+    return &TWiki::Plugins::TreePlugin::getLinkName($node);
 }
 
 sub formatBranch {
-	my ($this, $node, $childrenText, $count, $level) = @_;	
-	return $this->formatNode($node, $count, $level).$childrenText;
+    my ( $this, $node, $childrenText, $count, $level ) = @_;
+    return $this->formatNode( $node, $count, $level ) . $childrenText;
 }
 
 sub formatChild {
-	my ($this, $node, $count, $level) = @_;
-	$this->setOutNum($node, $count);
-	return $node->toHTMLFormat($this, $count, $level );
+    my ( $this, $node, $count, $level ) = @_;
+    $this->setOutNum( $node, $count );
+    return $node->toHTMLFormat( $this, $count, $level );
 }
 
 1;
-
-
 

@@ -11,10 +11,9 @@
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details, published at 
+# GNU General Public License for more details, published at
 # http://www.gnu.org/copyleft/gpl.html
 #
-
 
 package TWiki::Plugins::TreePlugin::FormatHelper;
 
@@ -24,25 +23,24 @@ use Exporter;
 use vars qw(@EXPORT);
 @EXPORT = qw(&loopReplaceRefData &replaceByRefData &spaceTopic);
 
-
 sub loopReplaceRefData {
-	my $text = shift;
-	my $ref = shift;
-	foreach (@_) {
-		$text = replaceByRefData($text, $ref, $_);
-	}
-	return $text;
+    my $text = shift;
+    my $ref  = shift;
+    foreach (@_) {
+        $text = replaceByRefData( $text, $ref, $_ );
+    }
+    return $text;
 }
 
- # s/\$(\w+)/$ref->data($1)/ge;
+# s/\$(\w+)/$ref->data($1)/ge;
 
 sub replaceByRefData {
-	my ($text, $ref, $label, $paramname) = @_;
-	$paramname = $label unless ($paramname);
-	if ($ref->data($paramname)) {
-		$text =~ s/\$$label/$ref->data($paramname)/ge;  # geo for cgi
-	}
-	return $text;
+    my ( $text, $ref, $label, $paramname ) = @_;
+    $paramname = $label unless ($paramname);
+    if ( $ref->data($paramname) ) {
+        $text =~ s/\$$label/$ref->data($paramname)/ge;    # geo for cgi
+    }
+    return $text;
 }
 
 sub spaceTopic {
@@ -52,9 +50,4 @@ sub spaceTopic {
 }
 
 1;
-
-
-
-
-
 

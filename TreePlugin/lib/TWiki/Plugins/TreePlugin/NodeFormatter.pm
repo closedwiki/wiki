@@ -11,35 +11,34 @@
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details, published at 
+# GNU General Public License for more details, published at
 # http://www.gnu.org/copyleft/gpl.html
 #
-
 
 package TWiki::Plugins::TreePlugin::NodeFormatter;
 
 # abstract interface to format the nodes in a tree
 
-        
 # Constructor
-sub new {}
+sub new { }
 
-sub initNode  {  _unimplemented("initNode",@_); }
-
-#
-sub formatNode { _unimplemented("formatNode",@_); }
+sub initNode { _unimplemented( "initNode", @_ ); }
 
 #
-sub formatChild {  _unimplemented("formatChild",@_); }
+sub formatNode { _unimplemented( "formatNode", @_ ); }
 
 #
-sub formatBranch { _unimplemented("formatBranch",@_); }
+sub formatChild { _unimplemented( "formatChild", @_ ); }
+
+#
+sub formatBranch { _unimplemented( "formatBranch", @_ ); }
 
 #
 sub _unimplemented {
-	my $routine = shift; 
-	my $class = shift; 
-	die "$routine not implemented for $class with params (".join(", ", @_).")";
+    my $routine = shift;
+    my $class   = shift;
+    die "$routine not implemented for $class with params ("
+      . join( ", ", @_ ) . ")";
 }
 
 1;
