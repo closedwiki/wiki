@@ -71,11 +71,6 @@ sub toHTMLFormat {
     my $num       = shift || 0;
     my $level     = shift || 0;
 
-# return "<!-- Reached stoplevel -->" this causes problems with |-table formatting
-    my $stoplevel = $formatter->data("stoplevel") || 999;    # big number!
-    return ""
-      if ( $stoplevel < $level );
-
     $formatter->initNode( $this, $num, $level );
 
     my $childrenText = "";

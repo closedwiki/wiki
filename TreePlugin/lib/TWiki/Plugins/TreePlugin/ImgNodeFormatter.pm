@@ -114,6 +114,8 @@ sub new {
 sub formatNode {
     my ( $this, $node, $count, $level ) = @_;
 
+    return "" if ( ! $this->isInsideLevelBounds( $level ) );
+
     my $sub;
     my $mode = $this->data("mode");
 

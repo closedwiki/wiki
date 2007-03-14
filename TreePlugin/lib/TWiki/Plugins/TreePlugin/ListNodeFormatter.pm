@@ -37,9 +37,9 @@ sub new {
     my $this = {};
     $this->{_data} = ();
     bless( $this, $class );
-    $this->data( "nodeBeg",  $nodeBeg  || "<ul> " );
-    $this->data( "nodeEnd",  $nodeEnd  || " </ul>" );
-    $this->data( "childBeg", $childBeg || "<li> " );
+    $this->data( "nodeBeg",  $nodeBeg  || "\n<ul> " );
+    $this->data( "nodeEnd",  $nodeEnd  || " \n</ul>" );
+    $this->data( "childBeg", $childBeg || "\n<li> " );
     $this->data( "childEnd", $childEnd || " </li>" );
     return $this;
 }
@@ -59,26 +59,48 @@ sub data {
 sub formatNode {
     my ( $this, $node, $count, $level ) = @_;
 
-    return "[[" . &TWiki::Plugins::TreePlugin::getLinkName($node) . "][" . $node->name() . "]]";
+    return "" if ( ! $this->isInsideLevelBounds( $level ) );
+    
+    my $link = &TWiki::Plugins::TreePlugin::getLinkName($node);
+    my $label = $node->name();
+    return "[[$link][$label]]";
 }
 
 sub formatBranch {
     my ( $this, $node, $childrenText, $count, $level ) = @_;
-    return $this->formatNode($node) unless $childrenText;
-    return $this->formatNode($node)
-      . $this->data("nodeBeg")
-      . $childrenText
-      . $this->data("nodeEnd");
+
+    return if ( $childrenText eq '');
+    
+    return $this->formatNode($node, $count, $level) unless $childrenText;
+
+    # $childrenText not empty
+    my $insideLevelBounds = $this->isOneOffLevelBounds( $level );
+    my $formattedText = $this->formatNode($node, $count, $level);    
+    return ( $insideLevelBounds ) 
+      ? $formattedText . $this->closeBranch( $childrenText )
+      : $formattedText . $childrenText;
+}
+
+sub closeBranch {
+    my ( $this, $text ) = @_;
+    
+    return $this->data("nodeBeg") . $text . $this->data("nodeEnd");
+    
 }
 
 sub formatChild {
     my ( $this, $node, $count, $level ) = @_;
 
-    #return "" if ( $text == "");
     my $res = $node->toHTMLFormat( $this, $count, $level );
-    return ($res)
-      ? $this->data("childBeg") . $res . $this->data("childEnd")
-      : "";
+    return "" if ( $res eq '' );
+    
+    my $withinBounds = $this->isInsideLevelBounds( $level );
+
+    my $formattedText = "";
+    $formattedText .= $this->data("childBeg") if ( $withinBounds );
+    $formattedText .= $res;
+    $formattedText .= $this->data("childEnd") if ( $withinBounds );
+    return $formattedText;
 }
 
 1;

@@ -34,7 +34,7 @@ use vars qw(
   %FormatMap $RootLabel
 );
 
-$VERSION = '0.7';
+$VERSION = '0.7.1';
 
 $RootLabel =
   "_RootLabel_";    # what we use to label the root of a tree if not a topic
@@ -169,18 +169,20 @@ sub handleTreeView {
     my $attrFormat = TWiki::Func::extractNameValuePair( $attributes, "format" )
       || "";
     $attrFormat .= "\n" if ($attrFormat);    # to enable |-tables formatting
+    
     my $attrFormatBranch =
       TWiki::Func::extractNameValuePair( $attributes, "formatbranch" ) || "";
     my $attrFormatting =
       TWiki::Func::extractNameValuePair( $attributes, "formatting" ) || "";
     my $attrStartlevel =
-      TWiki::Func::extractNameValuePair( $attributes, "startlevel" ) || 0;
+      TWiki::Func::extractNameValuePair( $attributes, "startlevel" ) || -1; # -1 means not defined
     my $attrStoplevel =
       TWiki::Func::extractNameValuePair( $attributes, "stoplevel" ) || 999;
     my $doBookView =
       TWiki::Func::extractNameValuePair( $attributes, "bookview" ) || "";
     my $attrLevelPrefix =
       TWiki::Func::extractNameValuePair( $attributes, "levelprefix" ) || "";
+    
     cgiOverride( \$attrFormatting, "formatting" );
 
     # set the type of formatting
@@ -189,7 +191,8 @@ sub handleTreeView {
     $formatter->data( "startlevel", $attrStartlevel );
     $formatter->data( "stoplevel",  $attrStoplevel );
     $formatter->data( "url",        $CurrUrl );
-
+    $formatter->data( "levelprefix", $attrLevelPrefix );
+        
     # if bookView, read bookview file as format
     if ($doBookView) {
         $formatter->data( "format", &TWiki::Func::readTemplate("booktree") );
@@ -200,8 +203,7 @@ sub handleTreeView {
         $formatter->data( "format", $attrFormat ) if ($attrFormat);
         $formatter->data( "branchformat", $attrFormatBranch )
           if ($attrFormatBranch);
-        $formatter->data( "levelprefix", $attrLevelPrefix )
-          if ($attrLevelPrefix);
+
     }
 
     # get search results
@@ -292,7 +294,7 @@ sub handleTreeView {
 }
 
 sub getLinkName {
-    my ( $node, $level ) = @_;
+    my ( $node ) = @_;
     return $node->name() unless $node->data("web");
     return $node->data("web") . "." . $node->name();
 }

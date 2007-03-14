@@ -20,8 +20,8 @@ Attributes:
       * =hlist= is a &lt;h<i>n</i>&gt;-list of section heads, see [[Sandbox.TreePluginSamples#SampleHList][sample Headlines]]
       * =coloroutline:colorlist= is an outline formatting with level values turned into colors, see [[Sandbox.TreePluginSamples#SampleNestedTables][sample Nested tables]]. Example: =formatting="coloroutline:#ffeeff,#eeffee,#ffffee,#eeeeff,#ffeeee,#eeffff"=
       * =imageoutline:mode= is a way to incorporate images into the outline format, specifically to display thread-like and folder views, see [[Sandbox.TreePluginSamples#SampleImageTrees][sample Image Trees]]. The general format is: imageoutline: _mode_ : _images_ : _imageformat_. Example: =formatting="imageoutline:thread"= or =formatting="imageoutline:thread:I.gif,white.gif,T.gif,L.gif:&lt;img src=\"$image\" border=\"0\">"=.
-   * *startlevel* - the depth of the tree to start showing nodes from. To hide the root node, supply =startlevel="1"= (root is level 0).
-   * *stoplevel* - the depth of the tree to show
+   * *startlevel* - the depth of the tree to start showing nodes from. To hide the root node, supply =startlevel="1"= (root is level 0). The displayed node depths are relative to the root topic.
+   * *stoplevel* - the depth of the tree to show, relative to start level 
    * *header* - header output
    * *bookview* - list topics in BookView form 
    * *format* - specify the format for each node (=outline= & =coloroutline=). Format variable options:
@@ -92,6 +92,7 @@ a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, for example, =
 | CPAN&nbsp;Dependencies: | none _(test package relies on Wiki:PerlUnit)_ |
 | Perl Version: | 5.0, 5.6.1, 5.8.7 |
 | Change&nbsp;History: | <!-- specify latest version first -->&nbsp; |
+| 14 Mar 2007 | 0.7.1 - Arthur Clemens: Made =startlevel= and =stoplevel= relative to the root topic. | 
 | 14 Mar 2007 | 0.7 - Arthur Clemens: =web= parameter is now actually used. Added parameter =startlevel=. | 
 | 01 Oct 2006 | 0.6 - TWiki:Main.StephaneLenclud: adding =$index= format subsitution. Useful when used in combination with TWiki:Plugins/TreeBrowserPlugin. Also attempting to restore compatibility with Cairo, but still waiting for someone to test it.  |
 | 16 Sep 2006 | 0.5 - TWiki:Main.StephaneLenclud: adding =levelprefix= parameter to unable usage in combination with TWiki:Plugins/TreeBrowserPlugin. |

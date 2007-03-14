@@ -79,6 +79,8 @@ sub formatOutNum {
 sub formatNode {
     my ( $this, $node, $count, $level ) = @_;
 
+    return "" if ( ! $this->isInsideLevelBounds( $level ) );
+
     # no formatting applied
     return &TWiki::Plugins::TreePlugin::getLinkName($node);
 }
@@ -90,7 +92,7 @@ sub formatBranch {
 
 sub formatChild {
     my ( $this, $node, $count, $level ) = @_;
-    $this->setOutNum( $node, $count );
+    $this->setOutNum( $node, $count ) if ( ! $this->isInsideLevelBounds( $level ) );
     return $node->toHTMLFormat( $this, $count, $level );
 }
 

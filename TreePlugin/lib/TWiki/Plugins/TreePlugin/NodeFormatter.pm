@@ -17,28 +17,70 @@
 
 package TWiki::Plugins::TreePlugin::NodeFormatter;
 
-# abstract interface to format the nodes in a tree
+=pod
 
-# Constructor
+Superclass for node types. Formatting functions are implemented by subclasses.
+
+=cut
+
 sub new { }
 
 sub initNode { _unimplemented( "initNode", @_ ); }
 
-#
 sub formatNode { _unimplemented( "formatNode", @_ ); }
 
-#
 sub formatChild { _unimplemented( "formatChild", @_ ); }
 
-#
 sub formatBranch { _unimplemented( "formatBranch", @_ ); }
 
-#
+sub closeBranch {
+    my ( $this, $text ) = @_;
+    return $text;
+}
+
 sub _unimplemented {
     my $routine = shift;
     my $class   = shift;
     die "$routine not implemented for $class with params ("
       . join( ", ", @_ ) . ")";
+}
+
+=pod
+
+Checks if the current level is within bounds set by startlevel and stoplevel.
+
+=cut
+
+sub isInsideLevelBounds {
+    my ( $this, $level ) = @_;
+	
+	return 1 if not defined $level;
+         
+    return 0 if ( $level < $this->data("startlevel") );
+
+    return 0 if ( $level > $this->data("stoplevel") );
+
+    return 1; 
+}
+
+=pod
+
+Checks if the current level is within one count to bounds set by startlevel and stoplevel. Used to properly close lists.
+
+Might not be the best way to solve this problem.
+
+=cut
+
+sub isOneOffLevelBounds {
+    my ( $this, $level ) = @_;
+	
+	return 1 if not defined $level;
+
+    return 0 if ( $level < ($this->data("startlevel") - 1) );
+
+    return 0 if ( $level > ($this->data("stoplevel") + 1) );
+
+    return 1; 
 }
 
 1;
