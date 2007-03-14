@@ -48,16 +48,15 @@ sub formatCount { return $_[1]; }
 sub formatNode {
     my ( $this, $node, $count, $level ) = @_;
 
-    #SL: do not render at level 0 when using "levelprefix"
-    return "" if ( $level == 0 && $this->data("levelprefix") );
-    return "" if ( $level < $this->data("startlevel") );
+    return "" if ( ! $this->isInsideLevelBounds( $level ) );
+    #return "" if ( $level eq '0' && $this->data("levelprefix") ne '' );
 
     my $res = $this->data("format");
 
     my $nodeLinkName = &TWiki::Plugins::TreePlugin::getLinkName($node);
     return $nodeLinkName unless ($res);
 
-    # special substituions
+    # special substitutions
 
     # Make linkable non-wiki-word names
     my $spaceTopic =
