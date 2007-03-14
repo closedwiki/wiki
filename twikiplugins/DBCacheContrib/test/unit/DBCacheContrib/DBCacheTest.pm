@@ -53,7 +53,8 @@ sub tear_down {
 sub notest_loadSimple {
     my $this = shift;
     my $db = new TWiki::Contrib::DBCacheContrib($testweb);
-    $this->assert_str_equals("0 2 0", $db->load());
+    my @res = $db->load();
+    $this->assert_str_equals("0 2 0", join(' ',@res));
     my $topic = $db->get("WebHome");
     $this->assert($topic);
     my $info = $topic->get("info");
@@ -131,17 +132,20 @@ sub test_cache {
     $this->assert_equals(0, $db->{loaded});
 
     # There should be no cache there
-    $this->assert_str_equals("0 2 0", $db->load());
+    my @res = $db->load();
+    $this->assert_str_equals("0 2 0", join(' ',@res));
     $this->assert_equals(1, $db->{loaded});
-    $this->assert_str_equals("0 0 0", $db->load());
+    @res = $db->load();
+    $this->assert_str_equals("0 0 0", join(' ',@res));
     my $initial = $db;
 
     # There's a cache there now
     $db = new TWiki::Contrib::DBCacheContrib($testweb);
     $this->assert_equals(0, $db->{loaded});
-    $this->assert_str_equals("2 0 0", $db->load());
+    @res = $db->load();
+    $this->assert_str_equals("2 0 0", join(' ',@res));
     $this->assert_equals(1, $db->{loaded});
-    $this->assert_str_equals("0 0 0", $db->load());
+    $this->assert_str_equals("0 0 0", join(' ', $db->load()));
     $this->checkSameAs($initial,$db);
 
     sleep(1);# wait for clock tick, and re-save file
@@ -149,30 +153,35 @@ sub test_cache {
 
     # One file in the cache has been touched
     $db = new TWiki::Contrib::DBCacheContrib($testweb);
-    $this->assert_str_equals("1 1 0", $db->load());
+    @res = $db->load();
+    $this->assert_str_equals("1 1 0", join(' ',@res));
 
     $this->checkSameAs($initial,$db);
     $db = new TWiki::Contrib::DBCacheContrib($testweb);
-    $this->assert_str_equals("2 0 0", $db->load());
+    @res = $db->load();
+    $this->assert_str_equals("2 0 0", join(' ',@res));
     $this->checkSameAs($initial,$db);
 
     # A new file has been created
     TWiki::Func::saveTopicText( $testweb, "NewFile", "Blah" );
 
     $db = new TWiki::Contrib::DBCacheContrib($testweb);
-    $this->assert_str_equals("2 1 0", $db->load());
+    @res = $db->load();
+    $this->assert_str_equals("2 1 0", join(' ',@res));
 
     # One file in the cache has been deleted
     $twiki->{store}->moveTopic($testweb, "FormTest", "Trash", "FormTest$$",
                                $twiki->{user});
     $db = new TWiki::Contrib::DBCacheContrib($testweb);
-    $this->assert_str_equals("2 0 1", $db->load());
+    @res = $db->load();
+    $this->assert_str_equals("2 0 1", join(' ',@res));
 
     $twiki->{store}->moveTopic($testweb, "NewFile", "Trash", "NewFile$$",
                                $twiki->{user});
     TWiki::Func::saveTopicText( $testweb, "FormTest", $formTest );
     $db = new TWiki::Contrib::DBCacheContrib($testweb);
-    $this->assert_str_equals("1 1 1", $db->load());
+    @res = $db->load();
+    $this->assert_str_equals("1 1 1", join(' ',@res));
 
     $this->checkSameAs($initial, $db);
 }

@@ -4,8 +4,6 @@
 #
 use strict;
 
-use Time::ParseDate;
-
 =begin text
 
 ---++ package TWiki::Contrib::DBCacheContrib::Search
@@ -91,6 +89,9 @@ my $now = time();
 # time.
 sub forceTime {
     my $t = shift;
+
+    require Time::ParseDate;
+
     $now = Time::ParseDate::parsedate( $t );
 }
 
@@ -291,6 +292,8 @@ sub matches {
     if ( $op eq "<=" ) { return ( $lval <= $rval ) };
 
     if ($lval !~ /^-?\d+$/) {
+        require Time::ParseDate;
+
         $lval = Time::ParseDate::parsedate( $lval );
     }
     return 0 unless( defined( $lval ));
@@ -299,6 +302,8 @@ sub matches {
         return ( $lval >= $now && workingDays( $now, $lval ) <= $rval );
     }
     if ($rval !~ /^-?\d+$/) {
+        require Time::ParseDate;
+
         $rval = Time::ParseDate::parsedate( $rval );
     }
 
