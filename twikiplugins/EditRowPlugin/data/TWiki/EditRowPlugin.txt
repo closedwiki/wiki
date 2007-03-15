@@ -1,3 +1,4 @@
+%META:TOPICINFO{author="SimianApe" date="1173974145" format="1.1" reprev="1.2" version="1.2"}%
 ---+!! !EditRowPlugin
 <!--
 One line description, required for extensions repository catalog.
@@ -35,13 +36,13 @@ See also: !EditTablePlugin, !EditTableRowPlugin.
 
 See EditTablePlugin for information on the =%EDITTABLE= tag and its
 parameters. The same tag syntax is used for this plugin. When a table row is
-edited, then four buttons may be shown in the row depending on the settings
-of =changerows= and =quietsave=.
+edited, then a number of buttons may be shown in the row depending on the
+settings of =changerows= and =quietsave=.
    * %ICON{save}% saves the changes in the current row
    * %ICON{quiet}% saves without notification
-   * %ICON{plus}% adds a new row after the current row (taking for its contents whatever you entered into the current row). 
-   * %ICON{minus}% deletes that row.
-
+   * %ICON{plus}% adds a new row after the current row (taking for its contents whatever you entered into the current row)
+   * %ICON{minus}% deletes that row
+   * %ICON{stop}% switches off the edit
 If both !EditRowPlugin and !EditTablePlugin are required, then you have to put !EditRowPlugin into ={PluginsOrder}= in [[%SCRIPTURLPATH{configure}%][configure]]) before !EditTablePlugin.
 
 The assumption is that most of the time you will want to use EditTablePlugin, and will only enable this plugin in topics where there are large tables that it can't cope with. So this plugin has to be enabled specifically by setting
@@ -50,22 +51,25 @@ in a topic or !WebPreferences. It is enabled in this topic, so if it is working 
 examples will be editable.
 ---+++ Example 1
 %EDITTABLE{ format="| row, -1 | text, 20, init | select, 1, one, two, three, four | radio, 3,:-),:-I,:-( | label, 20 |" changerows="on" quietsave="on" }%
-|*Nr*|*Text field*|*Drop down*|*Mood*|*Timestamp*|
+| *Nr* | *Text field* | *Drop down* | *Mood* | *Timestamp* |
 | 1 | hello table | one | :-) | 26 Jun 2002 12:30 |
 | 2 |  | two | :-( | 27 Jun 2002 12:40 |
+
 ---+++ Example 2
 %EDITTABLE{ format="| label,12 | text, 40 |" }%
-|*Key*|*Value*|
+| *Key* | *Value* |
 | Name: | John Smith |
 | Gender: | M |
 | DOB: | 1999/12/31 |
 | City: | New York |
+
 ---+++ Example 3
 %EDITTABLE{ format="| label,12 | textarea, 3x30 |" }%
-|*Model*|*Description*|
+| *Model* | *Description* |
 | 345TG66 | Short, with sightly concave upper surface, and devilish nuts |
 | 9A-11 | A new model for 2007, but not quite as pretty as the 9A-10 |
 | RR717-D | Solid performer, dependable in vacuum grinders |
+
 
 ---++ Installation Instructions
 
