@@ -23,7 +23,8 @@ At this time most features of !EditTablePlugin are supported. Known exceptions
 are:
    * the =helptopic= and =editbutton= switches, which are ignored,
    * the =EDITCELL= feature, which is not supported,
-   * access controls, which are only checked on topic save.
+   * access controls on edit; with this plugin, access is only checked on topic save,
+   * The "Initial values" feature, which is incompatible with the way thi splugin adds new rows.
 
 The plugin doesn't use !JavaScript (except for the calendar) so it should
 work with all browsers.
@@ -48,7 +49,7 @@ The assumption is that most of the time you will want to use EditTablePlugin, an
 in a topic or !WebPreferences. It is enabled in this topic, so if it is working then the following
 examples will be editable.
 ---+++ Example 1
-%EDITTABLE{ format="| row, -1 | text, 20, init | select, 1, one, two, three, four | radio, 3,:-),:-I,:-( | label, 20, %SERVERTIME{"$day $mon $year $hour:$min"}% |" changerows="on" quietsave="on" }%
+%EDITTABLE{ format="| row, -1 | text, 20, init | select, 1, one, two, three, four | radio, 3,:-),:-I,:-( | label, 20 |" changerows="on" quietsave="on" }%
 |*Nr*|*Text field*|*Drop down*|*Mood*|*Timestamp*|
 | 1 | hello table | one | :-) | 26 Jun 2002 12:30 |
 | 2 |  | two | :-( | 27 Jun 2002 12:40 |
@@ -77,6 +78,7 @@ examples will be editable.
 |  Copyright: | &copy; 2007 Wind<nop>River Inc. |
 |  License: | [[http://www.gnu.org/licenses/gpl.html][GPL (Gnu General Public License)]] |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  13144 | Bugs:Item3770: Bugfixes |
 |  Dependencies: | %$DEPENDENCIES% |
 |  Plugin Home: | http://twiki.org/cgi-bin/view/Plugins/EditRowPlugin |
 |  Feedback: | http://twiki.org/cgi-bin/view/Plugins/EditRowPluginDev |

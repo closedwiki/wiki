@@ -12,9 +12,16 @@ sub parseTables {
     my $active_table = undef;
     my @tables;
     my $nTables = 0;
+    my $disable = 0;
 
     foreach my $line (split(/\r?\n/, $_[0])) {
-        if ($line =~ /%EDITTABLE{(.*?)}%/) {
+        if ($line =~ /<(verbatim|literal)>/) {
+            $disable++;
+        }
+        if ($line =~ m#</(verbatim|literal)>#) {
+            $disable-- if $disable;
+        }
+        if (!$disable && $line =~ /%EDITTABLE{([^\n]*)}%/) {
             my $attrs = new TWiki::Attrs($1);
 
             if ($attrs->{include}) {
@@ -28,11 +35,18 @@ sub parseTables {
                 }
                 my ($meta, $text) = TWiki::Func::readTopic($iw, $it);
                 $text =~ m/%EDITTABLE{([^\n]*)}%/s;
-                $attrs = new TWiki::Attrs($1);
+                my $params = $1;
+                if ($params) {
+                    unless ($iw eq $_[2] && $it eq $_[1]) {
+                        $params = TWiki::Func::expandCommonVariables(
+                            $params, $iw, $it);
+                    }
+                    $attrs = new TWiki::Attrs($params);
+                }
             }
             $active_table =
               new TWiki::Plugins::EditRowPlugin::Table(
-                  ++$nTables, $attrs, $_[2], $_[1]);
+                  ++$nTables, $line, $attrs, $_[2], $_[1]);
             push(@tables, $active_table);
             next;
         }
@@ -56,19 +70,21 @@ sub parseTables {
 }
 
 sub new {
-    my ($class, $tno, $attrs, $web, $topic) = @_;
+    my ($class, $tno, $spec, $attrs, $web, $topic) = @_;
 
     my $this = bless({}, $class);
     $this->{number} = $tno;
+    $this->{spec} = $spec;
     $this->{rows} = [];
     $this->{attrs} = $attrs;
+    $this->{topic} = $topic;
+    $this->{web} = $web;
+
     if ($attrs->{format}) {
-        $this->{colTypes} = _parseFormat($attrs->{format});
+        $this->{colTypes} = $this->_parseFormat($attrs->{format});
     } else {
         $this->{colTypes} = [];
     }
-    $this->{topic} = $topic;
-    $this->{web} = $web;
 
     return $this;
 }
@@ -82,7 +98,7 @@ sub finish {
 
 sub stringify {
     my $this = shift;
-    my $s = '%EDITTABLE{'.$this->{attrs}->stringify()."}%\n";
+    my $s = "$this->{spec}\n";
     foreach my $row (@{$this->{rows}}) {
         $s .= $row->stringify()."\n";
     }
@@ -147,11 +163,19 @@ sub deleteRow {
 
 # Private method that parses a column type specification
 sub _parseFormat {
-    my $format = shift;
+    my ($this, $format) = @_;
     my @cols;
 
     $format =~ s/^\s*\|//;
     $format =~ s/\|\s*$//;
+
+    $format =~ s/\$nop(\(\))?//gs;
+    $format =~ s/\$quot(\(\))?/\"/gs;
+    $format =~ s/\$percnt(\(\))?/\%/gs;
+    $format =~ s/\$dollar(\(\))?/\$/gs;
+    $format =~ s/<nop>//gos;
+    $format = TWiki::Func::expandCommonVariables(
+        $format, $this->{topic}, $this->{web});
 
     foreach my $column (split ( /\|/, $format ))  {
         my ($type, $size, @values) =
