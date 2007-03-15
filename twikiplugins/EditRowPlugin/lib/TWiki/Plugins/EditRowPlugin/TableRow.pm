@@ -32,41 +32,41 @@ sub renderForEdit {
     foreach (@{$this->{cols}}) {
         push(@out, $_->renderForEdit($ct->[$col++]));
     }
-    my $buttons = CGI::input({
+    my $buttons = CGI::image_button({
         type => 'submit',
         name => 'editrowplugin_save',
         value => $TWiki::Plugins::EditRowPlugin::NOISY_SAVE,
         title => $TWiki::Plugins::EditRowPlugin::NOISY_SAVE,
-        style => 'font-size:0;width:18px; height:18px; background-image:url(%PUBURLPATH%/TWiki/TWikiDocGraphics/save.gif)',
+	src => '%PUBURLPATH%/TWiki/TWikiDocGraphics/save.gif'
        }, '');
     my $attrs = $this->{table}->{attrs};
     if (TWiki::isTrue($attrs->{quietsave})) {
-        $buttons .= CGI::input({
-            type => 'submit',
-            name => 'editrowplugin_save',
-            value => $TWiki::Plugins::EditRowPlugin::QUIET_SAVE,
-            title => $TWiki::Plugins::EditRowPlugin::QUIET_SAVE,
-            style => 'font-size:0;width:18px; height:18px; background-image:url(%PUBURLPATH%/TWiki/TWikiDocGraphics/quiet.gif)',
+        $buttons .= CGI::image_button({
+          type => 'submit',
+          name => 'editrowplugin_save',
+          value => $TWiki::Plugins::EditRowPlugin::QUIET_SAVE,
+          title => $TWiki::Plugins::EditRowPlugin::QUIET_SAVE,
+          src => '%PUBURLPATH%/TWiki/TWikiDocGraphics/quiet.gif'
         }, '');
     }
     # add save button
     if ($attrs->{changerows}) {
         # add add row button
-        $buttons .= CGI::input({
-            type => 'submit',
-            name => 'editrowplugin_save',
-            value => $TWiki::Plugins::EditRowPlugin::ADD_ROW,
-            title => $TWiki::Plugins::EditRowPlugin::ADD_ROW,
-            style => 'font-size:0;width:18px; height:18px; background-image:url(%PUBURLPATH%/TWiki/TWikiDocGraphics/plus.gif)',
+        $buttons .= CGI::image_button({
+        type => 'submit',
+        name => 'editrowplugin_save',
+        value => $TWiki::Plugins::EditRowPlugin::ADD_ROW,
+        title => $TWiki::Plugins::EditRowPlugin::ADD_ROW,
+        src => '%PUBURLPATH%/TWiki/TWikiDocGraphics/plus.gif'
         }, '');
         if ($attrs->{changerows} eq 'on') {
             # add delete row button
-            $buttons .= CGI::input({
+            $buttons .= CGI::image_button({
                 type => 'submit',
                 name => 'editrowplugin_save',
                 value => $TWiki::Plugins::EditRowPlugin::DELETE_ROW,
                 title => $TWiki::Plugins::EditRowPlugin::DELETE_ROW,
-                style => 'font-size:0;width:18px; height:18px; background-image:url(%PUBURLPATH%/TWiki/TWikiDocGraphics/minus.gif)',
+                src => '%PUBURLPATH%/TWiki/TWikiDocGraphics/minus.gif'
             }, '');
         }
     }
@@ -107,9 +107,10 @@ sub renderForDisplay {
         }
         unshift(@out,
              "<a href='$url'>".
-               CGI::image_button(
+               CGI::img({
                    -name => "${erp}_edit$id",
-                   -src => '%PUBURLPATH%/TWiki/TWikiDocGraphics/edittopic.gif').
+                   -border => 0,
+                   -src => '%PUBURLPATH%/TWiki/TWikiDocGraphics/edittopic.gif'}).
                      "</a>");
     }
     return '| '.join(' | ', @out). ' |';
