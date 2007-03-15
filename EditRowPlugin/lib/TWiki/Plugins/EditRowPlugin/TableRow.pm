@@ -5,8 +5,6 @@ use strict;
 
 use TWiki::Func;
 
-my $erp = 'erp';
-
 sub new {
     my ($class, $table, $number) = @_;
     my $this = bless({}, $class);
@@ -70,7 +68,14 @@ sub renderForEdit {
             }, '');
         }
     }
-    $buttons .= "<a name='$erp$this->{table}->{number}_$this->{number}'></a>";
+    $buttons .= CGI::input({
+        type => 'submit',
+        name => 'editrowplugin_save',
+        value => $TWiki::Plugins::EditRowPlugin::CANCEL_ROW,
+        title => $TWiki::Plugins::EditRowPlugin::CANCEL_ROW,
+        style => 'font-size:0;width:18px; height:18px; background-image:url(%PUBURLPATH%/TWiki/TWikiDocGraphics/stop.gif)',
+    }, '');
+    $buttons .= "<a name='erp$this->{table}->{number}_$this->{number}'></a>";
     unshift(@out, $buttons);
 
     return '| ' . join(' | ', @out) . '|';
@@ -97,22 +102,26 @@ sub renderForDisplay {
             $url = TWiki::Func::getScriptUrl(
                 $this->{table}->{web}, $this->{table}->{topic}, 'view').
                 "?active_table=$this->{table}->{number}".
-                ";active_row=$this->{number}#$erp$id";
+                ";active_row=$this->{number}#erp$id";
         } else {
             $url = TWiki::Func::getScriptUrl(
                 $this->{table}->{web}, $this->{table}->{topic}, 'view',
                 active_table => $this->{table}->{number},
                 active_row => $this->{number},
-                '#' => "$erp$id");
+                '#' => "erp$id");
         }
-        unshift(@out,
-             "<a href='$url'>".
-               CGI::img({
-                   -name => "${erp}_edit$id",
-                   -border => 0,
-                   -src => '%PUBURLPATH%/TWiki/TWikiDocGraphics/edittopic.gif'}).
-                     "</a>");
-    }
+        my $button =
+          CGI::img({
+              -name => "erp_edit$id",
+              -border => 0,
+              -src => '%PUBURLPATH%/TWiki/TWikiDocGraphics/edittopic.gif'
+             });
+        unshift(
+            @out,
+            "<a href='$url'>" .
+              $button .
+                "</a><a name='erp$this->{table}->{number}_$this->{number}'></a>");
+        }
     return '| '.join(' | ', @out). ' |';
 }
 

@@ -161,6 +161,11 @@ sub deleteRow {
     return $this->stringify();
 }
 
+sub cancelRow {
+    my ($this, $urps) = @_;
+    return $this->stringify();
+}
+
 # Private method that parses a column type specification
 sub _parseFormat {
     my ($this, $format) = @_;

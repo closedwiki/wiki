@@ -13,12 +13,13 @@ $NO_PREFS_IN_TOPIC = 1;
 
 $pluginName = 'EditRowPlugin';
 
-use vars qw($ADD_ROW $DELETE_ROW $QUIET_SAVE $NOISY_SAVE $EDIT_ROW);
+use vars qw($ADD_ROW $DELETE_ROW $QUIET_SAVE $NOISY_SAVE $EDIT_ROW $CANCEL_ROW);
 $ADD_ROW = 'Add Row';
 $DELETE_ROW = 'Delete Row';
 $QUIET_SAVE = 'Quiet Save';
 $NOISY_SAVE = 'Save';
 $EDIT_ROW = 'Edit';
+$CANCEL_ROW = 'Cancel';
 
 sub initPlugin {
     my( $topic, $web, $user, $installWeb ) = @_;
@@ -120,7 +121,7 @@ sub save {
         my $table = undef;
         my $active_table = 0;
 
-        my $action;
+        my $action = 'cancelRow';
         if ($saveType =~ /^($QUIET_SAVE|$NOISY_SAVE)$/o) {
             $action = 'changeRow';
         } elsif ($saveType eq $ADD_ROW) {
@@ -139,13 +140,21 @@ sub save {
                     $line = $table->stringify();
                 }
                 $table->finish();
+                $nlines .= $line;
+            } else {
+                $nlines .= "$line\n";
             }
-            $nlines .= "$line\n";
         }
         TWiki::Func::saveTopic($web, $topic, $meta, $nlines,
                                 { minor => 1 });
 
-        $url = TWiki::Func::getScriptUrl($web, $topic, 'view');
+        my $anchor = "erp$urps->{active_table}_$urps->{active_row}";
+        if ($TWiki::Plugins::VERSION < 1.11) {
+            $url = TWiki::Func::getScriptUrl($web, $topic, 'view')."#anchor";
+        } else {
+            $url = TWiki::Func::getScriptUrl(
+                $web, $topic, 'view', '#' => $anchor);
+        }
     }
     TWiki::Func::redirectCgiQuery(undef, $url);
     return 0;
