@@ -74,7 +74,7 @@ sub commonTagsHandler {
                   TWiki::Func::getScriptUrl($pluginName, 'save', 'rest');
                 $line = <<HTML;
 <form name='roweditform_$active_table' method='post' action='$saveUrl'>
-<input type="hidden" name="topic" value="$web.$topic" />
+<input type="hidden" name="active_topic" value="$web.$topic" />
 <input type="hidden" name="active_table" value="$active_table" />
 <input type="hidden" name="active_row" value="$urps->{active_row}" />
 HTML
@@ -98,7 +98,7 @@ sub save {
 
     my $saveType = $query->param('editrowplugin_save') || '';
     my ($web, $topic) = TWiki::Func::normalizeWebTopicName(
-        undef, $query->param('topic'));
+        undef, $query->param('active_topic'));
 
     my ($meta, $text) = TWiki::Func::readTopic($web, $topic);
     my $url;
