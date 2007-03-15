@@ -930,13 +930,22 @@ sub renderWebComponent {
 
   doInit();
   my $theComponent = $params->{_DEFAULT};
+  my $lineprefix = $params->{lineprefix};
+  my $web = $params->{web};
+  $web=$baseWeb unless defined($web); #Default to $baseWeb NOTE: don't use the currentWeb
+  my $multiple = $params->{multiple};
+  $multiple=0 unless defined($multiple);  
+
   my $name = lc $theComponent;
   $name =~ s/^currentWeb//o;
 
   return '' if $skinState{$name} && $skinState{$name} eq 'off';
 
-  my $text = getWebComponent($theComponent);
-  $text .= "\n" if $name eq 'sidebar'; # SMELL: extra linefeed hack for sidebars
+  my $text = getWebComponent($theComponent, $web, $multiple);
+  if (defined $lineprefix)  
+    {
+    $text =~ s/[\n\r]+/\n$lineprefix/gs;
+    }
 
   return $text
 }
@@ -950,11 +959,13 @@ sub renderWebComponent {
 # (like: TheComponent = WebSideBar)
 sub getWebComponent {
   my $component = shift;
+  my $web = shift;
+  my $multiple = shift;
 
   #writeDebug("called getWebComponent($component)");
 
   # SMELL: why does preview call for components twice ???
-  if ($seenWebComponent{$component} && $seenWebComponent{$component} > 2) {
+  if ($seenWebComponent{$component} && $seenWebComponent{$component} > 2 && !$multiple) {
     return '<span class="twikiAlert">'.
       "ERROR: component '$component' already included".
       '</span>';
@@ -967,7 +978,9 @@ sub getWebComponent {
   my $mainWeb = &TWiki::Func::getMainWebname();
   my $twikiWeb = &TWiki::Func::getTwikiWebname();
 
-  my $theWeb = $baseWeb; # NOTE: don't use the currentWeb
+  my $theWeb = $web;
+  my $targetWeb = $web;
+
   my $theComponent = $component;
   if (&TWiki::Func::topicExists($theWeb, $theComponent) &&
       &TWiki::Func::checkAccessPermission('VIEW',$currentUser,undef,$theComponent, $theWeb)) {
@@ -1006,7 +1019,11 @@ sub getWebComponent {
   }
   #$text =~ s/^\s*//o;
   #$text =~ s/\s*$//o;
-  $text = &TWiki::Func::expandCommonVariables($text, $component, $theWeb);
+  #SL: As opposed to INCLUDE WEBCOMPONENT should render as if they were in the web they provide links to.
+  #    This behavior allows for web component to be consistently rendered in foreign web using the =web= parameter. 
+  #    It makes sure %WEB% is expanded to the appropriate value. 
+  #    Although possible, usage of %BASEWEB% in web component topics might have undesired effect when web component is rendered from a foreign web. 
+  $text = &TWiki::Func::expandCommonVariables($text, $component, $targetWeb);
 
   # ignore permission warnings here ;)
   $text =~ s/No permission to read.*//g;

@@ -196,7 +196,7 @@ not take effect throughly; topic preferences are fetched before rendering starts
 (3) it is not checked if the resulting skinstate is "valid" when you use SETSKINSTATE;
 this _is_ the case if you use preferences values
 
-The following argumets are known and can be used in any combination:
+The following arguments are known and can be used in any combination:
    * buttons="..."
    * sidebar="..."
    * variation="..."
@@ -231,7 +231,13 @@ The "guest" and "format" format strings can use the following variables
 
 
 ---+++ WEBCOMPONENT
-*Syntax*: =%<nop>WEBCOMPONENT{"name"}%=
+*Syntax*: =%<nop>WEBCOMPONENT{"name" web="&lt;name>" lineprefix="&lt;prefix>" multiple="<anything>"}%=
+
+*Arguments*: ==
+   * =name=: The name of the !WebComponent topic.
+   * =web="&lt;name>"=: The web to fetch the component from. Default to the current web.
+   * =lineprefix="&lt;prefix>"=: A prefix to be added to each line of the web component topic before inclusion. Typically three space characters.
+   * =multiple= : If defined WEBCOMPONENT will allow for multiple inclusions of the same web component topic.
 
 display a web component. A web component "<nop>MyComponent" is searched looking for
    1 <nop>MyComponent in the current web,
