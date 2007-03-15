@@ -1,0 +1,29 @@
+.editTableInput,
+.editTableTextarea {
+	font-family:monospace;
+}
+.editTableActionButton {
+	margin-right:2px;
+}
+td.editTableActionCell {
+	vertical-align:middle;
+}
+.editTableActionCell a:hover {
+	background:none;
+}
+.editTableActionSelectedCell {
+	background-color:#006699;
+}
+.twikiTableEven textarea,
+.twikiTableEven .editTableTextarea,
+.twikiTableEven input {
+	background-color:#f5f5f5;
+}
+.twikiTableOdd textarea,
+.twikiTableOdd .editTableTextarea,
+.twikiTableOdd input {
+	background-color:#ffffff;
+}
+.editTableCalendarButton {
+	margin:0 2px;
+}

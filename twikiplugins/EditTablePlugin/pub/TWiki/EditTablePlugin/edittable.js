@@ -1,19 +1,25 @@
-// edittable.js
+// sEditTable.js
 //
 // By Byron Darrah
 //
 // This code adds support to the TWiki EditTablesPlugin for dynamically
 // manipulating rows within a table.
+// 
+// Small refactoring by Arthur Clemens
 
-//-----------------------------------------------------------------------------
+/**
+
+*/
 // Global variables
 
-// Array of edittables.
-var edittable;
-var row_operation = 'none';
-var row_selection;
+var sEditTable; // array of edittables
+var sRowSelection;
+var sAlternatingColors = {even:null, odd:null};
+var sAlternatingDefaultColors = {even:"#ffffff", odd:"#ffffff"};
 
-//-----------------------------------------------------------------------------
+/**
+
+*/
 // Here's a custom version of getElementByTagName.  I find it easier
 // to debug certain problems this way when a script doesn't seem to be
 // finding the node we'd expect.
@@ -26,10 +32,27 @@ function searchNodeTreeForTagName(node, tag_name) {
   }
 }
 
-//-----------------------------------------------------------------------------
+function hasClass(el, className) {
+	var re = new RegExp('(?:^|\\s+)' + className + '(?:\\s+|$)');
+	return re.test(el['className']);
+}      
+function addClass(el, className) {
+	if (hasClass(el, className)) { return; } // already present
+	el['className'] = [el['className'], className].join(' ');
+}
+function removeClass(el, className) {
+	if (!hasClass(el, className)) { return; } // not present
+	var re = new RegExp('(?:^|\\s+)' + className + '(?:\\s+|$)', 'g');
+	var c = el['className'];
+	el['className'] = c.replace( re, ' ');
+}
+      
+/**
+
+*/
 
 // Build the list of edittables.
-function edittable_init(form_name, asset_url) {
+function edittableInit(form_name, asset_url) {
 
   // The form we want is actually the second thing in the
   // document that has the form_name.
@@ -39,35 +62,41 @@ function edittable_init(form_name, asset_url) {
     alert("Error: EditTable features cannot be enabled.\n");
     return;
   }
-  attach_event(tableform, 'submit', submit_handler);
+  attachEvent(tableform, 'submit', submitHandler);
 
   var somerow = searchNodeTreeForTagName(tableform, "TR");
   if(somerow != null) {
     var row_container = somerow.parentNode;
-    edittable = new edittable_object(tableform, row_container);
-    insert_action_buttons(asset_url);
+    sEditTable = new EditTableObject(tableform, row_container);
+    insertActionButtons(asset_url);
   }
-  row_selection = new row_selection_object();
+  sRowSelection = new RowSelectionObject();
+  retrieveAlternatingRowColors();
+  fixStyling();
 }
 
-//-----------------------------------------------------------------------------
+/**
+
+*/
 // Create the etrow_id# inputs to tell the server about row changes we made.
-function submit_handler(evt) {
-  var inp;
-  for(i=0; i<edittable.numrows; i++) {
+function submitHandler(evt) {
+  var inp, ilen = sEditTable.numrows;
+  for(var i=0; i<ilen; i++) {
     var inpname = 'etrow_id'+(i+1);
-    var row_id  = edittable.revidx[i]+1;
+    var row_id  = sEditTable.revidx[i]+1;
     inp = document.createElement('INPUT');
     inp.setAttribute('type', 'hidden');
     inp.setAttribute('name', inpname);
     inp.setAttribute('value', '' + row_id);
-    edittable.tableform.appendChild(inp);
+    sEditTable.tableform.appendChild(inp);
   }
   return true;
 }
 
-//-----------------------------------------------------------------------------
-function attach_event(obj, evtype, handler) {
+/**
+
+*/
+function attachEvent(obj, evtype, handler) {
   if(window.addEventListener){ // Mozilla, Netscape, Firefox
     obj.addEventListener(evtype, handler, false);
   } else { // IE
@@ -75,8 +104,21 @@ function attach_event(obj, evtype, handler) {
   }
 }
 
-//-----------------------------------------------------------------------------
-function get_event_attr(evt, pname) {
+/**
+
+*/
+function detachEvent(obj, evtype, handler) {
+  if(window.addEventListener){ // Mozilla, Netscape, Firefox
+    obj.removeEventListener(evtype, handler, false);
+  } else { // IE
+    obj.detachEvent('on' + evtype, handler);
+  }
+}
+
+/**
+
+*/
+function getEventAttr(evt, pname) {
   var e_out;
   var ie_var = "srcElement";
   var moz_var = "target";
@@ -85,94 +127,228 @@ function get_event_attr(evt, pname) {
   return e_out;
 }
 
-//-----------------------------------------------------------------------------
-function insert_action_buttons(asset_url) {
+/**
+
+*/
+function insertActionButtons(asset_url) {
 
   var rownr=0;
-  for(var child = edittable.row_container.firstChild; child != null;
+  var action_cell, action_butt;
+  
+  for(var child = sEditTable.row_container.firstChild; child != null;
           child = child.nextSibling) {
     if (child.tagName == 'TR') {
-      action_cell = document.createElement('TD');
-      action_cell.id = 'et_actioncell' + rownr;
-
-      action_butt = document.createElement('IMG');
-      action_butt.setAttribute('src', asset_url + '/movebutt.png');
-      action_butt.setAttribute('alt', 'Move');
-      attach_event(action_butt, 'click', move_handler);
-      action_butt.rownr = rownr;
-      action_cell.appendChild(action_butt);
-
-      action_butt = document.createElement('IMG');
-      action_butt.setAttribute('src', asset_url + '/delbutt.png');
-      action_butt.setAttribute('alt', 'Delete');
-      attach_event(action_butt, 'click', delete_handler);
-      action_butt.rownr = rownr;
-      action_cell.appendChild(action_butt);
-
-      child.insertBefore(action_cell, child.firstChild);
-      rownr++;
+		action_cell = document.createElement('TD');
+		addClass(action_cell, 'editTableActionCell');
+		
+		action_cell.id = 'et_actioncell' + rownr;
+		{
+			action_butt = document.createElement('IMG');
+			var objLink = document.createElement("a");
+			objLink.href = "#";
+			objLink.setAttribute('title', 'Move row');
+			objLink.appendChild(action_butt);
+			action_butt.moveButtonSrc = asset_url + '/btn_move.gif';
+			action_butt.targetButtonSrc = asset_url + '/btn_target.gif';
+			action_butt.setAttribute('src', action_butt.moveButtonSrc);
+			addClass(action_butt, 'editTableActionButton');
+			action_butt.handler = moveHandler;
+			attachEvent(action_butt, 'click', action_butt.handler);
+			action_butt.rownr = rownr;
+			action_cell.moveButton = action_butt;
+			action_cell.appendChild(objLink);
+		}
+		{
+			action_butt = document.createElement('IMG');
+			var objLink = document.createElement("a");
+			objLink.href = "#";
+			objLink.setAttribute('title', 'Delete row');
+			objLink.appendChild(action_butt);
+			action_butt.enableButtonSrc = asset_url + '/btn_delete.gif';
+			action_butt.disableButtonSrc = asset_url + '/btn_delete_disabled.gif';
+			action_butt.setAttribute('src', asset_url + '/btn_delete.gif');
+			addClass(action_butt, 'editTableActionButton');
+			action_butt.handler = deleteHandler;
+			attachEvent(action_butt, 'click', action_butt.handler);
+			action_butt.rownr = rownr;
+			action_cell.deleteButton = action_butt;
+			action_cell.appendChild(objLink);
+		}		
+		child.insertBefore(action_cell, child.firstChild);
+		rownr++;
     }
   }
+  // set styling for the last action_cell to remove the bottom border
+  addClass(action_cell, 'twikiLast');
+
 }
 
-//-----------------------------------------------------------------------------
+/**
 
-function move_handler(evt) {
-  var rownr = get_event_attr(evt, 'rownr');
-  if (row_selection.rownum == null) {
-    var row_elem             = edittable.rows[rownr];
-    var action_cell          = row_elem.firstChild;
-    row_selection.row        = row_elem;
-    row_selection.rownum     = rownr;
-    row_selection.color_node = action_cell;
-    row_selection.old_color = row_selection.color_node.style.backgroundColor;
-    row_selection.color_node.style.backgroundColor = '#7070ff';
-  } else {
-    moverow(row_selection.rownum, rownr);
-    row_selection.row        = null;
-    row_selection.rownum     = null;
-    row_selection.color_node.style.backgroundColor = row_selection.old_color;
-    row_selection.color_node = null;
-    row_selection.old_color  = null;
-  }
+*/
+function moveHandler(evt) {
+	var rownr = getEventAttr(evt, 'rownr');
+	if (sRowSelection.rownum == null) {
+		var row_elem             = sEditTable.rows[rownr];
+		var action_cell          = row_elem.firstChild;
+		sRowSelection.row        = row_elem;
+		sRowSelection.rownum     = rownr;
+		var tableCells = row_elem.getElementsByTagName('TD');
+		for (var i=0; i<tableCells.length; ++i) {
+			addClass(tableCells[i], 'editTableActionSelectedCell');	
+		}
+	} else {
+		moveRow(sRowSelection.rownum, rownr);
+		var row_elem             = sEditTable.rows[sRowSelection.rownum];
+		var tableCells = row_elem.getElementsByTagName('TD');
+		for (var i=0; i<tableCells.length; ++i) {
+			removeClass(tableCells[i], 'editTableActionSelectedCell');	
+		}
+		sRowSelection.row        = null;
+		sRowSelection.rownum     = null;
+	}
+	switchDeleteButtons(evt);
+	switchMoveButtonsToTargetButtons(evt, rownr);
 }
 
-//-----------------------------------------------------------------------------
-function delete_handler(evt) {
-  var rownr = get_event_attr(evt, 'rownr');
+/**
 
-  var from_row_pos = edittable.positions[rownr];
+*/
+function switchDeleteButtons (evt) {
+	var rownr = getEventAttr(evt, 'rownr');
+	var mode = (sRowSelection.rownum == null) ? 'to_enable' : 'to_disable';
+	var ilen = sEditTable.rows.length;
+	for (var i=0; i<ilen; ++i) {
+		var row_elem = sEditTable.rows[i];
+		var action_cell = row_elem.firstChild;
+		var deleteButton = action_cell.deleteButton;
+		deleteButton.src = (mode == 'to_enable') ? deleteButton['enableButtonSrc'] : deleteButton['disableButtonSrc'];
+		if (mode == 'to_enable') {
+			attachEvent(deleteButton, 'click', deleteButton.handler);
+		} else {
+			detachEvent(deleteButton, 'click', deleteButton.handler);
+		}
+	}
+}
+
+/**
+
+*/
+function switchMoveButtonsToTargetButtons (evt, selectedRow) {
+	var rownr = getEventAttr(evt, 'rownr');
+	var mode = (sRowSelection.rownum == null) ? 'to_move' : 'to_target';
+	var ilen = sEditTable.rows.length;
+	for (var i=0; i<ilen; ++i) {
+		if (mode == 'to_target' && i == selectedRow) continue;
+		var row_elem = sEditTable.rows[i];
+		var action_cell = row_elem.firstChild;
+		var moveButton = action_cell.moveButton;
+		moveButton.src = (mode == 'to_target') ? moveButton['targetButtonSrc'] : moveButton['moveButtonSrc'];
+	}
+}
+
+
+/**
+
+*/
+function deleteHandler(evt) {
+  var rownr = getEventAttr(evt, 'rownr');
+
+  var from_row_pos = sEditTable.positions[rownr];
 
   // Remove the from_row from the table.
-  var row_container      = edittable.row_container;
-  var from_row_elem      = edittable.rows[rownr];
+  var row_container      = sEditTable.row_container;
+  var from_row_elem      = sEditTable.rows[rownr];
   row_container.removeChild(from_row_elem);
 
   // Update all rows after from_row.
-  for(var pos=from_row_pos+1; pos < edittable.numrows; pos++) {
-    var rownum = edittable.revidx[pos];
+  for(var pos=from_row_pos+1; pos < sEditTable.numrows; pos++) {
+    var rownum = sEditTable.revidx[pos];
     var newpos = pos-1;
-    edittable.positions[rownum] = newpos;
-    edittable.revidx[newpos]    = rownum;
-    update_rowlabels(rownum, -1);
+    sEditTable.positions[rownum] = newpos;
+    sEditTable.revidx[newpos]    = rownum;
+    updateRowlabels(rownum, -1);
   }
 
-  if (row_selection.rownum == rownr) {
-    row_selection.row        = null;
-    row_selection.rownum     = null;
-    row_selection.color_node = null;
-    row_selection.old_color  = null;
+  if (sRowSelection.rownum == rownr) {
+    sRowSelection.row        = null;
+    sRowSelection.rownum     = null;
   }
 
-  edittable.numrows--;
-  edittable.tableform.etrows.value = edittable.numrows;
+  sEditTable.numrows--;
+  sEditTable.tableform.etrows.value = sEditTable.numrows;
+  
+  fixStyling();
 }
 
+/**
 
-//-----------------------------------------------------------------------------
-function moverow(from_row, to_row) {
-  var from_row_pos = edittable.positions[from_row];
-  var to_row_pos   = edittable.positions[to_row];
+*/
+function retrieveAlternatingRowColors () {
+	var ilen = sEditTable.numrows;
+	for (var i=0; i<ilen; ++i) {
+		var tr = sEditTable.rows[i];
+		var tableCells = tr.getElementsByTagName('TD');
+		var alternate = (i%2 == 0) ? 'even': 'odd';
+		for (var j=0; j<tableCells.length; ++j) {
+			if (sAlternatingColors.even != null && sAlternatingColors.odd != null) continue;
+			sAlternatingColors[alternate] = tableCells[j].getAttribute('bgColor');
+		}
+		if (sAlternatingColors.even != null && sAlternatingColors.odd != null) {
+			return;
+		}
+	}
+	if (!sAlternatingColors.odd) {
+		sAlternatingColors.odd = sAlternatingDefaultColors.odd;
+	}
+	if (!sAlternatingColors.even) {
+		sAlternatingColors.even = sAlternatingDefaultColors.even;
+	}
+}
+
+/**
+Style the last row.
+*/
+function fixStyling () {
+	
+	// style even/uneven rows
+	var ilen = sEditTable.numrows;
+	for (var i=0; i<ilen; i++) {
+		var num = sEditTable.revidx[i];
+		var tr = sEditTable.rows[num];
+		var tableCells = tr.getElementsByTagName('TD');
+		var alternate = (i%2 == 0) ? 'even': 'odd';
+		var className = (i%2 == 0) ? 'twikiTableEven': 'twikiTableOdd';
+		
+		removeClass(tr, 'twikiTableEven');
+		removeClass(tr, 'twikiTableOdd');
+		addClass(tr, className);
+		
+		for (var j=0; j<tableCells.length; ++j) {
+			var cell = tableCells[j];
+			removeClass(cell, 'twikiLast');
+			addClass(cell, className);
+			cell.removeAttribute('bgColor');
+			cell.setAttribute('bgColor', sAlternatingColors[alternate]);
+		}
+	}
+	
+	// style last row
+	var lastRowNum = sEditTable.revidx[sEditTable.numrows-1];
+	var lastRowElement = sEditTable.rows[lastRowNum];
+	var tableCells = lastRowElement.getElementsByTagName('TD');
+	for (var i=0; i<tableCells.length; ++i) {
+		addClass(tableCells[i], 'twikiLast');
+	}
+	
+}
+
+/**
+
+*/
+function moveRow(from_row, to_row) {
+  var from_row_pos = sEditTable.positions[from_row];
+  var to_row_pos   = sEditTable.positions[to_row];
 
   var inc = 1;
   if(to_row_pos == -1 || from_row_pos > to_row_pos) {
@@ -181,21 +357,21 @@ function moverow(from_row, to_row) {
   if (from_row == to_row) { return; }
 
   // Remove the from_row from the table.
-  var row_container      = edittable.row_container;
-  var from_row_elem      = edittable.rows[from_row];
-  workaround_ie_checkbox_bug(from_row_elem);
+  var row_container      = sEditTable.row_container;
+  var from_row_elem      = sEditTable.rows[from_row];
+  workaroundIECheckboxBug(from_row_elem);
   row_container.removeChild(from_row_elem);
 
   // Update all rows after from_row up to to_row.
   for(var pos=from_row_pos+inc; pos != to_row_pos+inc; pos+=inc) {
-    var rownum = edittable.revidx[pos];
+    var rownum = sEditTable.revidx[pos];
     var newpos = pos-inc;
-    edittable.positions[rownum] = newpos;
-    edittable.revidx[newpos]    = rownum;
-    update_rowlabels(rownum, -inc);
+    sEditTable.positions[rownum] = newpos;
+    sEditTable.revidx[newpos]    = rownum;
+    updateRowlabels(rownum, -inc);
   }
 
-  var insertion_target = edittable.rows[to_row];
+  var insertion_target = sEditTable.rows[to_row];
   if (inc == 1) {
     insertion_target = insertion_target.nextSibling;
   }
@@ -204,39 +380,44 @@ function moverow(from_row, to_row) {
   } else {
     row_container.insertBefore(from_row_elem, insertion_target);
   }
-  edittable.positions[from_row] = to_row_pos;
-  edittable.revidx[to_row_pos]  = from_row;
-  update_rowlabels(from_row, to_row_pos-from_row_pos);
+  sEditTable.positions[from_row] = to_row_pos;
+  sEditTable.revidx[to_row_pos]  = from_row;
+  updateRowlabels(from_row, to_row_pos-from_row_pos);
 
+	fixStyling();
 }
 
-//-----------------------------------------------------------------------------
+/**
+
+*/
 // IE will reset checkboxes to their default state when they are moved around
 // in the DOM tree, so we have to override the default state.
 
-function workaround_ie_checkbox_bug(container) {
+function workaroundIECheckboxBug(container) {
   var elems = container.getElementsByTagName('INPUT');
-  for(i=0; elems[i] != null; i++) {
-    inp=elems[i];
+  for(var i=0; elems[i] != null; i++) {
+    var inp = elems[i];
     if(inp['type'] == 'radio') {
       inp['defaultChecked'] = inp['checked'];
     }
   }
 }
 
-//-----------------------------------------------------------------------------
+/**
 
-function row_selection_object() {
+*/
+
+function RowSelectionObject() {
   this.row        = null;
   this.rownum     = null;
-  this.color_node = null;
-  this.old_color  = null;
   return this;
 }
 
-//-----------------------------------------------------------------------------
+/**
 
-function edittable_object(tableform, row_container) {
+*/
+
+function EditTableObject(tableform, row_container) {
   this.tableform           = tableform;
   this.row_container       = row_container;
   this.rows                = new Array();
@@ -244,7 +425,7 @@ function edittable_object(tableform, row_container) {
   this.rowids              = new Array();
   this.revidx              = new Array();
   this.numrows             = 0;
-  row_elem                 = row_container.firstChild;
+  var row_elem             = row_container.firstChild;
 
   while(row_elem != null) {
     if(row_elem.tagName == "TR") {
@@ -259,7 +440,9 @@ function edittable_object(tableform, row_container) {
   return this;
 }
 
-//-----------------------------------------------------------------------------
+/**
+
+*/
 
 function etsubmit(formid) {
   var form      = document.getElementById(formid);
@@ -277,13 +460,15 @@ function etsubmit(formid) {
   return true;
 }
 
-//-----------------------------------------------------------------------------
+/**
+
+*/
 // Update all row labels in a row by adding a delta amount to each one.
 
-function update_rowlabels(rownum, delta) {
-  var row=edittable.rows[rownum];
+function updateRowlabels(rownum, delta) {
+  var row=sEditTable.rows[rownum];
   var label_nodes = row.getElementsByTagName('DIV');
-  for(i=0; label_nodes[i] != null; i++) {
+  for(var i=0; label_nodes[i] != null; i++) {
     var lnode = label_nodes[i];
     if (lnode.className == 'et_rowlabel') {
       var input_node = lnode.getElementsByTagName('INPUT').item(0);
@@ -303,5 +488,7 @@ function update_rowlabels(rownum, delta) {
 
 }
 
-//-----------------------------------------------------------------------------
-// EOF: edittable.js
+/**
+
+*/
+// EOF: sEditTable.js

@@ -20,7 +20,7 @@ package TWiki::Plugins::EditTablePlugin;
 
 use vars qw(
             $web $topic $user $VERSION $RELEASE $debug
-            $query $renderingWeb
+            $query $renderingWeb $usesJavascriptInterface $editModeHeaderDone
     );
 
 # This should always be $Rev$ so that TWiki can determine the checked-in
@@ -52,7 +52,8 @@ sub initPlugin {
 
     # Get plugin debug flag
     $debug = TWiki::Func::getPreferencesFlag( 'EDITTABLEPLUGIN_DEBUG' );
-
+    $usesJavascriptInterface = TWiki::Func::getPreferencesFlag( 'EDITTABLEPLUGIN_JAVASCRIPTINTERFACE' );
+    $editModeHeaderDone = 0;
     $prefsInitialized = 0;
     $renderingWeb = $web;
 
@@ -62,7 +63,7 @@ sub initPlugin {
     # Initialize $table such that the code will correctly detect when to
     # read in a topic.
     undef $table;
-
+    
     return 1;
 }
 
@@ -105,6 +106,34 @@ sub decodeValue {
     $theText =~ s/\"/\&quot;/go;          # change " to entity
 
     return $theText;
+}
+
+sub addEditModeHeadersToHead {
+    return if $editModeHeaderDone;
+    return if !$usesJavascriptInterface;
+    
+    $editModeHeaderDone = 1;
+
+    my $header=<<'EOF'; 
+<style type="text/css" media="all">
+@import url("%PUBURL%/%TWIKIWEB%/EditTablePlugin/edittable.css");
+</style>
+<script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/EditTablePlugin/edittable.js"></script>
+EOF
+
+  TWiki::Func::addToHEAD('EDITTABLEPLUGIN',$header)
+}
+
+sub dynamicJavascriptForTable {
+	my ( $tableNr, $assetUrl ) = @_;
+	
+	return "" if !$usesJavascriptInterface;
+
+	return "<script type=\"text/javascript\">\n"
+	   . "<!-- -------- <pre> --------\n"
+	   . "edittableInit('edittable$tableNr','$assetUrl');\n"
+	   . "//   -------- </pre> -------- -->\n"
+	   . "</script>\n";
 }
 
 1;

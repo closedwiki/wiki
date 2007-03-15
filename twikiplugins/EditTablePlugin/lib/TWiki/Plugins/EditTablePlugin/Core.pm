@@ -288,7 +288,7 @@ sub handleTableStart {
     }
     $text .= "<div class=\"".$cssClass."\">";
     $text .= "$preSp<form name=\"edittable$theTableNr\" action=\"$viewUrl\" method=\"post\">\n";
-    $text .= "$preSp<input type=\"hidden\" name=\"ettablenr\" value=\"$theTableNr\" />\n";
+    $text .= "$preSp<input class=\"twikiInputField\" type=\"hidden\" name=\"ettablenr\" value=\"$theTableNr\" />\n";
     $text .= "$preSp<input type=\"hidden\" name=\"etedit\" value=\"on\" />\n" unless $doEdit;
     return $text;
 }
@@ -328,14 +328,10 @@ sub handleTableEnd {
         my $assetUrl  = '%PUBURL%/%TWIKIWEB%/EditTablePlugin';
         my $scriptUrl = $assetUrl.'/edittable.js';
 
-        # Include javascript functionality for browsers that support it.
-        $text .= '<SCRIPT TYPE="text/javascript" SRC="'.$scriptUrl.'"></SCRIPT>'."\n";
+        &TWiki::Plugins::EditTablePlugin::addEditModeHeadersToHead();
+		# table specific script
         my $tableNr = $query->param( 'ettablenr' );
-        $text .= "<SCRIPT TYPE=\"text/javascript\">\n"
-               . "<!-- -------- <pre> --------\n"
-               . "edittable_init('edittable$tableNr','$assetUrl');\n"
-               . "//   -------- </pre> -------- -->\n"
-               . "</SCRIPT>\n";
+        $text .= &TWiki::Plugins::EditTablePlugin::dynamicJavascriptForTable( $tableNr, $assetUrl);
 
     } else {
         # View mode
@@ -381,7 +377,7 @@ sub viewEditCell {
     if( $img ) {
         return "<input class=\"editTableEditImageButton\" type=\"image\" src=\"$img\" alt=\"$value\" />";
     } else {
-        return "<input class=\"editTableEditButton\" type=\"submit\" value=\"$value\" />";
+        return "<input class=\"twikiButton editTableEditButton\" type=\"submit\" value=\"$value\" />";
     }
 }
 
@@ -422,12 +418,10 @@ sub inputElement {
     my $val  = '';
     my $valExpanded = '';
     my $sel  = '';
-    my $style = '';
-    $style = " style='background:#e8e8e8'" if ($theRowNr % 2);
     if( $type eq 'select' ) {
         my $expandedValue = TWiki::Func::expandCommonVariables( $theValue, $theTopic, $theWeb );
         $size = 1 if $size < 1;
-        $text = "<select$style name=\"$theName\" size=\"$size\">";
+        $text = "<select name=\"$theName\" size=\"$size\">";
         $i = 2;
         while( $i < @bits ) {
             $val  = $bits[$i] || '';
@@ -505,9 +499,9 @@ sub inputElement {
 
     } elsif( $type eq 'row' ) {
         $size = $size + $theRowNr;
-        $text = "<DIV class=\"et_rowlabel\">"
+        $text = "<div class=\"et_rowlabel\">"
               . "$size<input type=\"hidden\" name=\"$theName\" value=\"$size\" />"
-              . "</DIV>";
+              . "</div>";
         $text .= saveEditCellFormat( $cellFormat, $theName );
 
     } elsif( $type eq 'label' ) {
@@ -532,7 +526,7 @@ sub inputElement {
         $theValue = $cell if( defined $cell );  # original value from file
         $theValue = TWiki::Plugins::EditTablePlugin::encodeValue( $theValue ) unless( $theValue eq '' );
         $theValue = "\*$theValue\*" if( $isHeader );
-        $text .= "<input$style type=\"hidden\" name=\"$theName\" value=\"$theValue\" />";
+        $text .= "<input type=\"hidden\" name=\"$theName\" value=\"$theValue\" />";
         $text = "\*$text\*" if( $isHeader );
 
     } elsif( $type eq 'textarea' ) {
@@ -541,7 +535,7 @@ sub inputElement {
         $cols = 30 if $cols < 1;
 
         $theValue = TWiki::Plugins::EditTablePlugin::encodeValue( $theValue ) unless( $theValue eq '' );
-        $text .= "<textarea$style class=\"editTableTextarea\" rows=\"$rows\" cols=\"$cols\" name=\"$theName\">$theValue</textarea>";
+        $text .= "<textarea class=\"editTableTextarea\" rows=\"$rows\" cols=\"$cols\" name=\"$theName\">$theValue</textarea>";
         $text .= saveEditCellFormat( $cellFormat, $theName );
 
     } elsif( $type eq 'date' ) {
@@ -552,13 +546,16 @@ sub inputElement {
         $theValue = TWiki::Plugins::EditTablePlugin::encodeValue( $theValue ) unless( $theValue eq '' );
         $text .= CGI::textfield(
             { name => $theName,
+              class => 'twikiInputField editTableInput',
               id => 'id'.$theName,
               size=> $size,
               value => $theValue });
         $text .= saveEditCellFormat( $cellFormat, $theName );
         eval 'use TWiki::Contrib::JSCalendarContrib';
         unless ( $@ ) {
+        	$text .= '%TWISTY{link="" noscript="hide" start="show" prefix="&nbsp;"}%';
             $text .= CGI::image_button(
+            	-class => 'editTableCalendarButton',
                 -name => 'calendar',
                 -onclick =>
                   "return showCalendar('id$theName','$ifFormat')",
@@ -567,6 +564,7 @@ sub inputElement {
                       '/JSCalendarContrib/img.gif',
                 -alt => 'Calendar',
                 -align => 'MIDDLE' );
+			$text .= '%ENDTWISTY%';
         }
 
         $query->{'jscalendar'} = 1;
@@ -574,7 +572,7 @@ sub inputElement {
     } else { #  if( $type eq 'text')
         $size = 16 if $size < 1;
         $theValue = TWiki::Plugins::EditTablePlugin::encodeValue( $theValue ) unless( $theValue eq '' );
-        $text = "<input$style class=\"editTableInput\" type=\"text\" name=\"$theName\" size=\"$size\" value=\"$theValue\" />";
+        $text = "<input class=\"twikiInputField editTableInput\" type=\"text\" name=\"$theName\" size=\"$size\" value=\"$theValue\" />";
         $text .= saveEditCellFormat( $cellFormat, $theName );
     }
     return $text;
@@ -617,7 +615,7 @@ sub handleTableRow {
             $val .= " %EDITCELL{$cellFormat}%" if( $cellFormat );
             if( defined $val ) {
                 # change any new line character sequences to <br />
-                $val =~ s/(\n\r?)|(\r\n?)+/<br \/>/gos;
+                $val =~ s/[\n\r]{2,}?/%BR%/gos;
                 # escape "|" to HTML entity
                 $val =~ s/\|/\&\#124;/gos;
                 $cellDefined = 1;
