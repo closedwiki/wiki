@@ -135,12 +135,13 @@ sub save {
                 $active_table++;
                 if ($active_table == $urps->{active_table}) {
                     $line = $table->$action($urps);
+                } else {
+                    $line = $table->stringify();
                 }
                 $table->finish();
             }
             $nlines .= "$line\n";
         }
-
         TWiki::Func::saveTopic($web, $topic, $meta, $nlines,
                                 { minor => 1 });
 
