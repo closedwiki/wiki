@@ -58,7 +58,8 @@ function dTree(objName) {
         autoToggle : false, //Clicking on a node itself will open/close that node, rename activeNode?
         popup : false, //Popup menu style
         closePopupDelay : 1000, //Delay before closing all popup
-        popupOffset : {'x':0, 'y':0} //Allow fine tunning of popup position, in pixel  
+        popupOffset : {'x':0, 'y':0}, //Allow fine tunning of popup position, in pixel
+        firstPopupOffset : {'x':0, 'y':0} //Allow fine tunning of first popup position, in pixel    
 	};
 	this.icon = {
 	  root : 'base.gif',
@@ -409,6 +410,7 @@ dTree.prototype.nodeStatus = function(status, id, bottom)
                 }
             else
                 {
+                //IE sub menu not working because of clipping solve that by getting ride of nested div 
                 //writeDebug('IE');
                 //eDiv.style.position = 'absolute';
                 //eDiv.style.left = getAbsoluteLeft(nodeIdString) + eNodeDiv.offsetWidth -6 + 'px'; //eNodeDiv.style.left + eNodeDiv.style.pixelWidth;
@@ -436,8 +438,8 @@ dTree.prototype.nodeStatus = function(status, id, bottom)
 
             var nodePos = Position.get(eNodeDiv);    
             eDiv.style.position = 'absolute';
-            eDiv.style.left = nodePos.left + nodePos.width + this.config.popupOffset.x + 'px'; //4px padding + 2 px border
-            eDiv.style.top = nodePos.top + this.config.popupOffset.y +'px';
+            eDiv.style.left = nodePos.left + nodePos.width + this.config.popupOffset.x + this.config.firstPopupOffset.x + 'px'; //4px padding + 2 px border
+            eDiv.style.top = nodePos.top + this.config.popupOffset.y + this.config.firstPopupOffset.y +'px';
             }
 
             /*        
