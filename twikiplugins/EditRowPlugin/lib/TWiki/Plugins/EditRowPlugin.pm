@@ -38,7 +38,17 @@ sub initPlugin {
 
 # Handler run when viewing a topic
 sub commonTagsHandler {
-    # my ( $text, $topic, $web ) = @_;
+    # my ( $text, $topic, $web, $meta ) = @_;
+
+    my $query = TWiki::Func::getCgiQuery();
+    return unless $query;
+
+    my $context = TWiki::Func::getContext();
+    return unless $context->{view};
+
+    # SMELL: hack to get around not having a proper topic object model
+    $meta ||= $context->{can_render_meta};
+    return unless $meta;
 
     return unless
       TWiki::Func::getPreferencesValue('ENABLE_TABLE_ROW_EDIT');
@@ -47,16 +57,15 @@ sub commonTagsHandler {
 
     my ($topic, $web) = ($_[1], $_[2]);
 
+    return unless TWiki::Func::checkAccessPermission(
+        'CHANGE', TWiki::Func::getWikiName(), $_[0], $topic, $web, $meta);
+
     require TWiki::Plugins::EditRowPlugin::Table;
     return if $@;
 
     my $content = TWiki::Plugins::EditRowPlugin::Table::parseTables(@_);
 
     $_[0] =~ s/\\\n//gs;
-
-    my $query = TWiki::Func::getCgiQuery();
-
-    return unless $query;
 
     my $urps = $query->Vars();
     $urps->{active_table} ||= 0;
@@ -105,7 +114,7 @@ sub save {
     my $url;
     if (!TWiki::Func::checkAccessPermission(
         'CHANGE', TWiki::Func::getWikiName(), $text, $topic, $web, $meta)) {
-    
+
         # SMELL: 
         # - can't use TWiki::Func::getOopsUrl() to get an accessdenied url
         #   because it does not pass the def => 'topic_access' parameter
@@ -113,7 +122,7 @@ sub save {
         #   because the rest script does not catch it
         # see Bugs:Item3772
 
-        $url = $TWiki::Plugins::SESSION->getOopsUrl( 
+        $url = $TWiki::Plugins::SESSION->getOopsUrl(
           'accessdenied', 
           web => $web,
           topic => $topic,

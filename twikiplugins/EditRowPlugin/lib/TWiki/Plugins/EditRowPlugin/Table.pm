@@ -52,13 +52,10 @@ sub parseTables {
         }
 
         if ($active_table && $line =~ s/^\s*\|//) {
-            my $row = new TWiki::Plugins::EditRowPlugin::TableRow(
-                $active_table, scalar(@{$active_table->{rows}}) + 1);
-            my $n = 1;
             $line =~ s/\|\s*$//;
-            push(@{$row->{cols}}, map {
-                new TWiki::Plugins::EditRowPlugin::TableCell($row, $_, $n++); }
-              split(/\s*\|\s*/, $line));
+            my $row = new TWiki::Plugins::EditRowPlugin::TableRow(
+                $active_table, scalar(@{$active_table->{rows}}) + 1,
+                split(/\s*\|\s*/, $line));
             push(@{$active_table->{rows}}, $row);
             next;
         }
@@ -111,9 +108,9 @@ sub renderForEdit {
     my $n = 1;
     foreach my $row (@{$this->{rows}}) {
         if ($n++ == $activeRow) {
-            push(@out, $row->renderForEdit());
+            push(@out, $row->renderForEdit($this->{colTypes}));
         } else {
-            push(@out, $row->renderForDisplay($this));
+            push(@out, $row->renderForDisplay($this->{colTypes}));
         }
     }
     return join("\n", @out);
@@ -123,7 +120,7 @@ sub renderForDisplay {
     my $this = shift;
     my @out;
     foreach my $row (@{$this->{rows}}) {
-        push(@out, $row->renderForDisplay());
+        push(@out, $row->renderForDisplay($this->{colTypes}));
     }
     return join("\n", @out);
 }
@@ -141,17 +138,16 @@ sub changeRow {
 
 sub addRow {
     my ($this, $urps) = @_;
-    my $arow = $this->{rows}->[$urps->{active_row} - 1];
-    my $newRow = new TWiki::Plugins::EditRowPlugin::TableRow(
-        $this, $urps->{active_row});
-    splice(@{$this->{rows}}, $urps->{active_row}, 0, $newRow);
-    foreach my $c (@{$arow->{cols}}) {
-        my $cellName = "cell_$this->{number}_$arow->{number}_$c->{number}";
-        my $cv = $urps->{$cellName} || '';
-        push(@{$newRow->{cols}},
-             new TWiki::Plugins::EditRowPlugin::TableCell(
-                 $newRow, $cv, $c->{number}));
+    my @cols;
+    for (my $i = 1; $i <= scalar(@{$this->{colTypes}}); $i++) {
+        my $cellName = "cell_$this->{number}_$urps->{active_row}_$i";
+        push(@cols, $urps->{$cellName} || '');
     }
+
+    my $newRow = new TWiki::Plugins::EditRowPlugin::TableRow(
+        $this, $urps->{active_row}, @cols);
+    splice(@{$this->{rows}}, $urps->{active_row}, 0, $newRow);
+
     return $this->stringify();
 }
 
