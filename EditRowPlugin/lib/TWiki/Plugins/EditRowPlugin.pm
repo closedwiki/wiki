@@ -105,9 +105,25 @@ sub save {
     my $url;
     if (!TWiki::Func::checkAccessPermission(
         'CHANGE', TWiki::Func::getWikiName(), $text, $topic, $web, $meta)) {
-        $url = TWiki::Func::getOopsUrl(
-            $web, $topic, 'oopsaccessdenied',
-            'accessdenied', 'param2', 'param3');
+    
+        # SMELL: 
+        # - can't use TWiki::Func::getOopsUrl() to get an accessdenied url
+        #   because it does not pass the def => 'topic_access' parameter
+        # - can throw an appropriate exception 
+        #   because the rest script does not catch it
+        # see Bugs:Item3772
+
+        $url = $TWiki::Plugins::SESSION->getOopsUrl( 
+          'accessdenied', 
+          web => $web,
+          topic => $topic,
+          def => 'topic_access',
+          params => [
+            'CHANGE',
+            'access not allowed on topic',
+          ]
+        );
+
     } else {
         $text =~ s/\\\n//gs;
         require TWiki::Plugins::EditRowPlugin::Table;
