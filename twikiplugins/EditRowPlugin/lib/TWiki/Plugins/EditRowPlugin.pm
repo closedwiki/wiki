@@ -140,20 +140,23 @@ sub save {
         my $content = TWiki::Plugins::EditRowPlugin::Table::parseTables(
             $text, $topic, $web);
 
-        my $urps = $query->Vars();
-
         my $nlines = '';
         my $table = undef;
         my $active_table = 0;
-
         my $action = 'cancelRow';
-        if ($saveType =~ /^($QUIET_SAVE|$NOISY_SAVE)$/o) {
+        my $minor = 0;
+        if ($query->param('editrowplugin_save.x')) {
             $action = 'changeRow';
-        } elsif ($saveType eq $ADD_ROW) {
+        } elsif ($query->param('editrowplugin_quietSave.x')) {
+            $action = 'changeRow';
+            $minor = 1;
+        } elsif ($query->param('editrowplugin_addRow.x')) {
             $action = 'addRow';
-        } elsif ($saveType eq $DELETE_ROW) {
+        } elsif ($query->param('editrowplugin_deleteRow.x')) {
             $action = 'deleteRow';
         }
+
+        my $urps = $query->Vars();
 
         foreach my $line (@$content) {
             if (ref($line) eq 'TWiki::Plugins::EditRowPlugin::Table') {
@@ -171,11 +174,11 @@ sub save {
             }
         }
         TWiki::Func::saveTopic($web, $topic, $meta, $nlines,
-                                { minor => 1 });
+                                { minor => $minor });
 
         my $anchor = "erp$urps->{active_table}_$urps->{active_row}";
         if ($TWiki::Plugins::VERSION < 1.11) {
-            $url = TWiki::Func::getScriptUrl($web, $topic, 'view')."#anchor";
+            $url = TWiki::Func::getScriptUrl($web, $topic, 'view')."#$anchor";
         } else {
             $url = TWiki::Func::getScriptUrl(
                 $web, $topic, 'view', '#' => $anchor);
