@@ -47,7 +47,7 @@ sub commonTagsHandler {
     return unless $context->{view};
 
     # SMELL: hack to get around not having a proper topic object model
-    $meta ||= $context->{can_render_meta};
+    my $meta = $_[3] || $context->{can_render_meta};
     return unless $meta;
 
     return unless
