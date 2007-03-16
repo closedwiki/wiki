@@ -4,14 +4,24 @@ package TWiki::Plugins::EditRowPlugin::TableRow;
 use strict;
 
 use TWiki::Func;
+use TWiki::Plugins::EditRowPlugin::TableCell;
 
 sub new {
-    my ($class, $table, $number) = @_;
+    my ($class, $table, $number, @cols) = @_;
     my $this = bless({}, $class);
-    @{$this->{cols}} = @_;
     $this->{table} = $table;
     $this->{number} = $number;
-    $this->{cols} = [];
+
+    # pad out the cols to the width of the format
+    my $ncols = scalar(@{$table->{colTypes}});
+    while (scalar(@cols) < $ncols) {
+        push(@cols, '');
+    }
+    my $n = 1;
+    @cols = map {
+        new TWiki::Plugins::EditRowPlugin::TableCell($this, $_, $n++); }
+      @cols;
+    $this->{cols} = \@cols;
     return $this;
 }
 
@@ -22,20 +32,22 @@ sub stringify {
 }
 
 sub renderForEdit {
-    my $this = shift;
+    my ($this, $colDefs) = @_;
 
     my @out;
+
+    # Generate the editors for each cell in the row
     my $col = 0;
-    my $ct = $this->{table}->{colTypes};
-    foreach (@{$this->{cols}}) {
-        push(@out, $_->renderForEdit($ct->[$col++]));
+    foreach my $cell (@{$this->{cols}}) {
+        push(@out, $cell->renderForEdit($colDefs->[$col++]));
     }
+
     my $buttons = CGI::image_button({
         type => 'submit',
         name => 'editrowplugin_save',
         value => $TWiki::Plugins::EditRowPlugin::NOISY_SAVE,
         title => $TWiki::Plugins::EditRowPlugin::NOISY_SAVE,
-	src => '%PUBURLPATH%/TWiki/TWikiDocGraphics/save.gif'
+        src => '%PUBURLPATH%/TWiki/TWikiDocGraphics/save.gif'
        }, '');
     my $attrs = $this->{table}->{attrs};
     if (TWiki::isTrue($attrs->{quietsave})) {
@@ -82,7 +94,7 @@ sub renderForEdit {
 }
 
 sub renderForDisplay {
-    my $this = shift;
+    my ($this, $colDefs) = @_;
     my @out;
     my $attrs = $this->{table}->{attrs};
     if ($this->{number} == 1 &&
@@ -92,9 +104,8 @@ sub renderForDisplay {
         unshift(@out, '');
     } else {
         my $col = 0;
-        my $ct = $this->{table}->{colTypes};
         foreach (@{$this->{cols}}) {
-            push(@out, $_->renderForDisplay($ct->[$col++]));
+            push(@out, $_->renderForDisplay($colDefs->[$col++]));
         }
         my $id = "$this->{table}->{number}_$this->{number}";
         my $url;
@@ -118,10 +129,9 @@ sub renderForDisplay {
              });
         unshift(
             @out,
-            "<a href='$url'>" .
-              $button .
-                "</a><a name='erp$this->{table}->{number}_$this->{number}'></a>");
-        }
+            "<a name='erp$this->{table}->{number}_$this->{number}'></a>".
+              "<a href='$url'>" . $button . "</a>");
+    }
     return '| '.join(' | ', @out). ' |';
 }
 

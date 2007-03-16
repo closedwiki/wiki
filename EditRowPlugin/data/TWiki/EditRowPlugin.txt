@@ -1,9 +1,9 @@
-%META:TOPICINFO{author="SimianApe" date="1173974145" format="1.1" reprev="1.2" version="1.2"}%
 ---+!! !EditRowPlugin
 <!--
 One line description, required for extensions repository catalog.
    * Set SHORTDESCRIPTION = Single table row inline edit
 -->
+
 %SHORTDESCRIPTION%
 <img src="%ATTACHURLPATH%/screenshot.gif" alt="screenshot.gif" width='415' height='100' style="float:right" />
 
@@ -24,13 +24,14 @@ At this time most features of !EditTablePlugin are supported. Known exceptions
 are:
    * the =helptopic= and =editbutton= switches, which are ignored,
    * the =EDITCELL= feature, which is not supported,
-   * access controls on edit; with this plugin, access is only checked on topic save,
    * The "Initial values" feature, which is incompatible with the way this plugin adds new rows.
 
 The plugin doesn't use !JavaScript (except for the calendar) so it should
 work with all browsers.
 
 See also: !EditTablePlugin, !EditTableRowPlugin.
+
+Another great TWiki extension from the <img src="%ATTACHURLPATH%/wikiring.png" alt="" /> *WikiRing* - working together to improve your wiki experience!
 
 ---++ Usage
 
@@ -70,7 +71,6 @@ examples will be editable.
 | 9A-11 | A new model for 2007, but not quite as pretty as the 9A-10 |
 | RR717-D | Solid performer, dependable in vacuum grinders |
 
-
 ---++ Installation Instructions
 
 %$INSTALL_INSTRUCTIONS%
@@ -82,6 +82,7 @@ examples will be editable.
 |  Copyright: | &copy; 2007 Wind<nop>River Inc. |
 |  License: | [[http://www.gnu.org/licenses/gpl.html][GPL (Gnu General Public License)]] |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  13155 | Fixed issue with short rows, and added perms check |
 |  13148 | Bugs:Item3770: Bugfixes |
 |  Dependencies: | %$DEPENDENCIES% |
 |  Plugin Home: | http://twiki.org/cgi-bin/view/Plugins/EditRowPlugin |
@@ -91,3 +92,4 @@ examples will be editable.
 <!-- Do _not_ attempt to edit this topic; it is auto-generated. Please add comments/questions/remarks to the Dev topic instead. -->
 
 %META:FILEATTACHMENT{name="screenshot.gif" attr="h" comment="" version="1"}%
+%META:FILEATTACHMENT{name="wikiring.png" attr="h" comment="" version="1"}%
