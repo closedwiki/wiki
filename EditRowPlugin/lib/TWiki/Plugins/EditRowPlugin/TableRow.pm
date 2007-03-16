@@ -42,18 +42,19 @@ sub renderForEdit {
         push(@out, $cell->renderForEdit($colDefs->[$col++]));
     }
 
-    my $buttons = CGI::image_button({
-        type => 'submit',
-        name => 'editrowplugin_save',
-        value => $TWiki::Plugins::EditRowPlugin::NOISY_SAVE,
-        title => $TWiki::Plugins::EditRowPlugin::NOISY_SAVE,
-        src => '%PUBURLPATH%/TWiki/TWikiDocGraphics/save.gif'
-       }, '');
+    my $buttons =
+      "<a name='erp$this->{table}->{number}_$this->{number}'></a>";
+    $buttons .=
+      CGI::image_button({
+          name => 'editrowplugin_save',
+          value => $TWiki::Plugins::EditRowPlugin::NOISY_SAVE,
+          title => $TWiki::Plugins::EditRowPlugin::NOISY_SAVE,
+          src => '%PUBURLPATH%/TWiki/TWikiDocGraphics/save.gif'
+         }, '');
     my $attrs = $this->{table}->{attrs};
     if (TWiki::isTrue($attrs->{quietsave})) {
         $buttons .= CGI::image_button({
-          type => 'submit',
-          name => 'editrowplugin_save',
+          name => 'editrowplugin_quietSave',
           value => $TWiki::Plugins::EditRowPlugin::QUIET_SAVE,
           title => $TWiki::Plugins::EditRowPlugin::QUIET_SAVE,
           src => '%PUBURLPATH%/TWiki/TWikiDocGraphics/quiet.gif'
@@ -63,31 +64,27 @@ sub renderForEdit {
     if ($attrs->{changerows}) {
         # add add row button
         $buttons .= CGI::image_button({
-        type => 'submit',
-        name => 'editrowplugin_save',
-        value => $TWiki::Plugins::EditRowPlugin::ADD_ROW,
-        title => $TWiki::Plugins::EditRowPlugin::ADD_ROW,
-        src => '%PUBURLPATH%/TWiki/TWikiDocGraphics/plus.gif'
+            name => 'editrowplugin_addRow',
+            value => $TWiki::Plugins::EditRowPlugin::ADD_ROW,
+            title => $TWiki::Plugins::EditRowPlugin::ADD_ROW,
+            src => '%PUBURLPATH%/TWiki/TWikiDocGraphics/plus.gif'
         }, '');
         if ($attrs->{changerows} eq 'on') {
             # add delete row button
             $buttons .= CGI::image_button({
-                type => 'submit',
-                name => 'editrowplugin_save',
+                name => 'editrowplugin_deleteRow',
                 value => $TWiki::Plugins::EditRowPlugin::DELETE_ROW,
                 title => $TWiki::Plugins::EditRowPlugin::DELETE_ROW,
                 src => '%PUBURLPATH%/TWiki/TWikiDocGraphics/minus.gif'
             }, '');
         }
     }
-    $buttons .= CGI::input({
-        type => 'submit',
-        name => 'editrowplugin_save',
+    $buttons .= CGI::image_button({
+        name => 'editrowplugin_cancelRow',
         value => $TWiki::Plugins::EditRowPlugin::CANCEL_ROW,
         title => $TWiki::Plugins::EditRowPlugin::CANCEL_ROW,
-        style => 'font-size:0;width:18px; height:18px; background-image:url(%PUBURLPATH%/TWiki/TWikiDocGraphics/stop.gif)',
+        src => '%PUBURLPATH%/TWiki/TWikiDocGraphics/stop.gif',
     }, '');
-    $buttons .= "<a name='erp$this->{table}->{number}_$this->{number}'></a>";
     unshift(@out, $buttons);
 
     return '| ' . join(' | ', @out) . '|';

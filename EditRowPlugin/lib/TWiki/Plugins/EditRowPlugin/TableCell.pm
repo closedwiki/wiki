@@ -36,9 +36,8 @@ sub renderForDisplay {
 
     if ($colDef->{type} eq 'row') {
         my $attrs = $this->{row}->{table}->{attrs};
-        if ($this->{number} == 1 &&
-              (!defined($attrs->{headerislabel}) ||
-                 TWiki::isTrue($attrs->{headerislabel}))) {
+        if (!defined($attrs->{headerislabel}) ||
+              TWiki::isTrue($attrs->{headerislabel})) {
             return $this->{row}->{number} - 1;
         } else {
             return $this->{row}->{number};
@@ -103,9 +102,8 @@ sub renderForEdit {
     } elsif( $colDef->{type} eq 'row' ) {
 
         my $attrs = $this->{row}->{table}->{attrs};
-        if ($this->{number} == 1 &&
-              (!defined($attrs->{headerislabel}) ||
-                 TWiki::isTrue($attrs->{headerislabel}))) {
+        if (!defined($attrs->{headerislabel}) ||
+              TWiki::isTrue($attrs->{headerislabel})) {
             $text = $this->{row}->{number} - 1;
         } else {
             $text = $this->{row}->{number};

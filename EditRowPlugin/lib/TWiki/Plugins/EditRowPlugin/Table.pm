@@ -139,11 +139,11 @@ sub changeRow {
 sub addRow {
     my ($this, $urps) = @_;
     my @cols;
-    for (my $i = 1; $i <= scalar(@{$this->{colTypes}}); $i++) {
+    my $arow = $this->{rows}->[$urps->{active_row} - 1];
+    for (my $i = 1; $i <= scalar(@{$arow->{cols}}); $i++) {
         my $cellName = "cell_$this->{number}_$urps->{active_row}_$i";
         push(@cols, $urps->{$cellName} || '');
     }
-
     my $newRow = new TWiki::Plugins::EditRowPlugin::TableRow(
         $this, $urps->{active_row}, @cols);
     splice(@{$this->{rows}}, $urps->{active_row}, 0, $newRow);
