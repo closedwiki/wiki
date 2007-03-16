@@ -816,7 +816,7 @@ msgstr "Hoofdlettergevoelig"
 
 #: twikiplugins/PatternSkin/data/TWiki/WebLeftBar.txt:32
 msgid "Categories"
-msgstr "CategoriÃ«n"
+msgstr "Categorieën"
 
 #: data/TWiki/ChangePassword.txt:2
 msgid "Change Password"
@@ -1463,7 +1463,7 @@ msgstr "Ik ben mijn wachtwoord vergeten"
 #: data/TWiki/TWikiPreferences.txt:42
 msgid "Ideas, requests, problems regarding %1? <a href='%2'>Send feedback</a>"
 msgstr ""
-"IdeeÃ«n, verzoeken of problemen aangaande %1? <a href='%2'>Stuur feedback</a>"
+"Ideeën, verzoeken of problemen aangaande %1? <a href='%2'>Stuur feedback</a>"
 
 #: templates/messages.tmpl:306
 msgid "If this line isn't present see _upgrade_ section below"
@@ -3291,7 +3291,7 @@ msgid ""
 "You now need to verify your e-mail address. You can do so by entering %1 in "
 "the form presented to you when this e-mail was sent, or by visiting %2"
 msgstr ""
-"Je moet nu je e-mailadres verifiÃ«ren. Dit kan je doen door %1 in te vullen "
+"Je moet nu je e-mailadres verifiëren. Dit kan je doen door %1 in te vullen "
 "in het formulier dat je hebt gekregen toen je deze e-mail werd gestuurd, of "
 "door %2 te bezoeken."
 
@@ -3356,7 +3356,7 @@ msgstr "Je geregistreerde e-mailadres(sen) zijn vernieuwd naar: %1."
 
 #: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:90
 msgid "Your signature to copy/paste:"
-msgstr "Je signatuur om te kopiÃ«ren/plakken:"
+msgstr "Je signatuur om te kopiëren/plakken:"
 
 #: templates/messages.tmpl:153
 msgid ""
