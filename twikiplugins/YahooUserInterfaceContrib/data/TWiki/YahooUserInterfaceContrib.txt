@@ -43,7 +43,7 @@ Settings are stored as preferences variables. To reference a setting write ==%<n
 |  Dependencies: | %$DEPENDENCIES% |
 |  Version: | %$VERSION% |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  %DATE%: | update to v2.2.0a version |
+|  16 Mar 2007: | update to v2.2.0a version |
 |  24 Oct 2006: | Initial version |
 |  Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
@@ -53,13 +53,13 @@ __Related Topics:__ %TWIKIWEB%.TWikiPreferences
 
 %META:FORM{name="PackageForm"}%
 %META:FIELD{name="TopicClassification" attributes="" title="TopicClassification" value="ContribPackage"}%
-%META:FIELD{name="TestedOnTWiki" attributes="" title="TestedOnTWiki" value="4.0.0"}%
-%META:FIELD{name="TestedOnOS" attributes="" title="TestedOnOS" value="OsLinux"}%
+%META:FIELD{name="TestedOnTWiki" attributes="" title="TestedOnTWiki" value="4.1,4.0.0"}%
+%META:FIELD{name="TestedOnOS" attributes="" title="TestedOnOS" value="AnyOS"}%
 %META:FIELD{name="ShouldRunOnOS" attributes="" title="ShouldRunOnOS" value="AnyOS"}%
 %META:FIELD{name="InstalledOnTWikiOrg" attributes="" title="InstalledOnTWikiOrg" value="No"}%
 %META:FIELD{name="DemoUrl" attributes="" title="DemoUrl" value=""}%
 %META:FIELD{name="DevelopedInSVN" attributes="" title="DevelopedInSVN" value="Yes"}%
-%META:FIELD{name="ModificationPolicy" attributes="" title="ModificationPolicy" value="PleaseFeelFreeToModify"}%
+%META:FIELD{name="ModificationPolicy" attributes="" title="ModificationPolicy" value="ContactAuthorFirst"}%
 %META:FIELD{name="RelatedTopics" attributes="" title="RelatedTopics" value=""}%
 %META:FILEATTACHMENT{name="YahooUserInterfaceContrib_installer" attr="" autoattached="1" comment="" date="1161688828" path="YahooUserInterfaceContrib_installer" size="36117" user="Main.SvenDowideit" version="2"}%
 %META:FILEATTACHMENT{name="YahooUserInterfaceContrib.zip" attr="" autoattached="1" comment="" date="1161688792" path="YahooUserInterfaceContrib.zip" size="499834" user="Main.SvenDowideit" version="5"}%
