@@ -50,4 +50,19 @@ Settings are stored as preferences variables. To reference a setting write ==%<n
 |  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
 __Related Topics:__ %TWIKIWEB%.TWikiPreferences
-%META:FILEATTACHMENT{name="wikiringlogo20x20.png" attr="h" autoattached="1" comment="wikiringlogo20x20.png" date="1161609076" path="wikiringlogo20x20.png" size="1343" user="Main.SvenDowideit" version="1"}%
+
+%META:FORM{name="PackageForm"}%
+%META:FIELD{name="TopicClassification" attributes="" title="TopicClassification" value="ContribPackage"}%
+%META:FIELD{name="TestedOnTWiki" attributes="" title="TestedOnTWiki" value="4.0.0"}%
+%META:FIELD{name="TestedOnOS" attributes="" title="TestedOnOS" value="OsLinux"}%
+%META:FIELD{name="ShouldRunOnOS" attributes="" title="ShouldRunOnOS" value="AnyOS"}%
+%META:FIELD{name="InstalledOnTWikiOrg" attributes="" title="InstalledOnTWikiOrg" value="No"}%
+%META:FIELD{name="DemoUrl" attributes="" title="DemoUrl" value=""}%
+%META:FIELD{name="DevelopedInSVN" attributes="" title="DevelopedInSVN" value="Yes"}%
+%META:FIELD{name="ModificationPolicy" attributes="" title="ModificationPolicy" value="PleaseFeelFreeToModify"}%
+%META:FIELD{name="RelatedTopics" attributes="" title="RelatedTopics" value=""}%
+%META:FILEATTACHMENT{name="YahooUserInterfaceContrib_installer" attr="" autoattached="1" comment="" date="1161688828" path="YahooUserInterfaceContrib_installer" size="36117" user="Main.SvenDowideit" version="2"}%
+%META:FILEATTACHMENT{name="YahooUserInterfaceContrib.zip" attr="" autoattached="1" comment="" date="1161688792" path="YahooUserInterfaceContrib.zip" size="499834" user="Main.SvenDowideit" version="5"}%
+%META:FILEATTACHMENT{name="wikiringlogo20x20.png" attr="h" autoattached="1" comment="wikiringlogo20x20.png" date="1161688837" path="wikiringlogo20x20.png" size="1343" user="Main.SvenDowideit" version="1"}%
+%META:FILEATTACHMENT{name="YahooUserInterfaceContrib.md5" attr="" autoattached="1" comment="" date="1161688830" path="YahooUserInterfaceContrib.md5" size="219" user="Main.SvenDowideit" version="5"}%
+%META:FILEATTACHMENT{name="YahooUserInterfaceContrib.tgz" attr="" autoattached="1" comment="" date="1161688822" path="YahooUserInterfaceContrib.tgz" size="914658" user="Main.SvenDowideit" version="5"}%
