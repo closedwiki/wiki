@@ -31,7 +31,7 @@ work with all browsers.
 
 See also: !EditTablePlugin, !EditTableRowPlugin.
 
-Another great TWiki extension from the <img src="%ATTACHURLPATH%/wikiring.png" alt="" /> *WikiRing* - working together to improve your wiki experience!
+Another great TWiki extension from the <a style="text-decoration:none" href="http://wikiring.com"><img src="%ATTACHURLPATH%/wikiring.png" alt="" /> *WikiRing* </a> - working together to improve your wiki experience!
 
 ---++ Usage
 
@@ -82,7 +82,7 @@ examples will be editable.
 |  Copyright: | &copy; 2007 Wind<nop>River Inc. |
 |  License: | [[http://www.gnu.org/licenses/gpl.html][GPL (Gnu General Public License)]] |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  13155 | Fixed issue with short rows, and added perms check |
+|  13155 | Fixed issue with short rows, and added perms check. Thanks also to TWiki:Main.MichaelDaum for more fixes and testing. |
 |  13148 | Bugs:Item3770: Bugfixes |
 |  Dependencies: | %$DEPENDENCIES% |
 |  Plugin Home: | http://twiki.org/cgi-bin/view/Plugins/EditRowPlugin |
