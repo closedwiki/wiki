@@ -39,7 +39,7 @@ use vars qw(
         $debug $js
     );
 
-$VERSION = 'v1.3';
+$VERSION = 'v1.4';
 $pluginName = 'TreeBrowserPlugin';
 
 # =========================
@@ -133,7 +133,8 @@ sub handleTreeView {
    my $nodeActions = &TWiki::Func::extractNameValuePair( $theAttr, "nodeactions" );
    my $popup = &TWiki::Func::extractNameValuePair( $theAttr, "popup" );
    my $closePopupDelay  = &TWiki::Func::extractNameValuePair( $theAttr, "closepopupdelay" );
-   my $popupOffset  = &TWiki::Func::extractNameValuePair( $theAttr, "popupoffset" );    
+   my $popupOffset  = &TWiki::Func::extractNameValuePair( $theAttr, "popupoffset" );
+   my $firstPopupOffset  = &TWiki::Func::extractNameValuePair( $theAttr, "firstpopupoffset" );        
         
    my $icons = 0;
    $icons = 1 if ($type eq "icon");
@@ -144,12 +145,12 @@ sub handleTreeView {
    my $opento = 0;
    $opento = $open1 if (!$openall && $open1);
     
-   return $thePre . &renderTreeView( $type, $params, $useLines, $usePlusMinus, $useStatusText, $closeSameLevel, $noIndent, $noRoot, $noCss, $theTitle, $icons, $shared, $openall, $opento, $theList, $style, $autoToggle, $nodeActions, $popup, $closePopupDelay, $popupOffset );
+   return $thePre . &renderTreeView( $type, $params, $useLines, $usePlusMinus, $useStatusText, $closeSameLevel, $noIndent, $noRoot, $noCss, $theTitle, $icons, $shared, $openall, $opento, $theList, $style, $autoToggle, $nodeActions, $popup, $closePopupDelay, $popupOffset, $firstPopupOffset );
 }
 
 sub renderTreeView
 {
-    my ( $theType, $theParams, $useLines, $usePlusMinus, $useStatusText, $closeSameLevel, $noIndent, $noRoot, $noCss, $theTitle, $icons, $shared, $openAll, $openTo, $theText, $style, $autoToggle, $nodeActions, $popup, $closePopupDelay, $popupOffset) = @_;
+    my ( $theType, $theParams, $useLines, $usePlusMinus, $useStatusText, $closeSameLevel, $noIndent, $noRoot, $noCss, $theTitle, $icons, $shared, $openAll, $openTo, $theText, $style, $autoToggle, $nodeActions, $popup, $closePopupDelay, $popupOffset, $firstPopupOffset) = @_;
 
     $theText =~ s/^[\n\r]*//os;
     my @tree = ();
@@ -236,7 +237,11 @@ $var = new dTree('$var');\n";
     $text .= "$var.config.closePopupDelay=$closePopupDelay;\n" if (defined $closePopupDelay && !($closePopupDelay eq ""));
     #Parse popup offset
     my ($offsetX, $offsetY)=split(/ *, */, $popupOffset, 2);        
-    $text .= "$var.config.popupOffset={x:$offsetX , y:$offsetY};\n" if (defined $offsetX && defined $offsetY);        
+    $text .= "$var.config.popupOffset={x:$offsetX , y:$offsetY};\n" if (defined $offsetX && defined $offsetY);
+    #Parse first popup offset
+    my ($firstOffsetX, $firstOffsetY)=split(/ *, */, $firstPopupOffset, 2);        
+    $text .= "$var.config.firstPopupOffset={x:$firstOffsetX , y:$firstOffsetY};\n" if (defined $firstOffsetX && defined $firstOffsetY);
+        
     
     $text .= "$var.config.useStatusText=false;\n"; #Broken due to dtree usage if ($useStatusText=~/true|1|on/i);
     $text .= "$var.config.useSelection=false;\n"; #Broken due to dtree usage
