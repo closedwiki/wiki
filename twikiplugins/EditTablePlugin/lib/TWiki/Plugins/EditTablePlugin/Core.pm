@@ -51,8 +51,11 @@ sub process {
     my $doEdit = 0;
     my $cgiRows = -1;
 
+    $_[0] =~ s/\r//go;
+    $_[0] =~ s/\\\s*\n//go;  # Join lines ending in "\"
+    
     # appended stuff is a hack to handle EDITTABLE correctly if at end
-    foreach( split( /\r?\n/, "$_[0]\n<nop>\n" ) ) {
+    foreach( split( /\n/, "$_[0]\n<nop>\n" ) ) {
         if( s/(\s*)%EDITTABLE{(.*)}%/&handleEditTableTag( $theWeb, $theTopic, $1, $2 )/geo ) {
             $enableForm = 1;
             $tableNr += 1;
@@ -614,7 +617,7 @@ sub handleTableRow {
             $val .= " %EDITCELL{$cellFormat}%" if( $cellFormat );
             if( defined $val ) {
                 # change any new line character sequences to <br />
-                $val =~ s/[\n\r]{2,}?/%BR%/gos;
+                $val =~ s/[\n]{2,}?/%BR%/gos;
                 # escape "|" to HTML entity
                 $val =~ s/\|/\&\#124;/gos;
                 $cellDefined = 1;
@@ -681,7 +684,7 @@ sub doSaveTable {
     my $doSave = 0;
     my $result = '';
     # appended stuff is a hack to handle EDITTABLE correctly if at end
-    foreach( split( /\r?\n/, "$text\n<nop>\n" ) ) {
+    foreach( split( /\n/, "$text\n<nop>\n" ) ) {
         if( /%EDITTABLE{(.*)}%/o ) {
             $tableNr += 1;
             if( $tableNr == $theTableNr ) {
@@ -817,8 +820,6 @@ sub _parseOutTables {
     my $line = '';
     my @row = ();
 
-    $topic =~ s/\r//go;
-    $topic =~ s/\\\n//go;  # Join lines ending in "\"
     foreach( split( /\n/, $topic ) ) {
 
         # change state:
