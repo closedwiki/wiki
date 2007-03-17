@@ -2436,6 +2436,25 @@ sub normalizeWebTopicName {
 
 =pod
 
+---++ StaticMethod sanitizeAttachmentName($fname) -> ($fileName, $origName)
+
+Given a file namer, sanitise it according to the rules for transforming
+attachment names. Returns
+the sanitised name together with the basename before sanitisation.
+
+Sanitation includes filtering illegal characters and mapping client
+file names to legal server names.
+
+*Since:* TWiki::Plugins::VERSION 1.13
+
+=cut
+
+sub sanitizeAttachmentName {
+    return TWiki::Sandbox::sanitizeAttachmentName(@_);
+}
+
+=pod
+
 ---+++ writeWarning( $text )
 
 Log Warning that may require admin intervention to data/warning.txt
