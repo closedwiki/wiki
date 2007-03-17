@@ -53,9 +53,9 @@ __Note:__ The =%<nop>EDITCELL{ }%=variable cannot be used by itself; place an =%
       * <input type="submit" name="etaddrow" value="Add row" onclick="return(false);" /> - add row to the table (if enabled)
       * <input type="submit" name="etdelrow" value="Delete last row" onclick="return(false);" /> - remove last row from the table (if enabled)
       * <input type="submit" name="etcancel" value="Cancel" onclick="return(false);" /> - cancel without saving and release edit lock
-      * <img src="%ATTACHURLPATH%/movebutt.gif"> - Move a row by clicking this button next to the row to
+      * <img src="%ATTACHURLPATH%/btn_move.gif"> - Move a row by clicking this button next to the row to
          be moved, then at a destination.
-      * <img src="%ATTACHURLPATH%/delbutt.gif"> - Deletes the row next to this button.
+      * <img src="%ATTACHURLPATH%/btn_delete.gif"> - Deletes the row next to this button.
 </form>
 
 ---++ Examples
@@ -115,7 +115,7 @@ a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, for example, =
       * Set DEBUG = 0
 
    * Set JAVASCRIPTINTERFACE to 1 to be able to directly move and delete row without page refresh.
-      * Set JAVASCRIPTINTERFACE = 0
+      * Set JAVASCRIPTINTERFACE = 1
    
    * Default for change rows flag: =on=, =off=, =add=
       * Set CHANGEROWS = on
@@ -165,7 +165,7 @@ __Note:__ The Plugin uses base settings like date format, language and style fro
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | %$VERSION% |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
-|  15 Mar 2007: | Arthur Clemens: Fixed eating of double newlinesl icons for javascript buttons and interface improvements. By default the javascript interface is turned off, set =JAVASCRIPTINTERFACE= to use it in edit mode. |
+|  15 Mar 2007: | Arthur Clemens: Fixed eating of double newlines; icons for javascript buttons and interface improvements. By default the javascript interface is turned off, set =JAVASCRIPTINTERFACE= to use it in edit mode. |
 |  05 Mar 2007: | Byron Darrah: Added ability to dynamically move and delete rows. |
 |  12 Oct 2006: | <a rel="nofollow" href="http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item2982">Item2982</a> Use default date format from JSCalendarContrib |
 |  02 Oct 2006: | <a rel="nofollow" href="http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item2884">Item2884</a> Check also for access permission in meta data; proper fix to not warn if oneself has a lock on topic |
