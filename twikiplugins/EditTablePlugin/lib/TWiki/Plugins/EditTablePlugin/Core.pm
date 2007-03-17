@@ -52,7 +52,7 @@ sub process {
     my $cgiRows = -1;
 
     $_[0] =~ s/\r//go;
-    $_[0] =~ s/\\\s*\n//go;  # Join lines ending in "\"
+    $_[0] =~ s/\\\n//go;  # Join lines ending in "\"
     
     # appended stuff is a hack to handle EDITTABLE correctly if at end
     foreach( split( /\n/, "$_[0]\n<nop>\n" ) ) {
@@ -617,7 +617,7 @@ sub handleTableRow {
             $val .= " %EDITCELL{$cellFormat}%" if( $cellFormat );
             if( defined $val ) {
                 # change any new line character sequences to <br />
-                $val =~ s/[\n]{2,}?/%BR%/gos;
+                $val =~ s/[\n\r]{2,}?/%BR%/gos;
                 # escape "|" to HTML entity
                 $val =~ s/\|/\&\#124;/gos;
                 $cellDefined = 1;
