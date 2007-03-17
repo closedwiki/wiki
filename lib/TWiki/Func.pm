@@ -299,6 +299,24 @@ sub getCgiQuery {
 
 =pod
 
+---++ getSessionKeys() -> @keys
+Get a list of all the names of session variables. The list is unsorted.
+
+Session keys are stored and retrieved using =setSessionValue= and
+=getSessionValue=.
+
+*Since:* TWiki::Plugins::VERSION 1.13
+
+=cut
+
+sub getSessionKeys {
+    ASSERT($TWiki::Plugins::SESSION) if DEBUG;
+    my $hash = $TWiki::Plugins::SESSION->{loginManager}->getSessionValues();
+    return keys %{$hash};
+}
+
+=pod
+
 ---+++ getSessionValue( $key ) -> $value
 
 Get a session value from the client session module
