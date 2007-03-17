@@ -55,7 +55,7 @@ sub renderForEdit {
     $expandedValue =~ s/^\s*(.*?)\s*$/$1/;
 
     my $text = '';
-    my $cellName = 'cell_'.$this->{row}->{table}->{number}.'_'.
+    my $cellName = 'erp_cell_'.$this->{row}->{table}->{number}.'_'.
       $this->{row}->{number}.'_'.$this->{number};
 
     if( $colDef->{type} eq 'select' ) {
@@ -135,7 +135,6 @@ sub renderForEdit {
 
         $text .= CGI::textfield({
             name => $cellName,
-            id => 'id'.$cellName,
             size=> $colDef->{size},
             value => $this->{text} });
 

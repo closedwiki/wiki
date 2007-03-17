@@ -17,12 +17,38 @@ sub new {
     while (scalar(@cols) < $ncols) {
         push(@cols, '');
     }
-    my $n = 1;
-    @cols = map {
-        new TWiki::Plugins::EditRowPlugin::TableCell($this, $_, $n++); }
-      @cols;
-    $this->{cols} = \@cols;
+    $this->{cols} = [];
+    $this->set(@cols);
     return $this;
+}
+
+# break cycles to ensure we release back to garbage
+sub finish {
+    my $this = shift;
+    $this->{table} = undef;
+    foreach my $cell (@{$this->{cols}}) {
+        $cell->finish();
+    }
+    undef($this->{cols});
+}
+
+# Set the columns in the row. Adapts to widen or narrow the row as required.
+sub set {
+    my ($this, @cols) = @_;
+    while (scalar(@{$this->{cols}}) > scalar(@cols)) {
+        pop(@{$this->{cols}})->finish();
+    }
+    my $n = 0;
+    foreach my $val (@cols) {
+        if ($n < scalar(@{$this->{cols}})) {
+            $this->{cols}->[$n]->{text} = $val;
+        } else {
+            push(@{$this->{cols}},
+                 new TWiki::Plugins::EditRowPlugin::TableCell(
+                     $this, $val, $n + 1));
+        }
+        $n++;
+    }
 }
 
 sub stringify {
@@ -43,10 +69,10 @@ sub renderForEdit {
     }
 
     my $buttons =
-      "<a name='erp$this->{table}->{number}_$this->{number}'></a>";
+      "<a name='erp_$this->{table}->{number}_$this->{number}'></a>";
     $buttons .=
       CGI::image_button({
-          name => 'editrowplugin_save',
+          name => 'erp_save',
           value => $TWiki::Plugins::EditRowPlugin::NOISY_SAVE,
           title => $TWiki::Plugins::EditRowPlugin::NOISY_SAVE,
           src => '%PUBURLPATH%/TWiki/TWikiDocGraphics/save.gif'
@@ -54,7 +80,7 @@ sub renderForEdit {
     my $attrs = $this->{table}->{attrs};
     if (TWiki::isTrue($attrs->{quietsave})) {
         $buttons .= CGI::image_button({
-          name => 'editrowplugin_quietSave',
+          name => 'erp_quietSave',
           value => $TWiki::Plugins::EditRowPlugin::QUIET_SAVE,
           title => $TWiki::Plugins::EditRowPlugin::QUIET_SAVE,
           src => '%PUBURLPATH%/TWiki/TWikiDocGraphics/quiet.gif'
@@ -64,7 +90,7 @@ sub renderForEdit {
     if ($attrs->{changerows}) {
         # add add row button
         $buttons .= CGI::image_button({
-            name => 'editrowplugin_addRow',
+            name => 'erp_addRow',
             value => $TWiki::Plugins::EditRowPlugin::ADD_ROW,
             title => $TWiki::Plugins::EditRowPlugin::ADD_ROW,
             src => '%PUBURLPATH%/TWiki/TWikiDocGraphics/plus.gif'
@@ -72,7 +98,7 @@ sub renderForEdit {
         if ($attrs->{changerows} eq 'on') {
             # add delete row button
             $buttons .= CGI::image_button({
-                name => 'editrowplugin_deleteRow',
+                name => 'erp_deleteRow',
                 value => $TWiki::Plugins::EditRowPlugin::DELETE_ROW,
                 title => $TWiki::Plugins::EditRowPlugin::DELETE_ROW,
                 src => '%PUBURLPATH%/TWiki/TWikiDocGraphics/minus.gif'
@@ -80,7 +106,7 @@ sub renderForEdit {
         }
     }
     $buttons .= CGI::image_button({
-        name => 'editrowplugin_cancelRow',
+        name => 'erp_cancelRow',
         value => $TWiki::Plugins::EditRowPlugin::CANCEL_ROW,
         title => $TWiki::Plugins::EditRowPlugin::CANCEL_ROW,
         src => '%PUBURLPATH%/TWiki/TWikiDocGraphics/stop.gif',
@@ -109,32 +135,27 @@ sub renderForDisplay {
         if ($TWiki::Plugins::VERSION < 1.11) {
             $url = TWiki::Func::getScriptUrl(
                 $this->{table}->{web}, $this->{table}->{topic}, 'view').
-                "?active_table=$this->{table}->{number}".
-                ";active_row=$this->{number}#erp$id";
+                "?erp_active_table=$this->{table}->{number}".
+                ";erp_active_row=$this->{number}#erp_$id";
         } else {
             $url = TWiki::Func::getScriptUrl(
                 $this->{table}->{web}, $this->{table}->{topic}, 'view',
-                active_table => $this->{table}->{number},
-                active_row => $this->{number},
-                '#' => "erp$id");
+                erp_active_table => $this->{table}->{number},
+                erp_active_row => $this->{number},
+                '#' => "erp_$id");
         }
         my $button =
           CGI::img({
-              -name => "erp_edit$id",
+              -name => "erp_edit_$id",
               -border => 0,
               -src => '%PUBURLPATH%/TWiki/TWikiDocGraphics/edittopic.gif'
              });
         unshift(
             @out,
-            "<a name='erp$this->{table}->{number}_$this->{number}'></a>".
+            "<a name='erp_$this->{table}->{number}_$this->{number}'></a>".
               "<a href='$url'>" . $button . "</a>");
     }
     return '| '.join(' | ', @out). ' |';
-}
-
-sub finish {
-    my $this = shift;
-    $this->{table} = undef;
 }
 
 1;
