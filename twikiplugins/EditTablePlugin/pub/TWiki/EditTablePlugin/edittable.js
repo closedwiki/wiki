@@ -54,25 +54,39 @@ function removeClass(el, className) {
 // Build the list of edittables.
 function edittableInit(form_name, asset_url) {
 
-  // The form we want is actually the second thing in the
-  // document that has the form_name.
-  var tableform = document.getElementsByName(form_name)[1];
+	// The form we want is actually the second thing in the
+	// document that has the form_name.
+	var tableform = document.getElementsByName(form_name)[1];
   
-  if(tableform == null) {
-    alert("Error: EditTable features cannot be enabled.\n");
-    return;
-  }
-  attachEvent(tableform, 'submit', submitHandler);
+	if(tableform == null) {
+		alert("Error: EditTable features cannot be enabled.\n");
+		return;
+	}
+	attachEvent(tableform, 'submit', submitHandler);
 
-  var somerow = searchNodeTreeForTagName(tableform, "TR");
-  if(somerow != null) {
-    var row_container = somerow.parentNode;
-    sEditTable = new EditTableObject(tableform, row_container);
-    insertActionButtons(asset_url);
-  }
-  sRowSelection = new RowSelectionObject();
-  retrieveAlternatingRowColors();
-  fixStyling();
+	var somerow = searchNodeTreeForTagName(tableform, "TR");
+	if (somerow != null) {
+		var row_container = somerow.parentNode;
+		sEditTable = new EditTableObject(tableform, row_container);
+		insertActionButtons(asset_url);
+	}
+	sRowSelection = new RowSelectionObject();
+	retrieveAlternatingRowColors();
+	fixStyling();
+  
+	if (Behaviour) {
+		var myrules = {
+			// catch click on button "Add row"
+			'#etaddrow' : function(element) {
+				element.onclick = function() {
+					addHandler(); // not implemented
+					return true;
+				}
+				element = null;
+			}
+		};
+		Behaviour.register(myrules);
+	}
 }
 
 /**
@@ -144,35 +158,29 @@ function insertActionButtons(asset_url) {
 		action_cell.id = 'et_actioncell' + rownr;
 		{
 			action_butt = document.createElement('IMG');
-			var objLink = document.createElement("a");
-			objLink.href = "#";
-			objLink.setAttribute('title', 'Move row');
-			objLink.appendChild(action_butt);
+			action_butt.setAttribute('title', 'Move row');
 			action_butt.moveButtonSrc = asset_url + '/btn_move.gif';
 			action_butt.targetButtonSrc = asset_url + '/btn_target.gif';
 			action_butt.setAttribute('src', action_butt.moveButtonSrc);
-			addClass(action_butt, 'editTableActionButton');
 			action_butt.handler = moveHandler;
 			attachEvent(action_butt, 'click', action_butt.handler);
+			addClass(action_butt, 'editTableActionButton');
 			action_butt.rownr = rownr;
 			action_cell.moveButton = action_butt;
-			action_cell.appendChild(objLink);
+			action_cell.appendChild(action_butt);
 		}
 		{
 			action_butt = document.createElement('IMG');
-			var objLink = document.createElement("a");
-			objLink.href = "#";
-			objLink.setAttribute('title', 'Delete row');
-			objLink.appendChild(action_butt);
+			action_butt.setAttribute('title', 'Delete row');
 			action_butt.enableButtonSrc = asset_url + '/btn_delete.gif';
 			action_butt.disableButtonSrc = asset_url + '/btn_delete_disabled.gif';
 			action_butt.setAttribute('src', asset_url + '/btn_delete.gif');
-			addClass(action_butt, 'editTableActionButton');
 			action_butt.handler = deleteHandler;
 			attachEvent(action_butt, 'click', action_butt.handler);
+			addClass(action_butt, 'editTableActionButton');
 			action_butt.rownr = rownr;
 			action_cell.deleteButton = action_butt;
-			action_cell.appendChild(objLink);
+			action_cell.appendChild(action_butt);
 		}		
 		child.insertBefore(action_cell, child.firstChild);
 		rownr++;
@@ -279,6 +287,13 @@ function deleteHandler(evt) {
   sEditTable.tableform.etrows.value = sEditTable.numrows;
   
   fixStyling();
+}
+
+/**
+to write
+*/
+function addHandler() {
+	//
 }
 
 /**

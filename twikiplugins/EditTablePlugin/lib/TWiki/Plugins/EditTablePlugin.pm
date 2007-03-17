@@ -120,7 +120,6 @@ sub addEditModeHeadersToHead {
 </style>
 <script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/EditTablePlugin/edittable.js"></script>
 EOF
-
   TWiki::Func::addToHEAD('EDITTABLEPLUGIN',$header)
 }
 

@@ -299,16 +299,16 @@ sub handleTableEnd {
     my $text   = "$preSp<input type=\"hidden\" name=\"etrows\"   value=\"$theRowNr\" />\n";
     if( $doEdit ) {
         # Edit mode
-        $text .= "$preSp<input type=\"submit\" name=\"etsave\"   value=\"Save table\" class=\"twikiSubmit\" />\n";
+        $text .= "$preSp<input type=\"submit\" name=\"etsave\" id=\"etsave\" value=\"Save table\" class=\"twikiSubmit\" />\n";
         if( $params{'quietsave'} ) {
-            $text .= "$preSp<input type=\"submit\" name=\"etqsave\"  value=\"Quiet save\" class=\"twikiButton\" />\n";
+            $text .= "$preSp<input type=\"submit\" name=\"etqsave\" id=\"etqsave\" value=\"Quiet save\" class=\"twikiButton\" />\n";
         }
         if( $params{'changerows'} ) {
-            $text .= "$preSp<input type=\"submit\" name=\"etaddrow\" value=\"Add row\" class=\"twikiButton\" />\n";
-            $text .= "$preSp<input type=\"submit\" name=\"etdelrow\" value=\"Delete last row\" class=\"twikiButton\" />\n"
+            $text .= "$preSp<input type=\"submit\" name=\"etaddrow\" id=\"etaddrow\" value=\"Add row\" class=\"twikiButton\" />\n";
+            $text .= "$preSp<input type=\"submit\" name=\"etdelrow\" id=\"etdelrow\" value=\"Delete last row\" class=\"twikiButton\" />\n"
               unless( $params{'changerows'} =~ /^add$/oi );
         }
-        $text .= "$preSp<input type=\"submit\" name=\"etcancel\" value=\"Cancel\" class=\"twikiButton\" />\n";
+        $text .= "$preSp<input type=\"submit\" name=\"etcancel\" id=\"etcancel\" value=\"Cancel\" class=\"twikiButton\" />\n";
 
         if( $params{'helptopic'} ) {
             # read help topic and show below the table
@@ -326,7 +326,6 @@ sub handleTableEnd {
             }
         }
         my $assetUrl  = '%PUBURL%/%TWIKIWEB%/EditTablePlugin';
-        my $scriptUrl = $assetUrl.'/edittable.js';
 
         &TWiki::Plugins::EditTablePlugin::addEditModeHeadersToHead();
 		# table specific script
