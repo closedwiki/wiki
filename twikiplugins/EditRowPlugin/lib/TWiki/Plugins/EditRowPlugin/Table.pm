@@ -7,14 +7,15 @@ use TWiki::Func;
 use TWiki::Plugins::EditRowPlugin::TableRow;
 use TWiki::Plugins::EditRowPlugin::TableCell;
 
+# Static method that parses tables out of a block of text
 sub parseTables {
-    #my $text, $topic, $web = @_
+    my ($text, $topic, $web, $meta, $urps) = @_;
     my $active_table = undef;
     my @tables;
     my $nTables = 0;
     my $disable = 0;
 
-    foreach my $line (split(/\r?\n/, $_[0])) {
+    foreach my $line (split(/\r?\n/, $text)) {
         if ($line =~ /<(verbatim|literal)>/) {
             $disable++;
         }
@@ -22,31 +23,47 @@ sub parseTables {
             $disable-- if $disable;
         }
         if (!$disable && $line =~ /%EDITTABLE{([^\n]*)}%/) {
-            my $attrs = new TWiki::Attrs($1);
-
-            if ($attrs->{include}) {
-                my( $iw, $it ) = TWiki::Func::normalizeWebTopicName(
-                    $_[2], $attrs->{include});
+            $nTables++;
+            my $attrs;
+            $attrs = new TWiki::Attrs($1);
+            my %read = ( "$web.$topic" => 1 );
+            while ($attrs->{include}) {
+                my ($iw, $it) = TWiki::Func::normalizeWebTopicName(
+                    $web, $attrs->{include});
                 # This check is missing from EditTablePlugin
-                unless( TWiki::Func::topicExists($iw, $it)) {
+                unless (TWiki::Func::topicExists($iw, $it)) {
                     $line = CGI::span(
-                        {class=>'twikiAlert'},
+                        { class=>'twikiAlert' },
                         "Could not find format topic $attrs->{include}");
                 }
+                if ($read{"$iw.$it"}) {
+                    $line = CGI::span(
+                        { class=>'twikiAlert' },
+                        "Recursive include of $attrs->{include}");
+                }
+                $read{"$iw.$it"} = 1;
                 my ($meta, $text) = TWiki::Func::readTopic($iw, $it);
                 $text =~ m/%EDITTABLE{([^\n]*)}%/s;
-                my $params = $1;
+                my $params = $1 || '';
                 if ($params) {
-                    unless ($iw eq $_[2] && $it eq $_[1]) {
-                        $params = TWiki::Func::expandCommonVariables(
-                            $params, $iw, $it);
-                    }
-                    $attrs = new TWiki::Attrs($params);
+                    $params = TWiki::Func::expandCommonVariables(
+                        $params, $iw, $it);
+                }
+                $attrs = new TWiki::Attrs($params);
+            }
+            # is there a format in the query? if there is,
+            # override the format we just parsed
+            if ($urps) {
+                my $format = $urps->{erp_active_format};
+                if (defined($format)) {
+                    # undo the encoding
+                    $format =~ s/-([a-z\d][a-z\d])/chr(hex($1))/gie;
+                    $attrs->{format} = $format;
                 }
             }
             $active_table =
               new TWiki::Plugins::EditRowPlugin::Table(
-                  ++$nTables, $line, $attrs, $_[2], $_[1]);
+                  $nTables, $line, $attrs, $_[2], $_[1]);
             push(@tables, $active_table);
             next;
         }
@@ -86,11 +103,14 @@ sub new {
     return $this;
 }
 
+# break cycles to ensure we release back to garbage
 sub finish {
     my $this = shift;
     foreach my $row (@{$this->{rows}}) {
         $row->finish();
     }
+    undef($this->{rows});
+    undef($this->{colTypes});
 }
 
 sub stringify {
@@ -125,41 +145,50 @@ sub renderForDisplay {
     return join("\n", @out);
 }
 
-sub changeRow {
-    my ($this, $urps) = @_;
-    my $arow = $this->{rows}->[$urps->{active_row} - 1];
-    foreach my $c (@{$arow->{cols}}) {
-        my $cellName = "cell_$this->{number}_$arow->{number}_$c->{number}";
-        my $cv = $urps->{$cellName} || '';
-        $c->{text} = $cv;
+# Get the cols for the given row, padding out with empty cols if
+# the row is shorter than the type def for the table.
+sub _getCols {
+    my ($this, $urps, $row) = @_;
+    my $count = scalar(@{$this->{rows}->[$row - 1]->{cols}});
+    my $defs = scalar(@{$this->{colTypes}});
+    $count = $defs if $defs > $count;
+    my @cols;
+    for (my $i = 1; $i <= $count; $i++) {
+        my $cellName = "erp_cell_$this->{number}_${row}_$i";
+        push(@cols, $urps->{$cellName} || '');
     }
-    return $this->stringify();
+    return @cols;
 }
 
+# Action on row saved
+sub changeRow {
+    my ($this, $urps) = @_;
+    my $row = $urps->{erp_active_row};
+    $this->{rows}->[$row - 1]->set($this->_getCols($urps, $row));
+}
+
+# Action on row added
 sub addRow {
     my ($this, $urps) = @_;
     my @cols;
-    my $arow = $this->{rows}->[$urps->{active_row} - 1];
-    for (my $i = 1; $i <= scalar(@{$arow->{cols}}); $i++) {
-        my $cellName = "cell_$this->{number}_$urps->{active_row}_$i";
-        push(@cols, $urps->{$cellName} || '');
-    }
+    my $row = $urps->{erp_active_row};
     my $newRow = new TWiki::Plugins::EditRowPlugin::TableRow(
-        $this, $urps->{active_row}, @cols);
-    splice(@{$this->{rows}}, $urps->{active_row}, 0, $newRow);
-
-    return $this->stringify();
+        $this, $row, $this->_getCols($urps, $row));
+    splice(@{$this->{rows}}, $row, 0, $newRow);
+    # renumber lower rows
+    for (my $i = $row + 1; $i < scalar(@{$this->{rows}}); $i++) {
+        $this->{rows}->[$i]->{number}++;
+    }
 }
 
+# Action on row deleted
 sub deleteRow {
     my ($this, $urps) = @_;
-    splice(@{$this->{rows}}, $urps->{active_row} - 1, 1);
-    return $this->stringify();
+    splice(@{$this->{rows}}, $urps->{erp_active_row} - 1, 1);
 }
 
+# Action on edit cancelled
 sub cancelRow {
-    my ($this, $urps) = @_;
-    return $this->stringify();
 }
 
 # Private method that parses a column type specification

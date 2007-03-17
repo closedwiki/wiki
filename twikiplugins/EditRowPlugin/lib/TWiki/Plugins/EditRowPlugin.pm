@@ -68,8 +68,8 @@ sub commonTagsHandler {
     $_[0] =~ s/\\\n//gs;
 
     my $urps = $query->Vars();
-    $urps->{active_table} ||= 0;
-    $urps->{active_row} ||= 0;
+    $urps->{erp_active_table} ||= 0;
+    $urps->{erp_active_row} ||= 0;
 
     my $nlines = '';
     my $table = undef;
@@ -79,17 +79,26 @@ sub commonTagsHandler {
         if (ref($line) eq 'TWiki::Plugins::EditRowPlugin::Table') {
             $table = $line;
             $active_table++;
-            if ($active_table == $urps->{active_table}) {
+            if ($active_table == $urps->{erp_active_table}) {
+                my $active_row = $urps->{erp_active_row};
                 my $saveUrl =
                   TWiki::Func::getScriptUrl($pluginName, 'save', 'rest');
-                $line = <<HTML;
-<form name='roweditform_$active_table' method='post' action='$saveUrl'>
-<input type="hidden" name="active_topic" value="$web.$topic" />
-<input type="hidden" name="active_table" value="$active_table" />
-<input type="hidden" name="active_row" value="$urps->{active_row}" />
-HTML
-                $line .= $table->renderForEdit($urps->{active_row});
-                $line .= "\n</form>";
+                $line = CGI::start_form(
+                    -method=>'POST',
+                    -name => 'erp_form_'.$active_table,
+                    -action => $saveUrl);
+                $line .= CGI::hidden('erp_active_topic', "$web.$topic");
+                $line .= CGI::hidden('erp_active_table', $active_table);
+                $line .= CGI::hidden('erp_active_row', $active_row);
+                my $format = $table->{attrs}->{format};
+                # SMELL: Have to double-encode the format param to defend it
+                # against the rest of TWiki. We use the escape char '-' as it
+                # isn't used by TWiki.
+                $format =~ s/([][@\s%!:-])/sprintf('-%02x',ord($1))/ge;
+                # it will get encoded again as a URL param
+                $line .= CGI::hidden('erp_active_format', $format);
+                $line .= "\n".$table->renderForEdit($active_row)."\n";
+                $line .= CGI::end_form();
             } else {
                 $line = $table->renderForDisplay();
             }
@@ -108,14 +117,14 @@ sub save {
 
     my $saveType = $query->param('editrowplugin_save') || '';
     my ($web, $topic) = TWiki::Func::normalizeWebTopicName(
-        undef, $query->param('active_topic'));
+        undef, $query->param('erp_active_topic'));
 
     my ($meta, $text) = TWiki::Func::readTopic($web, $topic);
     my $url;
     if (!TWiki::Func::checkAccessPermission(
         'CHANGE', TWiki::Func::getWikiName(), $text, $topic, $web, $meta)) {
 
-        # SMELL: 
+        # SMELL:
         # - can't use TWiki::Func::getOopsUrl() to get an accessdenied url
         #   because it does not pass the def => 'topic_access' parameter
         # - can throw an appropriate exception 
@@ -137,36 +146,37 @@ sub save {
         $text =~ s/\\\n//gs;
         require TWiki::Plugins::EditRowPlugin::Table;
         die $@ if $@;
+        my $urps = $query->Vars();
         my $content = TWiki::Plugins::EditRowPlugin::Table::parseTables(
-            $text, $topic, $web);
+            $text, $topic, $web, $meta, $urps);
 
         my $nlines = '';
         my $table = undef;
         my $active_table = 0;
         my $action = 'cancelRow';
         my $minor = 0;
-        if ($query->param('editrowplugin_save.x')) {
+        # The submit buttons are image buttons. The only way with IE to tell
+        # which one was clicked is by looking at the x coordinate of the
+        # press.
+        if ($query->param('erp_save.x')) {
             $action = 'changeRow';
-        } elsif ($query->param('editrowplugin_quietSave.x')) {
+        } elsif ($query->param('erp_quietSave.x')) {
             $action = 'changeRow';
             $minor = 1;
-        } elsif ($query->param('editrowplugin_addRow.x')) {
+        } elsif ($query->param('erp_addRow.x')) {
             $action = 'addRow';
-        } elsif ($query->param('editrowplugin_deleteRow.x')) {
+        } elsif ($query->param('erp_deleteRow.x')) {
             $action = 'deleteRow';
         }
-
-        my $urps = $query->Vars();
 
         foreach my $line (@$content) {
             if (ref($line) eq 'TWiki::Plugins::EditRowPlugin::Table') {
                 $table = $line;
                 $active_table++;
-                if ($active_table == $urps->{active_table}) {
-                    $line = $table->$action($urps);
-                } else {
-                    $line = $table->stringify();
+                if ($active_table == $urps->{erp_active_table}) {
+                    $table->$action($urps);
                 }
+                $line = $table->stringify();
                 $table->finish();
                 $nlines .= $line;
             } else {
@@ -176,7 +186,7 @@ sub save {
         TWiki::Func::saveTopic($web, $topic, $meta, $nlines,
                                 { minor => $minor });
 
-        my $anchor = "erp$urps->{active_table}_$urps->{active_row}";
+        my $anchor = "erp$urps->{erp_active_table}_$urps->{erp_active_row}";
         if ($TWiki::Plugins::VERSION < 1.11) {
             $url = TWiki::Func::getScriptUrl($web, $topic, 'view')."#$anchor";
         } else {
