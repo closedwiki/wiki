@@ -3,7 +3,8 @@
 	font-family:monospace;
 }
 .editTableActionButton {
-	margin-right:2px;
+	margin:0 2px 2px 0;
+	cursor:pointer; cursor:hand;
 }
 td.editTableActionCell {
 	vertical-align:middle;
