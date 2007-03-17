@@ -430,6 +430,67 @@ sub getContext {
 
 =pod
 
+---+++ pushTopicContext($web, $topic)
+   * =$web= - new web
+   * =$topic= - new topic
+Change the TWiki context so it behaves as if it was processing =$web.$topic=
+from now on. All the preferences will be reset to those of the new topic.
+Note that if the new topic is not readable by the logged in user due to
+access control considerations, there will *not* be an exception. It is the
+duty of the caller to check access permissions before changing the topic.
+
+It is the duty of the caller to restore the original context by calling
+=popContext=.
+
+Note that this call does *not* re-initialise plugins, so if you have used
+global variables to remember the web and topic in =initPlugin=, then those
+values will be unchanged.
+
+*Since:* TWiki::Plugins::VERSION 1.13
+
+=cut
+
+sub pushTopicContext {
+    my $twiki = $TWiki::Plugins::SESSION;
+    ASSERT($twiki) if DEBUG;
+    my( $web, $topic ) = $twiki->normalizeWebTopicName( @_ );
+    my $old = {
+        web => $twiki->{webName},
+        topic => $twiki->{topicName},
+        mark => $twiki->{prefs}->mark() };
+
+    push( @{$twiki->{_FUNC_PREFS_STACK}}, $old );
+    $twiki->{webName} = $web;
+    $twiki->{topicName} = $topic;
+    $twiki->{prefs}->pushWebPreferences( $web );
+    $twiki->{prefs}->pushPreferences( $web, $topic, 'TOPIC' );
+    $twiki->{prefs}->pushPreferenceValues(
+        'SESSION', $twiki->{loginManager}->getSessionValues() );
+}
+
+=pod
+
+---+++ popTopicContext()
+
+Returns the TWiki context to the state it was in before the
+=pushTopicContext= was called.
+
+*Since:* TWiki::Plugins::VERSION 1.13
+
+=cut
+
+sub popTopicContext {
+    ASSERT($TWiki::Plugins::SESSION) if DEBUG;
+    my $twiki = $TWiki::Plugins::SESSION;
+    ASSERT(scalar(@{$twiki->{_FUNC_PREFS_STACK}})) if DEBUG;
+    my $old = pop( @{$twiki->{_FUNC_PREFS_STACK}} );
+    $twiki->{prefs}->restore( $old->{mark});
+    $twiki->{webName} = $old->{web};
+    $twiki->{topicName} = $old->{topic};
+}
+
+=pod
+
 ---++ Preferences
 
 =cut
