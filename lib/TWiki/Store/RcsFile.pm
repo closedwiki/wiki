@@ -23,7 +23,7 @@
 ---+ package TWiki::Store::RcsFile
 
 This class is PACKAGE PRIVATE to Store, and should never be
-used from anywhere else. Base class of implementations of stores
+used from anywhere else. It is the base class of implementations of stores
 that manipulate RCS format files.
 
 The general contract of the methods on this class and its subclasses
@@ -61,14 +61,17 @@ sub new {
     my $this = bless( {}, $class );
     $this->{session} = $session;
 
+    utf8::downgrade( $web ) if( $web && $] >= 5.008 );
     $this->{web} = $web;
 
     if( $topic ) {
         my $rcsSubDir = ( $TWiki::cfg{RCS}{useSubDir} ? '/RCS' : '' );
 
+        utf8::downgrade( $topic ) if( $] >= 5.008 );
         $this->{topic} = $topic;
 
         if( $attachment ) {
+            utf8::downgrade( $attachment ) if( $] >= 5.008 );
 
             $this->{attachment} = $attachment;
 
@@ -83,21 +86,9 @@ sub new {
             $this->{rcsFile} = $TWiki::cfg{DataDir}.'/'.
               $web.$rcsSubDir.'/'.$topic.'.txt,v';
         }
-
-        # remove utf8 encodings from filenames
-        downgrade($this->{attachment});
-        downgrade($this->{file});
-        downgrade($this->{rcsFile});
     }
 
     return $this;
-}
-
-# downgrade utf8 encoding of files
-sub downgrade {
-  return unless $_[0];
-  return unless $] >= 5.008;
-  utf8::downgrade($_[0]);
 }
 
 # Used in subclasses for late initialisation during object creation
@@ -237,8 +228,10 @@ sub getWorkArea {
     my $dir =  "$TWiki::cfg{RCS}{WorkAreaDir}/$key";
 
     unless( -d $dir ) {
-        mkdir( $dir ) || throw Error::Simple(
-            'RCS: failed to create '.$key.' work area. Check that {RCS}{WorkAreaDir} points to a valid directory that I can read and write to');
+        mkdir( $dir ) || throw Error::Simple(<<ERROR);
+Failed to create $key work area. Check your setting of {RCS}{WorkAreaDir}
+in =configure=.
+ERROR
     }
     return $dir;
 }

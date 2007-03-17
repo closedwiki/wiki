@@ -457,7 +457,7 @@ sub sysCommand {
     if( $this->{TRACE} ) {
         my $cq = $this->{CMDQUOTE};
         my $cmd = $path.' '.$cq.join($cq.' '.$cq, @args).$cq;
-        print STDERR $cmd.' -> '.$data."\n";
+        print STDERR $cmd,' -> ',$data,"\n";
     }
     return ( $data, $exit );
 }

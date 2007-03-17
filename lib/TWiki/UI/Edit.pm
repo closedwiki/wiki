@@ -43,7 +43,6 @@ use TWiki::Store;
 use TWiki::UI;
 use Error qw( :try );
 use TWiki::OopsException;
-use CGI qw( -any );
 
 =pod
 
@@ -317,7 +316,7 @@ sub init_edit {
     $tmpl =~ s/%CMD%/$saveCmd/go;
     $session->enterContext( 'can_render_meta', $meta );
 
-    $tmpl = $session->handleCommonTags( $tmpl, $webName, $topic );
+    $tmpl = $session->handleCommonTags( $tmpl, $webName, $topic, $meta );
     $tmpl = $session->{renderer}->getRenderedVersion( $tmpl, $webName, $topic );
     # Don't want to render form fields, so this after getRenderedVersion
     my $formMeta = $meta->get( 'FORM' );
@@ -345,7 +344,8 @@ sub init_edit {
         }
     } elsif( !$saveCmd && $session->{prefs}->getWebPreferencesValue( 'WEBFORMS', $webName )) {
         $formText = $session->{templates}->readTemplate( "addform", $skin );
-        $formText = $session->handleCommonTags( $formText, $webName, $topic );
+        $formText = $session->handleCommonTags(
+            $formText, $webName, $topic, $meta );
     }
     $tmpl =~ s/%FORMFIELDS%/$formText/g;
 

@@ -726,14 +726,16 @@ sub searchWeb {
 
             # Special handling for format='...'
             if( $format ) {
-                ( $meta, $text ) = $this->_getTextAndMeta( $topicInfo, $web, $topic );
+                ( $meta, $text ) = $this->_getTextAndMeta(
+                    $topicInfo, $web, $topic );
 
                 if( $doExpandVars ) {
                     if( $web eq $baseWeb && $topic eq $baseTopic ) {
                         # primitive way to prevent recursion
                         $text =~ s/%SEARCH/%<nop>SEARCH/g;
                     }
-                    $text = $session->handleCommonTags( $text, $web, $topic );
+                    $text = $session->handleCommonTags(
+                        $text, $web, $topic, $meta );
                 }
             }
 
@@ -801,12 +803,14 @@ sub searchWeb {
 
                 if( $doBookView ) {
                     # BookView
-                    ( $meta, $text ) = $this->_getTextAndMeta( $topicInfo, $web, $topic ) unless $text;
+                    ( $meta, $text ) = $this->_getTextAndMeta(
+                        $topicInfo, $web, $topic ) unless $text;
                     if( $web eq $baseWeb && $topic eq $baseTopic ) {
                         # primitive way to prevent recursion
                         $text =~ s/%SEARCH/%<nop>SEARCH/g;
                     }
-                    $text = $session->handleCommonTags( $text, $web, $topic );
+                    $text = $session->handleCommonTags(
+                        $text, $web, $topic, $meta );
                     $text = $session->{renderer}->getRenderedVersion
                       ( $text, $web, $topic );
                     # FIXME: What about meta data rendering?
@@ -856,8 +860,8 @@ sub searchWeb {
                         '\#FF00FF';
                     $beforeText =~ s/%WEBBGCOLOR%/$thisWebBGColor/go;
                     $beforeText =~ s/%WEB%/$web/go;
-                    $beforeText = $session->handleCommonTags
-                      ( $beforeText, $web, $topic );
+                    $beforeText = $session->handleCommonTags(
+                        $beforeText, $web, $topic );
                     if ( defined $callback ) {
                         $beforeText =
                           $renderer->getRenderedVersion(
@@ -897,9 +901,8 @@ sub searchWeb {
         # output footer only if hits in web
         if( $ntopics ) {
             # output footer of $web
-            $afterText  = $session->handleCommonTags( $afterText,
-                                                      $web,
-                                                      $homeTopic );
+            $afterText  = $session->handleCommonTags(
+                $afterText, $web, $homeTopic );
             if( $inline || $format ) {
                 $afterText =~ s/\n$//os;  # remove trailing new line
             }
@@ -907,8 +910,8 @@ sub searchWeb {
             if ( defined $callback ) {
                 $afterText = 
                   $renderer->getRenderedVersion( $afterText,
-                                                         $web,
-                                                         $homeTopic );
+                                                 $web,
+                                                 $homeTopic );
                 $afterText =~ s|</*nop/*>||goi;   # remove <nop> tag
                 &$callback( $cbdata, $afterText );
             } else {

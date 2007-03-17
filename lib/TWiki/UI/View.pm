@@ -372,7 +372,7 @@ sub view {
 sub _prepare {
     my( $text, $session, $webName, $topicName, $meta, $minimalist) = @_;
 
-    $text = $session->handleCommonTags( $text, $webName, $topicName );
+    $text = $session->handleCommonTags( $text, $webName, $topicName, $meta );
     $text = $session->{renderer}->getRenderedVersion( $text, $webName, $topicName );
     $text =~ s/( ?) *<\/?(nop|noautolink)\/?>\n?/$1/gois;
 

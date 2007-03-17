@@ -104,20 +104,15 @@ yyyyyy   is the new line 5
 =cut
 
 package TWiki::Store::RcsLite;
-
-use TWiki::Store::RcsFile;
-@ISA = qw(TWiki::Store::RcsFile);
+use base 'TWiki::Store::RcsFile';
 
 use strict;
-#use Algorithm::Diff;# qw(diff sdiff);
+
 use Algorithm::Diff;
 use FileHandle;
 use Assert;
 use TWiki::Time;
 use Error qw( :try );
-
-my $N = "\n";
-my $T = "\t";
 
 #
 # As well as the field inherited from RcsFile, the object for each file
@@ -139,12 +134,8 @@ my $T = "\t";
 
 # implements RcsFile
 sub new {
-    my( $class, $session, $web, $topic, $attachment, $settings ) = @_;
-    ASSERT($session->isa( 'TWiki')) if DEBUG;
-    my $this =
-      bless( new TWiki::Store::RcsFile( $session, $web, $topic,
-                                        $attachment, $settings ),
-             $class );
+    my $class = shift;
+    my $this = $class->SUPER::new( @_ );
     $this->{head} = 0;
     $this->{access} = '';
     $this->{symbols} = '';
@@ -237,7 +228,7 @@ sub _process {
         $this->{state} = 'nocommav';
         return;
     }
-    my $fh = new FileHandle;
+    my $fh = new FileHandle();
     if( ! $fh->open( $rcsFile ) ) {
         $this->{session}->writeWarning( 'Failed to open '.$rcsFile );
         $this->{state} = 'nocommav';
@@ -372,12 +363,12 @@ access	$this->{access};
 symbols$this->{symbols};
 locks; strict;
 HERE
-    print $file 'comment',$T,_formatString( $this->{comment} ),';',$N;
+    print $file 'comment',"\t",_formatString( $this->{comment} ),';',"\n";
     if( $this->{expand} ) {
-        print $file 'expand',$T,_formatString( $this->{expand} ),';'.$N;
+        print $file 'expand',"\t",_formatString( $this->{expand} ),';'."\n";
     }
 
-    print $file $N;
+    print $file "\n";
 
     # most recent rev first
     for( my $i = $this->{head}; $i > 0; $i--) {
@@ -388,17 +379,17 @@ HERE
 date	$rcsDate;	author $this->{revs}[$i]->{author};	state Exp;
 branches;	
 HERE
-        print $file 'next',$T;
+        print $file 'next',"\t";
         print $file '1.',($i - 1) if( $i > 1 );
-        print $file ';'.$N;
+        print $file ";\n";
     }
 
-    print $file $N,$N,'desc',$N, _formatString( $this->{desc} ).$N,$N;
+    print $file "\n\n",'desc',"\n", _formatString( $this->{desc} )."\n\n";
 
     for( my $i = $this->{head}; $i > 0; $i--) {
-        print $file $N,'1.',$i,$N,
-          'log',$N,_formatString( $this->{revs}[$i]->{log} ),
-            $N,'text',$N,_formatString( $this->{revs}[$i]->{text} ),$N,$N;
+        print $file "\n",'1.',$i,"\n",
+          'log',"\n",_formatString( $this->{revs}[$i]->{log} ),
+            "\n",'text',"\n",_formatString( $this->{revs}[$i]->{text} ),"\n\n";
     }
     $this->{state} = 'parsed'; # now known clean
 }
@@ -434,6 +425,7 @@ sub addRevisionFromText {
     shift->_addRevision( 0, @_ );
 }
 
+# implements RcsFile
 sub addRevisionFromStream {
     shift->_addRevision( 1, @_ );
 }
@@ -700,7 +692,7 @@ sub _diff {
 
         $adj += _addChunk( $chunkSign, \$out, \@lines, $start, $adj );
     }
-    $out .= $N;
+    $out .= "\n";
     #print STDERR "CONVERTED\n",$out,"\n";
     return $out;
 }
@@ -712,10 +704,10 @@ sub _addChunk {
 
     my $nLines = scalar( @$lines );
     if( $nLines > 0 ) {
-        $$out .= $N if( $$out && $$out !~ /\n$/o );
+        $$out .= "\n" if( $$out && $$out !~ /\n$/o );
         if( $chunkSign eq '+' ) {
-            # Added $N at end to correct Item2957
-            $$out .= 'a'.($start-$adj).' '.$nLines.$N.join( "\n", @$lines ).$N;
+            # Added "\n" at end to correct Item2957
+            $$out .= 'a'.($start-$adj).' '.$nLines."\n".join( "\n", @$lines )."\n";
         } else {
             $$out .= 'd'.($start+1).' '.$nLines;
             $nLines *= -1;
@@ -725,6 +717,7 @@ sub _addChunk {
     return $nLines;
 }
 
+# implements RcsFile
 sub getRevisionAtTime {
     my( $this, $date ) = @_;
 

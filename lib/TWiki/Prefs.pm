@@ -216,7 +216,7 @@ sub mark {
 
 =pod
 
----++ ObjectMethod resetTo( $mark )
+---++ ObjectMethod restore( $mark )
 Resets the preferences stack to the given mark, to recover after a topic
 include.
 

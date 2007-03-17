@@ -98,7 +98,7 @@ as kernel methods may change between TWiki releases.
 
 =cut
 
-$VERSION = '1.12';
+$VERSION = '1.13';
 
 $inited = 0;
 
@@ -452,7 +452,7 @@ Called at the beginning (for cache Plugins only)
 
 sub beforeCommonTagsHandler {
     my $this = shift;
-    #my( $text, $topic, $theWeb ) = @_;
+    #my( $text, $topic, $theWeb, $meta ) = @_;
     $this->_dispatch( 'beforeCommonTagsHandler', @_ );
 }
 
@@ -466,7 +466,7 @@ Called after %INCLUDE:"..."%
 
 sub commonTagsHandler {
     my $this = shift;
-    #my( $text, $topic, $theWeb ) = @_;
+    #my( $text, $topic, $theWeb, $meta ) = @_;
     $this->_dispatch( 'commonTagsHandler', @_ );
 }
 
@@ -480,7 +480,7 @@ Called at the end (for cache Plugins only)
 
 sub afterCommonTagsHandler {
     my $this = shift;
-    #my( $text, $topic, $theWeb ) = @_;
+    #my( $text, $topic, $theWeb, $meta ) = @_;
     $this->_dispatch( 'afterCommonTagsHandler', @_ );
 }
 

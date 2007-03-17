@@ -851,7 +851,6 @@ sub saveTopic {
     if( $user &&
           !$this->{session}->{security}->checkAccessPermission
             ( 'CHANGE', $user, undef, undef, $topic, $web )) {
-
         throw TWiki::AccessControlException(
             'CHANGE', $user, $web, $topic,
             $this->{session}->{security}->getReason());

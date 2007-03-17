@@ -1066,8 +1066,10 @@ sub _newWebScreen {
     }
     $tmpl =~ s/%LOCAL_SEARCH%/$search/go;
 
-    $tmpl = $session->handleCommonTags( $tmpl, $oldWeb, $TWiki::cfg{HomeTopicName} );
-    $tmpl = $session->{renderer}->getRenderedVersion( $tmpl, $oldWeb, $TWiki::cfg{HomeTopicName} );
+    $tmpl = $session->handleCommonTags(
+        $tmpl, $oldWeb, $TWiki::cfg{HomeTopicName} );
+    $tmpl = $session->{renderer}->getRenderedVersion(
+        $tmpl, $oldWeb, $TWiki::cfg{HomeTopicName} );
     $session->writeCompletePage( $tmpl );
 }
 
@@ -1264,7 +1266,7 @@ sub _editSettings {
 
     my $skin = $session->getSkin();
     my $tmpl = $session->{templates}->readTemplate( 'settings', $skin );
-    $tmpl = $session->handleCommonTags( $tmpl, $web, $topic );
+    $tmpl = $session->handleCommonTags( $tmpl, $web, $topic, $meta );
     $tmpl = $session->{renderer}->getRenderedVersion( $tmpl, $web, $topic );
 
     $tmpl =~ s/%TEXT%/$settings/o;

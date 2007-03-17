@@ -571,15 +571,15 @@ sub _renderExistingWikiWord {
 }
 
 sub _renderNonExistingWikiWord {
-    my ($this, $theWeb, $theTopic, $theLinkText) = @_;
+    my ($this, $web, $topic, $text) = @_;
 
     my $ans = $this->{NEWLINKFORMAT};
-    $ans =~ s/\$web/$theWeb/g;
-    $ans =~ s/\$topic/$theTopic/g;
-    $ans =~ s/\$text/$theLinkText/g;
+    $ans =~ s/\$web/$web/g;
+    $ans =~ s/\$topic/$topic/g;
+    $ans =~ s/\$text/$text/g;
     $ans =~ s/\$linksymbol/$this->{NEWLINKSYMBOL}/g;
-    $ans = $this->{session}->handleCommonTags($ans, 
-	$this->{session}{webName}, $this->{session}{topicName});
+    $ans = $this->{session}->handleCommonTags(
+        $ans, $this->{session}{webName}, $this->{session}{topicName});
     return $ans;
 }
 

@@ -82,7 +82,8 @@ sub stringify {
         $session->{templates}->readTemplate( 'oops'.$this->{template},
                                              $session->getSkin() );
         my $message = $session->{templates}->expandTemplate( $this->{def} );
-        $message = $session->handleCommonTags( $message, $this->{web}, $this->{topic} );
+        $message = $session->handleCommonTags(
+            $message, $this->{web}, $this->{topic} );
         my $n = 1;
         foreach my $param ( @{$this->{params}} ) {
             $message =~ s/%PARAM$n%/$param/g;

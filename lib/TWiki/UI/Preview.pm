@@ -85,7 +85,7 @@ sub preview {
     $session->enterContext( 'can_render_meta', $meta );
 
     my $dispText = $text;
-    $dispText = $session->handleCommonTags( $dispText, $web, $topic );
+    $dispText = $session->handleCommonTags( $dispText, $web, $topic, $meta );
     $dispText = $session->{renderer}->getRenderedVersion( $dispText, $web, $topic );
 
     # Disable links and inputs in the text
@@ -94,7 +94,7 @@ sub preview {
     $dispText =~ s(</?form(|\s.*?)>)()gis;
     $dispText =~ s/(<[^>]*\bon[A-Za-z]+=)('[^']*'|"[^"]*")/$1''/gis;
 
-    $tmpl = $session->handleCommonTags( $tmpl, $web, $topic );
+    $tmpl = $session->handleCommonTags( $tmpl, $web, $topic, $meta );
     $tmpl = $session->{renderer}->getRenderedVersion( $tmpl, $web, $topic );
     $tmpl =~ s/%TEXT%/$dispText/go;
     $tmpl =~ s/%FORMFIELDS%/$formFields/go;

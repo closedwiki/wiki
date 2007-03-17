@@ -2544,7 +2544,7 @@ sub restDispatch {
 
 =pod
 
----++ ObjectMethod handleCommonTags( $text, $web, $topic ) -> $text
+---++ ObjectMethod handleCommonTags( $text, $web, $topic, $meta ) -> $text
 
 Processes %<nop>VARIABLE%, and %<nop>TOC% syntax; also includes
 'commonTagsHandler' plugin hook.
@@ -2552,10 +2552,13 @@ Processes %<nop>VARIABLE%, and %<nop>TOC% syntax; also includes
 Returns the text of the topic, after file inclusion, variable substitution,
 table-of-contents generation, and any plugin changes from commonTagsHandler.
 
+$meta may be undef when, for example, expanding templates, or one-off strings
+at a time when meta isn't available.
+
 =cut
 
 sub handleCommonTags {
-    my( $this, $text, $theWeb, $theTopic ) = @_;
+    my( $this, $text, $theWeb, $theTopic, $meta ) = @_;
 
     ASSERT($this->isa( 'TWiki')) if DEBUG;
     ASSERT($theWeb) if DEBUG;
@@ -2564,7 +2567,8 @@ sub handleCommonTags {
     return $text unless $text;
     my $verbatim={};
     # Plugin Hook (for cache Plugins only)
-    $this->{plugins}->beforeCommonTagsHandler( $text, $theTopic, $theWeb );
+    $this->{plugins}->beforeCommonTagsHandler(
+        $text, $theTopic, $theWeb, $meta );
 
     #use a "global var", so included topics can extract and putback 
     #their verbatim blocks safetly.
@@ -2583,7 +2587,7 @@ sub handleCommonTags {
 
 
     # Plugin Hook
-    $this->{plugins}->commonTagsHandler( $text, $theTopic, $theWeb, 0 );
+    $this->{plugins}->commonTagsHandler( $text, $theTopic, $theWeb, 0, $meta );
 
     # process tags again because plugin hook may have added more in
     $this->_expandAllTags( \$text, $theTopic, $theWeb );
@@ -2604,7 +2608,8 @@ sub handleCommonTags {
     $this->{renderer}->putBackBlocks( \$text, $verbatim, 'verbatim' );
 
     # TWiki Plugin Hook (for cache Plugins only)
-    $this->{plugins}->afterCommonTagsHandler( $text, $theTopic, $theWeb );
+    $this->{plugins}->afterCommonTagsHandler(
+        $text, $theTopic, $theWeb, $meta );
 
     return $text;
 }
@@ -2624,7 +2629,7 @@ result in it being added many times.
 =cut
 
 sub addToHEAD {
-	my ($this,$tag,$header) = @_;
+	my ($this, $tag, $header) = @_;
     ASSERT($this->isa( 'TWiki')) if DEBUG;
 	
 	$header = $this->handleCommonTags( $header, $this->{webName},
@@ -2902,7 +2907,7 @@ sub _INCLUDE {
 
     # 4th parameter tells plugin that its called for an included file
     $this->{plugins}->commonTagsHandler( $text, $includedTopic,
-                                         $includedWeb, 1 );
+                                         $includedWeb, 1, $meta );
 
     # We have to expand tags again, because a plugin may have inserted additional
     # tags.

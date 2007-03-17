@@ -523,7 +523,7 @@ WARN
       TWiki::UI::Save::buildNewTopic($session, 'save');
 
     if( $saveaction =~ /^(save|checkpoint)$/ ) {
-        $session->{plugins}->afterEditHandler( $newText, $topic, $web );
+        $session->{plugins}->afterEditHandler( $newText, $topic, $web, $newMeta );
     }
 
     try {

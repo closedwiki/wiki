@@ -31,25 +31,16 @@ There is one of these object for each file stored under RCS.
 =cut
 
 package TWiki::Store::RcsWrap;
-
-use TWiki;
-use File::Copy;
-use TWiki::Store::RcsFile;
-use TWiki::Time;
-
-@ISA = qw(TWiki::Store::RcsFile);
+use base 'TWiki::Store::RcsFile';
 
 use strict;
 use Assert;
 
+use TWiki::Time;
+
 # implements RcsFile
 sub new {
-    my( $class, $session, $web, $topic, $attachment ) = @_;
-    ASSERT($session->isa( 'TWiki')) if DEBUG;
-    my $this =
-      bless( new TWiki::Store::RcsFile( $session, $web, $topic, $attachment ),
-             $class );
-    return $this;
+    return shift->SUPER::new( @_ );
 }
 
 =pod
@@ -63,8 +54,7 @@ to.
 =cut
 
 sub finish {
-    my $this = shift;
-
+    #my $this = shift;
 }
 
 # implements RcsFile
@@ -234,6 +224,7 @@ sub getRevision {
     my $coCmd = $TWiki::cfg{RCS}{coCmd};
     my $file = $this->{file};
     if( $TWiki::cfg{RCS}{coMustCopy} ) {
+        # SMELL: is this really necessary? What evidence is there?
         # Need to take temporary copy of topic, check it out to file,
         # then read that
         # Need to put RCS into binary mode to avoid extra \r appearing and
@@ -263,6 +254,7 @@ sub getRevision {
     return $text;
 }
 
+# implements RcsFile
 sub numRevisions {
     my( $this ) = @_;
 
@@ -468,6 +460,7 @@ sub _lock {
     chmod( $TWiki::cfg{RCS}{filePermission}, $this->{file} );
 }
 
+# implements RcsFile
 sub getRevisionAtTime {
     my( $this, $date ) = @_;
 

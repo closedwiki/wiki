@@ -68,7 +68,7 @@ my %format =
 #| Return: =$text= | Formatted html text |
 #| TODO: | this should move to Render.pm |
 sub _renderCellData {
-    my( $session, $data, $web, $topic ) = @_;
+    my( $session, $meta, $data, $web, $topic ) = @_;
     if ( $data ){
         $data =~ s(^%META:FIELD{(.*)}%.*$)
           (_renderAttrs($1,'|*FORM FIELD $title*|$name|$value|'))gem;

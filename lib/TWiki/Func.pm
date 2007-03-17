@@ -1896,12 +1896,13 @@ sub addToHEAD {
 
 =pod
 
----+++ expandCommonVariables( $text, $topic, $web ) -> $text
+---+++ expandCommonVariables( $text, $topic, $web, $meta ) -> $text
 
 Expand all common =%<nop>VARIABLES%=
    * =$text=  - Text with variables to expand, e.g. ='Current user is %<nop>WIKIUSER%'=
    * =$topic= - Current topic name, e.g. ='WebNotify'=
    * =$web=   - Web name, optional, e.g. ='Main'=. The current web is taken if missing
+   * =$meta=  - topic meta-data to use while expanding (Since TWiki::Plugins::VERSION 1.13)
 Return: =$text=     Expanded text, e.g. ='Current user is <nop>TWikiGuest'=
 
 *Since:* TWiki::Plugins::VERSION 1.000 (7 Dec 2002)
@@ -1911,11 +1912,12 @@ See also: expandVariablesOnTopicCreation
 =cut
 
 sub expandCommonVariables {
-    my( $text, $topic, $web ) = @_;
+    my( $text, $topic, $web, $meta ) = @_;
     ASSERT($TWiki::Plugins::SESSION) if DEBUG;
     $topic ||= $TWiki::Plugins::SESSION->{topicName};
     $web ||= $TWiki::Plugins::SESSION->{webName};
-    return $TWiki::Plugins::SESSION->handleCommonTags( $text, $web, $topic );
+    return $TWiki::Plugins::SESSION->handleCommonTags(
+        $text, $web, $topic, $meta );
 }
 
 =pod

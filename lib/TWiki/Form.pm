@@ -88,18 +88,18 @@ sub new {
 
     unless ( $def ) {
 
-      # Read topic that defines the form
-      unless( $store->topicExists( $web, $form ) ) {
-        return undef;
-      }
-      my( $meta, $text ) =
-	$store->readTopic( $session->{user}, $web, $form, undef );
+        # Read topic that defines the form
+        unless( $store->topicExists( $web, $form ) ) {
+            return undef;
+        }
+        my( $meta, $text ) =
+          $store->readTopic( $session->{user}, $web, $form, undef );
 
-      $this->{fields} = $this->_parseFormDefinition( $text );
+        $this->{fields} = $this->_parseFormDefinition( $meta, $text );
 
     } else {
 
-      $this->{fields} = $def;
+        $this->{fields} = $def;
 
     }
 
@@ -120,7 +120,7 @@ sub new {
                                          $fieldWeb, $fieldTopic, undef );
                     # Add processing of SEARCHES for Lists
                     $text = $this->{session}->handleCommonTags(
-                        $text,$this->{web},$this->{topic});
+                        $text, $this->{web}, $this->{topic}, $meta);
                     @posValues = _getPossibleFieldValues( $text );
                     $fieldDef->{type} ||= 'select';  #FIXME keep?
                 }
@@ -144,7 +144,7 @@ sub new {
 #   2nd - name, title, type, size, vals, tooltip, attributes
 #   Possible attributes are "M" (mandatory field)
 sub _parseFormDefinition {
-    my( $this, $text ) = @_;
+    my( $this, $meta, $text ) = @_;
 
     my $store = $this->{session}->{store};
     my @fields = ();
@@ -188,8 +188,9 @@ sub _parseFormDefinition {
             }
 
             $vals ||= '';
-            $vals = $this->{session}->handleCommonTags($vals,$this->{web},$this->{topic});
-	    $vals =~ s/<\/?(nop|noautolink)\/?>//go;
+            $vals = $this->{session}->handleCommonTags(
+                $vals, $this->{web}, $this->{topic}, $meta);
+            $vals =~ s/<\/?(nop|noautolink)\/?>//go;
             $vals =~ s/^\s*//go;
             $vals =~ s/\s*$//go;
 
@@ -286,7 +287,7 @@ sub _getPossibleFieldValues {
 # Generate a link to the given topic, so we can bring up details in a
 # separate window.
 sub _link {
-    my( $this, $string, $tooltip, $topic ) = @_;
+    my( $this, $meta, $string, $tooltip, $topic ) = @_;
 
     $string =~ s/[\[\]]//go;
 
@@ -311,7 +312,8 @@ sub _link {
                 rel => 'nofollow'
                }, $string );
     } else {
-        my $expanded = $this->{session}->handleCommonTags( $string, $web, $topic );
+        my $expanded = $this->{session}->handleCommonTags(
+            $string, $web, $topic, $meta );
         if ( $tooltip ) {
             $link = CGI::span ( { title => $tooltip }, $expanded );
         } else {
@@ -346,10 +348,10 @@ sub renderForEdit {
         $session->enterContext( 'mandatoryfields' );
     }
     my $tmpl = $session->{templates}->readTemplate( "form" );
-    $tmpl = $session->handleCommonTags( $tmpl, $web, $topic );
+    $tmpl = $session->handleCommonTags( $tmpl, $web, $topic, $meta );
 
     # Note: if WEBFORMS preference is not set, can only delete form.
-    $tmpl =~ s/%FORMTITLE%/$this->_link($this->{web}.'.'.$this->{topic})/geo;
+    $tmpl =~ s/%FORMTITLE%/$this->_link($meta, $this->{web}.'.'.$this->{topic})/geo;
     my( $text, $repeatTitledText, $repeatUntitledText, $afterText ) =
       split( /%REPEAT%/, $tmpl );
 
@@ -363,7 +365,8 @@ sub renderForEdit {
             my $tmp = $repeatUntitledText;
             my $value =
               $session->{renderer}->getRenderedVersion(
-                  $session->handleCommonTags($fieldDef->{value}, $web, $topic));
+                  $session->handleCommonTags(
+                      $fieldDef->{value}, $web, $topic, $meta ));
             $tmp =~ s/%ROWVALUE%/$value/go;
             $text .= $tmp;
         } else {
@@ -380,8 +383,8 @@ sub renderForEdit {
                 # definition. Doesn't make sense for checkboxes.
                 $value = $fieldDef->{value};
                 if( defined( $value )) {
-                    $value = $session->handleCommonTags( $value, $web,
-                                                         $topic );
+                    $value = $session->handleCommonTags(
+                        $value, $web, $topic, $meta );
                     $value = TWiki::expandStandardEscapes( $value ); # Item2837
                 }
             }
@@ -390,7 +393,7 @@ sub renderForEdit {
               $this->renderFieldForEdit( $fieldDef, $web, $topic, $value );
 
             my $tmp = $repeatTitledText;
-            $tmp =~ s/%ROWTITLE%/$this->_link($title,$tooltip,$definingTopic)/geo;
+            $tmp =~ s/%ROWTITLE%/$this->_link($meta,$title,$tooltip,$definingTopic)/geo;
             $tmp =~ s/%ROWEXTRA%/$extra/go;
             $tmp =~ s/%ROWVALUE%/$value/go;
             $text .= $tmp;
@@ -467,7 +470,8 @@ sub renderFieldForEdit {
 				     -alt => 'Calendar',
 				     -class => 'twikiButton twikiEditFormCalendarButton' );
 	$value .= '%ENDTWISTY%';
-	$value = $session->{renderer}->getRenderedVersion( $session->handleCommonTags( $value, $web, $topic ) );
+	$value = $session->{renderer}->getRenderedVersion(
+        $session->handleCommonTags( $value, $web, $topic ));
       }
     } elsif( $type eq 'text' ) {
         $value = CGI::textfield( -class => 'twikiInputField twikiEditFormTextField',
@@ -584,10 +588,10 @@ sub renderFieldForEdit {
         foreach $item ( @$options ) {
             #NOTE: Does not expand $item in label
             $attrs{$item} =
-              { class=>'twikiEditFormCheckboxField',
-                label=>$session->handleCommonTags( $item,
-                                                   $web,
-                                                   $topic ) };
+              { class => 'twikiEditFormCheckboxField',
+                label => $session->handleCommonTags(
+                    $item, $web, $topic )
+               };
 
             if( $isSelected{$item} ) {
                 $attrs{$item}{checked} = 'checked';
@@ -613,7 +617,8 @@ sub renderFieldForEdit {
         foreach $item ( @$options ) {
             $attrs{$item} =
               { class=>'twikiRadioButton twikiEditFormRadioField',
-                label=>$session->handleCommonTags( $item, $web, $topic ) };
+                label=>$session->handleCommonTags(
+                    $item, $web, $topic ) };
 
             $selected = $item if( $item eq $value );
         }
