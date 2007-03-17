@@ -14,8 +14,7 @@
 
 var sEditTable; // array of edittables
 var sRowSelection;
-var sAlternatingColors = {even:null, odd:null};
-var sAlternatingDefaultColors = {even:"#ffffff", odd:"#ffffff"};
+var sAlternatingColors = [];
 
 /**
 
@@ -74,6 +73,7 @@ function edittableInit(form_name, asset_url) {
 	retrieveAlternatingRowColors();
 	fixStyling();
   
+  	var Behaviour;
 	if (Behaviour) {
 		var myrules = {
 			// catch click on button "Add row"
@@ -304,20 +304,15 @@ function retrieveAlternatingRowColors () {
 	for (var i=0; i<ilen; ++i) {
 		var tr = sEditTable.rows[i];
 		var tableCells = tr.getElementsByTagName('TD');
-		var alternate = (i%2 == 0) ? 'even': 'odd';
+		var alternate = (i%2 == 0) ? 0: 1;
 		for (var j=0; j<tableCells.length; ++j) {
-			if (sAlternatingColors.even != null && sAlternatingColors.odd != null) continue;
-			sAlternatingColors[alternate] = tableCells[j].getAttribute('bgColor');
+			if (sAlternatingColors[0] != null && sAlternatingColors[1] != null) continue;
+			var color = tableCells[j].getAttribute('bgColor');
+			if (color) sAlternatingColors[alternate] = color;
 		}
-		if (sAlternatingColors.even != null && sAlternatingColors.odd != null) {
+		if (sAlternatingColors[0] != null && sAlternatingColors[1] != null) {
 			return;
 		}
-	}
-	if (!sAlternatingColors.odd) {
-		sAlternatingColors.odd = sAlternatingDefaultColors.odd;
-	}
-	if (!sAlternatingColors.even) {
-		sAlternatingColors.even = sAlternatingDefaultColors.even;
 	}
 }
 
@@ -332,9 +327,12 @@ function fixStyling () {
 		var num = sEditTable.revidx[i];
 		var tr = sEditTable.rows[num];
 		var tableCells = tr.getElementsByTagName('TD');
-		var alternate = (i%2 == 0) ? 'even': 'odd';
+		var alternate = (i%2 == 0) ? 0: 1;
 		var className = (i%2 == 0) ? 'twikiTableEven': 'twikiTableOdd';
 		
+		if (!sAlternatingColors[alternate]) {
+			continue;
+		}
 		removeClass(tr, 'twikiTableEven');
 		removeClass(tr, 'twikiTableOdd');
 		addClass(tr, className);
