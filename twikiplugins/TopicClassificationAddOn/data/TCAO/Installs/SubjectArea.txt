@@ -23,4 +23,3 @@ To enable any of these settings, replace the explanation with the value you want
 %META:FIELD{name="Classification" attributes="" title="Classification" value="Classification"}%
 %META:FIELD{name="Summary" attributes="" title="Summary" value="%25BASEWEB%25 web content subject areas."}%
 %META:FIELD{name="Facets" attributes="" title="Facets" value=""}%
-%META:REVCOMMENT{ncomments="0"}%

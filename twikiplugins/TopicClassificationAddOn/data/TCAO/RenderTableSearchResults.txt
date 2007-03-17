@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="LynnwoodBrown" date="1172276435" format="1.1" reprev="1.5" version="1.5"}%
+%META:TOPICINFO{author="LynnwoodBrown" date="1173485322" format="1.1" version="1.11"}%
 %META:TOPICPARENT{name="TopicFunction"}%
 ---+!! Function: %TOPIC%
 %FORMFIELD{"Summary"}%
@@ -10,10 +10,14 @@
 %RED%TODO%ENDCOLOR%
 
 ---+++++ Parameters
-   * FACETS - Specify what "facets" in include as filters. Defaults to the contents of "Facets" field in base topic.
-   * INITSORT -%RED%Required%ENDCOLOR%  Initial sort. set to either "created" or "modified"
-   * INITLIMIT - %RED%Required%ENDCOLOR%  Initial results # limit. Set to 10, 20, 50, 100, or all.
-   * Note: if you are using this in conjunction with RenderSearchString, you can simplify things by defining these parameters within the base topic.
+   * BASESEARCH - %RED% REQUIRED:%ENDCOLOR% Base search string (in %TWIKIWEB%.DBCachePlugin DBQUERY format). For example: ==name = '.*'== - e.g. finds all topics.
+   * EXCLUDE - Option regex for results to exclude. Defaults to ==\bWeb*== - e.g. excludes topics starting with "Web".
+   * FACETS - Optional list of facets to use in the filter bar and search results.
+   * INITSORT - Optionally set initial sort. Defaults to "modified".
+   * INITLIMIT - Optionally set initial limit to # of results. Defaults to "all".
+   * SEARCH_FORMAT - Optional setting for different format for search results.
+   * HEADER_FORMAT - Optional setting for different format for search results header.
+   * FOOTER_FORMAT - Optional setting for different format for search results footer.
 
 ---+++++ Css
    * 
@@ -21,41 +25,48 @@
 
 ---++ Implementation
 <verbatim>
-%STARTINCLUDE%<div class="patternTopicAction">%TWISTY{id="%INCLUDINGTOPIC%topicfilters" showlink=" *Show list options* " showimg="%ICONURLPATH{toggleopen-small}%"
-hidelink=" *Hide list options* " hideimg="%ICONURLPATH{toggleclose-small}%" mode="div" remember="on"}%
-<noautolink>
-<form name="filterList" action="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%BASEWEB%/%BASETOPIC%" >
-<span style="font-size:.85em;">
-%TABLE{dataalign="center" columnwidths=" , ,35px, 30px" valign="middle"}%
-%IFDEFINEDTHEN{"%FACETS%" glue="off"  }%
-| <b>Filter by:</b>  %BR%
-~~~  
-%~~  FORMATLIST{"%FACETS%"
-~~~         separator=" " 
-~~~       format="<select name=\"$1\" size=\"1\"  > <option value=\"\"><nop>$1...</option> 
-~~~           $percntDBQUERY{\"$percntFORMFIELD{\"Classification\" topic=\"%BASEWEB%.$1\" }$percnt='$1'\" web=\"%BASEWEB%\" 
-~~~              format=\"<option $dollarpercntIF{\\"$'URLPARAM{$1}'='$topic'\\" then=\\"selected\\" else=\\" \\"}$dollarpercnt>$topic</option>\" 
-~~~       separator=\" \" }$percnt</select>" 
-~~~   }%   %FIDEFINED%
-~~~     | *Sort by Date:*  %BR%
-~~~     <input type="radio" name="sort" value="modified" %IFDEFINED{"%URLPARAM{"sort" default="%INITSORT%"}%" as="modified" then="checked"}% >Modified  
-~~~     <input type="radio" name="sort" value="created" %IFDEFINED{"%URLPARAM{"sort" default="%INITSORT%"}%" as="created" then="checked" glue="off"}% >Created   
-~~~     | *# results:* %BR% <select name="limit"> 
-~~~         <option %IFDEFINED{"%URLPARAM{"limit" default="%INITLIMIT%"}%" as="10" then="selected" glue="off"}% >10</option>
-~~~         <option %IFDEFINED{"%URLPARAM{"limit" default="%INITLIMIT%"}%" as="20" then="selected" glue="off"}% >20</option>
-~~~         <option %IFDEFINED{"%URLPARAM{limit default="%INITLIMIT%"}%" as="50" then="selected" glue="off"}%>50</option>
-~~~         <option %IFDEFINED{"%URLPARAM{limit default="%INITLIMIT%"}%" as="100" then="selected" glue="off"}%>100</option>
-~~~         <option %IFDEFINED{"%URLPARAM{limit default="%INITLIMIT%"}%" as="all" then="selected" glue="off"}%>all</option>
-~~~    </select> | 
-~~~  <input type="submit" value="Apply">  | 
- </span></form>%ENDTWISTY%</div></noautolink>%STOPINCLUDE%
+%STARTINCLUDE%
+%INCLUDE{"%TCAOWEB%.RenderBarFilterWithSort"  INITSORT="%IFDEFINED{"%INITSORT%" then="$percntINITSORT$percnt" else="modified" glue="off"}%" INITLIMIT="%IFDEFINED{"%INITLIMIT%" then="$percntINITLIMIT$percnt" else="all" glue="off"}%" }%
+%TABLE{tablewidth="100%" columnwidths=",,,50px"}%
+%~~   DBQUERY{
+*~~       
+%~~       INCLUDE{"%TCAOWEB%.RenderSearchString"  
+~~~           BASESEARCH="%IFDEFINED{"%BASESEARCH%" then="$test" else="name = '.*'" glue="off" }%" 
+~~~           INITSORT="%IFDEFINED{"%INITSORT%" then="$test" else="modified" glue="off"}%"
+~~~           INITLIMIT="%IFDEFINED{"%INITLIMIT%" then="$test" else="all" glue="off"}%" 
+~~~        }% 
+~~~        web="%BASEWEB%" 
+~~~        exclude="%IFDEFINED{"%EXCLUDE%" then="$test" else="\bWeb*" glue="off"}%" 
+~~~        header="$percntIFDEFINED{\"%HEADER_FORMAT%\" 
+~~~            then=\"%HEADER_FORMAT%\"
+~~~            else=\"| *Topic* | *Summary* | *Modified by* | *On* |$n\"
+~~~            glue=\"off\"}$percnt"
+~~~        footer="$percntIFDEFINED{\"%FOOTER_FORMAT%\" 
+~~~            then=\"%FOOTER_FORMAT%\"
+~~~            else=\"\"  glue=\"off\"}$percnt"
+~~~        format="
+*~~            $percntIFDEFINEDTHEN{\"%SEARCH_FORMAT%\" glue=\"off\"}$percnt
+~~~            %SEARCH_FORMAT%
+~~~            $percntELSEDEFINED$percnt
+*~~            | [[$web.$topic][$percntSPACEOUT{$topic}$percnt]] <span class=\"twikiSmall\" ><em>
+*~~                 $percntIFDEFINED{\"$expand(TopicType or Classification)\" 
+~~~                       then=\"<noautolink>$expand(TopicType or Classification)</noautolink>\" glue=\"off\"}$percnt</em></span>  |
+~~~                <noautolink>$formfield(Summary)</noautolink>   | 
+~~~                $percntMAINWEB$percnt.$expand(info.author) | $formatTime(info.date, '$day $month') |
+~~~         $percntFIDEFINED$percnt"
+~~~     }%
+
+_[[%BASEWEB%.WebChanges][View more recent changes...]]_
+
+<!-- interrupt glue -->
+%STOPINCLUDE%
 </verbatim>
 
 <!-- interrupt glue -->
 
 ---++ Test
 <div class="alt">
-%INCLUDE{"%TOPIC%" FACETS="TopicType, SubjectArea" INITSORT="modified" }%
+%INCLUDE{"%TOPIC%"  FACETS="SubjectArea"}%
 </div>
 
 %DBCALL{"RenderFunctionCallers"}%
@@ -68,13 +79,7 @@ hidelink=" *Hide list options* " hideimg="%ICONURLPATH{toggleclose-small}%" mode
 </div>
 
 
-<!--
-   * Set SIDEBAR = TopicType
-   * Set SIDEBARARG = TopicFunction
--->
-
-%META:FORM{name="TCAO.TopicForm"}%
+%META:FORM{name="TopicForm"}%
 %META:FIELD{name="TopicType" attributes="" title="TopicType" value="TopicFunction"}%
 %META:FIELD{name="SubjectArea" attributes="" title="SubjectArea" value=""}%
-%META:FIELD{name="Summary" attributes="" title="Summary" value="Bar with sort and filter options"}%
-%META:REVCOMMENT{ncomments="0"}%
+%META:FIELD{name="Summary" attributes="" title="Summary" value="Generic table display for search results"}%

@@ -15,13 +15,7 @@ To enable any of these settings, replace the explanation with the value you want
 %COMMENT{type="removeable_help" remove="on"}%
 %INCLUDE{"%TCAOWEB%.RenderClassificationTopic" }%
 
-<!-- Hidden include for CreateNewTopic
-You can modify the options for creating new topics of this type by changing the parameters to RenderTopicCreator. See that topic for more info.
-%STARTSECTION{"new" type="section"}%
-%DBCALL{"%TCAOWEB%.RenderTopicCreator"  TEMPLATE="%TOPIC%Template" TYPE="%TOPIC%"  FACETS="%FORMFIELD{Facets}%" TOPICSUMMARY="One-line summary/headline for question or proposition being discussed." EXTRA="<h4>One-paragraph opening statement for discussion:</h4> <textarea name=statement cols=60 rows=4></textarea> %BR% <em>You can add expand of this after the topic is created.</em>" }%
-%ENDSECTION{"new" type="section"}%
--->
-<!-- Topic Permissions
+<div class="twikiHidden">You can modify the options for creating new topics of this type by changing the parameters to RenderTopicCreator. See that topic for more info.%STARTSECTION{name="new" type="section"}%%DBCALL{"%TCAOWEB%.RenderTopicCreator"  TEMPLATE="%TOPIC%Template" TYPE="%TOPIC%"  FACETS="%FORMFIELD{Facets}%" TOPICSUMMARY="One-line summary/headline for question or proposition being discussed." EXTRA="| *Opening statement for discussion:* | <textarea name=statement cols=40 rows=4></textarea> %BR% <em>You can add expand of this after the topic is created.</em> |" }%%ENDSECTION{name="new" type="section"}%</div><!-- Topic Permissions
 	* Set ALLOWTOPICCHANGE = %MAINWEB%.ModeratorGroup
 	* Set ALLOWTOPICRENAME = %MAINWEB%.ModeratorGroup
 -->

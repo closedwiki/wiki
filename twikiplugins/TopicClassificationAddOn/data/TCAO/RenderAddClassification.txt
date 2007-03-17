@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="LynnwoodBrown" date="1171687697" format="1.1" version="1.24"}%
+%META:TOPICINFO{author="LynnwoodBrown" date="1174083196" format="1.1" reprev="1.28" version="1.28"}%
 %META:TOPICPARENT{name="TopicFunction"}%
 ---+!! Function: %TOPIC%
 %FORMFIELD{"Summary"}%
@@ -39,43 +39,40 @@ var null_summary;
 null_summary = " ";
 
 // These variables are for holding the Summary value when switching back and forth between predefined and new.
-var predefinedSummary, newSummary;
-predefinedSummary = " ";
+var newSummary;
 newSummary = " ";
 
-function choosePredefined() {
-   document.addType.topic.value=document.addType.select_predefined.value;
-   document.addType.templatetopic.value=('%TCAOWEB%/Installs.' + document.addType.select_predefined.value);
-  // Save any new Summary that may have been entered.
-   newSummary=document.addType.Summary.value; 
-   document.addType.Summary.value=eval(document.addType.select_predefined.value + '_summary');
-   document.getElementById("addNew").style.display = "none";
-   document.getElementById("addPredefined").style.display = "block";
-}
-
-function chooseNew() {
-   document.addType.topic.value=document.addType.new_type.value;
+function selectNewOrPre(selectedItem) {
+   if (selectedItem == 'new' || selectedItem == 'none' ) {
+      //restore any previously entered new class name and summary
+      document.addType.topic.value=document.addType.new_type.value;
+      document.addType.Summary.value=newSummary;
+      // set default template for new class or over-ride by TEMPLATE value defined locally
 %IFDEFINEDTHEN{"%TEMPLATE%" glue="off"}%
-   document.addType.templatetopic.value="%TEMPLATE%";
+      document.addType.templatetopic.value="%TEMPLATE%";
 %ELSEDEFINED%
-   document.addType.templatetopic.value="%TCAOWEB%/Installs.%TYPE%Template";
+      document.addType.templatetopic.value="%TCAOWEB%/Installs.%TYPE%Template";
 %FIDEFINED%
-   predefinedSummary=document.addType.Summary.value;
-   document.addType.Summary.value=newSummary;
-   document.getElementById("addPredefined").style.display = "none";
-   document.getElementById("addNew").style.display = "block";
+      // switch user interface
+      document.getElementById("addNew").style.display = "block";
+   } else {
+     // Save any new Summary that may have been entered.
+      newSummary=document.addType.Summary.value; 
+      // Set in the topic name, template, and fill in summary field
+      document.addType.topic.value=selectedItem;
+      document.addType.templatetopic.value = ('%TCAOWEB%/Installs.' + selectedItem);
+      document.addType.Summary.value=eval(selectedItem + '_summary');
+      // switch user interface
+      document.getElementById("addNew").style.display = "none";
+   }
 }
 
-function selectPredefined() {
-   document.addType.topic.value=document.addType.select_predefined.value;
-   document.addType.templatetopic.value=('%TCAOWEB%/Installs.' + document.addType.select_predefined.value);
-   document.addType.Summary.value=eval(document.addType.select_predefined.value + '_summary');
-}
 
 function nameNew() {
    document.addType.topic.value=removeSpacesAndPunctiation(capitalize(document.addType.new_type.value));
    document.addType.new_type.value=document.addType.topic.value;
    insertHtml((document.addType.topic.value + "Template"), "newTemplateFeedback");
+   insertHtml((document.addType.topic.value + "Form"), "newFormFeedback");
 }
 
 function checkName() {
@@ -89,28 +86,44 @@ function checkName() {
 
 //--></script>
 
----+++ Add A New <nop>%TYPE% to the <nop>%BASEWEB% Web
+---+++ Add New <nop>%TYPE% to the <nop>%BASEWEB% Web
 
 <div class="twikiFormSteps">
 <div class="twikiFormStep">
 <p><form name="addType" action="%SCRIPTURLPATH%/save%SCRIPTSUFFIX%/%BASEWEB%/" onsubmit="return checkName()" >
-Add <input type="radio" name="defined_or_new" checked="on" onClick="choosePredefined()"> *predefined* or <input type="radio" name="defined_or_new" onClick="chooseNew()"> *new* <nop>%TYPE%:
+Add <select name="selectClass"  size="1"  
+~~~          onchange="selectNewOrPre(this.value);" > 
+~~~      <option value="new"> New <nop>%TYPE% </option>
+~~~      <option value="none"> Predefined <nop>%TYPE%s: </option>
+%~~     DBQUERY{ "Classification = '%TYPE%'" 
+~~~            web="%TCAOWEB%/Installs" 
+~~~           order="topic" 
+~~~           exclude="(
+*~~           
+%~~              DBQUERY{ "Classification = '%TYPE%'" 
+~~~                 web="%BASEWEB%" 
+~~~                 order="topic" 
+~~~                 format="$topic" 
+~~~                 separator="|"
+~~~                 remote="off"
+~~~               }%
+*~~            )" 
+~~~           format="<option value=\"$topic\">- <nop>$topic</option>" 
+~~~           separator="" 
+~~~           remote="off"
+~~~        }% 
+~~~   </select>
 </p>
 </div><!--/twikiFormStep--><div class="twikiFormStep">
-<div id="addPredefined" style="display:block;"  >
-*Select predefined <nop>%TYPE% to add:* <select name="select_predefined" size="1"  onchange="selectPredefined()" > <option value="null"> Select... </option>%SEARCH{ "[C]lassification.*value\=.*%TYPE%" web="%TCAOWEB%/Installs" excludetopic="%DBQUERY{ "Classification='%TYPE%'" web="%BASEWEB%" order="topic" format="$topic" separator=", "}%" order="topic" type="regex"  nonoise="on" format="<option>$topic</option>" separator="" }% </select> %BR%
-</div>
-<div id="addNew" style="display:none;"  >
-*Create a new <nop>%TYPE% called:* <input type="text" name="new_type"  size="40" onblur="nameNew();" > %BR%
+<span id="addNew" style="display:inline;"  >%TABLE{tablewidth="100%" columnwidths="14%,86%" }%
+|  *Name:* | <input type="text" name="new_type"  size="25" onblur="nameNew();" > |
 %IFDEFINEDTHEN{"%NEWEXTRA%" glue="off"}%
 %INCLUDE{"%TOPIC%" section="%NEWEXTRA%" TYPE="%TYPE%"}% 
 %FIDEFINED%
-</div>
-<p />
-*Summary for this <nop>%TYPE%:* <input type="text" name="Summary" size="40" value=' ' /> 
-<p />
-*Optional: Specify Facets for this <nop>%TYPE%:* <input type="text" name="Facets" size="40" /> 
-<p />
+</span>
+%TABLE{tablewidth="100%" columnwidths="14%,86%" }%
+|  *Summary:* | <input type="text" name="Summary" size="40" value=' ' /> <br /> _Provide short summary of new %TYPE%_   |
+|  *Facets:* | <input type="text" name="Facets" size="40" />  <br /> _Optional: Identify classifications to cross reference._   | 
 %IFDEFINEDTHEN{"%ALLEXTRA%" glue="off"}%
 %INCLUDE{"%TOPIC%" section="%ALLEXTRA%" TYPE="%TYPE%"}% 
 %FIDEFINED%
@@ -121,6 +134,7 @@ Add <input type="radio" name="defined_or_new" checked="on" onClick="choosePredef
 <input type="hidden" name="Classification" value="%TYPE%" />
 <p /><input type="submit" id="submit" value=" Create New <nop>%TYPE%  " />
 </form>
+
 </div><!--/twikiFormStep-->
 </div><!--/twikiFormSteps-->
 %STOPINCLUDE%
@@ -138,7 +152,7 @@ Use this section for assigning no parent as is the default for !TopicTypes
 Use this section to create a new template topic based on the name of the new classification. Requires an accompanying CREATETOPIC tag in the template for the new class.
 <verbatim>
 %STARTSECTION{name="defaultTemplate" type="section"}%
-%I% A new template topic called <span id="newTemplateFeedback" class="twikiInputFieldDisabled">...<!--generated name will be put here--></span> will automatically be created. %BR%
+| A new template topic called <span id="newTemplateFeedback" class="twikiInputFieldDisabled">...<!--generated name will be put here--></span> will automatically be created.    ||
 %ENDSECTION{"defaultTemplate"}%
 </verbatim>
 
@@ -146,8 +160,7 @@ Use this section to create a new template topic based on the name of the new cla
 Use this section to add a select element for assigning parent topic that list topics _of the same class_ as the one being created.
 <verbatim>
 %STARTSECTION{name="selectClassParent" type="section"}%
-<p />
-*Optional: Assign another <nop>%BASETOPIC% as parent:* <select name="topicparent"> <option>%BASETOPIC%</option> %DBQUERY{"Classification='%BASETOPIC%'" web="%BASEWEB%" format="<option>$topic</option>" separator=" "}%</select>
+|  *Change Parent:* | <select name="topicparent"> <option>%BASETOPIC%</option> %DBQUERY{"Classification='%BASETOPIC%'" web="%BASEWEB%" format="<option>$topic</option>" separator=" "}%</select>   | _Optional_   |
 %ENDSECTION{"selectClassParent"}%
 </verbatim>
 
@@ -171,6 +184,6 @@ Use this section to add a select element for assigning parent topic that list to
 
 %META:FORM{name="TopicForm"}%
 %META:FIELD{name="TopicType" attributes="" title="TopicType" value="TopicFunction"}%
+%META:FIELD{name="SubjectArea" attributes="" title="SubjectArea" value="TcaoAdmin"}%
 %META:FIELD{name="Summary" attributes="" title="Summary" value="Provides interface to adding new Classifications."}%
 %META:TOPICMOVED{by="LynnwoodBrown" date="1159827949" from="TCAO2.RenderClassificationSetUp" to="TCAO2.RenderAddClassification"}%
-%META:REVCOMMENT{comment_1=" " minor_1="1" ncomments="1" rev_1="22" t_1="1167774973"}%

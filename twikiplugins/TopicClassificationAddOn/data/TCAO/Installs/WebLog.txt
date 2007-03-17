@@ -18,7 +18,7 @@ To enable any of these settings, replace the explanation with the value you want
 %COMMENT{type="removeable_help" remove="on"}%
 %INCLUDE{"%TCAOWEB%.RenderClassificationTopic" }%
 
-<!-- Hidden section for creating new topics
+<div class="twikiHidden">
 You can modify the options for creating new topics of this type by changing the parameters to RenderTopicCreator. See that topic for more info.
 %STARTSECTION{name="new" type="section"}%
 %INCLUDE{"%TCAOWEB%.CreateNewWebLog" }%
@@ -34,7 +34,7 @@ Additional steps to complete installation of this !TopicType:
 
 %ENDSECTION{name="help" type="section" }%
 
--->
+</div>
 
 <!-- Topic Permissions
 	* Set ALLOWTOPICCHANGE = %MAINWEB%.ModeratorGroup

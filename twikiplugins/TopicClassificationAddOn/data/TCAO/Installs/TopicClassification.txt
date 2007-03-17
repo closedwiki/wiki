@@ -15,6 +15,3 @@
    * Set ALLOWTOPICRENAME = %MAINWEB%.TWikiAdminGroup
    * Set HELPTOPIC = %TCAOWEB%.PostTCAOInstallHelp
 -->
-
-
-%META:REVCOMMENT{ncomments="0"}%

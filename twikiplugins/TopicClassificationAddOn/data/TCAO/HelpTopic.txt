@@ -2,12 +2,12 @@
 %META:TOPICPARENT{name="TopicType"}%
 %INCLUDE{"%TCAOWEB%.RenderClassificationTopic" }%
 
-<!-- Hidden include for CreateNewTopic
+<div class="twikiHidden">
 You can modify the options for creating new topics of this type by changing the parameters to RenderTopicCreator. See that topic for more info.
 %STARTSECTION{"new" type="section"}%
 %DBCALL{"%TCAOWEB%.RenderTopicCreator"  TEMPLATE="%TOPIC%Template" TYPE="%TOPIC%"  FACETS="SubjectArea" TOPICSUMMARY="Summarize the content of this Help topic." }%
 %ENDSECTION{"new" type="section"}%
--->
+</div>
 <!-- Topic Permissions
 	* Set ALLOWTOPICCHANGE = %MAINWEB%.TWikiAdminGroup
 	* Set ALLOWTOPICRENAME = %MAINWEB%.TWikiAdminGroup
