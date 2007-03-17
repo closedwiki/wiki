@@ -29,7 +29,9 @@ After the !TopicType is selected, the "new" section of that !TopicType in the lo
 ~~~
 %~~     DBQUERY{"Classification = 'TopicType'" 
 ~~~         web="%BASEWEB%" 
-~~~         format="<option $percntIFDEFINED{\"%URLPARAM{type}%\" as=\"$topic\" then=\"selected\" glue=\"off\"}$percnt >$topic</option>" 
+~~~         format="<option value=\"$topic\" 
+~~~               $percntIFDEFINED{\"%URLPARAM{type}%\" as=\"$topic\" then=\"selected\" glue=\"off\"}$percnt >
+*~~               $percntSPACEOUT{$topic}$percnt</option>" 
 ~~~         separator=" " 
 ~~~      }% 
 ~~~      </select></span></h3>

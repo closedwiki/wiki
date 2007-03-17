@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="LynnwoodBrown" date="1172272861" format="1.1" reprev="1.4" version="1.4"}%
+%META:TOPICINFO{author="LynnwoodBrown" date="1173482207" format="1.1" version="1.8"}%
 %META:TOPICPARENT{name="TopicFunction"}%
 ---+!! Function: %TOPIC%
 %FORMFIELD{"Summary"}%
@@ -23,7 +23,7 @@
 %ENDSECTION{name="documentation" type="section"}%
 
 ---++ Implementation
-<verbatim>
+<verbatim><noautolink>
 %STARTINCLUDE%%IFDEFINEDTHEN{"%FORSEARCH%" glue="off"}%
 ~~~  search="
 *~~    %BASESEARCH%;
@@ -35,20 +35,24 @@
 ~~~   "%BASESEARCH% 
 *~~   
 %~~    FORMATLIST{"%FACETS%" separator=" " 
-~~~          format="$percntIF{ \"$'URLPARAM{$1}'!=''\" then=\"AND $1 = '$percntURLPARAM{$1}$percnt'\" }$percnt"
+~~~          format="$percntIF{ \"$'URLPARAM{$1}'!=''\" then=\" AND $1 = '$percntURLPARAM{$1}$percnt'\" }$percnt"
 ~~~    }%" 
 ~~~   %FIDEFINED%
 ~~~    order="%URLPARAM{"sort" default="%INITSORT%"}%"  
 ~~~    limit="%URLPARAM{"limit" default="%INITLIMIT%"}%" 
-~~~    reverse="on"
+~~~    %IFDEFINEDTHEN{"%URLPARAM{sort}%" glue="off"}%
+~~~       reverse="%IFDEFINED{"%URLPARAM{sort}%" as="modified|date" then="on" else="off" glue="off" }%"
+~~~    %ELSEDEFINED%
+~~~       reverse="%IFDEFINED{"%INITSORT%" as="modified|date" then="on" else="off" glue="off" }%"
+~~~    %FIDEFINED%
 ~~~    %STOPINCLUDE%
-</verbatim>
+</noautolink></verbatim>
 
 <!-- interrupt glue -->
 
 ---++ Test
 <div class="alt">
-%DBCALL{"%TOPIC%" BASESEARCH="[T]opicType.*value\=.*%BASETOPIC%" FACETS="SubjectArea, TopicType"}%
+%DBCALL{"%TOPIC%" BASESEARCH="[T]opicType.*value\=.*%BASETOPIC%" FACETS="SubjectArea, TopicType" INITSORT="modified"}%
 </div>
 
 %DBCALL{"RenderFunctionCallers"}%
@@ -61,14 +65,8 @@
 </div>
 
 
-<!--
-   * Set SIDEBAR = TopicType
-   * Set SIDEBARARG = TopicFunction
--->
-
-
 %META:FORM{name="TopicForm"}%
 %META:FIELD{name="TopicType" attributes="" title="TopicType" value="TopicFunction"}%
 %META:FIELD{name="SubjectArea" attributes="" title="SubjectArea" value=""}%
 %META:FIELD{name="Summary" attributes="" title="Summary" value="Generates a properly formatted searchstring for either SEARCH or DBQUERY"}%
-%META:REVCOMMENT{ncomments="0"}%
+

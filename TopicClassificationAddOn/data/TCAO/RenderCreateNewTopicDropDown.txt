@@ -23,7 +23,9 @@
 ~~~   
 %~~   DBQUERY{ "Classification= 'TopicType'" 
 ~~~        web="%BASEWEB%" 
-~~~        format= "<option>$topic</option>" separator=" "
+~~~        format= "<option value=\"$topic\" >
+*~~              $percntSPACEOUT{$topic}$percnt</option>" 
+~~~        separator=" "
 ~~~    }%</select>
 ~~~    <input type="hidden" name="step" value="two"> 
 ~~~    </form>

@@ -1,5 +1,3 @@
-TopicClassificationAddOn_installer 0770
-TopicClassificationAddOn_installer.pl 0770
 data/TWiki/TopicClassificationAddOn.txt 0644
 data/TCAO/AllNews.txt 0644
 data/TCAO/CreateNewTopic.txt 0644
@@ -58,7 +56,9 @@ data/TCAO/Installs/WebLog.txt 0644
 data/TCAO/Installs/WebLogForm.txt 0644
 data/TCAO/Installs/WebLogLinkList.txt 0644
 data/TCAO/Installs/WebLogTemplate.txt 0644
+data/TCAO/Installs/WebNotify.txt 0644
 data/TCAO/Installs/WebPreferences.txt 0644
+data/TCAO/Installs/WebRss.txt 0644
 data/TCAO/Installs/WebSearch.txt 0644
 data/TCAO/Installs/WebSearchAdvanced.txt 0644
 data/TCAO/Installs/WebTopicCreator.txt 0644
@@ -67,6 +67,7 @@ data/TCAO/Installs/WikiWorld.txt 0644
 data/TCAO/JustBlogItInstallation.txt 0644
 data/TCAO/MasterTopic.txt 0644
 data/TCAO/MasterTopicTemplate.txt 0644
+data/TCAO/NewTopicTypeInstallHelp.txt 0644
 data/TCAO/PostTCAOInstallHelp.txt 0644
 data/TCAO/RecentNews.txt 0644
 data/TCAO/RenderAddClassification.txt 0644
@@ -87,6 +88,7 @@ data/TCAO/RenderSearchString.txt 0644
 data/TCAO/RenderStandardFilter.txt 0644
 data/TCAO/RenderTWikiFormList.txt 0644
 data/TCAO/RenderTableOfContent.txt 0644
+data/TCAO/RenderTableSearchResults.txt 0644
 data/TCAO/RenderTopicCreator.txt 0644
 data/TCAO/RenderTopicSummaryWithCommentsList.txt 0644
 data/TCAO/SubjectArea.txt 0644
@@ -111,7 +113,10 @@ data/TCAO/WebLogHelp.txt 0644
 data/TCAO/WebLogLinkList.txt 0644
 data/TCAO/WebNotify.txt 0644
 data/TCAO/WebPreferences.txt 0644
+data/TCAO/WebRss.txt 0644
 data/TCAO/WebSearch.txt 0644
 data/TCAO/WebSearchAdvanced.txt 0644
 data/TCAO/WebTopicList.txt 0644
+data/TCAO/changes 0644
+data/TCAO/mailnotify 0644
 lib/TWiki/Contrib/TopicClassificationAddOn.pm 0644

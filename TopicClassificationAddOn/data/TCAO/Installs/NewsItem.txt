@@ -19,12 +19,13 @@ To enable any of these settings, replace the explanation with the value you want
 
 See also: [[%BASEWEB%.AllNews][All News for %WIKITOOLNAME%]] and [[%BASEWEB%.RecentNews][Recent News from all Webs]]
 
-<!-- Hidden include for CreateNewTopic
+<div class="twikiHidden">
 You can modify the options for creating new topics of this type by changing the parameters to RenderTopicCreator. See that topic for more info.
 %STARTSECTION{name="new" type="section"}%
-%DBCALL{"%TCAOWEB%.RenderTopicCreator"  TEMPLATE="%TOPIC%Template" TYPE="%TOPIC%"  FACETS="SubjectArea" TOPICSUMMARY="Use Summary for displaying !NewsItem headline." EXTRA="<h3> News text: </h3><textarea name=\\"entry\\" cols=\\"60\\" rows=\\"3\\" ></textarea> " SAVE="checked" }%
+%DBCALL{"%TCAOWEB%.RenderTopicCreator"  TEMPLATE="%TOPIC%Template" TYPE="%TOPIC%"  FACETS="SubjectArea" TOPICSUMMARY="Use Summary for displaying !NewsItem headline." EXTRA="|  *News text:* | <textarea name=\\"entry\\" cols=\\"60\\" rows=\\"3\\" ></textarea>  |" SAVE="checked" }%
 %ENDSECTION{name="new" type="section"}%
--->
+</div>
+
 
 <!-- Topic Permissions
 	* Set ALLOWTOPICCHANGE = %MAINWEB%.ModeratorGroup

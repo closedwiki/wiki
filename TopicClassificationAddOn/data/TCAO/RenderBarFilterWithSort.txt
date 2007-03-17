@@ -21,11 +21,10 @@
 
 ---++ Implementation
 <verbatim>
-%STARTINCLUDE%<div class="patternTopicAction">
-<noautolink>
+%STARTINCLUDE%<noautolink>
 #FilterBar
 <form name="filterList" action="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%BASEWEB%/%BASETOPIC%#FilterBar" >
-~~~     <div style="padding:0em 0em 1em 0em;color:#666;background-color:#FCF8EC;font-size:94%;margin:0 0 1em 0;">
+~~~     <div style="padding:.5em .5em 2em .5em;color:#666;background-color:#FCF8EC;font-size:94%;margin:0 0 0 0;">
 ~~~     <div class="twikiLeft">
 ~~~     *Sort by:*  <select name="sort" onchange="submit();" > 
 *~~       <option value="modified" %IFDEFINED{"%URLPARAM{"sort" default="%INITSORT%"}%" as="modified" then="selected" glue="off"}% >
@@ -62,7 +61,7 @@
 ~~~         <option %IFDEFINED{"%URLPARAM{"limit" default="%INITLIMIT%"}%" as="100" then="selected" glue="off"}%>100</option>
 ~~~         <option %IFDEFINED{"%URLPARAM{"limit" default="%INITLIMIT%"}%" as="all" then="selected" glue="off"}%>all</option>
 ~~~    </select> </div> 
-*~~    </form></div><!-- bar styling --></noautolink></div><!-- patternTopicAction --><div class="twikiClear"></div>%STOPINCLUDE%
+*~~    </form></div><!-- bar styling --></noautolink><div class="twikiClear"></div>%STOPINCLUDE%
 </verbatim>
 
 <!-- interrupt glue -->

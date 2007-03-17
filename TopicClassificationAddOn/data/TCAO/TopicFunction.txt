@@ -3,24 +3,21 @@
 <!-- Optional Topic Settings
 To enable any of these settings, replace the explanation with the value you want and remove the "#" before "Set". 
    * Set CLASS_DESCRIPTION = %FORMFIELD{"Summary" topic="%BASEWEB%.%BASETOPIC%"}%
-   * #Set ADD_FILTER = %TCAOWEB%.RenderStandardFilter
-   * Set SEARCH_FORMAT = | $web.$topic  | <noautolink>$formfield(Summary)</noautolink>  |
+   * Set SEARCH_FORMAT = | [[$web.$topic][$percntSPACEOUT{$topic}$percnt]]  | <noautolink>$formfield(Summary)</noautolink>  |
    * Set HEADER_FORMAT = | *<nop>TopicFunction* | *Description* |$n
-   * #Set FOOTER_FORMAT = Optional custom format for search results footer. Defaults to "Number of topics found = $count".
-   * #Set SEARCH_ORDER = Option for changing the default order for the search. Defaults to "name."
-   * #Set SEARCH_REVERSE = Option to reverse the search order. Defaults to "off."
+   * Set INITSORT = name
 -->
 
 %INCLUDE{"%TCAOWEB%.RenderClassificationTopic" }%
 
 See also: %TOPIC%Template
 
-<!-- Hidden include for CreateNewTopic
+<div class="twikiHidden">
 You can modify the options for creating new topics of this type by changing the parameters to RenderTopicCreator. See that topic for more info.
 %STARTSECTION{name="new" type="section"}%
 %DBCALL{"%TCAOWEB%.RenderTopicCreator"  TEMPLATE="%TOPIC%Template" TYPE="%TOPIC%"  VALUE="Render..." TOPICSUMMARY="Summarize what this TopicFunction does." }%
 %ENDSECTION{name="new" type="section"}%
--->
+</div>
 <!-- Topic Permissions
 	* Set ALLOWTOPICCHANGE = %MAINWEB%.ModeratorGroup
 	* Set ALLOWTOPICRENAME = %MAINWEB%.ModeratorGroup
