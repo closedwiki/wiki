@@ -1,159 +1,95 @@
-%META:TOPICINFO{author="TaitCyrus" date="1051904047" format="1.0" version="1.2"}%
----++ %TOPIC% (Version 1.3)
+---++ %TOPIC%
 
-Provide secure access (read and write [mysql only]) to data in a database allowing the user to specify the resulting output format as well as editable tables.  'secure', in this case, just means not putting passwords in clear text into a TWiki page but placing it either in a 'secure' flat TWiki file or in a database.
+Provide secure access (read and write) to data in an SQL database,
+with flexible results formatting.
 
-*NOTE:* <br>Security is _only_ achieved if:
-	1 File ==bin/DatabasePluginConfig.pm== is not readable through a web page and has been _locked_ by updating the ==.htaccess== file in ==bin== (or locking via whatever your security procedure is on your web server)
-	1 File ==bin/DatabasePluginEdit== has been _locked_ (requiring a valid user) by updating the ==.htaccess== file in ==bin== (or locking via whatever your security procedure is on your web server)
-	1 People with login/ftp access to your web server do *not* have read access to ==bin/DatabasePluginConfig.pm==
+Any database that has a DBI interface can be used.
 
-This plugin references ==bin/DatabasePluginConfig.pm==.  This file contains one required section and one optional section.
-	* *Required* - Description of where the primary DatabasePlugin database is located and
-	* *Optional* - Any local database specific information if the above required section says that the _db_driver_ is ==Local==.
+This version is for TWiki-4 only.
 
-Again, this plugin provides access to database information in a semi-secure manner.  Since clear text passwords in a TWiki page is not good, the passwords to databases are themselves placed into a DatabasePlugin database (either located in a real database or located in the ==bin/DatabasePluginConfig.pm== file).  This database contains the following fields:
-	| *Column Name* | *Description* |
-	| ID | Standard auto_increment column to allow for unique db entries (optional if a real database) |
-	| description | This field acts as the look-up mechanism for the indirection.  A TWiki page would reference this name instead of having to publicly specify user names, passwords, etc. |
-	| driver | Database driver name (currently only =mysql= has been tested) |
-	| db_name | The name of the database in which the =table_name= is found |
-	| db_sid | The SID of the database in which the =table_name= is found (optional: used for Oracle) |
-	| table_name | The name of the table found in the =db_name= database |
-	| ro_username | A user name providing read-only access to the specified table |
-	| ro_password | The password for the specified =ro_username= |
-	| hostname | The name of the host on which the specified =db_name= lives |
+---++ Usage
 
-To secure the database information allowing access to the above database, a Perl .pm is created and placed into =bin= where the ==.htaccess== file (or whatever your security mechanism is) is updated such that this file can NOT be viewed from a web browser.  This file contains variables defining access information to the above database. The variables are:
-	| $db_driver | DBI driver -- Tested values are: *mysql*, *Oracle*, and *Local* (where *Local* means instead of the indirection into the database to get the further database information the info is obtained locally) |
-	| $db_database | The name of the database in which the table described above can be found |
-	| $db_sid | The SID of the database in which the table described above can be fond (optional: used for Oracle) |
-	| $db_table | The table in which the above information is found.  I used =DatabasePlugin= as the table name, though you can specify anything you wish |
-	| $db_username | The user name allowing access to the above database (for both read and write access) |
-	| $db_password | The password allowing $db_username access to the table (for both read and write access) |
-	| $db_hostname | The hostname on which the above table can be found |
-	| $db_edit_prefix | The prefix used when generating the URL for invoking phpMyAdmin.  The value of this by default is 'https' for added security, though could be set to 'http' |
-	| $db_edit_url | The rest of the URL which points to phpMyAdmin.  This can either be a relative path or absolute.  If absolute, then the form would look something like =machine.do.main/path_to_where_phpMyAdmin_can_be_found= |
+---+++ %<nop>DATABASE_SQL{description="table_description" sql="sql"}%
+This is the most general of the commands. It allows you to execute arbitrary SQL statements, and provides flexible formatting of the results.
+   * =description= - identifies the database configuration to use (required)
+   * =sql= - The SQL to execute (required)
+   * =format= - (optional) Format to display results in. if yu don;t give this parameter results will be ignored.
+   * =header= - (otional) The header to display on the results table.
+   * =separator= - string that separates results. Default newline.
+If the SQL statement doesn't return a result (e.g. an =UPDATE= statement) you must *not* give a =format= parameter. The =format= parameter is a string describing the required format for the results, where each =$colname= will expand to the value of that column. See %TWIKIWEB%.FormattedSearch for more on how =format=, =header= and =separator= work.
 
----++ Syntax Rules
+---+++ %<nop>DATABASE_SQL_TABLE{description="db1" headers="hdr1,hdr2,hdr3" command="sql command"}%
+   * =description= - identifies the database configuration to use
+   * =headers= - Table headers.
+   * =command= - Any SQL command that returns rows
+   * %X% This syntax is maintained for compatibility. You are recommended to use DATABASE_SQL instead.
 
-	* &#37;DATABASE_TABLE{description="db1" headers="hdr1,hdr2,hdr3" columns="col1,col2,col3"}%
-		| *Key* | *Default* | *Description of key* |
-		| description | | Lookup "key" in the DatabasePlugin database to get the info on the database to access|
-		| columns (optional) | "*" | The columns in the table to return |
-		| headers (optional) | columns values | Table headers. |
+---+++ %<nop>DATABASE_SQL_REPEAT{description="description" command="..SQL COMMAND.." columns="col1,col2,col3"}% .... user formatting .... %DATABASE_SQL_REPEAT%
+   * =description= - identifies the database configuration to use
+   * =columns= - The columns in the table to return. Default "*"
+   * =command= - Any SQL command that returns values
+   * %X% This syntax is maintained for compatibility. You are recommended to use DATABASE_SQL instead.
 
-	* &#37;DATABASE_SQL_TABLE{description="db1" headers="hdr1,hdr2,hdr3" command="sql command"}%
-		| *Key* | *Default* | *Description of key* |
-		| description | | Lookup "key" in the DatabasePlugin database to get the info on the database to access|
-		| headers | | Table headers. |
-		| command | | Any SQL command |
+---+++ %<nop>DATABASE_TABLE{description="table_description" headers="hdr1,hdr2,hdr3" columns="col1,col2,col3"}%
+   * =description= - identifies the database+table configuration to use (required)
+   * =columns= - The columns in the table to return. Default "*"
+   * =headers= - Table headers
+   * %X% This command *requires* a table to be specified in the configuration.
+   * %X% This syntax is maintained for compatibility. You are recommended to use DATABASE_SQL instead.
 
-	* &#37;DATABASE_REPEAT{description="table_description" columns="col1,col2,col3"}% .... user formatting .... %DATABASE_REPEAT%
-		| *Key* | *Default* | *Description of key* |
-		| description | | Lookup "key" in the DatabasePlugin database to get the info on the database to access|
-		| columns (optional) | "*" | The columns in the table to return |
+---+++ %<nop>DATABASE_REPEAT{description="table_description" table="mytable" columns="col1,col2,col3"}% .... user formatting .... %DATABASE_REPEAT%
+   * =description= - identifies the database+table configuration to use
+   * =columns= - The columns in the table to return. Default "*"
+   * %X% This command *requires* a table to be specified in the configuration.
+   * %X% This syntax is maintained for compatibility. You are recommended to use DATABASE_SQL instead.
 
-	* &#37;DATABASE_SQL_REPEAT{description="table_description" command="..SQL COMMAND.." columns="col1,col2,col3"}% .... user formatting .... %DATABASE_SQL_REPEAT%
-		| *Key* | *Default* | *Description of key* |
-		| description | | Lookup "key" in the DatabasePlugin database to get the info on the database to access|
-		| columns (optional) | "*" | The columns in the table to return |
-		| command | | Any SQL command |
+---+++ %<nop>DATABASE_EDIT{description="table_description" display_text="HTML link text"}%
+Creates a frame and invokes an external database editor.
+   * =description= - identifies the database configuration to use
+   * =display_text= - (optional) The columns in the table to return
 
-	* &#37;DATABASE_REPEAT{description="table_description" columns="col1,col2,col3"}% .... user formatting .... %DATABASE_REPEAT%
-		| *Key* | *Default* | *Description of key* |
-		| description | | Lookup "key" in the DatabasePlugin database to get the info on the database to access|
-		| columns (optional) | "*" | The columns in the table to return |
+---++ Examples
 
-	* &#37;DATABASE_EDIT{description="table_description" display_text="HTML link text"}%
-		| *Key* | *Default* | *Description of key* |
-		| description | | Lookup "key" in the DatabasePlugin database to get the info on the database to access|
-		| display_text (optional) | "edit" | The columns in the table to return |
+=%<nop>DATABASE_SQL{description="mysql_user_info" format="| $User | $Select_priv |" header="| <nop>*User Name* | <nop>*Select Privs* |"}%=
 
----++ Example
+You will get back a table with one row for each matching database entry.
 
-Assume that the =DatabasePluginConfig.pm= file (locked away in =bin= so that a user can not view the contents) contains the following:
+Using the =format= functionality, you can define how the database data is displayed wrapping it in any formatting you choose.  For example, if you wanted to create a single table cell containing the information for 3 fields of the Kalendus calendar, you could use the following:
 
-<verbatim>
-$db_driver      = "Oracle";
-$db_database    = "mydb";
-$db_sid         = "sid";
-$db_table       = "DatabasePlugin";
-$db_username    = "user";
-$db_password    = "123456"; # (Note: this is the clear text password)
-$db_hostname    = "localhost";
-</verbatim>
+=%<nop>DATABASE_SQL{description="calendar_events" sql="SELECT * from calendar" format="| $startdate $subject $body |"}%=
 
-Assume that the database specified above contains the following information:
-	| *ID* | *description* | *driver* | *db_name* | *table_name* | *ro_username* | *ro_password* | *hostname* |
-	| 1 | calendar_events | mysql | mydb | kalendus_event | username1 | password1 | localhost |
-	| 2 | mysql_user_info | mysql | mysql | user | username2 | password2 | localhost |
+Or let's say you wanted to display the next two upcoming scheduled events in the Kalendus calendar.
 
-Now if I have the following in a TWiki page and the DatabasePlugin installed, the results should be a table containing 4 columns of information.
+=%<nop>DATABASE_SQL{description="calendar_events" command="SELECT subject,body,startdate FROM kalendus_event WHERE to_days(startdate) > to_days(now()) order by startdate limit 2" format="$startdate&lt;br />$subject&lt;br />$body"}%=
 
-&#37;DATABASE_TABLE{description="mysql_user_info" columns="Host,User,Password,Select_priv"}%
-
-If I want table column headings that differ from the database column names, I could use:
-&#37;DATABASE_TABLE{description="mysql_user_info" columns="Host,User,Password,Select_priv" headers="Host Name,User Name, Password,Select Privs"}%
-
-An optional way to do the same thing would be to use:
-&#37;DATABASE_SQL_TABLE{description="mysql_user_info" command="SELECT Host,User,Password,Select_priv FROM user" headers="Host Name,User Name, Password,Select Privs"}%
-
-Using the REPEAT functionality, you can define how the database data is displayed wrapping it in any formatting you choose.  For example, if you wanted to create a single table cell containing the information for 3 fields of the Kalendus calendar, you could use the following:
-&#37;DATABASE_REPEAT{description="calendar_events"}%| %startdate%<BR>%subject%<BR>%body% |
-%DATABASE_REPEAT%
-
-Or lets say you wanted to display the next two upcoming scheduled events in the Kalendus calendar.
-&#37;DATABASE_SQL_REPEAT{description="calendar_events" command="SELECT subject,body,startdate FROM kalendus_event WHERE to_days(startdate) >= to_days(now()) order by startdate limit 2"}%| %startdate%<BR>%subject%<BR>%body% |
-%DATABASE_SQL_REPEAT%
-
-Now lets say that you wanted to give the user the ability to edit the contents of a table.  NOTE: This feature assumes the availability of phpMyAdmin since it uses phpMyAdmin to provide table editing.  The following is how you would edit the table described by _calendar_events_.
-&#37;DATABASE_EDIT{description="calendar_events" display_text="Edit the above table"}%
-
----++ %TOPIC% Settings
-
-Plugin settings are stored as preferences variables. To reference
-a plugin setting write ==%<plugin>_<setting>%==, i.e. ==%INTERWIKIPLUGIN_SHORTDESCRIPTION%==
-
-	* One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
-		* Set SHORTDESCRIPTION = Provide somewhat secure access to data in a database returning the data in either table form or in a user defined format
-
-	* Debug plugin: (See output in =data/debug.txt=)
-		* Set DEBUG = 0
-
-	* Set security mode (0 = allow viewing of the contents of the master DatabasePlugin database, 1 = don't allow viewing of the master database)
-	* Set SECURITY = 1
-	* Set SECURITY_MESSAGE = <font color=red>Error: For security reasons, you can't specify the main DatabasePlugin database since it contains clear text passwords.</font>
+<!--
+	* Set SHORTDESCRIPTION = Provide access to data in a SQL database
+-->
 
 ---+++ Plugin Installation Instructions
+%I% Note for upgraders; the configuration has moved into =configure= now. You will have to copy the settings from your existing =bin/DatabasePluginConfig.pm= manually. it should be fairly obvious what you have to do.
 
-	* Download the ZIP file from the Plugin web (see below)
-	* Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
-	  | *File:* | *Description:* |
-	  | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
-	  | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
-	  | ==bin/%TOPIC%Config.pm== | Plugin configuration/initialization information |
-	  | ==bin/%TOPIC%Edit== | Routine which generates a frame based HTML page for editing a <nop>MySql table. <font color=red>NOTE: For security reasons, you MUST add this application to your .htaccess list as requiring a valid user since the output from this script will embed the database username and password allowing write access to the tables</font> |
-	* (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
-	* Test if the plugin is correctly installed:
-		* You will need to configure your installation to know if it is working as expected.
+%$INSTALLATION_INSTRUCTIONS%
+   * If you are using TWiki-4.1 or later, use =configure= to set up the
+     plugin. Otherwise copy and paste the contents of =lib/TWiki/Plugins/DatabasePlugin/Config.spec= into =LocalSite.cfg= and enter your settings manually.
 
 ---+++ Plugin Info
 
-|  Plugin Author: | Main.TaitCyrus |
-|  Plugin Version: | 5 May 2003 (v1.3)|
-|  Change History: | 5 May 2003 (v1.3) Add support for the primary DB to be in a local file instead of in a DB.  It is acknowledged that this reduces security somewhat<BR>Also added support for Oracle (by adding in the concept of a SID) |
-| | 20 Mar 2002 (v1.2): Added table editing ability |
-| | 18 Feb 2002 (v1.11): Removed hard coded $debug=1; |
-| | 16 Feb 2002 (v1.1): Added the two REPEAT functions |
-| | 20 Jan 2002 (v1.0): Initial version  |
+|  Plugin Author: | TWiki:Main.TaitCyrus |
+|  Plugin Version: | %$VERSION% |
+|  Change History: | |
+|  18 March 2007 | Rewritten for efficiency and clarity, and added DATABASE_SQL - TWiki:Main.CrawfordCurrie |
+|  5 May 2003 (v1.3) | Add support for the primary DB to be in a local file instead of in a DB.  It is acknowledged that this reduces security somewhat<BR>Also added support for Oracle (by adding in the concept of a SID) |
+|  20 Mar 2002 (v1.2) | Added table editing ability |
+|  18 Feb 2002 (v1.11): | Removed hard coded $debug=1; |
+|  16 Feb 2002 (v1.1): | Added the two REPEAT functions |
+|  20 Jan 2002 (v1.0): | Initial version  |
 |  CPAN Dependencies: | DBI |
-|  Other Dependencies: | phpmyadmin (to support the edit ability) |
+|  Other Dependencies: | phpmyadmin (optional, to support DATABASE_EDIT) |
 |  Perl Version: | 5.0 (tested with 5.6.1 [mysql] and 5.8.0 [Oracle and Local] ) |
 |  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 
 __Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
 
--- Main.TaitCyrus - 5 May 2003 <br>
 
