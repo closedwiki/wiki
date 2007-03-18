@@ -59,7 +59,8 @@ function dTree(objName) {
         popup : false, //Popup menu style
         closePopupDelay : 1000, //Delay before closing all popup
         popupOffset : {'x':0, 'y':0}, //Allow fine tunning of popup position, in pixel
-        firstPopupOffset : {'x':0, 'y':0} //Allow fine tunning of first popup position, in pixel    
+        firstPopupOffset : {'x':0, 'y':0}, //Allow fine tunning of first popup position, in pixel
+        useOpacity : false //Allow fine tunning of first popup position, in pixel        
 	};
 	this.icon = {
 	  root : 'base.gif',
@@ -151,7 +152,7 @@ dTree.prototype.addNode = function(pNode) {
 	if (this.config.inOrder) n = pNode._ai;
    //SL: for each children
 	for (n; n<this.aNodes.length; n++) {	
-		if (this.aNodes[n].pid == pNode.id) { //SL: what's that magic?
+		if (this.aNodes[n].pid == pNode.id) { //SL: Testing if node n is a child of pNode
 			var cn = this.aNodes[n];
 			cn._p = pNode;
 			cn._ai = n;
@@ -213,19 +214,29 @@ dTree.prototype.node = function(node, nodeId) {
 		str += '<div id="n' + this.obj + nodeId + '" class="'+ myClass +'" '+ nodeScript + '>' + this.indent(node, nodeId);
 		if (this.config.useIcons) str += '<img id="i' + this.obj + nodeId + '" src="' + ((node._io) ? node.iconOpen : node.icon) + '" alt="" />';
 		//str += (node.name + this.level); //Debug level
-      str += node.name;
+        str += node.name;
 		str += '</div>';
+       
 	}
 	
-   //SL: If the node has children
+   //SL: If the node has children, create <div> for children encapsulation
 	if (node._hc) {
       //SL: Display that group of children if this node is root OR this node is open BUT NOT in popup menu style.   
-      //We also add automatic popup closing functionality for popup menu 
+      //We also add automatic popup closing functionality for popup menu using timeout
       str += '<div id="d' + this.obj + nodeId + '" class="'+ this.getClassChildren() + ' ' + this.getClassLevel() + '" style="display:' + ((isRoot || (node._io && !this.config.popup )) ? 'block' : 'none') + ';" ' + (this.config.popup? 'onmouseout="javascript: clearTimeout('+ this.obj +'.popupTimeout);' + this.obj + '.popupTimeout=setTimeout(\''+ this.obj +'.oAll(false)\',' + this.config.closePopupDelay + ');" onmouseover="clearTimeout('+ this.obj +'.popupTimeout);"' : '') + '>';
         //Same as above line but with debug output built-in
         //str += '<div id="d' + this.obj + nodeId + '" class="'+ this.getClassChildren() + ' ' + this.getClassLevel() + '" style="display:' + ((isRoot || (node._io && !this.config.popup )) ? 'block' : 'none') + ';" ' + (this.config.popup? 'onmouseout="javascript: writeDebug(\'onmouseout:' + this.obj + ' \');clearTimeout('+ this.obj +'.popupTimeout);' + this.obj + '.popupTimeout=setTimeout(\''+ this.obj +'.oAll(false)\',' + this.config.closePopupDelay + ');" onmouseover="javascript: writeDebug(\'onmouseover:' + this.obj + ' \');clearTimeout('+ this.obj +'.popupTimeout);"' : '') + '>';
 		str += this.addNode(node);
 		str += '</div>';
+
+        //Here comes a trick to have opaque text on translucent background
+        if (this.config.useOpacity)
+            {
+            str += '<div id="dbkg' + this.obj + nodeId + '" class="'+ this.getClassTranslucentBackground() + ' ' + this.getClassLevel() +'" style="display:none;">';
+		    str += this.fakeChildren(node);
+            str += '</div>';            
+            }
+
 	}
 	this.aIndent.pop();
 	return str;
@@ -374,6 +385,11 @@ dTree.prototype.closeAllChildren = function(node) {
 dTree.prototype.nodeStatus = function(status, id, bottom)
     {
 	eDiv	= document.getElementById('d' + this.obj + id);
+    var eDivBkg;
+    if (this.config.useOpacity)
+        {
+    	eDivBkg	= document.getElementById('dbkg' + this.obj + id);
+        }
     var eJoin;
     if (this.config.usePlusMinus) eJoin	= document.getElementById('j' + this.obj + id);
 	if (this.config.useIcons) 
@@ -404,9 +420,16 @@ dTree.prototype.nodeStatus = function(status, id, bottom)
             {
             if (navigator.appName!='Microsoft Internet Explorer')
                 {
+                //Submenu for non IE browser
                 eDiv.style.position = 'absolute';
                 eDiv.style.left = eNodeDiv.offsetLeft + eNodeDiv.offsetWidth + this.config.popupOffset.x + 'px'; 
                 eDiv.style.top = eNodeDiv.offsetTop + this.config.popupOffset.y + 'px';    
+                if (this.config.useOpacity) 
+                    {
+                    eDivBkg.style.position = 'absolute';
+                    eDivBkg.style.left = eNodeDiv.offsetLeft + eNodeDiv.offsetWidth + this.config.popupOffset.x + 'px'; 
+                    eDivBkg.style.top = eNodeDiv.offsetTop + this.config.popupOffset.y + 'px';    
+                    }
                 }
             else
                 {
@@ -436,10 +459,17 @@ dTree.prototype.nodeStatus = function(status, id, bottom)
             eDiv.style.top = getAbsoluteTop(nodeIdString) + this.config.popupOffset.y + 'px';        
             */
 
+            //Position first level of popup menu
             var nodePos = Position.get(eNodeDiv);    
             eDiv.style.position = 'absolute';
-            eDiv.style.left = nodePos.left + nodePos.width + this.config.popupOffset.x + this.config.firstPopupOffset.x + 'px'; //4px padding + 2 px border
+            eDiv.style.left = nodePos.left + nodePos.width + this.config.popupOffset.x + this.config.firstPopupOffset.x + 'px';
             eDiv.style.top = nodePos.top + this.config.popupOffset.y + this.config.firstPopupOffset.y +'px';
+            if (this.config.useOpacity) 
+                {
+                eDivBkg.style.position = 'absolute';
+                eDivBkg.style.left = nodePos.left + nodePos.width + this.config.popupOffset.x + this.config.firstPopupOffset.x + 'px';
+                eDivBkg.style.top = nodePos.top + this.config.popupOffset.y + this.config.firstPopupOffset.y +'px';
+                }
             }
 
             /*        
@@ -470,7 +500,25 @@ dTree.prototype.nodeStatus = function(status, id, bottom)
 
     //Do that last
   	eDiv.style.display = (status) ? 'block': 'none'; //TODO: should really hide at the beginning if needed.
+    if (this.config.useOpacity) 
+        {
+      	eDivBkg.style.display = (status) ? 'block': 'none'; //TODO: should really hide at the beginning if needed.
+        }
+
     };
+
+dTree.prototype.onload = function() {
+/*
+    //Just an idea
+    if (this.config.useOpacity)
+        {
+    	eDivBkg	= document.getElementById('dbkg' + this.obj + '0');
+    	eDiv	= document.getElementById('d' + this.obj + '0');
+        }
+*/
+
+    //twiki.js addLoadEvent
+};
 
 // [Cookie] Clears a cookie
 dTree.prototype.clearCookie = function() {
@@ -523,7 +571,44 @@ dTree.prototype.isOpen = function(id) {
 	return false;
 };
 
+
+//Not used
+
+dTree.prototype.childCount = function(pNode) {
+    var count=0;
+	for (var n=0; n<this.aNodes.length; n++)
+        {	
+		if (this.aNodes[n].pid == pNode.id) //SL: Testing if node n is a child of pNode
+            {
+            count++;
+            }
+        }
+    return count;
+}
+
+//Returns n times fake children for the node, used for translucent background
+dTree.prototype.fakeChildren = function(pNode) {
+    var str='';
+	for (var n=0; n<this.aNodes.length; n++)
+        {	
+		if (this.aNodes[n].pid == pNode.id) //SL: Testing if node n is a child of pNode
+            {
+            str+='<div class="' + this.getClassFakeItem() + '"><br /></div>';
+            }
+        }
+    return str;
+}
+
+
 //SL: The getClass functions are used to get the CSS class
+
+dTree.prototype.getClassFakeItem = function() {
+    return this.config.style + 'FakeItem';
+}
+
+dTree.prototype.getClassTranslucentBackground = function() {
+    return this.config.style + 'TranslucentBackground';
+}
 
 dTree.prototype.getClassTree = function() {
     return this.config.style;
