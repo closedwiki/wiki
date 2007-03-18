@@ -111,7 +111,7 @@ sub _loadSpecsFrom {
         next if $read->{$extension};
         my $file = "$dir/$extension/Config.spec";
         next unless -e $file;
-        _parse($file, $root);
+        _parse($file, $root, 1);
         $read->{$extension} = $file;
     }
     closedir(D);
