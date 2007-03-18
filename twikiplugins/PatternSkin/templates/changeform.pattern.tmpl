@@ -1,13 +1,12 @@
-%TMPL:INCLUDE{"page"}%
-%TMPL:INCLUDE{"viewtopicactionbuttons"}%
-%TMPL:INCLUDE{"viewbottombar"}%
+%TMPL:INCLUDE{"app"}%
+%TMPL:DEF{"logo"}%%TMPL:END%%{ don't show a logo to make best use of screen estate }%
 
 
 
 %TMPL:DEF{"titleaction"}%%MAKETEXT{"(change form)"}% %TMPL:END%
 
 
-%TMPL:DEF{"pagetitle"}%<h1 class="patternTemplateTitle">%MAKETEXT{"Choose a new form for [_1]" args="[[%TOPIC%]]"}%</h1>%TMPL:END%
+%TMPL:DEF{"pagetitle"}%<h1 class="patternTemplateTitle">%MAKETEXT{"Choose a new form for [_1]" args="<nop>%TOPIC%"}%</h1>%TMPL:END%
 
 %TMPL:DEF{"webaction"}% *%MAKETEXT{"Action"}%* %TMPL:END%
 

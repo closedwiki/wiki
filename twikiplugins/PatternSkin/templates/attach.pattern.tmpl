@@ -1,8 +1,5 @@
-%TMPL:INCLUDE{"page"}%
-%TMPL:INCLUDE{"logo"}%
-%TMPL:INCLUDE{"viewtoolbar"}%
-%TMPL:INCLUDE{"viewtopicactionbuttons"}%
-%TMPL:INCLUDE{"viewbottombar"}%
+%TMPL:INCLUDE{"app"}%
+%TMPL:DEF{"logo"}%%TMPL:END%
 
 
 
@@ -49,8 +46,7 @@
 
 %TMPL:DEF{"formstart"}%<div class="patternAttachForm"><form name="main" enctype="multipart/form-data" action="%SCRIPTURLPATH{"upload"}%/%INTURLENCODE{"%WEB%/%TOPIC%"}%" method="post">%TMPL:END%
 
-%TMPL:DEF{"formend"}%</div><!-- /patternAttachForm-->
-</form>%TMPL:END%
+%TMPL:DEF{"formend"}%</form></div><!-- /patternAttachForm-->%TMPL:END%
 
 
 
@@ -86,7 +82,7 @@
 %TMPL:P{"pagehelp"}%
 %TMPL:P{"formstart"}%
 %TMPL:P{"attachform"}%
-%TMPL:P{"topicaction"}%
+%TMPL:P{"topicaction"}%%TMPL:P{"formend"}%
 %TMPL:P{"movedelete"}%
 %TMPL:P{"pagehelp_nojavascript"}%
 </div><!-- /patternTopic-->

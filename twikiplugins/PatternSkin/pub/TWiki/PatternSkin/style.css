@@ -245,10 +245,12 @@ blockquote {
 .editTable .twikiTable {
 	margin:0 0 2px 0;
 }
+/*
 .editTableInput,
 .editTableTextarea {
 	font-family:monospace;
 }
+*/
 .editTableEditImageButton {
 	border:none;
 }
