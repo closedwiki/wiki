@@ -26,18 +26,6 @@ div.dmenuTranslucentBackground {
     z-index: 150;
 }
 
-.smenu a:hover {
-    color: orange;
-    text-decoration: none;    
-    display:block;    
-}
-
-.smenu a {
-    color: #FFFFFF;
-    text-decoration: none;    
-    display:block;    
-}
-
 .smenuLevel0 > .smenuNodeOpened a,
 .smenuLevel0 > .smenuNodeClosed a,
 .smenuLevel0 > .smenuLeaf a{
@@ -54,10 +42,10 @@ div.dmenuTranslucentBackground {
 }
 
 
-.smenuNodeOpened,
-.smenuNodeClosed,
-.smenuLeaf {
-   color: #000000;
+.smenuNodeOpened a,
+.smenuNodeClosed a,
+.smenuLeaf a{
+   color: #FFFFFF;
    text-decoration: none;
    display:block;
    width:100%;
@@ -65,13 +53,9 @@ div.dmenuTranslucentBackground {
    /*overflow: hidden;*/ /* prevents text to overflow*/
 }
 
-.smenuNodeOpened:hover,
-.smenuNodeClosed:hover,
-.smenuLeaf:hover {
-
-   /*border-color: #222222 #888888 #888888 #222222;*/ 
-
-  /* background-color:#777777;*/
+.smenuNodeOpened a:hover,
+.smenuNodeClosed a:hover,
+.smenuLeaf a:hover {
     text-decoration: none;
     color:orange;
 }
@@ -81,8 +65,6 @@ div.dmenuTranslucentBackground {
 }
 
 .smenuFakeItem {
-    color:#000000;
-    /*display:block;*/
     padding: 4px 4px 4px 4px; 
 }
 
@@ -90,8 +72,7 @@ div.smenuTranslucentBackground.smenuLevel1  {
     z-index: 150;
     background-color:#000000;
     opacity:0.40; 
-    filter: alpha (opacity=40);
-    color:black;  
+    filter: alpha (opacity=40); 
     border-style:solid;
     border-width:2px;
     border-color:#FFFFFF;     
@@ -100,7 +81,6 @@ div.smenuTranslucentBackground.smenuLevel1  {
 div.smenuChildren.smenuLevel1 {
    z-index: 200;
    background-color:transparent;
-   color:#000000;
    border-style:solid;
    border-width:2px;
    border-color:#FFFFFF;
@@ -160,8 +140,7 @@ div.smenuTranslucentBackground.smenuLevel2  {
     z-index: 150;
     background-color:#000000;
     opacity:0.40; 
-    filter: alpha (opacity=40);
-    color:black;  
+    filter: alpha (opacity=40); 
     border-style:solid;
     border-width:2px;
     border-color:#FFFFFF;     
@@ -170,7 +149,6 @@ div.smenuTranslucentBackground.smenuLevel2  {
 div.smenuChildren.smenuLevel2 {
    z-index: 200;
    background-color:transparent;
-   color:#000000;
    /*overflow:hidden;*/
    border-style:solid;
    border-width:2px;
