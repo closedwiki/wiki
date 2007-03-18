@@ -519,6 +519,10 @@ The root shows and one can fold/unfold the entire tree from the root thanks to =
 
 __Related Topics:__ TWiki:Plugins.RenderListPlugin, TWiki:Plugins.TreePlugin
 
+%META:FILEATTACHMENT{name="dtree.js" attr="h" autoattached="1" comment="" date="1159656769" path="dtree.js" size="12407" user="Main.StephaneLenclud" version="8"}%
+%META:FILEATTACHMENT{name="dtree.css" attr="h" autoattached="1" comment="" date="1159656429" path="dtree.css" size="817" user="Main.StephaneLenclud" version="1"}%
+%META:FILEATTACHMENT{name="dmenu.css" attr="h" autoattached="1" comment="" date="1151849905" path="dmenu.css" size="1095" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="smenu.css" attr="h" autoattached="1" comment="" date="1159656429" path="smenu.css" size="817" user="Main.StephaneLenclud" version=""}%
 %META:FILEATTACHMENT{name="empty.gif" attr="h" autoattached="1" comment="" date="1151849905" path="empty.gif" size="62" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="email.gif" attr="h" autoattached="1" comment="" date="1151849905" path="email.gif" size="183" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="xls.gif" attr="h" autoattached="1" comment="" date="1151849905" path="xls.gif" size="918" user="UnknownUser" version=""}%
@@ -534,7 +538,6 @@ __Related Topics:__ TWiki:Plugins.RenderListPlugin, TWiki:Plugins.TreePlugin
 %META:FILEATTACHMENT{name="cd.gif" attr="h" autoattached="1" comment="" date="1151849905" path="cd.gif" size="239" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="virtualperson.gif" attr="h" autoattached="1" comment="" date="1151849905" path="virtualperson.gif" size="149" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="group.gif" attr="h" autoattached="1" comment="" date="1151849905" path="group.gif" size="162" user="UnknownUser" version=""}%
-%META:FILEATTACHMENT{name="dtree.css" attr="h" autoattached="1" comment="" date="1159656429" path="dtree.css" size="817" user="Main.StephaneLenclud" version="1"}%
 %META:FILEATTACHMENT{name="minus.gif" attr="h" autoattached="1" comment="" date="1151849905" path="minus.gif" size="86" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="ppt.gif" attr="h" autoattached="1" comment="" date="1151849905" path="ppt.gif" size="921" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="join.gif" attr="h" autoattached="1" comment="" date="1151849905" path="join.gif" size="69" user="UnknownUser" version=""}%
@@ -545,7 +548,6 @@ __Related Topics:__ TWiki:Plugins.RenderListPlugin, TWiki:Plugins.TreePlugin
 %META:FILEATTACHMENT{name="minusbottom.gif" attr="h" autoattached="1" comment="" date="1151849905" path="minusbottom.gif" size="85" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="nolines_plus.gif" attr="h" autoattached="1" comment="" date="1151849905" path="nolines_plus.gif" size="870" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="persons.gif" attr="h" autoattached="1" comment="" date="1151849905" path="persons.gif" size="164" user="UnknownUser" version=""}%
-%META:FILEATTACHMENT{name="dtree.js" attr="h" autoattached="1" comment="" date="1159656769" path="dtree.js" size="12407" user="Main.StephaneLenclud" version="8"}%
 %META:FILEATTACHMENT{name="sound.gif" attr="h" autoattached="1" comment="" date="1151849905" path="sound.gif" size="166" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="home.gif" attr="h" autoattached="1" comment="" date="1151849905" path="home.gif" size="172" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="folder.gif" attr="h" autoattached="1" comment="" date="1151849905" path="folder.gif" size="372" user="UnknownUser" version=""}%
@@ -560,4 +562,3 @@ __Related Topics:__ TWiki:Plugins.RenderListPlugin, TWiki:Plugins.TreePlugin
 %META:FILEATTACHMENT{name="virtualhome.gif" attr="h" autoattached="1" comment="" date="1151849905" path="virtualhome.gif" size="162" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="plus.gif" attr="h" autoattached="1" comment="" date="1151849905" path="plus.gif" size="89" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="globe.gif" attr="h" autoattached="1" comment="" date="1151849905" path="globe.gif" size="1095" user="UnknownUser" version=""}%
-%META:FILEATTACHMENT{name="dmenu.css" attr="h" autoattached="1" comment="" date="1151849905" path="globe.gif" size="1095" user="UnknownUser" version=""}%
