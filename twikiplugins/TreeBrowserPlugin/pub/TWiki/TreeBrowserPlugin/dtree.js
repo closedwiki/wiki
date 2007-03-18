@@ -209,7 +209,13 @@ dTree.prototype.node = function(node, nodeId) {
                 }
             }; //alert(\'debug\');  
         }
-        else {myClass = this.getClassLeaf();}
+        else {
+            myClass = this.getClassLeaf();
+            if (this.config.popup) {
+                //Make sure hovering over a leaf closes level sub-menu
+                nodeScript='onmouseover="javascript: ' + this.obj + '.closeAllChildren(' + this.obj +'.aNodes['+node.pid+']);"';
+            }
+        }
         if (isRoot) {myClass += ' ' + this.getClassRoot();}
 		str += '<div id="n' + this.obj + nodeId + '" class="'+ myClass +'" '+ nodeScript + '>' + this.indent(node, nodeId);
 		if (this.config.useIcons) str += '<img id="i' + this.obj + nodeId + '" src="' + ((node._io) ? node.iconOpen : node.icon) + '" alt="" />';
@@ -489,11 +495,11 @@ dTree.prototype.nodeStatus = function(status, id, bottom)
             {
             var styleDisplay=(status) ? 'block': 'none';
       	    eDivBkg.style.display = styleDisplay; //TODO: should really hide at the beginning if needed.
-            this.setChildrenDisplay(eDivBkg,styleDisplay); //IE Debug: Doing it prevents the need to have FakeItem set to display:block in CSS
+            this.setChildrenDisplay(eDivBkg,styleDisplay); //IE Debug: Doing this prevents the need to have FakeItem set to display:block in CSS
             }
         }
         
-    //Closes submenu when going back one level, TODO: do something similar for leaf onmouseover but using pid
+    //Closes submenu when going back one level
     if (this.config.popup)
         {
         this.closeAllChildren(this.aNodes[id]);
