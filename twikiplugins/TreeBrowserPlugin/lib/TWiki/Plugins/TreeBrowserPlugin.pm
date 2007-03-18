@@ -39,7 +39,7 @@ use vars qw(
         $debug $js
     );
 
-$VERSION = 'v1.5';
+$VERSION = 'v1.6';
 $pluginName = 'TreeBrowserPlugin';
 
 # =========================
