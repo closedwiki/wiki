@@ -8,7 +8,7 @@ sub handle {
     my ($tmp, @columns);
 
     die "No table defined in $dbinfo->{description}"
-      unless $dbinfo->{table_name};
+      unless $dbinfo->{table};
 
     $dbinfo->connect($args);
 
@@ -26,7 +26,7 @@ sub handle {
     }
 
     my $col = join(", ", @columns);
-    my $cmd = "SELECT $col FROM $dbinfo->{table_name}";
+    my $cmd = "SELECT $col FROM $dbinfo->{table}";
     my $sth = $dbinfo->{db}->prepare($cmd);
     $sth->execute;
     my $line;

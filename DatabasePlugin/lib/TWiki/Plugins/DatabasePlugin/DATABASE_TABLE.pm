@@ -7,6 +7,9 @@ sub handle {
     my ($dbinfo, $args) = @_;
     my ($tmp, @columns, @headers);
 
+    die "No table defined in $dbinfo->{description}"
+      unless $dbinfo->{table};
+
     $dbinfo->connect();
 
     # Define the columns in the associated table
@@ -31,8 +34,6 @@ sub handle {
         @headers = @columns;
     }
 
-    my $table = TWiki::Func::extractNameValuePair( $args, "table" );
-    die "No table=" unless $table;
     # Generate table header using the table column names
     my $line = "| ";
     for my $c (@headers) {
@@ -40,7 +41,7 @@ sub handle {
     }
     $line .= "\n";
     my $col = join(", ", @columns);
-    my $cmd = "SELECT $col FROM $table";
+    my $cmd = "SELECT $col FROM $dbinfo->{table}";
     my $sth = $dbinfo->{db}->prepare($cmd);
     $sth->execute;
     while (my @row = $sth->fetchrow_array()) {

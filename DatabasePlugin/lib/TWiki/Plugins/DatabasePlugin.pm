@@ -49,7 +49,8 @@ sub initPlugin {
         while (my $row = $sth->fetchrow_hashref()) {
             # Compatibility
             $row->{database} ||= $row->{db_name};
-            $row->{sid} ||= $row->{db_sid};
+            $row->{table}    ||= $row->{table_name};
+            $row->{sid}      ||= $row->{db_sid};
             $row->{username} ||= $row->{ro_username};
             $row->{password} ||= $row->{ro_password};
             my $dbi = new TWiki::Plugins::DatabasePlugin::Connection($row);
@@ -98,7 +99,7 @@ sub commonTagsHandler {
 }
 
 1;
---END__
+__END__
 #
 # TWiki WikiClone ($wikiversion has version info)
 #
