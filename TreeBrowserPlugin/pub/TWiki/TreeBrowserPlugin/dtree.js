@@ -335,15 +335,7 @@ dTree.prototype.o = function(id) {
 dTree.prototype.oAll = function(status) {
 	for (var n=0; n<this.aNodes.length; n++) {
 		if (this.aNodes[n]._hc && this.aNodes[n].pid != this.root.id) { //org
-        //if (this.aNodes[n].pid != this.root.id) {
-            //showDebug();
-            //writeDebug('Hide all:' + this.obj + n);
-            //writeDebug('LS:' + this.aNodes[n]._ls);
-
-            //writeDebug('Node count:' + this.aNodes.length);                  
 			this.nodeStatus(status, n, this.aNodes[n]._ls); //org
-            //writeDebug('After:' + this.obj + n);
-            //this.closeAllChildren(this.aNodes[n]);//IE sub menu bug
 			this.aNodes[n]._io = status; //org
 		}
 	}
@@ -394,8 +386,6 @@ dTree.prototype.closeAllChildren = function(node) {
 // Change the status of a node(open or closed)
 dTree.prototype.nodeStatus = function(status, id, bottom)
     {
-    //writeDebug('nodeStatus start');    
-
 	eDiv	= document.getElementById('d' + this.obj + id);
     var eDivBkg;
     if (this.config.useOpacity)
@@ -412,7 +402,7 @@ dTree.prototype.nodeStatus = function(status, id, bottom)
     if (this.config.usePlusMinus) eJoin.src = (this.config.useLines)?
 	((status)?((bottom)?this.icon.minusBottom:this.icon.minus):((bottom)?this.icon.plusBottom:this.icon.plus)):
 	((status)?this.icon.nlMinus:this.icon.nlPlus);
-    //eDiv.style.display = (status) ? 'block': 'none'; //was there
+    //eDiv.style.display = (status) ? 'block': 'none'; //was there, moved to the end coz IE rendering is too slow
     //SL: Change the class of the node div
     var nodeIdString = 'n' + this.obj + id; 
     var eNodeDiv = document.getElementById('n' + this.obj + id);
@@ -423,71 +413,25 @@ dTree.prototype.nodeStatus = function(status, id, bottom)
     // Set position for popup menu
     if (this.config.popup && status && !isRoot)
         {    
-        //TODOs
-        //Decide which position API to use and move them to JavaScriptPlugin. extend HTMLElement class?
-        //Implement =popupoffset= parameter to easily adjust the postion of the popup menu
-        //Implement support for sub menu
-        
+        //TODOs: Decide which position API to use and move them to JavaScriptPlugin. extend HTMLElement class
         //If level>1 it means that we are dealing with a submenu i.e. a child from a popup menu
         if (this.aNodes[id].level>1)
             {
-/*
-            if (navigator.appName!='Microsoft Internet Explorer')
-                {*/
-                //Submenu for non IE browser
-                eDiv.style.position = 'absolute';
-                eDiv.style.left = eNodeDiv.offsetLeft + eNodeDiv.offsetWidth + this.config.popupOffset.x + 'px'; 
-                eDiv.style.top = eNodeDiv.offsetTop + this.config.popupOffset.y + 'px';    
-                if (this.config.useOpacity && eDivBkg) 
-                    {
-                    eDivBkg.style.position = 'absolute';
-                    eDivBkg.style.left = eNodeDiv.offsetLeft + eNodeDiv.offsetWidth + this.config.popupOffset.x + 'px'; 
-                    eDivBkg.style.top = eNodeDiv.offsetTop + this.config.popupOffset.y + 'px';    
-                    }
-/*              
-                }
-            else
+            //Submenu for non IE browser
+            eDiv.style.position = 'absolute';
+            eDiv.style.left = eNodeDiv.offsetLeft + eNodeDiv.offsetWidth + this.config.popupOffset.x + 'px'; 
+            eDiv.style.top = eNodeDiv.offsetTop + this.config.popupOffset.y + 'px';    
+            if (this.config.useOpacity && eDivBkg) 
                 {
-                //IE sub menu not working because of clipping solve that by getting ride of nested div 
-                //writeDebug('IE');
-                //eDiv.style.position = 'absolute';
-                //eDiv.style.left = getAbsoluteLeft(nodeIdString) + eNodeDiv.offsetWidth -6 + 'px'; //eNodeDiv.style.left + eNodeDiv.style.pixelWidth;
-                //eDiv.style.top = getAbsoluteTop(nodeIdString) + 'px';        
-                eDiv.style.position = 'absolute';
-                //Not working
-                //eDiv.style.left = eNodeDiv.offsetWidth + 'px'; //nodePos.left + nodePos.width -6 + 'px'; //4px padding + 2 px border
-                //eDiv.style.top = eNodeDiv.offsetHeight + 'px';    
-                //Show underneath
-                //eDiv.style.left = 0 + 'px'; //nodePos.left + nodePos.width -6 + 'px'; //4px padding + 2 px border
-                //eDiv.style.top = 0 + 'px';    
-                //Show but clipped
-                eDiv.style.left = eNodeDiv.offsetLeft + eNodeDiv.offsetWidth + this.config.popupOffset.x + 'px'; 
-                eDiv.style.top = eNodeDiv.offsetTop + this.config.popupOffset.y + 'px';    
-
-                //eDiv.style.left = 50 + 'px'; //nodePos.left + nodePos.width -6 + 'px'; //4px padding + 2 px border
-                //eDiv.style.top = 20 + 'px';
-                //Possible workaround for IE: don't use nested div   
-                if (this.config.useOpacity) 
-                    {
-                    eDivBkg.style.position = 'absolute';
-                    eDivBkg.style.left = eNodeDiv.offsetLeft + eNodeDiv.offsetWidth + this.config.popupOffset.x + 'px'; 
-                    eDivBkg.style.top = eNodeDiv.offsetTop + this.config.popupOffset.y + 'px';    
-
-                    //eDivBkg.style.left = 50 + 'px';
-                    //eDivBkg.style.top = 20 + 'px';
-                    }
-                }*/
+                eDivBkg.style.position = 'absolute';
+                eDivBkg.style.left = eNodeDiv.offsetLeft + eNodeDiv.offsetWidth + this.config.popupOffset.x + 'px'; 
+                eDivBkg.style.top = eNodeDiv.offsetTop + this.config.popupOffset.y + 'px';    
+                }
             }
         else 
             {
-            /*
-            eDiv.style.position = 'absolute';
-            eDiv.style.left = getAbsoluteLeft(nodeIdString) + eNodeDiv.offsetWidth + this.config.popupOffset.x + 'px'; 
-            eDiv.style.top = getAbsoluteTop(nodeIdString) + this.config.popupOffset.y + 'px';        
-            */
-
             //Position first level of popup menu
-            var nodePos = Position.get(eNodeDiv);    
+            var nodePos = Position.get(eNodeDiv); //That API is slow especially with IE, consider using getAbsoluteLeft and getAbsoluteTop instead     
             eDiv.style.position = 'absolute';
             eDiv.style.left = nodePos.left + nodePos.width + this.config.popupOffset.x + this.config.firstPopupOffset.x + 'px';
             eDiv.style.top = nodePos.top + this.config.popupOffset.y + this.config.firstPopupOffset.y +'px';
@@ -502,25 +446,8 @@ dTree.prototype.nodeStatus = function(status, id, bottom)
             /*        
         if (writeDebug)
             {
-
             showDebug();
             writeDebug(navigator.appName);         
-            writeDebug(eDiv.style.left);            
-            writeDebug(eDiv.style.top);
-
-            //writeDebug(eDiv.onmouseout);
-            //writeDebug(nodePos.left);
-            //writeDebug(nodePos.top);
-            //writeDebugObject(eNodeDiv.style);
-            //writeDebug(eNodeDiv.style.paddingLeft);
-            //writeDebug(eNodeDiv.style.paddingRight);
-            //writeDebug(eNodeDiv.style.padding);
-            //writeDebug(eNodeDiv.parentNode.offsetLeft);
-            //writeDebug(eNodeDiv.parentNode.offsetTop);
-            // writeDebugObject(eNodeDiv.offsetParent.offsetLeft);
-            //writeDebugObject(eNodeDiv.offsetParent.offsetTop);
-            //writeDebug(eNodeDiv.offsetParent.offsetLeft);
-            //writeDebug(eNodeDiv.offsetParent.offsetTop);          
             }    
             */
         }
@@ -533,7 +460,6 @@ dTree.prototype.nodeStatus = function(status, id, bottom)
         //So instead of hidding element using the display property we just set their x coordinate to something off the screen
         if (!status)
             {
-            //writeDebug('send it to hell');     
             eDiv.style.left="100000px"; //send it to hell
             }
         else
@@ -567,14 +493,11 @@ dTree.prototype.nodeStatus = function(status, id, bottom)
             }
         }
         
-    //Closes submenu when going back one level
+    //Closes submenu when going back one level, TODO: do something similar for leaf onmouseover but using pid
     if (this.config.popup)
         {
-        //showDebug();
-        //writeDebug('closeAllChildren:' + this.obj + id);         
         this.closeAllChildren(this.aNodes[id]);
         }
-    //writeDebug('nodeStatus end');    
     };
 
 dTree.prototype.onload = function() {
@@ -586,7 +509,6 @@ dTree.prototype.onload = function() {
     	eDiv	= document.getElementById('d' + this.obj + '0');
         }
 */
-
     //twiki.js addLoadEvent
 };
 
