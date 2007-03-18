@@ -36,20 +36,6 @@ sub connect {
             die "Can't open database specified by description '$description'";
         }
 
-        # If the user is concerned about security, make sure that a request to
-        # display the main DatabasePlugin is not allowed.
-        my $security_on =
-          TWiki::Func::getPreferencesFlag( "DATABASEPLUGIN_SECURITY" );
-        if ($security_on &&
-              $this->{driver} eq
-                $TWiki::cfg{Plugins}{DatabasePlugin}{ConfigDriver} &&
-                  $this->{database} eq
-                    $TWiki::cfg{Plugins}{DatabasePlugin}{ConfigDB} &&
-                      $this->{table} && $this->{table} eq
-                        $TWiki::cfg{Plugins}{DatabasePlugin}{ConfigTable}) {
-            die TWiki::Func::getPreferencesValue(
-                'DATABASEPLUGIN_SECURITY_MESSAGE' );
-        }
         $this->{db} = $db;
     }
 }
