@@ -82,7 +82,7 @@ div.dmenuTranslucentBackground {
 
 .smenuFakeItem {
     color:#000000;
-    display:block;
+    /*display:block;*/
     padding: 4px 4px 4px 4px; 
 }
 
@@ -124,7 +124,7 @@ div.smenuTranslucentBackground.smenuLevel0  {
 div.smenuChildren.smenuLevel0 {
     z-index: 200;
     background-color:transparent;
-    overflow:hidden;
+    /*overflow:hidden;*/
     border-style:solid;
     border-width:0px 0px 0px 1px;
     border-color:#555555;     
@@ -171,7 +171,7 @@ div.smenuChildren.smenuLevel2 {
    z-index: 200;
    background-color:transparent;
    color:#000000;
-   overflow:hidden;
+   /*overflow:hidden;*/
    border-style:solid;
    border-width:2px;
    border-color:#FFFFFF;

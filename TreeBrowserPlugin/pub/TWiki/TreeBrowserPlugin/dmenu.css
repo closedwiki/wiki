@@ -9,6 +9,11 @@
 }
 */
 
+/*Prevents NatSkin firefox bug*/ 
+.natMainContents {
+overflow:visible;
+}
+
 .dmenu {
     z-index:200; 
 	line-height:100%;

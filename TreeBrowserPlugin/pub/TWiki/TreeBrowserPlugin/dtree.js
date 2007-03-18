@@ -24,7 +24,7 @@ function Node(id, pid, name, url, title, target, icon, iconOpen, open) {
 	this.iconOpen = iconOpen;
 	this._io = open || false; //SL: meens "is open".
 	this._is = false; //SL: meens "is select"? Not used in by TreeBrowserPlugin.
-	this._ls = false; 
+	this._ls = false; //SL: meens "last sibling"
 	this._hc = false; //SL: meens "have children". 
 	this._ai = 0;
 	this._p;
@@ -226,8 +226,9 @@ dTree.prototype.node = function(node, nodeId) {
       str += '<div id="d' + this.obj + nodeId + '" class="'+ this.getClassChildren() + ' ' + this.getClassLevel() + '" style="display:' + ((isRoot || (node._io && !this.config.popup )) ? 'block' : 'none') + ';" ' + (this.config.popup? 'onmouseout="javascript: clearTimeout('+ this.obj +'.popupTimeout);' + this.obj + '.popupTimeout=setTimeout(\''+ this.obj +'.oAll(false)\',' + this.config.closePopupDelay + ');" onmouseover="clearTimeout('+ this.obj +'.popupTimeout);"' : '') + '>';
         //Same as above line but with debug output built-in
         //str += '<div id="d' + this.obj + nodeId + '" class="'+ this.getClassChildren() + ' ' + this.getClassLevel() + '" style="display:' + ((isRoot || (node._io && !this.config.popup )) ? 'block' : 'none') + ';" ' + (this.config.popup? 'onmouseout="javascript: writeDebug(\'onmouseout:' + this.obj + ' \');clearTimeout('+ this.obj +'.popupTimeout);' + this.obj + '.popupTimeout=setTimeout(\''+ this.obj +'.oAll(false)\',' + this.config.closePopupDelay + ');" onmouseover="javascript: writeDebug(\'onmouseover:' + this.obj + ' \');clearTimeout('+ this.obj +'.popupTimeout);"' : '') + '>';
-		str += this.addNode(node);
+    	str += this.addNode(node);
 		str += '</div>';
+
 
         //Here comes a trick to have opaque text on translucent background
         if (this.config.useOpacity)
@@ -333,9 +334,17 @@ dTree.prototype.o = function(id) {
 // Open or close all nodes
 dTree.prototype.oAll = function(status) {
 	for (var n=0; n<this.aNodes.length; n++) {
-		if (this.aNodes[n]._hc && this.aNodes[n].pid != this.root.id) {
-			this.nodeStatus(status, n, this.aNodes[n]._ls)
-			this.aNodes[n]._io = status;
+		if (this.aNodes[n]._hc && this.aNodes[n].pid != this.root.id) { //org
+        //if (this.aNodes[n].pid != this.root.id) {
+            //showDebug();
+            //writeDebug('Hide all:' + this.obj + n);
+            //writeDebug('LS:' + this.aNodes[n]._ls);
+
+            //writeDebug('Node count:' + this.aNodes.length);                  
+			this.nodeStatus(status, n, this.aNodes[n]._ls); //org
+            //writeDebug('After:' + this.obj + n);
+            //this.closeAllChildren(this.aNodes[n]);//IE sub menu bug
+			this.aNodes[n]._io = status; //org
 		}
 	}
 	if (this.config.useCookies) this.updateCookie();
@@ -374,8 +383,9 @@ dTree.prototype.closeLevel = function(node) {
 dTree.prototype.closeAllChildren = function(node) {
 	for (var n=0; n<this.aNodes.length; n++) {
 		if (this.aNodes[n].pid == node.id && this.aNodes[n]._hc) {
-			if (this.aNodes[n]._io) this.nodeStatus(false, n, this.aNodes[n]._ls);
-			this.aNodes[n]._io = false;
+			if (this.aNodes[n]._io) this.nodeStatus(false, n, this.aNodes[n]._ls);			
+            //this.nodeStatus(false, n, this.aNodes[n]._ls);
+            this.aNodes[n]._io = false;
 			this.closeAllChildren(this.aNodes[n]);		
 		}
 	}
@@ -384,6 +394,8 @@ dTree.prototype.closeAllChildren = function(node) {
 // Change the status of a node(open or closed)
 dTree.prototype.nodeStatus = function(status, id, bottom)
     {
+    //writeDebug('nodeStatus start');    
+
 	eDiv	= document.getElementById('d' + this.obj + id);
     var eDivBkg;
     if (this.config.useOpacity)
@@ -407,6 +419,7 @@ dTree.prototype.nodeStatus = function(status, id, bottom)
     eNodeDiv.className = (status) ? this.getClassNodeOpened() : this.getClassNodeClosed();
     var isRoot=(this.root.id == this.aNodes[id].pid);
     if (isRoot) { eNodeDiv.className += ' ' + this.getClassRoot(); } //Add root class to the root 
+
     // Set position for popup menu
     if (this.config.popup && status && !isRoot)
         {    
@@ -418,18 +431,20 @@ dTree.prototype.nodeStatus = function(status, id, bottom)
         //If level>1 it means that we are dealing with a submenu i.e. a child from a popup menu
         if (this.aNodes[id].level>1)
             {
+/*
             if (navigator.appName!='Microsoft Internet Explorer')
-                {
+                {*/
                 //Submenu for non IE browser
                 eDiv.style.position = 'absolute';
                 eDiv.style.left = eNodeDiv.offsetLeft + eNodeDiv.offsetWidth + this.config.popupOffset.x + 'px'; 
                 eDiv.style.top = eNodeDiv.offsetTop + this.config.popupOffset.y + 'px';    
-                if (this.config.useOpacity) 
+                if (this.config.useOpacity && eDivBkg) 
                     {
                     eDivBkg.style.position = 'absolute';
                     eDivBkg.style.left = eNodeDiv.offsetLeft + eNodeDiv.offsetWidth + this.config.popupOffset.x + 'px'; 
                     eDivBkg.style.top = eNodeDiv.offsetTop + this.config.popupOffset.y + 'px';    
                     }
+/*              
                 }
             else
                 {
@@ -446,10 +461,22 @@ dTree.prototype.nodeStatus = function(status, id, bottom)
                 //eDiv.style.left = 0 + 'px'; //nodePos.left + nodePos.width -6 + 'px'; //4px padding + 2 px border
                 //eDiv.style.top = 0 + 'px';    
                 //Show but clipped
+                eDiv.style.left = eNodeDiv.offsetLeft + eNodeDiv.offsetWidth + this.config.popupOffset.x + 'px'; 
+                eDiv.style.top = eNodeDiv.offsetTop + this.config.popupOffset.y + 'px';    
+
                 //eDiv.style.left = 50 + 'px'; //nodePos.left + nodePos.width -6 + 'px'; //4px padding + 2 px border
                 //eDiv.style.top = 20 + 'px';
-                //Possible workaround for IE: don't use nested div    
-                }
+                //Possible workaround for IE: don't use nested div   
+                if (this.config.useOpacity) 
+                    {
+                    eDivBkg.style.position = 'absolute';
+                    eDivBkg.style.left = eNodeDiv.offsetLeft + eNodeDiv.offsetWidth + this.config.popupOffset.x + 'px'; 
+                    eDivBkg.style.top = eNodeDiv.offsetTop + this.config.popupOffset.y + 'px';    
+
+                    //eDivBkg.style.left = 50 + 'px';
+                    //eDivBkg.style.top = 20 + 'px';
+                    }
+                }*/
             }
         else 
             {
@@ -464,7 +491,7 @@ dTree.prototype.nodeStatus = function(status, id, bottom)
             eDiv.style.position = 'absolute';
             eDiv.style.left = nodePos.left + nodePos.width + this.config.popupOffset.x + this.config.firstPopupOffset.x + 'px';
             eDiv.style.top = nodePos.top + this.config.popupOffset.y + this.config.firstPopupOffset.y +'px';
-            if (this.config.useOpacity) 
+            if (this.config.useOpacity && eDivBkg) 
                 {
                 eDivBkg.style.position = 'absolute';
                 eDivBkg.style.left = nodePos.left + nodePos.width + this.config.popupOffset.x + this.config.firstPopupOffset.x + 'px';
@@ -497,14 +524,57 @@ dTree.prototype.nodeStatus = function(status, id, bottom)
             }    
             */
         }
-
-    //Do that last
-  	eDiv.style.display = (status) ? 'block': 'none'; //TODO: should really hide at the beginning if needed.
-    if (this.config.useOpacity) 
+    
+    //Do that last, hide and show the children div TODO: should really hide at the beginning if needed.     
+    if (navigator.appName=='Microsoft Internet Explorer' && this.config.popup)
         {
-      	eDivBkg.style.display = (status) ? 'block': 'none'; //TODO: should really hide at the beginning if needed.
-        }
+        //This pile of over complicated code is IE specific
+        //It was implemented to workaround IE problems with display:none property in submenus.     
+        //So instead of hidding element using the display property we just set their x coordinate to something off the screen
+        if (!status)
+            {
+            //writeDebug('send it to hell');     
+            eDiv.style.left="100000px"; //send it to hell
+            }
+        else
+            {
+       	    eDiv.style.display = 'block';
+            }
 
+        if (this.config.useOpacity && eDivBkg) 
+            {
+            if (!status)
+                {
+                eDivBkg.style.left="100000px"; //send it to hell
+                this.setChildrenDisplay(eDivBkg,'none');        
+                }
+            else
+                {
+       	        eDivBkg.style.display = 'block';
+                this.setChildrenDisplay(eDivBkg,'block');                
+                }
+            }
+        }
+    else
+        {
+        //Non IE nice and easy :)
+  	    eDiv.style.display = (status) ? 'block': 'none'; //TODO: should really hide at the beginning if needed.
+        if (this.config.useOpacity && eDivBkg) 
+            {
+            var styleDisplay=(status) ? 'block': 'none';
+      	    eDivBkg.style.display = styleDisplay; //TODO: should really hide at the beginning if needed.
+            this.setChildrenDisplay(eDivBkg,styleDisplay); //IE Debug: Doing it prevents the need to have FakeItem set to display:block in CSS
+            }
+        }
+        
+    //Closes submenu when going back one level
+    if (this.config.popup)
+        {
+        //showDebug();
+        //writeDebug('closeAllChildren:' + this.obj + id);         
+        this.closeAllChildren(this.aNodes[id]);
+        }
+    //writeDebug('nodeStatus end');    
     };
 
 dTree.prototype.onload = function() {
@@ -599,6 +669,14 @@ dTree.prototype.fakeChildren = function(pNode) {
     return str;
 }
 
+//Set the display property for the style of the children
+dTree.prototype.setChildrenDisplay = function(ele,disp) {
+    if (!ele || !ele.childNodes) return;
+	for (var n=0; n<ele.childNodes.length; n++)
+        {	
+        ele.childNodes[n].style.display=disp;
+        }
+}
 
 //SL: The getClass functions are used to get the CSS class
 
