@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="StephaneLenclud" date="1174180288" format="1.1" reprev="1.27" version="1.27"}%
+%META:TOPICINFO{author="StephaneLenclud" date="1174230217" format="1.1" reprev="1.28" version="1.28"}%
 ---+!! Tree Browser Plugin
 
 Renders a bulleted or numbered list as a collapsible/expandable tree of nodes.
@@ -466,32 +466,21 @@ a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>T
 
 ---++ Known issues
 
-   * Pop-up sub-menu not working on IE because of nested DIV clipping problem. 
    * PatternSkin prevents javascript to determine menu position in topic content. Use =firstpopupoffset="-163,0"= as a workaround.
    * NatSkin CSS =natMainContent= =overflow:hidden= causes =z-index= bug in !FireFox. Workaround by removing or overriding =overflow:hidden= for =natMainContent=.
    * =dtreeTranslucentBackground= only works for pop-up and not level 0. Sizing issue... 
-
----+++ Root status management problem
-
-When doing something like:
-<verbatim>
-%TREEBROWSER{"thread" title="Root" shared="menudemo" noindent="on" autotoggle="on" style="dmenu"}%
-</verbatim>
-The root shows and one can fold/unfold the entire tree from the root thanks to =autotoggle=. Yet since dtree was not designed for the root to be foldable it does not manage its status properly as with any other node. That ought to be fixed. 
+   * Pop-up sub-menu won't work on IE for =dmenu= style. Workaround by using =smenu=.
 
 ---++ Planned Enhancements
 
-   * Support configurable icons for each node (similar to TWiki:Plugins.RenderListPlugin). _SL: I think it was done already_
-   * Support configurable default icons. _SL: I think this was done sometimes ago._
-   * Support wrapping of long node text. _SL: Not sure how to do that? Looks like it's not such a big problem with Firfox._
-   * Support tree browser in other than view mode also. _SL: Not sure what's that?_
-   * Cleanup and comment !JavaScript code.
+See TWiki:Plugins.TreeBrowserPluginDev.
    
 ---++ Plugin Info
 
-|  Plugin Author: | TWiki:Main.ThomasWeigert |
-|  Plugin Version: | v1.5 |
+|  Plugin Author: | TWiki:Main.ThomasWeigert & TWiki:Main.StephaneLenclud |
+|  Plugin Version: | %PLUGINVERSION{"TreeBrowserPlugin"}% |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  16 Mar 2007: | (v1.6) - Sub-menus now working in IE with =smenu= style. Closing sub-menu when going back one level with mouse cursor.  By [[TWiki:Main.StephaneLenclud][Stéphane Lenclud]]. |
 |  16 Mar 2007: | (v1.5) - Adding =useopacity= parameter. Adding =smenu.css=. By [[TWiki:Main.StephaneLenclud][Stéphane Lenclud]]. |
 |  16 Mar 2007: | (v1.4) - Adding =firstpopupoffset= allowing workaround for PatternSkin problem. By [[TWiki:Main.StephaneLenclud][Stéphane Lenclud]]. |
 |  14 Mar 2007: | (v1.3) - Adding =popup=, =closepopudelay= and =popupoffset= parameters. Implemented pop-up menu. Improved =dmenu.css=. By [[TWiki:Main.StephaneLenclud][Stéphane Lenclud]]. |
