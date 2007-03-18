@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="StephaneLenclud" date="1174016509" format="1.1" reprev="1.26" version="1.26"}%
+%META:TOPICINFO{author="StephaneLenclud" date="1174180288" format="1.1" reprev="1.27" version="1.27"}%
 ---+!! Tree Browser Plugin
 
 Renders a bulleted or numbered list as a collapsible/expandable tree of nodes.
@@ -32,6 +32,7 @@ Place the tag =%<nop>TREEBROWSER{= _parameters_ =}%= immediately before a bullet
 | =closepopupdelay= | Pop-up mode only. Delay in millisecond before all popup close once the mouse cursor has left the menu structure. | =1000= |
 | =popupoffset= | Provides x and y offset from parent node for pop-up menus. Allows for fine tunning of pop-up position. | =0,0= |
 | =firstpopupoffset= | Provides x and y offset for first level pop-up menus. Introduce as a workaround for PatternSkin issues. | =0,0= |
+| =useopacity= | Used to generate extra =dtreeTransluscentBackground= =div=. Enables popup with translucent background and opaque text. | =off= |
 
 Rendering themes can be defined by =&lt;name&gt;_THEME= Plugin settings
    * Each theme is defined by a comma separated list containing the render type and parameters required by that render type
@@ -86,6 +87,8 @@ Variable classes allows for multiple tree =style= support on one page.
    * =dtreeLevel1=: given to the =div= element encapsulating the children of level 0 items. Introduced in v0.9.
    * =dtreeLevel2=: given to the =div= element encapsulating the children of level 1 items. Introduced in v0.9.
    * =dtreeLeveln=: given to the =div= element encapsulating the children of level n-1 items. Introduced in v0.9.
+   * =dtreeTransluscentBackground=: given to the =div= element used for popup translucent background. Introduced in v1.5.
+   * =dtreeFakeItem=: given to the =div= element simulating nodes and leaf in =dtreeTransluscentBackground=. It guarantees same size for the translucent background and actual =dtreeChildren= =div=. Typically you should give =dtreeFakeItem= the same margin and padding properties as for =dtreeLeaf=, =dtreeNodeOpened= and =dtreeNodeclosed=. Introduced in v1.5.
 
 ---++ Examples
 
@@ -120,8 +123,8 @@ generates
 <a href="javascript: basicdemo.openAll();">open all</a> | <a href="javascript: basicdemo.closeAll();">close all</a>
 
 </td><td>
-<script type="text/javascript" src="https://slion.net/pub/TWiki/TreeBrowserPlugin/dtree.js"></script>
-<div class="treeBrowserPlugin"><style type="text/css" media="all">@import "https://slion.net/pub/TWiki/TreeBrowserPlugin/dtree.css";</style><script type="text/javascript">
+<script type="text/javascript" src="%ATTACHURL%/dtree.js"></script>
+<div class="treeBrowserPlugin"><style type="text/css" media="all">@import "%ATTACHURL%/dtree.css";</style><script type="text/javascript">
 
 <!--
 left = new dTree('left');
@@ -166,6 +169,8 @@ To add _"collapse/expand all nodes"_ functionalities do something like:
 
 ---++++ =autotoggle= example
 
+*Code*
+
 <verbatim>
 %TREEBROWSER{"thread" noroot="on" shared="menudemo" noindent="on" autotoggle="on" style="dmenu"}%
    * Vegetables
@@ -198,7 +203,7 @@ To add _"collapse/expand all nodes"_ functionalities do something like:
       * Peach
 </td>
 <td style="padding:5px;">
-<script type="text/javascript" src="https://slion.net/pub/TWiki/TreeBrowserPlugin/dtree.js"></script>
+<script type="text/javascript" src="%ATTACHURL%/dtree.js"></script>
 <div class="treeBrowserPlugin"><style type="text/css" media="all">@import "%ATTACHURL%/dmenu.css";</style><script type="text/javascript">
 <!--
 menudemo = new dTree('menudemo');
@@ -238,6 +243,8 @@ document.write(menudemo);
 
 ---++++ =nodeactions= example
 
+*Code*
+
 <verbatim>
 %TREEBROWSER{"thread" noroot="on" shared="memenudemo" noindent="on" style="dmenu" nodeactions="onmouseover open, onclick close"}%
    * Vegetables
@@ -254,6 +261,8 @@ document.write(menudemo);
 </verbatim>
 
 ---++++ Pop-up example
+
+*Code*
 
 <verbatim>
 %TREEBROWSER{"thread" noroot="on" shared="memenudemo" noindent="on" style="dmenu" nodeactions="onmouseover open, onclick close", closesamelevel="on" popup="on" popupoffset="-10,-4" }%
@@ -297,6 +306,7 @@ popupdemo.addAction('onclick','close');
 popupdemo.config.closePopupDelay=1000;
 popupdemo.config.popupOffset={x:0 , y:0};
 %IF{"$ SKIN='pattern' or $ SKIN='twikiorg,pattern'" then="popupdemo.config.firstPopupOffset={x:-163 , y:0};" else="popupdemo.config.firstPopupOffset={x:0 , y:0};"}%
+popupdemo.add(0,-1,"");
 popupdemo.add(1,0,"Vegetables",'','','','/pub/TWiki/TreeBrowserPlugin/folder.gif','/pub/TWiki/TreeBrowserPlugin/folderopen.gif');
 popupdemo.add(2,1,"Carot",'','','','/pub/TWiki/TreeBrowserPlugin/page.gif');
 popupdemo.add(3,1,"Leek",'','','','/pub/TWiki/TreeBrowserPlugin/page.gif');
@@ -309,6 +319,75 @@ popupdemo.add(9,8,"Pink",'','','','/pub/TWiki/TreeBrowserPlugin/page.gif');
 popupdemo.add(10,8,"Yellow ",'','','','/pub/TWiki/TreeBrowserPlugin/page.gif');
 popupdemo.add(11,6,"Peach",'','','','/pub/TWiki/TreeBrowserPlugin/page.gif');
 document.write(popupdemo);
+//-->
+</script>
+</div>
+
+---++++ Pop-up menu opacity example 
+
+*Code*
+
+<verbatim>
+%TREEBROWSER{"thread" noroot="on" shared="opacitynotabledemo" noindent="on" style="smenu" nodeactions="onmouseover open, onclick close" popup="on" closesamelevel="on" closepopupdelay="100" firstpopupoffset="-60,0" popupoffset="-20,0" useopacity="on"}%
+   * <a>Vegetables</a>
+      * <a>Carot</a>
+      * <a>Leek</a>
+      * <a>Tomato</a>
+      * <a>Potato</a>
+   * <a>Fruits</a>
+      * <a>Banana</a>
+         * <a>Green</a>
+         * <a>Yellow</a> 
+      * <a>Grape fruit</a>       
+         * <a>Pink</a>
+         * <a>Yellow</a> 
+      * <a>Peach</a>
+</verbatim>
+
+*Simulated*
+
+<div class="treeBrowserPlugin"><style type="text/css" media="all">@import "%ATTACHURL%/smenu.css";</style>
+<script type="text/javascript">
+<!--
+opacitydemo = new dTree('opacitydemo');
+opacitydemo.config.style='smenu';
+opacitydemo.config.inOrder=true;
+opacitydemo.config.iconPath='%ATTACHURL%/';
+opacitydemo.updateIconPath();
+opacitydemo.icon.root='%ATTACHURL%/home.gif';
+opacitydemo.config.useIcons=false;
+opacitydemo.config.shared=true;
+opacitydemo.config.noIndent=true;
+opacitydemo.config.useLines=false;
+opacitydemo.config.usePlusMinus=false;
+opacitydemo.config.closeSameLevel=true;
+opacitydemo.config.noRoot=true;
+opacitydemo.config.popup=true;
+opacitydemo.config.useOpacity=true;
+opacitydemo.config.autoToggle=true;
+opacitydemo.addAction('onmouseover','open');
+opacitydemo.addAction('onclick','close');
+opacitydemo.config.closePopupDelay=100;
+opacitydemo.config.popupOffset={x:-20 , y:0};
+%IF{"$ SKIN='pattern' or $ SKIN='twikiorg,pattern'" then="opacitydemo.config.firstPopupOffset={x:-223 , y:0};" else="opacitydemo.config.firstPopupOffset={x:-60 , y:0};"}%
+opacitydemo.config.useStatusText=false;
+opacitydemo.config.useSelection=false;
+opacitydemo.config.folderLinks=false;
+opacitydemo.add(0,-1,"");
+opacitydemo.add(1,0,"<a>Vegetables</a>",'','','','','');
+opacitydemo.add(2,1,"<a>Carot</a>",'','','','');
+opacitydemo.add(3,1,"<a>Leek</a>",'','','','');
+opacitydemo.add(4,1,"<a>Tomato</a>",'','','','');
+opacitydemo.add(5,1,"<a>Potato</a>",'','','','');
+opacitydemo.add(6,0,"<a>Fruits</a>",'','','','','');
+opacitydemo.add(7,6,"<a>Banana</a>",'','','','','');
+opacitydemo.add(8,7,"<a>Green</a>",'','','','');
+opacitydemo.add(9,7,"<a>Yellow</a> ",'','','','');
+opacitydemo.add(10,6,"<a>Grape fruit</a> ",'','','','','');
+opacitydemo.add(11,10,"<a>Pink</a>",'','','','');
+opacitydemo.add(12,10,"<a>Yellow</a> ",'','','','');
+opacitydemo.add(13,6,"<a>Peach</a>",'','','','');
+document.write(opacitydemo);
 //-->
 </script>
 </div>
@@ -343,6 +422,8 @@ a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>T
      | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
      | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
      | ==pub/TWiki/%TOPIC%/dtree.css== | part of dtree |
+     | ==pub/TWiki/%TOPIC%/dmenu.css== | Menu CSS  |
+     | ==pub/TWiki/%TOPIC%/smenu.css== | Nicer menu CSS |
      | ==pub/TWiki/%TOPIC%/dtree.js== | part of dtree |
      | ==pub/TWiki/%TOPIC%/base.gif== | part of dtree |
      | ==pub/TWiki/%TOPIC%/cd.gif== | part of dtree |
@@ -385,9 +466,10 @@ a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>T
 
 ---++ Known issues
 
-   * Pop-up sub-menu not working on IE because of nested DIV clipping problem. No know workaround.
+   * Pop-up sub-menu not working on IE because of nested DIV clipping problem. 
    * PatternSkin prevents javascript to determine menu position in topic content. Use =firstpopupoffset="-163,0"= as a workaround.
-   * NatSkin CSS =natMainContent= =overflow:hidden= causes Z-order bug in !FireFox. Workaround by removing or overriding =overflow:hidden= for =natMainContent=.
+   * NatSkin CSS =natMainContent= =overflow:hidden= causes =z-index= bug in !FireFox. Workaround by removing or overriding =overflow:hidden= for =natMainContent=.
+   * =dtreeTranslucentBackground= only works for pop-up and not level 0. Sizing issue... 
 
 ---+++ Root status management problem
 
@@ -408,8 +490,9 @@ The root shows and one can fold/unfold the entire tree from the root thanks to =
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.ThomasWeigert |
-|  Plugin Version: | v1.4 |
+|  Plugin Version: | v1.5 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  16 Mar 2007: | (v1.5) - Adding =useopacity= parameter. Adding =smenu.css=. By [[TWiki:Main.StephaneLenclud][Stéphane Lenclud]]. |
 |  16 Mar 2007: | (v1.4) - Adding =firstpopupoffset= allowing workaround for PatternSkin problem. By [[TWiki:Main.StephaneLenclud][Stéphane Lenclud]]. |
 |  14 Mar 2007: | (v1.3) - Adding =popup=, =closepopudelay= and =popupoffset= parameters. Implemented pop-up menu. Improved =dmenu.css=. By [[TWiki:Main.StephaneLenclud][Stéphane Lenclud]]. |
 |  11 Mar 2007: | (v1.2) - Adding =nodeactions= parameter. Improved =dmenu.css=. By [[TWiki:Main.StephaneLenclud][Stéphane Lenclud]]. |

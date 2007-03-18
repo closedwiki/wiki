@@ -10,24 +10,22 @@
 */
 
 .dmenu {
-/*	
-   font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
-	font-size: 11px;
-	color: #666;
-	white-space: nowrap;
-*/
-    z-index:100!important; 
+    z-index:200; 
 	line-height:100%;
     max-width:200px;
     /*overflow:hidden;*/
     cursor:pointer;
-
 }
+
 .dmenu img {
 	display:inline; /*Important for compatibility with NatSkin*/
 	border: 0px;
 	vertical-align: middle;
- 
+}
+
+/*Make sure background item have lower z-index than the rest*/
+div.dmenuTranslucentBackground {
+    z-index: 150;
 }
 
 .dmenu a {
@@ -137,6 +135,7 @@ width:180px; /* Fixes funny IE bug by which every menu item have a different siz
 .dmenuRoot {
 width:180px; /* Align with the above */
 }
+
 
 
 

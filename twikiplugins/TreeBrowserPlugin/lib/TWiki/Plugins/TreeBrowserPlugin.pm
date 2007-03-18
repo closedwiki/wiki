@@ -39,7 +39,7 @@ use vars qw(
         $debug $js
     );
 
-$VERSION = 'v1.4';
+$VERSION = 'v1.5';
 $pluginName = 'TreeBrowserPlugin';
 
 # =========================
@@ -134,7 +134,8 @@ sub handleTreeView {
    my $popup = &TWiki::Func::extractNameValuePair( $theAttr, "popup" );
    my $closePopupDelay  = &TWiki::Func::extractNameValuePair( $theAttr, "closepopupdelay" );
    my $popupOffset  = &TWiki::Func::extractNameValuePair( $theAttr, "popupoffset" );
-   my $firstPopupOffset  = &TWiki::Func::extractNameValuePair( $theAttr, "firstpopupoffset" );        
+   my $firstPopupOffset  = &TWiki::Func::extractNameValuePair( $theAttr, "firstpopupoffset" );
+   my $useOpacity  = &TWiki::Func::extractNameValuePair( $theAttr, "useopacity" );                
         
    my $icons = 0;
    $icons = 1 if ($type eq "icon");
@@ -145,12 +146,12 @@ sub handleTreeView {
    my $opento = 0;
    $opento = $open1 if (!$openall && $open1);
     
-   return $thePre . &renderTreeView( $type, $params, $useLines, $usePlusMinus, $useStatusText, $closeSameLevel, $noIndent, $noRoot, $noCss, $theTitle, $icons, $shared, $openall, $opento, $theList, $style, $autoToggle, $nodeActions, $popup, $closePopupDelay, $popupOffset, $firstPopupOffset );
+   return $thePre . &renderTreeView( $type, $params, $useLines, $usePlusMinus, $useStatusText, $closeSameLevel, $noIndent, $noRoot, $noCss, $theTitle, $icons, $shared, $openall, $opento, $theList, $style, $autoToggle, $nodeActions, $popup, $closePopupDelay, $popupOffset, $firstPopupOffset, $useOpacity );
 }
 
 sub renderTreeView
 {
-    my ( $theType, $theParams, $useLines, $usePlusMinus, $useStatusText, $closeSameLevel, $noIndent, $noRoot, $noCss, $theTitle, $icons, $shared, $openAll, $openTo, $theText, $style, $autoToggle, $nodeActions, $popup, $closePopupDelay, $popupOffset, $firstPopupOffset) = @_;
+    my ( $theType, $theParams, $useLines, $usePlusMinus, $useStatusText, $closeSameLevel, $noIndent, $noRoot, $noCss, $theTitle, $icons, $shared, $openAll, $openTo, $theText, $style, $autoToggle, $nodeActions, $popup, $closePopupDelay, $popupOffset, $firstPopupOffset, $useOpacity) = @_;
 
     $theText =~ s/^[\n\r]*//os;
     my @tree = ();
@@ -227,6 +228,7 @@ $var = new dTree('$var');\n";
     $text .= "$var.config.closeSameLevel=true;\n" if ($closeSameLevel=~/true|1|on/i);
     $text .= "$var.config.noRoot=true;\n" if ($noRoot=~/true|1|on/i);
     $text .= "$var.config.popup=true;\n" if ($popup=~/true|1|on/i);
+    $text .= "$var.config.useOpacity=true;\n" if ($useOpacity=~/true|1|on/i);
     $text .= "$var.config.autoToggle=true;\n" if (($autoToggle=~/true|1|on/i) || (defined $nodeActions && !($nodeActions eq ""))|| (defined $popup && !($popup eq ""))); #Enables if $popup or $nodActions
     #Parse nodeactions: <html_event> <javascript_function>,...
     foreach (split (/ *, */, $nodeActions)) {
