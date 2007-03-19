@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1158898025" format="1.2" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1174329144" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiVariables"}%
 #VarGMTIME2
 
@@ -13,7 +13,7 @@
      | =$wday= | day of the Week (Sun, Mon, Tue, Wed, Thu, Fri, Sat) | Thu |
      | =$dow= | day of the week (Sun = 0) | 2  |
      | =$week= | number of week in year (ISO 8601) | 34 |
-     | =$month= | month in ISO format | Dec |
+     | =$month= | short name of month | Dec |
      | =$mo= | 2 digit month | 12 |
      | =$year= | 4 digit year | 1999 |
      | =$ye= | 2 digit year | 99 |
