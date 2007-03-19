@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1167267197" format="1.0" version="1.17"}%
+%META:TOPICINFO{author="PeterThoeny" date="1174266362" format="1.0" version="1.18"}%
 ---+!! Black List Plugin
 
 %TOC%
@@ -139,13 +139,14 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 
 	* Wiki-spam filtering for HTML attachments works in TWiki 01-Sep-2004 and later.
 	* With TWiki 4.0.2 on some platforms, notably Solaris, attached files are uploaded with a zero file size. This is because there is a bug in how TWiki 4.0.2 handles the beforeAttachmentSaveHandler. If affected, upgrade TWiki or apply bug fix [[http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item2390][Item2390]]
-	* Scan for script eval in attachments is currently hardcoded
+	* Scan for script eval() and escape() is currently hardcoded
 
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main/PeterThoeny |
-|  Plugin Version: | 28 Dec 2006 (r12348) |
+|  Plugin Version: | 18 Mar 2007 (r13184) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  18 Mar 2007: | Scan for evil script eval() and escape() in topic text and attachments |
 |  28 Dec 2006: | Fixed bug where EXCLUDELIST pattern was removing only part of a wiki-spam pattern |
 |  27 Dec 2006: | Support for TWiki 4.1 |
 |  01 Jul 2006: | Added EXCLUDELIST; scan for evil script eval in attachments; scan also .js and .css attachments; fixed writeLog error on Cairo |
@@ -174,5 +175,5 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 
 __Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins, [[http://directory.google.com/Top/Computers/Internet/Abuse/Spam/Wikispam/][Google wiki spam directory]]
 
--- TWiki:Main/PeterThoeny - 28 Dec 2006
+-- TWiki:Main/PeterThoeny - 18 Mar 2007
 
