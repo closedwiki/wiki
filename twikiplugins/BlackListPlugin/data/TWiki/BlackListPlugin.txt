@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1174266422" format="1.0" version="1.18"}%
+%META:TOPICINFO{author="PeterThoeny" date="1174266482" format="1.0" version="1.18"}%
 ---+!! Black List Plugin
 
 %TOC%
@@ -144,7 +144,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main/PeterThoeny |
-|  Plugin Version: | 18 Mar 2007 (r13185) |
+|  Plugin Version: | 18 Mar 2007 (r13186) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
 |  18 Mar 2007: | Scan for evil script eval() and escape() in topic text and attachments; support for TWiki 4.2 (using new =TWiki::Func::getExternalResource=) |
 |  28 Dec 2006: | Fixed bug where EXCLUDELIST pattern was removing only part of a wiki-spam pattern |

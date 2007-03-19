@@ -31,10 +31,10 @@ use vars qw(
 use vars qw( %TWikiCompatibility );
 
 BEGIN {
-# This should always be $Rev: 9979 $ so that TWiki can determine the checked-in
+# This should always be $Rev: 13186 $ so that TWiki can determine the checked-in
 # status of the plugin. It is used by the build automation tools, so
 # you should leave it alone.
-$VERSION = '$Rev: 9979 $';
+$VERSION = '$Rev: 13186 $';
 
 # This is a free-form string you can use to "name" your own plugin version.
 # It is *not* used by the build automation tools, but is reported as part
@@ -403,6 +403,7 @@ sub _getSpamMergeText
     my $port = 0;
     my $path = $2;
     my $text = '';
+    my $headerAndContent = 1;
     if( $TWiki::Plugins::VERSION < 1.1 ) {
         # TWiki 01 Sep 2004 and older
         $text = TWiki::Net::getUrl( $host, $port, $path );
@@ -414,25 +415,35 @@ sub _getSpamMergeText
         $text = TWiki::Plugins::SESSION->{net}->getUrl( 'http', $host, $port, $path );
     } else {
         # TWiki 4.2
-        my $response = TWiki::Func::getExternalResource( "http://$host:$port/$path" );
-        $text = $response->content() unless( $response->is_error() );
+        my $response = TWiki::Func::getExternalResource( $url );
+        if( $response->is_error() ) {
+            my $msg = "Code " . $response->code() . ": " . $response->message();
+            $msg =~ s/[\n\r]/ /gos;
+            TWiki::Func::writeDebug( "- $pluginName ERROR: Can't read $url ($msg)" );
+            return "#ERROR: Can't read $url ($msg)";
+        } else {
+            $text = $response->content();
+            $headerAndContent = 0;
+        }
     }
 
-    if( $text =~ /text\/plain\s*ERROR\: (.*)/s ) {
-        my $msg = $1;
-        $msg =~ s/[\n\r]/ /gos;
-        TWiki::Func::writeDebug( "- $pluginName ERROR: Can't read $url ($msg)" );
-        return "#ERROR: Can't read $url ($msg)";
-    }
-    if( $text =~ /HTTP\/[0-9\.]+\s*([0-9]+)\s*([^\n]*)/s ) {
-        unless( $1 == 200 ) {
-           TWiki::Func::writeDebug( "- $pluginName ERROR: Can't read $url ($1 $2)" );
-           return "#ERROR: Can't read $url ($1 $2)";
+    if( $headerAndContent ) {
+        if( $text =~ /text\/plain\s*ERROR\: (.*)/s ) {
+            my $msg = $1;
+            $msg =~ s/[\n\r]/ /gos;
+            TWiki::Func::writeDebug( "- $pluginName ERROR: Can't read $url ($msg)" );
+            return "#ERROR: Can't read $url ($msg)";
+        }
+        if( $text =~ /HTTP\/[0-9\.]+\s*([0-9]+)\s*([^\n]*)/s ) {
+            unless( $1 == 200 ) {
+                TWiki::Func::writeDebug( "- $pluginName ERROR: Can't read $url ($1 $2)" );
+                return "#ERROR: Can't read $url ($1 $2)";
+            }
         }
     }
     $text =~ s/\r\n/\n/gos;
     $text =~ s/\r/\n/gos;
-    $text =~ s/^.*?\n\n(.*)/$1/os;  # strip header
+    $text =~ s/^.*?\n\n(.*)/$1/os if( $headerAndContent );  # strip header
     unless( $text =~ /.{128}/ ) {
         # spam-merge file is too short, possibly temporary read error
         TWiki::Func::writeDebug( "- $pluginName WARNING: Content of $url is too short, using old cache" );
