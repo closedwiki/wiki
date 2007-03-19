@@ -273,7 +273,6 @@ sub beforeSaveHandler
     }
 
     # check for evil eval() or escape() spam in <script>
-    my $text = TWiki::Func::readFile( $tmpFilename );
     if( $_[0] =~ /<script.*?(eval|escape) *\(.*?<\/script>/gis ) {
         _oopsMessage( "topic", "script eval() or escape()", $remoteAddr );
     }
@@ -412,7 +411,7 @@ sub _getSpamMergeText
         $text = $TWiki::Plugins::SESSION->{net}->getUrl( $host, $port, $path );
     } elsif( $TWiki::Plugins::VERSION < 1.12 ) {
         # TWiki 4.1
-        $text = TWiki::Plugins::SESSION->{net}->getUrl( 'http', $host, $port, $path );
+        $text = $TWiki::Plugins::SESSION->{net}->getUrl( 'http', $host, $port, $path );
     } else {
         # TWiki 4.2
         my $response = TWiki::Func::getExternalResource( $url );
