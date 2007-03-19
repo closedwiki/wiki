@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1153796460" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1174329144" format="1.1" version="$Rev$"}%
 ---++ TWiki Editing Shorthand
 
 %STARTINCLUDE%
@@ -234,6 +234,8 @@ Multiple of three spaces, a type character, a dot, and another space. Several ty
 <td>
  *Definition List:* %BR%
  Three spaces, a dollar sign, the term, a colon, a space, followed by the definition.
+
+ Deprecated syntax: Three spaces, the term with no spaces, a colon, a space, followed by the definition.
 </td><td>
 <verbatim>
    $ Sushi: Japan
