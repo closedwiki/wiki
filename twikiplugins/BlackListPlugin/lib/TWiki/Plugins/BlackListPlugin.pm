@@ -1,6 +1,6 @@
 # Plugin for TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 2004-2006 Peter Thoeny, peter@thoeny.org
+# Copyright (C) 2004-2007 Peter Thoeny, peter@thoeny.org
 #
 # For licensing info read LICENSE file in the TWiki root.
 # This program is free software; you can redistribute it and/or
@@ -272,6 +272,12 @@ sub beforeSaveHandler
         _oopsMessage( "topic", $1, $remoteAddr );
     }
 
+    # check for evil eval() or escape() spam in <script>
+    my $text = TWiki::Func::readFile( $tmpFilename );
+    if( $text =~ /<script.*?(eval|escape) *\(.*?<\/script>/gis ) {
+        _oopsMessage( "topic", "script eval() or escape()", $remoteAddr );
+    }
+
     # check for 'no changes ... no changes' by ringtones scumbag
     if( $_[0] =~ /no changes \.\.\. no changes/gis ) {
         _oopsMessage( "topic", "ringtones scumbag", $remoteAddr );
@@ -301,10 +307,10 @@ sub beforeAttachmentSaveHandler
     my $remoteAddr = $ENV{'REMOTE_ADDR'}   || "";
     return if( $remoteAddr =~ /^$whiteList/ );
 
-    # check for evil eval() spam in <script>
+    # check for evil eval() or escape() spam in <script>
     my $text = TWiki::Func::readFile( $tmpFilename );
-    if( $text =~ /<script.*?eval *\(.*?<\/script>/gis ) {
-        _oopsMessage( "html", "script eval", $remoteAddr );
+    if( $text =~ /<script.*?(eval|escape) *\(.*?<\/script>/gis ) {
+        _oopsMessage( "html", "script eval() or escape()", $remoteAddr );
     }
 
     # check for known spam signatures
