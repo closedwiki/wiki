@@ -305,6 +305,9 @@ sub _fixHtml {
    # Extract the content between the PDFSTART and PDFSTOP comment markers
    $html = _extractPdfSections($html);
 
+   # remove <nop> tags
+   $html =~ s/<nop>//g;
+
    # remove all page breaks
    # FIXME - why remove a forced page break? Instead insert a <!-- PAGE BREAK -->
    #         otherwise dangling </p> is not cleaned up
@@ -361,7 +364,7 @@ sub _fixHtml {
    # link internally if we include the topic
    for my $wikiword (@$refTopics) {
       $url = TWiki::Func::getScriptUrl($webName, $wikiword, 'view');
-      $html =~ s/$url(?!#)/#$wikiword/g; # not anchored
+      $html =~ s/([\'\"])$url\1/\1#$wikiword\1/g; # not anchored
       $html =~ s/$url(#\w*)/$1/g; # anchored
    }
 
