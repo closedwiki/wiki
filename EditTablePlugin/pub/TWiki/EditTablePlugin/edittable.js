@@ -68,6 +68,8 @@ function edittableInit(form_name, asset_url) {
 		var row_container = somerow.parentNode;
 		sEditTable = new EditTableObject(tableform, row_container);
 		insertActionButtons(asset_url);
+		insertRowSeparators();
+
 	}
 	sRowSelection = new RowSelectionObject();
 	retrieveAlternatingRowColors();
@@ -194,29 +196,125 @@ function insertActionButtons(asset_url) {
 /**
 
 */
+function insertRowSeparators() {
+
+  var rownr=0;
+  var sep_row, columns;
+  var table = sEditTable.row_container;
+  while(table.tagName != 'TABLE') {
+    table = table.parentNode;
+  }
+
+  for(var child = sEditTable.row_container.firstChild; child != null;
+          child = child.nextSibling) {
+    if (child.tagName == 'TR') {
+		columns = countRowColumns(child);
+		sep_row = makeSeparatorRow(rownr, columns);
+		sEditTable.row_container.insertBefore(sep_row, child);
+		rownr++;
+    }
+  }
+  sep_row = makeSeparatorRow(null, columns);
+  sEditTable.row_container.appendChild(sep_row);
+}
+
+
+/**
+
+*/
+function makeSeparatorRow(rownr, columns) {
+	var sep_row      = document.createElement('TR');
+	var sep_cell     = document.createElement('TD');
+	sep_cell.colSpan = columns;
+	sep_cell.style.padding    = '0px';
+	sep_cell.style.spacing    = '0px';
+	sep_cell.style.border     = '0';
+	sep_cell.style.height     = '4px';
+	sep_cell.style.background = '#99B';
+	sep_cell.rownr            = rownr;
+
+	sep_row.style.padding = '0px';
+	sep_row.style.spacing = '0px';
+	sep_row.style.border  = '0';
+	sep_row.style.height  = '4px';
+	sep_row.rownr         = rownr;
+
+	sep_row.appendChild(sep_cell);
+	addClass(sep_row, 'editTableRowSeparator');
+	sep_row.id       = 'et_rowseparator' + rownr;
+	sep_row.ckhandler  = sepClickHandler;
+	sep_row.mohandler  = sepMouseOverHandler;
+	attachEvent(sep_row, 'click', sep_row.ckhandler);
+	attachEvent(sep_row, 'mouseover', sep_row.mohandler);
+	return sep_row;
+}
+
+
+
+/**
+
+*/
+function countRowColumns(row_el) {
+	var count = 0;
+	for(var tcell = row_el.firstChild; tcell != null;
+		tcell = tcell.nextSibling) {
+		if (tcell.tagName == 'TD' || tcell.tagName == 'TH') {
+			count += tcell.colSpan;
+		}
+	}
+	return count;
+}
+
+/**
+
+*/
 function moveHandler(evt) {
 	var rownr = getEventAttr(evt, 'rownr');
-	if (sRowSelection.rownum == null) {
-		var row_elem             = sEditTable.rows[rownr];
-		var action_cell          = row_elem.firstChild;
-		sRowSelection.row        = row_elem;
-		sRowSelection.rownum     = rownr;
-		var tableCells = row_elem.getElementsByTagName('TD');
-		for (var i=0; i<tableCells.length; ++i) {
-			addClass(tableCells[i], 'editTableActionSelectedCell');	
-		}
-	} else {
-		moveRow(sRowSelection.rownum, rownr);
-		var row_elem             = sEditTable.rows[sRowSelection.rownum];
-		var tableCells = row_elem.getElementsByTagName('TD');
-		for (var i=0; i<tableCells.length; ++i) {
-			removeClass(tableCells[i], 'editTableActionSelectedCell');	
-		}
-		sRowSelection.row        = null;
-		sRowSelection.rownum     = null;
+	if (sRowSelection.rownum != null) {
+		return;
+	}
+	var row_elem             = sEditTable.rows[rownr];
+	var action_cell          = row_elem.firstChild;
+	sRowSelection.row        = row_elem;
+	sRowSelection.rownum     = rownr;
+	var tableCells = row_elem.getElementsByTagName('TD');
+	for (var i=0; i<tableCells.length; ++i) {
+		addClass(tableCells[i], 'editTableActionSelectedCell');	
 	}
 	switchDeleteButtons(evt);
-	switchMoveButtonsToTargetButtons(evt, rownr);
+	switchMoveButtons('active', rownr);
+}
+
+/**
+
+*/
+function sepClickHandler(evt) {
+	var rownr = getEventAttr(evt, 'rownr');
+	if (sRowSelection.rownum == null) {
+		return;
+	}
+	moveRow(sRowSelection.rownum, rownr);
+	var row_elem             = sEditTable.rows[sRowSelection.rownum];
+	var tableCells = row_elem.getElementsByTagName('TD');
+	for (var i=0; i<tableCells.length; ++i) {
+		removeClass(tableCells[i], 'editTableActionSelectedCell');	
+	}
+	switchMoveButtons('normal', sRowSelection.rownum);
+	sRowSelection.row        = null;
+	sRowSelection.rownum     = null;
+	switchDeleteButtons(evt);
+}
+
+/**
+
+*/
+function sepMouseOverHandler(evt) {
+	var style = getEventAttr(evt, 'style');
+	if (sRowSelection.rownum == null) {
+		style.cursor = 'default';
+	} else {
+		style.cursor = 'move';
+        }
 }
 
 /**
@@ -242,17 +340,11 @@ function switchDeleteButtons (evt) {
 /**
 
 */
-function switchMoveButtonsToTargetButtons (evt, selectedRow) {
-	var rownr = getEventAttr(evt, 'rownr');
-	var mode = (sRowSelection.rownum == null) ? 'to_move' : 'to_target';
-	var ilen = sEditTable.rows.length;
-	for (var i=0; i<ilen; ++i) {
-		if (mode == 'to_target' && i == selectedRow) continue;
-		var row_elem = sEditTable.rows[i];
-		var action_cell = row_elem.firstChild;
-		var moveButton = action_cell.moveButton;
-		moveButton.src = (mode == 'to_target') ? moveButton['targetButtonSrc'] : moveButton['moveButtonSrc'];
-	}
+function switchMoveButtons(mode, selectedRow) {
+	var row_elem = sEditTable.rows[selectedRow];
+	var action_cell = row_elem.firstChild;
+	var moveButton = action_cell.moveButton;
+	moveButton.src = (mode == 'active') ? moveButton['targetButtonSrc'] : moveButton['moveButtonSrc'];
 }
 
 
@@ -267,6 +359,7 @@ function deleteHandler(evt) {
   // Remove the from_row from the table.
   var row_container      = sEditTable.row_container;
   var from_row_elem      = sEditTable.rows[rownr];
+  row_container.removeChild(from_row_elem.previousSibling);
   row_container.removeChild(from_row_elem);
 
   // Update all rows after from_row.
@@ -361,18 +454,32 @@ function fixStyling () {
 */
 function moveRow(from_row, to_row) {
   var from_row_pos = sEditTable.positions[from_row];
-  var to_row_pos   = sEditTable.positions[to_row];
+  var to_row_pos;
+
+  // If the end separator row was selected, use the last row.
+  if (to_row == null) {
+    to_row_pos = sEditTable.numrows-1;
+    to_row     = sEditTable.revidx[to_row_pos];
+  } else {
+    to_row_pos = sEditTable.positions[to_row];
+    if (to_row_pos > from_row_pos) {
+      to_row_pos--;
+      to_row = sEditTable.revidx[to_row_pos];
+    }
+  }
 
   var inc = 1;
   if(to_row_pos == -1 || from_row_pos > to_row_pos) {
     inc=-1;
   }
-  if (from_row == to_row) { return; }
+  if (from_row == to_row) { return;   }
 
   // Remove the from_row from the table.
   var row_container      = sEditTable.row_container;
   var from_row_elem      = sEditTable.rows[from_row];
+  var from_row_sep       = from_row_elem.previousSibling;
   workaroundIECheckboxBug(from_row_elem);
+  row_container.removeChild(from_row_sep);
   row_container.removeChild(from_row_elem);
 
   // Update all rows after from_row up to to_row.
@@ -384,15 +491,14 @@ function moveRow(from_row, to_row) {
     updateRowlabels(rownum, -inc);
   }
 
-  var insertion_target = sEditTable.rows[to_row];
+  var insertion_target;
   if (inc == 1) {
-    insertion_target = insertion_target.nextSibling;
-  }
-  if(insertion_target == null) {
-    row_container.appendChild(from_row_elem);
+    insertion_target = sEditTable.rows[to_row].nextSibling;
   } else {
-    row_container.insertBefore(from_row_elem, insertion_target);
+    insertion_target = sEditTable.rows[to_row].previousSibling;
   }
+  row_container.insertBefore(from_row_sep, insertion_target);
+  row_container.insertBefore(from_row_elem, insertion_target);
   sEditTable.positions[from_row] = to_row_pos;
   sEditTable.revidx[to_row_pos]  = from_row;
   updateRowlabels(from_row, to_row_pos-from_row_pos);
