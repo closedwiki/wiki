@@ -8,7 +8,7 @@ twiki.String = {
 	*/
 	isWikiWord:function(inValue) {
 		if (!inValue) return false;
-		re = new RegExp(twiki.StringConstants.getInstance().WIKIWORD_REGEX);
+		var re = new RegExp(twiki.StringConstants.getInstance().WIKIWORD_REGEX);
 		return (inValue.match(re)) ? true : false;
 	},
 
@@ -19,7 +19,7 @@ twiki.String = {
 	*/
 	capitalize:function(inValue) {
 		if (!inValue) return null;
-		re = new RegExp("[" + twiki.StringConstants.getInstance().MIXED_ALPHANUM_CHARS + "]+", "g");
+		var re = new RegExp("[" + twiki.StringConstants.getInstance().MIXED_ALPHANUM_CHARS + "]+", "g");
 		return inValue.replace(re, function(a) {
 			return a.charAt(0).toLocaleUpperCase() + a.substr(1);
 		});
@@ -41,8 +41,8 @@ twiki.String = {
 	*/
 	removeSpaces:function(inValue) {
 		if (!inValue) return null;
-		sIn = inValue;
-		sOut = '';
+		var sIn = inValue;
+		var sOut = '';
 		for ( var i = 0; i < sIn.length; i++ ) {
 			ch = sIn.charAt( i );
 			if( ch==' ' ) {
@@ -62,7 +62,7 @@ twiki.String = {
 	removePunctuation:function(inValue) {
 		if (!inValue) return null;
 		var allowedRegex = "[^" + twiki.StringConstants.getInstance().MIXED_ALPHANUM_CHARS + "]";
-		re = new RegExp(allowedRegex, "g");
+		var re = new RegExp(allowedRegex, "g");
 		return inValue.replace(re, "");
 	},
 	
