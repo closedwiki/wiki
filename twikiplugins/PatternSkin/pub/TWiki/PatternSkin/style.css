@@ -516,7 +516,8 @@ table.twikiFormTable th.twikiFormTableHRow a:visited {
 .twikiPageForm td.first {
 	padding-top:1em;
 }
-.twikiBroadcastMessage {
+.twikiBroadcastMessage,
+.twikiNotification {
 	padding:.25em .5em;
 	margin:0 0 1em 0;
 }
