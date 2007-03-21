@@ -151,7 +151,7 @@ __Note:__ You do not need to install anything on the browser to use this add-on.
 |  Add-on Author: | TWiki:Main/BrianSpinar, TWiki:Main/WadeTurland |
 |  Add-on Version: | 20 Mar 2007 (v13196) |
 |  Change History: | |
-|  13196 | Removed <nop> before sending to htmldoc, fixed Item3549 |
+|  13196 | Removed =nop= tags before sending to htmldoc, fixed Bugs:Item3549 |
 |  11673 | TWiki:Main/RickMach updated MIME type to pdf from x-pdf, fixed bug preventing disabling the TOC |
 |  9716 | TWiki:Main/CrawfordCurrie added content-disposition header to files, so they download using a sensible file name |
 |  9683 | TWiki:Main/CrawfordCurrie updated for TWiki-4 |
