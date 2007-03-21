@@ -133,7 +133,11 @@ Edit this topic, and change the color variables as you like.
    * Set ATTACHMENT_AND_FORM_BACKGROUND = #FEFCF6
 ---++++ DIFF_HEADER_BACKGROUND Diff header (dark gray) (same as GRAYED_OUT_TEXT)
    * Set DIFF_HEADER_BACKGROUND = #ccc
-
+---++++ BROADCAST_MESSAGE
+   * Set BROADCAST_MESSAGE = #ff0
+---++++ NOTIFICATION
+   * Set NOTIFICATION = #ffc
+   
 ---++++ Table colors
 ---+++++ TABLE_DATA_BACKGROUND Table data background
    * Set TABLE_DATA_BACKGROUND = #f0f6f9
@@ -226,6 +230,10 @@ blockquote {
 	border-color:%INFO_BORDER%;
 	background-color:%ACTIVE_FORM_BACKGROUND%;
 }
+blockquote h2 {
+	background:none;
+}
+h1, h2
 h1, h2, h3, h4, h5, h6 {
 	color:%HEADER_TEXT%;
 }
@@ -444,7 +452,10 @@ table.twikiFormTable th.twikiFormTableHRow font {
 	color:%MUTED_TEXT%;
 }
 .twikiBroadcastMessage {
-	background-color:yellow;
+	background-color:%BROADCAST_MESSAGE%;
+}
+.twikiNotification {
+	background-color:%NOTIFICATION%;
 }
 .twikiBroadcastMessage b,
 .twikiBroadcastMessage strong {

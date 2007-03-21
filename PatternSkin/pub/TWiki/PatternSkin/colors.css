@@ -51,6 +51,9 @@ blockquote {
 	border-color:#D5E6F3;
 	background-color:#f8fbfc;
 }
+blockquote h2 {
+	background:none;
+}
 h1, h2, h3, h4, h5, h6 {
 	color:#a00;
 }
@@ -269,7 +272,10 @@ table.twikiFormTable th.twikiFormTableHRow font {
 	color:#666;
 }
 .twikiBroadcastMessage {
-	background-color:yellow;
+	background-color:#ff0;
+}
+.twikiNotification {
+	background-color:#ffc;
 }
 .twikiBroadcastMessage b,
 .twikiBroadcastMessage strong {
