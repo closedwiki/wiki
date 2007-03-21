@@ -113,8 +113,8 @@ A wide range of standard styles are used in the TWiki core code and topics, and 
 |#twikiLogin  | login.pattern.tmpl  | |
 
 ---+++ Reserved Styles
-|.twikiImage  | defined in PatternSkin | |
-
+|.twikiImage  | defined in PatternSkin  |div creates border around enclosed image |
+|.twikiNotification  | defined in PatternSkin |temporary alert, lighter than broadcast message |
 
 ---++ Tips
 !PatternSkin makes extensive use of CSS in its templates. Read the PatternSkin topic and PatternSkinCss to learn more about creating your own CSS-based skin.
