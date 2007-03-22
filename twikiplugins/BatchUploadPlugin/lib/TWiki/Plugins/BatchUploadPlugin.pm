@@ -42,7 +42,7 @@ $VERSION = '$Rev$';
 # This is a free-form string you can use to "name" your own plugin version.
 # It is *not* used by the build automation tools, but is reported as part
 # of the version number in PLUGINDESCRIPTIONS.
-$RELEASE = '1.2';
+$RELEASE = '1.3';
 
 $pluginName = 'BatchUploadPlugin';    # Name of this Plugin
 
@@ -95,8 +95,12 @@ sub beforeAttachmentSaveHandler {
     ) if $debug;
 
     my $cgiQuery = TWiki::Func::getCgiQuery();
-    return if ( !$pluginEnabled || !$cgiQuery->param('batchupload') );
-
+    return if ( !$pluginEnabled );
+    
+    my $batchupload = $cgiQuery->param('batchupload') || '';
+    return if ( ( $TWiki::cfg{Plugins}{BatchUploadPlugin}{usercontrol} ) 
+                && ( $batchupload ne 'on' ) );
+    
     my $attachmentName = $attrHashRef->{attachment};
 
     return if ( !isZip($attachmentName) );
