@@ -152,7 +152,7 @@ sub addUserToMapping {
       $store->readTopic( undef, $TWiki::cfg{UsersWebName},
                          $TWiki::cfg{UsersTopicName}, undef );
     my $result = '';
-    my $entry = "\t* ";
+    my $entry = "   * ";
     $entry .= $user->web()."."
       unless $user->web() eq $TWiki::cfg{UsersWebName};
     $entry .= $user->wikiName()." - ";
