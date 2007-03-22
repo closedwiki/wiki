@@ -79,7 +79,7 @@ $TWiki::cfg{Plugins}{BatchUploadPlugin}{usercontrol} = 1;
 | Copyright &copy;: | TWiki:Main.MartinCleaver, TWiki:Main.ArthurClemens |
 | License: | [[http://www.gnu.org/copyleft/gpl.html][GPL]] |
 | Dependencies: | %$DEPENDENCIES% |
-| Plugin Version: | 21 Mar 2007 2006 (v1.300) |
+| Plugin Version: | 21 Mar 2007 (v1.300) |
 | Change History: | <!-- versions below in reverse order -->&nbsp; |
 | 21 Mar 2007 | 1.3: TWiki:Main.ScottHoge: added =usercontrol= cfg, to allow global control of upload as in v1.1 |
 | 20 Feb 2007 | 1.2: TWiki:Main.MartinRothbaum, TWiki:Main.SopanShewale: added option to enable/disable unzip-and-attach behavior via cgi parameter. |
