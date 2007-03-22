@@ -1,0 +1,95 @@
+%META:TOPICINFO{author="TWikiContributor" date="1163536597" format="1.0" version="1.1"}%
+%META:TOPICPARENT{name="TagMePlugin"}%
+---+!! Tag-Me: Manage Tags
+
+%STARTSECTION{"create"}%
+#CreateTag
+---++ Create New Tag
+<noautolink>
+<script language="javascript" type="text/javascript">
+<!-- // <pre>-hide
+function cleanTag(inTagString) {
+	var shouldTranslate = 0%TAGMEPLUGIN_NORMALIZE_TAG_INPUT%;
+	var cleanName = "";
+	if (shouldTranslate) {
+		cleanName = translateEntities(inTagString);
+	} else {
+		cleanName = makeSafe(inTagString);
+	}
+	return cleanName;
+}
+/**
+Translates international characters to ASCII.
+*/
+function translateEntities(inText) {
+	var translated = '';
+	for ( var i = 0; i < inText.length; i++ ) {
+		var ch = inText.charAt( i );
+		var chVal = ch.charCodeAt(0);
+		var ch2 = '';
+		if( (chVal==192) || (chVal==193) || (chVal==194) || (chVal==195) ) { ch = 'A'; }
+		if( chVal==196) { ch = 'A'; ch2 = 'E'; }
+		if( chVal==197) { ch = 'A'; ch2 = 'A'; }
+		if( chVal==198) { ch = 'A'; ch2 = 'E'; }
+		if( chVal==199) { ch = 'C'; }
+		if( (chVal==200) || (chVal==201) || (chVal==202) || (chVal==203) ) { ch = 'E'; }
+		if( (chVal==204) || (chVal==205) || (chVal==206) || (chVal==207) ) { ch = 'I'; }
+		if( chVal==208) { ch = 'd'; }
+		if( chVal==209) { ch = 'N'; }
+		if( (chVal==210) || (chVal==211) || (chVal==212) || (chVal==213) ) { ch = 'O'; }
+		if( chVal==214) { ch = 'O'; ch2 = 'E'; }
+		if( chVal==216) { ch = 'O'; ch2 = 'E'; }
+		if( (chVal==217) || (chVal==218) || (chVal==219) ) { ch = 'U'; }
+		if( chVal==220) { ch = 'U'; ch2 = 'E'; }
+		if( chVal==221) { ch = 'Y'; }
+		if( chVal==222) { ch = 'P'; }
+		if( chVal==223) { ch = 's'; ch2 = 's'; }
+		if( (chVal==224) || (chVal==225) || (chVal==226) || (chVal==227) ) { ch = 'a'; }
+		if( chVal==228) { ch = 'a'; ch2 = 'e'; }
+		if( chVal==229) { ch = 'a'; ch2 = 'a'; }
+		if( chVal==230) { ch = 'a'; ch2 = 'e'; }
+		if( chVal==231) { ch = 'c'; }
+		if( (chVal==232) || (chVal==233) || (chVal==234) || (chVal==235) ) { ch = 'e'; }
+		if( (chVal==236) || (chVal==237) || (chVal==238) || (chVal==239) ) { ch = 'i'; }
+		if( chVal==240) { ch = 'd'; }
+		if( chVal==241) { ch = 'n'; }
+		if( (chVal==242) || (chVal==243) || (chVal==244) || (chVal==245) ) { ch = 'o'; }
+		if( chVal==246) { ch = 'o'; ch2 = 'e'; }
+		if( chVal==248) { ch = 'o'; ch2 = 'e'; }
+		if( (chVal==249) || (chVal==250) || (chVal==251) ) { ch = 'u'; }
+		if( chVal==252) { ch = 'u'; ch2 = 'e'; }
+		if( chVal==253) { ch = 'y'; }
+		if( chVal==254) { ch = 'p'; }
+		if( chVal==255) { ch = 'y'; }
+		ch = toUnderscore(ch);
+		ch = ch.toLowerCase();
+		if( ((ch>='a')&&(ch<='z')) || ((ch>='0')&&(ch<='9')) || (ch=='_') ) { sOut+=ch }
+		if( ch2!='' ) { sOut+=ch2; }
+	}
+	return translated;
+}
+function toUnderscore (inChar) {
+	var safeChar = inChar;
+	if( ((safeChar=='-') || (safeChar==' ') || (safeChar=='/')) ) { safeChar = '_'; }
+	return safeChar;
+}
+function makeSafe (inText) {
+	var re = new RegExp(/[\x01-\x1f^\#\,\'\"]/g);
+	return inText.replace(re, "");
+}
+// </pre>-hide -->
+</script>
+%TAGME{ tpaction="%URLPARAM{"newaction" default="nop"}%" tag="%URLPARAM{newtag}%" }%
+
+<form name="addtag" action="%SCRIPTURL%/viewauth%SCRIPTSUFFIX%/%WEB%/TagMeManage#CreateTag" method="post">
+Create a new tag - then add it to a topic.
+
+*Tag name:* <input type="text" class="twikiInputField" name="newtag" size="30" onblur="this.value=cleanTag(this.value)" /> <input type="submit" class="twikiSubmit" value="%MAKETEXT{"Create"}%" />
+<input type="hidden" name="newaction" value="newtag" />
+<input type="hidden" name="from" value="%URLPARAM{"from"}%" />
+<input type="hidden" name="note" value="Return to [<nop>[%URLPARAM{"from" default="<nop>%WEB%.%TOPIC%" }%]]" />
+</form>
+
+Existing tags: %TAGME{ tpaction="showalltags" format="[[%SCRIPTURL%/view%SCRIPTSUFFIX%/%TWIKIWEB%/TagMeSearch?tag=$tag][$tag]]" separator=", " }%
+</noautolink>
+%ENDSECTION{"create"}%

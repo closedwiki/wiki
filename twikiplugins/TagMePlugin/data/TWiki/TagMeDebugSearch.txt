@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1142985766" format="1.0" version="1.4"}%
+%META:TOPICINFO{author="TWikiContributor" date="1142985766" format="1.0" version="1.1"}%
 %META:TOPICPARENT{name="TagMeDebugViewTags"}%
 ---+ Tag-me: Debug Tag Search
 
@@ -23,7 +23,3 @@ __Result:__ %BR%
 %TAGME{ tpaction="query" web="%URLPARAM{qweb}%" topic="%URLPARAM{qtopic}%" tag="%URLPARAM{qtag}%" by="%URLPARAM{qby}%" sort="%URLPARAM{qsort}%" norelated="%URLPARAM{qnorelated}%" nototal="%URLPARAM{qnototal}%" minsize="%URLPARAM{qmin}%" maxsize="%URLPARAM{qmax}%" format="%URLPARAM{qformat}%" separator="%URLPARAM{qseparator}%" }%
 
 __See also:__ TagMePlugin, TagMeViewAllTags, TagMeViewMyTags, TagMeSearch, TagMeDebugViewTags
-
--- TWiki:Main.PeterThoeny - 21 Mar 2006
-
-%META:TOPICMOVED{by="PeterThoeny" date="1142122307" from="TWiki3.TagMeDebugSpecificTag" to="TWiki3.TagMeDebugSearch"}%

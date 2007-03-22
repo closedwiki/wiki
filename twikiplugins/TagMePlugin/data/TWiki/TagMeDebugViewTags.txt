@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1142121665" format="1.0" version="1.4"}%
+%META:TOPICINFO{author="TWikiContributor" date="1142121665" format="1.0" version="1.1"}%
 ---+ Tag-me: Debug View Tags
 
 <noautolink>
@@ -19,6 +19,3 @@ __Result:__
 %TAGME{ tpaction="showalltags" by="%URLPARAM{qby}%" web="%URLPARAM{qweb}%" topic="%URLPARAM{qtopic}%" exclude="%URLPARAM{qexclude}%" minsize="%URLPARAM{qmin}%" maxsize="%URLPARAM{qmax}%" format="%URLPARAM{qformat}%" separator="%URLPARAM{qseparator}%" }%
 
 __See also:__ TagMePlugin, TagMeViewAllTags, TagMeViewMyTags, TagMeSearch, TagMeDebugSearch
-
--- TWiki:Main.PeterThoeny - 11 Mar 2006
-
