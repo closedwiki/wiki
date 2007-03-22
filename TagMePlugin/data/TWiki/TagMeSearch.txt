@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1163536578" format="1.0" version="1.7"}%
+%META:TOPICINFO{author="TWikiContributor" date="1163536578" format="1.0" version="1.1"}%
 %META:TOPICPARENT{name="TagMeViewAllTags"}%
 ---+ Tag-me: Tag Search
 
@@ -31,7 +31,3 @@ Show topics tagged with
 %STOPINCLUDE%
 
 __See also:__ TagMePlugin, TagMeViewAllTags, TagMeViewMyTags
-
--- TWiki:Main.PeterThoeny - 11 Mar 2006
-
-%META:TOPICMOVED{by="PeterThoeny" date="1142121545" from="TWiki3.TagMeViewSpecificTag" to="TWiki3.TagMeSearch"}%

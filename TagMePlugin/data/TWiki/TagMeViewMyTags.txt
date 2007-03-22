@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1160871591" format="1.0" version="1.6"}%
+%META:TOPICINFO{author="TWikiContributor" date="1160871591" format="1.0" version="1.1"}%
 %META:TOPICPARENT{name="TagMeViewAllTags"}%
 ---+ Tag-me: View My Tags
 
@@ -19,6 +19,3 @@
 %STOPINCLUDE%
 
 __See also:__ TagMePlugin, TagMeViewAllTags, TagMeSearch
-
--- TWiki:Main.PeterThoeny - 11 Mar 2006
-

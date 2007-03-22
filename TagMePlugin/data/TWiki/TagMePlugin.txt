@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1163536597" format="1.0" version="1.16"}%
+%META:TOPICINFO{author="TWikiContributor" date="1163536597" format="1.0" version="1.1"}%
 ---+!! Tag-me Plugin
 
 Plugin to tag wiki content collectively in order to find content by tags and to get a meaningful page ranking.
@@ -48,75 +48,8 @@ You see:
 	* an add tag selector, and
 	* a link to create a new tag 
 
----+++ Create New Tag
-#AddNewTag
-<noautolink>
-<script language="javascript">
-<!-- // <pre>-hide
-function cleanTag(name)
-{
-var sIn = name;
-var sOut = '';
-var chgUpper = true;
-for ( var i = 0; i < sIn.length; i++ ) {
- var ch = sIn.charAt( i );
- var chVal = ch.charCodeAt(0);
- var ch2 = '';
- if( (chVal==192) || (chVal==193) || (chVal==194) || (chVal==195) ) { ch = 'A'; }
- if( chVal==196) { ch = 'A'; ch2 = 'E'; }
- if( chVal==197) { ch = 'A'; ch2 = 'A'; }
- if( chVal==198) { ch = 'A'; ch2 = 'E'; }
- if( chVal==199) { ch = 'C'; }
- if( (chVal==200) || (chVal==201) || (chVal==202) || (chVal==203) ) { ch = 'E'; }
- if( (chVal==204) || (chVal==205) || (chVal==206) || (chVal==207) ) { ch = 'I'; }
- if( chVal==208) { ch = 'd'; }
- if( chVal==209) { ch = 'N'; }
- if( (chVal==210) || (chVal==211) || (chVal==212) || (chVal==213) ) { ch = 'O'; }
- if( chVal==214) { ch = 'O'; ch2 = 'E'; }
- if( chVal==216) { ch = 'O'; ch2 = 'E'; }
- if( (chVal==217) || (chVal==218) || (chVal==219) ) { ch = 'U'; }
- if( chVal==220) { ch = 'U'; ch2 = 'E'; }
- if( chVal==221) { ch = 'Y'; }
- if( chVal==222) { ch = 'P'; }
- if( chVal==223) { ch = 's'; ch2 = 's'; }
- if( (chVal==224) || (chVal==225) || (chVal==226) || (chVal==227) ) { ch = 'a'; }
- if( chVal==228) { ch = 'a'; ch2 = 'e'; }
- if( chVal==229) { ch = 'a'; ch2 = 'a'; }
- if( chVal==230) { ch = 'a'; ch2 = 'e'; }
- if( chVal==231) { ch = 'c'; }
- if( (chVal==232) || (chVal==233) || (chVal==234) || (chVal==235) ) { ch = 'e'; }
- if( (chVal==236) || (chVal==237) || (chVal==238) || (chVal==239) ) { ch = 'i'; }
- if( chVal==240) { ch = 'd'; }
- if( chVal==241) { ch = 'n'; }
- if( (chVal==242) || (chVal==243) || (chVal==244) || (chVal==245) ) { ch = 'o'; }
- if( chVal==246) { ch = 'o'; ch2 = 'e'; }
- if( chVal==248) { ch = 'o'; ch2 = 'e'; }
- if( (chVal==249) || (chVal==250) || (chVal==251) ) { ch = 'u'; }
- if( chVal==252) { ch = 'u'; ch2 = 'e'; }
- if( chVal==253) { ch = 'y'; }
- if( chVal==254) { ch = 'p'; }
- if( chVal==255) { ch = 'y'; }
- if( ((ch=='-') || (ch==' ') || (ch=='/')) ) { ch = '_'; }
- ch=ch.toLowerCase();
- if( ((ch>='a')&&(ch<='z')) || ((ch>='0')&&(ch<='9')) || (ch=='_') ) { sOut+=ch }
- if( ch2!='' ) { sOut+=ch2; }
-}
-return sOut;
-}
-// </pre>-hide -->
-</script>
-<form name="addtag" action="%SCRIPTURL%/viewauth%SCRIPTSUFFIX%/%WEB%/%TOPIC%#AddNewTag" method="post">
-A never before used tag needs to be added to the system before a topic can be tagged with it. Use this form to add a new brand new tag.
-	* Create new tag:
-	  <input type="text" name="newtag" size="10" onblur="this.value=cleanTag(this.value)" />
-	  <input type="hidden" name="newaction" value="newtag" />
-	  <input type="hidden" name="to" value="Return to: [<nop>[%URLPARAM{"from" default="%WEB%.%TOPIC%"}%]]" />
-	  <input type="submit" value="Add" /> (use only alphanumeric characters and underscore) %BR%
-	  %TAGME{ tpaction="%URLPARAM{"newaction" default="nop"}%" tag="%URLPARAM{newtag}%" }%%BR%
-	  %URLPARAM{to}%
-	* Existing tags: %TAGME{ tpaction="showalltags" format="[[%SCRIPTURL%/view%SCRIPTSUFFIX%/%TWIKIWEB%/TagMeSearch?tag=$tag][$tag]]" separator=", " }%
-</form>
-</noautolink>
+---+++ Create New Tags
+[[TagMeManage#CreateTag][TagMeManage]] lets you create new tags.
 
 ---+++ Add Tag to Topic
 
@@ -152,10 +85,11 @@ The Plugin handles a =%<nop>TAGME{}%= variable that performs different actions. 
 	  | =web="%<nop>WEB%"= | Limit query to a web | current web |
 	  | =topic="*Plugin"= | Limit query to a topic, or a comma-space delimited list of topics with optional asterisk wildcards | all topics |
 	  | =exclude="fixme"= | Exclude tags; specify a tag, or a comma-space delimited list of tags with optional asterisk wildcards  | all tags |
+	  | =mincount="2"= | Exclude tags below the threshold of =mincount= votes | all tags | 
 	  | =minsize="90"= | Minimum size of tag =$size= (typically percent font size) | ="90"= |
 	  | =maxsize="180"= | Maximum size of tag =$size= | ="180"= |
 	  | =format="..."= | Format of a tag, tokens =$tag=, =$size= | ="$tag"= |
-	  | =separator=", "= | Separator between tags | =", "= |
+	  | =separator=", "= | Separator between tags | =", "=, unless =format= has been specified |
 
 	* =%<nop>TAGME{ tpaction="query" ... }%= - tag search
 	  | *Parameter* | *Comment* | *Default* |
@@ -185,6 +119,66 @@ The Plugin handles a =%<nop>TAGME{}%= variable that performs different actions. 
 	  | =tag="..."= | Name of tag | (required) |
 	  | =nostatus="on"= | Turn off status text shown when a tag is removed or voted on | (show status text) |
 
+---++ CSS Styles
+!TagMePlugin writes the following CSS styles:
+
+| *Class*             | *Used where* |
+| =tagMeControl=      | Around 'tags shown on a topic': tag link plus vote counter plus add/vote button |
+| =tagMeVoteCount=    | Around vote count number |
+| =tagMeNotification= | =span=: One-line notification feedback after adding or removal of a tag and on in this process |
+| =tagMeNotification= | =div=: Block of notification feedback after creation of a tag and on errors in this process |
+
+---+++ Preventing link wrap
+If users are allowed to use spaces in their tag names (when =NORMALIZE_TAG_INPUT= is set to 0), tag links may break halfway to the next line. To prevent wrapping add a wrapper =div= around the tags:
+
+<verbatim>
+<div class="tagmetags">
+%TAGME{ ... }%
+</div>
+</verbatim>
+... and use this CSS style:
+
+<verbatim>
+.tagmetags a {
+	white-space:nowrap;
+}
+</verbatim>
+
+---+++ Example styles used on twiki.org
+To show the 'tags shown on a topic': 
+
+<verbatim>
+<div class="tagmetags">
+%TAGME{ tpaction="%URLPARAM{tpaction}%" web="%WEB%" tag="%URLPARAM{tag}%" }%
+</div>
+</verbatim>
+
+CSS styles:
+
+<verbatim>
+.tagmetags {
+	color:#8E9195;
+	font-size:94%;
+}
+.tagmetags a {
+	white-space:nowrap;
+}
+.tagmetags a:link,
+.tagmetags a:visited {
+	color:#777;
+	text-decoration:none;
+}
+.tagmetags a:hover {
+	color:#FBF7E8; 
+	background-color:#D6000F;
+	text-decoration:underline;
+}
+.tagmetags select {
+	font-size:.86em;
+	margin:0 .25em 0 0;
+}
+</verbatim>
+
 ---++ Plugin Settings
 
 Plugin settings are stored as preferences variables. To reference a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>TAGMEPLUGIN_SHORTDESCRIPTION%==
@@ -195,6 +189,11 @@ Plugin settings are stored as preferences variables. To reference a plugin setti
 	* Log add/create actions:
 		* Set LOGACTION = 1
 
+	* Optionally normalize tag names. Set to 1 to translate international characters to their latin match (&uuml; to ue, &aring; to aa, etcetera), and to convert spaces to underscores. %BR%
+	Set to 0 to allow any user input, except for the reserved characters =,#'"=. %BR%
+	Setting to 0 also sorts tags case insensitive: 'U' comes after 't'.
+		* Set NORMALIZE_TAG_INPUT = 1
+		
 	* Debug plugin: (See output in =data/debug.txt=)
 		* Set DEBUG = 0
 
@@ -206,11 +205,11 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 	* Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
 	  | *File:* | *Description:* |
 	  | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
-	  | ==data/TWiki/%TOPIC%ViewAllTags.txt== | Supporting topic to view all tags |
-	  | ==data/TWiki/%TOPIC%ViewMyTags.txt== | Supporting topic to view my tags |
-	  | ==data/TWiki/%TOPIC%Search.txt== | Supporting topic to search for tagged topics |
-	  | ==data/TWiki/%TOPIC%Debug*.txt== | Supporting topics for debug |
-	  | ==data/TWiki/%TOPIC%*.txt,v== | Topic repository files |
+	  | ==data/TWiki/TagMeViewAllTags.txt== | Supporting topic to view all tags |
+	  | ==data/TWiki/TagMeViewMyTags.txt== | Supporting topic to view my tags |
+	  | ==data/TWiki/TagMeSearch.txt== | Supporting topic to search for tagged topics |
+	  | ==data/TWiki/TagMeManage.txt== | Supporting topic to create new tags |
+	  | ==data/TWiki/TagMeDebug*.txt== | Supporting topics for debug |
 	  | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
 	  | ==pub/TWiki/%TOPIC%/*.gif== | Icon files |
 	* Configure and enable the Plugin:
@@ -218,9 +217,9 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 		* Change the Plugin settings as needed
 		* Add the =%<nop>TAGME{}%= variable to the page decoration. It should be exactly of the form =%<nop>TAGME{ tpaction="%<nop>URLPARAM{tpaction}%" tag="%<nop>URLPARAM{tag}%" }%=. This should be done so that it is rendered for every topic, e.g. somewhere in the skin template, such as the %TWIKIWEB%.WebTopBar. A good place is also the WEBCOPYRIGHT since it gets displayed by every topic view. Example setting in the %TWIKIWEB%.TWikiPreferences:
 			* =Set WEBCOPYRIGHT = Tags: %<nop>TAGME{ tpaction="%<nop>URLPARAM{tpaction}%" tag="%<nop>URLPARAM{tag}%" }%%<nop>BR% Copyright &copy; 1999-%GMTIME{"$year"}% by...=
-		* For international character support: Remove the =onblur= attribute from the =name="newtag"= input tag in the "Create New Tag" form
+		* For international character support: set =NORMALIZE_TAG_INPUT= to 0.
 	* Test if the installation was successful:
-		* Add a tag
+		* Go to TagMeManage and add a tag
 
 ---++ Limitations
 
@@ -231,8 +230,9 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Plugin Author: | TWiki:Main.PeterThoeny ([[http://www.structuredwikis.com/peter.html][blog]]) |
 |  Copyright: | &copy; 2006, Peter@Thoeny.org, [[http://www.structuredwikis.com/][StructuredWikis LLC]] |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 14 Nov 2006 (V1.032) |
+|  Plugin Version: | 22 Mar 2006 (V1.033) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  22 Mar 2007: | Arthur Clemens: Added option =NORMALIZE_TAG_INPUT= (to be set to 0) to allow any word as tag name (including upper case, punctuation characters and spaces). Moved "create new tag" form to TagMeManage. Created CSS styles in =tagme.css=. Added =mincount= parameter to =TAGME{tpaction="showalltags"}=. |
 |  14 Nov 2006: | Fix IE browser crash issue on print (forms can't be named "tags"; debug by TWiki:Main.KevinKalmbach) |
 |  14 Oct 2006: | Fix show default problem introduced by version 07 Oct 2006 (contributed by TWiki:Main.ChristianSuenkel) |
 |  07 Oct 2006: | nostatus="on" parameter for add/remove tag (contributed by TWiki:Main.FredMorris) |

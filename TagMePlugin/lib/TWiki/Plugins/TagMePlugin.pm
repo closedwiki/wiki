@@ -25,10 +25,10 @@ package TWiki::Plugins::TagMePlugin;
 use vars qw(
         $web $topic $user $installWeb $VERSION $RELEASE $pluginName $debug
         $initialized $attachDir $attachUrl $logAction $tagLinkFormat $tagQueryFormat
-        $alphaNum
+        $alphaNum $doneHeader $normalizeTagInput
     );
 
-$VERSION = '1.032';
+$VERSION = '1.033';
 $RELEASE = 'Any TWiki';
 $pluginName = 'TagMePlugin';  # Name of this Plugin
 $initialized = 0;
@@ -54,9 +54,12 @@ sub initPlugin
 
     # Get plugin debug flag
     $debug = TWiki::Func::getPluginPreferencesFlag( "\U$pluginName\E_DEBUG" );
-
+    $normalizeTagInput = TWiki::Func::getPreferencesFlag( 'NORMALIZE_TAG_INPUT' ) || TWiki::Func::getPluginPreferencesFlag( 'NORMALIZE_TAG_INPUT' );
+    
     _writeDebug( "initPlugin( $web.$topic ) is OK" );
     $initialized = 0;
+    $doneHeader = 0;
+    
     return 1;
 }
 
@@ -68,8 +71,9 @@ sub _initialize
     $attachDir = TWiki::Func::getPubDir()     . "/$installWeb/$pluginName";
     $attachUrl = TWiki::Func::getPubUrlPath() . "/$installWeb/$pluginName";
     $logAction = TWiki::Func::getPreferencesFlag( "\U$pluginName\E_LOGACTION" );
-    $tagLinkFormat = '<a href="%SCRIPTURL%/view%SCRIPTSUFFIX%/' . $installWeb
-                   . '/TagMeSearch?tag=$tag;by=$by">$tag</a>';
+    $tagLinkFormat = '<a href="%SCRIPTURL%/view%SCRIPTSUFFIX%/'
+                               . $installWeb
+                               . '/TagMeSearch?tag=$tag;by=$by">$tag</a>';
     $tagQueryFormat = 
           '<table style="width:100%;" border="0" cellspacing="0" cellpadding="2"><tr>$n'
         . '<td style="width:50%;" bgcolor="#EEEEDD"> <b>[[$web.$topic][<nop>$topic]]</b> '
@@ -85,7 +89,18 @@ sub _initialize
         . '</tr><tr><td></td></tr></table>';
     $alphaNum = TWiki::Func::getRegularExpression( 'mixedAlphaNum' );
 
+    _addHeader();
+    
     $initialized = 1;
+}
+
+# =========================
+sub _addHeader {
+    return if $doneHeader;
+
+    my $header = "\n<style type=\"text/css\" media=\"all\">\n\@import url(\"$attachUrl/tagme.css\");\n</style>\n";
+    TWiki::Func::addToHEAD('TAGMEPLUGIN',$header);
+    $doneHeader = 1;
 }
 
 # =========================
@@ -143,7 +158,7 @@ sub _handleTagMe
     } elsif( $action eq 'nop' ) {
         # no operation
     } elsif( $action ) {
-        $text = 'TAGME error: Unrecognized action';
+        $text = 'Unrecognized action';
     } else {
         $text = _showDefault();
     }
@@ -159,8 +174,7 @@ sub _showDefault
 
     my $webTopic = "$web.$topic";
     @tagInfo = _readTagInfo( $webTopic ) unless( scalar( @tagInfo ) );
-    my $text = '<div class="tagMePlugin" style="display:inline;"><form name="tagmeshow" '
-             . 'action="%SCRIPTURL%/viewauth%SCRIPTSUFFIX%/%BASEWEB%/%BASETOPIC%" method="post">';
+    my $text = '';
     my $tag = '';
     my $num = '';
     my $users = '';
@@ -174,16 +188,22 @@ sub _showDefault
             $num = $1;
             $tag = $2;
             $users = $3;
-            $line = _printTagLink( $tag, '' ) . " %GRAY% $num%ENDCOLOR% ";
+            $line = _printTagLink( $tag, '' ) . "<span class=\"tagMeVoteCount\">$num</span>";
             if( $users =~ /\b$user\b/ ) {
                 $line .= _imgTag( 'tag_remove', 'Remove my vote on this tag', 'remove', $tag );
             } else {
                 $line .= _imgTag( 'tag_add', 'Add my vote for this tag', 'add', $tag );
             }
-            $seen{$tag} = $line;
+            $seen{$tag} = _wrapHtmlTagControl( $line );
         }
     }
-    $text .= join( ', ', map{ $seen{$_} } sort keys( %seen ) );
+    if ( $normalizeTagInput ) {
+        # plain sort can be used and should be just a little faster
+        $text .= join( ', ', map{ $seen{$_} } sort keys( %seen ) );
+    } else {
+        # uppercase characters are possible, so sort with lowercase comparison
+        $text .= join( ', ', map{ $seen{$_} } sort { lc $a cmp lc $b } keys( %seen ) );
+    }
     $text .= ', ' if( scalar %seen );
     my @allTags = _readAllTags();
     my @notSeen = ();
@@ -191,19 +211,19 @@ sub _showDefault
         push( @notSeen, $_ ) unless( $seen{$_} );
     }
     if( scalar @notSeen ) {
-        $text .= '<select name="tag"> <option></option> ';
+        my $selectControl .= '<select name="tag"> <option></option> ';
         foreach( @notSeen ) {
-            $text .= "<option>$_</option> ";
+            $selectControl .= "<option>$_</option> ";
         }
-        $text .= '</select>';
-        $text .= '<input type="hidden" name="tpaction" value="add" />';
-        $text .= '<input type="image" src="' . $attachUrl . '/tag_addnew.gif" name="add" alt="Add" '
+        $selectControl .= '</select>';
+        $selectControl .= '<input type="hidden" name="tpaction" value="add" />';
+        $selectControl .= '<input type="image" src="' . $attachUrl . '/tag_addnew.gif" name="add" alt="Add" '
                . 'value="Select tag and add to topic" title="Select tag and add to topic" />, ';
+        $text .= _wrapHtmlTagControl( $selectControl );
     }
-    $text .= " <a href=\"%SCRIPTURL%/viewauth%SCRIPTSUFFIX%/$installWeb/$pluginName?"
-           . "from=$web.$topic#AddNewTag\">create new tag</a>";
-    $text .= '</form></div>';
-    return $text;
+    $text .= "<a href=\"%SCRIPTURL%/viewauth%SCRIPTSUFFIX%/$installWeb/TagMeManage"
+           . "?from=$web.$topic#CreateTag\">create new tag</a>";
+    return _wrapHtmlTagMeShowForm( $text );
 }
 
 # =========================
@@ -218,6 +238,7 @@ sub _showAllTags
     my $separator = TWiki::Func::extractNameValuePair( $attr, 'separator' );
     my $minSize   = TWiki::Func::extractNameValuePair( $attr, 'minsize' );
     my $maxSize   = TWiki::Func::extractNameValuePair( $attr, 'maxsize' );
+    my $minCount  = TWiki::Func::extractNameValuePair( $attr, 'mincount' );
 
     my $topicsRegex = '';
     if( $qTopic ) {
@@ -233,10 +254,16 @@ sub _showAllTags
         $excludeRegex =~ s/\*/\.\*/go;
         $excludeRegex = '^(' . $excludeRegex . ')$';
     }
-    $format = '$tag' unless $format;
-    $format =~ s/\$n/\n/go;
-    $separator = ', ' unless $separator;
+    my $hasSeparator = $separator ne '';
+    my $hasFormat = $format ne '';
+    
+    $separator = ', ' unless ($hasSeparator || $hasFormat);
     $separator =~ s/\$n/\n/go;
+    
+    $format = '$tag' unless $hasFormat;
+    $format .= "\n" unless $separator;
+    $format =~ s/\$n/\n/go;
+    
     $by = $user if( $by eq 'me' );
     $by = '' if( $by eq 'all' );
     $maxSize = 180 unless( $maxSize ); # Max % size of font
@@ -278,11 +305,30 @@ sub _showAllTags
                 }
             }
         }
+        
+        if ( $minCount ) {
+            # remove items below the threshold
+            foreach my $item (keys %allTags) {
+                delete $allTags{$item} if ( $tagCount{$item} < $minCount );
+            }
+        }
+
+		my $temp = join ( ";", keys( %allTags ) );
+        &TWiki::Func::writeDebug("allTags = " . $temp . "\n");
+        
         my @tags = ();
         if( $by ) {
-            @tags = sort keys( %myTags );
+            if ( $normalizeTagInput) {
+                @tags = sort keys( %myTags );
+            } else {
+                @tags = sort { lc $a cmp lc $b} keys( %myTags );
+            }
         } else {
-            @tags = sort keys( %allTags );
+            if ( $normalizeTagInput) {
+                @tags = sort keys( %allTags );
+            } else {
+                @tags = sort { lc $a cmp lc $b} keys( %allTags );
+            }
         }
         if( $by && ! scalar @tags ) {
             return "__Note:__ You haven't yet added any tags. To add a tag, go to "
@@ -290,6 +336,7 @@ sub _showAllTags
                  . "vote on an existing tag.";
         }
         my $max = 1;
+        
         my %order = map{ ($_, $max++) }
                     sort{ $tagCount{$a} <=> $tagCount{$b} }
                     keys( %tagCount );
@@ -467,20 +514,27 @@ sub _printTagLink
 sub _newTag
 {
     my( $tag ) = @_;
-    return "TAGME error: <nop>$user cannot add new tags" if( $user =~ /^(TWikiGuest|guest)$/ );
-    $tag = lc( $tag );
-    $tag =~ s/[- \/]/_/go;
-    $tag =~ s/[^${alphaNum}_]//go;
-    $tag =~ s/^(.{30}).*/$1/;
-    return "TAGME error: Please enter a tag" unless( $tag );
+    
+    return _wrapHtmlErrorFeedbackMessage( "<nop>$user cannot add new tags" ) if( $user =~ /^(TWikiGuest|guest)$/ );
+    if ( $normalizeTagInput ) {
+        $tag =~ s/[- \/]/_/go;
+        $tag = lc( $tag );
+        $tag =~ s/[^${alphaNum}_]//go;
+    } else {
+        $tag =~ s/[\x01-\x1f^\#\,\'\"]//go; # make safe
+    }
+    $tag =~ s/^(.{30}).*/$1/; # limit to 30 characters
+    $tag =~ s/^\s*//; # trim spaces at start
+    $tag =~ s/\s*$//; # trim spaces at end
+    return _wrapHtmlErrorFeedbackMessage( "Please enter a tag" ) unless( $tag );
     my @allTags = _readAllTags();
     if( grep( /^$tag$/, @allTags ) ) {
-        return "TAGME error: Tag \"$tag\" is already added to system";
+        return _wrapHtmlErrorFeedbackMessage( "Tag \"$tag\" already exists" );
     } else {
         push( @allTags, $tag );
         writeAllTags( @allTags );
         _writeLog( "New tag '$tag'" );
-        return "Tag \"$tag\" added to system";
+        return _wrapHtmlFeedbackMessage( "Tag \"$tag\" is successfully added!" );
     }
 }
 
@@ -505,12 +559,12 @@ sub _addTag
                 $users = $3;
                 if( $tag eq $addTag ) {
                     if( $users =~ /\b$user\b/ ) {
-                        $text .= ' (you already added this tag)';
+                        $text .= _wrapHtmlFeedbackErrorInline( "you already added this tag" );
                     } else {
                         # add user to existing tag
                         $line = sprintf( '%03d', $num+1 );
                         $line .= ", $tag, $users, $user";
-                        $text .= " (added tag vote on \"$tag\")";
+                        $text .= _wrapHtmlFeedbackInline( "added tag vote on \"$tag\"" );
                         _writeLog( "Added tag vote on '$tag'" );
                     }
                 }
@@ -521,7 +575,7 @@ sub _addTag
             # tag does not exist yet
             if( $addTag ) {
                 push( @result, "001, $addTag, $user" );
-                $text .= " (added tag \"$addTag\")";
+                $text .= _wrapHtmlFeedbackInline(" added tag \"$addTag\"" );
                 _writeLog( "Added tag '$addTag'" );
             } else {
                 $text .= " (please select a tag)";
@@ -530,7 +584,7 @@ sub _addTag
         @tagInfo = reverse sort( @result );
         _writeTagInfo( $webTopic, @tagInfo );
     } else {
-        $text .= " (tag not added, topic does not exist)";
+        $text .= _wrapHtmlFeedbackErrorInline( "tag not added, topic does not exist" );
     }
     # Suppress status? FWM, 03-Oct-2006
     return _showDefault( @tagInfo ) . (( $noStatus ) ? '' : $text);
@@ -562,11 +616,11 @@ sub _removeTag
                     if( $num ) {
                         $line = sprintf( '%03d', $num );
                         $line .= ", $tag$users";
-                        $text .= " (removed my tag vote on \"$tag\")";
+                        $text .= _wrapHtmlFeedbackInline( "removed my tag vote on \"$tag\"" );
                         _writeLog( "Removed tag vote on '$tag'" );
                         push( @result, $line );
                     } else {
-                        $text .= " (removed tag \"$tag\")";
+                        $text .= _wrapHtmlFeedbackInline( "removed tag \"$tag\"" );
                         _writeLog( "Removed tag '$tag'" );
                     }
                 }
@@ -581,7 +635,7 @@ sub _removeTag
         @tagInfo = reverse sort( @result );
         _writeTagInfo( $webTopic, @tagInfo );
     } else {
-        $text .= " (tag \"$removeTag\" not found)";
+        $text .= _wrapHtmlFeedbackErrorInline( "tag \"$removeTag\" not found" );
     }
     # Suppress status? FWM, 03-Oct-2006
     return _showDefault( @tagInfo ) . (( $noStatus ) ? '' : $text);
@@ -660,16 +714,21 @@ sub renameTagInfo
 sub _readAllTags
 {
      my $text = TWiki::Func::readFile( "$attachDir/_tags_all.txt" );
-     my @tags = grep{ /^[${alphaNum}_]/ } split( /\n/, $text );
+     #my @tags = grep{ /^[${alphaNum}_]/ } split( /\n/, $text );
+     # we assume that this file has been written by TagMe, so tags should be
+     # valid, and we only need to filter out the comment line
+     my @tags = grep { !/^\#.*/ } split( /\n/, $text );
      return @tags;
 }
 
 # =========================
+# Sorting of tags (lowercase comparison) is done just before writing of
+# the _tags_all file.
 sub writeAllTags
 {
     my( @tags ) = @_;
     my $text = "# This file is generated, do not edit\n"
-             . join( "\n", sort @tags ) . "\n";
+             . join( "\n", sort { lc $a cmp lc $b} @tags ) . "\n";
     TWiki::Func::saveFile( "$attachDir/_tags_all.txt", $text );
 }
 
@@ -706,5 +765,40 @@ sub _handleMakeText
 }
 
 # =========================
+sub _wrapHtmlFeedbackMessage {
+    my( $text ) = @_;
+    return "<div class=\"tagMeNotification\">$text<div>%URLPARAM{\"note\"}\%</div></div>";
+}
 
+# =========================
+sub _wrapHtmlErrorFeedbackMessage {
+    my( $text ) = @_;
+    return _wrapHtmlFeedbackMessage( "<span class=\"twikiAlert\">$text</span>" );
+}
+
+# =========================
+sub _wrapHtmlFeedbackInline {
+    my( $text ) = @_;
+    return " <span class=\"tagMeNotification\">$text</span>";
+}
+
+# =========================
+sub _wrapHtmlFeedbackErrorInline {
+    my( $text ) = @_;
+    return _wrapHtmlFeedbackInline( "<span class=\"twikiAlert\">$text</span>" );
+}
+
+# =========================
+sub _wrapHtmlTagControl {
+    my( $text ) = @_;
+    return "<span class=\"tagMeControl\">$text</span>";
+}
+
+# =========================
+sub _wrapHtmlTagMeShowForm {
+    my( $text ) = @_;
+    return "<form name=\"tagmeshow\" action=\"%SCRIPTURL%/viewauth%SCRIPTSUFFIX%/%BASEWEB%/%BASETOPIC%\" method=\"post\">$text</form>";
+}
+
+# =========================
 1;

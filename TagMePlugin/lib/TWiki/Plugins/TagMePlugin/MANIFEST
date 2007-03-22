@@ -4,6 +4,7 @@ data/TWiki/TagMePlugin.txt NEW
 data/TWiki/TagMeSearch.txt NEW
 data/TWiki/TagMeViewAllTags.txt NEW
 data/TWiki/TagMeViewMyTags.txt NEW
+data/TWiki/TagMeManage.txt NEW
 lib/TWiki/Plugins/TagMePlugin.pm NEW
 pub/TWiki/TagMePlugin/alltagcloud.gif NEW
 pub/TWiki/TagMePlugin/tag_add.gif NEW
@@ -13,3 +14,4 @@ pub/TWiki/TagMePlugin/tag_expand.gif NEW
 pub/TWiki/TagMePlugin/tag_ok.gif NEW
 pub/TWiki/TagMePlugin/tag_remove.gif NEW
 pub/TWiki/TagMePlugin/topictags.gif NEW
+pub/TWiki/TagMePlugin/tagme.css NEW
