@@ -456,7 +456,7 @@ sub test_noppedScrote {
 EXPECTED
 
     my $actual = <<ACTUAL;
-=your words_=
+ =your words_=
 ACTUAL
     $this->do_test($expected, $actual);
 }
@@ -473,6 +473,26 @@ EXPECTED
 <verbatim>
 your words
 </verbatim>
+ACTUAL
+    $this->do_test($expected, $actual);
+}
+
+sub test_Item3757 {
+    my $this = shift;
+    my $expected = <<EXPECTED;
+<textarea>
+your words
+
+some other
+</textarea>
+EXPECTED
+
+    my $actual = <<ACTUAL;
+<textarea>
+your words
+
+some other
+</textarea>
 ACTUAL
     $this->do_test($expected, $actual);
 }

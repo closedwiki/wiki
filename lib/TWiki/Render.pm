@@ -865,6 +865,7 @@ sub getRenderedVersion {
     my $removedComments = {};
     my $removedScript = {};
     my $removedHead = {};
+    my $removedTextarea = {};
     my $removedVerbatim = {};
     my $removedLiterals = {};
 
@@ -878,6 +879,8 @@ sub getRenderedVersion {
                                      $removedComments );
     $text = $this->takeOutProtected( $text, qr/<head.*?<\/head>/si,
                                      $removedHead );
+    $text = $this->takeOutProtected( $text, qr/<textarea\b.*?<\/textarea>/si,
+                                     $removedTextarea );
     $text = $this->takeOutProtected( $text, qr/<script\b.*?<\/script>/si,
                                      $removedScript );
 
@@ -1114,6 +1117,7 @@ sub getRenderedVersion {
 
     $this->putBackProtected( \$text, $removedHead );
     $this->putBackProtected( \$text, $removedComments );
+    $this->putBackProtected( \$text, $removedTextarea );
 
     $this->{session}->{loginManager}->endRenderingHandler( $text );
 
