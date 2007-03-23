@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1172730733" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="SvenDowideit" date="1174652085" format="1.1" version="1.2"}%
 ---+!! <nop>%WEB% Web Preferences
 
 The following settings are __web preferences__ of the [[%WEB%.%HOMETOPIC%][%WEB%]] web. These preferences overwrite the __site-level preferences__ in [[%TWIKIWEB%.%WIKIPREFSTOPIC%]] and [[%LOCALSITEPREFS%]], and can be overwritten by __user preferences__ (your personal topic, eg: %MAINWEB%.%WIKINAME% in the [[%MAINWEB%.%HOMETOPIC%][%MAINWEB%]] web).
@@ -20,7 +20,7 @@ These settings override the defaults for this web only. See [[%TWIKIWEB%.TWikiPr
       * [[%TWIKIWEB%.WebTopicEditTemplate]]: Site-level default topic template
 
    * Comma separated list of *forms* that can be attached to topics in this web. See %TWIKIWEB%.TWikiForms for more information.
-      * Set WEBFORMS = 
+      * Set WEBFORMS = ASimpleForm
 
    * Users or groups who __are not__ / __are__ allowed to __view__ / __change__ / __rename__ topics in the <nop>%WEB% web: (See %TWIKIWEB%.TWikiAccessControl). Remove the # to enable any of these settings. Remember that an empty setting is a valid setting; setting DENYWEBVIEW to nothing means that anyone can view the web.
       * Set DENYWEBVIEW = 
