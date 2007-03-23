@@ -3661,8 +3661,11 @@ sub _USERINFO {
     if ($info =~ /\$groups/) {
         my @groupNames = map {$_->webDotWikiName();} $user->getGroups();
         my $groups = join(', ', @groupNames);
-        $groups .= ' isAdmin()' if $user->isAdmin();
         $info =~ s/\$groups/$groups/g;
+    }
+    if ($info =~ /\$admin/) {
+        my $admin = $user->isAdmin()? 'true' : 'false';
+        $info =~ s/\$admin/$admin/g;
     }
 
     return $info;

@@ -4,7 +4,7 @@
 ---+++ USERINFO{"WikiName"} -- retrieve details about a user
    * Syntax: =%<nop>USERINFO%=
    * Expands to: <code>%USERINFO%</code> (comma-separated list of the username, wikiusername, and emails)
-   * With formatted output, using tokens =$emails=, =$username=, =$wikiname=, =$wikiusername=, and =$groups=:
+   * With formatted output, using tokens =$emails=, =$username=, =$wikiname=, =$wikiusername=, =$groups= and =$admin= ($admin returns 'true' or 'false'):
       * Example: =%<nop>USERINFO{ format="$username is really $wikiname" }%=
       * Expands to: =%USERINFO{ format="$username is really !$wikiname" }%=
    * Retrieve information about another user:
