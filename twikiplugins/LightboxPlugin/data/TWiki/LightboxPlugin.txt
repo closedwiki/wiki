@@ -41,9 +41,9 @@ Note, TWiki-wide defaults can be set using
 
 
    * %I% If your text is to short, the thumbnail will overlap use height to fix this.
-    <verbaim>
+<verbatim>
    <div style="border:1px dashed #22638c;padding:4px;height:200px; ">
-   </verbatim>
+</verbatim>
 
 ---++ Plugin Installation Instructions
 
@@ -75,7 +75,7 @@ This TWiki extension includes v2.0 of Lightbox.
 |  Plugin Author: | TWiki:Main.ScottHoge |
 |  Copyright: | &copy; 2006, TWiki:Main.HenriAanstoot |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Add-on Version: | 22 Mar 2007 (V1.000) |
+|  Add-on Version: | 23 Mar 2007 (%$VERSION%) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
 |  23 Mar 2007: | Added Plugin code with TWiki Tags |
 |  22 Sep 2006: | Initial version |
