@@ -407,7 +407,8 @@ sub rename {
         $new_url = $session->getScriptUrl( 0, 'view', $newWeb, $newTopic );
     }
 
-    $session->redirect( $new_url );
+    #follow redirectto=
+    $session->redirect( $new_url, undef, 1 );
 }
 
 #| =skin= | skin(s) to use |
@@ -1320,7 +1321,7 @@ sub _saveSettings {
                                     params => shift->{-text} );
     };
     my $viewURL = $session->getScriptUrl( 0, 'view', $web, $topic );
-    $session->redirect( $viewURL );
+    $session->redirect( $viewURL, undef, 1 );
     return;
 
 }
