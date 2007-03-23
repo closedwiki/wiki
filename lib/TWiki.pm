@@ -687,7 +687,67 @@ sub writePageHeader {
 
 =pod
 
----++ ObjectMethod redirect( $url, $passthrough )
+---++ StaticMethod isRedirectSafe($redirect) => $ok
+
+tests if the $redirect is an external URL, returning false if AllowRedirectUrl is denied
+
+=cut
+
+sub isRedirectSafe {
+    my $redirect = shift;
+    
+    #TODO: this should really use URI
+    #TODO: this should also grok aliases for the current host. (127.0.0.1, ip, multi-homed, localhost etc) though this raises the danger level somewhat.
+    if ((!$TWiki::cfg{AllowRedirectUrl}) && ( $redirect =~ m!^([^:]*://[^/]*)/*(.*)?$! )) {
+        my $host = $1;
+        #remove trailing /'s to match
+        $TWiki::cfg{DefaultUrlHost} =~ m!^([^:]*://[^/]*)/*(.*)?$!;
+        my $expected = $1;
+        return (uc($host) eq uc($expected));
+    }
+    return 1;
+}
+
+=pod
+
+---++ ObjectMethod _getRedirectUrl() => redirectURL set from the parameter
+
+Reads a redirect url from CGI parameter 'redirectto'.
+This function is used to get and test the 'redirectto' cgi parameter, 
+and then the calling function can set its own reporting if there is a problem.
+
+
+=cut
+
+sub _getRedirectUrl {
+    my $session = shift;
+
+    my $query = $session->{cgiQuery};
+    my $redirecturl = $query->param( 'redirectto' );
+    return '' unless $redirecturl;
+    
+    if( $redirecturl =~ /^$TWiki::regex{linkProtocolPattern}\:\/\//o ) {
+        # assuming URL
+        if (isRedirectSafe($redirecturl)) {
+            return $redirecturl;
+        } else {
+            return '';
+        }
+    }
+    # assuming 'web.topic' or 'topic'
+    my ( $w, $t ) = $session->normalizeWebTopicName( $session->{webName}, $redirecturl );
+    $redirecturl = $session->getScriptUrl( 1, 'view', $w, $t );
+    return $redirecturl;
+}
+
+
+=pod
+
+---++ ObjectMethod redirect( $url, $passthrough, $action_redirectto )
+
+   * $url - url or twikitopic to redirect to
+   * $passthrough - (optional) parameter to **FILLMEIN**
+   * $action_redirectto - (optional) redirect to where ?redirectto= points to if its valid
 
 Redirects the request to =$url=, *unless*
    1 It is overridden by a plugin declaring a =redirectCgiQueryHandler=.
@@ -703,11 +763,13 @@ request_method was POST then it caches the form data and passes over a
 cache reference in the redirect GET.
 
 Passthrough is only meaningful if the redirect target is on the same server.
+TODO: but what exactly is passthrough intended to do?
+
 
 =cut
 
 sub redirect {
-    my( $this, $url, $passthru ) = @_;
+    my( $this, $url, $passthru, $action_redirectto ) = @_;
 
     ASSERT($this->isa( 'TWiki')) if DEBUG;
 
@@ -720,6 +782,11 @@ sub redirect {
     if( $query->param( 'noredirect' )) {
         die "ERROR: $url";
         return;
+    }
+    
+    if ($action_redirectto) {
+        my $redir = $this->_getRedirectUrl();
+        $url = $redir if ($redir);
     }
 
     if ($passthru) {
@@ -748,7 +815,21 @@ sub redirect {
         }
     }
 
+    # prevent phishing by only allowing redirect to configured host
+    #do this check as late as possible to catch _any_ last minute hacks
+    #TODO: this should really use URI
+    if (!isRedirectSafe($url)) {
+         #goto oops if URL is trying to take us somewhere dangerous
+         $url = $this->getOopsUrl( 'accessdenied',
+                                def => 'topic_access',
+                                web => $this->{web} || $TWiki::cfg{UsersWebName},
+                                topic => $this->{topic} || $TWiki::cfg{HomeTopicName},
+                                params => [ 'redirect', 'unsafe redirect to '.$url.': host does not match DefaultUrlHost' ]);
+    }
+
+
     return if( $this->{plugins}->redirectCgiQueryHandler( $query, $url ) );
+    #SMELL: this is a bad breaking of encapsulation: the loginManager should just modify the url, then the redirect should only happen here.
     return if( $this->{loginManager}->redirectCgiQuery( $query, $url ) );
     die "Login manager returned 0 from redirectCgiQuery";
 }
@@ -1266,13 +1347,8 @@ sub new {
         if( $topic =~ /^$regex{linkProtocolPattern}\:\/\//o &&
             $this->{cgiQuery} ) {
             # redirect to URI
-            if ($TWiki::cfg{AllowRedirectUrl}) {
                 print $this->redirect( $topic );
                 return;
-            } else {
-                # for security, ignore redirect to URL
-                $topic = '';
-            }
         } elsif( $topic =~ /((?:.*[\.\/])+)(.*)/ ) {
             # is 'bin/script?topic=Webname.SomeTopic'
             $web   = $1;

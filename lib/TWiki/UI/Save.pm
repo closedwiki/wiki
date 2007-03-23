@@ -274,25 +274,6 @@ sub buildNewTopic {
     return( $newMeta, $newText, $saveOpts, $merged );
 }
 
-sub _getRedirectUrl {
-    my $session = shift;
-
-    my $query = $session->{cgiQuery};
-    my $redirecturl = $query->param( 'redirectto' );
-    return '' unless $redirecturl;
-    if( $redirecturl =~ /^$TWiki::regex{linkProtocolPattern}\:\/\//o ) {
-        # assuming URL
-        if ($TWiki::cfg{AllowRedirectUrl}) {
-            return $redirecturl;
-        } else {
-            return '';
-        }
-    }
-    # assuming 'web.topic' or 'topic'
-    my ( $w, $t ) = $session->normalizeWebTopicName( $session->{webName}, $redirecturl );
-    $redirecturl = $session->getScriptUrl( 1, 'view', $w, $t );
-}
-
 =pod
 
 ---++ StaticMethod save($session)
@@ -364,7 +345,6 @@ sub save {
         $session->{topicName} = $topic;
     }
 
-    my $redirecturl = _getRedirectUrl( $session );
     my $saveaction = '';
     foreach my $action qw( save checkpoint quietsave cancel preview
                            addform replaceform delRev repRev ) {
@@ -394,19 +374,16 @@ WARN
         }
 
         # redirect to a sensible place (a topic that exists)
-        my $viewURL = $redirecturl || '';
-        unless ( $viewURL ) {
-            my( $w, $t ) = ( '', '' );
-            foreach my $test ( $topic,
-                               $query->param( 'topicparent' ),
-                               $TWiki::cfg{HomeTopicName} ) {
-                ( $w, $t ) =
-                  $session->normalizeWebTopicName( $web, $test );
-                last if( $store->topicExists( $w, $t ));
-            }
-            $viewURL = $session->getScriptUrl( 1, 'view', $w, $t );
+        my( $w, $t ) = ( '', '' );
+        foreach my $test ( $topic,
+                           $query->param( 'topicparent' ),
+                           $TWiki::cfg{HomeTopicName} ) {
+            ( $w, $t ) =
+              $session->normalizeWebTopicName( $web, $test );
+            last if( $store->topicExists( $w, $t ));
         }
-        $session->redirect( $viewURL );
+        my $viewURL = $session->getScriptUrl( 1, 'view', $w, $t );
+        $session->redirect( $viewURL, undef, 1 );
 
         return;
     }
@@ -431,6 +408,8 @@ WARN
                                              $topic, $editaction ) );
         return;
     }
+
+    my $redirecturl;
 
     if( $saveaction eq 'checkpoint' ) {
         $query->param( -name=>'dontnotify', -value=>'checked' );
@@ -475,6 +454,7 @@ WARN
                                       '.'.$TWiki::cfg{SuperAdminGroup} );
     }
 
+    #success - redirect to topic view (unless its a checkpoint save)
     $redirecturl ||= $session->getScriptUrl( 1, 'view', $web, $topic );
 
     if( $saveCmd eq 'delRev' ) {
@@ -489,7 +469,7 @@ WARN
                                         params => shift->{-text} );
         };
 
-        $session->redirect( $redirecturl );
+        $session->redirect( $redirecturl, undef, 1 );
         return;
     }
 
@@ -515,7 +495,7 @@ WARN
                                         params => shift->{-text} );
         };
 
-        $session->redirect( $redirecturl );
+        $session->redirect( $redirecturl, undef, ( $saveaction ne 'checkpoint' ) );
         return;
     }
 
@@ -550,7 +530,7 @@ WARN
                                     params => $merged );
     }
 
-    $session->redirect( $redirecturl );
+    $session->redirect( $redirecturl, undef, ( $saveaction ne 'checkpoint' ) );
 }
 
 1;
