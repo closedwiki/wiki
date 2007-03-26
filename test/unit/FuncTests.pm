@@ -501,5 +501,60 @@ sub test_getExternalResource {
     $this->assert(!$response->is_redirect());
 }
 
+sub test_isTrue {
+    my $this = shift;
+
+#Returns 1 if =$value= is true, and 0 otherwise. "true" means set to
+#something with a Perl true value, with the special cases that "off",
+#"false" and "no" (case insensitive) are forced to false. Leading and
+#trailing spaces in =$value= are ignored.
+#
+#If the value is undef, then =$default= is returned. If =$default= is
+#not specified it is taken as 0.
+
+#DEFAULTS
+    $this->assert_equals(0, TWiki::Func::isTrue());
+    $this->assert_equals(1, TWiki::Func::isTrue(undef, 1));
+    $this->assert_equals(0, TWiki::Func::isTrue(undef, 'bad'));
+
+#TRUE
+    $this->assert_equals(1, TWiki::Func::isTrue('true', 'bad'));
+    $this->assert_equals(1, TWiki::Func::isTrue('True', 'bad'));
+    $this->assert_equals(1, TWiki::Func::isTrue('TRUE', 'bad'));
+    $this->assert_equals(1, TWiki::Func::isTrue('bad', 'bad'));
+    $this->assert_equals(1, TWiki::Func::isTrue('Bad', 'bad'));
+    $this->assert_equals(1, TWiki::Func::isTrue('BAD'));
+
+    $this->assert_equals(1, TWiki::Func::isTrue(1));
+    $this->assert_equals(1, TWiki::Func::isTrue(-1));
+    $this->assert_equals(1, TWiki::Func::isTrue(12));
+    $this->assert_equals(1, TWiki::Func::isTrue({a=>'me', b=>'ed'}));
+
+#FALSE
+    $this->assert_equals(0, TWiki::Func::isTrue('off', 'bad'));
+    $this->assert_equals(0, TWiki::Func::isTrue('no', 'bad'));
+    $this->assert_equals(0, TWiki::Func::isTrue('false', 'bad'));
+    
+    $this->assert_equals(0, TWiki::Func::isTrue('Off', 'bad'));
+    $this->assert_equals(0, TWiki::Func::isTrue('No', 'bad'));
+    $this->assert_equals(0, TWiki::Func::isTrue('False', 'bad'));
+
+    $this->assert_equals(0, TWiki::Func::isTrue('OFF', 'bad'));
+    $this->assert_equals(0, TWiki::Func::isTrue('NO', 'bad'));
+    $this->assert_equals(0, TWiki::Func::isTrue('FALSE', 'bad'));
+
+    $this->assert_equals(0, TWiki::Func::isTrue(0));
+    $this->assert_equals(0, TWiki::Func::isTrue('0'));
+    $this->assert_equals(0, TWiki::Func::isTrue(' 0'));
+
+#SPACES
+    $this->assert_equals(0, TWiki::Func::isTrue('  off', 'bad'));
+    $this->assert_equals(0, TWiki::Func::isTrue('no  ', 'bad'));
+    $this->assert_equals(0, TWiki::Func::isTrue('  false  ', 'bad'));
+
+    $this->assert_equals(0, TWiki::Func::isTrue(0));
+
+}
+
 1;
 

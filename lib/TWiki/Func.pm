@@ -2728,6 +2728,28 @@ sub formatGmTime {
 
 =pod
 
+=pod
+
+---++ StaticMethod isTrue( $value, $default ) -> $boolean
+
+Returns 1 if =$value= is true, and 0 otherwise. "true" means set to
+something with a Perl true value, with the special cases that "off",
+"false" and "no" (case insensitive) are forced to false. Leading and
+trailing spaces in =$value= are ignored.
+
+If the value is undef, then =$default= is returned. If =$default= is
+not specified it is taken as 0.
+
+=cut
+
+sub isTrue {
+#   my ( $value, $default ) = @_;
+
+    return TWiki::isTrue( @_ );
+}
+
+=pod
+
 ---+++ getDataDir( ) -> $dir
 
 *DEPRECATED* since 1.1 - use the "Webs, Topics and Attachments" functions to manipulate topics instead

@@ -2242,6 +2242,7 @@ sub isTrue {
     $value =~ s/^\s*(.*?)\s*$/$1/gi;
     $value =~ s/off//gi;
     $value =~ s/no//gi;
+    $value =~ s/false//gi;
     return ( $value ) ? 1 : 0;
 }
 
