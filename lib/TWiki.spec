@@ -965,8 +965,10 @@ $TWiki::cfg{WebMasterEmail} = '';
 $TWiki::cfg{WebMasterName} = 'TWiki Administrator';
 
 # **COMMAND**
-# Mail program. If Net::SMTP is installed, it will be used in preference.
-# Otherwise this needs to be a command-line program that accepts
+# Mail program. If Net::SMTP is installed, it will be used in preference. 
+# To force TWiki to use the {MailProgram}, unset both {SMTP}{MAILHOST} 
+# below and all SMTPMAILHOST settings in your TWiki's Preferences topics.
+# This needs to be a command-line program that accepts
 # MIME format mail messages on standard input, and mails them.
 # To disable all outgoing email from TWiki leave both this field and the
 # MAILHOST field below blank.
