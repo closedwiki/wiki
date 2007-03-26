@@ -880,14 +880,20 @@ sub emitTable {
             use strict 'refs';
         }    # foreach my $fcell ( @$row )
 
-        $text .= $currTablePre
-          . CGI::Tr(
+      
+        my $rowHTML =CGI::Tr(
             { class => ( $rowCount % 2 ) ? 'twikiTableOdd' : 'twikiTableEven' },
-            $rowtext
-          ) . "\n";
-        $rowCount++;
-        $isHeaderRow = 1 if ( $headerCellCount == $colCount );
-        if ($isHeaderRow) {
+            $rowtext  ) ;
+
+        $isHeaderRow =  ( $headerCellCount == $colCount );
+      my $isFooterRow =  (($numberOfRows - $rowCount) <= $footerRows);
+
+      if ($isFooterRow) {
+         #this makes one tfoot element per header row due to the line by line nature of this parser - which might be a good thing..
+         $rowHTML = CGI::tfoot($rowHTML);
+      } elsif ($isHeaderRow) {
+         #this makes one thead element per header row due to the line by line nature of this parser - which might be a good thing..
+         $rowHTML = CGI::thead($rowHTML);
 
             # reset data color count to start with first color after
             # each table heading
@@ -896,6 +902,8 @@ sub emitTable {
         else {
             $dataColorCount++;
         }
+        $text .= $currTablePre . $rowHTML . "\n";
+      $rowCount++;
     }    # foreach my $row ( @curTable )
 
     $text .= $currTablePre . CGI::end_table() . "\n";
