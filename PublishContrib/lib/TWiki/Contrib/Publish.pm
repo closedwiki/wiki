@@ -265,6 +265,7 @@ TEXT
         $disabledPlugins .= ', '.$plugin unless ($enable);
     }
     
+    $TWiki::cfg{PublishContrib}{URL} .= '/' unless ( $TWiki::cfg{PublishContrib}{URL} =~ /\/^/);
 
     $this->logInfo("Publisher", $this->{publisher});
     $this->logInfo("Date", TWiki::Func::formatTime(time()));
