@@ -278,8 +278,8 @@ TEXT
                   $generator->new($dir, $this->{web}, $genopt, $this, $query);
             };
         }
-        if ($@) {
-            print "Failed to initialise '$format' generator: <pre>$@</pre>\n",$footer;
+        if ($@ || (!$this->{archive})) {
+            print "Failed to initialise '$format' ($generator) generator: <pre>$@</pre>\n",$footer;
             return;
 
         }

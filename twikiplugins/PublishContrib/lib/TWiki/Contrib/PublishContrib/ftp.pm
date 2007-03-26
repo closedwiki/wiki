@@ -22,7 +22,8 @@ use base 'TWiki::Contrib::PublishContrib::file';
 
 sub new {
     my( $class, $path, $web, $genopt, $logger, $query ) = @_;
-    my $this = $class->SUPER::new(@_);
+    my $this = $class->SUPER::new($path, $web, $genopt, $logger);
+    
     foreach my $param qw(defaultpage googlefile destinationftpserver destinationftppath destinationftpusername destinationftppassword fastupload relativeurl) {
         $this->{$param} = $query->param($param);
         $query->delete($param);
@@ -36,6 +37,7 @@ sub new {
         die "destinationftppassword param not defined"
           unless (defined($this->{destinationftppassword}));
     }
+    return $this;
 }
 
 sub addString {
@@ -168,7 +170,7 @@ HERE
     my $urls = join("\n",
         map {
             "$topicTemplatePre$this->{relativeurl}".
-              "/$this->{path}/$_$topicTemplatePost\n"
+              "$_$topicTemplatePost\n"
           }  @$filesRef );
 
     $map =~ s/%URLS%/$urls/;
