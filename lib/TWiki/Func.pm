@@ -2740,6 +2740,8 @@ trailing spaces in =$value= are ignored.
 If the value is undef, then =$default= is returned. If =$default= is
 not specified it is taken as 0.
 
+Since: $TWiki::Plugins::VERSION 1.13
+
 =cut
 
 sub isTrue {
