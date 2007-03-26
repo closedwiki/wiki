@@ -124,6 +124,18 @@ padding:.5em;
   </td>
 </tr>
 <tr>
+  <td> 
+    Comma-separated list of Plugins to enable during publish
+  </td>
+  <td> 
+    <input type="text" name="enableplugins" class="twikiInputField" value="%URLPARAM{"enableplugins" default=""}%" size="50"/><br />
+    select from %ACTIVATEDPLUGINS%
+  </td>
+  <td>
+   =enableplugins=
+  </td>
+</tr>
+<tr>
   <td>Output format</td>
   <td>
    <select name="format" class="twikiSelect" onchange="toggle('ftp','ftpoptions')">
@@ -344,6 +356,7 @@ This add-on started as the TWiki:Plugins/GenHTMLAddon, written by TWiki:Main/Cra
 |  Dependencies: | %$DEPENDENCIES% |
 |  Version: | %$VERSION% |
 |  Change History: | |
+|  13222 | fixed ftp publish, added doco, and added enabled plugin selection funcitonality |
 |  13064 | Bugs:Item3722 worked around core attaching URL params to internal URLs |
 |  12961 | Bugs:Item3671 cannot publish without write access to history topic, so \
   security now checked early. Bugs:Item3619 Cleaned up error handling from \

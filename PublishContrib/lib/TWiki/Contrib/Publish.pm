@@ -249,18 +249,39 @@ TEXT
         #$query->query_string();
         #$this->logInfo("URL", $url);
     }
+    
+    
+    #disable unwanted plugins
+    my $enabledPlugins = '';
+    my $disabledPlugins = '';
+    my @pluginsToEnable = split(/[, ]+/, $query->param('enableplugins'));
+    foreach my $plugin (keys(%{$TWiki::cfg{Plugins}})) {
+        my $enable = $TWiki::cfg{Plugins}{$plugin}{Enabled};
+        if (scalar(@pluginsToEnable) > 0) {
+            $enable = grep(/$plugin/, @pluginsToEnable);
+            $TWiki::cfg{Plugins}{$plugin}{Enabled} = $enable;
+        }
+        $enabledPlugins .= ', '.$plugin if ($enable);
+        $disabledPlugins .= ', '.$plugin unless ($enable);
+    }
+    
 
     $this->logInfo("Publisher", $this->{publisher});
     $this->logInfo("Date", TWiki::Func::formatTime(time()));
     $this->logInfo("{PublishContrib}{Dir}", $TWiki::cfg{PublishContrib}{Dir});
     $this->logInfo("{PublishContrib}{URL}", $TWiki::cfg{PublishContrib}{URL});
     $this->logInfo("Web", $this->{web});
+    $this->logInfo("Content Generator", $format);
     $this->logInfo("Config", $configtopic) if $configtopic;
     $this->logInfo("Skin", $this->{skin});
     $this->logInfo("Inclusions", $this->{inclusions});
     $this->logInfo("Exclusions", $this->{exclusions});
     $this->logInfo("Content Filter", $this->{topicFilter});
     $this->logInfo("Generator Options", $genopt);
+    $this->logInfo("Enabled Plugins", $enabledPlugins);
+    $this->logInfo("Disabled Plugins", $disabledPlugins);
+
+
 
     my @templatesWanted = split(/,/, $this->{templatesWanted});
 
