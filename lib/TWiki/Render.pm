@@ -294,6 +294,7 @@ sub _emitTR {
     $theRow =~ s/\s*$//;    # remove trailing spaces
     $theRow =~ s/(\|\|+)/$TWiki::TranslationToken.length($1).'|'/ge;  # calc COLSPAN
     my $cells = '';
+   my $containsTableHeader;
     foreach( split( /\|/, $theRow ) ) {
         my @attr;
 
@@ -317,11 +318,19 @@ sub _emitTR {
         if( /^\s*\*(.*)\*\s*$/ ) {
             push( @attr, bgcolor => '#99CCCC' );
             $cells .= CGI::th( { @attr }, CGI::strong( " $1 " ))."\n";
+            $containsTableHeader = 1;
         } else {
             $cells .= CGI::td( { @attr }, " $_ " )."\n";
         }
     }
-    return $thePre.CGI::Tr( $cells );
+   my $tableRow = CGI::Tr( $cells );
+   unless ($insideTABLE) {   #first row in table _is_ a header
+      if ($containsTableHeader) {
+         $tableRow = CGI::thead($tableRow);
+      }
+   }
+   
+    return $thePre.$tableRow;
 }
 
 sub _fixedFontText {
