@@ -261,7 +261,7 @@ sub _showAllTags
     $separator =~ s/\$n/\n/go;
     
     $format = '$tag' unless $hasFormat;
-    $format .= "\n" unless $separator;
+    $format .= "\n" unless $hasSeparator;
     $format =~ s/\$n/\n/go;
     
     $by = $user if( $by eq 'me' );
@@ -341,12 +341,14 @@ sub _showAllTags
                     sort{ $tagCount{$a} <=> $tagCount{$b} }
                     keys( %tagCount );
         my $size = 0;
+        my $tmpSep = '_#_';
         $text = join( $separator,
                     map{
                         $size = int( $maxSize * ( $order{$_} + 1 ) / $max );
                         $size = $minSize if( $size < $minSize );
                         $line = $format;
-                        $line =~ s/tag\=\$tag/_urlEncode($_)/geo;
+                        $line =~ s/(tag\=)\$tag/$1$tmpSep\$tag$tmpSep/go unless $normalizeTagInput;
+                        $line =~ s/$tmpSep\$tag$tmpSep/&_urlEncode($tag)/geo unless $normalizeTagInput;
                         $line =~ s/\$tag/$_/geo;
                         $line =~ s/\$size/$size/geo;
                         $line;
@@ -429,15 +431,20 @@ sub _queryTag
 
     # related tags
     unless( $noRelated ) {
+        # TODO: should be conditional sort
         $text .= "__%MAKETEXT{\"Related tags\"}%:__ "
                . join( ', ',
                        map{ _printTagLink( $_, $qBy ) }
                        grep{ !/^$qTag$/ }
-                       sort keys( %related )
+                       sort { lc $a cmp lc $b} keys( %related )
                      )
                . "\n\n";
     }
-
+if ( $normalizeTagInput) {
+                @tags = sort keys( %allTags );
+            } else {
+                @tags = sort { lc $a cmp lc $b} keys( %allTags );
+            }
     my @topics = ();
     if( $sort eq 'tagcount' ) {
         # Sort topics by tag count
@@ -494,7 +501,8 @@ sub _printWebTopic
         . "format=\"$format\""
         . ' }%';
     $text = TWiki::Func::expandCommonVariables( $text, $qTopic, $qWeb );
-    $text =~ s/\$taglist/join( ', ', map{ _printTagLink( $_, $qBy ) } @{$tagsRef} )/geo;
+    # TODO: should be conditional sort
+    $text =~ s/\$taglist/join( ', ', map{ _printTagLink( $_, $qBy ) } sort { lc $a cmp lc $b} @{$tagsRef} )/geo;
     $text =~ s/\$size/$size/go if( $size );
     $text =~ s/\$votecount/$voteCount/go;
     return $text;
@@ -505,8 +513,11 @@ sub _printTagLink
 {
     my( $tag, $by ) = @_;
     my $text = $tagLinkFormat;
-    $text =~ s/(tag\=)\$tag/$1_#_\$tag_#_/go unless $normalizeTagInput;
-    $text =~ s/_#_\$tag_#_/&_urlEncode($tag)/geo unless $normalizeTagInput;
+    if( !$normalizeTagInput) {
+        my $tmpSep = '_#_';
+        $text =~ s/(tag\=)\$tag/$1$tmpSep\$tag$tmpSep/go;
+        $text =~ s/$tmpSep\$tag$tmpSep/&_urlEncode($tag)/geo;
+    }
     $text =~ s/\$tag/$tag/go;
     $text =~ s/\$by/$by/go;
     return $text;
@@ -658,7 +669,7 @@ sub _imgTag
     my $text = '';
     if( $tag ) {
         $text = "<a href=\"%SCRIPTURL%/viewauth%SCRIPTSUFFIX%/%BASEWEB%/%BASETOPIC%?"
-              . "tpaction=$action;tag=$tag\">";
+              . "tpaction=$action;tag=" . _urlEncode($tag) . "\">";
     }
     $text .= "<img src=\"$attachUrl/$image.gif\" alt=\"$title\" title=\"$title\" "
            . "width=\"12\" height=\"10\" border=\"0\" />";
