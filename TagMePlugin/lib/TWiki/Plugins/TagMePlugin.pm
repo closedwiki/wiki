@@ -347,10 +347,10 @@ sub _showAllTags
                         $size = int( $maxSize * ( $order{$_} + 1 ) / $max );
                         $size = $minSize if( $size < $minSize );
                         $line = $format;
-                        $line =~ s/(tag\=)\$tag/$1$tmpSep\$tag$tmpSep/go unless $normalizeTagInput;
-                        $line =~ s/$tmpSep\$tag$tmpSep/&_urlEncode($tag)/geo unless $normalizeTagInput;
-                        $line =~ s/\$tag/$_/geo;
-                        $line =~ s/\$size/$size/geo;
+                        $line =~ s/(tag\=)\$tag/$1$tmpSep\$tag$tmpSep/go;
+                        $line =~ s/$tmpSep\$tag$tmpSep/&_urlEncode($_)/geo;
+                        $line =~ s/\$tag/$_/go;
+                        $line =~ s/\$size/$size/go;
                         $line;
                     } @tags );
     }
@@ -363,7 +363,7 @@ sub _queryTag
     my( $attr ) = @_;
     my $qWeb      = TWiki::Func::extractNameValuePair( $attr, 'web' );
     my $qTopic    = TWiki::Func::extractNameValuePair( $attr, 'topic' );
-    my $qTag      = TWiki::Func::extractNameValuePair( $attr, 'tag' );
+    my $qTag      = _urlDecode(TWiki::Func::extractNameValuePair( $attr, 'tag' ));
     my $qBy       = TWiki::Func::extractNameValuePair( $attr, 'by' );
     my $noRelated = TWiki::Func::extractNameValuePair( $attr, 'norelated' );
     my $noTotal   = TWiki::Func::extractNameValuePair( $attr, 'nototal' );
@@ -435,16 +435,16 @@ sub _queryTag
         $text .= "__%MAKETEXT{\"Related tags\"}%:__ "
                . join( ', ',
                        map{ _printTagLink( $_, $qBy ) }
-                       grep{ !/^$qTag$/ }
+                       grep{ !/^\Q$qTag\E$/ }
                        sort { lc $a cmp lc $b} keys( %related )
                      )
                . "\n\n";
     }
-if ( $normalizeTagInput) {
-                @tags = sort keys( %allTags );
-            } else {
-                @tags = sort { lc $a cmp lc $b} keys( %allTags );
-            }
+    if ( $normalizeTagInput) {
+        @tags = sort keys( %allTags );
+    } else {
+        @tags = sort { lc $a cmp lc $b} keys( %allTags );
+    }
     my @topics = ();
     if( $sort eq 'tagcount' ) {
         # Sort topics by tag count
@@ -524,13 +524,6 @@ sub _printTagLink
 }
 
 # =========================
-sub _urlEncode {
-    my $text = shift;
-    $text =~ s/([^0-9a-zA-Z-_.:~!*'()\/%])/'%'.sprintf('%02x',ord($1))/ge;
-    return $text;
-}
-
-# =========================
 # Add new tag to system
 sub _newTag
 {
@@ -549,7 +542,7 @@ sub _newTag
     $tag =~ s/\s*$//; # trim spaces at end
     return _wrapHtmlErrorFeedbackMessage( "Please enter a tag" ) unless( $tag );
     my @allTags = _readAllTags();
-    if( grep( /^$tag$/, @allTags ) ) {
+    if( grep( /^\Q$tag\E$/, @allTags ) ) {
         return _wrapHtmlErrorFeedbackMessage( "Tag \"$tag\" already exists" );
     } else {
         push( @allTags, $tag );
@@ -819,6 +812,20 @@ sub _wrapHtmlTagControl {
 sub _wrapHtmlTagMeShowForm {
     my( $text ) = @_;
     return "<form name=\"tagmeshow\" action=\"%SCRIPTURL%/viewauth%SCRIPTSUFFIX%/%BASEWEB%/%BASETOPIC%\" method=\"post\">$text</form>";
+}
+
+# =========================
+sub _urlEncode {
+    my $text = shift;
+    $text =~ s/([^0-9a-zA-Z-_.:~!*'()\/%])/'%'.sprintf('%02x',ord($1))/ge;
+    return $text;
+}
+
+# =========================
+sub _urlDecode {
+    my $text = shift;
+    $text =~ s/%([\da-f]{2})/chr(hex($1))/gei;
+    return $text;
 }
 
 # =========================
