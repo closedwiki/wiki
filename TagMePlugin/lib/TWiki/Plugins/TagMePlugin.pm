@@ -346,7 +346,8 @@ sub _showAllTags
                         $size = int( $maxSize * ( $order{$_} + 1 ) / $max );
                         $size = $minSize if( $size < $minSize );
                         $line = $format;
-                        $line =~ s/\$tag/$_/go;
+                        $line =~ s/tag\=\$tag/_urlEncode($_)/geo;
+                        $line =~ s/\$tag/$_/geo;
                         $line =~ s/\$size/$size/geo;
                         $line;
                     } @tags );
@@ -504,8 +505,17 @@ sub _printTagLink
 {
     my( $tag, $by ) = @_;
     my $text = $tagLinkFormat;
+    $text =~ s/(tag\=)\$tag/$1_#_\$tag_#_/go unless $normalizeTagInput;
+    $text =~ s/_#_\$tag_#_/&_urlEncode($tag)/geo unless $normalizeTagInput;
     $text =~ s/\$tag/$tag/go;
     $text =~ s/\$by/$by/go;
+    return $text;
+}
+
+# =========================
+sub _urlEncode {
+    my $text = shift;
+    $text =~ s/([^0-9a-zA-Z-_.:~!*'()\/%])/'%'.sprintf('%02x',ord($1))/ge;
     return $text;
 }
 
