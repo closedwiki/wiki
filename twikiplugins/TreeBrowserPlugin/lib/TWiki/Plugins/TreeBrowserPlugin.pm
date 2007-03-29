@@ -126,7 +126,7 @@ sub handleTreeView {
    my $noCss = &TWiki::Func::extractNameValuePair( $theAttr, "nocss" );
    # =style= specifies the CSS file to be used.
    my $style = &TWiki::Func::extractNameValuePair( $theAttr, "style" );
-   $style=dtree unless TWiki::Func::attachmentExists($installWeb,$pluginName,"$style.css"); #Default to dtree
+   $style="dtree" unless TWiki::Func::attachmentExists($installWeb,$pluginName,"$style.css"); #Default to dtree
    my $useStatusText = &TWiki::Func::extractNameValuePair( $theAttr, "usestatustext" );
    my $closeSameLevel = &TWiki::Func::extractNameValuePair( $theAttr, "closesamelevel" );
    my $autoToggle = &TWiki::Func::extractNameValuePair( $theAttr, "autotoggle" );
