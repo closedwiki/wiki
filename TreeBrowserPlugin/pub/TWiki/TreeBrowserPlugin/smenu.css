@@ -35,6 +35,14 @@ div.dmenuTranslucentBackground {
    width:100%;
 }
 
+.smenuLevel0 > .smenuNodeOpened a {
+color: orange;
+}
+
+.smenuLevel1 > .smenuNodeOpened a {
+color: orange;
+}
+
 .smenuLevel0 > .smenuNodeOpened a:hover,
 .smenuLevel0 > .smenuNodeClosed a:hover,
 .smenuLevel0 > .smenuLeaf a:hover {
