@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="StephaneLenclud" date="1174258241" format="1.1" reprev="1.29" version="1.29"}%
+%META:TOPICINFO{author="StephaneLenclud" date="1175200538" format="1.1" version="1.30"}%
 ---+!! Tree Browser Plugin
 
 Renders a bulleted or numbered list as a collapsible/expandable tree of nodes.
@@ -480,6 +480,7 @@ See TWiki:Plugins.TreeBrowserPluginDev.
 |  Plugin Author: | TWiki:Main.ThomasWeigert & TWiki:Main.StephaneLenclud |
 |  Plugin Version: | %PLUGINVERSION{"TreeBrowserPlugin"}% |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  29 Mar 2007: | (v1.8) - Improved =smenu= CSS and fixing warning.  By [[TWiki:Main.StephaneLenclud][Stéphane Lenclud]]. |
 |  18 Mar 2007: | (v1.7) - Improved =smenu= CSS, resolved _highlighting gap issue_ . Now closing sub-menu when highlighting leaf.  By [[TWiki:Main.StephaneLenclud][Stéphane Lenclud]]. |
 |  18 Mar 2007: | (v1.6) - Sub-menus now working in IE with =smenu= style. Closing sub-menu when going back one level with mouse cursor.  By [[TWiki:Main.StephaneLenclud][Stéphane Lenclud]]. |
 |  18 Mar 2007: | (v1.5) - Adding =useopacity= parameter. Adding =smenu.css=. By [[TWiki:Main.StephaneLenclud][Stéphane Lenclud]]. |
