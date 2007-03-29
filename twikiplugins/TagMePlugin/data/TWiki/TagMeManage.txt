@@ -2,10 +2,59 @@
 %META:TOPICPARENT{name="TagMePlugin"}%
 ---+!! Tag-Me: Manage Tags
 
+%TOC%
+
 %STARTSECTION{"create"}%
 #CreateTag
 ---++ Create New Tag
-<noautolink>
+
+Create a new tag - then add it to a topic.
+
+<noautolink><form name="addtag" action="%SCRIPTURL%/viewauth%SCRIPTSUFFIX%/%WEB%/TagMeManage#CreateTag" method="post" onsubmit="return cleanTag(this.newtag.value);">%TAGME{ tpaction="%URLPARAM{"newaction" default="nop"}%" tag="%URLPARAM{newtag}%" note="%URLPARAM{newtagnote}%" }%
+<div class="twikiFormSteps">
+<div class="twikiFormStep twikiLast">
+Tag name: <input type="text" class="twikiInputField" name="newtag" size="30" onblur="this.value=cleanTag(this.value)" /> <input type="submit" class="twikiSubmit" value="%MAKETEXT{"Create"}%" />
+</div>
+</div>
+<input type="hidden" name="newaction" value="newtag" />
+<input type="hidden" name="from" value="%URLPARAM{"from"}%" />
+<input type="hidden" name="newtagnote" value="Return to [<nop>[%URLPARAM{"from" default="%BASEWEB%.%HOMETOPIC%" }%]]" />
+</form>
+
+Existing tags: %TAGME{ tpaction="showalltags" format="[[%SCRIPTURL%/view%SCRIPTSUFFIX%/%TWIKIWEB%/TagMeSearch?tag=$tag][$tag]]" separator=", " }%
+</noautolink>
+%ENDSECTION{"create"}%
+
+%BR%
+
+%STARTSECTION{"rename"}%
+#RenameTag
+---++ Rename Existing Tag
+
+<noautolink><form name="renametag" action="%SCRIPTURL%/viewauth%SCRIPTSUFFIX%/%WEB%/TagMeManage#RenameTag" method="post" onsubmit="return cleanTag(this.newtag.value);">%TAGME{ tpaction="%URLPARAM{"renameaction" default="nop"}%" oldtag="%URLPARAM{oldtag}%" newtag="%URLPARAM{newtag}%" note="%URLPARAM{renametagnote}%" }%
+<div class="twikiFormSteps">
+<div class="twikiFormStep">
+Tag to rename: %BR%
+<select name="oldtag">
+%TAGME{ tpaction="showalltags" format="<option>$tag</option>" separator="$n" }%
+</select>
+</div>
+<div class="twikiFormStep">
+New name for this tag: %BR%
+<input type="text" name="newtag" class="twikiInputField" size="30" onblur="this.value=cleanTag(this.value)" />
+</div>
+<div class="twikiFormStep twikiLast">
+<input type="submit" class="twikiSubmit" value="%MAKETEXT{"Rename"}%" />
+</div>
+</div>
+<input type="hidden" name="renameaction" value="renametag" />
+</form>
+</noautolink>
+%ENDSECTION{"rename"}%
+
+
+
+%STARTSECTION{"cleanTagJavascript"}%
 <script language="javascript" type="text/javascript">
 <!-- // <pre>-hide
 function cleanTag(inTagString) {
@@ -63,33 +112,26 @@ function translateEntities(inText) {
 		if( chVal==255) { ch = 'y'; }
 		ch = toUnderscore(ch);
 		ch = ch.toLowerCase();
-		if( ((ch>='a')&&(ch<='z')) || ((ch>='0')&&(ch<='9')) || (ch=='_') ) { sOut+=ch }
-		if( ch2!='' ) { sOut+=ch2; }
+		if( ((ch>='a')&&(ch<='z')) || ((ch>='0')&&(ch<='9')) || (ch=='_') ) { translated += ch }
+		if( ch2!='' ) { translated += ch2; }
 	}
+	// remove double underscores
+	var re = new RegExp(/_+/g);
+	translated = translated.replace(re, "_");
 	return translated;
 }
 function toUnderscore (inChar) {
+	if (inChar.length == 0) return "";
 	var safeChar = inChar;
 	if( ((safeChar=='-') || (safeChar==' ') || (safeChar=='/')) ) { safeChar = '_'; }
 	return safeChar;
 }
 function makeSafe (inText) {
-	var re = new RegExp(/[\x01-\x1f^\#\,\'\"]/g);
-	return inText.replace(re, "");
+	if (inText.length == 0) return "";
+	var re = new RegExp(/[\x01-\x1f^\#\,\'\"\|]/g);
+	var perlSafeString = inText.replace(re, "");
+	return perlSafeString;
 }
 // </pre>-hide -->
 </script>
-%TAGME{ tpaction="%URLPARAM{"newaction" default="nop"}%" tag="%URLPARAM{newtag}%" }%
-
-<form name="addtag" action="%SCRIPTURL%/viewauth%SCRIPTSUFFIX%/%WEB%/TagMeManage#CreateTag" method="post">
-Create a new tag - then add it to a topic.
-
-*Tag name:* <input type="text" class="twikiInputField" name="newtag" size="30" onblur="this.value=cleanTag(this.value)" /> <input type="submit" class="twikiSubmit" value="%MAKETEXT{"Create"}%" />
-<input type="hidden" name="newaction" value="newtag" />
-<input type="hidden" name="from" value="%URLPARAM{"from"}%" />
-<input type="hidden" name="note" value="Return to [<nop>[%URLPARAM{"from" default="<nop>%WEB%.%TOPIC%" }%]]" />
-</form>
-
-Existing tags: %TAGME{ tpaction="showalltags" format="[[%SCRIPTURL%/view%SCRIPTSUFFIX%/%TWIKIWEB%/TagMeSearch?tag=$tag][$tag]]" separator=", " }%
-</noautolink>
-%ENDSECTION{"create"}%
+%ENDSECTION{"cleanTagJavascript"}%

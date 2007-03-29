@@ -11,9 +11,8 @@
 	white-space:nowrap;
 }
 div.tagMeNotification {
-	/* mimic the new twikiNotification */
-	padding:.25em .5em;
-	margin:0 0 1em 0;
+	padding:.5em 20px; /* side padding same as twikiFormStep */
+	margin:1em 0;
 }
 .tagMeVoteCount {
 	margin:0 .35em;
