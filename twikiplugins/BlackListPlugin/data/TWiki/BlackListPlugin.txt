@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1174266482" format="1.0" version="1.18"}%
+%META:TOPICINFO{author="PeterThoeny" date="1175216011" format="1.0" version="1.19"}%
 ---+!! Black List Plugin
 
 %TOC%
@@ -61,7 +61,7 @@ Plugin settings are stored as preferences variables. To reference a plugin setti
 		4 Points for view raw
 		5 Threshold to add to BANLIST
 		6 Measured over time (in seconds)
-		* Set BANLISTCONFIG = 10, 5, 1, 20, 120, 300
+		* Set BANLISTCONFIG = 10, 5, 1, 5, 120, 300
 		* Your current score: %BLACKLISTPLUGIN{ action="user_score" }% for IP address %REMOTE_ADDR%
 
 	* Message for users on BLACKLIST and BANLIST:
@@ -124,10 +124,10 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 	  | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
 	  | ==pub/TWiki/%TOPIC%/.htaccess== | Apache access control to protect pub dir |
 	  | ==templates/oopsblacklist.tmpl== | Generic oops message |
-	* Write protect this Plugin topic (if not already done)
 	* Make sure =pub/TWiki/%TOPIC%/= is writable by the CGI user (typically =nobody=)
 	* Add the hidden form field to the registration form as described in the "Registration protection settings" section (this is already in TWiki 4.0)
 	* From TWiki 4.0 release on: Run the configure utility in your browser to enable the Plugin
+	* Make sure that non-administrators cannot edit this plugin topic. By default, this topic is write protected with an =ALLOWTOPICCHANGE = !TWikiAdminGroup= setting.
 	* Test if the installation was successful:
 		1 Using above form, add the IP address of one of your workstations to the BANLIST
 		1 Access TWiki from that workstation
@@ -144,8 +144,9 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main/PeterThoeny |
-|  Plugin Version: | 18 Mar 2007 (r13186) |
+|  Plugin Version: | 29 Mar 2007 (r13186) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  29 Mar 2007: | Doc fixes; change view=raw penalty from 20 to 5 |
 |  18 Mar 2007: | Scan for evil script eval() and escape() in topic text and attachments; support for TWiki 4.2 (using new =TWiki::Func::getExternalResource=) |
 |  28 Dec 2006: | Fixed bug where EXCLUDELIST pattern was removing only part of a wiki-spam pattern |
 |  27 Dec 2006: | Support for TWiki 4.1 |
@@ -175,5 +176,5 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 
 __Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins, [[http://directory.google.com/Top/Computers/Internet/Abuse/Spam/Wikispam/][Google wiki spam directory]]
 
--- TWiki:Main/PeterThoeny - 18 Mar 2007
+-- TWiki:Main/PeterThoeny - 29 Mar 2007
 
