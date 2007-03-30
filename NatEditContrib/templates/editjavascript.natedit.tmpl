@@ -1,0 +1,24 @@
+%TMPL:DEF{"templatejavascript"}%<script type="text/javascript" src="%PUBURLPATH%/%TWIKIWEB%/TWikiJavascripts/twiki_edit.js"></script>
+<script type="text/javascript" src="%PUBURLPATH%/%TWIKIWEB%/NatEditContrib/edit.js"></script>
+<script type="text/javascript">
+<!--
+function submitEditForm(script, action) {
+  document.main.elements['action_preview'].value = '';
+  document.main.elements['action_save'].value = '';
+  document.main.elements['action_checkpoint'].value = '';
+  document.main.elements['action_addform'].value = '';
+  document.main.elements['action_cancel'].value = '';
+  document.main.elements['action_' + action].value = 'foobar';
+  document.main.submit();
+}
+/* testing ImagePlugin: %IMAGE{"clear"}% */
+function natEditImageButtonAction() {
+  %IFDEFINEDTHEN{"$percntIMAGE{\"clear\"}$percnt" as="<br.*"}%
+    natEditImageButtonActionImagePlugin();
+  %ELSEDEFINED%
+    natEditImageButtonActionStandard();
+  %FIDEFINED%
+}
+//-->
+</script>
+%TMPL:END%

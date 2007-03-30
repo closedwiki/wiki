@@ -1,0 +1,24 @@
+%TMPL:INCLUDE{"edit"}%
+%TMPL:INCLUDE{"edittoolbar"}%
+%TMPL:INCLUDE{"edithelp"}%
+%TMPL:INCLUDE{"editjavascript"}%
+
+%TMPL:DEF{"content"}%%TMPL:P{"pagetitle"}%
+%TMPL:P{"formstart"}%%TMPL:P{"formattop"}%
+%TMPL:P{"textarea"}%
+<br clear="both" />
+%TMPL:P{"formatbottom"}%
+%TMPL:P{"toolbar"}%
+<input type="hidden" name="action_preview" value="" />
+<input type="hidden" name="action_save" value="" />
+<input type="hidden" name="action_checkpoint" value="" />
+<input type="hidden" name="action_addform" value="" />
+<input type="hidden" name="action_replaceform" value="" />
+<input type="hidden" name="action_cancel" value="" />
+%TMPL:P{"pagehelp"}%
+%TMPL:P{"formend"}%
+%TMPL:END%
+
+%TMPL:DEF{"formattop"}%%TMPL:P{"edittoolbar"}%%TMPL:END%
+
+%TMPL:DEF{"help"}%%TMPL:P{"edithelp"}%%TMPL:END%

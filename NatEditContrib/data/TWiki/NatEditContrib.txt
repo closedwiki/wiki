@@ -1,0 +1,40 @@
+---+!! %TOPIC%
+<!--
+
+   PLEASE DO NOT EDIT THIS TOPIC
+
+   It is automatically generated from the subversion repository, and any
+   changes you make will simply be overwritten the next time a release is
+   generated.
+
+   Instead, you could check your fix in, raise a bug in the Bugs web, or
+   mail the author.
+-->
+
+---++ Summary of Contents
+
+
+---+++ Features
+
+
+<!--
+	* Set STUB = %$STUB%
+	* Set SHORTDESCRIPTION = A Wikiwyg Editor
+-->
+
+---++ Installation Instructions
+%$INSTALL_INSTRUCTIONS%
+
+---++ Contrib Info
+|  Author: | TWiki:Main/MichaelDaum |
+|  Copyright &copy;: | 2007 Michael Daum http://wikiring.de |
+|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
+|  Version: | %$VERSION% |
+|  Change History: | |
+|  31 Mar 2007 | Initial version |
+|  Dependencies: | %$DEPENDENCIES% |
+|  Perl Version: | - |
+|  Plugin Home: | TWiki:Plugins/%TOPIC% |
+|  Feedback: | TWiki:Plugins/%TOPIC%Dev |
+|  Appraisal: | TWiki:Plugins/%TOPIC%Appraisal |
+
