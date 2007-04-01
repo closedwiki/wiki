@@ -2,13 +2,20 @@
 <form name="main" action="%SCRIPTURLPATH{"save"}%/%WEB%/%TOPIC%?action_save=1">
 <input type="hidden" name="t" value="%GMTIME{"$epoch"}%" />
 ---+++++ %ICON{"arrowup"}% *%MAKETEXT{"Set new topic parent"}%*
+<div class="twikiFormSteps">
+<div class="twikiFormStep">
 %MAKETEXT{"Current parent:"}% %IF{'NONE%SEARCH{ "^%TOPIC%$" scope="topic" regex="on" nosearch="on" nototal="on" format="$parent" }%=NONE' then='(none)' else='%SEARCH{ "^%TOPIC%$" scope="topic" regex="on" nosearch="on" nototal="on" format="$parent" }%' }%
-
+</div>
+<div class="twikiFormStep">
 %MAKETEXT{"Select topic parent:"}% %BR%
 <select class="twikiSelect" name="topicparent" size="10">
 <option value="none">%MAKETEXT{"none (remove topic parent)"}%</option>
 %TOPICLIST{"<option $marker value='$name'>$name</option>" separator=" " selection="%SEARCH{ "^%TOPIC%$" scope="topic" regex="on" nosearch="on" nototal="on" format="$parent" }%"}%
-</select> %BR%
+</select>
+</div>
+<div class="twikiFormStep twikiLast">
 <input type='submit' class='twikiButton' value='%MAKETEXT{"Set new parent"}%' />
 <input type="hidden" name="t" value="%SERVERTIME{$year$mo$day$hour$min$sec}%" />
+</div>
+</div>
 </form>%TMPL:END%
