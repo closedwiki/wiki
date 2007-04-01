@@ -1692,15 +1692,14 @@ sub createWeb {
 
     return unless $this->topicExists( $newWeb, $wpt );
 
-    my( $meta, $text ) =
-      $this->readTopic( undef, $newWeb, $wpt, undef );
-
     if( $opts ) {
+        my( $meta, $text ) =
+            $this->readTopic( undef, $newWeb, $wpt, undef );
         foreach my $key ( %$opts ) {
             $text =~ s/($TWiki::regex{setRegex}$key\s*=).*?$/$1 $opts->{$key}/gm;
         }
+        $this->saveTopic( $user, $newWeb, $wpt, $text, $meta );
     }
-    $this->saveTopic( $user, $newWeb, $wpt, $text, $meta );
 }
 
 =pod
