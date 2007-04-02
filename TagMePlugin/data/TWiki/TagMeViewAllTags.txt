@@ -1,24 +1,19 @@
-%META:TOPICINFO{author="PeterThoeny" date="1160871564" format="1.0" version="1.5"}%
+%META:TOPICINFO{author="TWikiContributor" date="1160871564" format="1.0" version="1.1"}%
 %META:TOPICPARENT{name="TagMePlugin"}%
 ---+ Tag-me: View All Tags
 
 %STARTINCLUDE%
-<table border="0" cellpadding="3" cellspacing="0"><tr>
+<table class="tagmeNavigation" border="0" cellpadding="3" cellspacing="0"><tr>
 <td>&nbsp; &nbsp;</td>
-<td bgcolor="#DDDDCC">&nbsp; *All Tags* &nbsp;</td>
+<td bgcolor="#EAE9DE">&nbsp; *All Tags* &nbsp;</td>
 <td>&nbsp;</td>
-<td bgcolor="#EEEEDD">&nbsp; [[%SCRIPTURL%/viewauth%SCRIPTSUFFIX%/%WEB%/TagMeViewMyTags][My Tags]] &nbsp;</td>
+<td bgcolor="#F6F4EB">&nbsp; [[%SCRIPTURL%/viewauth%SCRIPTSUFFIX%/%WEB%/TagMeViewMyTags][My Tags]] &nbsp;</td>
 <td>&nbsp;</td>
-<td bgcolor="#EEEEDD">&nbsp; [[TagMeSearch][Tag Search]] &nbsp;</td>
+<td bgcolor="#F6F4EB">&nbsp; [[TagMeSearch][Tag Search]] &nbsp;</td>
 </tr></table>
 <table border="0" cellpadding="5" cellspacing="0" style="width:100%;">
-<tr bgcolor="#DDDDCC"><td style="width:100%;"></td></tr>
-<tr bgcolor="#EEEEDD"><td style="width:100%;">
-%TAGME{ tpaction="showalltags" format="<a href=\"%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/TagMeSearch?tag=$tag\" style=\"font-size:$size%\">$tag</a>" separator=", " }%
+<tr bgcolor="#EAE9DE"><td style="width:100%;"></td></tr>
 </td></tr></table>
+
+%TAGME{ tpaction="showalltags" format="<a href=\"%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/TagMeSearch?tag=$tag\" style=\"font-size:$size%\">$tag</a>" separator=", " }%
 %STOPINCLUDE%
-
-__See also:__ TagMePlugin, TagMeViewMyTags, TagMeSearch
-
--- TWiki:Main.PeterThoeny - 11 Mar 2006
-

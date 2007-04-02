@@ -49,13 +49,16 @@ You see:
 	* a link to create a new tag 
 
 ---+++ Create New Tags
-Go to [[TagMeManage#CreateTag][TagMeManage]] to create new tags.
+Go to [[TagMeCreateNewTag]] to create new tags.
 
 ---+++ Add Tag to Topic
 Once a new tag is created, it can be added in the tag list of the topic.
 
 ---+++ Rename Tags
-Go to [[TagMeManage#RenameTag][TagMeManage]] to rename existing tags.
+Go to [[TagMeRenameTag]] to rename existing tags.
+
+---+++ Delete Tags
+Go to [[TagMeDeleteTag]] to delete existing tags.
 
 ---+++ List All Tags
 
@@ -232,10 +235,11 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Plugin Author: | TWiki:Main.PeterThoeny ([[http://www.structuredwikis.com/peter.html][blog]]) |
 |  Copyright: | &copy; 2006, Peter@Thoeny.org, [[http://www.structuredwikis.com/][StructuredWikis LLC]] |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 30 Mar 2006 (V1.033) |
+|  Plugin Version: | 02 Apr 2006 (V1.034) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  30 Mar 2007: | Arthur Clemens: Added "Rename Existing Tag" interface in TagMeManage. |
-|  22 Mar 2007: | Arthur Clemens: Added option =NORMALIZE_TAG_INPUT= (to be set to 0) to allow any word as tag name (including upper case, punctuation characters and spaces). Moved "create new tag" form to TagMeManage. Created CSS styles in =tagme.css=. Added =mincount= parameter to =TAGME{tpaction="showalltags"}=. |
+|  02 Apr 2007: | Arthur Clemens: Added "Delete Tag" interface. Added tabbed interface for Create, Rename, Delete tags. |
+|  30 Mar 2007: | Arthur Clemens: Added "Rename Tag" interface. |
+|  22 Mar 2007: | Arthur Clemens: Added option =NORMALIZE_TAG_INPUT= (to be set to 0) to allow any word as tag name (including upper case, punctuation characters and spaces). Moved "Create New Tag" to dedicated page. Created CSS styles in =tagme.css=. Added =mincount= parameter to =TAGME{tpaction="showalltags"}=. |
 |  14 Nov 2006: | Fix IE browser crash issue on print (forms can't be named "tags"; debug by TWiki:Main.KevinKalmbach) |
 |  14 Oct 2006: | Fix show default problem introduced by version 07 Oct 2006 (contributed by TWiki:Main.ChristianSuenkel) |
 |  07 Oct 2006: | nostatus="on" parameter for add/remove tag (contributed by TWiki:Main.FredMorris) |
