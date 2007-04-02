@@ -4,6 +4,36 @@
 .tagMeControl input { 
 	border:0;
 }
+a.tagmeAction img {
+	visibility:hidden;
+}
+a.tagmeAction:hover {
+	background-color:transparent;
+	background-repeat:no-repeat;
+}
+a.tagmeAction {
+	background-position:0 .25em;
+	background-repeat:no-repeat;
+}
+a.tag_add {
+	background-image:url(tag_add.gif);
+}
+a.tag_add:hover {
+	background-image:url(tag_add_over.gif);
+}
+a.tag_addnew {
+	background-image:url(tag_add.gif);
+}
+a.tag_addnew:hover {
+	background-image:url(tag_addnew_over.gif);
+}
+a.tag_remove {
+	background-image:url(tag_remove.gif);
+}
+a.tag_remove:hover {
+	background-image:url(tag_remove_over.gif);
+}
+
 .tagMeNotification {
 	background-color:#ffc;
 	color:#000;
@@ -15,6 +45,20 @@ div.tagMeNotification {
 	margin:1em 0;
 }
 .tagMeVoteCount {
-	margin:0 .35em;
+	margin:0 .25em;
 	color:#8E9195; /* use twikiGrayText color */
+}
+.tagmeNavigation a {
+	text-decoration:none;
+}
+.tagmeNavigation a:link,
+.tagmeNavigation a:visited {
+	color:#666;
+}
+.tagmeNavigation a:hover {
+	background-color:transparent;
+	border-bottom:1px solid #666;
+}
+.tagmeRelated {
+	font-weight:bold;
 }
