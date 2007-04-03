@@ -29,7 +29,7 @@ use base qw( TWiki::Contrib::Build );
 
 sub new {
     my $class = shift;
-    return bless( $class->SUPER::new( "MoveableTypeSampleDesignContrib" ), $class );
+    return bless( $class->SUPER::new( "MoveableTypeSkin" ), $class );
 }
 
 # Example: Override the build target
