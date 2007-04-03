@@ -3,22 +3,35 @@
 %TMPL:INCLUDE{"edithelp"}%
 %TMPL:INCLUDE{"editjavascript"}%
 
+%TMPL:DEF{"bottombar"}%%TMPL:END%
+
 %TMPL:DEF{"content"}%%TMPL:P{"pagetitle"}%
 %TMPL:P{"formstart"}%%TMPL:P{"formattop"}%
 %TMPL:P{"textarea"}%
-<br clear="both" />
-%TMPL:P{"formatbottom"}%
-%TMPL:P{"toolbar"}%
+%TMPL:P{"form"}%
 <input type="hidden" name="action_preview" value="" />
 <input type="hidden" name="action_save" value="" />
 <input type="hidden" name="action_checkpoint" value="" />
-<input type="hidden" name="action_addform" value="" />
-<input type="hidden" name="action_replaceform" value="" />
 <input type="hidden" name="action_cancel" value="" />
-%TMPL:P{"pagehelp"}%
+%TMPL:P{"formatbottom"}%
 %TMPL:P{"formend"}%
+%TMPL:P{"pagehelp"}%
 %TMPL:END%
 
 %TMPL:DEF{"formattop"}%%TMPL:P{"edittoolbar"}%%TMPL:END%
 
+%TMPL:DEF{"formatbottom"}% 
+<div class="patternTopicActions">
+  <input type="checkbox" class="twikiCheckbox" title="Creates a new topic revision when saving" id="forcenewrevision" name="forcenewrevision" %FORCENEWREVISIONCHECKBOX% />
+  <label for="forcenewrevision">%MAKETEXT{"Force new revision"}%</label> 
+</div>
+%TMPL:END%
+
 %TMPL:DEF{"help"}%%TMPL:P{"edithelp"}%%TMPL:END%
+%TMPL:DEF{"pagehelp"}%<!-- -->
+%TWISTYSHOW{id="edithelp" link="%MAKETEXT{"Show help"}%" imgleft="%ICONURLPATH{toggleopen-small}%"}%
+%TWISTYHIDE{id="edithelp" link="%MAKETEXT{"Hide help"}%" imgleft="%ICONURLPATH{toggleclose-small}%"}%
+%TWISTYTOGGLE{id="edithelp" mode="div" class="twikiHelp" remember="on" noscript="hide"}%
+%TMPL:P{"help"}%
+%ENDTWISTYTOGGLE%
+%TMPL:END%

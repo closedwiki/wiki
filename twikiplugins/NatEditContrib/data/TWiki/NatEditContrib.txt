@@ -1,4 +1,5 @@
----+!! %TOPIC%
+%META:TOPICINFO{author="TWikiContributor" date="1175518951" format="1.1" reprev="1.1" version="$Rev$"}%
+---+!! Natural Edit Contrib
 <!--
 
    PLEASE DO NOT EDIT THIS TOPIC
@@ -10,12 +11,35 @@
    Instead, you could check your fix in, raise a bug in the Bugs web, or
    mail the author.
 -->
+%TOC%
 
----++ Summary of Contents
+---++ Description
+The <nop>NatEdit is an wiki editor that helps in learning the <nop>TWikiMarkup Language
+by providing a GUI. By design, this is not a wysiwyg editor that tries to generate the
+correct TML in the background. Instead, the user is still in charge of writing correct
+wiki markup but with a bit more of assistance as a plain browser textarea. Therefor
+this editor helps to lower the learning curve but will not get in your way once
+you are aware of wiki markup. 
 
+<nop>NatEdit heavily depends on javascript. As a consequence, browsers without
+javascript are not supported by <nop>NatEdit.
 
----+++ Features
+---++ Configuration
+Add the identifier =natedit= to the =SKIN= variable in Main.TWikiPreferences or
+in your WebPreferences to enable it.  So in case you are using <nop>PatternSkin
+this is
+<verbatim>
+* Set SKIN = natedit,pattern
+</verbatim>
+In case you are using <nop>NatSkin you don't have to install the NatEditContrib
+because it is already part of the <nop>NatSkin.
 
+If you want to customize the help text in the bottom part of the editor then
+set the variable =NATEDIT_HELPTEXT to the name of a topic that contains
+the help text. The default is
+<verbatim>
+* Set NATEDIT_HELPTEXT = %TWIKIWEB%.NatEditHelpText
+</verbatim>
 
 <!--
 	* Set STUB = %$STUB%
@@ -26,11 +50,15 @@
 %$INSTALL_INSTRUCTIONS%
 
 ---++ Contrib Info
+Sponsored by [[http://www.trivadis.com][Trivadis AG]]
+
 |  Author: | TWiki:Main/MichaelDaum |
 |  Copyright &copy;: | 2007 Michael Daum http://wikiring.de |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Version: | %$VERSION% |
 |  Change History: | |
+|  03 Apri 2007 | added NATEDIT_HELPTEXT variable; \
+                  be backwards compatible to <nop>PatternSkin (TWiki-4.1.2) |
 |  31 Mar 2007 | Initial version |
 |  Dependencies: | %$DEPENDENCIES% |
 |  Perl Version: | - |
@@ -38,3 +66,4 @@
 |  Feedback: | TWiki:Plugins/%TOPIC%Dev |
 |  Appraisal: | TWiki:Plugins/%TOPIC%Appraisal |
 
+-- TWiki:Main.MichaelDaum - 03 Apr 2007
