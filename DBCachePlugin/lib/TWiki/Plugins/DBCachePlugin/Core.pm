@@ -623,7 +623,9 @@ sub handleATTACHMENTS {
       '%MAKETEXT{"delete"}%</a>';
     
     $index++;
-    my $text = _expandVariables($theFormat, $thisWeb, $thisTopic,
+    my $text = $theFormat;
+    $text =~ s/\$date\(([^\)]+)\)/TWiki::Func::formatTime($date, $1)/ge;
+    $text = _expandVariables($text, $thisWeb, $thisTopic,
       'webdav'=>$webDavAction,
       'webdavUrl'=>$webDavUrl,
       'props'=>$propsAction,
@@ -652,7 +654,6 @@ sub handleATTACHMENTS {
       'web'=>$thisWeb,
       'topic'=>$thisTopic,
     );
-    $text =~ s/\$date\(([^\)]+)\)/TWiki::Func::formatTime($date, $2)/ge;
 
     push @result, $text;
   }
@@ -795,7 +796,8 @@ sub _formatRecursive {
       _formatRecursive($theDB, $theWeb, $topicName, $params, $seen, 
         $depth+1, $numberString);
     
-    if (($subResult && @$subResult) || !($params->{hidenull} eq 'off')) {
+
+    if ($subResult && @$subResult) {
       push @result, 
         _expandVariables($params->{subheader}, $theWeb, $topicName, 
           'web'=>$theWeb,

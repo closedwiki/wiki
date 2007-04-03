@@ -161,7 +161,7 @@ tool or (b) as a tool to extract properties of (a set of) known topics.
   defaults to "$n"; the special separator "none" disables separation |
 | =include="..."= | pattern each found topic name must match to be considered a hit |
 | =exclude="..."= | pattern each found topic name must not match to be considered a hit |
-| =order="..."= | specifies the sorting of hits; defaults to "name" |
+| =sort="..."= | specifies the sorting of hits; defaults to "name" |
 | =reverse="..."= | specify if hits should be sorted in reverse order; defaults to "off" |
 | =limit="..."= | maximum number of topics to include in the hit set |
 | =skip="..."= | number of topics to skip while constructing the hit set; defaults to "0" |
@@ -400,10 +400,12 @@ following is the default paramenter (omitting the #)
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.MichaelDaum |
-|  Copyright &copy;: | 2005-2006, Michael Daum http://wikiring.com |
+|  Copyright &copy;: | 2005-2007, Michael Daum http://wikiring.de |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | v1.51 |
+|  Plugin Version: | v1.52 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  03 Apr 2007: | fixed $date(format) in ATTACHMENTS; \
+                  fixed 'segfault' in DBRECURSE while formatting sub-results |
 |  19 Feb 2007: | multiple enhancements to the ATTACHMENTS tag (e.g. icons, actions) |
 |  31 Jan 2007: | fixed caching "web" property of topics; \
                   fixed DBDUMP of topics w/o attachments;\
@@ -459,4 +461,4 @@ following is the default paramenter (omitting the #)
 |  Feedback: | TWiki:Plugins/%TOPIC%Dev |
 |  Appraisal: | TWiki:Plugins/%TOPIC%Appraisal |
 
--- TWiki:Main.MichaelDaum - 19 Feb 2007
+-- TWiki:Main.MichaelDaum - 03 Apr 2007
