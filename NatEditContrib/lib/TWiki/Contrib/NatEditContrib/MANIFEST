@@ -1,4 +1,5 @@
 data/TWiki/NatEditContrib.txt 0644
+data/TWiki/NatEditHelpText.txt 0644
 lib/TWiki/Contrib/NatEditContrib.pm 0644
 pub/TWiki/NatEditContrib/button_accept.png 0644
 pub/TWiki/NatEditContrib/button_bold.png 0644
