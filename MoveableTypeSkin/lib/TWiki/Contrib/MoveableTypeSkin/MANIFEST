@@ -1,0 +1,27 @@
+data/TWiki/MoveableTypeSkin.txt  Plugin doc page
+data/TWiki/TestUrls.txt
+
+lib/TWiki/Contrib/MoveableTypeSkin.pm  Plugin Perl module 
+templates/twiki.moveabletype.tmpl
+templates/viewprint.moveabletype.tmpl
+
+#demo templates
+templates/view.moveabletypeonecolumn.tmpl
+templates/view.moveabletypethreecolumn.tmpl
+templates/view.moveabletypetwocolumnleft.tmpl
+templates/view.moveabletypetwocolumnright.tmpl
+
+pub/TWiki/MoveableTypeSkin/skindemo.js
+pub/TWiki/MoveableTypeSkin/wikiringlogo20x20.png
+pub/TWiki/MoveableTypeSkin/screenshot.gif
+pub/TWiki/MoveableTypeSkin/fullscreen.gif
+pub/TWiki/MoveableTypeSkin/iconic.gif
+pub/TWiki/MoveableTypeSkin/iconic_preview.gif
+pub/TWiki/MoveableTypeSkin/preview_splattered_edit.gif
+pub/TWiki/MoveableTypeSkin/splattered_edit.gif
+
+
+data/TWiki/MoveableTypeSampleDesign.txt
+pub/TWiki/MoveableTypeSampleDesign/base-weblog.css
+pub/TWiki/MoveableTypeSampleDesign/TWiki.css
+
