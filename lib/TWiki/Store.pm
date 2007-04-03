@@ -269,8 +269,9 @@ sub readTopicRaw {
     if( $user &&
           !$this->{session}->{security}->checkAccessPermission
             ( 'VIEW', $user, $text, undef, $topic, $web )) {
+        my $users = $this->{session}->{users};
         throw TWiki::AccessControlException(
-            'VIEW', $user, $web, $topic,
+            'VIEW', $users->wikiname($user), $web, $topic,
             $this->{session}->{security}->getReason());
     }
 
@@ -293,7 +294,7 @@ sub moveAttachment {
     my( $this, $oldWeb, $oldTopic, $oldAttachment,
         $newWeb, $newTopic, $newAttachment, $user ) = @_;
     ASSERT($this->isa('TWiki::Store')) if DEBUG;
-    ASSERT($user->isa('TWiki::User')) if DEBUG;
+    my $users = $this->{session}->{users};
 
     $this->lockTopic( $user, $oldWeb, $oldTopic );
     try {
@@ -302,7 +303,7 @@ sub moveAttachment {
               !$this->{session}->{security}->checkAccessPermission
                 ( 'CHANGE', $user, $otext, $ometa, $oldTopic, $oldWeb )) {
             throw TWiki::AccessControlException(
-                'CHANGE', $user, $oldWeb, $oldTopic,
+                'CHANGE', $users->wikiname($user), $oldWeb, $oldTopic,
                 $this->{session}->{security}->getReason());
         }
 
@@ -311,7 +312,7 @@ sub moveAttachment {
               !$this->{session}->{security}->checkAccessPermission
                 ( 'CHANGE', $user, $ntext, $nmeta, $newTopic, $newWeb )) {
             throw TWiki::AccessControlException(
-                'CHANGE', $user, $newWeb, $newTopic,
+                'CHANGE', $users->wikiname($user), $newWeb, $newTopic,
                 $this->{session}->{security}->getReason());
         }
 
@@ -330,7 +331,7 @@ sub moveAttachment {
         # Add file attachment to new topic
         $fileAttachment->{name} = $newAttachment;
         $fileAttachment->{movefrom} = $oldWeb.'.'.$oldTopic.'.'.$oldAttachment;
-        $fileAttachment->{moveby}   = $user->webDotWikiName();
+        $fileAttachment->{moveby}   = $users->webDotWikiName($user);
         $fileAttachment->{movedto}  = $newWeb.'.'.$newTopic.'.'.$newAttachment;
         $fileAttachment->{movedwhen} = time();
         $nmeta->putKeyed( 'FILEATTACHMENT', $fileAttachment );
@@ -342,7 +343,7 @@ sub moveAttachment {
         $this->{session}->writeLog(
             'move',
             $fileAttachment->{movefrom}.' moved to '.
-              $fileAttachment->{movedto}, $user->webDotWikiName() );
+              $fileAttachment->{movedto}, $users->webDotWikiName($user) );
     } finally {
         $this->unlockTopic( $user, $oldWeb, $oldTopic );
         $this->unlockTopic( $user, $newWeb, $newTopic );
@@ -379,8 +380,10 @@ sub getAttachmentStream {
     if( $user &&
           !$this->{session}->{security}->checkAccessPermission
             ( 'VIEW', $user, undef, undef, $topic, $web )) {
-        throw TWiki::AccessControlException( 'VIEW', $user, $web, $topic,
-                                             $this->{session}->{security}->getReason());
+        my $users = $this->{session}->{users};
+        throw TWiki::AccessControlException(
+            'VIEW', $users->wikiname($user), $web, $topic,
+            $this->{session}->{security}->getReason());
     }
 
     my $handler = $this->_getHandler( $web, $topic, $att );
@@ -445,10 +448,10 @@ All parameters must be defined and must be untainted.
 sub moveTopic {
     my( $this, $oldWeb, $oldTopic, $newWeb, $newTopic, $user ) = @_;
     ASSERT($this->isa('TWiki::Store')) if DEBUG;
-    ASSERT($user->isa('TWiki::User')) if DEBUG;
 
     my $handler = $this->_getHandler( $oldWeb, $oldTopic, '' );
     my $rev = $handler->numRevisions();
+    my $users = $this->{session}->{users};
 
     # will block
     $this->lockTopic( $user, $oldWeb, $oldTopic );
@@ -459,7 +462,7 @@ sub moveTopic {
               !$this->{session}->{security}->checkAccessPermission
                 ( 'CHANGE', $user, $otext, undef, $oldTopic, $oldWeb )) {
             throw TWiki::AccessControlException(
-                'CHANGE', $user,
+                'CHANGE', $users->wikiname($user),
                 $oldWeb, $oldTopic,
                 $this->{session}->{security}->getReason());
         }
@@ -472,7 +475,7 @@ sub moveTopic {
               !$this->{session}->{security}->checkAccessPermission
                 ( 'CHANGE', $user, $ntext, $nmeta, $newTopic, $newWeb )) {
             throw TWiki::AccessControlException(
-                'CHANGE', $user, $newWeb, $newTopic,
+                'CHANGE', $users->wikiname($user), $newWeb, $newTopic,
                 $this->{session}->{security}->getReason());
         }
 
@@ -508,7 +511,7 @@ sub _recordChange {
       split( /[\r\n]+/, $this->readMetaData( $web, 'changes' ));
     # SMELL: make the 500 configurable? Or trim on the basis of age?
     shift( @foo) if( $#foo > 500 );
-    push( @foo, [ $topic, $user->login(), time(), $rev, $more ] );
+    push( @foo, [ $topic, $user, time(), $rev, $more ] );
     $this->saveMetaData(
         $web, 'changes',
         join( "\n",
@@ -528,7 +531,6 @@ All parrameters must be defined and must be untainted.
 sub moveWeb {
     my( $this, $oldWeb, $newWeb, $user ) = @_;
     ASSERT($this->isa('TWiki::Store')) if DEBUG;
-    ASSERT($user->isa('TWiki::User')) if DEBUG;
 
     $oldWeb =~ s/\./\//go;
     $newWeb =~ s/\./\//go;
@@ -594,8 +596,9 @@ sub readAttachment {
     if( $user &&
           !$this->{session}->{security}->checkAccessPermission
             ( 'VIEW', $user, undef, undef, $topic, $web )) {
+        my $users = $this->{session}->{users};
         throw TWiki::AccessControlException(
-            'VIEW', $user, $web, $topic,
+            'VIEW', $users->wikiname($user), $web, $topic,
             $this->{session}->{security}->getReason());
     }
 
@@ -645,7 +648,7 @@ sub getWorkArea {
 ---++ ObjectMethod getRevisionDiff ( $user, $web, $topic, $rev1, $rev2, $contextLines  ) -> \@diffArray
 
 Return reference to an array of [ diffType, $right, $left ]
-   * =$user= - the user object, or undef to suppress access control checks
+   * =$user= - the user id, or undef to suppress access control checks
    * =$web= - the web
    * =$topic= - the topic
    * =$rev1= Integer revision number
@@ -704,7 +707,7 @@ Get revision info of a topic.
    * =$topic= Topic name, required, e.g. ='TokyoOffice'=
    * =$rev= revision number. If 0, undef, or out-of-range, will get info about the most recent revision.
    * =$attachment= attachment filename; undef for a topic
-Return list with: ( last update date, last user object, =
+Return list with: ( last update date, last user id, =
 | $date | in epochSec |
 | $user | user *object* |
 | $rev | the revision number |
@@ -732,8 +735,6 @@ sub getRevisionInfo {
     my( $rrev, $date, $user, $comment ) =
       $handler->getRevisionInfo( $rev );
     $rev = $rrev;
-
-    $user = $this->{session}->{users}->findUser( $user ) if $user;
 
     return ( $date, $user, $rev, $comment );
 }
@@ -842,9 +843,10 @@ Save a new revision of the topic, calling plugins handlers as appropriate.
 sub saveTopic {
     my( $this, $user, $web, $topic, $text, $meta, $options ) = @_;
     ASSERT($this->isa('TWiki::Store')) if DEBUG;
-    ASSERT($user->isa('TWiki::User')) if DEBUG;
+    ASSERT($user) if DEBUG;
     $web =~ s#\.#/#go;
     $meta = $this->_removeAutoAttachmentsFromMeta($meta);
+    my $users = $this->{session}->{users};
 
     $options = {} unless defined( $options );
 
@@ -852,7 +854,7 @@ sub saveTopic {
           !$this->{session}->{security}->checkAccessPermission
             ( 'CHANGE', $user, undef, undef, $topic, $web )) {
         throw TWiki::AccessControlException(
-            'CHANGE', $user, $web, $topic,
+            'CHANGE', $users->getWikiName($user), $web, $topic,
             $this->{session}->{security}->getReason());
     }
     my $plugins = $this->{session}->{plugins};
@@ -925,11 +927,11 @@ If file is not set, this is a properties-only save.
 sub saveAttachment {
     my( $this, $web, $topic, $attachment, $user, $opts ) = @_;
     ASSERT($this->isa('TWiki::Store')) if DEBUG;
-    ASSERT($user->isa('TWiki::User')) if DEBUG;
     ASSERT(defined($opts)) if DEBUG;
     my $action;
     my $plugins = $this->{session}->{plugins};
     my $attrs;
+    my $users = $this->{session}->{users};
 
     $this->lockTopic( $user, $web, $topic );
 
@@ -942,7 +944,7 @@ sub saveAttachment {
                 ( 'CHANGE', $user, $text, $meta, $topic, $web )) {
 
             throw TWiki::AccessControlException(
-                'CHANGE', $user, $web, $topic,
+                'CHANGE', $users->wikiname($user), $web, $topic,
                 $this->{session}->{security}->getReason());
         }
 
@@ -958,7 +960,7 @@ sub saveAttachment {
             $attrs = {
                 attachment => $attachment,
                 stream => $opts->{stream},
-                user => $user->webDotWikiName()
+                user => $users->webDotWikiName($user)
                };
             $attrs->{comment} = $opts->{comment}
               if (defined($opts->{comment}));
@@ -995,7 +997,7 @@ sub saveAttachment {
             try {
                 $handler->addRevisionFromStream( $opts->{stream},
                                                  $opts->{comment},
-                                                 $user->wikiName() );
+                                                 $user );
             } catch Error::Simple with {
                 $error = shift;
             };
@@ -1049,10 +1051,9 @@ sub saveAttachment {
 sub _noHandlersSave {
     my( $this, $user, $web, $topic, $text, $meta, $options ) = @_;
 
-    ASSERT($user->isa('TWiki::User')) if DEBUG;
-
     $meta ||= new TWiki::Meta( $this->{session}, $web, $topic );
 
+    my $users = $this->{session}->{users};
     my $handler = $this->_getHandler( $web, $topic );
     my $currentRev = $handler->numRevisions() || 0;
     my $nextRev = $currentRev + 1;
@@ -1069,7 +1070,7 @@ sub _noHandlersSave {
               $handler->getRevisionInfo( $currentRev );
 
             # same user?
-            if(  $revuser eq $user->wikiName() ) {
+            if(  $revuser eq $user ) {
                 $this->repRev( $user, $web, $topic, $text,
                                $meta, $options );
                 return;
@@ -1087,7 +1088,7 @@ sub _noHandlersSave {
 
     try {
         $handler->addRevisionFromText( $text, $options->{comment},
-                                       $user->wikiName() );
+                                       $user );
         # just in case they are not sequential
         $nextRev = $handler->numRevisions();
 
@@ -1130,6 +1131,7 @@ sub repRev {
     ASSERT($meta && $meta->isa('TWiki::Meta')) if DEBUG;
 
     my( $revdate, $revuser, $rev ) = $meta->getRevisionInfo();
+    my $users = $this->{session}->{users};
 
     # RCS requires a newline for the last line,
     $text .= "\n" unless $text =~ /\n$/s;
@@ -1155,14 +1157,15 @@ sub repRev {
     try {
         my $handler = $this->_getHandler( $web, $topic );
         $handler->replaceRevision( $text, $options->{comment},
-                                        $revuser->wikiName(), $revdate );
+                                        $revuser, $revdate );
     } finally {
         $this->unlockTopic( $user, $web, $topic );
     };
 
     if( ( $TWiki::cfg{Log}{save} ) && ! ( $options->{dontlog} ) ) {
         # write log entry
-        my $extra = "repRev $rev by " . $revuser->login() .
+        my $extra = "repRev $rev by " .
+          $revuser .
             ' '. TWiki::Time::formatTime( $revdate, '$rcs', 'gmtime' );
         $extra   .= ' minor' if( $options->{minor} );
         $this->{session}->writeLog( $options->{operation} || 'save',
@@ -1211,7 +1214,7 @@ sub delRev {
 
     # write log entry
     $this->{session}->writeLog( 'cmd', $web.'.'.$topic, 'delRev by '.
-                                  $user->login().": $rev", $user );
+                                  $user.": $rev", $user );
 }
 
 =pod
@@ -1235,23 +1238,23 @@ _note_ the locks used when a topic is edited; those are Leases
 sub lockTopic {
     my ( $this, $locker, $web, $topic ) = @_;
     ASSERT($this->isa('TWiki::Store')) if DEBUG;
-    ASSERT($locker->isa('TWiki::User')) if DEBUG;
     ASSERT($web && $topic) if DEBUG;
 
     my $handler = $this->_getHandler( $web, $topic );
+    my $users = $this->{session}->{users};
 
     while ( 1 ) {
         my ( $user, $time ) = $handler->isLocked();
-        last if ( !$user || $locker->wikiName() eq $user );
+        last if ( !$user || $locker eq $user );
         $this->{session}->writeWarning( "Lock on $web.$topic for ".
-                                          $locker->wikiName().
+                                          $locker.
                                             " denied by $user" );
         # see how old the lock is. If it's older than 2 minutes,
         # break it anyway. Locks are atomic, and should never be
         # held that long, by _any_ process.
         if ( time() - $time > 2 * 60 ) {
             $this->{session}->writeWarning
-              ( $locker->wikiName()." broke ${user}s lock on $web.$topic" );
+              ( $locker." broke ${user}s lock on $web.$topic" );
             $handler->setLock( 0 );
             last;
         }
@@ -1259,7 +1262,7 @@ sub lockTopic {
         sleep(2);
     }
 
-    $handler->setLock( 1, $locker->wikiName() );
+    $handler->setLock( 1, $locker );
 }
 
 =pod
@@ -1280,10 +1283,9 @@ _note_ the locks used when a topic is edited; those are Leases
 sub unlockTopic {
     my ( $this, $user, $web, $topic ) = @_;
     ASSERT($this->isa('TWiki::Store')) if DEBUG;
-    ASSERT($user->isa('TWiki::User')) if DEBUG;
 
     my $handler = $this->_getHandler( $web, $topic );
-    $handler->setLock( 0, $user->wikiName() );
+    $handler->setLock( 0, $user );
 }
 
 =pod
@@ -1344,6 +1346,7 @@ sub extractMetaData {
     my( $this, $meta, $rtext ) = @_;
     ASSERT($this->isa('TWiki::Store')) if DEBUG;
     ASSERT(defined($$rtext)) if DEBUG;
+    my $users = $this->{session}->{users};
 
     my $format = $STORE_FORMAT_VERSION;
     # head meta-data
@@ -1388,8 +1391,6 @@ sub extractMetaData {
         $this->{session}->{attach}->upgradeFrom1v0beta( $meta );
         if( $meta->count( 'TOPICMOVED' ) ) {
             my $moved = $meta->get( 'TOPICMOVED' );
-            my $u = $this->{session}->{users}->findUser( $moved->{by} );
-            $moved->{by} = $u->wikiName() if $u;
             $meta->put( 'TOPICMOVED', $moved );
         }
     }
@@ -1481,11 +1482,12 @@ sub readMetaData {
 # Add TOPICINFO type data to the object, as specified by the parameters.
 #    * =$rev= - the revision number
 #    * =$time= - the time stamp
-#    * =$user= - the user object
+#    * =$user= - the user id
 # SMELL: Duplicate rev control info in the topic
 sub addTOPICINFO {
     my( $meta, $rev, $time, $user, $repRev ) = @_;
     $rev = 1 if $rev < 1;
+    my $users = $meta->{_session}->{users};
 
     my %options =
       (
@@ -1494,7 +1496,7 @@ sub addTOPICINFO {
           # read these topics
           version => '1.'.$rev,
           date    => $time,
-          author  => $user->wikiName(),
+          author  => $user,
           format  => $TWiki::Store::STORE_FORMAT_VERSION,
          );
     # if this is a reprev, then store the revision that was affected.
@@ -1577,7 +1579,8 @@ sub getListOfWebs {
     }
 
     my $user = $this->{session}->{user};
-    if( $filter =~ /\bpublic\b/ && !$user->isAdmin()) {
+    if( $filter =~ /\bpublic\b/ &&
+          !$this->{session}->{users}->isAdmin( $user )) {
         my $prefs = $this->{session}->{prefs};
         my $wn = $this->{session}->{webName};
         @webList =
@@ -1654,7 +1657,6 @@ the web preferences topic in the new web.
 sub createWeb {
     my ( $this, $user, $newWeb, $baseWeb, $opts ) = @_;
     ASSERT($this->isa('TWiki::Store')) if DEBUG;
-    ASSERT($user->isa('TWiki::User')) if DEBUG;
 
     unless( $baseWeb ) {
         # For a web to be a web, it has to have at least one topic
@@ -2052,11 +2054,6 @@ sub getLease {
 
     my $handler = $this->_getHandler( $web, $topic );
     my $lease = $handler->getLease();
-    if( $lease ) {
-        my $user = $this->{session}->{users}->findUser( $lease->{user} );
-        ASSERT( $user->isa('TWiki::User')) if DEBUG;
-        $lease->{user} = $user;
-    }
     return $lease;
 }
 
@@ -2072,13 +2069,12 @@ See =getLease= for more details about Leases.
 
 sub setLease {
     my( $this, $web, $topic, $user, $length ) = @_;
-    ASSERT( $user->isa( 'TWiki::User') ) if DEBUG;
 
     my $handler = $this->_getHandler( $web, $topic );
     my $lease;
     if( $user ) {
         my $t = time();
-        $lease = { user => $user->wikiName(),
+        $lease = { user => $user,
                    expires => $t + $length,
                    taken => $t };
     }

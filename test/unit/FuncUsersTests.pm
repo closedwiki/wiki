@@ -29,7 +29,7 @@ sub set_up {
         # Create an admin group/user
         $this->{twiki}->{store}->saveTopic(
             $this->{twiki}->{user}, $this->{users_web}, 'TWikiAdminGroup',
-            '   * Set GROUP = '.$this->{twiki}->{user}->wikiName().", TWikiAdminGroup\n");
+            '   * Set GROUP = '.$this->{twiki}->{user}.", TWikiAdminGroup\n");
 
         $this->registerUser('usera', 'User', 'A', 'user@example.com');
         $this->registerUser('userb', 'User', 'B', 'user@example.com');
@@ -84,7 +84,7 @@ sub test_eachUser {
         push(@list, $u);
     }
     my $ulist = join(',', sort @list);
-    $this->assert_str_equals("ScumBag,UserA,UserB,UserC", $ulist);
+    $this->assert_str_equals("ScumBag,TWikiGuest,UserA,UserB,UserC", $ulist);
 }
 
 sub test_eachGroup {
@@ -105,39 +105,39 @@ sub test_isAnAdmin {
     my @list = TWiki::Func::eachUser();
     foreach my $u ( @list ) {
         $u =~ /.*\.(.*)/;
-        $TWiki::Plugins::SESSION->{user} = $TWiki::Plugins::SESSION->{users}->findUser(undef, $u);
+        $TWiki::Plugins::SESSION->{user} = $u;
         $this->assert(!TWiki::Func::isAnAdmin(), $u);
     }
 }
 
 sub test_isGroupMember {
     my $this = shift;
-    $TWiki::Plugins::SESSION->{user} = $TWiki::Plugins::SESSION->{users}->findUser('UserA', 'UserA');
+    $TWiki::Plugins::SESSION->{user} = 'usera';
     $this->assert(TWiki::Func::isGroupMember('AandBGroup'));
     $this->assert(TWiki::Func::isGroupMember('AandCGroup'));
     $this->assert(!TWiki::Func::isGroupMember('BandCGroup'));
-    $this->assert(TWiki::Func::isGroupMember('BandCGroup', 'UserB'));
-    $this->assert(TWiki::Func::isGroupMember('BandCGroup', 'UserC'));
+    $this->assert(TWiki::Func::isGroupMember('BandCGroup', 'userb'));
+    $this->assert(TWiki::Func::isGroupMember('BandCGroup', 'userc'));
 }
 
 sub test_eachMembership {
     my $this = shift;
 
     my @list;
-    my $it = TWiki::Func::eachMembership('UserA');
+    my $it = TWiki::Func::eachMembership('usera');
     while ($it->hasNext()) {
         my $g = $it->next();
         push(@list, $g);
     }
     $this->assert_str_equals('AandBGroup,AandCGroup', join(',', sort @list));
-    $it = TWiki::Func::eachMembership('UserB');
+    $it = TWiki::Func::eachMembership('userb');
     @list = ();
     while ($it->hasNext()) {
         my $g = $it->next();
         push(@list, $g);
     }
     $this->assert_str_equals('AandBGroup,BandCGroup', join(',', sort @list));
-    $it = TWiki::Func::eachMembership('UserC');
+    $it = TWiki::Func::eachMembership('userc');
     @list = ();
     while ($it->hasNext()) {
         my $g = $it->next();
@@ -145,8 +145,7 @@ sub test_eachMembership {
     }
     $this->assert_str_equals('AandCGroup,BandCGroup', sort join(',', @list));
 
-    $TWiki::Plugins::SESSION->{user} =
-      $TWiki::Plugins::SESSION->{users}->findUser('UserA', 'UserA');
+    $TWiki::Plugins::SESSION->{user} = 'usera';
     $it = TWiki::Func::eachMembership();
     @list = ();
     while ($it->hasNext()) {
@@ -164,7 +163,7 @@ sub test_eachGroupMember {
         my $g = $it->next();
         push(@list, $g);
     }
-    $this->assert_str_equals('UserA,UserB', sort join(',', @list));
+    $this->assert_str_equals('usera,userb', sort join(',', @list));
 }
 
 sub test_isGroup {

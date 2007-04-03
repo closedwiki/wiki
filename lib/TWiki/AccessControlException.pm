@@ -26,18 +26,16 @@ Exception used raise an access control violation.
 =cut
 
 package TWiki::AccessControlException;
+use base 'Error';
 
 use strict;
-use Error;
-
-@TWiki::AccessControlException::ISA = qw(Error);
 
 =pod
 
 ---+ ClassMethod new($mode, $user, $web, $topic, $reason)
 
    * =$mode= - mode of access (view, change etc)
-   * =$user= - user object doing the accessing
+   * =$user= - wikiname of user doing the accessing
    * =$web= - web being accessed
    * =$topic= - topic being accessed
    * =$reason= - string reason for failure
@@ -53,7 +51,7 @@ sub new {
     return $class->SUPER::new(
                               web => $web,
                               topic => $topic,
-                              user => $user->wikiName(),
+                              user => $user,
                               mode => $mode,
                               reason => $reason,
                              );

@@ -6,58 +6,54 @@ use strict;
 
 package FuncTests;
 
-use base qw(TWikiTestCase);
+use base qw(TWikiFnTestCase);
 
 use TWiki;
 use TWiki::Func;
 
 sub new {
-	my $self = shift()->SUPER::new(@_);
+	my $self = shift()->SUPER::new("Func", @_);
 	return $self;
 }
 
 my $twiki;
-my $testweb = "TemporaryFuncModuleTestWeb";
-my $testextra = $testweb."Extra";
 
 sub set_up {
     my $this = shift;
     $this->SUPER::set_up();
     $TWiki::cfg{StoreImpl} = "RcsWrap";
-    $twiki = new TWiki();
     $TWiki::cfg{AutoAttachPubFiles} = 0;
+    $twiki = new TWiki($this->{test_user_login});
     $TWiki::Plugins::SESSION = $twiki;
-    $this->assert_null($twiki->{store}->createWeb($twiki->{user}, $testweb));
-    $this->assert_null($twiki->{store}->createWeb($twiki->{user}, $testextra));
-    $this->assert($twiki->{store}->webExists($testweb));
+    $this->{test_web2} = $this->{test_web}.'Extra';
+    $this->assert_null($twiki->{store}->createWeb(
+        $twiki->{user}, $this->{test_web2}));
 }
 
 sub tear_down {
     my $this = shift;
-    $this->removeWebFixture($twiki,$testweb);
-    $this->removeWebFixture($twiki,$testextra);
-    eval {$twiki->finish()};
+    $this->removeWebFixture($twiki,$this->{test_web2});
     $this->SUPER::tear_down();
 }
 
 sub test_web {
     my $this = shift;
 
-    TWiki::Func::createWeb($testweb."Blah");
-    $this->assert(TWiki::Func::webExists($testweb."Blah"));
+    TWiki::Func::createWeb($this->{test_web}."Blah");
+    $this->assert(TWiki::Func::webExists($this->{test_web}."Blah"));
 
-    TWiki::Func::moveWeb($testweb."Blah", $testweb."Blah2");
-    $this->assert(!TWiki::Func::webExists($testweb."Blah"));
-    $this->assert(TWiki::Func::webExists($testweb."Blah2"));
+    TWiki::Func::moveWeb($this->{test_web}."Blah", $this->{test_web}."Blah2");
+    $this->assert(!TWiki::Func::webExists($this->{test_web}."Blah"));
+    $this->assert(TWiki::Func::webExists($this->{test_web}."Blah2"));
 
-    TWiki::Func::moveWeb($testweb."Blah2",
-                         $TWiki::cfg{TrashWebName}.'.'.$testweb);
-    $this->assert(!TWiki::Func::webExists($testweb."Blah2"));
+    TWiki::Func::moveWeb($this->{test_web}."Blah2",
+                         $TWiki::cfg{TrashWebName}.'.'.$this->{test_web});
+    $this->assert(!TWiki::Func::webExists($this->{test_web}."Blah2"));
     $this->assert(TWiki::Func::webExists(
-        $TWiki::cfg{TrashWebName}.'.'.$testweb));
+        $TWiki::cfg{TrashWebName}.'.'.$this->{test_web}));
 
     $twiki->{store}->removeWeb($twiki->{user},
-                               $TWiki::cfg{TrashWebName}.'.'.$testweb);
+                               $TWiki::cfg{TrashWebName}.'.'.$this->{test_web});
 }
 
 sub test_getViewUrl {
@@ -65,11 +61,11 @@ sub test_getViewUrl {
 
     $TWiki::Plugins::SESSION = new TWiki();
     my $ss = 'view'.$TWiki::cfg{ScriptSuffix};
-    my $result = TWiki::Func::getViewUrl ( "Main", "WebHome" );
-    $this->assert_matches(qr!/$ss/Main/WebHome!, $result );
+    my $result = TWiki::Func::getViewUrl ( $this->{users_web}, "WebHome" );
+    $this->assert_matches(qr!/$ss/$this->{users_web}/WebHome!, $result );
 
     $result = TWiki::Func::getViewUrl ( "", "WebHome" );
-    $this->assert_matches(qr!/$ss/Main/WebHome!, $result );
+    $this->assert_matches(qr!/$ss/$this->{users_web}/WebHome!, $result );
 
     $TWiki::Plugins::SESSION = new TWiki(
         undef,
@@ -88,11 +84,11 @@ sub test_getScriptUrl {
 
     $TWiki::Plugins::SESSION = new TWiki();
     my $ss = 'wibble'.$TWiki::cfg{ScriptSuffix};
-    my $result = TWiki::Func::getScriptUrl ( "Main", "WebHome", 'wibble' );
-    $this->assert_matches(qr!/$ss/Main/WebHome!, $result );
+    my $result = TWiki::Func::getScriptUrl ( $this->{users_web}, "WebHome", 'wibble' );
+    $this->assert_matches(qr!/$ss/$this->{users_web}/WebHome!, $result );
 
     $result = TWiki::Func::getScriptUrl ( "", "WebHome", 'wibble' );
-    $this->assert_matches(qr!/$ss/Main/WebHome!, $result );
+    $this->assert_matches(qr!/$ss/$this->{users_web}/WebHome!, $result );
 
     my $q = new CGI( {} );
     $q->path_info( '/Sausages/AndMash' );
@@ -102,7 +98,7 @@ sub test_getScriptUrl {
     $this->assert_matches(qr!/$ss/Sausages/AndMash!, $result );
 
     $result = TWiki::Func::getScriptUrl ( "", "AndMash", 'wibble' );
-    $this->assert_matches(qr!/$ss/Main/AndMash!, $result );
+    $this->assert_matches(qr!/$ss/$this->{users_web}/AndMash!, $result );
 }
 
 sub test_leases {
@@ -110,39 +106,39 @@ sub test_leases {
 
     my $testtopic = $TWiki::cfg{HomeTopicName};
 
-    my( $oops, $login, $time ) =
-      TWiki::Func::checkTopicEditLock($testweb, $testtopic);
+    my( $oops, $user, $time ) =
+      TWiki::Func::checkTopicEditLock($this->{test_web}, $testtopic);
     $this->assert(!$oops, $oops);
-    $this->assert(!$login);
+    $this->assert(!$user);
     $this->assert_equals(0,$time);
 
-    my $locker = $twiki->{user}->login();
-    TWiki::Func::setTopicEditLock($testweb, $testtopic, 1);
+    my $locker = $twiki->{user};
+    TWiki::Func::setTopicEditLock($this->{test_web}, $testtopic, 1);
 
     # check the lease
-    ( $oops, $login, $time ) =
-      TWiki::Func::checkTopicEditLock($testweb, $testtopic);
-    $this->assert_equals($locker,$login);
+    ( $oops, $user, $time ) =
+      TWiki::Func::checkTopicEditLock($this->{test_web}, $testtopic);
+    $this->assert_equals($locker,$user);
     $this->assert($time > 0);
     $this->assert_matches(qr/leaseconflict/,$oops);
     $this->assert_matches(qr/active/,$oops);
 
     # change user and check the lease again
-    $twiki->{user} = $twiki->{users}->findUser('TestUser1');
-    ( $oops, $login, $time ) =
-      TWiki::Func::checkTopicEditLock($testweb, $testtopic);
-    $this->assert_equals($locker,$login);
+    $twiki->{user} = 'TestUser1';
+    ( $oops, $user, $time ) =
+      TWiki::Func::checkTopicEditLock($this->{test_web}, $testtopic);
+    $this->assert_equals($locker,$user);
     $this->assert($time > 0);
     $this->assert_matches(qr/leaseconflict/,$oops);
     $this->assert_matches(qr/active/,$oops);
 
     # try and clear the lease. This should always succeed, even
     # though the user has changed
-    TWiki::Func::setTopicEditLock($testweb, $testtopic, 0);
-    ( $oops, $login, $time ) =
-      TWiki::Func::checkTopicEditLock($testweb, $testtopic);
+    TWiki::Func::setTopicEditLock($this->{test_web}, $testtopic, 0);
+    ( $oops, $user, $time ) =
+      TWiki::Func::checkTopicEditLock($this->{test_web}, $testtopic);
     $this->assert(!$oops,$oops);
-    $this->assert(!$login);
+    $this->assert(!$user);
     $this->assert_equals(0,$time);
 }
 
@@ -168,10 +164,10 @@ sub test_attachments {
     $twiki = new TWiki( );
     $TWiki::Plugins::SESSION = $twiki;
 
-	TWiki::Func::saveTopicText( $testweb, $topic,'' );
+	TWiki::Func::saveTopicText( $this->{test_web}, $topic,'' );
 
     my $e = TWiki::Func::saveAttachment(
-        $testweb, $topic, $name1,
+        $this->{test_web}, $topic, $name1,
         {
             dontlog => 1,
             comment => 'Feasgar Bha',
@@ -182,12 +178,12 @@ sub test_attachments {
       } );
     $this->assert(!$e,$e);
 
-    my( $meta, $text ) = TWiki::Func::readTopic( $testweb, $topic );
+    my( $meta, $text ) = TWiki::Func::readTopic( $this->{test_web}, $topic );
     my @attachments = $meta->find( 'FILEATTACHMENT' );
     $this->assert_str_equals($name1, $attachments[0]->{name} );
 
     $e = TWiki::Func::saveAttachment(
-        $testweb, $topic, $name2,
+        $this->{test_web}, $topic, $name2,
         {
             dontlog => 1,
             comment => 'Ciamar a tha u',
@@ -198,15 +194,15 @@ sub test_attachments {
       } );
     $this->assert(!$e,$e);
 
-    ( $meta, $text ) = TWiki::Func::readTopic( $testweb, $topic );
+    ( $meta, $text ) = TWiki::Func::readTopic( $this->{test_web}, $topic );
     @attachments = $meta->find( 'FILEATTACHMENT' );
     $this->assert_str_equals($name1, $attachments[0]->{name} );
     $this->assert_str_equals($name2, $attachments[1]->{name} );
     unlink("$tmpfile");
 
-    my $x = TWiki::Func::readAttachment($testweb, $topic, $name1);
+    my $x = TWiki::Func::readAttachment($this->{test_web}, $topic, $name1);
     $this->assert_str_equals($data, $x);
-    $x = TWiki::Func::readAttachment($testweb, $topic, $name2);
+    $x = TWiki::Func::readAttachment($this->{test_web}, $topic, $name2);
     $this->assert_str_equals($data, $x);
 }
 
@@ -217,12 +213,11 @@ sub test_getrevinfo {
     $twiki = new TWiki( );
     $TWiki::Plugins::SESSION = $twiki;
 
-    my $testuser = new TWiki::User( $twiki, "lunch", "PeterRabbit" );
-    $twiki->{user} = $testuser;
-	TWiki::Func::saveTopicText( $testweb, $topic, 'blah' );
+    $twiki->{user} = "PeterRabbit";
+	TWiki::Func::saveTopicText( $this->{test_web}, $topic, 'blah' );
 
     my( $date, $user, $rev, $comment ) =
-      TWiki::Func::getRevisionInfo( $testweb, $topic );
+      TWiki::Func::getRevisionInfo( $this->{test_web}, $topic );
     $this->assert_equals( 1, $rev );
     $this->assert_str_equals( "PeterRabbit", $user );
 }
@@ -231,36 +226,36 @@ sub test_moveTopic {
     my $this = shift;
     my $twiki = new TWiki();
     $TWiki::Plugins::SESSION = $twiki;
-	TWiki::Func::saveTopicText( $testweb, "SourceTopic", "Wibble" );
-    $this->assert(TWiki::Func::topicExists( $testweb, "SourceTopic"));
-    $this->assert(!TWiki::Func::topicExists( $testweb, "TargetTopic"));
-    $this->assert(!TWiki::Func::topicExists( $testextra, "SourceTopic"));
-    $this->assert(!TWiki::Func::topicExists( $testextra, "TargetTopic"));
+	TWiki::Func::saveTopicText( $this->{test_web}, "SourceTopic", "Wibble" );
+    $this->assert(TWiki::Func::topicExists( $this->{test_web}, "SourceTopic"));
+    $this->assert(!TWiki::Func::topicExists( $this->{test_web}, "TargetTopic"));
+    $this->assert(!TWiki::Func::topicExists( $this->{test_web2}, "SourceTopic"));
+    $this->assert(!TWiki::Func::topicExists( $this->{test_web2}, "TargetTopic"));
 
-	TWiki::Func::moveTopic( $testweb, "SourceTopic",
-                              $testweb, "TargetTopic" );
-    $this->assert(!TWiki::Func::topicExists( $testweb, "SourceTopic"));
-    $this->assert(TWiki::Func::topicExists( $testweb, "TargetTopic"));
+	TWiki::Func::moveTopic( $this->{test_web}, "SourceTopic",
+                              $this->{test_web}, "TargetTopic" );
+    $this->assert(!TWiki::Func::topicExists( $this->{test_web}, "SourceTopic"));
+    $this->assert(TWiki::Func::topicExists( $this->{test_web}, "TargetTopic"));
 
-	TWiki::Func::moveTopic( $testweb, "TargetTopic",
+	TWiki::Func::moveTopic( $this->{test_web}, "TargetTopic",
                               undef, "SourceTopic" );
-    $this->assert(TWiki::Func::topicExists( $testweb, "SourceTopic"));
-    $this->assert(!TWiki::Func::topicExists( $testweb, "TargetTopic"));
+    $this->assert(TWiki::Func::topicExists( $this->{test_web}, "SourceTopic"));
+    $this->assert(!TWiki::Func::topicExists( $this->{test_web}, "TargetTopic"));
 
-	TWiki::Func::moveTopic( $testweb, "SourceTopic",
-                              $testextra, "SourceTopic" );
-    $this->assert(!TWiki::Func::topicExists( $testweb, "SourceTopic"));
-    $this->assert(TWiki::Func::topicExists( $testextra, "SourceTopic"));
+	TWiki::Func::moveTopic( $this->{test_web}, "SourceTopic",
+                              $this->{test_web2}, "SourceTopic" );
+    $this->assert(!TWiki::Func::topicExists( $this->{test_web}, "SourceTopic"));
+    $this->assert(TWiki::Func::topicExists( $this->{test_web2}, "SourceTopic"));
 
-	TWiki::Func::moveTopic( $testextra, "SourceTopic",
-                              $testweb, undef );
-    $this->assert(TWiki::Func::topicExists( $testweb, "SourceTopic"));
-    $this->assert(!TWiki::Func::topicExists( $testextra, "SourceTopic"));
+	TWiki::Func::moveTopic( $this->{test_web2}, "SourceTopic",
+                              $this->{test_web}, undef );
+    $this->assert(TWiki::Func::topicExists( $this->{test_web}, "SourceTopic"));
+    $this->assert(!TWiki::Func::topicExists( $this->{test_web2}, "SourceTopic"));
 
-	TWiki::Func::moveTopic( $testweb, "SourceTopic",
-                              $testextra, "TargetTopic" );
-    $this->assert(!TWiki::Func::topicExists( $testweb, "SourceTopic"));
-    $this->assert(TWiki::Func::topicExists( $testextra, "TargetTopic"));
+	TWiki::Func::moveTopic( $this->{test_web}, "SourceTopic",
+                              $this->{test_web2}, "TargetTopic" );
+    $this->assert(!TWiki::Func::topicExists( $this->{test_web}, "SourceTopic"));
+    $this->assert(TWiki::Func::topicExists( $this->{test_web2}, "TargetTopic"));
 }
 
 sub test_moveAttachment {
@@ -268,7 +263,7 @@ sub test_moveAttachment {
 
     my $twiki = new TWiki();
     $TWiki::Plugins::SESSION = $twiki;
-	TWiki::Func::saveTopicText( $testweb, "SourceTopic", "Wibble" );
+	TWiki::Func::saveTopicText( $this->{test_web}, "SourceTopic", "Wibble" );
     my $stream;
     my $data = "\0b\1l\2a\3h\4b\5l\6a\7h";
     my $tmpfile = "temporary.dat";
@@ -277,7 +272,7 @@ sub test_moveAttachment {
     print $stream $data;
     close($stream);
     TWiki::Func::saveAttachment(
-        $testweb, "SourceTopic", "Name1",
+        $this->{test_web}, "SourceTopic", "Name1",
         {
             dontlog => 1,
             comment => 'Feasgar Bha',
@@ -287,31 +282,31 @@ sub test_moveAttachment {
             filedate => 0,
       } );
     unlink($tmpfile);
-    $this->assert(TWiki::Func::attachmentExists( $testweb, "SourceTopic",
+    $this->assert(TWiki::Func::attachmentExists( $this->{test_web}, "SourceTopic",
                                                   "Name1"));
 
-    TWiki::Func::saveTopicText( $testweb, "TargetTopic", "Wibble" );
-    TWiki::Func::saveTopicText( $testextra, "TargetTopic", "Wibble" );
+    TWiki::Func::saveTopicText( $this->{test_web}, "TargetTopic", "Wibble" );
+    TWiki::Func::saveTopicText( $this->{test_web2}, "TargetTopic", "Wibble" );
 
-	TWiki::Func::moveAttachment( $testweb, "SourceTopic", "Name1",
-                              $testweb, "SourceTopic", "Name2" );
-    $this->assert(!TWiki::Func::attachmentExists( $testweb, "SourceTopic",
+	TWiki::Func::moveAttachment( $this->{test_web}, "SourceTopic", "Name1",
+                              $this->{test_web}, "SourceTopic", "Name2" );
+    $this->assert(!TWiki::Func::attachmentExists( $this->{test_web}, "SourceTopic",
                                                   "Name1"));
-    $this->assert(TWiki::Func::attachmentExists( $testweb, "SourceTopic",
+    $this->assert(TWiki::Func::attachmentExists( $this->{test_web}, "SourceTopic",
                                                  "Name2"));
 
-	TWiki::Func::moveAttachment( $testweb, "SourceTopic", "Name2",
-                              $testweb, "TargetTopic", undef );
-    $this->assert(!TWiki::Func::attachmentExists( $testweb, "SourceTopic",
+	TWiki::Func::moveAttachment( $this->{test_web}, "SourceTopic", "Name2",
+                              $this->{test_web}, "TargetTopic", undef );
+    $this->assert(!TWiki::Func::attachmentExists( $this->{test_web}, "SourceTopic",
                                                   "Name2"));
-    $this->assert(TWiki::Func::attachmentExists( $testweb, "TargetTopic",
+    $this->assert(TWiki::Func::attachmentExists( $this->{test_web}, "TargetTopic",
                                                  "Name2"));
 
-	TWiki::Func::moveAttachment( $testweb, "TargetTopic", "Name2",
-                              $testextra, "TargetTopic", "Name1" );
-    $this->assert(!TWiki::Func::attachmentExists( $testweb, "TargetTopic",
+	TWiki::Func::moveAttachment( $this->{test_web}, "TargetTopic", "Name2",
+                              $this->{test_web2}, "TargetTopic", "Name1" );
+    $this->assert(!TWiki::Func::attachmentExists( $this->{test_web}, "TargetTopic",
                                                   "Name2"));
-    $this->assert(TWiki::Func::attachmentExists( $testextra, "TargetTopic",
+    $this->assert(TWiki::Func::attachmentExists( $this->{test_web2}, "TargetTopic",
                                                  "Name1"));
 }
 
@@ -346,15 +341,16 @@ sub test_w2em {
     my $twiki = new TWiki();
     $TWiki::Plugins::SESSION = $twiki;
 
-    my $ems = join(',', $twiki->{user}->emails());
+    my $ems = join(',', $twiki->{users}->getEmails($twiki->{user}));
     $this->assert_str_equals(
-        $ems, TWiki::Func::wikiToEmail($twiki->{user}->wikiName()));
+        $ems, TWiki::Func::wikiToEmail($twiki->{user}));
 }
 
 sub test_normalizeWebTopicName {
     my $this = shift;
     $TWiki::cfg{EnableHierarchicalWebs} = 1;
-    my ($w, $t) = TWiki::Func::normalizeWebTopicName( 'Web',  'Topic' );
+    my ($w, $t);
+    ($w, $t) = TWiki::Func::normalizeWebTopicName( 'Web',  'Topic' );
     $this->assert_str_equals( 'Web', $w);
     $this->assert_str_equals( 'Topic', $t );
     ($w, $t) = TWiki::Func::normalizeWebTopicName( '',     'Topic' );
@@ -426,7 +422,7 @@ sub test_checkAccessPermission {
     my $this = shift;
     my $topic = "NoWayJose";
 
-	TWiki::Func::saveTopicText( $testweb, $topic, <<END,
+	TWiki::Func::saveTopicText( $this->{test_web}, $topic, <<END,
 \t* Set DENYTOPICVIEW = $TWiki::cfg{DefaultUserWikiName}
 END
  );
@@ -434,20 +430,20 @@ END
     $twiki = new TWiki();
     $TWiki::Plugins::SESSION = $twiki;
     my $access = TWiki::Func::checkAccessPermission(
-        'VIEW', $TWiki::cfg{DefaultUserWikiName}, undef, $topic, $testweb);
+        'VIEW', $TWiki::cfg{DefaultUserWikiName}, undef, $topic, $this->{test_web});
     $this->assert(!$access);
     $access = TWiki::Func::checkAccessPermission(
-        'VIEW', $TWiki::cfg{DefaultUserWikiName}, '', $topic, $testweb);
+        'VIEW', $TWiki::cfg{DefaultUserWikiName}, '', $topic, $this->{test_web});
     $this->assert(!$access);
     $access = TWiki::Func::checkAccessPermission(
-        'VIEW', $TWiki::cfg{DefaultUserWikiName}, 0, $topic, $testweb);
+        'VIEW', $TWiki::cfg{DefaultUserWikiName}, 0, $topic, $this->{test_web});
     $this->assert(!$access);
     $access = TWiki::Func::checkAccessPermission(
         'VIEW', $TWiki::cfg{DefaultUserWikiName}, "Please me, let me go",
-        $topic, $testweb);
+        $topic, $this->{test_web});
     $this->assert($access);
     # make sure meta overrides text, as documented - Item2953
-    my $meta = new TWiki::Meta($twiki, $testweb, $topic);
+    my $meta = new TWiki::Meta($twiki, $this->{test_web}, $topic);
     $meta->putKeyed('PREFERENCE', {
         name => 'ALLOWTOPICVIEW',
         title => 'ALLOWTOPICVIEW',
@@ -457,9 +453,9 @@ END
         'VIEW',
         $TWiki::cfg{DefaultUserWikiName},
         "   * Set ALLOWTOPICVIEW = NotASoul\n",
-        $topic, $testweb, $meta);
+        $topic, $this->{test_web}, $meta);
     $this->assert($access);
-    $meta = new TWiki::Meta($twiki, $testweb, $topic);
+    $meta = new TWiki::Meta($twiki, $this->{test_web}, $topic);
     $meta->putKeyed('PREFERENCE', {
         name => 'DENYTOPICVIEW',
         title => 'DENYTOPICVIEW',
@@ -469,7 +465,7 @@ END
         'VIEW',
         $TWiki::cfg{DefaultUserWikiName},
         "   * Set ALLOWTOPICVIEW = $TWiki::cfg{DefaultUserWikiName}\n",
-        $topic, $testweb, $meta);
+        $topic, $this->{test_web}, $meta);
     $this->assert(!$access);
 }
 

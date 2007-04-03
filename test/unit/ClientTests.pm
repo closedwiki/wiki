@@ -16,8 +16,7 @@ use TWiki::UI::View;
 use TWiki::UI::Edit;
 
 my $session;
-my $twikiRegistrationAgent = 'TWikiRegistrationAgent';
-my ( $joe, $agent, $userTopic );
+my $agent = 'TWikiRegistrationAgent';
 
 sub new {
     my $this = shift()->SUPER::new(@_);
@@ -63,11 +62,7 @@ sub set_up {
 }
 
 sub set_up_user {
-    $joe = $session->{users}->findUser( "joe", "Main.JoeDoe" );
-    $agent = $session->{users}->findUser( $twikiRegistrationAgent,
-                                          $twikiRegistrationAgent);
-    $userTopic = 
-      $session->{users}->addUserToTWikiUsersTopic( $joe, $agent);
+    $session->{users}->addUserToTWikiUsersTopic( "joe", "JoeDoe", $agent);
 }
 
 sub tear_down {

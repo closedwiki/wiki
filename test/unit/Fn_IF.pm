@@ -19,6 +19,7 @@ sub test_correctIF {
     $this->{twiki}->enterContext('test');
     $TWiki::cfg{Fnargle} = 'Fleeble';
     $TWiki::cfg{A}{B} = 'C';
+    my $u = $this->{twiki}->{users};
     my @tests = (
         { test => 'A=B', then=>0, else=>1 },
         { test => 'A!=B', then=>1, else=>0 },
@@ -27,7 +28,8 @@ sub test_correctIF {
         { test => 'context test', then=>1, else=>0 },
         { test => '{Fnargle}=Fleeble', then=>1, else=>0 },
         { test => '{A}{B}=C', then=>1, else=>0 },
-        { test => '$ WIKINAME = '.$this->{twiki}->{user}->wikiName(), then=>1, else=>0 },
+        { test => '$ WIKINAME = '.$u->getWikiName($this->{twiki}->{user}),
+          then=>1, else=>0 },
         { test => 'defined EDITBOXHEIGHT', then=>1, else=>0 },
         { test => '0>1', then=>0, else=>1 },
         { test => '1>0', then=>1, else=>0 },

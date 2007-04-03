@@ -37,7 +37,6 @@ use Assert;
 
 use TWiki::Attrs;
 use TWiki::Store;
-use TWiki::User;
 use TWiki::Prefs;
 use TWiki::Meta;
 use TWiki::Time;
@@ -126,6 +125,7 @@ sub formatVersions {
     ASSERT($this->isa( 'TWiki::Attach')) if DEBUG;
 
     my $store = $this->{session}->{store};
+    my $users = $this->{session}->{users};
     my $latestRev =
       $store->getRevisionNumber( $web, $topic, $attrs{name} );
 
@@ -141,7 +141,7 @@ sub formatVersions {
     for( my $rev = $latestRev; $rev >= 1; $rev-- ) {
         my( $date, $user, $minorRev, $comment ) =
           $store->getRevisionInfo( $web, $topic, $rev, $attrs{name} );
-        $user = $user->webDotWikiName() if( $user );
+        $user = $users->webDotWikiName($user) if( $user );
 
         $rows .= $this->_formatRow( $web, $topic,
                              {
@@ -178,6 +178,7 @@ sub _formatRow {
 sub _expandAttrs {
     my ( $this, $attr, $web, $topic, $info ) = @_;
     my $file = $info->{name};
+    my $users = $this->{session}->{users};
 
     if ( $attr eq 'REV' ) {
         return $info->{version};
@@ -225,9 +226,9 @@ sub _expandAttrs {
         return TWiki::Time::formatTime( $info->{date} || 0 );
     }
     elsif ( $attr eq 'USER' ) {
-        my $user = $this->{session}->{users}->findUser($info->{user});
+        my $user = $info->{user};
         if (defined($user)) {
-            return $user->webDotWikiName();
+            return $users->webDotWikiName($user);
         } else {
             return $info->{user};
         }
@@ -531,6 +532,7 @@ sub _getOldAttachAttr {
     my $before='';
 	my $item='';
 	my $after='';
+    my $users = $this->{session}->{users};
 
     ( $before, $fileName, $after ) = split( /<(?:\/)*TwkFileName>/, $atext );
     if( ! $fileName ) { $fileName = ''; }
@@ -550,11 +552,10 @@ sub _getOldAttachAttr {
             $fileDate = TWiki::Time::parseTime( $fileDate );
         }
         ( $before, $fileUser,    $after ) = split( /<(?:\/)*TwkFileUser>/, $atext );
-        if( ! $fileUser ) { 
-            $fileUser = ''; 
+        if( ! $fileUser ) {
+            $fileUser = '';
         } else {
-            my $u = $this->{session}->{users}->findUser( $fileUser );
-            $fileUser = $u->login() if $u;
+            $fileUser = $users->getLoginName($fileUser) if $fileUser;
         }
         $fileUser =~ s/ //go;
         ( $before, $fileComment, $after ) = split( /<(?:\/)*TwkFileComment>/, $atext );
@@ -629,6 +630,7 @@ CODE_SMELL: Is this really necessary? upgradeFrom1v0beta?
 sub upgradeFrom1v0beta {
     my( $this, $meta ) = @_;
     ASSERT($this->isa( 'TWiki::Attach')) if DEBUG;
+    my $users = $this->{session}->{users};
 
     my @attach = $meta->find( 'FILEATTACHMENT' );
     foreach my $att ( @attach ) {
@@ -638,8 +640,7 @@ sub upgradeFrom1v0beta {
             $date = TWiki::Time::parseTime( $date );
         }
         $att->{date} = $date;
-        my $u = $this->{session}->{users}->findUser( $att->{user} );
-        $att->{user} = $u->webDotWikiName() if $u;
+        $att->{user} = $users->webDotWikiName($att->{user});
     }
 }
 

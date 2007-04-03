@@ -58,8 +58,11 @@ sub set_up {
 
     $twiki = new TWiki();
 
-    $testUser1 = $this->createFakeUser($twiki);
-    $testUser2 = $this->createFakeUser($twiki);
+    # Use just the wikiname (don't create a complete user) because the
+    # store should *only* need the wikiname; no other user details are
+    # required.
+    $testUser1 = "DummyUserOne";
+    $testUser2 = "DummyUserTwo";
     $twiki->{store}->createWeb( $twiki->{user}, $testweb);
 }
 
@@ -85,7 +88,7 @@ sub verify_checkin {
     my $this = shift;
     my $topic = "UnitTest1";
     my $text = "hi";
-    my $user = $twiki->{users}->findUser($testUser1);
+    my $user = $testUser1;
 
     $this->assert(!$twiki->{store}->topicExists($testweb,$topic));
     $twiki->{store}->saveTopic( $user, $testweb, $topic, $text );
@@ -107,7 +110,7 @@ sub verify_checkin {
     my( $dateMeta0, $authorMeta0, $revMeta0 ) = $meta->getRevisionInfo();
     $this->assert_num_equals( $revMeta0, $revMeta );
     # Check-in with different text, under different user (to force change)
-    $user = $twiki->{users}->findUser($testUser2);
+    $user = $testUser2;
     $text = "bye";
 
     $twiki->{store}->saveTopic($user, $testweb, $topic, $text, $meta );
@@ -125,7 +128,7 @@ sub verify_checkin_attachment {
     # Create topic
     my $topic = "UnitTest2";
     my $text = "hi";
-    my $user = $twiki->{users}->findUser($testUser1);
+    my $user = $testUser1;
 
     $twiki->{store}->saveTopic($user, $testweb, $topic, $text );
 
@@ -172,7 +175,7 @@ sub verify_rename() {
     my $oldTopic = "UnitTest2";
     my $newWeb = $oldWeb;
     my $newTopic = "UnitTest2Moved";
-    my $user = $twiki->{users}->findUser($testUser1);
+    my $user = $testUser1;
 
     $twiki->{store}->saveTopic($user, $oldWeb, $oldTopic, "Elucidate the goose" );
     $this->assert(!$twiki->{store}->topicExists($newWeb, $newTopic));
@@ -181,7 +184,7 @@ sub verify_rename() {
     open( FILE, ">/tmp/$attachment" );
     print FILE "Test her attachment to me\n";
     close(FILE);
-    $user = $twiki->{users}->findUser( $testUser2 );
+    $user = $testUser2;
     $twiki->{userName} = $user;
     $twiki->{store}->saveAttachment($oldWeb, $oldTopic, $attachment, $user,
                                 { file => "/tmp/$attachment" } );
@@ -191,7 +194,7 @@ sub verify_rename() {
     my $oldRevTop =
       $twiki->{store}->getRevisionNumber( $oldWeb, $oldTopic );
 
-    $user =$twiki->{users}->findUser( $testUser1 );
+    $user = $testUser1;
     $twiki->{user} = $user;
 
     #$TWiki::Sandbox::_trace = 1;

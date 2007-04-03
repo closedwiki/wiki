@@ -21,8 +21,32 @@
 
 ---+ package TWiki::Users
 
-Singleton object that handles mapping of users to wikinames and
-vice versa, and user authentication checking.
+This is a facade that presents a simple interface to the User Mapping
+and Password modules.
+
+Everywhere else in the code, the methods getWikiName, getLoginName etc. must
+be used to map a "canonical user identifier" to a wiki name, login name etc.
+This is to avoid exporting implementation assumptions outside this module.
+
+*Terminology*
+   * A *login name* is the name used to log in to TWiki. Each login name is
+     assumed to be unique to a human.
+   * A *wikiname* is how a user is displayed. A login name will usually
+     map to a wikiname for display. Many login names may map to a single
+     wikiname.
+   * A *group* is an id that represents a group of users and other groups.
+     Groups are *defined* using wikinames, but these are expanded to a list
+     of login names at the first opportunity.
+   * An *email* is an email address asscoiated with a *login name*. A single
+     login name may have many emails.
+
+Internally TWiki uses something referred to as a "canonical user id" or
+just "user id". This is normally just the user login name, but - *and this
+uis very important* - it doesn't have to be. All it needs to be is a unique
+string that identifies a user.
+
+Again, it is very importnat *not* to assume that user ids are always login
+names. You have been warned!
 
 =cut
 
@@ -30,7 +54,6 @@ package TWiki::Users;
 
 use strict;
 use Assert;
-use TWiki::User;
 use TWiki::Time;
 
 BEGIN {
@@ -63,19 +86,15 @@ sub new {
     $this->{passwords} = $implPasswordManager->new( $session );
 
     my $implUserMappingManager = $TWiki::cfg{UserMappingManager};
-    $implUserMappingManager = 'TWiki::Users::TWikiUserMapping' if( $implUserMappingManager eq 'none' );
+    $implUserMappingManager = 'TWiki::Users::TWikiUserMapping'
+      if( $implUserMappingManager eq 'none' );
     eval "use $implUserMappingManager";
     die "User Mapping Manager: $@" if $@;
-    $this->{usermappingmanager} = $implUserMappingManager->new( $session );
+    $this->{mapping} = $implUserMappingManager->new( $session );
 
     $this->{login} = {};
-    $this->{wikiname} = {};
 
     $this->{CACHED} = 0;
-
-    # create the guest user
-    $this->createUser( $TWiki::cfg{DefaultUserLogin},
-                       $TWiki::cfg{DefaultUserWikiName} );
 
     return $this;
 }
@@ -95,19 +114,12 @@ sub finish {
     my $this = shift;
 
     $this->{passwords}->finish();
-    $this->{usermappingmanager}->finish();
-
-    my $wikinames = $this->{wikiname};
-    while (my ($wikiname,$user) = each %$wikinames) {
-       $user->{groups} = ();
-    }
-    $this->{wikiname}  =  {};
     $this->{login}     =  {};
 }
 
-# Get a list of user objects from a text string containing a
-# list of user names. Used by User.pm
-sub expandUserList {
+# Get a list of canonical *user* names from a text string containing a
+# list of user and group *wiki* names.
+sub _expandUserList {
     my( $this, $names, $expand ) = @_;
     ASSERT($this->isa( 'TWiki::Users')) if DEBUG;
 
@@ -116,209 +128,392 @@ sub expandUserList {
     # i.e.: "%MAINWEB%.UserA, UserB, Main.UserC  # something else"
     $names =~ s/(<[^>]*>)//go;     # Remove HTML tags
 
-    $names =~ s/\s*([$TWiki::regex{mixedAlphaNum}_\.\,\s\%]*)\s*(.*)/$1/go;
-
-    my @l = map { $this->findUser( $_ ) } split( /[\,\s]+/, $names );
+    my @l;
+    foreach my $ident ( split( /[\,\s]+/, $names )) {
+        $ident =~ s/^.*\.//;
+        next unless $ident;
+        push( @l, @{$this->{mapping}->findUserByWikiName( $ident )} );
+    }
     return \@l;
 }
 
 =pod
 
----++ ObjectMethod findUser( $name [, $wikiname] [, $nocreate ] ) -> $userObject
+---++ ObjectMethod findUserByWikiName( $wn ) -> \@users
+   * =$wn= - wikiname to look up
+Return a list of users for the users that have this wikiname. Since a single
+wikiname might be used by multiple login ids, we need a list.
 
-   * =$name= - login name or wiki name
-   * =$wikiname= - optional, wikiname for created user
-   * =$nocreate= - optional, disable creation of user object for user not found
-
-Find the user object corresponding to =$name=, which may be either a
-login name or a wiki name. If =$name= is found (either in the list
-of login names or the list of wiki names) the corresponding
-user object is returned. In this case =$wikiname= is ignored.
-
-If they are not found, and =$nocreate= is true, then return undef.
-
-If =$nocreate= is false, then a user object is returned even if
-the user is not known.
-
-If =$nocreate= is false, and no =$wikiname= is given, then the
-=$name= is used for both login name and wiki name.
-
-If nocreate is off, then a default user will be created with their wikiname
-set the same as their login name. This user/wiki name pair can be overridden
-by a later createUser call when the correct wikiname is known, if necessary.
+If $wn is the name of a group, the group will *not* be expanded.
 
 =cut
 
-sub findUser {
-    my( $this, $name, $wikiname, $dontCreate ) = @_;
-    ASSERT($this->isa( 'TWiki::Users')) if DEBUG;
-    $name ||= $TWiki::cfg{DefaultUserLogin};
-    my $object;
-
-    #$this->{session}->writeDebug("Looking for $name / $wikiname / $dontCreate");
-
-    # is it a cached login name?
-    $object = $this->{login}{$name};
-    return $object if $object;
-
-    # remove pointless tag; we'll be looking there anyway
-    $name =~ s/^%MAINWEB%.//;
-
-    if( $name =~ m/^$TWiki::regex{webNameRegex}\.$TWiki::regex{wikiWordRegex}$/o ) {
-        # may be web.wikiname; try the cache
-        $object = $this->{wikiname}{$name};
-        return $object if $object;
-    }
-
-    # prepend the mainweb and try again in the cache
-    if( $name =~ /^$TWiki::regex{wikiWordRegex}$/ ) {
-        $object = $this->{wikiname}{"$TWiki::cfg{UsersWebName}.$name"};
-        return $object if $object;
-    }
-
-    # not cached
-
-    # if no wikiname is given, try and recover it from
-    # TWikiUsers
-    unless( $wikiname ) {
-        $wikiname = $this->lookupLoginName( $name );
-    }
-
-    if( !$wikiname &&
-        $name =~ m/^($TWiki::regex{webNameRegex}\.)?$TWiki::regex{wikiWordRegex}$/o ) {
-        my $t = $name;
-        $t = "$TWiki::cfg{UsersWebName}.$t" unless $1;
-        # not in TWiki users as a login name; see if it is
-        # a WikiName
-        my $lUser = $this->lookupWikiName( $t );
-        if( $lUser ) {
-            # it's a wikiname
-            $name = $lUser;
-            $wikiname = $t;
-        }
-    }
-
-    # if we haven't matched a wikiname yet and we've been told
-    # not to create, then abandon ship
-    return undef if ( !$wikiname && $dontCreate );
-
-    unless( $wikiname ) {
-        # default to wikiname being the same as name.
-        # Commented out because this warning is too common, and tends to
-        # flood the logs.
-        # $this->{session}->writeWarning("$name does not exist in TWikiUsers - is this a bogus user?") unless( $name =~ /Group$/ );
-        $wikiname = $name;
-    }
-
-    return $this->createUser( $name, $wikiname );
+sub findUserByWikiName {
+    my( $this, $wn ) = @_;
+    ASSERT($wn) if DEBUG;
+    return $this->{mapping}->findUserByWikiName( $wn );
 }
 
 =pod
 
 ---++ ObjectMethod findUserByEmail( $email ) -> \@users
    * =$email= - email address to look up
-Return a list of user objects for the users that have this email registered
-with the password manager.
+Return a list of users for the users that have this email registered
+with the password manager or the user mapping manager.
+
+The password manager is asked first for whether it maps emails.
+If it doesn't, then the user mapping manager is asked instead.
 
 =cut
 
 sub findUserByEmail {
     my( $this, $email ) = @_;
     ASSERT($email) if DEBUG;
-    return $this->{passwords}->findUserByEmail( $email );
+    my @users;
+    my $um = $this->{mapping};
+    my $logins = $this->{passwords}->findUserByEmail( $email );
+    if ($logins) {
+        foreach my $l ( @$logins ) {
+            $l = $um->lookupLoginName( $l );
+            push( @users, $l ) if $l;
+        }
+        return \@users;
+    }
+    # if the password manager didn't want to provide the service, ask
+    # the user mapping manager
+    push( @users, $um->findUserByEmail( $email ));
+    return \@users;
 }
 
 =pod
 
----++ ObjectMethod createUser( $login, $wikiname ) -> $userobject
+---++ ObjectMethod setEmails($user, @emails)
 
-Create a user, and insert them in the maps (overwriting any current entry).
-Use this instead of findUser when you want to be sure you are not going to
-pick up any default user created by findUser. All parameters are required.
+Set the email address(es) for the given login name.
+The password manager is tried first, and if it doesn't want to know the
+user mapping manager is tried.
 
 =cut
 
-sub createUser {
-    my( $this, $name, $wikiname ) = @_;
+sub setEmails {
+    my $this = shift;
+    my $user = shift;
 
-    my $object = new TWiki::User( $this->{session}, $name, $wikiname );
-    if ( defined ($object) ) {
-        $this->{login}{$object->login()} = $object;
-        $this->{wikiname}{$object->webDotWikiName()} = $object;
+    return if ($this->{passwords}->setEmails( $user, @_ ));
+
+    return $this->{mapping}->setEmails( $user, @_ );
+}
+
+=pod
+
+---++ ObjectMethod isAdmin() -> $boolean
+
+True if the user is an admin (is a member of the $TWiki::cfg{SuperAdminGroup})
+
+=cut
+
+sub isAdmin {
+    my( $this, $user ) = @_;
+    my $isAdmin = 0;
+
+    if ($user eq $TWiki::cfg{SuperAdminGroup}) {
+        $isAdmin = 1;
+    } else {
+        my $sag = $TWiki::cfg{SuperAdminGroup};
+        $isAdmin = $this->{mapping}->isInGroup( $user, $sag );
     }
 
-    return $object;
+    return $isAdmin;
 }
 
 =pod
 
----++ ObjectMethod addUserToMapping( $user ) -> $topicName
+---++ ObjectMethod isInList( $user, $list ) -> $boolean
 
-Add a user to the persistant mapping that maps from usernames to wikinames
-and vice-versa.
+Return true $user is in a list of user and group *wikinames*. Groups
+are recursively evaluated.
+
+$list is a string representation of a user list.
 
 =cut
 
-sub addUserToMapping {
-    my ( $this, $user, $me ) = @_;
+sub isInList {
+    my( $this, $user, $userlist, $scanning ) = @_;
+    $scanning = {} unless $scanning;
+    unless( ref( $userlist )) {
+        # string parameter
+        $userlist = _expandUserList( $this, $userlist );
+    }
+    my $abuser;
+    my $umm = $this->{mapping};
+    foreach $abuser ( @$userlist ) {
+        # don't check the same user twice
+        next if $scanning->{$abuser};
+        $scanning->{$abuser} = 1;
 
-    return $this->{usermappingmanager}->addUserToMapping($user, $me);
+        return 1 if $user eq $abuser;
+        if( $umm->isGroup($abuser) ) {
+            return 1 if $umm->isInGroup($user, $abuser );
+        }
+    }
+    return 0;
 }
 
-# Translates username (e.g. jsmith) to Web.WikiName
-# (e.g. Main.JaneSmith)
-sub lookupLoginName {
-    my( $this, $loginUser ) = @_;
+=pod
 
-    return undef unless $loginUser;
+---++ ObjectMethod getLoginName($user) -> $string
 
-    $loginUser =~ s/$TWiki::cfg{NameFilter}//go;
-    return $this->{usermappingmanager}->lookupLoginName($loginUser);
+Get the login name of a user. By convention
+users are identified in the core code by their login name, and
+never by their wiki name, so this is a nop.
 
+=cut
+
+sub getLoginName {
+    my( $this, $user) = @_;
+
+    return $user;
 }
 
-# Translates Web.WikiName (e.g. Main.JaneSmith) to
-# username (e.g. jsmith)
-sub lookupWikiName {
-    my( $this, $wikiName ) = @_;
+=pod
 
-    return undef unless $wikiName;
+---++ ObjectMethod getEmails($user) -> @emailAddress
 
-    $wikiName =~ s/$TWiki::cfg{NameFilter}//go;
-    $wikiName = "$TWiki::cfg{UsersWebName}.$wikiName"
-      unless $wikiName =~ /\./;
+If this is a user, return their email addresses. If it is a group,
+return the addresses of everyone in the group.
 
-    return $this->{usermappingmanager}->lookupWikiName($wikiName);
+The password manager and user mapping manager are both consulted for emails
+for each user (where they are actually found is implementation defined).
+
+=cut
+
+sub getEmails {
+    my( $this, $user ) = @_;
+
+    my $um = $this->{mapping};
+    my @emails;
+    if ( $um->isGroup($user) ) {
+        my $it = $um->eachGroupMember($user);
+        while( $it->hasNext() ) {
+            push( @emails, $this->getEmails($it->next()) );
+        }
+    } else {
+        my $passwordHandler = $this->{session}->{users}->{passwords};
+        push( @emails,
+              $passwordHandler->getEmails( $user ));
+        push(@emails, $um->getEmails($user));
+    }
+
+    return @emails;
 }
 
-sub eachGroup {
-    my $this = shift;
-    return $this->{usermappingmanager}->eachGroup(@_);
+=pod
+
+---++ ObjectMethod getWikiName($user) -> $wikiName
+
+Get the wikiname to display for a canonical user identifier.
+
+=cut
+
+sub getWikiName {
+    my ($this, $user ) = @_;
+    ASSERT($user) if DEBUG;
+
+    if ($TWiki::cfg{MapUserToWikiName}) {
+        my $mapped = $this->{mapping}->lookupLoginName($user);
+        return $mapped if $mapped;
+    }
+    return $user;
 }
+
+=pod
+
+---++ ObjectMethod webDotWikiName($user) -> $webDotWiki
+
+Return the fully qualified wikiname of the user
+
+=cut
+
+sub webDotWikiName {
+    my( $this, $user ) = @_;
+    return "$TWiki::cfg{UsersWebName}.".$this->getWikiName( $user );
+}
+
+=pod
+
+---++ ObjectMethod userExists($login) -> $user
+
+Determine if the user already exists or not. Return a canonical user
+identifier if the user is known, or undef otherwise.
+
+=cut
+
+sub userExists {
+    my( $this, $loginName ) = @_;
+
+    if( $loginName eq $TWiki::cfg{DefaultUserLogin} ) {
+        return $loginName;
+    }
+
+    # TWiki allows *groups* to log in
+    if( $this->{mapping}->isGroup( $loginName )) {
+        return $loginName;
+    }
+
+    # Look them up in the password manager.
+    if( $this->{passwords}->fetchPass( $loginName )) {
+        return $loginName;
+    }
+
+    return undef;
+}
+
+=pod
+
+---++ ObjectMethod eachUser() -> $iterator
+
+Get an iterator over the list of all the registered users *not* including
+groups.
+
+Use it as follows:
+<verbatim>
+    my $iterator = $umm->eachUser();
+    while ($it->hasNext()) {
+        my $user = $it->next();
+        ...
+    }
+</verbatim>
+
+=cut
 
 sub eachUser {
-    my $this = shift;
-    return $this->{usermappingmanager}->eachUser(@_);
+    return shift->{mapping}->eachUser( @_ );
 }
 
-sub isGroup {
-    my $this = shift;
-    return $this->{usermappingmanager}->isGroup(@_);
+=pod
+
+---++ ObjectMethod eachGroup() -> $iterator
+
+Get an iterator over the list of all the groups.
+
+=cut
+
+sub eachGroup {
+    return shift->{mapping}->eachGroup( @_ );
 }
+
+=pod
+
+---++ ObjectMethod eachGroupMember($group) -> $iterator
+
+Return a iterator of user ids that are members of this group.
+Should only be called on groups.
+
+Note that groups may be defined recursively, so a group may contain other
+groups. This method should *only* return users i.e. all contained groups
+should be fully expanded.
+
+=cut
 
 sub eachGroupMember {
-    my $this = shift;
-    return $this->{usermappingmanager}->eachGroupMember(@_);
+    return shift->{mapping}->eachGroupMember( @_ );
 }
 
-sub eachMembership {
-    my $this = shift;
-    return $this->{usermappingmanager}->eachMembership(@_);
+=pod
+
+---++ ObjectMethod isGroup($user) -> boolean
+
+Establish if a user refers to a group or not.
+
+The default implementation is to check if the wikiname of the user ends with
+'Group'. Subclasses may override this behaviour to provide alternative
+interpretations. The $TWiki::cfg{SuperAdminGroup} is recognized as a
+group no matter what it's name is.
+
+=cut
+
+sub isGroup {
+    return shift->{mapping}->isGroup( @_ );
 }
+
+=pod
+
+---++ ObjectMethod isInGroup( $user, $group ) -> $boolean
+
+Test if user is in the given group.
+
+=cut
 
 sub isInGroup {
-    my $this = shift;
-    return $this->{usermappingmanager}->isInGroup(@_);
+    return shift->{mapping}->isInGroup( @_ );
+}
+
+=pod
+
+---++ ObjectMethod eachMembership($user) -> $iterator
+
+Return an iterator over the groups that $user (an object)
+is a member of.
+
+=cut
+
+sub eachMembership {
+    return shift->{mapping}->eachMembership( @_ );
+
+}
+
+=pod
+
+---++ ObjectMethod checkPassword( $user, $passwordU ) -> $boolean
+
+Finds if the password is valid for the given user.
+
+Returns 1 on success, undef on failure.
+
+=cut
+
+sub checkPassword {
+    my( $this, $user, $pw ) = @_;
+    return $this->{passwords}->checkPassword($this->getLoginName($user), $pw);
+}
+
+=pod
+
+---++ ObjectMethod setPassword( $user, $newPassU, $oldPassU ) -> $boolean
+
+If the $oldPassU matches matches the user's password, then it will
+replace it with $newPassU.
+
+If $oldPassU is not correct and not 1, will return 0.
+
+If $oldPassU is 1, will force the change irrespective of
+the existing password, adding the user if necessary.
+
+Otherwise returns 1 on success, undef on failure.
+
+=cut
+
+sub setPassword {
+    my( $this, $user, $newPassU, $oldPassU ) = @_;
+    return $this->{passwords}->setPassword(
+        $this->getLoginName($user), $newPassU, $oldPassU);
+}
+
+=pod
+
+---++ ObjectMethod removeUser( $user ) -> $boolean
+
+Delete the users entry. Removes the user from the password
+manager and user mapping manager. Does *not* remove their personal
+topics, which may still be linked.
+
+=cut
+
+sub removeUser {
+    my( $this, $user ) = @_;
+    my $ln = $this->getLoginName($user);
+    $this->{passwords}->removeUser($ln);
+    $this->{mapping}->removeUserFromMapping($this->getWikiName( $user ), $ln);
 }
 
 1;

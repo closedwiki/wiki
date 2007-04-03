@@ -60,7 +60,7 @@ sub doTests {
     my %encrapted;
     foreach my $user ( sort keys %$users1 ) {
         $this->assert(!$impl->fetchPass($user));
-        my $added = $impl->passwd( $user, $users1->{$user}->{pass} );
+        my $added = $impl->setPassword( $user, $users1->{$user}->{pass} );
         $this->assert_null($impl->error());
         $this->assert($added);
         $impl->setEmails($user, $users1->{$user}->{emails});
@@ -83,7 +83,7 @@ sub doTests {
     }
     # try changing with wrong pass
     foreach my $user ( sort keys %$users1 ) {
-        my $added = $impl->passwd( $user, $users1->{$user}->{pass},
+        my $added = $impl->setPassword( $user, $users1->{$user}->{pass},
                                    $users2->{$user}->{pass} );
         $this->assert(!$added);
         $this->assert_not_null($impl->error());
@@ -91,7 +91,7 @@ sub doTests {
     if ($salted) {
         # re-add them with the same password, make sure encoding changed
         foreach my $user ( sort keys %$users1 ) {
-            my $added = $impl->passwd( $user, $users1->{$user}->{pass},
+            my $added = $impl->setPassword( $user, $users1->{$user}->{pass},
                                        $users1->{$user}->{pass},
                                        $encrapted{$user} );
             $this->assert_null($impl->error());
@@ -102,17 +102,17 @@ sub doTests {
     }
     # force-change them to users2 password
     foreach my $user ( sort keys %$users1 ) {
-        my $added = $impl->passwd( $user, $users2->{$user}->{pass},
+        my $added = $impl->setPassword( $user, $users2->{$user}->{pass},
                                    $users1->{$user}->{pass} );
         $this->assert_null($impl->error());
         $this->assert_str_not_equals($encrapted{$user},
                                      $impl->fetchPass($user));
         $this->assert_null($impl->error());
     }
-    $this->assert(!$impl->deleteUser('notauser'));
+    $this->assert(!$impl->removeUser('notauser'));
     $this->assert_not_null($impl->error());
     # delete first
-    $this->assert($impl->deleteUser('alligator'));
+    $this->assert($impl->removeUser('alligator'));
     $this->assert_null($impl->error());
     foreach my $user ( sort keys %$users1 ) {
         if( $user !~ /alligator/ ) {
@@ -122,7 +122,7 @@ sub doTests {
         }
     }
     # delete last
-    $this->assert($impl->deleteUser('mole'));
+    $this->assert($impl->removeUser('mole'));
     foreach my $user ( sort keys %$users1 ) {
         if( $user !~ /(alligator|mole)/ ) {
             $this->assert($impl->checkPassword($user, $users2->{$user}->{pass}));
@@ -131,7 +131,7 @@ sub doTests {
         }
     }
     # delete middle
-    $this->assert($impl->deleteUser('budgie'));
+    $this->assert($impl->removeUser('budgie'));
     foreach my $user ( sort keys %$users1 ) {
         if( $user !~ /(alligator|mole|budgie)/ ) {
             $this->assert($impl->checkPassword($user, $users2->{$user}->{pass}));

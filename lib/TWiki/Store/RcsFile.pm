@@ -416,7 +416,7 @@ sub getTimestamp {
 
 =pod
 
----++ ObjectMethod restoreLatestRevision($wikiname)
+---++ ObjectMethod restoreLatestRevision( $user )
 
 Restore the plaintext file from the revision at the head.
 

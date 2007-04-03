@@ -149,7 +149,7 @@ sub encrypt {
 sub fetchPass {
     my ( $this, $user ) = @_;
     ASSERT($this->isa( 'TWiki::Users::HtPasswdUser')) if DEBUG;
-    my $ret = undef;
+    my $ret = 0;
 
     if( $user ) {
         try {
@@ -158,6 +158,7 @@ sub fetchPass {
                 $ret = $db->{$user}->{pass};
             } else {
                 $this->{error} = 'Login invalid';
+                $ret = undef;
             }
         } catch Error::Simple with {
             $this->{error} = $!;
@@ -168,7 +169,7 @@ sub fetchPass {
     return $ret;
 }
 
-sub passwd {
+sub setPassword {
     my ( $this, $user, $newUserPassword, $oldUserPassword ) = @_;
     ASSERT($this->isa( 'TWiki::Users::HtPasswdUser')) if DEBUG;
 
@@ -195,7 +196,7 @@ sub passwd {
     return 1;
 }
 
-sub deleteUser {
+sub removeUser {
     my ( $this, $user ) = @_;
     ASSERT($this->isa( 'TWiki::Users::HtPasswdUser')) if DEBUG;
     my $result = undef;
@@ -271,6 +272,27 @@ sub setEmails {
         $db->{$user}->{emails} = '';
     }
     _savePasswd($db);
+    return 1;
+}
+
+=pod
+
+
+Searches the password DB for users who have set this email.
+
+=cut
+
+sub findUserByEmail {
+    my( $this, $email ) = @_;
+    my $users = [];
+    my $db = _readPasswd();
+    while (my ($k, $v) = each %$db) {
+        my %ems = map { $_ => 1 } split(';', $v->{emails});
+        if ($ems{$email}) {
+            push(@$users, $k);
+        }
+    }
+    return $users;
 }
 
 1;

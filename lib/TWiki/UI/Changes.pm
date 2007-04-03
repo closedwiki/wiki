@@ -65,7 +65,7 @@ sub changes {
     }
     my %done = ();
     foreach my $change ( reverse @changes ) {
-        my( $changedTopic, $login, $time, $rev ) = split( /\t/, $change );
+        my( $changedTopic, $u, $time, $rev ) = split( /\t/, $change );
         unless( $done{$changedTopic} ) {
             next unless $session->{store}->topicExists( $webName, $changedTopic );
 
@@ -74,8 +74,7 @@ sub changes {
                     $session->{user}, $webName, $changedTopic, $rev );
                 my $thisChange = $eachChange;
                 $thisChange =~ s/%TOPICNAME%/$changedTopic/go;
-                my $u = $session->{users}->findUser( $login );
-                my $wikiuser = $u ? $u->webDotWikiName() : '';
+                my $wikiuser = $u ? $users->webDotWikiName($u) : '';
                 $thisChange =~ s/%AUTHOR%/$wikiuser/go;
                 $time = TWiki::Time::formatTime( $time );
                 $rev = 1 unless $rev;

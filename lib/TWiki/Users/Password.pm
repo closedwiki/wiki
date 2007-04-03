@@ -64,7 +64,6 @@ to.
 
 sub finish {
     my $this = shift;
-    
 }
 
 =pod
@@ -79,14 +78,14 @@ Returns undef otherwise.
 =cut
 
 sub fetchPass {
-    return '';
+    return 0;
 }
 
 =pod
 
 ---++ ObjectMethod checkPassword( $user, $passwordU ) -> $boolean
 
-Finds if the password is valid for the given login.
+Finds if the password is valid for the given user.
 
 Returns 1 on success, undef on failure.
 
@@ -98,26 +97,22 @@ sub checkPassword {
 
 =pod
 
----++ ObjectMethod deleteUser( $user ) -> $boolean
+---++ ObjectMethod removeUser( $user ) -> $boolean
 
-Delete users entry.
-
-Returns 1 on success, undef on failure.
+Delete the users entry.
 
 =cut
 
-sub deleteUser {
+sub removeUser {
     return 1;
 }
 
+
 =pod
 
----++ ObjectMethod passwd( $user, $newPassU, $oldPassU ) -> $boolean
+---++ ObjectMethod setPassword( $user, $newPassU, $oldPassU ) -> $boolean
 
-If the $oldPassU is undef, it will try to add the user, failing
-if they are already there.
-
-If the $oldPassU matches matches the login's password, then it will
+If the $oldPassU matches matches the user's password, then it will
 replace it with $newPassU.
 
 If $oldPassU is not correct and not 1, will return 0.
@@ -129,7 +124,7 @@ Otherwise returns 1 on success, undef on failure.
 
 =cut
 
-sub passwd {
+sub setPassword {
     my $this = shift;
     $this->{error} = 'System does not support changing passwords';
     return undef;
@@ -170,96 +165,45 @@ sub error {
 
 =pod
 
----++ ObjectMethod getEmails($user) -> @emails
-
-Fetch the email address(es) for the given username. Default behaviour
-is to look up the users' personal topic.
+---++ ObjectMethod getEmails($login) -> @emails
+Fetch the email address(es) for the given login. Default
+behaviour is to return an empty list. Called by Users.pm.
 
 =cut
 
 sub getEmails {
-    my( $this, $login ) = @_;
-
-    my $user = $this->{session}->{users}->findUser( $login, undef, 1 );
-    return () unless $user;
-
-    my ($meta, $text) =
-      $this->{session}->{store}->readTopic(
-          undef, $TWiki::cfg{UsersWebName}, $user->wikiName() );
-
-    my @addresses;
-
-    # Try the form first
-    my $entry = $meta->get('FIELD', 'Email');
-    if ($entry) {
-        push( @addresses, split( /;/, $entry->{value} ) );
-    } else {
-        # Now try the topic text
-        foreach my $l (split ( /\r?\n/, $text  )) {
-            if ($l =~ /^\s+\*\s+E-?mail:\s*(.*)$/mi) {
-                push @addresses, split( /;/, $1 );
-            }
-        }
-    }
-
-    return @addresses;
+    return ();
 }
 
 =pod
 
----++ ObjectMethod setEmails($user, @emails)
-
-Set the email address(es) for the given username in the user topic.
+---++ ObjectMethod setEmails($user, @emails) -> $boolean
+Set the email address(es) for the given login name. Returns true if
+the emails were set successfully.
+Default behaviour is a nop, which will result in the user mapping manager
+taking over. Called by Users.pm.
 
 =cut
 
 sub setEmails {
-    my $this = shift;
-    my $login = shift;
-    my $mails = join( ';', @_ );
-
-    my $user = $this->{session}->{users}->findUser( $login, undef, 1 );
-    return () unless $user;
-
-    my ($meta, $text) =
-      $this->{session}->{store}->readTopic(
-          undef, $TWiki::cfg{UsersWebName}, $user->wikiName() );
-
-    if ($meta->get('FORM')) {
-        # use the form if there is one
-        $meta->putKeyed( 'FIELD',
-                         { name => 'Email',
-                           value => $mails,
-                           title => 'Email',
-                           attributes=> 'h' } );
-    } else {
-        # otherwise use the topic text
-        unless( $text =~ s/^(\s+\*\s+E-?mail:\s*).*$/$1$mails/mi ) {
-            $text .= "\n   * Email: $mails\n";
-        }
-    }
-
-    $this->{session}->{store}->saveTopic( $user, $TWiki::cfg{UsersWebName},
-                                  $user->wikiName(), $text, $meta );
+    return 0;
 }
 
-#returns an array of user objects that relate to a email address
+=pod
+
+---++ ObjectMethod findUserByEmail($email) -> \@users
+Returns an array of user wikinames that relate to a email address.
+Defaut behaviour is a nop, which will result in the user mapping manager
+being asked for its opinion. If subclass implementations return a value for
+this, then the user mapping manager will *not* be asked.
+
+Called by Users.pm.
+
+=cut
+
 sub findUserByEmail {
     my( $this, $email ) = @_;
-    ASSERT($email) if DEBUG;
-    # SMELL: there is no way in TWiki to map from an email back to a user, so
-    # we have to cheat. We do this as follows:
-    unless( $this->{_MAP_OF_EMAILS} ) {
-        $this->{_MAP_OF_EMAILS} = ();
-        my $it = $this->{session}->{users}->eachUser();
-        while( $it->hasNext() ) {
-            my $uo = $it->next();
-ASSERT($uo->isa('TWiki::User'));
-            map { push( @{$this->{_MAP_OF_EMAILS}->{$_}}, $uo); }
-              $uo->emails();
-        }
-    }
-    return $this->{_MAP_OF_EMAILS}->{$email};
+    return undef;
 }
 
 1;

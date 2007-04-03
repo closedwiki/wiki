@@ -243,7 +243,8 @@ sub buildNewTopic {
         # If the last save was by me, don't merge
         if(( $orev ne $rev ||
                $odate && $date && $odate ne $date ) &&
-                 !$author->equals( $user )) {
+                 $author ne $user ) {
+
             my $pti = $prevMeta->get( 'TOPICINFO' );
             if( $pti->{reprev} && $pti->{version} &&
                   $pti->{reprev} == $pti->{version} ) {
@@ -267,7 +268,7 @@ sub buildNewTopic {
             if( $formDef && $prevMeta ) {
                 $newMeta->merge( $prevMeta, $formDef );
             }
-            $merged = [ $orev, $author->wikiName(), $rev||1 ];
+            $merged = [ $orev, $author, $rev||1 ];
         }
     }
 
@@ -447,7 +448,7 @@ WARN
     }
 
     my $saveCmd = $query->param( 'cmd' ) || 0;
-    if ( $saveCmd && ! $session->{user}->isAdmin()) {
+    if ( $saveCmd && ! $session->{users}->isAdmin( $session->{user} )) {
         throw TWiki::OopsException( 'accessdenied', def => 'only_group',
                                     web => $web, topic => $topic,
                                     params => $TWiki::cfg{UsersWebName}.
@@ -519,7 +520,7 @@ WARN
 
     my $lease = $store->getLease( $web, $topic );
     # clear the lease, if (and only if) we own it
-    if( $lease && $lease->{user}->equals( $user )) {
+    if( $lease && $lease->{user} eq $user ) {
         $store->clearLease( $web, $topic );
     }
 

@@ -54,16 +54,11 @@ sub set_up {
     $TWiki::cfg{WarningFileName} = "$tempdir/TWikiTestCase.warn";
 }
 
-# Restores TWiki::cfg from backup and deletes any fake users created
+# Restores TWiki::cfg from backup
 sub tear_down {
     my $this = shift;
+    eval {$this->{twiki}->finish()};
     %TWiki::cfg = eval $this->{__TWikiSafe};
-    if(defined($this->{fake_users})) {
-        for my $i (@{$this->{fake_users}}) {
-            unlink("$TWiki::cfg{DataDir}/$TWiki::cfg{UsersWebName}/$i.txt");
-            unlink("$TWiki::cfg{DataDir}/$TWiki::cfg{UsersWebName}/$i.txt,v");
-        }
-    }
 }
 
 sub _copy {
@@ -95,36 +90,6 @@ sub _copy {
     else {
         return $n;
     }
-}
-
-# Like it says on the tin; creates a fake user, that is guaranteed not to
-# conflict with any existing user. Fake users will be killed during tear_down.
-# Be aware that if you fail to call tear-down, for example if you ctrl-C the
-# tests, you may leave fake users around, so it is better to change
-# $TWiki::cfg{UsersWebName} to a test-specific web first.
-# The first parameter is a TWiki object and is required.
-# The optional parameter is the text to put in the user topic.
-# Only the user topic is created; the user is _not_ added to TWikiUsers.
-# The wikiname of the new user topic is returned.
-sub createFakeUser {
-    my( $this, $twiki, $text, $name ) = @_;
-    $this->assert($twiki->{store}->webExists($TWiki::cfg{UsersWebName}));
-    $name ||= '';
-    my $base = "TemporaryTestUser".$name;
-    my $i = 0;
-    while($twiki->{store}->topicExists($TWiki::cfg{UsersWebName},$base.$i)) {
-        $i++;
-    }
-    $text ||= '';
-    my $meta = new TWiki::Meta($twiki, $TWiki::cfg{UsersWebName}, $base.$i);
-    $meta->put( "TOPICPARENT", {
-        name => $TWiki::cfg{UsersWebName}.'.'.$TWiki::cfg{HomeTopicName} } );
-    $twiki->{store}->saveTopic($twiki->{user},
-                               $TWiki::cfg{UsersWebName},
-                               $base.$i,
-                               $text, $meta);
-    push( @{$this->{fake_users}}, $base.$i);
-    return $base.$i;
 }
 
 # 1:1 HTML comparison. Correctly compares attributes in tags. Uses HTML::Parser

@@ -69,7 +69,7 @@ sub checkPassword {
     return $r;
 }
 
-sub deleteUser {
+sub removeUser {
     my( $this, $login ) = @_;
     ASSERT( $login ) if DEBUG;
 
@@ -84,7 +84,7 @@ sub deleteUser {
     return $r;
 }
 
-sub passwd {
+sub setPassword {
     my( $this, $user, $newPassU, $oldPassU ) = @_;
     ASSERT( $user ) if DEBUG;
 

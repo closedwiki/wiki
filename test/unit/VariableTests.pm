@@ -5,16 +5,12 @@ use strict;
 
 package GenericVariablesTests;
 
-use base qw( TWikiTestCase );
+use base qw( TWikiFnTestCase );
 
 use TWiki;
 use Error qw( :try );
 
 my $twiki;
-
-my $testWeb = 'TemporaryTestWeb';
-my $testTopic = 'TestTopic';
-my $testUsersWeb = "TemporaryTestVariablesUsersWeb";
 
 sub set_up {
     my $this = shift;
@@ -22,26 +18,12 @@ sub set_up {
     $this->SUPER::set_up();
 
     my $query = new CGI("");
-    $query->path_info("/$testWeb/$testTopic");
-    $TWiki::cfg{UsersWebName} = $testUsersWeb;
-    $TWiki::cfg{MapUserToWikiName} = 1;;
-    $TWiki::cfg{Htpasswd}{FileName} = '/tmp/junkpasswd';
-    $TWiki::cfg{PasswordManager} = 'TWiki::Users::HtPasswdUser';
-    $twiki = new TWiki(undef, $query);
-    $twiki->{store}->createWeb( $twiki->{user}, $testWeb );
-}
-
-sub tear_down {
-    my $this = shift;
-
-    $this->removeWebFixture( $twiki, $testWeb );
-    eval {$twiki->finish()};
-
-    $this->SUPER::tear_down();
+    $query->path_info("/$this->{test_web}/$this->{test_topic}");
+    $twiki = new TWiki('scum', $query);
 }
 
 sub new {
-    my $self = shift()->SUPER::new(@_);
+    my $self = shift()->SUPER::new('Variables', @_);
     return $self;
 }
 
@@ -63,32 +45,28 @@ sub test_embeddedExpansions {
           XB => 'PLAR',
       });
 
-    my $result = $twiki->handleCommonTags("%%A%%B%%", $testWeb, $testTopic);
+    my $result = $twiki->handleCommonTags("%%A%%B%%", $this->{test_web}, $this->{test_topic});
     $this->assert_equals('Egg sample', $result);
 
-    $result = $twiki->handleCommonTags("%C%%D%", $testWeb, $testTopic);
+    $result = $twiki->handleCommonTags("%C%%D%", $this->{test_web}, $this->{test_topic});
     $this->assert_equals('Egg sample', $result);
 
-    $result = $twiki->handleCommonTags("%E%%F%", $testWeb, $testTopic);
+    $result = $twiki->handleCommonTags("%E%%F%", $this->{test_web}, $this->{test_topic});
     $this->assert_equals('Egg sample', $result);
 
-    $result = $twiki->handleCommonTags("%%XA{}%%XB{}%%", $testWeb, $testTopic);
+    $result = $twiki->handleCommonTags("%%XA{}%%XB{}%%", $this->{test_web}, $this->{test_topic});
     $this->assert_equals('Exem plar', $result);
 
-    $result = $twiki->handleCommonTags("%%XA%%XB%{}%", $testWeb, $testTopic);
+    $result = $twiki->handleCommonTags("%%XA%%XB%{}%", $this->{test_web}, $this->{test_topic});
     $this->assert_equals('Exem plar', $result);
 
-    $result = $twiki->handleCommonTags("%%%PA%%%%SB{}%%%", $testWeb, $testTopic);
+    $result = $twiki->handleCommonTags("%%%PA%%%%SB{}%%%", $this->{test_web}, $this->{test_topic});
     $this->assert_equals('Egg sample', $result);
 
 }
 
 sub test_topicCreationExpansions {
     my $this = shift;
-    my $user = new TWiki::User($twiki, "fnurgle", "FrankNurgle");
-    $user->setEmails('frank@nurgle.org','mad@sad.com');
-    $this->assert_str_equals('fnurgle', $user->login());
-    $this->assert_str_equals('FrankNurgle', $user->wikiName());
 
     my $text = <<'END';
 %USERNAME%
@@ -103,16 +81,16 @@ Kill me
 %USERINFO{format="$emails,$username,$wikiname,$wikiusername"}%
 %ENDSECTION{name="fred" type="section"}%
 END
-    my $result = $twiki->expandVariablesOnTopicCreation($text, $user);
-    my $xpect = <<'END';
-fnurgle
+    my $result = $twiki->expandVariablesOnTopicCreation($text, $this->{test_user});
+    my $xpect = <<END;
+scum
 
-FrankNurgle
-TemporaryTestVariablesUsersWeb.FrankNurgle
+ScumBag
+$this->{users_web}.ScumBag
 %WEBCOLOR%
 %STARTSECTION{name="fred" type="section"}%
-fnurgle, TemporaryTestVariablesUsersWeb.FrankNurgle, frank@nurgle.org, mad@sad.com
-frank@nurgle.org, mad@sad.com,fnurgle,FrankNurgle,TemporaryTestVariablesUsersWeb.FrankNurgle
+scum, $this->{users_web}.ScumBag, scumbag\@example.com
+scumbag\@example.com,scum,ScumBag,$this->{users_web}.ScumBag
 %ENDSECTION{name="fred" type="section"}%
 END
     $this->assert_str_equals($xpect, $result);
@@ -121,10 +99,6 @@ END
 sub test_userExpansions {
     my $this = shift;
     $TWiki::cfg{AntiSpam}{HideUserDetails} = 0;
-    my $user = new TWiki::User($twiki, "fnurgle", "FrankNurgle");
-    $user->setEmails('frank@nurgle.org','mad@sad.com');
-    $this->assert_str_equals('fnurgle', $user->login());
-    $this->assert_str_equals('FrankNurgle', $user->wikiName());
 
     my $text = <<'END';
 %USERNAME%
@@ -134,15 +108,14 @@ sub test_userExpansions {
 %USERINFO{format="$emails,$username,$wikiname,$wikiusername"}%
 %USERINFO{"TWikiGuest" format="$emails,$username,$wikiname,$wikiusername"}%
 END
-    $twiki->{user} = $user;
-    my $result = $twiki->handleCommonTags($text, $testWeb, $testTopic);
-    my $xpect = <<'END';
-fnurgle
-FrankNurgle
-TemporaryTestVariablesUsersWeb.FrankNurgle
-fnurgle, TemporaryTestVariablesUsersWeb.FrankNurgle, frank@nurgle.org, mad@sad.com
-frank@nurgle.org, mad@sad.com,fnurgle,FrankNurgle,TemporaryTestVariablesUsersWeb.FrankNurgle
-,guest,TWikiGuest,TemporaryTestVariablesUsersWeb.TWikiGuest
+    my $result = $twiki->handleCommonTags($text, $this->{test_web}, $this->{test_topic});
+    my $xpect = <<END;
+scum
+ScumBag
+$this->{users_web}.ScumBag
+scum, $this->{users_web}.ScumBag, scumbag\@example.com
+scumbag\@example.com,scum,ScumBag,$this->{users_web}.ScumBag
+,guest,TWikiGuest,$this->{users_web}.TWikiGuest
 END
     $this->assert_str_equals($xpect, $result);
 }

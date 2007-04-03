@@ -230,6 +230,7 @@ sub _collectLogData {
     my %statViews;
     my %statSaves;
     my %statUploads;
+    my $users = $session->{users};
 
     binmode $TMPFILE;
     while ( my $line = <$TMPFILE> ) {
@@ -242,9 +243,7 @@ sub _collectLogData {
         while( !$logFileUserName && scalar( @fields )) {
             $logFileUserName = shift @fields;
         }
-        
-        my $userObj = $session->{users}->findUser($logFileUserName);
-        
+
         my( $opName, $webTopic, $notes, $ip ) = @fields;
 
         # ignore minor changes - not statistically helpful
@@ -255,7 +254,7 @@ sub _collectLogData {
 
         # ignore "renamed web" log lines
         next if( $opName && $opName =~ /(renameweb)/ );
-        
+
         # ignore "change password" log lines
         next if( $opName && $opName =~ /(changepasswd)/ );
 
@@ -274,11 +273,11 @@ sub _collectLogData {
 
             } elsif( $opName eq 'save' ) {
                 $statSaves{$webName}++;
-                $contrib{$webName}{$userObj->webDotWikiName()}++;
+                $contrib{$webName}{$users->webDotWikiName($logFileUserName)}++;
 
             } elsif( $opName eq 'upload' ) {
                 $statUploads{$webName}++;
-                $contrib{$webName}{$userObj->webDotWikiName()}++;
+                $contrib{$webName}{$users->webDotWikiName($logFileUserName)}++;
 
             } elsif( $opName eq 'rename' ) {
                 # Pick up the old and new topic names
@@ -314,7 +313,7 @@ sub _processWeb {
     my( $topic, $user ) = ( $session->{topicName}, $session->{user} );
 
     if( $isFirstTime ) {
-        _printMsg( $session, '* Executed by '.$user->wikiName() );
+        _printMsg( $session, '* Executed by '.$user );
     }
 
     _printMsg( $session, "* Reporting on TWiki.$web web" );

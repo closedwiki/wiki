@@ -45,56 +45,40 @@ package TWiki::Users::TWikiUserMapping;
 use strict;
 use Assert;
 use Error qw( :try );
-use TWiki::User;
 use TWiki::Time;
 use TWiki::ListIterator;
 
-=pod
-
----++ ClassMethod new( $session ) -> $object
-
-Constructs a new user mapping handler of this type, referring to $session
-for any required TWiki services.
-
-=cut
-
+# Constructs a new user mapping handler of this type, referring to $session
+# for any required TWiki services.
 sub new {
     my( $class, $session ) = @_;
 
     my $this = bless( {}, $class );
     $this->{session} = $session;
 
-    %{$this->{U2W}} = ();
-    %{$this->{W2U}} = ();
+    $this->{U2W} = {};
+    $this->{W2U} = {};
 
     return $this;
 }
 
-=pod
-
----++ ObjectMethod finish
-
-Complete processing after the client's HTTP request has been responded
-to.
-   1 breaking circular references to allow garbage collection in persistent
-     environments
-
-=cut
-
+# Complete processing after the client's HTTP request has been responded
+# to by breaking references (if any)
 sub finish {
     my $this = shift;
+    $this->{U2W} = undef;
+    $this->{W2U} = undef;
 }
 
-# callback for search function to collate results
+# PRIVATE callback for search function to collate results
 sub _collateGroups {
     my $ref = shift;
     my $group = shift;
     return unless $group;
-    my $groupObject = $ref->{users}->findUser( $group );
-    push (@{$ref->{list}}, $groupObject) if $groupObject;
+    push (@{$ref->{list}}, $group);
 }
 
-# get a list of groups defined in this TWiki
+# PRIVATE get a list of groups defined in this TWiki
 sub _getListOfGroups {
     my $this = shift;
     ASSERT(ref($this) eq 'TWiki::Users::TWikiUserMapping') if DEBUG;
@@ -118,34 +102,26 @@ sub _getListOfGroups {
               noheader      => 'on',
               nototal       => 'on',
               noempty       => 'on',
-              format	     => '$web.$topic',
+              format	     => '$topic',
               separator     => '',
              );
     }
     return $this->{groupsList};
 }
 
-=pod
-
----++ ObjectMethod addUserToMapping( $user, $addingUser ) -> $topicName
-
-Add a user to the persistant mapping that maps from usernames to wikinames
-and vice-versa. The default implementation uses a special topic called
-"TWikiUsers" in the users web. Subclasses will provide other implementations
-(usually stubs if they have other ways of mapping usernames to wikinames).
-
-Group names must be acceptable to $TWiki::cfg{NameFilter}
-
-$user is the user being added. $addingUser is the user doing the adding.
-
-=cut
-
+# Add a user to the persistant mapping that maps from usernames to wikinames
+# and vice-versa. The default implementation uses a special topic called
+# "TWikiUsers" in the users web. Subclasses will provide other implementations
+# (usually stubs if they have other ways of mapping usernames to wikinames).
+#
+# Names must be acceptable to $TWiki::cfg{NameFilter}
+#
+# $login can be undef; $wikiname must always have a value.
 sub addUserToMapping {
-    my ( $this, $user, $me ) = @_;
+    my ( $this, $wikiname, $login ) = @_;
 
     ASSERT($this->isa( 'TWiki::Users::TWikiUserMapping')) if DEBUG;
-    ASSERT($user->isa( 'TWiki::User')) if DEBUG;
-    ASSERT($me->isa( 'TWiki::User')) if DEBUG;
+    ASSERT($login) if DEBUG;
 
     my $store = $this->{session}->{store};
     my( $meta, $text ) =
@@ -153,14 +129,13 @@ sub addUserToMapping {
                          $TWiki::cfg{UsersTopicName}, undef );
     my $result = '';
     my $entry = "   * ";
-    $entry .= $user->web()."."
-      unless $user->web() eq $TWiki::cfg{UsersWebName};
-    $entry .= $user->wikiName()." - ";
-    $entry .= $user->login() . " - " if $user->login();
+    $entry .= $wikiname." - ";
+    $entry .= $login . " - " if $login;
     my $today = TWiki::Time::formatTime(time(), '$day $mon $year', 'gmtime');
 
-    # add to the cache
-    $this->{U2W}{$user->login()} = $user->{web} . "." . $user->wikiName();
+    # add to the caches
+    $this->{U2W}{$login} = $wikiname;
+    $this->{W2U}{$wikiname} = $login;
 
     # add name alphabetically to list
     foreach my $line ( split( /\r?\n/, $text) ) {
@@ -176,9 +151,9 @@ sub addUserToMapping {
                 #	* A - <a name="A">- - - -</a>^M
                 $name = $1;
             }
-            if( $name && ( $user->wikiName() le $name ) ) {
+            if( $name && ( $wikiname le $name ) ) {
                 # found alphabetical position
-                if( $user->wikiName() eq $name ) {
+                if( $wikiname eq $name ) {
                     # adjusting existing user - keep original registration date
                     $entry .= $odate;
                 } else {
@@ -197,82 +172,57 @@ sub addUserToMapping {
         # brand new file - add to end
         $result .= "$entry$today\n";
     }
-    $store->saveTopic( $me, $TWiki::cfg{UsersWebName},
+    $store->saveTopic( $TWiki::cfg{SuperAdminGroup},
+                       $TWiki::cfg{UsersWebName},
                        $TWiki::cfg{UsersTopicName},
                        $result, $meta );
 
     return $TWiki::cfg{UsersTopicName};
 }
 
-=pod
+# Remove a user from the mapping
+# Called by TWiki::Users
+sub removeUserFromMapping {
+    # SMELL: currently a nop
+}
 
----++ ObjectMethod lookupLoginName($username) -> $wikiName
-
-Map a username to the corresponding wikiname. This is used for lookups during
-user resolution, and should be as fast as possible.
-
-=cut
-
+# Map a username to the corresponding wikiname. This is used for lookups,
+# and should be as fast as possible. Returns undef if no such user exists.
+# Called by TWiki::Users
 sub lookupLoginName {
-    my ($this, $loginUser) = @_;
+    my ($this, $login) = @_;
 
+    # SMELL: what if we just want to know if they exist? Why bother
+    # loading the mapping?
     $this->_loadMapping();
-    return $this->{U2W}{$loginUser};
+    return $this->{U2W}{$login};
 }
 
-=pod
-
----++ Objectmethod lookupWikiName($wikiname) -> $username
-
-Map a wikiname to the corresponding username. This is used for lookups during
-user resolution, and should be as fast as possible.
-
-=cut
-
+# Map a wikiname to the corresponding username. This is used for lookups,
+# and should be as fast as possible. Returns undef if no such user exists.
+# Called by TWiki::Users. Only one user per wikiname is found.
 sub lookupWikiName {
-    my ($this, $wikiName) = @_;
+    my ($this, $wn) = @_;
 
+    # SMELL: what if we just want to know if they exist? Why bother
+    # loading the mapping?
     $this->_loadMapping();
-    return $this->{W2U}{$wikiName};
+    return $this->{W2U}{$wn};
 }
 
-=pod
-
----++ ObjectMethod eachUser() -> $iterator
-
-Get an iterator over the list of all the registered users *not* including
-groups. The iterator will return each user object.
-
-Use it as follows:
-<verbatim>
-    my $iterator = $umm->eachUser();
-    while ($it->hasNext()) {
-        my $user = $it->next();
-        ...
-    }
-</verbatim>
-
-=cut
-
+# Called from TWiki::Users. See the documentation of the corresponding
+# method in that module for details.
 sub eachUser {
     my( $this ) = @_;
     ASSERT($this->isa( 'TWiki::Users::TWikiUserMapping')) if DEBUG;
 
     $this->_loadMapping();
-    my $users = $this->{session}->{users};
-    my @list = map { $users->findUser($_) } keys(%{$this->{W2U}});
+    my @list =  keys(%{$this->{W2U}});
     return new TWiki::ListIterator( \@list );
 }
 
-=pod
-
----++ ObjectMethod eachGroup() -> $iterator
-
-Get an iterator over the list of all the groups. The iterator will return
-each group user object.
-
-=cut
-
+# Called from TWiki::Users. See the documentation of the corresponding
+# method in that module for details.
 sub eachGroup {
     my ( $this ) = @_;
     $this->_getListOfGroups();
@@ -281,6 +231,7 @@ sub eachGroup {
 
 # Build hash to translate between username (e.g. jsmith)
 # and WikiName (e.g. Main.JaneSmith).
+# PRIVATE subclasses should *not* implement this.
 sub _loadMapping {
     my $this = shift;
 
@@ -299,6 +250,12 @@ sub _loadMapping {
         #   * TWikiGuest - guest - 10 Mar 2005
         #   * TWikiGuest - 10 Mar 2005
         $text =~ s/^\s*\* ($TWiki::regex{webNameRegex}\.)?($TWiki::regex{wikiWordRegex})\s*(?:-\s*(\S+)\s*)?-.*$/$this->_cacheUser($1,$2,$3)/gome;
+        # Always create the guest user (even though they may not be able to
+        # log in, we still need them as a default).
+        if (!$this->{U2W}{$TWiki::cfg{DefaultUserLogin}}) {
+            $this->_cacheUser(undef, $TWiki::cfg{DefaultUserWikiName},
+                              $TWiki::cfg{DefaultUserLogin});
+        }
     } else {
         # If there is no mapping topic, then
         # map only guest to TWikiGuest.
@@ -307,6 +264,7 @@ sub _loadMapping {
     }
 }
 
+# PRIVATE
 sub _cacheUser {
     my($this, $web, $wUser, $lUser) = @_;
     $web ||= $TWiki::cfg{UsersWebName};
@@ -315,83 +273,52 @@ sub _cacheUser {
     # SMELL: filter prevents use of password managers with wierd usernames,
     # like the DOMAIN\username used in the swamp of despair.
     $lUser =~ s/$TWiki::cfg{NameFilter}//go;
-    my $wwn = $web.'.'.$wUser;
-    $this->{U2W}{$lUser} = $wwn;
-    $this->{W2U}{$wwn} = $lUser;
+    $this->{U2W}{$lUser} = $wUser;
+    $this->{W2U}{$wUser} = $lUser;
 }
 
-=pod
-
----++ ObjectMethod eachGroupMember($group) -> $iterator
-
-Return a iterator of user objects that are members of this group.
-Should only be called on groups.
-
-Note that groups may be defined recursively, so a group may contain other
-groups. This method should *only* return users i.e. all contained groups
-should be fully expanded.
-
-=cut
-
+# Called from TWiki::Users. See the documentation of the corresponding
+# method in that module for details.
 sub eachGroupMember {
     my $this = shift;
     my $group = shift;
     ASSERT($this->isa( 'TWiki::Users::TWikiUserMapping')) if DEBUG;
     my $store = $this->{session}->{store};
+    my $users = $this->{session}->{users};
 
-    if( !defined $group->{members} &&
-          $store->topicExists( $group->{web}, $group->{wikiname} )) {
+    my $members = [];
+
+    if( $store->topicExists( $TWiki::cfg{UsersWebName}, $group )) {
         my $text =
           $store->readTopicRaw( undef,
-                                $group->{web}, $group->{wikiname},
+                                $TWiki::cfg{UsersWebName}, $group,
                                 undef );
         foreach( split( /\r?\n/, $text ) ) {
             if( /$TWiki::regex{setRegex}GROUP\s*=\s*(.+)$/ ) {
                 next unless( $1 eq 'Set' );
                 # Note: if there are multiple GROUP assignments in the
                 # topic, only the last will be taken.
-                $group->{members} = 
-                  $this->{session}->{users}->expandUserList( $2 );
+                $members = TWiki::Users::_expandUserList( $users, $2 );
             }
-        }
-        # backlink the user to the group
-        foreach my $user ( @{$group->{members}} ) {
-            push( @{$user->{groups}}, $group );
         }
     }
 
-    return new TWiki::ListIterator( \@{$group->{members}} );
+    return new TWiki::ListIterator( $members );
 }
 
-=pod
-
----++ ObjectMethod isGroup($user) -> boolean
-
-Establish if a user object refers to a user group or not.
-
-The default implementation is to check if the wikiname of the user ends with
-'Group'. Subclasses may override this behaviour to provide alternative
-interpretations. The $TWiki::cfg{SuperAdminGroup} is recognized as a
-group no matter what it's name is.
-
-=cut
-
+# Called from TWiki::Users. See the documentation of the corresponding
+# method in that module for details.
 sub isGroup {
     my ($this, $user) = @_;
-    ASSERT($user->isa( 'TWiki::User')) if DEBUG;
 
-    return $user->wikiName() =~ /Group$/;
+    # Groups have the same username as wikiname as canonical name
+    return 1 if $user eq $TWiki::cfg{SuperAdminGroup};
+
+    return $user =~ /Group$/;
 }
 
-=pod
-
----++ ObjectMethod eachMembership($user) -> $iterator
-
-Return an iterator over the user objects of the groups that $user (an object)
-is a member of.
-
-=cut
-
+# Called from TWiki::Users. See the documentation of the corresponding
+# method in that module for details.
 sub eachMembership {
     my ($this, $user) = @_;
     my @groups = ();
@@ -402,32 +329,115 @@ sub eachMembership {
     return $it;
 }
 
-=pod
-
----++ ObjectMethod isInGroup( $user, $group ) -> $boolean
-
-Test if user is in the given group. Default implementation loads
-the group and checks the members.
-
-=cut
-
+# Called from TWiki::Users. See the documentation of the corresponding
+# method in that module for details.
 sub isInGroup {
     my( $this, $user, $group, $scanning ) = @_;
-    ASSERT(ref($group) eq 'TWiki::User') if DEBUG;
-    ASSERT($group->isGroup()) if DEBUG;
 
     my @users;
-    my $it = $group->eachGroupMember();
+    my $it = $this->eachGroupMember($group);
     while ($it->hasNext()) {
         my $u = $it->next();
         next if $scanning->{$u};
         $scanning->{$u} = 1;
-        return 1 if $u->equals($user);
-        if( $u->isGroup() ) {
+        return 1 if $u eq $user;
+        if( $this->isGroup($u) ) {
             return 1 if $this->isInGroup( $user, $u, $scanning);
         }
     }
     return 0;
+}
+
+# Called from TWiki::Users. See the documentation of the corresponding
+# method in that module for details.
+sub getEmails {
+    my( $this, $user ) = @_;
+
+    my ($meta, $text) =
+      $this->{session}->{store}->readTopic(
+          undef, $TWiki::cfg{UsersWebName},
+          $this->{session}->{users}->getWikiName($user) );
+
+    my @addresses;
+
+    # Try the form first
+    my $entry = $meta->get('FIELD', 'Email');
+    if ($entry) {
+        push( @addresses, split( /;/, $entry->{value} ) );
+    } else {
+        # Now try the topic text
+        foreach my $l (split ( /\r?\n/, $text  )) {
+            if ($l =~ /^\s+\*\s+E-?mail:\s*(.*)$/mi) {
+                push @addresses, split( /;/, $1 );
+            }
+        }
+    }
+
+    return @addresses;
+}
+
+# Called from TWiki::Users. See the documentation of the corresponding
+# method in that module for details.
+sub setEmails {
+    my $this = shift;
+    my $user = shift;
+
+    my $mails = join( ';', @_ );
+
+    $user = $this->{session}->{users}->getWikiName( $user );
+
+    my ($meta, $text) =
+      $this->{session}->{store}->readTopic(
+          undef, $TWiki::cfg{UsersWebName},
+          $user);
+
+    if ($meta->get('FORM')) {
+        # use the form if there is one
+        $meta->putKeyed( 'FIELD',
+                         { name => 'Email',
+                           value => $mails,
+                           title => 'Email',
+                           attributes=> 'h' } );
+    } else {
+        # otherwise use the topic text
+        unless( $text =~ s/^(\s+\*\s+E-?mail:\s*).*$/$1$mails/mi ) {
+            $text .= "\n   * Email: $mails\n";
+        }
+    }
+
+    $this->{session}->{store}->saveTopic(
+        $user, $TWiki::cfg{UsersWebName}, $user, $text, $meta );
+}
+
+# Called from TWiki::Users. See the documentation of the corresponding
+# method in that module for details.
+sub findUserByEmail {
+    my( $this, $email ) = @_;
+
+    unless( $this->{_MAP_OF_EMAILS} ) {
+        $this->{_MAP_OF_EMAILS} = [];
+        my $it = $this->eachUser();
+        while( $it->hasNext() ) {
+            my $uo = $it->next();
+            map { push( @{$this->{_MAP_OF_EMAILS}->{$_}}, $uo); }
+              $this->{session}->{users}->getEmails( $uo );
+        }
+    }
+    return $this->{_MAP_OF_EMAILS}->{$email};
+}
+
+# Called from TWiki::Users. See the documentation of the corresponding
+# method in that module for details.
+sub findUserByWikiName {
+    my( $this, $wn ) = @_;
+
+    my @users = ();
+    if( $this->isGroup( $wn )) {
+        @users = ( $wn );
+    } elsif( $this->{W2U}->{$wn} ) {
+        @users = ( $this->{W2U}->{$wn} );
+    }
+    return \@users;
 }
 
 1;

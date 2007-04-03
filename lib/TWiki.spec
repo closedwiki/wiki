@@ -281,14 +281,6 @@ $TWiki::cfg{SuperAdminGroup} = 'TWikiAdminGroup';
 # use TWiki to manually rename the existing topic</b>
 $TWiki::cfg{UsersTopicName} = 'TWikiUsers';
 
-# **BOOLEAN EXPERT**
-# Map login name to Wiki name via the mapping in the topic named
-# in {UsersTopicName}. Set this to $FALSE for .htpasswd
-# authenticated sites where the user's wiki name is the
-# name they use to log in, or if you have some other way of
-# making the mapping to a Wiki name (e.g. a local Plugin).
-$TWiki::cfg{MapUserToWikiName} = $TRUE;
-
 # **STRING 100 EXPERT**
 # Comma-separated list of scripts that require the user to authenticate.
 # With TemplateLogin, any time an unauthenticated user attempts to access
@@ -374,6 +366,14 @@ $TWiki::cfg{Htpasswd}{Encoding} = 'crypt';
 #   information and group memberships
 # </li></ol>
 $TWiki::cfg{UserMappingManager} = 'TWiki::Users::TWikiUserMapping';
+
+# **BOOLEAN EXPERT**
+# Map login name to Wiki name via the mapping in the topic named
+# in {UsersTopicName}. Set this to $FALSE for .htpasswd
+# authenticated sites where the users wiki name is the
+# name they use to log in, or if you have some other way of
+# making the mapping to a Wiki name (e.g. a bespoke mapping manager).
+$TWiki::cfg{MapUserToWikiName} = $TRUE;
 
 #---++ Registration
 # **BOOLEAN**

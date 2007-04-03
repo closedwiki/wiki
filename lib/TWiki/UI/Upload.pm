@@ -101,8 +101,8 @@ sub attach {
     my $fileWikiUser = '';
     if( $fileName ) {
         $tmpl = $session->{templates}->readTemplate( 'attachagain', $skin );
-        my $u = $session->{users}->findUser( $args->{user} );
-        $fileWikiUser = $u->webDotWikiName() if $u;
+        my $u = $args->{user};
+        $fileWikiUser = $users->webDotWikiName($u) if $u;
     } else {
         $tmpl = $session->{templates}->readTemplate( 'attachnew', $skin );
     }

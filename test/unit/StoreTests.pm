@@ -41,7 +41,7 @@ sub set_up {
 	#TODO: we should share common set up and tear down code
     # we need to make sure we have a TestUser topic
 	
-	$twiki->{user} = $twiki->{users}->findUser('TestUser');
+	$twiki->{user} = 'TestUser';
 	$user = $twiki->{user};
 }
 
@@ -240,7 +240,7 @@ sub test_leases {
     # check the lease
     $lease = $twiki->{store}->getLease($web, $testtopic);
     $this->assert_not_null($lease);
-    $this->assert_deep_equals($locker, $lease->{user});
+    $this->assert_str_equals($locker, $lease->{user});
     $this->assert($set, $lease->{taken});
     $this->assert($lease->{taken}+10, $lease->{expires});
 
@@ -374,7 +374,7 @@ sub beforeAttachmentSaveHandler {
       unless $attrHash->{attachment} eq $attachment;
     die "comment $attrHash->{comment}"
       unless $attrHash->{comment} eq "a comment";
-    die "user ".$user unless $user == $twiki->{user};
+    die "user ".$user unless $user eq $twiki->{user};
 
     open(F, "<".$attrHash->{tmpFilename}) ||
       die "$attrHash->{tmpFilename}: $!";
@@ -398,7 +398,7 @@ sub afterAttachmentSaveHandler {
     die "comment $attrHash->{comment}"
       unless $attrHash->{comment} eq "a comment";
     die "user ".$user->stringify()
-      unless $user == $twiki->{user};
+      unless $user eq $twiki->{user};
 }
 
 sub test_attachmentSaveHandlers {

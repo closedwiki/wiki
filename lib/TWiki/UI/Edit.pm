@@ -80,6 +80,7 @@ sub init_edit {
     my $webName = $session->{webName};
     my $topic = $session->{topicName};
     my $user = $session->{user};
+    my $users = $session->{users};
 
     # empty means edit both form and text, "form" means edit form only,
     # "text" means edit text only
@@ -119,9 +120,9 @@ sub init_edit {
     unless( $breakLock || $topic =~ /X{10}/ || $topic =~ /AUTOINC\d+/) {
         my $lease = $store->getLease( $webName, $topic );
         if( $lease ) {
-            my $who = $lease->{user}->webDotWikiName();
+            my $who = $users->webDotWikiName($lease->{user});
 
-            if( $who ne $user->webDotWikiName() ) {
+            if( $who ne $users->webDotWikiName($user) ) {
                 # redirect; we are trying to break someone else's lease
                 my( $future, $past );
                 my $why = $lease->{message};
@@ -188,7 +189,7 @@ sub init_edit {
           $store->readTopic( undef, $webName, $topic, undef );
     }
 
-    if( $saveCmd && ! $session->{user}->isAdmin()) {
+    if( $saveCmd && ! $session->{users}->isAdmin( $session->{user} )) {
         throw TWiki::OopsException( 'accessdenied', def=>'only_group',
                                     web => $webName, topic => $topic,
                                     params => $TWiki::cfg{UsersWebName}.

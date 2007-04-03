@@ -109,6 +109,7 @@ database, that can then be displayed by referring to
 sub login {
     my( $this, $query, $twikiSession ) = @_;
     my $twiki = $this->{twiki};
+    my $users = $twiki->{users};
 
     my $origurl = $query->param( 'origurl' );
     my $loginName = $query->param( 'username' );
@@ -136,8 +137,7 @@ sub login {
     }
 
     if( $loginName ) {
-        my $passwordHandler = $twiki->{users}->{passwords};
-        my $validation = $passwordHandler->checkPassword( $loginName, $loginPass );
+        my $validation = $users->checkPassword( $loginName, $loginPass );
 
         if( $validation ) {
             $this->userLoggedIn( $loginName );

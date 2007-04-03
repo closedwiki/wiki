@@ -336,10 +336,11 @@ sub checkAccess {
         $script =~ s@^.*/([^./]+)@$1@g if $script;
 
         if( defined $script && $this->{_authScripts}{$script} ) {
-            my $topic = $this->{twiki}->{topicName};
-            my $web = $this->{twiki}->{webName};
+            my $topic = $twiki->{topicName};
+            my $web = $twiki->{webName};
             throw TWiki::AccessControlException(
-                $script, $this->{twiki}->{user}, $web, $topic,
+                $script, $twiki->{user},
+                $web, $topic,
                 'authentication required' );
         }
     }

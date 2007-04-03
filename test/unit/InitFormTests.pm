@@ -314,7 +314,7 @@ sub test_tmpl_form_notext_params {
   # Pass query parameters, no text
   my $this = shift;
   
-  my $text = setup_formtests( $this, $testweb, "", "formtemplate=\"$testweb.$testform\" templatetopic=\"$testweb.$testtmpl\" IssueName=\"My first defect\" IssueDescription=\"Simple description of problem\" IssueType=\"Enhancement\" History1=\"%ATTACHURL%\" History2=\"%ATTACHURL%\" History3=\"\$percntATTACHURL%\" History4=\"\$percntATTACHURL%\" text=\"\"" );
+  my $text = setup_formtests( $this, $testweb, $testtopic1, "formtemplate=\"$testweb.$testform\" templatetopic=\"$testweb.$testtmpl\" IssueName=\"My first defect\" IssueDescription=\"Simple description of problem\" IssueType=\"Enhancement\" History1=\"%ATTACHURL%\" History2=\"%ATTACHURL%\" History3=\"\$percntATTACHURL%\" History4=\"\$percntATTACHURL%\" text=\"\"" );
 
   $this->assert_html_matches('<input type="text" name="IssueName" value="My first defect" size="73" class="twikiInputField twikiEditFormTextField" />', get_formfield(1, $text));
   $this->assert_html_matches('<textarea name="IssueDescription"  rows="5" cols="55" class="twikiInputField twikiEditFormTextAreaField">

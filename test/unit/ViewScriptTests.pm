@@ -2,7 +2,7 @@ use strict;
 
 package ViewScriptTests;
 
-use base qw(TWikiTestCase);
+use base qw(TWikiFnTestCase);
 
 use strict;
 use TWiki;
@@ -10,10 +10,7 @@ use TWiki::UI::View;
 use CGI;
 use Error qw( :try );
 
-my $testweb = "TemporaryViewScriptTestsWeb";
-
 my $twiki;
-my $testuser;
 
 my $topic1 = <<'HERE';
 CONTENT
@@ -45,7 +42,7 @@ pretemplate%STARTTEXT%pre%ENDTEXT%posttemplate
 HERE
 
 sub new {
-    my $self = shift()->SUPER::new(@_);
+    my $self = shift()->SUPER::new("ViewScript", @_);
     return $self;
 }
 
@@ -54,44 +51,36 @@ sub set_up {
     my $this = shift;
     $this->SUPER::set_up();
 
-    $twiki = new TWiki();
-
-    $testuser = $twiki->{users}->findUser($this->createFakeUser($twiki));
-
-    $twiki->{store}->createWeb($testuser, $testweb);
-
-    $twiki->{store}->saveTopic( $testuser, $testweb, 'TestTopic1',
-                                $topic1, undef );
-    $twiki->{store}->saveTopic( $testuser, $testweb, 'ViewoneTemplate',
-                                $templateTopicContent1, undef );
-    $twiki->{store}->saveTopic( $testuser, $testweb, 'ViewtwoTemplate',
-                                $templateTopicContent2, undef );
-    $twiki->{store}->saveTopic( $testuser, $testweb, 'ViewthreeTemplate',
-                                $templateTopicContent3, undef );
-    $twiki->{store}->saveTopic( $testuser, $testweb, 'ViewfourTemplate',
-                                $templateTopicContent4, undef );
-    $twiki->{store}->saveTopic( $testuser, $testweb, 'ViewfiveTemplate',
-                                $templateTopicContent5, undef );
-
-    $TWiki::Plugins::SESSION = $twiki;
-}
-
-sub tear_down {
-    my $this = shift;
-    $this->removeWebFixture($twiki, $testweb);
-    eval {$twiki->finish()};
-    $this->SUPER::tear_down();
+    $twiki = $this->{twiki};
+    $twiki->{store}->saveTopic(
+        $this->{test_user_wikiname}, $this->{test_web}, 'TestTopic1',
+        $topic1, undef );
+    $twiki->{store}->saveTopic(
+        $this->{test_user_wikiname}, $this->{test_web}, 'ViewoneTemplate',
+        $templateTopicContent1, undef );
+    $twiki->{store}->saveTopic(
+        $this->{test_user_wikiname}, $this->{test_web}, 'ViewtwoTemplate',
+        $templateTopicContent2, undef );
+    $twiki->{store}->saveTopic(
+        $this->{test_user_wikiname}, $this->{test_web}, 'ViewthreeTemplate',
+        $templateTopicContent3, undef );
+    $twiki->{store}->saveTopic(
+        $this->{test_user_wikiname}, $this->{test_web}, 'ViewfourTemplate',
+        $templateTopicContent4, undef );
+    $twiki->{store}->saveTopic(
+        $this->{test_user_wikiname}, $this->{test_web}, 'ViewfiveTemplate',
+        $templateTopicContent5, undef );
 }
 
 sub setup_view {
-    my ( $this, $web, $topic, $tmpl, $testuser ) = @_;
+    my ( $this, $web, $topic, $tmpl ) = @_;
     my $query = new CGI({
         webName => [ $web ],
         topicName => [ $topic ],
         template => [ $tmpl ],
     });
     $query->path_info( "$web/$topic" );
-    $twiki = new TWiki( $testuser->login(), $query );
+    $twiki = new TWiki( $this->{test_user_login}, $query );
     my ($text, $result) = $this->capture( \&TWiki::UI::View::view, $twiki);
     my @lines = split( /\n\r?/, $text ) if $result;
     shift @lines; shift @lines; shift @lines; shift @lines; shift @lines;
@@ -104,21 +93,21 @@ sub test_prepostamble {
     my $this = shift;
     my $text;
 
-    $text = $this->setup_view( $testweb, 'TestTopic1', 'viewone', $testuser );
+    $text = $this->setup_view( $this->{test_web}, 'TestTopic1', 'viewone' );
     $this->assert_equals('pretemplatepreCONTENT
 postposttemplate', $text);
 
-    $text = $this->setup_view( $testweb, 'TestTopic1', 'viewtwo', $testuser );
+    $text = $this->setup_view( $this->{test_web}, 'TestTopic1', 'viewtwo' );
     $this->assert_equals('pretemplateCONTENT
 postposttemplate', $text);
 
-    $text = $this->setup_view( $testweb, 'TestTopic1', 'viewthree', $testuser );
+    $text = $this->setup_view( $this->{test_web}, 'TestTopic1', 'viewthree' );
     $this->assert_equals('pretemplatepreCONTENTposttemplate', $text);
 
-    $text = $this->setup_view( $testweb, 'TestTopic1', 'viewfour', $testuser );
+    $text = $this->setup_view( $this->{test_web}, 'TestTopic1', 'viewfour' );
     $this->assert_equals('pretemplateCONTENTposttemplate', $text);
 
-    $text = $this->setup_view( $testweb, 'TestTopic1', 'viewfive', $testuser );
+    $text = $this->setup_view( $this->{test_web}, 'TestTopic1', 'viewfive' );
     $this->assert_equals('pretemplateposttemplate', $text);
 }
 

@@ -6,8 +6,7 @@ use strict;
 # 3) Turn autoattach = on. Ask for the list of attachments. attachmentAdded should appear. attachmentMissing should not.
 
 package AutoAttachTests;
-
-use base qw(TWikiTestCase);
+use base qw(TWikiFnTestCase);
 
 use strict;
 use TWiki;
@@ -19,14 +18,11 @@ use TWiki::OopsException;
 use Devel::Symdump;
 
 sub new {
-    my $this = shift()->SUPER::new(@_);
+    my $this = shift()->SUPER::new('AutoAttach', @_);
     return $this;
 }
 
-my $testweb = "TemporaryStoreAutoAttachTestWeb";
 my $session;
-my $testUser1;
-my $testUser2;
 my %cfg;
 
 use Data::Dumper;
@@ -40,10 +36,6 @@ sub set_up {
     $TWiki::cfg{LogFileName} = "/tmp/junk";
 
     $session = new TWiki();
-
-    $testUser1 = $this->createFakeUser($session);
-    $testUser2 = $this->createFakeUser($session);
-    $session->{store}->createWeb( $session->{user}, $testweb);
 }
 
 sub set_up_topic {
@@ -51,17 +43,10 @@ sub set_up_topic {
     # Create topic
     my $topic = shift;
     my $text = "hi";
-    my $user = $session->{users}->findUser($testUser1);
 
-    $session->{store}->saveTopic($user, $testweb, $topic, $text );
+    $session->{store}->saveTopic(
+        $this->{test_user_wikiname}, $this->{test_web}, $topic, $text );
 
-}
-
-sub tear_down {
-    my $this = shift;
-    $this->removeWebFixture($session, $testweb);
-    eval {$session->finish()};
-    $this->SUPER::tear_down();
 }
 
 # We create a topic with a missing attachment
@@ -72,10 +57,10 @@ sub addMissingAttachment {
     my $file = shift; 
     my $comment = shift; 
 
-    $this->assert($session->{store}->topicExists($testweb, $topic));
+    $this->assert($session->{store}->topicExists($this->{test_web}, $topic));
 
     my ($meta, $text) = $session->{store}->readTopic( 
-    $session->{user}, $testweb, $topic );
+    $session->{user}, $this->{test_web}, $topic );
 
     $meta->putKeyed( 'FILEATTACHMENT',
                        {
@@ -89,7 +74,7 @@ sub addMissingAttachment {
                              attr    => ''
                         }
                        );
-    $session->{store}->saveTopic($session->{user}, $testweb, $topic, $text, $meta);
+    $session->{store}->saveTopic($session->{user}, $this->{test_web}, $topic, $text, $meta);
 }
 
 # We create a 3 more attachment entries:
@@ -100,14 +85,14 @@ sub sneakAttachmentsAddedToTopic {
     my $this = shift;
     my ($topic, @filenames) = @_;
     my $dir = $TWiki::cfg{PubDir};
-    $dir = "$dir/$testweb/$topic";
+    $dir = "$dir/$this->{test_web}/$topic";
     #print STDERR "DEBUG: dir=$dir\n";
 
     foreach my $file (@filenames) {
       touchFile("$dir/$file");
     }
 
-    mkdir $dir.'/_hiddenDirectoryForPlugins';    
+    mkdir $dir.'/_hiddenDirectoryForPlugins';
 }
 
 sub touchFile {
@@ -135,7 +120,7 @@ sub test_autoattach {
     $this->sneakAttachmentsAddedToTopic($topic, 'sneakedfile1.txt','sneakedfile2.txt', 'commavfilesshouldbeignored2.txt,v','_hiddenAttachment.txt', 'ressurectedComment.txt');
 
 
-    my ($meta, $text) = simulate_view($session, $testweb, $topic);
+    my ($meta, $text) = simulate_view($session, $this->{test_web}, $topic);
     my @attachments = $meta->find( 'FILEATTACHMENT' );
 #    printAttachments(@attachments); # leave as comment unless debugging
 
@@ -193,9 +178,8 @@ sub verify_normal_attachment {
 
     my $topic = shift;
     my $attachment = shift;
-    
-    my $user = $session->{users}->findUser($testUser1);
-    $this->assert($session->{store}->topicExists($testweb, $topic));
+
+    $this->assert($session->{store}->topicExists($this->{test_web}, $topic));
 
     open( FILE, ">/tmp/$attachment" );
     print FILE "Test attachment\n";
@@ -205,11 +189,13 @@ sub verify_normal_attachment {
     my $doNotLogChanges = 0;
     my $doUnlock = 1;
 
-    $session->{store}->saveAttachment($testweb, $topic, $attachment, $user, 
-                                { file => "/tmp/$attachment", comment => 'comment 1' } );
+    $session->{store}->saveAttachment(
+        $this->{test_web}, $topic, $attachment, $this->{test_user_wikiname},
+        { file => "/tmp/$attachment", comment => 'comment 1' } );
 
     # Check revision number
-    my $rev = $session->{store}->getRevisionNumber($testweb, $topic, $attachment);
+    my $rev = $session->{store}->getRevisionNumber(
+        $this->{test_web}, $topic, $attachment);
     $this->assert_num_equals(1,$rev);
 
 }

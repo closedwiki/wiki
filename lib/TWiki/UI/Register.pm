@@ -42,7 +42,6 @@ use TWiki;
 use TWiki::Net;
 use TWiki::Plugins;
 use TWiki::Form;
-use TWiki::User;
 use TWiki::Data::DelimitedFile;
 use Data::Dumper;
 use Error qw( :try );
@@ -50,7 +49,7 @@ use TWiki::UI;
 use TWiki::OopsException;
 use Assert;
 
-my $twikiRegistrationAgent = 'TWikiRegistrationAgent';
+my $agent = 'TWikiRegistrationAgent';
 
 # Keys from the user data that should *not* be included in
 # the user topic.
@@ -160,8 +159,7 @@ sub passwd_cgi {
 # TODO: S&R row, data => user
 # TODO: Replace LoginName with UserName (NB. templates/topics)
 # TODO: During normal registration, a Plugin callback to set cookies,
-#       TWiki::Plugins::registrationHandler( $data{webName}, $data{WikiName},
-#       $data{remoteUser} );
+#       TWiki::Plugins::registrationHandler( $data{webName}, $data{WikiName};
 #       Is called. But this has little to do with registration - it is an authentication rememberer.
 #       In fact, isn't my bulkregistration handler just a reg handler?
 # TODO: registernotifybulk.tmpl 
@@ -210,7 +208,7 @@ sub bulkRegister {
     $settings->{doEmailUserDetails} =
       $query->param('EmailUsersWithDetails') || 0;
 
-    unless( $user->isAdmin() ) {
+    unless( $session->{users}->isAdmin( $user ) ) {
         throw TWiki::OopsException( 'accessdenied', def => 'only_group',
                                     web => $web, topic => $topic,
                                     params => [ $TWiki::cfg{UsersWebName}.'.'.
@@ -325,18 +323,19 @@ sub _registerSingleBulkUser {
     $session->writeLog('bulkregister', $row->{webName}.'.'.$row->{WikiName},
                        $row->{Email}, $row->{WikiName} );
 
-    my $user = $session->{users}->findUser( $row->{LoginName},
-                                            $row->{WikiName} );
+    my $users = $session->{users};
 
-    my $userTopic =
-      $session->{users}->addUserToMapping( $user, $session->{user} );
+    my $userTopic = $session->{users}->{mapping}->addUserToMapping(
+        $row->{WikiName}, $row->{LoginName} );
 
-    if( $doOverwriteTopics or !$session->{store}->topicExists( $row->{webName}, $row->{WikiName} ) ) {
+    if( $doOverwriteTopics or !$session->{store}->topicExists(
+        $row->{webName}, $row->{WikiName} ) ) {
         $log .= _createUserTopic($session, 'NewUserTemplate', $row);
     } else {
         $log .= $b.' Not writing topic '.$row->{WikiName}."\n";
 	}
-    $user->setEmails( $row->{Email} );
+
+    $session->{users}->setEmails($row->{LoginName}, $row->{Email});
 
     #if ($TWiki::cfg{EmailUserDetails}) {
         # If you want it, write it.
@@ -421,6 +420,14 @@ sub register {
     _validateRegistration( $session, $data, $query, $topic, 1 );
 }
 
+# global used by test harness to give predictable results
+use vars qw( $password );
+
+# STATIC function that returns a random password
+sub randomPassword {
+    return $password || int( rand(9999999999) );
+}
+
 #   1 generates a activation password
 #   2 calls _putRegDetailsByCode(activation password)
 #   3 sends them a 'registerconfirm' email.
@@ -436,7 +443,7 @@ sub _requireVerification {
     $data->{webName} = $web;
 
     $data->{VerificationCode} =
-      $data->{WikiName}.'.'.TWiki::User::randomPassword();
+      $data->{WikiName}.'.'.randomPassword();
     _putRegDetailsByCode( $data, $tmpDir );
 
     $session->writeLog(
@@ -490,7 +497,7 @@ sub resetPassword {
     if ( $isBulk ) {
         # Only admin is able to reset more than one password or
         # another user's password.
-        unless( $user->isAdmin()) {
+        unless( $session->{users}->isAdmin( $user )) {
             throw TWiki::OopsException
               ( 'accessdenied', def => 'only_group',
                 web => $web, topic => $topic,
@@ -520,6 +527,7 @@ sub resetPassword {
             # be them!)
             $action = '?username='. $userNames[0];
         }
+
         throw TWiki::OopsException( 'attention',
                                     topic => $TWiki::cfg{UsersTopicName},
                                     def => 'reset_ok',
@@ -534,39 +542,38 @@ sub resetPassword {
 
 # return status
 sub _resetUsersPassword {
-    my( $session, $userName, $introduction, $pMess ) = @_;
+    my( $session, $user, $introduction, $pMess ) = @_;
 
-    my $user = $session->{users}->findUser( $userName, undef, 1);
+    my $users = $session->{users};
+
     unless( $user ) {
-        # couldn't work out who they are, its neither loginName nor
-        # wikiName.
-        $$pMess .= $session->inlineAlert( 'alerts', 'bad_user', $userName );
+        $$pMess .= $session->inlineAlert( 'alerts', 'bad_user', '' );
         return 0;
     }
 
     my $message = '';
-    unless( $user->passwordExists() ) {
+    unless( $users->userExists( $user )) {
         # Not an error.
-        $$pMess .= $session->inlineAlert( 'alerts', 'missing_user',
-                                          $user->wikiName());
+        $$pMess .= $session->inlineAlert( 'alerts', 'missing_user', $user);
     }
 
-    my $password = $user->resetPassword();
+    $users->setPassword($user, $password, 1);
 
-    my @em = $user->emails();
+    my @em = $users->getEmails($user);
     if (!scalar(@em)) {
-        $$pMess .= $session->inlineAlert( 'alerts', 'no_email_for',
-                                          $user->wikiName());
+        $$pMess .= $session->inlineAlert( 'alerts', 'no_email_for', $user);
     } else {
+        my $ln = $session->{users}->getLoginName($user);
+        my $wn = $session->{users}->getWikiName($user);
         foreach my $email ( @em ) {
             my $err = _sendEmail(
                 $session,
                 'mailresetpassword',
                 {
                     webName => $TWiki::cfg{UsersWebName},
-                    LoginName => $user->login(),
-                    Name => TWiki::spaceOutWikiWord($user->wikiName()),
-                    WikiName => $user->wikiName(),
+                    LoginName => $ln,
+                    Name => TWiki::spaceOutWikiWord($wn),
+                    WikiName => $wn,
                     Email => $email,
                     PasswordA => $password,
                     Introduction => $introduction,
@@ -578,10 +585,11 @@ sub _resetUsersPassword {
         }
     }
 
-    $$pMess .= $session->inlineAlert( 'alerts',
-                                      'new_sys_pass',
-                                      $user->login(),
-                                      $user->wikiName() );
+    $$pMess .= $session->inlineAlert(
+        'alerts',
+        'new_sys_pass',
+        $session->{users}->getLoginName($user),
+        $session->{users}->getWikiName( $user ));
 
     return 1;
 }
@@ -614,7 +622,7 @@ sub changePassword {
     my $requestUser = $session->{user};
 
     my $oldpassword = $query->param( 'oldpassword' );
-    my $username = $query->param( 'username' );
+    my $user = $query->param( 'username' );
     my $passwordA = $query->param( 'password' );
     my $passwordB = $query->param( 'passwordA' );
     my $email = $query->param( 'email' );
@@ -622,7 +630,7 @@ sub changePassword {
     my $topicName = $query->param( 'TopicName' );
 
     # check if required fields are filled in
-    unless( $username ) {
+    unless( $user ) {
         throw TWiki::OopsException( 'attention',
                                     web => $webName,
                                     topic => $topic,
@@ -630,14 +638,14 @@ sub changePassword {
                                     params => [ 'username' ] );
     }
 
-    my $user = $session->{users}->findUser( $username );
+    my $users = $session->{users};
 
     unless ($user) {
         throw TWiki::OopsException( 'attention',
                                     web => $webName,
                                     topic => $topic,
                                     def => 'notwikiuser',
-                                    $username );
+                                    $user );
     }
 
     my $changePass = 0;
@@ -661,7 +669,7 @@ sub changePassword {
     }
 
     # check if required fields are filled in
-    unless( defined $oldpassword || $requestUser->isAdmin()) {
+    unless( defined $oldpassword || $users->isAdmin( $requestUser )) {
         throw TWiki::OopsException( 'attention',
                                     web => $webName,
                                     topic => $topic,
@@ -669,7 +677,8 @@ sub changePassword {
                                     params => [ 'oldpassword' ] );
     }
 
-    unless( $requestUser->isAdmin() || $user->checkPassword( $oldpassword)) {
+    unless( $users->isAdmin( $requestUser ) ||
+              $users->checkPassword( $user, $oldpassword)) {
         throw TWiki::OopsException( 'attention',
                                     web => $webName,
                                     topic => $topic,
@@ -677,7 +686,7 @@ sub changePassword {
     }
 
     if( defined $email ) {
-        $user->setEmails( split(/\s+/, $email) );
+        $users->setEmails($user, split(/\s+/, $email) );
     }
 
     # OK - password may be changed
@@ -690,15 +699,14 @@ sub changePassword {
                 def => 'bad_password',
                 params => [ $TWiki::cfg{MinPasswordLength} ] );
         }
-        my $e = $user->changePassword( $oldpassword, $passwordA );
-        if( $e ) {
-            $session->writeWarning('password could not be changed: '.$e);
+
+        unless( $users->setPassword($user, $oldpassword, $passwordA)) {
             throw TWiki::OopsException( 'attention',
                                         web => $webName,
                                         topic => $topic,
                                         def => 'password_not_changed');
         } else {
-            $session->writeLog('changepasswd', $user->wikiName());
+            $session->writeLog('changepasswd', $user);
         }
         # OK - password changed
         throw TWiki::OopsException( 'attention',
@@ -741,8 +749,6 @@ sub verifyEmailAddress {
 
     my $topic = $session->{topicName};
     my $web = $session->{webName};
-
-    #    $this->{session}->writeLog('verifyuser', $loginName, $userName);
 
 }
 
@@ -806,20 +812,18 @@ sub finish {
     $session->{loginManager}->userLoggedIn( $data->{LoginName}, $data->{WikiName} );
 
     # add user to TWikiUsers topic
-    my $user = $session->{users}->createUser( $data->{LoginName},
-                                              $data->{WikiName} );
+    my $users = $session->{users};
 
-    my $agent = $session->{users}->findUser( $twikiRegistrationAgent,
-                                             $twikiRegistrationAgent);
-
-    my $userTopic = $session->{users}->addUserToMapping( $user, $agent);
+    # SMELL: accessing a private data member
+    my $userTopic = $users->{mapping}->addUserToMapping(
+        $data->{WikiName}, $data->{LoginName} );
 
     # inform user and admin about the registration.
     my $status = _emailRegistrationConfirmations( $session, $data );
 
     my $log = _createUserTopic($session, 'NewUserTemplate', $data);
 
-    $user->setEmails( $data->{Email} );
+    $users->setEmails($data->{LoginName}, $data->{Email});
 
     # write log entry
     if ($TWiki::cfg{Log}{register}) {
@@ -896,17 +900,13 @@ sub _writeRegistrationDetailsToTopic {
     }
     $text = $before . $addText . $after;
 
-    my $userName = $data->{remoteUser} || $data->{WikiName};
-    my $user = $session->{users}->findUser( $userName );
+    my $user = $data->{WikiName};
     $text = $session->expandVariablesOnTopicCreation( $text, $user );
 
     $meta->put( 'TOPICPARENT', { 'name' => $TWiki::cfg{UsersTopicName}} );
 
-    my $agent = $session->{users}->findUser( $twikiRegistrationAgent,
-                                             $twikiRegistrationAgent);
-
     $session->{store}->saveTopic($agent, $TWiki::cfg{UsersWebName},
-                                 $data->{WikiName}, $text, $meta );
+                                 $user, $text, $meta );
     return $log;
 }
 
@@ -1022,7 +1022,8 @@ sub _validateRegistration {
 
     # DELETED CHECK: check for wikiName field.
 
-    if($session->{store}->topicExists( $TWiki::cfg{UsersWebName}, $data->{WikiName} )) {
+    if( $session->{store}->topicExists( $TWiki::cfg{UsersWebName},
+                                        $data->{WikiName} )) {
         throw TWiki::OopsException( 'attention',
                                     web => $data->{webName},
                                     topic => $topic,
@@ -1039,7 +1040,8 @@ sub _validateRegistration {
                                     params => [ $data->{LoginName} ] );
     }
 
-    if ($session->{users}->lookupLoginName($data->{LoginName})) {
+    $data->{LoginName} =~ s/$TWiki::cfg{NameFilter}//go;
+    if( $session->{users}->userExists( $data->{LoginName} )) {
         throw TWiki::OopsException( 'attention',
                                     web => $data->{webName},
                                     topic => $topic,
@@ -1047,8 +1049,10 @@ sub _validateRegistration {
                                     params => [ $data->{LoginName},  ] );
     }
 
-    my $user = $session->{users}->findUser( $data->{LoginName}, undef, 1 );
-    if ( $user && $user->passwordExists() ) {
+    my $users = $session->{users};
+    if( $TWiki::cfg{MapUserToWikiName} &&
+          $data->{LoginName} &&
+            $users->userExists( $data->{LoginName}) ) {
         throw TWiki::OopsException( 'attention',
                                     web => $data->{webName},
                                     topic => $topic,
@@ -1135,9 +1139,12 @@ sub _validateRegistration {
 sub _addUserToPasswordSystem {
     my( $session, $userRow ) = @_;
 
-    my $user = $session->{users}->findUser($userRow->{LoginName}, $userRow->{WikiName});
-    if ($user && $user->passwordExists()) {
-        unless( $user->checkPassword( $userRow->{Password} )) {
+    my $users = $session->{users};
+    my $user = $userRow->{LoginName} || $userRow->{WikiName};
+    if( $user && $users->userExists($user)) {
+        unless( $users->checkPassword(
+            $user,
+            $userRow->{Password} )) {
             throw Error::Simple("New password did not match existing password for this user");
         }
         # User exists, and the password was good.
@@ -1152,10 +1159,13 @@ sub _addUserToPasswordSystem {
     }
     my $password = $userRow->{Password};
     unless ($password) {
-        $password = TWiki::User::randomPassword();
+        $password = randomPassword();
         $session->writeWarning('No password specified for '.$userRow->{LoginName}.' - using random='.$password);
     }
-    $user->addPassword( $password );
+    unless( $users->setPassword( $user, $password )) {
+        $session->writeWarning('Failed to add password');
+    }
+
     return 1;
 }
 

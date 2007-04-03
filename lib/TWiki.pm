@@ -61,7 +61,6 @@ use vars qw(
             $TranslationToken
             $twikiLibDir
             %regex
-            %constantTags
             %functionTags
             %contextFreeSyntax
             %restDispatch
@@ -221,19 +220,16 @@ BEGIN {
         VAR               => \&_VAR,
         WEBLIST           => \&_WEBLIST,
         WIKINAME          => \&_WIKINAME_deprecated,
-        WIKIUSERNAME      => \&_WIKIUSERNAME_deprecated
+        WIKIUSERNAME      => \&_WIKIUSERNAME_deprecated,
+        # Constant tag strings _not_ dependent on config. These get nicely
+        # optimised by the compiler.
+        ENDSECTION        => sub { '' },
+        WIKIVERSION       => sub { $VERSION },
+        STARTSECTION      => sub { '' },
+        STARTINCLUDE      => sub { '' },
+        STOPINCLUDE       => sub { '' },
        );
     $contextFreeSyntax{IF} = 1;
-
-    # Constant tag strings _not_ dependent on config
-    %constantTags = (
-        ENDSECTION        => '',
-        WIKIVERSION       => $VERSION,
-        STARTSECTION      => '',
-
-        STARTINCLUDE      => '',
-        STOPINCLUDE       => '',
-       );
 
     unless( ( $TWiki::cfg{DetailedOS} = $^O ) ) {
         require Config;
@@ -278,25 +274,25 @@ BEGIN {
     }
 
     # Constant tags dependent on the config
-    $constantTags{AUTHREALM}       = $TWiki::cfg{AuthRealm};
-    $constantTags{HOMETOPIC}       = $TWiki::cfg{HomeTopicName};
-    $constantTags{MAINWEB}         = $TWiki::cfg{UsersWebName};
-    $constantTags{TRASHWEB}        = $TWiki::cfg{TrashWebName};
-    $constantTags{NOTIFYTOPIC}     = $TWiki::cfg{NotifyTopicName};
-    $constantTags{SCRIPTSUFFIX}    = $TWiki::cfg{ScriptSuffix};
-    $constantTags{LOCALSITEPREFS}  = $TWiki::cfg{LocalSitePreferences};
-    $constantTags{STATISTICSTOPIC} = $TWiki::cfg{Stats}{TopicName};
-    $constantTags{TWIKIWEB}        = $TWiki::cfg{SystemWebName};
-    $constantTags{WEBPREFSTOPIC}   = $TWiki::cfg{WebPrefsTopicName};
-    $constantTags{DEFAULTURLHOST}  = $TWiki::cfg{DefaultUrlHost};
-    $constantTags{WIKIPREFSTOPIC}  = $TWiki::cfg{SitePrefsTopicName};
-    $constantTags{WIKIUSERSTOPIC}  = $TWiki::cfg{UsersTopicName};
-    $constantTags{WIKIWEBMASTER}   = $TWiki::cfg{WebMasterEmail};
-    $constantTags{WIKIWEBMASTERNAME} = $TWiki::cfg{WebMasterName};
-    if( $TWiki::cfg{NoFollow} ) {
-        $constantTags{NOFOLLOW} = 'rel='.$TWiki::cfg{NoFollow};
-    }
-    $constantTags{ALLOWLOGINNAME} = $TWiki::cfg{Register}{AllowLoginName} || 0;
+    $functionTags{AUTHREALM}       = sub { $TWiki::cfg{AuthRealm} };
+    $functionTags{HOMETOPIC}       = sub { $TWiki::cfg{HomeTopicName} };
+    $functionTags{MAINWEB}         = sub { $TWiki::cfg{UsersWebName} };
+    $functionTags{TRASHWEB}        = sub { $TWiki::cfg{TrashWebName} };
+    $functionTags{NOTIFYTOPIC}     = sub { $TWiki::cfg{NotifyTopicName} };
+    $functionTags{SCRIPTSUFFIX}    = sub { $TWiki::cfg{ScriptSuffix} };
+    $functionTags{LOCALSITEPREFS}  = sub { $TWiki::cfg{LocalSitePreferences} };
+    $functionTags{STATISTICSTOPIC} = sub { $TWiki::cfg{Stats}{TopicName} };
+    $functionTags{TWIKIWEB}        = sub { $TWiki::cfg{SystemWebName} };
+    $functionTags{WEBPREFSTOPIC}   = sub { $TWiki::cfg{WebPrefsTopicName} };
+    $functionTags{DEFAULTURLHOST}  = sub { $TWiki::cfg{DefaultUrlHost} };
+    $functionTags{WIKIPREFSTOPIC}  = sub { $TWiki::cfg{SitePrefsTopicName} };
+    $functionTags{WIKIUSERSTOPIC}  = sub { $TWiki::cfg{UsersTopicName} };
+    $functionTags{WIKIWEBMASTER}   = sub { $TWiki::cfg{WebMasterEmail} };
+    $functionTags{WIKIWEBMASTERNAME} = sub { $TWiki::cfg{WebMasterName} };
+    $functionTags{NOFOLLOW} =
+      sub { $TWiki::cfg{NoFollow} ? 'rel='.$TWiki::cfg{NoFollow} : '' };
+    $functionTags{ALLOWLOGINNAME} =
+      sub { $TWiki::cfg{Register}{AllowLoginName} || 0 };
 
     # locale setup
     #
@@ -320,9 +316,9 @@ BEGIN {
         setlocale(&LC_CTYPE, $TWiki::cfg{Site}{Locale});
     }
 
-    $constantTags{CHARSET} = $TWiki::cfg{Site}{CharSet};
-    $constantTags{SHORTLANG} = $TWiki::cfg{Site}{Lang};
-    $constantTags{LANG} = $TWiki::cfg{Site}{FullLang};
+    $functionTags{CHARSET}   = sub { $TWiki::cfg{Site}{CharSet} };
+    $functionTags{SHORTLANG} = sub { $TWiki::cfg{Site}{Lang} };
+    $functionTags{LANG}      = sub { $TWiki::cfg{Site}{FullLang} };
 
     # Set up pre-compiled regexes for use in rendering.  All regexes with
     # unchanging variables in match should use the '/o' option.
@@ -1300,11 +1296,13 @@ sub normalizeWebTopicName {
 
 Constructs a new TWiki object. Parameters are taken from the query object.
 
-   * =$loginName= is the username of the user you want to be logged-in if none is
-     available from a session or browser. Used mainly for side scripts and debugging.
-   * =$query= the CGI query (may be undef, in which case an empty query is used)
-   * =\%initialContext= - reference to a hash containing context name=value pairs
-     to be pre-installed in the context hash
+   * =$loginName= is the login username (*not* the wikiname) of the user you
+     want to be logged-in if none is available from a session or browser.
+     Used mainly for side scripts and debugging.
+   * =$query= the CGI query (may be undef, in which case an empty query
+     is used)
+   * =\%initialContext= - reference to a hash containing context
+     name=value pairs to be pre-installed in the context hash
 
 =cut
 
@@ -1446,7 +1444,8 @@ sub new {
     # setup the cgi session, from a cookie or the url. this may return
     # the login, but even if it does, plugins will get the chance to override
     # it below.
-    my $login = $this->{remoteUser} = $this->{loginManager}->loadSession($loginName);
+    my $login = $this->{remoteUser} =
+      $this->{loginManager}->loadSession($loginName);
     my $prefs = new TWiki::Prefs( $this );
     $this->{prefs} = $prefs;
 
@@ -1459,10 +1458,8 @@ sub new {
     unless( $login =~ /$TWiki::cfg{LoginNameFilterIn}/) {
         die "Illegal format for login name '$login' (does not match ".$TWiki::cfg{LoginNameFilterIn}.")";
     }
-    $login = TWiki::Sandbox::untaintUnchecked( $login );
-
-    my $user = $this->{users}->findUser( $login );
-    $this->{user} = $user;
+    # The login name is used as a canonical identifier for the user
+    $this->{user} = TWiki::Sandbox::untaintUnchecked( $login );
 
     # Static session variables that can be expanded in topics when they
     # are enclosed in % signs
@@ -1482,8 +1479,8 @@ sub new {
     $prefs->pushGlobalPreferencesSiteSpecific();
 
     $prefs->pushPreferences(
-        $TWiki::cfg{UsersWebName}, $user->wikiName(),
-        'USER '.$user->wikiName() );
+        $TWiki::cfg{UsersWebName}, $this->{user},
+        'USER '.$this->{users}->getWikiName( $this->{user} ));
 
     $prefs->pushWebPreferences( $this->{webName} );
 
@@ -1543,7 +1540,7 @@ sub finish {
    * =$action= - what happened, e.g. view, save, rename
    * =$wbTopic= - what it happened to
    * =$extra= - extra info, such as minor flag
-   * =$user= - user who did the saving (user object or string user name)
+   * =$user= - user who did the saving (user id)
 Write the log for an event to the logfile
 
 =cut
@@ -1556,10 +1553,9 @@ sub writeLog {
     my $extra = shift || '';
     my $user = shift;
 
-    $user = $this->{user} unless $user;
-    if( ref($user) && $user->isa('TWiki::User')) {
-        $user = $user->wikiName();
-    }
+    $user ||= $this->{user};
+    $user = $this->{users}->getWikiName( $user );
+
     if( $user eq $cfg{DefaultUserWikiName} ) {
        my $cgiQuery = $this->{cgiQuery};
        if( $cgiQuery ) {
@@ -2055,7 +2051,7 @@ sub parseSections {
 ---++ ObjectMethod expandVariablesOnTopicCreation ( $text, $user ) -> $text
 
    * =$text= - text to expand
-   * =$user= - reference to user object. This is the user expanded in e.g. %USERNAME. Optional, defaults to logged-in user.
+   * =$user= - This is the user expanded in e.g. %USERNAME. Optional, defaults to logged-in user.
 Expand limited set of variables during topic creation. These are variables
 expected in templates that must be statically expanded in new content.
 
@@ -2068,7 +2064,6 @@ sub expandVariablesOnTopicCreation {
 
     ASSERT($this->isa( 'TWiki')) if DEBUG;
     $user ||= $this->{user};
-    ASSERT($user->isa( 'TWiki::User')) if DEBUG;
 
     # Chop out templateonly sections
     my( $ntext, $sections ) = parseSections( $text );
@@ -2455,9 +2450,6 @@ sub _expandTagOnTopicRendering {
     my $e = $this->{prefs}->getPreferencesValue( $tag );
     unless( defined( $e )) {
         $e = $this->{SESSION_TAGS}{$tag};
-        unless( defined( $e )) {
-            $e = $constantTags{$tag};
-        }
         if( !defined( $e ) && defined( $functionTags{$tag} )) {
             $e = &{$functionTags{$tag}}
               ( $this, new TWiki::Attrs(
@@ -3633,39 +3625,52 @@ sub _USERINFO {
     my $format = $params->{format} || '$username, $wikiusername, $emails';
 
     my $user = $this->{user};
+
     if( $params->{_DEFAULT} ) {
-        $user = $this->{users}->findUser( $params->{_DEFAULT}, undef, 1 );
+        $user = $params->{_DEFAULT};
         return '' if !$user;
+        # map wikiname to a login name
+        $user =~ s/^.*\.//; # kill web
+        my $users = $this->{users}->findUserByWikiName($user);
+        return '' unless $users && scalar(@$users);
+        $user = $users->[0];
         return '' if( $TWiki::cfg{AntiSpam}{HideUserDetails} &&
-                        !$this->{user}->isAdmin() &&
-                          $user != $this->{user} );
+                        !$this->{users}->isAdmin( $this->{user} ) &&
+                          $user ne $this->{user} );
     }
+
+    return '' unless $user;
 
     my $info = $format;
 
     if ($info =~ /\$username/) {
-        my $username = $user->login();
+        my $username = $this->{users}->getLoginName($user);
         $info =~ s/\$username/$username/g;
     }
     if ($info =~ /\$wikiname/) {
-        my $wikiname = $user->wikiName();
+        my $wikiname = $this->{users}->getWikiName( $user );
         $info =~ s/\$wikiname/$wikiname/g;
     }
     if ($info =~ /\$wikiusername/) {
-        my $wikiusername = $user->webDotWikiName();
+        my $wikiusername = $this->{users}->webDotWikiName($user);
         $info =~ s/\$wikiusername/$wikiusername/g;
     }
     if ($info =~ /\$emails/) {
-        my $emails = join(', ', $user->emails());
+        my $emails = join(', ', $this->{users}->getEmails($user));
         $info =~ s/\$emails/$emails/g;
     }
     if ($info =~ /\$groups/) {
-        my @groupNames = map {$_->webDotWikiName();} $user->getGroups();
+        my @groupNames;
+        my $it = $this->{users}->eachMembership( $user );
+        while( $it->hasNext()) {
+            my $group = $it->next();
+            push( @groupNames, $this->{users}->webDotWikiName($group));
+        }
         my $groups = join(', ', @groupNames);
         $info =~ s/\$groups/$groups/g;
     }
     if ($info =~ /\$admin/) {
-        my $admin = $user->isAdmin()? 'true' : 'false';
+        my $admin = $this->{users}->isAdmin($user) ? 'true' : 'false';
         $info =~ s/\$admin/$admin/g;
     }
 
@@ -3679,13 +3684,13 @@ sub _GROUPS {
     my @table;
     while( $groups->hasNext() ) {
         my $group = $groups->next();
-        my $descr = '| [['.$group->webDotWikiName().']['.
-          $group->wikiName().']] |';
-        my $it = $group->eachGroupMember();
+        my $descr = '| [['.$this->{users}->webDotWikiName($group).']['.
+          $this->{users}->getWikiName( $group ).']] |';
+        my $it = $this->{users}->eachGroupMember($group);
         while( $it->hasNext() ) {
             my $user = $it->next();
-            $descr .= ' [['.$user->webDotWikiName().']['.
-              $user->wikiName().']]';
+            $descr .= ' [['.$this->{users}->webDotWikiName($user).']['.
+              $this->{users}->getWikiName( $user ).']]';
         }
         push( @table, "$descr |");
     }

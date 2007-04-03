@@ -2,7 +2,7 @@
 require 5.006;
 package PrefsTests;
 
-use base qw(TWikiTestCase);
+use base qw(TWikiFnTestCase);
 
 use TWiki;
 use TWiki::Prefs;
@@ -11,15 +11,11 @@ use Assert;
 use Error qw( :try );
 
 sub new {
-    my $self = shift()->SUPER::new(@_);
+    my $self = shift()->SUPER::new("Prefs", @_);
     return $self;
 }
 
 my $testSysWeb = 'TemporaryTestPrefsSystemWeb';
-my $testNormalWeb = "TemporaryTestPrefsWeb";
-my $testUsersWeb = "TemporaryTestPrefsUsersWeb";
-my $testTopic = "TemporaryTestPrefsTopic";
-my $testUser;
 
 my $twiki;
 my $topicquery;
@@ -31,28 +27,25 @@ sub set_up {
     $this->SUPER::set_up();
 
     $original = $TWiki::cfg{SystemWebName};
-    $TWiki::cfg{UsersWebName} = $testUsersWeb;
+
     $TWiki::cfg{SystemWebName} = $testSysWeb;
-    $TWiki::cfg{LocalSitePreferences} = "$testUsersWeb.TWikiPreferences";
+    $TWiki::cfg{LocalSitePreferences} = "$this->{users_web}.TWikiPreferences";
     $TWiki::cfg{SuperAdminGroup} = 'ArglyBargly';
 
     $topicquery = new CGI( "" );
-    $topicquery->path_info("/$testNormalWeb/$testTopic");
+    $topicquery->path_info("/$this->{test_web}/$this->{test_topic}");
     try {
         $twiki = new TWiki('AdminUser');
-        $twiki->{store}->createWeb($twiki->{user}, $testUsersWeb);
         $twiki->{store}->saveTopic(
-            $twiki->{user}, $testUsersWeb, $TWiki::cfg{SuperAdminGroup},
-            '   * Set GROUP = '.$twiki->{user}->wikiName()."\n");
+            $twiki->{user}, $this->{users_web}, $TWiki::cfg{SuperAdminGroup},
+            '   * Set GROUP = '.$twiki->{user}."\n");
         $twiki = new TWiki($TWiki::cfg{SuperAdminGroup});
         $twiki->{store}->createWeb($twiki->{user}, $testSysWeb, $original);
-        $twiki->{store}->createWeb($twiki->{user}, $testNormalWeb, '_default');
 
         $twiki->{store}->copyTopic(
             $twiki->{user}, $original, $TWiki::cfg{SitePrefsTopicName},
             $testSysWeb, $TWiki::cfg{SitePrefsTopicName} );
 
-        $testUser = $this->createFakeUser($twiki);
     } catch TWiki::AccessControlException with {
         $this->assert(0,shift->stringify());
     } catch Error::Simple with {
@@ -63,10 +56,7 @@ sub set_up {
 sub tear_down {
     my $this = shift;
 
-    $this->removeWebFixture($twiki, $testUsersWeb);
     $this->removeWebFixture($twiki, $testSysWeb);
-    $this->removeWebFixture($twiki, $testNormalWeb);
-    eval {$twiki->finish()};
     $this->SUPER::tear_down();
 }
 
@@ -77,7 +67,7 @@ sub _set {
     $this->assert_not_null($pref);
     $type ||= 'Set';
 
-    my $user = $twiki->{users}->findUser('AdminUser');
+    my $user = $twiki->{user};
     my( $meta, $text) = $twiki->{store}->readTopic($user, $web, $topic);
     $text =~ s/^\s*\* $type $pref =.*$//gm;
     $text .= "\n\t* $type $pref = $val\n";
@@ -99,17 +89,17 @@ sub _setSitePref {
 
 sub _setWebPref {
    my ( $this, $pref, $val, $type ) = @_;
-   $this->_set($testNormalWeb, $TWiki::cfg{WebPrefsTopicName}, $pref, $val, $type);
+   $this->_set($this->{test_web}, $TWiki::cfg{WebPrefsTopicName}, $pref, $val, $type);
 }
 
 sub _setTopicPref {
    my ( $this, $pref, $val, $type ) = @_;
-   $this->_set($testNormalWeb, $testTopic, $pref, $val, $type);
+   $this->_set($this->{test_web}, $this->{test_topic}, $pref, $val, $type);
 }
 
 sub _setUserPref {
    my ( $this, $pref, $val, $type ) = @_;
-   $this->_set($TWiki::cfg{UsersWebName}, $testUser, $pref, $val, $type);
+   $this->_set($TWiki::cfg{UsersWebName}, $this->{test_user_wikiname}, $pref, $val, $type);
 }
 
 sub test_system {
@@ -122,7 +112,7 @@ sub test_system {
     $this->_setWebPref("FINALPREFERENCES", "");
     $this->_setUserPref("FINALPREFERENCES", "");
 
-    my $t = new TWiki( $testUser );
+    my $t = new TWiki( $this->{test_user_wikiname} );
     $this->assert_str_equals("DEFAULT",
                              $t->{prefs}->getPreferencesValue("SOURCE"));
 }
@@ -137,7 +127,7 @@ sub test_local {
     $this->_setWebPref("FINALPREFERENCES", "");
     $this->_setUserPref("FINALPREFERENCES", "");
 
-    my $t = new TWiki( $testUser );
+    my $t = new TWiki( $this->{test_user_wikiname} );
     $this->assert_str_equals("SITE",
                              $t->{prefs}->getPreferencesValue("SOURCE"));
 }
@@ -152,7 +142,7 @@ sub test_web {
     $this->_setWebPref("FINALPREFERENCES", "");
     $this->_setUserPref("FINALPREFERENCES", "");
 
-    my $t = new TWiki( $testUser, $topicquery );
+    my $t = new TWiki( $this->{test_user_wikiname}, $topicquery );
     $this->assert_str_equals("WEB",
                              $t->{prefs}->getPreferencesValue("SOURCE"));
 }
@@ -167,7 +157,7 @@ sub test_user {
     $this->_setWebPref("FINALPREFERENCES", "");
     $this->_setUserPref("FINALPREFERENCES", "");
 
-    my $t = new TWiki( $testUser, $topicquery );
+    my $t = new TWiki( $this->{test_user_wikiname}, $topicquery );
     $this->assert_str_equals("USER",
                              $t->{prefs}->getPreferencesValue("SOURCE"));
 }
@@ -181,7 +171,7 @@ sub test_topic {
     $this->_setWebPref("FINALPREFERENCES", "");
     $this->_setUserPref("FINALPREFERENCES", "");
 
-    my $t = new TWiki( $testUser, $topicquery );
+    my $t = new TWiki( $this->{test_user_wikiname}, $topicquery );
     $this->assert_str_equals("TOPIC",
                              $t->{prefs}->getPreferencesValue("SOURCE"));
 }
@@ -199,8 +189,7 @@ sub test_order {
     $this->_setSitePref("FINALPREFERENCES", "");
     $this->_setWebPref("FINALPREFERENCES", "");
     $this->_setUserPref("FINALPREFERENCES", "");
-
-    my $t = new TWiki( $testUser, $topicquery );
+    my $t = new TWiki( $this->{test_user_wikiname}, $topicquery );
     $this->assert_str_equals("TOPIC",
                              $t->{prefs}->getPreferencesValue("SOURCE"));
 }
@@ -219,7 +208,7 @@ sub test_finalSystem {
     $this->_setWebPref("FINALPREFERENCES", "");
     $this->_setUserPref("FINALPREFERENCES", "");
 
-    my $t = new TWiki( $testUser, $topicquery );
+    my $t = new TWiki( $this->{test_user_wikiname}, $topicquery );
     $this->assert_str_equals("DEFAULT",
                              $t->{prefs}->getPreferencesValue("SOURCE"));
 }
@@ -238,7 +227,7 @@ sub test_finalSite {
     $this->_setWebPref("FINALPREFERENCES", "");
     $this->_setUserPref("FINALPREFERENCES", "");
 
-    my $t = new TWiki( $testUser, $topicquery );
+    my $t = new TWiki( $this->{test_user_wikiname}, $topicquery );
     $this->assert_str_equals("SITE",
                              $t->{prefs}->getPreferencesValue("SOURCE"));
 }
@@ -257,7 +246,7 @@ sub test_finalWeb {
     $this->_setWebPref("FINALPREFERENCES", "SOURCE");
     $this->_setUserPref("FINALPREFERENCES", "");
 
-    my $t = new TWiki( $testUser, $topicquery );
+    my $t = new TWiki( $this->{test_user_wikiname}, $topicquery );
     $this->assert_str_equals("WEB",
                              $t->{prefs}->getPreferencesValue("SOURCE"));
 }
@@ -276,7 +265,7 @@ sub test_finalUser {
     $this->_setWebPref("FINALPREFERENCES", "");
     $this->_setUserPref("FINALPREFERENCES", "SOURCE");
 
-    my $t = new TWiki( $testUser, $topicquery );
+    my $t = new TWiki( $this->{test_user_wikiname}, $topicquery );
     $this->assert_str_equals("USER",
                              $t->{prefs}->getPreferencesValue("SOURCE"));
 }
@@ -294,7 +283,7 @@ sub test_nouser {
     $this->_setWebPref("FINALPREFERENCES", "");
     $this->_setUserPref("FINALPREFERENCES", "");
 
-    my $t = new TWiki( $testUser, $topicquery );
+    my $t = new TWiki( $this->{test_user_wikiname}, $topicquery );
     $this->assert_str_equals("WEB",
                              $t->{prefs}->getPreferencesValue("SOURCE", undef, 1));
 }
@@ -305,13 +294,13 @@ sub test_local_to_default {
     $this->_setDefaultPref("SOURCE", "GLOBAL");
     $this->_setDefaultPref("SOURCE", "LOCAL", "Local");
 
-    my $t = new TWiki( $testUser, $topicquery );
+    my $t = new TWiki( $this->{test_user_wikiname}, $topicquery );
     $this->assert_str_equals("GLOBAL",
                              $t->{prefs}->getPreferencesValue("SOURCE"));
 
     my $localquery = new CGI( "" );
     $localquery->path_info("/$testSysWeb/$TWiki::cfg{SitePrefsTopicName}");
-    $t = new TWiki( $testUser, $localquery );
+    $t = new TWiki( $this->{test_user_wikiname}, $localquery );
     $this->assert_str_equals("LOCAL",
                              $t->{prefs}->getPreferencesValue("SOURCE"));
 }
@@ -322,14 +311,14 @@ sub test_local_to_site {
     $this->_setSitePref("SOURCE", "GLOBAL");
     $this->_setSitePref("SOURCE", "LOCAL", "Local");
 
-    my $t = new TWiki( $testUser, $topicquery );
+    my $t = new TWiki( $this->{test_user_wikiname}, $topicquery );
     $this->assert_str_equals("GLOBAL",
                              $t->{prefs}->getPreferencesValue("SOURCE"));
     my($tw, $tt ) = $t->normalizeWebTopicName('',
                                             $TWiki::cfg{LocalSitePreferences});
     my $localquery = new CGI( "" );
     $localquery->path_info("$tw/$tt");
-    $t = new TWiki( $testUser, $localquery );
+    $t = new TWiki( $this->{test_user_wikiname}, $localquery );
     $this->assert_str_equals("LOCAL",
                              $t->{prefs}->getPreferencesValue("SOURCE"));
 }
@@ -340,13 +329,13 @@ sub test_local_to_user {
     $this->_setUserPref("SOURCE", "GLOBAL");
     $this->_setUserPref("SOURCE", "LOCAL", "Local");
 
-    my $t = new TWiki( $testUser, $topicquery );
+    my $t = new TWiki( $this->{test_user_wikiname}, $topicquery );
     $this->assert_str_equals("GLOBAL",
                              $t->{prefs}->getPreferencesValue("SOURCE"));
 
     my $localquery = new CGI( "" );
-    $localquery->path_info("/$TWiki::cfg{UsersWebName}/$testUser");
-    $t = new TWiki( $testUser, $localquery );
+    $localquery->path_info("/$TWiki::cfg{UsersWebName}/$this->{test_user_wikiname}");
+    $t = new TWiki( $this->{test_user_wikiname}, $localquery );
     $this->assert_str_equals("LOCAL",
                              $t->{prefs}->getPreferencesValue("SOURCE"));
 }
@@ -357,13 +346,13 @@ sub test_local_to_web {
     $this->_setWebPref("SOURCE", "GLOBAL");
     $this->_setWebPref("SOURCE", "LOCAL", "Local");
 
-    my $t = new TWiki( $testUser, $topicquery );
+    my $t = new TWiki( $this->{test_user_wikiname}, $topicquery );
     $this->assert_str_equals("GLOBAL",
                              $t->{prefs}->getPreferencesValue("SOURCE"));
 
     my $localquery = new CGI( "" );
-    $localquery->path_info("/$testNormalWeb/$TWiki::cfg{WebPrefsTopicName}");
-    $t = new TWiki( $testUser, $localquery );
+    $localquery->path_info("/$this->{test_web}/$TWiki::cfg{WebPrefsTopicName}");
+    $t = new TWiki( $this->{test_user_wikiname}, $localquery );
     $this->assert_str_equals("LOCAL",
                              $t->{prefs}->getPreferencesValue("SOURCE"));
 }
@@ -375,7 +364,7 @@ sub test_whitespace {
     $this->_setTopicPref("TWO", "   VAL\n   U\n   E");
     $this->_setTopicPref("THREE", "VAL\n   ");
 
-    my $t = new TWiki( $testUser, $topicquery );
+    my $t = new TWiki( $this->{test_user_wikiname}, $topicquery );
     $this->assert_str_equals("VAL ",
                              $t->{prefs}->getPreferencesValue("ONE"));
     $this->assert_str_equals("VAL\n   U\n   E",

@@ -177,8 +177,9 @@ sub renderMoved {
         my( $toWeb, $toTopic ) =
           $this->{session}->normalizeWebTopicName( $web, $moved->{to} );
         my $by = $moved->{by};
-        my $u = $this->{session}->{users}->findUser( $by );
-        $by = $u->webDotWikiName() if $u;
+        my $u = $by;
+        my $users = $this->{session}->{users};
+        $by = $users->webDotWikiName($u) if $u;
         my $date = TWiki::Time::formatTime( $moved->{date}, '', 'gmtime' );
 
         # Only allow put back if current web and topic match stored information
@@ -436,6 +437,7 @@ sub _linkToolTipInfo {
 
     # FIXME: This is slow, it can be improved by caching topic rev info and summary
     my $store = $this->{session}->{store};
+    my $users = $this->{session}->{users};
     # SMELL: we ought not to have to fake this. Topic object model, please!!
     my $meta = new TWiki::Meta( $this->{session}, $theWeb, $theTopic );
     my( $date, $user, $rev ) = $meta->getRevisionInfo();
@@ -444,9 +446,9 @@ sub _linkToolTipInfo {
     $text =~ s/\$topic/<nop>$theTopic/g;
     $text =~ s/\$rev/1.$rev/g;
     $text =~ s/\$date/TWiki::Time::formatTime( $date )/ge;
-    $text =~ s/\$username/$user->login()/ge;       # 'jsmith'
-    $text =~ s/\$wikiname/$user->wikiName()/ge;  # 'JohnSmith'
-    $text =~ s/\$wikiusername/$user->webDotWikiName()/ge; # 'Main.JohnSmith'
+    $text =~ s/\$username/$users->getLoginName($user)/ge;       # 'jsmith'
+    $text =~ s/\$wikiname/$users->getWikiName($user)/ge;  # 'JohnSmith'
+    $text =~ s/\$wikiusername/$users->webDotWikiName($user)/ge; # 'Main.JohnSmith'
     if( $text =~ /\$summary/ ) {
         my $summary = $store->readTopicRaw
           ( undef, $theWeb, $theTopic, undef );
@@ -1549,6 +1551,7 @@ sub renderRevisionInfo {
     my( $this, $web, $topic, $meta, $rrev, $format ) = @_;
     ASSERT($this->isa( 'TWiki::Render')) if DEBUG;
     my $store = $this->{session}->{store};
+    my $users = $this->{session}->{users};
 
     if( $rrev ) {
         $rrev = $store->cleanUpRevID( $rrev );
@@ -1564,9 +1567,9 @@ sub renderRevisionInfo {
     my $wn = '';
     my $un = '';
     if( $user ) {
-        $wun = $user->webDotWikiName();
-        $wn = $user->wikiName();
-        $un = $user->login();
+        $wun = $users->webDotWikiName($user);
+        $wn = $users->getWikiName( $user );
+        $un = $users->getLoginName($user);
     }
 
     my $value = $format || 'r$rev - $date - $time - $wikiusername';
@@ -1610,7 +1613,6 @@ In non-tml, lines are truncated to 70 characters. Differences are shown using + 
 sub summariseChanges {
     my( $this, $user, $web, $topic, $orev, $nrev, $tml ) = @_;
     ASSERT($this->isa( 'TWiki::Render')) if DEBUG;
-    #ASSERT($user->isa( 'TWiki::User')) if DEBUG;
     my $summary = '';
     my $store = $this->{session}->{store};
 

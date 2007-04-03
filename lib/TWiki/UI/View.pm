@@ -37,7 +37,6 @@ use strict;
 use integer;
 
 use TWiki;
-use TWiki::User;
 use TWiki::UI;
 use TWiki::Time;
 

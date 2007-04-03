@@ -207,11 +207,11 @@ sub registerHandlers {
 
     my $p = $this->{module};
     my $sub = $p . "::initPlugin";
-
+    my $users = $TWiki::Plugins::SESSION->{users};
     no strict 'refs';
     my $status = &$sub( $TWiki::Plugins::SESSION->{topicName},
                         $TWiki::Plugins::SESSION->{webName},
-                        $TWiki::Plugins::SESSION->{user}->login(),
+                        $users->getLoginName($TWiki::Plugins::SESSION->{user}),
                         $this->{installWeb} );
     use strict 'refs';
 

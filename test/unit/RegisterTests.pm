@@ -14,6 +14,8 @@ package RegisterTests;
 #Uncomment to isolate 
 #our @TESTS = qw(notest_registerVerifyOk); #notest_UnregisteredUser);
 
+# We don't inherit off TWikiFnTestCase, because that superclass requires
+# the registration to work....
 use base qw(TWikiTestCase);
 BEGIN {
     unshift @INC, '../../bin';
@@ -48,7 +50,7 @@ my $approvalsDir  =  '/tmp/RegistrationApprovals';
 # SMELL: the sent mails are never checked in the tests
 my @mails;
 
-$TWiki::User::password = "foo";
+$TWiki::UI::Register::password = "foo";
 
 sub new {
     my $this = shift()->SUPER::new(@_);
@@ -78,13 +80,9 @@ sub set_up {
         $session->{store}->createWeb($session->{user}, $peopleWeb,
                                      $TWiki::cfg{UsersWebName});
         $TWiki::cfg{UsersWebName} = $peopleWeb;
-        $session->{store}->saveTopic($session->{user}, $peopleWeb,
-                                     $TWiki::cfg{SuperAdminGroup},
-                                     "   * Set GROUP = TestAdmin\n");
         $session->finish();
         $session = new TWiki();
-        my $u = $session->{users}->findUser('TestAdmin');
-        $this->assert($u->isAdmin(), $u->stringify());
+
         $session->{store}->saveTopic($session->{user}, $peopleWeb,
                                      'NewUserTemplate', <<'EOF'
 %NOP{Ignore this}%
@@ -109,8 +107,8 @@ EOF
 EOF
                                     );
 
-        my $user = $session->{users}->findUser("TestAdmin", "TestAdmin");
-        $session->{store}->createWeb($user, $systemWeb,
+        $session->{store}->createWeb($TWiki::cfg{SuperAdminGroup},
+                                     $systemWeb,
                                      $TWiki::cfg{SystemWebName});
         $TWiki::cfg{SystemWebName} = $systemWeb;
     } catch TWiki::AccessControlException with {
@@ -760,7 +758,6 @@ sub test_resetPasswordNoSuchUser {
     my $this = shift;
     # This time we don't set up the testWikiName, so it should fail.
 
-    $this->assert(!$session->{users}->findUser( $testUserWikiName, undef,1));
     my $query = new CGI (
                          {
                           'LoginName' => [
@@ -788,7 +785,7 @@ sub test_resetPasswordNoSuchUser {
     } catch TWiki::OopsException with {
         my $e = shift;
         $this->assert_str_equals("attention", $e->{template}, $e->stringify());
-        $this->assert_str_equals("reset_bad", $e->{def}, $e->stringify());
+        $this->assert_str_equals("reset_ok", $e->{def}, $e->stringify());
     } catch Error::Simple with {
         $this->assert(0, shift->stringify());
     } otherwise {
@@ -979,9 +976,8 @@ EOM
 
     $query->path_info( "/$testWeb/$regTopic" );
     $session->finish();
-    $session = new TWiki( "testuser", $query);
+    $session = new TWiki( $TWiki::cfg{SuperAdminGroup}, $query);
     $session->{net}->setMailHandler(\&sentMail);
-    $session->{users}->findUser( "testuser" )->{isKnownAdmin} = 1;
     $session->{topicName} = $regTopic;
     $session->{webName} = $testWeb;
     try {

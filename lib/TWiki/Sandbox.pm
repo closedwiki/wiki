@@ -316,6 +316,7 @@ sub _buildCommandLine {
         if (@tmplarg == 1) {
             push @arguments, @targs;
         } else {
+            map { ASSERT(defined($_)) } @targs if( DEBUG );
             push @arguments, join ('', @targs);
         }
     }

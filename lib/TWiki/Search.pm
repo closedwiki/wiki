@@ -30,7 +30,6 @@ package TWiki::Search;
 use strict;
 use Assert;
 use TWiki::Sandbox;
-use TWiki::User;
 use TWiki::Time;
 
 my $emptySearch =   'something.Very/unLikelyTo+search-for;-)';
@@ -407,6 +406,7 @@ sub searchWeb {
     my $date =          $params{date} || '';
     my $recurse =       $params{'recurse'} || '';
     my $finalTerm =     $inline ? ( $params{nofinalnewline} || 0 ) : 0;
+    my $users = $this->{session}->{users};
 
     $baseWeb =~ s/\./\//go;
 
@@ -587,7 +587,7 @@ sub searchWeb {
     }
 
     # Loop through webs
-    my $isAdmin = $session->{user}->isAdmin();
+    my $isAdmin = $session->{users}->isAdmin( $session->{user} );
     my $ttopics = 0;
     foreach my $web ( @webs ) {
         $web =~ s/$TWiki::cfg{NameFilter}//go;
@@ -713,7 +713,7 @@ sub searchWeb {
             my $isoDate = TWiki::Time::formatTime( $epochSecs, '$iso', 'gmtime');
 
             my $revUser = $topicInfo->{$topic}->{editby} || 'UnknownUser';
-            my $ru = $session->{users}->findUser( $revUser );
+            my $ru = $revUser;
             my $revNum  = $topicInfo->{$topic}->{revNum} || 0;
 
             # Check security
@@ -770,9 +770,9 @@ sub searchWeb {
                     $out =~ s/\$date/$revDate/gs;
                     $out =~ s/\$isodate/$isoDate/gs;
                     $out =~ s/\$rev/$revNum/gs;
-                    $out =~ s/\$wikiusername/$ru->webDotWikiName()/ges;
-                    $out =~ s/\$wikiname/$ru->wikiName()/ges;
-                    $out =~ s/\$username/$ru->login()/ges;
+                    $out =~ s/\$wikiusername/$users->webDotWikiName($ru)/ges;
+                    $out =~ s/\$wikiname/$users->getWikiName($ru)/ges;
+                    $out =~ s/\$username/$users->getLoginName($ru)/ges;
                     my $r1info = {};
                     $out =~ s/\$createdate/$this->_getRev1Info( $web, $topic, 'date', $r1info )/ges;
                     $out =~ s/\$createusername/$this->_getRev1Info( $web, $topic, 'username', $r1info )/ges;
@@ -1019,6 +1019,7 @@ sub _extractTopicInfo {
     my $info = {};
     my $session = $this->{session};
     my $store = $session->{store};
+    my $users = $this->{session}->{users};
 
     my ( $meta, $text ) = $this->_getTextAndMeta( undef, $web, $topic );
 
@@ -1026,7 +1027,7 @@ sub _extractTopicInfo {
     $info->{meta} = $meta;
 
     my ( $revdate, $revuser, $revnum ) = $meta->getRevisionInfo();
-    $info->{editby}     = $revuser ? $revuser->webDotWikiName() : '';
+    $info->{editby}     = $revuser ? $users->webDotWikiName($revuser) : '';
     $info->{modified}   = $revdate;
     $info->{revNum}     = $revnum;
 
@@ -1076,6 +1077,7 @@ sub _getRev1Info {
     my( $this, $web, $topic, $attr, $info ) = @_;
     my $key = $web.'.'.$topic;
     my $store = $this->{session}->{store};
+    my $users = $this->{session}->{users};
 
     unless( $info->{webTopic} && $info->{webTopic} eq $key ) {
         my $meta = new TWiki::Meta( $this->{session}, $web, $topic );
@@ -1085,13 +1087,13 @@ sub _getRev1Info {
         $info->{webTopic} = $key;
     }
     if( $attr eq 'username' ) {
-        return $info->{user}->login();
+        return $users->getLoginName($info->{user});
     }
     if( $attr eq 'wikiname' ) {
-        return $info->{user}->wikiName();
+        return $users->getWikiName( $info->{user} );
     }
     if( $attr eq 'wikiusername' ) {
-        return $info->{user}->webDotWikiName();
+        return $users->webDotWikiName($info->{user});
     }
     if( $attr eq 'date' ) {
         return TWiki::Time::formatTime( $info->{date} );

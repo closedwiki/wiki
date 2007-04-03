@@ -31,7 +31,6 @@ use strict;
 use Assert;
 use TWiki;
 use TWiki::UI;
-use TWiki::User;
 use TWiki::Sandbox;
 use Error qw( :try );
 use TWiki::OopsException;
@@ -73,7 +72,7 @@ sub manage {
     }
 }
 
-# Renames the user's topic (with renaming all links) and
+# Renames the *current* user's topic (with renaming all links) and
 # removes user entry from passwords. CGI parameters:
 sub _removeUser {
     my $session = shift;
@@ -83,21 +82,23 @@ sub _removeUser {
     my $query = $session->{cgiQuery};
     my $user = $session->{user};
 
+    my $login = $session->{users}->getLoginName($user);
     my $password = $query->param( 'password' );
 
     # check if user entry exists
-    if( $user && !$user->passwordExists()) {
+    my $users = $session->{users};
+    if( $users->userExists( $user )) {
         throw TWiki::OopsException( 'attention',
                                     web => $webName,
                                     topic => $topic,
                                     def => 'notwikiuser',
-                                    params => $user->stringify() );
+                                    params => [ $user ] );
     }
 
     #check to see it the user we are trying to remove is a member of a group.
     #initially we refuse to delete the user
     #in a later implementation we will remove the from the group (if Access.pm implements it..)
-    my $git = $user->eachMembership();
+    my $git = $users->eachMembership($user);
     if( $git->hasNext() ) {
         my $list = '';
         while ($git->hasNext()) {
@@ -111,20 +112,20 @@ sub _removeUser {
                                       [ $user->stringify(), $list ] );
     }
 
-    unless( $user->checkPassword( $password ) ) {
+    unless( $users->checkPassword($user, $password)) {
         throw TWiki::OopsException( 'attention',
                                     web => $webName,
                                     topic => $topic,
                                     def => 'wrong_password');
     }
 
-    $user->remove();
+    $users->removeUser( $user );
 
     throw TWiki::OopsException( 'attention',
                                 def => 'remove_user_done',
                                 web => $webName,
                                 topic => $topic,
-                                params => $user->webDotWikiName() );
+                                params => $users->webDotWikiName($user) );
 }
 
 sub _isValidHTMLColor {
@@ -788,8 +789,7 @@ sub move {
                  from => $oldWeb.'.'.$oldTopic,
                  to   => $newWeb.'.'.$newTopic,
                  date => time(),
-                 # SMELL: surely this should be webDotWikiname?
-                 by   => $session->{user}->wikiName(),
+                 by   => $session->{user},
                 } );
 
     $store->saveTopic( $session->{user}, $newWeb, $newTopic, $text, $meta,

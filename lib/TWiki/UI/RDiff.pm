@@ -28,6 +28,8 @@ UI functions for diffing.
 package TWiki::UI::RDiff;
 
 use strict;
+use Assert;
+
 use TWiki;
 use TWiki::Store;
 use TWiki::Prefs;
@@ -68,7 +70,8 @@ my %format =
 #| Return: =$text= | Formatted html text |
 #| TODO: | this should move to Render.pm |
 sub _renderCellData {
-    my( $session, $meta, $data, $web, $topic ) = @_;
+    my( $session, $data, $web, $topic ) = @_;
+    ASSERT($topic) if DEBUG;
     if ( $data ){
         $data =~ s(^%META:FIELD{(.*)}%.*$)
           (_renderAttrs($1,'|*FORM FIELD $title*|$name|$value|'))gem;
@@ -249,6 +252,7 @@ sub _renderSequential
 {
     my ( $session, $web, $topic, $diffType, $left, $right ) = @_;
     my $result = '';
+    ASSERT($topic) if DEBUG;
 
     #note: I have made the colspan 9 to make sure that it spans all columns (thought there are only 2 now)
     if ( $diffType eq '-') {

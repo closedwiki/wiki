@@ -687,7 +687,9 @@ Return: =$wikiName= Wiki Name, e.g. ='JohnDoe'=
 
 sub getWikiName {
     ASSERT($TWiki::Plugins::SESSION) if DEBUG;
-    return $TWiki::Plugins::SESSION->{user}->wikiName();
+    my $user = $TWiki::Plugins::SESSION->{user};
+    my $users = $TWiki::Plugins::SESSION->{users};
+    return $users->getWikiName( $user );
 }
 
 =pod
@@ -704,7 +706,8 @@ Return: =$wikiName= Wiki Name, e.g. ="Main.JohnDoe"=
 
 sub getWikiUserName {
     ASSERT($TWiki::Plugins::SESSION) if DEBUG;
-    return $TWiki::Plugins::SESSION->{user}->webDotWikiName();
+    my $users = $TWiki::Plugins::SESSION->{users};
+    return $users->webDotWikiName($TWiki::Plugins::SESSION->{user});
 }
 
 =pod
@@ -723,9 +726,8 @@ sub wikiToUserName {
     my( $wiki ) = @_;
     ASSERT($TWiki::Plugins::SESSION) if DEBUG;
     return '' unless $wiki;
-    my $user = $TWiki::Plugins::SESSION->{users}->findUser( $wiki, undef, 1 );
-    return $wiki unless $user;
-    return $user->login();
+    my $users = $TWiki::Plugins::SESSION->{users};
+    return $users->getLoginName($wiki);
 }
 
 =pod
@@ -745,10 +747,11 @@ sub userToWikiName {
     my( $login, $dontAddWeb ) = @_;
     return '' unless $login;
     ASSERT($TWiki::Plugins::SESSION) if DEBUG;
-    my $user = $TWiki::Plugins::SESSION->{users}->findUser( $login, undef, 1 );
+    my $users = $TWiki::Plugins::SESSION->{users};
+    my $user = $users->userExists( $login );
     return '' unless $user;
-    return $user->wikiName() if $dontAddWeb;
-    return $user->webDotWikiName();
+    return $users->getWikiName( $user ) if $dontAddWeb;
+    return $users->webDotWikiName($user);
 }
 
 =pod
@@ -769,13 +772,14 @@ sub emailToWikiNames {
     ASSERT($email) if DEBUG;
 
     my %matches;
-    my $ua = $TWiki::Plugins::SESSION->{users}->findUserByEmail( $email );
+    my $users = $TWiki::Plugins::SESSION->{users};
+    my $ua = $users->findUserByEmail( $email );
     if ($ua) {
         foreach my $user (@$ua) {
             if( $dontAddWeb ) {
-                $matches{$user->wikiName()} = 1;
+                $matches{$users->getWikiName($user)} = 1;
             } else {
-                $matches{$user->webDotWikiName()} = 1;
+                $matches{$users->webDotWikiName($user)} = 1;
             }
         }
     }
@@ -795,15 +799,20 @@ undef, returns the registered email addresses for the logged-in user.
 =cut
 
 sub wikinameToEmails {
-    my( $user ) = @_;
+    my( $wikiname ) = @_;
 
-    if( $user ) {
-        $user = $TWiki::Plugins::SESSION->{users}->findUser($user, undef, 1);
+    if( $wikiname ) {
+        my $lns = $TWiki::Plugins::SESSION->{users}->findUserByWikiName(
+            $wikiname );
+        my @em = ();
+        foreach my $user ( @$lns ) {
+            push(@em, $TWiki::Plugins::SESSION->{users}->getEmails( $user ));
+        }
+        return @em;
     } else {
-        $user = $TWiki::Plugins::SESSION->{user};
+        my $user = $TWiki::Plugins::SESSION->{user};
+        return $TWiki::Plugins::SESSION->{users}->getEmails( $user );
     }
-    return $user->emails();
-
 }
 
 =pod
@@ -818,12 +827,12 @@ Test if logged in user is a guest (TWikiGuest)
 
 sub isGuest {
     ASSERT($TWiki::Plugins::SESSION) if DEBUG;
-    return $TWiki::Plugins::SESSION->{user}->isDefaultUser();
+    return $TWiki::Plugins::SESSION->{user} eq $TWiki::cfg{DefaultUserWikiName};
 }
 
 =pod
 
----++ isAnAdmin( $user ) -> $boolean
+---++ isAnAdmin( $login ) -> $boolean
 
 Find out if the user is an admin or not. If the user is not given,
 the currently logged-in user is assumed.
@@ -835,21 +844,18 @@ the currently logged-in user is assumed.
 sub isAnAdmin {
     my ($user) = @_;
 
-    if ($user) {
-        $user = $TWiki::Plugins::SESSION->{users}->findUser($user, undef, 1);
-    } else {
-        $user = $TWiki::Plugins::SESSION->{user};
-    }
-    return $TWiki::Plugins::SESSION->{user}->isAdmin();
+    $user ||= $TWiki::Plugins::SESSION->{user};
+
+    return $TWiki::Plugins::SESSION->{users}->isAdmin( $user );
 }
 
 =pod
 
----++ isGroupMember( $group, $user ) -> $boolean
+---++ isGroupMember( $group, $login ) -> $boolean
 
-Find out if the $user is in the named group. e.g.
+Find out if $login is in the named group. e.g.
 <verbatim>
-if( TWiki::Func::isGroupMember( "HesperionXXGroup", "JordiSavall" )) {
+if( TWiki::Func::isGroupMember( "HesperionXXGroup", "jordi" )) {
     ...
 }
 </verbatim>
@@ -862,22 +868,16 @@ If =$user= is =undef=, it defaults to the currently logged-in user.
 sub isGroupMember {
     my ($group, $user) = @_;
 
-    if ($user) {
-        $user = $TWiki::Plugins::SESSION->{users}->findUser($user, $user, 1);
-    } else {
-        $user = $TWiki::Plugins::SESSION->{user};
-    }
-    $group = $TWiki::Plugins::SESSION->{users}->findUser($group, $group, 1);
-    return () unless $group->isGroup();
-    return $user->isInGroup( $group );
+    return () unless $TWiki::Plugins::SESSION->{users}->isGroup($group);
+    $user ||= $TWiki::Plugins::SESSION->{user};
+    return $TWiki::Plugins::SESSION->{users}->isInGroup( $user, $group );
 }
 
 =pod
 
 ---++ eachUser() -> $iterator
 Get an iterator over the list of all the registered users *not* including
-groups. The iterator will return each wikiname
-in turn (e.g. FredBloggs).
+groups. The iterator will return each login name in turn (e.g. 'fred').
 
 Use it as follows:
 <verbatim>
@@ -895,16 +895,12 @@ Use it as follows:
 =cut
 
 sub eachUser {
-    my $session = $TWiki::Plugins::SESSION;
-    my $it = $session->{users}->eachUser();
-    # Get the name from the user object
-    $it->{process} = sub { return $_[0]->wikiName() };
-    return $it;
+    return $TWiki::Plugins::SESSION->{users}->eachUser();
 }
 
 =pod
 
----++ eachMembership($user) -> $iterator
+---++ eachMembership($login) -> $iterator
 Get an iterator over the names of all groups that the user is a member of.
 If =$user= is =undef=, defaults to the currently logged-in user.
 
@@ -915,16 +911,9 @@ If =$user= is =undef=, defaults to the currently logged-in user.
 sub eachMembership {
     my ($user) = @_;
 
-    if ($user) {
-        $user = $TWiki::Plugins::SESSION->{users}->findUser($user, $user, 1);
-    } else {
-        $user = $TWiki::Plugins::SESSION->{user};
-    }
+    $user ||= $TWiki::Plugins::SESSION->{user};
 
-    my $it = $user->eachMembership();
-    # Get the name from the user object
-    $it->{process} = sub { return $_[0]->wikiName() };
-    return $it;
+    return $TWiki::Plugins::SESSION->{users}->eachMembership($user);
 }
 
 =pod
@@ -950,8 +939,6 @@ Use it as follows:
 sub eachGroup {
     my $session = $TWiki::Plugins::SESSION;
     my $it = $session->{users}->eachGroup();
-    # Get the name from the user object
-    $it->{process} = sub { return $_[0]->wikiName() };
     return $it;
 }
 
@@ -966,9 +953,7 @@ Checks if =$group= is the name of a group known to TWiki.
 sub isGroup {
     my( $group ) = @_;
 
-    my $users = $TWiki::Plugins::SESSION->{users};
-    my $uo = $users->findUser( $group );
-    return $users->isGroup( $uo );
+    return $TWiki::Plugins::SESSION->{users}->isGroup( $group );
 }
 
 =pod
@@ -982,7 +967,7 @@ Use it as follows:
     my $iterator = TWiki::Func::eachGroupMember('RadioheadGroup');
     while ($it->hasNext()) {
         my $user = $it->next();
-        # $user is a user name e.g. 'ThomYorke', 'PhilSelway'
+        # $user is a login name e.g. 'yorke', 'selway'
     }
 </verbatim>
 
@@ -993,13 +978,11 @@ Use it as follows:
 =cut
 
 sub eachGroupMember {
-    my $group = shift;
+    my $user = shift;
     my $session = $TWiki::Plugins::SESSION;
-    my $user = $session->{users}->findUser($group);
-    return undef unless $user->isGroup();
-    my $it = $user->eachGroupMember();
-    # Get the name from the user object
-    $it->{process} = sub { return $_[0]->wikiName() };
+    return undef unless
+      $TWiki::Plugins::SESSION->{users}->isGroup($user);
+    my $it = $TWiki::Plugins::SESSION->{users}->eachGroupMember($user);
     return $it;
 }
 
@@ -1085,9 +1068,12 @@ sub checkAccessPermission {
     return 1 unless ( $user );
     ASSERT($TWiki::Plugins::SESSION) if DEBUG;
     $text = undef unless $text;
-    $user = $TWiki::Plugins::SESSION->{users}->findUser( $user );
+    my $login = $TWiki::Plugins::SESSION->{users}->findUserByWikiName(
+        $user );
+    $login = [ $TWiki::cfg{DefaultUserLogin} ] unless(
+        $login && scalar(@$login));
     return $TWiki::Plugins::SESSION->{security}->checkAccessPermission(
-        $type, $user, $text, $meta, $topic, $web );
+        $type, $login->[0], $text, $meta, $topic, $web );
 }
 
 =pod
@@ -1281,21 +1267,23 @@ sub checkTopicEditLock {
         my $session = $TWiki::Plugins::SESSION;
 
         if( $remain > 0 ) {
-            my $who = $lease->{user}->login();
-            my $wn = $lease->{user}->webDotWikiName();
-            my $past = TWiki::Time::formatDelta(time()-$lease->{taken},
-                                                $TWiki::Plugins::SESSION->{i18n}
-                                               );
-            my $future = TWiki::Time::formatDelta($lease->{expires}-time(),
-                                                  $TWiki::Plugins::SESSION->{i18n}
-                                                 );
-            return( $session->getOopsUrl( 'leaseconflict',
-                                          def => 'lease_active',
-					  keep => 1,   # Need to keep parameters across redirect
-                                          web => $web,
-                                          topic => $topic,
-                                          params => [ $wn, $past, $future, $script ] ),
-                                          $who, $remain / 60 );
+            my $who = $lease->{user};
+            my $past = TWiki::Time::formatDelta(
+                time()-$lease->{taken},
+                $TWiki::Plugins::SESSION->{i18n}
+               );
+            my $future = TWiki::Time::formatDelta(
+                $lease->{expires}-time(),
+                $TWiki::Plugins::SESSION->{i18n}
+               );
+            return( $session->getOopsUrl(
+                'leaseconflict',
+                def => 'lease_active',
+                keep => 1,   # Need to keep parameters across redirect
+                web => $web,
+                topic => $topic,
+                params => [ $who, $past, $future, $script ] ),
+                    $who, $remain / 60 );
         }
     }
     return ('', '', 0);
@@ -1523,13 +1511,7 @@ Return: =( $date, $user, $rev, $comment )= List with: ( last update date, login 
 
 NOTE: if you are trying to get revision info for a topic, use
 =$meta->getRevisionInfo= instead if you can - it is significantly
-more efficient, and returns a user object that contains other user
-information.
-
-NOTE: prior versions of TWiki may under some circumstances have returned
-the login name of the user rather than the wiki name; the code documentation
-was totally unclear, and we have been unable to establish the intent.
-However the wikiname is obviously more useful, so that is what is returned.
+more efficient.
 
 *Since:* TWiki::Plugins::VERSION 1.000 (29 Jul 2001)
 
@@ -1539,7 +1521,7 @@ sub getRevisionInfo {
     ASSERT($TWiki::Plugins::SESSION) if DEBUG;
     my( $date, $user, $rev, $comment ) =
       $TWiki::Plugins::SESSION->{store}->getRevisionInfo( @_ );
-    $user = $user->wikiName();
+    $user = $TWiki::Plugins::SESSION->{users}->getLoginName( $user );
     return ( $date, $user, $rev, $comment );
 }
 
@@ -2093,12 +2075,10 @@ be comma-separated.
 =cut
 
 sub wikiToEmail {
-    my( $wiki ) = @_;
+    my( $user ) = @_;
     ASSERT($TWiki::Plugins::SESSION) if DEBUG;
-    return '' unless $wiki;
-    my $user = $TWiki::Plugins::SESSION->{users}->findUser( $wiki, undef, 1 );
     return '' unless $user;
-    return join( ',', $user->emails() );
+    return join( ',', $TWiki::Plugins::SESSION->{users}->getEmails($user) );
 }
 
 =pod

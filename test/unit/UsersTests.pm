@@ -43,19 +43,18 @@ sub set_up {
     $topicquery->path_info("/$testNormalWeb/$testTopic");
     try {
         $twiki = new TWiki($TWiki::cfg{SuperAdminGroup});
-        my $twikiUserObject = $twiki->{user};
-        $twiki->{store}->createWeb($twikiUserObject, $testUsersWeb);
+        $twiki->{store}->createWeb($twiki->{user}, $testUsersWeb);
         # the group is recursive to force a recursion block
         $twiki->{store}->saveTopic(
             $twiki->{user}, $testUsersWeb, $TWiki::cfg{SuperAdminGroup},
-            '   * Set GROUP = '.$twikiUserObject->wikiName().", ".
+            '   * Set GROUP = '.$twiki->{user}.", ".
               $TWiki::cfg{SuperAdminGroup}."\n");
 
-        $twiki->{store}->createWeb($twikiUserObject, $testSysWeb, $original);
-        $twiki->{store}->createWeb($twikiUserObject, $testNormalWeb, '_default');
+        $twiki->{store}->createWeb($twiki->{user}, $testSysWeb, $original);
+        $twiki->{store}->createWeb($twiki->{user}, $testNormalWeb, '_default');
 
         $twiki->{store}->copyTopic(
-            $twikiUserObject, $original, $TWiki::cfg{SitePrefsTopicName},
+            $twiki->{user}, $original, $TWiki::cfg{SitePrefsTopicName},
             $testSysWeb, $TWiki::cfg{SitePrefsTopicName} );
 
         $testUser = $this->createFakeUser($twiki);
@@ -117,32 +116,50 @@ my $initial = <<'THIS';
 	* Z - <a name="Z">- - - -</a>
 THIS
 
+sub createFakeUser {
+    my( $this, $twiki, $text, $name ) = @_;
+    $this->assert($twiki->{store}->webExists($TWiki::cfg{UsersWebName}));
+    $name ||= '';
+    my $base = "TemporaryTestUser".$name;
+    my $i = 0;
+    while($twiki->{store}->topicExists($TWiki::cfg{UsersWebName},$base.$i)) {
+        $i++;
+    }
+    $text ||= '';
+    my $meta = new TWiki::Meta($twiki, $TWiki::cfg{UsersWebName}, $base.$i);
+    $meta->put( "TOPICPARENT", {
+        name => $TWiki::cfg{UsersWebName}.'.'.$TWiki::cfg{HomeTopicName} } );
+    $twiki->{store}->saveTopic($twiki->{user},
+                               $TWiki::cfg{UsersWebName},
+                               $base.$i,
+                               $text, $meta);
+    push( @{$this->{fake_users}}, $base.$i);
+    return $base.$i;
+}
+
 sub testAddUsers {
     my $this = shift;
     $twiki = new TWiki();
     my $ttpath = "$TWiki::cfg{DataDir}/$TWiki::cfg{UsersWebName}/$TWiki::cfg{UsersTopicName}.txt";
-    my $me =  $twiki->{users}->findUser("TWikiRegistrationAgent");
+    my $me =  "TWikiRegistrationAgent";
 
     open(F,">$ttpath") || $this->assert(0,  "open $ttpath failed");
     print F $initial;
     close(F);
     chmod(0777, $ttpath);
-    my $user1 = $twiki->{users}->findUser("auser", "AaronUser");
-    my $user2 = $twiki->{users}->findUser("guser", "GeorgeUser");
-    my $user3 = $twiki->{users}->findUser("zuser", "ZebediahUser");
-    $twiki->{users}->addUserToMapping($user2, $me);
+    $twiki->{users}->{mapping}->addUserToMapping("GeorgeUser", "guser", $me);
     open(F,"<$ttpath");
     local $/ = undef;
     my $text = <F>;
     close(F);
     $this->assert_matches(qr/\n\s+\* GeorgeUser - guser - \d\d \w\w\w \d\d\d\d\n/s, $text);
-    $twiki->{users}->addUserToMapping($user1, $me);
+    $twiki->{users}->{mapping}->addUserToMapping("AaronUser", "auser", $me);
     open(F,"<$ttpath");
     local $/ = undef;
     $text = <F>;
     close(F);
     $this->assert_matches(qr/AaronUser.*GeorgeUser/s, $text);
-    $twiki->{users}->addUserToMapping($user3, $me);
+    $twiki->{users}->{mapping}->addUserToMapping("ZebediahUser", "zuser", $me);
     open(F,"<$ttpath");
     local $/ = undef;
     $text = <F>;
@@ -154,32 +171,30 @@ sub testLoad {
     my $this = shift;
 
     $twiki = new TWiki();
-    my $me =  $twiki->{users}->findUser("TWikiRegistrationAgent");
+    my $me = "TWikiRegistrationAgent";
     $ttpath = "$TWiki::cfg{DataDir}/$TWiki::cfg{UsersWebName}/$TWiki::cfg{UsersTopicName}.txt";
 
     open(F,">$ttpath") || $this->assert(0,  "open $ttpath failed");
     print F $initial;
     close(F);
 
-    my $user1 = $twiki->{users}->findUser("auser", "AaronUser");
-    my $user2 = $twiki->{users}->findUser("guser","GeorgeUser");
-    my $user3 = $twiki->{users}->findUser("zuser","ZebediahUser");
-    $twiki->{users}->addUserToMapping($user1, $me);
-    $twiki->{users}->addUserToMapping($user2, $me);
-    $twiki->{users}->addUserToMapping($user3, $me);
-    $twiki->{users}->addUserToMapping($user1, $me);
-    $twiki->{users}->addUserToMapping($user2, $me);
-    $twiki->{users}->addUserToMapping($user3, $me);
+    $twiki->{users}->{mapping}->addUserToMapping("ZebediahUser", "zuser", $me);
+    $twiki->{users}->{mapping}->addUserToMapping("AaronUser", "auser", $me);
+    $twiki->{users}->{mapping}->addUserToMapping("GeorgeUser", "guser", $me);
+    # deliberate repeat
+    $twiki->{users}->{mapping}->addUserToMapping("ZebediahUser", "zuser", $me);
     # find a nonexistent user to force a cache read
     $twiki = new TWiki();
-    my $n = $twiki->{users}->lookupLoginName("auser");
-    $this->assert_str_equals("$testUsersWeb.AaronUser", $n);
-    $n = $twiki->{users}->lookupWikiName("AaronUser");
+    my $n = $twiki->{users}->{mapping}->lookupLoginName("auser");
+    $this->assert_str_equals("AaronUser", $n);
+    $n = $twiki->{users}->getLoginName("auser");
     $this->assert_str_equals("auser", $n);
+    $n = $twiki->{users}->getWikiName("auser");
+    $this->assert_str_equals("AaronUser", $n);
 
     my $i = $twiki->{users}->eachUser();
     my @l = ();
-    while ($i->hasNext()) { push(@l, $i->next()->wikiName()) };
+    while ($i->hasNext()) { push(@l, $i->next()) };
     my $k = join(",",sort @l);
     $this->assert($k =~ s/^AaronUser,//,$k);
     $this->assert($k =~ s/^AttilaTheHun,//,$k);
@@ -189,22 +204,20 @@ sub testLoad {
     $this->assert($k =~ s/^SadOldMan,//,$k);
     $this->assert($k =~ s/^SorryOldMan,//,$k);
     $this->assert($k =~ s/^StupidOldMan,//,$k);
+    $this->assert($k =~ s/^TWikiGuest,//,$k);
     $this->assert($k =~ s/^ZebediahUser//,$k);
     $this->assert_str_equals("",$k);
 }
 
 sub groupFix {
     my $this = shift;
-    my $me =  $twiki->{users}->findUser("TWikiRegistrationAgent");
-    my $user1 = $twiki->{users}->findUser("auser", "AaronUser");
-    my $user2 = $twiki->{users}->findUser("guser","GeorgeUser");
-    my $user3 = $twiki->{users}->findUser("zuser","ZebediahUser");
-    $twiki->{users}->addUserToMapping($user1, $me);
-    $twiki->{users}->addUserToMapping($user2, $me);
-    $twiki->{users}->addUserToMapping($user3, $me);
-    $twiki->{users}->addUserToMapping($user1, $me);
-    $twiki->{users}->addUserToMapping($user2, $me);
-    $twiki->{users}->addUserToMapping($user3, $me);
+    my $me =  "TWikiRegistrationAgent";
+    $twiki->{users}->{mapping}->addUserToMapping("AaronUser", "auser", $me);
+    $twiki->{users}->{mapping}->addUserToMapping("GeorgeUser", "guser", $me);
+    $twiki->{users}->{mapping}->addUserToMapping("ZebediahUser", "zuser", $me);
+    $twiki->{users}->{mapping}->addUserToMapping("AaronUser", "auser", $me);
+    $twiki->{users}->{mapping}->addUserToMapping("GeorgeUser", "guser", $me);
+    $twiki->{users}->{mapping}->addUserToMapping("ZebediahUser", "zuser", $me);
     $twiki->{store}->saveTopic(
         $twiki->{user}, $testUsersWeb, 'AmishGroup',
         "   * Set GROUP = AaronUser,%MAINWEB%.GeorgeUser\n");
@@ -218,7 +231,7 @@ sub test_getListOfGroups {
     $this->groupFix();
     my $i = $twiki->{users}->eachGroup();
     my @l = ();
-    while ($i->hasNext()) { push(@l, $i->next()->wikiName()) };
+    while ($i->hasNext()) { push(@l, $i->next()) };
     my $k = join(',', sort @l);
     $this->assert_str_equals("AmishGroup,BaptistGroup", $k);
 }
@@ -226,21 +239,21 @@ sub test_getListOfGroups {
 sub test_groupMembers {
     my $this = shift;
     $this->groupFix();
-    my $g = $twiki->{users}->findUser("AmishGroup");
-    $this->assert($g->isGroup());
-    my $i = $g->eachGroupMember();
+    my $g = "AmishGroup";
+    $this->assert($twiki->{users}->isGroup($g));
+    my $i = $twiki->{users}->eachGroupMember($g);
     my @l = ();
-    while ($i->hasNext()) { push(@l, $i->next()->wikiName()) };
+    while ($i->hasNext()) { push(@l, $i->next()) };
     my $k = join(',', sort @l);
-    $this->assert_str_equals("AaronUser,GeorgeUser", $k);
-    $g = $twiki->{users}->findUser("BaptistGroup");
-    $this->assert($g->isGroup());
+    $this->assert_str_equals("auser,guser", $k);
+    $g = "BaptistGroup";
+    $this->assert($twiki->{users}->isGroup($g));
 
-    $i = $g->eachGroupMember();
+    $i = $twiki->{users}->eachGroupMember($g);
     @l = ();
-    while ($i->hasNext()) { push(@l, $i->next()->wikiName()) };
+    while ($i->hasNext()) { push(@l, $i->next()) };
     $k = join(',', sort @l);
-    $this->assert_str_equals("GeorgeUser,ZebediahUser", $k);
+    $this->assert_str_equals("guser,zuser", $k);
 
 }
 
