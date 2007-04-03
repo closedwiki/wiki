@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1175621959" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1175627493" format="1.1" version="$Rev$"}%
 %TOC%
 %STARTINCLUDE%
 ---# TWiki Site Tools
@@ -42,6 +42,11 @@ This is simply a preset =SEARCH=. The number of topics listed by the =limit= par
 limit="50" }%
 </pre>
 </blockquote>
+
+#WebRssAndAtom
+---++ <nop>WebRss and <nop>WebAtom - news feeds on recent changes
+
+You can point your news reader at WebRss and WebAtom to find out what is new in a TWiki web. WebRssBase and WebAtomBase have the details. Like WebChanges, this is based on a =%<nop>SEARCH{}%=.
 
 #WebIndex
 ---++ <nop>WebIndex - list of topics
@@ -151,5 +156,14 @@ The above line will run mailnotify nightly at 02:00. The =-q= switch suppresses 
    * TWikiAccessControl describes how to restrict read and write access to topics and webs, by users and groups
    * SitePermissions lists the permissions settings of the webs on this TWiki site
 
+---++ Help with crontab
+
+The crontab command is used to schedule commands to be executed periodically.
+
+   * Wikipedia.org:Crontab - crontab documentation
+   * [[http://www.kalab.com/freeware/pycron/pycron.htm][pycron]] - crontab for Windows
+
 __Related Topics:__ AdminDocumentationCategory, AdminToolsCategory
 
+%STOPINCLUDE%
+-- __Contributors:__ TWiki:Main.MikeMannix, TWiki:Main.PeterThoeny, TWiki:Main.CrawfordCurrie, TWiki:Main.KennethLavrsen, TWiki:Main.SvenDowideit
