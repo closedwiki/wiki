@@ -286,7 +286,18 @@ sub expandPath {
     my $first = $1;
     my $tail = $2;
     my $result = $this->expandPath($theRoot, $first);
-    my $root = ref($result)?$result:$this->fastget($result); 
+    my $root;
+    if (ref($result)) {
+      $root = $result;
+    } else {
+      if ($result =~ /^(.*)\.(.*?)$/) {
+        my $db = TWiki::Plugins::DBCachePlugin::Core::getDB($1);
+        $root = $db->fastget($2);
+        return $db->expandPath($root, $tail);
+      } else {
+        $root = $this->fastget($result); 
+      }
+    }
     return $this->expandPath($root, $tail)
   }
 
