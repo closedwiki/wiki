@@ -17,3 +17,6 @@
 
 %TAGME{ tpaction="showalltags" format="<a href=\"%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/TagMeSearch?tag=$tag\" style=\"font-size:$size%\">$tag</a>" separator=", " }%
 %STOPINCLUDE%
+
+%BR%
+<span class="twikiGrayText">Other tag options: [[TagMeCreateNewTag][Create New Tag]], [[TagMeRenameTag][Rename Tag]], [[TagMeDeleteTag][Delete Tag]]</span>

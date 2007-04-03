@@ -678,7 +678,7 @@ sub _makeSafeTag {
         $tag =~ s/_+/_/go;              # replace double underscores with single
     }
     else {
-        $tag =~ s/[\x01-\x1f^\#\,\'\"\|]//go;    # strip #,'"|
+        $tag =~ s/[\x01-\x1f^\#\,\'\"\|\*]//go;    # strip #,'"|*
     }
     $tag =~ s/^(.{30}).*/$1/;                    # limit to 30 characters
     $tag =~ s/^\s*//;                            # trim spaces at start
