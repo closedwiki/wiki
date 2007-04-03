@@ -22,6 +22,7 @@ sub set_up {
     $TWiki::cfg{AntiSpam}{RobotsAreWelcome} = 1;
     $TWiki::cfg{AntiSpam}{EmailPadding} = 'STUFFED';
     $TWiki::cfg{AllowInlineScript} = 1;
+    $ENV{SCRIPT_NAME} = ''; #  required by fake sort URLs in expected text
 }
 
 # This formats the text up to immediately before <nop>s are removed, so we
