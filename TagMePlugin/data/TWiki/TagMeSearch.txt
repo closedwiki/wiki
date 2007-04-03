@@ -29,3 +29,6 @@ Show topics tagged with
 
 %TAGME{ tpaction="query" web="%URLPARAM{qweb}%" topic="%URLPARAM{qtopic}%" tag="%URLPARAM{tag}%" by="%URLPARAM{by}%" }%
 %STOPINCLUDE%
+
+%BR%
+<span class="twikiGrayText">Other tag options: [[TagMeCreateNewTag][Create New Tag]], [[TagMeRenameTag][Rename Tag]], [[TagMeDeleteTag][Delete Tag]]</span>

@@ -195,7 +195,7 @@ Plugin settings are stored as preferences variables. To reference a plugin setti
 		* Set LOGACTION = 1
 
 	* Optionally normalize tag names. Set to 1 to translate international characters to their latin match (&uuml; to ue, &aring; to aa, etcetera), and to convert spaces to underscores. %BR%
-	Set to 0 to allow any user input, except for the reserved characters =,#'"=. %BR%
+	Set to 0 to allow any user input, except for the reserved characters =,#'"|*=. %BR%
 	Setting to 0 also sorts tags case insensitive: 'U' comes after 't'.
 		* Set NORMALIZE_TAG_INPUT = 1
 		
