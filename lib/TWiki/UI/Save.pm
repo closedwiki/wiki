@@ -370,7 +370,7 @@ WARN
 
     if( $saveaction eq 'cancel' ) {
         my $lease = $store->getLease( $web, $topic );
-        if( $lease && $lease->{user}->equals( $user )) {
+        if( $lease && $lease->{user} eq $user ) {
             $store->clearLease( $web, $topic );
         }
 
@@ -427,7 +427,7 @@ WARN
         $redirecturl .= $editparams
           if $editparams;  # May contain anchor
         my $lease = $store->getLease( $web, $topic );
-        if( $lease && $lease->{user}->equals( $user )) {
+        if( $lease && $lease->{user} eq $user ) {
             $store->setLease( $web, $topic, $user, $TWiki::cfg{LeaseLength} );
         }
         # drop through

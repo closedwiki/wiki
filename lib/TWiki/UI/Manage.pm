@@ -102,14 +102,14 @@ sub _removeUser {
     if( $git->hasNext() ) {
         my $list = '';
         while ($git->hasNext()) {
-            $list .= ' '.$git->next()->stringify();
+            $list .= ' '.$git->next();
         }
         throw TWiki::OopsException( 'attention',
                                     web => $webName,
                                     topic => $topic,
                                     def => 'in_a_group',
                                     params =>
-                                      [ $user->stringify(), $list ] );
+                                      [ $user, $list ] );
     }
 
     unless( $users->checkPassword($user, $password)) {
@@ -1305,7 +1305,7 @@ sub _saveSettings {
     if ( $originalrev ) {
         my ( $date, $author, $rev ) = $newMeta->getRevisionInfo();
         # If the last save was by me, don't merge
-        if ( $rev ne $originalrev && !$author->equals( $user )) {
+        if ( $rev ne $originalrev && $author ne $user ) {
             $newMeta->merge( $currMeta );
         }
     }
