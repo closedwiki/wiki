@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1163619832" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1175621959" format="1.1" version="$Rev$"}%
 %TOC%
 %STARTINCLUDE%
 ---# TWiki Site Tools
@@ -68,7 +68,7 @@ You can generate a listing manually, or on an automated schedule, of visits to i
       * Call the =twiki/bin/statistics= script from a cron job, once a day is recommended. This will update the WebStatistics topics in all webs.
       * __Attention:__ The script must run as the same user as the CGI scripts are running, which is user =nobody= on many systems. Example crontab entry: %BR% =0 0 * * * (cd /path/to/twiki/bin; ./statistics &gt;/dev/null 2&gt;&amp;1)=
       * There is a workaround in case you can't run the script as user =nobody= : Run the utility =twiki/tools/geturl.pl= in your cron job and specify the URL of the =twiki/bin/statistics= script as a parameter. Example: %BR% =0 0 * * * (cd /path/to/twiki/tools; ./geturl.pl mydomain.com /urlpath/to/twiki/bin/statistics &gt;/dev/null 2&gt;&amp;1)= 
-      * *NOTE:* =geturl.pl= _will do a TWiki CGI request as the <nop>TWikiGuest user, so if you use this workaround, the WebStatistics topics you are updating will have to be writeable by <nop>TWikiGuest_
+      * __NOTE:__ =geturl.pl= will do a TWiki CGI request as the <nop>TWikiGuest user, so if you use this workaround, the !WebStatistics topics you are updating will have to be writable by <nop>TWikiGuest.
 
 When running from the command line or a cron job, you can pass parameters to the script like this:
 <verbatim>
