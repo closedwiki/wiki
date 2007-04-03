@@ -1,0 +1,351 @@
+---+!! MoveableTypeSkin Contrib Package
+
+---+++ See [[http://www.home.org.au/cgi-bin/view/TWiki/MoveableTypeSkin][Sven's personal Blog]] for a *DEMO*
+
+MoveableTypeSkin is a simple TWiki Skin that allows you define a look and feel for TWiki using the css tags defined by by the [[http://www.thestylecontest.com][Moveable Type style archive]] (the default moveable type templates for v3.3). 
+
+Through this reusable design, you can also preview ideas for a design _using_ the css and graphic art of [[http://www.thestylecontest.com][the Moveable Type style archive]] on your running TWiki.
+
+To try it out, install the contrib, then use the =next= and =previous= design links below
+
+Some css designs are not suitable for generic useage, as they make assumptions about the number of pixels that the text is long, but you should be able to get inspiration from these works anyway. 
+
+%STARTSECTION{"css-browser"}%
+<!--
+      * Set CURRENTCSS = %URLPARAM{"upto" default="41"}%
+      * Set NEXTCSS = %CALC{"$IF( $EVAL( %CURRENTCSS% + 1 ) > 182, 1, $EVAL( %CURRENTCSS% + 1 ))"}%
+      * Set PREVIOUSCSS = %CALC{"$IF( $EVAL( %CURRENTCSS% - 1 ) < 1, 182, $EVAL( %CURRENTCSS% - 1 ))"}%
+      
+      * Set CURRENTCSSURL = cssfile=%URLPARAM{"cssfile" default="%CSS%CURRENTCSS%%"}%
+      * Set CURRENTCOLUMNS = moveabletypecolumns=%URLPARAM{"moveabletypecolumns" default="one-column"}%      
+      
+      * Set CURRENTQUERYSTRING = skin=moveabletype;moveabletypetopic=%URLPARAM{"moveabletypetopic" default="%MOVEABLETYPESKIN_DESIGNTOPIC%"}%
+-->
+<div align="center" style="margin:6px;">
+<div style="color:black;align:center;width:80%;background-color:#F3FEF6;border:1px solid;margin:6px;padding:10px;">
+---++ To browse the designs from [[http://www.thestylecontest.com][The Style Archive]] and [[http://www.sixapart.com/movabletype/styles/library][The Six Apart style library]]
+
+[[%SCRIPTURL{view}%/%WEB%/%TOPIC%?skin=moveabletype;moveabletypetopic=%MOVEABLETYPESKIN_DESIGNTOPIC%;cssfile=%CSS%PREVIOUSCSS%%;upto=%PREVIOUSCSS%][&lt;&lt; Previous]] 
+[[%SCRIPTURL{view}%/%WEB%/%TOPIC%?skin=moveabletype;moveabletypetopic=%MOVEABLETYPESKIN_DESIGNTOPIC%;cssfile=%CSS%NEXTCSS%%;upto=%NEXTCSS%][Next &gt;&gt;]] 
+
+view in: 
+[[%SCRIPTURL{view}%/%WEB%/%TOPIC%?moveabletypecolumns=one-column;%CURRENTQUERYSTRING%;%CURRENTCSSURL%;upto=%CURRENTCSS%][one column]], 
+[[%SCRIPTURL{view}%/%WEB%/%TOPIC%?moveabletypecolumns=two-column-left;%CURRENTQUERYSTRING%;%CURRENTCSSURL%;upto=%CURRENTCSS%][two column left]], 
+[[%SCRIPTURL{view}%/%WEB%/%TOPIC%?moveabletypecolumns=two-column-right;%CURRENTQUERYSTRING%;%CURRENTCSSURL%;upto=%CURRENTCSS%][two column right]], 
+[[%SCRIPTURL{view}%/%WEB%/%TOPIC%?moveabletypecolumns=three-column;%CURRENTQUERYSTRING%;%CURRENTCSSURL%;upto=%CURRENTCSS%][three column]]
+
+currently showing : [[%CSS%CURRENTCSS%%][CSS%CURRENTCSS%]]
+
+show using HTML
+[[%SCRIPTURL{view}%/%WEB%/%TOPIC%?skin=moveabletypeonecolumn;%CURRENTCSSURL%][one column]], 
+[[%SCRIPTURL{view}%/%WEB%/%TOPIC%?skin=moveabletypetwocolumn-left;%CURRENTCSSURL%][two column left]], 
+[[%SCRIPTURL{view}%/%WEB%/%TOPIC%?skin=moveabletypetwocolumn-right;%CURRENTCSSURL%][two column right]], 
+[[%SCRIPTURL{view}%/%WEB%/%TOPIC%?skin=moveabletypethreecolumn;%CURRENTCSSURL%][three column]]
+
+</div></div>
+%ENDSECTION{"css-browser"}%
+
+
+---+++ Some selected examples
+   * [[%SCRIPTURL{view}%?%CURRENTQUERYSTRING%;cssfile=%CSS41%;moveabletypecolumns=two-column-left;upto=41][CSS41 (two column left)]]
+   * [[%SCRIPTURL{view}%?%CURRENTQUERYSTRING%;cssfile=%CSS20%;moveabletypecolumns=two-column-left;upto=20][CSS20 (two column left)]]
+   * [[%SCRIPTURL{view}%?%CURRENTQUERYSTRING%;cssfile=%CSS20%;moveabletypecolumns=one-column;upto=20][CSS20 (one column)]]
+   * [[%SCRIPTURL{view}%?%CURRENTQUERYSTRING%;cssfile=%CSS40%;moveabletypecolumns=three-columneft;upto=40][CSS40 (three column)]]
+   * [[%SCRIPTURL{view}%?%CURRENTQUERYSTRING%;cssfile=%CSS3%;moveabletypecolumns=one-column;upto=3][CSS3 (one column)]]
+   * [[%SCRIPTURL{view}%?%CURRENTQUERYSTRING%;cssfile=%CSS3%;moveabletypecolumns=two-column-left;upto=3][CSS3 (two column left)]]
+   * [[%SCRIPTURL{view}%?%CURRENTQUERYSTRING%;cssfile=%CSS4%;moveabletypecolumns=two-column-right;upto=4][CSS4 (two column right)]]
+   * [[%SCRIPTURL{view}%?%CURRENTQUERYSTRING%;cssfile=%CSS7%;moveabletypecolumns=one-column;upto=7][CSS7 (one column)]]
+
+---++ Customisation instructions
+The fastest way to develop your own css, is to use [[http://styles.movalog.com/generator/][the Movable Type Style generator]], or to adapt one of the existing css's on the web. There is documentation for this set of css classes and tags found at [[http://www.thestylearchive.com/help/stylesheet_reference][Stylesheet Reference]] and other related pages.
+
+   1 *COPY* the MoveableTypeSampleDesign topic text to =YourSitesMoveableTypeDesign= (or something of your choosing) and then attach your css and images (including a copy of base-weblog.css) to that topic. You should now be able to proof your design from that topic.
+   2 customise =TWiki.css= (copy from MoveableTypeSampleDesign) and attach it to your design's topic.
+      * This file contains most TWiki specific styles, such as tables, forms and diffs. (WORK in progress)
+   3 to customise the common text sections in your design edit the _Moveable Type Common Text sections_ in your new design's topic (=YourSitesMoveableTypeDesign=).
+
+Once you are done, you will be able to set the following in your %MAINWEB%.TWikiPreferences to roll the skin out to everyone:
+
+---++ Settings
+
+Skin Settings are stored as preferences variables that must be added to %MAINWEB%.TWikiPreferences. They are:
+
+set TWiki to use the moveabletype skin
+      * Set SKIN=moveabletype
+set the moveabletype skin to use this topic to get the _moveabletype Common Text sections_ from this topic
+      * Set MOVEABLETYPESKIN_DESIGNTOPIC = %URLPARAM{"moveabletypetopic" default="MoveableTypeSampleDesign"}%
+set the moveabletype skin to use this topic to get the css and images from here (must be in the %TWIKIWEB%)
+      * Set MOVEABLETYPESKIN_CSSFILE = %URLPARAM{"cssfile" default="%CSS41%"}%
+      * Set MOVEABLETYPESKIN_TWIKICSSFILE = %URLPARAM{"twikicssfile" default="%PUBURLPATH%/%TWIKIWEB%/%MOVEABLETYPESKIN_DESIGNTOPIC%/TWiki.css"}%
+   * is the css one-column, two-column-left, two-column-right, three-column (if not set, either as TWikiVariable or the UrlParameter moveabletypecolumns, it defaults to one-column)
+      * Set MOVEABLETYPESKIN_COLUMNS = %URLPARAM{"moveabletypecolumns" default="two-column-left"}%
+
+
+
+There are static text sections in the MoveableType css that can be customised by editing the named sections on the %TWIKIWEB%.MoveableTypeSampleDesign topic - each section can be re-defined either inline, or using INCLUDEs.
+
+---+++ Skin variables
+If you set =PAGETOPIC= in your preferences or in your topic, it will be used as the page's HTML title, in preference to the Topic's name. This is useful to make userfriendly titles for AUTO topic name TWikiApps like TWiki:Plugins:BugsContrib.
+
+---+++ Skin URL Parameters for testing skin designs
+   * skin - must be set to moveabletype
+   * cssfile - the url to the moveabletype css file you want to view
+   * twikicssfile - the url to the TWiki.css file
+   * moveabletypetopic - the topic (in the %TWIKIWEB% only) that the moveabletype common sections come from
+   * moveabletypecolumns - column setting (one-column, two-column-left, two-column-right, three-column)
+   
+---+++ Technical details
+This skin is an example of how to make a TWikiSkin _without_ duplicating the work of the TWiki Core release. It reuses the default skin, and only adds a =twiki.moveabletype.tmpl= (and a viewprint that I hope to remove later), and only defines the bare essentials to create HTML that is similar to an existing system.
+
+You can use this technique to create a TWikiSkin that matches closely the HTML of your existing web site, and thus re-use the existing site's css styling, thus creating a comon look & feel.
+
+---+++ Plugin topic Settings
+   * One line description:
+      * Set SHORTDESCRIPTION = a TWiki skin based on the HTML used by [[http://www.thestylecontest.com][The Style Archive]] and [[http://www.sixapart.com/movabletype/styles/library][The Six Apart style library]]
+
+---++ Installation Instructions
+	* Download the ZIP file from the Plugin web (see below)
+	* Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
+	| *File:* | *Description:* |
+%$MANIFEST%
+	* Run ==%TOPIC%_installer.pl== to automatically check and install other modules that this module depends on. You can also do this step manually. Dependencies:
+	%$DEPENDENCIES%
+
+---++ Interesting URLS
+   * http://www.bkdesign.ca/movable-type/movable-type-styles.php
+   * http://www.bkdesign.ca/movable-type/simplify-movable-type.php
+
+---++ Contrib Info
+
+|  Contrib Author: | TWiki:Main.SvenDowideit - SvenDowideit@DistributedINFORMATION.com [[http://DistributedINFORMATION.com][DistributedINFORMATION]] - a <img src="%ATTACHURLPATH%/wikiringlogo20x20.png" /> [[http://www.wikiring.com][WikiRing.com]] partner |
+|  Copyright &copy;: | SixApart and designs by various, and twiki adaption by TWiki:Main.SvenDowideit - SvenDowideit@DistributedINFORMATION.com |
+|  License: | Various Open Source |
+|  Description: | a TWiki skin based on the HTML used by [[http://www.thestylecontest.com][The Style Archive]] and [[http://www.sixapart.com/movabletype/styles/library][The Six Apart style library]] |
+|  Screenshot: | <a href="%ATTACHURL%/fullscreen.gif"><img src="%ATTACHURL%/screenshot.gif" alt="Click for full screen image" width="600" height="130" /></a> |
+|  Screenshot: | <a href="%ATTACHURL%/iconic.gif"><img src="%ATTACHURL%/iconic_preview.gif" alt="Click for full screen image" width="600" height="130" /></a> |
+|  Screenshot: | <a href="%ATTACHURL%/splattered_edit.gif"><img src="%ATTACHURL%/preview_splattered_edit.gif" alt="Click for full screen image" width="600" height="130" /></a> |
+|  Preview: | [[%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%][Preview with this topic]] |
+|  Base Name: | moveabletype |
+|  Skin Version: | 03 Apr 2007 (v1.000) |
+|  Dependencies: | %$DEPENDENCIES% |
+|  Version: | %$VERSION% |
+|  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  %DATE%: | Initial version |
+|  30 Mar 2007: | initial release of Skin | 
+|  Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
+|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
+|  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
+
+__Related Topics:__ %TWIKIWEB%.TWikiPreferences
+
+-- TWiki:Main/SvenDowideit - %DATE%
+
+<!--
+
+      * Set CSS1 = http://www.thestylecontest.com/styles/styles_new/583minimal/583minimal.css
+      * Set CSS2 = http://www.thestylecontest.com/styles/styles_new/582unsleepable/582unsleepable.css
+      * Set CSS3 = http://www.thestylecontest.com/styles/styles_new/581cutline/581cutline.css
+      * Set CSS4 = http://www.thestylecontest.com/styles/styles_new/5802813/5802813.css
+      * Set CSS5 = http://www.thestylecontest.com/styles/styles_new/299totally/299totally.css
+      * Set CSS6 = http://www.thestylecontest.com/styles/styles_new/297note_taking/297note_taking.css
+      * Set CSS7 = http://www.thestylecontest.com/styles/styles_new/295summer_love/295summer_love.css
+      * Set CSS8 = http://www.thestylecontest.com/styles/styles_new/294scarf/294scarf.css
+      * Set CSS9 = http://www.thestylecontest.com/styles/styles_new/293the_bahamas/293the_bahamas.css
+      * Set CSS10 = http://www.thestylecontest.com/styles/styles_new/291cotton_candy_messenger/291cotton_candy_messenger.css
+      * Set CSS11 = http://www.thestylecontest.com/styles/styles_new/290makeup/290makeup.css
+      * Set CSS12 = http://www.thestylecontest.com/styles/styles_new/289my_news/289my_news.css
+      * Set CSS13 = http://www.thestylecontest.com/styles/styles_new/288exhibit/288exhibit.css
+      * Set CSS14 = http://www.thestylecontest.com/styles/styles_new/287splattered_paint/287splattered_paint.css
+      * Set CSS15 = http://www.thestylecontest.com/styles/styles_new/286pink_blooms/286pink_blooms.css
+      * Set CSS16 = http://www.thestylecontest.com/styles/styles_new/285mood_rings/285mood_rings.css
+      * Set CSS17 = http://www.thestylecontest.com/styles/styles_new/284roboto/284roboto.css
+      * Set CSS18 = http://www.thestylecontest.com/styles/styles_new/283modernist_alt/283modernist_alt.css
+      * Set CSS19 = http://www.thestylecontest.com/styles/styles_new/282modernist_citron/282modernist_citron.css
+      * Set CSS20 = http://www.thestylecontest.com/styles/styles_new/281modernist_lounge/281modernist_lounge.css
+      * Set CSS21 = http://www.thestylecontest.com/styles/styles_new/280frankenblog/280frankenblog.css
+      * Set CSS22 = http://www.thestylecontest.com/styles/styles_new/279threed/279threed.css
+      * Set CSS23 = http://www.thestylecontest.com/styles/styles_new/278the_sun/278the_sun.css
+      * Set CSS24 = http://www.thestylecontest.com/styles/styles_new/276unite_antiwar/276unite_antiwar.css
+      * Set CSS25 = http://www.thestylecontest.com/styles/styles_new/275pages/275pages.css
+      * Set CSS26 = http://www.thestylecontest.com/styles/styles_new/274skyline/274skyline.css
+      * Set CSS27 = http://www.thestylecontest.com/styles/styles_new/273generation/273generation.css
+      * Set CSS28 = http://www.thestylecontest.com/styles/styles_new/200iconic/200iconic.css
+      * Set CSS29 = http://www.thestylecontest.com/styles/styles_new/270cartoon/270cartoon.css
+      * Set CSS30 = http://www.thestylecontest.com/styles/styles_new/268parchment/268parchment.css
+      * Set CSS31 = http://www.thestylecontest.com/styles/styles_new/267mango/267mango.css
+      * Set CSS32 = http://www.thestylecontest.com/styles/styles_new/246digital_violet/246digital_violet.css
+      * Set CSS33 = http://www.thestylecontest.com/styles/styles_new/245swimmingly/245swimmingly.css
+      * Set CSS34 = http://www.thestylecontest.com/styles/styles_new/243zen_and_the_art_of_movable_type/243zen_and_the_art_of_movable_type.css
+      * Set CSS35 = http://www.thestylecontest.com/styles/styles_new/242tv_signal/242tv_signal.css
+      * Set CSS36 = http://www.thestylecontest.com/styles/styles_new/241pro_writer/241pro_writer.css
+      * Set CSS37 = http://www.thestylecontest.com/styles/styles_new/240nibbaana/240nibbaana.css
+      * Set CSS38 = http://www.thestylecontest.com/styles/styles_new/239make_my_way/239make_my_way.css
+      * Set CSS39 = http://www.thestylecontest.com/styles/styles_new/238fashion_stylish_style_contest/238fashion_stylish_style_contest.css
+      * Set CSS40 = http://www.thestylecontest.com/styles/styles_new/237retrokottke/237retrokottke.css
+      * Set CSS41 = http://www.thestylecontest.com/styles/styles_new/236soleil/236soleil.css
+      * Set CSS42 = http://www.thestylecontest.com/styles/styles_new/235mawar/235mawar.css
+      * Set CSS43 = http://www.thestylecontest.com/styles/styles_new/234watch_tv/234watch_tv.css
+      * Set CSS44 = http://www.thestylecontest.com/styles/styles_new/233live_green_go_yellow/233live_green_go_yellow.css
+      * Set CSS45 = http://www.thestylecontest.com/styles/styles_new/232my_personal_spectrum/232my_personal_spectrum.css
+      * Set CSS46 = http://www.thestylecontest.com/styles/styles_new/231freshly_baked_bread/231freshly_baked_bread.css
+      * Set CSS47 = http://www.thestylecontest.com/styles/styles_new/230orange_keys/230orange_keys.css
+      * Set CSS48 = http://www.thestylecontest.com/styles/styles_new/228old_notes/228old_notes.css
+      * Set CSS49 = http://www.thestylecontest.com/styles/styles_new/227popcorn/227popcorn.css
+      * Set CSS50 = http://www.thestylecontest.com/styles/styles_new/225star_crash/225star_crash.css
+      * Set CSS51 = http://www.thestylecontest.com/styles/styles_new/224vacationland/224vacationland.css
+      * Set CSS52 = http://www.thestylecontest.com/styles/styles_new/223the_blog_frog/223the_blog_frog.css
+      * Set CSS53 = http://www.thestylecontest.com/styles/styles_new/222summer/222summer.css
+      * Set CSS54 = http://www.thestylecontest.com/styles/styles_new/221chameleon/221chameleon.css
+      * Set CSS55 = http://www.thestylecontest.com/styles/styles_new/220balloon/220balloon.css
+      * Set CSS56 = http://www.thestylecontest.com/styles/styles_new/219fleur/219fleur.css
+      * Set CSS57 = http://www.thestylecontest.com/styles/styles_new/218miniml/218miniml.css
+      * Set CSS58 = http://www.thestylecontest.com/styles/styles_new/217black_and_bright/217black_and_bright.css
+      * Set CSS59 = http://www.thestylecontest.com/styles/styles_new/216the_literary_life/216the_literary_life.css
+      * Set CSS60 = http://www.thestylecontest.com/styles/styles_new/215cookies_n_cream/215cookies_n_cream.css
+      * Set CSS61 = http://www.thestylecontest.com/styles/styles_new/214palette/214palette.css
+      * Set CSS62 = http://www.thestylecontest.com/styles/styles_new/213rudimentary/213rudimentary.css
+      * Set CSS63 = http://www.thestylecontest.com/styles/styles_new/212sideways/212sideways.css
+      * Set CSS64 = http://www.thestylecontest.com/styles/styles_new/209nonong/209nonong.css
+      * Set CSS65 = http://www.thestylecontest.com/styles/styles_new/208gothic/208gothic.css
+      * Set CSS66 = http://www.thestylecontest.com/styles/styles_new/206four_tone_mantis/206four_tone_mantis.css
+      * Set CSS67 = http://www.thestylecontest.com/styles/styles_new/205pride/205pride.css
+      * Set CSS68 = http://www.thestylecontest.com/styles/styles_new/204oriental_dream/204oriental_dream.css
+      * Set CSS69 = http://www.thestylecontest.com/styles/styles_new/199dark_style/199dark_style.css
+      * Set CSS70 = http://www.thestylecontest.com/styles/styles_new/198going_dotty/198going_dotty.css
+      * Set CSS71 = http://www.thestylecontest.com/styles/styles_new/197the_late_show/197the_late_show.css
+      * Set CSS72 = http://www.thestylecontest.com/styles/styles_new/196feminism/196feminism.css
+      * Set CSS73 = http://www.thestylecontest.com/styles/styles_new/195magic_paper/195magic_paper.css
+      * Set CSS74 = http://www.thestylecontest.com/styles/styles_new/193tune_it_up/193tune_it_up.css
+      * Set CSS75 = http://www.thestylecontest.com/styles/styles_new/191sunflower_valley/191sunflower_valley.css
+      * Set CSS76 = http://www.thestylecontest.com/styles/styles_new/184the_sky_conquest/184the_sky_conquest.css
+      * Set CSS77 = http://www.thestylecontest.com/styles/styles_new/190revolutionary_type/190revolutionary_type.css
+      * Set CSS78 = http://www.thestylecontest.com/styles/styles_new/189foggy_forest/189foggy_forest.css
+      * Set CSS79 = http://www.thestylecontest.com/styles/styles_new/188pink_construction/188pink_construction.css
+      * Set CSS80 = http://www.thestylecontest.com/styles/styles_new/185the_american_flag/185the_american_flag.css
+      * Set CSS81 = http://www.thestylecontest.com/styles/styles_new/183mrbrown/183mrbrown.css
+      * Set CSS82 = http://www.thestylecontest.com/styles/styles_new/181quoth_the_raven/181quoth_the_raven.css
+      * Set CSS83 = http://www.thestylecontest.com/styles/styles_new/180raw/180raw.css
+      * Set CSS84 = http://www.thestylecontest.com/styles/styles_new/179pinc/179pinc.css
+      * Set CSS85 = http://www.thestylecontest.com/styles/styles_new/163shlyapa/163shlyapa.css
+      * Set CSS86 = http://www.thestylecontest.com/styles/styles_new/178bulletin_board/178bulletin_board.css
+      * Set CSS87 = http://www.thestylecontest.com/styles/styles_new/177compute/177compute.css
+      * Set CSS88 = http://www.thestylecontest.com/styles/styles_new/176tropical_dream/176tropical_dream.css
+      * Set CSS89 = http://www.thestylecontest.com/styles/styles_new/174into_the_fields/174into_the_fields.css
+      * Set CSS90 = http://www.thestylecontest.com/styles/styles_new/173blue_screen/173blue_screen.css
+      * Set CSS91 = http://www.thestylecontest.com/styles/styles_new/172square_me_over/172square_me_over.css
+      * Set CSS92 = http://www.thestylecontest.com/styles/styles_new/171chiane/171chiane.css
+      * Set CSS93 = http://www.thestylecontest.com/styles/styles_new/170midnight_sun/170midnight_sun.css
+      * Set CSS94 = http://www.thestylecontest.com/styles/styles_new/169the_road_to_october/169the_road_to_october.css
+      * Set CSS95 = http://www.thestylecontest.com/styles/styles_new/167coming_home/167coming_home.css
+      * Set CSS96 = http://www.thestylecontest.com/styles/styles_new/166circled/166circled.css
+      * Set CSS97 = http://www.thestylecontest.com/styles/styles_new/165that_yard_scene/165that_yard_scene.css
+      * Set CSS98 = http://www.thestylecontest.com/styles/styles_new/164pink_glow/164pink_glow.css
+      * Set CSS99 = http://www.thestylecontest.com/styles/styles_new/162blue_bell/162blue_bell.css
+      * Set CSS100 = http://www.thestylecontest.com/styles/styles_new/161geo/161geo.css
+      * Set CSS101 = http://www.thestylecontest.com/styles/styles_new/160night_skies/160night_skies.css
+      * Set CSS102 = http://www.thestylecontest.com/styles/styles_new/159relaxation_subvert/159relaxation_subvert.css
+      * Set CSS103 = http://www.thestylecontest.com/styles/styles_new/158sunflower_delight/158sunflower_delight.css
+      * Set CSS104 = http://www.thestylecontest.com/styles/styles_new/157cleanstyle_black_and_white/157cleanstyle_black_and_white.css
+      * Set CSS105 = http://www.thestylecontest.com/styles/styles_new/155red_curve/155red_curve.css
+      * Set CSS106 = http://www.thestylecontest.com/styles/styles_new/153cleanstyle_blue_and_yellow/153cleanstyle_blue_and_yellow.css
+      * Set CSS107 = http://www.thestylecontest.com/styles/styles_new/152fractal_dreams/152fractal_dreams.css
+      * Set CSS108 = http://www.thestylecontest.com/styles/styles_new/151heart_way/151heart_way.css
+      * Set CSS109 = http://www.thestylecontest.com/styles/styles_new/149news_paper_classic/149news_paper_classic.css
+      * Set CSS110 = http://www.thestylecontest.com/styles/styles_new/148clean_cut/148clean_cut.css
+      * Set CSS111 = http://www.thestylecontest.com/styles/styles_new/147the_cutting_room/147the_cutting_room.css
+      * Set CSS112 = http://www.thestylecontest.com/styles/styles_new/146comic_book/146comic_book.css
+      * Set CSS113 = http://www.thestylecontest.com/styles/styles_new/145pretty_in_pink/145pretty_in_pink.css
+      * Set CSS114 = http://www.thestylecontest.com/styles/styles_new/143rawk/143rawk.css
+      * Set CSS115 = http://www.thestylecontest.com/styles/styles_new/142cool_calm_collected/142cool_calm_collected.css
+      * Set CSS116 = http://www.thestylecontest.com/styles/styles_new/139dark_hash/139dark_hash.css
+      * Set CSS117 = http://www.thestylecontest.com/styles/styles_new/138the_escher_effect/138the_escher_effect.css
+      * Set CSS118 = http://www.thestylecontest.com/styles/styles_new/137ocean_voyage/137ocean_voyage.css
+      * Set CSS119 = http://www.thestylecontest.com/styles/styles_new/135bicycles/135bicycles.css
+      * Set CSS120 = http://www.thestylecontest.com/styles/styles_new/134shadow_dancers/134shadow_dancers.css
+      * Set CSS121 = http://www.thestylecontest.com/styles/styles_new/133relaxation_summer/133relaxation_summer.css
+      * Set CSS122 = http://www.thestylecontest.com/styles/styles_new/129top_secret/129top_secret.css
+      * Set CSS123 = http://www.thestylecontest.com/styles/styles_new/128scrapbook_blue/128scrapbook_blue.css
+      * Set CSS124 = http://www.thestylecontest.com/styles/styles_new/127newsline_miniblue/127newsline_miniblue.css
+      * Set CSS125 = http://www.thestylecontest.com/styles/styles_new/126utopia/126utopia.css
+      * Set CSS126 = http://www.thestylecontest.com/styles/styles_new/125newsline/125newsline.css
+      * Set CSS127 = http://www.thestylecontest.com/styles/styles_new/124political_statement/124political_statement.css
+      * Set CSS128 = http://www.thestylecontest.com/styles/styles_new/123roses/123roses.css
+      * Set CSS129 = http://www.thestylecontest.com/styles/styles_new/122seeing_stars/122seeing_stars.css
+      * Set CSS130 = http://www.thestylecontest.com/styles/styles_new/121painterly/121painterly.css
+      * Set CSS131 = http://www.thestylecontest.com/styles/styles_new/120hot_springs/120hot_springs.css
+      * Set CSS132 = http://www.thestylecontest.com/styles/styles_new/117imagenation/117imagenation.css
+      * Set CSS133 = http://www.thestylecontest.com/styles/styles_new/116web_2oz_ruby_slippers/116web_2oz_ruby_slippers.css
+      * Set CSS134 = http://www.thestylecontest.com/styles/styles_new/115toe_of_frog/115toe_of_frog.css
+      * Set CSS135 = http://www.thestylecontest.com/styles/styles_new/114web_2oz_emerald_city/114web_2oz_emerald_city.css
+      * Set CSS136 = http://www.thestylecontest.com/styles/styles_new/112binary_blue/112binary_blue.css
+      * Set CSS137 = http://www.thestylecontest.com/styles/styles_new/111espresso_midnight/111espresso_midnight.css
+      * Set CSS138 = http://www.thestylecontest.com/styles/styles_new/100black_and_white/100black_and_white.css
+      * Set CSS139 = http://www.thestylecontest.com/styles/styles_new/108kinda_canoe/108kinda_canoe.css
+      * Set CSS140 = http://www.thestylecontest.com/styles/styles_new/109bamboo_dream/109bamboo_dream.css
+      * Set CSS141 = http://www.thestylecontest.com/styles/styles_new/107aspartame/107aspartame.css
+      * Set CSS142 = http://www.thestylecontest.com/styles/styles_new/105garden_state/105garden_state.css
+      * Set CSS143 = http://www.thestylecontest.com/styles/styles_new/104nautica/104nautica.css
+      * Set CSS144 = http://www.thestylecontest.com/styles/styles_new/103trail_mix/103trail_mix.css
+      * Set CSS145 = http://www.thestylecontest.com/styles/styles_new/101the_great_outdoors/101the_great_outdoors.css
+      * Set CSS146 = http://www.thestylecontest.com/styles/styles_new/99childs_play/99childs_play.css
+      * Set CSS147 = http://www.thestylecontest.com/styles/styles_new/92relaxation/92relaxation.css
+      * Set CSS148 = http://www.thestylecontest.com/styles/styles_new/86kubrick/86kubrick.css
+      * Set CSS149 = http://www.thestylecontest.com/styles/styles_new/82kiss/82kiss.css
+      * Set CSS150 = http://www.sixapart.com/movabletype/styles/vicksburg_variations/theme-vicksburg_desert/theme-vicksburg_desert.css
+      * Set CSS151 = http://www.sixapart.com/movabletype/styles/vicksburg_variations/theme-vicksburg_khaki/theme-vicksburg_khaki.css
+      * Set CSS152 = http://www.sixapart.com/movabletype/styles/vicksburg_variations/theme-vicksburg_violet/theme-vicksburg_violet.css
+      * Set CSS153 = http://www.sixapart.com/movabletype/styles/pale_palettes/theme-subtle/theme-subtle.css
+      * Set CSS154 = http://www.sixapart.com/movabletype/styles/bold_palettes/theme-forest_green/theme-forest_green.css
+      * Set CSS155 = http://www.sixapart.com/movabletype/styles/bold_palettes/theme-sunburned/theme-sunburned.css
+      * Set CSS156 = http://www.sixapart.com/movabletype/styles/pale_palettes/theme-city_blend/theme-city_blend.css
+      * Set CSS157 = http://www.sixapart.com/movabletype/styles/vicksburg_variations/theme-vicksburg_red/theme-vicksburg_red.css
+      * Set CSS158 = http://www.sixapart.com/movabletype/styles/cool_colors/theme-powell_street/theme-powell_street.css
+      * Set CSS159 = http://www.sixapart.com/movabletype/styles/special_interest/theme-baby/theme-baby.css
+      * Set CSS160 = http://www.sixapart.com/movabletype/styles/pale_palettes/theme-tickle/theme-tickle.css
+      * Set CSS161 = http://www.sixapart.com/movabletype/styles/classic/theme-april_showers/theme-april_showers.css
+      * Set CSS162 = http://www.sixapart.com/movabletype/styles/bold_palettes/theme-purple_crush/theme-purple_crush.css
+      * Set CSS163 = http://www.sixapart.com/movabletype/styles/cool_colors/theme-porpoise/theme-porpoise.css
+      * Set CSS164 = http://www.sixapart.com/movabletype/styles/special_interest/theme-knitting/theme-knitting.css
+      * Set CSS165 = http://www.sixapart.com/movabletype/styles/special_interest/theme-travel/theme-travel.css
+      * Set CSS166 = http://www.sixapart.com/movabletype/styles/special_interest/theme-wedding/theme-wedding.css
+      * Set CSS167 = http://www.sixapart.com/movabletype/styles/cool_colors/theme-bryant/theme-bryant.css
+      * Set CSS168 = http://www.sixapart.com/movabletype/styles/vicksburg_variations/theme-vicksburg_rose/theme-vicksburg_rose.css
+      * Set CSS169 = http://www.sixapart.com/movabletype/styles/vicksburg_variations/theme-vicksburg_olive/theme-vicksburg_olive.css
+      * Set CSS170 = http://www.sixapart.com/movabletype/styles/vicksburg_variations/theme-vicksburg_teal/theme-vicksburg_teal.css
+      * Set CSS171 = http://www.sixapart.com/movabletype/styles/bold_palettes/theme-beckett/theme-beckett.css
+      * Set CSS172 = http://www.sixapart.com/movabletype/styles/classic/theme-earth/theme-earth.css
+      * Set CSS173 = http://www.sixapart.com/movabletype/styles/classic/theme-green_grass/theme-green_grass.css
+      * Set CSS174 = http://www.sixapart.com/movabletype/styles/special_interest/theme-stitch/theme-stitch.css
+      * Set CSS175 = http://www.sixapart.com/movabletype/styles/classic/theme-minimalist/theme-minimalist.css
+      * Set CSS176 = http://www.sixapart.com/movabletype/styles/bold_palettes/theme-masala/theme-masala.css
+      * Set CSS177 = http://www.sixapart.com/movabletype/styles/classic/theme-classy/theme-classy.css
+      * Set CSS178 = http://www.sixapart.com/movabletype/styles/cool_colors/theme-blue_crush/theme-blue_crush.css
+      * Set CSS179 = http://www.sixapart.com/movabletype/styles/vicksburg_variations/theme-vicksburg/theme-vicksburg.css
+      * Set CSS180 = http://www.sixapart.com/movabletype/styles/cool_colors/theme-stevenson/theme-stevenson.css
+      * Set CSS181 = http://www.sixapart.com/movabletype/styles/bold_palettes/theme-folio/theme-folio.css
+      * Set CSS182 = http://www.sixapart.com/movabletype/styles/classic/theme-bonjour_chatette/theme-bonjour_chatette.css
+
+
+-->
+
+
+%META:FORM{name="SkinPackage"}%
+%META:FIELD{name="TopicClassification" attributes="" title="TopicClassification" value="IncompletePackage"}%
+%META:FIELD{name="TestedOnTWiki" attributes="" title="TestedOnTWiki" value="4.1"}%
+%META:FIELD{name="TestedOnOS" attributes="" title="TestedOnOS" value="AnyOS"}%
+%META:FIELD{name="ShouldRunOnOS" attributes="" title="ShouldRunOnOS" value="AnyOS"}%
+%META:FIELD{name="InstalledOnTWikiOrg" attributes="" title="InstalledOnTWikiOrg" value="No"}%
+%META:FIELD{name="DemoUrl" attributes="" title="DemoUrl" value="http://home.org.au"}%
+%META:FIELD{name="DevelopedInSVN" attributes="" title="DevelopedInSVN" value="No"}%
+%META:FIELD{name="ModificationPolicy" attributes="" title="ModificationPolicy" value="ContactAuthorFirst"}%
+%META:FIELD{name="RelatedTopics" attributes="" title="RelatedTopics" value=""}%
+%META:FILEATTACHMENT{name="skindemo.js" attachment="skindemo.js" attr="H" comment="" date="1174054380" path="skindemo.js" user="SvenDowideit" version="1"}%
+%META:FILEATTACHMENT{name="wikiringlogo20x20.png" attachment="wikiringlogo20x20.png" attr="H" comment="" date="1174054380" path="wikiringlogo20x20.png" user="SvenDowideit" version="1"}%
+%META:FILEATTACHMENT{name="screenshot.gif" attachment="screenshot.gif" attr="H" comment="" date="1174054380" path="screenshot.gif" user="SvenDowideit" version="1"}%
+%META:FILEATTACHMENT{name="fullscreen.gif" attachment="fullscreen.gif" attr="H" comment="" date="1174054380" path="fullscreen.gif" user="SvenDowideit" version="1"}%
+
+%META:FILEATTACHMENT{name="iconic.gif" attachment="iconic.gif" attr="H" comment="" date="1174054380" path="iconic.gif" user="SvenDowideit" version="1"}%
+%META:FILEATTACHMENT{name="iconic_preview.gif" attachment="iconic_preview.gif" attr="H" comment="" date="1174054380" path="iconic_preview.gif" user="SvenDowideit" version="1"}%
+%META:FILEATTACHMENT{name="preview_splattered_edit.gif" attachment="preview_splattered_edit.gif" attr="H" comment="" date="1174054380" path="preview_splattered_edit.gif" user="SvenDowideit" version="1"}%
+%META:FILEATTACHMENT{name="splattered_edit.gif" attachment="splattered_edit.gif" attr="H" comment="" date="1174054380" path="splattered_edit.gif" user="SvenDowideit" version="1"}%
+
