@@ -758,7 +758,7 @@ sub doEnableEdit {
 
     TWiki::Func::writeDebug( "- EditTablePlugin::doEnableEdit( $theWeb, $theTopic )" ) if $TWiki::Plugins::EditTablePlugin::debug;
 
-    my $wikiUserName = TWiki::Func::getWikiUserName();
+    my $wikiUserName = TWiki::Func::getWikiName();
     if( ! TWiki::Func::checkAccessPermission( 'change', $wikiUserName, undef, $theTopic, $theWeb ) ) {
         # user has no permission to change the topic
         throw TWiki::OopsException(
