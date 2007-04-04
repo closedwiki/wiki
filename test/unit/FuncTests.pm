@@ -552,5 +552,28 @@ sub test_isTrue {
 
 }
 
+sub test_expandStandardEscapes {
+    my $this = shift;
+
+    my $input = <<'TEST';
+$n embed$nembed$n()embed
+$nop embed$nopembed$nop()embed
+$quot embed$quotembed$quot()embed
+$percnt embed$percntembed$percnt()embed
+$dollar embed$dollarembed$dollar()embed
+TEST
+    my $expected = <<'TEST';
+
+ embed$nembed
+embed
+ embedembedembed
+" embed"embed"embed
+% embed%embed%embed
+$ embed$embed$embed
+TEST
+    my $output = TWiki::Func::expandStandardEscapes($input);
+    $this->assert_str_equals($expected, $output);
+}
+
 1;
 
