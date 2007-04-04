@@ -19,6 +19,9 @@
 # =========================
 package TWiki::Plugins::TreePlugin;
 
+use strict;
+use warnings;
+
 use TWiki::Func;
 
 use TWiki::Plugins::TreePlugin::TWikiNode;
@@ -31,10 +34,10 @@ use TWiki::Plugins::TreePlugin::ImgNodeFormatter;
 # =========================
 use vars qw(
   $web $topic $user $installWeb $VERSION $debug $INTREE
-  %FormatMap $RootLabel
+  %FormatMap $RootLabel $AGdebugmsg
 );
 
-$VERSION = '0.7.1';
+$VERSION = '0.8';
 
 $RootLabel =
   "_RootLabel_";    # what we use to label the root of a tree if not a topic
@@ -62,6 +65,9 @@ sub initPlugin {
     if ( !$cgi ) {
         return 0;
     }
+    
+    TWiki::Func::registerTagHandler( 'TREEVIEW', \&HandleTreeTag );
+    TWiki::Func::registerTagHandler( 'TREE', \&HandleTreeTag );
 
     # Plugin correctly initialized
     &TWiki::Func::writeDebug(
@@ -70,58 +76,9 @@ sub initPlugin {
     return 1;
 }
 
-# =========================
-sub commonTagsHandler {
-### my ( $text, $topic, $web ) = @_;   # do not uncomment, use $_[0], $_[1]... instead
-
-#&TWiki::Func::writeDebug( "- TreePlugin::commonTagsHandler( $_[2].$_[1] )" ) if $debug;
-
-    #$_[0] =~ s/%CREATECHILD%/&handleCreateChildInput(0, $_[2])/geo;
-    #$_[0] =~ s/%CREATECHILD{(.*?)}%/&handleCreateChildInput($1, $_[2])/geo;
-    $_[0] =~ s/%TREEVIEW%/&handleTreeView($_[1], $_[2], "")/geo;
-    $_[0] =~ s/%TREEVIEW{(.*?)}%/&handleTreeView($_[1], $_[2], $1)/geo;
-
-}
-
-# given attribute and formatter
-# returns \n-seperated list of topics,
-# each topic line is composed of
-#        topicname|modtime|author|summary (if applicable)
-
-sub _getSearchString {
-    my ( $attrWeb, $attributes, $formatter ) = @_;
-
-    my $attrForm = TWiki::Func::extractNameValuePair( $attributes, "form" )
-      || "";
-
-    my $searchVal   = ".*";
-    my $searchScope = "topic";
-
-    #	not functioning
-    #    if ($attrForm) {
-    #    	$searchVal = "%META:FORM\{.*name=\\\"$attrForm\\\"\}%";
-    #    	$searchScope = "text";
-    #    }
-
-    my $searchWeb = ($attrWeb) ? $attrWeb : "all";
-    my $searchTmpl = "\$topic|%TIME%|%AUTHOR%";
-
-    # optimization: remember not to save heavy memory values
-    if (   $formatter->data("format")
-        && $formatter->data("format") =~ m/\$(summary|text)/ )
-    {
-        $formatter->data( "fullSubs", 1 );
-        $searchTmpl .= "|\$summary";
-    }
-
-    #	ok. make the topic list and return it  (use this routine for now)
-    #   hopefully there'll be an optimized one later
-
-    return TWiki::Func::expandCommonVariables(
-"%SEARCH{search=\"$searchVal\" web=\"$searchWeb\" format=\"$searchTmpl\" scope=\"$searchScope\" regex=\"on\" nosearch=\"on\" nototal=\"on\" noempty=\"on\"}%"
-    );
-
-}
+=pod
+Tag handler for TREE and TREEVIEW
+=cut 
 
 # bugs re recursion:
 #	1) doesn't remember webs so: recursion across webs is problematic
@@ -130,26 +87,24 @@ sub _getSearchString {
 
 $AGdebugmsg = "<br \/>AG debug message<br \/>";
 
-# bugs re recursion:
-#	1) doesn't remember webs so: recursion across webs is problematic
-#	2) if two topics with identical names in different webs AND
-#		both have a TREEVIEW tag -> the second will be excluded
-
-sub handleTreeView {
-    my ( $topic, $web, $attributes ) = @_;
+sub HandleTreeTag {
+    my($session, $params, $topic, $web) = @_;    
 
     my $cgi   = &TWiki::Func::getCgiQuery();
     my $plist = $cgi->query_string();
     $plist .= "\&" if $plist;
-    $CurrUrl = $cgi->url . $cgi->path_info() . "?" . $plist;
+    my $CurrUrl = $cgi->url . $cgi->path_info() . "?" . $plist;
 
     # $CurrUrl =~ s/\&/\&amp;/go;
 
-    my $attrWeb = TWiki::Func::extractNameValuePair( $attributes, "web" )
+    my $attrWeb = $params->{'web'}
       || $web
       || "";
-    my $attrTopic = TWiki::Func::extractNameValuePair( $attributes, "topic" )
+    my $attrTopic = $params->{'topic'}
       || $RootLabel;    # ie, do all web, needs to be nonempty
+
+    my $attrFormatting;
+
     cgiOverride( \$attrWeb,        "treeweb" );
     cgiOverride( \$attrTopic,      "treetopic" );
     cgiOverride( \$attrFormatting, "formatting" );
@@ -163,25 +118,28 @@ sub handleTreeView {
 
     my $attrHeader =
         "<div class=\"treePluginHeader\"> "
-      . TWiki::Func::extractNameValuePair( $attributes, "header" )
+      . $params->{'header'}
       . " </div><!--//treePluginHeader-->" || "";
     $attrHeader .= "\n" if ($attrHeader);    # to enable |-tables formatting
-    my $attrFormat = TWiki::Func::extractNameValuePair( $attributes, "format" )
+    my $attrFormat = $params->{'format'}
       || "";
     $attrFormat .= "\n" if ($attrFormat);    # to enable |-tables formatting
     
     my $attrFormatBranch =
-      TWiki::Func::extractNameValuePair( $attributes, "formatbranch" ) || "";
-    my $attrFormatting =
-      TWiki::Func::extractNameValuePair( $attributes, "formatting" ) || "";
+      $params->{'formatbranch'} || "";
+    $attrFormatting =
+      $params->{'formatting'} || "";
     my $attrStartlevel =
-      TWiki::Func::extractNameValuePair( $attributes, "startlevel" ) || -1; # -1 means not defined
+      $params->{'startlevel'} || -1; # -1 means not defined
+    #SL: If now =topic= parameter was given and =startlevel= below 1 then set =startlevel= to 1
+    #This workaround get ride of the empty root line when rendering a tree for an entire Web
+    if (($attrTopic eq $RootLabel) && ($attrStartlevel<1)) { $attrStartlevel=1; } #
     my $attrStoplevel =
-      TWiki::Func::extractNameValuePair( $attributes, "stoplevel" ) || 999;
+      $params->{'stoplevel'} || 999;
     my $doBookView =
-      TWiki::Func::extractNameValuePair( $attributes, "bookview" ) || "";
+      $params->{'bookview'} || "";
     my $attrLevelPrefix =
-      TWiki::Func::extractNameValuePair( $attributes, "levelprefix" ) || "";
+      $params->{'levelprefix'} || "";
     
     cgiOverride( \$attrFormatting, "formatting" );
 
@@ -207,7 +165,7 @@ sub handleTreeView {
     }
 
     # get search results
-    my $search = _getSearchString( $attrWeb, $attributes, $formatter );
+    my $search = _getSearchString( $attrWeb, $params, $formatter );
 
     my %nodes = ();
     my $root = _findTWikiNode( $RootLabel, \%nodes );    # make top dog node
@@ -285,6 +243,7 @@ sub handleTreeView {
       . "</div><!--//treePlugin-->";
 
 #SL: Substitute $index in the rendered tree, $index is most useful to implement menus in combination with TreeBrowserPlugin
+#SL Later: well actually TreeBrowserPlugin now supports =autotoggle= so TreeBrowserPlugin can get away without using that $index in most cases.
     if ( defined $formatter->data("format") ) {
         my $Index = 0;
         $renderedTree =~ s/\$Index/$Index++;$Index/egi;
@@ -292,6 +251,51 @@ sub handleTreeView {
 
     return $renderedTree;
 }
+
+
+# given attribute and formatter
+# returns \n-seperated list of topics,
+# each topic line is composed of
+#        topicname|modtime|author|summary (if applicable)
+
+sub _getSearchString {
+    my ( $attrWeb, $params, $formatter ) = @_;
+
+    my $attrForm = $params->{'form'}
+      || "";
+
+    my $searchVal   = ".*";
+    my $searchScope = "topic";
+
+    #	not functioning
+    #    if ($attrForm) {
+    #    	$searchVal = "%META:FORM\{.*name=\\\"$attrForm\\\"\}%";
+    #    	$searchScope = "text";
+    #    }
+
+    my $searchWeb = ($attrWeb) ? $attrWeb : "all";
+    my $searchTmpl = "\$topic|%TIME%|%AUTHOR%";
+
+    # optimization: remember not to save heavy memory values
+    if (   $formatter->data("format")
+        && $formatter->data("format") =~ m/\$(summary|text)/ )
+    {
+        $formatter->data( "fullSubs", 1 );
+        $searchTmpl .= "|\$summary";
+    }
+
+    #
+    my $excludetopic=$params->{'excludetopic'} || "";
+
+    #	ok. make the topic list and return it  (use this routine for now)
+    #   hopefully there'll be an optimized one later    
+    return TWiki::Func::expandCommonVariables(
+"%SEARCH{search=\"$searchVal\" web=\"$searchWeb\" format=\"$searchTmpl\" scope=\"$searchScope\" regex=\"on\" nosearch=\"on\" nototal=\"on\" noempty=\"on\" excludetopic=\"$excludetopic\"}%"
+    );
+
+}
+
+
 
 sub getLinkName {
     my ( $node ) = @_;
@@ -317,6 +321,7 @@ sub _findUltimateParentBreakingCycles {
     my $orignode       = shift;
     my $node           = $orignode;
     my %alreadyvisited = ();
+    my $parent;
     while ( $parent = _findParent($node) ) {
 
         # break cycles

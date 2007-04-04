@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1159730103" format="1.1" reprev="1.1" version="1.1"}%
+%META:TOPICINFO{author="StephaneLenclud" date="1175645365" format="1.1" reprev="1.8" version="1.8"}%
 ---+!! Tree Plugin
 
 Renders topics' parent-child relationships as hierarchical tree view. Useful for dynamic sitemaps and threads.
@@ -8,7 +8,8 @@ Renders topics' parent-child relationships as hierarchical tree view. Useful for
 
 ---++ Syntax Rules
 
-=%<nop>TREEVIEW{}%= displays topic children in a hierarchical tree
+=%<nop>TREEVIEW{}%= displays topic children in a hierarchical tree <br />
+=%<nop>TREE{}%= synonym of =%<nop>TREEVIEW{}%=
 
 Attributes:
    * *web* - specify web
@@ -20,6 +21,7 @@ Attributes:
       * =hlist= is a &lt;h<i>n</i>&gt;-list of section heads, see [[Sandbox.TreePluginSamples#SampleHList][sample Headlines]]
       * =coloroutline:colorlist= is an outline formatting with level values turned into colors, see [[Sandbox.TreePluginSamples#SampleNestedTables][sample Nested tables]]. Example: =formatting="coloroutline:#ffeeff,#eeffee,#ffffee,#eeeeff,#ffeeee,#eeffff"=
       * =imageoutline:mode= is a way to incorporate images into the outline format, specifically to display thread-like and folder views, see [[Sandbox.TreePluginSamples#SampleImageTrees][sample Image Trees]]. The general format is: imageoutline: _mode_ : _images_ : _imageformat_. Example: =formatting="imageoutline:thread"= or =formatting="imageoutline:thread:I.gif,white.gif,T.gif,L.gif:&lt;img src=\"$image\" border=\"0\">"=.
+   * *excludetopic* - Same meaning as TWiki.VarSEARCH =excludetopic=. Topics with excluded parent find themselves in a second tree below the first one and separated by a blank line.
    * *startlevel* - the depth of the tree to start showing nodes from. To hide the root node, supply =startlevel="1"= (root is level 0). The displayed node depths are relative to the root topic.
    * *stoplevel* - the depth of the tree to show, relative to start level 
    * *header* - header output
@@ -79,19 +81,20 @@ a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, for example, =
    * Unzip ==%TOPIC%.zip== in your ($TWIKI_ROOT) directory.
    * Alternatively,
       * Manually resolve the dependencies listed below.
-      %$DEPENDENCIES%
+      None
       
       
       
 ---++ Plugin Info
 
-| Authors: | TWiki:Main.SlavaKozlov (alpha release), TWiki:Main.StephaneLenclud (2006)  |
+| Authors: | TWiki:Main.SlavaKozlov (alpha release), TWiki:Main.StephaneLenclud (2006-2007)  |
 | Copyright&nbsp;&copy;: | Copyright (C) 2002 Slava Kozlov. All Rights Reserved. |
 | License: | [[http://www.gnu.org/copyleft/gpl.html][GPL]] |
-| Dependencies: | %$DEPENDENCIES% |
+| Dependencies: | None |
 | CPAN&nbsp;Dependencies: | none _(test package relies on Wiki:PerlUnit)_ |
 | Perl Version: | 5.0, 5.6.1, 5.8.7 |
 | Change&nbsp;History: | <!-- specify latest version first -->&nbsp; |
+| 4 Apr 2007 | 0.8 - Adding =excludetopic= parameter. Adding =%<nop>TREE%= as synonym tag. Code cleaning in =TreePlugin.pm=. Fix root issue when no =topic= specified. By TWiki:Main.StephaneLenclud | 
 | 14 Mar 2007 | 0.7.1 - Arthur Clemens: Made =startlevel= and =stoplevel= relative to the root topic. | 
 | 14 Mar 2007 | 0.7 - Arthur Clemens: =web= parameter is now actually used. Added parameter =startlevel=. | 
 | 01 Oct 2006 | 0.6 - TWiki:Main.StephaneLenclud: adding =$index= format subsitution. Useful when used in combination with TWiki:Plugins/TreeBrowserPlugin. Also attempting to restore compatibility with Cairo, but still waiting for someone to test it.  |
