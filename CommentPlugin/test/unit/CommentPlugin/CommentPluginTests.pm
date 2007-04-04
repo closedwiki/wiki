@@ -135,7 +135,7 @@ HERE
     $this->assert(scalar($dattrs =~ s/\s+method\s*=\s*\"post\"//i), $dattrs);
     $this->assert(scalar($dattrs =~ s/\s+action=\"(.*?)\"//), $dattrs);
     $this->assert_str_equals($url, $1);
-    $this->assert_str_equals('enctype="application/x-www-form-urlencoded" id="' . $type . '1"', trim($dattrs));
+    $this->assert_str_equals('enctype="multipart/form-data" id="' . $type . '1"', trim($dattrs));
 
     # no hiddens should be generated if disabled
     $this->assert(scalar($html =~ s/<input ([^>]*\bname="comment_type".*?)\/>//i),$html);
