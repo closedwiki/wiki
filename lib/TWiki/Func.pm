@@ -727,7 +727,7 @@ sub wikiToUserName {
     ASSERT($TWiki::Plugins::SESSION) if DEBUG;
     return '' unless $wiki;
     my $users = $TWiki::Plugins::SESSION->{users};
-    return $users->getLoginName($wiki);
+    return $users->findUserByWikiName($wiki)->[0];
 }
 
 =pod
