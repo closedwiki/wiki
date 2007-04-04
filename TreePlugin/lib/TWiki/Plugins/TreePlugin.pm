@@ -133,7 +133,7 @@ sub HandleTreeTag {
       $params->{'startlevel'} || -1; # -1 means not defined
     #SL: If now =topic= parameter was given and =startlevel= below 1 then set =startlevel= to 1
     #This workaround get ride of the empty root line when rendering a tree for an entire Web
-    if (($attrTopic eq $RootLabel) && ($attrStartlevel<1)) { $attrStartlevel=1; } #
+    if (($attrTopic eq $RootLabel) && ($attrStartlevel==-1)) { $attrStartlevel=1; } #
     my $attrStoplevel =
       $params->{'stoplevel'} || 999;
     my $doBookView =
