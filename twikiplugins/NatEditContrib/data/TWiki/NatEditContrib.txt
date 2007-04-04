@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1175518951" format="1.1" reprev="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="MichaelDaum" date="1175688961" format="1.1" reprev="1.1" version="1.1"}%
 ---+!! Natural Edit Contrib
 <!--
 
@@ -23,6 +23,9 @@ you are aware of wiki markup.
 
 <nop>NatEdit heavily depends on javascript. Hence browsers without
 javascript are not supported.
+
+---++ Screenshot
+<img src="%ATTACHURLPATH%/screenshot1.png" alt="screenshot1.png" />
 
 ---++ Configuration
 Add the identifier =natedit= to the =SKIN= variable in Main.TWikiPreferences or
@@ -85,3 +88,5 @@ Sponsored by [[http://www.trivadis.com][Trivadis AG]]
 |  Appraisal: | TWiki:Plugins/%TOPIC%Appraisal |
 
 -- TWiki:Main.MichaelDaum - 04 Apr 2007
+
+%META:FILEATTACHMENT{name="screenshot1.png" attachment="screenshot1.png" attr="" comment="" date="1175688869" path="screenshot1.png" size="61040" stream="screenshot1.png" user="Main.MichaelDaum" version="1"}%
