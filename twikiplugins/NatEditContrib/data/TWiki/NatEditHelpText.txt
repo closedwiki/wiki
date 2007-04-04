@@ -64,15 +64,7 @@ Help text for the NatEditContrib editor
 <table cellpadding="10">
 <tr>
 <td valign="top">
-%FORMATLIST{
-  "%ACTIVATEDPLUGINS%" 
-  separator=" " 
-  header="<ul>"
-  format="<li><a href=\"$percntSCRIPTURLPATH{\"view\"}$percnt/%TWIKIWEB%/$1\" target=\"_blank\">$1</a></li>" 
-  footer="</ul>"
-  pattern="(\w+)$" 
-  sort="on"
-}%
+%PLUGINDESCRIPTIONS%
 </td>
 </tr>
 </table>

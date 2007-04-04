@@ -1,4 +1,4 @@
-%TMPL:DEF{"edittoolbar"}%<div class="natEditToolBar">%TMPL:P{"texttools"}%%TMPL:P{"headlinetools"}% %TMPL:P{"paragraphtools"}% %TMPL:P{"objecttools"}% %TMPL:P{"edittools"}%%TMPL:P{"exittools"}%%TMPL:P{"helptools"}%</div>%TMPL:END%
+%TMPL:DEF{"edittoolbar"}%<div class="natEditToolBar">%TMPL:P{"texttools"}%%TMPL:P{"headlinetools"}% %TMPL:P{"paragraphtools"}% %TMPL:P{"objecttools"}% %TMPL:P{"edittools"}%%TMPL:P{"exittools"}%%TMPL:P{"helptools"}% %TMPL:P{"forcenewrevision"}%</div>%TMPL:END%
 
 %TMPL:DEF{"texttools"}%<span class="natEditTextTools"><!--
 --><a class="natEditBoldButton" accesskey="b" href="javascript:natEditBoldButtonAction();"><!--
@@ -31,15 +31,18 @@
 --><img src="%PUBURLPATH%/%TWIKIWEB%/NatEditContrib/button_ext.png" alt='%MAKETEXT{"External link"}%' title='%MAKETEXT{"External link"}%' /></a><!--
 --><a class="natEditIntButton" accesskey="[" href="javascript:natEditIntButtonAction()"><!--
 --><img src="%PUBURLPATH%/%TWIKIWEB%/NatEditContrib/button_int.png" alt='%MAKETEXT{"Internal link"}%' title='%MAKETEXT{"Internal link"}%' /></a><!--
---><a class="natEditImageButton" accesskey="g" href="javascript:natEditImageButtonAction()"><!--
---><img src="%PUBURLPATH%/%TWIKIWEB%/NatEditContrib/button_image.png" alt='%MAKETEXT{"Embed image"}%' title='%MAKETEXT{"Embed image"}%' /></a><!--
---><a class="natEditMathButton" accesskey="m" href="javascript:natEditMathButtonAction()"><!--
---><img src="%PUBURLPATH%/%TWIKIWEB%/NatEditContrib/button_formula.png" alt='%MAKETEXT{"Mathematical formula (<nop>LaTeX)"}%' title='%MAKETEXT{"Mathematical formula (<nop>LaTeX)"}%' /></a><!--
+-->%TMPL:P{"imagebutton"}%<!--
+-->%TMPL:P{context="MathModePluginEnabled" then="mathbutton"}%<!--
 --><a class="natEditVerbatimButton" accesskey="v" href="javascript:natEditVerbatimButtonAction()"><!--
 --><img src="%PUBURLPATH%/%TWIKIWEB%/NatEditContrib/button_verbatim.png" alt='%MAKETEXT{"Ignore wiki formatting"}%' title='%MAKETEXT{"Ignore wiki formatting"}%' /></a><!--
---><a class="natEditSignatureButton" accessKey="z" href="javascript:natEditSignatureButtonAction(' - %DATE%','%WIKIUSERNAME%')"><!--
+--><a class="natEditSignatureButton" accessKey="z" href="javascript:natInsertTags(%IF{"defined NATEDIT_SIGNATURE" then="%NATEDIT_SIGNATURE%" else="'=--= ','%WIKIUSERNAME%',' - %DATE%'"}%)"><!--
 --><img src="%PUBURLPATH%/%TWIKIWEB%/NatEditContrib/button_signature.png" alt='%MAKETEXT{"Your signature with timestamp"}%' title='%MAKETEXT{"Your signature with timestamp"}%' /></a><!--
 --></span>%TMPL:END%
+
+%TMPL:DEF{"mathbutton"}%<!--
+--><a class="natEditMathButton" accesskey="m" href="javascript:natEditMathButtonAction()"><!--
+--><img src="%PUBURLPATH%/%TWIKIWEB%/NatEditContrib/button_formula.png" alt='%MAKETEXT{"Mathematical formula (<nop>LaTeX)"}%' title='%MAKETEXT{"Mathematical formula (<nop>LaTeX)"}%' /></a><!--
+-->%TMPL:END%
 
 %TMPL:DEF{"headlinetools"}%<span class="natEditHeadlineTools"><!--
 --><a class="natEditH1Button" accesskey="1" href="javascript:natEditHeadlineButtonAction(1)" /><!--
@@ -72,3 +75,16 @@
 --><a class="natEditCancelButton" href="javascript:submitEditForm('save', 'cancel');" accesskey="c" title='%MAKETEXT{"Abandon your changes and exit"}%'><!--
 --><img src="%PUBURLPATH%/%TWIKIWEB%/NatEditContrib/button_cancel.png" alt='%MAKETEXT{"Cancel and abandon changes"}%' title='%MAKETEXT{"Cancel and abandon changes"}%' /></a><!--
 --></span>%TMPL:END%
+
+%TMPL:DEF{"forcenewrevision"}%<span class="natEditForceNewRevision"><!--
+--><input type="checkbox" title="Creates a new topic revision when saving" id="forcenewrevision" name="forcenewrevision" %FORCENEWREVISIONCHECKBOX% /><!--
+--><label for="forcenewrevision">%MAKETEXT{"New revision"}%</label><!--
+--></span>%TMPL:END%
+
+%TMPL:DEF{"imagebutton"}%<!--
+--><a class="natEditImageButton" accesskey="g" href="javascript:%TMPL:P{context="ImagePluginEnabled" then="image_action_plugin" else="image_action_standard"}%"><!--
+--><img src="%PUBURLPATH%/%TWIKIWEB%/NatEditContrib/button_image.png" alt='%MAKETEXT{"Embed image"}%' title='%MAKETEXT{"Embed image"}%' /></a><!--
+-->%TMPL:END%
+
+%TMPL:DEF{"image_action_plugin"}%natEditImageButtonActionImagePlugin();%TMPL:END%
+%TMPL:DEF{"image_action_standard"}%natEditImageButtonActionStandard();%TMPL:END%

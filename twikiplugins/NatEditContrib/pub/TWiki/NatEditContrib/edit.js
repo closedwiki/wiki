@@ -5,7 +5,7 @@ var txtarea;
 
 // apply tagOpen/tagClose to selection in textarea,
 // use sampleText instead of selection if there is none
-function natInsertTags(tagOpen, tagClose, sampleText) {
+function natInsertTags(tagOpen, sampleText, tagClose) {
   // IE
   if (document.selection) {
     var theSelection = document.selection.createRange().text;
@@ -69,71 +69,77 @@ function natInsertTags(tagOpen, tagClose, sampleText) {
 
 // button functions
 function natEditBoldButtonAction() {
-  natInsertTags('*', '*', 'Bold text');
+  natInsertTags('*', 'Bold text', '*');
 }
 function natEditItalicButtonAction() {
-  natInsertTags('_', '_', 'Italic text');
+  natInsertTags('_', 'Italic text', '_');
 }
 function natEditUnderlinedButtonAction() {
-  natInsertTags('<u>', '</u>', 'Underlined text');
+  natInsertTags('<u>', 'Underlined text', '</u>');
 }
 function natEditStrikeButtonAction() {
-  natInsertTags('<strike>', '</strike>', 'Strike through text');
+  natInsertTags('<strike>', 'Strike through text', '</strike>');
 } 
 function natEditSubButtonAction() {
-  natInsertTags('<sub>', '</sub>', 'Subscript text');
+  natInsertTags('<sub>', 'Subscript text', '</sub>');
 }
 function natEditSupButtonAction() {
-  natInsertTags('<sup>', '</sup>', 'Superscript text');
+  natInsertTags('<sup>', 'Superscript text', '</sup>');
 }
 
 function natEditLeftButtonAction() {
-  natInsertTags('<div style=\'text-align:left\'>\n','<\/div>\n','Align left');
+  natInsertTags('<div style=\'text-align:left\'>\n','Align left','\n<\/div>\n');
 }
 function natEditRightButtonAction() {
-  natInsertTags('<div style=\'text-align:right\'>\n','<\/div>\n','Align right');
+  natInsertTags('<div style=\'text-align:right\'>\n','Align right','\n<\/div>\n');
 }
 function natEditJustifyButtonAction() {
-  natInsertTags('<div style=\'text-align:justify\'>\n','<\/div>\n','Justify text');
+  natInsertTags('<div style=\'text-align:justify\'>\n','Justify text','\n<\/div>\n');
 }
 function natEditCenterButtonAction() {
-  natInsertTags('<center>\n','<\/center>\n','Center text');
+  natInsertTags('<center>\n','Center text','\n<\/center>\n');
 }
 function natEditExtButtonAction() {
-  natInsertTags('[[http://...][',']]','link text');
+  natInsertTags('[[http://...][','link text',']]');
 }
 function natEditIntButtonAction() {
-  natInsertTags('[[',']]','web.topic][link text');
+  natInsertTags('[[','web.topic][link text',']]');
 }
 function natEditHeadlineButtonAction(level) {
   if (level == 2) {
-    natInsertTags('\n---++ ','\n','Headline text');
+    natInsertTags('\n---++ ','Headline text','\n');
   } else if (level == 3) {
-    natInsertTags('\n---+++ ','\n','Headline text');
+    natInsertTags('\n---+++ ','Headline text','\n');
   } else if (level == 4) {
-    natInsertTags('\n---++++ ','\n','Headline text');
+    natInsertTags('\n---++++ ','Headline text','\n');
   } else if (level == 5) {
-    natInsertTags('\n---+++++ ','\n','Headline text');
+    natInsertTags('\n---+++++ ','Headline text','\n');
   } else if (level == 6) {
-    natInsertTags('\n---++++++ ','\n','Headline text');
+    natInsertTags('\n---++++++ ','Headline text','\n');
   } else {
-    natInsertTags('\n---+ ','\n','Headline text');
+    natInsertTags('\n---+ ','Headline text','\n');
   }
 }
 function natEditImageButtonActionStandard() {
-  natInsertTags('<img class=\'border alignleft\' src=\'%ATTACHURLPATH%/','\' title="Example" />','Example.jpg');
+  natInsertTags('<img class=\'border alignleft\' src=\'%ATTACHURLPATH%/','Example.jpg','\' title="Example" />');
 }
 function natEditImageButtonActionImagePlugin() {
-  natInsertTags('%IMAGE{"','|400px|Caption text|frame|center"}%','Example.jpg');
+  natInsertTags('%IMAGE{"','Example.jpg','|400px|Caption text|frame|center"}%');
 }
 function natEditMathButtonAction() {
-  natInsertTags('<latex title="Example">\n','\n</latex>','\\LaTeX'); // inline
+  natInsertTags('<latex title="Example">\n','\\sum_{x=1}^{n}\frac{1}{x}','\n</latex>'); // inline
 }
 function natEditVerbatimButtonAction() {
-  natInsertTags('<verbatim>','<\/verbatim>','Insert non-formatted text here');
+  natInsertTags('<verbatim>','Insert non-formatted text here','<\/verbatim>');
 }
-function natEditSignatureButtonAction(date, wikiUserName) {
-  natInsertTags('=--= ',date,wikiUserName);
+
+function submitEditForm(script, action) {
+  document.main.elements['action_preview'].value = '';
+  document.main.elements['action_save'].value = '';
+  document.main.elements['action_checkpoint'].value = '';
+  document.main.elements['action_cancel'].value = '';
+  document.main.elements['action_' + action].value = 'foobar';
+  document.main.submit();
 }
 
 function getWindowHeight () {
@@ -175,7 +181,7 @@ function fixHeightOfTheText() {
   return height;
 }
 
-function natSetupEdit() {
+function natEditInit() {
   if (document.main) {
     txtarea = document.main.text;
   } else {
@@ -186,8 +192,20 @@ function natSetupEdit() {
   window.onresize = fixHeightOfTheText;
   fixHeightOfTheText();
 
-
   return true;
 }
 
-addLoadEvent(natSetupEdit);
+/* override twiki default one as it generates a null value error because
+ * we don't have a signature box 
+ */
+function setEditBoxFontStyle(inFontStyle) {
+  if (inFontStyle == EDITBOX_FONTSTYLE_MONO) {
+    replaceClass(document.getElementById(EDITBOX_ID), EDITBOX_FONTSTYLE_PROPORTIONAL_STYLE, EDITBOX_FONTSTYLE_MONO_STYLE);
+    writeCookie(COOKIE_PREFIX + EDITBOX_COOKIE_FONTSTYLE_ID, inFontStyle, COOKIE_EXPIRES);
+  } else {
+    replaceClass(document.getElementById(EDITBOX_ID), EDITBOX_FONTSTYLE_MONO_STYLE, EDITBOX_FONTSTYLE_PROPORTIONAL_STYLE);
+    writeCookie(COOKIE_PREFIX + EDITBOX_COOKIE_FONTSTYLE_ID, inFontStyle, COOKIE_EXPIRES);
+  }
+}
+
+addLoadEvent(natEditInit);
