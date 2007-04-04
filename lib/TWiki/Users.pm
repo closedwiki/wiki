@@ -93,7 +93,6 @@ sub new {
     $this->{mapping} = $implUserMappingManager->new( $session );
 
     $this->{login} = {};
-
     $this->{CACHED} = 0;
 
     return $this;
@@ -107,12 +106,14 @@ Complete processing after the client's HTTP request has been responded
 to.
    1 breaking circular references to allow garbage collection in persistent
      environments
+   1 let more complex usermappers & password handlers close their connections
 
 =cut
 
 sub finish {
     my $this = shift;
 
+    $this->{mapping}->finish();
     $this->{passwords}->finish();
     $this->{login}     =  {};
 }
@@ -208,7 +209,9 @@ sub setEmails {
 
 ---++ ObjectMethod isAdmin() -> $boolean
 
-True if the user is an admin (is a member of the $TWiki::cfg{SuperAdminGroup})
+True if the user is an admin 
+   * is $TWiki::cfg{SuperAdminGroup}
+   * is a member of the $TWiki::cfg{SuperAdminGroup}
 
 =cut
 
@@ -378,8 +381,8 @@ groups.
 Use it as follows:
 <verbatim>
     my $iterator = $umm->eachUser();
-    while ($it->hasNext()) {
-        my $user = $it->next();
+    while ($iterator->hasNext()) {
+        my $user = $iterator->next();
         ...
     }
 </verbatim>
@@ -497,6 +500,22 @@ sub setPassword {
     my( $this, $user, $newPassU, $oldPassU ) = @_;
     return $this->{passwords}->setPassword(
         $this->getLoginName($user), $newPassU, $oldPassU);
+}
+
+=pod
+
+---++ ObjectMethod passwordError( ) -> $string
+
+returns a string indicating the error that happened in the password handlers
+TODO: these delayed error's should be replaced with Exceptions.
+
+returns undef if no error
+
+=cut
+
+sub passwordError {
+    my( $this ) = @_;
+    return $this->{passwords}->error();
 }
 
 =pod

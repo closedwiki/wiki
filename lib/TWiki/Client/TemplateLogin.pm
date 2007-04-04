@@ -136,8 +136,11 @@ sub login {
         $note = $twiki->{templates}->expandTemplate( 'NEW_USER_NOTE' );
     }
 
+    my $error = '';
+
     if( $loginName ) {
         my $validation = $users->checkPassword( $loginName, $loginPass );
+        $error = $users->passwordError();
 
         if( $validation ) {
             $this->userLoggedIn( $loginName );
@@ -156,9 +159,7 @@ sub login {
     # TODO: add JavaScript password encryption in the template
     # to use a template)
     $origurl ||= '';
-    $tmpl =~ s/%ORIGURL%/$origurl/g;
-    $tmpl =~ s/%BANNER%/$banner/g;
-    $tmpl =~ s/%NOTE%/$note/g;
+    $twiki->{prefs}->pushPreferenceValues('SESSION', {ORIGURL=>$origurl, BANNER=>$banner, NOTE=>$note, ERROR=>$error});
 
     $tmpl = $twiki->handleCommonTags( $tmpl, $web, $topic );
     $tmpl = $twiki->{renderer}->getRenderedVersion( $tmpl, '' );

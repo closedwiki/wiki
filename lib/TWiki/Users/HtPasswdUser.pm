@@ -238,12 +238,6 @@ sub checkPassword {
     return 0;
 }
 
-sub error {
-    my $this = shift;
-
-    return $this->{error};
-}
-
 sub getEmails {
     my( $this, $user ) = @_;
 

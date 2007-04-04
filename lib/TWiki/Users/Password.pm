@@ -47,6 +47,7 @@ sub new {
     my( $class, $session ) = @_;
 
     my $this = bless( {}, $class );
+    $this->{error} = undef;
     $this->{session} = $session;
     return $this;
 }
@@ -92,6 +93,8 @@ Returns 1 on success, undef on failure.
 =cut
 
 sub checkPassword {
+    my $this = shift;
+    $this->{error} = undef;
     return 1;
 }
 
@@ -104,6 +107,8 @@ Delete the users entry.
 =cut
 
 sub removeUser {
+    my $this = shift;
+    $this->{error} = undef;
     return 1;
 }
 
@@ -160,7 +165,9 @@ method call succeeded.
 =cut
 
 sub error {
-    return '';
+    my $this = shift;
+
+    return $this->{error};
 }
 
 =pod

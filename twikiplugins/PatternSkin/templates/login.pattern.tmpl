@@ -87,6 +87,7 @@
 %TMPL:P{"passwordstep"}%
 <div class="twikiFormStep twikiLast">
 <input class="twikiSubmit" type="submit" value='%MAKETEXT{"Logon"}%' tabindex="3" />
+%IF{"$ERROR != ''" then="%BR% _Error: %ERROR%_"}%
 </div><!-- /twikiFormStep-->
 </div><!-- /twikiFormSteps-->
 <literal>
@@ -94,7 +95,6 @@
 </literal>
 <input type="hidden" name="origurl" value="%ORIGURL%" />
 </form>
-
 %TMPL:P{"seealsonote"}%
 </div><!-- /twikiLogin-->
 </div><!-- /patternTopic-->%TMPL:END%
