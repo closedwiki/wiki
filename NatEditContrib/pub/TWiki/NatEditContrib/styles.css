@@ -1,0 +1,46 @@
+/* natedit styles */
+.natEditToolBar {
+  margin-bottom:5px;
+  padding:0px 2px;
+}
+.natPreviewToolBar img,
+.natEditToolBar img {
+  margin-right:3px;
+  border:0px;
+  position:relative;
+  top:3px;
+}
+.natPreviewToolBar a:hover,
+.natEditToolBar a:hover {
+  text-decoration:none;
+  background:white;
+}
+.natPreviewToolBar a:hover img,
+.natEditToolBar a:hover img {
+  top:2px;
+  right:1px;
+}
+.natEditEditTools,
+.natEditExitTools,
+.natEditHelpTools,
+.natEditObjectTools,
+.natEditParagraphTools,
+.natEditHeadlineTools,
+.natEditTextTools {
+  margin-right:5px;
+  white-space:nowrap;
+}
+.natEditForceNewRevision {
+  float:right;
+  display:block;
+  margin:5px 0px
+}
+.natEditForceNewRevision label,
+.natEditForceNewRevision input {
+  margin:0px 5px;
+}
+.natEditFontButtons {
+  margin:0.5em;
+  float:right;
+}
+
