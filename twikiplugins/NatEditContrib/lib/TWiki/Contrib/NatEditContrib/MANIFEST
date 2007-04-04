@@ -31,8 +31,8 @@ pub/TWiki/NatEditContrib/button_underlined.png 0644
 pub/TWiki/NatEditContrib/button_undo.png 0644
 pub/TWiki/NatEditContrib/button_verbatim.png 0644
 pub/TWiki/NatEditContrib/edit.js 0644
+pub/TWiki/NatEditContrib/styles.css 0644
 templates/edithelp.natedit.tmpl 0644
-templates/editjavascript.natedit.tmpl 0644
 templates/edit.natedit.tmpl 0644
 templates/edittoolbar.natedit.tmpl 0644
 templates/preview.natedit.tmpl 0644

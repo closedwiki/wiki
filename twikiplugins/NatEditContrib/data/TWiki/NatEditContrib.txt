@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="MichaelDaum" date="1175688961" format="1.1" reprev="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1175688961" format="1.1" reprev="1.1" version="$Rev$"}%
 ---+!! Natural Edit Contrib
 <!--
 
@@ -89,4 +89,4 @@ Sponsored by [[http://www.trivadis.com][Trivadis AG]]
 
 -- TWiki:Main.MichaelDaum - 04 Apr 2007
 
-%META:FILEATTACHMENT{name="screenshot1.png" attachment="screenshot1.png" attr="" comment="" date="1175688869" path="screenshot1.png" size="61040" stream="screenshot1.png" user="Main.MichaelDaum" version="1"}%
+%META:FILEATTACHMENT{name="screenshot1.png" attachment="screenshot1.png" attr="" comment="" date="1175688869" path="screenshot1.png" size="61040" stream="screenshot1.png" user="Main.TWikiContributor" version="1"}%
