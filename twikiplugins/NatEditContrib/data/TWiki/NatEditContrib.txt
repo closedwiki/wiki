@@ -73,7 +73,7 @@ Sponsored by [[http://www.trivadis.com][Trivadis AG]]
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Version: | %$VERSION% |
 |  Change History: | |
-|  05 Apr 2007 | added support for <nop>EditContrib |
+|  05 Apr 2007 | added support for <nop>EditContrib and =editform= |
 |  04 Apr 2007 | added css file; \
                    added monospace &lt;-&gt; propotional font toggles; \
                    made signature text customizable; \
