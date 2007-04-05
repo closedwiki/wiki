@@ -45,9 +45,16 @@ Note, TWiki-wide defaults can be set using
    <div style="border:1px dashed #22638c;padding:4px;height:200px; ">
 </verbatim>
 
+---+++ Example
+
+<verbatim>
+%LIGHTBOX{ image="img-test.jpg"  thumbnail="tmb-test.jpg" caption="This is a test"}%
+</verbatim>
+
+
 ---++ Plugin Installation Instructions
 
-__Note:__ You do not need to install anything on the browser to use this add-on. The following instructions are for the administrator who installs the add-on on the server where TWiki is running. 
+__Note:__ You do not need to install anything on the browser to use this plugin. The following instructions are for the administrator who installs the plugin on the server where TWiki is running. 
 
    * Download the ZIP file from the Plugin Home (see below)
    * Unzip ==LightboxPlugin.zip== in the root of your twiki installation %BR% Content:
@@ -56,6 +63,7 @@ __Note:__ You do not need to install anything on the browser to use this add-on.
      | ==lib/TWiki/Plugins/LightboxPlugin.pm== | plugin perl code |
      | ==pub/TWiki/LightboxPlugin/lightbox.css== | stylesheet |
      | ==pub/TWiki/LightboxPlugin/lightbox.js== | javascript |
+     | ==pub/TWiki/LightboxPlugin/blank.gif== | empty image   |
      | ==pub/TWiki/LightboxPlugin/close.gif== | close image button  |
      | ==pub/TWiki/LightboxPlugin/loading.gif== | image loading animation |
      | ==pub/TWiki/LightboxPlugin/overlay.png== | overlay image |
@@ -69,21 +77,21 @@ __Note:__ You do not need to install anything on the browser to use this add-on.
 
    * Set SHORTDESCRIPTION = TWiki hooks to the Lightbox Javascript package for better thumbnail clickthrough
 
-This TWiki extension includes v2.0 of Lightbox.
+This TWiki extension includes v1.0 of Lightbox.
 
-|  Add-on Author: | TWiki:Main.HenriAanstoot |
-|  Plugin Author: | TWiki:Main.ScottHoge |
+|  Plugin Author: | TWiki:Main.HenriAanstoot, TWiki:Main.ScottHoge |
 |  Copyright: | &copy; 2006, TWiki:Main.HenriAanstoot |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Add-on Version: | 23 Mar 2007 (%$VERSION%) |
+|  Plugin Version: | 5 Apr 2007 (%$VERSION%) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|   5 Apr 2007: | Added blank.gif to the package |
 |  23 Mar 2007: | Added Plugin code with TWiki Tags |
 |  22 Sep 2006: | Initial version |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 (TWiki 4.0) |
 |  CPAN Dependencies: | none |
 |  Other Dependencies: | none |
 |  Perl Version: | 5.005 |
-|  Add-on Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
+|  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 |  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
