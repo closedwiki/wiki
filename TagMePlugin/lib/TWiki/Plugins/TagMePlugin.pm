@@ -200,7 +200,7 @@ sub _showDefault {
     return '' unless ( TWiki::Func::topicExists( $web, $topic ) );
 
     my $query = $TWiki::Plugins::SESSION->{cgiQuery};
-    my $tagMode = $query->param( 'tagmode' );
+    my $tagMode = $query->param( 'tagmode' ) || '';
         
     my $webTopic = "$web.$topic";
     @tagInfo = _readTagInfo($webTopic) unless ( scalar(@tagInfo) );
@@ -286,7 +286,9 @@ sub _createNoJavascriptSelectBox {
 sub _createJavascriptSelectBox {
     my (@notSeen) = @_;
 
-    my $selectControl = '<span id="tagMeSelect"></span>';
+    my $random = int( rand(1000) );
+    my $selectControlId = "tagMeSelect$random";
+    my $selectControl = "<span id=\"$selectControlId\"></span>";
     my $script        = <<'EOF';
 <script type="text/javascript" language="javascript">
 //<![CDATA[
@@ -302,7 +304,7 @@ function createSelectBox(inText, inElemId) {
 }
 EOF
     $script .= 'var text="#' . join( "#", @notSeen ) . '";';
-    $script .= "\nif (text.length > 0) {createSelectBox(text, \"tagMeSelect\"); document.getElementById(\"tagmeAddNewButton\").style.display=\"inline\";}\n//]]>\n</script>";
+    $script .= "\nif (text.length > 0) {createSelectBox(text, \"$selectControlId\"); document.getElementById(\"tagmeAddNewButton\").style.display=\"inline\";}\n//]]>\n</script>";
 
     my $noscript .= '<noscript><a href="%SCRIPTURL%/viewauth%SCRIPTSUFFIX%/%BASEWEB%/%BASETOPIC%?tagmode=nojavascript">tag this topic</a></noscript>';
 
