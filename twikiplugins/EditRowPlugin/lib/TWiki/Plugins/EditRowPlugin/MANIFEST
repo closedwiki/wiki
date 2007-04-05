@@ -7,3 +7,5 @@ lib/TWiki/Plugins/EditRowPlugin/TableRow.pm 0644 Perl module
 lib/TWiki/Plugins/EditRowPlugin/TableCell.pm 0644 Perl module
 pub/TWiki/EditRowPlugin/screenshot.gif 0444 Image
 pub/TWiki/EditRowPlugin/wikiring.png 0444 Image
+pub/TWiki/EditRowPlugin/edittable.gif 0444 Image
+pub/TWiki/EditRowPlugin/quiet.gif 0444 Image

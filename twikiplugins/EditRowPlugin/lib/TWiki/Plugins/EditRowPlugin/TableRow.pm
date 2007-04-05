@@ -58,7 +58,7 @@ sub stringify {
 }
 
 sub renderForEdit {
-    my ($this, $colDefs) = @_;
+    my ($this, $colDefs, $addButtons) = @_;
 
     my @out;
 
@@ -68,92 +68,57 @@ sub renderForEdit {
         push(@out, $cell->renderForEdit($colDefs->[$col++]));
     }
 
-    my $buttons =
-      "<a name='erp_$this->{table}->{number}_$this->{number}'></a>";
-    $buttons .=
-      CGI::image_button({
-          name => 'erp_save',
-          value => $TWiki::Plugins::EditRowPlugin::NOISY_SAVE,
-          title => $TWiki::Plugins::EditRowPlugin::NOISY_SAVE,
-          src => '%PUBURLPATH%/TWiki/TWikiDocGraphics/save.gif'
-         }, '');
-    my $attrs = $this->{table}->{attrs};
-    if (TWiki::isTrue($attrs->{quietsave})) {
-        $buttons .= CGI::image_button({
-          name => 'erp_quietSave',
-          value => $TWiki::Plugins::EditRowPlugin::QUIET_SAVE,
-          title => $TWiki::Plugins::EditRowPlugin::QUIET_SAVE,
-          src => '%PUBURLPATH%/TWiki/TWikiDocGraphics/quiet.gif'
-        }, '');
+    # We always hadd the buttons column, even when it is empty. Otherwise the
+    # headers get out of alignment.
+    my $buttons = '';
+    if ($addButtons) {
+        $buttons = $this->{table}->generateEditButtons($this->{number});
     }
-    # add save button
-    if ($attrs->{changerows}) {
-        # add add row button
-        $buttons .= CGI::image_button({
-            name => 'erp_addRow',
-            value => $TWiki::Plugins::EditRowPlugin::ADD_ROW,
-            title => $TWiki::Plugins::EditRowPlugin::ADD_ROW,
-            src => '%PUBURLPATH%/TWiki/TWikiDocGraphics/plus.gif'
-        }, '');
-        if ($attrs->{changerows} eq 'on') {
-            # add delete row button
-            $buttons .= CGI::image_button({
-                name => 'erp_deleteRow',
-                value => $TWiki::Plugins::EditRowPlugin::DELETE_ROW,
-                title => $TWiki::Plugins::EditRowPlugin::DELETE_ROW,
-                src => '%PUBURLPATH%/TWiki/TWikiDocGraphics/minus.gif'
-            }, '');
-        }
-    }
-    $buttons .= CGI::image_button({
-        name => 'erp_cancelRow',
-        value => $TWiki::Plugins::EditRowPlugin::CANCEL_ROW,
-        title => $TWiki::Plugins::EditRowPlugin::CANCEL_ROW,
-        src => '%PUBURLPATH%/TWiki/TWikiDocGraphics/stop.gif',
-    }, '');
     unshift(@out, $buttons);
 
-    return '| ' . join(' | ', @out) . '|';
+    return '| ' . join(' | ', @out) . ' |';
 }
 
 sub renderForDisplay {
-    my ($this, $colDefs) = @_;
+    my ($this, $colDefs, $displayOnly) = @_;
     my @out;
     my $attrs = $this->{table}->{attrs};
     if ($this->{number} == 1 &&
           (!defined($attrs->{headerislabel}) ||
              TWiki::isTrue($attrs->{headerislabel}))) {
         @out = map { $_->{text} } @{$this->{cols}};
-        unshift(@out, '');
+        unshift(@out, '') unless $displayOnly;
     } else {
         my $col = 0;
         foreach (@{$this->{cols}}) {
             push(@out, $_->renderForDisplay($colDefs->[$col++]));
         }
-        my $id = "$this->{table}->{number}_$this->{number}";
-        my $url;
-        if ($TWiki::Plugins::VERSION < 1.11) {
-            $url = TWiki::Func::getScriptUrl(
-                $this->{table}->{web}, $this->{table}->{topic}, 'view').
-                "?erp_active_table=$this->{table}->{number}".
-                ";erp_active_row=$this->{number}#erp_$id";
-        } else {
-            $url = TWiki::Func::getScriptUrl(
-                $this->{table}->{web}, $this->{table}->{topic}, 'view',
-                erp_active_table => $this->{table}->{number},
-                erp_active_row => $this->{number},
-                '#' => "erp_$id");
+        unless ($displayOnly) {
+            my $id = "$this->{table}->{number}_$this->{number}";
+            my $url;
+            if ($TWiki::Plugins::VERSION < 1.11) {
+                $url = TWiki::Func::getScriptUrl(
+                    $this->{table}->{web}, $this->{table}->{topic}, 'view').
+                      "?erp_active_table=$this->{table}->{number}".
+                        ";erp_active_row=$this->{number}#erp_$id";
+            } else {
+                $url = TWiki::Func::getScriptUrl(
+                    $this->{table}->{web}, $this->{table}->{topic}, 'view',
+                    erp_active_table => $this->{table}->{number},
+                    erp_active_row => $this->{number},
+                    '#' => "erp_$id");
+            }
+            my $button =
+              CGI::img({
+                  -name => "erp_edit_$id",
+                  -border => 0,
+                  -src => '%PUBURLPATH%/TWiki/TWikiDocGraphics/edittopic.gif'
+                 });
+            unshift(
+                @out,
+                "<a name='erp_$this->{table}->{number}_$this->{number}'></a>".
+                  "<a href='$url'>" . $button . "</a>");
         }
-        my $button =
-          CGI::img({
-              -name => "erp_edit_$id",
-              -border => 0,
-              -src => '%PUBURLPATH%/TWiki/TWikiDocGraphics/edittopic.gif'
-             });
-        unshift(
-            @out,
-            "<a name='erp_$this->{table}->{number}_$this->{number}'></a>".
-              "<a href='$url'>" . $button . "</a>");
     }
     return '| '.join(' | ', @out). ' |';
 }

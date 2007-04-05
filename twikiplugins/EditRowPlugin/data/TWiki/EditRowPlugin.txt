@@ -9,16 +9,26 @@ One line description, required for extensions repository catalog.
 
 %TOC%
 
-Supports editing a single row in a table at a time, in-place in the table.
+A clone of !EditTablePlugin that supports editing a single row in a table
+at a time, in-place in the table.
 Multiple tables in a topic are supported, but only one table at a time
-can be edited.
+can be open for editing.
 
-Works like the !EditTablePlugin (it uses exactly the same =%EDITTABLE= tags)
-except that it only opens one row at a time. Closed rows are shown with
+Works like the !EditTablePlugin (it uses exactly the same =%EDITTABLE= tags) and
+you can use it to edit the entire table. The main purpose, though, is to support
+editing one row at a time. Closed rows are shown with
 an edit %ICON{edittopic}% button.
 
-This solves the problem with the long page rendering times required to show all
-the HTML for a full table edit on big tables.
+So why should you use this plugin instead of the !EditTablePlugin?
+   1 The plugin knows if you can modify the topic or
+     not, and only offers the editing controls if you can modify the table.
+   1 You can edit one row at a time, instead of havng to edit the entire
+     table. This solves the problem with the long page rendering times
+     required to show all the HTML for a full table edit on big tables.
+   1 The plugin doesn't use !JavaScript (except for the calendar) and
+     doesn't do anything clever with CSS, so it should work with all browsers.
+   1 The plugin is coded using a clean object-oriented architecture, which
+     means it is easily extensible.
 
 At this time most features of !EditTablePlugin are supported. Known exceptions
 are:
@@ -26,30 +36,28 @@ are:
    * the =EDITCELL= feature, which is not supported,
    * The "Initial values" feature, which is incompatible with the way this plugin adds new rows.
 
-The plugin doesn't use !JavaScript (except for the calendar) so it should
-work with all browsers.
-
-See also: !EditTablePlugin, !EditTableRowPlugin.
+See also: TWiki:Plugins.EditTablePlugin, TWiki:Plugins.EditTablerowPlugin.
 
 Another great TWiki extension from the <a style="text-decoration:none" href="http://wikiring.com"><img src="%ATTACHURLPATH%/wikiring.png" alt="" /> *WikiRing* </a> - working together to improve your wiki experience!
 
 ---++ Usage
 
 See EditTablePlugin for information on the =%EDITTABLE= tag and its
-parameters. The same tag syntax is used for this plugin. When a table row is
-edited, then a number of buttons may be shown in the row depending on the
-settings of =changerows= and =quietsave=.
-   * %ICON{save}% saves the changes in the current row
-   * %ICON{quiet}% saves without notification
-   * %ICON{plus}% adds a new row after the current row, taking for its contents whatever you entered into the current row
-   * %ICON{minus}% deletes that row
-   * %ICON{stop}% switches off the edit
-If both !EditRowPlugin and !EditTablePlugin are required, then you have to put !EditRowPlugin into ={PluginsOrder}= in [[%SCRIPTURLPATH{configure}%][configure]] before !EditTablePlugin.
+parameters. The same tag syntax is used for this plugin.
 
-The assumption is that most of the time you will want to use EditTablePlugin, and will only enable this plugin in topics where there are large tables that it can't cope with. So this plugin has to be enabled specifically by setting
-   * Set ENABLE_TABLE_ROW_EDIT = on
-in a topic or !WebPreferences. It is enabled in this topic, so if it is working then the following
-examples will be editable.
+Table rows are shown with an edit button %ICON{edittopic}% in the first column,
+and a table edit button <img src="%ATTACHURLPATH%/edittable.gif" /> after the
+table. When the table is
+edited, then a number of buttons may be shown depending on the
+settings of =changerows= and =quietsave=.
+   * %ICON{save}% saves the changes
+   * <img src="%ATTACHURLPATH%/quiet.gif" /> saves without notification
+   * %ICON{plus}% adds a new row after the current row, taking for its contents whatever you entered into the current row
+   * %ICON{minus}% deletes the row
+   * %ICON{stop}% switches off the edit
+
+If the plugin is installed and working *and you can modify this topic* then
+the following examples will be editable.
 ---+++ Example 1
 %EDITTABLE{ format="| row, -1 | text, 20, init | select, 1, one, two, three, four | radio, 3,:-),:-I,:-( | label, 20 |" changerows="on" quietsave="on" }%
 | *Nr* | *Text field* | *Drop down* | *Mood* | *Timestamp* |
@@ -94,3 +102,5 @@ examples will be editable.
 
 %META:FILEATTACHMENT{name="screenshot.gif" attr="h" comment="" version="1"}%
 %META:FILEATTACHMENT{name="wikiring.png" attr="h" comment="" version="1"}%
+%META:FILEATTACHMENT{name="edittable.gif" attr="h" comment="" version="1"}%
+%META:FILEATTACHMENT{name="quiet.gif" attr="h" comment="" version="1"}%
