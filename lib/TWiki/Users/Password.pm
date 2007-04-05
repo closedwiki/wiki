@@ -132,7 +132,7 @@ Otherwise returns 1 on success, undef on failure.
 sub setPassword {
     my $this = shift;
     $this->{error} = 'System does not support changing passwords';
-    return undef;
+    return 1;
 }
 
 =pod

@@ -270,7 +270,7 @@ sub setEmails {
 }
 
 # Searches the password DB for users who have set this email.
-sub findUserByEmail {
+sub findLoginByEmail {
     my( $this, $email ) = @_;
     my $logins = [];
     my $db = _readPasswd();

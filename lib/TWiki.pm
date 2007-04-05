@@ -1336,7 +1336,7 @@ Constructs a new TWiki object. Parameters are taken from the query object.
 =cut
 
 sub new {
-    my( $class, $loginName, $query, $initialContext ) = @_;
+    my( $class, $login, $query, $initialContext ) = @_;
 
     $query ||= new CGI( {} );
     my $this = bless( {}, $class );
@@ -1473,22 +1473,25 @@ sub new {
     # setup the cgi session, from a cookie or the url. this may return
     # the login, but even if it does, plugins will get the chance to override
     # it below.
-    my $login = $this->{remoteUser} =
-      $this->{loginManager}->loadSession($loginName);
+    $login = $this->{remoteUser} =
+      $this->{loginManager}->loadSession( $login );
+
     my $prefs = new TWiki::Prefs( $this );
     $this->{prefs} = $prefs;
 
     # Push global preferences from TWiki.TWikiPreferences
     $prefs->pushGlobalPreferences();
 
+    # For compatibility with older ways of building login managers,
+    # plugins can provide an alternate login name.
     my $plogin = $this->{plugins}->load( $TWiki::cfg{DisableAllPlugins} );
     $login = $plogin if $plogin;
+
+    # if we get here without a login id, we are a guest
     $login ||= $TWiki::cfg{DefaultUserLogin};
-    unless( $login =~ /$TWiki::cfg{LoginNameFilterIn}/) {
-        die "Illegal format for login name '$login' (does not match ".$TWiki::cfg{LoginNameFilterIn}.")";
-    }
-    # The login name is used as a canonical identifier for the user
-    $this->{user} = TWiki::Sandbox::untaintUnchecked( $login );
+
+    # Determine the canonical ID for this login
+    $this->{user} = $this->{users}->getCanonicalUserID( $login );
 
     # Static session variables that can be expanded in topics when they
     # are enclosed in % signs
@@ -1507,9 +1510,14 @@ sub new {
     # Now the rest of the preferences
     $prefs->pushGlobalPreferencesSiteSpecific();
 
-    $prefs->pushPreferences(
-        $TWiki::cfg{UsersWebName}, $this->{user},
-        'USER '.$this->{users}->getWikiName( $this->{user} ));
+    # User preferences only available if we can get to a valid wikiname,
+    # which depends on the user mapper.
+    my $wn = $this->{users}->getWikiName( $this->{user} );
+    if( $wn ) {
+        $prefs->pushPreferences(
+            $TWiki::cfg{UsersWebName}, $wn,
+            'USER ' . $wn );
+    }
 
     $prefs->pushWebPreferences( $this->{webName} );
 
@@ -1583,9 +1591,9 @@ sub writeLog {
     my $user = shift;
 
     $user ||= $this->{user};
-    $user = $this->{users}->getWikiName( $user );
+    $user = $this->{users}->getLoginName( $user );
 
-    if( $user eq $cfg{DefaultUserWikiName} ) {
+    if( $user eq $cfg{DefaultUserLogin} ) {
        my $cgiQuery = $this->{cgiQuery};
        if( $cgiQuery ) {
            my $agent = $cgiQuery->user_agent();

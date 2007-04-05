@@ -33,19 +33,19 @@ sub set_up {
                                $TWiki::cfg{DefaultUserWikiName},'');
     $this->registerUser(
         'white', 'Mr', "White", 'white@example.com');
-    $MrWhite = 'white';
+    $MrWhite = $twiki->{users}->getCanonicalUserID('white');
     $this->registerUser(
         'blue', 'Mr', "Blue", 'blue@example.com');
-    $MrBlue = 'blue';
+    $MrBlue = $twiki->{users}->getCanonicalUserID('blue');
     $this->registerUser(
         'orange', 'Mr', "Orange", 'orange@example.com');
-    $MrOrange = 'orange';
+    $MrOrange = $twiki->{users}->getCanonicalUserID('orange');
     $this->registerUser(
         'green', 'Mr', "Green", 'green@example.com');
-    $MrGreen = 'green';
+    $MrGreen = $twiki->{users}->getCanonicalUserID('green');
     $this->registerUser(
         'yellow', 'Mr', "Yellow", 'yellow@example.com');
-    $MrYellow = 'yellow';
+    $MrYellow = $twiki->{users}->getCanonicalUserID('yellow');
     $twiki->{store}->saveTopic(
         $currUser, $this->{users_web}, "ReservoirDogsGroup", <<THIS);
    * Set GROUP = MrWhite, $this->{users_web}.MrBlue

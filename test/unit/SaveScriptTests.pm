@@ -635,7 +635,7 @@ sub test_1897 {
     # make sure we have time to complete the test
     $TWiki::cfg{ReplaceIfEditedAgainWithin} = 7200;
 
-    $this->{twiki} = new TWiki();
+    $this->{twiki} = new TWiki($this->{test_user_login});
 
     my $oldmeta = new TWiki::Meta(
         $this->{twiki}, $this->{test_web}, 'MergeSave');
@@ -645,7 +645,7 @@ sub test_1897 {
 
     # First, user A saves to create rev 1
     $this->{twiki}->{store}->saveTopic(
-        $this->{test_user_login}, $this->{test_web}, 'MergeSave',
+        $this->{twiki}->{user}, $this->{test_web}, 'MergeSave',
                                 "Smelly\ncat", $oldmeta );
     my($meta, $text) = $this->{twiki}->{store}->readTopic(
         undef, $this->{test_web}, 'MergeSave');

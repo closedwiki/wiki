@@ -35,12 +35,22 @@ sub set_up {
         $this->registerUser('userb', 'User', 'B', 'user@example.com');
         $this->registerUser('userc', 'User', 'C', 'userc@example.com;userd@example.com');
 
-        $this->{twiki}->{store}->saveTopic($this->{twiki}->{user}, $this->{users_web}, 'AandBGroup',
-                  "   * Set GROUP = UserA, UserB");
-        $this->{twiki}->{store}->saveTopic($this->{twiki}->{user}, $this->{users_web}, 'AandCGroup',
-                  "   * Set GROUP = UserA, UserC");
-        $this->{twiki}->{store}->saveTopic($this->{twiki}->{user}, $this->{users_web}, 'BandCGroup',
-                  "   * Set GROUP = UserC, UserB");
+        $this->{twiki}->{store}->saveTopic(
+            $this->{twiki}->{user},
+            $this->{users_web}, 'AandBGroup',
+            "   * Set GROUP = UserA, UserB");
+        $this->{twiki}->{store}->saveTopic(
+            $this->{twiki}->{user},
+            $this->{users_web}, 'AandCGroup',
+            "   * Set GROUP = UserA, UserC");
+        $this->{twiki}->{store}->saveTopic(
+            $this->{twiki}->{user},
+            $this->{users_web}, 'BandCGroup',
+            "   * Set GROUP = UserC, UserB");
+        $this->{twiki}->{store}->saveTopic(
+            $this->{twiki}->{user},
+            $this->{users_web}, 'ScumGroup',
+            "   * Set GROUP = $TWiki::cfg{DefaultUserWikiName}");
 
     } catch TWiki::AccessControlException with {
         my $e = shift;
@@ -96,7 +106,7 @@ sub test_eachGroup {
         push(@list, $u);
     }
     my $ulist = join(',', sort @list);
-    $this->assert_str_equals('AandBGroup,AandCGroup,BandCGroup,TWikiAdminGroup', $ulist);
+    $this->assert_str_equals('AandBGroup,AandCGroup,BandCGroup,ScumGroup,TWikiAdminGroup', $ulist);
 }
 
 # SMELL: nothing tests if we are an admin!
@@ -112,47 +122,50 @@ sub test_isAnAdmin {
 
 sub test_isGroupMember {
     my $this = shift;
-    $TWiki::Plugins::SESSION->{user} = 'usera';
+    $TWiki::Plugins::SESSION->{user} =
+      $TWiki::Plugins::SESSION->{users}->getCanonicalUserID('usera');
     $this->assert(TWiki::Func::isGroupMember('AandBGroup'));
     $this->assert(TWiki::Func::isGroupMember('AandCGroup'));
     $this->assert(!TWiki::Func::isGroupMember('BandCGroup'));
-    $this->assert(TWiki::Func::isGroupMember('BandCGroup', 'userb'));
-    $this->assert(TWiki::Func::isGroupMember('BandCGroup', 'userc'));
+    $this->assert(TWiki::Func::isGroupMember('BandCGroup', 'UserB'));
+    $this->assert(TWiki::Func::isGroupMember('BandCGroup', 'UserC'));
 }
 
 sub test_eachMembership {
     my $this = shift;
 
     my @list;
-    my $it = TWiki::Func::eachMembership('usera');
+    my $it = TWiki::Func::eachMembership('UserA');
     while ($it->hasNext()) {
         my $g = $it->next();
         push(@list, $g);
     }
     $this->assert_str_equals('AandBGroup,AandCGroup', join(',', sort @list));
-    $it = TWiki::Func::eachMembership('userb');
+    $it = TWiki::Func::eachMembership('UserB');
     @list = ();
     while ($it->hasNext()) {
         my $g = $it->next();
         push(@list, $g);
     }
     $this->assert_str_equals('AandBGroup,BandCGroup', join(',', sort @list));
-    $it = TWiki::Func::eachMembership('userc');
+    $it = TWiki::Func::eachMembership('UserC');
     @list = ();
     while ($it->hasNext()) {
         my $g = $it->next();
         push(@list, $g);
     }
     $this->assert_str_equals('AandCGroup,BandCGroup', sort join(',', @list));
+}
 
-    $TWiki::Plugins::SESSION->{user} = 'usera';
-    $it = TWiki::Func::eachMembership();
-    @list = ();
+sub test_eachMembershipDefault {
+    my $this = shift;
+    my $it = TWiki::Func::eachMembership();
+    my @list = ();
     while ($it->hasNext()) {
         my $g = $it->next();
         push(@list, $g);
     }
-    $this->assert_str_equals('AandBGroup,AandCGroup', sort join(',', @list));
+    $this->assert_str_equals('ScumGroup', sort join(',', @list));
 }
 
 sub test_eachGroupMember {
@@ -163,7 +176,7 @@ sub test_eachGroupMember {
         my $g = $it->next();
         push(@list, $g);
     }
-    $this->assert_str_equals('usera,userb', sort join(',', @list));
+    $this->assert_str_equals('UserA,UserB', sort join(',', @list));
 }
 
 sub test_isGroup {

@@ -551,7 +551,7 @@ sub _getOldAttachAttr {
             $fileDate =~ s/&nbsp;/ /go;
             $fileDate = TWiki::Time::parseTime( $fileDate );
         }
-        ( $before, $fileUser,    $after ) = split( /<(?:\/)*TwkFileUser>/, $atext );
+        ( $before, $fileUser, $after ) = split( /<(?:\/)*TwkFileUser>/, $atext );
         if( ! $fileUser ) {
             $fileUser = '';
         } else {

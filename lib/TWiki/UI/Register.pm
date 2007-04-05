@@ -165,8 +165,6 @@ sub passwd_cgi {
 # TODO: registernotifybulk.tmpl 
 # TODO: make it copy the fields it wants before handing off to the RegsitrationPlugin - that way it won't matter if
 #       that deletes such keys.
-# ISSUE: TWiki::User::addUserToMapping does not replace the line if you now supply a login name when one 
-#       was not needed before.
 # TODO: write a plugin that intercepts the change of metadata on a topic and invokes functionality as described on 
 #       RegistrationAsPlugin.
 
@@ -238,17 +236,16 @@ sub bulkRegister {
 
         try {
             _validateRegistration( $session, $row, $query, $topic, 0 );
-            my ($userTopic, $uLog) =
-              _registerSingleBulkUser($session, $row, $settings );
-            if( $userTopic ) {
-                $log .= "\n---+++ ". $row->{WikiName}."\n";
-                $log .= $b.' Added to users topic '.$userTopic.":\n".
-                  join("\n".$indent,split /\r?\n/, $uLog)."\n";	
-                $registrationsMade++;
-            }
+            my $uLog = _registerSingleBulkUser($session, $row, $settings );
+            $log .= "\n---+++ ". $row->{WikiName}."\n";
+            $log .= join("\n".$indent,split /\r?\n/, $uLog)."\n";	
+            $registrationsMade++;
         } catch TWiki::OopsException with {
             my $e = shift;
             $log .= $e->stringify( $session )."\n";
+        } catch Error::Simple with {
+            my $e = shift;
+            $log .= "Failed to register user: ".$e->stringify()."\n";
         };
     }
 
@@ -268,16 +265,7 @@ sub bulkRegister {
     $session->redirect($session->getScriptUrl( 1, 'view', $web, $logTopic ));
 }
 
-#    Process a single user, parameters passed as a hash
-#
-#    * receives row and a fieldNamesOrderedList
-#    * sets LoginName to be WikiName if not present
-#    * rearranges the row to comply with the ordered list
-#    * if using htpasswd, calls _addUserToPasswordSystem()
-#    * makes createUserTopic
-#    * calls addUserToMapping()
-# SMELL could be made much more efficient if needed, as calls to addUserToMapping()
-# are quite expensive when doing 300 in succession!
+# Register a single user during a bulk registration process
 sub _registerSingleBulkUser {
     my ($session, $row, $settings) = @_;
     ASSERT( $row ) if DEBUG;
@@ -316,33 +304,31 @@ sub _registerSingleBulkUser {
     #-- Generation of the page is done from the {form} subhash, so align the two
     $row->{form} = _makeFormFieldOrderMatch( $fieldNames, $row);
 
-    my $passResult = _addUserToPasswordSystem( $session, $row );
-    $log .= $b.' Password set '.($passResult?'OK':'FAILED')."\n";
-    #TODO: need a path for if it doesn't succeed.
-
-    $session->writeLog('bulkregister', $row->{webName}.'.'.$row->{WikiName},
-                       $row->{Email}, $row->{WikiName} );
-
     my $users = $session->{users};
-
-    my $userTopic = $session->{users}->{mapping}->addUserToMapping(
-        $row->{WikiName}, $row->{LoginName} );
 
     if( $doOverwriteTopics or !$session->{store}->topicExists(
         $row->{webName}, $row->{WikiName} ) ) {
         $log .= _createUserTopic($session, 'NewUserTemplate', $row);
     } else {
         $log .= $b.' Not writing topic '.$row->{WikiName}."\n";
-	}
+    }
 
-    $session->{users}->setEmails($row->{LoginName}, $row->{Email});
+    # Add the user to the user management system. May throw an exception
+    my ( $user, $pass ) = $users->addUser(
+        $row->{LoginName}, $row->{WikiName},
+        $row->{Password}, $row->{Email} );
+
+    $session->writeLog('bulkregister',
+                       $row->{webName}.'.'.$row->{WikiName},
+                       $row->{Email}, $row->{WikiName} );
 
     #if ($TWiki::cfg{EmailUserDetails}) {
-        # If you want it, write it.
-        # _sendEmail($session, 'registernotifybulk', $data );
+    # If you want it, write it.
+    # _sendEmail($session, 'registernotifybulk', $data );
     #    $log .= $b.' Password email disabled\n';
     #}
-    return ($userTopic, $log);
+
+    return $log;
 }
 
 #ensures all named fields exist in hash
@@ -417,15 +403,9 @@ sub register {
     $data->{webName} = $web;
     $data->{debug} = 1;
 
+    # SMELL: should perform basic checks that we have e.g. a WikiName
+
     _validateRegistration( $session, $data, $query, $topic, 1 );
-}
-
-# global used by test harness to give predictable results
-use vars qw( $password );
-
-# STATIC function that returns a random password
-sub randomPassword {
-    return $password || int( rand(9999999999) );
 }
 
 #   1 generates a activation password
@@ -443,7 +423,7 @@ sub _requireVerification {
     $data->{webName} = $web;
 
     $data->{VerificationCode} =
-      $data->{WikiName}.'.'.randomPassword();
+      $data->{WikiName}.'.'.TWiki::Users::randomPassword();
     _putRegDetailsByCode( $data, $tmpDir );
 
     $session->writeLog(
@@ -557,14 +537,16 @@ sub _resetUsersPassword {
         $$pMess .= $session->inlineAlert( 'alerts', 'missing_user', $user);
     }
 
+    my $password = TWiki::Users::randomPassword();
+
     $users->setPassword($user, $password, 1);
 
     my @em = $users->getEmails($user);
     if (!scalar(@em)) {
         $$pMess .= $session->inlineAlert( 'alerts', 'no_email_for', $user);
     } else {
-        my $ln = $session->{users}->getLoginName($user);
-        my $wn = $session->{users}->getWikiName($user);
+        my $ln = $users->getLoginName($user);
+        my $wn = $users->getWikiName($user);
         foreach my $email ( @em ) {
             my $err = _sendEmail(
                 $session,
@@ -588,8 +570,8 @@ sub _resetUsersPassword {
     $$pMess .= $session->inlineAlert(
         'alerts',
         'new_sys_pass',
-        $session->{users}->getLoginName($user),
-        $session->{users}->getWikiName( $user ));
+        $users->getLoginName($user),
+        $users->getWikiName( $user ));
 
     return 1;
 }
@@ -757,16 +739,6 @@ sub verifyEmailAddress {
 ---++ StaticMethod finish
 
 Presently this is called in RegisterCgiScript directly after a call to verify. The separation is intended for the RegistrationApprovals functionality
-   1 calls _reloadUserContext (throws oops if appropriate)
-   3 calls createUserTopic()
-   4 if using the htpasswdFormatFamily, calls _addUserToPasswordSystem
-   5 calls the misnamed RegistrationHandler to set cookies
-   6 calls addUserToMapping
-   7 writes the logEntry (if wanted :/)
-   8 redirects browser to 'oopsregthanks'
-
-reloads the context by code
-these two are separate in here to ease the implementation of administrator approval 
 
 =cut
 
@@ -791,15 +763,24 @@ sub finish {
         throw Error::Simple( 'no WikiName after reload');
     }
 
-    my $success = _addUserToPasswordSystem( $session, $data );
-    # SMELL - error condition? surely need a way to flag an error?
-    unless ( $success ) {
+    # Create the user topic. We have to do this before adding the
+    # user to the user management system, because some user mappers
+    # use the user topic to store data.
+    my $log = _createUserTopic($session, 'NewUserTemplate', $data);
+
+    my $users = $session->{users};
+    try {
+        $users->addUser( $data->{LoginName}, $data->{WikiName},
+                         $data->{Password}, $data->{Email} );
+    } catch Error::Simple with {
+        my $e = shift;
         throw TWiki::OopsException( 'attention',
                                     web => $data->{webName},
                                     topic => $topic,
                                     def => 'problem_adding',
-                                    params => [ $data->{WikiName} ] );
-    }
+                                    params => [ $data->{WikiName},
+                                                $e->stringify() ] );
+    };
 
     # Plugin callback to set cookies.
     $session->{plugins}->registrationHandler( $data->{WebName},
@@ -811,19 +792,8 @@ sub finish {
     # but we'll leave them both in here for now.)
     $session->{loginManager}->userLoggedIn( $data->{LoginName}, $data->{WikiName} );
 
-    # add user to TWikiUsers topic
-    my $users = $session->{users};
-
-    # SMELL: accessing a private data member
-    my $userTopic = $users->{mapping}->addUserToMapping(
-        $data->{WikiName}, $data->{LoginName} );
-
     # inform user and admin about the registration.
     my $status = _emailRegistrationConfirmations( $session, $data );
-
-    my $log = _createUserTopic($session, 'NewUserTemplate', $data);
-
-    $users->setEmails($data->{LoginName}, $data->{Email});
 
     # write log entry
     if ($TWiki::cfg{Log}{register}) {
@@ -870,10 +840,8 @@ sub _createUserTopic {
     return $log;
 }
 
-#Writes the registration details passed as a hash to either BulletFields or FormFields
-#on the user's topic.
-#
-#Returns 'BulletFields' or 'FormFields' depending on what it chose.
+# Writes the registration details passed as a hash to either BulletFields
+# or FormFields on the user's topic.
 #
 sub _writeRegistrationDetailsToTopic {
     my ($session, $data, $meta, $text) = @_;
@@ -1129,44 +1097,6 @@ sub _validateRegistration {
                                     def => 'missing_fields',
                                     params => [ join(', ', @missing) ] );
     }
-}
-
-# generate user entry
-# If a password exists (either in Data{PasswordA} or data{CryptPassword}, use it.
-# Otherwise generate a random one, and store it back in the user record.
-
-#SMELL - when should they get notified of the password?
-sub _addUserToPasswordSystem {
-    my( $session, $userRow ) = @_;
-
-    my $users = $session->{users};
-    my $user = $userRow->{LoginName} || $userRow->{WikiName};
-    if( $user && $users->userExists($user)) {
-        unless( $users->checkPassword(
-            $user,
-            $userRow->{Password} )) {
-            throw Error::Simple("New password did not match existing password for this user");
-        }
-        # User exists, and the password was good.
-        return 1;
-    }
-
-    my $success;
-    if ($userRow->{CryptPassword})  {
-        throw Error::Simple( 'No API to install crypted password' );
-        #	$success = $session->{users}->installCryptedPassword($userRow->{LoginName},
-        #						   $userRow->{CryptPassword});
-    }
-    my $password = $userRow->{Password};
-    unless ($password) {
-        $password = randomPassword();
-        $session->writeWarning('No password specified for '.$userRow->{LoginName}.' - using random='.$password);
-    }
-    unless( $users->setPassword( $user, $password )) {
-        $session->writeWarning('Failed to add password');
-    }
-
-    return 1;
 }
 
 # sends $p->{template} to $p->{Email} with a bunch of substitutions.

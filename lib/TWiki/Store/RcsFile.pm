@@ -752,7 +752,6 @@ sub saveFile {
     print FILE $text;
     close( FILE) ||
       throw Error::Simple( 'RCS: failed to create file '.$name.': '.$! );
-
     return undef;
 }
 

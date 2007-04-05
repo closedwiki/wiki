@@ -56,6 +56,8 @@ sub new {
     my $this = bless( {}, $class );
     $this->{session} = $session;
 
+    #$this->{U2L} = {};
+    $this->{L2U} = {};
     $this->{U2W} = {};
     $this->{W2U} = {};
 
@@ -66,8 +68,55 @@ sub new {
 # to by breaking references (if any)
 sub finish {
     my $this = shift;
-    $this->{U2W} = undef;
-    $this->{W2U} = undef;
+    #delete $this->{U2L};
+    delete $this->{L2U};
+    delete $this->{U2W};
+    delete $this->{W2U};
+}
+
+# Convert a login name to the corresponding canonical user name. The
+# canonical name can be any string of 7-bit alphanumeric and underscore
+# characters, and must correspond 1:1 to the login name.
+sub login2canonical {
+    my( $this, $login ) = @_;
+
+    use bytes;
+    # use bytes to ignore character encoding
+    $login =~ s/([^a-zA-Z0-9])/'_'.sprintf('%02d', ord($1))/ge;
+    no bytes;
+    # further uniquify the UID in test mode, to increase the fragility
+    return "UID${login}UID" if DEBUG;
+    return $login;
+}
+
+# See login2 canonical
+sub canonical2login {
+    my( $this, $user ) = @_;
+    ASSERT($user) if DEBUG;
+    $user =~ s/^UID// if DEBUG;
+    $user =~ s/UID$// if DEBUG;
+    use bytes;
+    # use bytes to ignore character encoding
+    $user =~ s/_(\d\d)/chr($1)/ge;
+    no bytes;
+    return $user;
+}
+
+# PRIVATE
+sub _cacheUser {
+    my($this, $wikiname, $login) = @_;
+    ASSERT($wikiname) if DEBUG;
+
+    $login ||= $wikiname;
+
+    my $user = login2canonical( $this, $login );
+
+    #$this->{U2L}->{$user}     = $login;
+    $this->{U2W}->{$user}     = $wikiname;
+    $this->{L2U}->{$login}    = $user;
+    $this->{W2U}->{$wikiname} = $user;
+
+    return $user;
 }
 
 # PRIVATE callback for search function to collate results
@@ -116,26 +165,33 @@ sub _getListOfGroups {
 #
 # Names must be acceptable to $TWiki::cfg{NameFilter}
 #
-# $login can be undef; $wikiname must always have a value.
-sub addUserToMapping {
-    my ( $this, $wikiname, $login ) = @_;
+# $login must *always* be specified. $wikiname may be undef, in which case
+# the user mapper should make one up.
+#
+# This function must return a *canonical user id* that it uses to uniquely
+# identify the user. This can be the login name, or the wikiname if they
+# are all guaranteed unigue, or some other string consisting only of 7-bit
+# alphanumerics and underscores.
+#
+sub addUser {
+    my ( $this, $login, $wikiname ) = @_;
 
-    ASSERT($this->isa( 'TWiki::Users::TWikiUserMapping')) if DEBUG;
     ASSERT($login) if DEBUG;
 
+    # SMELL: really ought to be smarter about this e.g. make a wikiword
+    $wikiname ||= $login;
+
     my $store = $this->{session}->{store};
-    my( $meta, $text ) =
-      $store->readTopic( undef, $TWiki::cfg{UsersWebName},
-                         $TWiki::cfg{UsersTopicName}, undef );
+    my( $meta, $text ) = $store->readTopic(
+        undef, $TWiki::cfg{UsersWebName}, $TWiki::cfg{UsersTopicName}, undef );
+
     my $result = '';
-    my $entry = "   * ";
-    $entry .= $wikiname." - ";
+    my $entry = "   * $wikiname - ";
     $entry .= $login . " - " if $login;
     my $today = TWiki::Time::formatTime(time(), '$day $mon $year', 'gmtime');
 
-    # add to the caches
-    $this->{U2W}{$login} = $wikiname;
-    $this->{W2U}{$wikiname} = $login;
+    # add to the mapping caches
+    my $user = _cacheUser( $this, $wikiname, $login );
 
     # add name alphabetically to list
     foreach my $line ( split( /\r?\n/, $text) ) {
@@ -177,37 +233,41 @@ sub addUserToMapping {
                        $TWiki::cfg{UsersTopicName},
                        $result, $meta );
 
-    return $TWiki::cfg{UsersTopicName};
+    return $user;
 }
 
 # Remove a user from the mapping
 # Called by TWiki::Users
-sub removeUserFromMapping {
-    # SMELL: currently a nop
+sub removeUser {
+    # SMELL: currently a nop, needs someone to implement it
 }
 
-# Map a username to the corresponding wikiname. This is used for lookups,
-# and should be as fast as possible. Returns undef if no such user exists.
-# Called by TWiki::Users
+# Map a canonical user name to a wikiname
+sub getWikiName {
+    my ($this, $user) = @_;
+    if( $TWiki::cfg{MapUserToWikiName} ) {
+        _loadMapping( $this );
+        return $this->{U2W}->{$user} || $user;
+    } else {
+        # If the mapping isn't enabled there's no point in loading it
+        return canonical2login( $this, $user );
+    }
+}
+
+# Map a canonical user name to a login name
+sub getLoginName {
+    my ($this, $user) = @_;
+    return canonical2login( $this, $user );
+}
+
+# Map a login name to the corresponding canonical user name. This is used for
+# lookups, and should be as fast as possible. Returns undef if no such user
+# exists. Called by TWiki::Users
 sub lookupLoginName {
     my ($this, $login) = @_;
 
-    # SMELL: what if we just want to know if they exist? Why bother
-    # loading the mapping?
     _loadMapping( $this );
-    return $this->{U2W}{$login};
-}
-
-# Map a wikiname to the corresponding username. This is used for lookups,
-# and should be as fast as possible. Returns undef if no such user exists.
-# Called by TWiki::Users. Only one user per wikiname is found.
-sub lookupWikiName {
-    my ($this, $wn) = @_;
-
-    # SMELL: what if we just want to know if they exist? Why bother
-    # loading the mapping?
-    _loadMapping( $this );
-    return $this->{W2U}{$wn};
+    return $this->{L2U}->{$login};
 }
 
 # Called from TWiki::Users. See the documentation of the corresponding
@@ -217,7 +277,7 @@ sub eachUser {
     ASSERT($this->isa( 'TWiki::Users::TWikiUserMapping')) if DEBUG;
 
     _loadMapping( $this );
-    my @list =  keys(%{$this->{W2U}});
+    my @list = keys(%{$this->{U2W}});
     return new TWiki::ListIterator( \@list );
 }
 
@@ -249,34 +309,17 @@ sub _loadMapping {
         # This matches:
         #   * TWikiGuest - guest - 10 Mar 2005
         #   * TWikiGuest - 10 Mar 2005
-        $text =~ s/^\s*\* ($TWiki::regex{webNameRegex}\.)?($TWiki::regex{wikiWordRegex})\s*(?:-\s*(\S+)\s*)?-.*$/_cacheUser( $this, $1,$2,$3)/gome;
-        # Always create the guest user (even though they may not be able to
-        # log in, we still need them as a default).
-        if (!$this->{U2W}{$TWiki::cfg{DefaultUserLogin}}) {
-            _cacheUser( $this,undef, $TWiki::cfg{DefaultUserWikiName},
-                              $TWiki::cfg{DefaultUserLogin});
-        }
-    } else {
-        # If there is no mapping topic, then
-        # map only guest to TWikiGuest.
-        _cacheUser( $this,undef, $TWiki::cfg{DefaultUserWikiName},
-                          $TWiki::cfg{DefaultUserLogin});
+        $text =~ s/^\s*\* (?:$TWiki::regex{webNameRegex}\.)?($TWiki::regex{wikiWordRegex})\s*(?:-\s*(\S+)\s*)?-.*$/_cacheUser( $this, $1, $2)/gome;
+    }
+    # Always map the guest user (even though they may not be able to
+    # log in, we still need them as a default).
+    unless ($this->{L2U}->{$TWiki::cfg{DefaultUserLogin}}) {
+        _cacheUser( $this, $TWiki::cfg{DefaultUserWikiName},
+                    $TWiki::cfg{DefaultUserLogin});
     }
 }
 
-# PRIVATE
-sub _cacheUser {
-    my($this, $web, $wUser, $lUser) = @_;
-    $web ||= $TWiki::cfg{UsersWebName};
-    $lUser ||= $wUser;	# userid
-    # FIXME: Should filter in for security...
-    # SMELL: filter prevents use of password managers with wierd usernames,
-    # like the DOMAIN\username used in the swamp of despair.
-    $lUser =~ s/$TWiki::cfg{NameFilter}//go;
-    $this->{U2W}{$lUser} = $wUser;
-    $this->{W2U}{$wUser} = $lUser;
-}
-
+my %expanding;
 # Called from TWiki::Users. See the documentation of the corresponding
 # method in that module for details.
 sub eachGroupMember {
@@ -288,19 +331,25 @@ sub eachGroupMember {
 
     my $members = [];
 
-    if( $store->topicExists( $TWiki::cfg{UsersWebName}, $group )) {
+    if( !$expanding{$group} &&
+          $store->topicExists( $TWiki::cfg{UsersWebName}, $group )) {
+
+        $expanding{$group} = 1;
         my $text =
           $store->readTopicRaw( undef,
                                 $TWiki::cfg{UsersWebName}, $group,
                                 undef );
+
         foreach( split( /\r?\n/, $text ) ) {
             if( /$TWiki::regex{setRegex}GROUP\s*=\s*(.+)$/ ) {
                 next unless( $1 eq 'Set' );
                 # Note: if there are multiple GROUP assignments in the
                 # topic, only the last will be taken.
-                $members = TWiki::Users::_expandUserList( $users, $2 );
+                my $f = $2;
+                $members = TWiki::Users::_expandUserList( $users, $f );
             }
         }
+        delete $expanding{$group};
     }
 
     return new TWiki::ListIterator( $members );
@@ -325,7 +374,9 @@ sub eachMembership {
 
     _getListOfGroups( $this );
     my $it = new TWiki::ListIterator( \@{$this->{groupsList}} );
-    $it->{filter} = sub { $this->isInGroup($user, $_[0]) };
+    $it->{filter} = sub {
+        $this->isInGroup($user, $_[0]);
+    };
     return $it;
 }
 
@@ -333,6 +384,7 @@ sub eachMembership {
 # method in that module for details.
 sub isInGroup {
     my( $this, $user, $group, $scanning ) = @_;
+    ASSERT($user) if DEBUG;
 
     my @users;
     my $it = $this->eachGroupMember($group);
@@ -423,11 +475,7 @@ sub findUserByEmail {
               $this->{session}->{users}->getEmails( $uo );
         }
     }
-    if ($this->{_MAP_OF_EMAILS}->{$email}) {
-	return @{$this->{_MAP_OF_EMAILS}->{$email}};
-    } else {
-	return ();
-    }
+    return $this->{_MAP_OF_EMAILS}->{$email};
 }
 
 # Called from TWiki::Users. See the documentation of the corresponding
@@ -435,11 +483,10 @@ sub findUserByEmail {
 sub findUserByWikiName {
     my( $this, $wn ) = @_;
 
+    _loadMapping( $this );
     my @users = ();
-    if( $this->isGroup( $wn )) {
-        @users = ( $wn );
-    } elsif( $this->{W2U}->{$wn} ) {
-        @users = ( $this->{W2U}->{$wn} );
+    if( $this->{W2U}->{$wn} ) {
+        push( @users, $this->{W2U}->{$wn} );
     }
     return \@users;
 }

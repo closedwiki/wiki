@@ -716,7 +716,12 @@ sub getWikiUserName {
 
 Translate a Wiki name to a login name based on [[%MAINWEB%.TWikiUsers]] topic
    * =$wikiName= - Wiki name, e.g. ='Main.JohnDoe'= or ='JohnDoe'=
-Return: =$loginName=   Login name of user, e.g. ='jdoe'=
+Return: =$loginName=   Login name of user, e.g. ='jdoe'=, or undef if not
+matched.
+
+Note that it is possible for several login names to map to the same wikiname.
+This function will only return the *first* login name that maps to the
+wikiname.
 
 *Since:* TWiki::Plugins::VERSION 1.000 (7 Dec 2002)
 
@@ -727,7 +732,9 @@ sub wikiToUserName {
     ASSERT($TWiki::Plugins::SESSION) if DEBUG;
     return '' unless $wiki;
     my $users = $TWiki::Plugins::SESSION->{users};
-    return $users->findUserByWikiName($wiki)->[0];
+    my $found = $users->findUserByWikiName($wiki);
+    return $users->getLoginName( $found->[0] ) if scalar(@$found);
+    return undef;
 }
 
 =pod
@@ -867,17 +874,24 @@ If =$user= is =undef=, it defaults to the currently logged-in user.
 
 sub isGroupMember {
     my ($group, $user) = @_;
+    my $users = $TWiki::Plugins::SESSION->{users};
 
-    return () unless $TWiki::Plugins::SESSION->{users}->isGroup($group);
-    $user ||= $TWiki::Plugins::SESSION->{user};
-    return $TWiki::Plugins::SESSION->{users}->isInGroup( $user, $group );
+    return () unless $users->isGroup($group);
+    if( $user ) {
+        my $login = wikiToUserName( $user );
+        return 0 unless $login;
+        $user = $users->getCanonicalUserID( $login );
+    } else {
+        $user = $TWiki::Plugins::SESSION->{user};
+    }
+    return $users->isInGroup( $user, $group );
 }
 
 =pod
 
 ---++ eachUser() -> $iterator
 Get an iterator over the list of all the registered users *not* including
-groups. The iterator will return each login name in turn (e.g. 'fred').
+groups. The iterator will return each wiki name in turn (e.g. 'FredBloggs').
 
 Use it as follows:
 <verbatim>
@@ -895,14 +909,18 @@ Use it as follows:
 =cut
 
 sub eachUser {
-    return $TWiki::Plugins::SESSION->{users}->eachUser();
+    my $it = $TWiki::Plugins::SESSION->{users}->eachUser();
+    $it->{process} = sub {
+        return $TWiki::Plugins::SESSION->{users}->getWikiName( $_[0] );
+    };
+    return $it;
 }
 
 =pod
 
----++ eachMembership($login) -> $iterator
+---++ eachMembership($wikiname) -> $iterator
 Get an iterator over the names of all groups that the user is a member of.
-If =$user= is =undef=, defaults to the currently logged-in user.
+If =$wikiname= is =undef=, defaults to the currently logged-in user.
 
 *Since:* TWiki::Plugins::VERSION 1.12
 
@@ -910,10 +928,17 @@ If =$user= is =undef=, defaults to the currently logged-in user.
 
 sub eachMembership {
     my ($user) = @_;
+    my $users = $TWiki::Plugins::SESSION->{users};
 
-    $user ||= $TWiki::Plugins::SESSION->{user};
+    if( $user ) {
+        my $login = wikiToUserName( $user );
+        return 0 unless $login;
+        $user = $users->getCanonicalUserID( $login );
+    } else {
+        $user = $TWiki::Plugins::SESSION->{user};
+    }
 
-    return $TWiki::Plugins::SESSION->{users}->eachMembership($user);
+    return $users->eachMembership($user);
 }
 
 =pod
@@ -967,7 +992,7 @@ Use it as follows:
     my $iterator = TWiki::Func::eachGroupMember('RadioheadGroup');
     while ($it->hasNext()) {
         my $user = $it->next();
-        # $user is a login name e.g. 'yorke', 'selway'
+        # $user is a wiki name e.g. 'TomYorke', 'PhilSelway'
     }
 </verbatim>
 
@@ -983,6 +1008,9 @@ sub eachGroupMember {
     return undef unless
       $TWiki::Plugins::SESSION->{users}->isGroup($user);
     my $it = $TWiki::Plugins::SESSION->{users}->eachGroupMember($user);
+    $it->{process} = sub {
+        return $TWiki::Plugins::SESSION->{users}->getWikiName( $_[0] );
+    };
     return $it;
 }
 
@@ -1295,7 +1323,7 @@ sub checkTopicEditLock {
 
    * =$web= Web name, e.g. ="Main"=, or empty
    * =$topic= Topic name, e.g. ="MyTopic"=, or ="Main.MyTopic"=
-   * =$lock= 1 to lease the topic, 0 to clear the lease=
+   * =$lock= 1 to lease the topic, 0 to clear an existing lease
 
 Takes out a "lease" on the topic. The lease doesn't prevent
 anyone from editing and changing the topic, but it does redirect them
@@ -1521,7 +1549,7 @@ sub getRevisionInfo {
     ASSERT($TWiki::Plugins::SESSION) if DEBUG;
     my( $date, $user, $rev, $comment ) =
       $TWiki::Plugins::SESSION->{store}->getRevisionInfo( @_ );
-    $user = $TWiki::Plugins::SESSION->{users}->getLoginName( $user );
+    $user = $TWiki::Plugins::SESSION->{users}->getWikiName( $user );
     return ( $date, $user, $rev, $comment );
 }
 

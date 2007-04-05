@@ -82,7 +82,6 @@ sub _removeUser {
     my $query = $session->{cgiQuery};
     my $user = $session->{user};
 
-    my $login = $session->{users}->getLoginName($user);
     my $password = $query->param( 'password' );
 
     # check if user entry exists
@@ -97,7 +96,8 @@ sub _removeUser {
 
     #check to see it the user we are trying to remove is a member of a group.
     #initially we refuse to delete the user
-    #in a later implementation we will remove the from the group (if Access.pm implements it..)
+    #in a later implementation we will remove the from the group 
+    #(if Access.pm implements it..)
     my $git = $users->eachMembership($user);
     if( $git->hasNext() ) {
         my $list = '';

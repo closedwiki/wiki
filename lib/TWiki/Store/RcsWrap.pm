@@ -148,6 +148,7 @@ sub replaceRevision {
     } else {
         _deleteRevision( $this, $rev );
     }
+
     TWiki::Store::RcsFile::saveFile( $this, $this->{file}, $text );
 	$date = TWiki::Time::formatTime( $date , '$rcs', 'gmtime');
 

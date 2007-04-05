@@ -849,7 +849,6 @@ sub saveTopic {
     my $users = $this->{session}->{users};
 
     $options = {} unless defined( $options );
-
     if( $user &&
           !$this->{session}->{security}->checkAccessPermission
             ( 'CHANGE', $user, undef, undef, $topic, $web )) {
@@ -878,6 +877,7 @@ sub saveTopic {
             $meta = $after;
         }
     }
+
     my $error;
     try {
         _noHandlersSave( $this, $user, $web, $topic, $text, $meta, $options );
