@@ -21,9 +21,7 @@ Show topics tagged with
 <option></option>
 %TAGME{ tpaction="showalltags" format="<option>$tag</option>" separator="$n" }% </select>
 &nbsp; by
-<input type="radio" name="by" value="all" %CALC{"$IF($EXACT(%URLPARAM{by}%,me), , checked=\"checked\")"}% /> all users &nbsp;
-<input type="radio" name="by" value="me" %CALC{"$IF($EXACT(%URLPARAM{by}%,me), checked=\"checked\")"}% /> me only
-<input type="submit" value="Go" /> </td>
+<input type="radio" name="by" id="byall" value="all" %CALC{"$IF($EXACT(%URLPARAM{by}%,me), , checked=\"checked\")"}% /><label for="byall">all users</label> <input type="radio" name="by" id="byme" value="me" %CALC{"$IF($EXACT(%URLPARAM{by}%,me), checked=\"checked\")"}% /><label for="byme">me only</label> &nbsp; <input type="submit" class="twikiButton" value="Go" /> </td>
 </tr></table>
 </form>
 
@@ -31,4 +29,4 @@ Show topics tagged with
 %STOPINCLUDE%
 
 %BR%
-<span class="twikiGrayText">Other tag options: [[TagMeCreateNewTag][Create New Tag]], <a href="%SCRIPTURL{view}%/%TWIKIWEB%/TagMeRenameTag?renametagfrom=%URLPARAM{tag}%">Rename Tag</a>, <a href="%SCRIPTURL{view}%/%TWIKIWEB%/TagMeDeleteTag?deletetag=%URLPARAM{tag}%">Delete Tag</a></span>
+<span class="twikiGrayText">Other tag options: [[TagMeCreateNewTag][Create new tag]], <a href="%SCRIPTURL{view}%/%TWIKIWEB%/TagMeRenameTag?renametagfrom=%URLPARAM{tag}%">Rename tag</a>, <a href="%SCRIPTURL{view}%/%TWIKIWEB%/TagMeDeleteTag?deletetag=%URLPARAM{tag}%">Delete tag</a></span>

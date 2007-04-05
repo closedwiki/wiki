@@ -28,7 +28,7 @@ use vars qw(
   $alphaNum $doneHeader $normalizeTagInput $lineRegex
 );
 
-$VERSION     = '1.034';
+$VERSION     = '1.035';
 $RELEASE     = '4.0 (Dakar)';
 $pluginName  = 'TagMePlugin';                  # Name of this Plugin
 $initialized = 0;
@@ -81,18 +81,17 @@ sub _initialize {
       . $installWeb
       . '/TagMeSearch?tag=$tag;by=$by">$tag</a>';
     $tagQueryFormat =
-'<table style="width:100%;" border="0" cellspacing="0" cellpadding="2"><tr>$n'
-      . '<td style="width:50%;" bgcolor="#F6F4EB"> <b>[[$web.$topic][<nop>$topic]]</b> '
-      . '<font size="-1" color="#666666">in <nop>$web web</font></td>$n'
-      . '<td style="width:30%;" bgcolor="#F6F4EB">'
+'<table class="tagmeResultsTable tagmeResultsTableHeader" cellpadding="0" cellspacing="0" border="0"><tr>$n'
+      . '<td class="tagmeTopicTd"> <b>[[$web.$topic][<nop>$topic]]</b> '
+      . '<span class="tagmeTopicTdWeb">in <nop>$web web</span></td>$n'
+      . '<td class="tagmeDateTd">'
       . '[[%SCRIPTURL%/rdiff%SCRIPTSUFFIX%/$web/$topic][$date]] - r$rev </td>$n'
-      . '<td style="width:20%;" bgcolor="#F6F4EB"> $wikiusername </td>$n'
+      . '<td class="tagmeAuthorTd"> $wikiusername </td>$n'
       . '</tr></table>$n'
-      . '<table style="width:100%;" border="0" cellspacing="0" cellpadding="2"><tr>$n'
-      . '<td>&nbsp;</td>$n'
-      . '<td style="width:99%;"><font size="-1" color="#666666">'
-      . '$summary %BR% Tags: $taglist </font></td>$n'
-      . '</tr><tr><td></td></tr></table>';
+      . '<p class="tagmeResultsDetails">'
+      . '<span class="tagmeResultsSummary">$summary</span>%BR% $n'
+      . '<span class="tagmeResultsTags">Tags: $taglist</span>'
+      . '</p>';
     $alphaNum = TWiki::Func::getRegularExpression('mixedAlphaNum');
 
     _addHeader();
@@ -255,9 +254,7 @@ sub _showDefault {
         if ( $tagMode eq 'nojavascript' ) {
             $text .= _createNoJavascriptSelectBox( @notSeen );
         } else {
-            # disabled untill fully working
-            #$text .= _createJavascriptSelectBox( @notSeen );
-            $text .= _createNoJavascriptSelectBox( @notSeen );
+            $text .= _createJavascriptSelectBox( @notSeen );
         }
     }
     $text .=
@@ -267,6 +264,7 @@ sub _showDefault {
 }
 
 # =========================
+# Used as fallback for noscript
 sub _createNoJavascriptSelectBox {
     my (@notSeen) = @_;
 
@@ -283,6 +281,8 @@ sub _createNoJavascriptSelectBox {
 }
 
 # =========================
+# The select box plus contents is written using Javascript to prevent the tags
+# getting indexed by search engines
 sub _createJavascriptSelectBox {
     my (@notSeen) = @_;
 
@@ -302,12 +302,14 @@ function createSelectBox(inText, inElemId) {
 }
 EOF
     $script .= 'var text="#' . join( "#", @notSeen ) . '";';
-    $script .= "\nif (text.length > 0) createSelectBox(text, \"tagMeSelect\");\n//]]>\n</script>";
+    $script .= "\nif (text.length > 0) {createSelectBox(text, \"tagMeSelect\"); document.getElementById(\"tagmeAddNewButton\").style.display=\"inline\";}\n//]]>\n</script>";
 
     my $noscript .= '<noscript><a href="%SCRIPTURL%/viewauth%SCRIPTSUFFIX%/%BASEWEB%/%BASETOPIC%?tagmode=nojavascript">tag this topic</a></noscript>';
 
+    $selectControl .= "<span id=\"tagmeAddNewButton\" style=\"display:none;\">" 
+                      . _addNewButton() . "</span>";
     $selectControl .= $script;
-    $selectControl .= _addNewButton();
+
     $selectControl = _wrapHtmlTagControl( $selectControl );
     $selectControl .= $noscript;
     

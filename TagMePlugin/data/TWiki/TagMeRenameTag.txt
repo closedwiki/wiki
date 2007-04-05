@@ -40,4 +40,4 @@ New name for this tag: %BR%
 %STOPINCLUDE%
 
 %BR%
-<span class="twikiGrayText">Other tag options: [[TagMeViewAllTags][View All Tags]], [[TagMeViewMyTags][View My Tags]], [[TagMeSearch][Search Tags]]</span>
+<span class="twikiGrayText">Other tag options: [[TagMeViewAllTags][View all tags]], [[TagMeViewMyTags][View my tags]], [[TagMeSearch][Search tags]]</span>
