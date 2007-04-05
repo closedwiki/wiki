@@ -439,7 +439,7 @@ sub registrationHandler {
     my $this = shift;
     ASSERT($this->isa( 'TWiki::Plugins')) if DEBUG;
     #my( $web, $wikiName, $loginName ) = @_;
-    $this->_dispatch( 'registrationHandler', @_ );
+    _dispatch( $this, 'registrationHandler', @_ );
 }
 
 =pod
@@ -453,7 +453,7 @@ Called at the beginning (for cache Plugins only)
 sub beforeCommonTagsHandler {
     my $this = shift;
     #my( $text, $topic, $theWeb, $meta ) = @_;
-    $this->_dispatch( 'beforeCommonTagsHandler', @_ );
+    _dispatch( $this, 'beforeCommonTagsHandler', @_ );
 }
 
 =pod
@@ -467,7 +467,7 @@ Called after %INCLUDE:"..."%
 sub commonTagsHandler {
     my $this = shift;
     #my( $text, $topic, $theWeb, $meta ) = @_;
-    $this->_dispatch( 'commonTagsHandler', @_ );
+    _dispatch( $this, 'commonTagsHandler', @_ );
 }
 
 =pod
@@ -481,7 +481,7 @@ Called at the end (for cache Plugins only)
 sub afterCommonTagsHandler {
     my $this = shift;
     #my( $text, $topic, $theWeb, $meta ) = @_;
-    $this->_dispatch( 'afterCommonTagsHandler', @_ );
+    _dispatch( $this, 'afterCommonTagsHandler', @_ );
 }
 
 =pod
@@ -518,7 +518,7 @@ foreach my $placeholder ( keys %$map ) {
 
 sub preRenderingHandler {
     my $this = shift;
-    $this->_dispatch( 'preRenderingHandler', @_ );
+    _dispatch( $this, 'preRenderingHandler', @_ );
     # Apply the startRenderingHandler (*deprecated*!) if any are defined
 }
 
@@ -532,7 +532,7 @@ sub preRenderingHandler {
 
 sub postRenderingHandler {
     my $this = shift;
-    $this->_dispatch( 'postRenderingHandler', @_ );
+    _dispatch( $this, 'postRenderingHandler', @_ );
 }
 
 =pod
@@ -550,7 +550,7 @@ the plugin.
 sub startRenderingHandler {
     my $this = shift;
     #my ( $text, $web, $topic ) = @_;
-    $this->_dispatch( 'startRenderingHandler', @_ );
+    _dispatch( $this, 'startRenderingHandler', @_ );
 }
 
 =pod
@@ -569,7 +569,7 @@ instead of line-by-line.
 sub outsidePREHandler {
     my $this = shift;
     #my( $text ) = @_;
-    $this->_dispatch( 'outsidePREHandler', @_ );
+    _dispatch( $this, 'outsidePREHandler', @_ );
 }
 
 =pod
@@ -588,7 +588,7 @@ instead of line-by-line.
 sub insidePREHandler {
     my $this = shift;
     #my( $text ) = @_;
-    $this->_dispatch( 'insidePREHandler', @_ );
+    _dispatch( $this, 'insidePREHandler', @_ );
 }
 
 =pod
@@ -604,7 +604,7 @@ Called just after the line loop
 sub endRenderingHandler {
     my $this = shift;
     #my ( $text ) = @_;
-    $this->_dispatch( 'endRenderingHandler', @_ );
+    _dispatch( $this, 'endRenderingHandler', @_ );
 }
 
 =pod
@@ -618,7 +618,7 @@ Called by edit
 sub beforeEditHandler {
     my $this = shift;
     #my( $text, $topic, $web, $meta ) = @_;
-    $this->_dispatch( 'beforeEditHandler', @_ );
+    _dispatch( $this, 'beforeEditHandler', @_ );
 }
 
 =pod
@@ -632,7 +632,7 @@ Called by edit
 sub afterEditHandler {
     my $this = shift;
     #my( $text, $topic, $web ) = @_;
-    $this->_dispatch( 'afterEditHandler', @_ );
+    _dispatch( $this, 'afterEditHandler', @_ );
 }
 
 =pod
@@ -646,7 +646,7 @@ Called just before the save action
 sub beforeSaveHandler {
     my $this = shift;
     #my ( $theText, $theTopic, $theWeb, $meta ) = @_;
-    $this->_dispatch( 'beforeSaveHandler', @_ );
+    _dispatch( $this, 'beforeSaveHandler', @_ );
 }
 
 =pod
@@ -660,7 +660,7 @@ Called just after the save action
 sub afterSaveHandler {
     my $this = shift;
     #my ( $theText, $theTopic, $theWeb, $error, $meta ) = @_;
-    $this->_dispatch( 'afterSaveHandler', @_ );
+    _dispatch( $this, 'afterSaveHandler', @_ );
 }
 
 =pod
@@ -681,7 +681,7 @@ Called just after the rename/move/delete action of a web, topic or attachment.
 sub afterRenameHandler {
     my $this = shift;
     #my ( $oldWeb, $oldTopic, $oldAttachment, $newWeb, $newTopic, $newAttachment ) = @_;
-    $this->_dispatch( 'afterRenameHandler', @_ );
+    _dispatch( $this, 'afterRenameHandler', @_ );
 }
 
 =pod
@@ -694,7 +694,7 @@ Called to handle text merge.
 
 sub mergeHandler {
     my $this = shift;
-    $this->_dispatch( 'mergeHandler', @_ );
+    _dispatch( $this, 'mergeHandler', @_ );
 }
 
 =pod
@@ -727,7 +727,7 @@ Example usage:
 sub beforeAttachmentSaveHandler {
     my $this = shift;
     #my ( $theAttrHash, $theTopic, $theWeb ) = @_;
-    $this->_dispatch( 'beforeAttachmentSaveHandler', @_ );
+    _dispatch( $this, 'beforeAttachmentSaveHandler', @_ );
 }
 
 =pod
@@ -755,7 +755,7 @@ Note: The hash is *read-only*
 sub afterAttachmentSaveHandler {
     my $this = shift;
     #my ( $theText, $theTopic, $theWeb ) = @_;
-    $this->_dispatch( 'afterAttachmentSaveHandler', @_ );
+    _dispatch( $this, 'afterAttachmentSaveHandler', @_ );
 }
 
 
@@ -774,7 +774,7 @@ multiple plugins want to modify headers.
 
 sub writeHeaderHandler {
     my $this = shift;
-    return $this->_dispatch( 'writeHeaderHandler', @_ );
+    return _dispatch( $this, 'writeHeaderHandler', @_ );
 }
 
 =pod
@@ -785,7 +785,7 @@ sub writeHeaderHandler {
 
 sub modifyHeaderHandler {
     my $this = shift;
-    return $this->_dispatch( 'modifyHeaderHandler', @_ );
+    return _dispatch( $this, 'modifyHeaderHandler', @_ );
 }
 
 =pod
@@ -798,7 +798,7 @@ Called by TWiki::redirect
 
 sub redirectCgiQueryHandler {
     my $this = shift;
-    return $this->_dispatch( 'redirectCgiQueryHandler', @_ );
+    return _dispatch( $this, 'redirectCgiQueryHandler', @_ );
 }
 
 =pod
@@ -826,7 +826,7 @@ times throughout the page.
 
 sub renderFormFieldForEditHandler {
     my $this = shift;
-    return $this->_dispatch( 'renderFormFieldForEditHandler', @_ );
+    return _dispatch( $this, 'renderFormFieldForEditHandler', @_ );
 }
 
 =pod
@@ -841,7 +841,7 @@ Originated from the TWiki:Plugins.SpacedWikiWordPlugin hack
 
 sub renderWikiWordHandler {
     my $this = shift;
-    return $this->_dispatch( 'renderWikiWordHandler', @_ );
+    return _dispatch( $this, 'renderWikiWordHandler', @_ );
 }
 
 1;

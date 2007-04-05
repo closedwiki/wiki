@@ -570,7 +570,7 @@ sub _renderExistingWikiWord {
     } else {
         push( @attrs, class => $currentTopic.$currentWebHome.'twikiLink', href => $href );
     }
-    my $tooltip = $this->_linkToolTipInfo( $web, $topic );
+    my $tooltip = _linkToolTipInfo( $this, $web, $topic );
     push( @attrs, title => $tooltip ) if( $tooltip );
 
     my $link = CGI::a( { @attrs }, $text );
@@ -677,7 +677,7 @@ sub _handleSquareBracketedLink {
                 $text =~ s/(?<=[\s\(])($TWiki::regex{wikiWordRegex}|[$TWiki::regex{upperAlpha}])/<nop>$1/go;
             }
         }
-        return $this->_externalLink( $link, $text );
+        return _externalLink( $this, $link, $text );
     }
 
     $text ||= $link;
@@ -754,7 +754,7 @@ sub _mailLink {
 
     my $url = $text;
     $url = 'mailto:'.$url unless $url =~ /^mailto:/i;
-    return $this->_externalLink( $url, $text );
+    return _externalLink( $this, $url, $text );
 }
 
 =pod
@@ -975,7 +975,7 @@ sub getRenderedVersion {
     $text =~ s/}$TWiki::TranslationToken/>/go;
 
     # standard URI
-    $text =~ s/(^|[-*\s(|])($TWiki::regex{linkProtocolPattern}:([^\s<>"]+[^\s*.,!?;:)<|]))/$1.$this->_externalLink($2)/geo;
+    $text =~ s/(^|[-*\s(|])($TWiki::regex{linkProtocolPattern}:([^\s<>"]+[^\s*.,!?;:)<|]))/$1._externalLink( $this,$2)/geo;
 
     # other entities
     $text =~ s/&(\w+);/$TWiki::TranslationToken$1;/g;      # "&abc;"
@@ -986,9 +986,9 @@ sub getRenderedVersion {
 
     # Headings
     # '<h6>...</h6>' HTML rule
-    $text =~ s/$TWiki::regex{headerPatternHt}/$this->_makeAnchorHeading($2,$1)/geo;
+    $text =~ s/$TWiki::regex{headerPatternHt}/_makeAnchorHeading( $this,$2,$1)/geo;
     # '----+++++++' rule
-    $text =~ s/$TWiki::regex{headerPatternDa}/$this->_makeAnchorHeading($2,(length($1)))/geo;
+    $text =~ s/$TWiki::regex{headerPatternDa}/_makeAnchorHeading( $this,$2,(length($1)))/geo;
 
     # Horizontal rule
     my $hr = CGI::hr();
@@ -1005,7 +1005,7 @@ sub getRenderedVersion {
         # Table: | cell | cell |
         # allow trailing white space after the last |
         if( $line =~ m/^(\s*)\|.*\|\s*$/ ) {
-            $line =~ s/^(\s*)\|(.*)/$this->_emitTR($1,$2,$insideTABLE)/e;
+            $line =~ s/^(\s*)\|(.*)/_emitTR( $this,$1,$2,$insideTABLE)/e;
             $insideTABLE = 1;
         } elsif( $insideTABLE ) {
             $result .= '</table>';
@@ -1025,17 +1025,17 @@ sub getRenderedVersion {
         elsif ( $line =~ m/^(\t|   )+\S/ ) {
             if ( $line =~ s/^((\t|   )+)\$\s(([^:]+|:[^\s]+)+?):\s/<dt> $3 <\/dt><dd> / ) {
                 # Definition list
-                $this->_addListItem( \$result, 'dl', 'dd', $1, '' );
+                _addListItem( $this, \$result, 'dl', 'dd', $1, '' );
                 $isList = 1;
             }
             elsif ( $line =~ s/^((\t|   )+)(\S+?):\s/<dt> $3<\/dt><dd> /o ) {
                 # Definition list
-                $this->_addListItem( \$result, 'dl', 'dd', $1, '' );
+                _addListItem( $this, \$result, 'dl', 'dd', $1, '' );
                 $isList = 1;
             }
             elsif ( $line =~ s/^((\t|   )+)\* /<li> /o ) {
                 # Unnumbered list
-                $this->_addListItem( \$result, 'ul', 'li', $1, '' );
+                _addListItem( $this, \$result, 'ul', 'li', $1, '' );
                 $isList = 1;
             }
             elsif ( $line =~ m/^((\t|   )+)([1AaIi]\.|\d+\.?) ?/ ) {
@@ -1048,7 +1048,7 @@ sub getRenderedVersion {
                     $ot = '';
                 }
                 $line =~ s/^((\t|   )+)([1AaIi]\.|\d+\.?) ?/<li$ot> /;
-                $this->_addListItem( \$result, 'ol', 'li', $1, $ot );
+                _addListItem( $this, \$result, 'ol', 'li', $1, $ot );
                 $isList = 1;
             }
             elsif( $isList && $line =~ /^(\t|   )+\s*\S/ ) {
@@ -1069,7 +1069,7 @@ sub getRenderedVersion {
 
         # Finish the list
         unless( $isList ) {
-            $this->_addListItem( \$result, '', '', '' );
+            _addListItem( $this, \$result, '', '', '' );
             $isList = 0;
         }
 
@@ -1080,7 +1080,7 @@ sub getRenderedVersion {
     if( $insideTABLE ) {
         $result .= '</table>';
     }
-    $this->_addListItem( \$result, '', '', '' );
+    _addListItem( $this, \$result, '', '', '' );
 
     $text = $result;
 
@@ -1096,19 +1096,19 @@ sub getRenderedVersion {
     # Email addresses must always be 7-bit, even within I18N sites
 
     # Normal mailto:foo@example.com ('mailto:' part optional)
-    $text =~ s/$STARTWW((mailto\:)?[a-zA-Z0-9-_.+]+@[a-zA-Z0-9-_.]+\.[a-zA-Z0-9-_]+)$ENDWW/$this->_mailLink( $1 )/gem;
+    $text =~ s/$STARTWW((mailto\:)?[a-zA-Z0-9-_.+]+@[a-zA-Z0-9-_.]+\.[a-zA-Z0-9-_]+)$ENDWW/_mailLink( $this, $1 )/gem;
 
     # Handle [[][] and [[]] links
     # Escape rendering: Change ' ![[...' to ' [<nop>[...', for final unrendered ' [[...' output
     $text =~ s/(^|\s)\!\[\[/$1\[<nop>\[/gm;
     # Spaced-out Wiki words with alternative link text
     # i.e. [[$1][$3]]
-    $text =~ s/\[\[([^\]\[\n]+)\](\[([^\]\n]+)\])?\]/$this->_handleSquareBracketedLink($theWeb,$theTopic,$1,$3)/ge;
-    
+    $text =~ s/\[\[([^\]\[\n]+)\](\[([^\]\n]+)\])?\]/_handleSquareBracketedLink( $this,$theWeb,$theTopic,$1,$3)/ge;
+
     unless( TWiki::isTrue( $prefs->getPreferencesValue('NOAUTOLINK')) ) {
         # Handle WikiWords
         $text = $this->takeOutBlocks( $text, 'noautolink', $removed );
-        $text =~ s/$STARTWW(?:($TWiki::regex{webNameRegex})\.)?($TWiki::regex{wikiWordRegex}|$TWiki::regex{abbrevRegex})($TWiki::regex{anchorRegex})?/$this->_handleWikiWord($theWeb,$1,$2,$3)/geom;
+        $text =~ s/$STARTWW(?:($TWiki::regex{webNameRegex})\.)?($TWiki::regex{wikiWordRegex}|$TWiki::regex{abbrevRegex})($TWiki::regex{anchorRegex})?/_handleWikiWord( $this,$theWeb,$1,$2,$3)/geom;
         $this->putBackBlocks( \$text, $removed, 'noautolink' );
     }
 
@@ -1219,7 +1219,7 @@ sub TML2PlainText {
     }
 
     # Format e-mail to add spam padding (HTML tags removed later)
-    $text =~ s/$STARTWW((mailto\:)?[a-zA-Z0-9-_.+]+@[a-zA-Z0-9-_.]+\.[a-zA-Z0-9-_]+)$ENDWW/$this->_mailLink( $1 )/gem;
+    $text =~ s/$STARTWW((mailto\:)?[a-zA-Z0-9-_.+]+@[a-zA-Z0-9-_.]+\.[a-zA-Z0-9-_]+)$ENDWW/_mailLink( $this, $1 )/gem;
     $text =~ s/<!--.*?-->//gs;          # remove all HTML comments
     $text =~ s/<(?!nop)[^>]*>//g;       # remove all HTML tags except <nop>
     $text =~ s/\&[a-z]+;/ /g;           # remove entities

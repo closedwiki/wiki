@@ -486,7 +486,7 @@ sub _rewriteURL {
     return $url unless $sessionId;
     return $url if $url =~ m/\?$CGI::Session::NAME=/;
 
-    my $s = $this->_myScriptURLRE();
+    my $s = _myScriptURLRE( $this );
 
     # If the URL has no colon in it, or it matches the local script
     # URL, it must be an internal URL and therefore needs the session.
@@ -521,7 +521,7 @@ sub _rewriteFORM {
 
     return $url.$rest unless $this->{_cgisession};
 
-    my $s = $this->_myScriptURLRE();
+    my $s = _myScriptURLRE( $this );
 
     if( $url !~ /:/ || $url =~ /^($s)/ ) {
         $rest .= CGI::hidden( -name => $CGI::Session::NAME,
@@ -560,17 +560,17 @@ sub endRenderingHandler {
         # rules to rewrite any relative URLs at that time.
 
         # a href= rewriting
-        $_[0] =~ s/(<a[^>]*(?<=\s)href=(["']))(.*?)(\2)/$1.$this->_rewriteURL($3).$4/geoi;
+        $_[0] =~ s/(<a[^>]*(?<=\s)href=(["']))(.*?)(\2)/$1._rewriteURL( $this,$3).$4/geoi;
 
         # form action= rewriting
         # SMELL: Forms that have no target are also implicit internal
         # links, but are not handled. Does this matter>
-        $_[0] =~ s/(<form[^>]*(?<=\s)(?:action)=(["']))(.*?)(\2[^>]*>)/$1.$this->_rewriteFORM($3, $4)/geoi;
+        $_[0] =~ s/(<form[^>]*(?<=\s)(?:action)=(["']))(.*?)(\2[^>]*>)/$1._rewriteFORM( $this,$3, $4)/geoi;
     }
 
     # And, finally, the logon stuff
-    $_[0] =~ s/%SESSIONLOGON%/$this->_dispLogon()/geo;
-    $_[0] =~ s/%SKINSELECT%/$this->_skinSelect()/geo;
+    $_[0] =~ s/%SESSIONLOGON%/_dispLogon( $this )/geo;
+    $_[0] =~ s/%SKINSELECT%/_skinSelect( $this )/geo;
 }
 
 # Push the standard cookie
@@ -632,7 +632,7 @@ sub modifyHeader {
     return if $TWiki::cfg{Sessions}{MapIP2SID};
 
     my $query = $this->{twiki}->{cgiQuery};
-    $this->_pushCookie();
+    _pushCookie( $this );
     $hopts->{cookie} = $this->{_cookies};
 }
 
@@ -650,7 +650,7 @@ sub redirectCgiQuery {
     my( $this, $query, $url ) = @_;
 
     if( $this->{_cgisession} ) {
-        $url = $this->_rewriteURL( $url )
+        $url = _rewriteURL( $this, $url )
           unless( !$TWiki::cfg{Sessions}{IDsInURLs} || $this->{_haveCookie} );
 
         # This usually won't be important, but just in case they haven't
@@ -663,7 +663,7 @@ sub redirectCgiQuery {
         #
         # So this is just a big fat precaution, just like the rest of this
         # whole handler.
-        $this->_pushCookie();
+        _pushCookie( $this );
     }
 
     if( $TWiki::cfg{Sessions}{MapIP2SID} ) {
@@ -907,7 +907,7 @@ sub _dispLogon {
     my $urlToUse = $this->loginUrl();
 
     unless( $this->{_haveCookie} || !$TWiki::cfg{Sessions}{IDsInURLs} ) {
-        $urlToUse = $this->_rewriteURL( $urlToUse );
+        $urlToUse = _rewriteURL( $this, $urlToUse );
     }
 
     my $text = $twiki->{templates}->expandTemplate('LOG_IN');

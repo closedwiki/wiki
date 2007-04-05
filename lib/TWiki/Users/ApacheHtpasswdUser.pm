@@ -85,13 +85,13 @@ sub removeUser {
 }
 
 sub setPassword {
-    my( $this, $user, $newPassU, $oldPassU ) = @_;
-    ASSERT( $user ) if DEBUG;
+    my( $this, $login, $newPassU, $oldPassU ) = @_;
+    ASSERT( $login ) if DEBUG;
 
     if( defined($oldPassU)) {
         my $ok = 0;
         try {
-            $ok = $this->{apache}->htCheckPassword( $user, $oldPassU );
+            $ok = $this->{apache}->htCheckPassword( $login, $oldPassU );
         } catch Error::Simple with {
         };
         unless( $ok ) {
@@ -102,7 +102,7 @@ sub setPassword {
 
     my $added = 0;
     try {
-        $added = $this->{apache}->htpasswd( $user, $newPassU, $oldPassU );
+        $added = $this->{apache}->htpasswd( $login, $newPassU, $oldPassU );
         $this->{error} = undef;
     } catch Error::Simple with {
         $this->{error} = $this->{apache}->error();
@@ -114,12 +114,12 @@ sub setPassword {
 }
 
 sub encrypt {
-    my( $this, $user, $passwordU, $fresh ) = @_;
-    ASSERT( $user ) if DEBUG;
+    my( $this, $login, $passwordU, $fresh ) = @_;
+    ASSERT( $login ) if DEBUG;
 
     my $salt = '';
     unless( $fresh ) {
-        my $epass = $this->fetchPass( $user );
+        my $epass = $this->fetchPass( $login );
         $salt = substr( $epass, 0, 2 ) if ( $epass );
     }
     my $r = $this->{apache}->CryptPasswd( $passwordU, $salt );

@@ -84,7 +84,7 @@ sub fetchPass {
 
 =pod
 
----++ ObjectMethod checkPassword( $user, $passwordU ) -> $boolean
+---++ ObjectMethod checkPassword( $login, $passwordU ) -> $boolean
 
 Finds if the password is valid for the given user.
 
@@ -100,7 +100,7 @@ sub checkPassword {
 
 =pod
 
----++ ObjectMethod removeUser( $user ) -> $boolean
+---++ ObjectMethod removeUser( $login ) -> $boolean
 
 Delete the users entry.
 
@@ -115,7 +115,7 @@ sub removeUser {
 
 =pod
 
----++ ObjectMethod setPassword( $user, $newPassU, $oldPassU ) -> $boolean
+---++ ObjectMethod setPassword( $login, $newPassU, $oldPassU ) -> $boolean
 
 If the $oldPassU matches matches the user's password, then it will
 replace it with $newPassU.
@@ -137,13 +137,13 @@ sub setPassword {
 
 =pod
 
----++ encrypt( $user, $passwordU, $fresh ) -> $passwordE
+---++ encrypt( $login, $passwordU, $fresh ) -> $passwordE
 
 Will return an encrypted password. Repeated calls
-to encrypt with the same user/passU will return the same passE.
+to encrypt with the same login/passU will return the same passE.
 
 However if the passU is changed, and subsequently changed _back_
-to the old user/passU pair, then the old passE is no longer valid.
+to the old login/passU pair, then the old passE is no longer valid.
 
 If $fresh is true, then a new password not based on any pre-existing
 salt will be used. Set this if you are generating a completely
@@ -184,7 +184,7 @@ sub getEmails {
 
 =pod
 
----++ ObjectMethod setEmails($user, @emails) -> $boolean
+---++ ObjectMethod setEmails($login, @emails) -> $boolean
 Set the email address(es) for the given login name. Returns true if
 the emails were set successfully.
 Default behaviour is a nop, which will result in the user mapping manager
@@ -198,8 +198,8 @@ sub setEmails {
 
 =pod
 
----++ ObjectMethod findUserByEmail($email) -> \@users
-Returns an array of user wikinames that relate to a email address.
+---++ ObjectMethod findLoginByEmail($email) -> \@users
+Returns an array of login names that relate to a email address.
 Defaut behaviour is a nop, which will result in the user mapping manager
 being asked for its opinion. If subclass implementations return a value for
 this, then the user mapping manager will *not* be asked.

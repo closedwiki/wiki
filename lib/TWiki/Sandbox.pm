@@ -365,7 +365,7 @@ sub sysCommand {
     my $pTmpl = $2;
 
     # Build argument list from template
-    my @args = $this->_buildCommandLine( $pTmpl, %params );
+    my @args = _buildCommandLine( $this, $pTmpl, %params );
     if ( $this->{REAL_SAFE_PIPE_OPEN} ) {
         # Real safe pipes, open from process directly - works
         # for most Unix/Linux Perl platforms and on Cygwin.  Based on

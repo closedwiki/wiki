@@ -107,7 +107,7 @@ sub _savePasswd {
 }
 
 sub encrypt {
-    my ( $this, $user, $passwd, $fresh ) = @_;
+    my ( $this, $login, $passwd, $fresh ) = @_;
 
     ASSERT($this->isa( 'TWiki::Users::HtPasswdUser')) if DEBUG;
 
@@ -125,7 +125,7 @@ sub encrypt {
 	    # found at http://world.inch.com/Scripts/htpasswd.pl.html
 
         my $salt;
-        $salt = $this->fetchPass( $user ) unless $fresh;
+        $salt = $this->fetchPass( $login ) unless $fresh;
         if ( $fresh || !$salt ) {
             my @saltchars = ( 'a'..'z', 'A'..'Z', '0'..'9', '.', '/' );
             $salt = $saltchars[int(rand($#saltchars+1))] .
@@ -135,7 +135,7 @@ sub encrypt {
 
     } elsif ( $TWiki::cfg{Htpasswd}{Encoding} eq 'md5' ) {
         # SMELL: what does this do if we are using a htpasswd file?
-		my $toEncode= "$user:$TWiki::cfg{AuthRealm}:$passwd";
+		my $toEncode= "$login:$TWiki::cfg{AuthRealm}:$passwd";
 		return Digest::MD5::md5_hex( $toEncode );
 
     } elsif ( $TWiki::cfg{Htpasswd}{Encoding} eq 'plain' ) {
@@ -147,15 +147,15 @@ sub encrypt {
 }
 
 sub fetchPass {
-    my ( $this, $user ) = @_;
+    my ( $this, $login ) = @_;
     ASSERT($this->isa( 'TWiki::Users::HtPasswdUser')) if DEBUG;
     my $ret = 0;
 
-    if( $user ) {
+    if( $login ) {
         try {
             my $db = _readPasswd();
-            if( exists $db->{$user} ) {
-                $ret = $db->{$user}->{pass};
+            if( exists $db->{$login} ) {
+                $ret = $db->{$login}->{pass};
             } else {
                 $this->{error} = 'Login invalid';
                 $ret = undef;
@@ -170,22 +170,22 @@ sub fetchPass {
 }
 
 sub setPassword {
-    my ( $this, $user, $newUserPassword, $oldUserPassword ) = @_;
+    my ( $this, $login, $newUserPassword, $oldUserPassword ) = @_;
     ASSERT($this->isa( 'TWiki::Users::HtPasswdUser')) if DEBUG;
 
     if( defined( $oldUserPassword )) {
         unless( $oldUserPassword eq '1') {
-            return 0 unless $this->checkPassword( $user, $oldUserPassword );
+            return 0 unless $this->checkPassword( $login, $oldUserPassword );
         }
-    } elsif( $this->fetchPass( $user )) {
-        $this->{error} = $user.' already exists';
+    } elsif( $this->fetchPass( $login )) {
+        $this->{error} = $login.' already exists';
         return 0;
     }
 
     try {
         my $db = _readPasswd();
-        $db->{$user}->{pass} = $this->encrypt( $user, $newUserPassword, 1 );
-        $db->{$user}->{emails} ||= '';
+        $db->{$login}->{pass} = $this->encrypt( $login, $newUserPassword, 1 );
+        $db->{$login}->{emails} ||= '';
         _savePasswd( $db );
     } catch Error::Simple with {
         $this->{error} = $!;
@@ -197,17 +197,17 @@ sub setPassword {
 }
 
 sub removeUser {
-    my ( $this, $user ) = @_;
+    my ( $this, $login ) = @_;
     ASSERT($this->isa( 'TWiki::Users::HtPasswdUser')) if DEBUG;
     my $result = undef;
     $this->{error} = undef;
 
     try {
         my $db = _readPasswd();
-        unless( $db->{$user} ) {
-            $this->{error} = 'No such user '.$user;
+        unless( $db->{$login} ) {
+            $this->{error} = 'No such user '.$login;
         } else {
-            delete $db->{$user};
+            delete $db->{$login};
             _savePasswd( $db );
             $result = 1;
         }
@@ -218,13 +218,13 @@ sub removeUser {
 }
 
 sub checkPassword {
-    my ( $this, $user, $password ) = @_;
+    my ( $this, $login, $password ) = @_;
     ASSERT($this->isa( 'TWiki::Users::HtPasswdUser')) if DEBUG;
-    my $encryptedPassword = $this->encrypt( $user, $password );
+    my $encryptedPassword = $this->encrypt( $login, $password );
 
     $this->{error} = undef;
 
-    my $pw = $this->fetchPass( $user );
+    my $pw = $this->fetchPass( $login );
     return 0 unless defined $pw;
     # $pw will be 0 if there is no pw
 
@@ -239,54 +239,48 @@ sub checkPassword {
 }
 
 sub getEmails {
-    my( $this, $user ) = @_;
+    my( $this, $login ) = @_;
 
     # first try the mapping cache
     my $db = _readPasswd();
-    if( $db->{$user}->{emails}) {
-        return split(/;/, $db->{$user}->{emails});
+    if( $db->{$login}->{emails}) {
+        return split(/;/, $db->{$login}->{emails});
     }
 
     # fall back to the default approach
-    return $this->SUPER::getEmails( $user );
+    return $this->SUPER::getEmails( $login );
 }
 
 sub setEmails {
     my $this = shift;
-    my $user = shift;
-    die unless ($user);
+    my $login = shift;
+    ASSERT($login) if DEBUG;
 
     my $db = _readPasswd();
-    unless ($db->{$user}) {
-        $db->{$user}->{pass} = '';
+    unless ($db->{$login}) {
+        $db->{$login}->{pass} = '';
     }
     if( scalar(@_) ) {
-        $db->{$user}->{emails} = join(';', @_);
+        $db->{$login}->{emails} = join(';', @_);
     } else {
-        $db->{$user}->{emails} = '';
+        $db->{$login}->{emails} = '';
     }
     _savePasswd($db);
     return 1;
 }
 
-=pod
-
-
-Searches the password DB for users who have set this email.
-
-=cut
-
+# Searches the password DB for users who have set this email.
 sub findUserByEmail {
     my( $this, $email ) = @_;
-    my $users = [];
+    my $logins = [];
     my $db = _readPasswd();
     while (my ($k, $v) = each %$db) {
         my %ems = map { $_ => 1 } split(';', $v->{emails});
         if ($ems{$email}) {
-            push(@$users, $k);
+            push(@$logins, $k);
         }
     }
-    return $users;
+    return $logins;
 }
 
 1;

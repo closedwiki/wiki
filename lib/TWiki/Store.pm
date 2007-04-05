@@ -257,7 +257,7 @@ sub readTopicRaw {
 
     my $text;
 
-    my $handler = $this->_getHandler( $web, $topic );
+    my $handler = _getHandler( $this, $web, $topic );
     unless ( $version ) {
         $text = $handler->getLatestRevision();
     } else {
@@ -318,14 +318,14 @@ sub moveAttachment {
 
         # Remove file attachment from old topic
         my $handler =
-          $this->_getHandler( $oldWeb, $oldTopic, $oldAttachment );
+          _getHandler( $this, $oldWeb, $oldTopic, $oldAttachment );
 
         $handler->moveAttachment( $newWeb, $newTopic, $newAttachment );
 
         my $fileAttachment =
           $ometa->get( 'FILEATTACHMENT', $oldAttachment );
         $ometa->remove( 'FILEATTACHMENT', $oldAttachment );
-        $this->_noHandlersSave( $user, $oldWeb, $oldTopic, $otext, $ometa,
+        _noHandlersSave( $this, $user, $oldWeb, $oldTopic, $otext, $ometa,
                                 { notify => 0 } );
 
         # Add file attachment to new topic
@@ -336,7 +336,7 @@ sub moveAttachment {
         $fileAttachment->{movedwhen} = time();
         $nmeta->putKeyed( 'FILEATTACHMENT', $fileAttachment );
 
-        $this->_noHandlersSave( $user, $newWeb, $newTopic, $ntext,
+        _noHandlersSave( $this, $user, $newWeb, $newTopic, $ntext,
                                 $nmeta, { dontlog => 1,
                                           notify => 0,
                                           comment => 'moved' } );
@@ -386,7 +386,7 @@ sub getAttachmentStream {
             $this->{session}->{security}->getReason());
     }
 
-    my $handler = $this->_getHandler( $web, $topic, $att );
+    my $handler = _getHandler( $this, $web, $topic, $att );
     return $handler->getStream();
 }
 
@@ -402,7 +402,7 @@ sub getAttachmentList {
     my( $this, $web, $topic ) = @_;
 
     ASSERT($this->isa('TWiki::Store')) if DEBUG;
-    my $handler = $this->_getHandler( $web, $topic );
+    my $handler = _getHandler( $this, $web, $topic );
     return $handler->getAttachmentList($web, $topic);
 }
 
@@ -418,7 +418,7 @@ sub attachmentExists {
     my( $this, $web, $topic, $att ) = @_;
 
     ASSERT($this->isa('TWiki::Store')) if DEBUG;
-    my $handler = $this->_getHandler( $web, $topic, $att );
+    my $handler = _getHandler( $this, $web, $topic, $att );
     return $handler->storedDataExists();
 }
 
@@ -449,7 +449,7 @@ sub moveTopic {
     my( $this, $oldWeb, $oldTopic, $newWeb, $newTopic, $user ) = @_;
     ASSERT($this->isa('TWiki::Store')) if DEBUG;
 
-    my $handler = $this->_getHandler( $oldWeb, $oldTopic, '' );
+    my $handler = _getHandler( $this, $oldWeb, $oldTopic, '' );
     my $rev = $handler->numRevisions();
     my $users = $this->{session}->{users};
 
@@ -486,10 +486,10 @@ sub moveTopic {
 
     if( $newWeb ne $oldWeb ) {
         # Record that it was moved away
-        $this->_recordChange( $oldWeb, $oldTopic, $user, $rev );
+        _recordChange( $this, $oldWeb, $oldTopic, $user, $rev );
     }
 
-    $this->_recordChange( $newWeb, $newTopic, $user, $rev );
+    _recordChange( $this, $newWeb, $newTopic, $user, $rev );
 
     # Log rename
     if( $TWiki::cfg{Log}{rename} ) {
@@ -550,7 +550,7 @@ sub moveWeb {
     pop( @newParentPath );
     my $newParent = join( '/', @newParentPath );
 
-    my $handler = $this->_getHandler( $oldWeb );
+    my $handler = _getHandler( $this, $oldWeb );
     $handler->moveWeb( $newWeb );
 
     (@webList) = $this->getListOfWebs('public', $newWeb);
@@ -602,7 +602,7 @@ sub readAttachment {
             $this->{session}->{security}->getReason());
     }
 
-    my $handler = $this->_getHandler( $web, $topic, $attachment );
+    my $handler = _getHandler( $this, $web, $topic, $attachment );
     return $handler->getRevision( $theRev );
 }
 
@@ -623,7 +623,7 @@ sub getRevisionNumber {
 
     $attachment = '' unless $attachment;
 
-    my $handler = $this->_getHandler( $web, $topic, $attachment );
+    my $handler = _getHandler( $this, $web, $topic, $attachment );
     return $handler->numRevisions();
 }
 
@@ -639,7 +639,7 @@ intended as a work area for plugins. The directory will exist.
 sub getWorkArea {
     my( $this, $key ) = @_;
 
-    my $handler = $this->_getHandler( );
+    my $handler = _getHandler( $this, );
     return $handler->getWorkArea( $key );
 }
 
@@ -694,7 +694,7 @@ sub getRevisionDiff {
         return $rd if $rd;
     }
 
-    my $rcs = $this->_getHandler( $web, $topic );
+    my $rcs = _getHandler( $this, $web, $topic );
     return $rcs->revisionDiff( $rev1, $rev2, $contextLines );
 }
 
@@ -730,7 +730,7 @@ sub getRevisionInfo {
     $rev ||= 0;
 
     my $handler =
-      $this->_getHandler( $web, $topic, $attachment );
+      _getHandler( $this, $web, $topic, $attachment );
 
     my( $rrev, $date, $user, $comment ) =
       $handler->getRevisionInfo( $rev );
@@ -845,7 +845,7 @@ sub saveTopic {
     ASSERT($this->isa('TWiki::Store')) if DEBUG;
     ASSERT($user) if DEBUG;
     $web =~ s#\.#/#go;
-    $meta = $this->_removeAutoAttachmentsFromMeta($meta);
+    $meta = _removeAutoAttachmentsFromMeta( $this, $meta );
     my $users = $this->{session}->{users};
 
     $options = {} unless defined( $options );
@@ -880,7 +880,7 @@ sub saveTopic {
     }
     my $error;
     try {
-        $this->_noHandlersSave( $user, $web, $topic, $text, $meta, $options );
+        _noHandlersSave( $this, $user, $web, $topic, $text, $meta, $options );
     } catch Error::Simple with {
         $error = shift;
     };
@@ -965,7 +965,7 @@ sub saveAttachment {
             $attrs->{comment} = $opts->{comment}
               if (defined($opts->{comment}));
 
-            my $handler = $this->_getHandler( $web, $topic, $attachment );
+            my $handler = _getHandler( $this, $web, $topic, $attachment );
 
             my $tmpFile;
 
@@ -1054,7 +1054,7 @@ sub _noHandlersSave {
     $meta ||= new TWiki::Meta( $this->{session}, $web, $topic );
 
     my $users = $this->{session}->{users};
-    my $handler = $this->_getHandler( $web, $topic );
+    my $handler = _getHandler( $this, $web, $topic );
     my $currentRev = $handler->numRevisions() || 0;
     my $nextRev = $currentRev + 1;
 
@@ -1093,7 +1093,7 @@ sub _noHandlersSave {
         $nextRev = $handler->numRevisions();
 
         my $extra = $options->{minor} ? 'minor' : '';
-        $this->_recordChange( $web, $topic, $user, $nextRev, $extra );
+        _recordChange( $this, $web, $topic, $user, $nextRev, $extra );
 
         if( ( $TWiki::cfg{Log}{save} ) && ! ( $options->{dontlog} ) ) {
             $this->{session}->writeLog( 'save', $web.'.'.$topic,
@@ -1155,7 +1155,7 @@ sub repRev {
 
     $this->lockTopic( $user, $web, $topic );
     try {
-        my $handler = $this->_getHandler( $web, $topic );
+        my $handler = _getHandler( $this, $web, $topic );
         $handler->replaceRevision( $text, $options->{comment},
                                         $revuser, $revdate );
     } finally {
@@ -1201,7 +1201,7 @@ sub delRev {
 
     $this->lockTopic( $user, $web, $topic );
     try {
-        my $handler = $this->_getHandler( $web, $topic );
+        my $handler = _getHandler( $this, $web, $topic );
         $handler->deleteRevision();
 
         # restore last topic from repository
@@ -1240,7 +1240,7 @@ sub lockTopic {
     ASSERT($this->isa('TWiki::Store')) if DEBUG;
     ASSERT($web && $topic) if DEBUG;
 
-    my $handler = $this->_getHandler( $web, $topic );
+    my $handler = _getHandler( $this, $web, $topic );
     my $users = $this->{session}->{users};
 
     while ( 1 ) {
@@ -1284,7 +1284,7 @@ sub unlockTopic {
     my ( $this, $user, $web, $topic ) = @_;
     ASSERT($this->isa('TWiki::Store')) if DEBUG;
 
-    my $handler = $this->_getHandler( $web, $topic );
+    my $handler = _getHandler( $this, $web, $topic );
     $handler->setLock( 0, $user );
 }
 
@@ -1305,7 +1305,7 @@ sub webExists {
     $web =~ s#\.#/#go;
 
     return 0 unless defined $web;
-    my $handler = $this->_getHandler( $web, $TWiki::cfg{WebPrefsTopicName} );
+    my $handler = _getHandler( $this, $web, $TWiki::cfg{WebPrefsTopicName} );
     return $handler->storedDataExists();
 }
 
@@ -1327,7 +1327,7 @@ sub topicExists {
 
     return 0 unless $topic;
 
-    my $handler = $this->_getHandler( $web, $topic );
+    my $handler = _getHandler( $this, $web, $topic );
     return $handler->storedDataExists();
 }
 
@@ -1424,7 +1424,7 @@ sub getTopicParent {
 
     return undef unless $this->topicExists( $web, $topic );
 
-    my $handler = $this->_getHandler( $web, $topic );
+    my $handler = _getHandler( $this, $web, $topic );
 
     my $strm = $handler->getStream();
     my $data = '';
@@ -1457,7 +1457,7 @@ sub getTopicLatestRevTime {
     my ( $this, $web, $topic ) = @_;
     $web =~ s#\.#/#go;
 
-    my $handler = $this->_getHandler( $web, $topic );
+    my $handler = _getHandler( $this, $web, $topic );
     return $handler->getLatestRevisionTime();
 }
 
@@ -1475,7 +1475,7 @@ sub readMetaData {
     ASSERT($this->isa('TWiki::Store')) if DEBUG;
     $web =~ s#\.#/#go;
 
-    my $handler = $this->_getHandler( $web );
+    my $handler = _getHandler( $this, $web );
     return $handler->readMetaData( $name );
 }
 
@@ -1522,7 +1522,7 @@ sub saveMetaData {
     ASSERT($this->isa('TWiki::Store')) if DEBUG;
     $web =~ s#\.#/#go;
 
-    my $handler = $this->_getHandler( $web );
+    my $handler = _getHandler( $this, $web );
     return $handler->saveMetaData( $name, $text );
 }
 
@@ -1542,7 +1542,7 @@ sub getTopicNames {
 
     $web =~ s#\.#/#go;
 
-    my $handler = $this->_getHandler( $web );
+    my $handler = _getHandler( $this, $web );
     return $handler->getTopicNames();
 }
 
@@ -1570,7 +1570,7 @@ sub getListOfWebs {
     $web ||= '';
     $web =~ s#\.#/#g;
 
-    my @webList = $this->_getSubWebs( $web );
+    my @webList = _getSubWebs( $this, $web );
 
     if ( $filter =~ /\buser\b/ ) {
         @webList = grep { !/(?:^_|\/_)/, } @webList;
@@ -1608,7 +1608,7 @@ sub getListOfWebs {
 sub _getSubWebs {
     my( $this, $web ) = @_ ;
 
-    my $handler = $this->_getHandler( $web );
+    my $handler = _getHandler( $this, $web );
     my @tmpList = $handler->getWebNames();
     # filter only those webs that meet the webExists criteria
     my @webList;
@@ -1628,7 +1628,7 @@ sub _getSubWebs {
     if( $TWiki::cfg{EnableHierarchicalWebs} ) {
         my @subWebList = ();
         foreach my $subWeb ( @webList ) {
-            push( @subWebList, $this->_getSubWebs( $subWeb ));
+            push( @subWebList, _getSubWebs( $this, $subWeb ));
         }
         push( @webList, @subWebList );
     }
@@ -1728,7 +1728,7 @@ sub removeWeb {
         throw Error::Simple( 'No such web '.$web );
     }
 
-    my $handler = $this->_getHandler( $web );
+    my $handler = _getHandler( $this, $web );
     $handler->removeWeb();
 }
 
@@ -1881,7 +1881,7 @@ sub copyTopic {
     $fromWeb =~ s#\.#/#go;
     $toWeb =~ s#\.#/#go;
 
-    my $handler = $this->_getHandler( $fromWeb, $fromTopic );
+    my $handler = _getHandler( $this, $fromWeb, $fromTopic );
     $handler->copyTopic( $toWeb, $toTopic );
 }
 
@@ -2008,7 +2008,7 @@ sub searchInWebContent {
     my( $this, $searchString, $web, $topics, $options ) = @_;
     $web =~ s#\.#/#go;
 
-    my $handler = $this->_getHandler( $web );
+    my $handler = _getHandler( $this, $web );
     return $handler->searchInWebContent( $searchString, $topics, $options );
 }
 
@@ -2029,7 +2029,7 @@ Returns a single-digit rev number or undef if it couldn't be determined
 sub getRevisionAtTime {
     my ( $this, $web, $topic, $time ) = @_;
 
-    my $handler = $this->_getHandler( $web, $topic );
+    my $handler = _getHandler( $this, $web, $topic );
     return $handler->getRevisionAtTime( $time );
 }
 
@@ -2052,7 +2052,7 @@ another user is already editing a topic.
 sub getLease {
     my( $this, $web, $topic ) = @_;
 
-    my $handler = $this->_getHandler( $web, $topic );
+    my $handler = _getHandler( $this, $web, $topic );
     my $lease = $handler->getLease();
     return $lease;
 }
@@ -2070,7 +2070,7 @@ See =getLease= for more details about Leases.
 sub setLease {
     my( $this, $web, $topic, $user, $length ) = @_;
 
-    my $handler = $this->_getHandler( $web, $topic );
+    my $handler = _getHandler( $this, $web, $topic );
     my $lease;
     if( $user ) {
         my $t = time();
@@ -2095,7 +2095,7 @@ See =getLease= for more details about Leases.
 sub clearLease {
     my( $this, $web, $topic ) = @_;
 
-    my $handler = $this->_getHandler( $web, $topic );
+    my $handler = _getHandler( $this, $web, $topic );
     $handler->setLease( undef );
 }
 
@@ -2110,7 +2110,7 @@ some store implementations when a topic is created, but never saved.
 
 sub removeSpuriousLeases {
     my( $this, $web ) = @_;
-    my $handler = $this->_getHandler( $web );
+    my $handler = _getHandler( $this, $web );
     $handler->removeSpuriousLeases();
 }
 

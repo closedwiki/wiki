@@ -56,7 +56,7 @@ sub tear_down {
 sub test_mktmp {
     # this is only used on WINDOWS so needs a special test
     my $this = shift;
-    my $tmpfile = TWiki::Store::RcsFile::_mkTmpFilename();
+    my $tmpfile = TWiki::Store::RcsFile::mkTmpFilename();
     $this->assert(!-e $tmpfile);
 }
 
@@ -124,10 +124,10 @@ sub test_RcsWrapOnly_ciLocked {
     unlink("$topic.txt");
 
     # file is now locked by blocker_socker, save some new text
-    $rcs->_saveFile( $rcs->{file}, "Shimmy Dimmy" );
+    $rcs->saveFile( $rcs->{file}, "Shimmy Dimmy" );
     # check it in
     $rcs->_ci( "Gotcha", "SheikAlot" );
-    my $txt = $rcs->_readFile($vfile);
+    my $txt = $rcs->readFile($vfile);
     $this->assert_matches(qr/Gotcha/s, $txt);
     $this->assert_matches(qr/BungditDin/s, $txt);
     $this->assert_matches(qr/Shimmy Dimmy/, $txt);
@@ -254,14 +254,14 @@ sub verifyGetBinaryRevision {
     my $atttext2 = "\003test test test\000\n";
     my $attachment = "file.binary";
     my $rcs = $class->new( $twiki, $testWeb, $topic, $attachment );
-    $rcs->_saveFile("tmp.tmp", $atttext1) && die;
+    $rcs->saveFile("tmp.tmp", $atttext1) && die;
     my $fh;
     open($fh, "<tmp.tmp");
     $rcs->addRevisionFromStream( $fh, "comment attachment",
                        "UserForRev" );
     close($fh);
     unlink("tmp.tmp");
-    $rcs->_saveFile("tmp.tmp", $atttext2) && die;
+    $rcs->saveFile("tmp.tmp", $atttext2) && die;
     open($fh, "<tmp.tmp");
     $rcs->addRevisionFromStream( $fh, "comment attachment",
                                  "UserForRev" );

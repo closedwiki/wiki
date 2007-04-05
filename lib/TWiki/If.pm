@@ -114,9 +114,9 @@ $defOps{'$'} =
             return $twiki->{cgiQuery}->param( $text );
         }
         $text = "%$text%";
-        $twiki->_expandAllTags(\$text,
-                               $twiki->{topicName},
-                               $twiki->{webName});
+        TWiki::expandAllTags($twiki, \$text,
+                              $twiki->{topicName},
+                              $twiki->{webName});
         return $text || '';
     }
    };
@@ -278,7 +278,7 @@ sub parse {
         if ( $string =~ m/^\s*$/o ) {
             return new TWiki::IfNode( undef, '', undef );
         } else {
-            my( $node, $rest ) = $this->_parse( $string );
+            my( $node, $rest ) = _parse( $this, $string );
             return $node;
         }
     }
@@ -298,7 +298,7 @@ sub _parse {
             my $op = $this->{operators}->{lc($1)};
             while( scalar( @opers ) > 0 &&
                      $op->{prec} < $opers[$#opers]->{prec} ) {
-                $this->_apply( \@opers, \@opands );
+                _apply( $this, \@opers, \@opands );
             }
             die($this->{RE}[1]) unless $op;
             push( @opers, $op );
@@ -316,7 +316,7 @@ sub _parse {
         }
         elsif( $string =~ s/\s*\(//o ) {
             my $oa;
-            ( $oa, $string ) = $this->_parse( $string );
+            ( $oa, $string ) = _parse( $this, $string );
             push( @opands, $oa );
         }
         elsif( $string =~ s/^\s*\)//o ) {
@@ -329,7 +329,7 @@ sub _parse {
         }
     }
     while( scalar( @opers ) > 0 ) {
-        return undef unless $this->_apply( \@opers, \@opands );
+        return undef unless _apply( $this, \@opers, \@opands );
     }
     unless( scalar( @opands ) == 1 ) {
         $this->{error} = 'Missing operator?';

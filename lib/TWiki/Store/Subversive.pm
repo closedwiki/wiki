@@ -74,7 +74,7 @@ sub init {
     return unless $this->{topic};
 
     unless( -e $this->{file} ) {
-        $this->_mkPathTo( $this->{file} );
+        _mkPathTo( $this, $this->{file} );
 
         unless( open(F, '>'.$this->{file})) {
             throw Error::Simple('svn add of '.$this->{file}.
@@ -147,7 +147,7 @@ Get the text of the most recent revision
 
 sub getLatestRevision {
     my $this = shift;
-    return $this->_readFile( $this->{file} );
+    return _readFile( $this, $this->{file} );
 }
 
 =pod
@@ -174,7 +174,7 @@ sub readMetaData {
     my( $this, $name ) = @_;
     my $file = $TWiki::cfg{DataDir}.'/'.$this->{web}.'/'.$name;
     if( -e $file ) {
-        return $this->_readFile( $file );
+        return _readFile( $this, $file );
     }
     return '';
 }
@@ -193,7 +193,7 @@ sub saveMetaData {
 
     my $file = $TWiki::cfg{DataDir}.'/'.$this->{web}.'/'.$name;
 
-    return $this->_saveFile( $file, $text );
+    return _saveFile( $this, $file, $text );
 }
 
 =pod
@@ -321,10 +321,10 @@ Move a web.
 
 sub moveWeb {
     my( $this, $newWeb ) = @_;
-    $this->_moveFile( $TWiki::cfg{DataDir}.'/'.$this->{web},
+    _moveFile( $this, $TWiki::cfg{DataDir}.'/'.$this->{web},
                $TWiki::cfg{DataDir}.'/'.$newWeb );
     if( -d $TWiki::cfg{PubDir}.'/'.$this->{web} ) {
-        $this->_moveFile( $TWiki::cfg{PubDir}.'/'.$this->{web},
+        _moveFile( $this, $TWiki::cfg{PubDir}.'/'.$this->{web},
                    $TWiki::cfg{PubDir}.'/'.$newWeb );
     }
 }
@@ -344,7 +344,7 @@ if the main file revision is required.
 
 sub getRevision {
     my( $this ) = @_;
-    return $this->_readFile( $this->{file} );
+    return _readFile( $this, $this->{file} );
 }
 
 =pod
@@ -393,7 +393,7 @@ sub restoreLatestRevision {
     my $rev = $this->numRevisions();
     my $text = $this->getRevision( $rev );
 
-    return $this->_saveFile( $this->{file}, $text );
+    return _saveFile( $this, $this->{file}, $text );
 }
 
 =pod
@@ -414,8 +414,8 @@ sub removeWeb {
     # Just make sure of the context
     ASSERT(!$this->{topic}) if DEBUG;
 
-    $this->_rmtree( $TWiki::cfg{DataDir}.'/'.$this->{web} );
-    $this->_rmtree( $TWiki::cfg{PubDir}.'/'.$this->{web} );
+    _rmtree( $this, $TWiki::cfg{DataDir}.'/'.$this->{web} );
+    _rmtree( $this, $TWiki::cfg{PubDir}.'/'.$this->{web} );
 }
 
 =pod
@@ -435,13 +435,13 @@ sub moveTopic {
     # Move data file
     my $new = new TWiki::Store::Subversive( $this->{session},
                                             $newWeb, $newTopic, '' );
-    $this->_moveFile( $this->{file}, $new->{file} );
+    _moveFile( $this, $this->{file}, $new->{file} );
 
     # Move attachments
     my $from = $TWiki::cfg{PubDir}.'/'.$this->{web}.'/'.$this->{topic};
     if( -e $from ) {
         my $to = $TWiki::cfg{PubDir}.'/'.$newWeb.'/'.$newTopic;
-        $this->_moveFile( $from, $to );
+        _moveFile( $this, $from, $to );
     }
 }
 
@@ -462,7 +462,7 @@ sub copyTopic {
     my $new = new TWiki::Store::Subversive( $this->{session},
                                          $newWeb, $newTopic, '' );
 
-    $this->_copyFile( $this->{file}, $new->{file} );
+    _copyFile( $this, $this->{file}, $new->{file} );
 
     if( opendir(DIR, $TWiki::cfg{PubDir}.'/'.$this->{web}.'/'.
                   $this->{topic} )) {
@@ -484,7 +484,7 @@ sub moveAttachment {
     my $new = TWiki::Store::Subversive->new( $this->{session}, $newWeb,
                                           $newTopic, $newAttachment );
 
-    $this->_moveFile( $this->{file}, $new->{file} );
+    _moveFile( $this, $this->{file}, $new->{file} );
 }
 
 sub copyAttachment {
@@ -497,7 +497,7 @@ sub copyAttachment {
     my $new = TWiki::Store::Subversive->new( $this->{session}, $newWeb,
                                           $newTopic, $attachment );
 
-    $this->_copyFile( $this->{file}, $new->{file} );
+    _copyFile( $this, $this->{file}, $new->{file} );
 }
 
 =pod
@@ -533,7 +533,7 @@ sub _saveStream {
 
     ASSERT($fh) if DEBUG;
 
-    $this->_mkPathTo( $this->{file} );
+    _mkPathTo( $this, $this->{file} );
     open( F, '>'.$this->{file} ) ||
         throw Error::Simple( 'RCS: open '.$this->{file}.' failed: '.$! );
     binmode( F ) ||
@@ -554,7 +554,7 @@ sub _saveStream {
 sub _copyFile {
     my( $this, $from, $to ) = @_;
 
-    $this->_mkPathTo( $to );
+    _mkPathTo( $this, $to );
 
     my($output, $exit) = $this->{session}->{sandbox}->sysCommand(
         'svn cp %FROM|F% %TO|F%',
@@ -568,7 +568,7 @@ sub _copyFile {
 sub _moveFile {
     my( $this, $from, $to ) = @_;
 
-    $this->_mkPathTo( $to );
+    _mkPathTo( $this, $to );
     my($output, $exit) = $this->{session}->{sandbox}->sysCommand(
         'svn mv %FROM|F% %TO|F%',
         FROM => $from, TO => $to);
@@ -581,7 +581,7 @@ sub _moveFile {
 sub _saveFile {
     my( $this, $name, $text ) = @_;
 
-    $this->_mkPathTo( $name );
+    _mkPathTo( $this, $name );
 
     open( FILE, '>'.$name ) ||
       throw Error::Simple( 'RCS: failed to create file '.$name.': '.$! );
@@ -683,14 +683,14 @@ sub addRevisionFromText {
     my( $this, $text, $comment, $user, $date ) = @_;
     $this->init();
 
-    $this->_saveFile( $this->{file}, $text );
+    _saveFile( $this, $this->{file}, $text );
 }
 
 sub addRevisionFromStream {
     my( $this, $stream, $comment, $user, $date ) = @_;
     $this->init();
 
-    $this->_saveStream( $stream );
+    _saveStream( $this, $stream );
 }
 
 sub replaceRevision {

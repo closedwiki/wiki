@@ -216,7 +216,7 @@ sub _readTo {
 sub _ensureProcessed {
     my( $this ) = @_;
     if( ! $this->{state} ) {
-        $this->_process();
+        _process( $this );
     }
 }
 
@@ -411,7 +411,7 @@ sub initText {
 # implements RcsFile
 sub numRevisions {
     my( $this ) = @_;
-    $this->_ensureProcessed();
+    _ensureProcessed( $this );
     # if state is nocommav, and the file exists, there is only one revision
     if( $this->{state} eq 'nocommav' ) {
         return 1 if( -e $this->{file} );
@@ -422,36 +422,36 @@ sub numRevisions {
 
 # implements RcsFile
 sub addRevisionFromText {
-    shift->_addRevision( 0, @_ );
+    _addRevision( shift, 0, @_ );
 }
 
 # implements RcsFile
 sub addRevisionFromStream {
-    shift->_addRevision( 1, @_ );
+    _addRevision( shift, 1, @_ );
 }
 
 sub _addRevision {
     my( $this, $isStream, $data, $log, $author, $date ) = @_;
 
-    $this->_ensureProcessed();
+    _ensureProcessed( $this);
 
     if( $this->{state} eq 'nocommav' && -e $this->{file} ) {
         # Must do this *before* saving the attachment, so we
         # save the file on disc
         $this->{head} = 1;
-        $this->{revs}[1]->{text} = $this->_readFile( $this->{file} );
+        $this->{revs}[1]->{text} = TWiki::Store::RcsFile::readFile( $this, $this->{file} );
         $this->{revs}[1]->{log} = $log;
         $this->{revs}[1]->{author} = $author;
         $this->{revs}[1]->{date} = (defined $date ? $date : time());
-        $this->_writeMe();
+        _writeMe( $this );
     }
 
     if( $isStream ) {
-        $this->_saveStream( $data );
+        TWiki::Store::RcsFile::saveStream( $this, $data );
         # SMELL: for big attachments, this is a dog
-        $data = $this->_readFile( $this->{file} );
+        $data = TWiki::Store::RcsFile::readFile( $this, $this->{file} );
     } else {
-        $this->_saveFile( $this->{file}, $data );
+        TWiki::Store::RcsFile::saveFile( $this, $this->{file}, $data );
     }
 
     my $head = $this->{head};
@@ -468,7 +468,7 @@ sub _addRevision {
     $this->{revs}[$head]->{author} = $author;
     $this->{revs}[$head]->{date} = ( defined $date ? $date : time());
 
-    return $this->_writeMe();
+    return _writeMe( $this );
 }
 
 sub _writeMe {
@@ -482,7 +482,7 @@ sub _writeMe {
                             ' for write: '.$! );
     } else {
         binmode( $out );
-        $this->_write( $out );
+        _write( $this, $out );
         close( $out );
     }
     chmod( $TWiki::cfg{RCS}{filePermission}, $this->{rcsFile} );
@@ -493,19 +493,19 @@ sub _writeMe {
 # implements RcsFile
 sub replaceRevision {
     my( $this, $text, $comment, $user, $date ) = @_;
-    $this->_ensureProcessed();
-    $this->_delLastRevision();
-    return $this->_addRevision( 0, $text, $comment, $user, $date );
+    _ensureProcessed( $this );
+    _delLastRevision( $this );
+    return _addRevision( $this, 0, $text, $comment, $user, $date );
 }
 
 # implements RcsFile
 sub deleteRevision {
     my( $this ) = @_;
-    $this->_ensureProcessed();
+    _ensureProcessed( $this );
     # Can't delete revision 1
     return unless $this->{head} > 1;
-    $this->_delLastRevision();
-    return $this->_writeMe();
+    _delLastRevision( $this );
+    return _writeMe( $this);
 }
 
 sub _delLastRevision {
@@ -516,7 +516,7 @@ sub _delLastRevision {
     my $lastText = $this->getRevision( $numRevisions );
     $this->{revs}[$numRevisions]->{text} = $lastText;
     $this->{head} = $numRevisions;
-    $this->_saveFile( $this->{file}, $lastText );
+    TWiki::Store::RcsFile::saveFile( $this, $this->{file}, $lastText );
 }
 
 # implements RcsFile
@@ -525,7 +525,7 @@ sub _delLastRevision {
 sub revisionDiff {
     my( $this, $rev1, $rev2, $contextLines ) = @_;
     my @list;
-    $this->_ensureProcessed();
+    _ensureProcessed( $this );
     my $text1 = $this->getRevision( $rev1 );
     my $text2 = $this->getRevision( $rev2 );
 	
@@ -543,7 +543,7 @@ sub revisionDiff {
 sub getRevisionInfo {
     my( $this, $version ) = @_;
 
-    $this->_ensureProcessed();
+    _ensureProcessed( $this );
 
     if( $this->{state} ne 'nocommav' ) {
         if( !$version || $version > $this->{head} ) {
@@ -612,7 +612,7 @@ sub getRevision {
 
     return $this->SUPER::getRevision($version) unless $version;
 
-    $this->_ensureProcessed();
+    _ensureProcessed( $this );
 
     return $this->SUPER::getRevision($version) if $this->{state} eq 'nocommav';
 
@@ -624,7 +624,7 @@ sub getRevision {
     $version = $head if $version > $head;
     my $headText = $this->{revs}[$head]->{text};
     my $text = _split( $headText );
-    return $this->_patchN( $text, $head-1, $version );
+    return _patchN( $this, $text, $head-1, $version );
 }
 
 # Apply reverse diffs until we reach our target rev
@@ -723,7 +723,7 @@ sub getRevisionAtTime {
 
     my $version = 1;
 
-    $this->_ensureProcessed();
+    _ensureProcessed( $this );
 
     $version = $this->{head};
 

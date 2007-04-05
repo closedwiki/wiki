@@ -242,7 +242,7 @@ sub enabled_languages {
     my $this = shift;
 
     unless ($this->{checked_enabled}) {
-        $this->_discover_languages();
+        _discover_languages( $this );
     }
 
     $this->{checked_enabled} = 1;
@@ -260,7 +260,7 @@ sub _discover_languages {
     foreach my $line (<LANGUAGE>) {
             my ($key,$name)=split('=',$line);
              chop($name);
-            $this->_add_language($key,$name);
+            _add_language( $this,$key,$name);
         }
     } else {
         #TODO: if the cache file don't exist, perhaps a warning should be issued to the logs?
@@ -269,7 +269,7 @@ sub _discover_languages {
             my $h = TWiki::I18N->get_handle($tag);
             my $name = $h->maketext("_language_name");
             $name = $this->toSiteCharSet($name); 
-            $this->_add_language($tag, $name);
+            _add_language( $this,$tag, $name);
             print LANGUAGE "$tag=$name\n";
         }
     }

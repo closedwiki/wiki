@@ -63,7 +63,7 @@ sub initBinary {
 
     $this->{binary} = 1;
 
-    TWiki::Store::RcsFile::_mkPathTo( $this->{file} );
+    TWiki::Store::RcsFile::mkPathTo( $this->{file} );
 
     return if -e $this->{rcsFile};
 
@@ -72,12 +72,12 @@ sub initBinary {
           $TWiki::cfg{RCS}{initBinaryCmd}, FILENAME => $this->{file} );
     if( $exit ) {
         throw Error::Simple( $TWiki::cfg{RCS}{initBinaryCmd}.
-                               ' of '.$this->_hidePath($this->{file}).
+                               ' of '.$this->hidePath($this->{file}).
                                  ' failed: '.$rcsOutput );
     } elsif( ! -e $this->{rcsFile} ) {
         # Sometimes (on Windows?) rcs file not formed, so check for it
         throw Error::Simple( $TWiki::cfg{RCS}{initBinaryCmd}.
-                               ' of '.$this->_hidePath($this->{rcsFile}).
+                               ' of '.$this->hidePath($this->{rcsFile}).
                                  ' failed to create history file ');
     }
 }
@@ -88,7 +88,7 @@ sub initText {
 
     $this->{binary} = 0;
 
-    TWiki::Store::RcsFile::_mkPathTo( $this->{file} );
+    TWiki::Store::RcsFile::mkPathTo( $this->{file} );
 
     return if -e $this->{rcsFile};
 
@@ -99,12 +99,12 @@ sub initText {
     if( $exit ) {
         $rcsOutput ||= '';
         throw Error::Simple( $TWiki::cfg{RCS}{initTextCmd}.
-                               ' of '.$this->_hidePath($this->{file}).
+                               ' of '.$this->hidePath($this->{file}).
                                  ' failed: '.$rcsOutput );
     } elsif( ! -e $this->{rcsFile} ) {
         # Sometimes (on Windows?) rcs file not formed, so check for it
         throw Error::Simple( $TWiki::cfg{RCS}{initTextCmd}.
-                               ' of '.$this->_hidePath($this->{rcsFile}).
+                               ' of '.$this->hidePath($this->{rcsFile}).
                                  ' failed to create history file ');
     }
 }
@@ -115,12 +115,12 @@ sub addRevisionFromText {
     $this->init();
 
     unless( -e $this->{rcsFile} ) {
-        $this->_lock();
-        $this->_ci( $comment, $user, $date );
+        _lock( $this );
+        _ci( $this, $comment, $user, $date );
     }
-    $this->_saveFile( $this->{file}, $text );
-    $this->_lock();
-    $this->_ci( $comment, $user, $date );
+    TWiki::Store::RcsFile::saveFile( $this, $this->{file}, $text );
+    _lock( $this );
+    _ci( $this, $comment, $user, $date );
 }
 
 # implements RcsFile
@@ -128,9 +128,9 @@ sub addRevisionFromStream {
     my( $this, $stream, $comment, $user, $date ) = @_;
     $this->init();
 
-    $this->_lock();
-    $this->_saveStream( $stream );
-    $this->_ci( $comment, $user, $date );
+    _lock( $this );
+    TWiki::Store::RcsFile::saveStream( $this, $stream );
+    _ci( $this, $comment, $user, $date );
 }
 
 # implements RcsFile
@@ -146,12 +146,12 @@ sub replaceRevision {
         # initial revision, so delete repository file and start again
         unlink $this->{rcsFile};
     } else {
-        $this->_deleteRevision( $rev );
+        _deleteRevision( $this, $rev );
     }
-    $this->_saveFile( $this->{file}, $text );
+    TWiki::Store::RcsFile::saveFile( $this, $this->{file}, $text );
 	$date = TWiki::Time::formatTime( $date , '$rcs', 'gmtime');
 
-    $this->_lock();
+    _lock( $this );
     my ($rcsOut, $exit) =
       $this->{session}->{sandbox}->sysCommand(
           $TWiki::cfg{RCS}{ciDateCmd},
@@ -171,7 +171,7 @@ sub deleteRevision {
     my( $this ) = @_;
     my $rev = $this->numRevisions();
     return undef if( $rev <= 1 );
-    return $this->_deleteRevision( $rev );
+    return _deleteRevision( $this, $rev );
 }
 
 sub _deleteRevision {
@@ -192,7 +192,7 @@ sub _deleteRevision {
 
     if( $exit ) {
         throw Error::Simple( $TWiki::cfg{RCS}{delRevCmd}.
-                               ' of '.$this->_hidePath($this->{file}).
+                               ' of '.$this->hidePath($this->{file}).
                                  ' failed: '.$rcsOut );
     }
 
@@ -205,10 +205,10 @@ sub _deleteRevision {
 
     if( $exit ) {
         throw Error::Simple( $TWiki::cfg{RCS}{coCmd}.
-                               ' of '.$this->_hidePath($this->{file}).
+                               ' of '.$this->hidePath($this->{file}).
                                  ' failed: '.$rcsOut );
     }
-    $this->_saveFile( $this->{file}, $rcsOut );
+    TWiki::Store::RcsFile::saveFile( $this, $this->{file}, $rcsOut );
 }
 
 # implements RcsFile
@@ -230,7 +230,7 @@ sub getRevision {
         # Need to put RCS into binary mode to avoid extra \r appearing and
         # read from binmode file rather than stdout to avoid early file
         # read termination
-        $tmpfile = $this->_mkTmpFilename();
+        $tmpfile = TWiki::Store::RcsFile::mkTmpFilename( $this );
         $tmpRevFile = $tmpfile.',v';
         copy( $this->{rcsFile}, $tmpRevFile );
         my ($tmp, $status) = $this->{session}->{sandbox}->sysCommand(
@@ -245,7 +245,7 @@ sub getRevision {
         FILENAME => $file );
 
     if( $tmpfile ) {
-        $text = $this->_readFile( $tmpfile );
+        $text = TWiki::Store::RcsFile::readFile( $this, $tmpfile );
         # SMELL: Is untainting really necessary here?
         unlink TWiki::Sandbox::untaintUnchecked( $tmpfile );
         unlink TWiki::Sandbox::untaintUnchecked( $tmpRevFile );
@@ -269,7 +269,7 @@ sub numRevisions {
           FILENAME => $this->{rcsFile} );
     if( $exit ) {
         throw Error::Simple( 'RCS: '.$TWiki::cfg{RCS}{histCmd}.
-                               ' of '.$this->_hidePath($this->{rcsFile}).
+                               ' of '.$this->hidePath($this->{rcsFile}).
                                  ' failed: '.$rcsOutput );
     }
     if( $rcsOutput =~ /head:\s+\d+\.(\d+)\n/ ) {
@@ -423,7 +423,7 @@ sub _ci {
     $rcsOutput ||= '';
 
     if( $exit ) {
-        throw Error::Simple($cmd.' of '.$this->_hidePath($this->{file}).
+        throw Error::Simple($cmd.' of '.$this->hidePath($this->{file}).
                               ' failed: '.$exit.' '.$rcsOutput );
     }
 

@@ -194,7 +194,7 @@ sub lookupLoginName {
 
     # SMELL: what if we just want to know if they exist? Why bother
     # loading the mapping?
-    $this->_loadMapping();
+    _loadMapping( $this );
     return $this->{U2W}{$login};
 }
 
@@ -206,7 +206,7 @@ sub lookupWikiName {
 
     # SMELL: what if we just want to know if they exist? Why bother
     # loading the mapping?
-    $this->_loadMapping();
+    _loadMapping( $this );
     return $this->{W2U}{$wn};
 }
 
@@ -216,7 +216,7 @@ sub eachUser {
     my( $this ) = @_;
     ASSERT($this->isa( 'TWiki::Users::TWikiUserMapping')) if DEBUG;
 
-    $this->_loadMapping();
+    _loadMapping( $this );
     my @list =  keys(%{$this->{W2U}});
     return new TWiki::ListIterator( \@list );
 }
@@ -225,7 +225,7 @@ sub eachUser {
 # method in that module for details.
 sub eachGroup {
     my ( $this ) = @_;
-    $this->_getListOfGroups();
+    _getListOfGroups( $this );
     return new TWiki::ListIterator( \@{$this->{groupsList}} );
 }
 
@@ -249,17 +249,17 @@ sub _loadMapping {
         # This matches:
         #   * TWikiGuest - guest - 10 Mar 2005
         #   * TWikiGuest - 10 Mar 2005
-        $text =~ s/^\s*\* ($TWiki::regex{webNameRegex}\.)?($TWiki::regex{wikiWordRegex})\s*(?:-\s*(\S+)\s*)?-.*$/$this->_cacheUser($1,$2,$3)/gome;
+        $text =~ s/^\s*\* ($TWiki::regex{webNameRegex}\.)?($TWiki::regex{wikiWordRegex})\s*(?:-\s*(\S+)\s*)?-.*$/_cacheUser( $this, $1,$2,$3)/gome;
         # Always create the guest user (even though they may not be able to
         # log in, we still need them as a default).
         if (!$this->{U2W}{$TWiki::cfg{DefaultUserLogin}}) {
-            $this->_cacheUser(undef, $TWiki::cfg{DefaultUserWikiName},
+            _cacheUser( $this,undef, $TWiki::cfg{DefaultUserWikiName},
                               $TWiki::cfg{DefaultUserLogin});
         }
     } else {
         # If there is no mapping topic, then
         # map only guest to TWikiGuest.
-        $this->_cacheUser(undef, $TWiki::cfg{DefaultUserWikiName},
+        _cacheUser( $this,undef, $TWiki::cfg{DefaultUserWikiName},
                           $TWiki::cfg{DefaultUserLogin});
     }
 }
@@ -323,7 +323,7 @@ sub eachMembership {
     my ($this, $user) = @_;
     my @groups = ();
 
-    $this->_getListOfGroups();
+    _getListOfGroups( $this );
     my $it = new TWiki::ListIterator( \@{$this->{groupsList}} );
     $it->{filter} = sub { $this->isInGroup($user, $_[0]) };
     return $it;
@@ -415,7 +415,7 @@ sub findUserByEmail {
     my( $this, $email ) = @_;
 
     unless( $this->{_MAP_OF_EMAILS} ) {
-        $this->{_MAP_OF_EMAILS} = [];
+        $this->{_MAP_OF_EMAILS} = {};
         my $it = $this->eachUser();
         while( $it->hasNext() ) {
             my $uo = $it->next();
@@ -423,7 +423,11 @@ sub findUserByEmail {
               $this->{session}->{users}->getEmails( $uo );
         }
     }
-    return $this->{_MAP_OF_EMAILS}->{$email};
+    if ($this->{_MAP_OF_EMAILS}->{$email}) {
+	return @{$this->{_MAP_OF_EMAILS}->{$email}};
+    } else {
+	return ();
+    }
 }
 
 # Called from TWiki::Users. See the documentation of the corresponding

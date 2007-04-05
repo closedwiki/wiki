@@ -95,7 +95,7 @@ sub new {
         my( $meta, $text ) =
           $store->readTopic( $session->{user}, $web, $form, undef );
 
-        $this->{fields} = $this->_parseFormDefinition( $meta, $text );
+        $this->{fields} = _parseFormDefinition( $this, $meta, $text );
 
     } else {
 
@@ -351,7 +351,7 @@ sub renderForEdit {
     $tmpl = $session->handleCommonTags( $tmpl, $web, $topic, $meta );
 
     # Note: if WEBFORMS preference is not set, can only delete form.
-    $tmpl =~ s/%FORMTITLE%/$this->_link($meta, $this->{web}.'.'.$this->{topic})/geo;
+    $tmpl =~ s/%FORMTITLE%/_link( $this,$meta, $this->{web}.'.'.$this->{topic})/geo;
     my( $text, $repeatTitledText, $repeatUntitledText, $afterText ) =
       split( /%REPEAT%/, $tmpl );
 
@@ -393,7 +393,7 @@ sub renderForEdit {
               $this->renderFieldForEdit( $fieldDef, $web, $topic, $value );
 
             my $tmp = $repeatTitledText;
-            $tmp =~ s/%ROWTITLE%/$this->_link($meta,$title,$tooltip,$definingTopic)/geo;
+            $tmp =~ s/%ROWTITLE%/_link( $this,$meta,$title,$tooltip,$definingTopic)/geo;
             $tmp =~ s/%ROWEXTRA%/$extra/go;
             $tmp =~ s/%ROWVALUE%/$value/go;
             $text .= $tmp;

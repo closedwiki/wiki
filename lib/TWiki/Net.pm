@@ -107,8 +107,8 @@ sub getExternalResource {
         return new TWiki::Net::HTTPResponse("Bad URL: $url");
     }
 
-    if( $this->_LWPavailable()) {
-        return $this->_GETUsingLWP( $url );
+    if( _LWPavailable( $this )) {
+        return _GETUsingLWP( $this, $url );
     }
 
     # Fallback mechanism
@@ -291,7 +291,7 @@ sub sendEmail {
     $retries ||= 1;
 
     unless( defined $this->{mailHandler} ) {
-        $this->_installMailHandler();
+        _installMailHandler( $this );
     }
 
     return 'No mail handler available' unless $this->{mailHandler};

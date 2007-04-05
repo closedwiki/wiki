@@ -94,7 +94,7 @@ sub renderMetaData {
         my $attrAttr = $attachment->{attr};
 
         if( ! $attrAttr || ( $showAttr && $attrAttr =~ /^[$showAttr]*$/ )) {
-            $rows .= $this->_formatRow( $web, $topic, $attachment, $row );
+            $rows .= _formatRow( $this, $web, $topic, $attachment, $row );
         }
     }
 
@@ -143,7 +143,7 @@ sub formatVersions {
           $store->getRevisionInfo( $web, $topic, $rev, $attrs{name} );
         $user = $users->webDotWikiName($user) if( $user );
 
-        $rows .= $this->_formatRow( $web, $topic,
+        $rows .= _formatRow( $this, $web, $topic,
                              {
                               name    => $attrs{name},
                               version => $rev,
@@ -169,7 +169,7 @@ sub _formatRow {
 
     my $row = $tmpl;
 
-    $row =~ s/%A_(\w+)%/$this->_expandAttrs($1,$web,$topic,$info)/ge;
+    $row =~ s/%A_(\w+)%/_expandAttrs( $this,$1,$web,$topic,$info)/ge;
     $row =~ s/$TWiki::TranslationToken/%/go;
 
     return $row;
@@ -587,7 +587,7 @@ sub migrateToFileAttachmentMacro {
         my $line = '';
         foreach $line ( split( /<TwkNextItem>/, $atext ) ) {
             my( $fileName, $filePath, $fileSize, $fileDate, $fileUser, $fileComment ) =
-              $this->_getOldAttachAttr( $line );
+              _getOldAttachAttr( $this, $line );
 
             if( $fileName ) {
                 $meta->putKeyed( 'FILEATTACHMENT',

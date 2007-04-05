@@ -214,10 +214,10 @@ sub readTemplate {
     $this->{files} = ();
 
     # recursively read template file(s)
-    my $text = $this->_readTemplateFile( $name, $skins, $web );
+    my $text = _readTemplateFile( $this, $name, $skins, $web );
 
     while( $text =~ /%TMPL\:INCLUDE{[\s\"]*(.*?)[\"\s]*}%/s ) {
-        $text =~ s/%TMPL\:INCLUDE{[\s\"]*(.*?)[\"\s]*}%/$this->_readTemplateFile( $1, $skins, $web )/geo;
+        $text =~ s/%TMPL\:INCLUDE{[\s\"]*(.*?)[\"\s]*}%/_readTemplateFile( $this, $1, $skins, $web )/geo;
     }
 
     # Kill comments, marked by %{ ... }%
@@ -260,7 +260,7 @@ sub readTemplate {
     }
 
     # handle %TMPL:P{"..."}% recursively
-    $result =~ s/(%TMPL\:P{.*?}%)/$this->_expandTrivialTemplate($1)/geo;
+    $result =~ s/(%TMPL\:P{.*?}%)/_expandTrivialTemplate( $this, $1)/geo;
 
     $result =~ s|^(( {3})+)|"\t" x (length($1)/3)|geom;  # leading spaces to tabs
     return $result;

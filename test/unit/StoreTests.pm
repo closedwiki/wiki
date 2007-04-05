@@ -142,6 +142,7 @@ sub test_CreateSimpleMetaTopic {
 	$this->assert_equals($text, $readText);
     # remove topicinfo, useless for test
     $readMeta->remove('TOPICINFO');
+    $meta->remove('TOPICINFO');
     @{$meta->{FILEATTACHMENT}} = () unless $meta->{FILEATTACHMENT};
 	$this->assert_deep_equals($meta, $readMeta);
 	$twiki->{store}->removeWeb($twiki->{user}, $web);
@@ -167,6 +168,7 @@ sub test_CreateSimpleCompoundTopic {
 	$this->assert_equals($text, $readText);
     # remove topicinfo, useless for test
     $readMeta->remove('TOPICINFO');
+    $meta->remove('TOPICINFO');
     @{$meta->{FILEATTACHMENT}} = () unless $meta->{FILEATTACHMENT};
     $this->assert_deep_equals($meta, $readMeta);
 	$twiki->{store}->removeWeb($twiki->{user}, $web);

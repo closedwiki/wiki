@@ -109,7 +109,7 @@ sub init {
 
 # Make any missing paths on the way to this file
 # SMELL: duplicates CPAN File::Tree::mkpath
-sub _mkPathTo {
+sub mkPathTo {
 
     my $file = shift;
 
@@ -173,7 +173,7 @@ Get the text of the most recent revision
 
 sub getLatestRevision {
     my $this = shift;
-    return $this->_readFile( $this->{file} );
+    return readFile( $this, $this->{file} );
 }
 
 =pod
@@ -201,7 +201,7 @@ sub readMetaData {
     my( $this, $name ) = @_;
     my $file = $TWiki::cfg{DataDir}.'/'.$this->{web}.'/.'.$name;
     if( -e $file ) {
-        return $this->_readFile( $file );
+        return readFile( $this, $file );
     }
     return '';
 }
@@ -250,7 +250,7 @@ sub saveMetaData {
 
     my $file = $TWiki::cfg{DataDir}.'/'.$this->{web}.'/.'.$name;
 
-    return $this->_saveFile( $file, $text );
+    return saveFile( $this, $file, $text );
 }
 
 =pod
@@ -379,7 +379,7 @@ if the main file revision is required.
 
 sub getRevision {
     my( $this ) = @_;
-    return $this->_readFile( $this->{file} );
+    return readFile( $this, $this->{file} );
 }
 
 =pod
@@ -432,7 +432,7 @@ sub restoreLatestRevision {
     unless( -e $this->{rcsFile} ) {
         $this->addRevisionFromText( $text, "restored", $user, time() );
     } else {
-        $this->_saveFile( $this->{file}, $text );
+        saveFile( $this, $this->{file}, $text );
     }
 }
 
@@ -478,7 +478,7 @@ sub moveTopic {
     _moveFile( $this->{file}, $new->{file} );
 
     # Move history
-    _mkPathTo( $new->{rcsFile});
+    mkPathTo( $new->{rcsFile});
     if( -e $this->{rcsFile} ) {
         _moveFile( $this->{rcsFile}, $new->{rcsFile} );
     }
@@ -604,10 +604,10 @@ sub setLock {
 
     $user = $this->{session}->{user} unless $user;
 
-    my $filename = $this->_controlFileName('lock');
+    my $filename = _controlFileName( $this, 'lock');
     if( $lock ) {
         my $lockTime = time();
-        $this->_saveFile( $filename, $user."\n".$lockTime );
+        saveFile( $this, $filename, $user."\n".$lockTime );
     } else {
         unlink $filename ||
           throw Error::Simple( 'RCS: failed to delete '.$filename.': '.$! );
@@ -625,9 +625,9 @@ See if a twiki lock exists. Return the lock user and lock time if it does.
 sub isLocked {
     my( $this ) = @_;
 
-    my $filename = $this->_controlFileName('lock');
+    my $filename = _controlFileName( $this, 'lock');
     if ( -e $filename ) {
-        my $t = $this->_readFile( $filename );
+        my $t = readFile( $this, $filename );
         return split( /\s+/, $t, 2 );
     }
     return ( undef, undef );
@@ -646,9 +646,9 @@ Set an lease on the topic.
 sub setLease {
     my( $this, $lease ) = @_;
 
-    my $filename = $this->_controlFileName('lease');
+    my $filename = _controlFileName( $this, 'lease');
     if( $lease ) {
-        $this->_saveFile( $filename, join( "\n", %$lease ) );
+        saveFile( $this, $filename, join( "\n", %$lease ) );
     } elsif( -e $filename ) {
         unlink $filename ||
           throw Error::Simple( 'RCS: failed to delete '.$filename.': '.$! );
@@ -666,9 +666,9 @@ Get the current lease on the topic.
 sub getLease {
     my( $this ) = @_;
 
-    my $filename = $this->_controlFileName('lease');
+    my $filename = _controlFileName( $this, 'lease');
     if ( -e $filename ) {
-        my $t = $this->_readFile( $filename );
+        my $t = readFile( $this, $filename );
         my $lease = { split( /\r?\n/, $t ) };
         return $lease;
     }
@@ -699,12 +699,12 @@ sub removeSpuriousLeases {
     }
 }
 
-sub _saveStream {
+sub saveStream {
     my( $this, $fh ) = @_;
 
     ASSERT($fh) if DEBUG;
 
-    _mkPathTo( $this->{file} );
+    mkPathTo( $this->{file} );
     open( F, '>'.$this->{file} ) ||
         throw Error::Simple( 'RCS: open '.$this->{file}.' failed: '.$! );
     binmode( F ) ||
@@ -725,7 +725,7 @@ sub _saveStream {
 sub _copyFile {
     my( $from, $to ) = @_;
 
-    _mkPathTo( $to );
+    mkPathTo( $to );
     unless( File::Copy::copy( $from, $to ) ) {
         throw Error::Simple( 'RCS: copy '.$from.' to '.$to.' failed: '.$! );
     }
@@ -734,16 +734,16 @@ sub _copyFile {
 sub _moveFile {
     my( $from, $to ) = @_;
 
-    _mkPathTo( $to );
+    mkPathTo( $to );
     unless( File::Copy::move( $from, $to ) ) {
         throw Error::Simple( 'RCS: move '.$from.' to '.$to.' failed: '.$! );
     }
 }
 
-sub _saveFile {
+sub saveFile {
     my( $this, $name, $text ) = @_;
 
-    _mkPathTo( $name );
+    mkPathTo( $name );
 
     open( FILE, '>'.$name ) ||
       throw Error::Simple( 'RCS: failed to create file '.$name.': '.$! );
@@ -756,7 +756,7 @@ sub _saveFile {
     return undef;
 }
 
-sub _readFile {
+sub readFile {
     my( $this, $name ) = @_;
     my $data;
     if( open( IN_FILE, '<', $name )) {
@@ -769,7 +769,7 @@ sub _readFile {
     return $data;
 }
 
-sub _mkTmpFilename {
+sub mkTmpFilename {
     my $tmpdir = File::Spec->tmpdir();
     my $file = _mktemp( 'twikiAttachmentXXXXXX', $tmpdir );
     return File::Spec->catfile($tmpdir, $file);
@@ -1003,13 +1003,8 @@ sub getAttachmentAttributes {
 	return @stat;
 }
 
-=pod
-
-sub _constructAttributesForAutoAttached
-as long as stat is defined, return an emulated set of attributes for that attachment.
-
-=cut
-
+# as long as stat is defined, return an emulated set of attributes for that
+# attachment.
 sub _constructAttributesForAutoAttached {
     my ($file, $stat) = @_;
 
@@ -1083,7 +1078,7 @@ sub stringify {
 
 # Chop out recognisable path components to prevent hacking based on error
 # messages
-sub _hidePath {
+sub hidePath {
     my ( $this, $erf ) = @_;
     $erf =~ s#.*(/\w+/\w+\.[\w,]*)$#...$1#;
     return $erf;

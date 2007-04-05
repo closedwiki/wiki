@@ -427,7 +427,7 @@ sub searchWeb {
     $type = 'regex' if( $params{regex} );
 
     # Filter the search string for security and untaint it 
-    $searchString = $this->_filterSearchString( $searchString, $type );
+    $searchString = _filterSearchString( $this, $searchString, $type );
 
     my $mixedAlpha = $TWiki::regex{mixedAlpha};
     if( defined( $separator )) {
@@ -577,7 +577,7 @@ sub searchWeb {
 
     # Split the search string into tokens depending on type of search -
     # each token is ANDed together by actual search
-    my @tokens = $this->_tokensFromSearchString( $searchString, $type );
+    my @tokens = _tokensFromSearchString( $this, $searchString, $type );
 
     # Write log entry
     # FIXME: Move log entry further down to log actual webs searched
@@ -606,7 +606,7 @@ sub searchWeb {
                   && $web ne $session->{webName} );
 
         # Run the search on topics in this web
-        my @topicList = $this->_searchTopicsInWeb(
+        my @topicList = _searchTopicsInWeb( $this,
             $web, $topic, $scope, $type, $caseSensitive, @tokens );
 
         # exclude topics, Codev.ExcludeWebTopicsFromSearch
@@ -650,14 +650,14 @@ sub searchWeb {
                 }
             }
 
-            $topicInfo = $this->_sortTopics( $web, \@topicList,
+            $topicInfo = _sortTopics( $this, $web, \@topicList,
                                              $sortOrder, !$revSort );
         } elsif( $sortOrder =~ /^creat/ || # topic creation time
                    $sortOrder eq 'editby' || # author
                      $sortOrder =~ s/^formfield\((.*)\)$/$1/ # form field
                     ) {
 
-            $topicInfo = $this->_sortTopics( $web, \@topicList,
+            $topicInfo = _sortTopics( $this, $web, \@topicList,
                                              $sortOrder, !$revSort );
 
         } else {
@@ -706,7 +706,7 @@ sub searchWeb {
             unless( exists( $topicInfo->{$topic} ) ) {
                 # not previously cached
                 $topicInfo->{$topic} =
-                  $this->_extractTopicInfo( $web, $topic, 0, undef );
+                  _extractTopicInfo( $this, $web, $topic, 0, undef );
             }
             my $epochSecs = $topicInfo->{$topic}->{modified};
             my $revDate = TWiki::Time::formatTime( $epochSecs );
@@ -726,7 +726,7 @@ sub searchWeb {
 
             # Special handling for format='...'
             if( $format ) {
-                ( $meta, $text ) = $this->_getTextAndMeta(
+                ( $meta, $text ) = _getTextAndMeta( $this,
                     $topicInfo, $web, $topic );
 
                 if( $doExpandVars ) {
@@ -743,7 +743,7 @@ sub searchWeb {
             if( $doMultiple ) {
                 my $pattern = $tokens[$#tokens]; # last token in an AND search
                 $pattern = quotemeta( $pattern ) if( $type ne 'regex' );
-                ( $meta, $text ) = $this->_getTextAndMeta( $topicInfo, $web, $topic ) unless $text;
+                ( $meta, $text ) = _getTextAndMeta( $this, $topicInfo, $web, $topic ) unless $text;
                 if( $caseSensitive ) {
                     @multipleHitLines = reverse grep { /$pattern/ } split( /[\n\r]+/, $text );
                 } else {
@@ -774,12 +774,12 @@ sub searchWeb {
                     $out =~ s/\$wikiname/$users->getWikiName($ru)/ges;
                     $out =~ s/\$username/$users->getLoginName($ru)/ges;
                     my $r1info = {};
-                    $out =~ s/\$createdate/$this->_getRev1Info( $web, $topic, 'date', $r1info )/ges;
-                    $out =~ s/\$createusername/$this->_getRev1Info( $web, $topic, 'username', $r1info )/ges;
-                    $out =~ s/\$createwikiname/$this->_getRev1Info( $web, $topic, 'wikiname', $r1info )/ges;
-                    $out =~ s/\$createwikiusername/$this->_getRev1Info( $web, $topic, 'wikiusername', $r1info )/ges;
+                    $out =~ s/\$createdate/_getRev1Info( $this, $web, $topic, 'date', $r1info )/ges;
+                    $out =~ s/\$createusername/_getRev1Info( $this, $web, $topic, 'username', $r1info )/ges;
+                    $out =~ s/\$createwikiname/_getRev1Info( $this, $web, $topic, 'wikiname', $r1info )/ges;
+                    $out =~ s/\$createwikiusername/_getRev1Info( $this, $web, $topic, 'wikiusername', $r1info )/ges;
                     if( $out =~ m/\$text/ ) {
-                        ( $meta, $text ) = $this->_getTextAndMeta( $topicInfo, $web, $topic ) unless $text;
+                        ( $meta, $text ) = _getTextAndMeta( $this, $topicInfo, $web, $topic ) unless $text;
                         if( $topic eq $session->{topicName} ) {
                             # defuse SEARCH in current topic to prevent loop
                             $text =~ s/%SEARCH{.*?}%/SEARCH{...}/go;
@@ -803,7 +803,7 @@ sub searchWeb {
 
                 if( $doBookView ) {
                     # BookView
-                    ( $meta, $text ) = $this->_getTextAndMeta(
+                    ( $meta, $text ) = _getTextAndMeta( $this,
                         $topicInfo, $web, $topic ) unless $text;
                     if( $web eq $baseWeb && $topic eq $baseTopic ) {
                         # primitive way to prevent recursion
@@ -845,7 +845,7 @@ sub searchWeb {
 
                 } else {
                     # regular search view
-                    ( $meta, $text ) = $this->_getTextAndMeta(
+                    ( $meta, $text ) = _getTextAndMeta( $this,
                         $topicInfo, $web, $topic ) unless $text;
                     $text = $renderer->makeTopicSummary( $text, $topic, $web );
                     $out =~ s/%TEXTHEAD%/$text/go;
@@ -983,7 +983,8 @@ sub _sortTopics{
 
     my $topicInfo = {};
     foreach my $topic ( @$topics ) {
-        $topicInfo->{$topic} = $this->_extractTopicInfo( $web, $topic, $sortfield );
+        $topicInfo->{$topic} = _extractTopicInfo(
+            $this, $web, $topic, $sortfield );
     }
     if( $revSort ) {
         @$topics = map { $_->[1] }
@@ -1021,7 +1022,7 @@ sub _extractTopicInfo {
     my $store = $session->{store};
     my $users = $this->{session}->{users};
 
-    my ( $meta, $text ) = $this->_getTextAndMeta( undef, $web, $topic );
+    my ( $meta, $text ) = _getTextAndMeta( $this, undef, $web, $topic );
 
     $info->{text} = $text;
     $info->{meta} = $meta;
