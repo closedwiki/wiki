@@ -177,22 +177,21 @@ Tags: %TAGME{ tpaction="%URLPARAM{tpaction}%" web="%WEB%" tag="%URLPARAM{tag}%" 
 CSS styles:
 
 <verbatim>
-.tagmeTopicTags select {
+.tagmetags select {
    font-size:.8em;
    margin:0 .25em 0 0;
 }
-.tagmeTopicTags a {
+.tagmetags a {
    text-decoration:none;
    white-space:nowrap;
 }
-.tagmeTopicTags a:link,
-.tagmeTopicTags a:visited {
+.tagmetags a:link,
+.tagmetags a:visited {
 	color:#06c;
 	text-decoration:none;
 }
-.tagmeTopicTags a:hover {
+.tagmetags a:hover {
 	color:#FBF7E8; 
-	background-color:#D6000F;
 }
 .tagMeControl {
 	color:#8E9195; /* gray for non-links */
