@@ -200,6 +200,9 @@ sub _showDefault {
 
     return '' unless ( TWiki::Func::topicExists( $web, $topic ) );
 
+    my $query = $TWiki::Plugins::SESSION->{cgiQuery};
+    my $tagMode = $query->param( 'tagmode' );
+        
     my $webTopic = "$web.$topic";
     @tagInfo = _readTagInfo($webTopic) unless ( scalar(@tagInfo) );
     my $text  = '';
@@ -222,11 +225,11 @@ sub _showDefault {
               . "<span class=\"tagMeVoteCount\">$num</span>";
             if ( $users =~ /\b$user\b/ ) {
                 $line .= _imgTag( 'tag_remove', 'Remove my vote on this tag',
-                    'remove', $tag );
+                    'remove', $tag, $tagMode );
             }
             else {
                 $line .=
-                  _imgTag( 'tag_add', 'Add my vote for this tag', 'add', $tag );
+                  _imgTag( 'tag_add', 'Add my vote for this tag', 'add', $tag, $tagMode );
             }
             $seen{$tag} = _wrapHtmlTagControl($line);
         }
@@ -249,19 +252,22 @@ sub _showDefault {
         push( @notSeen, $_ ) unless ( $seen{$_} );
     }
     if ( scalar @notSeen ) {
-
-        # temporarily disabled until noscript fallback works
-        #$text .= _wrapHtmlTagControl( _createJavascriptSelectTagToAddControl( @notSeen ) );
-        $text .= _wrapHtmlTagControl( _createSelectTagToAddControl(@notSeen) );
+        if ( $tagMode eq 'nojavascript' ) {
+            $text .= _createNoJavascriptSelectBox( @notSeen );
+        } else {
+            # disabled untill fully working
+            #$text .= _createJavascriptSelectBox( @notSeen );
+            $text .= _createNoJavascriptSelectBox( @notSeen );
+        }
     }
     $text .=
-        "<a href=\"%SCRIPTURL%/viewauth%SCRIPTSUFFIX%/$installWeb/TagMeCreateNewTag"
-      . "?from=$web.$topic#CreateTag\">create new tag</a>";
+        ", <a href=\"%SCRIPTURL%/viewauth%SCRIPTSUFFIX%/$installWeb/TagMeCreateNewTag"
+      . "?from=$web.$topic\">create new tag</a>";
     return _wrapHtmlTagMeShowForm($text);
 }
 
 # =========================
-sub _createSelectTagToAddControl {
+sub _createNoJavascriptSelectBox {
     my (@notSeen) = @_;
 
     my $selectControl = '';
@@ -270,29 +276,23 @@ sub _createSelectTagToAddControl {
         $selectControl .= "<option>$_</option> ";
     }
     $selectControl .= '</select>';
-    $selectControl .= '<input type="hidden" name="tpaction" value="add" />';
-    $selectControl .=
-        '<input type="image"'
-      . ' src="' . $attachUrl . '/tag_addnew.gif"'
-      . ' class="tag_addnew"'
-      . ' name="add" alt="Add"'
-      . ' alt="Select tag and add to topic"'
-      . ' value="Select tag and add to topic"'
-      . ' title="Select tag and add to topic"'
-      . ' />, ';
+    $selectControl .= _addNewButton();
+    $selectControl = _wrapHtmlTagControl( $selectControl );
+    
     return $selectControl;
 }
 
 # =========================
-# Not implemented yet
-sub _createJavascriptSelectTagToAddControl {
+sub _createJavascriptSelectBox {
     my (@notSeen) = @_;
 
     my $selectControl = '<span id="tagMeSelect"></span>';
     my $script        = <<'EOF';
 <script type="text/javascript" language="javascript">
+//<![CDATA[
 function createSelectBox(inText, inElemId) {
 	var selectBox = document.createElement('SELECT');
+	selectBox.name = "tag";
 	document.getElementById(inElemId).appendChild(selectBox);
 	var items = inText.split("#");
 	var i, ilen = items.length;
@@ -301,13 +301,32 @@ function createSelectBox(inText, inElemId) {
 	}
 }
 EOF
-    $script .= 'var text="' . join( "#", @notSeen ) . '";';
-    $script .= 'if (text.length > 0) createSelectBox(text, "tagMeSelect");'
-        . '</script>'
-        . '<noscript><a href="%SCRIPTURL%/viewauth%SCRIPTSUFFIX%/' . $installWeb . '/TagMeAddToTopic?addtotopic=%BASETOPIC%">tag this topic</a></noscript> ';
+    $script .= 'var text="#' . join( "#", @notSeen ) . '";';
+    $script .= "\nif (text.length > 0) createSelectBox(text, \"tagMeSelect\");\n//]]>\n</script>";
+
+    my $noscript .= '<noscript><a href="%SCRIPTURL%/viewauth%SCRIPTSUFFIX%/%BASEWEB%/%BASETOPIC%?tagmode=nojavascript">tag this topic</a></noscript>';
 
     $selectControl .= $script;
+    $selectControl .= _addNewButton();
+    $selectControl = _wrapHtmlTagControl( $selectControl );
+    $selectControl .= $noscript;
+    
     return $selectControl;
+}
+
+# =========================
+sub _addNewButton {
+
+    my $input = '<input type="hidden" name="tpaction" value="add" />';
+    $input .= '<input type="image"'
+      . ' src="' . $attachUrl . '/tag_addnew.gif"'
+      . ' class="tag_addnew"'
+      . ' name="add"'
+      . ' alt="Select tag and add to topic"'
+      . ' value="Select tag and add to topic"'
+      . ' title="Select tag and add to topic"'
+      . ' />';
+    return $input;
 }
 
 # =========================
@@ -661,6 +680,11 @@ sub _newTag {
         push( @allTags, $tag );
         writeAllTags(@allTags);
         _writeLog("New tag '$tag'");
+        my $query = $TWiki::Plugins::SESSION->{cgiQuery};
+        my $from = $query->param( 'from' );
+        if ( $from ) {
+            $note = '<a href="%SCRIPTURL{viewauth}%/%URLPARAM{"from"}%?tpaction=add;tag=%URLPARAM{newtag}%">Add tag "%URLPARAM{newtag}%" to %URLPARAM{"from"}%</a>%BR%' . $note;
+        }
         return _wrapHtmlFeedbackMessage( "Tag \"$tag\" is successfully added",
             $note );
     }
@@ -732,7 +756,7 @@ sub _addTag {
                 _writeLog("Added tag '$addTag'");
             }
             else {
-                $text .= " (please select a tag)";
+                $text .= _wrapHtmlFeedbackInline(" (please select a tag)" );
             }
         }
         @tagInfo = reverse sort(@result);
@@ -798,7 +822,7 @@ sub _removeTag {
         _writeTagInfo( $webTopic, @tagInfo );
     }
     else {
-        $text .= _wrapHtmlFeedbackErrorInline("tag \"$removeTag\" not found");
+        $text .= _wrapHtmlFeedbackErrorInline("Tag \"$removeTag\" not found");
     }
 
     # Suppress status? FWM, 03-Oct-2006
@@ -817,13 +841,15 @@ sub _tagDataLine {
 
 # =========================
 sub _imgTag {
-    my ( $image, $title, $action, $tag ) = @_;
+    my ( $image, $title, $action, $tag, $tagMode ) = @_;
     my $text = '';
+    #my $tagMode |= '';
+    
     if ($tag) {
         $text =
           "<a class=\"tagmeAction $image\" href=\"%SCRIPTURL%/viewauth%SCRIPTSUFFIX%/%BASEWEB%/%BASETOPIC%?"
           . "tpaction=$action;tag="
-          . _urlEncode($tag) . "\">";
+          . _urlEncode($tag) . ";tagmode=$tagMode\">";
     }
     $text .=
           "<img src=\"$attachUrl/$image.gif\""
@@ -982,7 +1008,7 @@ sub _modifyTag {
 # =========================
 sub _renameTag {
     my ($attr) = @_;
-    my $oldTag = TWiki::Func::extractNameValuePair( $attr, 'renametag' );
+    my $oldTag = TWiki::Func::extractNameValuePair( $attr, 'oldtag' );
     my $newTag = TWiki::Func::extractNameValuePair( $attr, 'newtag' );
     my $note   = TWiki::Func::extractNameValuePair( $attr, 'note' ) || '';
 
@@ -1002,7 +1028,7 @@ sub _renameTag {
 # =========================
 sub _deleteTag {
     my ($attr) = @_;
-    my $deleteTag = TWiki::Func::extractNameValuePair( $attr, 'deletetag' );
+    my $deleteTag = TWiki::Func::extractNameValuePair( $attr, 'oldtag' );
     my $note   = TWiki::Func::extractNameValuePair( $attr, 'note' ) || '';
 
     return _wrapHtmlErrorFeedbackMessage( "Please select a tag to delete", $note )

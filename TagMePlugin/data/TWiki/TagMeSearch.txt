@@ -31,4 +31,4 @@ Show topics tagged with
 %STOPINCLUDE%
 
 %BR%
-<span class="twikiGrayText">Other tag options: [[TagMeCreateNewTag][Create New Tag]], [[TagMeRenameTag][Rename Tag]], [[TagMeDeleteTag][Delete Tag]]</span>
+<span class="twikiGrayText">Other tag options: [[TagMeCreateNewTag][Create New Tag]], <a href="%SCRIPTURL{view}%/%TWIKIWEB%/TagMeRenameTag?renametagfrom=%URLPARAM{tag}%">Rename Tag</a>, <a href="%SCRIPTURL{view}%/%TWIKIWEB%/TagMeDeleteTag?deletetag=%URLPARAM{tag}%">Delete Tag</a></span>

@@ -17,20 +17,22 @@
 %STARTSECTION{"create"}%
 Create a new tag - then add it to a topic.
 
-<noautolink><form name="addtag" action="%SCRIPTURL%/viewauth%SCRIPTSUFFIX%/%BASEWEB%/%BASETOPIC%" method="post" onsubmit="return cleanTag(this.newtag.value);">%TAGME{ tpaction="%URLPARAM{"newaction" default="nop"}%" tag="%URLPARAM{newtag}%" note="%URLPARAM{newtagnote}%" }%
+<noautolink>%TAGME{ tpaction="%URLPARAM{"newaction" default="nop"}%" tag="%URLPARAM{newtag}%" note="%URLPARAM{newtagnote}%" }%<form name="addtag" action="%SCRIPTURL%/viewauth%SCRIPTSUFFIX%/%BASEWEB%/%BASETOPIC%" method="post" onsubmit="return cleanTag(this.newtag.value);">
 <div class="twikiFormSteps">
 <div class="twikiFormStep twikiLast">
-Name of new tag: <input type="text" class="twikiInputField" name="newtag" size="30" onblur="this.value=cleanTag(this.value)" /> <input type="submit" class="twikiSubmit" value="%MAKETEXT{"Create"}%" />
+Name of new tag: <input type="text" class="twikiInputField" name="newtag" size="30" value="%URLPARAM{"createtag"}%" onblur="this.value=cleanTag(this.value)" /> <input type="submit" class="twikiSubmit" value="%MAKETEXT{"Create"}%" />
 </div>
 </div>
 <input type="hidden" name="newaction" value="newtag" />
 <input type="hidden" name="from" value="%URLPARAM{"from"}%" />
 <input type="hidden" name="newtagnote" value="Return to [<nop>[%URLPARAM{"from" default="%BASEWEB%.%HOMETOPIC%" }%]]" />
 </form>
-
-Existing tags: %TAGME{ tpaction="showalltags" format="[[%SCRIPTURL%/view%SCRIPTSUFFIX%/%TWIKIWEB%/TagMeSearch?tag=$tag][$tag]]" separator=", " }%
 </noautolink>
 %ENDSECTION{"create"}%
+
+%STARTSECTION{"existing"}%
+Existing tags: %TAGME{ tpaction="showalltags" format="[[%SCRIPTURL%/view%SCRIPTSUFFIX%/%TWIKIWEB%/TagMeSearch?tag=$tag][$tag]]" separator=", " }%
+%ENDSECTION{"existing"}%
 %STOPINCLUDE%
 
 %BR%

@@ -51,14 +51,30 @@ You see:
 ---+++ Create New Tags
 Go to [[TagMeCreateNewTag]] to create new tags.
 
+<blockquote>
+For developers: %BR%
+Use url parameter =createtag=my+tag+name= to pass a new tag name to the form.
+</blockquote>
+
 ---+++ Add Tag to Topic
 Once a new tag is created, it can be added in the tag list of the topic.
 
 ---+++ Rename Tags
 Go to [[TagMeRenameTag]] to rename existing tags.
 
+<blockquote>
+For developers: %BR%
+Use url parameters =renametagfrom=my+old+tag+name= and =renametagto=my+new+tag+name= to pass the old and new tag names to the form.
+</blockquote>
+
 ---+++ Delete Tags
 Go to [[TagMeDeleteTag]] to delete existing tags.
+
+<blockquote>
+For developers: %BR%
+Use url parameter =deletetag=my+tag+name= to pass the to-be-deleted tag name to the form.
+</blockquote>
+
 
 ---+++ List All Tags
 
@@ -162,11 +178,16 @@ CSS styles:
 
 <verbatim>
 .tagmetags {
-	color:#8E9195;
-	font-size:94%;
+	color:#8E9195; /* gray for non-links */
+}
+.tagmetags select {
+   background-color:#FDFBF7;
+   font-size:.8em;
+   margin:0 .25em 0 0;
 }
 .tagmetags a {
-	white-space:nowrap;
+   text-decoration:none;
+   white-space:nowrap;
 }
 .tagmetags a:link,
 .tagmetags a:visited {
