@@ -50,15 +50,9 @@ sub commonTagsHandler {
     my $meta = $_[3] || $context->{can_render_meta};
     return unless $meta;
 
-    return unless
-      TWiki::Func::getPreferencesValue('ENABLE_TABLE_ROW_EDIT');
-
     return unless $_[0] =~ /%EDITTABLE{(.*?)}%/;
 
     my ($topic, $web) = ($_[1], $_[2]);
-
-    return unless TWiki::Func::checkAccessPermission(
-        'CHANGE', TWiki::Func::getWikiName(), $_[0], $topic, $web, $meta);
 
     require TWiki::Plugins::EditRowPlugin::Table;
     return if $@;
@@ -75,11 +69,18 @@ sub commonTagsHandler {
     my $table = undef;
     my $active_table = 0;
 
+    my $displayOnly = 0;
+
+    unless (TWiki::Func::checkAccessPermission(
+        'CHANGE', TWiki::Func::getWikiName(), $_[0], $topic, $web, $meta)) {
+        $displayOnly = 1;
+    }
+
     foreach my $line (@$content) {
         if (ref($line) eq 'TWiki::Plugins::EditRowPlugin::Table') {
             $table = $line;
             $active_table++;
-            if ($active_table == $urps->{erp_active_table}) {
+            if (!$displayOnly && $active_table == $urps->{erp_active_table}) {
                 my $active_row = $urps->{erp_active_row};
                 my $saveUrl =
                   TWiki::Func::getScriptUrl($pluginName, 'save', 'rest');
@@ -100,8 +101,9 @@ sub commonTagsHandler {
                 $line .= "\n".$table->renderForEdit($active_row)."\n";
                 $line .= CGI::end_form();
             } else {
-                $line = $table->renderForDisplay();
+                $line = $table->renderForDisplay($displayOnly);
             }
+
             $table->finish();
         }
         $nlines .= "$line\n";
@@ -153,15 +155,15 @@ sub save {
         my $nlines = '';
         my $table = undef;
         my $active_table = 0;
-        my $action = 'cancelRow';
+        my $action = 'cancel';
         my $minor = 0;
         # The submit buttons are image buttons. The only way with IE to tell
         # which one was clicked is by looking at the x coordinate of the
         # press.
         if ($query->param('erp_save.x')) {
-            $action = 'changeRow';
+            $action = 'change';
         } elsif ($query->param('erp_quietSave.x')) {
-            $action = 'changeRow';
+            $action = 'change';
             $minor = 1;
         } elsif ($query->param('erp_addRow.x')) {
             $action = 'addRow';
