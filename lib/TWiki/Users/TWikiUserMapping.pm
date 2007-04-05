@@ -247,7 +247,7 @@ sub getWikiName {
     my ($this, $user) = @_;
     if( $TWiki::cfg{MapUserToWikiName} ) {
         _loadMapping( $this );
-        return $this->{U2W}->{$user} || $user;
+        return $this->{U2W}->{$user} || canonical2login( $this, $user );
     } else {
         # If the mapping isn't enabled there's no point in loading it
         return canonical2login( $this, $user );
