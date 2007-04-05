@@ -89,7 +89,8 @@ $VERSION = '$Rev$';
 # of the version number in PLUGINDESCRIPTIONS.
 $RELEASE = 'Dakar';
 
-$REVISION = '1.020'; #dro# added week attribute requested by TWiki:Main.JanFilipsky; added tooltip to day headers;
+$REVISION = '1.021'; #dro# fixed minor HTML bug reported by TWiki:Main.JfMacaud; fixed some minor bugs (documentation, preferences handling);
+#$REVISION = '1.020'; #dro# added week attribute requested by TWiki:Main.JanFilipsky; added tooltip to day headers;
 #$REVISION = '1.019'; #dro# improved navigation; fixed %<nop>ICON% tag handling bug reported by TWiki:Main.UlfJastrow;
 #$REVISION = '1.018'; #dro# fixed periodic event bug; added navigation feature
 #$REVISION = '1.017'; #dro# fixed minor bug (periodic repeater)
@@ -268,10 +269,11 @@ sub initOptions() {
 			}
 		} else {
 			if (grep /^\Q$option\E$/, @flagOptions) {
-				$v = TWiki::Func::getPluginPreferencesFlag("\U$option\E") || undef;
+				$v = TWiki::Func::getPreferencesFlag("\U${pluginName}_$option\E") || undef;
 			} else {
-				$v = TWiki::Func::getPluginPreferencesValue("\U$option\E") || undef;
+				$v = TWiki::Func::getPreferencesValue("\U${pluginName}_$option\E") || undef;
 			}
+			$v = undef if (defined $v) && ($v eq "");
 			$options{$option}=(defined $v)? $v : $defaults{$option};
 		}
 
@@ -864,7 +866,7 @@ sub renderHolidaylist() {
 
 	# create table header:
 	
-	$text .= '<noautolink><a name="hlpid'.$hlid.'"/><table'
+	$text .= '<noautolink><a name="hlpid'.$hlid.'"></a><table'
 	       . ' class="holidaylistPluginTable"'
 	       . ' border="'.$options{border}.'"'
                . ' cellpadding="'.$options{cellpadding}.'"'

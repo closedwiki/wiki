@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1153838786" format="1.0" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1175765955" format="1.0" version="$Rev$"}%
 ---+!! <nop>HolidaylistPlugin</nop>
 
 %TOC%
@@ -113,7 +113,7 @@ The syntax follows that of the !CalendarPlugin. See TWiki:Plugins.CalendarPlugin
 | showweekends | show weekends if set to 1 | showweekends="0" |
 | startdate | a start date (e.g. '1 Oct 2005') or a day offset (e.g. '10', '+30' or '-30') | startdate="+0" |
 | topic | a comma separated list of source topics | topic="%<nop>TOPIC%" |
-| week | set a week (1..53) or a week offset (-1, +0, +1, +2, ...) | week="+0" |
+| week | set a week (1..52) or a week offset (-1, +0, +1, +2, ...) | week="+0" |
 | year | set a year (e.g. 2005, 2006 ...) or a year offset (e.g. +0, +1, -1, ...) | year="0" |
 |  *Icons*  |||
 | adayofficon |a day off icon | adayofficon=":ok:" |
@@ -225,8 +225,9 @@ The syntax follows that of the !CalendarPlugin. See TWiki:Plugins.CalendarPlugin
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.PeterJones, TWiki:Main.DanielRohde |
-|  Plugin Version: | v1.020 (21 Sep 2006) |
+|  Plugin Version: | v1.021 (BETA) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  v1.021 (BETA) | TWiki:Main.DanielRohde: fixed minor HTML bug reported by TWiki:Main.JfMacaud; fixed some minor bugs (documentation, preferences handling); |
 |  v1.020 (21 Sep 2006) | TWiki:Main.DanielRohde: added week attribute requested by TWiki:Main.JanFilipsky; added tooltip to day headers; |
 |  v1.019 (7 Aug 2006) | TWiki:Main.DanielRohde: improved navigation; fixed %<nop>ICON% tag handling bug reported by TWiki:Main.UlfJastrow; |
 |  v1.018 (25 Jul 2006) | TWiki:Main.DanielRohde: fixed periodic event bug; added navigation feature | 
