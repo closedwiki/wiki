@@ -53,7 +53,7 @@ Go to [[TagMeCreateNewTag]] to create new tags.
 
 <blockquote>
 For developers: %BR%
-Use url parameter =createtag=my+tag+name= to pass a new tag name to the form.
+Use the url parameter =createtag=my+tag+name= to pass a new tag name to the form.
 </blockquote>
 
 ---+++ Add Tag to Topic
@@ -64,7 +64,7 @@ Go to [[TagMeRenameTag]] to rename existing tags.
 
 <blockquote>
 For developers: %BR%
-Use url parameters =renametagfrom=my+old+tag+name= and =renametagto=my+new+tag+name= to pass the old and new tag names to the form.
+Use the url parameters =renametagfrom=my+old+tag+name= and =renametagto=my+new+tag+name= to pass the old and new tag names to the form.
 </blockquote>
 
 ---+++ Delete Tags
@@ -72,7 +72,7 @@ Go to [[TagMeDeleteTag]] to delete existing tags.
 
 <blockquote>
 For developers: %BR%
-Use url parameter =deletetag=my+tag+name= to pass the to-be-deleted tag name to the form.
+Use the url parameter =deletetag=my+tag+name= to pass the to-be-deleted tag name to the form.
 </blockquote>
 
 
@@ -153,14 +153,14 @@ The Plugin handles a =%<nop>TAGME{}%= variable that performs different actions. 
 If users are allowed to use spaces in their tag names (when =NORMALIZE_TAG_INPUT= is set to 0), tag links may break halfway to the next line. To prevent wrapping add a wrapper =div= around the tags:
 
 <verbatim>
-<div class="tagmetags">
+<div class="tagmeTagCloud">
 %TAGME{ ... }%
 </div>
 </verbatim>
 ... and use this CSS style:
 
 <verbatim>
-.tagmetags a {
+.tagmeTagCloud a {
 	white-space:nowrap;
 }
 </verbatim>
@@ -169,39 +169,33 @@ If users are allowed to use spaces in their tag names (when =NORMALIZE_TAG_INPUT
 To show the 'tags shown on a topic': 
 
 <verbatim>
-<div class="tagmetags">
-%TAGME{ tpaction="%URLPARAM{tpaction}%" web="%WEB%" tag="%URLPARAM{tag}%" }%
+<div class="tagmeTopicTags">
+Tags: %TAGME{ tpaction="%URLPARAM{tpaction}%" web="%WEB%" tag="%URLPARAM{tag}%" }%, [[TWiki.TagMeViewAllTags][view all tags]]
 </div>
 </verbatim>
 
 CSS styles:
 
 <verbatim>
-.tagmetags {
-	color:#8E9195; /* gray for non-links */
-}
-.tagmetags select {
-   background-color:#FDFBF7;
+.tagmeTopicTags select {
    font-size:.8em;
    margin:0 .25em 0 0;
 }
-.tagmetags a {
+.tagmeTopicTags a {
    text-decoration:none;
    white-space:nowrap;
 }
-.tagmetags a:link,
-.tagmetags a:visited {
-	color:#777;
+.tagmeTopicTags a:link,
+.tagmeTopicTags a:visited {
+	color:#06c;
 	text-decoration:none;
 }
-.tagmetags a:hover {
+.tagmeTopicTags a:hover {
 	color:#FBF7E8; 
 	background-color:#D6000F;
-	text-decoration:underline;
 }
-.tagmetags select {
-	font-size:.86em;
-	margin:0 .25em 0 0;
+.tagMeControl {
+	color:#8E9195; /* gray for non-links */
 }
 </verbatim>
 
@@ -256,8 +250,9 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Plugin Author: | TWiki:Main.PeterThoeny ([[http://www.structuredwikis.com/peter.html][blog]]) |
 |  Copyright: | &copy; 2006, Peter@Thoeny.org, [[http://www.structuredwikis.com/][StructuredWikis LLC]] |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 02 Apr 2006 (V1.034) |
+|  Plugin Version: | 02 Apr 2006 (V1.035) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  05 Apr 2007  | Arthur Clemens: The "topic tags" select box is now created with Javascript to prevent the tag options getting indexed by search engines. The former select box is used for noscript fallback. |
 |  02 Apr 2007: | Arthur Clemens: Added "Delete Tag" interface. Added tabbed interface for Create, Rename, Delete tags. |
 |  30 Mar 2007: | Arthur Clemens: Added "Rename Tag" interface. |
 |  22 Mar 2007: | Arthur Clemens: Added option =NORMALIZE_TAG_INPUT= (to be set to 0) to allow any word as tag name (including upper case, punctuation characters and spaces). Moved "Create New Tag" to dedicated page. Created CSS styles in =tagme.css=. Added =mincount= parameter to =TAGME{tpaction="showalltags"}=. |

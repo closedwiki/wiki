@@ -35,3 +35,35 @@ div.tagMeNotification {
 .tagmeRelated {
 	font-weight:bold;
 }
+
+/* TagMeSearch results table */
+.tagmeResultsTable {
+	width:100%;
+}
+.tagmeResultsTableHeader td,
+.tagmeResultsTableHeader th {
+	padding:1px 5px;
+}
+.tagmeResultsTableHeader td,
+.tagmeResultsTableHeader th {
+	background-color:#F6F4EB;
+}
+.tagmeResultsTableHeader td.tagmeTopicTd {
+	width:50%;
+}
+.tagmeResultsTableHeader td.tagmeDateTd {
+	width:20%;
+}
+.tagmeResultsTableHeader td.tagmeAuthorTd {
+	width:30%;
+}
+.tagmeTopicTdWeb {
+	font-size:94%;
+	color:#666;
+}
+.tagmeResultsDetails {
+	font-size:94%;
+	color:#666;
+	margin:0 0 1em 0;
+	padding:.15em 0 0 1.5em;
+}
