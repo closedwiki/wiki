@@ -21,32 +21,45 @@
 
 ---+ package TWiki::Users
 
-This is a facade that presents a simple interface to the User Mapping
+This package provides services for the lookup and manipulation of login and
+wiki names of users, and their authentication.
+
+It is a Facade that presents a common interface to the User Mapping
 and Password modules.
 
-Everywhere else in the code, the methods getWikiName, getLoginName etc. must
-be used to map a "canonical user identifier" to a wiki name, login name etc.
-This is to avoid exporting implementation assumptions outside this module.
+TWiki uses the concept of a _login name_ which is used to authenticate a
+user. A login name maps to a _wiki name_ that is used to identify the user
+for display. Each login name is unique to a single user, though several
+login names may map to the same wiki name.
+
+Using this module (and the associated plug-in user mapper) TWiki supports
+the concept of _groups_. Groups are sets of login names that are treated
+equally for the purposes of access control. Group names do not have to be
+wiki names, though it is helpful for display if they are.
+
+Internally in the code TWiki uses something referred to as a _canonical user
+id_ or just _user id_. The user id is also used externally to uniquely identify
+the user when (for example) recording topic histories. The user id is *usually*
+just the login name, but it need not be. Some login names have characters that
+are illegal in canonical user ids, which are constrained to 7-bit
+alphanumerics and underscores.
+
+The canonical user id should *never* be seen by a user.
 
 *Terminology*
    * A *login name* is the name used to log in to TWiki. Each login name is
-     assumed to be unique to a human.
-   * A *wikiname* is how a user is displayed. A login name will usually
-     map to a wikiname for display. Many login names may map to a single
-     wikiname.
-   * A *group* is an id that represents a group of users and other groups.
-     Groups are *defined* using wikinames, but these are expanded to a list
-     of login names at the first opportunity.
+     assumed to be unique to a human. The Password module is responsible for
+     authenticating and manipulating login names.
+   * A *canonical user id* is an internal TWiki representation of a user. Each
+     canonical user id maps 1:1 to a login name.
+   * A *wikiname* is how a user is displayed. Many user ids may map to a
+     single wikiname. The user mapping module is responsible for mapping
+     the user id to a wikiname.
+   * A *group id* represents a group of users and other groups.
+     The user mapping module is responsible for mapping from a group id to
+     a list of canonical user ids for the users in that group.
    * An *email* is an email address asscoiated with a *login name*. A single
      login name may have many emails.
-
-Internally TWiki uses something referred to as a "canonical user id" or
-just "user id". This is normally just the user login name, but - *and this
-uis very important* - it doesn't have to be. All it needs to be is a unique
-string that identifies a user.
-
-Again, it is very importnat *not* to assume that user ids are always login
-names. You have been warned!
 
 =cut
 
@@ -118,8 +131,8 @@ sub finish {
     $this->{login}     =  {};
 }
 
-# Get a list of canonical *user* names from a text string containing a
-# list of user and group *wiki* names.
+# Get a list of *canonical user ids* from a text string containing a
+# list of user *wiki* names and *group ids*.
 sub _expandUserList {
     my( $this, $names, $expand ) = @_;
     ASSERT($this->isa( 'TWiki::Users')) if DEBUG;
