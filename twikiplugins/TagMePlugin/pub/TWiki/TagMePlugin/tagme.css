@@ -36,7 +36,9 @@ div.tagMeNotification {
 	font-weight:bold;
 }
 
-/* TagMeSearch results table */
+/*
+TagMeSearch results table
+*/
 .tagmeResultsTable {
 	width:100%;
 }
