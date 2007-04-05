@@ -16,18 +16,18 @@
 <tr bgcolor="#EAE9DE"><td style="width:100%;"></td></tr>
 </table>
 %STARTSECTION{"create"}%
-<noautolink><form name="renametag" action="%SCRIPTURL%/viewauth%SCRIPTSUFFIX%/%BASEWEB%/%BASETOPIC%" method="post" onsubmit="return cleanTag(this.newtag.value);">%TAGME{ tpaction="%URLPARAM{"renameaction" default="nop"}%" renametag="%URLPARAM{renametag}%" newtag="%URLPARAM{newtag}%" note="%URLPARAM{renametagnote}%" }%
+<noautolink><form name="renametag" action="%SCRIPTURL%/viewauth%SCRIPTSUFFIX%/%BASEWEB%/%BASETOPIC%" method="post" onsubmit="return cleanTag(this.newtag.value);">%TAGME{ tpaction="%URLPARAM{"renameaction" default="nop"}%" oldtag="%URLPARAM{oldtag}%" newtag="%URLPARAM{newtag}%" note="%URLPARAM{renametagnote}%" }%
 <div class="twikiFormSteps">
 <div class="twikiFormStep">
 Tag to rename: %BR%
-<select name="renametag">
-<option>%URLPARAM{oldtag}%</option>
+<select name="oldtag">
+<option>%URLPARAM{renametagfrom}%</option>
 %TAGME{ tpaction="showalltags" format="<option>$tag</option>" separator="$n" }%
 </select>
 </div>
 <div class="twikiFormStep">
 New name for this tag: %BR%
-<input type="text" name="newtag" class="twikiInputField" size="30" onblur="this.value=cleanTag(this.value)" />
+<input type="text" value="%URLPARAM{"renametagto" default="%URLPARAM{renametagfrom}%"}%" name="newtag" class="twikiInputField" size="30" onblur="this.value=cleanTag(this.value)" />
 </div>
 <div class="twikiFormStep twikiLast">
 <input type="submit" class="twikiSubmit" value="%MAKETEXT{"Rename"}%" />
