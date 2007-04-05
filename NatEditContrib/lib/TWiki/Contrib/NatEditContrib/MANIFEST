@@ -33,8 +33,11 @@ pub/TWiki/NatEditContrib/button_verbatim.png 0644
 pub/TWiki/NatEditContrib/edit.js 0644
 pub/TWiki/NatEditContrib/screenshot1.png 0644
 pub/TWiki/NatEditContrib/styles.css 0644
+templates/editform.natedit.tmpl 0644
+templates/editformtoolbar.natedit.tmpl 0644
 templates/edithelp.natedit.tmpl 0644
 templates/edit.natedit.tmpl 0644
+templates/editsection.natedit.tmpl 0644
 templates/edittoolbar.natedit.tmpl 0644
 templates/preview.natedit.tmpl 0644
 templates/previewtoolbar.natedit.tmpl 0644
