@@ -73,12 +73,13 @@ Sponsored by [[http://www.trivadis.com][Trivadis AG]]
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Version: | %$VERSION% |
 |  Change History: | |
-|  04 April 2007 | added css file; \
+|  05 Apr 2007 | added support for <nop>EditContrib |
+|  04 Apr 2007 | added css file; \
                    added monospace &lt;-&gt; propotional font toggles; \
                    made signature text customizable; \
                    minor refactoring of the javascript; \
                    removed non-standard tags FORMATLIST and IFDEFINED |
-|  03 Apri 2007 | added NATEDIT_HELPTEXT variable; \
+|  03 Apr 2007 | added NATEDIT_HELPTEXT variable; \
                   be backwards compatible to <nop>PatternSkin (TWiki-4.1.2) |
 |  31 Mar 2007 | Initial version |
 |  Dependencies: | %$DEPENDENCIES% |
@@ -87,6 +88,6 @@ Sponsored by [[http://www.trivadis.com][Trivadis AG]]
 |  Feedback: | TWiki:Plugins/%TOPIC%Dev |
 |  Appraisal: | TWiki:Plugins/%TOPIC%Appraisal |
 
--- TWiki:Main.MichaelDaum - 04 Apr 2007
+-- TWiki:Main.MichaelDaum - 05 Apr 2007
 
 %META:FILEATTACHMENT{name="screenshot1.png" attachment="screenshot1.png" attr="" comment="" date="1175688869" path="screenshot1.png" size="61040" stream="screenshot1.png" user="Main.TWikiContributor" version="1"}%
