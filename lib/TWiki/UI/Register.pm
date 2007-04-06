@@ -535,13 +535,18 @@ sub _resetUsersPassword {
     unless( $users->userExists( $user )) {
         # Not an error.
         $$pMess .= $session->inlineAlert( 'alerts', 'missing_user', $user);
+        return 0;
     }
 
     my $password = TWiki::Users::randomPassword();
 
-    $users->setPassword($user, $password, 1);
+    unless( $users->setPassword( $user, $password, 1 )) {
+        $$pMess .= $session->inlineAlert( 'alerts', 'reset_bad', $user);
+        return 0;
+    }
 
     my @em = $users->getEmails($user);
+    my $sent = 0;
     if (!scalar(@em)) {
         $$pMess .= $session->inlineAlert( 'alerts', 'no_email_for', $user);
     } else {
@@ -563,15 +568,19 @@ sub _resetUsersPassword {
 
             if( $err ) {
                 $$pMess .= $session->inlineAlert( 'alerts', 'generic', $err );
+            } else {
+                $sent = 1;
             }
         }
     }
 
-    $$pMess .= $session->inlineAlert(
-        'alerts',
-        'new_sys_pass',
-        $users->getLoginName($user),
-        $users->getWikiName( $user ));
+    if ($sent ) {
+        $$pMess .= $session->inlineAlert(
+            'alerts',
+            'new_sys_pass',
+            $users->getLoginName($user),
+            $users->getWikiName( $user ));
+    }
 
     return 1;
 }
