@@ -38,7 +38,7 @@ use vars qw(
 );
 
 $pluginName = 'TreePlugin';
-$VERSION = '0.9';
+$VERSION = '1.1';
 $RootLabel = "_RootLabel_";    # what we use to label the root of a tree if not a topic
 
 # =========================
@@ -89,12 +89,15 @@ $AGdebugmsg = "<br \/>AG debug message<br \/>";
 sub HandleTreeTag
     {
     my($session, $params, $aTopic, $aWeb) = @_;    
+    
+    #### Initializations 
 
     my $cgi   = &TWiki::Func::getCgiQuery();
     my $plist = $cgi->query_string();
     $plist .= "\&" if $plist;
     my $CurrUrl = $cgi->url . $cgi->path_info() . "?" . $plist;
-
+    
+    my $nodiv = $params->{'nodiv'} || "0";
     my $attrWeb = $params->{'web'} || $aWeb || "";
     #Get root topic id in the form =web.topic=
     my $rootTopicId = $params->{'topic'} ? "$attrWeb.".$params->{'topic'} : $RootLabel; 
@@ -109,7 +112,7 @@ sub HandleTreeTag
     else
         {
         #Make sure the tree starts on a new line and get formatted correctly
-        $attrHeader="\n"; 
+        $attrHeader=""; 
         }
 
     my $attrFormat = $params->{'format'} || "";
@@ -155,76 +158,77 @@ sub HandleTreeTag
     #SL: I know it's a bit mad what's going on between $attrFormat, $formatter->data('format') and $params->{'format'} but that will do for now
     $params->{'format'}=$formatter->data("format") if ($attrFormat eq "");
 
-    # get search results
+    #### Get SEARCH results 
     my $search = doSEARCH( $attrWeb, $params, $formatter );
 
-    #SL: from here we parse the result of the SEARCH to build up our true
-    # I really don't like the way that algorithm was written though. It very confusing and hard to maintain
-    # We should really loop twice trough all topics:
-    #    first time to build up node objects
-    #    second time to create parent/child association
-    # Doing that would also most certainly remove the need for that cycle stuff in the end for web tree.
-    # It will also allow us to fix/control that issue with blank line separating _orphans trees from the main tree_       
-
     my %nodes = ();
-    my $root = getTWikiNode( $RootLabel, \%nodes );    # make top dog node
 
-    # loop thru topics
+    &TWiki::Func::writeDebug("First loop") if $debug;    
+    
+    #### Parse SEARCH results and build up tree structure    
+
+    #First loop:
+    #   * Parse the SEARCH output
+    #   * Create TWikiNode objects 
+    #   * Populate hash of nodes/topics
     foreach ( split /\n/, $search ) {
-        #my ( $topic, $modTime, $author, $summary ) = #SL: was
         my ( $nodeWeb, $nodeTopic, $nodeFormat ) = split /\|/;    # parse out node data
         my $nodeId = "$nodeWeb.$nodeTopic";
-    
+        
         #If no node format default to the formatter's format     
         if (!$nodeFormat) {$nodeFormat=$formatter->data("format");}
+       
+        # create node object and add it to the hash
+        my $node = createTWikiNode( $nodeId, \%nodes );        
+        $node->data( "web",     $nodeWeb );
+        $node->data( "topic",   $nodeTopic );
+        $node->data( "format",  "$nodeFormat\n" ) if defined $nodeFormat; 
+    }
+    
+    &TWiki::Func::writeDebug("Create root") if $debug;    
+    
+    #SL: to simplify we could even systematically create the web root, that would do no arm would save a few test... why not
+    #If no root topic specified it means we are rendering web tree therefore create a fake web root object 
+    my $webRoot = $rootTopicId eq $RootLabel ? createTWikiNode( $RootLabel, \%nodes ) : undef;  
+    #At this stage the root must be in the hash, if not just quite (fake web root or actual topic root) 
+    return "<!-- No Topic -->" unless $nodes{$rootTopicId};  # nope, the wanted node ain't here
 
+    &TWiki::Func::writeDebug("Second loop") if $debug;    
+
+    #Second loop:
+    #   * Create nodes relationship
+    foreach my $nodeId (sort keys %nodes) {
+        my $node=$nodes{$nodeId};
+        #Make sure we don't set a parent to the web root otherwise we just go in an infinite loop while rendering
+        next if (defined $webRoot && $node == $webRoot);
         #Get parent
         #SL: We could get the parent from the SEARCH
         #I wonder if that would give us any performance gain
         #...since we would need to make the scope="text" 
-        my $parentId = getParentId($nodeWeb,$nodeTopic);
-        my $parent = (defined $parentId) ? getTWikiNode( $parentId, \%nodes )    # yes i have a parent, get it
-          : $root;       # otherwise root's my parent
-       
-        # create my node (or if it's already created get it)
-        my $node = getTWikiNode( $nodeId, \%nodes );
-        
-        $node->data( "web",     $nodeWeb );
-        $node->data( "topic",   $nodeTopic );
-        #Set the format for this node as it came back from the SEARCH
-        $node->data( "format",  "$nodeFormat\n" ); #SL: new
-
+        my $parentId = getParentId($node->data('web'),$node->data('topic'));
+        my $parent = defined $parentId && defined $nodes{$parentId} ? $nodes{$parentId} : $webRoot; # otherwise root's my parent
+        next unless (defined $parent);
         $node->data( "parent", $parent );
-        $parent->add_child($node);    # hook me up
+        $parent->add_child($node); # hook me up
     }
+    
+    #### Tree rendering
 
-    return "<!-- No Topic -->"
-      unless $nodes{$rootTopicId};      # nope, the wanted node ain't here
+    &TWiki::Func::writeDebug("Rendering..") if $debug;    
 
-    $root->name(" ");    # change root's name so it don't show up, hack
+    $webRoot->name(" ") if (defined $webRoot);    # If using fake root change root's name so it don't show up, hack
+    my $root= defined $webRoot ? $webRoot : $nodes{$rootTopicId}; #Get the root object fake web root or actual topic root 
 
     # format the tree & parse TWiki tags and rendering
-    my $renderedTree = "";
-    if ( $rootTopicId ne $RootLabel ) {
-        #SL: was using TWiki::Func::expandCommonVariables
-        #SL:  should be nod need to expand common variable anymore here, thanks to doSEARCH
-        $renderedTree = $attrHeader . $nodes{$rootTopicId}->toHTMLFormat($formatter);
-    }
-    else {
-        # no starting topic given so do all topics
-        #SL:  should look at the cycle stuff, that's probably causing the blank line when root topic is not found, should be optional 
-        my %rootnodes = %{ _findRootsBreakingCycles( \%nodes ) };
-        foreach my $i ( sort keys(%rootnodes) ) {
-            #SL: was using TWiki::Func::expandCommonVariables, no need now as it was done by doSEARCH
-            $renderedTree .= $attrHeader . $rootnodes{$i}->toHTMLFormat($formatter)
-        }
-    }
+    my $renderedTree = $attrHeader . $root->toHTMLFormat($formatter);
 
-    #$renderedTree = $AGdebugmsg . $renderedTree;
-    $renderedTree =
-        "<div class=\"treePlugin\">"
-      . $renderedTree
-      . "</div><!--//treePlugin-->";
+    &TWiki::Func::writeDebug("Rendering done!") if $debug;    
+    
+    #Workaround for our issues of trailing new lines
+    $renderedTree=~s/\s*$//so;
+
+    #Encapsulate in a div.
+    $renderedTree ="<div class=\"treePlugin\">\n".$renderedTree."</div><!--//treePlugin-->" unless ($nodiv);
 
     #SL: Substitute $index in the rendered tree, $index is most useful to implement menus in combination with TreeBrowserPlugin
     #SL Later: well actually TreeBrowserPlugin now supports =autotoggle= so TreeBrowserPlugin can get away without using that $index in most cases.
@@ -232,30 +236,32 @@ sub HandleTreeTag
         my $Index = 0;
         $renderedTree =~ s/\$Index/$Index++;$Index/egi;
     }
-
+    
+    &TWiki::Func::writeDebug($renderedTree) if $debug;    
+    
     return $renderedTree;
 }
 
 =pod
-Get a TWiki::Plugins::TreePlugin::TWikiNode object from the given hash
-Create a new one if not found.
+Create a new node object and add it to the given hash 
 @param [in] scalar node id
 @param [in] scalar hash reference
 @return Pointer to TWiki::Plugins::TreePlugin::TWikiNode object
 =cut
 
-sub getTWikiNode {
-    my ( $name, $hash ) = @_;
-    my $node = $hash->{$name};    # look for node
-    if ( !$node ) {               # create if not there
-        $node = TWiki::Plugins::TreePlugin::TWikiNode->new($name);
-        $hash->{$name} = $node;
-    }
+sub createTWikiNode {
+    my ( $id, $hash ) = @_;
+    my $node = TWiki::Plugins::TreePlugin::TWikiNode->new($id);
+    $hash->{$id} = $node;
     return $node;
 }
 
-=pod
 
+=pod
+Return web.topic of the parent topic for the specified topic or undef if no parent
+@param [in] web 
+@param [in] topic
+@return web.topic for the parent or undef 
 =cut
 
 sub getParentId {
@@ -304,7 +310,7 @@ sub doSEARCH {
     #   * First comes our topic identifier 
     #   * Next comes our topic format
     my $searchTmpl = "\$web|\$topic";
-    $searchTmpl .= "|" . $params->{'format'};
+    $searchTmpl .= "|" . $params->{'format'} if defined $params->{'format'}; 
     
     #	ok. make the topic list and return it  (use this routine for now)
     #   hopefully there'll be an optimized one later    
@@ -314,76 +320,15 @@ sub doSEARCH {
     return TWiki::Func::expandCommonVariables($search);
 }
 
-
-
+=pod
+Used by some formater.
+Useless really :)
+=cut
 sub getLinkName {
     my ( $node ) = @_;
     return $node->name(); # SL: just return the name which is in fact the id now in format web.topic    
     #return $node->name() unless $node->data("web");
     #return $node->data("web") . "." . $node->data('topic');
-}
-
-sub _findRootsBreakingCycles {
-    my ($hashMappingNamesToNodes) = @_;
-    my %roots = ();
-
-    $AGdebugmsg = "";
-    foreach my $i ( sort keys(%$hashMappingNamesToNodes) ) {
-        my $ultimateParentNode =
-          _findUltimateParentBreakingCycles( ${$hashMappingNamesToNodes}{$i} );
-        $roots{ $ultimateParentNode->name() } = $ultimateParentNode;
-    }
-
-    return \%roots;
-}
-
-sub _findUltimateParentBreakingCycles {
-    my $orignode       = shift;
-    my $node           = $orignode;
-    my %alreadyvisited = ();
-    my $parent;
-    while ( $parent = _findParent($node) ) {
-
-        # break cycles
-        if ( $alreadyvisited{ $parent->name() } ) {
-            $AGdebugmsg = $AGdebugmsg
-              . "pre-rm:"
-              . $parent->toStringNonRecursive()
-              . " <br \/>\n";
-            $parent->remove_child($node);
-            $AGdebugmsg = $AGdebugmsg
-              . "post-rm:"
-              . $parent->toStringNonRecursive()
-              . " <br \/>\n";
-            $AGdebugmsg = $AGdebugmsg
-              . $parent->name() . "<-"
-              . $node->name()
-              . " \n<br \/>\n";
-            my $cycleroot =
-              TWiki::Plugins::TreePlugin::TWikiNode->new(
-                $parent->name() . " cycle..." );
-            my $cycleleaf =
-              TWiki::Plugins::TreePlugin::TWikiNode->new(
-                $node->name() . " ...cycle" );
-            $node->data( "parent", $cycleroot );
-            $cycleroot->add_child($node);
-            $parent->add_child($cycleleaf);
-
-            # TBD: give some indication of cycle broken
-            return $cycleroot;
-        }
-        else {
-            $alreadyvisited{ $parent->name() } = 1;
-        }
-
-        # move up
-        $node = $parent;
-    }
-    $AGdebugmsg = $AGdebugmsg
-      . "findUltimateParent("
-      . $orignode->name() . ")" . "="
-      . $node->name() . "<br \/>";
-    return $node;
 }
 
 sub _findParent {

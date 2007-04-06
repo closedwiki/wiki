@@ -71,18 +71,20 @@ sub toHTMLFormat {
     my $num       = shift || 0;
     my $level     = shift || 0;
 
+    #&TWiki::Func::writeDebug("toHTMLFormat: ".$this->name()) if $TWiki::Plugins::TreePlugin::debug;   
+
     $formatter->initNode( $this, $num, $level );
 
     my $childrenText = "";
     if ( scalar( @{ $this->children() } ) ) {
         my $count = 0;
         foreach my $node ( @{ $this->children() } )
-        {    # accumulate childrens' format
-            $node->data( "count", $count++ )
-              ;    # remember this node's sibling order
-            $childrenText .=
-              $formatter->formatChild( $node, $count, $level + 1 );
-        }
+            {    
+            # accumulate childrens' format
+            $node->data( "count", $count++ );
+            # remember this node's sibling order            
+            $childrenText .= $formatter->formatChild( $node, $count, $level + 1 );
+            }
     }
     return ($childrenText)
       ? $formatter->formatBranch( $this, $childrenText, $num, $level )
