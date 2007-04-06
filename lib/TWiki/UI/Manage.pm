@@ -274,14 +274,18 @@ sub rename {
     $attachment ||= '';
 
     TWiki::UI::checkWebExists( $session, $oldWeb, $oldTopic, 'rename' );
-    # Item3270: Wrap topic existence into extra try/catch block to
-    #           check for the same name starting with a lower case letter.
-    try {
-        TWiki::UI::checkTopicExists( $session, $oldWeb, $oldTopic, 'rename');
-    } catch TWiki::OopsException with {
+
+    unless( $session->{store}->topicExists( $oldWeb, $oldTopic )) {
+        # Item3270: check for the same name starting with a lower case letter.
+        unless( $session->{store}->topicExists( $oldWeb, lcfirst $oldTopic )) {
+            throw TWiki::OopsException( 'accessdenied',
+                                        def => 'no_such_topic',
+                                        web => $oldWeb,
+                                        topic => $oldTopic,
+                                        params => 'rename' );
+        }
         $oldTopic = lcfirst $oldTopic;
-        TWiki::UI::checkTopicExists( $session, $oldWeb, $oldTopic, 'rename');
-    };
+    }
 
     if( $newTopic && !TWiki::isValidWikiWord( $newTopic ) ) {
         unless( $doAllowNonWikiWord ) {
@@ -306,7 +310,6 @@ sub rename {
                 'attention',
                 web => $oldWeb, topic => $oldTopic,
                 def => ($tmplname eq 'deleteattachment') ? 'delete_err' : 'move_err',
-                keep => 1,
                 params => [
                     $newWeb, $newTopic,
                     $attachment,
@@ -325,7 +328,6 @@ sub rename {
                     'attention',
                     def => 'move_err',
                     web => $oldWeb, topic => $oldTopic,
-                    keep => 1,
                     params => [
                         $newWeb, $newTopic,
                         $attachment,

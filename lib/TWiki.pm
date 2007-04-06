@@ -818,7 +818,7 @@ sub redirect {
             $existing = $1;
         }
         if ($ENV{REQUEST_METHOD} eq 'POST') {
-            # Redirecting from a port to a get
+            # Redirecting from a post to a get
             my $cache = $this->cacheQuery();
             if ($cache) {
                 $url .= "?$cache";
@@ -839,15 +839,20 @@ sub redirect {
     }
 
     # prevent phishing by only allowing redirect to configured host
-    #do this check as late as possible to catch _any_ last minute hacks
-    #TODO: this should really use URI
+    # do this check as late as possible to catch _any_ last minute hacks
+    # TODO: this should really use URI
     if (!isRedirectSafe($url)) {
          #goto oops if URL is trying to take us somewhere dangerous
-         $url = $this->getOopsUrl( 'accessdenied',
-                                def => 'topic_access',
-                                web => $this->{web} || $TWiki::cfg{UsersWebName},
-                                topic => $this->{topic} || $TWiki::cfg{HomeTopicName},
-                                params => [ 'redirect', 'unsafe redirect to '.$url.': host does not match DefaultUrlHost' ]);
+         $url = $this->getScriptUrl(
+             1, 'oops',
+             $this->{web} || $TWiki::cfg{UsersWebName},
+             $this->{topic} || $TWiki::cfg{HomeTopicName},
+             template => 'oopsaccessdenied',
+             def => 'topic_access',
+             param1 => 'redirect',
+             param2 => 'unsafe redirect to '.$url.
+               ': host does not match DefaultUrlHost'
+            );
     }
 
 
@@ -1201,89 +1206,6 @@ sub mapToIconFileName {
     }
 
     return $this->{_ICONMAP}->{$fileExt} || $default || 'else';
-}
-
-=pod
-
----++ ObjectMethod getOopsUrl( $template, @options ) -> $absoluteOopsURL
-
-Composes a URL for an "oops" error page. The @options consists of a list
-of key => value pairs. The following keys are used:
-   * =-web= - web name
-   * =-topic= - topic name
-   * =-def= - optional template def within the main template file
-   * =-params= - a single parameter, or a reference to an array of parameters  These are passed in the URL as '&param1=' etc.
-
-Do _not_ include the "oops" part in front of the template name.
-
-Alternatively you can pass a reference to an OopsException in place of the template. All other parameters will be ignored.
-
-The returned URL ends up looking something like this:
-"http://host/twiki/bin/oops/$web/$topic?template=$template&param1=$scriptParams[0]..."
-
-Note: if {keep} is true in the params, then they will also be pushed into the
-current query.
-
-=cut
-
-sub getOopsUrl {
-    my $this = shift;
-    ASSERT($this->isa( 'TWiki')) if DEBUG;
-    my $template = shift;
-    my $params;
-    my $keep;
-    my $query;
-
-    if( $template->isa('TWiki::OopsException') ) {
-        # The parameters were provided when the exception was thrown
-        $params = $template;
-        $template = $params->{template};
-    } else {
-        # The params are in the parameter array
-        $params = { @_ };
-    }
-
-    if ($params->{keep}) {
-        $query = $this->{cgiQuery};
-        $keep = 1;
-    }
-    delete($params->{keep});
-
-    my $web = $params->{web} || $this->{webName};
-    my $topic = $params->{topic} || $this->{topicName};
-    my $def = $params->{def};
-    my $PARAMS = $params->{params};
-
-    # Build a query string for the new URL.
-    # Push all URL params into the current query as well if {keep} is
-    # set, because if it is, GET params will be ignored when it is
-    # restored.
-    my @urlParams = ( template => 'oops'.$template );
-    $query->param(-name => "template", -value => 'oops'.$template ) if $keep;
-
-    if ($def) {
-        push( @urlParams, def => $def );
-        $query->param(-name => "def", -value => $def ) if $keep;
-    }
-
-    if( ref($PARAMS) eq "ARRAY" ) {
-        my $n = 1;
-        foreach my $p ( @$PARAMS ) {
-            $p = '' unless defined $p;
-            push( @urlParams, "param$n" => $p );
-            $query->param(-name => "param$n", -value => $p ) if $keep;
-            $n++;
-        }
-    } elsif( defined $PARAMS ) {
-        push( @urlParams, param1 => $PARAMS );
-        $query->param(-name => "param1", -value => $PARAMS ) if $keep;
-    }
-
-    $this->enterContext( 'absolute_urls' );
-    my $url = $this->getScriptUrl( 0, 'oops', $web, $topic, @urlParams );
-    $this->leaveContext( 'absolute_urls' );
-
-    return $url;
 }
 
 =pod
@@ -3746,3 +3668,5 @@ sub GROUPS {
 }
 
 1;
+
+

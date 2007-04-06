@@ -161,48 +161,7 @@ sub getViewUrl {
     ASSERT($TWiki::Plugins::SESSION) if DEBUG;
 
     $web ||= $TWiki::Plugins::SESSION->{webName} || $TWiki::cfg{UsersWebName};
-    return $TWiki::Plugins::SESSION->getScriptUrl( 1, 'view', $web, $topic );
-}
-
-=pod
-
----+++ getOopsUrl( $web, $topic, $template, $param1, $param2, $param3, $param4 ) -> $url
-
-Compose fully qualified 'oops' dialog URL
-   * =$web=                  - Web name, e.g. ='Main'=. The current web is taken if empty
-   * =$topic=                - Topic name, e.g. ='WebNotify'=
-   * =$template=             - Oops template name, e.g. ='oopsmistake'=. The 'oops' is optional; 'mistake' will translate to 'oopsmistake'.
-   * =$param1= ... =$param4= - Parameter values for %<nop>PARAM1% ... %<nop>PARAMn% variables in template, optional
-Return: =$url=                     URL, e.g. ="http://example.com:80/cgi-bin/oops.pl/ Main/WebNotify?template=oopslocked&amp;param1=joe"=
-
-This might be used like this:
-<verbatim>
-   my $url = TWiki::Func::getOopsUrl($web, $topic, 'oopsmistake', 'I made a boo-boo');
-   TWiki::Func::redirectCgiQuery( undef, $url );
-   return 0;
-</verbatim>
-
-*Since:* TWiki::Plugins::VERSION 1.000 (7 Dec 2002)
-
-Since TWiki::Plugins::VERSION 1.1, the recommended approach is to throw an [[TWikiOopsExceptionDotPm][oops exception]].
-<verbatim>
-   use Error qw( :try );
-
-   throw TWiki::OopsException($web, $topic, undef, 0, [ 'I made a boo-boo' ]);
-</verbatim>
-and let TWiki handle the cleanup.
-
-=cut
-
-sub getOopsUrl {
-    my( $web, $topic, $template, @params ) = @_;
-    ASSERT($TWiki::Plugins::SESSION) if DEBUG;
-
-    my $res = $TWiki::Plugins::SESSION->getOopsUrl( 'TeMpLaTe', web => $web,
-                                                    topic => $topic,
-                                                    params => \@params );
-    $res =~ s/oopsTeMpLaTe/$template/g;
-    return $res;
+    return getScriptUrl( $web, $topic, 'view' );
 }
 
 =pod
@@ -1016,46 +975,6 @@ sub eachGroupMember {
 
 =pod
 
----+++ permissionsSet( $web ) -> $boolean
-
-Test if any access restrictions are set for this web, ignoring settings on
-individual pages
-   * =$web= - Web name, required, e.g. ='Sandbox'=
-
-*Since:* TWiki::Plugins::VERSION 1.000 (27 Feb 2001)
-
-*DEPRECATED* since 1.12 - use =getPreferencesValue= instead to determine
-what permissions are set on the web, for example:
-<verbatim>
-foreach my $type qw( ALLOW DENY ) {
-    foreach my $action qw( CHANGE VIEW ) {
-        my $pref = $type . 'WEB' . $action;
-        my $val = getPreferencesValue( $pref, $web ) || '';
-        if( $val =~ /\S/ ) {
-            print "$pref is set to $val on $web\n";
-        }
-    }
-}
-</verbatim>
-
-=cut
-
-sub permissionsSet {
-    my( $web ) = @_;
-
-    foreach my $type qw( ALLOW DENY ) {
-        foreach my $action qw( CHANGE VIEW RENAME ) {
-            my $pref = $type . 'WEB' . $action;
-            my $val = getPreferencesValue( $pref, $web ) || '';
-            return 1 if( $val =~ /\S/ );
-        }
-    }
-
-    return 0;
-}
-
-=pod
-
 ---+++ checkAccessPermission( $type, $wikiName, $text, $topic, $web, $meta ) -> $boolean
 
 Check access permission for a topic based on the
@@ -1304,14 +1223,15 @@ sub checkTopicEditLock {
                 $lease->{expires}-time(),
                 $TWiki::Plugins::SESSION->{i18n}
                );
-            return( $session->getOopsUrl(
-                'leaseconflict',
+            my $url = getScriptUrl(
+                $web, $topic, 'oops',
+                template => 'oopsleaseconflict',
                 def => 'lease_active',
-                keep => 1,   # Need to keep parameters across redirect
-                web => $web,
-                topic => $topic,
-                params => [ $who, $past, $future, $script ] ),
-                    $who, $remain / 60 );
+                param1 => $who,
+                param2 => $past,
+                param3 => $future,
+                param4 => $script );
+            return( $url, $who, $remain / 60 );
         }
     }
     return ('', '', 0);
@@ -1430,9 +1350,7 @@ sub saveTopicText {
 
     my $session = $TWiki::Plugins::SESSION;
     my( $mirrorSite, $mirrorViewURL ) = $session->readOnlyMirrorWeb( $web );
-    return $session->getOopsUrl
-      ( 'mirror', web => $web, topic => $topic,
-        params => [ $mirrorSite, $mirrorViewURL ] ) if( $mirrorSite );
+    throw Error::Simple('Cannot save on a mirror site') if( $mirrorSite );
 
     # check access permission
     unless( $ignorePermissions ||
@@ -1441,17 +1359,17 @@ sub saveTopicText {
                 $topic, $web )
           ) {
         my @plugin = caller();
-        return $session->getOopsUrl( 'accessdenied',
-                                     def => 'topic_access',
-                                     web => $web,
-                                     topic => $topic,
-                                     params => [ 'in', $plugin[0] ] );
+        return getScriptUrl(
+            $web, $topic, 'oops',
+            template => 'oopsaccessdenied',
+            def => 'topic_access',
+            param1 => 'in',
+            param2 => $plugin[0] );
     }
 
-    return $session->getOopsUrl( 'attention',
-                                 def => 'save_error',
-                                 web => $web,
-                                 topic => $topic )
+    return getScriptUrl(
+        $web, $topic, 'oops', template => 'oopsattention', def => 'save_error',
+        param1 => 'No text' )
       unless( defined $text );
 
     # extract meta data and merge old attachment meta data
@@ -1467,9 +1385,9 @@ sub saveTopicText {
       $session->{store}->saveTopic
         ( $session->{user}, $web, $topic, $text, $meta,
           { notify => $dontNotify } );
-    return $session->getOopsUrl
-      ( 'attention', def => 'save_error',
-        web => $web, topic => $topic, params => $error ) if( $error );
+    return getScriptUrl(
+        $web, $topic, 'oops', template => 'oopsattention', def => 'save_error',
+          param1 => $error ) if( $error );
     return '';
 }
 
@@ -1611,7 +1529,7 @@ Read topic text, including meta data
    * =$ignorePermissions=  - Set to ="1"= if checkAccessPermission() is already performed and OK; an oops URL is returned if user has no permission
 Return: =$text=                  Topic text with embedded meta data; an oops URL for calling redirectCgiQuery() is returned in case of an error
 
-This method is more efficient than =readTopic=, but returns meta-data embedded in the text. Plugins authors must be very careful to avoid damaging meta-data. You are recommended to use readTopic instead, which is a lot safer..
+This method is more efficient than =readTopic=, but returns meta-data embedded in the text. Plugins authors must be very careful to avoid damaging meta-data. You are recommended to use readTopic instead, which is a lot safer.
 
 *Since:* TWiki::Plugins::VERSION 1.010 (31 Dec 2002)
 
@@ -1632,9 +1550,11 @@ sub readTopicText {
             ( $user, $web, $topic, $rev );
     } catch TWiki::AccessControlException with {
         my $e = shift;
-        $text = $TWiki::Plugins::SESSION->getOopsUrl
-          ( 'accessdenied', def=>'topic_access', web => $web, topic => $topic,
-            params => [ $e->{mode}, $e->{reason} ] );
+        $text = getScriptUrl(
+            $web, $topic, 'oops',
+            template => 'oopsaccessdenied', def=>'topic_access',
+            param1 => $e->{mode},
+            param2 => $e->{reason} );
     };
 
     return $text;
@@ -2724,6 +2644,88 @@ using it.
 sub getScriptUrlPath {
     ASSERT($TWiki::Plugins::SESSION) if DEBUG;
     return $TWiki::Plugins::SESSION->getScriptUrl( 0, '' );
+}
+
+=pod
+
+---+++ getOopsUrl( $web, $topic, $template, $param1, $param2, $param3, $param4 ) -> $url
+
+Compose fully qualified 'oops' dialog URL
+   * =$web=                  - Web name, e.g. ='Main'=. The current web is taken if empty
+   * =$topic=                - Topic name, e.g. ='WebNotify'=
+   * =$template=             - Oops template name, e.g. ='oopsmistake'=. The 'oops' is optional; 'mistake' will translate to 'oopsmistake'.
+   * =$param1= ... =$param4= - Parameter values for %<nop>PARAM1% ... %<nop>PARAMn% variables in template, optional
+Return: =$url=                     URL, e.g. ="http://example.com:80/cgi-bin/oops.pl/ Main/WebNotify?template=oopslocked&amp;param1=joe"=
+
+*DEPRECATED* since 1.1, the recommended approach is to throw an [[TWikiOopsExceptionDotPm][oops exception]].
+<verbatim>
+   use Error qw( :try );
+
+   throw TWiki::OopsException($web, $topic, undef, 0, [ 'I made a boo-boo' ]);
+
+If this is not possible (e.g. in a REST handler that does not trap the exception)
+then you can use =getScriptUrl= instead:
+<verbatim>
+   my $url = TWiki::Func::getScriptUrl($web, $topic, 'oops',
+            template => 'oopsmistake',
+            param1 => 'I made a boo-boo');
+   TWiki::Func::redirectCgiQuery( undef, $url );
+   return 0;
+</verbatim>
+
+*Since:* TWiki::Plugins::VERSION 1.000 (7 Dec 2002)
+
+=cut
+
+sub getOopsUrl {
+    my( $web, $topic, $template, @params ) = @_;
+
+    $template = "oops$template" unless $template =~ /^oops/;
+    my $n = 1;
+    @params = map { 'param'.($n++) => $_ } @params;
+    return getScriptUrl( $web, $topic, 'oops',
+                         template => $template,
+                         @params );
+}
+
+=pod
+
+---+++ permissionsSet( $web ) -> $boolean
+
+Test if any access restrictions are set for this web, ignoring settings on
+individual pages
+   * =$web= - Web name, required, e.g. ='Sandbox'=
+
+*Since:* TWiki::Plugins::VERSION 1.000 (27 Feb 2001)
+
+*DEPRECATED* since 1.12 - use =getPreferencesValue= instead to determine
+what permissions are set on the web, for example:
+<verbatim>
+foreach my $type qw( ALLOW DENY ) {
+    foreach my $action qw( CHANGE VIEW ) {
+        my $pref = $type . 'WEB' . $action;
+        my $val = getPreferencesValue( $pref, $web ) || '';
+        if( $val =~ /\S/ ) {
+            print "$pref is set to $val on $web\n";
+        }
+    }
+}
+</verbatim>
+
+=cut
+
+sub permissionsSet {
+    my( $web ) = @_;
+
+    foreach my $type qw( ALLOW DENY ) {
+        foreach my $action qw( CHANGE VIEW RENAME ) {
+            my $pref = $type . 'WEB' . $action;
+            my $val = getPreferencesValue( $pref, $web ) || '';
+            return 1 if( $val =~ /\S/ );
+        }
+    }
+
+    return 0;
 }
 
 =pod

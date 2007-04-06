@@ -108,4 +108,34 @@ sub stringify {
     }
 }
 
+=pod
+
+---++ ObjectMethod redirect( $twiki )
+Generate a redirect to an 'oops' script for this exception.
+If the 'keep' parameter is set in the
+exception, it saves parameter values into the query as well. This is needed
+if the query string might get lost during a passthrough, due to a POST
+being redirected to a GET.
+
+=cut
+
+sub redirect {
+    my( $this, $session ) = @_;
+
+    my @p = ();
+
+    $this->{template} = "oops$this->{template}" unless
+      $this->{template} =~ /^oops/;
+    push( @p, template => $this->{template} );
+    push( @p, def => $this->{def}) if $this->{def};
+    my $n = 1;
+    push( @p, map { 'param'.($n++) => $_ } @{$this->{params}} );
+    my $url = $session->getScriptUrl(
+        1, 'oops', $this->{web}, $this->{topic}, @p);
+    while( my $p = shift( @p )) {
+        $session->{cgiQuery}->param( -name => $p, -value => shift( @p ));
+    }
+    $session->redirect( $url, $this->{keep} );
+}
+
 1;
