@@ -1,7 +1,7 @@
-%META:TOPICINFO{author="StephaneLenclud" date="1175645365" format="1.1" reprev="1.8" version="1.8"}%
+%META:TOPICINFO{author="StephaneLenclud" date="1175833577" format="1.1" reprev="1.10" version="1.10"}%
 ---+!! Tree Plugin
 
-Renders topics' parent-child relationships as hierarchical tree view. Useful for dynamic sitemaps and threads.
+Renders topics' parent-child relationships as hierarchical tree view. Useful for dynamic site maps and threads.
 
 %TOC%
 
@@ -11,38 +11,38 @@ Renders topics' parent-child relationships as hierarchical tree view. Useful for
 =%<nop>TREEVIEW{}%= displays topic children in a hierarchical tree <br />
 =%<nop>TREE{}%= synonym of =%<nop>TREEVIEW{}%=
 
-Attributes:
-   * *web* - specify web
-   * *topic* - specify tree's root topic (if none, will do the entire web)
-   * *formatting* - specify the formatting method
-      * =ullist= is a &lt;ul&gt;-list, see [[Sandbox.TreePluginSamples#UlList][sample UL lists]]
-      * =ollist= is a &lt;ol&gt;-list, see [[Sandbox.TreePluginSamples#OlList][sample OL lists]]
-      * =outline= is an outline list, see [[Sandbox.TreePluginSamples#SampleOutlines][sample Outlines]]
-      * =hlist= is a &lt;h<i>n</i>&gt;-list of section heads, see [[Sandbox.TreePluginSamples#SampleHList][sample Headlines]]
-      * =coloroutline:colorlist= is an outline formatting with level values turned into colors, see [[Sandbox.TreePluginSamples#SampleNestedTables][sample Nested tables]]. Example: =formatting="coloroutline:#ffeeff,#eeffee,#ffffee,#eeeeff,#ffeeee,#eeffff"=
-      * =imageoutline:mode= is a way to incorporate images into the outline format, specifically to display thread-like and folder views, see [[Sandbox.TreePluginSamples#SampleImageTrees][sample Image Trees]]. The general format is: imageoutline: _mode_ : _images_ : _imageformat_. Example: =formatting="imageoutline:thread"= or =formatting="imageoutline:thread:I.gif,white.gif,T.gif,L.gif:&lt;img src=\"$image\" border=\"0\">"=.
-   * *excludetopic* - Same meaning as TWiki.VarSEARCH =excludetopic=. Topics with excluded parent find themselves in a second tree below the first one and separated by a blank line.
-   * *startlevel* - the depth of the tree to start showing nodes from. To hide the root node, supply =startlevel="1"= (root is level 0). The displayed node depths are relative to the root topic.
-   * *stoplevel* - the depth of the tree to show, relative to start level 
-   * *header* - header output
-   * *bookview* - list topics in BookView form 
-   * *format* - specify the format for each node (=outline= & =coloroutline=). Format variable options:
-      * =$topic= - the topic name
-      * =$web= - the topic's web
-      * =$spacetopic= - the topic with spaces
-      * =$summary= - the topic's summary
-      * =$text= - the topic's text (which will get rendered)
-      * =$author= - the topic's last author 
-      * =$modTime= - the topic's modification time
-      * =$level= - the tree depth of the topic (in whatever format)
-      * =$count= - the topic's child position
-      * =$index= - the index of the topic in the tree. Starts from one. Most useful when used in combination with [[TWiki:Plugins.TreeBrowserPlugin][TreeBrowserPlugin]]
-      * =$onum= - outline number for the topic (eg, 1.3.4.2) 
-      * =$url= - the current topic's URL
-   * *formatbranch* - specify the format for a group of children (=outline= & =coloroutline=)
-      * =$parent= - the text of a node
-      * =$children= - the text of all the node's children (if any)
-   * *levelprefix* - specify a prefix to a node format. The prefix is inserted =$level= times at the beginning of the rendered node format (=outline=). It allows generation of trees using TWiki bullet list syntax thus enabling usage of !TreePlugin [[#Combination_with_TreeBrowserPlug][in combination with TreeBrowserPlugin]].
+|*Parameter*|*Description*|*Default*|
+|=web=| The web to search. | current web |
+|=topic=| Specify tree's root topic. If none the entire web topics' tree is generated | none |
+|=formatting=| Specify the formatting method <br />\
+ =ullist= is a &lt;ul&gt;-list, see [[Sandbox.TreePluginSamples#UlList][sample UL lists]] <br />\
+ =ollist= is a &lt;ol&gt;-list, see [[Sandbox.TreePluginSamples#OlList][sample OL lists]] <br />\
+ =outline= is an outline list, see [[Sandbox.TreePluginSamples#SampleOutlines][sample Outlines]] <br />\
+ =hlist= is a &lt;h<i>n</i>&gt;-list of section heads, see [[Sandbox.TreePluginSamples#SampleHList][sample Headlines]] <br />\
+ =coloroutline:colorlist= is an outline formatting with level values turned into colors, see [[Sandbox.TreePluginSamples#SampleNestedTables][sample Nested tables]]. Example: =formatting="coloroutline:#ffeeff,#eeffee,#ffffee,#eeeeff,#ffeeee,#eeffff"= <br />\
+ =imageoutline:mode= is a way to incorporate images into the outline format, specifically to display thread-like and folder views, see [[Sandbox.TreePluginSamples#SampleImageTrees][sample Image Trees]]. The general format is: imageoutline: _mode_ : _images_ : _imageformat_. Example: =formatting="imageoutline:thread"= or =formatting="imageoutline:thread:I.gif,white.gif,T.gif,L.gif:&lt;img src=\"$image\" border=\"0\">"=. <br />\
+| =outline= | 
+|=excludetopic=| Same meaning as TWiki.VarSEARCH =excludetopic=. Topics with excluded parent find themselves in a second tree below the first one and separated by a blank line. | none |
+|=startlevel=| The depth of the tree to start showing nodes from. To hide the root node, supply =startlevel="1"= (root is level 0). The displayed node depths are relative to the root topic. | =0= or =1= if =topic= is not specified |
+|=stoplevel=| The depth of the tree to show, relative to start level. | =999= | 
+|=header=| If specified output the value within a =&lt;div&gt;= of class =treePluginHeader=. | none |
+|=bookview=| List topics in BookView form | none | 
+|=format=| Specify the format for each node (=outline= & =coloroutline=). \
+The following pseudo-variable are supported on top of the ones described in TWiki.FormattedSearch: <br />\
+ =$spacetopic= - the topic with spaces <br />\
+ =$level= - the tree depth of the topic (in whatever format) <br />\
+ =$count= - the topic's child position <br />\
+ =$index= - the index of the topic in the tree. Starts from one. Most useful when used in combination with [[TWiki:Plugins.TreeBrowserPlugin][TreeBrowserPlugin]] <br />\
+ =$onum= - outline number for the topic (eg, 1.3.4.2)  <br />\
+ =$url= - the current topic's URL <br />\
+ =$author= - the topic's last author %RED%Not supported from v0.9. Use =%<nop>AUTHOR%= instead. %ENDCOLOR% <br />\
+ =$modTime= - the topic's modification time. %RED%Not supported from v0.9%ENDCOLOR% <br />\
+| none |
+| =formatbranch= | - specify the format for a group of children (=outline= & =coloroutline=)  <br />\
+ =$parent= - the text of a node  <br />\
+ =$children= - the text of all the node's children (if any) <br />\
+| none |
+|=levelprefix=| Specify a prefix to a node format. The prefix is inserted =$level= times at the beginning of the rendered node format. It allows generation of trees using TWiki bullet list syntax thus enabling usage of !TreePlugin [[#Combination_with_TreeBrowserPlug][in combination with TreeBrowserPlugin]]. | none |
 
 
 ---++ Samples
@@ -94,6 +94,7 @@ a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, for example, =
 | CPAN&nbsp;Dependencies: | none _(test package relies on Wiki:PerlUnit)_ |
 | Perl Version: | 5.0, 5.6.1, 5.8.7 |
 | Change&nbsp;History: | <!-- specify latest version first -->&nbsp; |
+| 6 Apr 2007 | 0.9 - Support for TWiki.FormattedSearch pseudo-variables. Code cleaning in =TreePlugin.pm=. Removed some dead code. Improved documentation. By TWiki:Main.StephaneLenclud | 
 | 4 Apr 2007 | 0.8 - Adding =excludetopic= parameter. Adding =%<nop>TREE%= as synonym tag. Code cleaning in =TreePlugin.pm=. Fix root issue when no =topic= specified. By TWiki:Main.StephaneLenclud | 
 | 14 Mar 2007 | 0.7.1 - Arthur Clemens: Made =startlevel= and =stoplevel= relative to the root topic. | 
 | 14 Mar 2007 | 0.7 - Arthur Clemens: =web= parameter is now actually used. Added parameter =startlevel=. | 
@@ -107,7 +108,6 @@ a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, for example, =
 | Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
 __Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
-
 
 %META:FILEATTACHMENT{name="oT.gif" attr="h" autoattached="1" comment="" date="1158432770" path="oT.gif" size="879" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="I.gif" attr="h" autoattached="1" comment="" date="1158432770" path="I.gif" size="869" user="UnknownUser" version=""}%

@@ -37,7 +37,7 @@ use vars qw(
   %FormatMap $RootLabel $AGdebugmsg
 );
 
-$VERSION = '0.8';
+$VERSION = '0.9';
 
 $RootLabel =
   "_RootLabel_";    # what we use to label the root of a tree if not a topic
@@ -87,7 +87,8 @@ Tag handler for TREE and TREEVIEW
 
 $AGdebugmsg = "<br \/>AG debug message<br \/>";
 
-sub HandleTreeTag {
+sub HandleTreeTag
+    {
     my($session, $params, $topic, $web) = @_;    
 
     my $cgi   = &TWiki::Func::getCgiQuery();
@@ -97,33 +98,23 @@ sub HandleTreeTag {
 
     # $CurrUrl =~ s/\&/\&amp;/go;
 
-    my $attrWeb = $params->{'web'}
-      || $web
-      || "";
-    my $attrTopic = $params->{'topic'}
-      || $RootLabel;    # ie, do all web, needs to be nonempty
+    my $attrWeb = $params->{'web'} || $web || "";
+    my $attrTopic = $params->{'topic'} || $RootLabel;    # ie, do all web, needs to be nonempty
 
     my $attrFormatting;
+        
+    my $attrHeader='';
+    if (defined $params->{'header'})
+        {
+        $attrHeader ='<div class="treePluginHeader">'. $params->{'header'}."</div>\n";
+        }
+    else
+        {
+        #Make sure the tree starts on a new line and get formatted correctly
+        $attrHeader="\n"; 
+        }
 
-    cgiOverride( \$attrWeb,        "treeweb" );
-    cgiOverride( \$attrTopic,      "treetopic" );
-    cgiOverride( \$attrFormatting, "formatting" );
-
-    # we've expanded TREESEARCH on this topic before, we won't repeat
-    #	return "<!-- Self-recursion -->" if ($TreeTopics{$topic});
-
-    #    # global hash, record this object and attrTopic too (as initial seed)
-    #    $TreeTopics{$topic} = 1;
-    #	$TreeTopics{$attrTopic} = 1;
-
-    my $attrHeader =
-        "<div class=\"treePluginHeader\"> "
-      . $params->{'header'}
-      . " </div><!--//treePluginHeader-->" || "";
-    $attrHeader .= "\n" if ($attrHeader);    # to enable |-tables formatting
-    my $attrFormat = $params->{'format'}
-      || "";
-    $attrFormat .= "\n" if ($attrFormat);    # to enable |-tables formatting
+    my $attrFormat = $params->{'format'} || "";
     
     my $attrFormatBranch =
       $params->{'formatbranch'} || "";
@@ -131,7 +122,7 @@ sub HandleTreeTag {
       $params->{'formatting'} || "";
     my $attrStartlevel =
       $params->{'startlevel'} || -1; # -1 means not defined
-    #SL: If now =topic= parameter was given and =startlevel= below 1 then set =startlevel= to 1
+    #SL: If no =topic= and =startlevel= parameter was given then set =startlevel= to 1
     #This workaround get ride of the empty root line when rendering a tree for an entire Web
     if (($attrTopic eq $RootLabel) && ($attrStartlevel==-1)) { $attrStartlevel=1; } #
     my $attrStoplevel =
@@ -141,8 +132,6 @@ sub HandleTreeTag {
     my $attrLevelPrefix =
       $params->{'levelprefix'} || "";
     
-    cgiOverride( \$attrFormatting, "formatting" );
-
     # set the type of formatting
     my $formatter = setFormatter($attrFormatting);
 
@@ -163,6 +152,10 @@ sub HandleTreeTag {
           if ($attrFormatBranch);
 
     }
+    
+    #Before doing the SEARCH, if no format was specified use formatter's default
+    #SL: I know it's a bit mad what's going on between $attrFormat, $formatter->data('format') and $params->{'format'} but that will do for now
+    $params->{'format'}=$formatter->data("format") if ($attrFormat eq "");
 
     # get search results
     my $search = _getSearchString( $attrWeb, $params, $formatter );
@@ -172,8 +165,12 @@ sub HandleTreeTag {
 
     # loop thru topics
     foreach ( split /\n/, $search ) {
-        my ( $topic, $modTime, $author, $summary ) =
+        #my ( $topic, $modTime, $author, $summary ) = #SL: was
+        my ( $topic, $format ) =
           split /\|/;    # parse out data
+    
+        #If no node format default to the formatter's format     
+        if (!$format) {$format=$formatter->data("format")}
 
         # get parent
         my ( $meta, $text ) = &TWiki::Func::readTopic( $attrWeb, $topic );
@@ -188,20 +185,22 @@ sub HandleTreeTag {
 
         my %par = ( defined $ref ? %$ref : () );
         my $parent = (%par)
-          ? _findTWikiNode( $par{"name"},
+          ? _findTWikiNode( $par{'name'},
             \%nodes )    # yes i have a parent, get it
           : $root;       # otherwise root's my parent
 
         # create my node (or if it's already created get it)
         my $node = _findTWikiNode( $topic, \%nodes );
+        
 
-        $node->data( "author",  $author );
-        $node->data( "web",     $attrWeb );
-        $node->data( "modTime", $modTime );
+        #$node->data( "web",     $attrWeb );
+        #Set the format for this node as it came back from the SEARCH
+        $node->data( "format",  "$format\n" ); #SL: new
+
 
         # big memory items, only save if need to
         if ( $formatter->data("fullSubs") ) {
-            $node->data( "summary", $summary );
+            #$node->data( "summary", $summary );
             $node->data( "text",    $text );
             $node->data( "meta",    $meta );
         }
@@ -242,8 +241,8 @@ sub HandleTreeTag {
       . $renderedTree
       . "</div><!--//treePlugin-->";
 
-#SL: Substitute $index in the rendered tree, $index is most useful to implement menus in combination with TreeBrowserPlugin
-#SL Later: well actually TreeBrowserPlugin now supports =autotoggle= so TreeBrowserPlugin can get away without using that $index in most cases.
+    #SL: Substitute $index in the rendered tree, $index is most useful to implement menus in combination with TreeBrowserPlugin
+    #SL Later: well actually TreeBrowserPlugin now supports =autotoggle= so TreeBrowserPlugin can get away without using that $index in most cases.
     if ( defined $formatter->data("format") ) {
         my $Index = 0;
         $renderedTree =~ s/\$Index/$Index++;$Index/egi;
@@ -261,32 +260,19 @@ sub HandleTreeTag {
 sub _getSearchString {
     my ( $attrWeb, $params, $formatter ) = @_;
 
-    my $attrForm = $params->{'form'}
-      || "";
+    my $excludetopic=$params->{'excludetopic'} || "";
 
     my $searchVal   = ".*";
     my $searchScope = "topic";
 
-    #	not functioning
-    #    if ($attrForm) {
-    #    	$searchVal = "%META:FORM\{.*name=\\\"$attrForm\\\"\}%";
-    #    	$searchScope = "text";
-    #    }
-
     my $searchWeb = ($attrWeb) ? $attrWeb : "all";
-    my $searchTmpl = "\$topic|%TIME%|%AUTHOR%";
 
-    # optimization: remember not to save heavy memory values
-    if (   $formatter->data("format")
-        && $formatter->data("format") =~ m/\$(summary|text)/ )
-    {
-        $formatter->data( "fullSubs", 1 );
-        $searchTmpl .= "|\$summary";
-    }
-
-    #
-    my $excludetopic=$params->{'excludetopic'} || "";
-
+    #We build up our SEARCH format parameter
+    #   * First comes our topic identifier 
+    #   * Next comes our topic format
+    my $searchTmpl = "\$topic"; #SL: shall we $web.$topic instead ? Mmmmn maybe not
+    $searchTmpl .= "|" . $params->{'format'};
+    
     #	ok. make the topic list and return it  (use this routine for now)
     #   hopefully there'll be an optimized one later    
     return TWiki::Func::expandCommonVariables(
@@ -438,125 +424,6 @@ sub _findTWikiNode {
         $hash->{$name} = $node;
     }
     return $node;
-}
-
-# use cgi var to override given variable ref
-
-sub cgiOverride {
-    my $variable  = shift;
-    my $paramname = shift;
-
-    my $cgi = &TWiki::Func::getCgiQuery();
-    if ( !$cgi ) {
-        return;
-    }
-    else {
-        my $tmp = $cgi->param($paramname);
-        $$variable = $tmp if ($tmp);
-    }
-}
-
-# allow other classes to see the installation web
-sub installWeb {
-    return $installWeb;
-}
-
-sub handleCreateChildInput {
-    my ( $args, $web ) = @_;
-
-    my ( $addtext, $meta, $text );
-
-    if ( TWiki::Func::topicExists( $web, "AddUnder" ) ) {
-        ( $meta, $addtext ) = &TWiki::Func::readTopic( $web, "AddUnder" );
-    }
-
-    # need to reread to get the meta of this topic
-    ( $meta, $text ) = &TWiki::Func::readTopic( $web, $topic );
-
-    # change meta according to new attributes (reuse $meta for object props)
-    if ($args) {
-        $meta = setMetaFromAttr( $meta, $args );
-    }
-
-    # put in fields data (if this is going to be a form)
-
-    my $formfields;
-
-    # so: is new topic to have a form? if so, put in new fields
-
-    my $ref = 0;
-    if ( $TWiki::Plugins::VERSION < 1.1 ) {
-        $ref = $meta->findOne("FORM");
-    }
-    else {
-        $ref = $meta->get("FORM");
-    }
-
-    my %form = ( defined $ref ? %$ref : () );
-
-    if (%form) {
-        my $name = $form{"name"};
-        $formfields = &TWiki::Form::getFieldParams($meta);
-        my $forminput =
-          "<input type=\"hidden\" name=\"formtemplate\" value=\"$name\" />";
-        $addtext =~ s/%FORMINPUT%/$forminput/e;
-    }
-    else {
-        $addtext =~ s/%FORMINPUT%//g;
-    }
-
-    $addtext =~ s/%ADDFORM%/$formfields/g;
-
-    return $addtext;
-}
-
-# changes the passed meta, to the given fields value of the given args
-
-sub setMetaFromAttr {
-    my ( $meta, $args ) = @_;
-
-    # no matter what, no inherited values in child's form
-    if ( &TWiki::extractNameValuePair( $args, "resetform" ) ) {
-        $meta->remove("FIELD");
-        return $meta;
-    }
-
-    # get this form name
-    my $ref = 0;
-    if ( $TWiki::Plugins::VERSION < 1.1 ) {
-        $ref = $meta->findOne("FORM");
-    }
-    else {
-        $ref = $meta->get("FORM");
-    }
-
-    my %form = ( defined $ref ? %$ref : () );
-    my $name = $form{"name"} if (%form) || "";
-
-    # get new form name, if any
-    my $newform = TWiki::extractNameValuePair( $args, "form" );
-
-    # if newform & different, just set new form name (& delete all fields)
-    if ( $newform && $newform ne $name ) {
-        $meta->put( "FORM", ( "name" => $newform ) );
-        $meta->remove("FIELD");
-    }
-
-    my $fields = TWiki::extractNameValuePair( $args, "fields" );
-
-    # put in new fields into $meta
-
-    # hash of fields
-    my %f = map { split( /=/, $_ ) }
-      grep { /[^\=]*\=[^\=]*$/ }
-      split( /\s*,\s*/, $fields );
-
-    foreach ( keys %f ) {
-        my @a = ( "name" => $_, "value" => $f{$_} );
-        $meta->put( "FIELD", @a );
-    }
-
-    return $meta;
 }
 
 1;
