@@ -7,6 +7,16 @@ use TWiki::Func;
 use TWiki::Plugins::EditRowPlugin::TableRow;
 use TWiki::Plugins::EditRowPlugin::TableCell;
 
+use vars qw($ADD_ROW $DELETE_ROW $QUIET_SAVE $NOISY_SAVE $EDIT_ROW $CANCEL_ROW $UP_ROW $DOWN_ROW);
+$ADD_ROW    = 'Add new row after this row / at the end';
+$DELETE_ROW = 'Delete this row / last row';
+$QUIET_SAVE = 'Quiet Save';
+$NOISY_SAVE = 'Save';
+$EDIT_ROW   = 'Edit';
+$CANCEL_ROW = 'Cancel';
+$UP_ROW     = 'Move this row up';
+$DOWN_ROW   = 'Move this row down';
+
 # Static method that parses tables out of a block of text
 sub parseTables {
     my ($text, $topic, $web, $meta, $urps) = @_;
@@ -129,16 +139,23 @@ sub stringify {
 sub renderForEdit {
     my ($this, $activeRow) = @_;
     my $wholeTable = ($activeRow <= 0);
-    my @out;
-    my $n = 1;
+    my @out = ( "<a name='erp_$this->{number}'></a>" );
+    my $firstRow = 1;
+
+    # no special treatment for the first row unless requested
+    my $attrs = $this->{attrs};
+    $firstRow = 0 unless TWiki::isTrue($attrs->{headerislabel});
+
+    my $n = $firstRow ? 0 : 1;
+    my $r = 1;
     foreach my $row (@{$this->{rows}}) {
-        if ($n == $activeRow ||
-              $wholeTable && !($n == 1 && $this->{attrs}->{headerislabel})) {
-            push(@out, $row->renderForEdit($this->{colTypes}, !$wholeTable));
+        if ($r++ == $activeRow || $wholeTable && !$firstRow) {
+            push(@out, $row->renderForEdit($this->{colTypes}, $n, $firstRow, !$wholeTable));
         } else {
-            push(@out, $row->renderForDisplay($this->{colTypes}));
+            push(@out, $row->renderForDisplay($this->{colTypes}, $n, $firstRow, !$wholeTable));
         }
         $n++;
+        $firstRow = 0;
     }
     if ($wholeTable) {
         push(@out, $this->generateEditButtons(0));
@@ -147,38 +164,57 @@ sub renderForEdit {
 }
 
 sub renderForDisplay {
-    my ($this, $displayOnly) = @_;
+    my ($this, $showControls) = @_;
     my @out;
+    my $firstRow = 1;
+
+    # no special treatment for the first row unless requested
+    my $attrs = $this->{attrs};
+    $firstRow = 0 unless TWiki::isTrue($attrs->{headerislabel});
+
+    my $n = $firstRow ? 0 : 1;
 
     foreach my $row (@{$this->{rows}}) {
-        push(@out, $row->renderForDisplay($this->{colTypes}, $displayOnly));
+        push(@out, $row->renderForDisplay($this->{colTypes}, $n, $firstRow, $showControls));
+        $firstRow = 0;
+        $n++;
     }
-    unless ($displayOnly) {
+
+    my $button =
+      CGI::img({
+          -name => "erp_edit_$this->{number}",
+          -border => 0,
+          -src => '%PUBURLPATH%/TWiki/EditRowPlugin/edittable.gif'
+         });
+
+    my $script = 'view';
+    unless ($showControls || TWiki::Func::getContext()->{authenticated}) {
+        # A  bit of a hack. If the user isn't logged in, then show the table edit button
+        # anyway, but redirect them to viewauth to force login.
+        $script = 'viewauth';
+        $showControls = 1;
+    }
+
+    if ($showControls) {
         my $url;
         if ($TWiki::Plugins::VERSION < 1.11) {
             $url = TWiki::Func::getScriptUrl(
-                $this->{web}, $this->{topic}, 'view')
+                $this->{web}, $this->{topic}, $script)
               ."?erp_active_table=$this->{number}"
                 .";erp_active_row=-1"
                   ."#erp_$this->{number}";
         } else {
             $url = TWiki::Func::getScriptUrl(
-                $this->{web}, $this->{topic}, 'view',
+                $this->{web}, $this->{topic}, $script,
                 erp_active_table => $this->{number},
                 erp_active_row => -1,
                 '#' => "erp_$this->{number}");
         }
-        my $button =
-          CGI::img({
-              -name => "erp_edit_$this->{number}",
-              -border => 0,
-              -src => '%PUBURLPATH%/TWiki/EditRowPlugin/edittable.gif'
-             });
-        push(
-            @out,
-            "<a name='erp_$this->{number}'></a>".
-              "<a href='$url'>" . $button . "</a>");
+        push(@out,
+             "<a name='erp_$this->{number}'></a>".
+               "<a href='$url'>" . $button . "</a>");
     }
+
     return join("\n", @out);
 }
 
@@ -215,24 +251,65 @@ sub change {
     }
 }
 
+# Action on move up; save and shift row
+sub moveUp {
+    my ($this, $urps) = @_;
+    change($this, $urps);
+    my $row = $urps->{erp_active_row};
+    my $tmp = $this->{rows}->[$row - 1];
+    $this->{rows}->[$row - 1] = $this->{rows}->[$row - 2];
+    $this->{rows}->[$row - 2] = $tmp;
+    $urps->{erp_active_row}--;
+}
+
+# Action on move down; save and shift row
+sub moveDown {
+    my ($this, $urps) = @_;
+    change($this, $urps);
+    my $row = $urps->{erp_active_row};
+    my $tmp = $this->{rows}->[$row - 1];
+    $this->{rows}->[$row - 1] = $this->{rows}->[$row];
+    $this->{rows}->[$row] = $tmp;
+    $urps->{erp_active_row}++;
+}
+
 # Action on row added
 sub addRow {
     my ($this, $urps) = @_;
     my @cols;
     my $row = $urps->{erp_active_row};
-    my $newRow = new TWiki::Plugins::EditRowPlugin::TableRow(
-        $this, $row, $this->_getCols($urps, $row));
-    splice(@{$this->{rows}}, $row, 0, $newRow);
-    # renumber lower rows
-    for (my $i = $row + 1; $i < scalar(@{$this->{rows}}); $i++) {
-        $this->{rows}->[$i]->{number}++;
+    if ($row > 0) {
+        # Clone of a specific row
+        my $newRow = new TWiki::Plugins::EditRowPlugin::TableRow(
+            $this, $row, $this->_getCols($urps, $row));
+        splice(@{$this->{rows}}, $row, 0, $newRow);
+        # renumber lower rows
+        for (my $i = $row + 1; $i < scalar(@{$this->{rows}}); $i++) {
+            $this->{rows}->[$i]->{number}++;
+        }
+        $urps->{erp_active_row}++;
+
+    } else {
+        # new, empty last row
+        my $newRow = new TWiki::Plugins::EditRowPlugin::TableRow(
+            $this, scalar(@{$this->{rows}}), map { '' } @{$this->{colTypes}});
+        push(@{$this->{rows}}, $newRow);
+        $urps->{erp_active_row} = scalar(@{$this->{rows}});
     }
 }
 
 # Action on row deleted
 sub deleteRow {
     my ($this, $urps) = @_;
-    splice(@{$this->{rows}}, $urps->{erp_active_row} - 1, 1);
+    my $row = $urps->{erp_active_row};
+    my @dead;
+    if ($row > 0) {
+        @dead = splice(@{$this->{rows}}, $urps->{erp_active_row} - 1, 1);
+        $urps->{erp_active_row}-- if $urps->{erp_active_row} >= scalar(@{$this->{rows}});
+    } else {
+        push(@dead, pop(@{$this->{rows}}));
+    }
+    map { $_->finish() } @dead;
 }
 
 # Action on edit cancelled
@@ -288,46 +365,73 @@ sub _parseFormat {
 
 sub generateEditButtons {
     my ($this, $id) = @_;
+    my $labelled = $this->{attrs}->{headerislabel};
+    my $topRow = ($id == 1);
+    my $sz = scalar(@{$this->{rows}});
+    my $bottomRow = ($id == $sz && !$labelled
+                       || $id == $sz - 1 && $labelled);
     $id = "_$id" if $id;
-    my $buttons = "<a name='erp_$this->{number}$id'></a>";
+
+    my $buttons = '';
     $buttons .=
       CGI::image_button({
           name => 'erp_save',
-          value => $TWiki::Plugins::EditRowPlugin::NOISY_SAVE,
-          title => $TWiki::Plugins::EditRowPlugin::NOISY_SAVE,
+          value => $NOISY_SAVE,
+          title => $NOISY_SAVE,
           src => '%PUBURLPATH%/TWiki/TWikiDocGraphics/save.gif'
          }, '');
     my $attrs = $this->{attrs};
     if (TWiki::isTrue($attrs->{quietsave})) {
         $buttons .= CGI::image_button({
             name => 'erp_quietSave',
-            value => $TWiki::Plugins::EditRowPlugin::QUIET_SAVE,
-            title => $TWiki::Plugins::EditRowPlugin::QUIET_SAVE,
+            value => $QUIET_SAVE,
+            title => $QUIET_SAVE,
             src => '%PUBURLPATH%/TWiki/EditRowPlugin/quiet.gif'
            }, '');
     }
-    if ($id && $attrs->{changerows}) {
+    $buttons .= CGI::image_button({
+        name => 'erp_cancel',
+        value => $CANCEL_ROW,
+        title => $CANCEL_ROW,
+        src => '%PUBURLPATH%/TWiki/TWikiDocGraphics/stop.gif',
+    }, '');
+
+    if ($attrs->{changerows}) {
+        $buttons .= '<br />';
+        if ($id) {
+            if (!$topRow) {
+                $buttons .= CGI::image_button({
+                    name => 'erp_upRow',
+                    value => $UP_ROW,
+                    title => $UP_ROW,
+                    src => '%PUBURLPATH%/TWiki/TWikiDocGraphics/arrowup.gif'
+                   }, '');
+            }
+            if (!$bottomRow) {
+                $buttons .= CGI::image_button({
+                    name => 'erp_downRow',
+                    value => $DOWN_ROW,
+                    title => $DOWN_ROW,
+                    src => '%PUBURLPATH%/TWiki/TWikiDocGraphics/arrowdown.gif'
+                   }, '');
+            }
+        }
         $buttons .= CGI::image_button({
             name => 'erp_addRow',
-            value => $TWiki::Plugins::EditRowPlugin::ADD_ROW,
-            title => $TWiki::Plugins::EditRowPlugin::ADD_ROW,
+            value => $ADD_ROW,
+            title => $ADD_ROW,
             src => '%PUBURLPATH%/TWiki/TWikiDocGraphics/plus.gif'
            }, '');
         if ($attrs->{changerows} eq 'on') {
             $buttons .= CGI::image_button({
                 name => 'erp_deleteRow',
-                value => $TWiki::Plugins::EditRowPlugin::DELETE_ROW,
-                title => $TWiki::Plugins::EditRowPlugin::DELETE_ROW,
+                value => $DELETE_ROW,
+                title => $DELETE_ROW,
                 src => '%PUBURLPATH%/TWiki/TWikiDocGraphics/minus.gif'
                }, '');
         }
     }
-    $buttons .= CGI::image_button({
-        name => 'erp_cancel',
-        value => $TWiki::Plugins::EditRowPlugin::CANCEL_ROW,
-        title => $TWiki::Plugins::EditRowPlugin::CANCEL_ROW,
-        src => '%PUBURLPATH%/TWiki/TWikiDocGraphics/stop.gif',
-    }, '');
+    return $buttons;
 }
 
 1;

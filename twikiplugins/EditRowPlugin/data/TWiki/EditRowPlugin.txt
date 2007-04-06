@@ -20,11 +20,12 @@ editing one row at a time. Closed rows are shown with
 an edit %ICON{edittopic}% button.
 
 So why should you use this plugin instead of the !EditTablePlugin?
-   1 The plugin knows if you can modify the topic or
-     not, and only offers the editing controls if you can modify the table.
-   1 You can edit one row at a time, instead of havng to edit the entire
+   1 You don't see all the edit controls unless you can change the topic. This means that people
+     without write access aren't bothered by lots of pointless controls everywhere.
+   1 You can edit one row at a time, instead of having to edit the entire
      table. This solves the problem with the long page rendering times
      required to show all the HTML for a full table edit on big tables.
+   1 Supports moving rows around in the table, deleting and adding rows.
    1 The plugin doesn't use !JavaScript (except for the calendar) and
      doesn't do anything clever with CSS, so it should work with all browsers.
    1 The plugin is coded using a clean object-oriented architecture, which
@@ -42,10 +43,28 @@ Another great TWiki extension from the <a style="text-decoration:none" href="htt
 
 ---++ Usage
 
-See EditTablePlugin for information on the =%EDITTABLE= tag and its
-parameters. The same tag syntax is used for this plugin.
+Add =%<nop>EDITTABLE{...}%= on the line before the first row of an existing table to make it editable. Parameters:
 
-Table rows are shown with an edit button %ICON{edittopic}% in the first column,
+   * =format= - The format of the cells in a row of the table. The format is defined like a table row, where the cell data specify the type for each cell. For example, =format="| text,16 | label |"=. Cells can be any of the following types:
+      * =text, &lt;size&gt;, &lt;initial value&gt;=. Simple text field
+      * =textarea, &lt;rows&gt;x&lt;columns&gt;, &lt;initial value&gt;=. Multirow text box
+      * =select, &lt;size&gt;, &lt;option 1&gt;, &lt;option 2&gt;, etc*<nop>=
+        Select one from a list of choices.
+      * =radio, &lt;size*&gt;, &lt;option 1&gt;, &lt;option 2&gt;,= etc. size
+        indicates the number of buttons per line in edit mode | | =%VBAR% 
+      * =checkbox, &lt;size*&gt;, &lt;option 1&gt;, &lt;option 2&gt;, etc= - as radio
+      * label, 0, &lt;label text&gt; - fixed label
+      * =row= - the row number, automatically worked out
+      * =date, &lt;size&gt;, &lt;initial value&gt;, &lt;DHTML date format&gt;
+   * =changerows= - Rows can be added and removed if ="on"=. Rows can be added but
+     not removed if ="add"=
+   * =quietsave= - Quiet Save button is shown if ="on"=
+   * =include= - Name of another topic defining the EDITTABLE parameters. The first
+     %<nop>EDITTABLE% in the topic is used. This is useful if you have many topics
+     with the same table format and you want to update the format in one place.
+   * =headerislabel= - The first row of the table is treated as a label row if ="on"=
+
+Table rows are shown with a row edit button %ICON{edittopic}% in the first column,
 and a table edit button <img src="%ATTACHURLPATH%/edittable.gif" /> after the
 table. When the table is
 edited, then a number of buttons may be shown depending on the
@@ -54,7 +73,9 @@ settings of =changerows= and =quietsave=.
    * <img src="%ATTACHURLPATH%/quiet.gif" /> saves without notification
    * %ICON{plus}% adds a new row after the current row, taking for its contents whatever you entered into the current row
    * %ICON{minus}% deletes the row
-   * %ICON{stop}% switches off the edit
+   * $ICON{arrowup}% Move this row up one row in the table
+   * $ICON{arrowdown}% Move this row down one row in the table
+   * %ICON{stop}% cancels the open edit
 
 If the plugin is installed and working *and you can modify this topic* then
 the following examples will be editable.
@@ -90,6 +111,7 @@ the following examples will be editable.
 |  Copyright: | &copy; 2007 Wind<nop>River Inc. |
 |  License: | [[http://www.gnu.org/licenses/gpl.html][GPL (Gnu General Public License)]] |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  13291 | Added full table editing, and a bunch of other requested features |
 |  13161 | Bulletproofed against issues with rows that are shorter or longer than the format. |
 |  13159 | Fixed issue with short rows, and added perms check. Thanks also to TWiki:Main.MichaelDaum for more fixes and testing. Now works on IE. |
 |  13148 | Bugs:Item3770: Bugfixes |

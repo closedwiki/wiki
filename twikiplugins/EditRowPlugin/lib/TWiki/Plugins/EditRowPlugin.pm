@@ -13,14 +13,6 @@ $NO_PREFS_IN_TOPIC = 1;
 
 $pluginName = 'EditRowPlugin';
 
-use vars qw($ADD_ROW $DELETE_ROW $QUIET_SAVE $NOISY_SAVE $EDIT_ROW $CANCEL_ROW);
-$ADD_ROW = 'Add Row';
-$DELETE_ROW = 'Delete Row';
-$QUIET_SAVE = 'Quiet Save';
-$NOISY_SAVE = 'Save';
-$EDIT_ROW = 'Edit';
-$CANCEL_ROW = 'Cancel';
-
 sub initPlugin {
     my( $topic, $web, $user, $installWeb ) = @_;
 
@@ -71,8 +63,9 @@ sub commonTagsHandler {
 
     my $displayOnly = 0;
 
-    unless (TWiki::Func::checkAccessPermission(
-        'CHANGE', TWiki::Func::getWikiName(), $_[0], $topic, $web, $meta)) {
+    # Without change access, there is no way you can edit.
+    if (!TWiki::Func::checkAccessPermission(
+        'CHANGE', TWiki::Func::getWikiName(), @_)) {
         $displayOnly = 1;
     }
 
@@ -101,17 +94,18 @@ sub commonTagsHandler {
                 $line .= "\n".$table->renderForEdit($active_row)."\n";
                 $line .= CGI::end_form();
             } else {
-                $line = $table->renderForDisplay($displayOnly);
+                $line = $table->renderForDisplay(!$displayOnly);
             }
 
             $table->finish();
         }
         $nlines .= "$line\n";
     }
+
     $_[0] = $nlines;
 }
 
-# REST handler for table row edit save. Supports all four functions
+# REST handler for table row edit save.
 sub save {
     my $query = TWiki::Func::getCgiQuery();
 
@@ -126,23 +120,13 @@ sub save {
     if (!TWiki::Func::checkAccessPermission(
         'CHANGE', TWiki::Func::getWikiName(), $text, $topic, $web, $meta)) {
 
-        # SMELL:
-        # - can't use TWiki::Func::getOopsUrl() to get an accessdenied url
-        #   because it does not pass the def => 'topic_access' parameter
-        # - can throw an appropriate exception 
-        #   because the rest script does not catch it
-        # see Bugs:Item3772
-
-        $url = $TWiki::Plugins::SESSION->getOopsUrl(
-          'accessdenied', 
-          web => $web,
-          topic => $topic,
-          def => 'topic_access',
-          params => [
-            'CHANGE',
-            'access not allowed on topic',
-          ]
-        );
+        $url = TWiki::Func::getScriptUrl(
+            $web, $topic, 'oops',
+            template => 'oopsaccessdenied',
+            def => 'topic_access',
+            param1 => 'CHANGE',
+            param2 => 'access not allowed on topic'
+         );
 
     } else {
         $text =~ s/\\\n//gs;
@@ -156,21 +140,32 @@ sub save {
         my $table = undef;
         my $active_table = 0;
         my $action = 'cancel';
-        my $minor = 0;
+        my $minor = 0;     # If true, this is a quiet save
+        my $no_save = 0;   # if true, we are cancelling
+        my $no_return = 0; # if true, we want to finish editing after the action
+
         # The submit buttons are image buttons. The only way with IE to tell
         # which one was clicked is by looking at the x coordinate of the
         # press.
         if ($query->param('erp_save.x')) {
             $action = 'change';
+            $no_return = 1;
         } elsif ($query->param('erp_quietSave.x')) {
             $action = 'change';
             $minor = 1;
+            $no_return = 1;
+        } elsif ($query->param('erp_upRow.x')) {
+            $action = 'moveUp';
+        } elsif ($query->param('erp_downRow.x')) {
+            $action = 'moveDown';
         } elsif ($query->param('erp_addRow.x')) {
             $action = 'addRow';
         } elsif ($query->param('erp_deleteRow.x')) {
             $action = 'deleteRow';
+        } elsif ($query->param('erp_cancel.x')) {
+            $no_save = 1;
+            $no_return = 1;
         }
-
         foreach my $line (@$content) {
             if (ref($line) eq 'TWiki::Plugins::EditRowPlugin::Table') {
                 $table = $line;
@@ -185,15 +180,29 @@ sub save {
                 $nlines .= "$line\n";
             }
         }
-        TWiki::Func::saveTopic($web, $topic, $meta, $nlines,
-                                { minor => $minor });
+        unless ($no_save) {
+            TWiki::Func::saveTopic($web, $topic, $meta, $nlines,
+                                   { minor => $minor });
+        }
 
-        my $anchor = "erp$urps->{erp_active_table}_$urps->{erp_active_row}";
+        my $anchor = "erp_$urps->{erp_active_table}";
+        if ($urps->{erp_active_row} > 0) {
+            $anchor .= "_$urps->{erp_active_row}";
+        }
         if ($TWiki::Plugins::VERSION < 1.11) {
-            $url = TWiki::Func::getScriptUrl($web, $topic, 'view')."#$anchor";
+            my $p = '';
+            unless ($no_save) {
+                $p = "?erp_active_table=$urps->{erp_active_table}";
+                $p .= ";erp_active_row=$urps->{erp_active_row}";
+            }
+            $url = TWiki::Func::getScriptUrl($web, $topic, 'view')."$p#$anchor";
         } else {
-            $url = TWiki::Func::getScriptUrl(
-                $web, $topic, 'view', '#' => $anchor);
+            my @p = ('#' => $anchor);
+            unless ($no_return) {
+                push(@p, erp_active_table => $urps->{erp_active_table});
+                push(@p, erp_active_row => $urps->{erp_active_row});
+            }
+            $url = TWiki::Func::getScriptUrl( $web, $topic, 'view', @p);
         }
     }
     TWiki::Func::redirectCgiQuery(undef, $url);

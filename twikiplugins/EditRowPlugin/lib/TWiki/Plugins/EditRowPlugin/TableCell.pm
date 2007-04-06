@@ -31,23 +31,17 @@ sub stringify {
 }
 
 sub renderForDisplay {
-    my ($this, $colDef) = @_;
+    my ($this, $colDef, $n) = @_;
     $colDef ||= $defCol;
 
     if ($colDef->{type} eq 'row') {
-        my $attrs = $this->{row}->{table}->{attrs};
-        if (!defined($attrs->{headerislabel}) ||
-              TWiki::isTrue($attrs->{headerislabel})) {
-            return $this->{row}->{number} - 1;
-        } else {
-            return $this->{row}->{number};
-        }
+        return $n;
     }
     return $this->{text};
 }
 
 sub renderForEdit {
-    my ($this, $colDef) = @_;
+    my ($this, $colDef, $n) = @_;
     $colDef ||= $defCol;
 
     my $expandedValue = TWiki::Func::expandCommonVariables(
@@ -101,13 +95,7 @@ sub renderForEdit {
 
     } elsif( $colDef->{type} eq 'row' ) {
 
-        my $attrs = $this->{row}->{table}->{attrs};
-        if (!defined($attrs->{headerislabel}) ||
-              TWiki::isTrue($attrs->{headerislabel})) {
-            $text = $this->{row}->{number} - 1;
-        } else {
-            $text = $this->{row}->{number};
-        }
+        $text = $n;
 
     } elsif( $colDef->{type} eq 'textarea' ) {
 
@@ -117,11 +105,11 @@ sub renderForEdit {
         $rows = 3 if $rows < 1;
         $cols = 30 if $cols < 1;
 
-        $text .= CGI::textarea({
-            rows => $rows,
-            cols => $cols,
-            name => $cellName,
-            default => $this->{text}});
+        $text = CGI::textarea(
+            -rows => $rows,
+            -columns => $cols,
+            -name => $cellName,
+            -default => $this->{text});
 
     } elsif( $colDef->{type} eq 'date' ) {
 
