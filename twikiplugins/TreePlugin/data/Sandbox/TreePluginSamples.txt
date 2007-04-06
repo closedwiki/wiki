@@ -1,3 +1,4 @@
+%META:TOPICINFO{author="StephaneLenclud" date="1175825093" format="1.1" version="1.2"}%
 ---+!! %TWIKIWEB%.TreePlugin Samples
 
 %TOC%
@@ -43,7 +44,7 @@ formatting="ollist"}%
 %<nop>TREEVIEW{topic="TreeTop" formatting="outline"}%
 </code>
 
-This is also the default for the tag (when foramtting is not set).
+This is also the default for the tag (when formatting is not set).
 
 <a href="">TreeTop</a> <br>1 <a href="">TheOne</a> <br>1.1 <a href="">OneOne</a> <br>1.1.1 <a href="">OneOneOne</a> <br>1.2 <a href="">OneTwo</a> <br>1.2.1 <a href="">OneTwoOne</a> <br>1.2.2 <a href="">OneTwoTwo</a> <br>1.2.2.1 <a href="">OneTwoTwoOne</a> <br>1.2.2.2 <a href="">OneTwoTwoThree</a> <br>1.2.2.3 <a href="">OneTwoTwoTwo</a> <br>2 <a href="">TheThree</a> <br>2.1 <a href="">ThreeOne</a> <br>2.2 <a href="">ThreeThree</a> <br>2.2.1 <a href="">ThreeThreeOne</a> <br>2.3 <a href="">ThreeTwo</a> <br>3 <a href="">TheTwo</a> <br>
 

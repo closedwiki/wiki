@@ -18,6 +18,9 @@
 package TWiki::Plugins::TreePlugin::FormatOutlineNodeFormatter;
 use base qw(TWiki::Plugins::TreePlugin::OutlineNodeFormatter);
 
+use strict;
+use warnings;
+
 use TWiki::Plugins::TreePlugin::FormatHelper qw(spaceTopic loopReplaceRefData);
 
 use TWiki::Func;
@@ -49,46 +52,31 @@ sub formatNode {
     my ( $this, $node, $count, $level ) = @_;
 
     return "" if ( ! $this->isInsideLevelBounds( $level ) );
-    #return "" if ( $level eq '0' && $this->data("levelprefix") ne '' );
 
-    my $res = $this->data("format");
+    #my $res = $this->data("format"); #SL: was that 
+    my $res =  $node->data("format"); #SL: we do that now
 
     my $nodeLinkName = &TWiki::Plugins::TreePlugin::getLinkName($node);
     return $nodeLinkName unless ($res);
 
-    # special substitutions
+    # Pseudo-variable substitutions
+    # We only do pseudo-variable specific to TreePlugin
+    # ... in fact pseudo-variable common with SEARCH was already done
 
-    # Make linkable non-wiki-word names
-    my $spaceTopic =
-      &TWiki::Plugins::TreePlugin::FormatHelper::spaceTopic( $node->name() );
-    $res =~ s/\$topic/$node->name()/geo;
-    $res =~ s/\$spacetopic/$spaceTopic/ge;
+    # Make linkable non-wiki-word namesuse strict;
+use warnings;
 
+    my $spaceTopic = &TWiki::Plugins::TreePlugin::FormatHelper::spaceTopic( $node->name() );
+    $res =~ s/\$spacetopic/$spaceTopic/g;
+    #$res =~ s/\$topic/$node->name()/geo;
     $res =~ s/\$outnum/$this->formatOutNum($node)/geo;
     $res =~ s/\$count/$this->formatCount($count)/geo;
     $res =~ s/\$level/$this->formatLevel($level)/geo;
     $res =~ s/\$n/\n/go;
 
-    # node data substitutions
-    $res =
-      &TWiki::Plugins::TreePlugin::FormatHelper::loopReplaceRefData( $res,
-        $node, qw(modTime author web) );
+    #SL: here were some crazy data substitution we've delegating that to the SEARCH itself
 
-    # formatter data substitutions
-    $res =
-      &TWiki::Plugins::TreePlugin::FormatHelper::loopReplaceRefData( $res,
-        $this, qw(url) );
-
-    # only do this if we are in full substituiton mode
-    if ( defined( $this->data("fullSubs") ) && $this->data("fullSubs") ) {
-        $res =
-          &TWiki::Plugins::TreePlugin::FormatHelper::loopReplaceRefData( $res,
-            $node, qw(text summary) );
-
-        # some meta substitutions go here
-    }
-
-#SL: levelprefix allows rendering of bullet list using TWiki syntax thus enabling combination with TreeBrowserPlugin
+    #SL: levelprefix allows rendering of bullet list using TWiki syntax thus enabling combination with TreeBrowserPlugin
     if ( defined( $this->data("levelprefix") ) ) {
         my $i = $level;
         while ( $i > 0 ) {
