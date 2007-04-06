@@ -132,33 +132,6 @@ sub finish {
     $this->{login}     =  {};
 }
 
-# Get a list of *canonical user ids* from a text string containing a
-# list of user *wiki* names and *group ids*.
-sub _expandUserList {
-    my( $this, $names ) = @_;
-    ASSERT($this->isa( 'TWiki::Users')) if DEBUG;
-
-    $names ||= '';
-    # comma delimited list of users or groups
-    # i.e.: "%MAINWEB%.UserA, UserB, Main.UserC  # something else"
-    $names =~ s/(<[^>]*>)//go;     # Remove HTML tags
-
-    my @l;
-    foreach my $ident ( split( /[\,\s]+/, $names )) {
-        $ident =~ s/^.*\.//;       # Dump the web specifier
-        next unless $ident;
-        if( $this->{mapping}->isGroup( $ident )) {
-            my $it = $this->{mapping}->eachGroupMember( $ident );
-            while( $it->hasNext() ) {
-                push( @l, $it->next() );
-            }
-        } else {
-            push( @l, @{$this->{mapping}->findUserByWikiName( $ident )} );
-        }
-    }
-    return \@l;
-}
-
 # global used by test harness to give predictable results
 use vars qw( $password );
 
@@ -351,30 +324,31 @@ sub isAdmin {
 
 ---++ ObjectMethod isInList( $user, $list ) -> $boolean
 
-Return true $user is in a list of user and group *wikinames*. Groups
-are recursively evaluated.
+Return true if $user is in a list of user *wikinames* and group ids.
 
-$list is a string representation of a user list.
+$list is a comma-separated wikiname and group list. The list may contain the
+conventional web specifiers (which are ignored).
 
 =cut
 
 sub isInList {
-    my( $this, $user, $userlist, $scanning ) = @_;
-    $scanning = {} unless $scanning;
-    unless( ref( $userlist )) {
-        # string parameter
-        $userlist = _expandUserList( $this, $userlist );
-    }
-    my $abuser;
-    my $umm = $this->{mapping};
-    foreach $abuser ( @$userlist ) {
-        # don't check the same user twice
-        next if $scanning->{$abuser};
-        $scanning->{$abuser} = 1;
+    my( $this, $user, $userlist ) = @_;
 
-        return 1 if $user eq $abuser;
-        if( $umm->isGroup($abuser) ) {
-            return 1 if $umm->isInGroup($user, $abuser );
+    return 0 unless $userlist;
+
+    # comma delimited list of users or groups
+    # i.e.: "%MAINWEB%.UserA, UserB, Main.UserC  # something else"
+    $userlist =~ s/(<[^>]*>)//go;     # Remove HTML tags
+
+    my $wn = getWikiName( $this, $user );
+    my $umm = $this->{mapping};
+
+    foreach my $ident ( split( /[\,\s]+/, $userlist )) {
+        $ident =~ s/^.*\.//;       # Dump the web specifier
+        next unless $ident;
+        return 1 if( $ident eq $wn );
+        if( $umm->isGroup( $ident )) {
+            return 1 if( $umm->isInGroup( $user, $ident ));
         }
     }
     return 0;

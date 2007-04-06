@@ -319,6 +319,32 @@ sub _loadMapping {
     }
 }
 
+# Get a list of *canonical user ids* from a text string containing a
+# list of user *wiki* names and *group ids*.
+sub _expandUserList {
+    my( $this, $names ) = @_;
+
+    $names ||= '';
+    # comma delimited list of users or groups
+    # i.e.: "%MAINWEB%.UserA, UserB, Main.UserC  # something else"
+    $names =~ s/(<[^>]*>)//go;     # Remove HTML tags
+
+    my @l;
+    foreach my $ident ( split( /[\,\s]+/, $names )) {
+        $ident =~ s/^.*\.//;       # Dump the web specifier
+        next unless $ident;
+        if( $this->isGroup( $ident )) {
+            my $it = $this->eachGroupMember( $ident );
+            while( $it->hasNext() ) {
+                push( @l, $it->next() );
+            }
+        } else {
+            push( @l, @{$this->findUserByWikiName( $ident )} );
+        }
+    }
+    return \@l;
+}
+
 my %expanding;
 # Called from TWiki::Users. See the documentation of the corresponding
 # method in that module for details.
@@ -346,7 +372,7 @@ sub eachGroupMember {
                 # Note: if there are multiple GROUP assignments in the
                 # topic, only the last will be taken.
                 my $f = $2;
-                $members = TWiki::Users::_expandUserList( $users, $f );
+                $members = _expandUserList( $this, $f );
             }
         }
         delete $expanding{$group};
@@ -482,11 +508,23 @@ sub findUserByEmail {
 # method in that module for details.
 sub findUserByWikiName {
     my( $this, $wn ) = @_;
-
-    _loadMapping( $this );
     my @users = ();
-    if( $this->{W2U}->{$wn} ) {
-        push( @users, $this->{W2U}->{$wn} );
+
+    # Add additional mappings defined in TWikiUsers
+    if ($TWiki::cfg{MapUserToWikiName}) {
+        _loadMapping( $this );
+        if( $this->{W2U}->{$wn} ) {
+            push( @users, $this->{W2U}->{$wn} );
+        } else {
+            # Bloody compatibility!
+            # The wikiname is always a registered user for the purposes of this
+            # mapping. We have to do this because TWiki defines access controls
+            # in terms of mapped users, and if a wikiname is *missing* from the
+            # mapping there is "no such user".
+            push( @users, login2canonical( $this, $wn ));
+        }
+    } else {
+        push( @users, login2canonical( $this, $wn ));
     }
     return \@users;
 }
