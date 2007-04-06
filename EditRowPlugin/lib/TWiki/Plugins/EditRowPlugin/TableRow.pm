@@ -58,43 +58,39 @@ sub stringify {
 }
 
 sub renderForEdit {
-    my ($this, $colDefs, $addButtons) = @_;
+    my ($this, $colDefs, $n, $firstRow, $showControls) = @_;
 
-    my @out;
+    my $id = "$this->{table}->{number}_$this->{number}";
+    my @out = ();
 
     # Generate the editors for each cell in the row
     my $col = 0;
     foreach my $cell (@{$this->{cols}}) {
-        push(@out, $cell->renderForEdit($colDefs->[$col++]));
+        my $text = $cell->renderForEdit($colDefs->[$col++], $n);
+        push(@out, $text);
     }
 
-    # We always hadd the buttons column, even when it is empty. Otherwise the
-    # headers get out of alignment.
-    my $buttons = '';
-    if ($addButtons) {
-        $buttons = $this->{table}->generateEditButtons($this->{number});
+    if ($showControls) {
+        my $buttons = $this->{table}->generateEditButtons($n);
+        unshift(@out, $buttons);
     }
-    unshift(@out, $buttons);
 
-    return '| ' . join(' | ', @out) . ' |';
+    return "| <a name='erp_$id'></a> " . join(' | ', @out) . ' |';
 }
 
 sub renderForDisplay {
-    my ($this, $colDefs, $displayOnly) = @_;
+    my ($this, $colDefs, $n, $firstRow, $withControls) = @_;
     my @out;
-    my $attrs = $this->{table}->{attrs};
-    if ($this->{number} == 1 &&
-          (!defined($attrs->{headerislabel}) ||
-             TWiki::isTrue($attrs->{headerislabel}))) {
+    my $id = "$this->{table}->{number}_$this->{number}";
+    if ($firstRow) {
         @out = map { $_->{text} } @{$this->{cols}};
-        unshift(@out, '') unless $displayOnly;
+        unshift(@out, '') if $withControls;
     } else {
         my $col = 0;
         foreach (@{$this->{cols}}) {
-            push(@out, $_->renderForDisplay($colDefs->[$col++]));
+            push(@out, $_->renderForDisplay($colDefs->[$col++], $n));
         }
-        unless ($displayOnly) {
-            my $id = "$this->{table}->{number}_$this->{number}";
+        if ($withControls) {
             my $url;
             if ($TWiki::Plugins::VERSION < 1.11) {
                 $url = TWiki::Func::getScriptUrl(
@@ -116,11 +112,10 @@ sub renderForDisplay {
                  });
             unshift(
                 @out,
-                "<a name='erp_$this->{table}->{number}_$this->{number}'></a>".
                   "<a href='$url'>" . $button . "</a>");
         }
     }
-    return '| '.join(' | ', @out). ' |';
+    return "| <a name='erp_$id'></a> " .join(' | ', @out). ' |';
 }
 
 1;
