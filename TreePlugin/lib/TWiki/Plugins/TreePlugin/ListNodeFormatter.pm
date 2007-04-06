@@ -62,7 +62,7 @@ sub formatNode {
     return "" if ( ! $this->isInsideLevelBounds( $level ) );
     
     my $link = &TWiki::Plugins::TreePlugin::getLinkName($node);
-    my $label = $node->name();
+    my $label = $node->data('topic');
     return "[[$link][$label]]";
 }
 

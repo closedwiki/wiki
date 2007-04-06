@@ -64,9 +64,7 @@ sub formatNode {
     # ... in fact pseudo-variable common with SEARCH was already done
 
     # Make linkable non-wiki-word namesuse strict;
-use warnings;
-
-    my $spaceTopic = &TWiki::Plugins::TreePlugin::FormatHelper::spaceTopic( $node->name() );
+    my $spaceTopic = &TWiki::Plugins::TreePlugin::FormatHelper::spaceTopic( $node->data('topic') );
     $res =~ s/\$spacetopic/$spaceTopic/g;
     #$res =~ s/\$topic/$node->name()/geo;
     $res =~ s/\$outnum/$this->formatOutNum($node)/geo;

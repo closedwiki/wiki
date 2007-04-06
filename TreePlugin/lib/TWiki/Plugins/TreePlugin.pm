@@ -33,23 +33,21 @@ use TWiki::Plugins::TreePlugin::ImgNodeFormatter;
 
 # =========================
 use vars qw(
-  $web $topic $user $installWeb $VERSION $debug $INTREE
-  %FormatMap $RootLabel $AGdebugmsg
+  $gWeb $gTopic $user $installWeb $VERSION $debug $INTREE
+  %FormatMap $RootLabel $AGdebugmsg $pluginName
 );
 
+$pluginName = 'TreePlugin';
 $VERSION = '0.9';
-
-$RootLabel =
-  "_RootLabel_";    # what we use to label the root of a tree if not a topic
+$RootLabel = "_RootLabel_";    # what we use to label the root of a tree if not a topic
 
 # =========================
 sub initPlugin {
-    ( $topic, $web, $user, $installWeb ) = @_;
+    ( $gTopic, $gWeb, $user, $installWeb ) = @_;
 
     # check for Plugins.pm versions
     if ( $TWiki::Plugins::VERSION < 1 ) {
-        &TWiki::Func::writeWarning(
-            "Version mismatch between TreePlugin and Plugins.pm");
+        &TWiki::Func::writeWarning("Version mismatch between TreePlugin and Plugins.pm");
         return 0;
     }
 
@@ -57,7 +55,8 @@ sub initPlugin {
 # $exampleCfgVar = &TWiki::Prefs::getPreferencesValue( "TreePlugin_EXAMPLE" ) || "default";
 
     # Get plugin debug flag
-    $debug = &TWiki::Func::getPreferencesFlag("TreePlugin_DEBUG");
+    $debug = TWiki::Func::getPreferencesFlag( "\U$pluginName\E_DEBUG" );
+
 
     &TWiki::Func::writeDebug("installWeb: $installWeb") if $debug;
 
@@ -71,7 +70,7 @@ sub initPlugin {
 
     # Plugin correctly initialized
     &TWiki::Func::writeDebug(
-        "- TWiki::Plugins::TreePlugin::initPlugin( $web.$topic ) is OK")
+        "- TWiki::Plugins::TreePlugin::initPlugin( $gWeb.$gTopic ) is OK")
       if $debug;
     return 1;
 }
@@ -89,18 +88,17 @@ $AGdebugmsg = "<br \/>AG debug message<br \/>";
 
 sub HandleTreeTag
     {
-    my($session, $params, $topic, $web) = @_;    
+    my($session, $params, $aTopic, $aWeb) = @_;    
 
     my $cgi   = &TWiki::Func::getCgiQuery();
     my $plist = $cgi->query_string();
     $plist .= "\&" if $plist;
     my $CurrUrl = $cgi->url . $cgi->path_info() . "?" . $plist;
 
-    # $CurrUrl =~ s/\&/\&amp;/go;
-
-    my $attrWeb = $params->{'web'} || $web || "";
-    my $attrTopic = $params->{'topic'} || $RootLabel;    # ie, do all web, needs to be nonempty
-
+    my $attrWeb = $params->{'web'} || $aWeb || "";
+    #Get root topic id in the form =web.topic=
+    my $rootTopicId = $params->{'topic'} ? "$attrWeb.".$params->{'topic'} : $RootLabel; 
+  
     my $attrFormatting;
         
     my $attrHeader='';
@@ -124,7 +122,7 @@ sub HandleTreeTag
       $params->{'startlevel'} || -1; # -1 means not defined
     #SL: If no =topic= and =startlevel= parameter was given then set =startlevel= to 1
     #This workaround get ride of the empty root line when rendering a tree for an entire Web
-    if (($attrTopic eq $RootLabel) && ($attrStartlevel==-1)) { $attrStartlevel=1; } #
+    if (($rootTopicId eq $RootLabel) && ($attrStartlevel==-1)) { $attrStartlevel=1; } #
     my $attrStoplevel =
       $params->{'stoplevel'} || 999;
     my $doBookView =
@@ -158,80 +156,67 @@ sub HandleTreeTag
     $params->{'format'}=$formatter->data("format") if ($attrFormat eq "");
 
     # get search results
-    my $search = _getSearchString( $attrWeb, $params, $formatter );
+    my $search = doSEARCH( $attrWeb, $params, $formatter );
+
+    #SL: from here we parse the result of the SEARCH to build up our true
+    # I really don't like the way that algorithm was written though. It very confusing and hard to maintain
+    # We should really loop twice trough all topics:
+    #    first time to build up node objects
+    #    second time to create parent/child association
+    # Doing that would also most certainly remove the need for that cycle stuff in the end for web tree.
+    # It will also allow us to fix/control that issue with blank line separating _orphans trees from the main tree_       
 
     my %nodes = ();
-    my $root = _findTWikiNode( $RootLabel, \%nodes );    # make top dog node
+    my $root = getTWikiNode( $RootLabel, \%nodes );    # make top dog node
 
     # loop thru topics
     foreach ( split /\n/, $search ) {
         #my ( $topic, $modTime, $author, $summary ) = #SL: was
-        my ( $topic, $format ) =
-          split /\|/;    # parse out data
+        my ( $nodeWeb, $nodeTopic, $nodeFormat ) = split /\|/;    # parse out node data
+        my $nodeId = "$nodeWeb.$nodeTopic";
     
         #If no node format default to the formatter's format     
-        if (!$format) {$format=$formatter->data("format")}
+        if (!$nodeFormat) {$nodeFormat=$formatter->data("format");}
 
-        # get parent
-        my ( $meta, $text ) = &TWiki::Func::readTopic( $attrWeb, $topic );
-
-        my $ref = 0;
-        if ( $TWiki::Plugins::VERSION < 1.1 ) {
-            $ref = $meta->findOne("TOPICPARENT");
-        }
-        else {
-            $ref = $meta->get("TOPICPARENT");
-        }
-
-        my %par = ( defined $ref ? %$ref : () );
-        my $parent = (%par)
-          ? _findTWikiNode( $par{'name'},
-            \%nodes )    # yes i have a parent, get it
+        #Get parent
+        #SL: We could get the parent from the SEARCH
+        #I wonder if that would give us any performance gain
+        #...since we would need to make the scope="text" 
+        my $parentId = getParentId($nodeWeb,$nodeTopic);
+        my $parent = (defined $parentId) ? getTWikiNode( $parentId, \%nodes )    # yes i have a parent, get it
           : $root;       # otherwise root's my parent
-
+       
         # create my node (or if it's already created get it)
-        my $node = _findTWikiNode( $topic, \%nodes );
+        my $node = getTWikiNode( $nodeId, \%nodes );
         
-
-        #$node->data( "web",     $attrWeb );
+        $node->data( "web",     $nodeWeb );
+        $node->data( "topic",   $nodeTopic );
         #Set the format for this node as it came back from the SEARCH
-        $node->data( "format",  "$format\n" ); #SL: new
+        $node->data( "format",  "$nodeFormat\n" ); #SL: new
 
-
-        # big memory items, only save if need to
-        if ( $formatter->data("fullSubs") ) {
-            #$node->data( "summary", $summary );
-            $node->data( "text",    $text );
-            $node->data( "meta",    $meta );
-        }
         $node->data( "parent", $parent );
         $parent->add_child($node);    # hook me up
     }
 
     return "<!-- No Topic -->"
-      unless $nodes{$attrTopic};      # nope, the wanted node ain't here
+      unless $nodes{$rootTopicId};      # nope, the wanted node ain't here
 
     $root->name(" ");    # change root's name so it don't show up, hack
 
     # format the tree & parse TWiki tags and rendering
     my $renderedTree = "";
-    if ( $attrTopic ne $RootLabel ) {
-
-        # running from a given topic
-        $renderedTree =
-          TWiki::Func::expandCommonVariables(
-            $attrHeader . $nodes{$attrTopic}->toHTMLFormat($formatter),
-            $attrTopic, $attrWeb );
+    if ( $rootTopicId ne $RootLabel ) {
+        #SL: was using TWiki::Func::expandCommonVariables
+        #SL:  should be nod need to expand common variable anymore here, thanks to doSEARCH
+        $renderedTree = $attrHeader . $nodes{$rootTopicId}->toHTMLFormat($formatter);
     }
     else {
-
         # no starting topic given so do all topics
+        #SL:  should look at the cycle stuff, that's probably causing the blank line when root topic is not found, should be optional 
         my %rootnodes = %{ _findRootsBreakingCycles( \%nodes ) };
         foreach my $i ( sort keys(%rootnodes) ) {
-            $renderedTree .=
-              TWiki::Func::expandCommonVariables(
-                $attrHeader . $rootnodes{$i}->toHTMLFormat($formatter),
-                $attrTopic, $attrWeb );
+            #SL: was using TWiki::Func::expandCommonVariables, no need now as it was done by doSEARCH
+            $renderedTree .= $attrHeader . $rootnodes{$i}->toHTMLFormat($formatter)
         }
     }
 
@@ -251,13 +236,61 @@ sub HandleTreeTag
     return $renderedTree;
 }
 
+=pod
+Get a TWiki::Plugins::TreePlugin::TWikiNode object from the given hash
+Create a new one if not found.
+@param [in] scalar node id
+@param [in] scalar hash reference
+@return Pointer to TWiki::Plugins::TreePlugin::TWikiNode object
+=cut
 
-# given attribute and formatter
-# returns \n-seperated list of topics,
-# each topic line is composed of
-#        topicname|modtime|author|summary (if applicable)
+sub getTWikiNode {
+    my ( $name, $hash ) = @_;
+    my $node = $hash->{$name};    # look for node
+    if ( !$node ) {               # create if not there
+        $node = TWiki::Plugins::TreePlugin::TWikiNode->new($name);
+        $hash->{$name} = $node;
+    }
+    return $node;
+}
 
-sub _getSearchString {
+=pod
+
+=cut
+
+sub getParentId {
+    my ($aWeb, $aTopic) = @_;
+    my ( $meta, $text ) = &TWiki::Func::readTopic( $aWeb, $aTopic );
+    my $ref = $meta->get("TOPICPARENT");
+    return undef unless (defined $ref); 
+    #my %par = (defined $ref ? %$ref : ()); #cast
+    my $parent = $ref->{'name'};
+    return undef unless (defined $parent); #Handle the case where META:TOPICPARENT does not specify a name !?!
+    #Now deal with the case where we have no web specified in the parent Codev.GetRidOfTheDot
+    unless ($parent=~/.+\.+/) #unless web.topic format
+        {
+        #Prepend the web 
+        $parent="$aWeb.$parent"; 
+        }
+    return $parent;
+}
+
+
+=pod
+Just do a %SEARCH%
+
+given attribute and formatter
+returns \n-seperated list of topics,
+each topic line is composed of
+topicname|modtime|author|summary (if applicable)
+
+@param [in] scalar. The web to search for.
+@param [in] hash reference. The tag parameters.
+@param [in] reference to a formatter object.
+@return The output of our %SEARCH%
+=cut
+
+sub doSEARCH {
     my ( $attrWeb, $params, $formatter ) = @_;
 
     my $excludetopic=$params->{'excludetopic'} || "";
@@ -270,23 +303,24 @@ sub _getSearchString {
     #We build up our SEARCH format parameter
     #   * First comes our topic identifier 
     #   * Next comes our topic format
-    my $searchTmpl = "\$topic"; #SL: shall we $web.$topic instead ? Mmmmn maybe not
+    my $searchTmpl = "\$web|\$topic";
     $searchTmpl .= "|" . $params->{'format'};
     
     #	ok. make the topic list and return it  (use this routine for now)
     #   hopefully there'll be an optimized one later    
-    return TWiki::Func::expandCommonVariables(
-"%SEARCH{search=\"$searchVal\" web=\"$searchWeb\" format=\"$searchTmpl\" scope=\"$searchScope\" regex=\"on\" nosearch=\"on\" nototal=\"on\" noempty=\"on\" excludetopic=\"$excludetopic\"}%"
-    );
+    my $search="%SEARCH{search=\"$searchVal\" web=\"$searchWeb\" format=\"$searchTmpl\" scope=\"$searchScope\" regex=\"on\" nosearch=\"on\" nototal=\"on\" noempty=\"on\" excludetopic=\"$excludetopic\"}%";
+    &TWiki::Func::writeDebug($search) if $debug;    
 
+    return TWiki::Func::expandCommonVariables($search);
 }
 
 
 
 sub getLinkName {
     my ( $node ) = @_;
-    return $node->name() unless $node->data("web");
-    return $node->data("web") . "." . $node->name();
+    return $node->name(); # SL: just return the name which is in fact the id now in format web.topic    
+    #return $node->name() unless $node->data("web");
+    #return $node->data("web") . "." . $node->data('topic');
 }
 
 sub _findRootsBreakingCycles {
@@ -372,7 +406,7 @@ sub setFormatter {
     # return $formatter if $formatter;
     my $formatter;
 
-    # -- look up how to do case in Perl! :)
+    # -- look up how to do case in Perl! :) SL: lol, I have no idea myself
     if ( $name eq "ullist" ) {
         $formatter =
           new TWiki::Plugins::TreePlugin::ListNodeFormatter( "<ul> ",
@@ -413,17 +447,8 @@ sub setFormatter {
     # $FormatMap{$name} = $formatter;
 }
 
-# TBD: so far as I can tell, the code below is mis-commented.
-# It is not finding a child of a node via the lookup;
-# instead, it is finding an entry for the node itself.
-sub _findTWikiNode {
-    my ( $name, $hash ) = @_;
-    my $node = $hash->{$name};    # look for node
-    if ( !$node ) {               # create if not there
-        $node = TWiki::Plugins::TreePlugin::TWikiNode->new($name);
-        $hash->{$name} = $node;
-    }
-    return $node;
-}
+
+
+
 
 1;

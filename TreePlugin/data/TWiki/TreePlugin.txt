@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="StephaneLenclud" date="1175833577" format="1.1" reprev="1.10" version="1.10"}%
+%META:TOPICINFO{author="StephaneLenclud" date="1175866381" format="1.1" reprev="1.12" version="1.12"}%
 ---+!! Tree Plugin
 
 Renders topics' parent-child relationships as hierarchical tree view. Useful for dynamic site maps and threads.
@@ -46,6 +46,7 @@ The following pseudo-variable are supported on top of the ones described in TWik
 
 
 ---++ Samples
+
 See the following pages for sample usage and output.
    * [[Sandbox.TreePluginSamples]]
    * [[Sandbox.HeadingOutlineSample]]
@@ -53,27 +54,29 @@ See the following pages for sample usage and output.
 
 <!-- The Plugins.<nop>TreePluginHelp topic in the installation contains complete help information. -->
 
+---+++ Usage
 
+=%<nop>TREE{web="Sandbox" formatting="ullist"}%=
+
+=%<nop>TREE{web="Sandbox"}%=
+
+<verbatim>
+%TREE{excludetopic="Web*" formatting="outline" format="* [[$topic][$spacetopic]]" levelprefix="   " startlevel="1"}%
+</verbatim>
 
 ---+++ Combination with [[TWiki:Plugins.TreeBrowserPlugin][TreeBrowserPlugin]]
 
 =%<nop>TREEBROWSER{"file" title="%<nop>WEB%"}%= %BR%
 =%<nop>TREEVIEW{web="%<nop>WEB%" topic="GrandParent" formatting="outline" format="* $topic" levelprefix="   "}%=
 
-
-
 ---++ Plugin Settings
 
-Plugin settings are stored as preferences variables.%BR%
-To reference
-a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, for example, ==%<nop>INTERWIKIPLUGIN_SHORTDESCRIPTION%==
 <!--
    * Set SHORTDESCRIPTION = Dynamic generation of TWiki topic trees 
 -->
-   * Set DEBUG to 1 to get debug messages in =data/debug.txt=.  Default: =0=
-      * Set DEBUG = 0
 
-
+Specify plug-in settings on %MAINWEB%.TWikiPreferences using:
+   * Set #TREEPLUGIN_DEBUG_FAKE = 0
 
 ---++ Installation Instructions
 
@@ -94,6 +97,7 @@ a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, for example, =
 | CPAN&nbsp;Dependencies: | none _(test package relies on Wiki:PerlUnit)_ |
 | Perl Version: | 5.0, 5.6.1, 5.8.7 |
 | Change&nbsp;History: | <!-- specify latest version first -->&nbsp; |
+| 6 Apr 2007 | 1.0 - More code cleaning. Testing most formatting. Better support for =web="all"=. By TWiki:Main.StephaneLenclud | 
 | 6 Apr 2007 | 0.9 - Support for TWiki.FormattedSearch pseudo-variables. Code cleaning in =TreePlugin.pm=. Removed some dead code. Improved documentation. By TWiki:Main.StephaneLenclud | 
 | 4 Apr 2007 | 0.8 - Adding =excludetopic= parameter. Adding =%<nop>TREE%= as synonym tag. Code cleaning in =TreePlugin.pm=. Fix root issue when no =topic= specified. By TWiki:Main.StephaneLenclud | 
 | 14 Mar 2007 | 0.7.1 - Arthur Clemens: Made =startlevel= and =stoplevel= relative to the root topic. | 
