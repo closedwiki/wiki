@@ -70,7 +70,6 @@ sub formatNode {
     $res =~ s/\$outnum/$this->formatOutNum($node)/geo;
     $res =~ s/\$count/$this->formatCount($count)/geo;
     $res =~ s/\$level/$this->formatLevel($level)/geo;
-    $res =~ s/\$n/\n/go;
 
     #SL: here were some crazy data substitution we've delegating that to the SEARCH itself
 

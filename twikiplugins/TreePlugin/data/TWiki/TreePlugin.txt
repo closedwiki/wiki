@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="StephaneLenclud" date="1175866381" format="1.1" reprev="1.12" version="1.12"}%
+%META:TOPICINFO{author="StephaneLenclud" date="1175894250" format="1.1" version="1.13"}%
 ---+!! Tree Plugin
 
 Renders topics' parent-child relationships as hierarchical tree view. Useful for dynamic site maps and threads.
@@ -43,6 +43,7 @@ The following pseudo-variable are supported on top of the ones described in TWik
  =$children= - the text of all the node's children (if any) <br />\
 | none |
 |=levelprefix=| Specify a prefix to a node format. The prefix is inserted =$level= times at the beginning of the rendered node format. It allows generation of trees using TWiki bullet list syntax thus enabling usage of !TreePlugin [[#Combination_with_TreeBrowserPlug][in combination with TreeBrowserPlugin]]. | none |
+| =nodiv= | Suppress the =&lt;div&gt;= around the tree. Allows for trees concatenation. | none |
 
 
 ---++ Samples
@@ -97,6 +98,7 @@ Specify plug-in settings on %MAINWEB%.TWikiPreferences using:
 | CPAN&nbsp;Dependencies: | none _(test package relies on Wiki:PerlUnit)_ |
 | Perl Version: | 5.0, 5.6.1, 5.8.7 |
 | Change&nbsp;History: | <!-- specify latest version first -->&nbsp; |
+| 6 Apr 2007 | 1.1 - Even more code cleaning. Rewrote tree building algorithm. Orphaned topics are now sorted as if child of the web root. No more blank line in the middle of the tree. Adding =nodiv= parameter. By TWiki:Main.StephaneLenclud | 
 | 6 Apr 2007 | 1.0 - More code cleaning. Testing most formatting. Better support for =web="all"=. By TWiki:Main.StephaneLenclud | 
 | 6 Apr 2007 | 0.9 - Support for TWiki.FormattedSearch pseudo-variables. Code cleaning in =TreePlugin.pm=. Removed some dead code. Improved documentation. By TWiki:Main.StephaneLenclud | 
 | 4 Apr 2007 | 0.8 - Adding =excludetopic= parameter. Adding =%<nop>TREE%= as synonym tag. Code cleaning in =TreePlugin.pm=. Fix root issue when no =topic= specified. By TWiki:Main.StephaneLenclud | 
