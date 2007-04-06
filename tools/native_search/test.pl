@@ -5,5 +5,6 @@
 # perl test.pl -i -l NativeTWikiSearch test.pl Makefile.PL NativeTWikiSearch.xs
 #
 use NativeTWikiSearch;
+die "I need parameters, like grep!" unless scalar(@ARGV);
 my $result = NativeTWikiSearch::cgrep(\@ARGV);
 print "RESULT\n".join("\n", @$result)."\n";
