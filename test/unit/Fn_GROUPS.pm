@@ -30,7 +30,7 @@ sub test_basic {
         '%GROUPS%', $this->{test_web}, $this->{test_topic});
     $this->assert_str_equals(<<HUMPH, "$ui\n");
 | *Group* | *Members* |
-| [[TemporaryGROUPSUsersWeb.GropeGroup][GropeGroup]] | [[TemporaryGROUPSUsersWeb.ScumBag][ScumBag]] [[TemporaryGROUPSUsersWeb.TWikiGuest][TWikiGuest]] |
+| <nop>GropeGroup | [[TemporaryGROUPSUsersWeb.ScumBag][ScumBag]] [[TemporaryGROUPSUsersWeb.TWikiGuest][TWikiGuest]] |
 HUMPH
 }
 

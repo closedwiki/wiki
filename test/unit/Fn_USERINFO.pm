@@ -48,7 +48,7 @@ sub test_formatted {
     $TWiki::cfg{AntiSpam}{HideUserDetails} = 0;
     my $ui = $this->{twiki}->handleCommonTags('%USERINFO{"ScumBag" format="W$wikiusernameU$wikinameE$emailsG$groupsE"}%', $this->{test_web}, $this->{test_topic});
     $this->assert_str_equals(
-        "W$TWiki::cfg{UsersWebName}.ScumBagUScumBagEscumbag\@example.comG$TWiki::cfg{UsersWebName}.GropeGroupE", $ui);
+        "W$TWiki::cfg{UsersWebName}.ScumBagUScumBagEscumbag\@example.comGGropeGroupE", $ui);
 }
 
 1;

@@ -3710,7 +3710,7 @@ sub USERINFO {
         my $it = $this->{users}->eachMembership( $user );
         while( $it->hasNext()) {
             my $group = $it->next();
-            push( @groupNames, $this->{users}->webDotWikiName($group));
+            push( @groupNames, $group);
         }
         my $groups = join(', ', @groupNames);
         $info =~ s/\$groups/$groups/g;
@@ -3730,9 +3730,10 @@ sub GROUPS {
     my @table;
     while( $groups->hasNext() ) {
         my $group = $groups->next();
-        my $descr = '| [['.$this->{users}->webDotWikiName($group).']['.
-          $this->{users}->getWikiName( $group ).']] |';
-        my $it = $this->{users}->eachGroupMember($group);
+        # Nop it to prevent wikiname expansion. Groups may not be defined as
+        # topics, but may come from the user mapper.
+        my $descr = "| <nop>$group |";
+        my $it = $this->{users}->eachGroupMember( $group );
         while( $it->hasNext() ) {
             my $user = $it->next();
             $descr .= ' [['.$this->{users}->webDotWikiName($user).']['.
