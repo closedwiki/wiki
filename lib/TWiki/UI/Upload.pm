@@ -68,6 +68,7 @@ sub attach {
     my $atext = '';
     my $fileUser = '';
     my $isHideChecked = '';
+    my $users = $session->{users};
 
     TWiki::UI::checkMirror( $session, $webName, $topic );
 
