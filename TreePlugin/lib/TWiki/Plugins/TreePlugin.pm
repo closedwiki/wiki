@@ -38,7 +38,7 @@ use vars qw(
 );
 
 $pluginName = 'TreePlugin';
-$VERSION = '1.1';
+$VERSION = '1.2';
 $RootLabel = "_RootLabel_";    # what we use to label the root of a tree if not a topic
 
 # =========================
@@ -300,6 +300,7 @@ sub doSEARCH {
     my ( $attrWeb, $params, $formatter ) = @_;
 
     my $excludetopic=$params->{'excludetopic'} || "";
+    my $includetopic=$params->{'includetopic'} || "";
 
     my $searchVal   = ".*";
     my $searchScope = "topic";
@@ -314,7 +315,7 @@ sub doSEARCH {
     
     #	ok. make the topic list and return it  (use this routine for now)
     #   hopefully there'll be an optimized one later    
-    my $search="%SEARCH{search=\"$searchVal\" web=\"$searchWeb\" format=\"$searchTmpl\" scope=\"$searchScope\" regex=\"on\" nosearch=\"on\" nototal=\"on\" noempty=\"on\" excludetopic=\"$excludetopic\"}%";
+    my $search="%SEARCH{search=\"$searchVal\" web=\"$searchWeb\" format=\"$searchTmpl\" scope=\"$searchScope\" regex=\"on\" nosearch=\"on\" nototal=\"on\" noempty=\"on\" excludetopic=\"$excludetopic\" topic=\"$includetopic\"}%";
     &TWiki::Func::writeDebug($search) if $debug;    
 
     return TWiki::Func::expandCommonVariables($search);

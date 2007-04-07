@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="StephaneLenclud" date="1175894250" format="1.1" version="1.13"}%
+%META:TOPICINFO{author="StephaneLenclud" date="1175942782" format="1.1" reprev="1.14" version="1.14"}%
 ---+!! Tree Plugin
 
 Renders topics' parent-child relationships as hierarchical tree view. Useful for dynamic site maps and threads.
@@ -22,7 +22,8 @@ Renders topics' parent-child relationships as hierarchical tree view. Useful for
  =coloroutline:colorlist= is an outline formatting with level values turned into colors, see [[Sandbox.TreePluginSamples#SampleNestedTables][sample Nested tables]]. Example: =formatting="coloroutline:#ffeeff,#eeffee,#ffffee,#eeeeff,#ffeeee,#eeffff"= <br />\
  =imageoutline:mode= is a way to incorporate images into the outline format, specifically to display thread-like and folder views, see [[Sandbox.TreePluginSamples#SampleImageTrees][sample Image Trees]]. The general format is: imageoutline: _mode_ : _images_ : _imageformat_. Example: =formatting="imageoutline:thread"= or =formatting="imageoutline:thread:I.gif,white.gif,T.gif,L.gif:&lt;img src=\"$image\" border=\"0\">"=. <br />\
 | =outline= | 
-|=excludetopic=| Same meaning as TWiki.VarSEARCH =excludetopic=. Topics with excluded parent find themselves in a second tree below the first one and separated by a blank line. | none |
+|=excludetopic=| Same meaning as TWiki.VarSEARCH =excludetopic=. Topics with excluded parent or processed like topic without parent. | none |
+|=includetopic=| Same meaning as TWiki.VarSEARCH =topic=. Can improve processing time. | none |
 |=startlevel=| The depth of the tree to start showing nodes from. To hide the root node, supply =startlevel="1"= (root is level 0). The displayed node depths are relative to the root topic. | =0= or =1= if =topic= is not specified |
 |=stoplevel=| The depth of the tree to show, relative to start level. | =999= | 
 |=header=| If specified output the value within a =&lt;div&gt;= of class =treePluginHeader=. | none |
@@ -70,6 +71,13 @@ See the following pages for sample usage and output.
 =%<nop>TREEBROWSER{"file" title="%<nop>WEB%"}%= %BR%
 =%<nop>TREEVIEW{web="%<nop>WEB%" topic="GrandParent" formatting="outline" format="* $topic" levelprefix="   "}%=
 
+---++ Performance consideration
+
+For each =%<nop>TREE%= or =%<nop>TREEVIEW%= tag a TWiki.VarSEARCH at topic scope is performed. To reduce the scope of that search one can use =includetopic= and =excludetopic=. Those two parameters should be used by TreePlugin users worried about performance. In fact they can potently greatly reduce the processing time. 
+
+For instance if you know that every topic in your tree has a common prefix you can easily make use of =includetopic=. Also when generating web tree you may want to =excludetopic= prefixed with _Web_.
+
+
 ---++ Plugin Settings
 
 <!--
@@ -86,9 +94,7 @@ Specify plug-in settings on %MAINWEB%.TWikiPreferences using:
    * Alternatively,
       * Manually resolve the dependencies listed below.
       None
-      
-      
-      
+                 
 ---++ Plugin Info
 
 | Authors: | TWiki:Main.SlavaKozlov (alpha release), TWiki:Main.StephaneLenclud (2006-2007)  |
@@ -98,6 +104,7 @@ Specify plug-in settings on %MAINWEB%.TWikiPreferences using:
 | CPAN&nbsp;Dependencies: | none _(test package relies on Wiki:PerlUnit)_ |
 | Perl Version: | 5.0, 5.6.1, 5.8.7 |
 | Change&nbsp;History: | <!-- specify latest version first -->&nbsp; |
+| 7 Apr 2007 | 1.2 - Documentation improvement. Adding =includetopic= parameter. By TWiki:Main.StephaneLenclud | 
 | 6 Apr 2007 | 1.1 - Even more code cleaning. Rewrote tree building algorithm. Orphaned topics are now sorted as if child of the web root. No more blank line in the middle of the tree. Adding =nodiv= parameter. By TWiki:Main.StephaneLenclud | 
 | 6 Apr 2007 | 1.0 - More code cleaning. Testing most formatting. Better support for =web="all"=. By TWiki:Main.StephaneLenclud | 
 | 6 Apr 2007 | 0.9 - Support for TWiki.FormattedSearch pseudo-variables. Code cleaning in =TreePlugin.pm=. Removed some dead code. Improved documentation. By TWiki:Main.StephaneLenclud | 
