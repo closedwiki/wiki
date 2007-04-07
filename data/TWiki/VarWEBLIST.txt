@@ -11,7 +11,7 @@
      | =separator=", "= | Line separator | ="$n"= (new line) |
      | =webs="public"=   | Comma separated list of webs, =public= expands to all non-hidden.%BR% __NOTE:__ Administrators will see all webs, not just the public ones | ="public"= |
      | =marker="selected"= | Text for =$marker= if the item matches =selection= | ="selected"= |
-     | =selection="%<nop>WEB%"= | Current value to be selected in list | =section="%<nop>WEB%"= |
+     | =selection="%<nop>WEB%"= | Current value to be selected in list | =selection="%<nop>WEB%"= |
    * Example: =%<nop>WEBLIST{"   * [<nop>[$name.%HOMETOPIC%]]"}%= - creates a bullet list of all webs.
    * Example: =&lt;form&gt;&lt;select name="web"&gt; %<nop>WEBLIST{"&lt;option $marker value=$qname&gt;$name&lt;/option&gt;" webs="Trash, public" selection="%<nop>WEB%" separator=" "}% &lt;/select&gt;&lt;/form&gt;= - creates a dropdown of all public webs + Trash web, with the current web highlighted.
    * Related: [[#VarTOPICLIST][TOPICLIST]], [[#VarSEARCH][SEARCH]]
