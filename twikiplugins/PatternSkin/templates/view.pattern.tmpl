@@ -66,16 +66,14 @@
 
 
 
-%TMPL:DEF{"content"}%%TMPL:P{"toolbar"}%
-%TMPL:P{"topicpathinfo"}%%TMPL:P{"beforetext"}%%TMPL:P{"formattop"}%%TMPL:P{"attachmentsattop"}%<div class="patternContent">%TMPL:P{"textcontent"}%
+%TMPL:DEF{"contentwithactions"}%%TMPL:P{"toolbar"}%
+%TMPL:P{"topicpathinfo"}%%TMPL:P{"beforetext"}%%TMPL:P{"formattop"}%%TMPL:P{"attachmentsattop"}%<div class="patternContent">%TMPL:P{"content"}%
 %TMPL:P{"aftertext"}%%TMPL:P{"formatbottom"}%%TMPL:P{"attachmentsatbottom"}%</div><!-- /patternContent-->
 %TMPL:P{"topicaction"}%%TMPL:P{"topicinfo"}%%TMPL:END%
 
 %TMPL:DEF{"broadcastmessage"}%%BROADCASTMESSAGE%%TMPL:END%
 
-
-%TMPL:DEF{"textcontent"}%<div class="patternTopic">%TMPL:P{"broadcastmessage"}% %TEXT%</div><!-- /patternTopic-->%TMPL:END%
-
+%TMPL:DEF{"content"}%<div class="patternTopic">%TMPL:P{"broadcastmessage"}% %TEXT%</div><!-- /patternTopic-->%TMPL:END%
 
 
 %TMPL:DEF{"topicinfo"}%<div class="patternMoved">%META{"moved"}%</div><!-- /patternMoved-->%TMPL:END%
