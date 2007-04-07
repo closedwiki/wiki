@@ -1,7 +1,7 @@
 %META:TOPICINFO{author="Main.TWikiContributor" date="1173012480" format="1.1" reprev="1.1" version="1.1"}%
 ---+!! !RenderTableDataPlugin
 
-*Render table data in a customizable way.*
+*Separate data storage from display: render table data in any different way.*
 
 Main features:
    * Pass a custom format to render the table data
@@ -72,11 +72,13 @@ Token strings (to be used with variables): %BR% \
 | =none= (the bare table cell data) | =format="Title: $C1(100,...)$n$n"= |
 | =rows=      | Either a row number or a range of rows to read. A range is defined as two numbers separated by =..=. The end row number can be omitted, for example: =rows="2.."=. The first row is numbered 1. %BR% Use =rows="2.."= to skip the header row. | =none= (all rows) | =rows="2"=, =rows="2..6"=, =rows="2.."= |
 | =cols=      | Either a column number or a range of columns to read. A range is defined as two numbers separated by =..=. The end column number can be omitted, for example: =cols="2.."=. The first column is numbered 1. | =none= (all columns) | =cols="2"=, =cols="1..4"=, =cols="1.."= |
-| =show=      | Show a limited set of results: either a row number or a range of rows. A range is defined as two numbers separated by =..=. The end result number can be omitted, for example: =show="2.."=. The first result is numbered 1. %BR% If sorting is used, sorting takes place before limiting the display by =show=.  | =none= (show all results) | =show="2"=, =show="2..6"=, =show="2.."= |
+| =show=      | Show a limited set of results: either a row number or a range of rows. A range is defined as two numbers separated by =..=. The end result number can be omitted, for example: =show="2.."=. The first result is numbered 1. %BR% If sorting is used, sorting takes place before limiting the display by =show=. %BR% \
+Start counting from the end by using a negative number: =show="-5.."= will start 5 positions from the end counting up to the end. %BR% \
+Likewise use =show="..-5"= to show results up to the fifth item from the end. | =none= (show all results) | =show="2"=, =show="2..6"=, =show="2.."=, =show="-5.."=, =show="..-5"= |
 | =preservespaces= | By default leading and trailing spaces of table cells are trimmed. Use =on= to preserve spaces. | =none= (spaces are trimmed) | =preservespaces="on"= |
 | =sortdirection= | The sort direction of the parsed data corresponding to the original table data. %BR% If no =sortcolumn= is passed and the direction is ="descending"=, the results are simply reversed. | =none= (no sorting) | =sortdirection="ascending"= (default direction), =sortdirection="descending"= |
 | =sortcolumn= | The table column data to sort upon. You may use a column with dates or sequential numbers to sort the results without showing that order data in the results. %BR% The first column is numbered 1. The column number always refers to the original table, even if cells are omitted with parameter =rows= or =cols=. | =none= (no sorting) | =sortcolumn="1"= |
-| =condition= | Defines what will be displayed. At this time only condition paramater =random= is implemented. | =none= (no condition) | =condition="random"= |
+| =filter= | Defines what will be displayed. At this time only filter paramater =random= is implemented. | =none= (no filter) | =filter="random"= |
 | =beforetext= | Text to display before the rendered data. | =none= | =beforetext="The list:$n"= |
 | =aftertext= | Text to display after the rendered data. | =none= | =aftertext="For more information see..."= |
 
@@ -107,7 +109,7 @@ Results in:
 
 ---++ Settings
 
-   * Set SHORTDESCRIPTION = Render table data in a customizable way
+   * Set SHORTDESCRIPTION = Separate data storage from display: render table data in any different way
    * Set DEBUG = 0
 
 ---++ Installation Instructions
@@ -124,6 +126,7 @@ Results in:
 | Copyright &copy;: | 2007 Arthur Clemens |
 | License: | [[http://www.gnu.org/copyleft/gpl.html][GPL]] |
 | Dependencies: | %$DEPENDENCIES% |
+| 07 Apr 2007 | Arthur Clemens: 1.0.5 Added the option to use negative numbers for =show=, for instance =show="-n.."= to start n positions from the end. Deprecated =condition="random"=; from now on use =filter="random"=. |
 | 12 Mar 2007 | Arthur Clemens: 1.0.4 Added limit parameter syntax to format. |
 | 11 Mar 2007 | Arthur Clemens: 1.0.3 Added =$nop= token. |
 | 08 Mar 2007 | Arthur Clemens: 1.0.2 Fixed sorting bug. Added params =beforetext=, =aftertext=, =show= and =condition="random"=.  |
