@@ -1,13 +1,13 @@
-
 %TMPL:INCLUDE{"view"}%
 
-%TMPL:DEF{"textcontent"}%<div class="patternTopic"> %TEXT%</div>
-%COMMENT{}%
 
-<!-- /patternTopic-->%TMPL:END% 
+%TMPL:DEF{"content"}%<div class="patternTopic">
+%TEXT%
 
-%TMPL:DEF{"formattop"}%%TMPL:P{"broadcastmessage"}%
----+ <span style="font-size:80%"><nop>%TOPIC%: %FORMFIELD{"Summary"}%</span>
+</div><!-- /patternTopic-->%TMPL:END%
+
+%TMPL:DEF{"formattop"}% %TMPL:P{"broadcastmessage"}%
+---+ <span style="font-size:80%"><nop>%TOPIC%: %FORMFIELD{"Summary"}% </span>
 %TABLE{ sort="off" databg="#eeeeee" }%
 | *Priority:* | *<nop>CurrentState:* | *<nop>AppliesTo:* | *Component:* | *<nop>WaitingFor:* |
 | %FORMFIELD{"Priority"}% | %FORMFIELD{"CurrentState"}% | %FORMFIELD{"AppliesTo"}% | %FORMFIELD{"Component"}% |  %FORMFIELD{"WaitingFor"}% |
@@ -15,4 +15,3 @@
 ---++ Details
 
 %TMPL:END%
-
