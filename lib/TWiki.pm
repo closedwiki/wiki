@@ -3157,6 +3157,7 @@ sub WEBLIST {
     my $web = $params->{web} || '';
     my $webs = $params->{webs} || 'public';
     my $selection = $params->{selection} || '';
+    my $showWeb = $params->{subwebs} || '';
     $selection =~ s/\,/ /g;
     $selection = " $selection ";
     my $marker = $params->{marker} || 'selected="selected"';
@@ -3166,9 +3167,9 @@ sub WEBLIST {
     my @webslist = split( /,\s*/, $webs );
     foreach my $aweb ( @webslist ) {
         if( $aweb eq 'public' ) {
-            push( @list, $this->{store}->getListOfWebs( 'user,public,allowed' ) );
+            push( @list, $this->{store}->getListOfWebs( 'user,public,allowed', $showWeb ) );
         } elsif( $aweb eq 'webtemplate' ) {
-            push( @list, $this->{store}->getListOfWebs( 'template,allowed' ));
+            push( @list, $this->{store}->getListOfWebs( 'template,allowed', $showWeb ));
         } else{
             push( @list, $aweb ) if( $this->{store}->webExists( $aweb ) );
         }

@@ -319,4 +319,42 @@ sub test_squab_path_to_topic_in_subweb {
 
 }
 
+#TODO: move these tests to a VarWEBLIST and add more
+sub test_WEBLIST_all {
+    my $this = shift;
+
+    my $query = new CGI("");
+    $query->path_info("/$testWeb");
+    $twiki = new TWiki( $TWiki::cfg{DefaultUserName}, $query);
+
+    my $text = ' %WEBLIST{format="$name" separator=", "}% ';
+    $text = $twiki->handleCommonTags($text, $testWeb);
+#Yes, you're supposed to be running these tests in a virgin TWiki, not on one that you've be doing other work (or had tests crash.)
+    $this->assert_matches(qr! HierarchicalWebsTestsTestWeb, HierarchicalWebsTestsTestWeb/SubWeb, Main, Sandbox, TWiki, TestCases !, $text);
+}
+
+sub test_WEBLIST_relative {
+    my $this = shift;
+
+    my $query = new CGI("");
+    $query->path_info("/$testWeb");
+    $twiki = new TWiki( $TWiki::cfg{DefaultUserName}, $query);
+
+    my $text = ' %WEBLIST{format="$name" separator=", " subwebs="'.$testWeb.'"}% ';
+    $text = $twiki->handleCommonTags($text, $testWeb);
+    $this->assert_matches(qr! $testWebSubWebPath !, $text);
+}
+
+sub test_WEBLIST_end {
+    my $this = shift;
+
+    my $query = new CGI("");
+    $query->path_info("/$testWeb");
+    $twiki = new TWiki( $TWiki::cfg{DefaultUserName}, $query);
+
+    my $text = ' %WEBLIST{format="$name" separator=", " subwebs="'.$testWebSubWebPath.'"}% ';
+    $text = $twiki->handleCommonTags($text, $testWeb);
+    $this->assert_matches(qr!  !, $text);
+}
+
 1;
