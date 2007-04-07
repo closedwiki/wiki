@@ -37,7 +37,7 @@ $VERSION = '$Rev: 11069$';
 # This is a free-form string you can use to "name" your own plugin version.
 # It is *not* used by the build automation tools, but is reported as part
 # of the version number in PLUGINDESCRIPTIONS.
-$RELEASE = '1.0.4';
+$RELEASE = '1.0.5';
 
 # Name of this Plugin, only used in this module
 $pluginName = 'RenderTableDataPlugin';
@@ -82,6 +82,21 @@ Creates a nested array (tableMatrix) from the text cells.
 Optionally sorts the array.
 Renders out the rows and cells.
 
+----
+|  |
+|  |-------- rowStart: start reading here
+|  |                |
+|  |                -------- showStart: start displaying from here
+|  |
+|  |
+|  |                -------- showEnd: end displaying from here
+|  |                |
+|  |-------- rowEnd: end reading here
+----
+  
+rowStart, rowEnd, showStart, showEnd are all 1-based indexed
+i.e. value 1 refers to the first element in the array
+
 =cut
 
 sub _parseTableRows {
@@ -96,68 +111,67 @@ sub _parseTableRows {
     my $topic          = $params->{'topic'}          || $inTopic;
     my $web            = $params->{'web'}            || $inWeb;
     my $preserveSpaces = $params->{'preservespaces'} || 'off';
-    my $sortCol        = -1;
-    $sortCol = $params->{'sortcolumn'} - 1
-      if ( $params->{'sortcolumn'} )
-      ;    # subtract 1 to use zero based indexing; -1 means "not set"
-    my $sortDirection = $params->{'sortdirection'} || 'ascending';
-    my $beforeText    = $params->{'beforetext'}    || '';
-    my $afterText     = $params->{'aftertext'}     || '';
+    my $sortCol        = $params->{'sortcolumn'}     || undef;
+    my $sortDirection  = $params->{'sortdirection'}  || 'ascending';
+    my $beforeText     = $params->{'beforetext'}     || '';
+    my $afterText      = $params->{'aftertext'}      || '';
 
-    my $rowStart   = 0;
-    my $rowEnd     = -1;
-    my $rowsParams = $params->{'rows'};
+    my $rowStart   = 1;
+    my $rowEnd     = undef;
+    my $rowsParams = $params->{'rows'} || '';
     if ($rowsParams) {
-        $rowsParams =~ /([0-9]*)(\.\.)*([0-9]*)/;
+        $rowsParams =~ /([0-9\-]*)(\.\.)*([0-9\-]*)/;
         if ($1) {
-            $rowStart = $1 - 1;    # subtract 1 to use zero based indexing
+            $rowStart = $1;
         }
         if ($2) {
             $rowEnd = $3
-              ? $3 - 1
-              : -1;  # subtract 1 to use zero based indexing; -1 means "not set"
+              ? $3
+              : undef;
         }
         else {
             $rowEnd = $rowStart;
         }
     }
-    my $colStart   = 0;
-    my $colEnd     = -1;
-    my $colsParams = $params->{'cols'};
+    my $colStart   = 1;
+    my $colEnd     = undef;
+    my $colsParams = $params->{'cols'} || '';
     if ($colsParams) {
-        $colsParams =~ /([0-9]*)(\.\.)*([0-9]*)/;
+        $colsParams =~ /([0-9\-]*)(\.\.)*([0-9\-]*)/;
         if ($1) {
-            $colStart = $1 - 1;    # subtract 1 to use zero based indexing
+            $colStart = $1;
         }
         if ($2) {
             $colEnd = $3
-              ? $3 - 1
-              : -1;  # subtract 1 to use zero based indexing; -1 means "not set"
+              ? $3
+              : undef;
         }
         else {
             $colEnd = $colStart;
         }
     }
 
-    my $showSetStart = 0;
-    my $showSetEnd   = -1;
-    my $showParams   = $params->{'show'};
+    my $showSetStart = 1;
+    my $showSetEnd   = undef;
+    my $showParams   = $params->{'show'} || '';
     if ($showParams) {
-        $showParams =~ /([0-9]*)(\.\.)*([0-9]*)/;
+        $showParams =~ /([0-9\-]*)(\.\.)*([0-9\-]*)/;
         if ($1) {
-            $showSetStart = $1 - 1;    # subtract 1 to use zero based indexing
+            $showSetStart = $1;
         }
         if ($2) {
             $showSetEnd = $3
-              ? $3 - 1
-              : -1;  # subtract 1 to use zero based indexing; -1 means "not set"
+              ? $3
+              : undef;
         }
         else {
             $showSetEnd = $showSetStart;
         }
     }
-
-    my $condition = $params->{'condition'} || '';
+    $showSetStart = $rowStart if !defined $showSetStart;
+    $showSetEnd = $rowEnd if !defined $showSetEnd;
+            
+    my $filter = $params->{'filter'} || '';
 
     my $text = TWiki::Func::readTopicText( $web, $topic );
 
@@ -165,7 +179,7 @@ sub _parseTableRows {
     my $insidePRE   = 0;
     my $insideTABLE = 0;
     my $line        = "";
-    my $rPos;
+    my $rPos        = 1;
     my @tableMatrix = ();
 
     $text =~ s/\r//go;
@@ -187,19 +201,20 @@ sub _parseTableRows {
                 # inside | table |
                 if ( !$insideTABLE ) {
                     $insideTABLE = 1;
-                    $rPos        = -1;
+                    $rPos        = 1;
                 }
 
-                $rPos++;
-
-                if ( $rowStart > $rPos ) {
-
-                    # skip
+                if ( defined $rowStart && $rowStart > $rPos ) {
+                    $rPos++;
                     next;
                 }
-                if ( $rowEnd != -1 && $rowEnd < $rPos ) {
+                if ( defined $rowEnd && $rowEnd < $rPos ) {
                     $shouldRenderTableData = 1;
+                    $rPos++;
                     next;
+                }
+                if ( defined $rowEnd && $rPos > $rowEnd ) {
+                    last;
                 }
                 $line = $_;
                 $line =~ s/^(\s*\|)(.*)\|\s*$/$2/o;
@@ -214,10 +229,9 @@ sub _parseTableRows {
                     }
                     push @row, { text => $value, type => 'text' };
                 }
-                $colEnd = ( @row - 1 ) if $colEnd == -1;
-                push @tableMatrix, [@row]
-                  ;   # we must add the complete row to be able to sort later on
-
+                $colEnd = @row if !defined $colEnd; # 1-based indexing
+                push @tableMatrix, [@row];   # we must add the complete row to be able to sort later on
+                $rPos++;
             }
             else {
 
@@ -229,15 +243,15 @@ sub _parseTableRows {
             }
         }
 
-        if ($shouldRenderTableData) {
+        if ($shouldRenderTableData && $colEnd) {
 
-            if ( $sortCol != -1 ) {
+            if ( defined $sortCol ) {
                 my $type =
-                  _guessColumnType( $sortCol, $rowStart, @tableMatrix );
+                  _guessColumnType( $sortCol-1, $rowStart, @tableMatrix );
                 if ( $type eq $columnType{'TEXT'} ) {
                     @tableMatrix = map { $_->[0] }
                       sort { $a->[1] cmp $b->[1] }
-                      map { [ $_, _stripHtml( $_->[$sortCol]->{text} ) ] }
+                      map { [ $_, _stripHtml( $_->[$sortCol-1]->{text} ) ] }
                       @tableMatrix;
                 }
                 elsif ( $type eq $columnType{'UNDEFINED'} ) {
@@ -246,19 +260,30 @@ sub _parseTableRows {
                 }
                 else {
                     @tableMatrix = sort {
-                        $a->[$sortCol]->{$type} <=> $b->[$sortCol]->{$type}
+                        $a->[$sortCol-1]->{$type} <=> $b->[$sortCol-1]->{$type}
                     } @tableMatrix;
                 }
             }
-
             if ( $sortDirection eq 'descending' ) {
                 @tableMatrix = reverse @tableMatrix;
             }
+            
+            my $resultSetStart = ( defined $showSetStart ) ? $showSetStart : 1;
+            my $resultSetEnd   = ( defined $showSetEnd ) ? $showSetEnd : @tableMatrix;
+            
+            if ( $resultSetStart < 0 ) {
+                $resultSetStart += @tableMatrix+1;
+                $resultSetEnd = @tableMatrix;
+            }
+            if ( $resultSetEnd < 0 ) {
+                $resultSetEnd += @tableMatrix+1;
+                $resultSetStart = 1;
+            }
 
-            my $resultSetStart = $showSetStart;
-            my $resultSetEnd   = $showSetEnd;
-            $resultSetEnd = $#tableMatrix if $resultSetEnd == -1;
-            if ( $condition eq 'random' ) {
+            $resultSetStart -= 1;
+            $resultSetEnd -= 1;
+   
+            if ( $filter eq 'random' ) {
 
                 my $resultCount = ( $resultSetEnd - $resultSetStart ) + 1;
 
@@ -266,10 +291,12 @@ sub _parseTableRows {
                 $resultSetStart += $random;
                 $resultSetEnd = $resultSetStart;
             }
+            
             for my $rowPos ( $resultSetStart .. $resultSetEnd ) {
                 my $row       = $tableMatrix[$rowPos];
+                next if !$row;
                 my $rowResult = $format;
-                for my $colPos ( $colStart .. $colEnd ) {
+                for my $colPos ( $colStart-1 .. $colEnd-1 ) {
                     my $cell = $row->[$colPos]->{text};
                     if ( $format eq '' ) {
 
@@ -277,10 +304,9 @@ sub _parseTableRows {
                         $rowResult .= $cell;
                         next;
                     }
-                    my $cellNumber =
-                      $colPos + 1;    # param input is non-zero based
+                    my $cellNum = $colPos + 1;
                     $rowResult =~
-s/\$C$cellNumber(\(([0-9]*),*(.*?)\))*/_getCellContents($session,$cell,$2,$3)/ges;
+s/\$C$cellNum(\(([0-9]*),*(.*?)\))*/_getCellContents($cell,$2,$3)/ges;
                 }
                 $result .= $rowResult;
             }
@@ -292,10 +318,8 @@ s/\$C$cellNumber(\(([0-9]*),*(.*?)\))*/_getCellContents($session,$cell,$2,$3)/ge
             $result =~ s/\$quot/\"/go;
 
             # feedback variables
-            # translate back to input values
-            $showSetStart += 1;
-            $showSetEnd   += 1;
-            $showSetEnd = '' if $showSetEnd == 0;
+            $showSetStart = '' if !defined $showSetStart;
+            $showSetEnd = '' if !defined $showSetEnd;
             my $set = "$showSetStart..$showSetEnd";
             $result =~ s/\$set/$set/go;
             $result =~ s/\$set/$set/go;
@@ -319,7 +343,7 @@ s/\$C$cellNumber(\(([0-9]*),*(.*?)\))*/_getCellContents($session,$cell,$2,$3)/ge
 =cut
 
 sub _getCellContents {
-    my ( $session, $cellText, $limit, $placeholder ) = @_;
+    my ( $cellText, $limit, $placeholder ) = @_;
     if ( !$limit ) {
         return $cellText;
     }
