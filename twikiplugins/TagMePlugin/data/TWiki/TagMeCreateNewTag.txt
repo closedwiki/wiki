@@ -20,7 +20,7 @@ Create a new tag - then add it to a topic.
 <noautolink>%TAGME{ tpaction="%URLPARAM{"newaction" default="nop"}%" tag="%URLPARAM{newtag}%" note="%URLPARAM{newtagnote}%" }%<form name="addtag" action="%SCRIPTURL%/viewauth%SCRIPTSUFFIX%/%BASEWEB%/%BASETOPIC%" method="post" onsubmit="return cleanTag(this.newtag.value);">
 <div class="twikiFormSteps">
 <div class="twikiFormStep twikiLast">
-Name of new tag: <input type="text" class="twikiInputField" name="newtag" size="30" value="%URLPARAM{"createtag"}%" onblur="this.value=cleanTag(this.value)" /> <input type="submit" class="twikiSubmit" value="%MAKETEXT{"Create"}%" />
+Name of new tag: <input type="text" class="twikiInputField" name="newtag" id="newtag" size="30" value="%URLPARAM{"createtag"}%" onblur="this.value=cleanTag(this.value)" /> <input type="submit" class="twikiSubmit" value="%MAKETEXT{"Create"}%" />
 </div>
 </div>
 <input type="hidden" name="newaction" value="newtag" />
@@ -116,6 +116,11 @@ function makeSafe (inText) {
 	var perlSafeString = inText.replace(re, "");
 	return perlSafeString;
 }
+addLoadEvent(setHandyFocus);
+function setHandyFocus () {
+	document.getElementById('newtag').focus();
+}
 // </pre>-hide -->
 </script>
+
 %ENDSECTION{"cleanTagJavascript"}%
