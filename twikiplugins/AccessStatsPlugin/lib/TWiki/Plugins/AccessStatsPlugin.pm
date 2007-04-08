@@ -44,11 +44,13 @@ use vars qw( $VERSION $RELEASE $debug $pluginName $accessLogFileName $accessLogD
 # status of the plugin. It is used by the build automation tools, so
 # you should leave it alone.
 $VERSION = '$Rev: 8713$';
+#$VERSION = 'v1.002';
+
 
 # This is a free-form string you can use to "name" your own plugin version.
 # It is *not* used by the build automation tools, but is reported as part
 # of the version number in PLUGINDESCRIPTIONS.
-$RELEASE = '27 Feb 2006 (V1.002)';
+$RELEASE = '9 Apr 2007';
 
 # Name of this Plugin, only used in this module
 $pluginName = 'AccessStatsPlugin';
