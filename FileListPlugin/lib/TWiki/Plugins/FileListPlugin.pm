@@ -34,7 +34,7 @@ $VERSION = '$Rev$';
 # This is a free-form string you can use to "name" your own plugin version.
 # It is *not* used by the build automation tools, but is reported as part
 # of the version number in PLUGINDESCRIPTIONS.
-$RELEASE = '0.8';
+$RELEASE = '0.9';
 
 $pluginName = 'FileListPlugin';  # Name of this Plugin
 
@@ -71,7 +71,10 @@ sub _handleFileList
 	my $thisWeb = $params{'web'} || $theWeb || '';
 	my $thisTopic = $params{'topic'} || $theTopic || '';
 	
-	my $format = $params{'format'} || $defaultFormat;
+	my $format  = $params{'format'} || $defaultFormat;
+	my $header  = $params{'header'} || '';
+	my $footer  = $params{'footer'} || '';
+	my $alttext = $params{'alt'}    || '';
 	
 	my $filter = $params{"filter"}; # "abc, def" syntax. Substring match will be used
 	
@@ -153,6 +156,13 @@ sub _handleFileList
     
 		$outtext .= $s . "\n";
 	}
+	
+	if ( $outtext eq "" ) {
+		$outtext = $alttext;
+	} else {
+		$outtext = $header . "\n" . $outtext . $footer;
+	}
+	
 	return $outtext;
 }
 
