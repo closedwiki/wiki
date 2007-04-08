@@ -17,6 +17,9 @@ View permissions are honored: if the user is not allowed to view the referring t
 | =web=       | Web name of =topic= | =<nop>%WEB%= |
 | =filter=    | Comma separated list of file extensions to be listed |=gif,jpg= |
 | =format=    | Format string. Use the format in the table below | |
+| =header=    | If there are hits this header is prepended | |
+| =footer=    | If there are hits this footer is appended | |
+| =alt=       | Alternate text if nothing is found | |
 
 | *Format parameter* | *Comment* |
 | =$fileName=  | Name of the file |
@@ -69,6 +72,7 @@ Output (if installed):
 | Copyright &copy;: | TWiki:Main.VinodKulkarni, TWiki:Main.SopanShewale (2006), TWiki:Main.ArthurClemens (2006) |
 | License: | [[http://www.gnu.org/copyleft/gpl.html][GPL]] |
 | Dependencies: | %$DEPENDENCIES% |
+| 08 Apr 2007 - v.0.9 | TWiki:Main.OliverKrueger: added header, footer and alt params. |
 | 17 Dec 2006 - v.0.8 | TWiki:Main.ArthurClemens: reworked for TWiki 4.1 and optimized; activated =filter= parameter, added topic view permission check. |
 | 03 Mar 2006 - v.0.7 | TWiki:Main.SopanShewale: reworked for TWiki 4 |
 | 11 Apr 2005 - v.0.6 | TWiki:Main.VinodKulkarni: Initial version |
