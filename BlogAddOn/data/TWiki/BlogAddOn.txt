@@ -15,7 +15,7 @@ What's not provided:
    * A calendar display of posts
    * Display of the number of comments
    * Paging controls to navigate lists of postings
-   * The ability to close or hide comments
+   * The ability to close commenting or hide comments
 
 When installed, see !_BlogAddOn.BlogAddOnHome for additional details.
 
@@ -28,7 +28,7 @@ When installed, see !_BlogAddOn.BlogAddOnHome for additional details.
    * Download the ZIP file from the Plugin web (see below)
    * Unzip ==%TOPIC%.zip== in your ($TWIKI_ROOT) directory.
    * Copy the files from =/data/_BlogAddOn= to the web you want to blog in
-   * !BlogAddOn is based on TWiki 4.1 with !PatternSkin plus !CommentPlugin.
+   * !BlogAddOn is based on TWiki 4.1 with !CommentPlugin.
    * Alternatively,
       * Manually resolve the dependencies listed below.
       %$DEPENDENCIES%
@@ -39,7 +39,8 @@ When installed, see !_BlogAddOn.BlogAddOnHome for additional details.
 | Copyright &copy;: | 2006, 2007 Arthur Clemens |
 | License: | [[http://www.gnu.org/copyleft/gpl.html][GPL]] |
 | Dependencies: | %$DEPENDENCIES% |
-| |!BlogAddOn is based on TWiki 4.1 with !PatternSkin. |
+| |!BlogAddOn is based on TWiki 4.1. |
+| 08 Apr 2007 | Arthur Clemens: 1.0.8 Show link to latest comment in !BlogPost listing. Improved readability for comments. This version relies on CommentPlugin svn release number 13313 and PatternSkin svn release number 13309, but !BlogAddOn will now play nicely with other skins as well. | 
 | 06 Feb 2007 | Arthur Clemens: 1.0.7 Added no-javascript fallback to !BlogPost and !BlogPostCreator (so that topic can actually be created without javascript). Fixed a javascript bug that was introduced when a Core function was renamed. |
 | 25 Feb 2007 | Arthur Clemens: 1.0.6 URL param for limit setting now overrides INCLUDE parameter. |
 | 25 Feb 2007 | Arthur Clemens: 1.0.5 Prevents recreation/overwriting of existing topics. Added "No limit" label to filter dropdown. |
