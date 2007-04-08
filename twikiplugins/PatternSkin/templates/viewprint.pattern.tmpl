@@ -42,9 +42,9 @@
 
 %TMPL:DEF{"broadcastmessage"}%%TMPL:END%
 
-%TMPL:DEF{"textcontent"}%<div class="patternTopic">%TMPL:P{"broadcastmessage"}% %TEXT%</div><!-- /patternTopic-->%TMPL:END%
+%TMPL:DEF{"content"}%<div class="patternTopic">%TMPL:P{"broadcastmessage"}% %TEXT%</div><!-- /patternTopic-->%TMPL:END%
 
-%TMPL:DEF{"content"}%
-%TMPL:P{"beforetext"}%%TMPL:P{"formattop"}%%TMPL:P{"attachmentsattop"}%<div class="patternContent">%TMPL:P{"textcontent"}%
+%TMPL:DEF{"contentwithnavigation"}%
+%TMPL:P{"beforetext"}%%TMPL:P{"formattop"}%%TMPL:P{"attachmentsattop"}%<div class="patternContent">%TMPL:P{"content"}%
 %TMPL:P{"aftertext"}%%TMPL:P{"formatbottom"}%%TMPL:P{"attachmentsatbottom"}%</div><!-- /patternContent-->
 %TMPL:P{"topicinfo"}%%TMPL:END%
