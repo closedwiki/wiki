@@ -45,6 +45,7 @@ When installed, see [[_PersonalInfoAddOn.PersonalInfoHome]] for additional detai
 | License: | [[http://www.gnu.org/copyleft/gpl.html][GPL]] |
 | |!PersonalInfoAddOn is based on TWiki 4.1 with !PatternSkin. |
 | Dependencies: | %$DEPENDENCIES% |
+| 07 Apr 2007 | Arthur Clemens: 1.1.2 Update to match PatternSkin svn release number 13320. |
 | 07 Mar 2007 | Arthur Clemens: 1.1.1 Fixed CSS bug on Win Explorer 6.  |
 | 06 Mar 2007 | Arthur Clemens: 1.1 Modularized include sections to make these easier to override: all local overrides can now safely happen in the !PersonalInfo topic.  |
 | 06 Mar 2007 | Arthur Clemens: 1.0.2 Added =phoneListXML= output.  |

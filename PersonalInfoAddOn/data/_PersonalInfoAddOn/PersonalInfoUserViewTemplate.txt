@@ -1,7 +1,7 @@
-%TMPL:INCLUDE{"view.pattern"}%
+%TMPL:INCLUDE{"view"}%
 
 %TMPL:DEF{"form"}%%TMPL:END%
 
-%TMPL:DEF{"textcontent"}%<div class="patternTopic">%TMPL:P{"broadcastmessage"}% 
+%TMPL:DEF{"content"}%<div class="patternTopic">%TMPL:P{"broadcastmessage"}% 
 %INCLUDE{"PersonalInfo" section="personalInfo"}%
 %TEXT%</div><!-- /patternTopic-->%TMPL:END%

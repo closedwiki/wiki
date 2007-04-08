@@ -88,7 +88,7 @@ color:#ccc;
 
 ---++ phoneListXML
 <verbatim>
-%STARTSECTION{"phoneListXML"}%<?xml version="1.0" encoding="UTF-8"?>
+%STARTSECTION{"phoneListXML"}%<?xml version="1.0" encoding="ISO-8859-1"?>
 <users>
 %SEARCH{ "[F]irstName.*value=.*();[W]orkStatus.*value=.*(Current)" web="%MAINWEB%" type="regex" nonoise="on" excludetopic="UserForm,PersonalInfo,PersonalInfoDocumentation,TWikiContributor,TWikiGuest,UnknownUser" format="<user><firstname>$formfield(FirstName)</firstname><lastname>$formfield(LastName)</lastname><phone>$formfield(WorkPhone)</phone><url>%SCRIPTURL{view}%/%WEB%/$topic</url></user>" "}%
 </users>
@@ -126,8 +126,8 @@ padding:.1em .25em;
 <verbatim>
 %STARTSECTION{"directSearchScript"}%<script language="javascript" type="text/javascript">%STARTSECTION{"directSearchScriptCode"}%
 var MAX_RESULTS = %IF{"defined maxresults" then="%URLPARAM{"maxresults" default="%maxresults%"}%" else="12"}%;
+var userData = new Array(%INCLUDE{"PersonalInfo" section="directSearchData"}%);
 function showResults() {
-	var userData = new Array(%INCLUDE{"PersonalInfo" section="directSearchData"}%);
 	var output = "";
 	var resultCount = 0;
 	var query = document.getElementById("personalInfoSearchBox").value.toLowerCase();
