@@ -49,3 +49,7 @@ function confirmDelete(inTagName) {
 // </pre>-hide -->
 </script>
 %ENDSECTION{"dialogJavascript"}%
+
+<!--
+   * Set ALLOWTOPICVIEW = Main.TWikiAdminGroup
+-->
