@@ -41,3 +41,7 @@ New name for this tag: %BR%
 
 %BR%
 <span class="twikiGrayText">Other tag options: [[TagMeViewAllTags][View all tags]], [[TagMeViewMyTags][View my tags]], [[TagMeSearch][Search tags]]</span>
+
+<!--
+   * Set ALLOWTOPICVIEW = Main.TWikiAdminGroup
+-->
