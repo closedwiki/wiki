@@ -2,7 +2,7 @@
 %TMPL:INCLUDE{"view"}%
 
 
-
+<verbatim>
 %TMPL:DEF{"postinfo"}%%TMPL:P{context="TimeSincePluginEnabled" then="exactdate" else="exactdate"}%%TMPL:END%
 
 %TMPL:DEF{"exactdate"}%%MAKETEXT{"[_1] by [_2] in [_3]" args="%REVINFO{rev="1" format="$date - $time"}%, %FORMFIELD{"Author"}%, [[%SCRIPTURL{view}%/%BASEWEB%/BlogPost?category=%FORMFIELD{"Category"}%][%FORMFIELD{"Category"}%]]"}%%TMPL:END%
@@ -11,7 +11,7 @@
 
 
 
-%TMPL:DEF{"textcontent"}%%INCLUDE{"BlogAddOnStyles"}%
+%TMPL:DEF{"content"}%%INCLUDE{"BlogAddOnStyles"}%
 <div class="patternTopic">%BROADCASTMESSAGE%
 <h1 class="blogAddOnTitle"> %FORMFIELD{"Title"}% </h1>
 <div class="twikiGrayText twikiSmallish blogPostAddOnHeaderInfo">%TMPL:P{"postinfo"}%</div>
@@ -19,14 +19,15 @@
 %TEXT%
 
 ---++ %MAKETEXT{"Comments"}%
+#BlogPostComments
 %INCLUDE{"%TOPIC%Comments" warn="off"}%
 
-<form method="post" action="%SCRIPTURL{save}%/%WEB%/%TOPIC%Comments" enctype="application/x-www-form-urlencoded" name="blogpostcomment" id="blogpostcomment">
-<input type="hidden" name="topicparent" value="%TOPIC%" />
-<input type="hidden" name="comment_action" value="save" />
-%COMMENT{noform="on" type="return" target="%TOPIC%" button="%MAKETEXT{"Add comment"}%"}%</form>
-</div>%TMPL:END%
+%COMMENT{noform="on" type="blogpost" templatetopic="BlogPostCommentTemplate" target="%TOPIC%" button="%MAKETEXT{"Add comment"}%" }%
+</div>
+#BlogPostEnd
+%TMPL:END%
 
 
 
 %TMPL:DEF{"form"}%%TMPL:END%
+</verbatim>
