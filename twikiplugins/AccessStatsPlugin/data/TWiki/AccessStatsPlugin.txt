@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="StephaneLenclud" date="1176036822" format="1.1" version="1.7"}%
+%META:TOPICINFO{author="StephaneLenclud" date="1176073441" format="1.1" reprev="1.8" version="1.8"}%
 ---+!! <nop>%TOPIC%
 
 The !AccessStatsPlugin provide statistics by parsing the Apache access log files.
@@ -61,10 +61,11 @@ To release a new version from an installation on a linux machine just execute th
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.StephaneLenclud |
-|  Copyright: | &copy; 2006, TWiki:Main.StephaneLenclud |
+|  Copyright: | &copy; 2006-2007, TWiki:Main.StephaneLenclud |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 21 Feb 2006 (V1.001) |
+|  Plugin Version: | 9 Apr 2007 (V1.002) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  9 Apr 2007 | Fixing issue with unzipped files like =access.log.n= not being parsed. |
 |  21 Feb 2006: | Supports gz archived apache log file |
 |  20 Feb 2006: | Now supports web, topic and attachment parameter |
 |  18 Feb 2006: | Initial version |
