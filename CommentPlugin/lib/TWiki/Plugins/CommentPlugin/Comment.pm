@@ -70,6 +70,17 @@ sub prompt {
     $_[1] =~ s/%COMMENT({.*?})?%/_handleInput($1,$_[2],$_[3],\$idx,$message,$disable,$defaultType)/eg;
 }
 
+sub _getTemplateLocation {
+    my ( $attrtemplatetopic ) = @_;
+    
+    my $templatetopic = '';
+    if ( $attrtemplatetopic ) {
+        my ($templocweb, $temploctopic ) = TWiki::Func::normalizeWebTopicName('', $attrtemplatetopic);
+        $templatetopic = "$templocweb.$temploctopic";
+    }
+    return $templatetopic;
+}
+
 # PRIVATE generate an input form for a %COMMENT tag
 sub _handleInput {
     my ( $attributes, $web, $topic, $pidx, $message,
@@ -85,6 +96,9 @@ sub _handleInput {
     my $remove = $attrs->remove( 'remove' );
     my $nopost = $attrs->remove( 'nopost' );
     my $default = $attrs->remove( 'default' );
+    my $attrtemplatetopic = $attrs->remove( 'templatetopic' ) || '';
+    my $templatetopic = _getTemplateLocation( $attrtemplatetopic );
+    
     $message ||= $default || '';
     $message ||= $default || '';
 	$disable ||= '';
@@ -95,10 +109,9 @@ sub _handleInput {
 
     # Expand the template in the context of the web where the comment
     # box is (not the target of the comment!)
-    my $input = _getTemplate( "PROMPT:$type", $topic, $web ) || '';
-
+    my $input = _getTemplate( "PROMPT:$type", $web, $topic, $templatetopic ) || '';
     return $input if $input =~ m/^%RED%/so;
-
+    
     # Expand special attributes as required
     $input =~ s/%([a-z]\w+)\|(.*?)%/_expandPromptParams($1, $2, $attrs)/ieg;
 
@@ -131,23 +144,35 @@ sub _handleInput {
         my $n = $$pidx + 0;
 
         if ( $disable eq '' ) {
-            $input .= CGI::hidden( -name=>'comment_action', -value=>'save' );
-            $input .= CGI::hidden( -name=>'comment_type', -value=>$type );
+            my $hiddenFields = "";
+            $hiddenFields .= "\n".CGI::hidden( -name=>'comment_action', -value=>'save' );
+            $hiddenFields .= "\n".CGI::hidden( -name=>'comment_type', -value=>$type );
             if( defined( $silent )) {
-                $input .= CGI::hidden( -name=>'comment_nonotify', value=>1 );
+                $hiddenFields .= "\n".CGI::hidden( -name=>'comment_nonotify', value=>1 );
+            }
+            if ( $templatetopic ) {
+                $hiddenFields .= "\n".CGI::hidden( -name=>'comment_templatetopic', -value=>$templatetopic );
             }
             if ( $location ) {
-                $input .= CGI::hidden( -name=>'comment_location', -value=>$location );
+                $hiddenFields .= "\n".CGI::hidden( -name=>'comment_location', -value=>$location );
             } elsif ( $anchor ) {
-                $input .= CGI::hidden( -name=>'comment_anchor', -value=>$anchor );
+                $hiddenFields .= "\n".CGI::hidden( -name=>'comment_anchor', -value=>$anchor );
             } else {
-                $input .= CGI::hidden( -name=>'comment_index', -value=>$$pidx );
+                $hiddenFields .= "\n".CGI::hidden( -name=>'comment_index', -value=>$$pidx );
             }
             if( $nopost ) {
-                $input .= CGI::hidden( -name=>'comment_nopost', -value=>$nopost );
+                $hiddenFields .= "\n".CGI::hidden( -name=>'comment_nopost', -value=>$nopost );
             }
             if( $remove ) {
-                $input .= CGI::hidden( -name=>'comment_remove', -value=>$$pidx );
+                $hiddenFields .= "\n".CGI::hidden( -name=>'comment_remove', -value=>$$pidx );
+            }
+            $input .= $hiddenFields;
+        }
+        if ( $noform ) {
+            my $form = _getTemplate( "FORM:$type", $topic, $web,  $templatetopic, 'off' ) || '';
+            if ( $form ) {
+                $form =~ s/%COMMENTPROMPT%/$input/;
+                $input = $form;
             }
         }
         unless ($noform eq 'on') {
@@ -163,15 +188,15 @@ sub _handleInput {
 
 # PRIVATE get the given template and do standard expansions
 sub _getTemplate {
-    my ( $name, $topic, $web ) = @_;
+    my ( $name, $topic, $web, $templatetopic, $warn ) = @_;
 
     # Get the templates.
-    my $templateFile =
-      TWiki::Func::getPreferencesValue('COMMENTPLUGIN_TEMPLATES') || 'comments';
-
+    my $templateFile = $templatetopic
+        || TWiki::Func::getPreferencesValue('COMMENTPLUGIN_TEMPLATES')
+        || 'comments';
+    
     my $templates =
       TWiki::Func::loadTemplate( $templateFile );
-
     if (! $templates ) {
         TWiki::Func::writeWarning("Could not read template file '$templateFile'");
         return;
@@ -179,7 +204,7 @@ sub _getTemplate {
 
     my $t = TWiki::Func::expandTemplate( $name );
     return "%RED%No such template def TMPL:DEF{$name}%ENDCOLOR%"
-      unless ( defined($t) && $t ne '' );
+      unless ( defined($t) && $t ne '' ) || $warn eq 'off';
 
     return $t;
 }
@@ -209,8 +234,9 @@ sub _buildNewTopic {
     my $location = $query->param( 'comment_location' );
     my $remove = $query->param( 'comment_remove' );
     my $nopost = $query->param( 'comment_nopost' );
-
-    my $output = _getTemplate( "OUTPUT:$type", $topic, $web );
+    my $templatetopic = $query->param( 'comment_templatetopic' ) || '';
+    
+    my $output = _getTemplate( "OUTPUT:$type", $topic, $web, $templatetopic );
     if ( $output =~ m/^%RED%/ ) {
         die $output;
     }
