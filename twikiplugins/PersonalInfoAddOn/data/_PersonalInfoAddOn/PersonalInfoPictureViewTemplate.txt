@@ -66,9 +66,13 @@
 .patternTopicActions {margin-top:-1px;}
 .pIPictures .genericFileType {display:none;}
 .pIPictures .fileTypepng,
+.pIPictures .fileTypePNG,
 .pIPictures .fileTypegif,
+.pIPictures .fileTypeGIF,
 .pIPictures .fileTypejpg,
-.pIPictures .fileTypejpeg {display:block;}
+.pIPictures .fileTypeJPG,
+.pIPictures .fileTypejpeg,
+.pIPictures .fileTypeJPEG {display:block;}
 .pIPictures .userPictureActions {margin:0 0 0 1em;}
 .piUploadNew {margin:2em 0 0 0; text-align:center;}
 .piUploadNew a {font-weight:bold;}
