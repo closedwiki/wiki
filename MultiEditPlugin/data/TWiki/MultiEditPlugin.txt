@@ -61,6 +61,8 @@ Plugin settings are stored as preferences variables. To reference a plugin setti
 
 It is not possible based on the current TWiki rendering model to make this feature work when only part of a topic is included. If there are sections identified in an included topic which are before the %<nop>STARTINCLUDE% marker, then the sections in the included topic cannot be properly edited.
 
+Text within &lt;pre&gt; tags placed in sections is not correctly rendered, albeit the text is in the topic and is not lost.
+
 ---++ Plugin Installation Instructions
 
 __Note:__ You do not need to install anything on the browser to use this plugin. The following instructions are for the administrator who installs the plugin on the server where TWiki is running. 
@@ -99,9 +101,9 @@ Index: lib/TWiki.pm
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main/ThomasWeigert |
-|  Plugin Version: | 10 Dec 2006 |
+|  Plugin Version: | 08 Apr 2007 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  08 Apr 2006: | Update by TWiki:Main.MichaelDaum. Fix for Bugs:Item3847.  |
+|  08 Apr 2006: | Update by TWiki:Main.MichaelDaum. Fix for Bugs:Item3847. Handle verbatim in sections. |
 |  10 Dec 2006: | Fix for unnamed sections. |
 |  19 Nov 2006: | Support editing of sections from included topics. Use =strict=. |
 |  09 Sep 2006: | Bug (disabled SectionalEditPlugin) fixed. |

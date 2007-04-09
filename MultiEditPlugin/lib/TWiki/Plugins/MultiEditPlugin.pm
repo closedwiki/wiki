@@ -105,13 +105,17 @@ sub rememberTopic {
 
 ##SMELL: Need to make sure the section attribute is given, even if
 ##topic was passed already
-  $posattr =~ s/label\s*="(.*?)"//o;
-  my $label = $1;
+##SMELL: Not sure what the label="..." parameter is all about but it
+##does not allow editing later as the edit does not find the prefixed section
+  my $seclabel = '';
+  if ( $posattr =~ s/label\s*=\"(.*?)\"//o ) {
+    $seclabel = $1;
+  }
   if ($posattr =~ / topic=/o) {
     return "<section$posattr>";
   } else {
     $_[3]++;
-    return "<section$posattr topic=\"$topic\" web=\"$web\" section=\"$label$_[3]\">";
+    return "<section$posattr topic=\"$topic\" web=\"$web\" section=\"$seclabel$_[3]\">";
   }
 }
 
@@ -206,14 +210,20 @@ sub editRow
 }
 
 # =========================
-sub postRenderingHandler
+# Need to use this deprecated plugin, as otherwise the verbatim does not
+# get put back in. Eventually, add verbatim etc. insertion back into her
+# from TWiki::Render::getRenderedVersion.
+# Note that the current version does not handle pre sections correctly,
+# as this handler runs after the pre is restored.
+# TODO: move to postRenderingHandler, but restore verbatim and pre.
+sub endRenderingHandler
 {
 ### my ( $text ) = @_;   # do not uncomment, use $_[0] instead
 
     return if ($_[0] =~ m/\<\/?body[^>]*\>/o);
 
     my $session = $TWiki::Plugins::SESSION;
-    TWiki::Func::writeDebug( "- ${pluginName}::postRenderingHandler( $session->{webName}.$session->{topicName} )" ) if $debug;
+    TWiki::Func::writeDebug( "- ${pluginName}::endRenderingHandler( $session->{webName}.$session->{topicName} )" ) if $debug;
 
     while ($_[0] =~ s/$prefix(.*?)$prefix/$renderedText{$1}/e) {}
 }
