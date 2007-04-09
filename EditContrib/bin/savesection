@@ -28,30 +28,6 @@ BEGIN {
 }
 
 use strict;
-use TWiki::Func;
-use TWiki::UI;
-use TWiki::UI::Save;
 use TWiki::Contrib::EditContrib;
+TWiki::UI::run ( \&TWiki::Contrib::EditContrib::save );
 
-TWiki::UI::run ( \&save );
-
-sub save {
-
-  my $session = shift;
-  $TWiki::Plugins::SESSION = $session;
-  my $query = TWiki::Func::getCgiQuery();
-
-  ## Not used?
-  my $nl = ( $query->param( 'newline' ) )?"\n":"";
-
-  # Update url parameters
-  my $text =
-    TWiki::Contrib::EditContrib::unprotect($query->param( 'pretxt' )) .
-	$query->param( 'text' ) .
-	  TWiki::Contrib::EditContrib::unprotect($query->param( 'postxt' ));
-
-  $session->{cgiQuery}->param( -name=>"text", -value=>$text);
-
-  TWiki::UI::Save::save( $session );
-
-}
