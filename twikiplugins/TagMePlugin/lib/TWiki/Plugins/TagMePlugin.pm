@@ -257,8 +257,9 @@ sub _showDefault {
             $text .= _createJavascriptSelectBox( @notSeen );
         }
     }
+    $text .= ', ' if $text;
     $text .=
-        ", <a href=\"%SCRIPTURL%/viewauth%SCRIPTSUFFIX%/$installWeb/TagMeCreateNewTag"
+        "<a href=\"%SCRIPTURL%/viewauth%SCRIPTSUFFIX%/$installWeb/TagMeCreateNewTag"
       . "?from=$web.$topic\">create new tag</a>";
     return _wrapHtmlTagMeShowForm($text);
 }

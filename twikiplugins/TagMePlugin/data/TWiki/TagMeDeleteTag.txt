@@ -16,6 +16,9 @@
 </table>
 %STARTSECTION{"delete"}%
 <noautolink><form name="renametag" action="%SCRIPTURL%/viewauth%SCRIPTSUFFIX%/%BASEWEB%/%BASETOPIC%" method="post" onsubmit="return confirmDelete(this.oldtag.value);">%TAGME{ tpaction="%URLPARAM{"deleteaction" default="nop"}%" oldtag="%URLPARAM{oldtag}%" note="%URLPARAM{renametagnote}%" }%
+
+%ICON{"warning"}% Only administrators may delete tags
+
 <div class="twikiFormSteps">
 <div class="twikiFormStep">
 Tag to delete: %BR%
@@ -49,7 +52,3 @@ function confirmDelete(inTagName) {
 // </pre>-hide -->
 </script>
 %ENDSECTION{"dialogJavascript"}%
-
-<!--
-   * Set ALLOWTOPICVIEW = Main.TWikiAdminGroup
--->
