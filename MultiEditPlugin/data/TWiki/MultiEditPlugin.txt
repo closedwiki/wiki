@@ -44,13 +44,18 @@ Plugin settings are stored as preferences variables. To reference a plugin setti
 
    * Edit label (may also be an &lt;img&gt; tag):
       * #Set LABEL = Edit
-      * Set LABEL = %BR%<div align="right">%ICON{edittopic}% Edit</div>
+      * Set LABEL = <div class="multiEditLabel">%ICON{edittopic}% Edit</div>
 
    * A comma separated list of skins *NOT* to allow editing (you'll probably want the =viewprint= template here as well):
       * Set SKIPSKIN = viewprint, print, plain
 
    * Placement of edit button =before= or =after= editable section
       * Set PLACEMENT = after
+
+   * Several css classes are available for further formatting of edited sections:
+      * =multiEditSection=: for the section text
+      * =multiEditLabel=: for the label text
+      * =multiEditLink=: for the edit link
 
 ---++ Bug Warning
 
@@ -96,6 +101,7 @@ Index: lib/TWiki.pm
 |  Plugin Author: | TWiki:Main/ThomasWeigert |
 |  Plugin Version: | 10 Dec 2006 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  08 Apr 2006: | Update by TWiki:Main.MichaelDaum. Fix for Bugs:Item3847.  |
 |  10 Dec 2006: | Fix for unnamed sections. |
 |  19 Nov 2006: | Support editing of sections from included topics. Use =strict=. |
 |  09 Sep 2006: | Bug (disabled SectionalEditPlugin) fixed. |

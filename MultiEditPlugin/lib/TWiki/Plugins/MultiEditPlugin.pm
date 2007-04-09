@@ -21,7 +21,7 @@ package TWiki::Plugins::MultiEditPlugin;
 # =========================
 use vars qw(
         $VERSION $pluginName $debug
-        $label $skipskin $placement $renderedText $prefix
+        $label $skipskin $placement %renderedText $prefix
     );
 
 use TWiki::Func;
@@ -57,7 +57,7 @@ sub initPlugin
     $placement = ($placement =~ /before/i ? 1 : 0);
 
     #initialize a few other things
-    $renderedText = ();
+    %renderedText = ();
     $prefix = "<_render_>";
 
     # Get plugin debug flag
@@ -103,11 +103,15 @@ sub beforeCommonTagsHandler {
 sub rememberTopic {
   my ( $topic, $web, $posattr ) = @_;
 
+##SMELL: Need to make sure the section attribute is given, even if
+##topic was passed already
+  $posattr =~ s/label\s*="(.*?)"//o;
+  my $label = $1;
   if ($posattr =~ / topic=/o) {
     return "<section$posattr>";
   } else {
     $_[3]++;
-    return "<section$posattr topic=\"$topic\" web=\"$web\" section=\"$_[3]\">";
+    return "<section$posattr topic=\"$topic\" web=\"$web\" section=\"$label$_[3]\">";
   }
 }
 
@@ -123,7 +127,8 @@ sub preRenderingHandler
     # This handler is called by getRenderedVersion just before the line loop
 
     # Only bother with this plugin if viewing (i.e. not searching, etc)
-    return unless ($0 =~ m/view|viewauth|render/o);
+    my $cgiAction = getCgiAction();
+    return unless ($cgiAction =~ m/view|viewauth|render/o);
 
     my $ctmpl = $session->{cgiQuery}->param('template') || '';
     my $cskin = &TWiki::Func::getSkin() || '';
@@ -163,11 +168,11 @@ sub preRenderingHandler
 	    $state='edit'; $skip = 1; next; }
 	if ( $sec eq "</section>" ) {
 	  $skip = 1;
-	  my $tmp = TWiki::Func::renderText($lastsec, $_[1], $_[2]);
+	  my $tmp = TWiki::Func::renderText($lastsec, $web);
 	  # restore verbatim markers
 	  $tmp =~ s/\<\!\-\-\!([a-z0-9]+)\!\-\-\>/\<\!\-\-$TWiki::TranslationToken$1$TWiki::TranslationToken\-\-\>/gio;
 	  my $rText = ( $dontedit )? $tmp : &editRow("$eurl/$web/$topic", $pos, $tmp);
-	  $$renderedText{"$pos$web$topic"} = $rText;
+	  $renderedText{"$pos$web$topic"} = $rText;
 	  $lastsec = '';
 	  $ret .= "$prefix$pos$web$topic$prefix";
           $dontedit = 0;
@@ -186,20 +191,18 @@ sub editLink
 {
     my ($eurl,$pos,$title) = @_;
     my $session = $TWiki::Plugins::SESSION;
-    return "<a href=\"$eurl\?t=" . time() . "&sec=$pos&origurl=" . $session->{webName}.'.'.$session->{topicName} . "#SECEDITBOX\"><small>$title</small></a>";
+    return "<a class=\"multiEditLink\" href=\"$eurl\?t=" . time() . "&sec=$pos&origurl=" . $session->{webName}.'.'.$session->{topicName} . "#SECEDITBOX\">$title</a>";
 }
 
 # =========================
 sub editRow
 {
     my ($eurl,$pos,@content) = @_;
-    #return '<table border=\"0\"><tr><td>' .
-    return '<div>' .
+    return '<div class="multiEditSection">' .
 	($placement
 	 ? editLink($eurl,$pos,$label) . join("", @content)
 	 : join('', @content) . editLink($eurl,$pos,$label)) .
 	 '</div>';
-	 #'</td></tr></table>';
 }
 
 # =========================
@@ -212,9 +215,7 @@ sub postRenderingHandler
     my $session = $TWiki::Plugins::SESSION;
     TWiki::Func::writeDebug( "- ${pluginName}::postRenderingHandler( $session->{webName}.$session->{topicName} )" ) if $debug;
 
-    if ( ref $renderedText ) {
-        while ($_[0] =~ s/$prefix(.*?)$prefix/$$renderedText{$1}/e) {}
-    }
+    while ($_[0] =~ s/$prefix(.*?)$prefix/$renderedText{$1}/e) {}
 }
 
 # =========================
@@ -260,6 +261,23 @@ sub doEdit
 
     TWiki::Contrib::EditContrib::finalize_edit ( $session, $pretxt, $sectxt, $postxt, '', '', $tmpl );
 
+}
+
+###############################################################################
+# take the REQUEST_URI, strip off the PATH_INFO from the end, the last word
+# is the action; this is done that complicated as there may be different
+# paths for the same action depending on the apache configuration (rewrites, aliases)
+sub getCgiAction {
+
+  my $pathInfo = $ENV{'PATH_INFO'} || '';
+  my $theAction = $ENV{'REQUEST_URI'} || '';
+  if ($theAction =~ /^.*?\/([^\/]+)$pathInfo.*$/) {
+    $theAction = $1;
+  } else {
+    $theAction = 'view';
+  }
+
+  return $theAction;
 }
 
 1;
