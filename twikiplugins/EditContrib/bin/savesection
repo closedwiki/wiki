@@ -29,5 +29,5 @@ BEGIN {
 
 use strict;
 use TWiki::Contrib::EditContrib;
-TWiki::UI::run ( \&TWiki::Contrib::EditContrib::save );
+TWiki::UI::run ( \&TWiki::Contrib::EditContrib::saveSection );
 
