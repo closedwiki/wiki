@@ -17,6 +17,9 @@
 </table>
 %STARTSECTION{"create"}%
 <noautolink><form name="renametag" action="%SCRIPTURL%/viewauth%SCRIPTSUFFIX%/%BASEWEB%/%BASETOPIC%" method="post" onsubmit="return cleanTag(this.newtag.value);">%TAGME{ tpaction="%URLPARAM{"renameaction" default="nop"}%" oldtag="%URLPARAM{oldtag}%" newtag="%URLPARAM{newtag}%" note="%URLPARAM{renametagnote}%" }%
+
+%ICON{"warning"}% Only administrators may rename tags
+
 <div class="twikiFormSteps">
 <div class="twikiFormStep">
 Tag to rename: %BR%
@@ -50,7 +53,3 @@ New name for this tag: %BR%
    }
 //]]>
 </script>
-
-<!--
-   * Set ALLOWTOPICVIEW = Main.TWikiAdminGroup
--->
