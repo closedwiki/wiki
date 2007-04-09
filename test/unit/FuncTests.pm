@@ -552,7 +552,7 @@ sub test_isTrue {
 
 }
 
-sub test_expandStandardEscapes {
+sub test_decodeFormatTokens {
     my $this = shift;
 
     my $input = <<'TEST';
@@ -571,7 +571,7 @@ embed
 % embed%embed%embed
 $ embed$embed$embed
 TEST
-    my $output = TWiki::Func::expandStandardEscapes($input);
+    my $output = TWiki::Func::decodeFormatTokens($input);
     $this->assert_str_equals($expected, $output);
 }
 

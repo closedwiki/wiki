@@ -2208,11 +2208,11 @@ sub registerRESTHandler {
 
 =pod
 
----++ expandStandardEscapes($str) -> $unescapedStr
+---++ decodeFormatTokens($str) -> $unencodedString
 
-TWiki has an informal standard set of escapes used in =format=
-parameters used to block evaluation of paramater strings. For example, if
-you were to write
+TWiki has an informal standard set of tokens used in =format=
+parameters that are used to block evaluation of paramater strings.
+For example, if you were to write
 
 =%<nop>MYTAG{format="%<nop>WURBLE%"}%=
 
@@ -2224,7 +2224,7 @@ this TWiki uses escapes in the format string. For example:
 This lets you enter arbitrary strings into parameters without worrying that
 TWiki will expand them before your plugin gets a chance to deal with them
 properly. Once you have processed your tag, you will want to expand these
-escapes to their proper value. That's what this function does.
+tokens to their proper value. That's what this function does.
 
 | *Escape:* | *Expands To:* |
 | =$n= or =$n()= | New line. Use =$n()= if followed by alphanumeric character, e.g. write =Foo$n()Bar= instead of =Foo$nBar= |
@@ -2233,11 +2233,14 @@ escapes to their proper value. That's what this function does.
 | =$percnt= | Percent sign (=%=) |
 | =$dollar= | Dollar sign (=$=) |
 
+Note thath $quot, $percnt and $dollar all work *even if they are followed by
+alphanumeric characters*. You have been warned!
+
 *Since:* TWiki::Plugins::VERSION 1.12
 
 =cut
 
-sub expandStandardEscapes {
+sub decodeFormatTokens {
     return TWiki::expandStandardEscapes( @_ );
 }
 
