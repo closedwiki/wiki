@@ -79,7 +79,7 @@ sub renderForEdit {
             my %opts = (
                 type => $colDef->{type},
                 name => $cellName,
-                value => $this->{text},
+                value => $option,
                );
             $opts{checked} = 'checked'
               if ($expandedValue =~ /,$expandedOption,/);
@@ -123,6 +123,7 @@ sub renderForEdit {
 
         $text .= CGI::textfield({
             name => $cellName,
+            id => "id$cellName",
             size=> $colDef->{size},
             value => $this->{text} });
 
