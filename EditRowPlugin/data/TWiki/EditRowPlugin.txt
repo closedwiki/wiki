@@ -20,8 +20,6 @@ editing one row at a time. Closed rows are shown with
 an edit %ICON{edittopic}% button.
 
 So why should you use this plugin instead of the !EditTablePlugin?
-   1 You don't see all the edit controls unless you can change the topic. This means that people
-     without write access aren't bothered by lots of pointless controls everywhere.
    1 You can edit one row at a time, instead of having to edit the entire
      table. This solves the problem with the long page rendering times
      required to show all the HTML for a full table edit on big tables.
@@ -30,6 +28,8 @@ So why should you use this plugin instead of the !EditTablePlugin?
      doesn't do anything clever with CSS, so it should work with all browsers.
    1 The plugin is coded using a clean object-oriented architecture, which
      means it is easily extensible.
+   1 The plugin uses a simple REST interface for saving changes, which allows
+     Javascript table editors to use it to save.
 
 At this time most features of !EditTablePlugin are supported. Known exceptions
 are:
@@ -73,8 +73,8 @@ settings of =changerows= and =quietsave=.
    * <img src="%ATTACHURLPATH%/quiet.gif" /> saves without notification
    * %ICON{plus}% adds a new row after the current row, taking for its contents whatever you entered into the current row
    * %ICON{minus}% deletes the row
-   * $ICON{arrowup}% Move this row up one row in the table
-   * $ICON{arrowdown}% Move this row down one row in the table
+   * %ICON{arrowup}% Move this row up one row in the table
+   * %ICON{arrowdown}% Move this row down one row in the table
    * %ICON{stop}% cancels the open edit
 
 If the plugin is installed and working *and you can modify this topic* then
@@ -100,6 +100,26 @@ the following examples will be editable.
 | 9A-11 | A new model for 2007, but not quite as pretty as the 9A-10 |
 | RR717-D | Solid performer, dependable in vacuum grinders |
 
+---++ Using the REST interface
+The plugin supports saving changes to tables via a REST handler. This handler
+is invoked using the following URL format:
+
+&lt;twiki-bin-path>/rest/EditRowPlugin/save
+
+The handler accepts the following parameters:
+   * =erp_active_topic= the web.wikiname of the topic to be changed
+   * =erp_active_table= the table to be changed (numbered from 1)
+   * =erp_active_row= - the row to be changed (numbered from 1, or -1 for the whole table)
+   * =erp_active_format= - the =format= parameter from the =EDITTABLE= tag
+   * =erp_save.x= - if nonzero, this is a save
+   * =erp_quietSave.x= - if nonzero, this is a quietsave
+   * =erp_upRow.x= - if nonzero, this is a row move
+   * =erp_downRow.x= - if nonzero, this is a  row move
+   * =erp_deleteRow.x= - if nonzero, this is a row deletion
+   * =erp_cancel.x= - if nonzero, this is a cancel
+   * =erp_noredirect= - if set, suppresses the redirect and gets a status code instead
+The value of each individual cell is stored in a parameter called =erp_&lt;table>_&lt;row>_&lt;column>=
+
 ---++ Installation Instructions
 
 %$INSTALL_INSTRUCTIONS%
@@ -111,7 +131,8 @@ the following examples will be editable.
 |  Copyright: | &copy; 2007 Wind<nop>River Inc. |
 |  License: | [[http://www.gnu.org/licenses/gpl.html][GPL (Gnu General Public License)]] |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  13291 | Added full table editing, and a bunch of other requested features |
+|  13335 | Fixed broken date prompt, and problem with radio buttons, improved and documented REST interface for Javascript authors |
+|  13291 | Added full table editing, including moving rows within the table |
 |  13161 | Bulletproofed against issues with rows that are shorter or longer than the format. |
 |  13159 | Fixed issue with short rows, and added perms check. Thanks also to TWiki:Main.MichaelDaum for more fixes and testing. Now works on IE. |
 |  13148 | Bugs:Item3770: Bugfixes |

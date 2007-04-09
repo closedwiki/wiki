@@ -5,6 +5,8 @@ use strict;
 
 use vars qw( $VERSION $RELEASE $SHORTDESCRIPTION $debug $pluginName $NO_PREFS_IN_TOPIC );
 
+use Assert;
+
 $VERSION = '$Rev$';
 $RELEASE = '$Date$';
 $SHORTDESCRIPTION = 'Single table row inline edit';
@@ -105,18 +107,27 @@ sub commonTagsHandler {
     $_[0] = $nlines;
 }
 
-# REST handler for table row edit save.
+# REST handler for table row edit save with redirect on completion.
+# The noredirect URL parameter can be passed to prevent
+# the redirection. If it is set, the request will respond with a 500
+# status code with a human readable message. This allows the handler
+# to be used by Javascript table editors.
 sub save {
     my $query = TWiki::Func::getCgiQuery();
 
-    return unless $query;
+    unless ($query) {
+        print CGI::header(-status => "500 failed");
+    }
+
+    # Report fatals if we are in debug mode
+    eval "use CGI::Carp qw(fatalsToBrowser)" if DEBUG;
 
     my $saveType = $query->param('editrowplugin_save') || '';
     my ($web, $topic) = TWiki::Func::normalizeWebTopicName(
         undef, $query->param('erp_active_topic'));
 
     my ($meta, $text) = TWiki::Func::readTopic($web, $topic);
-    my $url;
+    my ($url, $mess);
     if (!TWiki::Func::checkAccessPermission(
         'CHANGE', TWiki::Func::getWikiName(), $text, $topic, $web, $meta)) {
 
@@ -127,7 +138,7 @@ sub save {
             param1 => 'CHANGE',
             param2 => 'access not allowed on topic'
          );
-
+        $mess = "TWIKI ACCESS DENIED";
     } else {
         $text =~ s/\\\n//gs;
         require TWiki::Plugins::EditRowPlugin::Table;
@@ -205,8 +216,16 @@ sub save {
             $url = TWiki::Func::getScriptUrl( $web, $topic, 'view', @p);
         }
     }
-    TWiki::Func::redirectCgiQuery(undef, $url);
-    return 0;
+
+    unless ($query->param('erp_noredirect')) {
+        TWiki::Func::redirectCgiQuery(undef, $url);
+    } elsif ($mess) {
+        print CGI::header(-status => "500 $mess");
+    } else {
+        print CGI::header(-status => 200);
+    }
+
+    return 0; # Suppress standard redirection mechanism
 }
 
 1;
