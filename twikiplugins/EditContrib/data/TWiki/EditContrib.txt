@@ -115,8 +115,9 @@ __Note:__ You do not need to install anything on the browser to use this contrib
 |  Copyright &copy;: |  |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Dependencies: | none  |
-|  Version: | 31 Dec 2006 |
+|  Version: | 08 Apr 2007 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  08 Apr 2007: | Update by TWiki:Main.MichaelDaum: Move addsection into pm. |
 |  31 Dec 2006: | Support proper handling of embedded sections. In TWiki 4.1, also return to original page upon cancel. |
 |  19 Nov 2006: | Fix for incorrect rendering of pre and post text by TWiki:Main.ScottHoge. |
 |  20 Sep 2006: | Move cursor to textarea upon edit. |

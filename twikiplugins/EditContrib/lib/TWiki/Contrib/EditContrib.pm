@@ -23,6 +23,7 @@ use CGI::Carp qw(fatalsToBrowser);
 use CGI;
 use TWiki;
 use TWiki::UI;
+use TWiki::UI::Save;
 use Error qw( :try );
 use TWiki::OopsException;
 
@@ -391,10 +392,6 @@ sub finalize_edit {
       $tmpl =~ s/%TEXTDETAIL%//go;
     }
 
-    # do not allow click on link before save: (mods by TedPavlic)
-    my $oopsUrl = '%SCRIPTURLPATH%/oops%SCRIPTSUFFIX%/%WEB%/%TOPIC%';
-    $oopsUrl = $session->handleCommonTags( $oopsUrl, $webName, $topic );
-
     if ( $pretxtRender ) {
       #### quoteForXml included in entityEncode
       #### $pretxtRender = &TWiki::Contrib::EditContrib::quoteForXml($pretxtRender);
@@ -439,13 +436,14 @@ sub finalize_edit {
     $session->writeCompletePage( $tmpl, 'edit', $cgiAppType );
 }
 
+# =========================
 sub addSection {
     my $session = shift;
 
     $session->enterContext( 'edit' );
     my $text = '';
     my $tmpl = '';
-    ( $session, $text, $tmpl ) = &TWiki::Contrib::EditContrib::edit( $session );
+    ( $session, $text, $tmpl ) = &edit( $session );
 
     my $query = $session->{cgiQuery};
     my $webName = $session->{webName};
@@ -469,8 +467,26 @@ sub addSection {
     my $pretxt = $text . $preamble;
     my $postxt = $posamble;
 
-    TWiki::Contrib::EditContrib::finalize_edit ($session, $pretxt, $sectxt, $postxt, '', '', $tmpl);
+    finalize_edit ($session, $pretxt, $sectxt, $postxt, '', '', $tmpl);
 
+}
+
+# =========================
+sub saveSection {
+  my $session = shift;
+
+  $TWiki::Plugins::SESSION = $session;
+  my $query = TWiki::Func::getCgiQuery();
+
+  # update text url param
+  my $text = 
+    unprotect($query->param( 'pretxt' )) .
+    $query->param( 'text' ) .
+    unprotect($query->param( 'postxt' ));
+  $query->param( -name=>"text", -value=>$text);
+
+  # call original save
+  TWiki::UI::Save::save( $session );
 }
 
 1;
