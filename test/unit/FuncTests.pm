@@ -101,6 +101,24 @@ sub test_getScriptUrl {
     $this->assert_matches(qr!/$ss/$this->{users_web}/AndMash!, $result );
 }
 
+sub test_getOopsUrl {
+    my $this = shift;
+    my $url =
+      TWiki::Func::getOopsUrl('Incy','Wincy', 'Spider', 'Hurble', 'Burble',
+                             'Wurble', 'Murble');
+    $this->assert_str_equals(
+      TWiki::Func::getScriptUrl('Incy', 'Wincy', 'oops').
+      "?template=oopsSpider;param1=Hurble;param2=Burble;param3=Wurble;param4=Murble",
+      $url);
+    $url =
+      TWiki::Func::getOopsUrl('Incy','Wincy', 'oopspider', 'Hurble', 'Burble',
+                             'Wurble', 'Murble');
+    $this->assert_str_equals(
+      TWiki::Func::getScriptUrl('Incy', 'Wincy', 'oops').
+      "?template=oopspider;param1=Hurble;param2=Burble;param3=Wurble;param4=Murble",
+      $url);
+}
+
 sub test_leases {
     my $this = shift;
 
