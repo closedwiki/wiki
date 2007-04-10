@@ -297,9 +297,9 @@ sub _buildNewTopic {
         } else {
             if ( $location ) {
                 if ( $position eq 'BEFORE' ) {
-                    $text =~ s/($location)/$output$1/m;
+                    $text =~ s/(?<!location\=\")($location)/$output$1$2/m;
                 } else { # AFTER
-                    $text =~ s/($location)/$1$output/m;
+                    $text =~ s/(?<!location\=\")($location)/$1$2$output/m;
                 }
             } elsif ( $anchor ) {
                 # position relative to anchor
