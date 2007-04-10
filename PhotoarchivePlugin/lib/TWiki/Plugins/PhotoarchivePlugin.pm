@@ -218,6 +218,9 @@ sub attachedImages
 			# check if image exist
 			unless ( -f "$attachment_dir"."$imagedata[$i]" ) 
 			{
+				TWiki::Func::writeDebug( "- TWiki::Plugins::${pluginName}".
+                    "::attachedImages ( $web.$topic ) ".
+                    "$attachment_dir"."$imagedata[$i]"." is no file" ) if $debug;
 				$i = $i + 3;
 				$j--;
 				next;  # jump to next filename
@@ -385,8 +388,8 @@ sub getDescriptedContent
 				if $debug;
 
 			# create descripted images
-			system("$bin_anytopnm $sourceimage 2> /dev/null | ".
-				"$bin_pnmscale $pnmwidth $pnmheight | $bin_pnmtojpeg > $sourcedescripted");
+			system("$bin_anytopnm \"$sourceimage\" 2> /dev/null | ".
+				"$bin_pnmscale $pnmwidth $pnmheight | $bin_pnmtojpeg > \"$sourcedescripted\"");
 		}
 		
 
@@ -563,8 +566,8 @@ sub getDetailedContent
 			if $debug;
 
 		# create image
-		system("$bin_anytopnm $sourceimage 2> /dev/null | ".
-			"$bin_pnmscale $pnmwidth $pnmheight | $bin_pnmtojpeg > $sourcedetailed");
+		system("$bin_anytopnm \"$sourceimage\" 2> /dev/null | ".
+			"$bin_pnmscale $pnmwidth $pnmheight | $bin_pnmtojpeg > \"$sourcedetailed\"");
 	}
 
 	$content .= qq(<br />\n<table border="0" align="center" width="70%" cellpadding="$detailedspace">\n<tr>\n
@@ -723,8 +726,8 @@ sub getThumbsContent
 				if $debug;
 
 			# create thumbnails
-			system("$bin_anytopnm $sourceimage 2> /dev/null | ".
-				"$bin_pnmscale $pnmwidth $pnmheight | $bin_pnmtojpeg > $sourcethumb");
+			system("$bin_anytopnm \"$sourceimage\" 2> /dev/null | ".
+				"$bin_pnmscale $pnmwidth $pnmheight | $bin_pnmtojpeg > \"$sourcethumb\"");
 		}
 
 		if ( $row_counter == $images_per_row )
@@ -1010,8 +1013,8 @@ sub startRandom
 			if $debug;
 
 		# create image
-		system("$bin_anytopnm $sourceimage 2> /dev/null | ".
-			"$bin_pnmscale $pnmwidth $pnmheight | $bin_pnmtojpeg > $destimage");
+		system("$bin_anytopnm \"$sourceimage\" 2> /dev/null | ".
+			"$bin_pnmscale $pnmwidth $pnmheight | $bin_pnmtojpeg > \"$destimage\"");
 	}
 
 	$content .= qq(<img src="$image" alt="image: $pheader->[0]" title="$pheader->[0]" $himage_width $himage_height border="0">);
