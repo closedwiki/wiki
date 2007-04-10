@@ -122,8 +122,8 @@ You can use this technique to create a TWikiSkin that matches closely the HTML o
 |  License: | Various Open Source |
 |  Description: | a TWiki skin based on the HTML used by [[http://www.thestylecontest.com][The Style Archive]] and [[http://www.sixapart.com/movabletype/styles/library][The Six Apart style library]] |
 |  Screenshot: | <a href="%ATTACHURL%/fullscreen.gif"><img src="%ATTACHURL%/screenshot.gif" alt="Click for full screen image" width="600" height="130" /></a> |
-|  Screenshot: | <a href="%ATTACHURL%/iconic.gif"><img src="%ATTACHURL%/iconic_preview.gif" alt="Click for full screen image" width="600" height="130" /></a> |
 |  Screenshot: | <a href="%ATTACHURL%/splattered_edit.gif"><img src="%ATTACHURL%/preview_splattered_edit.gif" alt="Click for full screen image" width="600" height="130" /></a> |
+|  Screenshot: | <a href="%ATTACHURL%/iconic.gif"><img src="%ATTACHURL%/iconic_preview.gif" alt="Click for full screen image" width="600" height="130" /></a> |
 |  Preview: | [[%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%][Preview with this topic]] |
 |  Base Name: | moveabletype |
 |  Skin Version: | 03 Apr 2007 (v1.000) |
