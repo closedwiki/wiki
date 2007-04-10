@@ -95,4 +95,19 @@ sub test_SEARCH_Native {
     $this->std_tests();
 }
 
+sub test_SEARCH_3860 {
+    my $this = shift;
+    my $result = $this->{twiki}->handleCommonTags(
+        <<'HERE', $this->{test_web}, $this->{test_topic});
+%SEARCH{"BLEEGLE" topic="OkTopic" format="$wikiname $wikiusername" nonoise="on" }%
+HERE
+    my $wn = $this->{twiki}->{users}->getWikiName($this->{twiki}->{user});
+    $this->assert_str_equals("$wn $this->{users_web}.$wn\n", $result);
+    $result = $this->{twiki}->handleCommonTags(
+        <<'HERE', $this->{test_web}, $this->{test_topic});
+%SEARCH{"BLEEGLE" topic="OkTopic" format="$createwikiname $createwikiusername" nonoise="on" }%
+HERE
+    $this->assert_str_equals("$wn $this->{users_web}.$wn\n", $result);
+}
+
 1;

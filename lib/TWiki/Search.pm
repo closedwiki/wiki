@@ -1028,7 +1028,7 @@ sub _extractTopicInfo {
     $info->{meta} = $meta;
 
     my ( $revdate, $revuser, $revnum ) = $meta->getRevisionInfo();
-    $info->{editby}     = $revuser ? $users->webDotWikiName($revuser) : '';
+    $info->{editby}     = $revuser || '';
     $info->{modified}   = $revdate;
     $info->{revNum}     = $revnum;
 
