@@ -70,12 +70,19 @@ sub prompt {
     $_[1] =~ s/%COMMENT({.*?})?%/_handleInput($1,$_[2],$_[3],\$idx,$message,$disable,$defaultType)/eg;
 }
 
+=pod
+
+Parses a templatetopic attribute and returns a "Web.Topic" string.
+
+=cut
+
 sub _getTemplateLocation {
-    my ( $attrtemplatetopic ) = @_;
+    my ( $attrtemplatetopic, $web ) = @_;
     
     my $templatetopic = '';
+    my $templateweb = $web || '';
     if ( $attrtemplatetopic ) {
-        my ($templocweb, $temploctopic ) = TWiki::Func::normalizeWebTopicName('', $attrtemplatetopic);
+        my ($templocweb, $temploctopic ) = TWiki::Func::normalizeWebTopicName($templateweb, $attrtemplatetopic);
         $templatetopic = "$templocweb.$temploctopic";
     }
     return $templatetopic;
@@ -97,7 +104,7 @@ sub _handleInput {
     my $nopost = $attrs->remove( 'nopost' );
     my $default = $attrs->remove( 'default' );
     my $attrtemplatetopic = $attrs->remove( 'templatetopic' ) || '';
-    my $templatetopic = _getTemplateLocation( $attrtemplatetopic );
+    my $templatetopic = _getTemplateLocation( $attrtemplatetopic, $web );
     
     $message ||= $default || '';
     $message ||= $default || '';
