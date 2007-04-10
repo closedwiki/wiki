@@ -345,7 +345,7 @@ tr.twikiDiffDebug .twikiDiffUnchangedText {
 /* image positions are set here as well as these are dependent on the image */
 
 .twikiInputField {
-	background-image:url(background_input.gif);
+	QQbackground-image:url(background_input.gif);
 	background-repeat:repeat-x;
 }
 .twikiInputFieldDisabled {
@@ -353,7 +353,7 @@ tr.twikiDiffDebug .twikiDiffUnchangedText {
 	border:none;
 }
 .twikiButton {
-	background-image:url(background_button.gif);
+	QQbackground-image:url(background_button.gif);
 	background-repeat:repeat-x;
 }
 .patternToolBarButtons .patternButton a {
@@ -363,33 +363,33 @@ tr.twikiDiffDebug .twikiDiffUnchangedText {
 	*/
 }
 .twikiSubmit {
-	background-image:url(background_submit.gif);
+	QQbackground-image:url(background_submit.gif);
 	background-repeat:repeat-x;
 }
 .twikiSubmitDisabled {
 	background-image:none;
 }
 .twikiToc li {
-	background-image:url(bullet-child-black.gif);
+	QQbackground-image:url(bullet-child-black.gif);
 	background-repeat:no-repeat;
 	background-position:0 .35em;
 }
 /*#patternLeftBarContents .patternLeftBarPersonal,*/
 #twikiLogin,
 #patternLeftBarContents .tipsOfTheDayContents {
-	background-image:url(gradient_blue.gif);
+	QQbackground-image:url(gradient_blue.gif);
 	background-repeat:repeat-x;
 }
 #patternOuter {
 	/* gradient yellow of left bar and main */
-	background-image:url(gradient_yellow.gif);
+	QQbackground-image:url(gradient_yellow.gif);
 	background-repeat:repeat-x;
 }
 .patternPrintPage #patternOuter {
 	background:#fff; /* white - do not change */
 }
 .twikiPageForm table {
-	background-image:url(form_gradient.gif);
+	QQbackground-image:url(form_gradient.gif);
 	background-repeat:repeat-x;
 }
 
