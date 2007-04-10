@@ -16,7 +16,9 @@
 
 <div class="twikiBroadcastMessage" style="background-color:#ffc;">WARNING: TWiki-4 only. If you want to use this plugin with an earlier version of TWiki, please use [[http://twiki.org/cgi-bin/attach/Plugins/CommentPlugin?filename=CommentPlugin.zip&revInfo=1][revision 31 of the zip]].</div>
 
-%TOC%
+Child topics: CommentPluginTemplates, CommentPluginExamples
+
+%TOC{title="On this page:"}%
 
 ---++ Features
 
@@ -68,7 +70,8 @@ Getting more sophisticated, you can also specify a regular expression for the ta
 </verbatim>
 will place comments above the first occurence of the string =Flights of Fancy= in the current topic.
 
-*Warning* of course, if a user's comment contains the string "Flights of Fancy" they may and up _changing the location_ for the next comment! Also, if you use a tag in the location, then you've just inserted another tag in the page that contains the =%COMMENT=! So be very careful how you specify the RE for =location=. Note that the RE is matched using perl "multiple line" mode, so ^ and $ match the start of a line and the end of a line respectively.
+*Warning* of course, if a user's comment contains the string "Flights of Fancy" they may and up _changing the location_ for the next comment! Also, if you use a tag in the location, then you've just inserted another tag in the page that contains the =%COMMENT=! So be very careful how you specify the RE for =location=. Note that the RE is matched using perl "multiple line" mode, so ^ and $ match the start of a line and the end of a line respectively. %BR%
+Also note that you cannot have the text =location="= just before the location.
 
 I look forward to someone leveraging this feature to create - for example - threaded conversations using =%COMMENT=.
 
@@ -77,15 +80,21 @@ If you specify an anchor _and_ a =location=, the anchor will be ignored.
 ---+++ Default templates
 Templates are used to define the "comment style" i.e. how comments appear in the page. The default is to add comments in "Blog like" style using bulleted lists, with the most recent comment at the top, but many other styles are available such as tables or Wiki thread mode comments. It is easy to define your own customer styles as well.
 
-A set of default comment templates are shipped with the plugin. These are:
+A set of default comment templates are shipped with the plugin - see also CommentPluginTemplates:
 | *Template type* | *Description* |
 | =top= | Comments, signed and dated (server time), added at top of the topic (the anchor is ignored) |
 | =bottom= | Comments, signed and dated (server time), added at end of the target topic (the anchor is ignored) |
 | =above= | Comments, signed and dated (server time), added immediately before the target anchor, or the =%COMMENT= if no anchor is specified |
 | =below= | Comments, signed and dated (server time), added immediately below the target anchor, or the =%COMMENT= if no anchor is specified |
+| =belowthreadmode= | Comments, signed and dated, added recurse after comment box |
 | =threadmode= | Wiki thread mode comment, signed and dated (server time) |
 | =tableprepend= | Comments, signed and dated (server time), formatted as an HTML table row, added below the anchor (which must be in an HTML &lt;table>) |
 | =tableappend= | Comments, signed and dated (server time), formatted as an HTML table row, added above the anchor (which must be in an HTML &lt;table>) |
+| =action= | Action added to action table directly above comment box (requires TWiki:Plugins/ActionTrackerPlugin) |
+| =table= | Tablerows adding on end |
+| =toctalk= | Talk using TOC adding on end |
+| =bookmark= | Create a list of annotated bookmarks |
+| =return= | Post to a different topic and return |
 
 Your local installation may add more template types as well - see [[#TemPlates][Customisation]], below.
 
@@ -108,11 +117,14 @@ This allows for several levels of customisation:
    1 To override templates on a *web-by-web basis*, add a topic =UserCommentsTemplate= to the web (this will replace %TWIKIWEB%.<nop>UserCommentsTemplate)
    1 To override templates *for a specific skin*, add them to %TWIKIWEB%.<nop>UserComments&lt;Skin&gt;Template (where &lt;Skin&gt; is the name of the skin with the first letter capitalised, e.g. Pattern)
 
-You can also define a comment *template in a topic*: pass the topic location with =templatetopic=, for example:
+You can also define a *comment template in a topic*, by passing the topic location with =templatetopic=. For example:
+<blockquote>
 <verbatim>
 %COMMENT{type="blogpost" templatetopic="BlogPostCommentTemplate" target="%TOPIC%" button="Add comment" }%
 </verbatim>
+
 =templatetopic= accepts =topic= or =web.topic= syntax. See an example in [[CommentPluginExamples#TemplateTopic][CommentPluginExamples:templatetopic]].
+</blockquote>
 
 
 %X% Templates are picked up by following the [[TWikiTemplates#Finding_Templates][standard TWiki rules]] for locating template files. Note that you can use =%TMPL:INCLUDE= to include other files of templates. %BR%
