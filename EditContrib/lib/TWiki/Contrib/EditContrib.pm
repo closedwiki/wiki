@@ -489,4 +489,23 @@ sub saveSection {
   TWiki::UI::Save::save( $session );
 }
 
+# =========================
+# take the REQUEST_URI, strip off the PATH_INFO from the end, the last word
+# is the action; this is done that complicated as there may be different
+# paths for the same action depending on the apache configuration (
+# rewrites, aliases)
+sub getCgiAction {
+
+  my $pathInfo = $ENV{'PATH_INFO'} || '';
+  my $theAction = $ENV{'REQUEST_URI'} || '';
+  if ($theAction =~ /^.*?\/([^\/]+)$pathInfo.*$/) {
+    $theAction = $1;
+  } else {
+    $theAction = 'view';
+  }
+
+  return $theAction;
+}
+
+
 1;
