@@ -2,7 +2,7 @@
 %INCLUDE{"%TOPIC%" NAME="%URLPARAM{"name" default="%WIKINAME%"}%"}%
 
 <form action="%SCRIPTURL{"view"}%/%WEB%/%TOPIC%">
-*See bugs reported by:* <input type="text" size="30" name="name" value="%URLPARAM{"name" default="%WIKINAME%"}%" />
+*See bugs reported by:* <input type="text" size="30" class="twikiInputField" name="name" value="%URLPARAM{"name" default="%WIKINAME%"}%" />
 </form>
 
 See also: MyDetailedItems
