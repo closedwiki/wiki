@@ -775,7 +775,7 @@ sub test_resetPasswordNoSuchUser {
     } catch TWiki::OopsException with {
         my $e = shift;
         $this->assert_str_equals("attention", $e->{template}, $e->stringify());
-        $this->assert_str_equals("reset_ok", $e->{def}, $e->stringify());
+        $this->assert_str_equals("reset_bad", $e->{def}, $e->stringify());
     } catch Error::Simple with {
         $this->assert(0, shift->stringify());
     } otherwise {
@@ -816,7 +816,8 @@ sub test_resetPasswordNeedPrivilegeForMultipleReset {
 
     } catch TWiki::OopsException with {
         my $e = shift;
-        $this->assert_matches(qr/$this->{users_web}\.$TWiki::cfg{SuperAdminGroup}/, $e->stringify());
+        $this->assert_matches(qr/$TWiki::cfg{SuperAdminGroup}/,
+                              $e->stringify());
         $this->assert_str_equals('accessdenied', $e->{template});
         $this->assert_str_equals('only_group', $e->{def});
     } catch Error::Simple with {
@@ -827,8 +828,8 @@ sub test_resetPasswordNeedPrivilegeForMultipleReset {
     $this->assert_equals(0, scalar(@TWikiFnTestCase::mails));
 }
 
-# This test is supposed to ensure that the system can reset passwords for a user
-# currently absent from .htpasswd
+# This test is supposed to ensure that the system can reset passwords
+# for a user currently absent from .htpasswd
 sub test_resetPasswordNoPassword {
     my $this = shift;
 

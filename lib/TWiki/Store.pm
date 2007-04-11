@@ -271,7 +271,7 @@ sub readTopicRaw {
             ( 'VIEW', $user, $text, undef, $topic, $web )) {
         my $users = $this->{session}->{users};
         throw TWiki::AccessControlException(
-            'VIEW', $users->wikiname($user), $web, $topic,
+            'VIEW', $user, $web, $topic,
             $this->{session}->{security}->getReason());
     }
 
@@ -303,7 +303,7 @@ sub moveAttachment {
               !$this->{session}->{security}->checkAccessPermission
                 ( 'CHANGE', $user, $otext, $ometa, $oldTopic, $oldWeb )) {
             throw TWiki::AccessControlException(
-                'CHANGE', $users->wikiname($user), $oldWeb, $oldTopic,
+                'CHANGE', $user, $oldWeb, $oldTopic,
                 $this->{session}->{security}->getReason());
         }
 
@@ -312,7 +312,7 @@ sub moveAttachment {
               !$this->{session}->{security}->checkAccessPermission
                 ( 'CHANGE', $user, $ntext, $nmeta, $newTopic, $newWeb )) {
             throw TWiki::AccessControlException(
-                'CHANGE', $users->wikiname($user), $newWeb, $newTopic,
+                'CHANGE', $user, $newWeb, $newTopic,
                 $this->{session}->{security}->getReason());
         }
 
@@ -382,7 +382,7 @@ sub getAttachmentStream {
             ( 'VIEW', $user, undef, undef, $topic, $web )) {
         my $users = $this->{session}->{users};
         throw TWiki::AccessControlException(
-            'VIEW', $users->wikiname($user), $web, $topic,
+            'VIEW', $user, $web, $topic,
             $this->{session}->{security}->getReason());
     }
 
@@ -462,7 +462,7 @@ sub moveTopic {
               !$this->{session}->{security}->checkAccessPermission
                 ( 'CHANGE', $user, $otext, undef, $oldTopic, $oldWeb )) {
             throw TWiki::AccessControlException(
-                'CHANGE', $users->wikiname($user),
+                'CHANGE', $user,
                 $oldWeb, $oldTopic,
                 $this->{session}->{security}->getReason());
         }
@@ -475,7 +475,7 @@ sub moveTopic {
               !$this->{session}->{security}->checkAccessPermission
                 ( 'CHANGE', $user, $ntext, $nmeta, $newTopic, $newWeb )) {
             throw TWiki::AccessControlException(
-                'CHANGE', $users->wikiname($user), $newWeb, $newTopic,
+                'CHANGE', $user, $newWeb, $newTopic,
                 $this->{session}->{security}->getReason());
         }
 
@@ -598,7 +598,7 @@ sub readAttachment {
             ( 'VIEW', $user, undef, undef, $topic, $web )) {
         my $users = $this->{session}->{users};
         throw TWiki::AccessControlException(
-            'VIEW', $users->wikiname($user), $web, $topic,
+            'VIEW', $user, $web, $topic,
             $this->{session}->{security}->getReason());
     }
 
@@ -853,7 +853,7 @@ sub saveTopic {
           !$this->{session}->{security}->checkAccessPermission
             ( 'CHANGE', $user, undef, undef, $topic, $web )) {
         throw TWiki::AccessControlException(
-            'CHANGE', $users->getWikiName($user), $web, $topic,
+            'CHANGE', $user, $web, $topic,
             $this->{session}->{security}->getReason());
     }
     my $plugins = $this->{session}->{plugins};
@@ -944,7 +944,7 @@ sub saveAttachment {
                 ( 'CHANGE', $user, $text, $meta, $topic, $web )) {
 
             throw TWiki::AccessControlException(
-                'CHANGE', $users->wikiname($user), $web, $topic,
+                'CHANGE', $user, $web, $topic,
                 $this->{session}->{security}->getReason());
         }
 

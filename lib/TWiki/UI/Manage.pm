@@ -66,7 +66,7 @@ sub manage {
     } elsif( $action ) {
         throw TWiki::OopsException( 'attention',
                                     def => 'unrecognized_action',
-                                    params => $action );
+                                    params => [ $action ] );
     } else {
         throw TWiki::OopsException( 'attention', def => 'missing_action' );
     }
@@ -108,15 +108,14 @@ sub _removeUser {
                                     web => $webName,
                                     topic => $topic,
                                     def => 'in_a_group',
-                                    params =>
-                                      [ $user, $list ] );
+                                    params => [ $user, $list ] );
     }
 
     unless( $users->checkPassword($user, $password)) {
         throw TWiki::OopsException( 'attention',
                                     web => $webName,
                                     topic => $topic,
-                                    def => 'wrong_password');
+                                    def => 'wrong_password' );
     }
 
     $users->removeUser( $user );
@@ -125,7 +124,7 @@ sub _removeUser {
                                 def => 'remove_user_done',
                                 web => $webName,
                                 topic => $topic,
-                                params => $users->webDotWikiName($user) );
+                                params => [ $users->webDotWikiName($user) ] );
 }
 
 sub _isValidHTMLColor {
@@ -160,15 +159,17 @@ sub _createWeb {
         throw TWiki::OopsException( 'attention', def => 'web_missing' );
     }
     unless ( TWiki::isValidWebName( $newWeb, 1 )) {
-        throw TWiki::OopsException
-          ( 'attention', def =>'invalid_web_name', params => $newWeb );
+        throw TWiki::OopsException(
+            'attention',
+            def =>'invalid_web_name', params => [ $newWeb ] );
     }
     $newWeb = TWiki::Sandbox::untaintUnchecked( $newWeb );
 
     my $baseWeb = $query->param( 'baseweb' ) || '';
     unless( $session->{store}->webExists( $baseWeb )) {
-        throw TWiki::OopsException
-          ( 'attention', def => 'base_web_missing', params => $baseWeb );
+        throw TWiki::OopsException(
+            'attention',
+            def => 'base_web_missing', params => [ $baseWeb ] );
     }
     $baseWeb = TWiki::Sandbox::untaintUnchecked( $baseWeb );
 
@@ -177,14 +178,14 @@ sub _createWeb {
     $newTopic = TWiki::Sandbox::untaintUnchecked( $newTopic );
 
     if( $session->{store}->webExists( $newWeb )) {
-        throw TWiki::OopsException
-          ( 'attention', def => 'web_exists', params => $newWeb );
+        throw TWiki::OopsException(
+            'attention', def => 'web_exists', params => [ $newWeb ] );
     }
 
     unless( _isValidHTMLColor( $webBGColor )) {
-        throw TWiki::OopsException
-          ( 'attention', def => 'invalid_web_color',
-            params => $webBGColor );
+        throw TWiki::OopsException(
+            'attention', def => 'invalid_web_color',
+            params => [ $webBGColor ] );
     }
 
     # create the empty web
@@ -252,7 +253,7 @@ sub rename {
     my $newWeb = $query->param( 'newweb' ) || '';
     unless( !$newWeb || TWiki::isValidWebName( $newWeb, 1 )) {
         throw TWiki::OopsException
-          ( 'attention', def =>'invalid_web_name', params => $newWeb );
+          ( 'attention', def =>'invalid_web_name', params => [ $newWeb ] );
     }
     $newWeb = TWiki::Sandbox::untaintUnchecked( $newWeb );
 
@@ -278,22 +279,24 @@ sub rename {
     unless( $session->{store}->topicExists( $oldWeb, $oldTopic )) {
         # Item3270: check for the same name starting with a lower case letter.
         unless( $session->{store}->topicExists( $oldWeb, lcfirst $oldTopic )) {
-            throw TWiki::OopsException( 'accessdenied',
-                                        def => 'no_such_topic',
-                                        web => $oldWeb,
-                                        topic => $oldTopic,
-                                        params => 'rename' );
+            throw TWiki::OopsException(
+                'accessdenied',
+                def => 'no_such_topic',
+                web => $oldWeb,
+                topic => $oldTopic,
+                params => [ 'rename' ] );
         }
         $oldTopic = lcfirst $oldTopic;
     }
 
     if( $newTopic && !TWiki::isValidWikiWord( $newTopic ) ) {
         unless( $doAllowNonWikiWord ) {
-            throw TWiki::OopsException( 'attention',
-                                        web => $oldWeb,
-                                        topic => $oldTopic,
-                                        def => 'not_wikiword',
-                                        params => [ $newTopic ] );
+            throw TWiki::OopsException(
+                'attention',
+                web => $oldWeb,
+                topic => $oldTopic,
+                def => 'not_wikiword',
+                params => [ $newTopic ] );
         }
         # Filter out dangerous characters (. and / may cause
         # issues with pathnames
@@ -428,14 +431,16 @@ sub _renameweb {
     my $newParentWeb = $query->param( 'newparentweb' ) || '';
     unless ( !$newParentWeb || TWiki::isValidWebName( $newParentWeb, 1 )) {
         throw TWiki::OopsException
-          ( 'attention', def => 'invalid_web_name', params => $newParentWeb );
+          ( 'attention', def => 'invalid_web_name',
+            params => [ $newParentWeb ] );
     }
     $newParentWeb = TWiki::Sandbox::untaintUnchecked( $newParentWeb );
 
     my $newSubWeb = $query->param( 'newsubweb' ) || '';;
     unless ( !$newSubWeb || TWiki::isValidWebName( $newSubWeb, 1 )) {
         throw TWiki::OopsException
-          ( 'attention', def => 'invalid_web_name', params => $newSubWeb );
+          ( 'attention', def => 'invalid_web_name',
+            params => [ $newSubWeb ] );
     }
     $newSubWeb = TWiki::Sandbox::untaintUnchecked( $newSubWeb );
 
@@ -1320,7 +1325,7 @@ sub _saveSettings {
                                     def => 'save_error',
                                     web => $web,
                                     topic => $topic,
-                                    params => shift->{-text} );
+                                    params => [ shift->{-text} ] );
     };
     my $viewURL = $session->getScriptUrl( 0, 'view', $web, $topic );
     $session->redirect( $viewURL, undef, 1 );

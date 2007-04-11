@@ -21,7 +21,15 @@
 
 ---+ package TWiki::AccessControlException
 
-Exception used raise an access control violation.
+Exception used raise an access control violation. This exception has the
+following fields:
+   * =web= - the web which was being accessed
+   * =topic= - the topic being accessed (if any)
+   * =user= - canonical username of the person doing the accessing. Use
+   the methods of the TWiki::Users class to get more information about the
+   user.
+   * =mode= - the access mode e.g. CHANGE, VIEW etc
+   * =reason= a text string giving the reason for the refusal.
 
 =cut
 
@@ -35,7 +43,7 @@ use strict;
 ---+ ClassMethod new($mode, $user, $web, $topic, $reason)
 
    * =$mode= - mode of access (view, change etc)
-   * =$user= - wikiname of user doing the accessing
+   * =$user= - canonical user name of user doing the accessing
    * =$web= - web being accessed
    * =$topic= - topic being accessed
    * =$reason= - string reason for failure

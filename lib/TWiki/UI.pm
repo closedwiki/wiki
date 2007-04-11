@@ -164,8 +164,8 @@ sub run {
             # Client did not want to authenticate, perhaps because
             # we are already authenticated.
             my $exception = new TWiki::OopsException(
+                'accessdenied',
                 web => $e->{web}, topic => $e->{topic},
-                template => 'oopsaccessdenied',
                 def => 'topic_access',
                 params => [ $e->{mode}, $e->{reason} ] );
 
@@ -219,7 +219,7 @@ sub checkWebExists {
                                 def => 'no_such_web',
                                 web => $webName,
                                 topic => $topic,
-                                params => $op );
+                                params => [ $op ] );
     }
 }
 
@@ -241,7 +241,7 @@ sub checkTopicExists {
                                     def => 'no_such_topic',
                                     web => $webName,
                                     topic => $topic,
-                                    params => $op );
+                                    params => [ $op ] );
     }
 }
 
@@ -263,11 +263,8 @@ sub checkMirror {
 
     return unless ( $mirrorSiteName );
 
-    throw TWiki::OopsException( 'mirror',
-                                web => $webName,
-                                topic => $topic,
-                                params => [ $mirrorSiteName,
-                                            $mirrorViewURL ] );
+    throw Error::Simple(
+        "This is a mirror site $mirrorSiteName, $mirrorViewURL" );
 }
 
 =pod twiki
@@ -290,8 +287,8 @@ sub checkAccess {
                                     web => $web,
                                     topic => $topic,
                                     params =>
-                                    [ $mode,
-                                      $session->{security}->getReason()]);
+                                      [ $mode,
+                                        $session->{security}->getReason()]);
     }
 }
 

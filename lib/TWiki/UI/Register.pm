@@ -207,10 +207,10 @@ sub bulkRegister {
       $query->param('EmailUsersWithDetails') || 0;
 
     unless( $session->{users}->isAdmin( $user ) ) {
-        throw TWiki::OopsException( 'accessdenied', def => 'only_group',
-                                    web => $web, topic => $topic,
-                                    params => [ $TWiki::cfg{UsersWebName}.'.'.
-                                      $TWiki::cfg{SuperAdminGroup} ] );
+        throw TWiki::OopsException(
+            'accessdenied', def => 'only_group',
+            web => $web, topic => $topic,
+            params => [ $TWiki::cfg{SuperAdminGroup} ] );
     }
 
     #-- Read the topic containing a table of people to be registered
@@ -434,19 +434,21 @@ sub _requireVerification {
     my $em = TWiki::entityEncode( $data->{Email} );
 
     if($err) {
-        throw TWiki::OopsException( 'attention',
-                                    def => 'registration_mail_failed',
-                                    web => $data->{webName},
-                                    topic => $topic,
-                                    params => [ $em, $err ]);
+        throw TWiki::OopsException(
+            'attention',
+            def => 'registration_mail_failed',
+            web => $data->{webName},
+            topic => $topic,
+            params => [ $em, $err ]);
     };
 
 
-    throw TWiki::OopsException( 'attention',
-                                def => 'confirm',
-                                web => $data->{webName},
-                                topic => $topic,
-                                params => [ $em ] );
+    throw TWiki::OopsException(
+        'attention',
+        def => 'confirm',
+        web => $data->{webName},
+        topic => $topic,
+        params => [ $em ] );
 }
 
 =pod
@@ -481,8 +483,7 @@ sub resetPassword {
             throw TWiki::OopsException
               ( 'accessdenied', def => 'only_group',
                 web => $web, topic => $topic,
-                params => [ $TWiki::cfg{UsersWebName}.'.'.
-                $TWiki::cfg{SuperAdminGroup} ] );
+                params => [ $TWiki::cfg{SuperAdminGroup} ] );
         }
     } else {
         # Anyone can reset a single password - important because by definition
@@ -636,7 +637,7 @@ sub changePassword {
                                     web => $webName,
                                     topic => $topic,
                                     def => 'notwikiuser',
-                                    $user );
+                                    params => [ $user ] );
     }
 
     my $changePass = 0;
@@ -1023,7 +1024,7 @@ sub _validateRegistration {
                                     web => $data->{webName},
                                     topic => $topic,
                                     def => 'already_exists',
-                                    params => [ $data->{LoginName},  ] );
+                                    params => [ $data->{LoginName} ] );
     }
 
     my $users = $session->{users};

@@ -112,7 +112,9 @@ sub registerUser {
     } catch TWiki::OopsException with {
         my $e = shift;
         $this->assert_str_equals("attention", $e->{template},$e->stringify());
-        $this->assert_str_equals("thanks", $e->{def},$e->stringify());
+        $this->assert_str_equals(
+            "thanks", $e->{def},
+            $e->stringify().`cat $TWiki::cfg{Htpasswd}{FileName}`);
     } catch TWiki::AccessControlException with {
         my $e = shift;
         $this->assert(0, $e->stringify);

@@ -199,22 +199,25 @@ sub upload {
         }
 
         unless( $fileSize && $fileName ) {
-            throw TWiki::OopsException( 'attention',
-                                        def => 'zero_size_upload',
-                                        web => $webName,
-                                        topic => $topic,
-                                        params => ($filePath || '""') );
+            throw TWiki::OopsException(
+                'attention',
+                def => 'zero_size_upload',
+                web => $webName,
+                topic => $topic,
+                params => [ ($filePath || '""') ] );
         }
 
-        my $maxSize = $session->{prefs}->getPreferencesValue( 'ATTACHFILESIZELIMIT' );
+        my $maxSize = $session->{prefs}->getPreferencesValue(
+            'ATTACHFILESIZELIMIT' );
         $maxSize = 0 unless ( $maxSize =~ /([0-9]+)/o );
 
         if( $maxSize && $fileSize > $maxSize * 1024 ) {
-            throw TWiki::OopsException( 'attention',
-                                        def => 'oversized_upload',
-                                        web => $webName,
-                                        topic => $topic,
-                                        params => [ $fileName, $maxSize ] );
+            throw TWiki::OopsException(
+                'attention',
+                def => 'oversized_upload',
+                web => $webName,
+                topic => $topic,
+                params => [ $fileName, $maxSize ] );
         }
     }
 
@@ -235,13 +238,14 @@ sub upload {
                                     def => 'save_error',
                                     web => $webName,
                                     topic => $topic,
-                                    params => shift->{-text} );
+                                    params => [ shift->{-text} ] );
     };
 
     close( $stream ) if $stream;
 
     if( $fileName eq $origName ) {
-        $session->redirect( $session->getScriptUrl( 1, 'view', $webName, $topic ), undef, 1 );
+        $session->redirect(
+            $session->getScriptUrl( 1, 'view', $webName, $topic ), undef, 1 );
     } else {
         throw TWiki::OopsException( 'attention',
                                     def => 'upload_name_changed',

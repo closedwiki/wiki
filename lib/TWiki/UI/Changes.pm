@@ -74,7 +74,7 @@ sub changes {
                     $session->{user}, $webName, $changedTopic, $rev );
                 my $thisChange = $eachChange;
                 $thisChange =~ s/%TOPICNAME%/$changedTopic/go;
-                my $wikiuser = $u ? $users->webDotWikiName($u) : '';
+                my $wikiuser = $u ? $session->{users}->webDotWikiName($u) : '';
                 $thisChange =~ s/%AUTHOR%/$wikiuser/go;
                 $time = TWiki::Time::formatTime( $time );
                 $rev = 1 unless $rev;

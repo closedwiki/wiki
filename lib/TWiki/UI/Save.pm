@@ -52,11 +52,12 @@ sub buildNewTopic {
 
     unless( scalar($query->param()) ) {
         # insufficient parameters to save
-        throw TWiki::OopsException( 'attention',
-                                    def => 'bad_script_parameters',
-                                    web => $session->{webName},
-                                    topic => $session->{topicName},
-                                    params => [ $script ]);
+        throw TWiki::OopsException(
+            'attention',
+            def => 'bad_script_parameters',
+            web => $session->{webName},
+            topic => $session->{topicName},
+            params => [ $script ]);
     }
 
     TWiki::UI::checkMirror( $session, $webName, $topic );
@@ -80,11 +81,12 @@ sub buildNewTopic {
           && ( ! $topicExists )
             && ( ! TWiki::isValidTopicName( $topic ) ) ) {
         # do not allow non-wikinames
-        throw TWiki::OopsException( 'attention',
-                                    def => 'not_wikiword',
-                                    web => $webName,
-                                    topic => $topic,
-                                    params => [ $topic ] );
+        throw TWiki::OopsException(
+            'attention',
+            def => 'not_wikiword',
+            web => $webName,
+            topic => $topic,
+            params => [ $topic ] );
     }
 
     my $user = $session->{user};
@@ -193,11 +195,12 @@ sub buildNewTopic {
     if( $formName ) {
         $formDef = new TWiki::Form( $session, $webName, $formName );
         unless( $formDef ) {
-            throw TWiki::OopsException( 'attention',
-                                        def => 'no_form_def',
-                                        web => $session->{webName},
-                                        topic => $session->{topicName},
-                                        params => [ $webName, $formName ] );
+            throw TWiki::OopsException(
+                'attention',
+                def => 'no_form_def',
+                web => $session->{webName},
+                topic => $session->{topicName},
+                params => [ $webName, $formName ] );
         }
         $newMeta->put( 'FORM', { name => $formName });
     }
@@ -449,10 +452,11 @@ WARN
 
     my $saveCmd = $query->param( 'cmd' ) || 0;
     if ( $saveCmd && ! $session->{users}->isAdmin( $session->{user} )) {
-        throw TWiki::OopsException( 'accessdenied', def => 'only_group',
-                                    web => $web, topic => $topic,
-                                    params => $TWiki::cfg{UsersWebName}.
-                                      '.'.$TWiki::cfg{SuperAdminGroup} );
+        throw TWiki::OopsException(
+            'accessdenied',
+            def => 'only_group',
+            web => $web, topic => $topic,
+            params => [ $TWiki::cfg{SuperAdminGroup} ] );
     }
 
     #success - redirect to topic view (unless its a checkpoint save)
@@ -463,11 +467,12 @@ WARN
         try {
             $store->delRev( $user, $web, $topic );
         } catch Error::Simple with {
-            throw TWiki::OopsException( 'attention',
-                                        def => 'save_error',
-                                        web => $web,
-                                        topic => $topic,
-                                        params => shift->{-text} );
+            throw TWiki::OopsException(
+                'attention',
+                def => 'save_error',
+                web => $web,
+                topic => $topic,
+                params => [ shift->{-text} ]);
         };
 
         $session->redirect( $redirecturl, undef, 1 );
@@ -489,11 +494,12 @@ WARN
             $store->repRev( $user, $web, $topic,
                             $textQueryParam, $meta, $saveOpts );
         } catch Error::Simple with {
-            throw TWiki::OopsException( 'attention',
-                                        def => 'save_error',
-                                        web => $web,
-                                        topic => $topic,
-                                        params => shift->{-text} );
+            throw TWiki::OopsException(
+                'attention',
+                def => 'save_error',
+                web => $web,
+                topic => $topic,
+                params => [ shift->{-text} ] );
         };
 
         $session->redirect( $redirecturl, undef, ( $saveaction ne 'checkpoint' ) );
@@ -511,11 +517,12 @@ WARN
         $store->saveTopic( $user, $web, $topic,
                            $newText, $newMeta, $saveOpts );
     } catch Error::Simple with {
-        throw TWiki::OopsException( 'attention',
-                                    def => 'save_error',
-                                    web => $web,
-                                    topic => $topic,
-                                    params => shift->{-text} );
+        throw TWiki::OopsException(
+            'attention',
+            def => 'save_error',
+            web => $web,
+            topic => $topic,
+            params => [ shift->{-text} ] );
     };
 
     my $lease = $store->getLease( $web, $topic );
@@ -525,10 +532,11 @@ WARN
     }
 
     if( $merged ) {
-        throw TWiki::OopsException( 'attention',
-                                    def => 'merge_notice',
-                                    web => $web, topic => $topic,
-                                    params => $merged );
+        throw TWiki::OopsException(
+            'attention',
+            def => 'merge_notice',
+            web => $web, topic => $topic,
+            params => [ $merged ] );
     }
 
     $session->redirect( $redirecturl, undef, ( $saveaction ne 'checkpoint' ) );

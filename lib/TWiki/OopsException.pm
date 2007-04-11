@@ -56,10 +56,13 @@ sub new {
     my( $class, $template ) = @_;
     my $this = bless( $class->SUPER::new(), $class );
     $this->{template} = $template;
-    ASSERT( scalar( @_ ) % 2 == 0 ) if DEBUG;
+    ASSERT( scalar( @_ ) % 2 == 0, join( ";", @_ ) ) if DEBUG;
     while ( my $key = shift @_ ) {
         my $val = shift @_;
         $this->{$key} = $val;
+    }
+    if( $this->{params} && ref( $this->{params} ) ne 'ARRAY') {
+        $this->{params} = [ $this->{params} ];
     }
     return $this;
 }

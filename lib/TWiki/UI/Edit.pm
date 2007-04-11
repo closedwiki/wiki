@@ -151,13 +151,14 @@ sub init_edit {
                 if( $def ) {
                     # use a 'keep' redirect to ensure we pass parameter
                     # values in the query on to the oops script
-                    throw TWiki::OopsException( 'leaseconflict',
-                                                def => $def,
-                                                web => $webName,
-                                                topic => $topic,
-                                                keep => 1,
-                                                params =>
-                                                  [ $who, $past, $future, 'edit' ] );
+                    throw TWiki::OopsException(
+                        'leaseconflict',
+                        def => $def,
+                        web => $webName,
+                        topic => $topic,
+                        keep => 1,
+                        params =>
+                          [ $who, $past, $future, 'edit' ] );
                 }
             }
         }
@@ -166,10 +167,11 @@ sub init_edit {
     # Prevent editing existing topic?
     if( $onlyNewTopic && $topicExists ) {
         # Topic exists and user requested oops if it exists
-        throw TWiki::OopsException( 'attention',
-                                    def => 'topic_exists',
-                                    web => $webName,
-                                    topic => $topic );
+        throw TWiki::OopsException(
+            'attention',
+            def => 'topic_exists',
+            web => $webName,
+            topic => $topic );
     }
 
     # prevent non-Wiki names?
@@ -190,10 +192,11 @@ sub init_edit {
     }
 
     if( $saveCmd && ! $session->{users}->isAdmin( $session->{user} )) {
-        throw TWiki::OopsException( 'accessdenied', def=>'only_group',
-                                    web => $webName, topic => $topic,
-                                    params => $TWiki::cfg{UsersWebName}.
-                                    '.'.$TWiki::cfg{SuperAdminGroup} );
+        throw TWiki::OopsException(
+            'accessdenied',
+            def=>'only_group',
+            web => $webName, topic => $topic,
+            params => [ $TWiki::cfg{SuperAdminGroup} ] );
     }
 
 
@@ -209,12 +212,12 @@ sub init_edit {
     }
 
     if( !$tmpl ) {
-        throw TWiki::OopsException( 'attention',
-                                    def => 'no_such_template',
-                                    web => $webName,
-                                    topic => $topic,
-                                    params => [ $template.$editaction,
-                                                'EDIT_TEMPLATE' ] );
+        throw TWiki::OopsException(
+            'attention',
+            def => 'no_such_template',
+            web => $webName,
+            topic => $topic,
+            params => [ $template.$editaction, 'EDIT_TEMPLATE' ] );
     }
 
     my $templateWeb = $webName;
@@ -224,11 +227,12 @@ sub init_edit {
               $session->normalizeWebTopicName( $templateWeb, $templateTopic );
 
             unless( $store->topicExists( $templateWeb, $templateTopic )) {
-                throw TWiki::OopsException( 'accessdenied',
-                                            def => 'no_such_topic',
-                                            web => $templateWeb,
-                                            topic => $templateTopic,
-                                            params => [ 'templatetopic' ] );
+                throw TWiki::OopsException(
+                    'accessdenied',
+                    def => 'no_such_topic',
+                    web => $templateWeb,
+                    topic => $templateTopic,
+                    params => [ 'templatetopic' ] );
             }
 
             ( $meta, $text ) =
@@ -327,11 +331,12 @@ sub init_edit {
     if( $form && !$saveCmd ) {
         my $formDef = new TWiki::Form( $session, $templateWeb, $form );
         unless( $formDef ) {
-            throw TWiki::OopsException( 'attention',
-                                        def => 'no_form_def',
-                                        web => $session->{webName},
-                                        topic => $session->{topicName},
-                                        params => [ $templateWeb, $form ] );
+            throw TWiki::OopsException(
+                'attention',
+                def => 'no_form_def',
+                web => $session->{webName},
+                topic => $session->{topicName},
+                params => [ $templateWeb, $form ] );
         }
         $formDef->getFieldValuesFromQuery( $session->{cgiQuery}, $meta );
         # And render them for editing
