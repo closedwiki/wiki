@@ -20,22 +20,24 @@ editing one row at a time. Closed rows are shown with
 an edit %ICON{edittopic}% button.
 
 So why should you use this plugin instead of the !EditTablePlugin?
-   1 You can edit one row at a time, instead of having to edit the entire
+   1 The main point is that *you can edit one row at a time*, instead of
+     having to edit the entire
      table. This solves the problem with the long page rendering times
      required to show all the HTML for a full table edit on big tables.
-   1 Supports moving rows around in the table, deleting and adding rows.
+   1 Simple interface to moving rows around in the table, deleting and adding rows.
+   1 Gets row numbering right (takes account of headers)
    1 The plugin doesn't use !JavaScript (except for the calendar) and
      doesn't do anything clever with CSS, so it should work with all browsers.
    1 The plugin is coded using a clean object-oriented architecture, which
      means it is easily extensible.
    1 The plugin uses a simple REST interface for saving changes, which allows
-     Javascript table editors to use it to save.
+     Javascript table editors to use the same interface to save.
 
 At this time most features of !EditTablePlugin are supported. Known exceptions
 are:
    * the =helptopic= and =editbutton= switches, which are ignored,
    * the =EDITCELL= feature, which is not supported,
-   * The "Initial values" feature, which is incompatible with the way this plugin adds new rows.
+   * The "Initial values" feature.
 
 See also: TWiki:Plugins.EditTablePlugin, TWiki:Plugins.EditTablerowPlugin.
 
@@ -46,16 +48,19 @@ Another great TWiki extension from the <a style="text-decoration:none" href="htt
 Add =%<nop>EDITTABLE{...}%= on the line before the first row of an existing table to make it editable. Parameters:
 
    * =format= - The format of the cells in a row of the table. The format is defined like a table row, where the cell data specify the type for each cell. For example, =format="| text,16 | label |"=. Cells can be any of the following types:
-      * =text, &lt;size&gt;, &lt;initial value&gt;=. Simple text field
-      * =textarea, &lt;rows&gt;x&lt;columns&gt;, &lt;initial value&gt;=. Multirow text box
-      * =select, &lt;size&gt;, &lt;option 1&gt;, &lt;option 2&gt;, etc*<nop>=
+      * =text, &lt;size&gt;, &lt;initial value&gt;= Simple text field
+      * =textarea, &lt;rows&gt;x&lt;columns&gt;, &lt;initial value&gt;= Multirow text box.
+      * =select, &lt;size&gt;, &lt;option 1&gt;, &lt;option 2&gt;, etc=
         Select one from a list of choices.
-      * =radio, &lt;size*&gt;, &lt;option 1&gt;, &lt;option 2&gt;,= etc. size
-        indicates the number of buttons per line in edit mode | | =%VBAR% 
-      * =checkbox, &lt;size*&gt;, &lt;option 1&gt;, &lt;option 2&gt;, etc= - as radio
-      * label, 0, &lt;label text&gt; - fixed label
-      * =row= - the row number, automatically worked out
-      * =date, &lt;size&gt;, &lt;initial value&gt;, &lt;DHTML date format&gt;
+      * =radio, &lt;size&gt;, &lt;option 1&gt;, &lt;option 2&gt;,= etc.
+        Radio buttons. =size=
+        indicates the number of buttons per line in edit mode.
+      * =checkbox, &lt;size&gt;, &lt;option 1&gt;, &lt;option 2&gt;, etc=
+        Checkboxes. =size=
+        indicates the number of buttons per line in edit mode.
+      * label, 0, &lt;label text&gt; Fixed label.
+      * =row= The row number, automatically worked out.
+      * =date, &lt;size&gt;, &lt;initial value&gt;, &lt;DHTML date format&gt;=
    * =changerows= - Rows can be added and removed if ="on"=. Rows can be added but
      not removed if ="add"=
    * =quietsave= - Quiet Save button is shown if ="on"=
@@ -131,6 +136,7 @@ The value of each individual cell is stored in a parameter called =erp_&lt;table
 |  Copyright: | &copy; 2007 Wind<nop>River Inc. |
 |  License: | [[http://www.gnu.org/licenses/gpl.html][GPL (Gnu General Public License)]] |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  13359 | Bugs:Item3875 - can now edit top row of tables. Also now writes row numbers back to the topic, which was needed to support some compatible apps. |
 |  13335 | Fixed broken date prompt, and problem with radio buttons, improved and documented REST interface for Javascript authors |
 |  13291 | Added full table editing, including moving rows within the table |
 |  13161 | Bulletproofed against issues with rows that are shorter or longer than the format. |
