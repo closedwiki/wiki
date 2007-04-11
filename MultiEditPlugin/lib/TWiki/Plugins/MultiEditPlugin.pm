@@ -131,7 +131,7 @@ sub preRenderingHandler
     # This handler is called by getRenderedVersion just before the line loop
 
     # Only bother with this plugin if viewing (i.e. not searching, etc)
-    my $cgiAction = getCgiAction();
+    my $cgiAction = TWiki::Contrib::EditContrib::getCgiAction();
     return unless ($cgiAction =~ m/view|viewauth|render/o);
 
     my $ctmpl = $session->{cgiQuery}->param('template') || '';
@@ -143,6 +143,7 @@ sub preRenderingHandler
         }
     }
 
+#    return if $skipit; ## SMELL: Why has this been removed by MD?
     my $ret = '';
     my $eurl = TWiki::Func::getScriptUrlPath() . '/editonesection';
 
@@ -176,6 +177,12 @@ sub preRenderingHandler
 	  # restore verbatim markers
 	  $tmp =~ s/\<\!\-\-\!([a-z0-9]+)\!\-\-\>/\<\!\-\-$TWiki::TranslationToken$1$TWiki::TranslationToken\-\-\>/gio;
 	  my $rText = ( $dontedit )? $tmp : &editRow("$eurl/$web/$topic", $pos, $tmp);
+	  # now restore pre
+##SMELL: This should work also for verbatim, etc., but that information
+##is (contrary to the documentation) not passed into a handler. Need to
+##continue to rely on the deprecated endRenderingHandler.
+	  putBackBlocks( \$rText, $_[1], 'pre' );
+
 	  $renderedText{"$pos$web$topic"} = $rText;
 	  $lastsec = '';
 	  $ret .= "$prefix$pos$web$topic$prefix";
@@ -190,12 +197,24 @@ sub preRenderingHandler
     }
 }
 
+sub putBackBlocks {
+    my( $text, $map, $tag ) = @_;
+
+    foreach my $placeholder ( keys %$map ) {
+        if( $placeholder =~ /^$tag\d+$/ ) {
+            my $params = $map->{$placeholder}{params} || '';
+            my $val = $map->{$placeholder}{text};
+	    $$text =~ s(<!--$TWiki::TranslationToken$placeholder$TWiki::TranslationToken-->)(<$tag$params>$val</$tag>);
+        }
+    }
+}
+
 # =========================
 sub editLink
 {
     my ($eurl,$pos,$title) = @_;
     my $session = $TWiki::Plugins::SESSION;
-    return "<a class=\"multiEditLink\" href=\"$eurl\?t=" . time() . "&sec=$pos&origurl=" . $session->{webName}.'.'.$session->{topicName} . "#SECEDITBOX\">$title</a>";
+    return "<a class=\"multiEditLink\" href=\"$eurl\?t=" . time() . "&sec=$pos&redirectto=" . $session->{webName}.'.'.$session->{topicName} . "#SECEDITBOX\">$title</a>";
 }
 
 # =========================
@@ -271,23 +290,6 @@ sub doEdit
 
     TWiki::Contrib::EditContrib::finalize_edit ( $session, $pretxt, $sectxt, $postxt, '', '', $tmpl );
 
-}
-
-###############################################################################
-# take the REQUEST_URI, strip off the PATH_INFO from the end, the last word
-# is the action; this is done that complicated as there may be different
-# paths for the same action depending on the apache configuration (rewrites, aliases)
-sub getCgiAction {
-
-  my $pathInfo = $ENV{'PATH_INFO'} || '';
-  my $theAction = $ENV{'REQUEST_URI'} || '';
-  if ($theAction =~ /^.*?\/([^\/]+)$pathInfo.*$/) {
-    $theAction = $1;
-  } else {
-    $theAction = 'view';
-  }
-
-  return $theAction;
 }
 
 1;
