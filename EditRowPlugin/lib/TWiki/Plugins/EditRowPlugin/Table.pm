@@ -83,9 +83,10 @@ sub parseTables {
 
         if ($active_table && $line =~ s/^\s*\|//) {
             $line =~ s/\|\s*$//;
+            # Note use of -1 on the split so we don't lose fields
             my $row = new TWiki::Plugins::EditRowPlugin::TableRow(
                 $active_table, scalar(@{$active_table->{rows}}) + 1,
-                split(/\s*\|\s*/, $line));
+                split(/\s*\|\s*/, $line, -1));
             push(@{$active_table->{rows}}, $row);
             next;
         }
