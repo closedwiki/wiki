@@ -35,7 +35,7 @@ Active Items with Priority
 	LIMIT=""
 	CODEBASE=".*"
 }%
-<input type="submit" name="%IF{"defined closed" then="other" else="closed"}%" value="%IF{"defined closed" then="Hide" else="Show"}% closed and discarded items" />
+<input type="submit" class="twikiButton" name="%IF{"defined closed" then="other" else="closed"}%" value="%IF{"defined closed" then="Hide" else="Show"}% closed and discarded items" />
 </form>
 </div>
 

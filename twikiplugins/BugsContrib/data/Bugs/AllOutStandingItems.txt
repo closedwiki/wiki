@@ -13,7 +13,7 @@
 	</td>
 </tr>
 </table>
-<input type="submit" value="Refresh">
+<input type="submit" class="twikiSubmit" value="Refresh">
 </form>
 %TOC%
 ---+++ Waiting for feedback
