@@ -195,7 +195,7 @@ sub save {
         }
         if ($TWiki::Plugins::VERSION < 1.11) {
             my $p = '';
-            unless ($no_save) {
+            unless ($no_return) {
                 $p = "?erp_active_table=$urps->{erp_active_table}";
                 $p .= ";erp_active_row=$urps->{erp_active_row}";
             }
