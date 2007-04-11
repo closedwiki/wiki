@@ -64,11 +64,14 @@ sub parseTables {
             # is there a format in the query? if there is,
             # override the format we just parsed
             if ($urps) {
-                my $format = $urps->{erp_active_format};
+                my $format = $urps->{"erp_${nTables}_format"};
                 if (defined($format)) {
                     # undo the encoding
                     $format =~ s/-([a-z\d][a-z\d])/chr(hex($1))/gie;
                     $attrs->{format} = $format;
+                }
+                if (defined($urps->{"erp_${nTables}_headed"})) {
+                    $attrs->{headerislabel} = $urps->{"erp_${nTables}_headed"};
                 }
             }
             $active_table =
@@ -146,13 +149,24 @@ sub renderForEdit {
     my $attrs = $this->{attrs};
     $firstRow = 0 unless TWiki::isTrue($attrs->{headerislabel});
 
+    my $format = $attrs->{format};
+    # SMELL: Have to double-encode the format param to defend it
+    # against the rest of TWiki. We use the escape char '-' as it
+    # isn't used by TWiki.
+    $format =~ s/([][@\s%!:-])/sprintf('-%02x',ord($1))/ge;
+    # it will get encoded again as a URL param
+    push(@out, CGI::hidden("erp_$this->{number}_format", $format));
+    push(@out, CGI::hidden("erp_$this->{number}_headed", $firstRow));
+
     my $n = $firstRow ? 0 : 1;
     my $r = 1;
     foreach my $row (@{$this->{rows}}) {
         if ($r++ == $activeRow || $wholeTable && !$firstRow) {
-            push(@out, $row->renderForEdit($this->{colTypes}, $n, $firstRow, !$wholeTable));
+            push(@out, $row->renderForEdit(
+                $this->{colTypes}, $n, $firstRow, !$wholeTable));
         } else {
-            push(@out, $row->renderForDisplay($this->{colTypes}, $n, $firstRow, !$wholeTable));
+            push(@out, $row->renderForDisplay(
+                $this->{colTypes}, $n, $firstRow, !$wholeTable));
         }
         $n++;
         $firstRow = 0;
@@ -222,12 +236,21 @@ sub renderForDisplay {
 # the row is shorter than the type def for the table.
 sub _getCols {
     my ($this, $urps, $row) = @_;
+    my $attrs = $this->{attrs};
+    my $firstRow = 1;
+    $firstRow = 0 unless TWiki::isTrue($attrs->{headerislabel});
+    my $n = $firstRow ? 0 : 1;
     my $count = scalar(@{$this->{rows}->[$row - 1]->{cols}});
     my $defs = scalar(@{$this->{colTypes}});
     $count = $defs if $defs > $count;
     my @cols;
     for (my $i = 1; $i <= $count; $i++) {
+        my $colDef = $this->{colTypes}->[$i - 1];
         my $cellName = "erp_cell_$this->{number}_${row}_$i";
+        # Force numbering if this is an auto-numbered column
+        if ($colDef->{type} eq 'row') {
+            $urps->{$cellName} = $row - $firstRow;
+        }
         push(@cols, $urps->{$cellName} || '');
     }
     return @cols;
@@ -243,9 +266,10 @@ sub change {
     } else {
         # Whole table
         for (my $i = 1; $i <= scalar(@{$this->{rows}}); $i++) {
-            # Skip the header row if there is no data for it in the query
-            next if ($i == 1 &&
-                       !defined($urps->{"erp_cell_$this->{number}_${row}_1"}));
+            # Skip the header row
+            if ($i == 1 && $this->{attrs}->{headerislabel}) {
+                next;
+            }
             $this->{rows}->[$i - 1]->set($this->_getCols($urps, $i));
         }
     }

@@ -86,13 +86,6 @@ sub commonTagsHandler {
                 $line .= CGI::hidden('erp_active_topic', "$web.$topic");
                 $line .= CGI::hidden('erp_active_table', $active_table);
                 $line .= CGI::hidden('erp_active_row', $active_row);
-                my $format = $table->{attrs}->{format};
-                # SMELL: Have to double-encode the format param to defend it
-                # against the rest of TWiki. We use the escape char '-' as it
-                # isn't used by TWiki.
-                $format =~ s/([][@\s%!:-])/sprintf('-%02x',ord($1))/ge;
-                # it will get encoded again as a URL param
-                $line .= CGI::hidden('erp_active_format', $format);
                 $line .= "\n".$table->renderForEdit($active_row)."\n";
                 $line .= CGI::end_form();
             } else {
