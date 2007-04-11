@@ -1,7 +1,7 @@
-%META:TOPICINFO{author="TWikiContributor" date="1154970081" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1176251863" format="1.1" version="$Rev$"}%
 ---+ TWiki Logos 
 
-The official TWiki logo is a big "T" in a speech bubble convenying "working together", and has a "collaborate with TWiki" tag line.
+The official TWiki logo is a big "T" in a speech bubble conveying "working together", and has a "collaborate with TWiki" tag line.
 
 ---++ TWiki.org Logo Artwork
 
@@ -90,3 +90,5 @@ TWiki&trade;, the TWiki logo and the "Collaborate with TWiki" tagline are a trad
 
 The logo was created by TWiki:Main.PeterThoeny and TWiki:Main.ArthurClemens in September 2005, based on a lot of feedback from the TWiki community. See history and provide feedback at TWiki:Codev.TWikiLogoDevelopment.
 
+%STOPINCLUDE%
+-- __Contribtors:__ TWiki:Main.ArthurClemens, TWiki:Main.PeterThoeny - 02 Oct 2005
