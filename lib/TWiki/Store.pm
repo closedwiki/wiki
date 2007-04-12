@@ -455,6 +455,12 @@ sub moveTopic {
 
     # will block
     $this->lockTopic( $user, $oldWeb, $oldTopic );
+
+    # Clear outstanding leases. We assume that the caller has checked
+    # that the lease is OK to kill.
+    $this->clearLease( $oldWeb, $oldTopic )
+      if $this->getLease( $oldWeb, $oldTopic );
+
     try {
         my $otext = $this->readTopicRaw( undef, $oldWeb, $oldTopic );
         # Note: undef $meta param will cause $otext to be parsed for meta

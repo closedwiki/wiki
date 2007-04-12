@@ -1729,12 +1729,109 @@ sub forEachLine {
                 $options->{in_verbatim} > 0 && !$options->{verbatim} ||
                 $options->{in_literal} > 0 && !$options->{literal} ||
                 $options->{in_noautolink} > 0 && !$options->{noautolink} ) {
-
             $line = &$fn( $line, $options );
         }
         $newText .= $line;
     }
     return $newText;
+}
+
+=pod
+
+---++ StaticMethod getReferenceRE($web, $topic, %options) -> $re
+
+   * $web, $topic - specify the topic being referred to, or web if $topic is
+     undef.
+   * %options - the following options are available
+      * =interweb= - if true, then fully web-qualified references are required.
+      * =grep= - if true, generate a GNU-grep compatible RE instead of the
+        default Perl RE.
+      * =url= - if set, generates an expression that will match a TWiki
+        URL that points to the web/topic, instead of the default which
+        matches topic links in plain text.
+
+Generate a regular expression that can be used to match references to the
+specified web/topic. Note that the resultant RE will only match fully
+qualified (i.e. with web specifier) topic names and topic names that
+are wikiwords in text. Works for spaced-out wikiwords for topic names.
+
+The RE returned is designed to be used with =s///=
+
+=cut
+
+sub getReferenceRE {
+    my( $web, $topic, %options) = @_;
+
+    my $matchWeb = $web;
+    # Convert . and / to [./] (subweb separators)
+    $matchWeb =~ s#[./]#[./]#go;
+
+    # Note use of \< and \> to match the empty string at the
+    # edges of a word.
+    my( $bow, $eow, $forward, $back ) = ( '\b', '\b', '?=', '?<=' );
+    if( $options{grep} ) {
+        $bow = '\<';
+        $eow = '\>';
+        $forward = '';
+        $back = '';
+    }
+    my $squabo = "($back\\[\\[)";
+    my $squabc = "($forward\\][][])";
+
+    my $re;
+
+    if( $options{url} ) {
+        # URL fragment. Assume / separator (while . is legal, it's
+        # undocumented and is not common usage)
+        $re = "/$web/";
+        $re .= $topic.$eow if $topic;
+    } else {
+        if( defined( $topic )) {
+            # Work out spaced-out version (allows lc first chars on words)
+            my $sot = TWiki::spaceOutWikiWord( $topic, ' *' );
+            if( $sot ne $topic ) {
+                $sot =~ s/\b([a-zA-Z])/'['.uc($1).lc($1).']'/ge;
+            } else {
+                $sot = undef;
+            }
+
+            if( $options{interweb} ) {
+                # Require web specifier
+                $re = "$bow$matchWeb\\.$topic$eow";
+                if( $sot ) {
+                    # match spaced out in squabs only
+                    $re .= "|$squabo$matchWeb\\.$sot$squabc";
+                }
+            } else {
+                # Optional web specifier - but *only* if the topic name
+                # is a wikiword
+                if( $topic =~ /$TWiki::regex{wikiWordRegex}/ ) {
+                    # Bit of jigger-pokery at the front to avoid matching
+                    # subweb specifiers
+                    $re = "((${back}[^./])|^)$bow($matchWeb\\.)?$topic$eow";
+                    if( $sot ) {
+                        # match spaced out in squabs only
+                        $re .= "|$squabo($matchWeb\\.)?$sot$squabc";
+                    }
+                } else {
+                    # Non-wikiword; require web specifier or squabs
+                    $re = "((${back}[^./])|^)$bow$matchWeb\\.$topic$eow";
+                    $re .= "|$squabo$topic$squabc";
+                }
+            }
+        } else {
+            # Searching for a web
+            if( $options{interweb} ) {
+                # web name used to refer to a topic
+                $re = $bow.'\.'.$matchWeb.'\.[A-Za-z0-9]+'.$eow;
+            } else {
+                # most general search for a reference to a topic or subweb
+                $re = $bow.$matchWeb.'\.[A-Za-z0-9]+'.$eow;
+            }
+        }
+    }
+
+    return $re;
 }
 
 =pod
@@ -1745,7 +1842,6 @@ Callback designed for use with forEachLine, to replace topic references.
 \%options contains:
    * =oldWeb= => Web of reference to replace
    * =oldTopic= => Topic of reference to replace
-   * =spacedTopic= => RE matching spaced out oldTopic
    * =newWeb= => Web of new reference
    * =newTopic= => Topic of new reference
    * =inWeb= => the web which the text we are presently processing resides in
@@ -1759,31 +1855,35 @@ sub replaceTopicReferences {
 
     ASSERT(defined $args->{oldWeb}) if DEBUG;
     ASSERT(defined $args->{oldTopic}) if DEBUG;
-    ASSERT(defined $args->{spacedTopic}) if DEBUG;
+
     ASSERT(defined $args->{newWeb}) if DEBUG;
     ASSERT(defined $args->{newTopic}) if DEBUG;
+
     ASSERT(defined $args->{inWeb}) if DEBUG;
 
-    my $repl = $args->{newTopic};
+    # Do the traditional TWiki topic references first
+    my $oldTopic = $args->{oldTopic};
+    my $newTopic = $args->{newTopic};
+    my $repl = $newTopic;
 
-    $args->{inWeb} =~ s/\//./go;
-    $args->{newWeb} =~ s/\//./go;
-    $args->{oldWeb} =~ s/\//./go;
-    my $oldWebRegex = $args->{oldWeb};
+    # Canonicalise web names by converting . to /
+    my $inWeb = $args->{inWeb}; $inWeb =~ s#\.#/#g;
+    my $newWeb = $args->{newWeb}; $newWeb =~ s#\.#/#g;
+    my $oldWeb = $args->{oldWeb}; $oldWeb =~ s#\.#/#g;
+    my $sameWeb = ($oldWeb eq $newWeb);
 
-    $oldWebRegex =~ s#\.#[.\\/]#go;
-
-    if( $args->{inWeb} ne $args->{newWeb} || $args->{fullPaths} ) {
-        $repl = $args->{newWeb}.'.'.$repl;
+    if( $inWeb ne $newWeb || $args->{fullPaths} ) {
+        $repl = $newWeb.'.'.$repl;
     }
 
-    $text =~ s/\b$oldWebRegex\.$args->{oldTopic}\b/$repl/g;
-    $text =~ s/\[\[$oldWebRegex\.$args->{spacedTopic}(\](\[[^\]]+\])?\])/[[$repl$1/g;
+    my $re = getReferenceRE( $oldWeb, $oldTopic );
 
-    return $text unless( $args->{inWeb} eq $args->{oldWeb} );
+    $text =~ s/$re/$repl/g;
 
-    $text =~ s/([^\.]|^)$args->{oldTopic}\b/$1$repl/g;
-    $text =~ s/\[\[($args->{spacedTopic})(\](\[[^\]]+\])?\])/[[$repl$2/g;
+    # Now URL form
+    $repl = "/$newWeb/$newTopic";
+    $re = getReferenceRE( $oldWeb, $oldTopic, url => 1);
+    $text =~ s/$re/$repl/g;
 
     return $text;
 }
@@ -1806,15 +1906,18 @@ sub replaceWebReferences {
     ASSERT(defined $args->{oldWeb}) if DEBUG;
     ASSERT(defined $args->{newWeb}) if DEBUG;
 
-    my $repl = $args->{newWeb};
+    my $newWeb = $args->{newWeb}; $newWeb =~ s#\.#/#g;
+    my $oldWeb = $args->{oldWeb}; $oldWeb =~ s#\.#/#g;
 
-    $args->{newWeb}=~s/\//./go;
-    $args->{oldWeb}=~s/\//./go;
-    my $oldWebRegex=$args->{oldWeb};
+    return $text if $oldWeb eq $newWeb;
 
-    $oldWebRegex=~s#\.#[.\\/]#go;
+    my $re = getReferenceRE( $oldWeb, undef);
 
-    $text =~ s/\b$oldWebRegex\b/$repl/g;
+    $text =~ s/$re/$newWeb/g;
+
+    $re = getReferenceRE( $oldWeb, undef, url => 1);
+
+    $text =~ s#$re#/$newWeb/#g;
 
     return $text;
 }
@@ -1838,11 +1941,11 @@ sub replaceWebInternalReferences {
     my $options =
       {
        # exclude this topic from the list
-       topics => [ grep { !/^$oldTopic$/ } @topics ],
+          topics => [ grep { !/^$oldTopic$/ } @topics ],
        inWeb => $oldWeb,
-       inTopic => $oldTopic,
+          inTopic => $oldTopic,
        oldWeb => $oldWeb,
-       newWeb => $oldWeb,
+          newWeb => $oldWeb,
       };
 
     $$text = $this->forEachLine( $$text, \&_replaceInternalRefs, $options );
@@ -1858,13 +1961,13 @@ sub replaceWebInternalReferences {
     @topics = $this->{session}->{store}->getTopicNames( $newWeb );
     $options =
       {
-       # exclude this topic from the list
-       topics => [ @topics ],
-       fullPaths => 0,
-       inWeb => $newWeb,
-       inTopic => $oldTopic,
-       oldWeb => $newWeb,
-       newWeb => $newWeb,
+          # exclude this topic from the list
+          topics => [ @topics ],
+          fullPaths => 0,
+          inWeb => $newWeb,
+          inTopic => $oldTopic,
+          oldWeb => $newWeb,
+          newWeb => $newWeb,
       };
 
     $$text = $this->forEachLine( $$text, \&_replaceInternalRefs, $options );
@@ -1885,8 +1988,6 @@ sub _replaceInternalRefs {
         $args->{fullPaths} =  ( $topic ne $args->{inTopic} ) if (!defined($args->{fullPaths}));
         $args->{oldTopic} = $topic;
         $args->{newTopic} = $topic;
-        $args->{spacedTopic} = TWiki::spaceOutWikiWord( $topic );
-        $args->{spacedTopic} =~ s/ / */g;
         $text = replaceTopicReferences( $text, $args );
     }
     return $text;

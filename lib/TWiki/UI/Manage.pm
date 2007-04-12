@@ -785,9 +785,7 @@ sub move {
        newWeb => $newWeb,
        inWeb => $newWeb,
        fullPaths => 0,
-       spacedTopic => TWiki::spaceOutWikiWord( $oldTopic )
       };
-    $options->{spacedTopic} =~ s/ / */g;
     $text = $session->{renderer}->forEachLine(
         $text, \&TWiki::Render::replaceTopicReferences, $options );
 
@@ -1120,29 +1118,16 @@ sub getReferringTopics {
     my %results;
     foreach my $searchWeb ( @webs ) {
         next if( $allWebs && $searchWeb eq $web );
+
+        # Search for both the twiki form and the URL form
+        my $searchString = TWiki::Render::getReferenceRE(
+            $web, $topic, grep => 1, sameweb => ($searchWeb eq $web)).'|'.
+              TWiki::Render::getReferenceRE(
+                  $web, $topic, grep => 1, sameweb => ($searchWeb eq $web),
+                  url => 1);
         my @topicList = $store->getTopicNames( $searchWeb );
-        my $searchString;
-        my $webString = $web;
-        $webString =~ s#[\./]#[\\.\\/]#go;
-
-        if( defined($topic) ) {
-            if( $searchWeb eq $web ) {
-                $searchString = '\<'.$topic.'\>';
-            } else {
-                $searchString = '\<'.$webString.'\.'.$topic.'\>';
-             }
-        } elsif( $searchWeb ne $web ) {
-            # search for the *qualified* web name
-            $searchString = '\<'.$webString.'\.[A-Za-z0-9]*\>';
-        } else {
-            # most general search
-            $searchString = '\<'.$webString.'\>';
-        }
-        # Note use of \< and \> to match the empty string at the
-        # edges of a word.
-
-        my $matches = $store->searchInWebContent
-          ( $searchString,
+        my $matches = $store->searchInWebContent(
+            $searchString,
             $searchWeb, \@topicList,
             { casesensitive => 1, type => 'regex' } );
 
@@ -1172,14 +1157,12 @@ sub _updateReferringTopics {
     my $user = $session->{user};
     my $options =
       {
-       pre => 1, # process lines in PRE blocks
-       oldWeb => $oldWeb,
-       oldTopic => $oldTopic,
-       newWeb => $newWeb,
-       newTopic => $newTopic,
-       spacedTopic => TWiki::spaceOutWikiWord( $oldTopic )
+          pre => 1, # process lines in PRE blocks
+          oldWeb => $oldWeb,
+          oldTopic => $oldTopic,
+          newWeb => $newWeb,
+          newTopic => $newTopic,
       };
-    $options->{spacedTopic} =~ s/ / */g;
 
     foreach my $item ( @$refs ) {
         my( $itemWeb, $itemTopic ) =
@@ -1191,7 +1174,6 @@ sub _updateReferringTopics {
                 my( $meta, $text ) =
                   $store->readTopic( undef, $itemWeb, $itemTopic, undef );
                 $options->{inWeb} = $itemWeb;
-
                 $text = $renderer->forEachLine
                   ( $text, \&TWiki::Render::replaceTopicReferences, $options );
                 $meta->forEachSelectedValue

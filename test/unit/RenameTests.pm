@@ -14,8 +14,38 @@ my $oldweb = "TemporaryRenameOldWeb";
 my $newweb = "TemporaryRenameNewWeb";
 my $oldtopic = "OldTopic";
 my $newtopic = "NewTopic";
+my $othertopic = "OtherTopic";
+my $notawwtopic = "random";
 my $twiki;
-my $originaltext;
+my $originaltext = <<THIS;
+1 $oldweb.$oldtopic
+$oldweb.$oldtopic 2
+3 $oldweb.$oldtopic more
+$oldtopic 4
+5 $oldtopic
+7 ($oldtopic)
+8 [[$oldweb.$oldtopic]]
+9 [[$oldtopic]]
+10 [[$oldweb.$oldtopic][the text]]
+11 [[$oldtopic][the text]]
+12 $oldweb.$newtopic
+13 $newweb.$oldtopic
+14 $othertopic
+15 $oldweb.$othertopic
+16 $newweb.$othertopic
+17 MeMe${oldtopic}pick$oldweb.${oldtopic}me
+18 http://site/$oldweb/$oldtopic
+19 [[http://blah/$oldtopic/blah][ref]]
+<verbatim>
+protected $oldweb.$oldtopic
+</verbatim>
+<pre>
+pre $oldweb.$oldtopic
+</pre>
+<noautolink>
+protected $oldweb.$oldtopic
+</noautolink>
+THIS
 
 sub new {
     my $self = shift()->SUPER::new(@_);
@@ -47,40 +77,11 @@ sub set_up {
                           value=>"$newweb.$newtopic"} );
     $meta->put( "TOPICPARENT", {name=> "$oldweb.$oldtopic"} );
 
-    $originaltext = <<THIS;
-1 $oldweb.$oldtopic
-$oldweb.$oldtopic 2
-3 $oldweb.$oldtopic more
-$oldtopic 4
-5 $oldtopic
-7 ($oldtopic)
-8 [[$oldweb.$oldtopic]]
-9 [[$oldtopic]]
-10 [[$oldweb.$oldtopic][the text]]
-11 [[$oldtopic][the text]]
-12 $oldweb.$newtopic
-13 $newweb.$oldtopic
-14 OtherTopic
-15 $oldweb.OtherTopic
-16 $newweb.OtherTopic
-
-<verbatim>
-protected $oldweb.$oldtopic
-</verbatim>
-<pre>
-pre $oldweb.$oldtopic
-</pre>
-<noautolink>
-protected $oldweb.$oldtopic
-</noautolink>
-
-THIS
-
     $twiki->{store}->saveTopic( $twiki->{user}, $oldweb, $oldtopic,
                                 $originaltext, $meta );
-    $twiki->{store}->saveTopic( $twiki->{user}, $oldweb, "OtherTopic",
+    $twiki->{store}->saveTopic( $twiki->{user}, $oldweb, $othertopic,
                                 $originaltext, $meta );
-    $twiki->{store}->saveTopic( $twiki->{user}, $newweb, "OtherTopic",
+    $twiki->{store}->saveTopic( $twiki->{user}, $newweb, $othertopic,
                                 $originaltext, $meta );
     $twiki->{store}->saveTopic( $twiki->{user}, $newweb,
                                 $TWiki::cfg{HomeTopicName},
@@ -110,25 +111,75 @@ sub check {
 
 sub test_referringtopics {
     my $this = shift;
-    my $refs = TWiki::UI::Manage::getReferringTopics($twiki,
-                                                     $oldweb, $oldtopic, 0);
+    my $ott = TWiki::spaceOutWikiWord( $oldtopic );
+    my $lott = lc($ott);
+    $twiki->{store}->saveTopic( $twiki->{user}, $oldweb, 'MatchMeOne',
+                                <<THIS );
+[[$ott]]
+THIS
+    $twiki->{store}->saveTopic( $twiki->{user}, $oldweb, 'MatchMeTwo',
+                                <<THIS );
+[[$lott]]
+THIS
+    $twiki->{store}->saveTopic( $twiki->{user}, $newweb, 'MatchMeThree',
+                                <<THIS );
+[[$oldweb.$ott]]
+THIS
+    $twiki->{store}->saveTopic( $twiki->{user}, $newweb, 'MatchMeFour',
+                                <<THIS );
+[[$oldweb.$lott]]
+THIS
+    $twiki->{store}->saveTopic( $twiki->{user}, $oldweb, 'NoMatch',
+                                <<THIS );
+Refer to $ott and $lott
+THIS
+    $twiki->{store}->saveTopic( $twiki->{user}, $newweb, 'NoMatch',
+                                <<THIS );
+Refer to $ott and $lott
+THIS
+    # Just $oldweb
+    my $refs;
+    $refs = TWiki::UI::Manage::getReferringTopics(
+        $twiki, $oldweb, $oldtopic, 0);
     $this->assert_str_equals("HASH", ref($refs));
-    my @expected = ( "$oldweb.OtherTopic" );
-    @expected = sort(@expected);
+    my @expected;
+    @expected =  ( "$oldweb.$othertopic",
+                   "$oldweb.MatchMeOne",
+                   "$oldweb.MatchMeTwo",
+                  );
+    @expected = sort @expected;
 
-    my $i = scalar(keys %$refs);
+    my $i;
+    $i  = scalar(keys %$refs);
     $this->assert_equals( scalar(@expected), $i, join(",",keys %$refs));
     $i = 0;
     foreach my $r ( sort keys %$refs ) {
         $this->assert_str_equals($expected[$i++], $r);
     }
+
+    # All webs
     $refs = TWiki::UI::Manage::getReferringTopics(
         $twiki, $oldweb, $oldtopic, 1);
-    $this->assert( $refs->{"$newweb.OtherTopic"});
-    $this->assert( !$refs->{"$oldweb.OtherTopic"});
-    $this->assert( !$refs->{"$newweb.$oldtopic"}) ;
+    foreach my $r ( keys %$refs ) {
+        unless ($r =~ /^($oldweb|$newweb)\./) {
+            delete $refs->{$r};
+        }
+    }
+    @expected = ( "$newweb.$othertopic",
+                  "$newweb.MatchMeThree",
+                  "$newweb.MatchMeFour",
+                  "$newweb.$TWiki::cfg{HomeTopicName}");
+    @expected = sort @expected;
+
+    $i = scalar(keys %$refs);
+    $this->assert_equals( scalar(@expected), $i, join(",",keys %$refs));
+    $i = 0;
+    foreach my $r ( sort keys %$refs ) {
+        $this->assert_str_equals($expected[$i++], $r);
+    }
 }
 
+# Rename topic within the same web
 sub test_rename_oldwebnewtopic {
     my $this = shift;
     my $query = new CGI({
@@ -136,8 +187,8 @@ sub test_rename_oldwebnewtopic {
                          newweb => [ $oldweb ],
                          newtopic => [ $newtopic ],
                          referring_topics => [ "$oldweb.$newtopic",
-                                               "$oldweb.OtherTopic",
-                                               "$newweb.OtherTopic" ],
+                                               "$oldweb.$othertopic",
+                                               "$newweb.$othertopic" ],
                          topic => $oldtopic
                         });
 
@@ -148,7 +199,7 @@ sub test_rename_oldwebnewtopic {
 
     $this->assert( $twiki->{store}->topicExists( $oldweb, $newtopic ));
     $this->assert(!$twiki->{store}->topicExists( $oldweb, $oldtopic ));
-    my $expected = <<THIS;
+    $this->check($oldweb, $newtopic, undef, <<THIS, 1);
 1 $newtopic
 $newtopic 2
 3 $newtopic more
@@ -161,10 +212,12 @@ $newtopic 4
 11 [[$newtopic][the text]]
 12 $oldweb.$newtopic
 13 $newweb.$oldtopic
-14 OtherTopic
-15 $oldweb.OtherTopic
-16 $newweb.OtherTopic
-
+14 $othertopic
+15 $oldweb.$othertopic
+16 $newweb.$othertopic
+17 MeMe${oldtopic}pick$oldweb.${oldtopic}me
+18 http://site/$oldweb/$newtopic
+19 [[http://blah/$oldtopic/blah][ref]]
 <verbatim>
 protected $oldweb.$oldtopic
 </verbatim>
@@ -175,25 +228,55 @@ pre $newtopic
 protected $oldweb.$oldtopic
 </noautolink>
 THIS
-    $this->check($oldweb, $newtopic, undef, $expected, 1);
-    $this->check($oldweb, 'OtherTopic', undef, $expected, 2);
-    $expected = <<THIS;
+    $this->check($oldweb, $othertopic, undef, <<THIS, 2);
+1 $newtopic
+$newtopic 2
+3 $newtopic more
+$newtopic 4
+5 $newtopic
+7 ($newtopic)
+8 [[$newtopic]]
+9 [[$newtopic]]
+10 [[$newtopic][the text]]
+11 [[$newtopic][the text]]
+12 $oldweb.$newtopic
+13 $newweb.$oldtopic
+14 $othertopic
+15 $oldweb.$othertopic
+16 $newweb.$othertopic
+17 MeMe${oldtopic}pick$oldweb.${oldtopic}me
+18 http://site/$oldweb/$newtopic
+19 [[http://blah/$oldtopic/blah][ref]]
+<verbatim>
+protected $oldweb.$oldtopic
+</verbatim>
+<pre>
+pre $newtopic
+</pre>
+<noautolink>
+protected $oldweb.$oldtopic
+</noautolink>
+THIS
+
+    $this->check($newweb, $othertopic, undef, <<THIS, 3);
 1 $oldweb.$newtopic
 $oldweb.$newtopic 2
 3 $oldweb.$newtopic more
-$oldtopic 4
-5 $oldtopic
-7 ($oldtopic)
+$oldweb.$newtopic 4
+5 $oldweb.$newtopic
+7 ($oldweb.$newtopic)
 8 [[$oldweb.$newtopic]]
-9 [[$oldtopic]]
+9 [[$oldweb.$newtopic]]
 10 [[$oldweb.$newtopic][the text]]
-11 [[$oldtopic][the text]]
+11 [[$oldweb.$newtopic][the text]]
 12 $oldweb.$newtopic
 13 $newweb.$oldtopic
-14 OtherTopic
-15 $oldweb.OtherTopic
-16 $newweb.OtherTopic
-
+14 $othertopic
+15 $oldweb.$othertopic
+16 $newweb.$othertopic
+17 MeMe${oldtopic}pick$oldweb.${oldtopic}me
+18 http://site/$oldweb/$newtopic
+19 [[http://blah/$oldtopic/blah][ref]]
 <verbatim>
 protected $oldweb.$oldtopic
 </verbatim>
@@ -204,18 +287,18 @@ pre $oldweb.$newtopic
 protected $oldweb.$oldtopic
 </noautolink>
 THIS
-    $this->check($newweb, 'OtherTopic', undef, $expected, 3);
 }
 
+# Rename topic to a different web, keeping the same name
 sub test_rename_newweboldtopic {
     my $this = shift;
     my $query = new CGI({
                          action => [ 'rename' ],
                          newweb => [ $newweb ],
                          newtopic => [ $oldtopic ],
-                         referring_topics => [ "$oldweb.OtherTopic",
+                         referring_topics => [ "$oldweb.$othertopic",
                                                "$newweb.$oldtopic",
-                                               "$newweb.OtherTopic" ],
+                                               "$newweb.$othertopic" ],
                          topic => $oldtopic
                         });
 
@@ -227,7 +310,7 @@ sub test_rename_newweboldtopic {
     $this->assert( $twiki->{store}->topicExists( $newweb, $oldtopic ));
     $this->assert(!$twiki->{store}->topicExists( $oldweb, $oldtopic ));
 
-    my $expected = <<THIS;
+    $this->check($newweb, $oldtopic, undef, <<THIS, 4);
 1 $oldtopic
 $oldtopic 2
 3 $oldtopic more
@@ -240,10 +323,12 @@ $oldtopic 4
 11 [[$oldtopic][the text]]
 12 $oldweb.$newtopic
 13 $oldtopic
-14 $oldweb.OtherTopic
-15 $oldweb.OtherTopic
-16 OtherTopic
-
+14 $oldweb.$othertopic
+15 $oldweb.$othertopic
+16 $othertopic
+17 MeMe${oldtopic}pick$oldweb.${oldtopic}me
+18 http://site/$newweb/$oldtopic
+19 [[http://blah/$oldtopic/blah][ref]]
 <verbatim>
 protected $oldweb.$oldtopic
 </verbatim>
@@ -254,8 +339,7 @@ pre $oldtopic
 protected $oldweb.$oldtopic
 </noautolink>
 THIS
-    $this->check($newweb, $oldtopic, undef, $expected, 4);
-    $expected = <<THIS;
+    $this->check($newweb, $othertopic, undef, <<THIS, 5);
 1 $oldtopic
 $oldtopic 2
 3 $oldtopic more
@@ -268,10 +352,12 @@ $oldtopic 4
 11 [[$oldtopic][the text]]
 12 $oldweb.$newtopic
 13 $newweb.$oldtopic
-14 OtherTopic
-15 $oldweb.OtherTopic
-16 $newweb.OtherTopic
-
+14 $othertopic
+15 $oldweb.$othertopic
+16 $newweb.$othertopic
+17 MeMe${oldtopic}pick$oldweb.${oldtopic}me
+18 http://site/$newweb/$oldtopic
+19 [[http://blah/$oldtopic/blah][ref]]
 <verbatim>
 protected $oldweb.$oldtopic
 </verbatim>
@@ -282,8 +368,8 @@ pre $oldtopic
 protected $oldweb.$oldtopic
 </noautolink>
 THIS
-    $this->check($newweb, 'OtherTopic', undef, $expected, 5);
-    $expected = <<THIS;
+
+    $this->check($oldweb, $othertopic, undef, <<THIS, 6);
 1 $newweb.$oldtopic
 $newweb.$oldtopic 2
 3 $newweb.$oldtopic more
@@ -296,10 +382,12 @@ $newweb.$oldtopic 4
 11 [[$newweb.$oldtopic][the text]]
 12 $oldweb.$newtopic
 13 $newweb.$oldtopic
-14 OtherTopic
-15 $oldweb.OtherTopic
-16 $newweb.OtherTopic
-
+14 $othertopic
+15 $oldweb.$othertopic
+16 $newweb.$othertopic
+17 MeMe${oldtopic}pick$oldweb.${oldtopic}me
+18 http://site/$newweb/$oldtopic
+19 [[http://blah/$oldtopic/blah][ref]]
 <verbatim>
 protected $oldweb.$oldtopic
 </verbatim>
@@ -310,7 +398,6 @@ pre $newweb.$oldtopic
 protected $oldweb.$oldtopic
 </noautolink>
 THIS
-    $this->check($oldweb, 'OtherTopic', undef, $expected, 6);
 }
 
 
@@ -325,15 +412,20 @@ sub test_rename_from_lowercase {
     my $oldtopic   =  'lowercase';
     my $newtopic   =  'upperCase';
     my $meta       =  new TWiki::Meta($twiki, $oldweb, $oldtopic);
-    my $topictext  =  'Dummy';
+    my $topictext  =  <<THIS;
+One lowercase
+Twolowercase
+[[lowercase]]
+THIS
     $twiki->{store}->saveTopic( $twiki->{user}, $oldweb, $oldtopic,
                                 $topictext, $meta );
     my $query = new CGI({
-                         action   => 'rename',
-                         topic    => $oldtopic,
-                         newweb   => $oldweb,
-                         newtopic => $newtopic,
-                        });
+        action   => 'rename',
+        topic    => $oldtopic,
+        newweb   => $oldweb,
+        newtopic => $newtopic,
+        referring_topics => [ "$oldweb.$newtopic" ],
+    });
 
     $query->path_info("/$oldweb" );
     $twiki = new TWiki( "TestUser1", $query );
@@ -341,7 +433,12 @@ sub test_rename_from_lowercase {
     my ($text,$result)  =  $this->capture( \&TWiki::UI::Manage::rename, $twiki );
     my $ext = $TWiki::cfg{ScriptSuffix};
     $this->assert_matches(qr/^Status:\s+302/s,$text);
-    $this->assert_matches(qr([lL]ocation:\s+\S+?/view$ext/$oldweb/UpperCase)s,$text)
+    $this->assert_matches(qr([lL]ocation:\s+\S+?/view$ext/$oldweb/UpperCase)s,$text);
+    $this->check($oldweb, 'UpperCase', $meta, <<THIS, 100);
+One lowercase
+Twolowercase
+[[UpperCase]]
+THIS
 }
 
 sub test_accessRenameRestrictedTopic {
@@ -393,6 +490,29 @@ sub test_accessRenameRestrictedWeb {
     } catch TWiki::OopsException with {
         $this->assert_str_equals('OopsException(accessdenied/topic_access web=>TemporaryRenameOldWeb topic=>WebPreferences params=>[RENAME,access not allowed on web])', shift->stringify());
     }
+}
+
+# Purpose: verify that leases are removed when a topic is renamed
+sub test_leaseReleasemeLetMeGo {
+    my $this =  shift;
+
+    # Grab a lease
+    $twiki->{store}->setLease($oldweb, $oldtopic, $twiki->{user}, 1000);
+
+    my $query = new CGI({
+                         action   => 'rename',
+                         topic    => $oldtopic,
+                         newweb   => $oldweb,
+                         newtopic => $newtopic,
+                        });
+
+    $query->path_info("/$oldweb" );
+    $twiki = new TWiki( "TestUser1", $query );
+    $TWiki::Plugins::SESSION = $twiki;
+    $this->capture(\&TWiki::UI::Manage::rename, $twiki );
+
+    my $lease = $twiki->{store}->getLease($oldweb, $oldtopic);
+    $this->assert_null($lease, $lease);
 }
 
 1;
