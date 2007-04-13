@@ -183,7 +183,7 @@ sub addUser {
 
     my $store = $this->{session}->{store};
     my( $meta, $text ) = $store->readTopic(
-        undef, $TWiki::cfg{UsersWebName}, $TWiki::cfg{UsersTopicName}, undef );
+        undef, $TWiki::cfg{UsersWebName}, $TWiki::cfg{UsersTopicName} );
 
     my $result = '';
     my $entry = "   * $wikiname - ";
@@ -216,7 +216,7 @@ sub addUser {
                     $entry .= $today."\n".$line;
                 }
                 # don't adjust if unchanged
-                return $TWiki::cfg{UsersTopicName} if( $entry eq $line );
+                return $user if( $entry eq $line );
                 $line = $entry;
                 $entry = '';
             }
@@ -232,7 +232,6 @@ sub addUser {
                        $TWiki::cfg{UsersWebName},
                        $TWiki::cfg{UsersTopicName},
                        $result, $meta );
-
     return $user;
 }
 

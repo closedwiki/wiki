@@ -16,8 +16,7 @@ Any fields you define in this table will end up in the User's topic. If a form (
 If you use the %MAINWEB%.UserForm then ensure that it contains all the fields you define here. Otherwise they will disappear when the user edits their home topic!
 
 ---+++ Mandatory fields
-   * WikiName 
-   * Email
+   * !WikiName 
    * !FirstName
    * !LastName 
 
@@ -26,9 +25,13 @@ If you use the %MAINWEB%.UserForm then ensure that it contains all the fields yo
 
 
 ---++ Settings
+   * Define where to pick up the table of users to register
       * Set REGISTERTOPIC = %MAINWEB%.UnprocessedRegistrations
+   * Use this to define where to log the bulk registration process. It needs
+     to be a topic name in this web.
       * Set LOGTOPIC = %REGISTERTOPIC%Log
-
+   * Set this to 1 to make the bulk registration overwrite any existing user
+     topics. By default, existing user topics are left alone.
       * Set OVERWRITEHOMETOPICS = 0
 
 ---+++ Example format
