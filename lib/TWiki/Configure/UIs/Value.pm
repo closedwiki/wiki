@@ -26,7 +26,7 @@ use base 'TWiki::Configure::UI';
 # Generates the appropriate HTML for getting a value to configure the
 # entry. The actual input field is decided by the type.
 sub open_html {
-    my ($this, $value, $valuer) = @_;
+    my ($this, $value, $valuer, $experts) = @_;
 
     my $type = $value->getType();
     return '' if $value->{hidden};
@@ -34,6 +34,7 @@ sub open_html {
     my $trclass = '';
     my $info = '';
     if ($value->{opts} =~ /(\b|^)EXPERT(\b|$)/i) {
+        return '' unless $experts;
         $info = CGI::h6('EXPERT') . $info;
         $trclass = 'expertsOnly';
     }

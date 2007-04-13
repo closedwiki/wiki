@@ -45,9 +45,9 @@ sub endVisit {
     die "Fatal Error - Could not load UI for $class - $@" unless $ui;
     $this->{output} =
       pop(@{$this->{stack}}).
-        $ui->open_html($item, $this->{valuer}).
-          $this->{output}.
-            $ui->close_html($item, $this->{valuer});
+        $ui->open_html($item, $this->{valuer}, $this->{experts}).
+          $this->{output}. # only used for sections
+            $ui->close_html($item, $this->{valuer}, $this->{experts});
     return 1;
 }
 

@@ -268,6 +268,7 @@ $query = new CGI;
 
 my $url = $query->url();
 my $action = $query->param('action') || 'Configure';
+my $expertsMode = defined($query->param('expert'));
 
 # Handle serving an image embedded in the configure page, before generating
 # any other output
@@ -533,7 +534,7 @@ browse to the TWiki WebHome</a>.
      <li><span class='warn'>Warnings</span> are non-fatal, but are often a good
       indicator that something that is wrong.</li>
      <li>The little <span class='twikiAlert' title="Not here, stupid. In the table below!">&delta;</span> after an entry means that the current value is <b>not</b> the same as the default value. If you hover the cursor over the <span class='twikiAlert' title="Not here, stupid. In the table below!">&delta;</span>, a popup will show you what the default value is.</li>
-     <li><b><font color="#f00">EXPERT</font></b> means a setting is for expert use only. You should not fiddle with it unless you know what you are doing, or at least have read all the documentation!</lib>
+     <li><b><font color="#f00">EXPERT</font></b> means a setting is for expert use only. You should not fiddle with it unless you know what you are doing, or at least have read all the documentation! EXPERT options are hidden unless you click the <form><input type=submit value="Yes, I've read all the documentation"/><input type="hidden" name="expert" value="1" /></form> button.</lib>
     </ul>
    </div><!-- remark-->
   </div><!--explanation-->
@@ -569,7 +570,7 @@ HERE
     # Load the UI for the configuration and whack it out
     my $ui = _checkLoadUI('Root', $root);
     return 1 unless $ui;
-
+    $ui->{experts} = $expertsMode;
     print $ui->ui($root, $valuer);
 
     print "</div><!-- options -->\n";
