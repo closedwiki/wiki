@@ -712,8 +712,7 @@ sub searchWeb {
             my $revDate = TWiki::Time::formatTime( $epochSecs );
             my $isoDate = TWiki::Time::formatTime( $epochSecs, '$iso', 'gmtime');
 
-            my $revUser = $topicInfo->{$topic}->{editby} || 'UnknownUser';
-            my $ru = $revUser;
+            my $ru = $topicInfo->{$topic}->{editby} || 'UnknownUser';
             my $revNum  = $topicInfo->{$topic}->{revNum} || 0;
 
             # Check security
@@ -799,7 +798,7 @@ sub searchWeb {
                     $srev = CGI::span( { class => 'twikiNew' }, ($this->{session}->{i18n}->maketext('NEW')) );
                 }
                 $out =~ s/%REVISION%/$srev/o;
-                $out =~ s/%AUTHOR%/$revUser/o;
+                $out =~ s/%AUTHOR%/$users->webDotWikiName($ru)/e;
 
                 if( $doBookView ) {
                     # BookView
