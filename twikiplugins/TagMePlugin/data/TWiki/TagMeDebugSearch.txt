@@ -3,7 +3,7 @@
 ---+ Tag-me: Debug Tag Search
 
 <noautolink>
-<form action="%SCRIPTURL%/view/%WEB%/%TOPIC%">
+<form action="%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%">
 |  web: | <input name="qweb" value="%URLPARAM{ "qweb" encode="entity" }%" size="80" /> |
 |  topic: | <input name="qtopic" value="%URLPARAM{ "qtopic" encode="entity" }%" size="80" /> |
 |  tag: | <input name="qtag" value="%URLPARAM{ "qtag" encode="entity" }%" size="80" /> |

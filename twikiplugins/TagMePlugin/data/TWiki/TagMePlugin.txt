@@ -92,7 +92,7 @@ __%T% Tip:__ In a <nop>%HOMETOPIC% of a web you can show a tag cloud of all tagg
 
 ---+++ Tag Search
 
-%TWIKIWEB%.TagMeSearch shows a list of topics that are tagged with a specific tag, sorted by relevance. Topics with a high tag count are shown first.
+%TWIKIWEB%.TagMeSearch shows a list of topics that are tagged with all of the selected tags, sorted by relevance. Topics with a high tag count are shown first.
 
 ---+++ Plugin Variable
 
@@ -109,7 +109,7 @@ The Plugin handles a =%<nop>TAGME{}%= variable that performs different actions. 
 	  | =mincount="2"= | Exclude tags below the threshold of =mincount= votes | all tags | 
 	  | =minsize="90"= | Minimum size of tag =$size= (typically percent font size) | ="90"= |
 	  | =maxsize="180"= | Maximum size of tag =$size= | ="180"= |
-	  | =format="..."= | Format of a tag, tokens =$tag=, =$size= | ="$tag"= |
+	  | =format="..."= | Format of a tag, tokens =$tag=, =$size=, =$marker= (adds selected="selected" for use in html options) | ="$tag"= |
 	  | =separator=", "= | Separator between tags | =", "=, unless =format= has been specified |
 
 	* =%<nop>TAGME{ tpaction="query" ... }%= - tag search
@@ -125,6 +125,10 @@ The Plugin handles a =%<nop>TAGME{}%= variable that performs different actions. 
 	  | =maxsize="180"= | Maximum size of topic =$size= | ="180"= |
 	  | =format="..."= | Format of a topic, any token of %TWIKIWEB%.FormattedSearch can be used, such as =$web=, =$topic=, =$summary=, =$rev=, =$n=. In addition, =$votecount= expands to the number of tag votes, =$size= to the suggested font size, and =$taglist= to the tag list of the topic.  | (nice formatting) |
 	  | =separator=", "= | Separator between tags, =$n= or =$n()= can be used for newlines | ="$n"= |
+	  | =limit=""= | limit number of results if =sort="web"= | |
+	  | =header=""= | if =sort="web"=, add this header once per web with results (only =$web= is interpreted) | =---+++ $web= |
+	  | =footer=""= | if =sort="web"=, add this footer once per web with results (only =$web= and =$count= and $showmore are interpreted) |=showing $limit out of $count results $showmore= |
+  
 
 	* =%<nop>TAGME{ tpaction="newtag" ... }%= - create new tag
 	  | *Parameter* | *Comment* | *Default* |
@@ -249,8 +253,9 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Plugin Author: | TWiki:Main.PeterThoeny ([[http://www.structuredwikis.com/peter.html][blog]]) |
 |  Copyright: | &copy; 2006, Peter@Thoeny.org, [[http://www.structuredwikis.com/][StructuredWikis LLC]] |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 02 Apr 2006 (V1.035) |
+|  Plugin Version: | 12 Apr 2006 (V1.036) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  12 Apr 2007: |  TWiki:Main.CrawfordCurrie contributed ability to search for multiple tags. TWiki:Main.SvenDowideit for [[http://www.escapestudios.co.uk/][Escape Studios]]: added parameters needed for custom search result display. |
 |  05 Apr 2007  | Arthur Clemens: The "topic tags" select box is now created with Javascript to prevent the tag options getting indexed by search engines. The former select box is used for noscript fallback. |
 |  02 Apr 2007: | Arthur Clemens: Added "Delete Tag" interface. Added tabbed interface for Create, Rename, Delete tags. |
 |  30 Mar 2007: | Arthur Clemens: Added "Rename Tag" interface. |
