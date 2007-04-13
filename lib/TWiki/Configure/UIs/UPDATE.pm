@@ -48,9 +48,13 @@ sub ui {
         close(F);
     }
 
+    # Put in a link to the front page of the TWiki
+    my $url = "$TWiki::cfg{DefaultUrlHost}$TWiki::cfg{ScriptUrlPath}/view$TWiki::cfg{ScriptSuffix}/";
     return $this->{output}.CGI::p().CGI::strong(
         'Setting ' . $this->{changed}.
-          ' configuration item' . (($this->{changed} == 1) ? '' : 's').'.');
+          ' configuration item' . (($this->{changed} == 1) ? '' : 's').'.').
+            CGI::p().
+                CGI::a({ href => $url}, "Go to the TWiki front page")." or ";
 }
 
 # Listener for when a saved configuration item is changed.
