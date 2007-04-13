@@ -450,30 +450,33 @@ sub renderFieldForEdit {
         $value = $output;
 
     } elsif( $type eq 'date' ) {
-      $size = 10 if( !$size || $size < 1 );
-      $value = CGI::textfield({ name => $name,
-				id => 'id'.$name,
-				size=> $size,
-				value => $value,
-				class=> 'twikiInputField twikiEditFormDateField'});
-      require TWiki::Contrib::JSCalendarContrib;
-      unless ( $@ ) {
-	my $ifFormat = $TWiki::cfg{JSCalendarContrib}{format} || '%e %b %Y';
-	TWiki::Contrib::JSCalendarContrib::addHEAD( 'twiki' );
-	$value .= '%TWISTY{link="" noscript="hide" start="show" prefix="&nbsp;"}%';
-	$value .= CGI::image_button( -name => 'calendar',
-				     -onclick =>
-				     "return showCalendar('id$name','$ifFormat')",
-				     -src=> $TWiki::cfg{PubUrlPath} . '/' .
-				       $TWiki::cfg{SystemWebName} .
-				       '/JSCalendarContrib/img.gif',
-				     -alt => 'Calendar',
-				     -class => 'twikiButton twikiEditFormCalendarButton' );
-	$value .= '%ENDTWISTY%';
-	$value = $session->{renderer}->getRenderedVersion(
-        $session->handleCommonTags( $value, $web, $topic ));
-      }
+        $size =~ s/[^\d]//g;
+        $size = 10 if( !$size || $size < 1 );
+        $value = CGI::textfield({ name => $name,
+                                  id => 'id'.$name,
+                                  size=> $size,
+                                  value => $value,
+                                  class=> 'twikiInputField twikiEditFormDateField'});
+        require TWiki::Contrib::JSCalendarContrib;
+        unless ( $@ ) {
+            my $ifFormat = $TWiki::cfg{JSCalendarContrib}{format} || '%e %b %Y';
+            TWiki::Contrib::JSCalendarContrib::addHEAD( 'twiki' );
+            $value .= '%TWISTY{link="" noscript="hide" start="show" prefix="&nbsp;"}%';
+            $value .= CGI::image_button( -name => 'calendar',
+                                         -onclick =>
+                                           "return showCalendar('id$name','$ifFormat')",
+                                         -src=> $TWiki::cfg{PubUrlPath} . '/' .
+                                           $TWiki::cfg{SystemWebName} .
+                                             '/JSCalendarContrib/img.gif',
+                                         -alt => 'Calendar',
+                                         -class => 'twikiButton twikiEditFormCalendarButton' );
+            $value .= '%ENDTWISTY%';
+            $value = $session->{renderer}->getRenderedVersion(
+                $session->handleCommonTags( $value, $web, $topic ));
+        }
     } elsif( $type eq 'text' ) {
+        $size =~ s/[^\d]//g;
+        $size = 30 if (!$size || $size < 1);
         $value = CGI::textfield( -class => 'twikiInputField twikiEditFormTextField',
                                  -name => $name,
                                  -size => $size,
@@ -510,18 +513,20 @@ sub renderFieldForEdit {
         $options = $fieldDef->{value};
         ASSERT( ref( $options )) if DEBUG;
         my $minSize = $size;
-        my $maxSize = $size;
-        if( $size =~ /([0-9]+)\.\.([0-9]+)/ ) {
+        $minSize =~ s/[^\d]//g;
+        $minSize ||= 1;
+        my $maxSize = $minSize;
+        if( $size =~ /(\d+)\.\.(\d+)/ ) {
             ( $minSize, $maxSize ) = ( $1, $2 );
         }
         my $isMulti  = ( $type =~ /\+multi/ );
         my $isValues = ( $type =~ /\+values/ );
         my $choices = '';
         foreach $item ( @$options ) {
-	    $item = &TWiki::urlDecode($item);
+            $item = &TWiki::urlDecode($item);
             my $params = {
-	      class=>'twikiEditFormOption'
-	    };
+                class=>'twikiEditFormOption'
+               };
             my $itemValue = $item;
             if( $isValues ) {
                 if( $item =~ /^(.*?[^\\])=(.*)$/ ) {
@@ -550,25 +555,27 @@ sub renderFieldForEdit {
             $size = $minSize;
         }
         my $params = { 
-	  class=>'twikiEditFormSelect',
-	  name=>$name, 
-	  size=>$size 
-	};
+            class => 'twikiEditFormSelect',
+            name => $name,
+            size => $size
+           };
         if( $isMulti ) {
             $params->{'multiple'}='on';
             $value  = CGI::Select( $params, $choices );
             # Item2410: We need a dummy control to detect the case where
             #           all checkboxes have been deliberately unchecked
-	    # Item3061:
-	    # Don't use CGI, it will insert the value from the query
-	    # once again and we need an empt field here.
-	    $value .= '<input type="hidden" name="'.$name.'" value="" />';
+            # Item3061:
+            # Don't use CGI, it will insert the value from the query
+            # once again and we need an empt field here.
+            $value .= '<input type="hidden" name="'.$name.'" value="" />';
         }
         else {
             $value  = CGI::Select( $params, $choices );
         }
 
     } elsif( $type =~ /^checkbox/ ) {
+        $size =~ s/[^\d]//g;
+        $size = 4 if (!$size || $size < 1);
         $options = $fieldDef->{value};
         ASSERT( ref( $options )) if DEBUG;
         if( $type eq 'checkbox+buttons' ) {
@@ -605,12 +612,14 @@ sub renderFieldForEdit {
                                       -attributes => \%attrs );
         # Item2410: We need a dummy control to detect the case where
         #           all checkboxes have been deliberately unchecked
-	# Item3061:
-	# Don't use CGI, it will insert the value from the query
-	# once again and we need an empt field here.
+        # Item3061:
+        # Don't use CGI, it will insert the value from the query
+        # once again and we need an empt field here.
         $value .= '<input type="hidden" name="'.$name.'" value="" />';
 
     } elsif( $type eq 'radio' ) {
+        $size =~ s/[^\d]//g;
+        $size = 4 if (!$size || $size < 1);
         $options = $fieldDef->{value};
         ASSERT( ref( $options )) if DEBUG;
         my $selected = '';
@@ -633,10 +642,10 @@ sub renderFieldForEdit {
         # Treat like text, make it reasonably long
         # SMELL: Sven thinks this should be an error condition - so users
         # know about typo's, and don't lose data when the typo is fixed
-        $value = CGI::textfield( -class=>'twikiEditFormError',
-                                 -name=>$name,
-                                 -size=>80,
-                                 -value=>$value );
+        $value = CGI::textfield( -class => 'twikiEditFormError',
+                                 -name => $name,
+                                 -size => 80,
+                                 -value => $value );
 
     }
     return ( $extra, $value );
