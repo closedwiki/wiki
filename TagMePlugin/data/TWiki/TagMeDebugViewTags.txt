@@ -2,7 +2,7 @@
 ---+ Tag-me: Debug View Tags
 
 <noautolink>
-<form action="%SCRIPTURL%/view/%WEB%/%TOPIC%">
+<form action="%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%">
 |  by: | <input name="qby" value="%URLPARAM{ "qby" encode="entity" }%" size="80" /> |
 |  web: | <input name="qweb" value="%URLPARAM{ "qweb" encode="entity" }%" size="80" /> |
 |  topic: | <input name="qtopic" value="%URLPARAM{ "qtopic" encode="entity" }%" size="80" /> |

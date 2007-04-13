@@ -2,6 +2,8 @@
 #
 # Copyright (C) 2006 Peter Thoeny, peter@thoeny.org
 # Copyright (c) 2006 Fred Morris, m3047-twiki@inwa.net
+# Copyright (c) 2007 Crawford Currie, http://c-dot.co.uk
+# Copyright (c) 2007 Sven Dowideit, SvenDowideit@DistributedINFORMATION.com
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -16,21 +18,24 @@
 #
 # =========================
 #
-# This Plugin publishes topics of a web as static HTML pages.
+# This Plugin implements tags in TWiki.
 
 # =========================
 package TWiki::Plugins::TagMePlugin;
+
+use strict;
 
 # =========================
 use vars qw(
   $web $topic $user $installWeb $VERSION $RELEASE $pluginName $debug
   $initialized $attachDir $attachUrl $logAction $tagLinkFormat $tagQueryFormat
-  $alphaNum $doneHeader $normalizeTagInput $lineRegex
+  $alphaNum $doneHeader $normalizeTagInput $lineRegex $topicsRegex
 );
 
-$VERSION     = '1.035';
-$RELEASE     = '4.0 (Dakar)';
-$pluginName  = 'TagMePlugin';                  # Name of this Plugin
+$VERSION = '1.036';
+$RELEASE = 'Any TWiki';
+$pluginName = 'TagMePlugin';  # Name of this Plugin
+
 $initialized = 0;
 $lineRegex   = "^0*([0-9]+), ([^,]+), (.*)";
 
@@ -80,8 +85,7 @@ sub _initialize {
         '<a href="%SCRIPTURL%/view%SCRIPTSUFFIX%/'
       . $installWeb
       . '/TagMeSearch?tag=$tag;by=$by">$tag</a>';
-    $tagQueryFormat =
-'<table class="tagmeResultsTable tagmeResultsTableHeader" cellpadding="0" cellspacing="0" border="0"><tr>$n'
+    $tagQueryFormat = '<table class="tagmeResultsTable tagmeResultsTableHeader" cellpadding="0" cellspacing="0" border="0"><tr>$n'
       . '<td class="tagmeTopicTd"> <b>[[$web.$topic][<nop>$topic]]</b> '
       . '<span class="tagmeTopicTdWeb">in <nop>$web web</span></td>$n'
       . '<td class="tagmeDateTd">'
@@ -201,7 +205,7 @@ sub _showDefault {
 
     my $query = $TWiki::Plugins::SESSION->{cgiQuery};
     my $tagMode = $query->param( 'tagmode' ) || '';
-        
+
     my $webTopic = "$web.$topic";
     @tagInfo = _readTagInfo($webTopic) unless ( scalar(@tagInfo) );
     my $text  = '';
@@ -212,9 +216,10 @@ sub _showDefault {
     my %seen  = ();
     foreach (@tagInfo) {
 
-# Format:  3 digit number of users, tag, comma delimited list of users
-# Example: 004, usability, UserA, UserB, UserC, UserD
-# SMELL: This format is a quick hack for easy sorting, parsing, and for fast rendering
+        # Format:  3 digit number of users, tag, comma delimited list of users
+        # Example: 004, usability, UserA, UserB, UserC, UserD
+        # SMELL: This format is a quick hack for easy sorting, parsing, and
+        # for fast rendering
         if (/$lineRegex/) {
             $num   = $1;
             $tag   = $2;
@@ -228,7 +233,8 @@ sub _showDefault {
             }
             else {
                 $line .=
-                  _imgTag( 'tag_add', 'Add my vote for this tag', 'add', $tag, $tagMode );
+                  _imgTag( 'tag_add', 'Add my vote for this tag',
+                           'add', $tag, $tagMode );
             }
             $seen{$tag} = _wrapHtmlTagControl($line);
         }
@@ -277,7 +283,7 @@ sub _createNoJavascriptSelectBox {
     $selectControl .= '</select>';
     $selectControl .= _addNewButton();
     $selectControl = _wrapHtmlTagControl( $selectControl );
-    
+
     return $selectControl;
 }
 
@@ -309,8 +315,9 @@ EOF
 
     my $noscript .= '<noscript><a href="%SCRIPTURL%/viewauth%SCRIPTSUFFIX%/%BASEWEB%/%BASETOPIC%?tagmode=nojavascript">tag this topic</a></noscript>';
 
-    $selectControl .= "<span id=\"tagmeAddNewButton\" style=\"display:none;\">" 
-                      . _addNewButton() . "</span>";
+    $selectControl .=
+      '<span id="tagmeAddNewButton" style="display:none;">'
+        . _addNewButton() . '</span>';
     $selectControl .= $script;
 
     $selectControl = _wrapHtmlTagControl( $selectControl );
@@ -346,8 +353,12 @@ sub _showAllTags {
     my $minSize   = TWiki::Func::extractNameValuePair( $attr, 'minsize' );
     my $maxSize   = TWiki::Func::extractNameValuePair( $attr, 'maxsize' );
     my $minCount  = TWiki::Func::extractNameValuePair( $attr, 'mincount' );
+	# a comma separated list of 'selected' options (for html forms)
+    my $selection = TWiki::Func::extractNameValuePair( $attr, 'selection' )
+      || '';
+	my %selected = map { $_ => 1 } split(/,\s*/, $selection);
 
-    my $topicsRegex = '';
+    $topicsRegex = '';
     if ($qTopic) {
         $topicsRegex = $qTopic;
         $topicsRegex =~ s/, */\|/go;
@@ -383,14 +394,15 @@ sub _showAllTags {
         $text = join(
             $separator,
             map {
+                my $tag = $_;
                 $line = $format;
-                $line =~ s/\$tag/$_/go;
+                $line =~ s/\$tag/$tag/go;
+                my $marker = '';
+                $marker = ' selected="selected" 'if ($selected{$tag});
+                $line =~ s/\$marker/$marker/g;
                 $line;
-              } _readAllTags()
-        );
-    }
-    else {
-
+            } _readAllTags() );
+    } else {
         # slow processing
         # SMELL: Quick hack, should be done with nice data structure
         my %tagCount = ();
@@ -477,9 +489,10 @@ sub _showAllTags {
 # =========================
 sub _queryTag {
     my ($attr) = @_;
+
     my $qWeb   = TWiki::Func::extractNameValuePair( $attr, 'web' );
     my $qTopic = TWiki::Func::extractNameValuePair( $attr, 'topic' );
-    my $qTag = _urlDecode( TWiki::Func::extractNameValuePair( $attr, 'tag' ) );
+    my $qTag   = _urlDecode( TWiki::Func::extractNameValuePair( $attr, 'tag' ) );
     my $qBy       = TWiki::Func::extractNameValuePair( $attr, 'by' );
     my $noRelated = TWiki::Func::extractNameValuePair( $attr, 'norelated' );
     my $noTotal   = TWiki::Func::extractNameValuePair( $attr, 'nototal' );
@@ -490,7 +503,10 @@ sub _queryTag {
       || "\n";
     my $minSize = TWiki::Func::extractNameValuePair( $attr, 'minsize' );
     my $maxSize = TWiki::Func::extractNameValuePair( $attr, 'maxsize' );
-
+    my $resultLimit   = TWiki::Func::extractNameValuePair( $attr, 'limit' );
+    my $formatHeader   = TWiki::Func::extractNameValuePair( $attr, 'header' ) || '---+++ $web';
+    my $formatFooter   = TWiki::Func::extractNameValuePair( $attr, 'footer' ) || 'Showing $limit out of $count results $showmore';
+	
     return '__Note:__ Please select a tag' unless ($qTag);
 
     my $topicsRegex = '';
@@ -510,34 +526,44 @@ sub _queryTag {
     $maxSize = 180 unless ($maxSize);    # Max % size of font
     $minSize = 90  unless ($minSize);
 
+    my @qTagsA = split(/,\s*/, $qTag);
+    my $qTagsRE = join('|', @qTagsA);
+
     # SMELL: Quick hack, should be done with nice data structure
     my $text      = '';
     my %tagVotes  = ();
     my %topicTags = ();
     my %related   = ();
+    my %sawTag;
     my $tag       = '';
     my $num       = '';
     my $users     = '';
-    my @tags      = ();
+    my @tags;
     my $webTopic  = '';
     foreach $webTopic ( _getTagInfoList() ) {
         next if ( $qWeb        && $webTopic !~ /^$qWeb\./ );
         next if ( $topicsRegex && $webTopic !~ /$topicsRegex/ );
         my @tagInfo = _readTagInfo($webTopic);
         @tags = ();
-        foreach $line (@tagInfo) {
+        %sawTag = ();
+        foreach my $line (@tagInfo) {
             if ( $line =~ /$lineRegex/ ) {
                 $num   = $1;
                 $tag   = $2;
                 $users = $3;
                 push( @tags, $tag );
-                if ( $tag eq $qTag ) {
+                if ( $tag =~ /^($qTagsRE)$/ ) {
+                    $sawTag{$tag} = 1;
                     $tagVotes{$webTopic} = $num
                       unless ( $by && $users !~ /$by/ );
                 }
             }
         }
-        if ( $tagVotes{$webTopic} ) {
+        if (scalar keys %sawTag < scalar @qTagsA) {
+            # Not all tags seen, skip this topic
+            delete $tagVotes{$webTopic};
+        }
+        elsif ( $tagVotes{$webTopic} ) {
             $topicTags{$webTopic} = [ sort { lc $a cmp lc $b } @tags ];
             foreach $tag (@tags) {
                 $num = $related{$tag} || 0;
@@ -554,7 +580,7 @@ sub _queryTag {
 
         # TODO: should be conditional sort
         my @relatedTags = map { _printTagLink( $_, $qBy ) }
-                          grep { !/^\Q$qTag\E$/ }
+                          grep { !/^\Q$qTagsRE\E$/ }
                           sort { lc $a cmp lc $b } keys(%related);
         if ( @relatedTags ) {
             $text .= "<span class=\"tagmeRelated\">%MAKETEXT{\"Related tags\"}%:</span> "
@@ -562,12 +588,13 @@ sub _queryTag {
               . "\n\n";
         }
     }
-    if ($normalizeTagInput) {
-        @tags = sort keys(%allTags);
-    }
-    else {
-        @tags = sort { lc $a cmp lc $b } keys(%allTags);
-    }
+    # SMELL: Commented out by CC. This code does nothing useful.
+    #if ($normalizeTagInput) {
+    #    @tags = sort keys(%allTags);
+    #}
+    #else {
+    #    @tags = sort { lc $a cmp lc $b } keys(%allTags);
+    #}
     my @topics = ();
     if ( $sort eq 'tagcount' ) {
 
@@ -608,12 +635,56 @@ sub _queryTag {
     else {
 
         # normal formatting without $size (faster)
-        foreach $webTopic (@topics) {
-            $text .=
-              _printWebTopic( $webTopic, $topicTags{$webTopic}, $qBy, $format,
-                $tagVotes{$webTopic} );
-            $text .= $separator;
-        }
+		if ( $qWeb =~ /\|/ ) {
+			#multiple webs selected
+			my %webText;
+			my %resultCount;
+			foreach $webTopic ( @topics ) {
+				my ($thisWeb, $thisTopic) = TWiki::Func::normalizeWebTopicName('', $webTopic);
+				#initialise this new web with the header
+				unless (defined($webText{$thisWeb})) {
+					$webText{$thisWeb} = '';
+					$resultCount{$thisWeb} = 0;
+					if (defined($formatHeader)) {
+						my $header = $formatHeader;
+						$header =~ s/\$web/$thisWeb/g;
+						$webText{$thisWeb} .= "\n$header\n";
+					}
+				}
+				$resultCount{$thisWeb}++;
+				
+				#limit by $resultLimit
+				next if ((defined($resultLimit)) && ($resultLimit ne '') && ($resultLimit < $resultCount{$thisWeb}));
+				
+				$webText{$thisWeb} .= _printWebTopic( $webTopic, $topicTags{$webTopic}, $qBy,
+										$format, $tagVotes{$webTopic} );
+				$webText{$thisWeb} .= $separator;
+			}
+			my @webOrder = split(/[)(|]/,  $qWeb);
+			foreach my $thisWeb (@webOrder) {
+				if (defined($webText{$thisWeb})) {
+					if (defined($formatFooter)) {
+						my $footer = $formatFooter;
+						$footer =~ s/\$web/$thisWeb/g;
+						my $c = ($resultLimit < $resultCount{$thisWeb}) ? $resultLimit : $resultCount{$thisWeb};
+						$footer =~ s/\$limit/$c/g;
+						my $morelink ='';
+						#TODO: make link
+						$morelink = "\n %BR%<div class='tagShowMore'> *Show All results*: "._printTagLink($qTag, $qBy, $thisWeb)."</div>\n" if ($c < $resultCount{$thisWeb});
+						$footer =~ s/\$showmore/$morelink/g;
+						$footer =~ s/\$count/$resultCount{$thisWeb}/g;
+						$webText{$thisWeb} .= "\n$footer\n";
+					}
+					$text .= $webText{$thisWeb}."\n" 
+				}
+			}
+		} else {
+			foreach $webTopic ( @topics ) {
+				$text .= _printWebTopic( $webTopic, $topicTags{$webTopic}, $qBy,
+										$format, $tagVotes{$webTopic} );
+				$text .= $separator;
+			}
+		}
     }
     $text =~ s/\Q$separator\E$//s;
     $text .= "\n%MAKETEXT{\"Number of topics\"}%: " . scalar( keys(%tagVotes) )
@@ -645,19 +716,26 @@ s/\$taglist/join( ', ', map{ _printTagLink( $_, $qBy ) } sort { lc $a cmp lc $b}
 }
 
 # =========================
-sub _printTagLink {
-    my ( $tag, $by ) = @_;
-    my $text = $tagLinkFormat;
+sub _printTagLink
+{
+    my( $qTag, $by, $web ) = @_;
+    $web = '' unless (defined($web));
 
-    # urlencode characters
-    # in 2 passes
-    my $tmpSep = '_#_';
-    $text =~ s/(tag\=)\$tag/$1$tmpSep\$tag$tmpSep/go;
-    $text =~ s/$tmpSep\$tag$tmpSep/&_urlEncode($tag)/geo;
-    
-    $text =~ s/\$tag/$tag/go;
-    $text =~ s/\$by/$by/go;
-    return $text;
+    my $links = '';
+
+    foreach my $tag (split(/,\s*/, $qTag)) {
+        my $text = $tagLinkFormat;
+        # urlencode characters
+        # in 2 passes
+        my $tmpSep = '_#_';
+        $text =~ s/(tag\=)\$tag/$1$tmpSep\$tag$tmpSep/go;
+        $text =~ s/$tmpSep\$tag$tmpSep/&_urlEncode($tag)/geo;
+        $text =~ s/\$tag/$tag/go;
+        $text =~ s/\$by/$by/go;
+        $text =~ s/\$web/$web/go;
+        $links .= $tag;
+    }
+    return $links;
 }
 
 # =========================
@@ -837,7 +915,7 @@ sub _removeTag {
 # =========================
 sub _tagDataLine {
     my ( $num, $tag, $users, $user ) = @_;
-    
+
     my $line = sprintf( '%03d', $num );
     $line .= ", $tag, $users";
     $line .= ", $user" if $user;
@@ -849,7 +927,7 @@ sub _imgTag {
     my ( $image, $title, $action, $tag, $tagMode ) = @_;
     my $text = '';
     #my $tagMode |= '';
-    
+
     if ($tag) {
         $text =
           "<a class=\"tagmeAction $image\" href=\"%SCRIPTURL%/viewauth%SCRIPTSUFFIX%/%BASEWEB%/%BASETOPIC%?"
@@ -871,7 +949,7 @@ sub _imgTag {
 sub _getTagInfoList {
     my @list = ();
     if ( opendir( DIR, "$attachDir" ) ) {
-        @files =
+        my @files =
           grep { !/^_tags_all\.txt$/ } grep { /^_tags_.*\.txt$/ } readdir(DIR);
         closedir DIR;
         @list = map { s/^_tags_(.*)\.txt$/$1/; $_ } @files;
@@ -945,9 +1023,9 @@ sub writeAllTags {
 # =========================
 sub _modifyTag {
     my ( $oldTag, $newTag, $changeMessage, $note ) = @_;
-    
+
     my @allTags = _readAllTags();
-    
+
     if ( $oldTag ) {
         if ( !grep( /^\Q$oldTag\E$/, @allTags ) ) {
             return _wrapHtmlErrorFeedbackMessage( "Tag \"$oldTag\" does not exist",
@@ -960,7 +1038,7 @@ sub _modifyTag {
                 $note );
         }
     }
-    
+
     my @newAllTags = grep( !/^\Q$oldTag\E$/, @allTags );
     push( @newAllTags, $newTag ) if ( $newTag ) ;
     writeAllTags(@newAllTags);
@@ -974,7 +1052,7 @@ sub _modifyTag {
         my $users      = '';
         my $tagChanged = 0; # only save new file if content should be updated
         my @result     = ();
-        foreach $line (@tagInfo) {
+        foreach my $line (@tagInfo) {
 
             if ( $line =~ /^($lineRegex)$/ ) {
                 $line  = $1;
@@ -1038,11 +1116,11 @@ sub _deleteTag {
 
     return _wrapHtmlErrorFeedbackMessage( "Please select a tag to delete", $note )
       unless ($deleteTag);
-    
+
     my $changeMessage = "Tag \"$deleteTag\" is successfully deleted";
     return _modifyTag( $deleteTag, '', $changeMessage, $note );
 }
-    
+
 # =========================
 sub _writeDebug {
     my ($text) = @_;
