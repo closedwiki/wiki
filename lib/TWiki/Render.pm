@@ -1693,8 +1693,12 @@ Iterate over each line, calling =\&fn= on each.
 \%options may contain:
    * =pre= => true, will call fn for each line in pre blocks
    * =verbatim= => true, will call fn for each line in verbatim blocks
+   * =literal= => true, will call fn for each line in literal blocks
    * =noautolink= => true, will call fn for each line in =noautolink= blocks
-The spec of \&fn is sub fn( \$line, \%options ) -> $newLine; the %options hash passed into this function is passed down to the sub, and the keys =in_pre=, =in_verbatim= and =in_noautolink= are set boolean TRUE if the line is from one (or more) of those block types.
+The spec of \&fn is =sub fn( $line, \%options ) -> $newLine=. The %options
+hash passed into this function is passed down to the sub, and the keys
+=in_literal=, =in_pre=, =in_verbatim= and =in_noautolink= are set boolean
+TRUE if the line is from one (or more) of those block types.
 
 The return result replaces $line in $newText.
 
@@ -1749,7 +1753,6 @@ sub forEachLine {
       * =url= - if set, generates an expression that will match a TWiki
         URL that points to the web/topic, instead of the default which
         matches topic links in plain text.
-
 Generate a regular expression that can be used to match references to the
 specified web/topic. Note that the resultant RE will only match fully
 qualified (i.e. with web specifier) topic names and topic names that

@@ -39,18 +39,24 @@ sub test_webExpansion {
         $this->{twiki}->{user}, $this->{other_web},
         $includedTopic, <<THIS);
 <literal>
-1 [[$includedTopic][blah]] $includedTopic
+1 [[$includedTopic][one]] $includedTopic
 </literal>
 <verbatim>
-2 [[$includedTopic][blah]] $includedTopic
+2 [[$includedTopic][two]] $includedTopic
 </verbatim>
 <pre>
-3 [[$includedTopic][blah]] $includedTopic
+3 [[$includedTopic][three]] $includedTopic
 </pre>
 <noautolink>
-4 [[$includedTopic][blah]] $includedTopic
+4 [[$includedTopic][four]] [[$includedTopic]] $includedTopic
 </noautolink>
-5 [[$includedTopic][blah]] $includedTopic
+5 [[$includedTopic][five]] $includedTopic
+$includedTopic 6
+7 ($includedTopic)
+8 #$includedTopic
+9 [[TWiki.$includedTopic]]
+10 [[$includedTopic]]
+11 [[http://fleegle][$includedTopic]]
 THIS
     # Expand an include in the context of the test web
     my $text = $this->{twiki}->handleCommonTags(
@@ -59,18 +65,24 @@ THIS
     my @get = split(/\n/, $text);
     my @expect = split(/\n/, <<THIS);
 <literal>
-1 [[$includedTopic][blah]] $includedTopic
+1 [[$includedTopic][one]] $includedTopic
 </literal>
 <verbatim>
-2 [[$includedTopic][blah]] $includedTopic
+2 [[$includedTopic][two]] $includedTopic
 </verbatim>
 <pre>
-3 [[$this->{other_web}.$includedTopic][blah]] $this->{other_web}.$includedTopic
+3 [[$this->{other_web}.$includedTopic][three]] $this->{other_web}.$includedTopic
 </pre>
 <noautolink>
-4 [[$this->{other_web}.$includedTopic][blah]] $includedTopic
+4 [[$this->{other_web}.$includedTopic][four]] [[$this->{other_web}.$includedTopic][$includedTopic]] $includedTopic
 </noautolink>
-5 [[$this->{other_web}.$includedTopic][blah]] $this->{other_web}.$includedTopic
+5 [[$this->{other_web}.$includedTopic][five]] $this->{other_web}.$includedTopic
+$this->{other_web}.$includedTopic 6
+7 ($this->{other_web}.$includedTopic)
+8 #$includedTopic
+9 [[TWiki.$includedTopic]]
+10 [[$this->{other_web}.$includedTopic][$includedTopic]]
+11 [[http://fleegle][$includedTopic]]
 THIS
     while (my $e = pop(@expect)) {
         $this->assert_str_equals($e, pop(@get));

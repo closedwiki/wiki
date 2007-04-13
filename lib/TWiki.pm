@@ -749,7 +749,7 @@ sub _getRedirectUrl {
     my $redirecturl = $query->param( 'redirectto' );
     return '' unless $redirecturl;
 
-    if( $redirecturl =~ /^$TWiki::regex{linkProtocolPattern}\:\/\//o ) {
+    if( $redirecturl =~ m#^$regex{linkProtocolPattern}://#o ) {
         # assuming URL
         if (isRedirectSafe($redirecturl)) {
             return $redirecturl;
@@ -1293,7 +1293,7 @@ sub new {
     my $web = '';
     my $topic = $query->param( 'topic' );
     if( $topic ) {
-        if( $topic =~ /^$regex{linkProtocolPattern}\:\/\//o &&
+        if( $topic =~ m#^$regex{linkProtocolPattern}://#o &&
             $this->{cgiQuery} ) {
             # redirect to URI
                 print $this->redirect( $topic );
@@ -1605,7 +1605,7 @@ sub _rewriteURLInInclude {
     } elsif( $url =~ /^\./ ) {
         # fix relative URL
         $url = $theHost.$theAbsPath.'/'.$url;
-    } elsif( $url =~ /^$regex{linkProtocolPattern}\:/o ) {
+    } elsif( $url =~ /^$regex{linkProtocolPattern}:/o ) {
         # full qualified URL, do nothing
     } elsif( $url =~ /^#/ ) {
         # anchor. This needs to be left relative to the including topic
@@ -1618,21 +1618,42 @@ sub _rewriteURLInInclude {
     return $url;
 }
 
+# Add a web reference to a [[...][...]] link in an included topic
 sub _fixIncludeLink {
-    my( $theWeb, $theLink, $theLabel ) = @_;
+    my( $web, $link, $label ) = @_;
 
-    # [[...][...]] link
-    if( $theLink =~ /^($regex{webNameRegex}\.|$regex{defaultWebNameRegex}\.|$regex{linkProtocolPattern}\:|\/)/o ) {
-        if ( $theLabel ) {
-            return "[[$theLink][$theLabel]]";
+    # Detect absolute and relative URLs and web-qualified wikinames
+    if( $link =~ m#^($regex{webNameRegex}\.|$regex{defaultWebNameRegex}\.|$regex{linkProtocolPattern}:|/)#o ) {
+        if( $label ) {
+            return "[[$link][$label]]";
         } else {
-            return "[[$theLink]]";
+            return "[[$link]]";
         }
-    } elsif ( $theLabel ) {
-        return "[[$theWeb.$theLink][$theLabel]]";
-    } else {
-        return "[[$theWeb.$theLink][$theLink]]";
+    } elsif( !$label ) {
+        # Must be wikiword or spaced-out wikiword (or illegal link :-/)
+        $label = $link;
     }
+    return "[[$web.$link][$label]]";
+}
+
+# Replace web references in a topic. Called from forEachLine, applying to
+# each non-verbatim and non-literal line.
+sub _fixupIncludedTopic {
+    my( $text, $options ) = @_;
+
+    my $fromWeb = $options->{web};
+
+    unless( $options->{in_noautolink} ) {
+        # 'TopicName' to 'Web.TopicName'
+        $text =~ s#(?:^|(?<=[\s(]))($regex{wikiWordRegex})(?=\s|\)|$)#$fromWeb.$1#go;
+    }
+
+    # Handle explicit [[]] everywhere
+    # '[[TopicName][...]]' to '[[Web.TopicName][...]]'
+    $text =~ s/\[\[([^]]+)\](?:\[([^]]+)\])?\]/
+      _fixIncludeLink( $fromWeb, $1, $2 )/geo;
+
+    return $text;
 }
 
 # Clean-up HTML text so that it can be shown embedded in a topic
@@ -2982,27 +3003,13 @@ sub INCLUDE {
     if( $includedWeb ne $includingWeb ) {
 	    my $removed = {};
 
-        # Must handle explicit [[]] before noautolink
-        # '[[TopicName]]' to '[[Web.TopicName][TopicName]]'
-        $text =~ s/\[\[([^\]]+)\]\]/&_fixIncludeLink( $includedWeb, $1 )/geo;
-        # '[[TopicName][...]]' to '[[Web.TopicName][...]]'
-        $text =~ s/\[\[([^\]]+)\]\[([^\]]+)\]\]/&_fixIncludeLink( $includedWeb, $1, $2 )/geo;
-
-	    unless( TWiki::isTrue( $this->{prefs}->getPreferencesValue('NOAUTOLINK')) ) {
-	        # Handle WikiWords
-	        $text = $this->{renderer}->takeOutBlocks( $text, 'noautolink', $removed );
-	    }
-
-        # 'TopicName' to 'Web.TopicName'
-        $text =~ s/(^|[\s(])($regex{webNameRegex}\.$regex{wikiWordRegex})/$1$TranslationToken$2/go;
-        $text =~ s/(^|[\s(])($regex{wikiWordRegex})/$1$includedWeb\.$2/go;
-        $text =~ s/(^|[\s(])$TranslationToken/$1/go;
-
-        $this->{renderer}->putBackBlocks( \$text, $removed, 'noautolink' );
+        $text = $this->{renderer}->forEachLine(
+            $text, \&_fixupIncludedTopic, { web => $includedWeb,
+                                            pre => 1,
+                                            noautolink => 1} );
+        # handle tags again because of plugin hook
+        expandAllTags( $this, \$text, $includedTopic, $includedWeb );
     }
-
-    # handle tags again because of plugin hook
-    expandAllTags( $this, \$text, $includedTopic, $includedWeb );
 
     # restore the tags
     delete $this->{_INCLUDES}->{$key};
