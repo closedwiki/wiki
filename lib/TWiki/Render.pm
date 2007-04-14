@@ -1811,14 +1811,14 @@ sub getReferenceRE {
                 if( $topic =~ /$TWiki::regex{wikiWordRegex}/ ) {
                     # Bit of jigger-pokery at the front to avoid matching
                     # subweb specifiers
-                    $re = "((${back}" . "[^./])|^)$bow($matchWeb\\.)?$topic$eow";
+                    $re = "(($back\[^./])|^)$bow($matchWeb\\.)?$topic$eow";
                     if( $sot ) {
                         # match spaced out in squabs only
                         $re .= "|$squabo($matchWeb\\.)?$sot$squabc";
                     }
                 } else {
                     # Non-wikiword; require web specifier or squabs
-                    $re = "((${back}" . "[^./])|^)$bow$matchWeb\\.$topic$eow";
+                    $re = "(($back\[^./])|^)$bow$matchWeb\\.$topic$eow";
                     $re .= "|$squabo$topic$squabc";
                 }
             }
