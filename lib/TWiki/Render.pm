@@ -873,27 +873,21 @@ sub getRenderedVersion {
 
     # Maps of placeholders to tag parameters and text
     my $removed = {};
-    my $removedComments = {};
-    my $removedScript = {};
-    my $removedHead = {};
-    my $removedTextarea = {};
-    my $removedVerbatim = {};
-    my $removedLiterals = {};
 
     # verbatim before literal - see Item3431
-    $text = $this->takeOutBlocks( $text, 'verbatim', $removedVerbatim );
-    $text = $this->takeOutBlocks( $text, 'literal', $removedLiterals );
+    $text = $this->takeOutBlocks( $text, 'verbatim', $removed );
+    $text = $this->takeOutBlocks( $text, 'literal', $removed );
 
-    $text = $this->takeOutProtected( $text, qr/<\?([^?]*)\?>/s,
-                                     $removedComments );
-    $text = $this->takeOutProtected( $text, qr/<!DOCTYPE([^<>]*)>?/mi,
-                                     $removedComments );
-    $text = $this->takeOutProtected( $text, qr/<head.*?<\/head>/si,
-                                     $removedHead );
-    $text = $this->takeOutProtected( $text, qr/<textarea\b.*?<\/textarea>/si,
-                                     $removedTextarea );
-    $text = $this->takeOutProtected( $text, qr/<script\b.*?<\/script>/si,
-                                     $removedScript );
+    $text = $this->_takeOutProtected( $text, qr/<\?([^?]*)\?>/s,
+                                     'comment', $removed );
+    $text = $this->_takeOutProtected( $text, qr/<!DOCTYPE([^<>]*)>?/mi,
+                                     'comment', $removed );
+    $text = $this->_takeOutProtected( $text, qr/<head.*?<\/head>/si,
+                                     'head', $removed );
+    $text = $this->_takeOutProtected( $text, qr/<textarea\b.*?<\/textarea>/si,
+                                     'textarea', $removed );
+    $text = $this->_takeOutProtected( $text, qr/<script\b.*?<\/script>/si,
+                                     'script', $removed );
 
     # DEPRECATED startRenderingHandler before PRE removed
     # SMELL: could parse more efficiently if this wasn't
@@ -1118,17 +1112,18 @@ sub getRenderedVersion {
     $plugins->endRenderingHandler( $text );
 
     # replace verbatim with pre in the final output
-    $this->putBackBlocks( \$text, $removedVerbatim,
+    $this->putBackBlocks( \$text, $removed,
                           'verbatim', 'pre', \&verbatimCallBack );
     $text =~ s|\n?<nop>\n$||o; # clean up clutch
 
-    $this->putBackProtected( \$text, $removedScript, \&_filterScript );
-    $this->putBackBlocks( \$text, $removedLiterals,
+    $this->_putBackProtected( \$text, 'script', $removed, \&_filterScript );
+    $this->putBackBlocks( \$text, $removed,
                           'literal', '', \&_filterLiteral );
 
-    $this->putBackProtected( \$text, $removedHead );
-    $this->putBackProtected( \$text, $removedComments );
-    $this->putBackProtected( \$text, $removedTextarea );
+    $this->_putBackProtected( \$text, 'literal', $removed );
+    $this->_putBackProtected( \$text, 'comment', $removed );
+    $this->_putBackProtected( \$text, 'head', $removed );
+    $this->_putBackProtected( \$text, 'textarea', $removed );
 
     $this->{session}->{loginManager}->endRenderingHandler( $text );
 
@@ -1327,60 +1322,53 @@ sub makeTopicSummary {
     return $this->protectPlainText( $htext );
 }
 
-=pod
-
----++ ObjectMethod takeOutProtected( \$text, $re, \%map ) -> $text
-
-   * =$text= - Text to process
-   * =$re= - Regular expression that matches tag expressions to remove
-   * =\%map= - Reference to a hash to contain the removed blocks
-
-Return value: $text with blocks removed
-
-used to extract from $text comment type tags like &lt;!DOCTYPE blah>
-
-WARNING: if you want to take out &lt;!-- comments --> you _will_ need to re-write all the takeOuts
-	to use a different placeholder
-
-=cut
-
-sub takeOutProtected {
-	my( $this, $intext, $re, $map ) = @_;
+# _takeOutProtected( \$text, $re, $id, \%map ) -> $text
+#
+#   * =$text= - Text to process
+#   * =$re= - Regular expression that matches tag expressions to remove
+#   * =\%map= - Reference to a hash to contain the removed blocks
+#
+# Return value: $text with blocks removed. Unlike takeOuBlocks, this
+# *preserves* the tags.
+#
+# used to extract from $text comment type tags like &lt;!DOCTYPE blah>
+#
+# WARNING: if you want to take out &lt;!-- comments --> you _will_ need
+# to re-write all the takeOuts to use a different placeholder
+sub _takeOutProtected {
+	my( $this, $intext, $re, $id, $map ) = @_;
 	ASSERT($this->isa( 'TWiki::Render')) if DEBUG;
 
-	$intext =~ s/($re)/_replaceBlock($1, $map)/ge;
+	$intext =~ s/($re)/_replaceBlock($1, $id, $map)/ge;
 
 	return $intext;
 }
 
 sub _replaceBlock {
-	my( $scoop, $map ) = @_;
+	my( $scoop, $id, $map ) = @_;
 	my $placeholder = $placeholderMarker;
     $placeholderMarker++;
-	$map->{$placeholder}{text} = $scoop;
+	$map->{$id.$placeholder}{text} = $scoop;
 
-	return '<!--'.$TWiki::TranslationToken.$placeholder.
+	return '<!--'.$TWiki::TranslationToken.$id.$placeholder.
       $TWiki::TranslationToken.'-->';
 }
 
-=pod
-
----++ ObjectMethod putBackProtected( \$text, \%map, $callback ) -> $text
-
-Return value: $text with blocks added back
-   * =\$text= - reference to text to process
-   * =\%map= - map placeholders to blocks removed by takeOutBlocks
-   * =$callback= - Reference to function to call on each block being inserted (optional)
-
-Reverses the actions of takeOutProtected.
-
-=cut
-
-sub putBackProtected {
-    my( $this, $text, $map, $callback ) = @_;
+# _putBackProtected( \$text, $id, \%map, $callback ) -> $text
+# Return value: $text with blocks added back
+#   * =\$text= - reference to text to process
+#   * =$id= - type of taken-out block e.g. 'verbatim'
+#   * =\%map= - map placeholders to blocks removed by takeOutBlocks
+#   * =$callback= - Reference to function to call on each block being inserted (optional)
+#
+#Reverses the actions of takeOutProtected.
+sub _putBackProtected {
+    my( $this, $text, $id, $map, $callback ) = @_;
     ASSERT($this->isa( 'TWiki::Render')) if DEBUG;
+    ASSERT(ref($map) eq 'HASH') if DEBUG;
 
     foreach my $placeholder ( keys %$map ) {
+        next unless $placeholder =~ /^$id\d+$/;
         my $val = $map->{$placeholder}{text};
         $val = &$callback( $val ) if( defined( $callback ));
         $$text =~ s/<!--$TWiki::TranslationToken$placeholder$TWiki::TranslationToken-->/$val/;
@@ -1515,12 +1503,6 @@ sub putBackBlocks {
             delete( $map->{$placeholder} );
         }
     }
-    # This was added by Sven in 7219, but without any clear explanation
-    # or tests. It removes perfectly valid content from inside verbatim
-    # tags, and causes the unit tests for <literal> to fail.
-    #	if ($newtag eq '') {
-    #		$$text =~ s/&#60;\/?$tag&#62;//g;
-    #	}
 }
 
 =pod

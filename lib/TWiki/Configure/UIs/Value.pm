@@ -60,8 +60,7 @@ sub open_html {
         { colspan => 2, class=>$cssClass },
         $hiddenText.$info );
     my $row1;
-    
-    
+
     if ($value->{hidden}) {
     	# This seems never to happen
         $row1 = CGI::Tr({class => 'hiddenRow '.$trclass }, $td)."\n";

@@ -147,7 +147,7 @@ sub checkCalls {
     my ($this, $number, $name) = @_;
     my $saw = eval "\$TWiki::Plugins::$this->{plugin_name}::called->{$name} || 0";
     $this->assert_equals(
-        $number, $saw, "calls($name) $saw != $number");
+        $number, $saw, "calls($name) $saw != $number ".join(' ',caller));
 }
 
 sub test_commonTagsHandlers {
@@ -204,14 +204,19 @@ sub earlyInitPlugin {
     die "IUH $called->{initializeUserHandler}" if $called->{initializeUserHandler};
     $called->{earlyInitPlugin}++;
 }
+
 sub initializeUserHandler {
+    # $tester not set up yet
     die "$called->{earlyInitPlugin}" unless $called->{earlyInitPlugin};
     die "$called->{initPlugin}" unless !$called->{initPlugin};
     die "$called->{initializeUserHandler}" unless !$called->{initializeUserHandler};
     $called->{initializeUserHandler}++;
-    die "RU $_[0]" unless $_[0] eq ($TWiki::Plugins::SESSION->{remoteUser}||'');
-    die "URL $_[1]" unless $_[1] eq $TWiki::Plugins::SESSION->{cgiQuery}->url();
-    die "PATH $_[2]" unless $_[2] eq $TWiki::Plugins::SESSION->{cgiQuery}->path_info();
+    my $ru = $_[0] || 'undef';
+    die "RU $ru" unless $ru eq ($TWiki::Plugins::SESSION->{remoteUser}||'undef');
+    my $url = $_[1] || 'undef';
+    die "URL $url" unless $url eq ($TWiki::Plugins::SESSION->{cgiQuery}->url() || undef);
+    my $path = $_[2] || 'undef';
+    die "PATH $path" unless $path eq ($TWiki::Plugins::SESSION->{cgiQuery}->path_info() || 'undef');
 }
 HERE
     $this->checkCalls(1, 'earlyInitPlugin');
@@ -277,6 +282,7 @@ INNER
     $tester->assert_str_equals("<textarea>\nTEXTAREA\n</textarea>", $removed->{textarea3}{text});
     $_[0] = "preRenderingHandler\n$_[0]";
 }
+
 # Called after PRE blocks have been re-inserted, but *before* any other block
 # types have been reinserted (so markers are still present)
 sub endRenderingHandler {
@@ -298,6 +304,7 @@ INNER
     $called->{endRenderingHandler}++;
     $_[0] = "endRenderingHandler\n$_[0]";
 }
+
 # Called after all blocks have been re-inserted
 sub postRenderingHandler {
     my ($text) = @_;

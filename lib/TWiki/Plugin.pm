@@ -31,7 +31,7 @@ use Assert;
 use vars qw( @registrableHandlers %deprecated );
 
 @registrableHandlers =
-  (                                # VERSION:
+  (                                # TWiki::Plugins::VERSION:
    'afterAttachmentSaveHandler',   # 1.022
    'afterCommonTagsHandler',       # 1.024
    'afterEditHandler',             # 1.010
@@ -154,7 +154,7 @@ sub load {
     if( defined( &$sub ) ) {
         no strict 'refs';
         my $error = &$sub();
-       if( $error ) {
+        if( $error ) {
             push( @{$this->{errors}}, $sub.' failed: '.$error );
             $this->{disabled} = 1;
             return undef;
@@ -168,7 +168,7 @@ sub load {
         no strict 'refs';
         $user = &$sub( $this->{session}->{remoteUser},
                        $this->{session}->{cgiQuery}->url(),
-                       $this->{session}->{pathInfo} );
+                       $this->{session}->{cgiQuery}->path_info());
         use strict 'refs';
     }
     #print STDERR "Compile $p: ".timestr(timediff(new Benchmark, $begin))."\n";

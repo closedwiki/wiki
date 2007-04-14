@@ -194,6 +194,7 @@ sub load {
             }
         }
     }
+
     my $user; # the user login name
     my $userDefiner; # the plugin that is defining the user
     foreach my $pn ( @pluginList ) {
@@ -266,8 +267,9 @@ sub enable {
         if ($disabled{$plugin->{name}}) {
             $plugin->{disabled} = 1;
             push( @{$plugin->{errors}}, $plugin->{name}.' has been disabled' );
+        } else {
+            $plugin->registerHandlers( $this );
         }
-        $plugin->registerHandlers( $this );
         # Report initialisation errors
         if ( $plugin->{errors} ) {
             $this->{session}->writeWarning( join( "\n", @{$plugin->{errors}} ));
@@ -324,7 +326,6 @@ sub _dispatch {
     my $this = shift;
     ASSERT($this->isa( 'TWiki::Plugins')) if DEBUG;
     my $handlerName = shift;
-
     foreach my $plugin ( @{$this->{registeredHandlers}{$handlerName}} ) {
         # Set the value of $SESSION for this call stack
         local $SESSION = $this->{session};
