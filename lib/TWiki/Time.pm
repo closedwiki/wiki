@@ -173,13 +173,19 @@ sub formatTime  {
     $formatString ||= '$day $month $year - $hour:$min';
     $outputTimeZone ||= $TWiki::cfg{DisplayTimeValues};
 
-    my( $sec, $min, $hour, $day, $mon, $year, $wday);
+    if( $formatString =~ /http|email/i ) {
+        $outputTimeZone = 'gmtime';
+    }
+
+    my( $sec, $min, $hour, $day, $mon, $year, $wday, $tz_str);
     if( $outputTimeZone eq 'servertime' ) {
         ( $sec, $min, $hour, $day, $mon, $year, $wday ) =
           localtime( $epochSeconds );
+        $tz_str = 'Local';
     } else {
         ( $sec, $min, $hour, $day, $mon, $year, $wday ) =
           gmtime( $epochSeconds );
+        $tz_str = 'GMT';
     }
 
     #standard twiki date time formats
@@ -187,9 +193,8 @@ sub formatTime  {
         # RCS format, example: "2001/12/31 23:59:59"
         $formatString = '$year/$mo/$day $hour:$min:$sec';
     } elsif ( $formatString =~ /http|email/i ) {
-        # HTTP header format, e.g. "Thu, 23 Jul 1998 07:21:56 EST"
- 	    # - based on RFC 2616/1123 and HTTP::Date; also used
-        # by TWiki::Net for Date header in emails.
+        # HTTP and email header format, e.g. "Thu, 23 Jul 1998 07:21:56 EST"
+ 	    # RFC 822/2616/1123
         $formatString = '$wday, $day $month $year $hour:$min:$sec $tz';
     } elsif ( $formatString =~ /iso/i ) {
         # ISO Format, see spec at http://www.w3.org/TR/NOTE-datetime
@@ -198,7 +203,8 @@ sub formatTime  {
         if( $outputTimeZone eq 'gmtime' ) {
             $formatString = $formatString.'Z';
         } else {
-            #TODO:            $formatString = $formatString.  # TZD  = time zone designator (Z or +hh:mm or -hh:mm) 
+            #TODO:            $formatString = $formatString.
+            # TZD  = time zone designator (Z or +hh:mm or -hh:mm) 
         }
     }
 
@@ -218,7 +224,6 @@ sub formatTime  {
 
     # SMELL: how do we get the different timezone strings (and when
     # we add usertime, then what?)
-    my $tz_str = ( $outputTimeZone eq 'servertime' ) ? 'Local' : 'GMT';
     $value =~ s/\$tz/$tz_str/geoi;
 
     return $value;
