@@ -81,6 +81,28 @@ sub test_normalize {
     $this->assert_str_equals('a/..b', TWiki::Sandbox::normalizeFileName ('a/..b'));
 }
 
+sub test_sanitizeAttachmentName {
+    my $this = shift;
+    
+    $this->assert_str_equals('abc', TWiki::Sandbox::sanitizeAttachmentName ('abc'));
+    $this->assert_str_equals('abc.txt', TWiki::Sandbox::sanitizeAttachmentName ('abc.txt'));
+    $this->assert_str_equals('abc.txt', TWiki::Sandbox::sanitizeAttachmentName ('../abc.txt'));
+    $this->assert_str_equals('abc.txt', TWiki::Sandbox::sanitizeAttachmentName ('.abc.txt'));
+    $this->assert_str_equals('abc.txt', TWiki::Sandbox::sanitizeAttachmentName ('\\abc.txt'));
+    $this->assert_str_equals('abc.txt', TWiki::Sandbox::sanitizeAttachmentName ('/abc.txt'));
+    
+    $this->assert_str_equals('abc.php.txt', TWiki::Sandbox::sanitizeAttachmentName ('abc.php')); # just checking the string conversion, not the tainted input filename
+    
+    $this->assert_str_equals('a_b_c', TWiki::Sandbox::sanitizeAttachmentName ('a b c'));
+    
+    # checking tainted variable
+    my $tainted = $ENV{PATH};
+    my $untainted = $tainted;
+    $untainted =~ s/(.*?)/$1/;
+    $untainted =~ s/^([\.\/\\]*)*(.*?)$/$2/go;
+    $this->assert_str_equals($untainted, TWiki::Sandbox::sanitizeAttachmentName ($tainted));
+}
+
 sub test_buildCommandLine {
     my $this = shift;
     $this->assert_deep_equals(['a', 'b', 'c'],
