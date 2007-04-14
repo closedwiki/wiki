@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1173655082" format="1.0" version="1.51"}%
+%META:TOPICINFO{author="PeterThoeny" date="1176530418" format="1.0" version="1.52"}%
 ---+!! TWiki Spreadsheet Plugin
 
 This Plugin adds spreadsheet capabilities to %WIKITOOLNAME% topics. Formulae like ==%<nop>CALC{"$INT(7/3)"}%== are evaluated at page view time. They can be placed in table cells and outside of tables. In other words, this Plugin provides general formula evaluation capability, not just classic spreadsheet functions.
@@ -173,7 +173,7 @@ Conventions for Syntax:
 
 #FuncFORMAT
 ---+++ FORMAT( type, prec, number ) -- format a number to a certain type and precision
-	* Type can be COMMA for comma format, DOLLAR for Dollar format, KB for Kilo Byte format, MB for Mega Byte format, KBMB for Kilo/Mega/Giga/Tera Byte auto-adjust format, NUMBER for number, and PERCENT for percent format
+	* Type can be COMMA for comma format, DOLLAR for Dollar format, KB for Kilo Byte format, MB for Mega Byte format, KBMB for Kilo/Mega/Giga/Tera Byte auto-adjust format, NUMBER for number, and PERCENT for percent format. For PERCENT, the number is multiplied by 100 and add a percent sign is added.
 	* Syntax: ==$FORMAT( type, prec, number )==
 	* Example: ==%<nop>CALC{"$FORMAT(COMMA, 2, 12345.6789)"}%== returns ==12,345.68==
 	* Example: ==%<nop>CALC{"$FORMAT(DOLLAR, 2, 12345.67)"}%== returns ==$12,345.68==
