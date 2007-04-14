@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1176530418" format="1.0" version="1.52"}%
+%META:TOPICINFO{author="PeterThoeny" date="1176590091" format="1.0" version="1.53"}%
 ---+!! TWiki Spreadsheet Plugin
 
 This Plugin adds spreadsheet capabilities to %WIKITOOLNAME% topics. Formulae like ==%<nop>CALC{"$INT(7/3)"}%== are evaluated at page view time. They can be placed in table cells and outside of tables. In other words, this Plugin provides general formula evaluation capability, not just classic spreadsheet functions.
@@ -150,7 +150,7 @@ Conventions for Syntax:
 
 #FuncEXISTS
 ---+++ EXISTS( topic ) -- check if topic exists
-	* Topic can be =TopicName= or a =Web.TopicName=
+	* Topic can be =TopicName= or a =Web.TopicName=. Current web is used if web is not specified.
 	* Syntax: ==$EXISTS( topic )==
 	* Example: ==%<nop>CALC{"$EXISTS(<nop>%HOMETOPIC%)"}%== returns ==1==
 	* Example: ==%<nop>CALC{"$EXISTS(<nop>ThisDoesNotExist)"}%== returns ==0==
@@ -692,8 +692,9 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Plugin Author: | TWiki:Main/PeterThoeny |
 |  Copyright: | &copy; 2001-2007, Peter@Thoeny.org, [[http://www.structuredwikis.com/][StructuredWikis LLC]] |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 11 Mar 2007 (r13123) |
+|  Plugin Version: | 14 Apr 2007 (13402) |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
+|  14 Apr 2007: | Fixing bug in $EXISTS() that required full =web.topic= instead of just =topic= |
 |  11 Mar 2007: | Fixing bug in $VALUE() and $INT(), introduced by version 09 Mar 2007 |
 |  09 Mar 2007: | Added $EXP(), $LN(), $LOG(), $PI(), $SQRT(); fixed $ROUND() bug, contributed by TWiki:Main/SergejZnamenskij |
 |  23 Jan 2007: | Enhanced documentation |
@@ -740,5 +741,5 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 
 __Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
 
--- TWiki:Main/PeterThoeny - 11 Mar 2007
+-- TWiki:Main/PeterThoeny - 14 Apr 2007
 
