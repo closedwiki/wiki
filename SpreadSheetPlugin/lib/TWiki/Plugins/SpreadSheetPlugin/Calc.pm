@@ -71,6 +71,7 @@ sub CALC
     @tableMatrix = ();
     $cPos = -1;
     $rPos = -1;
+    $web = $_[2];
 
     my @result = ();
     my $insidePRE = 0;
@@ -909,7 +910,7 @@ sub doFunc
         $result = $theAttr;
 
     } elsif ( $theFunc eq "EXISTS" ) {
-        $result = TWiki::Func::topicExists( "", $theAttr );
+        $result = TWiki::Func::topicExists( $web, $theAttr );
         $result = 0 unless( $result );
     }
 
