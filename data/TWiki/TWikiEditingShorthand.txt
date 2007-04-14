@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1174329144" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1176595977" format="1.1" version="$Rev$"}%
 ---++ TWiki Editing Shorthand
 
 %STARTINCLUDE%
@@ -257,7 +257,8 @@ Each row of the table is a line containing of one or more cells. Each cell start
    * =|^|= cell with caret indicating follow-up row of multi-span rows
    * You can split rows over multiple lines by putting a backslash ='\'= at the end of each line
    * Contents of table cells wrap automatically as determined by the browser
-   * Use =&amp;#124;= or =%<nop>VBAR%= to add =&#124;= characters in tables.
+   * Use =%<nop>VBAR%= or =&amp;#124;= to add =&#124;= characters in tables.
+   * Use =%<nop>CARET%= or =&amp;#94;= to add =&#94;= characters in tables.
 %T% The %TWIKIWEB%.TablePlugin provides the =|^|= multiple-span row functionality and additional rendering features
 </td><td>
 <verbatim>

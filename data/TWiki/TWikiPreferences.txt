@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1160958216" format="1.1" version="$Rev $"}%
+%META:TOPICINFO{author="TWikiContributor" date="1176595196" format="1.1" version="$Rev$"}%
 ---+!! <nop>%WIKITOOLNAME% Site-Level Preferences
 
 This topic defines __site-level__ settings that apply to all users and webs on this TWikiSite.
@@ -225,6 +225,9 @@ _(Click for form-based editing of existing preferences.)_
 
    * Vertical bar / pipe symbol:
       * Set VBAR = &#124;
+
+   * Vertical caret symbol:
+      * Set CARET = &#94;
 
    * Line break and bullet with different levels of indentation:
       * Set BB = <br />&#8226;

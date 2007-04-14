@@ -1,0 +1,9 @@
+%META:TOPICINFO{author="TWikiContributor" date="1176595420" format="1.1" version="$Rev$"}%
+%META:TOPICPARENT{name="TWikiPreferences"}%
+#VarCARET
+
+---+++ CARET -- caret symbol
+   * The caret variable can be used in TWiki tables.
+   * Type: Preference variable - TWikiRenderingShortcut.
+   * Current value: CARET = %CARET%
+   * Related: [[#VarBR][BR]], [[#VarBULLET][BULLET]], [[#VarBB][BB]], [[#VarBB2][BB2]], [[#VarBB3][BB3]], [[#VarBB4][BB4]], [[#VarVBAR][VBAR]]
