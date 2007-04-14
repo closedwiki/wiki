@@ -245,16 +245,17 @@ sub startRenderingHandler {
     $called->{startRenderingHandler}++;
     $tester->assert_str_equals("Gruntfos", $_[1]);
     $tester->assert_str_equals("WebHome", $_[2]);
+    $text =~ s/\d+${TWiki::TranslationToken}--/NUMBERx--/g;
     $text =~ s/${TWiki::TranslationToken}/x/g;
     $tester->assert_str_equals(<<INNER, $text);
-<!--xliteral1x-->
-<!--xverbatim0x-->
+<!--xliteralNUMBERx-->
+<!--xverbatimNUMBERx-->
 <pre>
 PRE
 </pre>
-<!--xhead2x-->
-<!--xscript4x-->
-<!--xtextarea3x-->
+<!--xheadNUMBERx-->
+<!--xscriptNUMBERx-->
+<!--xtextareaNUMBERx-->
 <nop>
 INNER
    $_[0] = "startRenderingHandler\n".$_[0];
@@ -263,15 +264,16 @@ INNER
 sub preRenderingHandler {
     my ($text, $removed ) = @_;
     $called->{preRenderingHandler}++;
+    $text =~ s/\d+${TWiki::TranslationToken}--/NUMBERx--/g;
     $text =~ s/${TWiki::TranslationToken}/x/g;
     $tester->assert_str_equals(<<INNER, $text);
 startRenderingHandler
-<!--xliteral1x-->
-<!--xverbatim0x-->
-<!--xpre5x-->
-<!--xhead2x-->
-<!--xscript4x-->
-<!--xtextarea3x-->
+<!--xliteralNUMBERx-->
+<!--xverbatimNUMBERx-->
+<!--xpreNUMBERx-->
+<!--xheadNUMBERx-->
+<!--xscriptNUMBERx-->
+<!--xtextareaNUMBERx-->
 <nop>
 INNER
     $tester->assert_str_equals("\nLITERAL\n", $removed->{literal1}{text});
@@ -287,18 +289,19 @@ INNER
 # types have been reinserted (so markers are still present)
 sub endRenderingHandler {
     my ( $text ) = @_;
+    $text =~ s/\d+${TWiki::TranslationToken}--/NUMBERx--/g;
     $text =~ s/${TWiki::TranslationToken}/x/g;
     $tester->assert_str_equals(<<INNER, $text);
 preRenderingHandler
 startRenderingHandler
-<!--xliteral1x-->
-<!--xverbatim0x-->
+<!--xliteralNUMBERx-->
+<!--xverbatimNUMBERx-->
 <pre>
 PRE
 </pre>
-<!--xhead2x-->
-<!--xscript4x-->
-<!--xtextarea3x-->
+<!--xheadNUMBERx-->
+<!--xscriptNUMBERx-->
+<!--xtextareaNUMBERx-->
 <nop>
 INNER
     $called->{endRenderingHandler}++;
@@ -338,6 +341,7 @@ INNER
 # Should only be called on one line
 sub insidePREHandler {
     my( $text ) = @_;
+    $text =~ s/\d+${TWiki::TranslationToken}--/NUMBERx--/g;
     $text =~ s/${TWiki::TranslationToken}/x/g;
     push(@PluginHandlerTests::iprelines, $text);
     $called->{insidePREHandler}++;
@@ -347,6 +351,7 @@ sub insidePREHandler {
 # called on
 sub outsidePREHandler {
     my( $text ) = @_;
+    $text =~ s/\d+${TWiki::TranslationToken}--/NUMBERx--/g;
     $text =~ s/${TWiki::TranslationToken}/x/g;
     push(@PluginHandlerTests::oprelines, $text);
     $called->{outsidePREHandler}++;
@@ -403,12 +408,12 @@ HERE
     $this->assert_str_equals('PRE', $iprelines[1]);
     $this->assert_str_equals('preRenderingHandler', $oprelines[0]);
     $this->assert_str_equals('startRenderingHandler', $oprelines[1]);
-    $this->assert_str_equals('<!--xliteral1x-->', $oprelines[2]);
-    $this->assert_str_equals('<!--xverbatim0x-->', $oprelines[3]);
-    $this->assert_str_equals('<!--xpre5x-->', $oprelines[4]);
-    $this->assert_str_equals('<!--xhead2x-->', $oprelines[5]);
-    $this->assert_str_equals('<!--xscript4x-->', $oprelines[6]);
-    $this->assert_str_equals('<!--xtextarea3x-->', $oprelines[7]);
+    $this->assert_str_equals('<!--xliteralNUMBERx-->', $oprelines[2]);
+    $this->assert_str_equals('<!--xverbatimNUMBERx-->', $oprelines[3]);
+    $this->assert_str_equals('<!--xpreNUMBERx-->', $oprelines[4]);
+    $this->assert_str_equals('<!--xheadNUMBERx-->', $oprelines[5]);
+    $this->assert_str_equals('<!--xscriptNUMBERx-->', $oprelines[6]);
+    $this->assert_str_equals('<!--xtextareaNUMBERx-->', $oprelines[7]);
     $this->assert_str_equals('<nop>', $oprelines[8]);
     $this->checkCalls(1, 'preRenderingHandler');
     $this->checkCalls(1, 'startRenderingHandler');
