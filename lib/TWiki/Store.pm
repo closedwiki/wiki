@@ -1621,13 +1621,13 @@ sub _getSubWebs {
     if( $web ) {
         # sub-web
         @webList = sort
-          grep { $this->webExists( $_ ) } # filter dirs with no WebHome
+          grep { $this->webExists( $_ ) } # filter non-web dirs
             map { $web.'/'.$_ }           # add hierarchical path
               @tmpList;
     } else {
         # root level (no parent web)
         @webList = sort
-          grep { $this->webExists( $_ ) } # filter dirs with no WebHome
+          grep { $this->webExists( $_ ) } # filter non-web dirs
             @tmpList;
     }
 
