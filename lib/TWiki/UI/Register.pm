@@ -839,8 +839,8 @@ sub _writeRegistrationDetailsToTopic {
 
     my( $before, $repeat, $after ) = split( /%SPLIT%/, $text, 3 );
     $before = '' unless defined( $before );
-    $after = "\n".'   * Set ALLOWTOPICCHANGE = %WIKIUSERNAME%'."\n" unless defined( $after );
-
+    $after = '' unless defined( $after );
+    
     my $log;
     my $addText;
     my $form = $meta->get( 'FORM' );
