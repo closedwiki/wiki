@@ -1,0 +1,553 @@
+use strict;
+
+# Authors: Crawford Currie http://wikiring.com
+#
+# Make sure that all the right plugin handlers are called in the
+# right places with the right parameters.
+#
+# Here are the handlers we need to test, and the current status:
+#
+# | *Handler*                    | *Tested by* |
+# | afterAttachmentSaveHandler   | *untested* |
+# | afterCommonTagsHandler       | test_commonTagsHandlers |
+# | afterEditHandler             | *untested* |
+# | afterRenameHandler           | *untested* |
+# | afterSaveHandler             | *untested* |
+# | beforeAttachmentSaveHandler  | *untested* |
+# | beforeCommonTagsHandler      | test_commonTagsHandlers |
+# | beforeEditHandler            | *untested* |
+# | beforeSaveHandler            | *untested* |
+# | commonTagsHandler            | test_commonTagsHandlers |
+# | earlyInitPlugin              | test_earlyInit |
+# | endRenderingHandler          | test_renderingHandlers |
+# | initPlugin                   | all tests |
+# | initializeUserHandler        | test_earlyInit |
+# | insidePREHandler             | test_renderingHandlers |
+# | modifyHeaderHandler          | *untested* |
+# | mergeHandler                 | *untested* |
+# | outsidePREHandler            | test_renderingHandlers |
+# | postRenderingHandler         | test_renderingHandlers |
+# | preRenderingHandler          | test_renderingHandlers |
+# | redirectCgiQueryHandler      | *untested* |
+# | registrationHandler          | *untested* |
+# | renderFormFieldForEditHandler| *untested* |
+# | renderWikiWordHandler        | *untested* |
+# | startRenderingHandler        | test_renderingHandlers |
+# | writeHeaderHandler           | *untested* |
+#
+# We do this by actually writing a valid plugin implementation to the
+# plugins area in the code, and removing it again when we are done. Each
+# bespoke plugin has specialised handlers designed to interact with this
+# test.
+#
+# The handlers that are not currently tested are represented in the code
+# below using a function called "detest_<handlername>". If you are going
+# to write a test for the handler, rename it to "test_<handlername>" and
+# start coding....
+#
+package PluginHandlerTests;
+use base qw(TWikiFnTestCase);
+
+use strict;
+use TWiki;
+use CGI;
+use Error qw( :try );
+use TWiki::Plugin;
+use Symbol qw(delete_package);
+
+my $systemWeb = "TemporaryPluginHandlersSystemWeb";
+
+sub new {
+    my $self = shift()->SUPER::new("PluginHandlers", @_);
+    return $self;
+}
+
+# Set up the test fixture.
+sub set_up {
+    my $this = shift;
+    $this->SUPER::set_up();
+    # Disable all plugins
+    foreach my $key (keys %{$TWiki::cfg{Plugins}}) {
+        $TWiki::cfg{Plugins}{$key}{Enabled} = 0;
+    }
+    # Locate the code
+    my $found;
+    foreach my $inc (@INC) {
+        if (-e "$inc/TWiki/Plugins/EmptyPlugin.pm") {
+            # Found it
+            $found = $inc;
+            last;
+        }
+    }
+    die "Can't find code" unless $found;
+    $this->{code_root} = "$found/TWiki/Plugins/";
+    $this->{twiki}->{store}->createWeb($this->{twiki}->{user},
+                                       $systemWeb,
+                                       $TWiki::cfg{SystemWebName});
+    $TWiki::cfg{SystemWebName} = $systemWeb;
+}
+
+sub tear_down {
+    my $this = shift;
+
+    $this->removeWebFixture($this->{twiki}, $systemWeb);
+    unlink($this->{plugin_pm});
+    Symbol::delete_package("TWiki::Plugins::$this->{plugin_name}");
+    $this->SUPER::tear_down();
+}
+
+# Build the plugin source, using the code passed in $code as the
+# body of the plugin. $code will normally be at least one handler
+# implementation, sometimes more than one.
+sub makePlugin {
+    my ($this, $test, $code) = @_;
+
+    $this->{plugin_name} = ucfirst("${test}Plugin");
+    $this->{plugin_pm} = $this->{code_root}.$this->{plugin_name}.".pm";
+
+    $code = <<HERE;
+package TWiki::Plugins::$this->{plugin_name};
+
+use vars qw( \$called \$tester \$VERSION );
+\$called = {};
+\$VERSION = 999.911;
+
+sub initPlugin {
+    \$called->{initPlugin}++;
+    return 1;
+}
+# line 11
+$code
+1;
+HERE
+    open(F, ">$this->{plugin_pm}") ||
+      die "Failed to open $this->{plugin_pm}: $!";
+    print F $code;
+    close(F);
+    try {
+        $this->{twiki}->{store}->saveTopic(
+            $this->{twiki}->{users}->findUserByWikiName('TWikiAdminGroup')->[0],
+            $TWiki::cfg{SystemWebName},
+            $this->{plugin_name}, <<'EOF');
+   * Set PLUGINVAR = Blah
+EOF
+    } catch TWiki::AccessControlException with {
+        $this->assert(0,shift->stringify());
+    } catch Error::Simple with {
+        $this->assert(0,shift->stringify());
+    };
+    $TWiki::cfg{Plugins}{$this->{plugin_name}}{Enabled} = 1;
+    $this->{twiki} = new TWiki(); # default user
+    eval "\$TWiki::Plugins::$this->{plugin_name}::tester = \$this;";
+    $this->checkCalls(1, 'initPlugin');
+    $TWiki::Plugins::SESSION = $this->{twiki};
+}
+
+sub checkCalls {
+    my ($this, $number, $name) = @_;
+    my $saw = eval "\$TWiki::Plugins::$this->{plugin_name}::called->{$name} || 0";
+    $this->assert_equals(
+        $number, $saw, "calls($name) $saw != $number");
+}
+
+sub test_commonTagsHandlers {
+    my $this = shift;
+    $this->makePlugin('beforeCommonTagsHandler', <<'HERE');
+sub beforeCommonTagsHandler {
+    #my( $text, $topic, $theWeb, $meta ) = @_;
+    $tester->assert_str_equals('Zero', $_[0], "ONE $_[0]");
+    $tester->assert_str_equals('Tropic', $_[1], "TWO $_[1]");
+    $tester->assert_str_equals('Werb', $_[2], "THREE $_[2]");
+    $tester->assert($_[3]->isa('TWiki::Meta'), "FOUR $_[3]");
+    $tester->assert_str_equals('Wibble', $_[3]->get('WIBBLE')->{wibble});
+    $_[0] = 'One';
+    $called->{beforeCommonTagsHandler}++;
+}
+sub commonTagsHandler {
+    #my( $text, $topic, $theWeb, $included, $meta ) = @_;
+    $tester->assert_str_equals('One', $_[0]);
+    $tester->assert_str_equals('Tropic', $_[1]);
+    $tester->assert_str_equals('Werb', $_[2]);
+    $tester->assert($_[4]->isa('TWiki::Meta'), "OUCH $_[4]");
+    $tester->assert_str_equals('Wibble', $_[4]->get('WIBBLE')->{wibble});
+    $_[0] = 'Two';
+    $called->{commonTagsHandler}++;
+}
+sub afterCommonTagsHandler {
+    #my( $text, $topic, $theWeb, $meta ) = @_;
+    $tester->assert_str_equals('Two', $_[0]);
+    $tester->assert_str_equals('Tropic', $_[1]);
+    $tester->assert_str_equals('Werb', $_[2]);
+    $tester->assert($_[3]->isa('TWiki::Meta'));
+    $tester->assert_str_equals('Wibble', $_[3]->get('WIBBLE')->{wibble});
+    $_[0] = 'Zero';
+    $called->{afterCommonTagsHandler}++;
+}
+HERE
+    # Crude test to ensure all handlers are called, and in the right order.
+    # Doesn't verify that they are called at the right time
+    my $meta = new TWiki::Meta($this->{twiki}, "Werb", "Tropic");
+    $meta->put('WIBBLE', { wibble => 'Wibble' } );
+    TWiki::Func::expandCommonVariables("Zero", "Tropic", "Werb", $meta);
+    $this->checkCalls(1, 'beforeCommonTagsHandler');
+    $this->checkCalls(1, 'commonTagsHandler');
+    $this->checkCalls(1, 'afterCommonTagsHandler');
+}
+
+sub test_earlyInit {
+    my $this = shift;
+    $this->makePlugin('earlyInitPlugin', <<'HERE');
+sub earlyInitPlugin {
+    # $tester not set up yet
+    die "EIP $called->{earlyInitPlugin}" if  $called->{earlyInitPlugin};
+    die "IP $called->{initPlugin}" if $called->{initPlugin};
+    die "IUH $called->{initializeUserHandler}" if $called->{initializeUserHandler};
+    $called->{earlyInitPlugin}++;
+}
+sub initializeUserHandler {
+    die "$called->{earlyInitPlugin}" unless $called->{earlyInitPlugin};
+    die "$called->{initPlugin}" unless !$called->{initPlugin};
+    die "$called->{initializeUserHandler}" unless !$called->{initializeUserHandler};
+    $called->{initializeUserHandler}++;
+    die "RU $_[0]" unless $_[0] eq ($TWiki::Plugins::SESSION->{remoteUser}||'');
+    die "URL $_[1]" unless $_[1] eq $TWiki::Plugins::SESSION->{cgiQuery}->url();
+    die "PATH $_[2]" unless $_[2] eq $TWiki::Plugins::SESSION->{cgiQuery}->path_info();
+}
+HERE
+    $this->checkCalls(1, 'earlyInitPlugin');
+    $this->checkCalls(1, 'initPlugin');
+    $this->checkCalls(1, 'initializeUserHandler');
+}
+
+# Test that the rendering handlers are called in the correct sequence.
+# The sequence is:
+# 1 startRenderingHandler
+# 2 preRenderingHandler
+# -*- insidePreHandler and outsidePreHandler -*-
+# 3 endRenderingHandler
+# 4 postRenderingHandler
+# Each handler checks its params and the state of the text, and prepends
+# an id to the text to say its been called and make sure that text can be
+# written.
+use vars qw( @oprelines @iprelines );
+sub test_renderingHandlers {
+    my $this = shift;
+    $this->makePlugin('postRenderingHandler', <<'HERE');
+# Called after verbatim, literal, head, textareas, script have
+# all been removed, but *before* PRE is removed
+sub startRenderingHandler {
+    my ($text, $web, $topic ) = @_;
+    $called->{startRenderingHandler}++;
+    $tester->assert_str_equals("Gruntfos", $_[1]);
+    $tester->assert_str_equals("WebHome", $_[2]);
+    $text =~ s/${TWiki::TranslationToken}/x/g;
+    $tester->assert_str_equals(<<INNER, $text);
+<!--xliteral1x-->
+<!--xverbatim0x-->
+<pre>
+PRE
+</pre>
+<!--xhead2x-->
+<!--xscript4x-->
+<!--xtextarea3x-->
+<nop>
+INNER
+   $_[0] = "startRenderingHandler\n".$_[0];
+}
+# Called after all blocks have been removed
+sub preRenderingHandler {
+    my ($text, $removed ) = @_;
+    $called->{preRenderingHandler}++;
+    $text =~ s/${TWiki::TranslationToken}/x/g;
+    $tester->assert_str_equals(<<INNER, $text);
+startRenderingHandler
+<!--xliteral1x-->
+<!--xverbatim0x-->
+<!--xpre5x-->
+<!--xhead2x-->
+<!--xscript4x-->
+<!--xtextarea3x-->
+<nop>
+INNER
+    $tester->assert_str_equals("\nLITERAL\n", $removed->{literal1}{text});
+    $tester->assert_str_equals("\nVERBATIM\n", $removed->{verbatim0}{text});
+    $tester->assert_str_equals("\nPRE\n", $removed->{pre5}{text});
+    $tester->assert_str_equals("<head>\nHEAD\n</head>", $removed->{head2}{text});
+    $tester->assert_str_equals("<script>\nSCRIPT\n</script>", $removed->{script4}{text});
+    $tester->assert_str_equals("<textarea>\nTEXTAREA\n</textarea>", $removed->{textarea3}{text});
+    $_[0] = "preRenderingHandler\n$_[0]";
+}
+# Called after PRE blocks have been re-inserted, but *before* any other block
+# types have been reinserted (so markers are still present)
+sub endRenderingHandler {
+    my ( $text ) = @_;
+    $text =~ s/${TWiki::TranslationToken}/x/g;
+    $tester->assert_str_equals(<<INNER, $text);
+preRenderingHandler
+startRenderingHandler
+<!--xliteral1x-->
+<!--xverbatim0x-->
+<pre>
+PRE
+</pre>
+<!--xhead2x-->
+<!--xscript4x-->
+<!--xtextarea3x-->
+<nop>
+INNER
+    $called->{endRenderingHandler}++;
+    $_[0] = "endRenderingHandler\n$_[0]";
+}
+# Called after all blocks have been re-inserted
+sub postRenderingHandler {
+    my ($text) = @_;
+    $tester->assert_str_equals(<<INNER, "$text\n");
+endRenderingHandler
+preRenderingHandler
+startRenderingHandler
+
+LITERAL
+
+<pre>
+VERBATIM
+</pre>
+<pre>
+PRE
+</pre>
+<head>
+HEAD
+</head>
+<script>
+SCRIPT
+</script>
+<textarea>
+TEXTAREA
+</textarea>
+INNER
+    $called->{postRenderingHandler}++;
+    $_[0] = "postRenderingHandler\n$_[0]";
+}
+
+# Should only be called on one line
+sub insidePREHandler {
+    my( $text ) = @_;
+    $text =~ s/${TWiki::TranslationToken}/x/g;
+    push(@PluginHandlerTests::iprelines, $text);
+    $called->{insidePREHandler}++;
+}
+
+# Should be called on every line that the inside handler is *not*
+# called on
+sub outsidePREHandler {
+    my( $text ) = @_;
+    $text =~ s/${TWiki::TranslationToken}/x/g;
+    push(@PluginHandlerTests::oprelines, $text);
+    $called->{outsidePREHandler}++;
+}
+HERE
+    my $text = <<HERE;
+<literal>
+LITERAL
+</literal>
+<verbatim>
+VERBATIM
+</verbatim>
+<pre>
+PRE
+</pre>
+<head>
+HEAD
+</head>
+<script>
+SCRIPT
+</script>
+<textarea>
+TEXTAREA
+</textarea>
+HERE
+    @oprelines = ();
+    @iprelines = ();
+    my $out = TWiki::Func::renderText($text, "Gruntfos")."\n";
+    $this->assert_str_equals(<<HERE, $out);
+postRenderingHandler
+endRenderingHandler
+preRenderingHandler
+startRenderingHandler
+
+LITERAL
+
+<pre>
+VERBATIM
+</pre>
+<pre>
+PRE
+</pre>
+<head>
+HEAD
+</head>
+<script>
+SCRIPT
+</script>
+<textarea>
+TEXTAREA
+</textarea>
+HERE
+    $this->assert_str_equals('', $iprelines[0]);
+    $this->assert_str_equals('PRE', $iprelines[1]);
+    $this->assert_str_equals('preRenderingHandler', $oprelines[0]);
+    $this->assert_str_equals('startRenderingHandler', $oprelines[1]);
+    $this->assert_str_equals('<!--xliteral1x-->', $oprelines[2]);
+    $this->assert_str_equals('<!--xverbatim0x-->', $oprelines[3]);
+    $this->assert_str_equals('<!--xpre5x-->', $oprelines[4]);
+    $this->assert_str_equals('<!--xhead2x-->', $oprelines[5]);
+    $this->assert_str_equals('<!--xscript4x-->', $oprelines[6]);
+    $this->assert_str_equals('<!--xtextarea3x-->', $oprelines[7]);
+    $this->assert_str_equals('<nop>', $oprelines[8]);
+    $this->checkCalls(1, 'preRenderingHandler');
+    $this->checkCalls(1, 'startRenderingHandler');
+    $this->checkCalls(1, 'endRenderingHandler');
+    $this->checkCalls(1, 'postRenderingHandler');
+}
+
+sub detest_afterAttachmentSaveHandler {
+    my $this = shift;
+    $this->makePlugin('afterAttachmentSaveHandler', <<'HERE');
+sub afterAttachmentSaveHandler {
+    my ($attachmentAttrHash, $topic, $web, $error) = @_;
+    $called->{afterAttachmentSaveHandler}++;
+}
+HERE
+}
+
+sub detest_afterEditHandler {
+    my $this = shift;
+    $this->makePlugin('afterEditHandler', <<'HERE');
+sub afterEditHandler {
+    my( $text, $topic, $web ) = @_;
+    $called->{afterEditHandler}++;
+}
+HERE
+}
+
+sub detest_afterRenameHandler {
+    my $this = shift;
+    $this->makePlugin('afterRenameHandler', <<'HERE');
+sub afterRenameHandler {
+    my ($oldWeb, $oldTopic, $oldAttachment, $newWeb,
+        $newTopic, $newAttachment) = @_;
+    $called->{afterRenameHandler}++;
+}
+HERE
+}
+
+sub detest_afterSaveHandler {
+    my $this = shift;
+    $this->makePlugin('afterSaveHandler', <<'HERE');
+sub afterSaveHandler {
+    my ($theText, $theTopic, $theWeb, $error, $meta) = @_;
+    $called->{afterSaveHandler}++;
+}
+HERE
+}
+
+sub detest_beforeAttachmentSaveHandler {
+    my $this = shift;
+    $this->makePlugin('beforeAttachmentSaveHandler', <<'HERE');
+sub beforeAttachmentSaveHandler {
+    my( $attrHashRef, $topic, $web ) = @_;
+    $called->{beforeAttachmentSaveHandler}++;
+}
+HERE
+}
+
+sub detest_beforeEditHandler {
+    my $this = shift;
+    $this->makePlugin('beforeEditHandler', <<'HERE');
+sub beforeEditHandler {
+    my( $text, $topic, $web, $meta ) = @_;
+    $called->{beforeEditHandler}++;
+}
+HERE
+}
+
+sub detest_beforeSaveHandler {
+    my $this = shift;
+    $this->makePlugin('beforeSaveHandler', <<'HERE');
+sub beforeSaveHandler {
+    my ( $theText, $theTopic, $theWeb, $meta ) = @_;
+    $called->{beforeSaveHandler}++;
+}
+HERE
+}
+
+sub detest_modifyHeaderHandler {
+    my $this = shift;
+    $this->makePlugin('modifyHeaderHandler', <<'HERE');
+sub modifyHeaderHandler {
+    my ($headers, $query) = @_;
+    $called->{modifyHeaderHandler}++;
+}
+HERE
+}
+
+sub detest_mergeHandler {
+    my $this = shift;
+    $this->makePlugin('mergeHandler', <<'HERE');
+sub mergeHandler {
+    my ($diff, $old, $new, $info) = @_;
+    $called->{mergeHandler}++;
+}
+HERE
+}
+
+sub detest_redirectCgiQueryHandler {
+    my $this = shift;
+    $this->makePlugin('redirectCgiQueryHandler', <<'HERE');
+sub redirectCgiQueryHandler {
+    my ( $query, $url ) = @_;
+    $called->{redirectCgiQueryHandler}++;
+}
+HERE
+}
+
+sub detest_registrationHandler {
+    my $this = shift;
+    $this->makePlugin('registrationHandler', <<'HERE');
+sub registrationHandler {
+    my ( $web, $wikiName, $loginName ) = @_;
+    $called->{registrationHandler}++;
+}
+HERE
+}
+
+sub detest_renderFormFieldForEditHandler {
+    my $this = shift;
+    $this->makePlugin('renderFormFieldForEditHandler', <<'HERE');
+sub renderFormFieldForEditHandler {
+    my ($name, $type, $size, $value, $attributes, $possibleValues) = @_;
+    $called->{renderFormFieldForEditHandler}++;
+}
+HERE
+}
+
+sub detest_renderWikiWordHandler {
+    my $this = shift;
+    $this->makePlugin('renderWikiWordHandler', <<'HERE');
+sub renderWikiWordHandler {
+    my ($text) = @_;
+    $called->{renderWikiWordHandler}++;
+}
+HERE
+}
+
+sub detest_writeHeaderHandler {
+    my $this = shift;
+    $this->makePlugin('writeHeaderHandler', <<'HERE');
+sub writeHeaderHandler {
+    my ($query) = @_;
+    $called->{writeHeaderHandler}++;
+}
+HERE
+}
+
+1;
