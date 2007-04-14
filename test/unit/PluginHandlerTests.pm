@@ -237,7 +237,7 @@ HERE
 use vars qw( @oprelines @iprelines );
 sub test_renderingHandlers {
     my $this = shift;
-    $this->makePlugin('postRenderingHandler', <<'HERE');
+    $this->makePlugin('renderingHandlers', <<'HERE');
 # Called after verbatim, literal, head, textareas, script have
 # all been removed, but *before* PRE is removed
 sub startRenderingHandler {
@@ -280,21 +280,20 @@ INNER
     # keys are generated when they are added to the removed hash)
     foreach my $k ( keys %{$removed} ) {
         if ($k =~ /^literal/) {
-            $tester->assert_str_equals("\nLITERAL\n", $removed->{$k}{text});
-        }
-        elsif ($k =~ /^verbatim/) {
-            $tester->assert_str_equals("\nVERBATIM\n", $removed->{$k}{text});
-        }
-        elsif ($k =~ /^pre/) {
-            $tester->assert_str_equals("\nPRE\n", $removed->{$k}{text});
-        }
-        elsif ($k =~ /^head/) {
-            $tester->assert_str_equals("<head>\nHEAD\n</head>", $removed->{$k}{text});
-        }
-        elsif ($k =~ /^script/) {
-            $tester->assert_str_equals("<script>\nSCRIPT\n</script>", $removed->{$k}{text});
-        elsif ($k =~ /^textarea/) {
-            $tester->assert_str_equals("<textarea>\nTEXTAREA\n</textarea>", $removed->{$k}{text});
+            $tester->assert_str_equals("\nLITERAL\n", $removed->{$k}{'text'});
+        } elsif ($k =~ /^verbatim/) {
+            $tester->assert_str_equals("\nVERBATIM\n", $removed->{$k}{'text'});
+        } elsif ($k =~ /^pre/) {
+            $tester->assert_str_equals("\nPRE\n", $removed->{$k}{'text'});
+        } elsif ($k =~ /^head/) {
+            $tester->assert_str_equals("<head>\nHEAD\n</head>",
+                 $removed->{$k}{'text'});
+        } elsif ($k =~ /^script/) {
+            $tester->assert_str_equals("<script>\nSCRIPT\n</script>",
+                 $removed->{$k}{'text'});
+        } elsif ($k =~ /^textarea/) {
+            $tester->assert_str_equals("<textarea>\nTEXTAREA\n</textarea>",
+                  $removed->{$k}{'text'});
         }
     }
     $_[0] = "preRenderingHandler\n$_[0]";
