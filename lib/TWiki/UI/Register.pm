@@ -958,7 +958,7 @@ sub _buildConfirmationEmail {
             $value = '*******';
         }
         if ( $name ne 'Confirm' ) {
-            $before .= $b.' '.$name.': '.$value."\n";
+            $before .= $b1.' '.$name.': '.$value."\n";
         }
     }
     $templateText = $before.($after||'');
