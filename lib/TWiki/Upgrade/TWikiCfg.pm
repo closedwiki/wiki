@@ -88,7 +88,7 @@ sub UpgradeTWikiConfig {
 
     # No need to upgrade if LocalSite.cfg is already good
     eval 'use TWiki';
-    if ( !$@ && defined &TWiki::new && -f "$twikiLibPath/TWiki/Client.pm" ) {
+    if ( !$@ && defined &TWiki::new && -f "$twikiLibPath/TWiki/LoginManager.pm" ) {
         print STDERR "$twikiLibPath is a Dakar TWiki\n";
         use vars qw(%cfg);
 	%cfg = ();

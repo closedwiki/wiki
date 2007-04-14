@@ -26,7 +26,7 @@
 
 =pod
 
----+ package TWiki::Client
+---+ package TWiki::LoginManager
 
 The package is also a Factory for login managers and also the base class
 for all login managers.
@@ -39,10 +39,10 @@ consider TemplateLogin or ApacheLogin, which are subclasses of this class.
 
 If you are building a new login manager, then you should write a new subclass
 of this class, implementing the methods marked as *VIRTUAL*. There are already
-examples in the =lib/TWiki/Client= directory.
+examples in the =lib/TWiki/LoginManager= directory.
 
 The class has extensive tracing, which is enabled by
-$TWiki::cfg{Trace}{Client.pm}. The tracing is done in such a way as to
+$TWiki::cfg{Trace}{LoginManager.pm}. The tracing is done in such a way as to
 let the perl optimiser optimise out the trace function as a no-op if tracing
 is disabled.
 
@@ -53,11 +53,11 @@ Early in TWiki::new, the login manager is created. The creation of the login man
    1 Creates the login manager object
 Slightly later in TWiki::new, loginManager->loadSession is called.
    1 Calls loginManager->getUser to get the username *before* the session is created
-      * TWiki::Client::ApacheLogin looks at REMOTE_USER
-      * TWiki::Client::TemplateLogin just returns undef
+      * TWiki::LoginManager::ApacheLogin looks at REMOTE_USER
+      * TWiki::LoginManager::TemplateLogin just returns undef
    1 reads the TWIKISID cookie to get the SID (or the TWIKISID parameters in the CGI query if cookies aren't available, or IP2SID mapping if that's enabled).
    1 Creates the CGI::Session object, and the session is thereby read.
-   1 If the username still isn't known, reads it from the cookie. Thus TWiki::Client::ApacheLogin overrides the cookie using REMOTE_USER, and TWiki::Client::TemplateLogin *always* uses the session.
+   1 If the username still isn't known, reads it from the cookie. Thus TWiki::LoginManager::ApacheLogin overrides the cookie using REMOTE_USER, and TWiki::LoginManager::TemplateLogin *always* uses the session.
 
 Later again in TWiki::new, plugins are given a chance to *override* the username found from the loginManager.
 
@@ -69,7 +69,7 @@ The TWiki object this login manager is attached to.
 
 =cut
 
-package TWiki::Client;
+package TWiki::LoginManager;
 
 use strict;
 use Assert;
@@ -94,9 +94,9 @@ $M3 = chr(7);
 
 =pod
 
----++ StaticMethod makeLoginManager( $twiki ) -> $TWiki::Client
+---++ StaticMethod makeLoginManager( $twiki ) -> $TWiki::LoginManager
 
-Factory method, used to generate a new TWiki::Client object
+Factory method, used to generate a new TWiki::LoginManager object
 for the given session.
 
 =cut
@@ -126,7 +126,7 @@ sub makeLoginManager {
     my $mgr;
     if( $TWiki::cfg{LoginManager} eq 'none' ) {
         # No login manager; just use default behaviours
-        $mgr = new TWiki::Client( $twiki );
+        $mgr = new TWiki::LoginManager( $twiki );
     } else {
         eval 'use '. $TWiki::cfg{LoginManager};
         throw Error::Simple( $@ ) if $@;
@@ -166,7 +166,7 @@ sub _real_trace {
     print STDERR "$id: $mess\n";
 }
 
-if( $TWiki::cfg{Trace}{Client} ) {
+if( $TWiki::cfg{Trace}{LoginManager} ) {
     *_trace = \&_real_trace;
 } else {
     *_trace = sub { undef };
@@ -808,7 +808,7 @@ sub _LOGIN {
     #my( $twiki, $params, $topic, $web ) = @_;
     my $twiki = shift;
     my $this = $twiki->{loginManager};
-    ASSERT($this->isa('TWiki::Client')) if DEBUG;
+    ASSERT($this->isa('TWiki::LoginManager')) if DEBUG;
 
     return '' if $twiki->inContext( 'authenticated' );
 
@@ -823,7 +823,7 @@ sub _LOGIN {
 sub _LOGOUTURL {
     my( $twiki, $params, $topic, $web ) = @_;
     my $this = $twiki->{loginManager};
-    ASSERT($this->isa('TWiki::Client')) if DEBUG;
+    ASSERT($this->isa('TWiki::LoginManager')) if DEBUG;
 
     return $twiki->getScriptUrl(
         0, 'view',
@@ -835,7 +835,7 @@ sub _LOGOUTURL {
 sub _LOGOUT {
     my( $twiki, $params, $topic, $web ) = @_;
     my $this = $twiki->{loginManager};
-    ASSERT($this->isa('TWiki::Client')) if DEBUG;
+    ASSERT($this->isa('TWiki::LoginManager')) if DEBUG;
 
     return '' unless $twiki->inContext( 'authenticated' );
 
@@ -850,7 +850,7 @@ sub _LOGOUT {
 sub _AUTHENTICATED {
     my( $twiki, $params ) = @_;
     my $this = $twiki->{loginManager};
-    ASSERT($this->isa('TWiki::Client')) if DEBUG;
+    ASSERT($this->isa('TWiki::LoginManager')) if DEBUG;
 
     if( $twiki->inContext( 'authenticated' )) {
         return $params->{then} || 1;
@@ -862,7 +862,7 @@ sub _AUTHENTICATED {
 sub _CANLOGIN {
     my( $twiki, $params ) = @_;
     my $this = $twiki->{loginManager};
-    ASSERT($this->isa('TWiki::Client')) if DEBUG;
+    ASSERT($this->isa('TWiki::LoginManager')) if DEBUG;
     if( $twiki->inContext( 'can_login' )) {
         return $params->{then} || 1;
     } else {
@@ -873,7 +873,7 @@ sub _CANLOGIN {
 sub _SESSION_VARIABLE {
     my( $twiki, $params ) = @_;
     my $this = $twiki->{loginManager};
-    ASSERT($this->isa('TWiki::Client')) if DEBUG;
+    ASSERT($this->isa('TWiki::LoginManager')) if DEBUG;
     my $name = $params->{_DEFAULT};
 
     if( defined( $params->{set} ) ) {
@@ -890,7 +890,7 @@ sub _SESSION_VARIABLE {
 sub _LOGINURL {
     my( $twiki, $params ) = @_;
     my $this = $twiki->{loginManager};
-    ASSERT($this->isa('TWiki::Client')) if DEBUG;
+    ASSERT($this->isa('TWiki::LoginManager')) if DEBUG;
     return $this->loginUrl();
 }
 

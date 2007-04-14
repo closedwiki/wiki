@@ -23,7 +23,7 @@
 
 =pod
 
----+ package TWiki::Client::ApacheLogin
+---+ package TWiki::LoginManager::ApacheLogin
 
 This is login manager that you can specify in the security setup section of
 [[%SCRIPTURL{"configure"}%][configure]]. It instructs TWiki to
@@ -35,17 +35,16 @@ ending in "auth". The latter should be symlinks to existing scripts; e.g.,
 
 See also TWikiUserAuthentication.
 
-Subclass of TWiki::Client; see that class for documentation of the
+Subclass of TWiki::LoginManager; see that class for documentation of the
 methods of this class.
 
 =cut
 
-package TWiki::Client::ApacheLogin;
+package TWiki::LoginManager::ApacheLogin;
+use base 'TWiki::LoginManager';
 
 use strict;
 use Assert;
-
-@TWiki::Client::ApacheLogin::ISA = qw( TWiki::Client );
 
 sub new {
     my( $class, $twiki ) = @_;
@@ -124,7 +123,7 @@ sub checkSession {
     my $this = shift;
     my $cgisession = $this->{cgisession};
     my $query = $this->{twiki}->{cgiQuery};
-    my $authUserSessionVar = $TWiki::Client::authUserSessionVar;
+    my $authUserSessionVar = $TWiki::LoginManager::authUserSessionVar;
 
     $cgisession->clear() if(
         defined($cgisession) && defined($cgisession->param) &&

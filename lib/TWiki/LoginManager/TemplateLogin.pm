@@ -23,25 +23,23 @@
 
 =pod
 
----+ package TWiki::Client::TemplateLogin
+---+ package TWiki::LoginManager::TemplateLogin
 
 This is a login manager that you can specify in the security setup section of
 [[%SCRIPTURL{"configure"}%][configure]]. It provides users with a
 template-based form to enter usernames and passwords, and works with the
 PasswordManager that you specify to verify those passwords.
 
-Subclass of TWiki::Client; see that class for documentation of the
+Subclass of TWiki::LoginManager; see that class for documentation of the
 methods of this class.
 
 =cut
 
-package TWiki::Client::TemplateLogin;
+package TWiki::LoginManager::TemplateLogin;
+use base 'TWiki::LoginManager';
 
 use strict;
 use Assert;
-use TWiki::Client;
-
-@TWiki::Client::TemplateLogin::ISA = ( 'TWiki::Client' );
 
 sub new {
     my( $class, $session ) = @_;

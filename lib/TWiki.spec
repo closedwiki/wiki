@@ -228,18 +228,18 @@ $TWiki::cfg{Sessions}{UseIPMatching} = 1;
 $TWiki::cfg{Sessions}{MapIP2SID} = 0;
 
 #---++ Authentication
-# **SELECTCLASS none,TWiki::Client::*Login**
+# **SELECTCLASS none,TWiki::LoginManager::*Login**
 # TWiki supports different ways of responding when the user asks to log
 # in (or is asked to log in as the result of an access control fault).
 # They are:
 # <ol><li>
 # none - Don't support logging in, all users have access to everything.
 # </li><li>
-# TWiki::Client::TemplateLogin - Redirect to the login template, which
+# TWiki::LoginManager::TemplateLogin - Redirect to the login template, which
 #   asks for a username and password in a form. Does not cache the ID in
 #   the browser, so requires client sessions to work.
 # </li><li>
-# TWiki::Client::ApacheLogin - Redirect to an '...auth' script for which
+# TWiki::LoginManager::ApacheLogin - Redirect to an '...auth' script for which
 #   Apache can be configured to ask for authorization information. Does
 #   not require client sessions, but works best with them enabled.
 # </li></ol>

@@ -161,7 +161,7 @@ sub run {
     } catch TWiki::AccessControlException with {
         my $e = shift;
         unless( $session->{loginManager}->forceAuthentication() ) {
-            # Client did not want to authenticate, perhaps because
+            # Login manager did not want to authenticate, perhaps because
             # we are already authenticated.
             my $exception = new TWiki::OopsException(
                 'accessdenied',

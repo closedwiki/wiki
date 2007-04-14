@@ -140,9 +140,9 @@ sub renderParent {
                  ( $pTopic eq $TWiki::cfg{HomeTopicName} ) ||
                  $visited{$parent} );
         $visited{$parent} = 1;
-	$text = $format;
-	$text =~ s/\$web/$pWeb/g;
-	$text =~ s/\$topic/$pTopic/g;
+        $text = $format;
+        $text =~ s/\$web/$pWeb/g;
+        $text =~ s/\$topic/$pTopic/g;
         unshift( @stack, $text );
         last if $dontRecurse;
         $parent = $store->getTopicParent( $pWeb, $pTopic );

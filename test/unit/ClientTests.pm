@@ -3,7 +3,7 @@ use strict;
 package ClientTests;
 
 # This is woefully incomplete, but it does at least check that
-# Client.pm compiles okay.
+# LoginManager.pm compiles okay.
 
 use base qw(TWikiTestCase);
 
@@ -11,7 +11,7 @@ use CGI;
 use Error qw( :try );
 
 use TWiki;
-use TWiki::Client;
+use TWiki::LoginManager;
 use TWiki::UI::View;
 use TWiki::UI::Edit;
 
@@ -30,7 +30,7 @@ sub list_tests {
     my $clz = new Devel::Symdump(qw(ClientTests));
     for my $i ($clz->functions()) {
         next unless $i =~ /::verify_/;
-        foreach my $impl qw( TWiki::Client::TemplateLogin TWiki::Client::ApacheLogin none) {
+        foreach my $impl qw( TWiki::LoginManager::TemplateLogin TWiki::LoginManager::ApacheLogin none) {
             my $fn = $i;
             $fn =~ s/\W/_/g;
             my $sfn = 'ClientTests::test_'.$fn.$impl;
