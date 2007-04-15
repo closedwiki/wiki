@@ -673,7 +673,7 @@ sub changePassword {
                 params => [ $TWiki::cfg{MinPasswordLength} ] );
         }
 
-        unless( $users->setPassword($user, $oldpassword, $passwordA)) {
+        unless( $users->setPassword( $user, $passwordA, $oldpassword )) {
             throw TWiki::OopsException( 'attention',
                                         web => $webName,
                                         topic => $topic,
