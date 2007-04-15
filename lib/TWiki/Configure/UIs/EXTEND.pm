@@ -60,7 +60,7 @@ I can't download $arf because of the following error:
 <pre>$@</pre>
 HERE
         undef $ar;
-    } elsif ($ar !~ s!^.*Content-Type: application/x-gzip\r\n\r\n!!is) {
+    } elsif ($ar !~ s!^.*Content-Type: application/x-gzip.*\r\n\r\n!!is) {
         print $this->WARN(<<HERE);
 I can't install $arf because I don't recognise the download
 as a gzip file.
@@ -85,7 +85,7 @@ I can't download $arf because of the following error:
 <pre>$@</pre>
 HERE
             undef $ar;
-        } elsif ($ar !~ s#^.*Content-Type: application/zip\r\n\r\n##is) {
+        } elsif ($ar !~ s#^.*Content-Type: application/zip.*\r\n\r\n##is) {
             print $this->WARN(<<HERE);
 I can't install $arf because I don't recognise the download
 as a zip file.
