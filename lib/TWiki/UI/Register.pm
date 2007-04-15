@@ -987,7 +987,7 @@ sub _validateRegistration {
                                     topic => $session->{topicName},
                                     def => 'bad_loginname',
                                     params => [ 'undefined' ] );
-    } elsif( !defined( $data->{LoginName} ) {
+    } elsif( !defined( $data->{LoginName} ) ) {
         # Login name is optional, default to the wikiname
         $data->{LoginName} = $data->{WikiName};
     }
