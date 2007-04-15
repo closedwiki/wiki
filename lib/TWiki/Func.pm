@@ -1175,7 +1175,10 @@ sub getTopicList {
 Test if topic exists
    * =$web=   - Web name, optional, e.g. ='Main'=.
    * =$topic= - Topic name, required, e.g. ='TokyoOffice'=, or ="Main.TokyoOffice"=
+
 $web and $topic are parsed as described in the documentation for =normalizeWebTopicName=.
+Specifically, the %MAINWEB% is used if $web is not specified and $topic has no web specifier.
+To get an expected behaviour it is recommened to specify the current web for $web; don't leave it empty.
 
 *Since:* TWiki::Plugins::VERSION 1.000 (14 Jul 2001)
 
