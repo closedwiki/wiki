@@ -1,5 +1,12 @@
 twiki (1:4.0.5-9.1) unstable; urgency=low
 
+  * remove 192.168.1.10 from configure access (Closes: #412057)
+
+ -- Sven Dowideit <SvenDowideit@distributedINFORMATION.com>  Sun, 15 Apr 2007 08:53:40 +0100
+
+
+twiki (1:4.0.5-9.1) unstable; urgency=low
+
   * Non-maintainer upload.
   * Correct inconsistencies in debconf templates
   * Debconf translations:
