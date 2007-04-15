@@ -132,6 +132,10 @@ sub error {
     return $this->{error} || undef;
 }
 
+sub isManagingEmails {
+    return 1;
+}
+
 # emails are stored in extra info field as a ; separated list
 sub getEmails {
     my( $this, $login) = @_;

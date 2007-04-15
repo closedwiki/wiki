@@ -1459,6 +1459,8 @@ sub new {
     # *all possible preferences sources* are available
     $this->{i18n} = TWiki::I18N::get( $this );
 
+    $TWiki::Plugins::SESSION = $this;
+
     return $this;
 }
 

@@ -172,14 +172,33 @@ sub error {
 
 =pod
 
+---++ ObjectMethod isManagingEmails() -> $boolean
+Determines if this manager can store and retrieve emails. The password
+manager is used in preference to the user mapping manager for storing
+emails, on the basis that emails need to be secure, and the password
+database is the most secure place. If a password manager does not
+manage emails, then TWiki will fall back to using the user mapping
+manager (which by default will store emails in user topics)
+
+The default ('none') password manager does *not* manage emails.
+
+=cut
+
+sub isManagingEmails {
+    return 0;
+}
+
+=pod
+
 ---++ ObjectMethod getEmails($login) -> @emails
 Fetch the email address(es) for the given login. Default
 behaviour is to return an empty list. Called by Users.pm.
+Only used if =isManagingEmails= -> =true=.
 
 =cut
 
 sub getEmails {
-    return ();
+    die "should never be called";
 }
 
 =pod
@@ -189,11 +208,12 @@ Set the email address(es) for the given login name. Returns true if
 the emails were set successfully.
 Default behaviour is a nop, which will result in the user mapping manager
 taking over. Called by Users.pm.
+Only used if =isManagingEmails= -> =true=.
 
 =cut
 
 sub setEmails {
-    return 0;
+    die "should never be called";
 }
 
 =pod
@@ -203,6 +223,7 @@ Returns an array of login names that relate to a email address.
 Defaut behaviour is a nop, which will result in the user mapping manager
 being asked for its opinion. If subclass implementations return a value for
 this, then the user mapping manager will *not* be asked.
+Only used if =isManagingEmails= -> =true=.
 
 Called by Users.pm.
 
@@ -210,7 +231,7 @@ Called by Users.pm.
 
 sub findUserByEmail {
     my( $this, $email ) = @_;
-    return undef;
+    die "should never be called";
 }
 
 1;

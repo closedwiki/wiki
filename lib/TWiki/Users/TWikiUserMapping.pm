@@ -427,6 +427,7 @@ sub isInGroup {
 
 # Called from TWiki::Users. See the documentation of the corresponding
 # method in that module for details.
+# Only used if =passwordManager->isManagingEmails= = =false=.
 sub getEmails {
     my( $this, $user ) = @_;
 
@@ -455,6 +456,7 @@ sub getEmails {
 
 # Called from TWiki::Users. See the documentation of the corresponding
 # method in that module for details.
+# Only used if =passwordManager->isManagingEmails= = =false=.
 sub setEmails {
     my $this = shift;
     my $user = shift;
@@ -488,6 +490,7 @@ sub setEmails {
 
 # Called from TWiki::Users. See the documentation of the corresponding
 # method in that module for details.
+# Only used if =passwordManager->isManagingEmails= = =false=.
 sub findUserByEmail {
     my( $this, $email ) = @_;
 

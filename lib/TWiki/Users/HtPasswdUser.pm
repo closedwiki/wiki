@@ -238,6 +238,10 @@ sub checkPassword {
     return 0;
 }
 
+sub isManagingEmails {
+    return 1;
+}
+
 sub getEmails {
     my( $this, $login ) = @_;
 
