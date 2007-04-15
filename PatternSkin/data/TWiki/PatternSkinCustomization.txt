@@ -8,7 +8,21 @@
 
 ---++ First Read: How to modify !PatternSkin templates
 
-If you need to change any of the elements that are visible on the common 'view' pages, you need to change the 'view' _template_: =/templates/view.pattern.tmpl=. The quickest way would be to simply change the text in the template. A safer way -  strongly recommended, because it will survive a TWiki update - is to create your own custom skin. That may sound like an awful lot of work, but in reality a skin may be as much as 1 file that consists of only a few lines of code.
+Everything you see on the common 'view' page is written by the =view= template. For pattern skin this file is =/templates/view.pattern.tmpl=.
+
+We describe two approaches to override this template:
+   1 By creating a custom skin file in the =templates= directory
+   1 By creating a custom topic template
+
+Which approach is best?
+   * If you want to change the appearance for a lot of pages or even site-wide, the template approach is the easiest.
+   * If you want to change the appearance of a single topic, or a set of topics, use a topic template.
+
+---+++ The template approach
+
+To change templates you will need shell access. If you don't have this read on below in [[#TopicTemplates][The topic template approach]].
+
+The quickest way to change the view template would be to simply change the text in the template. A safer way -  strongly recommended, because it will survive a TWiki update - is to create your own custom skin. That may sound like an awful lot of work, but in reality a skin may be as much as 1 file that consists of only a few lines of code.
 
 *Example* %BR%
 Let's say you want to simplify the bottom toolbar and remove all links except for "More topic actions". You would need to target =%<nop>TMPL:DEF{"topicactionbuttons"}%=, which is located in =view.pattern.tmpl=.
@@ -16,10 +30,11 @@ Let's say you want to simplify the bottom toolbar and remove all links except fo
 *The steps you would need:*
    1 Think up a name for your skin. Let us use =myskin= for now.
    1 Create a new (empty) view template file in =/templates= called =view.myskin.tmpl=.
-   1 In =view.myskin.tmpl= you write: %BR%
-   =%<nop>TMPL:INCLUDE{"view"}%= %BR%
-   =%<nop>TMPL:DEF{"topicactionbuttons"}%%<nop>TMPL:P{"activatable_more"}%%<nop>TMPL:END%=
-   1 Now the skin is set. For testing, view any topic and append to the topic name: =?cover=myskin=. You should see an effect now.
+   1 In =view.myskin.tmpl= you write:
+   <blockquote><verbatim>
+   %TMPL:INCLUDE{"view"}%
+   %TMPL:DEF{"topicactionbuttons"}%%TMPL:P{"activatable_more"}%%TMPL:END%</verbatim></blockquote>
+   1 For testing, view any topic and append to the topic name: =?cover=myskin=. You should see an effect now.
    1 To make the changes visible on all pages, go to [[Main.TWikiPreferences]] (to keep %WIKIPREFSTOPIC% intact) and write:
 <blockquote><pre>
    * <nop>Set COVER = myskin
@@ -29,6 +44,56 @@ or write
    * <nop>Set SKIN = myskin,pattern
 </pre></blockquote>
 
+Test by appending =?cover=myskin= to the url.
+
+
+#TopicTemplates
+---+++ The topic template approach (using VIEW_TEMPLATE)
+
+Template overrides can be written in a topic, a so-called _topic template_. Topic template names end with =Template=, for instance =BlogPostViewTemplate=.
+
+Call this template by setting =VIEW_TEMPLATE=:
+<blockquote>
+<verbatim>
+   * Set VIEW_TEMPLATE = BlogPostView
+</verbatim>
+</blockquote>
+   * Note that you don't use the =Template= extension now
+   * You can make this setting hidden by writing this in the Settings screen: go to More and then Topic Settings
+   * On topic creation you can set the topic template by passing =templatetopic=:
+   <verbatim>
+   <input type="hidden" name="templatetopic" value="BlogPostViewTemplate" />
+   </verbatim>
+
+We can use the same example as above. In a topic write:
+<blockquote>
+<verbatim>
+%TMPL:INCLUDE{"view"}%
+%TMPL:DEF{"topicactionbuttons"}%%TMPL:P{"activatable_more"}%%TMPL:END%
+</verbatim>
+</blockquote>
+
+You can also test this by appending =?template=PersonalInfoView= to the url.
+
+---++ Reference: pattern skin template INCLUDE tree
+
+<verbatim>
+view
+    page
+        constants
+        javascript
+        styles
+            stylesdynamic
+        body
+            viewtopbar
+                %TWIKIWEB%.WebTopBar
+            viewtoolbar
+            viewleftbar
+                %WEB%.WebLeftBar
+            viewtopicactionbuttons
+            viewbottombar
+                %TWIKIWEB%.WebBottomBar
+</verbatim>
 
 ---++ Logo
 
@@ -72,13 +137,24 @@ To change only the web logo image to site-wide, in [[%LOCALSITEPREFS%]] set:
 
 ---+++ My logo does not fit the top bar
 
+See [[#TopBarChangeHeight][I want to change the height of the top bar]]
+
+---+++ I want to change the white space above and below the logo
+
+Change the table style in topic %TWIKIWEB%.WebTopBar. The default top padding is 11px.
+
+---++ Top bar
+
+#TopBarChangeHeight
+---+++ I want to change the height of the top bar
+
 The top bar is 64 pixels high by default.
 
-*Using templates:*
-<blockquote>
-Change the height of the top bar in =templates/viewtopbar.pattern.tmpl=:
+*Using templates:* %BR%
+Using either a template or a topic template, copy this definition in your custom template:
 
-<pre>
+<blockquote>
+<verbatim>
 %TMPL:DEF{"topbardimensions"}%
 #patternTopBar,
 #patternClearHeaderCenter,
@@ -89,21 +165,14 @@ Change the height of the top bar in =templates/viewtopbar.pattern.tmpl=:
 	overflow:hidden;
 }
 %TMPL:END%
-</pre>
-
-Only change the number from 64px to another value.
+</verbatim>
+And change the number from 64px to a different value.
 </blockquote>
 
 *Using style sheets:*
 <blockquote>
 Create a new stylesheet with above definition in it, attach it to a topic and point =USERLAYOUTURL= to that topic attachment. See %TWIKIWEB%.PatternSkinCssCookbook about creating custom styles.
 </blockquote>
-
----+++ I want to change the white space above and below the logo
-
-Change the table style in topic %TWIKIWEB%.WebTopBar. The default top padding is 11px.
-
----++ Top bar
 
 ---+++ I want to set or change the top background image
 
@@ -149,95 +218,118 @@ The view template is populated with page elements using template inclusions:
 Each included template draws a part of the screen.%BR%
 Omit =%<nop>TMPL:INCLUDE{"viewtopbar"}%= to hide the top bar.
 
-Another approach is to clear the contents of module =topbar=; for example in =view.myskin.tmpl=:
-<blockquote><pre>
-%<nop>TMPL:INCLUDE{"view"}%
+Another approach is to clear the contents of module =topbar=. Using either a template or a topic template, write in your custom template:
 
-%<nop>TMPL:INCLUDE{"topbar"}%%TMPL:END%
-</pre>
+<blockquote><verbatim>
+%TMPL:INCLUDE{"view"}%
+%TMPL:INCLUDE{"topbar"}%%TMPL:END%
+</verbatim>
 
 and add:
 
-<pre>
-%<nop>TMPL:DEF{"topbardimensions"}%#patternTopBar,
+<verbatim>
+%TMPL:DEF{"topbardimensions"}%#patternTopBar,
 #patternClearHeaderCenter,
 #patternClearHeaderLeft,
 #patternClearHeaderRight,
 #patternTopBarContentsOuter {
 	height:0px;
-}%<nop>TMPL:END%
-</pre>
-</blockquote>
+}%TMPL:END%
+</verbatim></blockquote>
 
-*Using style sheets:*
-<blockquote>
-See PatternSkinCssCookbookNoTopBar.
-</blockquote>
+*Using style sheets:* %BR%
+See PatternSkinCssCookbookNoTopBar
 
 ---++ Left bar
 
 ---+++ I want to hide the left bar
 
-*Using templates:*
+*Using templates:* %BR%
+Omit =%<nop>TMPL:INCLUDE{"viewleftbar"}%= to hide the left bar, or in a custom template clear it using
+<blockquote><verbatim>
+%TMPL:DEF{"viewleftbar"}%%TMPL:END%
+</verbatim></blockquote>
+
+*Using style sheets:* %BR%
+See PatternSkinCssCookbookNoLeftBar
+
+---+++ I want to make the left bar wider
+
+*Using templates:* %BR%
+
+The left bar is 12 em wide by default.
+
+*Using templates:* %BR%
+Using either a template or a topic template, copy this definition in your custom template:
+
 <blockquote>
-Omit =%<nop>TMPL:INCLUDE{"viewleftbar"}%= to hide the left bar, or in a view template clear it using =%<nop>TMPL:DEF{"viewleftbar"}%%TMPL:END%=
+<verbatim>
+%TMPL:DEF{"leftbardimensions"}%#patternOuter {
+	margin-left:12em;
+}
+#patternLeftBar {
+	width:12em;
+	margin-left:-12em;
+}%TMPL:END%
+</verbatim>
+And change the number from 12em to a different value (3 occurrences).
 </blockquote>
 
-*Using style sheets:*
-<blockquote>
-See PatternSkinCssCookbookNoLeftBar.
-</blockquote>
 
 ---++ Other page parts
 
 ---+++ I want to hide the edit buttons from certain users
 
-It may defy the wiki-ness of your TWiki installation, but in certain circumstances it could be useful to hide the edit buttons from users that are not logged in, for instance for customers.
+It may defy the wiki-ness of your TWiki installation, but in certain circumstances it could be useful to hide the edit buttons from users that are not logged in, for instance for clients that have gotten viewing rights only.
 
-Create in the template directory the file =view.customer.tmpl=. 'Empty' =topicaction= and =toolbar= by writing in the template:
+Using either a template or a topic template, 'empty' =topicaction= and =toolbar= by writing:
 <blockquote><pre>
 %<nop>TMPL:INCLUDE{"view"}%
 %<nop>TMPL:DEF{"topicaction"}%%TMPL:END%
 %<nop>TMPL:DEF{"toolbar"}%%TMPL:END%
 </pre></blockquote>
 
-In %MAINWEB%.TWikiGuest, set the cover to
+In the user page of %MAINWEB%.TWikiGuest, set the cover to
 <blockquote><pre>
    * <nop>Set COVER = customer
 </pre></blockquote>
 
-By default this topic is editable only by !TWikiAdminGroup members.
+By default this topic is editable only by TWiki admins.
 
 ---+++ I want to remove the History button from the bottom
 
-All action buttons are defined in =viewtopicactionbuttons.pattern.tmpl=. Remove module =revisions= from =%<nop>TMPL:DEF{"topicactionbuttons"}%=. %BR%
+All action buttons are defined in =viewtopicactionbuttons.pattern.tmpl=. The history buttons or in module =revisions=:
 <blockquote><code style="white-space:pre">
 %<nop>TMPL:DEF{"topicactionbuttons"}%%<nop>TMPL:P{"activatable_raw_edit"}%%<nop>TMPL:P{"sep"}%
-%<nop>TMPL:P{context="WysiwygPluginEnabled" then="activatable_edit_wysiwyg"}%%<nop>TMPL:P{context="WysiwygPluginEnabled" then="sep"}%
+%<nop>TMPL:P{context="WysiwygPluginEnabled" then="activatable_edit_wysiwyg"}%
+%<nop>TMPL:P{context="WysiwygPluginEnabled" then="sep"}%
 %<nop>TMPL:P{"activatable_attach"}%%<nop>TMPL:P{"sep"}%
 %<nop>TMPL:P{"printable"}%%<nop>TMPL:P{"sep"}%
 %<nop>TMPL:P{"raw"}%%<nop>TMPL:P{"sep"}%
 %<nop>TMPL:P{"backlinks"}%%<nop>TMPL:P{"sep"}%
-<span style="color:red"><s>%<nop>TMPL:P{"revisions"}%%<nop>TMPL:P{"sep"}%</s></span>
+%<nop>TMPL:P{"revisions"}%%<nop>TMPL:P{"sep"}% <span style="color:red">&lt; HERE</span>
 %<nop>TMPL:P{"activatable_more"}%%<nop>TMPL:END%
 </code>
 </blockquote>
-In your =view.myskin.tmpl= file (see above) you write:
-<blockquote><pre>
-%<nop>TMPL:INCLUDE{"view"}%
 
-%<nop>TMPL:DEF{"topicactionbuttons"}%%TMPL:P{"activatable_raw_edit"}%%TMPL:P{"sep"}%
-%<nop>TMPL:P{context="WysiwygPluginEnabled" then="activatable_edit_wysiwyg"}%%TMPL:P{context="WysiwygPluginEnabled" then="sep"}%
-%<nop>TMPL:P{"activatable_attach"}%%TMPL:P{"sep"}%
-%<nop>TMPL:P{"printable"}%%TMPL:P{"sep"}%
-%<nop>TMPL:P{"raw"}%%TMPL:P{"sep"}%
-%<nop>TMPL:P{"backlinks"}%%TMPL:P{"sep"}%
-%<nop>TMPL:P{"activatable_more"}%%TMPL:END%
-</pre>
+If we emptied module =revisions= we would end up with 2 separators, so we need to remove the line altogether. We do this by copying the block and omitting the line. %BR%
+Using either a template or a topic template, to remove the history buttons write in your custom template:
+
+<blockquote><verbatim>
+%TMPL:INCLUDE{"view"}%
+
+%TMPL:DEF{"topicactionbuttons"}%%TMPL:P{"activatable_raw_edit"}%%TMPL:P{"sep"}%
+%TMPL:P{context="WysiwygPluginEnabled" then="activatable_edit_wysiwyg"}%
+%TMPL:P{context="WysiwygPluginEnabled" then="sep"}%
+%TMPL:P{"activatable_attach"}%%TMPL:P{"sep"}%
+%TMPL:P{"printable"}%%TMPL:P{"sep"}%
+%TMPL:P{"raw"}%%TMPL:P{"sep"}%
+%TMPL:P{"backlinks"}%%TMPL:P{"sep"}%
+%TMPL:P{"activatable_more"}%%TMPL:END%
+</verbatim>
 
 Remove all newlines if you copy-paste above text.
 </blockquote>
-Test by appending =?cover=myskin= to any topic.
 
 ---+++ I want to insert text outside of the topic content
 
@@ -247,18 +339,38 @@ Both modules are wrapped in CSS containers:
    * =beforetextcontents= - wrapped in =div= of class =twikiBeforeText=
    * =aftertextcontents= - wrapped in =div= of class =twikiAfterText=
    
-To put contents before the main text, use the custom skin approach as described above.%BR%
-So our =view.myskin.tmpl= file contains:
-<blockquote><pre>
-%<nop>TMPL:INCLUDE{"view"}%
+To put contents *before* the main text, use the custom skin approach as described above.%BR%
+So our custom template contains:
+<blockquote><verbatim>
+%TMPL:INCLUDE{"view"}%
+%TMPL:DEF{"beforetextcontents"}%This is the text before%TMPL:END%
+</verbatim></blockquote>
 
-%<nop>TMPL:DEF{"beforetextcontents"}%This is the text before%TMPL:END%
-</pre></blockquote>
-Test by appending =?cover=myskin= to any topic.
+Use the same procedure for contents to be put *after* the topic text:
+<blockquote><verbatim>
+%TMPL:INCLUDE{"view"}%
+%TMPL:DEF{"aftertextcontents"}%This is the text after%TMPL:END%
+</verbatim></blockquote>
 
-Use the same procedure for contents to be put after the topic text:
-<blockquote><pre>
-%<nop>TMPL:INCLUDE{"view"}%
+---+++ I want to place the form at the top
 
-%<nop>TMPL:DEF{"aftertextcontents"}%This is the text after%TMPL:END%
-</pre></blockquote>
+Pattern skin has 2 buckets for the form: =formattop= (form-at-the-top) and =formatbottom= (form-at-the-bottom):
+
+<blockquote>
+<verbatim>
+%TMPL:DEF{"formattop"}%%TMPL:END%
+%TMPL:DEF{"formatbottom"}%%TMPL:P{"form"}%%TMPL:END%
+</verbatim>
+</blockquote>
+
+You simply swap the bucket contents. Using either a template or a topic template, write in your custom template:
+
+<blockquote>
+<verbatim>
+%TMPL:INCLUDE{"view"}%
+%TMPL:DEF{"formattop"}%%TMPL:P{"form"}%%TMPL:END%
+%TMPL:DEF{"formatbottom"}%%TMPL:END%
+</verbatim>
+</blockquote>
+
+
