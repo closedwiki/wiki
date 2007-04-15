@@ -141,7 +141,6 @@ sub formatVersions {
     for( my $rev = $latestRev; $rev >= 1; $rev-- ) {
         my( $date, $user, $minorRev, $comment ) =
           $store->getRevisionInfo( $web, $topic, $rev, $attrs{name} );
-        $user = $users->webDotWikiName($user) if( $user );
 
         $rows .= _formatRow( $this, $web, $topic,
                              {
@@ -226,12 +225,7 @@ sub _expandAttrs {
         return TWiki::Time::formatTime( $info->{date} || 0 );
     }
     elsif ( $attr eq 'USER' ) {
-        my $user = $info->{user};
-        if (defined($user)) {
-            return $users->webDotWikiName($user);
-        } else {
-            return $info->{user};
-        }
+        return $info->{user} || 'unknown';
     }
     else {
         return $TWiki::TranslationToken.'A_'.$attr.$TWiki::TranslationToken;
