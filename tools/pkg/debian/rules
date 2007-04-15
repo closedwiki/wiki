@@ -69,6 +69,8 @@ install: build
 	mkdir debian/twiki/var/lib/twiki/tools
 	cp -r tools/* debian/twiki/var/lib/twiki/tools/
 	chmod -R 777 debian/twiki/var/lib/twiki/tools/*
+	cp -p debian/mod_perl_startup.pl debian/twiki/var/lib/twiki/tools/
+
 
     #SVEN - you should probably make this a patch file.
 	perl -piOLD -e 's{#! perl}{#!/usr/bin/perl}g;' debian/twiki/var/lib/twiki/tools/rewriteshbang.pl
