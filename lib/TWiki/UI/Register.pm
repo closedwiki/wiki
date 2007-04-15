@@ -401,6 +401,7 @@ sub _requireVerification {
     my $web = $session->{webName};
 
     my $data = _getDataFromQuery( $query, $query->param() );
+    $data->{LoginName} ||= $data->{WikiName};
     $data->{webName} = $web;
 
     $data->{VerificationCode} =
@@ -754,6 +755,10 @@ sub finish {
         throw Error::Simple( 'no WikiName after reload');
     }
 
+    if (! exists $data->{LoginName}) {
+        throw Error::Simple( 'no LoginName after reload');
+    }
+
     # Create the user topic. We have to do this before adding the
     # user to the user management system, because some user mappers
     # use the user topic to store data.
@@ -974,6 +979,19 @@ sub _buildConfirmationEmail {
 sub _validateRegistration {
     my ( $session, $data, $requireForm ) = @_;
 
+    if( !defined( $data->{LoginName} ) &&
+          $TWiki::cfg{Register}{AllowLoginName} ) {
+        # Login name is required, barf
+        throw TWiki::OopsException( 'attention',
+                                    web => $data->{webName},
+                                    topic => $session->{topicName},
+                                    def => 'bad_loginname',
+                                    params => [ 'undefined' ] );
+    } elsif( !defined( $data->{LoginName} ) {
+        # Login name is optional, default to the wikiname
+        $data->{LoginName} = $data->{WikiName};
+    }
+
     # Check if login name matches expectations
     unless( $data->{LoginName} =~ /$TWiki::cfg{LoginNameFilterIn}/ ) {
         throw TWiki::OopsException( 'attention',
@@ -985,8 +1003,7 @@ sub _validateRegistration {
 
     # Check if the login name is already registered
     my $users = $session->{users};
-    if( $TWiki::cfg{MapUserToWikiName} && $data->{LoginName} &&
-          $users->userExists( $data->{LoginName}) ) {
+    if( $users->userExists( $data->{LoginName}) ) {
         throw TWiki::OopsException( 'attention',
                                     web => $data->{webName},
                                     topic => $session->{topicName},
@@ -1006,9 +1023,8 @@ sub _validateRegistration {
     if (exists $data->{passwordA}) {
         # check password length
         my $doCheckPasswordLength  =
-            ($TWiki::cfg{PasswordManager}  ne  'none')  &&
-            !$TWiki::cfg{Register}{AllowLoginName}      &&
-             $TWiki::cfg{MinPasswordLength};
+          ( $TWiki::cfg{PasswordManager} ne 'none'  &&
+              $TWiki::cfg{MinPasswordLength} );
 
         if ($doCheckPasswordLength &&
             length($data->{passwordA}) < $TWiki::cfg{MinPasswordLength}) {
@@ -1209,8 +1225,6 @@ sub _getDataFromQuery {
         }
     }
     $data->{WikiName} = TWiki::Sandbox::untaintUnchecked($data->{WikiName});
-    $data->{LoginName} ||= $data->{WikiName}
-      unless $TWiki::cfg{Register}{AllowLoginName};
     if( !$data->{Name} &&
           defined $data->{FirstName} && defined $data->{LastName}) {
         $data->{Name} = $data->{FirstName}.' '.$data->{LastName};

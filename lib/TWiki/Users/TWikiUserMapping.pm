@@ -244,7 +244,7 @@ sub removeUser {
 # Map a canonical user name to a wikiname
 sub getWikiName {
     my ($this, $user) = @_;
-    if( $TWiki::cfg{MapUserToWikiName} ) {
+    if( $TWiki::cfg{Register}{AllowLoginName} ) {
         _loadMapping( $this );
         return $this->{U2W}->{$user} || canonical2login( $this, $user );
     } else {
@@ -513,7 +513,7 @@ sub findUserByWikiName {
     my @users = ();
 
     # Add additional mappings defined in TWikiUsers
-    if ($TWiki::cfg{MapUserToWikiName}) {
+    if ($TWiki::cfg{Register}{AllowLoginName}) {
         _loadMapping( $this );
         if( $this->{W2U}->{$wn} ) {
             push( @users, $this->{W2U}->{$wn} );

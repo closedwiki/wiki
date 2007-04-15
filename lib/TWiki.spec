@@ -367,21 +367,12 @@ $TWiki::cfg{Htpasswd}{Encoding} = 'crypt';
 # </li></ol>
 $TWiki::cfg{UserMappingManager} = 'TWiki::Users::TWikiUserMapping';
 
-# **BOOLEAN EXPERT**
-# Map login name to Wiki name via the mapping in the topic named
-# in {UsersTopicName}. Set this to $FALSE for .htpasswd
-# authenticated sites where the users wiki name is the
-# name they use to log in, or if you have some other way of
-# making the mapping to a Wiki name (e.g. a bespoke mapping manager).
-$TWiki::cfg{MapUserToWikiName} = $TRUE;
-
 #---++ Registration
 # **BOOLEAN**
 # If you want users to be able to use a login ID other than their
 # wikiname, you need to turn this on. It controls whether the 'LoginName'
-# box appears during the user registration process. If you are using
-# intranet authentication instead of TWiki authentication, you probably
-# need to turn this on.
+# box appears during the user registration process, and whether TWiki
+# tries to map login names to wikinames.
 $TWiki::cfg{Register}{AllowLoginName} = $FALSE;
 
 # **BOOLEAN EXPERT**
