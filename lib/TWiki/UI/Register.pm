@@ -564,7 +564,7 @@ sub _resetUsersPassword {
             $users->getWikiName( $user ));
     }
 
-    return 1;
+    return $sent;
 }
 
 =pod

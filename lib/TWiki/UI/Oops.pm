@@ -123,7 +123,8 @@ sub oops {
             $tmplData =~ s/%PARAM$n%/$param/g;
             $n++;
         }
-        ASSERT( $tmplData !~ /%PARAM\d+%/ ) if DEBUG;
+        $tmplData =~ s/%(PARAM\d+)%/
+          CGI::span({class=>'twikiAlert'},"MISSING $1 ")/ge if DEBUG;
         $tmplData = $session->handleCommonTags( $tmplData, $web, $topic );
         $tmplData = $session->{renderer}->getRenderedVersion( $tmplData, $web,
                                                               $topic );
