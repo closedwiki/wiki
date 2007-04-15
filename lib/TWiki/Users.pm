@@ -262,17 +262,20 @@ sub findUserByEmail {
     ASSERT($email) if DEBUG;
     my @users;
     my $um = $this->{mapping};
-    my $logins = $this->{passwords}->findLoginByEmail( $email );
-    if ($logins) {
-        foreach my $l ( @$logins ) {
-            $l = $um->lookupLoginName( $l );
-            push( @users, $l ) if $l;
+    my $ph = $this->{passwords};
+    if( $ph->isManagingEmails()) {
+        my $logins = $this->{passwords}->findLoginByEmail( $email );
+        if (defined $logins) {
+            foreach my $l ( @$logins ) {
+                $l = $um->lookupLoginName( $l );
+                push( @users, $l ) if $l;
+            }
         }
-        return \@users;
+    } else {
+        # if the password manager didn't want to provide the service, ask
+        # the user mapping manager
+        push( @users, $um->findUserByEmail( $email ));
     }
-    # if the password manager didn't want to provide the service, ask
-    # the user mapping manager
-    push( @users, $um->findUserByEmail( $email ));
     return \@users;
 }
 
@@ -289,11 +292,13 @@ user mapping manager is tried.
 sub setEmails {
     my $this = shift;
     my $user = shift;
+    my $ph = $this->{passwords};
 
-    return if ($this->{passwords}->setEmails(
-        $this->getLoginName( $user ), @_ ));
-
-    return $this->{mapping}->setEmails( $user, @_ );
+    if( $ph->isManagingEmails()) {
+        $ph->setEmails( $this->getLoginName( $user ), @_ );
+    } else {
+        $this->{mapping}->setEmails( $user, @_ );
+    }
 }
 
 =pod
@@ -398,13 +403,16 @@ sub getEmails {
         }
     } else {
         my $ph = $this->{passwords};
-        # get emails from the password manager
-        foreach ($ph->getEmails( $this->getLoginName( $user ))) {
-            $emails{$_} = 1;
-        }
-        # And any on offer from the user mapping manager
-        foreach ($um->getEmails( $user )) {
-            $emails{$_} = 1;
+        if ($ph->isManagingEmails()) {
+            # get emails from the password manager
+            foreach ($ph->getEmails( $this->getLoginName( $user ))) {
+                $emails{$_} = 1;
+            }
+        } else {
+            # And any on offer from the user mapping manager
+            foreach ($um->getEmails( $user )) {
+                $emails{$_} = 1;
+            }
         }
     }
 
