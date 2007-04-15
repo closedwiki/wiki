@@ -170,9 +170,9 @@ sub statistics {
     if( !$session->inContext( 'command_line' ) ) {
         $tmp = $TWiki::cfg{Stats}{TopicName};
         my $url = $session->getScriptUrl( 0, 'view', $destWeb, $tmp );
-        _printMsg( $session, '* Go back to '
+        _printMsg( $session, '* Go to '
                    . CGI::a( { href => $url,
-                               rel => 'nofollow' }, $tmp) );
+                               rel => 'nofollow' }, "$webName.$tmp") );
     }
     _printMsg( $session, 'End creating usage statistics' );
     print CGI::end_html() unless( $session->inContext( 'command_line' ) );
@@ -316,7 +316,7 @@ sub _processWeb {
         _printMsg( $session, '* Executed by '.$user );
     }
 
-    _printMsg( $session, "* Reporting on TWiki.$web web" );
+    _printMsg( $session, "* Reporting on $web web" );
 
     # Handle null values, print summary message to browser/stdout
     my $statViews = $statViewsRef->{$web};
