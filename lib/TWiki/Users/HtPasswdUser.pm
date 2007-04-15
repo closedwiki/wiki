@@ -251,8 +251,7 @@ sub getEmails {
         return split(/;/, $db->{$login}->{emails});
     }
 
-    # fall back to the default approach
-    return $this->SUPER::getEmails( $login );
+    return ();
 }
 
 sub setEmails {

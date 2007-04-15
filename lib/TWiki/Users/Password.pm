@@ -198,7 +198,7 @@ Only used if =isManagingEmails= -> =true=.
 =cut
 
 sub getEmails {
-    die "should never be called";
+    ASSERT(0, "should never be called") if DEBUG;
 }
 
 =pod
@@ -213,7 +213,7 @@ Only used if =isManagingEmails= -> =true=.
 =cut
 
 sub setEmails {
-    die "should never be called";
+    ASSERT(0, "should never be called") if DEBUG;
 }
 
 =pod
@@ -230,8 +230,7 @@ Called by Users.pm.
 =cut
 
 sub findUserByEmail {
-    my( $this, $email ) = @_;
-    die "should never be called";
+    ASSERT(0, "should never be called") if DEBUG;
 }
 
 1;
