@@ -716,7 +716,7 @@ sub _handleSquareBracketedLink {
 sub _externalLink {
     my( $this, $url, $text ) = @_;
 
-    if( $url =~ /\.(gif|jpg|jpeg|png)$/i && !$text) {
+    if( $url =~ /^[^?]*\.(gif|jpg|jpeg|png)$/i && !$text) {
         my $filename = $url;
         $filename =~ s@.*/([^/]*)@$1@go;
         return CGI::img( { src => $url, alt => $filename } );
