@@ -181,7 +181,7 @@ sub _getInstalledVersion {
     my $version;
     my $check = 'use '.$path.'; $version = $'.$path.'::VERSION;';
     eval $check;
-    print STDERR $@ if $@;
+    #print STDERR $@ if $@ && DEBUG;
     $version =~ s/^\s*\$Rev:\s*(\d+)\s*\$$/$1/ if $version;
     return $version;
 }
