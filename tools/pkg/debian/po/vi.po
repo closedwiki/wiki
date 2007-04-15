@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: twiki 20040902-3\n"
 "Report-Msgid-Bugs-To: svenud@ozemail.com.au\n"
-"POT-Creation-Date: 2007-02-14 17:20+1100\n"
+"POT-Creation-Date: 2007-02-17 09:09+0100\n"
 "PO-Revision-Date: 2005-08-10 22:45+0930\n"
 "Last-Translator: Clytie Siddall <clytie@riverland.net.au>\n"
 "Language-Team: Vietnamese <gnomevi-list@lists.sourceforge.net>\n"
@@ -17,23 +17,18 @@ msgstr ""
 "X-Generator: LocFactoryEditor 1.2.2\n"
 
 #. Type: string
-#. Default
-#: ../templates:1001
-msgid "http://localhost/"
-msgstr "http://localhost/"
-
-#. Type: string
 #. Description
-#: ../templates:1002
-msgid "What is the top-level URL of the server TWiki runs under?"
+#: ../templates:1001
+#, fuzzy
+msgid "Top-level URL of the server TWiki runs under:"
 msgstr "TWiki chạy trên máy phục vụ có địa chỉ Mạng cấp đầu nào?"
 
 #. Type: string
 #. Description
-#: ../templates:1002
+#: ../templates:1001
 msgid ""
 "For a normal install, this should be a URL for your web server's full name, "
-"which is used to construct urls on some pages.  The install will serve up "
+"which is used to construct URLs on some pages.  The install will serve up "
 "the data by adding \"twiki\" to the end of this setting; it is also needed "
 "for certain redirections."
 msgstr ""
@@ -43,20 +38,15 @@ msgstr ""
 "thức giá trị này; cũng cần thiết nó để chuyển hướng trong một số trường hợp."
 
 #. Type: string
-#. Default
-#: ../templates:2001
-msgid "webmaster@localhost"
-msgstr "webmaster@localhost"
-
-#. Type: string
 #. Description
-#: ../templates:2002
-msgid "What is the email address of the webmaster for this TWiki?"
+#: ../templates:2001
+#, fuzzy
+msgid "Email address of the webmaster for this TWiki:"
 msgstr "Cho TWiki này, người chủ nơi Mạng có địa chỉ thư nào?"
 
 #. Type: string
 #. Description
-#: ../templates:2002
+#: ../templates:2001
 msgid ""
 "This email address gets mail for new user registration, and is listed on the "
 "\"oops\" page when things go wrong."
@@ -78,12 +68,11 @@ msgstr "Cài đặt môi trường wiki mẫu khi cài đặt đầu tiên khôn
 msgid ""
 "TWiki includes a complete \"starter kit\" which includes user registration "
 "pages, documentation, and tutorials.  Only decline if you're re-installing "
-"twiki after deleting the package and want to keep the old data, or if you've "
-"got a twiki data set from your own manual install. If data/Main/WebHome.txt "
-"is present, the starter kit will not be unpacked. The the starter kit files "
-"can be found in /usr/share/twiki/twiki-data.tar.gz  (and twiki-pub.tar.gz), "
-"if you want to install it manually or compare your  topics with the new "
-"version)"
+"TWiki after deleting the package and want to keep the old data, or if you've "
+"got a TWiki data set from your own manual install.  If data/Main/WebHome.txt "
+"is present, the starter kit will not be unpacked.  The starter kit files can "
+"be found in /usr/share/twiki/twiki-data.tar.gz (and twiki-pub.tar.gz), if "
+"you want to install it manually or compare your topics with the new version."
 msgstr ""
 "TWiki bao gồm một bộ dụng cụ bắt đầu hoàn thành, gồm trang đăng ký người "
 "dùng, tài liệu và trợ lý học tập. Nếu bạn đang cài đặt lại twiki sau khi xóa "
@@ -110,6 +99,12 @@ msgid ""
 "After you have created yourself a user, edit the Main.TWikiAdminGroup to "
 "restrict Admin privileges to that user."
 msgstr ""
+
+#~ msgid "http://localhost/"
+#~ msgstr "http://localhost/"
+
+#~ msgid "webmaster@localhost"
+#~ msgstr "webmaster@localhost"
 
 #~ msgid ""
 #~ "The default debian installation of the TWiki is configured to create new "

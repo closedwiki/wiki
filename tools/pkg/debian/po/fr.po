@@ -11,10 +11,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: twiki_1:4.0.5-4\n"
+"Project-Id-Version: twiki_1:4.0.5-9\n"
 "Report-Msgid-Bugs-To: svenud@ozemail.com.au\n"
-"POT-Creation-Date: 2007-02-14 17:20+1100\n"
-"PO-Revision-Date: 2006-12-08 21:54+0100\n"
+"POT-Creation-Date: 2007-02-17 09:09+0100\n"
+"PO-Revision-Date: 2007-02-17 14:11+0100\n"
 "Last-Translator: Michel Grentzinger <mic.grentz@online.fr>\n"
 "Language-Team: French <debian-l10n-french@lists.debian.org>\n"
 "MIME-Version: 1.0\n"
@@ -22,23 +22,17 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 #. Type: string
-#. Default
+#. Description
 #: ../templates:1001
-msgid "http://localhost/"
-msgstr "http://localhost/"
+msgid "Top-level URL of the server TWiki runs under:"
+msgstr "URL du serveur faisant tourner TWiki :"
 
 #. Type: string
 #. Description
-#: ../templates:1002
-msgid "What is the top-level URL of the server TWiki runs under?"
-msgstr "URL du serveur TWiki :"
-
-#. Type: string
-#. Description
-#: ../templates:1002
+#: ../templates:1001
 msgid ""
 "For a normal install, this should be a URL for your web server's full name, "
-"which is used to construct urls on some pages.  The install will serve up "
+"which is used to construct URLs on some pages.  The install will serve up "
 "the data by adding \"twiki\" to the end of this setting; it is also needed "
 "for certain redirections."
 msgstr ""
@@ -48,61 +42,52 @@ msgstr ""
 "également pour certaines redirections."
 
 #. Type: string
-#. Default
-#: ../templates:2001
-msgid "webmaster@localhost"
-msgstr "webmaster@localhost"
-
-#. Type: string
 #. Description
-#: ../templates:2002
-msgid "What is the email address of the webmaster for this TWiki?"
+#: ../templates:2001
+msgid "Email address of the webmaster for this TWiki:"
 msgstr "Adresse électronique du webmestre de TWiki :"
 
 #. Type: string
 #. Description
-#: ../templates:2002
+#: ../templates:2001
 msgid ""
 "This email address gets mail for new user registration, and is listed on the "
 "\"oops\" page when things go wrong."
 msgstr ""
-"L'adresse électronique indiqué recevra les demandes d'enregistrement des "
-"nouveaux utilisateurs. Elle est affichée sur la page oops lorsque un "
-"incident se produit."
+"L'adresse électronique indiquée recevra les demandes d'enregistrement des "
+"nouveaux utilisateurs. Elle est affichée sur la page « oops » lorsqu'un "
+"incident survient."
 
 #. Type: boolean
 #. Description
 #: ../templates:3001
-#, fuzzy
 msgid "Install default wiki Topic Set on initial install?"
 msgstr ""
-"Faut-il installer l'exemple d'univers wiki lors de l'installation initiale ?"
+"Faut-il installer un univers wiki par défaut lors de l'installation "
+"initiale ?"
 
 #. Type: boolean
 #. Description
 #: ../templates:3001
-#, fuzzy
 msgid ""
 "TWiki includes a complete \"starter kit\" which includes user registration "
 "pages, documentation, and tutorials.  Only decline if you're re-installing "
-"twiki after deleting the package and want to keep the old data, or if you've "
-"got a twiki data set from your own manual install. If data/Main/WebHome.txt "
-"is present, the starter kit will not be unpacked. The the starter kit files "
-"can be found in /usr/share/twiki/twiki-data.tar.gz  (and twiki-pub.tar.gz), "
-"if you want to install it manually or compare your  topics with the new "
-"version)"
+"TWiki after deleting the package and want to keep the old data, or if you've "
+"got a TWiki data set from your own manual install.  If data/Main/WebHome.txt "
+"is present, the starter kit will not be unpacked.  The starter kit files can "
+"be found in /usr/share/twiki/twiki-data.tar.gz (and twiki-pub.tar.gz), if "
+"you want to install it manually or compare your topics with the new version."
 msgstr ""
 "TWiki comprend un kit de démarrage complet qui inclut des pages destinées à "
-"l'enregistrement des utilisateurs, de la documentation et des tutoriels. Si "
-"vous réinstallez twiki après avoir supprimé le paquet et que vous souhaitez "
-"conserver vos anciennes données ou si vous avez un ensemble de données twiki "
-"provenant d'une installation que vous avez faite vous-même, ne choisissez "
-"pas cette option. Pour une installation normale, vous pouvez la choisir et "
-"un ensemble simple de données sera installé dans /var/lib/twiki/data (et /"
-"var/www/twiki/pub). Dans tous les cas, si data/Main/WebHome.txt existe, le "
-"kit de démarrage ne sera pas décompacté. Vous pourrez alors regarder dans /"
-"usr/share/doc/twiki/twiki-data.tar.gz (et twiki-pub.tar.gz) si vous "
-"souhaitez l'installer vous-même ou le comparer à une nouvelle version."
+"l'enregistrement des utilisateurs, de la documentation et des tutoriels. "
+"Veuillez refuser uniquement dans le cas où vous réinstallez twiki après "
+"avoir supprimé le paquet et que vous souhaitez conserver vos anciennes "
+"données ou si vous avez un ensemble de données twiki provenant d'une "
+"installation que vous avez faite vous-même. Si le fichier data/Main/WebHome."
+"txt est présent, le kit de démarrage ne sera pas décompressé. Les fichiers "
+"du kit de démarrage peuvent être trouvés dans /usr/share/twiki/twiki-data."
+"tar.gz (et twiki-pub.tar.gz) si vous voulez l'installer vous-même ou le "
+"comparer à la nouvelle version."
 
 #. Type: note
 #. Description

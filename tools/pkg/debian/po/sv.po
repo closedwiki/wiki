@@ -15,8 +15,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: twiki 20040902-3\n"
 "Report-Msgid-Bugs-To: svenud@ozemail.com.au\n"
-"POT-Creation-Date: 2007-02-14 17:20+1100\n"
-"PO-Revision-Date: 2005-11-28 12:30+0100\n"
+"POT-Creation-Date: 2007-02-17 09:09+0100\n"
+"PO-Revision-Date: 2007-02-17 10:54+0100\n"
 "Last-Translator: Daniel Nylander <po@danielnylander.se>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
 "MIME-Version: 1.0\n"
@@ -24,91 +24,73 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 #. Type: string
-#. Default
+#. Description
 #: ../templates:1001
-msgid "http://localhost/"
-msgstr "http://localhost/"
+msgid "Top-level URL of the server TWiki runs under:"
+msgstr "Topp-nivå-URLen för servern som TWiki kör på:"
 
 #. Type: string
 #. Description
-#: ../templates:1002
-msgid "What is the top-level URL of the server TWiki runs under?"
-msgstr "Vilken är topp-nivå-URLen för servern som TWiki kör under?"
-
-#. Type: string
-#. Description
-#: ../templates:1002
+#: ../templates:1001
 msgid ""
 "For a normal install, this should be a URL for your web server's full name, "
-"which is used to construct urls on some pages.  The install will serve up "
+"which is used to construct URLs on some pages.  The install will serve up "
 "the data by adding \"twiki\" to the end of this setting; it is also needed "
 "for certain redirections."
 msgstr ""
-"För en normal installation bör detta vara en URL för din webbservers fulla "
-"namn som används för att konstruera URLer för vissa sidor.  Installationen "
-"kommer att servera data genom att lägga till \"twiki\" på slutet av denna "
-"inställning; den behövs också för vissa omdirigeringar."
+"För en normal installation bör detta vara en URL för din webbservers "
+"fullständiga namn som används för att konstruera URLer för vissa sidor.  "
+"Installationen kommer att servera data genom att lägga till \"twiki\" på "
+"slutet av denna inställning; den behövs också för vissa omdirigeringar."
 
 #. Type: string
-#. Default
+#. Description
 #: ../templates:2001
-msgid "webmaster@localhost"
-msgstr "webmaster@localhost"
+msgid "Email address of the webmaster for this TWiki:"
+msgstr "E-postadress för webbmastern för denna TWiki:"
 
 #. Type: string
 #. Description
-#: ../templates:2002
-msgid "What is the email address of the webmaster for this TWiki?"
-msgstr "Vad är e-postadressen för webmastern för denna TWiki?"
-
-#. Type: string
-#. Description
-#: ../templates:2002
+#: ../templates:2001
 msgid ""
 "This email address gets mail for new user registration, and is listed on the "
 "\"oops\" page when things go wrong."
 msgstr ""
 "Denna e-postadress tar emot e-post för nya användarregistreringar och är "
-"listad på sidan \"oops\" när saker går fel."
+"listad på \"oops\"-sidan när saker och ting går fel."
 
 #. Type: boolean
 #. Description
 #: ../templates:3001
-#, fuzzy
 msgid "Install default wiki Topic Set on initial install?"
-msgstr "Installera exempeldata vid initiell installation?"
+msgstr "Installera standarduppsättning av wikiämnen vid initial installation?"
 
 #. Type: boolean
 #. Description
 #: ../templates:3001
-#, fuzzy
 msgid ""
 "TWiki includes a complete \"starter kit\" which includes user registration "
 "pages, documentation, and tutorials.  Only decline if you're re-installing "
-"twiki after deleting the package and want to keep the old data, or if you've "
-"got a twiki data set from your own manual install. If data/Main/WebHome.txt "
-"is present, the starter kit will not be unpacked. The the starter kit files "
-"can be found in /usr/share/twiki/twiki-data.tar.gz  (and twiki-pub.tar.gz), "
-"if you want to install it manually or compare your  topics with the new "
-"version)"
+"TWiki after deleting the package and want to keep the old data, or if you've "
+"got a TWiki data set from your own manual install.  If data/Main/WebHome.txt "
+"is present, the starter kit will not be unpacked.  The starter kit files can "
+"be found in /usr/share/twiki/twiki-data.tar.gz (and twiki-pub.tar.gz), if "
+"you want to install it manually or compare your topics with the new version."
 msgstr ""
-"TWiki inkluderar ett komplett \"startkit\" som inkluderar sidor för "
-"användarregistrering, dokumentation och genomgångar. Om du installerar om "
-"twiki efter att ha tagit bort paketet och vill behålla det gamla datat eller "
-"om du har twiki-data från din egna manuella installtion bör du svara \"nej\" "
-"här.  Vid en normal initial installation, säg \"ja\" och exempeldata kommer "
-"att installeras i /var/lib/twiki/data (och /var/www/twiki/pub). (I båda "
-"fallen, om data/Main/WebHome.txt finns kommer startkitet inte att packas "
-"upp; du kan se i /usr/share/doc/twiki/twiki-data.tar.gz (och twiki-pub.tar."
-"zg) om du önskar att installera det manuellt eller att att jämföra med en ny "
-"version.)"
+"TWiki inkluderar ett komplett \"starter kit\" som inkluderar sidor för "
+"användarregistrering, dokumentation och handledningar.  Vägra endast om du "
+"installerar om twiki efter att paketet har tagits bort och du vill behålla "
+"gammalt data, eller om du har en uppsättning twiki-data från din egna "
+"manuella installation. Om data/Main/WebHome.txt finns kommer startkitet inte "
+"att packas upp. Startkitets filer kan hittas i /usr/share/twiki/twiki-data."
+"tar.gz  (och twiki-pub.tar.gz), om du vill installera det manuellt eller "
+"jämföra dina ämnen med den nya versionen."
 
 #. Type: note
 #. Description
 #: ../templates:4001
-#, fuzzy
 msgid "Admin User Registration configuration required"
-msgstr "Konfiguration av användarregistrering krävs"
+msgstr "Konfiguration av administrationsanvändaren krävs"
 
 #. Type: note
 #. Description
@@ -117,6 +99,14 @@ msgid ""
 "After you have created yourself a user, edit the Main.TWikiAdminGroup to "
 "restrict Admin privileges to that user."
 msgstr ""
+"Efter att du har skapat en användare åt dig själv, redigera Main."
+"TWikiAdminGroup för att begränsa Admin-behörigheten till den användaren."
+
+#~ msgid "http://localhost/"
+#~ msgstr "http://localhost/"
+
+#~ msgid "webmaster@localhost"
+#~ msgstr "webmaster@localhost"
 
 #~ msgid ""
 #~ "The default debian installation of the TWiki is configured to create new "

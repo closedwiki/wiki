@@ -1,3 +1,24 @@
+twiki (1:4.0.5-9.1) unstable; urgency=low
+
+  * Non-maintainer upload.
+  * Correct inconsistencies in debconf templates
+  * Debconf translations:
+    - Remove the incorrect br.po file (Breton != Brazilian)
+    - Galician. Closes: #411191
+    - Tamil. Closes: #411211
+    - German. Closes: #411219
+    - Czech. Closes: #411223
+    - Swedish. Closes: #411230
+    - Russian. Closes: #411239
+    - Brazilian Portuguese. Closes: #411278
+    - Portuguese. Closes: #411295
+    - Norwegian Bokmal. Closes: #411331
+    - Romanian. Closes: #411351
+    - French. Closes: #411615
+    - Basque. Closes: #411632
+
+ -- Christian Perrier <bubulle@debian.org>  Tue, 20 Feb 2007 08:53:40 +0100
+
 twiki (1:4.0.5-9) unstable; urgency=emergency
 
   * move cgi-bin/.htaccess to apache.conf and remove // from end of defaultsiteurl
@@ -12,7 +33,7 @@ twiki (1:4.0.5-9) unstable; urgency=emergency
   * changed samplefiles prompt to remove yes/no assumption
   * unpatch on clean
 
- -- Sven Dowideit <svenud@ozemail.com.au>  Wed, 14 Feb 2007  22:32:36 +0100
+ -- Sven Dowideit <svenud@ozemail.com.au>  Sun, 11 Feb 2007  22:32:36 +0100
 
 twiki (1:4.0.5-8) unstable; urgency=medium
 
