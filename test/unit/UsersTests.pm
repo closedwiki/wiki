@@ -37,7 +37,7 @@ sub set_up {
     $TWiki::cfg{SystemWebName} = $testSysWeb;
     $TWiki::cfg{LocalSitePreferences} = "$testUsersWeb.TWikiPreferences";
     $TWiki::cfg{UserMappingManager} = 'TWiki::Users::TWikiUserMapping';
-    $TWiki::cfg{MapUserToWikiName} = 1;
+    $TWiki::cfg{Register}{AllowLoginName} = 1;
     $topicquery = new CGI( "" );
     $topicquery->path_info("/$testNormalWeb/$testTopic");
     try {
