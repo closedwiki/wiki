@@ -25,6 +25,8 @@ use base 'TWiki::Configure::Checker';
 sub check {
     my $this = shift;
     my $e = '';
+    # Rename from old "Client" to new "LoginManager" - see Bugs:Item3375
+    $TWiki::cfg{LoginManager} =~ s/::Client::/::LoginManager::/;
     if( $TWiki::cfg{LoginManager} =~ /ApacheLogin$/ &&
           !$TWiki::cfg{UseClientSessions} ) {
         $e .= $this->WARN(<<'HERE');

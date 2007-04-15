@@ -128,6 +128,8 @@ sub makeLoginManager {
         # No login manager; just use default behaviours
         $mgr = new TWiki::LoginManager( $twiki );
     } else {
+        # Rename from old "Client" to new "LoginManager" - see Bugs:Item3375
+        $TWiki::cfg{LoginManager} =~ s/::Client::/::LoginManager::/;
         eval 'use '. $TWiki::cfg{LoginManager};
         throw Error::Simple( $@ ) if $@;
         $mgr = $TWiki::cfg{LoginManager}->new( $twiki );
