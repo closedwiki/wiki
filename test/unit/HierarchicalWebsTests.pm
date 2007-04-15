@@ -324,24 +324,25 @@ sub test_WEBLIST_all {
     my $this = shift;
 
     my $query = new CGI("");
-    $query->path_info("/$testWeb");
+    $query->path_info("/$testWeb/WebHome");
     $twiki = new TWiki( $TWiki::cfg{DefaultUserName}, $query);
 
     my $text = ' %WEBLIST{format="$name" separator=", "}% ';
-    $text = $twiki->handleCommonTags($text, $testWeb);
-#Yes, you're supposed to be running these tests in a virgin TWiki, not on one that you've be doing other work (or had tests crash.)
-    $this->assert_matches(qr! HierarchicalWebsTestsTestWeb, HierarchicalWebsTestsTestWeb/SubWeb, Main, Sandbox, TWiki, TestCases !, $text);
+    $text = $twiki->handleCommonTags($text, $testWeb, 'WebHome');
+    foreach my $web ('HierarchicalWebsTestsTestWeb', 'HierarchicalWebsTestsTestWeb/SubWeb', 'Main', 'Sandbox', 'TWiki', 'TestCases') {
+        $this->assert_matches(qr!\b$web\b!, $text);
+    }
 }
 
 sub test_WEBLIST_relative {
     my $this = shift;
 
     my $query = new CGI("");
-    $query->path_info("/$testWeb");
+    $query->path_info("/$testWeb/WebHome");
     $twiki = new TWiki( $TWiki::cfg{DefaultUserName}, $query);
 
     my $text = ' %WEBLIST{format="$name" separator=", " subwebs="'.$testWeb.'"}% ';
-    $text = $twiki->handleCommonTags($text, $testWeb);
+    $text = $twiki->handleCommonTags($text, $testWeb, 'WebHome');
     $this->assert_matches(qr! $testWebSubWebPath !, $text);
 }
 
@@ -349,11 +350,11 @@ sub test_WEBLIST_end {
     my $this = shift;
 
     my $query = new CGI("");
-    $query->path_info("/$testWeb");
+    $query->path_info("/$testWeb/WebHome");
     $twiki = new TWiki( $TWiki::cfg{DefaultUserName}, $query);
 
     my $text = ' %WEBLIST{format="$name" separator=", " subwebs="'.$testWebSubWebPath.'"}% ';
-    $text = $twiki->handleCommonTags($text, $testWeb);
+    $text = $twiki->handleCommonTags($text, $testWeb, 'WebHome');
     $this->assert_matches(qr!  !, $text);
 }
 
