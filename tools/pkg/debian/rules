@@ -63,12 +63,12 @@ install: build
 # and change the RCS lock owners to match
 
 	#distribute the tools scripts
-	cp UpgradeTwiki debian/twiki/var/lib/twiki
-	chmod 777 debian/twiki/var/lib/twiki/UpgradeTwiki
+	#cp UpgradeTwiki debian/twiki/var/lib/twiki
+	#chmod 777 debian/twiki/var/lib/twiki/UpgradeTwiki
     	
 	mkdir debian/twiki/var/lib/twiki/tools
-	cp tools/* debian/twiki/var/lib/twiki/tools/
-	chmod 777 debian/twiki/var/lib/twiki/tools/*
+	cp -r tools/* debian/twiki/var/lib/twiki/tools/
+	chmod -R 777 debian/twiki/var/lib/twiki/tools/*
 
     #SVEN - you should probably make this a patch file.
 	perl -piOLD -e 's{#! perl}{#!/usr/bin/perl}g;' debian/twiki/var/lib/twiki/tools/rewriteshbang.pl
@@ -106,8 +106,8 @@ install: build
 
 #move twiki.cfg to /etc/twiki
 	cp debian/LocalSite.cfg debian/twiki/etc/twiki/LocalSite.cfg
-	mv debian/twiki/usr/share/perl5/LocalSite.cfg.txt debian/twiki/etc/twiki/LocalSite.cfg.txt
-	mv debian/twiki/usr/share/perl5/TWiki.cfg debian/twiki/etc/twiki/TWiki.cfg
+	#mv debian/twiki/usr/share/perl5/LocalSite.cfg.txt debian/twiki/etc/twiki/LocalSite.cfg.txt
+	#mv debian/twiki/usr/share/perl5/TWiki.cfg debian/twiki/etc/twiki/TWiki.cfg
  
 	perl -pi~ -e 's|^(.twikiLibPath).*|\1 = \"/etc/twiki\";|;' debian/twiki/usr/lib/cgi-bin/twiki/LocalLib.cfg
 	rm debian/twiki/usr/lib/cgi-bin/twiki/LocalLib.cfg~
