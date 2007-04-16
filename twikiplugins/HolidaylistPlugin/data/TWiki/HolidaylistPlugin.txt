@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1175765955" format="1.0" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1176709243" format="1.0" version="$Rev$"}%
 ---+!! <nop>HolidaylistPlugin</nop>
 
 %TOC%
@@ -109,6 +109,7 @@ The syntax follows that of the !CalendarPlugin. See TWiki:Plugins.CalendarPlugin
 | monthnames | custom month names (a list separated by '&brvbar;' and starting on January; overwrites lang attribute) | monthnames="J&brvbar;F&brvbar;M&brvbar;A&brvbar;M&brvbar;J&brvbar;J&brvbar;A&brvbar;S&brvbar;O&brvbar;N&brvbar;D" |
 | navdays | defines the days to navigate to (default: value of the =days= attribute) | navdays="30" |
 | removeatwork | set to "1" to remove persons without calendar entries from table | removeatwork="0" |
+| showmonthheader | set to "on" to show a additional month header | showmonthheader="0" |
 | showpubholidays | show public holidays as separate lines (rows) in table (related: enablepubholidays, pubholidayicon) | showpubholidays="0" |
 | showweekends | show weekends if set to 1 | showweekends="0" |
 | startdate | a start date (e.g. '1 Oct 2005') or a day offset (e.g. '10', '+30' or '-30') | startdate="+0" |
@@ -227,7 +228,7 @@ The syntax follows that of the !CalendarPlugin. See TWiki:Plugins.CalendarPlugin
 |  Plugin Author: | TWiki:Main.PeterJones, TWiki:Main.DanielRohde |
 |  Plugin Version: | v1.021 (BETA) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  v1.021 (BETA) | TWiki:Main.DanielRohde: fixed minor HTML bug reported by TWiki:Main.JfMacaud; fixed some minor bugs (documentation, preferences handling); |
+|  v1.021 (BETA) | TWiki:Main.DanielRohde: fixed minor HTML bug reported by TWiki:Main.JfMacaud; added month header feature (showmonthheader attribute) requested by Rikard Johansson; fixed some minor bugs (documentation, preferences handling); |
 |  v1.020 (21 Sep 2006) | TWiki:Main.DanielRohde: added week attribute requested by TWiki:Main.JanFilipsky; added tooltip to day headers; |
 |  v1.019 (7 Aug 2006) | TWiki:Main.DanielRohde: improved navigation; fixed %<nop>ICON% tag handling bug reported by TWiki:Main.UlfJastrow; |
 |  v1.018 (25 Jul 2006) | TWiki:Main.DanielRohde: fixed periodic event bug; added navigation feature | 

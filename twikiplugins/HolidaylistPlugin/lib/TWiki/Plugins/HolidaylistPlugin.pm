@@ -89,7 +89,7 @@ $VERSION = '$Rev$';
 # of the version number in PLUGINDESCRIPTIONS.
 $RELEASE = 'Dakar';
 
-$REVISION = '1.021'; #dro# fixed minor HTML bug reported by TWiki:Main.JfMacaud; fixed some minor bugs (documentation, preferences handling);
+$REVISION = '1.021'; #dro# fixed minor HTML bug reported by TWiki:Main.JfMacaud; added month header feature (showmonthheader attribute) requested by Rikard Johansson; fixed some minor bugs (documentation, preferences handling);
 #$REVISION = '1.020'; #dro# added week attribute requested by TWiki:Main.JanFilipsky; added tooltip to day headers;
 #$REVISION = '1.019'; #dro# improved navigation; fixed %<nop>ICON% tag handling bug reported by TWiki:Main.UlfJastrow;
 #$REVISION = '1.018'; #dro# fixed periodic event bug; added navigation feature
@@ -207,6 +207,7 @@ sub initDefaults() {
 		navenable => 1,
 		navdays => undef,
 		week => undef,
+		showmonthheader => undef,
 	);
 
 	# reminder: don't forget change documentation (HolidaylistPlugin topic) if you add a new rendered option
@@ -214,7 +215,7 @@ sub initDefaults() {
 
 	# options to turn or switch things on (1) or off (0)
 	# this special handling allows 'on'/'yes';'off'/'no' values additionally to '1'/'0'
-	@flagOptions = ( 'showweekends', 'removeatwork', 'compatmode', 'enablepubholidays', 'showpubholidays', 'navenable' );
+	@flagOptions = ( 'showweekends', 'removeatwork', 'compatmode', 'enablepubholidays', 'showpubholidays', 'navenable','showmonthheader' );
 
 	%months = ( Jan=>1, Feb=>2, Mar=>3, Apr=>4, May=>5, Jun=>6, 
 	            Jul=>7, Aug=>8, Sep=>9, Oct=>10, Nov=>11, Dec=>12 );
@@ -879,7 +880,9 @@ sub renderHolidaylist() {
 	$text .= '<caption align="'.$options{tablecaptionalign}.'"><noautolink>'.$options{tablecaption}.'</noautolink></caption>'."\n";
 
 	$text .= '<tr bgcolor="'.$options{tableheadercolor}.'">';
-	$text .= '<th align="left"'.(defined $options{nwidth}?' width="'.$options{nwidth}.'"':'').'>'
+	$text .= '<th align="left"'
+			.(defined $options{nwidth}?' width="'.$options{nwidth}.'"':'')
+			.($options{showmonthheader}?' rowspan="2"':'').'>'
 			.'<noautolink>'
 			.$options{name}
 			.($options{'navenable'}?&renderNav(-1).&renderNav(0).&renderNav(1):'')
@@ -887,6 +890,19 @@ sub renderHolidaylist() {
 			.'</th>';
 
 	my ($dd,$mm,$yy) = getStartDate();
+	
+	if ($options{showmonthheader}) {
+		my $restdays = $options{days};
+		my ($yy1,$mm1,$dd1) = ($yy, $mm, $dd);
+		while ($restdays > 0) {
+			my $daysdiff = Days_in_Month($yy1,$mm1) - $dd1 + 1;
+			$daysdiff = $restdays if ($restdays-$daysdiff<0);
+			$text .= '<th colspan="'.$daysdiff.'" title="'. Month_to_Text($mm1).' '.$yy1.'">' . Month_to_Text($mm1) . '</th>';
+			($yy1,$mm1,$dd1) = Add_Delta_Days($yy1,$mm1,$dd1, $daysdiff);
+			$restdays -= $daysdiff;
+		}
+		$text .= '</tr>';
+	}
 
 	for (my $i=0; $i< $options{days}; $i++) {
 		my ($yy1,$mm1,$dd1) = Add_Delta_Days($yy, $mm, $dd, $i);
