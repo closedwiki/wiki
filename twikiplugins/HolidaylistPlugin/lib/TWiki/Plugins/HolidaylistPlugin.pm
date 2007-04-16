@@ -208,6 +208,7 @@ sub initDefaults() {
 		navdays => undef,
 		week => undef,
 		showmonthheader => undef,
+		monthheaderformat => '%B',
 	);
 
 	# reminder: don't forget change documentation (HolidaylistPlugin topic) if you add a new rendered option
@@ -806,9 +807,9 @@ sub handleCalendarEvents {
 
 } # sub handleCalendarEvents
 # =========================
-sub mystrftime($$$) {
-	my ($yy,$mm,$dd) = @_;
-	my $text = $options{headerformat};
+sub mystrftime($$$$) {
+	my ($yy,$mm,$dd,$format) = @_;
+	my $text = defined $format ? $format : $options{headerformat};
 
 	my $dow = Day_of_Week($yy,$mm,$dd);
 	my $t_dow =  undef;
@@ -897,7 +898,9 @@ sub renderHolidaylist() {
 		while ($restdays > 0) {
 			my $daysdiff = Days_in_Month($yy1,$mm1) - $dd1 + 1;
 			$daysdiff = $restdays if ($restdays-$daysdiff<0);
-			$text .= '<th colspan="'.$daysdiff.'" title="'. Month_to_Text($mm1).' '.$yy1.'">' . Month_to_Text($mm1) . '</th>';
+			$text .= '<th colspan="'.$daysdiff.'" title="'. Month_to_Text($mm1).' '.$yy1.'">' 
+				. &mystrftime($yy1,$mm1,$dd1,$options{monthheaderformat})
+				. '</th>';
 			($yy1,$mm1,$dd1) = Add_Delta_Days($yy1,$mm1,$dd1, $daysdiff);
 			$restdays -= $daysdiff;
 		}
