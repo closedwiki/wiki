@@ -901,7 +901,7 @@ sub renderHolidaylist() {
 			($yy1,$mm1,$dd1) = Add_Delta_Days($yy1,$mm1,$dd1, $daysdiff);
 			$restdays -= $daysdiff;
 		}
-		$text .= '</tr>';
+		$text .= '</tr><tr>';
 	}
 
 	for (my $i=0; $i< $options{days}; $i++) {
