@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1176709243" format="1.0" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1176716627" format="1.0" version="$Rev$"}%
 ---+!! <nop>HolidaylistPlugin</nop>
 
 %TOC%
@@ -130,6 +130,7 @@ The syntax follows that of the !CalendarPlugin. See TWiki:Plugins.CalendarPlugin
 | daynames | costum daynames (a list separated by a '&brvbar;' and starting on Monday; overwrites lang attribute) | daynames="M&brvbar;T&brvbar;W&brvbar;T&brvbar;F&brvbar;S&brvbar;S" |
 | headerformat | table header format of a day; a subset of strftime conversion specifiers is supported (only date not time specificiers; see manual page or TWiki:Codev.ConvergeDateTimeFormattingModels) | headerformat="&lt;font&nbsp;size=\"-2\">%b&lt;br/&gt;%a&lt;br/&gt;%e&lt;/font&gt;" |
 | lang | language (related: daynames, monthnames) | lang="English" |
+| monthheaderformat | month header format (related: showmonthheader) | monthheaderformat="%B" |
 | monthnames | costum month names (a list separated by '&brvbar;' and starting on January; overwrites lang attribute) | monthnames="J&brvbar;F&brvbar;M&brvbar;A&brvbar;M&brvbar;J&brvbar;J&brvbar;A&brvbar;S&brvbar;O&brvbar;N&brvbar;D" |
 | name | header content of the first cell header |name="Name" |
 | navdays | defines the days to navigate to (default: value of the =days= attribute) | navdays="30" |
