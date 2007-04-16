@@ -25,13 +25,13 @@ use strict;
 # $VERSION is referred to by TWiki, and is the only global variable that
 # *must* exist in this package
 use vars qw( $VERSION $RELEASE $debug $pluginName );
-use vars qw( $savedAlready $keepPars $defaultComment ); 
+use vars qw( $savedAlready $defaultKeepPars $defaultComment ); 
 
 # This should always be $Rev: 11069$ so that TWiki can determine the checked-in
 # status of the plugin. It is used by the build automation tools, so
 # you should leave it alone.
 $VERSION = '$Rev: 11069$';
-$RELEASE = '2.1.0';
+$RELEASE = '2.2.0';
 
 # Name of this Plugin, only used in this module
 $pluginName = 'AttachContentPlugin';
@@ -46,8 +46,8 @@ sub initPlugin {
     }
 
     $debug = TWiki::Func::getPluginPreferencesFlag("DEBUG") || TWiki::Func::getPreferencesFlag("DEBUG");
-    $keepPars = TWiki::Func::getPluginPreferencesValue("KEEPPARS") || TWiki::Func::getPreferencesValue("KEEPPARS");
-    $defaultComment = TWiki::Func::getPluginPreferencesValue("COMMENT") || TWiki::Func::getPreferencesValue("COMMENT") || '';
+    $defaultKeepPars = TWiki::Func::getPluginPreferencesFlag("KEEPPARS") || 0;
+    $defaultComment = TWiki::Func::getPluginPreferencesValue("ATTACHCONTENTCOMMENT") || '';
 
     # Plugin correctly initialized
     return 1;
@@ -62,7 +62,8 @@ Only implemented to remove the plugin tags from topic view
 =cut
 
 sub commonTagsHandler {
-    $_[0] =~ s/%STARTATTACH{(.*?)}%(.*?)%ENDATTACH%//gs;
+    $_[0] =~ s/%STARTATTACH{.*?}%//gs;
+    $_[0] =~ s/%ENDATTACH%//gs;
 }
 
 =pod
@@ -125,12 +126,22 @@ sub handleAttach {
     my ($inAttr, $inContent, $inWeb, $inTopic) = @_;
 
     my $attrs = TWiki::Func::expandCommonVariables($inAttr, $inTopic, $inWeb);
-    my $web = TWiki::Func::extractNameValuePair( $attrs, 'web' ) || $inWeb;
-    my $topic = TWiki::Func::extractNameValuePair( $attrs, 'topic' ) || $inTopic;
-    my $attrFileName = TWiki::Func::extractNameValuePair( $attrs, '' );
-    my $comment = TWiki::Func::extractNameValuePair( $attrs, 'comment' ) || $defaultComment;
-    my $attrHide = TWiki::Func::extractNameValuePair( $attrs, 'hide' ) || '';
-    my $hide = $attrHide eq 'on' || '';
+    my %params = TWiki::Func::extractParameters($attrs);
+
+    my $attrFileName = $params{_DEFAULT};
+    return '' unless $attrFileName;
+    
+    my $web = $params{'web'} || $inWeb;
+    my $topic = $params{'topic'} || $inTopic;
+    my $comment = $defaultComment;
+    $comment = $params{'comment'} if defined($params{'comment'});
+    my $hide = defined($params{'hide'}) && ( $params{'hide'} eq 'on' );
+    my $keepPars = $params{'keeppars'};
+    if ( defined($keepPars) ) {
+        $keepPars = $keepPars eq 'on';
+    } else {
+        $keepPars = $defaultKeepPars;
+    }
     
     my $workArea = TWiki::Func::getWorkArea($pluginName);
 
