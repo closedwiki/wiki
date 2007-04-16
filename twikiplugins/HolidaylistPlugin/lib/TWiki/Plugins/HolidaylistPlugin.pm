@@ -264,7 +264,7 @@ sub initOptions() {
 		my $v = $params{$option};
 		if (defined $v) {
 			if (grep /^\Q$option\E$/, @flagOptions) {
-				$options{$option} = ($v!=0)&&($v!~/no/i)&&($v!~/off/i);
+				$options{$option} = ($v!~/^(0|on|off)$/i);
 			} else {
 				$options{$option} = $v;
 			}
