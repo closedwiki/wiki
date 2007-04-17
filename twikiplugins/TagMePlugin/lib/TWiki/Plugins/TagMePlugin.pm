@@ -493,6 +493,8 @@ sub _queryTag {
     my $qWeb   = TWiki::Func::extractNameValuePair( $attr, 'web' );
     my $qTopic = TWiki::Func::extractNameValuePair( $attr, 'topic' );
     my $qTag   = _urlDecode( TWiki::Func::extractNameValuePair( $attr, 'tag' ) );
+    my $refine    = TWiki::Func::extractNameValuePair( $attr, 'refine' )
+      || TWiki::Func::getPluginPreferencesFlag('ALWAYS_REFINE');
     my $qBy       = TWiki::Func::extractNameValuePair( $attr, 'by' );
     my $noRelated = TWiki::Func::extractNameValuePair( $attr, 'norelated' );
     my $noTotal   = TWiki::Func::extractNameValuePair( $attr, 'nototal' );
@@ -579,11 +581,13 @@ sub _queryTag {
     unless ( $noRelated ) {
 
         # TODO: should be conditional sort
-        my @relatedTags = map { _printTagLink( $_, $qBy ) }
+        my @relatedTags = map { _printTagLink( $_, $qBy, undef, $refine ) }
                           grep { !/^\Q$qTagsRE\E$/ }
                           sort { lc $a cmp lc $b } keys(%related);
         if ( @relatedTags ) {
-            $text .= "<span class=\"tagmeRelated\">%MAKETEXT{\"Related tags\"}%:</span> "
+            $text .= '<span class="tagmeRelated">%MAKETEXT{"Related tags"}%';
+            $text .= ' (%MAKETEXT{"Click to refine the search"}%)' if $refine;
+            $text .= ': </span> '
               . join( ', ', @relatedTags )
               . "\n\n";
         }
@@ -718,22 +722,27 @@ s/\$taglist/join( ', ', map{ _printTagLink( $_, $qBy ) } sort { lc $a cmp lc $b}
 # =========================
 sub _printTagLink
 {
-    my( $qTag, $by, $web ) = @_;
+    my( $qTag, $by, $web, $refine ) = @_;
     $web = '' unless (defined($web));
 
     my $links = '';
 
     foreach my $tag (split(/,\s*/, $qTag)) {
         my $text = $tagLinkFormat;
+        if ($refine) {
+            $text = '[['.TWiki::Func::getCgiQuery()->url(-path_info => 1).
+              '?'.TWiki::Func::getCgiQuery()->query_string();
+            $text .= ";tag="._urlEncode($tag).']['.$tag.']]';
+        }
         # urlencode characters
         # in 2 passes
         my $tmpSep = '_#_';
-        $text =~ s/(tag\=)\$tag/$1$tmpSep\$tag$tmpSep/go;
+        $text =~ s/(tag=)\$tag/$1$tmpSep\$tag$tmpSep/go;
         $text =~ s/$tmpSep\$tag$tmpSep/&_urlEncode($tag)/geo;
         $text =~ s/\$tag/$tag/go;
         $text =~ s/\$by/$by/go;
         $text =~ s/\$web/$web/go;
-        $links .= $tag;
+        $links .= $text;
     }
     return $links;
 }
