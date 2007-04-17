@@ -128,8 +128,8 @@ The Plugin handles a =%<nop>TAGME{}%= variable that performs different actions. 
 	  | =limit=""= | limit number of results if =sort="web"= | |
 	  | =header=""= | if =sort="web"=, add this header once per web with results (only =$web= is interpreted) | =---+++ $web= |
 	  | =footer=""= | if =sort="web"=, add this footer once per web with results (only =$web= and =$count= and $showmore are interpreted) |=showing $limit out of $count results $showmore= |
+      | =refine= | Normally related tags are shown that when clicked on will search for the related tag. If =refine= is set to 1, then the link instead will *add* the clicked tag to the set of tags being searched for, allowing you to incrementally refine search results. |
   
-
 	* =%<nop>TAGME{ tpaction="newtag" ... }%= - create new tag
 	  | *Parameter* | *Comment* | *Default* |
 	  | =tag="..."= | Name of tag. Accepts alphanumeric and underscore characters only | (required) |
@@ -216,7 +216,10 @@ Plugin settings are stored as preferences variables. To reference a plugin setti
 	Set to 0 to allow any user input, except for the reserved characters =,#'"|*=. %BR%
 	Setting to 0 also sorts tags case insensitive: 'U' comes after 't'.
 		* Set NORMALIZE_TAG_INPUT = 1
-		
+
+	* If 1, then the =refine= parameter is always added to TAGME queries.
+		* Set ALWAYS_REFINE = 1
+
 	* Debug plugin: (See output in =data/debug.txt=)
 		* Set DEBUG = 0
 
@@ -255,6 +258,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | 12 Apr 2006 (V1.036) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  17th Apr 2007: | TWiki:Main.CrawfordCurrie for [[http://www.escapestudios.co.uk/][Escape Studios]]: contributed support for incremental refinement of tag searches |
 |  12 Apr 2007: |  TWiki:Main.CrawfordCurrie contributed ability to search for multiple tags. TWiki:Main.SvenDowideit for [[http://www.escapestudios.co.uk/][Escape Studios]]: added parameters needed for custom search result display. |
 |  05 Apr 2007  | Arthur Clemens: The "topic tags" select box is now created with Javascript to prevent the tag options getting indexed by search engines. The former select box is used for noscript fallback. |
 |  02 Apr 2007: | Arthur Clemens: Added "Delete Tag" interface. Added tabbed interface for Create, Rename, Delete tags. |
