@@ -512,8 +512,10 @@ sub findUserByWikiName {
     my( $this, $wn ) = @_;
     my @users = ();
 
-    # Add additional mappings defined in TWikiUsers
-    if ($TWiki::cfg{Register}{AllowLoginName}) {
+    if( $this->isGroup( $wn )) {
+        push( @users, $wn);
+    } elsif( $TWiki::cfg{Register}{AllowLoginName} ) {
+        # Add additional mappings defined in TWikiUsers
         _loadMapping( $this );
         if( $this->{W2U}->{$wn} ) {
             push( @users, $this->{W2U}->{$wn} );
@@ -526,6 +528,8 @@ sub findUserByWikiName {
             push( @users, login2canonical( $this, $wn ));
         }
     } else {
+        # The wikiname is also the login name, so we can just convert
+        # it to a canonical user id
         push( @users, login2canonical( $this, $wn ));
     }
     return \@users;

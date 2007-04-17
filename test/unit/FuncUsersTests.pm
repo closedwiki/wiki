@@ -83,6 +83,9 @@ sub test_wikiNameToEmails {
     @emails = TWiki::Func::wikinameToEmails('UserC');
     $this->assert_str_equals("userd\@example.com,userc\@example.com",
                              join(',', reverse sort @emails));
+    @emails = TWiki::Func::wikinameToEmails('AandCGroup');
+    $this->assert_str_equals("userd\@example.com,userc\@example.com,user\@example.com",
+                             join(',', reverse sort @emails));
 }
 
 sub test_eachUser {
