@@ -128,11 +128,11 @@ The Plugin handles a =%<nop>TAGME{}%= variable that performs different actions. 
 	  | =limit=""= | limit number of results if =sort="web"= | |
 	  | =header=""= | if =sort="web"=, add this header once per web with results (only =$web= is interpreted) | =---+++ $web= |
 	  | =footer=""= | if =sort="web"=, add this footer once per web with results (only =$web= and =$count= and $showmore are interpreted) |=showing $limit out of $count results $showmore= |
-      | =refine= | Normally related tags are shown that when clicked on will search for the related tag. If =refine= is set to 1, then the link instead will *add* the clicked tag to the set of tags being searched for, allowing you to incrementally refine search results. |
+      | =refine= | Normally related tags are shown that when clicked on will search for the related tag. If =refine= is set to 1, then the link instead will *add* the clicked tag to the set of tags being searched for, allowing you to incrementally refine search results. If not set the value of =ALWAYS_REFINE= is used. |
   
 	* =%<nop>TAGME{ tpaction="newtag" ... }%= - create new tag
 	  | *Parameter* | *Comment* | *Default* |
-	  | =tag="..."= | Name of tag. Accepts alphanumeric and underscore characters only | (required) |
+	  | =tag="..."= | Name of tag. Accepts alphanumeric and underscore characters only (unless =NORMALIZE_TAG_INPUT= is set to 0 to allow any user input) | (required) |
 
 	* =%<nop>TAGME{ tpaction="add" ... }%= - add tag to topic, or add vote to existing tag
 	  | *Parameter* | *Comment* | *Default* |
@@ -258,7 +258,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | 12 Apr 2006 (V1.036) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  17th Apr 2007: | TWiki:Main.CrawfordCurrie for [[http://www.escapestudios.co.uk/][Escape Studios]]: contributed support for incremental refinement of tag searches |
+|  17 Apr 2007: | TWiki:Main.CrawfordCurrie for [[http://www.escapestudios.co.uk/][Escape Studios]]: contributed support for incremental refinement of tag searches |
 |  12 Apr 2007: |  TWiki:Main.CrawfordCurrie contributed ability to search for multiple tags. TWiki:Main.SvenDowideit for [[http://www.escapestudios.co.uk/][Escape Studios]]: added parameters needed for custom search result display. |
 |  05 Apr 2007  | Arthur Clemens: The "topic tags" select box is now created with Javascript to prevent the tag options getting indexed by search engines. The former select box is used for noscript fallback. |
 |  02 Apr 2007: | Arthur Clemens: Added "Delete Tag" interface. Added tabbed interface for Create, Rename, Delete tags. |
