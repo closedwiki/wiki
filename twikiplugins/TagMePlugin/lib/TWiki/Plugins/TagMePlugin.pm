@@ -250,12 +250,12 @@ sub _showDefault {
         $text .=
           join( ', ', map { $seen{$_} } sort { lc $a cmp lc $b } keys(%seen) );
     }
-    $text .= ', ' if ( scalar %seen );
     my @allTags = _readAllTags();
     my @notSeen = ();
     foreach (@allTags) {
         push( @notSeen, $_ ) unless ( $seen{$_} );
     }
+    $text .=  ', ' if ( scalar @tagInfo && scalar @notSeen );
     if ( scalar @notSeen ) {
         if ( $tagMode eq 'nojavascript' ) {
             $text .= _createNoJavascriptSelectBox( @notSeen );
