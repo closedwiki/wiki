@@ -1,16 +1,7 @@
 %META:TOPICINFO{author="TWikiContributor" date="1168078214" format="1.1" version="$Rev$"}%
 ---+!! TWiki Reference Manual (%WIKIVERSION%)
 
-<script type="text/javascript">
-<!--
-function dblclick() { window.scrollTo(0,0) }
-if (document.layers) { document.captureEvents(Event.ONDBLCLICK); }
-document.ondblclick=dblclick; 
--->
-</script>
-
-This page contains all documentation topics as one long, complete reference sheet.%BR%
-__Doubleclick anywhere__ to return to the top of the page.
+This page contains all documentation topics as one long, complete reference sheet.
 
 %TOC{ depth="2" }%
 
