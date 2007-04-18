@@ -54,16 +54,28 @@ sub new {
     $this->{SESSION} = $session;
     $this->{WEB} = $web;
     $this->{TOPIC} = $topic;
-    my $user = $session->{users}->findUser( $author, undef, 1 );
-    $this->{AUTHOR} = $user ? $user->wikiName() : $author;
+    my $user;
+    # SMELL: call to unpublished core function
+    if (defined(&TWiki::Users::findUser)) {
+        $user = $session->{users}->findUser( $author, undef, 1 );
+        $this->{AUTHOR} = $user ? $user->wikiName() : $author;
+    } else {
+        $this->{AUTHOR} = $session->{users}->getWikiName($author);
+    }
     $this->{TIME} = $time;
     ASSERT($rev) if DEBUG;
     # rev at this change
     $this->{CURR_REV} = $rev;
     # previous rev
-    $this->{BASE_REV} = $rev - 1;
+    $this->{BASE_REV} = $rev - 1 || 1;
 
     return $this;
+}
+
+sub stringify {
+    my $this = shift;
+
+    return "$this->{WEB}.$this->{TOPIC} by $this->{AUTHOR} at $this->{TIME} from r$this->{BASE_REV} to r$this->{CURR_REV}";
 }
 
 =pod
@@ -119,7 +131,8 @@ sub expandHTML {
     my $frev = '';
     if( $this->{CURR_REV} ) {
         if( $this->{CURR_REV} > 1 ) {
-            $frev = 'r'.$this->{BASE_REV}.'-&gt;r'.$this->{CURR_REV};
+            $frev = 'r'.$this->{BASE_REV}.
+              '-&gt;r'.$this->{CURR_REV};
         } else {
             # new _since the last notification_
             $frev = CGI::span( { class=>'twikiNew' }, 'NEW' );
@@ -167,7 +180,8 @@ sub expandPlain {
     my $frev = '';
     if( $this->{CURR_REV} ) {
         if( $this->{CURR_REV} > 1 ) {
-            $frev = 'r'.$this->{BASE_REV}.'->r'.$this->{CURR_REV};
+            $frev = 'r'.$this->{BASE_REV}.
+              '->r'.$this->{CURR_REV};
         } else {
             # new _since the last notification_
             $frev = 'NEW';

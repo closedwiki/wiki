@@ -99,6 +99,41 @@ sub matches {
 
 =pod
 
+---++ covers($other, $db) -> $boolean
+   * =$other= - Other subscription object we are checking
+   * =$db= - TWiki::Contrib::MailerContrib::UpData database of parent names
+Return true if this subscription already covers all the topics
+specified by another subscription. Thus:
+   * A&#2A;B _covers_ AB, AxB
+   * A&#2A; _covers_ A&#2A;B
+   * &#2A;B _does not cover_ A&#2A;
+
+=cut
+
+sub covers {
+    my( $this, $tother, $db ) = @_;
+
+    # A different mode never matches
+    return 0 unless $this->{mode} eq $tother->{mode};
+
+    # do they match without taking into account the depth?
+    return 0 unless( $this->matches($tother->{topics}, undef, 0) );
+
+    # if we have a depth and they don't, that's already catered for
+    # by the matches test above
+
+    # if we don't have a depth and they do, then we might be covered
+    # by them, but that's irrelevant
+
+    # if we have a depth and they have a depth, then there is coverage
+    # if our depth is >= their depth
+    return 0 unless( $this->{depth} >= $tother->{depth} );
+
+    return 1;
+}
+
+=pod
+
 ---++ getMode() -> $mode
 Return ! if this is a non-changes subscription and the topics should
 be mailed even if there are no changes. ? to mail the full topic only

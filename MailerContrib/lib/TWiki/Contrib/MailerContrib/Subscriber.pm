@@ -73,23 +73,56 @@ sub getEmailAddresses {
         if ( $this->{name} =~ /^$TWiki::regex{emailAddrRegex}/o ) {
             push( @{$this->{emails}}, $this->{name} );
         } else {
-            my $user = $this->{session}->{users}->findUser(
-                $this->{name}, undef, 1 );
-            if( $user ) {
-                push( @{$this->{emails}}, $user->emails() );
-            } else {
-                $user = $this->{session}->{users}->findUser(
-                    $this->{name}, $this->{name}, 1 );
+            my $users = $this->{session}->{users};
+            if (defined(&TWiki::Users::findUser)) {
+                my $user = $users->findUser( $this->{name}, undef, 1 );
                 if( $user ) {
                     push( @{$this->{emails}}, $user->emails() );
                 } else {
-                    # unknown - can't find an email
-                    $this->{emails} = [];
+                    $user = $users->findUser(
+                        $this->{name}, $this->{name}, 1 );
+                    if( $user ) {
+                        push( @{$this->{emails}}, $user->emails() );
+                    } else {
+                        # unknown - can't find an email
+                        $this->{emails} = [];
+                    }
+                }
+            } else {
+                # User is represented by a wikiname. Map to a canonical
+                # userid.
+                my $list = $users->findUserByWikiName($this->{name});
+                foreach my $user (@$list) {
+                    # Automatically expands groups
+                    push( @{$this->{emails}}, $users->getEmails($user) );
                 }
             }
         }
     }
     return $this->{emails};
+}
+
+# Add a subsciption to an internal list, optimising the list so that
+# the fewest subscriptions are kept that are needed to cover all
+# topics.
+sub _addAndOptimise {
+    my( $this, $set, $new ) = @_;
+
+    # Don't add covered duplicates
+    my $i = 0;
+    my @remove;
+    foreach my $known (@{$this->{$set}}) {
+        return if $known->covers($new);
+        if( $new->covers( $known )) {
+            # remove anything covered by the new subscription
+            unshift(@remove, $i);
+        }
+        $i++;
+    }
+    foreach $i (@remove) {
+        splice(@{$this->{$set}}, $i, 1);
+    }
+    push( @{$this->{$set}}, $new );
 }
 
 =pod
@@ -103,11 +136,7 @@ Add a new subscription to this subscriber object.
 sub subscribe {
     my ( $this, $subs ) = @_;
 
-    # Don't add identical duplicates
-    foreach my $known (@{$this->{subscriptions}}) {
-        return if $known->equals($subs);
-    }
-    push( @{$this->{subscriptions}}, $subs );
+    $this->_addAndOptimise( 'subscriptions', $subs );
 }
 
 =pod
@@ -126,7 +155,7 @@ to be notified of changes to this topic.
 sub unsubscribe {
     my ( $this, $subs ) = @_;
 
-    push( @{$this->{unsubscriptions}}, $subs );
+    $this->_addAndOptimise( 'unsubscriptions', $subs );
 }
 
 =pod
