@@ -229,7 +229,7 @@ Plugin settings are stored as preferences variables. To reference a plugin setti
 	* List of users and groups that are allowed to change (rename and delete) tags (names separated by commas). %BR%
 	Users that are not allowed to change post their change requests to TagMeChangeRequests. %BR%
 	If not set anyone can change tags.
-		* Set ALLOW_TAG_CHANGE = Main.TWikiAdminGroup, Main.TestUser
+		* Set ALLOW_TAG_CHANGE = Main.TWikiAdminGroup
 		
 	* Debug plugin: (See output in =data/debug.txt=)
 		* Set DEBUG = 0
