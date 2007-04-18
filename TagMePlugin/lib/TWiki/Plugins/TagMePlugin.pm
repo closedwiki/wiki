@@ -32,7 +32,7 @@ use vars qw(
   $alphaNum $doneHeader $normalizeTagInput $lineRegex $topicsRegex
 );
 
-$VERSION    = '1.037';
+$VERSION    = '1.038';
 $RELEASE    = 'Any TWiki';
 $pluginName = 'TagMePlugin';    # Name of this Plugin
 
