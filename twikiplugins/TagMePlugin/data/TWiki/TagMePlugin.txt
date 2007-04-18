@@ -178,7 +178,7 @@ If users are allowed to use spaces in their tag names (when =NORMALIZE_TAG_INPUT
 To show the 'tags shown on a topic': 
 
 <verbatim>
-<div class="tagmeTopicTags">
+<div class="tagmetags">
 Tags: %TAGME{ tpaction="%URLPARAM{tpaction}%" web="%WEB%" tag="%URLPARAM{tag}%" }%, [[TWiki.TagMeViewAllTags][view all tags]]
 </div>
 </verbatim>
@@ -188,7 +188,6 @@ CSS styles:
 <verbatim>
 .tagmetags select {
    font-size:.8em;
-   margin:0 .25em 0 0;
 }
 .tagmetags a {
    text-decoration:none;
@@ -229,7 +228,7 @@ Plugin settings are stored as preferences variables. To reference a plugin setti
 	* List of users and groups that are allowed to change (rename and delete) tags (names separated by commas). %BR%
 	Users that are not allowed to change post their change requests to TagMeChangeRequests. %BR%
 	If not set anyone can change tags.
-		* Set ALLOW_TAG_CHANGE = Main.TWikiAdminGroup
+		* Set ALLOW_TAG_CHANGE = Main.TWikiAdminGroup, Main.TestUser
 		
 	* Debug plugin: (See output in =data/debug.txt=)
 		* Set DEBUG = 0
@@ -269,9 +268,9 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Plugin Author: | TWiki:Main.PeterThoeny ([[http://www.structuredwikis.com/peter.html][blog]]) |
 |  Copyright: | &copy; 2006, Peter@Thoeny.org, [[http://www.structuredwikis.com/][StructuredWikis LLC]] |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 18 Apr 2006 (V1.038) |
+|  Plugin Version: | 18 Apr 2006 (V1.037) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  18 Apr 2007: | Arthur Clemens: added permissions for rename and delete; added TagMeChangeRequests; updated button graphics. |
+|  18 Apr 2007: | Arthur Clemens: added permissions for rename and delete; added TagMeChangeRequests. |
 |  17 Apr 2007: | TWiki:Main.CrawfordCurrie for [[http://www.escapestudios.co.uk/][Escape Studios]]: contributed support for incremental refinement of tag searches. |
 |  12 Apr 2007: | TWiki:Main.CrawfordCurrie contributed ability to search for multiple tags. TWiki:Main.SvenDowideit for [[http://www.escapestudios.co.uk/][Escape Studios]]: added parameters needed for custom search result display. |
 |  05 Apr 2007: | Arthur Clemens: The "topic tags" select box is now created with Javascript to prevent the tag options getting indexed by search engines. The former select box is used for noscript fallback. |
