@@ -18,13 +18,6 @@
 #
 # As per the GPL, removal of this notice is prohibited.
 
-use strict;
-use TWiki;
-
-use TWiki::Contrib::MailerContrib::WebNotify;
-use TWiki::Contrib::MailerContrib::Change;
-use TWiki::Contrib::MailerContrib::UpData;
-
 =pod
 
 ---+ package TWiki::Contrib::Mailer
@@ -36,18 +29,20 @@ Also supported is a simple API that can be used to change the Web<nop>Notify top
 =cut
 
 package TWiki::Contrib::Mailer;
+
+use strict;
+
 use URI;
 
-use vars qw ( $VERSION $RELEASE $verbose );
-# This should always be $Rev$ so that TWiki can determine the checked-in
-# status of the plugin. It is used by the build automation tools, so
-# you should leave it alone.
-$VERSION = '$Rev$';
+use TWiki;
+use TWiki::Contrib::MailerContrib::WebNotify;
+use TWiki::Contrib::MailerContrib::Change;
+use TWiki::Contrib::MailerContrib::UpData;
 
-# This is a free-form string you can use to "name" your own plugin version.
-# It is *not* used by the build automation tools, but is reported as part
-# of the version number in PLUGINDESCRIPTIONS.
-$RELEASE = 'Dakar';
+use vars qw ( $VERSION $RELEASE $verbose );
+
+$VERSION = '$Rev$';
+$RELEASE = 'TWiki-4';
 
 =pod
 
@@ -128,17 +123,28 @@ sub _processWeb {
     return $report;
 }
 
+# Process subscriptions in $notify
 sub _processSubscriptions {
     my ( $twiki, $web, $notify, $db ) = @_;
 
-    my $timeOfLastNotify =
-      $twiki->{store}->readMetaData( $web, 'mailnotify' ) || 0;
-    my $timeOfLastChange = '';
+    my $metadir = TWiki::Func::getWorkArea('MailerContrib');
+    my $notmeta = $web;
+    $notmeta =~ s#/#.#g;
+    $notmeta = "$metadir/$notmeta";
+
+    my $timeOfLastNotify = 0;
+    if( open(F, "<$notmeta")) {
+        local $/ = undef;
+        $timeOfLastNotify = <F>;
+        close(F);
+    }
 
     if ( $verbose ) {
         print "\tLast notification was at " .
-          TWiki::Time::formatTime( $timeOfLastNotify ). "\n";
+          TWiki::Time::formatTime( $timeOfLastNotify, 'iso' ). "\n";
     }
+
+    my $timeOfLastChange = 0;
 
     # Hash indexed on email address, each entry contains a hash
     # of topics already processed in the change set for this email.
@@ -146,45 +152,43 @@ sub _processSubscriptions {
     # record for this topic in the array of Change objects for this
     # email in %changeset.
     my %seenset;
+
     # Hash indexed on email address, each entry contains an array
     # indexed by the index stored in %seenSet. Each entry in the array
     # is a ref to a Change object.
     my %changeset;
+
     # Hash indexed on topic name, mapping to email address, used to
     # record simple newsletter subscriptions.
     my %allSet;
 
-    my $changes = $twiki->{store}->readMetaData( $web, 'changes' );
-
-    unless ( $changes ) {
-        print "No changes in $web\n" if ( $verbose );
-        return '';
+    if( !defined( &TWiki::Func::eachChangeSince )) {
+        require TWiki::Contrib::MailerContrib::CompatibilityHacks;
     }
 
-    foreach my $line ( reverse split( /\n/, $changes ) ) {
-        # Parse lines from .changes:
-        # <topic>	<user>		<change time>	<revision>
-        # WebHome	FredBloggs	1014591347	21
-        next if $line =~ /minor$/;
-        my ($topicName, $userName, $changeTime, $revision) =
-          split( /\t/, $line);
+    # + 1 because the 'since' check is >=
+    my $it = TWiki::Func::eachChangeSince( $web, $timeOfLastNotify + 1 );
+    while( $it->hasNext() ) {
+        my $change = $it->next();
+        next if $change->{more} && $change->{more} =~ /minor$/;
 
-        next unless TWiki::Func::topicExists( $web, $topicName );
+        next unless TWiki::Func::topicExists( $web, $change->{topic} );
 
-        $timeOfLastChange = $changeTime unless( $timeOfLastChange );
+        $timeOfLastChange = $change->{time} unless( $timeOfLastChange );
 
-        # found last interesting change?
-        last if( $changeTime <= $timeOfLastNotify );
-
-        print "\tFound change to $topicName\n" if ( $verbose );
+        print "\tChange to $change->{topic} at ".
+          TWiki::Time::formatTime( $change->{time}, 'iso' ).
+              ". New revision is $change->{revision}\n" if ( $verbose );
 
         # Formulate a change record, irrespective of
         # whether any subscriber is interested
-        my $change = new TWiki::Contrib::MailerContrib::Change
-          ( $twiki, $web, $topicName, $userName, $changeTime, $revision );
+        $change = new TWiki::Contrib::MailerContrib::Change(
+            $twiki, $web, $change->{topic}, $change->{user},
+            $change->{time}, $change->{revision} );
 
         # Now, find subscribers to this change and extend the change set
-        $notify->processChange( $change, $db, \%changeset, \%seenset, \%allSet );
+        $notify->processChange(
+            $change, $db, \%changeset, \%seenset, \%allSet );
     }
 
     # For each topic, see if there's a compulsory subscription independent
@@ -200,7 +204,10 @@ sub _processSubscriptions {
 
     $report .= _sendNewsletterMails( $twiki, $web, \%allSet);
 
-    $twiki->{store}->saveMetaData( $web, 'mailnotify', $timeOfLastChange );
+    if( open(F, ">$notmeta" )) {
+        print F $timeOfLastChange;
+        close(F);
+    }
 
     return $report;
 }
@@ -317,7 +324,6 @@ sub _sendNewsletterMail {
 
     my ($revdate, $revuser, $maxrev);
     ($revdate, $revuser, $maxrev) = $meta->getRevisionInfo();
-    $revuser = $revuser->wikiName();
 
     # Handle standard formatting.
     $body =~ s/%TEXT%/$text/g;

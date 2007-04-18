@@ -56,6 +56,7 @@ sub set_up {
     $testWeb2 = "$this->{test_web}/SubWeb";
     # Will get torn down when the parent web dies
     $this->{twiki}->{store}->createWeb($user, $testWeb2);
+
     $this->registerUser("tu1", "Test", "User1", "test1\@example.com");
     $this->registerUser("tu2", "Test", "User2", "test2\@example.com");
     $this->registerUser("tu3", "Test", "User3", "test3\@example.com");
@@ -221,7 +222,12 @@ sub set_up {
                                     { forcenewrevision=>1 });
 
         # stamp the baseline
-        $this->{twiki}->{store}->saveMetaData($web, "mailnotify", time());
+        my $metadir = TWiki::Func::getWorkArea('MailerContrib');
+        my $dirpath = $web;
+        $dirpath =~ s#/#.#g;
+        $this->assert(open(F, ">$metadir/$dirpath"), "$metadir/$dirpath: $!");
+        print F time();
+        close(F);
 
         # wait a wee bit for the clock to tick over
         sleep(1);
@@ -285,10 +291,9 @@ sub set_up {
         $this->{twiki}->{store}->saveTopic( $user, $web, "TestTopic1",
                                     $finalText{TestTopic1}, $meta,
                                     { forcenewrevision=>1 });
+print `cat $TWiki::cfg{DataDir}/$web/.changes`;
     }
     # OK, we should have a bunch of changes
-    #print "MN: ",cat $TWiki::cfg{DataDir}/$this->{test_web}/.mailnotify;
-    #print cat $TWiki::cfg{DataDir}/$this->{test_web}/.changes;
 }
 
 sub testSimple {
@@ -378,6 +383,43 @@ sub testSubweb {
                             join(" ", keys %matched));
         }
     }
+}
+
+sub testCovers {
+    my $this = shift;
+
+    my $s1 = new TWiki::Contrib::MailerContrib::Subscription(
+        'A', 0, undef);
+    $this->assert($s1->covers($s1));
+
+    my $s2 = new TWiki::Contrib::MailerContrib::Subscription(
+        'A', 0, '!');
+    $this->assert(!$s1->covers($s2));
+
+    $s1 = new TWiki::Contrib::MailerContrib::Subscription(
+        'A*', 0, '!');
+    $this->assert($s1->covers($s2));
+    $this->assert(!$s2->covers($s1));
+
+    $s2 = new TWiki::Contrib::MailerContrib::Subscription(
+        'A', 1, '!');
+    $this->assert(!$s1->covers($s2));
+    $this->assert(!$s2->covers($s1));
+
+    $s1 = new TWiki::Contrib::MailerContrib::Subscription(
+        'A*', 1, '!');
+    $this->assert($s1->covers($s2));
+    $this->assert(!$s2->covers($s1));
+
+    $s2 = new TWiki::Contrib::MailerContrib::Subscription(
+        'A*B', 1, '!');
+    $this->assert($s1->covers($s2));
+    $this->assert(!$s2->covers($s1));
+
+    $s1 = new TWiki::Contrib::MailerContrib::Subscription(
+        'AxB', 0, '!');
+    $this->assert(!$s1->covers($s2));
+    $this->assert($s2->covers($s1));
 }
 
 1;
