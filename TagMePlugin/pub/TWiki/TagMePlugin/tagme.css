@@ -4,6 +4,12 @@
 .tagMeControl input { 
 	border:0;
 }
+.tagMeControl select {
+	margin:0 .2em 0 0;
+}
+.tagMeControl img {
+	vertical-align:middle;
+}
 a.tagmeAction:hover {
 	background-color:transparent;
 }
