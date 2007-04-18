@@ -7,6 +7,7 @@ data/TWiki/TagMeViewMyTags.txt NEW
 data/TWiki/TagMeCreateNewTag.txt NEW
 data/TWiki/TagMeRenameTag.txt NEW
 data/TWiki/TagMeDeleteTag.txt NEW
+data/TWiki/TagMeChangeRequests.txt NEW
 lib/TWiki/Plugins/TagMePlugin.pm NEW
 pub/TWiki/TagMePlugin/alltagcloud.gif NEW
 pub/TWiki/TagMePlugin/tag_add.gif NEW
