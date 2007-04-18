@@ -593,5 +593,66 @@ TEST
     $this->assert_str_equals($expected, $output);
 }
 
+sub test_eachChangeSince {
+    my $this = shift;
+    $TWiki::cfg{Store}{RememberChangesFor} = 5; # very bad memory
+    sleep(1);
+    my $start = time();
+    my $users = $twiki->{users};
+    $twiki->{store}->saveTopic(
+        $twiki->{user}, $this->{test_web}, "ClutterBuck",
+        "One" );
+    $twiki->{store}->saveTopic(
+        $users->findUserByWikiName("ScumBag")->[0],
+        $this->{test_web}, "PiggleNut",
+        "One" );
+    # Wait a second
+    sleep(1);
+    my $mid = time();
+    $twiki->{store}->saveTopic(
+        $users->findUserByWikiName("TWikiGuest")->[0],
+        $this->{test_web}, "ClutterBuck",
+        "One" );
+    $twiki->{store}->saveTopic(
+        $users->findUserByWikiName("TWikiAdminGroup")->[0],
+        $this->{test_web}, "PiggleNut",
+        "Two", undef );
+    my $change;
+    my $it = TWiki::Func::eachChangeSince($this->{test_web}, $start);
+    $this->assert($it->hasNext());
+    $change = $it->next();
+    $this->assert_str_equals("PiggleNut", $change->{topic});
+    $this->assert_equals(2, $change->{revision});
+    $this->assert_equals('TWikiAdminGroup', $change->{user});
+    $this->assert($it->hasNext());
+    $change = $it->next();
+    $this->assert_str_equals("ClutterBuck", $change->{topic});
+    $this->assert_equals(2, $change->{revision});
+    $this->assert_equals('TWikiGuest', $change->{user});
+    $change = $it->next();
+    $this->assert_str_equals("PiggleNut", $change->{topic});
+    $this->assert_equals(1, $change->{revision});
+    $this->assert_equals('ScumBag', $change->{user});
+    $this->assert($it->hasNext());
+    $change = $it->next();
+    $this->assert_str_equals("ClutterBuck", $change->{topic});
+    $this->assert_equals(1, $change->{revision});
+    $this->assert_equals('ScumBag', $change->{user});
+    $this->assert(!$it->hasNext());
+
+    $it = TWiki::Func::eachChangeSince($this->{test_web}, $mid);
+    $this->assert($it->hasNext());
+    $change = $it->next();
+    $this->assert_str_equals("PiggleNut", $change->{topic});
+    $this->assert_equals(2, $change->{revision});
+    $this->assert_equals('TWikiAdminGroup', $change->{user});
+    $change = $it->next();
+    $this->assert_str_equals("ClutterBuck", $change->{topic});
+    $this->assert_equals(2, $change->{revision});
+    $this->assert_equals('TWikiGuest', $change->{user});
+
+    $this->assert(!$it->hasNext());
+}
+
 1;
 

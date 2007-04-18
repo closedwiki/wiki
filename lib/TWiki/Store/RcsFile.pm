@@ -88,6 +88,9 @@ sub new {
         }
     }
 
+    # Default to remembering changes for a month
+    $TWiki::cfg{Store}{RememberChangesFor} ||= 31 * 24 * 60 * 60;
+
     return $this;
 }
 
@@ -191,23 +194,6 @@ sub getLatestRevisionTime {
 
 =pod
 
----++ ObjectMethod readMetaData($name) -> $text
-
-Get a meta-data block for this web
-
-=cut
-
-sub readMetaData {
-    my( $this, $name ) = @_;
-    my $file = $TWiki::cfg{DataDir}.'/'.$this->{web}.'/.'.$name;
-    if( -e $file ) {
-        return readFile( $this, $file );
-    }
-    return '';
-}
-
-=pod
-
 ---+++ ObjectMethod getWorkArea( $key ) -> $directorypath
 
 Gets a private directory uniquely identified by $key. The directory is
@@ -234,23 +220,6 @@ in =configure=.
 ERROR
     }
     return $dir;
-}
-
-=pod
-
----++ ObjectMethod saveMetaData( $web, $name ) -> $text
-
-Write a named meta-data string. If web is given the meta-data
-is stored alongside a web.
-
-=cut
-
-sub saveMetaData {
-    my ( $this, $name, $text ) = @_;
-
-    my $file = $TWiki::cfg{DataDir}.'/'.$this->{web}.'/.'.$name;
-
-    return saveFile( $this, $file, $text );
 }
 
 =pod
@@ -1081,6 +1050,82 @@ sub hidePath {
     my ( $this, $erf ) = @_;
     $erf =~ s#.*(/\w+/\w+\.[\w,]*)$#...$1#;
     return $erf;
+}
+
+=pod
+
+---++ ObjectMethod recordChange($user, $rev, $more)
+Record that the file changed
+
+=cut
+
+sub recordChange {
+    my( $this, $user, $rev, $more ) = @_;
+    $more ||= '';
+
+    # Store wikiname in the change log
+    $user = $this->{session}->{users}->getWikiName( $user );
+
+    my $file = $TWiki::cfg{DataDir}.'/'.$this->{web}.'/.changes';
+    return unless( !-e $file || -w $file ); # no point if we can't write it
+
+    my @changes =
+      map {
+          my @row = split(/\t/, $_, 5);
+          \@row }
+        split( /[\r\n]+/, readFile( $this, $file ));
+
+    # Forget old stuff
+    my $cutoff = time() - $TWiki::cfg{Store}{RememberChangesFor};
+    while (scalar(@changes) && $changes[0]->[2] < $cutoff) {
+        shift( @changes );
+    }
+
+    # Add the new change to the end of the file
+    push( @changes, [ $this->{topic}, $user, time(), $rev, $more ] );
+    my $text = join( "\n", map { join( "\t", @$_); } @changes );
+
+    saveFile( $this, $file, $text );
+}
+
+=pod
+
+---++ ObjectMethod eachChange($since) -> $iterator
+
+Return iterator over changes - see Store for details
+
+=cut
+
+sub eachChange {
+    my( $this, $since ) = @_;
+    my $file = $TWiki::cfg{DataDir}.'/'.$this->{web}.'/.changes';
+    require TWiki::ListIterator;
+
+    if( -r $file ) {
+        # SMELL: could use a LineIterator to avoid reading the whole
+        # file, but it hardle seems worth it.
+        my @changes =
+          map {
+              # Create a hash for this line
+              { topic => $_->[0], user => $_->[1], time => $_->[2],
+                  revision => $_->[3], more => $_->[4] };
+          }
+            grep {
+                # Filter on time
+                $_->[2] && $_->[2] >= $since
+            }
+              map {
+                  # Split line into an array
+                  my @row = split(/\t/, $_, 5);
+                  \@row;
+              }
+                reverse split( /[\r\n]+/, readFile( $this, $file ));
+
+        return new TWiki::ListIterator( \@changes );
+    } else {
+        my $changes = [];
+        return new TWiki::ListIterator( $changes );
+    }
 }
 
 1;

@@ -805,6 +805,15 @@ $TWiki::cfg{RCS}{filePermission}= 0644;
 # Considered experimental.
 $TWiki::cfg{AutoAttachPubFiles} = $FALSE;
 
+# **NUMBER EXPERT**
+# Number of seconds to remember changes for. This doesn't affect revision
+# histories, which always remember the date a file change. It only affects
+# the number of changes that are cached for fast access by the 'changes' and
+# 'statistics' scripts, and for use by extensions such as the change
+# notification mailer. It should be no shorter than the interval between runs
+# of these scripts.
+$TWiki::cfg{Store}{RememberChangesFor} = 31 * 24 * 60 * 60;
+
 # **REGEX EXPERT**
 # Perl regular expression matching suffixes valid on plain text files
 # Defines which attachments will be treated as ASCII in RCS. This is a

@@ -52,10 +52,8 @@ sub changes {
 
     my( $page, $eachChange, $after) = split( /%REPEAT%/, $text );
 
-    my $changeData = $session->{store}->readMetaData( $webName, 'changes' );
-    my @changes = split( /\r?\n/, $changeData );
-    unless( $query->param( 'minor' )) {
-        @changes = grep { !/\tminor$/ } @changes;
+    my $showMinor = $query->param( 'minor' );
+    unless( $showMinor ) {
         my $comment = CGI::b( 'Note: ' ).
           'This page is showing major changes only. '.
             CGI::a( { href => $query->url()."/$webName?minor=1",
@@ -64,35 +62,38 @@ sub changes {
         $page .= $comment;
     }
     my %done = ();
-    foreach my $change ( reverse @changes ) {
-        my( $changedTopic, $u, $time, $rev ) = split( /\t/, $change );
-        unless( $done{$changedTopic} ) {
-            next unless $session->{store}->topicExists( $webName, $changedTopic );
 
-            try {
-                my $summary = $session->{renderer}->summariseChanges(
-                    $session->{user}, $webName, $changedTopic, $rev );
-                my $thisChange = $eachChange;
-                $thisChange =~ s/%TOPICNAME%/$changedTopic/go;
-                my $wikiuser = $u ? $session->{users}->webDotWikiName($u) : '';
-                $thisChange =~ s/%AUTHOR%/$wikiuser/go;
-                $time = TWiki::Time::formatTime( $time );
-                $rev = 1 unless $rev;
-                my $srev = 'r' . $rev;
-                if( $rev == 1 ) {
-                    $srev = CGI::span( { class => 'twikiNew' }, 'NEW' );
-                }
-                $thisChange =~ s/%TIME%/$time/g;
-                $thisChange =~ s/%REVISION%/$srev/go;
-                $thisChange = $session->{renderer}->getRenderedVersion
-                  ( $thisChange, $webName, $changedTopic );
-                $thisChange =~ s/%TEXTHEAD%/$summary/go;
-                $page .= $thisChange;
-            } catch TWiki::AccessControlException with {
-                # ignore changes we can't see
-            };
-            $done{$changedTopic} = 1;
-        }
+    my $iterator = $session->{store}->eachChange( $webName, 0 );
+
+    while( $iterator->hasNext() ) {
+        my $change = $iterator->next();
+        next if (!$showMinor && $change->{more} && $change->{more} =~ /minor/);
+        next if $done{$change->{topic}};
+        next unless $session->{store}->topicExists( $webName, $change->{topic} );
+        try {
+            my $summary = $session->{renderer}->summariseChanges(
+                $session->{user}, $webName, $change->{topic}, $change->{revision} );
+            my $thisChange = $eachChange;
+            $thisChange =~ s/%TOPICNAME%/$change->{topic}/go;
+            my $wikiuser = $change->{user} ?
+              $session->{users}->webDotWikiName($change->{user}) : '';
+            $thisChange =~ s/%AUTHOR%/$wikiuser/go;
+            my $time = TWiki::Time::formatTime( $change->{time} );
+            $change->{revision} = 1 unless $change->{revision};
+            my $srev = 'r' . $change->{revision};
+            if( $change->{revision} == 1 ) {
+                $srev = CGI::span( { class => 'twikiNew' }, 'NEW' );
+            }
+            $thisChange =~ s/%TIME%/$time/g;
+            $thisChange =~ s/%REVISION%/$srev/go;
+            $thisChange = $session->{renderer}->getRenderedVersion
+              ( $thisChange, $webName, $change->{topic} );
+            $thisChange =~ s/%TEXTHEAD%/$summary/go;
+            $page .= $thisChange;
+        } catch TWiki::AccessControlException with {
+            # ignore changes we can't see
+        };
+        $done{$change->{topic}} = 1;
     }
     if( $TWiki::cfg{Log}{changes} ) {
         # write log entry

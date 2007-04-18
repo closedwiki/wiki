@@ -49,7 +49,9 @@ sub tear_down {
     my $this = shift;
 
     $this->removeWebFixture($twiki, $web)
-      if( $twiki->{store}->webExists( $web ));
+      if( -e "$TWiki::cfg{DataDir}/$web");
+
+    unlink "$TWiki::cfg{DataDir}/$web/.changes";
 
     eval {$twiki->finish()};
     $this->SUPER::tear_down();
@@ -435,6 +437,54 @@ sub test_attachmentSaveHandlers {
     unlink("/tmp/$attachment");
 
 	$twiki->{store}->removeWeb($twiki->{user}, $web);
+}
+
+sub test_eachChange {
+    my $this = shift;
+    $twiki->{store}->createWeb($twiki->{user}, $web);
+    $TWiki::cfg{Store}{RememberChangesFor} = 5; # very bad memory
+    sleep(1);
+    my $start = time();
+    $twiki->{store}->saveTopic( $twiki->{user}, $web, "ClutterBuck",
+                                "One" );
+    $twiki->{store}->saveTopic( $twiki->{user}, $web, "PiggleNut",
+                                "One" );
+    # Wait a second
+    sleep(1);
+    my $mid = time();
+    $twiki->{store}->saveTopic( $twiki->{user}, $web, "ClutterBuck",
+                                "One", undef, { forcenewrevision => 1 } );
+    $twiki->{store}->saveTopic( $twiki->{user}, $web, "PiggleNut",
+                                "Two", undef, { forcenewrevision => 1 } );
+    my $change;
+    my $it = $twiki->{store}->eachChange($web, $start);
+    $this->assert($it->hasNext());
+    $change = $it->next();
+    $this->assert_str_equals("PiggleNut", $change->{topic});
+    $this->assert_equals(2, $change->{revision});
+    $this->assert($it->hasNext());
+    $change = $it->next();
+    $this->assert_str_equals("ClutterBuck", $change->{topic});
+    $this->assert_equals(2, $change->{revision});
+    $this->assert($it->hasNext());
+    $change = $it->next();
+    $this->assert_str_equals("PiggleNut", $change->{topic});
+    $this->assert_equals(1, $change->{revision});
+    $this->assert($it->hasNext());
+    $change = $it->next();
+    $this->assert_str_equals("ClutterBuck", $change->{topic});
+    $this->assert_equals(1, $change->{revision});
+    $this->assert(!$it->hasNext());
+    $it = $twiki->{store}->eachChange($web, $mid);
+    $this->assert($it->hasNext());
+    $change = $it->next();
+    $this->assert_str_equals("PiggleNut", $change->{topic});
+    $this->assert_equals(2, $change->{revision});
+    $this->assert($it->hasNext());
+    $change = $it->next();
+    $this->assert_str_equals("ClutterBuck", $change->{topic});
+    $this->assert_equals(2, $change->{revision});
+    $this->assert(!$it->hasNext());
 }
 
 1;

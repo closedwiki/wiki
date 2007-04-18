@@ -492,10 +492,11 @@ sub moveTopic {
 
     if( $newWeb ne $oldWeb ) {
         # Record that it was moved away
-        _recordChange( $this, $oldWeb, $oldTopic, $user, $rev );
+        $handler->recordChange( $user, $rev );
     }
 
-    _recordChange( $this, $newWeb, $newTopic, $user, $rev );
+    $handler = _getHandler( $this, $newWeb, $newTopic, '' );
+    $handler->recordChange( $user, $rev );
 
     # Log rename
     if( $TWiki::cfg{Log}{rename} ) {
@@ -507,21 +508,6 @@ sub moveTopic {
     # alert plugins of topic move
     $this->{session}->{plugins}->afterRenameHandler( $oldWeb, $oldTopic, '',
                                                      $newWeb, $newTopic, '' );
-}
-
-# update .changes for statistics and mailer
-sub _recordChange {
-    my( $this, $web, $topic, $user, $rev, $more ) = @_;
-    $more ||= '';
-    my @foo = map { my @row = split(/\t/, $_); \@row }
-      split( /[\r\n]+/, $this->readMetaData( $web, 'changes' ));
-    # SMELL: make the 500 configurable? Or trim on the basis of age?
-    shift( @foo) if( $#foo > 500 );
-    push( @foo, [ $topic, $user, time(), $rev, $more ] );
-    $this->saveMetaData(
-        $web, 'changes',
-        join( "\n",
-              map { join( "\t", @$_); } @foo ));
 }
 
 =pod
@@ -1099,7 +1085,7 @@ sub _noHandlersSave {
         $nextRev = $handler->numRevisions();
 
         my $extra = $options->{minor} ? 'minor' : '';
-        _recordChange( $this, $web, $topic, $user, $nextRev, $extra );
+        $handler->recordChange( $user, $nextRev, $extra );
 
         if( ( $TWiki::cfg{Log}{save} ) && ! ( $options->{dontlog} ) ) {
             $this->{session}->writeLog( 'save', $web.'.'.$topic,
@@ -1469,20 +1455,23 @@ sub getTopicLatestRevTime {
 
 =pod
 
----++ ObjectMethod readMetaData( $web, $name ) -> $text
+---++ ObjectMethod eachChange( $web, $time ) -> $iterator
 
-Read a named meta-data string. If web is given the meta-data
-is stored alongside a web.
+Get an iterator over the list of all the changes in the given web between
+=$time= and now. $time is a time in seconds since 1st Jan 1970, and is not
+guaranteed to return any changes that occurred before (now - 
+{Store}{RememberChangesFor}). Changes are returned in oldest-first
+order.
 
 =cut
 
-sub readMetaData {
-    my ( $this, $web, $name ) = @_;
+sub eachChange {
+    my ( $this, $web, $time ) = @_;
     ASSERT($this->isa('TWiki::Store')) if DEBUG;
     $web =~ s#\.#/#go;
 
     my $handler = _getHandler( $this, $web );
-    return $handler->readMetaData( $name );
+    return $handler->eachChange( $time );
 }
 
 # Add TOPICINFO type data to the object, as specified by the parameters.
@@ -1512,24 +1501,6 @@ sub addTOPICINFO {
     $options{reprev} = '1.'.$rev if $repRev;
 
     $meta->put( 'TOPICINFO', \%options );
-}
-
-=pod
-
----++ ObjectMethod saveMetaData( $web, $name ) -> $text
-
-Write a named meta-data string. If web is given the meta-data
-is stored alongside a web.
-
-=cut
-
-sub saveMetaData {
-    my ( $this, $web, $name, $text ) = @_;
-    ASSERT($this->isa('TWiki::Store')) if DEBUG;
-    $web =~ s#\.#/#go;
-
-    my $handler = _getHandler( $this, $web );
-    return $handler->saveMetaData( $name, $text );
 }
 
 =pod
@@ -1690,10 +1661,6 @@ sub createWeb {
     foreach my $topic ( @topicList ) {
         $this->copyTopic( $user, $baseWeb, $topic, $newWeb, $topic );
     }
-
-    # create meta-data files
-    $this->saveMetaData( $newWeb, 'changes', '');
-    $this->saveMetaData( $newWeb, 'mailnotify', '');
 
     # patch WebPreferences in new web
     my $wpt = $TWiki::cfg{WebPrefsTopicName};

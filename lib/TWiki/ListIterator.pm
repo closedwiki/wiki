@@ -117,6 +117,7 @@ will print
 
 sub next {
     my $this = shift;
+    $this->hasNext();
     my $n = $this->{next};
     $this->{next} = undef;
     $n = &{$this->{process}}($n) if $this->{process};
