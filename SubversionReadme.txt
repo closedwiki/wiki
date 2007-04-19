@@ -1,6 +1,6 @@
 
 this is the DEVELOP Branch of twiki. Please goto 
-http://twiki.org/cgi-bin/view/Codev/HowDoesTheDEVELOPBranchWork for
+http://twiki.org/cgi-bin/view/Codev/SubversionReadme for
 further information.
 
 there is an automatically updated test version of this Branch at 
