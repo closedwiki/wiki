@@ -589,8 +589,10 @@ sub _queryTag {
         elsif ( $tagVotes{$webTopic} ) {
             $topicTags{$webTopic} = [ sort { lc $a cmp lc $b } @tags ];
             foreach $tag (@tags) {
-                $num = $related{$tag} || 0;
-                $related{$tag} = $num + 1;
+                unless( $tag =~ /^($qTagsRE)$/ ) {
+                    $num = $related{$tag} || 0;
+                    $related{$tag} = $num + 1;
+                }
             }
         }
     }
