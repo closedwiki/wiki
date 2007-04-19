@@ -92,3 +92,28 @@ Test:
    
 ---
 
+#TestAnchor
+
+Test:
+<verbatim>
+[[%TOPIC%#TestAnchor]]
+</verbatim>
+
+   * Plugin spaced out: [[%TOPIC%#TestAnchor]]
+   * Expected: <a href="#">Test Case Spaced Wiki Word Plugin # Test Anchor</a>
+   
+---
+
+#TestAnchor
+
+Test:
+<verbatim>
+[[%TOPIC%#TestAnchor]]
+</verbatim>
+
+   * Plugin spaced out: [[%TOPIC%#TestAnchor][TestAnchor]]
+      * explicitely set to a topic name, so should remain unchanged
+   * Expected: <a href="#">TestAnchor</a>
+   
+---
+
