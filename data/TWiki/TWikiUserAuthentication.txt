@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1159684864" format="1.0" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1176971123" format="1.0" version="$Rev$"}%
 %TOC%
 %STARTINCLUDE%
 ---# TWiki User Authentication
@@ -26,34 +26,40 @@ Please note FileAttachments are not protected by TWiki User Authentication.
 
 __%T% Tip:__ TWiki:TWiki.TWikiUserAuthenticationSupplement on TWiki.org has supplemental documentation on user authentication.
 
+#PasswordManagement
 ---++ Password Management
 
 As shipped, TWiki supports the Apache 'htpasswd' password manager. This manager supports the use of =.htpasswd= files on the server. These files can be unique to TWiki, or can be shared with other applications (such as an Apache webserver). A variety of password encodings are supported for flexibility when re-using existing files. See the descriptive comments in the Security Settings section of the [[%SCRIPTURLPATH{"configure"}%][configure] interface for more details.
 
 You can easily plug in alternate password management modules to support interfaces to other third-party authentication databases.
 
+#UserMapping
 ---++ User Mapping
 
 Often when you are using an external authentication method, you want to map from an unfriendly "login name" to a more friendly WikiName. Also, an external authentication database may well have user information you want to import to TWiki, such as user groups.
 
 By default, TWiki supports mapping of usernames to wikinames, and supports TWiki groups internal to TWiki. If you want, you can plug in an alternate user mapping module to support import of groups etc.
 
+#UserRegistration
 ---++ User Registration
 
 New user registration uses the password manager to set and change passwords and store email addresses. It is also responsible for the new user verification process. the registration process supports *single user registration* via the TWikiRegistration page, and *bulk user registration* via the BulkRegistration page (for admins only).
 
 The registration process is also responsible for creating user topics, and setting up the mapping information used by the User Mapping support.
 
+#LoginManagement
 ---++ Login Management
 
 Login management controls the way users have to log in. There are three basic options; no login, login via a TWiki login page, and login using the webserver authentication support.
 
+#NoLogin
 ---+++ No Login (select =none= in configure)
 
 Does exactly what it says on the tin. Forget about authentication to make your site completely public - anyone can browse and edit freely, in classic Wiki style. All visitors are given the %MAINWEB%.TWikiGuest default identity, so you can't track individual user activity.
 
 __%X% Note:__ This setup is *not* recommended on public websites for security reasons; anyone would be able to change system settings and perform tasks usually restricted to administrators.
 
+#TemplateLogin
 ---+++ Template Login (select =TWiki::Client::TemplateLogin= in configure)
 
 Template Login asks for a username and password in a web page, and processes them using whatever Password Manager you choose. Users can log in and log out. Client Sessions are used to remember users. Users can choose to have their session remembered so they will automatically be logged in the next time they start their browser.
@@ -76,6 +82,7 @@ TWikiAccessControl has more information on setting up access controls.
 
 %T% You can customize the default user home page in NewUserTemplate. The same variables get expanded as in the [[TWikiTemplates#Template_Topics][template topics]]
 
+#ApacheLogin
 ---+++ Apache Login (select =TWiki::Client::ApacheLogin= in configure)
 
 Using this method TWiki does not authenticate users internally. Instead it depends on the =REMOTE_USER= environment variable, which is set when you enable authentication in the webserver.
@@ -111,6 +118,7 @@ Any time a user enters a page that needs authentication, they will be forced to 
 
 The ==bin/logon== script accomplishes this. The ==bin/logon== script must be setup in the ==bin/.htaccess== file to be a script which requires a =valid user=. However, once authenticated, it will simply redirect the user to the view URL for the page from which the =logon= script was linked.
 
+#TrackSessions
 ---++ Sessions
 
 TWiki uses the CPAN:CGI::Session and CPAN:CGI::Cookie modules to track sessions. These modules are de facto standards for session management among Perl programmers. If you can't use Cookies for any reason, CPAN:CGI::Session also supports session tracking using the client IP address.
@@ -139,6 +147,7 @@ TWiki normally uses cookies to store session information on a client computer. C
 
 For a number of reasons, it may not be possible to use cookies. In this case, TWiki has a fallback mechanism; it will automatically rewrite every internal URL it sees on pages being generated to one that also passes session information.
 
+#UsernameVsLoginName
 ---++ TWiki Username vs. Login Username
 
 This section applies only if you are using authentication with existing login names (i.e. mapping from login names to WikiNames).

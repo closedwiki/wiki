@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1172865279" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1176971123" format="1.1" version="$Rev$"}%
 %TOC%
 %STARTINCLUDE%
 
@@ -189,14 +189,30 @@ This setup can be useful to hide a new web until content its ready for deploymen
 
 __%X% Note:__ Obfuscating a web without view access control is *very* insecure, as anyone who knows the URL can access the web.
 
+---+++ Restrict Access to Whole TWiki Site
+
+For a firewalled TWiki, e.g. an intranet wiki or extranet wiki, you want to allow only invited people to access your TWiki. In this case, enable [[TWikiUserAuthentication#ApacheLogin][user authentication with ApacheLogin]] and lock down access to the whole =twiki/bin= and =twiki/pub= directories to all but valid users. In the Apache =.htaccess= file or the appropriate =.conf= file, replace the =&lt;FilesMatch "(attach|edit|...= section with this:
+
+<verbatim>
+<FilesMatch ".*">
+       require valid-user
+</FilesMatch>
+</verbatim>
+
+If needed, you can further restrict access to selected webs with ALLOWWEBVIEW and other access control settings.
+
+__Note:__ With this configuration, someone with access to the site needs to register new users.
+
 ---+++ Authenticate all Webs and Restrict Selected Webs
 
 Use the following setup to authenticate users for topic viewing in all webs and to restrict access to selected webs. Requires TWikiUserAuthentication to be enabled.
 
+   1. Set =require valid-user= on your =view= script in .htaccess or the appropriate Apache .conf file. As of 4.x, this looks like: =FilesMatch "(attach|edit|manage|rename|save|view|upload|mail|logon|.*auth).*"= (normally =view= is not in that list).
    1. *Restrict* view access to selected Users and Groups. Set one or both of these variables in its %WEBPREFSTOPIC% topic:
       * ==Set <nop>DENYWEBVIEW = &lt; list of Users and Groups &gt;==
       * ==Set <nop>ALLOWWEBVIEW = &lt; list of Users and Groups &gt;==
       * __Note:__ =DENYWEBVIEW= is evaluated before =ALLOWWEBVIEW=. Access is denied if the authenticated person is in the =DENYWEBVIEW= list, or not in the =ALLOWWEBVIEW= list. Access is granted in case =DENYWEBVIEW= and =ALLOWWEBVIEW= is not defined.
+   1. If you still want public users to be able to register automatically follow TWiki:TWiki.RegisterOnViewRestrictedSite.
 
 ---+++ Authenticate and Restrict Selected Webs Only
 
