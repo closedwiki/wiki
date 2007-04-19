@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1173722288" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1176947074" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiInstallationGuide"}%
 ---+ Administrator Skills Assumptions
 
@@ -8,7 +8,7 @@ If you need to install TWiki you'll need to either have or learn the following s
 
    * *Operating system administration:* Ability to use Unix/Linux command line tools (or equivalent Windows tools), including ability to move/copy/delete files, change permissions, view web server log files, set environment variables, use a text editor, etc.
    * *Web server administration:* Ability to do basic setup, e.g. ability to edit config files or use GUI configuration tools to enable CGI scripts on a directory.
-   * *Program compilation:* _Where RCS is not pre-installed_ (that is most Unix systems), the ability to download and compile the RCS program from source, including use of =configure=, =make=, etc.  This is often *not* necessary on Linux or Windows.
+   * *Program compilation:* _Where Revision Control System (RCS) is not pre-installed_ (that is most Unix systems), the ability to download and compile the RCS program from source, including use of =configure=, =make=, etc.  This is often *not* necessary on Linux or Windows.
    * *Troubleshooting*: Ability to perform tests, inspect error logs, talk to technical support (whether in an IT department or web hosting provider) and read documentation in order to help with diagnosing installation problems.
 
 Installing TWiki is *not* recommended for people who only know HTML and web design, unless they are willing to learn the above, or team up with someone who can handle the installation.
