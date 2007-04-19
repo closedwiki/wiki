@@ -1,0 +1,94 @@
+%META:TOPICINFO{author="TWikiContributor" date="1111930902" format="1.0" version="$Rev: 7490 $"}%
+
+---+!! %TWIKIWEB%.SpacedWikiWordPlugin tests
+
+Description: visual test output from %TWIKIWEB%.SpacedWikiWordPlugin.
+
+---
+Test:
+<verbatim>
+WebHome
+</verbatim>
+
+   * Core spaced out word: %SPACEOUT{"WebHome"}%
+   * Plugin spaced out: WebHome
+   * Expected: <a href="#">Web Home</a>
+
+---
+
+Test:
+<verbatim>
+TWiki.TWikiVariables
+</verbatim>
+
+   * Core spaced out word: %SPACEOUT{"TWikiVariables"}%
+   * Plugin spaced out: TWiki.TWikiVariables
+      * Testing if the T and W don't show a gap
+   * Expected: <a href="#">TWiki Variables</a>
+
+---
+
+Test:
+<verbatim>
+[[WebStatistics]]
+</verbatim>
+
+   * Plugin spaced out: [[WebStatistics]]
+   * Expected: <a href="#">Web Statistics</a>
+   
+---
+
+Test:
+<verbatim>
+WebHomes
+</verbatim>
+
+   * Plugin spaced out: WebHomes
+   * Expected: <a href="#">Web Homes</a>
+   
+---
+
+Test:
+<verbatim>
+[[WebTopicList][WebTopicList]]
+</verbatim>
+
+   * Plugin spaced out: [[WebTopicList][WebTopicList]]
+      * explicitely set to a topic name, so should remain unchanged
+   * Expected: <a href="#">WebTopicList</a>
+   
+---
+
+Test:
+<verbatim>
+[[%WEB%.WebTopicList][WebTopicList]]
+</verbatim>
+
+   * Plugin spaced out: [[%WEB%.WebTopicList][WebTopicList]]
+      * explicitely set to a topic name, so should remain unchanged
+   * Expected: <a href="#">WebTopicList</a>
+   
+---
+
+Test:
+<verbatim>
+[[WebPreferences][PrefTopic]]
+</verbatim>
+
+   * Plugin spaced out: [[WebPreferences][PrefTopic]]
+      * explicitely set to a topic name, so should remain unchanged
+   * Expected: <a href="#">PrefTopic</a>
+   
+---
+
+Test:
+<verbatim>
+%SEARCH{"SpacedWikiWord" scope="topic" nonoise="on" format="[[$web.$topic][$topic]]"}%
+</verbatim>
+
+   * Plugin spaced out: %SEARCH{"SpacedWikiWord" scope="topic" nonoise="on" format="[[$web.$topic][$topic]]"}%
+      * explicitely set to a topic name, so should remain unchanged
+   * Expected: <a href="#">TestCaseSpacedWikiWordPlugin</a>
+   
+---
+
