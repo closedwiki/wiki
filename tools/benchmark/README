@@ -21,7 +21,7 @@ for a long time. But try a range of different pages.
 
 The benchmarks are run using the =tools/benchmark.pl= script. This script runs the benchmark on Athens first (to normalise AthensMarks) and then repeats the experiment on a list of other installations. Edit the script as appropriate for the installations you want to benchmark. You can turn debug on in this script if you think there is something going wrong. It may help.
 
-Benchmark results are reported in a table that shows the plugins installed in the installation, together with an absolute number indicating the time taken to render the page, and the performance of the instalation in AthensMarks. AthensMarks are defined as the percentage of athens performance delivered by the installation; so 100 AthensMarks is the same performance as athens; 33 AthensMarks indicates performance 3 times worse than athens; 300 AthensMarks indicates performance 3 times better than Athens.
+Benchmark results are reported in a table that shows the plugins installed in the installation, together with an absolute number indicating the time taken to render the page, and the performance of the installation in AthensMarks. AthensMarks are defined as the percentage of athens performance delivered by the installation; so 100 AthensMarks is the same performance as athens; 33 AthensMarks indicates performance 3 times worse than athens; 300 AthensMarks indicates performance 3 times better than Athens.
 
 The benchmarks are for the _core code only_ i.e. the overhead of client/server comms is _not_ taken into account. This means that factors such as time taken to download CSS or Javascript files are _not_ being measured. For that, use =ab= based benchmarks.
 

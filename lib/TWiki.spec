@@ -640,7 +640,7 @@ $TWiki::cfg{LogFileName} = '$TWiki::cfg{DataDir}/log%DATE%.txt';
 # But for best performance you should enable only the languages you really
 # need. English is the default language, and is always enabled.
 # <p />
-# {LocalesDir} is used to find the languages supported in your instalation,
+# {LocalesDir} is used to find the languages supported in your installation,
 # so if the list below is empty, it's probably because {LocalesDir} is pointing
 # to the wrong place.
 $TWiki::cfg{UserInterfaceInternationalisation} = $FALSE;
