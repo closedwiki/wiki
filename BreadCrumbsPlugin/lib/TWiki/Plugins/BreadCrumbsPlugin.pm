@@ -96,20 +96,18 @@ sub renderBreadCrumbs {
 
   # format result
   my @lines = ();
-  my $fmt = $topicformat;
-  foreach my $item (reverse @$breadCrumbs) {
+  foreach my $item (@$breadCrumbs) {
     next unless $item;
     next if $exclude ne '' && $item->{name} =~ /^($exclude)$/;
     next if $include ne '' && $item->{name} !~ /^($include)$/;
-    my $line = $fmt;
-    $fmt = $format;
+    my $line = ($item->{istopic} ? $topicformat : $format);
     my $webtopic = $item->{target};
     $webtopic =~ s/\//./go;
     $line =~ s/\$name/$item->{name}/g;
     $line =~ s/\$target/$item->{target}/g;
     $line =~ s/\$webtopic/$webtopic/g;
     #writeDebug("... added");
-    unshift @lines, $line;
+    push @lines, $line;
   }
   my $result = $header.join($separator, @lines).$footer;
 
@@ -128,7 +126,7 @@ sub getPathBreadCrumbs {
     map {
       /^(.*)\.(.*?)$/; 
       my $name = ($2 eq 'WebHome')?$1:$2;
-      { name => $name, target => $_ }
+      { name => $name, target => $_, istopic => 1 }
     } split(',', $trail);
 
   return \@trail;
@@ -147,7 +145,8 @@ sub getLocationBreadCrumbs {
       $webName = $2;
     }
     #writeDebug("adding breadcrumb: target=$thisWeb/WebHome, name=$webName");
-    push @breadCrumbs, { target=>"$thisWeb/WebHome", name=>$webName };
+    push @breadCrumbs, {
+        target=>"$thisWeb/WebHome", name=>$webName, istopic => 0 };
   } else {
     my $parentWeb = '';
     my @webCrumbs;
@@ -155,7 +154,8 @@ sub getLocationBreadCrumbs {
       $parentWeb .= '/' if $parentWeb;
       $parentWeb .= $parentName;
       #writeDebug("adding breadcrumb: target=$parentWeb/WebHome, name=$parentName");
-      push @webCrumbs, { target=>"$parentWeb/WebHome", name=>$parentName };
+      push @webCrumbs, {
+          target=>"$parentWeb/WebHome", name=>$parentName, istopic => 0 };
     }
     if ($recurse->{once} || $recurse->{webonce}) {
       my @list;
@@ -185,13 +185,15 @@ sub getLocationBreadCrumbs {
 
       # check end of loop
       last if 
-	$seen{"$web.$topic"} || 
-	$topic eq 'WebHome' ||
+	$seen{"$web.$topic"} ||
+# Commented out because it breaks the trail
+#	$topic eq 'WebHome' ||
 	!TWiki::Func::topicExists($web,$topic);
 
       # add breadcrumb
       #writeDebug("adding breadcrumb: target=$web/$topic, name=$topic");
-      unshift @topicCrumbs, { target=>"$web/$topic", name=>$topic };
+      unshift @topicCrumbs, {
+          target=>"$web/$topic", name=>$topic, istopic => 1 };
       $seen{"$web.$topic"} = 1;
 
       # check for bailout
@@ -205,7 +207,8 @@ sub getLocationBreadCrumbs {
   # maybe add this topic if it was not covered yet
   unless ($seen{"$thisWeb.$thisTopic"}) {
     #writeDebug("finally adding breadcrumb: target=$thisWeb/$thisTopic, name=$thisTopic");
-    push @breadCrumbs, { target=>"$thisWeb/$thisTopic", name=>$thisTopic };
+    push @breadCrumbs, {
+        target=>"$thisWeb/$thisTopic", name=>$thisTopic, istopic => 1 };
   }
 
   return \@breadCrumbs;
