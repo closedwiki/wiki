@@ -461,18 +461,19 @@ sub _linkToolTipInfo {
 
 =pod
 
----++ ObjectMethod internalLink ( $theWeb, $theTopic, $theLinkText, $theAnchor, $doLink, $doKeepWeb ) -> $html
+---++ ObjectMethod internalLink ( $theWeb, $theTopic, $theLinkText, $theAnchor, $doLink, $doKeepWeb, $hasExplicitLinkLabel ) -> $html
 
 Generate a link. 
 
 Note: Topic names may be spaced out. Spaced out names are converted to <nop>WikWords,
 for example, "spaced topic name" points to "SpacedTopicName".
    * =$theWeb= - the web containing the topic
-   * =$theTopic= - the topic to be lunk
+   * =$theTopic= - the topic to be link
    * =$theLinkText= - text to use for the link
    * =$theAnchor= - the link anchor, if any
    * =$doLinkToMissingPages= - boolean: false means suppress link for non-existing pages
    * =$doKeepWeb= - boolean: true to keep web prefix (for non existing Web.TOPIC)
+   * =$hasExplicitLinkLabel= - boolean: true in case of [[TopicName][explicit link label]] 
 
 Called by _handleWikiWord and _handleSquareBracketedLink and by Func::internalLink
 
@@ -483,7 +484,7 @@ SMELL: why is this available to Func?
 =cut
 
 sub internalLink {
-    my( $this, $theWeb, $theTopic, $theLinkText, $theAnchor, $doLinkToMissingPages, $doKeepWeb ) = @_;
+    my( $this, $theWeb, $theTopic, $theLinkText, $theAnchor, $doLinkToMissingPages, $doKeepWeb, $hasExplicitLinkLabel ) = @_;
     ASSERT($this->isa( 'TWiki::Render')) if DEBUG;
     # SMELL - shouldn't it be callable by TWiki::Func as well?
 
@@ -499,11 +500,17 @@ sub internalLink {
         ($theWeb ne $this->{session}->{webName})) {
             $theLinkText = $theWeb;
     }
-
+    
     # Get rid of leading/trailing spaces in topic name
     $theTopic =~ s/^\s*//o;
     $theTopic =~ s/\s*$//o;
 
+    # Allow spacing out, etc.
+    # Plugin authors use $hasExplicitLinkLabel to determine if the link label
+    # should be rendered differently even if the topic author has used a
+    # specific link label.
+    $theLinkText = $this->{session}->{plugins}->renderWikiWordHandler( $theLinkText, $hasExplicitLinkLabel ) || $theLinkText;
+    
     # Turn spaced-out names into WikiWords - upper case first letter of
     # whole link, and first of each word. TODO: Try to turn this off,
     # avoiding spaces being stripped elsewhere
@@ -512,7 +519,7 @@ sub internalLink {
 
     # Add <nop> before WikiWord inside link text to prevent double links
     $theLinkText =~ s/(?<=[\s\(])([$TWiki::regex{upperAlpha}])/<nop>$1/go;
-
+    
     return _renderWikiWord($this, $theWeb, $theTopic, $theLinkText, $theAnchor, $doLinkToMissingPages, $doKeepWeb);
 }
 
@@ -572,7 +579,7 @@ sub _renderExistingWikiWord {
     }
     my $tooltip = _linkToolTipInfo( $this, $web, $topic );
     push( @attrs, title => $tooltip ) if( $tooltip );
-
+    
     my $link = CGI::a( { @attrs }, $text );
     # When we pass the tooltip text to CGI::a it may contain
     # <nop>s, and CGI::a will convert the < to &lt;. This is a
@@ -631,9 +638,6 @@ sub _handleWikiWord {
         }
     }
 
-    # Allow spacing out, etc
-    $text = $this->{session}->{plugins}->renderWikiWordHandler( $text ) || $text;
-
     # =$doKeepWeb= boolean: true to keep web prefix (for non existing Web.TOPIC)
     # (Necessary to leave "web part" of ABR.ABR.ABR intact if topic not found)
     $keepWeb = ( $topic =~ /^$TWiki::regex{abbrevRegex}$/o && $web ne $this->{session}->{webName} );
@@ -646,19 +650,21 @@ sub _handleWikiWord {
     # TODO: check the spec of doKeepWeb vs $doLinkToMissingPages
 
     return $this->internalLink( $web, $topic, $text, $anchor,
-                                $linkIfAbsent, $keepWeb );
+                                $linkIfAbsent, $keepWeb, undef );
 }
 
 
 # Handle SquareBracketed links mentioned on page $theWeb.$theTopic
-# format: [[$text]]
+# format: [[$link]]
 # format: [[$link][$text]]
 sub _handleSquareBracketedLink {
     my( $this, $web, $topic, $link, $text ) = @_;
-
+   
     # Strip leading/trailing spaces
     $link =~ s/^\s+//;
     $link =~ s/\s+$//;
+
+    my $hasExplicitLinkLabel = $text ? 1 : undef;
 
     # Explicit external [[$link][$text]]-style can be handled directly
     if( $link =~ m!^($TWiki::regex{linkProtocolPattern}\:|/)! ) {
@@ -707,7 +713,7 @@ sub _handleSquareBracketedLink {
     # Topic defaults to the current topic
     ($web, $topic) = $this->{session}->normalizeWebTopicName( $web, $topic );
 
-    return $this->internalLink( $web, $topic, $text, $anchor, 1, undef );
+    return $this->internalLink( $web, $topic, $text, $anchor, 1, undef, $hasExplicitLinkLabel );
 }
 
 # Handle an external link typed directly into text. If it's an image
