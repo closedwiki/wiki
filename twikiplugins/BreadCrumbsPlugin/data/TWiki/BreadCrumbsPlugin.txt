@@ -40,6 +40,7 @@ individual breadcrumb is displayed.
    * =header=: format string prepended to the output result
    * =format=: format string to render one item on the breadcrumbs path
      (defaults to '[<nop>[$webtopic][$name]]')
+   * =topicformat=: format string for the _last_ (topic) item on the path; defaults to the same as =format=
    * =footer=: format string appended to the output result
    * =separator=: format string to be put between items
      (defaults to one space char)
@@ -138,8 +139,9 @@ separator) may contain special variables:
 |  Plugin Author: | TWiki:Main.MichaelDaum |
 |  Copyright &copy;: | 2006, MichaelDaum@WikiRing.com |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | v0.12 (%$VERSION%) |
+|  Plugin Version: | v0.13 (%$VERSION%) |
 |  Change History: | &nbsp; |
+|  19 Apr 2007: | TWiki:Main.CrawfordCurrie added =topicformat= |
 |  20 Feb 2007: | TWiki:Main.CrawfordCurrie added path breadcrumbs |
 |  18 Dec 2006: | added $webtopic pseudo-parameter |
 |  31 Aug 2006: | added NO_PREFS_IN_TOPIC;\
