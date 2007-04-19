@@ -55,7 +55,7 @@ The config file is a dump (using CPAN:Data::Dumper) of the configuration object 
 	| *File:* | *Description:* |
 %$MANIFEST%
 
-If you have a non-standard instalation, then move the files wherever you need them to be.
+If you have a non-standard installation, then move the files wherever you need them to be.
 
 ---+ Settings
    * Name of the perl package
