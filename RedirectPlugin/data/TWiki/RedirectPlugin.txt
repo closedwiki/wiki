@@ -1,31 +1,43 @@
 %META:TOPICINFO{author="smokris" date="1056159480" format="1.0" version="1.2"}%
----+ Redirect Plugin
+---+!! Redirect Plugin
 
-This plugin allows one to produce TWiki topics that automatically redirect to other TWiki topics or URLs.
+Create a redirect to another topic or website.
 
 I typically use this to make easy-to-type shortforms/acronyms of topic names.  For example:
 	* actual content appears under =<nop>Main.LightweightDirectoryAccessProtocol=
 	* =<nop>Main.LDAP= contains just a redirect tag.  Referencing =<nop>Main.LDAP= anywhere or entering it in the _Go_ box takes one directly to =<nop>Main.LightweightDirectoryAccessProtocol=
 
+%TOC%
+
+---++ Syntax Rules
+	* Redirect to a topic within the web: =%<nop>REDIRECT{"SomeTopic"}%=
+	* Redirect to a topic in another web: =%<nop>REDIRECT{"Someweb.SomeTopic"}%=
+	* Redirect to any URL: =%<nop>REDIRECT{"http://domain.com/"}%=
+
+---++ Prevent redirecting
+To view the topic that contains a =REDIRECT=, pass parameter =noredirect=on= to the url. For example:
+
+<verbatim>
+http://domain.com/twiki/bin/view/Main/WebHome?noredirect=on
+</verbatim>	
+	
 ---++ Related Topics
 	* http://twiki.org/cgi-bin/view/Codev/RedirectPage
 	* http://twiki.org/cgi-bin/view/Codev/PageRedirectTag
 	* http://twiki.org/cgi-bin/view/Codev/TopicAliases
 	* http://twiki.org/cgi-bin/view/Codev/RedirectToRenamedPage
 
----++ Syntax Rules
-	* Redirect to a topic within the web: =&#37;REDIRECT{"WikiWord"}%=
-	* Redirect to a topic in another web: =&#37;REDIRECT{"TWiki.WikiWord"}%=
-	* Redirect to any URL: =&#37;REDIRECT{"http://google.com/"}%=
+---++ Plugin Settings
 
----++ Caveat
-	* Once you've added a redirect tag to a topic, you won't ever see the topic itself until you remove the tag.  Therefore, to remove or change redirection, you will need to manually enter the appropriate URL to edit the topic.
+	* Set SHORTDESCRIPTION = Create a redirect to another topic or website
+	* Set DEBUG = 0
 
----++ Redirect Plugin Settings
-		* Set SHORTDESCRIPTION = This plugin allows one to produce TWiki topics that automatically redirect to other TWiki topics or URLs.
-		* Set DEBUG = 0
+---++ Test topics
+If installed:
+	* Sandbox.RedirectPluginTest - this topic should redirect to:
+	* Sandbox.RedirectPluginDestination
 
----++ Plugin Installation Instructions
+---++ Installation Instructions
 
 __Note:__ You do not need to install anything on the browser to use this plugin. The following instructions are for the administrator who installs the plugin on the server where TWiki is running. 
 
@@ -40,8 +52,9 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main/SteveMokris |
-|  Plugin Version: | 10 Aug 2006 |
+|  Plugin Version: | 21 Apr 2006 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  21 Apr 2007: | Arthur Clemens: fixed redirect to non-wiki word topics; added =noredirect=on= parameter; added support for TWiki:Codev.ShorterURLs. |
 |  10 Aug 2006: | Ability to redirect to URL restored by TWiki:Main/ThomasWeigert. Also added support for URL parameters. Fixed a few bugs. |
 |  09 Jun 2006: | Dakar port by TWiki:Main/MeredithLesley |
 |  20 Jun 2003: | Initial version |
