@@ -4,8 +4,10 @@
 
 Description: visual test output from %TWIKIWEB%.SpacedWikiWordPlugin.
 
----
-Test:
+%TOC%
+
+---+++ topic
+
 <verbatim>
 WebHome
 </verbatim>
@@ -14,9 +16,8 @@ WebHome
    * Plugin spaced out: WebHome
    * Expected: <a href="#">Web Home</a>
 
----
+---+++ web.topic
 
-Test:
 <verbatim>
 TWiki.TWikiVariables
 </verbatim>
@@ -26,9 +27,8 @@ TWiki.TWikiVariables
       * Testing if the T and W don't show a gap
    * Expected: <a href="#">TWiki Variables</a>
 
----
+---+++ Bracket notation, no link label
 
-Test:
 <verbatim>
 [[WebStatistics]]
 </verbatim>
@@ -36,9 +36,8 @@ Test:
    * Plugin spaced out: [[WebStatistics]]
    * Expected: <a href="#">Web Statistics</a>
    
----
+---+++ Plural
 
-Test:
 <verbatim>
 WebHomes
 </verbatim>
@@ -46,9 +45,8 @@ WebHomes
    * Plugin spaced out: WebHomes
    * Expected: <a href="#">Web Homes</a>
    
----
+---+++ Bracket notation: link label same as topic name
 
-Test:
 <verbatim>
 [[WebTopicList][WebTopicList]]
 </verbatim>
@@ -57,9 +55,8 @@ Test:
       * explicitely set to a topic name, so should remain unchanged
    * Expected: <a href="#">WebTopicList</a>
    
----
+---+++ Bracket notation: link label same as topic name, with web
 
-Test:
 <verbatim>
 [[%WEB%.WebTopicList][WebTopicList]]
 </verbatim>
@@ -68,9 +65,8 @@ Test:
       * explicitely set to a topic name, so should remain unchanged
    * Expected: <a href="#">WebTopicList</a>
    
----
+---+++ Bracket notation: link label
 
-Test:
 <verbatim>
 [[WebPreferences][PrefTopic]]
 </verbatim>
@@ -79,9 +75,8 @@ Test:
       * explicitely set to a topic name, so should remain unchanged
    * Expected: <a href="#">PrefTopic</a>
    
----
+---+++ Bracket notation: search results: default behaviour
 
-Test:
 <verbatim>
 %SEARCH{"SpacedWikiWord" scope="topic" nonoise="on" format="[[$web.$topic][$topic]]"}%
 </verbatim>
@@ -90,9 +85,8 @@ Test:
       * explicitely set to a topic name, so should remain unchanged
    * Expected: <a href="#">TestCaseSpacedWikiWordPlugin</a>
    
----
+---+++ Bracket notation: search results: set to spaced out
 
-Test:
 <verbatim>
 %SEARCH{"SpacedWikiWord" scope="topic" nonoise="on" format="[[$web.$topic][$percntSPACEOUT{$topic}$percnt]]"}%
 </verbatim>
@@ -101,11 +95,10 @@ Test:
       * explicitely set to a topic name, so should remain unchanged
    * Expected: <a href="#">Test Case Spaced Wiki Word Plugin</a>
    
----
+---+++ Bracket notation: anchor, no link label
 
 #TestAnchor
 
-Test:
 <verbatim>
 [[%TOPIC%#TestAnchor]]
 </verbatim>
@@ -113,11 +106,10 @@ Test:
    * Plugin spaced out: [[%TOPIC%#TestAnchor]]
    * Expected: <a href="#">Test Case Spaced Wiki Word Plugin#Test Anchor</a>
    
----
+---+++ Bracket notation: anchor, link label
 
 #TestAnchor
 
-Test:
 <verbatim>
 [[%TOPIC%#TestAnchor]]
 </verbatim>
@@ -126,5 +118,25 @@ Test:
       * explicitely set to a topic name, so should remain unchanged
    * Expected: <a href="#">TestAnchor</a>
    
----
 
+---+++ DONTSPACE words
+
+   * Set SPACEDWIKIWORDPLUGIN_DONTSPACE = CamelCase, DaimlerChrysler, MasterCard
+  
+<verbatim>
+CamelCase, DaimlerChrysler, MasterCard, UnlikelyGibberishWikiWord
+</verbatim>  
+
+   * Plugin handling: CamelCase, DaimlerChrysler, MasterCard, UnlikelyGibberishWikiWord
+   * Expected: Mc<nop>Intosh, Camel<nop>Case, Venture<nop>Lab, Unlikely Gibberish Wiki Word
+   
+---+++ DONTSPACE words, no links
+
+   * Set SPACEDWIKIWORDPLUGIN_DONTSPACE = CamelCase, DaimlerChrysler, MasterCard
+  
+<verbatim>
+!McIntosh, !CamelCase, !VentureLab
+</verbatim>  
+
+   * Plugin handling: !McIntosh, !CamelCase, !VentureLab, !UnlikelyGibberishWikiWord
+   * Expected: !McIntosh, !CamelCase, !VentureLab, !UnlikelyGibberishWikiWord
