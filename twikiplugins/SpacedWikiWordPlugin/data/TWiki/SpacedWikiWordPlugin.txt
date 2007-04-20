@@ -1,50 +1,61 @@
-%META:TOPICINFO{author="TWikiGuest" date="1081752098" format="1.0" version="1.2"}%
----++ Spaced Out TWiki Word Plugin
+%META:TOPICINFO{author="TWikiContributor" date="1081752098" format="1.0" version="1.1"}%
+---+!! Spaced Out Wiki Word Plugin
 
-Causes wiki words to be displayed with spaces between capitals.
+Display wiki words spaced out: =WebHome= is displayed as =Web Home=.
 
-See also TWiki:Support.CanIRenderWikiWordsSpacedOut 
+%TOC%
 
-Regexes shamelessly stolen from TWiki:Codev.SpacedOutTWikiWords
+---++ Syntax Rules
 
-NB. Needs TWiki:Codev.CairoRelease or alphas after 12 Apr 2004
+You don't have to write any syntax. If this plugin is enabled, wiki words are automatically spaced out. Automatically expanded are: =TopicName=, =Web.TopicName=, =[<nop>[TopicName]]=.
 
----+++ Syntax Rules
+Explicitly written link labels are *not* spaced out. Examples: =[<nop>[TopicName][TopicName]]= or =[<nop>[TopicName][SomeOtherName]]=.
 
-| *If you write* | *You should see* | *Test* |
-| !BSFLeaders | BSF Leaders | BSFLeaders | 
-| !DogWalkers | Dog Walkers | DogWalkers | 
-| !Lotus123 | Lotus 123 | Lotus123 | 
-| !ILikeTWiki | I Like T Wiki |ILikeTWiki | 
+---+++ Spacing out search results
+Link labels in search results are also considered 'explicit':
 
----+++ %TOPIC% Settings
+<verbatim>
+[[$web.$topic][$topic]]
+</verbatim>
+... is not spaced out automatically.
+
+Instead write:
+
+<verbatim>
+[[$web.$topic][$percntSPACEOUT{$topic}$percnt]]
+</verbatim>
+
+to generate: %SEARCH{"%TOPIC%" scope="topic" nonoise="on" format="[[$web.$topic][$percntSPACEOUT{$topic}$percnt]]"}%
+
+More info on search syntax in FormattedSearch.
+
+---++ Plugin Settings
 
 Plugin settings are stored as preferences variables. 
 
 	* One line description, shown in the %TWIKIWEB%.TextFormattingRules topic:
-		* Set SHORTDESCRIPTION = Causes wiki words to be displayed with spaces between capitals.
-
+		* Set SHORTDESCRIPTION = Display wiki words spaced out
+		
+	* Debug plugin: (See output in =data/debug.txt=)
 		* Set DEBUG = 0
 
----+++ Plugin Installation Instructions
+---++ Plugin Installation Instructions
 
 To install plugin:
 	* Unzip the archive to the top of your directory
-	* (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
+	* TWiki 4 and higher: Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
 
----+++ Plugin Info
+---++ Plugin Info
 
-|  Plugin Author: | TWiki:Main.MartinCleaver |
-|  Plugin Version: | 12 Apr 2004 |
-|  Change History: | 14 Apr 2002 Initial version |
-|  Change History: | 12 Apr 2004 Updated for TWiki:Codev.CairoRelease |
+|  Plugin Author: | TWiki:Main.MartinCleaver, TWiki:Main.ArthurClemens |
+|  Plugin Version: | 20 Apr 2007 |
+|     History: | <!-- specify latest version first -->&nbsp; |
+|  20 Apr 2007 | Arthur Clemens: updated with regexes from TWiki Core =spaceOutWikiWord= |
+|  12 Apr 2004 | Updated for TWiki 3 |
+|  14 Apr 2002 | First release |
 |  CPAN Dependencies: | none |
 |  Other Dependencies: | none |
 |  Perl Version: | 5.0 |
-|  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% ( TWiki:Plugins/%TOPIC% )|
-|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev ( TWiki:Plugins/%TOPIC%Dev )|
-
-__Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
-
--- TWiki:Main.MartinCleaver - 27 Feb 2001 <br> 
-
+|  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
+|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev | %STOPINCLUDE%
+|  Download: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |

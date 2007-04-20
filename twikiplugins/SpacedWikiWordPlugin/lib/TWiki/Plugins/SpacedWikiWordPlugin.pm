@@ -1,21 +1,20 @@
+# Plugin for TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
-# TWiki WikiClone ($wikiversion has version info)
-#
-# Copyright (C) 2000-2001 Andrea Sterbini, a.sterbini@flashnet.it
-# Copyright (C) 2001 Peter Thoeny, Peter@Thoeny.com
+# Copyright (c) by TWiki Contributors. All Rights Reserved. TWiki Contributors
+# are listed in the AUTHORS file in the root of this distribution.
+# NOTE: Please extend that file, not this notice.
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
 # as published by the Free Software Foundation; either version 2
-# of the License, or (at your option) any later version.
+# of the License, or (at your option) any later version. For
+# more details read LICENSE in the root of this distribution.
 #
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details, published at 
-# http://www.gnu.org/copyleft/gpl.html
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #
-# =========================
+# For licensing info read LICENSE file in the TWiki root.
 
 
 # =========================
@@ -56,38 +55,17 @@ sub initPlugin
     return 1;
 }
 
-
-sub spacedWikiWord
-{
-    my ( $word ) =  @_;
-#    $word =~ s/([a-z0-9])([A-Z])/$1&nbsp;$2/g; #lower alphanum followed by upper
-#    $word =~ s/([a-zA-Z])([0-9])/$1&nbsp;$2/g; #letter followed by number
-
-# Stolen from http://twiki.org/cgi-bin/view/Codev/SpacedOutTWikiWords
-
-   # Make BSFLeaders into BSF Leaders, but don't make
-   #  InterfacingTCL into Interfacing TC L
-   $word =~ s!([A-Z\s]+)([A-Z][^A-Z\s]+)!$1 $2!g;
-
-   # make DogWalkers into Dog Walkers
-   $word =~ s!([a-z])([A-Z])!$1 $2!g;
-
-   # make Lotus123 into Lotus 123
-   $word =~ s!([A-Z])([^A-Z\s])!$1 $2!gi;
-
-   # Make 1999Corvette into 1999 Corvette
-   $word =~ s!([^A-Z\s])([A-Z])!$1 $2!gi;
-
-   return $word;
-}
-
 =pod
 
-Space out WikiWord -> Wiki Word
+---++ renderWikiWordHandler( $linkLabel, $hasExplicitLinkLabel ) -> $text
+
+
+   * =$linkLabel= - the link label to be spaced out
+   * =$hasExplicitLinkLabel= - in case of bracket notation: the link label is written as [[TopicName][link label]]
 
 We use the following rules:
-- Space out in case of TopicName, Web.TopicName, [[TopicName]]
-- Do not space out [[TopicName][TopicName]] or [[TopicName][SomeOtherName]]; in these cases the topic author has used an explicit link label
+   - Space out in case of TopicName, Web.TopicName, [[TopicName]]
+   - Do not space out [[TopicName][TopicName]] or [[TopicName][SomeOtherName]]; in these cases the topic author has used an explicit link label
 Search results not so clear-cut; currently [[$web.$topic][$topic]] is not spaced
 out.
     
@@ -95,10 +73,43 @@ out.
 
 sub renderWikiWordHandler 
 {
-    my ( $text, $hasExplicitLinkLabel ) = @_;
-    TWiki::Func::writeDebug( "$text" ) if $debug;
-    return spacedWikiWord($text) unless $hasExplicitLinkLabel;
-    return $text;
+    my ( $linkLabel, $hasExplicitLinkLabel ) = @_;
+    
+    # switch off until TWiki::Func::spaceOutWikiWord is implemented:
+    #if( $TWiki::Plugins::VERSION < 1.13 ) {
+    #    return _spacedWikiWord( $linkLabel ) unless $hasExplicitLinkLabel; 
+    #}
+    #return TWiki::Func::spaceOutWikiWord( $linkLabel ) unless $hasExplicitLinkLabel;
+    
+    # instead use temporarily:
+    return _spacedWikiWord( $linkLabel ) unless $hasExplicitLinkLabel;
+    
+    return $linkLabel;
+}
+
+=pod
+
+---++ _spacedWikiWord( $linkLabel ) -> $text
+
+Fallback for older Plugins version. Regexes are copied from TWiki::spaceOutWikiWord.
+
+   * =$linkLabel= - the link label to be spaced out
+
+=cut
+
+sub _spacedWikiWord
+{
+    my ( $linkLabel ) =  @_;
+
+    my $sep = ' ';
+    my $lowerAlphaRegex = TWiki::Func::getRegularExpression('lowerAlpha');
+    my $upperAlphaRegex = TWiki::Func::getRegularExpression('upperAlpha');
+    my $numericRegex = TWiki::Func::getRegularExpression('numeric');
+
+    $linkLabel =~ s/([$lowerAlphaRegex])([$upperAlphaRegex$numericRegex]+)/$1$sep$2/go;
+    $linkLabel =~ s/([$numericRegex])([$upperAlphaRegex])/$1$sep$2/go;
+
+    return $linkLabel;
 }
 
 1;
