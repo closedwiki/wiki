@@ -22,7 +22,7 @@ package TWiki::Plugins::SpacedWikiWordPlugin;
 
 # =========================
 use vars qw(
-        $web $topic $user $installWeb $VERSION $RELEASE $debug
+        $web $topic $user $installWeb $VERSION $RELEASE $debug %dontSpaceSet
     );
 
 # This should always be $Rev$ so that TWiki can determine the checked-in
@@ -50,6 +50,11 @@ sub initPlugin
     # Get plugin debug flag
     $debug = &TWiki::Func::getPreferencesFlag( "SPACEDWIKIWORDPLUGIN_DEBUG" );
 
+    my $dontSpaceWords = &TWiki::Func::getPreferencesValue( "DONTSPACE" ) ||
+                       &TWiki::Func::getPreferencesValue( "SPACEDWIKIWORDPLUGIN_DONTSPACE" );
+    $dontSpaceWords =~ s/ //go;
+    %dontSpaceSet = map { $_ => 1 } split(",", $dontSpaceWords);
+    
     # Plugin correctly initialized
     &TWiki::Func::writeDebug( "- TWiki::Plugins::SpacedWikiWord::initPlugin( $web.$topic ) is OK" ) if $debug;
     return 1;
@@ -74,6 +79,9 @@ out.
 sub renderWikiWordHandler 
 {
     my ( $linkLabel, $hasExplicitLinkLabel ) = @_;
+    
+    # do nothing if this label is defined in the do-not-link list
+    return $linkLabel if $dontSpaceSet{ $linkLabel };
     
     # switch off until TWiki::Func::spaceOutWikiWord is implemented:
     #if( $TWiki::Plugins::VERSION < 1.13 ) {
