@@ -40,7 +40,7 @@ individual breadcrumb is displayed.
    * =header=: format string prepended to the output result
    * =format=: format string to render one item on the breadcrumbs path
      (defaults to '[<nop>[$webtopic][$name]]')
-   * =topicformat=: format string for the _last_ (topic) item on the path; defaults to the same as =format=
+   * =topicformat=: format string for any _topic_ items on the path; for example, parent topics. Defaults to the same as =format=.
    * =footer=: format string appended to the output result
    * =separator=: format string to be put between items
      (defaults to one space char)
