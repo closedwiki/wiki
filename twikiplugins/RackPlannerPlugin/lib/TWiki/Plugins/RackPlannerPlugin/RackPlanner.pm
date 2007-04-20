@@ -101,7 +101,7 @@ sub _initDefaults {
 		'tooltipfixtop'=>0,
 		'tooltipbgcolor'=>"",
 		'tooltipfgcolor'=>"",
-		'tooltipformat'=>'<b><span title="Device name">%DEVICE%:</span></b> <span title="Form factor">%FORMFACTOR%</span> (<span title="Start-End units">%SUNIT%-%EUNIT%</span>, <span title="Rack name">%RACK%</span>)<div title="Owner">%OWNERICON% %OWNER%</div><div title="Connected to">%CONNECTEDTOICON% %CONNECTEDTO%</div><div title="Notes">%NOTESICON% %NOTES%</div> <div style="font-size:xx-small;text-align:right;"><span style="background-color:red;" title="Close tooltip">%CLOSEBUTTON%</span></div>',
+		'tooltipformat'=>'<b><span title="Device name">%DEVICE%:</span></b> <span title="Form factor">%FORMFACTOR%</span> (<span title="Start-End units">%SUNIT%-%EUNIT%</span>, <span title="Rack name"> %RACK%</span>)<div title="Owner">%OWNERICON% %OWNER%</div><div title="Connected to">%CONNECTEDTOICON% %CONNECTEDTO%</div><div title="Notes">%NOTESICON% %NOTES%</div> <div style="font-size:xx-small;text-align:right;"><span style="background-color:red;" title="Close tooltip">%CLOSEBUTTON%</span></div>',
 	);
 
 	@renderedOptions = ( 'name', 'notesicon','conflicticon', 'connectedtoicon', 'ownericon', 'emptytext' );
