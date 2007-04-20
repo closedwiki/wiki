@@ -12,9 +12,8 @@
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details, published at 
+# GNU General Public License for more details, published at
 # http://www.gnu.org/copyleft/gpl.html
-
 
 # =========================
 package TWiki::Plugins::RedirectPlugin;
@@ -23,98 +22,105 @@ package TWiki::Plugins::RedirectPlugin;
 use vars qw( $VERSION $RELEASE $debug $pluginName );
 use strict;
 
-$VERSION = '$Rev$';
-$RELEASE = 'Dakar';
+$VERSION    = '$Rev$';
+$RELEASE    = 'Dakar';
 $pluginName = 'RedirectPlugin';
 
 # =========================
-sub initPlugin
-{
+sub initPlugin {
     my ( $topic, $web, $user, $installWeb ) = @_;
 
     # check for Plugins.pm versions
-    if( $TWiki::Plugins::VERSION < 1.1 ) {
-        TWiki::Func::writeWarning( "This version of $pluginName works only with TWiki 4 and greater." );
+    if ( $TWiki::Plugins::VERSION < 1.1 ) {
+        TWiki::Func::writeWarning(
+            "This version of $pluginName works only with TWiki 4 and greater.");
         return 0;
     }
 
     # this doesn't really have any meaning if we aren't being called as a CGI
-    my $query=&TWiki::Func::getCgiQuery();
+    my $query = &TWiki::Func::getCgiQuery();
     return 0 unless $query;
 
     # Get plugin debug flag
-    $debug = &TWiki::Func::getPreferencesFlag( "\U$pluginName\E_DEBUG" );
+    $debug = &TWiki::Func::getPreferencesFlag("\U$pluginName\E_DEBUG");
 
-    TWiki::Func::registerTagHandler('REDIRECT', \&REDIRECT);
+    TWiki::Func::registerTagHandler( 'REDIRECT', \&REDIRECT );
 
     # Plugin correctly initialized
-    &TWiki::Func::writeDebug( "- TWiki::Plugins::$pluginName::initPlugin( $web.$topic ) is OK" ) if $debug;
+    &TWiki::Func::writeDebug(
+        "- TWiki::Plugins::$pluginName::initPlugin( $web.$topic ) is OK")
+      if $debug;
     return 1;
 }
 
 # =========================
 sub REDIRECT {
-    my ($session, $params, $topic, $web) = @_;
+    my ( $session, $params, $topic, $web ) = @_;
 
-    my $context = TWiki::Func::getContext();
-    my $newWeb = $web;
-    my $newTopic;
-    my $anchor = '';
+    my $context   = TWiki::Func::getContext();
+    my $newWeb    = $web;
+    my $newTopic  = '';
+    my $anchor    = '';
     my $urlparams = '';
-    my $dest = $params->{'newtopic'} || $params->{_DEFAULT};
+    my $dest      = $params->{'newtopic'} || $params->{_DEFAULT};
 
-    # Redirect only on view.
-    if ($context->{'view'} && $dest) {
+    my $webNameRegex  = TWiki::Func::getRegularExpression('webNameRegex');
+    my $wikiWordRegex = TWiki::Func::getRegularExpression('wikiWordRegex');
+    my $anchorRegex   = TWiki::Func::getRegularExpression('anchorRegex');
+
+    # Redirect only on view
+    # Support Codev.ShorterURLs: do not redirect on edit
+    if ( $dest && !$context->{'edit'}) {
+
         my $query = TWiki::Func::getCgiQuery();
-        $dest = TWiki::Func::expandCommonVariables($dest, $topic, $web);
+        
+        # do not redirect when param "redirect=no" is passed
+        my $noredirect = $query->param(-name => 'noredirect') || '';
+        return '' if $noredirect eq 'on';
+        
+        $dest = TWiki::Func::expandCommonVariables( $dest, $topic, $web );
 
-        my $webNameRegex = TWiki::Func::getRegularExpression('webNameRegex');
-        my $wikiWordRegex = TWiki::Func::getRegularExpression('wikiWordRegex');
-        my $anchorRegex = TWiki::Func::getRegularExpression('anchorRegex');
+        # redirect to URL
+        if ( $dest =~ m/^http/ ) {
 
-	# redirect to URL
-	if ($dest =~ m/^http/) {
-
-	  return "<br>%RED%Cannot redirect to current topic%ENDCOLOR%"
-	    if ( $dest eq TWiki::Func::getViewUrl($web, $topic) );
-	  TWiki::Func::redirectCgiQuery($query, $dest);
-	  return '';
-	}
-
-	# redirect within this site
-        if ($dest =~ s/^($webNameRegex)\.// ) {
-            $newWeb = $1;
+            return "%BR% %RED% Cannot redirect to current topic %ENDCOLOR%"
+              if ( $dest eq TWiki::Func::getViewUrl( $web, $topic ) );
+            TWiki::Func::redirectCgiQuery( $query, $dest );
+            return '';
         }
 
-        if ($dest =~ s/^($wikiWordRegex)//) {
-            $newTopic = $1;
+        # else: "topic" or "web.topic" notation
+        # get the components and check if the topic exists
+        my $topicLocation = "";
+        if ( $dest =~ /^((.*?)\.)*(.*?)(\#.*|\?.*|$)$/ ) {
+            $newWeb = $2 || $web || '';
+            $newTopic = $3 || '';
+            # ignore anchor and params here
+            $topicLocation = "$newWeb.$newTopic";
         }
 
-        if ($newWeb eq $web && $newTopic eq $topic) {
-            return "<br>%RED%Cannot redirect to current topic%ENDCOLOR%";
+        if ( !TWiki::Func::topicExists( undef, $topicLocation ) ) {
+            return
+"%RED% Could not redirect to topic $topicLocation (the topic does not seem to exist) %ENDCOLOR%";
         }
-
-        if ($dest =~ s/^($anchorRegex)$//) {
+        
+        if ($dest =~ /($anchorRegex)/) {
             $anchor = $1;
         }
-
-	if ($dest =~ /^\?/) {
-	    $urlparams = $dest;
-	    $dest = '';
-	}
-	
-	unless ($dest) {
-            TWiki::Func::redirectCgiQuery($query, TWiki::Func::getViewUrl($newWeb, $newTopic) . $anchor . $urlparams);
+        
+        if ($dest =~ /(\?.*)/) {
+	        $urlparams = $1;
         }
 
-        return "%RED%Cannot redirect to $dest";
+        # topic exists
+        TWiki::Func::redirectCgiQuery( $query,
+            TWiki::Func::getViewUrl( $newWeb, $newTopic ) . $anchor
+              . $urlparams );
 
     }
 
     return '';
 
 }
-
-# =========================
 
 1;
