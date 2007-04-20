@@ -29,13 +29,22 @@ to generate: %SEARCH{"%TOPIC%" scope="topic" nonoise="on" format="[[$web.$topic]
 
 More info on search syntax in FormattedSearch.
 
+---+++ Preventing spacing out of some words
+Some words (often brand names and medical terms) are written in [[Wikipedia:CamelCase][CamelCase]] notation and should not be spaced out. For example: !CamelCase, !DaimlerChrysler, !MasterCard.
+
+Define a list of words that should not get spaced out with =DONTSPACE= at the [[#PluginSettings][Plugin Settings]] below.
+
+#PluginSettings
 ---++ Plugin Settings
 
 Plugin settings are stored as preferences variables. 
 
 	* One line description, shown in the %TWIKIWEB%.TextFormattingRules topic:
 		* Set SHORTDESCRIPTION = Display wiki words spaced out
-		
+
+	* List of words that should not be spaced out (separated by commas):
+		* Set DONTSPACE = 
+
 	* Debug plugin: (See output in =data/debug.txt=)
 		* Set DEBUG = 0
 
@@ -50,7 +59,7 @@ To install plugin:
 |  Plugin Author: | TWiki:Main.MartinCleaver, TWiki:Main.ArthurClemens |
 |  Plugin Version: | 20 Apr 2007 |
 |     History: | <!-- specify latest version first -->&nbsp; |
-|  20 Apr 2007 | Arthur Clemens: updated with regexes from TWiki Core =spaceOutWikiWord= |
+|  20 Apr 2007 | Arthur Clemens: updated with regexes from TWiki Core =spaceOutWikiWord=; added =DONTSPACE= option. |
 |  12 Apr 2004 | Updated for TWiki 3 |
 |  14 Apr 2002 | First release |
 |  CPAN Dependencies: | none |
