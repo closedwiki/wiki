@@ -92,6 +92,17 @@ Test:
    
 ---
 
+Test:
+<verbatim>
+%SEARCH{"SpacedWikiWord" scope="topic" nonoise="on" format="[[$web.$topic][$percntSPACEOUT{$topic}$percnt]]"}%
+</verbatim>
+
+   * Plugin spaced out: %SEARCH{"SpacedWikiWord" scope="topic" nonoise="on" format="[[$web.$topic][$percntSPACEOUT{$topic}$percnt]]"}%
+      * explicitely set to a topic name, so should remain unchanged
+   * Expected: <a href="#">Test Case Spaced Wiki Word Plugin</a>
+   
+---
+
 #TestAnchor
 
 Test:
@@ -100,7 +111,7 @@ Test:
 </verbatim>
 
    * Plugin spaced out: [[%TOPIC%#TestAnchor]]
-   * Expected: <a href="#">Test Case Spaced Wiki Word Plugin # Test Anchor</a>
+   * Expected: <a href="#">Test Case Spaced Wiki Word Plugin#Test Anchor</a>
    
 ---
 
