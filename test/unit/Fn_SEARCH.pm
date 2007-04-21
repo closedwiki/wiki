@@ -59,7 +59,203 @@ sub std_tests  {
     $this->assert_matches(qr/OkTopic/, $result);
     $this->assert_matches(qr/Ok-Topic/, $result);
     $this->assert_matches(qr/Ok\+Topic/, $result);
+    
+    # Test types of search
+
+    # ---------------------
+    # Search string 'blah'
+    # regex
+    $result = $this->{twiki}->handleCommonTags(
+        '%SEARCH{"blah" type="regex" scope="text" nonoise="on" format="$topic"}%',
+        $this->{test_web}, $this->{test_topic});
+        
+    $this->assert_matches(qr/OkTopic/, $result);
+    $this->assert_matches(qr/Ok-Topic/, $result);
+    $this->assert_matches(qr/Ok\+Topic/, $result);
+    
+    # literal
+    $result = $this->{twiki}->handleCommonTags(
+        '%SEARCH{"blah" type="literal" scope="text" nonoise="on" format="$topic"}%',
+        $this->{test_web}, $this->{test_topic});
+        
+    $this->assert_matches(qr/OkTopic/, $result);
+    $this->assert_matches(qr/Ok-Topic/, $result);
+    $this->assert_matches(qr/Ok\+Topic/, $result);
+    
+    # keyword
+    $result = $this->{twiki}->handleCommonTags(
+        '%SEARCH{"blah" type="keyword" scope="text" nonoise="on" format="$topic"}%',
+        $this->{test_web}, $this->{test_topic});
+        
+    $this->assert_matches(qr/OkTopic/, $result);
+    $this->assert_matches(qr/Ok-Topic/, $result);
+    $this->assert_matches(qr/Ok\+Topic/, $result);
+    
+    # word
+    #$result = $this->{twiki}->handleCommonTags(
+    #    '%SEARCH{"blah" type="word" scope="text" nonoise="on" format="$topic"}%',
+    #    $this->{test_web}, $this->{test_topic});
+        
+    #$this->assert_matches(qr/OkTopic/, $result);
+    #$this->assert_matches(qr/Ok-Topic/, $result);
+    #$this->assert_does_not_match(qr/Ok\+Topic/, $result);
+    
+    # ---------------------
+    # Search string 'match'
+    # regex
+    $result = $this->{twiki}->handleCommonTags(
+        '%SEARCH{"match" type="regex" scope="text" nonoise="on" format="$topic"}%',
+        $this->{test_web}, $this->{test_topic});
+        
+    $this->assert_matches(qr/OkTopic/, $result);
+    $this->assert_matches(qr/Ok-Topic/, $result);
+    $this->assert_matches(qr/Ok\+Topic/, $result);
+    
+    # literal
+    $result = $this->{twiki}->handleCommonTags(
+        '%SEARCH{"match" type="literal" scope="text" nonoise="on" format="$topic"}%',
+        $this->{test_web}, $this->{test_topic});
+        
+    $this->assert_matches(qr/OkTopic/, $result);
+    $this->assert_matches(qr/Ok-Topic/, $result);
+    $this->assert_matches(qr/Ok\+Topic/, $result);
+    
+    # keyword
+    $result = $this->{twiki}->handleCommonTags(
+        '%SEARCH{"match" type="keyword" scope="text" nonoise="on" format="$topic"}%',
+        $this->{test_web}, $this->{test_topic});
+        
+    $this->assert_matches(qr/OkTopic/, $result);
+    $this->assert_matches(qr/Ok-Topic/, $result);
+    $this->assert_matches(qr/Ok\+Topic/, $result);
+    
+    # word
+    #$result = $this->{twiki}->handleCommonTags(
+    #    '%SEARCH{"match" type="word" scope="text" nonoise="on" format="$topic"}%',
+    #    $this->{test_web}, $this->{test_topic});
+        
+    #$this->assert_does_not_match(qr/OkTopic/, $result);
+    #$this->assert_does_not_match(qr/Ok-Topic/, $result);
+    #$this->assert_does_not_match(qr/Ok\+Topic/, $result);
+    
+    # ---------------------
+    # Search string 'matchme'
+    # regex
+    $result = $this->{twiki}->handleCommonTags(
+        '%SEARCH{"matchme" type="regex" scope="text" nonoise="on" format="$topic"}%',
+        $this->{test_web}, $this->{test_topic});
+        
+    $this->assert_matches(qr/OkTopic/, $result);
+    $this->assert_matches(qr/Ok-Topic/, $result);
+    $this->assert_matches(qr/Ok\+Topic/, $result);
+    
+    # literal
+    $result = $this->{twiki}->handleCommonTags(
+        '%SEARCH{"matchme" type="literal" scope="text" nonoise="on" format="$topic"}%',
+        $this->{test_web}, $this->{test_topic});
+        
+    $this->assert_matches(qr/OkTopic/, $result);
+    $this->assert_matches(qr/Ok-Topic/, $result);
+    $this->assert_matches(qr/Ok\+Topic/, $result);
+    
+    # keyword
+    $result = $this->{twiki}->handleCommonTags(
+        '%SEARCH{"matchme" type="keyword" scope="text" nonoise="on" format="$topic"}%',
+        $this->{test_web}, $this->{test_topic});
+        
+    $this->assert_matches(qr/OkTopic/, $result);
+    $this->assert_matches(qr/Ok-Topic/, $result);
+    $this->assert_matches(qr/Ok\+Topic/, $result);
+    
+    # word
+    #$result = $this->{twiki}->handleCommonTags(
+    #    '%SEARCH{"matchme" type="word" scope="text" nonoise="on" format="$topic"}%',
+    #    $this->{test_web}, $this->{test_topic});
+        
+    #$this->assert_matches(qr/OkTopic/, $result);
+    #$this->assert_does_not_match(qr/Ok-Topic/, $result);
+    #$this->assert_does_not_match(qr/Ok\+Topic/, $result);
+    
+    # ---------------------
+    # Search string 'matchme -dont'
+    # regex
+    $result = $this->{twiki}->handleCommonTags(
+        '%SEARCH{"matchme -dont" type="regex" scope="text" nonoise="on" format="$topic"}%',
+        $this->{test_web}, $this->{test_topic});
+        
+    $this->assert_does_not_match(qr/OkTopic/, $result);
+    $this->assert_does_not_match(qr/Ok-Topic/, $result);
+    $this->assert_does_not_match(qr/Ok\+Topic/, $result);
+    
+    # literal
+    $result = $this->{twiki}->handleCommonTags(
+        '%SEARCH{"matchme -dont" type="literal" scope="text" nonoise="on" format="$topic"}%',
+        $this->{test_web}, $this->{test_topic});
+        
+    $this->assert_does_not_match(qr/OkTopic/, $result);
+    $this->assert_does_not_match(qr/Ok-Topic/, $result);
+    $this->assert_does_not_match(qr/Ok\+Topic/, $result);
+    
+    # keyword
+    $result = $this->{twiki}->handleCommonTags(
+        '%SEARCH{"matchme -dont" type="keyword" scope="text" nonoise="on" format="$topic"}%',
+        $this->{test_web}, $this->{test_topic});
+        
+    $this->assert_matches(qr/OkTopic/, $result);
+    $this->assert_does_not_match(qr/Ok-Topic/, $result);
+    $this->assert_does_not_match(qr/Ok\+Topic/, $result);
+    
+    # word
+    #$result = $this->{twiki}->handleCommonTags(
+    #    '%SEARCH{"matchme -dont" type="word" scope="text" nonoise="on" format="$topic"}%',
+    #    $this->{test_web}, $this->{test_topic});
+        
+    #$this->assert_matches(qr/OkTopic/, $result);
+    #$this->assert_does_not_match(qr/Ok-Topic/, $result);
+    #$this->assert_does_not_match(qr/Ok\+Topic/, $result);
+    
+    # ---------------------
+    # Search string 'blah/matchme.blah'
+    # regex
+    $result = $this->{twiki}->handleCommonTags(
+        '%SEARCH{"blah/matchme.blah" type="regex" scope="text" nonoise="on" format="$topic"}%',
+        $this->{test_web}, $this->{test_topic});
+        
+    $this->assert_matches(qr/OkTopic/, $result);
+    $this->assert_does_not_match(qr/Ok-Topic/, $result);
+    $this->assert_does_not_match(qr/Ok\+Topic/, $result);
+    
+    # literal
+    $result = $this->{twiki}->handleCommonTags(
+        '%SEARCH{"blah/matchme.blah" type="literal" scope="text" nonoise="on" format="$topic"}%',
+        $this->{test_web}, $this->{test_topic});
+        
+    $this->assert_matches(qr/OkTopic/, $result);
+    $this->assert_does_not_match(qr/Ok-Topic/, $result);
+    $this->assert_does_not_match(qr/Ok\+Topic/, $result);
+    
+    # keyword
+    $result = $this->{twiki}->handleCommonTags(
+        '%SEARCH{"blah/matchme.blah" type="keyword" scope="text" nonoise="on" format="$topic"}%',
+        $this->{test_web}, $this->{test_topic});
+        
+    $this->assert_matches(qr/OkTopic/, $result);
+    $this->assert_does_not_match(qr/Ok-Topic/, $result);
+    $this->assert_does_not_match(qr/Ok\+Topic/, $result);
+    
+    # word
+    #$result = $this->{twiki}->handleCommonTags(
+    #    '%SEARCH{"blah/matchme.blah" type="word" scope="text" nonoise="on" format="$topic"}%',
+    #    $this->{test_web}, $this->{test_topic});
+        
+    #$this->assert_matches(qr/OkTopic/, $result);
+    #$this->assert_does_not_match(qr/Ok-Topic/, $result);
+    #$this->assert_does_not_match(qr/Ok\+Topic/, $result);
 }
+
+=pod
+
+=cut
 
 sub test_SEARCH_Forking {
     my $this = shift;
