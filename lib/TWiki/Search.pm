@@ -32,13 +32,14 @@ use Assert;
 use TWiki::Sandbox;
 use TWiki::Time;
 
-my $emptySearch =   'something.Very/unLikelyTo+search-for;-)';
+my $emptySearch = 'something.Very/unLikelyTo+search-for;-)';
 
 BEGIN {
-    # 'Use locale' for internationalisation of Perl sorting and searching - 
+
+    # 'Use locale' for internationalisation of Perl sorting and searching -
     # main locale settings are done in TWiki::setupLocale
     # Do a dynamic 'use locale' for this module
-    if( $TWiki::cfg{UseLocale} ) {
+    if ( $TWiki::cfg{UseLocale} ) {
         require locale;
         import locale();
     }
@@ -56,7 +57,7 @@ sub new {
     my ( $class, $session ) = @_;
     my $this = bless( {}, $class );
 
-    ASSERT($session->isa( 'TWiki')) if DEBUG;
+    ASSERT( $session->isa('TWiki') ) if DEBUG;
     $this->{session} = $session;
 
     return $this;
@@ -65,9 +66,9 @@ sub new {
 # Untaints the search value (text string, regex or search expression) by
 # 'filtering in' valid characters only.
 sub _filterSearchString {
-    my $this = shift;
+    my $this         = shift;
     my $searchString = shift;
-    my $type = shift;
+    my $type         = shift;
 
     # Use filtering-out of regexes only if (1) on a safe sandbox platform
     # OR (2) administrator has explicitly configured $forceUnsafeRegexes == 1.
@@ -75,64 +76,74 @@ sub _filterSearchString {
     # Only well-secured intranet sites, authenticated for all access
     # (view, edit, attach, search, etc), AND forced to use unsafe
     # platforms, should use the $forceUnsafeRegexes flag.
-    my $unsafePlatform = ( not ($this->{session}->{sandbox}->{SAFE} ) );
+    my $unsafePlatform = ( not( $this->{session}->{sandbox}->{SAFE} ) );
 
     # FIXME: Use of new global
-    my $useFilterIn = ($unsafePlatform and not $TWiki::cfg{ForceUnsafeRegexes});
+    my $useFilterIn =
+      ( $unsafePlatform and not $TWiki::cfg{ForceUnsafeRegexes} );
 
     ########################################################################
     # SMELL: commented out useless condition; $langAlphabetic was always 1,#
     # and is now removed from TWiki.pm. What was this supposed to do?      #
     ########################################################################
-    # Non-alphabetic language sites (e.g. Japanese and Chinese) cannot use
-    # filtering-in and must use safe pipes, since TWiki does not currently
-    # support Unicode, required for filtering-in.  Alphabetic languages such
-    # as English, French, Russian, Greek and most European languages are
-    # handled by filtering-in.
-    #if ( not $TWiki::langAlphabetic and $unsafePlatform ) {
-    #    # Best option is to upgrade Perl.
-    #    die "You are using a non-alphabetic language on a non-safe-pipes platform.  This is a serious SECURITY RISK,\nso TWiki cannot be used as it is currently installed - please\nread TWiki:Codev/SafePipes for options to avoid or remove this risk.";
-    #}
+# Non-alphabetic language sites (e.g. Japanese and Chinese) cannot use
+# filtering-in and must use safe pipes, since TWiki does not currently
+# support Unicode, required for filtering-in.  Alphabetic languages such
+# as English, French, Russian, Greek and most European languages are
+# handled by filtering-in.
+#if ( not $TWiki::langAlphabetic and $unsafePlatform ) {
+#    # Best option is to upgrade Perl.
+#    die "You are using a non-alphabetic language on a non-safe-pipes platform.  This is a serious SECURITY RISK,\nso TWiki cannot be used as it is currently installed - please\nread TWiki:Codev/SafePipes for options to avoid or remove this risk.";
+#}
 
     my $mixedAlphaNum = $TWiki::regex{mixedAlphaNum};
 
-    my $validChars;            # String of valid characters or POSIX
-                               # regex elements (e.g. [:alpha:] from 
-                               # _setupRegexes) - designed to
-                               # be used within a character class.
+    my $validChars;    # String of valid characters or POSIX
+                       # regex elements (e.g. [:alpha:] from
+                       # _setupRegexes) - designed to
+                       # be used within a character class.
 
-    if( $type eq 'regex' ) {
-        # Regular expression search - example: soap;wsdl;web service;!shampoo;[Ff]red
-        if ( $useFilterIn ) {
+    if ( $type eq 'regex' ) {
+
+   # Regular expression search - example: soap;wsdl;web service;!shampoo;[Ff]red
+        if ($useFilterIn) {
+
             # Filter in
             # TWiki search syntax and limited regex syntax
-            $validChars = ${mixedAlphaNum}.' !;.[]\\*\\+';
-        } else {
-            # Filter out - only for use on safe pipe platform or
-            # if forced by admin
-            # FIXME: Review and test since first versions were broken
-            # SMELL: CC commented out next two lines as they escape
-            # escape chars in REs
-            #$searchString =~ s/(^|[^\\])(['"`\\])/$1\\$2/g;    # Escape all types of quotes and backslashes
-            #$searchString =~ s/([\@\$])\(/$1\\\(/g;          # Escape @( ... ) and $( ... )
+            $validChars = ${mixedAlphaNum} . ' !;.[]\\*\\+';
+        }
+        else {
+
+# Filter out - only for use on safe pipe platform or
+# if forced by admin
+# FIXME: Review and test since first versions were broken
+# SMELL: CC commented out next two lines as they escape
+# escape chars in REs
+#$searchString =~ s/(^|[^\\])(['"`\\])/$1\\$2/g;    # Escape all types of quotes and backslashes
+#$searchString =~ s/([\@\$])\(/$1\\\(/g;          # Escape @( ... ) and $( ... )
         }
 
-    } elsif( $type eq 'literal' ) {
+    }
+    elsif ( $type eq 'literal' ) {
+
         # Filter in
         # Literal search - search for exactly what was typed in (old style
         # TWiki non-regex search)
         # Alphanumeric, spaces, selected punctuation
-        $validChars = ${mixedAlphaNum}.' \.';
+        $validChars = ${mixedAlphaNum} . ' \.';
 
-    } else {
+    }
+    else {
+
         # FIXME: spaces not working - url encoded in search pattern
         # Filter in
         # Keyword search (new style, Google-like).
         # Example: soap +wsdl +"web service" -shampoo
-        $validChars = ${mixedAlphaNum}.' +"-';
+        $validChars = ${mixedAlphaNum} . ' +"-';
     }
 
-    if ( $useFilterIn ) {
+    if ($useFilterIn) {
+
         # Clean up - delete all invalid characters
         # FIXME: be sure to escape special characters in literal
         $searchString =~ s/[^${validChars}]+//go;
@@ -143,7 +154,7 @@ sub _filterSearchString {
     $searchString = $1;
 
     # Limit string length
-    $searchString = substr($searchString, 0, 1500);
+    $searchString = substr( $searchString, 0, 1500 );
 }
 
 =pod
@@ -155,37 +166,40 @@ Sanitise search pattern - currently used for FormattedSearch only
 =cut
 
 sub getTextPattern {
-    my( $text, $pattern ) = @_;
+    my ( $text, $pattern ) = @_;
 
-    $pattern =~ s/([^\\])([\$\@\%\&\#\'\`\/])/$1\\$2/go;  # escape some special chars
-    $pattern = TWiki::Sandbox::untaintUnchecked( $pattern );
+    $pattern =~
+      s/([^\\])([\$\@\%\&\#\'\`\/])/$1\\$2/go;    # escape some special chars
+    $pattern = TWiki::Sandbox::untaintUnchecked($pattern);
 
     my $OK = 0;
-    eval {
-       $OK = ( $text =~ s/$pattern/$1/is );
-    };
-    $text = '' unless( $OK );
+    eval { $OK = ( $text =~ s/$pattern/$1/is ); };
+    $text = '' unless ($OK);
 
     return $text;
 }
-
 
 # Split the search string into tokens depending on type of search.
 # Search is an 'AND' of all tokens - various syntaxes implemented
 # by this routine.
 sub _tokensFromSearchString {
-    my( $this, $searchString, $type ) = @_;
+    my ( $this, $searchString, $type ) = @_;
 
     my @tokens = ();
-    if( $type eq 'regex' ) {
+    if ( $type eq 'regex' ) {
+
         # Regular expression search Example: soap;wsdl;web service;!shampoo
         @tokens = split( /;/, $searchString );
 
-    } elsif( $type eq 'literal' ) {
+    }
+    elsif ( $type eq 'literal' ) {
+
         # Literal search (old style)
         $tokens[0] = $searchString;
 
-    } else {
+    }
+    else {
+
         # Keyword search (Google-style) - implemented by converting
         # to regex format. Example: soap +wsdl +"web service" -shampoo
 
@@ -195,17 +209,22 @@ sub _tokensFromSearchString {
 
         # Build pattern of stop words
         my $prefs = $this->{session}->{prefs};
-        my $stopWords = $prefs->getPreferencesValue( 'SEARCHSTOPWORDS' ) || '';
+        my $stopWords = $prefs->getPreferencesValue('SEARCHSTOPWORDS') || '';
         $stopWords =~ s/[\s\,]+/\|/go;
         $stopWords =~ s/[\(\)]//go;
 
         # Tokenize string taking account of literal strings, then remove
         # stop words and convert '+' and '-' syntax.
         @tokens =
-            map { s/^\+//o; s/^\-/\!/o; s/^"//o; $_ }    # remove +, change - to !, remove "
-            grep { ! /^($stopWords)$/i }                  # remove stopwords
-            map { s/$TWiki::TranslationToken/ /go; $_ }   # restore space
-            split( /[\s]+/, $searchString );              # split on spaces
+          map {
+            s/^\+//o;
+            s/^\-/\!/o;
+            s/^"//o;
+            $_
+          }    # remove +, change - to !, remove "
+          grep { !/^($stopWords)$/i }    # remove stopwords
+          map { s/$TWiki::TranslationToken/ /go; $_ }    # restore space
+          split( /[\s]+/, $searchString );               # split on spaces
     }
 
     return @tokens;
@@ -221,102 +240,125 @@ sub _translateSpace {
     return $text;
 }
 
-
 # Search a single web based on parameters - @theTokens is a list of
 # search terms to be ANDed together, $topic is list of one or more topics.
 #
 sub _searchTopicsInWeb {
-    my( $this, $web, $topic, $scope, $type,
-        $caseSensitive, @theTokens ) = @_;
+    my ( $this, $web, $topic, $scope, $type, $caseSensitive, @theTokens ) = @_;
 
     my @topicList = ();
-    return @topicList unless( @theTokens );   # bail out if no search string
+    return @topicList unless (@theTokens);    # bail out if no search string
     my $store = $this->{session}->{store};
 
-    if( $topic ) {
+    if ($topic) {
+
         # limit search to topic list
-        if( $topic =~ /^\^\([\_\-\+$TWiki::regex{mixedAlphaNum}\|]+\)\$$/ ) {
+        if ( $topic =~ /^\^\([\_\-\+$TWiki::regex{mixedAlphaNum}\|]+\)\$$/ ) {
+
             # topic list without wildcards
             # for speed, do not get all topics in web
             # but convert topic pattern into topic list
             my $topics = $topic;
             $topics =~ s/^\^\(//o;
             $topics =~ s/\)\$//o;
+
             # build list from topic pattern
             @topicList = split( /\|/, $topics );
-        } else {
+        }
+        else {
+
             # topic list with wildcards
-            @topicList = $store->getTopicNames( $web );
-            if( $caseSensitive ) {
+            @topicList = $store->getTopicNames($web);
+            if ($caseSensitive) {
+
                 # limit by topic name,
                 @topicList = grep( /$topic/, @topicList );
-            } else {
+            }
+            else {
+
                 # Codev.SearchTopicNameAndTopicText
                 @topicList = grep( /$topic/i, @topicList );
             }
         }
-    } else {
-        @topicList = $store->getTopicNames( $web );
+    }
+    else {
+        @topicList = $store->getTopicNames($web);
     }
 
     # default scope is 'text'
-    $scope = 'text' unless( $scope =~ /^(topic|all)$/ );
+    $scope = 'text' unless ( $scope =~ /^(topic|all)$/ );
 
     # AND search - search once for each token, ANDing result together
-    foreach my $token ( @theTokens ) {
+    foreach my $token (@theTokens) {
+
         # search on each token
         my $invertSearch = ( $token =~ s/^\!//o );
+
         # flag for AND NOT search
-        my @scopeTextList = ();
+        my @scopeTextList  = ();
         my @scopeTopicList = ();
-        return @topicList unless( @topicList );
+        return @topicList unless (@topicList);
 
         # scope can be 'topic' (default), 'text' or "all"
         # scope='text', e.g. Perl search on topic name:
-        unless( $scope eq 'text' ) {
+        unless ( $scope eq 'text' ) {
             my $qtoken = $token;
+
             # FIXME I18N
-            $qtoken = quotemeta( $qtoken ) if( $type ne 'regex' );
-            if( $caseSensitive ) {
+            $qtoken = quotemeta($qtoken) if ( $type ne 'regex' );
+            if ($caseSensitive) {
+
                 # fix for Codev.SearchWithNoPipe
                 @scopeTopicList = grep( /$qtoken/, @topicList );
-            } else {
+            }
+            else {
                 @scopeTopicList = grep( /$qtoken/i, @topicList );
             }
         }
 
         # scope='text', e.g. grep search on topic text:
-        unless( $scope eq 'topic' ) {
+        unless ( $scope eq 'topic' ) {
+
             # search only for the topic name, ignoring matching lines.
             # We will make a mess of reporting the matches later on.
-            my $matches = $store->searchInWebContent
-              ( $token, $web, \@topicList,
-                { type => $type, casesensitive => $caseSensitive,
-                  files_without_match => 1 } );
+            my $matches = $store->searchInWebContent(
+                $token, $web,
+                \@topicList,
+                {
+                    type                => $type,
+                    casesensitive       => $caseSensitive,
+                    files_without_match => 1
+                }
+            );
             @scopeTextList = keys %$matches;
         }
 
-        if( @scopeTextList && @scopeTopicList ) {
+        if ( @scopeTextList && @scopeTopicList ) {
+
             # join 'topic' and 'text' lists
             push( @scopeTextList, @scopeTopicList );
             my %seen = ();
+
             # make topics unique
-            @scopeTextList = sort grep { ! $seen{$_} ++ } @scopeTextList;
-        } elsif( @scopeTopicList ) {
-            @scopeTextList =  @scopeTopicList;
+            @scopeTextList = sort grep { !$seen{$_}++ } @scopeTextList;
+        }
+        elsif (@scopeTopicList) {
+            @scopeTextList = @scopeTopicList;
         }
 
-        if( $invertSearch ) {
+        if ($invertSearch) {
+
             # do AND NOT search
             my %seen = ();
-            foreach my $topic ( @scopeTextList ) {
+            foreach my $topic (@scopeTextList) {
                 $seen{$topic} = 1;
             }
             @scopeTextList = ();
-            foreach my $topic ( @topicList ) {
-                push( @scopeTextList, $topic ) unless( $seen{$topic} );
+            foreach my $topic (@topicList) {
+                push( @scopeTextList, $topic ) unless ( $seen{$topic} );
             }
         }
+
         # reduced topic list for next token
         @topicList = @scopeTextList;
     }
@@ -324,12 +366,15 @@ sub _searchTopicsInWeb {
 }
 
 sub _makeTopicPattern {
-    my( $topic ) = @_ ;
-    return '' unless( $topic );
+    my ($topic) = @_;
+    return '' unless ($topic);
+
     # 'Web*, FooBar' ==> ( 'Web*', 'FooBar' ) ==> ( 'Web.*', "FooBar" )
-    my @arr = map { s/[^\*\_\-\+$TWiki::regex{mixedAlphaNum}]//go; s/\*/\.\*/go; $_ }
-              split( /,\s*/, $topic );
-    return '' unless( @arr );
+    my @arr =
+      map { s/[^\*\_\-\+$TWiki::regex{mixedAlphaNum}]//go; s/\*/\.\*/go; $_ }
+      split( /,\s*/, $topic );
+    return '' unless (@arr);
+
     # ( 'Web.*', 'FooBar' ) ==> "^(Web.*|FooBar)$"
     return '^(' . join( '|', @arr ) . ')$';
 }
@@ -366,83 +411,90 @@ FIXME: =callback= cannot work with format parameter (consider format='| $topic |
 
 sub searchWeb {
     my $this = shift;
-    ASSERT($this->isa( 'TWiki::Search')) if DEBUG;
-    my %params = @_;
-    my $callback =      $params{_callback};
-    my $cbdata =        $params{_cbdata};
-    my $baseTopic =     $params{basetopic} || $this->{session}->{topicName};
-    my $baseWeb =       $params{baseweb}   || $this->{session}->{webName};
-    my $doBookView =    TWiki::isTrue( $params{bookview} );
+    ASSERT( $this->isa('TWiki::Search') ) if DEBUG;
+    my %params        = @_;
+    my $callback      = $params{_callback};
+    my $cbdata        = $params{_cbdata};
+    my $baseTopic     = $params{basetopic} || $this->{session}->{topicName};
+    my $baseWeb       = $params{baseweb} || $this->{session}->{webName};
+    my $doBookView    = TWiki::isTrue( $params{bookview} );
     my $caseSensitive = TWiki::isTrue( $params{casesensitive} );
-    my $excludeTopic =  $params{excludetopic} || '';
-    my $doExpandVars =  TWiki::isTrue( $params{expandvariables} );
-    my $format =        $params{format} || '';
-    my $header =        $params{header};
-    my $inline =        $params{inline};
-    my $limit =         $params{limit} || '';
-    my $doMultiple =    TWiki::isTrue( $params{multiple} );
-    my $nonoise =       TWiki::isTrue( $params{nonoise} );
-    my $noEmpty =       TWiki::isTrue( $params{noempty}, $nonoise );
+    my $excludeTopic  = $params{excludetopic} || '';
+    my $doExpandVars  = TWiki::isTrue( $params{expandvariables} );
+    my $format        = $params{format} || '';
+    my $header        = $params{header};
+    my $inline        = $params{inline};
+    my $limit         = $params{limit} || '';
+    my $doMultiple    = TWiki::isTrue( $params{multiple} );
+    my $nonoise       = TWiki::isTrue( $params{nonoise} );
+    my $noEmpty       = TWiki::isTrue( $params{noempty}, $nonoise );
+
     # Note: a defined header overrides noheader
     my $noHeader =
-      !defined($header) && TWiki::isTrue( $params{noheader}, $nonoise)
-        # Note: This is done for Cairo compatibility
-        || (!$header && $format && $inline);
+      !defined($header)
+      && TWiki::isTrue( $params{noheader}, $nonoise )
 
-    my $noSearch =      TWiki::isTrue( $params{nosearch}, $nonoise );
-    my $noSummary =     TWiki::isTrue( $params{nosummary}, $nonoise );
-    my $zeroResults =   1 - TWiki::isTrue( ($params{zeroresults} || 'on'), $nonoise );
-    my $noTotal =       TWiki::isTrue( $params{nototal}, $nonoise );
-    my $newLine =       $params{newline} || '';
-    my $sortOrder =     $params{order} || '';
-    my $revSort =       TWiki::isTrue( $params{reverse} );
-    my $scope =         $params{scope} || '';
-    my $searchString =  $params{search} || $emptySearch;
-    my $separator =     $params{separator};
-    my $template =      $params{template} || '';
-    my $topic =         $params{topic} || '';
-    my $type =          $params{type} || '';
-    my $webName =       $params{web} || '';
-    my $date =          $params{date} || '';
-    my $recurse =       $params{'recurse'} || '';
-    my $finalTerm =     $inline ? ( $params{nofinalnewline} || 0 ) : 0;
-    my $users = $this->{session}->{users};
+      # Note: This is done for Cairo compatibility
+      || ( !$header && $format && $inline );
+
+    my $noSearch  = TWiki::isTrue( $params{nosearch},  $nonoise );
+    my $noSummary = TWiki::isTrue( $params{nosummary}, $nonoise );
+    my $zeroResults =
+      1 - TWiki::isTrue( ( $params{zeroresults} || 'on' ), $nonoise );
+    my $noTotal = TWiki::isTrue( $params{nototal}, $nonoise );
+    my $newLine   = $params{newline} || '';
+    my $sortOrder = $params{order}   || '';
+    my $revSort      = TWiki::isTrue( $params{reverse} );
+    my $scope        = $params{scope} || '';
+    my $searchString = $params{search} || $emptySearch;
+    my $separator    = $params{separator};
+    my $template     = $params{template} || '';
+    my $topic        = $params{topic} || '';
+    my $type         = $params{type} || '';
+    my $webName      = $params{web} || '';
+    my $date         = $params{date} || '';
+    my $recurse      = $params{'recurse'} || '';
+    my $finalTerm    = $inline ? ( $params{nofinalnewline} || 0 ) : 0;
+    my $users        = $this->{session}->{users};
 
     $baseWeb =~ s/\./\//go;
 
-    my $session = $this->{session};
+    my $session  = $this->{session};
     my $renderer = $session->{renderer};
 
     # Limit search results
-    if ($limit =~ /(^\d+$)/o) {
+    if ( $limit =~ /(^\d+$)/o ) {
+
         # only digits, all else is the same as
         # an empty string.  "+10" won't work.
         $limit = $1;
-    } else {
+    }
+    else {
+
         # change 'all' to 0, then to big number
         $limit = 0;
     }
-    $limit = 32000 unless( $limit );
+    $limit = 32000 unless ($limit);
 
-    $type = 'regex' if( $params{regex} );
+    $type = 'regex' if ( $params{regex} );
 
-    # Filter the search string for security and untaint it 
+    # Filter the search string for security and untaint it
     $searchString = _filterSearchString( $this, $searchString, $type );
 
     my $mixedAlpha = $TWiki::regex{mixedAlpha};
-    if( defined( $separator )) {
-        $separator =~ s/\$n\(\)/\n/gos;  # expand "$n()" to new line
+    if ( defined($separator) ) {
+        $separator =~ s/\$n\(\)/\n/gos;    # expand "$n()" to new line
         $separator =~ s/\$n([^$mixedAlpha]|$)/\n$1/gos;
     }
-    if( $newLine ) {
-        $newLine =~ s/\$n\(\)/\n/gos;  # expand "$n()" to new line
+    if ($newLine) {
+        $newLine =~ s/\$n\(\)/\n/gos;                # expand "$n()" to new line
         $newLine =~ s/\$n([^$mixedAlpha]|$)/\n$1/gos;
     }
 
     my $searchResult = '';
-    my $homeWeb = $session->{webName};
-    my $homeTopic = $TWiki::cfg{HomeTopicName};
-    my $store = $session->{store};
+    my $homeWeb      = $session->{webName};
+    my $homeTopic    = $TWiki::cfg{HomeTopicName};
+    my $store        = $session->{store};
 
     my %excludeWeb;
     my @tmpWebs;
@@ -451,103 +503,112 @@ sub searchWeb {
     # otherwise ignored (unless there is a web called 'All'.)
     my $searchAllFlag = ( $webName =~ /(^|[\,\s])(all|on)([\,\s]|$)/i );
 
-    if( $webName ) {
+    if ($webName) {
         foreach my $web ( split( /[\,\s]+/, $webName ) ) {
             $web =~ s#\.#/#go;
+
             # the web processing loop filters for valid web names,
             # so don't do it here.
             if ( $web =~ s/^-// ) {
                 $excludeWeb{$web} = 1;
-            } else {
+            }
+            else {
                 push( @tmpWebs, $web );
-                if( TWiki::isTrue( $recurse ) || $web =~ /^(all|on)$/i ) {
-                    my $webarg = ($web =~/^(all|on)$/i) ? undef : $web;
+                if ( TWiki::isTrue($recurse) || $web =~ /^(all|on)$/i ) {
+                    my $webarg = ( $web =~ /^(all|on)$/i ) ? undef: $web;
                     push( @tmpWebs,
-                      $store->getListOfWebs( 'user,allowed', $webarg ));
+                        $store->getListOfWebs( 'user,allowed', $webarg ) );
                 }
             }
         }
 
-    } else {
+    }
+    else {
+
         # default to current web
         push( @tmpWebs, $session->{webName} );
-        if ( TWiki::isTrue( $recurse )) {
-            push( @tmpWebs, $store->getListOfWebs( 'user,allowed',
-                                                   $session->{webName} ));
+        if ( TWiki::isTrue($recurse) ) {
+            push( @tmpWebs,
+                $store->getListOfWebs( 'user,allowed', $session->{webName} ) );
         }
     }
 
     my @webs;
-    foreach my $web ( @tmpWebs ) {
+    foreach my $web (@tmpWebs) {
         push( @webs, $web ) unless $excludeWeb{$web};
         $excludeWeb{$web} = 1;
     }
 
     # E.g. "Bug*, *Patch" ==> "^(Bug.*|.*Patch)$"
-    $topic = _makeTopicPattern( $topic );
+    $topic = _makeTopicPattern($topic);
 
     # E.g. "Web*, FooBar" ==> "^(Web.*|FooBar)$"
-    $excludeTopic = _makeTopicPattern( $excludeTopic );
+    $excludeTopic = _makeTopicPattern($excludeTopic);
 
     my $output = '';
-    my $tmpl = '';
+    my $tmpl   = '';
 
     my $originalSearch = $searchString;
     my $spacedTopic;
 
-    if( $format ) {
+    if ($format) {
         $template = 'searchformat';
-    } elsif( $template ) {
+    }
+    elsif ($template) {
+
         # template definition overrides book and rename views
-    } elsif( $doBookView ) {
+    }
+    elsif ($doBookView) {
         $template = 'searchbookview';
-    } else {
+    }
+    else {
         $template = 'search';
     }
-    $tmpl = $session->{templates}->readTemplate( $template );
+    $tmpl = $session->{templates}->readTemplate($template);
 
     # SMELL: the only META tags in a template will be METASEARCH
     # Why the heck are they being filtered????
-    $tmpl =~ s/\%META{.*?}\%//go;  # remove %META{'parent'}%
+    $tmpl =~ s/\%META{.*?}\%//go;    # remove %META{'parent'}%
 
     # Split template into 5 sections
-    my( $tmplHead, $tmplSearch, $tmplTable, $tmplNumber, $tmplTail ) =
+    my ( $tmplHead, $tmplSearch, $tmplTable, $tmplNumber, $tmplTail ) =
       split( /%SPLIT%/, $tmpl );
 
     # Invalid template?
-    if( ! $tmplTail ) {
+    if ( !$tmplTail ) {
         my $mess =
-          CGI::h1('TWiki Installation Error') .
-              'Incorrect format of '.$template.' template (missing sections? There should be 4 %SPLIT% tags)';
+            CGI::h1('TWiki Installation Error')
+          . 'Incorrect format of '
+          . $template
+          . ' template (missing sections? There should be 4 %SPLIT% tags)';
         if ( defined $callback ) {
             &$callback( $cbdata, $mess );
             return undef;
-        } else {
+        }
+        else {
             return $mess;
         }
     }
 
     # Expand tags in template sections
-    $tmplSearch = $session->handleCommonTags( $tmplSearch,
-                                              $homeWeb,
-                                              $homeTopic );
-    $tmplNumber = $session->handleCommonTags( $tmplNumber,
-                                              $homeWeb,
-                                              $homeTopic );
+    $tmplSearch =
+      $session->handleCommonTags( $tmplSearch, $homeWeb, $homeTopic );
+    $tmplNumber =
+      $session->handleCommonTags( $tmplNumber, $homeWeb, $homeTopic );
 
     # If not inline search, also expand tags in head and tail sections
-    unless( $inline ) {
-        $tmplHead = $session->handleCommonTags( $tmplHead,
-                                                $homeWeb,
-                                                $homeTopic );
+    unless ($inline) {
+        $tmplHead =
+          $session->handleCommonTags( $tmplHead, $homeWeb, $homeTopic );
 
-        if( defined $callback ) {
-            $tmplHead = $renderer->getRenderedVersion( $tmplHead,
-                                                       $homeWeb,
-                                                       $homeTopic );
-            $tmplHead =~ s|</*nop/*>||goi;   # remove <nop> tags
+        if ( defined $callback ) {
+            $tmplHead =
+              $renderer->getRenderedVersion( $tmplHead, $homeWeb, $homeTopic );
+            $tmplHead =~ s|</*nop/*>||goi;    # remove <nop> tags
             &$callback( $cbdata, $tmplHead );
-        } else {
+        }
+        else {
+
             # don't getRenderedVersion; this will be done by a single
             # call at the end.
             $searchResult .= $tmplHead;
@@ -555,21 +616,23 @@ sub searchWeb {
     }
 
     # Generate 'Search:' part showing actual search string used
-    unless( $noSearch ) {
+    unless ($noSearch) {
         my $searchStr = $searchString;
-        $searchStr = '' if( $searchString eq $emptySearch );
-        $searchStr =~ s/&/&amp;/go;
-        $searchStr =~ s/</&lt;/go;
-        $searchStr =~ s/>/&gt;/go;
-        $searchStr =~ s/^\.\*$/Index/go;
+        $searchStr = '' if ( $searchString eq $emptySearch );
+        $searchStr  =~ s/&/&amp;/go;
+        $searchStr  =~ s/</&lt;/go;
+        $searchStr  =~ s/>/&gt;/go;
+        $searchStr  =~ s/^\.\*$/Index/go;
         $tmplSearch =~ s/%SEARCHSTRING%/$searchStr/go;
-        if( defined $callback ) {
-            $tmplSearch = $renderer->getRenderedVersion( $tmplSearch,
-                                                         $homeWeb,
-                                                         $homeTopic );
-            $tmplSearch =~ s|</*nop/*>||goi;   # remove <nop> tag
+        if ( defined $callback ) {
+            $tmplSearch =
+              $renderer->getRenderedVersion( $tmplSearch, $homeWeb,
+                $homeTopic );
+            $tmplSearch =~ s|</*nop/*>||goi;    # remove <nop> tag
             &$callback( $cbdata, $tmplSearch );
-        } else {
+        }
+        else {
+
             # don't getRenderedVersion; will be done later
             $searchResult .= $tmplSearch;
         }
@@ -581,7 +644,7 @@ sub searchWeb {
 
     # Write log entry
     # FIXME: Move log entry further down to log actual webs searched
-    if( ( $TWiki::cfg{Log}{search} ) && ( ! $inline ) ) {
+    if ( ( $TWiki::cfg{Log}{search} ) && ( !$inline ) ) {
         my $t = join( ' ', @webs );
         $session->writeLog( 'search', $t, $searchString );
     }
@@ -589,39 +652,43 @@ sub searchWeb {
     # Loop through webs
     my $isAdmin = $session->{users}->isAdmin( $session->{user} );
     my $ttopics = 0;
-    foreach my $web ( @webs ) {
+    foreach my $web (@webs) {
         $web =~ s/$TWiki::cfg{NameFilter}//go;
-        $web = TWiki::Sandbox::untaintUnchecked( $web );
+        $web = TWiki::Sandbox::untaintUnchecked($web);
 
-        next unless $store->webExists( $web );  # can't process what ain't thar
+        next unless $store->webExists($web);    # can't process what ain't thar
 
         my $prefs = $session->{prefs};
-        my $thisWebNoSearchAll = $prefs->getWebPreferencesValue( 'NOSEARCHALL', $web ) || '';
+        my $thisWebNoSearchAll =
+          $prefs->getWebPreferencesValue( 'NOSEARCHALL', $web ) || '';
 
         # make sure we can report this web on an 'all' search
         # DON'T filter out unless it's part of an 'all' search.
-        next if ( $searchAllFlag
-                  && ! $isAdmin
-                  && ( $thisWebNoSearchAll =~ /on/i || $web =~ /^[\.\_]/ )
-                  && $web ne $session->{webName} );
+        next
+          if ( $searchAllFlag
+            && !$isAdmin
+            && ( $thisWebNoSearchAll =~ /on/i || $web =~ /^[\.\_]/ )
+            && $web ne $session->{webName} );
 
         # Run the search on topics in this web
-        my @topicList = _searchTopicsInWeb( $this,
-            $web, $topic, $scope, $type, $caseSensitive, @tokens );
+        my @topicList =
+          _searchTopicsInWeb( $this, $web, $topic, $scope, $type,
+            $caseSensitive, @tokens );
 
         # exclude topics, Codev.ExcludeWebTopicsFromSearch
-        if( $caseSensitive && $excludeTopic ) {
+        if ( $caseSensitive && $excludeTopic ) {
             @topicList = grep( !/$excludeTopic/, @topicList );
-        } elsif( $excludeTopic ) {
+        }
+        elsif ($excludeTopic) {
             @topicList = grep( !/$excludeTopic/i, @topicList );
         }
-        next if( $noEmpty && ! @topicList ); # Nothing to show for this web
+        next if ( $noEmpty && !@topicList );    # Nothing to show for this web
 
         my $topicInfo = {};
 
         # sort the topic list by date, author or topic name, and cache the
         # info extracted to do the sorting
-        if( $sortOrder eq 'modified' ) {
+        if ( $sortOrder eq 'modified' ) {
 
             # For performance:
             #   * sort by approx time (to get a rough list)
@@ -631,52 +698,59 @@ sub searchWeb {
             # SMELL: In Dakar this seems to be pointless since latest rev
             # time is taken from topic instead of dir list.
             my $slack = 10;
-            if(  $limit + 2 * $slack < scalar( @topicList ) ) {
+            if ( $limit + 2 * $slack < scalar(@topicList) ) {
+
                 # sort by approx latest rev time
                 my @tmpList =
-                  map { $_->[1] }
-                    sort {$a->[0] <=> $b->[0] }
-                      map { [ $store->getTopicLatestRevTime( $web, $_ ), $_ ] }
-                        @topicList;
-                @tmpList = reverse( @tmpList ) if( $revSort );
+                  map  { $_->[1] }
+                  sort { $a->[0] <=> $b->[0] }
+                  map  { [ $store->getTopicLatestRevTime( $web, $_ ), $_ ] }
+                  @topicList;
+                @tmpList = reverse(@tmpList) if ($revSort);
 
                 # then shorten list and build the hashes for date and author
                 my $idx = $limit + $slack;
                 @topicList = ();
-                foreach( @tmpList ) {
+                foreach (@tmpList) {
                     push( @topicList, $_ );
                     $idx -= 1;
                     last if $idx <= 0;
                 }
             }
 
-            $topicInfo = _sortTopics( $this, $web, \@topicList,
-                                             $sortOrder, !$revSort );
-        } elsif( $sortOrder =~ /^creat/ || # topic creation time
-                   $sortOrder eq 'editby' || # author
-                     $sortOrder =~ s/^formfield\((.*)\)$/$1/ # form field
-                    ) {
+            $topicInfo =
+              _sortTopics( $this, $web, \@topicList, $sortOrder, !$revSort );
+        }
+        elsif (
+            $sortOrder =~ /^creat/ ||    # topic creation time
+            $sortOrder eq 'editby' ||    # author
+            $sortOrder =~ s/^formfield\((.*)\)$/$1/    # form field
+          )
+        {
 
-            $topicInfo = _sortTopics( $this, $web, \@topicList,
-                                             $sortOrder, !$revSort );
+            $topicInfo =
+              _sortTopics( $this, $web, \@topicList, $sortOrder, !$revSort );
 
-        } else {
+        }
+        else {
 
             # simple sort, see Codev.SchwartzianTransformMisused
             # note no extraction of topic info here, as not needed
             # for the sort. Instead it will be read lazily, later on.
-            if( $revSort ) {
-                @topicList = sort {$b cmp $a} @topicList;
-            } else {
-                @topicList = sort {$a cmp $b} @topicList;
+            if ($revSort) {
+                @topicList = sort { $b cmp $a } @topicList;
+            }
+            else {
+                @topicList = sort { $a cmp $b } @topicList;
             }
         }
 
-        if( $date ){
+        if ($date) {
             use TWiki::Time;
-            my @ends = &TWiki::Time::parseInterval( $date );
+            my @ends       = &TWiki::Time::parseInterval($date);
             my @resultList = ();
-            foreach my $topic ( @topicList ) {
+            foreach my $topic (@topicList) {
+
                 # if date falls out of interval: exclude topic from result
                 my $topicdate = $store->getTopicLatestRevTime( $web, $topic );
                 push( @resultList, $topic )
@@ -686,34 +760,38 @@ sub searchWeb {
         }
 
         # header and footer of $web
-        my( $beforeText, $repeatText, $afterText ) =
+        my ( $beforeText, $repeatText, $afterText ) =
           split( /%REPEAT%/, $tmplTable );
-        if( defined $header ) {
+        if ( defined $header ) {
             $beforeText = TWiki::expandStandardEscapes($header);
-            $beforeText =~ s/\$web/$web/gos;         # expand name of web
-            if( defined( $separator )) {
+            $beforeText =~ s/\$web/$web/gos;    # expand name of web
+            if ( defined($separator) ) {
                 $beforeText .= $separator;
-            } else {
-                $beforeText =~ s/([^\n])$/$1\n/os;  # add new line at end if needed
+            }
+            else {
+                $beforeText =~
+                  s/([^\n])$/$1\n/os;           # add new line at end if needed
             }
         }
 
         # output the list of topics in $web
-        my $ntopics = 0;
+        my $ntopics    = 0;
         my $headerDone = $noHeader;
-        foreach my $topic ( @topicList ) {
+        foreach my $topic (@topicList) {
             my $forceRendering = 0;
-            unless( exists( $topicInfo->{$topic} ) ) {
+            unless ( exists( $topicInfo->{$topic} ) ) {
+
                 # not previously cached
                 $topicInfo->{$topic} =
                   _extractTopicInfo( $this, $web, $topic, 0, undef );
             }
             my $epochSecs = $topicInfo->{$topic}->{modified};
-            my $revDate = TWiki::Time::formatTime( $epochSecs );
-            my $isoDate = TWiki::Time::formatTime( $epochSecs, '$iso', 'gmtime');
+            my $revDate   = TWiki::Time::formatTime($epochSecs);
+            my $isoDate =
+              TWiki::Time::formatTime( $epochSecs, '$iso', 'gmtime' );
 
-            my $ru = $topicInfo->{$topic}->{editby} || 'UnknownUser';
-            my $revNum  = $topicInfo->{$topic}->{revNum} || 0;
+            my $ru     = $topicInfo->{$topic}->{editby} || 'UnknownUser';
+            my $revNum = $topicInfo->{$topic}->{revNum} || 0;
 
             # Check security
             # FIXME - how do we deal with user login not being available if
@@ -724,29 +802,35 @@ sub searchWeb {
             my ( $meta, $text );
 
             # Special handling for format='...'
-            if( $format ) {
-                ( $meta, $text ) = _getTextAndMeta( $this,
-                    $topicInfo, $web, $topic );
+            if ($format) {
+                ( $meta, $text ) =
+                  _getTextAndMeta( $this, $topicInfo, $web, $topic );
 
-                if( $doExpandVars ) {
-                    if( $web eq $baseWeb && $topic eq $baseTopic ) {
+                if ($doExpandVars) {
+                    if ( $web eq $baseWeb && $topic eq $baseTopic ) {
+
                         # primitive way to prevent recursion
                         $text =~ s/%SEARCH/%<nop>SEARCH/g;
                     }
-                    $text = $session->handleCommonTags(
-                        $text, $web, $topic, $meta );
+                    $text =
+                      $session->handleCommonTags( $text, $web, $topic, $meta );
                 }
             }
 
             my @multipleHitLines = ();
-            if( $doMultiple ) {
-                my $pattern = $tokens[$#tokens]; # last token in an AND search
-                $pattern = quotemeta( $pattern ) if( $type ne 'regex' );
-                ( $meta, $text ) = _getTextAndMeta( $this, $topicInfo, $web, $topic ) unless $text;
-                if( $caseSensitive ) {
-                    @multipleHitLines = reverse grep { /$pattern/ } split( /[\n\r]+/, $text );
-                } else {
-                    @multipleHitLines = reverse grep { /$pattern/i } split( /[\n\r]+/, $text );
+            if ($doMultiple) {
+                my $pattern = $tokens[$#tokens];   # last token in an AND search
+                $pattern = quotemeta($pattern) if ( $type ne 'regex' );
+                ( $meta, $text ) =
+                  _getTextAndMeta( $this, $topicInfo, $web, $topic )
+                  unless $text;
+                if ($caseSensitive) {
+                    @multipleHitLines =
+                      reverse grep { /$pattern/ } split( /[\n\r]+/, $text );
+                }
+                else {
+                    @multipleHitLines =
+                      reverse grep { /$pattern/i } split( /[\n\r]+/, $text );
                 }
             }
 
@@ -759,12 +843,13 @@ sub searchWeb {
 
                 my $out = '';
 
-                $text = pop( @multipleHitLines ) if( scalar( @multipleHitLines ) );
+                $text = pop(@multipleHitLines) if ( scalar(@multipleHitLines) );
 
-                if( $format ) {
+                if ($format) {
                     $out = $format;
                     $out =~ s/\$web/$web/gs;
-                    $out =~ s/\$topic\(([^\)]*)\)/TWiki::Render::breakName( $topic, $1 )/ges;
+                    $out =~
+s/\$topic\(([^\)]*)\)/TWiki::Render::breakName( $topic, $1 )/ges;
                     $out =~ s/\$topic/$topic/gs;
                     $out =~ s/\$date/$revDate/gs;
                     $out =~ s/\$isodate/$isoDate/gs;
@@ -773,20 +858,29 @@ sub searchWeb {
                     $out =~ s/\$wikiname/$users->getWikiName($ru)/ges;
                     $out =~ s/\$username/$users->getLoginName($ru)/ges;
                     my $r1info = {};
-                    $out =~ s/\$createdate/_getRev1Info( $this, $web, $topic, 'date', $r1info )/ges;
-                    $out =~ s/\$createusername/_getRev1Info( $this, $web, $topic, 'username', $r1info )/ges;
-                    $out =~ s/\$createwikiname/_getRev1Info( $this, $web, $topic, 'wikiname', $r1info )/ges;
-                    $out =~ s/\$createwikiusername/_getRev1Info( $this, $web, $topic, 'wikiusername', $r1info )/ges;
-                    if( $out =~ m/\$text/ ) {
-                        ( $meta, $text ) = _getTextAndMeta( $this, $topicInfo, $web, $topic ) unless $text;
-                        if( $topic eq $session->{topicName} ) {
+                    $out =~
+s/\$createdate/_getRev1Info( $this, $web, $topic, 'date', $r1info )/ges;
+                    $out =~
+s/\$createusername/_getRev1Info( $this, $web, $topic, 'username', $r1info )/ges;
+                    $out =~
+s/\$createwikiname/_getRev1Info( $this, $web, $topic, 'wikiname', $r1info )/ges;
+                    $out =~
+s/\$createwikiusername/_getRev1Info( $this, $web, $topic, 'wikiusername', $r1info )/ges;
+
+                    if ( $out =~ m/\$text/ ) {
+                        ( $meta, $text ) =
+                          _getTextAndMeta( $this, $topicInfo, $web, $topic )
+                          unless $text;
+                        if ( $topic eq $session->{topicName} ) {
+
                             # defuse SEARCH in current topic to prevent loop
                             $text =~ s/%SEARCH{.*?}%/SEARCH{...}/go;
                         }
                         $out =~ s/\$text/$text/gos;
-                        $forceRendering = 1 unless( $doMultiple );
+                        $forceRendering = 1 unless ($doMultiple);
                     }
-                } else {
+                }
+                else {
                     $out = $repeatText;
                 }
                 $out =~ s/%WEB%/$web/go;
@@ -794,99 +888,120 @@ sub searchWeb {
                 $out =~ s/%TIME%/$revDate/o;
 
                 my $srev = 'r' . $revNum;
-                if( $revNum eq '0' || $revNum eq '1' ) {
-                    $srev = CGI::span( { class => 'twikiNew' }, ($this->{session}->{i18n}->maketext('NEW')) );
+                if ( $revNum eq '0' || $revNum eq '1' ) {
+                    $srev = CGI::span( { class => 'twikiNew' },
+                        ( $this->{session}->{i18n}->maketext('NEW') ) );
                 }
                 $out =~ s/%REVISION%/$srev/o;
                 $out =~ s/%AUTHOR%/$users->webDotWikiName($ru)/e;
 
-                if( $doBookView ) {
+                if ($doBookView) {
+
                     # BookView
-                    ( $meta, $text ) = _getTextAndMeta( $this,
-                        $topicInfo, $web, $topic ) unless $text;
-                    if( $web eq $baseWeb && $topic eq $baseTopic ) {
+                    ( $meta, $text ) =
+                      _getTextAndMeta( $this, $topicInfo, $web, $topic )
+                      unless $text;
+                    if ( $web eq $baseWeb && $topic eq $baseTopic ) {
+
                         # primitive way to prevent recursion
                         $text =~ s/%SEARCH/%<nop>SEARCH/g;
                     }
-                    $text = $session->handleCommonTags(
-                        $text, $web, $topic, $meta );
-                    $text = $session->{renderer}->getRenderedVersion
-                      ( $text, $web, $topic );
+                    $text =
+                      $session->handleCommonTags( $text, $web, $topic, $meta );
+                    $text =
+                      $session->{renderer}
+                      ->getRenderedVersion( $text, $web, $topic );
+
                     # FIXME: What about meta data rendering?
                     $out =~ s/%TEXTHEAD%/$text/go;
 
-                } elsif( $format ) {
-                    $out =~ s/\$summary(?:\(([^\)]*)\))?/$renderer->makeTopicSummary( $text, $topic, $web, $1 )/ges;
-                    $out =~ s/\$changes(?:\(([^\)]*)\))?/$renderer->summariseChanges($ru,$web,$topic,$1,$revNum)/ges;
-                    $out =~ s/\$formfield\(\s*([^\)]*)\s*\)/TWiki::Render::renderFormFieldArg( $meta, $1 )/ges;
-                    $out =~ s/\$parent\(([^\)]*)\)/TWiki::Render::breakName( $meta->getParent(), $1 )/ges;
+                }
+                elsif ($format) {
+                    $out =~
+s/\$summary(?:\(([^\)]*)\))?/$renderer->makeTopicSummary( $text, $topic, $web, $1 )/ges;
+                    $out =~
+s/\$changes(?:\(([^\)]*)\))?/$renderer->summariseChanges($ru,$web,$topic,$1,$revNum)/ges;
+                    $out =~
+s/\$formfield\(\s*([^\)]*)\s*\)/TWiki::Render::renderFormFieldArg( $meta, $1 )/ges;
+                    $out =~
+s/\$parent\(([^\)]*)\)/TWiki::Render::breakName( $meta->getParent(), $1 )/ges;
                     $out =~ s/\$parent/$meta->getParent()/ges;
                     $out =~ s/\$formname/$meta->getFormName()/ges;
-                    $out =~ s/\$count\((.*?\s*\.\*)\)/_countPattern( $text, $1 )/ges;
-                    # FIXME: Allow all regex characters but escape them
-                    # Note: The RE requires a .* at the end of a pattern to avoid false positives
-                    # in pattern matching
-                    $out =~ s/\$pattern\((.*?\s*\.\*)\)/getTextPattern( $text, $1 )/ges;
-                    $out =~ s/\r?\n/$newLine/gos if( $newLine );
-                    if( defined( $separator )) {
+                    $out =~
+                      s/\$count\((.*?\s*\.\*)\)/_countPattern( $text, $1 )/ges;
+
+   # FIXME: Allow all regex characters but escape them
+   # Note: The RE requires a .* at the end of a pattern to avoid false positives
+   # in pattern matching
+                    $out =~
+s/\$pattern\((.*?\s*\.\*)\)/getTextPattern( $text, $1 )/ges;
+                    $out =~ s/\r?\n/$newLine/gos if ($newLine);
+                    if ( defined($separator) ) {
                         $out .= $separator;
-                    } else {
+                    }
+                    else {
+
                         # add new line at end if needed
                         # SMELL: why?
                         $out =~ s/([^\n])$/$1\n/s;
                     }
 
-                    $out = TWiki::expandStandardEscapes( $out );
+                    $out = TWiki::expandStandardEscapes($out);
 
-                } elsif( $noSummary ) {
+                }
+                elsif ($noSummary) {
                     $out =~ s/%TEXTHEAD%//go;
                     $out =~ s/&nbsp;//go;
 
-                } else {
+                }
+                else {
+
                     # regular search view
-                    ( $meta, $text ) = _getTextAndMeta( $this,
-                        $topicInfo, $web, $topic ) unless $text;
+                    ( $meta, $text ) =
+                      _getTextAndMeta( $this, $topicInfo, $web, $topic )
+                      unless $text;
                     $text = $renderer->makeTopicSummary( $text, $topic, $web );
                     $out =~ s/%TEXTHEAD%/$text/go;
                 }
 
                 # lazy output of header (only if needed for the first time)
-                unless( $headerDone ) {
+                unless ($headerDone) {
                     $headerDone = 1;
                     my $prefs = $session->{prefs};
                     my $thisWebBGColor =
-                      $prefs->getWebPreferencesValue( 'WEBBGCOLOR', $web ) ||
-                        '\#FF00FF';
+                      $prefs->getWebPreferencesValue( 'WEBBGCOLOR', $web )
+                      || '\#FF00FF';
                     $beforeText =~ s/%WEBBGCOLOR%/$thisWebBGColor/go;
                     $beforeText =~ s/%WEB%/$web/go;
-                    $beforeText = $session->handleCommonTags(
-                        $beforeText, $web, $topic );
+                    $beforeText =
+                      $session->handleCommonTags( $beforeText, $web, $topic );
                     if ( defined $callback ) {
                         $beforeText =
-                          $renderer->getRenderedVersion(
-                              $beforeText, $web, $topic );
-                        $beforeText =~ s|</*nop/*>||goi;   # remove <nop> tag
+                          $renderer->getRenderedVersion( $beforeText, $web,
+                            $topic );
+                        $beforeText =~ s|</*nop/*>||goi;    # remove <nop> tag
                         &$callback( $cbdata, $beforeText );
-                    } else {
+                    }
+                    else {
                         $searchResult .= $beforeText;
                     }
                 }
 
-		#don't expand if a format is specified - it breaks tables and stuff 
-                unless(  $format ) {
-                    $out =
-                      $renderer->getRenderedVersion( $out, $web, $topic );
+             #don't expand if a format is specified - it breaks tables and stuff
+                unless ($format) {
+                    $out = $renderer->getRenderedVersion( $out, $web, $topic );
                 }
 
                 # output topic (or line if multiple=on)
                 if ( defined $callback ) {
-                    $out =~ s|</*nop/*>||goi;   # remove <nop> tag
+                    $out =~ s|</*nop/*>||goi;    # remove <nop> tag
                     &$callback( $cbdata, $out );
-                } else {
+                }
+                else {
                     $searchResult .= $out;
                 }
 
-            } while( @multipleHitLines ); # multiple=on loop
+            } while (@multipleHitLines);    # multiple=on loop
 
             $ntopics += 1;
             $ttopics += 1;
@@ -894,107 +1009,104 @@ sub searchWeb {
             # delete topic info to clear any cached data
             undef $topicInfo->{$topic};
 
-            last if( $ntopics >= $limit );
-        } # end topic loop
+            last if ( $ntopics >= $limit );
+        }    # end topic loop
 
         # output footer only if hits in web
-        if( $ntopics ) {
+        if ($ntopics) {
+
             # output footer of $web
-            $afterText  = $session->handleCommonTags(
-                $afterText, $web, $homeTopic );
-            if( $inline || $format ) {
-                $afterText =~ s/\n$//os;  # remove trailing new line
+            $afterText =
+              $session->handleCommonTags( $afterText, $web, $homeTopic );
+            if ( $inline || $format ) {
+                $afterText =~ s/\n$//os;    # remove trailing new line
             }
 
             if ( defined $callback ) {
-                $afterText = 
-                  $renderer->getRenderedVersion( $afterText,
-                                                 $web,
-                                                 $homeTopic );
-                $afterText =~ s|</*nop/*>||goi;   # remove <nop> tag
+                $afterText =
+                  $renderer->getRenderedVersion( $afterText, $web, $homeTopic );
+                $afterText =~ s|</*nop/*>||goi;    # remove <nop> tag
                 &$callback( $cbdata, $afterText );
-            } else {
+            }
+            else {
                 $searchResult .= $afterText;
             }
         }
 
         # output number of topics (only if hits in web or if
         # only searching one web)
-        if( $ntopics || scalar( @webs ) < 2 ) {
-            unless( $noTotal ) {
+        if ( $ntopics || scalar(@webs) < 2 ) {
+            unless ($noTotal) {
                 my $thisNumber = $tmplNumber;
                 $thisNumber =~ s/%NTOPICS%/$ntopics/go;
                 if ( defined $callback ) {
                     $thisNumber =
-                      $renderer->getRenderedVersion( $thisNumber,
-                                                             $web,
-                                                             $homeTopic );
-                    $thisNumber =~ s|</*nop/*>||goi;   # remove <nop> tag
+                      $renderer->getRenderedVersion( $thisNumber, $web,
+                        $homeTopic );
+                    $thisNumber =~ s|</*nop/*>||goi;    # remove <nop> tag
                     &$callback( $cbdata, $thisNumber );
-                } else {
+                }
+                else {
                     $searchResult .= $thisNumber;
                 }
             }
         }
-    } # end of: foreach my $web ( @webs )
+    }    # end of: foreach my $web ( @webs )
     return '' if ( $ttopics == 0 && $zeroResults );
 
-    if( $format  && ! $finalTerm ) {
-        if( $separator ) {
-            $searchResult =~ s/$separator$//s;  # remove separator at end
-        } else {
-            $searchResult =~ s/\n$//os;            # remove trailing new line
+    if ( $format && !$finalTerm ) {
+        if ($separator) {
+            $searchResult =~ s/$separator$//s;    # remove separator at end
+        }
+        else {
+            $searchResult =~ s/\n$//os;           # remove trailing new line
         }
     }
 
-    unless( $inline ) {
-        $tmplTail = $session->handleCommonTags( $tmplTail,
-                                                $homeWeb,
-                                                $homeTopic );
+    unless ($inline) {
+        $tmplTail =
+          $session->handleCommonTags( $tmplTail, $homeWeb, $homeTopic );
 
-        if( defined $callback ) {
-            $tmplTail = $renderer->getRenderedVersion( $tmplTail,
-                                                       $homeWeb,
-                                                       $homeTopic );
-            $tmplTail =~ s|</*nop/*>||goi;   # remove <nop> tag
+        if ( defined $callback ) {
+            $tmplTail =
+              $renderer->getRenderedVersion( $tmplTail, $homeWeb, $homeTopic );
+            $tmplTail =~ s|</*nop/*>||goi;        # remove <nop> tag
             &$callback( $cbdata, $tmplTail );
-        } else {
+        }
+        else {
             $searchResult .= $tmplTail;
         }
     }
 
-    return undef if ( defined $callback );
+    return undef         if ( defined $callback );
     return $searchResult if $inline;
 
-    $searchResult = $session->handleCommonTags( $searchResult,
-                                                $homeWeb,
-                                                $homeTopic );
-    $searchResult = $renderer->getRenderedVersion( $searchResult,
-                                                   $homeWeb,
-                                                   $homeTopic );
+    $searchResult =
+      $session->handleCommonTags( $searchResult, $homeWeb, $homeTopic );
+    $searchResult =
+      $renderer->getRenderedVersion( $searchResult, $homeWeb, $homeTopic );
 
     return $searchResult;
 }
 
 # extract topic info required for sorting and sort.
-sub _sortTopics{
+sub _sortTopics {
     my ( $this, $web, $topics, $sortfield, $revSort ) = @_;
 
     my $topicInfo = {};
-    foreach my $topic ( @$topics ) {
-        $topicInfo->{$topic} = _extractTopicInfo(
-            $this, $web, $topic, $sortfield );
+    foreach my $topic (@$topics) {
+        $topicInfo->{$topic} =
+          _extractTopicInfo( $this, $web, $topic, $sortfield );
     }
-    if( $revSort ) {
+    if ($revSort) {
         @$topics = map { $_->[1] }
           sort { _compare( $b->[0], $a->[0] ) }
-            map { [ $topicInfo->{$_}->{$sortfield}, $_ ] }
-              @$topics;
-    } else {
+          map { [ $topicInfo->{$_}->{$sortfield}, $_ ] } @$topics;
+    }
+    else {
         @$topics = map { $_->[1] }
           sort { _compare( $a->[0], $b->[0] ) }
-            map { [ $topicInfo->{$_}->{$sortfield}, $_ ] }
-              @$topics;
+          map { [ $topicInfo->{$_}->{$sortfield}, $_ ] } @$topics;
     }
 
     return $topicInfo;
@@ -1004,11 +1116,13 @@ sub _sortTopics{
 my $number = qr/^[-+]?[0-9]+(\.[0-9]*)?([Ee][-+]?[0-9]+)?$/s;
 
 sub _compare {
-    if( $_[0] =~ /$number/o && $_[1] =~ /$number/o ) {
+    if ( $_[0] =~ /$number/o && $_[1] =~ /$number/o ) {
+
         # when sorting numbers do it largest first; this is just because
         # this is what date comparisons need.
         return $_[1] <=> $_[0];
-    } else {
+    }
+    else {
         return $_[1] cmp $_[0];
     }
 }
@@ -1016,10 +1130,10 @@ sub _compare {
 # extract topic info
 sub _extractTopicInfo {
     my ( $this, $web, $topic, $sortfield ) = @_;
-    my $info = {};
+    my $info    = {};
     my $session = $this->{session};
-    my $store = $session->{store};
-    my $users = $this->{session}->{users};
+    my $store   = $session->{store};
+    my $users   = $this->{session}->{users};
 
     my ( $meta, $text ) = _getTextAndMeta( $this, undef, $web, $topic );
 
@@ -1027,22 +1141,23 @@ sub _extractTopicInfo {
     $info->{meta} = $meta;
 
     my ( $revdate, $revuser, $revnum ) = $meta->getRevisionInfo();
-    $info->{editby}     = $revuser || '';
-    $info->{modified}   = $revdate;
-    $info->{revNum}     = $revnum;
+    $info->{editby}   = $revuser || '';
+    $info->{modified} = $revdate;
+    $info->{revNum}   = $revnum;
 
     $info->{allowView} =
-      $session->{security}->
-        checkAccessPermission( 'VIEW', $session->{user},
-                               $text, $meta,
-                               $topic, $web );
+      $session->{security}
+      ->checkAccessPermission( 'VIEW', $session->{user}, $text, $meta, $topic,
+        $web );
 
     return $info unless $sortfield;
 
     if ( $sortfield =~ /^creat/ ) {
-        ( $info->{$sortfield} ) = $meta->getRevisionInfo( 1 );
-    } elsif ( !defined( $info->{$sortfield} )) {
-        $info->{$sortfield} = TWiki::Render::renderFormFieldArg( $meta, $sortfield );
+        ( $info->{$sortfield} ) = $meta->getRevisionInfo(1);
+    }
+    elsif ( !defined( $info->{$sortfield} ) ) {
+        $info->{$sortfield} =
+          TWiki::Render::renderFormFieldArg( $meta, $sortfield );
     }
 
     return $info;
@@ -1050,19 +1165,18 @@ sub _extractTopicInfo {
 
 # get the text and meta for a topic
 sub _getTextAndMeta {
-    my( $this, $topicInfo, $web, $topic ) = @_;
+    my ( $this, $topicInfo, $web, $topic ) = @_;
     my ( $meta, $text );
     my $store = $this->{session}->{store};
 
     # read from cache if it's there
-    if ( $topicInfo ) {
+    if ($topicInfo) {
         $text = $topicInfo->{$topic}->{text};
         $meta = $topicInfo->{$topic}->{meta};
     }
 
-    unless( defined $text ) {
-        ( $meta, $text ) =
-          $store->readTopic( undef, $web, $topic, undef );
+    unless ( defined $text ) {
+        ( $meta, $text ) = $store->readTopic( undef, $web, $topic, undef );
         $text =~ s/%WEB%/$web/gos;
         $text =~ s/%TOPIC%/$topic/gos;
     }
@@ -1074,28 +1188,28 @@ sub _getTextAndMeta {
 # 'wikiusername'. Revision info is cached in the search
 # object for speed.
 sub _getRev1Info {
-    my( $this, $web, $topic, $attr, $info ) = @_;
-    my $key = $web.'.'.$topic;
+    my ( $this, $web, $topic, $attr, $info ) = @_;
+    my $key   = $web . '.' . $topic;
     my $store = $this->{session}->{store};
     my $users = $this->{session}->{users};
 
-    unless( $info->{webTopic} && $info->{webTopic} eq $key ) {
+    unless ( $info->{webTopic} && $info->{webTopic} eq $key ) {
         my $meta = new TWiki::Meta( $this->{session}, $web, $topic );
-        my ( $d, $u ) = $meta->getRevisionInfo( 1 );
-        $info->{date} = $d;
-        $info->{user} = $u;
+        my ( $d, $u ) = $meta->getRevisionInfo(1);
+        $info->{date}     = $d;
+        $info->{user}     = $u;
         $info->{webTopic} = $key;
     }
-    if( $attr eq 'username' ) {
-        return $users->getLoginName($info->{user});
+    if ( $attr eq 'username' ) {
+        return $users->getLoginName( $info->{user} );
     }
-    if( $attr eq 'wikiname' ) {
+    if ( $attr eq 'wikiname' ) {
         return $users->getWikiName( $info->{user} );
     }
-    if( $attr eq 'wikiusername' ) {
-        return $users->webDotWikiName($info->{user});
+    if ( $attr eq 'wikiusername' ) {
+        return $users->webDotWikiName( $info->{user} );
     }
-    if( $attr eq 'date' ) {
+    if ( $attr eq 'date' ) {
         return TWiki::Time::formatTime( $info->{date} );
     }
 
@@ -1105,13 +1219,15 @@ sub _getRev1Info {
 # With the same argument as $pattern, returns a number which is the count of
 # occurences of the pattern argument.
 sub _countPattern {
-    my( $theText, $thePattern ) = @_;
+    my ( $theText, $thePattern ) = @_;
 
-    $thePattern =~ s/([^\\])([\$\@\%\&\#\'\`\/])/$1\\$2/go;  # escape some special chars
-    $thePattern =~ /(.*)/;     # untaint
+    $thePattern =~
+      s/([^\\])([\$\@\%\&\#\'\`\/])/$1\\$2/go;    # escape some special chars
+    $thePattern =~ /(.*)/;                        # untaint
     $thePattern = $1;
     my $OK = 0;
     eval {
+
         # counting hack, see: http://dev.perl.org/perl6/rfc/110.html
         $OK = () = $theText =~ /$thePattern/g;
     };
