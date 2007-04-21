@@ -18,13 +18,15 @@ sub usage {
  Must be run from the root of a SVN checkout tree
 
  pseudo-install optional modules in a SVN checkout tree
- This is done by a simple copy or link of the files listed in the MANIFEST
+ This is done by a link or copy of the files listed in the MANIFEST
  for each module. The installer script is not called.
- It should be equivalent to a tar zx of the packaged module over the dev tree.
+ It should be almost equivalent to a tar zx of the packaged module
+ over the dev tree.
 
- Usage: pseudo-install.pl [-link] [all|default] <module>...
-    -link - link instead of copy (using ln -s)
-    -uninstall - self explanatory
+ Usage: pseudo-install.pl [-link] [-copy] [all|default] <module>...
+    -link - create links (default behaviour)
+    -copy - copy instead of linking
+    -uninstall - self explanatory (doesn't remove dirs)
     all - install all modules found in twikiplugins
     default - install modules listed in tools/MANIFEST
     <module>... one or more modules to install e.g. FirstPlugin SomeContrib ...
@@ -59,7 +61,7 @@ sub installModule {
     }
 
     my $manifest = findRelativeTo($moduleDir."lib/TWiki/$subdir/$module/",'MANIFEST');
-    
+
     if( -e "$manifest" ) {
         open( F, "<$manifest" ) || die $!;
         foreach my $file ( <F> ) {
@@ -174,14 +176,16 @@ unless (@ARGV) {
     exit 1;
 }
 
+$install = \&just_link;
 if ($ARGV[0] eq '-link') {
     shift(@ARGV);
     $install = \&just_link;
+} elsif ($ARGV[0] eq '-copy') {
+    shift(@ARGV);
+    $install = \&copy_in;
 } elsif ($ARGV[0] eq '-uninstall') {
     shift(@ARGV);
     $install = \&uninstall;
-} else {
-    $install = \&copy_in;
 }
 
 my @modules;
