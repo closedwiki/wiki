@@ -57,12 +57,12 @@ sub initPlugin {
 sub REDIRECT {
     my ( $session, $params, $topic, $web ) = @_;
 
-    my $context   = TWiki::Func::getContext();
-    my $newWeb    = $web;
-    my $newTopic  = '';
-    my $anchor    = '';
-    my $urlparams = '';
-    my $dest      = $params->{'newtopic'} || $params->{_DEFAULT};
+    my $context     = TWiki::Func::getContext();
+    my $newWeb      = $web;
+    my $newTopic    = '';
+    my $anchor      = '';
+    my $queryString = '';
+    my $dest        = $params->{'newtopic'} || $params->{_DEFAULT};
 
     my $webNameRegex  = TWiki::Func::getRegularExpression('webNameRegex');
     my $wikiWordRegex = TWiki::Func::getRegularExpression('wikiWordRegex');
@@ -70,17 +70,25 @@ sub REDIRECT {
 
     # Redirect only on view
     # Support Codev.ShorterURLs: do not redirect on edit
-    if ( $dest 
-        && ( !$context->{'edit'} )
-        || ( !$context->{'save'} )
-       ) {
+    if (   $dest
+        && !$context->{'edit'}
+        && !$context->{'save'}
+        && !$context->{'preview'} )
+    {
 
         my $query = TWiki::Func::getCgiQuery();
-        
+
+        my $queryString = "";
+        my $param;
+        foreach my $param ( $query->param ) {
+            $queryString .= "&" if $queryString;
+            $queryString .= "$param=" . $query->param("$param");
+        }
+
         # do not redirect when param "redirect=no" is passed
-        my $noredirect = $query->param(-name => 'noredirect') || '';
+        my $noredirect = $query->param( -name => 'noredirect' ) || '';
         return '' if $noredirect eq 'on';
-        
+
         $dest = TWiki::Func::expandCommonVariables( $dest, $topic, $web );
 
         # redirect to URL
@@ -98,6 +106,7 @@ sub REDIRECT {
         if ( $dest =~ /^((.*?)\.)*(.*?)(\#.*|\?.*|$)$/ ) {
             $newWeb = $2 || $web || '';
             $newTopic = $3 || '';
+
             # ignore anchor and params here
             $topicLocation = "$newWeb.$newTopic";
         }
@@ -106,19 +115,23 @@ sub REDIRECT {
             return
 "%RED% Could not redirect to topic $topicLocation (the topic does not seem to exist) %ENDCOLOR%";
         }
-        
-        if ($dest =~ /($anchorRegex)/) {
+
+        if ( $dest =~ /($anchorRegex)/ ) {
             $anchor = $1;
         }
-        
-        if ($dest =~ /(\?.*)/) {
-	        $urlparams = $1;
+
+        if ( $dest =~ /(\?.*)/ ) {
+
+            #override url params
+            $queryString = $1;
         }
+        
+        $queryString = "?" . $queryString if $queryString;
 
         # topic exists
         TWiki::Func::redirectCgiQuery( $query,
             TWiki::Func::getViewUrl( $newWeb, $newTopic ) . $anchor
-              . $urlparams );
+              . $queryString );
 
     }
 

@@ -4,7 +4,7 @@
 Create a redirect to another topic or website.
 
 I typically use this to make easy-to-type shortforms/acronyms of topic names.  For example:
-	* actual content appears under =<nop>Main.LightweightDirectoryAccessProtocol=
+	* Actual content appears under =<nop>Main.LightweightDirectoryAccessProtocol=
 	* =<nop>Main.LDAP= contains just a redirect tag.  Referencing =<nop>Main.LDAP= anywhere or entering it in the _Go_ box takes one directly to =<nop>Main.LightweightDirectoryAccessProtocol=
 
 %TOC%
@@ -13,7 +13,11 @@ I typically use this to make easy-to-type shortforms/acronyms of topic names.  F
 	* Redirect to a topic within the web: =%<nop>REDIRECT{"SomeTopic"}%=
 	* Redirect to a topic in another web: =%<nop>REDIRECT{"Someweb.SomeTopic"}%=
 	* Redirect to any URL: =%<nop>REDIRECT{"http://domain.com/"}%=
-
+	* Pass parameters:
+	   * Url parameters are passed on: =http://domain.com/twiki/bin/view/Main/TopicThatContainsARedirect?q=LDAP"}%=. The landing topic url will contain these parameters
+	   * Parameters can also be passed to the variable: =%<nop>REDIRECT{"Someweb.SomeTopic?q=LDAP"}%=
+	   * =REDIRECT= parameters override url parameters
+	
 ---++ Prevent redirecting
 To view the topic that contains a =REDIRECT=, pass parameter =noredirect=on= to the url. For example:
 
@@ -34,7 +38,7 @@ http://domain.com/twiki/bin/view/Main/WebHome?noredirect=on
 
 ---++ Test topics
 If installed:
-	* Sandbox.RedirectPluginTest - this topic should redirect to:
+	* Sandbox.RedirectPluginTest - this topic should redirect to landing page:
 	* Sandbox.RedirectPluginDestination
 
 ---++ Installation Instructions
@@ -52,8 +56,9 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main/SteveMokris |
-|  Plugin Version: | 21 Apr 2006 |
+|  Plugin Version: | 22 Apr 2006 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  22 Apr 2007: | Arthur Clemens: url parameters are now passed on. Adapted from TWiki:Main.JohnRouillard. |
 |  21 Apr 2007: | Arthur Clemens: fixed redirect to non-wiki word topics; added =noredirect=on= parameter; added support for TWiki:Codev.ShorterURLs. |
 |  10 Aug 2006: | Ability to redirect to URL restored by TWiki:Main/ThomasWeigert. Also added support for URL parameters. Fixed a few bugs. |
 |  09 Jun 2006: | Dakar port by TWiki:Main/MeredithLesley |
