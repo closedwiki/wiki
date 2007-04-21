@@ -53,8 +53,10 @@ sub parseTables {
                 }
                 $read{"$iw.$it"} = 1;
                 my ($meta, $text) = TWiki::Func::readTopic($iw, $it);
-                $text =~ m/%EDITTABLE{([^\n]*)}%/s;
-                my $params = $1 || '';
+                my $params = '';
+                if ($text =~ m/%EDITTABLE{([^\n]*)}%/s) {
+                    $params = $1;
+                }
                 if ($params) {
                     $params = TWiki::Func::expandCommonVariables(
                         $params, $iw, $it);
@@ -150,7 +152,7 @@ sub renderForEdit {
     my $attrs = $this->{attrs};
     $firstRow = 0 unless TWiki::isTrue($attrs->{headerislabel});
 
-    my $format = $attrs->{format};
+    my $format = $attrs->{format} || '';
     # SMELL: Have to double-encode the format param to defend it
     # against the rest of TWiki. We use the escape char '-' as it
     # isn't used by TWiki.

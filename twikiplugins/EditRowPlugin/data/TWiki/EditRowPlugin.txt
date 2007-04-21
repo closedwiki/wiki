@@ -82,16 +82,19 @@ settings of =changerows= and =quietsave=.
    * %ICON{arrowdown}% Move this row down one row in the table
    * %ICON{stop}% cancels the open edit
 
-If the plugin is installed and working *and you can modify this topic* then
-the following examples will be editable.
+<!--
+   * Set ERPENABLED = %IF{"{Plugins}{EditRowPlugin}{Enabled}" then="EDITTABLE" else="<nop>EDITTABLE"}%
+-->
+The !EditRowPlugin is %IF{"{Plugins}{EditRowPlugin}{Enabled}" else=" *not* currently enabled in this TWiki, so the examples are disabled." then="enabled in this TWiki. Click on the buttons to try it out."}%
+
 ---+++ Example 1
-%EDITTABLE{ format="| row, -1 | text, 20, init | select, 1, one, two, three, four | radio, 3,:-),:-I,:-( | label, 20 |" changerows="on" quietsave="on" }%
+%%ERPENABLED%{ format="| row, -1 | text, 20, init | select, 1, one, two, three, four | radio, 3,:-),:-I,:-( | label, 20 |" changerows="on" quietsave="on" }%
 | *Nr* | *Text field* | *Drop down* | *Mood* | *Timestamp* |
 | 1 | hello table | one | :-) | 26 Jun 2002 12:30 |
 | 2 |  | two | :-( | 27 Jun 2002 12:40 |
 
 ---+++ Example 2
-%EDITTABLE{ format="| label,12 | text, 40 |" }%
+%%ERPENABLED%{ format="| label,12 | text, 40 |" }%
 | *Key* | *Value* |
 | Name: | John Smith |
 | Gender: | M |
@@ -99,7 +102,7 @@ the following examples will be editable.
 | City: | New York |
 
 ---+++ Example 3
-%EDITTABLE{ format="| label,12 | textarea, 3x30 |" }%
+%%ERPENABLED%{ format="| label,12 | textarea, 3x30 |" }%
 | *Model* | *Description* |
 | 345TG66 | Short, with sightly concave upper surface, and devilish nuts |
 | 9A-11 | A new model for 2007, but not quite as pretty as the 9A-10 |
@@ -136,6 +139,7 @@ The value of each individual cell is stored in a parameter called =erp_&lt;table
 |  Copyright: | &copy; 2007 Wind<nop>River Inc. |
 |  License: | [[http://www.gnu.org/licenses/gpl.html][GPL (Gnu General Public License)]] |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  13487 | Bugs:Item3925 - fixed infinite loop when included format doesn't exist |
 |  13359 | Bugs:Item3875 - can now edit top row of tables. Also now writes row numbers back to the topic, which was needed to support some compatible apps. |
 |  13335 | Fixed broken date prompt, and problem with radio buttons, improved and documented REST interface for Javascript authors |
 |  13291 | Added full table editing, including moving rows within the table |
