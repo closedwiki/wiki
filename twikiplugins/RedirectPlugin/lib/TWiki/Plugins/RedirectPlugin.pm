@@ -70,7 +70,10 @@ sub REDIRECT {
 
     # Redirect only on view
     # Support Codev.ShorterURLs: do not redirect on edit
-    if ( $dest && !$context->{'edit'}) {
+    if ( $dest 
+        && ( !$context->{'edit'} )
+        || ( !$context->{'save'} )
+       ) {
 
         my $query = TWiki::Func::getCgiQuery();
         
