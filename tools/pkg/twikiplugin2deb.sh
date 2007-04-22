@@ -6,7 +6,12 @@
 # Christopher Huhn, GSI <C.Huhn@gsi.de>, 2005
 #
 
+[ "$DEBEMAIL" ] || DEBEMAIL="SvenDowideit@DistributedINFORMATION.com" || DEBEMAIL="$(whoami)@$(cat /etc/mailname)"
+[ "$DEBFULLNAME" ] || DEBFULLNAME="Sven Dowideit" || DEBFULLNAME="$(whoami)"
+
 CURL=/usr/bin/curl
+#either zip or tgz
+ARCHIVETYPE=tgz
 
 if [ ! -x $CURL ]
 then
@@ -14,40 +19,92 @@ then
     exit 1
 fi
 
-# quick'n'dirty list of all plugins:
-# curl http://twiki.org/cgi-bin/view/Plugins/WebTopicList?skin=rss | \
-#      grep "Plugin$" | cut -f 2 -d ' '
+if [ ! $1 ]
+then
+    BUILD_DIR=/tmp/build_twiki_plugins
+    PLUGINFILE=PluginsList
+    echo no contrib specified, building all in $BUILD_DIR
+
+    if [ ! -e $BUILD_DIR ] 
+    then
+        mkdir $BUILD_DIR
+    fi
+    
+    cp $0 $BUILD_DIR
+    cd $BUILD_DIR
+
+    if [ ! -e $BUILD_DIR/$PLUGINFILE ] 
+    then
+        if [ ! -e $BUILD_DIR/$PLUGINFILE ] 
+        then
+            echo get Contribs list from TWiki.org
+            # quick'n'dirty list of all plugins:
+            `curl http://twiki.org/cgi-bin/view/Plugins/WebTopicList?skin=rss > PluginsWeb`
+        fi
+#        `cat PluginsWeb | grep "Plugins$" | cut -f 3 -d ' ' > $PLUGINFILE`
+        `cat PluginsWeb | grep "Skin$" | cut -f 3 -d ' ' >> $PLUGINFILE`
+#        `cat PluginsWeb | grep "Contrib$" | cut -f 3 -d ' ' >> $PLUGINFILE`
+    fi    
+
+    PLUGINS=`cat $PLUGINFILE`
+    for plugin in $PLUGINS 
+    do
+        echo building debian package for $plugin
+	    $0 $plugin
+    done;
+
+    exit 1
+fi
 
 
 PLUGIN=$1
 TWIKI_HOMEURL=http://twiki.org
 TWIKI_SCRIPTURLPATH=/cgi-bin
-TWIKI_PUBURLPATH=/p/pub/
-PLUGINURL=$TWIKI_HOMEURL$TWIKI_PUBURLPATH/Plugins/$PLUGIN/$PLUGIN.zip
+TWIKI_PUBURLPATH=/p/pub
+PLUGINURL=$TWIKI_HOMEURL$TWIKI_PUBURLPATH/Plugins/$PLUGIN/$PLUGIN.$ARCHIVETYPE
 PACKAGE=twiki-$(echo $PLUGIN | tr 'A-Z' 'a-z')
 # TODO: 
 #VERSION=$(date +%Y%m%d)
 LAST_MODIFIED="$(HEAD $PLUGINURL | grep Last-Modified: | cut -f 2- -d ' ')"
+if [ ! "$LAST_MODIFIED" ]; then
+    echo "error: $PLUGINURL does not exist"
+    exit 0;
+fi
 echo "$PLUGINURL last modified : $LAST_MODIFIED"
  VERSION=$(date -d "$LAST_MODIFIED" +"%y%m%d")
 echo "Version : $VERSION"
 
-[ "$DEBEMAIL" ] || DEBEMAIL="$(whoami)@$(cat /etc/mailname)"
-# TODO: get the fullname
-[ "$DEBFULLNAME" ] || DEBFULLNAME="$(whoami)"
+YEAR=$(date -d "$LAST_MODIFIED" +"%y")
+if [ $YEAR != "07" ]
+then
+    echo "Package too old, not building : $YEAR"
+    exit 0
+fi
 
 
- if [ ! -e $PLUGIN-$VERSION.zip ]; then
-        echo "$CURL $PLUGINURL -o $PLUGIN-$VERSION.zip"
-       $CURL $PLUGINURL -o $PLUGIN-$VERSION.zip
-        touch -d "$LAST_MODIFIED" $PLUGIN-$VERSION.zip
+ if [ ! -e $PLUGIN-$VERSION.$ARCHIVETYPE ]; then
+        echo "getting : $CURL $PLUGINURL -o $PLUGIN-$VERSION.$ARCHIVETYPE"
+       $CURL -f $PLUGINURL -o $PLUGIN-$VERSION.$ARCHIVETYPE
+        touch -d "$LAST_MODIFIED" $PLUGIN-$VERSION.$ARCHIVETYPE
  fi
+
+if [ -e $PACKAGE-$VERSION ]; then
+    echo error: $PACKAGE-$VERSION directory already exists, not building new package
+    exit 0;
+fi
 
 [ -d $PACKAGE-$VERSION ] || mkdir $PACKAGE-$VERSION
 
 cd $PACKAGE-$VERSION
 
-unzip -u ../$PLUGIN-$VERSION.zip
+if [ $ARCHIVETYPE = "zip" ]
+then
+    unzip -u ../$PLUGIN-$VERSION.$ARCHIVETYPE
+fi
+if [ $ARCHIVETYPE = "tgz" ]
+then
+    tar zxvf ../$PLUGIN-$VERSION.$ARCHIVETYPE
+fi
 
 # Get some info from data/TWiki/$PLUGIN.txt
 # Some plugins install to a different web (i. e. JavaDocPlugin). Is that a bug?
@@ -65,13 +122,14 @@ fi
 
 #TODO: process dependencies of perl stuff:
 # for PERL_MODULE in $(egrep -h "^\s*(use|require)" $(find lib/ -name *.pm) | sort | uniq); do ...; done
+# it would be nice to process the DEPENDANCIES file, but its not included in the archive, so we have to parse&revers the hash in installer.pl
 
 mkdir debian
 
 ##### debian/changelog ######
 
 cat <<EOF > debian/changelog
-$PACKAGE ($VERSION-1) unstable; urgency=low
+$PACKAGE (0:$VERSION-1) unstable; urgency=low
 
   * Initial debianization with twikiplugin2deb
 
