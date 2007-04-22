@@ -288,7 +288,7 @@ sub std_tests  {
     #    $this->{test_web}, $this->{test_topic});
         
     #$this->assert_does_not_match(qr/OkTopic/, $result);
-    #$this->assert_matches(qr/Ok-Topic/, $result);
+    #$this->assert_does_not_match(qr/Ok-Topic/, $result);
     #$this->assert_matches(qr/Ok\+Topic/, $result);
 }
 
