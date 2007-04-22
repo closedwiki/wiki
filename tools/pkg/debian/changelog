@@ -1,10 +1,11 @@
 twiki (1:4.1.2-1) unstable; urgency=low
 
+  * add commented out mod_perl on apache 2 support using IFModule
   * block php from pub and spiders from DOS'ing us
   * remove 192.168.1.10 from configure access (Closes: #412057)
   * update to twiki release 4.1.2 (Closes: #414361)
 
- -- Sven Dowideit <SvenDowideit@DistributedINFORMATION.com>  Sun, 22 Apr 2007 08:53:40 +0100
+ -- Sven Dowideit <SvenDowideit@DistributedINFORMATION.com>  Sun, 15 Apr 2007 08:53:40 +0100
 
 
 twiki (1:4.0.5-9.1) unstable; urgency=low
