@@ -35,15 +35,15 @@ then
 
     if [ ! -e $BUILD_DIR/$PLUGINFILE ] 
     then
-        if [ ! -e $BUILD_DIR/$PLUGINFILE ] 
+        if [ ! -e $BUILD_DIR/PluginsFastReport ] 
         then
             echo get Contribs list from TWiki.org
             # quick'n'dirty list of all plugins:
-            `curl http://twiki.org/cgi-bin/view/Plugins/WebTopicList?skin=rss > PluginsWeb`
+            `curl 'http://twiki.org/cgi-bin/view/Plugins/FastReport?skin=text;contenttype=text/plain' > PluginsFastReport`
+            #TODO: replace with 
+            #which is what configure uses..
         fi
-#        `cat PluginsWeb | grep "Plugins$" | cut -f 3 -d ' ' > $PLUGINFILE`
-        `cat PluginsWeb | grep "Skin$" | cut -f 3 -d ' ' >> $PLUGINFILE`
-#        `cat PluginsWeb | grep "Contrib$" | cut -f 3 -d ' ' >> $PLUGINFILE`
+        `cat PluginsFastReport | grep "topic: " | cut -f 3 -d ' ' > $PLUGINFILE`
     fi    
 
     PLUGINS=`cat $PLUGINFILE`
@@ -129,7 +129,7 @@ mkdir debian
 ##### debian/changelog ######
 
 cat <<EOF > debian/changelog
-$PACKAGE (0:$VERSION-1) unstable; urgency=low
+$PACKAGE ($VERSION-1) unstable; urgency=low
 
   * Initial debianization with twikiplugin2deb
 
