@@ -31,6 +31,6 @@ dpkg-buildpackage -rfakeroot
 #interdiff -z twiki_4.1.2-{8,9}.diff.gz
 #upload this too
 
-
-#copy into my debarchive incoming, so i can test from there
-cp /tmp/build_deb/* /var/lib/debarchiver/incoming/stable
+#push into the DistributedINFORMATION.com apt repository
+#cd repos
+#./updateRepos.sh
