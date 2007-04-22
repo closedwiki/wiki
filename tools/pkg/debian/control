@@ -1,7 +1,7 @@
 Source: twiki
 Section: web
 Priority: optional
-Maintainer: Sven Dowideit <svenud@ozemail.com.au>
+Maintainer: Sven Dowideit <SvenDowideit@DistributedINFORMATION.com>
 Uploaders: Amaya Rodrigo Sastre <amaya@debian.org>
 Build-Depends: debhelper (>= 5), tardy, po-debconf, dpatch
 Standards-Version: 3.7.2
