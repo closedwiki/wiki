@@ -130,10 +130,6 @@ case "$1" in
 		fi
 	fi
 
-	if [ ! -e /usr/share/perl5/TWiki.cfg ]; then
-		ln -s /etc/twiki/TWiki.cfg /usr/share/perl5/TWiki.cfg 
-	fi
-
 	#remove the  .htaccess file - moved to apache-twiki.conf
 	if [ -e /usr/lib/cgi-bin/twiki/.htaccess ]; then
 		rm /usr/lib/cgi-bin/twiki/.htaccess 
