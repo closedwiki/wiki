@@ -231,7 +231,7 @@ HERE
               $this->NOTE(<<HERE
 This is the actual PATH setting that will be used by Perl to run
 programs. It is normally identical to {SafeEnvPath}, unless
-that variable is empty, in which case this will be the webserver users
+that variable is empty, in which case this will be the webserver user's
 standard path..
 HERE
                   ));
