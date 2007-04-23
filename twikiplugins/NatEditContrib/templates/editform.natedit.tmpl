@@ -20,5 +20,6 @@
 <input type="hidden" name="editaction" value="form" />
 <input type="hidden" name="cmd" value="%CMD%" /><div></div>
 %TMPL:P{"edittoolbar"}%
-%FORMFIELDS%
+%TMPL:P{"formfields"}%
 </form></div><!-- /patternFormHolder-->%TMPL:END%
+%TMPL:DEF{"formfields"}%%FORMFIELDS%%TMPL:END%

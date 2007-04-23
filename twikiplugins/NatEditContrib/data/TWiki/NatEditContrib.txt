@@ -73,6 +73,7 @@ Sponsored by [[http://www.trivadis.com][Trivadis AG]]
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Version: | %$VERSION% |
 |  Change History: | |
+|  23 Apr 2007 | fixed IE freezing on resizing the edit window |
 |  05 Apr 2007 | added support for <nop>EditContrib and =editform= |
 |  04 Apr 2007 | added css file; \
                    added monospace &lt;-&gt; propotional font toggles; \
@@ -88,6 +89,6 @@ Sponsored by [[http://www.trivadis.com][Trivadis AG]]
 |  Feedback: | TWiki:Plugins/%TOPIC%Dev |
 |  Appraisal: | TWiki:Plugins/%TOPIC%Appraisal |
 
--- TWiki:Main.MichaelDaum - 05 Apr 2007
+-- TWiki:Main.MichaelDaum - 23 Apr 2007
 
 %META:FILEATTACHMENT{name="screenshot1.png" attachment="screenshot1.png" attr="" comment="" date="1175688869" path="screenshot1.png" size="61040" stream="screenshot1.png" user="Main.TWikiContributor" version="1"}%
