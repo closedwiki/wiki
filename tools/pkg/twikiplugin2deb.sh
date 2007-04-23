@@ -6,6 +6,8 @@
 # Christopher Huhn, GSI <C.Huhn@gsi.de>, 2005
 #
 
+START_DIR=`pwd`
+
 [ "$DEBEMAIL" ] || DEBEMAIL="SvenDowideit@DistributedINFORMATION.com" || DEBEMAIL="$(whoami)@$(cat /etc/mailname)"
 [ "$DEBFULLNAME" ] || DEBFULLNAME="Sven Dowideit" || DEBFULLNAME="$(whoami)"
 
@@ -30,6 +32,7 @@ then
         mkdir $BUILD_DIR
     fi
     
+   
     cp $0 $BUILD_DIR
     cd $BUILD_DIR
 
@@ -40,8 +43,6 @@ then
             echo get Contribs list from TWiki.org
             # quick'n'dirty list of all plugins:
             `curl 'http://twiki.org/cgi-bin/view/Plugins/FastReport?skin=text;contenttype=text/plain' > PluginsFastReport`
-            #TODO: replace with 
-            #which is what configure uses..
         fi
         `cat PluginsFastReport | grep "topic: " | cut -f 3 -d ' ' > $PLUGINFILE`
     fi    
@@ -49,8 +50,19 @@ then
     PLUGINS=`cat $PLUGINFILE`
     for plugin in $PLUGINS 
     do
+        if [ $plugin == 'CaptchaPlugin' ]
+        then
+            continue
+        fi
         echo building debian package for $plugin
 	    $0 $plugin
+	    PACKAGE=twiki-$(echo $plugin | tr 'A-Z' 'a-z')
+	    if [ -r $BUILD_DIR/$PACKAGE*.changes ]
+	    then
+       	    cd $START_DIR/experimental
+    	    reprepro --ignore=wrongdistribution   include experimental $BUILD_DIR/$PACKAGE*.changes
+    	    cd $BUILD_DIR
+    	fi
     done;
 
     exit 1
@@ -63,19 +75,24 @@ TWIKI_SCRIPTURLPATH=/cgi-bin
 TWIKI_PUBURLPATH=/p/pub
 PLUGINURL=$TWIKI_HOMEURL$TWIKI_PUBURLPATH/Plugins/$PLUGIN/$PLUGIN.$ARCHIVETYPE
 PACKAGE=twiki-$(echo $PLUGIN | tr 'A-Z' 'a-z')
-# TODO: 
-#VERSION=$(date +%Y%m%d)
 LAST_MODIFIED="$(HEAD $PLUGINURL | grep Last-Modified: | cut -f 2- -d ' ')"
 if [ ! "$LAST_MODIFIED" ]; then
-    echo "error: $PLUGINURL does not exist"
-    exit 0;
+    #try zip
+    ARCHIVETYPE=zip
+    PLUGINURL=$TWIKI_HOMEURL$TWIKI_PUBURLPATH/Plugins/$PLUGIN/$PLUGIN.$ARCHIVETYPE
+    PACKAGE=twiki-$(echo $PLUGIN | tr 'A-Z' 'a-z')
+    LAST_MODIFIED="$(HEAD $PLUGINURL | grep Last-Modified: | cut -f 2- -d ' ')"
+    if [ ! "$LAST_MODIFIED" ]; then
+        echo "error: $PLUGINURL does not exist"
+        exit 0;
+    fi
 fi
 echo "$PLUGINURL last modified : $LAST_MODIFIED"
  VERSION=$(date -d "$LAST_MODIFIED" +"%y%m%d")
 echo "Version : $VERSION"
 
 YEAR=$(date -d "$LAST_MODIFIED" +"%y")
-if [ $YEAR != "07" ]
+if [ [$YEAR != "07"] && [$YEAR != "06"] ]
 then
     echo "Package too old, not building : $YEAR"
     exit 0
