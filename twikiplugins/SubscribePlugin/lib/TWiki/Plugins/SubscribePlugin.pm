@@ -1,3 +1,4 @@
+# See the bottom of the file for description, copyright and license information
 package TWiki::Plugins::SubscribePlugin;
 
 use strict;
@@ -37,30 +38,47 @@ sub _SUBSCRIBE {
     my $form;
     my $suid = $query->param( 'subscribe_uid' );
 
+    my $cur_user = TWiki::Func::getWikiName();
+
     if ($suid && $suid == $uid) {
         # We have been asked to subscribe
         my $topics = $query->param('subscribe_topic');
         $topics =~ /^(.*)$/;
         $topics = $1; # Untaint - we will check it later
         my $who = $query->param('subscribe_subscriber');
-        my $unsubscribe = $query->param('subscribe_remove');
-        $form = _subscribe($web, $topics, $who, $unsubscribe);
+        $who ||= $cur_user;
+        if ($who eq $TWiki::cfg{DefaultUserWikiName}) {
+            $form = _alert("Cannot subscribe $who");
+        } else {
+            my $unsubscribe = $query->param('subscribe_remove');
+            $form = _subscribe($web, $topics, $who, $cur_user, $unsubscribe);
+        }
     } else {
         my $who = $params->{who} || TWiki::Func::getWikiName();
-        my $topics = $params->{topic} || $topic;
-        my $prompt = $params->{prompt} || "Subscribe me to changes";
-        my $unsubscribe = $params->{unsubscribe} || 0;
+        if ($who eq $TWiki::cfg{DefaultUserWikiName}) {
+            $form = '';
+        } else {
+            my $topics = $params->{topic} || $topic;
+            my $unsubscribe = $params->{unsubscribe} || 0;
 
-        $form = <<FORM;
-<form name="subscriber_form$uid" method="POST" action="%SCRIPTURLPATH{view}%/%WEB%/%TOPIC%">
-<input type="hidden" name="subscribe_topic" value="$topics" />
-<input type="hidden" name="subscribe_subscriber" value="$who" />
-<input type="hidden" name="subscribe_remove" value="$unsubscribe" />
-<input type="hidden" name="subscribe_uid" value="$uid" />
-<input type="submit" name="subscribe_me" value="$prompt" />
-</form>
-FORM
-        $form =~ s/\n//g;
+            my $url = TWiki::Func::getScriptUrl(
+                $web, $topic, 'view',
+                subscribe_topic => $topics,
+                subscribe_subscriber => $who,
+                subscribe_remove => $unsubscribe,
+                subscribe_uid => $uid);
+            if ($params->{format}) {
+                $form = $params->{format};
+                $form =~ s/\$url/$url/g;
+                $form =~ s/\$wikiname/$who/g;
+            } elsif ($unsubscribe) {
+                $form = CGI::a({href => $url},
+                               "Unsubscribe <nop>$who from changes");
+            } else {
+                $form = CGI::a({href => $url},
+                               "Subscribe <nop>$who to changes");
+            }
+        }
     }
     $uid++;
     return $form;
@@ -71,21 +89,19 @@ sub _alert {
     return "<span class='twikiAlert'>$mess</span>";
 }
 
-# Handle a subscription request
+# Handle a (un)subscription request
 sub _subscribe {
-    my( $web, $topics, $subscriber ) = @_;
+    my( $web, $topics, $subscriber, $cur_user, $unsubscribe ) = @_;
 
     eval { require TWiki::Contrib::MailerContrib::WebNotify };
     return _alert("Failed to load MailerContrib")
       if $@;
 
-    my $cur_user = TWiki::Func::getWikiName();
-
-    $subscriber ||= $cur_user;
-    return _alert("bad subscriber '$subscriber'") unless
-      $subscriber =~ m/($TWiki::cfg{LoginNameFilterIn})/ ||
-        $subscriber =~ m/^([A-Z0-9._%-]+@[A-Z0-9.-]+\.[A-Z]{2,4})$/i ||
-          $subscriber =~ m/($TWiki::regex{wikiWordRegex})/o;
+    return _alert("bad subscriber '$subscriber'") if
+      !($subscriber =~ m/($TWiki::cfg{LoginNameFilterIn})/ ||
+          $subscriber =~ m/^([A-Z0-9._%-]+@[A-Z0-9.-]+\.[A-Z]{2,4})$/i ||
+            $subscriber =~ m/($TWiki::regex{wikiWordRegex})/o) ||
+              $subscriber eq $TWiki::cfg{DefaultUserWikiName};
     $subscriber = $1; # untaint
 
     # replace wildcards for checking - we want them
@@ -98,33 +114,49 @@ sub _subscribe {
     return _alert("bad topic '$topics'") if
       $checktopic =~ m/$TWiki::cfg{NameFilter}/o;
 
-    # First make sure we are allowed to subscribe
-    my $allowed = TWiki::Func::checkAccessPermission(
-        'SUBSCRIBE',
-        $cur_user,
-        undef,
-        $TWiki::cfg{NotifyTopicName}, $web,
-        undef );
-    return _alert("not allowed to subscribe to this web")
-      unless $allowed;
-
-    $allowed = TWiki::Func::checkAccessPermission(
-        'CHANGE',
-        $cur_user,
-        undef,
-        $TWiki::cfg{NotifyTopicName}, $web,
-        undef );
-    return _alert("$cur_user is not allowed to change <nop>$TWiki::cfg{NotifyTopicName} in this web")
-      unless $allowed;
-
     my $wn = new TWiki::Contrib::MailerContrib::WebNotify(
         $TWiki::Plugins::SESSION, $web, $TWiki::cfg{NotifyTopicName} );
 
-    $wn->subscribe( $subscriber, $topics );
+    my $mess;
+    if ($unsubscribe && $unsubscribe =~ /^(on|true|yes)$/i) {
+        $wn->unsubscribe( $subscriber, $topics );
+        $mess = 'unsubscribed from';
+    } else {
+        $wn->subscribe( $subscriber, $topics );
+        $mess = 'subscribed to';
+    }
 
     $wn->writeWebNotify();
 
-    return _alert("$subscriber has been subscribed to $web.<nop>$topics");
+    return _alert("$subscriber has been $mess <nop>$web.<nop>$topics");
 }
 
 1;
+__END__
+
+Plugin for TWiki Enterprise Collaboration Platform, http://TWiki.org/
+
+Copyright (C) 2007 Crawford Currie http://c-dot.co.uk
+and TWiki Contributors. All Rights Reserved. TWiki Contributors
+are listed in the AUTHORS file in the root of this distribution.
+NOTE: Please extend that file, not this notice.
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version. For
+more details read LICENSE in the root of this distribution.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+For licensing info read LICENSE file in the TWiki root.
+
+Author: Crawford Currie http://c-dot.co.uk
+
+This plugin supports a subscription button that, when embedded in a topic,
+will add the clicker to the WebNotify for that topic. It uses the API
+published by the MailerContrib to manage the subscriptions in WebNotify.
+
+TWikiGuest cannot be subscribed, only logged-in users.
