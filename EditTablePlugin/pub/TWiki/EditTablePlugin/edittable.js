@@ -71,7 +71,7 @@ function edittableInit(form_name, asset_url) {
 		insertRowSeparators();
 
 	}
-	sRowSelection = new RowSelectionObject();
+	sRowSelection = new RowSelectionObject(asset_url);
 	retrieveAlternatingRowColors();
 	fixStyling();
   
@@ -162,7 +162,6 @@ function insertActionButtons(asset_url) {
 			action_butt = document.createElement('IMG');
 			action_butt.setAttribute('title', 'Move row');
 			action_butt.moveButtonSrc = asset_url + '/btn_move.gif';
-			action_butt.targetButtonSrc = asset_url + '/btn_target.gif';
 			action_butt.setAttribute('src', action_butt.moveButtonSrc);
 			action_butt.handler = moveHandler;
 			attachEvent(action_butt, 'click', action_butt.handler);
@@ -268,21 +267,69 @@ function countRowColumns(row_el) {
 /**
 
 */
+function selectRow(rownr) {
+	if (rownr == null && sRowSelection.row == null) {
+		return;
+	}
+	var top_image    = "none";
+	var bottom_image = "none";
+
+	if (rownr != null) {
+		sRowSelection.row    = sEditTable.rows[rownr];
+		sRowSelection.rownum = rownr;
+		top_image            = "url(" + sRowSelection.topImage + ")";
+		bottom_image         = "url(" + sRowSelection.bottomImage + ")";
+		var sep_row = sRowSelection.row.previousSibling;
+		while (sep_row != null && sep_row.tagName != 'TR') {
+			sep_row = sep_row.previousSibling;
+		}
+		sRowSelection.topSep = sep_row;
+		sep_row = sRowSelection.row.nextSibling;
+		while (sep_row != null && sep_row.tagName != 'TR') {
+			sep_row = sep_row.nextSibling;
+		}
+		sRowSelection.bottomSep = sep_row;
+	}
+
+	/* Set the style class of data cell elements in the selected row */
+	var tableCells = sRowSelection.row.getElementsByTagName('TD');
+	for (var i=0; i<tableCells.length; ++i) {
+		if (rownr != null) {
+			addClass(tableCells[i], 'editTableActionSelectedCell');
+		} else {
+			removeClass(tableCells[i], 'editTableActionSelectedCell');
+		}
+	}
+
+	/* Place images of moving dashes above and below the selected row */
+	if (sRowSelection.topSep != null) {
+		var sepCells = sRowSelection.topSep.getElementsByTagName('TD');
+		sepCells[0].style.backgroundImage = top_image;
+		sepCells[0].style.backgroundRepeat = "repeat-x";
+	}
+	if (sRowSelection.bottomSep != null) {
+		var sepCells = sRowSelection.bottomSep.getElementsByTagName('TD');
+		sepCells[0].style.backgroundImage = bottom_image;
+		sepCells[0].style.backgroundRepeat = "repeat-x";
+	}
+	if (rownr == null) {
+		sRowSelection.row       = null;
+		sRowSelection.rownum    = null;
+		sRowSelection.topSep    = null;
+		sRowSelection.bottomSep = null;
+	}
+}
+
+/**
+
+*/
 function moveHandler(evt) {
 	var rownr = getEventAttr(evt, 'rownr');
 	if (sRowSelection.rownum != null) {
 		return;
 	}
-	var row_elem             = sEditTable.rows[rownr];
-	var action_cell          = row_elem.firstChild;
-	sRowSelection.row        = row_elem;
-	sRowSelection.rownum     = rownr;
-	var tableCells = row_elem.getElementsByTagName('TD');
-	for (var i=0; i<tableCells.length; ++i) {
-		addClass(tableCells[i], 'editTableActionSelectedCell');	
-	}
+	selectRow(rownr);
 	switchDeleteButtons(evt);
-	switchMoveButtons('active', rownr);
 }
 
 /**
@@ -294,14 +341,7 @@ function sepClickHandler(evt) {
 		return;
 	}
 	moveRow(sRowSelection.rownum, rownr);
-	var row_elem             = sEditTable.rows[sRowSelection.rownum];
-	var tableCells = row_elem.getElementsByTagName('TD');
-	for (var i=0; i<tableCells.length; ++i) {
-		removeClass(tableCells[i], 'editTableActionSelectedCell');	
-	}
-	switchMoveButtons('normal', sRowSelection.rownum);
-	sRowSelection.row        = null;
-	sRowSelection.rownum     = null;
+	selectRow(null);
 	switchDeleteButtons(evt);
 }
 
@@ -340,17 +380,6 @@ function switchDeleteButtons (evt) {
 /**
 
 */
-function switchMoveButtons(mode, selectedRow) {
-	var row_elem = sEditTable.rows[selectedRow];
-	var action_cell = row_elem.firstChild;
-	var moveButton = action_cell.moveButton;
-	moveButton.src = (mode == 'active') ? moveButton['targetButtonSrc'] : moveButton['moveButtonSrc'];
-}
-
-
-/**
-
-*/
 function deleteHandler(evt) {
   var rownr = getEventAttr(evt, 'rownr');
 
@@ -372,8 +401,7 @@ function deleteHandler(evt) {
   }
 
   if (sRowSelection.rownum == rownr) {
-    sRowSelection.row        = null;
-    sRowSelection.rownum     = null;
+    selectRow(null);
   }
 
   sEditTable.numrows--;
@@ -526,9 +554,13 @@ function workaroundIECheckboxBug(container) {
 
 */
 
-function RowSelectionObject() {
-  this.row        = null;
-  this.rownum     = null;
+function RowSelectionObject(asset_url) {
+  this.topImage    = asset_url + '/dash_right.gif';
+  this.bottomImage = asset_url + '/dash_left.gif';
+  this.row         = null;
+  this.rownum      = null;
+  this.topSep      = null;
+  this.bottomSep   = null;
   return this;
 }
 
