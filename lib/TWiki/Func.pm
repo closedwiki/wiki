@@ -1152,6 +1152,44 @@ sub moveWeb {
 
 =pod
 
+---++ eachChangeSince($web, $time) -> $iterator
+
+Get an iterator over the list of all the changes in the given web between
+=$time= and now. $time is a time in seconds since 1st Jan 1970, and is not
+guaranteed to return any changes that occurred before (now - 
+{Store}{RememberChangesFor}). {Store}{RememberChangesFor}) is a
+setting in =configure=. Changes are returned in oldest-first
+order.
+
+Use it as follows:
+<verbatim>
+    my $iterator = TWiki::Func::eachChangeSince(
+        $web, time() - 7 * 24 * 60 * 60); # the last 7 days
+    while ($it->hasNext()) {
+        my $change = $it->next();
+        # $change is a perl hash that contains the following fields:
+        # topic => topic name
+        # user => wikiname - wikiname of user who made the change
+        # time => time of the change
+        # revision => revision number *after* the change
+        # more => more info about the change (e.g. 'minor')
+    }
+</verbatim>
+
+=cut
+
+sub eachChangeSince {
+    my( $web, $time ) = @_;
+    ASSERT($TWiki::Plugins::SESSION) if DEBUG;
+    ASSERT($TWiki::Plugins::SESSION->{store}->webExists($web)) if DEBUG;
+
+    my $iterator =
+      $TWiki::Plugins::SESSION->{store}->eachChange( $web, $time );
+    return $iterator;
+}
+
+=pod
+
 ---+++ getTopicList( $web ) -> @topics
 
 Get list of all topics in a web
@@ -1306,7 +1344,6 @@ appropriate.
 sub saveTopic {
     my( $web, $topic, $meta, $text, $options ) = @_;
     ASSERT($TWiki::Plugins::SESSION) if DEBUG;
-    ASSERT($meta) if DEBUG;
 
     return $TWiki::Plugins::SESSION->{store}->saveTopic
       ( $TWiki::Plugins::SESSION->{user}, $web, $topic, $text, $meta,
