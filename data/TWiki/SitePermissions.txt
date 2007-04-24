@@ -2,10 +2,8 @@
 ---+ Permissions settings of the webs on this TWiki site
 %STARTINCLUDE%
 | *Web* | *Sitemap* | *VIEW* || *CHANGE* || *RENAME* ||
-|^| *Listed* | *DENY* | *ALLOW* | *DENY* | *ALLOW* | *DENY* | *ALLOW* |
+| *&nbsp;* | *Listed* | *DENY* | *ALLOW* | *DENY* | *ALLOW* | *DENY* | *ALLOW* |
 %SEARCH{ "%WEBPREFSTOPIC%" web="%MAINWEB%, %TWIKIWEB%, all" scope="topic" topic="%WEBPREFSTOPIC%" nototal="on" nosearch="on" format="| [[$web.%WEBPREFSTOPIC%][<img src=\"%PUBURLPATH%/%TWIKIWEB%/TWikiDocGraphics/wrench.gif\" alt=\"Preferences\" title=\"Preferences of <nop>$web web\" width=\"16\" height=\"16\" border=\"0\" />]] [[$web.%HOMETOPIC%][<img src=\"%PUBURLPATH%/%TWIKIWEB%/TWikiDocGraphics/home.gif\" alt=\"Home\" title=\"Home of <nop>$web web\" width=\"16\" height=\"16\" border=\"0\" />]] [[$web.%HOMETOPIC%][$web]] | $percntVAR{ \"SITEMAPLIST\" web=\"$web\" }$percnt | $percntVAR{ \"DENYWEBVIEW\" web=\"$web\" }$percnt | $percntVAR{ \"ALLOWWEBVIEW\" web=\"$web\" }$percnt | $percntVAR{ \"DENYWEBCHANGE\" web=\"$web\" }$percnt | $percntVAR{ \"ALLOWWEBCHANGE\" web=\"$web\" }$percnt | $percntVAR{ \"DENYWEBRENAME\" web=\"$web\" }$percnt | $percntVAR{ \"ALLOWWEBRENAME\" web=\"$web\" }$percnt |" }%
-
-See TWikiAccessControl for details 
 
 __Please Note:__
 
@@ -14,4 +12,7 @@ __Please Note:__
    * The TWiki web must not deny view to %MAINWEB%.TWikiGuest; otherwise, people will not be able to register.
 
 %STOPINCLUDE%
+
+See TWikiAccessControl for details 
+
 __Related Topics:__ SiteMap, UserDocumentationCategory, AdminDocumentationCategory, AdminToolsCategory
