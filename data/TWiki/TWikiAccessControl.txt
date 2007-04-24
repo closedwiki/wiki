@@ -78,7 +78,7 @@ A member of the Super Admin Group has unrestricted access throughout the TWiki, 
 
 You can define who is allowed to read or write to a web or a topic. Note that some plugins may not respect access permissions.
 
-   * Restricting VIEW blocks viewing and searching of content.
+   * Restricting VIEW blocks viewing and searching of content. When you restric VIEW to a topic or web, this also restricts [[VarINCLUDE][INCLUDE]] and [[FormattedSearch][Formatted SEARCH]] from showing the content of the topics.
    * Restricting CHANGE blocks creating new topics, changing topics or attaching files.
    * Restricting RENAME prevents renaming of topics within a web.
    
