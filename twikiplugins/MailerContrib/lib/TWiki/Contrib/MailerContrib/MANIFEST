@@ -3,6 +3,7 @@ lib/TWiki/Contrib/MailerContrib/Subscriber.pm 0444
 lib/TWiki/Contrib/MailerContrib/Subscription.pm 0444
 lib/TWiki/Contrib/MailerContrib/Change.pm 0444
 lib/TWiki/Contrib/MailerContrib/UpData.pm 0444
+lib/TWiki/Contrib/MailerContrib/CompatibilityHacks.pm 0444
 lib/TWiki/Contrib/Mailer.pm 0444
 data/TWiki/MailerContrib.txt 0644
 tools/mailnotify 0555
