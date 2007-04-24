@@ -25,11 +25,10 @@ use Unicode::MapUTF8 qw(from_utf8);
 use Net::LDAP::Constant qw( LDAP_CONTROL_PAGED );
 
 use vars qw(%LDAP_U2W %LDAP_W2U %LDAP_DN2U %ISMEMBEROF %ISGROUP %GROUPMEMBERS 
-  $cacheHits $debug $isLoadedMapping
+  $cacheHits $isLoadedMapping
 );
 
 @TWiki::Users::LdapUserMapping::ISA = qw(TWiki::Users::TWikiUserMapping);
-$debug = 0; # toggle me
 
 =pod
 
@@ -41,11 +40,6 @@ native way to represent users and groups using topics with
 according LDAP records.
 
 =cut
-
-sub writeDebug {
-  # comment me in/out
-  print STDERR "LdapUserMapping - $_[0]\n" if $debug;
-}
 
 =pod 
 
@@ -82,7 +76,7 @@ sub new {
     %ISGROUP = ();
   }
 
-  #writeDebug("cacheHits=$cacheHits");
+  $this->{ldap}->writeDebug("cacheHits=$cacheHits");
 
   return $this;
 }
@@ -104,7 +98,7 @@ sub getListOfGroups {
     return $this->SUPER::getListOfGroups();
   }
 
-  #writeDebug("called getListOfGroups()");
+  $this->{ldap}->writeDebug("called getListOfGroups()");
   my %groups;
   if ($this->{ldap}{twikiGroupsBackoff}) {
     %groups = map { $_->wikiName() => $_ } $this->SUPER::getListOfGroups();
@@ -115,7 +109,7 @@ sub getListOfGroups {
     $groups{$groupName} = $this->{session}->{users}->findUser($groupName, $groupName);
   }
 
-  #writeDebug("got " . (scalar keys %groups) . " overall groups=".join(',',keys %groups));
+  #$this->{ldap}->writeDebug("got " . (scalar keys %groups) . " overall groups=".join(',',keys %groups));
 
   return values %groups;
 }
@@ -137,15 +131,16 @@ sub groupMembers {
   }
 
   unless (defined($group->{members})) {
-    #writeDebug("called groupMembers(".$group->wikiName().")");
+    $this->{ldap}->writeDebug("called groupMembers(".$group->wikiName().")");
 
     my $members = $this->getGroupMembers($group->wikiName);
     if (defined($members)) {
       $group->{members} = [];
-      #writeDebug("found ".scalar(@$members)." members:".join(', ', @$members));
+      #$this->{ldap}->writeDebug("found ".scalar(@$members)." members:".join(', ', @$members));
       foreach my $member (@$members) {
         my $memberUser = $this->{session}->{users}->findUser($member); ## provide the wikiName
         push @{$group->{members}}, $memberUser if $memberUser;
+	push @{$memberUser->{groups}}, $group; # backlink the user to the group
       }
     } else {
       # fallback to twiki groups
@@ -182,28 +177,44 @@ user resolution, and should be as fast as possible.
 =cut
 
 sub lookupLoginName {
-  my ($this, $loginName) = @_;
+  my ($this, $name) = @_;
 
-  writeDebug("called lookupLoginName($loginName)");
+  $this->{ldap}->writeDebug("called lookupLoginName($name)");
 
-  unless ($this->{ldap}{excludeMap}{$loginName}) {
+  unless ($this->{ldap}{excludeMap}{$name}) {
     # load the mapping in parts as long as needed
     while (1) {
-      return $LDAP_U2W{$loginName} 
-        if defined($LDAP_U2W{$loginName}) && $LDAP_U2W{$loginName} ne '_unknown_';
+      if (defined($LDAP_U2W{$name}) && $LDAP_U2W{$name} ne '_unknown_') {
+	$this->{ldap}->writeDebug("found loginName in cache");
+	return $LDAP_U2W{$name};
+      }
+      if (defined($LDAP_W2U{$name})) {
+	$this->{ldap}->writeDebug("hey, you called lookupLoginName with a wikiName");
+	return $name;
+      }
       last if $isLoadedMapping;
       $this->loadLdapMapping();
     }
   }
 
-  #writeDebug("asking SUPER");
-  my $wikiName = $this->SUPER::lookupLoginName($loginName) || '_unknown_';
-  $LDAP_U2W{$loginName} = $wikiName;
-  $LDAP_W2U{$wikiName} = $loginName;
-
+  if (defined($LDAP_U2W{$name}) && $LDAP_U2W{$name} ne '_unknown_') {
+    $this->{ldap}->writeDebug("found loginName in cache again");
+    return $LDAP_U2W{$name};
+  }
+  if (defined($LDAP_W2U{$name})) {
+    $this->{ldap}->writeDebug("hey, you called lookupLoginName with a wikiName again");
+    return $name;
+  }
+  
+  $this->{ldap}->writeDebug("asking SUPER");
+  my $wikiName = $this->SUPER::lookupLoginName($name) || $name;
+  $wikiName =~ s/^(.*)\.(.*?)$/$2/;
+  $this->{ldap}->writeDebug("got wikiName=$wikiName and loginName=$name");
+  $LDAP_U2W{$name} = $wikiName;
+  $LDAP_W2U{$wikiName} = $name;
 
   return undef if $wikiName eq '_unknown_';
-  return $wikiName;
+  return $wikiName; 
 }
 
 =pod
@@ -216,27 +227,43 @@ user resolution, and should be as fast as possible.
 =cut
 
 sub lookupWikiName {
-  my ($this, $wikiName) = @_;
+  my ($this, $name) = @_;
 
   # removing leading web
-  $wikiName =~ s/^.*\.(.*?)$/$1/o;
+  $name =~ s/^.*\.(.*?)$/$1/o;
 
-  writeDebug("called lookupWikiName($wikiName)");
+  $this->{ldap}->writeDebug("called lookupWikiName($name)");
 
-  unless ($this->{ldap}{excludeMap}{$wikiName}) {
+  unless ($this->{ldap}{excludeMap}{$name}) {
     while (1) {
       # load the mapping in parts as long as needed
-      return $LDAP_W2U{$wikiName} 
-        if defined($LDAP_W2U{$wikiName}) && $LDAP_W2U{$wikiName} ne '_unknown_';
+      if (defined($LDAP_W2U{$name}) && $LDAP_W2U{$name} ne '_unknown_') {
+	$this->{ldap}->writeDebug("found wikiName in cache");
+        return $LDAP_W2U{$name} 
+      }
+      if (defined($LDAP_U2W{$name})) {
+	$this->{ldap}->writeDebug("hey, you called lookupWikiName with a loginName");
+        return $name
+      }
       last if $isLoadedMapping;
       $this->loadLdapMapping();
     }
   }
 
-#  writeDebug("asking SUPER");
-  my $loginName = $this->SUPER::lookupWikiName($wikiName) || '_unknown_';
-  $LDAP_U2W{$loginName} = $wikiName;
-  $LDAP_W2U{$wikiName} = $loginName;
+  if (defined($LDAP_W2U{$name}) && $LDAP_W2U{$name} ne '_unknown_') {
+    $this->{ldap}->writeDebug("found wikiName in cache again");
+    return $LDAP_W2U{$name};
+  }
+  if (defined($LDAP_U2W{$name})) {
+    $this->{ldap}->writeDebug("hey, you called lookupWikiName with a loginName again");
+    return $name
+  }
+
+  $this->{ldap}->writeDebug("asking SUPER");
+  my $loginName = $this->SUPER::lookupWikiName($name) || '_unknown_';
+  $this->{ldap}->writeDebug("got wikiName=$name and loginName=$loginName");
+  $LDAP_U2W{$loginName} = $name;
+  $LDAP_W2U{$name} = $loginName;
 
   return undef if $loginName eq '_unknown_';
   return $loginName;
@@ -255,7 +282,7 @@ the loginName.
 sub lookupDistinguishedName {
   my ($this, $dn) = @_;
 
-  writeDebug("called lookupDistinguishedName($dn)");
+  $this->{ldap}->writeDebug("called lookupDistinguishedName($dn)");
 
   while (1) {
     # load the mapping in parts as long as needed
@@ -281,12 +308,12 @@ false if the search result has been cached completely.
 sub loadLdapMapping {
   my $this = shift;
 
-  writeDebug("called loadLdapMapping()");
+  $this->{ldap}->writeDebug("called loadLdapMapping()");
   if ($isLoadedMapping) {
-    writeDebug("already loaded");
+    $this->{ldap}->writeDebug("already loaded");
     return 0;
   } 
-  writeDebug("need to fetch mapping");
+  $this->{ldap}->writeDebug("need to fetch mapping");
 
   # prepare search
   $this->{_page} = $this->{ldap}->getPageControl() 
@@ -294,7 +321,7 @@ sub loadLdapMapping {
 
   my @args = (
     filter=>$this->{ldap}{loginFilter}, 
-    base=>$this->{ldap}{basePasswd},
+    base=>$this->{ldap}{userBase},
     attrs=>[$this->{ldap}{loginAttribute}, @{$this->{ldap}{wikiNameAttributes}}],
     control=>[$this->{_page}],
   );
@@ -302,7 +329,7 @@ sub loadLdapMapping {
   # do it
   my $mesg = $this->{ldap}->search(@args);
   unless ($mesg) {
-    writeDebug("oops, no result");
+    $this->{ldap}->writeDebug("oops, no result");
     $isLoadedMapping = 1;
   } else {
 
@@ -342,7 +369,7 @@ sub loadLdapMapping {
       }
       $wikiName ||= $loginName;
 
-      #writeDebug("adding wikiName=$wikiName, loginName=$loginName");
+      $this->{ldap}->writeDebug("adding wikiName=$wikiName, loginName=$loginName");
       $LDAP_U2W{$loginName} = $wikiName;
       $LDAP_W2U{$wikiName} = $loginName;
       $LDAP_DN2U{$dn} = $loginName;
@@ -359,24 +386,28 @@ sub loadLdapMapping {
       } else {
 
         # found all
-        #writeDebug("ok, no more cookie");
+        #$this->{ldap}->writeDebug("ok, no more cookie");
         $isLoadedMapping = 1;
       }
     } else {
 
       # never reach
-      #writeDebug("oops, no resp");
+      $this->{ldap}->writeDebug("oops, no resp");
       $isLoadedMapping = 1;
     }
   }
 
   # clean up error cases
   if ($isLoadedMapping && $this->{_cookie}) {
-    #writeDebug("cleaning up page");
+    $this->{ldap}->writeDebug("cleaning up page");
     $this->{_page}->cookie($this->{_cookie});
     $this->{_page}->size(0);
     $this->{ldap}->search(@args);
     return 0;
+  }
+
+  if ($this->{ldap}{debug}) {
+    $this->{ldap}->writeDebug("got ".scalar(keys %LDAP_U2W)." keys in cache");
   }
 
   return 1;
@@ -398,7 +429,7 @@ that is able to display groups and members in a paginated way.
 sub getListOfAllWikiNames {
   my $this = shift;
 
-  writeDebug("called getListOfAllWikiNames");
+  $this->{ldap}->writeDebug("called getListOfAllWikiNames");
   while($this->loadLdapMapping()) {}
   return keys %LDAP_W2U;
 }
@@ -510,7 +541,7 @@ not exist.
 sub getGroupMembers {
   my ($this, $groupName) = @_;
 
-  writeDebug("called getGroupMembers($groupName)");
+  $this->{ldap}->writeDebug("called getGroupMembers($groupName)");
   return undef if $this->{ldap}{excludeMap}{$groupName};
 
   # lookup cache
@@ -519,20 +550,20 @@ sub getGroupMembers {
   my $groupEntry = $this->{ldap}->getGroup($groupName);
   return undef unless $groupEntry;
 
-  #writeDebug("this is an ldap group");
+  $this->{ldap}->writeDebug("this is an ldap group");
 
   # fetch all members
   my @members = ();
   foreach my $member ($groupEntry->get_value($this->{ldap}{memberAttribute})) {
     $member = from_utf8(-string=>$member, -charset=>$TWiki::cfg{Site}{CharSet});
 
-    #writeDebug("found member=$member");
+    $this->{ldap}->writeDebug("found member=$member");
 
     # groups may store DNs to members instead of a memberUid, in this case we
     # have to lookup the corresponding loginAttribute
     if ($this->{ldap}{memberIndirection}) {
       my $found = 0;
-      #writeDebug("following indirection");
+      $this->{ldap}->writeDebug("following indirection");
       while(1) {
         if (defined($LDAP_DN2U{$member})) {
           $found = 1;
