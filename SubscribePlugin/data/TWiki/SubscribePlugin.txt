@@ -1,32 +1,35 @@
 ---+ Subscribe Plugin
 
 This is a companion plugin to the MailerContrib. It allows you to trivially
-add a "Subscribe me" button to topics to get subscribed to changes.
+add a "Subscribe me" link to topics to get subscribed to changes.
+
+Example (only works if plugin is installed): %SUBSCRIBE%
 
 ---++ Usage
 Anywhere in a topic or template:
    * =%<nop>SUBSCRIBE{...}%= or simply =%<nop>SUBSCRIBE%=
 
 | *Parameter* | *Default* | *Meaning* |
-| =who= | Logged-in user | Who to subscribe |
-| =topic= | Current topic | Topic to subscribe to. Wildcards may be used e.g. =topic="Item*"= will subscribe to all topics starting with =Item=. If you specify a web, then the subscription will be added to the WebNotify for that web. |
-| =prompt= | =Subscribe me to changes= | What to put in the button |
+| =who= | Logged-in user | Who to subscribe (wikiname, no web) |
+| =topic= | Current topic | Topic to subscribe to. Wildcards may be used e.g. =topic="Item*"= will subscribe to all topics starting with =Item=. If you specify a web, then the subscription will be added to the !WebNotify for that web. |
+| =format= | A link | Format of the link generated for subscription. Special tokens within this string are expanded when it is instantiated: <br /> =$url= - expands to the URL that has to be invoked to execute the subscription<br /> =$wikiname= expands to the wikiname of the user who will be subscribed. |
 | =unsubscribe= | Not set | If set, will *unsubscribe* the user |
 
+The plugin will do the best it can to optimise the subscription lists in
+WebNotify.
+
 ---++ Access Controls
-You don't need VIEW access to the WebNotify topic in order to subscribe to changes in a web, but you must have CHANGE and SUBSCRIBE access. SUBSCRIBE access is like CHANGE and VIEW except it is specific to this plugin, and is provided for use when you want users to be able to subscribe or unsubscribe, but you don't want them to be able to modify their subscription or otherwise edit the WebNotify topic.
+The guest user is not allowed to subscribe for notification.
+
+You don't need =VIEW= access to the WebNotify topic in order to subscribe to changes in a web, but you must have =CHANGE= access. If you want users to be able to subscribe or unsubscribe, but you don't want them to be able to modify their subscription or otherwise edit the WebNotify topic, you can restrict =VIEW= access to WebNotify. This will make it uneditable from the browser (but will not block =save= urls, so is not fully secure).
 
 %X% Note that permissions on individual topics are *not* checked when subscription mails are sent out, so be very careful about who you allow to subscribe.
 
 ---++ Plugin Installation Instructions
 
-%$INSTALLATION_INSTRUCTIONS%
+%$INSTALL_INSTRUCTIONS%
 
 The plugin is currently %IF{"context SubscribePluginEnabled" then="installed and enabled" else="not installed, or not enabled in [[%SCRIPTURLPATH{configure}%][configure]]"}%.
-
-When the plugin is installed and enabled, then you should see a button here, that you can click on to subscribe yourself:
-%SUBSCRIBE{who="%WIKINAME%" topic="Sandbox.SubscribeTestTopic" prompt="Subscribe to changes to Sandbox.<nop>SubscribeTestTopic"}%
-%SUBSCRIBE%
 
 ---++ Plugin Info
 
