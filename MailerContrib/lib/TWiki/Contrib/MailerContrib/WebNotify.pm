@@ -311,7 +311,7 @@ sub _load {
             $this->_parsePages( $1, $3 );
             $in_pre = 0;
         }
-        elsif ( $line =~ /^\s+\*\s$webRE?($TWiki::regex{wikiWordRegex})\s*:(.*)$/o ) {
+        elsif ( $line =~ /^\s+\*\s$webRE?([$TWiki::regex{mixedAlphaNum}]+)\s*:(.*)$/o ) {
             # * Main.WikiName: topics
             # * %MAINWEB%.WikiName: topics
             if ( $2 ne $TWiki::cfg{DefaultUserWikiName} ) {
