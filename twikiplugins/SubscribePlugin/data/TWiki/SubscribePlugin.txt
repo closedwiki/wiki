@@ -12,10 +12,12 @@ Anywhere in a topic or template:
 | *Parameter* | *Default* | *Meaning* |
 | =who= | Logged-in user | Who to subscribe (wikiname, no web) |
 | =topic= | Current topic | Topic to subscribe to. Wildcards may be used e.g. =topic="Item*"= will subscribe to all topics starting with =Item=. If you specify a web, then the subscription will be added to the !WebNotify for that web. |
-| =format= | A link | Format of the link generated for subscription. Special tokens within this string are expanded when it is instantiated: <br /> =$url= - expands to the URL that has to be invoked to execute the subscription<br /> =$wikiname= expands to the wikiname of the user who will be subscribed. |
-| =unsubscribe= | Not set | If set, will *unsubscribe* the user |
+| =format= | A link | Format of the link generated for subscription link. Special tokens within this string are expanded when it is instantiated: <br /> =$url= - expands to the URL that has to be invoked to execute the subscription<br /> =$wikiname= expands to the wikiname of the user who will be subscribed. |
+| =formatunsubscribe= | A link | Format of the link generated for unsubscription link. Special tokens within this string are expanded when it is instantiated: <br /> =$url= - expands to the URL that has to be invoked to execute the subscription<br /> =$wikiname= expands to the wikiname of the user who will be subscribed. |
+| =unsubscribe= | Not set | If set to "on", will *unsubscribe* the user |
 
-The plugin will do the best it can to optimise the subscription lists in
+   * The button toggles subscribe/unsubscribe if the user is already subscribben or vice versa. So after the next click on the button, the user will be unsubscribben.
+   * The plugin will do the best it can to optimise the subscription lists in
 WebNotify.
 
 ---++ Access Controls
