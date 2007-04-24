@@ -68,6 +68,11 @@ ACTUAL
 
 sub test_simpleTheadTableusingTablePlugin {
     my $this = shift;
+
+    my $cgi = $this->{twiki}->{cgiQuery};
+    my $url = $cgi->url . $cgi->path_info();
+    $url =~ s/\&/\&amp;/go;
+
     my $expected = <<EXPECTED;
 <nop>
 <nop>
@@ -75,7 +80,7 @@ sub test_simpleTheadTableusingTablePlugin {
 <table style="border-width:1px;" cellspacing="0" cellpadding="0" class="twikiTable" border="1">
     <thead>
         <tr class="twikiTableEven">
-            <th bgcolor="#6b7f93" valign="top" style="vertical-align:top;" class="twikiFirstCol" maxcols="0"> <a rel="nofollow" href="http://localhost/TemporaryTableFormattingTestWebTableFormatting/TestTopicTableFormatting?sortcol=0;table=1;up=0#sorted_table" style="color:#ffffff" title="Sort by this column">a</a> </th><th bgcolor="#6b7f93" valign="top" style="vertical-align:top;" maxcols="0"> <a rel="nofollow" href="http://localhost/TemporaryTableFormattingTestWebTableFormatting/TestTopicTableFormatting?sortcol=1;table=1;up=0#sorted_table" style="color:#ffffff" title="Sort by this column">b</a> </th>
+            <th bgcolor="#6b7f93" valign="top" style="vertical-align:top;" class="twikiFirstCol" maxcols="0"> <a rel="nofollow" href="$url?sortcol=0;table=1;up=0#sorted_table" style="color:#ffffff" title="Sort by this column">a</a> </th><th bgcolor="#6b7f93" valign="top" style="vertical-align:top;" maxcols="0"> <a rel="nofollow" href="$url?sortcol=1;table=1;up=0#sorted_table" style="color:#ffffff" title="Sort by this column">b</a> </th>
         </tr>
     </thead>
     <tr class="twikiTableOdd">
@@ -126,12 +131,17 @@ ACTUAL
 
 sub test_doubleTheadTableusingTablePlugin {
     my $this = shift;
+
+    my $cgi = $this->{twiki}->{cgiQuery};
+    my $url = $cgi->url . $cgi->path_info();
+    $url =~ s/\&/\&amp;/go;
+
     my $expected = <<EXPECTED;
 <nop>
 <nop>
 <nop>
 <nop>
-<table style="border-width:1px;" cellspacing="0" cellpadding="0" class="twikiTable" border="1"><thead><tr class="twikiTableEven"><th bgcolor="#6b7f93" valign="top" style="vertical-align:top;" class="twikiFirstCol" maxcols="0"> <a rel="nofollow" href="http://localhost/TemporaryTableFormattingTestWebTableFormatting/TestTopicTableFormatting?sortcol=0;table=1;up=0#sorted_table" style="color:#ffffff" title="Sort by this column">a</a> </th><th bgcolor="#6b7f93" valign="top" style="vertical-align:top;" maxcols="0"> <a rel="nofollow" href="http://localhost/TemporaryTableFormattingTestWebTableFormatting/TestTopicTableFormatting?sortcol=1;table=1;up=0#sorted_table" style="color:#ffffff" title="Sort by this column">b</a> </th></tr></thead>
+<table style="border-width:1px;" cellspacing="0" cellpadding="0" class="twikiTable" border="1"><thead><tr class="twikiTableEven"><th bgcolor="#6b7f93" valign="top" style="vertical-align:top;" class="twikiFirstCol" maxcols="0"> <a rel="nofollow" href="$url?sortcol=0;table=1;up=0#sorted_table" style="color:#ffffff" title="Sort by this column">a</a> </th><th bgcolor="#6b7f93" valign="top" style="vertical-align:top;" maxcols="0"> <a rel="nofollow" href="$url?sortcol=1;table=1;up=0#sorted_table" style="color:#ffffff" title="Sort by this column">b</a> </th></tr></thead>
 <thead><tr class="twikiTableOdd"><th bgcolor="#6b7f93" valign="top" style="vertical-align:top;" class="twikiFirstCol" maxcols="0"> <span style="color:#ffffff"> <strong> c </strong> </span> </th><th bgcolor="#6b7f93" valign="top" style="vertical-align:top;" maxcols="0"> <span style="color:#ffffff"> <strong> c </strong> </span> </th></tr></thead>
 <tr class="twikiTableEven"><td bgcolor="#ffffff" valign="top" style="vertical-align:top;" class="twikiFirstCol"> 2 </td><td bgcolor="#ffffff" valign="top" style="vertical-align:top;"> 3 </td></tr>
 <tr class="twikiTableOdd"><td bgcolor="#edf4f9" valign="top" style="vertical-align:top;" class="twikiFirstCol twikiLast"> ok </td><td bgcolor="#edf4f9" valign="top" style="vertical-align:top;" class="twikiLast"> bad </td></tr>
@@ -148,6 +158,11 @@ ACTUAL
 
 sub test_doubleTheadandTfootTableusingTablePlugin {
     my $this = shift;
+
+    my $cgi = $this->{twiki}->{cgiQuery};
+    my $url = $cgi->url . $cgi->path_info();
+    $url =~ s/\&/\&amp;/go;
+
     my $expected = <<EXPECTED;
 <nop>
 <nop>
@@ -162,7 +177,7 @@ sub test_doubleTheadandTfootTableusingTablePlugin {
     </thead>
     <thead>
         <tr class="twikiTableOdd">
-            <th bgcolor="#6b7f93" valign="top" style="vertical-align:top;" class="twikiFirstCol" maxcols="0"> <a rel="nofollow" href="http://localhost/TemporaryTableFormattingTestWebTableFormatting/TestTopicTableFormatting?sortcol=0;table=1;up=0#sorted_table" style="color:#ffffff" title="Sort by this column">c</a> </th><th bgcolor="#6b7f93" valign="top" style="vertical-align:top;" maxcols="0"> <a rel="nofollow" href="http://localhost/TemporaryTableFormattingTestWebTableFormatting/TestTopicTableFormatting?sortcol=1;table=1;up=0#sorted_table" style="color:#ffffff" title="Sort by this column">c</a> </th>
+            <th bgcolor="#6b7f93" valign="top" style="vertical-align:top;" class="twikiFirstCol" maxcols="0"> <a rel="nofollow" href="$url?sortcol=0;table=1;up=0#sorted_table" style="color:#ffffff" title="Sort by this column">c</a> </th><th bgcolor="#6b7f93" valign="top" style="vertical-align:top;" maxcols="0"> <a rel="nofollow" href="$url?sortcol=1;table=1;up=0#sorted_table" style="color:#ffffff" title="Sort by this column">c</a> </th>
         </tr>
     </thead>
     <tr class="twikiTableEven">
