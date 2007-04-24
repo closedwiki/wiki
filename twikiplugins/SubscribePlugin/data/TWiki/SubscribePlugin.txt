@@ -16,9 +16,8 @@ Anywhere in a topic or template:
 | =formatunsubscribe= | A link | Format of the link generated for unsubscription link. Special tokens within this string are expanded when it is instantiated: <br /> =$url= - expands to the URL that has to be invoked to execute the subscription<br /> =$wikiname= expands to the wikiname of the user who will be subscribed. |
 | =unsubscribe= | Not set | If set to "on", will *unsubscribe* the user |
 
-   * The button toggles subscribe/unsubscribe if the user is already subscribben or vice versa. So after the next click on the button, the user will be unsubscribben.
-   * The plugin will do the best it can to optimise the subscription lists in
-WebNotify.
+   * The button toggles subscribe/unsubscribe if the user is already subscribed or vice versa. So after the next click on the button, the user will be unsubscribben.
+   * The plugin will do the best it can to optimise the subscription lists in WebNotify.
 
 ---++ Access Controls
 The guest user is not allowed to subscribe for notification.
