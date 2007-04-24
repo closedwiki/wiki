@@ -20,7 +20,7 @@
 
 use strict;
 
-use TWiki;
+use TWiki::Func;
 
 use TWiki::Contrib::MailerContrib::Subscriber;
 use TWiki::Contrib::MailerContrib::Subscription;
@@ -28,7 +28,10 @@ use TWiki::Contrib::MailerContrib::Subscription;
 =pod
 
 ---+ package TWiki::Contrib::MailerContrib::WebNotify
-Object that represents the contents of a %NOTIFYTOPIC% topic in a TWiki web
+Object that represents the contents of a %NOTIFYTOPIC% topic in a TWiki web.
+
+Note that =$TWiki::Plugins::SESSION= is used to find the TWiki session, and
+must be set up before this class is used.
 
 =cut
 
@@ -55,9 +58,8 @@ sub new {
     $this->{topic} = $topic || $TWiki::cfg{NotifyTopicName};
     $this->{pretext} = '';
     $this->{posttext} = '';
-    $this->{session} = $session;
 
-    if( $session->{store}->topicExists( $web, $topic )) {
+    if( TWiki::Func::topicExists( $web, $topic )) {
         $this->_load();
     }
 
@@ -75,12 +77,11 @@ the method will throw an exception.
 
 sub writeWebNotify {
     my $this = shift;
-    return $this->{session}->{store}->saveTopic(
-        $this->{session}->{user},
+    TWiki::Func::saveTopic(
         $this->{web},
         $this->{topic},
-        $this->stringify(),
         undef, # meta
+        $this->stringify(),
         { dontlog => 1, unlock => 1 });
 }
 
@@ -102,8 +103,7 @@ sub getSubscriber {
     my $subscriber = $this->{subscribers}{$name};
     unless ( $noAdd || defined( $subscriber )) {
         $subscriber =
-          new TWiki::Contrib::MailerContrib::Subscriber( $this->{session},
-                                                         $name );
+          new TWiki::Contrib::MailerContrib::Subscriber( $name );
         $this->{subscribers}{$name} = $subscriber;
     }
     return $subscriber;
@@ -139,7 +139,8 @@ sub subscribe {
     my ( $this, $name, $topics, $depth, $mode ) = @_;
 
     my $subscriber = $this->getSubscriber( $name );
-    my $sub = new TWiki::Contrib::MailerContrib::Subscription( $topics, $depth, $mode );
+    my $sub = new TWiki::Contrib::MailerContrib::Subscription(
+        $topics, $depth, $mode );
     $subscriber->subscribe( $sub );
 }
 
@@ -159,7 +160,8 @@ sub unsubscribe {
     my ( $this, $name, $topics, $depth ) = @_;
 
     my $subscriber = $this->getSubscriber( $name );
-    my $sub = new TWiki::Contrib::MailerContrib::Subscription( $topics, $depth );
+    my $sub = new TWiki::Contrib::MailerContrib::Subscription(
+        $topics, $depth );
     $subscriber->unsubscribe( $sub );
 }
 
@@ -274,8 +276,8 @@ sub isEmpty {
 sub _load {
     my $this = shift;
 
-    my ( $meta, $text ) = $this->{session}->{store}->readTopic(
-        undef, $this->{web}, $this->{topic} );
+    my ( $meta, $text ) = TWiki::Func::readTopic(
+        $this->{web}, $this->{topic} );
     my $in_pre = 1;
     $this->{pretext} = '';
     $this->{posttext} = '';
