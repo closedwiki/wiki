@@ -69,7 +69,7 @@ Or let's say you wanted to display the next two upcoming scheduled events in the
 ---+++ Plugin Installation Instructions
 %I% Note for upgraders; the configuration has moved into =configure= now. You will have to copy the settings from your existing =bin/DatabasePluginConfig.pm= manually. it should be fairly obvious what you have to do.
 
-%$INSTALLATION_INSTRUCTIONS%
+%$INSTALL_INSTRUCTIONS%
    * If you are using TWiki-4.1 or later, use =configure= to set up the
      plugin. Otherwise copy and paste the contents of =lib/TWiki/Plugins/DatabasePlugin/Config.spec= into =LocalSite.cfg= and enter your settings manually.
 

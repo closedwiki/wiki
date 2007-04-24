@@ -7,7 +7,7 @@ sub handle {
       TWiki::Func::extractNameValuePair( $args, "description" );
 
     my $db_driver = $dbinfo->{driver};
-    my $database  = $dbinfo->{name};
+    my $database  = $dbinfo->{database};
     my $user		= $dbinfo->{username};
     my $password	= $dbinfo->{password};
     my $table		= $dbinfo->{table};
