@@ -23,11 +23,10 @@ use Net::LDAP::Control::Paged;
 use Net::LDAP::Constant qw(LDAP_SUCCESS LDAP_SIZELIMIT_EXCEEDED LDAP_CONTROL_PAGED);
 use Digest::MD5 qw( md5_hex );
 
-use vars qw($VERSION $RELEASE $debug $sharedLdapContrib);
+use vars qw($VERSION $RELEASE $sharedLdapContrib);
 
 $VERSION = '$Rev$';
-$RELEASE = 'v0.91';
-$debug = 0; # toggle me
+$RELEASE = 'v1.00-pre2';
 
 =begin text
 
@@ -56,10 +55,25 @@ my @emails = $entry->get_value('mail');
 
 =cut
 
-# static method to write debug messages.
+=begin text
+
+---+++ writeDebug($msg, $level) 
+
+Method to write a debug messages. The $msg is only
+written if the given current debug level is high enough
+($level <= $TWiki::cfg{Ldap}{Debug}). The higher the 
+debug level, the more verbose the debug output.
+
+Debug output is written to STDERR.
+
+=cut
+
 sub writeDebug {
-  # comment me in/out
-  print STDERR "LdapContrib - $_[0]\n" if $debug;
+  my ($this, $msg, $level) = @_;
+
+  $level ||= 1;
+
+  print STDERR $msg."\n" if $level <= $this->{debug};
 }
 
 
@@ -74,8 +88,8 @@ Possible options are:
    * base: the base DN to use in searches
    * port: port address used when binding to the LDAP server
    * version: protocol version 
-   * basePasswd: sub-tree DN of user accounts
-   * baseGroup: sub-tree DN of group definitions
+   * userBase: sub-tree DN of user accounts
+   * groupBase: sub-tree DN of group definitions
    * loginAttribute: user login name attribute
    * loginFilter: filter to be used to find login accounts
    * groupAttribute: the group name attribute 
@@ -93,22 +107,33 @@ in =lib/LocalSite.cfg=.
 sub new {
   my $class = shift;
 
-  #writeDebug("called LdapContrib constructor");
-
   my $this = {
     ldap=>undef,# connect later
     error=>undef,
+    debug=>$TWiki::cfg{Ldap}{Debug} || 0,
     host=>$TWiki::cfg{Ldap}{Host} || 'localhost',
     base=>$TWiki::cfg{Ldap}{Base} || '',
     port=>$TWiki::cfg{Ldap}{Port} || 389,
     version=>$TWiki::cfg{Ldap}{Version} || 3,
-    basePasswd=>$TWiki::cfg{Ldap}{BasePasswd} || '',
-    baseGroup=>$TWiki::cfg{Ldap}{BaseGroup} || '',
+
+    userBase=>$TWiki::cfg{Ldap}{UserBase} 
+      || $TWiki::cfg{Ldap}{BasePasswd} # DEPRECATED
+      || $TWiki::cfg{Ldap}{Base} 
+      || '',
+
+    groupBase=>$TWiki::cfg{Ldap}{GroupBase} 
+      || $TWiki::cfg{Ldap}{BaseGroup} # DEPRECATED
+      || $TWiki::cfg{Ldap}{Base} 
+      || '',
+
     loginAttribute=>$TWiki::cfg{Ldap}{LoginAttribute} || 'uid',
+
     wikiNameAttribute=>$TWiki::cfg{Ldap}{WikiNameAttributes} 
       || $TWiki::cfg{Ldap}{WikiNameAttribute} || 'cn',
+
     normalizeWikiName=>$TWiki::cfg{Ldap}{NormalizeWikiNames}
       || $TWiki::cfg{Ldap}{NormalizeWikiName},
+
     loginFilter=>$TWiki::cfg{Ldap}{LoginFilter} || 'objectClass=posixAccount',
     groupAttribute=>$TWiki::cfg{Ldap}{GroupAttribute} || 'cn',
     groupFilter=>$TWiki::cfg{Ldap}{GroupFilter} || 'objectClass=posixGroup',
@@ -119,16 +144,15 @@ sub new {
     bindPassword=>$TWiki::cfg{Ldap}{BindPassword} || '',
     ssl=>$TWiki::cfg{Ldap}{SSL} || 0,
     mapGroups=>$TWiki::cfg{Ldap}{MapGroups} || 0,
+
     exclude=>$TWiki::cfg{Ldap}{Exclude} || 
       'TWikiGuest, TWikiContributor, TWikiRegistrationAgent, TWikiAdminGroup, NobodyGroup',
+
     pageSize=>$TWiki::cfg{Ldap}{PageSize} || 200,
     @_
   };
   $this->{normalizeWikiName} = 1 unless defined $this->{normalizeWikiName};
   @{$this->{wikiNameAttributes}} = split(/,\s/, $this->{wikiNameAttribute});
-
-  $this->{basePasswd} = 'ou=people,'.$this->{base} unless $this->{basePasswd};
-  $this->{baseGroup} = 'ou=group,'.$this->{base} unless $this->{baseGroup};
   %{$this->{groupNames}} = (); # caches known groups
   $this->{cachedGroupNames} = 0; # flag to indicate that the cache is filled
 
@@ -136,7 +160,10 @@ sub new {
   my %excludeMap = map {$_ => 1} split(/,\s/, $this->{exclude});
   $this->{excludeMap} = \%excludeMap;
 
-  return bless($this, $class);
+  bless($this, $class);
+  $this->writeDebug("constructed a new LdapContrib object");
+
+  return $this;
 }
 
 =begin text
@@ -166,9 +193,9 @@ by calling this method. The methods below will do that automatically when needed
 sub connect {
   my ($this, $dn, $passwd) = @_;
 
-  #writeDebug("called connect");
-  #writeDebug("dn=$dn") if $dn;
-  #writeDebug("passwd=***") if $passwd;
+  $this->writeDebug("called connect");
+  $this->writeDebug("dn=$dn", 2) if $dn;
+  $this->writeDebug("passwd=***", 2) if $passwd;
 
   $this->{ldap} = Net::LDAP->new($this->{host},
     port=>$this->{port},
@@ -184,19 +211,19 @@ sub connect {
   if (defined($dn)) {
     die "illegal call to connect()" unless defined($passwd);
     my $msg = $this->{ldap}->bind($dn, password=>$passwd);
-    #writeDebug("bind for $dn");
+    $this->writeDebug("bind for $dn");
     return ($this->checkError($msg) == LDAP_SUCCESS)?1:0;
   } 
 
   # proxy user 
   if ($this->{bindDN} && $this->{bindPassword}) {
     my $msg = $this->{ldap}->bind($this->{bindDN},password=>$this->{bindPassword});
-    #writeDebug("proxy bind");
+    $this->writeDebug("proxy bind");
     return ($this->checkError($msg) == LDAP_SUCCESS)?1:0;
   }
   
   # anonymous bind
-  #writeDebug("anonymous bind");
+  $this->writeDebug("anonymous bind");
   return 1
 }
 
@@ -212,7 +239,7 @@ a reconnect and possibly rebind as a different user.
 sub disconnect {
   my $this = shift;
 
-  #writeDebug("called disconnect()");
+  #$this->writeDebug("called disconnect()");
   return unless $this->{ldap};
 
   $this->{ldap}->unbind();
@@ -239,7 +266,7 @@ sub checkError {
     $this->{error} = undef;
   } else {
     $this->{error} = $code.': '.$msg->error();
-    #writeDebug('LdapContrib - '.$this->{error});
+    $this->writeDebug($this->{error});
   } 
  
   return $code;
@@ -267,24 +294,28 @@ sub getError {
 Fetches an account entry from the database and returns a Net::LDAP::Entry
 object on success and undef otherwise. Note, the login name is match against
 the attribute defined in $ldap->{loginAttribute}. Account records are 
-search using $ldap->{loginFilter} in the subtree defined by $ldap->{basePasswd}.
+search using $ldap->{loginFilter} in the subtree defined by $ldap->{userBase}.
 
 =cut
 
 sub getAccount {
   my ($this, $login) = @_;
 
-  #writeDebug("called getAccount($login)");
+  $this->writeDebug("called getAccount($login)");
   return undef if $this->{excludeMap}{$login};
 
   my $filter = '(&('.$this->{loginFilter}.')('.$this->{loginAttribute}.'='.$login.'))';
   my $msg = $this->search(
     filter=>$filter, 
-    base=>$this->{basePasswd}
+    base=>$this->{userBase}
   );
-  return undef unless $msg;
+  unless ($msg) {
+    $this->writeDebug("no such account");
+    return undef;
+  }
   if ($msg->count() != 1) {
     $this->{error} = 'Login invalid';
+    $this->writeDebug($this->{error});
     return undef;
   }
 
@@ -304,10 +335,10 @@ Returns a Net::LDAP::Search object searching for all user accounts in the databa
 sub getAccounts {
   my $this = shift;
 
-  #writeDebug("called getAccounts()");
+  $this->writeDebug("called getAccounts()");
   return $this->search(
     filter=>$this->{loginFilter}, 
-    base=>$this->{basePasswd}
+    base=>$this->{userBase}
   );
 }
 
@@ -324,15 +355,18 @@ Check the error message using $ldap->getError().
 sub getGroup {
   my ($this, $wikiName) = @_;
 
-  #writeDebug("called getGroup($wikiName)");
+  $this->writeDebug("called getGroup($wikiName)");
   return undef if $this->{excludeMap}{$wikiName};
 
   my $filter = '(&('.$this->{groupFilter}.')('.$this->{groupAttribute}.'='.$wikiName.'))';
   my $msg = $this->search(
     filter=>$filter, 
-    base=>$this->{baseGroup}
+    base=>$this->{groupBase}
   );
-  return undef unless $msg;
+  unless ($msg) {
+    $this->writeDebug("no such group");
+    return undef;
+  }
   return $msg->entry(0);
 }
 
@@ -350,10 +384,10 @@ the use getGroupNames()
 sub getGroups {
   my $this = shift;
 
-  #writeDebug("called getGroups()");
+  $this->writeDebug("called getGroups()");
   return $this->search(
     filter=>$this->{groupFilter}, 
-    base=>$this->{baseGroup}
+    base=>$this->{groupBase}
   );
 }
 
@@ -371,16 +405,19 @@ sub getGroupNames {
   return keys %{$this->{groupNames}} if $this->{cachedGroupNames};
   $this->{cachedGroupNames} = 1;
 
-  #writeDebug("called getGroupNames()");
+  $this->writeDebug("called getGroupNames()");
 
   my $groupAttribute = $this->{groupAttribute};
   my $msg = $this->search(
     filter=>$this->{groupFilter}, 
-    base=>$this->{baseGroup}, 
+    base=>$this->{groupBase}, 
     attrs=>[$groupAttribute]
   );
   
-  return undef unless $msg;
+  unless ($msg) {
+    $this->writeDebug("nothing found");
+    return undef;
+  }
 
   while (my $entry = $msg->pop_entry()) {
     my $groupName = $entry->get_value($groupAttribute);
@@ -403,7 +440,7 @@ sub isGroup {
 
   # may be called using a user object or a wikiName string
   my $wikiName = (ref $user)?$user->wikiName():$user;
-  #writeDebug("called isGroup($wikiName)");
+  #$this->writeDebug("called isGroup($wikiName)");
   return undef if $this->{excludeMap}{$wikiName};
 
   $this->getGroupNames(); # populate cache
@@ -440,9 +477,9 @@ sub search {
   $args{limit} = 0 unless $args{limit};
   $args{attrs} = ['*'] unless $args{attrs};
 
-  if ($debug) {
+  if ($this->{debug}) {
     my $attrString = join(',', @{$args{attrs}});
-    writeDebug("called search(filter=$args{filter}, base=$args{base}, scope=$args{scope}, limit=$args{limit}, attrs=$attrString)");
+    $this->writeDebug("called search(filter=$args{filter}, base=$args{base}, scope=$args{scope}, limit=$args{limit}, attrs=$attrString)");
   }
 
   $this->connect() unless $this->{ldap};
@@ -451,15 +488,15 @@ sub search {
 
   # we set a limit so it is ok that it exceeds
   if ($args{limit} && $errorCode == LDAP_SIZELIMIT_EXCEEDED) {
-    #writeDebug("limit exceeded");
+    $this->writeDebug("limit exceeded");
     return $msg;
   }
   
   if ($errorCode != LDAP_SUCCESS) {
-    #writeDebug("error in search: ".$this->getError());
+    $this->writeDebug("error in search: ".$this->getError());
     return undef;
   }
-  #writeDebug("done search");
+  $this->writeDebug("done search");
 
   return $msg;
 }
@@ -488,7 +525,7 @@ my $blobUrlPath = $ldap->cacheBlob($entry, $attr);
 sub cacheBlob {
   my ($this, $entry, $attr, $refresh) = @_;
 
-  #writeDebug("called cacheBlob()");
+  $this->writeDebug("called cacheBlob()");
 
   my $twikiWeb = &TWiki::Func::getTwikiWebname();
   my $dir = &TWiki::Func::getPubDir().'/'.$twikiWeb.'/LdapContrib';
@@ -496,7 +533,7 @@ sub cacheBlob {
   my $fileName = $dir.'/'.$key;
 
   if ($refresh || !-f $fileName) {
-    #writeDebug("caching blob");
+    $this->writeDebug("caching blob");
     my $value = $entry->get_value($attr);
     return undef unless defined $value;
     mkdir($dir, 0775) unless -e $dir;
@@ -506,10 +543,10 @@ sub cacheBlob {
     print FILE $value;
     close (FILE);
   } else {
-    #writeDebug("already got blob");
+    $this->writeDebug("already got blob");
   }
   
-  #writeDebug("done cacheBlob()");
+  $this->writeDebug("done cacheBlob()");
 
   return &TWiki::Func::getPubUrlPath().'/'.$twikiWeb.'/LdapContrib/'.$key;
 }

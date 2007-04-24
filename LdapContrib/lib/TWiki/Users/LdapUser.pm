@@ -21,10 +21,9 @@ use strict;
 use TWiki::Users::Password;
 use TWiki::Contrib::LdapContrib;
 
-use vars qw(%U2DN %U2EMAILS $debug);
+use vars qw(%U2DN %U2EMAILS);
 
 @TWiki::Users::LdapUser::ISA = qw( TWiki::Users::Password );
-$debug = 0; # toggle me
 
 =pod
 
@@ -50,11 +49,6 @@ Implemented Interface:
    * setEmails(login, @emails)
    
 =cut
-
-sub writeDebug {
-  # comment me in/out
-  print STDERR "LdapUser - $_[0]\n" if $debug;
-}
 
 =pod
 
@@ -108,7 +102,7 @@ existsUser() or the like
 sub fetchPass {
   my ($this, $login) = @_;
 
-  #writeDebug("called fetchPass($login)");
+  $this->{ldap}->writeDebug("called fetchPass($login)");
 
   my $entry = $this->{ldap}->getAccount($login);
   return $entry->get_value('userPassword') if $entry;
@@ -126,7 +120,7 @@ check passwd by binding to the ldap server
 sub checkPassword {
   my ($this, $login, $passU) = @_;
 
-  #writeDebug("called checkPassword($login, passU)");
+  $this->{ldap}->writeDebug("called checkPassword($login, passU)");
 
   # guest has no password
   return 1 if $login eq $TWiki::cfg{DefaultUserWikiName};
@@ -134,7 +128,7 @@ sub checkPassword {
 
   # lookup cache
   if (defined($U2DN{$login})) {
-    #writeDebug("found dn for $login in cache: $U2DN{$login}");
+    $this->{ldap}->writeDebug("found dn for $login in cache: $U2DN{$login}");
   } else {
     $U2DN{$login} = '';
     my $entry = $this->{ldap}->getAccount($login);
@@ -160,16 +154,15 @@ if this is not the case we fallback to twiki's default behavior
 sub getEmails {
   my ($this, $login) = @_;
 
-  #writeDebug("getEmails($login)");
+  $this->{ldap}->writeDebug("getEmails($login)");
 
   # guest has no email addrs
   return () if $login eq $TWiki::cfg{DefaultUserWikiName};
 
   # lookup cache
   if (defined($U2EMAILS{$login})) {
-    #writeDebug("found emails for $login in cache: ".join(',',@{$U2EMAILS{$login}}));
+    $this->{ldap}->writeDebug("found emails for $login in cache: ".join(',',@{$U2EMAILS{$login}}));
   } else {
-    $U2EMAILS{$login} = [];
     my $entry = $this->{ldap}->getAccount($login);
     if ($entry) {
       @{$U2EMAILS{$login}} = $entry->get_value('mail');
@@ -178,7 +171,12 @@ sub getEmails {
   return @{$U2EMAILS{$login}} if $U2EMAILS{$login};
 
   # fall back to the default approach
-  return $this->SUPER::getEmails($login);
+  $this->writeDebug("fall back to default approach to get email addresses");
+
+  @{$U2EMAILS{$login}} = $this->SUPER::getEmails($login) || ();
+  $this->{ldap}->writeDebug("found emails for $login: ".join(',',@{$U2EMAILS{$login}}));
+
+  return @{$U2EMAILS{$login}};
 }
 
 =pod ObjectMethod finish()
