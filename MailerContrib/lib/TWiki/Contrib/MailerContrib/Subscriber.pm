@@ -35,24 +35,20 @@ name may also be a group, so it may expand to many email addresses.
 package TWiki::Contrib::MailerContrib::Subscriber;
 
 use TWiki;
+use TWiki::Plugins;
 use Assert;
 
 =pod
 
----++ new($session, $name)
-   * =$session= - TWiki object
+---++ new($name)
    * =$name= - Wikiname, with no web, or email address, of user targeted for notification
 Create a new user.
 
 =cut
 
 sub new {
-    my ( $class, $session, $name ) = @_;
-    ASSERT($session->isa( 'TWiki')) if DEBUG;
-    my $this = bless( {}, $class );
-
-    $this->{session} = $session;
-    $this->{name} = $name;
+    my ( $class, $name ) = @_;
+    my $this = bless( { name => $name }, $class );
 
     return $this;
 }
@@ -67,14 +63,22 @@ subscription
 
 sub getEmailAddresses {
     my $this = shift;
-    ASSERT($this->isa( 'TWiki::Contrib::MailerContrib::Subscriber')) if DEBUG;
 
     unless ( defined( $this->{emails} )) {
         if ( $this->{name} =~ /^$TWiki::regex{emailAddrRegex}/o ) {
             push( @{$this->{emails}}, $this->{name} );
         } else {
-            my $users = $this->{session}->{users};
-            if (defined(&TWiki::Users::findUser)) {
+            my $users = $TWiki::Plugins::SESSION->{users};
+            if ($users->can('findUserByWikiName')) {
+                # User is represented by a wikiname. Map to a canonical
+                # userid.
+                my $list = $users->findUserByWikiName($this->{name});
+                foreach my $user (@$list) {
+                    # Automatically expands groups
+                    push( @{$this->{emails}}, $users->getEmails($user) );
+                }
+            } else {
+                # Old code; use the user object
                 my $user = $users->findUser( $this->{name}, undef, 1 );
                 if( $user ) {
                     push( @{$this->{emails}}, $user->emails() );
@@ -88,14 +92,6 @@ sub getEmailAddresses {
                         $this->{emails} = [];
                     }
                 }
-            } else {
-                # User is represented by a wikiname. Map to a canonical
-                # userid.
-                my $list = $users->findUserByWikiName($this->{name});
-                foreach my $user (@$list) {
-                    # Automatically expands groups
-                    push( @{$this->{emails}}, $users->getEmails($user) );
-                }
             }
         }
     }
@@ -108,7 +104,7 @@ sub getEmailAddresses {
 sub _addAndOptimise {
     my( $this, $set, $new ) = @_;
 
-    # Don't add covered duplicates
+    # Don't add already covered duplicates
     my $i = 0;
     my @remove;
     foreach my $known (@{$this->{$set}}) {
@@ -125,6 +121,25 @@ sub _addAndOptimise {
     push( @{$this->{$set}}, $new );
 }
 
+# Subtract a subscription from an internal list. Do the best job
+# you can in the face of wildcards.
+sub _subtract {
+    my( $this, $set, $new ) = @_;
+
+    my $i = 0;
+    my @remove;
+    foreach my $known (@{$this->{$set}}) {
+        if( $new->covers( $known )) {
+            # remove anything covered by the new subscription
+            unshift(@remove, $i);
+        }
+        $i++;
+    }
+    foreach $i (@remove) {
+        splice(@{$this->{$set}}, $i, 1);
+    }
+}
+
 =pod
 
 ---++ subscribe($subs)
@@ -137,6 +152,7 @@ sub subscribe {
     my ( $this, $subs ) = @_;
 
     $this->_addAndOptimise( 'subscriptions', $subs );
+    $this->_subtract( 'unsubscriptions', $subs );
 }
 
 =pod
@@ -156,6 +172,7 @@ sub unsubscribe {
     my ( $this, $subs ) = @_;
 
     $this->_addAndOptimise( 'unsubscriptions', $subs );
+    $this->_subtract( 'subscriptions', $subs );
 }
 
 =pod

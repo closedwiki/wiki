@@ -291,7 +291,6 @@ sub set_up {
         $this->{twiki}->{store}->saveTopic( $user, $web, "TestTopic1",
                                     $finalText{TestTopic1}, $meta,
                                     { forcenewrevision=>1 });
-print `cat $TWiki::cfg{DataDir}/$web/.changes`;
     }
     # OK, we should have a bunch of changes
 }
