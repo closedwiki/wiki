@@ -75,11 +75,11 @@ sub mailNotify {
         $twiki = new TWiki();
     }
 
+    $TWiki::Plugins::SESSION = $twiki;
+
     my $context = TWiki::Func::getContext();
 
     $context->{command_line} = 1;
-
-    $TWiki::Plugins::SESSION = $twiki;
 
     # absolute URL context for email generation
     $context->{absolute_urls} = 1;

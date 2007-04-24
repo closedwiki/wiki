@@ -77,12 +77,11 @@ the method will throw an exception.
 
 sub writeWebNotify {
     my $this = shift;
-    TWiki::Func::saveTopic(
+    TWiki::Func::saveTopicText(
         $this->{web},
         $this->{topic},
-        undef, # meta
         $this->stringify(),
-        { dontlog => 1, unlock => 1 });
+        1, 1);
 }
 
 =pod
