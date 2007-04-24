@@ -141,6 +141,7 @@ Newsletters are sent after formatting using the standard =view= template, using 
 |  Author: | TWiki:Main/CrawfordCurrie (http://c-dot.co.uk) |
 |  Copyright &copy;: | 2004, Wind River Systems; 2006, http://WikiRing.com |
 |  License: | GPL |
+|  Version: | %$VERSION% |
 |  Change History: | |
 |  12496 | <a rel='nofollow' href='http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item3415'>Item3415</a> mailnotify did not send notifications to intranet users because of wrong call to findUser. |
 |  11672 | Added newsletter support, after much harassment from TWiki:Main.LynnwoodBrown |
