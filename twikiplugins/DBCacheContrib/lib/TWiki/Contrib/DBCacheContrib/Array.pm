@@ -2,7 +2,10 @@
 # Copyright (C) Motorola 2003 - All rights reserved
 # Copyright (C) Crawford Currie 2004
 #
+package TWiki::Contrib::DBCacheContrib::Array;
+
 use strict;
+use Assert;
 
 =begin text
 
@@ -16,8 +19,6 @@ this array object instead.
 =cut
 
 use TWiki::Contrib::DBCacheContrib::Search;
-
-package TWiki::Contrib::DBCacheContrib::Array;
 
 =begin text
 
@@ -219,6 +220,7 @@ values. Return a =TWiki::Contrib::DBCacheContrib::Array= of matching entries.
 
 sub search {
     my ( $this, $search ) = @_;
+    ASSERT($search) if DEBUG;
     my $result = new TWiki::Contrib::DBCacheContrib::Array();
 
     return $result unless ( $this->size() > 0 );

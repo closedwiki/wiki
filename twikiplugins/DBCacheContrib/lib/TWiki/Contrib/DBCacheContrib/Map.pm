@@ -2,9 +2,12 @@
 # Copyright (C) Motorola 2003 - All rights reserved
 # Copyright (C) Crawford Currie 2004
 #
+package TWiki::Contrib::DBCacheContrib::Map;
+
 use strict;
 
 use TWiki::Contrib::DBCacheContrib::Array;
+use Assert;
 
 =begin text
 
@@ -16,8 +19,6 @@ Objects in the map are either strings, or other objects that must
 support toString.
 
 =cut
-
-package TWiki::Contrib::DBCacheContrib::Map;
 
 =begin text
 
@@ -223,6 +224,7 @@ values. Return a =TWiki::Contrib::DBCacheContrib::Array= of matching keys.
 
 sub search {
     my ( $this, $search ) = @_;
+    ASSERT($search) if DEBUG;
     my $result = new TWiki::Contrib::DBCacheContrib::Array();
 
     foreach my $meta ( values( %{$this->{keys}} )) {

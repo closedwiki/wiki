@@ -1,42 +1,44 @@
 #
 # Copyright (C) Motorola 2003 - All rights reserved
 #
+package  TWiki::Plugins::FormQueryPlugin::WebDB;
+use base 'TWiki::Contrib::DBCacheContrib';
+
 use strict;
 
 use Time::ParseDate;
-use Benchmark;
 
 use TWiki::Contrib::DBCacheContrib;
 use TWiki::Contrib::DBCacheContrib::Search;
 
-use TWiki::Plugins::FormQueryPlugin::ColourMap;
 use TWiki::Plugins::FormQueryPlugin::Relation;
 use TWiki::Plugins::FormQueryPlugin::TableFormat;
 use TWiki::Plugins::FormQueryPlugin::TableDef;
+use TWiki::Plugins::FormQueryPlugin::TablerowDef;
 
-package  TWiki::Plugins::FormQueryPlugin::WebDB;
-
-# A DB is a hash keyed on topic name
-
-@TWiki::Plugins::FormQueryPlugin::WebDB::ISA = ("TWiki::Contrib::DBCacheContrib");
+# A Web DB is a hash keyed on topic name
 
 my %prefs;
 my @relations;
-my $colourmap;
+my %queries;  # Map from name to queries
+my %webs;     # Map from name to web
 
 # PUBLIC
 sub new {
     my ( $class, $web ) = @_;
+
     my $this = bless( $class->SUPER::new($web, "_FormQueryCache"), $class );
 
-    # Note: queries are not cached. If performance really stinks
-    # we could, I suppose.
-    $this->{_queries} = undef;
-    $this->{_topiccreator} = 0;
-	$this->{_tables} = undef;
+    $this->{_tables} = undef;
 
     $this->init( $web ) if ( defined( $web ));
+
     return $this;
+}
+
+sub query {
+    my ( $this, $name ) = @_;
+    return $queries{$name};
 }
 
 # PUBLIC late initialisation of this object, used when serialising
@@ -47,42 +49,34 @@ sub init {
 
     $this->{_web} = $web;
 
-    my $rtext = TWiki::Func::getPreferencesValue( "FQRELATIONS" ) ||
-      "ReQ%Ax%B SubReq ReQ%A; TiT%An%B TestItem ReQ%A";
-    my $tablenames = TWiki::Func::getPreferencesValue( "FQTABLES" ) ||
-      "TaskTable";
-    my $hmap = TWiki::Func::getPreferencesValue( "FQHIGHLIGHTMAP" ) ||
-	  "HighlightMap";
-
+    my $rtext = TWiki::Func::getPreferencesValue(
+        "FORMQUERYPLUGIN_RELATIONS" ) || "";
+    my $tablenames = TWiki::Func::getPreferencesValue(
+        "FORMQUERYPLUGIN_TABLES" ) || "";
     foreach my $relation ( split( /;/, $rtext )) {
-        push( @relations, new  TWiki::Plugins::FormQueryPlugin::Relation( $relation ));
+        push( @relations,
+              new TWiki::Plugins::FormQueryPlugin::Relation( $relation ));
     }
 
     my @tables;
-    foreach my $table ( split( /\s*,\s*/, $tablenames )) {
-        my( $tableweb,$tablename ) =
-          TWiki::Func::normalizeWebTopicName($web, $table);
-        if ( !(TWiki::Func::topicExists( $tableweb, $tablename ))) {
+
+    foreach my $table ( split( /\s*,\s*/, $tablenames ) ) {
+        if ( $table =~ s/^all$//i ) {
+            # Insert a special flag to indicate all tables should be read
+            $this->{_tables}{all} = 1;
+            return;
+        }
+        if ( !(TWiki::Func::topicExists( $web, $table ))) {
             TWiki::Func::writeWarning( "No such table template topic '$table'" );
         } else {
-            my $text = TWiki::Func::readTopicText( $tableweb, $tablename );
-            my $ttype = new  TWiki::Plugins::FormQueryPlugin::TableDef( $text );
+            my $text = TWiki::Func::readTopicText( $web, $table );
+            my $ttype = new TWiki::Plugins::FormQueryPlugin::TableDef( $text );
             if ( defined( $ttype )) {
-                $this->{_tables}{$tablename} = $ttype;
-                push(@tables, $tablename);
+                $this->{_tables}{$table} = $ttype;
+                push(@tables, $table);
             } else {
                 TWiki::Func::writeWarning( "Error in table template topic '$table'" );
             }
-        }
-    }
-    $this->{_tableRE} = join('|', @tables);
-	
-    if ( defined( $hmap )) {
-        if ( !(TWiki::Func::topicExists( $web, $hmap ))) {
-            TWiki::Func::writeWarning( "No such highlight map topic '$hmap'" );
-        } else {
-            my $text = TWiki::Func::readTopicText( $web, $hmap );
-            $colourmap = new  TWiki::Plugins::FormQueryPlugin::ColourMap( $text );
         }
     }
 }
@@ -90,57 +84,124 @@ sub init {
 # Invoked by superclass for each line in a topic.
 sub readTopicLine {
     my ( $this, $topic, $meta, $line, $fh ) = @_;
-	my $re = $this->{_tableRE};
 
-    return $line unless ( defined( $re ));
+    my $text = $line;
 
-	my $text = $line;
-
-	while ( $line =~ s/%EDITTABLE{\s*include=\"(.*?)\"\s*}%//o ) {
-        my( $tableweb, $tablename ) =
-             TWiki::Func::normalizeWebTopicName($this->{_web},$1);
+    # Handle tables defined through %EDITTABLE{}% tags
+    while ( ($line =~ s/%(EDITTABLE){(.*)}%//o) ||
+              ($line =~ s/%(EDITTABLEROW){(.*)}%//o) ) {
+        my $type = $1;
+        my $attrs = new TWiki::Attrs($2);
+        my $tablename = $attrs->{$type eq 'EDITTABLE' ? 'include' : 'template'};
+        next unless $tablename;
         my $ttype = $this->{_tables}{$tablename};
-        if ( defined( $ttype )) {
-            # TimSlidel: collapse multiple instances
-            # of the same table type into a single table
-            # my $table = new TWiki::Contrib::DBCacheContrib::Array();
-            my $table = $meta->fastget( $tablename );
-            if ( !defined( $table )) {
-                $table = new TWiki::Contrib::DBCacheContrib::Array();
-            }
-            my $lc = 0;
-            my $row = "";
-            while ( $line = <$fh> ) {
-                if ( $line =~ s/\\\s*$//o ) {
-                    $text .= $line;
-                    # This row is continued on the next line
-                    $row .= $line;
-                } elsif ( $line =~ m/\|\s*$/o ) {
-                    $text .= $line;
-                    # This line terminates a row
-                    $row .= $line;
-                    if ( $lc == 0 ) {
-                        # It's the header, ignore it
+        if ( !defined ( $ttype ) ) {
+            if ( $this->{_tables}{all} ) {
+                if ( !TWiki::Func::topicExists( $this->{_web}, $tablename )) {
+                    TWiki::Func::writeWarning(
+                        "No such table template topic '$tablename'" );
+                    return $text;
+                } else {
+                    my $table = TWiki::Func::readTopicText(
+                        $this->{_web}, $tablename );
+                    if ( $type eq 'EDITTABLE' ) {
+                        $ttype =
+                          new TWiki::Plugins::FormQueryPlugin::TableDef(
+                              $table );
                     } else {
-                        # Load the row
-                        my $rowmeta =
-                          $ttype->loadRow( $row, "TWiki::Contrib::DBCacheContrib::Map" );
-                        $rowmeta->set( "topic", $topic );
-                        $rowmeta->set( "${tablename}_of", $meta ); 
-                        $table->add( $rowmeta );
+                        $ttype =
+                          new TWiki::Plugins::FormQueryPlugin::TablerowDef(
+                              $table );
                     }
-                    $row = "";
-                    $lc++;
-                } elsif ( $line !~ m/^\s*\|/o ) {
-                    # This is not a valid row start, so must be the
-                    # end of the table
-                    last;
+                    if ( defined( $ttype )) {
+                        $this->{_tables}{$tablename} = $ttype;
+                    } else {
+                        TWiki::Func::writeWarning(
+                            "Error in table template topic '$table'" );
+                        return $text;
+                    }
                 }
+            } else {
+                return $text;
             }
-            $meta->set( $tablename, $table );
         }
-	}
-	return $text;
+        # TimSlidel: collapse multiple instances
+        # of the same table type into a single table
+        # my $table = new TWiki::Contrib::DBCacheContrib::Array();
+        # Bug: This treats the row after a table as text, even if it is a META
+        # Currently there is an empty line inserted by save between the META
+        # after text and the text, so everything works as expected. But if that
+        # line where to disappear, we would loose the first line of META
+
+        # Read table into temporary structure
+        my $lc = 0;
+        my $tmptable = '';
+        my $aftertable;
+        while ( $line = <$fh> ) {
+            if ( $line =~ s/\\\s*$//o ) {
+                $text .= $line;
+                # This row is continued on the next line
+                $tmptable .= $line;
+            } elsif ( $line =~ m/\|\s*$/o ) {
+                $text .= $line;
+                # This line terminates a row
+                $tmptable .= $line;
+                if ( $lc == 0 ) {
+                    # It's the header, ignore it
+                }
+                $lc++;
+            } elsif ( $line !~ m/^\s*\|/o ) {
+                # This is not a valid row start, so must be the
+                # end of the table
+                $text .= $line;
+                last;
+            }
+        }
+
+        # Apply SpreadsheetPlugin to table
+        eval {
+            require TWiki::Plugins::SpreadSheetPlugin;
+            TWiki::Plugins::SpreadSheetPlugin::commonTagsHandler( $tmptable );
+        };
+        # ignore if it fails; may not be installed
+
+        # Now read the table into the cache structure
+        my $table = $meta->fastget( $tablename );
+        if ( !defined( $table )) {
+            $table = new TWiki::Contrib::DBCacheContrib::Array();
+        }
+        $lc = 0;
+        my $row = "";
+        foreach $line ( split( /\n/, $tmptable )) {
+            if ( $line =~ s/\\\s*$//o ) {
+                # This row is continued on the next line
+                $row .= $line;
+            } elsif ( $line =~ m/\|\s*$/o ) {
+                # This line terminates a row
+                $row .= $line;
+                if ( $lc == 0 ) {
+                    # It's the header, ignore it
+                } else {
+                    # Load the row
+                    my $rowmeta =
+                      $ttype->loadRow( $row,
+                                       "TWiki::Contrib::DBCacheContrib::Map" );
+                    # $rowmeta->set( "topic", $topic );
+                    $rowmeta->set( "_up", $meta );
+                    $table->add( $rowmeta );
+                }
+                $row = "";
+                $lc++;
+            } elsif ( $line !~ m/^\s*\|/o ) {
+                # This is not a valid row start, so must be the
+                # end of the table
+                last;
+            }
+        }
+        $meta->set( $tablename, $table );
+    }
+
+    return $text;
 }
 
 # PROTECTED called by superclass when one or more topics had
@@ -211,108 +272,120 @@ sub toString {
     return $text;
 }
 
-# PUBLIC STATIC generate error message unless moan is off
-sub moan {
-    my ( $macro, $attrs, $message, $nomess ) = @_;
-
-    return $nomess if( $attrs->{moan} && $attrs->{moan} eq 'off' );
-
-    return ' '.CGI::span(
-        {class=>'twikiAlert'},
-        $message.' in '.$macro.'{'.$attrs->stringify().'}').' ';
-}
-
 # PUBLIC
 # Run a query on the DB.
 # It may optionally have the following field:
 # form   Name f the form type to run the query on
 # It must has the field
 # search Boolean expression for the query
-sub formQuery {
-    my ( $this, $macro, $attrs ) = @_;
+sub formQueryOnQuery {
+    my ( $name, $string, $query, $extract, $case ) = @_;
 
-    my $name = $attrs->{name};
     if ( !defined( $name )) {
-        return moan( $macro, $attrs, "'name' not defined", "" );
+        throw Error::Simple "'name' not defined";
     }
 
-    my $search;
-    eval {
-        $search = new TWiki::Contrib::DBCacheContrib::Search( $attrs->{search} );
-    };
-    if ( !defined( $search )) {
-        return moan( $macro, $attrs,
-                     "'search' not defined, or invalid search expression", "" );
+    return _search ( $webs{$query}, $name, $string,
+                     $queries{$query}, $query, $extract, $case );
+}
+
+sub formQueryOnDB {
+    my ( $this, $name, $string, $extract, $case, $multiple ) = @_;
+
+    if ( !defined( $name )) {
+        throw Error::Simple "'name' not defined";
     }
 
     # Make sure the DB is loaded
     $this->load();
 
-    my $queryname = $attrs->{query};
-    my $query;
-    if ( defined( $queryname )) {
-        $query = $this->{_queries}{$queryname};
-    } else {
-        $queryname = "ROOT";
-        $query = $this;
+    return _search ( $this->{_web}, $name, $string, $this,
+                     "ROOT", $extract, $case, $multiple );
+}
+
+# PRIVATE
+sub _search {
+    my ( $web, $name, $string, $query, $queryname,
+         $extract, $case, $multiple ) = @_;
+
+    my $search;
+
+    eval {
+        $search = new TWiki::Contrib::DBCacheContrib::Search( $string );
+    };
+
+    if ( $@ || !$search ) {
+        throw Error::Simple(
+            "'search' not defined, or invalid search expression: $@" );
     }
 
     if ( !defined( $query )) {
-        return moan( $macro, $attrs, "Query '$queryname' not defined", "" );
+        throw Error::Simple "Query '$queryname' not defined";
     }
 
     if ( $query->size() == 0 ) {
-        return moan( $macro, $attrs, "Query '$queryname' returned no values", "" );
+        throw Error::Simple "Query '$queryname' returned no values";
     }
 
-    delete( $this->{_queries}{$name} );
+    delete( $queries{$name} ) unless $multiple;
 
-    my $matches = $query->search( $search );
+    my $matches = $query->search( $search, $case );
 
-    my $extract = $attrs->{extract};
+    my $realMatches;
+    if ($multiple) { $realMatches = $queries{$name}; }
+    $realMatches = new TWiki::Contrib::DBCacheContrib::Array()
+      unless $realMatches;
+
     if ( defined( $extract ) && $matches->size() > 0) {
         # Extract a defined subfield and make the query result an
         # array of the subfield. If the subfield is an array, flatten out
         # the array.
-        my $realMatches = new TWiki::Contrib::DBCacheContrib::Array();
         foreach my $match ( $matches->getValues() ) {
             my $subfield = $match->get( $extract );
             if ( defined( $subfield )) {
-                if ( $subfield->isa( "TWiki::Contrib::DBCacheContrib::Array" )) {
+                if ( $subfield->isa( 'TWiki::Contrib::DBCacheContrib::Array' )
+                       && ($subfield->size() > 0) ) {
                     foreach my $entry ( $subfield->getValues() ) {
                         $realMatches->add( $entry );
                     }
+                } elsif ( $subfield->isa(
+                    'TWiki::Contrib::DBCacheContrib::Array' ) ) {
+                    # Did not match
                 } else {
                     $realMatches->add( $subfield );
                 }
             }
         }
         $matches = $realMatches;
+    } elsif ( $matches->size() > 0 ) {
+        foreach my $match ( $matches->getValues() ) {
+            $realMatches->add( $match );
+        }
+        $matches = $realMatches;
     }
 
     if ( !defined( $matches ) || $matches->size() == 0 ) {
-        return moan( $macro, $attrs, "No values returned", "" );
+        throw Error::Simple "No values returned";
     }
-    $this->{_queries}{$name} = $matches;
+    $webs{$name} = $web;
+    $queries{$name} = $matches;
 
     return "";
 }
 
 # PUBLIC
 sub tableFormat {
-    my ( $this, $macro, $attrs ) = @_;
+    my ( $name, $format, $attrs ) = @_;
 
-    my $name = $attrs->{name};
     if ( !defined( $name )) {
-        return moan( $macro, $attrs, "'name' not defined", "" );
+        throw Error::Simple "'name' not defined";
     }
 
-    my $format = $attrs->{format};
     if ( !defined( $format )) {
-        return moan( $macro, $attrs, "'format' not defined", "" );
+        throw Error::Simple "'format' not defined";
     }
 
-    my $fmt = new  TWiki::Plugins::FormQueryPlugin::TableFormat( $attrs, $colourmap );
+    my $fmt = new TWiki::Plugins::FormQueryPlugin::TableFormat( $attrs );
 
     $fmt->addToCache( $name );
 
@@ -327,140 +400,128 @@ sub tableFormat {
 #        to insert the topic name.
 # header header of the table
 # sort   Comma-separated list of fields to sort on
-# row_from  (optional) Render rows starting from row_from (1st row == 1)
-# row_count (optional) Render a maximum of row_count rows
+# start  (optional) Render rows starting from start (1st row == 1)
+# limit (optional) Render a maximum of limit rows
 sub showQuery {
-    my ( $this, $macro, $attrs ) = @_;
+    my ( $name, $format, $attrs, $topic, $web, $user, $installWeb ) = @_;
 
-    my $name = $attrs->{query};
     if ( !defined( $name )) {
-        return moan( $macro, $attrs, "'query' not defined", "" );
+        throw Error::Simple "'query' not defined";
     }
-
-    my $format = $attrs->{format};
-    if ( !defined( $format )) {
-        return moan( $macro, $attrs, "'format' not defined", "" );
-    }
-    $format = new  TWiki::Plugins::FormQueryPlugin::TableFormat( $attrs, $colourmap );
 
     if ( !defined( $format )) {
-        return moan( $macro, $attrs, "Table format not defined", "" );
+        throw Error::Simple "'format' not defined";
+    }
+    $format = new TWiki::Plugins::FormQueryPlugin::TableFormat( $attrs );
+
+    if ( !defined( $format )) {
+        throw Error::Simple "Table format not defined";
     }
 
-    my $matches = $this->{_queries}{$name};
+    my $matches = $queries{$name};
     if ( !defined( $matches ) || $matches->size() == 0 ) {
-        return moan( $macro, $attrs, "Query '$name' returned no values", "" );
+        throw Error::Simple "Query '$name' returned no values";
     }
 
     ## get finished html or twiki format table as string
     # Patch from SimonHardyFrancis
-    
-    return $format->formatTable( $matches, $colourmap,
-								 $attrs->{row_from},
-								 $attrs->{row_count});
+    return $format->formatTable( $matches,
+                                 $attrs->{separator},
+                                 $attrs->{newline},
+                                 $attrs->{start},
+                                 $attrs->{limit},
+                                 $topic, $web, $user, $installWeb );
 }
 
 # PUBLIC return the sum of all occurrences of a numeric
 # field in a query
 sub sumQuery {
-    my ( $this, $macro, $attrs ) = @_;
+    my ( $name, $field ) = @_;
 
-    my $name = $attrs->{query};
     if ( !defined( $name )) {
-        return moan( $macro, $attrs, "'query' not defined", 0 );
+        throw Error::Simple "'query' not defined";
     }
 
-    my $field = $attrs->{field};
     if ( !defined( $field )) {
-        return moan( $macro, $attrs, "'field' not defined", 0 );
+        throw Error::Simple "'field' not defined";
     }
 
-    my $matches = $this->{_queries}{$name};
+    my $matches = $queries{$name};
     if ( !defined( $matches ) || $matches->size() == 0 ) {
-        return moan( $macro, $attrs, "Query '$name' returned no values", 0 );
+        throw Error::Simple "Query '$name' returned no values";
     }
 
     return $matches->sum( $field );
 }
 
-# PUBLIC generate HTML to generate a new topic according to the rules
-# given in the relation
-sub createNewTopic {
-    my ( $this, $macro, $attrs, $web, $topic ) = @_;
+sub getQueryInfo {
+    my ( $name, $limit ) = @_;
 
-    my $relation = $attrs->{relation};
-    if ( !defined( $relation )) {
-        return moan( $macro, $attrs, "'relation' not defined", "" );
-    }
-
-    my $base = $attrs->{base};
-    $base = $topic unless ( defined( $base ));
-
-    # Optional
-    my $text = $attrs->{text} || "";
-    # Optional
-    my $formtype = $attrs->{form};
-    # Optional
-    my $template = $attrs->{template};
-
-    my $tc = $this->{_topiccreator}++;
-    my $child;
-
-    my $form = "<form name=\"topiccreator$tc\" ";
-    $form .= "action=\"%SCRIPTURL%/autocreate/$web/";
-    $form .= "$base\">";
-    $form .= "<input type=\"submit\" value=\"$text\" />";
-    $form .= "<input type=\"hidden\" name=\"relation\" value=\"$relation\" />";
-    if ( defined( $formtype )) {
-        $form .= "<input type=\"hidden\" name=\"formtemplate\" value=\"$formtype\" />";
-    }
-    if ( defined( $template )) {
-        $form .= "<input type=\"hidden\" name=\"templatetopic\" value=\"$template\" />";
-    }
-    return "$form</form>";
-}
-
-# PUBLIC derive a new topic name according to the rules given in the
-# relation, returning a topic name with a '\n' where the topic number
-# should go. It is the responsibility of the caller to determine if
-# this conflicts with any known topic.
-# This is used by the autocreate script.
-sub deriveNewTopic {
-    my ( $this, $relation, $topic ) = @_;
-    my $child;
-
-    if ( $relation eq "copy" ) {
-        $child = $topic;
-        # find the last number in the topic name
-        $child =~ s/([^\d])(\d+)([^\d]*)$/$1\n$3/o;
-    } else {
-        # Find and apply the relation
-        foreach my $r ( @relations ) {
-            if ( $r->{relation} eq $relation ) {
-                $child = $r->nextChild( $topic, $this );
-                last;
-            }
+    if ( defined($name) && ! $name eq "" ) {
+        my $matches = $queries{$name};
+        if ( !defined( $matches ) || $matches->size() == 0 ) {
+            throw Error::Simple "Query '$name' returned no values";
         }
+        return $matches->toString($limit);
     }
-
-    return $child;
 }
 
-sub getInfo {
-    my ( $this, $attrs ) = @_;
+sub getTopicInfo {
+    my ( $this, $topic, $limit ) = @_;
 
     $this->SUPER::load();
-    my $topic = $attrs->{topic};
 
-    if (!defined($topic) || $topic eq '') {
-        return $this->toString();
-    } else {
+    if ( defined($topic) && ! $topic eq '' ) {
         my $ti = $this->get( $topic );
         if (defined($ti)) {
-            return $ti->toString($attrs->{limit});
+            return $ti->toString($limit);
         }
         return CGI::span({class=>'twikiAlert'}, $topic.' not known');
+    } else {
+        return $this->toString();
     }
+}
+
+# PUBLIC return the number of matches for the specified query. 
+sub matchCount {
+    my ( $name ) = @_;
+
+    if ( !defined( $name )) {
+        throw Error::Simple "'query' not defined";
+    }
+
+    my $matches = $queries{$name};
+    if( defined( $matches ) ) {
+        return $matches->size();
+    }
+    return 0;
+}
+
+sub toTable {
+    my ( $name, $format, $attrs, $topic, $web, $user, $installWeb ) = @_;
+
+    if ( !defined( $name )) {
+        throw Error::Simple "'query' not defined";
+    }
+
+    if ( !defined( $format )) {
+        throw Error::Simple "'format' not defined";
+    }
+    $format = new TWiki::Plugins::FormQueryPlugin::TableFormat( $attrs );
+
+    if ( !defined( $format )) {
+        throw Error::Simple "Table format not defined";
+    }
+
+    my $matches = $queries{$name};
+    if ( !defined( $matches ) || $matches->size() == 0 ) {
+        throw Error::Simple "Query '$name' returned no values";
+    }
+
+    return $format->toTable( $matches,
+                             $attrs->{start},
+                             $attrs->{limit},
+                             $topic, $web, $user, $installWeb );
 }
 
 1;

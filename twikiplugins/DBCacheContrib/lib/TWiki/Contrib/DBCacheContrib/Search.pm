@@ -8,12 +8,11 @@ use strict;
 
 ---++ package TWiki::Contrib::DBCacheContrib::Search
 
-Search operators work on the fields of a TWiki::Contrib::DBCacheContrib::Map. The fields are given by name, and the values by strings or numbers. Strings should always be surrounded by 'single-quotes'. Strings which are regular expressions (RHS of =, != =~ operators) use 'perl' re syntax (see =man perlre= for help). Numbers can be signed integers or decimals.
-
-*Warning* single and double quotes are not allowed in values!
+Search operators work on the fields of a TWiki::Contrib::DBCacheContrib::Map.
+%STARTSECTION{"searchoperators"}%
+Fields are given by name, and values by strings or numbers. Strings should always be surrounded by 'single-quotes'. Strings which are regular expressions (RHS of =, != =~ operators) use 'perl' regular expression syntax (google for =perlre= for help). Numbers can be signed integers or decimals. Single quotes in values may be escaped using backslash (\).
 
 The following operators are available:
-
 | *Operator* | *Result* | *Meaning* |
 | <code>=</code> | Boolean | LHS exactly matches the regular expression on the RHS. The expression must match the whole string. |
 | <code>!=</code> | Boolean | Inverse of = |
@@ -32,10 +31,9 @@ The following operators are available:
 | =OR= | Boolean | OR |
 | <code>()</code> | any | Bracketed subexpression |
 
-Dates for =EARLIER_THAN=, =LATER_THAN= and =WITHIN_DAYS= must be dates in the format expected by =Time::ParseDate= (like the ActionTrackerPlugin). =WITHIN_DAYS= works out the number of _working_ days (i.e. excluding Saturday and Sunday). Apologies in advance if your weekend is offset &plusmn; a day! Integers will automatically be converted to dates, by assuming they represent a number of seconds since 1st January 1970 (a.k.a "the epoch")
+Dates for =EARLIER_THAN=, =LATER_THAN= and =WITHIN_DAYS= must be dates in the format expected by =Time::ParseDate= (like the ActionTrackerPlugin). =WITHIN_DAYS= works out the number of _working_ days (i.e. excluding Saturday and Sunday). Apologies in advance if your weekend is offset &plusmn; a day! Integers will automatically be converted to dates, by assuming they represent a number of seconds since midnight GMT on 1st January 1970.
 
-A search object implements the "matches" method as its general
-contract with the rest of the world.
+%ENDSECTION{"searchoperators"}%
 
 ---+++ Example
 Get a list of attachments that have a date earlier than 1st January 2000
@@ -53,6 +51,9 @@ Get a list of attachments that have a date earlier than 1st January 2000
      }
   }
 </verbatim>
+
+A search object implements the "matches" method as its general
+contract with the rest of the world.
 
 =cut
 
@@ -156,7 +157,7 @@ sub _parse {
         } elsif ( $string =~ s/^\s*($uopRE)//o ) {
             # unary op
             push( @opers, $1 );
-        } elsif ( $string =~ s/^\s*\'(.*?)\'//o ) {
+        } elsif ( $string =~ s/^\s*\'(.*?)(?<!\\)\'//o ) {
             push( @opands, new TWiki::Contrib::DBCacheContrib::Search(
                 undef, undef, "STRING", $1 ));
         } elsif ( $string =~ s/^\s*(-?\d+(\.\d*)?(e-?\d+)?)//io ) {
@@ -207,7 +208,10 @@ sub matches {
 
     if ($op eq "NODE") {
         return 0 unless ($map && defined $r);
-        my $val = $map->get($map->get("form"))->get( $r );
+        # Only reference the hash if the contained form does not
+        # define the field
+        my $form = $map->get("form");
+        my $val = $map->get($form)->get( $r );
         unless ($val) {
             $val = $map->get( $r );
         }
@@ -266,6 +270,7 @@ sub matches {
         return uc( $r->matches( $map ));
     };
     if ($op eq "i2d") {
+        return 0 unless $r;
         return TWiki::Time::formatTime( $r->matches( $map ),
                                         '$email', 'gmtime' );
     };

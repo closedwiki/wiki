@@ -18,9 +18,12 @@ package TWiki::Plugins::FormQueryPlugin::TableDef;
 sub new {
     my ( $class, $text ) = @_;
 
-    my $params = '';
-    if ( $text =~ m/(?:\n|^)%EDITTABLE{(.*?)}%/s ) {
-        $params = $1;
+    my $params;
+    foreach my $line ( split( /\n/, $text )) {
+      if ( $line =~ m/%EDITTABLE{(.*?)}%/o ) {
+	$params = $1;
+	last;
+      }
     }
 
     my $attrs = new TWiki::Attrs( $params );

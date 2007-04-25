@@ -4,7 +4,6 @@ package FileTimeTest;
 
 use base qw(TWikiTestCase);
 
-use TWiki::Contrib::DBCacheContrib::Archive;
 use TWiki::Contrib::DBCacheContrib::FileTime;
 use TWiki::Contrib::DBCacheContrib::Array;
 use TWiki::Func;
