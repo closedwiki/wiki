@@ -5,7 +5,7 @@ use strict;
 
 use vars qw( $VERSION $RELEASE $SHORTDESCRIPTION $debug $pluginName $NO_PREFS_IN_TOPIC $uid );
 
-$VERSION = '$Rev$';
+$VERSION = '$Rev: 13513 (24 Apr 2007) $';
 
 $RELEASE = 'Dakar';
 
@@ -48,58 +48,75 @@ sub _SUBSCRIBE {
         my $who = $query->param('subscribe_subscriber');
         $who ||= $cur_user;
         if ($who eq $TWiki::cfg{DefaultUserWikiName}) {
-            $form = _alert("Cannot subscribe $who");
+            $form = _alert("Abonierung fehlgeschlagen!");
         } else {
             my $unsubscribe = $query->param('subscribe_remove');
-            $form = _subscribe($web, $topics, $who, $cur_user, $unsubscribe);
+             _subscribe($web, $topics, $who, $cur_user, $unsubscribe);
         }
-    } else {
-        	my $topics = $params->{topic} || $topic;
-            
-            # checking if the has subscribben for that topic already
-			eval { require TWiki::Contrib::MailerContrib::WebNotify };
-			($web, $topics) = TWiki::Func::normalizeWebTopicName($web, $topics);
-			my $wn = new TWiki::Contrib::MailerContrib::WebNotify( $TWiki::Plugins::SESSION, $web, $TWiki::cfg{NotifyTopicName} );
-        	my $subscriber = $wn->getSubscriber($who);
-        	
-        	
-        	my $unsubscribe = 0;
-        	# user hase allready subscribed..so if he clicks again, he want to delete that subsciprtion
-        	if ( $subscriber->isSubscribedTo($topics) ) {
-        		$unsubscribe = 'yes';
-        	}	
-        	
-            my $url = TWiki::Func::getScriptUrl(
-                $web, $topic, 'view',
-                subscribe_topic => $topics,
-                subscribe_subscriber => $who,
-                subscribe_remove => $unsubscribe,
-                subscribe_uid => $uid);
-           
-            if ($unsubscribe) {
-            	if ($params->{format}) {
-               	 	$form = $params->{format};
-                	$form =~ s/\$url/$url/g;
-                	$form =~ s/\$wikiname/$who/g;
-            	}
-            	else {
-                	$form = CGI::a({href => $url},
-                               "Unubscribe");
-            	}
-            } else {
-            	if ($params->{formatunsubscribe}) {
-               	 	$form = $params->{formatsubscribe};
-                	$form =~ s/\$url/$url/g;
-                	$form =~ s/\$wikiname/$who/g;
-            	}
-            	else {
-               		$form = CGI::a({href => $url},
-                               "Subscribe");
-            	}
-            }
-    }
+    } 
+   
     $uid++;
-    return $form;
+    return _getbutton($session, $params, $topic, $web);;
+}
+
+sub _getbutton{
+	my($session, $params, $topic, $web) = @_;
+
+    my $query = TWiki::Func::getCgiQuery();
+    my $form;
+    my $suid = $query->param( 'subscribe_uid' );
+
+    my $cur_user = TWiki::Func::getWikiName();
+	
+	my $who = $params->{who} || TWiki::Func::getWikiName();
+    if ($who eq $TWiki::cfg{DefaultUserWikiName}) {
+        $form = '';
+    } else {
+        my $topics = $params->{topic} || $topic;
+            
+        # checking if the has subscribben for that topic already
+		eval { require TWiki::Contrib::MailerContrib::WebNotify };
+		($web, $topics) = TWiki::Func::normalizeWebTopicName($web, $topics);
+		my $wn = new TWiki::Contrib::MailerContrib::WebNotify( $TWiki::Plugins::SESSION, $web, $TWiki::cfg{NotifyTopicName} );
+        my $subscriber = $wn->getSubscriber($who);
+        	
+        	
+        my $unsubscribe = 0;
+        # user hase allready subscribed..so if he clicks again, he want to delete that subsciprtion
+        if ( $subscriber->isSubscribedTo($topics) ) {
+        	$unsubscribe = 'yes';
+        }	
+        	
+        my $url = TWiki::Func::getScriptUrl(
+        $web, $topic, 'view',
+        	subscribe_topic => $topics,
+            subscribe_subscriber => $who,
+            subscribe_remove => $unsubscribe,
+            subscribe_uid => $uid);
+           
+        if ($unsubscribe) {
+            if ($params->{format}) {
+               	$form = $params->{format};
+                $form =~ s/\$url/$url/g;
+                $form =~ s/\$wikiname/$who/g;
+            }
+            else {
+                $form = CGI::a({href => $url},
+                               "unsubscribe");
+            }
+         } 
+         else {
+            if ($params->{formatunsubscribe}) {
+               	$form = $params->{formatsubscribe};
+               	$form =~ s/\$url/$url/g;
+               	$form =~ s/\$wikiname/$who/g;
+            }
+            else {
+            	$form = CGI::a({href => $url},
+                               "subscribe");
+           	}
+         }
+    }
 }
 
 sub _alert {
@@ -146,7 +163,8 @@ sub _subscribe {
 
     $wn->writeWebNotify();
 
-    return _alert("$subscriber has been $mess <nop>$web.<nop>$topics");
+    #return _alert("$subscriber has been $mess <nop>$web.<nop>$topics");
+    return ;
 }
 
 1;
