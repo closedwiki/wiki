@@ -53,6 +53,7 @@ sub init {
         "FORMQUERYPLUGIN_RELATIONS" ) || "";
     my $tablenames = TWiki::Func::getPreferencesValue(
         "FORMQUERYPLUGIN_TABLES" ) || "";
+
     foreach my $relation ( split( /;/, $rtext )) {
         push( @relations,
               new TWiki::Plugins::FormQueryPlugin::Relation( $relation ));
