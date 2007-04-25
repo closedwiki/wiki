@@ -15,13 +15,13 @@ use Assert;
 
 use vars qw(
             $web $topic $user $installWeb $VERSION $RELEASE
-            %db $initialised $moan
+            %db $initialised $moan $quid
            );
 
 $VERSION = '$Rev$';
 $RELEASE = 'TWiki-4';
+$quid = 0;
 
-my $pluginName = 'FormQueryPlugin';
 $initialised = 0; # flag whether _lazyInit has been called
 %db = (); # hash of loaded DBs, keyed on web name
 
@@ -74,7 +74,7 @@ sub initPlugin {
 
 sub _moan {
     my( $tag, $attrs, $mess ) = @_;
-    my $whinge = $moan;
+    my $whinge = $moan || 'on';
     $whinge = $attrs->{moan} if defined $attrs->{moan};
     if( lc( $whinge ) eq 'on' ) {
         return CGI::span({class => 'twikiAlert'},
@@ -127,6 +127,7 @@ sub _DOQUERY {
 
     my($session, $attrs, $topic, $web) = @_;
 
+    my $webName;
     my $result = '';
     try {
         my $casesensitive = $attrs->{casesensitive} || "0";
@@ -134,24 +135,25 @@ sub _DOQUERY {
         my $string = $attrs->{search};
         $string = $attrs->{"_DEFAULT"} unless $string;
 
-        my $webName = $attrs->{web} || $web;
+        $webName = $attrs->{web} || $web;
         my @webs = split( /,\s*/, $webName );
 
         foreach $webName ( @webs ) {
             if ( _lazyCreateDB($webName) ) {
                 # This should be done more efficiently, don't copy...
                 $db{$webName}->formQueryOnDB(
-                    '__query__',
+                    '__query__'.$quid,
                     $string,
                     $attrs->{extract},
                     $casesensitive,
                     1 );
 
                 $result .= TWiki::Plugins::FormQueryPlugin::WebDB::showQuery(
-                    '__query__',
+                    '__query__'.$quid,
                     $attrs->{format},
                     $attrs,
                     $topic, $web, $user, $installWeb );
+                $quid++;
             } else {
                 $result .= _original( 'DOANDSHOWQUERY', $_[1] );
             }
@@ -319,10 +321,11 @@ sub _lazyInit {
     return 1 if ( $initialised );
 
     # FQP_ENABLE must be set globally or in this web!
-    return 0 unless TWiki::Func::getPreferencesFlag( "\U$pluginName\E_ENABLE" );
+    return 0 unless TWiki::Func::getPreferencesFlag(
+        "FORMQUERYPLUGIN_ENABLE" );
 
     # Check for diagostic output
-    $moan = ( TWiki::Func::getPreferencesFlag( "\U$pluginName\E_MOAN" ));
+    $moan = TWiki::Func::getPreferencesValue( "FORMQUERYPLUGIN_MOAN" );
 
     require TWiki::Plugins::FormQueryPlugin::WebDB;
     die $@ if $@;
@@ -340,7 +343,7 @@ sub _lazyCreateDB {
 
     $db{$webName} = new TWiki::Plugins::FormQueryPlugin::WebDB( $webName );
 
-    return 0 unless $db{$webName};
+    return 0 unless ref($db{$webName});
 
     return 1;
 }
