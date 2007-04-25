@@ -2,13 +2,17 @@
 # Copyright (C) Motorola 2003 - All rights reserved
 # Copyright (C) Crawford Currie 2004 - All rights reserved
 #
+package TWiki::Contrib::DBCacheContrib;
+use base 'TWiki::Contrib::DBCacheContrib::Map';
+
 use strict;
 
 use TWiki::Contrib::DBCacheContrib::Array;
 use TWiki::Contrib::DBCacheContrib::FileTime;
 use TWiki::Attrs;
+use Assert;
 
-=begin text
+=pod
 
 ---++ class DBCacheContrib
 
@@ -38,117 +42,37 @@ As topics are loaded, the readTopicLine method gives subclasses an opportunity t
 
 =cut
 
-package TWiki::Contrib::DBCacheContrib;
-
-# A DB is a hash keyed on topic name
-
-use base 'TWiki::Contrib::DBCacheContrib::Map';
-
 use vars qw( $initialised $storable $VERSION $RELEASE );
 
 $initialised = 0; # Not initialised until the first new
-# This should always be $Rev$ so that TWiki can determine the checked-in
-# status of the plugin. It is used by the build automation tools, so
-# you should leave it alone.
+
 $VERSION = '$Rev$';
+$RELEASE = 'TWiki-4';
 
-# This is a free-form string you can use to "name" your own plugin version.
-# It is *not* used by the build automation tools, but is reported as part
-# of the version number in PLUGINDESCRIPTIONS.
-$RELEASE = 'Dakar';
-
-$storable = 1;
-
-=begin text
+=pod
 
 ---+++ =new($web, $cacheName)=
    * =$web= name of web to create the object for.
-   * =$cacheName= name of cache file
+   * =$cacheName= name of cache file (default "_DBCache")
+
 Construct a new DBCache object.
 
 =cut
 
 sub new {
     my ( $class, $web, $cacheName ) = @_;
+    $cacheName ||= '_DBCache';
     my $this = bless( $class->SUPER::new(), $class );
     $this->{_web} = $web;
     $this->{loaded} = 0;
-    $this->{_cachename} = $cacheName || '_DBCache';
+    $this->{_cachename} = $cacheName;
 
-    eval 'use Storable';
-
-    if ( $@ ) {
-        print STDERR "WARNING: Cannot use Storable: $@";
-        $storable = 0;
-    }
+    die "No {DBCacheContrib}{Archivist}" unless
+      defined( $TWiki::cfg{DBCacheContrib}{Archivist} );
+    eval "use $TWiki::cfg{DBCacheContrib}{Archivist}";
+    die $@ if ( $@ );
 
     return $this;
-}
-
-# PRIVATE write a new cache of the listed files.
-sub _writeCache {
-    my ( $this, $cache ) = @_;
-    my $mayBeArchive = 1;
-
-    if ( $storable ) {
-        eval {
-            $mayBeArchive = 0 if (Storable::lock_store( $this, $cache ));
-        };
-
-        if ( $@ ) {
-            print STDERR "Write of Storable $cache failed with $@\n";
-            $mayBeArchive = 1;
-        }
-    }
-
-    if ( $mayBeArchive ) {
-        eval {
-            require TWiki::Contrib::DBCacheContrib::Archive;
-            my $archive = new TWiki::Contrib::DBCacheContrib::Archive( $cache, 'w' );
-            $archive->writeObject( $this );
-            $archive->close();
-        };
-        if ( $@ ) {
-            print STDERR "Write of Archive $cache failed with $@\n";
-        }
-    }
-}
-
-# PRIVATE read from cache file.
-# May throw an exception.
-sub _readCache {
-    my ( $this, $cache ) = @_;
-    my $data;
-
-    return undef unless ( -e $cache );
-
-    my $mayBeArchive = 1;
-
-    if ( $storable ) {
-        eval {
-            $data = Storable::lock_retrieve( $cache );
-        };
-        if ( $@ ) {
-            print STDERR "Retrieve of Storable $cache failed with $@\n";
-        } elsif ( $data ) {
-            $mayBeArchive = 0;
-        }
-    }
-
-    if ( $mayBeArchive ) {
-        eval {
-            require TWiki::Contrib::DBCacheContrib::Archive;
-            my $archive = new TWiki::Contrib::DBCacheContrib::Archive( $cache, 'r' );
-            $data = $archive->readObject();
-            $archive->close();
-        };
-        if ( $@ ) {
-            print STDERR "Retrieve of Archive $cache failed with $@\n";
-            $data = undef;
-        }
-    }
-
-    return $data;
 }
 
 # PRIVATE load a single topic from the given data directory. This
@@ -160,15 +84,16 @@ sub _loadTopic {
     my $filename = "$dataDir/$topic.txt";
     my $fh;
 
-
     unless (open( $fh, "<$filename" )) {
-      print STDERR "WARNING: Failed to open $dataDir/$topic.txt\n";
-      return 0;
+        print STDERR "WARNING: Failed to open $dataDir/$topic.txt\n";
+        return 0;
     }
+
     my $meta = new TWiki::Contrib::DBCacheContrib::Map();
     $meta->set( 'name', $topic );
     $meta->set( 'topic', $topic );
-    $meta->set( '.cache_time', new TWiki::Contrib::DBCacheContrib::FileTime( $filename ));
+    $meta->set( '.cache_time',
+                new TWiki::Contrib::DBCacheContrib::FileTime( $filename ));
 
     my $line;
     my $text = '';
@@ -242,7 +167,7 @@ sub _loadTopic {
     return $meta;
 }
 
-=begin text
+=pod
 
 ---+++ readTopicLine($topic, $meta, $line, $fh) --> text
    * $topic - name of the topic being read
@@ -262,7 +187,7 @@ adding them to the hash for the topic.
 #    return $_[3];
 #}
 
-=begin text
+=pod
 
 ---+++ onReload($topics)
    * =$topics= - perl array of topic names that have just been loaded (or reloaded)
@@ -281,7 +206,8 @@ sub _onReload {
     foreach my $topic ( $this->getValues() ) {
         # Fill in parent relations
         unless ($topic->get('parent')) {
-          $topic->set('parent', $TWiki::cfg{HomeTopicName}); # last parent is WebHome
+          $topic->set('parent', $TWiki::cfg{HomeTopicName});
+          # last parent is WebHome
         }
         unless ( $topic->get( '_up' )) {
             my $parent = $topic->get( 'parent' );
@@ -306,9 +232,9 @@ sub _onReload {
     $this->onReload(@_);
 }
 
-=begin text
+=pod
 
----+++ load() -> @result
+---+++ load() -> ($readFromCache, $readFromFile, $removed)
 
 Load the web into the database.
 Returns a list containing 3 numbers that give the number of topics
@@ -324,13 +250,20 @@ sub load {
 
     my $web = $this->{_web};
     $web =~ s/\./\//go;
-    my $dataDir = TWiki::Func::getDataDir() . "/$web";
-    my $cacheFile = $dataDir . '/' . $this->{_cachename};
+    my $dataDir = TWiki::Func::getDataDir()."/$web";
+    my $workDir = TWiki::Func::getWorkArea('DBCacheContrib');
+    my $cacheFile = "$workDir/$web.$this->{_cachename}";
 
     my $time;
 
     my $writeCache = 0;
-    my $cache = $this->_readCache( $cacheFile );
+
+    my $cache;
+
+    eval {
+        $cache = $TWiki::cfg{DBCacheContrib}{Archivist}->retrieve(
+            $cacheFile );
+    };
 
     my $readFromCache = 0;
     my $readFromFile = 0;
@@ -368,7 +301,7 @@ sub load {
     }
 
     if ( $writeCache ) {
-        $this->_writeCache( $cacheFile );
+        $TWiki::cfg{DBCacheContrib}{Archivist}->store( $this, $cacheFile );
     }
 
     $this->{loaded} = 1;
@@ -431,36 +364,6 @@ sub _updateCache {
     }
 
     return ( $readFromCache, $readFromFile, $removed );
-}
-
-=begin text
-
----+++ write($archive)
-   * =$archive= - the TWiki::Contrib::DBCacheContrib::Archive being written to
-Writes this object to the archive. Archives are used only if Storable is not available. This
-method must be overridden by subclasses is serialisation of their data fields is required.
-
-=cut
-
-sub write {
-    my ( $this, $archive ) = @_;
-    $archive->writeString( $this->{_web} );
-    $this->SUPER::write( $archive );
-}
-
-=begin text
-
----+++ read($archive)
-   * =$archive= - the TWiki::Contrib::DBCacheContrib::Archive being read from
-Reads this object from the archive. Archives are used only if Storable is not available. This
-method must be overridden by subclasses is serialisation of their data fields is required.
-
-=cut
-
-sub read {
-    my ( $this, $archive ) = @_;
-    $this->{_web} = $archive->readString();
-    $this->SUPER::read( $archive );
 }
 
 1;

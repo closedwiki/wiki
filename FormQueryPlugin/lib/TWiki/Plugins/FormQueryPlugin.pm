@@ -1,144 +1,346 @@
 #
-# Copyright (C) 2004 Crawford Currie, cc@c-dot.co.uk
+# Copyright (C) 2004 Crawford Currie, http://c-dot.co.uk
 #
 # TWiki plugin-in module for Form Query Plugin
 #
+package TWiki::Plugins::FormQueryPlugin;
+
 use strict;
 
 use TWiki;
 use TWiki::Func;
-
-package TWiki::Plugins::FormQueryPlugin;
+use TWiki::Attrs;
+use Error qw( :try );
+use Assert;
 
 use vars qw(
-            $web $topic $user $installWeb $VERSION $RELEASE $pluginName
-            $debug %db
+            $web $topic $user $installWeb $VERSION $RELEASE
+            %db $initialised $moan
            );
 
-# This should always be $Rev$ so that TWiki can determine the checked-in
-# status of the plugin. It is used by the build automation tools, so
-# you should leave it alone.
 $VERSION = '$Rev$';
+$RELEASE = 'TWiki-4';
 
-# This is a free-form string you can use to "name" your own plugin version.
-# It is *not* used by the build automation tools, but is reported as part
-# of the version number in PLUGINDESCRIPTIONS.
-$RELEASE = 'Dakar';
-
-$pluginName = 'FormQueryPlugin';
-$debug = 0;
+my $pluginName = 'FormQueryPlugin';
+$initialised = 0; # flag whether _lazyInit has been called
+%db = (); # hash of loaded DBs, keyed on web name
 
 sub initPlugin {
     ( $topic, $web, $user, $installWeb ) = @_;
 
-    if ( defined( $WebDB::storable ) &&
-           TWiki::Func::getPreferencesFlag( "\U$pluginName\E_STORABLE" )) {
-        $WebDB::storable = 1;
-    } else {
-        $WebDB::storable = 0;
-    }
-
-    # Get plugin debug flag
-    $debug = ( $debug || TWiki::Func::getPreferencesFlag( "\U$pluginName\E_DEBUG" ));
-
-    TWiki::Func::registerTagHandler( 'FQPDEBUG', \&_handleFQPInfo,
-                                     'context-free' );
-    TWiki::Func::registerTagHandler( 'FORMQUERY', \&_handleFormQuery,
-                                     'context-free' );
-    TWiki::Func::registerTagHandler( 'WORKDAYS', \&_handleWorkingDays,
-                                     'context-free' );
-    TWiki::Func::registerTagHandler( 'SUMFIELD', \&_handleSumQuery,
-                                     'context-free' );
-    TWiki::Func::registerTagHandler( 'ARITH', \&_handleCalc,
-                                     'context-free' );
-    TWiki::Func::registerTagHandler( 'TABLEFORMAT', \&_handleTableFormat,
-                                     'context-free' );
-    TWiki::Func::registerTagHandler( 'SHOWQUERY', \&_handleShowQuery,
-                                     'context-free' );
-    TWiki::Func::registerTagHandler( 'TOPICCREATOR', \&_handleTopicCreator,
-                                     'context-free' );
-    TWiki::Func::registerTagHandler( 'PROGRESS', \&_handleProgress,
-                                     'context-free' );
+    TWiki::Func::registerTagHandler(
+        'FQPDEBUG',
+        \&_FQPDEBUG,
+        'context-free' );
+    TWiki::Func::registerTagHandler(
+        'DOANDSHOWQUERY',
+        \&_DOQUERY, # Deprecated
+        'context-free' );
+    TWiki::Func::registerTagHandler(
+        'DOQUERY',
+        \&_DOQUERY,
+        'context-free' );
+    TWiki::Func::registerTagHandler(
+        'FORMQUERY',
+        \&_FORMQUERY,
+        'context-free' );
+    TWiki::Func::registerTagHandler(
+        'SUMFIELD',
+        \&_SUMFIELD,
+        'context-free' );
+    TWiki::Func::registerTagHandler(
+        'MATCHCOUNT',
+        \&_MATCHCOUNT,
+        'context-free' );
+    TWiki::Func::registerTagHandler(
+        'TABLEFORMAT',
+        \&_TABLEFORMAT,
+        'context-free' );
+    TWiki::Func::registerTagHandler(
+        'SHOWQUERY',
+        \&_SHOWQUERY,
+        'context-free' );
+    TWiki::Func::registerTagHandler(
+        'QUERYTOCALC',
+        \&_QUERYTOCALC,
+        'context-free' );
+    TWiki::Func::registerTagHandler(
+        'SHOWCALC',
+        \&_SHOWCALC,
+        'context-free' );
 
     return 1;
 }
 
-sub _handleFQPInfo {
-    my($session, $params, $topic, $web) = @_;
-    return CGI::span({class=>'twikiAlert'}, 'FQP init failed')
-      unless ( _lazyInit($web) );
-    return $db{$web}->getInfo( $params );
+sub _moan {
+    my( $tag, $attrs, $mess ) = @_;
+    my $whinge = $moan;
+    $whinge = $attrs->{moan} if defined $attrs->{moan};
+    if( lc( $whinge ) eq 'on' ) {
+        return CGI::span({class => 'twikiAlert'},
+                         '%<nop>'.$tag.'{'.$attrs->stringify()."}% :$mess");
+    }
+    return '';
 }
 
-sub _handleFormQuery {
-    my($session, $params, $topic, $web) = @_;
-    return CGI::span({class=>'twikiAlert'}, 'FQP init failed')
-      unless ( _lazyInit($web) );
-    return $db{$web}->formQuery( 'FORMQUERY', $params );
+sub _original {
+    my( $macro, $params ) = @_;
+    return _moan($macro, $params, "Plugin initialisation failed");
 }
 
-sub _handleTableFormat {
-    my($session, $params, $topic, $web) = @_;
-    return CGI::span({class=>'twikiAlert'}, 'FQP init failed')
-      unless ( _lazyInit($web) );
-    return $db{$web}->tableFormat( 'TABLEFORMAT', $params );
+sub _FQPDEBUG {
+    return _original( 'FQPINFO', $_[1] ) unless ( _lazyInit() );
+
+    my($session, $attrs, $topic, $web) = @_;
+
+    my $limit = $attrs->{limit};
+    $limit = undef if ($limit && $limit eq 'all');
+
+    my $result;
+    try {
+        my $name = $attrs->{query};
+        if ( $name ) {
+            $result = TWiki::Plugins::FormQueryPlugin::WebDB::getQueryInfo(
+                $name, $limit );
+        } else {
+
+            my $webName = $attrs->{web} || $web;
+
+            if ( _lazyCreateDB($webName) ) {
+                $result = $db{$webName}->getTopicInfo(
+                    $attrs->{topic},
+                    $attrs->{limit} );
+            } else {
+                $result = _original( 'FQPINFO', $_[1] );
+            }
+        }
+    } catch Error::Simple with {
+        $result = _moan( 'FQPINFO', $attrs, shift->{-text} );
+        die $result if DEBUG;
+    };
+    return $result;
 }
 
-sub _handleShowQuery {
-    my($session, $params, $topic, $web) = @_;
-    return CGI::span({class=>'twikiAlert'}, 'FQP init failed')
-      unless ( _lazyInit($web) );
-    return $db{$web}->showQuery( 'SHOWQUERY', $params );
+sub _DOQUERY {
+
+    return _original( 'DOQUERY', $_[1] ) unless ( _lazyInit() );
+
+    my($session, $attrs, $topic, $web) = @_;
+
+    my $result = '';
+    try {
+        my $casesensitive = $attrs->{casesensitive} || "0";
+        $casesensitive = 0 if( $casesensitive =~ /^off$/oi );
+        my $string = $attrs->{search};
+        $string = $attrs->{"_DEFAULT"} unless $string;
+
+        my $webName = $attrs->{web} || $web;
+        my @webs = split( /,\s*/, $webName );
+
+        foreach $webName ( @webs ) {
+            if ( _lazyCreateDB($webName) ) {
+                # This should be done more efficiently, don't copy...
+                $db{$webName}->formQueryOnDB(
+                    '__query__',
+                    $string,
+                    $attrs->{extract},
+                    $casesensitive,
+                    1 );
+
+                $result .= TWiki::Plugins::FormQueryPlugin::WebDB::showQuery(
+                    '__query__',
+                    $attrs->{format},
+                    $attrs,
+                    $topic, $web, $user, $installWeb );
+            } else {
+                $result .= _original( 'DOANDSHOWQUERY', $_[1] );
+            }
+        }
+    } catch Error::Simple with {
+        $result = _moan( 'DOQUERY', $attrs, shift->{-text} );
+    };
+    return $result;
+
 }
 
-sub _handleTopicCreator {
-    my($session, $params, $topic, $web) = @_;
-    return CGI::span({class=>'twikiAlert'}, 'TOPICCREATOR REMOVED - use XXXXXXXXXX');
+sub _FORMQUERY {
+    return _original( 'FORMQUERY', $_[1] ) unless ( _lazyInit() );
+
+    my($session, $attrs, $topic, $web) = @_;
+
+    my $query = $attrs->{query};
+    my $casesensitive = $attrs->{casesensitive} || "0";
+    $casesensitive = 0 if( $casesensitive =~ /^off$/oi );
+    my $string = $attrs->{search};
+    $string = $attrs->{"_DEFAULT"} || "" unless $string;
+
+    my $result = '';
+    try {
+        if ( $query ) {
+            $result = TWiki::Plugins::FormQueryPlugin::WebDB::formQueryOnQuery(
+                $attrs->{name},
+                $string,
+                $query,
+                $attrs->{extract},
+                $casesensitive );
+        } else {
+            my $webName = $attrs->{web} || $web;
+            my @webs = split /,\s*/, $webName;
+
+            my $result;
+            foreach $webName ( @webs ) {
+                if ( _lazyCreateDB($webName) ) {
+                    # This should be done more efficiently, don't copy every time...
+                    $result .= $db{$webName}->formQueryOnDB(
+                        $attrs->{name},
+                        $string,
+                        $attrs->{extract},
+                        $casesensitive,
+                        1 );
+                } else {
+                    $result .= _original( 'FORMQUERY', $_[1] );
+                }
+            }
+        }
+    } catch Error::Simple with {
+        $result = _moan( 'FORMQUERY', $attrs, shift->{-text} );
+    };
+    return $result;
 }
 
-sub _handleSumQuery {
-    my($session, $params, $topic, $web) = @_;
-    return CGI::span({class=>'twikiAlert'}, 'FQP init failed')
-      unless ( _lazyInit($web) );
-    return $db{$web}->sumQuery( 'SUMQUERY', $params );
+sub _TABLEFORMAT {
+    return _original( 'TABLEFORMAT', $_[1] ) unless ( _lazyInit() );
+
+    my($session, $attrs, $topic, $web) = @_;
+
+    my $result;
+    try {
+        $result = TWiki::Plugins::FormQueryPlugin::WebDB::tableFormat(
+						$attrs->{name},
+						$attrs->{format},
+						$attrs );
+    } catch Error::Simple with {
+        $result = _moan( 'TABLEFORMAT', $attrs, shift->{-text} );
+    };
+    return $result;
 }
 
-sub _handleCalc {
-    my($session, $params, $topic, $web) = @_;
-    return CGI::span({class=>'twikiAlert'}, 'ARITH REMOVED - use SpreadSheetPlugin');
+sub _SHOWQUERY {
+    return _original( 'SHOWQUERY', $_[1] ) unless ( _lazyInit() );
+
+    my($session, $attrs, $topic, $web) = @_;
+
+    my $result;
+    try {
+        $result = TWiki::Plugins::FormQueryPlugin::WebDB::showQuery(
+            $attrs->{query},
+            $attrs->{format},
+            $attrs,
+            $topic, $web, $user, $installWeb);
+    } catch Error::Simple with {
+        $result = _moan( 'SHOWQUERY', $attrs, shift->{-text} );
+    };
+    return $result;
 }
 
-sub _handleWorkingDays {
-    my($session, $params, $topic, $web) = @_;
-    return CGI::span({class=>'twikiAlert'}, 'WORKDAYS REMOVED - use SpreadSheetPlugin');
+sub _QUERYTOCALC {
+    return _original( 'QUERYTOCALC', $_[1] ) unless ( _lazyInit() );
+
+    my($session, $attrs, $topic, $web) = @_;
+
+    my $result;
+    try {
+        $result = TWiki::Plugins::FormQueryPlugin::WebDB::toTable(
+            $attrs->{query},
+            $attrs->{format},
+            $attrs,
+            $topic, $web, $user, $installWeb);
+    } catch Error::Simple with {
+        $result = _moan( 'QUERYTOCALC', $attrs, shift->{-text} );
+    };
+    return $result;
 }
 
-sub _handleProgress {
-    my($session, $params, $topic, $web) = @_;
-    return CGI::span({class=>'twikiAlert'}, 'FQP init failed')
-      unless ( _lazyInit($web) );
-    return  TWiki::Plugins::FormQueryPlugin::ReqDBSupport::progressBar(
-        'PROGRESSBAR', $params, $web, $topic );
+sub _SHOWCALC {
+    return _original( 'SHOWCALC', $_[1] ) unless ( _lazyInit() );
+
+    my($session, $attrs, $topic, $web) = @_;
+
+    my $calcline = $attrs->{"_DEFAULT"};
+
+    # Not required but for safety, as we are not in the table...
+    $TWiki::Plugins::SpreadSheetPlugin::cPos = -1;
+
+    my $result;
+    try {
+        $result = TWiki::Plugins::SpreadSheetPlugin::Calc::doCalc($calcline);
+    } catch Error::Simple with {
+        $result = _moan( 'SHOWCALC', $attrs, shift->{-text} );
+    };
+    return $result;
+}
+
+sub _SUMFIELD {
+    return _original( 'SUMFIELD', $_[1] ) unless ( _lazyInit() );
+
+    my($session, $attrs, $topic, $web) = @_;
+
+    my $result;
+    try {
+        $result = TWiki::Plugins::FormQueryPlugin::WebDB::sumQuery(
+            $attrs->{query},
+            $attrs->{field} );
+    } catch Error::Simple with {
+        $result = _moan( 'SUMFIELD', $attrs, shift->{-text} );
+    };
+    return $result;
+}
+
+sub _MATCHCOUNT {
+    return _original( 'MATCHCOUNT', $_[1] ) unless ( _lazyInit() );
+
+    my($session, $attrs, $topic, $web) = @_;
+
+    my $result;
+    try {
+        $result = TWiki::Plugins::FormQueryPlugin::WebDB::matchCount(
+					       $attrs->{query} );
+    } catch Error::Simple with {
+        $result = _moan( 'MATCHCOUNT', $attrs,shift->{-text});
+    };
+    return $result;
 }
 
 sub _lazyInit {
-    my ($web) = @_;
 
-    return 1 if $db{$web};
+    # Problem: %SEARCH% with scope=text changes the current directory, thus 
+    # the subsequent loads do not work.
+
+    return 1 if ( $initialised );
 
     # FQP_ENABLE must be set globally or in this web!
     return 0 unless TWiki::Func::getPreferencesFlag( "\U$pluginName\E_ENABLE" );
 
-    eval <<'HERE';
-use TWiki::Plugins::FormQueryPlugin::WebDB;
-use TWiki::Plugins::FormQueryPlugin::ReqDBSupport;
-use TWiki::Plugins::FormQueryPlugin::Arithmetic;
-HERE
+    # Check for diagostic output
+    $moan = ( TWiki::Func::getPreferencesFlag( "\U$pluginName\E_MOAN" ));
+
+    require TWiki::Plugins::FormQueryPlugin::WebDB;
     die $@ if $@;
 
-    $db{$web} = new  TWiki::Plugins::FormQueryPlugin::WebDB( $web );
+    $initialised = 1;
 
-    return 0 unless $db{$web};
+    return 1;
+
+}
+
+sub _lazyCreateDB {
+    my ( $webName ) = @_;
+
+    return 1 if $db{$webName};
+
+    $db{$webName} = new TWiki::Plugins::FormQueryPlugin::WebDB( $webName );
+
+    return 0 unless $db{$webName};
 
     return 1;
 }
