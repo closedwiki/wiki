@@ -37,9 +37,27 @@ if ($ENV{TWIKI_ASSERTS}) {
   print "Assert checking off $ENV{TWIKI_ASSERTS}\n";
 }
 
+#make sure our environment is sufficiently clean to run tests
+#DON"T RUN THIS :)
+#my $dangerousRemover = 'rm -r /tmp/junk* ; rm  '.$TWiki::cfg{TempfileDir}.'/[cde]* ; rm '.$TWiki::cfg{TempfileDir}.'/* ; rm -r '.$TWiki::cfg{DataDir}.'/Temp*';
+#`$dangerousRemover`;
+testForFiles('/tmp/junk*'); #this is hardcoded into some tests :(
+testForFiles($TWiki::cfg{TempfileDir}.'/*');
+testForFiles($TWiki::cfg{DataDir}.'/Temp*');
+
+
 # Uncomment and edit to debug individual packages.
 #debug_pkgs(qw/Test::Unit::TestCase/);
 
 my $testrunner = Test::Unit::TestRunner->new();
+print "\n---------------\nRunning: ".join(',', @ARGV)."\n";
 $testrunner->start(@ARGV);
 
+sub testForFiles {
+    my $test = shift;
+    
+    my $list = `ls $test 2> /dev/null`;
+    die "please remove $test to run tests\n" unless ($list eq '');
+}
+
+1;
