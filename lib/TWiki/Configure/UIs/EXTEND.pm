@@ -144,7 +144,13 @@ MESS
             print $this->ERROR("No permission to write to $ef");
             die "Installation terminated";
         } elsif (!-d $ef) {
-            unless (File::Copy::move("$dir/$file", $ef)) {
+            if (-d "$dir/$file") {
+                unless (mkdir($ef)) {
+                    print $this->ERROR(
+                        "Cannot create directory $ef: $!");
+                    die "Installation terminated";
+                }
+            } elsif (!File::Copy::move("$dir/$file", $ef)) {
                 print $this->ERROR("Failed to move file '$file' to $ef: $!");
                 die "Installation terminated";
             };
@@ -236,6 +242,7 @@ sub _listDir {
                 push(@names, "$path$f");
             }
         }
+        closedir($d);
     }
     return @names;
 }
