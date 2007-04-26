@@ -54,9 +54,8 @@ sub _SUBSCRIBE {
              _subscribe($web, $topics, $who, $cur_user, $unsubscribe);
         }
     } 
-   
-    $uid++;
-    return _getbutton($session, $params, $topic, $web);;
+
+    return _getbutton($session, $params, $topic, $web);
 }
 
 sub _getbutton{
@@ -102,7 +101,7 @@ sub _getbutton{
             }
             else {
                 $form = CGI::a({href => $url},
-                               "unsubscribe");
+                               "Abo aufl&ouml;sen");
             }
          } 
          else {
@@ -113,10 +112,13 @@ sub _getbutton{
             }
             else {
             	$form = CGI::a({href => $url},
-                               "subscribe");
+                               "Abonieren");
            	}
          }
     }
+    
+    $uid++;
+    return $form;
 }
 
 sub _alert {
@@ -164,7 +166,7 @@ sub _subscribe {
     $wn->writeWebNotify();
 
     #return _alert("$subscriber has been $mess <nop>$web.<nop>$topics");
-    return ;
+    return "";
 }
 
 1;
