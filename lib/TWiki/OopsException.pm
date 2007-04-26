@@ -53,13 +53,15 @@ The remaining parameters are interpreted as key-value pairs. The following keys 
 =cut
 
 sub new {
-    my( $class, $template ) = @_;
+    my $class = shift;
+    my $template = shift;
     my $this = bless( $class->SUPER::new(), $class );
     $this->{template} = $template;
-    ASSERT( scalar( @_ ) % 2 == 0, join( ";", @_ ) ) if DEBUG;
+    ASSERT( scalar( @_ ) % 2 == 0, join( ";", map { $_ || 'undef'} @_ ) )
+      if DEBUG;
     while ( my $key = shift @_ ) {
         my $val = shift @_;
-        $this->{$key} = $val;
+        $this->{$key} = $val || '';
     }
     if( $this->{params} && ref( $this->{params} ) ne 'ARRAY') {
         $this->{params} = [ $this->{params} ];
@@ -138,7 +140,7 @@ sub redirect {
     while( my $p = shift( @p )) {
         $session->{cgiQuery}->param( -name => $p, -value => shift( @p ));
     }
-    $session->redirect( $url, $this->{keep} );
+    $session->redirect( $url, 1 );
 }
 
 1;
