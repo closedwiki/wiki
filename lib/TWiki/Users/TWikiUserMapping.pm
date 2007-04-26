@@ -85,7 +85,9 @@ sub login2canonical {
     $login =~ s/([^a-zA-Z0-9])/'_'.sprintf('%02d', ord($1))/ge;
     no bytes;
     # further uniquify the UID in test mode, to increase the fragility
-    return "UID${login}UID" if DEBUG;
+#    return "UID${login}UID" if DEBUG;
+    $login = 'TWikiUserMapping_'.$login;
+   
     return $login;
 }
 
@@ -93,8 +95,8 @@ sub login2canonical {
 sub canonical2login {
     my( $this, $user ) = @_;
     ASSERT($user) if DEBUG;
-    $user =~ s/^UID// if DEBUG;
-    $user =~ s/UID$// if DEBUG;
+    $user =~ s/TWikiUserMapping_//;
+   
     use bytes;
     # use bytes to ignore character encoding
     $user =~ s/_(\d\d)/chr($1)/ge;
@@ -173,6 +175,9 @@ sub _getListOfGroups {
 # are all guaranteed unigue, or some other string consisting only of 7-bit
 # alphanumerics and underscores.
 #
+# if you fail to create a new user (for eg your Mapper has read only access), 
+#             throw Error::Simple(
+#                'Failed to add user: '.$ph->error());
 sub addUser {
     my ( $this, $login, $wikiname ) = @_;
 
@@ -244,6 +249,8 @@ sub removeUser {
 # Map a canonical user name to a wikiname
 sub getWikiName {
     my ($this, $user) = @_;
+    
+#    $user =~ s/^TWikiUserMapping_//;
     if( $TWiki::cfg{Register}{AllowLoginName} ) {
         _loadMapping( $this );
         return $this->{U2W}->{$user} || canonical2login( $this, $user );
@@ -534,5 +541,68 @@ sub findUserByWikiName {
     }
     return \@users;
 }
+
+
+
+=pod
+
+---++ ObjectMethod ASSERT_IS_CANONICAL_USER_ID( $user_id ) -> $boolean
+
+used for debugging to ensure we are actually passing a canonical_id
+
+=cut
+
+sub ASSERT_IS_CANONICAL_USER_ID {
+    my( $this, $user_id ) = @_;
+#print STDERR "ASSERT_IS_CANONICAL_USER_ID($user_id)";
+#    ASSERT($user_id =~/^UID$(\s+)UID$/) if DEBUG;
+    ASSERT( $user_id =~/^TWikiUserMapping_/ );	#refine with more specific regex
+
+}
+
+=pod
+
+---++ ObjectMethod ASSERT_IS_USER_LOGIN_ID( $user_login ) -> $boolean
+
+used for debugging to ensure we are actually passing a user login
+
+=cut
+
+sub ASSERT_IS_USER_LOGIN_ID {
+    my( $this, $user_login ) = @_;
+    
+}
+
+
+=pod
+
+---++ ObjectMethod ASSERT_IS_USER_DISPLAY_NAME( $user_display ) -> $boolean
+
+used for debugging to ensure we are actually passing a user display_name (commonly a WikiWord Name)
+
+=cut
+
+sub ASSERT_IS_USER_DISPLAY_NAME {
+    my( $this, $user_display ) = @_;
+    
+}
+
+=pod
+
+---++ ObjectMethod ASSERT_IS_GROUP_DISPLAY_NAME( $group_display ) -> $boolean
+
+used for debugging to ensure we are actually passing a group display_name (commonly a WikiWord Name)
+
+#TODO: i fear we'll need to make a canonical_group_id too 
+
+=cut
+
+sub ASSERT_IS_GROUP_DISPLAY_NAME {
+    my( $this, $group_display ) = @_;
+    
+}
+
+
+
 
 1;

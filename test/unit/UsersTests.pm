@@ -176,14 +176,18 @@ sub testLoad {
     print F $initial;
     close(F);
 
-    $twiki->{users}->{mapping}->addUser( "zuser","ZebediahUser", $me);
-    $twiki->{users}->{mapping}->addUser( "auser","AaronUser", $me);
-    $twiki->{users}->{mapping}->addUser( "guser","GeorgeUser", $me);
+    my $zuser_id = $twiki->{users}->{mapping}->addUser( "zuser","ZebediahUser", $me);
+    $twiki->{users}->{mapping}->ASSERT_IS_CANONICAL_USER_ID($zuser_id);
+    my $auser_id = $twiki->{users}->{mapping}->addUser( "auser","AaronUser", $me);
+    $twiki->{users}->{mapping}->ASSERT_IS_CANONICAL_USER_ID($auser_id);
+    my $guser_id = $twiki->{users}->{mapping}->addUser( "guser","GeorgeUser", $me);
+    $twiki->{users}->{mapping}->ASSERT_IS_CANONICAL_USER_ID($guser_id);
     # deliberate repeat
     $twiki->{users}->{mapping}->addUser( "zuser","ZebediahUser", $me);
     # find a nonexistent user to force a cache read
     $twiki = new TWiki();
     my $n = $twiki->{users}->{mapping}->lookupLoginName("auser");
+    $this->assert_str_equals($n, $auser_id);    
     $this->assert_str_equals("AaronUser", $twiki->{users}->getWikiName($n));
     $this->assert_str_equals("auser", $twiki->{users}->getLoginName($n));
 

@@ -60,6 +60,10 @@ The canonical user id should *never* be seen by a user.
      a list of canonical user ids for the users in that group.
    * An *email* is an email address asscoiated with a *login name*. A single
      login name may have many emails.
+	 
+*NOTE:* 
+   * wherever the code references $user, its a canonical_id
+   * wherever the code references $group, its a group_name (TODO: extract a canonical_group_id and mapping)
 
 =cut
 
@@ -105,6 +109,8 @@ sub new {
     eval "use $implUserMappingManager";
     die "User Mapping Manager: $@" if $@;
     $this->{mapping} = $implUserMappingManager->new( $session );
+    $implUserMappingManager =~ /^TWiki::Users::(.*)$/;
+    $this->{mapping_id} = $1.'_';
 
     $this->{login} = {};
     $this->{CACHED} = 0;
@@ -156,7 +162,7 @@ sub randomPassword {
    * =$password= - password. If undef, a password will be generated.
 
 Add a new TWiki user identity, returning the canonical user id for the new
-user.
+user. Used ONLY for user registration.
 
 The user is added to the password system (if there is one, and if it accepts
 changes). If the user already exists in the password system, then the password
@@ -174,6 +180,7 @@ sub addUser {
     my( $this, $login, $wikiname, $password, $emails) = @_;
     my $removeOnFail = 0;
 
+	$this->ASSERT_IS_USER_LOGIN_ID($login) if DEBUG;
     ASSERT($login || $wikiname) if DEBUG; # must have one
 
     $login ||= $wikiname;
@@ -204,6 +211,7 @@ sub addUser {
     # OK, looking good. Get the canonical user ID from the user mapping
     # manager.
     my $user = $this->{mapping}->addUser( $login, $wikiname );
+	$this->ASSERT_IS_CANONICAL_USER_ID($user) if DEBUG;
 
     $this->setEmails( $user, $emails );
 
@@ -224,6 +232,7 @@ corresponding wiki name using the methods of this class.
 
 sub getCanonicalUserID {
     my( $this, $login ) = @_;
+	$this->ASSERT_IS_USER_LOGIN_ID($login) if DEBUG;
 
     return $this->{mapping}->login2canonical( $login );
 }
@@ -283,7 +292,7 @@ sub findUserByEmail {
 
 ---++ ObjectMethod setEmails($user, @emails)
 
-Set the email address(es) for the given login name.
+Set the email address(es) for the given user.
 The password manager is tried first, and if it doesn't want to know the
 user mapping manager is tried.
 
@@ -293,6 +302,7 @@ sub setEmails {
     my $this = shift;
     my $user = shift;
     my $ph = $this->{passwords};
+	$this->ASSERT_IS_CANONICAL_USER_ID($user) if DEBUG;
 
     if( $ph->isManagingEmails()) {
         $ph->setEmails( $this->getLoginName( $user ), @_ );
@@ -314,6 +324,7 @@ True if the user is an admin
 sub isAdmin {
     my( $this, $user ) = @_;
     my $isAdmin = 0;
+	$this->ASSERT_IS_CANONICAL_USER_ID($user) if DEBUG;
 
     if ($user eq $TWiki::cfg{SuperAdminGroup}) {
         $isAdmin = 1;
@@ -338,7 +349,8 @@ conventional web specifiers (which are ignored).
 
 sub isInList {
     my( $this, $user, $userlist ) = @_;
-
+	$this->ASSERT_IS_CANONICAL_USER_ID($user) if DEBUG;
+	
     return 0 unless $userlist;
 
     # comma delimited list of users or groups
@@ -370,9 +382,15 @@ never by their wiki name, so this is a nop.
 =cut
 
 sub getLoginName {
-    my( $this, $user) = @_;
-
-    return $this->{mapping}->getLoginName( $user );
+    my( $this, $user_id) = @_;
+	$this->ASSERT_IS_CANONICAL_USER_ID($user_id) if DEBUG;
+	
+	#only process canonical_ids that are for the currently selected mapper (if none specificed in the canon_id, assume TWikiUserMapping)
+    if ( $user_id =~ /^($this->{mapping_id})/ || ($this->{mapping_id} eq 'TWikiUserMapping_')) {
+        return $this->{mapping}->getLoginName( $user_id );
+    } else {
+        return 'unknown_user';
+    }
 }
 
 =pod
@@ -391,6 +409,7 @@ Duplicates are removed from the list.
 
 sub getEmails {
     my( $this, $user ) = @_;
+	$this->ASSERT_IS_CANONICAL_USER_ID($user) if DEBUG;
 
     my $um = $this->{mapping};
     my %emails;
@@ -428,10 +447,17 @@ Get the wikiname to display for a canonical user identifier.
 =cut
 
 sub getWikiName {
-    my ($this, $user ) = @_;
-    ASSERT($user) if DEBUG;
-
-    return $this->{mapping}->getWikiName($user);
+    my ($this, $user_id ) = @_;
+    ASSERT($user_id) if DEBUG;
+	$this->ASSERT_IS_CANONICAL_USER_ID($user_id) if DEBUG;
+	
+	#only process canonical_ids that are for the currently selected mapper (if none specificed in the canon_id, assume TWikiUserMapping)
+    if ( $user_id =~ /^($this->{mapping_id})/ || ($this->{mapping_id} eq 'TWikiUserMapping_')) {
+        return $this->{mapping}->getWikiName($user_id);
+    } else {
+        #TODO: if no mapper is specified, return user_id - as its a pre canon-id UID, otherwise call it unknown
+        return $user_id;
+    }
 }
 
 =pod
@@ -444,7 +470,8 @@ Return the fully qualified wikiname of the user
 
 sub webDotWikiName {
     my( $this, $user ) = @_;
-    return "$TWiki::cfg{UsersWebName}.".getWikiName( $this, $user );
+ 	$this->ASSERT_IS_CANONICAL_USER_ID($user) if DEBUG;
+   return "$TWiki::cfg{UsersWebName}.".getWikiName( $this, $user );
 }
 
 =pod
@@ -458,6 +485,7 @@ identifier if the user is known, or undef otherwise.
 
 sub userExists {
     my( $this, $loginName ) = @_;
+	$this->ASSERT_IS_USER_LOGIN_ID($loginName) if DEBUG;
 
     if( $loginName eq $TWiki::cfg{DefaultUserLogin} ) {
         return $loginName;
@@ -482,6 +510,8 @@ sub userExists {
 
 Get an iterator over the list of all the registered users *not* including
 groups.
+
+list of canonical_ids ???
 
 Use it as follows:
 <verbatim>
@@ -538,6 +568,8 @@ The default implementation is to check if the wikiname of the user ends with
 interpretations. The $TWiki::cfg{SuperAdminGroup} is recognized as a
 group no matter what it's name is.
 
+QUESTION: is the $user parameter here a string, or a canonical_id??
+
 =cut
 
 sub isGroup {
@@ -567,12 +599,11 @@ is a member of.
 
 sub eachMembership {
     return shift->{mapping}->eachMembership( @_ );
-
 }
 
 =pod
 
----++ ObjectMethod checkPassword( $user, $passwordU ) -> $boolean
+---++ ObjectMethod checkPassword( $userName, $passwordU ) -> $boolean
 
 Finds if the password is valid for the given user.
 
@@ -581,9 +612,14 @@ Returns 1 on success, undef on failure.
 =cut
 
 sub checkPassword {
-    my( $this, $user, $pw ) = @_;
+#    my( $this, $user, $pw ) = @_;
+#    return $this->{passwords}->checkPassword(
+#        $this->getLoginName( $user ), $pw);
+
+    my( $this, $userName, $pw ) = @_;
+	$this->ASSERT_IS_USER_LOGIN_ID($userName) if DEBUG;
     return $this->{passwords}->checkPassword(
-        $this->getLoginName( $user ), $pw);
+        $userName, $pw);
 }
 
 =pod
@@ -604,6 +640,7 @@ Otherwise returns 1 on success, undef on failure.
 
 sub setPassword {
     my( $this, $user, $newPassU, $oldPassU ) = @_;
+	$this->ASSERT_IS_CANONICAL_USER_ID($user) if DEBUG;
     return $this->{passwords}->setPassword(
         $this->getLoginName( $user ), $newPassU, $oldPassU);
 }
@@ -636,9 +673,74 @@ topics, which may still be linked.
 
 sub removeUser {
     my( $this, $user ) = @_;
+	$this->ASSERT_IS_CANONICAL_USER_ID($user) if DEBUG;
     my $ln = $this->getLoginName( $user );
     $this->{passwords}->removeUser($ln);
     $this->{mapping}->removeUser($this->getWikiName( $user ), $ln);
 }
+
+=pod
+
+---++ ObjectMethod ASSERT_IS_CANONICAL_USER_ID( $user_id ) -> $boolean
+
+used for debugging to ensure we are actually passing a canonical_id
+
+=cut
+
+sub ASSERT_IS_CANONICAL_USER_ID {
+    my( $this, $user_id ) = @_;
+
+#print STDERR "ASSERT_IS_CANONICAL_USER_ID: $user_id =~ /^(".$this->{mapping_id}."\n";
+
+	#only process canonical_ids that are for the currently selected mapper (if none specificed in the canon_id, assume TWikiUserMapping)
+    if ( $user_id =~ /^($this->{mapping_id})/ || ($this->{mapping_id} eq 'TWikiUserMapping_')) {
+        $this->{mapping}->ASSERT_IS_CANONICAL_USER_ID($user_id);
+    } else {
+        #TODO: warn on not current mapper's Canonical_ID
+    }
+}
+
+=pod
+
+---++ ObjectMethod ASSERT_IS_USER_LOGIN_ID( $user_login ) -> $boolean
+
+used for debugging to ensure we are actually passing a user login
+
+=cut
+
+sub ASSERT_IS_USER_LOGIN_ID {
+    my( $this, $user_login ) = @_;
+    $this->{mapping}->ASSERT_IS_USER_LOGIN_ID($user_login);
+}
+
+
+=pod
+
+---++ ObjectMethod ASSERT_IS_USER_DISPLAY_NAME( $user_display ) -> $boolean
+
+used for debugging to ensure we are actually passing a user display_name (commonly a WikiWord Name)
+
+=cut
+
+sub ASSERT_IS_USER_DISPLAY_NAME {
+    my( $this, $user_display ) = @_;
+    $this->{mapping}->ASSERT_IS_USER_DISPLAY_NAME($user_display);
+}
+
+=pod
+
+---++ ObjectMethod ASSERT_IS_GROUP_DISPLAY_NAME( $group_display ) -> $boolean
+
+used for debugging to ensure we are actually passing a group display_name (commonly a WikiWord Name)
+
+#TODO: i fear we'll need to make a canonical_group_id too 
+
+=cut
+
+sub ASSERT_IS_GROUP_DISPLAY_NAME {
+    my( $this, $group_display ) = @_;
+    $this->{mapping}->ASSERT_IS_GROUP_DISPLAY_NAME($group_display);
+}
+
 
 1;
