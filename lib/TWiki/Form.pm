@@ -747,7 +747,7 @@ sub getFieldValuesFromQuery {
         if (defined $value) {
             $seen++;
             if ($this->{session}->inContext('edit')) {
-                $value  =  TWiki::expandStandardEscapes( $value );
+                $value = TWiki::expandStandardEscapes( $value );
             }
         }
 
@@ -755,25 +755,26 @@ sub getFieldValuesFromQuery {
         if( $fieldDef->{type} =~ /^checkbox|\+multi/ ) {
             my @values = $query->param( $param );
             if ($#values>=0) {
-              if ($#values==0) {
-                @values = split /\,|%2C/, $values[0];
-              }
-              my %vset = ();
-              foreach my $val (@values) {
-                $val =~ s/^\s*//o;
-                $val =~ s/\s*$//o;
-                $vset{$val} = (defined $val && $val =~ /\S/); # skip empty values
-              }
-              $value = '';
-              my $isValues = ( $fieldDef->{type} =~ /\+values/ );
-              foreach my $flditem (@{$fieldDef->{value}}) {
-                $flditem =~ s/^.*?[^\\]=(.*)$/$1/ if $isValues; # get the real value 
-                # Maintain order of definition
-                if ($vset{$flditem}) {
-                  $value .= ', ' if $value;
-                  $value .= $flditem;
+                if ($#values==0) {
+                    @values = split /\,|%2C/, $values[0];
                 }
-              }
+                my %vset = ();
+                foreach my $val (@values) {
+                    $val =~ s/^\s*//o;
+                    $val =~ s/\s*$//o;
+                    $vset{$val} = (defined $val &&
+                                     $val =~ /\S/); # skip empty values
+                }
+                $value = '';
+                my $isValues = ( $fieldDef->{type} =~ /\+values/ );
+                foreach my $flditem (@{$fieldDef->{value}}) {
+                    $flditem =~ s/^.*?[^\\]=(.*)$/$1/ if $isValues; # get the real value 
+                    # Maintain order of definition
+                    if ($vset{$flditem}) {
+                        $value .= ', ' if $value;
+                        $value .= $flditem;
+                    }
+                }
             }
         }
 
@@ -785,8 +786,9 @@ sub getFieldValuesFromQuery {
             }
         }
 
-        if( $fieldDef->{attributes} =~ /M/ && !$value &&
-              ( !$preDef || !$preDef->{value} ) ) {
+        if( $fieldDef->{attributes} =~ /M/ &&
+              ( !defined $value || $value eq '') &&
+                ( !$preDef || !$preDef->{value} ) ) {
             # Remember missing mandatory fields
             push( @missing, $fieldDef->{title} || "unnamed field" );
         }
