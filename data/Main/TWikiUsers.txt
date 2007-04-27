@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiAdminGroup" date="1177673441" format="1.1" reprev="1.2" version="1.2"}%
+%META:TOPICINFO{author="TWikiContributor" date="1137835126" format="1.1" version="$Rev$"}%
 ---+ List of <nop>%WIKITOOLNAME% users
 
 Below is a list of users with accounts. If you want to edit topics or see protected areas of the site then you can get added to the list by registering: fill out the form in %TWIKIWEB%.TWikiRegistration. 
@@ -30,14 +30,10 @@ If you forget your password, %TWIKIWEB%.ResetPassword will get a new one sent to
    * Q - <a name="Q">- - - -</a>
    * R - <a name="R">- - - -</a>
    * S - <a name="S">- - - -</a>
-   * DELETESvenDowideit - sven - 10 Feb 1999
    * T - <a name="T">- - - -</a>
    * TWikiContributor - 1 Jan 2005
    * TWikiGuest - guest - 10 Feb 1999
    * TWikiRegistrationAgent - 1 Jan 2005
-   * TestUser5 - TestUser5 - 27 Apr 2007
-   * TestUser7 - test7 - 27 Apr 2007
-   * TestUser8 - test8 - 27 Apr 2007
    * U - <a name="U">- - - -</a>
    * UnknownUser - 1 Jan 2005
    * V - <a name="V">- - - -</a>
@@ -54,3 +50,4 @@ __%X% Note:__ There are four default system users:
 
 __Access Control:__
    * Set ALLOWTOPICCHANGE = TWikiAdminGroup, TWikiRegistrationAgent
+
