@@ -22,6 +22,8 @@ If you are upgrading from an earlier major version of TWiki such a Cairo (TWiki 
 
 Upgrading from a recent TWiki4 release is much simpler. Upgraders from earlier TWiki4 versions can with advantage follow the steps described in TWiki:TWiki.UpgradingTWiki04x00PatchReleases to ensure a safe upgrade without accidently overwriting customizations.
 
+One of the more difficult tasks is installation of addition CPAN libraries. See <a href="http://twiki.org/cgi-bin/view/TWiki/HowToInstallCpanModules" title="'TWiki/HowToInstallCpanModules' on TWiki.org">TWiki:TWiki.HowToInstallCpanModules</a> for detailed information on how to install !CPAN libraries.
+
 If you need help, ask a question in the TWiki:Support web or on TWiki:Codev.TWikiIRC (irc.freenode.net, channel #twiki) 
 
 #StandardInstallation
@@ -163,6 +165,12 @@ TWiki is written in Perl 5, uses a number of shell commands, and requires <a hre
 
 ---+++ Required CPAN Modules
 
+Most of the !CPAN libraries listesd below are part of a standard Perl installation so you most likely have them all!
+
+See <a href="http://twiki.org/cgi-bin/view/TWiki/HowToInstallCpanModules" title="'TWiki/HowToInstallCpanModules' on TWiki.org">TWiki:TWiki.HowToInstallCpanModules</a> for detailed information on how to install !CPAN libraries
+
+
+
 The following Perl <a href="http://cpan.perl.org/" rel="nofollow" target="_top">CPAN</a> modules are used by TWiki:
 
 | *Module* | *Preferred version* |
@@ -175,7 +183,7 @@ The following Perl <a href="http://cpan.perl.org/" rel="nofollow" target="_top">
 | File::Copy | &gt;=2.06 |
 | File::Find | &gt;=1.05 |
 | File::Spec | &gt;=3.05 |
-| FileHandle | &gt;=2.01 |
+| !FileHandle | &gt;=2.01 |
 | IO::File | &gt;=1.10 |
 | Text::Diff (included) | &nbsp; |
 | Time::Local | &gt;=1.11 |
@@ -183,6 +191,8 @@ The following Perl <a href="http://cpan.perl.org/" rel="nofollow" target="_top">
 ---+++ Optional CPAN Modules
 
 The following Perl modules may be used by TWiki:
+
+See <a href="http://twiki.org/cgi-bin/view/TWiki/HowToInstallCpanModules" title="'TWiki/HowToInstallCpanModules' on TWiki.org">TWiki:TWiki.HowToInstallCpanModules</a> for detailed information on how to install !CPAN libraries
 
 | *Module* | *Preferred version* | *Description* |
 | Archive::Tar | &nbsp; | May be required by the Extensions Installer in configure if command line tar or unzip is not available |
