@@ -136,18 +136,6 @@ $TWiki::cfg{TempfileDir} = '/tmp/twiki';
 # if your webserver requires an extension.
 $TWiki::cfg{ScriptSuffix} = '';
 
-#---+ Operating system
-
-# **STRING 20 EXPERT**
-# {OS} and {DetailedOS} are calculated in the TWiki code. <b>You
-# should only need to override if there is something badly wrong with
-# those calculations.</b><br />
-# {OS} may be one of UNIX WINDOWS VMS DOS MACINTOSH OS2
-# $TWiki::cfg{OS} =
-# **STRING 20 EXPERT**
-# The value of Perl $OS
-# $TWiki::cfg{DetailedOS} =
-
 # ---+ Security setup
 
 # **STRING H**
@@ -245,7 +233,7 @@ $TWiki::cfg{Sessions}{MapIP2SID} = 0;
 # </li></ol>
 $TWiki::cfg{LoginManager} = 'none';
 
-# **REGEX**
+# **REGEX EXPERT**
 # The perl regular expression used to constrain user login names. Some
 # environments may require funny characters in login names, such as \.
 # This is a filter <b>in</b> expression i.e. a login name must match this
@@ -436,6 +424,17 @@ $TWiki::cfg{Register}{NeedVerification} = $TRUE;
 $TWiki::cfg{SafeEnvPath} = '/bin:/usr/bin';
 
 #---++ Miscellaneous
+
+# **STRING 20 EXPERT**
+# {OS} and {DetailedOS} are calculated in the TWiki code. <b>You
+# should only need to override if there is something badly wrong with
+# those calculations.</b><br />
+# {OS} may be one of UNIX WINDOWS VMS DOS MACINTOSH OS2
+# $TWiki::cfg{OS} =
+# **STRING 20 EXPERT**
+# The value of Perl $OS
+# $TWiki::cfg{DetailedOS} =
+
 # **BOOLEAN EXPERT**
 # Remove .. from %INCLUDE{filename}%, to stop includes
 # of relative paths.
@@ -556,29 +555,29 @@ $TWiki::cfg{AntiSpam}{RobotsAreWelcome} = $TRUE;
 
 #---+ Log files
 
-# **BOOLEAN**
+# **BOOLEAN EXPERT**
 # Whether or not to to log different actions in the Access log
 # (in order of how frequently they occur in a typical installation).
 # Information in the Access log is used in gathering web statistics,
 # and is useful as an audit trail of TWiki activity.
 $TWiki::cfg{Log}{view}     = $TRUE; # very frequent, every page view
-# **BOOLEAN**
+# **BOOLEAN EXPERT**
 $TWiki::cfg{Log}{search}   = $TRUE;
-# **BOOLEAN**
+# **BOOLEAN EXPERT**
 $TWiki::cfg{Log}{changes}  = $TRUE; # infrequent if you use WebChanges
-# **BOOLEAN**
+# **BOOLEAN EXPERT**
 $TWiki::cfg{Log}{rdiff}    = $TRUE; # whenever revisions are differenced
-# **BOOLEAN**
+# **BOOLEAN EXPERT**
 $TWiki::cfg{Log}{edit}     = $TRUE; # fairly frequent, every time a page is edited
-# **BOOLEAN**
+# **BOOLEAN EXPERT**
 $TWiki::cfg{Log}{save}     = $TRUE;
-# **BOOLEAN**
+# **BOOLEAN EXPERT**
 $TWiki::cfg{Log}{upload}   = $TRUE; # whenever a new attachment is created
-# **BOOLEAN**
+# **BOOLEAN EXPERT**
 $TWiki::cfg{Log}{attach}   = $TRUE;
-# **BOOLEAN**
+# **BOOLEAN EXPERT**
 $TWiki::cfg{Log}{rename}   = $TRUE; # when a topic or attachment is renamed
-# **BOOLEAN**
+# **BOOLEAN EXPERT**
 $TWiki::cfg{Log}{register} = $TRUE; # rare, when a new user registers
 
 # Names of the various log files. You can use %DATE% (which gets expanded
@@ -769,14 +768,7 @@ $TWiki::cfg{PluralToSingular} = $TRUE;
 # Subversion version control system as a data store.
 $TWiki::cfg{StoreImpl} = 'RcsWrap';
 
-# The quote used for command arguments is normally ' for
-# unix, and " for Windows.
-# <b>Note: If you override any of the paths, parameters of the form
-# %ARG|T% must <em>NOT</em> be enclosed in any kind of quotes.</b> 
-# Otherwise the quotes will be treated as part of the parameter value.
-$TWiki::cfg{RCS}{BinDir} ||= '/usr/bin';
-
-# **STRING 20**
+# **STRING 20 EXPERT**
 # Specifies the extension to use on RCS files. Set to -x,v on windows, leave
 # blank on other platforms.
 $TWiki::cfg{RCS}{ExtOption} = "";
@@ -831,68 +823,68 @@ $TWiki::cfg{RCS}{useSubDir} = $FALSE;
 # May be needed in some windows installations (not required for cygwin)
 $TWiki::cfg{RCS}{coMustCopy} = $FALSE;
 
-# **COMMAND**
+# **COMMAND EXPERT**
 # RcsWrap initialise a file as binary.
 # %FILENAME|F% will be expanded to the filename.
-$TWiki::cfg{RCS}{initBinaryCmd} = "$TWiki::cfg{RCS}{BinDir}/rcs $TWiki::cfg{RCS}{ExtOption} -i -t-none -kb %FILENAME|F%";
-# **COMMAND**
+$TWiki::cfg{RCS}{initBinaryCmd} = "/usr/bin/rcs $TWiki::cfg{RCS}{ExtOption} -i -t-none -kb %FILENAME|F%";
+# **COMMAND EXPERT**
 # RcsWrap initialise a topic file.
-$TWiki::cfg{RCS}{initTextCmd} = "$TWiki::cfg{RCS}{BinDir}/rcs $TWiki::cfg{RCS}{ExtOption} -i -t-none -ko %FILENAME|F%";
-# **COMMAND**
+$TWiki::cfg{RCS}{initTextCmd} = "/usr/bin/rcs $TWiki::cfg{RCS}{ExtOption} -i -t-none -ko %FILENAME|F%";
+# **COMMAND EXPERT**
 # RcsWrap uses this on Windows to create temporary binary files during upload.
-$TWiki::cfg{RCS}{tmpBinaryCmd}  = "$TWiki::cfg{RCS}{BinDir}/rcs $TWiki::cfg{RCS}{ExtOption} -kb %FILENAME|F%";
-# **COMMAND**
+$TWiki::cfg{RCS}{tmpBinaryCmd}  = "/usr/bin/rcs $TWiki::cfg{RCS}{ExtOption} -kb %FILENAME|F%";
+# **COMMAND EXPERT**
 # RcsWrap check-in.
 # %USERNAME|S% will be expanded to the username.
 # %COMMENT|U% will be expanded to the comment.
 $TWiki::cfg{RCS}{ciCmd} =
-    "$TWiki::cfg{RCS}{BinDir}/ci $TWiki::cfg{RCS}{ExtOption} -m%COMMENT|U% -t-none -w%USERNAME|S% -u %FILENAME|F%";
-# **COMMAND**
+    "/usr/bin/ci $TWiki::cfg{RCS}{ExtOption} -m%COMMENT|U% -t-none -w%USERNAME|S% -u %FILENAME|F%";
+# **COMMAND EXPERT**
 # RcsWrap check in, forcing the date.
 # %DATE|D% will be expanded to the date.
 $TWiki::cfg{RCS}{ciDateCmd} =
-    "$TWiki::cfg{RCS}{BinDir}/ci $TWiki::cfg{RCS}{ExtOption} -m%COMMENT|U% -t-none -d%DATE|D% -u -w%USERNAME|S% %FILENAME|F%";
-# **COMMAND**
+    "/usr/bin/ci $TWiki::cfg{RCS}{ExtOption} -m%COMMENT|U% -t-none -d%DATE|D% -u -w%USERNAME|S% %FILENAME|F%";
+# **COMMAND EXPERT**
 # RcsWrap check out.
 # %REVISION|N% will be expanded to the revision number
 $TWiki::cfg{RCS}{coCmd} =
-    "$TWiki::cfg{RCS}{BinDir}/co $TWiki::cfg{RCS}{ExtOption} -p%REVISION|N% -ko %FILENAME|F%";
-# **COMMAND**
+    "/usr/bin/co $TWiki::cfg{RCS}{ExtOption} -p%REVISION|N% -ko %FILENAME|F%";
+# **COMMAND EXPERT**
 # RcsWrap file history.
 $TWiki::cfg{RCS}{histCmd} =
-    "$TWiki::cfg{RCS}{BinDir}/rlog $TWiki::cfg{RCS}{ExtOption} -h %FILENAME|F%";
-# **COMMAND**
+    "/usr/bin/rlog $TWiki::cfg{RCS}{ExtOption} -h %FILENAME|F%";
+# **COMMAND EXPERT**
 # RcsWrap revision info about the file.
 $TWiki::cfg{RCS}{infoCmd} =
-    "$TWiki::cfg{RCS}{BinDir}/rlog $TWiki::cfg{RCS}{ExtOption} -r%REVISION|N% %FILENAME|F%";
-# **COMMAND**
+    "/usr/bin/rlog $TWiki::cfg{RCS}{ExtOption} -r%REVISION|N% %FILENAME|F%";
+# **COMMAND EXPERT**
 # RcsWrap revision info about the revision that existed at a given date.
 # %REVISIONn|N% will be expanded to the revision number.
 # %CONTEXT|N% will be expanded to the number of lines of context.
 $TWiki::cfg{RCS}{rlogDateCmd} =
-    "$TWiki::cfg{RCS}{BinDir}/rlog $TWiki::cfg{RCS}{ExtOption} -d%DATE|D% %FILENAME|F%";
-# **COMMAND**
+    "/usr/bin/rlog $TWiki::cfg{RCS}{ExtOption} -d%DATE|D% %FILENAME|F%";
+# **COMMAND EXPERT**
 # RcsWrap differences between two revisions.
 $TWiki::cfg{RCS}{diffCmd} =
-    "$TWiki::cfg{RCS}{BinDir}/rcsdiff $TWiki::cfg{RCS}{ExtOption} -q -w -B -r%REVISION1|N% -r%REVISION2|N% -ko --unified=%CONTEXT|N% %FILENAME|F%";
-# **COMMAND**
+    "/usr/bin/rcsdiff $TWiki::cfg{RCS}{ExtOption} -q -w -B -r%REVISION1|N% -r%REVISION2|N% -ko --unified=%CONTEXT|N% %FILENAME|F%";
+# **COMMAND EXPERT**
 # RcsWrap lock a file.
 $TWiki::cfg{RCS}{lockCmd} =
-    "$TWiki::cfg{RCS}{BinDir}/rcs $TWiki::cfg{RCS}{ExtOption} -l %FILENAME|F%";
-# **COMMAND**
+    "/usr/bin/rcs $TWiki::cfg{RCS}{ExtOption} -l %FILENAME|F%";
+# **COMMAND EXPERT**
 # RcsWrap unlock a file.
 $TWiki::cfg{RCS}{unlockCmd} =
-    "$TWiki::cfg{RCS}{BinDir}/rcs $TWiki::cfg{RCS}{ExtOption} -u %FILENAME|F%";
-# **COMMAND**
+    "/usr/bin/rcs $TWiki::cfg{RCS}{ExtOption} -u %FILENAME|F%";
+# **COMMAND EXPERT**
 # RcsWrap break a file lock.
 $TWiki::cfg{RCS}{breaklockCmd} =
-    "$TWiki::cfg{RCS}{BinDir}/rcs $TWiki::cfg{RCS}{ExtOption} -u -M %FILENAME|F%";
-# **COMMAND**
+    "/usr/bin/rcs $TWiki::cfg{RCS}{ExtOption} -u -M %FILENAME|F%";
+# **COMMAND EXPERT**
 # RcsWrap delete a specific revision.
 $TWiki::cfg{RCS}{delRevCmd} =
-    "$TWiki::cfg{RCS}{BinDir}/rcs $TWiki::cfg{RCS}{ExtOption} -o%REVISION|N% %FILENAME|F%";
+    "/usr/bin/rcs $TWiki::cfg{RCS}{ExtOption} -o%REVISION|N% %FILENAME|F%";
 
-# **SELECTCLASS TWiki::Store::SearchAlgorithms::* **
+# **SELECTCLASS TWiki::Store::SearchAlgorithms::* EXPERT**
 # TWiki RCS has three built-in search algorithms
 # <ol><li> The default 'Forking' algorithm, which forks a subprocess that
 # runs a 'grep' command,
@@ -912,18 +904,19 @@ $TWiki::cfg{RCS}{SearchAlgorithm} = 'TWiki::Store::SearchAlgorithms::Forking';
 # to -i for case-sensitive search or to the empty string otherwise.
 # Similarly for %DET, which controls whether matching lines are required.
 # (see the documentation on these options with GNU grep for details).
-$TWiki::cfg{RCS}{EgrepCmd} = "/bin/egrep" . ' %CS{|-i}% %DET{|-l}% -H -- %TOKEN|U% %FILES|F%';
+$TWiki::cfg{RCS}{EgrepCmd} = '/bin/egrep %CS{|-i}% %DET{|-l}% -H -- %TOKEN|U% %FILES|F%';
 
 # **COMMAND EXPERT**
 # Full path to GNU-compatible fgrep program. This is used for searching when
 # {SearchAlgorithm} is 'TWiki::Store::SearchAlgorithms::Forking'.
-$TWiki::cfg{RCS}{FgrepCmd} = "/bin/fgrep" . ' %CS{|-i}% %DET{|-l}% -H -- %TOKEN|U% %FILES|F%';
+$TWiki::cfg{RCS}{FgrepCmd} = '/bin/fgrep %CS{|-i}% %DET{|-l}% -H -- %TOKEN|U% %FILES|F%';
 
 # **PATH**
 # Path to the directory where the RCS store implementation will create
 # plugin work areas. Plugin work areas are directories that are managed
 # by plugins, for example for temporary files. The directory has to be
-# readable and writable by the webserver user.
+# readable and writable by the webserver user. Some plugins may require
+# that the directories are visible on the web.
 $TWiki::cfg{RCS}{WorkAreaDir} = '$TWiki::cfg{PubDir}/_work_areas';
 
 # **BOOLEAN**
@@ -1033,7 +1026,7 @@ $TWiki::cfg{PROXY}{HOST} = '';
 # are using a TWikiPreferences topic from a previous release of TWiki.
 $TWiki::cfg{PROXY}{PORT} = '';
 
-#---+ Statistics
+#---+ Miscellaneous settings
 
 # **NUMBER**
 # Number of top viewed topics to show in statistics topic
@@ -1046,8 +1039,6 @@ $TWiki::cfg{Stats}{TopContrib} = 10;
 # **STRING 20 EXPERT**
 # Name of statistics topic
 $TWiki::cfg{Stats}{TopicName} = 'WebStatistics';
-
-#---+ Miscellaneous settings
 
 # **STRING 120 EXPERT**
 # Template path. A comma-separated list of generic file names, containing
@@ -1158,7 +1149,7 @@ $TWiki::cfg{RegistrationApprovals} = '$TWiki::cfg{DataDir}/RegistrationApprovals
 # who should develop with it switched on.
 $TWiki::cfg{WarningsAreErrors} = $FALSE;
 
-#---+ Plugins
+#---+ Extensions
 # *PLUGINS* Marker used by bin/configure script - do not remove!
 # The plugins listed below were discovered by searching the @INC path for
 # modules that match the TWiki standard e.g. TWiki/Plugins/MyPlugin.pm.
