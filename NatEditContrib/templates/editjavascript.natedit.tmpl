@@ -21,6 +21,9 @@ function natEditBoldButtonAction() {
 function natEditItalicButtonAction() {
   natInsertTags(%IF{"defined NATEDIT_ITALIC" then="%NATEDIT_ITALIC%" else="'_', 'Italic text', '_'"}%);
 }
+function natEditMonoButtonAction() {
+  natInsertTags(%IF{"defined NATEDIT_MONO" then="%NATEDIT_MONO%" else="'=', 'Monospace text', '='"}%);
+}
 function natEditUnderlinedButtonAction() {
   natInsertTags(%IF{"defined NATEDIT_UNDERLINE" then="%NATEDIT_UNDERLINE%" else="'<u>', 'Underlined text', '</u>'"}%);
 }
