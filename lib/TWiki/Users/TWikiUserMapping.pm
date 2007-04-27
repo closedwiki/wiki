@@ -74,6 +74,11 @@ sub finish {
     delete $this->{W2U};
 }
 
+#return 1 if the UserMapper supports registration (ie can create new users)
+sub supportsRegistration {
+    return 1;
+}
+
 # Convert a login name to the corresponding canonical user name. The
 # canonical name can be any string of 7-bit alphanumeric and underscore
 # characters, and must correspond 1:1 to the login name.

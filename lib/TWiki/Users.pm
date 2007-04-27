@@ -109,6 +109,8 @@ sub new {
     eval "use $implUserMappingManager";
     die "User Mapping Manager: $@" if $@;
     $this->{mapping} = $implUserMappingManager->new( $session );
+    #the UI for rego supported/not is different from rego temporarily turned off
+    $session->enterContext('registration_supported') if $this->{mapping}->supportsRegistration();
     $implUserMappingManager =~ /^TWiki::Users::(.*)$/;
     $this->{mapping_id} = $1.'_';
 
@@ -612,10 +614,6 @@ Returns 1 on success, undef on failure.
 =cut
 
 sub checkPassword {
-#    my( $this, $user, $pw ) = @_;
-#    return $this->{passwords}->checkPassword(
-#        $this->getLoginName( $user ), $pw);
-
     my( $this, $userName, $pw ) = @_;
 	$this->ASSERT_IS_USER_LOGIN_ID($userName) if DEBUG;
     return $this->{passwords}->checkPassword(
