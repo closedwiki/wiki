@@ -20,14 +20,16 @@
   top:1px;
   left:1px;
 }
-.natEditEditTools,
-.natEditExitTools,
 .natEditHelpTools,
 .natEditObjectTools,
 .natEditParagraphTools,
 .natEditHeadlineTools,
 .natEditTextTools {
   margin-right:5px;
+  white-space:nowrap;
+}
+.natEditEditTools,
+.natEditExitTools {
   white-space:nowrap;
 }
 .natEditForceNewRevision {
