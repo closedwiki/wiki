@@ -21,6 +21,7 @@
 <input type="hidden" name="action_save" value="" />
 <input type="hidden" name="action_checkpoint" value="" />
 <input type="hidden" name="action_cancel" value="" />
+%TMPL:P{"revCommentPluginOptions"}%
 %TMPL:P{"formatbottom"}%%TMPL:P{"formend"}%
 %TMPL:P{"pagehelp"}%
 %TMPL:END%
@@ -42,3 +43,5 @@
 %TMPL:P{"help"}%
 %ENDTWISTYTOGGLE%
 %TMPL:END%
+
+%TMPL:DEF{"revCommentPluginOptions"}%%IF{ "context RevCommentPluginEnabled" then="<div class='revComment'><label for='comment'>Summary of changes</label> <input class='twikiEditComment twikiInputField' size='50' type='text' name='comment' id='comment' /></div><!--/revComment-->" else=""}%%TMPL:END%

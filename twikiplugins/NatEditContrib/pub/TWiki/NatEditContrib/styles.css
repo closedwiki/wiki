@@ -44,3 +44,13 @@
   float:right;
 }
 
+/* RevCommentPlugin support */
+.revComment {
+  margin:0.5em 0px;
+}
+.revComment label {
+  font-weight:bold;
+}
+.revComment input {
+  width:80%;
+}
