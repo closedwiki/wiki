@@ -90,4 +90,36 @@ THIS
 
 }
 
+# Test include of a section when there is no such section in the included
+# topic
+sub test_3158 {
+    my $this = shift;
+    my $includedTopic = "TopicToInclude";
+    $this->{twiki}->{store}->saveTopic(
+        $this->{twiki}->{user}, $this->{other_web},
+        $includedTopic, <<THIS);
+Snurfle
+%STARTSECTION{"suction"}%
+Such a section!
+%ENDSECTION{"suction"}%
+Out of scope
+THIS
+    my $text = $this->{twiki}->handleCommonTags(
+        "%INCLUDE{\"$this->{other_web}.$includedTopic\" section=\"suction\"}%",
+        $this->{test_web}, $this->{test_topic});
+    $this->assert_str_equals("\nSuch a section!\n", $text);
+
+    $this->{twiki}->{store}->saveTopic(
+        $this->{twiki}->{user}, $this->{other_web},
+        $includedTopic, <<THIS);
+%STARTSECTION{"nosuction"}%
+No such section!
+%ENDSECTION{"nosuction"}%
+THIS
+    $text = $this->{twiki}->handleCommonTags(
+        "%INCLUDE{\"$this->{other_web}.$includedTopic\" section=\"suction\"}%",
+        $this->{test_web}, $this->{test_topic});
+    $this->assert_str_equals('', $text);
+}
+
 1;

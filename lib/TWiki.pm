@@ -2960,7 +2960,8 @@ sub INCLUDE {
         return '';
     }
 
-    # remove everything before and after the selected include block
+    # remove everything before and after the default include block unless
+    # a section is explicitly defined
     if( !$section ) {
        $text =~ s/.*?%STARTINCLUDE%//s;
        $text =~ s/%STOPINCLUDE%.*//s;
@@ -2970,8 +2971,8 @@ sub INCLUDE {
     my( $ntext, $sections ) = parseSections( $text );
 
     my $interesting = ( defined $section );
-    if( scalar( @$sections )) {
-        # Rebuild the text from the sections
+    if( $interesting || scalar( @$sections )) {
+        # Rebuild the text from the interesting sections
         $text = '';
         foreach my $s ( @$sections ) {
             if( $section && $s->{type} eq 'section' &&
