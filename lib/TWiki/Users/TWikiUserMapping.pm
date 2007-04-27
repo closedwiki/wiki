@@ -556,7 +556,7 @@ sub ASSERT_IS_CANONICAL_USER_ID {
     my( $this, $user_id ) = @_;
 #print STDERR "ASSERT_IS_CANONICAL_USER_ID($user_id)";
 #    ASSERT($user_id =~/^UID$(\s+)UID$/) if DEBUG;
-    ASSERT( $user_id =~/^TWikiUserMapping_/ );	#refine with more specific regex
+#    ASSERT( $user_id =~/^TWikiUserMapping_/ );	#refine with more specific regex
 
 }
 
