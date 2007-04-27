@@ -56,7 +56,7 @@
 --></span>%TMPL:END%
 
 %TMPL:DEF{"helptools"}%<span class="natEditHelpTools"><!--
---><a class="natEditHelpButton" accesskey="?" href="%SCRIPTURLPATH{"view"}%/%TWIKIWEB%/TextFormattingRules" target="_blank"><!--
+--><a class="natEditHelpButton" accesskey="?" href="javascript:launchWindow('%TWIKIWEB%', 'TextFormattingRules')" target="TextFormattingRules"><!--
 --><img src="%PUBURLPATH%/%TWIKIWEB%/NatEditContrib/button_help.png" alt='%MAKETEXT{"Help"}%' title='%MAKETEXT{"Help"}%' /></a><!--
 --></span>%TMPL:END%
 
@@ -66,12 +66,12 @@
 --><a class="natEditUndoButton" href="javascript:self.location.reload();" accesskey="u" title='%MAKETEXT{"Abandon your changes but continue editing"}%'><!--
 --><img src="%PUBURLPATH%/%TWIKIWEB%/NatEditContrib/button_undo.png" alt='%MAKETEXT{"Abandon your changes but continue editing"}%' title='%MAKETEXT{"Abandon your changes but continue editing"}%' /></a><!--
 --><a class="natEditSaveButton" href="javascript:submitEditForm('save','checkpoint');" accesskey="s"><!--
---><img src="%PUBURLPATH%/%TWIKIWEB%/NatEditContrib/button_save.png" alt='%MAKETEXT{"Save and continue editing"}%' title='%MAKETEXT{"Save and continue editing"}%' /></a><!--
+--><img src="%PUBURLPATH%/%TWIKIWEB%/NatEditContrib/button_floppy.png" alt='%MAKETEXT{"Save and continue editing"}%' title='%MAKETEXT{"Save and continue editing"}%' /></a><!--
 --></span>%TMPL:END%
 
 %TMPL:DEF{"exittools"}%<span class="natEditExitTools"><!--
 --><a class="natEditDoneButton" href="javascript:submitEditForm('save', 'save');" accesskey="d"><!--
---><img src="%PUBURLPATH%/%TWIKIWEB%/NatEditContrib/button_done.png" alt='%MAKETEXT{"Save and exit"}%' title='%MAKETEXT{"Save and exit"}%' /></a><!--
+--><img src="%PUBURLPATH%/%TWIKIWEB%/NatEditContrib/button_save.png" alt='%MAKETEXT{"Save and exit"}%' title='%MAKETEXT{"Save and exit"}%' /></a><!--
 --><a class="natEditCancelButton" href="javascript:submitEditForm('save', 'cancel');" accesskey="c" title='%MAKETEXT{"Abandon your changes and exit"}%'><!--
 --><img src="%PUBURLPATH%/%TWIKIWEB%/NatEditContrib/button_cancel.png" alt='%MAKETEXT{"Cancel and abandon changes"}%' title='%MAKETEXT{"Cancel and abandon changes"}%' /></a><!--
 --></span>%TMPL:END%
