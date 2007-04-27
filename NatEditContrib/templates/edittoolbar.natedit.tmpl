@@ -35,7 +35,7 @@
 -->%TMPL:P{context="MathModePluginEnabled" then="mathbutton"}%<!--
 --><a class="natEditVerbatimButton" accesskey="v" href="javascript:natEditVerbatimButtonAction()"><!--
 --><img src="%PUBURLPATH%/%TWIKIWEB%/NatEditContrib/button_verbatim.png" alt='%MAKETEXT{"Ignore wiki formatting"}%' title='%MAKETEXT{"Ignore wiki formatting"}%' /></a><!--
---><a class="natEditSignatureButton" accessKey="z" href="javascript:natInsertTags(%IF{"defined NATEDIT_SIGNATURE" then="%NATEDIT_SIGNATURE%" else="'=--= ','%WIKIUSERNAME%',' - %DATE%'"}%)"><!--
+--><a class="natEditSignatureButton" accessKey="z" href="javascript:natEditSignatureButtonAction()"><!--
 --><img src="%PUBURLPATH%/%TWIKIWEB%/NatEditContrib/button_signature.png" alt='%MAKETEXT{"Your signature with timestamp"}%' title='%MAKETEXT{"Your signature with timestamp"}%' /></a><!--
 --></span>%TMPL:END%
 
@@ -82,9 +82,6 @@
 --></span>%TMPL:END%
 
 %TMPL:DEF{"imagebutton"}%<!--
---><a class="natEditImageButton" accesskey="g" href="javascript:%TMPL:P{context="ImagePluginEnabled" then="image_action_plugin" else="image_action_standard"}%"><!--
+--><a class="natEditImageButton" accesskey="g" href="javascript:natEditImageButtonAction()"><!--
 --><img src="%PUBURLPATH%/%TWIKIWEB%/NatEditContrib/button_image.png" alt='%MAKETEXT{"Embed image"}%' title='%MAKETEXT{"Embed image"}%' /></a><!--
 -->%TMPL:END%
-
-%TMPL:DEF{"image_action_plugin"}%natEditImageButtonActionImagePlugin();%TMPL:END%
-%TMPL:DEF{"image_action_standard"}%natEditImageButtonActionStandard();%TMPL:END%
