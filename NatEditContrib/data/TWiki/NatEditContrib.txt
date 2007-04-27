@@ -98,11 +98,12 @@ Sponsored by [[http://www.trivadis.com][Trivadis AG]]
 |  Author: | TWiki:Main/MichaelDaum |
 |  Copyright &copy;: | 2007 Michael Daum http://wikiring.de |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Version: | v1.30 |
+|  Version: | v1.31 |
 |  Change History: | |
 |  27 Apr 2007 | made all button output configurable; \
                  standardized their defaults; \
-                 fixed javascript in preview mode |
+                 fixed javascript in preview mode; \
+                 added support for TWiki:Plugins/RevCommentPlugin |
 |  23 Apr 2007 | fixed IE freezing on resizing the edit window |
 |  05 Apr 2007 | added support for <nop>EditContrib and =editform= |
 |  04 Apr 2007 | added css file; \
