@@ -52,6 +52,7 @@ will be inserted. If there's a current selection, then it will be used instead o
 | *Name* | *Icon* | *Description* | *Default* |
 | NATEDIT_BOLD | <img src="%ATTACHURLPATH%/button_bold.png" alt="bold" /> | bold text | '*', 'Bold text', '*' |
 | NATEDIT_ITALIC | <img src="%ATTACHURLPATH%/button_italic.png" alt="italic" /> | italic text | '_', 'Italic text', '_' |
+| NATEDIT_MONO | <img src="%ATTACHURLPATH%/button_mono.png" alt="monospace" /> | monospace text | '=', 'Monospace text', '=' |
 | NATEDIT_UNDERLINE | <img src="%ATTACHURLPATH%/button_underlined.png" alt="underlined" /> | underlined text | '<<nop>u>', 'Underlined text', '</u>' | 
 | NATEDIT_STRIKE | <img src="%ATTACHURLPATH%/button_strike.png" alt="strike" /> | striked text | '<<nop>strike>', 'Strike through text', '<<nop>/strike>' |
 | NATEDIT_SUB | <img src="%ATTACHURLPATH%/button_sub.png" alt="sub" /> | subscribed text | '<<nop>sub>', 'Subscript text', '<<nop>/sub>' |
