@@ -395,7 +395,7 @@ Like many other TWiki extensions, this module is shipped with a fully automatic 
       * If you don't have a permanent connection, you can still use the automatic installer, by downloading all required TWiki archives to a local directory.
          * Point the environment variable =\$TWIKI_PACKAGES= to this directory, and the installer script will look there first for required TWiki packages.
             * =\$TWIKI_PACKAGES= is actually a path; you can list several directories separated by :
-         * If you are behind a firewall that blocks access to CPAN, you can build a local CPAN mini-mirror, as described at http://twiki.org/cgi-bin/view/Codev/BuildingDakar#CPAN_local_minimirror
+         * If you are behind a firewall that blocks access to CPAN, you can pre-install the required !CPAN libraries, as described at http://twiki.org/cgi-bin/view/TWiki/HowToInstallCpanModules
    * If you don't want to use the installer script, or have problems on your platform (e.g. you don't have Perl 5.8), then you can still install manually:
       1 Download and unpack one of the =.zip= or =.tgz= archives to a temporary directory.
       1 Manually copy the contents across to the relevant places in your TWiki installation.
