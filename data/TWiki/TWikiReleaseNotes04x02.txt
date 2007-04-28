@@ -1,0 +1,89 @@
+%META:TOPICINFO{author="TWikiContributor" date="1177700623" format="1.1" version="$Rev$"}%
+---+!! TWiki Release 4.2.0 (Freetown), %$DATE%
+
+%TOC%
+
+---++ Introduction
+
+TWiki Release 4.2.0 is a minor release. TWiki releases are either major (major new features and changes in architecture), minor (enhancements and bug fixes), or patch releases (bug fixes only) which can be installed as upgrades on production installations.
+
+TWiki Release 4.2.0 introduces some good enhancements and quite many bug fixes since 4.1.2.
+
+The development team has done everything to maintain full compatibility with topics generated in TWiki-4.0 and there are no changes to the topic format.
+
+TWiki 4.1.1 addresses a series of bugs found in the first 4 weeks after the release of TWiki 4.1.0.
+
+---++ Pre-installed Extensions
+
+TWiki 4.2.0 is shipped with
+
+   * *Plugins:* !CommentPlugin, !EditTablePlugin, !EmptyPlugin, !InterwikiPlugin, !PreferencesPlugin, !RenderListPlugin, !SlideShowPlugin, !SmiliesPlugin, !SpreadSheetPlugin, !TablePlugin, !TwistyPlugin, !WysiwygPlugin
+   * *Contribs:* !BehaviourContrib !JSCalendarContrib, !KupuContrib, !MailerContrib, !NatEditContrib, !TipsContrib, !TwistyContrib
+   * *Skins:* !ClassicSkin, !PatternSkin
+
+---++ New Features Highlights
+
+   * *Easier Installation and Upgrade*
+
+
+   * *Usability Enhancements*
+
+
+   * *Application Platform Enhancements*
+
+
+   * *Search Enhancements*
+
+
+   * *Skins and Templates Enhancements*
+
+
+   * *Miscellaneous Feature Enhancements*
+
+
+   * *Enhancements of Pre-installed Plugins*
+
+
+---++ Important Changes since 4.1.2
+
+
+
+---++ Deprecation Notices
+
+
+
+---++ Bug Fix Highlights
+
+
+
+
+The full list of bug fixes can be seen below
+
+---++  TWiki 4.2.0 Minor Release - Details
+
+The 4.1.0 release was built from SVN http://svn.twiki.org/svn/twiki/branches/Patch04x02 revision FIXME.
+
+---+++ TWiki 4.2.0 Fixes
+<noautolink>
+
+FIXME using http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/ReleaseNotesTml?type=n%2Fa%7Cpatch%7Cminor
+
+</noautolink>
+
+
+</noautolink>
+
+---+++ TWiki 4.2.0 Enhancements
+
+<noautolink>
+
+FIXME using http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/ReleaseNotesTml?type=n%2Fa%7Cpatch%7Cminor
+
+</noautolink>
+
+
+
+<!-- Note: Do not use Bugs: interwiki links because interwiki rule might not be defined
+   * Set BUGS = http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs
+-->
+__Related Topic:__ TWikiHistory
