@@ -2522,6 +2522,22 @@ sub sanitizeAttachmentName {
 
 =pod
 
+---+++ spaceOutWikiWord( $word, $sep ) -> $text
+
+Spaces out a wiki word by inserting a string (default: one space) between each word component.
+With parameter $sep any string may be used as separator between the word components; if $sep is undefined it defaults to a space.
+
+*Since:* TWiki::Plugins::VERSION 1.13
+
+=cut
+
+sub spaceOutWikiWord {
+    #my ( $word, $sep ) = @_;
+    return TWiki::spaceOutWikiWord(@_);
+}
+
+=pod
+
 ---+++ writeWarning( $text )
 
 Log Warning that may require admin intervention to data/warning.txt
