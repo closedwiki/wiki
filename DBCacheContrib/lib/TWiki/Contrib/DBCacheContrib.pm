@@ -67,8 +67,19 @@ sub new {
     $this->{loaded} = 0;
     $this->{_cachename} = $cacheName;
 
-    die "No {DBCacheContrib}{Archivist}" unless
-      defined( $TWiki::cfg{DBCacheContrib}{Archivist} );
+    # Backward compatibility
+    unless( $TWiki::cfg{DBCacheContrib}{Archivist} ) {
+        eval 'use Storable';
+        if ($@) {
+            # Storable not available
+            $TWiki::cfg{DBCacheContrib}{Archivist} =
+              'TWiki::Contrib::DBCacheContrib::Archivist::File';
+        } else {
+            $TWiki::cfg{DBCacheContrib}{Archivist} =
+              'TWiki::Contrib::DBCacheContrib::Archivist::Storable';
+        }
+    }
+
     eval "use $TWiki::cfg{DBCacheContrib}{Archivist}";
     die $@ if ( $@ );
 
@@ -249,8 +260,9 @@ sub load {
     return (0, 0, 0) if ( $this->{loaded} );
 
     my $web = $this->{_web};
-    $web =~ s/\./\//go;
+    $web =~ s/\./\//g;
     my $dataDir = TWiki::Func::getDataDir()."/$web";
+    $web =~ s/\//\./g;
     my $workDir = TWiki::Func::getWorkArea('DBCacheContrib');
     my $cacheFile = "$workDir/$web.$this->{_cachename}";
 
