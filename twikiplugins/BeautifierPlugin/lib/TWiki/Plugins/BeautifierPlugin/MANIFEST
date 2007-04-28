@@ -23,3 +23,4 @@ lib/Output/ANSI.pm NEW
 lib/Output/DocBook.pm NEW
 lib/Output/HTML.pm NEW
 lib/TWiki/Plugins/BeautifierPlugin.pm NEW
+pub/TWiki/BeautifierPlugin/style.css NEW
