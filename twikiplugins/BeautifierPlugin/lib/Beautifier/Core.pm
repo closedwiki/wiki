@@ -145,7 +145,7 @@ if ($DEBUG) { print "Selection open\n" };
 			# Closing selection blocks
 			if (defined($self->{highlightfile}->{selectoff}) && $self->{context}->{inselection} && substr($line, $j, length($self->{highlightfile}->{selectoff})) eq $self->{highlightfile}->{selectoff})
 			{
-if (!$DEBUG) { print "Selection close\n"; }
+if ($DEBUG) { print "Selection close\n"; }
 				$lineout .= $self->{context}->{select_parts}[1];
 				$out .= $lineout;
 				$lineout = "";
