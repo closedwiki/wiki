@@ -2,9 +2,11 @@
 %STARTINCLUDE%
 ---+!! TWiki Installation Guide
 
-*The following is installation instructions for the TWiki 4.1 production release on an Apache web server on Linux.* Visit TWiki:TWiki.InstallingTWiki for the latest updates to this guide and supplemental information for installing or upgrading TWiki, including notes on installing TWiki on different platforms, environments and web hosting sites.
+*The following is installation instructions for the TWiki 4.2 production release on an Apache web server on Linux.* Visit TWiki:TWiki.InstallingTWiki for the latest updates to this guide and supplemental information for installing or upgrading TWiki, including notes on installing TWiki on different platforms, environments and web hosting sites.
 
-If you are upgrading from a previous version of TWiki, you probably want to read TWikiUpgradeGuide instead (both this document and the !TWikiUpgradeGuide are also available in the root of the distribution as HTML files)
+If you are upgrading from a previous version of TWiki, you probably want to read =TWikiUpgradeGuide= instead.
+
+Both this document and the !TWikiUpgradeGuide are also available in the root of the distribution as HTML files. For this reason links to pages inside your own TWiki are written like =TWiki.WebHome= and not like live web links.
 
 %TOC%
 
@@ -66,7 +68,7 @@ The TWIki:TWiki.ApacheConfigGenerator will help you address all 3 security eleme
 
 ---++ Next Steps
 
-Once you have TWiki installed and running, you might consider the following optional steps for setting up and customizing your TWiki site. Many of the references below refer to topics within your TWiki installation. For example, =TWiki.TWikiSkins= refers to the =TWikiSkins= topic in your TWiki web. If not available locally, you can find these topics in the on-line reference copy of [[TWiki:TWiki04x01.WebHome][TWiki Release 4.1]].
+Once you have TWiki installed and running, you might consider the following optional steps for setting up and customizing your TWiki site. Many of the references below refer to topics within your TWiki installation. For example, =TWiki.TWikiSkins= refers to the =TWikiSkins= topic in your TWiki web. Easy way to jump directly to view the pages is to open your own TWiki in your browser and write =TWiki.TWikiSkins= in the Jump test box to the right in the top bar and hit Enter. You can find these topics in the on-line reference copy at the official TWiki website: [[TWiki:TWiki04x02.WebHome][TWiki Release 4.2]]
 
 #AuthenticationOfUsers
 ---++ Enable Authentication of Users
@@ -82,7 +84,7 @@ These are the steps for enabling "Template Login" which asks for a username and 
       1 Register yourself using the =TWiki.TWikiRegistration= topic.<br />
      %H% Check that the password manager recognizes the new user. Check that a new line with the username and encrypted password is added to the =data/.htpasswd= file. If not, you probably got a path wrong, or the permissions may not allow the webserver user to write to that file.
    1 Edit a topic (by clicking on the =Edit= link at beginning or end of topic) to check if authentication works.
-   1 Edit the =Main/TWikiAdminGroup= topic to include users with system administrator status. Additional instructions are provided in that topic.<br />
+   1 Edit the =Main.TWikiAdminGroup= topic to include users with system administrator status. Additional instructions are provided in that topic.<br />
    %X% This is a very important step, as users in this group can access all topics, independent of TWiki access controls.
    1 Clear admin notes: Some pages are meant to be customized after choice of authentication - check and update these topics (remove notice): =Main.TWikiAdminGroup=, =TWiki.ChangePassword=, =TWiki.ResetPassword=, and =TWiki.ChangeEmailAddress=.
 
@@ -139,7 +141,7 @@ Failing that, please check <b><a href="http://twiki.org/cgi-bin/view/TWiki.Insta
    * For Windows, check the <a href="http://twiki.org/cgi-bin/view/Codev/WindowsInstallCookbook" title="'Codev/WindowsInstallCookbook' on TWiki.org">TWiki:Codev.WindowsInstallCookbook</a>. 
    * For !MacOS X, check TWiki:Codev.TWikiOnMacOSX.
 
-It is also advisable to review TWiki:Codev.KnownIssuesOfTWiki04x01.
+It is also advisable to review TWiki:Codev.KnownIssuesOfTWiki04x02.
 
 If you need help, ask a question in the TWiki:Support web or on TWiki:Codev/TWikiIRC (irc.freenode.net, channel #twiki)
 
