@@ -41,11 +41,11 @@
 
 # =========================
 package TWiki::Plugins::BeautifierPlugin; 	# change the package name!!!
-# use lib ( '.');
 use Beautifier::Core;
 use Output::HTML;
 
 # =========================
+
 use vars qw(
         $web $topic $user $installWeb $VERSION $RELEASE $debug %langs
     );
@@ -60,8 +60,8 @@ $VERSION = '$Rev$';
 # of the version number in PLUGINDESCRIPTIONS.
 $RELEASE = 'Dakar';
 
-
 # =========================
+
 sub initPlugin
 {
     ( $topic, $web, $user, $installWeb ) = @_;
@@ -73,9 +73,6 @@ sub initPlugin
         return 0;
     }
 
-    # Get plugin preferences, the variable defined by:          * Set EXAMPLE = ...
-    # $exampleCfgVar = &TWiki::Func::getPreferencesValue( "EMPTYPLUGIN_EXAMPLE" ) || "default";
-
     # Get plugin debug flag
     $debug = &TWiki::Func::getPreferencesFlag( "BEAUTIFIERPLUGIN_DEBUG" );
 
@@ -85,6 +82,7 @@ sub initPlugin
 }
 
 # =========================
+
 sub commonTagsHandler
 {
 ### my ( $text, $topic, $web ) = @_;   # do not uncomment, use $_[0], $_[1]... instead
@@ -103,11 +101,14 @@ sub commonTagsHandler
     $_[0] =~ s/%CODE_PYTHON{(.*?)}%/&handleCode("python", $1)/gseo;
     $_[0] =~ s/%CODE_JAVA{(.*?)}%/&handleCode("java", $1)/gseo;
 }
+
 # =========================
 
 sub handleCode
 {
     my $args = shift;
+
+    TWiki::Func::addToHEAD( BEAUTIFIERPLUGIN_CODEFRAGMENT_CSS => '<link rel="stylesheet" href="%PUBURL%/%TWIKIWEB%/BeautifierPlugin/style.css" type="text/css" media="all" />' );
 
     my $lang = TWiki::Func::extractNameValuePair( $args );	# || default language (eg, TWiki::Func::getPreferencesValue(uc 'BEAUTIFIERPLUGIN_LANGUAGE' ) 
     unless ($langs->{$lang})
@@ -116,21 +117,20 @@ sub handleCode
         eval "use HFile::HFile_$lang";
         if ($@)
         {
-            my $out = "<b>BeautifierPlugin Error: Unable to handle \"$lang\" syntax.</b>";
-            $out .= "<div class=\"fragment\"><pre>";
-            $out .= shift();
-            $out .= "</pre></div>";
-            return $out;
+            return '<b>BeautifierPlugin Error: Unable to handle "$lang" syntax.</b>'
+		. _formatBeautifierOutput( shift );
         }
         my $hfile = eval "new HFile::HFile_$lang";
         $langs->{$lang} = new Beautifier::Core($hfile, new Output::HTML);
     }
-    my $out = "<div class=\"fragment\">";
-    $out .= $langs->{$lang}->highlight_text(shift());
-    $out .= "</pre></div>";
-    return $out;
+    return _formatBeautifierOutput( $langs->{$lang}->highlight_text( shift ) );
+}
+
+# =========================
+
+sub _formatBeautifierOutput {
+    return '<div class="BeautifierPlugin"><div class="fragment"><pre>' . shift . '</pre></div></div>';
 }
 
 # =========================
 1;
-
