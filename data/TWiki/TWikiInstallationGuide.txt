@@ -128,9 +128,12 @@ TWiki:Plugins is an extensive library of Plugins for TWiki, that enhance functio
 You activate installed plugin in the _Plugins_ section of =configure=. In this section you also find a _Find More Extensions_ button which opens an application which can install additional plugins from the TWiki.org website. If you are behind a firewall or your server has no access to the Internet it is also possible to install plugins manually. Manual installation instructions for the plugins can be found in the plugin topics on TWiki.org. Additional documenation on TWiki plugins can be found at TWiki:TWiki.TWikiPluginsSupplement.
 
 Some plugins require that you define their settings in =configure=. You fill find these under the _Extensions_ section of configure.
+
 ---++ Customize your TWiki!
 
-The real power of TWiki lies in it's flexibility to be customized to meet your needs. A good place to start for exploring what's possible is <a href="http://twiki.org/cgi-bin/view/TWiki/TWikiAdminCookBook" title="'TWiki/TWikiAdminCookBook' on TWiki.org">TWiki:TWiki.TWikiAdminCookBook</a> which offers tips and tricks for customizing your TWiki site. Many of these are appropriate to implement immediately after installing TWiki and before adding content so now's a good time to look at these. If you would like to customize the look of your TWiki, see <a href="http://twiki.org/cgi-bin/view/TWiki.TWikiSkinsSupplement" title="'TWiki.TWikiSkinsSupplement' on TWiki.org">TWiki:TWiki.TWikiSkinsSupplement</a>.
+The real power of TWiki lies in it's flexibility to be customized to meet your needs. You can with small means change the looks of the default skin (called !PatternSkin) by reading the =TWiki.PatternSkinCustomization=
+
+At the official TWiki website you can find more resources. A good place to start for exploring what's possible is <a href="http://twiki.org/cgi-bin/view/TWiki/TWikiAdminCookBook" title="'TWiki/TWikiAdminCookBook' on TWiki.org">TWiki:TWiki.TWikiAdminCookBook</a> which offers tips and tricks for customizing your TWiki site. Many of these are appropriate to implement immediately after installing TWiki and before adding content so now's a good time to look at these.
 
 ---++ Troubleshooting
 
