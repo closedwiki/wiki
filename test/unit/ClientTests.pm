@@ -117,7 +117,7 @@ sub verify_edit {
     };
 
     $query = new CGI ({});
-    $query->path_info( "/Main/WebHome" );
+    $query->path_info( "/Main/WebHome?breaklock=1" );
     $ENV{SCRIPT_NAME} = "edit";
     $session->finish();
     $session = new TWiki( undef, $query );
@@ -141,7 +141,9 @@ sub verify_edit {
 
     $this->annotate("new session using $userLogin\n");
     $session = new TWiki( $userLogin, $query );
-
+    
+    #clear the lease - one of the previous tests may have different usermapper & thus different user
+    TWiki::Func::setTopicEditLock('Main', 'WebHome', 0);
     try {
         $text = $this->capture( \&TWiki::UI::Edit::edit, $session );
     } catch TWiki::OopsException with {
