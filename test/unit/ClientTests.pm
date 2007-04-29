@@ -62,7 +62,7 @@ sub set_up {
 
     $TWiki::cfg{UseClientSessions} = 1;
     $TWiki::cfg{PasswordManager} = "TWiki::Users::HtPasswdUser";
-    $TWiki::cfg{Htpasswd}{FileName} = "/tmp/htpasswd";
+    $TWiki::cfg{Htpasswd}{FileName} = "/tmp/junkhtpasswd";      #TODO: um, shouldn't we have a private dir, that is deleteable
     $TWiki::cfg{AuthScripts} = "edit";
 }
 
