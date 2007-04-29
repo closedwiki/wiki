@@ -17,6 +17,9 @@ use TWiki::UI::Edit;
 
 my $session;
 my $agent = 'TWikiRegistrationAgent';
+my $userLogin;
+my $userWikiName;
+my $user_id;
 
 sub new {
     my $this = shift()->SUPER::new(@_);
@@ -30,24 +33,28 @@ sub list_tests {
     my $clz = new Devel::Symdump(qw(ClientTests));
     for my $i ($clz->functions()) {
         next unless $i =~ /::verify_/;
-        foreach my $impl qw( TWiki::LoginManager::TemplateLogin TWiki::LoginManager::ApacheLogin none) {
-            my $fn = $i;
-            $fn =~ s/\W/_/g;
-            my $sfn = 'ClientTests::test_'.$fn.$impl;
-            no strict 'refs';
-            *$sfn = sub {
-                my $this = shift;
-                $TWiki::cfg{LoginManager} = $impl;
-                &$i($this);
-            };
-            use strict 'refs';
-            push(@set, $sfn);
+        foreach my $LoginImpl qw( TWiki::LoginManager::TemplateLogin TWiki::LoginManager::ApacheLogin none) {
+            foreach my $userManagerImpl qw( TWiki::Users::TWikiUserMapping TWiki::Users::BaseUserMapping) {
+                my $fn = $i;
+                $fn =~ s/\W/_/g;
+                my $sfn = 'ClientTests::test_'.$fn.$LoginImpl.$userManagerImpl;
+                no strict 'refs';
+                *$sfn = sub {
+                    my $this = shift;
+                    $TWiki::cfg{LoginManager} = $LoginImpl;
+                    $TWiki::cfg{UserMappingManager} = $userManagerImpl;
+                    &$i($this);
+                };
+                use strict 'refs';
+                push(@set, $sfn);
+            }
         }
     }
     return @set;
 }
 
 sub set_up {
+#print STDERR "\n------------- set_up -----------------\n";
     my $this = shift;
     $this->SUPER::set_up();
 
@@ -57,12 +64,23 @@ sub set_up {
     $TWiki::cfg{PasswordManager} = "TWiki::Users::HtPasswdUser";
     $TWiki::cfg{Htpasswd}{FileName} = "/tmp/htpasswd";
     $TWiki::cfg{AuthScripts} = "edit";
-
-    # $this->setup_user();
 }
 
 sub set_up_user {
-    $session->{users}->addUserToTWikiUsersTopic( "joe", "JoeDoe", $agent);
+    my $this = shift;
+    if ($session->{users}->supportsRegistration()) {
+        $userLogin = 'joe';
+        $userWikiName = 'JoeDoe';    
+	    $user_id = $session->{users}->addUser( $userLogin, $userWikiName, 'secrect_password', 'email@home.org.au');
+	    $this->annotate("create $userLogin user - cUID = $user_id\n");
+	    #TODO: figure out why $user_id is comming back as the password..
+    } else {
+        $userLogin = 'admin';
+        $user_id = $session->{users}->getCanonicalUserID($userLogin);
+        $userWikiName = $session->{users}->getWikiName($user_id);
+	    $this->annotate("no rego support (using admin)\n");
+    }
+#print STDERR "\n------------- set_up_user (login: $userLogin) (cUID:$user_id) -----------------\n";
 }
 
 sub tear_down {
@@ -79,14 +97,17 @@ sub capture {
 }
 
 sub verify_edit {
+#print STDERR "\n------------- verify_edit -----------------\n";
+
     my $this = shift;
     my ( $query, $text );
 
     $query = new CGI ({});
     $query->path_info( "/Main/WebHome" );
     $ENV{SCRIPT_NAME} = "view";
-    $session->finish();
+    $session->finish();#close this TWiki session - its using the wrong mapper and login
     $session = new TWiki( undef, $query );
+    $this->set_up_user();
     try {
         $text = $this->capture( \&TWiki::UI::View::view, $session );
     } catch TWiki::OopsException with {
@@ -117,7 +138,9 @@ sub verify_edit {
     $query->path_info( "/Main/WebHome" );
     $ENV{SCRIPT_NAME} = "edit";
     $session->finish();
-    $session = new TWiki( "joe", $query );
+
+    $this->annotate("new session using $userLogin\n");
+    $session = new TWiki( $userLogin, $query );
 
     try {
         $text = $this->capture( \&TWiki::UI::Edit::edit, $session );
