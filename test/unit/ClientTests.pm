@@ -148,6 +148,8 @@ sub verify_edit {
         $this->assert(0,shift->stringify());
     } catch Error::Simple with {
         $this->assert(0,shift->stringify());
+    } otherwise {
+	    $this->assert(0,shift->stringify());
     };
 }
 
