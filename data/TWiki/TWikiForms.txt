@@ -1,5 +1,5 @@
-%META:TOPICINFO{author="TWikiContributor" date="1163619832" format="1.0" version="$Rev$"}%
-%TOC%  
+%META:TOPICINFO{author="TWikiContributor" date="1177803014" format="1.0" version="$Rev$"}%
+%TOC%
 %STARTINCLUDE%
 ---# TWiki Forms
 
@@ -7,7 +7,7 @@ _Add structure to content with forms attached to twiki topics. TWiki forms (with
 
 ---++ Overview
 
-By adding form-based input to freeform content, you can structure topics with unlimited, easily searchable categories. A form is enabled for a web and can be added to a topic. The form data is shown in tabular format when the topic is viewed, and can be changed in edit mode using edit fields, radio buttons, check boxes and list boxes. Many different form types can be defined in a web, though a topic can only have only form attached to it at a time.
+By adding form-based input to freeform content, you can structure topics with unlimited, easily searchable categories. A form is enabled for a web and can be added to a topic. The form data is shown in tabular format when the topic is viewed, and can be changed in edit mode using edit fields, radio buttons, check boxes and list boxes. Many different form types can be defined in a web, though a topic can only have one form attached to it at a time.
 
 Typical steps to build an application based on TWiki forms:
    1. Define a form template
