@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1177803014" format="1.1" version="$Rev$"}%
 ---++ Text Formatting FAQ
 
 The most frequently asked questions about text formatting are answered. Also, TextFormattingRules contains the complete TWiki shorthand system on one quick reference page.
@@ -38,6 +38,13 @@ A question mark after a word is a link to a topic that doesn't yet exist - click
 To prevent auto-linking - say you want to enter a word like <nop>JavaScript (the proper spelling!) - prefix the WikiStyleWord with an exclamation point: 
 
    * =!WikiStyleWord= displays as !WikiStyleWord
+
+---
+---+++ How do I start a word with an exclamation mark?
+
+A leading exclamation point is used to escape wiki formatting, as we have learned in the previous question. Sometimes it has an unwanted effect, such as when you want to write "!=" (e.g. "not equal"), you will not see the exclamation mark.
+
+To escape the exclamation mark escape, try prefixing a =&lt;nop>=, e.g. write =A &lt;nop>!=<nop> B= to get "A <nop>!= B". Alternatively, use the HTML entity =&amp;#33;=, which renders as an exclamation mark, e.g. write =A &amp;#33;=<nop> B= to get "A &#33;= B". 
 
 ---
 ---+++ How can I write fixed font text?
@@ -159,4 +166,5 @@ If you need more colors you can use HTML, like =&lt;font color="#ff0000"&gt; red
 The code is the _hexadecimal RGB color code_, which is simply Red, Green and Blue values in hex notation (base 16, 0-F). For pure red, the RGB components are 255-0-0 - full red (255), no green or blue. That's FF-0-0 in hex, or ="#ff0000"= for Web page purposes. StandardColors lists basic colors.
 
 -----
-
+%STOPINCLUDE%
+-- __Contributors:__ TWiki:Main.PeterThoeny,  TWiki:Main.MikeMannix
