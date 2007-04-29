@@ -7,7 +7,7 @@ _Add functionality to TWiki with extensions not based on the TWiki scripts._
 
 ---++ Overview
 
-An add-on runs separately from the TWiki scripts, e.g. for data import, export to static HTML, etc. Add-Ons normally do not call any TWiki code directly, though may invoke TWiki scripts. There are different types on add-ofs, they may be stand alone scripts, browser plugins, office tool extensions, or even a set of TWiki topics that form a TWiki application.
+An add-on runs separately from the TWiki scripts, e.g. for data import, export to static HTML, etc. Add-Ons normally do not call any TWiki code directly, though may invoke TWiki scripts. There are different types of add-ons, they may be stand alone scripts, browser plugins, office tool extensions, or even a set of TWiki topics that form a TWiki application.
 
 __Relevant links on TWiki.org:__
    * TWiki:Plugins.AddOnPackage - list of all contributed add-on scripts
