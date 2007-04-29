@@ -110,7 +110,7 @@ sub new {
     die "User Mapping Manager: $@" if $@;
     $this->{mapping} = $implUserMappingManager->new( $session );
     #the UI for rego supported/not is different from rego temporarily turned off
-    $session->enterContext('registration_supported') if $this->{mapping}->supportsRegistration();
+    $session->enterContext('registration_supported') if $this->supportsRegistration();
     $implUserMappingManager =~ /^TWiki::Users::(.*)$/;
     $this->{mapping_id} = $1.'_';
 
@@ -140,6 +140,12 @@ sub finish {
     $this->{login}     =  {};
 }
 
+#return 1 if the UserMapper supports registration (ie can create new users)
+sub supportsRegistration {
+    my( $this ) = @_;
+    return $this->{mapping}->supportsRegistration();
+}
+
 # global used by test harness to give predictable results
 use vars qw( $password );
 
@@ -156,7 +162,7 @@ sub randomPassword {
 
 =pod
 
----++ ObjectMethod addUser($login, $wikiname, $password, $emails) -> ($status, $user, $password)
+---++ ObjectMethod addUser($login, $wikiname, $password, $emails) -> ($user, $password)
 
    * =$login= - user login name. If =undef=, =$wikiname= will be used as the login name.
    * =$wikiname= - user wikiname. If =undef=, the user mapper will be asked
