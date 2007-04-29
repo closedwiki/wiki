@@ -58,6 +58,15 @@ sub set_up {
 
     $twiki = new TWiki();
 
+#TODO: re-do to test other choices
+    $TWiki::cfg{Htpasswd}{FileName} = '/tmp/junkpasswd';
+    $TWiki::cfg{PasswordManager} = 'TWiki::Users::HtPasswdUser';
+    $TWiki::cfg{UserMappingManager} = 'TWiki::Users::TWikiUserMapping';
+    $TWiki::cfg{LoginManager} = 'TWiki::LoginManager::TemplateLogin';  
+    #$this->annotate(" session is running as ".TWiki::Func::getWikiName());
+    #$this->annotate("\nusermapper: ".$twiki->{users}->{mapping_id});
+    
+
     # Use just the wikiname (don't create a complete user) because the
     # store should *only* need the wikiname; no other user details are
     # required.
@@ -278,6 +287,7 @@ sub verify_releaselocksonsave {
     $twiki = new TWiki( $testUser2, $query );
     try {
         $this->capture( \&TWiki::UI::Save::save,  $twiki );
+        $this->annotate("\na merge notice exception should have been thrown for /$testweb/$topic");
         $this->assert(0);
     } catch TWiki::OopsException with {
         my $e = shift;
