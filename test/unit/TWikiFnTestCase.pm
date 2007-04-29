@@ -42,6 +42,7 @@ sub set_up {
     $TWiki::cfg{Htpasswd}{FileName} = '/tmp/junkpasswd'.$this->{var};
     $TWiki::cfg{PasswordManager} = 'TWiki::Users::HtPasswdUser';
     $TWiki::cfg{UserMappingManager} = 'TWiki::Users::TWikiUserMapping';
+    $TWiki::cfg{LoginManager} = 'TWiki::LoginManager::TemplateLogin';    
     $TWiki::cfg{Register}{NeedVerification} = 0;
     $TWiki::cfg{MinPasswordLength} = 0;
     $TWiki::cfg{UsersWebName} = $this->{users_web};
