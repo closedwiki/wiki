@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1177803014" format="1.0" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1177881299" format="1.1" version="$Rev$"}%
 %TOC%
 %STARTINCLUDE%
 ---# TWiki Forms
@@ -129,7 +129,7 @@ The ==Type==, ==Size== and ==Value== fields describe the legal values for this f
    * ==Type== =checkbox= specifies one or more checkboxes. The =Size= field specifies how many checkboxes will be displayed on each line. The =Value= field should be a comma-separated list of item labels.
       * ==Type== =checkbox+buttons= will add *Set* and *Clear* buttons to the basic =checkbox= type.
    * ==Type== =radio= is like =checkbox= except that radio buttons are mutually exclusive; only one can be selected.
-   * ==Type== =label= specifies read-only label text, The =Value= field should contian the text of the label.
+   * ==Type== =label= specifies read-only label text. The =Value= field should contain the text of the label.
    * ==Type== =select= specifies a select box. The =Value= field should contain a comma-separated list of options for the box. The =Size= field can specify a fixed size for the box (e.g. =1=, or a range e.g. =3..10=. If you specify a range, then the box will never be smaller than 3 items, never larger than 10, and will be 5 high if there are only 5 options.
       * There are two modifiers that can be applied to the =select= type:
          * =select+multi= turns multiselect on for the select, to allow Shift+Click and Ctrl+Click to select (or deselect) multiple items.
