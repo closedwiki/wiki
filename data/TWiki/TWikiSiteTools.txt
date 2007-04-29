@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1175627493" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1177803014" format="1.1" version="$Rev$"}%
 %TOC%
 %STARTINCLUDE%
 ---# TWiki Site Tools
@@ -143,9 +143,9 @@ You can use an external mail program, such as ==sendmail==, if the =Net::SMTP= m
 *For Unix platforms:* Edit the =cron= table so that =mailnotify= is called in an interval of your choice. Please consult =man crontab= of how to modify the table that schedules program execution at certain intervals. Example:
 <pre>
 % crontab -e
-0 2 * * * (cd /path/to/twiki/bin; ./mailnotify -q)
+0 1 * * * (cd /path/to/twiki/bin; ./mailnotify -q)
 </pre>
-The above line will run mailnotify nightly at 02:00. The =-q= switch suppresses all normal output.
+The above line will run mailnotify nightly at 01:00. The =-q= switch suppresses all normal output.
 
 *For ISP installations:* Many ISPs don't allow hosted accounts direct cron access, as it's often used for things that can heavily load the server. Workaround scripts are available.
 
