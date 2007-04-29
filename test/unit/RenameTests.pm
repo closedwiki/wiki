@@ -57,9 +57,14 @@ sub set_up {
     my $this = shift;
 
     $this->SUPER::set_up();
+    $TWiki::cfg{EnableHierarchicalWebs} = 1;
+    $TWiki::cfg{Htpasswd}{FileName} = '/tmp/junkpasswd';
+    $TWiki::cfg{PasswordManager} = 'TWiki::Users::HtPasswdUser';
+    $TWiki::cfg{UserMappingManager} = 'TWiki::Users::TWikiUserMapping';
+    $TWiki::cfg{LoginManager} = 'TWiki::LoginManager::TemplateLogin';      
 
     $twiki = new TWiki( "TestUser1", new CGI({topic=>"/$oldweb/$oldtopic"}));
-
+    
     $twiki->{store}->createWeb($twiki->{user}, $oldweb);
     $twiki->{store}->createWeb($twiki->{user}, $newweb);
 
