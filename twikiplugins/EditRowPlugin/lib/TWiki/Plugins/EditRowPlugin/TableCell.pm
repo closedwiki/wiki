@@ -142,13 +142,14 @@ sub renderForEdit {
 
     } else { #  if( $colDef->{type} =~ /^(text|label)$/)
 
+        my $val = $this->{text};
         $text = CGI::textfield({
             name => $cellName,
             size => $colDef->{size},
-            value => $this->{text} });
+            value => $val });
 
     }
-    return $text;
+    return TWiki::Plugins::EditRowPlugin::defend($text);
 }
 
 1;

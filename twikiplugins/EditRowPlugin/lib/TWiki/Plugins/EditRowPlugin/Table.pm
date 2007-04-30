@@ -18,6 +18,8 @@ $UP_ROW     = 'Move this row up';
 $DOWN_ROW   = 'Move this row down';
 
 # Static method that parses tables out of a block of text
+# Returns an array of lines, with those lines that represent editable
+# tables plucked out and replaced with references to table objects
 sub parseTables {
     my ($text, $topic, $web, $meta, $urps) = @_;
     my $active_table = undef;
@@ -32,7 +34,8 @@ sub parseTables {
         if ($line =~ m#</(verbatim|literal)>#) {
             $disable-- if $disable;
         }
-        if (!$disable && $line =~ /%EDITTABLE{([^\n]*)}%/) {
+        if (!$disable && $line =~ /%EDITTABLE{([^\n]*)}%/ ) {
+            # Editable table
             $nTables++;
             my $attrs;
             $attrs = new TWiki::Attrs($1);
@@ -78,12 +81,27 @@ sub parseTables {
             }
             $active_table =
               new TWiki::Plugins::EditRowPlugin::Table(
-                  $nTables, $line, $attrs, $_[2], $_[1]);
+                  $nTables, 1, $line, $attrs, $_[2], $_[1]);
             push(@tables, $active_table);
             next;
         }
-
-        if ($active_table && $line =~ s/^\s*\|//) {
+        elsif (!$disable && !$active_table && $line =~ s/^\s*\|//) {
+            # Uneditable table
+            $nTables++;
+            $line =~ s/\|\s*$//;
+            my $attrs => new TWiki::Attrs('');
+            $active_table =
+              new TWiki::Plugins::EditRowPlugin::Table(
+                  $nTables, 0, $line, $attrs, $_[2], $_[1]);
+            push(@tables, $active_table);
+            my $row = new TWiki::Plugins::EditRowPlugin::TableRow(
+                $active_table, scalar(@{$active_table->{rows}}) + 1,
+                split(/\s*\|\s*/, $line, -1));
+            push(@{$active_table->{rows}}, $row);
+            next;
+        }
+        elsif (!$disable && $active_table && $line =~ s/^\s*\|//) {
+            # Table row
             $line =~ s/\|\s*$//;
             # Note use of -1 on the split so we don't lose fields
             my $row = new TWiki::Plugins::EditRowPlugin::TableRow(
@@ -100,9 +118,10 @@ sub parseTables {
 }
 
 sub new {
-    my ($class, $tno, $spec, $attrs, $web, $topic) = @_;
+    my ($class, $tno, $editable, $spec, $attrs, $web, $topic) = @_;
 
     my $this = bless({}, $class);
+    $this->{editable} = $editable;
     $this->{number} = $tno;
     $this->{spec} = $spec;
     $this->{rows} = [];
@@ -144,9 +163,17 @@ sub stringify {
 
 sub renderForEdit {
     my ($this, $activeRow) = @_;
+
+    if (!$this->{editable}) {
+        return $this->renderForDisplay(0);
+    }
     my $wholeTable = ($activeRow <= 0);
     my @out = ( "<a name='erp_$this->{number}'></a>" );
     my $firstRow = 1;
+    my $orientation = $this->{attrs}->{orientrowedit} || 'horizontal';
+
+    # Disallow vertical display for whole table edits
+    $orientation = 'horizontal' if $wholeTable;
 
     # no special treatment for the first row unless requested
     my $attrs = $this->{attrs};
@@ -163,10 +190,13 @@ sub renderForEdit {
 
     my $n = $firstRow ? 0 : 1;
     my $r = 1;
+    my $labelRow;
     foreach my $row (@{$this->{rows}}) {
+        $labelRow = $row if $firstRow;
         if ($r++ == $activeRow || $wholeTable && !$firstRow) {
             push(@out, $row->renderForEdit(
-                $this->{colTypes}, $n, $firstRow, !$wholeTable));
+                $this->{colTypes}, $n, $firstRow, !$wholeTable,
+                $labelRow, $orientation));
         } else {
             push(@out, $row->renderForDisplay(
                 $this->{colTypes}, $n, $firstRow, !$wholeTable));
@@ -175,7 +205,7 @@ sub renderForEdit {
         $firstRow = 0;
     }
     if ($wholeTable) {
-        push(@out, $this->generateEditButtons(0));
+        push(@out, $this->generateEditButtons(0, 0));
     }
     return join("\n", @out);
 }
@@ -185,6 +215,8 @@ sub renderForDisplay {
     my @out;
     my $firstRow = 1;
 
+    $showControls = 0 unless $this->{editable};
+
     # no special treatment for the first row unless requested
     my $attrs = $this->{attrs};
     $firstRow = 0 unless TWiki::isTrue($attrs->{headerislabel});
@@ -192,7 +224,8 @@ sub renderForDisplay {
     my $n = $firstRow ? 0 : 1;
 
     foreach my $row (@{$this->{rows}}) {
-        push(@out, $row->renderForDisplay($this->{colTypes}, $n, $firstRow, $showControls));
+        push(@out, $row->renderForDisplay(
+            $this->{colTypes}, $n, $firstRow, $showControls));
         $firstRow = 0;
         $n++;
     }
@@ -206,10 +239,11 @@ sub renderForDisplay {
 
     my $script = 'view';
     unless ($showControls || TWiki::Func::getContext()->{authenticated}) {
-        # A  bit of a hack. If the user isn't logged in, then show the table edit button
-        # anyway, but redirect them to viewauth to force login.
+        # A  bit of a hack. If the user isn't logged in, then show the
+        # table edit button anyway, but redirect them to viewauth to force
+        # login.
         $script = 'viewauth';
-        $showControls = 1;
+        $showControls = $this->{editable};
     }
 
     if ($showControls) {
@@ -227,6 +261,7 @@ sub renderForDisplay {
                 erp_active_row => -1,
                 '#' => "erp_$this->{number}");
         }
+
         push(@out,
              "<a name='erp_$this->{number}'></a>".
                "<a href='$url'>" . $button . "</a>");
@@ -391,10 +426,15 @@ sub _parseFormat {
 }
 
 sub generateEditButtons {
-    my ($this, $id) = @_;
-    my $labelled = $this->{attrs}->{headerislabel};
+    my ($this, $id, $multirow) = @_;
+    my $attrs = $this->{attrs};
+    my $labelled = $attrs->{headerislabel};
     my $topRow = ($id == 1);
     my $sz = scalar(@{$this->{rows}});
+    my $q = defined($attrs->{quietsave}) ? $attrs->{quietsave} :
+      TWiki::Func::getPreferencesValue('QUIETSAVE');
+    my $changerows = defined($attrs->{changerows}) ? $attrs->{changerows} :
+      TWiki::Func::getPreferencesValue('CHANGEROWS');
     my $bottomRow = ($id == $sz && !$labelled
                        || $id == $sz - 1 && $labelled);
     $id = "_$id" if $id;
@@ -407,8 +447,7 @@ sub generateEditButtons {
           title => $NOISY_SAVE,
           src => '%PUBURLPATH%/TWiki/TWikiDocGraphics/save.gif'
          }, '');
-    my $attrs = $this->{attrs};
-    if (TWiki::isTrue($attrs->{quietsave})) {
+    if (TWiki::isTrue($q)) {
         $buttons .= CGI::image_button({
             name => 'erp_quietSave',
             value => $QUIET_SAVE,
@@ -423,8 +462,8 @@ sub generateEditButtons {
         src => '%PUBURLPATH%/TWiki/TWikiDocGraphics/stop.gif',
     }, '');
 
-    if ($attrs->{changerows}) {
-        $buttons .= '<br />';
+    if (TWiki::isTrue($changerows)) {
+        $buttons .= '<br />' if $multirow;
         if ($id) {
             if (!$topRow) {
                 $buttons .= CGI::image_button({
@@ -449,7 +488,7 @@ sub generateEditButtons {
             title => $ADD_ROW,
             src => '%PUBURLPATH%/TWiki/TWikiDocGraphics/plus.gif'
            }, '');
-        if ($attrs->{changerows} eq 'on') {
+        if (TWiki::isTrue($changerows)) {
             $buttons .= CGI::image_button({
                 name => 'erp_deleteRow',
                 value => $DELETE_ROW,

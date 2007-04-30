@@ -1,7 +1,9 @@
+
 # See bottom of file for copyright
 package TWiki::Plugins::EditRowPlugin::TableRow;
 
 use strict;
+use Assert;
 
 use TWiki::Func;
 use TWiki::Plugins::EditRowPlugin::TableCell;
@@ -58,24 +60,59 @@ sub stringify {
 }
 
 sub renderForEdit {
-    my ($this, $colDefs, $n, $firstRow, $showControls) = @_;
+    my ($this, $colDefs, $n, $firstRow, $showControls, $hdrs, $orient) = @_;
 
     my $id = "$this->{table}->{number}_$this->{number}";
-    my @out = ();
+    my $anchor = CGI::a({ name=>"erp_$id" });
 
-    # Generate the editors for each cell in the row
-    my $col = 0;
-    foreach my $cell (@{$this->{cols}}) {
-        my $text = $cell->renderForEdit($colDefs->[$col++], $n);
-        push(@out, $text);
+    if ($orient eq 'vertical') {
+        # Each column is presented as a row
+        my $col = 0;
+        my @rows;
+        # Number of empty columns at end of each row
+        my $empties = '|' x (scalar(@{$this->{cols}}) - 1);
+        foreach my $cell (@{$this->{cols}}) {
+            my $hdr = $hdrs->{cols}->[$col];
+            $hdr = $hdr->{text} if $hdr;
+            $hdr ||= '';
+            my $text = $cell->renderForEdit($colDefs->[$col++], $n);
+            push(@rows, "| $hdr| $text $anchor |$empties");
+        }
+        if ($showControls) {
+            my $buttons = $this->{table}->generateEditButtons($n, 0);
+            push(@rows, "| $buttons ||$empties");
+        }
+        return @rows;
+    } else {
+        # Generate the editors for each cell in the row
+        my @cols = ();
+        my $col = 0;
+        foreach my $cell (@{$this->{cols}}) {
+            my $text = $cell->renderForEdit($colDefs->[$col++], $n,
+                                            $hdrs, $orient);
+            push(@cols, $text);
+        }
+
+        if ($showControls) {
+            my $buttons = $this->{table}->generateEditButtons($n, 1);
+            unshift(@cols, $buttons);
+        }
+
+        return ("| $anchor" . join(' | ', @cols) . " |");
     }
+}
 
-    if ($showControls) {
-        my $buttons = $this->{table}->generateEditButtons($n);
-        unshift(@out, $buttons);
+# Generate a sort command suitable for sorting the table columns
+sub _sortCommand {
+    my ($text, $col) = @_;
+
+    if ($text =~ s/^\*(.*)\*$/$1/) {
+        return '*'.CGI::span(
+            { class => 'erpSort',
+              onclick => "this.blur(); return sortTable(this,  $col, false);",
+          }, $text).'*';
     }
-
-    return "| <a name='erp_$id'></a> " . join(' | ', @out) . ' |';
+    return $text;
 }
 
 sub renderForDisplay {
@@ -84,7 +121,9 @@ sub renderForDisplay {
     my $id = "$this->{table}->{number}_$this->{number}";
     if ($firstRow) {
         @out = map { $_->{text} } @{$this->{cols}};
-        unshift(@out, '') if $withControls;
+        # The ** fools TablePlugin into thinking this is a header.
+        # Otherwise it disables sorting.
+        unshift(@out, '**') if $withControls;
     } else {
         my $col = 0;
         foreach (@{$this->{cols}}) {
@@ -115,7 +154,17 @@ sub renderForDisplay {
                   "<a href='$url'>" . $button . "</a>");
         }
     }
-    return "| <a name='erp_$id'></a> " .join(' | ', @out). ' |';
+
+    # Special handling for anchored heading cells :-(
+    my $tag = "<a name='erp_$id'></a>";
+    if ($out[-1] =~ s/^(\*.*)\*$/$1/) {
+        $tag .= '*';
+    }
+    $out[-1] .= $tag;
+
+    my $col = 0;
+    return "| " .join(' | ', map {
+        _sortCommand($_, $col++) } @out). " |";
 }
 
 1;

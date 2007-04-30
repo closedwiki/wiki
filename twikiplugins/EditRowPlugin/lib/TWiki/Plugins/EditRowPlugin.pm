@@ -3,17 +3,16 @@ package TWiki::Plugins::EditRowPlugin;
 
 use strict;
 
-use vars qw( $VERSION $RELEASE $SHORTDESCRIPTION $debug $pluginName $NO_PREFS_IN_TOPIC );
+use vars qw( $VERSION $RELEASE $SHORTDESCRIPTION $NO_PREFS_IN_TOPIC $headed );
 
 use Assert;
 
 $VERSION = '$Rev$';
 $RELEASE = '$Date$';
-$SHORTDESCRIPTION = 'Single table row inline edit';
-
+$SHORTDESCRIPTION = 'Inline edit for tables';
 $NO_PREFS_IN_TOPIC = 1;
 
-$pluginName = 'EditRowPlugin';
+my $pluginName = 'EditRowPlugin';
 
 sub initPlugin {
     my( $topic, $web, $user, $installWeb ) = @_;
@@ -25,6 +24,7 @@ sub initPlugin {
     }
 
     TWiki::Func::registerRESTHandler('save', \&save);
+    $headed = 0;
 
     # Plugin correctly initialized
     return 1;
@@ -32,7 +32,23 @@ sub initPlugin {
 
 # Handler run when viewing a topic
 sub commonTagsHandler {
-    # my ( $text, $topic, $web, $meta ) = @_;
+    # my ( $text, $topic, $web, $included, $meta ) = @_;
+
+    unless ($headed) {
+        $headed = 1;
+        my $header = '<script type="text/javascript" src="';
+        $header .= TWiki::Func::getPubUrlPath().'/'.
+          TWiki::Func::getTwikiWebname().
+              '/EditRowPlugin/TableSort.js"></script>';
+        $header .= <<STYLE;
+<style>
+.erpSort {
+   text-decoration: underline;
+}
+</style>
+STYLE
+        TWiki::Func::addToHEAD('EDITROWPLUGIN_JSSORT', $header);
+    }
 
     my $query = TWiki::Func::getCgiQuery();
     return unless $query;
@@ -41,21 +57,22 @@ sub commonTagsHandler {
     return unless $context->{view};
 
     # SMELL: hack to get around not having a proper topic object model
-    my $meta = $_[3] || $context->{can_render_meta};
+    my $meta = $_[4] || $context->{can_render_meta};
     return unless $meta;
 
-    return unless $_[0] =~ /%EDITTABLE{(.*?)}%/;
+    return if TWiki::Func::getPreferencesFlag('EDITROWPLUGIN_DISABLE');
 
     my ($topic, $web) = ($_[1], $_[2]);
 
     require TWiki::Plugins::EditRowPlugin::Table;
     return if $@;
 
-    my $content = TWiki::Plugins::EditRowPlugin::Table::parseTables(@_);
+    my $urps = $query->Vars();
+    my $content = TWiki::Plugins::EditRowPlugin::Table::parseTables(
+        @_, $urps);
 
     $_[0] =~ s/\\\n//gs;
 
-    my $urps = $query->Vars();
     $urps->{erp_active_table} ||= 0;
     $urps->{erp_active_row} ||= 0;
 
@@ -67,7 +84,8 @@ sub commonTagsHandler {
 
     # Without change access, there is no way you can edit.
     if (!TWiki::Func::checkAccessPermission(
-        'CHANGE', TWiki::Func::getWikiName(), @_)) {
+        'CHANGE', TWiki::Func::getWikiName(),
+        $_[0], $_[1], $_[2], $meta)) {
         $displayOnly = 1;
     }
 
@@ -98,6 +116,21 @@ sub commonTagsHandler {
     }
 
     $_[0] = $nlines;
+}
+
+# Replace content with a marker to prevent it being munged by TWiki
+my @refs;
+sub defend {
+    my( $text ) = @_;
+    my $n = scalar( @refs );
+    push( @refs, $text );
+    return "\07$n\07";
+}
+
+# Replace protected content.
+sub postRenderingHandler {
+    while( $_[0] =~ s/\07([0-9]+)\07/$refs[$1]/gi ) {
+    }
 }
 
 # REST handler for table row edit save with redirect on completion.
