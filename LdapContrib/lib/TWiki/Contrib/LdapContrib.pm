@@ -26,7 +26,7 @@ use Digest::MD5 qw( md5_hex );
 use vars qw($VERSION $RELEASE $sharedLdapContrib);
 
 $VERSION = '$Rev$';
-$RELEASE = 'v1.00-pre2';
+$RELEASE = 'v1.01';
 
 =begin text
 
