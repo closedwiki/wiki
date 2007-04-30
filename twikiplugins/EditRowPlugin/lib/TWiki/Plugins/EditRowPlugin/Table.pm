@@ -154,7 +154,11 @@ sub finish {
 
 sub stringify {
     my $this = shift;
-    my $s = "$this->{spec}\n";
+
+    my $s = '';
+    if ($this->{editable}) {
+        $s .= "$this->{spec}\n";
+    }
     foreach my $row (@{$this->{rows}}) {
         $s .= $row->stringify()."\n";
     }
