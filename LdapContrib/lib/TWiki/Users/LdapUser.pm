@@ -171,7 +171,7 @@ sub getEmails {
   return @{$U2EMAILS{$login}} if $U2EMAILS{$login};
 
   # fall back to the default approach
-  $this->writeDebug("fall back to default approach to get email addresses");
+  $this->{ldap}->writeDebug("fall back to default approach to get email addresses");
 
   @{$U2EMAILS{$login}} = $this->SUPER::getEmails($login) || ();
   $this->{ldap}->writeDebug("found emails for $login: ".join(',',@{$U2EMAILS{$login}}));
