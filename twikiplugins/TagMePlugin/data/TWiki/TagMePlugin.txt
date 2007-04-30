@@ -268,8 +268,9 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Plugin Author: | TWiki:Main.PeterThoeny ([[http://www.structuredwikis.com/peter.html][blog]]) |
 |  Copyright: | &copy; 2006, Peter@Thoeny.org, [[http://www.structuredwikis.com/][StructuredWikis LLC]] |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 18 Apr 2006 (V1.037) |
+|  Plugin Version: | 30 Apr 2006 (V1.037) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  30 Apr 2007: | Arthur Clemens: fixed calculation of sizes in tag cloud; if =mincount= is passed only the shown tags are calculated. |
 |  18 Apr 2007: | Arthur Clemens: added permissions for rename and delete; added TagMeChangeRequests. |
 |  17 Apr 2007: | TWiki:Main.CrawfordCurrie for [[http://www.escapestudios.co.uk/][Escape Studios]]: contributed support for incremental refinement of tag searches. |
 |  12 Apr 2007: | TWiki:Main.CrawfordCurrie contributed ability to search for multiple tags. TWiki:Main.SvenDowideit for [[http://www.escapestudios.co.uk/][Escape Studios]]: added parameters needed for custom search result display. |
