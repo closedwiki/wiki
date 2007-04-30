@@ -8,6 +8,8 @@ pub/TWiki/NatEditContrib/button_center.png 0644
 pub/TWiki/NatEditContrib/button_done.png 0644
 pub/TWiki/NatEditContrib/button_edit.png 0644
 pub/TWiki/NatEditContrib/button_ext.png 0644
+pub/TWiki/NatEditContrib/button_eye.png 0644
+pub/TWiki/NatEditContrib/button_floppy.png 0644
 pub/TWiki/NatEditContrib/button_form.png 0644
 pub/TWiki/NatEditContrib/button_formula.png 0644
 pub/TWiki/NatEditContrib/button_h1.png 0644
@@ -20,6 +22,7 @@ pub/TWiki/NatEditContrib/button_int.png 0644
 pub/TWiki/NatEditContrib/button_italic.png 0644
 pub/TWiki/NatEditContrib/button_justify.png 0644
 pub/TWiki/NatEditContrib/button_left.png 0644
+pub/TWiki/NatEditContrib/button_mono.png 0644
 pub/TWiki/NatEditContrib/button_preview.png 0644
 pub/TWiki/NatEditContrib/button_right.png 0644
 pub/TWiki/NatEditContrib/button_save.png 0644
