@@ -479,18 +479,25 @@ sub _showAllTags {
               . "a topic of interest, and add a tag from the list, or put your "
               . "vote on an existing tag.";
         }
-        my $max = 1;
-
-        my %order = map { ( $_, $max++ ) }
-          sort { $tagCount{$a} <=> $tagCount{$b} }
-          keys(%tagCount);
+        
+        # calculate the relative sizes
+        # we need to map size to tag count:
+        #
+        #    $minSize    --   $maxSize
+        #        |                |
+        # smallest count -- largest count
+        #
+        my @orderedKeys = sort { $tagCount{$a} <=> $tagCount{$b} } keys(%allTags);
+        my $smallestCount = $tagCount{$orderedKeys[0]};
+        my $largestCount = $tagCount{$orderedKeys[-1]} || $smallestCount;
+        my $sizeStep = ($maxSize - $minSize) / ($largestCount - $smallestCount);
+        
         my $size   = 0;
         my $tmpSep = '_#_';
         $text = join(
             $separator,
             map {
-                $size = int( $maxSize * ( $order{$_} + 1 ) / $max );
-                $size = $minSize if ( $size < $minSize );
+                $size = int( $minSize + $sizeStep * ($tagCount{$_} - $smallestCount) );
                 $line = $format;
                 $line =~ s/(tag\=)\$tag/$1$tmpSep\$tag$tmpSep/go;
                 $line =~ s/$tmpSep\$tag$tmpSep/&_urlEncode($_)/geo;
