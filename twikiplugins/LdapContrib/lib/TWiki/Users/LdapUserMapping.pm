@@ -190,7 +190,7 @@ sub lookupLoginName {
       }
       if (defined($LDAP_W2U{$name})) {
 	$this->{ldap}->writeDebug("hey, you called lookupLoginName with a wikiName");
-	return $name;
+	return undef;
       }
       last if $isLoadedMapping;
       $this->loadLdapMapping();
@@ -203,7 +203,7 @@ sub lookupLoginName {
   }
   if (defined($LDAP_W2U{$name})) {
     $this->{ldap}->writeDebug("hey, you called lookupLoginName with a wikiName again");
-    return $name;
+    return undef;
   }
   
   $this->{ldap}->writeDebug("asking SUPER");
@@ -243,7 +243,7 @@ sub lookupWikiName {
       }
       if (defined($LDAP_U2W{$name})) {
 	$this->{ldap}->writeDebug("hey, you called lookupWikiName with a loginName");
-        return $name
+        return undef;
       }
       last if $isLoadedMapping;
       $this->loadLdapMapping();
@@ -256,7 +256,7 @@ sub lookupWikiName {
   }
   if (defined($LDAP_U2W{$name})) {
     $this->{ldap}->writeDebug("hey, you called lookupWikiName with a loginName again");
-    return $name
+    return undef;
   }
 
   $this->{ldap}->writeDebug("asking SUPER");
