@@ -106,7 +106,7 @@ sub commonTagsHandler
 
 sub handleCode
 {
-    my $args = shift;
+    my ( $args, $codeFragment ) = @_;
 
     TWiki::Func::addToHEAD( BEAUTIFIERPLUGIN_CODEFRAGMENT_CSS => '<link rel="stylesheet" href="%PUBURL%/%TWIKIWEB%/BeautifierPlugin/style.css" type="text/css" media="all" />' );
 
@@ -117,19 +117,19 @@ sub handleCode
         eval "use HFile::HFile_$lang";
         if ($@)
         {
-            return '<b>BeautifierPlugin Error: Unable to handle "$lang" syntax.</b>'
-		. _formatBeautifierOutput( shift );
+            return qq{<b>BeautifierPlugin Error: Unable to handle "$lang" language.</b>}
+		. _formatBeautifierOutput( $codeFragment );
         }
         my $hfile = eval "new HFile::HFile_$lang";
         $langs->{$lang} = new Beautifier::Core($hfile, new Output::HTML);
     }
-    return _formatBeautifierOutput( $langs->{$lang}->highlight_text( shift ) );
+    return _formatBeautifierOutput( $langs->{$lang}->highlight_text( $codeFragment ) );
 }
 
 # =========================
 
 sub _formatBeautifierOutput {
-    return '<div class="BeautifierPlugin"><div class="fragment"><pre>' . shift . '</pre></div></div>';
+    return '<div class="BeautifierPlugin"><div class="fragment"><pre>' . shift() . '</pre></div></div>';
 }
 
 # =========================

@@ -94,6 +94,7 @@ void nWorld::StepSim()
 ---++ History
 
 | *Date* | *Change* | *Name* |
+| 30 Apr 2007 | warnings cleanup; no functional changes | TWiki:Main.WillNorris |
 | 27 Apr 2007 | automatically adds CSS for formatting code fragments | TWiki:Main.WillNorris |
 |  1 Jan 2006 | upgraded to TWiki::Func::extractNameValuePair for better parameter parsing, upgraded TWiki:Plugins.BuildContrib support | TWiki:Main.WillNorris |
 | 26 Jul 2003 | Syntax fixes from TWiki:Main/WillNorris  | TWiki:Main/LingLo |
@@ -101,7 +102,7 @@ void nWorld::StepSim()
 | 28 Dec 2002 | Accepts mixed case language names | TWiki:Main/LingLo |
 | 20 Dec 2002 | Changed syntax to allow for simpler addition of new languages | TWiki:Main/LingLo |
 | 16 Oct 2002 | Added nebula nodes and links to Python scripts, but it doesn't work since the node names are usually in strings | TWiki:Main/LeafGarland |
-| 30 Jul 2002 | Added nebula nodes and links to Tcl scripts | TWiki:Main/LeafGarland |
+| 30 Jul 2002 | Added nebula nodes and links to TCL scripts | TWiki:Main/LeafGarland |
 | 30 Jul 2002 | Changed Beautifier::Core to use 'linkscripts' | TWiki:Main/LeafGarland |
 | 28 Jul 2002 | Created | TWiki:Main/LingLo |
 
