@@ -123,7 +123,7 @@ sub startRenderingHandler
     # This handler is called by getRenderedVersion just before the line loop
 
     # read in ~macros
-    while ($_[0] =~ s/^~([^\n]*)\n(.*?)\n~~(?=\n)//s) {
+    while ($_[0] =~ s/\n~([^\n]*)\n(.*?)\n~~(?=\n)//s) {
         my $macroName = $1;
         my $macroText = TWiki::Func::renderText($2, $_[1], $_[2]);
 	$macroText =~ s/~(?=$macroName)/~<nop>/g; # no direct recursion
