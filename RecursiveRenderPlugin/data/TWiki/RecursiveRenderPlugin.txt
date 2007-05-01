@@ -58,8 +58,9 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.WalterMundt |
-|  Plugin Version: | 21 Jan 2003 (V0.2) |
+|  Plugin Version: | 01 May 2007 (V0.3) |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
+|  01 May 2007  | 0.3 Validated TWiki4.x operation |
 |  21 Jan 2003: | 0.2: Bugfix release. |
 |  20 Jan 2003: | 0.1: Inital release. |
 |  CPAN Dependencies: | none |
