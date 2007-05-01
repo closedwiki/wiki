@@ -16,151 +16,13 @@ package TWiki::Contrib::Build;
 
 use TWiki::Contrib::BuildContrib::BaseBuild;
 use Error qw(:try);
+use CGI qw(:any);
 
 =pod
 
 ---++ Package TWiki::Contrib::Build
 
 This is a base class used for making build scripts for TWiki packages.
-This class is derived from to create a build script for a specific module.
-
-The resulting build script works a bit like make and a bit like Ant.
-Build targets are Perl functions, which operate on various data defined
-in control files to build the various targets. Perl is used rather than
-make for portability reasons.
-
-By default, the resulting build script will interpret the targets described
-below, and the following options:
-| -n | Do nothing |
-| -v | Be verbose |
-| -topiconly | with target 'upload', only upload the topic (not the zip) |
-
----+++ Targets
-
-The following targets will always exist:
-| build | *internal target* check that everything is perl |
-| test | run unit tests |
-| install | install on local installation defined by $TWIKI_HOME |
-| uninstall | uninstall from local installation defined by $TWIKI_HOME |
-| pod | build POD documentation of the package |
-| release | build, pod and package a release zip |
-| upload | build, pod, package and upload |
-| manifest | print a guess at the MANIFEST |
-| history | Update the history in the topic for an extension |
-| dependencies | Find and print missing dependencies (for DEPENDENCIES) |
-Note: if you override any of these targets it is generally wise to call the SUPER version of the target!
-
----+++ Standard directory structure
-The standard module directory structure mirrors the TWiki installation directory structure, so each file in the development directory structure is in the place it will be in in the actual installation. From the _root directory_, these are the key areas:
-| lib/TWiki/Plugins/ | this is where your <code><i>name</i>.pm</code> file goes for plugins |
-| lib/TWiki/Plugins/<i>name</i>/ | directory containing sub-modules used by your plugin, and your build.pl script. It is referred to below as the "module directory" |
-Contribs are held in the =lib/TWiki/Contrib= directory instead of =lib/TWiki/Plugins= but otherwise work the same way.
-| data/ | as you expect to see in the installation |
-| pub/ | as you expect to see in the installation. You must list required directories, even if they are initially empty. |
-| templates/ | as you expect to see in installation |
-| templates/<skin name>/ | this is where templates for your skin go |
-| contrib/ | this is where non-TWiki, non-web-accessible files associated with a Contrib or plugin go |
-
----+++ Environment Variables
-During development you might use a single directory tree to do all of developemnt, development testing and release testing. Alternatively you might use:
-   1 A subversion checkout tree for the sources
-   1 A test installation
-   1 An installation of the latest released TWiki for final release testing
-Or you might use some other combination in between - it depends on what you are developing. To make the build as flexible as possible, !BuildContrib supports a number of environment variables that can be used to point to your different components.
-
-The build process requires access to the TWiki libraries, so it can pick up the components of the build system. There are two ways to point to the required perl libraries:
-   1 Set =PERL5LIB= (as described in =man perlrun=) to point to the =lib= directory in your development area. You may also want to point to your =lib/CPAN/lib= directory to pick up CPAN dependencies, if you are using a local install.
-      * The *advantage* of setting =PERL5LIB= is that you only need to set it once, in your login script.
-      * The *disadvantage* of setting it is that any TWiki scripts you run during testing will *also* pick up these libs, which may mask problems elsewhere in your configuration.
-   1 Set =TWIKI_LIBS= (which is a path, same as PERL5LIB) to point to your =lib= directory in your development area. =$TWIKI_LIBS= is used to extend @INC _for the duration of the build only_, so it won't mask problems during testing.
-The approach we _recommend_ is to set =TWIKI_LIBS= in your login script (e.g. =.login=, =.csh=, =.profile= depending on what shell you prefer).
-
-The build scripts support the =install= target. if you are developing a TWiki extension, you can use the =install= target to automatically install your package in a test installation. The environment variable =TWIKI_HOME= should be pointed to the *root* of your *test* TWiki installation. It is not needed if you never use the =install= target (for example, if you use =pseudo-install.pl= to install in your development system.
-
----+++ Manifest
-The main driving file for the build is the MANIFEST file. This contains a list of all the files that are wanted in the zip file. It is located at build time by looking in the current directory, and if there is no file there looking up a level, and so on. It will normally be held in your _module directory_. The MANIFEST file consists of a list of file paths, each relative to the root of the installation. Wildcards may NOT be used. Each file has an optional octal permissions mask and a description; for example,
-<verbatim>
-data/TWiki/MyPlugin.txt 0664 Plugin description topic
-</verbatim>
-If no permissions are given, permissions are guessed from the permissions on the file in the source tree. These permissions are used by the installer script generated by the builder to set file permissions in the installation.
-
-The following permissions are recommended:
-
-| *File type* | *Permissions* | *Meaning* |
-| =.pm= module | 0444 | Anyone can read, but cannot write or execute |
-| =.txt= file | 0644 | Anyone can read, only owner can write |
-| File in =/pub= | 0644 | ditto |
-| Script in =tools/= or =bin/= | 0555 | Anyone can read or execute, but not write |
-
-Do *not* include ==,v= files in your MANIFEST. If you include a =,v= file it will overwrite any existing =,v= file when an extension is upgraded, potentially wiping out local changes on the end users installation.
-
-MANIFESTs can trigger the inclusion of other modules that have been wrapped using BuildContrib. For example,
-<verbatim>
-!include twikiplugins/WysiwygPlugin/lib/TWiki/Plugins/WysiwygPlugin
-</verbatim>
-This will use 'perl build.pl handsoff_install' to build and install the module in the release tree being built.
-
----+++ Dependencies
-The DEPENDENCIES file specifies module dependencies, for example dependencies on other TWiki modules and on CPAN modules. It is found in the same way as the MANIFEST file. The DEPENDENCIES file contains a list of lines, each of which is a single dependency:
-<verbatim>
-name, version, type, description
-</verbatim>
-where
-   * name is the name of the module,
-   * version is the version constraint (e.g. ">1.5"),
-   * type is its type (CPAN, perl, C etc) and
-   * description is a short description of the module and where to get it.
-The installer script written by the build process uses the dependency type to decide how to install dependant modules. 'cpan' means 'get the module from CPAN and 'perl' means 'get the module from the Plugins web on TWiki.org' (or whatever other repositories the admin has specified using =TWIKI_PACKAGES= or =$PLUGINS_URL=).
----++++ Calculating DEPENDENCIES
-When your module (the _depender_) depends on another module (a _dependee_), it is important to think carefully about what version of the dependee your module requires.
-
-When you are working with TWiki modules (such as contribs and plugins) you should list the version number of the module that you tested with. Normally you will want to use a <code>&gt;</code> condition, so that more recent versions will also work. If a dependency on a TWiki module fails (because the module isn't installed, for example) then the installer script will pull *the latest version* of the module from TWiki.org, whether that is the required version or not. This is a limitation of the way plugins are stored on TWiki.org.
-
-When you are working with CPAN modules, you need to take account of the fact that there are *two types* of CPAN modules; _built-ins_ and _add-ons_.
-
-*Built-ins* are perl modules that are pre-installed in the perl distribution. Since these modules are usually very stable, it is generally safe to express the version dependency as ">0" (i.e. "any version of the module will do").
-
-Note however that the list of built-in modules is constantly growing with each new release of perl. So your module may be installed with a perl version that doesn't have the required module pre-installed. In this case, CPAN will *automatically try to upgrade the perl version*! There is no way around this, other than for the admin on the target system to *manually* install the module (download frm CPAN and build locally). You can help out the admin by expressing the dependency clearly, thus:
-
-<code>
-File::Find,>0,cpan,This module is shipped as part of standard perl from perl 5.8.0 onwards. If your perl installation is older than this, you should either upgrade perl, or *manually* install this module. If you allow this installer to continue, it will *automatically upgrade your perl installation* which is probably not what you want!
-</code>
-
----++++ ONLYIF
-A dependency may optionally be preceded by a condition that limits the cases where the dependency applies. The condition is specified using a line that contans <code>ONLYIF ( _condition_ )</code>, where _condition_ is a Perl conditional. This is most useful for enabling dependencies only for certain versions of TWiki. For example,
-<verbatim>
-TWiki::Rhinos,>=1.000,perl,Required. Download from TWiki:Plugins/RhinosContrib and install.
-ONLYIF ($TWiki::Plugins::VERSION < 1.025)
-TWiki::Plugins::CairoContrib, >=1.000, perl, Optional, only required if the plugin is to be run with versions of TWiki before Cairo. Available from the TWiki:Plugins/CairoContrib repository.
-</verbatim>
-Thus <nop>CairoContrib is only a dependency if the installation is being done on a TWiki version before Cairo. The =ONLYIF= only applies to the next dependency in the file.
-
-The condition is included in the installer script generated by the builder.
-
----+++ Installer
-The installer script generated by the builder when target =release= is used is based on a template installer. This template is populated with lists of files and dependencies to make the package-specific installer.
-
-You can extend the installer by providing PREINSTALL, POSTINSTALL, PREUNINSTALL, and/or POSTUNINSTALL files. These optional files can contain Perl fragments that must execute at the given stage of the installation. The script fragments will be inserted into the generated installer script. Read contrib/TEMPLATE_installer.pl to see how they fit in. The POD comments in that module indicate the functions that are most likely to be useful to anyone writing a script extension. The files are found in the same was as the MANIFEST and DEPENDENCIES files.
-
-The installer script automatically tries to satisfy dependencies on modules of known types (=cpan= and =perl=) by downloading them from TWiki.org or whatever other repositories the admin has specified using =TWIKI_PACKAGES= or =$PLUGINS_URL=. See the generated topic for the extension for more information.
-
----+++ Upload
-The =upload= target will upload your package to TWiki.org (or whatever other repository you specify). This is a two-stage process, because the forms on TWiki.org are edited there, and are not part of the uploaded package. So the upload process first build a release package, then downloads the existing form from TWiki.org. Once the real topic is assembled it is uploaded again, and the new release is attached.
-
----+++ Testing
-The way tests are shipped in this version of BuildContrib has changed radically since TWiki 'Cairo' release. It is now possible to use a TWiki installation as a test fixture. CPAN:Test::Unit tests are expected to be found in the =test/unit= directory in the root directory. Tests are run using the =tests/bin/TestRunner.pl= script (which is simply the =TestRunner.pl= script from the CPAN:Test::Unit distribution, and will be present in any subversion checkout of TWiki). Tests will normally need a TWiki installation; normally you should use the TWiki pointed at by =$TWIKI_HOME= by including the following in the test module:
-<verbatim>
-BEGIN{
-    push( @INC, "$ENV{TWIKI_HOME}/lib" );
-}
-</verbatim>
-
-However this _only_ works with the TWiki-4 release (and later). Tests are bundled by the !BuildContrib in a zip in the plugin directory, called tests.zip. This zip has to be unzipped from the root of the target installation before the tests can be run.
-
-The easiest way to generate tests for your extension is to copy the approach taken in another extension. See for example !ActionTrackerPlugin and !CommentPlugin, which both have extensive test suites.
-
----+++ Token expansion
-The build supports limited token expansion in =.txt= files. See the documentation on the =filter= method for more detail.
 
 ---+++ Methods
 
@@ -172,7 +34,6 @@ use File::Spec;
 use File::Find;
 use File::Path;
 use POSIX;
-use CGI ( -any );
 use diagnostics;
 use Carp;
 use vars qw( $VERSION $RELEASE $SHORTDESCRIPTION $basedir $twiki_home $buildpldir $libpath );
@@ -195,6 +56,9 @@ my $TWIKIORGSCRIPT = 'http://twiki.org/cgi-bin';
 my $TWIKIORGSUFFIX = '';
 my $TWIKIORGBUGS = 'http://develop.twiki.org/~develop/cgi-bin/view/Bugs';
 my $TWIKIORGEXTENSIONSWEB = "Plugins";
+
+my $GLACIERMELT = 20; # number of seconds to sleep between uploads,
+                      # to reduce average load on server
 
 $SIG{__DIE__} = sub { Carp::confess $_[0] };
 
@@ -300,7 +164,6 @@ sub new {
     my $stubpath = $this->{pm};
     $stubpath =~ s/.*[\\\/](TWiki[\\\/].*)\.pm/$1/;
     $stubpath =~ s/[\\\/]/::/g;
-    $this->{STUB} = $stubpath;
 
     # where data files live
     $this->{data_twiki} = 'data/TWiki';
@@ -412,10 +275,14 @@ HERE
         $this->{UPLOADTARGETSUFFIX} = $rep->{suffix};
         $this->{UPLOADTARGETWEB} = $rep->{web};
     } else {
-        $this->{UPLOADTARGETPUB} = $TWIKIORGPUB;
-        $this->{UPLOADTARGETSCRIPT} = $TWIKIORGSCRIPT;
-        $this->{UPLOADTARGETSUFFIX} = $TWIKIORGSUFFIX;
-        $this->{UPLOADTARGETWEB} = $TWIKIORGEXTENSIONSWEB;
+        $this->{UPLOADTARGETPUB} = $TWIKIORGPUB
+          unless defined $this->{UPLOADTARGETPUB};
+        $this->{UPLOADTARGETSCRIPT} = $TWIKIORGSCRIPT
+          unless defined $this->{UPLOADTARGETSCRIPT};
+        $this->{UPLOADTARGETSUFFIX} = $TWIKIORGSUFFIX
+          unless defined $this->{UPLOADTARGETSUFFIX};
+        $this->{UPLOADTARGETWEB} = $TWIKIORGEXTENSIONSWEB
+          unless defined $this->{UPLOADTARGETWEB};
     }
 
     return $this;
@@ -816,24 +683,7 @@ sub target_test {
 =pod
 
 ---++++ filter_txt
-Expands tokens. The following tokens are supported:
-   * %$MANIFEST% - TWiki table of files in MANIFEST
-   * %$FILES% - hash keyed on file name mapping to permissions i.e. 'data/TWiki/ThsiTopic.txt' => 0664, 'lib/TWiki/Plugins/BlahPlugin.pm' => 0775
-   * %$DEPENDENCIES% - list of dependencies from DEPENDENCIES
-   * %$VERSION% version from $VERSION in main .pm
-   * %$DATE% - local date
-   * %$POD% - expands to the POD documentation for the package, excluding test modules.
-   * %$PREINSTALL% - inserts script from PREINSTALL
-   * %$POSTINSTALL% - inserts script from POSTINSTALL
-   * %$PREUNINSTALL% - inserts script from PREUNINSTALL
-   * %$POSTUNINSTALL% - inserts script from POSTINSTALL
-   * %$UPLOADTARGETSCRIPT% - URL of upload scripts dir
-   * %$UPLOADTARGETSUFFIX% - Suffix for upload scripts
-   * %$UPLOADTARGETPUB% - URL of upload pub dir
-   * %$UPLOADTARGETWEB% - name f upload web dir
-   * %$BUGSURL% - URL of bugs web
-   * %$INSTALL_INSTRUCTIONS% - basic instructions for installing
-Three spaces is automatically translated to tab.
+Expands tokens.
 
 The filter is used in the generation of documentation topics and the installer
 
@@ -1318,6 +1168,7 @@ END
     # Upload the standard files
     foreach my $ext qw(.zip .tgz _installer .md5) {
         if ($doup) {
+            # Deep breath before the next one
             $this->_uploadFile($userAgent, $response,
                                $this->{UPLOADTARGETWEB}, $to, $to.$ext,
                                $this->{basedir}.'/'.$to.$ext,'');
@@ -1348,6 +1199,17 @@ END
 sub _uploadFile {
     my ($this, $userAgent, $response, $web, $to, $filename, $filepath, $filecomment, $hide) = @_;
 
+    my $sleep = $GLACIERMELT;
+    if ($sleep > 0) {
+        local $| = 1;
+        print "Taking a deep breath before the next upload";
+        while ($sleep > 0) {
+            print '.';
+            sleep(2);
+            $sleep -= 2;
+        }
+        print "\n";
+    }
     print "Uploading $filename from $filepath\n";
     $response = $userAgent->post(
         "$this->{UPLOADTARGETSCRIPT}/upload$this->{UPLOADTARGETSUFFIX}/$web/$to",
