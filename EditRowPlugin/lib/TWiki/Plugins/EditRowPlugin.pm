@@ -19,7 +19,8 @@ sub initPlugin {
 
     # check for Plugins.pm versions
     if( $TWiki::Plugins::VERSION < 1.1 ) {
-        TWiki::Func::writeWarning( "Version mismatch between $pluginName and Plugins.pm" );
+        TWiki::Func::writeWarning(
+            "Version mismatch between $pluginName and Plugins.pm");
         return 0;
     }
 
@@ -89,9 +90,11 @@ STYLE
         $displayOnly = 1;
     }
 
-    foreach my $line (@$content) {
-        if (ref($line) eq 'TWiki::Plugins::EditRowPlugin::Table') {
-            $table = $line;
+    my $hasTables = 0;
+    foreach (@$content) {
+        if (ref($_) eq 'TWiki::Plugins::EditRowPlugin::Table') {
+            my $line = '';
+            $table = $_;
             $active_table++;
             if (!$displayOnly && $active_table == $urps->{erp_active_table}) {
                 my $active_row = $urps->{erp_active_row};
@@ -111,11 +114,12 @@ STYLE
             }
 
             $table->finish();
+            $_ = "$line\n";
+            $hasTables = 1;
         }
-        $nlines .= "$line\n";
     }
 
-    $_[0] = $nlines;
+    $_[0] = join("\n", @$content) if $hasTables;
 }
 
 # Replace content with a marker to prevent it being munged by TWiki

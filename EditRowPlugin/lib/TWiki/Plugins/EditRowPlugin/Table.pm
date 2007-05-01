@@ -26,6 +26,7 @@ sub parseTables {
     my @tables;
     my $nTables = 0;
     my $disable = 0;
+    my $openRow = undef;
 
     foreach my $line (split(/\r?\n/, $text)) {
         if ($line =~ /<(verbatim|literal)>/) {
@@ -33,6 +34,10 @@ sub parseTables {
         }
         if ($line =~ m#</(verbatim|literal)>#) {
             $disable-- if $disable;
+        }
+        if (defined $openRow) {
+            $line = "$openRow$line";
+            $openRow = undef;
         }
         if (!$disable && $line =~ /%EDITTABLE{([^\n]*)}%/ ) {
             # Editable table
@@ -85,25 +90,25 @@ sub parseTables {
             push(@tables, $active_table);
             next;
         }
-        elsif (!$disable && !$active_table && $line =~ s/^\s*\|//) {
-            # Uneditable table
-            $nTables++;
+        elsif (!$disable && $line =~ /^\s*\|/) {
+            if ($line =~ s/\\$//) {
+                # Continuation
+                $openRow = $line;
+                next;
+            }
+            $line =~ s/^\s*\|//;
             $line =~ s/\|\s*$//;
-            my $attrs => new TWiki::Attrs('');
-            $active_table =
-              new TWiki::Plugins::EditRowPlugin::Table(
-                  $nTables, 0, $line, $attrs, $_[2], $_[1]);
-            push(@tables, $active_table);
-            my $row = new TWiki::Plugins::EditRowPlugin::TableRow(
-                $active_table, scalar(@{$active_table->{rows}}) + 1,
-                split(/\s*\|\s*/, $line, -1));
-            push(@{$active_table->{rows}}, $row);
-            next;
-        }
-        elsif (!$disable && $active_table && $line =~ s/^\s*\|//) {
-            # Table row
-            $line =~ s/\|\s*$//;
-            # Note use of -1 on the split so we don't lose fields
+            if (!$active_table) {
+                # Uneditable table
+                $nTables++;
+                $line =~ s/\|\s*$//;
+                my $attrs => new TWiki::Attrs('');
+                $active_table =
+                  new TWiki::Plugins::EditRowPlugin::Table(
+                      $nTables, 0, $line, $attrs, $_[2], $_[1]);
+                push(@tables, $active_table);
+            }
+            # Note use of -1 on the split so we don't lose empty columns
             my $row = new TWiki::Plugins::EditRowPlugin::TableRow(
                 $active_table, scalar(@{$active_table->{rows}}) + 1,
                 split(/\s*\|\s*/, $line, -1));
@@ -293,6 +298,9 @@ sub _getCols {
         if ($colDef->{type} eq 'row') {
             $urps->{$cellName} = $row - $firstRow;
         }
+        # CGI returns multi-values separated by \0. Replace with
+        # the TWiki convention, comma
+        $urps->{$cellName} =~ s/\0/, /g;
         push(@cols, $urps->{$cellName} || '');
     }
     return @cols;

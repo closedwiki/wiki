@@ -164,6 +164,7 @@ The value of each individual cell is stored in a parameter called =erp_&lt;table
 |  Copyright: | &copy; 2007 Wind<nop>River Inc. |
 |  License: | [[http://www.gnu.org/licenses/gpl.html][GPL (Gnu General Public License)]] |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  13560 | Bugs:Item4002 Problems with blank lines, multi-value edits, and line continuations resolved |
 |  13596 | Bugs:Item4000 Added =orientrowedit=, global control options, fixed issue with wikiwords in edited data, added column sorting |
 |  13487 | Bugs:Item3925 - fixed infinite loop when included format doesn't exist |
 |  13359 | Bugs:Item3875 - can now edit top row of tables. Also now writes row numbers back to the topic, which was needed to support some compatible apps. |
