@@ -42,15 +42,20 @@ Reads the specified manifest file. The parameters are:
   * $baseDir: The root dir as assumed by the manifest file
   * $path: path to be added to $file, if present
   * $file: The absolute path to the manifest file
-  * $noManifestFileHook (optinal): A pointer to a sub to be called if the manifest file is not found
+  * $noManifestFileHook (optional): A pointer to a sub to be called if
+    the manifest file is not found
 
-The manifest file consists of a list of file paths, each relative to the root of the installation. Wildcards may NOT be used. Each file has an optional octal permissions mask and a description; for example,
+The manifest file consists of a list of file paths, each relative to the
+root of the installation. Wildcards may NOT be used. Each file has an
+optional octal permissions mask and a description; for example,
 <verbatim>
 data/TWiki/MyPlugin.txt 0664 Plugin description topic
 </verbatim>
-If no permissions are given, permissions are guessed from the permissions on the file in the source tree. 
+If no permissions are given, permissions are guessed from the permissions
+on the file in the source tree.
 
-This sub returns a reference to a list of hashes with the information of each file. Each hash has the following information:
+This sub returns a reference to a list of hashes with the information of
+each file. Each hash has the following information:
    * name: Path of the file
    * description: (optional) Description of the file
    * permissions: (optional) Permission of the file
@@ -58,7 +63,7 @@ This sub returns a reference to a list of hashes with the information of each fi
 =cut
 
 sub readManifest {
-#TODO: Support for wildcards?
+    # TODO: Support for wildcards?
     my( $baseDir,$path, $file,$noManifestFileHook) = @_;
     $file ||= '';
     $file = $path.$file if $path;
@@ -80,13 +85,18 @@ sub readManifest {
             my $permissions = $2;
             my $desc = $3;
             unless( $permissions ) {
-                # No permissions in MANIFEST, read them from the file system
-                my @s = stat( $baseDir.'/'.$name );
-                if( $! ) {
-                    # default perms
-                    $permissions = 0774;
+                # No permissions in MANIFEST, apply defaults
+                if ($name =~ /\.pm$/) {
+                    $permissions = 0444;
+                } elsif ($name =~ /\.pl$/) {
+                    $permissions = 0554;
+                } elsif ($name =~ /^data\/.*\.txt$/ ||
+                           $name =~ /^pub\//) {
+                    $permissions = 0664;
+                } elsif ($name =~ /^bin\//) {
+                    $permissions = 0555;
                 } else {
-                    $permissions = ($s[2] & 0777);
+                    $permissions = 0444;
                 }
             }
             $permissions = 0 unless defined $permissions;

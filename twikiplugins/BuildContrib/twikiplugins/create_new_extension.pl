@@ -111,7 +111,7 @@ $def{UPLOADTARGETSUFFIX} = '';
 $def{UPLOADTARGETWEB} = "Plugins";
 while (1) {
     print <<END;
-The 'upload' target in the generated script will use:
+The 'upload' target in the generated script will use the following defaults:
 Web:     $def{UPLOADTARGETWEB}
 PubDir:  $def{UPLOADTARGETPUB}
 Scripts: $def{UPLOADTARGETSCRIPT}
@@ -179,8 +179,10 @@ use TWiki::Contrib::Build;
 # Create the build object
 $build = new TWiki::Contrib::Build('%$MODULE%');
 
-# Set the details of the repository for uploads.
+# (Optional) Set the details of the repository for uploads.
 # This can be any web on any accessible TWiki installation.
+# These defaults will be used when expanding tokens in .txt
+# files, but be warned, they can be overridden at upload time!
 
 # name of web to upload to
 $build->{UPLOADTARGETWEB} = '%$UPLOADTARGETWEB%';
