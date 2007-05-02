@@ -101,7 +101,7 @@ sub _getbutton{
             }
             else {
                 $form = CGI::a({href => $url},
-                               "Abo aufl&ouml;sen");
+                               "Unsubscribe");
             }
          } 
          else {
@@ -112,7 +112,7 @@ sub _getbutton{
             }
             else {
             	$form = CGI::a({href => $url},
-                               "Abonieren");
+                               "Subscribe");
            	}
          }
     }
