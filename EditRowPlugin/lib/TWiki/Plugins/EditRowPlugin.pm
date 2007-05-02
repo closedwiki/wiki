@@ -114,7 +114,7 @@ STYLE
             }
 
             $table->finish();
-            $_ = "$line\n";
+            $_ = $line;
             $hasTables = 1;
         }
     }

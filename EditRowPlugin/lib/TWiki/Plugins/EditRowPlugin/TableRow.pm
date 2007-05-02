@@ -9,18 +9,22 @@ use TWiki::Func;
 use TWiki::Plugins::EditRowPlugin::TableCell;
 
 sub new {
-    my ($class, $table, $number, @cols) = @_;
+    my ($class, $table, $number, $precruft, $postcruft, $cols) = @_;
     my $this = bless({}, $class);
     $this->{table} = $table;
     $this->{number} = $number;
+    $this->{isHeader} = 0;
+    $this->{isFooter} = 0;
+    $this->{precruft} = $precruft;
+    $this->{postcruft} = $postcruft;
 
     # pad out the cols to the width of the format
     my $ncols = scalar(@{$table->{colTypes}});
-    while (scalar(@cols) < $ncols) {
-        push(@cols, '');
+    while (scalar(@$cols) < $ncols) {
+        push(@$cols, '');
     }
     $this->{cols} = [];
-    $this->set(@cols);
+    $this->set($cols);
     return $this;
 }
 
@@ -36,12 +40,12 @@ sub finish {
 
 # Set the columns in the row. Adapts to widen or narrow the row as required.
 sub set {
-    my ($this, @cols) = @_;
-    while (scalar(@{$this->{cols}}) > scalar(@cols)) {
+    my ($this, $cols) = @_;
+    while (scalar(@{$this->{cols}}) > scalar(@$cols)) {
         pop(@{$this->{cols}})->finish();
     }
     my $n = 0;
-    foreach my $val (@cols) {
+    foreach my $val (@$cols) {
         if ($n < scalar(@{$this->{cols}})) {
             $this->{cols}->[$n]->{text} = $val;
         } else {
@@ -56,80 +60,84 @@ sub set {
 sub stringify {
     my $this = shift;
 
-    return '| '.join(' | ', map { $_->stringify() } @{$this->{cols}}).' |';
+    return '|'.join('|', map { $_->stringify() } @{$this->{cols}}).'|';
 }
 
 sub renderForEdit {
-    my ($this, $colDefs, $n, $firstRow, $showControls, $hdrs, $orient) = @_;
+    my ($this, $colDefs, $showControls, $orient) = @_;
 
     my $id = "$this->{table}->{number}_$this->{number}";
     my $anchor = CGI::a({ name=>"erp_$id" });
 
     if ($orient eq 'vertical') {
         # Each column is presented as a row
-        my $col = 0;
         my @rows;
         # Number of empty columns at end of each row
         my $empties = '|' x (scalar(@{$this->{cols}}) - 1);
+        my $hdrs = $this->{table}->getLabelRow();
+        my $col = 0;
         foreach my $cell (@{$this->{cols}}) {
+            # get the column label
             my $hdr = $hdrs->{cols}->[$col];
             $hdr = $hdr->{text} if $hdr;
             $hdr ||= '';
-            my $text = $cell->renderForEdit($colDefs->[$col++], $n);
+            my $text = $cell->renderForEdit($colDefs, $this->{isHeader});
             push(@rows, "| $hdr| $text $anchor |$empties");
+            $col++;
         }
         if ($showControls) {
-            my $buttons = $this->{table}->generateEditButtons($n, 0);
+            my $buttons = $this->{table}->generateEditButtons(
+                $this->{number}, 0);
             push(@rows, "| $buttons ||$empties");
         }
         return @rows;
     } else {
         # Generate the editors for each cell in the row
         my @cols = ();
-        my $col = 0;
         foreach my $cell (@{$this->{cols}}) {
-            my $text = $cell->renderForEdit($colDefs->[$col++], $n,
-                                            $hdrs, $orient);
+            my $text = $cell->renderForEdit($colDefs, $this->{isHeader});
             push(@cols, $text);
         }
 
         if ($showControls) {
-            my $buttons = $this->{table}->generateEditButtons($n, 1);
+            my $buttons = $this->{table}->generateEditButtons(
+                $this->{number}, 1);
             unshift(@cols, $buttons);
         }
 
-        return ("| $anchor" . join(' | ', @cols) . " |");
+        return ($this->{precruft}."$anchor" . join('|', @cols) . $this->{postcruft});
     }
-}
-
-# Generate a sort command suitable for sorting the table columns
-sub _sortCommand {
-    my ($text, $col) = @_;
-
-    if ($text =~ s/^\*(.*)\*$/$1/) {
-        return '*'.CGI::span(
-            { class => 'erpSort',
-              onclick => "this.blur(); return sortTable(this,  $col, false);",
-          }, $text).'*';
-    }
-    return $text;
 }
 
 sub renderForDisplay {
-    my ($this, $colDefs, $n, $firstRow, $withControls) = @_;
+    my ($this, $colDefs, $withControls) = @_;
     my @out;
     my $id = "$this->{table}->{number}_$this->{number}";
-    if ($firstRow) {
-        @out = map { $_->{text} } @{$this->{cols}};
-        # The ** fools TablePlugin into thinking this is a header.
-        # Otherwise it disables sorting.
-        unshift(@out, '**') if $withControls;
-    } else {
-        my $col = 0;
-        foreach (@{$this->{cols}}) {
-            push(@out, $_->renderForDisplay($colDefs->[$col++], $n));
+    my $addAnchor = $this->{table}->{editable};
+    my $anchor = "<a name='erp_$id'></a>";
+
+    foreach my $cell (@{$this->{cols}}) {
+        # Add the row anchor for editing. It's added to the first non-empty
+        # cell or, failing that, the first cell. This is to minimise the
+        # risk of breaking up implied colspans.
+        if ($addAnchor && $cell->{text} =~ /\S/) {
+            $cell->{text} .= $anchor;
+            $addAnchor = 0;
         }
-        if ($withControls) {
+        push(@out, $cell->renderForDisplay($colDefs, $this->{isHeader}));
+    }
+
+    if ($withControls) {
+        if ($this->{isHeader} || $this->{isFooter}) {
+            # The ** fools TablePlugin into thinking this is a header.
+            # Otherwise it disables sorting :-(
+            my $text = '';
+            if ($addAnchor) {
+                $text = $anchor;
+                $addAnchor = 0;
+            }
+            unshift(@out, " *$text* ");
+        } else {
             my $url;
             if ($TWiki::Plugins::VERSION < 1.11) {
                 $url = TWiki::Func::getScriptUrl(
@@ -144,27 +152,28 @@ sub renderForDisplay {
                     '#' => "erp_$id");
             }
             my $button =
-              CGI::img({
+              "<a href='$url'>" . CGI::img({
                   -name => "erp_edit_$id",
                   -border => 0,
                   -src => '%PUBURLPATH%/TWiki/TWikiDocGraphics/edittopic.gif'
-                 });
-            unshift(
-                @out,
-                  "<a href='$url'>" . $button . "</a>");
+                 }) . "</a>";
+            if ($addAnchor) {
+                $button .= $anchor;
+                $addAnchor = 0;
+            }
+            unshift(@out, $button);
         }
     }
 
-    # Special handling for anchored heading cells :-(
-    my $tag = "<a name='erp_$id'></a>";
-    if ($out[-1] =~ s/^(\*.*)\*$/$1/) {
-        $tag .= '*';
+    if ($addAnchor) {
+        # All cells were empty; we have to shoehorn the anchor into the
+        # final cell.
+        my $cell = $this->{cols}->[-1];
+        pop(@out);
+        $cell->{text} .= $anchor;
+        push(@out, $cell->renderForDisplay($colDefs, $this->{isHeader}));
     }
-    $out[-1] .= $tag;
-
-    my $col = 0;
-    return "| " .join(' | ', map {
-        _sortCommand($_, $col++) } @out). " |";
+    return $this->{precruft}.join('|', @out).$this->{postcruft};
 }
 
 1;

@@ -13,8 +13,15 @@ sub new {
     my $this = bless({}, $class);
     $this->{row} = $row;
     $this->{number} = $number;
-    $text =~ s/^\s*//;
-    $text =~ s/\s*$//;
+    $text =~ s/^(\s*)//;
+    $this->{precruft} = $1 || '';
+    $text =~ s/(\s*)$//;
+    $this->{postcruft} = $1 || '';
+    if ($text =~ s/^\*(.*)\*$/$1/) {
+        $this->{precruft} .= '*';
+        $this->{postcruft} = '*'.$this->{postcruft};
+        $this->{isHeader} = 1;
+    }
     $this->{text} = $text;
     return $this;
 }
@@ -27,22 +34,36 @@ sub finish {
 sub stringify {
     my $this = shift;
 
-    return $this->{text};
+    return $this->{precruft}.$this->{text}.$this->{postcruft};
+}
+
+# Generate a sort command suitable for sorting the table columns
+sub _getCell {
+    my ($this, $isHeader) = @_;
+
+    my $text = $this->{text};
+    if ($isHeader) {
+        $text = CGI::span(
+            { class => 'erpSort',
+              onclick => "javascript: return sortTable(this, $this->{number}, false);",
+          }, $text);
+    }
+    return $this->{precruft}.$text.$this->{postcruft};
 }
 
 sub renderForDisplay {
-    my ($this, $colDef, $n) = @_;
-    $colDef ||= $defCol;
+    my ($this, $colDefs, $isHeader) = @_;
+    my $colDef = $colDefs->[$this->{number} - 1] || $defCol;
 
     if ($colDef->{type} eq 'row') {
-        return $n;
+        $this->{text} = $this->{row}->{index};
     }
-    return $this->{text};
+    return $this->_getCell($isHeader);
 }
 
 sub renderForEdit {
-    my ($this, $colDef, $n) = @_;
-    $colDef ||= $defCol;
+    my ($this, $colDefs, $isHeader) = @_;
+    my $colDef = $colDefs->[$this->{number} - 1] || $defCol;
 
     my $expandedValue = TWiki::Func::expandCommonVariables(
         $this->{text} || '');
@@ -71,7 +92,7 @@ sub renderForEdit {
 
         $expandedValue = ",$expandedValue,";
         my $i = 0;
-        foreach my $option ( @{$colDef->{values}} ) {
+        foreach my $option (@{$colDef->{values}}) {
             my $expandedOption =
               TWiki::Func::expandCommonVariables($option);
             $expandedOption =~ s/^\s*(.*?)\s*$/$1/;
@@ -95,7 +116,7 @@ sub renderForEdit {
 
     } elsif( $colDef->{type} eq 'row' ) {
 
-        $text = $n;
+        $text = $this->{row}->{index};
 
     } elsif( $colDef->{type} eq 'textarea' ) {
 
@@ -113,31 +134,14 @@ sub renderForEdit {
 
     } elsif( $colDef->{type} eq 'date' ) {
 
-        require TWiki::Contrib::JSCalendarContrib;
-        unless( $@ ) {
-            TWiki::Contrib::JSCalendarContrib::addHEAD( 'twiki' );
-        }
-
-        my $ifFormat = $colDef->{values}->[0] ||
-          $TWiki::cfg{JSCalendarContrib}{format} || '%e %B %Y';
-
-        $text .= CGI::textfield({
-            name => $cellName,
-            id => "id$cellName",
-            size=> $colDef->{size},
-            value => $this->{text} });
-
         eval 'use TWiki::Contrib::JSCalendarContrib';
-        unless ( $@ ) {
-            $text .= CGI::image_button(
-                -name => 'calendar',
-                -onclick =>
-                  "return showCalendar('id$cellName','$ifFormat')",
-                -src=> TWiki::Func::getPubUrlPath() . '/' .
-                  TWiki::Func::getTwikiWebname() .
-                      '/JSCalendarContrib/img.gif',
-                -alt => 'Calendar',
-                -align => 'MIDDLE' );
+
+        if ($@) {
+            # Calendars not available
+            $text = CGI::textfield(-name => $cellName, -size => 10);
+        } else {
+            $text = TWiki::Contrib::JSCalendarContrib::renderDateForEdit(
+                $cellName, $this->{text}, $colDef->{values}->[0]);
         }
 
     } else { #  if( $colDef->{type} =~ /^(text|label)$/)
@@ -149,7 +153,8 @@ sub renderForEdit {
             value => $val });
 
     }
-    return TWiki::Plugins::EditRowPlugin::defend($text);
+    return $this->{precruft}.TWiki::Plugins::EditRowPlugin::defend($text)
+      .$this->{postcruft};
 }
 
 1;
