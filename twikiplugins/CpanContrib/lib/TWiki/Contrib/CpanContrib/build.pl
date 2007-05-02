@@ -1,4 +1,5 @@
 #!/usr/bin/perl -w
+use strict;
 #
 # Requires the environment variable TWIKI_LIBS (a colon-separated path
 # list) to be set to point at the build system and any required dependencies.
@@ -12,7 +13,7 @@
 
 # Standard preamble
 BEGIN {
-  unshift @INC, split( /:/, $ENV{TWIKI_LIBS} );
+  unshift @INC, split( /:/, $ENV{TWIKI_LIBS} || '' );
   unshift @INC, '../../../CPAN/lib';
 }
 
@@ -89,7 +90,7 @@ sub target_build {
     if ( open( BUILD_CACHE, '<', $build_cache_filename ) )
     {   # read module build cache
 	local $/ = undef;
-	$file = <BUILD_CACHE>;
+	my $file = <BUILD_CACHE>;
 	close BUILD_CACHE;
 
 	$build_cache = eval $file;
@@ -112,8 +113,12 @@ sub target_build {
 	    print "Installing $module\n";
 	    print "-" x 80, "\n";
 	    my $mirror = '../../../../../../../../MIRROR/MINICPAN/';
+	    -e $mirror or $mirror = 'http://cpan.perl.org';
 	    $build_cache->{$module}->{timebuilt} = time;	# earlier timestamp is better than later
 	    my $INSTALL_CPAN = `perl install-cpan.pl --mirror=$mirror --baselibdir=$base_lib_dir $module </dev/null`;
+	    if ( $@ ) {
+		print STDERR "error installing $module: $@\n";
+	    }
 	    # fill in the cache information
 	    ( my $CPAN_FILE ) = $INSTALL_CPAN =~ /.*CPAN\.pm: Going to build (.*)/;
 	    $build_cache->{$module}->{CPAN_FILE} = "$mirror/authors/id/$CPAN_FILE";
@@ -164,7 +169,7 @@ sub _upToDate
 
 package main;
 # Create the build object
-$build = new BuildBuild();
+my $build = new BuildBuild();
 
 # Build the target on the command line, or the default target
 $build->build( $build->{target} );
