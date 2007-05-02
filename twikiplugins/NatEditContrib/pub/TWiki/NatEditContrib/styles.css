@@ -1,49 +1,55 @@
-/* natedit styles */
-.natEditToolBar {
-  margin-bottom:5px;
-  padding:0px 2px;
+/* natedit base styles */
+.natEditTextTools,
+.natEditHeadlineTools,
+.natEditParagraphTools,
+.natEditObjectTools,
+.natEditEditTools,
+.natEditExitTools,
+.natEditHelpTools {
+  margin:0px 10px 0px 0px;
+  padding:0px;
+  float:left;
+  white-space:nowrap;
 }
-.natPreviewToolBar img,
-.natEditToolBar img {
-  margin-right:3px;
-  border:0px;
-  position:relative;
-  top:0px;
+.natEditHelpTools {
+  float:right;
 }
-.natPreviewToolBar a:hover,
+.natEditToolBar ul {
+  margin:0px;
+  padding:0px;
+}
+.natEditToolBar li {
+  display:inline;
+}
+.natEditToolBar ul li a span {
+  display:none;
+}
+
+.natEditToolBar a {
+  text-decoration:none;
+  background-position:top left;
+  background-repeat:no-repeat;
+  float:left;
+}
 .natEditToolBar a:hover {
   text-decoration:none;
-  background:white;
+  background-color:transparent;
+  _background-color:white;
 }
-.natPreviewToolBar a:hover img,
-.natEditToolBar a:hover img {
-  top:1px;
-  left:1px;
-}
-.natEditHelpTools,
-.natEditObjectTools,
-.natEditParagraphTools,
-.natEditHeadlineTools,
-.natEditTextTools {
-  margin-right:5px;
-  white-space:nowrap;
-}
-.natEditEditTools,
-.natEditExitTools {
-  white-space:nowrap;
-}
-.natEditForceNewRevision {
-  float:right;
-  display:block;
-  margin:5px 0px
-}
+
 .natEditForceNewRevision label,
 .natEditForceNewRevision input {
-  margin:0px 5px;
+  margin:4px;
+  _margin:0px;
+  border:0px;
 }
 .natEditFontButtons {
   margin:0.5em;
   float:right;
+}
+
+.twikiForm {
+  clear:both;
 }
 
 /* RevCommentPlugin support */
@@ -56,3 +62,4 @@
 .revComment input {
   width:80%;
 }
+

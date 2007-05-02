@@ -31,11 +31,29 @@ javascript are not supported.
 To enable the <nop>NatEditContrib add the identifier =natedit= to the =SKIN= 
 variable in Main.TWikiPreferences or WebPreferences.  So in case you are using <nop>PatternSkin
 this is
-<verbatim>
-* Set SKIN = natedit,pattern
-</verbatim>
+<pre>
+   * <!-- -->Set SKIN = natedit,pattern
+</pre>
 
 ---++ Customization
+---+++ Theming
+The editor can be themed using CSS. The actual theme is set using the =NATEDIT_THEME= variable
+which defaults to
+<verbatim>
+   * Set NATEDIT_THEME = default
+</verbatim>
+
+This value determines the subdirectory under 
+=%PUBURLPATH%/%TWIKIWEB%/NatEditContrib= which contains a =styles.css= file and a bunch
+of button images. You can create a new theme "foo" by creating a CSS file 
+=%PUBURLPATH%/%TWIKIWEB%/NatEditContrib/foo/styles.css= and setting 
+<pre>
+   * <!-- -->Set NATEDIT_THEME = foo
+</pre>
+See the default theme for the CSS classes used for the individual buttons.
+
+
+---+++ Markup
 All buttons produce a certain amout of TWiki markup or HTML inserting it at the current
 position in the textarea. This can be configured to your needs using a set of
 preference variables. Please add them to your Main.TWikiPreferences or WebPreferences to
@@ -50,32 +68,31 @@ will be inserted. If there's a current selection, then it will be used instead o
 =<sample-text>=.
 
 | *Name* | *Icon* | *Description* | *Default* |
-| NATEDIT_BOLD | <img src="%ATTACHURLPATH%/button_bold.png" alt="bold" /> | bold text | '*', 'Bold text', '*' |
-| NATEDIT_ITALIC | <img src="%ATTACHURLPATH%/button_italic.png" alt="italic" /> | italic text | '_', 'Italic text', '_' |
-| NATEDIT_MONO | <img src="%ATTACHURLPATH%/button_mono.png" alt="monospace" /> | monospace text | '=', 'Monospace text', '=' |
-| NATEDIT_UNDERLINE | <img src="%ATTACHURLPATH%/button_underlined.png" alt="underlined" /> | underlined text | '<<nop>u>', 'Underlined text', '</u>' | 
-| NATEDIT_STRIKE | <img src="%ATTACHURLPATH%/button_strike.png" alt="strike" /> | striked text | '<<nop>strike>', 'Strike through text', '<<nop>/strike>' |
-| NATEDIT_SUB | <img src="%ATTACHURLPATH%/button_sub.png" alt="sub" /> | subscribed text | '<<nop>sub>', 'Subscript text', '<<nop>/sub>' |
-| NATEDIT_SUP | <img src="%ATTACHURLPATH%/button_super.png" alt="super" /> | superscribed text | '<<nop>sup>', 'Superscript text', '<<nop>/sup>' |
-| NATEDIT_LEFT | <img src="%ATTACHURLPATH%/button_left.png" alt="left" /> | left adjusted section | '<<nop>div style=\"text-align:left\">\n','Align left','\n<<nop>\/div>\n' |
-| NATEDIT_RIGHT | <img src="%ATTACHURLPATH%/button_right.png" alt="right" /> | right adjusted section | '<<nop>div style=\"text-align:right\">\n','Align right','\n<<nop>\/div>\n' |
-| NATEDIT_CENTER | <img src="%ATTACHURLPATH%/button_center.png" alt="center" /> | centered section | '<<nop>div style=\"text-align:center\">\n','Center text','\n<<nop>\/div>\n' |
-| NATEDIT_JUSTIFY | <img src="%ATTACHURLPATH%/button_justify.png" alt="justify" /> | justify section | '<<nop>div style=\"text-align:justify\">\n','Justify text','\n<<nop>\/div>\n' |
-| NATEDIT_H1 | <img src="%ATTACHURLPATH%/button_h1.png" alt="h1" /> | headline level 1 | '\n---+ ','Headline text','\n' | 
-| NATEDIT_H2 | <img src="%ATTACHURLPATH%/button_h2.png" alt="h2" /> | headline level 2 | '\n---++ ','Headline text','\n' | 
-| NATEDIT_H3 | <img src="%ATTACHURLPATH%/button_h3.png" alt="h3" /> | headline level 3 | '\n---+++ ','Headline text','\n' | 
-| NATEDIT_H4 | <img src="%ATTACHURLPATH%/button_h4.png" alt="h4" /> | headline level 4 | '\n---++++ ','Headline text','\n' | 
-| NATEDIT_IMAGE | <img src="%ATTACHURLPATH%/button_image.png" alt="image" /> | image button |\
+| NATEDIT_BOLD | <img src="%ATTACHURLPATH%/%NATEDIT_THEME%/button_bold.png" alt="bold" /> | bold text | '*', 'Bold text', '*' |
+| NATEDIT_ITALIC | <img src="%ATTACHURLPATH%/%NATEDIT_THEME%/button_italic.png" alt="italic" /> | italic text | '_', 'Italic text', '_' |
+| NATEDIT_MONO | <img src="%ATTACHURLPATH%/%NATEDIT_THEME%/button_mono.png" alt="monospace" /> | monospace text | '=', 'Monospace text', '=' |
+| NATEDIT_UNDERLINE | <img src="%ATTACHURLPATH%/%NATEDIT_THEME%/button_underlined.png" alt="underlined" /> | underlined text | '<<nop>u>', 'Underlined text', '</u>' | 
+| NATEDIT_STRIKE | <img src="%ATTACHURLPATH%/%NATEDIT_THEME%/button_strike.png" alt="strike" /> | striked text | '<<nop>strike>', 'Strike through text', '<<nop>/strike>' |
+| NATEDIT_SUB | <img src="%ATTACHURLPATH%/%NATEDIT_THEME%/button_sub.png" alt="sub" /> | subscribed text | '<<nop>sub>', 'Subscript text', '<<nop>/sub>' |
+| NATEDIT_SUP | <img src="%ATTACHURLPATH%/%NATEDIT_THEME%/button_super.png" alt="super" /> | superscribed text | '<<nop>sup>', 'Superscript text', '<<nop>/sup>' |
+| NATEDIT_LEFT | <img src="%ATTACHURLPATH%/%NATEDIT_THEME%/button_left.png" alt="left" /> | left adjusted section | '<<nop>div style=\"text-align:left\">\n','Align left','\n<<nop>\/div>\n' |
+| NATEDIT_RIGHT | <img src="%ATTACHURLPATH%/%NATEDIT_THEME%/button_right.png" alt="right" /> | right adjusted section | '<<nop>div style=\"text-align:right\">\n','Align right','\n<<nop>\/div>\n' |
+| NATEDIT_CENTER | <img src="%ATTACHURLPATH%/%NATEDIT_THEME%/button_center.png" alt="center" /> | centered section | '<<nop>div style=\"text-align:center\">\n','Center text','\n<<nop>\/div>\n' |
+| NATEDIT_JUSTIFY | <img src="%ATTACHURLPATH%/%NATEDIT_THEME%/button_justify.png" alt="justify" /> | justify section | '<<nop>div style=\"text-align:justify\">\n','Justify text','\n<<nop>\/div>\n' |
+| NATEDIT_H1 | <img src="%ATTACHURLPATH%/%NATEDIT_THEME%/button_h1.png" alt="h1" /> | headline level 1 | '\n---+ ','Headline text','\n' | 
+| NATEDIT_H2 | <img src="%ATTACHURLPATH%/%NATEDIT_THEME%/button_h2.png" alt="h2" /> | headline level 2 | '\n---++ ','Headline text','\n' | 
+| NATEDIT_H3 | <img src="%ATTACHURLPATH%/%NATEDIT_THEME%/button_h3.png" alt="h3" /> | headline level 3 | '\n---+++ ','Headline text','\n' | 
+| NATEDIT_H4 | <img src="%ATTACHURLPATH%/%NATEDIT_THEME%/button_h4.png" alt="h4" /> | headline level 4 | '\n---++++ ','Headline text','\n' | 
+| NATEDIT_IMAGE | <img src="%ATTACHURLPATH%/%NATEDIT_THEME%/button_image.png" alt="image" /> | image button |\
  <<nop>img src=\"%<nop>ATTACHURLPATH%/','Example.jpg','\" title=\"Example\" /> \
  <br /> or \
  %<nop>IMAGE{\"','Example.jpg','&#124;400px&#124;Caption text&#124;frame&#124;center\"}<nop>% \
  when the <nop>ImagePlugin is installed |
-| NATEDIT_EXTLINK | <img src="%ATTACHURLPATH%/button_ext.png" alt="ext link" /> | external link | '[<nop>[http://...][','link text',']]' |
-| NATEDIT_INTLINK | <img src="%ATTACHURLPATH%/button_int.png" alt="int link" /> | internal link | '[<nop>[','web.topic][link text',']]' | 
-| NATEDIT_MATH | <img src="%ATTACHURLPATH%/button_formula.png" alt="math" /> | only visible if the <nop>MathModePlugin is installed | '<<nop>latex title=\"Example\">\n','\\sum_{x=1}^{n}\\frac{1}{x}','\n<<nop>/latex>' |
-| NATEDIT_SIGNATURE | <img src="%ATTACHURLPATH%/button_signature.png" alt="signature" /> | signature button | '-- ','%<nop>WIKIUSERNAME%',' - %<nop>DATE%' |
-| NATEDIT_VERBATIM | <img src="%ATTACHURLPATH%/button_verbatim.png" alt="verbatim" /> | section ignoring contained wiki markup | '<<nop>verbatim>\n','Insert non-formatted text here','\n<\/verbatim>\n' |
-
+| NATEDIT_EXTLINK | <img src="%ATTACHURLPATH%/%NATEDIT_THEME%/button_ext.png" alt="ext link" /> | external link | '[<nop>[http://...][','link text',']]' |
+| NATEDIT_INTLINK | <img src="%ATTACHURLPATH%/%NATEDIT_THEME%/button_int.png" alt="int link" /> | internal link | '[<nop>[','web.topic][link text',']]' | 
+| NATEDIT_MATH | <img src="%ATTACHURLPATH%/%NATEDIT_THEME%/button_formula.png" alt="math" /> | only visible if the <nop>MathModePlugin is installed | '<<nop>latex title=\"Example\">\n','\\sum_{x=1}^{n}\\frac{1}{x}','\n<<nop>/latex>' |
+| NATEDIT_SIGNATURE | <img src="%ATTACHURLPATH%/%NATEDIT_THEME%/button_signature.png" alt="signature" /> | signature button | '-- ','%<nop>WIKIUSERNAME%',' - %<nop>DATE%' |
+| NATEDIT_VERBATIM | <img src="%ATTACHURLPATH%/%NATEDIT_THEME%/button_verbatim.png" alt="verbatim" /> | section ignoring contained wiki markup | '<<nop>verbatim>\n','Insert non-formatted text here','\n<\/verbatim>\n' |
 
 If you want to customize the help text in the bottom part of the editor then
 set the variable =NATEDIT_HELPTEXT= to the name of a topic that contains
@@ -99,8 +116,9 @@ Sponsored by [[http://www.trivadis.com][Trivadis AG]]
 |  Author: | TWiki:Main/MichaelDaum |
 |  Copyright &copy;: | 2007 Michael Daum http://wikiring.de |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Version: | v1.33 |
+|  Version: | v1.40 |
 |  Change History: | |
+|  1 May 2007 | made natedit themable |
 |  27 Apr 2007 | made all button output configurable; \
                  standardized their defaults; \
                  fixed javascript in preview mode; \
@@ -122,6 +140,6 @@ Sponsored by [[http://www.trivadis.com][Trivadis AG]]
 |  Feedback: | TWiki:Plugins/%TOPIC%Dev |
 |  Appraisal: | TWiki:Plugins/%TOPIC%Appraisal |
 
--- TWiki:Main.MichaelDaum - 30 Apr 2007
+-- TWiki:Main.MichaelDaum - 1 May 2007
 
 %META:FILEATTACHMENT{name="screenshot1.png" attachment="screenshot1.png" attr="" comment="" date="1175688869" path="screenshot1.png" size="61040" stream="screenshot1.png" user="Main.TWikiContributor" version="1"}%
