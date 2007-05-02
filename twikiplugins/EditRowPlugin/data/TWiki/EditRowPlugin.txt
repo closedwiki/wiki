@@ -38,9 +38,13 @@ and you can use it to edit the entire table, or just one row at a time.
 
 Add =%<nop>EDITTABLE{...}%= on the line before the first row of an existing table to make it editable. Parameters:
 
-   * =format= - The format of the cells in a row of the table. The format is defined like a table row, where the cell data specify the type for each cell. For example, =format="| text,16 | label |"=. Cells can be any of the following types:
+   * =format= - The format of the cells in a row of the table. The format is
+     defined like a table row, where the cell data specify the type for each
+     cell. For example, =format="| text,16 | label |"=. Cells can be any of
+     the following types:
       * =text, &lt;size&gt;, &lt;initial value&gt;= Simple text field
-      * =textarea, &lt;rows&gt;x&lt;columns&gt;, &lt;initial value&gt;= Multirow text box.
+      * =textarea, &lt;rows&gt;x&lt;columns&gt;, &lt;initial value&gt;=
+        Multirow text box.
       * =select, &lt;size&gt;, &lt;option 1&gt;, &lt;option 2&gt;, etc=
         Select one from a list of choices.
       * =radio, &lt;size&gt;, &lt;option 1&gt;, &lt;option 2&gt;,= etc.
@@ -52,14 +56,32 @@ Add =%<nop>EDITTABLE{...}%= on the line before the first row of an existing tabl
       * label, 0, &lt;label text&gt; Fixed label.
       * =row= The row number, automatically worked out.
       * =date, &lt;size&gt;, &lt;initial value&gt;, &lt;DHTML date format&gt;=
-   * =changerows= - Rows can be added and removed if ="on"=. Rows can be added but
-     not removed if ="add"=. Defaults to the value of the [[TWikiVariables][preference]] =CHANGEROWS=, or =off= if it isn't set.
-   * =quietsave= - Quiet Save button is shown if ="on"=. Defaults to the value of the [[TWikiVariables][preference]] =QUIETSAVE=, or =off= if it isn't set.
-   * =include= - Name of another topic defining the EDITTABLE parameters. The first
-     %<nop>EDITTABLE% in the topic is used. This is useful if you have many topics
-     with the same table format and you want to update the format in one place.
-   * =headerislabel= - The first row of the table is treated as a label row if ="on"=
-   * =orientrowedit= - unique to !EditRowPlugin, this parameter controls the orientation of a row when it is being edited. It can be set to =horizontal= (the default) or =vertical=, which will present the columns of the row as rows in the editor. This makes editing very wide tables much easier. Has no effect in whole table editing mode.
+   * =changerows= - Rows can be added and removed if ="on"=. Rows can be
+     added but not removed if ="add"=. Defaults to the value of the
+     [[TWikiVariables][preference]] =CHANGEROWS=, or =off= if it isn't set.
+   * =quietsave= - Quiet Save button is shown if ="on"=. Defaults to the
+     value of the [[TWikiVariables][preference]] =QUIETSAVE=, or =off= if it
+     isn't set.
+   * =include= -
+     Name of another topic defining the EDITTABLE parameters. The first
+     %<nop>EDITTABLE% in the topic is used. This is useful if you have many
+     topics with the same table format and you want to update the format in
+     one place.
+   * =headerrows= -
+     Number of rows to treat as headers. Header rows are not 
+     editable, and will not be sorted. =headerislabel= is also 
+     supported for EditTablePlugin compatibility (equivalent 
+     to =headderrows="1"=) |
+   * =footerrows= -
+     Number of rows to treat as footers. Footer rows are not 
+     editable and will not be sorted. |
+   * =orientrowedit= -
+     unique to !EditRowPlugin, this parameter controls the 
+     orientation of a row when it is being edited. It can be
+     set to =horizontal= (the default) or =vertical=, which
+     will present the columns of the row as rows in the editor. This makes
+     editing very wide tables much easier. Has no effect in whole table
+     editing mode.
 
 Table rows are shown with a row edit button %ICON{edittopic}% in the first column,
 and a table edit button <img src="%ATTACHURLPATH%/edittable.gif" /> after the
@@ -74,7 +96,11 @@ settings of =changerows= and =quietsave=.
    * %ICON{arrowdown}% Move this row down one row in the table
    * %ICON{stop}% cancels the open edit
 
-Copy the following examples and paste them into a topic in the Sandbox web (or another web where you have write permissions). The !EditRowPlugin is %IF{"{Plugins}{EditRowPlugin}{Enabled}" else=" *not* currently enabled in this TWiki, so the examples are disabled." then="enabled in this TWiki. Click on the buttons to try it out."}%
+Copy the following examples and paste them into a topic in the Sandbox web
+(or another web where you have write access). The !EditRowPlugin is
+%IF{"{Plugins}{EditRowPlugin}{Enabled}"
+else=" *not* enabled in this TWiki, so the examples will be disabled."
+then="enabled in this TWiki. Click on the buttons to try it out."}%
 
 ---+++ Example 1
 <verbatim>
@@ -164,6 +190,7 @@ The value of each individual cell is stored in a parameter called =erp_&lt;table
 |  Copyright: | &copy; 2007 Wind<nop>River Inc. |
 |  License: | [[http://www.gnu.org/licenses/gpl.html][GPL (Gnu General Public License)]] |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  13609 | Bugs:Item4003: fixed colspan. Also added support for headerrows and footerrows parameters from %TABLE |
 |  13560 | Bugs:Item4002 Problems with blank lines, multi-value edits, and line continuations resolved |
 |  13596 | Bugs:Item4000 Added =orientrowedit=, global control options, fixed issue with wikiwords in edited data, added column sorting |
 |  13487 | Bugs:Item3925 - fixed infinite loop when included format doesn't exist |

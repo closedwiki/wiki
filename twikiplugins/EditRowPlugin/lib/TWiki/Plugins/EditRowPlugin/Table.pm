@@ -2,6 +2,7 @@
 package TWiki::Plugins::EditRowPlugin::Table;
 
 use strict;
+use Assert;
 
 use TWiki::Func;
 use TWiki::Plugins::EditRowPlugin::TableRow;
@@ -80,8 +81,13 @@ sub parseTables {
                     $format =~ s/-([a-z\d][a-z\d])/chr(hex($1))/gie;
                     $attrs->{format} = $format;
                 }
-                if (defined($urps->{"erp_${nTables}_headed"})) {
-                    $attrs->{headerislabel} = $urps->{"erp_${nTables}_headed"};
+                if (defined($urps->{"erp_${nTables}_headerrows"})) {
+                    $attrs->{headerrows} =
+                      $urps->{"erp_${nTables}_headerrows"};
+                }
+                if (defined($urps->{"erp_${nTables}_footerrows"})) {
+                    $attrs->{footerrows} =
+                      $urps->{"erp_${nTables}_footerrows"};
                 }
             }
             $active_table =
@@ -96,12 +102,13 @@ sub parseTables {
                 $openRow = $line;
                 next;
             }
-            $line =~ s/^\s*\|//;
-            $line =~ s/\|\s*$//;
+            my $precruft = '';
+            $precruft = $1 if $line =~ s/^(\s*\|)//;
+            my $postcruft = '';
+            $postcruft = $1 if $line =~ s/(\|\s*)$//;
             if (!$active_table) {
                 # Uneditable table
                 $nTables++;
-                $line =~ s/\|\s*$//;
                 my $attrs => new TWiki::Attrs('');
                 $active_table =
                   new TWiki::Plugins::EditRowPlugin::Table(
@@ -109,9 +116,11 @@ sub parseTables {
                 push(@tables, $active_table);
             }
             # Note use of -1 on the split so we don't lose empty columns
+            my @cols = split(/\|/, $line, -1);
             my $row = new TWiki::Plugins::EditRowPlugin::TableRow(
                 $active_table, scalar(@{$active_table->{rows}}) + 1,
-                split(/\s*\|\s*/, $line, -1));
+                $precruft, $postcruft,
+                \@cols);
             push(@{$active_table->{rows}}, $row);
             next;
         }
@@ -130,7 +139,6 @@ sub new {
     $this->{number} = $tno;
     $this->{spec} = $spec;
     $this->{rows} = [];
-    $this->{attrs} = $attrs;
     $this->{topic} = $topic;
     $this->{web} = $web;
 
@@ -140,9 +148,15 @@ sub new {
         $this->{colTypes} = [];
     }
 
-    if ($attrs->{headerislabel}) {
-        $attrs->{headerislabel} =~ s/^(off|false|no)$//i;
+    # if headerislabel true but no headerrows, set headerrows = 1
+    if ($attrs->{headerislabel} && !defined($attrs->{headerrows})) {
+        $attrs->{headerrows} = TWiki::isTrue($attrs->{headerislabel}) ? 1 : 0;
     }
+
+    $attrs->{headerrows} ||= 0;
+    $attrs->{footerrows} ||= 0;
+
+    $this->{attrs} = $attrs;
 
     return $this;
 }
@@ -170,15 +184,54 @@ sub stringify {
     return $s;
 }
 
+# Run after all rows have been added to set header and footer rows
+sub _finalise {
+    my $this = shift;
+    my $heads = $this->{attrs}->{headerrows};
+
+    while ($heads > 0) {
+        $this->{rows}->[--$heads]->{isHeader} = 1;
+    }
+    my $tails = $this->{attrs}->{footerrows};
+    while ($tails > 0) {
+        $this->{rows}->[-$tails]->{isFooter} = 1;
+        $tails--;
+    }
+    # Assign row index numbers to body cells
+    my $index = 0;
+    foreach my $row (@{$this->{rows}}) {
+        unless ($row->{isHeader} || $row->{isFooter}) {
+            $row->{index} = $index++;
+        }
+    }
+}
+
+sub getLabelRow() {
+    my $this = shift;
+
+    my $labelRow;
+    foreach my $row (@{$this->{rows}}) {
+        if ($row->{isHeader}) {
+            $labelRow = $row;
+        } else {
+            # the last header row is always taken as the label row
+            last;
+        }
+    }
+    return $labelRow;
+}
+
 sub renderForEdit {
     my ($this, $activeRow) = @_;
 
     if (!$this->{editable}) {
         return $this->renderForDisplay(0);
     }
+
+    $this->_finalise();
+
     my $wholeTable = ($activeRow <= 0);
     my @out = ( "<a name='erp_$this->{number}'></a>" );
-    my $firstRow = 1;
     my $orientation = $this->{attrs}->{orientrowedit} || 'horizontal';
 
     # Disallow vertical display for whole table edits
@@ -186,7 +239,6 @@ sub renderForEdit {
 
     # no special treatment for the first row unless requested
     my $attrs = $this->{attrs};
-    $firstRow = 0 unless TWiki::isTrue($attrs->{headerislabel});
 
     my $format = $attrs->{format} || '';
     # SMELL: Have to double-encode the format param to defend it
@@ -195,23 +247,27 @@ sub renderForEdit {
     $format =~ s/([][@\s%!:-])/sprintf('-%02x',ord($1))/ge;
     # it will get encoded again as a URL param
     push(@out, CGI::hidden("erp_$this->{number}_format", $format));
-    push(@out, CGI::hidden("erp_$this->{number}_headed", $firstRow));
+    if ($attrs->{headerrows}) {
+        push(@out, CGI::hidden("erp_$this->{number}_headerrows",
+                               $attrs->{headerrows}));
+    }
+    if ($attrs->{footerrows}) {
+        push(@out, CGI::hidden("erp_$this->{number}_footerrows",
+                               $attrs->{footerrows}));
+    }
 
-    my $n = $firstRow ? 0 : 1;
-    my $r = 1;
-    my $labelRow;
+    my $n = 0; # displayed row index
+    my $r = 0; # real row index
     foreach my $row (@{$this->{rows}}) {
-        $labelRow = $row if $firstRow;
-        if ($r++ == $activeRow || $wholeTable && !$firstRow) {
+        $n++ unless ($row->{isHeader} || $row->{isFooter});
+        if (++$r == $activeRow ||
+              $wholeTable && !$row->{isHeader} && !$row->{isFooter}) {
             push(@out, $row->renderForEdit(
-                $this->{colTypes}, $n, $firstRow, !$wholeTable,
-                $labelRow, $orientation));
+                $this->{colTypes}, !$wholeTable, $orientation));
         } else {
             push(@out, $row->renderForDisplay(
-                $this->{colTypes}, $n, $firstRow, !$wholeTable));
+                $this->{colTypes}, !$wholeTable));
         }
-        $n++;
-        $firstRow = 0;
     }
     if ($wholeTable) {
         push(@out, $this->generateEditButtons(0, 0));
@@ -222,21 +278,18 @@ sub renderForEdit {
 sub renderForDisplay {
     my ($this, $showControls) = @_;
     my @out;
-    my $firstRow = 1;
 
     $showControls = 0 unless $this->{editable};
 
-    # no special treatment for the first row unless requested
+    $this->_finalise();
+
     my $attrs = $this->{attrs};
-    $firstRow = 0 unless TWiki::isTrue($attrs->{headerislabel});
 
-    my $n = $firstRow ? 0 : 1;
-
+    my $n = 0;
     foreach my $row (@{$this->{rows}}) {
+        $n++ unless ($row->{isHeader} || $row->{isFooter});
         push(@out, $row->renderForDisplay(
-            $this->{colTypes}, $n, $firstRow, $showControls));
-        $firstRow = 0;
-        $n++;
+            $this->{colTypes}, $showControls));
     }
 
     my $button =
@@ -273,7 +326,7 @@ sub renderForDisplay {
 
         push(@out,
              "<a name='erp_$this->{number}'></a>".
-               "<a href='$url'>" . $button . "</a>");
+               "<a href='$url'>" . $button . '</a><br />');
     }
 
     return join("\n", @out);
@@ -303,7 +356,7 @@ sub _getCols {
         $urps->{$cellName} =~ s/\0/, /g;
         push(@cols, $urps->{$cellName} || '');
     }
-    return @cols;
+    return \@cols;
 }
 
 # Action on row saved
@@ -355,7 +408,7 @@ sub addRow {
     if ($row > 0) {
         # Clone of a specific row
         my $newRow = new TWiki::Plugins::EditRowPlugin::TableRow(
-            $this, $row, $this->_getCols($urps, $row));
+            $this, $row, '|', '|', $this->_getCols($urps, $row));
         splice(@{$this->{rows}}, $row, 0, $newRow);
         # renumber lower rows
         for (my $i = $row + 1; $i < scalar(@{$this->{rows}}); $i++) {
@@ -365,8 +418,9 @@ sub addRow {
 
     } else {
         # new, empty last row
+        my @cols = map { '' } @{$this->{colTypes}};
         my $newRow = new TWiki::Plugins::EditRowPlugin::TableRow(
-            $this, scalar(@{$this->{rows}}), map { '' } @{$this->{colTypes}});
+            $this, scalar(@{$this->{rows}}), '|', '|', \@cols);
         push(@{$this->{rows}}, $newRow);
         $urps->{erp_active_row} = scalar(@{$this->{rows}});
     }
@@ -550,7 +604,7 @@ Static function to extract a topic into a list of lines and embedded table defin
 Each table definition is an object of type EditTable, and contains
 a set of attrs (read from the %EDITTABLE) and a list of rows. You can spot the tables
 in the list by doing:
-if (ref($line) eq 'TWiki::Plugins::EditRowPlugin::Table') {
+newif (ref($line) eq 'TWiki::Plugins::EditRowPlugin::Table') {
 
 ---++ new($tno, $attrs, $web, $topic)
 Constructor
