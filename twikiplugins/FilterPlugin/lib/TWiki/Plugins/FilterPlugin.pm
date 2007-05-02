@@ -25,7 +25,7 @@ use vars qw(
     );
 
 $VERSION = '$Rev$';
-$RELEASE = '1.10';
+$RELEASE = '1.20';
 $NO_PREFS_IN_TOPIC = 1;
 $SHORTDESCRIPTION = 'Substitute and extract information from content by using regular expressions';
 $debug = 0; # toggle me
@@ -41,20 +41,32 @@ sub initPlugin {
   ($currentTopic, $currentWeb, $user) = @_;
 
   TWiki::Func::registerTagHandler('FORMATLIST', \&handleFormatList);
+  TWiki::Func::registerTagHandler('SUBST', \&handleSubst);
+  TWiki::Func::registerTagHandler('EXTRACT', \&handleExtract);
   return 1;
 }
 
 ###############################################################################
 sub commonTagsHandler {
-  $_[0] =~ s/%SUBST{(.*?)}%/&handleFilter($1, 1)/geo; 
-  $_[0] =~ s/%EXTRACT{(.*?)}%/&handleFilter($1, 0)/geo; 
-  while($_[0] =~ s/%STARTSUBST{(?!.*%STARTSUBST)(.*?)}%(.*?)%STOPSUBST%/&handleFilter($1, 1, $2)/ges) {
+  while($_[0] =~ s/%STARTSUBST{(?!.*%STARTSUBST)(.*?)}%(.*?)%STOPSUBST%/&handleFilterArea($1, 1, $2)/ges) {
     # nop
   }
-  while($_[0] =~ s/%STARTEXTRACT{(?!.*%STARTEXTRACT)(.*?)}%(.*?)%STOPEXTRACT%/&handleFilter($1, 0, $2)/ges) {
+  while($_[0] =~ s/%STARTEXTRACT{(?!.*%STARTEXTRACT)(.*?)}%(.*?)%STOPEXTRACT%/&handleFilterArea($1, 0, $2)/ges) {
     # nop
   }
 }
+
+###############################################################################
+sub handleFilterArea {
+  my ($theAttributes, $theMode, $theText) = @_;
+
+  $theAttributes ||= '';
+  #writeDebug("called handleFilterArea($theAttributes)");
+
+  my %params = TWiki::Func::extractParameters($theAttributes);
+  return handleFilter(\%params, $theMode, $theText);
+}
+
 
 ###############################################################################
 # filter a topic or url thru a regular expression
@@ -66,26 +78,28 @@ sub commonTagsHandler {
 #    * expand
 #
 sub handleFilter {
-  my ($theAttributes, $theMode, $theText) = @_;
-  $theAttributes = "" if !$theAttributes;
+  my ($params, $theMode, $theText) = @_;
 
   #writeDebug("called handleFilter");
-  #writeDebug("theAttributes = $theAttributes");
   #writeDebug("theMode = '$theMode'");
   #writeDebug("theText = '$theText'") if $theText;
 
   # get parameters
-  my $thePattern = &TWiki::Func::extractNameValuePair($theAttributes, "pattern") || '';
-  my $theFormat = &TWiki::Func::extractNameValuePair($theAttributes, "format") || '';
-  my $theMaxHits = &TWiki::Func::extractNameValuePair($theAttributes, "hits") 
-    || 100000; # some big number to prevent deep recursion
-  my $theTopic = &TWiki::Func::extractNameValuePair($theAttributes, "topic") || $currentTopic;
+  my $thePattern = $params->{pattern} || '';
+  my $theFormat = $params->{format} || '';
+  my $theHeader = $params->{header} || '';
+  my $theFooter = $params->{footer} || '';
+  my $theLimit = $params->{limit} || $params->{hits} || 100000; 
+  my $theSkip = $params->{skip} || 0;
+  my $theTopic = $params->{_DEFAULT} || $params->{topic} || $currentTopic;
   my $theWeb = $currentWeb;
-  if ($theTopic =~ /^(.*)\.(.*)$/) { # TODO : put normalizeWebTopicName() into the DakarContrib
+  if ($theTopic =~ /^(.*)\.(.*?)$/) { # TODO : put normalizeWebTopicName() into the DakarContrib
     $theWeb = $1;
     $theTopic = $2;
   }
-  my $theExpand = &TWiki::Func::extractNameValuePair($theAttributes, "expand") || 'on';
+  my $theExpand = $params->{expand} || 'on';
+  my $theSeparator = $params->{separator} || '';
+  my $theExclude = $params->{exclude} || '';
 
   # get the source text
   my $text = "";
@@ -105,15 +119,12 @@ sub handleFilter {
     }
   }
 
-  #writeDebug("thePattern=$thePattern");
-  #writeDebug("theFormat=$theFormat");
-  #writeDebug("theMaxHits=$theMaxHits");
-  #writeDebug("source text=$text");
-
   my $result = '';
+  my $hits = $theLimit;
+  my $skip = $theSkip;
   if ($theMode == 0) {
     # extraction mode
-    my $hits = $theMaxHits;
+    my @result = ();
     while($text =~ /$thePattern/gms) {
       my $arg1 = $1 || '';
       my $arg2 = $2 || '';
@@ -128,14 +139,15 @@ sub handleFilter {
       $match =~ s/\$4/$arg4/g;
       $match =~ s/\$5/$arg5/g;
       $match =~ s/\$6/$arg6/g;
-      $result .= $match;
+      next if $theExclude && $match =~ /^($theExclude)$/;
+      next if $skip-- > 0;
+      push @result,$match;
       $hits--;
-      last if $theMaxHits && $hits <= 0;
+      last if $theLimit > 0 && $hits <= 0;
     }
-    $text = $result;
+    $result = join($theSeparator, @result);
   } elsif ($theMode == 1) {
     # substitution mode
-    my $hits = $theMaxHits;
     $result = $text;
     while($text =~ /$thePattern/gsi) {
       my $arg1 = $1 || '';
@@ -151,26 +163,38 @@ sub handleFilter {
       $match =~ s/\$4/$arg4/g;
       $match =~ s/\$5/$arg5/g;
       $match =~ s/\$6/$arg6/g;
+      next if $theExclude && $match =~ /^($theExclude)$/;
+      next if $skip-- > 0;
       #writeDebug("match=$match");
       $result =~ s/$thePattern/$match/gmsi;
       #writeDebug("($hits) result=$result");
       $hits--;
-      last if $theMaxHits && $hits <= 0;
+      last if $theLimit > 0 && $hits <= 0;
     }
   }
-  &escapeParameter($result);
-  $result = &TWiki::Func::expandCommonVariables($result, $currentTopic, $currentWeb);
+  &escapeParameter($theHeader.$result.$theFooter);
+  #$result = &TWiki::Func::expandCommonVariables($result, $currentTopic, $currentWeb);
 
   #writeDebug("result=$result");
   return $result;
 }
 
 ###############################################################################
+sub handleSubst {
+  my ($session, $params, $theTopic, $theWeb) = @_;
+  return handleFilter($params, 1);
+}
+
+###############################################################################
+sub handleExtract {
+  my ($session, $params, $theTopic, $theWeb) = @_;
+  return handleFilter($params, 0);
+}
+
+###############################################################################
 sub handleFormatList {
   my ($session, $params, $theTopic, $theWeb) = @_;
   
-  #my $args = shift;
-
   #writeDebug("handleFormatList()");
 
   my $theList = $params->{_DEFAULT} || $params->{list} || '';
@@ -190,6 +214,7 @@ sub handleFormatList {
   &escapeParameter($theList);
   $theList = &TWiki::Func::expandCommonVariables($theList, $theTopic, $theWeb);
 
+  #writeDebug("theList='$theList'");
   #writeDebug("thePattern='$thePattern'");
   #writeDebug("theFormat='$theFormat'");
   #writeDebug("theSplit='$theSplit'");
@@ -199,7 +224,6 @@ sub handleFormatList {
   #writeDebug("theSort='$theSort'");
   #writeDebug("theUnique='$theUnique'");
   #writeDebug("theExclude='$theExclude'");
-  #writeDebug("theList='$theList'");
 
   my %seen = ();
   my @result;
@@ -209,14 +233,29 @@ sub handleFormatList {
     #writeDebug("found '$item'");
     next if $theExclude && $item =~ /^($theExclude)$/;
     next if $item =~ /^$/; # skip empty elements
-    $item =~ m/$thePattern/;
-    my $arg1 = $1 || '';
-    my $arg2 = $2 || '';
-    my $arg3 = $3 || '';
-    my $arg4 = $4 || '';
-    my $arg5 = $5 || '';
-    my $arg6 = $6 || '';
+    my $arg1 = '';
+    my $arg2 = '';
+    my $arg3 = '';
+    my $arg4 = '';
+    my $arg5 = '';
+    my $arg6 = '';
+    if ($item =~ m/$thePattern/) {
+      $arg1 = $1 || '';
+      $arg2 = $2 || '';
+      $arg3 = $3 || '';
+      $arg4 = $4 || '';
+      $arg5 = $5 || '';
+      $arg6 = $6 || '';
+    } else {
+      next;
+    }
     my $line = $theFormat;
+    #writeDebug("arg1=$arg1") if $arg1;
+    #writeDebug("arg2=$arg2") if $arg2;
+    #writeDebug("arg3=$arg3") if $arg3;
+    #writeDebug("arg4=$arg4") if $arg4;
+    #writeDebug("arg5=$arg5") if $arg5;
+    #writeDebug("arg6=$arg6") if $arg6;
     $line =~ s/\$1/$arg1/g;
     $line =~ s/\$2/$arg2/g;
     $line =~ s/\$3/$arg3/g;
@@ -236,6 +275,7 @@ sub handleFormatList {
       last if $theLimit - $count == 0;
     }
   }
+  #writeDebug("count=$count");
   return '' if $count == 0;
 
   if ($theSort ne 'off') {
@@ -252,6 +292,8 @@ sub handleFormatList {
   &escapeParameter($result);
   $result = &TWiki::Func::expandCommonVariables($result, $theTopic, $theWeb);
   $result =~ s/\s+$//go; # SMELL what the hell: where do the linefeeds come from
+
+  #writeDebug("result=$result");
 
   return $result;
 }
