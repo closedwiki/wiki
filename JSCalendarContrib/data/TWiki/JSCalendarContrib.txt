@@ -1,6 +1,6 @@
 ---+!! %TOPIC%
 
-[[http://dynarch.com/mishoo/calendar.epl][Mishoo JSCalendar]], packaged for use by plugins, skins and add-ons.
+%SHORTDESCRIPTION%
 
 <!--
 
@@ -14,64 +14,79 @@
 
 %TOC%
 
+<img src="%ATTACHURL%/screenshot.gif" style="float:right"/>
 ---++ Summary of Contents
 This module packages the [[http://dynarch.com/mishoo/calendar.epl][Mishoo JSCalendar]] Javascript in a form suitable for use with TWiki.
+
 
 ---++ Detailed Documentation
 Read [[%ATTACHURL%/doc/html/reference.html][the Mishoo documentation]] or [[%ATTACHURL%][visit the demo page]].
 
-This package provides a =renderFormFieldForEditHandler= that could be invoked by a plugin to ensure that forms use the [[http://dynarch.com/mishoo/calendar.epl][Mishoo JSCalendar]] for editing.
+This package also includes a small Perl module to make using the calendar
+easier from TWiki plugins. This module includes the functions:
 
-This package also includes a small Perl module to make using the calendar easier from TWiki plugins. This module includes the function:
+---++++ TWiki::Contrib::JSCalendarContrib::renderDateForEdit($name, $value, $format) -> $html
+This is the simplest way to use calendars from a plugin.
+   * =$name= is the name of the CGI parameter for the calendar
+     (it should be unique),
+   * =$value= is the current value of the parameter (may be undef)
+   * =$format= is the format to use (optional; the default is set
+     in =configure=). The
+HTML returned will display a date field and a drop-down calendar.
+Example:
 <verbatim>
-addHEAD( $setup )
+use TWiki::Contrib::JSCalendarContrib;
+...
+my $fromDate = TWiki::Contrib::JSCalendarContrib::renderDateForEdit(
+   'from', '1 April 1999');
+my $toDate = TWiki::Contrib::JSCalendarContrib::renderDateForEdit(
+   'to', undef, '%Y');
 </verbatim>
-that can automatically add the required headers to the page being rendered. =$setup= is the name of the calendar setup module; it can either be ommitted, in which case the method described in the Mishoo documentation can be used to create calendars, or it can be ='twiki'=, in which case a helper function is added that simplifies using calendars to set a value in a text field. For example,
+
+---+++ TWiki::Contrib::JSCalendarContrib::addHEAD( $setup )
+This function will automatically add the required headers to the page being
+rendered. It's intended for use when you want more control over the formatting
+of your calendars than =renderDateForEdit= affords. =$setup= is the name of
+the calendar setup module; it can either be omitted, in which case the method
+described in the Mishoo documentation can be used to create calendars, or it
+can be ='twiki'=, in which case a Javascript helper function called
+'showCalendar' is added that simplifies using calendars to set a value in a
+text field. For example, say we wanted to display the date with the calendar
+icon _before_ the text field, using the format =%Y %b %e=
 <verbatim>
-    # Add styles and javascript for the calendar
-    require TWiki::Contrib::JSCalendarContrib;
-    if( $@ || !$TWiki::Contrib::JSCalendarContrib::VERSION ||
-        $TWiki::Contrib::JSCalendarContrib::VERSION < 0.961 ) {
-        TWiki::Func::writeWarning('JSCalendarContrib >=0.961 not found '.$@);
-    } else {
-        TWiki::Contrib::JSCalendarContrib::addHEAD( 'twiki' );
-    }
+# Add styles and javascript for the calendar
+use TWiki::Contrib::JSCalendarContrib;
+...
 
-    $html .= CGI::textfield(
-        { name => 'datefield',
-          id => "id_datefield" });
-    $html .=
-          CGI::image_button(
-                      -name => 'datefield_calendar',
-                      -onclick =>
-                          "return showCalendar('id_datefield','%e %B %Y')",
-                      -src=> TWiki::Func::getPubUrlPath() . '/' .
-                        TWiki::Func::getTwikiWebname() .
-                            '/JSCalendarContrib/img.gif',
-                      -alt => 'Calendar',
-                      -align => 'MIDDLE' );
-            }
-        }
+sub commonTagsHandler {
+  ....
+  # Enable 'showCalendar'
+  TWiki::Contrib::JSCalendarContrib::addHEAD( 'twiki' );
+
+  my $cal = CGI::image_button(
+      -name => 'img_datefield',
+      -onclick =>
+       "return showCalendar('id_datefield','%Y %b %e')",
+      -src=> TWiki::Func::getPubUrlPath() . '/' .
+             TWiki::Func::getTwikiWebname() .
+             '/JSCalendarContrib/img.gif',
+      -alt => 'Calendar',
+      -align => 'MIDDLE' )
+    . CGI::textfield(
+      { name => 'date', id => "id_datefield" });
+  ....
+}
 </verbatim>
-The first parameter to showCalendar is the id of the textfield. See the Mishoo documentation for details of the '$e %B %Y' parameter.
+The first parameter to =showCalendar= is the id of the textfield, and the second parameter is the . See the Mishoo documentation for details of the '$e %B %Y' parameter.
 
-Note that the header will only be added once, regardless of the number of times that addHEAD is called.
-
-=addHEAD= can be called from =commonTagsHandler= for adding the header to all pages, or to =beforeEditHandler= just for edit pages etc.
+=addHEAD= can be called from =commonTagsHandler= for adding the header to all pages, or from =beforeEditHandler= just for edit pages etc.
 
 ---+++ Settings
-	* Name of the perl package
-		* Set STUB = %$STUB%
 	* What do I do
 		* Set SHORTDESCRIPTION = [[http://dynarch.com/mishoo/calendar.epl][Mishoo JSCalendar]], packaged for use by plugins, skins and add-ons.
 
 ---+++ Installation Instructions
-
-	* Download the archive from the Plugins web (see below)
-	* Unpack it in your twiki installation directory. Content:
-     | *File:* | *Description:* |
-%$MANIFEST%
-	* Make sure that all files are readable by the web server user
+%$INSTALL_INSTRUCTIONS%
 	* An administrator can customize the appearance of the calendar by setting the following in =<nop>LocalSite.cfg=
      | *Setting* | *Default* |
      | =$TWiki::cfg{JSCalendarContrib}{style}= | ='blue'= |
@@ -86,13 +101,14 @@ Note that the header will only be added once, regardless of the number of times 
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Dependencies: | %$DEPENDENCIES% |
 | Change History: | |
-| 11594 | Allow format to be configured. |
-| 11415 | Add a =renderFormFieldForEditHandler= so other plugins can forward to this handler to add the date field to the TWikiForms. (TWiki:Main.ThomasWeigert) |
-| 10247 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item2054'>Item2054</a>  put the calendar at z-index 2000, way above pattern skin divs. |
-| 6634 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item453'>Item453</a>  removed EditTablePlugins private copy of the Mishoo JS calendar, and made sure it works with JSCalendarContrib. Improved the documentation of the JSCalendar while I was there. |
-| 6626 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item468'>Item468</a>  updated docs for Dakar release |
-| 5048 | Cairo readiness |
-| 5039 | Split from SharedCode |
+|  13603 | Bugs:Item2982 cleaned up the interface to the contrib, re-added a date rendering function with a more generic interface |
+|  11594 | Allow format to be configured. |
+|  11415 | Add a =renderFormFieldForEditHandler= so other plugins can forward to this handler to add the date field to the TWikiForms. (TWiki:Main.ThomasWeigert) |
+|  10247 | Bugs:Item2054 put the calendar at z-index 2000, way above pattern skin divs. |
+|  6634 | Bugs:Item453  removed EditTablePlugins private copy of the Mishoo JS calendar, and made sure it works with JSCalendarContrib. Improved the documentation of the JSCalendar while I was there. |
+|  6626 | Bugs:Item468  updated docs for Dakar release |
+|  5048 | Cairo readiness |
+|  5039 | Split from SharedCode |
 |  27 Dec 2005 | updated to calendar version 1.0; set style for Safari to win2k-1|
 |  14 Aug 2004 | Separated out from SharedCode module |
 |  Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
@@ -101,3 +117,4 @@ Note that the header will only be added once, regardless of the number of times 
 
 __Related Topics:__ %TWIKIWEB%.TWikiPreferences
 
+%META:FILEATTACHMENT{name="screenshot.gif" attr="h" comment="" version="1"}%
