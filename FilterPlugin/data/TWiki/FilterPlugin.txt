@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1139389799" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1173599521" format="1.1" version="$Rev$"}%
 <!--
 
    PLEASE DO NOT EDIT THIS TOPIC
@@ -23,8 +23,12 @@ insert a topic by processing its content.
    * =topic="..."=: name of the topic text to be processed 
    * =pattern="..."=: pattern to be extracted or substituted 
    * =format="..."=: format expression or pattern substitute 
-   * =hits="&lt;n>"= maximum number of occurences to extract or substitute counted from the 
+   * =header="..."=: header string prepended to output
+   * =footer="..."=: footer string appended to output
+   * =limit="&lt;n>"= maximum number of occurences to extract or substitute counted from the 
      start of the text (defaults to =100000= aka all hits) 
+   * =skip="&lt;n>"= skip the first n occurences
+   * =exclude="...": skip occurences that match this regular expression
    * =expand="on,off"=: toggle expansion of TWiki markup before filtering
      (defaults to =on=) 
 
@@ -90,7 +94,7 @@ footer or header argument refers to the total number of list elements.
 
 ---+++ Format Comments
 | *Date* | *Author* | *Headline* |
-%EXTRACT{topic="%TOPIC%" expand="off" pattern=".div class=\"text\">.*?[\r\n]+(.*?)[\r\n]+(?:.*?[\r\n]+)+?-- (.*?) on (.*?)[\r\n]+" format="| $3 | $2 | $1 ... |\n"}%
+%EXTRACT{topic="%TOPIC%" expand="off" pattern=".div class=\"text\">.*?[\r\n]+(.*?)[\r\n]+(?:.*?[\r\n]+)+?-- (.*?) on (.*?)[\r\n]+" format="| $3 | $2 | $1 ... |$n"}%
 
 %STARTINCLUDE%
 <div class="text"><div class="comment">
@@ -113,7 +117,7 @@ This is a second comment.
 
 ---++ Plugin Installation Instructions
 
-	* [[http://twiki.org/p/pub/Plugins/%TOPIC%.zip][Download]] the ZIP file
+	* [[http://twiki.org/p/pub/Plugins/%TOPIC%/%TOPIC%.zip][Download]] the ZIP file
 	* Unzip it in your twiki installation directory. Content: 
 	  | *File:* | *Description:* |
 	  | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
@@ -128,8 +132,10 @@ This is a second comment.
 |  Plugin Author: | TWiki:Main.MichaelDaum |
 |  Copyright &copy;: | 2005-2007, MichaelDaum http://wikiring.com |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | v1.00 |
+|  Plugin Version: | v1.20 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  02 May 2007: | using registerTagHandler() as far as possible; \
+                  enhanced parameters to EXCTRACT and SUBST |
 |  05 Feb 2007: | fixed escapes in format strings; \
                   added better default value for max number of hits to prevent deep recursions \
                   on bad regexpressions |
@@ -152,4 +158,4 @@ This is a second comment.
 |  Feedback: | TWiki:Plugins/%TOPIC%Dev |
 |  Appraisal: | TWiki:Plugins/%TOPIC%Appraisal |
 
--- TWiki:Main.MichaelDaum - 05 Feb 2007
+-- TWiki:Main.MichaelDaum - 02 May 2007
