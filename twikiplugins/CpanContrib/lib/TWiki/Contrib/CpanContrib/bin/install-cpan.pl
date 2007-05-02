@@ -25,7 +25,7 @@ my $optsConfig = {
 #
     baselibdir => $FindBin::Bin . "/../cgi-bin/lib/CPAN",
 # SMELL: change into list   
-    mirror => -d $dirMirror && $dirMirror || 'http://perl.org',
+    mirror => -d $dirMirror && $dirMirror || 'http://cpan.perl.org',
 #
     config => "~/.cpan/CPAN/MyConfig.pm",
 #
