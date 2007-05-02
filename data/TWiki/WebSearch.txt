@@ -4,7 +4,7 @@
 
 %SEARCH{ 
 "%URLPARAM{search}%" 
-type="keyword" 
+type="%URLPARAM{"type" default="word"}%"
 scope="%URLPARAM{scope}%" 
 web="%URLPARAM{web}%" 
 nosearch="%URLPARAM{nosearch}%" 

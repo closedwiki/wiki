@@ -132,13 +132,13 @@ sub std_tests  {
     $this->assert_matches(qr/Ok\+Topic/, $result);
     
     # word
-    #$result = $this->{twiki}->handleCommonTags(
-    #    '%SEARCH{"match" type="word" scope="text" nonoise="on" format="$topic"}%',
-    #    $this->{test_web}, $this->{test_topic});
+    $result = $this->{twiki}->handleCommonTags(
+        '%SEARCH{"match" type="word" scope="text" nonoise="on" format="$topic"}%',
+        $this->{test_web}, $this->{test_topic});
         
-    #$this->assert_does_not_match(qr/OkTopic/, $result);
-    #$this->assert_does_not_match(qr/Ok-Topic/, $result);
-    #$this->assert_does_not_match(qr/Ok\+Topic/, $result);
+    $this->assert_does_not_match(qr/OkTopic/, $result);
+    $this->assert_does_not_match(qr/Ok-Topic/, $result);
+    $this->assert_does_not_match(qr/Ok\+Topic/, $result);
     
     # ---------------------
     # Search string 'matchme'
@@ -170,13 +170,13 @@ sub std_tests  {
     $this->assert_matches(qr/Ok\+Topic/, $result);
     
     # word
-    #$result = $this->{twiki}->handleCommonTags(
-    #    '%SEARCH{"matchme" type="word" scope="text" nonoise="on" format="$topic"}%',
-    #    $this->{test_web}, $this->{test_topic});
+    $result = $this->{twiki}->handleCommonTags(
+        '%SEARCH{"matchme" type="word" scope="text" nonoise="on" format="$topic"}%',
+        $this->{test_web}, $this->{test_topic});
         
-    #$this->assert_matches(qr/OkTopic/, $result);
-    #$this->assert_does_not_match(qr/Ok-Topic/, $result);
-    #$this->assert_does_not_match(qr/Ok\+Topic/, $result);
+    $this->assert_matches(qr/OkTopic/, $result);
+    $this->assert_does_not_match(qr/Ok-Topic/, $result);
+    $this->assert_does_not_match(qr/Ok\+Topic/, $result);
     
     # ---------------------
     # Search string 'matchme -dont'
@@ -208,13 +208,13 @@ sub std_tests  {
     $this->assert_does_not_match(qr/Ok\+Topic/, $result);
     
     # word
-    #$result = $this->{twiki}->handleCommonTags(
-    #    '%SEARCH{"matchme -dont" type="word" scope="text" nonoise="on" format="$topic"}%',
-    #    $this->{test_web}, $this->{test_topic});
+    $result = $this->{twiki}->handleCommonTags(
+        '%SEARCH{"matchme -dont" type="word" scope="text" nonoise="on" format="$topic"}%',
+        $this->{test_web}, $this->{test_topic});
         
-    #$this->assert_matches(qr/OkTopic/, $result);
-    #$this->assert_does_not_match(qr/Ok-Topic/, $result);
-    #$this->assert_does_not_match(qr/Ok\+Topic/, $result);
+    $this->assert_matches(qr/OkTopic/, $result);
+    $this->assert_does_not_match(qr/Ok-Topic/, $result);
+    $this->assert_does_not_match(qr/Ok\+Topic/, $result);
     
     # ---------------------
     # Search string 'blah/matchme.blah'
@@ -246,13 +246,13 @@ sub std_tests  {
     $this->assert_does_not_match(qr/Ok\+Topic/, $result);
     
     # word
-    #$result = $this->{twiki}->handleCommonTags(
-    #    '%SEARCH{"blah/matchme.blah" type="word" scope="text" nonoise="on" format="$topic"}%',
-    #    $this->{test_web}, $this->{test_topic});
+    $result = $this->{twiki}->handleCommonTags(
+        '%SEARCH{"blah/matchme.blah" type="word" scope="text" nonoise="on" format="$topic"}%',
+        $this->{test_web}, $this->{test_topic});
         
-    #$this->assert_matches(qr/OkTopic/, $result);
-    #$this->assert_does_not_match(qr/Ok-Topic/, $result);
-    #$this->assert_does_not_match(qr/Ok\+Topic/, $result);
+    $this->assert_matches(qr/OkTopic/, $result);
+    $this->assert_does_not_match(qr/Ok-Topic/, $result);
+    $this->assert_does_not_match(qr/Ok\+Topic/, $result);
     
     # ---------------------
     # Search string 'BLEEGLE dont'
@@ -284,13 +284,13 @@ sub std_tests  {
     $this->assert_matches(qr/Ok\+Topic/, $result);
     
     # word
-    #$result = $this->{twiki}->handleCommonTags(
-    #    '%SEARCH{"\"BLEEGLE dont\"" type="word" scope="text" nonoise="on" format="$topic"}%',
-    #    $this->{test_web}, $this->{test_topic});
+    $result = $this->{twiki}->handleCommonTags(
+        '%SEARCH{"\"BLEEGLE dont\"" type="word" scope="text" nonoise="on" format="$topic"}%',
+        $this->{test_web}, $this->{test_topic});
         
-    #$this->assert_does_not_match(qr/OkTopic/, $result);
-    #$this->assert_does_not_match(qr/Ok-Topic/, $result);
-    #$this->assert_matches(qr/Ok\+Topic/, $result);
+    $this->assert_does_not_match(qr/OkTopic/, $result);
+    $this->assert_does_not_match(qr/Ok-Topic/, $result);
+    $this->assert_matches(qr/Ok\+Topic/, $result);
 }
 
 =pod

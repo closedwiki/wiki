@@ -32,6 +32,7 @@ for details.
 
 sub search {
     my ($searchString, $topics, $options, $sDir) = @_;
+
     local $/ = "\n";
     my %seen;
     if ($options->{type} && $options->{type} eq 'regex') {
@@ -44,6 +45,7 @@ sub search {
     }
     # Convert GNU grep \< \> syntax to \b
     $searchString =~ s/(?<!\\)\\[<>]/\\b/g;
+    $searchString =~ s/^(.*)$/\\b$1\\b/go if $options->{'wordboundaries'};
     my $match_code = "return \$_[0] =~ m/$searchString/o";
     $match_code .= 'i' unless ($options->{casesensitive});
     my $doMatch = eval "sub { $match_code }";

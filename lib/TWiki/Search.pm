@@ -244,7 +244,7 @@ sub _translateSpace {
 # search terms to be ANDed together, $topic is list of one or more topics.
 #
 sub _searchTopicsInWeb {
-    my ( $this, $web, $topic, $scope, $type, $caseSensitive, @theTokens ) = @_;
+    my ( $this, $web, $topic, $scope, $type, $options, @theTokens ) = @_;
 
     my @topicList = ();
     return @topicList unless (@theTokens);    # bail out if no search string
@@ -269,7 +269,7 @@ sub _searchTopicsInWeb {
 
             # topic list with wildcards
             @topicList = $store->getTopicNames($web);
-            if ($caseSensitive) {
+            if ( $options->{'caseSensitive'} ) {
 
                 # limit by topic name,
                 @topicList = grep( /$topic/, @topicList );
@@ -306,7 +306,7 @@ sub _searchTopicsInWeb {
 
             # FIXME I18N
             $qtoken = quotemeta($qtoken) if ( $type ne 'regex' );
-            if ($caseSensitive) {
+            if ( $options->{'caseSensitive'} ) {
 
                 # fix for Codev.SearchWithNoPipe
                 @scopeTopicList = grep( /$qtoken/, @topicList );
@@ -319,14 +319,13 @@ sub _searchTopicsInWeb {
         # scope='text', e.g. grep search on topic text:
         unless ( $scope eq 'topic' ) {
 
-            # search only for the topic name, ignoring matching lines.
-            # We will make a mess of reporting the matches later on.
             my $matches = $store->searchInWebContent(
                 $token, $web,
                 \@topicList,
                 {
                     type                => $type,
-                    casesensitive       => $caseSensitive,
+                    casesensitive       => $options->{'caseSensitive'},
+                    wordboundaries      => $options->{'wordBoundaries'},
                     files_without_match => 1
                 }
             );
@@ -400,6 +399,8 @@ Note: If =format= is set, =template= will be ignored.
 
 Note: For legacy, if =regex= is defined, it will force type='regex'
 
+If =type="word"= it will be changed to =type="keyword"= with =wordBoundaries=1=. This will be used for searching with scope="text" only, because scope="topic" will do a Perl search on topic names.
+
 SMELL: If =template= is defined =bookview= will not work
 
 SMELL: it seems that if you define =_callback= or =inline= then you are
@@ -444,18 +445,27 @@ sub searchWeb {
     my $noTotal = TWiki::isTrue( $params{nototal}, $nonoise );
     my $newLine   = $params{newline} || '';
     my $sortOrder = $params{order}   || '';
-    my $revSort      = TWiki::isTrue( $params{reverse} );
-    my $scope        = $params{scope} || '';
-    my $searchString = $params{search} || $emptySearch;
-    my $separator    = $params{separator};
-    my $template     = $params{template} || '';
-    my $topic        = $params{topic} || '';
-    my $type         = $params{type} || '';
-    my $webName      = $params{web} || '';
-    my $date         = $params{date} || '';
-    my $recurse      = $params{'recurse'} || '';
-    my $finalTerm    = $inline ? ( $params{nofinalnewline} || 0 ) : 0;
-    my $users        = $this->{session}->{users};
+    my $revSort        = TWiki::isTrue( $params{reverse} );
+    my $scope          = $params{scope} || '';
+    my $searchString   = $params{search} || $emptySearch;
+    my $separator      = $params{separator};
+    my $template       = $params{template} || '';
+    my $topic          = $params{topic} || '';
+    my $type           = $params{type} || '';
+    
+    my $wordBoundaries = 0;
+    if ( $type eq 'word' ) {
+        # 'word' is exactly the same as 'keyword', except we will be searching
+        # with word boundaries
+        $type = 'keyword';
+        $wordBoundaries = 1;
+    }
+    
+    my $webName        = $params{web} || '';
+    my $date           = $params{date} || '';
+    my $recurse        = $params{'recurse'} || '';
+    my $finalTerm      = $inline ? ( $params{nofinalnewline} || 0 ) : 0;
+    my $users          = $this->{session}->{users};
 
     $baseWeb =~ s/\./\//go;
 
@@ -671,9 +681,14 @@ sub searchWeb {
             && $web ne $session->{webName} );
 
         # Run the search on topics in this web
-        my @topicList =
-          _searchTopicsInWeb( $this, $web, $topic, $scope, $type,
-            $caseSensitive, @tokens );
+        my @topicList = _searchTopicsInWeb(
+            $this, $web, $topic, $scope, $type,
+            {
+                caseSensitive  => $caseSensitive,
+                wordBoundaries => $wordBoundaries
+            },
+            @tokens
+        );
 
         # exclude topics, Codev.ExcludeWebTopicsFromSearch
         if ( $caseSensitive && $excludeTopic ) {

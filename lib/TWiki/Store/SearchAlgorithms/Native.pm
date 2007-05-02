@@ -36,10 +36,12 @@ Rude and crude, this makes no attempt to handle UTF-8.
 
 sub search {
     my ($searchString, $topics, $options, $sDir) = @_;
+
     if (!$options->{type} || $options->{type} ne 'regex') {
         # Escape non-word chars in search string for plain text search
         $searchString =~ s/(\W)/\\$1/g;
     }
+    $searchString =~ s/^(.*)$/\\b$1\\b/go if $options->{'wordboundaries'};
     my @fs;
     push(@fs, '-i') unless $options->{casesensitive};
     push(@fs, '-l') if $options->{files_without_match};

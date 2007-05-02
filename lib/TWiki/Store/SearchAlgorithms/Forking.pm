@@ -29,7 +29,7 @@ use strict;
 Forking implementation of the RCS cache search.
 
 ---++ search($searchString, $topics, $options, $sDir) -> \%seen
-Search .txt files in $dir for $string. See RcsFile::searchInWebContent
+Search .txt files in $dir for $searchString. See RcsFile::searchInWebContent
 for details.
 
 =cut
@@ -46,7 +46,9 @@ sub search {
     # FIXME: For Cygwin grep, do something about -E and -F switches
     # - best to strip off any switches after first space in
     # EgrepCmd etc and apply those as argument 1.
-    if( $options->{type} && $options->{type} eq 'regex' ) {
+    if( $options->{type} &&
+        ( $options->{type} eq 'regex' || $options->{wordboundaries} == 1 )
+        ) {
         $program = $TWiki::cfg{RCS}{EgrepCmd};
     } else {
         $program = $TWiki::cfg{RCS}{FgrepCmd};
@@ -54,6 +56,8 @@ sub search {
 
     $program =~ s/%CS{(.*?)\|(.*?)}%/$options->{casesensitive}?$1:$2/ge;
     $program =~ s/%DET{(.*?)\|(.*?)}%/$options->{files_without_match}?$2:$1/ge;
+    $searchString =~ s/^(.*)$/\\b$1\\b/go if $options->{'wordboundaries'};
+
     # process topics in sets, fix for Codev.ArgumentListIsTooLongForSearch
     my $maxTopicsInSet = 512; # max number of topics for a grep call
     my @take = @$topics;
