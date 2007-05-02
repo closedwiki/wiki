@@ -132,7 +132,7 @@ This is a second comment.
 |  Plugin Author: | TWiki:Main.MichaelDaum |
 |  Copyright &copy;: | 2005-2007, MichaelDaum http://wikiring.com |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | v1.20 |
+|  Plugin Version: | v1.21 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
 |  02 May 2007: | using registerTagHandler() as far as possible; \
                   enhanced parameters to EXCTRACT and SUBST |
