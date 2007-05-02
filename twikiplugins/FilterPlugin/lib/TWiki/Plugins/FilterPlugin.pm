@@ -25,7 +25,7 @@ use vars qw(
     );
 
 $VERSION = '$Rev$';
-$RELEASE = '1.20';
+$RELEASE = '1.21';
 $NO_PREFS_IN_TOPIC = 1;
 $SHORTDESCRIPTION = 'Substitute and extract information from content by using regular expressions';
 $debug = 0; # toggle me
@@ -172,7 +172,8 @@ sub handleFilter {
       last if $theLimit > 0 && $hits <= 0;
     }
   }
-  &escapeParameter($theHeader.$result.$theFooter);
+  $result = $theHeader.$result.$theFooter;
+  &escapeParameter($result);
   #$result = &TWiki::Func::expandCommonVariables($result, $currentTopic, $currentWeb);
 
   #writeDebug("result=$result");
