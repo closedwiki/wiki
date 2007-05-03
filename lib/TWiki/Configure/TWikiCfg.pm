@@ -64,7 +64,6 @@ package TWiki::Configure::TWikiCfg;
 
 use strict;
 use Data::Dumper;
-use FileHandle;
 
 use TWiki::Configure::Section;
 use TWiki::Configure::Checker;

@@ -193,28 +193,9 @@ HERE
     }
     $block .= $this->setting('mod_perl', $n);
 
-    # Get web server's user and group info
-    my $usr;
-    eval {
-        $usr = getlogin() || getpwuid($>) || '';
-    };
-
-    my $grp = '';
-    eval {
-        $grp = join(',', map { lc(getgrgid( $_ )) } split( ' ', $( ));
-    };
-    if( $@ ) {
-        # Try to use Cygwin's 'id' command - may be on the path, since Cygwin
-        # is probably installed to supply ls, egrep, etc - if it isn't, give
-        # up.
-        # Run command without stderr output, to avoid CGI giving error.
-        # Get names of primary and other groups.
-        $grp = lc(qx(sh -c '( id -un ; id -gn) 2>/dev/null' 2>nul ));
-    }
-
     $block .= $this->setting(
-        'CGI user', 'userid = <strong>'.$usr.'</strong> groups = <strong>'.
-          $grp.'</strong>'.
+        'CGI user', 'userid = <strong>'.$::WebServer_uid.'</strong> groups = <strong>'.
+          $::WebServer_gid.'</strong>'.
             $this->NOTE(
                 'Your CGI scripts are executing as this user.'));
 

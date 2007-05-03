@@ -109,20 +109,64 @@ tweaking of the TWiki code.
 HERE
 }
 
+# Get web server's user and group info
+use vars qw($WebServer_uid $WebServer_gid);
+$WebServer_uid = $WebServer_gid = '';
+
+eval {
+    $WebServer_uid = getlogin() || getpwuid($>) || '';
+};
+
+eval {
+    $WebServer_gid = join(',', map { lc(getgrgid( $_ )) } split( ' ', $( ));
+};
+if( $@ ) {
+    # Try to use Cygwin's 'id' command - may be on the path, since Cygwin
+    # is probably installed to supply ls, egrep, etc - if it isn't, give
+    # up.
+    # Run command without stderr output, to avoid CGI giving error.
+    # Get names of primary and other groups.
+    $WebServer_gid = lc(qx(sh -c '( id -un ; id -gn) 2>/dev/null' 2>nul ));
+}
+
 my $localLibFailure;
 
 sub _loadBasicModule {
-    my $module = shift;
+    my ($module) = @_;
 
     eval "use $module";
     if ($@) {
-        my $reason = <<HERE;
-Could not load $module. Please ensure this module is installed
-and available on the perl \@INC path before continuing. If the
-module is already installed, but can't be found, you may need
-to adjust your perl path, for example by setting PERL5LIB.
+        my $reason = "Failed to load the perl module $module. The module ";
+        # See if we can find the .pm on @INC
+        my $foundAt = "could not be found. ";
+        my $modpath = $module;
+        if ($modpath =~ /^([\w:]+)/) {
+            $modpath =~ s#::#/#g;
+            $modpath .= '.pm';
+            foreach my $path (@INC) {
+                if (-e "$path/$modpath") {
+                    $foundAt = "was found at $path/$modpath";
+                    if (!-r $foundAt) {
+                        $foundAt .=
+                          ", but I don't have permission to read it.";
+                    }
+                    last;
+                }
+            }
+        }
+        $reason .= $foundAt;
 
-The error seen was:
+        $reason .= <<HERE;
+
+
+Please ensure that:
+   1 $module is installed,
+   2 that the module is available on the \@INC path,
+   3 that the webserver user ($WebServer_uid) has permission to read the $modpath file.
+HERE
+
+        $reason .= <<HERE;
+The detailed error seen was:
 $@
 HERE
         if ($localLibFailure) {
@@ -140,7 +184,7 @@ HERE
 foreach my $module ('FindBin',
                     'File::Spec',
                     'Config',
-                    'CGI qw(:any)'
+                    'CGI qw(:any)',
                    ) {
     _loadBasicModule($module);
 }
@@ -178,21 +222,37 @@ if ($@) {
     unshift(@INC, File::Spec->catfile(@root, 'lib'));
 }
 
-# Load all the bits of the configure module that we use
+# Load all the bits of the configure module that we explicitly use
+# The loadBasicModule does some extra analysis on errors.
 foreach my $module (
+    'Cwd',
+    'Data::Dumper',
+    'File::Copy',
+    'File::Temp',
     'TWiki::Configure::Checker',
-    'TWiki::Configure::JS',
+    'TWiki::Configure::Checkers::RCS::Checker',
     'TWiki::Configure::CSS',
-    'TWiki::Configure::UI',
-    'TWiki::Configure::Root',
-    'TWiki::Configure::Valuer',
-    'TWiki::Configure::TWikiCfg',
+    'TWiki::Configure::Item',
+    'TWiki::Configure::JS',
     'TWiki::Configure::Load',
+    'TWiki::Configure::Pluggable',
+    'TWiki::Configure::Root',
+    'TWiki::Configure::Section',
+    'TWiki::Configure::Type',
+    'TWiki::Configure::Types::BOOLEAN',
+    'TWiki::Configure::Types::NUMBER',
+    'TWiki::Configure::Types::SELECT',
+    'TWiki::Configure::Types::STRING',
+    'TWiki::Configure::TWikiCfg',
+    'TWiki::Configure::UI',
+    'TWiki::Configure::UIs::Section',
+    'TWiki::Configure::Value',
+    'TWiki::Configure::Valuer',
    ) {
     _loadBasicModule($module);
 }
 
-$| = 1;                  # no buffering
+$| = 1;                  # no buffering on STDOUT
 
 ###########################################################
 # From this point on we shouldn't have any more "fatal" (to configure)
@@ -534,7 +594,7 @@ browse to the TWiki WebHome</a>.
      <li><span class='warn'>Warnings</span> are non-fatal, but are often a good
       indicator that something that is wrong.</li>
      <li>The little <span class='twikiAlert' title="Not here, stupid. In the table below!">&delta;</span> after an entry means that the current value is <b>not</b> the same as the default value. If you hover the cursor over the <span class='twikiAlert' title="Not here, stupid. In the table below!">&delta;</span>, a popup will show you what the default value is.</li>
-     <li><b><font color="#f00">EXPERT</font></b> means a setting is for expert use only. You should not fiddle with it unless you know what you are doing, or at least have read all the documentation! EXPERT options are hidden unless you click the <form><input type=submit value="Yes, I've read all the documentation"/><input type="hidden" name="expert" value="1" /></form> button.</lib>
+     <li><b><font color="#f00">EXPERT</font></b> means a setting is for expert use only. You should not fiddle with it unless you know what you are doing, or at least have read all the documentation. EXPERT options are hidden unless you click the <form><input type="submit" style="background-color:#eef" value="Yes, I've read all the documentation"/><input type="hidden" name="expert" value="1" /></form> button.</lib>
     </ul>
    </div><!-- remark-->
   </div><!--explanation-->

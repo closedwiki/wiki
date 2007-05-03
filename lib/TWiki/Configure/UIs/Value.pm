@@ -33,18 +33,29 @@ sub open_html {
 
     my $trclass = '';
     my $info = '';
+    my $isExpert = 0;
     if ($value->{opts} =~ /(\b|^)EXPERT(\b|$)/i) {
-        return '' unless $experts;
+        $isExpert = 1;
         $info = CGI::h6('EXPERT') . $info;
         $trclass = 'expertsOnly';
     }
     $info .= $value->{desc};
     my $keys = $value->getKeys();
+
     my $checker = TWiki::Configure::UI::loadChecker($keys, $value);
-    # SMELL the following line is reported to have
-    #       Use of uninitialized value in concatenation (.) or string
-    #       under some circumstances.  Should check routines return undef?
-    $info .= $checker->check($value) || '' if $checker;
+    my $broken = 0;
+    if ($checker) {
+        my $check = $checker->check($value);
+        if ($check) {
+            # something wrong
+            $info .= $check;
+            $broken = 1;
+        }
+    }
+
+    if ($isExpert && !$experts && !$broken) {
+        return '';
+    }
 
     my $class = $value->{typename};
     $class .= ' mandatory' if ($value->{mandatory});
