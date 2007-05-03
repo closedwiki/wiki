@@ -298,14 +298,7 @@ sub isAdmin {
     my $isAdmin = 0;
 	$this->ASSERT_IS_CANONICAL_USER_ID($user) if DEBUG;
 
-    if ($user eq $TWiki::cfg{SuperAdminGroup}) {
-        $isAdmin = 1;
-    } else {
-        my $sag = $TWiki::cfg{SuperAdminGroup};
-        $isAdmin = $this->{mapping}->isInGroup( $user, $sag );
-    }
-
-    return $isAdmin;
+    return $this->{mapping}->isAdmin( $user );
 }
 
 =pod

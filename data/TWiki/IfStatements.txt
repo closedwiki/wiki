@@ -75,6 +75,7 @@ Text comparison
 | search | in search script (see TWikiScripts) |
 | view | in view script (see TWikiScripts) |
 | rest | in rest script (see TWikiScripts) |
+| registration_supported | registration is supported by the current UserMapper |
 
 In addition there is a context identifier for each enabled plugin; for example, if =Gallous<nop>BreeksPlugin= is installed *and enabled*, then the context ID =Gallous<nop>BreeksPluginEnabled= will be set. Other extensions may set additional context identifiers.
 
