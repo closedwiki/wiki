@@ -493,7 +493,7 @@ sub isAdmin {
         $isAdmin = 1;
     } else {
         my $sag = $TWiki::cfg{SuperAdminGroup};
-        $isAdmin = $this}->isInGroup( $user, $sag );
+        $isAdmin = $this->isInGroup( $user, $sag );
     }
 
     return $isAdmin;
