@@ -92,8 +92,15 @@ function launchWindow( theWeb, theTopic, theAnchor ) {
 <div style="padding: 1em;">
 #PageTop
 <textarea name="text" wrap="virtual" rows="%EDITBOXHEIGHT%" cols="%EDITBOXWIDTH%" style="%EDITBOXSTYLE%">%TEXT%</textarea><br />
+<input type="hidden" name="originalrev" value="%ORIGINALREV%" />
+<input type="hidden" name="skin" value="%URLPARAM{"skin"}%" />
+<input type="hidden" name="redirectto" value="%REDIRECTTO%" />
 <input type="hidden" name="formtemplate" value="%FORMTEMPLATE%" />
+<input type="hidden" name="templatetopic" value="%URLPARAM{"templatetopic"}%" />
 <input type="hidden" name="topicparent" value="%TOPICPARENT%" />
+<input type="hidden" name="forcenewrevision" value="%URLPARAM{"forcenewrevision"}%" />
+<input type="hidden" name="rev" value="%URLPARAM{"rev"}%" />
+<input type="hidden" name="newtopic" value="%NEWTOPIC%" />
 <input type="hidden" name="cmd" value="%CMD%" />     
 See below for help in editing this page.
 <table border="0" cellpadding="2" cellspacing="0">

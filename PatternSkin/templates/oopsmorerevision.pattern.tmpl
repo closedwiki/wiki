@@ -1,7 +1,20 @@
 %TMPL:DEF{"oopsmorerevision"}%
+---++++ %ICON{"viewtopic"}% %MAKETEXT{"Revisions"}%
+---+++++ *%MAKETEXT{"View previous topic revision"}%* (1 ... %PARAM1%)
 <form name="main" action="%SCRIPTURLPATH{"view"}%/%WEB%/%TOPIC%">
----+++++ %ICON{"viewtopic"}% *%MAKETEXT{"View previous topic revision"}%* (1 ... %PARAM1%)
-   * %MAKETEXT{"Revision:"}% <input class="twikiInputField" type="text" name="rev" size="6" value="%PARAM2%" />
-     <input type="checkbox" class="twikiCheckbox" id="raw" name="raw" /><label for="raw">%MAKETEXT{"in raw text format"}%</label>
-     <input type="submit" class="twikiButton" value='%MAKETEXT{"View revision"}%' />
+   * %MAKETEXT{"View revision:"}% <input class="twikiInputField" type="text" name="rev" size="6" value="%PARAM2%" /> &nbsp;
+     <input type="checkbox" class="twikiCheckbox" id="raw" name="raw" /><label for="raw">%MAKETEXT{"in raw text format"}%</label> &nbsp;
+     <input type="submit" class="twikiButton" value='%MAKETEXT{"View"}%' />
+</form>
+---+++++ *%MAKETEXT{"Compare revisions"}%*
+<form name="main" action="%SCRIPTURLPATH{"rdiff"}%/%WEB%/%TOPIC%">
+   * %MAKETEXT{"Older revision:"}% <input class="twikiInputField" type="text" name="rev2" size="6" value="1" /> &nbsp; %MAKETEXT{"Newer revision:"}% <input class="twikiInputField" type="text" name="rev1" size="6" value="%PARAM1%" /><br />
+     <table class="twikiTable patternDiffOptions"><tr><td><label for="sequential"><img src="%PUBURLPATH%/%TWIKIWEB%/PatternSkin/oopsmore_diff_sequential.gif" alt="sequential" width="80" height="80" /></label></td><td><label for="sidebyside"><img src="%PUBURLPATH%/%TWIKIWEB%/PatternSkin/oopsmore_diff_sidebyside.gif" alt="side by side" width="80" height="80" /></label></td><td><label for="debug"><img src="%PUBURLPATH%/%TWIKIWEB%/PatternSkin/oopsmore_diff_debug.gif" alt="debug" width="80" height="80" /></label></td></tr><tr><td><input type="radio" name="render" id="sequential" value="sequential" checked="checked" /><label for="sequential"> %MAKETEXT{"Sequential"}%</label></td><td><input type="radio" name="render" id="sidebyside" value="sidebyside" /><label for="sidebyside"> %MAKETEXT{"Side by side"}%</label></td><td><input type="radio" name="render" id="debug" value="debug" /><label for="debug"> %MAKETEXT{"Debug"}%</label></td></tr></table>
+     <input type="submit" class="twikiButton" value='%MAKETEXT{"View difference"}%' />
+</form>
+---+++++ *%MAKETEXT{"Restore topic"}%*
+<form name="main" action="%SCRIPTURLPATH{"manage"}%/%WEB%/%TOPIC%">
+	* %MAKETEXT{"Restore topic to revision:"}% <input class="twikiInputField" type="text" name="rev" size="6" value="%PARAM2%" />
+	<input type="hidden" name="action" value="restoreRevision" />
+	<input type="submit" class="twikiButton" title="%MAKETEXT{"Restore topic to this revision"}%" value='%MAKETEXT{"Restore"}%' /> <span class="twikiGrayText">%MAKETEXT{"You will be able to review the topic before saving it to a new revision"}%</span>
 </form>%TMPL:END%
