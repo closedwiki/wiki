@@ -25,7 +25,7 @@
 
 <form name="main" action="%SCRIPTURLPATH{"edit"}%/%WEB%/%TOPIC%">
 <input type="hidden" name="t" value="%GMTIME{"$epoch"}%" />
-   * *Set new topic parent*
+   * *%MAKETEXT{"Set new topic parent"}%*
       * Step 1: Select topic parent: %BR%
         <select name="topicparent" size="10">
         <option value="none">none (remove topic parent)</option>
@@ -35,6 +35,7 @@
         <input type="hidden" name="t" value="%SERVERTIME{$year$mo$day$hour$min$sec}%" />
 </form>
 
+%IF{"$ param1='0'" then="<!--" }% 
 <form name="main" action="%SCRIPTURLPATH{"view"}%/%WEB%/%TOPIC%">
    * *%MAKETEXT{"View previous topic revision"}%* (1 ... %PARAM1%)
       * Revision: <input type="text" name="rev" size="6" value="%PARAM2%" />
@@ -50,12 +51,16 @@
 </form>
 
 <form name="main" action="%SCRIPTURLPATH{"manage"}%/%WEB%/%TOPIC%">
-	* *%MAKETEXT{"Restore topic to revision:"}%* <input type="text" name="rev" size="6" value="%PARAM2%" />
-	<input type="hidden" name="action" value="restoreRevision" />
-	<input type="submit" title="%MAKETEXT{"Restore topic to this revision"}%" value='%MAKETEXT{"Restore"}%' /> %MAKETEXT{"You will be able to review the topic before saving it to a new revision"}%
+   * *%MAKETEXT{"Restore topic to revision:"}%* <input type="text" name="rev" size="6" value="%PARAM2%" />
+   <input type="hidden" name="action" value="restoreRevision" />
+   <input type="submit" title="%MAKETEXT{"Restore topic to this revision"}%" value='%MAKETEXT{"Restore"}%' /> %MAKETEXT{"You will be able to review the topic before saving it to a new revision"}%
 </form>
+%IF{"$ param1='0'" then="-->" }%%IF{"$ param1!='0'" then="<!--" }%
+   * *%MAKETEXT{"Revisions"}%*
+      * %MAKETEXT{"No previous revision exists."}%
+%IF{"$ param1!='0'" then="-->" }%
 
-   * *Edit topic preference settings*
+   * *%MAKETEXT{"Edit topic preference settings"}%*
       * <a href="%SCRIPTURLPATH{"manage"}%/%WEB%/%TOPIC%?action=editSettings" rel='nofollow'>Edit settings</a> for this topic %TMPL:END%
 %TMPL:DEF{"topicaction"}% [[%WEB%.%TOPIC%][Cancel]] %TMPL:END%
 %TMPL:P{"oops"}%

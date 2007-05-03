@@ -1,5 +1,6 @@
 %TMPL:DEF{"oopsmorerevision"}%
 ---++++ %ICON{"viewtopic"}% %MAKETEXT{"Revisions"}%
+%IF{"$ param1='0'" then="<!--" }% 
 ---+++++ *%MAKETEXT{"View previous topic revision"}%* (1 ... %PARAM1%)
 <form name="main" action="%SCRIPTURLPATH{"view"}%/%WEB%/%TOPIC%">
    * %MAKETEXT{"View revision:"}% <input class="twikiInputField" type="text" name="rev" size="6" value="%PARAM2%" /> &nbsp;
@@ -17,4 +18,6 @@
 	* %MAKETEXT{"Restore topic to revision:"}% <input class="twikiInputField" type="text" name="rev" size="6" value="%PARAM2%" />
 	<input type="hidden" name="action" value="restoreRevision" />
 	<input type="submit" class="twikiButton" title="%MAKETEXT{"Restore topic to this revision"}%" value='%MAKETEXT{"Restore"}%' /> <span class="twikiGrayText">%MAKETEXT{"You will be able to review the topic before saving it to a new revision"}%</span>
-</form>%TMPL:END%
+</form>
+%IF{"$ param1='0'" then="-->" }%%IF{"$ param1!='0'" then="<!--" }%
+%MAKETEXT{"No previous revision exists."}%%IF{"$ param1!='0'" then="-->" }%%TMPL:END%
