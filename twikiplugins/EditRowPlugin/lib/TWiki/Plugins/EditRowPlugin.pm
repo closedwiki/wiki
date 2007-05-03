@@ -35,6 +35,9 @@ sub initPlugin {
 sub commonTagsHandler {
     # my ( $text, $topic, $web, $included, $meta ) = @_;
 
+    my $context = TWiki::Func::getContext();
+    return unless $context->{view};
+
     unless ($headed) {
         $headed = 1;
         my $header = '<script type="text/javascript" src="';
@@ -53,9 +56,6 @@ STYLE
 
     my $query = TWiki::Func::getCgiQuery();
     return unless $query;
-
-    my $context = TWiki::Func::getContext();
-    return unless $context->{view};
 
     # SMELL: hack to get around not having a proper topic object model
     my $meta = $_[4] || $context->{can_render_meta};
@@ -114,7 +114,14 @@ STYLE
             }
 
             $table->finish();
-            $_ = $line;
+            # If this is an included topic, mark the table as having
+            # being included so we don't attempt to reprocess it
+            my ($precruft, $postcruft) = ('', '');
+            if ($_[3]) {
+                $precruft = "<!-- STARTINCLUDE $_[2].$_[1] -->\n";
+                $postcruft = "\n<!-- STOPINCLUDE $_[2].$_[1] -->";
+            }
+            $_ = $precruft.$line.$postcruft;
             $hasTables = 1;
         }
     }
