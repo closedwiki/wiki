@@ -83,7 +83,7 @@ installation tree. Every plugin has some _key files_:
                * =build.pl= - build script for this extension
                * =MANIFEST= - list of files to be installed
                * =DEPENDENCIES= - list of modules this extension depends on
-               * =Config.spec= - =configure= setuo for this extension
+               * =Config.spec= - =configure= setup for this extension
    * =data/=
       * =TWiki/=
          * <code><i>name</i>.txt</code> - your plugin/contrib topic
@@ -121,7 +121,7 @@ only_, so it won't mask problems during testing.
 The approach we _recommend_ is to set =TWIKI_LIBS= in your login script (e.g. =.login=, =.csh=, =.profile= depending on what shell you prefer).
 
 <blockquote style="background-color: #ddf">
-*EXPERTS* =build.pl does *not* read =bin/setlib.cfg=. It uses =$TWIKI_LIBS= only to find the modules for the !BuildContrib.
+*EXPERTS* =build.pl= does *not* read =bin/setlib.cfg=. It uses =$TWIKI_LIBS= only to find the modules for the !BuildContrib.
 </blockquote>
 
 ---++ Build scripts
@@ -164,7 +164,7 @@ The archives will each contain the following:
 __Notes__
    * This topic, and all the embedded POD documentation, are generated using
      this build module.
-   * The =test= target assumes you are using Test::Unit.
+   * The =test= target assumes you are using CPAN:Test::Unit.
 
 ---++ MANIFEST
 The =MANIFEST= file contains a list of all the files that are wanted in the
@@ -327,6 +327,7 @@ and in the installer script. The following tokens are supported:
 You can also create other tokens to be expanded by adding them in your
 =build.pl=. For example,
 
+TODO: add code sample here?
 
 ---++ Upload
 When you are happy the release package is built correctly, you can
@@ -338,7 +339,7 @@ to enter an alternate upload target, should you require it (e.g. to upload to
 private corporate repository).
 
 ---++ Install support
-Installer scripts build by !BuildContrib are ijmportant for the full
+Installer scripts build by !BuildContrib are important for the full
 functioning of the extensions installer in =configure=.
 
 The installer script shipped with the package is very simple. By default all
