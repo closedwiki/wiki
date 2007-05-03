@@ -251,7 +251,7 @@ sub getEmails {
         return split(/;/, $db->{$login}->{emails});
     }
 
-    return ();
+    return;
 }
 
 sub setEmails {
@@ -263,7 +263,9 @@ sub setEmails {
     unless ($db->{$login}) {
         $db->{$login}->{pass} = '';
     }
-    if( scalar(@_) ) {
+#SMELL: this makes no sense. - the if above suggests that we can get to this point without $db->{$login}
+#  what use is going on if the user is not in the auth system? 
+    if( defined($_[0]) ) {
         $db->{$login}->{emails} = join(';', @_);
     } else {
         $db->{$login}->{emails} = '';

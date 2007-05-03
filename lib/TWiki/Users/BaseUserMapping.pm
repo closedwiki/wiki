@@ -60,6 +60,8 @@ sub new {
     $this->{U2W} = {'BaseUserMapping_333'=>$TWiki::cfg{AdminUserWikiName}, 'BaseUserMapping_666'=>$TWiki::cfg{DefaultUserWikiName}, 'BaseUserMapping_999'=>'UnknownUser'};
     $this->{W2U} = {$TWiki::cfg{AdminUserWikiName}=>'BaseUserMapping_333', $TWiki::cfg{DefaultUserWikiName}=>'BaseUserMapping_666', UnknownUser=>'BaseUserMapping_999'};
     $this->{U2E} = {'BaseUserMapping_333'=>'not@home.org.au'};
+    $this->{U2P} = {'BaseUserMapping_333'=>$TWiki::cfg{Password}};
+    
     
     $this->{GROUPS} = {$TWiki::cfg{SuperAdminGroup}=>['BaseUserMapping_333']};
 
@@ -71,8 +73,9 @@ sub new {
 sub finish {
     my $this = shift;
     delete $this->{U2L};
-    delete $this->{L2U};
     delete $this->{U2W};
+    delete $this->{U2P};
+    delete $this->{L2U};
     delete $this->{W2U};
     delete $this->{GROUPS};
 }
@@ -88,10 +91,21 @@ sub supportsRegistration {
 sub login2canonical {
     my( $this, $login ) = @_;
 
-#print STDERR "login2canonical($login) = ";
-#print STDERR $this->{L2U}->{$login};    
+    my $cUID;
+    if ($TWiki::cfg{Register}{AllowLoginName}) {
+       	$this->ASSERT_IS_USER_LOGIN_ID($login) if DEBUG;
+    	$cUID = $this->{L2U}{$login};
+    } else {
+        #BaseUserMapper _can_ assume that WikiNames are unique
+    	$this->ASSERT_IS_USER_DISPLAY_NAME($login) if DEBUG;
+    	$cUID = $this->{W2U}{$login};
 
-    return $this->{L2U}{$login};
+        #alternative impl - slower, but more re-useable
+        #my @list = findUserByWikiName($this, $login);
+        #$cUID = shift @list;
+    }  
+
+    return $cUID;
 }
 
 # See login2 canonical
@@ -133,8 +147,17 @@ sub addUser {
     return 0;
 }
 
-# Remove a user from the mapping
-# Called by TWiki::Users
+
+=pod
+
+---++ ObjectMethod removeUser( $user ) -> $boolean
+
+Delete the users entry. Removes the user from the password
+manager and user mapping manager. Does *not* remove their personal
+topics, which may still be linked.
+
+=cut
+
 sub removeUser {
     # SMELL: currently a nop, needs someone to implement it
     throw Error::Simple(
@@ -146,13 +169,7 @@ sub removeUser {
 sub getWikiName {
     my ($this, $user) = @_;
     
-    if( $TWiki::cfg{Register}{AllowLoginName} ) {
-#print STDERR "getWikiName($user) = ".$this->{U2W}->{$user};    
-        return $this->{U2W}->{$user} || canonical2login( $this, $user );
-    } else {
-        # If the mapping isn't enabled there's no point in loading it
-        return canonical2login( $this, $user );
-    }
+    return $this->{U2W}->{$user} || canonical2login( $this, $user );
 }
 
 # Map a canonical user name to a login name
@@ -167,7 +184,37 @@ sub getLoginName {
 sub lookupLoginName {
     my ($this, $login) = @_;
 
-    return $this->{L2U}->{$login};
+    return login2canonical($this, $login);
+}
+
+=pod
+
+---++ ObjectMethod userExists($login) -> $user
+
+Determine if the user already exists or not. Return a canonical user
+identifier if the user is known, or undef otherwise.
+
+=cut
+
+sub userExists {
+    my( $this, $loginName ) = @_;
+	$this->ASSERT_IS_USER_LOGIN_ID($loginName) if DEBUG;
+
+    if( $loginName eq $TWiki::cfg{DefaultUserLogin} ) {
+        return $loginName;
+    }
+
+    # TWiki allows *groups* to log in
+    if( $this->isGroup( $loginName )) {
+        return $loginName;
+    }
+
+    # Look them up in the password manager.
+    if( $this->{passwords}->fetchPass( $loginName )) {
+        return $loginName;
+    }
+
+    return undef;
 }
 
 # Called from TWiki::Users. See the documentation of the corresponding
@@ -246,18 +293,36 @@ sub isInGroup {
     return 0;
 }
 
-# Called from TWiki::Users. See the documentation of the corresponding
-# method in that module for details.
-# Only used if =passwordManager->isManagingEmails= = =false=.
+=pod
+
+---++ ObjectMethod getEmails($user) -> @emailAddress
+
+If this is a user, return their email addresses. If it is a group,
+return the addresses of everyone in the group.
+
+The password manager and user mapping manager are both consulted for emails
+for each user (where they are actually found is implementation defined).
+
+Duplicates are removed from the list.
+
+=cut
+
 sub getEmails {
     my( $this, $user ) = @_;
 
-    return $this->{U2E}{$user};
+    return $this->{U2E}{$user} || ();
 }
 
-# Called from TWiki::Users. See the documentation of the corresponding
-# method in that module for details.
-# Only used if =passwordManager->isManagingEmails= = =false=.
+=pod
+
+---++ ObjectMethod setEmails($user, @emails)
+
+Set the email address(es) for the given user.
+The password manager is tried first, and if it doesn't want to know the
+user mapping manager is tried.
+
+=cut
+
 sub setEmails {
     my $this = shift;
     my $user = shift;
@@ -267,9 +332,19 @@ sub setEmails {
     return 0;
 }
 
-# Called from TWiki::Users. See the documentation of the corresponding
-# method in that module for details.
-# Only used if =passwordManager->isManagingEmails= = =false=.
+
+=pod
+
+---++ ObjectMethod findUserByEmail( $email ) -> \@users
+   * =$email= - email address to look up
+Return a list of canonical user names for the users that have this email
+registered with the password manager or the user mapping manager.
+
+The password manager is asked first for whether it maps emails.
+If it doesn't, then the user mapping manager is asked instead.
+
+=cut
+
 sub findUserByEmail {
     my( $this, $email ) = @_;
 
@@ -306,7 +381,76 @@ sub findUserByWikiName {
     return \@users;
 }
 
+=pod
 
+---++ ObjectMethod checkPassword( $userName, $passwordU ) -> $boolean
+
+Finds if the password is valid for the given user.
+
+Returns 1 on success, undef on failure.
+
+=cut
+
+sub checkPassword {
+    my( $this, $login, $pass ) = @_;
+    
+  	$this->ASSERT_IS_USER_LOGIN_ID($login) if DEBUG;
+    my $cUID = login2canonical( $this, $login );
+    return unless ($cUID);  #user not found
+
+    my $hash = $this->{U2P}->{$cUID};
+    if ($hash && (crypt($pass, $hash) eq $hash)) {
+        return 1;   #yay, you've passed
+    }
+#be a little more helpful to the admin
+    if (($cUID eq 'BaseUserMapping_333') && (!$hash)) {
+        $this->{error} = 'To login as '.$login.', you must set {Password} in configure';
+        return;
+    }    
+}
+
+=pod
+
+---++ ObjectMethod setPassword( $user, $newPassU, $oldPassU ) -> $boolean
+
+If the $oldPassU matches matches the user's password, then it will
+replace it with $newPassU.
+
+If $oldPassU is not correct and not 1, will return 0.
+
+If $oldPassU is 1, will force the change irrespective of
+the existing password, adding the user if necessary.
+
+Otherwise returns 1 on success, undef on failure.
+
+=cut
+
+sub setPassword {
+    my( $this, $user, $newPassU, $oldPassU ) = @_;
+	$this->ASSERT_IS_CANONICAL_USER_ID($user) if DEBUG;
+    throw Error::Simple(
+          'cannot change user passwords using BaseUserMapper');
+
+    return $this->{passwords}->setPassword(
+        $this->getLoginName( $user ), $newPassU, $oldPassU);
+}
+
+=pod
+
+---++ ObjectMethod passwordError( ) -> $string
+
+returns a string indicating the error that happened in the password handlers
+TODO: these delayed error's should be replaced with Exceptions.
+
+returns undef if no error
+
+=cut
+
+sub passwordError {
+    my $this = shift;
+
+    return $this->{error};
+}
 
 =pod
 

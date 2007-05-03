@@ -55,6 +55,13 @@ sub new {
 
     my $this = bless( {}, $class );
     $this->{session} = $session;
+    
+    my $implPasswordManager = $TWiki::cfg{PasswordManager};
+    $implPasswordManager = 'TWiki::Users::Password'
+      if( $implPasswordManager eq 'none' );
+    eval "use $implPasswordManager";
+    die "Password Manager: $@" if $@;
+    $this->{passwords} = $implPasswordManager->new( $session );    
 
     #$this->{U2L} = {};
     $this->{L2U} = {};
@@ -72,6 +79,8 @@ sub finish {
     delete $this->{L2U};
     delete $this->{U2W};
     delete $this->{W2U};
+    
+    $this->{passwords}->finish();
 }
 
 #return 1 if the UserMapper supports registration (ie can create new users)
@@ -184,12 +193,32 @@ sub _getListOfGroups {
 #             throw Error::Simple(
 #                'Failed to add user: '.$ph->error());
 sub addUser {
-    my ( $this, $login, $wikiname ) = @_;
+    my ( $this, $login, $wikiname, $password, $emails ) = @_;
 
     ASSERT($login) if DEBUG;
 
     # SMELL: really ought to be smarter about this e.g. make a wikiword
     $wikiname ||= $login;
+    
+    if( $this->{passwords}->fetchPass( $login )) {
+        # They exist; their password must match
+        unless( $this->{passwords}->checkPassword( $login, $password )) {
+            throw Error::Simple(
+                'New password did not match existing password for this user');
+        }
+        # User exists, and the password was good.
+    } else {
+        # add a new user
+
+        unless( defined( $password )) {
+            $password = TWiki::Users::randomPassword();
+        }
+
+        unless( $this->{passwords}->setPassword( $login, $password )) {
+            throw Error::Simple(
+                'Failed to add user: '.$this->{passwords}->error());
+        }
+    }    
 
     my $store = $this->{session}->{store};
     my( $meta, $text ) = $store->readTopic(
@@ -242,13 +271,11 @@ sub addUser {
                        $TWiki::cfg{UsersWebName},
                        $TWiki::cfg{UsersTopicName},
                        $result, $meta );
-    return $user;
-}
 
-# Remove a user from the mapping
-# Called by TWiki::Users
-sub removeUser {
-    # SMELL: currently a nop, needs someone to implement it
+    $this->setEmails( $user, $emails );
+                       
+                       
+    return $user;
 }
 
 # Map a canonical user name to a wikiname
@@ -279,6 +306,36 @@ sub lookupLoginName {
 
     _loadMapping( $this );
     return $this->{L2U}->{$login};
+}
+
+=pod
+
+---++ ObjectMethod userExists($login) -> $user
+
+Determine if the user already exists or not. Return a canonical user
+identifier if the user is known, or undef otherwise.
+
+=cut
+
+sub userExists {
+    my( $this, $loginName ) = @_;
+	$this->ASSERT_IS_USER_LOGIN_ID($loginName) if DEBUG;
+
+    if( $loginName eq $TWiki::cfg{DefaultUserLogin} ) {
+        return $loginName;
+    }
+
+    # TWiki allows *groups* to log in
+    if( $this->isGroup( $loginName )) {
+        return $loginName;
+    }
+
+    # Look them up in the password manager.
+    if( $this->{passwords}->fetchPass( $loginName )) {
+        return $loginName;
+    }
+
+    return undef;
 }
 
 # Called from TWiki::Users. See the documentation of the corresponding
@@ -437,12 +494,118 @@ sub isInGroup {
     return 0;
 }
 
+=pod
+
+---++ ObjectMethod findUserByEmail( $email ) -> \@users
+   * =$email= - email address to look up
+Return a list of canonical user names for the users that have this email
+registered with the password manager or the user mapping manager.
+
+The password manager is asked first for whether it maps emails.
+If it doesn't, then the user mapping manager is asked instead.
+
+=cut
+
+sub findUserByEmail {
+    my( $this, $email ) = @_;
+    ASSERT($email) if DEBUG;
+    my @users;
+    if( $this->{passwords}->isManagingEmails()) {
+        my $logins = $this->{passwords}->findLoginByEmail( $email );
+        if (defined $logins) {
+            foreach my $l ( @$logins ) {
+                $l = $this->lookupLoginName( $l );
+                push( @users, $l ) if $l;
+            }
+        }
+    } else {
+        # if the password manager didn't want to provide the service, ask
+        # the user mapping manager
+        unless( $this->{_MAP_OF_EMAILS} ) {
+            $this->{_MAP_OF_EMAILS} = {};
+            my $it = $this->eachUser();
+            while( $it->hasNext() ) {
+                my $uo = $it->next();
+                map { push( @{$this->{_MAP_OF_EMAILS}->{$_}}, $uo); }
+                  $this->getEmails( $uo );
+            }
+        }
+        push( @users, $this->{_MAP_OF_EMAILS}->{$email});
+    }
+    return \@users;
+}
+
+=pod
+
+---++ ObjectMethod getEmails($user) -> @emailAddress
+
+If this is a user, return their email addresses. If it is a group,
+return the addresses of everyone in the group.
+
+The password manager and user mapping manager are both consulted for emails
+for each user (where they are actually found is implementation defined).
+
+Duplicates are removed from the list.
+
+=cut
+
+sub getEmails {
+    my( $this, $user ) = @_;
+	$this->ASSERT_IS_CANONICAL_USER_ID($user) if DEBUG;
+
+    my %emails;
+    if ( $this->isGroup($user) ) {
+        my $it = $this->eachGroupMember( $user );
+        while( $it->hasNext() ) {
+            foreach ($this->getEmails( $it->next())) {
+                $emails{$_} = 1;
+            }
+        }
+    } else {
+        if ($this->{passwords}->isManagingEmails()) {
+            # get emails from the password manager
+            foreach ($this->{passwords}->getEmails( $this->getLoginName( $user ))) {
+                $emails{$_} = 1;
+            }
+        } else {
+            # And any on offer from the user mapping manager
+            foreach ($this->mapper_getEmails( $user )) {
+                $emails{$_} = 1;
+            }
+        }
+    }
+
+    return keys %emails;
+}
+
+=pod
+
+---++ ObjectMethod setEmails($user, @emails)
+
+Set the email address(es) for the given user.
+The password manager is tried first, and if it doesn't want to know the
+user mapping manager is tried.
+
+=cut
+
+sub setEmails {
+    my $this = shift;
+    my $user = shift;
+	$this->ASSERT_IS_CANONICAL_USER_ID($user) if DEBUG;
+
+    if( $this->{passwords}->isManagingEmails()) {
+        $this->{passwords}->setEmails( $this->getLoginName( $user ), @_ );
+    } else {
+        $this->mapper_setEmails( $user, @_ );
+    }
+}
+
 # Called from TWiki::Users. See the documentation of the corresponding
 # method in that module for details.
 # Only used if =passwordManager->isManagingEmails= = =false=.
-sub getEmails {
+sub mapper_getEmails {
     my( $this, $user ) = @_;
-
+    
     my ($meta, $text) =
       $this->{session}->{store}->readTopic(
           undef, $TWiki::cfg{UsersWebName},
@@ -469,7 +632,7 @@ sub getEmails {
 # Called from TWiki::Users. See the documentation of the corresponding
 # method in that module for details.
 # Only used if =passwordManager->isManagingEmails= = =false=.
-sub setEmails {
+sub mapper_setEmails {
     my $this = shift;
     my $user = shift;
 
@@ -502,24 +665,6 @@ sub setEmails {
 
 # Called from TWiki::Users. See the documentation of the corresponding
 # method in that module for details.
-# Only used if =passwordManager->isManagingEmails= = =false=.
-sub findUserByEmail {
-    my( $this, $email ) = @_;
-
-    unless( $this->{_MAP_OF_EMAILS} ) {
-        $this->{_MAP_OF_EMAILS} = {};
-        my $it = $this->eachUser();
-        while( $it->hasNext() ) {
-            my $uo = $it->next();
-            map { push( @{$this->{_MAP_OF_EMAILS}->{$_}}, $uo); }
-              $this->{session}->{users}->getEmails( $uo );
-        }
-    }
-    return $this->{_MAP_OF_EMAILS}->{$email};
-}
-
-# Called from TWiki::Users. See the documentation of the corresponding
-# method in that module for details.
 sub findUserByWikiName {
     my( $this, $wn ) = @_;
     my @users = ();
@@ -547,6 +692,79 @@ sub findUserByWikiName {
     return \@users;
 }
 
+=pod
+
+---++ ObjectMethod checkPassword( $userName, $passwordU ) -> $boolean
+
+Finds if the password is valid for the given user.
+
+Returns 1 on success, undef on failure.
+
+=cut
+
+sub checkPassword {
+    my( $this, $userName, $pw ) = @_;
+	$this->ASSERT_IS_USER_LOGIN_ID($userName) if DEBUG;
+    return $this->{passwords}->checkPassword(
+        $userName, $pw);
+}
+
+=pod
+
+---++ ObjectMethod setPassword( $user, $newPassU, $oldPassU ) -> $boolean
+
+If the $oldPassU matches matches the user's password, then it will
+replace it with $newPassU.
+
+If $oldPassU is not correct and not 1, will return 0.
+
+If $oldPassU is 1, will force the change irrespective of
+the existing password, adding the user if necessary.
+
+Otherwise returns 1 on success, undef on failure.
+
+=cut
+
+sub setPassword {
+    my( $this, $user, $newPassU, $oldPassU ) = @_;
+	$this->ASSERT_IS_CANONICAL_USER_ID($user) if DEBUG;
+    return $this->{passwords}->setPassword(
+        $this->getLoginName( $user ), $newPassU, $oldPassU);
+}
+
+=pod
+
+---++ ObjectMethod passwordError( ) -> $string
+
+returns a string indicating the error that happened in the password handlers
+TODO: these delayed error's should be replaced with Exceptions.
+
+returns undef if no error
+
+=cut
+
+sub passwordError {
+    my( $this ) = @_;
+    return $this->{passwords}->error();
+}
+
+=pod
+
+---++ ObjectMethod removeUser( $user ) -> $boolean
+
+Delete the users entry. Removes the user from the password
+manager and user mapping manager. Does *not* remove their personal
+topics, which may still be linked.
+
+=cut
+
+sub removeUser {
+    my( $this, $user ) = @_;
+	$this->ASSERT_IS_CANONICAL_USER_ID($user) if DEBUG;
+    my $ln = $this->getLoginName( $user );
+    $this->{passwords}->removeUser($ln);
+    # SMELL: currently a nop, needs someone to implement it
+}
 
 
 =pod

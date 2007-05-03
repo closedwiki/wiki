@@ -1409,6 +1409,9 @@ sub new {
     my $plogin = $this->{plugins}->load( $TWiki::cfg{DisableAllPlugins} );
     $login = $plogin if $plogin;
 
+    #correct the DefaultUserLogin if $TWiki::cfg{Register}{AllowLoginName} is off
+    $TWiki::cfg{DefaultUserLogin} = $TWiki::cfg{DefaultUserWikiName} unless ($TWiki::cfg{Register}{AllowLoginName});
+
     # if we get here without a login id, we are a guest
     $login ||= $TWiki::cfg{DefaultUserLogin};
 
