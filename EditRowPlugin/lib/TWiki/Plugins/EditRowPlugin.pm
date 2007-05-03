@@ -119,7 +119,7 @@ STYLE
         }
     }
 
-    $_[0] = join("\n", @$content) if $hasTables;
+    $_[0] = join("\n", @$content)."\n" if $hasTables;
 }
 
 # Replace content with a marker to prevent it being munged by TWiki

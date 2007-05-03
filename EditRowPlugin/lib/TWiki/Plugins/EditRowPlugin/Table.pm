@@ -272,7 +272,7 @@ sub renderForEdit {
     if ($wholeTable) {
         push(@out, $this->generateEditButtons(0, 0));
     }
-    return join("\n", @out);
+    return join("\n", @out)."\n";
 }
 
 sub renderForDisplay {
@@ -405,25 +405,18 @@ sub addRow {
     my ($this, $urps) = @_;
     my @cols;
     my $row = $urps->{erp_active_row};
-    if ($row > 0) {
-        # Clone of a specific row
-        my $newRow = new TWiki::Plugins::EditRowPlugin::TableRow(
-            $this, $row, '|', '|', $this->_getCols($urps, $row));
-        splice(@{$this->{rows}}, $row, 0, $newRow);
-        # renumber lower rows
-        for (my $i = $row + 1; $i < scalar(@{$this->{rows}}); $i++) {
-            $this->{rows}->[$i]->{number}++;
-        }
-        $urps->{erp_active_row}++;
-
-    } else {
-        # new, empty last row
-        my @cols = map { '' } @{$this->{colTypes}};
-        my $newRow = new TWiki::Plugins::EditRowPlugin::TableRow(
-            $this, scalar(@{$this->{rows}}), '|', '|', \@cols);
-        push(@{$this->{rows}}, $newRow);
-        $urps->{erp_active_row} = scalar(@{$this->{rows}});
+    if ($row < 0) {
+        $row = scalar(@{$this->{rows}}) - $this->{attrs}->{footerrows};
     }
+    my @vals = map { $_->{initial_value} } @{$this->{colTypes}};
+    my $newRow = new TWiki::Plugins::EditRowPlugin::TableRow(
+        $this, $row, '|', '|', \@vals);
+    splice(@{$this->{rows}}, $row, 0, $newRow);
+    # renumber lower rows
+    for (my $i = $row + 1; $i < scalar(@{$this->{rows}}); $i++) {
+        $this->{rows}->[$i]->{number}++;
+    }
+    $urps->{erp_active_row} = $row + 1;
 }
 
 # Action on row deleted
@@ -452,20 +445,21 @@ sub _parseFormat {
     $format =~ s/^\s*\|//;
     $format =~ s/\|\s*$//;
 
+    $format = TWiki::Func::expandCommonVariables(
+        $format, $this->{topic}, $this->{web});
     $format =~ s/\$nop(\(\))?//gs;
     $format =~ s/\$quot(\(\))?/\"/gs;
     $format =~ s/\$percnt(\(\))?/\%/gs;
     $format =~ s/\$dollar(\(\))?/\$/gs;
     $format =~ s/<nop>//gos;
-    $format = TWiki::Func::expandCommonVariables(
-        $format, $this->{topic}, $this->{web});
 
     foreach my $column (split ( /\|/, $format ))  {
-        my ($type, $size, @values) =
-          map { s/^\s*(.*?)\s*$/$1/; $_; } split(/,/, $column);
+        my ($type, $size, @values) = split(/,/, $column);
 
         $type ||= 'text';
         $type = lc $type;
+        $type =~ s/^\s*//;
+        $type =~ s/\s*$//;
 
         $size ||= 0;
         $size =~ s/[^\w.]//g;
@@ -480,11 +474,18 @@ sub _parseFormat {
             }
         }
 
+        my $initial = '';
+        if ($type =~ /^(text|label)/) {
+            $initial = join(',', @values);
+        }
+
+        @values = map { s/^\s*//; s/\s*$//; $_ } @values;
         push(@cols,
              {
                  type => $type,
                  size => $size,
                  values => \@values,
+                 initial_value => $initial,
              });
     }
 
@@ -494,15 +495,13 @@ sub _parseFormat {
 sub generateEditButtons {
     my ($this, $id, $multirow) = @_;
     my $attrs = $this->{attrs};
-    my $labelled = $attrs->{headerislabel};
-    my $topRow = ($id == 1);
+    my $topRow = ($id == $attrs->{headerrows} + 1);
     my $sz = scalar(@{$this->{rows}});
     my $q = defined($attrs->{quietsave}) ? $attrs->{quietsave} :
       TWiki::Func::getPreferencesValue('QUIETSAVE');
     my $changerows = defined($attrs->{changerows}) ? $attrs->{changerows} :
       TWiki::Func::getPreferencesValue('CHANGEROWS');
-    my $bottomRow = ($id == $sz && !$labelled
-                       || $id == $sz - 1 && $labelled);
+    my $bottomRow = ($id == $sz - $attrs->{footerrows} + 1);
     $id = "_$id" if $id;
 
     my $buttons = '';

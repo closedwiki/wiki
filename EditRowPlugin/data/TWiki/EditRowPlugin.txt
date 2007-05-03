@@ -190,6 +190,7 @@ The value of each individual cell is stored in a parameter called =erp_&lt;table
 |  Copyright: | &copy; 2007 Wind<nop>River Inc. |
 |  License: | [[http://www.gnu.org/licenses/gpl.html][GPL (Gnu General Public License)]] |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  13615 | Bugs:Item3882 added initial values support Bugs:Item4009 fixed included tables. Also fixed a bug with variable expansion reported in the dev topic. |
 |  13609 | Bugs:Item4003: fixed colspan. Also added support for headerrows and footerrows parameters from %TABLE |
 |  13560 | Bugs:Item4002 Problems with blank lines, multi-value edits, and line continuations resolved |
 |  13596 | Bugs:Item4000 Added =orientrowedit=, global control options, fixed issue with wikiwords in edited data, added column sorting |
