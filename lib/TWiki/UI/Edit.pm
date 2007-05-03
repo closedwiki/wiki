@@ -98,6 +98,7 @@ sub init_edit {
     my $skin = $session->getSkin();
     my $theParent = $query->param( 'topicparent' ) || '';
     my $ptext = $query->param( 'text' );
+    my $revision = $query->param( 'rev' ) || undef;
     my $store = $session->{store};
 
     TWiki::UI::checkWebExists( $session, $webName, $topic, 'edit' );
@@ -188,9 +189,9 @@ sub init_edit {
 
     if( $topicExists ) {
         ( $meta, $text ) =
-          $store->readTopic( undef, $webName, $topic, undef );
+          $store->readTopic( undef, $webName, $topic, $revision );
     }
-
+    
     if( $saveCmd && ! $session->{users}->isAdmin( $session->{user} )) {
         throw TWiki::OopsException(
             'accessdenied',
@@ -220,6 +221,17 @@ sub init_edit {
             params => [ $template.$editaction, 'EDIT_TEMPLATE' ] );
     }
 
+    if( $revision ) {
+        # we are restoring from a previous revision
+        # be default check on the revision checkbox
+        if ( $tmpl =~ m/%FORCENEWREVISIONCHECKBOX%/) {
+            $tmpl =~ s/%FORCENEWREVISIONCHECKBOX%/checked="checked"/go;
+        } else {
+            # no checkbox in template, so force revision
+            $session->{cgiQuery}->param(-name => 'forcenewrevision', -value => '1');
+        }
+    }
+    
     my $templateWeb = $webName;
     unless( $topicExists ) {
         if( $templateTopic ) {
@@ -264,7 +276,7 @@ sub init_edit {
 
     # Insert the rev number/date we are editing. This will be boolean false if
     # this is a new topic.
-    if( $topicExists ) {
+    if( $topicExists && !defined $revision ) {
         my ( $orgDate, $orgAuth, $orgRev ) = $meta->getRevisionInfo();
         $tmpl =~ s/%ORIGINALREV%/${orgRev}_$orgDate/g;
     } else {

@@ -98,7 +98,6 @@ templates/oopsleaseconflict.pattern.tmpl 0444
 templates/oopsmore.pattern.tmpl 0444
 templates/oopsmorebacklinks.pattern.tmpl 0444
 templates/oopsmorechildtopics.pattern.tmpl 0444
-templates/oopsmorecompare.pattern.tmpl 0444
 templates/oopsmoredelete.pattern.tmpl 0444
 templates/oopsmorerename.pattern.tmpl 0444
 templates/oopsmorerevision.pattern.tmpl 0444

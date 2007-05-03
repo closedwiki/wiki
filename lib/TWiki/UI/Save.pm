@@ -49,6 +49,7 @@ sub buildNewTopic {
     my $webName = $session->{webName};
     my $topic = $session->{topicName};
     my $store = $session->{store};
+    my $revision = $query->param( 'rev' ) || undef;
 
     unless( scalar($query->param()) ) {
         # insufficient parameters to save
@@ -107,7 +108,7 @@ sub buildNewTopic {
 
     if( $topicExists ) {
         ( $prevMeta, $prevText ) =
-          $store->readTopic( $user, $webName, $topic, undef );
+          $store->readTopic( $user, $webName, $topic, $revision );
         if( $prevMeta ) {
             foreach my $k ( keys %$prevMeta ) {
                 unless( $k =~ /^_/ || $k eq 'FORM' || $k eq 'TOPICPARENT' ||
@@ -122,7 +123,7 @@ sub buildNewTopic {
 
         ( $templateMeta, $templateText ) =
           $store->readTopic( $user, $templateweb,
-                             $templatetopic, undef );
+                             $templatetopic, $revision );
         $templateText = '' if $query->param( 'newtopic' ); # created by edit
         $templateText =
           $session->expandVariablesOnTopicCreation( $templateText );

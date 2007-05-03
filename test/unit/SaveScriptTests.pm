@@ -620,6 +620,84 @@ Glaggie
 ZIS
 }
 
+sub test_restoreRevision {
+    my $this = shift;
+    
+    # first write topic without meta
+    my $query = new CGI({
+        text => [ 'FIRST REVISION' ],
+        action => [ 'save' ],
+        topic => [ $this->{test_web}.'.DeleteTestRestoreRevisionTopic' ]
+       });
+    $this->{twiki} = new TWiki( $this->{test_user_login}, $query );
+    $this->capture( \&TWiki::UI::Save::save, $this->{twiki});
+    
+    # retrieve revision number
+    my($meta, $text) = $this->{twiki}->{store}->readTopic(undef, $this->{test_web}, 'DeleteTestRestoreRevisionTopic');
+    my( $orgDate, $orgAuth, $orgRev ) = $meta->getRevisionInfo();
+    my $original = "${orgRev}_$orgDate";
+    $this->assert_equals(1, $orgRev);
+        
+    # write second revision with meta
+    $query = new CGI({
+                         action => [ 'save' ],
+			 text   => [ 'SECOND REVISION' ],
+			             originalrev => $original,
+                         forcenewrevision => 1,
+                         formtemplate => [ 'TestForm1' ],
+                         TWiki::Form::cgiName(undef,'Select') => [ 'Value_2' ],
+                         TWiki::Form::cgiName(undef,'Radio') => [ '3' ],
+                         TWiki::Form::cgiName(undef,'Checkbox') => [ 'red' ],
+                         TWiki::Form::cgiName(undef,'CheckboxandButtons') => [ 'hamster' ],
+                         TWiki::Form::cgiName(undef,'Textfield') => [ 'Test' ],
+			 topic  => [ $this->{test_web}.'.DeleteTestRestoreRevisionTopic' ]
+                        });
+    $this->{twiki} = new TWiki( $this->{test_user_login}, $query);
+    $this->capture( \&TWiki::UI::Save::save, $this->{twiki});
+
+    ($meta, $text) = $this->{twiki}->{store}->readTopic(undef, $this->{test_web}, 'DeleteTestRestoreRevisionTopic');
+    ( $orgDate, $orgAuth, $orgRev ) = $meta->getRevisionInfo();
+    $original = "${orgRev}_$orgDate";
+    $this->assert_equals(2, $orgRev);
+
+    # now restore topic to revision 1
+    # the form should be removed as well
+    $query = new CGI({
+        action => [ 'manage' ],
+        rev => 1,
+        forcenewrevision => 1,
+        topic => [ $this->{test_web}.'.DeleteTestRestoreRevisionTopic' ]
+       });
+    $this->{twiki} = new TWiki( $this->{test_user_login}, $query );
+    $this->capture( \&TWiki::UI::Save::save, $this->{twiki});
+    ($meta, $text) = $this->{twiki}->{store}->readTopic(undef, $this->{test_web}, 'DeleteTestRestoreRevisionTopic');
+    ( $orgDate, $orgAuth, $orgRev ) = $meta->getRevisionInfo();
+    $original = "${orgRev}_$orgDate";
+    $this->assert_equals(3, $orgRev);
+    $this->assert_matches(qr/FIRST REVISION/, $text);
+    $this->assert_null($meta->get('FORM'));
+    
+    # and restore topic to revision 2
+    # the form should be re-appended
+    $query = new CGI({
+        action => [ 'manage' ],
+        rev => 2,
+        forcenewrevision => 1,
+        topic => [ $this->{test_web}.'.DeleteTestRestoreRevisionTopic' ]
+       });
+    $this->{twiki} = new TWiki( $this->{test_user_login}, $query );
+    $this->capture( \&TWiki::UI::Save::save, $this->{twiki});
+    ($meta, $text) = $this->{twiki}->{store}->readTopic(undef, $this->{test_web}, 'DeleteTestRestoreRevisionTopic');
+    ( $orgDate, $orgAuth, $orgRev ) = $meta->getRevisionInfo();
+    $original = "${orgRev}_$orgDate";
+    $this->assert_equals(4, $orgRev);
+    $this->assert_matches(qr/SECOND REVISION/, $text);
+    $this->assert_not_null($meta->get('FORM'));
+    $this->assert_str_equals('TestForm1', $meta->get('FORM')->{name});
+    # field default values should be all ''
+    $this->assert_str_equals('Test', $meta->get('FIELD', 'Textfield' )->{value});
+}
+
 # test interaction with reprev. Testcase:
 #
 # 1. A edits and saves (rev 1 now on disc)

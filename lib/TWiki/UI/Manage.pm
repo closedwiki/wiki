@@ -63,6 +63,8 @@ sub manage {
         _editSettings( $session );
     } elsif( $action eq 'saveSettings' ) {
         _saveSettings( $session );
+    } elsif( $action eq 'restoreRevision' ) {
+        _restoreRevision( $session );
     } elsif( $action ) {
         throw TWiki::OopsException( 'attention',
                                     def => 'unrecognized_action',
@@ -1329,7 +1331,31 @@ sub _handleSave {
     };
   $meta->putKeyed( 'PREFERENCE', $args );
   return '';
+}
 
+sub _restoreRevision {
+    my ( $session ) = @_;
+    
+    use TWiki::Access;
+    use TWiki::UI::Edit;
+    
+	my $topic = $session->{topicName};
+	my $web = $session->{webName};
+	# read the current topic
+	my ( $meta, $text ) =
+		  $session->{store}->readTopic( undef, $web, $topic, undef ); 
+	my $security = $session->{security};
+	my $user = $session->{user};
+	if ( !$security->checkAccessPermission( 'change', $user, $text, $meta, $topic, $web ) ) {
+		# user has no permission to change the topic
+		throw TWiki::OopsException( 'accessdenied',
+								def => 'topic_access',
+								web => $web,
+								topic => $topic,
+								params => [ 'change', 'denied' ]);
+	}
+	$session->{cgiQuery}->param(-name => 'action', -value => '');
+	TWiki::UI::Edit::edit( $session );
 }
 
 1;

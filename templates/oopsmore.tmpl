@@ -28,7 +28,7 @@
 
 <form name="main" action="%SCRIPTURLPATH{"edit"}%/%WEB%/%TOPIC%">
 <input type="hidden" name="t" value="%GMTIME{"$epoch"}%" />
-   * *Set new topic parent*
+   * *%MAKETEXT{"Set new topic parent"}%*
       * Step 1: Select topic parent: %BR%
         <select name="topicparent" size="10">
         <option value="none">none (remove topic parent)</option>
@@ -46,13 +46,19 @@
 </form>
 
 <form name="main" action="%SCRIPTURLPATH{"rdiff"}%/%WEB%/%TOPIC%">
-   * *Compare revisions*
+   * *%MAKETEXT{"Compare revisions"}%*
       * Older revision: <input type="text" name="rev2" size="6" value="1.1" />
       * Newer revision: <input type="text" name="rev1" size="6" value="%PARAM1%" />
         <input type="submit" class="twikiSubmit" value="View difference" />
 </form>
 
-   * *Edit topic preference settings*
+<form name="main" action="%SCRIPTURLPATH{"manage"}%/%WEB%/%TOPIC%">
+   * *%MAKETEXT{"Restore topic to revision:"}%* <input type="text" name="rev" size="6" value="%PARAM2%" />
+   <input type="hidden" name="action" value="restoreRevision" />
+   <input type="submit" title="%MAKETEXT{"Restore topic to this revision"}%" value='%MAKETEXT{"Restore"}%' /> %MAKETEXT{"You will be able to review the topic before saving it to a new revision"}%
+</form>
+
+   * *%MAKETEXT{"Edit topic preference settings"}%*
       * <a href="%SCRIPTURLPATH{"manage"}%/%WEB%/%TOPIC%?action=editSettings" rel='nofollow'>Edit settings</a> for this topic 
 
  %TMPL:P{"topicinfo"}%

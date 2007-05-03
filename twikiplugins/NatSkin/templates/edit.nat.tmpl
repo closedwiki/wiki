@@ -28,7 +28,9 @@
   <input type="hidden" name="skin" value="%URLPARAM{"skin"}%" />
   <input type="hidden" name="cover" value="%URLPARAM{"cover"}%" />
   <input type="hidden" name="newtopic" value="%NEWTOPIC%" />
-  <input type="hidden" name="cmd" value="%CMD%" /> %TMPL:P{"edittoolbar"}%
+  <input type="hidden" name="cmd" value="%CMD%" />
+  <input type="hidden" name="forcenewrevision" value="%URLPARAM{"forcenewrevision"}%" />
+  <input type="hidden" name="rev" value="%URLPARAM{"rev"}%" /> %TMPL:P{"edittoolbar"}%
   <textarea id="natEditTextArea" name="text" wrap="virtual" rows="%EDITBOXHEIGHT%" cols="%EDITBOXWIDTH%" style="%EDITBOXSTYLE%">%TEXT%</textarea>
 </div>
 %FORMFIELDS%
