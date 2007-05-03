@@ -36,6 +36,16 @@ sub parseTables {
         if ($line =~ m#</(verbatim|literal)>#) {
             $disable-- if $disable;
         }
+        # Remove the marks that highlight included tables, and omit
+        # them from processing
+        if ($line =~ s/^<!-- STARTINCLUDE .* -->$//) {
+            $disable++;
+            next;
+        }
+        if ($line =~ s/^<!-- STOPINCLUDE .* -->$//) {
+            $disable-- if $disable;
+            next;
+        }
         if (defined $openRow) {
             $line = "$openRow$line";
             $openRow = undef;
@@ -189,12 +199,16 @@ sub _finalise {
     my $this = shift;
     my $heads = $this->{attrs}->{headerrows};
 
-    while ($heads > 0) {
-        $this->{rows}->[--$heads]->{isHeader} = 1;
+    while ($heads-- > 0) {
+        if ($heads < scalar(@{$this->{rows}})) {
+            $this->{rows}->[$heads]->{isHeader} = 1;
+        }
     }
     my $tails = $this->{attrs}->{footerrows};
     while ($tails > 0) {
-        $this->{rows}->[-$tails]->{isFooter} = 1;
+        if ($tails < scalar(@{$this->{rows}})) {
+            $this->{rows}->[-$tails]->{isFooter} = 1;
+        }
         $tails--;
     }
     # Assign row index numbers to body cells
@@ -409,6 +423,14 @@ sub addRow {
         $row = scalar(@{$this->{rows}}) - $this->{attrs}->{footerrows};
     }
     my @vals = map { $_->{initial_value} } @{$this->{colTypes}};
+    # widen up to the width of the previous row
+    my $count;
+    if (scalar(@{$this->{rows}})) {
+        my $count = scalar(@{$this->{rows}->[$row - 1]->{cols}});
+        while (scalar(@vals) < $count) {
+            push(@vals, '');
+        }
+    }
     my $newRow = new TWiki::Plugins::EditRowPlugin::TableRow(
         $this, $row, '|', '|', \@vals);
     splice(@{$this->{rows}}, $row, 0, $newRow);
