@@ -22,7 +22,7 @@ package TWiki::Plugins::SpacedWikiWordPlugin;
 
 # =========================
 use vars qw(
-        $web $topic $user $installWeb $VERSION $RELEASE $debug %dontSpaceSet
+        $web $topic $user $installWeb $VERSION $RELEASE $debug %dontSpaceSet $spaceOutWikiWordLinks $spaceOutUnderscoreLinks $removeAnchorDashes
     );
 
 # This should always be $Rev$ so that TWiki can determine the checked-in
@@ -50,10 +50,18 @@ sub initPlugin
     # Get plugin debug flag
     $debug = &TWiki::Func::getPreferencesFlag( "SPACEDWIKIWORDPLUGIN_DEBUG" );
 
+    $spaceOutWikiWordLinks = &TWiki::Func::getPreferencesValue( "SPACE_OUT_WIKI_WORD_LINKS" ) || &TWiki::Func::getPreferencesValue( "SPACEDWIKIWORDPLUGIN_SPACE_OUT_WIKI_WORD_LINKS" );
+    
+    $spaceOutUnderscoreLinks = &TWiki::Func::getPreferencesValue( "SPACE_OUT_UNDERSCORE_LINKS" ) || &TWiki::Func::getPreferencesValue( "SPACEDWIKIWORDPLUGIN_SPACE_OUT_UNDERSCORE_LINKS" );
+    
+    $removeAnchorDashes = &TWiki::Func::getPreferencesValue( "REMOVE_ANCHOR_DASHES" ) || &TWiki::Func::getPreferencesValue( "SPACEDWIKIWORDPLUGIN_REMOVE_ANCHOR_DASHES" );
+    
     my $dontSpaceWords = &TWiki::Func::getPreferencesValue( "DONTSPACE" ) ||
                        &TWiki::Func::getPreferencesValue( "SPACEDWIKIWORDPLUGIN_DONTSPACE" );
     $dontSpaceWords =~ s/ //go;
     %dontSpaceSet = map { $_ => 1 } split(",", $dontSpaceWords);
+    
+    TWiki::Func::registerTagHandler( 'SPACEOUT', \&_SPACEOUT );
     
     # Plugin correctly initialized
     &TWiki::Func::writeDebug( "- TWiki::Plugins::SpacedWikiWord::initPlugin( $web.$topic ) is OK" ) if $debug;
@@ -64,15 +72,14 @@ sub initPlugin
 
 ---++ renderWikiWordHandler( $linkLabel, $hasExplicitLinkLabel ) -> $text
 
-
    * =$linkLabel= - the link label to be spaced out
    * =$hasExplicitLinkLabel= - in case of bracket notation: the link label is written as [[TopicName][link label]]
 
 We use the following rules:
    - Space out in case of TopicName, Web.TopicName, [[TopicName]]
    - Do not space out [[TopicName][TopicName]] or [[TopicName][SomeOtherName]]; in these cases the topic author has used an explicit link label
-Search results not so clear-cut; currently [[$web.$topic][$topic]] is not spaced
-out.
+   - Search results written as [[$web.$topic][$topic]] are not spaced
+out. Use [[$web.$topic][$percntSPACEOUT{$topic}$percnt]] instead.
     
 =cut
 
@@ -83,21 +90,27 @@ sub renderWikiWordHandler
     # do nothing if this label is defined in the do-not-link list
     return $linkLabel if $dontSpaceSet{ $linkLabel };
     
-    # switch off until TWiki::Func::spaceOutWikiWord is implemented:
-    #if( $TWiki::Plugins::VERSION < 1.13 ) {
-    #    return _spacedWikiWord( $linkLabel ) unless $hasExplicitLinkLabel; 
-    #}
-    #return TWiki::Func::spaceOutWikiWord( $linkLabel ) unless $hasExplicitLinkLabel;
+    if ( $spaceOutUnderscoreLinks && !$hasExplicitLinkLabel ) {
+        $linkLabel = _spaceOutUnderscoreTopicLinks( $linkLabel );
+    }
     
-    # instead use temporarily:
-    return _spacedWikiWord( $linkLabel ) unless $hasExplicitLinkLabel;
+    if ( $spaceOutWikiWordLinks && !$hasExplicitLinkLabel ) {
+        if( $TWiki::Plugins::VERSION < 1.13 ) {
+            $linkLabel = _spaceOutWikiWordLinks( $linkLabel );
+        }
+        # else newer
+        $linkLabel = TWiki::Func::spaceOutWikiWord( $linkLabel );
+        
+        # eat anchor dash
+        $linkLabel =~ s/^#(.*?)$/$1/go if $removeAnchorDashes;
+    }
     
     return $linkLabel;
 }
 
 =pod
 
----++ _spacedWikiWord( $linkLabel ) -> $text
+---++ _spaceOutWikiWordLinks( $linkLabel ) -> $text
 
 Fallback for older Plugins version. Regexes are copied from TWiki::spaceOutWikiWord.
 
@@ -105,19 +118,57 @@ Fallback for older Plugins version. Regexes are copied from TWiki::spaceOutWikiW
 
 =cut
 
-sub _spacedWikiWord
+sub _spaceOutWikiWordLinks
 {
-    my ( $linkLabel ) =  @_;
+    my ( $linkLabel, $sep ) =  @_;
 
-    my $sep = ' ';
+    my $separator = $sep || ' ';
     my $lowerAlphaRegex = TWiki::Func::getRegularExpression('lowerAlpha');
     my $upperAlphaRegex = TWiki::Func::getRegularExpression('upperAlpha');
     my $numericRegex = TWiki::Func::getRegularExpression('numeric');
 
-    $linkLabel =~ s/([$lowerAlphaRegex])([$upperAlphaRegex$numericRegex]+)/$1$sep$2/go;
-    $linkLabel =~ s/([$numericRegex])([$upperAlphaRegex])/$1$sep$2/go;
+    $linkLabel =~ s/([$lowerAlphaRegex])([$upperAlphaRegex$numericRegex]+)/$1$separator$2/go;
+    $linkLabel =~ s/([$numericRegex])([$upperAlphaRegex])/$1$separator$2/go;
 
     return $linkLabel;
+}
+
+=pod
+
+Space out underscore topic links: "Human_revolution" becomes "Human revolution"
+
+   * =$linkLabel= - the link label to be spaced out
+
+=cut
+
+sub _spaceOutUnderscoreTopicLinks
+{
+    my ( $linkLabel ) =  @_;
+
+    $linkLabel =~ s/_/ /go;
+
+    return $linkLabel;
+}
+
+=pod
+
+Override TWiki _SPACEOUT function to enable spacing out of underscore topic links. 
+
+   * =$this= - not used
+   * =$params=
+      - (default) - the string to space out
+      - separator - the separator string, default a space
+      
+=cut
+
+sub _SPACEOUT {
+    my ( $this, $params ) = @_;
+    
+    my $spaceOutTopic = $params->{_DEFAULT};
+    my $sep = $params->{'separator'};
+    $spaceOutTopic = _spaceOutWikiWordLinks( $spaceOutTopic, $sep );
+    $spaceOutTopic = _spaceOutUnderscoreTopicLinks( $spaceOutTopic );
+    return $spaceOutTopic;
 }
 
 1;
