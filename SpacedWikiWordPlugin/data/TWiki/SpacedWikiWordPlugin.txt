@@ -101,7 +101,7 @@ Plugin settings are stored as preferences variables.
 
 #PluginTest
 ---++ Plugin Tests
-   * This plugin is %IF{"context SpacedWikiWordPluginEnabled" then='%GREEN% enabled %ENDCOLOR%' else ='%RED% not enabled %ENDCOLOR%'}%.
+   * This plugin is %IF{"context SpacedWikiWordPluginEnabled" then='%GREEN%enabled%ENDCOLOR%' else ='%RED%not enabled%ENDCOLOR%'}%.
    * !WikiWord links will %IF{"$ SPACE_OUT_WIKI_WORD_LINKS='1'" then='%GREEN%be spaced out%ENDCOLOR%' else='%RED%not be spaced out%ENDCOLOR%'}%.
    * !Underscore_topic links will %IF{"$ SPACE_OUT_UNDERSCORE_LINKS='1'" then='%GREEN%be spaced out%ENDCOLOR%' else='%RED%not be spaced out%ENDCOLOR%'}%.
    * =NOAUTOLINK= is %IF{"$ NOAUTOLINK='on'" then='%GREEN%on%ENDCOLOR%' else='not set'}%. !WikiWords will %IF{"$ NOAUTOLINK='on'" then=' *not* '}% automatically create links. Test: SpacedWikiWordPlugin
