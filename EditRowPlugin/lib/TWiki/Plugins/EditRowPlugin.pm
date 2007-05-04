@@ -68,7 +68,11 @@ STYLE
     require TWiki::Plugins::EditRowPlugin::Table;
     return if $@;
 
-    my $urps = $query->Vars();
+    my $vars = $query->Vars();
+    my $urps = {};
+    while (my ($key, $value) = each %{$vars}) {
+        $urps->{$key} = $value if $key =~ /^erp_/;
+    }
     my $content = TWiki::Plugins::EditRowPlugin::Table::parseTables(
         @_, $urps);
 
