@@ -82,6 +82,5 @@ You can easily select a balance of browser capability versus look and feel. Try 
 ---++ Important note about TWiki Plugins
 
    * Plugins can require just about anything -  browser-specific functions, stylesheets (CSS), Java applets, cookies, specific Perl modules,... - check the individual Plugin specs.
-      * __%T% Note:__ Plugins included in the TWiki distribution do not add requirements, except for the CommentPlugin which requires Perl 5.6.1.
 
 __Related Topics:__ AdminDocumentationCategory
