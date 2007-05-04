@@ -204,9 +204,11 @@ sub _processSubscriptions {
 
     $report .= _sendNewsletterMails( $twiki, $web, \%allSet);
 
-    if( open(F, ">$notmeta" )) {
-        print F $timeOfLastChange;
-        close(F);
+    if ($timeOfLastChange != 0) {
+        if( open(F, ">$notmeta" )) {
+            print F $timeOfLastChange;
+            close(F);
+        }
     }
 
     return $report;
