@@ -1,8 +1,8 @@
-%META:TOPICINFO{author="TWikiContributor" date="1177062278" format="1.0" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1178283753" format="1.0" version="$Rev$"}%
 ---+ <nop>RackPlannerPlugin
 The <nop>RackPlannerPlugin handles the tag =%<nop>RACKPLANNER%= and renders a rack overview (HTML table) with devices (computer, router, switches, ...). 
 ---++ Syntax Rules
-Devices are defined within a TWiki table. Following columns are supported (one row per device):
+Devices are defined within a TWiki table. Following columns are supported:
 
 | *Device* | *Rack* | *Starting Unit* | *Form Factor* | *Connected to:* | *Owner* | *Color/Image* | *Notes* |
 | device name(s) (separated by =' / '= or =' # '=) | rack name | a starting unit (a number between 1 and =units=) | a form factor (units, e.g. 4U, 2, 1U, ...) | device(s) is/are connected to ... (comma separated list of other devices, ports ...); every 'connected to' item is displayed as a icon (see =connectedtoicon=, e.g. %M%) with the text as tooltip; if you use links the icons are also links; | the device owner(s) is/are displayed as tooltip of the device name | colors or a background image URL for the table data cell | notes are displayed as a icon (=notesicon= e.g. %P%) with the note as tooltip; if you use a link the icon is also a link |
@@ -21,7 +21,7 @@ This =%<nop>EDITTABLE%= tag is an example. Feel free to modify the attributes (=
 *Notes:*
 	* The device order in the table is not relevant (except there's a conflict) but the column order is relevant (because the table header will be ignored).
 	* If more than one device uses the same unit the conflict will be displayed with a icon (see =conflicticon= attribute, e.g. %S%). The tooltip of the icon contains the device names.
-	* If you have more than one device in the same unit you have to put them into a single table row and separate device names, 'connected to', owner, colors, notes with a =' / '= or a ' # ' (a whitespace before and after the separator is required).
+	* If you have more than one device in the same unit you have to put them into a single table row and separate device names, 'connected to', owner, colors, notes with a =' / '= or a =' # '= (a whitespace before and after the separator is required).
 	
   
 
@@ -33,6 +33,7 @@ Usage: =%<nop>RACKPLANNER{attribute1="value" attribute2="value" ... }%=
 |  *Behavior:*  |||
 | autotopic | set it =on= and every rack name is automatically used as source topic for the device definition (=racks= attribute is required and the value is attached to the =topic= attribute value); useful if you define your racks and devices on topics with the same names as the racks | =autotopic="off"= |
 | dir | sets the direction of the units: =topdown= - unit 1 is at the top of the rack; =bottomup= - unit 1 is at the bottom of the rack; =leftright= - units are shown horizontal with unit 1 at the left; =rightleft= - units are shown horizontal with unit 1 at the right | =dir="bottomup"= |
+| clicktooltip | if enabled <nop>JavaScript tooltips are only shown with a mouse click to the table cell instead of 'mouse over' (related: enablejstooltips, clicktooltiptext) | =clicktooltip="off"= |
 | enablejstooltips | enables/disables <nop>JavaScript tooltips | =enablejstooltips="1"= |
 | racks | a comma separated list of rack names to show; if omitted all racks found on topics (see =topic= attribute) are shown  | =racks="rack1,rack2"= |
 | steps | unit steps to display (useful if you use only every =steps= unit of a rack) | =steps="1"= |
@@ -44,6 +45,7 @@ Usage: =%<nop>RACKPLANNER{attribute1="value" attribute2="value" ... }%=
 | notesicon | if a 'notes' entry exists this icon will be displayed with the note as tooltip | =notesicon="%<nop>P%"= |
 | ownericon | only used for !JavaScript tooltips | =ownericon="%<nop>ICON{persons}%"= |
 |  *Formatting:*  |||
+| clicktooltiptext | tooltip text if clicktooltip is enabled | =clicktooltiptext="click for information"= |
 | columnwidth | column width | =columnwidth="50px"= |
 | devicebgcolor | default device background color | =devicebgcolor="#f0f0f0"= |
 | devicefgcolor | default device foreground color | =devicefgcolor="#000000"= |
@@ -65,7 +67,7 @@ Usage: =%<nop>RACKPLANNER{attribute1="value" attribute2="value" ... }%=
 | toolitpfgcolor | tooltip foreground color (default: color from definition table) | =tooltipfgcolor=""= |
 | tooltipfixleft | tooltip position fix (skin dependent) | =tooltipfixleft=-163= |
 | tooltipfixtop | tooltip position fix (skin dependent) | =tooltipfixtop=0= |
-| tooltipformat | tooltip format (replacements: =%<nop>DEVICE%=: device name; =%<nop>FORMFACTOR%=: form factor; =%<nop>RACK%=: rack name; =%<nop>SUNIT%=: starting unit; =%<nop>EUNIT%=: ending unit; =%<nop>OWNER%=: onwer; =%<nop>NOTES%=: notes; =%<nop>OWNERICON%=: owner icon; =%<nop>NOTESICON%=: notes icon; =%<nop>CONNECTEDTOICON%=: 'connected to' icon; =%<nop>CLOSEBUTTON%=: a close button)  | =tooltipformat="&lt;b&gt;&lt;span title="Device name"&gt;%<nop>DEVICE%:&lt;/span&gt;&lt;/b&gt; &lt;span title="Form factor"&gt;%<nop>FORMFACTOR%&lt;/span&gt; (&lt;span title="Start-End units"&gt;%<nop>SUNIT%-%<nop>EUNIT%&lt;/span&gt;, &lt;span title="Rack name"&gt;%<nop>RACK%&lt;/span&gt;)&lt;div title="Owner"&gt;%<nop>OWNERICON% %<nop>OWNER%&lt;/div&gt;&lt;div title="Connected to"&gt;%<nop>CONNECTEDTOICON% %<nop>CONNECTEDTO%&lt;/div&gt;&lt;div title="Notes"&gt;%<nop>NOTESICON% %<nop>NOTES%&lt;/div&gt;&lt;div style="font-size:xx-small;text-align:right;"&gt;&lt;span style="background-color:red;" title="Close tooltip"&gt;%<nop>CLOSEBUTTON%&lt;/span&gt;&lt;/div&gt;"= |
+| tooltipformat | tooltip format (replacements: =%<nop>DEVICE%=: device name; =%<nop>FORMFACTOR%=: form factor; =%<nop>RACK%=: rack name; =%<nop>SUNIT%=: starting unit; =%<nop>EUNIT%=: ending unit; =%<nop>OWNER%=: onwer; =%<nop>NOTES%=: notes; =%<nop>OWNERICON%=: owner icon; =%<nop>NOTESICON%=: notes icon; =%<nop>CONNECTEDTOICON%=: 'connected to' icon; =%<nop>CLOSEBUTTON%=: a close button)  | =tooltipformat="&lt;b&gt;&lt;span title="Device name"&gt; %<nop>DEVICE%: &lt;/span&gt;&lt;/b&gt; &lt;span title="Form factor"&gt;%<nop>FORMFACTOR%&lt;/span&gt; (&lt;span title="Start-End units"&gt;%<nop>SUNIT%-%<nop>EUNIT%&lt;/span&gt;, &lt;span title="Rack name"&gt;%<nop>RACK%&lt;/span&gt;)&lt;div title="Owner"&gt;%<nop>OWNERICON% %<nop>OWNER% &lt;/div&gt;&lt;div title="Connected to"&gt;%<nop>CONNECTEDTOICON% %<nop>CONNECTEDTO% &lt;/div&gt;&lt;div title="Notes"&gt;%<nop>NOTESICON% %<nop>NOTES% &lt;/div&gt;&lt;div style="font-size:xx-small;text-align:right;"&gt;&lt;span style="background-color:red;" title="Close tooltip"&gt;%<nop>CLOSEBUTTON%&lt;/span&gt;&lt;/div&gt;"= |
 | unitcolumnbgcolor | background color of the unit column | =unitcolumnbgcolor="white"= |
 | unitcolumnfgcolor | foreground color of the unit column | =unitcolumnfgcolor="black"= |
 | unitcolumnformat | format of the unit column (replacement: =%U= - unit) | =unitcolumnformat="%U"= |
@@ -150,8 +152,9 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Plugin Author: | TWiki:Main.DanielRohde |
 |  Copyright: | &copy; 2006, TWiki:Main.DanielRohde |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | V1.004 (20 Apr 2007) |
+|  Plugin Version: | V1.005 (BETA) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  V1.005 (BETA) | TWiki:Main.DanielRohde: fixed links in 'connected to' or 'owner' field bug; added new attribute (clicktooltip...) |
 |  V1.004 (20 Apr 2007) | TWiki:Main.DanielRohde: fixed replacement in =tooltipformat= bug; improved =tooltipformat=; improved HTML rendering performance; added and fixed documenation; | 
 |  V1.003 (6 Mar 2007) | TWiki:Main.DanielRohde: fixed displayowner/displaynotes bug reported by TWiki:Main.PatrickTuite; added horizontal rendering feature requested by TWiki:Main.OlofStockhaus; added new attributes (tooltip..., columnwidth, textdir); fixed HTML validation bug; |
 |  V1.002 (26 Oct 2006): | TWiki:Main.DanielRohde: allowed multiple entries in a single unit; fixed rendering bug reported by TWiki:Main.SteveWray; fixed link color bug reported by TWiki:Main.SteveWray |

@@ -101,11 +101,13 @@ sub _initDefaults {
 		'tooltipfixtop'=>0,
 		'tooltipbgcolor'=>"",
 		'tooltipfgcolor'=>"",
-		'tooltipformat'=>'<b><span title="Device name">%DEVICE%:</span></b> <span title="Form factor">%FORMFACTOR%</span> (<span title="Start-End units">%SUNIT%-%EUNIT%</span>, <span title="Rack name"> %RACK%</span>)<div title="Owner">%OWNERICON% %OWNER%</div><div title="Connected to">%CONNECTEDTOICON% %CONNECTEDTO%</div><div title="Notes">%NOTESICON% %NOTES%</div> <div style="font-size:xx-small;text-align:right;"><span style="background-color:red;" title="Close tooltip">%CLOSEBUTTON%</span></div>',
+		'tooltipformat'=>'<b><span title="Device name"> %DEVICE%: </span></b> <span title="Form factor">%FORMFACTOR%</span> (<span title="Start-End units">%SUNIT%-%EUNIT%</span>, <span title="Rack name"> %RACK%</span>)<div title="Owner">%OWNERICON% %OWNER% </div><div title="Connected to">%CONNECTEDTOICON% %CONNECTEDTO% </div><div title="Notes">%NOTESICON% %NOTES% </div> <div style="font-size:xx-small;text-align:right;"><span style="background-color:red;" title="Close tooltip">%CLOSEBUTTON%</span></div>',
+		'clicktooltip'=> 0,
+		'clicktooltiptext'=>'click for information',
 	);
 
 	@renderedOptions = ( 'name', 'notesicon','conflicticon', 'connectedtoicon', 'ownericon', 'emptytext' );
-	@flagOptions = ( 'autotopic', 'displaystats', 'displayconnectedto', 'displaynotes', 'displayowner', 'displayunitcolumn','enablejstooltips' );
+	@flagOptions = ( 'autotopic', 'displaystats', 'displayconnectedto', 'displaynotes', 'displayowner', 'displayunitcolumn','enablejstooltips','clicktooltip' );
 
 	$rpId=0;
 
@@ -134,7 +136,7 @@ sub _initOptions {
                 my $v = $params{$option};
                 if (defined $v) {
                         if (grep /^\Q$option\E$/, @flagOptions) {
-                                $options{$option} = ($v!~/^(0|off)$/i);
+                                $options{$option} = ($v!~/^(0|off|false|no)$/i);
                         } else {
                                 $options{$option} = $v;
                         }
@@ -273,13 +275,17 @@ sub _renderHorizontal {
 					my $unitId = "RPP_${rpId}_${rackNumber}_".abs($unit);
 					my ($fgcolor, $bgcolor, $style) = &_getColorsAndStyle($$entryRef{'colimg'});
 
-					my $title= $options{'enablejstooltips'}
-							? &_renderJSTooltipText("${unitId}_TT",$entryRef, abs($unit),abs($unit+$colspan-1))
-							: $$entryRef{'formfactor'}.'('.abs($unit).'-'.(abs($unit+$colspan-1)).')';
+					my $title= $$entryRef{'formfactor'}.'('.abs($unit).'-'.(abs($unit+$colspan-1)).')';
 
-					$tooltips .= &_renderHiddenTooltip("${unitId}_TT", $unitId, $title, $fgcolor, $bgcolor) if $options{'enablejstooltips'};
+					$tooltips .= &_renderHiddenTooltip("${unitId}_TT", $unitId, &_renderJSTooltipText("${unitId}_TT",$entryRef, abs($unit),abs($unit+$colspan-1)), $fgcolor, $bgcolor) if $options{'enablejstooltips'};
+
+					my $tooltipshow=$options{'enablejstooltips'}?"rppTooltipShow('${unitId}_TT','$unitId',$options{'tooltipfixleft'},$options{'tooltipfixtop'},true);":"";
+					my($onmouseover, $onclick);
+					$onmouseover=$options{'clicktooltip'}?"":$tooltipshow;
+					$onclick=$options{'clicktooltip'}?$tooltipshow:"";
+					
 					$rackRows[$rackNumber] .= $cgi->td({
-						-title=>($options{'enablejstooltips'}?"":&_encodeTitle($title)),
+						-title=>$options{'enablejstooltips'}&&$options{'clicktooltip'}?$options{'clicktooltiptext'}:&_encodeTitle($title),
 						-align=>($options{'textdir'}=~/^topdown$/i)?'center':'left', 
 						-valign=>'top', 
 						-colspan=>$colspan, 
@@ -287,8 +293,8 @@ sub _renderHorizontal {
 						-bgcolor=>$bgcolor,
 						-width=>$options{'columnwidth'},
 						-id=>$unitId,
-						-onmouseover=>$options{'enablejstooltips'}?"rppTooltipShow('${unitId}_TT','$unitId',$options{'tooltipfixleft'},$options{'tooltipfixtop'},true);":"",
-						##-onmouseout=>$options{'enablejstooltips'}?"rppTooltipHide('${unitId}_TT');":"",
+						-onmouseover=>$onmouseover,
+						-onclick=>$onclick,
 						}, 
 						&_renderTextContent($entryRef)
 						);
@@ -423,25 +429,27 @@ sub _render {
 
 					my $unitId = "RPP_${rpId}_${rackNumber}_".abs($unit);
 					$fillRows=$rowspan-1;
-					my $title= $options{'enablejstooltips'}
-							? &_renderJSTooltipText("${unitId}_TT", $entryRef, abs($unit),abs($unit+$rowspan-1))
-							: $$entryRef{'formfactor'}.'('.abs($unit).'-'.(abs($unit+$rowspan-1)).')';
+					my $title =  $$entryRef{'formfactor'}.'('.abs($unit).'-'.(abs($unit+$rowspan-1)).')';
 
 					($fgcolor, $bgcolor, $style) = &_getColorsAndStyle($$entryRef{'colimg'});
 
-					$tooltips .= &_renderHiddenTooltip("${unitId}_TT", $unitId, $title, $fgcolor, $bgcolor) if $options{'enablejstooltips'};
+					$tooltips .= &_renderHiddenTooltip("${unitId}_TT", $unitId, &_renderJSTooltipText("${unitId}_TT", $entryRef, abs($unit),abs($unit+$rowspan-1)), $fgcolor, $bgcolor) if $options{'enablejstooltips'};
 					$itd .= &_renderTextContent($entryRef);
+					my $tooltipshow=$options{'enablejstooltips'}?"rppTooltipShow('${unitId}_TT','$unitId',$options{'tooltipfixleft'},$options{'tooltipfixtop'},true);":"";
+					my($onmouseover, $onclick);
+					$onmouseover=$options{'clicktooltip'}?"":$tooltipshow;
+					$onclick=$options{'clicktooltip'}?$tooltipshow:"";
 
 					$itd = $cgi->td({
-						-title=>($options{'enablejstooltips'}?"":&_encodeTitle($title)),
+						-title=>$options{'enablejstooltips'}&&$options{'clicktooltip'}?$options{'clicktooltiptext'}:&_encodeTitle($title),
 						-valign=>'top', 
 						-rowspan=>$rowspan, 
 						-nowrap=>'nowrap',
 						-style=>$style,
 						-bgcolor=>$bgcolor,
 						-id=>$unitId,
-						-onmouseover=>$options{'enablejstooltips'}? "rppTooltipShow('${unitId}_TT','$unitId',$options{'tooltipfixleft'},$options{'tooltipfixtop'},true);":"",
-						##-onmouseout=>$options{'enablejstooltips'}?"rppTooltipHide('${unitId}_TT');":"",
+						-onmouseover=>$onmouseover,
+						-onclick=>$onclick,
 						}, 
 						$itd)."\n";
 				} else {
@@ -880,7 +888,7 @@ sub _encode_entities {
 sub _encodeTitle {
 	my ($title, $dontEncodeEntities) = @_;
 	return "" unless defined $title;
-	$title =~ s/<[\/]?\w+[^>]*>//g;
+	$title =~ s/<[\/]?\w+[^>]*>//sg;
 	$title =~ s/\[\[[^\]]+\]\[([^\]]+)\]\]/$1/g;
 	$title =~ s/\[\[([^\]]+)\]\]/$1/g;
 	
