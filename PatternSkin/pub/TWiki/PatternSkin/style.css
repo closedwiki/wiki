@@ -440,7 +440,7 @@ table.twikiFormTable th.twikiFormTableHRow a:visited {
 .twikiFormSteps {
 	text-align:left;
 	padding:.25em 0 0 0;
-	border-width:1px 0;
+	border-width:1px 0 0 0;
 	border-style:solid;
 }
 .twikiFormStep {
@@ -465,7 +465,10 @@ table.twikiFormTable th.twikiFormTableHRow a:visited {
 .twikiFormStep p {
 	margin:.3em 0;
 }
-
+.twikiFormSteps .twikiLast {
+	border-bottom-style:solid;
+	border-bottom-width:1px;
+}
 .twikiToc {
 	margin:1em 0;
 	padding:.3em 0 .6em 0;
