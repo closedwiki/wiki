@@ -120,7 +120,7 @@ To install plugin:
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.MartinCleaver (2002, 2004), TWiki:Main.ArthurClemens (2007) |
-|  Plugin Version: | 04 May 2007 |
+|  Plugin Version: | 05 May 2007 |
 |     History: | <!-- specify latest version first -->&nbsp; |
 |  05 May 2007 | Arthur Clemens: fixed a wrong function call, thanks TWiki:Main.JohnFitzpatrick. |
 |  04 May 2007 | Arthur Clemens: spacing out uses a Core function (from Plugins version 1.13; fallback for older versions); added support for spacing out of "underscore topic names"; added optional removal of anchor dashes. |
