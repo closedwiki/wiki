@@ -9,8 +9,6 @@ Preference settings local to your site should be set in [[%LOCALSITEPREFS%]] (th
 
 [[TWikiVariables#PreferencesVariables][Read more]] on how to set Preferences Variables.
 
-%EDITPREFERENCES{"TWikiPreferencesForm"}% 
-_(Click for form-based editing of existing preferences.)_
 %TOC%
 
 #DefaultWebPreferences
