@@ -14,8 +14,12 @@
       * Optional are the fields =cc=, =subject= and =body=
       * Field =from= may be used but by default the address of =%<nop>WIKIWEBMASTER%= is used (this is set to: %WIKIWEBMASTER%)
 
+
+
 ---++ Example
 ---+++ Example form
+
+This form only works if this plugin is enabled and =%<nop>SENDEMAIL%= is written in the topic - see [[#PluginTest][Plugin Tests]] below to check this.
 
 <form enctype="application/x-www-form-urlencoded" name="mailform" action="" method="post">
 <input name="sendmail" type="hidden" value="on" />
@@ -23,7 +27,7 @@
 <p>CC:<br /><input type="text" class="twikiInputField" id="cc" name="cc" size="30"  value="" /></p>
 <p>Subject:<br /><input type="text" class="twikiInputField" id="subject" name="subject" size="30" value="" /></p>
 <p>Message:<br /><textarea class="twikiInputField" cols="80" name="body" rows="6"></textarea></p>
-<p><input type="submit" class="twikiSubmit" value="Send message" /></p>
+<p><input type="submit" class="twikiSubmit" value="Send message" %IF{"context SendEmailPluginEnabled" then='' else='disabled="disabled"'}% /></p>
 </form>
 
 ---+++ Example usage
@@ -39,6 +43,14 @@
 </form>
 </verbatim>
 
+
+
+#PluginTest
+---++ Plugin Tests
+   * !SendEmailPlugin is %IF{"context SendEmailPluginEnabled" then='%GREEN%enabled%ENDCOLOR%' else='%RED%not enabled%ENDCOLOR%'}%.
+
+
+
 #PluginSettings
 ---++ Plugin Settings
 
@@ -53,6 +65,8 @@ Plugin settings are stored as preferences variables. To reference a plugin setti
 
    * Debug plugin: (See output in =data/debug.txt=)
       * Set DEBUG = 0
+
+
 
 ---++ Plugin Installation Instructions
 
