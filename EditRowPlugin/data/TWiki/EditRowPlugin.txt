@@ -14,9 +14,10 @@ some of !TablePlugin. Features:
    1 You can edit one row at a time, instead of having to edit the entire
      table. This solves the problem with the long page rendering times
      required to show all the HTML for a full table edit on big tables.
-   1 Row being edited can be presented horizontally (as !EditTablePlugin) or
-     Form-style, like !EditTablerowPlugin. Makes it easier to edit very
+   1 Row being edited can be presented horizontally, as with !EditTablePlugin,
+     or Form-style, like !EditTablerowPlugin. Makes it easier to edit very
      wide tables.
+   1 Supports footer rows.
    1 Supports sorting columns in tables using Javascript, avoiding the
      round-trip to the server required by !TablePlugin. Can fall back to
      !TablePlugin if Javascript isn't available.
@@ -24,9 +25,9 @@ some of !TablePlugin. Features:
      adding rows.
    1 Gets row numbering right (takes account of headers).
    1 It's faster than the individual plugins it replaces.
-   1 Coded using a clean object-oriented architecture, which
+   1 (geeky) Coded using a clean object-oriented architecture, which
      makes it easily extensible.
-   1 Uses a simple REST interface for saving changes, which allows
+   1 (geeky) Uses a simple REST interface for saving changes, which allows
      Javascript table editors to use the same interface to save.
 
 Another great TWiki extension from the <a style="text-decoration:none" href="http://wikiring.com"><img src="%ATTACHURLPATH%/wikiring.png" alt="" /> *WikiRing* </a> - working together to improve your wiki experience!
@@ -38,13 +39,13 @@ and you can use it to edit the entire table, or just one row at a time.
 
 Add =%<nop>EDITTABLE{...}%= on the line before the first row of an existing table to make it editable. Parameters:
 
-   * =format= - The format of the cells in a row of the table. The format is
+   * ==format== - The format of the cells in a row of the table. The format is
      defined like a table row, where the cell data specify the type for each
      cell. For example, =format="| text,16 | label |"=. Cells can be any of
      the following types:
-      * =text, &lt;size&gt;, &lt;initial value&gt;= Simple text field
+      * =text, &lt;size&gt;, &lt;initial value&gt;= Simple text field. Initial value is optional.
       * =textarea, &lt;rows&gt;x&lt;columns&gt;, &lt;initial value&gt;=
-        Multirow text box.
+        Multirow text box. Initial value is optional.
       * =select, &lt;size&gt;, &lt;option 1&gt;, &lt;option 2&gt;, etc=
         Select one from a list of choices.
       * =radio, &lt;size&gt;, &lt;option 1&gt;, &lt;option 2&gt;,= etc.
@@ -53,29 +54,29 @@ Add =%<nop>EDITTABLE{...}%= on the line before the first row of an existing tabl
       * =checkbox, &lt;size&gt;, &lt;option 1&gt;, &lt;option 2&gt;, etc=
         Checkboxes. =size=
         indicates the number of buttons per line in edit mode.
-      * label, 0, &lt;label text&gt; Fixed label.
+      * =label, 0, &lt;label text&gt;= Fixed label.
       * =row= The row number, automatically worked out.
-      * =date, &lt;size&gt;, &lt;initial value&gt;, &lt;DHTML date format&gt;=
-   * =changerows= - Rows can be added and removed if ="on"=. Rows can be
+      * =date, &lt;size&gt;, &lt;initial value&gt;, &lt;DHTML date format&gt;= Date. Initial value and date format are both optional.
+   * ==changerows== - Rows can be added and removed if ="on"=. Rows can be
      added but not removed if ="add"=. Defaults to the value of the
      [[TWikiVariables][preference]] =CHANGEROWS=, or =off= if it isn't set.
-   * =quietsave= - Quiet Save button is shown if ="on"=. Defaults to the
+   * ==quietsave== - Quiet Save button is shown if ="on"=. Defaults to the
      value of the [[TWikiVariables][preference]] =QUIETSAVE=, or =off= if it
      isn't set.
-   * =include= -
+   * ==include== -
      Name of another topic defining the EDITTABLE parameters. The first
      %<nop>EDITTABLE% in the topic is used. This is useful if you have many
      topics with the same table format and you want to update the format in
      one place.
-   * =headerrows= -
+   * ==headerrows== -
      Number of rows to treat as headers. Header rows are not 
      editable, and will not be sorted. =headerislabel= is also 
      supported for EditTablePlugin compatibility (equivalent 
      to =headderrows="1"=) |
-   * =footerrows= -
+   * ==footerrows== -
      Number of rows to treat as footers. Footer rows are not 
      editable and will not be sorted. |
-   * =orientrowedit= -
+   * ==orientrowedit== -
      unique to !EditRowPlugin, this parameter controls the 
      orientation of a row when it is being edited. It can be
      set to =horizontal= (the default) or =vertical=, which
@@ -144,28 +145,27 @@ These preferences can be defined in %MAINWEB%.TWikiPreferences, in !WebPreferenc
 ---+++ !EditTablePlugin
 At this time most features of !EditTablePlugin are supported. Known exceptions
 are:
-   * the =helptopic= and =editbutton= switches,
+   * the =helptopic= and =editbutton= parameters,
    * the =EDITCELL= feature,
-   * the "Initial values" feature for templating new row values,
    * Plugin preferences (though global preferences are compatible)
 ---+++ !TablePlugin
 Javascript sorting in !EditRowPlugin is much faster than !TablePlugin. However
 !TablePlugin has many features this plugin does not support. The two plugins
 can safely be used together.
 ---+++ !EditTablerowPlugin
-Provides the vertical row presentation editing interface as
-!EditTablerowPlugin, with the row being edited show in context in the table.
+Provides the vertical row editing interface like
+!EditTablerowPlugin, with the row being edited shown in context in the table.
 
 ---++ Installation Instructions
 
 %$INSTALL_INSTRUCTIONS%
 
 ---++ Using the REST interface
-The plugin saves changes to tables via a REST handler. Developers may find
-this interface useful when developing their own Javascript tools that
+The plugin saves changes to tables via a [[http://en.wikipedia.org/wiki/Representational_State_Transfer][REST]] handler. Javascript developers may find
+this interface useful when developing their own tools that
 manipulate tables.
 
-The REST handler is invoked using the following URL format:
+The REST handler is invoked using the following URI format:
 
 &lt;twiki-bin-path>/rest/EditRowPlugin/save
 
@@ -185,11 +185,12 @@ The value of each individual cell is stored in a parameter called =erp_&lt;table
 
 ---++ Plugin Info
 
-|  Plugin Author(s): | Crawford Currie |
+|  Plugin Author(s): | Crawford Currie http://c-dot.co.uk |
 |  Plugin Version: | %$VERSION% |
 |  Copyright: | &copy; 2007 Wind<nop>River Inc. |
 |  License: | [[http://www.gnu.org/licenses/gpl.html][GPL (Gnu General Public License)]] |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  13641 | Bugs:Item4020 Improved the table anchors for a better editing experience. Fixed calendar formats. Fixed table footer sorting. Disabled label edits. Fixed multi-malued checkboxes. |
 |  13615 | Bugs:Item3882 added initial values support Bugs:Item4009 fixed included tables. Also fixed a bug with variable expansion reported in the dev topic. |
 |  13609 | Bugs:Item4003: fixed colspan. Also added support for headerrows and footerrows parameters from %TABLE |
 |  13560 | Bugs:Item4002 Problems with blank lines, multi-value edits, and line continuations resolved |

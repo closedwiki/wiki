@@ -139,12 +139,12 @@ sub defend {
     my( $text ) = @_;
     my $n = scalar( @refs );
     push( @refs, $text );
-    return "\07$n\07";
+    return "X\07$n\07X";
 }
 
 # Replace protected content.
 sub postRenderingHandler {
-    while( $_[0] =~ s/\07([0-9]+)\07/$refs[$1]/gi ) {
+    while( $_[0] =~ s/X\07([0-9]+)\07X/$refs[$1]/gi ) {
     }
 }
 
@@ -237,9 +237,13 @@ sub save {
                                    { minor => $minor });
         }
 
+        # Use a row anchor within range of the row being edited
         my $anchor = "erp_$urps->{erp_active_table}";
-        if ($urps->{erp_active_row} > 0) {
-            $anchor .= "_$urps->{erp_active_row}";
+        if ($urps->{erp_active_row} > 5) {
+            my $before = $urps->{erp_active_row} - 1;
+            $anchor .= "_$before";
+        } else {
+            $anchor .= "_1";
         }
         if ($TWiki::Plugins::VERSION < 1.11) {
             my $p = '';

@@ -2,6 +2,7 @@
 package TWiki::Plugins::EditRowPlugin::TableCell;
 
 use strict;
+use Assert;
 
 use TWiki::Func;
 
@@ -40,12 +41,15 @@ sub stringify {
 # Generate a sort command suitable for sorting the table columns
 sub _getCell {
     my ($this, $isHeader) = @_;
-
     my $text = $this->{text};
+    $text = '-' unless defined $text;
     if ($isHeader) {
         $text = CGI::span(
             { class => 'erpSort',
-              onclick => "javascript: return sortTable(this, $this->{number}, false);",
+              onclick => 'javascript: return sortTable(this, '.
+                $this->{number}.', false, '.
+                  $this->{row}->{table}->{attrs}->{headerrows}.','.
+                    $this->{row}->{table}->{attrs}->{footerrows}.');',
           }, $text);
     }
     return $this->{precruft}.$text.$this->{postcruft};
@@ -55,7 +59,8 @@ sub renderForDisplay {
     my ($this, $colDefs, $isHeader) = @_;
     my $colDef = $colDefs->[$this->{number} - 1] || $defCol;
 
-    if ($colDef->{type} eq 'row') {
+    if (!$this->{isHeader} && !$this->{isFooter} &&
+          $colDef->{type} eq 'row') {
         $this->{text} = $this->{row}->{index};
     }
     return $this->_getCell($isHeader);
@@ -88,35 +93,53 @@ sub renderForEdit {
         }
         $text .= "</select>";
 
-    } elsif( $colDef->{type} =~ /^(radio|checkbox)$/ ) {
+    } elsif ($colDef->{type} =~ /^(checkbox|radio)/) {
 
+        my %attrs;
+        my @defaults;
+        my @options;
         $expandedValue = ",$expandedValue,";
+
         my $i = 0;
         foreach my $option (@{$colDef->{values}}) {
+            push(@options, $option);
             my $expandedOption =
               TWiki::Func::expandCommonVariables($option);
             $expandedOption =~ s/^\s*(.*?)\s*$/$1/;
             $expandedOption =~ s/(\W)/\\$1/g;
-            my %opts = (
-                type => $colDef->{type},
-                name => $cellName,
-                value => $option,
-               );
-            $opts{checked} = 'checked'
-              if ($expandedValue =~ /,$expandedOption,/);
-            $text .= CGI::input(\%opts);
-            $text .= " $option ";
-            if( $colDef->{size} > 1 ) {
-                if ($i % $colDef->{size}) {
-                    $text .= '<br />';
-                }
+            $attrs{$option}{label} = $expandedOption;
+            if ($colDef->{type} eq 'checkbox') {
+                $attrs{$option}{class} = 'twikiEditFormCheckboxField';
+            } else {
+                $attrs{$option}{class} =
+                  'twikiRadioButton twikiEditFormRadioField';
             }
-            $i++;
+
+            if ($expandedValue =~ /,\s*$expandedOption\s*,/) {
+                $attrs{$option}{checked} = 'checked';
+                push( @defaults, $option );
+            }
+        }
+        if ($colDef->{type} eq 'checkbox') {
+            $text = CGI::checkbox_group(
+                -name => $cellName,
+                -values => \@options,
+                -defaults => \@defaults,
+                -columns => $colDef->{size},
+                -attributes => \%attrs );
+
+        } else {
+            $text = CGI::radio_group(
+                -name => $cellName,
+                -values => \@options,
+                -default => $defaults[0],
+                -columns => $colDef->{size},
+                -attributes => \%attrs );
         }
 
     } elsif( $colDef->{type} eq 'row' ) {
 
-        $text = $this->{row}->{index};
+        $text = $isHeader ? '' : $this->{row}->{index};
 
     } elsif( $colDef->{type} eq 'textarea' ) {
 
@@ -141,10 +164,14 @@ sub renderForEdit {
             $text = CGI::textfield(-name => $cellName, -size => 10);
         } else {
             $text = TWiki::Contrib::JSCalendarContrib::renderDateForEdit(
-                $cellName, $this->{text}, $colDef->{values}->[0]);
+                $cellName, $this->{text}, $colDef->{values}->[1]);
         }
 
-    } else { #  if( $colDef->{type} =~ /^(text|label)$/)
+    } elsif( $colDef->{type} eq 'label' ) {
+
+        $text = $this->{text};
+
+    } else { #  if( $colDef->{type} =~ /^text.*$/)
 
         my $val = $this->{text};
         $text = CGI::textfield({

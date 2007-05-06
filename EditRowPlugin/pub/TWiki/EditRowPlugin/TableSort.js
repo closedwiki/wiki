@@ -9,15 +9,17 @@
 //        etc.
 //  rev - If true, the column is sorted in reverse (descending) order
 //        initially.
+//  headrows - number of rows in table header (unsorted)
+//  footrows number of rows in table footer (unsorted)
 //
 // Automatically detects and sorts data types; numbers and dates
 
-function sortTable(tblEl, col, rev) {
+function sortTable(tblEl, col, rev, headrows, footrows) {
     
     // Get the table or table section to sort.
     // Search up to find the containing table
     while (tblEl != null &&
-           tblEl.tagName != "TABLE") {
+           tblEl.tagName.toUpperCase() != "TABLE") {
         tblEl = tblEl.parentNode;
     }
 
@@ -25,10 +27,26 @@ function sortTable(tblEl, col, rev) {
         return;
     }
 
+    // Find the TBODY, and work out the number of rows
+    var tblBody = null;
+    var gotBody = false;
     for (var i = 0; i < tblEl.childNodes.length; i++) {
-        if (tblEl.childNodes[i].tagName == "TBODY") {
-            tblEl = tblEl.childNodes[i];
-            break;
+        var tn = tblEl.childNodes[i].tagName;
+        if (tn != null)
+            tn = tn.toUpperCase();
+        if (tn == "THEAD") {
+            // Bloody TablePlugin generates footer rows in the THEAD!
+            if (gotBody)
+                footrows -= tblEl.childNodes[i].rows.length;
+            else
+                headrows -= tblEl.childNodes[i].rows.length;
+        }
+        else if (tn == "TBODY") {
+            tblBody = tblEl.childNodes[i];
+            gotBody = true;
+        }
+        else if (tn == "TFOOT") {
+            footrows -= tblEl.childNodes[i].rows.length;
         }
     }
 
@@ -65,15 +83,17 @@ function sortTable(tblEl, col, rev) {
     var testVal;
     var cmp;
     
-    for (i = 0; i < tblEl.rows.length - 1; i++) {
+    var start = (headrows > 0 ? headrows : 0);
+    var end = tblBody.rows.length - (footrows > 0 ? footrows : 0);
+    for (i = start; i < end - 1; i++) {
         
         // Assume the current row has the minimum value.
         minIdx = i;
-        minVal = getTextValue(tblEl.rows[i].cells[col]);
+        minVal = getTextValue(tblBody.rows[i].cells[col]);
         
         // Search the rows that follow the current one for a smaller value.
-        for (j = i + 1; j < tblEl.rows.length; j++) {
-            testVal = getTextValue(tblEl.rows[j].cells[col]);
+        for (j = i + 1; j < end; j++) {
+            testVal = getTextValue(tblBody.rows[j].cells[col]);
             cmp = compareValues(minVal, testVal);
             // Negate the comparison result if the reverse sort flag is set.
             if (tblEl.reverseSort[col])
@@ -89,13 +109,14 @@ function sortTable(tblEl, col, rev) {
         // By now, we have the row with the smallest value. Remove it from the
         // table and insert it before the current row.
         if (minIdx > i) {
-            tmpEl = tblEl.removeChild(tblEl.rows[minIdx]);
-            tblEl.insertBefore(tmpEl, tblEl.rows[i]);
+            tmpEl = tblBody.removeChild(tblBody.rows[minIdx]);
+            tblBody.insertBefore(tmpEl, tblBody.rows[i]);
         }
     }
     
     // Make it look pretty.
-    makePretty(tblEl, col);
+    // Not used, but kept for when TablePlugin uses classes.
+    //makePretty(tblBody, col);
     
     // Restore the table's display style.
     tblEl.style.display = oldDsply;
@@ -260,6 +281,7 @@ function normalizeString(s) {
 
 //-----------------------------------------------------------------------------
 // Functions to update the table appearance after a sort.
+// Not used, but kept for when TablePlugin uses classes.
 //-----------------------------------------------------------------------------
 
 // Style class names.
@@ -305,75 +327,6 @@ function makePretty(tblEl, col) {
             if (i == col)
                 cellEl.className += " " + colClsNm;
             cellEl.className = normalizeString(cellEl.className);
-        }
-    }
-}
-
-function setRanks(tblEl, col, rev) {
-    
-    // Determine whether to start at the top row of the table and go down or
-    // at the bottom row and work up. This is based on the current sort
-    // direction of the column and its reversed flag.
-    
-    var i    = 0;
-    var incr = 1;
-    if (tblEl.reverseSort[col])
-        rev = !rev;
-    if (rev) {
-        incr = -1;
-        i = tblEl.rows.length - 1;
-    }
-    
-    // Now go through each row in that direction and assign it a rank by
-    // counting 1, 2, 3...
-    
-    var count   = 1;
-    var rank    = count;
-    var curVal;
-    var lastVal = null;
-    
-    // Note that this loop is skipped if the table was sorted on the name
-    // column.
-    while (col > 1 && i >= 0 && i < tblEl.rows.length) {
-        
-        // Get the value of the sort column in this row.
-        curVal = getTextValue(tblEl.rows[i].cells[col]);
-        
-        // On rows after the first, compare the sort value of this row to the
-        // previous one. If they differ, update the rank to match the current row
-        // count. (If they are the same, this row will get the same rank as the
-        // previous one.)
-        if (lastVal != null && compareValues(curVal, lastVal) != 0)
-            rank = count;
-        // Set the rank for this row.
-        tblEl.rows[i].rank = rank;
-        
-        // Save the sort value of the current row for the next time around and bump
-        // the row counter and index.
-        lastVal = curVal;
-        count++;
-        i += incr;
-    }
-    
-    // Now go through each row (from top to bottom) and display its rank. Note
-    // that when two or more rows are tied, the rank is shown on the first of
-    // those rows only.
-    
-    var rowEl, cellEl;
-    var lastRank = 0;
-    
-    // Go through the rows from top to bottom.
-    for (i = 0; i < tblEl.rows.length; i++) {
-        rowEl = tblEl.rows[i];
-        cellEl = rowEl.cells[0];
-        // Delete anything currently in the rank column.
-        while (cellEl.lastChild != null)
-            cellEl.removeChild(cellEl.lastChild);
-        // If this row's rank is different from the previous one, Insert a new text
-        // node with that rank.
-        if (col > 1 && rowEl.rank != lastRank) {
-            cellEl.appendChild(document.createTextNode(rowEl.rank));
-            lastRank = rowEl.rank;
         }
     }
 }
