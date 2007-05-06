@@ -130,6 +130,7 @@ END
 }
 
 writeFile($modPath, "build.pl", $data{"build.pl"});
+chmod 0775, "$modPath/build.pl";
 writeFile($modPath, "DEPENDENCIES", $data{DEPENDENCIES});
 writeFile($modPath, "MANIFEST", $data{MANIFEST});
 
