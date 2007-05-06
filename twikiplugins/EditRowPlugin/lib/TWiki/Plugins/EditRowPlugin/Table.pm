@@ -214,7 +214,9 @@ sub _finalise {
     # Assign row index numbers to body cells
     my $index = 0;
     foreach my $row (@{$this->{rows}}) {
-        unless ($row->{isHeader} || $row->{isFooter}) {
+        if ($row->{isHeader} || $row->{isFooter}) {
+            $row->{index} = '';
+        } else {
             $row->{index} = $index++;
         }
     }
@@ -314,7 +316,7 @@ sub renderForDisplay {
          });
 
     my $script = 'view';
-    unless ($showControls || TWiki::Func::getContext()->{authenticated}) {
+    if ($showControls && !TWiki::Func::getContext()->{authenticated}) {
         # A  bit of a hack. If the user isn't logged in, then show the
         # table edit button anyway, but redirect them to viewauth to force
         # login.

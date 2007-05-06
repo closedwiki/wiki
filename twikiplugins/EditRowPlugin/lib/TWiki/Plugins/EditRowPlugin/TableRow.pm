@@ -67,7 +67,7 @@ sub renderForEdit {
     my ($this, $colDefs, $showControls, $orient) = @_;
 
     my $id = "$this->{table}->{number}_$this->{number}";
-    my $anchor = CGI::a({ name=>"erp_$id" });
+    my $anchor = CGI::a({ name=>"erp_$id" }).' ';
 
     if ($orient eq 'vertical') {
         # Each column is presented as a row
@@ -82,7 +82,8 @@ sub renderForEdit {
             $hdr = $hdr->{text} if $hdr;
             $hdr ||= '';
             my $text = $cell->renderForEdit($colDefs, $this->{isHeader});
-            push(@rows, "| $hdr| $text $anchor |$empties");
+            push(@rows, "| $hdr|$text$anchor|$empties");
+            $anchor = '';
             $col++;
         }
         if ($showControls) {
@@ -120,11 +121,18 @@ sub renderForDisplay {
         # Add the row anchor for editing. It's added to the first non-empty
         # cell or, failing that, the first cell. This is to minimise the
         # risk of breaking up implied colspans.
-        if ($addAnchor && $cell->{text} =~ /\S/) {
-            $cell->{text} .= $anchor;
+        my $text = $cell->renderForDisplay($colDefs, $this->{isHeader});
+        if ($addAnchor && $text =~ /\S/) {
+            # If the cell has *'s, it is seen by TablePlugin as a header.
+            # We have to respect that.
+            if ($text =~ /^(\s*.*)(\*\s*)$/) {
+                $text = $1.$anchor.$2;
+            } else {
+                $text .= $anchor;
+            }
             $addAnchor = 0;
         }
-        push(@out, $cell->renderForDisplay($colDefs, $this->{isHeader}));
+        push(@out, $text);
     }
 
     if ($withControls) {
@@ -133,24 +141,31 @@ sub renderForDisplay {
             # Otherwise it disables sorting :-(
             my $text = '';
             if ($addAnchor) {
-                $text = $anchor;
+                $text .= $anchor;
                 $addAnchor = 0;
             }
             unshift(@out, " *$text* ");
         } else {
+            # Use a row anchor within range of the row being edited
+            my $row_anchor = 1;
+            if ($this->{number} > 5) {
+                $row_anchor = $this->{number} - 1;
+            }
+            $row_anchor = "$this->{table}->{number}_$row_anchor";
             my $url;
             if ($TWiki::Plugins::VERSION < 1.11) {
                 $url = TWiki::Func::getScriptUrl(
                     $this->{table}->{web}, $this->{table}->{topic}, 'view').
                       "?erp_active_table=$this->{table}->{number}".
-                        ";erp_active_row=$this->{number}#erp_$id";
+                        ";erp_active_row=$this->{number}#erp_$row_anchor";
             } else {
                 $url = TWiki::Func::getScriptUrl(
                     $this->{table}->{web}, $this->{table}->{topic}, 'view',
                     erp_active_table => $this->{table}->{number},
                     erp_active_row => $this->{number},
-                    '#' => "erp_$id");
+                    '#' => "erp_$row_anchor");
             }
+
             my $button =
               "<a href='$url'>" . CGI::img({
                   -name => "erp_edit_$id",
@@ -173,7 +188,11 @@ sub renderForDisplay {
         $cell->{text} .= $anchor;
         push(@out, $cell->renderForDisplay($colDefs, $this->{isHeader}));
     }
-    return $this->{precruft}.join('|', @out).$this->{postcruft};
+    my $row = $this->{precruft}.join('|', @out).$this->{postcruft};
+    #$row =~ s/</&lt;/g; # DEBUG
+    #$row =~ s/\*/STAR/g; #DEBUG
+    #$row = '<br>'.$row; # DEBUG
+    return $row;
 }
 
 1;
