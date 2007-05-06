@@ -1,0 +1,4 @@
+# Release manifest for TWikiUserMappingContrib
+data/TWiki/TWikiUserMappingContrib.txt 0644 Documentation
+lib/TWiki/Contrib/TWikiUserMappingContrib.pm 0644 Perl module
+
