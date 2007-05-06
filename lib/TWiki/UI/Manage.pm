@@ -1354,7 +1354,7 @@ sub _restoreRevision {
 								topic => $topic,
 								params => [ 'change', 'denied' ]);
 	}
-	$session->{cgiQuery}->param(-name => 'action', -value => '');
+	$session->{cgiQuery}->delete('action');
 	TWiki::UI::Edit::edit( $session );
 }
 
