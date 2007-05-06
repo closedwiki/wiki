@@ -93,7 +93,7 @@ $def{STUBS} = $def{TYPE} eq 'Plugin' ? 'Plugins' : 'Contrib';
 
 # Templates for all required files are in this script, after __DATA__
 $/ = undef;
-my @DATA = split(/<<<< (.*?) >>>>/, <DATA>);
+my @DATA = split(/<<<< (.*?) >>>>\s*\n/, <DATA>);
 shift @DATA;
 my %data = @DATA;
 my $stubPath = "$def{MODULE}/lib/TWiki/$def{STUBS}";
