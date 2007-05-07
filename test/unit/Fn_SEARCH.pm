@@ -92,15 +92,14 @@ sub std_tests  {
     $this->assert_matches(qr/Ok-Topic/, $result);
     $this->assert_matches(qr/Ok\+Topic/, $result);
     
-#IS THIS IMPLEMENTED YET? IT FAILS    
-#    # word
-#    $result = $this->{twiki}->handleCommonTags(
-#        '%SEARCH{"blah" type="word" scope="text" nonoise="on" format="$topic"}%',
-#        $this->{test_web}, $this->{test_topic});
-#        
-#    $this->assert_matches(qr/OkTopic/, $result);
-#    $this->assert_matches(qr/Ok-Topic/, $result);
-#    $this->assert_does_not_match(qr/Ok\+Topic/, $result);
+    # word
+    $result = $this->{twiki}->handleCommonTags(
+        '%SEARCH{"blah" type="word" scope="text" nonoise="on" format="$topic"}%',
+        $this->{test_web}, $this->{test_topic});
+        
+    $this->assert_matches(qr/OkTopic/, $result);
+    $this->assert_matches(qr/Ok-Topic/, $result);
+    $this->assert_does_not_match(qr/Ok\+Topic/, $result);
     
     # ---------------------
     # Search string 'match'
