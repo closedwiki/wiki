@@ -292,6 +292,42 @@ $TWiki::cfg{AuthScripts} = 'attach,edit,manage,rename,save,upload,viewauth,rdiff
 $TWiki::cfg{AuthRealm} =
 'Enter your TWiki.LoginName. (Typically First name and last name, no space, no dots, capitalized, e.g. !JohnSmith, unless you chose otherwise). Visit TWiki.TWikiRegistration if you do not have one.';
 
+#---++ User Mapping
+# **SELECTCLASS TWiki::Users::*UserMapping**
+# This allows advanced users to write and over-ride the TWiki User and group mappings
+# rather than the loginname->TWikiUser and Groups definitions comming from TWiki 
+# user and group topics. Currently only TWikiUserMapping is implemented.
+# <ol><li>
+# TWiki::Users::TWikiUserMapping - uses TWiki user and group topics to determine user
+#   information and group memberships
+# </li><li>
+# TWiki::Users::BaseUserMapping - has only 2 users, {TWikiAdminUser} and {TWikiGuestUser}, with the Admin's login and password being set from this configure script. <b>no User registration.</b> (needs TemplateLogin)
+# </li></ol>
+$TWiki::cfg{UserMappingManager} = 'TWiki::Users::BaseUserMapping';
+
+#---++ Registration
+# **BOOLEAN**
+# If you want users to be able to use a login ID other than their
+# wikiname, you need to turn this on. It controls whether the 'LoginName'
+# box appears during the user registration process, and whether TWiki
+# tries to map login names to wikinames.
+$TWiki::cfg{Register}{AllowLoginName} = $FALSE;
+
+# **BOOLEAN**
+# by turning this option off, you can temporarily disable new user registration.
+# it will have no effect on existing users.
+$TWiki::cfg{Register}{EnableNewUserRegistration} = $TRUE;
+
+# **BOOLEAN EXPERT**
+# Hide password in registration email to the *user*
+# Note that TWiki sends admins a separate confirmation.
+$TWiki::cfg{Register}{HidePasswd} = $TRUE;
+
+# **BOOLEAN EXPERT**
+# Whether registrations must be verified by the user following
+# a link sent in an email to the user's registered email address
+$TWiki::cfg{Register}{NeedVerification} = $TRUE;
+
 #---++ Passwords
 # **SELECTCLASS none,TWiki::Users::*User**
 # Name of the password handler implementation. The password handler manages
@@ -343,35 +379,6 @@ $TWiki::cfg{Htpasswd}{FileName} = '$TWiki::cfg{DataDir}/.htpasswd';
 # <dt>plain</dt><dd> stores passwords as plain text (no encryption).</dd>
 # </dl>
 $TWiki::cfg{Htpasswd}{Encoding} = 'crypt';
-
-#---++ User Mapping
-# **SELECTCLASS TWiki::Users::*UserMapping**
-# This allows advanced users to write and over-ride the TWiki User and group mappings
-# rather than the loginname->TWikiUser and Groups definitions comming from TWiki 
-# user and group topics. Currently only TWikiUserMapping is implemented.
-# <ol><li>
-# TWiki::Users::TWikiUserMapping - uses TWiki user and group topics to determine user
-#   information and group memberships
-# </li></ol>
-$TWiki::cfg{UserMappingManager} = 'TWiki::Users::TWikiUserMapping';
-
-#---++ Registration
-# **BOOLEAN**
-# If you want users to be able to use a login ID other than their
-# wikiname, you need to turn this on. It controls whether the 'LoginName'
-# box appears during the user registration process, and whether TWiki
-# tries to map login names to wikinames.
-$TWiki::cfg{Register}{AllowLoginName} = $FALSE;
-
-# **BOOLEAN EXPERT**
-# Hide password in registration email to the *user*
-# Note that TWiki sends admins a separate confirmation.
-$TWiki::cfg{Register}{HidePasswd} = $TRUE;
-
-# **BOOLEAN EXPERT**
-# Whether registrations must be verified by the user following
-# a link sent in an email to the user's registered email address
-$TWiki::cfg{Register}{NeedVerification} = $TRUE;
 
 #---++ Paths
 # **PATH EXPERT**

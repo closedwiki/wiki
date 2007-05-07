@@ -55,6 +55,9 @@ sub set_up {
     $TWiki::cfg{RegistrationApprovals} = $approvalsDir;
     $TWiki::cfg{Register}{NeedVerification} = 1;
     $TWiki::cfg{MinPasswordLength} = 0;
+    $TWiki::cfg{UserMappingManager} = 'TWiki::Users::TWikiUserMapping';
+    $TWiki::cfg{Register}{EnableNewUserRegistration} = 1;
+    
 
     $this->{new_user_login} = 'sqwauk';
     $this->{new_user_fname} = 'Walter';
@@ -1084,6 +1087,61 @@ sub visible {
  $a =~ s/\r/CR/g;
  $a =~ s/ /SP/g;
  $a;
+}
+
+sub test_disabled_registration {
+    my $this = shift;
+    $TWiki::cfg{Register}{EnableNewUserRegistration} = 0;
+    $TWiki::cfg{Register}{NeedVerification}  =  0;
+    my $query = new CGI ({
+                          'TopicName' => [
+                                          'TWikiRegistration'
+                                         ],
+                          'Twk1Email' => [
+                                          $this->{new_user_email}
+                                         ],
+                          'Twk1WikiName' => [
+                                             $this->{new_user_wikiname}
+                                            ],
+                          'Twk1Name' => [
+                                         $this->{new_user_fullname}
+                                        ],
+                          'Twk0Comment' => [
+                                            ''
+                                           ],
+                          'Twk1LoginName' => [
+                                              $this->{new_user_login}
+                                             ],
+                          'Twk1FirstName' => [
+                                              $this->{new_user_fname}
+                                             ],
+                          'Twk1LastName' => [
+                                             $this->{new_user_sname}
+                                            ],
+                          'action' => [
+                                       'register'
+                                      ]
+                         });
+
+    $query->path_info( "/$this->{users_web}/TWikiRegistration" );
+    $this->{twiki}->finish();
+    $this->{twiki} = new TWiki( $TWiki::cfg{DefaultUserLogin}, $query);
+    $this->{twiki}->{net}->setMailHandler(\&TWikiFnTestCase::sentMail);
+
+    try {
+        TWiki::UI::Register::register_cgi($this->{twiki});    
+    } catch TWiki::OopsException with {
+        my $e = shift;
+        $this->assert_str_equals("attention", $e->{template},
+                                 $e->stringify());
+        $this->assert_str_equals("registration_disabled", $e->{def}, $e->stringify());
+    } catch Error::Simple with {
+        my $e = shift;
+        $this->assert(0,$e->stringify());
+    } otherwise {
+        my $e = shift;
+        $this->assert(0, "expected registration_disabled, got ".$e->stringify().' {'.$e->{template}.'}  {'.$e->{def}.'} '.ref($e));
+    }
 }
 
 1;

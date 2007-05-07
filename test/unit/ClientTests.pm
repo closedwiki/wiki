@@ -64,6 +64,7 @@ sub set_up {
     $TWiki::cfg{PasswordManager} = "TWiki::Users::HtPasswdUser";
     $TWiki::cfg{Htpasswd}{FileName} = "/tmp/junkhtpasswd";      #TODO: um, shouldn't we have a private dir, that is deleteable
     $TWiki::cfg{AuthScripts} = "edit";
+    $TWiki::cfg{Register}{EnableNewUserRegistration} = 1;
 }
 
 sub set_up_user {
@@ -154,5 +155,6 @@ sub verify_edit {
 	    $this->assert(0,shift->stringify());
     };
 }
+
 
 1;

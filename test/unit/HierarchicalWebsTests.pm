@@ -23,7 +23,9 @@ sub set_up {
     $TWiki::cfg{Htpasswd}{FileName} = '/tmp/junkpasswd';
     $TWiki::cfg{PasswordManager} = 'TWiki::Users::HtPasswdUser';
     $TWiki::cfg{UserMappingManager} = 'TWiki::Users::TWikiUserMapping';
-    $TWiki::cfg{LoginManager} = 'TWiki::LoginManager::TemplateLogin';      
+    $TWiki::cfg{LoginManager} = 'TWiki::LoginManager::TemplateLogin';   
+    $TWiki::cfg{Register}{EnableNewUserRegistration} = 1;
+       
 
     try {
         $twiki = new TWiki('AdminUser');

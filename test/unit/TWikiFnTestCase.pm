@@ -43,6 +43,8 @@ sub set_up {
     $TWiki::cfg{PasswordManager} = 'TWiki::Users::HtPasswdUser';
     $TWiki::cfg{UserMappingManager} = 'TWiki::Users::TWikiUserMapping';
     $TWiki::cfg{LoginManager} = 'TWiki::LoginManager::TemplateLogin';    
+    $TWiki::cfg{Register}{EnableNewUserRegistration} = 1;
+    
     $TWiki::cfg{Register}{NeedVerification} = 0;
     $TWiki::cfg{MinPasswordLength} = 0;
     $TWiki::cfg{UsersWebName} = $this->{users_web};

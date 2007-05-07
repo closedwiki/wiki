@@ -62,6 +62,7 @@ sub set_up {
     $TWiki::cfg{PasswordManager} = 'TWiki::Users::HtPasswdUser';
     $TWiki::cfg{UserMappingManager} = 'TWiki::Users::TWikiUserMapping';
     $TWiki::cfg{LoginManager} = 'TWiki::LoginManager::TemplateLogin';      
+    $TWiki::cfg{Register}{EnableNewUserRegistration} = 1;
 
     $twiki = new TWiki( "TestUser1", new CGI({topic=>"/$oldweb/$oldtopic"}));
     
