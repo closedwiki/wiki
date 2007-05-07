@@ -582,9 +582,9 @@ sub _renderTextContent {
 
 		my $text=$s;
 		$text.=":" if ( $options{'displayconnectedto'}||$options{'displayowner'}||$options{'displaynotes'});
-		$text.=" ".$connectedto if defined $connectedto && $options{'displayconnectedto'};
-		$text.=" ".$owner if defined $owner &&  $options{'displayowner'};
-		$text.=" ".$note if defined $note && $options{'displaynotes'};
+		$text.=" $connectedto " if defined $connectedto && $options{'displayconnectedto'};
+		$text.=" $owner " if defined $owner &&  $options{'displayowner'};
+		$text.=" $note " if defined $note && $options{'displaynotes'};
 
 		$text .= &_renderIconContent($connectedto,$note);
 		my ($fgcolor, $bgcolor, $style) = &_getColorsAndStyle($colors);
