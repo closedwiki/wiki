@@ -1,14 +1,15 @@
 @CPAN = (
-		    qw( ExtUtils::MakeMaker Storable Test::More Test::Harness YAML Compress::Zlib IO::Zlib IO::String Archive::Tar Data::Startup Math::BigInt File::Package File::Where File::AnySpec Tie::Gzip Archive::TarGzip ExtUtils::CBuilder ExtUtils::ParseXS Tree::DAG_Node 
-			Carp::Assert
-			Class::Data::Inheritable
-			Class::ISA Class::Virtually::Abstract 
-				Archive::Zip 
-			Archive::Any ),
+		    qw( ExtUtils::MakeMaker Storable Test::More Test::Harness YAML ),
+		qw( Compress::Raw::Zlib IO::Compress::Base IO::Compress::Gzip Compress::Zlib IO::Zlib ),
+		qw( IO::String Archive::Tar Data::Startup ),
+		qw( Math::BigRat bignum Math::BigInt ),
+		qw( File::Package File::Where File::AnySpec Tie::Gzip Archive::TarGzip ExtUtils::CBuilder ExtUtils::ParseXS Tree::DAG_Node Carp::Assert ),
+		qw( Class::Data::Inheritable Class::ISA Class::Virtually::Abstract File::Which Archive::Zip ),
+		qw( Module::Find Sub::Uplevel Test::Exception Array::Compare Test::Warn File::MMtypes MIME::Types Archive::Any ),
 	qw( Module::Build ),
-		    qw( Error URI HTML::Tagset HTML::Parser LWP LWP::UserAgent XML::Parser XML::Simple Algorithm::Diff Text::Diff HTML::Diff ),
-		    qw( HTML::Form HTML::HeadParser HTTP::Status HTML::TokeParser HTTP::Daemon HTTP::Request ),
-		    	qw( Test::Builder::Tester Test::LongString ),
+		    qw( Error URI HTML::Tagset HTML::Parser LWP LWP::UserAgent XML::NamespaceSupport XML::Parser XML::Simple Algorithm::Diff Text::Diff HTML::Diff ),
+#		    qw( HTML::Form HTML::HeadParser HTTP::Status HTML::TokeParser HTTP::Daemon HTTP::Request ),
+		qw( Test::Simple Test::LongString),
 		    qw( WWW::Mechanize HTML::TableExtract WWW::Mechanize::TWiki ),
 		    qw( Number::Compare Text::Glob File::Find::Rule ),	# also MailInContrib
 		    qw( File::Slurp File::Slurp::Tree ),
@@ -24,22 +25,22 @@
 	qw( Data::UUID ),		# GuidPlugin
 #	qw( Convert::ASN1 Digest::HMAC_MD5 Authen::SASL Net::SSLeay IO::Socket::SSL Net::LDAP ),		# LDAPPasswordChangerPlugin, LdapPlugin
 	qw( Convert::ASN1 Digest::HMAC_MD5 Authen::SASL IO::Socket::SSL Net::LDAP ),		# LDAPPasswordChangerPlugin, LdapPlugin
+				# (for Net::LDAP GSSAPI (didn't install: 'krb5-config command... not found!')
 	qw( Date::Handler ),		# LocalTimePlugin
-	qw( XML::Sablotron ),		# SablotronPlugin
-	qw( Image::LibRSVG ),		# SvgPlugin
+#	qw( XML::Sablotron ),		# SablotronPlugin (doesn't install: 'Sablotron.xs:39:20: sablot.h: No such file or directory')
+	qw( Image::LibRSVG ),		# SvgPlugin (doesn't install: 'LibRSVG.xs:28:26: librsvg/rsvg.h: No such file or directory')
 	qw( I18N::AcceptLanguage ),	# TopicTranslationsPlugin
 	qw( Weather::Com ),		# WeatherPlugin
 	qw( DBD::mysql ),		# BugzillaQueryPlugin, MailReminderPlugin
-	qw( XML::NamespaceSupport XML::SAX XML::LibXML::Common XML::LibXML XML::LibXSLT Text::ParseWords Cache::Cache String::CRC ),	# XmlQueryPlugin (XML::Simple above)
+	qw( XML::SAX XML::LibXML::Common XML::LibXML XML::LibXSLT Text::ParseWords Cache::Cache String::CRC ),	# XmlQueryPlugin (XML::Simple above)
 	qw( List::Permutor ),		# SuggestLinkPlugin
 	qw( Image::Info ),		# LatexModePlugin
-	qw( MIME::Types ),		# MailInContrib, optional SOAP::Lite interfaces
 	qw( MIME::Lite Authen::SASL XML::Stream Net::XMPP Net::Jabber ),	# optional SOAP::Lite interfaces
 	qw( SOAP::Lite ),		# SoapClientPlugin
 	qw( Font::AFM HTML::Element HTML::FormatText Date::Format ),	# URLCachePlugin
-	qw( IO::Pty Curses Term::Cap Event POE Net::IP Digest::HMAC_MD5 Net::DNS POE::Component::Client::DNS POE::Component::Client::Ident POE::Filter::IRCD POE::Component::Server::IRC ),	# IrcContrib
+	qw( IO::Pty Curses Term::Cap Event POE Net::IP Digest::HMAC_MD5 Net::DNS POE::Component::Client::DNS POE::Component::Client::Ident POE::Filter::IRCD Net::Netmask POE::Component::IRC POE::Component::Server::IRC ),	# IrcContrib
 	qw( Net::IRC ),			# IrcPlugin
-	qw( Test::More YAML SVN::Simple::Edit Class::Autouse File::chdir Class::Accessor Sort::Versions Term::ReadKey SVN::Mirror IO::Pager ),
+	qw( Test::More SVN::Simple::Edit Class::Autouse File::chdir Class::Accessor Sort::Versions Term::ReadKey SVN::Mirror IO::Pager ),
 		qw( Algorithm::Annotate Clone Data::Hierarchy File::Type PerlIO PerlIO::eol PerlIO::via::symlink PerlIO::via::dynamic IO::Digest Pod::Escapes Pod::Simple Regexp::Shellish ),
 	qw( SVK ),				   # SVK (YAML, Test::More, Encode, Data::UUID already included)
 # also (optional for SVN::Mirror) VCP::Dest::svk (VCP?)
@@ -63,7 +64,26 @@
 	qw( GetOpt::Long ),
 	qw( JSON ),					# InlineEditPlugin
 	qw( Safe HTML::Mason ),				# MasonPlugin
+	qw( HTTP::Lite Class::Accessor::Chained Text::vFile::asData Set::Infinite DateTime::Set FreezeThaw DateTime::Locale DateTime::TimeZone DateTime DateTime::Event::Recurrence DateTime::Event::ICal DateTime::Format::ICal iCal::Parser ),	# http://twiki.org/p/pub/Plugins/CalendarPluginDev/Calendar.pl.txt
 );
 
-#$, = "\n";
-#print @CPAN;
+__END__
+
+my $nCols = 3;
+
+use CGI qw( :standard );
+
+my $nPerCol = int( ( scalar @CPAN +$nCols-1 ) / $nCols );
+
+@CPAN = sort { lc $a cmp lc $b } @CPAN;
+
+my @row;
+for my $i ( 0..$nCols-1 ) {
+    my $start = ($i*$nPerCol);
+    push @row, td( "\n" . join( '', map { $_ && "   * [[CPAN:$_]]\n" || '' } @CPAN[ $start .. $start+$nPerCol-1 ] ) );
+}
+
+print table({},
+	    caption( "Included CPAN Modules (" . scalar @CPAN . ' installed)' ),
+	    Tr( {-valign=>'top'}, @row )
+	    );
