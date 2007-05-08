@@ -34,7 +34,7 @@ Parameters:
    * =header=: format string prepended to the output result
    * =footer=: format string appended to the result; if the list
      of webs is empty neither header nor footer are added.
-   * =separator=: text to be put between webs
+   * =separator=: text to be put between webs; can be =none= for no separators
    * =subformat=: format string to be used to format subwebs
      (defaults to =format=)
    * =subheader=: format string preceding the output of any subweb
@@ -43,8 +43,11 @@ Parameters:
      subheader and subfooter are only added if the list of subwebs of the 
      current web is not empty
      (defaults to =footer=)
-   * =subseparator=: text to be put between subwebs
+   * =subseparator=: text to be put between subwebs; can be =none= for no separators
      (defaults to =separator=)
+   * =subweb=: regular expression that subwebs must match to be listed; this
+     can also be =none=, =all=, =only= to suppress subwebs, show all or only dispay explicitly
+     mentioned subwebs (default is =all=)
    * =selection=: selected items in the list of webs
    * =marker=: text for =$marker= if the item maches the selection 
      (see pseudo variables below)
@@ -141,11 +144,12 @@ See the FlexWebListExamples.
 -->
 
 |  Plugin Author: | TWiki:Main.MichaelDaum |
-|  Copyright &copy;: | 2006, MichaelDaum http://wikiring.com |
+|  Copyright &copy;: | 2006-2007, MichaelDaum http://wikiring.de |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | v0.10 |
+|  Plugin Version: | v1.00 |
 |  Change History: | &nbsp; |
-|  10 Mar 2006: | fixed expansion of $n and $nop |
+|  08 May 2007: | docu fixes, respect HOMETOPIC in the examples |
+|  10 Mar 2007: | fixed expansion of $n and $nop |
 |  13 Oct 2006: | don't bail out entering a non-existing web |
 |  31 Aug 2006: | added NO_PREFS_IN_TOPIC;\
                   removed commonTagsHandler thus dropping support for cairo |
@@ -167,4 +171,4 @@ See the FlexWebListExamples.
 |  Feedback: | TWiki:Plugins/%TOPIC%Dev |
 |  Appraisal: | TWiki:Plugins/%TOPIC%Appraisal |
 
--- TWiki:Main/MichaelDaum - 03 Mar 2006
+-- TWiki:Main/MichaelDaum - 08 May 2007

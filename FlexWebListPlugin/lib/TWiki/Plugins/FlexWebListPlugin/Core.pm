@@ -44,10 +44,9 @@ sub handler {
   #writeDebug("*** called hander()");
 
   # extract parameters
-  $this->{webs} = $params->{_DEFAULT} || $params->{webs} || 'public';
-
+  $this->{format} = $params->{_DEFAULT} || $params->{format} || '$web ';
+  $this->{webs} = $params->{webs} || 'public';
   $this->{header} = $params->{header} || '';
-  $this->{format} = $params->{format} || '$web ';
   $this->{footer} = $params->{footer} || '';
   $this->{separator} = $params->{separator} || '';
   $this->{separator} = '' if $this->{separator} eq 'none';
