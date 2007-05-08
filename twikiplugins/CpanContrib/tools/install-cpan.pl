@@ -20,12 +20,12 @@ use Pod::Usage;
 use Cwd qw( cwd );
 sub mychomp { chomp $_[0]; $_[0] }
 
-my $dirMirror = "file:$FindBin::Bin/MIRROR/TWIKI";
+my $dirMirror = "file:$FindBin::Bin/MIRROR/MINICPAN/";
 my $optsConfig = {
 #
     baselibdir => $FindBin::Bin . "/../cgi-bin/lib/CPAN",
 # SMELL: change into list   
-    mirror => -d $dirMirror && $dirMirror || 'http://cpan.perl.org',
+    mirror => -d $dirMirror && $dirMirror || 'http://cpan.org',
 #
     config => "~/.cpan/CPAN/MyConfig.pm",
 #
@@ -50,12 +50,10 @@ foreach my $path qw( baselibdir mirror config )
 {
     # expand tildes in paths (from Perl Cookbook: 7.3. Expanding Tildes in Filenames)
     $optsConfig->{$path} =~ s{ ^ ~ ( [^/]* ) }
-    { $1
-                    ? (getpwnam($1))[7]
-                    : ( $ENV{HOME} || $ENV{LOGDIR}
-                         || (getpwuid($>))[7]
-                       )
-		}ex;
+    { $1 
+	  ? (getpwnam($1))[7]
+	  : ( $ENV{HOME} || $ENV{LOGDIR} || (getpwuid($>))[7] )
+    }ex;
 
     $optsConfig->{$path} = File::Spec->rel2abs( $optsConfig->{$path} ) 
 	unless $optsConfig->{$path} =~ /^[^:]{2,}:/;
@@ -103,6 +101,7 @@ installLocalModules({
 
 # explicity call cleanup code (puts back MyConfig.pm)
 $SIG{INT}();
+exit 0;
 
 ################################################################################
 ################################################################################
@@ -120,10 +119,11 @@ sub installLocalModules
     {
 	print "Installing $module\n" if $optsConfig->{verbose};
 
-	my $obj = CPAN::Shell->expand( Module => $module ) or warn "$module: $!";
+	my $obj = CPAN::Shell->expand( Module => $module ) or warn qq{can't find CPAN module "$module" (is it misspelled?)\n};
 	next unless $obj;
 	$obj->force;
 	$obj->install; # or warn "Error installing $module\n"; 
+print STDERR Dumper( $obj );
     }
 
 #    print Dumper( $CPAN::Config );
@@ -268,3 +268,66 @@ $CPAN::Config = {
 };
 1;
 __END__
+    $VAR1 = bless( {
+                 'ID' => 'Carp::Assert',
+                 'RO' => {
+                           'userid' => 'YVES',
+                           'stats' => 'd',
+                           'stati' => 'f',
+                           'description' => 'Stating the obvious to let the computer know',
+                           'CPAN_VERSION' => '0.20',
+                           'chapterid' => '3',
+                           'CPAN_FILE' => 'M/MS/MSCHWERN/Carp-Assert-0.20.tar.gz',
+                           'CPAN_USERID' => 'MSCHWERN',
+                           'statd' => 'a',
+                           'statl' => 'p',
+                           'statp' => 'p'
+			   }
+	     }, 'CPAN::Module' );
+
+
+---- Unsatisfied dependencies detected during [C/CM/CMOORE/Archive-Any-0.093.tar.gz] -----
+    MIME::Types
+    Test::Warn
+    Module::Find
+    File::MMagic
+Running make test
+  Delayed until after prerequisites
+Running make install
+  Delayed until after prerequisites
+    $VAR1 = bless( {
+                 'ID' => 'Archive::Any',
+                 'RO' => {
+                           'CPAN_FILE' => 'C/CM/CMOORE/Archive-Any-0.093.tar.gz',
+                           'CPAN_USERID' => 'CMOORE',
+                           'CPAN_VERSION' => '0.093'
+			   }
+	     }, 'CPAN::Module' );
+
+(success:)
+$VAR1 = bless( {
+                 'ID' => 'Class::Data::Inheritable',
+                 'RO' => {
+                           'CPAN_FILE' => 'T/TM/TMTM/Class-Data-Inheritable-0.06.tar.gz',
+                           'CPAN_USERID' => 'TMTM',
+                           'CPAN_VERSION' => '0.06'
+			   }
+	     }, 'CPAN::Module' );
+
+(also success:)
+    $VAR1 = bless( {
+                 'ID' => 'Module::Build',
+                 'RO' => {
+                           'userid' => 'KWILLIAMS',
+                           'stats' => 'd',
+                           'stati' => 'O',
+                           'description' => 'Build, test, and install Perl modules',
+                           'CPAN_VERSION' => '0.2808',
+                           'chapterid' => '2',
+                           'CPAN_FILE' => 'K/KW/KWILLIAMS/Module-Build-0.2808.tar.gz',
+                           'CPAN_USERID' => 'KWILLIAMS',
+                           'statd' => 'b',
+                           'statl' => 'p',
+                           'statp' => 'p'
+			   }
+	     }, 'CPAN::Module' );

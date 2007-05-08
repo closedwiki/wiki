@@ -11,6 +11,9 @@ use strict;
 # -v Be verbose
 #
 
+# TODO:
+# * add command line switch for cpan mirror directory
+
 # Standard preamble
 BEGIN {
   unshift @INC, split( /:/, $ENV{TWIKI_LIBS} || '' );
@@ -80,8 +83,7 @@ sub target_build {
     my $base_lib_dir = getcwd . "/../../../CPAN";
     # to keep "old" builds so that everything doesn't need to be built from scratch (for reasonable build times)
 #    -e $base_lib_dir && rmtree $base_lib_dir;
-    -e $base_lib_dir || mkpath $base_lib_dir or die $!;
-    chdir 'bin' or die $!;
+    -d $base_lib_dir || mkpath $base_lib_dir or die $!;
     ++$|;
 
     my $build_cache_filename = '.build_cache';
@@ -112,10 +114,10 @@ sub target_build {
 	{
 	    print "Installing $module\n";
 	    print "-" x 80, "\n";
-	    my $mirror = '../../../../../../../../MIRROR/MINICPAN/';
+	    my $mirror = '../../../../tools/MIRROR/MINICPAN/';
 	    -e $mirror or $mirror = 'http://cpan.perl.org';
 	    $build_cache->{$module}->{timebuilt} = time;	# earlier timestamp is better than later
-	    my $INSTALL_CPAN = `perl install-cpan.pl --mirror=$mirror --baselibdir=$base_lib_dir $module </dev/null`;
+	    my $INSTALL_CPAN = `perl ../../../../tools/install-cpan.pl --mirror=$mirror --baselibdir=$base_lib_dir $module </dev/null`;
 	    if ( $@ ) {
 		print STDERR "error installing $module: $@\n";
 	    }
@@ -149,7 +151,7 @@ sub _upToDate
     # no cache information; it "can't" be up-to-date
     return 0 unless $cache;
 
-    my $module = shift or die "module?";
+    my $module = shift or die "no module?";
 
     my $module_cache = $cache->{$module};
 
