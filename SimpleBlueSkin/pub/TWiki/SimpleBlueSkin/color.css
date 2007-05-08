@@ -3,7 +3,7 @@
  */
  
 body {
-  background-color: #b9b9b9;
+  background-color: #ffffff;
 }
 
 a {
@@ -11,21 +11,22 @@ a {
 }
  
 #simpleBlueContentBook {
-  background-color: #e9e9f5;
-  border-color: #797979;
-}
-
-#simpleBlueHeader {
   background-color: #ffffff;
   border-color: #797979;
 }
 
+#simpleBlueHeader {
+  color: #ffffff;
+  background-color: #35377c;
+  border-color: #797979;
+}
+
 #simpleBlueHeader a {
-  color: #000000;
+  color: #ffffff;
 }
 
 #simpleBlueNavigationArea {
-  background-color: #e9e9f5;
+  background-color: #ffffff;
 }
 
 #simpleBlueNavigationArea a {
@@ -83,7 +84,6 @@ a {
 }
 
 #simpleBlueFooter {
-  border-color: #797979;
   background-color: #ffffff;
 }
 
@@ -97,12 +97,12 @@ a {
 }
 
 #simpleBlueContentArea table th {
-  border-color: #35377c;
-  background-color:#e9e9f5;
+  border-color: #e5e5e5;
+  background-color:#35377c;
 }
 
 #simpleBlueContentArea table td {
-  border-color: #35377c;
+  border-color: #e5e5e5;
   background-color: #ffffff;
 }
 
@@ -112,11 +112,23 @@ a {
 
 #simpleBlueContentArea table th a:link,
 #simpleBlueContentArea table th a:visited {
-  color: #35377c;
+  color: #ffffff;
 }
 
 #simpleBlueContentArea table th a:hover {
    background-color: transparent;
+}
+
+#simpleBlueContentArea #twikiSearchTable .first {
+   background-color: #f5f5f5;
+}
+
+#simpleBlueContentArea #twikiSearchTable th {
+   background-color: #ffffff;
+}
+
+#simpleBlueContentArea #twikiSearchTable .last hr {
+   color: #ffffff;
 }
 
 #simpleBlueSearchResults {
@@ -132,6 +144,6 @@ a {
 }
 
 #simpleBlueContentArea pre {
-  background-color: #e9e9e9; 
-  border-color: #797979;
+  background-color: #f5f5f5; 
+  border-color: #35377c;
 }

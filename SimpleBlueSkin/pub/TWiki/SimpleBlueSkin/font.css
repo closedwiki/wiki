@@ -30,7 +30,6 @@ h4 {
 
 a {
   text-decoration: none;
-  font-style: italic;
 }
 
 img {
@@ -38,8 +37,8 @@ img {
 }
 
 #simpleBlueHeader {
-  font-size: 20pt;
-  line-height: 1.3em;
+  font-size: 1.75em;;
+  line-height: 1.4em;
 }
 
 #simpleBlueHeader .subtitle {
@@ -47,9 +46,14 @@ img {
   line-height: 1.3em;
 }
 
-#simpleBlueNaviBox a {
+#simpleBlueNaviBox_L1 a {
   font-size: 9pt;
   line-height: 1.3em;
+}
+
+#simpleBlueNaviBox_L2 a {
+  font-size: 9pt;
+  line-height: 1.1em;
 }
 
 #simpleBlueActionBarTop a {
