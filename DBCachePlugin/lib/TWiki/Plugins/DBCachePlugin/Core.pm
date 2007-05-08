@@ -129,6 +129,7 @@ sub handleDBQUERY {
       $format =~ s/\$formatTime\((.*?)(?:,\s*'([^']*?)')?\)/TWiki::Func::formatTime($theDB->expandPath($topicObj, $1), $2)/geo; # single quoted
       $format = _expandVariables($format, $topicWeb, $topicName,
 	topic=>$topicName, web=>$topicWeb, index=>$index, count=>$count);
+      $format =~ s/${TranslationToken}/)/go;
       $format = &TWiki::Func::expandCommonVariables($format, $topicName, $topicWeb);
       $text .= $format;
 
@@ -137,7 +138,6 @@ sub handleDBQUERY {
       last if $index == $theLimit;
     }
   }
-  $text =~ s/${TranslationToken}/)/go;
 
   $theHeader = _expandVariables($theHeader, $theWeb, $theTopic, count=>$count, web=>$thisWeb) if $theHeader;
   $theFooter = _expandVariables($theFooter, $theWeb, $theTopic, count=>$count, web=>$thisWeb) if $theFooter;

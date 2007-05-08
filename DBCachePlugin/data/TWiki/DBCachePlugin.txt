@@ -402,8 +402,9 @@ following is the default paramenter (omitting the #)
 |  Plugin Author: | TWiki:Main.MichaelDaum |
 |  Copyright &copy;: | 2005-2007, Michael Daum http://wikiring.de |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | v1.52 |
+|  Plugin Version: | v1.53 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  08 May 2007: | fixed loading db cache file since recent changes in <nop>DBCacheContrib |
 |  03 Apr 2007: | fixed $date(format) in ATTACHMENTS; \
                   fixed 'segfault' in DBRECURSE while formatting sub-results |
 |  19 Feb 2007: | multiple enhancements to the ATTACHMENTS tag (e.g. icons, actions) |
@@ -454,11 +455,11 @@ following is the default paramenter (omitting the #)
 |  24 Nov 2005: | Initial version |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 |
 |  CPAN Dependencies: | none |
-|  Other Dependencies: | TWiki:Plugins/DBCacheContrib |
+|  Other Dependencies: | TWiki:Plugins/DBCacheContrib (Version TWiki-4, Rev &gt;= 13562)|
 |  Perl Version: | 5.8 |
 |  [[TWiki:Plugins/Benchmark][Benchmarks]]: | %TWIKIWEB%.GoodStyle nn%, %TWIKIWEB%.FormattedSearch nn%, %TOPIC% nn% |
 |  Plugin Home: | TWiki:Plugins/%TOPIC% |
 |  Feedback: | TWiki:Plugins/%TOPIC%Dev |
 |  Appraisal: | TWiki:Plugins/%TOPIC%Appraisal |
 
--- TWiki:Main.MichaelDaum - 03 Apr 2007
+-- TWiki:Main.MichaelDaum - 08 May 2007
