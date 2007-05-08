@@ -399,7 +399,7 @@ access control considerations, there will *not* be an exception. It is the
 duty of the caller to check access permissions before changing the topic.
 
 It is the duty of the caller to restore the original context by calling
-=popContext=.
+=popTopicContext=.
 
 Note that this call does *not* re-initialise plugins, so if you have used
 global variables to remember the web and topic in =initPlugin=, then those
