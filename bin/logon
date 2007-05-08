@@ -32,21 +32,21 @@ BEGIN {
     unshift @INC, '.';
     require 'setlib.cfg';
 }
-use TWiki;
 
-$query = new CGI();
+#lets use the same code as login...
+use TWiki::UI;
 
-main();
+TWiki::UI::run( \&logon );
 
-sub main
-{
-    my $user = $query->remote_user();
-    my $session = new TWiki( $user, $query );
-    my $url = $session->getScriptUrl(
-        0, 'viewauth', $session->{webName}, $session->{topicName},
-        t => time());
-
-    $url .= ( ';' . $query->query_string() ) if $query->query_string();
-
-    $session->redirect( $url, 1 );
+sub logon {
+    my $session = shift;
+    if ($session->{cgiQuery}->param('sudo')) {
+        #promote / login to internal twiki admin
+        $session->enterContext('sudo_login');
+        $loginManager = TWiki::LoginManager::makeLoginManager( $session );
+        $loginManager->login( $session->{cgiQuery}, $session );
+    } else {
+        #normal path
+        $session->{loginManager}->login( $session->{cgiQuery}, $session );
+    }
 }

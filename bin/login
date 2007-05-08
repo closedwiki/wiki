@@ -34,5 +34,13 @@ TWiki::UI::run( \&logon );
 
 sub logon {
     my $session = shift;
-    $session->{loginManager}->login( $session->{cgiQuery}, $session );
+    if ($session->{cgiQuery}->param('sudo')) {
+        #promote / login to internal twiki admin
+        $session->enterContext('sudo_login');
+        $loginManager = TWiki::LoginManager::makeLoginManager( $session );
+        $loginManager->login( $session->{cgiQuery}, $session );
+    } else {
+        #normal path
+        $session->{loginManager}->login( $session->{cgiQuery}, $session );
+    }
 }

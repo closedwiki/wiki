@@ -108,6 +108,29 @@ sub loginUrl {
     return $twiki->getScriptUrl( 0, 'logon', $web, $topic, @_ );
 }
 
+
+=pod
+
+---++ ObjectMethod login( $query, $twiki )
+
+this allows the login and logon cgi-scripts to use the same code. 
+all a logon does, is re-direct to viewauth, and apache then figures out 
+if it needs to challenge the user
+
+=cut
+
+sub login {
+    my( $this, $query, $twikiSession ) = @_;
+
+    my $url = $twikiSession->getScriptUrl(
+        0, 'viewauth', $twikiSession->{webName}, $twikiSession->{topicName},
+        t => time());
+
+    $url .= ( ';' . $query->query_string() ) if $query->query_string();
+
+    $twikiSession->redirect( $url, 1 );
+}
+
 sub getUser {
     my $this = shift;
     my $query = $this->{twiki}->{cgiQuery};

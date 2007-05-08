@@ -103,6 +103,7 @@ for the given session.
 
 sub makeLoginManager {
     my $twiki = shift;
+ 
     ASSERT($twiki->isa( 'TWiki')) if DEBUG;
 
     if( $TWiki::cfg{UseClientSessions} &&
@@ -130,9 +131,13 @@ sub makeLoginManager {
     } else {
         # Rename from old "Client" to new "LoginManager" - see Bugs:Item3375
         $TWiki::cfg{LoginManager} =~ s/::Client::/::LoginManager::/;
-        eval 'use '. $TWiki::cfg{LoginManager};
+        my $loginManager = $TWiki::cfg{LoginManager};
+        if ($twiki->inContext('sudo_login')) {
+            $loginManager = 'TWiki::LoginManager::TemplateLogin';
+        }
+        eval 'use '. $loginManager;
         throw Error::Simple( $@ ) if $@;
-        $mgr = $TWiki::cfg{LoginManager}->new( $twiki );
+        $mgr = $loginManager->new( $twiki );
     }
     return $mgr;
 }
