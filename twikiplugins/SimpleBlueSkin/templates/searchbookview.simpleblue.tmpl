@@ -1,16 +1,13 @@
 %TMPL:INCLUDE{"twiki"}%
 
-%TMPL:INCLUDE{"search"}%
+%TMPL:DEF{"actionstring"}%Search Results%TMPL:END%
 
 %TMPL:DEF{"repeatedsearchblock"}%
-  <div class="simpleBlueSearchResultsHeader">
-    <h2>Results from %WEB% web</h2>
-  </div>
+  <h2>Results from %WEB% web</h2>
   %REPEAT%
     <div id="simpleBlueSearchResults">
       <div id="simpleBlueTopRow">
           <a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPICNAME%"><b>%TOPICNAME%</b></a>
-          <span class="twikiAlert">%LOCKED%</span>
       </div>
       <div id="simpleBlueGrayText">
         %TEXTHEAD%<br>
@@ -20,20 +17,17 @@
   %REPEAT%
 %TMPL:END%
 
+
 %TMPL:DEF{"searchbody"}%
   %SPLIT%
     %TMPL:P{"repeatedsearchblock"}%
   %SPLIT%
-  <b>Number of topics: %NTOPICS%</b>
+  Number of topics: <b>%NTOPICS%</b>
 %TMPL:END%
 
 %TMPL:DEF{"simpleBlueContentPane"}%
-  <div class="twikiBookViewList">
-    %SPLIT%
-      <div class="twikiSearchString">
-        Searched: <b><nop>%SEARCHSTRING%</b>
-      </div>
-      %TMPL:P{"searchbody"}%
-    %SPLIT%
-  </div>
-%TMPL:END%
+%TMPL:P{"contentheadingvariable"}%
+%SPLIT%
+<span>%MAKETEXT{"Searched:"}% <b><noautolink>%SEARCHSTRING%</noautolink></b></span><br><span>%TMPL:P{"searchbody"}%%SPLIT%%TMPL:END%
+
+%TMPL:P{"simpleBluePage"}%

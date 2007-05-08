@@ -8,7 +8,6 @@
     <div id="simpleBlueSearchResults">
       <div id="simpleBlueTopRow">
           <a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPICNAME%"><b>%TOPICNAME%</b></a>
-          <span class="twikiAlert">%LOCKED%</span>
       </div>
       <div id="simpleBlueGrayText">
         %TEXTHEAD%<br>
@@ -23,17 +22,12 @@
   %SPLIT%
     %TMPL:P{"repeatedsearchblock"}%
   %SPLIT%
-  <b>Number of topics: %NTOPICS%</b>
+  Number of topics: <b>%NTOPICS%</b>
 %TMPL:END%
 
 %TMPL:DEF{"simpleBlueContentPane"}%
 %TMPL:P{"contentheadingvariable"}%
-  %SPLIT%
-    <div class="twikiSearchString">
-      Searched: <b><nop>%SEARCHSTRING%</b>
-    </div>
-  %TMPL:P{"searchbody"}%
-  %SPLIT%
-%TMPL:END%
+%SPLIT%
+<span>%MAKETEXT{"Searched:"}% <b><noautolink>%SEARCHSTRING%</noautolink></b></span><br><span>%TMPL:P{"searchbody"}%%SPLIT%%TMPL:END%
 
 %TMPL:P{"simpleBluePage"}%
