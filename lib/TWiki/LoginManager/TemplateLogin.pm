@@ -129,10 +129,10 @@ sub login {
 
     $cgisession->param( 'REMEMBER', $remember ) if $cgisession;
     if( $cgisession && $cgisession->param( 'AUTHUSER' ) &&
-          $loginName ne $cgisession->param( 'AUTHUSER' )) {
+        $loginName && $loginName ne $cgisession->param( 'AUTHUSER' )) {
         $banner = $twiki->{templates}->expandTemplate( 'LOGGED_IN_BANNER' );
         $note = $twiki->{templates}->expandTemplate( 'NEW_USER_NOTE' );
-    }
+     }
 
     my $error = '';
 
