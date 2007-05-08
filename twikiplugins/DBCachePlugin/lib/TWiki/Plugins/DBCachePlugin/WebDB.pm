@@ -29,7 +29,7 @@ use Error qw( :try );
 sub new {
   my ($class, $web, $cacheName) = @_;
 
-  $cacheName = '_DBCachePluginDB' unless $cacheName;
+  $cacheName = 'DBCachePluginDB' unless $cacheName;
 
   my $this = bless($class->SUPER::new($web, $cacheName), $class);
   $this->{_loadTime} = 0;
@@ -56,8 +56,12 @@ sub load {
 sub _getCacheFile {
   my $this = shift;
 
-  return TWiki::Func::getDataDir() . '/' . 
-    $this->{web} . '/' .  $this->{_cachename};
+  my $workDir = TWiki::Func::getWorkArea('DBCacheContrib');
+  my $web = $this->{web};
+  $web =~ s/\//\./go;
+  my $cacheFile = "$workDir/$web.$this->{_cachename}";
+
+  return $cacheFile;
 }
 
 ###############################################################################
