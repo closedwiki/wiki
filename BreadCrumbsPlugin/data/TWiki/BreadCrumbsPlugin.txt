@@ -137,10 +137,11 @@ separator) may contain special variables:
 -->
 
 |  Plugin Author: | TWiki:Main.MichaelDaum |
-|  Copyright &copy;: | 2006, MichaelDaum@WikiRing.com |
+|  Copyright &copy;: | 2006, Michael Daum http://wikiring.de |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | v0.13 (%$VERSION%) |
+|  Plugin Version: | v1.00 (%$VERSION%) |
 |  Change History: | &nbsp; |
+|  08 May 2007: | respect HOMETOPIC setting, don't hardcoded '<nop>WebHome' |
 |  19 Apr 2007: | TWiki:Main.CrawfordCurrie added =topicformat= |
 |  20 Feb 2007: | TWiki:Main.CrawfordCurrie added path breadcrumbs |
 |  18 Dec 2006: | added $webtopic pseudo-parameter |
@@ -158,4 +159,4 @@ separator) may contain special variables:
 |  Feedback: | TWiki:Plugins/%TOPIC%Dev |
 |  Appraisal: | TWiki:Plugins/%TOPIC%Appraisal |
 
--- TWiki:Main/MichaelDaum - 20 Feb 2006
+-- TWiki:Main/MichaelDaum - 08 May 2007

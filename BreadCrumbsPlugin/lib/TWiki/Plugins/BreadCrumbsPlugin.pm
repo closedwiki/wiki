@@ -15,10 +15,13 @@
 package TWiki::Plugins::BreadCrumbsPlugin;
 
 use strict;
-use vars qw($VERSION $RELEASE $debug $NO_PREFS_IN_TOPIC $SHORTDESCRIPTION);
+use vars qw(
+  $VERSION $RELEASE $NO_PREFS_IN_TOPIC $SHORTDESCRIPTION
+  $debug $homeTopic $doneInit
+);
 
 $VERSION = '$Rev$';
-$RELEASE = 'v0.13';
+$RELEASE = 'v1.00';
 $NO_PREFS_IN_TOPIC = 1;
 $SHORTDESCRIPTION = 'A flexible way to display breadcrumbs navigation';
 
@@ -35,8 +38,19 @@ sub initPlugin {
 
   TWiki::Func::registerTagHandler('BREADCRUMBS', \&renderBreadCrumbs);
   recordTrail($_[1], $_[0]);
-  
+  $doneInit = 0;
+
   return 1;
+}
+
+###############################################################################
+sub doInit {
+
+  return if $doneInit;
+  $doneInit = 1;
+
+  $homeTopic = TWiki::Func::getPreferencesValue('HOMETOPIC') 
+    || $TWiki::cfg{HomeTopicName} || 'WebHome';
 }
 
 ###############################################################################
@@ -66,6 +80,8 @@ sub renderBreadCrumbs {
   my ($session, $params, $currentTopic, $currentWeb) = @_;
 
   #writeDebug("called renderBreadCrumbs($currentWeb, $currentTopic)");
+
+  doInit();
 
   # get parameters
   my $webTopic = $params->{_DEFAULT} || "$currentWeb.$currentTopic";
@@ -125,7 +141,7 @@ sub getPathBreadCrumbs {
   my @trail = 
     map {
       /^(.*)\.(.*?)$/; 
-      my $name = ($2 eq 'WebHome')?$1:$2;
+      my $name = ($2 eq $homeTopic)?$1:$2;
       { name => $name, target => $_, istopic => 1 }
     } split(',', $trail);
 
@@ -144,18 +160,20 @@ sub getLocationBreadCrumbs {
     if ($webName =~ /^(.*)[\.\/](.*?)$/) {
       $webName = $2;
     }
-    #writeDebug("adding breadcrumb: target=$thisWeb/WebHome, name=$webName");
+    #writeDebug("adding breadcrumb: target=$thisWeb/$homeTopic, name=$webName");
     push @breadCrumbs, {
-        target=>"$thisWeb/WebHome", name=>$webName, istopic => 0 };
+        target=>"$thisWeb/$homeTopic", name=>$webName, istopic => 0 
+    };
   } else {
     my $parentWeb = '';
     my @webCrumbs;
     foreach my $parentName (split(/\//,$thisWeb)) {
       $parentWeb .= '/' if $parentWeb;
       $parentWeb .= $parentName;
-      #writeDebug("adding breadcrumb: target=$parentWeb/WebHome, name=$parentName");
+      #writeDebug("adding breadcrumb: target=$parentWeb/$homeTopic, name=$parentName");
       push @webCrumbs, {
-          target=>"$parentWeb/WebHome", name=>$parentName, istopic => 0 };
+          target=>"$parentWeb/$homeTopic", name=>$parentName, istopic => 0 
+      };
     }
     if ($recurse->{once} || $recurse->{webonce}) {
       my @list;
@@ -186,8 +204,6 @@ sub getLocationBreadCrumbs {
       # check end of loop
       last if 
 	$seen{"$web.$topic"} ||
-# Commented out because it breaks the trail
-#	$topic eq 'WebHome' ||
 	!TWiki::Func::topicExists($web,$topic);
 
       # add breadcrumb
