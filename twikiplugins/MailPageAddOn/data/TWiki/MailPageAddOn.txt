@@ -50,7 +50,7 @@ __Note:__ You do not need to install anything on the browser to use this add-on.
 |  2 Aug 2006: | (v1.10): Templates never added to distribution archive correctly (TWiki:Main.SteffenPoulsen) |
 |  8 Apr 2006: | Minor update for TWiki:Codev.TWikiRelease04x00x02, TWiki oops templates added (TWiki:Main.SteffenPoulsen) |
 |  18 Jan 2005: | Initial version |
-|  CPAN Dependencies: | none |
+|  CPAN Dependencies: | CPAN:LWP::UserAgent |
 |  Other Dependencies: | none |
 |  Perl Version: | 5.005 |
 |  License: | GPL |
