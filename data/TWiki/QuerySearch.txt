@@ -1,0 +1,79 @@
+%META:TOPICINFO{author="TWikiContributor" date="1168735492" format="1.1" version="$Rev: 12524 $"}%
+%META:TOPICPARENT{name="TWikiVariables"}%
+%TOC%
+%STARTINCLUDE%
+---# Query Search
+
+Query searches help you search the contents of forms attached to your topics, as well as the values of other meta-data attached to the topic. Using query searches you can search:
+   1 The fields of forms
+   1 Parent relationships
+   1 File attachment information (but *not* the attached files themselves)
+
+Query searches are defined using a simple SQL-like query language. The language consists of _field specifiers_ and _constants_ joined with _operators_.
+
+---++ Field specifiers
+You use field specifiers to say what value from the topic you are interested
+in. Field specifiers come in two types; unqualified and qualified.
+Unqualified field specifiers are simply names, and are used to refer to the fields of the form attached to the topic. For example, if the form has a field called 'Date' then =Date= refers to that field.
+
+A qualified field specifier is of the form 'X.y' where X is the name of one of the meta-data record types described in %SYSTEMWEB%.TWikiMetaData, and =y= is one of the fields of that record. For example, =TOPICMOVED.from= refers to the 'from' field in the 'TOPICMOVED' record.
+
+FILEATTACHMENT records are referenced by the =attachment= operator (see below).
+
+---++ Constants
+You use constants for the values that you compare with fields. Constants are either strings, or numbers. Strings are always delimited by single-quotes (you can escape a quote using backslash) and numbers 
+
+---++ Operators
+
+| *Operator* | *Meaning* |
+| <code>=</code> | Left-hand side (LHS) exactly matches the value on the Right-hand side (RHS). Numbers and strings can be compared. |
+| <code>!=</code> | Inverse of =. |
+| <code>~</code> | Regular expression match. |
+| <code>&lt;</code> | LHS is less that RHS. If both sides are numbers, the order is numeric. Otherwise it is alphabetic. |
+| <code>&gt;</code> | > |
+| <code>&gt;=</code> | >= |
+| <code>&lt;=</code> | &lt;= |
+| =lc(x)= | Converts x to lower case, Use for caseless comparisons. |
+| =uc(x)= | Converts x to UPPER CASE. Use for caseless comparisons. |
+| =attachment('name')= | Gets the record for the attachment called 'name'. You can then use the =.= operator to get to the fields in the attachment record. |
+| =!= | NOT |
+| =:= | Reference; LHS must evaluate to a topic name, RHS to a query to be applied to that topic, For example, =Web.TopicName:FORM.name='ExampleForm'= will evaluate to true if the topic =Web.TopicName= has the form type =ExampleForm=. |
+| =AND= | AND |
+| =OR= | OR |
+| =()= | Bracketed subexpression |
+
+---++ Examples
+---+++ Query examples
+   * =attachment('purdey.gif')= - true if there is an attachment call =purdey.gif= on the topic
+   * =attachment('brollie.gif').size > 1024= - true if =brollie.gif= is bigger than 1K bytes
+   * =(Firstname='Emma' OR Firstname='John') AND Lastname='Peel'= - finds 'Emma Peel' and 'John Peel' but *not* 'Robert Peel' or 'Emma Thompson'
+   * =People.JohnSteed:Headgear ~ 'Bowler Hat'= - true if the Headgear field in !People.JohnSteed contains the string 'Bowler Hat'.
+---+++ Search examples
+Find all children of this topic in the current web
+<verbatim>
+%SEARCH{"TOPICPARENT.name = '%TOPIC%' web="%WEB%"}%
+</verbatim>
+Find the topic that has the attachment 'grunge.gif'
+<verbatim>
+%SEARCH{"attachment('grunge.gif')"}%
+</verbatim>
+Find all topics where the formfield 'Tags' contains 'green' or 'yellow'
+but not 'brown'
+<verbatim>
+%SEARCH{"lc(Tags) ~ '(green|yellow)' AND !(lc(Tags) ~ 'brown')"}%
+</verbatim>
+
+---++ Grammar of the query language
+<verbatim>
+expr ::= aexpr 'OR' expr | aexpr ;
+aexpr ::= nexpr AND aexpr | nexpr ;
+nexpr ::= '!' rexpr | rexpr ;
+rexpr ::= topic ':' bexpr | bexpr ;
+bexpr ::= uexpr bop bexpr | uexpr ;
+bop :: = '>' | '<' | '<=' | '>=' | '!=' | '~' | '=' ;
+uexpr ::= uop specifier | specifier ;
+uop ::= 'lc' | 'uc' ;
+specifier ::= '(' expr ')' | fieldtype '.' name | 'attachment' specifier | name ;
+fieldtype ::= 'TOPICINFO' | 'TOPICPARENT' | 'FORM' | TOPICMOVED ;
+name ::= a string of alphanumberic characters and underscores ;
+</verbatim>

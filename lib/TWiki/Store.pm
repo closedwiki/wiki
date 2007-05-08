@@ -140,6 +140,7 @@ sub readTopic {
     	$version = $this->cleanUpRevID( $version );
     }
 
+    # SMELL: assumes that the backend can't store meta outside the topic
     my $text = $this->readTopicRaw( $user, $web, $topic, $version );
     my $meta = new TWiki::Meta( $this->{session}, $web, $topic);
     $this->extractMetaData( $meta, \$text );
@@ -266,6 +267,7 @@ sub readTopicRaw {
 
     # Note: passing undef as meta will cause extraction of the meta
     # from the (raw) text passed
+    # SMELL: assumes that the backend can't store meta outside the topic
     if( $user &&
           !$this->{session}->{security}->checkAccessPermission
             ( 'VIEW', $user, $text, undef, $topic, $web )) {
@@ -1355,7 +1357,8 @@ sub extractMetaData {
     my $endMeta = 0;
 
     $$rtext =~ s(^%META:([^{]+){(.*)}%\r?\n)
-      ($endMeta=1;$meta->putKeyed( $1, _readKeyValues( $2, $format )),'')gem;
+      ($endMeta = 1;
+       $meta->putKeyed( $1, _readKeyValues( $2, $format )), '')gem;
 
     # eat the extra newline put in to separate text from tail meta-data
     $$rtext =~ s/\n$//s if $endMeta;
@@ -1902,36 +1905,34 @@ sub searchMetaData {
 
     my $text = '';
     if ($params->{format}) {
-        $text = $this->{session}->{search}->searchWeb
-        (
-         format	       => $params->{format},
-         search        => $searchVal,
-         web           => $attrWeb,
-         type          => 'regex',
-         nosummary     => 'on',
-         nosearch      => 'on',
-         noheader      => 'on',
-         nototal       => 'on',
-         noempty       => 'on',
-         template      => 'searchmeta',
-         inline        => 1,
-        );
+        $text = $this->{session}->{search}->searchWeb(
+            format	       => $params->{format},
+            search        => $searchVal,
+            web           => $attrWeb,
+            type          => 'regex',
+            nosummary     => 'on',
+            nosearch      => 'on',
+            noheader      => 'on',
+            nototal       => 'on',
+            noempty       => 'on',
+            template      => 'searchmeta',
+            inline        => 1,
+           );
     } else {
-    $this->{session}->{search}->searchWeb
-      (
-       _callback     => \&_collate,
-       _cbdata       => \$text,,
-       search        => $searchVal,
-       web           => $attrWeb,
-       type          => 'regex',
-       nosummary     => 'on',
-       nosearch      => 'on',
-       noheader      => 'on',
-       nototal       => 'on',
-       noempty       => 'on',
-       template      => 'searchmeta',
-       inline        => 1,
-      );
+        $this->{session}->{search}->searchWeb(
+            _callback     => \&_collate,
+            _cbdata       => \$text,,
+            search        => $searchVal,
+            web           => $attrWeb,
+            type          => 'regex',
+            nosummary     => 'on',
+            nosearch      => 'on',
+            noheader      => 'on',
+            nototal       => 'on',
+            noempty       => 'on',
+            template      => 'searchmeta',
+            inline        => 1,
+           );
     }
     my $attrTitle = $params->{title} || '';
     if( $text ) {
@@ -1942,6 +1943,29 @@ sub searchMetaData {
     }
 
     return $text;
+}
+
+=pod
+
+---++ ObjectMethod searchInWebMetaData($query, $web, \@topics) -> \%matches
+
+Search for a meta-data expression in the content of a web. =$query= must be a =TWiki::Query= object.
+
+Returns a reference to a hash that maps the names of topics that all matched
+to the result of the query expression (e.g. if the query expression is
+'TOPICPARENT.name' then you will get back a hash that maps topic names
+to their parent.
+
+=cut
+
+sub searchInWebMetaData {
+    my( $this, $query, $web, $topics ) = @_;
+    ASSERT($query);
+    ASSERT($query->isa('TWiki::Query'));
+    $web =~ s#\.#/#go;
+
+    my $handler = _getHandler( $this, $web );
+    return $handler->searchInWebMetaData( $query, $topics );
 }
 
 # callback for search function to collate

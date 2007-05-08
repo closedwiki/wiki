@@ -1890,6 +1890,7 @@ sub _TOC {
             $result .= "\n".$line;
         }
     }
+
     if( $result ) {
         if( $highest > 1 ) {
             # left shift TOC
@@ -3157,7 +3158,12 @@ sub SEARCH {
     $params->{search} = $params->{_DEFAULT} if( $params->{_DEFAULT} );
     $params->{type} = $this->{prefs}->getPreferencesValue( 'SEARCHVARDEFAULTTYPE' ) unless( $params->{type} );
 
-    my $s = $this->{search}->searchWeb( %$params );
+    my $s;
+    try {
+        $s = $this->{search}->searchWeb( %$params );
+    } catch Error::Simple with {
+        $s = $this->inlineAlert( 'alerts', 'bad_search', shift );
+    };
     return $s;
 }
 

@@ -31,6 +31,7 @@ use strict;
 use Assert;
 use TWiki::Sandbox;
 use TWiki::Time;
+use Error qw( :try );
 
 my $emptySearch = 'something.Very/unLikelyTo+search-for;-)';
 
@@ -192,9 +193,9 @@ sub _tokensFromSearchString {
         @tokens = split( /;/, $searchString );
 
     }
-    elsif ( $type eq 'literal' ) {
+    elsif ( $type eq 'literal' || $type eq 'query' ) {
 
-        # Literal search (old style)
+        # Literal search (old style) or query
         $tokens[0] = $searchString;
 
     }
@@ -319,16 +320,24 @@ sub _searchTopicsInWeb {
         # scope='text', e.g. grep search on topic text:
         unless ( $scope eq 'topic' ) {
 
-            my $matches = $store->searchInWebContent(
-                $token, $web,
-                \@topicList,
-                {
-                    type                => $type,
-                    casesensitive       => $options->{'caseSensitive'},
-                    wordboundaries      => $options->{'wordBoundaries'},
-                    files_without_match => 1
-                }
-            );
+            my $matches;
+            if( $type eq 'query' ) {
+                require TWiki::Query;
+                my $query = new TWiki::Query( $token );
+                $matches = $store->searchInWebMetaData(
+                    $query, $web, \@topicList);
+            } else {
+                $matches = $store->searchInWebContent(
+                    $token, $web,
+                    \@topicList,
+                    {
+                        type                => $type,
+                        casesensitive       => $options->{'caseSensitive'},
+                        wordboundaries      => $options->{'wordBoundaries'},
+                        files_without_match => 1
+                       }
+                   );
+            }
             @scopeTextList = keys %$matches;
         }
 

@@ -317,6 +317,39 @@ sub searchInWebContent {
 
 =pod
 
+---++ ObjectMethod searchInWebMetaData($query, \@topics) -> \%matches
+
+Search for a meta-data expression in the content of a web. =$query= must be a =TWiki::Query= object.
+
+Returns a reference to a hash that maps the names of topics that all matched
+to the result of the query expression (e.g. if the query expression is
+'TOPICPARENT.name' then you will get back a hash that maps topic names
+to their parent.
+
+=cut
+
+sub searchInWebMetaData {
+    my( $this, $query, $topics ) = @_;
+    my $sDir = $TWiki::cfg{DataDir}.'/'.$this->{web}.'/';
+    local $/;
+    my $store = $this->{session}->{store};
+    my %matches;
+
+    foreach my $topic ( @$topics ) {
+        next unless open(FILE, "<$sDir/$topic.txt");
+        my $text = <FILE>;
+        my $meta = new TWiki::Meta( $this->{session}, $this->{web}, $topic);
+        $store->extractMetaData( $meta, \$text );
+        my $match = $query->matches( $meta );
+        if( $match ) {
+            $matches{$topic} = $match;
+        }
+    }
+    return \%matches;
+}
+
+=pod
+
 ---++ ObjectMethod moveWeb(  $newWeb )
 
 Move a web.
