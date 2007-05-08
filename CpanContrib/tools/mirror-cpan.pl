@@ -6,27 +6,27 @@ use strict;
 
 # TODO: just start using minicpan :)
 
-my $Config;	# forward declaration
+use Getopt::Long;
+
+my $optsConfig;	# forward declaration
 
 sub Usage
 {
     print <<'__USAGE__';
 Usage:
-  ./mirror-cpan.pl [--configuration] [cpan modules list regex...]
-      --h(elp) | --?	usage info
+  mirror-cpan.pl [--mirror=[http://cpan.org]] [--local=[$FindBin::BIN/MIRROR/MINICPAN/]] [cpan modules list regex...]
+      --help | --?	usage info
+      --debug
+      --verbose
 
 Examples:
-Creates local mirror from CPAN containing only the latest version of each module (~523MB 12 Mar 2005)
-  ./mirror-cpan.pl     
+Creates local mirror from CPAN containing only the latest version of each module (~795MB 07 May 2007)
+  tools/mirror-cpan.pl
 Creates a local mirror of everything related to WWW::Mechanize
   ./mirror-cpan.pl WWW::Mechanize
   ./mirror-cpan.pl \^WWW::Mechanize      # more selective; only WWW::Mechanize tree on down, but not, eg, Test::WWW::Mechanize
-Creates a local mirror used by twiki modules
-  ./mirror-cpan --twiki `../bin/calc-twiki-deps.pl`
 __USAGE__
 
-    print "\nAvailable Configurations:  ";
-    print Dumper( $Config );
     return 0;
 }
 
@@ -36,27 +36,29 @@ use FindBin;
 use Data::Dumper qw( Dumper );
 
 ## warning: unknown files below the =local= dir are deleted!
-$Config = {
-    cpan => {
-	remote => "http://www.cpan.org/",
-	local => "$FindBin::Bin/MIRROR/MINICPAN/",
-    },
-    twiki => {
-	remote => "file:$FindBin::Bin/MIRROR/MINICPAN/",
-	local => "$FindBin::Bin/MIRROR/TWIKI/",
-    },
+$optsConfig = {
+    mirror => 'http://cpan.org/',
+    local => "$FindBin::Bin/MIRROR/MINICPAN/",
+# 
+    verbose => 0,
+    debug => 0,
+    help => 0,
+    man => 0,
 };
 
 my $TRACE = 1;
 
 ### END CONFIG
 
-my $where = 'cpan';
-if ( ( $ARGV[0] || '' ) =~ /^--/ )
-{
-    ( $where = shift ) =~ s/^--//;
-    if ( $where =~ /^(h(elp)?|\?)$/i ) { exit Usage() }
-}
+GetOptions( $optsConfig,
+	    'mirror=s', 'local=s',
+# miscellaneous/generic options
+	    'help|?', 'man', 'debug', 'verbose|v',
+	    );
+if ( $optsConfig->{help} || $optsConfig->{man} ) { exit Usage() }
+#pod2usage( 1 ) if $optsConfig->{help};
+#pod2usage({ -exitval => 1, -verbose => 2 }) if $optsConfig->{man};
+print STDERR Dumper( $optsConfig ) if $optsConfig->{debug};
 
 # pass module list on the command line
 my @modules = @ARGV ? @ARGV : q(.+);
@@ -64,8 +66,8 @@ print Dumper( \@modules );
 
 ################################################################################
 
-my $REMOTE = $Config->{$where}->{remote};
-my $LOCAL = $Config->{$where}->{local};
+my $REMOTE = $optsConfig->{mirror};
+my $LOCAL = $optsConfig->{local};
 
 ## core -
 use File::Path qw(mkpath);

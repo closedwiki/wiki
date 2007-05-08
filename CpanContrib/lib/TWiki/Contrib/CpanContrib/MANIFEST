@@ -1,3 +1,3 @@
 data/TWiki/CpanContrib.txt  Plugin doc page
-#bin/install-cpan.pl
-#bin/mirror-cpan.pl
+tools/install-cpan.pl
+tools/mirror-cpan.pl
