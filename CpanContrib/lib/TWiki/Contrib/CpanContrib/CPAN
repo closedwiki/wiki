@@ -37,12 +37,12 @@ File::MMtypes MIME::Types Archive::Any ),
 	qw( XML::SAX XML::LibXML::Common XML::LibXML XML::LibXSLT Text::ParseWords Cache::Cache String::CRC ),	# XmlQueryPlugin (XML::Simple above)
 	qw( List::Permutor ),		# SuggestLinkPlugin
 	qw( Image::Info ),		# LatexModePlugin
-	qw( MIME::Lite Authen::SASL XML::Stream Net::XMPP Net::Jabber ),	# optional SOAP::Lite interfaces
+	qw( MIME::Lite XML::Stream Net::XMPP Net::Jabber ),	# optional SOAP::Lite interfaces
 	qw( SOAP::Lite ),		# SoapClientPlugin
 	qw( Font::AFM HTML::Element HTML::FormatText Date::Format ),	# URLCachePlugin
-	qw( IO::Pty Curses Term::Cap Event POE Net::IP Digest::HMAC_MD5 Net::DNS POE::Component::Client::DNS POE::Component::Client::Ident POE::Filter::IRCD Net::Netmask POE::Component::IRC POE::Component::Server::IRC ),	# IrcContrib
+	qw( IO::Pty Curses Term::Cap Event POE Net::IP Net::DNS POE::Component::Client::DNS POE::Component::Client::Ident POE::Filter::IRCD Net::Netmask POE::Component::IRC POE::Component::Server::IRC ),	# IrcContrib
 	qw( Net::IRC ),			# IrcPlugin
-	qw( Test::More SVN::Simple::Edit List::Util Class::Autouse File::chdir Class::Accessor Sort::Versions Term::ReadKey SVN::Mirror IO::Pager ),
+	qw( SVN::Simple::Edit List::Util Class::Autouse File::chdir Class::Accessor Sort::Versions Term::ReadKey SVN::Mirror IO::Pager ),
 		qw( Algorithm::Annotate Clone Data::Hierarchy File::Type PerlIO PerlIO::eol PerlIO::via::symlink PerlIO::via::dynamic IO::Digest Pod::Escapes Pod::Simple Regexp::Shellish ),
 	qw( File::Spec File::Temp Getopt::Long List::MoreUtils Locale::Maketext::Simple App::CLI Path::Class YAML::Syck version SVK ),
 				   # SVK (YAML, Test::More, Encode, Data::UUID already included)
@@ -57,18 +57,16 @@ File::MMtypes MIME::Types Archive::Any ),
 	qw( Tie::Array::Sorted Time::Piece ),
 	qw( Plucene Plucene-SearchEngine-1.1 ),		# SearchEnginePluceneAddOn
 	qw( Class::Factory Class::Observable DBI DBI::DBD DBD::Mock Params::Validate DateTime::Locale Class::Singleton ),
-	qw( Cwd DateTime::TimeZone DateTime DateTime::Format::Strptime Devel::StackTrace Exception::Class Log::Dispatch Log::Log4perl Workflow ),
+	qw( Cwd DateTime::TimeZone DateTime::Format::Strptime Devel::StackTrace Exception::Class Log::Dispatch Log::Log4perl Workflow ),
 		# (DBD::CSV or SQL::Statement for Log::Log4perl tests)
-	qw( DBD::SQLite Math::Units Parse::RecDescent URI::Find POE::Component::IRC Date::Parse ),	# PipSqueek
+	qw( DBD::SQLite Math::Units Parse::RecDescent URI::Find Date::Parse ),	# PipSqueek
 		# (Class::Accessor, DBI, POE already installed) 
 	qw( Schedule::Cron ),
-	qw( Params::Validate ),
 	qw( Spreadsheet::WriteExcel Date::Manip ),	# FormMeta2ExcelAddOn
 	qw( Image::Magick ),
-	qw( GetOpt::Long ),
 	qw( JSON ),					# InlineEditPlugin
 	qw( Safe HTML::Mason ),				# MasonPlugin
-	qw( HTTP::Lite Class::Accessor::Chained Text::vFile::asData Set::Infinite DateTime::Set FreezeThaw DateTime::Locale DateTime::TimeZone DateTime DateTime::Event::Recurrence DateTime::Event::ICal DateTime::Format::ICal iCal::Parser ),	# http://twiki.org/p/pub/Plugins/CalendarPluginDev/Calendar.pl.txt
+	qw( HTTP::Lite Class::Accessor::Chained Text::vFile::asData Set::Infinite DateTime::Set FreezeThaw DateTime DateTime::Event::Recurrence DateTime::Event::ICal DateTime::Format::ICal iCal::Parser ),	# http://twiki.org/p/pub/Plugins/CalendarPluginDev/Calendar.pl.txt
 	qw( B::PerlReq ),		# for BuildContrib's make dependencies
 );
 
@@ -91,4 +89,13 @@ for my $i ( 0..$nCols-1 ) {
 print table({},
 	    caption( "Included CPAN Modules (" . scalar @CPAN . ' installed)' ),
 	    Tr( {-valign=>'top'}, @row )
-	    );
+	    ), "\n";
+
+# duplicates checking
+my $u; map { ++$u->{$_} } @CPAN;
+my $diff = scalar @CPAN - scalar keys %$u;
+warn "duplicates! ($diff)\n" if $diff;
+while ( my ( $module, $count ) = each( %$u ) ) {
+	warn "$module\n" if $count>1;
+}
+
