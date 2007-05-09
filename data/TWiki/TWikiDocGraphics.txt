@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1161409719" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1178746198" format="1.1" version="$Rev$"}%
 ---+!! TWiki Documentation Graphics and Filetype icons
 
 This is the TWiki icon library. The graphics can be used in topics and by web applications. 
@@ -106,6 +106,7 @@ Other usage: [[%TOPIC%#Usage_extended][see below]].
 | <img src="%ATTACHURLPATH%/recentchanges.gif" alt="Recent changes" title="Recent changes" />  | =recentchanges.gif= | Recent changes | =%<nop>ICON{recentchanges}%= |
 | <img src="%ATTACHURLPATH%/mail.gif" alt="Mail" title="Mail" />  | =mail.gif= | Mail | =%<nop>ICON{mail}%= |
 | <img src="%ATTACHURLPATH%/notify.gif" alt="Notify" title="Notify" />  | =notify.gif= | Notify | =%<nop>ICON{notify}%= |
+| <img src="%ATTACHURLPATH%/feed.gif" alt="Feed" title="Feed" />  | =feed.gif= | Feed | =%<nop>ICON{feed}%= |
 | <img src="%ATTACHURLPATH%/rss-feed.gif" alt="RSS feed" title="RSS feed" />  | =rss-feed.gif= | RSS feed, 36x14 | =&lt;img src="%<nop>ICONURL{rss-feed}%" width="36" height="14" alt="RSS feed" border="0" /&gt;= |
 | <img src="%ATTACHURLPATH%/rss-small.gif" alt="RSS feed" title="RSS feed" />  | =rss-small.gif= | RSS feed | =%<nop>ICON{rss-small}%= |
 | <img src="%ATTACHURLPATH%/xml-feed.gif" alt="XML feed" title="XML feed" />  | =xml-feed.gif= | XML feed, 36x14 | =&lt;img src="%<nop>ICONURL{xml-feed}%" width="36" height="13" alt="XML feed" border="0" /&gt;= |
