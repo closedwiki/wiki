@@ -56,14 +56,14 @@
 
 %TMPL:P{"previous"}%%IF{"$ATTACHFILESIZELIMIT > 0" then="%MAKETEXT{"Upload up to [_1] KB." args="%ATTACHFILESIZELIMIT%"}%"}%
 
-<input class="twikiInputField" type="file" name="filepath" value="%FILEPATH%" size="50" /><input type="hidden" name="filename" value="%FILENAME%" />
+<input class="twikiInputField" type="file" name="filepath" value="%FILEPATH%" size="70" /><input type="hidden" name="filename" value="%FILENAME%" />
 </div><!-- /twikiFormStep-->
 <div class="twikiFormStep">
 ---+++ %MAKETEXT{"Comment"}%
 
 %MAKETEXT{"Describe the file so other people know what it is."}%
 
-<input class="twikiInputField" type="text" name="filecomment" value="%FILECOMMENT%" maxlength="256" size="50" />
+<input class="twikiInputField" type="text" name="filecomment" value="%FILECOMMENT%" maxlength="256" size="70" />
 </div><!-- /twikiFormStep-->
 %TMPL:P{"twikiFormStepproperties"}%
 ---+++ %MAKETEXT{"Properties"}%
