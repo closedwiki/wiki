@@ -2,10 +2,12 @@
 		    qw( ExtUtils::MakeMaker Storable Test::More Test::Harness YAML ),
 		qw( Compress::Raw::Zlib IO::Compress::Base IO::Compress::Gzip Compress::Zlib IO::Zlib ),
 		qw( IO::String Archive::Tar Data::Startup ),
-		qw( Math::BigRat bignum Math::BigInt ),
+		qw( Math::BigInt Math::BigRat bignum ),
 		qw( File::Package File::Where File::AnySpec Tie::Gzip Archive::TarGzip ExtUtils::CBuilder ExtUtils::ParseXS Tree::DAG_Node Carp::Assert ),
 		qw( Class::Data::Inheritable Class::ISA Class::Virtually::Abstract File::Which Archive::Zip ),
-		qw( Module::Find Sub::Uplevel Test::Exception Array::Compare Test::Warn File::MMtypes MIME::Types Archive::Any ),
+		qw( Module::Find Sub::Uplevel Test::Exception Array::Compare Test::Warn 
+File::MMagic ?
+File::MMtypes MIME::Types Archive::Any ),
 	qw( Module::Build ),
 		    qw( Error URI HTML::Tagset HTML::Parser LWP LWP::UserAgent XML::NamespaceSupport XML::Parser XML::Simple Algorithm::Diff Text::Diff HTML::Diff ),
 #		    qw( HTML::Form HTML::HeadParser HTTP::Status HTML::TokeParser HTTP::Daemon HTTP::Request ),
@@ -40,20 +42,22 @@
 	qw( Font::AFM HTML::Element HTML::FormatText Date::Format ),	# URLCachePlugin
 	qw( IO::Pty Curses Term::Cap Event POE Net::IP Digest::HMAC_MD5 Net::DNS POE::Component::Client::DNS POE::Component::Client::Ident POE::Filter::IRCD Net::Netmask POE::Component::IRC POE::Component::Server::IRC ),	# IrcContrib
 	qw( Net::IRC ),			# IrcPlugin
-	qw( Test::More SVN::Simple::Edit Class::Autouse File::chdir Class::Accessor Sort::Versions Term::ReadKey SVN::Mirror IO::Pager ),
+	qw( Test::More SVN::Simple::Edit List::Util Class::Autouse File::chdir Class::Accessor Sort::Versions Term::ReadKey SVN::Mirror IO::Pager ),
 		qw( Algorithm::Annotate Clone Data::Hierarchy File::Type PerlIO PerlIO::eol PerlIO::via::symlink PerlIO::via::dynamic IO::Digest Pod::Escapes Pod::Simple Regexp::Shellish ),
-	qw( SVK ),				   # SVK (YAML, Test::More, Encode, Data::UUID already included)
+	qw( File::Spec File::Temp Getopt::Long List::MoreUtils Locale::Maketext::Simple App::CLI Path::Class YAML::Syck version SVK ),
+				   # SVK (YAML, Test::More, Encode, Data::UUID already included)
 # also (optional for SVN::Mirror) VCP::Dest::svk (VCP?)
 #	qw( Authen::SASL XML::Stream Net::Jabber ),	# ImmediateNotifyPlugin (already included by SOAP::Lite for SoapClientPlugin)
 	qw( Email::Simple Module::Pluggable Email::FolderType Email::Folder Email::FolderType::Net MIME::Base64 Email::MIME::Encodings Email::MIME::ContentType Email::MIME File::Path::Expand Email::LocalDelivery Email::Delete Net::POP3 Email::Folder::POP3 Net::IMAP::Simple URI::imap Email::Folder::IMAP ),	# MailInContrib
 	qw( Tk Devel::ptkdb ),		# for debugging
-	qw( Test::Manifest XML::RSS ),			# for tools/tinderbox/latest-svn-revision.pl
+	qw( Test::Manifest DateTime::Format::W3CDTF DateTime::Format::Mail XML::RSS ),			# for tools/tinderbox/latest-svn-revision.pl
 	qw( Class::Inner Devel::Symdump Test::Unit::Debug ),
 	qw( Bit::Vector::Minimal IO::Scalar ),
 		qw( Lingua::GL::Stemmer Lingua::PT::Stemmer Lingua::Stem::Fr Lingua::Stem::It Lingua::Stem::Ru Lingua::Stem::Snowball::Da Lingua::Stem::Snowball::No Lingua::Stem::Snowball::Se Text::German Lingua::Stem::En ),
 	qw( Tie::Array::Sorted Time::Piece ),
 	qw( Plucene Plucene-SearchEngine-1.1 ),		# SearchEnginePluceneAddOn
-	qw( Class::Factory Class::Observable DBI DBI::DBD DBD::Mock Params::Validate DateTime::Locale Class::Singleton DateTime::TimeZone DateTime DateTime::Format::Strptime Devel::StackTrace Exception::Class Log::Dispatch Log::Log4perl Workflow ),
+	qw( Class::Factory Class::Observable DBI DBI::DBD DBD::Mock Params::Validate DateTime::Locale Class::Singleton ),
+	qw( Cwd DateTime::TimeZone DateTime DateTime::Format::Strptime Devel::StackTrace Exception::Class Log::Dispatch Log::Log4perl Workflow ),
 		# (DBD::CSV or SQL::Statement for Log::Log4perl tests)
 	qw( DBD::SQLite Math::Units Parse::RecDescent URI::Find POE::Component::IRC Date::Parse ),	# PipSqueek
 		# (Class::Accessor, DBI, POE already installed) 
