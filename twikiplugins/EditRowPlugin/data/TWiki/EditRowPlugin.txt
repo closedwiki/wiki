@@ -83,6 +83,7 @@ Add =%<nop>EDITTABLE{...}%= on the line before the first row of an existing tabl
      will present the columns of the row as rows in the editor. This makes
      editing very wide tables much easier. Has no effect in whole table
      editing mode.
+   * ==helptopic== Topic name containing help text shown when editing a table. The [[VarSTARTINCLUDE][%<nop>STARTINCLUDE%]] and [[VarSTOPINCLUDE][%<nop>STOPINCLUDE%]] markers can be used in the topic to specify what is shown.
 
 Table rows are shown with a row edit button %ICON{edittopic}% in the first column,
 and a table edit button <img src="%ATTACHURLPATH%/edittable.gif" /> after the
@@ -145,7 +146,7 @@ These preferences can be defined in %MAINWEB%.TWikiPreferences, in !WebPreferenc
 ---+++ !EditTablePlugin
 At this time most features of !EditTablePlugin are supported. Known exceptions
 are:
-   * the =helptopic= and =editbutton= parameters,
+   * the =editbutton= parameter,
    * the =EDITCELL= feature,
    * Plugin preferences (though global preferences are compatible)
 ---+++ !TablePlugin

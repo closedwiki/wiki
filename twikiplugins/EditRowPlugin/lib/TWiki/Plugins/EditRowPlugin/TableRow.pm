@@ -68,12 +68,13 @@ sub renderForEdit {
 
     my $id = "$this->{table}->{number}_$this->{number}";
     my $anchor = CGI::a({ name=>"erp_$id" }).' ';
+    my @rows;
+    my $empties = '|' x (scalar(@{$this->{cols}}) - 1);
+    my $help = '';
 
     if ($orient eq 'vertical') {
         # Each column is presented as a row
-        my @rows;
         # Number of empty columns at end of each row
-        my $empties = '|' x (scalar(@{$this->{cols}}) - 1);
         my $hdrs = $this->{table}->getLabelRow();
         my $col = 0;
         foreach my $cell (@{$this->{cols}}) {
@@ -91,7 +92,6 @@ sub renderForEdit {
                 $this->{number}, 0);
             push(@rows, "| $buttons ||$empties");
         }
-        return @rows;
     } else {
         # Generate the editors for each cell in the row
         my @cols = ();
@@ -100,14 +100,21 @@ sub renderForEdit {
             push(@cols, $text);
         }
 
+        my $help = '';
         if ($showControls) {
             my $buttons = $this->{table}->generateEditButtons(
                 $this->{number}, 1);
             unshift(@cols, $buttons);
         }
 
-        return ($this->{precruft}."$anchor" . join('|', @cols) . $this->{postcruft});
+        push(@rows, $this->{precruft}.$anchor.join('|', @cols).
+               $this->{postcruft});
     }
+    if ($showControls) {
+        $help = $this->{table}->generateHelp();
+        push(@rows, "| $help ||$empties") if $help;
+    }
+    return @rows;
 }
 
 sub renderForDisplay {
