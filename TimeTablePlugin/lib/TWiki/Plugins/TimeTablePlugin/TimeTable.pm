@@ -173,7 +173,7 @@ sub _initDefaults {
 		workingbgcolor => 'white',	
 		workingfgcolor => 'black',
 		compatmode => 0, 		# compatibility mode
-		cmheaderformat => '<font title="%A - %d %B %y" size="-2">%b<br/>%a<br/>%e</font>',   # format of the header
+		cmheaderformat => '<font title="%A - %d %B %y" size="-2">%a<br/>%e</font>',   # format of the header
                 todaybgcolor    => undef,       # background color for today cells (usefull for a defined startdate)
                 todayfgcolor    => undef,       # foreground color for today cells (usefull for a dark todaybgcolor)
 		days	=> 7,			# XXX for later use
@@ -198,10 +198,14 @@ sub _initDefaults {
 		tooltipfixtop=>0,
 		tooltipdateformat => '%d %B %Y',
 		fontsize=>'xx-small',
+		showmonthheader => undef,
+		monthheaderformat => '%B',
+		monthheaderbgcolor => undef,
+		monthheaderfgcolor => 'black',
 	);
 
 	@renderedOptions = ('tablecaption', 'name' , 'navprev', 'navnext', 'wholetimerowtext');
-	@flagOptions = ( 'compatmode', 'showweekend', 'displaytime', 'forcestartdate', 'wholetimerow' );
+	@flagOptions = ( 'compatmode', 'showweekend', 'displaytime', 'forcestartdate', 'wholetimerow','showmonthheader' );
 
 
         %months = ( Jan=>1, Feb=>2, Mar=>3, Apr=>4, May=>5, Jun=>6, 
@@ -504,7 +508,25 @@ sub _render {
 	$text .= $cgi->caption($options{'tablecaption'});
 
 	### render weekday header:
-	$tr=$cgi->td($options{'name'}." ".&_renderNav(0)); 
+	my $showmonthheader = ((!defined $options{'showmonthheader'}&&$options{'compatmode'})||($options{'showmonthheader'}));
+	$tr=$cgi->td({rowspan=>$showmonthheader?2:1},$options{'name'}." ".&_renderNav(0)); 
+	if ($showmonthheader) {
+                my $restdays = $options{days};
+                my ($yy1,$mm1,$dd1) = ($yy, $mm, $dd);
+		my $bgcolor=(defined $options{'monthheaderbgcolor'})?$options{'monthheaderbgcolor'}:$options{'tableheadercolor'};
+		my $fgcolor=$options{'monthheaderfgcolor'};
+                while ($restdays > 0) {
+                        my $daysdiff = Days_in_Month($yy1,$mm1) - $dd1 + 1;
+                        $daysdiff = $restdays if ($restdays-$daysdiff<0);
+                        $tr .= $cgi->th({-colspan=>$daysdiff,-title=>Month_to_Text($mm1).' '.$yy1, -style=>"background-color: $bgcolor; color: $fgcolor"}, 
+					&_mystrftime($yy1,$mm1,$dd1,$options{'monthheaderformat'}));
+                        ($yy1,$mm1,$dd1) = Add_Delta_Days($yy1,$mm1,$dd1, $daysdiff);
+                        $restdays -= $daysdiff;
+                }
+		$tr.=$cgi->td({rowspan=>2},&_renderNav(1));
+		$text .= $cgi->Tr($tr);
+		$tr="";
+	} 
 	for (my $day = 0; $day < $options{'days'}; $day++) {
 		my ($yy1,$mm1,$dd1)= Add_Delta_Days($yy,$mm,$dd,$day);
 		my $dow = Day_of_Week($yy1,$mm1,$dd1);
@@ -518,7 +540,7 @@ sub _render {
 
 		$tr .= $cgi->td({-style=>(($colfgcolor ne '')?"color:$colfgcolor":''), -bgcolor=>$colbgcolor,-valign=>"top", -align=>"center", -title=>&_mystrftime($yy1,$mm1,$dd1,$options{'tooltipdateformat'}), -width=>$options{'tablecolumnwidth'}?$options{'tablecolumnwidth'}:""},&_mystrftime($yy1,$mm1,$dd1));
 	}
-	$tr.=$cgi->td(&_renderNav(1));
+	$tr.=$cgi->td(&_renderNav(1)) unless $showmonthheader;
 	$text .= $cgi->Tr($tr);
 	$text .= "\n";
 
