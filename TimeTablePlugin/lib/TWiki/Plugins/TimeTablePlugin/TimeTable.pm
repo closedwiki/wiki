@@ -529,7 +529,7 @@ sub _render {
 					} 
 				}
 			}
-                        $tr .= $cgi->th({-colspan=>$daysdiff-$weekenddays,-title=>Month_to_Text($mm1).' '.$yy1, -style=>"background-color: $bgcolor; color: $fgcolor"}, 
+                        $tr .= $cgi->th({-colspan=>$daysdiff-$weekenddays,-title=>Month_to_Text($mm1).' '.$yy1, -style=>"text-align:center;background-color: $bgcolor; color: $fgcolor"}, 
 					&_mystrftime($yy1,$mm1,$dd1,$options{'monthheaderformat'})) if $daysdiff-$weekenddays>0;
                         ($yy1,$mm1,$dd1) = Add_Delta_Days($yy1,$mm1,$dd1, $daysdiff);
                         $restdays -= $daysdiff;
