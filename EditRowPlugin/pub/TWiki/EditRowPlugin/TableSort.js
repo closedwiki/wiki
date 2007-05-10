@@ -5,8 +5,6 @@
 // sortTable(id, col, rev)
 //
 //  tblEl - an element anywhere in the table
-//  col - Index of the column to sort, 0 = first column, 1 = second column,
-//        etc.
 //  rev - If true, the column is sorted in reverse (descending) order
 //        initially.
 //  headrows - number of rows in table header (unsorted)
@@ -14,17 +12,50 @@
 //
 // Automatically detects and sorts data types; numbers and dates
 
-function sortTable(tblEl, col, rev, headrows, footrows) {
-    
-    // Get the table or table section to sort.
-    // Search up to find the containing table
-    while (tblEl != null &&
-           tblEl.tagName.toUpperCase() != "TABLE") {
-        tblEl = tblEl.parentNode;
+function sortTable(el, rev, headrows, footrows) {
+
+    // Search up to find the containing TD or TH
+    var tdEl = el;
+    while (tdEl != null &&
+           tdEl.tagName.toUpperCase() != "TD" &&
+           tdEl.tagName.toUpperCase() != "TH") {
+        tdEl = tdEl.parentNode;
+    }
+    if (tdEl == null) {
+        return;
     }
 
+    // Continue up to the TR
+    var trEl = tdEl;
+    while (trEl != null && trEl.tagName.toUpperCase() != "TR") {
+        trEl = trEl.parentNode;
+    }
+    if (trEl == null) {
+        return;
+    }
+
+    // Continue to search up to find the containing table
+    var tblEl = trEl;
+    while (tblEl != null && tblEl.tagName.toUpperCase() != "TABLE") {
+        tblEl = tblEl.parentNode;
+    }
     if (tblEl == null) {
         return;
+    }
+
+    // Now work out the column index
+    var col = 0;
+    var i = 0;
+    while (i < trEl.childNodes.length) {
+        if (trEl.childNodes[i].tagName != null) {
+            if (trEl.childNodes[i] == tdEl)
+                break;
+            col++;
+        }
+        i++;
+    }
+    if (i == trEl.childNodes.length) {
+        return null;
     }
 
     // Find the TBODY, and work out the number of rows
@@ -258,7 +289,6 @@ function compareValues(v1, v2) {
             }
         }
     }
-    
     // Compare the two values.
     if (v1 == v2)
         return 0;
@@ -284,6 +314,7 @@ function normalizeString(s) {
 // Not used, but kept for when TablePlugin uses classes.
 //-----------------------------------------------------------------------------
 
+/*
 // Style class names.
 var rowClsNm = "alternateRow";
 var colClsNm = "sortedColumn";
@@ -330,3 +361,4 @@ function makePretty(tblEl, col) {
         }
     }
 }
+*/

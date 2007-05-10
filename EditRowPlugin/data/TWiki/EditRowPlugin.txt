@@ -60,6 +60,8 @@ Add =%<nop>EDITTABLE{...}%= on the line before the first row of an existing tabl
    * ==changerows== - Rows can be added and removed if ="on"=. Rows can be
      added but not removed if ="add"=. Defaults to the value of the
      [[TWikiVariables][preference]] =CHANGEROWS=, or =off= if it isn't set.
+   * ==disable== - By default, the plugin shows both full table and individual row editing controls. You can choose to disable one or both of these modes using the =disable= parameter, by setting it to =row= or =full= (or =row,full= to disable all editing and just leave sorting). If full table editing is disabled, but =changerows= is =on=, then the <img src="%ATTACHURLPATH%/edittable.gif" /> (edit table) button will be replaced with a <img src="%ATTACHURLPATH%/addrow.gif" /> (add row) button. Defaults to the value of the
+     [[TWikiVariables][preference]] =EDITROWPLUGIN_DISABLE=, or =none= if it isn't set.
    * ==quietsave== - Quiet Save button is shown if ="on"=. Defaults to the
      value of the [[TWikiVariables][preference]] =QUIETSAVE=, or =off= if it
      isn't set.
@@ -83,7 +85,7 @@ Add =%<nop>EDITTABLE{...}%= on the line before the first row of an existing tabl
      will present the columns of the row as rows in the editor. This makes
      editing very wide tables much easier. Has no effect in whole table
      editing mode.
-   * ==helptopic== Topic name containing help text shown when editing a table. The [[VarSTARTINCLUDE][%<nop>STARTINCLUDE%]] and [[VarSTOPINCLUDE][%<nop>STOPINCLUDE%]] markers can be used in the topic to specify what is shown.
+   * ==helptopic== Topic name containing help text shown when editing a table. The [[VarSTARTINCLUDE][%<nop>STARTINCLUDE%]] and [[VarSTOPINCLUDE][%<nop>STOPINCLUDE%]] markers can be used in the topic to specify what is shown. Note that newlines are removed from the included text so the that text can be used inside a TWiki table.
 
 Table rows are shown with a row edit button %ICON{edittopic}% in the first column,
 and a table edit button <img src="%ATTACHURLPATH%/edittable.gif" /> after the
@@ -191,6 +193,7 @@ The value of each individual cell is stored in a parameter called =erp_&lt;table
 |  Copyright: | &copy; 2007 Wind<nop>River Inc. |
 |  License: | [[http://www.gnu.org/licenses/gpl.html][GPL (Gnu General Public License)]] |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  13685 | Bugs:Item4040 Support for =helptopic= and =disable=, which allows more flexible configuration of the UI, especially when vertical editing |
 |  13641 | Bugs:Item4020 Improved the table anchors for a better editing experience. Fixed calendar formats. Fixed table footer sorting. Disabled label edits. Fixed multi-malued checkboxes. |
 |  13615 | Bugs:Item3882 added initial values support Bugs:Item4009 fixed included tables. Also fixed a bug with variable expansion reported in the dev topic. |
 |  13609 | Bugs:Item4003: fixed colspan. Also added support for headerrows and footerrows parameters from %TABLE |
@@ -214,5 +217,6 @@ The value of each individual cell is stored in a parameter called =erp_&lt;table
 %META:FILEATTACHMENT{name="wikiring.png" attr="h" comment="" version="1"}%
 %META:FILEATTACHMENT{name="edittable.gif" attr="h" comment="" version="1"}%
 %META:FILEATTACHMENT{name="quiet.gif" attr="h" comment="" version="1"}%
+%META:FILEATTACHMENT{name="addrow.gif" attr="h" comment="" version="1"}%
 %META:FILEATTACHMENT{name="example3.gif" attr="h" comment="" version="1"}%
 %META:FILEATTACHMENT{name="example4.gif" attr="h" comment="" version="1"}%

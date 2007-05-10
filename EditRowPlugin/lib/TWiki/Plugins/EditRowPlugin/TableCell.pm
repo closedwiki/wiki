@@ -38,7 +38,7 @@ sub stringify {
     return $this->{precruft}.$this->{text}.$this->{postcruft};
 }
 
-# Generate a sort command suitable for sorting the table columns
+# Get the HTMl for the cell
 sub _getCell {
     my ($this, $isHeader) = @_;
     my $text = $this->{text};
@@ -46,8 +46,7 @@ sub _getCell {
     if ($isHeader) {
         $text = CGI::span(
             { class => 'erpSort',
-              onclick => 'javascript: return sortTable(this, '.
-                $this->{number}.', false, '.
+              onclick => 'javascript: return sortTable(this, false, '.
                   $this->{row}->{table}->{attrs}->{headerrows}.','.
                     $this->{row}->{table}->{attrs}->{footerrows}.');',
           }, $text);
