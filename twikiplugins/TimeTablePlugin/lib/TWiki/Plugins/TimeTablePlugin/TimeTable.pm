@@ -518,8 +518,19 @@ sub _render {
                 while ($restdays > 0) {
                         my $daysdiff = Days_in_Month($yy1,$mm1) - $dd1 + 1;
                         $daysdiff = $restdays if ($restdays-$daysdiff<0);
-                        $tr .= $cgi->th({-colspan=>$daysdiff,-title=>Month_to_Text($mm1).' '.$yy1, -style=>"background-color: $bgcolor; color: $fgcolor"}, 
-					&_mystrftime($yy1,$mm1,$dd1,$options{'monthheaderformat'}));
+			my $weekenddays = 0;
+			if (!$options{'showweekend'}) {
+				for (my $i=0; $i<$daysdiff; $i++) {
+					my ($yy2,$mm2,$dd2) = Add_Delta_Days($yy1,$mm1,$dd1,$i);
+					my $dow = Day_of_Week($yy2,$mm2,$dd2);
+					if ($dow>5) {
+						$weekenddays++;
+						$i+=5 if $dow==7;
+					} 
+				}
+			}
+                        $tr .= $cgi->th({-colspan=>$daysdiff-$weekenddays,-title=>Month_to_Text($mm1).' '.$yy1, -style=>"background-color: $bgcolor; color: $fgcolor"}, 
+					&_mystrftime($yy1,$mm1,$dd1,$options{'monthheaderformat'})) if $daysdiff-$weekenddays>0;
                         ($yy1,$mm1,$dd1) = Add_Delta_Days($yy1,$mm1,$dd1, $daysdiff);
                         $restdays -= $daysdiff;
                 }
