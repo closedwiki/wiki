@@ -146,6 +146,8 @@ sub login {
             if( !$origurl || $origurl eq $query->url() ) {
                 $origurl = $twiki->getScriptUrl( 0, 'view', $web, $topic );
             }
+            #SUCCESS our user is authenticated..
+            $query->delete('sudo'); #remove the sudo param - its only to tell TemplateLogin that we're using BaseMapper..
             # Redirect with passthrough
             $twikiSession->redirect($origurl, 1 );
             return;
