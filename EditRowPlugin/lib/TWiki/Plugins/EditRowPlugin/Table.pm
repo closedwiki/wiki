@@ -287,6 +287,8 @@ sub renderForEdit {
     }
     if ($wholeTable) {
         push(@out, $this->generateEditButtons(0, 0));
+        my $help = $this->generateHelp();
+        push(@out, $help) if $help;
     }
     return join("\n", @out)."\n";
 }
@@ -514,6 +516,24 @@ sub _parseFormat {
     }
 
     return \@cols;
+}
+
+sub generateHelp {
+    my ($this) = @_;
+    my $attrs = $this->{attrs};
+    my $help;
+    if ($attrs->{helptopic}) {
+        my ($web, $topic) = TWiki::Func::normalizeWebTopicName(
+            $this->{web}, $attrs->{helptopic});
+        my ($meta, $text) = TWiki::Func::readTopic($web, $topic);
+        $text =~ s/.*?%STARTINCLUDE%//s;
+        $text =~ s/%STOPINCLUDE%.*//s;
+        $text =~ s/^\s*//s;
+        $text =~ s/\s*$//s;
+        $text =~ s/\r?\n/ <br \/> /g;
+        $help = $text;
+    }
+    return $help;
 }
 
 sub generateEditButtons {
