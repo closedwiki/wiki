@@ -32,7 +32,13 @@ use Data::Dumper qw( Dumper );		# not (just) for debugging, but for loading and 
 
 sub new {
     my $class = shift;
-    return bless( $class->SUPER::new( "CpanContrib" ), $class );
+    my $this = bless( $class->SUPER::new( "CpanContrib" ), $class );
+
+    $this->{DEBUG} = 0;
+    $this->{throttle} = 0;	# delay after each module build (to be nicer on shared hosts?)
+    $this->{force} = 0;		# force rebuild even if newer than cache
+
+    return $this;
 }
 
 
@@ -57,7 +63,7 @@ sub stage_cpan {
 			no_chdir => 1 }, 
 		      '.' );
 }
-  
+
 
 sub target_build {
     my $this = shift;
@@ -81,12 +87,12 @@ sub target_build {
 
     use Cwd;
     my $base_lib_dir = getcwd . "/../../../CPAN";
+    $this->{DEBUG} && print STDERR "base_lib_dir=[$base_lib_dir]\n";
     # to keep "old" builds so that everything doesn't need to be built from scratch (for reasonable build times)
-#    -e $base_lib_dir && rmtree $base_lib_dir;
     -d $base_lib_dir || mkpath $base_lib_dir or die $!;
     ++$|;
 
-    my $build_cache_filename = '.build_cache';
+    my $build_cache_filename = "$base_lib_dir/.build_cache";
 
     my $build_cache;
     if ( open( BUILD_CACHE, '<', $build_cache_filename ) )
@@ -94,9 +100,15 @@ sub target_build {
 	local $/ = undef;
 	my $file = <BUILD_CACHE>;
 	close BUILD_CACHE;
+	$this->{DEBUG} && print STDERR $file;
 
-	$build_cache = eval $file;
+	{
+	    no strict;
+	    $build_cache = eval $file;
+	    die $@ if $@;
+	}
     }
+    $this->{DEBUG} && print STDERR Dumper( $build_cache );
 
     foreach my $module ( @CpanContrib::Modules::CPAN )
     {
@@ -105,7 +117,7 @@ sub target_build {
 	# SMELL: fix unix-specific chmod shell call
 	system( chmod => '-R' => 'a+rwx' => $dirCpanBuild ), rmtree $dirCpanBuild if -d $dirCpanBuild;
 
-	if ( _upToDate( $build_cache, $module ) )
+	if ( $this->_upToDate( $build_cache, $module ) )
 	{
 	    print "Skipping $module (already built)\n";
 	    print "-" x 80, "\n";
@@ -118,7 +130,9 @@ sub target_build {
 	    -e $mirror or $mirror = 'http://cpan.perl.org';
 	    $build_cache->{$module}->{timebuilt} = time;	# earlier timestamp is better than later
 	    my $INSTALL_CPAN = `perl ../../../../tools/install-cpan.pl --mirror=$mirror --baselibdir=$base_lib_dir $module </dev/null`;
+	    $this->{DEBUG} && print STDERR $INSTALL_CPAN;
 	    if ( $@ ) {
+		# TODO: also check for 'prerequisite' '::' lines?
 		print STDERR "error installing $module: $@\n";
 	    }
 	    # fill in the cache information
@@ -127,10 +141,11 @@ sub target_build {
 
 	    # save module build cache
 	    open( BUILD_CACHE, '>', $build_cache_filename );
-	    $Data::Dumper::Sortkeys = sub { my ( $hash ) = @_; return [ sort keys %$hash ] };
+	    $Data::Dumper::Sortkeys = sub { [ sort lc keys %{ my $h = shift() } ] };
 	    print BUILD_CACHE Dumper( $build_cache );
 	    close BUILD_CACHE;
 	}
+	sleep $this->{throttle};
     }
 
     # cleanup the intermediate CPAN build directories
@@ -147,13 +162,16 @@ sub target_build {
 # (or maybe i can do more parsing of the output to see if it copied any files anywhere)
 sub _upToDate
 {
+    my $self = shift;
     my $cache = shift;
+
     # no cache information; it "can't" be up-to-date
     return 0 unless $cache;
 
     my $module = shift or die "no module?";
 
     my $module_cache = $cache->{$module};
+    $self->{DEBUG} && print STDERR "module_cache: ", Dumper( $module_cache );
 
     # if cache doesn't know anything about it, we can't say it's up-to-date
     return 0 unless $module_cache->{timebuilt};
@@ -162,7 +180,9 @@ sub _upToDate
     return 0 unless -e $module_cache->{CPAN_FILE};
 
     # simply, if the source file is newer, rebuild
-    return 0 if (stat( $module_cache->{CPAN_FILE} ))[9] > $module_cache->{timebuilt};
+    my $cpan_file_timestamp = ( stat( $module_cache->{CPAN_FILE} ))[9];
+    $self->{DEBUG} && print STDERR "cpan_file_timestamp: [$cpan_file_timestamp]\n";
+    return 0 if $cpan_file_timestamp > $module_cache->{timebuilt};
 
     return 1;
 }
