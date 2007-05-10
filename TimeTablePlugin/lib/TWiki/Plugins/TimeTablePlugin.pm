@@ -38,7 +38,8 @@ $VERSION = '$Rev: 8670$';
 # of the version number in PLUGINDESCRIPTIONS.
 $RELEASE = 'Dakar';
  
-$REVISION = '1.011'; #dro# added fontsize attribute; fixed HTML bug (validation);
+$REVISION = '1.012'; #dro# fixed readTopicText bug reported TWiki:Main.JoachimRahn
+#$REVISION = '1.011'; #dro# added fontsize attribute; fixed HTML bug (validation);
 #$REVISION = '1.010'; #dro# added tablecolumnwidth and tabledatacellwidth attributes requested by TWiki:Main.VickiBrown;  added tooltip feature (tooltip... attributes);
 #$REVISION = '1.009'; #dro# added duration feature; added time zone abbreviations; improved performance; fixed conflict rendering bug; fixed time zone bugs (whole-time event handling, topic include)
 #$REVISION = '1.008'; #dro# added timezone feature requested by TWiki:Main.BenWatts; fixed major midday/midnight (12pm/12am) bug reported by TWiki:Main.BenWatts; fixed overlapping day bug; fixed periodic event bug; fixed minor bugs (stylesheet bug: annyoing JavaScript errors; empty event row) 

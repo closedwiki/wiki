@@ -1162,7 +1162,7 @@ sub _expandIncludedEvents
 
         push( @{$theProcessedTopicsRef}, "$theWeb.$theTopic" );
 
-        my $text = &readTopicText( $theWeb, $theTopic );
+        my $text = &_readTopicText( $theWeb, $theTopic );
 
         $text =~ s/.*?%STARTINCLUDE%//s;
         $text =~ s/%STOPINCLUDE%.*//s;
