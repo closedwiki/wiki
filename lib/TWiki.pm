@@ -1274,10 +1274,11 @@ sub new {
     $this->{search} = new TWiki::Search( $this );
     $this->{templates} = new TWiki::Templates( $this );
     $this->{attach} = new TWiki::Attach( $this );
-    $this->{loginManager} = TWiki::LoginManager::makeLoginManager( $this );
     # cache CGI information in the session object
     $this->{cgiQuery} = $query;
-
+    
+    #TODO: move loginManager into the TWiki::User - or even into the mappings
+    $this->{loginManager} = TWiki::LoginManager::makeLoginManager( $this );
     $this->{users} = new TWiki::Users( $this );
 
     # Make %ENV safer, preventing hijack of the search path
@@ -1392,11 +1393,7 @@ sub new {
         $this->{urlHost} = $TWiki::cfg{DefaultUrlHost};
     }
 
-    # setup the cgi session, from a cookie or the url. this may return
-    # the login, but even if it does, plugins will get the chance to override
-    # it below.
-    $login = $this->{remoteUser} =
-      $this->{loginManager}->loadSession( $login );
+    $this->{remoteUser} = $this->{users}->initialiseUserFromSession($login);
 
     my $prefs = new TWiki::Prefs( $this );
     $this->{prefs} = $prefs;
@@ -1404,19 +1401,7 @@ sub new {
     # Push global preferences from TWiki.TWikiPreferences
     $prefs->pushGlobalPreferences();
 
-    # For compatibility with older ways of building login managers,
-    # plugins can provide an alternate login name.
-    my $plogin = $this->{plugins}->load( $TWiki::cfg{DisableAllPlugins} );
-    $login = $plogin if $plogin;
-
-    #correct the DefaultUserLogin if $TWiki::cfg{Register}{AllowLoginName} is off
-    $TWiki::cfg{DefaultUserLogin} = $TWiki::cfg{DefaultUserWikiName} unless ($TWiki::cfg{Register}{AllowLoginName});
-
-    # if we get here without a login id, we are a guest
-    $login ||= $TWiki::cfg{DefaultUserLogin};
-
-    # Determine the canonical ID for this login
-    $this->{user} = $this->{users}->getCanonicalUserID( $login );
+    $this->{user} = $this->{users}->initialiseUser($this->{remoteUser});
 
     # Static session variables that can be expanded in topics when they
     # are enclosed in % signs

@@ -105,6 +105,13 @@ sub makeLoginManager {
     my $twiki = shift;
  
     ASSERT($twiki->isa( 'TWiki')) if DEBUG;
+    
+    #user is trying to sudo login - use BaseUserMapping
+    if ($twiki->{cgiQuery}->param('sudo')) {
+        #promote / login to internal twiki admin
+        $twiki->enterContext('sudo_login');
+    }
+    
 
     if( $TWiki::cfg{UseClientSessions} &&
           !$twiki->inContext( 'command_line' )) {

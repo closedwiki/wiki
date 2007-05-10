@@ -95,10 +95,15 @@ sub new {
     my $this = bless( {}, $class );
 
     $this->{session} = $session;
+    
+    #correct the DefaultUserLogin if $TWiki::cfg{Register}{AllowLoginName} is off
+    $TWiki::cfg{DefaultUserLogin} = $TWiki::cfg{DefaultUserWikiName} unless ($TWiki::cfg{Register}{AllowLoginName});
+    
 
     my $implUserMappingManager = $TWiki::cfg{UserMappingManager};
-    $implUserMappingManager = 'TWiki::Users::TWikiUserMapping'
-      if( $implUserMappingManager eq 'none' );
+    $implUserMappingManager = 'TWiki::Users::TWikiUserMapping' if( $implUserMappingManager eq 'none' );
+    $implUserMappingManager = 'TWiki::Users::BaseUserMapping' if( $session->{cgiQuery}->param('sudo') && $session->{cgiQuery}->param('sudo') eq 'sudo' );
+print STDERR "making an $implUserMappingManager";
     eval "use $implUserMappingManager";
     die "User Mapping Manager: $@" if $@;
     $this->{mapping} = $implUserMappingManager->new( $session );
@@ -134,6 +139,33 @@ sub supportsRegistration {
     return $this->{mapping}->supportsRegistration();
 }
 
+sub initialiseUserFromSession {
+    my( $this, $login ) = @_;
+    #unset the existing user if we're wanting to login a TWikiAdmin
+    if ($this->{session}->inContext('sudo_login')) {
+        $login = undef
+    } else {
+        # setup the cgi session, from a cookie or the url. this may return
+        # the login, but even if it does, plugins will get the chance to override
+        # it below.
+        $login = $this->{session}->{loginManager}->loadSession( $login );
+    }
+    return $login;
+}
+sub initialiseUser {
+    my( $this, $login ) = @_;
+
+    # For compatibility with older ways of building login managers,
+    # plugins can provide an alternate login name.
+    my $plogin = $this->{session}->{plugins}->load( $TWiki::cfg{DisableAllPlugins} );
+    $login = $plogin if $plogin;
+
+    # if we get here without a login id, we are a guest
+    $login ||= $TWiki::cfg{DefaultUserLogin};
+
+    # Determine the canonical ID for this login
+    return $this->getCanonicalUserID( $login );    
+}
 
 # global used by test harness to give predictable results
 use vars qw( $password );
@@ -204,8 +236,14 @@ corresponding wiki name using the methods of this class.
 sub getCanonicalUserID {
     my( $this, $login ) = @_;
 	$this->ASSERT_IS_USER_LOGIN_ID($login) if DEBUG;
+	
+	
+	my $user_id = $this->{mapping}->login2canonical( $login );
+    ASSERT($user_id) if DEBUG;
+	$this->ASSERT_IS_CANONICAL_USER_ID($user_id) if DEBUG;
+	
 
-    return $this->{mapping}->login2canonical( $login );
+    return $user_id;
 }
 
 =pod
@@ -514,6 +552,8 @@ sub eachMembership {
 Finds if the password is valid for the given user.
 
 Returns 1 on success, undef on failure.
+
+TODO: add special check for BaseMapping admin user's login, and if its there (and we're in sudo_context?) use that..
 
 =cut
 
