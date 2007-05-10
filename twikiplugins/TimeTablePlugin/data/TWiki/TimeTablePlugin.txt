@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1178785182" format="1.0" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1178789816" format="1.0" version="$Rev$"}%
 ---+!! <nop>%TOPIC%
 The <nop>%TOPIC% handles the tag =%<nop>TIMETABLE%= and creates a weekly timetable. 
 The timetable is rendered with HTML tables and should work with all modern web browsers.
@@ -82,7 +82,7 @@ Example: %<nop>TIMETABLE{lang="Deutsch" timeinterval="15" }%
 | workingendtime | working hours end time | workingendtime="5:00pm" |
 | workingstarttime | working hours start time | workingstarttime="9:00am" |
 |  *Compatibility Mode:*  |||
-| cmheaderformat | table header format of a day; a subset of strftime conversion specifiers is supported (only date not time specifiers; see manual page or TWiki:Codev.ConvergeDateTimeFormattingModels) | cmheaderformat="&lt;font&nbsp;title=\"%A - %d %b %Y\" size=\"-2\">%b&lt;br/&gt;%a&lt;br/&gt;%e&lt;/font&gt;" |
+| cmheaderformat | table header format of a day; a subset of strftime conversion specifiers is supported (only date not time specifiers; see manual page or TWiki:Codev.ConvergeDateTimeFormattingModels) | cmheaderformat="&lt;font&nbsp;title=\"%A - %d %b %Y\" size=\"-2\">%a&lt;br/&gt;%e&lt;/font&gt;" |
 | daynames | custom day names (a list separated by a '¦' and starting on Monday; overwrites lang attribute) | daynames="M¦T¦W¦T¦F¦S¦S" |
 | forcestartdate | if set to 1 the timetable starts with the given startdate ('0' means: the timetable view starts with Monday') | forcestartdate="0" |
 | month | set a month (e.g. Jan, Feb ... or 01, 02, ... 12 ) or a month offset (e.g. +0, +1, -2,...) | month="+1" |
@@ -100,9 +100,13 @@ Example: %<nop>TIMETABLE{lang="Deutsch" timeinterval="15" }%
 | eventfgcolor | default text color of an event cell (you can overwrite this with an event entry) | eventfgcolor = "black" |
 | fontsize | default font size | fontsize="xx-small" | 
 | headerformat | table header format of a day; a subset of strftime conversion specifiers is supported (only date not time specifiers; see manual page or TWiki:Codev.ConvergeDateTimeFormattingModels) | headerformat="&lt;font&nbsp;title=\"%A - %d %b %Y\" size=\"-2\">%a&lt;/font&gt;" |
+| monthheaderbgcolor | month header background color (default: tableheadercolor) | monthheaderbgcolor="%<nop>WEBBGCOLOR%" |
+| monthheaderfgcolor | month header text (foreground) color (default: black) | monthheaderfgcolor="black" |
+| monthheaderformat | month header format (related: =showmonthheader=) | monthheaderformat="%B" |
 | name | header content of the first column | name = "&amp;nbsp;" |
 | nowbgcolor | highlight current time in the timeline with a background color | nowbgcolor="black" | 
 | nowfgcolor | highlight current time in the timeline with a forgeround color | nowfgcolor="white" |
+| showmonthheader | enables/disables monthheader; if =compatmode=on= the montheader is shown by default | showmonthheader="off" |
 | showtimeline | show timeline =left=, =right=, or on =both= sides | showtimeline="both" |
 | tablebgcolor | table background color | tablebgcolor="white" |
 | tablecaption | table caption shown above the timetable | tablecaption="Timetable" |
@@ -230,7 +234,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | V1.012 (BETA) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  V1.012 (BETA) | TWiki:Main.DanielRohde: fixed readTopicText bug reported TWiki:Main.JoachimRahn |
+|  V1.012 (BETA) | TWiki:Main.DanielRohde: fixed readTopicText bug reported TWiki:Main.JoachimRahn; added month header feature (attributes: showmonthheader, monthheader...) |
 |  V1.011 (1 Mar 2007) | TWiki:Main.DanielRohde: added fontsize attribute; fixed HTML bug (validation); |
 |  V1.010 (19 Feb 2007) | TWiki:Main.DanielRohde: added tablecolumnwidth and tabledatacellwidth attributes requested by TWiki:Main.VickiBrown;  added tooltip feature (tooltip... attributes); |
 |  V1.009 (7 Aug 2006) | TWiki:Main.DanielRohde: added duration feature; added time zone abbreviations; improved performance; fixed conflict rendering bug; fixed time zone bugs (whole-time event handling, topic include) |
