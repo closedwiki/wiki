@@ -13,67 +13,113 @@ Query searches are defined using a simple SQL-like query language. The language 
 
 ---++ Field specifiers
 You use field specifiers to say what value from the topic you are interested
-in. Field specifiers come in two types; unqualified and qualified.
-Unqualified field specifiers are simply names, and are used to refer to the fields of the form attached to the topic. For example, if the form has a field called 'Date' then =Date= refers to that field.
+in.
 
-A qualified field specifier is of the form 'X.y' where X is the name of one of the meta-data record types described in %SYSTEMWEB%.TWikiMetaData, and =y= is one of the fields of that record. For example, =TOPICMOVED.from= refers to the 'from' field in the 'TOPICMOVED' record.
+All meta-data in a topic is referenced according to a to a simple plan.
+ 
+   * =attachments= (FILEATTACHMENT)
+      * _for each attachment_
+         * =name=
+         * =attr=
+         * =comment=
+         * =path=
+         * =size=
+         * =user=
+         * =rev=
+         * =date=
+         * =comment=
+   * =parent= (TOPICPARENT)
+      * =name=
+   * =info= (TOPICINFO)
+      * =author=
+      * =date=
+      * =format=
+      * =version=
+   * =moved= (TOPICMOVED)
+      * =by=
+      * =date=
+      * =from=
+      * =to=
+   * =form= (FORM) - the main form of the topic
+      * =name= (known as the _formname_)
+   * _formname_ (the =name= field from the FORM)
+      * _for each field in the form_
+         * =name=
+         * =title=
+         * =value=
 
-FILEATTACHMENT records are referenced by the =attachment= operator (see below).
+See TWikiMetaData for details of what all these fields mean.
+
+These fields are specified using a simple syntax:
+   * =X= will get the field named =X=. For example, =info=, =moved= or =attachments=.
+   * =X.Y= will get the subfield =Y= of the field named =X=. For example =info.date=, =moved.by=
+   * =X[N]= will get the Nth element of an array field. N starts at 0. For example, =attachments[4]= will get the fifth attachment in the list.
+   * =X[?<i>query</i>]= will get all the elements of the array =X= that match_query_ - for example, =attachments[?size>1024]=. _query_ can be arbitrarily complex. For example, =DocumentForm[?name!='Summary' AND value~'top secret'].value=.
+   * =X:Y= - will get the value of the field specified by =Y= from the topic specified by the _value_ of =X=. =X= must evaluate to a topic name, and =Y= to a query to be applied to that topic. For example, =parent.name:form.name='ExampleForm'= will evaluate to true if (1) the topic has a parent, (2) the parent topic has the main form type =ExampleForm=.
+
+There is a shortcut for accessing form fields. The syntax =X= will evaluate to =(form.name)[?name=X].value=, if and only if =X= doesn't match another field name. For example, =PersonForm[?name='Lastname'].value= and =Lastname= will evaluate to the same value(s).
 
 ---++ Constants
-You use constants for the values that you compare with fields. Constants are either strings, or numbers. Strings are always delimited by single-quotes (you can escape a quote using backslash) and numbers 
+You use constants for the values that you compare with fields. Constants are either strings, or numbers. Strings are always delimited by single-quotes (you can escape a quote using backslash). Numbers can be any integer or floating point number. 
 
 ---++ Operators
 
+Field specifiers and constants are combined using _operators_ to create queries.
 | *Operator* | *Meaning* |
 | <code>=</code> | Left-hand side (LHS) exactly matches the value on the Right-hand side (RHS). Numbers and strings can be compared. |
-| <code>!=</code> | Inverse of =. |
-| <code>~</code> | Regular expression match. |
-| <code>&lt;</code> | LHS is less that RHS. If both sides are numbers, the order is numeric. Otherwise it is alphabetic. |
-| <code>&gt;</code> | > |
-| <code>&gt;=</code> | >= |
-| <code>&lt;=</code> | &lt;= |
+| <code>!=</code> | Inverse of <code>=</code>. |
+| <code>~</code> | Regular expression match. Use perl regular expressions. |
+| <code>&lt;</code> | LHS is less that RHS. If both sides are numbers, the order is numeric. Otherwise it is alphabetic (applies to all comparison operators) |
+| <code>&gt;</code> | &gt; |
+| <code>&gt;=</code> | &gte; |
+| <code>&lt;=</code> | &lte; |
 | =lc(x)= | Converts x to lower case, Use for caseless comparisons. |
 | =uc(x)= | Converts x to UPPER CASE. Use for caseless comparisons. |
-| =attachment('name')= | Gets the record for the attachment called 'name'. You can then use the =.= operator to get to the fields in the attachment record. |
-| =!= | NOT |
-| =:= | Reference; LHS must evaluate to a topic name, RHS to a query to be applied to that topic, For example, =Web.TopicName:FORM.name='ExampleForm'= will evaluate to true if the topic =Web.TopicName= has the form type =ExampleForm=. |
-| =AND= | AND |
-| =OR= | OR |
-| =()= | Bracketed subexpression |
+| =NOT= | Invert the result of the subquery |
+| =AND= | Combine two subqueries |
+| =OR= | Combine two subqueries |
+| =()= | Bracketed subquery |
+
+---++ Putting it all together
+When a query is applied to a topic, the goal is to reduce to a TRUE or FALSE value that indicates whether the topic matches that query or not. If the query returns TRUE, then the topic is included in the search results.
+
+A query matches if the query returns one or more values when it is applied to the topic. So if I have a very simple query, such as ="attachments"= then this will return TRUE for all topics that have one or more attachments. If I write ="attachments[?size>1024 AND name ~ '\.gif$']"= then it will return TRUE for all topics that have at least one attachment larger than 1024 bytes with a name ending in =.gif=.
 
 ---++ Examples
 ---+++ Query examples
-   * =attachment('purdey.gif')= - true if there is an attachment call =purdey.gif= on the topic
-   * =attachment('brollie.gif').size > 1024= - true if =brollie.gif= is bigger than 1K bytes
-   * =(Firstname='Emma' OR Firstname='John') AND Lastname='Peel'= - finds 'Emma Peel' and 'John Peel' but *not* 'Robert Peel' or 'Emma Thompson'
-   * =People.JohnSteed:Headgear ~ 'Bowler Hat'= - true if the Headgear field in !People.JohnSteed contains the string 'Bowler Hat'.
+   * =attachments[?name='purdey.gif']= - true if there is an attachment call =purdey.gif= on the topic
+   * =(Person<nop>Form[?name=Firstname].value='Emma' OR Person<nop>Form[name=Firstname].value='John') AND Person<nop>Form[name='Lastname'].value='Peel'= - true for 'Emma Peel' and 'John Peel' but *not* 'Robert Peel' or 'Emma Thompson'
+   * =(Firstname='Emma' OR Firstname='John') AND Lastname='Peel'= - shortcut form of the previous query
+   * =History<nop>Form[?name='Age'].value>2= - true if the topic has a =HistoryForm=, and the form has a field called =Age= with a value > 2
+   * =TrackingForm.Person:ClothesForm.Headgear ~ 'Bowler Hat'= - true if the =TrackingForm= attached to the topic has a field called =person= that is a name of a topic, and that topic contains the form =ClothesForm=, with a field called =Headgear=, which has a value that contains the string ='Bowler Hat'=. (Phew!)
+
 ---+++ Search examples
 Find all children of this topic in the current web
 <verbatim>
-%SEARCH{"TOPICPARENT.name = '%TOPIC%' web="%WEB%"}%
+%SEARCH{"parent.name = '%TOPIC%' web="%WEB%"}%
 </verbatim>
 Find the topic that has the attachment 'grunge.gif'
 <verbatim>
-%SEARCH{"attachment('grunge.gif')"}%
+%SEARCH{"attachments[?name='grunge.gif']"}%
 </verbatim>
-Find all topics where the formfield 'Tags' contains 'green' or 'yellow'
+Find all topics that have form =ColourForm= where the formfield 'Shades' contains 'green' or 'yellow'
 but not 'brown'
 <verbatim>
-%SEARCH{"lc(Tags) ~ '(green|yellow)' AND !(lc(Tags) ~ 'brown')"}%
+%SEARCH{"lc(Shades) ~ '(green|yellow)' AND NOT(lc(Shades) ~ 'brown')"}%
 </verbatim>
 
 ---++ Grammar of the query language
 <verbatim>
-expr ::= aexpr 'OR' expr | aexpr ;
-aexpr ::= nexpr AND aexpr | nexpr ;
-nexpr ::= '!' rexpr | rexpr ;
-rexpr ::= topic ':' bexpr | bexpr ;
-bexpr ::= uexpr bop bexpr | uexpr ;
+query ::= aexpr [ 'OR' expr ] ;
+aexpr ::= nexpr [ 'AND' aexpr ] ;
+nexpr ::= 'NOT' nexpr | bexpr ;
+bexpr ::= uexpr [ bop bexpr ] ;
 bop :: = '>' | '<' | '<=' | '>=' | '!=' | '~' | '=' ;
-uexpr ::= uop specifier | specifier ;
+uexpr ::= uop ref | ref ;
 uop ::= 'lc' | 'uc' ;
-specifier ::= '(' expr ')' | fieldtype '.' name | 'attachment' specifier | name ;
-fieldtype ::= 'TOPICINFO' | 'TOPICPARENT' | 'FORM' | TOPICMOVED ;
+ref ::= specifier [ ':' ref ] ;
+specifier ::= terminal '.' specifier | terminal '[' [ '?' ] query ']';
+terminal ::= '(' query ')' | string | name ;
 name ::= a string of alphanumberic characters and underscores ;
+string ::= any string of characters in single quotes
 </verbatim>
