@@ -165,6 +165,18 @@ sub new {
 
     $attrs->{headerrows} ||= 0;
     $attrs->{footerrows} ||= 0;
+    my $disable = defined($attrs->{disable}) ?
+      $attrs->{disable} :
+        TWiki::Func::getPreferencesValue('EDITROWPLUGIN_DISABLE');
+    $attrs->{disable} = $disable || '';
+    my $changerows = defined($attrs->{changerows}) ?
+      $attrs->{changerows} :
+        TWiki::Func::getPreferencesValue('CHANGEROWS');
+    $attrs->{changerows} = TWiki::isTrue($changerows);
+    my $q = defined($attrs->{quietsave}) ?
+      $attrs->{quietsave} :
+        TWiki::Func::getPreferencesValue('QUIETSAVE');
+    $attrs->{quietsave} = TWiki::isTrue($q);
 
     $this->{attrs} = $attrs;
 
@@ -272,6 +284,7 @@ sub renderForEdit {
                                $attrs->{footerrows}));
     }
 
+    my $rowControls = !($wholeTable);
     my $n = 0; # displayed row index
     my $r = 0; # real row index
     foreach my $row (@{$this->{rows}}) {
@@ -279,10 +292,10 @@ sub renderForEdit {
         if (++$r == $activeRow ||
               $wholeTable && !$row->{isHeader} && !$row->{isFooter}) {
             push(@out, $row->renderForEdit(
-                $this->{colTypes}, !$wholeTable, $orientation));
+                $this->{colTypes}, $rowControls, $orientation));
         } else {
             push(@out, $row->renderForDisplay(
-                $this->{colTypes}, !$wholeTable));
+                $this->{colTypes}, $rowControls));
         }
     }
     if ($wholeTable) {
@@ -304,18 +317,12 @@ sub renderForDisplay {
     my $attrs = $this->{attrs};
 
     my $n = 0;
+    my $rowControls = ($showControls && $this->{attrs}->{disable} !~ /row/);
     foreach my $row (@{$this->{rows}}) {
         $n++ unless ($row->{isHeader} || $row->{isFooter});
         push(@out, $row->renderForDisplay(
-            $this->{colTypes}, $showControls));
+            $this->{colTypes}, $rowControls));
     }
-
-    my $button =
-      CGI::img({
-          -name => "erp_edit_$this->{number}",
-          -border => 0,
-          -src => '%PUBURLPATH%/TWiki/EditRowPlugin/edittable.gif'
-         });
 
     my $script = 'view';
     if ($showControls && !TWiki::Func::getContext()->{authenticated}) {
@@ -327,24 +334,63 @@ sub renderForDisplay {
     }
 
     if ($showControls) {
-        my $url;
-        if ($TWiki::Plugins::VERSION < 1.11) {
-            $url = TWiki::Func::getScriptUrl(
-                $this->{web}, $this->{topic}, $script)
-              ."?erp_active_table=$this->{number}"
-                .";erp_active_row=-1"
-                  ."#erp_$this->{number}";
-        } else {
-            $url = TWiki::Func::getScriptUrl(
-                $this->{web}, $this->{topic}, $script,
-                erp_active_table => $this->{number},
-                erp_active_row => -1,
-                '#' => "erp_$this->{number}");
-        }
+        if ($this->{attrs}->{disable} !~ /full/) {
+            # Full table editing is not disabled
+            my $title = "Edit full table";
+            my $button =
+              CGI::img({
+                  -name => "erp_edit_$this->{number}",
+                  -border => 0,
+                  -src => '%PUBURLPATH%/TWiki/EditRowPlugin/edittable.gif',
+                  -title => $title,
+              });
+            my $url;
+            if ($TWiki::Plugins::VERSION < 1.11) {
+                $url = TWiki::Func::getScriptUrl(
+                    $this->{web}, $this->{topic}, $script)
+                  ."?erp_active_table=$this->{number}"
+                    .";erp_active_row=-1"
+                      ."#erp_$this->{number}";
+            } else {
+                $url = TWiki::Func::getScriptUrl(
+                    $this->{web}, $this->{topic}, $script,
+                    erp_active_table => $this->{number},
+                    erp_active_row => -1,
+                    '#' => "erp_$this->{number}");
+            }
 
-        push(@out,
-             "<a name='erp_$this->{number}'></a>".
-               "<a href='$url'>" . $button . '</a><br />');
+            push(@out,
+                 "<a name='erp_$this->{number}'></a>".
+                   "<a href='$url' title='$title'>" . $button . '</a><br />');
+        } elsif ($this->{attrs}->{changerows}) {
+            my $title = "Add row to end of table";
+            my $button = CGI::img({
+                -name => "erp_edit_$this->{number}",
+                -border => 0,
+                -src => '%PUBURLPATH%/TWiki/EditRowPlugin/addrow.gif',
+                -title => $title,
+               }, '');
+            my $url;
+            if ($TWiki::Plugins::VERSION < 1.11) {
+                $url = TWiki::Func::getScriptUrl(
+                    'EditRowPlugin', 'save', 'rest')
+                  ."?erp_active_topic=$this->{web}.$this->{topic}"
+                    .";erp_active_table=$this->{number}"
+                      .";erp_active_row=-1"
+                        .";erp_addRow.x=1"
+                          ."#erp_$this->{number}";
+            } else {
+                $url = TWiki::Func::getScriptUrl(
+                    'EditRowPlugin', 'save', 'rest',
+                    erp_active_topic => "$this->{web}.$this->{topic}",
+                    erp_active_table => $this->{number},
+                    erp_active_row => -1,
+                    'erp_addRow.x' => 1,
+                    '#' => "erp_$this->{number}");
+            }
+            # Full table disabled, but not row
+            push(@out, "<a href='$url' title='$title'>$button</a><br />");
+        }
     }
 
     return join("\n", @out);
@@ -365,9 +411,14 @@ sub _getCols {
     for (my $i = 1; $i <= $count; $i++) {
         my $colDef = $this->{colTypes}->[$i - 1];
         my $cellName = "erp_cell_$this->{number}_${row}_$i";
-        # Force numbering if this is an auto-numbered column
         if ($colDef->{type} eq 'row') {
+            # Force numbering if this is an auto-numbered column
             $urps->{$cellName} = $row - $firstRow;
+        } elsif ($colDef->{type} eq 'label') {
+            # Label cells are uneditable, so we have to keep any existing
+            # value for them.
+            my $cell = $this->{rows}->[$row - 1]->{cols}->[$i - 1];
+            $urps->{$cellName} = $cell->{text};
         }
         # CGI returns multi-values separated by \0. Replace with
         # the TWiki convention, comma
@@ -426,6 +477,7 @@ sub addRow {
     if ($row < 0) {
         $row = scalar(@{$this->{rows}}) - $this->{attrs}->{footerrows};
     }
+
     my @vals = map { $_->{initial_value} } @{$this->{colTypes}};
     # widen up to the width of the previous row
     my $count;
@@ -452,7 +504,8 @@ sub deleteRow {
     my @dead;
     if ($row > 0) {
         @dead = splice(@{$this->{rows}}, $urps->{erp_active_row} - 1, 1);
-        $urps->{erp_active_row}-- if $urps->{erp_active_row} >= scalar(@{$this->{rows}});
+        $urps->{erp_active_row}-- if
+          $urps->{erp_active_row} >= scalar(@{$this->{rows}});
     } else {
         push(@dead, pop(@{$this->{rows}}));
     }
@@ -541,11 +594,7 @@ sub generateEditButtons {
     my $attrs = $this->{attrs};
     my $topRow = ($id == $attrs->{headerrows} + 1);
     my $sz = scalar(@{$this->{rows}});
-    my $q = defined($attrs->{quietsave}) ? $attrs->{quietsave} :
-      TWiki::Func::getPreferencesValue('QUIETSAVE');
-    my $changerows = defined($attrs->{changerows}) ? $attrs->{changerows} :
-      TWiki::Func::getPreferencesValue('CHANGEROWS');
-    my $bottomRow = ($id == $sz - $attrs->{footerrows} + 1);
+    my $bottomRow = ($id == $sz - $attrs->{footerrows});
     $id = "_$id" if $id;
 
     my $buttons = '';
@@ -556,7 +605,7 @@ sub generateEditButtons {
           title => $NOISY_SAVE,
           src => '%PUBURLPATH%/TWiki/TWikiDocGraphics/save.gif'
          }, '');
-    if (TWiki::isTrue($q)) {
+    if ($attrs->{quietsave}) {
         $buttons .= CGI::image_button({
             name => 'erp_quietSave',
             value => $QUIET_SAVE,
@@ -571,7 +620,7 @@ sub generateEditButtons {
         src => '%PUBURLPATH%/TWiki/TWikiDocGraphics/stop.gif',
     }, '');
 
-    if (TWiki::isTrue($changerows)) {
+    if ($this->{attrs}->{changerows}) {
         $buttons .= '<br />' if $multirow;
         if ($id) {
             if (!$topRow) {
@@ -597,14 +646,13 @@ sub generateEditButtons {
             title => $ADD_ROW,
             src => '%PUBURLPATH%/TWiki/TWikiDocGraphics/plus.gif'
            }, '');
-        if (TWiki::isTrue($changerows)) {
-            $buttons .= CGI::image_button({
-                name => 'erp_deleteRow',
-                value => $DELETE_ROW,
-                title => $DELETE_ROW,
-                src => '%PUBURLPATH%/TWiki/TWikiDocGraphics/minus.gif'
-               }, '');
-        }
+
+        $buttons .= CGI::image_button({
+            name => 'erp_deleteRow',
+            value => $DELETE_ROW,
+            title => $DELETE_ROW,
+            src => '%PUBURLPATH%/TWiki/TWikiDocGraphics/minus.gif'
+           }, '');
     }
     return $buttons;
 }

@@ -164,8 +164,9 @@ sub save {
     eval "use CGI::Carp qw(fatalsToBrowser)" if DEBUG;
 
     my $saveType = $query->param('editrowplugin_save') || '';
-    my ($web, $topic) = TWiki::Func::normalizeWebTopicName(
-        undef, $query->param('erp_active_topic'));
+    my $atopic = $query->param('erp_active_topic');
+    $atopic =~ /(.*)/;
+    my ($web, $topic) = TWiki::Func::normalizeWebTopicName(undef, $1);
 
     my ($meta, $text) = TWiki::Func::readTopic($web, $topic);
     my ($url, $mess);
@@ -251,7 +252,8 @@ sub save {
                 $p = "?erp_active_table=$urps->{erp_active_table}";
                 $p .= ";erp_active_row=$urps->{erp_active_row}";
             }
-            $url = TWiki::Func::getScriptUrl($web, $topic, 'view')."$p#$anchor";
+            $url = TWiki::Func::getScriptUrl($web, $topic, 'view').
+              "$p#$anchor";
         } else {
             my @p = ('#' => $anchor);
             unless ($no_return) {
