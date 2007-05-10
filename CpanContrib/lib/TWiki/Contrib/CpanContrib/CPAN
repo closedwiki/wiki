@@ -1,6 +1,6 @@
 @CPAN = (
 		    qw( ExtUtils::MakeMaker Storable Test::More Test::Harness YAML ),
-		qw( Compress::Raw::Zlib IO::Compress::Base IO::Compress::Gzip Compress::Zlib IO::Zlib ),
+		qw( Compress::Raw::Zlib IO::Compress::Base Compress::Raw::Bzip2 IO::Compress::Bzip2 IO::Compress::Gzip Compress::Zlib IO::Zlib ),
 		qw( IO::String Archive::Tar Data::Startup ),
 		qw( Math::BigInt Math::BigRat bignum ),
 		qw( File::Package File::Where File::AnySpec Tie::Gzip Archive::TarGzip ExtUtils::CBuilder ExtUtils::ParseXS Tree::DAG_Node Carp::Assert ),
