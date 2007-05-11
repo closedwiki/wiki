@@ -202,10 +202,12 @@ sub _initDefaults {
 		monthheaderformat => '%B',
 		monthheaderbgcolor => undef,
 		monthheaderfgcolor => 'black',
+		clicktooltip => 0,
+		clicktooltiptext => 'Click me for more information',
 	);
 
 	@renderedOptions = ('tablecaption', 'name' , 'navprev', 'navnext', 'wholetimerowtext');
-	@flagOptions = ( 'compatmode', 'showweekend', 'displaytime', 'forcestartdate', 'wholetimerow','showmonthheader' );
+	@flagOptions = ('compatmode','showweekend','displaytime','forcestartdate','wholetimerow','showmonthheader','clicktooltip');
 
 
         %months = ( Jan=>1, Feb=>2, Mar=>3, Apr=>4, May=>5, Jun=>6, 
@@ -584,15 +586,27 @@ sub _render {
 				foreach my $wtentry_ref ( @{$wtentries} ) {
 					$counter++;
 					my ($text, $title) = &_renderText($wtentry_ref, 1, 0);
+					my ($onmouseover, $onmouseout, $onclick);
+					$onmouseover="ttpTooltipShow('TTP_DIV_${ttid}_${day}_W_${counter}', 'TTP_TD_${ttid}_${day}_W_${counter}',".int($options{'tooltipfixleft'}).",".int($options{'tooltipfixtop'}).",true);";
+					$onmouseout="ttpTooltipHide('TTP_DIV_${ttid}_${day}_W_${counter}');";
+					if ($options{'clicktooltip'}) {
+						$title = $options{'clicktooltiptext'};
+						$onclick = $onmouseover;
+						$onmouseover="";
+						$onmouseout="";
+					} else {
+						$title = undef; $onclick = "";
+					}
 					$tooltips .= &_renderTooltip($wtentry_ref, $day, 'W', $counter, $yy1, $mm1, $dd1);
 					$tooltips .= &_renderTooltip($wtentry_ref, $day, 'W2', $counter, $yy1,$mm1,$dd1) if $options{'wholetimerow'} && ($options{'wholetimerowpos'}=~m/^(bottom|both)$/i);
 					$itr.=$cgi->Tr($cgi->td({-nowrap=>"nowrap",
 							-valign=>"top",
 							-bgcolor=>$$wtentry_ref{'bgcolor'}?$$wtentry_ref{'bgcolor'}:$options{eventbgcolor},
-							## -title=>$title,
+							-title=>$title,
 							-id=>"TTP_TD_${ttid}_${day}_W_${counter}",
-							-onmouseover=>"ttpTooltipShow('TTP_DIV_${ttid}_${day}_W_${counter}', 'TTP_TD_${ttid}_${day}_W_${counter}',".int($options{'tooltipfixleft'}).",".int($options{'tooltipfixtop'}).",true);",
-							-onmouseout=>"ttpTooltipHide('TTP_DIV_${ttid}_${day}_W_${counter}');",
+							-onclick=>$onclick,
+							-onmouseover=>$onmouseover,
+							-onmouseout=>$onmouseout,
 							}, 
 								$text
 							));
@@ -626,15 +640,27 @@ sub _render {
 
 					my ($text,$title) = &_renderText($mentry_ref, $rs, $fillRows);
 					$tooltips .= &_renderTooltip($mentry_ref, $day, $min, $counter, $yy1,$mm1,$dd1);
+					my ($onmouseover, $onmouseout, $onclick);
+					$onmouseover="ttpTooltipShow('TTP_DIV_${ttid}_${day}_${min}_${counter}', 'TTP_TD_${ttid}_${day}_${min}_${counter}',$options{'tooltipfixleft'},$options{'tooltipfixtop'},true);";
+					$onmouseout="ttpTooltipHide('TTP_DIV_${ttid}_${day}_${min}_${counter}');";
+					if ($options{'clicktooltip'}) {
+						$title = $options{'clicktooltiptext'};
+						$onclick=$onmouseover;
+						$onmouseover="";
+						$onmouseout="";
+					} else {
+						$title = undef; $onclick= "";
+					}
 					$itr.=$cgi->td({-nowrap=>"nowrap",
 							-valign=>"top",
 							-bgcolor=>$$mentry_ref{'bgcolor'}?$$mentry_ref{'bgcolor'}:$options{eventbgcolor},
 							-rowspan=>$rs+$fillRows,
-							### -title=>$title,
+							-title=>$title,
 							-width=>$options{'tabledatacellwidth'}?$options{'tabledatacellwidth'}:"",
 							-id=>"TTP_TD_${ttid}_${day}_${min}_${counter}",
-							-onmouseover=>"ttpTooltipShow('TTP_DIV_${ttid}_${day}_${min}_${counter}', 'TTP_TD_${ttid}_${day}_${min}_${counter}',$options{'tooltipfixleft'},$options{'tooltipfixtop'},true);",
-							-onmouseout=>"ttpTooltipHide('TTP_DIV_${ttid}_${day}_${min}_${counter}');",
+							-onclick=>$onclick,
+							-onmouseover=>$onmouseover,
+							-onmouseout=>$onmouseout,
 							}, 
 							$text
 							);
@@ -815,13 +841,23 @@ sub _renderTooltip {
 	$text=~s/\%TIMERANGE\%/&_renderTimeRange($mentry_ref)/esg;
 	$text=~s/\%DATE\%/&_mystrftime($yy,$mm,$dd,$options{'tooltipdateformat'})/esg;
 
+	my ($onmouseover,$onmouseout,$onclick);
+	$onmouseover = "ttpTooltipShow('TTP_DIV_${ttid}_${day}_${min}_${c}', 'TTP_TD_${ttid}_${day}_${min}_${c}',$options{'tooltipfixleft'},$options{'tooltipfixtop'},true);";
+	$onmouseout = "ttpTooltipHide('TTP_DIV_${ttid}_${day}_${min}_${c}');";
+	$onclick = "";
+	if ($options{'clicktooltip'}) {
+		$onclick = $onmouseout;
+		$onmouseout = "";
+	}
+
 	$tooltip.= $cgi->div(
 			{
 				-id=>"TTP_DIV_${ttid}_${day}_${min}_${c}", 
 				-class=>"timeTablePluginToolTips",
 				-style=>"visibility:hidden;position:absolute;top:0;left:0;z-index:2;font: normal $options{'fontsize'} sans-serif;padding: 3px; border: solid 1px; color: $fgcolor; background-color: $bgcolor;" ,
-				-onmouseover=>"ttpTooltipShow('TTP_DIV_${ttid}_${day}_${min}_${c}', 'TTP_TD_${ttid}_${day}_${min}_${c}',$options{'tooltipfixleft'},$options{'tooltipfixtop'},true);",
-				-onmouseout=>"ttpTooltipHide('TTP_DIV_${ttid}_${day}_${min}_${c}');",
+				-onclick => $onclick,
+				-onmouseover=> $onmouseover,
+				-onmouseout=> $onmouseout,
 			}, 
 				$text
 			);
