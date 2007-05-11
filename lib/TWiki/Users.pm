@@ -103,7 +103,7 @@ sub new {
     my $implUserMappingManager = $TWiki::cfg{UserMappingManager};
     $implUserMappingManager = 'TWiki::Users::TWikiUserMapping' if( $implUserMappingManager eq 'none' );
     $implUserMappingManager = 'TWiki::Users::BaseUserMapping' if( $session->{cgiQuery}->param('sudo') && $session->{cgiQuery}->param('sudo') eq 'sudo' );
-print STDERR "making an $implUserMappingManager";
+#print STDERR "making an $implUserMappingManager";
     eval "use $implUserMappingManager";
     die "User Mapping Manager: $@" if $@;
     $this->{mapping} = $implUserMappingManager->new( $session );

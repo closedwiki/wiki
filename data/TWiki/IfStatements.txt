@@ -17,16 +17,19 @@ expr ::= andexpr | andexpr 'or' expr ;
 andexpr ::= notexpr | notexpr 'and' andexpr ;
 notexpr ::= basexpr | 'not' baseexpr ;
 basexpr ::= atom | uop atom | atom bop basexpr ;
-uop ::= 'context' | 'defined' | '$' ;
-bop ::= '=' | '!=' | '>' | '<' | '>=' | '<=' ;
+uop ::= 'context' | 'defined' | '$' | 'lc' | 'uc' ;
+bop ::= '=' | '!=' | '>' | '<' | '>=' | '<=' | '~' ;
 atom ::= context identifier, TWiki variable name, single-quoted string, or configuration item
 </verbatim>
 | *Operators* ||
-| and | True if both sides are true |
-| or | True if one or other side is true |
-| not | negate the following expression |
+| =AND= | True if both sides are true |
+| =OR= | True if one or other side is true |
+| =NOT= | negate the following expression |
 | <nop>=, !<nop>= | String comparison |
-| &lt;, &gt;, &lt;=, &gt;= | Number comparison (there is no explicit numeric =) |
+| =lc(x)= | Converts x to lower case, Use for caseless comparisons. |
+| =uc(x)= | Converts x to UPPER CASE. Use for caseless comparisons. |
+| &lt;, &gt;, &lt;=, &gt;= | Comparison. If both terms are numbers, the order is numeric. Otherwise it is alphabetic (applies to all comparison operators) |
+| =~= | regular expression match (use perl regular expressions) |
 | context | True if the current context is set (see below) |
 | defined | True if a preference variable or url parameter of this name is defined. |
 | $ | expands a URL parameter or [[TWikiVariables][TWikiVariable]]. Plugin handlers *are not called*. Built-in variables and user-defined preferences are supported. You can pass a limited subset of parameters to TWiki variables by enclosing the variable name in single quotes; for example, =$ 'VARIABLE{value}'=. The ='VARIABLE{value}'= string may *not* contain quotes (' or "). |

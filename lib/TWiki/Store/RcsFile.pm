@@ -335,12 +335,14 @@ sub searchInWebMetaData {
     my $store = $this->{session}->{store};
     my %matches;
 
+    # SMELL: stunningly inefficient. Really need to do a better
+    # job of cacheing metadata
     foreach my $topic ( @$topics ) {
         next unless open(FILE, "<$sDir/$topic.txt");
         my $text = <FILE>;
         my $meta = new TWiki::Meta( $this->{session}, $this->{web}, $topic);
         $store->extractMetaData( $meta, \$text );
-        my $match = $query->matches( $meta );
+        my $match = $query->evaluate( [ $meta, $meta ] );
         if( $match ) {
             $matches{$topic} = $match;
         }

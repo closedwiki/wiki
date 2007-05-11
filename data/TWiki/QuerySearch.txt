@@ -91,7 +91,7 @@ A query matches if the query returns one or more values when it is applied to th
    * =(Person<nop>Form[?name=Firstname].value='Emma' OR Person<nop>Form[name=Firstname].value='John') AND Person<nop>Form[name='Lastname'].value='Peel'= - true for 'Emma Peel' and 'John Peel' but *not* 'Robert Peel' or 'Emma Thompson'
    * =(Firstname='Emma' OR Firstname='John') AND Lastname='Peel'= - shortcut form of the previous query
    * =History<nop>Form[?name='Age'].value>2= - true if the topic has a =HistoryForm=, and the form has a field called =Age= with a value > 2
-   * =TrackingForm.Person:ClothesForm.Headgear ~ 'Bowler Hat'= - true if the =TrackingForm= attached to the topic has a field called =person= that is a name of a topic, and that topic contains the form =ClothesForm=, with a field called =Headgear=, which has a value that contains the string ='Bowler Hat'=. (Phew!)
+   * =Person:ClothesForm[?name='Headgear'].value ~ 'Bowler Hat'= - true if the form attached to the topic has a field called =Person= that has a value that is the name of a topic, and that topic contains the form =ClothesForm=, with a field called =Headgear=, which has a value that contains the string ='Bowler Hat'=. (Phew!)
 
 ---+++ Search examples
 Find all children of this topic in the current web

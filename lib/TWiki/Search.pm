@@ -35,6 +35,8 @@ use Error qw( :try );
 
 my $emptySearch = 'something.Very/unLikelyTo+search-for;-)';
 
+my $queryParser;
+
 BEGIN {
 
     # 'Use locale' for internationalisation of Perl sorting and searching -
@@ -322,8 +324,11 @@ sub _searchTopicsInWeb {
 
             my $matches;
             if( $type eq 'query' ) {
-                require TWiki::Query;
-                my $query = new TWiki::Query( $token );
+                unless( defined( $queryParser )) {
+                    require TWiki::Query;
+                    $queryParser = TWiki::QueryParser->new();
+                }
+                my $query = $queryParser->parse( $token );
                 $matches = $store->searchInWebMetaData(
                     $query, $web, \@topicList);
             } else {

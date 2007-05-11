@@ -124,6 +124,7 @@ data/TWiki/PlainSkin.txt 0644
 data/TWiki/PreviewBackground.txt 0644
 data/TWiki/PrintSkin.txt 0644
 data/TWiki/QuietSave.txt 0644
+data/TWiki/QuerySearch.txt 0644
 data/TWiki/RegistrationApprovals.txt 0644
 data/TWiki/RegularExpression.txt 0644
 data/TWiki/RenameWeb.txt 0644
@@ -507,6 +508,9 @@ lib/TWiki/I18N.pm 0444
 lib/TWiki/I18N/Extract.pm 0444
 lib/TWiki/I18N/Fallback.pm 0444
 lib/TWiki/If.pm 0444
+lib/TWiki/InfixParser.pm 0444
+lib/TWiki/InfixParser/Error.pm 0444
+lib/TWiki/InfixParser/Node.pm 0444
 lib/TWiki/Merge.pm 0444
 lib/TWiki/Meta.pm 0444
 lib/TWiki/Net.pm 0444
@@ -517,6 +521,7 @@ lib/TWiki/Plurals.pm 0444
 lib/TWiki/Prefs.pm 0444
 lib/TWiki/Prefs/Parser.pm 0444
 lib/TWiki/Prefs/PrefsCache.pm 0444
+lib/TWiki/Query.pm 0444
 lib/TWiki/Render.pm 0444
 lib/TWiki/Sandbox.pm 0444
 lib/TWiki/Search.pm 0444
@@ -740,6 +745,7 @@ pub/TWiki/TWikiDocGraphics/ps.gif 0644
 pub/TWiki/TWikiDocGraphics/puzzle.gif 0644
 pub/TWiki/TWikiDocGraphics/py.gif 0644
 pub/TWiki/TWikiDocGraphics/question.gif 0644
+pub/TWiki/TWikiDocGraphics/quiet.gif 0644
 pub/TWiki/TWikiDocGraphics/ram.gif 0644
 pub/TWiki/TWikiDocGraphics/recentchanges.gif 0644
 pub/TWiki/TWikiDocGraphics/refreshtopic.gif 0644

@@ -851,7 +851,8 @@ sub redirect {
              def => 'topic_access',
              param1 => 'redirect',
              param2 => 'unsafe redirect to '.$url.
-               ': host does not match DefaultUrlHost'
+               ': host does not match {DefaultUrlHost} "'.
+                 $TWiki::cfg{DefaultUrlHost}.'"'
             );
     }
 
@@ -2842,16 +2843,22 @@ sub IF {
         $ifFactory = new TWiki::If();
     }
 
-    my $expr = $ifFactory->parse( $params->{_DEFAULT} );
-    return $this->inlineAlert(
-        'alerts', 'generic', 'IF{', $params->stringify(), '}:',
-        $ifFactory->{error} ) unless $expr;
-
-    if( $expr->evaluate( $this )) {
-        return $params->{then} || '';
-    } else {
-        return $params->{else} || '';
-    }
+    my $expr;
+    my $result;
+    try {
+        $expr = $ifFactory->parse( $params->{_DEFAULT} );
+        if( $expr->evaluate( $this )) {
+            $result = $params->{then} || '';
+        } else {
+            $result = $params->{else} || '';
+        }
+    } catch TWiki::InfixParser::Error with {
+        my $e = shift;
+        $result = $this->inlineAlert(
+            'alerts', 'generic', 'IF{', $params->stringify(), '}:',
+            $e );
+    };
+    return $result;
 }
 
 # Processes a specific instance %<nop>INCLUDE{...}% syntax.
