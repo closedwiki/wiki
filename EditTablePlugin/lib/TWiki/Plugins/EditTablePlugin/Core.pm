@@ -775,7 +775,7 @@ sub doEnableEdit {
         my $loginUser = TWiki::Func::wikiToUserName($wikiUserName);
         if ($lockUser  ne  $loginUser) {
           # warn user that other person is editing this topic
-          TWiki::Func::redirectCgiQuery( $query, $oopsUrl, 1 );
+          TWiki::Func::redirectCgiQuery( $query, $oopsUrl );
           return 0;
         }
       }
