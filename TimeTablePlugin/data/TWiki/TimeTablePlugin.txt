@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1178878438" format="1.0" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1178878798" format="1.0" version="$Rev$"}%
 ---+!! <nop>%TOPIC%
 The <nop>%TOPIC% handles the tag =%<nop>TIMETABLE%= and creates a weekly timetable. 
 The timetable is rendered with HTML tables and should work with all modern web browsers.
@@ -135,7 +135,7 @@ Example: %<nop>TIMETABLE{lang="Deutsch" timeinterval="15" }%
 
 
 ---++ Examples
-%TIMETABLE{descrlimit="9"}%
+%TIMETABLE{descrlimit="9" compatmode="on" wholetimerow="on"}%
 	* Mon,Tue - 9 - 14 - MONTEST1 - green
 	* Mon - 9 - 11 - MONTEST2 - yellow
 	* Mon - 10 - 13 - MONTEST3 - white,black
@@ -154,9 +154,11 @@ Example: %<nop>TIMETABLE{lang="Deutsch" timeinterval="15" }%
 	* Wed - 13 - 17 - WEDTEST4
 
 	* Thu - 7 - 20:30 - THUTEST1
-  
+	* E Thu - THUTEST2 %TTCM{,green}%
+	
 	* Fri - 7 - 10 - FRITEST1
 	* Fri - 12 - 15 - FRITEST2
+	* E Fri - FRITEST3 %TTCM{10-10:30,cyan}%
 
 	* Sat - 5 - 10 - SATTEST1 - white,blue
 	* Sat - 6 - 21 - SATTEST2 - yellow
@@ -164,6 +166,9 @@ Example: %<nop>TIMETABLE{lang="Deutsch" timeinterval="15" }%
 
 	* Sun - 9:18 - 17:35 - SUNTEST1 - red
 	* Sun - 18:00 - 18:15 - SUNTEST2 - yellow
+
+
+
 ---++ Plugin Settings
 
 Plugin settings are stored as preferences variables. To reference a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>NEWPLUGIN_SHORTDESCRIPTION%==
@@ -261,7 +266,3 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 __Related Topics:__ %TWIKIWEB%.TWikiPlugins, %TWIKIWEB%.DeveloperDocumentationCategory, %TWIKIWEB%.AdminDocumentationCategory, %TWIKIWEB%.TWikiPreferences
 
 -- TWiki:Main.DanielRohde - 16 May 2006
- 
-
-%META:FILEATTACHMENT{name="example.png" attr="" autoattached="1" comment="" date="1170253192" path="example.png" size="34071" user="UnknownUser" version=""}%
-%META:FILEATTACHMENT{name="timetabletooltips.js" attr="" autoattached="1" comment="" date="1171462541" path="timetabletooltips.js" size="1355" user="UnknownUser" version=""}%
