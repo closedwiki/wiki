@@ -650,9 +650,8 @@ sub test_rejectShortPassword {
     };
 }
 
-# Register a user with a password which is too short - must be accepted
-# if TWiki does not do login management
-sub test_ignoreShortPasswordBROKEN {
+# Register a user with a password which is too short
+sub test_shortPassword {
     my $this = shift;
     $TWiki::cfg{Register}{NeedVerification}  =  0;
     $TWiki::cfg{MinPasswordLength}           =  6;
@@ -683,8 +682,8 @@ sub test_ignoreShortPasswordBROKEN {
     } catch TWiki::OopsException with {
         my $e = shift;
         $this->assert_str_equals("attention", $e->{template}, $e->stringify());
-        $this->assert_str_equals("thanks", $e->{def}, $e->stringify());
-        $this->assert_equals(2, scalar(@TWikiFnTestCase::mails));
+        $this->assert_str_equals("bad_password", $e->{def}, $e->stringify());
+        $this->assert_equals(0, scalar(@TWikiFnTestCase::mails));
 	# don't check the TWikiFnTestCase::mails in this test case - this is done elsewhere
         @TWikiFnTestCase::mails = ();
     } catch TWiki::AccessControlException with {
@@ -831,9 +830,9 @@ sub test_resetPasswordNeedPrivilegeForMultipleReset {
     $this->assert_equals(0, scalar(@TWikiFnTestCase::mails));
 }
 
-# This test is supposed to ensure that the system can reset passwords
+# This test make sure that the system can't reset passwords
 # for a user currently absent from .htpasswd
-sub test_resetPasswordNoPasswordBROKEN {
+sub test_resetPasswordNoPassword {
     my $this = shift;
 
     $this->registerAccount();
@@ -867,7 +866,7 @@ sub test_resetPasswordNoPasswordBROKEN {
     } catch TWiki::OopsException with {
         my $e = shift;
         $this->assert_str_equals("attention", $e->{template}, $e->stringify());
-        $this->assert_str_equals("reset_ok", $e->{def}, $e->stringify());
+        $this->assert_str_equals("reset_bad", $e->{def}, $e->stringify());
     } catch Error::Simple with {
         $this->assert(0, shift->stringify());
     } otherwise {
