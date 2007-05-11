@@ -98,11 +98,19 @@ sub new {
     
     #correct the DefaultUserLogin if $TWiki::cfg{Register}{AllowLoginName} is off
     $TWiki::cfg{DefaultUserLogin} = $TWiki::cfg{DefaultUserWikiName} unless ($TWiki::cfg{Register}{AllowLoginName});
-    
+
+    $session->{loginManager} = TWiki::LoginManager::makeLoginManager( $session );
+    unless (( $session->{cgiQuery}->param('sudo') && $session->{cgiQuery}->param('sudo') eq 'sudo' )) {
+        #TODO: move loginManager into the TWiki::User - or even into the mappings
+        $session->{remoteUser} = initialiseUserFromSession($session);
+    }
 
     my $implUserMappingManager = $TWiki::cfg{UserMappingManager};
     $implUserMappingManager = 'TWiki::Users::TWikiUserMapping' if( $implUserMappingManager eq 'none' );
     $implUserMappingManager = 'TWiki::Users::BaseUserMapping' if( $session->{cgiQuery}->param('sudo') && $session->{cgiQuery}->param('sudo') eq 'sudo' );
+    $implUserMappingManager = 'TWiki::Users::BaseUserMapping' if( $session->{remoteUser} && $session->{remoteUser} eq $TWiki::cfg{AdminUserLogin} );
+#print STDERR 'remoteUser = '.($session->{remoteUser}||'undef').' twikiadmin = '.$TWiki::cfg{AdminUserLogin};
+    
 #print STDERR "making an $implUserMappingManager";
     eval "use $implUserMappingManager";
     die "User Mapping Manager: $@" if $@;
@@ -111,6 +119,9 @@ sub new {
     $session->enterContext('registration_supported') if $this->supportsRegistration();
     $implUserMappingManager =~ /^TWiki::Users::(.*)$/;
     $this->{mapping_id} = $1.'_';
+    
+    $session->{users} = $this;
+  
 
     return $this;
 }
@@ -140,15 +151,16 @@ sub supportsRegistration {
 }
 
 sub initialiseUserFromSession {
-    my( $this, $login ) = @_;
+    my( $session ) = @_;
+    my $login = $session->{remoteUser};
     #unset the existing user if we're wanting to login a TWikiAdmin
-    if ($this->{session}->inContext('sudo_login')) {
+    if ($session->inContext('sudo_login')) {
         $login = undef
     } else {
         # setup the cgi session, from a cookie or the url. this may return
         # the login, but even if it does, plugins will get the chance to override
         # it below.
-        $login = $this->{session}->{loginManager}->loadSession( $login );
+        $login = $session->{loginManager}->loadSession( $login );
     }
     return $login;
 }

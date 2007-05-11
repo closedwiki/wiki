@@ -55,8 +55,8 @@ sub new {
     $this->{session} = $session;
 
 #set up our users
-    $this->{L2U} = {admin=>'BaseUserMapping_333', $TWiki::cfg{DefaultUserLogin}=>'BaseUserMapping_666', unknown=>'BaseUserMapping_999'};
-    $this->{U2L} = {'BaseUserMapping_333'=>'admin', 'BaseUserMapping_666'=>$TWiki::cfg{DefaultUserLogin}, 'BaseUserMapping_999'=>'unknown'};
+    $this->{L2U} = {$TWiki::cfg{AdminUserLogin}=>'BaseUserMapping_333', $TWiki::cfg{DefaultUserLogin}=>'BaseUserMapping_666', unknown=>'BaseUserMapping_999'};
+    $this->{U2L} = {'BaseUserMapping_333'=>$TWiki::cfg{AdminUserLogin}, 'BaseUserMapping_666'=>$TWiki::cfg{DefaultUserLogin}, 'BaseUserMapping_999'=>'unknown'};
     $this->{U2W} = {'BaseUserMapping_333'=>$TWiki::cfg{AdminUserWikiName}, 'BaseUserMapping_666'=>$TWiki::cfg{DefaultUserWikiName}, 'BaseUserMapping_999'=>'UnknownUser'};
     $this->{W2U} = {$TWiki::cfg{AdminUserWikiName}=>'BaseUserMapping_333', $TWiki::cfg{DefaultUserWikiName}=>'BaseUserMapping_666', UnknownUser=>'BaseUserMapping_999'};
     $this->{U2E} = {'BaseUserMapping_333'=>'not@home.org.au'};

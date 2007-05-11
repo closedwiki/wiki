@@ -133,6 +133,8 @@ sub login {
 
 sub getUser {
     my $this = shift;
+    ASSERT($this->isa( 'TWiki::LoginManager::ApacheLogin')) if DEBUG;
+    
     my $query = $this->{twiki}->{cgiQuery};
     my $authUser;
     # Ignore remote user if we got here via an error
@@ -142,6 +144,7 @@ sub getUser {
     return $authUser;
 }
 
+#TODO: what did this do? I can't find its use anywhere!
 sub checkSession {
     my $this = shift;
     my $cgisession = $this->{cgisession};

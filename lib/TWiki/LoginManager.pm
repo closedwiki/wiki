@@ -139,7 +139,7 @@ sub makeLoginManager {
         # Rename from old "Client" to new "LoginManager" - see Bugs:Item3375
         $TWiki::cfg{LoginManager} =~ s/::Client::/::LoginManager::/;
         my $loginManager = $TWiki::cfg{LoginManager};
-        if ($twiki->inContext('sudo_login')) {
+        if ($twiki->inContext('sudo_login')) {   #TODO: move selection into BaseUserMapper
             $loginManager = 'TWiki::LoginManager::TemplateLogin';
         }
         eval 'use '. $loginManager;
@@ -235,6 +235,7 @@ sub loadSession {
     # Try and get the user from the webserver
     my $authUser = $this->getUser( $this ) || $defaultUser;
 
+    #this allows the session to over-ride apache_auth (useful for sudo)
     unless( $TWiki::cfg{UseClientSessions} ) {
         $this->userLoggedIn( $authUser ) if $authUser;
         return $authUser;
@@ -300,7 +301,9 @@ sub loadSession {
     # variable (which may have been set manually by a unit test,
     # or it might have come from Apache).
     if( $authUser ) {
-        _trace($this, "Session says user is $authUser");
+        my $cUID = TWiki::Sandbox::untaintUnchecked(
+            $this->{_cgisession}->param( 'cUID' )) || '';    
+        _trace($this, "Session says user is $authUser - $cUID");
     } else {
         # Use remote user provided from "new TWiki" call. This is mainly
         # for testing.
@@ -450,8 +453,10 @@ sub userLoggedIn {
     }
     if( $authUser && $authUser ne $TWiki::cfg{DefaultUserLogin} ) {
         _trace($this, "Session is authenticated");
-        $this->{_cgisession}->param( 'AUTHUSER', $authUser )
-          if( $TWiki::cfg{UseClientSessions} );
+        if( $TWiki::cfg{UseClientSessions} ) {
+            $this->{_cgisession}->param( 'AUTHUSER', $authUser );
+#            $this->{_cgisession}->param( 'cUID', $twiki->{users}->getCanonicalUserID($authUser) );
+        }
         $twiki->enterContext( 'authenticated' );
     } else {
         _trace($this, "Session is NOT authenticated");
