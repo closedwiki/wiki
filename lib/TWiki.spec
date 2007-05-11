@@ -308,7 +308,7 @@ $TWiki::cfg{AuthRealm} =
 # </li><li>
 # TWiki::Users::BaseUserMapping - has only 2 users, {TWikiAdminUser} and {TWikiGuestUser}, with the Admin's login and password being set from this configure script. <b>no User registration.</b> (needs TemplateLogin)
 # </li></ol>
-$TWiki::cfg{UserMappingManager} = 'TWiki::Users::BaseUserMapping';
+$TWiki::cfg{UserMappingManager} = 'TWiki::Users::TWikiUserMapping';
 
 #---++ Registration
 # **BOOLEAN**
