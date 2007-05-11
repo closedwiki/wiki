@@ -125,7 +125,7 @@ sub _getTTCMValues {
 		$bgcolor = $fgcolor;
 		$fgcolor = undef;
 	}
-
+	$timerange="0-24" unless defined $timerange && $timerange ne "";
 	my ($starttime,$endtime) = split /-/,$timerange;
 	$starttime = &_getTime($starttime);
 	if ($endtime =~ m/($duration_rx)$/i) { 
