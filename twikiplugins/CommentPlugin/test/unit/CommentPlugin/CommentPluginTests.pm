@@ -19,11 +19,6 @@ my $targettopic = "TargetTopic";
 my $thePathInfo = "/$baseweb/$basetopic";
 my $twiki;
 
-sub new {
-    my $self = shift()->SUPER::new(@_);
-    return $self;
-}
-
 # Set up the test fixture
 sub set_up {
     my $this = shift;
