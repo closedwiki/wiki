@@ -18,7 +18,7 @@
 !include twikiplugins/TipsContrib/lib/TWiki/Contrib/TipsContrib
 !include twikiplugins/WysiwygPlugin/lib/TWiki/Plugins/WysiwygPlugin
 !include twikiplugins/KupuContrib/lib/TWiki/Contrib/KupuContrib
-!include twikiplugins/TWikiUserMappingContrib/lib/Contrib/TWikiUserMappingContrib
+!include twikiplugins/TWikiUserMappingContrib/lib/TWiki/Contrib/TWikiUserMappingContrib
 AUTHORS 0444
 COPYING 0444
 COPYRIGHT 0444
