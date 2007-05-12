@@ -1158,7 +1158,7 @@ Get an iterator over the list of all the changes in the given web between
 =$time= and now. $time is a time in seconds since 1st Jan 1970, and is not
 guaranteed to return any changes that occurred before (now - 
 {Store}{RememberChangesFor}). {Store}{RememberChangesFor}) is a
-setting in =configure=. Changes are returned in oldest-first
+setting in =configure=. Changes are returned in *most-recent-first*
 order.
 
 Use it as follows:

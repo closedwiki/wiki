@@ -1463,7 +1463,7 @@ sub getTopicLatestRevTime {
 Get an iterator over the list of all the changes in the given web between
 =$time= and now. $time is a time in seconds since 1st Jan 1970, and is not
 guaranteed to return any changes that occurred before (now - 
-{Store}{RememberChangesFor}). Changes are returned in oldest-first
+{Store}{RememberChangesFor}). Changes are returned in most-recent-first
 order.
 
 =cut

@@ -16,23 +16,18 @@ sub new {
 	return $self;
 }
 
-my $twiki;
-
 sub set_up {
     my $this = shift;
     $this->SUPER::set_up();
-    $TWiki::cfg{StoreImpl} = "RcsWrap";
-    $TWiki::cfg{AutoAttachPubFiles} = 0;
-    $twiki = new TWiki($this->{test_user_login});
-    $TWiki::Plugins::SESSION = $twiki;
+
     $this->{test_web2} = $this->{test_web}.'Extra';
-    $this->assert_null($twiki->{store}->createWeb(
-        $twiki->{user}, $this->{test_web2}));
+    $this->assert_null($this->{twiki}->{store}->createWeb(
+        $this->{twiki}->{user}, $this->{test_web2}));
 }
 
 sub tear_down {
     my $this = shift;
-    $this->removeWebFixture($twiki,$this->{test_web2});
+    $this->removeWebFixture($this->{twiki},$this->{test_web2});
     $this->SUPER::tear_down();
 }
 
@@ -52,20 +47,22 @@ sub test_web {
     $this->assert(TWiki::Func::webExists(
         $TWiki::cfg{TrashWebName}.'.'.$this->{test_web}));
 
-    $twiki->{store}->removeWeb($twiki->{user},
+    $this->{twiki}->{store}->removeWeb($this->{twiki}->{user},
                                $TWiki::cfg{TrashWebName}.'.'.$this->{test_web});
 }
 
 sub test_getViewUrl {
     my $this = shift;
 
-    $TWiki::Plugins::SESSION = new TWiki();
     my $ss = 'view'.$TWiki::cfg{ScriptSuffix};
+
+    # relative to specified web
     my $result = TWiki::Func::getViewUrl ( $this->{users_web}, "WebHome" );
     $this->assert_matches(qr!/$ss/$this->{users_web}/WebHome!, $result );
 
+    # relative to web in path_info
     $result = TWiki::Func::getViewUrl ( "", "WebHome" );
-    $this->assert_matches(qr!/$ss/$this->{users_web}/WebHome!, $result );
+    $this->assert_matches(qr!/$ss/$this->{test_web}/WebHome!, $result );
 
     $TWiki::Plugins::SESSION = new TWiki(
         undef,
@@ -82,7 +79,6 @@ sub test_getViewUrl {
 sub test_getScriptUrl {
     my $this = shift;
 
-    $TWiki::Plugins::SESSION = new TWiki();
     my $ss = 'wibble'.$TWiki::cfg{ScriptSuffix};
     my $result = TWiki::Func::getScriptUrl ( $this->{users_web}, "WebHome", 'wibble' );
     $this->assert_matches(qr!/$ss/$this->{users_web}/WebHome!, $result );
@@ -119,44 +115,41 @@ sub test_getOopsUrl {
       $url);
 }
 
+# Check lease handling
 sub test_leases {
     my $this = shift;
 
     my $testtopic = $TWiki::cfg{HomeTopicName};
 
-    my( $oops, $user, $time ) =
+    # Check that there is no lease on the home topic
+    my( $oops, $login, $time ) =
       TWiki::Func::checkTopicEditLock($this->{test_web}, $testtopic);
     $this->assert(!$oops, $oops);
-    $this->assert(!$user);
+    $this->assert(!$login);
     $this->assert_equals(0,$time);
 
-    my $locker = $twiki->{user};
+    # Take out a lease on behalf of the current user
     TWiki::Func::setTopicEditLock($this->{test_web}, $testtopic, 1);
 
+    # Work out who leased it. The login name is used in the lease check.
+    my $locker = TWiki::Func::wikiToUserName(TWiki::Func::getWikiName());
+    $this->assert($locker);
+
     # check the lease
-    ( $oops, $user, $time ) =
+    ( $oops, $login, $time ) =
       TWiki::Func::checkTopicEditLock($this->{test_web}, $testtopic);
-    $this->assert_equals($locker,$user);
+    $this->assert_equals($locker, $login);
     $this->assert($time > 0);
     $this->assert_matches(qr/leaseconflict/,$oops);
     $this->assert_matches(qr/active/,$oops);
 
-    # change user and check the lease again
-    $twiki->{user} = 'TestUser1';
-    ( $oops, $user, $time ) =
-      TWiki::Func::checkTopicEditLock($this->{test_web}, $testtopic);
-    $this->assert_equals($locker,$user);
-    $this->assert($time > 0);
-    $this->assert_matches(qr/leaseconflict/,$oops);
-    $this->assert_matches(qr/active/,$oops);
-
-    # try and clear the lease. This should always succeed, even
-    # though the user has changed
+    # try and clear the lease. This should always succeed.
     TWiki::Func::setTopicEditLock($this->{test_web}, $testtopic, 0);
-    ( $oops, $user, $time ) =
+
+    ( $oops, $login, $time ) =
       TWiki::Func::checkTopicEditLock($this->{test_web}, $testtopic);
     $this->assert(!$oops,$oops);
-    $this->assert(!$user);
+    $this->assert(!$login);
     $this->assert_equals(0,$time);
 }
 
@@ -178,9 +171,6 @@ sub test_attachments {
 
     $this->assert(open($stream, "<$tmpfile"));
     binmode($stream);
-
-    $twiki = new TWiki( );
-    $TWiki::Plugins::SESSION = $twiki;
 
 	TWiki::Func::saveTopicText( $this->{test_web}, $topic,'' );
 
@@ -228,22 +218,18 @@ sub test_getrevinfo {
     my $this = shift;
     my $topic = "RevInfo";
 
-    $twiki = new TWiki( );
-    $TWiki::Plugins::SESSION = $twiki;
-
-    $twiki->{user} = "PeterRabbit";
+    my $login = TWiki::Func::wikiToUserName(TWiki::Func::getWikiName());
 	TWiki::Func::saveTopicText( $this->{test_web}, $topic, 'blah' );
 
     my( $date, $user, $rev, $comment ) =
       TWiki::Func::getRevisionInfo( $this->{test_web}, $topic );
     $this->assert_equals( 1, $rev );
-    $this->assert_str_equals( "PeterRabbit", $user );
+    $this->assert_str_equals( $login, $user );
 }
 
 sub test_moveTopic {
     my $this = shift;
-    my $twiki = new TWiki();
-    $TWiki::Plugins::SESSION = $twiki;
+
 	TWiki::Func::saveTopicText( $this->{test_web}, "SourceTopic", "Wibble" );
     $this->assert(TWiki::Func::topicExists( $this->{test_web}, "SourceTopic"));
     $this->assert(!TWiki::Func::topicExists( $this->{test_web}, "TargetTopic"));
@@ -279,8 +265,6 @@ sub test_moveTopic {
 sub test_moveAttachment {
     my $this = shift;
 
-    my $twiki = new TWiki();
-    $TWiki::Plugins::SESSION = $twiki;
 	TWiki::Func::saveTopicText( $this->{test_web}, "SourceTopic", "Wibble" );
     my $stream;
     my $data = "\0b\1l\2a\3h\4b\5l\6a\7h";
@@ -331,19 +315,16 @@ sub test_moveAttachment {
 sub test_workarea {
     my $this = shift;
 
-    my $twiki = new TWiki();
-    $TWiki::Plugins::SESSION = $twiki;
-
     my $dir = TWiki::Func::getWorkArea( 'TestPlugin' );
     $this->assert( -d $dir );
+
+    # SMELL: check the permissions
+
     unlink $dir;
 }
 
 sub test_extractParameters {
     my $this = shift;
-
-    my $twiki = new TWiki();
-    $TWiki::Plugins::SESSION = $twiki;
 
     my %attrs = TWiki::Func::extractParameters('"a" b="c"');
     my %expect = ( _DEFAULT=>"a", b=>"c" );
@@ -356,12 +337,11 @@ sub test_extractParameters {
 
 sub test_w2em {
     my $this = shift;
-    my $twiki = new TWiki();
-    $TWiki::Plugins::SESSION = $twiki;
 
-    my $ems = join(',', $twiki->{users}->getEmails($twiki->{user}));
-    $this->assert_str_equals(
-        $ems, TWiki::Func::wikiToEmail($twiki->{user}));
+    my $user = TWiki::Func::getWikiName();
+
+    my $ems = join(',', $this->{twiki}->{users}->getEmails($this->{twiki}->{user}));
+    $this->assert_str_equals($ems, TWiki::Func::wikiToEmail($user));
 }
 
 sub test_normalizeWebTopicName {
@@ -444,9 +424,9 @@ sub test_checkAccessPermission {
 \t* Set DENYTOPICVIEW = $TWiki::cfg{DefaultUserWikiName}
 END
  );
-    eval{$twiki->finish()};
-    $twiki = new TWiki();
-    $TWiki::Plugins::SESSION = $twiki;
+    eval{$this->{twiki}->finish()};
+    $this->{twiki} = new TWiki();
+    $TWiki::Plugins::SESSION = $this->{twiki};
     my $access = TWiki::Func::checkAccessPermission(
         'VIEW', $TWiki::cfg{DefaultUserWikiName}, undef, $topic, $this->{test_web});
     $this->assert(!$access);
@@ -461,7 +441,7 @@ END
         $topic, $this->{test_web});
     $this->assert($access);
     # make sure meta overrides text, as documented - Item2953
-    my $meta = new TWiki::Meta($twiki, $this->{test_web}, $topic);
+    my $meta = new TWiki::Meta($this->{twiki}, $this->{test_web}, $topic);
     $meta->putKeyed('PREFERENCE', {
         name => 'ALLOWTOPICVIEW',
         title => 'ALLOWTOPICVIEW',
@@ -473,7 +453,7 @@ END
         "   * Set ALLOWTOPICVIEW = NotASoul\n",
         $topic, $this->{test_web}, $meta);
     $this->assert($access);
-    $meta = new TWiki::Meta($twiki, $this->{test_web}, $topic);
+    $meta = new TWiki::Meta($this->{twiki}, $this->{test_web}, $topic);
     $meta->putKeyed('PREFERENCE', {
         name => 'DENYTOPICVIEW',
         title => 'DENYTOPICVIEW',
@@ -596,25 +576,28 @@ TEST
 sub test_eachChangeSince {
     my $this = shift;
     $TWiki::cfg{Store}{RememberChangesFor} = 5; # very bad memory
+    my $gus = $this->{twiki}->{user};
+    my $sb = $this->{twiki}->{users}->findUserByWikiName("ScumBag")->[0];
+
     sleep(1);
     my $start = time();
-    my $users = $twiki->{users};
-    $twiki->{store}->saveTopic(
-        $twiki->{user}, $this->{test_web}, "ClutterBuck",
+    my $users = $this->{twiki}->{users};
+    $this->{twiki}->{store}->saveTopic(
+        $gus, $this->{test_web}, "ClutterBuck",
         "One" );
-    $twiki->{store}->saveTopic(
-        $users->findUserByWikiName("ScumBag")->[0],
+    $this->{twiki}->{store}->saveTopic(
+        $sb,
         $this->{test_web}, "PiggleNut",
         "One" );
     # Wait a second
     sleep(1);
     my $mid = time();
-    $twiki->{store}->saveTopic(
-        $users->findUserByWikiName("TWikiGuest")->[0],
+    $this->{twiki}->{store}->saveTopic(
+        $sb,
         $this->{test_web}, "ClutterBuck",
         "One" );
-    $twiki->{store}->saveTopic(
-        $users->findUserByWikiName("TWikiAdminGroup")->[0],
+    $this->{twiki}->{store}->saveTopic(
+        $gus,
         $this->{test_web}, "PiggleNut",
         "Two", undef );
     my $change;
@@ -623,12 +606,12 @@ sub test_eachChangeSince {
     $change = $it->next();
     $this->assert_str_equals("PiggleNut", $change->{topic});
     $this->assert_equals(2, $change->{revision});
-    $this->assert_equals('TWikiAdminGroup', $change->{user});
+    $this->assert_equals('TWikiGuest', $change->{user});
     $this->assert($it->hasNext());
     $change = $it->next();
     $this->assert_str_equals("ClutterBuck", $change->{topic});
     $this->assert_equals(2, $change->{revision});
-    $this->assert_equals('TWikiGuest', $change->{user});
+    $this->assert_equals('ScumBag', $change->{user});
     $change = $it->next();
     $this->assert_str_equals("PiggleNut", $change->{topic});
     $this->assert_equals(1, $change->{revision});
@@ -637,7 +620,7 @@ sub test_eachChangeSince {
     $change = $it->next();
     $this->assert_str_equals("ClutterBuck", $change->{topic});
     $this->assert_equals(1, $change->{revision});
-    $this->assert_equals('ScumBag', $change->{user});
+    $this->assert_equals('TWikiGuest', $change->{user});
     $this->assert(!$it->hasNext());
 
     $it = TWiki::Func::eachChangeSince($this->{test_web}, $mid);
@@ -645,11 +628,11 @@ sub test_eachChangeSince {
     $change = $it->next();
     $this->assert_str_equals("PiggleNut", $change->{topic});
     $this->assert_equals(2, $change->{revision});
-    $this->assert_equals('TWikiAdminGroup', $change->{user});
+    $this->assert_equals('TWikiGuest', $change->{user});
     $change = $it->next();
     $this->assert_str_equals("ClutterBuck", $change->{topic});
     $this->assert_equals(2, $change->{revision});
-    $this->assert_equals('TWikiGuest', $change->{user});
+    $this->assert_equals('ScumBag', $change->{user});
 
     $this->assert(!$it->hasNext());
 }

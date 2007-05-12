@@ -38,6 +38,8 @@ sub set_up {
 
     $this->SUPER::set_up();
 
+    $TWiki::cfg{StoreImpl} = "RcsWrap";
+    $TWiki::cfg{AutoAttachPubFiles} = 0;
     $TWiki::cfg{Register}{AllowLoginName} = 1;
     $TWiki::cfg{Htpasswd}{FileName} = '/tmp/junkpasswd'.$this->{var};
     $TWiki::cfg{PasswordManager} = 'TWiki::Users::HtPasswdUser';
