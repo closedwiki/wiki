@@ -53,7 +53,7 @@ sub initPlugin {
 }
 
 sub commonTagsHandler {
-    my ( $text, $topic, $web ) = @_;
+    my ( $text, $topic, $web, $meta ) = @_;
 
     require TWiki::Plugins::CommentPlugin::Comment;
     if ($@) {
