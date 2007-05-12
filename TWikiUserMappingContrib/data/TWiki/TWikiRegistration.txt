@@ -1,7 +1,14 @@
 %META:TOPICINFO{author="TWikiContributor" date="1167679739" format="1.0" version="$Rev$"}%
 ---+ %MAKETEXT{"Registration"}%
 
-*%MAKETEXT{"To edit pages on this TWikiSite, you must have a registered user name and password."}%*
+%IF{"context registration_supported" 
+then="*%MAKETEXT{"To edit pages on this TWikiSite, you must have a registered user name and password."}%*" 
+else="*%MAKETEXT{"This TWiki does _not_ support new User Registration"}%*"
+}%
+
+<!--
+      * Set NOREGISTRATION = %IF{"context registration_supported" then="" else="DISABLED"}%
+-->
 
 %H% *%MAKETEXT{"Note:"}%* %MAKETEXT{"Registered users can [[[_1]][change]] and [[[_2]][reset]] their passwords." args="%TWIKIWEB%.ChangePassword,%TWIKIWEB%.ResetPassword"}%
 
@@ -84,40 +91,40 @@ return sOut;
 </tr>
 <tr>
   <td align="right"> %MAKETEXT{"First Name:"}% </td>
-  <td><input type="text" name="Twk1FirstName" size="40" class="twikiInputField" value="" onblur="this.form.Twk1WikiName.value=capitalise(this.value)+capitalise(this.form.Twk1LastName.value)" /> =<font color="red">**</font>= </td>
+  <td><input %NOREGISTRATION% type="text" name="Twk1FirstName" size="40" class="twikiInputField" value="" onblur="this.form.Twk1WikiName.value=capitalise(this.value)+capitalise(this.form.Twk1LastName.value)" /> =<font color="red">**</font>= </td>
 </tr>
 <tr>
   <td align="right"> %MAKETEXT{"Last Name:"}% </td>
-  <td><input type="text" name="Twk1LastName" size="40" class="twikiInputField" value="" onblur="this.form.Twk1WikiName.value=capitalise(this.form.Twk1FirstName.value)+capitalise(this.value)" /> =<font color="red">**</font>= </td>
+  <td><input %NOREGISTRATION%  type="text" name="Twk1LastName" size="40" class="twikiInputField" value="" onblur="this.form.Twk1WikiName.value=capitalise(this.form.Twk1FirstName.value)+capitalise(this.value)" /> =<font color="red">**</font>= </td>
 </tr>
   <td align="right"> %MAKETEXT{"(identifies you to others) WikiName:"}% </td>
-  <td><input type="text" name="Twk1WikiName" size="40" class="twikiInputField" value="" onblur="" /> =<font color="red">**</font>= </td>
+  <td><input %NOREGISTRATION%  type="text" name="Twk1WikiName" size="40" class="twikiInputField" value="" onblur="" /> =<font color="red">**</font>= </td>
 </tr>
 <!--
    # optional row for login name, enabled by {Register}{AllowLoginName} option in =configure=
-   * Set BESPOKE_AUTH = <tr><td align=\"right\"> %MAKETEXT{"(how you log in) LoginName:"}% </td><td><input type=\"text\" name=\"Twk1LoginName\" size=\"40\" class=\"twikiInputField\" value=\"%REMOTE_USER%\" /> =<font color='red'>**</font>= </td></tr>
+   * Set BESPOKE_AUTH = <tr><td align=\"right\"> %MAKETEXT{"(how you log in) LoginName:"}% </td><td><input %NOREGISTRATION% type=\"text\" name=\"Twk1LoginName\" size=\"40\" class=\"twikiInputField\" value=\"%REMOTE_USER%\" /> =<font color='red'>**</font>= </td></tr>
 -->
 %IF{"$ ALLOWLOGINNAME" then="%BESPOKE_AUTH%"}%
 <tr>
   <td align="right"> %MAKETEXT{"E-mail address:"}% </td>
-  <td><input type="text" name="Twk1Email" size="40" class="twikiInputField" value="" /> =<font color="red">**</font>= </td>
+  <td><input %NOREGISTRATION%  type="text" name="Twk1Email" size="40" class="twikiInputField" value="" /> =<font color="red">**</font>= </td>
 </tr>
 <!--
    # optional rows for password, enabled by {Register}{AllowLoginName} option in =configure=, we assume that login name means that TWiki does not handle passwords
-   * Set BESPOKE_PASSWORD = <tr><td align=\"right\"> %MAKETEXT{"Your password:"}% </td><td><input type=\"password\" name=\"Twk0Password\" size=\"40\" class=\"twikiInputField\" value=\"\" /> =<font color=\"red\">**</font>= </td></tr>\
-     <tr><td align=\"right\"> %MAKETEXT{"Retype password:"}% </td><td><input type=\"password\" name=\"Twk0Confirm\" size=\"40\" class=\"twikiInputField\" value=\"\" /> =<font color=\"red\">**</font>= </td></tr>
+   * Set BESPOKE_PASSWORD = <tr><td align=\"right\"> %MAKETEXT{"Your password:"}% </td><td><input %NOREGISTRATION% type=\"password\" name=\"Twk0Password\" size=\"40\" class=\"twikiInputField\" value=\"\" /> =<font color=\"red\">**</font>= </td></tr>\
+     <tr><td align=\"right\"> %MAKETEXT{"Retype password:"}% </td><td><input %NOREGISTRATION% type=\"password\" name=\"Twk0Confirm\" size=\"40\" class=\"twikiInputField\" value=\"\" /> =<font color=\"red\">**</font>= </td></tr>
 -->
 %IF{"$ ALLOWLOGINNAME < 1" then="%BESPOKE_PASSWORD%"}%
 <tr>
   <td align="right"> %MAKETEXT{"Organisation name:"}% </td>
-  <td><input type="text" name="Twk0OrganisationName" size="40" class="twikiInputField" value="" /></td>
+  <td><input %NOREGISTRATION%  type="text" name="Twk0OrganisationName" size="40" class="twikiInputField" value="" /></td>
 </tr><tr>
   <td align="right"> %MAKETEXT{"Organisation URL:"}% </td>
-  <td><input type="text" name="Twk0OrganisationURL" size="40" class="twikiInputField" onBlur="if(this.value=='http://') { this.value='' }" onFocus="if(this.value=='') { this.value='http://' }" /></td>
+  <td><input %NOREGISTRATION%  type="text" name="Twk0OrganisationURL" size="40" class="twikiInputField" onBlur="if(this.value=='http://') { this.value='' }" onFocus="if(this.value=='') { this.value='http://' }" /></td>
 </tr><tr>
   <td align="right"> %MAKETEXT{"Country:"}% </td>
   <td>
-  <select name="Twk1Country" size="1">
+  <select %NOREGISTRATION%  name="Twk1Country" size="1">
   <option selected value="">Select...</option>
   <option>USA</option>
   <option>Albania</option>
@@ -265,7 +272,7 @@ return sOut;
 </tr>
 <tr>
   <td valign="top" align="right"> %MAKETEXT{"Comments:"}%<br /> %MAKETEXT{"(optional)"}% </td>
-  <td><textarea name="Twk0Comment" wrap="virtual" rows="4" cols="38" class="twikiInputField"></textarea></td>
+  <td><textarea %NOREGISTRATION%  name="Twk0Comment" wrap="virtual" rows="4" cols="38" class="twikiInputField"></textarea></td>
 </tr>
 </table>
 </div><!-- /twikiFormStep-->
@@ -285,7 +292,7 @@ return sOut;
 <input type="hidden" name="rx" value='%BLACKLISTPLUGIN{ action="magic" }%' />
 <input type="hidden" name="topic" value="%TOPIC%" />
 <input type="hidden" name="action" value="register" />
-<input type="submit" class="twikiSubmit" value=' %MAKETEXT{"Submit"}% ' />
+<input %NOREGISTRATION%  type="submit" class="twikiSubmit" value=' %MAKETEXT{"Submit"}% ' />
 </div><!-- /twikiFormStep-->
 </div><!-- /twikiFormSteps-->
 </form>
