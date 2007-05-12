@@ -98,7 +98,7 @@ sub new {
 
     return $this unless defined( $string );
 
-    $string =~ s/\\(["'])/$TWiki::TranslationToken.sprintf("%.2u", ord($1))/ge;  # escapes
+    $string =~ s/\\([\\"'])/$TWiki::TranslationToken.sprintf("%.2u", ord($1))/ge;  # escapes
 
     my $sep = ( $friendly ? "[\\s,]" : "\\s" );
     my $first = 1;
