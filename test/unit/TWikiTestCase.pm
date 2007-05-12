@@ -19,7 +19,7 @@ use Error qw( :try );
 
 BEGIN {
     push( @INC, "$ENV{TWIKI_HOME}/lib" ) if defined($ENV{TWIKI_HOME});
-    unshift @INC, '../../bin';
+    unshift @INC, '../../bin'; # SMELL: dodgy
     require 'setlib.cfg';
     $SIG{__DIE__} = sub { Carp::confess $_[0] };
 };
@@ -52,6 +52,27 @@ sub set_up {
     # Move logging into a temporary directory
     $TWiki::cfg{LogFileName} = "$tempdir/TWikiTestCase.log";
     $TWiki::cfg{WarningFileName} = "$tempdir/TWikiTestCase.warn";
+
+    # Disable/enable plugins so that only core extensions (those defined
+    # in tools/MANIFEST) are enabled, but they are *all* enabled.
+
+    # First disable all plugins
+    foreach my $k (%{$TWiki::cfg{Plugins}}) {
+        $TWiki::cfg{Plugins}{$k}{Enabled} = 0;
+    }
+    # then reenable only those listed in MANIFEST
+    if (-e "$ENV{TWIKI_HOME}/tools/MANIFEST") {
+        open(F, "$ENV{TWIKI_HOME}/tools/MANIFEST") || die $!;
+    } else {
+        open(F, "../../tools/MANIFEST") || die $!;
+    }
+    local $/ = "\n";
+    while (<F>) {
+        if (/^!include .*?([^\/]+)$/) {
+            $TWiki::cfg{Plugins}{$1}{Enabled} = 1;
+        }
+    }
+    close(F);
 }
 
 # Restores TWiki::cfg from backup
