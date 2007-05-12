@@ -86,6 +86,13 @@ sub register_cgi {
     my $action = $session->{cgiQuery}->param('action') || '';
 
     if ($action eq 'register') {
+      if (!$session->inContext('registration_supported')) {
+        throw TWiki::OopsException( 'attention',
+                                    web => $session->{webName},
+                                    topic => $session->{topicName},
+                                    def => 'registration_not_supported' );
+        return;              
+      }
       if (!$TWiki::cfg{Register}{EnableNewUserRegistration}) {
         throw TWiki::OopsException( 'attention',
                                     web => $session->{webName},

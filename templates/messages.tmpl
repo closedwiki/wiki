@@ -130,6 +130,15 @@
 ---+++ %MAKETEXT{"Could not create the new web [_1]" args="%PARAM1%"}%
 %PARAM2%
 %TMPL:END%
+%TMPL:DEF{"registration_not_supported"}%
+---+++ %MAKETEXT{"New User Registration not supported"}%
+
+%MAKETEXT{"The selected User System does not support new user registration."}%
+
+%MAKETEXT{"Please contact [_1]." args="%WIKIWEBMASTER%"}%
+
+%MAKETEXT{"You have *not* been registered."}%
+%TMPL:END%
 %TMPL:DEF{"registration_disabled"}%
 ---+++ %MAKETEXT{"New User Registration disabled"}%
 

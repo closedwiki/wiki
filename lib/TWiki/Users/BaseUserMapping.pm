@@ -200,21 +200,7 @@ sub userExists {
     my( $this, $loginName ) = @_;
 	$this->ASSERT_IS_USER_LOGIN_ID($loginName) if DEBUG;
 
-    if( $loginName eq $TWiki::cfg{DefaultUserLogin} ) {
-        return $loginName;
-    }
-
-    # TWiki allows *groups* to log in
-    if( $this->isGroup( $loginName )) {
-        return $loginName;
-    }
-
-    # Look them up in the password manager.
-    if( $this->{passwords}->fetchPass( $loginName )) {
-        return $loginName;
-    }
-
-    return undef;
+    return $this->{L2U}{$loginName};
 }
 
 # Called from TWiki::Users. See the documentation of the corresponding
