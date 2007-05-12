@@ -1,6 +1,6 @@
 use strict;
 
-package MailerContribTests;
+package MailerContribSuite;
 use base qw(TWikiFnTestCase);
 
 use TWiki::Contrib::Mailer;
