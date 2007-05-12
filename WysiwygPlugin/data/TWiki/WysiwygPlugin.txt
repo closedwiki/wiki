@@ -98,12 +98,12 @@ the skin being used to invoke the Wysiwyg editor, for example =kupu= or =wikiwyg
 Note that is can be set differently in different areas by defining
 =WYSWIYGPLUGIN_WYSIWYGSKIN= locally (e.g. in !WebPreferences).
 
-The *global* TWiki Variable =WYSIWYG_EXCLUDE= can be set to make the plugin sensitive to what is in a topic before allowing it to be edited. You can set it up to refuse to edit if 
-   * some or all of HTML tags (e.g. =&lt;br /&gt;= or =&lt;div&gt;=), or 
-   * simple variables (e.g. =%<nop>VAR%=) or 
-   * calls (e.g. =%<nop>VARIABLE{...}%=)
-   * PRE blocks (=&lt;pre&gt;=)
-   * HTML comments (=&lt;!--= ... =--&gt;=)
+The *global* TWiki Variable =WYSIWYG_EXCLUDE= can be set to make the plugin sensitive to what is in a topic before allowing it to be edited. You can set it up to refuse to edit if the topic contains
+   * =html= - some or all of HTML tags (e.g. =&lt;br /&gt;= or =&lt;div&gt;=), or 
+   * =variabes= - simple variables (e.g. =%<nop>VAR%=) or 
+   * =calls= - TWiki variables with parameters e.g. =%<nop>VARIABLE{...}%=
+   * =pre= blocks (=&lt;pre&gt;=)
+   * HTML =comments= (=&lt;!--= ... =--&gt;=)
    
 are used in the topic. If the plugin detects an excluded construct in the topic, it will redirect to the default editor. Comma-separated list of one or more of =html=, =variables=, =calls=, =pre= or =comments= e.g.
    * Set WYSIWYG_EXCLUDE = calls,html
@@ -140,7 +140,8 @@ which is correct by construction, but does not render correctly in TWiki. This p
 |  Copyright | &copy; ILOG 2005 http://www.ilog.fr |
 |  License | [[http://www.gnu.org/licenses/gpl.html][GPL (Gnu General Public License)]] |
 |  Plugin Version: | %$VERSION% |
-|  Change&nbsp;History: | |
+|  Change History: | |
+|  13701 | Made use of HTML::Entities optional; fixed encoding problem with nbsp on IE; Bugs:Item1742 support for simultaneous edits (post edit merge) |
 |  12422 | Added JAVASCRIPT_TEXT to support editors that require topic text in a JS var |
 |  12161 | Added support for embedded editable HTML in the edit template |
 |  12119 | Split into WysiwygPlugin and KupuContrib |

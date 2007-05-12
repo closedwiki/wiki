@@ -24,8 +24,6 @@ use base qw(Test::Unit::TestSuite);
 sub name { 'WysiwygPluginTests' };
 
 sub include_tests {
-#    qw(TranslatorTests);
-#    qw(WysiwygPluginTests);
     qw(TranslatorTests WysiwygPluginTests);
 };
 

@@ -37,7 +37,6 @@ package TWiki::Plugins::WysiwygPlugin::TML2HTML;
 use strict;
 use TWiki;
 use CGI qw( -any );
-use HTML::Entities;
 
 my $TT0 = chr(0);
 my $TT1 = chr(1);
@@ -463,7 +462,13 @@ sub _getRenderedVersion {
 sub _encodeEntities {
     my $text = shift;
 
-    return HTML::Entities::encode_entities( $text );
+    # use HTML::Entities if it's available
+    eval "use HTML::Entities";
+    if ($@) {
+        $text =~ s/(\W)/'&#x'.sprintf(".2%h", ord($1)).';'/ge;
+    } else {
+        return HTML::Entities::encode_entities( $text );
+    }
 }
 
 # Make the html for a heading

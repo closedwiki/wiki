@@ -21,20 +21,25 @@
 
 This plugin is responsible for translating TML to HTML before an edit starts
 and translating the resultant HTML back into TML.
+
 The flow of control is as follows:
    1 User hits "edit"
-   2 if the skin is WYWIWYGPLUGIN_WYWIWYGSKIN, the beforeEditHandler
+   2 if the skin is WYSIWYGPLUGIN_WYSIWYGSKIN, the beforeEditHandler
       filters the edit
    3 The 'edit' template is instantiated with all the js and css
-   4 editor invokes view URL with the 'wysiwyg_edit=1' parameter to
-     obtain the clean document
-      * The earliest possible handler is implemented by the plugin in this
-        mode. This handler formats the text and then saves it so the rest
-        of twiki rendering can't do anything to it. At the end of rendering
-        it drops the saved text back in.
+      * JS, WYSIWYG and plain text formats are available for embedding
+        the content into the template, if that's what the editor requires.
+   4 editor JS starts up and optionally invokes view URL with the
+     'wysiwyg_edit=1' parameter to obtain the clean document (if it wasn't
+     provided in the template)
+      * The beforeCommonTagsHandler is implemented by the plugin in this
+        mode. This handler formats the text and then stores it away so the rest
+        of twiki rendering can't do anything to it. In the postRenderingHandler
+        it drops the stored text back into the template.
    5 User edits
-   6 editor saves by posting to 'save' with the 'wysiwyg_edit=1' parameter
-   7 the beforeSaveHandler sees this and converts the HTML back to tml
+   6 editor saves by posting to 'save' with the 'wysiwyg_edit=1' parameter.
+     The beforeSaveHandler sees this and converts the HTML back to TML.
+
 Note: In the case of a new topic, you might expect to see the "create topic"
 screen in the editor when it goesback to twiki for the topic content. This
 doesn't happen because the earliest possible handler is called on the topic
@@ -62,7 +67,7 @@ $SHORTDESCRIPTION = 'Translator framework for Wysiwyg editors';
 
 $VERSION = '$Rev$';
 
-$RELEASE = 'Dakar';
+$RELEASE = 'TWiki-4.2';
 
 sub initPlugin {
     my( $topic, $web, $user, $installWeb ) = @_;
@@ -131,36 +136,8 @@ sub beforeEditHandler {
     return unless $SKIN;
 
     if( TWiki::Func::getSkin() =~ /\b$SKIN\b/o ) {
-        my $exclusions = TWiki::Func::getPreferencesValue(
-            'WYSIWYG_EXCLUDE' );
-        my $calls_ok = TWiki::Func::getPreferencesValue(
-            'WYSIWYG_EDITABLE_CALLS' );
-        return unless $exclusions;
-        my $not_ok = 0;
-        if( $exclusions =~ /calls/
-              && $_[0] =~ /%((?!($calls_ok){)[A-Z_]+{.*?})%/s ) {
-            #print STDERR "WYSIWYG_DEBUG: has calls $1\n";
-            $not_ok = 1;
-        }
-        if( $exclusions =~ /variables/ && $_[0] =~ /%([A-Z_]+)%/s ) {
-            #print STDERR "$exclusions WYSIWYG_DEBUG: has variables $1\n";
-            $not_ok = 1;
-        }
-        if( $exclusions =~ /html/ &&
-              $_[0] =~ /<\/?((?!literal|verbatim|noautolink|nop|br)\w+)/ ) {
-            #print STDERR "WYSIWYG_DEBUG: has html: $1\n";
-            $not_ok = 1;
-        }
-        if( $exclusions =~ /comments/ && $_[0] =~ /<[!]--/ ) {
-            #print STDERR "WYSIWYG_DEBUG: has comments\n";
-            $not_ok = 1;
-        }
-        if( $exclusions =~ /pre/ && $_[0] =~ /<pre\w/ ) {
-            #print STDERR "WYSIWYG_DEBUG: has pre\n";
-            $not_ok = 1;
-        }
+        unless( isWysiwygEditable($_[0])) {
 
-        if( $not_ok ) {
             # redirect
             my $query = TWiki::Func::getCgiQuery();
             foreach my $p qw( skin cover ) {
@@ -181,14 +158,37 @@ sub beforeEditHandler {
     }
 }
 
-# Invoked when the selected skin is in use to convert HTML to
-# TML (best offorts)
+# This handler is only invoked *after* merging is complete
 sub beforeSaveHandler {
     #my( $text, $topic, $web ) = @_;
     my $query = TWiki::Func::getCgiQuery();
     return unless $query;
 
     return unless defined( $query->param( 'wysiwyg_edit' ));
+
+    _postProcess( @_ );
+}
+
+# This handler is invoked *before* a merge, and only from the edit
+# script (so it's useless for a REST save)
+sub afterEditHandler {
+    #my( $text, $topic, $web ) = @_;
+    my $query = TWiki::Func::getCgiQuery();
+    return unless $query;
+
+    return unless defined( $query->param( 'wysiwyg_edit' ));
+
+    # Switch off wysiwyg_edit so it doesn't try to transform again in
+    # the beforeSaveHandler
+    $query->delete( 'wysiwyg_edit' );
+
+    _postProcess( @_ );
+}
+
+# Invoked when the selected skin is in use to convert HTML to
+# TML (best efforts)
+sub _postProcess {
+    #my( $text, $topic, $web ) = @_;
 
     unless( $html2tml ) {
         require TWiki::Plugins::WysiwygPlugin::HTML2TML;
@@ -241,7 +241,7 @@ sub beforeSaveHandler {
 # commonTagsHandler is called so many times that getting the right
 # call is hard, and then preventing a repeat call is harder!
 sub beforeCommonTagsHandler {
-    #my ( $text, $topic, $web )
+    #my ( $text, $topic, $web, $meta )
     return if $recursionBlock;
     if( $MODERN ) {
         return unless TWiki::Func::getContext()->{body_text};
@@ -287,20 +287,7 @@ sub _WYSIWYG_TEXT {
     # by other plugins, or by the extraction of verbatim blocks.
     my( $meta, $text ) = TWiki::Func::readTopic( $web, $topic );
 
-    # Translate the topic text to pure HTML.
-    unless( $tml2html ) {
-        require TWiki::Plugins::WysiwygPlugin::TML2HTML;
-        $tml2html = new TWiki::Plugins::WysiwygPlugin::TML2HTML();
-    }
-    $text = $tml2html->convert(
-        $text,
-        {
-            web => $web,
-            topic => $topic,
-            getViewUrl => \&getViewUrl,
-            expandVarsInURL => \&expandVarsInURL,
-        }
-       );
+    $text = TranslateTML2HTML( $text, $web, $topic );
 
     # Lift out the text to protect it from further TWiki rendering. It will be
     # put back in the postRenderingHandler.
@@ -322,16 +309,12 @@ sub _JAVASCRIPT_TEXT {
 }
 
 # DEPRECATED in Dakar (postRenderingHandler does the job better)
-# This handler is required to re-insert blocks that were removed to protect
-# them from TWiki rendering, such as TWiki variables.
 $TWikiCompatibility{endRenderingHandler} = 1.1;
 sub endRenderingHandler {
     return postRenderingHandler( @_ );
 }
 
 # Dakar handler, replaces endRenderingHandler above
-# This handler is required to re-insert blocks that were removed to protect
-# them from TWiki rendering, such as TWiki variables.
 sub postRenderingHandler {
     return if( $recursionBlock || !$tml2html );
 
@@ -514,6 +497,64 @@ sub _dropBack {
     while( $text =~ s/\05([0-9]+)\05/$refs[$1]/gi ) {
     }
     return $text;
+}
+
+sub isWysiwygEditable {
+    #my ($text, $exclusions) = @_;
+
+    my $exclusions = $_[1];
+    unless( defined( $exclusions )) {
+        $exclusions = TWiki::Func::getPreferencesValue('WYSIWYG_EXCLUDE')
+          || '';
+    }
+    return unless $exclusions;
+
+    my $calls_ok = TWiki::Func::getPreferencesValue(
+        'WYSIWYG_EDITABLE_CALLS' ) || 'DO NOT MATCH';
+
+    my $ok = 1;
+    if( $exclusions =~ /calls/
+          && $_[0] =~ /%((?!($calls_ok){)[A-Z_]+{.*?})%/s ) {
+        #print STDERR "WYSIWYG_DEBUG: has calls $1\n";
+        $ok = 0;
+    }
+    if( $exclusions =~ /variables/ && $_[0] =~ /%([A-Z_]+)%/s ) {
+        #print STDERR "$exclusions WYSIWYG_DEBUG: has variables $1\n";
+        $ok = 0;
+    }
+    if( $exclusions =~ /html/ &&
+          $_[0] =~ /<\/?((?!literal|verbatim|noautolink|nop|br)\w+)/ ) {
+        #print STDERR "WYSIWYG_DEBUG: has html: $1\n";
+        $ok = 0;
+    }
+    if( $exclusions =~ /comments/ && $_[0] =~ /<[!]--/ ) {
+        #print STDERR "WYSIWYG_DEBUG: has comments\n";
+        $ok = 0;
+    }
+    if( $exclusions =~ /pre/ && $_[0] =~ /<pre\w/ ) {
+        #print STDERR "WYSIWYG_DEBUG: has pre\n";
+        $ok = 0;
+    }
+    return $ok;
+}
+
+sub TranslateTML2HTML {
+    my ($text, $web, $topic) = @_;
+
+    # Translate the topic text to pure HTML.
+    unless( $tml2html ) {
+        require TWiki::Plugins::WysiwygPlugin::TML2HTML;
+        $tml2html = new TWiki::Plugins::WysiwygPlugin::TML2HTML();
+    }
+    return $tml2html->convert(
+        $_[0],
+        {
+            web => $web,
+            topic => $topic,
+            getViewUrl => \&getViewUrl,
+            expandVarsInURL => \&expandVarsInURL,
+        }
+       );
 }
 
 1;

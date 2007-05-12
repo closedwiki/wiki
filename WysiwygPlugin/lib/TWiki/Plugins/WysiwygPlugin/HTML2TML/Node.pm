@@ -142,6 +142,8 @@ sub rootGenerate {
 
     my( $f, $tml ) = $this->generate($opts);
 
+    $tml=~ s/&nbsp;/$WC::NBSP/go;
+
     # isolate whitespace checks and convert to $NBSP
     $tml =~ s/$WC::CHECKw$WC::CHECKw+/$WC::CHECKw/go;
     $tml =~ s/([$WC::CHECKn$WC::CHECKs$WC::NBSP$WC::NBBR\s])$WC::CHECKw/$1/go;
