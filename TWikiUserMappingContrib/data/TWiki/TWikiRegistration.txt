@@ -7,7 +7,7 @@ else="*%MAKETEXT{"This TWiki does _not_ support new User Registration"}%*"
 }%
 
 <!--
-      * Set NOREGISTRATION = %IF{"context registration_supported" then="" else="DISABLED"}%
+      * Set NOREGISTRATION = %IF{"context registration_supported" then="%IF{"{Register}{EnableNewUserRegistration}" then="" else="DISABLED"}%" else="DISABLED"}%
 -->
 
 %H% *%MAKETEXT{"Note:"}%* %MAKETEXT{"Registered users can [[[_1]][change]] and [[[_2]][reset]] their passwords." args="%TWIKIWEB%.ChangePassword,%TWIKIWEB%.ResetPassword"}%
