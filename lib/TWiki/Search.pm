@@ -243,16 +243,13 @@ sub _translateSpace {
     return $text;
 }
 
-# Search a single web based on parameters - @theTokens is a list of
-# search terms to be ANDed together, $topic is list of one or more topics.
-#
-sub _searchTopicsInWeb {
-    my ( $this, $web, $topic, $scope, $type, $options, @theTokens ) = @_;
+# get a list of topics to search in the web, filtered by the $topic
+# spec
+sub _getTopicList {
+    my( $this, $web, $topic, $options ) = @_;
 
     my @topicList = ();
-    return @topicList unless (@theTokens);    # bail out if no search string
     my $store = $this->{session}->{store};
-
     if ($topic) {
 
         # limit search to topic list
@@ -272,7 +269,7 @@ sub _searchTopicsInWeb {
 
             # topic list with wildcards
             @topicList = $store->getTopicNames($web);
-            if ( $options->{'caseSensitive'} ) {
+            if ( $options->{caseSensitive} ) {
 
                 # limit by topic name,
                 @topicList = grep( /$topic/, @topicList );
@@ -287,20 +284,40 @@ sub _searchTopicsInWeb {
     else {
         @topicList = $store->getTopicNames($web);
     }
+}
+
+# Run a query over a list of topics
+sub _queryTopics {
+    my( $this, $web, $query, @topicList ) = @_;
+
+    my $store = $this->{session}->{store};
+
+    my $matches = $store->searchInWebMetaData(
+        $query, $web, \@topicList);
+
+    return keys %$matches;
+}
+
+# Run a search over a list of topics - @tokens is a list of
+# search terms to be ANDed together
+sub _searchTopics {
+    my ( $this, $web, $scope, $type, $options, $tokens, @topicList ) = @_;
+
+    my $store = $this->{session}->{store};
 
     # default scope is 'text'
     $scope = 'text' unless ( $scope =~ /^(topic|all)$/ );
 
     # AND search - search once for each token, ANDing result together
-    foreach my $token (@theTokens) {
+    foreach my $token (@$tokens) {
 
-        # search on each token
-        my $invertSearch = ( $token =~ s/^\!//o );
+        my $invertSearch = 0;
+
+        $invertSearch = ( $token =~ s/^\!//o );
 
         # flag for AND NOT search
         my @scopeTextList  = ();
         my @scopeTopicList = ();
-        return @topicList unless (@topicList);
 
         # scope can be 'topic' (default), 'text' or "all"
         # scope='text', e.g. Perl search on topic name:
@@ -322,27 +339,16 @@ sub _searchTopicsInWeb {
         # scope='text', e.g. grep search on topic text:
         unless ( $scope eq 'topic' ) {
 
-            my $matches;
-            if( $type eq 'query' ) {
-                unless( defined( $queryParser )) {
-                    require TWiki::Query;
-                    $queryParser = TWiki::QueryParser->new();
-                }
-                my $query = $queryParser->parse( $token );
-                $matches = $store->searchInWebMetaData(
-                    $query, $web, \@topicList);
-            } else {
-                $matches = $store->searchInWebContent(
-                    $token, $web,
-                    \@topicList,
-                    {
-                        type                => $type,
-                        casesensitive       => $options->{'caseSensitive'},
-                        wordboundaries      => $options->{'wordBoundaries'},
-                        files_without_match => 1
-                       }
-                   );
-            }
+            my $matches = $store->searchInWebContent(
+                $token, $web,
+                \@topicList,
+                {
+                    type                => $type,
+                    casesensitive       => $options->{'caseSensitive'},
+                    wordboundaries      => $options->{'wordBoundaries'},
+                    files_without_match => 1
+                   }
+               );
             @scopeTextList = keys %$matches;
         }
 
@@ -408,6 +414,9 @@ result is a string containing the rendered search results.
 
 If =inline= is set, then the results are *not* decorated with
 the search template head and tail blocks.
+
+The function will throw Error::Simple if it encounters any problems with the
+syntax of the search string.
 
 Note: If =format= is set, =template= will be ignored.
 
@@ -662,10 +671,6 @@ sub searchWeb {
         }
     }
 
-    # Split the search string into tokens depending on type of search -
-    # each token is ANDed together by actual search
-    my @tokens = _tokensFromSearchString( $this, $searchString, $type );
-
     # Write log entry
     # FIXME: Move log entry further down to log actual webs searched
     if ( ( $TWiki::cfg{Log}{search} ) && ( !$inline ) ) {
@@ -673,16 +678,39 @@ sub searchWeb {
         $session->writeLog( 'search', $t, $searchString );
     }
 
+    my $query;
+    my @tokens;
+
+    if( $type eq 'query' ) {
+        unless( defined( $queryParser )) {
+            require TWiki::Query;
+            $queryParser = TWiki::QueryParser->new();
+        }
+        my $error = '';
+        try {
+            $query = $queryParser->parse( $searchString );
+        } catch TWiki::InfixParser::Error with {
+            # Pass the error on to the caller
+            throw Error::Simple( shift->stringify());
+        };
+        return $error unless $query;
+    } else {
+        # Split the search string into tokens depending on type of search -
+        # each token is ANDed together by actual search
+        @tokens = _tokensFromSearchString( $this, $searchString, $type );
+        return '' unless scalar(@tokens);
+    }
+
     # Loop through webs
     my $isAdmin = $session->{users}->isAdmin( $session->{user} );
     my $ttopics = 0;
+    my $prefs = $session->{prefs};
     foreach my $web (@webs) {
         $web =~ s/$TWiki::cfg{NameFilter}//go;
         $web = TWiki::Sandbox::untaintUnchecked($web);
 
         next unless $store->webExists($web);    # can't process what ain't thar
 
-        my $prefs = $session->{prefs};
         my $thisWebNoSearchAll =
           $prefs->getWebPreferencesValue( 'NOSEARCHALL', $web ) || '';
 
@@ -694,15 +722,13 @@ sub searchWeb {
             && ( $thisWebNoSearchAll =~ /on/i || $web =~ /^[\.\_]/ )
             && $web ne $session->{webName} );
 
+        my $options = {
+            caseSensitive  => $caseSensitive,
+            wordBoundaries => $wordBoundaries,
+        };
+
         # Run the search on topics in this web
-        my @topicList = _searchTopicsInWeb(
-            $this, $web, $topic, $scope, $type,
-            {
-                caseSensitive  => $caseSensitive,
-                wordBoundaries => $wordBoundaries
-            },
-            @tokens
-        );
+        my @topicList = _getTopicList($this, $web, $topic, $options);
 
         # exclude topics, Codev.ExcludeWebTopicsFromSearch
         if ( $caseSensitive && $excludeTopic ) {
@@ -712,6 +738,14 @@ sub searchWeb {
             @topicList = grep( !/$excludeTopic/i, @topicList );
         }
         next if ( $noEmpty && !@topicList );    # Nothing to show for this web
+
+        if ($type eq 'query' ) {
+            @topicList = _queryTopics(
+                $this, $web, $query, @topicList );
+        } else {
+            @topicList = _searchTopics(
+                $this, $web, $scope, $type, $options, \@tokens, @topicList );
+        }
 
         my $topicInfo = {};
 

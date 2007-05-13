@@ -12,20 +12,20 @@ Fields are given by name, and values by strings or numbers. Strings should alway
 See TWiki.QuerySearch for details of the query language.
 
 A query object implements the =evaluate= method as its general
-contract with the rest of the world.
+contract with the rest of the world. This method does a "hard work" evaluation
+of the parser tree. Of course, smarter Store implementations should be
+able to do it better....
 
 =cut
 
 package TWiki::Query;
 use base 'TWiki::InfixParser::Node';
 
-use Assert;
-
 # 1 for debug
 sub MONITOR_EVAL { 0 };
 
 # map of reserved names to their meta-data type
-my %simpleNames = (
+my %metaDataTypes = (
     attachments => 'FILEATTACHMENT',
     field => 'FIELD',
     info => 'TOPICINFO',
@@ -39,8 +39,8 @@ sub _getField {
 
     my $result;
     if (ref($data) eq 'TWiki::Meta') {
-        if( $simpleNames{$field} ) {
-            $field = $simpleNames{$field};
+        if( $metaDataTypes{$field} ) {
+            $field = $metaDataTypes{$field};
             if ($field eq 'FILEATTACHMENT' || $field eq 'FIELD') {
                 # Array type, have to use find
                 my @e = $data->find( $field );

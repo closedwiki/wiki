@@ -107,7 +107,9 @@ sub search {
 
 #    $session->writePageHeader();
 
-    # SMELL: what's all the 'scalar' crud, below?
+    # 'scalar' is used below to get the scalar value of the parameter
+    # because it returns the empty string for undef.
+
     my $text = $session->{search}->searchWeb(
 #        _callback       => \&_contentCallback,	#FIXME - can't process format=| $topic | line by line...
         _callback       => undef,
