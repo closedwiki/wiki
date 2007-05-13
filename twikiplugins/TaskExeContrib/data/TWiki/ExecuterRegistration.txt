@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="StephaneLenclud" date="1179063533" format="1.1" reprev="1.2" version="1.2"}%
+%META:TOPICINFO{author="StephaneLenclud" date="1179098999" format="1.1" reprev="1.3" version="1.3"}%
 %META:TOPICPARENT{name="TaskExeManager"}%
 ---+ Register an executer machine
 
@@ -17,9 +17,9 @@ Of course you can always make your Executer private by using =ALLOWTOPICVIEW= fo
 
 %STARTINCLUDE%<form name="executercreate" action="%SCRIPTURLPATH{edit}%/%TASKEXE_TASKWEB%">
 <table>
-<tr><td>Topic name:</td><td><input type="text" value="" name="topic" size="32" /></td></tr>
-<tr><td>Bin URL:</td><td><input type="text" value="" name="BinURL" size="32" /></td></tr>
-<tr><td>Machine name:</td><td><input type="text" value="" name="Name" size="32" /></td></tr>
+<tr><td>Topic name:</td><td><input type="text" value="" name="topic" size="32" /></td> <td>e.g. !ExecuterMyBuildServer</td> </tr>
+<tr><td>Bin URL:</td><td><input type="text" value="" name="BinURL" size="32" /></td> <td>e.g. http://buildserver.local/executer</td> </tr>
+<tr><td>Machine name:</td><td><input type="text" value="" name="Name" size="32" /></td> <td>e.g. build-server</td> </tr>
 <tr><td></td><td></td></tr> 
 
      <input type="hidden" name="templatetopic" value="%TASKEXE_INSTALLEDWEB%.ExecuterTemplate" />

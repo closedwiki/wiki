@@ -1,29 +1,35 @@
-%META:TOPICINFO{author="StephaneLenclud" date="1179071678" format="1.1" reprev="1.2" version="1.2"}%
+%META:TOPICINFO{author="StephaneLenclud" date="1179100102" format="1.1" reprev="1.2" version="1.2"}%
 ---+!! Task Executer
+<!--
+One line description, required for extensions repository catalog.
+   * Set SHORTDESCRIPTION = Scripts running on a remote machine and executing tasks as defined by TaskExeContrib.
+-->
+%SHORTDESCRIPTION%
+
+%TOC%
 
 ---++ Purpose & scope 
 
 The task executer is running on a remote machine executing a task. It is a key concept of the TWiki.TaskExeContrib.
 Here we describe how to set-up and use an executer machine. We also provide technical information about the executer implementation.
 
-%TOC%
-
 ---++ Installation instructions
 
-The task executer is typically set-up on a remote machine where it runs as a __cron job__ a __Windows service__.
+DO NOT install on a TWiki server. <br />
+The task executer is typically set-up on a remote machine where it runs as a __Linux service__ or __Windows service__.
 
 ---+++ MS Windows executer set-up
 
 In the following set-up instructions paths and command lines are given as examples and should be altered according to your machine settings. 
 
-   1 Set-up a web server. Preferably Apache 2.2
-   1 Install the executer using the Windows installer provided.
+   1 Set-up a web server. Preferably Apache 2.2.
+   1 Install the executer using the [[%ATTACHURL%/ExecuterSetup.msi][Windows installer]] provided.
    1 Fix the [[http://en.wikipedia.org/wiki/Shebang_%28Unix%29][Shebang line]] in the CGI =exestart= and =exestatus=.
    1 Copy the folder =c:\executer\cgi-bin\executer= to your web server =cgi-bin= directory. 
    1 Set the credentials for accessing your TWiki web site in =c:\executer\cfg\executer.cfg=.  
    1 Run the Executer:
       * In a console:
-         * Open a console. Go to =c:\executer\cgi-bin\executer= and run =perl executer.pl=.
+         * Open a console. Go to =c:\executer\bin\executer= and run =perl executer.pl=.
       * As a Windows service:
          * You can use [[https://slion.net/view/Dev/ExeService][ExeService]] to set it up for you. 
          * Double check the service's _Log On_ information. Maybe you want to use specific user to gain write access to your TWiki pages.
@@ -34,7 +40,13 @@ __Note:__ When using MS Windows operating system as a build server you may want 
 
 ---+++ Linux executer set-up
 
-Soon to come.
+   1 Set-up a web server. Preferably Apache 2.2.
+   1 Install the =zip= or =tgz= provided in your home directory. 
+   1 Fix the [[http://en.wikipedia.org/wiki/Shebang_%28Unix%29][Shebang line]] in the CGI =exestart= and =exestatus=.
+   1 Set the credentials for accessing your TWiki web site in =~/executer/cfg/executer.cfg=  
+   1 Run the executer:
+      * In a console:
+         * Open a console. Go to =~/executer/bin/executer= and run =perl executer.pl=.
 
 ---+++ Executer registration
 
@@ -48,7 +60,7 @@ If you are experiencing problems with an Executer you should:
    * Delete files in =c:\executer=. DO NOT delete the directories in =c:\executer=.
    * Try to run it in console instead of Windows service
 
----++ Source code
+---++ System documentation
 
 *\lib\Slion\bin\executer.pl* - Infinite loop using !Slion::TWiki::Executer and waiting for task request from web server. <br />
 *\lib\Slion\TWiki\Executer.pm* - Sub class !Slion::TWiki::Client adding functionalities for parsing a Task topic and and executing Commands <br />
@@ -56,13 +68,23 @@ If you are experiencing problems with an Executer you should:
 *\cgi-bin\executer\exestatus* - CGI, output some Javascript for automatic status update from web page. <br />
 *\cgi-bin\executer\exestart* - CGI, used to trigger a [[TWiki.TaskExeContrib#Task][Task]].
 
----++ Dependencies
+---++ Package content
 
-The task executer itself has the following dependencies:
-   * CPAN:LWP 
-   * CPAN:LWP::UserAgent
-   * CPAN:Config::Simple
-   * CPAN:Crypt::SSLeay - Only if accessing your TWiki web site using HTTPS.
+     | *File:* | *Description:* |
+%$MANIFEST%
 
-Other dependencies might be added through the [[TWiki.TaskExeContrib#Task_Specification][Task specification]]. 
+---++ Contrib Info
 
+|  Contrib Author(s): | |
+|  Contrib Version: | %$VERSION% |
+|  Copyright: | &copy; |
+|  License: | [[http://www.gnu.org/licenses/gpl.html][GPL (Gnu General Public License)]] |
+|  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  Dependencies: | %$DEPENDENCIES% <br /> Other dependencies might be added through the [[TWiki.TaskExeContrib#Task_Specification][Task specification]]. |
+|  Contrib Home: | http://twiki.org/cgi-bin/view/Plugins/ExecuterContrib |
+|  Feedback: | http://twiki.org/cgi-bin/view/Plugins/ExecuterContribDev |
+|  Appraisal: | http://twiki.org/cgi-bin/view/Plugins/ExecuterContribAppraisal |
+
+<!-- Do _not_ attempt to edit this topic; it is auto-generated. Please add comments/questions/remarks to the Dev topic instead. -->
+
+%META:FILEATTACHMENT{name="ExecuterSetup.msi" attachment="ExecuterSetup.msi" attr="" comment="Windows installer" date="1179100050" path="ExecuterSetup.msi" size="99840" stream="ExecuterSetup.msi" user="Main.StephaneLenclud" version="1"}%
