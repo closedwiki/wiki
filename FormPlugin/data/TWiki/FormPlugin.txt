@@ -207,7 +207,10 @@ format="<p> $m $t $h <br />$e </p>"
 </verbatim>
 
 ---+++ =elementformat=
-The default =elementformat= is simply =$e=.
+The default =elementformat= is simply
+<verbatim>
+$e
+</verbatim>
 
 This means that radio buttons and checkboxes are all displayed on one line. To put these items on one line each, write:
 <verbatim>
@@ -215,7 +218,10 @@ elementformat="$e <br />"
 </verbatim>
 
 ---+++ =titleformat=
-The default =elementformat= is = $t <br />=.
+The default =elementformat= is
+<verbatim>
+ $t <br />
+</verbatim>
 
 To display the title in bold, write:
 <verbatim>
