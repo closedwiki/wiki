@@ -1,0 +1,251 @@
+%META:TOPICINFO{author="TWikiContributor" date="1176591878" format="1.1" reprev="1.1" version="1.1"}%
+
+---+!! Form Plugin Examples
+See [[FormPlugin]]
+
+%TOC%
+
+---++ Hints and mandatory indicators
+
+%STARTFORM{
+name="hintform"
+action="view"
+}%
+%FORMELEMENT{
+name="Name"
+type="text"
+title="Enter your name:"
+mandatory="on"
+hint="Or just anything"
+}%
+%FORMELEMENT{
+name="Anything"
+type="text"
+title="Enter something else:"
+mandatory="on"
+}%
+%FORMELEMENT{
+type="submit"
+buttonlabel="Submit"
+}%
+%ENDFORM%
+
+
+---++ Adding styles
+
+Setting:
+<verbatim>
+formcssclass="twikiFormSteps"
+elementcssclass="twikiFormStep"
+</verbatim>
+
+%STARTFORM{
+name="styleform"
+action="view"
+formcssclass="twikiFormSteps"
+elementcssclass="twikiFormStep"
+}%
+%FORMELEMENT{
+name="Name"
+type="text"
+title="Enter your name:"
+}%
+%FORMELEMENT{
+type="submit"
+buttonlabel="Submit"
+}%
+%ENDFORM%
+
+
+---++ Custom CSS classes
+
+%STARTFORM{
+name="customcssform"
+action="view"
+}%
+%FORMELEMENT{
+name="Name"
+type="text"
+title="Enter your name:"
+class="twikiBroadcastMessage"
+}%
+%FORMELEMENT{
+type="submit"
+buttonlabel="Submit"
+class="twikiSubmitDisabled"
+}%
+%ENDFORM%
+
+
+
+---++ Multi-select items
+
+%STARTFORM{
+name="multiform"
+action="view"
+formcssclass="twikiFormSteps"
+elementcssclass="twikiFormStep"
+}%
+%FORMELEMENT{
+name="Nice persons"
+type="radio"
+title="Nice persons with custom =titleformat=:"
+options="mary=Mary M, peter=Peter P, annabel=Annabel A, nicky=Nicky N, jennifer=Jennifer J"
+validate="nonempty"
+elementformat="$e <br />"
+titleformat=" *$t* %BR%"
+mandatory="on"
+hint="Select one person"
+}%
+%FORMELEMENT{
+name="Not-so-nice persons"
+type="checkbox"
+title="Not-so-nice persons with selected defaults:"
+options="mary, peter, annabel, nicky, jennifer"
+labels="Mary M, Peter P, Annabel A, Nicky N, Jennifer J"
+default="mary,peter"
+validate="nonempty"
+elementformat="$e <br />"
+mandatory="on"
+hint="Select any person"
+}%
+%FORMELEMENT{
+name="And even more persons"
+type="checkbox"
+title="And even more persons without custom =elementformat=:"
+options="mary, peter, annabel, nicky, jennifer"
+labels="Mary M, Peter P, Annabel A, Nicky N, Jennifer J"
+validate="nonempty"
+mandatory="on"
+hint="Select any person"
+}%
+%FORMELEMENT{type="selectmulti" title="Multiselect is =selectmulti=:" name="subject" options="work,freetime,not important" labels="Work, Freetime, Not important" default="not important" size="3"}%
+%ENDFORM%
+
+
+---++ Validation
+
+%STARTFORM{
+name="validationTestForm"
+action="view"
+method="POST"
+formcssclass="twikiFormSteps"
+elementcssclass="twikiFormStep"
+}%
+%FORMELEMENT{
+name="Name"
+type="text"
+title="Enter your name:"
+default=""
+mandatory="on"
+hint="You cannot post anonymously"
+}%
+%FORMELEMENT{
+name="Name float"
+type="text"
+title="Your salary:"
+default=""
+mandatory="on"
+validate="float"
+hint="Including the cents after the comma"
+}%
+%FORMELEMENT{
+name="Checkname"
+type="checkbox"
+title="Who earns more than you:"
+options="mary=Mary M, peter=Peter P, annabel=Annabel A, nicky=Nicky N, jennifer=Jennifer J"
+elementformat="$e<br />"
+mandatory="on"
+validate="nonempty"
+hint="Just pinpoint someone"
+}%
+%FORMELEMENT{
+type="submit"
+default="Try me"
+}%
+%ENDFORM%
+
+
+---++ Substitution of field references
+
+Reference field values as variables. In hidden field 'CarbonCopy' we are creating a combined entry of =Name= and =Password= fields:
+<verbatim>
+%FORMELEMENT{
+name="CarbonCopy"
+type="hidden"
+default="$Name earns $Salary"
+}%
+</verbatim>
+
+#SubstitutionReferences
+The !CarbonCopy form field: %URLPARAM{"CarbonCopy"}%
+
+%STARTFORM{
+name="substitutionform"
+action="view"
+anchor="SubstitutionReferences"
+formcssclass="twikiFormSteps"
+elementcssclass="twikiFormStep"
+}%
+%FORMELEMENT{
+name="Name"
+type="text"
+title="Enter your name:"
+mandatory="on"
+}%
+%FORMELEMENT{
+name="Salary"
+type="text"
+title="Enter your salary:"
+mandatory="on"
+validate="float"
+}%
+%FORMELEMENT{
+name="CarbonCopy"
+type="hidden"
+default="$Name earns $Salary"
+}%
+%FORMELEMENT{
+type="submit"
+buttonlabel="Submit"
+}%
+%ENDFORM%
+
+---++ !SendEmailPlugin form
+
+E-mail form for SendEmailPlugin - form works if the plugin is installed and enabled.
+
+%SENDEMAIL%
+
+%STARTFORM{
+name="mailForm"
+action="%SCRIPTURL{sendemail}%/%WEB%/%TOPIC%"
+method="POST"
+}%
+%FORMELEMENT{
+name="To"
+type="text"
+title="To:"
+validate="email"
+mandatory="on"
+hint="Enter an e-mail address"
+}%
+%FORMELEMENT{
+name="Subject"
+type="text"
+title="Subject:"
+hint="(optional)"
+}%
+%FORMELEMENT{
+name="body"
+type="textarea"
+title="Message:"
+rows="5"
+cols="80"
+hint="(optional)"
+}%
+%FORMELEMENT{
+type="submit"
+default="Send"
+}%
+%ENDFORM%

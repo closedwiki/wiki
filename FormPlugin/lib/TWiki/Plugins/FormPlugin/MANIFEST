@@ -1,0 +1,4 @@
+data/TWiki/FormPlugin.txt 0644 Documentation
+data/TWiki/FormPluginExamples.txt 0644 Documentation
+lib/TWiki/Plugins/FormPlugin.pm 0644 Perl module
+pub/TWiki/FormPlugin/formplugin.css 0644 CSS styles
