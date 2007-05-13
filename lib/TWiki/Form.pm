@@ -155,7 +155,7 @@ sub _parseFormDefinition {
 
             my $definingTopic = "";
             if( $title =~ /\[\[(.+)\]\[(.+)\]\]/ )  { # use common defining
-                $definingTopic = _cleanField( $1 );      # topics with different
+                $definingTopic = _cleanField( $1 );   # topics with different
                 $title = $2;                          # field titles
             }
 
@@ -164,7 +164,6 @@ sub _parseFormDefinition {
             # Rename fields with reserved names
             if( $reservedFieldNames{$name} ) {
                 $name .= '_';
-                $title .= '_';
             }
 
             push( @fields,
@@ -292,7 +291,7 @@ sub renderForEdit {
 
     # Note: if WEBFORMS preference is not set, can only delete form.
     $tmpl =~ s/%FORMTITLE%/_link(
-        $this,$meta, $this->{web}.'.'.$this->{topic})/ge;
+        $this, $meta, $this->{web}.'.'.$this->{topic})/ge;
     my( $text, $repeatTitledText, $repeatUntitledText, $afterText ) =
       split( /%REPEAT%/, $tmpl );
 
@@ -418,7 +417,7 @@ sub getFieldValuesFromQuery {
             $seen++;
         } elsif( $fieldDef->isMandatory() ) {
             # Remember missing mandatory fields
-            push( @missing, $this->{title} || "unnamed field" );
+            push( @missing, $fieldDef->{title} || "unnamed field" );
         }
     }
 

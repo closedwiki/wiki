@@ -220,10 +220,14 @@ sub populateMetaFromQueryData {
         }
         # NOTE: title and name are stored in the topic so that it can be
         # viewed without reading in the form definition
+        my $title = $this->{title};
+        if( $this->{definingTopic} ) {
+            $title = '[['.$this->{definingTopic}.']['.$title.']]';
+        }
         $def =
           {
               name =>  $this->{name},
-              title => $this->{title},
+              title => $title,
               value => $value,
               attributes => $this->{attributes},
           };
