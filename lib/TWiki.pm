@@ -2853,7 +2853,7 @@ sub IF {
         my $e = shift;
         $result = $this->inlineAlert(
             'alerts', 'generic', 'IF{', $params->stringify(), '}:',
-            $e );
+            $e->{-text} );
     };
     return $result;
 }
@@ -3151,7 +3151,8 @@ sub SEARCH {
     try {
         $s = $this->{search}->searchWeb( %$params );
     } catch Error::Simple with {
-        $s = $this->inlineAlert( 'alerts', 'bad_search', shift );
+        my $message = shift->{-text};
+        $s = $this->inlineAlert( 'alerts', 'bad_search', $message );
     };
     return $s;
 }
@@ -3527,7 +3528,7 @@ sub META {
 
     if( $option eq 'form' ) {
         # META:FORM and META:FIELD
-        return TWiki::Form::renderForDisplay( $this->{templates}, $meta );
+        return $meta->renderFormForDisplay( $this->{templates} );
     } elsif ( $option eq 'formfield' ) {
         # a formfield from within topic text
         return $this->{renderer}->renderFormField( $meta, $params );

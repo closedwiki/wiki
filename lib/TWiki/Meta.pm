@@ -560,4 +560,46 @@ sub getFormName {
     return '';
 }
 
+=pod
+
+---++ ObjectMethod renderFormForDisplay()
+
+Render the form contained in the meta for display. Does not require
+the form definition.
+
+=cut
+
+sub renderFormForDisplay {
+    my $this = shift;
+
+    my $templates = $this->{_session}->{templates};
+    my $form = $this->get( 'FORM' );
+
+    return '' unless( $form );
+
+    $templates->readTemplate('formtables');
+
+    my $name = $form->{name};
+
+    my $text = $templates->expandTemplate('FORM:display:header');
+
+	my $rowTemplate = $templates->expandTemplate('FORM:display:row');
+    my @fields = $this->find( 'FIELD' );
+    foreach my $field ( @fields ) {
+        my $fa = $field->{attributes} || '';
+        unless ( $fa =~ /H/ ) {
+            my $value = $field->{value};
+            $value = '&nbsp;' unless defined($value);
+            my $title = $field->{title} || $field->{name};
+            my $row = $rowTemplate;
+            $row =~ s/%A_TITLE%/$title/g;
+            $row =~ s/%A_VALUE%/$value/g;
+            $text .= $row;
+        }
+    }
+    $text .= $templates->expandTemplate('FORM:display:footer');
+    $text =~ s/%A_TITLE%/$name/g;
+    return $text;
+}
+
 1;

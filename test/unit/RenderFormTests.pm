@@ -111,7 +111,7 @@ sub compare_field_from_form_fmt {
 sub test_TML_in_forms {
     my $this = shift;
     my($meta, $text) = $twiki->{store}->readTopic(undef, $testweb, $testtopic1);
-    my $res = TWiki::Form::renderForDisplay($twiki->{templates},$meta);
+    my $res = $meta->renderFormForDisplay();
     my $render = $twiki->{renderer};
     $res = $render->getRenderedVersion($res, $testweb, $testtopic1);
 
@@ -134,7 +134,7 @@ sub test_TML_in_forms {
 sub test_formatted_TML_in_forms {
     my $this = shift;
     my($meta, $text) = $twiki->{store}->readTopic(undef, $testweb, $testtopic2);
-    my $res = TWiki::Form::renderForDisplay($twiki->{templates},$meta);
+    my $res = $meta->renderFormForDisplay();
     my $render = $twiki->{renderer};
     $res = $render->getRenderedVersion($res, $testweb, $testtopic2);
 
