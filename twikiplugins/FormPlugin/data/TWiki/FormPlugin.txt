@@ -320,6 +320,6 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 __Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
 
 
-%META:FILEATTACHMENT{name="form_on_submit_diagram.png" attr="" comment="Form on submit diagram" date="1178992688" path="form_on_submit_diagram.png" size="36218" user="Main.ArthurClemens" version="1"}%
-%META:FILEATTACHMENT{name="error.gif" attr="" comment="" date="1178912227" path="error.gif" size="351" user="TWikiContributor" version=""}%
-%META:FILEATTACHMENT{name="formplugin.css" attr="" comment="" date="1178990493" path="formplugin.css" size="1005" user="TWikiContributor" version=""}%
+%META:FILEATTACHMENT{name="form_on_submit_diagram.png" attr="" comment="Form on submit diagram" date="1178992688" path="form_on_submit_diagram.png" size="36218" user="Main.TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="error.gif" attr="" comment="" date="1178912227" path="error.gif" size="351" user="Main.TWikiContributor" version=""}%
+%META:FILEATTACHMENT{name="formplugin.css" attr="" comment="" date="1178990493" path="formplugin.css" size="1005" user="Main.TWikiContributor" version=""}%
