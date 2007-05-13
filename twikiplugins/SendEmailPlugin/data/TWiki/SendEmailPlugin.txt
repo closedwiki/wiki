@@ -6,23 +6,24 @@
 %TOC%
 
 ---++ Usage
-   * Write =%<nop>SENDEMAIL%= anywhere on the page, but preferably in a visible spot because the feedback messages will be written at the tag location.
-      * Optionally pass parameters =feedbackSucces= and =feedbackError=. Default feedback messages are set below in [[#PluginSettings][Plugin Settings]].
+
    * Create a form on the page.
-      * Required is a hidden field with =name="sendmail"= and =value="on"=
-      * Required is also a field with =name="to"=
+      * Call =action= script =sendemail=
+         * =action="%<nop>SCRIPTURL{sendemail}%/%<nop>WEB%/%<nop>TOPIC%"=
+      * Required is a field with =name="to"=
       * Optional are the fields =cc=, =subject= and =body=
       * Field =from= may be used but by default the address of =%<nop>WIKIWEBMASTER%= is used (this is set to: %WIKIWEBMASTER%)
-
-
+   * To show feedback write =%<nop>SENDEMAIL%= anywhere on the page where the feedback should appear.
+      * Optionally pass parameters =feedbackSuccess= and =feedbackError=. Default feedback messages are set below in [[#PluginSettings][Plugin Settings]].
 
 ---++ Example
 ---+++ Example form
 
-This form only works if this plugin is enabled and =%<nop>SENDEMAIL%= is written in the topic - see [[#PluginTest][Plugin Tests]] below to check this.
+This form only works if this plugin is enabled - see [[#PluginTest][Plugin Tests]] below to check this.
 
-<form enctype="application/x-www-form-urlencoded" name="mailform" action="" method="post">
-<input name="sendmail" type="hidden" value="on" />
+%SENDEMAIL%
+
+<form enctype="application/x-www-form-urlencoded" name="mailform" action="%SCRIPTURL{sendemail}%/%WEB%/%TOPIC%" method="POST">
 <p>To:<br /><input class="twikiInputField" id="to" name="to" size="30" type="text" value="" /></p>
 <p>CC:<br /><input type="text" class="twikiInputField" id="cc" name="cc" size="30"  value="" /></p>
 <p>Subject:<br /><input type="text" class="twikiInputField" id="subject" name="subject" size="30" value="" /></p>
@@ -32,14 +33,14 @@ This form only works if this plugin is enabled and =%<nop>SENDEMAIL%= is written
 
 ---+++ Example usage
 <verbatim>
-%SENDEMAIL{feedbackSucces="Successfully sent" feedbackError="Something went wrong." }%
+%SENDEMAIL{feedbackSuccess="Successfully sent" feedbackError="Something went wrong." }%
 
-<form enctype="application/x-www-form-urlencoded" name="mailform" action="" method="post">
-<input name="sendmail" type="hidden" value="on" />
+<form enctype="application/x-www-form-urlencoded" name="mailform" action="%SCRIPTURL{sendemail}%/%WEB%/%TOPIC%" method="POST">
 <p>To:<br /><input class="twikiInputField" id="to" name="to" size="30" type="text" value="" /></p>
+<p>CC:<br /><input type="text" class="twikiInputField" id="cc" name="cc" size="30"  value="" /></p>
 <p>Subject:<br /><input type="text" class="twikiInputField" id="subject" name="subject" size="30" value="" /></p>
 <p>Message:<br /><textarea class="twikiInputField" cols="80" name="body" rows="6"></textarea></p>
-<p><input type="submit" class="twikiSubmit" value="Send message" /></p>
+<p><input type="submit" class="twikiSubmit" value="Send message" %IF{"context SendEmailPluginEnabled" then='' else='disabled="disabled"'}% /></p>
 </form>
 </verbatim>
 
@@ -67,6 +68,13 @@ Plugin settings are stored as preferences variables. To reference a plugin setti
       * Set DEBUG = 0
 
 
+---++ CSS classes
+
+| *Class name* | *Note* |
+| =sendEmailPluginNotification=  | Used for feedback after sending a mail  |
+| =sendEmailPluginError=         | Styles =sendEmailPluginNotification= in case of an error   |
+
+
 
 ---++ Plugin Installation Instructions
 
@@ -81,9 +89,10 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.ArthurClemens |
-|  Plugin Version: | 05 May 2007  |
+|  Plugin Version: | 13 May 2007  |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  05 May 2007 | First release. |
+|  13 May 2007 | 1.1 Arthur Clemens: changed sendmail script invocation to be called through bin script =sendemail=; added CSS styles for feedback notification; fixed typo 'feedbackSucces'. |
+|  05 May 2007 | 1.0 First release. |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 |
 |  CPAN Dependencies: | none |
 |  Other Dependencies: | none |
