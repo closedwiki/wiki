@@ -21,6 +21,7 @@ package TWiki::Plugins::SendEmailPlugin;
 
 # Always use strict to enforce variable scoping
 use strict;
+use TWiki::Func;
 
 # $VERSION is referred to by TWiki, and is the only global variable that
 # *must* exist in this package
@@ -31,7 +32,7 @@ use vars qw( $successMessage $errorMessage $headerDone);
 # status of the plugin. It is used by the build automation tools, so
 # you should leave it alone.
 $VERSION = '$Rev: 11069$';
-$RELEASE = '1.1';
+$RELEASE = '1.1.1';
 
 # Name of this Plugin, only used in this module
 $pluginName = 'SendEmailPlugin';
@@ -98,6 +99,7 @@ sub sendEmail {
     my $body    = '';
 
     my $query = TWiki::Func::getCgiQuery();
+    return _finishSendEmail( $session, $ERROR_STATUS{'error'} ) if !$query;
 
     $to = $query->param('to') || $query->param('To');
     return _finishSendEmail( $session, $ERROR_STATUS{'error'} ) if !$to;
@@ -150,6 +152,8 @@ sub _handleSendEmailTag {
     _addHeader();
 
     my $query = TWiki::Func::getCgiQuery();
+    return '' if !$query;
+    
     my $errorStatus = $query->param($ERROR_STATUS_TAG);
     
     TWiki::Func::writeDebug("_handleSendEmailTag; errorStatus=$errorStatus") if $debug;
@@ -174,9 +178,10 @@ sub _finishSendEmail {
     my $topic = $session->{topicName};
 
     my $query = TWiki::Func::getCgiQuery();
+    
     TWiki::Func::writeDebug("_finishSendEmail errorStatus=$errorStatus") if $debug;
 
-    $query->param( -name => $ERROR_STATUS_TAG, -value => $errorStatus );
+    $query->param( -name => $ERROR_STATUS_TAG, -value => $errorStatus ) if $query;
 
     TWiki::Func::redirectCgiQuery( undef,
         TWiki::Func::getScriptUrl( $web, $topic, 'view' ), 1 );
