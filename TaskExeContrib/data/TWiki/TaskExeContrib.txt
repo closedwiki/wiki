@@ -1,9 +1,9 @@
-%META:TOPICINFO{author="StephaneLenclud" date="1179075912" format="1.1" reprev="1.6" version="1.6"}%
+%META:TOPICINFO{author="StephaneLenclud" date="1179097228" format="1.1" reprev="1.7" version="1.7"}%
 <!--
    * Set ALLOWTOPICVIEW = Main.StephaneLenclud
 -->
 
----+!! Remote task system
+---+!! Task executer application
 
 ---++!! Purpose & Scope 
 
@@ -14,12 +14,6 @@ TaskExeContrib was initially developed for [[Wikipedia:Software_release][softwar
 TaskExeContrib runs on a remote machine or [[#Executer][Executer]]. The [[#Executer][Executer]] reads a TWiki topic defining the tasks to execute and typically publishes output and results on another TWiki topic. 
 
 %TOC%
-
-
----++ Summary of Contents
-
-   * Download
-   * Installation instructions
 
 ---++ Management
 
@@ -249,7 +243,7 @@ Examples :
 
    * Install TaskExePlugin.
    * Install %TOPIC%.
-   * Set-up an _Executer_. See TaskExecuter.
+   * Set-up an _Executer_. See ExecuterContrib.
    * Go to TaskStarter and try running Sandbox.TaskSpecDemo using your _Executer_ and check the results on Sandbox.TaskSpecDemoOutput.
    * Once the above is working you should customize your application for your needs:
       * Create a Web dedicated to TaskExeContrib and install TaskExeContrib in it.
@@ -262,7 +256,6 @@ __Note:__ You do not need to install anything on the browser to use this contrib
    * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
      | *File:* | *Description:* |
 %$MANIFEST%
-<!-- replace table body above, keeping the header, with %$MANIFEST% when using with Build module to automatically extract MANIFEST -->
 
 Once installed you should have access to TaskExeManager.
 
