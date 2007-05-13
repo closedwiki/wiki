@@ -84,29 +84,7 @@ sub initPlugin {
 
 =pod
 
-=cut
-
-sub _handleSendEmailTag {
-    my ( $session, $params, $topic, $web ) = @_;
-
-    _addHeader();
-
-    my $query = TWiki::Func::getCgiQuery();
-    my $errorStatus = $query->param($ERROR_STATUS_TAG);
-    
-    TWiki::Func::writeDebug("_handleSendEmailTag; errorStatus=$errorStatus") if $debug;
-
-    return '' if !defined $errorStatus;
-
-    my $feedbackSuccess = $params->{'feedbackSuccess'} || $successMessage;
-    my $feedbackError   = $params->{'feedbackError'}   || $errorMessage;
-
-    my $message = ($errorStatus == $ERROR_STATUS{'error'}) ? $feedbackError : $feedbackSuccess;
-
-    return _wrapHtmlNotificationContainer( $message, $errorStatus );
-}
-
-=pod
+Invoked by bin/sendemail
 
 =cut
 
@@ -121,20 +99,20 @@ sub sendEmail {
 
     my $query = TWiki::Func::getCgiQuery();
 
-    $to = $query->param('to');
+    $to = $query->param('to') || $query->param('To');
     return _finishSendEmail( $session, $ERROR_STATUS{'error'} ) if !$to;
 
-    $from = $query->param('from')
+    $from = $query->param('from') || $query->param('From') 
       || $TWiki::cfg{WebMasterEmail}
       || TWiki::Func::getPreferencesValue('WIKIWEBMASTER');
 
     return _finishSendEmail( $session, $ERROR_STATUS{'error'} ) if !$from;
 
-    my $ccParam = $query->param('cc') || '';
+    my $ccParam = $query->param('cc') || $query->param('CC') || '';
     $cc = $ccParam if $ccParam;
-    my $subjectParam = $query->param('subject');
+    my $subjectParam = $query->param('subject') || $query->param('Subject');
     $subject = $subjectParam if $subjectParam;
-    my $bodyParam = $query->param('body') || '';
+    my $bodyParam = $query->param('body') || $query->param('Body') || '';
     $body = $bodyParam if $bodyParam;
 
     my $mail = <<'HERE';
@@ -160,6 +138,30 @@ HERE
     TWiki::Func::writeDebug("errorStatus=$errorStatus") if $debug;
 
     _finishSendEmail( $session, $errorStatus );
+}
+
+=pod
+
+=cut
+
+sub _handleSendEmailTag {
+    my ( $session, $params, $topic, $web ) = @_;
+
+    _addHeader();
+
+    my $query = TWiki::Func::getCgiQuery();
+    my $errorStatus = $query->param($ERROR_STATUS_TAG);
+    
+    TWiki::Func::writeDebug("_handleSendEmailTag; errorStatus=$errorStatus") if $debug;
+
+    return '' if !defined $errorStatus;
+
+    my $feedbackSuccess = $params->{'feedbackSuccess'} || $successMessage;
+    my $feedbackError   = $params->{'feedbackError'}   || $errorMessage;
+
+    my $message = ($errorStatus == $ERROR_STATUS{'error'}) ? $feedbackError : $feedbackSuccess;
+
+    return _wrapHtmlNotificationContainer( $message, $errorStatus );
 }
 
 =pod
