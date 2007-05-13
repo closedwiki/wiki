@@ -1,9 +1,31 @@
 # See bottom of file for license and copyright details
 # base class for all form field types
+
+=pod
+
+---+ package TWiki::Form::FieldDefinition
+
+Base class of all field definition classes.
+
+Type-specific classes are derived from this class to define specific
+per-type behaviours. This class also provides default behaviours for when
+a specific type cannot be loaded.
+
+=cut
+
 package TWiki::Form::FieldDefinition;
 
 use strict;
 use Assert;
+
+=pod
+
+---++ ClassMethod new(%...)
+
+Construct a new FieldDefinition. Parameters are passed in a hash. See
+Form.pm for how it is called. Subclasses should pass @_ on to this class.
+
+=cut
 
 sub new {
     my $class = shift;
@@ -16,27 +38,73 @@ sub new {
     return bless(\%attrs, $class);
 }
 
-# is the field type editable?
+=pod
+
+---++ isEditable() -> $boolean
+
+Is the field type editable? Labels aren't, for example. Subclasses may need
+to redefine this.
+
+=cut
+
 sub isEditable { 1 }
-# is it multi-valued (i.e. does it store multiple values)?
+
+=pod
+
+---++ isMultiValued() -> $boolean
+
+Is the field type multi-valued (i.e. does it store multiple values)?
+Subclasses may need to redefine this.
+
+=cut
+
 sub isMultiValued { 0 }
+
+=pod
+
+---++ isMandatory() -> $boolean
+
+Is this field mandatory (required)?
+
+=cut
 
 sub isMandatory { return shift->{attributes} =~ /M/ }
 
+=pod
+
+---++ renderForEdit( $web, $topic, $value ) -> ($col0html, $col1html)
+   =$web= - the web containing the topic being edited
+   =$topic= - the topic being edited
+Render the field for editing. Returns two chunks of HTML; the
+=$col0html= is appended to the HTML for the first column in the
+form table, and the =$col1html= is used as the content of the second column.
+
+=cut
+
 sub renderForEdit {
     my( $this, $web, $topic, $value ) = @_;
-ASSERT(0);
 
     # Treat like text, make it reasonably long, add a warning
-    return ( '<br /><span class="twikiAlert">MISSING TYPE '.$this->{type}.'</span>',
+    return ( '<br /><span class="twikiAlert">MISSING TYPE '.
+               $this->{type}.'</span>',
             CGI::textfield( -class => 'twikiEditFormError',
                             -name => $this->{name},
                             -size => 80,
                             -value => $value ));
 }
 
-# Try and get a sensible default value from the values stored in the form
-# definition.
+=pod
+
+---++ getDefaultValue() -> $value
+Try and get a sensible default value for the field from the
+values stored in the form definition. The result should be
+a value string.
+
+Some subclasses may not support the definition of defaults in
+the form definition. In that case this method should return =undef=.
+
+=cut
+
 sub getDefaultValue {
     my $this = shift;
 
@@ -45,6 +113,13 @@ sub getDefaultValue {
 
     return $value;
 }
+
+=pod
+
+---++ renderHidden($meta) -> $html
+Render the form in =$meta= as a set of hidden fields.
+
+=cut
 
 sub renderHidden {
     my( $this, $meta ) = @_;
@@ -55,17 +130,37 @@ sub renderHidden {
         $value = $field->{value};
     }
 
-    unless( defined( $value ) || $this->isMultiValued() ) {
-        $value = $this->{value};
+    my @values;
+
+    if( defined( $value )) {
+        if( $this->isMultiValued() ) {
+            push( @values, split(/\s*,\s*/, $value ));
+        } else {
+            push( @values, $value );
+        }
+    } else {
+        $value = $this->getDefaultValue();
+        push( @values, $this->getDefaultValue() ) if $value;
     }
 
-    $value = '' unless defined( $value );  # allow 0 values
+    return '' unless scalar( @values );
 
-    return CGI::hidden( -name => $this->{name}, -value => $value );
+    return CGI::hidden( -name => $this->{name}, -default => \@values );
 }
 
-# -> $boolean
-# return true if the value was updated from the query
+=pod
+
+---++ populateMetaDataFromQuery( $query, $meta, $old ) -> $boolean
+
+Given a CGI =$query=, a =$meta= object, and an array of =$old= field entries,
+then populate the $meta with a row for this field definition, taking the
+content from the query if it's there, otherwise from $old or failing that,
+from the default defined for the type. Refuses to update mandatory fields
+that have an empty value.
+
+Return true if the value in $meta was updated.
+
+=cut
 
 sub populateMetaFromQueryData {
     my( $this, $query, $meta, $old ) = @_;
@@ -88,8 +183,8 @@ sub populateMetaFromQueryData {
             }
             $value = '';
             my $isValues = ( $this->{type} =~ /\+values/ );
-            $this->expandOptions();
-            foreach my $option ( @{$this->{options}} ) {
+
+            foreach my $option ( @{$this->getOptions()} ) {
                 $option =~ s/^.*?[^\\]=(.*)$/$1/ if $isValues;
                 # Maintain order of definition
                 if( $vset{$option} ) {

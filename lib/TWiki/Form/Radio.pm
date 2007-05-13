@@ -11,7 +11,7 @@ sub new {
     $this->{size} =~ s/\D//g;
     $this->{size} ||= 0;
     $this->{size} = 4 if ( $this->{size} < 1 );
-    $this->{options} = undef;
+
     return $this;
 }
 
@@ -21,8 +21,7 @@ sub renderForEdit {
     my $selected = '';
     my $session = $this->{session};
     my %attrs;
-    $this->expandOptions();
-    foreach my $item ( @{$this->{options}} ) {
+    foreach my $item ( @{$this->getOptions()} ) {
         $attrs{$item} =
           { class=>'twikiRadioButton twikiEditFormRadioField',
             label=>$session->handleCommonTags(
@@ -33,7 +32,7 @@ sub renderForEdit {
 
     return ( '', CGI::radio_group(
         -name => $this->{name},
-        -values => $this->{options},
+        -values => $this->getOptions(),
         -default => $selected,
         -columns => $this->{size},
         -attributes => \%attrs ));

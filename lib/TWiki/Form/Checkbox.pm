@@ -11,7 +11,7 @@ sub new {
     $this->{size} =~ s/\D//g;
     $this->{size} ||= 0;
     $this->{size} = 4 if ( $this->{size} < 1 );
-    $this->{options} = undef;
+
     return $this;
 }
 
@@ -24,13 +24,10 @@ sub isMultiValued { 1 }
 sub renderForEdit {
     my( $this, $web, $topic, $value ) = @_;
 
-    # Make sure the options field is populated
-    $this->expandOptions();
-
     my $session = $this->{session};
     my $extra = '';
     if( $this->{type} =~ m/\+buttons/ ) {
-        my $boxes = scalar( @{$this->{options}} );
+        my $boxes = scalar( @{$this->getOptions()} );
         $extra = CGI::br();
         $extra .= CGI::button
           ( -class => 'twikiCheckBox twikiEditFormCheckboxButton',
@@ -46,7 +43,7 @@ sub renderForEdit {
     my %isSelected = map { $_ => 1 } split(/\s*,\s*/, $value);
     my %attrs;
     my @defaults;
-    foreach my $item ( @{$this->{options}} ) {
+    foreach my $item ( @{$this->getOptions()} ) {
         # NOTE: Does not expand $item in label
         $attrs{$item} =
           {
@@ -60,7 +57,7 @@ sub renderForEdit {
         }
     }
     $value = CGI::checkbox_group( -name => $this->{name},
-                                  -values => $this->{options},
+                                  -values => $this->getOptions(),
                                   -defaults => \@defaults,
                                   -columns => $this->{size},
                                   -attributes => \%attrs );

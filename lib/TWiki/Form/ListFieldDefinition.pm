@@ -1,7 +1,14 @@
 # See bottom of file for license and copyright details
-# Form field definitions that accept lists of values in the field definition.
-# This is different to being multi-valued, which means the field type
-# can *store* multiple values.
+
+=pod
+
+---++ package TWiki::Form::ListFieldDefinition
+Form field definitions that accept lists of values in the field definition.
+This is different to being multi-valued, which means the field type
+can *store* multiple values.
+
+=cut
+
 package TWiki::Form::ListFieldDefinition;
 use base 'TWiki::Form::FieldDefinition';
 
@@ -11,15 +18,12 @@ use Assert;
 # PRIVATE
 
 # PROTECTED - parse the {value} and extract a list of options.
-# Done lazily.
-sub expandOptions {
+# Done lazily to avoid repeated topic reads.
+sub getOptions {
     # $web and $topic are where the form definition lives
     my $this = shift;
 
-    return if $this->{options};
-
-    ASSERT($this->{web}) if DEBUG;
-    ASSERT($this->{topic}) if DEBUG;
+    return $this->{_options} if $this->{_options};
 
     my @vals = ();
 
@@ -52,7 +56,9 @@ sub expandOptions {
     }
     @vals = map { $_ =~ s/^\s*(.*)\s*$/$1/; $_; } @vals;
 
-    $this->{options} = \@vals;
+    $this->{_options} = \@vals;
+
+    return $this->{_options};
 }
 
 1;

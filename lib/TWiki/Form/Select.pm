@@ -28,10 +28,8 @@ sub isMultiValued { return shift->{type} =~ /\+multi/; }
 sub renderForEdit {
     my( $this, $web, $topic, $value ) = @_;
 
-    $this->expandOptions();
-
     my $choices = '';
-    foreach my $option ( @{$this->{options}} ) {
+    foreach my $option ( @{$this->getOptions()} ) {
         $option = TWiki::urlDecode($option);
         my %params = (
             class => 'twikiEditFormOption'
@@ -57,7 +55,7 @@ sub renderForEdit {
         $option =~ s/<nop/&lt\;nop/go;
         $choices .= CGI::option( \%params, $option );
     }
-    my $size = scalar( @{$this->{options}} );
+    my $size = scalar( @{$this->getOptions()} );
     if( $size > $this->{maxSize} ) {
         $size = $this->{maxSize};
     } elsif( $size < $this->{minSize} ) {

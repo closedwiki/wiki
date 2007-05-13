@@ -6,6 +6,23 @@
 
 Object representing a single form definition.
 
+Form definitions are mainly used to control rendering of a form for
+editing, though there is some application login there that handles
+transferring values between edits and saves.
+
+A form definition consists of a TWiki::Form object, which has a list
+of field definitions. Each field definition is an object of a type
+derived from TWiki::Form::FieldDefinition. These objects are responsible
+for the actual syntax and semantics of the field type. Form definitions
+are parsed from TWiki tables, and the types are mapped by name to a
+class declared in TWiki::Form::* - for example, the =text= type is mapped
+to =TWiki::Form::Text= and the =checkbox= type to =TWiki::Form::Checkbox=.
+
+The =TWiki::Form::FieldDefinition= class declares default behaviours for
+types that accept a single value in their definitions. The
+=TWiki::Form::ListFieldDefinition= extends this for types that have lists
+of possible values.
+
 =cut
 
 # The bulk of this object is a parser for form definitions. All the
@@ -433,11 +450,12 @@ sub isTextMergeable {
 
 =pod
 
----++ ObjectMethod getField( $name ) -> \%row
+---++ ObjectMethod getField( $name ) -> $fieldDefinition
 
    * =$name= - name of a form field (value of the =name= attribute)
 
-Returns the field, or undef if the form does not define the field.
+Returns a =TWiki::Form::FieldDefinition=, or undef if the form does not
+define the field.
 
 =cut
 
