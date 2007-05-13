@@ -448,4 +448,15 @@ sub test_refQuery {
     $this->assert_str_equals('QueryTopicTwo', $result);
 }
 
+# make sure syntax errors are handled cleanly
+sub test_badQuery1 {
+    my $this = shift;
+
+    $this->set_up_for_queries();
+    my $result = $this->{twiki}->handleCommonTags(
+        '%SEARCH{"A * B"'.$stdCrap,
+        $this->{test_web}, $this->{test_topic});
+    $this->assert_matches(qr/Error was: Syntax error in 'A \* B' at ' \* B'/s, $result);
+}
+
 1;
