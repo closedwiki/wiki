@@ -61,7 +61,7 @@ sub set_up {
         $TWiki::cfg{Plugins}{$k}{Enabled} = 0;
     }
     # then reenable only those listed in MANIFEST
-    if (-e "$ENV{TWIKI_HOME}/tools/MANIFEST") {
+    if ($ENV{TWIKI_HOME} && -e "$ENV{TWIKI_HOME}/tools/MANIFEST") {
         open(F, "$ENV{TWIKI_HOME}/tools/MANIFEST") || die $!;
     } else {
         open(F, "../../tools/MANIFEST") || die $!;

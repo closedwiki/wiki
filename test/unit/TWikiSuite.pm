@@ -23,7 +23,7 @@ sub include_tests {
     }
     closedir(DIR);
     # Add standard extensions tests
-    if (-e "$ENV{TWIKI_HOME}/tools/MANIFEST") {
+    if ($ENV{TWIKI_HOME} && -e "$ENV{TWIKI_HOME}/tools/MANIFEST") {
         open(F, "$ENV{TWIKI_HOME}/tools/MANIFEST") || die $!;
     } else {
         open(F, "../../tools/MANIFEST") || die $!;
