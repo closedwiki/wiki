@@ -1,0 +1,325 @@
+%META:TOPICINFO{author="TWikiContributor" date="1178992755" format="1.1" reprev="1.1" version="1.1"}%
+%IF{"defined Name and $ Name != ''" then="---+!! Hello %URLPARAM{"Name"}%!" else="---+!! Form Plugin"}%
+*Facilitates the creation of web forms.*
+		
+Main features:
+   * No html knowledge required to create forms
+      * Add input fields, textareas, dropdown select boxes, checkboxes, radio buttons
+      * Set preselected values
+   * Create a uniform layout
+   * Call TWiki scripts or custom scripts
+   * Use entered field values as variables
+   * Validate the form before it performs its action
+      * Usability tested error feedback
+
+%TOC%
+
+---++ Introduction
+A simple form can be created like this:
+<verbatim>
+%STARTFORM{
+name="myform"
+action="view"
+}%
+%FORMELEMENT{
+name="Name"
+type="text"
+title="Enter your name:"
+mandatory="on"
+}%
+%FORMELEMENT{
+type="submit"
+buttonlabel="Submit"
+}%
+%ENDFORM%
+</verbatim>
+
+%IF{"not context FormPluginEnabled" then="<!--"}%
+This results in:
+
+%STARTFORM{
+name="myform"
+action="view"
+}%
+%FORMELEMENT{
+name="Name"
+type="text"
+title="Enter your name:"
+mandatory="on"
+}%
+%FORMELEMENT{
+type="submit"
+buttonlabel="Submit"
+}%
+%ENDFORM%
+%IF{"not context FormPluginEnabled" then="-->"}%
+
+%IF{"not context FormPluginEnabled" then='This plugin is %RED%not enabled%ENDCOLOR% so the form is not created.'}%
+
+
+
+---++ Usage
+<verbatim>
+%STARTFORM{
+   name="..."
+   action="..."
+   method="..."
+   topic="..."
+   web="..."
+   redirectto="..."
+   formcssclass="..."
+   elementcssclass="..."
+}%
+%FORMELEMENT{
+   name="..."
+   type="..."
+   title="..."
+   hint="..."
+   mandatory="..."
+   validate="..."
+   options="..."
+   labels="..."
+   default="..."
+   buttonlabel="..."
+   size="..."
+   maxlength="..."
+   rows="..."
+   cols="..."
+   format="..."
+   elementformat="..."
+   class="..."
+}%
+%ENDFORM%
+</verbatim>
+
+Most parameters are optional. See below for a detailed explanation.
+
+---++ Parameters
+---+++ STARTFORM
+
+%TABLE{columnwidths="10%,44%,8%,8%,30%"}%
+| *Parameter* | *Description* | *Required* | *Default value* | *Examples* |
+| =name=      | The name of the form. Must be unique. | required |- | =name="personaldata"= |
+| =action=    | Action of the form. For example: %BR%\
+ =view=, =viewauth=, =edit=, =save=, =%<nop>SCRIPTURL{view}%/%<nop>WEB%/WebHome= | required |- | =action="viewauth"= |
+| =topic=     | Only if =action= is set to =view=, =viewauth=, =edit=, of =save=: the target topic of the action. =Webname.TopicName= syntax may be used. |- |the current topic | =topic="%<nop>WEB%.WebHome"= |
+| =web=     | Only if =action= is set to =view=, =viewauth=, =edit=, of =save=: the target web of the action. |- |the current web | =web="Main"= |
+| =anchor=  | The anchor link the form should be linked to after submission. If not set the default notification anchor link is used to directly point to possible problems. |- |=FormPluginNotification= | =anchor="MyForm"= |
+| =method=    | GET or POST ([[http://www.cs.tut.fi/~jkorpela/forms/methods.html][What's the difference?]]) |- | =GET= | =method="POST"= |
+| =redirectto= | Redirect topic after form action has been performed. Only for scripts that understand the =redirectto= parameter such as =edit= and =save=. Use the =Webname.TopicName= syntax. |- |- | =redirectto="Main.WebHome"= |
+| =formcssclass= | The CSS class of the form container. Use TWiki's =twikiFormSteps= class together with =twikiFormStep= for elements to divide the form in steps. |- |- | =formcssclass="twikiFormSteps"= |
+| =elementcssclass= | The CSS class of the element container. Use TWiki's =twikiFormStep= class to divide the form in steps. |- |- | =elementcssclass="twikiFormStep"= |
+
+---+++ FORMELEMENT
+
+%TABLE{columnwidths="10%,44%,8%,8%,30%"}%
+| *Parameter* | *Description* | *Required* | *Default value* | *Examples* |
+| =name=      | Element name, must be unique. May contain spaces. The element name is used in the validation error feedback. | required |- | =name="First name"= |
+| =type=      | Type of the element: \
+ %BB% =text= - creates a textfield; use =size= and =maxlength= to set the length \
+ %BB% =password= - creates a password textfield; otherwise same as =text= \
+ %BB% =textarea= - creates a textarea; use =rows= and =cols= to set the size \
+ %BB% =select= - creates a variable sized selection box; use =size= to set the visible number of items \
+ %BB% =selectmulti= - same as =select= with multiple items selectable \
+ %BB% =dropdown= - same as =select= with 1 item visible \
+ %BB% =checkbox= - creates a set of checkboxes; to put checkboxes on line each  set =elementformat="$e&nbsp;&lt;br&nbsp;/&gt;"= \
+ %BB% =radio= - creates a set of radio buttons; to put radio buttons on line each  set =elementformat="$e&nbsp;&lt;br&nbsp;/&gt;"= \
+ %BB% =submit= - creates a submit button \
+ %BB% =hidden= - creates a hidden input field |required |- | =type="selectmulti"= |
+| =options=    |List of selectable value parameters to use with =select=, =dropdown=, =checkbox= or =radio=. You may use TWikiForms notation =option1=Label 1, option2=Label 2=. |- |- | =options="mary, peter, annabel, nicky, jennifer"= or options and labels combined: =options="mary=Mary M, peter=Peter P, annabel=Annabel A, nicky=Nicky N, jennifer=Jennifer J"= |
+| =labels=    |To use with =options=: list of visible labels for each option. |- |If no labels are set the option values are displayed. | =labels="Mary M, Peter P, Annabel A, Nicky N, Jennifer J"= |
+| =default=   |Predefined input: \
+%BB% For single entry elements: the text value. \
+%BB% For multi-select elements: the selected items; a comma delimited string. \
+%BB% For =type="submit"= the button label; you may use =buttonlabel= as well.  |- |- | =default="%<nop>WIKIUSERNAME%"= or =default="mary, peter, annabel"= or =default="Submit"= |
+| =buttonlabel= | The button label. |- |- | =buttonlabel="Submit"= |
+| =hint=      | Input hint optionally displayed next to the form element. |- |- | =hint="Enter a <nop>TWiki.WikiWord"= |
+| =mandatory= | Indicates if the form element needs to have a value or selection when the form is submitted. Creates a red asterisk. |- |- | =mandatory="on"= |
+| =validate=  | The type of entry this form element needs to have when the form is submitted: \
+ %BB% =nonempty= single entry elements: must have a value; multi-select elements: must have a selection \
+ %BB% =string= same as =nonempty= \
+ %BB% =int= the input must be a rounded number \
+ %BB% =float= the input accepts rounded numbers and floating point numbers \
+ %BB% =email= the input must be in e-mail format |- |- | =validate="nonempty"= |
+| =format= | See [[#Formatting][Formatting]] below. ||||
+| =elementformat= | See [[#Formatting][Formatting]] below. ||||
+| =titleformat= | See [[#Formatting][Formatting]] below. ||||
+| =class=  | CSS class for the element |- |TWiki CSS classes: =twikiInputField=, =twikiSubmit= | =class="myButtonClass"= |
+| =size=   | For =type="text"= or =type="password"=: the width of the input field measured in number of characters. |- |=40= | =size="60"= |
+| =maxlength=  | For =type="text"= or =type="password"=: the maximum number of input characters. |- |- | =maxlength="12"= |
+| =rows=   | For =type="textarea"=: the number of rows. |- |- | =rows="5"= |
+| =cols=   | For =type="textarea"=: the number of columns. |- |- | =cols="80"= |
+
+Use =%<nop>URLPARAM{"element_name"}%= to retrieve the value of a submitted form element.
+
+
+---+++ ENDFORM
+Does not have any parameters.
+
+#FormStatus
+---+++ FORMSTATUS
+Retrieve the validation status of the form. Note that the status cannot be used to build form logic (the variable expansion happens long after the form is created), but you may use it to show additional feedback.
+
+   * Status = =%<nop>FORMSTATUS{"name_of_form"}%= %BR%
+   Possible values:
+      * =unchecked= - the form has not been validated
+      * =error= - the form has been validated and an error has been found
+      * =noerror= - the form has been validated and no errors have been found
+   * unchecked status = =%<nop>FORMSTATUS{"name_of_form" status="unchecked"}%= %BR%
+   ='1'= in case of unchecked, otherwise ='0'=  
+   * error status = =%<nop>FORMSTATUS{"name_of_form" status="error"}%= %BR%
+   ='1'= in case of error, otherwise ='0'=
+   * noerror status = =%<nop>FORMSTATUS{"name_of_form" status="noerror"}%= %BR%
+   ='1'= in case of noerror, otherwise ='0'=
+
+
+
+---++ Formatting
+Formatting of each form element can be set with the =FORMELEMENT= parameters:
+   * =format= - defines the display of:
+      * title
+      * field
+      * hint
+      * mandatory indicator
+   * =elementformat= - defines the display of the field / select item only
+   * =titleformat= - defines the display of the title only
+   
+Use the following tokens to define where form element parts are displayed:
+   * =$e= - form element token
+   * =$t= - title token
+   * =$h= - hint token
+   * =$m= - mandatory token, currently just an asterisk =*=
+
+The escape tokens =$quot= ("), =$percnt= (%), =$dollar= ($), =$n= (newline) and =$nop= (&lt;nop&gt;) can be used to prevent expansion.
+
+---+++ =format=
+
+The default =format= is: 
+<verbatim>
+<p> $t <br /> $e $m $h </p>
+</verbatim>
+This means that the title is displayed one line above the field, and the mandatory indicator and input hint are displayed at the right of the field. %BR%
+To swith the order around use for example:
+<verbatim>
+format="<p> $m $t $h <br />$e </p>"
+</verbatim>
+
+---+++ =elementformat=
+The default =elementformat= is simply =$e=.
+
+This means that radio buttons and checkboxes are all displayed on one line. To put these items on one line each, write:
+<verbatim>
+elementformat="$e <br />"
+</verbatim>
+
+---+++ =titleformat=
+The default =elementformat= is = $t <br />=.
+
+To display the title in bold, write:
+<verbatim>
+titleformat=" *$t* <br />"
+</verbatim>
+
+
+
+---++ Form processing
+A !FormPlugin form is first processed before it is sent to its action target. Processing is done in 2 steps:
+   1 Substitution of field references.
+   1 Validation
+
+<div class="twikiImage"><img src="%ATTACHURLPATH%/form_on_submit_diagram.png" alt="" width='804' height='502' /></div>
+
+---+++ Substitution of field references
+This allows to use entered field values as variables. For example: 
+   * A form element has the name "To"
+   * Another form element (for instance a hidden field) has the default value "email response to $To"
+   * When the form is submitted, =$To= is substituted for the form element value with that name
+   * The form is passed along
+      
+---+++ Form validation
+   * Form elements can be checked on input that is nonempty, string, int, float or email
+   * If a validation error occurs, the form is displayed with error feedback
+See =FORMELEMENT:validate= for usage instructions. %BR%
+Use =%<nop>FORMSTATUS{}%= to retrieve the status of the form; see [[#FormStatus][FORMSTATUS]].
+
+
+      
+---++ Examples
+See [[FormPluginExamples]]
+
+
+
+#PluginSettings
+---++ Plugin Settings
+
+Plugin settings are stored as preferences variables. To reference a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>CACHECONTENTPLUGIN_SHORTDESCRIPTION%==
+
+   * One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
+      * Set SHORTDESCRIPTION = Facilitates the creation of web forms
+
+   * Debug plugin: (See output in =data/debug.txt=)
+      * Set DEBUG = 0
+
+
+
+#PluginTest
+---++ Plugin Tests
+   * This plugin is %IF{"context FormPluginEnabled" then='%GREEN%enabled%ENDCOLOR%' else ='%RED%not enabled%ENDCOLOR%'}%.
+
+
+
+---++ CSS classes
+
+| *Class name* | *Note* |
+| =formPluginNotification=  | Used for validation error feedback  |
+| =fieldset.formPluginGroup=  | To group checkboxes and radio buttons  |
+| =fieldset.formPluginGroupWithHint=  | A group with an input hint - shows a border at the right  |
+| =formPluginTitle= | Element title |
+| =formPluginError=  | State that causes input fields to have a red border and titles to be bold red  |
+| =formPluginHint=  | Input hint  |
+| =formPluginMandatory=  | Mandatory indication (asterisk)  |
+
+
+
+---++ Further development
+   * The form validation does not work correctly with multiple forms on one page and when the method is POST
+   * It would be nice to feed form values from other topics
+   * It would be nice if the form had javascript form validation as well to provide direct user feedback.
+
+
+
+---++ Plugin Installation Instructions
+
+__Note:__ You do not need to install anything on the browser to use this plugin. The following instructions are for the administrator who installs the plugin on the server where TWiki is running. 
+
+   * Download the ZIP file from the Plugin web (see below)
+   * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
+     | *File:* | *Description:* |
+     | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
+     | ==data/TWiki/%TOPIC%.txt,v== | Plugin topic repository |
+     | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
+
+
+
+---++ Plugin Info
+
+|  Plugin Author: | TWiki:Main.ArthurClemens |
+|  Plugin Version: | 13 May 2007  |
+|  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  13 May 2007 | First release. |
+|  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 |
+|  CPAN Dependencies: |- |
+|  Other Dependencies: |- |
+|  Perl Version: | 5.005 |
+|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
+|  [[TWiki:Plugins/Benchmark][Benchmarks]]: | %TWIKIWEB%.GoodStyle nn%, %TWIKIWEB%.FormattedSearch nn%, %TOPIC% nn% |
+|  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
+|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
+|  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
+
+__Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
+
+
+%META:FILEATTACHMENT{name="form_on_submit_diagram.png" attr="" comment="Form on submit diagram" date="1178992688" path="form_on_submit_diagram.png" size="36218" user="Main.ArthurClemens" version="1"}%
+%META:FILEATTACHMENT{name="error.gif" attr="" comment="" date="1178912227" path="error.gif" size="351" user="TWikiContributor" version=""}%
+%META:FILEATTACHMENT{name="formplugin.css" attr="" comment="" date="1178990493" path="formplugin.css" size="1005" user="TWikiContributor" version=""}%
