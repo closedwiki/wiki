@@ -1,0 +1,51 @@
+%META:TOPICINFO{author="StephaneLenclud" date="1179076678" format="1.1" reprev="1.4" version="1.4"}%
+---+!! !TaskExePlugin
+<!--
+One line description, required for extensions repository catalog.
+    * Set SHORTDESCRIPTION = 
+-->
+%$SHORTDESCRIPTION%
+
+%TOC%
+
+---++ Usage
+
+Specifies settings for TaskExeContrib.
+
+---++ Settings
+
+Use =TASKWEB= to specify the name of the Web containing your task specifications. 
+   * Set TASKWEB = Sandbox
+
+Use =TASKPARENT= to specify the parent topic for newly created task specification. That topic should be in the =TASKWEB= really.
+   * Set TASKPARENT = Sandbox.TaskExeParent
+
+Use =EXECUTERPARENT= to specify the parent topic for newly created executer registration. That topic should be in the =TASKWEB= really.
+   * Set EXECUTERPARENT = Sandbox.TaskExeParent
+
+Use =INSTALLEDWEB= to specify the Web in which the TWiki.TaskExeManager was installed.
+   * Set INSTALLEDWEB = TWiki
+
+---++ Installation Instructions
+
+   * Download the ZIP file from the Plugin web (see below)
+   * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
+     | *File:* | *Description:* |
+%$MANIFEST%
+
+
+---++ Plugin Info
+
+|  Author: | TWiki:Main/StephaneLenclud |
+|  Copyright &copy;: | 2007,  Stéphane Lenclud, All Rights Reserved |
+|  Plugin Version: | %$VERSION% |
+|  License: | [[http://www.gnu.org/licenses/gpl.html][GPL (Gnu General Public License)]] |
+|  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  Dependencies: | %$DEPENDENCIES% |
+|  Plugin Home: | http://twiki.org/cgi-bin/view/Plugins/TaskExePlugin |
+|  Feedback: | http://twiki.org/cgi-bin/view/Plugins/TaskPluginDev |
+|  Appraisal: | http://twiki.org/cgi-bin/view/Plugins/TaskPluginAppraisal |
+
+<!-- Do _not_ attempt to edit this topic; it is auto-generated. Please add comments/questions/remarks to the Dev topic instead. -->
+
+%META:TOPICMOVED{by="StephaneLenclud" date="1179060207" from="TWiki.TaskPlugin" to="TWiki.TaskExePlugin"}%
