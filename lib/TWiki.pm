@@ -331,9 +331,8 @@ BEGIN {
     #
     #
     # Note that 'use locale' must be done in BEGIN block for regexes and
-    # sorting to
-    # work properly, although regexes can still work without this in
-    # 'non-locale regexes' mode.
+    # sorting to work properly, although regexes can still work without
+    # this in 'non-locale regexes' mode.
 
     if ( $TWiki::cfg{UseLocale} ) {
         # Set environment variables for grep 
@@ -352,6 +351,13 @@ BEGIN {
     $functionTags{CHARSET}   = sub { $TWiki::cfg{Site}{CharSet} };
     $functionTags{SHORTLANG} = sub { $TWiki::cfg{Site}{Lang} };
     $functionTags{LANG}      = sub { $TWiki::cfg{Site}{FullLang} };
+
+    # Tell CGI.pm which charset we are using if not default
+    if( $TWiki::cfg{Site}{CharSet} !~ /^iso-?8859-?1$/io ) {
+        require CGI;
+        import CGI ();
+        CGI::charset( $TWiki::cfg{Site}{CharSet} );
+    }
 
     # Set up pre-compiled regexes for use in rendering.  All regexes with
     # unchanging variables in match should use the '/o' option.
@@ -531,7 +537,7 @@ sub UTF82SiteCharSet {
     }
 
     # Convert into ISO-8859-1 if it is the site charset
-    if ( $TWiki::cfg{Site}{CharSet} =~ /^iso-?8859-?15?$/i ) {
+    if ( $TWiki::cfg{Site}{CharSet} =~ /^iso-?8859-?1$/i ) {
         # ISO-8859-1 maps onto first 256 codepoints of Unicode
         # (conversion from 'perldoc perluniintro')
         $text =~ s/ ([\xC2\xC3]) ([\x80-\xBF]) / 
