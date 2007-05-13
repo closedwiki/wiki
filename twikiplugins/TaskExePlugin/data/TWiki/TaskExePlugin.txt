@@ -1,20 +1,31 @@
-%META:TOPICINFO{author="StephaneLenclud" date="1179076678" format="1.1" reprev="1.4" version="1.4"}%
+%META:TOPICINFO{author="StephaneLenclud" date="1179092354" format="1.1" reprev="1.5" version="1.5"}%
 ---+!! !TaskExePlugin
 <!--
 One line description, required for extensions repository catalog.
     * Set SHORTDESCRIPTION = 
+
 -->
-%$SHORTDESCRIPTION%
+
 
 %TOC%
 
+This plug-in is used to specify settings for TaskExeContrib.
+
 ---++ Usage
 
-Specifies settings for TaskExeContrib.
+Adds the following TWiki variables:
+
+=%<nop>TASKEXE_TASKWEB%= <br />
+=%<nop>TASKEXE_TASKPARENT%= <br />
+=%<nop>TASKEXE_EXECUTERPARENT%= <br />
+=%<nop>TASKEXE_INSTALLEDWEB%= <br />
+
+There should be no need for you to use them directly unless you want to customize further the TaskExeManager application. 
+They take the values defined below in [[#Settings][Settings]].
 
 ---++ Settings
 
-Use =TASKWEB= to specify the name of the Web containing your task specifications. 
+Use =TASKWEB= to specify the name of the Web containing your task specifications and executer registrations. 
    * Set TASKWEB = Sandbox
 
 Use =TASKPARENT= to specify the parent topic for newly created task specification. That topic should be in the =TASKWEB= really.
@@ -40,7 +51,7 @@ Use =INSTALLEDWEB= to specify the Web in which the TWiki.TaskExeManager was inst
 |  Copyright &copy;: | 2007,  Stéphane Lenclud, All Rights Reserved |
 |  Plugin Version: | %$VERSION% |
 |  License: | [[http://www.gnu.org/licenses/gpl.html][GPL (Gnu General Public License)]] |
-|  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  Change History: | Initial version |
 |  Dependencies: | %$DEPENDENCIES% |
 |  Plugin Home: | http://twiki.org/cgi-bin/view/Plugins/TaskExePlugin |
 |  Feedback: | http://twiki.org/cgi-bin/view/Plugins/TaskPluginDev |
