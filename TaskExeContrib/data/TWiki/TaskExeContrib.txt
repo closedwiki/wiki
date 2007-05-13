@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="StephaneLenclud" date="1179074901" format="1.1" reprev="1.6" version="1.6"}%
+%META:TOPICINFO{author="StephaneLenclud" date="1179075912" format="1.1" reprev="1.6" version="1.6"}%
 <!--
    * Set ALLOWTOPICVIEW = Main.StephaneLenclud
 -->
@@ -271,7 +271,7 @@ Once installed you should have access to TaskExeManager.
 |  Author: | TWiki:Main/StephaneLenclud |
 |  Copyright &copy;: | 2006-2007,  Stéphane Lenclud, All Rights Reserved |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Dependencies: | none <!-- use %$DEPENDENCIES% with the Build Module to automatically extract dependencies --> |
+|  Dependencies: | %$DEPENDENCIES% |
 |  Version: | %$VERSION% |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
 |  13 May 2007: | Initial version |
