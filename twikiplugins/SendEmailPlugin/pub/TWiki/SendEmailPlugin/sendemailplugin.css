@@ -1,0 +1,17 @@
+.sendEmailPluginNotification {
+	background-color:#ffc;
+	color:#000;
+	padding:0 .25em;
+	white-space:nowrap;
+}
+div.sendEmailPluginNotification {
+	padding:.5em 20px; /* side padding same as twikiFormStep (assuming PatternSkin) */
+	margin:1em 0;
+}
+div.sendEmailPluginError {
+	border:1px solid #EE3312;
+	background-color:#FFF8E7;
+}
+.sendEmailPluginError {
+	color:#EE3312;
+}
