@@ -21,6 +21,7 @@ sub test_correctIF {
     $TWiki::cfg{A}{B} = 'C';
     my $u = $this->{twiki}->{users};
     my @tests = (
+
         { test => 'A=B', then=>0, else=>1 },
         { test => 'A!=B', then=>1, else=>0 },
         { test => "A='A'", then=>1, else=>0 },
@@ -54,6 +55,13 @@ sub test_correctIF {
         { test => "'A'~'B'", then=>0, else=>1 },
         { test => "'ABLABA'~'B.AB'", then=>1, else=>0 },
         { test => '\"BABA\"~\"(BA)+\"', then=>1, else=>0 },
+        { test => "lc('FRED')='fred'", then=>1, else=>0 },
+        { test => "('FRED')=uc 'fred'", then=>1, else=>0 },
+        { test => "1 = 1 > 0", then=>1, else=>0 },
+        { test => "1 > 1 = 0", then=>1, else=>0 },
+        { test => "not 1 = 2", then=>1, else=>0 },
+        { test => "not not 1 and 1", then=>1, else=>0 },
+        { test => "0 or not not 1 and 1", then=>1, else=>0 },
        );
 
     foreach my $test (@tests) {

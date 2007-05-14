@@ -8,6 +8,15 @@ use Assert;
 
 Support for the conditions in %IF{} statements.
 
+| *Precedence* | *Operator* |
+| 100  | or |
+| 200  | and |
+| 300  | not |
+| 400  | > < >= <= |
+| 500  | = != ~ |
+| 600  | lc uc context defined $ |
+| 1000 | ( |
+
 =cut
 
 package TWiki::If;
@@ -110,7 +119,7 @@ use vars qw( @cmpOps );
     },
     {
         name => '!=',
-        prec => 400,
+        prec => 500,
         arity => 2, # binary
         exec => sub {
             my( $clientData, $a, $b ) = @_;
@@ -210,7 +219,7 @@ use vars qw( @cmpOps );
 my @operators = (
     {
         name => 'context',
-        prec => 5,
+        prec => 600,
         arity => 1, # unary
         casematters => 0,
         exec => sub {
@@ -220,7 +229,7 @@ my @operators = (
     },
     {
         name => '$',
-        prec => 5,
+        prec => 600,
         arity => 1, # unary
         exec => sub {
             my( $session, $a ) = @_;
@@ -237,7 +246,7 @@ my @operators = (
     },
     {
         name => 'defined',
-        prec => 5,
+        prec => 600,
         arity => 1, # unary
         casematters => 0,
         exec => sub {
