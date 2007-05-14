@@ -31,7 +31,7 @@
 </literal>
 <input type="hidden" name="origurl" value="%ORIGURL%" />
 <input type='submit' value='Logon' />
-%IF{"$ERROR != ''" then="%BR% _Error: %ERROR%_"}%
+%IF{"$ERROR" then="%BR% _Error: %ERROR%._"}%
 </form>
 <p />
 %TMPL:END%
