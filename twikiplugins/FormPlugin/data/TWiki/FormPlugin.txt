@@ -1,8 +1,10 @@
-%META:TOPICINFO{author="TWikiContributor" date="1178992755" format="1.1" reprev="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiUserMapping_ArthurClemens" date="1179177105" format="1.1" version="1.3"}%
 %IF{"defined Name and $ Name != ''" then="---+!! Hello %URLPARAM{"Name"}%!" else="---+!! Form Plugin"}%
 *Facilitates the creation of web forms.*
-		
-Main features:
+
+%TOC%
+	
+---++ Main features
    * No html knowledge required to create forms
       * Add input fields, textareas, dropdown select boxes, checkboxes, radio buttons
       * Set preselected values
@@ -12,7 +14,10 @@ Main features:
    * Validate the form before it performs its action
       * Usability tested error feedback
 
-%TOC%
+Example of validation error feedback:
+
+<div class="twikiImage"><img src="%ATTACHURLPATH%/screenshot_validation_example.png" alt="Example of validation error feedback" width='738' height='535' /></div>
+     
 
 ---++ Introduction
 A simple form can be created like this:
@@ -312,8 +317,9 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.ArthurClemens |
-|  Plugin Version: | 13 May 2007  |
+|  Plugin Version: | 14 May 2007  |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  14 May 2007 | Added missing lib |
 |  13 May 2007 | First release. |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 |
 |  CPAN Dependencies: |- |
@@ -327,7 +333,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 
 __Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
 
-
-%META:FILEATTACHMENT{name="form_on_submit_diagram.png" attr="" comment="Form on submit diagram" date="1178992688" path="form_on_submit_diagram.png" size="36218" user="Main.TWikiContributor" version="1"}%
-%META:FILEATTACHMENT{name="error.gif" attr="" comment="" date="1178912227" path="error.gif" size="351" user="Main.TWikiContributor" version=""}%
-%META:FILEATTACHMENT{name="formplugin.css" attr="" comment="" date="1178990493" path="formplugin.css" size="1005" user="Main.TWikiContributor" version=""}%
+%META:FILEATTACHMENT{name="screenshot_validation_example.png" attachment="screenshot_validation_example.png" attr="" comment="Example of validation error feedback" date="1179177105" path="screenshot_validation_example.png" size="23656" stream="screenshot_validation_example.png" user="Main.TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="form_on_submit_diagram.png" attr="" autoattached="1" comment="Form on submit diagram" date="1179003044" path="form_on_submit_diagram.png" size="55590" user="Main.TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="error.gif" attr="" autoattached="1" comment="" date="1178912227" path="error.gif" size="351" user="Main.TWikiContributor" version=""}%
+%META:FILEATTACHMENT{name="formplugin.css" attr="" autoattached="1" comment="" date="1179004273" path="formplugin.css" size="1006" user="Main.TWikiContributor" version=""}%
