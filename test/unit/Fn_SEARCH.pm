@@ -291,7 +291,7 @@ sub std_tests  {
     $this->assert_matches(qr/Ok\+Topic/, $result);
 }
 
-sub detest_SEARCH_Forking {
+sub test_SEARCH_Forking {
     my $this = shift;
 
     $TWiki::cfg{RCS}{SearchAlgorithm} =
@@ -300,7 +300,7 @@ sub detest_SEARCH_Forking {
     $this->std_tests();
 }
 
-sub detest_SEARCH_PurePerl {
+sub test_SEARCH_PurePerl {
     my $this = shift;
 
     $TWiki::cfg{RCS}{SearchAlgorithm} =
@@ -309,7 +309,7 @@ sub detest_SEARCH_PurePerl {
     $this->std_tests();
 }
 
-sub detest_SEARCH_Native {
+sub test_SEARCH_Native {
     my $this = shift;
 
     # Need to try all three of the default algorithms
@@ -325,7 +325,7 @@ sub detest_SEARCH_Native {
     $this->std_tests();
 }
 
-sub detest_SEARCH_3860 {
+sub test_SEARCH_3860 {
     my $this = shift;
     my $result = $this->{twiki}->handleCommonTags(
         <<'HERE', $this->{test_web}, $this->{test_topic});

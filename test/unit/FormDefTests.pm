@@ -82,9 +82,8 @@ FORM
     $this->assert_str_equals('Select', $f->{title});
     $this->assert_equals(2, $f->{minSize});
     $this->assert_equals(4, $f->{maxSize});
-    $f->expandOptions($testNormalWeb, 'TestForm');
-    $this->assert_equals(3, scalar(@{$f->{options}}));
-    $this->assert_str_equals('a,b,c', join(',',@{$f->{options}}));
+    $this->assert_equals(3, scalar(@{$f->getOptions()}));
+    $this->assert_str_equals('a,b,c', join(',',@{$f->getOptions()}));
     $this->assert_str_equals('Tippity', $f->{tooltip});
     $this->assert_str_equals('M', $f->{attributes});
     $this->assert_str_equals('', $f->{definingTopic});
@@ -93,8 +92,7 @@ FORM
     $this->assert_str_equals('CheckyEgg', $f->{name});
     $this->assert_str_equals('Checky Egg', $f->{title});
     $this->assert_equals(1, $f->{size});
-    $f->expandOptions($testNormalWeb, 'TestForm');
-    $this->assert_str_equals('1;2;3;4', join(';',@{$f->{options}}));
+    $this->assert_str_equals('1;2;3;4', join(';',@{$f->getOptions()}));
     $this->assert_str_equals('Blip', $f->{tooltip});
     $this->assert_str_equals('', $f->{attributes});
     $this->assert_str_equals('', $f->{definingTopic});
@@ -124,9 +122,8 @@ FORM
     $this->assert_str_equals('Vals Elsewhere', $f->{title});
     $this->assert_equals(1, $f->{minSize});
     $this->assert_equals(1, $f->{maxSize});
-    $f->expandOptions($testNormalWeb, 'TestForm');
-    $this->assert_equals(3, scalar(@{$f->{options}}));
-    $this->assert_str_equals('ValOne,RowName,Age', join(',', @{$f->{options}}));
+    $this->assert_equals(3, scalar(@{$f->getOptions()}));
+    $this->assert_str_equals('ValOne,RowName,Age', join(',', @{$f->getOptions()}));
     $this->assert_str_equals('', $f->{definingTopic});
 }
 
@@ -152,9 +149,8 @@ FORM
     $this->assert_str_equals('select', $f->{type});
     $this->assert_str_equals('ValsElsewhere', $f->{name});
     $this->assert_str_equals('Vals Elsewhere', $f->{title});
-    $f->expandOptions($testNormalWeb, 'TestForm');
     $this->assert_str_equals('ValOne,RowName,Age',
-                             join(',', @{$f->{options}}));
+                             join(',', @{$f->getOptions()}));
     $this->assert_str_equals($testNormalWeb.'.Splodge', $f->{definingTopic});
 }
 

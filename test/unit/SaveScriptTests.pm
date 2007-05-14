@@ -326,7 +326,7 @@ sub test_simpleFormSave {
                          text => [ 'CORRECT' ],
                          formtemplate => [ 'TestForm1' ],
                          action => [ 'save' ],
-                         TWiki::Form::cgiName(undef,'Textfield') =>
+                         'Textfield' =>
                          [ 'Flintstone' ],
                          topic => [ $this->{test_web}.'.SimpleFormSave' ]
                         });
@@ -345,9 +345,9 @@ sub test_templateTopicFormSave {
     my $query = new CGI({
                          text => [ 'Template Topic' ],
                          formtemplate => [ 'TestForm1' ],
-                         TWiki::Form::cgiName(undef,'Select') =>
+                         'Select' =>
                          [ 'Value_1' ],
-                         TWiki::Form::cgiName(undef,'Textfield') =>
+                         'Textfield' =>
                          [ 'Fred' ],
                          action => [ 'save' ],
                          topic => [ $this->{test_web}.'.TemplateTopic' ]
@@ -377,9 +377,9 @@ sub test_prevTopicFormSave {
     my $query = new CGI({
                          text => [ 'Template Topic' ],
                          formtemplate => [ 'TestForm1' ],
-                         TWiki::Form::cgiName(undef,'Select') =>
+                         'Select' =>
                          [ 'Value_1' ],
-                         TWiki::Form::cgiName(undef,'Textfield') =>
+                         'Textfield' =>
                          [ 'Rubble' ],
                          action => [ 'save' ],
                          topic => [ $this->{test_web}.'.PrevTopicFormSave' ]
@@ -388,7 +388,7 @@ sub test_prevTopicFormSave {
     $this->capture( \&TWiki::UI::Save::save, $this->{twiki});
     $query = new CGI({
                       action => [ 'save' ],
-                      TWiki::Form::cgiName(undef,'Textfield') =>
+                      'Textfield' =>
                       [ 'Barney' ],
                       topic => [ $this->{test_web}.'.PrevTopicFormSave' ]
                      });
@@ -407,11 +407,11 @@ sub test_simpleFormSave1 {
                          action => [ 'save' ],
 			 text   => [ $testtext_nometa ],
                          formtemplate => [ 'TestForm1' ],
-                         TWiki::Form::cgiName(undef,'Select') => [ 'Value_2' ],
-                         TWiki::Form::cgiName(undef,'Radio') => [ '3' ],
-                         TWiki::Form::cgiName(undef,'Checkbox') => [ 'red' ],
-                         TWiki::Form::cgiName(undef,'CheckboxandButtons') => [ 'hamster' ],
-                         TWiki::Form::cgiName(undef,'Textfield') => [ 'Test' ],
+                         'Select' => [ 'Value_2' ],
+                         'Radio' => [ '3' ],
+                         'Checkbox' => [ 'red' ],
+                         'CheckboxandButtons' => [ 'hamster' ],
+                         'Textfield' => [ 'Test' ],
 			 topic  => [ $this->{test_web}.'.SimpleFormTopic' ]
                         });
     $this->{twiki} = new TWiki( $this->{test_user_login}, $query);
@@ -438,11 +438,11 @@ sub test_simpleFormSave2 {
                          action => [ 'save' ],
 			 text   => [ $testtext_nometa ],
                          formtemplate => [ 'TestForm3' ],
-                         TWiki::Form::cgiName(undef,'Select') => [ 'Value_2' ],
-                         TWiki::Form::cgiName(undef,'Radio') => [ '3' ],
-                         TWiki::Form::cgiName(undef,'Checkbox') => [ 'red' ],
-                         TWiki::Form::cgiName(undef,'CheckboxandButtons') => [ 'hamster' ],
-                         TWiki::Form::cgiName(undef,'Textfield') => [ 'Test' ],
+                         'Select' => [ 'Value_2' ],
+                         'Radio' => [ '3' ],
+                         'Checkbox' => [ 'red' ],
+                         'CheckboxandButtons' => [ 'hamster' ],
+                         'Textfield' => [ 'Test' ],
 			 topic  => [ $this->{test_web}.'.SimpleFormSave2' ]
                         });
     $this->{twiki} = new TWiki( $this->{test_user_login}, $query);
@@ -470,11 +470,11 @@ sub test_simpleFormSave3 {
             action => [ 'save' ],
             text   => [ $testtext_nometa ],
             formtemplate => [ 'TestForm1' ],
-            TWiki::Form::cgiName(undef,'Select') => [ 'Value_2' ],
-            TWiki::Form::cgiName(undef,'Radio') => [ '3' ],
-            TWiki::Form::cgiName(undef,'Checkbox') => [ 'red' ],
-            TWiki::Form::cgiName(undef,'CheckboxandButtons') => [ 'hamster' ],
-            TWiki::Form::cgiName(undef,'Textfield') => [ 'Test' ],
+            'Select' => [ 'Value_2' ],
+            'Radio' => [ '3' ],
+            'Checkbox' => [ 'red' ],
+            'CheckboxandButtons' => [ 'hamster' ],
+            'Textfield' => [ 'Test' ],
             topic  => [ $this->{test_web}.'.SimpleFormSave3' ]
            });
     $this->{twiki} = new TWiki( $this->{test_user_login}, $query);
@@ -535,12 +535,12 @@ sub test_merge {
             originalrev => $original,
             forcenewrevision => 1,
             formtemplate => [ 'TestForm4' ],
-            TWiki::Form::cgiName(undef,'Select') => [ 'Value_2' ],
-            TWiki::Form::cgiName(undef,'Radio') => [ '3' ],
-            TWiki::Form::cgiName(undef,'Checkbox') => [ 'red' ],
-            TWiki::Form::cgiName(undef,'CheckboxandButtons') => [ 'hamster' ],
-            TWiki::Form::cgiName(undef,'Textfield') => [ 'Bat' ],
-            TWiki::Form::cgiName(undef,'Textarea') => [ <<GUMP ],
+            'Select' => [ 'Value_2' ],
+            'Radio' => [ '3' ],
+            'Checkbox' => [ 'red' ],
+            'CheckboxandButtons' => [ 'hamster' ],
+            'Textfield' => [ 'Bat' ],
+            'Textarea' => [ <<GUMP ],
 Glug Glug
 Blog Glog
 Bungdit Din
@@ -563,12 +563,12 @@ GUMP
             text   => [ "Wet rat" ],
             originalrev => $original,
             formtemplate => [ 'TestForm4' ],
-            TWiki::Form::cgiName(undef,'Select') => [ 'Value_2' ],
-            TWiki::Form::cgiName(undef,'Radio') => [ '3' ],
-            TWiki::Form::cgiName(undef,'Checkbox') => [ 'red' ],
-            TWiki::Form::cgiName(undef,'CheckboxandButtons') => [ 'hamster' ],
-            TWiki::Form::cgiName(undef,'Textfield') => [ 'Rat' ],
-            TWiki::Form::cgiName(undef,'Textarea') => [ <<GUMP ],
+            'Select' => [ 'Value_2' ],
+            'Radio' => [ '3' ],
+            'Checkbox' => [ 'red' ],
+            'CheckboxandButtons' => [ 'hamster' ],
+            'Textfield' => [ 'Rat' ],
+            'Textarea' => [ <<GUMP ],
 Spletter Glug
 Blog Splut
 Bungdit Din
@@ -645,11 +645,11 @@ sub test_restoreRevision {
 			             originalrev => $original,
                          forcenewrevision => 1,
                          formtemplate => [ 'TestForm1' ],
-                         TWiki::Form::cgiName(undef,'Select') => [ 'Value_2' ],
-                         TWiki::Form::cgiName(undef,'Radio') => [ '3' ],
-                         TWiki::Form::cgiName(undef,'Checkbox') => [ 'red' ],
-                         TWiki::Form::cgiName(undef,'CheckboxandButtons') => [ 'hamster' ],
-                         TWiki::Form::cgiName(undef,'Textfield') => [ 'Test' ],
+                         'Select' => [ 'Value_2' ],
+                         'Radio' => [ '3' ],
+                         'Checkbox' => [ 'red' ],
+                         'CheckboxandButtons' => [ 'hamster' ],
+                         'Textfield' => [ 'Test' ],
 			 topic  => [ $this->{test_web}.'.DeleteTestRestoreRevisionTopic' ]
                         });
     $this->{twiki} = new TWiki( $this->{test_user_login}, $query);

@@ -15,8 +15,6 @@ use base 'TWiki::Form::FieldDefinition';
 use strict;
 use Assert;
 
-# PRIVATE
-
 # PROTECTED - parse the {value} and extract a list of options.
 # Done lazily to avoid repeated topic reads.
 sub getOptions {

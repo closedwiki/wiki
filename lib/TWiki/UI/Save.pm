@@ -212,7 +212,7 @@ sub buildNewTopic {
         my $filter = join(
             '|',
             map { $_->{name} }
-              grep { $_->{name} } @{$formDef->{fields}} );
+              grep { $_->{name} } @{$formDef->getFields()} );
         $newMeta->copyFrom( $copyMeta, 'FIELD', qr/^($filter)$/ );
     }
     if( $formDef ) {

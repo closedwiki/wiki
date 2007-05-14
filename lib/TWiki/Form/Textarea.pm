@@ -7,9 +7,12 @@ use strict;
 sub new {
     my $class = shift;
     my $this = $class->SUPER::new( @_ );
-    if( $this->{size} !~ /^(\d+)x(\d+)$/ ) {
-        $this->{rows} = $1;
-        $this->{cols} = $2;
+    if( $this->{size} =~ /^\s*(\d+)x(\d+)\s*$/ ) {
+        $this->{cols} = $1;
+        $this->{rows} = $2;
+    } else {
+        $this->{cols} = 50;
+        $this->{rows} = 4;
     }
     return $this;
 }

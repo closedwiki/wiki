@@ -890,7 +890,10 @@ sub _populateUserTopicForm {
     my %inform;
     my $form =
       new TWiki::Form( $session, $TWiki::cfg{UsersWebName}, $formName );
-    foreach my $field ( @{$form->{fields}} ) {
+
+    return ($meta, '' ) unless $form;
+
+    foreach my $field ( @{$form->getFields()} ) {
         foreach my $fd (@{$data->{form}}) {
             next unless $fd->{name} eq $field->{name};
             next if $SKIPKEYS{$fd->{name}};

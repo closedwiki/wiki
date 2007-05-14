@@ -3,7 +3,7 @@ use strict;
 # tests for the correct expansion of programmed TWiki variables (*not* TWikiFns, which
 # should have their own individual testcase)
 
-package GenericVariablesTests;
+package VariableTests;
 
 use base qw( TWikiFnTestCase );
 

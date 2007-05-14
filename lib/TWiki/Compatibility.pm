@@ -168,7 +168,7 @@ sub upgradeCategoryTable {
         my $def = new TWiki::Form($session, $web, $defaultFormTemplate );
         $meta->put( 'FORM', { name => $defaultFormTemplate } );
 
-        foreach my $fieldDef ( @{$def->{fields}} ) {
+        foreach my $fieldDef ( @{$def->getFields()} ) {
             my $value = '';
             foreach my $oldCatP ( @items ) {
                 my @oldCat = @$oldCatP;

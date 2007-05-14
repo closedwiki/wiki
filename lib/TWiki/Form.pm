@@ -79,20 +79,12 @@ sub new {
         my( $meta, $text ) =
           $store->readTopic( $session->{user}, $web, $form, undef );
 
-        $this->{fieldDefs} = _parseFormDefinition( $this, $meta, $text );
+        $this->{fields} = _parseFormDefinition( $this, $meta, $text );
 
     } else {
 
-        $this->{fieldDefs} = $def;
+        $this->{fields} = $def;
 
-    }
-
-    # Expand out values arrays in the definition
-    # SMELL: this should be done lazily
-    foreach my $fieldDef ( @{$this->{fieldDefs}} ) {
-        if( $fieldDef->isMandatory() ) {
-            $this->{mandatoryFieldsPresent} = 1;
-        }
     }
 
     return $this;
@@ -166,19 +158,20 @@ sub _parseFormDefinition {
                 $name .= '_';
             }
 
-            push( @fields,
-                  $this->createField(
-                      $type,
-                      name => $name,
-                      title => $title,
-                      size => $size,
-                      value => $vals,
-                      tooltip => $tooltip,
-                      attributes => $attributes,
-                      definingTopic => $definingTopic,
-                      web => $this->{web},
-                      topic => $this->{topic},
-                     ));
+            my $fieldDef = $this->createField(
+                $type,
+                name => $name,
+                title => $title,
+                size => $size,
+                value => $vals,
+                tooltip => $tooltip,
+                attributes => $attributes,
+                definingTopic => $definingTopic,
+                web => $this->{web},
+                topic => $this->{topic} );
+            push( @fields, $fieldDef);
+
+            $this->{mandatoryFieldsPresent} ||= $fieldDef->isMandatory();
         } else {
             $inBlock = 0;
         }
@@ -295,7 +288,7 @@ sub renderForEdit {
     my( $text, $repeatTitledText, $repeatUntitledText, $afterText ) =
       split( /%REPEAT%/, $tmpl );
 
-    foreach my $fieldDef ( @{$this->{fieldDefs}} ) {
+    foreach my $fieldDef ( @{$this->{fields}} ) {
 
         my $value;
         my $tooltip = $fieldDef->{tooltip};
@@ -374,7 +367,7 @@ sub renderHidden {
 
     my $text = '';
 
-    foreach my $field ( @{$this->{fieldDefs}} ) {
+    foreach my $field ( @{$this->{fields}} ) {
         $text .= $field->renderHidden( $meta );
     }
 
@@ -411,8 +404,7 @@ sub getFieldValuesFromQuery {
     # order in the previous meta object. See Item1982.
     my @old = $meta->find( 'FIELD' );
     $meta->remove('FIELD');
-
-    foreach my $fieldDef ( @{$this->{fieldDefs}} ) {
+    foreach my $fieldDef ( @{$this->{fields}} ) {
         if( $fieldDef->populateMetaFromQueryData( $query, $meta, \@old )) {
             $seen++;
         } elsif( $fieldDef->isMandatory() ) {
@@ -420,7 +412,6 @@ sub getFieldValuesFromQuery {
             push( @missing, $fieldDef->{title} || "unnamed field" );
         }
     }
-
     return ( $seen, \@missing );
 }
 
@@ -460,7 +451,7 @@ define the field.
 
 sub getField {
     my( $this, $name ) = @_;
-    foreach my $fieldDef ( @{$this->{fieldDefs}} ) {
+    foreach my $fieldDef ( @{$this->{fields}} ) {
         return $fieldDef if ( $fieldDef->{name} && $fieldDef->{name} eq $name);
     }
     return undef;
@@ -479,7 +470,7 @@ returned list should be treated as *read only* (must not be written to).
 
 sub getFields {
     my $this = shift;
-    return $this->{fieldDefs};
+    return $this->{fields};
 }
 
 1;

@@ -34,7 +34,8 @@ sub new {
     $attrs{name} ||= '';
     $attrs{attributes} ||= '';
     $attrs{type} ||= ''; # default
-
+    $attrs{size} =~ s/^\s*//;
+    $attrs{size} =~ s/\s*$//;
     return bless(\%attrs, $class);
 }
 
@@ -59,6 +60,17 @@ Subclasses may need to redefine this.
 =cut
 
 sub isMultiValued { 0 }
+
+=pod
+
+---++ isTextMergeable() -> $boolean
+
+Is this field type mergeable using a conventional text merge?
+
+=cut
+
+# can't merge multi-valued fields (select+multi, checkbox)
+sub isTextMergeable { return !shift->isMultiValued() }
 
 =pod
 
@@ -210,7 +222,6 @@ sub populateMetaFromQueryData {
             last;
         }
     }
-
     my $def;
 
     if( defined( $value ) ) {

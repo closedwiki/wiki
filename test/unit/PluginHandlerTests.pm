@@ -435,7 +435,7 @@ HERE
     $this->checkCalls(1, 'postRenderingHandler');
 }
 
-sub detest_afterAttachmentSaveHandler {
+sub test_afterAttachmentSaveHandler {
     my $this = shift;
     $this->makePlugin('afterAttachmentSaveHandler', <<'HERE');
 sub afterAttachmentSaveHandler {
@@ -445,7 +445,7 @@ sub afterAttachmentSaveHandler {
 HERE
 }
 
-sub detest_afterEditHandler {
+sub test_afterEditHandler {
     my $this = shift;
     $this->makePlugin('afterEditHandler', <<'HERE');
 sub afterEditHandler {
@@ -455,7 +455,7 @@ sub afterEditHandler {
 HERE
 }
 
-sub detest_afterRenameHandler {
+sub test_afterRenameHandler {
     my $this = shift;
     $this->makePlugin('afterRenameHandler', <<'HERE');
 sub afterRenameHandler {
@@ -466,7 +466,7 @@ sub afterRenameHandler {
 HERE
 }
 
-sub detest_afterSaveHandler {
+sub test_afterSaveHandler {
     my $this = shift;
     $this->makePlugin('afterSaveHandler', <<'HERE');
 sub afterSaveHandler {
@@ -476,7 +476,7 @@ sub afterSaveHandler {
 HERE
 }
 
-sub detest_beforeAttachmentSaveHandler {
+sub test_beforeAttachmentSaveHandler {
     my $this = shift;
     $this->makePlugin('beforeAttachmentSaveHandler', <<'HERE');
 sub beforeAttachmentSaveHandler {
@@ -486,7 +486,7 @@ sub beforeAttachmentSaveHandler {
 HERE
 }
 
-sub detest_beforeEditHandler {
+sub test_beforeEditHandler {
     my $this = shift;
     $this->makePlugin('beforeEditHandler', <<'HERE');
 sub beforeEditHandler {
@@ -496,7 +496,7 @@ sub beforeEditHandler {
 HERE
 }
 
-sub detest_beforeSaveHandler {
+sub test_beforeSaveHandler {
     my $this = shift;
     $this->makePlugin('beforeSaveHandler', <<'HERE');
 sub beforeSaveHandler {
@@ -506,7 +506,7 @@ sub beforeSaveHandler {
 HERE
 }
 
-sub detest_modifyHeaderHandler {
+sub test_modifyHeaderHandler {
     my $this = shift;
     $this->makePlugin('modifyHeaderHandler', <<'HERE');
 sub modifyHeaderHandler {
@@ -516,7 +516,7 @@ sub modifyHeaderHandler {
 HERE
 }
 
-sub detest_mergeHandler {
+sub test_mergeHandler {
     my $this = shift;
     $this->makePlugin('mergeHandler', <<'HERE');
 sub mergeHandler {
@@ -526,7 +526,7 @@ sub mergeHandler {
 HERE
 }
 
-sub detest_redirectCgiQueryHandler {
+sub test_redirectCgiQueryHandler {
     my $this = shift;
     $this->makePlugin('redirectCgiQueryHandler', <<'HERE');
 sub redirectCgiQueryHandler {
@@ -536,7 +536,7 @@ sub redirectCgiQueryHandler {
 HERE
 }
 
-sub detest_registrationHandler {
+sub test_registrationHandler {
     my $this = shift;
     $this->makePlugin('registrationHandler', <<'HERE');
 sub registrationHandler {
@@ -546,7 +546,7 @@ sub registrationHandler {
 HERE
 }
 
-sub detest_renderFormFieldForEditHandler {
+sub test_renderFormFieldForEditHandler {
     my $this = shift;
     $this->makePlugin('renderFormFieldForEditHandler', <<'HERE');
 sub renderFormFieldForEditHandler {
@@ -556,7 +556,7 @@ sub renderFormFieldForEditHandler {
 HERE
 }
 
-sub detest_renderWikiWordHandler {
+sub test_renderWikiWordHandler {
     my $this = shift;
     $this->makePlugin('renderWikiWordHandler', <<'HERE');
 sub renderWikiWordHandler {
@@ -566,7 +566,7 @@ sub renderWikiWordHandler {
 HERE
 }
 
-sub detest_writeHeaderHandler {
+sub test_writeHeaderHandler {
     my $this = shift;
     $this->makePlugin('writeHeaderHandler', <<'HERE');
 sub writeHeaderHandler {
