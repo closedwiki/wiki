@@ -333,7 +333,7 @@ sub moveAttachment {
         # Add file attachment to new topic
         $fileAttachment->{name} = $newAttachment;
         $fileAttachment->{movefrom} = $oldWeb.'.'.$oldTopic.'.'.$oldAttachment;
-        $fileAttachment->{moveby}   = $users->webDotWikiName($user);
+        $fileAttachment->{moveby}   = $user;
         $fileAttachment->{movedto}  = $newWeb.'.'.$newTopic.'.'.$newAttachment;
         $fileAttachment->{movedwhen} = time();
         $nmeta->putKeyed( 'FILEATTACHMENT', $fileAttachment );
@@ -730,6 +730,8 @@ sub getRevisionInfo {
       $handler->getRevisionInfo( $rev );
     $rev = $rrev;
 
+print STDERR "Store.getRevisionInfo( $date, $user, $rev, $comment )";
+
     return ( $date, $user, $rev, $comment );
 }
 
@@ -954,7 +956,8 @@ sub saveAttachment {
             $attrs = {
                 attachment => $attachment,
                 stream => $opts->{stream},
-                user => $users->webDotWikiName($user)
+                user => $user
+#                user => $users->webDotWikiName($user)
                };
             $attrs->{comment} = $opts->{comment}
               if (defined($opts->{comment}));

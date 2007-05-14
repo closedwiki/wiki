@@ -225,7 +225,7 @@ sub _expandAttrs {
         return TWiki::Time::formatTime( $info->{date} || 0 );
     }
     elsif ( $attr eq 'USER' ) {
-        return $info->{user} || 'unknown';
+        return $users->webDotWikiName($info->{user});
     }
     else {
         return $TWiki::TranslationToken.'A_'.$attr.$TWiki::TranslationToken;
