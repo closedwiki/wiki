@@ -91,14 +91,12 @@ sub register_cgi {
                                     web => $session->{webName},
                                     topic => $session->{topicName},
                                     def => 'registration_not_supported' );
-        return;              
       }
       if (!$TWiki::cfg{Register}{EnableNewUserRegistration}) {
         throw TWiki::OopsException( 'attention',
                                     web => $session->{webName},
                                     topic => $session->{topicName},
                                     def => 'registration_disabled' );
-        return;              
       }
       registerAndNext($session, $tempUserDir);
     }
@@ -110,14 +108,13 @@ sub register_cgi {
         finish( $session, $tempUserDir);
     }
     elsif ($action eq 'resetPassword') {
-        #SMELL - is this still called here, or only by passwd? 
         resetPassword( $session );
     }
     elsif ($action eq 'approve') {
         finish($session, $tempUserDir );
     }
     else {
-      registerAndNext($session, $tempUserDir);
+        registerAndNext($session, $tempUserDir);
     }
 
     $session->leaveContext('absolute_urls');
@@ -133,39 +130,6 @@ sub register_cgi {
 
     # Output of approve:
     #    RegisteredUser, all related UnsavedUsers deleted
-}
-
-=pod
-
----++ StaticMethod passwd_cgi( $session )
-
-=passwd= command handler.
-This method is designed to be
-invoked via the =TWiki::UI::run= method.
-
-=cut
-
-sub passwd_cgi {
-    my $session = shift;
-
-    my $action = $session->{cgiQuery}->param('action');
-
-    # absolute URL context for email generation
-    $session->enterContext('absolute_urls');
-
-    if( $action eq 'changePassword' ) {
-        changePassword( $session );
-    }
-    elsif ( $action eq 'resetPassword' ) {
-        resetPassword( $session );
-    }
-    else {
-        throw TWiki::OopsException( 'attention',
-                                    web => $session->{webName},
-                                    topic => $session->{topicName},
-                                    def => 'missing_action' );
-    }
-    $session->leaveContext('absolute_urls');
 }
 
 my $b1 = "\t* ";
@@ -542,6 +506,9 @@ sub _resetUsersPassword {
         return 0;
     }
 
+    # absolute URL context for email generation
+    $session->enterContext('absolute_urls');
+
     my @em = $users->getEmails($user);
     my $sent = 0;
     if (!scalar(@em)) {
@@ -570,6 +537,8 @@ sub _resetUsersPassword {
             }
         }
     }
+
+    $session->leaveContext('absolute_urls');
 
     if ($sent ) {
         $$pMess .= $session->inlineAlert(
@@ -770,7 +739,11 @@ sub finish {
     }
 
     if (! exists $data->{LoginName}) {
-        throw Error::Simple( 'no LoginName after reload');
+        if( $TWiki::cfg{AllowLoginName} ) {
+            # This should have been populated
+            throw Error::Simple( 'no LoginName after reload');
+        }
+        $data->{LoginName} ||= $data->{WikiName};
     }
 
     # Create the user topic. We have to do this before adding the
@@ -784,6 +757,8 @@ sub finish {
                          $data->{Password}, $data->{Email} );
     } catch Error::Simple with {
         my $e = shift;
+        # Log the error
+        $session->writeWarning( 'Registration failed: '.$e->stringify() );
         throw TWiki::OopsException( 'attention',
                                     web => $data->{webName},
                                     topic => $topic,
@@ -859,7 +834,7 @@ sub _writeRegistrationDetailsToTopic {
     my( $before, $repeat, $after ) = split( /%SPLIT%/, $text, 3 );
     $before = '' unless defined( $before );
     $after = '' unless defined( $after );
-    
+
     my $log;
     my $addText;
     my $form = $meta->get( 'FORM' );

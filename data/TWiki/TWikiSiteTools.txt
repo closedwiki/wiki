@@ -111,8 +111,6 @@ TWiki generates monthly log files which are used by the statistics script
      | register | =bulkregister= | !WikiUserName of new, e-mail address, admin ID |
      | rename | =rename= | when moving topic: =moved to !Newweb.NewTopic= |
      | rename | =move= | when moving attachment: =Attachment filename moved to !Newweb.NewTopic= |
-     | passwd | =resetpasswd= | LoginName, WikiName, E-mail address, success code from addUserPassword |
-     | passwd | =changepasswd= | LoginName, WikiName |
      | save | =save= | when replacing existing revision: =repRev 3= %BR% when user checks the minor changes box: =dontNotify= %BR% when user changes attributes to an exising attachment: =filename.ext= |
      | save | =cmd= | special admin parameter used when saving |
      | search | =search= | search string |

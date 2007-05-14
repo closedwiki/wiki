@@ -33,7 +33,8 @@ TWiki 4.2.0 is shipped with
 
 
    * *Search Enhancements*
-
+      * New =query= search mode supports SQL-style queries over form fields
+        and other meta-data
 
    * *Skins and Templates Enhancements*
 
@@ -46,6 +47,16 @@ TWiki 4.2.0 is shipped with
 
 ---++ Important Changes since 4.1.2
 
+The =resetpasswd= and =passwd= scripts have been removed. You are unlikely
+to encounter any problems with this unless you have local customised versions
+of any of the following topics:
+   * BulkResetPassword
+   * ChangeEmailAddress
+   * TWiki/ResetPassword
+   * TWiki/ChangePassword
+If you do, you will have to modify those templates to use the =manage= script
+with an appropriate =action= parameter. See the versions of these topics
+shipped with this release for an example.
 
 
 ---++ Deprecation Notices

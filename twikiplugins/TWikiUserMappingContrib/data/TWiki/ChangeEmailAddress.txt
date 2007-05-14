@@ -12,7 +12,7 @@
 
 %MAKETEXT{"If your old e-mail addresses are all invalid (you can't receive mail there any more) and you have forgotten your password, please contact [_1] for help." args="%WIKIWEBMASTER%"}%
 
-<form name="passwd" action="%SCRIPTURLPATH{"passwd"}%/%WEB%/%TOPIC%" method="post">
+<form name="manage" action="%SCRIPTURLPATH{"manage"}%/%WEB%/%TOPIC%" method="post">
 <div class="twikiFormSteps">
 <div class="twikiFormStep">
 *%MAKETEXT{"After submitting this form your e-mail will be changed, and you will be returned to this form."}%*

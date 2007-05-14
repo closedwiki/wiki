@@ -55,6 +55,8 @@ sub manage {
         _createWeb( $session );
     } elsif( $action eq 'changePassword' ) {
         TWiki::UI::Register::changePassword( $session );
+    } elsif( $action eq 'resetPassword' ) {
+        TWiki::UI::Register::resetPassword( $session );
     } elsif ($action eq 'bulkRegister') {
         TWiki::UI::Register::bulkRegister( $session );
     } elsif( $action eq 'deleteUserAccount' ) {

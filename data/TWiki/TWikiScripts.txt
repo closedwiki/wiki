@@ -98,13 +98,15 @@ Performs a range of management functions.
 | =sitemapuseto= | Value for SITEMAPUSETO | '' |
 | =nosearchall= | Value for NOSEARCHALL | '' |
 
----++++ =action=deleteUserAccount=
-Unregisters (removes) the currently logged-in user.
-| *Parameter* | *Description* | *Default* |
-| =password= | Users' password | none |
-
 ---++++ =action=editSettings=
 No parameters
+
+---++++ =action=saveSettings=
+| *Parameter* | *Description* | *Default* |
+| =text= | Text of the topic | '' |
+| =originalrev= | Revision that the edit started on | Most recent revision |
+| =redirectto= | If the savesettings process is successful, save will redirect to this topic or URL. The parameter value can be a =TopicName=, a =Web.TopicName=, or a URL.%BR% __Note:__ Redirect to a URL only works if it is enabled in =configure= (Miscellaneous ={AllowRedirectUrl}=). | 
+All other parameters may be interpreted as form fields, depending on the current form definition in the topic.
 
 ---++++ =action=bulkRegister=
 See BulkRegistration.
@@ -113,12 +115,30 @@ See BulkRegistration.
 | =EmailUsersWithDetails= | Whether to mail registered users or not | false |
 | =LogTopic= | Topic to save the log in | Same as topic name, with 'Result' appended. |
 
----++++ =action=saveSettings=
+---++++ =action=changePassword=
+Change password, email address, or both, of a user.
 | *Parameter* | *Description* | *Default* |
-| =text= | Text of the topic | '' |
-| =originalrev= | Revision that the edit started on | Most recent revision |
-| =redirectto= | If the savesettings process is successful, save will redirect to this topic or URL. The parameter value can be a =TopicName=, a =Web.TopicName=, or a URL.%BR% __Note:__ Redirect to a URL only works if it is enabled in =configure= (Miscellaneous ={AllowRedirectUrl}=). | 
-All other parameters may be interpreted as form fields, depending on the current form definition in the topic.
+| =username= | god alone knows | _none_ |
+| =oldpassword= | current password | _none_ |
+| =password= | new password | _none_ |
+| =passwordA= | new password confirmation | _none_ |
+| =email= | new email address | _none_ |
+=password, =passwordA= and =email= are optional. If neither or =password= and =passwordA= is set, then the user password is left unchanged. If =email= is unset, their email is left unchanged.
+
+---++++ =action=resetPassword=
+Reset the password for a single or multiple users
+| *Parameter* | *Description* | *Default* |
+| =LoginName= | *list* of usernames to reset | none - error if not set |
+| =Introduction= | message to be sent alongside the reset, most often used to announce to the user that they have been given an account.  | '' |
+
+This is used by BulkResetPassword and ResetPassword. Only administrators can provide a list of LoginNames, non-admins can only provide a single LoginName. 
+
+BulkRegistration provides the means to create multiple accounts but it does not announce those accounts to the users who own them. BulkResetPassword is used to assign the passwords, the Introduction is used to explain why they are receiving the mail.
+
+---++++ =action=deleteUserAccount=
+Unregisters (removes) the currently logged-in user.
+| *Parameter* | *Description* | *Default* |
+| =password= | Users' password | none |
 
 ---+++ =oops=
 This script is mainly used for rendering pages containing error messages, though it is also used for some functional actions such as manage pages (move topic etc).
@@ -131,20 +151,6 @@ The =oops= script supports the following parameters:
 | =template= | Name of the template file to display | |
 | =def= | Optional, can be set to the name of a single definition within =template=. This definition will be instantiated in the =template= wherever =%<nop>INSTANTIATE%= is seen. This lets you use a single template file for many messages. For an example, see =oopsmanagebad.tmpl=. | |
 | =paramN= | Where N is an integer from 1 upwards. These values will be substituted into =template= for =%<nop>PARAM1%= etc. | |
-
----+++ =passwd=
-
-| *Parameter* | *Description* | *Default* |
-| =action= | one of =changePassword= or =resetPassword= | none |
-Other parameters as described under =manage=, =action=changePassword=.
-
----++++ =action=changePassword=
-| *Parameter* | *Description* | *Default* |
-| =username= | Username | |
-| =oldpassword= | Existing password (plain text) | |
-| =password= | New password (plain text) | |
-| =passwordA= | New password confirmation (plain text) | |
-| =TopicName= | ? | |
 
 ---+++ =preview=
 This script is _deprecated_. Its functions are covered by the =save= script.
@@ -179,17 +185,6 @@ Used for renaming topics.
 | =currentwebonly= | if defined, searches current web only for links to this topic | |
 | =nonwikiword= | if defined, a non-wikiword is acceptable for the new topic name | |
 | =redirectto= | If the rename process is successful, rename will redirect to this topic or URL. The parameter value can be a =TopicName=, a =Web.TopicName=, or a URL.%BR% __Note:__ Redirect to a URL only works if it is enabled in =configure= (Miscellaneous ={AllowRedirectUrl}=). | |
-
-
----+++ =resetpasswd=
-Reset the password for a single or multiple users
-| *Parameter* | *Description* | *Default* |
-| =LoginName= | *list* of usernames to reset | none - error if not set |
-| =Introduction= | message to be sent alongside the reset, most often used to announce to the user that they have been given an account.  | '' |
-
-This is used by BulkResetPassword and ResetPassword. Only administrators can provide a list of LoginNames, non-admins can only provide a single LoginName. 
-
-BulkRegistration provides the means to create multiple accounts but it does not announce those accounts to the users who own them. BulkResetPassword is used to assign the passwords, the Introduction is used to explain why they are receiving the mail.
 
 ---+++ =rest=
 This REST ([[http://en.wikipedia.org/wiki/REST][Representational State Transfer]]) script can be invoked via http in the same way as the other TWiki scripts (see *Invocation Examples*, below) to execute a function that is associated to a "subject" and a "verb" (see below). These functions are usually registered by plugins using the =TWiki::Func::registerRESTHandler= method. The =rest= script will print the result directly to the browser unless the =endPoint= parameter is specified, in which case it will output a redirect to the given topic.
