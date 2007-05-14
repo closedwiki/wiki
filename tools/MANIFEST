@@ -38,12 +38,10 @@ bin/logos/info.gif 0444
 bin/logos/warning.gif 0444
 bin/manage 0555
 bin/oops 0555
-bin/passwd 0555
 bin/preview 0555
 bin/rdiff 0555
 bin/register 0555
 bin/rename 0555
-bin/resetpasswd 0555
 bin/rest 0555
 bin/save 0555
 bin/search 0555
@@ -503,6 +501,14 @@ lib/TWiki/Configure/Value.pm 0444
 lib/TWiki/Configure/Valuer.pm 0444
 lib/TWiki/Data/DelimitedFile.pm 0444
 lib/TWiki/Form.pm 0444
+lib/TWiki/Form/Checkbox.pm 0444
+lib/TWiki/Form/FieldDefinition.pm 0444
+lib/TWiki/Form/Label.pm 0444
+lib/TWiki/Form/ListFieldDefinition.pm 0444
+lib/TWiki/Form/Radio.pm 0444
+lib/TWiki/Form/Select.pm 0444
+lib/TWiki/Form/Text.pm 0444
+lib/TWiki/Form/Textarea.pm 0444
 lib/TWiki/Func.pm 0444
 lib/TWiki/I18N.pm 0444
 lib/TWiki/I18N/Extract.pm 0444
