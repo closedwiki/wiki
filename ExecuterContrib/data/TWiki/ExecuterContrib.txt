@@ -1,0 +1,29 @@
+
+---+!! !ExecuterContrib
+<!--
+One line description, required for extensions repository catalog.
+    * Set SHORTDESCRIPTION = 
+-->
+%SHORTDESCRIPTION%
+
+%TOC%
+
+---++ Usage
+
+---++ Installation Instructions
+
+%$INSTALL_INSTRUCTIONS%
+
+---++ Contrib Info
+
+|  Contrib Author(s): | |
+|  Contrib Version: | %$VERSION% |
+|  Copyright: | &copy; |
+|  License: | [[http://www.gnu.org/licenses/gpl.html][GPL (Gnu General Public License)]] |
+|  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  Dependencies: | %$DEPENDENCIES% |
+|  Contrib Home: | http://twiki.org/cgi-bin/view/Plugins/ExecuterContrib |
+|  Feedback: | http://twiki.org/cgi-bin/view/Plugins/ExecuterContribDev |
+|  Appraisal: | http://twiki.org/cgi-bin/view/Plugins/ExecuterContribAppraisal |
+
+<!-- Do _not_ attempt to edit this topic; it is auto-generated. Please add comments/questions/remarks to the Dev topic instead. -->
