@@ -1,0 +1,10 @@
+# Dependencies for ExecuterContrib
+# Example:
+
+Config::Simple,>=latest,cpan,Required.
+LWP::UserAgent,>=latest,cpan,Required.
+Crypt::SSLeay,>=latest,cpan,Required only if access TWiki through HTTPS.
+
+
+
+
