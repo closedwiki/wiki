@@ -570,7 +570,7 @@ Lifted out:
         $formcondition =~ m/^(.*?)\.(.*?)$/;
         my ( $formName, $conditionStatus ) = ( $1, $2 );
         my %status = _status($formName);
-        return '' unless TWiki::Func::isTrue( $status{$conditionStatus} );
+        return '' unless isTrue( $status{$conditionStatus} );
         
         my $query = TWiki::Func::getCgiQuery();
         my $default          = $params->{'default'};
@@ -603,7 +603,7 @@ sub _formElement {
     $title = _wrapHtmlTitleContainer($title) if $title;
 
     my $mandatoryParam = $params->{'mandatory'};
-    my $isMandatory = TWiki::Func::isTrue( $mandatoryParam, 0 );
+    my $isMandatory = isTrue( $mandatoryParam, 0 );
     my $mandatory =
       $isMandatory ? _wrapHtmlMandatoryContainer($MANDATORY_STRING) : '';
 
@@ -1171,6 +1171,26 @@ sub _wrapHtmlMandatoryContainer {
 
 sub _debug {
     TWiki::Func::writeDebug(@_);
+}
+
+=pod
+
+Will be replaced by TWiki::Func::isTrue
+
+=cut
+
+sub isTrue {
+    my( $value, $default ) = @_;
+
+    $default ||= 0;
+
+    return $default unless defined( $value );
+
+    $value =~ s/^\s*(.*?)\s*$/$1/gi;
+    $value =~ s/off//gi;
+    $value =~ s/no//gi;
+    $value =~ s/false//gi;
+    return ( $value ) ? 1 : 0;
 }
 
 1;
