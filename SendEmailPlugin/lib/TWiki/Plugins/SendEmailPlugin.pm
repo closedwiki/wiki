@@ -26,13 +26,13 @@ use TWiki::Func;
 # $VERSION is referred to by TWiki, and is the only global variable that
 # *must* exist in this package
 use vars qw( $VERSION $RELEASE $debug $pluginName );
-use vars qw( $successMessage $errorMessage $headerDone);
+use vars qw( $successUserMessage $errorUserMessage $errorMessage $headerDone);
 
 # This should always be $Rev: 11069$ so that TWiki can determine the checked-in
 # status of the plugin. It is used by the build automation tools, so
 # you should leave it alone.
 $VERSION = '$Rev: 11069$';
-$RELEASE = '1.1.1';
+$RELEASE = '1.1.2';
 
 # Name of this Plugin, only used in this module
 $pluginName = 'SendEmailPlugin';
@@ -41,13 +41,21 @@ $headerDone = 0;
 
 my $RETRY_COUNT                  = 5;
 my $ERROR_STATUS_TAG             = 'SendEmailErrorStatus';
+my $ERROR_MESSAGE_TAG            = 'SendEmailErrorMessage';
 my $NOTIFICATION_CSS_CLASS       = 'sendEmailPluginNotification';
 my $NOTIFICATION_ERROR_CSS_CLASS = 'sendEmailPluginError';
 my $NOTIFICATION_ANCHOR_NAME     = 'FormPluginNotification';
-my %ERROR_STATUS = (
+my %ERROR_STATUS                 = (
     'noerror' => 1,
     'error'   => 2,
 );
+my $ERROR_TITLE            = ' <nop>%TWIKIWEB%.SendEmailPlugin send error ';
+my $ERROR_BUTTON_LABEL     = 'Show error message';
+my $ERROR_CONCAT           = ': ';
+my $ERROR_NOT_VALID_EMAIL  = '\'$EMAIL\' is not an e-mail address';
+my $ERROR_EMPTY_TO_EMAIL   = 'you must pass a \'to\' e-mail address';
+my $ERROR_EMPTY_FROM_EMAIL = 'you must pass a \'from\' e-mail address';
+
 =pod
 
 =cut
@@ -65,13 +73,13 @@ sub initPlugin {
     $debug = TWiki::Func::getPluginPreferencesFlag("DEBUG")
       || TWiki::Func::getPreferencesFlag("SENDEMAILPLUGIN_DEBUG");
 
-    $successMessage =
+    $successUserMessage =
       TWiki::Func::getPluginPreferencesValue("EMAIL_SENT_SUCCESS_MESSAGE")
       || TWiki::Func::getPluginPreferencesValue(
         "SENDEMAILPLUGIN_EMAIL_SENT_SUCCESS_MESSAGE")
       || '';
 
-    $errorMessage =
+    $errorUserMessage =
       TWiki::Func::getPluginPreferencesValue("EMAIL_SENT_ERROR_MESSAGE")
       || TWiki::Func::getPluginPreferencesValue(
         "SENDEMAILPLUGIN_EMAIL_SENT_ERROR_MESSAGE")
@@ -102,13 +110,36 @@ sub sendEmail {
     return _finishSendEmail( $session, $ERROR_STATUS{'error'} ) if !$query;
 
     $to = $query->param('to') || $query->param('To');
-    return _finishSendEmail( $session, $ERROR_STATUS{'error'} ) if !$to;
+    my $emptyToEmailMessage = $ERROR_CONCAT . $ERROR_EMPTY_TO_EMAIL;
+    return _finishSendEmail( $session, $ERROR_STATUS{'error'},
+        $emptyToEmailMessage )
+      if !$to;
 
-    $from = $query->param('from') || $query->param('From') 
+    my $emailRE = TWiki::Func::getRegularExpression('emailAddrRegex');
+
+    my $isToEmail = ( $to =~ m/$emailRE/ );
+    my $notToEmailMessage = $ERROR_CONCAT . $ERROR_NOT_VALID_EMAIL;
+    $notToEmailMessage =~ s/\$EMAIL/$to/go;
+    return _finishSendEmail( $session, $ERROR_STATUS{'error'},
+        $notToEmailMessage )
+      if !$isToEmail;
+
+         $from = $query->param('from')
+      || $query->param('From')
       || $TWiki::cfg{WebMasterEmail}
       || TWiki::Func::getPreferencesValue('WIKIWEBMASTER');
 
-    return _finishSendEmail( $session, $ERROR_STATUS{'error'} ) if !$from;
+    my $emptyFromEmailMessage = $ERROR_CONCAT . $ERROR_EMPTY_FROM_EMAIL;
+    return _finishSendEmail( $session, $ERROR_STATUS{'error'},
+        $emptyFromEmailMessage )
+      if !$from;
+
+    my $isFromEmail = ( $from =~ m/$emailRE/ );
+    my $notFromEmailMessage = $ERROR_CONCAT . $ERROR_NOT_VALID_EMAIL;
+    $notFromEmailMessage =~ s/\$EMAIL/$from/go;
+    return _finishSendEmail( $session, $ERROR_STATUS{'error'},
+        $notFromEmailMessage )
+      if !$isFromEmail;
 
     my $ccParam = $query->param('cc') || $query->param('CC') || '';
     $cc = $ccParam if $ccParam;
@@ -135,11 +166,12 @@ HERE
     TWiki::Func::writeDebug("mail message=$mail") if $debug;
 
     my $error = TWiki::Func::sendEmail( $mail, $RETRY_COUNT );
-    my $errorStatus = $error ? $ERROR_STATUS{'error'} : $ERROR_STATUS{'noerror'};
-    
+    my $errorStatus =
+      $error ? $ERROR_STATUS{'error'} : $ERROR_STATUS{'noerror'};
+
     TWiki::Func::writeDebug("errorStatus=$errorStatus") if $debug;
 
-    _finishSendEmail( $session, $errorStatus );
+    _finishSendEmail( $session, $errorStatus, $error );
 }
 
 =pod
@@ -153,19 +185,27 @@ sub _handleSendEmailTag {
 
     my $query = TWiki::Func::getCgiQuery();
     return '' if !$query;
-    
+
     my $errorStatus = $query->param($ERROR_STATUS_TAG);
-    
-    TWiki::Func::writeDebug("_handleSendEmailTag; errorStatus=$errorStatus") if $debug;
+
+    TWiki::Func::writeDebug("_handleSendEmailTag; errorStatus=$errorStatus")
+      if $debug;
 
     return '' if !defined $errorStatus;
 
-    my $feedbackSuccess = $params->{'feedbackSuccess'} || $successMessage;
-    my $feedbackError   = $params->{'feedbackError'}   || $errorMessage;
+    my $feedbackSuccess = $params->{'feedbackSuccess'} || $successUserMessage;
+    $feedbackSuccess =~ s/^\s*(.*?)\s*$/$1/go;    # remove surrounding spaces
+    my $feedbackError = $params->{'feedbackError'} || $errorUserMessage;
 
-    my $message = ($errorStatus == $ERROR_STATUS{'error'}) ? $feedbackError : $feedbackSuccess;
+    my $userMessage =
+      ( $errorStatus == $ERROR_STATUS{'error'} )
+      ? $feedbackError
+      : $feedbackSuccess;
+    $userMessage =~ s/^\s*(.*?)\s*$/$1/go;        # remove surrounding spaces
+    my $errorMessage = $query->param($ERROR_MESSAGE_TAG) || '';
 
-    return _wrapHtmlNotificationContainer( $message, $errorStatus );
+    return _wrapHtmlNotificationContainer( $userMessage, $errorStatus,
+        $errorMessage, $topic, $web );
 }
 
 =pod
@@ -173,19 +213,27 @@ sub _handleSendEmailTag {
 =cut
 
 sub _finishSendEmail {
-    my ( $session, $errorStatus ) = @_;
+    my ( $session, $errorStatus, $error ) = @_;
+
     my $web   = $session->{webName};
     my $topic = $session->{topicName};
 
     my $query = TWiki::Func::getCgiQuery();
-    
-    TWiki::Func::writeDebug("_finishSendEmail errorStatus=$errorStatus") if $debug;
 
-    $query->param( -name => $ERROR_STATUS_TAG, -value => $errorStatus ) if $query;
+    TWiki::Func::writeDebug(
+        "_finishSendEmail errorStatus=$errorStatus; errorMessage=$errorMessage")
+      if $debug;
+
+    $query->param( -name => $ERROR_STATUS_TAG, -value => $errorStatus )
+      if $query;
+    my $errorMessage = $error || '';
+    $query->param( -name => $ERROR_MESSAGE_TAG, -value => $errorMessage )
+      if $query;
 
     TWiki::Func::redirectCgiQuery( undef,
         TWiki::Func::getScriptUrl( $web, $topic, 'view' ), 1 );
-    # would pass '#'=>$NOTIFICATION_ANCHOR_NAME but the anchor removes 
+
+    # would pass '#'=>$NOTIFICATION_ANCHOR_NAME but the anchor removes
     # the ERROR_STATUS_TAG param
 }
 
@@ -211,11 +259,41 @@ EOF
 =cut
 
 sub _wrapHtmlNotificationContainer {
-    my ( $text, $errorStatus ) = @_;
+    my ( $text, $errorStatus, $errorMessage, $topic, $web ) = @_;
 
     my $cssClass = $NOTIFICATION_CSS_CLASS;
-    $cssClass .= ' ' . $NOTIFICATION_ERROR_CSS_CLASS if ( $errorStatus == $ERROR_STATUS{'error'} );
-    return "#$NOTIFICATION_ANCHOR_NAME\n" . '<div class="' . $cssClass . '">' . $text . '</div>';
+    $cssClass .= ' ' . $NOTIFICATION_ERROR_CSS_CLASS
+      if ( $errorStatus == $ERROR_STATUS{'error'} );
+
+    my $message = $text;
+    if ( $errorMessage && length $errorMessage < 256 ) {
+        $message .= $errorMessage;
+    }
+    if ( $errorMessage && length $errorMessage > 256 ) {
+        my $oopsUrl = TWiki::Func::getOopsUrl( $web, $topic, 'oopsgeneric' );
+        $errorMessage = '<verbatim>' . $errorMessage . '</verbatim>';
+        my $errorForm = <<'HERE';
+<form enctype="application/x-www-form-urlencoded" name="mailerrorfeedbackform" action="%OOPSURL%" method="POST">
+<input type="hidden" name="template" value="oopsgeneric" />
+<input type="hidden" name="param1" value="%ERRORTITLE%" />
+<input type="hidden" name="param2" value="%ERRORMESSAGE%" />
+<input type="hidden" name="param3" value="" />
+<input type="hidden" name="param4" value="" />
+<input type="submit" class="twikiButton" value="%ERRORBUTTON%"  />
+</form>
+HERE
+        $errorForm =~ s/%OOPSURL%/$oopsUrl/go;
+        $errorForm =~ s/%ERRORTITLE%/$ERROR_TITLE/go;
+        $errorForm =~ s/%ERRORMESSAGE%/$errorMessage/go;
+        $errorForm =~ s/%ERRORBUTTON%/$ERROR_BUTTON_LABEL/go;
+        $message .= ' ' . $errorForm;
+    }
+
+    return "#$NOTIFICATION_ANCHOR_NAME\n"
+      . '<div class="'
+      . $cssClass . '">'
+      . $message
+      . '</div>';
 }
 
 1;

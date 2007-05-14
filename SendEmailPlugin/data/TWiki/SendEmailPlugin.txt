@@ -89,8 +89,9 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.ArthurClemens |
-|  Plugin Version: | 13 May 2007  |
+|  Plugin Version: | 15 May 2007  |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  15 may 2007 | 1.1.2 Arthur Clemens: improved error notifications |
 |  13 May 2007 | 1.1.1 Arthur Clemens: changed sendmail script invocation to be called through bin script =sendemail=; added CSS styles for feedback notification; fixed typo 'feedbackSucces'. |
 |  05 May 2007 | 1.0 First release. |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 |
