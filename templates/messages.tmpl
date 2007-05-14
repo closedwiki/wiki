@@ -442,7 +442,7 @@ __%MAKETEXT{"Note:"}%__
 %TMPL:DEF{"missing_user"}%       %MAKETEXT{"The entry for user [_1] was missing in the password system." args="%PARAM1%"}%<br /> %TMPL:END%
 %TMPL:DEF{"bad_user"}%           %MAKETEXT{"Can't find user [_1]" args="%PARAM1%"}%<br /> %TMPL:END%
 %TMPL:DEF{"no_email_for"}%       %MAKETEXT{"Can't get an e-mail address for [_1] (required for password reset)" args="%PARAM1%"}%<br /> %TMPL:END%
-%TMPL:DEF{"new_sys_pass"}%       %MAKETEXT{"A new *system-generated* password for your login name [_1] (<nop>WikiName [_2]) has been sent to your registered e-mail address. If your e-mail address is no longer valid, please contact [_3]" args="%PARAM1%, %MAINWEB%.%PARAM2%, <a href=\"mailto:%WIKIWEBMASTER%?subject=%ENCODE{"Reset password request for <nop>%PARAM1%/<nop>%PARAM2%\""}%>%WIKIWEBMASTER%</a>"}%<br /> %TMPL:END%
+%TMPL:DEF{"new_sys_pass"}%       %MAKETEXT{"A new *system-generated* password for your login name [_1] (<nop>WikiName [_2]) has been sent to your registered e-mail address. If your e-mail address is no longer valid, please contact [_3]" args="%PARAM1%, %MAINWEB%.%PARAM2%, <a href='mailto:%WIKIWEBMASTER%?subject=%ENCODE{"Reset password request for <nop>%PARAM1%/<nop>%PARAM2%"}%'>%WIKIWEBMASTER%</a>"}%<br /> %TMPL:END%
 %TMPL:DEF{"geturl_failed"}%      %MAKETEXT{"Failed to include URL [_1]" args="%PARAM1%"}%%TMPL:END%
 %TMPL:DEF{"urls_not_allowed"}%   %MAKETEXT{"Warning: This site does not allow %<nop>INCLUDE% of URLs"}% %TMPL:END%
 %TMPL:DEF{"bad_search"}%         %MAKETEXT{"Could not perform search. Error was: [_1]" args="%PARAM1%"}%%TMPL:END%
