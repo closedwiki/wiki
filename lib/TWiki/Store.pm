@@ -730,8 +730,6 @@ sub getRevisionInfo {
       $handler->getRevisionInfo( $rev );
     $rev = $rrev;
 
-print STDERR "Store.getRevisionInfo( $date, $user, $rev, $comment )";
-
     return ( $date, $user, $rev, $comment );
 }
 

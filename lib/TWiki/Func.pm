@@ -1272,7 +1272,8 @@ sub checkTopicEditLock {
                 param2 => $past,
                 param3 => $future,
                 param4 => $script );
-            return( $url, $who, $remain / 60 );
+            my $login = $session->{users}->getLoginName($who);
+            return( $url, $login, $remain / 60 );
         }
     }
     return ('', '', 0);

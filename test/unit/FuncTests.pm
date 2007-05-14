@@ -218,13 +218,14 @@ sub test_getrevinfo {
     my $this = shift;
     my $topic = "RevInfo";
 
-    my $login = TWiki::Func::wikiToUserName(TWiki::Func::getWikiName());
+#    my $login = TWiki::Func::wikiToUserName(TWiki::Func::getWikiName());
+    my $wikiname = TWiki::Func::getWikiName();
 	TWiki::Func::saveTopicText( $this->{test_web}, $topic, 'blah' );
 
     my( $date, $user, $rev, $comment ) =
       TWiki::Func::getRevisionInfo( $this->{test_web}, $topic );
     $this->assert_equals( 1, $rev );
-    $this->assert_str_equals( $login, $user );
+    $this->assert_str_equals( $wikiname, $user );   # the Func::getRevisionInfo quite clearly says wikiname
 }
 
 sub test_moveTopic {
