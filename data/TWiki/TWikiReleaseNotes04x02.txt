@@ -50,14 +50,13 @@ TWiki 4.2.0 is shipped with
 The =resetpasswd= and =passwd= scripts have been removed. You are unlikely
 to encounter any problems with this unless you have local customised versions
 of any of the following topics:
-   * BulkResetPassword
-   * ChangeEmailAddress
-   * TWiki/ResetPassword
-   * TWiki/ChangePassword
-If you do, you will have to modify those templates to use the =manage= script
+   * %SYSTEMWEB%.BulkResetPassword
+   * %SYSTEMWEB%.ChangeEmailAddress
+   * %SYSTEMWEB%.ResetPassword
+   * %SYSTEMWEB%.ChangePassword
+If you do, you will have to modify those topics to use the =manage= script
 with an appropriate =action= parameter. See the versions of these topics
-shipped with this release for an example.
-
+shipped with this release for an example that you can copy.
 
 ---++ Deprecation Notices
 
