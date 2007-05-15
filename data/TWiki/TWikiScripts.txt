@@ -350,6 +350,9 @@ Used for viewing attachments. Normally, a site will publish the attachments (=pu
 | =filename= | name of attachment | |
 | =rev= | Revision to view | |
 
+Instead of using the =filename= parameter, you can append the attachment name
+to the end of the URL path (after the topic) e.g. =%SCRIPTURL{viewfile}%/Webname/TopicName/Attachment.gif=
+
 ---++ Command Line Scripts
 Details on command line scripts located in the =twiki/tools= directory.
 

@@ -402,10 +402,18 @@ sub viewfile {
     my $session = shift;
 
     my $query = $session->{cgiQuery};
-    my $webName = $session->{webName};
-    my $topic = $session->{topicName};
 
-    my $fileName = $query->param( 'filename' );
+    my @path = split( '/', $query->path_info() );
+    shift( @path )unless $path[0];
+    my $fileName;
+    if( defined( $query->param( 'filename' ))) {
+        $fileName = $query->param( 'filename' );
+    } else {
+        $fileName = pop( @path );
+    }
+    my $topic = pop( @path );
+    my $webName = join('.', @path );
+
     $fileName = TWiki::Sandbox::sanitizeAttachmentName( $fileName );
 
     my $rev = $session->{store}->cleanUpRevID( $query->param( 'rev' ) );
