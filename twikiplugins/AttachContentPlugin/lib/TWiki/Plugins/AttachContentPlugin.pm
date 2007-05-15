@@ -45,9 +45,9 @@ sub initPlugin {
         return 0;
     }
 
-    $debug = TWiki::Func::getPluginPreferencesFlag("DEBUG") || TWiki::Func::getPreferencesFlag("DEBUG");
-    $defaultKeepPars = TWiki::Func::getPluginPreferencesFlag("KEEPPARS") || 0;
-    $defaultComment = TWiki::Func::getPluginPreferencesValue("ATTACHCONTENTCOMMENT") || '';
+    $debug = TWiki::Func::getPreferencesFlag("ATTACHCONTENTPLUGIN_DEBUG");
+    $defaultKeepPars = TWiki::Func::getPreferencesFlag("ATTACHCONTENTPLUGIN_KEEPPARS") || 0;
+    $defaultComment = TWiki::Func::getPreferencesValue("ATTACHCONTENTPLUGIN_ATTACHCONTENTCOMMENT") || '';
 
     # Plugin correctly initialized
     return 1;
