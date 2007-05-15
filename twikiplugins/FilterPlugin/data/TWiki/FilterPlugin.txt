@@ -43,7 +43,7 @@ insert a topic by processing its content.
 substitute text given inline. see [[#SUBST][SUBST]].
 
 ---+++ EXTRACT
-*Syntax*:=%<nop>EXTRACT{topic="..."  ...}%= 
+*Syntax*: =%<nop>EXTRACT{topic="..."  ...}%= 
 
 extract text from a topic. see [[#SUBST][SUBST]].
 
@@ -59,7 +59,7 @@ extract content given inline. see [[#SUBST][SUBST]].
 
 
 ---+++ FORMATLIST
-*Syntax*: =%<nop>FORMATLIST{"&lt;list>" ...}%
+*Syntax*: =%<nop>FORMATLIST{"&lt;list>" ...}%=
 
 formats a list of items. The &lt;list> argument is separated into items by using
 a split expression; each item is matched agains a pattern and then formatted
