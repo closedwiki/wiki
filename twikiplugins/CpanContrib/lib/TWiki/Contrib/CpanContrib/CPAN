@@ -68,6 +68,7 @@ File::MMtypes MIME::Types Archive::Any ),
 	qw( Safe HTML::Mason ),				# MasonPlugin
 	qw( HTTP::Lite Class::Accessor::Chained Text::vFile::asData Set::Infinite DateTime::Set FreezeThaw DateTime DateTime::Event::Recurrence DateTime::Event::ICal DateTime::Format::ICal iCal::Parser ),	# http://twiki.org/p/pub/Plugins/CalendarPluginDev/Calendar.pl.txt
 	qw( B::PerlReq ),		# for BuildContrib's make dependencies
+	qw( DBIx::FullTextSearch ),	# TWiki:Codev.DatabaseStore
 );
 
 __END__
