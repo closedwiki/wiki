@@ -15,7 +15,7 @@ application/mac-compactpro      cpt
 application/msword              doc dot
 application/msaccess            mdb 
 application/msexcel             csv
-application/octet-stream        bin dms lha lzh class w02 w03 w04
+application/octet-stream        bin dms lha lzh class w02 w03 w04 dmg
 application/oda                 oda
 application/ogg                 ogg 
 application/pdf                 pdf
