@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="StephaneLenclud" date="1179100102" format="1.1" reprev="1.2" version="1.2"}%
+%META:TOPICINFO{author="StephaneLenclud" date="1179190776" format="1.1" reprev="1.3" version="1.3"}%
 ---+!! Task Executer
 <!--
 One line description, required for extensions repository catalog.
@@ -75,11 +75,13 @@ If you are experiencing problems with an Executer you should:
 
 ---++ Contrib Info
 
-|  Contrib Author(s): | |
+|  Author: | TWiki:Main/StephaneLenclud |
+|  Copyright &copy;: | 2006-2007,  Stéphane Lenclud, All Rights Reserved |
 |  Contrib Version: | %$VERSION% |
-|  Copyright: | &copy; |
 |  License: | [[http://www.gnu.org/licenses/gpl.html][GPL (Gnu General Public License)]] |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  15 May 2007 | Adding support for =URLEXISTS=, =IF=, =ELSE=, =ENDIF= |
+|  14 May 2007 | Initial release |
 |  Dependencies: | %$DEPENDENCIES% <br /> Other dependencies might be added through the [[TWiki.TaskExeContrib#Task_Specification][Task specification]]. |
 |  Contrib Home: | http://twiki.org/cgi-bin/view/Plugins/ExecuterContrib |
 |  Feedback: | http://twiki.org/cgi-bin/view/Plugins/ExecuterContribDev |
@@ -87,4 +89,4 @@ If you are experiencing problems with an Executer you should:
 
 <!-- Do _not_ attempt to edit this topic; it is auto-generated. Please add comments/questions/remarks to the Dev topic instead. -->
 
-%META:FILEATTACHMENT{name="ExecuterSetup.msi" attachment="ExecuterSetup.msi" attr="" comment="Windows installer" date="1179100050" path="ExecuterSetup.msi" size="99840" stream="ExecuterSetup.msi" user="Main.StephaneLenclud" version="1"}%
+%META:FILEATTACHMENT{name="ExecuterSetup.msi" attachment="ExecuterSetup.msi" attr="" comment="Windows installer" date="1179190519" path="ExecuterSetup.msi" size="100864" stream="ExecuterSetup.msi" user="Main.StephaneLenclud" version="2"}%

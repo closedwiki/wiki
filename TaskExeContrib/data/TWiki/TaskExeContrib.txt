@@ -1,8 +1,4 @@
-%META:TOPICINFO{author="StephaneLenclud" date="1179097228" format="1.1" reprev="1.7" version="1.7"}%
-<!--
-   * Set ALLOWTOPICVIEW = Main.StephaneLenclud
--->
-
+%META:TOPICINFO{author="StephaneLenclud" date="1179190852" format="1.1" reprev="1.10" version="1.10"}%
 ---+!! Task executer application
 
 ---++!! Purpose & Scope 
@@ -105,7 +101,7 @@ Field name and shell command should be separated by a comma and a single space l
  Commit changes made by =FORMFIELD= Commands. It results in the fields values actually changing on the output topic.
 
 ---+++ =SHELLEXE=
- Execute a shell command redirecting standard and error output into files. Once the command has finished executing it outputs the return code and upload standard and error output files to the output topics. 
+ Execute a shell command redirecting standard and error output into files. Once the command has finished executing it outputs the return code and upload standard and error output files to the output topic. 
 
 Example:
 <verbatim>
@@ -159,14 +155,42 @@ Example:
 ---+++ =USERVAR=
 
 Defines a user variable. The parameter should contains the variable name followed by a comma, a single space and the variable's value.  
-A variable can be recall by using =$var=. See [[#Variable_substitutions][Variables Substitutions]].
+A variable can be recalled by using =$var=. See [[#Variable_substitutions][Variables Substitutions]].
 
 Example:
 <verbatim>
    * Cmd USERVAR = AgeOfTheCaptain, 39
 </verbatim>
 
+---+++ =URLEXISTS=
 
+Check whether or not a URL can be successfully downloaded and put the result in the given variable. A variable can be recalled by using =$var=. See [[#Variable_substitutions][Variables Substitutions]].
+
+Example:
+<verbatim>
+   * Cmd URLEXISTS = isGoogleThere, http://www.google.com
+   * Cmd OUTPUT = Google must be there: $var(isGoogleThere)
+   * Cmd URLEXISTS = notThere, http://www.msdlfjsljflkjdf.hgth
+   * Cmd OUTPUT = Surely that URL does not exists: $var(notThere)
+</verbatim>
+
+---+++ =IF=, =ELSE=, =ENDIF=
+
+Conditionally executes commands. Nested =IF= are not supported. =IF= supports four different condition formats:
+   * =left==right= 
+   * =left!=right=   
+   * =condition= 
+   * =!condition=   
+
+Example:
+<verbatim>
+   * Cmd URLEXISTS = isGoogleThere, http://www.google.com
+   * Cmd IF = $var(isGoogleThere)
+   * Cmd OUTPUT = Google is there!
+   * Cmd ELSE = else
+   * Cmd OUTPUT = Google is not there!
+   * Cmd ENDIF = endif    
+</verbatim>
 
 ---++ Variable substitutions
 
@@ -239,6 +263,16 @@ Examples :
    * Cmd OUTPUT = Command completed at: $currenttime(format)
 </verbatim>
 
+---+++ Other variables
+
+   * =$outputweb= : The name of the output Web.
+   * =$outputtopic= : The name of the definitive output topic. If auto numbering was used that variable resolves to the actual topic name.  
+
+Example :
+<verbatim>
+   * Cmd OUTPUT = This topic is $outputweb.$outputtopic
+</verbatim>
+
 ---++ Installation instructions
 
    * Install TaskExePlugin.
@@ -267,6 +301,7 @@ Once installed you should have access to TaskExeManager.
 |  Dependencies: | %$DEPENDENCIES% |
 |  Version: | %$VERSION% |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  15 May 2007 | Adding support for =URLEXISTS=, =IF=, =ELSE=, =ENDIF= |
 |  13 May 2007: | Initial version |
 |  Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
