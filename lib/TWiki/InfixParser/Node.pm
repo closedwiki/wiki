@@ -76,10 +76,16 @@ sub evaluate {
 sub stringify {
     my $this = shift;
 
-    return "'$this->{params}[0]'" unless ref( $this->{op} );
+    unless( ref( $this->{op} )) {
+        if( $this->{op} == 3 ) {
+            return "'$this->{params}[0]'";
+        } else {
+            return $this->{params}[0];
+        }
+    }
 
-    return "'$this->{op}->{name}'(".
-      join(',', map { $_->stringify() } @{$this->{params}}).')';
+    return $this->{op}->{name}.'{'.
+      join(',', map { $_->stringify() } @{$this->{params}}).'}';
 }
 
 1;

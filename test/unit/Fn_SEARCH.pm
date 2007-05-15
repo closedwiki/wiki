@@ -347,7 +347,7 @@ sub set_up_for_queries {
 %META:TOPICPARENT{name="WebHome"}%
 This is QueryTopic
 %META:FORM{name="TestForm"}%
-%META:FIELD{name="Field1" attributes="H" title="A Field" value="1"}%
+%META:FIELD{name="Field1" attributes="H" title="A Field" value="A Field"}%
 %META:FIELD{name="Field2" attributes="" title="Another Field" value="2"}%
 %META:FIELD{name="Firstname" attributes="" title="First Name" value="Emma"}%
 %META:FIELD{name="Lastname" attributes="" title="First Name" value="Peel"}%
@@ -362,11 +362,11 @@ HERE
 %META:TOPICINFO{author="TWikiUserMapping_guest" date="12" format="1.1" version="1.2"}%
 This is QueryTopicTwo
 %META:TOPICPARENT{name="QueryTopic"}%
-%META:FORM{name="TestForm"}%
-%META:FIELD{name="Field1" attributes="H" title="A Field" value="7"}%
-%META:FIELD{name="Field2" attributes="" title="Another Field" value="8"}%
-%META:FIELD{name="Firstname" attributes="" title="First Name" value="John"}%
-%META:FIELD{name="Lastname" attributes="" title="First Name" value="Peel"}%
+%META:FORM{name="TestyForm"}%
+%META:FIELD{name="FieldA" attributes="H" title="B Field" value="7"}%
+%META:FIELD{name="FieldB" attributes="" title="Banother Field" value="8"}%
+%META:FIELD{name="Firstname" attributes="" title="Pre Name" value="John"}%
+%META:FIELD{name="Lastname" attributes="" title="Post Name" value="Peel"}%
 %META:FILEATTACHMENT{name="porn.gif" comment="Cor" date="15062" size="15504"}%
 %META:FILEATTACHMENT{name="flib.xml" comment="Cor" date="1157965062" size="1"}%
 HERE
@@ -433,7 +433,37 @@ sub test_gropeQuery2 {
 
     $this->set_up_for_queries();
     my $result = $this->{twiki}->handleCommonTags(
-        '%SEARCH{"Firstname=\'Emma\' AND Lastname=\'Peel\'"'.$stdCrap,
+        '%SEARCH{"Lastname=\'Peel\'"'.$stdCrap,
+        $this->{test_web}, $this->{test_topic});
+    $this->assert_str_equals('QueryTopic QueryTopicTwo', $result);
+}
+
+sub test_formQuery {
+    my $this = shift;
+
+    $this->set_up_for_queries();
+    my $result = $this->{twiki}->handleCommonTags(
+        '%SEARCH{"form.name=\'TestyForm\'"'.$stdCrap,
+        $this->{test_web}, $this->{test_topic});
+    $this->assert_str_equals('QueryTopicTwo', $result);
+}
+
+sub test_formQuery2 {
+    my $this = shift;
+
+    $this->set_up_for_queries();
+    my $result = $this->{twiki}->handleCommonTags(
+        '%SEARCH{"TestForm"'.$stdCrap,
+        $this->{test_web}, $this->{test_topic});
+    $this->assert_str_equals('QueryTopic', $result);
+}
+
+sub test_formQuery3 {
+    my $this = shift;
+
+    $this->set_up_for_queries();
+    my $result = $this->{twiki}->handleCommonTags(
+        '%SEARCH{"TestForm[?name=\'Field1\'].value=\'A Field\'"'.$stdCrap,
         $this->{test_web}, $this->{test_topic});
     $this->assert_str_equals('QueryTopic', $result);
 }

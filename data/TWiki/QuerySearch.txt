@@ -40,7 +40,7 @@ All meta-data in a topic is referenced according to a to a simple plan.
       * =date=
       * =from=
       * =to=
-   * =form= (FORM) - the main form of the topic
+   * =form= (FORM) - the name of the main form of the topic
       * =name= (known as the _formname_)
    * _formname_ (the =name= field from the FORM)
       * _for each field in the form_
@@ -57,7 +57,9 @@ These fields are specified using a simple syntax:
    * =X[?<i>query</i>]= will get all the elements of the array =X= that match_query_ - for example, =attachments[?size>1024]=. _query_ can be arbitrarily complex. For example, =DocumentForm[?name!='Summary' AND value~'top secret'].value=.
    * =X:Y= - will get the value of the field specified by =Y= from the topic specified by the _value_ of =X=. =X= must evaluate to a topic name, and =Y= to a query to be applied to that topic. For example, =parent.name:form.name='ExampleForm'= will evaluate to true if (1) the topic has a parent, (2) the parent topic has the main form type =ExampleForm=.
 
-There is a shortcut for accessing form fields. The syntax =X= will evaluate to =(form.name)[?name=X].value=, if and only if =X= doesn't match another field name. For example, =PersonForm[?name='Lastname'].value= and =Lastname= will evaluate to the same value(s).
+There is a shortcut for accessing main form fields. The syntax =X= will evaluate to =<i>form.name</i>[?name=X].value=, if and only if =X= doesn't match another field name. For example, the following expressions will both evaluate to the same value(s)
+   * =PersonForm[?name='Lastname'].value=
+   * =Lastname= 
 
 ---++ Constants
 You use constants for the values that you compare with fields. Constants are either strings, or numbers. Strings are always delimited by single-quotes (you can escape a quote using backslash). Numbers can be any integer or floating point number. 

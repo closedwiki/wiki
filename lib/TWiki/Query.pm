@@ -24,8 +24,10 @@ use base 'TWiki::InfixParser::Node';
 # 1 for debug
 sub MONITOR_EVAL { 0 };
 
+use vars qw ( %metaDataTypes );
+
 # map of reserved names to their meta-data type
-my %metaDataTypes = (
+%metaDataTypes = (
     attachments => 'FILEATTACHMENT',
     field => 'FIELD',
     info => 'TOPICINFO',
@@ -49,9 +51,16 @@ sub _getField {
                 $result = $data->get( $field );
             }
         } else {
-            # Shortcut; not a predefined name; grope in the fields instead
-            $result = $data->get( 'FIELD', $field );
-            $result = $result->{value} if $result;
+            # Shortcut; is it the form name?
+            my $form = $data->get( 'FORM' );
+            if( $form && $field eq $form->{name}) {
+                my @e = $data->find( 'FIELD' );
+                return \@e;
+            } else {
+                # not a predefined name; grope in the fields instead
+                $result = $data->get( 'FIELD', $field );
+                $result = $result->{value} if $result;
+            }
         }
     } elsif( ref( $data ) eq 'ARRAY' ) {
         my @res;
@@ -70,13 +79,31 @@ sub _getField {
     return $result;
 }
 
+# <DEBUG SUPPORT>
 my $ind = 0;
+sub _blat {
+    my $a = shift;
+    return 'undef' unless defined($a);
+    if (ref($a) eq 'ARRAY') {
+        return '['.join(',', map { _blat($_) } @$a).']'
+    } elsif (ref($a) eq 'TWiki::Meta') {
+        return $a->stringify();
+    } elsif (ref($a) eq 'HASH') {
+        return '{'.join(',', map { "$_=>"._blat($a->{$_}) } keys %$a).'}'
+    } else {
+        return $a;
+    }
+}
+# </DEBUG SUPPORT>
 
 sub evaluate {
     my( $this, $clientData ) = @_;
     my $result;
 
-    print STDERR ('-' x $ind).$this->stringify()," {\n" if MONITOR_EVAL;
+    if (MONITOR_EVAL && $ind == 0 && ref($clientData) eq 'TWiki::Meta') {
+        print STDERR "$clientData->{_topic} ";
+    }
+    print STDERR ('-' x $ind).$this->stringify() if MONITOR_EVAL;
 
     if (!ref( $this->{op})) {
         if ($this->{op} == 1) {
@@ -86,13 +113,14 @@ sub evaluate {
             $result = $this->{params}[0];
         }
     } else {
+        print STDERR " {\n" if MONITOR_EVAL;
         $ind++ if MONITOR_EVAL;
         my $fn = $this->{op}->{exec};
         $result = &$fn( $clientData, @{$this->{params}} );
         $ind-- if MONITOR_EVAL;
+        print STDERR ('-' x $ind).'}' if MONITOR_EVAL;
     }
-    print STDERR ('-' x $ind).'} -> ',(defined($result)?$result:'undef'),"\n"
-      if MONITOR_EVAL;
+    print STDERR ' -> ',_blat($result),"\n" if MONITOR_EVAL;
 
     return $result;
 }
@@ -174,7 +202,18 @@ my @operators = (
         exec => sub {
             my( $domain, $a, $b ) = @_;
             my $lval = $a->evaluate( $domain );
-            return $b->evaluate( [ $lval, $domain->[1] ] );
+            if (ref($lval) eq 'ARRAY') {
+                my @res;
+                foreach my $el (@$lval) {
+                    if ($b->evaluate( [ $el, $domain->[1] ])) {
+                        push(@res, $el);
+                    }
+                }
+                return undef unless scalar( @res );
+                return \@res;
+            } else {
+                return $b->evaluate( [ $lval, $domain->[1] ] );
+            }
         },
     },
     {

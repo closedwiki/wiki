@@ -333,10 +333,10 @@ sub searchInWebMetaData {
     my $sDir = $TWiki::cfg{DataDir}.'/'.$this->{web}.'/';
     local $/;
     my $store = $this->{session}->{store};
-    my %matches;
 
     # SMELL: stunningly inefficient. Really need to do a better
     # job of cacheing metadata
+    my %matches;
     foreach my $topic ( @$topics ) {
         next unless open(FILE, "<$sDir/$topic.txt");
         my $text = <FILE>;
