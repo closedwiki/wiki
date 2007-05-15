@@ -40,7 +40,7 @@ sub new {
         # the first can get loaded from @INC.
         $modules{$module} = 1;
     }
-    foreach my $module (sort keys %modules) {
+    foreach my $module (sort { lc $a cmp lc $b } keys %modules) {
         $this->addChild(
             new TWiki::Configure::Value(
                 parent=>$this,
