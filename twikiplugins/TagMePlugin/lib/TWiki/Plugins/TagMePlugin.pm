@@ -63,10 +63,10 @@ sub initPlugin {
     }
 
     # Get plugin debug flag
-    $debug = TWiki::Func::getPreferencesFlag('DEBUG')
+    $debug = TWiki::Func::getPreferencesFlag('TAGMEPLUGIN_DEBUG')
       || TWiki::Func::getPluginPreferencesFlag('DEBUG');
 
-    $normalizeTagInput = TWiki::Func::getPreferencesFlag('NORMALIZE_TAG_INPUT')
+    $normalizeTagInput = TWiki::Func::getPreferencesFlag('TAGMEPLUGIN_NORMALIZE_TAG_INPUT')
       || TWiki::Func::getPluginPreferencesFlag('NORMALIZE_TAG_INPUT');
 
     _writeDebug("initPlugin( $web.$topic ) is OK");
@@ -479,25 +479,18 @@ sub _showAllTags {
               . "a topic of interest, and add a tag from the list, or put your "
               . "vote on an existing tag.";
         }
-        
-        # calculate the relative sizes
-        # we need to map size to tag count:
-        #
-        #    $minSize    --   $maxSize
-        #        |                |
-        # smallest count -- largest count
-        #
-        my @orderedKeys = sort { $tagCount{$a} <=> $tagCount{$b} } keys(%allTags);
-        my $smallestCount = $tagCount{$orderedKeys[0]};
-        my $largestCount = $tagCount{$orderedKeys[-1]} || $smallestCount;
-        my $sizeStep = ($maxSize - $minSize) / ($largestCount - $smallestCount);
-        
+        my $max = 1;
+
+        my %order = map { ( $_, $max++ ) }
+          sort { $tagCount{$a} <=> $tagCount{$b} }
+          keys(%tagCount);
         my $size   = 0;
         my $tmpSep = '_#_';
         $text = join(
             $separator,
             map {
-                $size = int( $minSize + $sizeStep * ($tagCount{$_} - $smallestCount) );
+                $size = int( $maxSize * ( $order{$_} + 1 ) / $max );
+                $size = $minSize if ( $size < $minSize );
                 $line = $format;
                 $line =~ s/(tag\=)\$tag/$1$tmpSep\$tag$tmpSep/go;
                 $line =~ s/$tmpSep\$tag$tmpSep/&_urlEncode($_)/geo;
