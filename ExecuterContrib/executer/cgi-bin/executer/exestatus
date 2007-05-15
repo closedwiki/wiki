@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-#Make sure you leave a blank line above as apache is a bit fussy with that
+#NOTE: Apache on linux does not like it when the shebang line ends with Windows style new line.
 #!c:/perl/bin/Perl.exe
 ##  exestatus - CGI gives the status of the executer 
 ##  That script is designed to be included as a javascript in HTML page.

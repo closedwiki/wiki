@@ -29,7 +29,14 @@ my %cmdFunctions=(
 			'UPLOAD' => \&DoUpload,
 			'TIMEFORMAT' => \&TimeFormat,
 			'VAR' => \&Var, #deprecated
-			'USERVAR' => \&Var			
+			'USERVAR' => \&Var,
+            'URLEXISTS' => \&DoUrlExists,
+            'IF' => \&DoIf,
+            'ELSE' => \&DoElse,
+            #'ELSEIF' => \&DoElseIf, #Implement some other time
+            'ENDIF' => \&DoEndIf
+			#'TOPICEXISTS' => \&TopicExists,
+			#'ATTACHMENTEXISTS' => \&AttachmentExists						
 		 	);
 		 
 require Slion::TWiki::Client;
@@ -59,6 +66,9 @@ sub new
 	$self->{TimeFormat}    		= undef; #Defines the time format currently in use
 	$self->{ShellExeCount}    	= undef; #Used for naming of the attached files
 	$self->{OutputTopicDetermined}= undef; # Pointer to a callback function
+    $self->{Depth}=0; #used for block depth management, in IF block notably    
+    $self->{Skip}=0;  #used for IF management. Tells whether or not the next commands should be skipped.
+
 	
 	bless $self, $aClass;
 	
@@ -216,8 +226,11 @@ sub DoTask()
 	#That counter is used to name the output files so that their names do not conflict.
 	$self->{ShellExeCount}=0;
 	$self->{InterruptReason} = undef; 
-	#TODO: shall we also reset some other data member in case of reentrance
+    #TODO: shall we also reset some other data member in case of reentrance
 	SetTimeHash($self->{StartTime});
+    #reset IF management variables
+    $self->{Depth}=0;    
+    $self->{Skip}=0;
 		
 	#Save input web/topic locally
 	my $inputWeb=$self->Web;
@@ -234,7 +247,7 @@ sub DoTask()
 		if ($line=~/^\s+\*\s+$keyVar\s+([\w]+)\s+=\s+(.*?)\s*$/i)
 			{
 			my $var=$1;
-			my $value=$2;	
+			my $value=$2;
 			$self->DoCmd($var,$value);
 			if (defined $self->{InterruptReason})
 				{
@@ -247,6 +260,12 @@ sub DoTask()
 			#print "$var => $value\n";
 			}	
 		}
+    
+    #End of task: check if the task was balanced
+    if ($self->{Depth}!=0)
+        {
+        $self->OutputError("WARNING: Unbalanced task! Check your IF commands.");
+        }
 				
 	return 1;				
 	}
@@ -262,12 +281,14 @@ sub DoCmd()
 	{
 	my $self=shift;	
 	my ($cmd,$cmdParams)=@_;
+    #Check whether that command should be skipped
+    return 1 if ($self->SkipCmd($cmd));
 	#Reset the current time
 	SetTimeHash($self->{CurrentTime});
 	
 	$self->VariableSubstitutions(\$cmdParams);
 	
-	$self->NewParagraph();
+	$self->NewParagraph(); #TODO: consider getting ride of that, it causes a lot of extra blank lines
 	
 	if (defined $cmdFunctions{$cmd})
 		{
@@ -590,11 +611,9 @@ sub Var()
 	
 	if ($cmdParam =~ /(.+?),\s(.+)/)
 		{
-		my $fieldName=$1;	
-		my $fieldValue=$2;	
-		#my %formFields=$self->{FormFields};	
-		#$formFields{$fieldName}=$fieldValue;
-		$self->{Var}->{$fieldName}=$fieldValue;			
+		my $varName=$1;	
+		my $varValue=$2;	
+		$self->{Var}->{$varName}=$varValue;			
 		return 1;
 		}
 	else		
@@ -604,6 +623,30 @@ sub Var()
 		}		
 	}	
 		
+=pod 
+Parse and execute the URLEXISTS command and set the given variable accordingly.
+@param The value of the URLEXISTS command. Should be of the for 'myUrlExists, http://www.google.com'.
+@return 1 if success, 0 if failure
+=cut 
+
+sub DoUrlExists()
+    {
+	my $self=shift;	
+	my $cmdParam=shift;			
+
+	if ($cmdParam =~ /(.+?),\s(.+)/)
+		{
+		my $varName=$1;	
+		my $url=$2;	
+		$self->{Var}->{$varName}=$self->UrlExists($url);			
+		return 1;
+		}
+	else		
+		{
+		$self->OutputError("WARNING: Can't parse URLEXISTS: =$cmdParam= !");
+		return 0;
+		}		
+    }
 	
 =pod
 Parses the FORMFIELDEXE command and set the form field value in the form fields hash.
@@ -780,6 +823,130 @@ sub DoUpload()
 	}
 
 =pod
+IF management. Eight now we don't support nested IFs.
+=cut
+
+sub DoIf()
+    {
+	my $self=shift;		
+	my $cmdParam=shift;	
+    
+    #Increment the depth
+    $self->{Depth}++; 
+
+    if ($self->{Depth}>1)
+        {
+        #Interrupt the task, we don't support nested IFs yet
+        $self->InterruptReason("ERROR: nested IFs not supported!");
+        return 0;
+        }       
+
+	if ($cmdParam =~ /\s*(.+?)\s*==\s*(.+?)\s*/)
+		{
+		my $left=$1;	
+		my $right=$2;	
+        $self->{Skip} = ($left ne $right);
+		return 1;
+		}
+    elsif ($cmdParam =~ /\s*(.+?)\s*!=\s*(.+?)\s*/)
+        {
+		my $left=$1;	
+		my $right=$2;
+        $self->{Skip} = ($left eq $right);
+		return 1;
+        }
+    elsif ($cmdParam =~ /\s*!(.+?)\s*/)
+        {
+        $self->{Skip}=$1;
+        return 1;
+        }	
+    else		
+		{
+        #Can't parse the if condition just assume its false;
+        $self->{Skip}=!$cmdParam;
+		#$self->OutputError("WARNING: Can't parse IF: =$cmdParam= ! Assuming condition is false.");
+		return 1;
+		}		
+    }
+
+sub DoElse()
+    {
+	my $self=shift;		
+	my $cmdParam=shift;	
+
+    if ($self->{Depth}!=1)
+        {
+        #Unbalanced task
+		$self->InterruptReason("ERROR: orphaned ELSE!");
+        return 0;
+        }       
+
+    #Reverse the skip flag
+    $self->{Skip}= !$self->{Skip};    
+    return 1;
+    }
+
+=pod
+
+#ELSEIF pattern is a bit complicated for tonight
+
+sub DoElseIf()
+    {
+	my $self=shift;
+    #If we skipped the block before then evaluate the ELSEIF otherwise just 
+    if ($self->{Skip})
+        {
+    	return $self->DoIf(@_);
+        }
+    else
+        {
+        return 1;
+        }
+    }
+=cut
+
+sub DoEndIf()
+    {
+	my $self=shift;		
+	my $cmdParam=shift;	
+    #Our if block is closed, make sure we are not skipping commands from now on 
+    #Decrement the depth
+    $self->{Depth}--;    
+    $self->{Skip}=0;
+
+    if ($self->{Depth}<0)
+        {
+        #Unbalanced task
+		$self->InterruptReason("ERROR: orphaned ENDIF!");
+        return 0;
+        }       
+
+    return 1;
+    }
+
+=pod
+Returns whether or not a command should be skipped.
+@param The command to evaluate.
+@return true if the command should be skipped false otherwise.
+=cut
+
+sub SkipCmd()
+    {
+  	my $self=shift;		
+	my $cmd=shift;	
+    
+    if ($self->{Skip} && !($cmd=~/IF|ELSE|ENDIF/) )
+        {
+        return 1;
+        }
+    else
+        {
+        return 0;
+        }    
+    }
+
+
+=pod
 Substitute $variable name thing in a given string
 
 =cut	
@@ -796,7 +963,8 @@ sub VariableSubstitutions
 	# $currenttime(format)
 	# $var(myvar)
 	# $param(myparam)
-	# 
+	# $outputweb
+	# $outputtopic
 
 	#Do the form field 
 	my $formFieldRef=$self->{FormFields};	
@@ -847,7 +1015,14 @@ sub VariableSubstitutions
    		my $formattedCurrentTime=$self->{TimeFormat};    	
    		FormatTime($currentTimeRef,\$formattedCurrentTime); 
    		$$textRef =~ s/\$currenttime\(format\)/$formattedCurrentTime/g;
-		}		       	       	     
+		}
+		
+	#Do $outputweb 	
+	$$textRef =~ s/\$outputweb/$self->{OutputWeb}/g;
+	#Do $outputtopic
+	$$textRef =~ s/\$outputtopic/$self->{OutputTopic}/g;
+	
+				       	       	     
     }	
 		
 
