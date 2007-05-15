@@ -437,8 +437,23 @@ sub Exists
 		return 0;
 		}
 	}
-	
-	
+
+=pod
+Download the given URL and returns whether or not it was a success.
+
+@param The URL to test for.
+@return true if success false otherwise
+=cut		
+
+sub UrlExists
+	{
+	my $self=shift;
+	my $url=shift;
+
+	$self->CheckUserAgent();	
+	my $response = $self->{UserAgent}->get($url);		
+	return $response->is_success;
+	}
 	
 =pod
 Append some text to a topic
