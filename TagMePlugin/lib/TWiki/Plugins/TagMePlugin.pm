@@ -63,12 +63,9 @@ sub initPlugin {
     }
 
     # Get plugin debug flag
-    $debug = TWiki::Func::getPreferencesFlag('TAGMEPLUGIN_DEBUG')
-      || TWiki::Func::getPluginPreferencesFlag('DEBUG');
-
-    $normalizeTagInput = TWiki::Func::getPreferencesFlag('TAGMEPLUGIN_NORMALIZE_TAG_INPUT')
-      || TWiki::Func::getPluginPreferencesFlag('NORMALIZE_TAG_INPUT');
-
+    $debug = TWiki::Func::getPreferencesFlag('TAGMEPLUGIN_DEBUG');
+    $normalizeTagInput = TWiki::Func::getPreferencesFlag('TAGMEPLUGIN_NORMALIZE_TAG_INPUT');
+    
     _writeDebug("initPlugin( $web.$topic ) is OK");
     $initialized = 0;
     $doneHeader  = 0;
