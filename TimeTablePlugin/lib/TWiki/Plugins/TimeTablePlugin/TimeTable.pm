@@ -905,7 +905,7 @@ sub _normalize {
 	} else {
 		$time = int(( $time + ($starttime % $interval ) ) / $interval)*$interval if !$up;
 		$time = ceil(( $time + ($starttime % $interval) ) / $interval)*$interval if $up;
-		$time=$starttime if $time<$starttime ;
+		##$time=$starttime if $time<$starttime ; ### XXX BUG: endtime < starttime
 	}
 
 	return $time;
