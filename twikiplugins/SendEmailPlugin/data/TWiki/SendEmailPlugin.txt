@@ -107,3 +107,5 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 
 __Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
 
+
+%META:FILEATTACHMENT{name="sendemailplugin.css" attr="" comment="CSS styles" date="1179167993" path="sendemailplugin.css" size="348" user="Main.TWikiContributor" version=""}%
