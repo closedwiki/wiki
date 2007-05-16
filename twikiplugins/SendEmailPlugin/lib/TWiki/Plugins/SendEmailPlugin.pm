@@ -32,7 +32,7 @@ use vars qw( $successUserMessage $errorUserMessage $errorMessage $headerDone);
 # status of the plugin. It is used by the build automation tools, so
 # you should leave it alone.
 $VERSION = '$Rev: 11069$';
-$RELEASE = '1.1.2';
+$RELEASE = '1.1.3';
 
 # Name of this Plugin, only used in this module
 $pluginName = 'SendEmailPlugin';
@@ -70,18 +70,15 @@ sub initPlugin {
         return 0;
     }
 
-    $debug = TWiki::Func::getPluginPreferencesFlag("DEBUG")
-      || TWiki::Func::getPreferencesFlag("SENDEMAILPLUGIN_DEBUG");
+    $debug = TWiki::Func::getPreferencesFlag("SENDEMAILPLUGIN_DEBUG");
 
     $successUserMessage =
-      TWiki::Func::getPluginPreferencesValue("EMAIL_SENT_SUCCESS_MESSAGE")
-      || TWiki::Func::getPluginPreferencesValue(
+      TWiki::Func::getPreferencesValue(
         "SENDEMAILPLUGIN_EMAIL_SENT_SUCCESS_MESSAGE")
       || '';
 
     $errorUserMessage =
-      TWiki::Func::getPluginPreferencesValue("EMAIL_SENT_ERROR_MESSAGE")
-      || TWiki::Func::getPluginPreferencesValue(
+      TWiki::Func::getPreferencesValue(
         "SENDEMAILPLUGIN_EMAIL_SENT_ERROR_MESSAGE")
       || '';
 
@@ -106,10 +103,16 @@ sub sendEmail {
     my $subject = '';
     my $body    = '';
 
+    TWiki::Func::writeDebug("sendEmail start") if $debug;
+
     my $query = TWiki::Func::getCgiQuery();
     return _finishSendEmail( $session, $ERROR_STATUS{'error'} ) if !$query;
 
+    TWiki::Func::writeDebug("sendEmail query=$query") if $debug;
+
     $to = $query->param('to') || $query->param('To');
+    TWiki::Func::writeDebug("sendEmail -- to=$to") if $to && $debug;
+
     my $emptyToEmailMessage = $ERROR_CONCAT . $ERROR_EMPTY_TO_EMAIL;
     return _finishSendEmail( $session, $ERROR_STATUS{'error'},
         $emptyToEmailMessage )
@@ -128,6 +131,7 @@ sub sendEmail {
       || $query->param('From')
       || $TWiki::cfg{WebMasterEmail}
       || TWiki::Func::getPreferencesValue('WIKIWEBMASTER');
+    TWiki::Func::writeDebug("sendEmail -- from=$from") if $from && $debug;
 
     my $emptyFromEmailMessage = $ERROR_CONCAT . $ERROR_EMPTY_FROM_EMAIL;
     return _finishSendEmail( $session, $ERROR_STATUS{'error'},
@@ -143,10 +147,14 @@ sub sendEmail {
 
     my $ccParam = $query->param('cc') || $query->param('CC') || '';
     $cc = $ccParam if $ccParam;
+    TWiki::Func::writeDebug("sendEmail -- cc=$cc") if $cc && $debug;
     my $subjectParam = $query->param('subject') || $query->param('Subject');
     $subject = $subjectParam if $subjectParam;
+    TWiki::Func::writeDebug("sendEmail -- subject=$subject")
+      if $subject && $debug;
     my $bodyParam = $query->param('body') || $query->param('Body') || '';
     $body = $bodyParam if $bodyParam;
+    TWiki::Func::writeDebug("sendEmail -- body=$body") if $body && $debug;
 
     my $mail = <<'HERE';
 From: %FROM%
@@ -189,7 +197,7 @@ sub _handleSendEmailTag {
     my $errorStatus = $query->param($ERROR_STATUS_TAG);
 
     TWiki::Func::writeDebug("_handleSendEmailTag; errorStatus=$errorStatus")
-      if $debug;
+      if $errorStatus && $debug;
 
     return '' if !defined $errorStatus;
 
@@ -220,9 +228,10 @@ sub _finishSendEmail {
 
     my $query = TWiki::Func::getCgiQuery();
 
-    TWiki::Func::writeDebug(
-        "_finishSendEmail errorStatus=$errorStatus; errorMessage=$errorMessage")
-      if $debug;
+    TWiki::Func::writeDebug("_finishSendEmail errorStatus=$errorStatus;")
+      if $errorStatus && $debug;
+    TWiki::Func::writeDebug("_finishSendEmail errorMessage=$errorMessage;")
+      if $errorMessage && $debug;
 
     $query->param( -name => $ERROR_STATUS_TAG, -value => $errorStatus )
       if $query;
