@@ -27,10 +27,10 @@ BEGIN {
     require 'setlib.cfg';
 }
 
+use TWiki;
 use TWiki::UI;
 use TWiki::Plugins::SendEmailPlugin;
 
-use TWiki;
-$TWiki::Plugins::SESSION = new TWiki();
-
+my $query = new CGI;
+$TWiki::Plugins::SESSION = new TWiki(undef, $query);
 TWiki::UI::run( \&TWiki::Plugins::SendEmailPlugin::sendEmail );
