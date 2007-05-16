@@ -1,5 +1,9 @@
-%META:TOPICINFO{author="StephaneLenclud" date="1179309990" format="1.1" reprev="1.12" version="1.12"}%
+%META:TOPICINFO{author="StephaneLenclud" date="1179353110" format="1.1" reprev="1.13" version="1.13"}%
 ---+!! Task executer application
+
+<!--
+   * Set SHORTDESCRIPTION = TWiki application for managing remote task execution
+-->
 
 ---++!! Purpose & Scope 
 
