@@ -237,7 +237,7 @@ sub _initRegexs {
         $bulletdate_rx = "$bullet_rx$date_rx\\s*-";
         $bulletdaterange_rx = "$bulletdate_rx\\s*$date_rx\\s*-";
 
-	$hour_rx = "([01]?[0-9]|2[0-4])";
+	$hour_rx = "((2[0-4])|([01]?[0-9]))";
 	$minute_rx = "[0-5]?[0-9]";
 	$am_rx = "[aA]\\.?[mM]\\.?";
 	$pm_rx = "[pP]\\.?[mM]\\.?";
