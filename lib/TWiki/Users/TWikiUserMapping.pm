@@ -199,7 +199,7 @@ sub addUser {
 
     # SMELL: really ought to be smarter about this e.g. make a wikiword
     $wikiname ||= $login;
-    
+
     if( $this->{passwords}->fetchPass( $login )) {
         # They exist; their password must match
         unless( $this->{passwords}->checkPassword( $login, $password )) {
@@ -218,7 +218,7 @@ sub addUser {
             throw Error::Simple(
                 'Failed to add user: '.$this->{passwords}->error());
         }
-    }    
+    }
 
     my $store = $this->{session}->{store};
     my( $meta, $text ) = $store->readTopic(
@@ -273,15 +273,14 @@ sub addUser {
                        $result, $meta );
 
     $this->setEmails( $user, $emails );
-                       
-                       
+
     return $user;
 }
 
 # Map a canonical user name to a wikiname
 sub getWikiName {
     my ($this, $user) = @_;
-    
+
 #    $user =~ s/^TWikiUserMapping_//;
     if( $TWiki::cfg{Register}{AllowLoginName} ) {
         _loadMapping( $this );
@@ -310,16 +309,18 @@ sub lookupLoginName {
 
 =pod
 
----++ ObjectMethod userExists($login) -> $user
+---++ ObjectMethod userExists($cUID) -> $boolean
 
-Determine if the user already exists or not. Return a canonical user
-identifier if the user is known, or undef otherwise.
+Determine if the user already exists or not. Whether a user exists
+or not is determined by the password manager.
 
 =cut
 
 sub userExists {
-    my( $this, $loginName ) = @_;
-	$this->ASSERT_IS_USER_LOGIN_ID($loginName) if DEBUG;
+    my( $this, $cUID ) = @_;
+	$this->ASSERT_IS_CANONICAL_USER_ID($cUID) if DEBUG;
+
+    my $loginName = $this->canonical2login( $cUID );
 
     if( $loginName eq $TWiki::cfg{DefaultUserLogin} ) {
         return $loginName;
@@ -711,8 +712,11 @@ sub findUserByWikiName {
         }
     } else {
         # The wikiname is also the login name, so we can just convert
-        # it to a canonical user id
-        push( @users, login2canonical( $this, $wn ));
+        # it directly to a cUID
+        my $cUID = login2canonical( $this, $wn );
+        if( $this->userExists( $cUID )) {
+            push( @users, login2canonical( $this, $wn ));
+        }
     }
     return \@users;
 }

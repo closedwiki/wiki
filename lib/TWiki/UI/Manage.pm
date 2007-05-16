@@ -90,12 +90,13 @@ sub _removeUser {
 
     # check if user entry exists
     my $users = $session->{users};
-    if( $users->userExists( $user )) {
-        throw TWiki::OopsException( 'attention',
-                                    web => $webName,
-                                    topic => $topic,
-                                    def => 'notwikiuser',
-                                    params => [ $user ] );
+    if( !$users->userExists( $user )) {
+        throw TWiki::OopsException(
+            'attention',
+            web => $webName,
+            topic => $topic,
+            def => 'notwikiuser',
+            params => [ $session->{users}->getWikiName( $user ) ] );
     }
 
     #check to see it the user we are trying to remove is a member of a group.
@@ -108,11 +109,12 @@ sub _removeUser {
         while ($git->hasNext()) {
             $list .= ' '.$git->next();
         }
-        throw TWiki::OopsException( 'attention',
-                                    web => $webName,
-                                    topic => $topic,
-                                    def => 'in_a_group',
-                                    params => [ $user, $list ] );
+        throw TWiki::OopsException(
+            'attention',
+            web => $webName,
+            topic => $topic,
+            def => 'in_a_group',
+            params => [ $session->{users}->getWikiName( $user ), $list ] );
     }
 
     unless( $users->checkPassword($user, $password)) {
@@ -124,11 +126,12 @@ sub _removeUser {
 
     $users->removeUser( $user );
 
-    throw TWiki::OopsException( 'attention',
-                                def => 'remove_user_done',
-                                web => $webName,
-                                topic => $topic,
-                                params => [ $users->webDotWikiName($user) ] );
+    throw TWiki::OopsException(
+        'attention',
+        def => 'remove_user_done',
+        web => $webName,
+        topic => $topic,
+        params => [ $users->getWikiName( $user ) ] );
 }
 
 sub _isValidHTMLColor {

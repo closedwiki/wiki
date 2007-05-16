@@ -57,7 +57,6 @@ sub set_up {
     $TWiki::cfg{MinPasswordLength} = 0;
     $TWiki::cfg{UserMappingManager} = 'TWiki::Users::TWikiUserMapping';
     $TWiki::cfg{Register}{EnableNewUserRegistration} = 1;
-    
 
     $this->{new_user_login} = 'sqwauk';
     $this->{new_user_fname} = 'Walter';
@@ -684,7 +683,7 @@ sub test_shortPassword {
         $this->assert_str_equals("attention", $e->{template}, $e->stringify());
         $this->assert_str_equals("bad_password", $e->{def}, $e->stringify());
         $this->assert_equals(0, scalar(@TWikiFnTestCase::mails));
-	# don't check the TWikiFnTestCase::mails in this test case - this is done elsewhere
+        # don't check the TWikiFnTestCase::mails in this test case - this is done elsewhere
         @TWikiFnTestCase::mails = ();
     } catch TWiki::AccessControlException with {
         my $e = shift;
@@ -696,6 +695,99 @@ sub test_shortPassword {
         $this->assert(0, "expected an oops redirect");
     };
 }
+
+
+# Purpose:  Test behaviour of duplicate activation (Item3105)
+# Verifies: Most of the things which are verified during normal
+#           registration with Verification, plus Oops for
+#           duplicate verification
+sub test_duplicateActivation {
+    my $this = shift;
+
+    # Start similar to registration with verification
+    $TWiki::cfg{Register}{NeedVerification}  =  1;
+    my $query = CGI->new({'TopicName'     => ['TWikiRegistration'],
+                          'Twk1Email'     => [$this->{new_user_email}],
+                          'Twk1WikiName'  => [$this->{new_user_wikiname}],
+                          'Twk1Name'      => [$this->{new_user_fullname}],
+                          'Twk1LoginName' => [$this->{new_user_login}],
+                          'Twk1FirstName' => [$this->{new_user_fname}],
+                          'Twk1LastName'  => [$this->{new_user_sname}],
+                          'action'        => ['register'],
+                      });
+    $query->path_info( "/$this->{users_web}/TWikiRegistration" );
+    $this->{twiki} = TWiki->new($TWiki::cfg{DefaultUserName}, $query);
+    $this->{twiki}->{net}->setMailHandler(\&TWikiFnTestCase::sentMail);
+    try {
+        TWiki::UI::Register::register_cgi($this->{twiki});
+    } catch TWiki::OopsException with {
+        my $e = shift;
+        $this->assert_str_equals("attention", $e->{template},$e->stringify());
+        $this->assert_str_equals("confirm", $e->{def}, $e->stringify());
+        my $encodedTestUserEmail =
+          TWiki::entityEncode($this->{new_user_email});
+        $this->assert_matches(qr/$encodedTestUserEmail/, $e->stringify());
+    } catch TWiki::AccessControlException with {
+        my $e = shift;
+        $this->assert(0, $e->stringify);
+    } catch Error::Simple with {
+        $this->assert(0, shift->stringify());
+    } otherwise {
+        $this->assert(0, "expected an oops redirect");
+    };
+    $this->{twiki}->finish();
+
+    # For verification process everything including finish(), so don't just
+    # call verifyEmails
+    my $code = shift || "$this->{new_user_wikiname}.foo";
+    $query = CGI->new ({'code'   => [$code],
+                        'action' => ['verify'],
+                    });
+    $query->path_info( "/$this->{users_web}/TWikiRegistration" );
+    $this->{twiki} = TWiki->new($TWiki::cfg{DefaultUserName},$query);
+    $this->{twiki}->{net}->setMailHandler(\&TWikiFnTestCase::sentMail);
+    try {
+        TWiki::UI::Register::register_cgi($this->{twiki});
+    } catch TWiki::OopsException with {
+        my $e = shift;
+        $this->assert_str_equals("attention", $e->{template}, $e->stringify());
+        $this->assert_str_equals("thanks", $e->{def}, $e->stringify());
+    } catch TWiki::AccessControlException with {
+        my $e = shift;
+        $this->assert(0, $e->stringify);
+    } catch Error::Simple with {
+        $this->assert(0, shift->stringify());
+    } otherwise {
+        $this->assert(0, "expected an oops redirect");
+    };
+    $this->{twiki}->finish();
+
+    # and now for something completely different: Do it all over again
+    @TWikiFnTestCase::mails = ();
+    $query = CGI->new ({'code'   => [$code],
+                        'action' => ['verify'],
+                    });
+    $query->path_info( "/$this->{users_web}/TWikiRegistration" );
+    $this->{twiki} = TWiki->new($TWiki::cfg{DefaultUserName},$query);
+    $this->{twiki}->{net}->setMailHandler(\&sentMail);
+    try {
+        TWiki::UI::Register::register_cgi($this->{twiki});
+    } catch TWiki::OopsException with {
+        my $e = shift;
+        $this->assert_str_equals("attention", $e->{template}, $e->stringify());
+        $this->assert_str_equals("duplicate_activation", $e->{def}, $e->stringify());
+        $this->assert_equals(0, scalar(@TWikiFnTestCase::mails));
+    } catch TWiki::AccessControlException with {
+        my $e = shift;
+        $this->assert(0, $e->stringify);
+    } catch Error::Simple with {
+        $this->assert(0, shift->stringify());
+    } otherwise {
+        $this->assert(0, "expected an oops redirect");
+    };
+    @TWikiFnTestCase::mails = ();
+}
+
 
 ################################################################################
 ################################ RESET PASSWORD TESTS ##########################
@@ -896,8 +988,10 @@ sub setupUnregistered {
 }
 
 =pod
+
 Create an incomplete registration, and try to finish it off.
 Once complete, try again - the second attempt at completion should fail.
+
 =cut
 
 sub test_UnregisteredUser {
@@ -908,7 +1002,7 @@ sub test_UnregisteredUser {
     my $result = TWiki::UI::Register::_getRegDetailsByCode($code, $TWiki::cfg{RegistrationApprovals});
     $this->assert_equals("homer", $result->{doh} );
 
-    my $result2 = TWiki::UI::Register::_reloadUserContext($code, $TWiki::cfg{RegistrationApprovals});
+    my $result2 = TWiki::UI::Register::_reloadUserContext($session, $code, $TWiki::cfg{RegistrationApprovals});
     $this->assert_deep_equals($result2, $regSave);
 
     try {
@@ -1077,8 +1171,11 @@ EOM
 
 
 =pod
+
   call this if you want to make spaces and \ns visible
+
 =cut
+
 sub visible {
   return $_[0];
  my ($a) = @_;

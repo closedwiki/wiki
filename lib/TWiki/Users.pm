@@ -25,7 +25,9 @@ This package provides services for the lookup and manipulation of login and
 wiki names of users, and their authentication.
 
 It is a Facade that presents a common interface to the User Mapping
-and Password modules.
+and Password modules. The rest of the core should *only* use the methods
+of this package, and should *never* call the mapping or password managers
+directly.
 
 TWiki uses the concept of a _login name_ which is used to authenticate a
 user. A login name maps to a _wiki name_ that is used to identify the user
@@ -44,7 +46,9 @@ just the login name, but it doesn't need to be. It just has to be a unique
 7-bit alphanumeric and underscore string that can be mapped to/from login
 and wiki names by the user mapper.
 
-The canonical user id should *never* be seen by a user.
+The canonical user id should *never* be seen by a user. On the other hand,
+core code should never use anything *but* a canonical user id to refer
+to a user.
 
 *Terminology*
    * A *login name* is the name used to log in to TWiki. Each login name is
@@ -63,7 +67,8 @@ The canonical user id should *never* be seen by a user.
 	 
 *NOTE:* 
    * wherever the code references $user, its a canonical_id
-   * wherever the code references $group, its a group_name (TODO: extract a canonical_group_id and mapping)
+   * wherever the code references $group, its a group_name
+     (TODO: extract a canonical_group_id and mapping)
 
 =cut
 
@@ -121,7 +126,6 @@ sub new {
     $this->{mapping_id} = $1.'_';
     
     $session->{users} = $this;
-  
 
     return $this;
 }
@@ -195,7 +199,7 @@ sub randomPassword {
 
 =pod
 
----++ ObjectMethod addUser($login, $wikiname, $password, $emails) -> ($user, $password)
+---++ ObjectMethod addUser($login, $wikiname, $password, $emails) -> $user
 
    * =$login= - user login name. If =undef=, =$wikiname= will be used as the login name.
    * =$wikiname= - user wikiname. If =undef=, the user mapper will be asked
@@ -212,8 +216,8 @@ existing user, and no password is given, a random password is generated.
 
 $login can be undef; $wikiname must always have a value.
 
-The return value is an array containing the canonical user id that is used
-by TWiki to identify the user, and the actual (unencrypted) password.
+The return value is the canonical user id that is used
+by TWiki to identify the user.
 
 =cut
 
@@ -226,11 +230,11 @@ sub addUser {
 
     # create a new user and get the canonical user ID from the user mapping
     # manager.
-    my $user = $this->{mapping}->addUser( $login, $wikiname, $password, $emails);
+    my $user = $this->{mapping}->addUser(
+        $login, $wikiname, $password, $emails);
 	$this->ASSERT_IS_CANONICAL_USER_ID($user) if DEBUG;
 
-#TODO: why are we passing the password back?
-    return ( $user, $password );
+    return $user;
 
 }
 
@@ -390,9 +394,7 @@ sub isInList {
 
 ---++ ObjectMethod getLoginName($user) -> $string
 
-Get the login name of a user. By convention
-users are identified in the core code by their login name, and
-never by their wiki name, so this is a nop.
+Get the login name of a user.
 
 =cut
 
@@ -446,18 +448,18 @@ sub webDotWikiName {
 
 =pod
 
----++ ObjectMethod userExists($login) -> $user
+---++ ObjectMethod userExists($cUID) -> $boolean
 
-Determine if the user already exists or not. Return a canonical user
-identifier if the user is known, or undef otherwise.
+Determine if the user already exists or not. A user exists if they are
+known to to the user mapper.
 
 =cut
 
 sub userExists {
-    my( $this, $loginName ) = @_;
-	$this->ASSERT_IS_USER_LOGIN_ID($loginName) if DEBUG;
+    my( $this, $cUID ) = @_;
+	$this->ASSERT_IS_CANONICAL_USER_ID($cUID) if DEBUG;
 
-    return $this->{mapping}->userExists( $loginName );
+    return $this->{mapping}->userExists( $cUID );
 }
 
 =pod

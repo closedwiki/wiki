@@ -274,7 +274,7 @@ sub _registerSingleBulkUser {
 
     try {
         # Add the user to the user management system. May throw an exception
-        my ( $user, $pass ) = $users->addUser(
+        my $user = $users->addUser(
             $row->{LoginName}, $row->{WikiName},
             $row->{Password}, $row->{Email} );
         $log .= "$b1 $row->{WikiName} has been added to the password and user mapping managers\n";
@@ -483,15 +483,16 @@ sub resetPassword {
 
 # return status
 sub _resetUsersPassword {
-    my( $session, $user, $introduction, $pMess ) = @_;
+    my( $session, $login, $introduction, $pMess ) = @_;
 
     my $users = $session->{users};
 
-    unless( $user ) {
+    unless( $login ) {
         $$pMess .= $session->inlineAlert( 'alerts', 'bad_user', '' );
         return 0;
     }
 
+    my $user = $users->getCanonicalUserID( $login );
     my $message = '';
     unless( $users->userExists( $user )) {
         # Not an error.
@@ -697,7 +698,7 @@ sub verifyEmailAddress {
     unless( $code ) {
         throw Error::Simple( 'verifyEmailAddress: no verification code!');
     }
-    my $data = _reloadUserContext( $code, $tempUserDir );
+    my $data = _reloadUserContext( $session, $code, $tempUserDir );
 
     if (! exists $data->{Email}) {
         throw Error::Simple( 'verifyEmailAddress: no email address!');
@@ -727,7 +728,7 @@ sub finish {
 
 	my $data;
 	if ($TWiki::cfg{Register}{NeedVerification}) {
-		$data = _reloadUserContext( $code, $tempUserDir );
+		$data = _reloadUserContext( $session, $code, $tempUserDir );
 		_deleteUserContext( $code, $tempUserDir );
 	} else {
 	    $data = _getDataFromQuery( $query, $query->param() );
@@ -995,7 +996,8 @@ sub _validateRegistration {
 
     # Check if the login name is already registered
     my $users = $session->{users};
-    if( $users->userExists( $data->{LoginName}) ) {
+    my $user = $users->getCanonicalUserID( $data->{LoginName} );
+    if( $users->userExists( $user )) {
         throw TWiki::OopsException( 'attention',
                                     web => $data->{webName},
                                     topic => $session->{topicName},
@@ -1141,20 +1143,35 @@ sub _getRegDetailsByCode {
 # Dies if loads and does not match.
 # Returns the users data hash if succeeded.
 # Returns () if not found.
+# Assumptions: In error handling we assume that the verification code
+#              starts with the wikiname under consideration, and that the
+#              random code does not contain a '.'.
 sub _reloadUserContext {
-    my( $code, $tmpDir ) = @_;
+    my( $session, $code, $tmpDir ) = @_;
 
     ASSERT($code) if DEBUG;
 
     my $verificationFilename = _verificationCodeFilename( $code, $tmpDir );
-    unless (-f $verificationFilename){
-        throw TWiki::OopsException( 'attention',
-                                    def => 'bad_ver_code',
-                                    params => [ $code, '.' ] );
+    unless( -f $verificationFilename ){
+        my( $wikiName ) = $code =~ /(.*)\./;
+        my $users = $session->{users}->findUserByWikiName( $wikiName );
+        if( scalar( @{$users} ) &&
+              $session->{users}->userExists( $users->[0] )) {
+            throw TWiki::OopsException('attention',
+                                       def => 'duplicate_activation',
+                                       params => [ $wikiName ],
+                                      );
+        }
+        else {
+            throw TWiki::OopsException('attention',
+                                       def => 'bad_ver_code',
+                                       params => [ $code, '.' ],
+                                      );
+        }
     }
 
-    my $data = _getRegDetailsByCode($code, $tmpDir);
-    my $error = _validateUserContext($code, $tmpDir);
+    my $data = _getRegDetailsByCode( $code, $tmpDir );
+    my $error = _validateUserContext( $code, $tmpDir );
 
     if( $error ) {
         throw TWiki::OopsException( 'attention',

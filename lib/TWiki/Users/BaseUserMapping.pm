@@ -178,6 +178,7 @@ sub getLoginName {
     return canonical2login( $this, $user );
 }
 
+# PROTECTED
 # Map a login name to the corresponding canonical user name. This is used for
 # lookups, and should be as fast as possible. Returns undef if no such user
 # exists. Called by TWiki::Users
@@ -189,18 +190,17 @@ sub lookupLoginName {
 
 =pod
 
----++ ObjectMethod userExists($login) -> $user
+---++ ObjectMethod userExists( $user ) -> $boolean
 
-Determine if the user already exists or not. Return a canonical user
-identifier if the user is known, or undef otherwise.
+Determine if the user already exists or not.
 
 =cut
 
 sub userExists {
-    my( $this, $loginName ) = @_;
-	$this->ASSERT_IS_USER_LOGIN_ID($loginName) if DEBUG;
+    my( $this, $cUID ) = @_;
+	$this->ASSERT_IS_CANONICAL_USER_ID($cUID) if DEBUG;
 
-    return $this->{L2U}{$loginName};
+    return $this->{U2L}{$cUID};
 }
 
 # Called from TWiki::Users. See the documentation of the corresponding
