@@ -11,6 +11,9 @@ use base 'Slion::TWiki::Client';
 use vars qw($VERSION);
 $VERSION = '1.00';
 
+use TWiki::Func;
+use Slion::Email;
+
 
 #Here we list the commands that executer understands and associate a command with a function
 my %cmdFunctions=(
@@ -34,9 +37,8 @@ my %cmdFunctions=(
             'IF' => \&DoIf,
             'ELSE' => \&DoElse,
             #'ELSEIF' => \&DoElseIf, #Implement some other time
-            'ENDIF' => \&DoEndIf
-			#'TOPICEXISTS' => \&TopicExists,
-			#'ATTACHMENTEXISTS' => \&AttachmentExists						
+            'ENDIF' => \&DoEndIf,
+            'SENDMAIL' => \&DoSendMail
 		 	);
 		 
 require Slion::TWiki::Client;
@@ -69,11 +71,28 @@ sub new
     $self->{Depth}=0; #used for block depth management, in IF block notably    
     $self->{Skip}=0;  #used for IF management. Tells whether or not the next commands should be skipped.
 
+   	$self->{TaskSpecTopic}    	= undef; #Set to the topic name of the task spec in use
+	$self->{TaskSpecWeb}    	= undef; #Set to the web name of the task spec in use
+    
+  	$self->{SmtpHost}    	= undef; #Set the SMTP host used to send mails
+    
 	
 	bless $self, $aClass;
 	
 	$self;
 	} 
+
+
+=pod
+Set/Get STMP Host. 
+=cut        
+        
+sub SmtpHost
+	{
+    my $self = shift;
+    if (@_) { $self->{SmtpHost} = shift }
+    return $self->{SmtpHost};
+    }	
 	
 =pod
 Set/Get TWiki output Web. 
@@ -232,9 +251,9 @@ sub DoTask()
     $self->{Depth}=0;    
     $self->{Skip}=0;
 		
-	#Save input web/topic locally
-	my $inputWeb=$self->Web;
-	my $inputTopic=$self->Topic;
+	#Save input web/topic in data members
+	$self->{TaskSpecWeb}=$self->Web;
+	$self->{TaskSpecTopic}=$self->Topic;
 		
 	#Read our input topic
 	my @myVars=[];
@@ -412,7 +431,7 @@ sub Output()
 		#$text=~s/(\n)/$1<br \/>/g;
 		
 		#Output our text to the target web.topic
-		$self->Append("\n$text <br \>");
+		$self->Append("\n$text <br />");
 				
 		#Set back previous values into data members		
 		$self->Web($currentWeb);
@@ -487,7 +506,7 @@ sub OutputError()
 		#$text=~s/(\n)/$1<br \/>/g;
 		
 		#Output our text to the target web.topic
-		$self->Append("\n%RED%$text%ENDCOLOR% <br \>");
+		$self->Append("\n%RED%$text%ENDCOLOR% <br />");
 				
 		#Set back previous values into data members		
 		$self->Web($currentWeb);
@@ -804,13 +823,15 @@ sub ChDir()
 		}			
 	}
 
-#Perfrom the UPLOAD command	
+=pod
+Perfrom the UPLOAD command	
+=cut
 sub DoUpload()
 	{
 	my $self=shift;	
 	my $cmdParam=shift;	
 
-	if (-s $cmdParam) #Avoid zero size upload, -s returns the size of the file)	
+	if (-s $cmdParam) #Avoid zero size upload, -s returns the size of the file
 		{
 		$self->UploadFile($cmdParam,"$cmdParam");		
 		return 1;	
@@ -823,7 +844,40 @@ sub DoUpload()
 	}
 
 =pod
-IF management. Eight now we don't support nested IFs.
+Perfrom the SENDMAIL command	
+=cut
+
+sub DoSendMail()
+    {
+	my $self=shift;	
+	my $cmdParam=shift;	
+
+    #my ($smtpHost, $from, $to, $subject, $body, $attachments)=@_;
+
+    my %params=TWiki::Func::extractParameters($cmdParam);    
+    
+    #my ($smtpHost, $from, $to, $subject, $body, $attachments)
+    $self->OutputError("WARNING: SENDMAIL missing =from= parameter!") unless defined $params{from};
+    $self->OutputError("WARNING: SENDMAIL missing =to= parameter!") unless defined $params{to};
+    $self->OutputError("WARNING: SENDMAIL missing SMTP Host!") unless defined $self->{SmtpHost};
+
+    if (defined $params{from} && defined $params{to} && defined $self->{SmtpHost})
+        {
+        if (defined $params{attachments})
+            {    
+            Slion::Email::SendMultipart($self->{SmtpHost},$params{from},$params{to},$params{subject},$params{body},$params{attachments});
+            }
+        else
+            {
+            Slion::Email::Send($self->{SmtpHost},$params{from},$params{to},$params{subject},$params{body});
+            }
+        }
+    }
+     
+
+
+=pod
+IF management. Right now we don't support nested IFs.
 =cut
 
 sub DoIf()
@@ -1021,8 +1075,10 @@ sub VariableSubstitutions
 	$$textRef =~ s/\$outputweb/$self->{OutputWeb}/g;
 	#Do $outputtopic
 	$$textRef =~ s/\$outputtopic/$self->{OutputTopic}/g;
-	
-				       	       	     
+	#Do $taskspecweb 	
+	$$textRef =~ s/\$taskspecweb/$self->{TaskSpecWeb}/g;
+	#Do $taskspectopic
+	$$textRef =~ s/\$taskspectopic/$self->{TaskSpecTopic}/g;				       	       	     
     }	
 		
 

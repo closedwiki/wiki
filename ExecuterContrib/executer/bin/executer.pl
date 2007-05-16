@@ -121,8 +121,10 @@ sub StartTask
 	#Set credentials
     my $username=$config{username};
     my $password=$config{password};
+    my $smtphost=$config{smtphost};
     $twiki->User($username);
 	$twiki->Password($password);
+    $twiki->SmtpHost($smtphost);
 
 	$twiki->Web($web);
 	$twiki->Topic($topic);
