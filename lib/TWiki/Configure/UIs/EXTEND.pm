@@ -89,6 +89,11 @@ command line.
 MESS
     }
 
+    # Strip HTTP headers if necessary
+    if ( $ar =~ m/^HTTP/sm ) {
+        $ar =~ s/^HTTP(.*?)\r\n\r\n(.*)/$2/sm;
+    }
+
     # Save it somewhere it will be cleaned up
     my ($tmp, $tmpfilename) = File::Temp::tempfile(SUFFIX => $ext, UNLINK=>1);
     binmode($tmp);
