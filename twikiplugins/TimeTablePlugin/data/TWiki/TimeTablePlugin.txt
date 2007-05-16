@@ -1,7 +1,7 @@
-%META:TOPICINFO{author="TWikiContributor" date="1179315361" format="1.0" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1179321536" format="1.0" version="$Rev$"}%
 ---+!! <nop>%TOPIC%
 The <nop>%TOPIC% handles the tag =%<nop>TIMETABLE%= and creates a weekly timetable. 
-The timetable is rendered with HTML tables and should work with all modern web browsers.
+The timetable is rendered with HTML tables and should work with all modern web browsers. Please take a look at the [[#TimeTablePluginFeatures][feature list]] for more information.
 
 It also handles the tag =%<nop>TTCM%= (<nop>TimeTable Compatibilty Mode). The compatibility mode allows the usage of all TWiki:Plugins.CalendarPlugin event types. The =%<nop>TTCM%= tag should be placed into the description field of an event and must contain a time range and
 optional colors in a comma separated list (=&lt;time range&gt;[<nop>[','&lt;foreground color&gt;][','&lt;background color&gt;]]=), 
@@ -27,6 +27,21 @@ and a time zone (timezone attribute) for all events on a topic. Please use it on
 
 
 %TOC%
+#TimeTablePluginFeatures
+---++ Features
+The TimeTablePlugin supports
+	* two time formats: 12 and 24 hour format (attribute: =timeformat=)
+	* (self-defined) time zones (attributes: =timezone, timezoneabbr=)
+	* all HolidaylistPlugin and CalendarPlugin event types if the compatiblity mode is enabled (=compatmode="on"=)
+	* navigation to other weeks (only if compatibility mode is enabled: =compatmode="on"=)
+	* own colors for a every event (add the foreground/background colors to a event definition or use the =%<nop>TTCM%= tag of the compatibility mode)
+	* using event definitions from other topics (attribute: =topic=) - including overwrite of the time zone (e.g. =topic="EvenTopic2:-3=)
+	* customization of 
+		* all text outputs and colors (attributes: =name, headerformat, ...=)
+		* the table rendering (attributes: =days, startdate, timeinterval, showtimeline, ...=)
+	* a default setup for foreground/background colors and time zone on a topic (=%<nop>TTTOPICSETUP%= tag)
+	* ... 
+
 
 ---++ Syntax Rules
 
@@ -221,7 +236,8 @@ Plugin settings are stored as preferences variables. To reference a plugin setti
 __Note:__ You do not need to install anything on the browser to use this plugin. The following instructions are for the administrator who installs the plugin on the TWiki server. 
 
 	* Download the ZIP file from the Plugin web (see below)
-	* Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
+	* Install the required Perl modules (Date::Calc and POSIX), e.g: perl -MCPAN -e "install Date::Calc"
+	* Unzip ==%TOPIC%.zip== in your twiki installation directory. Do not forget to change file permissions. Content:
 	  | *File:* | *Description:* |
 	  | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
 	  | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
