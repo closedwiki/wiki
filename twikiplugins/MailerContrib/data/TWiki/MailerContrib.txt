@@ -115,6 +115,10 @@ For example, assuming TWiki was installed at =/usr/local/twiki=, this cron entry
 </verbatim>
 will generate change notifications for the =Public= and =Private= webs every night at midnight.
 <verbatim>
+0 0 * * * cd /usr/local/twiki && perl -I bin tools/mailnotify -q -Sandbox
+</verbatim>
+will generate change notifications for all webs, except the =Sandbox= web.
+<verbatim>
 0 0 * * 0 cd /usr/local/twiki && perl -I bin tools/mailnotify -news
 </verbatim>
 will generate newsletters from *all* webs every week on midnight Saturday.

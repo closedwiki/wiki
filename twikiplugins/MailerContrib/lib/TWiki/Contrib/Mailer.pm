@@ -46,10 +46,11 @@ $RELEASE = 'TWiki-4';
 
 =pod
 
----++ StaticMethod mailNotify($webs, $session, $verbose)
+---++ StaticMethod mailNotify($webs, $session, $verbose, $exwebs)
    * =$webs= - filter list of names webs to process. Wildcards (*) may be used.
    * =$session= - optional session object. If not given, will use a local object.
-   * =$verbose= - true to get verbose (debug) output
+   * =$verbose= - true to get verbose (debug) output.
+   * =$exwebs = - filter list of webs to exclude.
 
 Main entry point.
 
@@ -60,7 +61,7 @@ only be called by =mailnotify= scripts.
 =cut
 
 sub mailNotify {
-    my( $webs, $twiki, $noisy ) = @_;
+    my( $webs, $twiki, $noisy, $exwebs ) = @_;
 
     $verbose = $noisy;
 
@@ -70,6 +71,11 @@ sub mailNotify {
     }
     $webstr = '*' unless ( $webstr );
     $webstr =~ s/\*/\.\*/g;
+
+    my $exwebstr;
+    if ( defined( $exwebs )) {
+        $exwebstr = join( '|', @$exwebs );
+    }
 
     if (!defined $twiki) {
         $twiki = new TWiki();
@@ -85,9 +91,10 @@ sub mailNotify {
     $context->{absolute_urls} = 1;
 
     my $report = '';
-    foreach my $web ( grep( /^($webstr)$/,
-                            TWiki::Func::getListOfWebs( 'user ') )) {
-        $report .= _processWeb( $twiki, $web );
+    foreach my $web ( TWiki::Func::getListOfWebs( 'user ') ) {
+       if ( $web =~ /^($webstr)$/ && $web !~ /^($exwebstr)$/ ) {
+          $report .= _processWeb( $twiki, $web );
+       }
     }
 
     $context->{absolute_urls} = 0;
