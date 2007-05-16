@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="StephaneLenclud" date="1179310546" format="1.1" reprev="1.4" version="1.4"}%
+%META:TOPICINFO{author="StephaneLenclud" date="1179353087" format="1.1" version="1.5"}%
 ---+!! Task Executer
 <!--
 One line description, required for extensions repository catalog.
@@ -91,4 +91,4 @@ If you are experiencing problems with an Executer you should:
 
 <!-- Do _not_ attempt to edit this topic; it is auto-generated. Please add comments/questions/remarks to the Dev topic instead. -->
 
-%META:FILEATTACHMENT{name="ExecuterSetup.msi" attachment="ExecuterSetup.msi" attr="" comment="Windows installer" date="1179190519" path="ExecuterSetup.msi" size="100864" stream="ExecuterSetup.msi" user="Main.StephaneLenclud" version="2"}%
+%META:FILEATTACHMENT{name="ExecuterSetup.msi" attachment="ExecuterSetup.msi" attr="" comment="Windows installer" date="1179311219" path="ExecuterSetup.msi" size="108544" stream="ExecuterSetup.msi" user="Main.StephaneLenclud" version="3"}%
