@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1179123991" format="1.0" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContrib" date="1179308686" format="1.0" version="$Rev$"}%
 ---+!! <nop>%TOPIC%
 The <nop>%TOPIC% handles the tag =%<nop>TIMETABLE%= and creates a weekly timetable. 
 The timetable is rendered with HTML tables and should work with all modern web browsers.
@@ -239,8 +239,9 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Plugin Author: | TWiki:Main.DanielRohde |
 |  Copyright: | &copy; 2006, TWiki:Main.DanielRohde |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | V1.012 (14 May 2007) |
+|  Plugin Version: | V1.013 (BETA) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  V1.013 (BETA) | TWiki:Main.DanielRohde: fixed major time parsing bug reported by TWiki:Main.LarsEik |
 |  V1.012 (14 May 2007) | TWiki:Main.DanielRohde: fixed readTopicText bug reported TWiki:Main.JoachimRahn; added month header feature (attributes: showmonthheader, monthheader...); added new tooltip feature (clicktooltip...) |
 |  V1.011 (1 Mar 2007) | TWiki:Main.DanielRohde: added fontsize attribute; fixed HTML bug (validation); |
 |  V1.010 (19 Feb 2007) | TWiki:Main.DanielRohde: added tablecolumnwidth and tabledatacellwidth attributes requested by TWiki:Main.VickiBrown;  added tooltip feature (tooltip... attributes); |
@@ -266,3 +267,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 __Related Topics:__ %TWIKIWEB%.TWikiPlugins, %TWIKIWEB%.DeveloperDocumentationCategory, %TWIKIWEB%.AdminDocumentationCategory, %TWIKIWEB%.TWikiPreferences
 
 -- TWiki:Main.DanielRohde - 16 May 2006
+ 
+
+%META:FILEATTACHMENT{name="example.png" attr="h" comment="" date="1178883488" path="example.png" size="33134" user="rohdedan" version="1.6"}%
+%META:FILEATTACHMENT{name="timetabletooltips.js" attr="h" autoattached="1" comment="" date="1171462541" path="timetabletooltips.js" size="1355" user="UnknownUser" version=""}%
