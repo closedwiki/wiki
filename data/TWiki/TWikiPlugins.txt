@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1168076964" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1179343828" format="1.1" version="$Rev$"}%
 %TOC%
 %STARTINCLUDE%
 ---# TWiki Plugins
@@ -76,12 +76,14 @@ Then these settings can be retrieved as preferences variables like =%&lt;pluginn
 
 Plugin status variables let you list all active Plugins wherever needed.
 
+#ActivatedPlugins
 ---++++ =%<nop>ACTIVATEDPLUGINS%=
 On this TWiki site, the enabled Plugins are: %ACTIVATEDPLUGINS%.
 
 ---++++ =%<nop>PLUGINDESCRIPTIONS%=
 %PLUGINDESCRIPTIONS%
 
+#FailedPlugins
 ---++++ =%<nop>FAILEDPLUGINS%=
 %FAILEDPLUGINS%
 
@@ -114,6 +116,7 @@ TWiki:Codev/StepByStepRenderingOrder helps you decide which rendering handler to
    * Keep the main plugin package as small as possible; create other packages that are loaded if and only if they are used. For example, create sub-packages of !BathPlugin in =lib/TWiki/Plugins/BathPlugin/=.
    * Avoid using preferences in the plugin topic; set =$NO_PREFS_IN_TOPIC= if you possibly can, as that will stop TWiki from reading the plugin topic for every page. Use [[#ConfigSpec][Config.spec]] instead. 
    * Use registered tag handlers
+   * [[#MeasurePerformance][Measure the performance]] to see the difference
 
 ---+++ Version Detection
 
