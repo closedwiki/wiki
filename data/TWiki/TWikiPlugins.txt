@@ -38,7 +38,7 @@ Each Plugin has a standard release topic, located in the TWiki:Plugins web at TW
 #PreTesting
 ---+++ On-Site Pretesting
 
-The recommended approach to testing new Plugins before making them public is to create a second local TWiki installation, and test the Plugin there. You can allow selected users access to the test area. Once you are satisifed that it won't compromise your main installation, you can install it there as well.
+The recommended approach to testing new Plugins before making them public is to create a second local TWiki installation, and test the Plugin there. You can allow selected users access to the test area. Once you are satisfied that it won't compromise your main installation, you can install it there as well.
 
 InstalledPlugins shows which Plugins are: 1) installed, 2) loading properly, and 3) what TWiki:Codev.PluginHandlers they invoke. Any failures are shown in the Errors section. The =[[VarFAILEDPLUGINS][%<nop>FAILEDPLUGINS%]]= variable can be used to debug failures. You may also want to check your webserver error log and the various TWiki log files.
 
@@ -64,7 +64,7 @@ Plugins can be enabled and disabled with the [[%SCRIPTURLPATH{configure}%][confi
 
 ---+++ Plugin Evaluation Order
 
-By default, TWiki executes Plugins in alphabetical order on Plugin name. It is possible to change the order, for example to evaluate database variables before the speadsheet CALCs. This can be done with ={PluginsOrder}= in the Plugins section of [[%SCRIPTURLPATH{configure}%][configure]].
+By default, TWiki executes Plugins in alphabetical order on Plugin name. It is possible to change the order, for example to evaluate database variables before the spreadsheet CALCs. This can be done with ={PluginsOrder}= in the Plugins section of [[%SCRIPTURLPATH{configure}%][configure]].
 
 ---+++ Plugin-Specific Settings
 
@@ -156,7 +156,7 @@ In particular, files that should be web-accessible (graphics, Java applets ...) 
 
 The Plugin API handles the details of connecting your Perl module with main TWiki code. When you're familiar with the [[#PluginAPI][Plugin API]], you're ready to develop Plugins.
 
-_The TWiki::Plugins.BuildContrib module provides a lot of support for plugins development, including a plugijn creator, automatic publishing support, and automatic installation script writer. If you plan on writing more than one plugin, you probably need it_.
+_The TWiki::Plugins.BuildContrib module provides a lot of support for plugins development, including a plugin creator, automatic publishing support, and automatic installation script writer. If you plan on writing more than one plugin, you probably need it_.
 
 ---+++ Creating the Perl Module 
 
@@ -251,14 +251,14 @@ Plugins sometimes need to store data. This can be Plugin internal data such as c
 
 ---+++ Plugin Internal Data
 
-You can create a Plugin "work area" using the =TWiki::Func::getWorkArea()= function, which gives you a persistant directory where you can store data files. By default they will not be web accessible. The directory is guaranteed to exist, and to be writable by the webserver user. For convenience, =TWiki::Func::storeFile()= and =TWiki::Func::readFile()= are provided to persistently store and retrieve simple data in this area.
+You can create a Plugin "work area" using the =TWiki::Func::getWorkArea()= function, which gives you a persistent directory where you can store data files. By default they will not be web accessible. The directory is guaranteed to exist, and to be writable by the webserver user. For convenience, =TWiki::Func::storeFile()= and =TWiki::Func::readFile()= are provided to persistently store and retrieve simple data in this area.
 
 ---+++ Web Accessible Data
 
 __Topic-specific data__ such as generated images can be stored in the topic's attachment area, which is web accessible. Use the =TWiki::Func::saveAttachment()= function to store the data.
 
 Recommendation for file name:
-   * Prefix the filename with an underscore (the leading underscore avoids a nameclash with files attached to the same topic)
+   * Prefix the filename with an underscore (the leading underscore avoids a name clash with files attached to the same topic)
    * Identify where the attachment originated from, typically by including the Plugin name in the file name
    * Use only alphanumeric characters, underscores, dashes and periods to avoid platform dependency issues and URL issues
    * Example: =_FooBarPlugin_img123.gif=
@@ -344,7 +344,7 @@ Each published Plugin has a Plugin development topic on TWiki.org. Plugin develo
 
 The Plugin interface (TWikiFuncDotPm functions and handlers) evolve over time. TWiki 4.0 introduced new API functions to address the needs of Plugin authors. It also deprecated some functions. Some Plugins written for earlier TWiki releases using unofficial TWiki internal functions no longer work on the TWiki 4.0 codebase. All this means that some Plugins need to be updated to work on the TWiki 4.0 codebase.
 
-Organizations typically do not upgrade to the latest TWiki for many months. However, many administrators still would like to install the latest versions of a Plugin on their older TWiki installation. This need is fullfilled if Plugins are maintained in a compatible manner. 
+Organizations typically do not upgrade to the latest TWiki for many months. However, many administrators still would like to install the latest versions of a Plugin on their older TWiki installation. This need is fulfilled if Plugins are maintained in a compatible manner. 
 
 __%T% Tip:__ Plugins can be written to be compatible with older and newer TWiki releases. This can be done also for Plugins using unofficial TWiki internal functions of an earlier release that no longer work on the latest TWiki codebase. TWiki:TWiki.TWikiPluginsSupplement#MaintainPlugins has more.
 
