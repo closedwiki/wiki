@@ -108,20 +108,21 @@ TWiki:Codev/StepByStepRenderingOrder helps you decide which rendering handler to
 ---+++ Hints on Writing Fast Plugins
 
    * Delay initialization as late as possible. For example, if your Plugin is a simple syntax processor, you might delay loading extra Perl modules until you actually see the syntax in the text.
-   * For example, use an =eval= block like this:%BR%
-     =eval { require IPC::Run }= %BR%
-     =return "&lt;font color=\"red\"&gt;SamplePlugin: Can't load required modules ($@)&lt;/font&gt;" if $@;=
-   * You can use a flag to avoid running the initialization twice
-   * The TWiki:Plugins.PluginBenchmarkAddOn comes in handy to measure and fine-tune the performance of your Plugin
+      * For example, use an =eval= block like this:%BR%
+        =eval { require IPC::Run }= %BR%
+        =return "&lt;font color=\"red\"&gt;SamplePlugin: Can't load required modules ($@)&lt;/font&gt;" if $@;=
+   * Keep the main plugin package as small as possible; create other packages that are loaded if and only if they are used. For example, create sub-packages of !BathPlugin in =lib/TWiki/Plugins/BathPlugin/=.
+   * Avoid using preferences in the plugin topic; set =$NO_PREFS_IN_TOPIC= if you possibly can, as that will stop TWiki from reading the plugin topic for every page. Use [[#ConfigSpec][Config.spec]] instead. 
+   * Use registered tag handlers
 
----+++ Plugin Version Detection
+---+++ Version Detection
 
-To eliminate the incompatibility problems bound to arise from active open Plugin development, a Plugin versioning system is provided for automatic compatibility checking.
+To eliminate the incompatibility problems that are bound to arise from active open Plugin development, a Plugin versioning system is provided for automatic compatibility checking.
 
-   * All modules require a =$VERSION='0.000'= variable, beginning at =1.000=.
+   * All plugin packages require a =$VERSION= variable. This should be an integer, or a subversion version id.
 
-   * The =initPlugin= handler should check all dependencies and return TRUE if the initialization is OK or FALSE if something went wrong.
-      * The Plugin initialization code does not register a Plugin that returns FALSE (or that has no =initPlugin= handler).
+   * The =initPlugin= handler should check all dependencies and return 1 if the initialization is OK or 0 if something went wrong.
+      * The Plugin initialization code does not register a Plugin that returns 0 (or that has no =initPlugin= handler).
 
    * =$TWiki::Plugins::VERSION= in the =TWiki::Plugins= module contains the TWiki Plugin API version, currently *%PLUGINVERSION{}%*.
       * You can also use the =[[VarPLUGINVERSION][%<nop>PLUGINVERSION{}%]]= variable to query the Plugin API version or the version of installed Plugins.
@@ -142,15 +143,17 @@ With a reasonable knowledge of the Perl scripting language, you can create new P
 
 ---+++ Anatomy of a Plugin
 
-A basic TWiki Plugin consists of two elements:
+A (very) basic TWiki Plugin consists of two files:
 
-   * a Perl module, ex: =MyFirstPlugin.pm=
-   * a documentation topic, ex: =MyFirstPlugin.txt=
+   * a Perl module, e.g. =MyFirstPlugin.pm=
+   * a documentation topic, e.g. =MyFirstPlugin.txt=
 
-The Perl module can be a block of code that connects with TWiki alone, or it can include other elements, like other Perl modules (including other Plugins), graphics, TWiki templates, external applications (ex: a Java applet), or just about anything else it can call.
+The Perl module can be a block of code that talks to with TWiki alone, or it can include other elements, like other Perl modules (including other Plugins), graphics, TWiki templates, external applications (ex: a Java applet), or just about anything else it can call.
 In particular, files that should be web-accessible (graphics, Java applets ...) are best placed as attachments of the =MyFirstPlugin= topic. Other needed Perl code is best placed in a =lib/TWiki/Plugins/MyFirstPlugin/= directory.
 
 The Plugin API handles the details of connecting your Perl module with main TWiki code. When you're familiar with the [[#PluginAPI][Plugin API]], you're ready to develop Plugins.
+
+_The TWiki::Plugins.BuildContrib module provides a lot of support for plugins development, including a plugijn creator, automatic publishing support, and automatic installation script writer. If you plan on writing more than one plugin, you probably need it_.
 
 ---+++ Creating the Perl Module 
 
@@ -161,13 +164,6 @@ If your Plugin uses its own modules and objects, you must include the name of th
 use TWiki::Plugins::MyFirstPlugin::Attrs;
 $var = MyFirstPlugin::Attrs->new();
 </pre>
-
-#MeasurePerformance
----+++ Measuring and Improving the Plugin Performance
-
-A high quality Plugin performs well. You can use the TWiki:Plugins.PluginBenchmarkAddOn to measure your TWiki:Plugins.PluginBenchmarks. The data is needed as part of the Documentation Topic.
-
-See also [[#FastPluginHints][Hints on Writing Fast Plugins]].
 
 #CreatePluginTopic
 ---+++ Writing the Documentation Topic
@@ -221,6 +217,13 @@ If you don't want (or can't) use the !BuildContrib, then a minimum Plugin releas
       * =data/TWiki/MyFirstPlugin.txt=
       * =pub/TWiki/MyFirstPlugin/uparrow.gif=
 
+#MeasurePerformance
+---+++ Measuring and Improving the Plugin Performance
+
+A high quality Plugin performs well. You can use the TWiki:Plugins.PluginBenchmarkAddOn to measure your TWiki:Plugins.PluginBenchmarks. The data is needed as part of the Documentation Topic.
+
+See also [[#FastPluginHints][Hints on Writing Fast Plugins]].
+
 #PublishPlugin
 ---+++ Publishing for Public Use
 
@@ -264,6 +267,68 @@ Recommendation for file names in Plugin attachment area:
    * Include the name of the web in the filename
    * Use only alphanumeric characters, underscores, dashes and periods to avoid platform dependency issues and URL issues
    * Example: =_Main_roundedge-ul.gif=
+
+#ConfigSpec
+---++ Integrating with <code>configure</code>
+Some TWiki extensions have setup requirements that are best integrated into =configure= rather than trying to use TWiki preferences variables. These extensions use =Config.spec= files to publish their configuration requirements.
+
+=Config.spec= files are read during TWiki configuration. Once a =Config.spec= has defined a configuration item, it is available for edit through the standard =configure= interface. =Config.spec= files are stored in the 'plugin directory' e.g. =lib/TWiki/Plugins/BathPlugin/Config.spec=.
+
+---+++ Structure of a <code>Config.spec</code> file
+The =Config.spec= file for a plugin starts with the plugin announcing what it is:
+<verbatim>
+# ---+ BathPlugin
+# This plugin senses the level of water in your bath, and ensures the plug
+# is not removed while the water is still warm.
+</verbatim> 
+This is followed by one or more configuration items. Each configuration item has a _type_, a _description_ and a _default_. For example:
+<verbatim>
+# **SELECT Plastic,Rubber,Metal**
+# Select the plug type
+$TWiki::cfg{BathPlugin}{PlugType} = 'Plastic';
+
+# **NUMBER**
+# Enter the chain length in cm
+$TWiki::cfg{BathPlugin}{ChainLength} = '30';
+
+# **BOOLEAN EXPERT**
+# Turn this option off to disable the water temperature alarm
+$TWiki::cfg{BathPlugin}{TempSensorEnabled} = '1';
+</verbatim>
+The type (e.g. =**SELECT**= ) tells =configure= to how to prompt for the value. It also tells configure how to do some basic checking on the value you actually enter. All the comments between the type and the configuration item are taken as part of the description. The configuration item itself defines the default value for the configuration item. The above spec defines the configuration items =$TWiki::cfg{BathPlugin}{PlugType}=, =$TWiki::cfg{BathPlugin}{ChainLength}=, and =$TWiki::cfg{BathPlugin}{TempSensorEnabled}= for use in your plugin. For example,
+<verbatim>
+if( $TWiki::cfg{BathPlugin}{TempSensorEnabled} && $curTemperature > 50 ) {
+    die "The bathwater is too hot for comfort";
+}
+</verbatim>
+
+The config.spec file is read by configure, and =configure= then writes =LocalSite.cfg= with the values chosen by the local site admin.
+
+A range of types are available for use in =Config.spec= files:
+
+| BOOLEAN | A true/false value, represented as a checkbox |
+| COMMAND _length_ | A shell command |
+| LANGUAGE | A language (selected from ={LocalesDir}= |
+| NUMBER | A number |
+| OCTAL | An octal number |
+| PASSWORD _length_ | A password (input is hidden) |
+| PATH _length_ | A file path |
+| PERL | A perl structure, consisting of arrays and hashes |
+| REGEX _length_ | A perl regular expression |
+| SELECT _choices_ | Pick one of a range of choices |
+| SELECTCLASS _root_ | Select a perl package (class) |
+| STRING _length_ | A string |
+| URL _length_ | A url |
+| URLPATH _length_ | A relative URL path |
+
+All types can be followed by a comma-separated list of _attributes_.
+| EXPERT | means this an expert option |
+| M | means the setting is mandatory (may not be empty) |
+| H | means the option is not visible in =configure= |
+
+See =lib/TWiki.spec= for many more examples.
+
+=Config.spec= files are also used for other (non-plugin) extensions. in this case they are stored under the =Contrib= directory instead of the =Plugins= directory.
 
 #MaintainPlugins
 ---++ Maintaining Plugins
