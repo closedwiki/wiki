@@ -4,7 +4,11 @@
 Config::Simple,>=latest,cpan,Required.
 LWP::UserAgent,>=latest,cpan,Required.
 Crypt::SSLeay,>=latest,cpan,Required only if access TWiki through HTTPS.
-
+Net::SMTP,>=latest,cpan,Required only if using SENDMAIL command.
+Carp,>=latest,cpan,Required only if using SENDMAIL command.
+MIME::Base64,>=latest,cpan,Required only if using SENDMAIL command.
+MIME::Types,>=latest,cpan,Required only if using SENDMAIL command.
+POSIX,>=latest,cpan,Required only if using SENDMAIL command.
 
 
 
