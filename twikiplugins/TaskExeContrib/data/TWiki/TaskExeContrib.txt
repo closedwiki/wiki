@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="StephaneLenclud" date="1179190852" format="1.1" reprev="1.10" version="1.10"}%
+%META:TOPICINFO{author="StephaneLenclud" date="1179309990" format="1.1" reprev="1.12" version="1.12"}%
 ---+!! Task executer application
 
 ---++!! Purpose & Scope 
@@ -192,6 +192,26 @@ Example:
    * Cmd ENDIF = endif    
 </verbatim>
 
+---+++ =SENDMAIL=
+
+This command does just that. It sends email. Typically used at the end of a task.
+The parameter format is the one of the well known TWiki.TWikiVariables argument list. 
+Supported parameters are:
+   * =from= : Email address of the sender.
+   * =to= : Email address of the recipient. Can be a string of semicolon separated addresses.
+
+   * =subject= : Subject of the message.
+   * =body= : Body of the message.
+   * =attachments= : The attachments file name separated by a pipe '|' characters. Also supports attachment display name. Just prefix the file name with the display name and separate them using '?'. Example: ="changelog.txt? d:/temp/changelog.out| diff.txt? d:/temp/diff.txt"=.
+
+Example:
+<verbatim>
+   * Cmd SENDMAIL = from="executertest@myexetest.com" to="test1@myexetest.com;test2@myexetest.com" subject="test email" body="2 attachments and 2 recipients." attachments="that ? mailthat.txt | this ? mailthis.txt"  
+   * Cmd SENDMAIL = from="executertest@myexetest.com" to="test@myexetest.com" subject="test email" body="1 attachments and 1 recipients." attachments="mailthis.txt"  
+</verbatim>
+
+
+
 ---++ Variable substitutions
 
 Before processing a [[#Command][Command]] variables are substituted by their actual values in the Command parameter. Here are described the supported variables.
@@ -267,10 +287,13 @@ Examples :
 
    * =$outputweb= : The name of the output Web.
    * =$outputtopic= : The name of the definitive output topic. If auto numbering was used that variable resolves to the actual topic name.  
-
+   * =$taskspecweb= : The name of the Web containing the task specification topic.
+   * =$taskspectopic= : The name of the task specification topic.  
+   
 Example :
 <verbatim>
    * Cmd OUTPUT = This topic is $outputweb.$outputtopic
+   * Cmd OUTPUT = Our task spec topic is $taskspecweb.$taskspectopic
 </verbatim>
 
 ---++ Installation instructions
@@ -301,6 +324,7 @@ Once installed you should have access to TaskExeManager.
 |  Dependencies: | %$DEPENDENCIES% |
 |  Version: | %$VERSION% |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  16 May 2007 | Adding support for =$taskspecweb=, =$taskspectopic= and =SENDMAIL= |
 |  15 May 2007 | Adding support for =URLEXISTS=, =IF=, =ELSE=, =ENDIF= |
 |  13 May 2007: | Initial version |
 |  Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
