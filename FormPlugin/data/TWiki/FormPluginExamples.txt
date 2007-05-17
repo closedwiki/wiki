@@ -5,6 +5,22 @@ See [[FormPlugin]]
 
 %TOC%
 
+---++ Focus
+
+%STARTFORM{
+name="focusform"
+action="view"
+}%
+%FORMELEMENT{
+name="Name"
+type="text"
+focus="on"
+title="Enter your name:"
+}%
+%ENDFORM%
+
+
+
 ---++ Hints and mandatory indicators
 
 %STARTFORM{
@@ -29,6 +45,7 @@ type="submit"
 buttonlabel="Submit"
 }%
 %ENDFORM%
+
 
 
 ---++ Adding styles
@@ -57,6 +74,7 @@ buttonlabel="Submit"
 %ENDFORM%
 
 
+
 ---++ Custom CSS classes
 
 %STARTFORM{
@@ -67,12 +85,32 @@ action="view"
 name="Name"
 type="text"
 title="Enter your name:"
-class="twikiBroadcastMessage"
+cssclass="twikiBroadcastMessage"
 }%
 %FORMELEMENT{
 type="submit"
 buttonlabel="Submit"
-class="twikiSubmitDisabled"
+cssclass="twikiButton"
+}%
+%ENDFORM%
+
+
+
+---++ Items on one line
+
+Using =elementformat=" $t $e "=:
+
+%STARTFORM{
+name="onelineform"
+action="view"
+elementformat=" $t $e $m $h "
+}%%FORMELEMENT{
+name="Name"
+type="text"
+title="Enter your name:"
+}%%FORMELEMENT{
+type="submit"
+buttonlabel="Submit"
 }%
 %ENDFORM%
 
@@ -87,32 +125,32 @@ formcssclass="twikiFormSteps"
 elementcssclass="twikiFormStep"
 }%
 %FORMELEMENT{
-name="Nice persons"
+name="Nice_persons"
 type="radio"
 title="Nice persons with custom =titleformat=:"
 options="mary=Mary M, peter=Peter P, annabel=Annabel A, nicky=Nicky N, jennifer=Jennifer J"
 validate="nonempty"
-elementformat="$e <br />"
+fieldformat="$e <br />"
 titleformat=" *$t* %BR%"
 mandatory="on"
 hint="Select one person"
 }%
 %FORMELEMENT{
-name="Not-so-nice persons"
+name="Not_so_nice_persons"
 type="checkbox"
 title="Not-so-nice persons with selected defaults:"
 options="mary, peter, annabel, nicky, jennifer"
 labels="Mary M, Peter P, Annabel A, Nicky N, Jennifer J"
 default="mary,peter"
 validate="nonempty"
-elementformat="$e <br />"
+fieldformat="$e <br />"
 mandatory="on"
 hint="Select any person"
 }%
 %FORMELEMENT{
-name="And even more persons"
+name="And_even_more_persons"
 type="checkbox"
-title="And even more persons without custom =elementformat=:"
+title="And even more persons without custom =fieldformat=:"
 options="mary, peter, annabel, nicky, jennifer"
 labels="Mary M, Peter P, Annabel A, Nicky N, Jennifer J"
 validate="nonempty"
@@ -123,11 +161,41 @@ hint="Select any person"
 %ENDFORM%
 
 
+
+---++ Disabled
+
+%STARTFORM{
+name="disabledform"
+action="view"
+}%
+%FORMELEMENT{
+name="Name"
+type="text"
+disabled="on"
+title="Enter your name:"
+}%
+%FORMELEMENT{
+name="ChecknameDisabled"
+type="checkbox"
+title="Choose a name:"
+options="mary=Mary M, peter=Peter P, annabel=Annabel A, nicky=Nicky N, jennifer=Jennifer J"
+fieldformat="$e<br />"
+disabled="on"
+}%
+%FORMELEMENT{
+type="submit"
+buttonlabel="Submit"
+disabled="on"
+}%
+%ENDFORM%
+
+
+
 ---++ Validation
 
 %STARTFORM{
 name="validationTestForm"
-action="view"
+action="viewauth"
 method="POST"
 formcssclass="twikiFormSteps"
 elementcssclass="twikiFormStep"
@@ -141,7 +209,7 @@ mandatory="on"
 hint="You cannot post anonymously"
 }%
 %FORMELEMENT{
-name="Name float"
+name="Salary"
 type="text"
 title="Your salary:"
 default=""
@@ -154,10 +222,10 @@ name="Checkname"
 type="checkbox"
 title="Who earns more than you:"
 options="mary=Mary M, peter=Peter P, annabel=Annabel A, nicky=Nicky N, jennifer=Jennifer J"
-elementformat="$e<br />"
+fieldformat="$e<br />"
 mandatory="on"
 validate="nonempty"
-hint="Just pinpoint someone"
+hint="Just point the finger"
 }%
 %FORMELEMENT{
 type="submit"

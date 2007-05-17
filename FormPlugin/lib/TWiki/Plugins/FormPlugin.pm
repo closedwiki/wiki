@@ -32,7 +32,7 @@ use CGI qw( :all );
 # *must* exist in this package
 use vars qw( $VERSION $RELEASE $debug $pluginName $installWeb);
 use vars
-  qw( $currentTopic $currentWeb $defaultFormat $defaultTitleFormat $elementcssclass %expandedForms %substitutedForms %uncheckedForms %validatedForms %errorForms %noErrorForms %errorFields $headerDone $currentFormName );
+  qw( $currentTopic $currentWeb $defaultFormat $defaultTitleFormat $elementcssclass %expandedForms %substitutedForms %uncheckedForms %validatedForms %errorForms %noErrorForms %errorFields $headerDone %currentForm );
 
 # This should always be $Rev: 11069$ so that TWiki can determine the checked-in
 # status of the plugin. It is used by the build automation tools, so
@@ -56,6 +56,13 @@ $defaultFormat      = '<p>$titleformat $e $m $h </p>';
   ; # hash of forms names that have their field tokens substituted by the corresponding field values
 %errorFields = ();    # for each field entry: ...
 
+# form attributes we want to retrieve while parsing FORMELEMENT tags:
+%currentForm = (
+   'name' => '',
+   'elementformat' => ''
+);
+
+# constants
 my $STATUS_NO_ERROR  = 'noerror';
 my $STATUS_ERROR     = 'error';
 my $STATUS_UNCHECKED = 'unchecked';
@@ -163,7 +170,6 @@ sub beforeCommonTagsHandler {
     if ( $submittedFormName && !$validatedForms{$submittedFormName} ) {
 
         my $error = !_validateForm();
-        _debug("validation: $submittedFormName: error=$error");
         if ($error) {
             $errorForms{$submittedFormName}   = 1;
             $noErrorForms{$submittedFormName} = 0;
@@ -257,11 +263,21 @@ sub _addHeader {
 
     return if $headerDone;
     
-    my $header = <<'EOF';
+    my $header = <<'END';
 <style type="text/css" media="all">
 @import url("%PUBURL%/%TWIKIWEB%/FormPlugin/formplugin.css");
 </style>
-EOF
+<script type="text/javascript">
+//<![CDATA[
+	function FP_setFocus(inFormName, inElementName) {
+		try {
+			document[inFormName][inElementName].focus();
+		} catch (er) {}
+	}
+//]]>
+</script>
+END
+
     TWiki::Func::addToHEAD( 'FORMPLUGIN', $header );
     $headerDone = 1;
 }
@@ -285,8 +301,6 @@ sub _startForm {
 
     # else
     $expandedForms{$name} = 1;
-
-    $currentFormName = $name; # retrieved for element rendering
     
     # check if the submitted form is the form at hand
     my $query             = TWiki::Func::getCgiQuery();
@@ -307,6 +321,14 @@ sub _startForm {
             $query->delete($ACTION_URL_TAG);
 
 # do not delete param $FORM_SUBMIT_TAG as we might want to know if this form is validated
+            my $method = _method( $params->{'method'} );
+            if ( $method eq 'POST' && $TWiki::Plugins::VERSION < 1.13 ) {
+                # on previous versions redirecting a POST does not work
+                # because the request is changed to a GET
+                # to not loose the parameters we will convert all key-values
+                # to a parameter string
+                $actionurl .= '?' . _paramString();
+            }
             TWiki::Func::redirectCgiQuery( undef, $actionurl, 1 );
             return;
         }
@@ -349,7 +371,6 @@ sub _validateForm {
             my $nameAndvalidationType = $query->param($name);
             $nameAndvalidationType =~ s/^(.*?)(\=m)*$/$1/go;
             my $isMultiple = $2 if $2;
-
             # append order argument
             $nameAndvalidationType .= '=' . $order++;
             if ($isMultiple) {
@@ -373,13 +394,12 @@ sub _validateForm {
     $TWiki::Plugins::FormPlugin::Validate::IgnoreNonMatchingFields = 1;
 
     # not need to check for all form elements
-    $TWiki::Plugins::FormPlugin::Validate::Complete = 1;
+    $TWiki::Plugins::FormPlugin::Validate::Complete = 0;
 
     # test fields
     TWiki::Plugins::FormPlugin::Validate::GetFormData(%validateFields);
 
     if ($TWiki::Plugins::FormPlugin::Validate::Error) {
-
         # store field name refs
         for my $href (@TWiki::Plugins::FormPlugin::Validate::ErrorFields) {
             my $fieldNameForRef = $href->{'field'};
@@ -398,8 +418,6 @@ sub _validateForm {
 sub _displayErrors {
     my ( $session, $params, $topic, $web ) = @_;
 
-    
-
     if (@TWiki::Plugins::FormPlugin::Validate::ErrorFields) {
         my $note = " *Some fields are not filled in correctly:* ";
         my @sortedErrorFields =
@@ -408,13 +426,12 @@ sub _displayErrors {
         for my $href (@sortedErrorFields) {
             my $errorType = $href->{'type'};
             my $fieldName = $href->{'field'};
-_debug("_displayErrors fieldName=$fieldName");
             my $errorString = $ERROR_STRINGS{$errorType} || '';
             my $expected = $href->{'expected'};
             my $expectedString =
               $expected ? ' ' . $ERROR_TYPE_HINTS{$expected} : '';
             $errorString .= $expectedString;
-            my $anchor = _anchorLink($fieldName);
+            my $anchor = '#' . _anchorLink($fieldName);
 
             # preserve state information
             my $currentUrl = _currentUrl(@_);
@@ -436,26 +453,8 @@ With POST, ignores url parameters.
 sub _currentUrl {
     my ( $session, $params, $topic, $web ) = @_;
 
-    my $method     = _method( $params->{'method'} );
-    my $currentUrl = CGI::url( -path_info => 1 );
-    my $parameters = '';
-    if ( $method eq 'GET' ) {
-        $parameters = CGI::url( -query => 1 );
-        if ( $currentUrl =~ m/$parameters/go ) {
-
-            # complete match, so no url parameters
-        }
-        else {
-            $parameters =~ s/^(.*?)(\?.*?)$/$2/go;
-
-            # make url uniform to urls
-            $parameters =~ s/;/&/go;
-
-            # strip private parameters
-            $parameters =~ s/(&\.[^&|^$|^#]*)//go;
-            $currentUrl .= $parameters;
-        }
-    }
+    my $query             = TWiki::Func::getCgiQuery();
+    my $currentUrl = $query->url().$query->path_info();
     return $currentUrl;
 }
 
@@ -488,6 +487,11 @@ sub _displayForm {
     my $webParam     = $params->{'web'};
     my $topicParam   = $params->{'topic'};
     my $anchor       = $params->{'anchor'} || $NOTIFICATION_ANCHOR_NAME;
+    
+    # store for element rendering
+    $currentForm{'name'} = $name;
+    $currentForm{'elementformat'} = $params->{'elementformat'} || '';
+    
     
     if ($topicParam) {
         ( $web, $topic ) =
@@ -575,7 +579,6 @@ Lifted out:
         my $query = TWiki::Func::getCgiQuery();
         my $default          = $params->{'default'};
         $query->param( -name => $name, -value => $default );
-        _debug("test: " . $query->param($name));
     }
 
 | =formcondition= | Display only if the form condition is true. Condition syntax: =form_name.contition_status=, where =contition_status= is one of =unchecked=, =error= or =noerror= |- |- | =formcondition="Mailform.noerror"= |
@@ -585,19 +588,27 @@ sub _formElement {
     my ( $session, $params, $topic, $web ) = @_;
 
     my $element       = _getFormElementHtml(@_);
+    $element = '<noautolink>' . $element . '</noautolink>'; # prevent wiki words inside form fields
     my $type          = $params->{'type'};
     my $name          = $params->{'name'};
 
 
-    my $format = $params->{'format'} || $defaultFormat;
+    my $format = $params->{'format'} || $currentForm{'elementformat'} || $defaultFormat;
+    
     if ( $type eq 'hidden' ) {
         $format = '$e';
-        $format =~ s/\$e/$element/go;
+        $format =~ s/\$e\b/$element/go;
         $format = _renderFormattingTokens($format);
         return $format;
     }
 
-    my $title = $params->{'title'};
+    my $focus = $params->{'focus'};
+    if ( $focus ) {
+        my $focusCall = '<script type="text/javascript">FP_setFocus("' . $currentForm{'name'} . '", "' . $name . '");</script>';
+        $format =~ s/(\$e\b)/$1$focusCall/go;
+    }
+    
+    my $title = $params->{'title'} || '';
     my $hint = $params->{'hint'} || '';
 
     $title = _wrapHtmlTitleContainer($title) if $title;
@@ -610,7 +621,7 @@ sub _formElement {
     my $titleformat = $params->{'titleformat'} || $defaultTitleFormat;
     $format =~ s/\$titleformat/$titleformat/go if $title;
     $format =~ s/\$e\b/$element/go;
-    $format =~ s/\$t\b/$title/go                             if $title;
+    $format =~ s/\$t\b/$title/go;
     $format =~ s/\$m\b/$mandatory/go;
 
     $hint = _wrapHtmlHintContainer($hint) if $hint;
@@ -622,7 +633,8 @@ sub _formElement {
     $format =~ s/\$titleformat//go;
     $format = _renderFormattingTokens($format);
 
-    if ( $elementcssclass && $type ne 'hidden' ) {
+    if ( $elementcssclass ) {
+        # not for hidden classes, but these are returned earlier in sub
         my $classAttr = ' class="' . $elementcssclass . '"';
         $format = '<div class="' . $elementcssclass . '">' . $format . '</div>';
     }
@@ -644,14 +656,14 @@ sub _formElement {
     }
 
     # error?
-    my %formStatus = _status($currentFormName);
+    my %formStatus = _status($currentForm{'name'});
     if ( $formStatus{$STATUS_ERROR} && $name && $errorFields{$name} ) {
         $format = _wrapHtmlErrorContainer($format);
     }
 
     # add anchor so individual fields can be targeted from any
     # error feedback
-    $format = '#' . _anchorLink($name) . "\n" . $format;
+    $format = '<a name="' . _anchorLink($name) . '"></a>' . "\n" . $format;
 
     return $format;
 }
@@ -688,9 +700,10 @@ sub _getFormElementHtml {
     my ( $options, $labels ) =
       _parseOptions( $params->{'options'}, $params->{'labels'} );
 
-    my $itemformat = $params->{'elementformat'};
-    my $class      = $params->{'class'};
-
+    my $itemformat = $params->{'fieldformat'};
+    my $cssClass      = $params->{'cssclass'};
+    $cssClass = _normalizeCssClassName($cssClass);
+    
     my $selectedoptions = $params->{'default'} || undef;
     my $isMultiple = $MULTIPLE_TYPES{$type};
     if ($isMultiple) {
@@ -701,47 +714,48 @@ sub _getFormElementHtml {
         $selectedoptions ||= param($name);
     }
 
+    my $disabled = $params->{'disabled'} || undef;
     my $element = '';
     if ( $type eq 'text' ) {
         $element =
           _getTextFieldHtml( $session, $name, $value, $size, $maxlength,
-            $class );
+            $cssClass, $disabled );
     }
     elsif ( $type eq 'password' ) {
         $element =
           _getPasswordFieldHtml( $session, $name, $value, $size, $maxlength,
-            $class );
+            $cssClass, $disabled );
     }
     elsif ( $type eq 'submit' ) {
-        $element = _getSubmitButtonHtml( $session, $name, $value, $class );
+        $element = _getSubmitButtonHtml( $session, $name, $value, $cssClass, $disabled );
     }
     elsif ( $type eq 'radio' ) {
         $element =
           _getRadioButtonGroupHtml( $session, $name, $options, $labels,
-            $selectedoptions, $itemformat, $class );
+            $selectedoptions, $itemformat, $cssClass, $disabled );
     }
     elsif ( $type eq 'checkbox' ) {
         $element =
           _getCheckboxButtonGroupHtml( $session, $name, $options, $labels,
-            $selectedoptions, $itemformat, $class );
+            $selectedoptions, $itemformat, $cssClass, $disabled );
     }
     elsif ( $type eq 'select' ) {
         $element =
           _getSelectHtml( $session, $name, $options, $labels, $selectedoptions,
-            $size, $hasMultiSelect, $class );
+            $size, $hasMultiSelect, $cssClass, $disabled );
     }
     elsif ( $type eq 'dropdown' ) {
 
         # just a select box with size of 1 and no multiple
         $element =
           _getSelectHtml( $session, $name, $options, $labels, $selectedoptions,
-            '1', undef, $class );
+            '1', undef, $cssClass, $disabled );
     }
     elsif ( $type eq 'textarea' ) {
         my $rows = $params->{'rows'};
         my $cols = $params->{'cols'};
         $element =
-          _getTextareaHtml( $session, $name, $value, $rows, $cols, $class );
+          _getTextareaHtml( $session, $name, $value, $rows, $cols, $cssClass, $disabled );
     }
     elsif ( $type eq 'hidden' ) {
         $element = _getHiddenHtml( $session, $name, $value );
@@ -758,7 +772,7 @@ sub _parseOptions {
 
     return ( '', '' ) if !$inOptions;
 
-    my @optionPairs = split( /\s*,\s*/, $inOptions );
+    my @optionPairs = split( /\s*,\s*/, $inOptions ) if $inOptions;
     my @optionList;
     my @labelList;
     foreach my $item (@optionPairs) {
@@ -799,16 +813,20 @@ sub _renderFormattingTokens {
 =cut
 
 sub _getTextFieldHtml {
-    my ( $session, $name, $value, $size, $maxlength, $class ) = @_;
+    my ( $session, $name, $value, $size, $maxlength, $cssClass, $disabled ) = @_;
 
-    my $cssClass = $class || 'twikiInputField';
-    return CGI::textfield(
+    my %attributes = (
         -name      => $name,
         -value     => $value,
         -size      => $size,
-        -maxlength => $maxlength,
-        -class     => $cssClass
+        -maxlength => $maxlength
     );
+    $cssClass = 'twikiInputFieldDisabled' if (!$cssClass && $disabled);
+    $cssClass ||= 'twikiInputField';
+    $cssClass = _normalizeCssClassName($cssClass);
+    $attributes{'class'} = $cssClass if $cssClass;
+    $attributes{'disabled'} = $disabled if $disabled;
+    return CGI::textfield(%attributes);
 }
 
 =pod
@@ -816,15 +834,18 @@ sub _getTextFieldHtml {
 =cut
 
 sub _getPasswordFieldHtml {
-    my ( $session, $name, $value, $size, $maxlength, $class ) = @_;
-
-    return CGI::password_field(
+    my ( $session, $name, $value, $size, $maxlength, $cssClass, $disabled ) = @_;
+    my %attributes = (
         -name      => $name,
         -value     => $value,
         -size      => $size,
-        -maxlength => $maxlength,
-        -class     => $class
+        -maxlength => $maxlength
     );
+    $cssClass = 'twikiInputFieldDisabled' if (!$cssClass && $disabled);
+    $cssClass ||= 'twikiInputField';
+    $cssClass = _normalizeCssClassName($cssClass);
+    $attributes{'disabled'} = $disabled if ($disabled);
+    return CGI::textfield(%attributes);
 }
 
 =pod
@@ -842,26 +863,21 @@ sub _getHiddenHtml {
 =cut
 
 sub _getSubmitButtonHtml {
-    my ( $session, $name, $value, $class ) = @_;
+    my ( $session, $name, $value, $cssClass, $disabled ) = @_;
 
     my $id       = $name  || undef;
-    my $cssClass = $class || 'twikiSubmit';
 
-    if ($id) {
-        return CGI::submit(
-            -name  => $name,
-            -value => $value,
-            -id    => $id,
-            -class => $cssClass
-        );
-    }
-    else {
-        return CGI::submit(
-            -name  => $name,
-            -value => $value,
-            -class => $cssClass
-        );
-    }
+    my %attributes = (
+        -name      => $name,
+        -value     => $value
+    );
+    $cssClass = 'twikiSubmitDisabled' if (!$cssClass && $disabled);
+    $cssClass ||= 'twikiSubmit';
+    $cssClass = _normalizeCssClassName($cssClass);
+    $attributes{'class'} = $cssClass if $cssClass;
+    $attributes{'disabled'} = $disabled if $disabled;
+    $attributes{'id'} = $id if ($id);
+    return CGI::submit(%attributes);
 }
 
 =pod
@@ -869,16 +885,20 @@ sub _getSubmitButtonHtml {
 =cut
 
 sub _getTextareaHtml {
-    my ( $session, $name, $value, $rows, $cols, $class ) = @_;
+    my ( $session, $name, $value, $rows, $cols, $cssClass, $disabled ) = @_;
 
-    my $cssClass = $class || 'twikiInputField';
-    return CGI::textarea(
+    my %attributes = (
         -name    => $name,
         -default => $value,
         -rows    => $rows,
-        -columns => $cols,
-        -class   => $cssClass
+        -columns => $cols
     );
+    $cssClass = 'twikiInputFieldDisabled' if (!$cssClass && $disabled);
+    $cssClass ||= 'twikiInputField';
+    $cssClass = _normalizeCssClassName($cssClass);
+    $attributes{'class'} = $cssClass if $cssClass;
+    $attributes{'disabled'} = $disabled if $disabled;
+    return CGI::textarea(%attributes);
 }
 
 =pod
@@ -887,15 +907,15 @@ sub _getTextareaHtml {
 
 sub _getCheckboxButtonGroupHtml {
     my ( $session, $name, $options, $labels, $selectedoptions, $itemformat,
-        $class )
+        $cssClass, $disabled )
       = @_;
 
-    my @optionList = split( /\s*,\s*/, $options );
+    my @optionList = split( /\s*,\s*/, $options ) if $options;
     $labels = $options if !$labels;
-    my @selectedValueList = split( /\s*,\s*/, $selectedoptions );
-    my @labelList         = split( /\s*,\s*/, $labels );
+    my @selectedValueList = split( /\s*,\s*/, $selectedoptions ) if $selectedoptions;
+    my @labelList         = split( /\s*,\s*/, $labels ) if $labels;
     my %labels;
-    @labels{@optionList} = @labelList;
+    @labels{@optionList} = @labelList if @labelList;
 
     # ideally we would use CGI::checkbox_group, but this does not
     # generate the correct labels
@@ -906,13 +926,17 @@ sub _getCheckboxButtonGroupHtml {
     #                            -labels=>\%labels);
 
     # so we roll our own while keeping the same interface
-    my @items = _checkbox_group(
+    my %attributes = (
         -name      => $name,
         -values    => \@optionList,
         -default   => \@selectedValueList,
         -linebreak => 'false',
         -labels    => \%labels
     );
+    $cssClass = 'twikiCheckbox ' . $cssClass;
+    $cssClass = _normalizeCssClassName($cssClass);
+    $attributes{'-class'} = $cssClass if $cssClass;
+    $attributes{'-disabled'} = $disabled if $disabled;    my @items = _checkbox_group(%attributes);
 
     return _wrapHtmlGroupContainer(
         _mapToItemFormatString( \@items, $itemformat ) );
@@ -935,23 +959,29 @@ sub _checkbox_group {
 
 sub _getRadioButtonGroupHtml {
     my ( $session, $name, $options, $labels, $selectedoptions, $itemformat,
-        $class )
+        $cssClass, $disabled )
       = @_;
 
-    my @optionList = split( /\s*,\s*/, $options );
+    return "" if !$options;
+    my @optionList = split( /\s*,\s*/, $options ) if $options;
     $labels = $options if !$labels;
-    my @selectedValueList = split( /\s*,\s*/, $selectedoptions );
-    my @labelList         = split( /\s*,\s*/, $labels );
+    my @selectedValueList = split( /\s*,\s*/, $selectedoptions ) if $selectedoptions;
+    my @labelList         = split( /\s*,\s*/, $labels ) if $labels;
     my %labels;
-    @labels{@optionList} = @labelList;
-    my @items = _radio_group(
+    @labels{@optionList} = @labelList if @labelList;
+    my %attributes = (
         -name      => $name,
         -values    => \@optionList,
         -default   => \@selectedValueList,
         -linebreak => 'false',
         -labels    => \%labels
     );
-
+    $cssClass = 'twikiInputFieldDisabled' if (!$cssClass && $disabled);
+    $cssClass = 'twikiRadioButton ' . $cssClass;
+    $cssClass = _normalizeCssClassName($cssClass);
+    $attributes{'-class'} = $cssClass if $cssClass;
+    $attributes{'-disabled'} = $disabled if $disabled;
+    my @items = _radio_group(%attributes);
     return _wrapHtmlGroupContainer(
         _mapToItemFormatString( \@items, $itemformat ) );
 }
@@ -990,18 +1020,18 @@ sub _mapToItemFormatString {
 
 sub _getSelectHtml {
     my ( $session, $name, $options, $labels, $selectedoptions, $size,
-        $hasMultiSelect, $class )
+        $hasMultiSelect, $cssClass, $disabled )
       = @_;
 
-    my @optionList = split( /\s*,\s*/, $options );
+    my @optionList = split( /\s*,\s*/, $options ) if $options;
     $labels = $options if !$labels;
-    my @selectedValueList = split( /\s*,\s*/, $selectedoptions );
-    my @labelList         = split( /\s*,\s*/, $labels );
+    my @selectedValueList = split( /\s*,\s*/, $selectedoptions ) if $selectedoptions;
+    my @labelList         = split( /\s*,\s*/, $labels ) if $labels;
     my %labels;
-    @labels{@optionList} = @labelList;
+    @labels{@optionList} = @labelList if @labelList;
 
     my $multiple = $hasMultiSelect ? 'true' : undef;
-    my @items = CGI::scrolling_list(
+    my %attributes = (
         -name     => $name,
         -values   => \@optionList,
         -default  => \@selectedValueList,
@@ -1009,7 +1039,12 @@ sub _getSelectHtml {
         -size     => $size,
         -multiple => $multiple
     );
-
+    $cssClass = 'twikiSelectDisabled' if (!$cssClass && $disabled);
+    $cssClass = 'twikiSelect ' . $cssClass;
+    $cssClass = _normalizeCssClassName($cssClass);
+    $attributes{'-class'} = $cssClass if $cssClass;
+    $attributes{'-disabled'} = $disabled if $disabled;
+    my @items = CGI::scrolling_list(%attributes);
     return _mapToItemFormatString( \@items );
 }
 
@@ -1023,7 +1058,7 @@ sub _group {
     my $type       = $options{-type};
     my $name       = $options{-name};
     my $size       = $options{-size};
-    my $values     = $options{ -values };
+    my $values     = $options{-values};
     my $default    = $options{-default};
     my %defaultSet = map { $_ => 1 } @$default;
 
@@ -1044,9 +1079,10 @@ sub _group {
         $optionFormat   = '<option $attributes>$label</option>';
         $selectedFormat = 'selected="selected"';
     }
-
+    my $disabledFormat = $options{-disabled} ? ' disabled="disabled"' : '';
+    my $cssClassFormat = $options{-class} ? ' class="' . $options{-class} . '"' : '';
+    
     my @elements;
-
     foreach (@$values) {
         my $value = $_;
         my $label = $labels->{$value};
@@ -1067,7 +1103,7 @@ sub _group {
         my $selected = '';
         $selected = $selectedFormat if $defaultSet{$value};
 
-        my $selectedAttributeString = "$attributeString $selected";
+        my $selectedAttributeString = "$attributeString $selected $disabledFormat $cssClassFormat";
         $selectedAttributeString =~ s/ +/ /go;    # remove extra spaces
 
         my $element = $optionFormat;
@@ -1079,6 +1115,17 @@ sub _group {
     }
 
     return @elements;
+}
+
+=pod
+
+=cut
+
+sub _normalizeCssClassName {
+    my ( $cssString ) = @_;
+    $cssString =~ s/^\s*(.*?)\s*$/$1/go; # strip surrounding spaces
+    $cssString =~ s/\s+/\s/go; # remove double spaces
+    return $cssString;
 }
 
 =pod
@@ -1191,6 +1238,23 @@ sub isTrue {
     $value =~ s/no//gi;
     $value =~ s/false//gi;
     return ( $value ) ? 1 : 0;
+}
+
+=pod
+
+=cut
+
+sub _paramString {
+    my $out   = '';
+    my $query = TWiki::Func::getCgiQuery();
+    my @names = $query->param;
+    foreach (@names) {
+        my $name = $_;
+        next if !$name;
+        $out .= ';' if $out;
+        $out .= "$name=" . $query->param($name);
+    }
+    return $out;
 }
 
 1;
