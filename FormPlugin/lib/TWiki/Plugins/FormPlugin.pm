@@ -328,8 +328,9 @@ sub _startForm {
                 # to not loose the parameters we will convert all key-values
                 # to a parameter string
                 $actionurl .= '?' . _paramString();
+                TWiki::Func::writeDebug("FormPlugin - POST and Plugins::VERSION < 1.13 -- converting all key-values to a parameter string: actionurl=" . $actionurl) if $debug;
             }
-            TWiki::Func::redirectCgiQuery( undef, $actionurl, 1 );
+            TWiki::Func::redirectCgiQuery( undef, $actionurl );
             return;
         }
     }
@@ -394,7 +395,7 @@ sub _validateForm {
     $TWiki::Plugins::FormPlugin::Validate::IgnoreNonMatchingFields = 1;
 
     # not need to check for all form elements
-    $TWiki::Plugins::FormPlugin::Validate::Complete = 0;
+    $TWiki::Plugins::FormPlugin::Validate::Complete = 1;
 
     # test fields
     TWiki::Plugins::FormPlugin::Validate::GetFormData(%validateFields);
@@ -714,7 +715,7 @@ sub _getFormElementHtml {
         $selectedoptions ||= param($name);
     }
 
-    my $disabled = $params->{'disabled'} || undef;
+    my $disabled = $params->{'disabled'} ? 'disabled' : undef;
     my $element = '';
     if ( $type eq 'text' ) {
         $element =
@@ -1123,8 +1124,9 @@ sub _group {
 
 sub _normalizeCssClassName {
     my ( $cssString ) = @_;
+    return '' if !$cssString;
     $cssString =~ s/^\s*(.*?)\s*$/$1/go; # strip surrounding spaces
-    $cssString =~ s/\s+/\s/go; # remove double spaces
+    $cssString =~ s/\s+/ /go; # remove double spaces
     return $cssString;
 }
 

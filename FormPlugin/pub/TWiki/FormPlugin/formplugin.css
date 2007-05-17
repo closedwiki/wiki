@@ -38,6 +38,7 @@ fieldset.formPluginGroupWithHint {
 .formPluginError .formPluginTitle {
 	font-weight:bold;
 	background-color:#EE3312;
+	padding:.1em .2em;
 	color:#fff;
 }
 .formPluginHint {
