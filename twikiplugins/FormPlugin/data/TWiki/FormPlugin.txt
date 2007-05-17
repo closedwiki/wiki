@@ -97,6 +97,7 @@ buttonlabel="Submit"
    fieldformat="..."
    cssclass="..."
    focus="..."
+   disabled="..."
 }%
 %ENDFORM%
 </verbatim>
@@ -168,8 +169,8 @@ Use =%<nop>URLPARAM{"element_name"}%= to retrieve the value of a submitted form 
 | =maxlength=  | For =type="text"= or =type="password"=: the maximum number of input characters. |- |- | =maxlength="12"= |
 | =rows=   | For =type="textarea"=: the number of rows. |- |- | =rows="5"= |
 | =cols=   | For =type="textarea"=: the number of columns. |- |- | =cols="80"= |
-| =focus=  | Gives text entry focus to a field. Use value ="on"= to give focus. Requires javascript. Only one element on the page can have focus. |- |- | =focus="on"= |
-
+| =focus=  | =focus="on"= gives text entry focus to a field. Requires javascript. Only one element on the page can have focus. |- |- | =focus="on"= |
+| =disabled=  | =disabled="on"= disables user input. |- |- | =disabled="on"= |
 
 
 
@@ -333,7 +334,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Other authors: | =Validate.pm=, originally =CGI::Validate= by Zenin <zenin@archive.rhps.org> aka Byron Brummer <byron@omix.com>. Copyright (c) 1997,1998 OMIX, Inc. All rights reserved. Use is granted under the same terms of Perl. |
 |  Plugin Version: | 17 May 2007  |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  17 May 2007 | 1.0.3 Added element attribute =focus=. Fallback for form POSTs and TWiki earlier than 4.2: POST requests are converted to GET requests. |
+|  17 May 2007 | 1.0.3 Added element attributes =focus= and =disabled=. Fallback for form POSTs and TWiki versions earlier than 4.2: POST requests are converted to GET requests. |
 |  15 May 2007 | 1.0.2 Added form attribute =elementformat=; changed parameter names for consistency: =class= to =cssclass=, =elementformat= to =fieldformat=.  |
 |  14 May 2007 | 1.0.1 Added missing lib. |
 |  13 May 2007 | 1.0 First release. |
