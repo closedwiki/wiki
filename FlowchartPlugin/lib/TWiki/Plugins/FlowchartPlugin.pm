@@ -630,8 +630,13 @@ sub afterSaveHandler
 
     TWiki::Func::writeDebug( "- ${pluginName}::afterSaveHandler( $_[2].$_[1] )" ) if $debug;
     
-    TWiki::Func::saveFile( "/tmp/xxx_$_[2]_$_[1].txt", 'ini' );
+    my $web = $_[2];
+    $web =~ s/(\/)/\./g;
 
+    my $tempFileName = $TWiki::cfg{TempfileDir} . '/' . $web . '_' . $_[1] . '.txt';
+
+    TWiki::Func::saveFile( $tempFileName, 'ini' );
+    
     # This handler is called by TWiki::Store::saveTopic just after the save action.
     # New hook in TWiki::Plugins $VERSION = '1.020'
 

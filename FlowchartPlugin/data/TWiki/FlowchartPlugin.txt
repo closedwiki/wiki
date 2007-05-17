@@ -1,4 +1,3 @@
-%META:TOPICINFO{author="AurelioAHeckert" date="1119968793" format="1.0" version="1.17"}%
 ---+!! <nop>%TOPIC%
 
 You can create flowcharts from textual content on the topic.
@@ -136,8 +135,9 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 
 <!-- INI Plugin Info -->
 |  Plugin Author: | TWiki:Main.AurelioAHeckert |
-|  Plugin Version: | 27 Jun 2005 (V1.000) |
+|  Plugin Version: | %$VERSION% |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  13779 | Bugs:Item4085 - Fixed problem with subwebs. Patch by TWiki:Main.JohnWorsley. |
 |  27 Jun 2005: | Initial public version 0.8 |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.024 |
 |  CPAN Dependencies: | none |
@@ -152,6 +152,3 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 
 __Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
 
--- TWiki:Main.AurelioAHeckert - 17 Jun 2005
-
-%META:TOPICMOVED{by="AurelioAHeckert" date="1119466004" from="TWiki.FluxogramaPlugin" to="TWiki.FlowchartPlugin"}%
