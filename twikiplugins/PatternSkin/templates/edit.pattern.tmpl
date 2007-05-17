@@ -47,7 +47,7 @@
 
 
 
-%TMPL:DEF{"action_buttons"}%%TMPL:P{"button_save"}%%TMPL:P{"sep"}%%TMPL:P{"button_quietsave"}%%TMPL:P{"sep"}%%TMPL:P{"button_checkpoint"}% %MAKETEXT{"or"}% %TMPL:P{"button_preview"}% %MAKETEXT{"or"}% %TMPL:P{"button_cancel"}%%TMPL:END%
+%TMPL:DEF{"action_buttons"}%%TMPL:P{"button_save"}%&nbsp;%TMPL:P{"button_quietsave"}%&nbsp;%TMPL:P{"button_checkpoint"}% %MAKETEXT{"or"}% %TMPL:P{"button_preview"}% %MAKETEXT{"or"}% %TMPL:P{"button_cancel"}%%TMPL:END%
 
 
 
@@ -59,7 +59,7 @@
 
 %TMPL:DEF{"button_preview"}%<input type="submit" class="twikiButton" name="action_preview" id="preview" %MAKETEXT{"value='Preview' accesskey='p'"}% />%TMPL:END%
 
-%TMPL:DEF{"button_cancel"}%<input type="submit" class="twikiButton" name="action_cancel" id="cancel" title='%MAKETEXT{"Cancel editing and discard changes"}%' %MAKETEXT{"value='Cancel' accesskey='c'"}% />%TMPL:END%
+%TMPL:DEF{"button_cancel"}%<input type="submit" class="twikiButton twikiButtonCancel" name="action_cancel" id="cancel" title='%MAKETEXT{"Cancel editing and discard changes"}%' %MAKETEXT{"value='Cancel' accesskey='c'"}% />%TMPL:END%
 
 
 
@@ -123,7 +123,7 @@
 
 
 
-%TMPL:DEF{"textarea"}%<textarea class="twikiEditboxStyleProportional" id="topic" name="text" rows="%EDITBOXHEIGHT%" cols="%EDITBOXWIDTH%" style='%EDITBOXSTYLE%' onkeydown='handleKeyDown(event)'>%TEXT%</textarea><script type="text/javascript">initTextAreaHeight();</script>%TMPL:END%
+%TMPL:DEF{"textarea"}%<textarea class="twikiTextarea twikiEditboxStyleProportional" id="topic" name="text" rows="%EDITBOXHEIGHT%" cols="%EDITBOXWIDTH%" style='%EDITBOXSTYLE%' onkeydown='handleKeyDown(event)'>%TEXT%</textarea><script type="text/javascript">initTextAreaHeight();</script>%TMPL:END%
 
 
 

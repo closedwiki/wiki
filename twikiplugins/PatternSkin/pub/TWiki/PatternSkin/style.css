@@ -38,7 +38,7 @@ th {
 	line-height:1.15em;
 }
 label {
-	padding:.15em 0; /* same vertical padding as twikiInputField */
+	padding:.15em .3em .15em 0; /* same vertical padding as twikiInputField */
 }
 strong, b {
 	font-weight:bold;
@@ -75,8 +75,8 @@ h1 {
 }
 h1 { font-size:210%; }
 h2 { font-size:150%; }
-h3 { font-size:130%; font-weight:bold; }
-h4 { font-size:122%; font-weight:bold; }
+h3 { font-size:135%; font-weight:bold; }
+h4 { font-size:120%; font-weight:bold; }
 h5 { font-size:110%; font-weight:bold; }
 h6 { font-size:95%; font-weight:bold; }
 h2, h3, h4, h5, h6 {
@@ -89,11 +89,12 @@ h2, h3, h4, h5, h6 {
 	height:auto;	
 }
 h1.patternTemplateTitle {
-	font-size:175%;
+	font-size:150%;
 	text-align:center;
 }
 h2.patternTemplateTitle {
 	text-align:center;
+	font-size:135%;
 }
 /* Links */
 /* somehow the twikiNewLink style have to be before the general link styles */
@@ -145,45 +146,45 @@ form {
 	margin:0;
 	padding:0;
 }
+html>body select { /* Mozilla */
+	font-size:94%;	
+}
 textarea,
 input,
 select {
 	vertical-align:middle;
-	border-width:1px;
-	border-style:solid;
 	font-family:"Lucida Grande", verdana, arial, sans-serif;
 }
-textarea {
-	padding:1px;
-}
-input,
-select option {
+.twikiTextarea {
 	padding:1px;
 }
 .twikiSubmit,
+.twikiSubmitDisabled,
 .twikiButton,
 .twikiCheckbox {
 	border-width:1px;
 	border-style:solid;
-	padding:.1em .3em;
+	padding:.1em .2em;
 	font-size:94%;
 	font-weight:bold;
 	vertical-align:middle;
 }
 .twikiCheckbox,
 .twikiRadioButton {
-	margin:0 .3em 0 0;
+	margin:1px .5em 1px .1em;
+	padding:0 0 0 .5em;
 	border:0;
 }
-.twikiInputField {
+.twikiTextarea,
+.twikiInputField,
+.twikiInputFieldDisabled,
+.twikiSelect {
 	border-width:1px;
 	border-style:solid;
-	padding:.15em .25em;
 	font-size:94%; /*S2*/
 }
-.patternFormButton {
-	border:0;
-	margin:0 0 0 2px;
+.twikiInputField {
+	padding:.1em .2em;
 }
 textarea {
 	font-size:100%;
@@ -928,7 +929,7 @@ table.patternDiffOptions input {
 	font-family:"Lucida Grande", verdana, arial, sans-serif;
 }
 .twikiChangeFormButtonHolder {
-	margin:.5em 0;
+	margin:.25em 0;
 	float:right;
 }
 .twikiChangeFormButton .twikiButton,
@@ -943,11 +944,11 @@ table.patternDiffOptions input {
 	width:100%;
 }
 .patternSigLine {
-	margin:.25em 0 .5em 0;
-	padding:0 .5em 0 0;
+	margin:0 0 .25em 0;
+	padding:.25em .5em;
 }
 .patternEditPage .patternTopicActions {
-	margin:1.5em 0 0 0;
+	margin:.5em 0 0 0;
 }
 
 /* preview.pattern.tmpl */
