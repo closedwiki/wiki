@@ -110,11 +110,6 @@ If you want to learn how to create your own look or skin based on !PatternSkin, 
       * .patternSearchResultCount - the number of results
       * .patternSearched - feedback on the string used to search
 
-   * %TWIKIWEB%.WebLeftBarSearch
-      * .patternFormButton
-      * .patternChangeLanguage - change language button (deprecated)
- 
-
 __Related Topics:__ TWikiSkins, AdminDocumentationCategory
 
 

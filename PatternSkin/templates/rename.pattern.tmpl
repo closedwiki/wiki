@@ -18,7 +18,7 @@
 
 
 
-%TMPL:DEF{"newweb"}%<p><select name="newweb">%WEBLIST{"<option $marker value=$qname>$name</option>" webs="%NEW_WEB%,public" selection="%NEW_WEB%" separator=" "}%</select></p>%TMPL:END%
+%TMPL:DEF{"newweb"}%<p><select name="newweb" class="twikiSelect">%WEBLIST{"<option $marker value=$qname>$name</option>" webs="%NEW_WEB%,public" selection="%NEW_WEB%" separator=" "}%</select></p>%TMPL:END%
 
 
 
@@ -26,7 +26,7 @@
 
 
 
-%TMPL:DEF{"newtopic"}%<p><input name="newtopic" value="%NEW_TOPIC%" size="36" /> %TMPL:P{"allownonwikiword"}%</p>%TMPL:END%
+%TMPL:DEF{"newtopic"}%<p><input name="newtopic" class="twikiInputField" value="%NEW_TOPIC%" size="20" /> %TMPL:P{"allownonwikiword"}%</p>%TMPL:END%
 
 
 

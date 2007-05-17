@@ -23,7 +23,7 @@
 
 
 
-%TMPL:DEF{"action_buttons"}%%TMPL:P{"button_save"}%%TMPL:P{"sep"}%%TMPL:P{"button_quietsave"}%%TMPL:P{"sep"}%%TMPL:P{"button_checkpoint"}% %MAKETEXT{"or"}% %TMPL:P{"button_discard"}%%TMPL:END%
+%TMPL:DEF{"action_buttons"}%%TMPL:P{"button_save"}%&nbsp;%TMPL:P{"button_quietsave"}%&nbsp;%TMPL:P{"button_checkpoint"}% %MAKETEXT{"or"}% %TMPL:P{"button_discard"}%%TMPL:END%
 
 
 
@@ -33,7 +33,7 @@
 
 %TMPL:DEF{"button_checkpoint"}%<input type="submit" class="twikiButton" name="action_checkpoint" id="checkpoint" %MAKETEXT{"value='Checkpoint' accesskey='k'"}% />%TMPL:END%
 
-%TMPL:DEF{"button_discard"}%<input id="discard" type="submit" class="twikiButton" name="action_cancel" %MAKETEXT{"value='Discard' accesskey='d'"}% />%TMPL:END%
+%TMPL:DEF{"button_discard"}%<input id="discard" type="submit" class="twikiButton twikiButtonCancel" name="action_cancel" %MAKETEXT{"value='Discard' accesskey='d'"}% />%TMPL:END%
 
 
 
