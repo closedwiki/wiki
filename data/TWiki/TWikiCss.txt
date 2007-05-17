@@ -83,6 +83,8 @@ A wide range of standard styles are used in the TWiki core code and topics, and 
 |.twikiSubmitDisabled  | |
 |.twikiInputField  | |
 |.twikiInputFieldDisabled  | |
+|.twikiTextarea | |
+}.twikiTextareaRawView | |
 |.twikiButton  | |
 |.twikiLeft  | |
 |.twikiRight  | |
