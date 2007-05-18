@@ -713,7 +713,7 @@ sub writePageHeader {
     $this->{plugins}->modifyHeaderHandler( $hopts, $this->{cgiQuery} );
 
     # add cookie(s)
-    $this->{loginManager}->modifyHeader( $hopts );
+    $this->{users}->{loginManager}->modifyHeader( $hopts );
 
     my $hdr = CGI::header( $hopts );
 
@@ -865,7 +865,7 @@ sub redirect {
 
     return if( $this->{plugins}->redirectCgiQueryHandler( $query, $url ) );
     #SMELL: this is a bad breaking of encapsulation: the loginManager should just modify the url, then the redirect should only happen here.
-    return if( $this->{loginManager}->redirectCgiQuery( $query, $url ) );
+    return if( $this->{users}->{loginManager}->redirectCgiQuery( $query, $url ) );
     die "Login manager returned 0 from redirectCgiQuery";
 }
 
@@ -1284,8 +1284,9 @@ sub new {
     # cache CGI information in the session object
     $this->{cgiQuery} = $query;
     
-    $this->{remoteUser} = $login;
+    $this->{remoteUser} = $login;	#use login as a default (set when running from cmd line)
     $this->{users} = new TWiki::Users( $this );
+	$this->{remoteUser} = $this->{users}->{remoteUser};
 
     # Make %ENV safer, preventing hijack of the search path
     # SMELL: can this be done in a BEGIN block? Or is the environment
@@ -1405,6 +1406,7 @@ sub new {
     # Push global preferences from TWiki.TWikiPreferences
     $prefs->pushGlobalPreferences();
 
+#TODO: what happens if we move this into the TWiki::User::new?
     $this->{user} = $this->{users}->initialiseUser($this->{remoteUser});
 
     # Static session variables that can be expanded in topics when they
@@ -1439,7 +1441,7 @@ sub new {
         $this->{webName}, $this->{topicName}, 'TOPIC' );
 
     $prefs->pushPreferenceValues( 'SESSION',
-                                  $this->{loginManager}->getSessionValues() );
+                                  $this->{users}->{loginManager}->getSessionValues() );
 
     # requires preferences (such as NEWTOPICBGCOLOR)
     $this->{renderer} = new TWiki::Render( $this );
@@ -1473,7 +1475,6 @@ to. Right now this does two things:
 
 sub finish {
     my $this = shift;
-    $this->{loginManager}->finish();
 
 #    use Data::Dumper;
 #    $Data::Dumper::Indent = 1;

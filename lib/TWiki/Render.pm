@@ -1131,7 +1131,7 @@ sub getRenderedVersion {
     $this->_putBackProtected( \$text, 'head', $removed );
     $this->_putBackProtected( \$text, 'textarea', $removed );
 
-    $this->{session}->{loginManager}->endRenderingHandler( $text );
+    $this->{session}->{users}->{loginManager}->endRenderingHandler( $text );
 
     $plugins->postRenderingHandler( $text );
     return $text;

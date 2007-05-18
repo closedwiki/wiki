@@ -156,11 +156,11 @@ sub run {
     local $SIG{__DIE__} = \&Carp::confess;
 
     try {
-        $session->{loginManager}->checkAccess();
+        $session->{users}->{loginManager}->checkAccess();
         &$method( $session );
     } catch TWiki::AccessControlException with {
         my $e = shift;
-        unless( $session->{loginManager}->forceAuthentication() ) {
+        unless( $session->{users}->{loginManager}->forceAuthentication() ) {
             # Login manager did not want to authenticate, perhaps because
             # we are already authenticated.
             my $exception = new TWiki::OopsException(

@@ -104,10 +104,10 @@ sub new {
     #correct the DefaultUserLogin if $TWiki::cfg{Register}{AllowLoginName} is off
     $TWiki::cfg{DefaultUserLogin} = $TWiki::cfg{DefaultUserWikiName} unless ($TWiki::cfg{Register}{AllowLoginName});
 
-    $session->{loginManager} = TWiki::LoginManager::makeLoginManager( $session );
+    $this->{loginManager} = TWiki::LoginManager::makeLoginManager( $session );
     unless (( $session->{cgiQuery}->param('sudo') && $session->{cgiQuery}->param('sudo') eq 'sudo' )) {
-        #TODO: move loginManager into the TWiki::User - or even into the mappings
-        $session->{remoteUser} = initialiseUserFromSession($session);
+        #don't take not of session info if the user has asked for a sudo login
+        $this->{remoteUser} = $this->initialiseUserFromSession($session);
     }
 
     my $implUserMappingManager = $TWiki::cfg{UserMappingManager};
@@ -125,8 +125,6 @@ sub new {
     $implUserMappingManager =~ /^TWiki::Users::(.*)$/;
     $this->{mapping_id} = $1.'_';
     
-    $session->{users} = $this;
-
     return $this;
 }
 
@@ -144,7 +142,8 @@ to.
 
 sub finish {
     my $this = shift;
-
+    
+    $this->{loginManager}->finish();
     $this->{mapping}->finish();
 }
 
@@ -155,7 +154,7 @@ sub supportsRegistration {
 }
 
 sub initialiseUserFromSession {
-    my( $session ) = @_;
+    my( $this, $session ) = @_;
     my $login = $session->{remoteUser};
     #unset the existing user if we're wanting to login a TWikiAdmin
     if ($session->inContext('sudo_login')) {
@@ -164,7 +163,7 @@ sub initialiseUserFromSession {
         # setup the cgi session, from a cookie or the url. this may return
         # the login, but even if it does, plugins will get the chance to override
         # it below.
-        $login = $session->{loginManager}->loadSession( $login );
+        $login = $this->{loginManager}->loadSession( $login );
     }
     return $login;
 }

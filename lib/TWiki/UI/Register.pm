@@ -776,7 +776,7 @@ sub finish {
     # let the client session know that we're logged in. (This probably
     # eliminates the need for the registrationHandler call above,
     # but we'll leave them both in here for now.)
-    $session->{loginManager}->userLoggedIn( $data->{LoginName}, $data->{WikiName} );
+    $users->{loginManager}->userLoggedIn( $data->{LoginName}, $data->{WikiName} );
 
     # inform user and admin about the registration.
     my $status = _emailRegistrationConfirmations( $session, $data );

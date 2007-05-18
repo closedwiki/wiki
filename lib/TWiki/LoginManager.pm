@@ -826,7 +826,7 @@ sub getUser {
 sub _LOGIN {
     #my( $twiki, $params, $topic, $web ) = @_;
     my $twiki = shift;
-    my $this = $twiki->{loginManager};
+    my $this = $twiki->{users}->{loginManager};
     ASSERT($this->isa('TWiki::LoginManager')) if DEBUG;
 
     return '' if $twiki->inContext( 'authenticated' );
@@ -841,7 +841,7 @@ sub _LOGIN {
 
 sub _LOGOUTURL {
     my( $twiki, $params, $topic, $web ) = @_;
-    my $this = $twiki->{loginManager};
+    my $this = $twiki->{users}->{loginManager};
     ASSERT($this->isa('TWiki::LoginManager')) if DEBUG;
 
     return $twiki->getScriptUrl(
@@ -853,7 +853,7 @@ sub _LOGOUTURL {
 
 sub _LOGOUT {
     my( $twiki, $params, $topic, $web ) = @_;
-    my $this = $twiki->{loginManager};
+    my $this = $twiki->{users}->{loginManager};
     ASSERT($this->isa('TWiki::LoginManager')) if DEBUG;
 
     return '' unless $twiki->inContext( 'authenticated' );
@@ -868,7 +868,7 @@ sub _LOGOUT {
 
 sub _AUTHENTICATED {
     my( $twiki, $params ) = @_;
-    my $this = $twiki->{loginManager};
+    my $this = $twiki->{users}->{loginManager};
     ASSERT($this->isa('TWiki::LoginManager')) if DEBUG;
 
     if( $twiki->inContext( 'authenticated' )) {
@@ -880,7 +880,7 @@ sub _AUTHENTICATED {
 
 sub _CANLOGIN {
     my( $twiki, $params ) = @_;
-    my $this = $twiki->{loginManager};
+    my $this = $twiki->{users}->{loginManager};
     ASSERT($this->isa('TWiki::LoginManager')) if DEBUG;
     if( $twiki->inContext( 'can_login' )) {
         return $params->{then} || 1;
@@ -891,7 +891,7 @@ sub _CANLOGIN {
 
 sub _SESSION_VARIABLE {
     my( $twiki, $params ) = @_;
-    my $this = $twiki->{loginManager};
+    my $this = $twiki->{users}->{loginManager};
     ASSERT($this->isa('TWiki::LoginManager')) if DEBUG;
     my $name = $params->{_DEFAULT};
 
@@ -908,7 +908,7 @@ sub _SESSION_VARIABLE {
 
 sub _LOGINURL {
     my( $twiki, $params ) = @_;
-    my $this = $twiki->{loginManager};
+    my $this = $twiki->{users}->{loginManager};
     ASSERT($this->isa('TWiki::LoginManager')) if DEBUG;
     return $this->loginUrl();
 }

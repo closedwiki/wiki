@@ -270,7 +270,7 @@ Session keys are stored and retrieved using =setSessionValue= and
 
 sub getSessionKeys {
     ASSERT($TWiki::Plugins::SESSION) if DEBUG;
-    my $hash = $TWiki::Plugins::SESSION->{loginManager}->getSessionValues();
+    my $hash = $TWiki::Plugins::SESSION->{users}->{loginManager}->getSessionValues();
     return keys %{$hash};
 }
 
@@ -290,7 +290,7 @@ sub getSessionValue {
 #   my( $key ) = @_;
     ASSERT($TWiki::Plugins::SESSION) if DEBUG;
 
-    return $TWiki::Plugins::SESSION->{loginManager}->getSessionValue( @_ );
+    return $TWiki::Plugins::SESSION->{users}->{loginManager}->getSessionValue( @_ );
 }
 
 
@@ -311,7 +311,7 @@ sub setSessionValue {
 #   my( $key, $value ) = @_;
     ASSERT($TWiki::Plugins::SESSION) if DEBUG;
 
-    $TWiki::Plugins::SESSION->{loginManager}->setSessionValue( @_ );
+    $TWiki::Plugins::SESSION->{users}->{loginManager}->setSessionValue( @_ );
 }
 
 =pod
@@ -330,7 +330,7 @@ Return: true if the session value was cleared
 sub clearSessionValue {
     ASSERT($TWiki::Plugins::SESSION) if DEBUG;
 
-    return $TWiki::Plugins::SESSION->{loginManager}->clearSessionValue( @_ );
+    return $TWiki::Plugins::SESSION->{users}->{loginManager}->clearSessionValue( @_ );
 }
 
 =pod
@@ -424,7 +424,7 @@ sub pushTopicContext {
     $twiki->{prefs}->pushWebPreferences( $web );
     $twiki->{prefs}->pushPreferences( $web, $topic, 'TOPIC' );
     $twiki->{prefs}->pushPreferenceValues(
-        'SESSION', $twiki->{loginManager}->getSessionValues() );
+        'SESSION', $twiki->{users}->{loginManager}->getSessionValues() );
 }
 
 =pod

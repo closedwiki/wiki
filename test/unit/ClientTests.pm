@@ -93,7 +93,7 @@ sub tear_down {
 sub capture {
     my $this = shift;
     my( $proc, $session ) = @_;
-    $session->{loginManager}->checkAccess();
+    $session->{users}->{loginManager}->checkAccess();
     $this->SUPER::capture( @_ );
 }
 
