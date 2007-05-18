@@ -16,8 +16,9 @@ Anywhere in a topic or template:
 | =format= | simple HTML Link with an action anchor "Subscribe" or "un-Subscribe" | has the format variables - =$topics=, =$url=, =$wikiname=, =$action= |
 | =formatunsubscribe= | =format= | same function as =format=, but allows the user to use a different look&feel from subscribe |
 
-   * The button toggles subscribe/unsubscribe if the user is already subscribed or vice versa. So after the next click on the button, the user will be unsubscribben.
+   * The button toggles subscribe/unsubscribe if the user is already subscribed or vice versa. So after the next click on the button, the user will be unsubscribed.
    * The plugin will do the best it can to optimise the subscription lists in WebNotify.
+   * subscription events will return to to the topic you're viewing
 
 ---++ Access Controls
 The guest user is not allowed to subscribe for notification.

@@ -3,7 +3,7 @@ package TWiki::Plugins::SubscribePlugin;
 
 use strict;
 
-use vars qw( $VERSION $RELEASE $SHORTDESCRIPTION $debug $pluginName $NO_PREFS_IN_TOPIC $uid );
+use vars qw( $VERSION $RELEASE $SHORTDESCRIPTION $debug $pluginName $NO_PREFS_IN_TOPIC $uid $WEB $TOPIC);
 
 $VERSION = '$Rev: 13787 (18 May 2007) $';
 
@@ -23,6 +23,8 @@ sub initPlugin {
         TWiki::Func::writeWarning( "Version mismatch between $pluginName and Plugins.pm" );
         return 0;
     }
+    $WEB = $web;
+    $TOPIC = $topic;
 
     TWiki::Func::registerTagHandler( 'SUBSCRIBE', \&_SUBSCRIBE );
     $uid = 1;
@@ -85,7 +87,7 @@ sub _getbutton{
         }	
         	
         my $url = TWiki::Func::getScriptUrl(
-        $web, $topic, 'view',
+        $WEB, $TOPIC, 'view',
         	subscribe_topic => $topics,
             subscribe_subscriber => $who,
             subscribe_remove => $unsubscribe,
