@@ -71,7 +71,7 @@ __%X% Note:__ TWiki has strict formatting rules. Make sure you have three spaces
 A number of TWiki functions (for example, renaming webs) are only available to administrators. Administrators are simply users who belong to the *SuperAdminGroup*. This is a standard user group, the name of which is defined by {SuperAdminGroup} setting in [[%SCRIPTURLPATH{"configure"}%][configure]]. The default name of this group is the =TWikiAdminGroup=. The system administrator may have chosen a different name for this group if your local TWiki uses an alternate group mapping manager but for simplicity we will use the default name !TWikiAdminGroup in the rest of this topic.
 
 You can create new administrators simply by adding them to the %MAINWEB%.TWikiAdminGroup topic. For example,
-   * ==Set <nop>GROUP= <nop>%MAINWEB%.ElizabethWindsor, <nop>%MAINWEB%.TonyBlair==
+   * ==Set <nop>GROUP = <nop>%MAINWEB%.ElizabethWindsor, <nop>%MAINWEB%.TonyBlair==
 A member of the Super Admin Group has unrestricted access throughout the TWiki, so only trusted staff should be added to this group.
 
 ---++ Restricting Access
