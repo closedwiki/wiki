@@ -210,9 +210,11 @@ sub desenhaFluxograma
   my $error = '';
   my $svg = &montaSVG($topic, $web);
   my $mapImg = &montaMapImg($topic, $web, $percentReduce);
+  unless (-d $myPub){
+    mkdir $myPub or die "can't create directory $myPub";
+  }
   TWiki::Func::saveFile( "$myPub/flowchart_$topic.svg", $svg );
   TWiki::Func::saveFile( "$myPub/flowchartMapImg_$topic.txt", $mapImg );
-  system ("mkdir", "$myPub");
   system ("convert", "$myPub/flowchart_$topic.svg",
           '-resize', $percentReduce.'%x'.$percentReduce.'%', "$myPub/flowchart_$topic.png");
 }

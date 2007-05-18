@@ -137,6 +137,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Plugin Author: | TWiki:Main.AurelioAHeckert |
 |  Plugin Version: | %$VERSION% |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  13786 | Bugs:Item4090 - Failed if topics attachment directory did not exist (TWiki:Main.AndrewRJones). |
 |  13779 | Bugs:Item4085 - Fixed problem with subwebs. Patch by TWiki:Main.JohnWorsley. |
 |  27 Jun 2005: | Initial public version 0.8 |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.024 |
