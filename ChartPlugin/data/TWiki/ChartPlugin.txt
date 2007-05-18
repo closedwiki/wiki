@@ -1,7 +1,15 @@
-%META:TOPICINFO{author="PeterThoeny" date="1100674597" format="1.0" version="1.8"}%
----+ Chart Plugin (v1.401)
+%META:TOPICINFO{author="TWikiContributor" date="1100674597" format="1.0" version="1.0"}%
+<!--
+    * Set SHORTDESCRIPTION = Create PNG or GIF charts to visualize TWiki tables
+-->
 
-This plugin creates PNG or GIF charts to visualize TWiki tables using a default linear scale or an optional semilogarithmic scale.
+---+!! Chart Plugin
+%SHORTDESCRIPTION%
+
+This plugin helps you visualize data in TWiki tables as charts,
+using a default linear scale or an optional semilogarithmic scale.
+
+%TOC%
 
 Five types of charts, _line_, _area_, _bar_, _scatter_ and _combo_, are currently available:
 
@@ -17,10 +25,7 @@ The =%<nop>CHART{...}%= variable gets expanded to an image representing the char
 ---++ <nop>%TOPIC% Global Settings
 
 Plugin settings are stored as preferences variables. To reference
-a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, for example, ==%<nop>CHARTPLUGIN_SHORTDESCRIPTION%==
-
-	* One line description, shown in the %TWIKIWEB%.TextFormattingRules topic:
-		* Set SHORTDESCRIPTION = Create PNG or GIF charts to visualize TWiki tables
+a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, for example, ==%<nop>CHARTPLUGIN_TYPE%==
 
 	* Set DEBUG to 1 to get debug messages in =data/debug.txt=.  Default: =0=
 		* Set DEBUG = 0
@@ -60,11 +65,14 @@ a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, for example, =
 
 The =%<nop>CHART{...}%= variable gets expanded to an image representing the chart. 
 
-	* Some parameters expect a range of table cells, using SpreadSheetPlugin syntax:
-		* A table cell can be addressed as ==R1:C1==. Cell addresses:
+	* Some parameters expect a range of table cells, using *extended* SpreadSheetPlugin syntax:
+		* A single table cell can be addressed as ==R1:C1==. Cell addresses:
 		  | ==R1:C1== | ==R1:C2== | ==R1:C3== | ==R1:C4== |
 		  | ==R2:C1== | ==R2:C2== | ==R2:C3== | ==R2:C4== |
 	* A range of table cells is defined by two cell addresses separated by ==".."==. For example, "row 1-20, column 3" is: ==R1:C3..R20:C3== and "row 15-5, column 2" is: ==R15:C2..R5:C2==
+   * Ranges can be discontinuous. Discontinous ranges are joined using =="+"==. For example: ==R4:C1..R5:C2+R9:C1..R15:C2==.
+   * When you are specifying datasets, you specify the range so that you have one data set per row (column). You can also specify multiple data sets using discontinuous blocks of cells; for example, ==R4:C1..R5:C2,R9:C1..R10:C2== specifies *4* data sets: R4:C1..R4:C2, R5:C1..R5:C2, R9:C1..R9:C15 and R10:C1..R10:C2
+   * ==+== has higher precedence than ==,==
 
 | *%<nop>CHART% Parameter* | *Comment* | *Default* |
 | =type= | The type of chart to create. One of ="area"=, ="bar"=, ="line"=, ="scatter"=, ="combo"= | Global =TYPE= setting |
@@ -165,40 +173,16 @@ The "if installed" column shows images instead of variables in case the plugin i
 If the required parameters are not defined, then an error message is returned or an &lt;img ... /&gt; image tag is returned pointing to a graphic containing the error message.
 
 ---++ Plugin Installation Instructions
-
-*Note:* You do not need to install anything on the browser to use this plugin. The following instructions are for the administrator who installs the plugin on the server where TWiki is running.
-
-	* Download the ZIP file from the Plugin web (see below)
-	* Unzip ==%TOPIC%.zip== in your TWiki installation directory. Content:
-	  | *File:* | *Description:* |
-	  | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
-	  | ==data/TWiki/ChartPluginTests.txt== | Test page containing many examples of the <nop>ChartPlugin in action.  Also shows various error conditions |
-	  | ==data/TWiki/ChartPluginTestsRemote.txt== | Topic containing remote tables referenced by ChartPluginTests |
-	  | ==pub/TWiki/ChartPlugin/line1.png== | Sample =line= image |
-	  | ==pub/TWiki/ChartPlugin/line2.png== | Sample =line= image |
-	  | ==pub/TWiki/ChartPlugin/area3.png== | Sample =area= image |
-	  | ==pub/TWiki/ChartPlugin/scatter1.png== | Sample =scatter= image |
-	  | ==pub/TWiki/ChartPlugin/combo1.png== | Sample =combo= image |
-	  | ==pub/TWiki/ChartPlugin/combo2.png== | Sample =combo= image |
-	  | ==pub/TWiki/ChartPlugin/lineexample.png== | Sample =line= image |
-	  | ==pub/TWiki/ChartPlugin/areaexample.png== | Sample =area= image |
-	  | ==pub/TWiki/ChartPlugin/scatterexample.png== | Sample =scatter= image |
-	  | ==pub/TWiki/ChartPlugin/comboexample.png== | Sample =combo= image |
-	  | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
-	  | ==lib/TWiki/Plugins/%TOPIC%/Chart.pm== | Chart library Plugin Perl module |
-	  | ==lib/TWiki/Plugins/%TOPIC%/Table.pm== | Table library Plugin Perl module |
-	  | ==lib/TWiki/Plugins/%TOPIC%/Parameter.pm== | Parameter library Plugin Perl module |
-	* If you see =Permission denied= errors, verify that ownership and permissions are correct for the following making sure that ownership and permissions match existing directories ownerships and permissions:
-		* =pub/TWiki/ChartPlugin=
-	* Test if the plugin is correctly installed:
-		* Check above examples if the "if installed" column shows images instead of variables.
-		* Check ChartPluginTests for some more tests
+%$INSTALL_INSTRUCTIONS%
+   * Check above examples if the "if installed" column shows images instead of variables.
+   * Check ChartPluginTests for some more tests
 
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.PeterThoeny, TWiki:Main.TaitCyrus |
-|  Plugin Version: | 16 Nov 2004 (V1.401) |
+|  Plugin Version: | %$VERSION% |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
+|   18 May 2007: | Added discontinuous ranges - TWiki:Main.CrawfordCurrie |
 |	16 Nov 2004: | V1.401 - Added benchmarks (no code changes) |
 |	30 Aug 2004: | V1.400 - Added support for =subtype="bar"= (includes various global bar settings), updated =gridcolor= to not only define the grid color but allowing the user to define the line style (for drawing user defined dotted lines), add a global for how wide lines are drawn instead of a hard coded value, change the order of how things are drawn so now the order is: areas, grid lines and X/Y axis labels, bars, lines/points/plines, rectangle around chart, data point labels, chart title/X/Y labels, and finally the legends. |
 |	13 May 2004: | V1.300 - Added support for =type="scatter"=; renamed =type="arealine"= to ="combo"= (arealine is undocumented); renamed =datatype= to =subtype= (datatype is undocumented); added =subtype= options ="point"= and ="pline"=, added new settings =GRIDCOLOR=, =DEFAULTDATA=, =POINTSIZE=; fixed bug with how the number of grids were drawn |
@@ -209,9 +193,7 @@ If the required parameters are not defined, then an error message is returned or
 |  13 Sept 2002: | V1.002 - Add support for better placement of legends so they don't overlap, add auto ymin/ymax determination if not specified, add =bgcolor= and =numygrids= options |
 |  27 Jun 2002: | V1.001 - Data range specified is clipped to actual table size; more forgiving data parsing by extracting first numeral from a table cell, e.g. extract =25= from =&lt;u&gt;25%&lt;/u&gt;= |
 |  20 Jun 2002: | Initial version (V1.000) |
-|  CPAN Dependencies: | GD from http://stein.cshl.org/WWW/software/GD |
-|  Other Dependencies: | gd library from http://www.boutell.com/gd (Tested with 1.8.4)<br /> PNG graphics library from http://www.libpng.org/pub/png|
-|  Perl Version: | 5.005 |
+|  Dependencies: | %$DEPENDENCIES% |
 |  TWiki:Plugins/Benchmark: | %TWIKIWEB%.GoodStyle 96%, %TWIKIWEB%.FormattedSearch 97%, ChartPlugin 69% |
 |  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
