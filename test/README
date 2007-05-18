@@ -16,8 +16,9 @@ perl ../bin/TestRunner.pl TWikiSuite.pm
 
 Attention: 
 
-   * for the tests to be run, you need a valid LocalSite.cfg under
+   * for the tests to be run, you need a valid LocalLib.cfg under
      /path/to/twiki/bin/ stating where your /path/to/twiki/lib directory is.
+   * and a valid setup LocalSite.cfg in lib
 
 TestCases Tests
 ===============
