@@ -94,7 +94,7 @@ $SIG{'__WARN__'} = sub { die @_ };
 eval 'require 5.00503';
 die $@ if $@;
 
-# We warn against running TWiki on an older Perl version then 5.8.0
+# We warn against running TWiki on an older Perl version then 5.8.4
 # but we will not let configure die in this situation. The user
 # may have updated many libraries and tweaked TWiki so let us give
 # him a chance.
@@ -103,7 +103,7 @@ if ($perlversion < 5.006) {
     print STDERR <<HERE;
 Your perl version is older than 5.6.0.
 TWiki has only been successfully tested on Perl 5.6.X and 5.8.X,
-and there has been reports that it does not run on 5.5.
+and there have been reports that it does not run on 5.5.
 Running TWiki with an older Perl version requires upgrading of modules and
 tweaking of the TWiki code.
 HERE
@@ -263,7 +263,7 @@ $| = 1;                  # no buffering on STDOUT
 package TWiki;
 
 # We keep the actual config, and the default from TWiki.cfg, separate
-use vars qw( %cfg $defaultCfg);
+use vars qw( %cfg $defaultCfg );
 
 # Declared in TWiki to support checkers
 use vars qw( $query );
