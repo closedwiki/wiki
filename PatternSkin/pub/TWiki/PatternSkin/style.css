@@ -171,19 +171,22 @@ select {
 }
 .twikiCheckbox,
 .twikiRadioButton {
-	margin:1px .5em 1px .1em;
+	margin:1px .25em 1px .1em;
 	padding:0 0 0 .5em;
 	border:0;
 }
 .twikiTextarea,
 .twikiInputField,
 .twikiInputFieldDisabled,
+.twikiInputFieldReadOnly,
 .twikiSelect {
 	border-width:1px;
 	border-style:solid;
 	font-size:94%; /*S2*/
 }
-.twikiInputField {
+.twikiInputField,
+.twikiInputFieldDisabled,
+.twikiInputFieldReadOnly {
 	padding:.1em .2em;
 }
 textarea {

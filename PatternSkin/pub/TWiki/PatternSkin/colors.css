@@ -120,6 +120,13 @@ h3, h4, h5, h6 {
 
 /* Form elements */
 
+textarea,
+input,
+select {
+	border-color:#aaa;
+	color:#000;
+	background-color:#fff;
+}
 .twikiSubmit,
 .twikiButton {
 	border-color:#fff #666 #666 #fff;
@@ -138,24 +145,32 @@ h3, h4, h5, h6 {
 }
 .twikiSubmitDisabled,
 .twikiSubmitDisabled:active {
-	border-color:#fff #888 #888 #fff;
-	color:#ccc;
+	border-color:#fff #666 #666 #fff;
+	color:#bbb;
 	background-color:#f8fbfc;
 }
 .twikiTextarea,
 .twikiInputField,
+.twikiInputFieldDisabled,
+.twikiInputFieldReadOnly,
 .twikiSelect {
 	border-color:#888 #e8e8e8 #e8e8e8 #888;
+}
+.twikiTextarea,
+.twikiInputField,
+.twikiSelect {
 	color:#000;
 	background-color:#fff;
 }
 .twikiTextareaRawView {
-	background-color:#fafaf8;
+	color:#666;
 }
 .twikiInputFieldDisabled {
-	border-color:#e0e0e0;
-	color:#ccc;
+	color:#bbb;
 	background-color:#fafaf8;
+}
+.twikiInputFieldReadOnly {
+	color:#666;
 }
 .twikiSelect {
 	border-color:#888 #e8e8e8 #e8e8e8 #888;
@@ -164,7 +179,7 @@ h3, h4, h5, h6 {
 }
 .twikiInputFieldDisabled,
 .twikiSelectDisabled {
-	color:#ccc;
+	color:#bbb;
 	border-color:#888 #e8e8e8 #e8e8e8 #888;
 	background-color:#fafaf8;
 }
@@ -395,7 +410,7 @@ a:hover .twikiAccessKey {
 }
 .patternTopicAction s,
 .patternTopicAction strike {
-	color:#ccc;
+	color:#bbb;
 }
 .patternTopicAction .twikiSeparator {
 	color:#E2DCC8;
@@ -421,7 +436,9 @@ a:hover .twikiAccessKey {
 	/* input fields default text color (no user input) */
 	color:#8E9195;
 }
-.patternSigLine {}
+.patternSigLine {
+	color:#666;
+}
 .patternToolBar .patternButton s,
 .patternToolBar .patternButton strike,
 .patternToolBar .patternButton a:link,
@@ -435,7 +452,7 @@ a:hover .twikiAccessKey {
 }
 .patternToolBar .patternButton s,
 .patternToolBar .patternButton strike {
-	color:#ccc;
+	color:#bbb;
 	border-color:#e0e0e0;
 }
 .patternToolBar .patternButton a:hover {
@@ -481,6 +498,9 @@ a:hover .twikiAccessKey {
 }
 
 /* WebSearch, WebSearchAdvanced */
+table#twikiSearchTable {
+	border-color:#ccc;
+}
 table#twikiSearchTable th,
 table#twikiSearchTable td {
 	background-color:#fff;
@@ -552,10 +572,6 @@ table.patternDiffOptions img {
 .twikiChangeFormButtonHolder .twikiButton { /* looks like a link */
 	color:#06c;
 	background:none;
-}
-.patternSig input {
-	color:#8E9195;
-	background-color:#fff;
 }
 
 /* preview.pattern.tmpl */
