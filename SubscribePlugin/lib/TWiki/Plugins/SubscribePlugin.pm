@@ -97,7 +97,7 @@ sub _getbutton{
         my $actionName = 'Subscribe';
         if ($unsubscribe eq 'yes') {
 	        $form = $params->{formatunsubscribe} if ($params->{formatunsubscribe});
-	        $actionName = 'un-Subscribe';
+	        $actionName = 'Unsubscribe';
         }
         if ($form) {
             $form =~ s/\$url/$url/g;
