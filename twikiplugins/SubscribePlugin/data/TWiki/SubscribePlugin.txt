@@ -64,8 +64,8 @@ This plugin is brought to you by the [[http://wikiring.com][WikiRing]] - working
 |  Plugin Author: | TWiki:Main.CrawfordCurrie |
 |  Copyright: | &copy; 2007, Crawford Currie http://c-dot.co.uk |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 13611 |
-|  Dependencies: | TWiki:Plugins.MailerContrib,>=13511,perl,TWiki 4 mailer module |
+|  Plugin Version: | %$VERSION% |
+|  Dependencies: | %$DEPENDENCIES% |
 | Change&nbsp;History: | |
 |  13787 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item4010'>Item4010</a>fix web subscription, and =format= parameters. - TWiki:Main.SvenDowideit |
 |  13525 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item3731'>Item3731</a> Update documentation topic. |
