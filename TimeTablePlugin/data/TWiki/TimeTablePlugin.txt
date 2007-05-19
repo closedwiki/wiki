@@ -32,7 +32,7 @@ and a time zone (timezone attribute) for all events on a topic. Please use it on
 The TimeTablePlugin supports
    * two time formats: 12 and 24 hour format (attribute: =timeformat=)
    * (self-defined) time zones (attributes: =timezone, timezoneabbr=)
-   * all HolidaylistPlugin and CalendarPlugin event types if the compatiblity mode is enabled (=compatmode="on"=)
+   * all HolidaylistPlugin and CalendarPlugin event types if the compatibility mode is enabled (=compatmode="on"=)
    * navigation to other weeks (only if compatibility mode is enabled: =compatmode="on"=)
    * own colors for a every event (add the foreground/background colors to a event definition or use the =%<nop>TTCM%= tag of the compatibility mode)
    * using event definitions from other topics (attribute: =topic=) - including overwrite of the time zone (e.g. =topic="EvenTopic2:-3=)
