@@ -97,7 +97,7 @@ sub inflate {
 
 	&_initDefaults() unless $defaultsInitialized;
 
-	return &_createUnknownParamsMessage() unless &_initOptions('');
+	return &_createUnknownParamsMessage() unless &_initOptions($attributes);
 
         &_initRegexs(); 
 
@@ -207,6 +207,12 @@ sub _initDefaults {
 		monthheaderfgcolor => 'black',
 		clicktooltip => 0,
 		clicktooltiptext => 'Click me for more information',
+		_DEFAULT => undef,
+		tablewidth => undef,
+		tableborder => undef,
+		tablecellpadding => 0,
+		tablecellspacing => 1,
+		
 	);
 
 	@renderedOptions = ('tablecaption', 'name' , 'navprev', 'navnext', 'wholetimerowtext');
@@ -270,10 +276,13 @@ sub _initOptions {
         }
         return 0 if $#unknownParams != -1; 
 
+        $cgi = &TWiki::Func::getCgiQuery();
+
         # Setup options (attributes>plugin preferences>defaults):
         %options= ();
         foreach my $option (@allOptions) {
-                my $v = $params{$option};
+                my $v = $cgi->param("ttp_${option}");
+                $v = $params{$option} unless defined $v;
                 if (defined $v) {
                         if (grep /^\Q$option\E$/, @flagOptions) {
                                 $options{$option} =  ($v!~/(false|no|off|0|disable)/i);
@@ -342,8 +351,6 @@ sub _initOptions {
 	}
 
         @processedTopics = ( );
-
-	$cgi = &TWiki::Func::getCgiQuery();
 
         return 1;
 }
@@ -492,7 +499,10 @@ sub _fetch {
 
 	return \%entries;
 }
-
+# =========================
+sub _setParams {
+	$_[2]{$_[1]}=$options{$_[0]} if defined $options{$_[0]} && $options{$_[0]} !~ /^\s*$/;
+}
 # =========================
 sub _render {
 	my ($entries_ref) = @_;
@@ -509,7 +519,15 @@ sub _render {
 
 	my($tr,$td);
 	$text .= $cgi->a({-name=>"ttpa$ttid"},"");
-	$text .= $cgi->start_table({-bgcolor=>$options{'tablebgcolor'}, -cellpadding=>'0',-cellspacing=>'1', -class=>'timeTablePluginTable', -id=>'timeTablePluginTable'.$ttid} );
+
+	my $tableparms = {class=>'timeTablePluginTable', id=>'timeTablePluginTable'.$ttid };
+	&_setParams('tablebgcolor','bgcolor',$tableparms);
+	&_setParams('tablewidth','width', $tableparms);
+	&_setParams('tableborder','border', $tableparms);
+	&_setParams('tablecellpadding','cellpadding', $tableparms);
+	&_setParams('tablecellspacing','cellspacing', $tableparms);
+	
+	$text .= $cgi->start_table($tableparms); # surrounding table
 	$text .= $cgi->caption($options{'tablecaption'});
 
 	### render weekday header:
@@ -627,7 +645,7 @@ sub _render {
 		}
 		###$td = $cgi->start_table({-rules=>"rows", -border=>"1",-cellpadding=>'0',-cellspacing=>'0', -height=>"100%"});
 		###$td = $cgi->start_table({-bgcolor=>"#fafafa", -cellpadding=>'0',-cellspacing=>'1', -height=>"100%"});
-		$td = $cgi->start_table({-width=>'100%', -bgcolor=>$colbgcolor, -cellpadding=>'0',-cellspacing=>'1', -height=>"100%"});
+		$td = $cgi->start_table({-width=>'100%', -bgcolor=>$colbgcolor, -cellpadding=>'0',-cellspacing=>'1', -height=>"100%"});  # XXXX data table
 
 		for (my $min=$starttime; $min <=$endtime; $min+=$options{'timeinterval'}) {
 			my $mentries = &_getMatchingEntries($dowentries_ref, $min, $options{'timeinterval'}, $starttime);
@@ -870,7 +888,7 @@ sub _renderTooltip {
 # =========================
 sub _renderTimeline {
 	###my $td = $cgi->start_table({-rules=>"rows",-border=>'1',-cellpadding=>'0',-cellspacing=>'0'});
-	my $td = $cgi->start_table({-bgcolor=>"#fafafa", -cellpadding=>'0',-cellspacing=>'1'});
+	my $td = $cgi->start_table({-bgcolor=>"#fafafa", -cellpadding=>'0',-cellspacing=>'1'}); # XXXX time line table
 	my $interval = $options{'timeinterval'};
 	my ($starttime,$endtime) = ( &_getTime($options{'starttime'}), &_getTime($options{'endtime'}));
 	my ($wst,$wet) = ( &_getTime($options{'workingstarttime'}), &_getTime($options{'workingendtime'}) );
