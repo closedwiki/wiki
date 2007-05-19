@@ -3,9 +3,12 @@
 ---+!! Form Plugin Examples
 See [[FormPlugin]]
 
+Please view the raw text of this topic to learn how these forms are created.
+
 %TOC%
 
----++ Focus
+---++ Javascript enhancements
+---+++ Focus
 
 %STARTFORM{
 name="focusform"
@@ -19,6 +22,147 @@ title="Enter your name:"
 }%
 %ENDFORM%
 
+---+++ Default text before click
+Click on the field...
+
+%STARTFORM{
+name="beforeclickform"
+action="view"
+}%
+%FORMELEMENT{
+name="Name"
+type="text"
+beforeclick="Your name..."
+}%
+%ENDFORM%
+
+---+++ onMouseOver, onMouseOut
+Mouse over the field...
+
+<script type="text/javascript">
+//<![CDATA[
+function makeYellow(el) {
+	el.style.backgroundColor = '#ffc';
+}
+function makeWhite(el) {
+	el.style.backgroundColor = '#fff';
+}
+//]]>
+</script>
+
+%STARTFORM{
+name="mouseoverform"
+action="view"
+}%
+%FORMELEMENT{
+name="Name"
+type="text"
+onMouseOver="makeYellow(this)"
+onMouseOut="makeWhite(this)"
+}%
+%ENDFORM%
+
+---+++ onSelect, onBlur
+Doubleclick on the text to select it...
+
+<script type="text/javascript">
+//<![CDATA[
+function makeBold(el) {
+	el.style.fontWeight = 'bold';
+}
+function makePlain(el) {
+	el.style.fontWeight = 'normal';
+}
+//]]>
+</script>
+
+%STARTFORM{
+name="selectform"
+action="view"
+}%
+%FORMELEMENT{
+name="Name"
+type="text"
+default="Doubleclick this text"
+onSelect="makeBold(this)"
+onBlur="makePlain(this)"
+}%
+%ENDFORM%
+
+---+++ onKeyUp
+Change the text...
+
+(in fact, =onChange= can be used as well, but that tends to react slower)
+
+<script type="text/javascript">
+//<![CDATA[
+function giveFeedback(el) {
+	var feedbackElement = document.getElementById('changeformFeedback');
+	feedbackElement.innerHTML = el.value;
+}
+//]]>
+</script>
+
+<div id="changeformFeedback" class="twikiSmall">Change output will be written here...</div>
+
+%STARTFORM{
+name="changeform"
+action="view"
+}%
+%FORMELEMENT{
+name="Name"
+type="text"
+default="Change this text"
+onKeyUp="giveFeedback(this)"
+}%
+%ENDFORM%
+
+---+++ onClick
+Click a checkbox...
+
+<script type="text/javascript">
+//<![CDATA[
+function clickFeedback(el) {
+	alert("checkbox: " + el.value + " clicked");
+}
+//]]>
+</script>
+
+%STARTFORM{
+name="clickform"
+action="view"
+}%
+%FORMELEMENT{
+name="OnClickCheckboxes"
+type="checkbox"
+options="mary, peter, annabel, nicky, jennifer"
+labels="Mary M, Peter P, Annabel A, Nicky N, Jennifer J"
+fieldformat="$e <br />"
+onClick="clickFeedback(this)"
+}%
+%ENDFORM%
+
+---+++ onSubmit
+Submit the form...
+
+<script type="text/javascript">
+//<![CDATA[
+function notify(inForm) {
+	alert("sending along form:" + inForm.name);
+}
+//]]>
+</script>
+
+%STARTFORM{
+name="submitform"
+action="view"
+onSubmit="notify(this)"
+}%
+%FORMELEMENT{
+type="submit"
+buttonlabel="Submit"
+}%
+%ENDFORM%
 
 
 ---++ Hints and mandatory indicators
@@ -173,6 +317,7 @@ name="Name"
 type="text"
 disabled="on"
 title="Enter your name:"
+default="%WIKIUSERNAME%"
 }%
 %FORMELEMENT{
 name="ChecknameDisabled"
@@ -181,11 +326,59 @@ title="Choose a name:"
 options="mary=Mary M, peter=Peter P, annabel=Annabel A, nicky=Nicky N, jennifer=Jennifer J"
 fieldformat="$e<br />"
 disabled="on"
+default="peter"
 }%
 %FORMELEMENT{
 type="submit"
 buttonlabel="Submit"
 disabled="on"
+}%
+%ENDFORM%
+
+
+
+---++ Read-only
+
+%STARTFORM{
+name="readonlyform"
+action="view"
+}%
+%FORMELEMENT{
+name="Name"
+type="text"
+readonly="on"
+title="Enter your name:"
+default="%WIKIUSERNAME%"
+}%
+%FORMELEMENT{
+name="ChecknameReadonly"
+type="checkbox"
+title="Choose a name:"
+options="mary=Mary M, peter=Peter P, annabel=Annabel A, nicky=Nicky N, jennifer=Jennifer J"
+fieldformat="$e<br />"
+readonly="on"
+default="peter"
+}%
+%FORMELEMENT{
+type="submit"
+buttonlabel="Submit"
+readonly="on"
+}%
+%ENDFORM%
+
+
+
+---++ Password
+
+%STARTFORM{
+name="passwordform"
+action="view"
+}%
+%FORMELEMENT{
+name="Password"
+type="password"
+title="Enter a password:"
+mandatory="on"
 }%
 %ENDFORM%
 
@@ -209,7 +402,7 @@ mandatory="on"
 hint="You cannot post anonymously"
 }%
 %FORMELEMENT{
-name="Salary"
+name="Your salary"
 type="text"
 title="Your salary:"
 default=""
@@ -296,6 +489,7 @@ type="text"
 title="To:"
 validate="email"
 mandatory="on"
+default="arthur@visiblearea.com"
 hint="Enter an e-mail address"
 }%
 %FORMELEMENT{

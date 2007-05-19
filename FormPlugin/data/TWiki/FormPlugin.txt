@@ -1,6 +1,8 @@
-%META:TOPICINFO{author="TWikiUserMapping_ArthurClemens" date="1179177105" format="1.1" version="1.3"}%
+%META:TOPICINFO{author="TWikiContributor" date="1179177105" format="1.1" version="1.3"}%
 %IF{"defined Name and $ Name != ''" then="---+!! Hello %URLPARAM{"Name"}%!" else="---+!! Form Plugin"}%
-*Facilitates the creation of web forms.*
+*Lets you create simple and advanced web forms.*
+
+*Note:* for TWiki versions before 4.2, form POSTs are converted to GETs.
 
 %TOC%
 	
@@ -13,6 +15,7 @@
    * Use entered field values as variables
    * Validate the form before it performs its action
       * Usability tested error feedback
+   * Add Javascript functions for advanced interaction
 
 Example of validation error feedback:
 
@@ -76,6 +79,7 @@ buttonlabel="Submit"
    formcssclass="..."
    elementcssclass="..."
    elementformat="..."
+   onSubmit="..."
 }%
 %FORMELEMENT{
    name="..."
@@ -98,6 +102,16 @@ buttonlabel="Submit"
    cssclass="..."
    focus="..."
    disabled="..."
+   readonly="..."
+   beforeclick=..."
+   onFocus="..."
+   onBlur="..."
+   onMouseOver="..."
+   onMouseOut="..."
+   onSelect="..."
+   onChange="..."
+   onClick="..."
+   onKeyUp="..."
 }%
 %ENDFORM%
 </verbatim>
@@ -119,6 +133,8 @@ Most parameters are optional. See below for a detailed explanation.
 | =redirectto= | Redirect topic after form action has been performed. Only for scripts that understand the =redirectto= parameter such as =edit= and =save=. Use the =Webname.TopicName= syntax. |- |- | =redirectto="Main.WebHome"= |
 | =formcssclass= | The CSS class of the form container. Use TWiki's =twikiFormSteps= class together with =twikiFormStep= for elements to divide the form in steps. |- |- | =formcssclass="twikiFormSteps"= |
 | =elementcssclass= | The CSS class of the element container. Use TWiki's =twikiFormStep= class to divide the form in steps. |- |- | =elementcssclass="twikiFormStep"= |
+| =onSubmit=  | Function call that is invoked when the user has pressed the submit button of a form. This event happens just before the form is submitted, and your function can return a value of false in order to abort the submission. Note that the function call should include =(this)=. |- |- | =onSubmit="notify(this)"= |
+
 
 ---+++ FORMELEMENT
 
@@ -170,7 +186,23 @@ Use =%<nop>URLPARAM{"element_name"}%= to retrieve the value of a submitted form 
 | =rows=   | For =type="textarea"=: the number of rows. |- |- | =rows="5"= |
 | =cols=   | For =type="textarea"=: the number of columns. |- |- | =cols="80"= |
 | =focus=  | =focus="on"= gives text entry focus to a field. Requires javascript. Only one element on the page can have focus. |- |- | =focus="on"= |
-| =disabled=  | =disabled="on"= disables user input. |- |- | =disabled="on"= |
+| =disabled=  | =disabled="on"= disables user input; copying from a disabled input field is not possible. Note: disabled fields are not included into the submitted data. |- |- | =disabled="on"= |
+| =readonly=  | =readonly="on"= makes the field read-only; copying is possible but not changing. Only works for text fields and textarea. Note: readonly fields _are_ included into the submitted data. |- |- | =readonly="on"= |
+
+---++++ Javascript parameters
+Note that all function calls should include =(this)=.
+
+%TABLE{columnwidths="10%,44%,8%,8%,30%"}%
+| *Parameter* | *Description* | *Required* | *Default value* | *Examples* |
+| =beforeclick=  | (Javascript convenience method) Creates default text in a textfield that is 'clicked away' when the field is clicked. |- |- | =beforeclick="Your name..."= |
+| =onFocus=  | Function call that is invoked when the user has selected a field. |- |- | =onFocus="makeBlack(this)"= |
+| =onBlur=  | Function call that is invoked when the user has changed the part of a text field that is selected. |- |- | =onBlur="makeGray(this)"= |
+| =onMouseOver=  | Function call that is invoked when the mouse has moved over an element. |- |- | =onMouseOver="makeYellow(this)"= |
+| =onMouseOut=  | Function call that is invoked when the mouse has moved off an element. |- |- | =onMouseOut="makeWhite(this)"= |
+| =onSelect=  | Function call that is invoked when the user has changed the part of a text field that is selected. |- |- | =onSelect="makeBold(this)"= |
+| =onChange=  | Function call that is invoked when the user has changed the contents of a field. |- |- | =onChange="giveFeedback(this)"= |
+| =onKeyUp=  | Practically the same as =onChange=. |- |- | =onKeyUp="giveFeedback(this)"= |
+| =onClick=  | Function call that is invoked when the user has clicked an element. |- |- | =onClick="beep(this)"= |
 
 
 
@@ -282,7 +314,7 @@ See [[FormPluginExamples]]
 Plugin settings are stored as preferences variables. To reference a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>CACHECONTENTPLUGIN_SHORTDESCRIPTION%==
 
    * One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
-      * Set SHORTDESCRIPTION = Facilitates the creation of web forms
+      * Set SHORTDESCRIPTION = Lets you create simple and advanced web forms
 
    * Debug plugin: (See output in =data/debug.txt=)
       * Set DEBUG = 0
@@ -332,9 +364,9 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 
 |  Plugin Author: | TWiki:Main.ArthurClemens |
 |  Other authors: | =Validate.pm=, originally =CGI::Validate= by Zenin <zenin@archive.rhps.org> aka Byron Brummer <byron@omix.com>. Copyright (c) 1997,1998 OMIX, Inc. All rights reserved. Use is granted under the same terms of Perl. |
-|  Plugin Version: | 17 May 2007  |
+|  Plugin Version: | 19 May 2007  |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  17 May 2007 | 1.0.3 Added element attributes =focus= and =disabled=. Fallback for form POSTs and TWiki versions earlier than 4.2: POST requests are converted to GET requests. |
+|  19 May 2007 | 1.0.3 Added element attributes: =focus=, =disabled=, =readonly=; Javascript parameters =beforeclick=, =onFocus=, =onBlur=, =onMouseOver=, =onMouseOut=, =onSelect=, =onChange=, =onClick=, =onKeyUp=; form parameter =onSubmit=. Fallback for form POSTs and TWiki versions earlier than 4.2: POST requests are converted to GET requests. |
 |  15 May 2007 | 1.0.2 Added form attribute =elementformat=; changed parameter names for consistency: =class= to =cssclass=, =elementformat= to =fieldformat=.  |
 |  14 May 2007 | 1.0.1 Added missing lib. |
 |  13 May 2007 | 1.0 First release. |
