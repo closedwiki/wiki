@@ -95,12 +95,15 @@ sub expand {
 sub inflate {
 	my ($attributes, $text, $topic, $web) = @_;
 
-	my ($starttime, $endtime, $duration, $fgcolor, $bgcolor) = &_getTTCMValues($attributes);
-
 	&_initDefaults() unless $defaultsInitialized;
+
 	return &_createUnknownParamsMessage() unless &_initOptions('');
 
+        &_initRegexs(); 
+
 	$cgi = &TWiki::Func::getCgiQuery();
+
+	my ($starttime, $endtime, $duration, $fgcolor, $bgcolor) = &_getTTCMValues($attributes);
 
 	my $title = &_renderTime($starttime,"12pm").(defined $duration?' ':'-').&_renderTime((defined $duration?$duration:$endtime),"12pm")
 		.' / '.&_renderTime($starttime,24).(defined $duration?' ':'-').&_renderTime((defined $duration?$duration:$endtime),24);

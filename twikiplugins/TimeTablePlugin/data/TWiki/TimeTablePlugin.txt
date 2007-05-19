@@ -257,7 +257,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | V1.013 (BETA) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  V1.013 (BETA) | TWiki:Main.DanielRohde: fixed major time parsing bug reported by TWiki:Main.LarsEik; fixed major bug: events with a time range before start time should not be displayed |
+|  V1.013 (BETA) | TWiki:Main.DanielRohde: fixed major time parsing bug reported by TWiki:Main.LarsEik; fixed major bug: events with a time range before start time should not be displayed; fixed major TTCM bug reported by TWiki:Main.ArthurClemens |
 |  V1.012 (14 May 2007) | TWiki:Main.DanielRohde: fixed readTopicText bug reported TWiki:Main.JoachimRahn; added month header feature (attributes: showmonthheader, monthheader...); added new tooltip feature (clicktooltip...) |
 |  V1.011 (1 Mar 2007) | TWiki:Main.DanielRohde: added fontsize attribute; fixed HTML bug (validation); |
 |  V1.010 (19 Feb 2007) | TWiki:Main.DanielRohde: added tablecolumnwidth and tabledatacellwidth attributes requested by TWiki:Main.VickiBrown;  added tooltip feature (tooltip... attributes); |
