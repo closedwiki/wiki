@@ -40,5 +40,5 @@ TWiki::UI::run( \&logon );
 
 sub logon {
     my $session = shift;
-    $session->{loginManager}->login( $session->{cgiQuery}, $session );
+    $session->{users}->{loginManager}->login( $session->{cgiQuery}, $session );
 }
