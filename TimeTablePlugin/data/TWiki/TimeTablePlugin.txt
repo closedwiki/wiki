@@ -40,7 +40,7 @@ The TimeTablePlugin supports
       * all text outputs and colors (attributes: =name, headerformat, ...=)
       * the table rendering (attributes: =days, startdate, timeinterval, showtimeline, ...=)
    * a default setup for foreground/background colors and time zone on a topic (=%<nop>TTTOPICSETUP%= tag)
-   * URL parameters: all attribute settings can be overwritten by URL parameters (=ttp_&lt;attribute&gt;=&lt;value&gt;=), e.g. [[%SCRIPTURL{"viewauth"}%/%WEB%/%TOPIC%?ttp_days=30;ttp_tableborder=10#TimeTablePluginExamples][%TOPIC%?ttp_days=30;ttp_tableborder=10]]
+   * URL parameters: all attribute settings can be overwritten by URL parameters (=ttp_&lt;attribute&gt;=&lt;value&gt;=), e.g. [[%SCRIPTURL{"viewauth"}%/%WEB%/%TOPIC%?ttp_days=14;ttp_tableborder=10;ttp_descrlimit=7#TimeTablePluginExamples][%TOPIC%?ttp_days=14;ttp_tableborder=10;ttp_descrlimit=7]]
    * ... 
 
 
@@ -157,7 +157,7 @@ Example: %<nop>TIMETABLE{lang="Deutsch" timeinterval="15" }%
 
 #TimeTablePluginExamples
 ---++ Examples
-%TIMETABLE{descrlimit="9" compatmode="on" wholetimerow="on"}%
+%TIMETABLE{compatmode="on" wholetimerow="on"}%
    * Mon,Tue - 9 - 14 - MONTEST1 - green
    * Mon - 9 - 11 - MONTEST2 - yellow
    * Mon - 10 - 13 - MONTEST3 - white,black

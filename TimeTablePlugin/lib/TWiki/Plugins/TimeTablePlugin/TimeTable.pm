@@ -159,7 +159,7 @@ sub _initDefaults {
 		monthnames => undef,
 		headerformat => '<font title="%A - %d %B %Y" size="-2">%a</font>',
 		showweekend => 1,		# show weekend
-		descrlimit => 10,		# per line description text limit
+		descrlimit => 7,		# per line description text limit
 		showtimeline => 'both',		# 
 		tableheadercolor => $webbgcolor,#
 		eventbgcolor => '#AAAAAA',	#
@@ -532,7 +532,7 @@ sub _render {
 
 	### render weekday header:
 	my $showmonthheader = ((!defined $options{'showmonthheader'}&&$options{'compatmode'})||($options{'showmonthheader'}));
-	$tr=$cgi->td({rowspan=>$showmonthheader?2:1},$options{'name'}." ".&_renderNav(0)); 
+	$tr=$cgi->td({-rowspan=>$showmonthheader?2:1,-align=>'right'},$options{'name'}." ".&_renderNav(0)); 
 	if ($showmonthheader) {
                 my $restdays = $options{days};
                 my ($yy1,$mm1,$dd1) = ($yy, $mm, $dd);
@@ -572,7 +572,8 @@ sub _render {
 		$colfgcolor = $options{'todayfgcolor'} if ($options{'todayfgcolor'})&&($todayDays==$startDateDays+$day);
 		$colfgcolor = '' unless defined $colfgcolor;
 
-		$tr .= $cgi->td({-style=>(($colfgcolor ne '')?"color:$colfgcolor":''), -bgcolor=>$colbgcolor,-valign=>"top", -align=>"center", -title=>&_mystrftime($yy1,$mm1,$dd1,$options{'tooltipdateformat'}), -width=>$options{'tablecolumnwidth'}?$options{'tablecolumnwidth'}:""},&_mystrftime($yy1,$mm1,$dd1));
+		###$tr .= $cgi->td({-style=>(($colfgcolor ne '')?"color:$colfgcolor":''), -bgcolor=>$colbgcolor,-valign=>"top", -align=>"center", -title=>&_mystrftime($yy1,$mm1,$dd1,$options{'tooltipdateformat'}), -width=>$options{'tablecolumnwidth'}?$options{'tablecolumnwidth'}:(90/$options{'days'}).'%'},&_mystrftime($yy1,$mm1,$dd1));
+		$tr .= $cgi->td({-style=>(($colfgcolor ne '')?"color:$colfgcolor":''), -bgcolor=>$colbgcolor,-valign=>"top", -align=>"center", -title=>&_mystrftime($yy1,$mm1,$dd1,$options{'tooltipdateformat'}), -width=>$options{'tablecolumnwidth'}?$options{'tablecolumnwidth'}:''},&_mystrftime($yy1,$mm1,$dd1));
 	}
 	$tr.=$cgi->td(&_renderNav(1)) unless $showmonthheader;
 	$text .= $cgi->Tr($tr);
@@ -580,7 +581,7 @@ sub _render {
 
 	### render time line:
 	$tr = "";
-	$tr.=$cgi->td({-valign=>"top"},($options{'showtimeline'}=~m/(left|both)/i?&_renderTimeline():"&nbsp;"));
+	$tr.=$cgi->td({-valign=>"top",-align=>'right'},($options{'showtimeline'}=~m/(left|both)/i?&_renderTimeline():"&nbsp;"));
 
 	my $wtrow = "";;
 
@@ -620,7 +621,8 @@ sub _render {
 					}
 					$tooltips .= &_renderTooltip($wtentry_ref, $day, 'W', $counter, $yy1, $mm1, $dd1);
 					$tooltips .= &_renderTooltip($wtentry_ref, $day, 'W2', $counter, $yy1,$mm1,$dd1) if $options{'wholetimerow'} && ($options{'wholetimerowpos'}=~m/^(bottom|both)$/i);
-					$itr.=$cgi->Tr($cgi->td({-nowrap=>"nowrap",
+					$itr.=$cgi->Tr($cgi->td({#-nowrap=>'nowrap',
+							#-style=>'white-space: nowrap;',
 							-valign=>"top",
 							-bgcolor=>$$wtentry_ref{'bgcolor'}?$$wtentry_ref{'bgcolor'}:$options{eventbgcolor},
 							-title=>$title,
@@ -672,7 +674,8 @@ sub _render {
 					} else {
 						$title = undef; $onclick= "";
 					}
-					$itr.=$cgi->td({-nowrap=>"nowrap",
+					$itr.=$cgi->td({#-nowrap=>'nowrap',
+							#-style=>'white-space: nowrap;',
 							-valign=>"top",
 							-bgcolor=>$$mentry_ref{'bgcolor'}?$$mentry_ref{'bgcolor'}:$options{eventbgcolor},
 							-rowspan=>$rs+$fillRows,
@@ -826,23 +829,25 @@ sub _renderText {
 	$text.=$trange if $options{'displaytime'};
 	
 	my $descrlimit = $options{'descrlimit'};
-	my $nt="";
-	for (my $l=0; $l<$rs; $l++) {
-		my $sub;
-		my $offset = $l * $descrlimit;
-		last if $offset>length($text);
-		$sub  = substr($text, $offset, $descrlimit);
-		last if (length($sub)<1);
-		$nt .= (($l==($rs-1))&&(length(substr($text,$offset))>$descrlimit))
-				? substr($sub,0,$descrlimit-length($options{'cuttext'})).$options{'cuttext'}
-				: $sub;
-		$nt .='<br/>' unless $l==$rs-1;
-	}	
-	$text='<noautolink>'.$nt.'</noautolink>';
-
+	####my $nt="";
+	###for (my $l=0; $l<$rs; $l++) {
+	###	my $sub;
+	###	my $offset = $l * $descrlimit;
+	###	last if $offset>length($text);
+	###	$sub  = substr($text, $offset, $descrlimit);
+	###	last if (length($sub)<1);
+	###	$nt .= (($l==($rs-1))&&(length(substr($text,$offset))>$descrlimit))
+	###			? substr($sub,0,$descrlimit-length($options{'cuttext'})).$options{'cuttext'}
+	###			: $sub;
+	###	$nt .='<br/>' unless $l==$rs-1;
+	###}	
+	###$text='<noautolink>'.$nt.'</noautolink>';
+	my $height = ($rs-1)*1.5;
+	$height=1.5 if $height<1.5;
+	my $width = (defined $descrlimit && $descrlimit!~/^\s*$/)?$descrlimit.'em':'';
 	$tddata.= $cgi->div({
 			## -title=>$title, 
-			-style=>'color:'.($$mentry_ref{'fgcolor'}?$$mentry_ref{'fgcolor'}:$options{'eventfgcolor'}).';'
+			-style=>'color:'.($$mentry_ref{'fgcolor'}?$$mentry_ref{'fgcolor'}:$options{'eventfgcolor'})					.';width:'.$width.';height:'.$height.'em; overflow:hidden',
 			}, $text);
 
 	return ($tddata, $title);
