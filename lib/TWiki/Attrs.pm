@@ -26,24 +26,20 @@
 ---+ package TWiki::Attrs
 
 Class of attribute sets, designed for parsing and storing attribute values
-from a TWiki tag e.g. =%TAG{fred='bad' "sad" joe="mad"}%=
+from a TWiki tag e.g. =%<nop>TAG{"joe" fred="bad" joe="mad"}%=
 
-An attribute set is a map containing an entry for each parameter. The
-default parameter (unnamed quoted string) is named <code>_<nop>DEFAULT</code> in the map.
+An attribute set is a hash containing an entry for each parameter. The
+default parameter (unnamed quoted string) is named <code>_<nop>DEFAULT</code> in the hash.
 
 Attributes declared later in the string will override those of the same
 name defined earlier. The one exception to this is the _DEFAULT key, where
-the _first_ instance of a setting is always taken.
+the _first_ instance is always taken.
 
-As well as standard TWiki syntax (parameter values double-quoted)
-it also parses single-quoted values, unquoted spaceless
-values, spaces around the =, and commas as well as spaces separating values,
-though none of these alternatives is advertised in documentation and
-the extended syntax can be turned off by passing the 'strict' parameter
+As well as the default TWiki syntax (parameter values double-quoted)
+this class also parses single-quoted values, unquoted spaceless
+values, spaces around the =, and commas as well as spaces separating values.
+The extended syntax has to be enabled by passing the =$friendly= parameter
 to =new=.
-
-This class replaces the old TWiki::extractNameValuePair and
-TWiki::extractParameters.
 
 =cut
 
@@ -179,7 +175,7 @@ sub isEmpty {
 
 ---++ ObjectMethod remove($key) -> $value
 
-| $key | Attribute to remove |
+   * =$key= - Attribute to remove
 Remove an attr value from the map, return old value. After a call to
 =remove= the attribute is no longer defined.
 
@@ -197,7 +193,7 @@ sub remove {
 
 ---++ ObjectMethod stringify() -> $string
 
-Generate a printed form for the map, using standard
+Generate a printed form for the map, using strict
 attribute syntax, with only the single-quote extension
 syntax observed (no {} brackets, though).
 
@@ -220,20 +216,16 @@ sub stringify {
 }
 
 
-=pod
-
----++ StaticMethod extractValue() -> $string
-
-Legacy support, formerly known as extractNameValuePair. This
-static method uses context information to determine how a value
-string is to be parsed. For example, if you have an attribute string
-like this:
-
-"abc def="ghi" jkl" def="qqq"
-
-then call extractValue( "def" ), it will return "ghi".
-
-=cut
+# ---++ StaticMethod extractValue() -> $string
+#
+# Legacy support, formerly known as extractNameValuePair. This
+# static method uses context information to determine how a value
+# string is to be parsed. For example, if you have an attribute string
+# like this:
+#
+# "abc def="ghi" jkl" def="qqq"
+#
+# then call extractValue( "def" ), it will return "ghi".
 
 sub extractValue {
     my( $str, $name ) = @_;
@@ -270,18 +262,13 @@ sub extractValue {
     return $value;
 }
 
-=pod
-
----++ ObjectMethod get($key) -> $value
-
-| $key | Attribute to get |
-Get an attr value from the map.
-
-Synonymous with $attrs->{$key}. Retained mainly for compatibility with
-the old AttrsContrib.
-
-=cut
-
+# ---++ ObjectMethod get($key) -> $value
+#
+# | $key | Attribute to get |
+# Get an attr value from the map.
+#
+# Synonymous with $attrs->{$key}. Retained mainly for compatibility with
+# the old AttrsContrib.
 sub get {
     my( $this, $field) = @_;
     return $this->{$field};

@@ -188,8 +188,8 @@ sub _findAttachments {
     # You need the following lines if you want metadata to supplement
     # the filesystem
     if (defined $attachmentsKnownInMeta) {
-      %filesListedInMeta =
-        TWiki::Meta::indexByKey('name', @$attachmentsKnownInMeta);
+        %filesListedInMeta = map {
+            $_->{name} => $_ } @$attachmentsKnownInMeta;
     }
 
     foreach my $file (keys %filesListedInPub) {
@@ -216,7 +216,7 @@ sub _findAttachments {
     # proper attachment sequence 
     #
     my @deindexedBecauseMetaDoesnotIndexAttachments =
-      TWiki::Meta::deindexKeyed(%filesListedInPub);
+      values(%filesListedInPub);
 
     return @deindexedBecauseMetaDoesnotIndexAttachments;
 }

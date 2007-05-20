@@ -305,7 +305,7 @@ sub getPluginVersion {
 
 ---++ ObjectMethod addListener( $command, $handler )
 
-   * =$command* - name of the event
+   * =$command= - name of the event
    * =$handler= - the handler object.
 
 Add a listener to the end of the list of registered listeners for this event.
@@ -499,21 +499,23 @@ Each removed block is represented by the block text and the parameters passed to
 <pre class='slobadob'>
 XYZ
 </pre>
+</verbatim>
 the map will contain:
-<pre>
+<verbatim>
 $removed->{'pre1'}{text}:   XYZ
 $removed->{'pre1'}{params}: class="slobadob"
-</pre>
 </verbatim>
 
 Iterating over blocks for a single tag is easy. For example, to prepend a line number to every line of a pre block you might use this code:
 
+<verbatim>
 foreach my $placeholder ( keys %$map ) {
     if( $placeholder =~ /^pre/i ) {
        my $n = 1;
        $map->{$placeholder}{text} =~ s/^/$n++/gem;
     }
 }
+</verbatim>
 
 =cut
 
@@ -704,8 +706,8 @@ sub mergeHandler {
 
 This code provides Plugins with the opportunity to alter an uploaded attachment between the upload and save-to-store processes. It is invoked as per other Plugins.
    * =$attrHashRef= - Hash reference of attachment attributes (keys are indicated below)
-   * =$topic= -     | Topic name
-   * =$web= -       | Web name
+   * =$topic= -     Topic name
+   * =$web= -       Web name
 
 Keys in $attrHashRef:
 | *Key*       | *Value* |
@@ -738,9 +740,9 @@ sub beforeAttachmentSaveHandler {
 deal with an uploaded attachment between the upload and save-to-store processes. It is invoked as per other plugins.
 
    * =$attrHashRef= - Hash reference of attachment attributes (keys are indicated below)
-   * =$topic= -     | Topic name
-   * =$web= -       | Web name
-   * =$error= -     | Error string of save action, empty if OK
+   * =$topic= -     Topic name
+   * =$web= -       Web name
+   * =$error= -     Error string of save action, empty if OK
 
 Keys in $attrHashRef:
 | *Key*       | *Value* |

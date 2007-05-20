@@ -31,6 +31,10 @@ following fields:
    * =mode= - the access mode e.g. CHANGE, VIEW etc
    * =reason= a text string giving the reason for the refusal.
 
+The exception may be thrown by plugins. If a plugin throws the exception, it
+will normally be caught and the browser redirected to a login screen (if the
+user is not logged in) or reported (if they are and just don't have access).
+
 =cut
 
 package TWiki::AccessControlException;
@@ -69,7 +73,7 @@ sub new {
 
 ---++ ObjectMethod stringify() -> $string
 
-Generate a summary string
+Generate a summary string. This is mainly for debugging.
 
 =cut
 

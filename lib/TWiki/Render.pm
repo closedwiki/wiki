@@ -509,7 +509,7 @@ sub internalLink {
     # Plugin authors use $hasExplicitLinkLabel to determine if the link label
     # should be rendered differently even if the topic author has used a
     # specific link label.
-    $theLinkText = $this->{session}->{plugins}->renderWikiWordHandler( $theLinkText, $hasExplicitLinkLabel ) || $theLinkText;
+    $theLinkText = $this->{session}->{plugins}->renderWikiWordHandler( $theLinkText, $hasExplicitLinkLabel, $theWeb, $theTopic ) || $theLinkText;
     
     # Turn spaced-out names into WikiWords - upper case first letter of
     # whole link, and first of each word. TODO: Try to turn this off,

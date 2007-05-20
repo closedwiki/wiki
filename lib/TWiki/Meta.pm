@@ -21,7 +21,10 @@
 
 ---+ package TWiki::Meta
 
-Meta-data handling.
+All TWiki topics have *data* (text) and *meta-data* (information about the
+topic). Meta-data includes information such as file attachments, form fields,
+topic parentage etc. When TWiki loads a topic from the store, it represents
+the meta-data in the topic using an object of this class.
 
 A meta-data object is a hash of different types of meta-data (keyed on
 the type, such as 'FIELD' and 'TOPICINFO').
@@ -31,17 +34,23 @@ contains another hash of the key=value pairs, corresponding to a
 single meta-datum.
 
 If there may be multiple entries of the same top-level type (i.e. for FIELD
-and FILEATTACHMENT) then the array hash multiple entries. These types
+and FILEATTACHMENT) then the array has multiple entries. These types
 are referred to as "keyed" types. The array entries are keyed with the
 attribute 'name' which must be in each entry in the array.
 
 For unkeyed types, the array has only one entry.
 
-The module knows nothing about how meta-data is stored. That is entirely the
-responsibility of the Store module.
-
-Meta-data objects are created by the Store engine when topics are read. They
-are populated using the =put= method.
+Pictorially,
+   * TOPICINFO
+      * author => '...'
+      * date => '...'
+      * ...
+   * FILEATTACHMENT
+      * [0] -> { name => '...' ... }
+      * [1] -> { name => '...' ... }
+   * FIELD
+      * [0] -> { name => '...' ... }
+      * [1] -> { name => '...' ... }
 
 =cut
 
@@ -55,8 +64,9 @@ use TWiki::Merge;
 =pod
 
 ---++ ClassMethod new($session, $web, $topic)
-
-Construct a new, empty Meta collection.
+   * =$session= - a TWiki object (e.g. =$TWiki::Plugins::SESSION)
+   * =$web=, =$topic= - the topic that the metadata relates to
+Construct a new, empty object to contain meta-data for the given topic.
 
 =cut
 
@@ -108,10 +118,13 @@ sub topic {
 
 ---++ ObjectMethod put($type, \%args)
 
-Put a hash of key=value pairs into the given type set in this meta.
+Put a hash of key=value pairs into the given type set in this meta. This
+will *not* replace another value with the same name (for that see =putKeyed=)
 
-See the main comment for this package to understand how meta-data is
-represented.
+For example, 
+<verbatim>
+$meta->put( 'FIELD', { name => 'MaxAge', title => 'Max Age', value =>'103' } );
+</verbatim>
 
 =cut
 
@@ -132,11 +145,14 @@ sub put {
 
 ---++ ObjectMethod putKeyed($type, \%args)
 
-Put a hash of key=value pairs into the given type set in this meta. The
-entries are keyed by 'name'.
+Put a hash of key=value pairs into the given type set in this meta, replacing
+any existing value with the same key.
 
-See the main comment for this package to understand how meta-data is
-represented.
+For example,
+<verbatim>
+$meta->putKeyed( 'FIELD', { name => 'MaxAge', title => 'Max Age', value =>'103' } );
+</verbatim>
+
 =cut
 
 # Note: Array is used instead of a hash to preserve sequence
@@ -166,8 +182,17 @@ sub putKeyed {
 
 ---++ ObjectMethod putAll
 
-Replaces all the items of a given key with a new array
-This is the logical inverse of the find method
+Replaces all the items of a given key with a new array.
+
+For example,
+<verbatim>
+$meta->putAll( 'FIELD',
+     { name => 'MinAge', title => 'Min Age', value =>'50' },
+     { name => 'MaxAge', title => 'Max Age', value =>'103' },
+     { name => 'HairColour', title => 'Hair Colour', value =>'white' }
+ );
+</verbatim>
+
 =cut
 
 sub putAll {
@@ -181,14 +206,19 @@ sub putAll {
 
 ---++ ObjectMethod get( $type, $key ) -> \%hash
 
-Find the value of a meta-datum in the map. If the type is 
-keyed, the $key parameter is required to say _which_
-entry you want. Otherwise it can be undef.
+Find the value of a meta-datum in the map. If the type is
+keyed (idenitifed by a =name=), the =$key= parameter is required
+to say _which_ entry you want. Otherwise you will just get the first value.
 
-WARNING SMELL If key is undef but the type is keyed you get the FIRST entry
 If you want all the keys of a given type use the 'find' method.
 
 The result is a reference to the hash for the item.
+
+For example,
+<verbatim>
+my $ma = $meta->get( 'FIELD', 'MinAge' );
+my $topicinfo = $meta->get( 'TOPICINFO' ); # get the TOPICINFO hash
+</verbatim>
 
 =cut
 
@@ -214,16 +244,21 @@ sub get {
 
 ---++ ObjectMethod find (  $type  ) -> @values
 
-Get all meta data for a specific type
+Get all meta data for a specific type.
 Returns the array stored for the type. This will be zero length
 if there are no entries.
+
+For example,
+<verbatim>
+my $attachments = $meta->find( 'FILEATTACHMENT' );
+</verbatim>
 
 =cut
 
 sub find {
     my( $this, $type ) = @_;
     ASSERT($this->isa( 'TWiki::Meta')) if DEBUG;
-    
+
     my $itemsr = $this->{$type};
     my @items = ();
 
@@ -236,49 +271,7 @@ sub find {
 
 =pod
 
----++ StaticMethod indexByKey
-
-See tests/unit/MetaTests.pm for an example
-
-The result is a hash the same as the array provided by find but keyed by the keyName.
-NB. results are indeterminate if the key you choose is not unique in the find. 
-
-=cut
-
-sub indexByKey {
-    my( $keyName, @array) = @_;
-
-	my %findKeyed = ();
-	foreach my $result (@array) {
-		my $key = $result->{$keyName};
-		$findKeyed{$key} = $result;
-	}
-	return %findKeyed;
-}
-
-=pod
-
-Flattens a keyed hash structure, taking only the values.
-Returns a hash.
-
-See tests/unit/MetaTests.pm for an example
-
-=cut
-
-sub deindexKeyed {
-    my (%hash) =@_;
-
-	my @array = ();
-	foreach my $key (keys %hash) {
-		my $value = $hash{$key};
-		push @array, $value;
-	}
-	return @array;
-}
-
-=pod
-
----++ ObjectMethod remove ( $type, $key )
+---++ ObjectMethod remove($type, $key)
 
 With no type, will remove all the contents of the object.
 
@@ -323,10 +316,8 @@ case it will retain the old values.
 
 If $type is undef, will copy ALL TYPES.
 
-If $nameFilter is defined (an RE), it will copy only data where
-{name} matches $nameFilter.
-
-SMELL: This is a shallow copy
+If $nameFilter is defined (a perl refular expression), it will copy
+only data where ={name}= matches $nameFilter.
 
 =cut
 
@@ -338,10 +329,7 @@ sub copyFrom {
     if( $type ) {
         foreach my $item ( @{$otherMeta->{$type}} ) {
             if( !$filter || ( $item->{name} && $item->{name} =~ /$filter/ )) {
-                my %data;
-                foreach my $k ( keys %$item ) {
-                    $data{$k} = $item->{$k};
-                }
+                my %data = map { $_ => $item->{$_} } keys %$item;
                 push( @{$this->{$type}}, \%data );
             }
         }
@@ -356,9 +344,9 @@ sub copyFrom {
 
 =pod
 
----++ ObjectMethod count (  $type  ) -> $integer
+---++ ObjectMethod count($type) -> $integer
 
-Return the number of entries of the given type that are in this meta set
+Return the number of entries of the given type
 
 =cut
 
@@ -466,7 +454,8 @@ sub merge {
 ---++ ObjectMethod stringify( $types ) -> $string
 
 Return a string version of the meta object. Uses \n to separate lines.
-If $types is specified, return only types specified by that RE.
+If =$types= is specified, return only types
+that match it. Types should be a perl regular expression.
 
 =cut
 
@@ -562,7 +551,7 @@ sub getFormName {
 
 =pod
 
----++ ObjectMethod renderFormForDisplay()
+---++ ObjectMethod renderFormForDisplay() -> $html
 
 Render the form contained in the meta for display. Does not require
 the form definition.
