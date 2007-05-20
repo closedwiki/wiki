@@ -14,6 +14,7 @@ This plugin allows you to have code fragments automatically formatted and highli
 | C++ | =%<nop>CODE{"cpp"}%= ... =%ENDCODE%= |
 | C# | =%<nop>CODE{"csharp"}%= ... =%ENDCODE%= |
 | Java | =%<nop>CODE{"java"}%= ... =%ENDCODE%= |
+| <nop>JavaScript | =%<nop>CODE{"javascript"}%= ... =%ENDCODE%= |
 | Lua | =%<nop>CODE{"lua"}%= ... =%ENDCODE%= |
 | Makefile | =%<nop>CODE{"makefile"}%= ... =%ENDCODE%= |
 | Perl | =%<nop>CODE{"perl"}%= ... =%ENDCODE%= |
@@ -87,13 +88,14 @@ void nWorld::StepSim()
 %ENDCODE%
 
 %CODE{"unknown"}%
-   just testing an invalid language setting...
+	testing an invalid language setting...
 %ENDCODE%
 
 
 ---++ History
 
 | *Date* | *Change* | *Name* |
+| 20 May 2007 | added <nop>JavaScript language file, removed legacy CODE_<i>lang</i> construct | TWiki:Main.WillNorris |
 | 30 Apr 2007 | warnings cleanup; no functional changes | TWiki:Main.WillNorris |
 | 27 Apr 2007 | automatically adds CSS for formatting code fragments | TWiki:Main.WillNorris |
 |  1 Jan 2006 | upgraded to TWiki::Func::extractNameValuePair for better parameter parsing, upgraded TWiki:Plugins.BuildContrib support | TWiki:Main.WillNorris |
