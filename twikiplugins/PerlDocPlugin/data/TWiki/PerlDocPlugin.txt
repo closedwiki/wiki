@@ -1,7 +1,6 @@
-%META:TOPICINFO{author="PeterThoeny" date="1039285439" format="1.0" version="1.2"}%
 ---+!! Perl Doc Plugin
 
-This Plugin extracts the Perl documentation (POD) from a Perl module located in the @INC library path and displays it in a topic.
+%SHORTDESCRIPTION%
 
 %TOC%
 
@@ -52,49 +51,27 @@ Silly paragraph
 =cut
 </pre>
 
----+ <nop>%TOPIC% Global Settings
-
-Plugin settings are stored as preferences variables. To reference a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>PODTOTWIKIPLUGIN_SHORTDESCRIPTION%==
-
-	* One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
+<!--
 		* Set SHORTDESCRIPTION = Extract the Perl documentation (POD) from a Perl module and display it in a topic.
-
-	* Enable Plugin: (0 or 1)
-		* Set ENABLE = 1
-
-	* Debug Plugin: (See output in =data/debug.txt=)
-		* Set DEBUG = 0
+-->
 
 ---+ Limitations
 
 	* Links (=L&lt;....&gt;=) are not supported
 
 ---+ Plugin Installation Instructions
-
-__Note:__ You do not need to install anything on the browser to use this plugin. The following instructions are for the administrator who installs the plugin on the server where TWiki is running. 
-
-	* Download the ZIP file from the Plugin web (see below)
-	* Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
-	  | *File:* | *Description:* |
-	  | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
-	  | ==data/TWiki/%TOPIC%.txt,v== | Plugin topic repository |
-	  | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
-	* (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
-	* Test above example if the installation was successful. You should see a "Nothing to do, no module specified" message below the form if the Plugin is enabled.
+%$INSTALL_INSTRUCTIONS%
 
 ---+ Plugin Info
 
 |  Plugin Author: | TWiki:Main/PeterThoeny |
-|  Plugin Version: | 07 Dec 2002 (V1.001) |
+|  Plugin Version: | %$VERSION% |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  20 May 2007 | Fixed for TWiki-4, added =pod, repackaged with =BuildContrib= - TWiki:Main.CrawfordCurrie |
 |  07 Dec 2002: | Removed "=pod" from showing up in html or twiki blocks |
 |  01 Dec 2002: | Initial version |
-|  CPAN Dependencies: | none |
-|  Other Dependencies: | none |
-|  Perl Version: | 5.005 |
+|  Dependencies: | %$DEPENDENCIES |
 |  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 
 __Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
-
--- TWiki:Main/PeterThoeny - 07 Dec 2002

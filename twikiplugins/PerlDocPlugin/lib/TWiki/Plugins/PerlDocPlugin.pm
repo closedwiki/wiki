@@ -61,71 +61,40 @@ Last paragraph of this document block
 package TWiki::Plugins::PerlDocPlugin;
 
 # =========================
-use vars qw(
-        $web $topic $user $installWeb $VERSION $RELEASE $debug
-    );
+use vars qw( $VERSION $RELEASE );
 
-# This should always be $Rev$ so that TWiki can determine the checked-in
-# status of the plugin. It is used by the build automation tools, so
-# you should leave it alone.
 $VERSION = '$Rev$';
 
-# This is a free-form string you can use to "name" your own plugin version.
-# It is *not* used by the build automation tools, but is reported as part
-# of the version number in PLUGINDESCRIPTIONS.
 $RELEASE = 'Dakar';
 
 
 # =========================
-sub initPlugin
-{
-    ( $topic, $web, $user, $installWeb ) = @_;
-
+sub initPlugin {
     # check for Plugins.pm versions
     if( $TWiki::Plugins::VERSION < 1 ) {
         TWiki::Func::writeWarning( "Version mismatch between PerlDocPlugin and Plugins.pm" );
         return 0;
     }
 
-    # Get plugin debug flag
-    $debug = TWiki::Func::getPreferencesFlag( "PERLDOCPLUGIN_DEBUG" );
+    if (TWiki::Func::getPreferencesFlag( 'PERLDOCPLUGIN_ENABLE' )) {
+        TWiki::Func::registerTagHandler('PERLDOC', \&perlDocHandler);
+        return 1;
+    }
 
-    # Get plugin debug flag
-    my $enable = TWiki::Func::getPreferencesFlag( "PERLDOCPLUGIN_ENABLE" );
-
-    # Plugin correctly initialized
-    my $txt = "disabled";
-    $txt = "enabled" if( $enable );
-    TWiki::Func::writeDebug( "- TWiki::Plugins::PerlDocPlugin::initPlugin( $web.$topic ) is " . $txt ) if $debug;
-    return $enable;
+    return 0;
 }
 
-# =========================
-sub commonTagsHandler
-{
-### my ( $text, $topic, $web ) = @_;   # do not uncomment, use $_[0], $_[1]... instead
+sub perlDocHandler {
+    my( $session, $params, $topic, $web ) = @_;
 
-    TWiki::Func::writeDebug( "- PerlDocPlugin::commonTagsHandler( $_[2].$_[1] )" ) if $debug;
-
-    # This is the place to define customized tags and variables
-    # Called by sub handleCommonTags, after %INCLUDE:"..."%
-
-    $_[0] =~ s/%PERLDOC{(.*)}%/perlDocHandler( $1, $_[2], $_[1] )/ge;
-}
-
-# =========================
-sub perlDocHandler
-{
-    my( $theArgs, $theWeb, $theTopic ) = @_;
-
-    my $libName = TWiki::Func::extractNameValuePair( $theArgs );
-    my $format = lc( TWiki::Func::extractNameValuePair( $theArgs, "format" ) );
+    my $libName = $params->{_DEFAULT};
+    my $format = lc( $params->{format} || '' );
     my $libFile = $libName;
     $libFile =~ s/\:\:/\//g;
     $libFile =~ s/[^a-zA-Z0-9_\/]//g;
     $libFile =~ /(.*)/;  # untaint
     $libFile = $1;
-    return "$installWeb.PerlDocPlugin: Nothing to do, no module specified." unless( $libName );
+    return "%SYSTEMWEB%.PerlDocPlugin: Nothing to do, no module specified." unless( $libName );
 
     my $fileName = "";
     foreach( @INC ) {
@@ -135,7 +104,7 @@ sub perlDocHandler
     }
     unless( $filename ) {
         my $path = join( ", ", @INC );
-        return "$installWeb.PerlDocPlugin: Module =$libName= not found in lib path =$path=.";
+        return "%SYSTEMWEB%.PerlDocPlugin: Module =$libName= not found in lib path =$path=.";
     }
 
     my $rText = TWiki::Func::readFile( $filename );
@@ -154,7 +123,7 @@ sub perlDocHandler
     $text = translatePod2TWiki( $text, ( $format eq "pod" ) );
 
     unless( $text ) {
-        return "$installWeb.PerlDocPlugin:  Module =$libName= has no documentation.";
+        return "%SYSTEMWEB%.PerlDocPlugin:  Module =$libName= has no documentation.";
     }
 
     if( $format =~ /(pod|twiki|raw)/ ) {
@@ -198,7 +167,9 @@ sub translatePod2TWiki
             $data = "";
         }
         if( $mode eq "" ) {
-            if( $tag =~ /^begin$/i ) {
+            if( $tag =~ /^pod$/ ) {
+                $mode = "twiki";
+            } elsif( $tag =~ /^begin$/i ) {
                 if( $data =~ /^(html|twiki)/i ) {
                     $data =~ s@([\r\n])( +)@"$1" . "\t" x (length($2)/3)@ges;
                     $data =~ s/^(html|twiki)//i;
