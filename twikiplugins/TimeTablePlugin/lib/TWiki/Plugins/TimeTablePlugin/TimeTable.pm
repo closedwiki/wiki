@@ -848,7 +848,7 @@ sub _renderText {
 	$tddata.= $cgi->div({
 			## -title=>$title, 
 			-style=>'color:'.($$mentry_ref{'fgcolor'}?$$mentry_ref{'fgcolor'}:$options{'eventfgcolor'})					.';width:'.$width.';height:'.$height.'em; overflow:hidden',
-			}, $text);
+			}, " $text ");
 
 	return ($tddata, $title);
 }
