@@ -9,6 +9,7 @@ lib/HFile/HFile_cpp.pm NEW
 lib/HFile/HFile_csharp.pm NEW
 lib/HFile/HFile_html.pm NEW
 lib/HFile/HFile_java.pm NEW
+lib/HFile/HFile_javascript.pm NEW
 lib/HFile/HFile_lua.pm NEW
 lib/HFile/HFile_makefile.pm NEW
 lib/HFile/HFile_perl.pm NEW

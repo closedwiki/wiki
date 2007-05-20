@@ -94,12 +94,6 @@ sub commonTagsHandler
 
     # Find code tag and beautify
     $_[0] =~ s/%CODE{(.*?)}%(.*?)%ENDCODE%/&handleCode($1, $2)/gseo;
-
-    # Legacy tags
-    $_[0] =~ s/%CODE_CPP{(.*?)}%/&handleCode("cpp", $1)/gseo;
-    $_[0] =~ s/%CODE_TCL{(.*?)}%/&handleCode("tcl", $1)/gseo;
-    $_[0] =~ s/%CODE_PYTHON{(.*?)}%/&handleCode("python", $1)/gseo;
-    $_[0] =~ s/%CODE_JAVA{(.*?)}%/&handleCode("java", $1)/gseo;
 }
 
 # =========================
