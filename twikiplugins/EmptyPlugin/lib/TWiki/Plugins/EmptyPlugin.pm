@@ -76,7 +76,7 @@ $VERSION = '$Rev$';
 # This is a free-form string you can use to "name" your own plugin version.
 # It is *not* used by the build automation tools, but is reported as part
 # of the version number in PLUGINDESCRIPTIONS.
-$RELEASE = 'Dakar';
+$RELEASE = 'TWiki-4.2';
 
 # Short description of this plugin
 # One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
@@ -140,8 +140,9 @@ sub initPlugin {
 
     # Set plugin preferences in LocalSite.cfg, like this:
     # $TWiki::cfg{Plugins}{EmptyPlugin}{ExampleSetting} = 1;
-    # Then recover it like this. Always provide a default in case the
-    # setting is not defined in LocalSite.cfg
+    # Always provide a default in case the setting is not defined in
+    # LocalSite.cfg. See TWiki.TWikiPlugins for help in adding your plugin
+    # configuration to the =configure= interface.
     my $setting = $TWiki::cfg{Plugins}{EmptyPlugin}{ExampleSetting} || 0;
     $debug = $TWiki::cfg{Plugins}{EmptyPlugin}{Debug} || 0;
 
@@ -181,8 +182,8 @@ sub _EXAMPLETAG {
 
 ---++ earlyInitPlugin()
 
-May be used by a plugin that requires early initialization. This handler
-is called before any other handler.
+This handler is called before any other handler, and before it has been
+determined if the plugin is enabled or not. Use it with great care!
 
 If it returns a non-null error string, the plugin will be disabled.
 
@@ -198,9 +199,11 @@ sub DISABLE_earlyInitPlugin {
    * =$loginName= - login name recovered from $ENV{REMOTE_USER}
    * =$url= - request url
    * =$pathInfo= - pathinfo from the CGI query
-Allows a plugin to set the username, for example based on cookies.
+Allows a plugin to set the username. Normally TWiki gets the username
+from the login manager. This handler gives you a chance to override the
+login manager.
 
-Return the user name, or =guest= if not logged in.
+Return the *login* name.
 
 This handler is called very early, immediately after =earlyInitPlugin=.
 
@@ -237,36 +240,37 @@ sub DISABLE_registrationHandler {
 
 =pod
 
----++ commonTagsHandler($text, $topic, $web )
+---++ commonTagsHandler($text, $topic, $web, $included, $meta )
    * =$text= - text to be processed
    * =$topic= - the name of the topic in the current CGI query
    * =$web= - the name of the web in the current CGI query
    * =$included= - Boolean flag indicating whether the handler is invoked on an included topic
-This handler is called by the code that expands %TAGS% syntax in
+   * =$meta= - meta-data object for the topic MAY BE =undef=
+This handler is called by the code that expands %<nop>TAGS% syntax in
 the topic body and in form fields. It may be called many times while
 a topic is being rendered.
-
-Plugins that want to implement their own %TAGS% with non-trivial
-additional syntax should implement this function. Internal TWiki
-variables (and any variables declared using =TWiki::Func::registerTagHandler=)
-are expanded _before_, and then again _after_, this function is called
-to ensure all %TAGS% are expanded.
 
 For variables with trivial syntax it is far more efficient to use
 =TWiki::Func::registerTagHandler= (see =initPlugin=).
 
+Plugins that have to parse the entire topic content should implement
+this function. Internal TWiki
+variables (and any variables declared using =TWiki::Func::registerTagHandler=)
+are expanded _before_, and then again _after_, this function is called
+to ensure all %<nop>TAGS% are expanded.
+
 __NOTE:__ when this handler is called, &lt;verbatim> blocks have been
-removed from the text (though all other HTML such as &lt;pre> blocks is
-still present).
+removed from the text (though all other blocks such as &lt;pre> and
+&lt;noautolink> are still present).
 
 __NOTE:__ meta-data is _not_ embedded in the text passed to this
-handler.
+handler. Use the =$meta= object.
 
 =cut
 
 sub DISABLE_commonTagsHandler {
     # do not uncomment, use $_[0], $_[1]... instead
-    ### my ( $text, $topic, $web ) = @_;
+    ### my ( $text, $topic, $web, $meta ) = @_;
 
     TWiki::Func::writeDebug( "- ${pluginName}::commonTagsHandler( $_[2].$_[1] )" ) if $debug;
 
@@ -277,10 +281,11 @@ sub DISABLE_commonTagsHandler {
 
 =pod
 
----++ beforeCommonTagsHandler($text, $topic, $web )
+---++ beforeCommonTagsHandler($text, $topic, $web, $meta )
    * =$text= - text to be processed
    * =$topic= - the name of the topic in the current CGI query
    * =$web= - the name of the web in the current CGI query
+   * =$meta= - meta-data object for the topic MAY BE =undef=
 This handler is called before TWiki does any expansion of it's own
 internal variables. It is designed for use by cache plugins. Note that
 when this handler is called, &lt;verbatim> blocks are still present
@@ -299,17 +304,18 @@ __NOTE:__ This handler is not separately called on included topics.
 
 sub DISABLE_beforeCommonTagsHandler {
     # do not uncomment, use $_[0], $_[1]... instead
-    ### my ( $text, $topic, $web ) = @_;
+    ### my ( $text, $topic, $web, $meta ) = @_;
 
     TWiki::Func::writeDebug( "- ${pluginName}::beforeCommonTagsHandler( $_[2].$_[1] )" ) if $debug;
 }
 
 =pod
 
----++ afterCommonTagsHandler($text, $topic, $web )
+---++ afterCommonTagsHandler($text, $topic, $web, $meta )
    * =$text= - text to be processed
    * =$topic= - the name of the topic in the current CGI query
    * =$web= - the name of the web in the current CGI query
+   * =$meta= - meta-data object for the topic MAY BE =undef=
 This handler is after TWiki has completed expansion of %TAGS%.
 It is designed for use by cache plugins. Note that when this handler
 is called, &lt;verbatim> blocks are present in the text.
@@ -325,7 +331,7 @@ handler.
 
 sub DISABLE_afterCommonTagsHandler {
     # do not uncomment, use $_[0], $_[1]... instead
-    ### my ( $text, $topic, $web ) = @_;
+    ### my ( $text, $topic, $web, $meta ) = @_;
 
     TWiki::Func::writeDebug( "- ${pluginName}::afterCommonTagsHandler( $_[2].$_[1] )" ) if $debug;
 }
@@ -427,17 +433,18 @@ sub DISABLE_beforeEditHandler {
 
 =pod
 
----++ afterEditHandler($text, $topic, $web )
+---++ afterEditHandler($text, $topic, $web, $meta )
    * =$text= - text that is being previewed
    * =$topic= - the name of the topic in the current CGI query
    * =$web= - the name of the web in the current CGI query
+   * =$meta= - meta-data for the topic.
 This handler is called by the preview script just before presenting the text.
 It is called once when the =preview= script is run.
 
 __NOTE:__ this handler is _not_ called unless the text is previewed.
 
 __NOTE:__ meta-data is _not_ embedded in the text passed to this
-handler.
+handler. Use the =$meta= object.
 
 __Since:__ TWiki::Plugins::VERSION = '1.010'
 
@@ -540,7 +547,7 @@ handler is called, the attachment has *not* been recorded in the database.
 The attributes hash will include at least the following attributes:
    * =attachment= => the attachment name
    * =comment= - the comment
-   * =user= - the user's TWiki user object
+   * =user= - the user id
    * =tmpFilename= - name of a temporary file containing the attachment data
 
 __Since:__ TWiki::Plugins::VERSION = '1.023'
@@ -564,7 +571,7 @@ This handler is called just after the save action. The attributes hash
 will include at least the following attributes:
    * =attachment= => the attachment name
    * =comment= - the comment
-   * =user= - the user's TWiki user object
+   * =user= - the user id
 
 __Since:__ TWiki::Plugins::VERSION = '1.023'
 
@@ -681,7 +688,7 @@ This handler is called before built-in types are considered. It generates
 the HTML text rendering this form field, or false, if the rendering 
 should be done by the built-in type handlers.
    * =$name= - name of form field
-   * =$type= - type of form field
+   * =$type= - type of form field (checkbox, radio etc)
    * =$size= - size of form field
    * =$value= - value held in the form field
    * =$attributes= - attributes of form field 
@@ -695,6 +702,26 @@ continues by considering the built-in types.
 =cut
 
 sub DISABLE_renderFormFieldForEditHandler {
+}
+
+=pod
+
+---++ renderWikiWordHandler($linkText, $hasExplicitLinkLabel, $web, $topic) -> $linkText
+   * =$linkText= - the text for the link i.e. for =[<nop>[Link][blah blah]]=
+     it's =blah blah=, for =BlahBlah= it's =BlahBlah=, and for [[Blah Blah]] it's =Blah Blah=.
+   * =$hasExplicitLinkLabel= - true if the link is of the form =[<nop>[Link][blah blah]]= (false if it's ==<nop>[Blah]] or =BlahBlah=)
+   * =$web=, =$topic= - specify the topic being rendered (only since TWiki 4.2)
+
+Called during rendering, this handler allows the plugin a chance to change
+the rendering of labels used for links.
+
+Return the new link text.
+
+=cut
+
+sub DISABLE_renderWikiWordHandler {
+    my( $linkText, $hasExplicitLinkLabel, $web, $topic ) = @_;
+    return $linkText;
 }
 
 =pod
