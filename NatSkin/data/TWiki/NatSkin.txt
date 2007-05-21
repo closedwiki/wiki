@@ -157,7 +157,7 @@ allways open an extra window.
 |  Skin Author: | TWiki:Main/MichaelDaum |
 |  Copyright &copy;: | 2003-2006, MichaelDaum@WikiRing.com |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Skin Version: | v3.0-pre13 |
+|  Skin Version: | v3.0-pre14 |
 |  Dependencies: | TWiki:Plugins/NatSkinPlugin |
 |  Description: | Driven by cascading stylesheets, Comes with 12 alternative styles, <nop>MoveableType and Wordpress Look-n-Feel |
 |  Base Name: | nat |
@@ -173,6 +173,7 @@ allways open an extra window.
    <div class="screenshotter"><a href="%ATTACHURL%/SquashThin.jpeg"><img src="%ATTACHURL%/SquashThin.jpeg" title="SquashThin" /></a></div>\
    <div class="screenshotter"><a href="%ATTACHURL%/StormyThin.jpeg"><img src="%ATTACHURL%/StormyThin.jpeg" title="StormyThin" /></a></div> |
 |  Change&nbsp;History: | <!-- specify latest version first -->&nbsp; |
+|  21 May 2007: | Bugs:Item3969 - 8bit email fix (TWiki:Main.WillNorris) |
 |  08 Mar 2007: | fixed sidebar navigation in IE; fixed twikiPageForms width for FF |
 |  06 Mar 2007: | fixed renameweb; nicened all rename dialogs; \
                   don't stretch twikiTables to 100% width by default; \
