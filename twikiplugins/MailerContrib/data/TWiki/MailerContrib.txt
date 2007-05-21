@@ -147,6 +147,7 @@ Newsletters are sent after formatting using the standard =view= template, using 
 |  License: | GPL |
 |  Version: | %$VERSION% |
 |  Change History: | |
+|  21 May 2007 | Bugs:Item3969 - 8bit email fix (TWiki:Main.WillNorris) |
 |  13623 | Bugs:Item4014 no changes was resetting the notify time to 0. Thanks to TWiki:Main.JeffCrawford for nailing this down. |
 |  12496 | <a rel='nofollow' href='http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item3415'>Item3415</a> mailnotify did not send notifications to intranet users because of wrong call to findUser. |
 |  11672 | Added newsletter support, after much harassment from TWiki:Main.LynnwoodBrown |
