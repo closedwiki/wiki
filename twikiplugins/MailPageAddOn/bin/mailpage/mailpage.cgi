@@ -279,7 +279,7 @@ This email was send from $servicename, located at $servicelocation
 
 print MAIL "------=_MAARTEN.ATT\n";
 print MAIL "Content-Type: text/html\;name=\"test.html\"\n";
-print MAIL "Content-Transfer-Encoding: 7bit\n";
+print MAIL "Content-Transfer-Encoding: 8bit\n";
 print MAIL "Content-Disposition: attachment\;filename=\"test.html\"\n\n";
 
 foreach $line ($res->content) {
