@@ -76,7 +76,7 @@ sub set_up_user {
 	    $this->annotate("create $userLogin user - cUID = $user_id\n");
 	    #TODO: figure out why $user_id is comming back as the password..
     } else {
-        $userLogin = 'admin';
+        $userLogin = $TWiki::cfg{AdminUserLogin};
         $user_id = $session->{users}->getCanonicalUserID($userLogin);
         $userWikiName = $session->{users}->getWikiName($user_id);
 	    $this->annotate("no rego support (using admin)\n");
