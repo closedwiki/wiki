@@ -10,8 +10,9 @@ The classic TWiki skin is the traditional TWiki skin, as seen in previous TWiki 
 |  Preview: | [[%SCRIPTURL{view}%/%WEB%/%TOPIC%?skin=classic][Preview with this topic]] |
 |  Base Name: | classic |
 |  Skin Author: | TWiki:Main/PeterThoeny |
-|  Skin Version: | 25 Jul 2004 (v1.000) |
+|  Skin Version: | 21 May 2007 (v1.001) |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
+|  21 May 2007 | Bugs:Item3969 - 8bit email fix (TWiki:Main.WillNorris) |
 |  25 Jul 2004: | Initial version (v1.000) |
 |  Dependencies: |  |
 |  Skin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
