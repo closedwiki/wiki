@@ -320,6 +320,9 @@ sub userExists {
     my( $this, $cUID ) = @_;
 	$this->ASSERT_IS_CANONICAL_USER_ID($cUID) if DEBUG;
 
+    # Do this to avoid a password manager lookup
+    return 1 if $cUID eq $this->{session}->{user};
+
     my $loginName = $this->canonical2login( $cUID );
 
     if( $loginName eq $TWiki::cfg{DefaultUserLogin} ) {
@@ -331,7 +334,7 @@ sub userExists {
         return $loginName;
     }
 
-    # Look them up in the password manager.
+    # Look them up in the password manager (can be slow).
     if( $this->{passwords}->fetchPass( $loginName )) {
         return $loginName;
     }
@@ -408,7 +411,7 @@ sub _expandUserList {
                 push( @l, $it->next() );
             }
         } else {
-            push( @l, @{$this->findUserByWikiName( $ident )} );
+            push( @l, @{$this->findUserByWikiName( $ident, 1 )} );
         }
     }
     return \@l;
@@ -690,9 +693,11 @@ sub mapper_setEmails {
 }
 
 # Called from TWiki::Users. See the documentation of the corresponding
-# method in that module for details.
+# method in that module for details. The $skipExistanceCheck parameter
+# is private to this module, and blocks the standard existence check
+# to avoid reading .htpasswd when checking group memberships).
 sub findUserByWikiName {
-    my( $this, $wn ) = @_;
+    my( $this, $wn, $skipExistanceCheck ) = @_;
     my @users = ();
 
     if( $this->isGroup( $wn )) {
@@ -714,7 +719,7 @@ sub findUserByWikiName {
         # The wikiname is also the login name, so we can just convert
         # it directly to a cUID
         my $cUID = login2canonical( $this, $wn );
-        if( $this->userExists( $cUID )) {
+        if( $skipExistanceCheck || $this->userExists( $cUID )) {
             push( @users, login2canonical( $this, $wn ));
         }
     }
