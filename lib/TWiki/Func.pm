@@ -46,97 +46,97 @@ documentation refers to the VERSION number and the date that the function
 was addded.
 
 Version 1.000:
-        checkAccessPermission( $type, $wikiName, $text, $topic, $web, $meta ) -> $boolean
-        expandCommonVariables( $text, $topic, $web, $meta ) -> $text
-        extractNameValuePair( $attr, $name ) -> $value
-        (deprecated) formatGmTime( $time, $format ) -> $text
-        getCgiQuery( ) -> $query
-        (deprecated) getDataDir( ) -> $dir
-        getDefaultUserName( ) -> $loginName
-        getMainWebname( ) -> $name
-        (deprecated) getOopsUrl( $web, $topic, $template, $param1, $param2, $param3, $param4 ) -> $url
-        getPreferencesFlag( $key, $web ) -> $value
-        getPreferencesValue( $key, $web ) -> $value
-        (deprecated) getPubDir( ) -> $dir
-        (deprecated) getPublicWebList( ) -> @webs
-        getPubUrlPath( ) -> $path
-        getRevisionInfo($web, $topic, $rev, $attachment ) -> ( $date, $user, $rev, $comment ) 
-        getScriptUrl( $web, $topic, $script, ... ) -> $url
-        (deprecated) getScriptUrlPath( ) -> $path
-        getSessionValue( $key ) -> $value
-        getSkin( ) -> $skin
-        getTopicList( $web ) -> @topics
-        getTwikiWebname( ) -> $name
-        getUrlHost( ) -> $host
-        getViewUrl( $web, $topic ) -> $url
-        getWikiName( ) -> $wikiName
-        getWikiToolName( ) -> $name
-        getWikiUserName( ) -> $wikiName
-        internalLink( $pre, $web, $topic, $label, $anchor, $createLink ) -> $text
-        isGuest( ) -> $boolean
-        (deprecated) permissionsSet( $web ) -> $boolean
-        readFile( $filename ) -> $text
-        readTemplate( $name, $skin ) -> $text
-        readTopic( $web, $topic, $rev ) -> ( $meta, $text )
-        redirectCgiQuery( $query, $url, $passthru )
-        renderText( $text, $web ) -> $text
-        saveFile( $filename, $text )
-        saveTopic( $web, $topic, $meta, $text, $options ) -> $error
-        setSessionValue( $key, $value ) -> $boolean
-        topicExists( $web, $topic ) -> $boolean
-        userToWikiName( $loginName, $dontAddWeb ) -> $wikiName
-        webExists( $web ) -> $boolean
-        wikiToUserName( $wikiName ) -> $loginName
-        writeHeader( $query, $contentLength )
+   * checkAccessPermission( $type, $wikiName, $text, $topic, $web, $meta ) -> $boolean
+   * expandCommonVariables( $text, $topic, $web, $meta ) -> $text
+   * extractNameValuePair( $attr, $name ) -> $value
+   * (deprecated) formatGmTime( $time, $format ) -> $text
+   * getCgiQuery( ) -> $query
+   * (deprecated) getDataDir( ) -> $dir
+   * getDefaultUserName( ) -> $loginName
+   * getMainWebname( ) -> $name
+   * (deprecated) getOopsUrl( $web, $topic, $template, $param1, $param2, $param3, $param4 ) -> $url
+   * getPreferencesFlag( $key, $web ) -> $value
+   * getPreferencesValue( $key, $web ) -> $value
+   * (deprecated) getPubDir( ) -> $dir
+   * (deprecated) getPublicWebList( ) -> @webs
+   * getPubUrlPath( ) -> $path
+   * getRevisionInfo($web, $topic, $rev, $attachment ) -> ( $date, $user, $rev, $comment ) 
+   * getScriptUrl( $web, $topic, $script, ... ) -> $url
+   * (deprecated) getScriptUrlPath( ) -> $path
+   * getSessionValue( $key ) -> $value
+   * getSkin( ) -> $skin
+   * getTopicList( $web ) -> @topics
+   * getTwikiWebname( ) -> $name
+   * getUrlHost( ) -> $host
+   * getViewUrl( $web, $topic ) -> $url
+   * getWikiName( ) -> $wikiName
+   * getWikiToolName( ) -> $name
+   * getWikiUserName( ) -> $wikiName
+   * internalLink( $pre, $web, $topic, $label, $anchor, $createLink ) -> $text
+   * isGuest( ) -> $boolean
+   * (deprecated) permissionsSet( $web ) -> $boolean
+   * readFile( $filename ) -> $text
+   * readTemplate( $name, $skin ) -> $text
+   * readTopic( $web, $topic, $rev ) -> ( $meta, $text )
+   * redirectCgiQuery( $query, $url, $passthru )
+   * renderText( $text, $web ) -> $text
+   * saveFile( $filename, $text )
+   * saveTopic( $web, $topic, $meta, $text, $options ) -> $error
+   * setSessionValue( $key, $value ) -> $boolean
+   * topicExists( $web, $topic ) -> $boolean
+   * userToWikiName( $loginName, $dontAddWeb ) -> $wikiName
+   * webExists( $web ) -> $boolean
+   * wikiToUserName( $wikiName ) -> $loginName
+   * writeHeader( $query, $contentLength )
 Version 1.010:
-        checkTopicEditLock( $web, $topic, $script ) -> ( $oopsUrl, $loginName, $unlockTime )
-        readTopicText( $web, $topic, $rev, $ignorePermissions ) -> $text
-        saveTopicText( $web, $topic, $text, $ignorePermissions, $dontNotify ) -> $oopsUrl
-        setTopicEditLock( $web, $topic, $lock )
+   * checkTopicEditLock( $web, $topic, $script ) -> ( $oopsUrl, $loginName, $unlockTime )
+   * readTopicText( $web, $topic, $rev, $ignorePermissions ) -> $text
+   * saveTopicText( $web, $topic, $text, $ignorePermissions, $dontNotify ) -> $oopsUrl
+   * setTopicEditLock( $web, $topic, $lock )
 Version 1.020:
-        formatTime( $time, $format, $timezone ) -> $text
-        getRegularExpression( $name ) -> $expr
-        writeDebug( $text )
-        writeWarning( $text )
+   * formatTime( $time, $format, $timezone ) -> $text
+   * getRegularExpression( $name ) -> $expr
+   * writeDebug( $text )
+   * writeWarning( $text )
 Version 1.021:
-        getPluginPreferencesFlag( $key ) -> $boolean
-        getPluginPreferencesValue( $key ) -> $value
+   * getPluginPreferencesFlag( $key ) -> $boolean
+   * getPluginPreferencesValue( $key ) -> $value
 Version 1.025:
-        (deprecated) checkDependencies( $moduleName, $dependenciesRef ) -> $error
-        extractParameters($attr ) -> %params
+   * (deprecated) checkDependencies( $moduleName, $dependenciesRef ) -> $error
+   * extractParameters($attr ) -> %params
 Version 1.1:
-        addToHEAD( $id, $header )
-        attachmentExists( $web, $topic, $attachment ) -> $boolean
-        clearSessionValue( $key ) -> $boolean
-        createWeb( $newWeb, $baseWeb, $opts )
-        expandTemplate( $def  ) -> $string
-        expandVariablesOnTopicCreation ( $text ) -> $text
-        getContext() -> \%hash
-        getListOfWebs( $filter ) -> @webs
-        getRevisionAtTime( $web, $topic, $time ) -> $rev
-        getWorkArea( $pluginName ) -> $directorypath
-        isValidWikiWord ( $text ) -> $boolean
-        loadTemplate ( $name, $skin, $web ) -> $text
-        moveAttachment( $web, $topic, $attachment, $newWeb, $newTopic, $newAttachment )
-        moveTopic( $web, $topic, $newWeb, $newTopic )
-        moveWeb( $oldName, $newName )
-        normalizeWebTopicName($web, $topic) -> ($web, $topic)
-        readAttachment( $web, $topic, $name, $rev ) -> $data
-        registerRESTHandler( $alias, \&fn, )
-        registerTagHandler( $var, \&fn, $syntax )
-        saveAttachment( $web, $topic, $attachment, $opts )
-        searchInWebContent($searchString, $web, \@topics, \%options ) -> \%map
-        sendEmail ( $text, $retries ) -> $error
-        wikiToEmail( $wikiName ) -> $email
+   * addToHEAD( $id, $header )
+   * attachmentExists( $web, $topic, $attachment ) -> $boolean
+   * clearSessionValue( $key ) -> $boolean
+   * createWeb( $newWeb, $baseWeb, $opts )
+   * expandTemplate( $def  ) -> $string
+   * expandVariablesOnTopicCreation ( $text ) -> $text
+   * getContext() -> \%hash
+   * getListOfWebs( $filter ) -> @webs
+   * getRevisionAtTime( $web, $topic, $time ) -> $rev
+   * getWorkArea( $pluginName ) -> $directorypath
+   * isValidWikiWord ( $text ) -> $boolean
+   * loadTemplate ( $name, $skin, $web ) -> $text
+   * moveAttachment( $web, $topic, $attachment, $newWeb, $newTopic, $newAttachment )
+   * moveTopic( $web, $topic, $newWeb, $newTopic )
+   * moveWeb( $oldName, $newName )
+   * normalizeWebTopicName($web, $topic) -> ($web, $topic)
+   * readAttachment( $web, $topic, $name, $rev ) -> $data
+   * registerRESTHandler( $alias, \&fn, )
+   * registerTagHandler( $var, \&fn, $syntax )
+   * saveAttachment( $web, $topic, $attachment, $opts )
+   * searchInWebContent($searchString, $web, \@topics, \%options ) -> \%map
+   * sendEmail ( $text, $retries ) -> $error
+   * wikiToEmail( $wikiName ) -> $email
 Version 1.12:
-        emailToWikiNames( $email, $dontAddWeb ) -> @wikiNames
-        getExternalResource( $url ) -> $response
-        wikiNameToEmails( $wikiname ) -> @emails
+   * emailToWikiNames( $email, $dontAddWeb ) -> @wikiNames
+   * getExternalResource( $url ) -> $response
+   * wikiNameToEmails( $wikiname ) -> @emails
 Version 1.13:
-        isTrue( $value, $default ) -> $boolean
-        popTopicContext()
-        pushTopicContext($web, $topic)
-        spaceOutWikiWord( $word, $sep ) -> $text
+   * isTrue( $value, $default ) -> $boolean
+   * popTopicContext()
+   * pushTopicContext($web, $topic)
+   * spaceOutWikiWord( $word, $sep ) -> $text
 
 
 __Note:__ Beware! These methods should only ever be called
