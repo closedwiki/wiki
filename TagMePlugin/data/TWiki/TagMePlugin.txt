@@ -209,7 +209,7 @@ CSS styles:
 #PluginSettings
 ---++ Plugin Settings
 
-Plugin settings are stored as preferences variables. To reference a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>TAGMEPLUGIN_SHORTDESCRIPTION%==
+Plugin settings are stored as preferences variables. To reference a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, e.g., ==%<nop>TAGMEPLUGIN_SHORTDESCRIPTION%==
 
 	* One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
 		* Set SHORTDESCRIPTION = Tag wiki content collectively to find content by keywords
@@ -248,14 +248,18 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 	  | ==data/TWiki/TagMeDebug*.txt== | Supporting topics for debug |
 	  | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
 	  | ==pub/TWiki/%TOPIC%/*.gif== | Icon files |
+	  | ==templates/view.tagme.tmpl== | Template containing GUI components |
 	* Configure and enable the Plugin:
 		* TWiki 4.0 and up: Run the [[%SCRIPTURL%/configure%SCRIPTSUFFIX%][configure]] script to enable the Plugin
 		* Change the Plugin settings as needed:
 			* Determine who will be allowed to rename and delete tags.
 			* For international character support: set =NORMALIZE_TAG_INPUT= to 0.
 			* To allow any user input as tag name also set =NORMALIZE_TAG_INPUT= to 0.
-		* Add the =%<nop>TAGME{}%= variable to the page decoration. It should be exactly of the form =%<nop>TAGME{ tpaction="%<nop>URLPARAM{tpaction}%" tag="%<nop>URLPARAM{tag}%" }%=. This should be done so that it is rendered for every topic, e.g. somewhere in the skin template, such as the %TWIKIWEB%.WebTopBar. A good place is also the WEBCOPYRIGHT since it gets displayed by every topic view. Example setting in the %TWIKIWEB%.TWikiPreferences:
-			* =Set WEBCOPYRIGHT = Tags: %<nop>TAGME{ tpaction="%<nop>URLPARAM{tpaction}%" tag="%<nop>URLPARAM{tag}%" }%%<nop>BR% Copyright &copy; 1999-%GMTIME{"$year"}% by...= 
+		* Add the =%<nop>TAGME{}%= variable to the page decoration. It should be exactly of the form =%<nop>TAGME{ tpaction="%<nop>URLPARAM{tpaction}%" tag="%<nop>URLPARAM{tag}%" }%=. This should be placed somewhere so as to be rendered for every topic.
+			* For the tag interface to appear at the top of the page directly below the breadcrumb (like on twiki.org), employ the simplest and most upgrade-resilient technique: modify your [[Main.TWikiPreferences]] and add the =tagme= template to your skin, e.g.:<br /><code>   * Set S<nop>KIN = tagme, %SKIN%</code>
+			* or, add the =%<nop>TAGME{}%= fragment somewhere in the skin's topic templates, such as the %TWIKIWEB%.WebTopBar. 
+			* or, another good place is =WEBCOPYRIGHT= since it gets displayed by every topic view. Example setting in the [[%MAINWEB%.TWikiPreferences]]:<br />
+				<code> * Set WEBCOPYRIGHT = Tags: %<nop>TAGME{ tpaction="%<nop>URLPARAM{tpaction}%" tag="%<nop>URLPARAM{tag}%" }%%<nop>BR% Copyright &copy; 1999-%GMTIME{"$year"}% by...</code>
 	* Test if the installation was successful:
 		* Go to [[TagMeCreateNewTag]] and add a tag
 
@@ -268,8 +272,9 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Plugin Author: | TWiki:Main.PeterThoeny ([[http://www.structuredwikis.com/peter.html][blog]]) |
 |  Copyright: | &copy; 2006, Peter@Thoeny.org, [[http://www.structuredwikis.com/][StructuredWikis LLC]] |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 30 Apr 2006 (V1.037) |
+|  Plugin Version: | 21 May 2007 (V1.039) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  21 May 2007: | TWiki:Main.WillNorris: added =view.tagme.tmpl= and updated installation instructions. |
 |  30 Apr 2007: | Arthur Clemens: fixed calculation of sizes in tag cloud; if =mincount= is passed only the shown tags are calculated. |
 |  18 Apr 2007: | Arthur Clemens: added permissions for rename and delete; added TagMeChangeRequests. |
 |  17 Apr 2007: | TWiki:Main.CrawfordCurrie for [[http://www.escapestudios.co.uk/][Escape Studios]]: contributed support for incremental refinement of tag searches. |
