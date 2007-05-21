@@ -114,8 +114,8 @@ sub new {
     my $implUserMappingManager = $TWiki::cfg{UserMappingManager};
     $implUserMappingManager = 'TWiki::Users::TWikiUserMapping' if( $implUserMappingManager eq 'none' );
     $implUserMappingManager = 'TWiki::Users::BaseUserMapping' if( $session->{cgiQuery}->param('sudo') && $session->{cgiQuery}->param('sudo') eq 'sudo' );
-    $implUserMappingManager = 'TWiki::Users::BaseUserMapping' if( $session->{remoteUser} && $session->{remoteUser} eq $TWiki::cfg{AdminUserLogin} );
-#print STDERR 'remoteUser = '.($session->{remoteUser}||'undef').' twikiadmin = '.$TWiki::cfg{AdminUserLogin};
+    $implUserMappingManager = 'TWiki::Users::BaseUserMapping' if( $this->{remoteUser} && $this->{remoteUser} eq $TWiki::cfg{AdminUserLogin} );
+#print STDERR 'remoteUser = '.($this->{remoteUser}||'undef').' twikiadmin = '.$TWiki::cfg{AdminUserLogin};
     
 #print STDERR "making an $implUserMappingManager";
     eval "use $implUserMappingManager";
