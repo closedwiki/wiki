@@ -15,3 +15,4 @@ pub/TWiki/TagMePlugin/tag_addnew.gif NEW
 pub/TWiki/TagMePlugin/tag_remove.gif NEW
 pub/TWiki/TagMePlugin/tagme.css NEW
 pub/TWiki/TagMePlugin/topictags.gif NEW
+templates/view.tagme.tmpl NEW
