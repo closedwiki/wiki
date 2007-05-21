@@ -212,7 +212,7 @@ sub _initDefaults {
 		tableborder => undef,
 		tablecellpadding => 0,
 		tablecellspacing => 1,
-		
+		textwrapper => 'browser',
 	);
 
 	@renderedOptions = ('tablecaption', 'name' , 'navprev', 'navnext', 'wholetimerowtext');
@@ -621,8 +621,9 @@ sub _render {
 					}
 					$tooltips .= &_renderTooltip($wtentry_ref, $day, 'W', $counter, $yy1, $mm1, $dd1);
 					$tooltips .= &_renderTooltip($wtentry_ref, $day, 'W2', $counter, $yy1,$mm1,$dd1) if $options{'wholetimerow'} && ($options{'wholetimerowpos'}=~m/^(bottom|both)$/i);
-					$itr.=$cgi->Tr($cgi->td({#-nowrap=>'nowrap',
-							#-style=>'white-space: nowrap;',
+					my $style = $options{'textwrapper'}=~/^plugin$/i?'white-space: nowrap;':''; 
+					$itr.=$cgi->Tr($cgi->td({
+							-style=>$style,
 							-valign=>"top",
 							-bgcolor=>$$wtentry_ref{'bgcolor'}?$$wtentry_ref{'bgcolor'}:$options{eventbgcolor},
 							-title=>$title,
@@ -674,8 +675,10 @@ sub _render {
 					} else {
 						$title = undef; $onclick= "";
 					}
-					$itr.=$cgi->td({#-nowrap=>'nowrap',
-							#-style=>'white-space: nowrap;',
+					
+					my $style = $options{'textwrapper'}=~/^plugin$/i?'white-space: nowrap;':''; 
+					$itr.=$cgi->td({
+							-style=>$style,
 							-valign=>"top",
 							-bgcolor=>$$mentry_ref{'bgcolor'}?$$mentry_ref{'bgcolor'}:$options{eventbgcolor},
 							-rowspan=>$rs+$fillRows,
@@ -828,27 +831,29 @@ sub _renderText {
 
 	$text.=$trange if $options{'displaytime'};
 	
+	my $style = 'color:'.($$mentry_ref{'fgcolor'}?$$mentry_ref{'fgcolor'}:$options{'eventfgcolor'});
 	my $descrlimit = $options{'descrlimit'};
-	####my $nt="";
-	###for (my $l=0; $l<$rs; $l++) {
-	###	my $sub;
-	###	my $offset = $l * $descrlimit;
-	###	last if $offset>length($text);
-	###	$sub  = substr($text, $offset, $descrlimit);
-	###	last if (length($sub)<1);
-	###	$nt .= (($l==($rs-1))&&(length(substr($text,$offset))>$descrlimit))
-	###			? substr($sub,0,$descrlimit-length($options{'cuttext'})).$options{'cuttext'}
-	###			: $sub;
-	###	$nt .='<br/>' unless $l==$rs-1;
-	###}	
-	###$text='<noautolink>'.$nt.'</noautolink>';
-	my $height = ($rs-1)*1.5;
-	$height=1.5 if $height<1.5;
-	my $width = (defined $descrlimit && $descrlimit!~/^\s*$/)?$descrlimit.'em':'';
-	$tddata.= $cgi->div({
-			## -title=>$title, 
-			-style=>'color:'.($$mentry_ref{'fgcolor'}?$$mentry_ref{'fgcolor'}:$options{'eventfgcolor'})					.';width:'.$width.';height:'.$height.'em; overflow:hidden',
-			}, " $text ");
+	if ($options{'textwrapper'}=~/^plugin$/i) {
+		my $nt="";
+		for (my $l=0; $l<$rs; $l++) {
+			my $sub;
+			my $offset = $l * $descrlimit;
+			last if $offset>length($text);
+			$sub  = substr($text, $offset, $descrlimit);
+			last if (length($sub)<1);
+			$nt .= (($l==($rs-1))&&(length(substr($text,$offset))>$descrlimit))
+				? substr($sub,0,$descrlimit-length($options{'cuttext'})).$options{'cuttext'}
+				: $sub;
+			$nt .='<br/>' unless $l==$rs-1;
+		}
+		$text='<noautolink>'.$nt.'</noautolink>';
+	} else {
+		my $height = ($rs-0)*1.4;
+		$height=1.4 if $height<1.4;
+		my $width = (defined $descrlimit && $descrlimit!~/^\s*$/)?$descrlimit.'em':'';
+		$style.=';width:'.$width.';height:'.$height.'em; overflow:hidden';
+	}
+	$tddata.= $cgi->div({-style=>$style}, " $text ");
 
 	return ($tddata, $title);
 }

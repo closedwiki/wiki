@@ -38,7 +38,7 @@ $VERSION = '$Rev: 8670$';
 # of the version number in PLUGINDESCRIPTIONS.
 $RELEASE = 'Dakar';
  
-$REVISION = '1.013'; #dro# fixed major time parsing bug reported by TWiki:Main.LarsEik; fixed major bug: events with a time range before start time should not be displayed; fixed major TTCM bug reported by TWiki:Main.ArthurClemens; added URL parameter feature; added new attributes (tableborder, tablewidth, tablecell...)
+$REVISION = '1.013'; #dro# fixed major time parsing bug reported by TWiki:Main.LarsEik; fixed major bug: events with a time range before start time should not be displayed; fixed major TTCM bug reported by TWiki:Main.ArthurClemens; added URL parameter feature; added new attributes (tableborder, tablewidth, tablecell...); added browser based text wrapping feature
 #$REVISION = '1.012'; #dro# fixed readTopicText bug reported TWiki:Main.JoachimRahn; added month header feature (attributes: showmonthheader, monthheader...); added new tooltip feature (clicktooltip...)
 #$REVISION = '1.011'; #dro# added fontsize attribute; fixed HTML bug (validation);
 #$REVISION = '1.010'; #dro# added tablecolumnwidth and tabledatacellwidth attributes requested by TWiki:Main.VickiBrown;  added tooltip feature (tooltip... attributes);
