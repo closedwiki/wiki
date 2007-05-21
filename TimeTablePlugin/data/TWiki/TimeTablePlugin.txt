@@ -239,6 +239,13 @@ Plugin settings are stored as preferences variables. To reference a plugin setti
 
 *Note:* Every attribute of %<nop>TIMETABLE% can also be used as plugin setting. You only have to use capital letters.
 
+---++ Known Issues and Bugs
+
+   * font sizes larger than =1em= may cause non matching timelines (browser dependent); 
+     <br/>workaround: don't use font sizes larger than =1em= or use other units (=pt/px/..=)
+   * some browsers (known: IE7) cut text lines of table cells with a row count equal 1 if =textwrapper="browser"= (default)
+     <br/>workaround: use =textwrapper="plugin"= attribute
+
 ---++ Plugin Installation Instructions
 
 __Note:__ You do not need to install anything on the browser to use this plugin. The following instructions are for the administrator who installs the plugin on the TWiki server. 
