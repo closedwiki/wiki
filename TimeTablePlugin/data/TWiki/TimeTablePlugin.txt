@@ -117,7 +117,7 @@ Example: %<nop>TIMETABLE{lang="Deutsch" timeinterval="15" }%
 | displaytime | display time in the event description of the timetable | displaytime="0" |
 | eventbgcolor | default background color of an event cell (you can overwrite this with an event entry) | eventbgcolor = "#AAAAAA" |
 | eventfgcolor | default text color of an event cell (you can overwrite this with an event entry) | eventfgcolor = "black" |
-| fontsize | default font size | fontsize="xx-small" | 
+| fontsize | default font size (see [[#TimeTablePluginKnownIssues][Known Issues and Bugs]]) | fontsize="xx-small" | 
 | headerformat | table header format of a day; a subset of strftime conversion specifiers is supported (only date not time specifiers; see manual page or TWiki:Codev.ConvergeDateTimeFormattingModels) | headerformat="&lt;font&nbsp;title=\"%A - %d %b %Y\" size=\"-2\">%a&lt;/font&gt;" |
 | monthheaderbgcolor | month header background color (default: tableheadercolor) | monthheaderbgcolor="%<nop>WEBBGCOLOR%" |
 | monthheaderfgcolor | month header text (foreground) color (default: black) | monthheaderfgcolor="black" |
@@ -239,10 +239,11 @@ Plugin settings are stored as preferences variables. To reference a plugin setti
 
 *Note:* Every attribute of %<nop>TIMETABLE% can also be used as plugin setting. You only have to use capital letters.
 
+#TimeTablePluginKnownIssues
 ---++ Known Issues and Bugs
 
-   * font sizes larger than =1em= may cause non matching timelines (browser dependent); 
-     <br/>workaround: don't use font sizes larger than =1em= or use other units (=pt/px/..=)
+   * font sizes larger than default font size (=1em=) may cause non matching timelines (browser dependent); 
+     <br/>workaround: don't use =fontsizes= larger than =1em= or set =textwrapper= to =plugin= (e.g. =%<nop>TIMETABLE{textwrapper="plugin" fontsize="18pt"]%=)
    * some browsers (known: IE7) cut text lines of table cells with a row count equal 1 if =textwrapper="browser"= (default)
      <br/>workaround: use =textwrapper="plugin"= attribute
 
