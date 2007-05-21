@@ -4,11 +4,14 @@
    * Member list:
       * Set GROUP = ATWikiUser
    * Persons/group who can change the list:
-      * #Set ALLOWTOPICCHANGE = TWikiAdminGroup
+      * Set ALLOWTOPICCHANGE = TWikiAdminGroup
 
 __Related topics:__ %WIKIUSERSTOPIC%, TWikiGroups, %TWIKIWEB%.TWikiAccessControl
 
+__%X% NOTE:__ You can login as the built in Admin user using the password set in configure via [[%SCRIPTURL{login}%?sudo=sudo][SUDO admin login]]
+
 __%X% NOTE:__ If you happen to lock yourself out of <nop>TWikiAdminGroup during setup activities, you can edit this group topic at file system level using any text file editor (as a last resort.)
+
 
 <table bgcolor="yellow"><tr><td>
 __Setup Note to Administrator:__
