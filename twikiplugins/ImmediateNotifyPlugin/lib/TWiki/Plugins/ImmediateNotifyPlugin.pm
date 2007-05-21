@@ -18,9 +18,6 @@
 #
 # This plugin supports immediate notification of topic saves.
 #
-# 26-Jul-2006:   SteffenPoulsen
-#                  - Ported to TWiki-4 / Dakar
-
 # =========================
 package TWiki::Plugins::ImmediateNotifyPlugin;
 

@@ -49,6 +49,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Plugin Author: | TWiki:Main/WalterMundt & TWiki:Main/JuergenPabel |
 |  Plugin Version: | v0.3 (26 Jul 2006) |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
+|  21 May 2007 | Bugs:Item3969 - 8bit email fix (TWiki:Main.WillNorris) |
 |  26 Jul 2006: | (v0.3) - TWiki:Main.SteffenPoulsen: Ported to TWiki-4 / Dakar |
 |  16 Mar 2003: | Added support for groups and SMTP |
 |  03 Feb 2003: | Initial version |
