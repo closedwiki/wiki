@@ -114,7 +114,7 @@ Content-Type: text/plain; charset=\"us-ascii\"
 $plain
 --$sep
 Content-Type: text/html; charset=\"us-ascii\"
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
 $html
 --$sep--
