@@ -848,21 +848,37 @@ sub _renderText {
 		}
 		$text='<noautolink>'.$nt.'</noautolink>';
 	} else {
-		my $hf=1.4;
-		if ($options{'fontsize'}=~/^([\d\.]+)em$/i) {
-			$hf-=$1;
-		} elsif ($options{'fontsize'}=~/(large|medium)/i) {
-			$hf=0;
-		}
-		my $height = $rs*$hf;
-		$height=1.4 if $height<1.4;
+		my $height = &_calcDivHeight($rs);
 		my $width = (defined $descrlimit && $descrlimit!~/^\s*$/)?$descrlimit.'em':'';
-		$style.=';width:'.$width.';height:'.$height.'em; overflow:hidden';
-		#$style.=';line-height:'.$options{'fontsize'}  if $options{'fontsize'}=~/^[\d\.]+em$/i;
+		$style.=';width:'.$width.';height:'.$height.';overflow:hidden';
 	}
 	$tddata.= $cgi->div({-style=>$style}, " $text ");
 
 	return ($tddata, $title);
+}
+# =========================
+sub _calcDivHeight
+{
+	my ($rows) = @_;
+	my $hf=1.4;
+	my $unit = 'em';
+	my $size = 0;
+	if ($options{'fontsize'}=~/^([\d\.]+)(\w+)$/i) {
+		($size,$unit)=($1,$2);
+	}
+	if ($unit=~/^em$/i) {
+		$hf-=$1;
+	} elsif ($options{'fontsize'}=~/(large|medium)/i) {
+		$hf=0;
+	} else {
+		$hf=$size;
+	}
+	my $height = $rows*$hf;
+	if ($height<1.4) {
+		$height=1.4; $unit='em';
+	}
+	return "$height$unit";
+	
 }
 # =========================
 sub _renderTooltip {
@@ -921,7 +937,6 @@ sub _renderTimeline {
 		}
 		$td .= $cgi->Tr($cgi->td({
 			-bgcolor=>$bgcolor,
-			-style=>'',
 			-align=>"right"},
 				$cgi->div({
 						-style=>'color:'.$fgcolor,
