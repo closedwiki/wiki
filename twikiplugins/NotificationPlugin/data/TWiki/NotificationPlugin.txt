@@ -113,8 +113,9 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main/RichardBaar |
-|  Plugin Version: | 11 May 2004 (V1.14) |
+|  Plugin Version: | 21 May 2007 (V1.15) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  21 May 2007 | Bugs:Item3969 - 8bit email fix (TWiki:Main.WillNorris) |
 |  14 Jan 2004: | Initial version |
 |  24 Feb 2004: | Version 1.03 - added SENDER variable, bug-fixes |
 |  24 Feb 2004: | Version 1.04 - bug-fix of immediate notifications |
