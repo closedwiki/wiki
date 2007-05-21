@@ -45,11 +45,12 @@ __Note:__ You do not need to install anything on the browser to use this add-on.
    * ==$req = new HTTP::Request 'GET' => $FORM{'url'}."?skin=print.pattern";== (Manually change the line into this for earlier releases)
 
 |  Add-on Author: | TWiki:Main/LynnwoodBrown |
-|  Add-on Version: | 2 Aug 2006 (v1.10) |
+|  Add-on Version: | 21 May 2007 (v1.11) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  2 Aug 2006: | (v1.10): Templates never added to distribution archive correctly (TWiki:Main.SteffenPoulsen) |
-|  8 Apr 2006: | Minor update for TWiki:Codev.TWikiRelease04x00x02, TWiki oops templates added (TWiki:Main.SteffenPoulsen) |
-|  18 Jan 2005: | Initial version |
+|  21 May 2007 | Bugs:Item3969 - 8bit email fix (TWiki:Main.WillNorris) |
+|   2 Aug 2006 | (v1.10): Templates never added to distribution archive correctly (TWiki:Main.SteffenPoulsen) |
+|   8 Apr 2006 | Minor update for TWiki:Codev.TWikiRelease04x00x02, TWiki oops templates added (TWiki:Main.SteffenPoulsen) |
+|  18 Jan 2005 | Initial version |
 |  CPAN Dependencies: | CPAN:LWP::UserAgent |
 |  Other Dependencies: | none |
 |  Perl Version: | 5.005 |
