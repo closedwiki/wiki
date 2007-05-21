@@ -1,11 +1,12 @@
 %TMPL:DEF{"edittoolbar"}%<div class="natEditToolBar">
+%TMPL:P{"helptools"}%
 %TMPL:P{"texttools"}%
 %TMPL:P{"headlinetools"}% 
 %TMPL:P{"paragraphtools"}% 
 %TMPL:P{"objecttools"}% 
 %TMPL:P{"edittools"}%
 %TMPL:P{"exittools"}%
-%TMPL:P{"helptools"}%
+%TMPL:P{"forcenewrevision"}%
 </div>%TMPL:END%
 
 %TMPL:DEF{"texttools"}%<ul class="natEditTextTools">
@@ -53,8 +54,7 @@
 %TMPL:DEF{"objecttools"}%<ul class="natEditObjectTools">
 %TMPL:P{"extbutton"}%
 %TMPL:P{"intbutton"}%
-%TMPL:P{"imagebutton"}%
-%TMPL:P{context="MathModePluginEnabled" then="mathbutton"}%
+%TMPL:P{"imagebutton"}%%TMPL:P{context="MathModePluginEnabled" then="mathbutton"}%
 %TMPL:P{"verbatimbutton"}%
 %TMPL:P{"signaturebutton"}%
 </ul>%TMPL:END%
@@ -79,12 +79,12 @@
 %TMPL:DEF{"exittools"}%<ul class="natEditExitTools">
 %TMPL:P{"savebutton"}%
 %TMPL:P{"cancelbutton"}%
-%TMPL:P{"forcenewrevision"}%
 </ul>%TMPL:END%
 
 %TMPL:DEF{"savebutton"}%<li class="natEditSaveButton"><a accesskey="s" href="javascript:submitEditForm('save', 'save')" title='%MAKETEXT{"Save and exit"}%'/><span>%MAKETEXT{"Save"}%</span></a></li>%TMPL:END%
 %TMPL:DEF{"cancelbutton"}%<li class="natEditCancelButton"><a accesskey="c" href="javascript:submitEditForm('save', 'cancel')" title='%MAKETEXT{"Abandon changes and exit"}%'/><span>%MAKETEXT{"Cancel"}%</span></a></li>%TMPL:END%
-%TMPL:DEF{"forcenewrevision"}%<li class="natEditForceNewRevision"><label for="forcenewrevision"><input type="checkbox" title="Creates a new topic revision when saving" id="forcenewrevision" name="forcenewrevision" %FORCENEWREVISIONCHECKBOX% />%MAKETEXT{"New revision"}%</label></li>%TMPL:END%
+
+%TMPL:DEF{"forcenewrevision"}%<ul class="natEditOptionTools"><li class="natEditForceNewRevision"><label for="forcenewrevision"><input type="checkbox" title="Creates a new topic revision when saving" id="forcenewrevision" name="forcenewrevision" %FORCENEWREVISIONCHECKBOX% />%MAKETEXT{"New revision"}%</label></li></ul>%TMPL:END%
 
 %TMPL:DEF{"helptools"}%<ul class="natEditHelpTools">
 %TMPL:P{"helpbutton"}%
