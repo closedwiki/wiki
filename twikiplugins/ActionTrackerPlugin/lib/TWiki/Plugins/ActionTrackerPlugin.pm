@@ -41,7 +41,7 @@ $VERSION = '$Rev$';
 # This is a free-form string you can use to "name" your own plugin version.
 # It is *not* used by the build automation tools, but is reported as part
 # of the version number in PLUGINDESCRIPTIONS.
-$RELEASE = '15 Feb 2007';
+$RELEASE = '21 May 2007';
 
 $SHORTDESCRIPTION = 'Adds support for action tags in topics, and automatic notification of action statuses';
 

@@ -376,6 +376,7 @@ These settings can be overridden in the Web<nop>Preferences topic of the current
 |  Plugin Author: | TWiki:Main/CrawfordCurrie, http://c-dot.co.uk |
 |  Plugin Version: | %$VERSION% |
 |  Change History: | |
+| 21 May 2007 | Bugs:Item3969 - 8bit email fix (TWiki:Main.WillNorris) |
 |  12958 | Bugs:Item3638 Fixed edit link for IE7 |
 |  12878 | putting styles.css file at the top of the html header so that \
          skins have a chance to override the defaults; \
