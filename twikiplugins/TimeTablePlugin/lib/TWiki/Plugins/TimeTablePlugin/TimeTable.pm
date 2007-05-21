@@ -848,7 +848,13 @@ sub _renderText {
 		}
 		$text='<noautolink>'.$nt.'</noautolink>';
 	} else {
-		my $height = ($rs-0)*1.4;
+		my $hf=1.4;
+		if ($options{'fontsize'}=~/^([\d\.]+)em$/i) {
+			$hf-=$1;
+		} elsif ($options{'fontsize'}=~/(large|medium)/i) {
+			$hf=0;
+		}
+		my $height = ($rs-0)*$hf;
 		$height=1.4 if $height<1.4;
 		my $width = (defined $descrlimit && $descrlimit!~/^\s*$/)?$descrlimit.'em':'';
 		$style.=';width:'.$width.';height:'.$height.'em; overflow:hidden';
