@@ -698,7 +698,7 @@ sub _render {
 				##$itr=$cgi->td('X'); ## DEBUG
 				$td .=$cgi->Tr($itr)."\n";	
 			} else {
-				$itr=$cgi->td({-title=>&_renderTime($min)},'&nbsp;');
+				$itr=$cgi->td({-title=>&_renderTime($min),-style=>''},'&nbsp;');
 				##$itr=$cgi->td({-valign=>'bottom', -align=>'left'}, '<font size="-4">'.&_renderTime($min).'</font>&nbsp;'); ## DEBUG
 				$td .=$cgi->Tr($itr)."\n";
 			}
@@ -854,10 +854,11 @@ sub _renderText {
 		} elsif ($options{'fontsize'}=~/(large|medium)/i) {
 			$hf=0;
 		}
-		my $height = ($rs-0)*$hf;
+		my $height = $rs*$hf;
 		$height=1.4 if $height<1.4;
 		my $width = (defined $descrlimit && $descrlimit!~/^\s*$/)?$descrlimit.'em':'';
 		$style.=';width:'.$width.';height:'.$height.'em; overflow:hidden';
+		#$style.=';line-height:'.$options{'fontsize'}  if $options{'fontsize'}=~/^[\d\.]+em$/i;
 	}
 	$tddata.= $cgi->div({-style=>$style}, " $text ");
 
@@ -891,7 +892,7 @@ sub _renderTooltip {
 			{
 				-id=>"TTP_DIV_${ttid}_${day}_${min}_${c}", 
 				-class=>"timeTablePluginToolTips",
-				-style=>"visibility:hidden;position:absolute;top:0;left:0;z-index:2;font: normal $options{'fontsize'} sans-serif;padding: 3px; border: solid 1px; color: $fgcolor; background-color: $bgcolor;" ,
+				-style=>"visibility:hidden;position:absolute;top:0;left:0;z-index:2;padding: 3px; border: solid 1px; color: $fgcolor; background-color: $bgcolor;" ,
 				-onclick => $onclick,
 				-onmouseover=> $onmouseover,
 				-onmouseout=> $onmouseout,
@@ -920,6 +921,7 @@ sub _renderTimeline {
 		}
 		$td .= $cgi->Tr($cgi->td({
 			-bgcolor=>$bgcolor,
+			-style=>'',
 			-align=>"right"},
 				$cgi->div({
 						-style=>'color:'.$fgcolor,
