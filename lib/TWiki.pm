@@ -42,7 +42,7 @@ with CGI accelerators such as mod_perl.
    * =cgiQuery=         Pointer to the CGI::
    * =context=          Hash of context ids
    * =i18n=             TWiki::I18N singleton
-   * =loginManager=     TWiki::LoginManager singleton
+   * moved: =loginManager=     TWiki::LoginManager singleton (moved to TWiki::Users)
    * =net=              TWiki::Net singleton
    * =plugins=          TWiki::Plugins singleton
    * =prefs=            TWiki::Prefs singleton
@@ -491,7 +491,6 @@ BEGIN {
 use TWiki::Access;    # access control
 use TWiki::Attach;    # file attachments
 use TWiki::Attrs;     # tag attribute handling
-use TWiki::LoginManager;    # client session handling
 use TWiki::Form;      # forms
 use TWiki::Net;       # SMTP, get URL
 use TWiki::Plugins;   # plugins handler
@@ -1467,7 +1466,7 @@ sub new {
 
 Complete processing after the client's HTTP request has been responded
 to. Right now this does two things:
-   1 calling TWiki::LoginManager to flushing the user's session (if any) to disk,
+   1 calling TWiki::LoginManager (via {users}) to flushing the user's session (if any) to disk,
    2 breaking circular references to allow garbage collection in persistent
      environments
 

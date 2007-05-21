@@ -77,6 +77,7 @@ package TWiki::Users;
 use strict;
 use Assert;
 use TWiki::Time;
+use TWiki::LoginManager;    # client session handling
 
 BEGIN {
     # Do a dynamic 'use locale' for this module
