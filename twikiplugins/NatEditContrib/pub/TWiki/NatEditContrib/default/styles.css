@@ -1,5 +1,5 @@
 /* default theme */
-.natEditToolBar { height:26px; margin:0px}
+.natEditToolBar { height:26px; margin:0px;}
 .natEditToolBar a {width:24px; height:24px;}
 .natEditEditButton a { background-image:url(button_edit.png); }
 .natEditEditButton a:hover { background-image:url(button_edit_hi.png); }
