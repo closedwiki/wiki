@@ -197,7 +197,9 @@ sub _expandAttrs {
         return $1;
     }
     elsif ( $attr eq 'URL' ) {
-        # SMELL: this should be done using appropriate magic in the template
+        return $TWiki::cfg{PubUrlPath}.'/'.$web.'/'.$topic.'/'.$file;
+    }
+    elsif ( $attr eq 'VIEWFILE' ) {
         return $this->{session}->getScriptUrl
           ( 0, 'viewfile', $web, $topic,
             rev => $info->{version} || undef, filename => $file );
