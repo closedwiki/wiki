@@ -13,7 +13,7 @@ Administrators can enable and disable plugins using [[%SCRIPTURLPATH{"configure"
 %SEARCH{ ".+(Contrib|AddOn)$" type="regex" scope="topic" nonoise="on" format="   * [[$topic]]" }%
 
 
----+ Plugin Diagnostics 
+---++ Plugin Diagnostics 
 %FAILEDPLUGINS%
 
 __Note:__ The diagnostics are provided by the =%<nop>FAILEDPLUGINS%= variable
