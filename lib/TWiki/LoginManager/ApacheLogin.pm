@@ -46,18 +46,36 @@ use base 'TWiki::LoginManager';
 use strict;
 use Assert;
 
+
+=pod
+
+---++ ClassMethod new ($session)
+
+Construct the ApacheLogin object
+
+=cut
+
 sub new {
-    my( $class, $twiki ) = @_;
-    my $this = bless( $class->SUPER::new($twiki), $class );
-    $twiki->enterContext( 'can_login', 1 );
+    my( $class, $session ) = @_;
+    my $this = bless( $class->SUPER::new($session), $class );
+    $session->enterContext( 'can_login' );
     # Can't logout, though
     TWiki::registerTagHandler('LOGOUT', sub { return '' });
     return $this;
 }
 
+
+=pod
+
+---++ ObjectMethod forceAuthentication () -> boolean
+
+method called when authentication is required - redirects to (...|view)auth
+Triggered on auth fail
+
+=cut
+
 sub forceAuthentication {
     my $this = shift;
-
     my $twiki = $this->{twiki};
     my $query = $twiki->{cgiQuery};
 
@@ -96,9 +114,18 @@ sub forceAuthentication {
         $twiki->redirect( $url, 1 );
         return 1;
     }
-
-    return 0;
+    return undef;
 }
+
+
+=pod
+
+---++ ObjectMethod loginUrl () -> $loginUrl
+
+TODO: why is this not used internally? When is it called, and why
+Content of a login link
+
+=cut
 
 sub loginUrl {
     my $this = shift;
@@ -107,7 +134,6 @@ sub loginUrl {
     my $web = $twiki->{webName};
     return $twiki->getScriptUrl( 0, 'logon', $web, $topic, @_ );
 }
-
 
 =pod
 
@@ -131,6 +157,15 @@ sub login {
     $twikiSession->redirect( $url, 1 );
 }
 
+
+=pod
+
+---++ ObjectMethod getUser () -> $authUser
+
+returns the userLogin if stored in the apache CGI query (ie session)
+
+=cut
+
 sub getUser {
     my $this = shift;
     ASSERT($this->isa( 'TWiki::LoginManager::ApacheLogin')) if DEBUG;
@@ -144,7 +179,15 @@ sub getUser {
     return $authUser;
 }
 
-#TODO: what did this do? I can't find its use anywhere!
+
+=pod
+
+---++ ObjectMethod checkSession ()
+
+TODO: what did this do? I can't find its use anywhere!
+
+=cut
+
 sub checkSession {
     my $this = shift;
     my $cgisession = $this->{cgisession};

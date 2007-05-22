@@ -149,8 +149,16 @@ sub makeLoginManager {
     return $mgr;
 }
 
-# protected: Construct new client object.
 
+=pod
+
+---++ ClassMethod new ($session, $impl)
+
+Construct the user management object
+
+=cut
+
+# protected: Construct new client object.
 sub new {
     my ( $class, $twiki ) = @_;
     my $this = bless( {}, $class );
@@ -172,6 +180,15 @@ sub new {
     return $this;
 }
 
+
+=pod
+
+---++ ClassMethod new ($session, $impl)
+
+Construct the user management object
+
+=cut
+
 sub _real_trace {
     my( $this, $mess ) = @_;
     my $id = 'Session'.
@@ -185,6 +202,15 @@ if( $TWiki::cfg{Trace}{LoginManager} ) {
 } else {
     *_trace = sub { undef };
 }
+
+
+=pod
+
+---++ ClassMethod new ($session, $impl)
+
+Construct the user management object
+
+=cut
 
 # read/write IP to SID map, return SID
 sub _IP2SID {
@@ -473,6 +499,15 @@ sub userLoggedIn {
     }
 }
 
+
+=pod
+
+---++ ClassMethod new ($session, $impl)
+
+Construct the user management object
+
+=cut
+
 # get an RE that matches a local script URL
 sub _myScriptURLRE {
     my $this = shift;
@@ -494,6 +529,15 @@ sub _myScriptURLRE {
     }
     return $s;
 }
+
+
+=pod
+
+---++ ClassMethod new ($session, $impl)
+
+Construct the user management object
+
+=cut
 
 # Rewrite a URL inserting the session id
 sub _rewriteURL {
@@ -529,6 +573,15 @@ sub _rewriteURL {
 
     return $url;
 }
+
+
+=pod
+
+---++ ClassMethod new ($session, $impl)
+
+Construct the user management object
+
+=cut
 
 # Catch all FORMs and add a hidden Session ID variable.
 # Only do this if the form is pointing to an internal link.
@@ -591,6 +644,15 @@ sub endRenderingHandler {
     $_[0] =~ s/%SESSIONLOGON%/_dispLogon( $this )/geo;
     $_[0] =~ s/%SKINSELECT%/_skinSelect( $this )/geo;
 }
+
+
+=pod
+
+---++ ClassMethod new ($session, $impl)
+
+Construct the user management object
+
+=cut
 
 # Push the standard cookie
 sub _pushCookie {
@@ -823,6 +885,15 @@ sub getUser {
     return undef;
 }
 
+
+=pod
+
+---++ ClassMethod new ($session, $impl)
+
+Construct the user management object
+
+=cut
+
 sub _LOGIN {
     #my( $twiki, $params, $topic, $web ) = @_;
     my $twiki = shift;
@@ -839,6 +910,15 @@ sub _LOGIN {
     return '';
 }
 
+
+=pod
+
+---++ ClassMethod new ($session, $impl)
+
+Construct the user management object
+
+=cut
+
 sub _LOGOUTURL {
     my( $twiki, $params, $topic, $web ) = @_;
     my $this = $twiki->{users}->{loginManager};
@@ -850,6 +930,15 @@ sub _LOGOUTURL {
         $twiki->{SESSION_TAGS}{BASETOPIC},
         'logout' => 1 );
 }
+
+
+=pod
+
+---++ ClassMethod new ($session, $impl)
+
+Construct the user management object
+
+=cut
 
 sub _LOGOUT {
     my( $twiki, $params, $topic, $web ) = @_;
@@ -866,6 +955,15 @@ sub _LOGOUT {
     return '';
 }
 
+
+=pod
+
+---++ ClassMethod new ($session, $impl)
+
+Construct the user management object
+
+=cut
+
 sub _AUTHENTICATED {
     my( $twiki, $params ) = @_;
     my $this = $twiki->{users}->{loginManager};
@@ -878,6 +976,15 @@ sub _AUTHENTICATED {
     }
 }
 
+
+=pod
+
+---++ ClassMethod new ($session, $impl)
+
+Construct the user management object
+
+=cut
+
 sub _CANLOGIN {
     my( $twiki, $params ) = @_;
     my $this = $twiki->{users}->{loginManager};
@@ -888,6 +995,15 @@ sub _CANLOGIN {
         return $params->{else} || 0;
     }
 }
+
+
+=pod
+
+---++ ClassMethod new ($session, $impl)
+
+Construct the user management object
+
+=cut
 
 sub _SESSION_VARIABLE {
     my( $twiki, $params ) = @_;
@@ -906,12 +1022,30 @@ sub _SESSION_VARIABLE {
     }
 }
 
+
+=pod
+
+---++ ClassMethod new ($session, $impl)
+
+Construct the user management object
+
+=cut
+
 sub _LOGINURL {
     my( $twiki, $params ) = @_;
     my $this = $twiki->{users}->{loginManager};
     ASSERT($this->isa('TWiki::LoginManager')) if DEBUG;
     return $this->loginUrl();
 }
+
+
+=pod
+
+---++ ClassMethod new ($session, $impl)
+
+Construct the user management object
+
+=cut
 
 sub _dispLogon {
     my $this = shift;
@@ -932,6 +1066,16 @@ sub _dispLogon {
     my $text = $twiki->{templates}->expandTemplate('LOG_IN');
     return CGI::a({ class => 'twikiAlert', href => $urlToUse }, $text );
 }
+
+
+=pod
+
+---++ PrivateMethod _skinSelect ()
+
+Internal use only
+TODO: what does it do?
+
+=cut
 
 sub _skinSelect {
     my $this = shift;

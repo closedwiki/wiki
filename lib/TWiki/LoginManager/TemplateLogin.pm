@@ -1,7 +1,7 @@
 # Module of TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 2005-2006 TWiki Contributors. All Rights Reserved.
-# TWiki Contributors
+# Copyright (C) 2005-2006 TWiki Contributors.
+# All Rights Reserved. TWiki Contributors
 # are listed in the AUTHORS file in the root of this distribution.
 # NOTE: Please extend that file, not this notice.
 #
@@ -41,9 +41,17 @@ use base 'TWiki::LoginManager';
 use strict;
 use Assert;
 
+
+=pod
+
+---++ ClassMethod new ($session, $impl)
+
+Construct the TemplateLogin object
+
+=cut
+
 sub new {
     my( $class, $session ) = @_;
-
     my $this = bless( $class->SUPER::new($session), $class );
     $session->enterContext( 'can_login' );
     if ($TWiki::cfg{Sessions}{ExpireCookiesAfter}) {
@@ -52,7 +60,16 @@ sub new {
     return $this;
 }
 
-# Triggered on auth fail
+
+=pod
+
+---++ ObjectMethod forceAuthentication () -> boolean
+
+method called when authentication is required - redirects to (...|view)auth
+Triggered on auth fail
+
+=cut
+
 sub forceAuthentication {
     my $this = shift;
     my $twiki = $this->{twiki};
@@ -71,13 +88,21 @@ sub forceAuthentication {
     return undef;
 }
 
-# Content of a login link
+
+=pod
+
+---++ ObjectMethod loginUrl () -> $loginUrl
+
+TODO: why is this not used internally? When is it called, and why
+Content of a login link
+
+=cut
+
 sub loginUrl {
     my $this = shift;
     my $twiki = $this->{twiki};
     my $topic = $twiki->{topicName};
     my $web = $twiki->{webName};
-    my $query = $twiki->{cgiQuery};
     return $twiki->getScriptUrl( 0, 'login', $web, $topic,
                                  origurl => $ENV{REQUEST_URI} );
 }

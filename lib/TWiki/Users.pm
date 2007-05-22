@@ -139,6 +139,14 @@ sub new {
     return $this;
 }
 
+=pod
+
+---++ ObjectMethod getMapping ($cUID, $login, $wikiname) -> usermapping object
+
+should really be PRIVATE.
+
+=cut
+
 sub getMapping {
 	my ($this, $cUID, $login, $wikiname) = @_;
 
@@ -161,7 +169,7 @@ $wikiname ||= '';
 
 =pod
 
----++ ObjectMethod finish
+---++ ObjectMethod finish()
 
 Complete processing after the client's HTTP request has been responded
 to.
@@ -179,11 +187,26 @@ sub finish {
     $this->{basemapping}->finish();
 }
 
-#return 1 if the UserMapper supports registration (ie can create new users)
+=pod
+
+---++ ObjectMethod supportsRegistration () -> boolean
+
+#return 1 if the  main UserMapper supports registration (ie can create new users)
+
+=cut
+
 sub supportsRegistration {
     my( $this ) = @_;
     return $this->{mapping}->supportsRegistration();
 }
+
+=pod
+
+---++ ObjectMethod initialiseUserFromSession ($session)
+
+loads user info from the loginManager's session system
+
+=cut
 
 sub initialiseUserFromSession {
     my( $this, $session ) = @_;
@@ -199,6 +222,15 @@ sub initialiseUserFromSession {
     }
     return $login;
 }
+
+=pod
+
+---++ ObjectMethod initialiseUser ($login) -> cUID
+
+
+
+=cut
+
 sub initialiseUser {
     my( $this, $login ) = @_;
 
@@ -700,21 +732,5 @@ sub ASSERT_IS_USER_DISPLAY_NAME {
     my( $this, $user_display ) = @_;
     $this->getMapping(undef, undef, $user_display)->ASSERT_IS_USER_DISPLAY_NAME($user_display) if ($this->getMapping(undef, undef, $user_display));
 }
-
-=pod
-
----++ ObjectMethod ASSERT_IS_GROUP_DISPLAY_NAME( $group_display ) -> $boolean
-
-used for debugging to ensure we are actually passing a group display_name (commonly a WikiWord Name)
-
-#TODO: i fear we'll need to make a canonical_group_id too 
-
-=cut
-
-sub ASSERT_IS_GROUP_DISPLAY_NAME {
-    my( $this, $group_display ) = @_;
-    $this->getMapping()->ASSERT_IS_GROUP_DISPLAY_NAME($group_display);
-}
-
 
 1;
