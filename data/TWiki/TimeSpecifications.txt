@@ -1,5 +1,18 @@
 %META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
----++ Time Interval Strings
+---++ Time Specifications
+TWiki recognises the following formats for date/time strings. For all strings the time is optional.
+   * 31 Dec 2001 - 23:59
+   * 2001/12/31 23:59:59
+   * 2001.12.31.23.59.59
+   * 2001/12/31 23:59
+   * 2001.12.31.23.59
+   * =2001-12-31T23:59:59= - ISO 8601 format
+ISO dates may have a timezone specifier, either Z or a signed difference
+in hh:mm format. For example:
+   * 2001-12-31T23:59:59+01:00
+   * 2001-12-31T23:59Z
+
+---++ Time Intervals
 
 Some features of TWiki, such as searches, permit the specification of _time intervals_. A time interval is a period of time, such as "1337 to 1451" (the Hundred Years War) or "9th February 2005 to 26th March 2005" (the Christian season of Lent).
 

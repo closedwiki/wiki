@@ -7,7 +7,7 @@
 A Query object is a representation of a SEARCH query over the form fields
 and other meta-data of a topic.
 
-Fields are given by name, and values by strings or numbers. Strings should always be surrounded by 'single-quotes'. Strings which are regular expressions (RHS of =, != ~ operators) use 'perl' regular expression syntax (google for =perlre= for help). Numbers can be signed integers or decimals. Single quotes in values may be escaped using backslash (\).
+Fields are given by name, and values by strings or numbers. Strings should always be surrounded by 'single-quotes'. Numbers can be signed integers or decimals. Single quotes in values may be escaped using backslash (\).
 
 See TWiki.QuerySearch for details of the query language.
 
@@ -29,7 +29,7 @@ use vars qw ( %metaDataTypes );
 # map of reserved names to their meta-data type
 %metaDataTypes = (
     attachments => 'FILEATTACHMENT',
-    field => 'FIELD',
+    fields => 'FIELD',
     info => 'TOPICINFO',
     parent => 'TOPICPARENT',
     moved => 'TOPICMOVED',
@@ -51,13 +51,17 @@ sub _getField {
                 $result = $data->get( $field );
             }
         } else {
-            # Shortcut; is it the form name?
             my $form = $data->get( 'FORM' );
             if( $form && $field eq $form->{name}) {
+                # SHORTCUT; is it the form name? If so, give me the fields
+                # as if the 'field' keyword had been used.
+                # TODO: This is where multiple form support needs to reside.
+                # Return the array of fields
                 my @e = $data->find( 'FIELD' );
                 return \@e;
             } else {
-                # not a predefined name; grope in the fields instead
+                # SHORTCUT; not a predefined name; grope in the fields instead.
+                # TODO: Needs to error out if there are multiple forms.
                 $result = $data->get( 'FIELD', $field );
                 $result = $result->{value} if $result;
             }
@@ -70,6 +74,19 @@ sub _getField {
         }
         if (scalar( @res )) {
             $result = \@res;
+        } else {
+            # SHORTCUT; The field name wasn't seen in any of the records.
+            # try again, this time matching 'name' and returning 'value'
+            foreach my $f ( @$data ) {
+                next unless ref($f) eq 'HASH';
+                if ($f->{name} && $f->{name} eq $field
+                      && defined $f->{value}) {
+                    push( @res, $f->{value} );
+                }
+            }
+            if (scalar( @res )) {
+                $result = \@res;
+            }
         }
     } elsif( ref( $data ) eq 'HASH' ) {
         $result = $data->{$this->{params}[0]};
@@ -199,22 +216,15 @@ my @operators = (
         prec => 800,
         arity => 2,
         close => ']',
-        exec => sub {
-            my( $domain, $a, $b ) = @_;
-            my $lval = $a->evaluate( $domain );
-            if (ref($lval) eq 'ARRAY') {
-                my @res;
-                foreach my $el (@$lval) {
-                    if ($b->evaluate( [ $el, $domain->[1] ])) {
-                        push(@res, $el);
-                    }
-                }
-                return undef unless scalar( @res );
-                return \@res;
-            } else {
-                return $b->evaluate( [ $lval, $domain->[1] ] );
-            }
-        },
+        exec => \&_where,
+    },
+    {
+        name => '[where', # synonym for [?
+        casematters => 0,
+        prec => 800,
+        arity => 2,
+        close => ']',
+        exec => \&_where,
     },
     {
         name => '[',
@@ -251,6 +261,23 @@ sub new {
         'TWiki::Query', \@operators,
         words => qr/\w+/);
     return $this;
+}
+
+sub _where {
+    my( $domain, $a, $b ) = @_;
+    my $lval = $a->evaluate( $domain );
+    if (ref($lval) eq 'ARRAY') {
+        my @res;
+        foreach my $el (@$lval) {
+            if ($b->evaluate( [ $el, $domain->[1] ])) {
+                push(@res, $el);
+            }
+        }
+        return undef unless scalar( @res );
+        return \@res;
+    } else {
+        return $b->evaluate( [ $lval, $domain->[1] ] );
+    }
 }
 
 1;

@@ -276,6 +276,8 @@ If $wn is the name of a group, the group will *not* be expanded.
 sub findUserByWikiName {
     my( $this, $wn ) = @_;
     ASSERT($wn) if DEBUG;
+    # Trim the (pointless) web, if present
+    $wn =~ s#.*[\./]##;
     return $this->{mapping}->findUserByWikiName( $wn );
 }
 

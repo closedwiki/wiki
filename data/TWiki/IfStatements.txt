@@ -28,8 +28,9 @@ atom ::= context identifier, TWiki variable name, single-quoted string, or confi
 | <nop>=, !<nop>= | String comparison |
 | =lc(x)= | Converts x to lower case, Use for caseless comparisons. |
 | =uc(x)= | Converts x to UPPER CASE. Use for caseless comparisons. |
+| =d2n(x)= | Converts a date/time (expressed in [[TimeSpecifications][one of the formats that TWiki can parse]]) to a number of seconds since 1st Jan 1970. You should always convert a string date using =d2n= before you compare it with another date. Times without a timezone are assumed to be in server local time. |
 | &lt;, &gt;, &lt;=, &gt;= | Comparison. If both terms are numbers, the order is numeric. Otherwise it is alphabetic (applies to all comparison operators) |
-| =~= | regular expression match (use perl regular expressions) |
+| =~= | wildcard match ('*' will match any number of characters, '?' will match any single character e.g. "$WIKINAME ~ '*Smit?'") |
 | context | True if the current context is set (see below) |
 | defined | True if a preference variable or url parameter of this name is defined. |
 | $ | expands a URL parameter or [[TWikiVariables][TWikiVariable]]. Plugin handlers *are not called*. Built-in variables and user-defined preferences are supported. You can pass a limited subset of parameters to TWiki variables by enclosing the variable name in single quotes; for example, =$ 'VARIABLE{value}'=. The ='VARIABLE{value}'= string may *not* contain quotes (' or "). |

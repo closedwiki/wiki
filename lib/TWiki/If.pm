@@ -92,6 +92,21 @@ use vars qw( @cmpOps );
         },
     },
     {
+        name => 'd2n',
+        prec => 600,
+        arity => 1,
+        casematters => 0,
+        exec => sub {
+            my( $clientData, $a ) = @_;
+            my $val = $a->evaluate($clientData) || '';
+            if (ref($val) eq 'ARRAY') {
+                my @res = map { _d2n($_) } @$val;
+                return \@res;
+            }
+            return _d2n( $val );
+        },
+    },
+    {
         name => '=',
         prec => 500,
         arity => 2, # binary
@@ -103,7 +118,7 @@ use vars qw( @cmpOps );
         },
     },
     {
-        name => '~',
+        name => '~', # LIKE
         prec => 500,
         arity => 2,
         exec => sub {
@@ -112,8 +127,12 @@ use vars qw( @cmpOps );
             my $eb = $b->evaluate($clientData) || '';
             return _evalTest($ea, $eb,
                           sub {
+                              my $expr = quotemeta($_[1]);
+                              # quotemeta will have escapes * and ? wildcards
+                              $expr =~ s/\\\?/./g;
+                              $expr =~ s/\\\*/.*/g;
                               defined($_[0]) && defined($_[1]) &&
-                                $_[0] =~ m/$_[1]/
+                                $_[0] =~ m/$expr/
                             });
         },
     },
@@ -270,6 +289,16 @@ sub new {
         'TWiki::IfNode', \@operators,
         words => qr/(\w+|({\w+})+)/);
     return $this;
+}
+
+# Private static wrapper around TWiki::parseTime
+sub _d2n {
+    my $date = shift;
+    eval {
+        $date = TWiki::Time::parseTime( $date, 1);
+    };
+    # ignore $@
+    return $date;
 }
 
 # Private subclass specialised to handle {} syntax

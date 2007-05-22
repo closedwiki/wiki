@@ -367,6 +367,8 @@ This is QueryTopicTwo
 %META:FIELD{name="FieldB" attributes="" title="Banother Field" value="8"}%
 %META:FIELD{name="Firstname" attributes="" title="Pre Name" value="John"}%
 %META:FIELD{name="Lastname" attributes="" title="Post Name" value="Peel"}%
+%META:FIELD{name="form" attributes="" title="Blah" value="form good"}%
+%META:FIELD{name="FORM" attributes="" title="Blah" value="FORM GOOD"}%
 %META:FILEATTACHMENT{name="porn.gif" comment="Cor" date="15062" size="15504"}%
 %META:FILEATTACHMENT{name="flib.xml" comment="Cor" date="1157965062" size="1"}%
 HERE
@@ -375,6 +377,7 @@ HERE
         'QueryTopicTwo', $text);
 }
 
+# NOTE: most query ops are tested in Fn_IF.pm, and are not re-tested here
 
 my $stdCrap = 'type="query" nonoise="on" format="$topic" separator=" "}%';
 
@@ -468,12 +471,36 @@ sub test_formQuery3 {
     $this->assert_str_equals('QueryTopic', $result);
 }
 
+sub test_formQuery4 {
+    my $this = shift;
+
+    $this->set_up_for_queries();
+    my $result = $this->{twiki}->handleCommonTags(
+        '%SEARCH{"TestForm.Field1=\'A Field\'"'.$stdCrap,
+        $this->{test_web}, $this->{test_topic});
+    $this->assert_str_equals('QueryTopic', $result);
+}
+
+sub test_formQuery5 {
+    my $this = shift;
+
+    $this->set_up_for_queries();
+    my $result = $this->{twiki}->handleCommonTags(
+        '%SEARCH{"TestyForm.form=\'form good\'"'.$stdCrap,
+        $this->{test_web}, $this->{test_topic});
+    $this->assert_str_equals('QueryTopicTwo', $result);
+    $result = $this->{twiki}->handleCommonTags(
+        '%SEARCH{"TestyForm.FORM=\'FORM GOOD\'"'.$stdCrap,
+        $this->{test_web}, $this->{test_topic});
+    $this->assert_str_equals('QueryTopicTwo', $result);
+}
+
 sub test_refQuery {
     my $this = shift;
 
     $this->set_up_for_queries();
     my $result = $this->{twiki}->handleCommonTags(
-        '%SEARCH{"parent.name:Firstname ~ \'^Emma$\'"'.$stdCrap,
+        '%SEARCH{"parent.name:Firstname ~ \'*mm?\'"'.$stdCrap,
         $this->{test_web}, $this->{test_topic});
     $this->assert_str_equals('QueryTopicTwo', $result);
 }

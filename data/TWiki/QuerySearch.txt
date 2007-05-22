@@ -42,7 +42,7 @@ All meta-data in a topic is referenced according to a to a simple plan.
       * =to=
    * =form= (FORM) - the name of the main form of the topic
       * =name= (known as the _formname_)
-   * _formname_ (the =name= field from the FORM)
+   * =fields= (FIELD) - the fields in the form. You can also use the name of the form (the value of =form.name= e.g. =PersonForm=)
       * _for each field in the form_
          * =name=
          * =title=
@@ -51,15 +51,20 @@ All meta-data in a topic is referenced according to a to a simple plan.
 See TWikiMetaData for details of what all these fields mean.
 
 These fields are specified using a simple syntax:
-   * =X= will get the field named =X=. For example, =info=, =moved= or =attachments=.
-   * =X.Y= will get the subfield =Y= of the field named =X=. For example =info.date=, =moved.by=
-   * =X[N]= will get the Nth element of an array field. N starts at 0. For example, =attachments[4]= will get the fifth attachment in the list.
-   * =X[?<i>query</i>]= will get all the elements of the array =X= that match_query_ - for example, =attachments[?size>1024]=. _query_ can be arbitrarily complex. For example, =DocumentForm[?name!='Summary' AND value~'top secret'].value=.
-   * =X:Y= - will get the value of the field specified by =Y= from the topic specified by the _value_ of =X=. =X= must evaluate to a topic name, and =Y= to a query to be applied to that topic. For example, =parent.name:form.name='ExampleForm'= will evaluate to true if (1) the topic has a parent, (2) the parent topic has the main form type =ExampleForm=.
+| =X= | will get the field named =X=. For example, =info=, =moved= or =attachments=. |
+| =X.Y= | will get the subfield =Y= of the field named =X=. For example =info.date=, =moved.by= |
+| =X[N]= | will get the Nth element of an array field. N starts at 0. For example, =attachments[4]= will get the fifth attachment in the list. |
+| =X[where <i>query</i>]= | will get all the elements of the array =X= that match_query_ - for example, =attachments[where size>1024]=. _query_ can be arbitrarily complex. For example, =DocumentForm[where name!='Summary' AND value~'top secret'].value=. =[?= is a synonym for =[where=. |
+| =X:Y= | will get the value of the field specified by =Y= from the topic specified by the _value_ of =X=. =X= must evaluate to a topic name, and =Y= to a query to be applied to that topic. For example, =parent.name:form.name='ExampleForm'= will evaluate to true if (1) the topic has a parent, (2) the parent topic has the main form type =ExampleForm=. |
 
-There is a shortcut for accessing main form fields. The syntax =X= will evaluate to =<i>form.name</i>[?name=X].value=, if and only if =X= doesn't match another field name. For example, the following expressions will both evaluate to the same value(s)
-   * =PersonForm[?name='Lastname'].value=
-   * =Lastname= 
+Note: at some point TWiki may support mutiple forms in the same topic. For this reason you are recommended *not* to use the =fields= keywords when accessing form fields, but always use the name of the form.
+
+There is a shortcut for accessing form fields. The syntax =X= will evaluate to =<i>field</i>[where name=X].value=, if and only if =X= doesn't match another field name. For example, the following expressions will all evaluate to the same value(s)
+   * =fields[where name='Lastname'].value=
+   * =PersonForm[where name='Lastname'].value=
+   * =Lastname=
+   * =PersonForm.Lastname=
+If =X= would conflict with the name of a top level field in the topic, you can prepend the name of the form to protect it. 
 
 ---++ Constants
 You use constants for the values that you compare with fields. Constants are either strings, or numbers. Strings are always delimited by single-quotes (you can escape a quote using backslash). Numbers can be any integer or floating point number. 
@@ -70,13 +75,14 @@ Field specifiers and constants are combined using _operators_ to create queries.
 | *Operator* | *Meaning* |
 | <code>=</code> | Left-hand side (LHS) exactly matches the value on the Right-hand side (RHS). Numbers and strings can be compared. |
 | <code>!=</code> | Inverse of <code>=</code>. |
-| <code>~</code> | Regular expression match. Use perl regular expressions. |
+| =~= | wildcard match ('*' will match any number of characters, '?' will match any single character e.g. "$WIKINAME ~ '*Smit?'") |
 | <code>&lt;</code> | LHS is less that RHS. If both sides are numbers, the order is numeric. Otherwise it is alphabetic (applies to all comparison operators) |
 | <code>&gt;</code> | &gt; |
 | <code>&gt;=</code> | &gte; |
 | <code>&lt;=</code> | &lte; |
 | =lc(x)= | Converts x to lower case, Use for caseless comparisons. |
 | =uc(x)= | Converts x to UPPER CASE. Use for caseless comparisons. |
+| =d2n(x)= | Converts a date (expressed in [[TimeSpecifications][one of the formats that TWiki can parse]]) to a number of seconds since 1st Jan 1970. This is the format dates are stored in inside TWiki topics, so you have to convert a string date using =d2n= before you can compare it with - for example - the date an attachment was uploaded. Times without a timezone are assumed to be in server local time. |
 | =NOT= | Invert the result of the subquery |
 | =AND= | Combine two subqueries |
 | =OR= | Combine two subqueries |
@@ -85,29 +91,32 @@ Field specifiers and constants are combined using _operators_ to create queries.
 ---++ Putting it all together
 When a query is applied to a topic, the goal is to reduce to a TRUE or FALSE value that indicates whether the topic matches that query or not. If the query returns TRUE, then the topic is included in the search results.
 
-A query matches if the query returns one or more values when it is applied to the topic. So if I have a very simple query, such as ="attachments"= then this will return TRUE for all topics that have one or more attachments. If I write ="attachments[?size>1024 AND name ~ '\.gif$']"= then it will return TRUE for all topics that have at least one attachment larger than 1024 bytes with a name ending in =.gif=.
+A query matches if the query returns one or more values when it is applied to the topic. So if I have a very simple query, such as ="attachments"= then this will return TRUE for all topics that have one or more attachments. If I write ="attachments[where size>1024 AND name ~ '*.gif']"= then it will return TRUE for all topics that have at least one attachment larger than 1024 bytes with a name ending in =.gif=.
 
 ---++ Examples
 ---+++ Query examples
-   * =attachments[?name='purdey.gif']= - true if there is an attachment call =purdey.gif= on the topic
-   * =(Person<nop>Form[?name=Firstname].value='Emma' OR Person<nop>Form[name=Firstname].value='John') AND Person<nop>Form[name='Lastname'].value='Peel'= - true for 'Emma Peel' and 'John Peel' but *not* 'Robert Peel' or 'Emma Thompson'
+   * =attachments[where name='purdey.gif']= - true if there is an attachment call =purdey.gif= on the topic
+   * =(Person<nop>Form[where name=Firstname].value='Emma' OR Person<nop>Form[name=Firstname].value='John') AND Person<nop>Form[name='Lastname'].value='Peel'= - true for 'Emma Peel' and 'John Peel' but *not* 'Robert Peel' or 'Emma Thompson'
    * =(Firstname='Emma' OR Firstname='John') AND Lastname='Peel'= - shortcut form of the previous query
-   * =History<nop>Form[?name='Age'].value>2= - true if the topic has a =HistoryForm=, and the form has a field called =Age= with a value > 2
-   * =Person:ClothesForm[?name='Headgear'].value ~ 'Bowler Hat'= - true if the form attached to the topic has a field called =Person= that has a value that is the name of a topic, and that topic contains the form =ClothesForm=, with a field called =Headgear=, which has a value that contains the string ='Bowler Hat'=. (Phew!)
+   * =History<nop>Form[where name='Age'].value>2= - true if the topic has a =HistoryForm=, and the form has a field called =Age= with a value > 2
+   * =Person:ClothesForm[where name='Headgear'].value ~ '*Bowler Hat*'= - true if the form attached to the topic has a field called =Person= that has a value that is the name of a topic, and that topic contains the form =ClothesForm=, with a field called =Headgear=, which has a value that contains the string ='Bowler Hat'=. (Phew!)
 
 ---+++ Search examples
-Find all children of this topic in the current web
+Find all topics that are children of this topic in the current web
 <verbatim>
-%SEARCH{"parent.name = '%TOPIC%' web="%WEB%"}%
+%SEARCH{"parent.name = '%TOPIC%'" web="%WEB%"}%
 </verbatim>
-Find the topic that has the attachment 'grunge.gif'
+Find all topics that have an attachment called 'grunge.gif'
 <verbatim>
-%SEARCH{"attachments[?name='grunge.gif']"}%
+%SEARCH{"attachments[where name='grunge.gif']"}%
 </verbatim>
-Find all topics that have form =ColourForm= where the formfield 'Shades' contains 'green' or 'yellow'
-but not 'brown'
+Find all topics that have form =ColourForm= where the form field 'Shades' is 'green' or 'yellow' but not 'brown'
 <verbatim>
-%SEARCH{"lc(Shades) ~ '(green|yellow)' AND NOT(lc(Shades) ~ 'brown')"}%
+%SEARCH{"(lc(Shades)='green' OR lc(Shades)='yellow') AND NOT(lc(Shades) ~ 'brown')"}%
+</verbatim>
+Find all topics that have PNG attachments that have been added since 26th March 2007
+<verbatim>
+%SEARCH{"attachments[where name ~ '*.png' AND date >= d2n('2007-03-26')"}%
 </verbatim>
 
 ---++ Grammar of the query language
@@ -118,7 +127,7 @@ nexpr ::= 'NOT' nexpr | bexpr ;
 bexpr ::= uexpr [ bop bexpr ] ;
 bop :: = '>' | '<' | '<=' | '>=' | '!=' | '~' | '=' ;
 uexpr ::= uop ref | ref ;
-uop ::= 'lc' | 'uc' ;
+uop ::= 'lc' | 'uc' | 'd2n' ;
 ref ::= specifier [ ':' ref ] ;
 specifier ::= terminal '.' specifier | terminal '[' [ '?' ] query ']';
 terminal ::= '(' query ')' | string | name ;
