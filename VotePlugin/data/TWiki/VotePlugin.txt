@@ -9,11 +9,11 @@
    Instead, you could check your fix in, raise a bug in the Bugs web, or mail the author.
 -->
 ---+!! <nop>%TOPIC%
-This plugin might be used to establish an online-voting system. Votes are
-collected in a separate file ... basically inspired by the TWiki:Plugins/PollPlugin.
+This plugin can be used to establish an online-voting system. Votes are
+collected in a separate file. Inspired by the TWiki:Plugins/PollPlugin.
 
 ---++ Example
-%VOTE{id="FavoritMeal" select1="Drink" options1="Beer,Wine,Milk,Water" select2="Food" options2="Steak,Bread,Pasta,Pizza"}%
+%VOTE{id="FavouriteMeal" select1="Drink" options1="Beer,Wine,Milk,Water" select2="Food" options2="Steak,Bread,Pasta,Pizza"}%
 
 <style type="text/css">
 .Vote {
@@ -28,31 +28,52 @@ collected in a separate file ... basically inspired by the TWiki:Plugins/PollPlu
 
 The %<nop>VOTE{ ... }% macro defines a poll using the following options:
 | *name* | *description* | *example* |
-| id | The identifier of a poll. This must be unique per topic. \
-       You can thus have multiple independent votes on the same topic page. | <nop>FaroritMeal |
-| style | Possible values are a combination of =bar=, =perc=, =total=  and =sum= \
-     to specify the display style of the poll results \
-          (default =bar,perc,total=). | =bar= |
-| select&lt;n&gt; | As you can see in the above example multiple decisions can be made within \
-       the same poll. This identifier must be unique within a poll. \
-       You can have up to 5 selects per vote (sorry hardcoded;)) | Drinks |
-| options&lt;n&gt; | Each select&lt;n&gt; corresponds to set of options that \
-       you must specify. | Beer,Wine,Milk |
+| =id= | \
+The identifier of a poll. This must be unique within the topic. \
+You can have multiple independent votes in the same \
+topic. | <nop>FavouriteMeal |
+| =style= | \
+Specifies the style of the poll result. Possible values are a \
+combination of =bar=, =perc=, =total=, =stars= and =sum= to specify the \
+display style of the poll results (the default is =bar,perc,total=). | =bar= |
+| =select<i>&lt;n&gt;</i>= | \
+As you can see in the example above, multiple \
+decisions can be made within the same poll. \
+You can have as many selects per %VOTE as you want. | =Drinks= |
+| =options<i>&lt;n&gt;</i>= | \
+Each select&lt;n&gt; must have a corresponding set of options that \
+the voter will select from. | =Beer,Wine,Milk= |
+| =global= | If set to ="on"=, this makes the =id= global in your TWiki. \
+Votes with global id's accumulate; the same id in two topics are \
+effectively both the same vote. |
+| =open= | Normally votes are recorded anonymously i.e. the database does *not* record who voted. If this option is set to ="on"=, then the database will record who voted. | 
+=select= and =option= can use the pseudo variables =$percnt=, =$dollar=, 
+=$quote= and =$doublequote= to render the respective characters in the vote
+output.
 
-=select= and =option= might use the pseudo variables =$percnt=, =$dollar=, =$quote= and
-=$doublequote= to render the respective characters in the vote output otherwise not allowed
-in an argument to a TWiki tag.
+The %<nop>VOTE{ ... }% will generate the selection box(es) and the poll
+results.
 
-The %<nop>VOTE{ ... }% will generate the selection box(es) and the poll results.
-The plugin will count only you latest vote. You might only vote once a day.
+The plugin will count only your latest vote. You may only vote once a day.
+
+You can weight the vote results by setting the !TWikiPreference
+=%<nop>VOTEPLUGIN_WEIGHTINGS%= to the name of a topic that is used
+to weight the votes of certain members of the community in the final result.
+For example,
+<verbatim>
+| *Name* | *Weight* |
+| AlbertCamus | 100 |
+| SunTszu | 50 |
+| NiccoloMachiavelli | 1000 |
+</verbatim>
+The numbers are percentages. A user who isn't otherwise weighted has a weighting of 100. A weighting lower that 100 reduces their influence on the vote, and a weighting higher than 100 increases it. In the example above,
+   * !AlbertCamus has a weight of 100, as does !AdamSmith (who gets the default)
+   * !SunTszu's votes only count for half as much as !AlbertCamus'
+   * !NiccolaMachiavelli has ten times as much influence as !AlbertCamus and !AdamSmith, and twenty times as much as !SunTszu.
+The weighting topic applies to all votes in the scope of the =%<nop>VOTEPLUGIN_WEIGHTINGS%= setting.
 
 ---++ Plugin Installation Instructions
-
-	* [[http://twiki.org/p/pub/Plugins/%TOPIC%/%TOPIC%.zip][Download]] the ZIP file
-	* Unzip it in your twiki installation directory. Content: 
-	| *File:* | *Description:* |
-%$MANIFEST%
-	* (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
+%$INSTALL_INSTRUCTIONS%
 
 ---++ Plugin Info
 <!-- provided for compatibility only
@@ -63,6 +84,7 @@ The plugin will count only you latest vote. You might only vote once a day.
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | v1.32 |
 |  Change History: | &nbsp; | 
+|               | Added =global= and =VOTEPLUGIN_WEIGHTINGS= - TWiki:Main/CrawfordCurrie |
 |  31 Aug 2006: | added NO_PREFS_IN_TOPIC |
 |  15 Aug 2006: | added "use strict" and fixed revealing errors |
 |  27 Apr 2006: | added lazy compilation |

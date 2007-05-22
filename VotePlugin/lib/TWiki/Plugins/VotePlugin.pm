@@ -14,12 +14,12 @@
 # http://www.gnu.org/copyleft/gpl.html
 
 ###############################################################################
-package TWiki::Plugins::VotePlugin; 
+package TWiki::Plugins::VotePlugin;
 use strict;
 
 ###############################################################################
 use vars qw(
-  $user $isInitialized
+  $isInitialized
   $VERSION $RELEASE $NO_PREFS_IN_TOPIC $SHORTDESCRIPTION
 );
 
@@ -30,27 +30,22 @@ $SHORTDESCRIPTION = 'Simple way to count votes';
 
 ###############################################################################
 sub initPlugin {
-  (undef, undef, $user, undef) = @_;
-
-  $isInitialized = 0;
-  return 1;
-}
-
-###############################################################################
-sub commonTagsHandler {
-  $_[0] =~ s/%VOTE{(.*?)}%/&handleVote($_[2], $_[1], $1)/geo;
+    $isInitialized = 0;
+    TWiki::Func::registerTagHandler('VOTE', \&handleVote);
+    return 1;
 }
 
 ###############################################################################
 sub handleVote {
+    #my ($session, $params, $topic, $web) = @_;
 
-  unless ($isInitialized) {
-    eval 'use TWiki::Plugins::VotePlugin::Core;';
-    die $@ if $@;
-    $isInitialized = 1;
-  }
+    unless ($isInitialized) {
+        eval 'use TWiki::Plugins::VotePlugin::Core;';
+        die $@ if $@;
+        $isInitialized = 1;
+    }
 
-  return TWiki::Plugins::VotePlugin::Core::handleVote(@_);
+    return TWiki::Plugins::VotePlugin::Core::handleVote(@_);
 }
 
 1;
