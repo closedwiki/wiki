@@ -55,6 +55,7 @@ sub new {
 
     my $this = bless( {}, $class );
     $this->{session} = $session;
+    $this->{mapping_id} = 'TWikiUserMapping_';
     
     my $implPasswordManager = $TWiki::cfg{PasswordManager};
     $implPasswordManager = 'TWiki::Users::Password'
@@ -86,6 +87,14 @@ sub finish {
 #return 1 if the UserMapper supports registration (ie can create new users)
 sub supportsRegistration {
     return 1;
+}
+
+sub handlesUser {
+	my ($this, $cUID, $login, $wikiname) = @_;
+
+    #if ( $user_id =~ /^($this->{mapping_id})/ || ($this->{mapping_id} eq 'TWikiUserMapping_'));
+	#TODO: should really see if there is a mapping_id on the front and bail if we don't grok it..
+	return 1;
 }
 
 # Convert a login name to the corresponding canonical user name. The

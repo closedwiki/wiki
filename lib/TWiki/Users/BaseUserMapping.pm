@@ -53,6 +53,7 @@ sub new {
 
     my $this = bless( {}, $class );
     $this->{session} = $session;
+	$this->{mapping_id} = 'BaseUserMapping_';
 
 #set up our users
     $this->{L2U} = {$TWiki::cfg{AdminUserLogin}=>'BaseUserMapping_333', $TWiki::cfg{DefaultUserLogin}=>'BaseUserMapping_666', unknown=>'BaseUserMapping_999'};
@@ -83,6 +84,25 @@ sub finish {
 #return 1 if the UserMapper supports registration (ie can create new users)
 sub supportsRegistration {
     return; #NO, we don't
+}
+
+sub handlesUser {
+	my ($this, $cUID, $login, $wikiname) = @_;
+	
+$cUID = '' unless (defined($cUID));
+$login = '' unless (defined($login));
+$wikiname = '' unless (defined($wikiname));
+	
+	return (
+		( ($cUID  && $cUID eq $this->{L2U}{$TWiki::cfg{AdminUserLogin}}) || 
+			($login  && $login eq $TWiki::cfg{AdminUserLogin}) ||
+			($wikiname  && $wikiname eq $TWiki::cfg{AdminUserWikiName}) ) 
+#TODO: i'd like to have base handle guest too, but something goes wrong			
+#			||
+#		   ( ($cUID  && $cUID eq $this->{L2U}{$TWiki::cfg{DefaultUserLogin}}) || 
+#			($login  && $login eq $TWiki::cfg{DefaultUserLogin}) ||
+#			($wikiname  && $wikiname eq $TWiki::cfg{DefaultUserWikiName}) )
+		);
 }
 
 # Convert a login name to the corresponding canonical user name. The
