@@ -867,10 +867,10 @@ sub _calcDivHeight
 		($size,$unit)=($1,$2);
 	}
 	if ($unit=~/^em$/i) {
-		$hf-=$1;
+		$hf-=$size;
 	} elsif ($options{'fontsize'}=~/(large|medium)/i) {
 		$hf=0;
-	} else {
+	} else { # pt, px, cm,mm,inch,...
 		$hf=$size;
 	}
 	my $height = $rows*$hf;
