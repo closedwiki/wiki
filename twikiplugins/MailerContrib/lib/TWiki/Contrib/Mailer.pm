@@ -72,10 +72,11 @@ sub mailNotify {
     $webstr = '*' unless ( $webstr );
     $webstr =~ s/\*/\.\*/g;
 
-    my $exwebstr;
+    my $exwebstr = '';
     if ( defined( $exwebs )) {
         $exwebstr = join( '|', @$exwebs );
     }
+    $exwebstr =~ s/\*/\.\*/g;
 
     if (!defined $twiki) {
         $twiki = new TWiki();
