@@ -77,6 +77,8 @@ package TWiki::Users;
 use strict;
 use Assert;
 use TWiki::Time;
+use TWiki::ListIterator;
+use TWiki::AggregateIterator;
 use TWiki::LoginManager;    # client session handling
 
 BEGIN {
@@ -554,7 +556,9 @@ Get an iterator over the list of all the groups.
 =cut
 
 sub eachGroup {
-    return shift->{mapping}->eachGroup( @_ );
+	my $this = shift;
+	my @list = ($this->{basemapping}->eachGroup( @_ ), $this->{mapping}->eachGroup( @_ ));
+    return new TWiki::AggregateIterator(\@list, 1);
 }
 
 =pod
@@ -571,7 +575,9 @@ should be fully expanded.
 =cut
 
 sub eachGroupMember {
-    return shift->{mapping}->eachGroupMember( @_ );
+	my $this = shift;
+	my @list = ($this->{basemapping}->eachGroupMember( @_ ), $this->{mapping}->eachGroupMember( @_ ));
+    return new TWiki::AggregateIterator(\@list, 1);
 }
 
 =pod

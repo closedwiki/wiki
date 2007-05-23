@@ -18,35 +18,40 @@
 
 =pod
 
----+ package TWiki::ListIterator
+---+ package TWiki::AggregateIterator
 
-Iterator over a list
+combine multiple iterators
 
 =cut
 
-package TWiki::ListIterator;
+package TWiki::AggregateIterator;
 
 use strict;
 
 =pod
 
----++ new(\@list)
+---++ new(\@list, $unique)
 
-Create a new iterator over the given list. Designed primarily for operations
-over fully defined lists of object references. The list is not damaged in
+Create a new iterator over the given list of iterators. The list is not damaged in
 any way.
+
+if $unique is set, we try to not repeat values.
+Warning: $unique assumes that the values are strings (so works for cUID's )
 
 =cut
 
 
 sub new {
-    my ($class, $list) = @_;
+    my ($class, $list, $unique) = @_;
     my $this = bless({
-        list => $list,
+        Itr_list => $list,
+		Itr_index => 0,
         index => 0,
         process => undef,
         filter => undef,
         next => undef,
+		unique => $unique,
+		unique_hash => {}
     }, $class);
     return $this;
 }
@@ -70,14 +75,30 @@ sub hasNext {
     return 1 if $this->{next};
     my $n;
     do {
-        if( $this->{list} && $this->{index} < scalar(@{$this->{list}}) ) {
-            $n = $this->{list}->[$this->{index}++];
+		unless ( $this->{list} ) {
+			if ($this->{Itr_index} < scalar(@{$this->{Itr_list}}) ) {
+				$this->{list} = $this->{Itr_list}->[$this->{Itr_index}++];
+			} else {
+        	    return 0; #no more iterators in list
+        	}
+		} 
+        if( $this->{list}->hasNext()) {
+            $n = $this->{list}->next();
         } else {
-            return 0;
-        }
-    } while ($this->{filter} && !&{$this->{filter}}($n));
+			$this->{list} = undef;	#goto next iterator
+		}
+    } while (!$this->{list} || ($this->{filter} && !&{$this->{filter}}($n)) || ($this->{unique} && !$this->unique($n)));
     $this->{next} = $n;
     return 1;
+}
+
+sub unique {
+	my ($this, $value) = @_;
+	unless (defined($this->{unique_hash}{$value})) {
+		$this->{unique_hash}{$value} = 1;
+		return 1;
+	} 
+	return 0;
 }
 
 =pod
@@ -96,22 +117,6 @@ iterator object:
      is returned by next. The value returned from next is the value returned
      by the process function.
 
-For example,
-<verbatim>
-my @list = ( 1, 2, 3 );
-
-my $it = new TWiki::ListIterator(\@list);
-$it->{filter} = sub { return $_[0] != 2 };
-$it->{process} = sub { return $_[0] + 1 };
-while ($it->hasNext()) {
-    my $x = $it->next();
-    print "$x, ";
-}
-</verbatim>
-will print
-<verbatim>
-2, 4
-</verbatim>
 
 =cut
 
@@ -121,6 +126,7 @@ sub next {
     my $n = $this->{next};
     $this->{next} = undef;
     $n = &{$this->{process}}($n) if $this->{process};
+#print STDERR "next - $n \n";	
     return $n;
 }
 

@@ -30,8 +30,13 @@ No registration - this is a read only usermapper
    * TWikiAdmin - uses the password that was set in Configure (IF its not null)
    * TWikiGuest - password guest
    * UnknownUser
----+++ Users
+ TODO:
+   * TWikiContributor - 1 Jan 2005
+   * TWikiRegistrationAgent - 1 Jan 2005
+   
+---+++ Groups
    * $TWiki::cfg{SuperAdminGroup}
+   * 
    
 
 =cut
@@ -63,15 +68,42 @@ sub new {
 	$this->{mapping_id} = 'BaseUserMapping_';
 
 #set up our users
-    $this->{L2U} = {$TWiki::cfg{AdminUserLogin}=>'BaseUserMapping_333', $TWiki::cfg{DefaultUserLogin}=>'BaseUserMapping_666', unknown=>'BaseUserMapping_999'};
-    $this->{U2L} = {'BaseUserMapping_333'=>$TWiki::cfg{AdminUserLogin}, 'BaseUserMapping_666'=>$TWiki::cfg{DefaultUserLogin}, 'BaseUserMapping_999'=>'unknown'};
-    $this->{U2W} = {'BaseUserMapping_333'=>$TWiki::cfg{AdminUserWikiName}, 'BaseUserMapping_666'=>$TWiki::cfg{DefaultUserWikiName}, 'BaseUserMapping_999'=>'UnknownUser'};
-    $this->{W2U} = {$TWiki::cfg{AdminUserWikiName}=>'BaseUserMapping_333', $TWiki::cfg{DefaultUserWikiName}=>'BaseUserMapping_666', UnknownUser=>'BaseUserMapping_999'};
+    $this->{L2U} = {
+		$TWiki::cfg{AdminUserLogin}=>'BaseUserMapping_333', 
+		$TWiki::cfg{DefaultUserLogin}=>'BaseUserMapping_666', 
+		unknown=>'BaseUserMapping_999',
+		TWikiContributor=>'BaseUserMapping_111',
+		TWikiRegistrationAgent=>'BaseUserMapping_222'
+	};
+    $this->{U2L} = {
+		'BaseUserMapping_333'=>$TWiki::cfg{AdminUserLogin}, 
+		'BaseUserMapping_666'=>$TWiki::cfg{DefaultUserLogin}, 
+		'BaseUserMapping_999'=>'unknown',
+		'BaseUserMapping_111'=>'TWikiContributor',
+		'BaseUserMapping_222'=>'TWikiRegistrationAgent'
+	};
+    $this->{U2W} = {
+		'BaseUserMapping_333'=>$TWiki::cfg{AdminUserWikiName}, 
+		'BaseUserMapping_666'=>$TWiki::cfg{DefaultUserWikiName}, 
+		'BaseUserMapping_999'=>'UnknownUser',
+		'BaseUserMapping_111'=>'TWikiContributor',
+		'BaseUserMapping_222'=>'TWikiRegistrationAgent'
+	};
+    $this->{W2U} = {
+		$TWiki::cfg{AdminUserWikiName}=>'BaseUserMapping_333', 
+		$TWiki::cfg{DefaultUserWikiName}=>'BaseUserMapping_666', 
+		UnknownUser=>'BaseUserMapping_999',
+		TWikiContributor=>'BaseUserMapping_111',
+		TWikiRegistrationAgent=>'BaseUserMapping_222'
+	};
     $this->{U2E} = {'BaseUserMapping_333'=>'not@home.org.au'};
     $this->{U2P} = {'BaseUserMapping_333'=>$TWiki::cfg{Password}};
     
     
-    $this->{GROUPS} = {$TWiki::cfg{SuperAdminGroup}=>['BaseUserMapping_333']};
+    $this->{GROUPS} = {
+		$TWiki::cfg{SuperAdminGroup}=>['BaseUserMapping_333'],
+		TWikiBaseGroup=>['BaseUserMapping_333', 'BaseUserMapping_666', 'BaseUserMapping_999', 'BaseUserMapping_111', 'BaseUserMapping_222']
+	};
 
     return $this;
 }
@@ -129,7 +161,7 @@ $login = '' unless (defined($login));
 $wikiname = '' unless (defined($wikiname));
 	
 	return (
-		( ($cUID  && $cUID eq $this->{L2U}{$TWiki::cfg{AdminUserLogin}}) || 
+		( ($cUID  && $cUID =~ /^$this->{mapping_id}/ ) || 
 			($login  && $login eq $TWiki::cfg{AdminUserLogin}) ||
 			($wikiname  && $wikiname eq $TWiki::cfg{AdminUserWikiName}) ) 
 #TODO: i'd like to have base handle guest too, but something goes wrong			
