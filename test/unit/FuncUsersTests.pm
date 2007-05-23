@@ -109,7 +109,7 @@ sub test_eachGroup {
         push(@list, $u);
     }
     my $ulist = join(',', sort @list);
-    $this->assert_str_equals('AandBGroup,AandCGroup,BandCGroup,ScumGroup,TWikiAdminGroup', $ulist);
+    $this->assert_str_equals('AandBGroup,AandCGroup,BandCGroup,ScumGroup,TWikiAdminGroup,TWikiBaseGroup', $ulist);
 }
 
 # SMELL: nothing tests if we are an admin!

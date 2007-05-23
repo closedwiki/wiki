@@ -236,7 +236,7 @@ sub test_getListOfGroups {
     my @l = ();
     while ($i->hasNext()) { push(@l, $i->next()) };
     my $k = join(',', sort @l);
-    $this->assert_str_equals("AmishGroup,BaptistGroup,TWikiAdminGroup", $k);
+    $this->assert_str_equals("AmishGroup,BaptistGroup,TWikiAdminGroup,TWikiBaseGroup", $k);
 }
 
 sub test_groupMembers {
