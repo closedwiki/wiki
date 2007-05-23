@@ -194,5 +194,88 @@ sub test_AggregateIteratorBad {
     $this->assert_str_equals('1, 2, 3, a, b, c, d, ',$b);
 }
 
+sub test_AggregateIteratorNestedUnique {
+    my $this = shift;
+
+	my @list1 = ( 1, 2, 3 );
+	my $it1 = new TWiki::ListIterator(\@list1);
+
+	my @list2 = qw/a b c d/;
+	my $it2 = new TWiki::ListIterator(\@list2);
+	
+	my @listA = qw/p l k/;
+	my $itA = new TWiki::ListIterator(\@listA);
+	my @listB = qw/y 2 b l/;
+	my $itB = new TWiki::ListIterator(\@listB);	
+	my @NestedItrList = ($itA , $itB);
+	my $it3 = new TWiki::AggregateIterator(\@NestedItrList, 1);
+
+	my @itrList = ($it1, $it2, $it3);
+	my $it = new TWiki::AggregateIterator(\@itrList, 1);
+
+	my $b = '';
+	while ($it->hasNext()) {
+		my $x = $it->next();
+		$b .= "$x, ";
+	}
+
+    $this->assert_str_equals('1, 2, 3, a, b, c, d, p, l, k, y, ' ,$b);
+}
+
+sub test_AggregateIteratorNestedUnique2 {
+    my $this = shift;
+
+	my @list1 = ( 1, 2, 3 );
+	my $it1 = new TWiki::ListIterator(\@list1);
+
+	my @list2 = qw/a b c d/;
+	my $it2 = new TWiki::ListIterator(\@list2);
+	
+	my @listA = qw/p l k/;
+	my $itA = new TWiki::ListIterator(\@listA);
+	my @listB = qw/y 2 b l/;
+	my $itB = new TWiki::ListIterator(\@listB);	
+	my @NestedItrList = ($itA , $itB);
+	my $it3 = new TWiki::AggregateIterator(\@NestedItrList);
+
+	my @itrList = ($it1, $it2, $it3);
+	my $it = new TWiki::AggregateIterator(\@itrList, 1);
+
+	my $b = '';
+	while ($it->hasNext()) {
+		my $x = $it->next();
+		$b .= "$x, ";
+	}
+
+    $this->assert_str_equals('1, 2, 3, a, b, c, d, p, l, k, y, ' ,$b);
+}
+
+sub test_AggregateIteratorNested {
+    my $this = shift;
+
+	my @list1 = ( 1, 2, 3 );
+	my $it1 = new TWiki::ListIterator(\@list1);
+
+	my @list2 = qw/a b c d/;
+	my $it2 = new TWiki::ListIterator(\@list2);
+	
+	my @listA = qw/p l k/;
+	my $itA = new TWiki::ListIterator(\@listA);
+	my @listB = qw/y 2 b l/;
+	my $itB = new TWiki::ListIterator(\@listB);	
+	my @NestedItrList = ($itA , $itB);
+	my $it3 = new TWiki::AggregateIterator(\@NestedItrList);
+
+	my @itrList = ($it1, $it2, $it3);
+	my $it = new TWiki::AggregateIterator(\@itrList);
+
+	my $b = '';
+	while ($it->hasNext()) {
+		my $x = $it->next();
+		$b .= "$x, ";
+	}
+
+    $this->assert_str_equals('1, 2, 3, a, b, c, d, p, l, k, y, 2, b, l, ' ,$b);
+}
 
 1;
