@@ -176,7 +176,7 @@ sub registerAccount {
     };
 }
 
-sub test_userTopicWithPMWithoutForm {
+sub detest_userTopicWithPMWithoutForm {
     my $this = shift;
     $this->registerAccount();
     my( $meta, $text ) = $this->{twiki}->{store}->readTopic(
@@ -192,7 +192,7 @@ sub test_userTopicWithPMWithoutForm {
     $this->assert_matches(qr/\s*AFTER\s*/, $text);
 }
 
-sub test_userTopicWithoutPMWithoutForm {
+sub detest_userTopicWithoutPMWithoutForm {
     my $this = shift;
     # Switch off the password manager to force email to be written to user
     # topic
@@ -212,7 +212,7 @@ sub test_userTopicWithoutPMWithoutForm {
     $this->assert_matches(qr/\s*AFTER\s*/, $text);
 }
 
-sub test_userTopicWithoutPMWithForm {
+sub detest_userTopicWithoutPMWithForm {
     my $this = shift;
     # Switch off the password manager to force email to be written to user
     # topic
@@ -279,7 +279,7 @@ EOF
     $this->assert_matches(qr/^\s*$/s, $text);
 }
 
-sub test_userTopicWithPMWithForm {
+sub detest_userTopicWithPMWithForm {
     my $this = shift;
 
     # Change the new user topic to include the form
@@ -435,7 +435,7 @@ sub registerVerifyOk {
 }
 
 #Register a user, then give a bad verification code. It should barf.
-sub test_registerBadVerify {
+sub detest_registerBadVerify {
     my $this = shift;
     $TWiki::cfg{Register}{NeedVerification}  =  1;
     my $query = new CGI ({
@@ -531,7 +531,7 @@ sub test_registerBadVerify {
 
 # Register a user with verification explicitly switched off
 # (SUPER's tear_down will take care for re-installing %TWiki::cfg)
-sub test_registerNoVerifyOk {
+sub detest_registerNoVerifyOk {
     my $this = shift;
     $TWiki::cfg{Register}{NeedVerification}  =  0;
     my $query = new CGI ({
@@ -605,7 +605,7 @@ sub test_registerNoVerifyOk {
 
 
 # Register a user with a password which is too short - must be rejected
-sub test_rejectShortPassword {
+sub detest_rejectShortPassword {
     my $this = shift;
     $TWiki::cfg{Register}{NeedVerification}  =  0;
     $TWiki::cfg{MinPasswordLength}           =  6;
@@ -650,7 +650,7 @@ sub test_rejectShortPassword {
 }
 
 # Register a user with a password which is too short
-sub test_shortPassword {
+sub detest_shortPassword {
     my $this = shift;
     $TWiki::cfg{Register}{NeedVerification}  =  0;
     $TWiki::cfg{MinPasswordLength}           =  6;
@@ -701,7 +701,7 @@ sub test_shortPassword {
 # Verifies: Most of the things which are verified during normal
 #           registration with Verification, plus Oops for
 #           duplicate verification
-sub test_duplicateActivation {
+sub detest_duplicateActivation {
     my $this = shift;
 
     # Start similar to registration with verification
@@ -792,7 +792,7 @@ sub test_duplicateActivation {
 ################################################################################
 ################################ RESET PASSWORD TESTS ##########################
 
-sub test_resetPasswordOkay {
+sub detest_resetPasswordOkay {
     my $this = shift;
 
     ## Need to create an account (else oopsnotwikiuser)
@@ -838,7 +838,7 @@ sub test_resetPasswordOkay {
     $this->assert_matches(qr/To: .*\b$this->{new_user_email}/,$mess);
 }
 
-sub test_resetPasswordNoSuchUser {
+sub detest_resetPasswordNoSuchUser {
     my $this = shift;
     # This time we don't set up the testWikiName, so it should fail.
 
@@ -879,7 +879,7 @@ sub test_resetPasswordNoSuchUser {
 }
 
 
-sub test_resetPasswordNeedPrivilegeForMultipleReset {
+sub detest_resetPasswordNeedPrivilegeForMultipleReset {
     my $this = shift;
     # This time we don't set up the testWikiName, so it should fail.
 
@@ -924,7 +924,7 @@ sub test_resetPasswordNeedPrivilegeForMultipleReset {
 
 # This test make sure that the system can't reset passwords
 # for a user currently absent from .htpasswd
-sub test_resetPasswordNoPassword {
+sub detest_resetPasswordNoPassword {
     my $this = shift;
 
     $this->registerAccount();
@@ -994,7 +994,7 @@ Once complete, try again - the second attempt at completion should fail.
 
 =cut
 
-sub test_UnregisteredUser {
+sub detest_UnregisteredUser {
     my $this = shift;
 
     TWiki::UI::Register::_putRegDetailsByCode($regSave, $TWiki::cfg{RegistrationApprovals});
@@ -1019,7 +1019,7 @@ sub test_UnregisteredUser {
     $this->assert_equals(0, scalar(@TWikiFnTestCase::mails));
 }
 
-sub test_missingElements {
+sub detest_missingElements {
     my $this = shift;
     my @present = ("one","two","three");
     my @required = ("one","two","six");
@@ -1029,7 +1029,7 @@ sub test_missingElements {
     $this->assert_deep_equals( [TWiki::UI::Register::_missingElements(\@present, \@present)], []);
 }
 
-sub test_bulkRegister {
+sub detest_bulkRegister {
     my $this = shift;
 
     my $testReg = <<'EOM';
@@ -1087,7 +1087,7 @@ EOM
     $this->assert_equals(0, scalar(@TWikiFnTestCase::mails));
 }
 
-sub test_buildRegistrationEmail {
+sub detest_buildRegistrationEmail {
     my ($this) = shift;
 
     my %data = (
@@ -1185,7 +1185,7 @@ sub visible {
  $a;
 }
 
-sub test_disabled_registration {
+sub detest_disabled_registration {
     my $this = shift;
     $TWiki::cfg{Register}{EnableNewUserRegistration} = 0;
     $TWiki::cfg{Register}{NeedVerification}  =  0;
@@ -1238,6 +1238,71 @@ sub test_disabled_registration {
         my $e = shift;
         $this->assert(0, "expected registration_disabled, got ".$e->stringify().' {'.$e->{template}.'}  {'.$e->{def}.'} '.ref($e));
     }
+}
+
+# "All I want to do for this installation is register with my wiki name
+# and use that as my login name, so I can log in using the template login."
+# {Register}{AllowLoginName} = 0
+# {Register}{NeedVerification} = 0
+# {Register}{EnableNewUserRegistration} = 1
+# {LoginManager} = 'TWiki::LoginManager::TemplateLogin'
+# {PasswordManager} = 'TWiki::Users::HtPasswdUser'
+sub test_3951 {
+    my $this = shift;
+    $TWiki::cfg{Register}{AllowLoginName} = 0;
+    $TWiki::cfg{Register}{NeedVerification} = 0;
+    $TWiki::cfg{Register}{EnableNewUserRegistration} = 1;
+    $TWiki::cfg{LoginManager} = 'TWiki::LoginManager::TemplateLogin';
+    $TWiki::cfg{PasswordManager} = 'TWiki::Users::HtPasswdUser';
+    my $query = new CGI ({
+                          'TopicName' => [
+                                          'TWikiRegistration'
+                                         ],
+                          'Twk1Email' => [
+                                          $this->{new_user_email}
+                                         ],
+                          'Twk1WikiName' => [
+                                             $this->{new_user_wikiname}
+                                            ],
+                          'Twk1Name' => [
+                                         $this->{new_user_fullname}
+                                        ],
+                          'Twk0Comment' => [
+                                            ''
+                                           ],
+                          'Twk1FirstName' => [
+                                              $this->{new_user_fname}
+                                             ],
+                          'Twk1LastName' => [
+                                             $this->{new_user_sname}
+                                            ],
+                          'action' => [
+                                       'register'
+                                      ]
+                         });
+
+    $query->path_info( "/$this->{users_web}/TWikiRegistration" );
+    $this->{twiki}->finish();
+    $this->{twiki} = new TWiki( $TWiki::cfg{DefaultUserLogin}, $query);
+    $this->{twiki}->{net}->setMailHandler(\&TWikiFnTestCase::sentMail);
+
+    try {
+        TWiki::UI::Register::register_cgi($this->{twiki});
+    } catch TWiki::OopsException with {
+        my $e = shift;
+        $this->assert_str_equals("attention", $e->{template},$e->stringify());
+        $this->assert_str_equals("thanks", $e->{def}, $e->stringify());
+        my $encodedTestUserEmail =
+          TWiki::entityEncode($this->{new_user_email});
+        $this->assert_matches(qr/$encodedTestUserEmail/, $e->stringify());
+    } catch TWiki::AccessControlException with {
+        my $e = shift;
+        $this->assert(0, $e->stringify);
+    } catch Error::Simple with {
+        $this->assert(0, shift->stringify());
+    } otherwise {
+        $this->assert(0, "expected an oops redirect");
+    };
 }
 
 1;

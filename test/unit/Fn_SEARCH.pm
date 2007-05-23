@@ -406,7 +406,7 @@ sub test_attachmentSizeQuery2 {
 
     $this->set_up_for_queries();
     my $result = $this->{twiki}->handleCommonTags(
-        '%SEARCH{"attachments[?size > 10000]"'.$stdCrap,
+        '%SEARCH{"META:FILEATTACHMENT[?size > 10000]"'.$stdCrap,
         $this->{test_web}, $this->{test_topic});
     $this->assert_str_equals('QueryTopicTwo', $result);
 }
@@ -500,12 +500,14 @@ sub test_refQuery {
 
     $this->set_up_for_queries();
     my $result = $this->{twiki}->handleCommonTags(
-        '%SEARCH{"parent.name:Firstname ~ \'*mm?\'"'.$stdCrap,
+        '%SEARCH{"parent.name/(Firstname ~ \'*mm?\' AND Field2=2)"'.$stdCrap,
         $this->{test_web}, $this->{test_topic});
     $this->assert_str_equals('QueryTopicTwo', $result);
 }
 
-# make sure syntax errors are handled cleanly
+# make sure syntax errors are handled cleanly. All the error cases thrown by
+# the infix parser are tested more thoroughly in Fn_IF, and don't have to
+# be re-tested here.
 sub test_badQuery1 {
     my $this = shift;
 

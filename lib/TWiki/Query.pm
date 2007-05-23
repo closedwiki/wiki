@@ -24,31 +24,51 @@ use base 'TWiki::InfixParser::Node';
 # 1 for debug
 sub MONITOR_EVAL { 0 };
 
-use vars qw ( %metaDataTypes );
+=pod
 
-# map of reserved names to their meta-data type
-%metaDataTypes = (
-    attachments => 'FILEATTACHMENT',
-    fields => 'FIELD',
-    info => 'TOPICINFO',
-    parent => 'TOPICPARENT',
-    moved => 'TOPICMOVED',
-    form => 'FORM',
+---++ PUBLIC $aliases
+A hash mapping short aliases for META: entry names. For example, this hash
+maps 'form' to 'META:FORM'. Published so extensions can extend the range
+of supported types.
+
+---++ PUBLIC %isArrayType
+Maps META: entry type names to true if the type is an array type (such as
+FIELD, ATTACHMENT or PREFERENCE). Published so extensions can extend the range
+or supported types. The type name should be given without the leading 'META:'
+
+=cut
+
+use vars qw ( %aliases %isArrayType );
+
+%aliases = (
+    attachments => 'META:FILEATTACHMENT',
+    fields      => 'META:FIELD',
+    form        => 'META:FORM',
+    info        => 'META:TOPICINFO',
+    moved       => 'META:TOPICMOVED',
+    parent      => 'META:TOPICPARENT',
+    preferences => 'META:PREFERENCE',
    );
+
+%isArrayType =
+  map { $_ => 1 } qw( FILEATTACHMENT FIELD PREFERENCE );
 
 sub _getField {
     my( $this, $data, $field ) = @_;
 
     my $result;
     if (ref($data) eq 'TWiki::Meta') {
-        if( $metaDataTypes{$field} ) {
-            $field = $metaDataTypes{$field};
-            if ($field eq 'FILEATTACHMENT' || $field eq 'FIELD') {
+        my $realField = $field;
+        if( $aliases{$field} ) {
+            $realField = $aliases{$field};
+        }
+        if ($realField =~ s/^META://) {
+            if ($isArrayType{$realField}) {
                 # Array type, have to use find
-                my @e = $data->find( $field );
+                my @e = $data->find( $realField );
                 $result = \@e;
             } else {
-                $result = $data->get( $field );
+                $result = $data->get( $realField );
             }
         } else {
             my $form = $data->get( 'FORM' );
@@ -170,12 +190,12 @@ my @operators = (
         },
     },
     {
-        name => ':',
+        name => '/',
         prec => 700,
         arity => 2,
         exec => sub {
             my( $domain, $a, $b ) = @_;
-            # SMELL: private fields in meta
+            # SMELL: accessing private fields in meta
             my $session = $domain->[1]->{_session};
             my $topic = $domain->[1]->{_topic};
 
@@ -208,6 +228,7 @@ my @operators = (
                 };
             }
             return undef unless scalar( @result );
+            return $result[0] if scalar(@result) == 1;
             return \@result;
         },
     },
@@ -259,7 +280,7 @@ sub new {
 
     my $this = $class->SUPER::new(
         'TWiki::Query', \@operators,
-        words => qr/\w+/);
+        words => qr/[A-Z][A-Z0-9_:]*/i);
     return $this;
 }
 

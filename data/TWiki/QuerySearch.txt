@@ -17,7 +17,7 @@ in.
 
 All meta-data in a topic is referenced according to a to a simple plan.
  
-   * =attachments= (FILEATTACHMENT)
+   * =META:FILEATTACHMENT=
       * _for each attachment_
          * =name=
          * =attr=
@@ -28,43 +28,56 @@ All meta-data in a topic is referenced according to a to a simple plan.
          * =rev=
          * =date=
          * =comment=
-   * =parent= (TOPICPARENT)
+   * =META:TOPICPARENT=
       * =name=
-   * =info= (TOPICINFO)
+   * =META:TOPICINFO=
       * =author=
       * =date=
       * =format=
       * =version=
-   * =moved= (TOPICMOVED)
+   * =META:TOPICMOVED=
       * =by=
       * =date=
       * =from=
       * =to=
-   * =form= (FORM) - the name of the main form of the topic
+   * =META:FORM= - the main form of the topic
       * =name= (known as the _formname_)
-   * =fields= (FIELD) - the fields in the form. You can also use the name of the form (the value of =form.name= e.g. =PersonForm=)
+   * =META:FIELD= - the fields in the form. You can also use the name of the form (the value of =META:FORM.name= e.g. =PersonForm=)
       * _for each field in the form_
          * =name=
          * =title=
          * =value=
+   * =META:PREFERENCE=
+      * _for each preference in the topic_
+         * =name=
+         * =value=
 
-See TWikiMetaData for details of what all these fields mean. =attachments= and =fields= are both _arrays_, which means they can have any number of records under them.
+See TWikiMetaData for details of what all these entries mean. =attachments= and =fields= are both _arrays_, which means they can have any number of records under them.
+
+It's a bit clumsy having to type =META:FILEATTACHMENT= every time you want to refer to the array of attachments in a topic, so there are some predefined aliases that make for a bit less typing:
+   * =attachments= means the same as =META:FILEATTACHMENT=
+   * =info= means the same as =META:TOPICINFO=
+   * =parent= means the same as =META:TOPICPARENT=
+   * =moved= means the same as =META:TOPICMOVED=
+   * =form= means the same as =META:FORM=
+   * =fields= means the same as =META:FIELD=
+   * =preferences= means the same as =META:PREFERENCE=
 
 This plan is referenced using a simple syntax:
-| =X= | will get the field named =X=. For example, =info=, =moved= or =attachments=. |
-| =X.Y= | will get the subfield =Y= of the field named =X=. For example =info.date=, =moved.by=, =parent.name= |
-| =X[N]= | will get the Nth element of an array. N starts at 0. For example, =attachments[4]= will get the fifth attachment in the list. |
-| =X[WHERE <i>query</i>]= | will get all the elements of the array =X= that match _query_ - for example, =attachments[WHERE size>1024]=. _query_ can be as complex as you like; for example, =DocumentForm[WHERE name!='Summary' AND value~'top secret'].value=. =[?= is a synonym for =[WHERE=. |
-| =X:Y= | will get the value of the field specified by =Y= from the topic specified by the _value_ of =X=. =X= must evaluate to a topic name, and =Y= to a query to be applied to that topic. For example, =parent.name:form.name='ExampleForm'= will evaluate to true if (1) the topic has a parent, (2) the parent topic has the main form type =ExampleForm=. |
+| =X= | refers to the field named =X=. For example, =info=, =META:TOPICMOVED= or =attachments=. |
+| =X.Y= | refers to the subfield =Y= of the field named =X=. For example =info.date=, =moved.by=, =META:TOPICPARENT.name= |
+| =X[N]= | refers to the Nth element of an array. N starts at 0. For example, =attachments[4]= will get the fifth attachment in the list. |
+| =X[WHERE <i>query</i>]= | refers to all the elements of the array =X= that match _query_ - for example, =attachments[WHERE size>1024]=. _query_ can be as complex as you like; for example, =DocumentForm[WHERE name!='Summary' AND value~'top secret'].value=. =[?= is a synonym for =[WHERE=. |
+| =X/Y= | refers to the field the field specified by =Y= from the topic specified by the _value_ of =X=. =X= must evaluate to a topic name, and =Y= to a query to be applied to that topic. For example, =parent.name/(form.name='ExampleForm')= will evaluate to true if (1) the topic has a parent, (2) the parent topic has the main form type =ExampleForm=. |
 
-Note: at some point TWiki may support multiple forms in the same topic. For this reason you are recommended *not* to use the =fields= keyword when accessing form fields, but always use the name of the form.
+Note: at some point TWiki may support multiple forms in the same topic. For this reason you are recommended *not* to use the =fields= keyword when accessing form fields, but always use the name of the form instead.
 
-There is a shortcut for accessing form fields. The syntax =X= will evaluate to =<i>field</i>[WHERE name=X].value=, if and only if =X= doesn't match another field name. For example, the following expressions will all evaluate to the same value(s)
+There is a shortcut for accessing form fields. The syntax =X= will evaluate to =<i>fields</i>[WHERE name='X'].value=, if and only if =X= isn't one of the entry names or their aliases described above. For example, the following expressions will all evaluate to the same value(s)
    * =fields[WHERE name='Lastname'].value=
    * =PersonForm[WHERE name='Lastname'].value=
    * =Lastname=
    * =PersonForm.Lastname=
-If =X= would conflict with the name of a top level field in the topic, you can prepend the name of the form to protect it. 
+If =X= would conflict with the name of an entry or alias (e.g. it's =moved= or maybe =parent=), you can prepend the name of the form followed by a dot, as shown in the last example. 
 
 ---++ Constants
 You use constants for the values that you compare with fields. Constants are either strings, or numbers. Strings are always delimited by single-quotes (you can escape a quote using backslash). Numbers can be any integer or floating point number. 
@@ -103,7 +116,8 @@ A query matches if the query returns one or more values when it is applied to th
    * =(Firstname='Emma' OR Firstname='John') AND Lastname='Peel'= - shortcut form of the previous query
    * =History<nop>Form[WHERE name='Age'].value>2= - true if the topic has a =HistoryForm=, and the form has a field called =Age= with a value > 2
    * =History<nop>Form.Age > 2= - shortcut for the previous query
-   * =Person:ClothesForm[WHERE name='Headgear'].value ~ '*Bowler Hat*'= - true if the form attached to the topic has a field called =Person= that has a value that is the name of a topic, and that topic contains the form =ClothesForm=, with a field called =Headgear=, which has a value that contains the string ='Bowler Hat'=. (Phew!)
+   * =preferences[WHERE name='FaveColour' AND value='Tangerine'] - true if the topic has the given preference setting and value
+   * =Person/(ClothesForm[WHERE name='Headgear'].value ~ '*Bowler*' AND attachments[WHERE name~'*hat.gif' AND date < d2n('2007-01-01')])= - true if the form attached to the topic has a field called =Person= that has a value that is the name of a topic, and that topic contains the form =ClothesForm=, with a field called =Headgear=, and the value of that field contains the string ='Bowler'=, and the topic also has at least one attachment that has a name matching =*hat.gif= and a date before 1st Jan 2007. (Phew!)
 
 ---+++ Search examples
 Find all topics that are children of this topic in the current web
@@ -132,8 +146,8 @@ bexpr ::= uexpr [ bop bexpr ] ;
 bop :: = '>' | '<' | '<=' | '>=' | '!=' | '~' | '=' ;
 uexpr ::= uop ref | ref ;
 uop ::= 'lc' | 'uc' | 'd2n' ;
-ref ::= specifier [ ':' ref ] ;
-specifier ::= terminal '.' specifier | terminal '[' [ '?' ] query ']';
+ref ::= specifier [ '/' ref ] ;
+specifier ::= terminal '.' specifier | terminal '[' [ '?' | 'WHERE' ] query ']';
 terminal ::= '(' query ')' | string | name ;
 name ::= a string of alphanumberic characters and underscores ;
 string ::= any string of characters in single quotes
