@@ -84,7 +84,7 @@ sub getUrl {
     }
     my $req = "GET $path HTTP/1.0\r\nHost: $host\r\nUser-agent: TWikiConfigure/1.0 +http://twiki.org/\r\n\r\n";
     if ($TWiki::cfg{PROXY}{HOST} && $TWiki::cfg{PROXY}{PORT}) {
-        $req = "GET http://$host:$port$path HTTP/1.0\r\n\r\n";
+        $req = "GET http://$host:$port$path HTTP/1.0\r\nUser-agent: TWikiConfigure/1.0 +http://twiki.org/\r\n\r\n";
         $host = $TWiki::cfg{PROXY}{HOST};
         $port = $TWiki::cfg{PROXY}{PORT};
     }
