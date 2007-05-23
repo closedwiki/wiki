@@ -233,8 +233,16 @@ sub addUser {
     }
 
     my $store = $this->{session}->{store};
-    my( $meta, $text ) = $store->readTopic(
-        undef, $TWiki::cfg{UsersWebName}, $TWiki::cfg{UsersTopicName} );
+    my( $meta, $text );
+
+    if( $store->topicExists( $TWiki::cfg{UsersWebName},
+                             $TWiki::cfg{UsersTopicName} )) {
+        ( $meta, $text ) = $store->readTopic(
+            undef, $TWiki::cfg{UsersWebName}, $TWiki::cfg{UsersTopicName} );
+    } else {
+        ( $meta, $text ) = $store->readTopic(
+            undef, $TWiki::cfg{UsersWebName}, 'TWikiUsersTemplate' );
+    }
 
     my $result = '';
     my $entry = "   * $wikiname - ";

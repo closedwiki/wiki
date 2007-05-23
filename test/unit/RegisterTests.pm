@@ -176,7 +176,7 @@ sub registerAccount {
     };
 }
 
-sub detest_userTopicWithPMWithoutForm {
+sub test_userTopicWithPMWithoutForm {
     my $this = shift;
     $this->registerAccount();
     my( $meta, $text ) = $this->{twiki}->{store}->readTopic(
@@ -192,7 +192,7 @@ sub detest_userTopicWithPMWithoutForm {
     $this->assert_matches(qr/\s*AFTER\s*/, $text);
 }
 
-sub detest_userTopicWithoutPMWithoutForm {
+sub test_userTopicWithoutPMWithoutForm {
     my $this = shift;
     # Switch off the password manager to force email to be written to user
     # topic
@@ -212,7 +212,7 @@ sub detest_userTopicWithoutPMWithoutForm {
     $this->assert_matches(qr/\s*AFTER\s*/, $text);
 }
 
-sub detest_userTopicWithoutPMWithForm {
+sub test_userTopicWithoutPMWithForm {
     my $this = shift;
     # Switch off the password manager to force email to be written to user
     # topic
@@ -279,7 +279,7 @@ EOF
     $this->assert_matches(qr/^\s*$/s, $text);
 }
 
-sub detest_userTopicWithPMWithForm {
+sub test_userTopicWithPMWithForm {
     my $this = shift;
 
     # Change the new user topic to include the form
@@ -435,7 +435,7 @@ sub registerVerifyOk {
 }
 
 #Register a user, then give a bad verification code. It should barf.
-sub detest_registerBadVerify {
+sub test_registerBadVerify {
     my $this = shift;
     $TWiki::cfg{Register}{NeedVerification}  =  1;
     my $query = new CGI ({
@@ -531,7 +531,7 @@ sub detest_registerBadVerify {
 
 # Register a user with verification explicitly switched off
 # (SUPER's tear_down will take care for re-installing %TWiki::cfg)
-sub detest_registerNoVerifyOk {
+sub test_registerNoVerifyOk {
     my $this = shift;
     $TWiki::cfg{Register}{NeedVerification}  =  0;
     my $query = new CGI ({
@@ -605,7 +605,7 @@ sub detest_registerNoVerifyOk {
 
 
 # Register a user with a password which is too short - must be rejected
-sub detest_rejectShortPassword {
+sub test_rejectShortPassword {
     my $this = shift;
     $TWiki::cfg{Register}{NeedVerification}  =  0;
     $TWiki::cfg{MinPasswordLength}           =  6;
@@ -650,7 +650,7 @@ sub detest_rejectShortPassword {
 }
 
 # Register a user with a password which is too short
-sub detest_shortPassword {
+sub test_shortPassword {
     my $this = shift;
     $TWiki::cfg{Register}{NeedVerification}  =  0;
     $TWiki::cfg{MinPasswordLength}           =  6;
@@ -701,7 +701,7 @@ sub detest_shortPassword {
 # Verifies: Most of the things which are verified during normal
 #           registration with Verification, plus Oops for
 #           duplicate verification
-sub detest_duplicateActivation {
+sub test_duplicateActivation {
     my $this = shift;
 
     # Start similar to registration with verification
@@ -792,7 +792,7 @@ sub detest_duplicateActivation {
 ################################################################################
 ################################ RESET PASSWORD TESTS ##########################
 
-sub detest_resetPasswordOkay {
+sub test_resetPasswordOkay {
     my $this = shift;
 
     ## Need to create an account (else oopsnotwikiuser)
@@ -838,7 +838,7 @@ sub detest_resetPasswordOkay {
     $this->assert_matches(qr/To: .*\b$this->{new_user_email}/,$mess);
 }
 
-sub detest_resetPasswordNoSuchUser {
+sub test_resetPasswordNoSuchUser {
     my $this = shift;
     # This time we don't set up the testWikiName, so it should fail.
 
@@ -879,7 +879,7 @@ sub detest_resetPasswordNoSuchUser {
 }
 
 
-sub detest_resetPasswordNeedPrivilegeForMultipleReset {
+sub test_resetPasswordNeedPrivilegeForMultipleReset {
     my $this = shift;
     # This time we don't set up the testWikiName, so it should fail.
 
@@ -924,7 +924,7 @@ sub detest_resetPasswordNeedPrivilegeForMultipleReset {
 
 # This test make sure that the system can't reset passwords
 # for a user currently absent from .htpasswd
-sub detest_resetPasswordNoPassword {
+sub test_resetPasswordNoPassword {
     my $this = shift;
 
     $this->registerAccount();
@@ -994,7 +994,7 @@ Once complete, try again - the second attempt at completion should fail.
 
 =cut
 
-sub detest_UnregisteredUser {
+sub test_UnregisteredUser {
     my $this = shift;
 
     TWiki::UI::Register::_putRegDetailsByCode($regSave, $TWiki::cfg{RegistrationApprovals});
@@ -1019,7 +1019,7 @@ sub detest_UnregisteredUser {
     $this->assert_equals(0, scalar(@TWikiFnTestCase::mails));
 }
 
-sub detest_missingElements {
+sub test_missingElements {
     my $this = shift;
     my @present = ("one","two","three");
     my @required = ("one","two","six");
@@ -1029,7 +1029,7 @@ sub detest_missingElements {
     $this->assert_deep_equals( [TWiki::UI::Register::_missingElements(\@present, \@present)], []);
 }
 
-sub detest_bulkRegister {
+sub test_bulkRegister {
     my $this = shift;
 
     my $testReg = <<'EOM';
@@ -1087,7 +1087,7 @@ EOM
     $this->assert_equals(0, scalar(@TWikiFnTestCase::mails));
 }
 
-sub detest_buildRegistrationEmail {
+sub test_buildRegistrationEmail {
     my ($this) = shift;
 
     my %data = (
@@ -1185,7 +1185,7 @@ sub visible {
  $a;
 }
 
-sub detest_disabled_registration {
+sub test_disabled_registration {
     my $this = shift;
     $TWiki::cfg{Register}{EnableNewUserRegistration} = 0;
     $TWiki::cfg{Register}{NeedVerification}  =  0;
