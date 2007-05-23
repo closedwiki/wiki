@@ -76,12 +76,13 @@ To build and install the module:
 cd lib/twiki-dav
 ./configure
 make
+make install
 </verbatim>
 Fuller instructions are given at http://webdav.org/mod_dav/install.html
 
 ---+++ Configure the Plugin & Publish Directories
 
-Edit lib/LocalSite.cfg= and add the following setting:
+Edit =lib/LocalSite.cfg= and add the following setting:
 <verbatim>
 # **PATH**
 # Set to point to the same directory as your DAVLockDB directive in httpd.conf.
@@ -92,7 +93,7 @@ $TWiki::cfg{Plugins}{WebDAVPlugin}{DAVLockDB} = '/var/lock/webdav';
 
 Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
 
-To enable the TWiki-specific functions of twiki-dav, edit your =httpd.conf= and set up appropriate =Alias=es to point at your TWiki directories (see example below). Add &lt;Location> sections for your TWiki directories, and add the following directives.
+To enable the TWiki-specific functions of twiki-dav, edit your =httpd.conf= and set up appropriate =Alias= entries to point at your TWiki directories (see example below). Add &lt;Location> sections for your TWiki directories, and add the following directives.
    * =DAV<nop>LockDB= tells twiki_dav where to look for the TWiki permissions database, and must be the same as the {Plugins}{WebDAVPlugin}{DAVLockDB} setting in =configure=. *It must point to a directory that already exists* - create it if necessary, making sure the Apache user can read and write to it.
 	* =DAV= is the standard DAV directive for enabling DAV on the directory.
 	* =TWikiDir= defines the type of the directory (pub or data), and the server path to the directory after the URI has been resolved. It should be the same as the last parameter to the Alias directive.
