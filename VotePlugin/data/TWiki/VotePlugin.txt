@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1139390324" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1179949934" format="1.1" version="$Rev$"}%
 <!--
 
    PLEASE DO NOT EDIT THIS TOPIC
@@ -15,14 +15,7 @@ collected in a separate file. Inspired by the TWiki:Plugins/PollPlugin.
 ---++ Example
 %VOTE{id="FavouriteMeal" select1="Drink" options1="Beer,Wine,Milk,Water" select2="Food" options2="Steak,Bread,Pasta,Pizza"}%
 
-<style type="text/css">
-.Vote {
-  margin-left:20px;
-}
-.VoteSelect {
-  margin-bottom:10px;
-}
-</style>
+%VOTE{id="Jazzers" stars1="Herbie Mann" stars2="Horace Silver" stars3="Thelonious Monk"}%
 
 ---++ Syntax Rules
 
@@ -45,8 +38,9 @@ Each select&lt;n&gt; must have a corresponding set of options that \
 the voter will select from. | =Beer,Wine,Milk= |
 | =global= | If set to ="on"=, this makes the =id= global in your TWiki. \
 Votes with global id's accumulate; the same id in two topics are \
-effectively both the same vote. |
-| =open= | Normally votes are recorded anonymously i.e. the database does *not* record who voted. If this option is set to ="on"=, then the database will record who voted. | 
+effectively both the same vote. | |
+| =open= | Normally votes are recorded anonymously i.e. the database does *not* record who voted. If this option is set to ="on"=, then the database will record who voted. | |
+
 =select= and =option= can use the pseudo variables =$percnt=, =$dollar=, 
 =$quote= and =$doublequote= to render the respective characters in the vote
 output.
@@ -80,7 +74,7 @@ The weighting topic applies to all votes in the scope of the =%<nop>VOTEPLUGIN_W
    * Set SHORTDESCRIPTION = Simple way to count votes
 -->
 |  Plugin Author: | TWiki:Main/MichaelDaum |
-|  Copyright &copy;: | 2005-2006, Michael Daum |
+|  Copyright &copy;: | 2005-2007, Michael Daum http://wikiring.de |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | v1.32 |
 |  Change History: | &nbsp; | 

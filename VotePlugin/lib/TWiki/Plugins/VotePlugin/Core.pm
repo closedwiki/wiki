@@ -17,28 +17,36 @@
 package TWiki::Plugins::VotePlugin::Core;
 
 ###############################################################################
-use vars qw($debug $isInitialized);
+use vars qw($debug $isInitialized $pubUrlPath);
 
 use strict;
 use Digest::MD5 qw(md5_base64);
 use Fcntl qw(:flock);
+use CGI;
 
-my $purl;
+$debug = 0; # toggle me
 
 ###############################################################################
 sub handleVote {
     my ($session, $params, $topic, $web) = @_;
 
-    unless ($purl) {
-        $purl = TWiki::Func::getPubUrlPath().'/'.TWiki::Func::getTwikiWebname().'/VotePlugin';
+    unless ($pubUrlPath) {
+        $pubUrlPath = TWiki::Func::getPubUrlPath().'/'.TWiki::Func::getTwikiWebname().'/VotePlugin';
     }
+
+    TWiki::Func::addToHEAD('VotePlugin_STARS', <<HEAD);
+<link href="$pubUrlPath/voting.css" rel="stylesheet" type="text/css" media="screen" />
+<script type='text/javascript' src='$pubUrlPath/voting.js' />
+HEAD
 
     my $id =       $params->{id}      || '_default';
     my $isGlobal = $params->{global}  || 0;
     my $isOpen =   $params->{open}    || 0;
 
     if (defined TWiki::Func::getCgiQuery()->param('register_vote')) {
-        _vote($web, $topic, $id);
+      registerVote($web, $topic, $id);
+    } else {
+      #print STDERR "no register_vote\n";
     }
 
     my @prompts = ();
@@ -93,8 +101,6 @@ sub handleVote {
     my $votesFile = getVotesFile($web, $topic, $id, $isGlobal);
     my %votes;
 
-    my $user = TWiki::Func::getWikiUserName();
-
     my %lastVote;
     if (open(VOTES, "<$votesFile")) {
         local $/ = "\n";
@@ -131,6 +137,11 @@ sub handleVote {
 
     my $needSubmit = !(scalar(@prompts) == 1 &&
                          $prompts[0]->{type} eq 'stars');
+    # SMELL: the current javascript does not support selecting
+    # multiple votes and submit them all in one
+    $needSubmit = 0; # kill this line if that's implemented
+
+
     my $act = TWiki::Func::getScriptUrl($web, $topic, 'viewauth');
     my $rows = '';
     foreach my $prompt (@prompts) {
@@ -153,8 +164,8 @@ sub handleVote {
                 }
             }
             my $myLastVote =
-              $lastVote{TWiki::Func::getWikiUserName()}{$key} || 0;
-            $row .= CGI::td({colspan=>2}, lineOfStars(
+              $lastVote{getIdent($isOpen)}{$key} || 0;
+            $row .= CGI::td(lineOfStars(
                 $id, $prompt, $needSubmit, $act,
                 $average, $myLastVote, $totalVoters));
         }
@@ -177,12 +188,12 @@ sub handleVote {
     }
     if ($needSubmit) {
         $rows .= CGI::Tr(CGI::td(
-            { colspan => 3},
+            { colspan => 2},
             CGI::submit(
                 { name=> 'OK', value=>'OK',
                   style=>'color:green'})));
     }
-    my $result = CGI::table({border=>2},$rows);
+    my $result = CGI::table({class=>'twikiTable voteTable'},$rows);
     $result .= CGI::input({type=>'hidden',
                            name=>'register_vote', value=>$id});
     $result .= CGI::input({type=>'hidden',
@@ -190,12 +201,13 @@ sub handleVote {
     $result .= CGI::input({type=>'hidden',
                            name=>'isSecret', value=>!$isOpen});
 
-    $result = CGI::form(
-        { name => $id, id => $id, action => $act, method=>'post' }, $result);
+    # why is CGI::form not part of my CGI.pm?
+    $result = "<form id='$id' action='$act' method='post'>".$result.'</form>';
 
     return "<literal>\n$result\n</literal>";
 }
 
+###############################################################################
 sub chartResult {
     my ($key, $keyValueFreq, $totalVotes, $params) = @_;
     my $color =    $params->{color}   || '';
@@ -219,23 +231,23 @@ sub chartResult {
         }
         my $data = '';
         if ($style =~ /bar/) {
-            my $graph = CGI::img({src=>$purl.'/leftbar.gif',
+            my $graph = CGI::img({src=>$pubUrlPath.'/leftbar.gif',
                                   alt=>"leftbar",
                                   height=>"14"});
-            $graph .= CGI::img({src=>$purl.'/mainbar.gif',
+            $graph .= CGI::img({src=>$pubUrlPath.'/mainbar.gif',
                                 alt=>"mainbar",
                                 height=>14,
                                 width=>($width/100*$perc)});
-            $graph .= CGI::img({src=>$purl.'/rightbar.gif',
+            $graph .= CGI::img({src=>$pubUrlPath.'/rightbar.gif',
                                   alt=>"leftbar",
                                   height=>"14"});
             $row .= CGI::td({
-                style=>'white-space:nowrap;border:0;'.
+                style=>'white-space:nowrap;border:0px;'.
                   ($bgcolor ? "background:$bgcolor;" : '').
                     ($color ? "color:$color;" : '')}, $graph);
             $row .= CGI::td({
                 align=>"left",
-                style=> 'white-space:nowrap;border:0;'.
+                style=> 'white-space:nowrap;border:0px;'.
                   ($bgcolor ? "background:$bgcolor;" : '').
                     ($color ? "color:$color;" : '')}, $totals);
         } else {
@@ -246,13 +258,14 @@ sub chartResult {
         }
         $rows .= CGI::Tr($row);
     }
-    return CGI::table({border=>2, width => '100%'}, $rows);
+    return CGI::table({width => '100%'}, $rows);
 }
 
 ###############################################################################
-# called by the vote cgi to register a vote
-sub _vote {
+sub registerVote {
     my ($web, $topic, $id) = @_;
+
+    #print STDERR "called registerVote()\n";
 
     # check parameters
     my $query = TWiki::Func::getCgiQuery();
@@ -270,10 +283,10 @@ sub _vote {
 
     my $date = getLocaldate();
     my $user = TWiki::Func::getWikiUserName();
-    my $ident = $user;
-    if ($query->param('isSecret')) {
-        $ident = md5_base64("$ENV{REMOTE_ADDR}$ident$date");
-    }
+    my $isOpen = ($query->param('isSecret'))?0:1;
+    my $ident = getIdent($isOpen, $user, $date);
+    $ident = int(rand(100)) 
+      if $debug; # for testing
 
     # Apply a weighting for the voting user
     my $weightsTopic = TWiki::Func::getPreferencesValue(
@@ -301,7 +314,7 @@ sub _vote {
     foreach my $key ($query->param()) {
         my $val = $query->param($key);
         next unless $key =~ s/^voteplugin_//;
-        print VOTES "|$key=$val"
+        print VOTES "|$key=$val";
     }
     print VOTES "\n";
 
@@ -392,18 +405,32 @@ sub expandVars {
 }
 
 ###############################################################################
+sub getIdent {
+    my ($isOpen, $user, $date) = @_;
+
+    $user ||= TWiki::Func::getWikiUserName();
+    $date ||= getLocaldate();
+
+    my $ident = $user;
+
+    $ident = md5_base64("$ENV{REMOTE_ADDR}$user$date") 
+      unless $isOpen;
+
+    return $ident;
+}
+
+###############################################################################
 sub lineOfStars {
     my ($form, $prompt, $needSubmit, $act, $count, $myLast, $total) = @_;
-    TWiki::Func::addToHEAD('VotePlugin_STARS', <<HEAD);
-<link href="$purl/voting.css" rel="stylesheet" type="text/css" media="screen" /><script type='text/javascript' src='$purl/voting.js' />
-HEAD
     my $width = 25 * scalar(@_);
     my $row = '';
     for (1..$prompt->{width}) {
-        my $class = ($_ > $count) ? 'clear' : 'set';
-        $row .= CGI::td({
+        my $class = ($_ > $count) ? 'voteClear' : 'voteSet';
+        $row .= CGI::td(CGI::a({
             class=>$class,
-            onclick=>"javascript:VotePlugin_clicked('$form', '$prompt->{name}', $_)"});
+            title=>$_,
+            href=>"javascript:VotePlugin_clicked('$form', '$prompt->{name}', $_);"}
+          ));
     }
 
     $row .= CGI::td(
@@ -413,7 +440,7 @@ HEAD
              id => "${form}_$prompt->{name}",
              value => $count})
             . CGI::small("My last vote $myLast, Total voters $total"));
-    return CGI::table({class=>'starrating'}, CGI::Tr($row));
+    return CGI::table({class=>'voteStarRating'}, CGI::Tr($row));
 }
 
 1;

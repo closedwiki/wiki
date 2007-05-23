@@ -1,18 +1,21 @@
-.starrating table {
-	margin: 0;
-	padding: 0;
-	border: 0;
+.voteStarRating {
+  margin: 0;
+  padding: 0;
+  border: 0;
 }
-.starrating td.clear {
-	background: url(http://daphne/MAIN/pub/TWiki/VotePlugin/alt_star.gif) top left repeat-x;
-    width: 25px;
-    height: 25px;	
+.voteClear {
+  background:url(alt_star.gif) top left repeat-x;
+  width: 25px;
+  height: 25px;	
+  float:left;
 }
-.starrating td.set {
-	background: url(http://daphne/MAIN/pub/TWiki/VotePlugin/alt_star.gif) center left repeat-x;		
-    width: 25px;
-    height: 25px;	
+.voteSet {
+  background:url(alt_star.gif) center left repeat-x;		
+  width: 25px;
+  height: 25px;	
+  float:left;
 }
-.starrating td:hover {
-	background: url(http://daphne/MAIN/pub/TWiki/VotePlugin/alt_star.gif) bottom left repeat-x;		
+.voteClear:hover,
+.voteSet:hover {
+  background:url(alt_star.gif) bottom left repeat-x;		
 }
