@@ -1,6 +1,7 @@
 # Release manifest for TWikiUserMappingContrib
 data/TWiki/TWikiUserMappingContrib.txt 0644 Documentation
 lib/TWiki/Contrib/TWikiUserMappingContrib.pm 0644 Perl module
+lib/TWiki/Users/TWikiUserMapping.pm 0644 Perl module
 
 
 #TWiki Topic based Usermapping topics
@@ -10,7 +11,7 @@ data/Main/UserForm.txt
 data/Main/UserListHeader.txt
 data/Main/UserViewTemplate.txt
 data/Main/NobodyGroup.txt
-data/Main/TWikiUsers.txt
+data/Main/TWikiUsersTemplate.txt 0444 Template for a new TWikiUsers topic
 data/Main/UserList.txt
 data/Main/UserListByDateJoined.txt
 data/Main/TWikiAdminGroup.txt
