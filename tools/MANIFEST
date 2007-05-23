@@ -559,7 +559,6 @@ lib/TWiki/Users.pm 0444
 lib/TWiki/Users/ApacheHtpasswdUser.pm 0444
 lib/TWiki/Users/HtPasswdUser.pm 0444
 lib/TWiki/Users/Password.pm 0444
-lib/TWiki/Users/TWikiUserMapping.pm 0444
 locale/TWiki.pot 0444
 locale/cs.po 0444
 locale/da.po 0444
