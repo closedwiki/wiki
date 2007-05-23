@@ -37,7 +37,9 @@ use vars qw( $translationToken
   @isoMonth %mon2num $initSort $initDirection $currentSortDirection
   @rowspan $pluginAttrs $prefsAttrs $tableId $tableSummary $tableCaption
   $iconUrl $unsortEnabled
-  %sortDirection %columnType );
+  %sortDirection %columnType 
+  %useCss
+);
 
 BEGIN {
     $translationToken = "\0";
@@ -94,16 +96,17 @@ sub _setDefaults {
     $tableId        = '';
     $tableSummary   = '';
     $tableCaption   = '';
+    %useCss = {};
     undef $initSort;
 
-    _parseParameters($pluginAttrs);
-    _parseParameters($prefsAttrs);    # Preferences setting
+    _parseParameters($pluginAttrs, 0);
+    _parseParameters($prefsAttrs, 0);    # Preferences setting
 }
 
 # Table attributes defined as a Plugin setting, a preferences setting
 # e.g. in WebPreferences or as a %TABLE{...}% setting
 sub _parseParameters {
-    my ($args) = @_;
+    my ($args, $useCss) = @_;
 
     return '' unless ( defined($args) );
     return '' unless ( $args =~ /\S/ );
@@ -128,6 +131,7 @@ sub _parseParameters {
 
     $tmp = $params{tableborder};
     $tableBorder = $tmp if ( defined $tmp && $tmp ne '' );
+    $useCss{tableBorder} = 1 if $useCss && defined $tmp;
 
     $tmp = $params{tableframe};
     $tableFrame = $tmp if ( defined $tmp && $tmp ne '' );
@@ -143,18 +147,23 @@ sub _parseParameters {
 
     $tmp = $params{cellborder};
     $cellBorder = $tmp if ( defined $tmp && $tmp ne '' );
+    $useCss{cellBorder} = 1 if $useCss && defined $tmp;
 
     $tmp = $params{headeralign};
     @headerAlign = split( /,\s*/, $tmp ) if ( defined $tmp );
+    $useCss{headerAlign} = 1 if $useCss && defined $tmp;
 
     $tmp = $params{dataalign};
     @dataAlign = split( /,\s*/, $tmp ) if ( defined $tmp );
+    $useCss{dataAlign} = 1 if $useCss && defined $tmp;
 
     $tmp = $params{tablewidth};
     $tableWidth = $tmp if ( defined $tmp );
+    $useCss{tableWidth} = 1 if $useCss && defined $tmp;
 
     $tmp = $params{columnwidths};
     @columnWidths = split( /, */, $tmp ) if ( defined $tmp );
+    $useCss{columnWidths} = 1 if $useCss && defined $tmp;
 
     $tmp        = $params{headerrows};
     $headerRows = $tmp if ( defined $tmp && $tmp ne '' );
@@ -165,44 +174,55 @@ sub _parseParameters {
 
     $tmp = $params{valign};
     $vAlign = $tmp if ( defined $tmp );
+    $useCss{vAlign} = 1 if $useCss && defined $tmp;
 
     $tmp = $params{datavalign};
     $dataVAlign = $tmp if ( defined $tmp );
+    $useCss{dataVAlign} = 1 if $useCss && defined $tmp;
 
     $tmp = $params{headervalign};
     $headerVAlign = $tmp if ( defined $tmp );
+    $useCss{headerVAlign} = 1 if $useCss && defined $tmp;
 
     my $tmpheaderbg = $params{headerbg};
     $headerBg = $tmpheaderbg if ( defined $tmpheaderbg );
+    $useCss{headerBg} = 1 if $useCss && defined $tmpheaderbg;
 
     # only set headerbgsorted color if it is defined in %TABLE{}% attributes
     # otherwise use headerbg
     $tmp = $params{headerbgsorted};
     if ( defined $tmp ) {
         $headerBgSorted = $tmp;
+        $useCss{headerBgSorted} = 1 if $useCss;
     }
     elsif ( defined $tmpheaderbg ) {
         $headerBgSorted = $tmpheaderbg;
+        $useCss{headerBgSorted} = 1 if $useCss;
     }
 
     $tmp = $params{headercolor};
     $headerColor = $tmp if ( defined $tmp );
+    $useCss{headerColor} = 1 if $useCss && defined $tmp; 
 
     my $tmpdatabg = $params{databg};
     @dataBg = split( /,\s*/, $tmpdatabg ) if ( defined $tmpdatabg );
+    $useCss{dataBg} = 1 if $useCss && defined $tmpdatabg;
 
     # only set databgsorted color if it is defined in %TABLE{}% attributes
     # otherwise use databg
     $tmp = $params{databgsorted};
     if ( defined $tmp ) {
         @dataBgSorted = split( /,\s*/, $tmp );
+        $useCss{dataBgSorted} = 1 if $useCss;
     }
     elsif ( defined $tmpdatabg ) {
         @dataBgSorted = split( /,\s*/, $tmpdatabg );
+        $useCss{dataBgSorted} = 1 if $useCss;
     }
 
     $tmp = $params{datacolor};
     @dataColor = split( /,\s*/, $tmp ) if ( defined $tmp );
+    $useCss{dataColor} = 1 if $useCss && defined $tmp;
 
     $tmp = $params{id};
     $tableId = $tmp if ( defined $tmp );
@@ -294,7 +314,6 @@ sub _processTableRow {
 
     foreach ( split( /\|/, $theRow ) ) {
         my $attr = {};
-        $attr->{style} = '';
         $span = 1;
 
         #AS 25-5-01 Fix to avoid matching also single columns
@@ -323,7 +342,8 @@ sub _processTableRow {
             $attr->{width} = $columnWidths[$colCount];
 
             # CSS style
-            $attr->{style} .= 'width:' . $columnWidths[$colCount] . ';';
+            $attr->{style} .= 'width:' . $columnWidths[$colCount] . ';'
+              if $useCss{columnWidths};
         }
         if (/^\s*\^\s*$/) {    # row span above
             $rowspan[$colCount]++;
@@ -365,15 +385,18 @@ sub _processTableRow {
                     my $align =
                       @headerAlign[ $colCount % ( $#headerAlign + 1 ) ];
                     $attr->{align} = $align;
-                    $attr->{style} .= 'text-align:' . $align . ';';
+                    $attr->{style} .= 'text-align:' . $align . ';'
+                      if $useCss{headerAlign};
                 }
                 if ($headerVAlign) {
                     $attr->{valign} = $headerVAlign if $headerVAlign;
-                    $attr->{style} .= 'vertical-align:' . $headerVAlign . ';';
+                    $attr->{style} .= 'vertical-align:' . $headerVAlign . ';'
+                      if $useCss{headerVAlign};
                 }
                 elsif ($vAlign) {
                     $attr->{valign} = $vAlign;
-                    $attr->{style} .= 'vertical-align:' . $vAlign . ';';
+                    $attr->{style} .= 'vertical-align:' . $vAlign . ';'
+                      if $useCss{vAlign};
                 }
                 $type = 'th';
             }
@@ -385,15 +408,18 @@ sub _processTableRow {
                 if (@dataAlign) {
                     my $align = @dataAlign[ $colCount % ( $#dataAlign + 1 ) ];
                     $attr->{align} = $align;
-                    $attr->{style} .= 'text-align:' . $align . ';';
+                    $attr->{style} .= 'text-align:' . $align . ';'
+                      if $useCss{dataAlign};
                 }
                 if ($dataVAlign) {
                     $attr->{valign} = $dataVAlign if $dataVAlign;
-                    $attr->{style} .= 'vertical-align:' . $dataVAlign . ';';
+                    $attr->{style} .= 'vertical-align:' . $dataVAlign . ';'
+                      if $useCss{dataVAlign};
                 }
                 elsif ($vAlign) {
                     $attr->{valign} = $vAlign;
-                    $attr->{style} .= 'vertical-align:' . $vAlign . ';';
+                    $attr->{style} .= 'vertical-align:' . $vAlign . ';'
+                      if $useCss{vAlign};
                 }
                 $type = 'td';
             }
@@ -416,7 +442,8 @@ sub _processTableRow {
                 if ( $tableRules eq 'groups' && $type eq 'td' ) {
                     $theCellBorder = 0;
                 }
-                $attr->{style} .= 'border-width:' . $theCellBorder . 'px;';
+                $attr->{style} .= 'border-width:'.$theCellBorder.'px;' 
+                  if $useCss{cellBorder};
             }
 
             push @row, { text => $value, attrs => $attr, type => $type };
@@ -580,13 +607,15 @@ sub emitTable {
         border      => $tableBorder,
         cellspacing => $cellSpacing,
         cellpadding => $cellPadding,
-        style       => 'border-width:' . $tableBorder . 'px;'
     };
     $tattrs->{id}      = $tableId      if ($tableId);
     $tattrs->{summary} = $tableSummary if ($tableSummary);
     $tattrs->{frame}   = $tableFrame   if ($tableFrame);
     $tattrs->{rules}   = $tableRules   if ($tableRules);
     $tattrs->{width}   = $tableWidth   if ($tableWidth);
+    $tattrs->{style}   = 'border-width:'.$tableBorder.'px;' if $useCss{tableBorder};
+    $tattrs->{style}  .= 'width:'.$tableWidth.'px;' if $useCss{tableWidth};
+
     my $text = $currTablePre . CGI::start_table($tattrs);
     $text .= $currTablePre . CGI::caption($tableCaption) if ($tableCaption);
     my $stype = '';
@@ -786,16 +815,26 @@ sub emitTable {
                           . $tableAnchor;
                 }
                 
-                my $linkColorStyle = '';
                 if ($headerColor) {
 
-                #$cell = CGI::span( { style => 'color:'.$headerColor }, $cell );
-                    $linkColorStyle = 'color:' . $headerColor;
+                  my $cellAttrs = { color => $headerColor };
+                  $cellAttrs->{style} = 'color:'.$headerColor.';' 
+                    if $useCss{headerColor};
+                  $cell = CGI::font( $cellAttrs, $cell );
                 }
+
                 if ( $sortThisTable && $rowCount == $headerRows - 1 ) {
                     if ($isSorted) {
-                        $attr->{bgcolor} = $headerBgSorted
-                          unless ( $headerBgSorted =~ /none/i );
+                        unless ( $headerBgSorted =~ /none/i ) {
+                          $attr->{bgcolor} = $headerBgSorted;
+                          $attr->{style} .= 'background-color:'.$headerBgSorted.';'
+                            if $useCss{headerBgSorted};
+                        }
+                    } else {
+                        unless ( $headerBg =~ /none/i ) {
+                          $attr->{style} .= 'background-color:'.$headerBg.';'
+                            if $useCss{headerBg};
+                        }
                     }
 
 #my $debugText = CGI::span( { class => 'twikiSmall' }, 'requestedTable='.$requestedTable.'; sortCol='.$sortCol.'; colCount='.$colCount.'; initSort='.$initSort.'; sorted='.$isSorted.'; currDir='.$currentDirection.'; newdir='.$newDirection.' ');
@@ -808,7 +847,6 @@ sub emitTable {
                           . $tableCount . ';up='
                           . $newDirection
                           . '#sorted_table',
-                        style => $linkColorStyle,
                         rel   => 'nofollow',
                         title => 'Sort by this column'
                     };
@@ -823,12 +861,6 @@ sub emitTable {
                           . CGI::a( $linkAttributes, $cell )
                           . $tableAnchor;
                     }
-                }
-                else {
-                    my $linkAttributes = { style => $linkColorStyle };
-                    $cell =
-                      CGI::span( $linkAttributes,
-                        ' <strong> ' . $cell . ' </strong> ' );
                 }
 
             }
@@ -846,15 +878,22 @@ sub emitTable {
                         $bgcolor =
                           $dataBg[ $dataColorCount % ( $#dataBg + 1 ) ];
                     }
-                    $attr->{bgcolor} = $bgcolor unless ( $bgcolor =~ /none/i );
+                    unless ( $bgcolor =~ /none/i ) {
+                      $attr->{bgcolor} = $bgcolor;
+                      $attr->{style} .= 'background-color:'.$bgcolor.';'
+                        if $useCss{dataBg};
+                    }
                 }
                 if (@dataColor) {
                     my $color =
                       $dataColor[ $dataColorCount % ( $#dataColor + 1 ) ];
 
-                    $cell = CGI::span( { style => 'color:' . $color },
-                        ' ' . $cell . ' ' )
-                      unless $color =~ /^(|none)$/i;
+                    unless ($color =~ /^(none)$/i) {
+                      my $cellAttrs = { color => $color};
+                      $cellAttrs->{style} = 'color:'.$color.';'
+                        if $useCss{dataColor};
+                      $cell = CGI::font( $cellAttrs, ' '.$cell.' ');
+                    }
                 }
                 $type = 'td' unless $type eq 'Y';
             }    ###if( $type eq 'th' )
@@ -889,10 +928,12 @@ sub emitTable {
       my $isFooterRow =  (($numberOfRows - $rowCount) <= $footerRows);
 
       if ($isFooterRow) {
-         #this makes one tfoot element per header row due to the line by line nature of this parser - which might be a good thing..
+         # this makes one tfoot element per header row due to the line by line
+         # nature of this parser - which might be a good thing..
          $rowHTML = CGI::tfoot($rowHTML);
       } elsif ($isHeaderRow) {
-         #this makes one thead element per header row due to the line by line nature of this parser - which might be a good thing..
+         # this makes one thead element per header row due to the line by line
+         # nature of this parser - which might be a good thing..
          $rowHTML = CGI::thead($rowHTML);
 
             # reset data color count to start with first color after
@@ -962,7 +1003,7 @@ sub handler {
     my $acceptable = $sortAllTables;
     my @lines = split( /\r?\n/, $_[0] );
     for (@lines) {
-        if (s/%TABLE(?:{(.*?)})?%/_parseParameters($1)/se) {
+        if (s/%TABLE(?:{(.*?)})?%/_parseParameters($1, 1)/se) {
             $acceptable = 1;
         }
         elsif ( $acceptable
