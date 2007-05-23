@@ -353,7 +353,8 @@ BEGIN {
     $functionTags{LANG}      = sub { $TWiki::cfg{Site}{FullLang} };
 
     # Tell CGI.pm which charset we are using if not default
-    if( $TWiki::cfg{Site}{CharSet} !~ /^iso-?8859-?1$/io ) {
+    if( defined $TWiki::cfg{Site}{CharSet} &&
+          $TWiki::cfg{Site}{CharSet} !~ /^iso-?8859-?1$/io ) {
         require CGI;
         import CGI ();
         CGI::charset( $TWiki::cfg{Site}{CharSet} );
