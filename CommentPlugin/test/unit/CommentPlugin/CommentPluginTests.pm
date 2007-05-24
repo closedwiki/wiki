@@ -130,6 +130,7 @@ HERE
     $this->assert(scalar($dattrs =~ s/\s+method\s*=\s*\"post\"//i), $dattrs);
     $this->assert(scalar($dattrs =~ s/\s+action=\"(.*?)\"//), $dattrs);
     $this->assert_str_equals($url, $1);
+    $dattrs =~ s#application/x-www-form-urlencoded#multipart/form-data#;
     $this->assert_str_equals('enctype="multipart/form-data" id="' . $type . '1"', trim($dattrs));
 
     # no hiddens should be generated if disabled
