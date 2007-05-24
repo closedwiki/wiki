@@ -78,11 +78,12 @@ Parses a templatetopic attribute and returns a "Web.Topic" string.
 
 sub _getTemplateLocation {
     my ( $attrtemplatetopic, $web ) = @_;
-    
+
     my $templatetopic = '';
     my $templateweb = $web || '';
     if ( $attrtemplatetopic ) {
-        my ($templocweb, $temploctopic ) = TWiki::Func::normalizeWebTopicName($templateweb, $attrtemplatetopic);
+        my ($templocweb, $temploctopic ) =
+          TWiki::Func::normalizeWebTopicName($templateweb, $attrtemplatetopic);
         $templatetopic = "$templocweb.$temploctopic";
     }
     return $templatetopic;
@@ -105,7 +106,7 @@ sub _handleInput {
     my $default = $attrs->remove( 'default' );
     my $attrtemplatetopic = $attrs->remove( 'templatetopic' ) || '';
     my $templatetopic = _getTemplateLocation( $attrtemplatetopic, $web );
-    
+
     $message ||= $default || '';
     $message ||= $default || '';
 	$disable ||= '';
@@ -118,7 +119,7 @@ sub _handleInput {
     # box is (not the target of the comment!)
     my $input = _getTemplate( "PROMPT:$type", $web, $topic, $templatetopic ) || '';
     return $input if $input =~ m/^%RED%/so;
-    
+
     # Expand special attributes as required
     $input =~ s/%([a-z]\w+)\|(.*?)%/_expandPromptParams($1, $2, $attrs)/ieg;
 
@@ -152,31 +153,41 @@ sub _handleInput {
 
         if ( $disable eq '' ) {
             my $hiddenFields = "";
-            $hiddenFields .= "\n".CGI::hidden( -name=>'comment_action', -value=>'save' );
-            $hiddenFields .= "\n".CGI::hidden( -name=>'comment_type', -value=>$type );
+            $hiddenFields .= "\n".CGI::hidden(
+                -name=>'comment_action', -value=>'save' );
+            $hiddenFields .= "\n".CGI::hidden(
+                -name=>'comment_type', -value=>$type );
             if( defined( $silent )) {
-                $hiddenFields .= "\n".CGI::hidden( -name=>'comment_nonotify', value=>1 );
+                $hiddenFields .= "\n".CGI::hidden(
+                    -name=>'comment_nonotify', value=>1 );
             }
             if ( $templatetopic ) {
-                $hiddenFields .= "\n".CGI::hidden( -name=>'comment_templatetopic', -value=>$templatetopic );
+                $hiddenFields .= "\n".CGI::hidden(
+                    -name=>'comment_templatetopic', -value=>$templatetopic );
             }
             if ( $location ) {
-                $hiddenFields .= "\n".CGI::hidden( -name=>'comment_location', -value=>$location );
+                $hiddenFields .= "\n".CGI::hidden(
+                    -name=>'comment_location', -value=>$location );
             } elsif ( $anchor ) {
-                $hiddenFields .= "\n".CGI::hidden( -name=>'comment_anchor', -value=>$anchor );
+                $hiddenFields .= "\n".CGI::hidden(
+                    -name=>'comment_anchor', -value=>$anchor );
             } else {
-                $hiddenFields .= "\n".CGI::hidden( -name=>'comment_index', -value=>$$pidx );
+                $hiddenFields .= "\n".CGI::hidden(
+                    -name=>'comment_index', -value=>$$pidx );
             }
             if( $nopost ) {
-                $hiddenFields .= "\n".CGI::hidden( -name=>'comment_nopost', -value=>$nopost );
+                $hiddenFields .= "\n".CGI::hidden(
+                    -name=>'comment_nopost', -value=>$nopost );
             }
             if( $remove ) {
-                $hiddenFields .= "\n".CGI::hidden( -name=>'comment_remove', -value=>$$pidx );
+                $hiddenFields .= "\n".CGI::hidden(
+                    -name=>'comment_remove', -value=>$$pidx );
             }
             $input .= $hiddenFields;
         }
         if ( $noform ) {
-            my $form = _getTemplate( "FORM:$type", $topic, $web,  $templatetopic, 'off' ) || '';
+            my $form = _getTemplate( "FORM:$type", $topic, $web,
+                                     $templatetopic, 'off' ) || '';
             if ( $form ) {
                 $form =~ s/%COMMENTPROMPT%/$input/;
                 $input = $form;
@@ -242,7 +253,7 @@ sub _buildNewTopic {
     my $remove = $query->param( 'comment_remove' );
     my $nopost = $query->param( 'comment_nopost' );
     my $templatetopic = $query->param( 'comment_templatetopic' ) || '';
-    
+
     my $output = _getTemplate( "OUTPUT:$type", $topic, $web, $templatetopic );
     if ( $output =~ m/^%RED%/ ) {
         die $output;
