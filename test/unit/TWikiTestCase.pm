@@ -24,12 +24,11 @@ BEGIN {
     $SIG{__DIE__} = sub { Carp::confess $_[0] };
 };
 
-# Temporary directory to store log files in.
+# Temporary directory to store work files in (sessions, logs etc).
 # Will be cleaned up after running the tests unless the environment
 # variable TWIKI_DEBUG_KEEP is true
 use File::Temp;
 my $cleanup  =  $ENV{TWIKI_DEBUG_KEEP} ? 0 : 1;
-my $tempdir  =  File::Temp::tempdir( CLEANUP => $cleanup );
 
 sub new {
     my $self = shift()->SUPER::new(@_);
@@ -49,9 +48,11 @@ sub set_up {
     $this->{__TWikiSafe} = Data::Dumper->Dump([\%TWiki::cfg], ['*TWiki::cfg']);
     $tmp->finish();
 
+    $TWiki::cfg{TempfileDir} = File::Temp::tempdir( CLEANUP => $cleanup );
+
     # Move logging into a temporary directory
-    $TWiki::cfg{LogFileName} = "$tempdir/TWikiTestCase.log";
-    $TWiki::cfg{WarningFileName} = "$tempdir/TWikiTestCase.warn";
+    $TWiki::cfg{LogFileName} = "$TWiki::cfg{TempfileDir}/TWikiTestCase.log";
+    $TWiki::cfg{WarningFileName} = "$TWiki::cfg{TempfileDir}/TWikiTestCase.warn";
 
     # Disable/enable plugins so that only core extensions (those defined
     # in tools/MANIFEST) are enabled, but they are *all* enabled.

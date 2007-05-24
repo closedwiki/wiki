@@ -41,12 +41,12 @@ sub set_up {
     $TWiki::cfg{StoreImpl} = "RcsWrap";
     $TWiki::cfg{AutoAttachPubFiles} = 0;
     $TWiki::cfg{Register}{AllowLoginName} = 1;
-    $TWiki::cfg{Htpasswd}{FileName} = '/tmp/junkpasswd'.$this->{var};
+    $TWiki::cfg{Htpasswd}{FileName} = "$TWiki::cfg{TempfileDir}/htpasswd";
     $TWiki::cfg{PasswordManager} = 'TWiki::Users::HtPasswdUser';
     $TWiki::cfg{UserMappingManager} = 'TWiki::Users::TWikiUserMapping';
-    $TWiki::cfg{LoginManager} = 'TWiki::LoginManager::TemplateLogin';    
+    $TWiki::cfg{LoginManager} = 'TWiki::LoginManager::TemplateLogin';
     $TWiki::cfg{Register}{EnableNewUserRegistration} = 1;
-    
+
     $TWiki::cfg{Register}{NeedVerification} = 0;
     $TWiki::cfg{MinPasswordLength} = 0;
     $TWiki::cfg{UsersWebName} = $this->{users_web};

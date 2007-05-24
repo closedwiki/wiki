@@ -23,6 +23,12 @@ my $user_id;
 
 sub new {
     my $this = shift()->SUPER::new(@_);
+    my $var = $_[0];
+    $var =~ s/\W//g;
+    $this->{test_web} = 'Temporary'.$var.'TestWeb'.$var;
+    $this->{test_topic} = 'TestTopic'.$var;
+    $this->{users_web} = 'Temporary'.$var.'UsersWeb';
+    $this->{twiki} = undef;
     return $this;
 }
 
@@ -59,22 +65,22 @@ sub set_up {
     $this->SUPER::set_up();
 
     $session = new TWiki();
-
+    $this->assert($TWiki::cfg{TempfileDir} && -d $TWiki::cfg{TempfileDir});
     $TWiki::cfg{UseClientSessions} = 1;
     $TWiki::cfg{PasswordManager} = "TWiki::Users::HtPasswdUser";
-    $TWiki::cfg{Htpasswd}{FileName} = "/tmp/junkhtpasswd";      #TODO: um, shouldn't we have a private dir, that is deleteable
+    $TWiki::cfg{Htpasswd}{FileName} = "$TWiki::cfg{TempfileDir}/htpasswd";
     $TWiki::cfg{AuthScripts} = "edit";
     $TWiki::cfg{Register}{EnableNewUserRegistration} = 1;
+    $TWiki::cfg{UsersWebName} = $this->{users_web};
 }
 
 sub set_up_user {
     my $this = shift;
     if ($session->{users}->supportsRegistration()) {
         $userLogin = 'joe';
-        $userWikiName = 'JoeDoe';    
+        $userWikiName = 'JoeDoe';
 	    $user_id = $session->{users}->addUser( $userLogin, $userWikiName, 'secrect_password', 'email@home.org.au');
 	    $this->annotate("create $userLogin user - cUID = $user_id\n");
-	    #TODO: figure out why $user_id is comming back as the password..
     } else {
         $userLogin = $TWiki::cfg{AdminUserLogin};
         $user_id = $session->{users}->getCanonicalUserID($userLogin);
