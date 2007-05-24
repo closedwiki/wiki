@@ -96,7 +96,7 @@ sub _setDefaults {
     $tableId        = '';
     $tableSummary   = '';
     $tableCaption   = '';
-    %useCss = {};
+    %useCss = ();
     undef $initSort;
 
     _parseParameters($pluginAttrs, 0);
