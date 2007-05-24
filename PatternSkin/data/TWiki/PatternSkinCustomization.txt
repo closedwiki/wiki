@@ -145,6 +145,29 @@ Change the table style in topic %TWIKIWEB%.WebTopBar. The default top padding is
 
 ---++ Top bar
 
+---+++ I get too many search results: I want the search box to search one web only
+
+In TWiki.WebTopBar you can find the line:
+<verbatim>
+<input type="hidden" name="web" value="all" />
+</verbatim>
+
+To search the current web only, write:
+<blockquote>
+<verbatim>
+<input type="hidden" name="web" value="%BASEWEB%" />
+</verbatim>
+</blockquote>
+
+To search a couple of webs, for instance the webs Main and TWiki, write:
+<blockquote>
+<verbatim>
+<input type="hidden" name="web" value="Main,TWiki" />
+</verbatim>
+</blockquote>
+
+See also: [[TWiki.VarSEARCH][Search variable]]
+
 #TopBarChangeHeight
 ---+++ I want to change the height of the top bar
 
@@ -180,8 +203,8 @@ The image at the top is called "header art" - commonly the top image found on bl
 
 Redefine your custom variables in [[%LOCALSITEPREFS%]] (to keep %WIKIPREFSTOPIC% intact):
 <blockquote><pre>
-   * Set WEBHEADERART = %<nop>PUBURLPATH%/%<nop>TWIKIWEB%/PatternSkin/TWiki_header.gif
-   * Set WEBHEADERBGCOLOR = somehexcolor (no quotes, for example: #ffffff)
+   * <nop>Set WEBHEADERART = %<nop>PUBURLPATH%/%<nop>TWIKIWEB%/PatternSkin/TWiki_header.gif
+   * <nop>Set WEBHEADERBGCOLOR = somehexcolor (no quotes, for example: #ffffff)
 </pre></blockquote>
 
 You can also set =WEBHEADERART= per web, by defining the variable in the Web's !WebPreferences.
@@ -190,7 +213,7 @@ You can also set =WEBHEADERART= per web, by defining the variable in the Web's !
 
 Redefine =WEBHEADERBGCOLOR= in [[%LOCALSITEPREFS%]] (to keep %WIKIPREFSTOPIC% intact):
 <blockquote><pre>
-   * Set WEBHEADERBGCOLOR = %<nop>WEBBGCOLOR%
+   * <nop>Set WEBHEADERBGCOLOR = %<nop>WEBBGCOLOR%
 </pre></blockquote>
 
 ---+++ I want to remove the Jump and Search boxes from the top bar 
