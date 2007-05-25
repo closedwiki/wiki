@@ -16,7 +16,7 @@
 <tr bgcolor="#EAE9DE"><td style="width:100%;"></td></tr>
 </table>
 %STARTSECTION{"create"}%
-<noautolink><form name="renametag" action="%SCRIPTURL%/viewauth%SCRIPTSUFFIX%/%BASEWEB%/%BASETOPIC%" method="post" onsubmit="return cleanTag(this.newtag.value);">%TAGME{ tpaction="%URLPARAM{"renameaction" default="renametaginit"}%" oldtag="%URLPARAM{oldtag}%" newtag="%URLPARAM{newtag}%" note="%URLPARAM{renametagnote}%" }%
+<noautolink><form name="renametag" action="%SCRIPTURL{viewauth}%/%BASEWEB%/%BASETOPIC%" method="post" onsubmit="return cleanTag(this.newtag.value);">%TAGME{ tpaction="%URLPARAM{"renameaction" default="renametaginit"}%" oldtag="%URLPARAM{oldtag}%" newtag="%URLPARAM{newtag}%" note="%URLPARAM{renametagnote}%" }%
 
 <div class="twikiFormSteps">
 <div class="twikiFormStep">

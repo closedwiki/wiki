@@ -88,7 +88,7 @@ Use the url parameter =deletetag=my+tag+name= to pass the to-be-deleted tag name
 Screenshot of tag cloud in the list all tags view: <br />
 <img src="%ATTACHURLPATH%/alltagcloud.gif" alt="Screenshot of view all tags tag cloud" width="598" height="168"  />
 
-__%T% Tip:__ In a <nop>%HOMETOPIC% of a web you can show a tag cloud of all tagged topics in that web with this variable:%BR% =%<nop>TAGME{ tpaction="showalltags" web="%<nop>WEB%" format="&lt;a href=\"%<nop>SCRIPTURL%/view%<nop>SCRIPTSUFFIX%/%<nop>TWIKIWEB%/TagMeSearch?tag=$tag;qweb=%<nop>WEB%\" style=\"font-size:$size%\"&gt;$tag&lt;/a&gt;" }%=
+__%T% Tip:__ In a <nop>%HOMETOPIC% of a web you can show a tag cloud of all tagged topics in that web with this variable:%BR% =%<nop>TAGME{ tpaction="showalltags" web="%<nop>WEB%" format="&lt;a href=\"%<nop>SCRIPTURL{view}%/%<nop>TWIKIWEB%/TagMeSearch?tag=$tag;qweb=%<nop>WEB%\" style=\"font-size:$size%\"&gt;$tag&lt;/a&gt;" }%=
 
 
 ---+++ List My Tags

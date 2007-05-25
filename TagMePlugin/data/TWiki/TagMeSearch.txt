@@ -3,12 +3,12 @@
 ---+ Tag-me: Tag Search
 
 %STARTINCLUDE%
-<form name="tagmesearch" action="%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%" method="get">
+<form name="tagmesearch" action="%SCRIPTURL{view}%/%WEB%/%TOPIC%" method="get">
 <table class="tagmeNavigation" border="0" cellpadding="3" cellspacing="0"><tr>
 <td>&nbsp; &nbsp;</td>
 <td bgcolor="#F6F4EB">&nbsp; [[TagMeViewAllTags][All Tags]] &nbsp;</td>
 <td>&nbsp;</td>
-<td bgcolor="#F6F4EB">&nbsp; [[%SCRIPTURL%/viewauth%SCRIPTSUFFIX%/%WEB%/TagMeViewMyTags][My Tags]] &nbsp;</td>
+<td bgcolor="#F6F4EB">&nbsp; [[%SCRIPTURL{viewauth}%/%WEB%/TagMeViewMyTags][My Tags]] &nbsp;</td>
 <td>&nbsp;</td>
 <td bgcolor="#EAE9DE">&nbsp; *Tag Search* &nbsp;</td>
 </tr></table>

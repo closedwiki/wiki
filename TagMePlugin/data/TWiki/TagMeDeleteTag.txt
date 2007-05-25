@@ -15,7 +15,7 @@
 <tr bgcolor="#EAE9DE"><td style="width:100%;"></td></tr>
 </table>
 %STARTSECTION{"delete"}%
-<noautolink><form name="renametag" action="%SCRIPTURL%/viewauth%SCRIPTSUFFIX%/%BASEWEB%/%BASETOPIC%" method="post" onsubmit="return confirmDelete(this.oldtag.value, this.postChangeRequest);">%TAGME{ tpaction="%URLPARAM{"deleteaction" default="deletetaginit"}%" oldtag="%URLPARAM{oldtag}%" note="%URLPARAM{renametagnote}%" }%
+<noautolink><form name="renametag" action="%SCRIPTURL{viewauth}%/%BASEWEB%/%BASETOPIC%" method="post" onsubmit="return confirmDelete(this.oldtag.value, this.postChangeRequest);">%TAGME{ tpaction="%URLPARAM{"deleteaction" default="deletetaginit"}%" oldtag="%URLPARAM{oldtag}%" note="%URLPARAM{renametagnote}%" }%
 
 <div class="twikiFormSteps">
 <div class="twikiFormStep">
