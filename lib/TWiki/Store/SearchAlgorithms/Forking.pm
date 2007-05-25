@@ -39,24 +39,28 @@ sub search {
 
     # Default (Forking) search
 
-    # I18N: 'grep' must use locales if needed,
+    # SMELL: I18N: 'grep' must use locales if needed,
     # for case-insensitive searching.
     my $program = '';
 
-    # FIXME: For Cygwin grep, do something about -E and -F switches
-    # - best to strip off any switches after first space in
-    # EgrepCmd etc and apply those as argument 1.
     if( $options->{type} &&
-        ( $options->{type} eq 'regex' || $options->{wordboundaries} == 1 )
-        ) {
+          ( $options->{type} eq 'regex' || $options->{wordboundaries} )) {
         $program = $TWiki::cfg{RCS}{EgrepCmd};
     } else {
         $program = $TWiki::cfg{RCS}{FgrepCmd};
     }
 
-    $program =~ s/%CS{(.*?)\|(.*?)}%/$options->{casesensitive}?$1:$2/ge;
-    $program =~ s/%DET{(.*?)\|(.*?)}%/$options->{files_without_match}?$2:$1/ge;
-    $searchString =~ s/^(.*)$/\\b$1\\b/go if $options->{'wordboundaries'};
+    if( $options->{casesensitive} ) {
+        $program =~ s/%CS{(.*?)\|.*?}%/$1/g;
+    } else {
+        $program =~ s/%CS{.*?\|(.*?)}%/$1/g;
+    }
+    if( $options->{files_without_match} ) {
+        $program =~ s/%DET{.*?\|(.*?)}%/$1/g;
+    } else {
+        $program =~ s/%DET{(.*?)\|.*?}%/$1/g;
+    }
+    $searchString =~ s/^(.*)$/\\b$1\\b/g if $options->{wordboundaries};
 
     # process topics in sets, fix for Codev.ArgumentListIsTooLongForSearch
     my $maxTopicsInSet = 512; # max number of topics for a grep call
@@ -70,15 +74,17 @@ sub search {
             $program,
             TOKEN => $searchString,
             FILES => \@set);
-        # SMELL: had to comment this out because getting exit code of
-        # 1 from a perfectly valid grep, on d.t.o :-(
-        #throw Error::Simple("$program failed: $m") if $exit;
-        $matches .= $m;
+        # man grep: "Normally, exit status is 0 if selected lines are found
+        # and 1 otherwise. But the exit status is 2 if an error occurred,
+        # unless the -q or --quiet or --silent option is used and a selected
+        # line is found."
+        throw Error::Simple($program.' returned an error')
+          if $exit > 1;
+        $matches .= $m unless $exit;
         @set = splice( @take, 0, $maxTopicsInSet );
     }
     my %seen;
-    # Note use of / and \ as dir separators, to support
-    # Winblows
+    # Note use of / and \ as dir separators, to support Winblows
     $matches =~ s/([^\/\\]*)\.txt(:(.*))?$/push( @{$seen{$1}}, $3 ); ''/gem;
 
     return \%seen;
