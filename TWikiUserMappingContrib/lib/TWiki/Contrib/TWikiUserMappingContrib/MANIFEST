@@ -7,11 +7,9 @@ lib/TWiki/Users/TWikiUserMapping.pm 0644 Perl module
 #TWiki Topic based Usermapping topics
 data/Main/TWikiRegistrationAgent.txt
 data/Main/UserListByPhotograph.txt
-data/Main/UserForm.txt
 data/Main/UserListHeader.txt
 data/Main/UserViewTemplate.txt
 data/Main/NobodyGroup.txt
-data/Main/TWikiUsersTemplate.txt 0444 Template for a new TWikiUsers topic
 data/Main/UserList.txt
 data/Main/UserListByDateJoined.txt
 data/Main/TWikiAdminGroup.txt
@@ -20,10 +18,12 @@ data/Main/UserListByLocation.txt
 data/Main/TWikiGroupTemplate.txt
 
 data/TWiki/TWikiRegistration.txt
+data/TWiki/TWikiUsersTemplate.txt 0444 Default template for a new TWikiUsers topic
 data/TWiki/ChangeEmailAddress.txt
 data/TWiki/BulkResetPassword.txt
 data/TWiki/TWikiUserSetting.txt
-data/TWiki/NewUserTemplate.txt
+data/TWiki/UserForm.txt 0444 Default form attached to a user topic
+data/TWiki/NewUserTemplate.txt 0444 Default new user topic template
 data/TWiki/ResetPassword.txt
 data/TWiki/ChangePassword.txt
 data/TWiki/BulkRegistration.txt
