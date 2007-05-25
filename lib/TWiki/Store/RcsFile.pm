@@ -162,7 +162,7 @@ if file-based rev info is required.
 sub getRevisionInfo {
     my( $this ) = @_;
     my $fileDate = $this->getTimestamp();
-    return ( 1, $fileDate, $TWiki::cfg{DefaultUserLogin},
+    return ( 1, $fileDate, $this->{session}->{users}->getCanonicalUserID($TWiki::cfg{DefaultUserLogin}),
              'Default revision information' );
 }
 

@@ -10,6 +10,7 @@ use TWiki;
 use Error qw( :try );
 
 sub new {
+    $TWiki::cfg{Register}{AllowLoginName}    =  1;
     my $self = shift()->SUPER::new('USERINFO', @_);
     return $self;
 }

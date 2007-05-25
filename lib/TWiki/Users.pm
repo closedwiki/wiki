@@ -106,12 +106,15 @@ sub new {
     
     #correct the DefaultUserLogin if $TWiki::cfg{Register}{AllowLoginName} is off
     $TWiki::cfg{DefaultUserLogin} = $TWiki::cfg{DefaultUserWikiName} unless ($TWiki::cfg{Register}{AllowLoginName});
+    $TWiki::cfg{AdminUserLogin} = $TWiki::cfg{AdminUserWikiName} unless ($TWiki::cfg{Register}{AllowLoginName});
 
     $this->{loginManager} = TWiki::LoginManager::makeLoginManager( $session );
     unless (( $session->{cgiQuery}->param('sudo') && $session->{cgiQuery}->param('sudo') eq 'sudo' )) {
         #don't take not of session info if the user has asked for a sudo login
         $this->{remoteUser} = $this->initialiseUserFromSession($session);
     }
+    $this->{remoteUser} = $TWiki::cfg{DefaultUserLogin} unless (defined($this->{remoteUser}));
+
     #making basemapping
     my $implBaseUserMappingManager = $TWiki::cfg{BaseUserMappingManager} || 'TWiki::Users::BaseUserMapping';
     eval "use $implBaseUserMappingManager";
@@ -204,7 +207,7 @@ sub supportsRegistration {
 
 =pod
 
----++ ObjectMethod initialiseUserFromSession ($session)
+---++ ObjectMethod initialiseUserFromSession ($session) -> $login (string)
 
 loads user info from the loginManager's session system
 
@@ -487,8 +490,8 @@ Get the wikiname to display for a canonical user identifier.
 sub getWikiName {
     my ($this, $cUID ) = @_;
     ASSERT($cUID) if DEBUG;
-	#$this->ASSERT_IS_CANONICAL_USER_ID($cUID) if DEBUG;
-	
+	$this->ASSERT_IS_CANONICAL_USER_ID($cUID) if DEBUG;
+
     my $wikiname = $this->getMapping($cUID)->getWikiName($cUID) if ($this->getMapping($cUID));
     return $wikiname || "UnknownUser";
 }

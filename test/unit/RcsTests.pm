@@ -27,6 +27,7 @@ sub set_up {
     $this->SUPER::set_up();
     die unless (defined $TWiki::cfg{PubUrlPath});
     die unless (defined $TWiki::cfg{ScriptSuffix});
+    $TWiki::cfg{Register}{AllowLoginName}    =  1;
     $twiki = new TWiki();
     $twiki->{sandbox}->{TRACE} = 0;
     # Switch off pipes to maximise debug opportunities
@@ -398,7 +399,7 @@ sub verifyRevInfo {
 
     ($rev, $date, $user, $comment) = $rcs->getRevisionInfo(3);
     $this->assert_equals(1, $rev);
-    $this->assert_str_equals('guest', $user);
+    $this->assert_str_equals($twiki->{users}->getCanonicalUserID($TWiki::cfg{DefaultUserLogin}), $user);
     $this->assert_str_equals('Default revision information', $comment);
 }
 
