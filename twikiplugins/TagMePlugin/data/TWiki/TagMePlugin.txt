@@ -144,6 +144,11 @@ The Plugin handles a =%<nop>TAGME{}%= variable that performs different actions. 
 	  | =tag="..."= | Name of tag | (required) |
 	  | =nostatus="on"= | Turn off status text shown when a tag is added or voted on | (show status text) |
 
+	* =%<nop>TAGME{ tpaction="newtagandadd" ... }%= - create new tag and add tag to topic
+	  | *Parameter* | *Comment* | *Default* |
+	  | =tag="..."= | Name of tag. Accepts alphanumeric and underscore characters only (unless =NORMALIZE_TAG_INPUT= is set to 0 to allow any user input) | (required) |
+
+
 	* =%<nop>TAGME{ tpaction="remove" ... }%= - remove my tag vote on existing tag
 	  | *Parameter* | *Comment* | *Default* |
 	  | =tag="..."= | Name of tag | (required) |
