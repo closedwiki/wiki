@@ -268,7 +268,7 @@ sub _showDefault {
             $text .= _createJavascriptSelectBox(@notSeen);
         }
     }
-    $text .= 
+    $text .= ' '.
       _wrapHtmlTagControl("<a href=\"%SCRIPTURL{viewauth}%/$installWeb/TagMeCreateNewTag".
         "?from=$web.$topic\">create new tag</a>");
 
@@ -363,6 +363,8 @@ sub _showAllTags {
     my $maxSize   = TWiki::Func::extractNameValuePair( $attr, 'maxsize' );
     my $minCount  = TWiki::Func::extractNameValuePair( $attr, 'mincount' );
 
+    $minCount = 1 if !defined($minCount) || $qWeb || $qTopic || $exclude || $by;
+
     # a comma separated list of 'selected' options (for html forms)
     my $selection = TWiki::Func::extractNameValuePair( $attr, 'selection' )
       || '';
@@ -398,7 +400,7 @@ sub _showAllTags {
     $minSize = 90  unless ($minSize);
     my $text = '';
     my $line = '';
-    unless ( $format =~ /\$size/ || $by || $qWeb || $qTopic || $exclude ) {
+    unless ( $format =~ /\$(size|count|order)/ || $by || $qWeb || $qTopic || $exclude ) {
 
         # fast processing
         $text = join(
@@ -419,9 +421,14 @@ sub _showAllTags {
         # slow processing
         # SMELL: Quick hack, should be done with nice data structure
         my %tagCount = ();
-        my %allTags  = ();
+        my %allTags  = map {$_=>1} _readAllTags();
         my %myTags   = ();
         my $webTopic = '';
+
+        foreach (keys %allTags) {
+          $tagCount{$_} = 0;
+        }
+
         foreach $webTopic ( _getTagInfoList() ) {
             next if ( $qWeb        && $webTopic !~ /^$qWeb\./ );
             next if ( $topicsRegex && $webTopic !~ /$topicsRegex/ );
@@ -437,7 +444,6 @@ sub _showAllTags {
                     unless ( $excludeRegex && $tag =~ /$excludeRegex/ ) {
                         $tagCount{$tag} += $num
                           unless ( $by && $users !~ /$by/ );
-                        $allTags{$tag} = 1;
                         $myTags{$tag} = 1 if ( $users =~ /$by/ );
                     }
                 }
@@ -492,6 +498,8 @@ sub _showAllTags {
                 $line =~ s/$tmpSep\$tag$tmpSep/&_urlEncode($_)/geo;
                 $line =~ s/\$tag/$_/go;
                 $line =~ s/\$size/$size/go;
+                $line =~ s/\$count/$tagCount{$_}/go;
+                $line =~ s/\$order/$order{$_}/go;
                 $line;
               } @tags
         );

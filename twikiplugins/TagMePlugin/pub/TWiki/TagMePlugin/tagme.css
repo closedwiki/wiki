@@ -1,11 +1,11 @@
 .tagMeControl {
 	white-space:nowrap;
+	margin:0 .2em 0 0;
 }
 .tagMeControl input { 
 	border:0;
 }
 .tagMeControl select {
-	margin:0 .2em 0 0;
 }
 .tagMeControl img {
 	vertical-align:middle;
@@ -35,8 +35,10 @@ div.tagMeNotification {
 	color:#666;
 }
 .tagmeNavigation a:hover {
+        /*
 	background-color:transparent;
 	border-bottom:1px solid #666;
+        */
 }
 .tagmeRelated {
 	font-weight:bold;

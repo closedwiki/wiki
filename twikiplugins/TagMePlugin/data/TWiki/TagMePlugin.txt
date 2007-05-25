@@ -114,7 +114,7 @@ The Plugin handles a =%<nop>TAGME{}%= variable that performs different actions. 
 	  | =mincount="2"= | Exclude tags below the threshold of =mincount= votes | all tags | 
 	  | =minsize="90"= | Minimum size of tag =$size= (typically percent font size) | ="90"= |
 	  | =maxsize="180"= | Maximum size of tag =$size= | ="180"= |
-	  | =format="..."= | Format of a tag, tokens =$tag=, =$size=, =$marker= (adds selected="selected" for use in html options) | ="$tag"= |
+	  | =format="..."= | Format of a tag, tokens =$tag=, =$size=, =$marker= (adds selected="selected" for use in html options), =$count=, =$order= | ="$tag"= |
 	  | =separator=", "= | Separator between tags | =", "=, unless =format= has been specified |
 
 	* =%<nop>TAGME{ tpaction="query" ... }%= - tag search
