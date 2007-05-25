@@ -247,7 +247,7 @@ sub addUser {
     my $result = '';
     my $entry = "   * $wikiname - ";
     $entry .= $login . " - " if $login;
-    my $today = TWiki::Time::formatTime(time(), '$day $mon $year', 'gmtime');
+    my $today = TWiki::Time::formatTime(time(), $TWiki::cfg{DefaultDateFormat}, 'gmtime');
 
     # add to the mapping caches
     my $user = _cacheUser( $this, $wikiname, $login );

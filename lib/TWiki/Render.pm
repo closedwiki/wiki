@@ -1564,8 +1564,8 @@ sub renderRevisionInfo {
     $value =~ s/\$web/$web/gi;
     $value =~ s/\$topic/$topic/gi;
     $value =~ s/\$rev/$rev/gi;
-    $value =~ s/\$time/TWiki::Time::formatTime($date, '$hour:$min:$sec')/gei;
-    $value =~ s/\$date/TWiki::Time::formatTime($date, '$day $mon $year')/gei;
+    $value =~ s/\$time/TWiki::Time::formatTime( $date, '$hour:$min:$sec')/gei;
+    $value =~ s/\$date/TWiki::Time::formatTime( $date, $TWiki::cfg{DefaultDateFormat} )/gei;
     $value =~ s/(\$(rcs|http|email|iso))/TWiki::Time::formatTime($date, $1 )/gei;
     if( $value =~ /\$(sec|min|hou|day|wday|dow|week|mo|ye|epoch|tz)/ ) {
         $value = TWiki::Time::formatTime( $date, $value );

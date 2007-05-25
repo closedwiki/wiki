@@ -69,11 +69,20 @@ Convert string date/time string to seconds since epoch (1970-01-01T00:00:00Z).
    * =$sDate= - date/time string
 
 Handles the following formats:
+
+Default TWiki format
    * 31 Dec 2001 - 23:59
+
+Date seperated by '/', '.' or '-', time with '.' or ':'
+Date and time separated by ' ', '.' and/or '-'
    * 2001/12/31 23:59:59
    * 2001.12.31.23.59.59
    * 2001/12/31 23:59
    * 2001.12.31.23.59
+   * 2001-12-31 23:59
+   * 2001-12-31 - 23:59
+
+ISO format
    * 2001-12-31T23:59:59
 ISO dates may have a timezone specifier, either Z or a signed difference
 in hh:mm format. For example:
@@ -105,19 +114,21 @@ sub parseTime {
     }
 
     # try "2001/12/31 23:59:59" or "2001.12.31.23.59.59" (RCS date)
-    if ($date =~ m!(\d+)[./](\d+)[./](\d+)[.\s]+(\d+)[.:](\d+)[.:](\d+)!) {
+    # or "2001-12-31 23:59:59" or "2001-12-31 - 23:59:59"
+    if ($date =~ m!(\d+)[./\-](\d+)[./\-](\d+)[.\s\-]+(\d+)[.:](\d+)[.:](\d+)!) {
         my $year = $1;
         $year -= 1900 if( $year > 1900 );
         return timegm( $6, $5, $4, $3, $2-1, $year ) - $tzadj;
     }
 
     # try "2001/12/31 23:59" or "2001.12.31.23.59" (RCS short date)
-    if ($date =~ m!(\d+)[./](\d+)[./](\d+)[.\s]+(\d+)[.:](\d+)!) {
+    # or "2001-12-31 23:59" or "2001-12-31 - 23:59"
+    if ($date =~ m!(\d+)[./\-](\d+)[./\-](\d+)[.\s\-]+(\d+)[.:](\d+)!) {
         my $year = $1;
         $year -= 1900 if( $year > 1900 );
         return timegm( 0, $5, $4, $3, $2-1, $year ) - $tzadj;
     }
-
+    
     # ISO date
     if ($date =~ /(\d\d\d\d)(?:-(\d\d)(?:-(\d\d))?)?(?:T(\d\d)(?::(\d\d)(?::(\d\d(?:\.\d+)?))?)?)?(Z|[-+]\d\d(?::\d\d)?)?/ ) {
         my ($Y, $M, $D, $h, $m, $s, $tz) =
@@ -170,7 +181,7 @@ sub formatTime  {
     my $value = $epochSeconds;
 
     # use default TWiki format "31 Dec 1999 - 23:59" unless specified
-    $formatString ||= '$day $month $year - $hour:$min';
+    $formatString ||= $TWiki::cfg{DefaultDateFormat} . ' - $hour:$min';
     $outputTimeZone ||= $TWiki::cfg{DisplayTimeValues};
 
     if( $formatString =~ /http|email/i ) {

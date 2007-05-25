@@ -18,7 +18,7 @@
      | =$username= | Login username of revision | =jsmith= |
      | =$wikiname= | WikiName of revision | =JohnSmith= |
      | =$wikiusername= | <nop>WikiName with %MAINWEB% web prefix | =%MAINWEB%.JohnSmith= |
-     | =$date= | Revision date | =21 Sep 2006= |
+     | =$date= | Revision date. Actual date format defined as {DefaultDateFormat} in [[%SCRIPTURLPATH{"configure"}%][configure]] | =21 Sep 2006= |
      | =$time= | Revision time | =23:24:25= |
      | =$iso= | Revision date in ISO date format | =2006-09-22T06:24:25Z= |
      | =$min=, =$sec=, etc. | Same date format qualifiers as [[#VarGMTIME2][GMTIME{"format"}]] | |
