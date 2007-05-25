@@ -17,7 +17,7 @@
 %STARTSECTION{"create"}%
 Create a new tag - then add it to a topic.
 
-<noautolink>%TAGME{ tpaction="%URLPARAM{"newaction" default="nop"}%" tag="%URLPARAM{newtag}%" note="%URLPARAM{newtagnote}%" }%<form name="addtag" action="%SCRIPTURL%/viewauth%SCRIPTSUFFIX%/%BASEWEB%/%BASETOPIC%" method="post" onsubmit="return cleanTag(this.newtag.value);">
+<noautolink>%TAGME{ tpaction="%URLPARAM{"newaction" default="nop"}%" tag="%URLPARAM{newtag}%" note="%URLPARAM{newtagnote}%" }%<form name="addtag" action="%SCRIPTURL{viewauth}%/%BASEWEB%/%BASETOPIC%" method="post" onsubmit="return cleanTag(this.newtag.value);">
 <div class="twikiFormSteps">
 <div class="twikiFormStep twikiLast">
 Name of new tag: <input type="text" class="twikiInputField" name="newtag" id="newtag" size="30" value="%URLPARAM{"createtag"}%" onblur="this.value=cleanTag(this.value)" /> <input type="submit" class="twikiSubmit" value="%MAKETEXT{"Create"}%" />
@@ -31,7 +31,7 @@ Name of new tag: <input type="text" class="twikiInputField" name="newtag" id="ne
 %ENDSECTION{"create"}%
 
 %STARTSECTION{"existing"}%
-Existing tags: %TAGME{ tpaction="showalltags" format="[[%SCRIPTURL%/view%SCRIPTSUFFIX%/%TWIKIWEB%/TagMeSearch?tag=$tag][$tag]]" separator=", " }%
+Existing tags: %TAGME{ tpaction="showalltags" format="[[%SCRIPTURL{view}%/%TWIKIWEB%/TagMeSearch?tag=$tag][$tag]]" separator=", " }%
 %ENDSECTION{"existing"}%
 %STOPINCLUDE%
 

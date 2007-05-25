@@ -28,7 +28,7 @@ use strict;
 # =========================
 use vars qw(
   $web $topic $user $installWeb $VERSION $RELEASE $pluginName $debug
-  $initialized $attachDir $attachUrl $logAction $tagLinkFormat $tagQueryFormat
+  $initialized $workAreaDir $attachUrl $logAction $tagLinkFormat $tagQueryFormat
   $alphaNum $doneHeader $normalizeTagInput $lineRegex $topicsRegex
 );
 
@@ -78,11 +78,11 @@ sub _initialize {
     return if ($initialized);
 
     # Initialization
-    $attachDir = TWiki::Func::getPubDir() . "/$installWeb/$pluginName";
+    $workAreaDir = TWiki::Func::getWorkArea($pluginName);
     $attachUrl = TWiki::Func::getPubUrlPath() . "/$installWeb/$pluginName";
     $logAction = TWiki::Func::getPreferencesFlag("\U$pluginName\E_LOGACTION");
     $tagLinkFormat =
-        '<a href="%SCRIPTURL%/view%SCRIPTSUFFIX%/'
+        '<a href="%SCRIPTURL{view}%/'
       . $installWeb
       . '/TagMeSearch?tag=$tag;by=$by">$tag</a>';
     $tagQueryFormat =
@@ -90,7 +90,7 @@ sub _initialize {
       . '<td class="tagmeTopicTd"> <b>[[$web.$topic][<nop>$topic]]</b> '
       . '<span class="tagmeTopicTdWeb">in <nop>$web web</span></td>$n'
       . '<td class="tagmeDateTd">'
-      . '[[%SCRIPTURL%/rdiff%SCRIPTSUFFIX%/$web/$topic][$date]] - r$rev </td>$n'
+      . '[[%SCRIPTURL{rdiff}%/$web/$topic][$date]] - r$rev </td>$n'
       . '<td class="tagmeAuthorTd"> $wikiusername </td>$n'
       . '</tr></table>$n'
       . '<p class="tagmeResultsDetails">'
@@ -247,20 +247,19 @@ sub _showDefault {
     if ($normalizeTagInput) {
 
         # plain sort can be used and should be just a little faster
-        $text .= join( ', ', map { $seen{$_} } sort keys(%seen) );
+        $text .= join( ' ', map { $seen{$_} } sort keys(%seen) );
     }
     else {
 
         # uppercase characters are possible, so sort with lowercase comparison
         $text .=
-          join( ', ', map { $seen{$_} } sort { lc $a cmp lc $b } keys(%seen) );
+          join( ' ', map { $seen{$_} } sort { lc $a cmp lc $b } keys(%seen) );
     }
     my @allTags = _readAllTags();
     my @notSeen = ();
     foreach (@allTags) {
         push( @notSeen, $_ ) unless ( $seen{$_} );
     }
-    $text .= ', ' if ( scalar @tagInfo && scalar @notSeen );
     if ( scalar @notSeen ) {
         if ( $tagMode eq 'nojavascript' ) {
             $text .= _createNoJavascriptSelectBox(@notSeen);
@@ -269,10 +268,10 @@ sub _showDefault {
             $text .= _createJavascriptSelectBox(@notSeen);
         }
     }
-    $text .= ', ' if $text;
-    $text .=
-"<a href=\"%SCRIPTURL%/viewauth%SCRIPTSUFFIX%/$installWeb/TagMeCreateNewTag"
-      . "?from=$web.$topic\">create new tag</a>";
+    $text .= 
+      _wrapHtmlTagControl("<a href=\"%SCRIPTURL{viewauth}%/$installWeb/TagMeCreateNewTag".
+        "?from=$web.$topic\">create new tag</a>");
+
     return _wrapHtmlTagMeShowForm($text);
 }
 
@@ -321,7 +320,7 @@ EOF
 "\nif (text.length > 0) {createSelectBox(text, \"$selectControlId\"); document.getElementById(\"tagmeAddNewButton\").style.display=\"inline\";}\n//]]>\n</script>";
 
     my $noscript .=
-'<noscript><a href="%SCRIPTURL%/viewauth%SCRIPTSUFFIX%/%BASEWEB%/%BASETOPIC%?tagmode=nojavascript">tag this topic</a></noscript>';
+'<noscript><a href="%SCRIPTURL{viewauth}%/%BASEWEB%/%BASETOPIC%?tagmode=nojavascript">tag this topic</a></noscript>';
 
     $selectControl .=
         '<span id="tagmeAddNewButton" style="display:none;">'
@@ -979,7 +978,7 @@ sub _imgTag {
 
     if ($tag) {
         $text =
-"<a class=\"tagmeAction $image\" href=\"%SCRIPTURL%/viewauth%SCRIPTSUFFIX%/%BASEWEB%/%BASETOPIC%?"
+"<a class=\"tagmeAction $image\" href=\"%SCRIPTURL{viewauth}%/%BASEWEB%/%BASETOPIC%?"
           . "tpaction=$action;tag="
           . _urlEncode($tag)
           . ";tagmode=$tagMode\">";
@@ -997,7 +996,7 @@ sub _imgTag {
 # =========================
 sub _getTagInfoList {
     my @list = ();
-    if ( opendir( DIR, "$attachDir" ) ) {
+    if ( opendir( DIR, "$workAreaDir" ) ) {
         my @files =
           grep { !/^_tags_all\.txt$/ } grep { /^_tags_.*\.txt$/ } readdir(DIR);
         closedir DIR;
@@ -1011,7 +1010,7 @@ sub _readTagInfo {
     my ($webTopic) = @_;
 
     $webTopic =~ s/[\/\\]/\./g;
-    my $text = TWiki::Func::readFile("$attachDir/_tags_$webTopic.txt");
+    my $text = TWiki::Func::readFile("$workAreaDir/_tags_$webTopic.txt");
     my @info = grep { /^[0-9]/ } split( /\n/, $text );
     return @info;
 }
@@ -1020,7 +1019,7 @@ sub _readTagInfo {
 sub _writeTagInfo {
     my ( $webTopic, @info ) = @_;
     $webTopic =~ s/[\/\\]/\./g;
-    my $file = "$attachDir/_tags_$webTopic.txt";
+    my $file = "$workAreaDir/_tags_$webTopic.txt";
     if ( scalar @info ) {
         my $text =
           "# This file is generated, do not edit\n"
@@ -1038,8 +1037,8 @@ sub renameTagInfo {
 
     $oldWebTopic =~ s/[\/\\]/\./g;
     $newWebTopic =~ s/[\/\\]/\./g;
-    my $oldFile = "$attachDir/_tags_$oldWebTopic.txt";
-    my $newFile = "$attachDir/_tags_$newWebTopic.txt";
+    my $oldFile = "$workAreaDir/_tags_$oldWebTopic.txt";
+    my $newFile = "$workAreaDir/_tags_$newWebTopic.txt";
     if ( -e $oldFile ) {
         my $text = TWiki::Func::readFile($oldFile);
         TWiki::Func::saveFile( $newFile, $text );
@@ -1049,7 +1048,7 @@ sub renameTagInfo {
 
 # =========================
 sub _readAllTags {
-    my $text = TWiki::Func::readFile("$attachDir/_tags_all.txt");
+    my $text = TWiki::Func::readFile("$workAreaDir/_tags_all.txt");
 
     #my @tags = grep{ /^[${alphaNum}_]/ } split( /\n/, $text );
     # we assume that this file has been written by TagMe, so tags should be
@@ -1066,7 +1065,7 @@ sub writeAllTags {
     my $text =
       "# This file is generated, do not edit\n"
       . join( "\n", sort { lc $a cmp lc $b } @tags ) . "\n";
-    TWiki::Func::saveFile( "$attachDir/_tags_all.txt", $text );
+    TWiki::Func::saveFile( "$workAreaDir/_tags_all.txt", $text );
 }
 
 # =========================
@@ -1302,7 +1301,7 @@ sub _wrapHtmlTagControl {
 sub _wrapHtmlTagMeShowForm {
     my ($text) = @_;
     return
-"<form name=\"tagmeshow\" action=\"%SCRIPTURL%/viewauth%SCRIPTSUFFIX%/%BASEWEB%/%BASETOPIC%\" method=\"post\">$text</form>";
+"<form name=\"tagmeshow\" action=\"%SCRIPTURL{viewauth}%/%BASEWEB%/%BASETOPIC%\" method=\"post\">$text</form>";
 }
 
 # =========================
