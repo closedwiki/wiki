@@ -1992,11 +1992,11 @@ Parse the arguments to a $formfield specification and extract
 the relevant formfield from the given meta data.
 
    * =args= string containing name of form field
-   
+
 In addition to the name of a field =args= can be appended with a commas
 followed by a string format (\d+)([,\s*]\.\.\.)?). This supports the formatted
 search function $formfield and is used to shorten the returned string or a 
-hyphenated string.        
+hyphenated string.
 
 =cut
 
@@ -2013,7 +2013,7 @@ sub renderFormFieldArg {
     my $value = '';
     my @fields = $meta->find( 'FIELD' );
     foreach my $field ( @fields ) {
-        my $title = $field->{title} || $field->{name};
+        my $title = quotemeta($field->{title} || $field->{name});
         if( $name =~ /^($field->{name}|$title)$/ ) {
             $value = $field->{value};
             $value = '' unless defined( $value );
