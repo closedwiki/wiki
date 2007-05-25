@@ -3,7 +3,13 @@
 
 __Note:__ This is a maintenance topic, used by the TWiki administrator.
 
-This form defines the form of the home pages of registered TWiki users listed in %WIKIUSERSTOPIC%.
+This form defines the form of the home pages of registered TWiki users listed
+in %WIKIUSERSTOPIC%. *Do not edit this topic* - if you want to customise the
+user form, then:
+   1 Take a copy of this topic and save it to %MAINWEB%.<nop>UserForm
+   1 Customise %MAINWEB%.<nop>UserForm
+   1 Take a copy of NewUserTemplate and save it to %MAINWEB%.<nop>NewUserTemplate
+   1 Modify %MAINWEB%.<nop>NewUserTemplate and change the form to select your new user form.
 
 |*Name*  |*Type*  |*Size*  |*Values*  |*Tooltip message*  |*Attributes*  |
 | <nop>FirstName | text | 40 | | | |

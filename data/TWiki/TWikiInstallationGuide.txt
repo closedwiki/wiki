@@ -118,9 +118,10 @@ TWiki now supports displaying of national (non-ascii) characters and presentatio
 
 ---++ Tailor New Users Home Topic
 
-When a new users registers on your TWiki a home topic is created for him based on the =TWiki/NewUserTemplate= template topic. This can be tailored. It contains additional resources you can use to:
+When a new users registers on your TWiki, a home topic is created for them based on the =TWiki.NewUserTemplate= topic. It contains additional resources you can use to:
    * Localise the user topic.
-   * Add a default ALLOWTOPICCHANGE so only the user can edit his own home topic. We do not encourage this for Intranet sites as it sends a wrong signal to new users, but it can be necessary on a public TWiki to avoid that the user topics get spammed.
+   * Add a default ALLOWTOPICCHANGE so only the user can edit their own home topic. We do not encourage this for Intranet sites as it sends a wrong signal to new users, but it can be necessary on a public TWiki to prevent spam.
+You can create a custom new user template topic by creating the =Main.NewUserTemplate= topic, which will then override the default NewUserTemplate.
 
 ---++ Install Plugins
 TWiki:Plugins is an extensive library of Plugins for TWiki, that enhance functionality in a huge number of ways. A few plugins are pre-installed in the TWiki distribution. For more information on these, see =TWiki.InstalledPlugins=.

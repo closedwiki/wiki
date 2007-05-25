@@ -267,7 +267,7 @@ sub _registerSingleBulkUser {
     if( $settings->{doOverwriteTopics} ||
           !$session->{store}->topicExists( $row->{webName},
                                            $row->{WikiName} ) ) {
-        $log .= _createUserTopic($session, 'NewUserTemplate', $row);
+        $log .= _createUserTopic($session, $row);
     } else {
         $log .= "$b1 Not writing user topic $row->{WikiName}\n";
     }
@@ -750,7 +750,7 @@ sub finish {
     # Create the user topic. We have to do this before adding the
     # user to the user management system, because some user mappers
     # use the user topic to store data.
-    my $log = _createUserTopic($session, 'NewUserTemplate', $data);
+    my $log = _createUserTopic($session, $data);
 
     my $users = $session->{users};
     try {
@@ -812,8 +812,20 @@ sub finish {
 #I use RegistrationHandler::register to prevent certain fields (like password) 
 #appearing in the homepage and to fetch photos into the topic
 sub _createUserTopic {
-    my ($session, $template, $row) = @_;
-    my ( $meta, $text ) = TWiki::UI::readTemplateTopic($session, $template);
+    my ($session, $row) = @_;
+    my $store = $session->{store};
+    my $template = 'NewUserTemplate';
+    my( $meta, $text );
+    if( $store->topicExists( $TWiki::cfg{UsersWebName}, $template )) {
+        # Use the local customised version
+        ( $meta, $text ) = $store->readTopic(
+            undef, $TWiki::cfg{UsersWebName}, $template );
+    } else {
+        # Use the default read-only version
+        ( $meta, $text ) = $store->readTopic(
+            undef, $TWiki::cfg{SystemWebName}, $template );
+    }
+
     my $log = $b1 . ' Writing topic '.$TWiki::cfg{UsersWebName} . '.'
       . $row->{WikiName}."\n"
         . "$b1 !RegistrationHandler:\n"

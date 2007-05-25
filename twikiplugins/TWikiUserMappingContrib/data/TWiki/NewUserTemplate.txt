@@ -87,7 +87,7 @@ Text for multilingual wiki community, copy from here to %<nop>ENDSECTION{type="t
    * %MAKETEXT{"[_1] lists all TWiki user tools" args="%TWIKIWEB%.UserToolsCategory"}%
 
 %ENDSECTION{type="templateonly"}%
-%META:FORM{name="%MAINWEB%.UserForm"}%
+%META:FORM{name="%SYSTEMWEB%.UserForm"}%
 %META:FIELD{name="FirstName" attributes="" title="<nop>FirstName" value=""}%
 %META:FIELD{name="LastName" attributes="" title="<nop>LastName" value=""}%
 %META:FIELD{name="OrganisationName" attributes="" title="<nop>OrganisationName" value=""}%
