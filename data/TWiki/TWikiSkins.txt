@@ -196,11 +196,10 @@ The format of tables of file versions in the Upload screen can also be changed, 
 
 The =ATTACH:row= macros are expanded for each file in the attachment table, using the following special tags:
 | *Tag* | *Description* |
-| =%A_URL%= | URL that will recover the file |
-| =%A_VIEWFILE%= | =viewfile= URL that will recover the file |
+| =%A_URL%= | =viewfile= URL that will recover the file |
 | =%A_REV%= | Revision of this file |
 | =%A_ICON%= | A file icon suitable for representing the attachment content |
-| =%A_FILE%= | The name of the file |
+| =%A_FILE%= | The name of the file. To get the 'pub' url of the file, use =%<nop>PUBURL%/%<nop>WEB%/%<nop>TOPIC%/%<nop>A_FILE%= |
 | =%A_SIZE%= | The size of the file |
 | =%A_DATE%= | The date the file was uploaded |
 | =%A_USER%= | The user who uploaded it |
