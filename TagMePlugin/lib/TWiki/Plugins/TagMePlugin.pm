@@ -160,23 +160,15 @@ sub _handleTagMe {
     elsif ( $action eq 'newtag' ) {
         $text = _newTag($attr);
     }
+    elsif ( $action eq 'newtagandadd' ) {
+        $text = _newTag($attr);
+        $text = _addTag($attr) unless $text =~ /twikiAlert/; 
+    }
     elsif ( $action eq 'add' ) {
-
-        # TODO: let _addTag deal with params
-        my $tag = TWiki::Func::extractNameValuePair( $attr, 'tag' );
-
-        # Add param to suppress status. FWM, 03-Oct-2006
-        my $noStatus = TWiki::Func::extractNameValuePair( $attr, 'nostatus' );
-        $text = _addTag( $tag, $noStatus );
+        $text = _addTag($attr);
     }
     elsif ( $action eq 'remove' ) {
-
-        # TODO: let _removeTag deal with params
-        my $tag = TWiki::Func::extractNameValuePair( $attr, 'tag' );
-
-        # Add param to suppress status. FWM, 03-Oct-2006
-        my $noStatus = TWiki::Func::extractNameValuePair( $attr, 'nostatus' );
-        $text = _removeTag( $tag, $noStatus );
+        $text = _removeTag($attr);
     }
     elsif ( $action eq 'renametag' ) {
         $text = _renameTag($attr);
@@ -852,7 +844,10 @@ sub _makeSafeTag {
 # Add tag to topic
 # The tag must already exist
 sub _addTag {
-    my ( $addTag, $noStatus ) = @_;
+    my ( $attr ) = @_;
+
+    my $addTag = TWiki::Func::extractNameValuePair( $attr, 'tag' );
+    my $noStatus = TWiki::Func::extractNameValuePair( $attr, 'nostatus' );
 
     my $webTopic = "$web.$topic";
     my @tagInfo  = _readTagInfo($webTopic);
@@ -912,7 +907,10 @@ sub _addTag {
 # =========================
 # Remove my tag vote from topic
 sub _removeTag {
-    my ( $removeTag, $noStatus ) = @_;
+    my ( $attr ) = @_;
+
+    my $removeTag = TWiki::Func::extractNameValuePair( $attr, 'tag' );
+    my $noStatus = TWiki::Func::extractNameValuePair( $attr, 'nostatus' );
 
     my $webTopic = "$web.$topic";
     my @tagInfo  = _readTagInfo($webTopic);

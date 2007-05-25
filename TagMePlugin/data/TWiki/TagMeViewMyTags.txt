@@ -9,13 +9,13 @@
 <td>&nbsp;</td>
 <td bgcolor="#EAE9DE">&nbsp; *My Tags* &nbsp;</td>
 <td>&nbsp;</td>
-<td bgcolor="#F6F4EB">&nbsp; [[%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/TagMeSearch?by=%URLPARAM{ "by" default="me" }%][Tag Search]] &nbsp;</td>
+<td bgcolor="#F6F4EB">&nbsp; [[%SCRIPTURL{view}%/%WEB%/TagMeSearch?by=%URLPARAM{ "by" default="me" }%][Tag Search]] &nbsp;</td>
 </tr></table>
 <table border="0" cellpadding="5" cellspacing="0" style="width:100%;">
 <tr bgcolor="#EAE9DE"><td style="width:100%;"></td></tr>
 </td></tr></table>
 
-%TAGME{ tpaction="showalltags" format="<a href=\"%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/TagMeSearch?tag=$tag;by=%URLPARAM{ "by" default="me" }%\" style=\"font-size:$size%\">$tag</a>" separator=", " by="%URLPARAM{ "by" default="me" }%" }%
+%TAGME{ tpaction="showalltags" format="<a href=\"%SCRIPTURL{view}%/%WEB%/TagMeSearch?tag=$tag;by=%URLPARAM{ "by" default="me" }%\" style=\"font-size:$size%\">$tag</a>" separator=", " by="%URLPARAM{ "by" default="me" }%" }%
 %STOPINCLUDE%
 
 %BR%
