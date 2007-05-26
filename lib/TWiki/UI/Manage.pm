@@ -148,19 +148,6 @@ sub _createWeb {
     my $query = $session->{cgiQuery};
     my $user = $session->{user};
 
-    my $webBGColor = $query->param( 'webbgcolor' ) || '';
-    my $siteMapWhat = $query->param( 'sitemapwhat' ) || '';
-    my $siteMapUseTo = $query->param( 'sitemapuseto' ) || '';
-    my $noSearchAll = $query->param( 'nosearchall' ) || '';
-
-    # check permission, user authorized to create web here?
-    my $parent = undef; # default is root if no parent web
-    if( $webName =~ m|^(.*)[./](.*?)$| ) {
-        $parent = $1;
-    }
-    TWiki::UI::checkAccess( $session, $parent, undef,
-                            'CHANGE', $session->{user} );
-
     my $newWeb = $query->param( 'newweb' ) || '';
     unless( $newWeb ) {
         throw TWiki::OopsException( 'attention', def => 'web_missing' );
@@ -171,6 +158,14 @@ sub _createWeb {
             def =>'invalid_web_name', params => [ $newWeb ] );
     }
     $newWeb = TWiki::Sandbox::untaintUnchecked( $newWeb );
+
+    # check permission, user authorized to create web here?
+    my $parent = undef; # default is root if no parent web
+    if( $newWeb =~ m|^(.*)[./](.*?)$| ) {
+        $parent = $1;
+    }
+    TWiki::UI::checkAccess( $session, $parent, undef,
+                            'CHANGE', $session->{user} );
 
     my $baseWeb = $query->param( 'baseweb' ) || '';
     unless( $session->{store}->webExists( $baseWeb )) {
@@ -189,21 +184,25 @@ sub _createWeb {
             'attention', def => 'web_exists', params => [ $newWeb ] );
     }
 
+    my $webBGColor = $query->param( 'WEBBGCOLOR' ) || '';
     unless( _isValidHTMLColor( $webBGColor )) {
         throw TWiki::OopsException(
             'attention', def => 'invalid_web_color',
             params => [ $webBGColor ] );
     }
 
-    # create the empty web
-    my $opts =
-      {
-       WEBBGCOLOR => $webBGColor,
-       SITEMAPWHAT => $siteMapWhat,
-       SITEMAPUSETO => $siteMapUseTo,
-       NOSEARCHALL => $noSearchAll,
-      };
-    $opts->{SITEMAPLIST} = 'on' if( $siteMapWhat );
+    # Get options from the form (only those options that are already
+    # set in the template WebPreferences topic are changed, so we can
+    # just copy everything)
+    my $opts = {
+        # Set permissions such that only the creating user can modify the
+        # web preferences
+        ALLOWTOPICCHANGE => $session->{users}->wikiName($user),
+        ALLOWTOPICRENAME => 'nobody',
+    };
+    foreach my $p ($query->param()) {
+        $opts->{uc($p)} = $query->param($p);
+    }
 
     my $err = $session->{store}->createWeb( $user, $newWeb, $baseWeb, $opts );
     if( $err ) {

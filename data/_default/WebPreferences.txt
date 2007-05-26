@@ -48,7 +48,7 @@ These settings override the defaults for this web only. See [[%TWIKIWEB%.TWikiPr
    * Comma separated list of *forms* that can be attached to topics in this web. See %TWIKIWEB%.TWikiForms for more information.
       * Set WEBFORMS =
 
-   * Users or groups who __are not__ / __are__ allowed to __view__ / __change__ / __rename__ topics in the <nop>%WEB% web: (See %TWIKIWEB%.TWikiAccessControl). Remove the # to enable any of these settings. Remember that an empty setting is a valid setting; setting DENYWEBVIEW to nothing means that anyone can view the web.
+   * Users or groups who __are not__ / __are__ allowed to __view__ / __change__ / __rename__ topics in the <nop>%WEB% web: (See %TWIKIWEB%.TWikiAccessControl).
       * Set DENYWEBVIEW = 
       * Set ALLOWWEBVIEW = 
       * Set DENYWEBCHANGE = 
@@ -57,8 +57,8 @@ These settings override the defaults for this web only. See [[%TWIKIWEB%.TWikiPr
       * Set ALLOWWEBRENAME = 
 
    * Users or groups allowed to change or rename this <nop>%TOPIC% topic: (e.g., %MAINWEB%.TWikiAdminGroup)
-      * Set ALLOWTOPICCHANGE = %MAINWEB%.TWikiAdminGroup
-      * Set ALLOWTOPICRENAME = %MAINWEB%.TWikiAdminGroup
+      * Set ALLOWTOPICCHANGE = 
+      * Set ALLOWTOPICRENAME = 
 
    * Web preferences that are *not* allowed to be overridden by user or topic preferences:
       * Set FINALPREFERENCES = NOSEARCHALL, ATTACHFILESIZELIMIT, WIKIWEBMASTER, WEBCOPYRIGHT, WEBTOPICLIST, DENYWEBVIEW, ALLOWWEBVIEW, DENYWEBCHANGE, ALLOWWEBCHANGE, DENYWEBRENAME, ALLOWWEBRENAME
