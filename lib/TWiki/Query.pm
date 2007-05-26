@@ -233,43 +233,11 @@ my @operators = (
         },
     },
     {
-        name => '[?',
-        prec => 800,
-        arity => 2,
-        close => ']',
-        exec => \&_where,
-    },
-    {
-        name => '[where', # synonym for [?
-        casematters => 0,
-        prec => 800,
-        arity => 2,
-        close => ']',
-        exec => \&_where,
-    },
-    {
         name => '[',
         prec => 800,
         arity => 2,
         close => ']',
-        exec => sub {
-            my( $domain, $a, $b ) = @_;
-            my $lval = $a->evaluate( $domain );
-            my $rval = $b->evaluate( $domain );
-            if( ref($lval) eq 'ARRAY' ) {
-                if( ref($rval) || $rval !~ /^\d+$/) {
-                    #die "$rval is not a valid index";
-                } elsif( $rval >= scalar(@$lval)) {
-                    #die "Index $rval out of bounds 0..".scalar(@$lval);
-                }
-                return $lval->[$rval];
-            } elsif( ref($lval) ) {
-                # Attempt to index a HASH or Meta
-            } elsif( $rval =~ /^0+$/) {
-                return $lval;
-            }
-            return undef;
-        },
+        exec => \&_where,
     },
     # Comparison ops, shared with %IF
     @TWiki::If::cmpOps,

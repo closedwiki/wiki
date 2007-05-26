@@ -396,7 +396,7 @@ sub test_attachmentSizeQuery1 {
 
     $this->set_up_for_queries();
     my $result = $this->{twiki}->handleCommonTags(
-        '%SEARCH{"attachments[?size > 0]"'.$stdCrap,
+        '%SEARCH{"attachments[size > 0]"'.$stdCrap,
         $this->{test_web}, $this->{test_topic});
     $this->assert_str_equals('QueryTopic QueryTopicTwo', $result);
 }
@@ -406,7 +406,7 @@ sub test_attachmentSizeQuery2 {
 
     $this->set_up_for_queries();
     my $result = $this->{twiki}->handleCommonTags(
-        '%SEARCH{"META:FILEATTACHMENT[?size > 10000]"'.$stdCrap,
+        '%SEARCH{"META:FILEATTACHMENT[size > 10000]"'.$stdCrap,
         $this->{test_web}, $this->{test_topic});
     $this->assert_str_equals('QueryTopicTwo', $result);
 }
@@ -416,7 +416,7 @@ sub test_indexQuery {
 
     $this->set_up_for_queries();
     my $result = $this->{twiki}->handleCommonTags(
-        '%SEARCH{"attachments[1].name=\'flib.xml\'"'.$stdCrap,
+        '%SEARCH{"attachments[name=\'flib.xml\']"'.$stdCrap,
         $this->{test_web}, $this->{test_topic});
     $this->assert_str_equals('QueryTopicTwo', $result);
 }
@@ -466,7 +466,7 @@ sub test_formQuery3 {
 
     $this->set_up_for_queries();
     my $result = $this->{twiki}->handleCommonTags(
-        '%SEARCH{"TestForm[?name=\'Field1\'].value=\'A Field\'"'.$stdCrap,
+        '%SEARCH{"TestForm[name=\'Field1\'].value=\'A Field\'"'.$stdCrap,
         $this->{test_web}, $this->{test_topic});
     $this->assert_str_equals('QueryTopic', $result);
 }
