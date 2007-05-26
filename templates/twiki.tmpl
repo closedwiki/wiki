@@ -116,7 +116,9 @@
 
 %TMPL:DEF{"bodyend"}%</body></html>%TMPL:END%
 
-%TMPL:DEF{"topicaction"}% [[%WEB%.%TOPIC%][Cancel]] %TMPL:END%
+%TMPL:DEF{"canceltopicaction"}%[[%WEB%.%TOPIC%][Cancel]]%TMPL:END%
+%TMPL:DEF{"topicaction"}%%TMPL:P{"topicactionbuttons"}%%TMPL:END%
+%TMPL:DEF{"topicactionbuttons"}%%TMPL:P{"canceltopicaction"}%%TMPL:END%
 
 %TMPL:DEF{"topicinfo"}%<table width="100%" border="0" cellpadding="3" cellspacing="0">
  <tr bgcolor="%WEBBGCOLOR%">
