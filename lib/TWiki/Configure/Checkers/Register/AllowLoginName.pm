@@ -35,6 +35,8 @@ sub check {
             $n = $this->WARN(<<WARNED);
 Deprecated {MapUserToWikiName} setting is inconsistent with
 {Register}{AllowLoginName}. {MapUserToWikiName} will be ignored.
+You can safely remove the {MapUserToWikiName} setting from your
+lib/LocalSite.cfg file to remove this warning.
 WARNED
         }
     }
