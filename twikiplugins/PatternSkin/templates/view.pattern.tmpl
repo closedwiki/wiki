@@ -58,7 +58,10 @@
 
 %TMPL:DEF{"revinfo"}% <span class="patternRevInfo">%REVINFO%</span>%TMPL:END%
 
-
+%{ DEPRECATED: beforetext and aftertext }%
+%{ compatibility transition older than 4.2: }%
+%TMPL:DEF{"contentheader"}%%TMPL:P{"beforetext"}%%TMPL:END%
+%TMPL:DEF{"contentfooter"}%%TMPL:P{"aftertext"}%%TMPL:END%
 
 %TMPL:DEF{"patterntopiccontents"}%%TMPL:P{"toolbar"}%
 %TMPL:P{"topicpathinfo"}%%TMPL:P{"contentheaderstylewrapper"}%%TMPL:P{"formattop"}%%TMPL:P{"attachmentsattop"}%<div class="patternContent">%TMPL:P{"content"}%
