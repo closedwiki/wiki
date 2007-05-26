@@ -125,7 +125,7 @@ setCheckBoxState(document.forms.newtopic.nonwikiword, allowsNonWikiWord.toBoolea
 <div class="twikiFormStep">
 ---------------------------------------------+++ %MAKETEXT{"Topic parent:"}%
 <p>%STARTSECTION{"topicparent"}%
-%IF{"defined pickparent" then="<select name='topicparent' size='10' class='twikiSelect' tabindex='12'>$percntTOPICLIST{$quot<option $marker value='$name'>$name</option>$quot separator=$quot$quot selection=$quot$percntURLPARAM{ $quotparent$quot default=$quot%MAKETEXT{"(no parent, orphaned topic)"}%$quot }$percnt$quot}$percnt<option value=$quot$quot>$percntMAKETEXT{$quot(no parent, orphaned topic)$quot}$percnt</option></select>" else="<input type='text' size='40'/><a href='$percntSCRIPTURLPATH{view}$percnt/$percntBASEWEB$percnt/$percntBASETOPIC$percnt?$percntQUERYSTRING$percnt;pickparent=1'>&nbsp;Pick from a list</a>"}%
+%IF{"defined pickparent" then="<select name='topicparent' size='10' class='twikiSelect' tabindex='12'>$percntTOPICLIST{$quot<option $marker value='$name'>$name</option>$quot separator=$quot$quot selection=$quot$percntURLPARAM{ $quotparent$quot default=$quot%MAKETEXT{"(no parent, orphaned topic)"}%$quot }$percnt$quot}$percnt<option value=$quot$quot>$percntMAKETEXT{$quot(no parent, orphaned topic)$quot}$percnt</option></select>" else="<input type='text' size='40' class='twikiInputField' />&nbsp;<a href='$percntSCRIPTURLPATH{view}$percnt/$percntBASEWEB$percnt/$percntBASETOPIC$percnt?$percntQUERYSTRING$percnt;pickparent=1'>%MAKETEXT{"Pick from a list"}%</a>"}%
 %ENDSECTION{"topicparent"}%</p>
 </div><!--/twikiFormStep-->
 <div class="twikiFormStep">
