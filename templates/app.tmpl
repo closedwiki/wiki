@@ -1,0 +1,12 @@
+%{ to be used by custom application pages }%
+%TMPL:INCLUDE{"twiki"}%
+%{ optional inline CSS styles to be placed in body text: }%
+%TMPL:DEF{"bodystyle"}%%TMPL:END%
+%{ title string in page: }%
+%TMPL:DEF{"pagetitlecontents"}%%TMPL:END%
+%{ main application contents: }%
+%TMPL:DEF{"appcontent"}%%TMPL:END%
+%TMPL:DEF{"pagetitle"}%<h1>%TMPL:P{"pagetitlecontents"}%</h1>%TMPL:END%
+%TMPL:DEF{"titleaction"}%(%TMPL:P{"pagetitlecontents"}%) %TMPL:END%
+%{ content: }%
+%TMPL:DEF{"content"}%%TMPL:P{"bodystyle"}%%TMPL:P{"pagetitle"}%%TMPL:P{"appcontent"}%%TMPL:END%
