@@ -4,12 +4,10 @@
 %TMPL:DEF{"LOG_IN"}%Log In%TMPL:END%
 %TMPL:DEF{"LOG_OUT"}%Log Out%TMPL:END%
 
-%TMPL:DEF{"htmldoctype"}%
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="%LANG%" lang="%LANG%"> %TMPL:END%
+%TMPL:DEF{"htmldoctype"}%<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="%LANG%" lang="%LANG%">%TMPL:END%
 
-%TMPL:DEF{"script"}%
-<script type="text/javascript" src="%PUBURLPATH%/%TWIKIWEB%/TWikiJavascripts/twiki.js"></script>
+%TMPL:DEF{"script"}%<script type="text/javascript" src="%PUBURLPATH%/%TWIKIWEB%/TWikiJavascripts/twiki.js"></script>
 <script type="text/javascript">
 //<![CDATA[
 	function launchWindow(inWeb, inTopic) {
@@ -17,8 +15,7 @@
 	}
 //]]>
 </script>
-%TMPL:P{"templatescript"}%
-%TMPL:END%
+%TMPL:P{"templatescript"}%%TMPL:END%
 
 
 
@@ -26,13 +23,11 @@
 
 
 
-%TMPL:DEF{"twikistyle"}%
-%TMPL:INCLUDE{"css"}%
-%TMPL:END%
+%TMPL:DEF{"twikistyle"}%%TMPL:INCLUDE{"css"}%%TMPL:END%
 
 
 
-%TMPL:DEF{"head"}% <head>
+%TMPL:DEF{"head"}%<head>
 	%TMPL:P{"windowtitle"}%
 	<meta http-equiv="Content-Type" content="text/html; charset=%CHARSET%" /> <meta name="robots" content="noindex" /> %HTTP_EQUIV_ON_VIEW%
 	<link rel="icon" href="%FAVICON%" type="image/x-icon" /> <link rel="shortcut icon" href="%FAVICON%" type="image/x-icon" />
@@ -44,7 +39,7 @@
 
 
 
-%TMPL:DEF{"titleaction"}% %TMPL:END%
+%TMPL:DEF{"titleaction"}%%TMPL:END%
 
 
 
@@ -52,9 +47,8 @@
 
 
 
-%TMPL:DEF{"bodystart"}% <body bgcolor="#ffffff">
-#PageTop
-%TMPL:END%
+%TMPL:DEF{"bodystart"}%<body bgcolor="#ffffff">
+#PageTop %TMPL:END%
 
 
 
@@ -62,8 +56,7 @@
 
 
 
-%TMPL:DEF{"standardheader"}%
-<form name="main" action="%SCRIPTURLPATH{"view"}%/%WEB%/%TOPIC%">
+%TMPL:DEF{"standardheader"}%<form name="main" action="%SCRIPTURLPATH{"view"}%/%WEB%/%TOPIC%">
 <table width="100%" border="0" cellpadding="3" cellspacing="0">
  <tr>
   <td bgcolor="%WEBBGCOLOR%" rowspan="2" valign="top" width="1%">
@@ -89,8 +82,7 @@
  </tr>
 </table></form>%TMPL:END%
 
-%TMPL:DEF{"simpleheader"}%
-<table width="100%" border="0" cellpadding="3" cellspacing="0">
+%TMPL:DEF{"simpleheader"}%<table width="100%" border="0" cellpadding="3" cellspacing="0">
  <tr>
   <td bgcolor="%WEBBGCOLOR%" rowspan="2" valign="top" width="1%">
    <noautolink>
@@ -112,13 +104,13 @@
 <font size="-2"> %WEBCOPYRIGHT% </font>
 </div>%TMPL:END%
 
-%TMPL:DEF{"footernote"}% %TMPL:END%
+%TMPL:DEF{"footernote"}%%TMPL:END%
 
 %TMPL:DEF{"standardfooter"}% 
 #PageBottom <table width="100%" border="0" cellpadding="3" cellspacing="0">
  <tr>
-  <td> %TMPL:P{"footernote"}% </td>
-  <td width="50%"> %TMPL:P{"copyright"}% </td>
+  <td> %TMPL:P{"footernote"}%</td>
+  <td width="50%"> %TMPL:P{"copyright"}%</td>
  </tr>
 </table>%TMPL:END%
 
@@ -126,18 +118,18 @@
 
 %TMPL:DEF{"topicaction"}% [[%WEB%.%TOPIC%][Cancel]] %TMPL:END%
 
-%TMPL:DEF{"topicinfo"}% <table width="100%" border="0" cellpadding="3" cellspacing="0">
+%TMPL:DEF{"topicinfo"}%<table width="100%" border="0" cellpadding="3" cellspacing="0">
  <tr bgcolor="%WEBBGCOLOR%">
-  <td valign="top">  Topic <b>%TOPIC%</b> . { %TMPL:P{"topicaction"}%  } </td> </tr> </table> %TMPL:END%
+<td valign="top"> Topic <b>%TOPIC%</b> . { %TMPL:P{"topicaction"}% } </td> </tr></table>%TMPL:END%
 
 
-%TMPL:DEF{"main"}% <div class="twikiMiddleContainer"><div class="twikiMain">
+%TMPL:DEF{"main"}%<div class="twikiMiddleContainer"><div class="twikiMain">
 %TMPL:P{"simpleheader"}%
-%TMPL:P{"content"}% %TMPL:P{"standardfooter"}%</div></div>%TMPL:END%
+%TMPL:P{"content"}%%TMPL:P{"standardfooter"}%</div></div>%TMPL:END%
 
 %TMPL:DEF{"revisions"}%<a href="%SCRIPTURLPATH{"rdiff"}%/%WEB%/%TOPIC%?type=history" title="%MAKETEXT{"View total topic history"}%" accesskey="H" rel="nofollow">%MAKETEXT{"&History"}%</a>: %REVISIONS% %TMPL:END%
 
-%TMPL:DEF{"login"}% %TMPL:P{context="can_login" then="login_actions"}% %TMPL:END%
+%TMPL:DEF{"login"}%%TMPL:P{context="can_login" then="login_actions"}%%TMPL:END%
 
 %TMPL:DEF{"login_actions"}%%IF{"context authenticated" then='%MAKETEXT{"Hello [_1]!" args="[[%WIKIUSERNAME%][%SPACEOUT{%WIKINAME%}%]]"}%%BR%%LOGOUT%' else='%LOGIN% %MAKETEXT{"or"}% [[%TWIKIWEB%.TWikiRegistration][%MAKETEXT{"Register"}%]]'}%%TMPL:END%
 
