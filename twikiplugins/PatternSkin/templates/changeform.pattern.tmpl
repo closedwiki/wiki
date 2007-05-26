@@ -28,14 +28,13 @@
 
 <form name="main" action="%SCRIPTURLPATH{"edit"}%/%WEB%/%TOPIC%" method="post">
 <input type="hidden" name="t" value="%GMTIME{'$epoch'}%" />
-<div class="twikiFormSteps twikiLast">
+<div class="twikiFormSteps">
 <div class="twikiFormStep twikiLast">
 ---+++ %MAKETEXT{"Possible form templates"}%   
 %FORMLIST%
 </div><!-- /twikiFormStep-->
 </div><!-- /twikiFormSteps-->
-%TEXT%
-%EDITACTION%
+%TEXT% %EDITACTION%
 <input type="hidden" name="topicparent" value="%URLPARAM{"topicparent"}%" />
 <input type="hidden" name="redirectto" value="%URLPARAM{"redirectto"}%" />
 <input type="hidden" name="skin" value="%URLPARAM{"skin"}%" />

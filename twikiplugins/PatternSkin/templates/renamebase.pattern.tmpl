@@ -2,8 +2,7 @@
 
 
 
-%TMPL:DEF{"templatejavascript"}%
-<script type="text/javascript">
+%TMPL:DEF{"templatescript"}%<script type="text/javascript">
 //<![CDATA[
 	var pageElem = null;
 	addLoadEvent(setPageElem);
@@ -12,8 +11,7 @@
 	}
 //]]>
 </script>
-<script type="text/javascript" src="%PUBURLPATH%/%TWIKIWEB%/TWikiJavascripts/twiki_renamebase.js"></script>%TMPL:P{"subtemplatejavascript"}%
-%TMPL:END%
+<script type="text/javascript" src="%PUBURLPATH%/%TWIKIWEB%/TWikiJavascripts/twiki_renamebase.js"></script>%TMPL:P{"subtemplatescript"}%%TMPL:END%
 
 
 
@@ -94,15 +92,14 @@
 
 %TMPL:DEF{"searchresults"}%<div class="patternSearchResults">
 ---+++ %MAKETEXT{"Notices:"}%
-%TMPL:P{"updatenote"}%<div class="patternBlockquote">
+<div class="patternBlockquote">%TMPL:P{"updatenote"}%
 ---++++ %MAKETEXT{"Change links in topics that refer to [_1] in the [_2] Web:" args="%TOPIC%, <nop>%WEB%"}%
 %LOCAL_SEARCH%
-</div>
-<div class="patternBlockquote">
+
 ---++++ %MAKETEXT{"Change links in topics that refer to [_1] in any Web:" args="[[%WEB%.%TOPIC%]]"}%
 %GLOBAL_SEARCH%
 %TMPL:P{"checkuncheck"}%
-</div>
+</div><!-- /patternBlockquote-->
 </div><!-- /patternSearchResults-->%TMPL:END%
 
 

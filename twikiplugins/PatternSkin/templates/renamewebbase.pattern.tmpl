@@ -37,7 +37,7 @@
 
 %TMPL:DEF{"searchresults"}%<div class="patternSearchResults">
 ---+++ %MAKETEXT{"Notices:"}%
-%TMPL:P{"updatenote"}%<div class="patternBlockquote">
+<div class="patternBlockquote">%TMPL:P{"updatenote"}%
 *%MAKETEXT{"Topics which are currently being edited by other users in the [_1] Web:" args="<nop>%WEB%"}%* %BR%
 %MOVE_LOCKED%
 
@@ -46,14 +46,12 @@
 
 *%MAKETEXT{"Topics which refer to this web that you do not have permission to change:"}%* %BR%
 %REF_DENIED%
-</div>
-<div class="patternBlockquote">
+
 ---++++ %MAKETEXT{"Change links in topics that refer to ![_1] in the [_2] Web:" args="%WEB%, <nop>%WEB%"}%
 %LOCAL_SEARCH%
-</div>
-<div class="patternBlockquote">
+
 ---++++ %MAKETEXT{"Change links in topics that refer to ![_1] in any Web:" args="%WEB%"}%
 %GLOBAL_SEARCH%
 %TMPL:P{"checkuncheck"}%
-</div>
+</div><!-- /patternBlockquote-->
 </div><!--/patternSearchResults-->%TMPL:END%
