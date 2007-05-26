@@ -679,8 +679,8 @@ $TWiki::cfg{DisplayTimeValues} = 'gmtime';
 # **SELECT $day $month $year, $year-$mo-$day, $year/$mo/$day, $year.$mo.$day**
 # Set the default format for dates. The traditional TWiki format is 
 # '$day $month $year' (31 Dec 2007). The ISO format '$year-$mo-$day'
-# (2007-12-31) is recommended for non English linguage TWikis. Note that $mo
-# is the month as two digit number. $month is the three first letters of
+# (2007-12-31) is recommended for non English language TWikis. Note that $mo
+# is the month as a two digit number. $month is the three first letters of
 # English name of the month
 $TWiki::cfg{DefaultDateFormat} = '$day $month $year';
 
