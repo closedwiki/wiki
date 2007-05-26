@@ -1,9 +1,12 @@
 %META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev: 7770 $"}%
 ---+ Plain Skin
 
-The plain skin is used to get the rendered topic text without any page decoration such as side, top or bottom bars. For example, TWiki uses this skin for pop-up help windows. It also can be used to display topic content inside an [[http://www.htmlhelp.com/reference/html40/special/iframe.html][IFRAME]].
+The plain skin is used to get the rendered topic text without any page decoration such as side, top or bottom bars. The text is shown without any markup styles. It can be used to display topic content inside an [[http://www.htmlhelp.com/reference/html40/special/iframe.html][IFRAME]].
 
 This skin is part of every TWiki distribution.
+
+This skin has been used to show topics in a pop-up window; this has been replaced with template =viewplain=.
+
 
 ---++ Skin Info
 
