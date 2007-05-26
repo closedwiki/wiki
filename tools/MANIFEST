@@ -951,6 +951,7 @@ templates/view.rssatom.tmpl 0444
 templates/view.text.tmpl 0444
 templates/view.tmpl 0444
 templates/view.xml.tmpl 0444
+templates/viewplain.tmpl 0444
 templates/viewprint.tmpl 0444
 tools/geturl.pl 0555
 tools/rewriteshbang.pl 0555
