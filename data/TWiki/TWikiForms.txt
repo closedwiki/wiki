@@ -163,7 +163,7 @@ For example, a simple form just supporting entry of a name and a date would look
    * The field value will be used to initialize a field when a form is created, unless specific values are given by the topic template or query parameters. The first item in the list for a select or radio type is the default item. For =label=, =text=, and =textarea= fields the value may also contain commas. =checkbox= fields cannot be initialized through the form template.
    * Leading and trailing spaces are _not_ significant.
    * Field values can also be generated through a %TWIKIWEB%.FormattedSearch, which must yield a suitable table as the result.
-   * Variables in the initial values of a form definition get expanded when form values are initialized from the form definition. The escape words =$quot= ("), =$percnt= (%), =$dollar= ($), =$n= (newline), and =$nop= can be used to prevent expansion.
+   * Variables in the initial values of a form definition get expanded when form values are initialized from the form definition. The FormatTokens can be used to prevent expansion.
 *General Notes:*
    * The topic definition is not read when a topic is viewed.
    * Form definition topics can be protected in the usual manner, using  TWikiAccessControl, to limit who can change the form template and/or individual value lists. Note that view access is required to be able to edit topics that use the form definition, though view access to the form definition is _not_ required to view a topic where the form has been used.

@@ -1953,6 +1953,7 @@ See test/unit/Fn_SECTION.pm for detailed testcases that
 round out the spec.
 
 =cut
+
 sub parseSections {
     #my( $text _ = @_;
     my %sections;
@@ -2852,9 +2853,9 @@ sub IF {
     try {
         $expr = $ifFactory->parse( $params->{_DEFAULT} );
         if( $expr->evaluate( $this )) {
-            $result = $params->{then} || '';
+            $result = expandStandardEscapes( $params->{then} || '' );
         } else {
-            $result = $params->{else} || '';
+            $result = expandStandardEscapes( $params->{else} || '' );
         }
     } catch TWiki::InfixParser::Error with {
         my $e = shift;
