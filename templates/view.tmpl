@@ -16,13 +16,11 @@
 
 %TMPL:DEF{"simpleheader"}%%BROADCASTMESSAGE%%TMPL:P{"standardheader"}%%TMPL:END%
 
-
 %TMPL:DEF{"inactive_edit"}%<strike>Edit</strike>%TMPL:END%
 %TMPL:DEF{"create_topic"}%Cr<span class="twikiAccessKey">e</span>ate%TMPL:END%
 %TMPL:DEF{"edit_topic"}%<span class="twikiAccessKey">E</span>dit%TMPL:END%
 
 %TMPL:DEF{"edit_wysiwyg_link"}%%TMPL:P{"sep"}% <a href="%SCRIPTURLPATH{"edit"}%/%WEB%/%TOPIC%?cover=%COMPOSER%" rel="nofollow" title='%MAKETEXT{"Edit this topic text"}%'>%MAKETEXT{"&WYSIWYG"}%</a>%TMPL:END%
-
 
 %TMPL:DEF{"url_param_editaction"}%%IF{"defined EDITACTION" then="&action=%EDITACTION%" else=""}%%TMPL:END%
 
@@ -34,13 +32,12 @@
 %TMPL:DEF{"inactive_more"}%<strike>More topic actions...</strike>%TMPL:END%
 %TMPL:DEF{"active_more"}%<a href="%SCRIPTURLPATH{"oops"}%/%WEB%/%TOPIC%?template=oopsmore&amp;param1=%MAXREV%&amp;param2=%CURRREV%" rel='nofollow'>More</a>%TMPL:END%
 
-
-%TMPL:DEF{"content"}%
+%TMPL:DEF{"content"}%%TMPL:P{"contentheaderstylewrapper"}%
 %TEXT%
 #TopicEnd
-%TMPL:P{"form"}%%TMPL:P{"attachments"}%
+%TMPL:P{"contentfooterstylewrapper"}%%TMPL:P{"form"}%%TMPL:P{"attachments"}%
 %TMPL:P{"topicinfo"}%%TMPL:END%
 
 %TMPL:DEF{"topicactionbuttons"}%%TMPL:P{context="inactive" then="inactive_edit" else="edit_topic_link"}%  %TMPL:P{"sep"}% %TMPL:P{context="inactive" then="inactive_attach" else="active_attach"}% %TMPL:P{"sep"}% Backlinks: <a href="%SCRIPTURLPATH{"oops"}%/%WEB%/%TOPIC%?template=backlinksweb" title="Search the <nop>%WEB% Web for topics that link to here">Web</a> <a href="%SCRIPTURLPATH{"oops"}%/%WEB%/%TOPIC%?template=backlinksallwebs" title="Search all webs for topics that link to here">All webs</a>
-  %TMPL:P{"sep"}% <a href="%SCRIPTURLPATH{"view"}%/%WEB%/%TOPIC%?cover=print%REVARG%" rel='nofollow'>Printable</a>
+%TMPL:P{"sep"}% <a href="%SCRIPTURLPATH{"view"}%/%WEB%/%TOPIC%?cover=print%REVARG%" rel='nofollow'>Printable</a>
 %TMPL:P{"sep"}% %TMPL:P{"revisions"}% %TMPL:P{"sep"}% %TMPL:P{context="inactive" then="inactive_more" else="active_more"}%%TMPL:END%

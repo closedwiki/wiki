@@ -106,7 +106,7 @@
 
 %TMPL:DEF{"footernote"}%%TMPL:END%
 
-%TMPL:DEF{"standardfooter"}% 
+%TMPL:DEF{"standardfooter"}%
 #PageBottom <table width="100%" border="0" cellpadding="3" cellspacing="0">
  <tr>
   <td> %TMPL:P{"footernote"}%</td>
@@ -121,13 +121,21 @@
 %TMPL:DEF{"topicactionbuttons"}%%TMPL:P{"canceltopicaction"}%%TMPL:END%
 
 %TMPL:DEF{"topicinfo"}%<table width="100%" border="0" cellpadding="3" cellspacing="0">
- <tr bgcolor="%WEBBGCOLOR%">
+<tr bgcolor="%WEBBGCOLOR%">
 <td valign="top"> Topic <b>%TOPIC%</b> . { %TMPL:P{"topicaction"}% } </td> </tr></table>%TMPL:END%
 
 
 %TMPL:DEF{"main"}%<div class="twikiMiddleContainer"><div class="twikiMain">
 %TMPL:P{"simpleheader"}%
 %TMPL:P{"content"}%%TMPL:P{"standardfooter"}%</div></div>%TMPL:END%
+
+%{ container displayed just above the topic text: }%
+%TMPL:DEF{"contentheader"}%%TMPL:END%
+%TMPL:DEF{"contentheaderstylewrapper"}%<div class="twikiContentHeader">%TMPL:P{"contentheader"}%</div>%TMPL:END%
+
+%{ container displayed just below the topic text: }%
+%TMPL:DEF{"contentfooter"}%%TMPL:END%
+%TMPL:DEF{"contentfooterstylewrapper"}%<div class="twikiContentFooter">%TMPL:P{"contentfooter"}%</div>%TMPL:END%
 
 %TMPL:DEF{"revisions"}%<a href="%SCRIPTURLPATH{"rdiff"}%/%WEB%/%TOPIC%?type=history" title="%MAKETEXT{"View total topic history"}%" accesskey="H" rel="nofollow">%MAKETEXT{"&History"}%</a>: %REVISIONS% %TMPL:END%
 
