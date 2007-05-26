@@ -893,6 +893,7 @@ robots.txt 0444
 root-htaccess.txt 0444
 subdir-htaccess.txt 0444
 templates/addform.tmpl 0444
+templates/app.tmpl 0444
 templates/attach.tmpl 0444
 templates/attachagain.tmpl 0444
 templates/attachnew.tmpl 0444
