@@ -15,15 +15,15 @@ twiki.HTML = {
 	},
 	
 	/**
-	Writes HTML to HTMLElement inElement.
-	@param inElement : (HTMLElement) element to write to
+	Writes HTML to HTMLElement el.
+	@param el : (HTMLElement) element to write to
 	@param inHtml : (String) HTML to write
 	@return The updated HTMLElement
 	*/
-	setHtmlOfElement:function(inElement, inHtml) {
-		if (!inElement || inHtml == undefined) return null;
-		inElement.innerHTML = inHtml;
-		return inElement;
+	setHtmlOfElement:function(el, inHtml) {
+		if (!el || inHtml == undefined) return null;
+		el.innerHTML = inHtml;
+		return el;
 	},
 	
 	/**
@@ -37,13 +37,13 @@ twiki.HTML = {
 	},
 	
 	/**
-	Returns the HTML contents of element inElement.
-	@param inElement : (HTMLElement) element to get contents of
+	Returns the HTML contents of element el.
+	@param el : (HTMLElement) element to get contents of
 	@return HTLM contents string.
 	*/
-	getHtmlOfElement:function(inElement) {
-		if (!inElement) return null;
-		return inElement.innerHTML;
+	getHtmlOfElement:function(el) {
+		if (!el) return null;
+		return el.innerHTML;
 	},
 	
 	/**
@@ -57,13 +57,13 @@ twiki.HTML = {
 	},
 	
 	/**
-	Clears the contents of element inElement.
-	@param inElement (HTMLElement) : object to clear
+	Clears the contents of element el.
+	@param el (HTMLElement) : object to clear
 	*/
-	clearElement:function(inElement) {
-		if (!inElement) return null;
-		twiki.HTML.setHtmlOfElement(inElement, "");
-		return inElement;
+	clearElement:function(el) {
+		if (!el) return null;
+		twiki.HTML.setHtmlOfElement(el, "");
+		return el;
 	},
 	
 	/**
@@ -77,15 +77,15 @@ twiki.HTML = {
 	/**
 	untested
 	*/
-	deleteElement:function(inElement) {
-		if (!inElement) return null;
-		inElement.parentNode.removeChild(inElement);
-		return inElement;
+	deleteElement:function(el) {
+		if (!el) return null;
+		el.parentNode.removeChild(el);
+		return el;
 	},
 	
 	/**
 	Inserts a new HTMLElement after an existing element.
-	@param inElement : (HTMLElement) (required) the element to insert after
+	@param el : (HTMLElement) (required) the element to insert after
 	@param inType : (String) (required) element type of the new HTMLElement: 'p', 'b', 'span', etc
 	@param inHtmlContents : (String) (optional) element HTML contents
 	@param inAttributes : (Object) (optional) value object with attributes to set to the new element
@@ -106,15 +106,15 @@ twiki.HTML = {
     	);
     </pre>
 	*/
-	insertAfterElement:function(inElement, inType, inHtmlContents, inAttributes) {
-		if (!inElement || !inType) return null;
+	insertAfterElement:function(el, inType, inHtmlContents, inAttributes) {
+		if (!el || !inType) return null;
 		var newElement = twiki.HTML._createElementWithTypeAndContents(
 			inType,
 			inHtmlContents,
 			inAttributes
 		);
 		if (newElement) {
-			inElement.appendChild(newElement);
+			el.appendChild(newElement);
 			return newElement;
 		}
 		return null;
@@ -122,21 +122,21 @@ twiki.HTML = {
 	
 	/**
 	Inserts a new HTMLElement after an existing element.
-	@param inElement : (HTMLElement) (required) the element to insert after
+	@param el : (HTMLElement) (required) the element to insert after
 	@param inType : (String) (required) element type of the new HTMLElement: 'p', 'b', 'span', etc
 	@param inHtmlContents : (String) (optional) element HTML contents
 	@param inAttributes : (Object) (optional) value object with attributes to set to the new element
 	@return The new HTMLElement
 	*/
-	insertBeforeElement:function(inElement, inType, inHtmlContents, inAttributes) {
-		if (!inElement || !inType) return null;
+	insertBeforeElement:function(el, inType, inHtmlContents, inAttributes) {
+		if (!el || !inType) return null;
 		var newElement = twiki.HTML._createElementWithTypeAndContents(
 			inType,
 			inHtmlContents,
 			inAttributes
 		);
 		if (newElement) {
-			inElement.parentNode.insertBefore(newElement, inElement);
+			el.parentNode.insertBefore(newElement, el);
 			return newElement;
 		}
 		return null;
@@ -144,21 +144,21 @@ twiki.HTML = {
 	
 	/**
 	Replaces an existing HTMLElement with a new element.
-	@param inElement : (HTMLElement) (required) the existing element to replace
+	@param el : (HTMLElement) (required) the existing element to replace
 	@param inType : (String) (required) element type of the new HTMLElement: 'p', 'b', 'span', etc
 	@param inHtmlContents : (String) (optional) element HTML contents
 	@param inAttributes : (Object) (optional) value object with attributes to set to the new element
 	@return The new HTMLElement
 	*/
-	replaceElement:function(inElement, inType, inHtmlContents, inAttributes) {
-		if (!inElement || !inType) return null;
+	replaceElement:function(el, inType, inHtmlContents, inAttributes) {
+		if (!el || !inType) return null;
 		var newElement = twiki.HTML._createElementWithTypeAndContents(
 			inType,
 			inHtmlContents,
 			inAttributes
 		);
 		if (newElement) {
-			inElement.parentNode.replaceChild(newElement, inElement);
+			el.parentNode.replaceChild(newElement, el);
 			return newElement;
 		}
 		return null;
@@ -214,19 +214,19 @@ twiki.HTML = {
 	
 	/**
 	Sets attributes to an HTMLElement.
-	@param inElement : (HTMLElement) element to set attributes to
+	@param el : (HTMLElement) element to set attributes to
 	@param inAttributes : (Object) value object with attributes
 	*/
-	setElementAttributes:function (inElement, inAttributes) {
+	setElementAttributes:function (el, inAttributes) {
 		for (var attr in inAttributes) {
 			if (attr == "style") {
 				var styleObject = inAttributes[attr];
 				for (var style in styleObject) {
-					inElement.style[style] = styleObject[style];
+					el.style[style] = styleObject[style];
 				}
 			} else {
-				//inElement.setAttribute(attr, inAttributes[attr]);
-				inElement[attr] = inAttributes[attr];
+				//el.setAttribute(attr, inAttributes[attr]);
+				el[attr] = inAttributes[attr];
 			}
 		}
 	}

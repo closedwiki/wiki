@@ -54,14 +54,14 @@ twiki.Array = {
 	/**
 	Determine the index of the (first) occurrence of an object in an array.
 	@param inArray : (Array) array to search
-	@param inElement : (Object) the object to find
+	@param el : (Object) the object to find
 	@return The index number; -1 if the object is not found; null if no valid Array has been passed.
 	*/
-	indexOf:function(inArray, inElement) {
+	indexOf:function(inArray, el) {
 		if (!inArray || inArray.length == undefined) return null;
 		var i, ilen = inArray.length;
 		for (i=0; i<ilen; ++i) {
-			if (inArray[i] == inElement) return i;
+			if (inArray[i] == el) return i;
 		}
 		return -1;
 	}

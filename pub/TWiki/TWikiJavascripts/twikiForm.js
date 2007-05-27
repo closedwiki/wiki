@@ -1,6 +1,4 @@
 twiki.Form = {
-
-	KEYVALUEPAIR_DELIMITER : ";",
 	
 	/*
 	Original js filename: formdata2querystring.js
@@ -8,16 +6,8 @@ twiki.Form = {
 	Copyright 2005 Matthew Eernisse (mde@fleegix.org)
 	
 	Licensed under the Apache License, Version 2.0 (the "License");
-	you may not use this file except in compliance with the License.
-	You may obtain a copy of the License at
-	
 	http://www.apache.org/licenses/LICENSE-2.0
-	
-	Unless required by applicable law or agreed to in writing, software
-	distributed under the License is distributed on an "AS IS" BASIS,
-	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-	See the License for the specific language governing permissions and
-	limitations under the License.
+
 	Original code by Matthew Eernisse (mde@fleegix.org), March 2005
 	Additional bugfixes by Mark Pruett (mark.pruett@comcast.net), 12th July 2005
 	Multi-select added by Craig Anderson (craig@sitepoint.com), 24th August 2006
@@ -25,16 +15,25 @@ twiki.Form = {
 	Version 1.3
 	
 	Changes for TWiki:
-	Added KEYVALUEPAIR_DELIMITER by Arthur Clemens
+	Added KEYVALUEPAIR_DELIMITER and documentation by Arthur Clemens, 2006
 	*/
 	
+	KEYVALUEPAIR_DELIMITER : ";",
+
 	/**
 	Serializes the data from all the inputs in a Web form
 	into a query-string style string.
-	@param inForm : Reference to a DOM node of the form element
-	@param inFormatOptions : value object of options for how to format the return string. Supported options:
+	@param inForm : (HTMLElement) Reference to a DOM node of the form element
+	@param inFormatOptions : (Object) value object of options for how to format the return string. Supported options:
 		  collapseMulti: (Boolean) take values from elements that can return multiple values (multi-select, checkbox groups) and collapse into a single, comma-delimited value (e.g., thisVar=asdf,qwer,zxcv)
 	@returns Query-string formatted String of variable-value pairs
+	@example
+	<code>
+	var queryString = twiki.Form.formData2QueryString(
+		document.getElementById('myForm'),
+		{collapseMulti:true}
+	);
+	</code>
 	*/
 	formData2QueryString:function (inForm, inFormatOptions) {
 		if (!inForm) return null;
@@ -126,5 +125,63 @@ twiki.Form = {
 		// Remove trailing separator
 		str = str.substr(0, str.length - 1);
 		return str;
+	},
+	
+	
+	/**
+	Finds the form element.
+	@param inFormName : (String) name of the form
+	@param inElementName : (String) name of the form element
+	@return HTMLElement
+	*/
+	getFormElement:function(inFormName, inElementName) {
+		return document[inFormName][inElementName];
+	},
+	
+	/**
+	Sets input focus to input element. Note: only one field on a page can have focus.
+	@param inFormName : (String) name of the form
+	@param inInputFieldName : (String) name of the input field that will get focus
+	*/
+	setFocus:function(inFormName, inInputFieldName) {
+		try {
+			formPlugin.getFormElement(inFormName, inInputFieldName).focus();
+		} catch (er) {}
+	},
+	
+	/**
+	Sets the default text of an input field (for instance the text 'Enter keyword or product number' in a search box) that is cleared when the field gets focus. The field is styled with CSS class 'twikiInputFieldBeforeFocus'.
+	@param el : (HTMLElement) the input field to receive default text
+	@param inText : (String) the default text
+	*/
+	initBeforeFocusText:function(el, inText) {
+		el.FP_defaultValue = inText;
+		twiki.Form.restoreBeforeFocusText(el);
+	},
+	
+	/**
+	Clears the default input field text. The CSS styling 'twikiInputFieldBeforeFocus' is removed. Call this function at 'onfocus'.
+	@param el : (HTMLElement) the input field that has default text
+	*/
+	clearBeforeFocusText:function(el) {
+		if (!el.FP_defaultValue) {
+			el.FP_defaultValue = el.value;
+		}
+		if (el.FP_defaultValue == el.value) {
+			el.value = "";
+		}
+		twiki.CSS.removeClass(el, "twikiInputFieldBeforeFocus");
+	},
+	
+	/**
+	Restores the default text when the input field is empty. Call this function at 'onblur'.
+	@param el : (HTMLElement) the input field to clear
+	*/
+	restoreBeforeFocusText:function(el) {
+		if (!el.value && el.FP_defaultValue) {
+			el.value = el.FP_defaultValue;
+			twiki.CSS.addClass(el, "twikiInputFieldBeforeFocus");
+		}
 	}
+	
 };
