@@ -3,7 +3,7 @@
 
 
 
-%TMPL:DEF{"pagetitle"}%<h1 class="patternTemplateTitle"><nop>%TOPIC% (%MAKETEXT{"Preview"}%)</h1>%TMPL:END%
+%TMPL:DEF{"pagetitle"}%<nop>%TOPIC% (%MAKETEXT{"Preview"}%)%TMPL:END%
 
 
 
@@ -80,8 +80,7 @@
 
 
 
-%TMPL:DEF{"content"}%%TMPL:P{"pagetitle"}%
-%TMPL:P{"pagehelp"}%
+%TMPL:DEF{"appcontent"}%%TMPL:P{"pagehelp"}%
 %TMPL:P{"formstart"}%
 <div class="patternPreviewArea">
 <div class="patternContent">
@@ -92,6 +91,4 @@
 </div>
 </div>
 %TMPL:P{"topicaction"}%
-%TMPL:P{"formend"}%
-%TMPL:P{"nojavascript_pagehelp"}%
-%TMPL:END%
+%TMPL:P{"formend"}%%TMPL:P{"nojavascript_pagehelp"}%%TMPL:END%

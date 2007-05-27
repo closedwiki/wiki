@@ -10,7 +10,7 @@
 
 
 
-%TMPL:DEF{"pagetitle"}%<h1 class="patternTemplateTitle">%TMPL:P{"webaction"}% %TOPIC%</h1>%TMPL:END%
+%TMPL:DEF{"pagetitle"}%%TMPL:P{"webaction"}% %TOPIC%%TMPL:END%
 
 
 
@@ -47,13 +47,10 @@
 
 
 
-%TMPL:DEF{"content"}%%TMPL:P{"pagetitle"}%
-%TMPL:P{"formstart"}%
+%TMPL:DEF{"appcontent"}%%TMPL:P{"formstart"}%
 %TMPL:P{"toolbar"}%
 %TMPL:P{"pagehelp"}%
 %TMPL:P{"textarea"}%
 %TMPL:P{"sig_textareabuttons"}%
 %TMPL:P{"topicaction"}%
-%TMPL:P{"formend"}%
-%TMPL:P{"pagehelp_nojavascript"}%
-%TMPL:END%
+%TMPL:P{"formend"}%%TMPL:P{"pagehelp_nojavascript"}%%TMPL:END%

@@ -46,7 +46,7 @@
 
 
 
-%TMPL:DEF{"pagetitle"}%<h1 class="patternTemplateTitle">%TMPL:P{"webaction"}% %TOPIC%</h1>%TMPL:END%
+%TMPL:DEF{"pagetitle"}%%TMPL:P{"webaction"}% %TOPIC%%TMPL:END%
 
 
 
@@ -104,13 +104,9 @@
 
 
 
-%TMPL:DEF{"content"}%<div class="patternTopic">
-%TMPL:P{"pagetitle"}%
-%TMPL:P{"toolbar"}%
+%TMPL:DEF{"content"}%%TMPL:P{"toolbar"}%
 %TMPL:P{"pagehelp"}%
 %TMPL:P{"formstart"}%
 %TMPL:P{"renameformsteps"}%%TMPL:P{"searchresults"}%
 %TMPL:P{"topicaction"}%
-%TMPL:P{"formend"}%
-%TMPL:P{"pagehelp_nojavascript"}%
-</div><!-- /patternTopic-->%TMPL:END%
+%TMPL:P{"formend"}%%TMPL:P{"pagehelp_nojavascript"}%%TMPL:END%

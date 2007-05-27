@@ -6,9 +6,9 @@
 %TMPL:INCLUDE{"viewtopicactionbuttons"}%
 %TMPL:INCLUDE{"viewbottombar"}%
 
-%TMPL:DEF{"pagetitle"}%<h1 class="patternTemplateTitle">%TMPL:P{"pagetitlecontents"}%</h1>%TMPL:END%
+%TMPL:DEF{"pagetitlestylewrapper"}%<h1 class="patternTemplateTitle">%TMPL:P{"pagetitle"}%</h1>%TMPL:END%
 
 %TMPL:DEF{"content"}%%TMPL:P{"bodystyle"}%
 <div class="patternTopic">
-%TMPL:P{"pagetitle"}%%TMPL:P{"appcontent"}%
+%TMPL:P{"pagetitlestylewrapper"}%%TMPL:P{"appcontent"}%
 </div><!-- /patternTopic-->%TMPL:END%
