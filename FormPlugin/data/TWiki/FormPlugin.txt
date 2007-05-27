@@ -133,7 +133,7 @@ Most parameters are optional. See below for a detailed explanation.
 | =redirectto= | Redirect topic after form action has been performed. Only for scripts that understand the =redirectto= parameter such as =edit= and =save=. Use the =Webname.TopicName= syntax. |- |- | =redirectto="Main.WebHome"= |
 | =formcssclass= | The CSS class of the form container. Use TWiki's =twikiFormSteps= class together with =twikiFormStep= for elements to divide the form in steps. |- |- | =formcssclass="twikiFormSteps"= |
 | =elementcssclass= | The CSS class of the element container. Use TWiki's =twikiFormStep= class to divide the form in steps. |- |- | =elementcssclass="twikiFormStep"= |
-| =onSubmit=  | Function call that is invoked when the user has pressed the submit button of a form. This event happens just before the form is submitted, and your function can return a value of false in order to abort the submission. Note that the function call should include =(this)=. |- |- | =onSubmit="notify(this)"= |
+| =onSubmit=  | Function call that is invoked when the user has pressed the submit button of a form. This event happens just before the form is submitted, and your function can return a value of false in order to abort the submission. Note that the function call should include =(this)=. |- |- | =onSubmit="return notify(this)"= |
 
 
 ---+++ FORMELEMENT
@@ -349,6 +349,8 @@ Plugin settings are stored as preferences variables. To reference a plugin setti
 
 ---++ Plugin Installation Instructions
 
+!FormPlugin requires TWiki 4.2.
+
 __Note:__ You do not need to install anything on the browser to use this plugin. The following instructions are for the administrator who installs the plugin on the server where TWiki is running. 
 
    * Download the ZIP file from the Plugin web (see below)
@@ -366,11 +368,12 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Other authors: | =Validate.pm=, originally =CGI::Validate= by Zenin <zenin@archive.rhps.org> aka Byron Brummer <byron@omix.com>. Copyright (c) 1997,1998 OMIX, Inc. All rights reserved. Use is granted under the same terms of Perl. |
 |  Plugin Version: | 19 May 2007  |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  27 May 2007 | 1.0.4 Update javascript calls to new =twikiForm.js=. |
 |  19 May 2007 | 1.0.3 Added element attributes: =focus=, =disabled=, =readonly=; Javascript parameters =beforeclick=, =onFocus=, =onBlur=, =onMouseOver=, =onMouseOut=, =onSelect=, =onChange=, =onClick=, =onKeyUp=; form parameter =onSubmit=. Fallback for form POSTs and TWiki versions earlier than 4.2: POST requests are converted to GET requests. |
 |  15 May 2007 | 1.0.2 Added form attribute =elementformat=; changed parameter names for consistency: =class= to =cssclass=, =elementformat= to =fieldformat=.  |
 |  14 May 2007 | 1.0.1 Added missing lib. |
 |  13 May 2007 | 1.0 First release. |
-|  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 |
+|  TWiki Dependency: | TWiki 4.2; $TWiki::Plugins::VERSION 1.1 |
 |  CPAN Dependencies: |- |
 |  Other Dependencies: |- |
 |  Perl Version: | 5.005 |
