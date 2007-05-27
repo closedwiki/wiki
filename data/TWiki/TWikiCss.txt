@@ -83,8 +83,10 @@ A wide range of standard styles are used in the TWiki core code and topics, and 
 |.twikiSubmitDisabled  | |
 |.twikiInputField  | |
 |.twikiInputFieldDisabled  | |
+|.twikiInputFieldReadOnly  | |
+|.twikiInputFieldBeforeFocus  |for use with Javascript: the color of the input text when not clicked in the field |
 |.twikiTextarea | |
-}.twikiTextareaRawView | |
+|.twikiTextareaRawView | |
 |.twikiButton  | |
 |.twikiLeft  | |
 |.twikiRight  | |
