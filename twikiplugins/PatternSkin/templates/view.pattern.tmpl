@@ -10,7 +10,9 @@
 
 
 
-%TMPL:DEF{"templatescript"}%%TMPL:END%
+%TMPL:DEF{"templatescript"}%<script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/TWikiJavaScripts/twikilib.js"></script>
+<script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/TWikiJavaScripts/twikiCSS.js"></script>
+<script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/TWikiJavaScripts/twikiForm.js"></script>%TMPL:END%
 
 
 
@@ -62,7 +64,7 @@
 %TMPL:DEF{"contentfooter"}%%TMPL:P{"aftertext"}%%TMPL:END%
 
 %TMPL:DEF{"patterntopiccontents"}%%TMPL:P{"toolbar"}%
-%TMPL:P{"topicpathinfo"}%%TMPL:P{"contentheaderstylewrapper"}%%TMPL:P{"formattop"}%%TMPL:P{"attachmentsattop"}%<div class="patternContent">%TMPL:P{"content"}%
+%TMPL:P{"topicpathinfo"}%%TMPL:P{"contentheaderstylewrapper"}%%TMPL:P{"formattop"}%%TMPL:P{"attachmentsattop"}%<div class="patternContent"><div class="patternTopic">%TMPL:P{"content"}%</div><!-- /patternTopic-->
 %TMPL:P{"contentfooterstylewrapper"}%%TMPL:P{"formatbottom"}%%TMPL:P{"attachmentsatbottom"}%</div><!-- /patternContent-->
 %TMPL:P{"topicaction"}%%TMPL:P{"footernote"}%%TMPL:END%
 
