@@ -183,6 +183,9 @@ select {
 	border-color:#888 #e8e8e8 #e8e8e8 #888;
 	background-color:#fafaf8;
 }
+.twikiInputFieldBeforeClick {
+	color:#666;
+}
 
 /*	-----------------------------------------------------------
 	Plugin elements
@@ -545,6 +548,9 @@ h4.patternSearchResultsHeader {
 }
 .patternViewPage .patternSearchResultsBegin {
 	border-color:#ccc;
+}
+.patternRenamePage .patternSearchResults .patternBlockquote {
+	border-color:#f00;
 }
 
 /* Search results in book view format */
