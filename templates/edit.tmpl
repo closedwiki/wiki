@@ -3,37 +3,43 @@
 %TMPL:DEF{"focus"}%
 try { document.main.text.focus(); } catch (er) {}
 %TMPL:END%
-%TMPL:DEF{"templatescript"}%<script type="text/javascript" src="%PUBURLPATH%/%TWIKIWEB%/TWikiJavascripts/twikiEvent.js"></script>
+
+%TMPL:DEF{"templatescript"}%<script type="text/javascript" src="%PUBURLPATH%/%TWIKIWEB%/TWikiJavascripts/twikiPref.js"></script>
+<script type="text/javascript" src="%PUBURLPATH%/%TWIKIWEB%/TWikiJavascripts/twikiCSS.js"></script>
+<script type="text/javascript" src="%PUBURLPATH%/%TWIKIWEB%/TWikiJavascripts/twikiEvent.js"></script>
 <script type="text/javascript" src="%PUBURLPATH%/%TWIKIWEB%/TWikiJavascripts/twiki_edit.js"></script>%TMPL:END%
 
+%TMPL:DEF{"textarea"}%<div class="twikiEditTextarea"><textarea class="twikiTextarea twikiEditboxStyleProportional" id="topic" name="text" rows="%EDITBOXHEIGHT%" cols="%EDITBOXWIDTH%" style='%EDITBOXSTYLE%' onkeydown='handleKeyDown(event)'>%TEXT%</textarea></div><!--/twikiEditTextarea-->%TMPL:END%
 
-%TMPL:DEF{"content"}%<form name="main" action="%SCRIPTURLPATH{"save"}%/%WEB%/%TOPIC%" method="post">
-<div class="twikiEditTextarea">
-<textarea id='topic' name='text' rows='%EDITBOXHEIGHT%' cols='%EDITBOXWIDTH%' style='%EDITBOXSTYLE%' onkeydown='handleKeyDown(event)'>%TEXT%</textarea>
-</div>
-<input type="hidden" name="originalrev" value="%ORIGINALREV%" />
-<input type="hidden" name="redirectto" value="%REDIRECTTO%" />
+%TMPL:DEF{"formparameters"}%<input type="hidden" name="originalrev" value="%ORIGINALREV%" />
 <input type="hidden" name="skin" value="%URLPARAM{"skin"}%" />
+<input type="hidden" name="cover" value="%URLPARAM{"cover"}%" />
+<input type="hidden" name="redirectto" value="%REDIRECTTO%" />
 <input type="hidden" name="formtemplate" value="%FORMTEMPLATE%" />
 <input type="hidden" name="templatetopic" value="%TEMPLATETOPIC%" />
+<input type="hidden" name="settingstopic" value="%SETTINGSTOPIC%" />
 <input type="hidden" name="topicparent" value="%TOPICPARENT%" />
 <input type="hidden" name="newtopic" value="%NEWTOPIC%" />
-<input type="hidden" name="cmd" value="%CMD%" />
+<input type="hidden" name="forcenewrevision" value="%URLPARAM{"forcenewrevision"}%" />
+<input type="hidden" name="rev" value="%URLPARAM{"rev"}%" />
+<input type="hidden" name="cmd" value="%CMD%" />%TMPL:END%
+
+%TMPL:DEF{"content"}%<form name="main" action="%SCRIPTURLPATH{"save"}%/%WEB%/%TOPIC%" method="post">
+%TMPL:P{"textarea"}%
+%TMPL:P{"formparameters"}%
 See below for help in editing this page.
 <table border="0" cellpadding="2" cellspacing="0">
  <tr>
   <td><b>-- <nop>%WIKIUSERNAME% - %DATE%</b></td>
   <td> &nbsp;&nbsp; <code>&lt;==</code> Your signature for easy copy and paste (triple click to select)</td>
  </tr>
-</table> %FORMFIELDS% %TMPL:P{"topicinfo"}%</form>
-%TMPL:END%
+</table> %FORMFIELDS% %TMPL:P{"topicinfo"}%</form>%TMPL:END%
 
 %TMPL:DEF{"footernote"}%
 <font color="#333333" size="-1"> 
 %INCLUDE{"%TWIKIWEB%.WikiSyntaxSummary"}% 
-</font> %TMPL:END%
+</font>%TMPL:END%
 
- 
 %TMPL:DEF{"topicaction"}%	<input type="submit" class="twikiSubmit" name="action_cancel" value="Cancel" id="cancel" />%TMPL:P{"sep"}%
     	<input type="submit" class="twikiSubmit" name="action_save" value="Save" id="save" />%TMPL:P{"sep"}% 
 	<input type="submit" class="twikiSubmit" name="action_preview" value="Preview" id="preview" />%TMPL:END%
