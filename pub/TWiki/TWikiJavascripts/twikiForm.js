@@ -1,3 +1,7 @@
+/**
+Requires twikiCSS.js
+*/
+
 twiki.Form = {
 	
 	/*
@@ -145,7 +149,7 @@ twiki.Form = {
 	*/
 	setFocus:function(inFormName, inInputFieldName) {
 		try {
-			formPlugin.getFormElement(inFormName, inInputFieldName).focus();
+			twiki.Form.getFormElement(inFormName, inInputFieldName).focus();
 		} catch (er) {}
 	},
 	
