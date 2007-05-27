@@ -2,11 +2,14 @@
 
 %TMPL:DEF{"titleaction"}% %REVTITLE% %TMPL:END%
 %TMPL:DEF{"webaction"}% %WEBTOPICLIST% %TMPL:END%
-%TMPL:DEF{"form"}%
-%META{"form"}%%TMPL:END%
 
-%TMPL:DEF{"attachments"}%
-%META{"attachments"}%%TMPL:END%
+%TMPL:DEF{"form"}%%META{"form"}%%TMPL:END%
+%TMPL:DEF{"formtop"}%%TMPL:END%
+%TMPL:DEF{"formbottom"}%%TMPL:P{"form"}%%TMPL:END%
+
+%TMPL:DEF{"attachments"}%%META{"attachments"}%%TMPL:END%
+%TMPL:DEF{"attachmentstop"}%%TMPL:END%
+%TMPL:DEF{"attachmentsbottom"}%%TMPL:P{"attachments"}%%TMPL:END%
 
 %TMPL:DEF{"footernote"}%
 <div class="TWikiFooterNote">
@@ -35,11 +38,10 @@
 %TMPL:DEF{"inactive_more"}%<strike>More topic actions...</strike>%TMPL:END%
 %TMPL:DEF{"active_more"}%<a href="%SCRIPTURLPATH{"oops"}%/%WEB%/%TOPIC%?template=oopsmore&amp;param1=%MAXREV%&amp;param2=%CURRREV%" rel='nofollow'>More</a>%TMPL:END%
 
-%TMPL:DEF{"content"}%%TMPL:P{"contentheaderstylewrapper"}%
+%TMPL:DEF{"content"}%%TMPL:P{"contentheaderstylewrapper"}%%TMPL:P{"formtop"}%%TMPL:P{"attachmentstop"}%
 %TEXT%
 #TopicEnd
-%TMPL:P{"contentfooterstylewrapper"}%%TMPL:P{"form"}%%TMPL:P{"attachments"}%
-%TMPL:P{"topicinfo"}%%TMPL:END%
+%TMPL:P{"contentfooterstylewrapper"}%%TMPL:P{"formbottom"}%%TMPL:P{"attachmentsbottom"}%%TMPL:P{"topicinfo"}%%TMPL:END%
 
 %TMPL:DEF{"topicactionbuttons"}%%TMPL:P{context="inactive" then="inactive_edit" else="edit_topic_link"}%  %TMPL:P{"sep"}% %TMPL:P{context="inactive" then="inactive_attach" else="active_attach"}% %TMPL:P{"sep"}% Backlinks: <a href="%SCRIPTURLPATH{"oops"}%/%WEB%/%TOPIC%?template=backlinksweb" title="Search the <nop>%WEB% Web for topics that link to here">Web</a> <a href="%SCRIPTURLPATH{"oops"}%/%WEB%/%TOPIC%?template=backlinksallwebs" title="Search all webs for topics that link to here">All webs</a>
 %TMPL:P{"sep"}% <a href="%SCRIPTURLPATH{"view"}%/%WEB%/%TOPIC%?cover=print%REVARG%" rel='nofollow'>Printable</a>
