@@ -6,6 +6,7 @@ twiki.CSS = {
 	@param inClassName : (String) CSS class name to remove
 	*/
 	removeClass:function(el, inClassName) {
+		if (!el) return;
 		var classes = twiki.CSS.getClassList(el);
 		if (!classes) return;
 		var index = twiki.CSS._indexOf(classes, inClassName);
@@ -21,6 +22,7 @@ twiki.CSS = {
 	@param inClassName : (String) CSS class name to add
 	*/
 	addClass:function(el, inClassName) {
+		if (!el) return;
 		var classes = twiki.CSS.getClassList(el);
 		if (!classes) return;
 		if (twiki.CSS._indexOf(classes, inClassName) < 0) {
@@ -37,6 +39,7 @@ twiki.CSS = {
 	@param inNewClass : (String) CSS class name to add
 	*/
 	replaceClass:function(el, inOldClass, inNewClass) {
+		if (!el) return;
 		twiki.CSS.removeClass(el, inOldClass);
 		twiki.CSS.addClass(el, inNewClass);
 	},
@@ -46,6 +49,7 @@ twiki.CSS = {
 	@param el : (HTMLElement) element to get the class list from
 	*/
 	getClassList:function(el) {
+		if (!el) return;
 		if (el.className && el.className != "") {
 			return el.className.split(' ');
 		}
@@ -58,6 +62,7 @@ twiki.CSS = {
 	@param inClassList : (Array) list of CSS class names
 	*/
 	setClassList:function(el, inClassList) {
+		if (!el) return;
 		el.className = inClassList.join(' ');
 	},
 	
@@ -68,6 +73,7 @@ twiki.CSS = {
 	@param inClassName : (String) CSS class name
 	*/
 	hasClass:function(el, inClassName) {
+		if (!el) return;
 		if (el.className) {
 			var classes = twiki.CSS.getClassList(el);
 			if (classes) return (twiki.CSS._indexOf(classes, inClassName) >= 0);
