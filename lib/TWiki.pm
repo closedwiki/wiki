@@ -1443,7 +1443,7 @@ sub new {
     $prefs->pushPreferenceValues( 'SESSION',
                                   $this->{users}->{loginManager}->getSessionValues() );
 
-    # requires preferences (such as NEWTOPICBGCOLOR)
+    # requires preferences (such as LINKTOOLTIPINFO)
     $this->{renderer} = new TWiki::Render( $this );
 
     # Finish plugin initialization - register handlers

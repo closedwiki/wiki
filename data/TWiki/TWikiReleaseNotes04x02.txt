@@ -58,6 +58,8 @@ If you do, you will have to modify those topics to use the =manage= script
 with an appropriate =action= parameter. See the versions of these topics
 shipped with this release for an example that you can copy.
 
+   * NEWTOPICLINKSYMBOL preference which was deprecated in 4.1 has now been removed from the code. If you used this simply modify the !TWikiPreference NEWLINKFORMAT setting which allows you much more control of the appearance of new links.
+
 ---++ Deprecation Notices
 
 

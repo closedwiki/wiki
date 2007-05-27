@@ -70,7 +70,7 @@ BEGIN {
 ---++ ClassMethod new ($session)
 
 Creates a new renderer with initial state from preference values
-(NEWTOPICLINKSYMBOL LINKTOOLTIPINFO)
+(LINKTOOLTIPINFO)
 
 =cut
 
@@ -81,14 +81,11 @@ sub new {
 
     $this->{session} = $session;
 
-    $this->{NEWLINKSYMBOL} =
-      $session->{prefs}->getPreferencesValue('NEWTOPICLINKSYMBOL')
-        || CGI::sup('?');
     $this->{NEWLINKFORMAT} =
       $session->{prefs}->getPreferencesValue('NEWLINKFORMAT')
         || '<span class="twikiNewLink">$text<a href="%SCRIPTURLPATH{"edit"}%/$web/$topic?topicparent=%WEB%.%TOPIC%" '.
 	   'rel="nofollow" title="%MAKETEXT{"Create this topic"}%">'.
-           '$linksymbol</a></span>';
+           '?</a></span>';
     # tooltip init
     $this->{LINKTOOLTIPINFO} =
       $session->{prefs}->getPreferencesValue('LINKTOOLTIPINFO')
@@ -595,7 +592,6 @@ sub _renderNonExistingWikiWord {
     $ans =~ s/\$web/$web/g;
     $ans =~ s/\$topic/$topic/g;
     $ans =~ s/\$text/$text/g;
-    $ans =~ s/\$linksymbol/$this->{NEWLINKSYMBOL}/g;
     $ans = $this->{session}->handleCommonTags(
         $ans, $this->{session}{webName}, $this->{session}{topicName});
     return $ans;
