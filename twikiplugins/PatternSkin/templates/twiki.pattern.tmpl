@@ -1,5 +1,4 @@
 %TMPL:INCLUDE{"twiki"}%
-%TMPL:INCLUDE{"oops"}%%{ "<-- for compatibility with existing oops templates, also from plugins" }%
 %TMPL:INCLUDE{"logo"}%
 %TMPL:INCLUDE{"viewtopicactionbuttons"}%
 %TMPL:INCLUDE{"viewbottombar"}%
@@ -12,12 +11,11 @@
 
 %TMPL:DEF{"bodyclassname"}%patternNoViewPage%TMPL:END%
 
-%TMPL:DEF{"content"}%%TMPL:P{"bodystyle"}%
-<div class="patternTopic">
-%TMPL:P{"pagetitlestylewrapper"}%%TMPL:P{"appcontent"}%
-</div><!-- /patternTopic-->%TMPL:END%
+%TMPL:DEF{"simpleheader"}%%TMPL:END%
 
 %TMPL:DEF{"pagetitlestylewrapper"}%<h1 class="patternTemplateTitle">%TMPL:P{"pagetitle"}%</h1>%TMPL:END%
+
+%TMPL:DEF{"patterntopiccontents"}%<div class="patternTopic">%TMPL:P{"pagetitlestylewrapper"}% %TMPL:P{"content"}%</div><!-- /patternTopic-->%TMPL:END%
 
 %TMPL:DEF{"htmldoctype"}%<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml" xml:lang="%LANG%" lang="%LANG%">%TMPL:END%
 
@@ -35,7 +33,7 @@
 %TMPL:DEF{"bodystart"}%<body class="%TMPL:P{"bodyclassname"}%">
 #PageTop%TMPL:END%
 
-%TMPL:DEF{"main"}%<div id="patternScreen">
+%TMPL:DEF{"main"}%%TMPL:P{"bodystyle"}%<div id="patternScreen">
 <div id="patternPageShadow">
 <div id="patternPage">
 %TMPL:P{"startleftbarwrapper"}%<div id="patternOuter">
@@ -50,7 +48,5 @@
 </div><!-- /patternPage-->
 </div><!-- /patternPageShadow-->
 </div><!-- /patternScreen-->%TMPL:END%
-
-%TMPL:DEF{"patterntopiccontents"}%%TMPL:P{"content"}%%TMPL:END%
 
 %TMPL:DEF{"bodyend"}%</body></html>%TMPL:END%
