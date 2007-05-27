@@ -269,9 +269,9 @@ sub _addHeader {
 <style type="text/css" media="all">
 @import url("%PUBURL%/%TWIKIWEB%/FormPlugin/formplugin.css");
 </style>
-<script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/TWikiJavaScripts/twikilib.js"></script>
-<script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/TWikiJavaScripts/twikiCSS.js"></script>
-<script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/TWikiJavaScripts/twikiForm.js"></script>
+<script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/TWikiJavascripts/twikilib.js"></script>
+<script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/TWikiJavascripts/twikiCSS.js"></script>
+<script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/TWikiJavascripts/twikiForm.js"></script>
 END
 
     TWiki::Func::addToHEAD( 'FORMPLUGIN', $header );
