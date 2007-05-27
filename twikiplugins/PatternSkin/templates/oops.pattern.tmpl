@@ -2,10 +2,9 @@
 
 
 
-%TMPL:DEF{"pagetitle"}%<h1 class="patternTemplateTitle">%TMPL:P{"heading"}%</h1>%TMPL:END%
+%TMPL:DEF{"pagetitle"}%%TMPL:P{"heading"}%%TMPL:END%
 
 
 
-%TMPL:DEF{"content"}%<div class="patternTopic">%TMPL:P{"pagetitle"}%
-%IF{" '%TMPL:P{"webaction"}%' = '' " then="" else="<h3><span class='twikiAlert'>%TMPL:P{"webaction"}%</span></h3>"}%
-%TMPL:P{"message"}%</div><!-- /patternTopic-->%TMPL:P{"topicaction"}%%TMPL:END%
+%TMPL:DEF{"appcontent"}%%IF{" '%TMPL:P{"webaction"}%' = '' " then="" else="<h3><span class='twikiAlert'>%TMPL:P{"webaction"}%</span></h3>"}%
+%TMPL:P{"message"}%%TMPL:P{"topicaction"}%%TMPL:END%
