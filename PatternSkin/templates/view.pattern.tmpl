@@ -1,47 +1,28 @@
-%TMPL:INCLUDE{"twiki"}%
+%TMPL:INCLUDE{"view"}%
+%TMPL:INCLUDE{"viewtopicactionbuttons"}%
 %TMPL:INCLUDE{"viewtoolbar"}%
 %TMPL:INCLUDE{"viewtopbar"}%
 %TMPL:INCLUDE{"viewleftbar"}%
 %TMPL:DEF{"logo"}%%TMPL:END%%{ no logo because we have a top bar }%
 
-
-
-%TMPL:DEF{"standardheader"}%%TMPL:END%
-
-
-
-%TMPL:DEF{"templatescript"}%<script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/TWikiJavascripts/twikiCSS.js"></script>
-<script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/TWikiJavascripts/twikiForm.js"></script>%TMPL:END%
-
-
-
 %TMPL:DEF{"bodyclassname"}%patternViewPage%TMPL:END%
 
-
-
-%TMPL:DEF{"titleaction"}%%REVTITLE%%TMPL:END%
-
-
-
-%TMPL:DEF{"topicpathseparator"}%<span class='twikiSeparator'>&nbsp;&gt;&nbsp;</span>%TMPL:END%
-
-
-
-%TMPL:DEF{"form"}%%META{"form"}%%TMPL:END%
+%{ DEPRECATED: formattop, formatbottom, attachmentsattop and attachmentsatbottom }%
+%{ compatibility transition older than 4.2: }%
 %TMPL:DEF{"formattop"}%%TMPL:END%
 %TMPL:DEF{"formatbottom"}%%TMPL:P{"form"}%%TMPL:END%
-
-
-
-%TMPL:DEF{"attachments"}%%META{"attachments"}%%TMPL:END%
 %TMPL:DEF{"attachmentsattop"}%%TMPL:END%
 %TMPL:DEF{"attachmentsatbottom"}%%TMPL:P{"attachments"}%%TMPL:END%
-
+%TMPL:DEF{"formtop"}%%TMPL:P{"formattop"}%%TMPL:END%
+%TMPL:DEF{"formbottom"}%%TMPL:P{"formatbottom"}%%TMPL:END%
+%TMPL:DEF{"attachmentstop"}%%TMPL:P{"attachmentsattop"}%%TMPL:END%
+%TMPL:DEF{"attachmentsbottom"}%%TMPL:P{"attachmentsatbottom"}%%TMPL:END%
 
 
 %TMPL:DEF{"topicpathinfo"}%<div class="patternHomePath"><span class="twikiRight">%TMPL:P{"revinfo"}%</span>%TMPL:P{"breadcrumb"}%<br class="twikiClear" /></div><!-- /patternHomePath-->%TMPL:END%
 
 
+%TMPL:DEF{"topicpathseparator"}%<span class='twikiSeparator'>&nbsp;&gt;&nbsp;</span>%TMPL:END%
 
 %TMPL:DEF{"breadcrumb"}%%TMPL:P{"breadcrumb:title"}%%TMPL:P{"breadcrumb:wikitoolname"}%%TMPL:P{"breadcrumb:currentweb"}%%META{"parent" nowebhome="on" prefix="%TMPL:P{"topicpathseparator"}%" suffix=""}%%TMPL:P{"breadcrumb:currenttopic"}%%TMPL:END%
 
@@ -63,16 +44,16 @@
 %TMPL:DEF{"contentfooter"}%%TMPL:P{"aftertext"}%%TMPL:END%
 
 %TMPL:DEF{"patterntopiccontents"}%%TMPL:P{"toolbar"}%
-%TMPL:P{"topicpathinfo"}%%TMPL:P{"contentheaderstylewrapper"}%%TMPL:P{"formattop"}%%TMPL:P{"attachmentsattop"}%<div class="patternContent"><div class="patternTopic">%TMPL:P{"content"}%</div><!-- /patternTopic-->
-%TMPL:P{"contentfooterstylewrapper"}%%TMPL:P{"formatbottom"}%%TMPL:P{"attachmentsatbottom"}%</div><!-- /patternContent-->
+%TMPL:P{"topicpathinfo"}%%TMPL:P{"contentheaderstylewrapper"}%%TMPL:P{"formtop"}%%TMPL:P{"attachmentstop"}%<div class="patternContent"><div class="patternTopic">%TMPL:P{"content"}%</div><!-- /patternTopic-->
+%TMPL:P{"contentfooterstylewrapper"}%%TMPL:P{"formbottom"}%%TMPL:P{"attachmentsbottom"}%</div><!-- /patternContent-->
 %TMPL:P{"topicaction"}%%TMPL:P{"footernote"}%%TMPL:END%
 
-%TMPL:DEF{"standardheader"}%%{"for compatibility with default skin"}%%TMPL:END%
+%TMPL:DEF{"standardheader"}%%TMPL:END%
 %TMPL:DEF{"simpleheader"}%%TMPL:P{"broadcastmessage"}%%TMPL:P{"standardheader"}%%TMPL:END%
 %TMPL:DEF{"broadcastmessage"}%%BROADCASTMESSAGE%%TMPL:END%
 
 %TMPL:DEF{"content"}%%TMPL:P{"simpleheader"}% %TEXT% %TMPL:END%
 
 
-%TMPL:DEF{"footernote"}%%{"for compatibility with default skin"}%%TMPL:P{"topicinfo"}%%TMPL:END%
+%TMPL:DEF{"footernote"}%%TMPL:P{"topicinfo"}%%TMPL:END%
 %TMPL:DEF{"topicinfo"}%<div class="patternMoved">%META{"moved"}%</div><!-- /patternMoved-->%TMPL:END%
