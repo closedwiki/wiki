@@ -6,11 +6,16 @@
 %TMPL:DEF{"htmldoctype"}%<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="%LANG%" lang="%LANG%">%TMPL:END%
 
-%TMPL:DEF{"script"}%<script type="text/javascript" src="%PUBURLPATH%/%TWIKIWEB%/TWikiJavascripts/twiki.js"></script>
+%TMPL:DEF{"script"}%<script type="text/javascript" src="%PUBURLPATH%/%TWIKIWEB%/TWikiJavascripts/twikilib.js"></script>
+<script type="text/javascript" src="%PUBURLPATH%/%TWIKIWEB%/TWikiJavascripts/twikiWindow.js"></script>
 <script type="text/javascript">
 //<![CDATA[
 	function launchWindow(inWeb, inTopic) {
-		return launchTheWindow("%SCRIPTURLPATH{"view"}%/", inWeb, inTopic, "", "viewplain");
+		return twiki.Window.openPopup("%SCRIPTURLPATH{"view"}%/",
+			{ web:inWeb,
+			  topic:inTopic,
+			  template:"viewplain"
+			} );
 	}
 //]]>
 </script>%TMPL:P{"templatescript"}%%TMPL:END%

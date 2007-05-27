@@ -1,17 +1,15 @@
 %TMPL:INCLUDE{"twiki"}%
 
-%TMPL:DEF{"templatescript"}%
-<script type="text/javascript" src="%PUBURLPATH%/%TWIKIWEB%/TWikiJavascripts/twiki_edit.js"></script>
-%TMPL:END%
+%TMPL:DEF{"templatescript"}%<script type="text/javascript" src="%PUBURLPATH%/%TWIKIWEB%/TWikiJavascripts/twikiEvent.js"></script>
+<script type="text/javascript" src="%PUBURLPATH%/%TWIKIWEB%/TWikiJavascripts/twiki_edit.js"></script>%TMPL:END%
 
 %TMPL:DEF{"titleaction"}%(set preferences) %TMPL:END%
 
 %TMPL:DEF{"webaction"}%Preferences for%TMPL:END%
 
 
-%TMPL:DEF{"topicaction"}%
-	<input type="submit" class="twikiSubmit" name="action" value="Cancel" id="cancel" />%TMPL:P{"sep"}%
-	<input type="submit" class="twikiSubmit" name="action" value="Update" id="checkpoint" />%TMPL:END%
+%TMPL:DEF{"topicaction"}%<input type="submit" class="twikiSubmit" name="action" value="Cancel" id="cancel" />%TMPL:P{"sep"}%
+<input type="submit" class="twikiSubmit" name="action" value="Update" id="checkpoint" />%TMPL:END%
 
 
 %TMPL:DEF{"footernote"}%
@@ -24,9 +22,7 @@
      <a target="TWikiVariables" onclick="return launchWindow('%TWIKIWEB%','TWikiVariables')" href="%SCRIPTURLPATH{"view"}%/%TWIKIWEB%/TWikiVariables" rel='nofollow'>Setting topic preferences</a>.
    * Each preference has the syntax <br />[multiple of 3 spaces] * [space] Set [space] VARIABLENAME [space] = [space] [value]
 </font>
- </div>%TMPL:END%
-
-
+</div>%TMPL:END%
 
 
 %TMPL:DEF{"content"}%
@@ -41,4 +37,3 @@
 </textarea><br />
 </div>
 %TMPL:P{"topicinfo"}%</form>%TMPL:END%
-

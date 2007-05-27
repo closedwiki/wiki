@@ -144,4 +144,4 @@ function setEditBoxFontStyle(inFontStyle) {
 	}
 }
 
-addLoadEvent(initForm);
+twiki.Event.addLoadEvent(initForm);

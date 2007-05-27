@@ -1,6 +1,6 @@
 twiki.Window = {
 	
-	POPUP_WINDOW_WIDTH : 500,
+	POPUP_WINDOW_WIDTH : 600,
 	POPUP_WINDOW_HEIGHT : 480,
 	POPUP_ATTRIBUTES : "titlebar=0,resizable,scrollbars",
 	

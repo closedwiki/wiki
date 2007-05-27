@@ -3,9 +3,8 @@
 %TMPL:DEF{"focus"}%
 try { document.main.text.focus(); } catch (er) {}
 %TMPL:END%
-%TMPL:DEF{"templatescript"}%
-<script type="text/javascript" src="%PUBURLPATH%/%TWIKIWEB%/TWikiJavascripts/twiki_edit.js"></script>
-%TMPL:END%
+%TMPL:DEF{"templatescript"}%<script type="text/javascript" src="%PUBURLPATH%/%TWIKIWEB%/TWikiJavascripts/twikiEvent.js"></script>
+<script type="text/javascript" src="%PUBURLPATH%/%TWIKIWEB%/TWikiJavascripts/twiki_edit.js"></script>%TMPL:END%
 
 
 %TMPL:DEF{"content"}%<form name="main" action="%SCRIPTURLPATH{"save"}%/%WEB%/%TOPIC%" method="post">
@@ -16,11 +15,9 @@ try { document.main.text.focus(); } catch (er) {}
 <input type="hidden" name="redirectto" value="%REDIRECTTO%" />
 <input type="hidden" name="skin" value="%URLPARAM{"skin"}%" />
 <input type="hidden" name="formtemplate" value="%FORMTEMPLATE%" />
-<input type="hidden" name="templatetopic" value="%URLPARAM{"templatetopic"}%" />
+<input type="hidden" name="templatetopic" value="%TEMPLATETOPIC%" />
 <input type="hidden" name="topicparent" value="%TOPICPARENT%" />
 <input type="hidden" name="newtopic" value="%NEWTOPIC%" />
-<input type="hidden" name="forcenewrevision" value="%URLPARAM{"forcenewrevision"}%" />
-<input type="hidden" name="rev" value="%URLPARAM{"rev"}%" />
 <input type="hidden" name="cmd" value="%CMD%" />
 See below for help in editing this page.
 <table border="0" cellpadding="2" cellspacing="0">
