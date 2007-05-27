@@ -367,7 +367,7 @@ select {
 	border-color:%INPUT_FIELD_BORDERS%;
 	background-color:%DISABLED_BACKGROUND%;
 }
-.twikiInputFieldBeforeClick {
+.twikiInputFieldBeforeFocus {
 	color:%MUTED_TEXT%;
 }
 
@@ -617,10 +617,6 @@ a:hover .twikiAccessKey {
 	color:%GENERAL_TEXT%;
 }
 .patternHelpCol {
-	color:%GRAYED_OUT_TEXT%;
-}
-.patternFormFieldDefaultColor {
-	/* input fields default text color (no user input) */
 	color:%GRAYED_OUT_TEXT%;
 }
 .patternSigLine {

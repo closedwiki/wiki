@@ -183,7 +183,7 @@ select {
 	border-color:#888 #e8e8e8 #e8e8e8 #888;
 	background-color:#fafaf8;
 }
-.twikiInputFieldBeforeClick {
+.twikiInputFieldBeforeFocus {
 	color:#666;
 }
 
@@ -433,10 +433,6 @@ a:hover .twikiAccessKey {
 	color:#000;
 }
 .patternHelpCol {
-	color:#8E9195;
-}
-.patternFormFieldDefaultColor {
-	/* input fields default text color (no user input) */
 	color:#8E9195;
 }
 .patternSigLine {
