@@ -148,7 +148,7 @@ Submit the form...
 <script type="text/javascript">
 //<![CDATA[
 function notify(inForm) {
-	alert("sending along form:" + inForm.name);
+	return confirm("Do you really want to send this form?");
 }
 //]]>
 </script>
@@ -156,7 +156,7 @@ function notify(inForm) {
 %STARTFORM{
 name="submitform"
 action="view"
-onSubmit="notify(this)"
+onSubmit="return notify(this)"
 }%
 %FORMELEMENT{
 type="submit"

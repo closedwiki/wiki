@@ -38,7 +38,7 @@ use vars
 # status of the plugin. It is used by the build automation tools, so
 # you should leave it alone.
 $VERSION = '$Rev: 11069$';
-$RELEASE = '1.0.3';
+$RELEASE = '1.0.';
 
 # Name of this Plugin, only used in this module
 $pluginName = 'FormPlugin';
@@ -271,7 +271,7 @@ sub _addHeader {
 </style>
 <script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/TWikiJavaScripts/twikilib.js"></script>
 <script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/TWikiJavaScripts/twikiCSS.js"></script>
-<script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/FormPlugin/formplugin.js"></script>
+<script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/TWikiJavaScripts/twikiForm.js"></script>
 END
 
     TWiki::Func::addToHEAD( 'FORMPLUGIN', $header );
@@ -625,7 +625,7 @@ sub _formElement {
     my $focus           = $params->{'focus'};
     if ($focus) {
         my $focusCall =
-            '<script type="text/javascript">formPlugin.setFocus("'
+            '<script type="text/javascript">twiki.Form.setFocus("'
           . $currentForm{'name'} . '", "'
           . $name
           . '");</script>';
@@ -634,10 +634,10 @@ sub _formElement {
     my $beforeclick = $params->{'beforeclick'};
     if ($beforeclick) {
         my $beforeclickCall =
-            '<script type="text/javascript">var el=formPlugin.getFormElement("'
+            '<script type="text/javascript">var el=twiki.Form.getFormElement("'
           . $currentForm{'name'} . '", "'
           . $name
-          . '"); formPlugin.initBeforeClickText(el,"'
+          . '"); twiki.Form.initBeforeFocusText(el,"'
           . $beforeclick
           . '");</script>';
         $javascriptCalls .= $beforeclickCall;
@@ -748,8 +748,8 @@ sub _getFormElementHtml {
     my $beforeclick = $params->{'beforeclick'};
     if ($beforeclick) {
         $value   = $beforeclick;
-        $onFocus = 'formPlugin.clearBeforeClickText(this)';
-        $onBlur  = 'formPlugin.restoreBeforeClickText(this)';
+        $onFocus = 'twiki.Form.clearBeforeFocusText(this)';
+        $onBlur  = 'twiki.Form.restoreBeforeFocusText(this)';
 
         # additional init function in _formElement
     }
