@@ -32,7 +32,7 @@
 
 
 
-%TMPL:DEF{"pagetitle"}%%BANNER%%TMPL:END%
+%TMPL:DEF{"pagetitle"}%%TMPL:END%
 
 
 
@@ -77,11 +77,11 @@
 
 
 
-%TMPL:DEF{"content"}%<div class="patternTopic"><div id="twikiLogin">
+%TMPL:DEF{"appcontent"}%<div id="twikiLogin">
 <form name="loginform" action="%SCRIPTURLPATH{"login"}%/%WEB%/%TOPIC%" method="post">
 <div class="twikiFormSteps">
 <div class="twikiFormStep">
-%TMPL:P{"pagetitle"}%%TMPL:P{"pagenote"}%
+%BANNER%%TMPL:P{"pagenote"}%
 </div><!-- /twikiFormStep-->
 %TMPL:P{"usernamestep"}%
 %TMPL:P{"passwordstep"}%
@@ -96,5 +96,4 @@
 <input type="hidden" name="origurl" value="%ORIGURL%" />
 </form>
 %TMPL:P{"seealsonote"}%
-</div><!-- /twikiLogin-->
-</div><!-- /patternTopic-->%TMPL:END%
+</div><!-- /twikiLogin-->%TMPL:END%

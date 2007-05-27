@@ -34,17 +34,16 @@
 <span class='sep'>&gt;</span> %TOPIC%</span>
 <div class="patternTopicInfo patternRevInfo">%MAKETEXT{"History:"}% %REVINFO%</div><!-- /patternTopicInfo --> </div> <!-- /patternTopicFooter --> %TMPL:END%
 
-%TMPL:DEF{"beforetextcontents"}%<nop>%TMPL:END%
-%TMPL:DEF{"beforetext"}%<div class="twikiBeforeText">%TMPL:P{"beforetextcontents"}%</div>%TMPL:END%
-
-%TMPL:DEF{"aftertextcontents"}%<nop>%TMPL:END%
-%TMPL:DEF{"aftertext"}%<div class="twikiAfterText">%TMPL:P{"aftertextcontents"}%</div>%TMPL:END%
+%{ DEPRECATED: beforetext and aftertext }%
+%{ compatibility transition older than 4.2: }%
+%TMPL:DEF{"contentheader"}%%TMPL:P{"beforetext"}%%TMPL:END%
+%TMPL:DEF{"contentfooter"}%%TMPL:P{"aftertext"}%%TMPL:END%
 
 %TMPL:DEF{"broadcastmessage"}%%TMPL:END%
 
 %TMPL:DEF{"content"}%<div class="patternTopic">%TMPL:P{"broadcastmessage"}% %TEXT%</div><!-- /patternTopic-->%TMPL:END%
 
-%TMPL:DEF{"contentwithnavigation"}%
-%TMPL:P{"beforetext"}%%TMPL:P{"formattop"}%%TMPL:P{"attachmentsattop"}%<div class="patternContent">%TMPL:P{"content"}%
-%TMPL:P{"aftertext"}%%TMPL:P{"formatbottom"}%%TMPL:P{"attachmentsatbottom"}%</div><!-- /patternContent-->
+%TMPL:DEF{"patterntopiccontents"}%
+%TMPL:P{"contentheader"}%%TMPL:P{"formattop"}%%TMPL:P{"attachmentsattop"}%<div class="patternContent">%TMPL:P{"content"}%
+%TMPL:P{"contentfooter"}%%TMPL:P{"formatbottom"}%%TMPL:P{"attachmentsatbottom"}%</div><!-- /patternContent-->
 %TMPL:P{"topicinfo"}%%TMPL:END%
