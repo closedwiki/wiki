@@ -26,6 +26,11 @@ This is an empty TWiki plugin. It is a fully defined plugin, but is
 disabled by default in a TWiki installation. Use it as a template
 for your own plugins; see TWiki.TWikiPlugins for details.
 
+This version of the !EmptyPlugin documents the handlers supported
+by revision 1.2 of the Plugins API. See the documentation of =TWiki::Func=
+for more information about what this revision number means, and how a
+plugin can check it.
+
 __NOTE:__ To interact with TWiki use ONLY the official API functions
 in the TWiki::Func module. Do not reference any functions or
 variables elsewhere in TWiki, as these are subject to change
@@ -36,8 +41,7 @@ For increased performance, all handlers except initPlugin are
 disabled below. *To enable a handler* remove the leading DISABLE_ from
 the function name. For efficiency and clarity, you should comment out or
 delete the whole of handlers you don't use before you release your
-plugin (or you can put __END__ on a line of it's own and move dead
-code below that line; Perl ignores anything after __END__).
+plugin.
 
 __NOTE:__ When developing a plugin it is important to remember that
 TWiki is tolerant of plugins that do not compile. In this case,
@@ -207,7 +211,7 @@ Return the *login* name.
 
 This handler is called very early, immediately after =earlyInitPlugin=.
 
-__Since:__ TWiki::Plugins::VERSION = '1.010'
+*Since:* TWiki::Plugins::VERSION = '1.010'
 
 =cut
 
@@ -227,7 +231,7 @@ sub DISABLE_initializeUserHandler {
 
 Called when a new user registers with this TWiki.
 
-__Since:__ TWiki::Plugins::VERSION = '1.010'
+*Since:* TWiki::Plugins::VERSION = '1.010'
 
 =cut
 
@@ -265,6 +269,8 @@ removed from the text (though all other blocks such as &lt;pre> and
 
 __NOTE:__ meta-data is _not_ embedded in the text passed to this
 handler. Use the =$meta= object.
+
+*Since:* $TWiki::Plugins::VERSION 1.000
 
 =cut
 
@@ -420,7 +426,7 @@ in the edit box. It is called once when the =edit= script is run.
 __NOTE__: meta-data may be embedded in the text passed to this handler 
 (using %META: tags)
 
-__Since:__ TWiki::Plugins::VERSION = '1.010'
+*Since:* TWiki::Plugins::VERSION = '1.010'
 
 =cut
 
@@ -446,7 +452,7 @@ __NOTE:__ this handler is _not_ called unless the text is previewed.
 __NOTE:__ meta-data is _not_ embedded in the text passed to this
 handler. Use the =$meta= object.
 
-__Since:__ TWiki::Plugins::VERSION = '1.010'
+*Since:* $TWiki::Plugins::VERSION 1.010
 
 =cut
 
@@ -474,7 +480,7 @@ object, never both. You are recommended to modify the =$meta= object rather
 than the text, as this approach is proof against changes in the embedded
 text format.
 
-__Since:__ TWiki::Plugins::VERSION = '1.010'
+*Since:* TWiki::Plugins::VERSION = '1.010'
 
 =cut
 
@@ -499,7 +505,7 @@ This handler is called each time a topic is saved.
 
 __NOTE:__ meta-data is embedded in $text (using %META: tags)
 
-__Since:__ TWiki::Plugins::VERSION = '1.020'
+*Since:* TWiki::Plugins::VERSION 1.025
 
 =cut
 
@@ -523,7 +529,7 @@ sub DISABLE_afterSaveHandler {
 
 This handler is called just after the rename/move/delete action of a web, topic or attachment.
 
-__Since:__ TWiki::Plugins::VERSION = '1.110'
+*Since:* TWiki::Plugins::VERSION = '1.11'
 
 =cut
 
@@ -550,7 +556,7 @@ The attributes hash will include at least the following attributes:
    * =user= - the user id
    * =tmpFilename= - name of a temporary file containing the attachment data
 
-__Since:__ TWiki::Plugins::VERSION = '1.023'
+*Since:* TWiki::Plugins::VERSION = 1.025
 
 =cut
 
@@ -573,7 +579,7 @@ will include at least the following attributes:
    * =comment= - the comment
    * =user= - the user id
 
-__Since:__ TWiki::Plugins::VERSION = '1.023'
+*Since:* TWiki::Plugins::VERSION = 1.025
 
 =cut
 
@@ -625,6 +631,8 @@ merge the data:
 The merge handler is called whenever a topic is saved, and a merge is 
 required to resolve concurrent edits on a topic.
 
+*Since:* TWiki::Plugins::VERSION = 1.1
+
 =cut
 
 sub DISABLE_mergeHandler {
@@ -647,7 +655,7 @@ Note that this is the HTTP header which is _not_ the same as the HTML
 &lt;HEAD&gt; tag. The contents of the &lt;HEAD&gt; tag may be manipulated
 using the =TWiki::Func::addToHEAD= method.
 
-__Since:__ TWiki::Plugins::VERSION 1.026
+*Since:* TWiki::Plugins::VERSION 1.1
 
 =cut
 
@@ -669,7 +677,7 @@ If this handler is defined in more than one plugin, only the handler
 in the earliest plugin in the INSTALLEDPLUGINS list will be called. All
 the others will be ignored.
 
-__Since:__ TWiki::Plugins::VERSION = '1.010'
+*Since:* TWiki::Plugins::VERSION 1.010
 
 =cut
 
@@ -699,6 +707,8 @@ should be done by the built-in type handlers.
 Return HTML text that renders this field. If false, form rendering 
 continues by considering the built-in types.
 
+*Since:* TWiki::Plugins::VERSION 1.1
+
 =cut
 
 sub DISABLE_renderFormFieldForEditHandler {
@@ -717,6 +727,8 @@ the rendering of labels used for links.
 
 Return the new link text.
 
+*Since:* TWiki::Plugins::VERSION 1.1
+
 =cut
 
 sub DISABLE_renderWikiWordHandler {
@@ -734,6 +746,8 @@ This is an example of a sub to be called by the =rest= script. The parameter is:
 Additional parameters can be recovered via de query object in the $session.
 
 For more information, check TWiki:TWiki.TWikiScripts#rest
+
+*Since:* TWiki::Plugins::VERSION 1.1
 
 =cut
 

@@ -41,122 +41,31 @@ as soon as possible.
 
 The version of the TWiki::Func module is defined by the VERSION number of the
 TWiki::Plugins module, currently %PLUGINVERSION%. This can be shown
-by the =%<nop>PLUGINVERSION%= variable. The 'Since' field in the function
-documentation refers to the VERSION number and the date that the function
-was addded.
+by the =%<nop>PLUGINVERSION%= TWiki variable, and accessed in code using
+=$TWiki::Plugins::VERSION=. The 'Since' field in the function
+documentation refers to =$TWiki::Plugins::VERSION=.
 
-Version 1.000:
-   * checkAccessPermission( $type, $wikiName, $text, $topic, $web, $meta ) -> $boolean
-   * expandCommonVariables( $text, $topic, $web, $meta ) -> $text
-   * extractNameValuePair( $attr, $name ) -> $value
-   * (deprecated) formatGmTime( $time, $format ) -> $text
-   * getCgiQuery( ) -> $query
-   * (deprecated) getDataDir( ) -> $dir
-   * getDefaultUserName( ) -> $loginName
-   * getMainWebname( ) -> $name
-   * (deprecated) getOopsUrl( $web, $topic, $template, $param1, $param2, $param3, $param4 ) -> $url
-   * getPreferencesFlag( $key, $web ) -> $value
-   * getPreferencesValue( $key, $web ) -> $value
-   * (deprecated) getPubDir( ) -> $dir
-   * (deprecated) getPublicWebList( ) -> @webs
-   * getPubUrlPath( ) -> $path
-   * getRevisionInfo($web, $topic, $rev, $attachment ) -> ( $date, $user, $rev, $comment ) 
-   * getScriptUrl( $web, $topic, $script, ... ) -> $url
-   * (deprecated) getScriptUrlPath( ) -> $path
-   * getSessionValue( $key ) -> $value
-   * getSkin( ) -> $skin
-   * getTopicList( $web ) -> @topics
-   * getTwikiWebname( ) -> $name
-   * getUrlHost( ) -> $host
-   * getViewUrl( $web, $topic ) -> $url
-   * getWikiName( ) -> $wikiName
-   * getWikiToolName( ) -> $name
-   * getWikiUserName( ) -> $wikiName
-   * internalLink( $pre, $web, $topic, $label, $anchor, $createLink ) -> $text
-   * isGuest( ) -> $boolean
-   * (deprecated) permissionsSet( $web ) -> $boolean
-   * readFile( $filename ) -> $text
-   * readTemplate( $name, $skin ) -> $text
-   * readTopic( $web, $topic, $rev ) -> ( $meta, $text )
-   * redirectCgiQuery( $query, $url, $passthru )
-   * renderText( $text, $web ) -> $text
-   * saveFile( $filename, $text )
-   * saveTopic( $web, $topic, $meta, $text, $options ) -> $error
-   * setSessionValue( $key, $value ) -> $boolean
-   * topicExists( $web, $topic ) -> $boolean
-   * userToWikiName( $loginName, $dontAddWeb ) -> $wikiName
-   * webExists( $web ) -> $boolean
-   * wikiToUserName( $wikiName ) -> $loginName
-   * writeHeader( $query, $contentLength )
-Version 1.010:
-   * checkTopicEditLock( $web, $topic, $script ) -> ( $oopsUrl, $loginName, $unlockTime )
-   * readTopicText( $web, $topic, $rev, $ignorePermissions ) -> $text
-   * saveTopicText( $web, $topic, $text, $ignorePermissions, $dontNotify ) -> $oopsUrl
-   * setTopicEditLock( $web, $topic, $lock )
-Version 1.020:
-   * formatTime( $time, $format, $timezone ) -> $text
-   * getRegularExpression( $name ) -> $expr
-   * writeDebug( $text )
-   * writeWarning( $text )
-Version 1.021:
-   * getPluginPreferencesFlag( $key ) -> $boolean
-   * getPluginPreferencesValue( $key ) -> $value
-Version 1.025:
-   * (deprecated) checkDependencies( $moduleName, $dependenciesRef ) -> $error
-   * extractParameters($attr ) -> %params
-Version 1.1:
-   * addToHEAD( $id, $header )
-   * attachmentExists( $web, $topic, $attachment ) -> $boolean
-   * clearSessionValue( $key ) -> $boolean
-   * createWeb( $newWeb, $baseWeb, $opts )
-   * expandTemplate( $def  ) -> $string
-   * expandVariablesOnTopicCreation ( $text ) -> $text
-   * getContext() -> \%hash
-   * getListOfWebs( $filter ) -> @webs
-   * getRevisionAtTime( $web, $topic, $time ) -> $rev
-   * getWorkArea( $pluginName ) -> $directorypath
-   * isValidWikiWord ( $text ) -> $boolean
-   * loadTemplate ( $name, $skin, $web ) -> $text
-   * moveAttachment( $web, $topic, $attachment, $newWeb, $newTopic, $newAttachment )
-   * moveTopic( $web, $topic, $newWeb, $newTopic )
-   * moveWeb( $oldName, $newName )
-   * normalizeWebTopicName($web, $topic) -> ($web, $topic)
-   * readAttachment( $web, $topic, $name, $rev ) -> $data
-   * registerRESTHandler( $alias, \&fn, )
-   * registerTagHandler( $var, \&fn, $syntax )
-   * saveAttachment( $web, $topic, $attachment, $opts )
-   * searchInWebContent($searchString, $web, \@topics, \%options ) -> \%map
-   * sendEmail ( $text, $retries ) -> $error
-   * wikiToEmail( $wikiName ) -> $email
-Version 1.12:
-   * emailToWikiNames( $email, $dontAddWeb ) -> @wikiNames
-   * getExternalResource( $url ) -> $response
-   * wikiNameToEmails( $wikiname ) -> @emails
-Version 1.13:
-   * isTrue( $value, $default ) -> $boolean
-   * popTopicContext()
-   * pushTopicContext($web, $topic)
-   * spaceOutWikiWord( $word, $sep ) -> $text
-
-
-__Note:__ Beware! These methods should only ever be called
-from the context of a TWiki Plugin. They require a Plugins SESSION context to be
-established before they are called, and will not work if simply called from
-another TWiki module. For example,
-<verbatim>
-use TWiki;
-print TWiki::Func::getSkin(),"\n";
-</verbatim>
-will fail with =Can't call method "getSkin" on an undefined value at TWiki/Func.pm line 83=.
-
-If you want to call the methods outside the context of a plugin, you can create a Plugins SESSION object. For example,
-the script:
-<verbatim>
-use TWiki:
-$TWiki::Plugins::SESSION = new TWiki();
-print TWiki::Func::getSkin(),"\n";
-</verbatim>
-will work happily.
+Notes on use of =$TWiki::Plugins::VERSION= (from 1.2 forwards):
+   * If the *major* version (e.g. =1.=) is the same then any plugin coded
+     to use any *earlier* revision of the =1.= API will still work. No
+     function has been removed from the interface, nor has any API published
+     in that version changed in such a way as to *require* plugins to be
+     recoded.
+   * If the *minor* version (e.g. 1.1) is incremented there may be changes
+     in the API that may help improve the coding of some plugins - for
+     example, new interfaces giving access to previously hidden core functions.
+     In addition, *deprecation* of functions in the interface trigger a minor
+     version increment. Note that deprecated functions are not _removed_, they
+     are merely frozen, and plugin authors are recommended to stop using them.
+   * Any additional digits in the version number relate to minor changes, such
+     as the addition of parameters to the existing functions, or addition of
+     utility functions that are unlikely to require significant changes to
+     existing plugins.
+   * =TWiki::Plugins::VERSION= also applies to the plugin handlers. The
+     handlers are documented in the !EmptyPlugin, and that module indicates
+     what version of =TWiki::Plugins::VERSION= it relates to.
+A full history of the changes to this API can be found at the end of this
+topic.
 
 =cut
 
@@ -220,7 +129,7 @@ Compose fully qualified URL
    * =$web=    - Web name, e.g. ='Main'=
    * =$topic=  - Topic name, e.g. ='WebNotify'=
    * =$script= - Script name, e.g. ='view'=
-   * =...= - an arbitrary number of name,value parameter pairs that will be url-encoded and added to the url. The special parameter name '#' is reserved for specifying an anchor. e.g. <tt>getScriptUrl('x','y','view','#'=>'XXX',a=>1,b=>2)</tt> will give <tt>.../view/x/y?a=1&b=2#XXX</tt>
+   * =...= - an arbitrary number of name=>value parameter pairs that will be url-encoded and added to the url. The special parameter name '#' is reserved for specifying an anchor. e.g. <tt>getScriptUrl('x','y','view','#'=>'XXX',a=>1,b=>2)</tt> will give <tt>.../view/x/y?a=1&b=2#XXX</tt>
 
 Return: =$url=       URL, e.g. ="http://example.com:80/cgi-bin/view.pl/Main/WebNotify"=
 
@@ -321,7 +230,7 @@ if (!$response->is_error() && $response->isa('HTTP::Response')) {
 }
 </verbatim>
 
-*Since:* TWiki::Plugins::VERSION 1.12
+*Since:* TWiki::Plugins::VERSION 1.2
 
 =cut
 
@@ -358,7 +267,7 @@ Get a list of all the names of session variables. The list is unsorted.
 Session keys are stored and retrieved using =setSessionValue= and
 =getSessionValue=.
 
-*Since:* TWiki::Plugins::VERSION 1.13
+*Since:* TWiki::Plugins::VERSION 1.2
 
 =cut
 
@@ -499,7 +408,7 @@ Note that this call does *not* re-initialise plugins, so if you have used
 global variables to remember the web and topic in =initPlugin=, then those
 values will be unchanged.
 
-*Since:* TWiki::Plugins::VERSION 1.13
+*Since:* TWiki::Plugins::VERSION 1.2
 
 =cut
 
@@ -528,7 +437,7 @@ sub pushTopicContext {
 Returns the TWiki context to the state it was in before the
 =pushTopicContext= was called.
 
-*Since:* TWiki::Plugins::VERSION 1.13
+*Since:* TWiki::Plugins::VERSION 1.2
 
 =cut
 
@@ -823,7 +732,7 @@ Find the wikinames of all users who have the given email address as their
 registered address. Since several users could register with the same email
 address, this returns a list of wikinames rather than a single wikiname.
 
-*Since:* TWiki::Plugins::VERSION 1.12
+*Since:* TWiki::Plugins::VERSION 1.2
 
 =cut
 
@@ -854,7 +763,7 @@ sub emailToWikiNames {
 Returns the registered email addresses of the named user. If $wikiname is
 undef, returns the registered email addresses for the logged-in user.
 
-*Since:* TWiki::Plugins::VERSION 1.12
+*Since:* TWiki::Plugins::VERSION 1.2
 
 =cut
 
@@ -897,7 +806,7 @@ sub isGuest {
 Find out if the user is an admin or not. If the user is not given,
 the currently logged-in user is assumed.
 
-*Since:* TWiki::Plugins::VERSION 1.12
+*Since:* TWiki::Plugins::VERSION 1.2
 
 =cut
 
@@ -921,7 +830,7 @@ if( TWiki::Func::isGroupMember( "HesperionXXGroup", "jordi" )) {
 </verbatim>
 If =$user= is =undef=, it defaults to the currently logged-in user.
 
-*Since:* TWiki::Plugins::VERSION 1.12
+*Since:* TWiki::Plugins::VERSION 1.2
 
 =cut
 
@@ -957,7 +866,7 @@ Use it as follows:
 
 *WARNING* on large sites, this could be a long list!
 
-*Since:* TWiki::Plugins::VERSION 1.12
+*Since:* TWiki::Plugins::VERSION 1.2
 
 =cut
 
@@ -975,7 +884,7 @@ sub eachUser {
 Get an iterator over the names of all groups that the user is a member of.
 If =$wikiname= is =undef=, defaults to the currently logged-in user.
 
-*Since:* TWiki::Plugins::VERSION 1.12
+*Since:* TWiki::Plugins::VERSION 1.2
 
 =cut
 
@@ -1010,7 +919,7 @@ Use it as follows:
 
 *WARNING* on large sites, this could be a long list!
 
-*Since:* TWiki::Plugins::VERSION 1.12
+*Since:* TWiki::Plugins::VERSION 1.2
 
 =cut
 
@@ -1051,7 +960,7 @@ Use it as follows:
 
 *WARNING* on large sites, this could be a long list!
 
-*Since:* TWiki::Plugins::VERSION 1.12
+*Since:* TWiki::Plugins::VERSION 1.2
 
 =cut
 
@@ -1754,7 +1663,6 @@ foreach my $a ( @attachments ) {
 =cut
 
 sub readAttachment {
-    my( $meta, $name ) = @_;
     ASSERT($TWiki::Plugins::SESSION) if DEBUG;
     my $result;
 
@@ -2046,7 +1954,7 @@ Expand all common =%<nop>VARIABLES%=
    * =$text=  - Text with variables to expand, e.g. ='Current user is %<nop>WIKIUSER%'=
    * =$topic= - Current topic name, e.g. ='WebNotify'=
    * =$web=   - Web name, optional, e.g. ='Main'=. The current web is taken if missing
-   * =$meta=  - topic meta-data to use while expanding (Since TWiki::Plugins::VERSION 1.13)
+   * =$meta=  - topic meta-data to use while expanding (Since TWiki::Plugins::VERSION 1.2)
 Return: =$text=     Expanded text, e.g. ='Current user is <nop>TWikiGuest'=
 
 *Since:* TWiki::Plugins::VERSION 1.000 (7 Dec 2002)
@@ -2371,7 +2279,7 @@ tokens to their proper value. That's what this function does.
 Note thath $quot, $percnt and $dollar all work *even if they are followed by
 alphanumeric characters*. You have been warned!
 
-*Since:* TWiki::Plugins::VERSION 1.12
+*Since:* TWiki::Plugins::VERSION 1.2
 
 =cut
 
@@ -2607,7 +2515,7 @@ the sanitised name together with the basename before sanitisation.
 Sanitation includes filtering illegal characters and mapping client
 file names to legal server names.
 
-*Since:* TWiki::Plugins::VERSION 1.13
+*Since:* TWiki::Plugins::VERSION 1.2
 
 =cut
 
@@ -2622,7 +2530,7 @@ sub sanitizeAttachmentName {
 Spaces out a wiki word by inserting a string (default: one space) between each word component.
 With parameter $sep any string may be used as separator between the word components; if $sep is undefined it defaults to a space.
 
-*Since:* TWiki::Plugins::VERSION 1.13
+*Since:* TWiki::Plugins::VERSION 1.2
 
 =cut
 
@@ -2852,7 +2760,7 @@ individual pages
 
 *Since:* TWiki::Plugins::VERSION 1.000 (27 Feb 2001)
 
-*DEPRECATED* since 1.12 - use =getPreferencesValue= instead to determine
+*DEPRECATED* since 1.2 - use =getPreferencesValue= instead to determine
 what permissions are set on the web, for example:
 <verbatim>
 foreach my $type qw( ALLOW DENY ) {
@@ -2939,7 +2847,7 @@ trailing spaces in =$value= are ignored.
 If the value is undef, then =$default= is returned. If =$default= is
 not specified it is taken as 0.
 
-*Since:* $TWiki::Plugins::VERSION 1.13
+*Since:* $TWiki::Plugins::VERSION 1.2
 
 =cut
 
@@ -3043,4 +2951,187 @@ sub checkDependencies {
 
 1;
 
-# EOF
+__DATA__
+
+=pod
+
+---++ API History
+
+---+++ twiki-20010901-release (Athens)
+$TWiki::Plugins::VERSION 1.000
+---++++ EmptyPlugin.pm
+   * =commonTagsHandler($text, $topic, $web)=
+   * =endRenderingHandler($text)=
+   * =outsidePREHandler($text)=
+   * =insidePREHandler($text)=
+   * =startRenderingHandler($text, $web)=
+---++++ Func.pm
+   * =checkAccessPermission($type, $login, $topicText, $topicName, $webName) -> $boolean=
+   * =expandCommonVariables($text, $topic, $web) -> $text=
+   * =extractNameValuePair($attrs, $name) -> $value=
+   * =formatGmTime($time) -> $text=
+   * =getCgiQuery() -> $query=
+   * =getDataDir() -> $dir=
+   * =getDefaultUserName() -> $loginName=
+   * =getMainWebname() -> $name=
+   * =getOopsUrl($web, $topic, $template, @theParams) -> $url=
+   * =getPreferencesFlag($key) -> $boolean=
+   * =getPreferencesValue($key, $web) -> $value=
+   * =getPublicWebList() -> @webs=
+   * =getPubDir() -> $dir=
+   * =getPubUrlPath() -> $path=
+   * =getRevisionInfo($webName, $topic, $rev, $attachment) -> ($date, $user, $rev, $comment)=
+   * =getScriptUrl($web, $topic, $script) -> $url=
+   * =getScriptUrlPath() -> $path=
+   * =getSessionValue($key) -> $value=
+   * =getSkin() -> $skin=
+   * =getTopicList($web) -> @topics=
+   * =getTwikiWebname() -> $name=
+   * =getUrlHost() -> $host=
+   * =getViewUrl($web, $topic) -> $url=
+   * =getWikiName() -> $wikiName=
+   * =getWikiUserName($text) -> $wikiName=
+   * =getWikiToolName() -> $name=
+   * =internalLink($preamble, $web, $topic, $linkText, $anchor, $createLink) -> $text=
+   * =isGuest() -> $boolean=
+   * =permissionsSet($web) -> $boolean=
+   * =readFile($filename) -> $text=
+   * =readTemplate($name, $skin) -> $text=
+   * =readTopic($webName, $topic) -> ($meta, $text)=
+   * =redirectCgiQuery($query, $url)=
+   * =renderText($text, $web) -> $text=
+   * =saveFile($filename, $text)=
+   * =setSessionValue($key, $value)=
+   * =topicExists($web, $topic) -> $boolean=
+   * =userToWikiName($user, $dontAddWeb) -> $wikiName=
+   * =webExists($web) -> $boolean=
+   * =wikiToUserName($wiki) -> $loginName=
+   * =writeDebug($text)=
+   * =writeHeader($query)=
+   * =writeWarning($text)=
+
+---+++ TWikiRelease01Feb2003 (Beijing)
+$TWiki::Plugins::VERSION 1.010
+---++++ EmptyPlugin.pm
+   * =afterEditHandler($text, $topic, $web)=
+   * =beforeEditHandler($text, $topic, $web)=
+   * =beforeSaveHandler($text, $topic, $web)=
+   * =initializeUserHandler($loginName, $url, $pathInfo)=
+   * =redirectCgiQueryHandler($query, $url)=
+   * =registrationHandler($web, $wikiName, $loginName)=
+   * =writeHeaderHandler($query)=
+---++++ Func.pm
+   * =checkTopicEditLock($web, $topic) ->($oopsUrl, $loginName, $unlockTime)=
+   * =readTopicText($web, $topic, $rev, $ignorePermissions) -> $text=
+   * =saveTopicText($web, $topic, $text, $ignorePermissions, $dontNotify) -> $oopsUrl=
+   * =setTopicEditLock($web, $topic, $lock) -> $oopsUrl=
+
+---+++ twiki-20040902-release (Cairo)
+$TWiki::Plugins::VERSION 1.025
+---++++ EmptyPlugin.pm
+   * =afterCommonTagsHandler($text, $topic, $web)=
+   * =afterSaveHandler($text, $topic, $web, $error)=
+   * =beforeCommonTagsHandler($text, $topic, $web)=
+   * =earlyInitPlugin()=
+---++++ Func.pm
+   * =afterAttachmentSaveHandler(\%attrHash, $topic, $web, $error)=
+   * =beforeAttachmentSaveHandler(\%attrHash, $topic, $web)=
+   * =checkDependencies($moduleName, $dependenciesRef) -> $error=
+   * =extractParameters($attr) -> %params=
+   * =formatTime($time, $format, $timezone) -> $text=
+   * =getPluginPreferencesFlag($key) -> $boolean=
+   * =getPluginPreferencesValue($key) -> $value=
+   * =getRegularExpression($regexName) -> $pattern=
+
+---+++ TWikiRelease04x00x00 (Dakar)
+$TWiki::Plugins::VERSION 1.1
+---++++ EmptyPlugin.pm
+   * =mergeHandler($diff, $old, $new, \%info) -> $text=
+   * =modifyHeaderHandler(\%headers, $query)=
+   * =postRenderingHandler($text)=
+   * =preRenderingHandler($text, \%map)=
+   * =renderFormFieldForEditHandler($name, $type, $size, $value, $attributes, $possibleValues) -> $html=
+   * =renderWikiWordHandler($linkText, $hasExplicitLinkLabel, $web, $topic) -> $linkText=
+
+   * <strike> =endRenderingHandler($text)= </strike>
+   * <strike> =startRenderingHandler($text, $web)= </strike>
+---++++ Func.pm
+   * =addToHEAD($id, $header)=
+   * =attachmentExists($web, $topic, $attachment) -> $boolean=
+   * =clearSessionValue($key) -> $boolean=
+   * =checkDependencies($moduleName, $dependenciesRef) -> $error=
+   * =createWeb($newWeb, $baseWeb, $opts)=
+   * =expandTemplate($def ) -> $string=
+   * =expandVariablesOnTopicCreation($text) -> $text=
+   * =getContext() -> \%hash=
+   * =getListOfWebs($filter) -> @webs=
+   * =getScriptUrl($web, $topic, $script, @params) -> $url=
+   * =getRevisionAtTime($web, $topic, $time) -> $rev=
+   * =getWorkArea($pluginName) -> $directorypath=
+   * =isValidWikiWord($text) -> $boolean=
+   * =loadTemplate($name, $skin, $web) -> $text=
+   * =moveAttachment($web, $topic, $attachment, $newWeb, $newTopic, $newAttachment)=
+   * =moveTopic($web, $topic, $newWeb, $newTopic)=
+   * =moveWeb($oldName, $newName)=
+   * =normalizeWebTopicName($web, $topic) ->($web, $topic)=
+   * =readAttachment($web, $topic, $name, $rev) -> $data=
+   * =registerRESTHandler($alias, \&fn,)=
+   * =registerTagHandler($var, \&fn, $syntax)=
+   * =saveAttachment($web, $topic, $attachment, $opts)=
+   * =saveTopic($web, $topic, $meta, $text, $options) -> $error=
+   * =searchInWebContent($searchString, $web, \@topics, \%options) -> \%map=
+   * =sendEmail($text, $retries) -> $error=
+   * =wikiToEmail($wikiName) -> $email=
+   * =writeHeader($query, $contentLength)=
+
+   * <strike> =checkDependencies($moduleName, $dependenciesRef) -> $error= </strike>
+   * <strike> =formatGmTime($time, $format) -> $text= </strike>
+   * <strike> =getDataDir() -> $dir= </strike>
+   * <strike> =getOopsUrl( $web, $topic, $template, @params ) -> $url= </strike>
+   * <strike> =getPubDir() -> $dir= </strike>
+   * <strike> =getPublicWebList() -> @webs= </strike>
+   * <strike> =getScriptUrlPath() -> $path= </strike>
+
+---+++ TWikiRelease04x00x01
+$TWiki::Plugins::VERSION 1.1
+---++++ EmptyPlugin.pm
+   * =afterSaveHandler($text, $topic, $web, $error, $meta)=
+   * =beforeSaveHandler($text, $topic, $web, $meta)=
+---++++ Func.pm
+
+---+++ TWikiRelease04x01x00
+$TWiki::Plugins::VERSION 1.11
+---++++ EmptyPlugin.pm
+   * =afterRenameHandler($oldWeb, $oldTopic, $oldAttachment, $newWeb, $newTopic, $newAttachment)=
+---++++ Func.pm
+No changes
+
+---+++ TWikiRelease04x02x00
+$TWiki::Plugins::VERSION 1.2
+---++++ EmptyPlugin.pm
+   * =afterCommonTagsHandler($text, $topic, $web, $meta)=
+   * =beforeCommonTagsHandler($text, $topic, $web, $meta)=
+   * =commonTagsHandler($text, $topic, $web, $included, $meta)=
+---++++ Func.pm
+   * =decodeFormatTokens($str) -> $unencodedString=
+   * =eachChangeSince($web, $time) -> $iterator=
+   * =eachGroup() -> $iterator=
+   * =eachGroupMember($group) -> $iterator=
+   * =eachMembership($wikiname) -> $iterator=
+   * =eachUser() -> $iterator=
+   * =emailToWikiNames($email, $dontAddWeb) -> @wikiNames=
+   * =expandCommonVariables($text, $topic, $web, $meta) -> $text=
+   * =getExternalResource($url) -> $response=
+   * =getSessionKeys() -> @keys=
+   * =isAnAdmin($login) -> $boolean=
+   * =isGroup($group) -> $boolean=
+   * =isGroupMember($group, $login) -> $boolean=
+   * =isTrue($value, $default) -> $boolean=
+   * =popTopicContext()=
+   * =pushTopicContext($web, $topic)=
+   * =sanitizeAttachmentName($fname) -> ($fileName, $origName)=
+   * =spaceOutWikiWord($word, $sep) -> $text=
+   * =wikiNameToEmails($wikiname) -> @emails=
+   * <strike> =permissionsSet($web) -> $boolean= </strike>
+
+=cut
