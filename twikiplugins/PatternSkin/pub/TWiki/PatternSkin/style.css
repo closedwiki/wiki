@@ -563,6 +563,9 @@ a.twikiLinkInHeaderRight {
 	border-width:1px;
 	border-style:solid;
 }
+.twikiNoBreak {
+	white-space:nowrap;
+}
 
 /*	-----------------------------------------------------------
 	Pattern skin specific elements
@@ -760,6 +763,9 @@ html>body #patternLeftBarContents .twikiHierarchicalNavigation { /* Mozilla */
 .patternTopicAction .patternSaveOptions .patternSaveOptionsContents {
 	padding:.2em 0;
 }
+.patternNoViewPage .patternTopicAction {
+	margin-top:-1px;
+}
 .patternMoved {
 	font-size:94%; /*S2*/
 	margin:1em 0;
@@ -869,6 +875,12 @@ h4.patternSearchResultsHeader {
 	line-height:1.5em;
 	padding:.5em 20px; /*S5*/
 }
+.patternRenamePage .patternSearchResults .patternBlockquote {
+	margin-left:4em; /* normally 5em */
+	padding-left:1em;
+	border-style:dotted;
+	border-width:0 0 0 1px;
+}
 
 /* Search results in book view format */
 
@@ -963,19 +975,10 @@ table.patternDiffOptions input {
 	padding:.5em;
 }
 
-/* rename.pattern.tmpl */
-
-.patternRenamePage .patternTopicAction {
-	margin-top:-1px;
-}
-
 /* attach.pattern.tmpl */
 
 .patternAttachPage .twikiAttachments table {
 	width:auto;
-}
-.patternAttachPage .patternTopicAction {
-	margin-top:-1px;
 }
 .patternAttachPage .twikiAttachments {
 	margin-top:0;
