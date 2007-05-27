@@ -3,10 +3,10 @@
 %{ optional inline CSS styles to be placed in body text: }%
 %TMPL:DEF{"bodystyle"}%%TMPL:END%
 %{ title string in page: }%
-%TMPL:DEF{"pagetitlecontents"}%%TMPL:END%
+%TMPL:DEF{"pagetitle"}%%TMPL:END%
 %{ main application contents: }%
 %TMPL:DEF{"appcontent"}%%TMPL:END%
-%TMPL:DEF{"pagetitle"}%<h1>%TMPL:P{"pagetitlecontents"}%</h1>%TMPL:END%
-%TMPL:DEF{"titleaction"}%(%TMPL:P{"pagetitlecontents"}%) %TMPL:END%
+%TMPL:DEF{"pagetitlestylewrapper"}%<h1>%TMPL:P{"pagetitle"}%</h1>%TMPL:END%
+%TMPL:DEF{"titleaction"}%(%TMPL:P{"pagetitle"}%) %TMPL:END%
 %{ content: }%
-%TMPL:DEF{"content"}%%TMPL:P{"bodystyle"}%%TMPL:P{"pagetitle"}%%TMPL:P{"appcontent"}%%TMPL:END%
+%TMPL:DEF{"content"}%%TMPL:P{"bodystyle"}%%TMPL:P{"pagetitlestylewrapper"}%%TMPL:P{"appcontent"}%%TMPL:END%
