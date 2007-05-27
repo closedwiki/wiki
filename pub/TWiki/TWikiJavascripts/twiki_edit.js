@@ -1,28 +1,23 @@
 var toShow = new Array();
 var toHide = new Array();
-var COOKIE_PREFIX = "PatternEdit";
-var COOKIE_EXPIRES = 365; // days
+var PREF_NAME = "Edit";
 var EDITBOX_ID = "topic";
-var SIGNATURE_BOX_ID = "sig";
-var EDITBOX_HOLDER_ID = "formHolder";
 // edit box rows
-var EDITBOX_COOKIE_ROWS_ID = "TextareaRows";
+var EDITBOX_PREF_ROWS_ID = "TextareaRows";
 var EDITBOX_CHANGE_STEP_SIZE = 4;
 var EDITBOX_MIN_ROWCOUNT = 4;
 // edit box font style
-var EDITBOX_COOKIE_FONTSTYLE_ID = "TextareaFontStyle";
+var EDITBOX_PREF_FONTSTYLE_ID = "TextareaFontStyle";
 var EDITBOX_FONTSTYLE_MONO = "mono";
 var EDITBOX_FONTSTYLE_PROPORTIONAL = "proportional";
 var EDITBOX_FONTSTYLE_MONO_STYLE = "twikiEditboxStyleMono";
 var EDITBOX_FONTSTYLE_PROPORTIONAL_STYLE = "twikiEditboxStyleProportional";
-var EDITBOX_COOKIE_FONTSTYLE_ID = "TextareaFontstyle";
+var textareaInited = false;
 
 function initForm() {
 	try { document.main.text.focus(); } catch (er) {}
 	
-	initTextAreaHeight();
-	initTextAreaFontStyle();
-	unhideTextArea();
+	initTextArea();
 	
 	var i, ilen = toShow.length;
 	var elem;
@@ -53,26 +48,28 @@ function initForm() {
 Sets the height of the edit box to height read from cookie.
 */
 function initTextAreaHeight() {
-	var cookie  = readCookie(COOKIE_PREFIX + EDITBOX_COOKIE_ROWS_ID);
-	if (!cookie) return;
-	setEditBoxHeight( parseInt(cookie) );
+	var pref = twiki.Pref.getPref(PREF_NAME + EDITBOX_PREF_ROWS_ID);
+	if (!pref) return;
+	setEditBoxHeight( parseInt(pref) );
+}
+
+/**
+Also called from template.
+*/
+function initTextArea () {
+	if (textareaInited) return;
+	initTextAreaHeight();
+	initTextAreaFontStyle();
+	textareaInited = true;
 }
 
 /**
 Sets the font style (monospace or proportional space) of the edit box to style read from cookie.
 */
 function initTextAreaFontStyle() {
-	var cookie  = readCookie(COOKIE_PREFIX + EDITBOX_COOKIE_FONTSTYLE_ID);
-	if (!cookie) return;
-	setEditBoxFontStyle( cookie );
-}
-
-/**
-Now that all edit box properties have been set, the hidden text area holder may unhide.
-*/
-function unhideTextArea() {
-	var elem = document.getElementById(EDITBOX_HOLDER_ID);
-	if (elem) elem.style.display = "block";
+	var pref  = twiki.Pref.getPref(PREF_NAME + EDITBOX_PREF_FONTSTYLE_ID);
+	if (!pref) return;
+	setEditBoxFontStyle( pref );
 }
 
 /**
@@ -113,7 +110,7 @@ function changeEditBox(inDirection) {
 	rowCount += (inDirection * EDITBOX_CHANGE_STEP_SIZE);
 	rowCount = (rowCount < EDITBOX_MIN_ROWCOUNT) ? EDITBOX_MIN_ROWCOUNT : rowCount;
 	setEditBoxHeight(rowCount);
-	writeCookie(COOKIE_PREFIX + EDITBOX_COOKIE_ROWS_ID, rowCount, COOKIE_EXPIRES);
+	twiki.Pref.setPref(PREF_NAME + EDITBOX_PREF_ROWS_ID, rowCount);
 	return false;
 }
 
@@ -131,17 +128,15 @@ param inFontStyle: either EDITBOX_FONTSTYLE_MONO or EDITBOX_FONTSTYLE_PROPORTION
 */
 function setEditBoxFontStyle(inFontStyle) {
 	if (inFontStyle == EDITBOX_FONTSTYLE_MONO) {
-		replaceClass(document.getElementById(EDITBOX_ID), EDITBOX_FONTSTYLE_PROPORTIONAL_STYLE, EDITBOX_FONTSTYLE_MONO_STYLE);
-		replaceClass(document.getElementById(SIGNATURE_BOX_ID), EDITBOX_FONTSTYLE_PROPORTIONAL_STYLE, EDITBOX_FONTSTYLE_MONO_STYLE);
-		writeCookie(COOKIE_PREFIX + EDITBOX_COOKIE_FONTSTYLE_ID, inFontStyle, COOKIE_EXPIRES);
+		twiki.CSS.replaceClass(document.getElementById(EDITBOX_ID), EDITBOX_FONTSTYLE_PROPORTIONAL_STYLE, EDITBOX_FONTSTYLE_MONO_STYLE);
+		twiki.Pref.setPref(PREF_NAME + EDITBOX_PREF_FONTSTYLE_ID, inFontStyle);
 		return;
 	}
 	if (inFontStyle == EDITBOX_FONTSTYLE_PROPORTIONAL) {
-		replaceClass(document.getElementById(EDITBOX_ID), EDITBOX_FONTSTYLE_MONO_STYLE, EDITBOX_FONTSTYLE_PROPORTIONAL_STYLE);
-		replaceClass(document.getElementById(SIGNATURE_BOX_ID), EDITBOX_FONTSTYLE_MONO_STYLE, EDITBOX_FONTSTYLE_PROPORTIONAL_STYLE);
-		writeCookie(COOKIE_PREFIX + EDITBOX_COOKIE_FONTSTYLE_ID, inFontStyle, COOKIE_EXPIRES);
+		twiki.CSS.replaceClass(document.getElementById(EDITBOX_ID), EDITBOX_FONTSTYLE_MONO_STYLE, EDITBOX_FONTSTYLE_PROPORTIONAL_STYLE);
+		twiki.Pref.setPref(PREF_NAME + EDITBOX_PREF_FONTSTYLE_ID, inFontStyle);
 		return;
 	}
 }
 
-twiki.Event.addLoadEvent(initForm);
+twiki.Event.addLoadEvent(initForm, true);
