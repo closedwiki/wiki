@@ -106,8 +106,8 @@
 <tr bgcolor="%WEBBGCOLOR%">
 <td valign="top"> Topic <b>%TOPIC%</b> . { %TMPL:P{"topicaction"}% } </td> </tr></table>%TMPL:END%
 
-%TMPL:DEF{"main"}%<div class="twikiMiddleContainer"><div class="twikiMain">
-%TMPL:P{"simpleheader"}%
+%TMPL:DEF{"main"}%%TMPL:P{"bodystyle"}%<div class="twikiMiddleContainer"><div class="twikiMain">
+%TMPL:P{"simpleheader"}%%TMPL:P{"pagetitlestylewrapper"}%
 %TMPL:P{"content"}%%TMPL:P{"standardfooter"}%</div></div>%TMPL:END%
 
 %{ container displayed just above the topic text: }%
@@ -130,10 +130,8 @@
 %{ title string in page: }%
 %TMPL:DEF{"pagetitle"}%%TMPL:END%
 %{ main application contents: }%
-%TMPL:DEF{"appcontent"}%%TMPL:END%
 %TMPL:DEF{"pagetitlestylewrapper"}%<h1>%TMPL:P{"pagetitle"}%</h1>%TMPL:END%
 %{ default content: }%
-%TMPL:DEF{"content"}%%TMPL:P{"bodystyle"}%%TMPL:P{"pagetitlestylewrapper"}%%TMPL:P{"appcontent"}%%TMPL:END%
 
 %TMPL:P{"htmldoctype"}%
 %TMPL:P{"head"}%
