@@ -1,6 +1,5 @@
-%{ Internationalisable Messages/constructs }%
 %TMPL:DEF{"sep"}%|%TMPL:END%
-%TMPL:DEF{"titlesep"}%&lt;%TMPL:END%
+%TMPL:DEF{"titlesep"}% &lt; %TMPL:END%
 %TMPL:DEF{"LOG_IN"}%Log In%TMPL:END%
 %TMPL:DEF{"LOG_OUT"}%Log Out%TMPL:END%
 
@@ -14,18 +13,11 @@
 		return launchTheWindow("%SCRIPTURLPATH{"view"}%/", inWeb, inTopic, "", "viewplain");
 	}
 //]]>
-</script>
-%TMPL:P{"templatescript"}%%TMPL:END%
+</script>%TMPL:P{"templatescript"}%%TMPL:END%
 
-
-
-%TMPL:DEF{"windowtitle"}%<title>%TMPL:P{"titleaction"}%<nop>%TOPIC% &lt; %WEB% &lt; <nop>%WIKITOOLNAME%</title>%TMPL:END%
-
-
+%TMPL:DEF{"windowtitle"}%<title>%TMPL:P{"titleaction"}% <nop>%TOPIC%%TMPL:P{"titlesep"}%%WEB%%TMPL:P{"titlesep"}%<nop>%WIKITOOLNAME%</title>%TMPL:END%
 
 %TMPL:DEF{"twikistyle"}%%TMPL:INCLUDE{"css"}%%TMPL:END%
-
-
 
 %TMPL:DEF{"head"}%<head>
 	%TMPL:P{"windowtitle"}%
@@ -37,24 +29,14 @@
 	%TMPL:P{"twikistyle"}%
 </head>%TMPL:END%
 
-
-
 %TMPL:DEF{"titleaction"}%%TMPL:END%
 
-
-
 %TMPL:DEF{"webaction"}%%TMPL:END%
-
-
 
 %TMPL:DEF{"bodystart"}%<body bgcolor="#ffffff">
 #PageTop %TMPL:END%
 
-
-
 %TMPL:DEF{"attachments"}%%TMPL:END%
-
-
 
 %TMPL:DEF{"standardheader"}%<form name="main" action="%SCRIPTURLPATH{"view"}%/%WEB%/%TOPIC%">
 <table width="100%" border="0" cellpadding="3" cellspacing="0">
@@ -124,7 +106,6 @@
 <tr bgcolor="%WEBBGCOLOR%">
 <td valign="top"> Topic <b>%TOPIC%</b> . { %TMPL:P{"topicaction"}% } </td> </tr></table>%TMPL:END%
 
-
 %TMPL:DEF{"main"}%<div class="twikiMiddleContainer"><div class="twikiMain">
 %TMPL:P{"simpleheader"}%
 %TMPL:P{"content"}%%TMPL:P{"standardfooter"}%</div></div>%TMPL:END%
@@ -143,6 +124,16 @@
 
 %TMPL:DEF{"login_actions"}%%IF{"context authenticated" then='%MAKETEXT{"Hello [_1]!" args="[[%WIKIUSERNAME%][%SPACEOUT{%WIKINAME%}%]]"}%%BR%%LOGOUT%' else='%LOGIN% %MAKETEXT{"or"}% [[%TWIKIWEB%.TWikiRegistration][%MAKETEXT{"Register"}%]]'}%%TMPL:END%
 
+%{ app-style page layout }%
+%{ optional inline CSS styles to be placed in body text: }%
+%TMPL:DEF{"bodystyle"}%%TMPL:END%
+%{ title string in page: }%
+%TMPL:DEF{"pagetitle"}%%TMPL:END%
+%{ main application contents: }%
+%TMPL:DEF{"appcontent"}%%TMPL:END%
+%TMPL:DEF{"pagetitlestylewrapper"}%<h1>%TMPL:P{"pagetitle"}%</h1>%TMPL:END%
+%{ default content: }%
+%TMPL:DEF{"content"}%%TMPL:P{"bodystyle"}%%TMPL:P{"pagetitlestylewrapper"}%%TMPL:P{"appcontent"}%%TMPL:END%
 
 %TMPL:P{"htmldoctype"}%
 %TMPL:P{"head"}%
