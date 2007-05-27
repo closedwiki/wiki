@@ -78,7 +78,7 @@ The main steps are:
 ---+++ Copy Users And Their Topics From Main Web
 
    * Copy all the topics from the Main web and corresponding pub/Main directories from the old TWiki to the new TWiki but do not overwrite any of the new topics already inside the new Main directory!
-   * Manually merge all the users from the old =TWiki.TWikiUsers= topic to the new TWiki. If you upgrade from Cairo you can simply use the old file and add the missing new system users to the list of users. If you upgrade from TWiki-4.0.X simply use the old topic.
+   * Manually merge all the users from the old =Main.TWikiUsers= topic to the new TWiki. If you upgrade from Cairo you can simply use the old file and add the missing new system users to the list of users. If you upgrade from TWiki-4.0.X simply use the old topic.
    * If you use =data/.htpasswd= for authentication copy this file from the old TWiki to the new.
       * If you upgrade from Cairo and you are using the Htpasswd login manager, then note that email addresses for users have moved out of user topics and into the password database. There is a script that performs this extra upgrade step for you - see =tools/upgrade_emails.pl=.
    * The old sandbox web may have a lot of useful topic and users may use it actively for drafts. Manually select the topics (remember the corresponding pub directories) from the old Sandbox web and copy them to the new TWiki. Decide if you want to overwrite the sandbox homepage and left menu bar or keep the new.
