@@ -1,9 +1,40 @@
 %META:TOPICINFO{author="TWikiContributor" date="1131431859" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="WebHome"}%
 ---+ %MAKETEXT{"Create New Topic in [_1] Web" args="<nop>%BASEWEB%"}%
+
+%INCLUDE{"%WEB%.%TOPIC%" section="formstart"}%
+<div class="twikiFormSteps">
+<div class="twikiFormStep">
+---------------------------------------------+++ %MAKETEXT{"Topic name:"}%
+<p>%INCLUDE{"%WEB%.%TOPIC%" section="topicname"}%</p>
+<p>%INCLUDE{"%WEB%.%TOPIC%" section="allownonwikiword"}%</p>
+</div><!--/twikiFormStep-->
+<div class="twikiFormStep">
+---------------------------------------------+++ %MAKETEXT{"Topic parent:"}%
+<p>%INCLUDE{"%WEB%.%TOPIC%" section="topicparent"}%</p>
+</div><!--/twikiFormStep-->
+<div class="twikiFormStep">
+---------------------------------------------+++ %MAKETEXT{"Use template:"}%
+<p>%INCLUDE{"%WEB%.%TOPIC%" section="topictemplate"}%</p>
+</div><!--/twikiFormStep-->
+<div class="twikiFormStep twikiLast">
+<p>%INCLUDE{"%WEB%.%TOPIC%" section="submit"}%</p>
+</div><!--/twikiFormStep-->
+</div><!--/twikiFormSteps-->
+<p>%INCLUDE{"%WEB%.%TOPIC%" section="formend"}%</p>
+
+<div class="twikiHelp">
+%ICON{info}% %MAKETEXT{"Once you have created the topic, consider adding links in related topics to the new topic so that there are more ways people can discover it."}%
+</div>
+
+<!--
+<verbatim>
+Sections:
 %STARTSECTION{"newtopicform"}%
 %STARTSECTION{"formstart"}%
-%STARTSECTION{"javascriptfunctions"}%
+%STARTSECTION{"javascriptfunctions"}%<script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/TWikiJavascripts/twikiString.js"></script>
+<script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/TWikiJavascripts/twikiCSS.js"></script>
+<script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/TWikiJavascripts/twikiHTML.js"></script>
 <script type="text/javascript" src="%PUBURLPATH%/%TWIKIWEB%/TWikiJavascripts/unicode_chars.js"></script>
 <script type="text/javascript">
 /* <![CDATA[ */
@@ -28,7 +59,7 @@ function canSubmit(inForm, inShouldConvertInput) {
 	if (inputForTopicName.length == 0) {
 		disableSubmit(inForm.submit);
 		/* Update feedback field */
-		insertHtml("", "webTopicCreatorFeedback");
+		twiki.HTML.setHtmlOfElementWithId("webTopicCreatorFeedback", "");
 		return false;
 	}
 	
@@ -47,7 +78,7 @@ function canSubmit(inForm, inShouldConvertInput) {
 	*/
 	var wikiWordName = noSpaceName;
 	if (!userAllowsNonWikiWord) {
-		wikiWordName = removeSpacesAndPunctuation(capitalize(inputForTopicName));
+		wikiWordName = removeSpacesAndPunctuation(twiki.String.capitalize(inputForTopicName));
 	}
 	if (userAllowsNonWikiWord) {
 		wikiWordName = removeSpacesAndPunctuation(capitalizeSentence(inputForTopicName));
@@ -65,9 +96,9 @@ function canSubmit(inForm, inShouldConvertInput) {
 	if (wikiWordName != inputForTopicName) {
 		feedbackHeader = "<strong>%MAKETEXT{"Topic will be named: "}%</strong>";
 		feedbackText = feedbackHeader + wikiWordName;
-		insertHtml(feedbackText, "webTopicCreatorFeedback");
+		twiki.HTML.setHtmlOfElementWithId("webTopicCreatorFeedback", feedbackText);
 	} else {
-		insertHtml('', "webTopicCreatorFeedback");
+		twiki.HTML.setHtmlOfElementWithId("webTopicCreatorFeedback", "");
 	}
 	/*
 	Update hidden field value
@@ -76,13 +107,16 @@ function canSubmit(inForm, inShouldConvertInput) {
 	if (hasNonWikiWordCheck && userAllowsNonWikiWord) {
 		inForm.onlywikiname.value = userAllowsNonWikiWord ? "off" : "on";
 	}
-	if (isWikiWord(wikiWordName) || userAllowsNonWikiWord) {
+	if (twiki.String.isWikiWord(wikiWordName) || userAllowsNonWikiWord) {
 		enableSubmit(inForm.submit);
 		return true;
 	} else {
 		disableSubmit(inForm.submit);
 		return false;
 	}
+}
+function removeSpacesAndPunctuation (inText) {
+	return twiki.String.removePunctuation(twiki.String.removeSpaces(inText));
 }
 function capitalizeSentence (inText) {
 	return inText.substr(0,1).toUpperCase() + inText.substr(1);
@@ -96,47 +130,33 @@ if (! inCheckBox) return;
 }
 function enableSubmit(inButton) {
 if (!inButton) return;
-	removeClass(inButton, "twikiSubmitDisabled");
+	twiki.CSS.removeClass(inButton, "twikiSubmitDisabled");
 	inButton.disabled = false;
 }
 function disableSubmit(inButton) {
 if (!inButton) return;
-	addClass(inButton, "twikiSubmitDisabled");
+	twiki.CSS.addClass(inButton, "twikiSubmitDisabled");
 	inButton.disabled = true;
 }
 /* ]]> */
 </script>
 %ENDSECTION{"javascriptfunctions"}%
 <form name="newtopic" id="newtopic" action="%SCRIPTURLPATH{edit}%/%BASEWEB%/" onsubmit="return canSubmit(this,true);"><input type="hidden" name="onlywikiname" /><input type="hidden" name="onlynewtopic" value="on" />%ENDSECTION{"formstart"}%
-<div class="twikiFormSteps">
-<div class="twikiFormStep">
----------------------------------------------+++ %MAKETEXT{"Topic name:"}%
-<p>%STARTSECTION{"topicname"}%<input type="text" class="twikiInputField" name="topic" id="topic" size="40" tabindex="10" %IF{"'%PREFILLTOPIC%'='1'" then="value=\"%BASETOPIC%\""}% %IF{"'%URLPARAM{"newtopic"}%'" then="value=\"%URLPARAM{"newtopic"}%\""}% onkeyup="canSubmit(this.form,false);" onchange="canSubmit(this.form,false);"  onblur="canSubmit(this.form,true);" /> <span id="webTopicCreatorFeedback" class="twikiGrayText"><!--generated name will be put here--></span>%ENDSECTION{"topicname"}%</p>
-<p>%STARTSECTION{"allownonwikiword"}%<input type="checkbox" class="twikiCheckbox" id="nonwikiword" name="nonwikiword" tabindex="11" onchange="canSubmit(this.form,false);" onmouseup="canSubmit(this.form,false);" /><label for="nonwikiword">%MAKETEXT{"Allow non <nop>WikiWord for the new topic name"}%</label><br />
+%STARTSECTION{"topicname"}%<input type="text" class="twikiInputField" name="topic" id="topic" size="40" tabindex="10" %IF{"'%PREFILLTOPIC%'='1'" then="value=\"%BASETOPIC%\""}% %IF{"'%URLPARAM{"newtopic"}%'" then="value=\"%URLPARAM{"newtopic"}%\""}% onkeyup="canSubmit(this.form,false);" onchange="canSubmit(this.form,false);"  onblur="canSubmit(this.form,true);" /> <span id="webTopicCreatorFeedback" class="twikiGrayText"><!--generated name will be put here--></span>%ENDSECTION{"topicname"}%
+%STARTSECTION{"allownonwikiword"}%<input type="checkbox" class="twikiCheckbox" id="nonwikiword" name="nonwikiword" tabindex="11" onchange="canSubmit(this.form,false);" onmouseup="canSubmit(this.form,false);" /><label for="nonwikiword">%MAKETEXT{"Allow non <nop>WikiWord for the new topic name"}%</label><br />
 <span class="twikiGrayText">%MAKETEXT{"It's usually best to choose a <a target='WikiWord' onclick=\"return launchWindow('[_1]','WikiWord')\" href='[_1]' rel='nofollow'>WikiWord</a> for the new topic name, otherwise automatic linking may not work. Characters not allowed in topic names, such as spaces will automatically be removed." args="%TWIKIWEB%,%SCRIPTURLPATH{"view"}%/%TWIKIWEB%/WikiWord"}%</span>
 <script type="text/javascript">
 /* <![CDATA[ */
 // Read url param 'allowsnonwikiword' to set the initial checkbox value
 var allowsNonWikiWord = "%URLPARAM{"allowsnonwikiword" default=off}%";
-setCheckBoxState(document.forms.newtopic.nonwikiword, allowsNonWikiWord.toBoolean() ? true : false);
+setCheckBoxState(document.forms.newtopic.nonwikiword, twiki.String.isBoolean(allowsNonWikiWord) ? true : false);
 /* ]]> */
-</script>%ENDSECTION{"allownonwikiword"}%</p>
-</div><!--/twikiFormStep-->
-<div class="twikiFormStep">
----------------------------------------------+++ %MAKETEXT{"Topic parent:"}%
-<p>%STARTSECTION{"topicparent"}%
-%IF{"defined pickparent" then="<select name='topicparent' size='10' class='twikiSelect' tabindex='12'>$percntTOPICLIST{$quot<option $marker value='$name'>$name</option>$quot separator=$quot$quot selection=$quot$percntURLPARAM{ $quotparent$quot default=$quot%MAKETEXT{"(no parent, orphaned topic)"}%$quot }$percnt$quot}$percnt<option value=$quot$quot>$percntMAKETEXT{$quot(no parent, orphaned topic)$quot}$percnt</option></select>" else="<input type='text' size='40' class='twikiInputField' />&nbsp;<a href='$percntSCRIPTURLPATH{view}$percnt/$percntBASEWEB$percnt/$percntBASETOPIC$percnt?$percntQUERYSTRING$percnt;pickparent=1'>%MAKETEXT{"Pick from a list"}%</a>"}%
-%ENDSECTION{"topicparent"}%</p>
-</div><!--/twikiFormStep-->
-<div class="twikiFormStep">
----------------------------------------------+++ %MAKETEXT{"Use template:"}%
-<p>%STARTSECTION{"topictemplate"}%<select name="templatetopic" class="twikiSelect">
-<option value="">%MAKETEXT{"Default template"}%</option>%SEARCH{".*Template$" scope="topic" type="regex" nonoise="on" format="<option>$topic</option>"}%</select> <a href="%SCRIPTURL{view}%/%TWIKIWEB%/WebTemplateTopics?web=%BASEWEB%">%MAKETEXT{"View templates"}%</a> %ENDSECTION{"topictemplate"}%</p>
-</div><!--/twikiFormStep-->
-<div class="twikiFormStep twikiLast">
-<p>%STARTSECTION{"submit"}%<input id="submit" type="submit" class="twikiSubmit" tabindex="13" value='%MAKETEXT{"Create this topic"}%' />%ENDSECTION{"submit"}%</p>
-</div><!--/twikiFormStep-->
-</div><!--/twikiFormSteps-->
+</script>%ENDSECTION{"allownonwikiword"}%
+%STARTSECTION{"topicparent"}%
+%IF{"defined pickparent" then="<select name='topicparent' size='10' class='twikiSelect' tabindex='12'>$percntTOPICLIST{$quot<option $marker value='$name'>$name</option>$quot separator=$quot$quot selection=$quot$percntURLPARAM{ $quotparent$quot default=$quot%MAKETEXT{"(no parent, orphaned topic)"}%$quot }$percnt$quot}$percnt<option value=$quot$quot>$percntMAKETEXT{$quot(no parent, orphaned topic)$quot}$percnt</option></select>" else="<input type='text' size='40' class='twikiInputField' />&nbsp;<a href='$percntSCRIPTURLPATH{view}$percnt/$percntBASEWEB$percnt/$percntBASETOPIC$percnt?$percntQUERYSTRING$percnt;pickparent=1'>%MAKETEXT{"Pick from a list"}%</a>"}%%ENDSECTION{"topicparent"}%
+%STARTSECTION{"topictemplate"}%<select name="templatetopic" class="twikiSelect">
+<option value="">%MAKETEXT{"Default template"}%</option>%SEARCH{".*Template$" scope="topic" type="regex" nonoise="on" format="<option>$topic</option>"}%</select> <a href="%SCRIPTURL{view}%/%TWIKIWEB%/WebTemplateTopics?web=%BASEWEB%">%MAKETEXT{"View templates"}%</a> %ENDSECTION{"topictemplate"}%
+%STARTSECTION{"submit"}%<input id="submit" type="submit" class="twikiSubmit" tabindex="13" value='%MAKETEXT{"Create this topic"}%' />%ENDSECTION{"submit"}%
 %STARTSECTION{"formend"}%
 </form>
 <script type="text/javascript">
@@ -148,7 +168,5 @@ document.forms.newtopic.topic.focus();
 //]]>
 </script>%ENDSECTION{"formend"}%
 %ENDSECTION{"newtopicform"}%
-%BR%
-<div class="twikiHelp">
-%ICON{info}% %MAKETEXT{"Once you have created the topic, consider adding links in related topics to the new topic so that there are more ways people can discover it."}%
-</div>
+</verbatim>
+-->
