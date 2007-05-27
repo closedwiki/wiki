@@ -19,10 +19,11 @@ limit="%URLPARAM{limit}%"
 zeroresults="%IF{ "defined search" then="on" else="off" }%"
 }%
 
+<script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/TWikiJavaScripts/twikiHTML.js"></script>
 <script type="text/javascript">
 //<![CDATA[
 	var linkText='<a href="#" onclick="location.hash=\'twikiSearchForm\'; return false;"><span class="patternLinkLabel twikiSmallish">%MAKETEXT{"Modify search"}%</span></a>';
-	%IF{"defined search" then="insertHtml('&nbsp;&nbsp;' + linkText, 'twikiModifySearchContainer');"}%
+	%IF{"defined search" then="twiki.HTML.setHtmlOfElementWithId('twikiModifySearchContainer', '&nbsp;&nbsp;' + linkText);"}%
 //]]>
 </script>
 
