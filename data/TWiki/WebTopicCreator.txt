@@ -7,15 +7,19 @@
 <div class="twikiFormStep">
 ---------------------------------------------+++ %MAKETEXT{"Topic name:"}%
 <p>%INCLUDE{"%WEB%.%TOPIC%" section="topicname"}%</p>
-<p>%INCLUDE{"%WEB%.%TOPIC%" section="allownonwikiword"}%</p>
+%IF{"'%HIDE_NON_WIKI_WORD_WARNINGS%'!='on'" then="<p>$percntINCLUDE{$quot$percntWEB$percnt.$percntTOPIC$percnt$quot section=$quotallownonwikiword$quot}$percnt</p>"}%
 </div><!--/twikiFormStep-->
 <div class="twikiFormStep">
----------------------------------------------+++ %MAKETEXT{"Topic parent:"}%
+%TWISTY{id="parent" prefix="<h3>!!" link="%MAKETEXT{"Topic parent:"}%" firststart="show" remember="on" showimgleft="%ICONURLPATH{toggleopen}%"
+hideimgleft="%ICONURLPATH{toggleclose}%" suffix="</h3>"}%
 <p>%INCLUDE{"%WEB%.%TOPIC%" section="topicparent"}%</p>
+%ENDTWISTY%
 </div><!--/twikiFormStep-->
 <div class="twikiFormStep">
----------------------------------------------+++ %MAKETEXT{"Use template:"}%
+%TWISTY{id="template" prefix="<h3>!!" link="%MAKETEXT{"Use template:"}%" firststart="show" remember="on" showimgleft="%ICONURLPATH{toggleopen}%"
+hideimgleft="%ICONURLPATH{toggleclose}%" suffix="</h3>"}%
 <p>%INCLUDE{"%WEB%.%TOPIC%" section="topictemplate"}%</p>
+%ENDTWISTY%
 </div><!--/twikiFormStep-->
 <div class="twikiFormStep twikiLast">
 <p>%INCLUDE{"%WEB%.%TOPIC%" section="submit"}%</p>
@@ -147,7 +151,7 @@ if (!inButton) return;
 <span class="twikiGrayText">%MAKETEXT{"It's usually best to choose a <a target='WikiWord' onclick=\"return launchWindow('[_1]','WikiWord')\" href='[_1]' rel='nofollow'>WikiWord</a> for the new topic name, otherwise automatic linking may not work. Characters not allowed in topic names, such as spaces will automatically be removed." args="%TWIKIWEB%,%SCRIPTURLPATH{"view"}%/%TWIKIWEB%/WikiWord"}%</span>
 <script type="text/javascript">
 /* <![CDATA[ */
-// Read url param 'allowsnonwikiword' to set the initial checkbox value
+// Read url param "allowsnonwikiword" to set the initial checkbox value
 var allowsNonWikiWord = "%URLPARAM{"allowsnonwikiword" default=off}%";
 setCheckBoxState(document.forms.newtopic.nonwikiword, twiki.String.isBoolean(allowsNonWikiWord) ? true : false);
 /* ]]> */
