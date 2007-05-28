@@ -3023,6 +3023,11 @@ sub INCLUDE {
 
     $text = applyPatternToIncludedText( $text, $pattern ) if( $pattern );
 
+    # Do not show TOC in included topic if TOC_HIDE_IF_INCLUDED preference has been set
+    if ( $this->{prefs}->getPreferencesValue('TOC_HIDE_IF_INCLUDED') eq 'on' ) {
+        $text =~ s/%TOC(?:{(.*?)})?%//go;
+    }
+
     expandAllTags( $this, \$text, $includedTopic, $includedWeb );
 
     # 4th parameter tells plugin that its called for an included file
