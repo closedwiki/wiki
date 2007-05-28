@@ -393,10 +393,10 @@ HERE
     $text =~ s/<img src=.*?[^>]>/[IMG]/goi;  # remove all images
     # add the url host to any in-twiki urls that lack it
     my $sup = TWiki::Func::getScriptUrlPath();
+    $sup =~ s#/$##;
     my $sun = TWiki::Func::getUrlHost() . $sup;
-    $text =~ s/href=\"$sup/href=\"$sun/ogi;
+    $text =~ s#href=\"$sup/#href=\"$sun/#ogi;
     $text =~ s/<\/?nop( \/)?>//goi;
-die unless $text;
 
     return $text;
 }

@@ -358,7 +358,7 @@ sub testHTMLFormattingOpen {
     $this->assert_html_matches("<td> Fri, 1 Jan 1999 </td>", $s );
     
     $fmt = new TWiki::Plugins::ActionTrackerPlugin::Format("", "| \$edit |", "");
-    my $url = "$TWiki::cfg{DefaultUrlHost}$TWiki::cfg{ScriptUrlPath}/edit$TWiki::cfg{ScriptSuffix}/Test/Topic\\?skin=action,pattern;atp_action=AcTion0;t=";
+    my $url = "$TWiki::cfg{DefaultUrlHost}$TWiki::cfg{ScriptUrlPath}/edit$TWiki::cfg{ScriptSuffix}/Test/Topic\\?skin=action%2cpattern;atp_action=AcTion0;t=";
     $s = $fmt->formatHTMLTable([$action], "href", 0 );
     $this->assert($s =~ m(<td> <a href="(.*?)">edit</a> </td>), $s);
     $this->assert($1, $s);

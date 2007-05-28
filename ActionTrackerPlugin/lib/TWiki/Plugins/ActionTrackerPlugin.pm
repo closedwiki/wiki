@@ -70,7 +70,7 @@ sub initPlugin {
 };
 
 sub commonTagsHandler {
-    my( $otext, $topic, $web ) = @_;
+    my( $otext, $topic, $web, $meta ) = @_;
 
     unless ($doneHeader) {
       my $header = <<'HERE';
