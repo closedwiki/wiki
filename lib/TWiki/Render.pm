@@ -57,6 +57,11 @@ my $SUMMARYLINES = 6;
 my $STARTWW = qr/^|(?<=[\s\(])/m;
 my $ENDWW = qr/$|(?=[\s,.;:!?)])/m;
 
+# marker used to tage the start of a table
+my $TABLEMARKER = "\0\1\2TABLE\2\1\0";
+# Marker used to indicate table rows that are valid header/footer rows
+my $TRMARK = "is\1all\1th";
+
 BEGIN {
     # Do a dynamic 'use locale' for this module
     if( $TWiki::cfg{UseLocale} ) {
@@ -236,10 +241,10 @@ sub renderFormField {
 # Add a list item, of the given type and indent depth. The list item may
 # cause the opening or closing of lists currently being handled.
 sub _addListItem {
-    my( $this, $result, $theType, $theElement, $theIndent, $theOlType ) = @_;
+    my( $this, $result, $type, $element, $indent ) = @_;
 
-    $theIndent =~ s/   /\t/g;
-    my $depth = length( $theIndent );
+    $indent =~ s/   /\t/g;
+    my $depth = length( $indent );
 
     my $size = scalar( @{$this->{LIST}} );
 
@@ -248,51 +253,86 @@ sub _addListItem {
     if( $size < $depth ) {
         my $firstTime = 1;
         while( $size < $depth ) {
-            push( @{$this->{LIST}}, { type=>$theType, element=>$theElement } );
-            $$result .= ' <'.$theElement.">\n" unless( $firstTime );
-            $$result .= ' <'.$theType.">\n";
+            push( @{$this->{LIST}}, { type=>$type, element=>$element } );
+            push @$result, ' <'.$element.">\n" unless( $firstTime );
+            push @$result, ' <'.$type.">\n";
             $firstTime = 0;
             $size++;
         }
     } else {
         while( $size > $depth ) {
             my $tags = pop( @{$this->{LIST}} );
-            $$result .= "\n</".$tags->{element}.'></'.$tags->{type}.'> ';
+            push @$result, "\n</".$tags->{element}.'></'.$tags->{type}.'> ';
             $size--;
         }
         if( $size ) {
-            $$result .= "\n</".$this->{LIST}->[$size-1]->{element}.'> ';
+            push @$result, "\n</".$this->{LIST}->[$size-1]->{element}.'> ';
         } else {
-            $$result .= "\n" if $$result;
+            push @$result, "\n";
         }
     }
 
     if ( $size ) {
         my $oldt = $this->{LIST}->[$size-1];
-        if( $oldt->{type} ne $theType ) {
-            $$result .= ' </'.$oldt->{type}.'><'.$theType.">\n";
+        if( $oldt->{type} ne $type ) {
+            push @$result, ' </'.$oldt->{type}.'><'.$type.">\n";
             pop( @{$this->{LIST}} );
-            push( @{$this->{LIST}}, { type=>$theType, element=>$theElement } );
+            push( @{$this->{LIST}}, { type=>$type, element=>$element } );
         }
     }
 }
 
-sub _emitTR {
-    my ( $this, $thePre, $theRow, $insideTABLE ) = @_;
-
-    unless( $insideTABLE ) {
-        $thePre .=
-          CGI::start_table({ class=>'twikiTable',
-                             border => 1,
-                             cellspacing => 0,
-                             cellpadding => 0 });
+# Given that we have just seen the end of a table, work out the head
+# and foot sections
+sub _addTHEADandTFOOT {
+    my( $lines ) = @_;
+    # scan back to the head of the table
+    my $i = scalar( @$lines ) - 1;
+    my @thRows;
+    my $inFoot = 1;
+    my $footLines = 0;
+    my $headLines = 0;
+    while( $i >= 0 && $lines->[$i] ne $TABLEMARKER ) {
+        if( $lines->[$i] =~ s/$TRMARK=(["'])(.*?)\1//i) {
+            if( $2 ) {
+                if( $inFoot ) {
+                    $footLines++;
+                } else {
+                    $headLines++;
+                }
+            } else {
+                $inFoot = 0;
+                $headLines = 0;
+            }
+        }
+        $i--;
     }
+    $lines->[$i] = CGI::start_table(
+        { class=>'twikiTable',
+          border => 1, cellspacing => 0, cellpadding => 0 });
+    if( $footLines && !$headLines) {
+        $headLines = $footLines;
+        $footLines = 0;
+    }
+    if( $footLines ) {
+        push( @$lines, '</tfoot>');
+        splice( @$lines, scalar( @$lines ) - $footLines, 0, '<tfoot>');
+    }
+    if( $headLines ) {
+        splice( @$lines, $i + 1 + $headLines, 0, '</thead>');
+        splice( @$lines, $i + 1, 0, '<thead>');
+    }
+}
+
+sub _emitTR {
+    my ( $this, $theRow ) = @_;
 
     $theRow =~ s/\t/   /g;  # change tabs to space
     $theRow =~ s/\s*$//;    # remove trailing spaces
     $theRow =~ s/(\|\|+)/$TWiki::TranslationToken.length($1).'|'/ge;  # calc COLSPAN
     my $cells = '';
-   my $containsTableHeader;
+    my $containsTableHeader;
+    my $isAllTH = 1;
     foreach( split( /\|/, $theRow ) ) {
         my @attr;
 
@@ -316,19 +356,12 @@ sub _emitTR {
         if( /^\s*\*(.*)\*\s*$/ ) {
             push( @attr, bgcolor => '#99CCCC' );
             $cells .= CGI::th( { @attr }, CGI::strong( " $1 " ))."\n";
-            $containsTableHeader = 1;
         } else {
             $cells .= CGI::td( { @attr }, " $_ " )."\n";
+            $isAllTH = 0;
         }
     }
-   my $tableRow = CGI::Tr( $cells );
-   unless ($insideTABLE) {   #first row in table _is_ a header
-      if ($containsTableHeader) {
-         $tableRow = CGI::thead($tableRow);
-      }
-   }
-   
-    return $thePre.$tableRow;
+    return CGI::Tr({ $TRMARK => $isAllTH }, $cells );
 }
 
 sub _fixedFontText {
@@ -993,45 +1026,50 @@ sub getRenderedVersion {
     # Now we really _do_ need a line loop, to process TML
     # line-oriented stuff.
     my $isList = 0;        # True when within a list
-    my $insideTABLE = 0;
-    my $result = '';
+    my $tableRow = 0;
+    my @result;
     my $isFirst = 1;
 
     foreach my $line ( split( /\r?\n/, $text )) {
         # Table: | cell | cell |
         # allow trailing white space after the last |
         if( $line =~ m/^(\s*)\|.*\|\s*$/ ) {
-            $line =~ s/^(\s*)\|(.*)/_emitTR( $this,$1,$2,$insideTABLE)/e;
-            $insideTABLE = 1;
-        } elsif( $insideTABLE ) {
-            $result .= '</table>';
-            $insideTABLE = 0;
+            unless( $tableRow ) {
+                # mark the head of the table
+                push( @result, $TABLEMARKER );
+            }
+            $line =~ s/^(\s*)\|(.*)/$1._emitTR( $this, $2 )/e;
+            $tableRow++;
+        } elsif( $tableRow ) {
+            _addTHEADandTFOOT( \@result );
+            push( @result, '</table>' );
+            $tableRow = 0;
         }
 
         # Lists and paragraphs
         if ( $line =~ m/^\s*$/ ) {
-            unless( $insideTABLE || $isFirst ) {
+            unless( $tableRow || $isFirst ) {
                 $line = '<p />';
             }
             $isList = 0;
         }
-        elsif ( $line =~ m/^(\S+?)/ ) {
+        elsif ( $line =~ m/^\S/ ) {
             $isList = 0;
         }
         elsif ( $line =~ m/^(\t|   )+\S/ ) {
             if ( $line =~ s/^((\t|   )+)\$\s(([^:]+|:[^\s]+)+?):\s/<dt> $3 <\/dt><dd> / ) {
                 # Definition list
-                _addListItem( $this, \$result, 'dl', 'dd', $1, '' );
+                _addListItem( $this, \@result, 'dl', 'dd', $1 );
                 $isList = 1;
             }
             elsif ( $line =~ s/^((\t|   )+)(\S+?):\s/<dt> $3<\/dt><dd> /o ) {
                 # Definition list
-                _addListItem( $this, \$result, 'dl', 'dd', $1, '' );
+                _addListItem( $this, \@result, 'dl', 'dd', $1 );
                 $isList = 1;
             }
             elsif ( $line =~ s/^((\t|   )+)\* /<li> /o ) {
                 # Unnumbered list
-                _addListItem( $this, \$result, 'ul', 'li', $1, '' );
+                _addListItem( $this, \@result, 'ul', 'li', $1 );
                 $isList = 1;
             }
             elsif ( $line =~ m/^((\t|   )+)([1AaIi]\.|\d+\.?) ?/ ) {
@@ -1044,12 +1082,12 @@ sub getRenderedVersion {
                     $ot = '';
                 }
                 $line =~ s/^((\t|   )+)([1AaIi]\.|\d+\.?) ?/<li$ot> /;
-                _addListItem( $this, \$result, 'ol', 'li', $1, $ot );
+                _addListItem( $this, \@result, 'ol', 'li', $1 );
                 $isList = 1;
             }
             elsif( $isList && $line =~ /^(\t|   )+\s*\S/ ) {
                 # indented line extending prior list item
-                $result .= $line;
+                push( @result, $line );
                 next;
             }
             else {
@@ -1059,26 +1097,27 @@ sub getRenderedVersion {
             # indented line extending prior list item; case where indent
             # starts with is at least 3 spaces or a tab, but may not be a
             # multiple of 3.
-            $result .= $line;
+            push( @result, $line );
             next;
         }
 
         # Finish the list
         unless( $isList ) {
-            _addListItem( $this, \$result, '', '', '' );
+            _addListItem( $this, \@result, '', '', '' );
             $isList = 0;
         }
 
-        $result .= $line;
+        push( @result, $line );
         $isFirst = 0;
     }
 
-    if( $insideTABLE ) {
-        $result .= '</table>';
+    if( $tableRow ) {
+        _addTHEADandTFOOT( \@result );
+        push( @result, '</table>' );
     }
-    _addListItem( $this, \$result, '', '', '' );
+    _addListItem( $this, \@result, '', '', '' );
 
-    $text = $result;
+    $text = join( '', @result );
 
     # '#WikiName' anchors
     $text =~ s/^(\#)($TWiki::regex{wikiWordRegex})/CGI::a( { name=>$this->makeAnchorName( $2 )}, '')/geom;
