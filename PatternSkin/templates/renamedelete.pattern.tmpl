@@ -30,11 +30,11 @@
 
 
 
-%TMPL:DEF{"newtopic"}%<p><input name="newtopic" class="twikiInputField" value="%NEW_TOPIC%" size="36" /> %TMPL:P{"allownonwikiword"}%</p>%TMPL:END%
+%TMPL:DEF{"newtopic"}%<p><input name="newtopic" class="twikiInputField" value="%NEW_TOPIC%" size="36" /> %TMPL:P{"namehelp"}%</p>%TMPL:P{"nonwikiword"}% %TMPL:END%
 
 
 
-%TMPL:DEF{"namehelp"}%<p>%MAKETEXT{"This name has been chosen so it doesn't conflict with any other topics already in the [_1] web." args="%NEW_WEB%"}%</p>%TMPL:END%
+%TMPL:DEF{"namehelp"}%<span class="twikiGrayText">%MAKETEXT{"This name has been chosen so it doesn't conflict with any other topics already in the [_1] web." args="%NEW_WEB%"}%</span>%TMPL:END%
 
 
 
