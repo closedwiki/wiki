@@ -53,9 +53,9 @@ sub _SUBSCRIBE {
             $form = _alert("$who cannot subscribe");
         } else {
             my $unsubscribe = $query->param('subscribe_remove');
-             _subscribe($web, $topics, $who, $cur_user, $unsubscribe);
+            _subscribe($web, $topics, $who, $cur_user, $unsubscribe);
         }
-    } 
+    }
 
     return _getbutton($session, $params, $topic, $web);
 }
@@ -74,7 +74,7 @@ sub _getbutton{
         $form = '';
     } else {
         my $topics = $params->{topic} || $topic;
-            
+
         # checking if the has subscribed for that topic already
 		eval { require TWiki::Contrib::MailerContrib::WebNotify };
 		my ($sweb, $stopics) = TWiki::Func::normalizeWebTopicName($web, $topics);
@@ -85,15 +85,22 @@ sub _getbutton{
         if ( $subscriber->isSubscribedTo($stopics) ) {
         	$unsubscribe = 'yes';
         }	
-        	
-        my $url = TWiki::Func::getScriptUrl(
-        $WEB, $TOPIC, 'view',
-        	subscribe_topic => $topics,
-            subscribe_subscriber => $who,
-            subscribe_remove => $unsubscribe,
-            subscribe_uid => $uid);
-            
-        $form = $params->{format};    
+
+        my $url;
+        if( $TWiki::Plugins::VERSION < 1.2) {
+            $url = TWiki::Func::getScriptUrl(
+                $WEB, $TOPIC, 'view').
+                "?subscribe_topic=$topics;subscribe_subscriber=$who;subscribe_remove=$unsubscribe;subscribe_uid=$uid";
+        } else {
+            $url = TWiki::Func::getScriptUrl(
+                $WEB, $TOPIC, 'view',
+                subscribe_topic => $topics,
+                subscribe_subscriber => $who,
+                subscribe_remove => $unsubscribe,
+                subscribe_uid => $uid);
+        }
+
+        $form = $params->{format};
         my $actionName = 'Subscribe';
         if ($unsubscribe eq 'yes') {
 	        $form = $params->{formatunsubscribe} if ($params->{formatunsubscribe});
@@ -107,9 +114,9 @@ sub _getbutton{
         } else {
             $form = CGI::a({href => $url},
                            $actionName);
-        }    
+        }
     }
-    
+
     $uid++;
     return $form;
 }
@@ -128,10 +135,11 @@ sub _subscribe {
       if $@;
 
     return _alert("bad subscriber '$subscriber'") if
-      !($subscriber =~ m/($TWiki::cfg{LoginNameFilterIn})/ ||
-          $subscriber =~ m/^([A-Z0-9._%-]+@[A-Z0-9.-]+\.[A-Z]{2,4})$/i ||
-            $subscriber =~ m/($TWiki::regex{wikiWordRegex})/o) ||
-              $subscriber eq $TWiki::cfg{DefaultUserWikiName};
+      !(($TWiki::cfg{LoginNameFilterIn} &&
+           $subscriber =~ m/($TWiki::cfg{LoginNameFilterIn})/) ||
+             $subscriber =~ m/^([A-Z0-9._%-]+@[A-Z0-9.-]+\.[A-Z]{2,4})$/i ||
+               $subscriber =~ m/($TWiki::regex{wikiWordRegex})/o) ||
+                 $subscriber eq $TWiki::cfg{DefaultUserWikiName};
     $subscriber = $1; # untaint
 
     # replace wildcards for checking - we want them

@@ -69,6 +69,7 @@ This plugin is brought to you by the [[http://wikiring.com][WikiRing]] - working
 |  Dependencies: | %$DEPENDENCIES% |
 |  Dependencies: | TWiki:Plugins.MailerContrib >=13511,perl,TWiki 4 mailer module |
 | Change&nbsp;History: | |
+|  13966 | Bugs:Item4155 Fixed for 4.0.x and 4.1.x |
 |  13787 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item4010'>Item4010</a>fix web subscription, and =format= parameters. - TWiki:Main.SvenDowideit |
 |  13525 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item3731'>Item3731</a> Update documentation topic. |
 |  13512 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item3731'>Item3731</a>  final pre-release tweaks, result of testing on 4.1.2 |
