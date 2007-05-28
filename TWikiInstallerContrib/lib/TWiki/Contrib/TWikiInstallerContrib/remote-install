@@ -1,8 +1,30 @@
-#!/usr/bin/perl -w
+#!/usr/bin/perl
+<<________________________________________________________________________________;
+
+IF YOU SEE THIS INSTEAD OF THE INSTALLATION WEB PAGE,
+
+* CREATE A .htaccess FILE IN THE SAME DIRECTORY THAT THIS SCRIPT IS LOCATED:
+
+Shell access
+============
+$ echo "SetHandler cgi-script" >.htaccess
+
+FTP-only access
+===============
+Create a new .htaccess file locally and FTP it.  The file should consist of the single line:
+SetHandler cgi-script
+
+* AND THEN REFRESH THIS PAGE
+________________________________________________________________________________
+# Copyright 2004,2005,2007 Will Norris.  All Rights Reserved.
+
+
+
+
 # $Id: install_twiki.cgi 7202 2005-10-28 20:36:14Z WillNorris $
-# Copyright 2004,2005 Will Norris.  All Rights Reserved.
 # License: GPL
 use strict;
+use warnings;
 #use Data::Dumper qw( Dumper );
 ++$|;
 
@@ -15,6 +37,20 @@ use strict;
 # TWikiFor: 
 #
 # TODO parameters:
+# from http://twiki.org/cgi-bin/view/Sandbox/WillNorrisSandbox?DOMAIN=admin.langalot.com&TWIKI_URL_PATH_DIR=twiki&USER=wn&DEFAULT_WEB=&ADMIN=webmaster&install_type=svn_main
+# * DOMAIN
+# * URL PATH
+# * DREAMHOST USER
+# * DEFAULT WEB
+# * ADMINISTRATOR
+#
+# make sure installs relative to script directory
+# configure admin user and password (twice)
+# create useres 'properly'
+# directions to create .htaccess: "SetHandler cgi-script"
+# add repositories (first: http://twiki.org/p/pub/Codev/Release/TWiki-4.1.2.zip)
+# add feedback (unzip progress meter or something)
+#
 # administrator ($twikiAdmin)
 #	(and update Main.TWikiAdminGroup)
 # wikiwebmaster (for email about this wiki site) - 
@@ -22,12 +58,12 @@ use strict;
 #
 # other TODO?
 # 	could create a TWikiInstallationReport topic...
+#
+# DONE
+# move 'configure & select individual components' checkbox to after we even know if there are any
+# clicking repository updates url field
+# 
 ################################################################################
-
-BEGIN {
-#    mkpath "lib/CPAN/lib/";
-    use lib qw( lib/CPAN/lib/ lib/CPAN/lib/arch/ );
-};
 
 use File::Path qw( mkpath rmtree );
 use CGI qw( :standard );
@@ -51,41 +87,84 @@ my $perl = $q->param( 'perl' ) || $EXECUTABLE_NAME;
 
 print $q->header(),
     $q->start_html( -title => 'TWiki Installer',
-		    -style => { -code => <<__CSS__ },
-html, body, table, tr, td, td p  { padding:0em; margin:0em; }
-html body { background:#FAFAF0; margin:0.2em 0 0.1em 0.2em; font-size:0.9em; }
-td { padding:0.1em; }
-.configuration { padding:1em 0; }
-h1 { font-size:1.5em; }
-.kernel { }
-.extension { }
-
-body { background-color:#D6000F; color:#222222; }
-h1 { color:#ff6900; }
-td:hover { background-color:#aa0000; }
-a:link { color:#F4C000; }
-a:hover:link { background-color:#F4C000; }
-a:hover:link, td:hover { color:#FBF7E8; }
+		    -BGCOLOR => '#f4c000',
+		    -style => {
+    			-src => [ 'http://twiki.biohack.net/pub/TWikiInstallerContrib/reset.css',
+				  'http://twiki.biohack.net/pub/TWikiInstallerContrib/styles.css', ],
+			-code => <<__CSS__,
+/*
+.repository { background:pink; color:green; }
+.repositoryName { background:magenta; }
+*/
 __CSS__
-    ),
-    $q->h1( 'TWiki Installer' )
-    ;
+		     },
+    -onload => "expand_collapse_repositories('twiki.org'); checkEnableInstallButton(event);",
+    -onkeyup => "checkEnableInstallButton(event)",
+    -onmousedown => "checkEnableInstallButton(event)",
+    -onmouseup => "checkEnableInstallButton(event)",
+    -script => q{
+function isEmpty(str) {
+	return str === '';
+}
+function checkEnableInstallButton(e) {
+	if (!e) { e = window.event }		// i don't think this works?!!! :(
+	
+	var disabled = false;
+	
+	var required_fields = [ 'TWikiFor', 'configure_admin', 'configure_password', 'configure_password2', 'WIKIWEBMASTER', 'TWikiAdmin', 'perl' ];
+	for ( i=0; i<required_fields.length; ++i ) {
+		var field = required_fields[i];
+		var el = document.getElementById( field );
+		if ( isEmpty(el.value) ) { disabled = true }
+		
+		// show/hide help elements
+		var elHelp = document.getElementById(field+'_help');
+		if ( elHelp ) {
+			elHelp.style.display = ( e.target === el ? '' : 'none' );
+		}
+	}
+
+	// see if the passwords match
+	var elPasswordMismatch = document.getElementById('password_mismatch');
+	var elConfigurePassword = document.getElementById('configure_password');
+	var elConfigurePassword2 = document.getElementById('configure_password2');
+	if ( isEmpty(elConfigurePassword2.value) || elConfigurePassword.value === elConfigurePassword2.value ) {
+		elPasswordMismatch.innerHTML = '';
+	} else {
+		elPasswordMismatch.innerHTML = 'Passwords do not match';
+		disabled = true;
+	}
+
+	var btnInstall = document.getElementById('install');
+	if ( btnInstall ) { btnInstall.disabled = disabled }
+	
+	return false;
+}
+},
+		    -head => [ map { 
+			       Link({-rel => $_,
+				     -href => 'http://twiki.biohack.net/pub/TWikiInstallerContrib/favicon.ico',
+				     -type => "image/x-icon"}) } ( 'icon', 'shortcut icon' )
+			       ]
+			       );
 
 ################################################################################
 
 my %installedPlugins;	# which plugins get installed/are encountered
-my $twikiDir = "$FindBin::Bin/twiki";
+my $twikiDir = "$FindBin::Bin";
 
 my ( $twikiPath ) = $ENV{SCRIPT_NAME} =~ m|(.*)/.*|;		# remove the script name from the path
 $twikiPath .= '/twiki';
+print STDERR "twikiPath=[$twikiPath]\n";
 
+# automatically detect required script suffix from this script's filename
 my ( $scriptSuffix ) = $ENV{SCRIPT_NAME} =~ m|.*/.*(\..*)$|;
 $scriptSuffix ||= '';
 
 my $localDirConfig = {
     # SMELL: doesn't handle httpS --- what happened to $ENV{SCRIPT_URI} ???
 	DefaultUrlHost   => "http://$ENV{HTTP_HOST}" . ( $ENV{SERVER_PORT} != 80 && ":$ENV{SERVER_PORT}" || '' ),
-	ScriptUrlPath    => "$twikiPath",
+	ScriptUrlPath    => "$twikiPath/bin",
 	ScriptSuffix     => $scriptSuffix,
 	PubUrlPath       => "$twikiPath/pub",
 	PubDir           => "$twikiDir/pub",
@@ -95,23 +174,28 @@ my $localDirConfig = {
 	LogDir           => "$twikiDir/data",	# ???
     };
 
+# inversion duplication from above (mostly)
 my $mapTWikiDirs = {
     lib       => { perms => 0440, dest => "$twikiDir/lib", },
     pub       => { perms => 0660, dest => $localDirConfig->{PubDir}, },
     data      => { perms => 0660, dest => $localDirConfig->{DataDir}, },
     templates => { perms => 0440, dest => $localDirConfig->{TemplateDir}, },
-    bin       => { perms => 0550, dest => "$twikiDir", },
+    bin       => { perms => 0550, dest => "$twikiDir/bin", },
     locale    => { perms => 0440, dest => $localDirConfig->{LocalesDir}, },
 #    log => ?
 };
 
+	print STDERR "FindBin::Bin=[$FindBin::Bin]\n";
+
 ################################################################################
 # already installed?
 ################################################################################
-if ( -d "$FindBin::Bin/twiki" && !$q->param( 'force' ) ) {
+my $fForceInstallation = $q->param( 'force' );
+if ( -e "$FindBin::Bin/LocalLib.cfg" && !$fForceInstallation ) {
     print $q->p( "TWiki is already installed! (you can ", $q->tt( 'force=1' ), " a (re)installation)" );
-
+    
     print $q->p( $q->a( { -href => continueToWikiUrl() }, "Proceed to the wiki" ) );
+    print $q->p( $q->a( { -href => continueToConfigureUrl() }, "Configure the wiki" ) );
 
     exit 0;
 }
@@ -121,11 +205,24 @@ if ( -d "$FindBin::Bin/twiki" && !$q->param( 'force' ) ) {
 sub continueToWikiUrl
 {
     # TODO: need URI for "view"
-    do "twiki/lib/TWiki.cfg";
-    do "twiki/lib/LocalSite.cfg";
+    do "lib/TWiki.cfg";
+    do "lib/LocalSite.cfg";
     my $url = $TWiki::cfg{DefaultUrlHost} . $TWiki::cfg{ScriptUrlPath} 
     . '/view'.$TWiki::cfg{ScriptSuffix}
     . '/TWiki/InstalledPlugins';
+
+    return $url;
+}
+
+
+################################################################################
+
+sub continueToConfigureUrl
+{
+    # TODO: need URI for "view"
+    do "lib/TWiki.cfg";
+    do "lib/LocalSite.cfg";
+    my $url = $TWiki::cfg{DefaultUrlHost} . $TWiki::cfg{ScriptUrlPath} . '/configure';
 
     return $url;
 }
@@ -140,8 +237,26 @@ unless ( $TWikiFor )
     exit 0;
 }
 
-my $tmpInstall = "$FindBin::Bin/twiki/tmp/install/";
+my $tmpInstall = "$FindBin::Bin/tmp/install/";
 mkpath $tmpInstall;
+
+install();
+
+print $q->p( $q->a( { -href => continueToWikiUrl() }, "Proceed to the wiki" ) );
+print $q->p( $q->a( { -href => continueToConfigureUrl() }, "Configure the wiki" ) );
+
+print $q->end_html;
+
+exit 0;
+
+################################################################################
+################################################################################
+################################################################################
+# do the INSTALLATION
+
+sub install {
+
+print "<h1>Installing...</h1>\n";
 
 my $archive_file = 'install.zip';
 unless ( -e $archive_file ) {
@@ -154,52 +269,15 @@ unless ( -e $archive_file ) {
     close TAR;
 }
 
-# SMELL: remove unless (but test speed; unzip with some option? (like refresh)
-unless ( -d "$tmpInstall/components/" ) {
-    my $archive = Archive::Zip::CommandLine->new( $archive_file ) or die "No $archive_file";
-    $archive->extractTree( '', $tmpInstall );
-}
-
-if ( ( $q->param('kernel') || '' ) =~ /^LATEST$/i ) {
-    $q->param( kernel => basename( (reverse sort { 
-	( $a =~ /.+?(\d+)/ )[0] <=> ( $b =~ /.+?(\d+)/ )[0] } 
-				    <$tmpInstall/components/kernel/*> )[0] 
-				   ) =~ /(.*)\./ );
-}
-
-if ( grep( /^all$/i, ( $q->param('extension') ) ) ) {
-    $q->param( -name => 'extension', 
-	       -value => [ sort map { basename /(.*)\./ } <$tmpInstall/components/extension/*> ],
-	       );
-}
-
-# set KERNEL and EXTENSION
-if ( lc( $q->param('install') || '' ) ne 'install' ) {
-    if ( $q->param('customise') ) {
-	# present configuration page if customised setup has been chosen
-	print installationMenu( $q ),
-    	$q->end_html;
-	exit 0;
-    }
-    else {
-	# set the defaults for a completely automated install
-	$q->param( kernel => basename( (reverse sort { 
-	    ( $a =~ /.+?(\d+)/ )[0] <=> ( $b =~ /.+?(\d+)/ )[0] } 
-					<$tmpInstall/components/kernel/*> )[0] 
-				       ) =~ /(.*)\./ );
-	$q->param( -name => 'extension', 
-		   -value => [ qw( CpanContrib TWikiInstallerContrib TWikiPluginInstallerContrib ) ],
-		   );
-    }
-}
+$q->param( kernel => $archive_file );
 
 ################################################################################
 # do the INSTALLATION
 
 -d $twikiDir || mkpath $twikiDir or die qq{Couldn't create "$twikiDir" to install into!};
-foreach my $type qw( kernel extension ) {
-    map { InstallTWikiExtension( "$tmpInstall/components/$type/$_.zip" ) } ( sort $q->param($type) );
-}
+# chmod g+w $twikiDir (?)
+
+InstallTWikiExtension( "$archive_file" );
 
 ################################################################################
 # LocalLib.cfg
@@ -208,7 +286,7 @@ open( FH, '>', $fnLocalLibCfg ) or die "Can't open $fnLocalLibCfg: $!";
 print FH <<'__LOCALLIB_CFG__';
 use vars qw( $twikiLibPath );
 use Cwd qw( abs_path );
-( $twikiLibPath ) = ($twikiLibPath = Cwd::abs_path( "lib" )) =~ /(.*)/;
+( $twikiLibPath ) = ($twikiLibPath = Cwd::abs_path( 'lib' )) =~ /(.*)/;
 1;
 __LOCALLIB_CFG__
 close( FH ) or die "Can't close $fnLocalLibCfg: $! ???";
@@ -247,18 +325,138 @@ open( FH, '>', $fnLocalSiteCfg ) or die "Can't open $fnLocalSiteCfg: $!";
 print FH $LocalSiteCfg;
 close( FH ) or die "Can't close $fnLocalSiteCfg: $! ???";
 
+
+################################################################################
+# setup configure
+if ( $q->param( 'configure_admin' ) ) {
+    my $htpasswd_params = "-b $localDirConfig->{DataDir} $q->param('configure_admin') $q->param('configure_password')";
+    `htpasswd $htpasswd_params`;
+}
+
+################################################################################
+
+my $BinHtAccess = <<'EOT' 
+#Block access from badly behaving robots and site sucking type programs.
+BrowserMatchNoCase ^Accoona blockAccess
+BrowserMatchNoCase ^ActiveAgent blockAccess
+BrowserMatchNoCase ^Attache blockAccess
+BrowserMatchNoCase BecomeBot blockAccess
+BrowserMatchNoCase ^bot blockAccess
+BrowserMatchNoCase Charlotte/ blockAccess
+BrowserMatchNoCase ^ConveraCrawler blockAccess
+BrowserMatchNoCase ^CrownPeak-HttpAgent blockAccess
+BrowserMatchNoCase ^EmailCollector blockAccess
+BrowserMatchNoCase ^EmailSiphon blockAccess
+BrowserMatchNoCase ^e-SocietyRobot blockAccess
+BrowserMatchNoCase ^Exabot blockAccess
+BrowserMatchNoCase ^FAST blockAccess
+BrowserMatchNoCase ^FDM blockAccess
+BrowserMatchNoCase ^GetRight/6.0a blockAccess
+BrowserMatchNoCase ^GetWebPics blockAccess
+BrowserMatchNoCase ^Gigabot blockAccess
+BrowserMatchNoCase ^gonzo1 blockAccess
+BrowserMatchNoCase ^Google\sSpider blockAccess
+BrowserMatchNoCase ^ichiro blockAccess
+BrowserMatchNoCase ^ie_crawler blockAccess
+BrowserMatchNoCase ^iGetter blockAccess
+BrowserMatchNoCase ^IRLbot blockAccess
+BrowserMatchNoCase Jakarta blockAccess
+BrowserMatchNoCase ^Java blockAccess
+BrowserMatchNoCase ^KrakSpider blockAccess
+BrowserMatchNoCase ^larbin blockAccess
+BrowserMatchNoCase ^LeechGet blockAccess
+BrowserMatchNoCase ^LinkWalker blockAccess
+BrowserMatchNoCase ^Lsearch blockAccess
+BrowserMatchNoCase ^Microsoft blockAccess
+BrowserMatchNoCase ^MJ12bot blockAccess
+BrowserMatchNoCase MSIECrawler blockAccess
+BrowserMatchNoCase ^MSRBOT blockAccess
+BrowserMatchNoCase ^noxtrumbot blockAccess
+BrowserMatchNoCase ^NutchCVS blockAccess
+BrowserMatchNoCase ^RealDownload blockAccess
+BrowserMatchNoCase ^Rome blockAccess
+BrowserMatchNoCase ^Roverbot blockAccess
+BrowserMatchNoCase ^schibstedsokbot blockAccess
+BrowserMatchNoCase ^Seekbot blockAccess
+BrowserMatchNoCase ^SiteSnagger blockAccess
+BrowserMatchNoCase ^SiteSucker blockAccess
+BrowserMatchNoCase ^Snapbot blockAccess
+BrowserMatchNoCase ^sogou blockAccess
+BrowserMatchNoCase ^SpiderKU blockAccess
+BrowserMatchNoCase ^SpiderMan blockAccess
+BrowserMatchNoCase ^Squid blockAccess
+BrowserMatchNoCase ^Teleport blockAccess
+BrowserMatchNoCase ^User-Agent\: blockAccess
+BrowserMatchNoCase VoilaBot blockAccess
+BrowserMatchNoCase ^voyager blockAccess
+BrowserMatchNoCase ^W3C blockAccess
+BrowserMatchNoCase ^w3search blockAccess
+BrowserMatchNoCase ^Web\sDownloader blockAccess
+BrowserMatchNoCase ^WebCopier blockAccess
+BrowserMatchNoCase ^WebDevil blockAccess
+BrowserMatchNoCase ^WebSec blockAccess
+BrowserMatchNoCase ^WebVac blockAccess
+BrowserMatchNoCase ^Webwhacker blockAccess
+BrowserMatchNoCase ^Webzip blockAccess
+BrowserMatchNoCase ^Wells blockAccess
+BrowserMatchNoCase ^WhoWhere blockAccess
+BrowserMatchNoCase www\.netforex\.org blockAccess
+BrowserMatchNoCase ^WX_mail blockAccess
+BrowserMatchNoCase ^yacybot blockAccess
+BrowserMatchNoCase ^ZIBB blockAccess
+BrowserMatchNoCase ^$ blockAccess
+Order Allow,Deny
+Allow from all
+Deny from env=blockAccess
+SetHandler cgi-script
+Options ExecCGI FollowSymLinks
+<FilesMatch "[^/]*\.html$">
+       SetHandler denied
+       allow from all
+</FilesMatch>
+
+# Limit access to configure to specific IP addresses and or users.
+# Make sure configure is not open to the general public.
+# It exposes system details that can help attackers.
+<FilesMatch "^configure">
+    SetHandler cgi-script
+    Order Deny,Allow
+    Deny from all
+    Satisfy Any
+EOT
+
+. <<EOT
+    Require user $q->param( 'configure_username' )
+    AuthUserFile $localDirConfig->{DataDir}/.htpasswd
+EOT
+    . <<EOT;
+    AuthName 'Enter your WikiName: (First name and last name, no space, no dots, capitalized, e.g. JohnSmith). Cancel to register if you do not have one.'
+    AuthType Basic
+    ErrorDocument 401 /twiki/bin/view/TWiki/TWikiRegistration
+</FilesMatch>
+EOT
+
+# SMELL: calculate ErrorDocument URL
+
+open ( HTACCESS, '>', "$localDirConfig->{BinDir}/.htaccess" ) or die $@;
+print HTACCESS $BinHtAccess, "\n";
+print HTACCESS "ErrorDocument 401 bin/view$scriptSuffix/TWiki/TWikiRegistration\n";
+close HTACCESS;
+
+#foreach my $dir qw( pub/Trash data lib locale logs templates test tools twikiplugins ) {
+#    my $abs_dir = $localDirConfig->{}/$dir;
+#    open( HTACCESS, '>', "$abs_dir/.htaccess" ) or die $@;
+#    print HTACCESS "Deny from all\n";
+#    close( HTACCESS );
+#}
+
 ################################################################################
 # finish/cleanup
 
 rmtree 'tmp/';
-#unlink $0;
+#unlink $0;			# remove this installation program (security!)
 #chmod 0440, $0;		# doesn't seem to be working??? ah, probably an ownership issue (but why does rm work?)
-
-print $q->p( $q->a( { -href => continueToWikiUrl() }, "Proceed to the wiki" ) );
-
-print $q->end_html;
-
-exit 0;
+}
 
 ################################################################################
 ################################################################################
@@ -286,23 +484,154 @@ sub InstallTWikiExtension {
 
 ################################################################################
 
+sub _display_repositories {
+    my ( $q, $repository ) = @_;
+
+    my $text = '';
+
+    $text .= q{<script type="text/javascript" >
+function expand_collapse_repositories( rep ) {
+    var repositories = document.getElementsByName('repository_files');
+    for ( i=0; i<repositories.length; ++i ) {
+	var r = repositories[i];
+	var files = document.getElementById( r.id );
+	r.style.display = r.id === rep ? '' : 'none';
+    }
+}
+</script>
+};
+
+    foreach my $rep ( sort { lc $a cmp lc $b } keys %$repository ) {
+	next unless scalar @{$repository->{$rep}};	# don't print empty repositories
+	$text .= qq{<div class=repository>
+<div class=repositoryName onclick="expand_collapse_repositories('$rep')" ><img src="http://$rep/favicon.ico" width="16" height="16" /> $rep</div>
+<div name="repository_files" id="$rep"><ul>};
+	foreach my $twikifor ( @{$repository->{$rep}} ) {
+	    $text .= q{<li><a href="javascript:()" onclick="document.getElementById('TWikiFor').value = } . qq{'$twikifor->{url}'" >$twikifor->{url}</a></li>};
+	}
+	$text .= "</div></ul></div>";
+    }
+
+    return $text;
+}
+
+################################################################################
+
 # parameters
 # cgi: 
 sub twikiForMenu {
     my $q = shift or die "no cgi?";
     my $text = '';
 
-    $text .= $q->start_form
-	. $q->hidden( -name => 'force', -value => $q->param('force') )
-	. 'TWikiFor: '
-	. $q->textfield( -name => 'TWikiFor', -size => 50, -value => 'http://TWikiFor.twiki.org/~twikibuilder/twiki.org.zip' ) 
-	. $q->br
-	. $q->checkbox( -name => 'customise', -label => 'Configure & select individual components' )
-	. $q->br
-	. $q->submit( -name => 'install', -value => 'Next...' )
-	. $q->br;
+my $repository = {
+    'twiki.org' => [
+		    { url => 'http://twiki.org/p/pub/Codev/Release/TWiki-4.1.2.zip', },
+#		    { url => 'http://twiki.org/p/pub/Codev/Release/TWiki-4.1.1.zip', },
+#		    { url => 'http://twiki.org/p/pub/Codev/Release/TWiki-4.1.0.zip', },
+		    { url => 'http://twiki.org/p/pub/Codev/Release/TWiki-4.0.5.zip', },
+#		    { url => 'http://twiki.org/p/pub/Codev/Release/TWiki-4.0.4.zip', },
+#		    { url => 'http://twiki.org/p/pub/Codev/Release/TWiki-4.0.3.zip', },
+#		    { url => 'http://twiki.org/p/pub/Codev/Release/TWiki-4.0.2.zip', },
+#		    { url => 'http://twiki.org/p/pub/Codev/Release/TWiki-4.0.1.zip', },
+#		    { url => 'http://twiki.org/p/pub/Codev/Release/TWiki-4.0.0.zip', },
+    ],
+    'twiki.biohack.net' => [
+#		      { url => 'http://twiki.biohack.net/pub/twiki/TWiki-SVN-MAIN.zip', },
+		      ],
+    'wikiring.de' => [
+		       ],
+    'wikiring.com' => [
+		       ],
+    'structuredwikis.com' => [
+			      ],
+    'distributedinformation.com' => [
+				     ],
+};
 
-    $text .= $q->end_form;
+    system( 'htpasswd -V' );
+    my $htpasswd_avail = $? == -1 ? ' disabled=disabled ' : '';
+
+
+    my ( $twikiUrl ) = $ENV{SCRIPT_URI} =~ m|^(.*/)|;
+
+    $text .= qq{
+<div id="container"><a id="topofpage"></a><div class="section">
+<!--==========================================================================================-->
+<div id="header"><!-- header image --></div>
+<h1>TWiki Installer</h1>
+The TWiki Installer will install a TWiki release to<br /> 
+<div id=twikiUrl><big>$twikiUrl</big></div>
+<div class=note>If this is not the desired URL, move this script to the correct directory and load the page in the browser from the new location.</div>
+<!--
+<ol>
+<li>Select a TWiki release from the list of available repositories below.</li>
+<li>Fill in the fields below; <strong>all fields are required</strong>. Many have been automatically determined or already filled in with reasonable defaults.
+</li>
+<li>Click the <strong>Install</strong> button. That's all! </li>
+</ol>
+-->
+<form method="post" action="" enctype="application/x-www-form-urlencoded" />
+<input type="hidden" name="force" value="$fForceInstallation" />
+<!--==========================================================================================-->
+<fieldset><legend>1. Choose a TWiki Release</legend>
+
+TWiki release to install <input type="text" name="TWikiFor" id="TWikiFor" value="http://twiki.org/p/pub/Codev/Release/TWiki-4.1.2.zip" size="50" />
+<div class=help>Select a TWiki release from the list below <i>or</i> enter a URL manually.
+<!-- By the way, this should also be able to install TWiki extensions -->
+</div>
+}
+
+. _display_repositories( $q, $repository ) .
+
+qq{</fieldset>
+
+<!--==========================================================================================-->
+<fieldset><legend>2. Set TWiki Settings</legend>
+<div id=configure><fieldset id=configure><legend>configure</legend>
+username <input $htpasswd_avail type=text name=configure_admin id=configure_admin value='wikimaster' /><br />
+<div class=help id=configure_admin_help>This is the account name to allow access to TWiki's system configuration<br/></div>
+password <input $htpasswd_avail type=password name=configure_password id=configure_password /><br />
+<div class=help id=configure_password_help>Be sure to pick a secure password!<br/></div>
+verify password $htpasswd_avail <input type=password name=configure_password2 id=configure_password2 /> <span id=password_mismatch></span><br/>
+<div class=help id=configure_password2_help>Type in the same password again<br/></div></fieldset></div>
+
+<b>TWikiAdmin</b>: <input type="text" name="TWikiAdmin" id="TWikiAdmin" size="35" value="$twikiAdmin" /><br />
+<div class=help id=TWikiAdmin_help>This TWiki account will be created and added to the <a target="_new" href="http://twiki.org/cgi-bin/view/TWiki/TWikiAccessControl#The_Super_Admin_Group">TWikiAdminGroup</a>. 
+A password will be automatically generated and sent to the email specified by WIKIWEBMASTER below<br/></div>
+
+<b>WIKIWEBMASTER</b>: <input type="text" name="WIKIWEBMASTER" id=WIKIWEBMASTER value="$wikiWebMaster" size="35" /><br />
+<div class=help id=WIKIWEBMASTER_help>This will automatically set the TWiki webmaster email address <a target="_new" href="http://twiki.org/cgi-bin/view/TWiki/TWikiPreferences#Email_and_Proxy_Server_Settings">WIKIWEBMASTER</a> in Main.TWikiPreferences<br/></div>
+
+<!--
+<b>WIKIWEBMASTERNAME</b>: <input type="text" name="WIKIWEBMASTERNAME" value="TWiki Administrator" size="35" /><br />
+<br/>
+-->
+
+<b>perl</b> (full path): <input type="text" name="perl" id="perl" value="$perl" size="30" /> (automatically detected)<br/>
+<div class=help id=perl_help>You may also change it to a perl accelerator, e.g,. <a target="_new" href="http://www.daemoninc.com/SpeedyCGI/">SpeedyCGI</a><br/></div>
+</fieldset>
+<!--==========================================================================================-->
+<fieldset><legend>3. Install TWiki!</legend>
+<input type="submit" name="install" id="install" value="Install" /> to $twikiDir <br />
+</fieldset>
+<!--==========================================================================================-->
+After the installation, you can start using the wiki right away or configure it in more detail.
+</div></div>
+</form>
+
+</div>
+<!--==========================================================================================-->
+<!-- <div class="footer">Copyright &copy; 2007 Will Norris. All Rights Reserved.</div> -->
+<!--==========================================================================================-->
+	</div>
+</div>
+};
+
+################################################################################
+
+    $text .= $q->hidden( -name => 'TWikiFor', -value => $q->param('TWikiFor') );
+
+################################################################################
 
     return $text;
 }
@@ -368,6 +697,7 @@ sub installationMenu {
     return $text;
 }
 
+################################################################################
 ################################################################################
 
 use Socket;
