@@ -2025,32 +2025,33 @@ sub parseSections {
 
 =pod
 
----++ ObjectMethod expandVariablesOnTopicCreation ( $text, $user ) -> $text
+---++ ObjectMethod expandVariablesOnTopicCreation ( $text, $user, $web, $topic ) -> $text
 
    * =$text= - text to expand
    * =$user= - This is the user expanded in e.g. %USERNAME. Optional, defaults to logged-in user.
 Expand limited set of variables during topic creation. These are variables
 expected in templates that must be statically expanded in new content.
+   * =$web= - name of web
+   * =$topic= - name of topic
 
 # SMELL: no plugin handler
 
 =cut
 
 sub expandVariablesOnTopicCreation {
-    my ( $this, $text, $user ) = @_;
+    my ( $this, $text, $user, $theWeb, $theTopic ) = @_;
 
     ASSERT($this->isa( 'TWiki')) if DEBUG;
     $user ||= $this->{user};
 
     # Chop out templateonly sections
     my( $ntext, $sections ) = parseSections( $text );
-
     if( scalar( @$sections )) {
         # Note that if named templateonly sections overlap, the behaviour is undefined.
         foreach my $s ( reverse @$sections ) {
             if( $s->{type} eq 'templateonly' ) {
-                $ntext = substr($ntext, 0, $s->{start}).
-                  substr($ntext, $s->{end}, length($ntext));
+                $ntext = substr($ntext, 0, $s->{start})
+                       . substr($ntext, $s->{end}, length($ntext));
             } else {
                 # put back non-templateonly sections
                 my $start = $s->remove('start');
@@ -2075,6 +2076,33 @@ sub expandVariablesOnTopicCreation {
     my $safe = $this->{user};
     $this->{user} = $user;
     $text = _processTags( $this, $text, \&_expandTagOnTopicCreation, 16 );
+
+    # expand all variables for type="expandvariables" sections
+    ( $ntext, $sections ) = parseSections( $text );
+    if( scalar( @$sections )) {
+        $theWeb   ||= $this->{session}->{webName};
+        $theTopic ||= $this->{session}->{topicName};
+        foreach my $s ( reverse @$sections ) {
+            if( $s->{type} eq 'expandvariables' ) {
+                my $etext = substr( $ntext, $s->{start}, $s->{end} - $s->{start} );
+                expandAllTags( $this, \$etext, $theTopic, $theWeb );
+                $ntext = substr( $ntext, 0, $s->{start})
+                       . $etext
+                       . substr( $ntext, $s->{end}, length($ntext) );
+            } else {
+                # put back non-expandvariables sections
+                my $start = $s->remove('start');
+                my $end = $s->remove('end');
+                $ntext = substr($ntext, 0, $start).
+                  '%STARTSECTION{'.$s->stringify().'}%'.
+                    substr($ntext, $start, $end - $start).
+                      '%ENDSECTION{'.$s->stringify().'}%'.
+                        substr($ntext, $end, length($ntext));
+            }
+        }
+        $text = $ntext;
+    }
+
     # kill markers used to prevent variable expansion
     $text =~ s/%NOP%//g;
     $this->{user} = $safe;

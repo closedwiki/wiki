@@ -263,7 +263,7 @@ sub init_edit {
             $formTemplate = $form->{name} if $form;
         }
 
-        $text = $session->expandVariablesOnTopicCreation( $text, $user );
+        $text = $session->expandVariablesOnTopicCreation( $text, $user, $webName, $topic );
         $tmpl =~ s/%NEWTOPIC%/1/;
     } else {
         $tmpl =~ s/%NEWTOPIC%//;

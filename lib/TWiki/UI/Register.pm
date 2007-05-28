@@ -862,7 +862,7 @@ sub _writeRegistrationDetailsToTopic {
     $text = $before . $addText . $after;
 
     my $user = $data->{WikiName};
-    $text = $session->expandVariablesOnTopicCreation( $text, $user );
+    $text = $session->expandVariablesOnTopicCreation( $text, $user, $TWiki::cfg{UsersWebName}, $user );
 
     $meta->put( 'TOPICPARENT', { 'name' => $TWiki::cfg{UsersTopicName}} );
 
