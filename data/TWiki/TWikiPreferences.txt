@@ -53,6 +53,22 @@ Preference settings local to your site should be set in [[%LOCALSITEPREFS%]] (th
    * Warn if =%<nop>INCLUDE{}%= of topic fails: Fail silently if empty or =off=. Output warning message (defined in templates/oopsalerts.tmpl) if set to =on=. Otherwise output specific text (use =$topic= for topic). You can override this in web preferences, or by using a =warn="..."= parameter with =%<nop>INCLUDE{}%= :
       * Set INCLUDEWARNING = on
 
+   * Generated Table of Contents (TOC) settings
+      * The first header level to appear in the TOC:
+         * Set TOC_MIN_DEPTH =
+            * If not set: =1=
+            * Possible values: =1= to =6=
+      * The last header level to appear in the TOC:      
+         * Set TOC_MAX_DEPTH =
+            * If not set: =6=
+            * Possible values: =1= to =6=
+            * Can be overridden by =depth= parameter of [[%TWIKIWEB%.VarTOC2][variable TOC]]
+      * The default TOC title:
+         * Set TOC_TITLE =
+            * If not set: nothing
+            * Possible values: any string, for example =On this page:=
+            * Can be overridden by =title= parameter of [[%TWIKIWEB%.VarTOC2][variable TOC]]
+
 ---++ Default User Settings
 
 %X% *NOTE:* They are typically redefined in topics of individual %MAINWEB%.TWikiUsers
