@@ -68,7 +68,11 @@ Preference settings local to your site should be set in [[%LOCALSITEPREFS%]] (th
             * If not set: nothing
             * Possible values: any string, for example =On this page:=
             * Can be overridden by =title= parameter of [[%TWIKIWEB%.VarTOC2][variable TOC]]
-
+      * Do not show a TOC if the topic it contains is included in another topic:
+         * Set TOC_HIDE_IF_INCLUDED =
+            * If not set: included TOC is shown
+            * Possible values: =on= or nothing
+            
 ---++ Default User Settings
 
 %X% *NOTE:* They are typically redefined in topics of individual %MAINWEB%.TWikiUsers
