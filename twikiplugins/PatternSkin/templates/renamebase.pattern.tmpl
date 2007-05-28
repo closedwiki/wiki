@@ -19,10 +19,6 @@
 
 
 
-%TMPL:DEF{"allownonwikiword"}%<input type="checkbox" class="twikiCheckbox" id="nonwikiword" name="nonwikiword" %NONWIKIWORDFLAG% /><label for="nonwikiword">%MAKETEXT{"Allow non <nop>WikiWord for the new topic name"}%</label>%TMPL:END%
-
-
-
 %TMPL:DEF{"toolbar"}%<div class="patternTop">%TWISTYSHOW{id="renamehelp" link="%MAKETEXT{"Show help"}%" imgleft="%ICONURLPATH{toggleopen-small}%"}%%TWISTYHIDE{id="renamehelp" link="%MAKETEXT{"Hide help"}%" imgleft="%ICONURLPATH{toggleclose-small}%"}%
 </div><!--//patternTop-->%TMPL:END%
 
@@ -62,13 +58,13 @@
 
 %TMPL:DEF{"toweb"}%<div class="twikiFormStep">
 %TMPL:P{"towebtitle"}%
-%TMPL:P{"newweb"}%%TMPL:P{"movewebhelp"}%</div><!-- /twikiFormStep-->%TMPL:END%
+%TMPL:P{"newweb"}%</div><!-- /twikiFormStep-->%TMPL:END%
 
 
 
 %TMPL:DEF{"totopic"}%<div class="twikiFormStep twikiLast">
 %TMPL:P{"totopictitle"}%
-%TMPL:P{"newtopic"}%%TMPL:P{"namehelp"}%</div><!-- /twikiFormStep-->%TMPL:END%
+%TMPL:P{"newtopic"}%</div><!-- /twikiFormStep-->%TMPL:END%
 
 
 

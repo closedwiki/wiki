@@ -14,27 +14,23 @@
 
 
 
-%TMPL:DEF{"towebtitle"}%---+++ %MAKETEXT{"To web:"}%%TMPL:END%
+%TMPL:DEF{"towebtitle"}%---+++ %MAKETEXT{"To web:"}% %TMPL:END%
 
 
 
-%TMPL:DEF{"newweb"}%<p><select name="newweb" class="twikiSelect">%WEBLIST{"<option $marker value=$qname>$name</option>" webs="%NEW_WEB%,public" selection="%NEW_WEB%" separator=" "}%</select></p>%TMPL:END%
+%TMPL:DEF{"newweb"}%<p><select name="newweb" class="twikiSelect">%WEBLIST{"<option $marker value=$qname>$name</option>" webs="%NEW_WEB%,public" selection="%NEW_WEB%" separator=" "}%</select>%TMPL:P{"movewebhelp"}%<p>%TMPL:END%
 
 
 
-%TMPL:DEF{"totopictitle"}%---+++ %MAKETEXT{"To topic:"}%%TMPL:END%
+%TMPL:DEF{"totopictitle"}%---+++ %MAKETEXT{"To topic:"}% %TMPL:END%
 
 
 
-%TMPL:DEF{"newtopic"}%<p><input name="newtopic" class="twikiInputField" value="%NEW_TOPIC%" size="36" /> %TMPL:P{"allownonwikiword"}%</p>%TMPL:END%
+%TMPL:DEF{"newtopic"}%<p><input name="newtopic" class="twikiInputField" value="%NEW_TOPIC%" size="36" />%TMPL:P{"nonwikiword"}%</p>%TMPL:END%
 
 
 
-%TMPL:DEF{"namehelp"}%<p>%MAKETEXT{"It's usually best to choose a <a target='WikiWord' onclick=\"return launchWindow('[_1]','WikiWord')\" href='[_1]' rel='nofollow'>WikiWord</a> for the new topic name, otherwise automatic linking may not work. Characters not allowed in topic names, such as spaces will automatically be removed." args="%TWIKIWEB%,%SCRIPTURLPATH{"view"}%/%TWIKIWEB%/WikiWord"}%</p>%TMPL:END%
-
-
-
-%TMPL:DEF{"movewebhelp"}%<p>%MAKETEXT{"You can move the topic to a different web."}%</p>%TMPL:END%
+%TMPL:DEF{"movewebhelp"}%<p class="twikiGrayText">%MAKETEXT{"You can move the topic to a different web."}%</p>%TMPL:END%
 
 
 

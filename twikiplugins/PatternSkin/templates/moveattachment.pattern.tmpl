@@ -18,7 +18,7 @@
 
 
 
-%TMPL:DEF{"namehelp"}%<p>%MAKETEXT{"The new topic chosen must already exist."}%</p>%TMPL:END%
+%TMPL:DEF{"namehelp"}%<p class="twikiGrayText">%MAKETEXT{"The new topic chosen must already exist."}%</p>%TMPL:END%
 
 
 
@@ -30,7 +30,7 @@
 
 
 
-%TMPL:DEF{"newtopic"}%<p><input name="newtopic" class="twikiInputField" value="" size="36" /><input type="hidden" name="nonwikiword" value="on" /></p>%TMPL:END%
+%TMPL:DEF{"newtopic"}%<p><input name="newtopic" class="twikiInputField" value="" size="36" /><input type="hidden" name="nonwikiword" value="on" /></p>%TMPL:P{"namehelp"}%%TMPL:END%
 
 
 

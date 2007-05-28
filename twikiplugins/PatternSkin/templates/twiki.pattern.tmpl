@@ -7,6 +7,8 @@
 %TMPL:DEF{"LOG_IN"}%%MAKETEXT{"Log In"}%%TMPL:END%
 %TMPL:DEF{"LOG_OUT"}%%MAKETEXT{"Log Out"}%%TMPL:END%
 
+%TMPL:DEF{"nonwikiwordwarning"}%<p><input type="checkbox" id="nonwikiword" name="nonwikiword" %NONWIKIWORDFLAG% /><label for="nonwikiword">%MAKETEXT{"Allow non <nop>WikiWord for the new topic name"}%</label><br /><span class="twikiGrayText">%TMPL:P{"nonwikiwordhelp"}%</span></p>%TMPL:END%
+
 %TMPL:DEF{"canceltopicaction"}%<a href="%SCRIPTURLPATH{"view"}%/%WEB%/%TOPIC%" title='%MAKETEXT{"Back to topic"}%' %MAKETEXT{"accesskey='c'"}% rel='nofollow'>%MAKETEXT{"&Cancel"}%</a>%TMPL:END%
 
 %TMPL:DEF{"bodyclassname"}%patternNoViewPage%TMPL:END%
