@@ -187,9 +187,10 @@ sub sanitizeAttachmentName {
     # Strip dots and slashes at start
     # untaint at the same time
     $fileName =~ s/^([\.\/\\]*)*(.*?)$/$2/go;
-    
+
     # If in iso8859 surroundings and Unicode::Normalize is available, let's get rid of 8-bit chars in filenames
-    if ( $TWiki::cfg{Site}{CharSet} =~ /^iso-?8859-?15?$/i ) {
+    if ( defined  $TWiki::cfg{Site}{CharSet} &&
+           $TWiki::cfg{Site}{CharSet} =~ /^iso-?8859-?15?$/i ) {
         if( $] >= 5.008 && eval { require Unicode::Normalize } ) {
             require Encode;
             eval 'use Unicode::Normalize';

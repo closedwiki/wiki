@@ -348,9 +348,9 @@ BEGIN {
         setlocale(&LC_CTYPE, $TWiki::cfg{Site}{Locale});
     }
 
-    $functionTags{CHARSET}   = sub { $TWiki::cfg{Site}{CharSet} };
-    $functionTags{SHORTLANG} = sub { $TWiki::cfg{Site}{Lang} };
-    $functionTags{LANG}      = sub { $TWiki::cfg{Site}{FullLang} };
+    $functionTags{CHARSET}   = sub { $TWiki::cfg{Site}{CharSet} || '' };
+    $functionTags{SHORTLANG} = sub { $TWiki::cfg{Site}{Lang} || '' };
+    $functionTags{LANG}      = sub { $TWiki::cfg{Site}{FullLang} || '' };
 
     # Tell CGI.pm which charset we are using if not default
     if( defined $TWiki::cfg{Site}{CharSet} &&
@@ -515,6 +515,8 @@ charset.
 
 sub UTF82SiteCharSet {
     my( $this, $text ) = @_;
+
+    return $text unless( defined $TWiki::cfg{Site}{CharSet} );
 
     # Detect character encoding of the full topic name from URL
     return undef if( $text =~ $regex{validAsciiStringRegex} );
@@ -702,7 +704,7 @@ sub writePageHeader {
     }
 
     $contentType = 'text/html' unless $contentType;
-    if(defined($TWiki::cfg{Site}{CharSet})) {
+    if( defined( $TWiki::cfg{Site}{CharSet} )) {
       $contentType .= '; charset='.$TWiki::cfg{Site}{CharSet};
     }
 

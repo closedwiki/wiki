@@ -298,8 +298,9 @@ ord() less than 128).
 
 sub fromSiteCharSet {
     my ( $this, $text ) = @_;
-    
-    return $text if ($TWiki::cfg{Site}{CharSet} =~ m/^utf-?8$/i);
+
+    return $text if( !defined  $TWiki::cfg{Site}{CharSet} ||
+                       $TWiki::cfg{Site}{CharSet} =~ m/^utf-?8$/i);
 
     if ($] < 5.008) {
         # use Unicode::MapUTF8 for Perl older than 5.8
@@ -320,7 +321,7 @@ sub fromSiteCharSet {
         # good Perl version, just use Encode
         require Encode;
         import Encode;
-        my $encoding = Encode::resolve_alias ( $TWiki::cfg{Site}{CharSet} );
+        my $encoding = Encode::resolve_alias( $TWiki::cfg{Site}{CharSet} );
         if ( not $encoding ) {
             $this->{session}->writeWarning
               ( 'Conversion to "'.$TWiki::cfg{Site}{CharSet}.
@@ -355,8 +356,9 @@ See also: the =fromSiteCharSet= method.
 sub toSiteCharSet {
     my ( $this, $encoded ) = @_;
 
-    return $encoded if ($TWiki::cfg{Site}{CharSet} =~ m/^utf-?8$/i);
-    
+    return $encoded if( !defined $TWiki::cfg{Site}{CharSet} ||
+                          $TWiki::cfg{Site}{CharSet} =~ m/^utf-?8$/i);
+
     if ( $] < 5.008 ) {
         # use Unicode::MapUTF8 for Perl older than 5.8
         require Unicode::MapUTF8;
