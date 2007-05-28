@@ -1,2 +1,3 @@
 // TWiki namespace
-var twiki = {};
+var twiki;
+if (!twiki) twiki = {};
