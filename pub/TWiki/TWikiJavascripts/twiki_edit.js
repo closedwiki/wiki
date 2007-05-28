@@ -1,5 +1,3 @@
-var toShow = new Array();
-var toHide = new Array();
 var PREF_NAME = "Edit";
 var EDITBOX_ID = "topic";
 // edit box rows
@@ -16,32 +14,7 @@ var textareaInited = false;
 
 function initForm() {
 	try { document.main.text.focus(); } catch (er) {}
-	
 	initTextArea();
-	
-	var i, ilen = toShow.length;
-	var elem;
-	for (i = 0; i < ilen; ++i) {
-		if (dom) {
-			elem = document.getElementById(toShow[i]);
-			if (elem) elem.style.display="inline";
-		} else if (ie4) {
-			document.all[toShow[i]].style.display="inline";
-		} else if (ns4) {
-			document.layers[toShow[i]].style.display="inline";
-		}
-	}
-	ilen = toHide.length;
-	for ( i = 0; i < toHide.length; ++i) {
-		if (dom) {
-			elem = document.getElementById(toHide[i]);
-			if (elem) elem.style.display="none";
-		} else if (ie4) {
-			document.all[toHide[i]].style.display="none";
-		} else if (ns4) {
-			document.layers[toHide[i]].style.display="none";
-		}
-	}
 }
 
 /**
@@ -83,22 +56,6 @@ function handleKeyDown(e) {
 	return true;
 }
 
-function checkAll( theButton, theButtonOffset, theNum, theCheck ) {
-	// find button element index
-	var i, j = 0;
-	for (i = 0; i <= document.main.length; ++i) {
-		if( theButton == document.main.elements[i] ) {
-			j = i;
-			break;
-		}
-	}
-	// set/clear all checkboxes
-	var last = j+theButtonOffset+theNum;
-	for(i = last-theNum; i < last; ++i) {
-		document.main.elements[i].checked = theCheck;
-	}
-}
-
 /**
 Changes the height of the editbox textarea.
 param inDirection : -1 (decrease) or 1 (increase).
@@ -138,5 +95,3 @@ function setEditBoxFontStyle(inFontStyle) {
 		return;
 	}
 }
-
-twiki.Event.addLoadEvent(initForm, true);
