@@ -1787,7 +1787,7 @@ sub _includeUrl {
 #    * $headingPatternHt : &lt;h[1-6]> HTML section heading &lt;/h[1-6]>
 sub _TOC {
     my ( $this, $text, $defaultTopic, $defaultWeb, $args ) = @_;
-
+    
     my $params = new TWiki::Attrs( $args );
     # get the topic name attribute
     my $topic = $params->{_DEFAULT} || $defaultTopic;
@@ -1803,10 +1803,11 @@ sub _TOC {
     $webPath =~ s/\./\//g;
 
     # get the depth limit attribute
-    my $depth = $params->{depth} || 6;
-
+    my $maxDepth = $params->{depth} || $this->{prefs}->getPreferencesValue('TOC_MAX_DEPTH') || 6;
+    my $minDepth = $this->{prefs}->getPreferencesValue('TOC_MIN_DEPTH') || 1;
+    
     # get the title attribute
-    my $title = $params->{title} || '';
+    my $title = $params->{title} || $this->{prefs}->getPreferencesValue('TOC_TITLE') || '';
     $title = CGI::span( { class => 'twikiTocTitle' }, $title ) if( $title );
 
     if( $web ne $defaultWeb || $topic ne $defaultTopic ) {
@@ -1854,7 +1855,7 @@ sub _TOC {
             next;
         }
 
-        if( $line && $level <= $depth ) {
+        if( $line && ($level >= $minDepth) && ($level <= $maxDepth) ) {
             # cut TOC exclude '---+ heading !! exclude this bit'
             $line =~ s/\s*$regex{headerPatternNoTOC}.+$//go;
             next unless $line;
