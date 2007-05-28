@@ -77,7 +77,7 @@ help : print
 	@echo 
 	@echo "make publish - upload distro and extensions + kernels (see below)"
 	@echo "make publish_distro - upload distro"
-	@echo "make publish_kernels - upload built kernels to PUBLISH_TO/twiki/components/kernel/"
+	@echo "make publish_kernels - upload built kernels to $PUBLISH_TO/twiki/components/kernel/"
 	@echo "make publish_extensions - upload built extensions to $PUBLISH_TO/twiki/components/extension/"
 	@echo 
 	@echo "make twiki-install - builds the installation webscript"
