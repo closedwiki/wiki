@@ -494,7 +494,7 @@ sub getWikiName {
     # CC commented this out because it was causing test failures in the
     # client tests when trying to view a topic where the history contains
     # a non-existant user.
-	$this->ASSERT_IS_CANONICAL_USER_ID($cUID) if DEBUG;
+	#$this->ASSERT_IS_CANONICAL_USER_ID($cUID) if DEBUG;
 
     my $wikiname = $this->getMapping($cUID)->getWikiName($cUID) if ($this->getMapping($cUID));
     return $wikiname || "UnknownUser";

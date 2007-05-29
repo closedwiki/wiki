@@ -400,10 +400,8 @@ sub parseRevisionDiff {
 
 sub _ci {
     my( $this, $comment, $user, $date ) = @_;
-    $comment = 'none' unless $comment;
 
-    die "fuck $user" if ($user =~ /\s/);
-print STDERR "_ci - ( $comment, $user, $date )\n";
+    $comment = 'none' unless $comment;
 
     my( $cmd, $rcsOutput, $exit );
     if( defined( $date )) {
