@@ -142,11 +142,12 @@ Found 4
 ---++ Expected
 
 <!-- expected with text and multi -->
-<table cellspacing="0" cellpadding="0" class="twikiTable" border="1"><tr>
+<table cellspacing="0" cellpadding="0" class="twikiTable" border="1">
+<tbody><tr>
 <td>  option1  </td>
 <td>  option  </td>
 <td>  &nbsp;  </td>
-</tr></table>
+</tr></tbody></table>
 <p />
 <!-- /expected -->
 
@@ -160,28 +161,30 @@ Found 4
 
 ---++ Expected
 
-<!-- expected Table and $summary -->
-<table cellspacing="0" cellpadding="0" class="twikiTable" border="1"><tr><th bgcolor="#99CCCC"><strong> Topic </strong></th>
+<!-- expected expand Table and $summary -->
+<table cellspacing="0" cellpadding="0" class="twikiTable" border="1">
+<thead>
+<tr>
+<th bgcolor="#99CCCC"><strong> Topic </strong></th>
 <th bgcolor="#99CCCC"><strong> Summary </strong></th>
 <th bgcolor="#99CCCC"><strong> Name </strong></th>
 <th bgcolor="#99CCCC"><strong> Role </strong></th>
 <th bgcolor="#99CCCC"><strong> Testsample </strong></th>
-
-</tr>
-<tr><td>  <a href="/twiki/bin/view/TestCases/FormattedSearch1" class="twikiLink">FormattedSearch1</a>  </td>
+</tr></thead><tbody>
+<tr><td>  <a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/TestCases/FormattedSearch1" class="twikiLink">FormattedSearch1</a>  </td>
 <td>  Michael Anchor is a famous Danish painter. He never painted $web, $n, $nop, $quot, $percnt or $dollar. He was married to Anna Anchor who was also a great painter. ...  </td>
 <td>  Michael Anchor  </td>
-<td>  <a href="/twiki/bin/view/TestCases/FormattedSearch2" class="twikiLink">FormattedSearch2</a>  </td>
+<td>  <a href="%SCRIPTURLPATH%/view/TestCases/FormattedSearch2" class="twikiLink">FormattedSearch2</a>  </td>
 <td>  $nop, $quot, $percnt, $dollar in $formfield()  </td>
 
 </tr>
-<tr><td>  <a href="/twiki/bin/view/TestCases/FormattedSearch2" class="twikiLink">FormattedSearch2</a>  </td>
+<tr><td>  <a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/TestCases/FormattedSearch2" class="twikiLink">FormattedSearch2</a>  </td>
 <td>  Michael Anchor and Anna Anchor lived in Skagen in Denmark. There is a very nice museum you can visit This text is fill in text which is there to ensure that the unique ...  </td>
 <td>  Anna Anchor  </td>
 <td>  Painter  </td>
 <td>  $summary  </td>
 
-</tr></table>
+</tr></tbody></table>
 <!-- /expected -->
 
 ---++ Actual

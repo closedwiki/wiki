@@ -8,7 +8,7 @@ This topic has no TOPICINFO meta-data, to force an upgradeCategoryTable action. 
 
 If this topic is displayed, the test passed.
 
-%GREEN% ALL TESTS PASSED %ENDCOLOR%
+<font color="green">ALL TESTS PASSED</font>
 
 <verbatim>
 <!--TWikiCat-->

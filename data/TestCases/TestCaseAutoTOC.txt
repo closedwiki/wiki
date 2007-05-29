@@ -8,18 +8,18 @@ Designed by: Crawford Currie
 
 <table><tr><th>Expected</th><th>Actual</th></tr>
 <tr valign="top"><td>
-<!-- expected expand -->
+<!-- expected expand rex -->
 <div class="twikiToc">
 <ul>
-<li> <a href="%SCRIPTURLPATH{"view"}%/%WEB%/TocFixture?test=compare;debugenableplugins=TestFixturePlugin;skin=pattern#Nonsense">Nonsense</a>
+<li> <a href="%SCRIPTURLPATH{"view"}%/%WEB%/TocFixture?@URLPARAMS#Nonsense">Nonsense</a>
 <ul>
-<li> <a href="%SCRIPTURLPATH{"view"}%/%WEB%/TocFixture?test=compare;debugenableplugins=TestFixturePlugin;skin=pattern#Makes">Makes</a>
+<li> <a href="%SCRIPTURLPATH{"view"}%/%WEB%/TocFixture?@URLPARAMS#Makes">Makes</a>
 <ul>
-<li> <a href="%SCRIPTURLPATH{"view"}%/%WEB%/TocFixture?test=compare;debugenableplugins=TestFixturePlugin;skin=pattern#Content">Content</a>
+<li> <a href="%SCRIPTURLPATH{"view"}%/%WEB%/TocFixture?@URLPARAMS#Content">Content</a>
 </li>
 </ul>
 </li>
-<li> <a href="%SCRIPTURLPATH{"view"}%/%WEB%/TocFixture?test=compare;debugenableplugins=TestFixturePlugin;skin=pattern#Tests">Tests</a>
+<li> <a href="%SCRIPTURLPATH{"view"}%/%WEB%/TocFixture?@URLPARAMS#Tests">Tests</a>
 </li>
 </ul>
 </li>
@@ -35,19 +35,19 @@ Designed by: Crawford Currie
 <div class="twikiToc">
 <span class="twikiTocTitle">The Top</span>
 <ul>
-<li> <a href="?test=compare;debugenableplugins=TestFixturePlugin;skin=pattern#H1_1">H1 <!--1--></a>
+<li> <a href="?@URLPARAMS#H1 &lt;!--1--&gt;">H1 <!--1--></a>
 <ul>
-<li> <a href="?test=compare;debugenableplugins=TestFixturePlugin;skin=pattern#H2">H2</a>
+<li> <a href="?@URLPARAMS#H2">H2</a>
 </li>
 </ul>
 </li>
-<li> <a href="?test=compare;debugenableplugins=TestFixturePlugin;skin=pattern#H1_2">H1 <!--2--></a>
+<li> <a href="?@URLPARAMS#H1_2">H1 <!--2--></a>
 <ul>
-<li> <a href="?test=compare;debugenableplugins=TestFixturePlugin;skin=pattern#H2">H2</a>
+<li> <a href="?@URLPARAMS#H2">H2</a>
 <ul>
 <li>
 <ul>
-<li> <a href="?test=compare;debugenableplugins=TestFixturePlugin;skin=pattern#Don_t_ignore">Don't ignore</a>
+<li> <a href="?@URLPARAMS#Don_t_ignore">Don't ignore</a>
 </li>
 </ul>
 </li>
@@ -55,15 +55,15 @@ Designed by: Crawford Currie
 </li>
 </ul>
 </li>
-<li> <a href="?test=compare;debugenableplugins=TestFixturePlugin;skin=pattern#hash_H1">hash H1</a>
+<li> <a href="?@URLPARAMS#hash_H1">hash H1</a>
 <ul>
-<li> <a href="?test=compare;debugenableplugins=TestFixturePlugin;skin=pattern#H2">H2</a>
+<li> <a href="?@URLPARAMS#H2">H2</a>
 </li>
 </ul>
 </li>
-<li> <a href="?test=compare;debugenableplugins=TestFixturePlugin;skin=pattern#hash_H1">hash H1</a>
+<li> <a href="?@URLPARAMS#hash_H1">hash H1</a>
 <ul>
-<li> <a href="?test=compare;debugenableplugins=TestFixturePlugin;skin=pattern#normal_H2">normal H2</a>
+<li> <a href="?@URLPARAMS#normal_H2">normal H2</a>
 </li>
 </ul>
 </li>

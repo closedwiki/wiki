@@ -10,6 +10,7 @@ Designed by: Crawford Currie
 ---++ Search for parents
 Expected:
 <!-- expected expand PARENT -->
+<p></p>
 <a href="%SCRIPTURLPATH{"view"}%/TestCases/%TOPIC%">%TOPIC%</a>
 <!-- /expected -->
 Actual:
@@ -30,6 +31,7 @@ Actual:
 ---++ Search for field value
 Expected:
 <!-- expected expand VALUE -->
+<p></p>
 <a href="%SCRIPTURLPATH{"view"}%/TestCases/DeliberatelyMoved">DeliberatelyMoved</a>
 <!-- /expected -->
 Actual: 

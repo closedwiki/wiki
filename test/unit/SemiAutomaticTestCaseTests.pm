@@ -1,0 +1,62 @@
+use strict;
+
+package SemiAutomaticTestCaseTests;
+
+use base qw(TWikiFnTestCase);
+
+use strict;
+use TWiki;
+use TWiki::UI::View;
+use CGI;
+use Error qw( :try );
+
+find_tests();
+
+sub find_tests {
+    my $twiki = new TWiki();
+    unless( $twiki->{store}->webExists('TestCases')) {
+        print STDERR "Cannot run semi-automatic test cases; TestCases web not found";
+        return;
+    }
+    eval "use TWiki::Plugins::TestFixturePlugin";
+    if ($@) {
+        print STDERR "Cannot run semi-automatic test cases; could not find TestFixturePlugin";
+        return;
+    }
+    my $suite = Test::Unit::TestSuite->empty_new("TaseCaseAutoTests");
+    foreach my $case ($twiki->{store}->getTopicNames('TestCases')) {
+        next unless $case =~ /^TestCaseAuto/;
+        my $test = 'SemiAutomaticTestCaseTests::test_'.$case;
+        no strict 'refs';
+        *$test = sub { shift->run_testcase($case) };
+        use strict 'refs';
+    }
+}
+
+sub new {
+    my $this = shift()->SUPER::new("TestCaseAuto", @_);
+    return $this;
+}
+
+sub run_testcase {
+    my ( $this, $testcase ) = @_;
+
+    my $query = new CGI({
+        test=>'compare',
+        debugenableplugins=>'TestFixturePlugin,InterwikiPlugin',
+        skin=>'pattern'});
+    $query->path_info( "TestCases/$testcase" );
+    $TWiki::cfg{Plugins}{TestFixturePlugin}{Enabled} = 1;
+    my $twiki = new TWiki( $this->{test_user_login}, $query );
+    $twiki->{store}->saveTopic(
+        $twiki->{user}, $this->{users_web}, 'TWikiContributor', 'none');
+    my ($text, $result) = $this->capture( \&TWiki::UI::View::view, $twiki);
+    unless( $text =~ m#<font color="green">ALL TESTS PASSED</font># ) {
+        open(F,">$testcase.html");
+        print F $text;
+        close F;
+        $this->assert(0, "$testcase FAILED - output in $testcase.html");
+    }
+}
+
+1;

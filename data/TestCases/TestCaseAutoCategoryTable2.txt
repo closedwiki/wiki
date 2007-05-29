@@ -15,4 +15,4 @@ This topic has 1.0beta TOPICINFO meta-data, to force an upgradeCategoryTable act
 
 If this topic is displayed, the test passed.
 
-%GREEN% ALL TESTS PASSED %ENDCOLOR%
+<font color="green">ALL TESTS PASSED</font>

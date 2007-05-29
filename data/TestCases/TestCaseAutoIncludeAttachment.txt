@@ -9,7 +9,7 @@ Designed by: Crawford Currie
 ---+ Existing attachment
 ---++ Expected
 <!-- expected -->
-<h1><a name="heading_1"></a>heading 1</h1>
+<h1><a name="heading 1"></a>heading 1</h1>
 <!-- /expected -->
 ---++ Actual
 <!-- actual -->

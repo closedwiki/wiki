@@ -470,9 +470,11 @@ Note: Cairo gets the first row wrong, by any sensible definition.
 ---+++ CASE IN_TABLE
 <!-- expected A_IN_TABLE -->
 <table border="1" cellspacing="0" cellpadding="0" class="twikiTable">
+<tbody>
 <tr><td> <code>* _ __ = ==</code> </td><td> <code>* _ __ = ==</code> </td></tr>
 <tr><td> <code>aa</code> </td><td> <code>bb</code> </td></tr>
 <tr><td> = </td><td> = </td></tr>
+</tbody>
 </table>
 <!-- /expected -->
 ---
@@ -921,9 +923,13 @@ Note: Cairo gets the first row wrong, by any sensible definition.
 ---+++ CASE IN_TABLE
 <!-- expected B_IN_TABLE -->
 <table border="1" cellspacing="0" cellpadding="0" class="twikiTable">
+<thead>
 <tr><th bgcolor="#99CCCC"> <strong>_ * __ = ==</strong> </th><th bgcolor="#99CCCC"> <strong>_ * __ = ==</strong> </th></tr>
 <tr><th bgcolor="#99CCCC"> <strong>aa</strong> </th><th bgcolor="#99CCCC"> <strong>bb</strong> </th></tr>
+</thead>
+<tbody>
 <tr><td> * </td><td> * </td></tr>
+</tbody>
 </table>
 <!-- /expected -->
 ---
@@ -1437,9 +1443,11 @@ Note: Cairo gets the first row wrong, by any sensible definition.
 ---+++ CASE IN_TABLE
 <!-- expected C_IN_TABLE -->
 <table border="1" cellspacing="0" cellpadding="0" class="twikiTable">
+<tbody>
 <tr><td> <em>* = == _ __</em> </td><td> <em>* = == _ __</em> </td></tr>
 <tr><td> <em>aa</em> </td><td> <em>bb</em> </td></tr>
 <tr><td> _ </td><td> _ </td></tr>
+</tbody>
 </table>
 <!-- /expected -->
 ---

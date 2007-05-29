@@ -266,7 +266,8 @@ WikiWordAfterList
 ---+++ Expected
 <!-- expected SIMPLE TABLE -->
 <p />
-<table border="1" cellspacing="0" cellpadding="0" class=twikiTable> <tr><th bgcolor="#99CCCC"> <strong>L</strong> </th><th bgcolor="#99CCCC"> <strong>C</strong> </th><th bgcolor="#99CCCC"> <strong>R</strong> </th></tr>
+<table border="1" cellspacing="0" cellpadding="0" class=twikiTable><thead><tr><th bgcolor="#99CCCC"> <strong>L</strong> </th><th bgcolor="#99CCCC"> <strong>C</strong> </th><th bgcolor="#99CCCC"> <strong>R</strong> </th></tr></thead>
+<tbody>
 <tr><td>  A2  </td><td align="center">	2	</td><td align="right">	2  </td></tr>
 
 <tr><td>  A3  </td><td align="center">	3	</td><td align="right">	3  </td></tr>
@@ -274,10 +275,11 @@ WikiWordAfterList
 <tr><td>  A4-6  </td><td>  four  </td><td>  four  </td></tr>
 
 <tr><td> ^ </td><td>  five  </td><td>  five  </td></tr>
+</tbody>
 </table>
 <p />
-<table border="1" cellspacing="0" cellpadding="0" class=twikiTable> <tr><td> ^ </td><td>  six  </td><td>  six  </td></tr>
-
+<table border="1" cellspacing="0" cellpadding="0" class=twikiTable> <tbody><tr><td> ^ </td><td>  six  </td><td>  six  </td></tr>
+</tbody>
 </table>
 <p />
 <!-- /expected -->
@@ -382,7 +384,7 @@ LinkBoxes
 <!-- expected expand SQUABS -->
 <span class="twikiNewLink">wiki syntax<a href="%SCRIPTURLPATH{"edit"}%/TestCases/WikiSyntax?topicparent=TestCases.TestCaseAutoFormatting" rel="nofollow"  title="Create this topic">?</a></span>
 <p />
-<a class="twikiLink" href="%SCRIPTURLPATH{"view"}%/%MAINWEB%/TWikiUsers">Main.TWiki users</a>
+<a class="twikiLink" href="%SCRIPTURLPATH{"view"}%/%MAINWEB%/TWikiUsers">%MAINWEB%.TWiki users</a>
 <p />
 escaped:
 [<nop>[wiki syntax]]
@@ -464,13 +466,16 @@ nowt!%MAINWEB%
 ---++ Complex table
 ---+++ Expected
 <!-- expected expand COMPLEX TABLE -->
-<table cellpadding="0" cellspacing="0" border="1" class=twikiTable><tr>
+<table cellpadding="0" cellspacing="0" border="1" class=twikiTable>
+<thead>
+<tr>
   <th bgcolor="#99CCCC"><strong>A0 all rows</strong></th>
   <th bgcolor="#99CCCC"><strong>B0</strong></th>
   <th bgcolor="#99CCCC"><strong>C0 widen this col</strong></th>
   <th bgcolor="#99CCCC"><strong><span class="twikiNewLink">D0LinkInColHeader<a href="%SCRIPTURLPATH{"edit"}%/TestCases/D0LinkInColHeader?topicparent=TestCases.TestCaseAutoFormatting" rel="nofollow" title="Create this topic">?</a></span></strong></th>
   <th bgcolor="#99CCCC"><strong>E0 not a link this time</strong></th>
- </tr>
+ </tr></thead>
+<tbody>
  <tr>
   <td align="right">   ^ </td>
   <td>  B1 left </td>
@@ -500,6 +505,7 @@ nowt!%MAINWEB%
   <td> C5</td>
   <td colspan="2"> D5:E5 span 2 cols</td>
  </tr>
+</tbody>
 </table>
 <!-- /expected -->
 ---+++ Actual
@@ -518,6 +524,7 @@ Note that when viewing this topic the table below may be formatted by <nop>Table
 ---+++ Expected
 <!-- expected GOOGLE -->
 <table border="1" cellspacing="0" cellpadding="0" class=twikiTable>
+<tbody>
  <tr>
   <td>
    <a  target="_top" href="http://www.google.co.uk">http://www.google.co.uk</a>  </td>
@@ -526,6 +533,7 @@ Note that when viewing this topic the table below may be formatted by <nop>Table
   <td>
    <a  target="_top" href="http://www.google.co.uk">http://www.google.co.uk</a>  </td>
  </tr>
+</tbody>
 </table>
 <!-- /expected -->
 ---+++ Actual
