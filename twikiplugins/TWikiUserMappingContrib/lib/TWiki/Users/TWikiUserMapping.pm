@@ -287,7 +287,9 @@ sub addUser {
         # brand new file - add to end
         $result .= "$entry$today\n";
     }
-    $store->saveTopic( $TWiki::cfg{SuperAdminGroup},
+    $store->saveTopic( 
+    			#TODO: why is this Admin and not the RegoAgent??
+    			$this->{session}->{users}->getCanonicalUserID($TWiki::cfg{AdminUserLogin}),
                        $TWiki::cfg{UsersWebName},
                        $TWiki::cfg{UsersTopicName},
                        $result, $meta );

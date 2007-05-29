@@ -39,8 +39,8 @@ if ($ENV{TWIKI_ASSERTS}) {
 
 #make sure our environment is sufficiently clean to run tests
 #DON"T RUN THIS :)
-#my $dangerousRemover = 'rm -r /tmp/junk* ; rm  '.$TWiki::cfg{TempfileDir}.'/[cde]* ; rm '.$TWiki::cfg{TempfileDir}.'/* ; rm -r '.$TWiki::cfg{DataDir}.'/Temp*';
-#`$dangerousRemover`;
+my $dangerousRemover = 'rm -r /tmp/junk* ; rm  '.$TWiki::cfg{TempfileDir}.'/[cde]* ; rm '.$TWiki::cfg{TempfileDir}.'/* ; rm -r '.$TWiki::cfg{DataDir}.'/Temp*';
+`$dangerousRemover`;
 testForFiles('/tmp/junk*'); #this is hardcoded into some tests :(
 testForFiles($TWiki::cfg{TempfileDir}.'/*');
 testForFiles($TWiki::cfg{DataDir}.'/Temp*');
