@@ -149,19 +149,20 @@ sub _tidy {
 sub _rexeq {
     my ( $a, $b ) = @_;
     my @res = ();
-    while ( $a =~ s/\@REX\((.*?)\)/"!REX".scalar(@res)."!"/e ) {
+    while ( $a =~ s/\@REX\((.*?)\)/"RRRREX".scalar(@res)."XERRRR"/e ) {
         push( @res, $1 );
     }
     # escape regular expression chars
-    $a =~ s/([\[\]\(\)\\\?\*\+\.\/\^\$])/\\$1/g;
-    $a =~ s/\@DATE/[0-3]\\d [JFMASOND][aepuco][nbrylgptvc] [12][09]\\d\\d/g;
-    $a =~ s/\@TIME/[012]\\d:[0-5]\\d/g;
+    $a = quotemeta($a);
+    $a =~ s/\\\@DATE/[0-3]\\d [JFMASOND][aepuco][nbrylgptvc] [12][09]\\d\\d/g;
+    $a =~ s/\\\@TIME/[012]\\d:[0-5]\\d/g;
     my $wikiword = '[A-Z]+[a-z]+[A-Z]+\w+';
-    $a =~ s/\@WIKIWORD/$wikiword/og;
+    $a =~ s/\\\@WIKIWORD/$wikiword/g;
+    $a =~ s/\\\@URLPARAMS/[A-Za-z0-9=%;]*/g;
     my $satWord = '<a [^>]*class="twikiLink"[^>]*>'.$wikiword.'</a>';
     my $unsatWord = '<span [^>]*class="twikiNewLink"[^>]*>'.$wikiword.'<a [^>]*><sup>\?</sup></a
 </span>';
-    $a =~ s/!REX(\d+)!/$res[$1]/g;
+    $a =~ s/RRRREX(\d+)XERRRR/$res[$1]/g;
     $a =~ s!/!\/!g;
     return $b =~ /^$a$/;
 }
