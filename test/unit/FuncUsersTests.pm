@@ -100,17 +100,49 @@ sub test_eachUser {
     $this->assert_str_equals("ScumBag,TWikiGuest,UserA,UserB,UserC", $ulist);
 }
 
-sub test_eachGroup {
+sub test_eachGroupTraditional {
     my $this = shift;
     my @list;
+
+    $TWiki::cfg{SuperAdminGroup} = 'TWikiAdminGroup';
+    # Force a re-read
+    $this->{twiki} = new TWiki();
+    $TWiki::Plugins::SESSION = $this->{twiki};
+    @TWikiFntestCase::mails = ();
+
     my $ite = TWiki::Func::eachGroup();
     while ($ite->hasNext()) {
         my $u = $ite->next();
         push(@list, $u);
     }
     my $ulist = join(',', sort @list);
-    $this->assert_str_equals('AandBGroup,AandCGroup,BandCGroup,ScumGroup,TWikiAdminGroup,TWikiBaseGroup', $ulist);
+    my @correctList = qw/ AandBGroup AandCGroup BandCGroup ScumGroup TWikiAdminGroup TWikiBaseGroup/;
+    my $correct = join(',', sort @correctList);
+    $this->assert_str_equals($correct, $ulist);
 }
+
+sub test_eachGroupCustomAdmin {
+    my $this = shift;
+    my @list;
+
+    $TWiki::cfg{SuperAdminGroup} = 'Super Admin';
+    # Force a re-read
+    $this->{twiki} = new TWiki();
+    $TWiki::Plugins::SESSION = $this->{twiki};
+    @TWikiFntestCase::mails = ();
+
+    my $ite = TWiki::Func::eachGroup();
+    while ($ite->hasNext()) {
+        my $u = $ite->next();
+        push(@list, $u);
+    }
+    my $ulist = join(',', sort @list);
+    my @correctList = qw/ AandBGroup AandCGroup BandCGroup ScumGroup TWikiAdminGroup TWikiBaseGroup/;
+    push @correctList, $TWiki::cfg{SuperAdminGroup};
+    my $correct = join(',', sort @correctList);
+    $this->assert_str_equals($correct, $ulist);
+}
+
 
 # SMELL: nothing tests if we are an admin!
 sub test_isAnAdmin {
