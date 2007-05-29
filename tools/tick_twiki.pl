@@ -44,8 +44,8 @@ BEGIN {
 # to -36000 or 36000 it will expire sessions that have not been used for
 # more than 100 hours,
 
-use TWiki::Client;
-TWiki::Client::expireDeadSessions();
+use TWiki::LoginManager;
+TWiki::LoginManager::expireDeadSessions();
 
 # This will remove topic leases that have expired. Topic leases may be
 # left behind when users edit a topic and then navigate away without
