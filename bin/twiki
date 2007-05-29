@@ -137,7 +137,7 @@ sub writeDebug {
 # stub for the template login manager
 sub login {
   my $session = shift;
-  $session->{loginManager}->login( $session->{cgiQuery}, $session );
+  $session->{users}->{loginManager}->login( $session->{cgiQuery}, $session );
 }
 
 ###############################################################################
