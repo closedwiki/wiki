@@ -835,7 +835,6 @@ pub/TWiki/TWikiJavascripts/twikiPref.js 0644
 pub/TWiki/TWikiJavascripts/twikiString.js 0644
 pub/TWiki/TWikiJavascripts/twikiStringUnicodeChars.js 0644
 pub/TWiki/TWikiJavascripts/twikiWindow.js 0644
-pub/TWiki/TWikiJavascripts/twiki_attach.js 0644
 pub/TWiki/TWikiJavascripts/twiki_edit.js 0644
 pub/TWiki/TWikiJavascripts/twiki_renamebase.js 0644
 pub/TWiki/TWikiJavascripts/twiki_renamedelete.js 0644
