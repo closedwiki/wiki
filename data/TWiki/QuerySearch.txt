@@ -17,11 +17,12 @@ in.
 
 All meta-data in a topic is referenced according to a to a simple plan.
  
+   * =name= - name of the topic
+   * =web= - name of the web the topic is within
    * =META:FILEATTACHMENT=
       * _for each attachment_
          * =name=
          * =attr=
-         * =comment=
          * =path=
          * =size=
          * =user=
@@ -42,7 +43,7 @@ All meta-data in a topic is referenced according to a to a simple plan.
       * =to=
    * =META:FORM= - the main form of the topic
       * =name= (known as the _formname_)
-   * =META:FIELD= - the fields in the form. You can also use the name of the form (the value of =META:FORM.name= e.g. =PersonForm=)
+   * =META:FIELD= - the fields in the form.
       * _for each field in the form_
          * =name=
          * =title=
@@ -52,27 +53,30 @@ All meta-data in a topic is referenced according to a to a simple plan.
          * =name=
          * =value=
 
-See TWikiMetaData for details of what all these entries mean. =attachments= and =fields= are both _arrays_, which means they can have any number of records under them.
+See TWikiMetaData for details of what all these entries mean.
 
-It's a bit clumsy having to type =META:FILEATTACHMENT= every time you want to refer to the array of attachments in a topic, so there are some predefined aliases that make for a bit less typing:
+Most things at the top level of the plan - =META:TOPICPARENT=, =META:TOPICINFO= etc - are _structures_ which are indexed by _keys_. For example, =META:TOPICINFO= has 4 entries, which are indexed by the keys =author=, =date=, =format= and =version=. =META:FILEATTACHMENT=, =META:FIELD= and =META:PREFERENCE= are all _arrays_, which means they can have any number of records under them. Arrays are indexed by _numbers_ - for example, the first entry in the =META:FIELD= array is entry 0.
+
+It's a bit clumsy having to type =META:FILEATTACHMENT= every time you want to refer to the array of attachments in a topic, so there are some predefined aliases that make it a bit less typing:
    * =attachments= means the same as =META:FILEATTACHMENT=
    * =info= means the same as =META:TOPICINFO=
    * =parent= means the same as =META:TOPICPARENT=
    * =moved= means the same as =META:TOPICMOVED=
    * =form= means the same as =META:FORM=
-   * =fields= means the same as =META:FIELD=
+   * =fields= means the same as =META:FIELD=, You can also use the name of the form (the value of =form.name= e.g. =PersonForm=)
    * =preferences= means the same as =META:PREFERENCE=
 
 This plan is referenced using a simple syntax:
-| =X= | refers to the field named =X=. For example, =info=, =META:TOPICMOVED= or =attachments=. |
-| =X.Y= | refers to the subfield =Y= of the field named =X=. For example =info.date=, =moved.by=, =META:TOPICPARENT.name= |
-| =X[<i>query</i>]= | refers to all the elements of the array =X= that match _query_ - for example, =attachments[size>1024]=. _query_ can be as complex as you like; for example, =DocumentForm[name!='Summary' AND value~'top secret'].value=. |
-| =X/Y= | refers to the field the field specified by =Y= from the topic specified by the _value_ of =X=. =X= must evaluate to a topic name, and =Y= to a query to be applied to that topic. For example, =parent.name/(form.name='ExampleForm')= will evaluate to true if (1) the topic has a parent, (2) the parent topic has the main form type =ExampleForm=. |
+| *Syntax* | *Means* | *Examples* |
+| =X= | refers to the field named =X=. | =info=, =META:TOPICMOVED=, =attachments=, =name=. |
+| =X.Y= | refers to the entry with the key =Y= in the structure named =X= | =info.date=, =moved.by=, =META:TOPICPARENT.name= |
+| =X[<i>query</i>]= | refers to all the elements of the array =X= that match _query_. If <i>query</i> is of the form =name='Y'= then you can use the same =X.Y= syntax as is used for accessing structures. | =attachments[size>1024]=, =DocumentForm[name!='Summary' AND value~'top secret'].value=, =DocumentForm.Summary= | 
+| =X[N]= | where =X= is an array and =N= is an integer number >= 0, gets the Nth element of the array =X= | =attachments[3]= |
+| =X/Y= | accesses =Y= from the topic specified by the _value_ of =X=. =X= must evaluate to a topic name | =parent.name/(form.name='ExampleForm')= will evaluate to true if (1) the topic has a parent, (2) the parent topic has the main form type =ExampleForm=. |
 
-Note: at some point TWiki may support multiple forms in the same topic. For this reason you are recommended *not* to use the =fields= keyword when accessing form fields, but always use the name of the form instead.
+Note: at some point TWiki may support multiple forms in the same topic. For this reason you are recommended *not* to use the =fields= shortcut when accessing form fields, but always use the name of the form instead.
 
-There is a shortcut for accessing form fields. The syntax =X= will evaluate to =<i>fields</i>[name='X'].value=, if and only if =X= isn't one of the entry names or their aliases described above. For example, the following expressions will all evaluate to the same value(s)
-   * =fields[name='Lastname'].value=
+There is a shortcut for accessing form fields. If you use the name of a field (for example, =LastName=) in the query without a . before it, that is taken to mean "the value of the field named this". This works if and only if the field name isn't the same as of the top level entry names or their aliases described above. For example, the following expressions will all evaluate to the same thing:
    * =PersonForm[name='Lastname'].value=
    * =Lastname=
    * =PersonForm.Lastname=

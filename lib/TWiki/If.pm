@@ -114,7 +114,7 @@ use vars qw( @cmpOps );
             my( $clientData, $a, $b ) = @_;
             my $ea = $a->evaluate($clientData) || '';
             my $eb = $b->evaluate($clientData) || '';
-            return _evalTest($ea, $eb, \&_cmp, sub { $_[0] == 0 });
+            return _evalTest($ea, $eb, \&_cmp, sub { $_[0] == 0 ? 1 : 0 });
         },
     },
     {
@@ -132,7 +132,7 @@ use vars qw( @cmpOps );
                               $expr =~ s/\\\?/./g;
                               $expr =~ s/\\\*/.*/g;
                               defined($_[0]) && defined($_[1]) &&
-                                $_[0] =~ m/$expr/
+                                $_[0] =~ m/$expr/ ? 1 : 0
                             });
         },
     },
@@ -144,7 +144,7 @@ use vars qw( @cmpOps );
             my( $clientData, $a, $b ) = @_;
             my $ea = $a->evaluate($clientData) || '';
             my $eb = $b->evaluate($clientData) || '';
-            return _evalTest($ea, $eb, \&_cmp, sub { $_[0] != 0 });
+            return _evalTest($ea, $eb, \&_cmp, sub { $_[0] != 0 ? 1 : 0 });
         },
     },
     {
@@ -155,7 +155,7 @@ use vars qw( @cmpOps );
             my( $clientData, $a, $b ) = @_;
             my $ea = $a->evaluate($clientData) || 0;
             my $eb = $b->evaluate($clientData) || 0;
-            return _evalTest($ea, $eb, \&_cmp, sub { $_[0] >= 0 });
+            return _evalTest($ea, $eb, \&_cmp, sub { $_[0] >= 0 ? 1 : 0 });
         },
     },
     {
@@ -166,7 +166,7 @@ use vars qw( @cmpOps );
             my( $clientData, $a, $b ) = @_;
             my $ea = $a->evaluate($clientData) || 0;
             my $eb = $b->evaluate($clientData) || 0;
-            return _evalTest($ea, $eb, \&_cmp, sub { $_[0] <= 0 });
+            return _evalTest($ea, $eb, \&_cmp, sub { $_[0] <= 0 ? 1 : 0 });
         },
     },
     {
@@ -177,7 +177,7 @@ use vars qw( @cmpOps );
             my( $clientData, $a, $b ) = @_;
             my $ea = $a->evaluate($clientData) || 0;
             my $eb = $b->evaluate($clientData) || 0;
-            return _evalTest($ea, $eb, \&_cmp, sub { $_[0] > 0 });
+            return _evalTest($ea, $eb, \&_cmp, sub { $_[0] > 0 ? 1 : 0 });
         },
     },
     {
@@ -188,7 +188,7 @@ use vars qw( @cmpOps );
             my( $clientData, $a, $b ) = @_;
             my $ea = $a->evaluate($clientData) || 0;
             my $eb = $b->evaluate($clientData) || 0;
-            return _evalTest($ea, $eb, \&_cmp, sub { $_[0] < 0 });
+            return _evalTest($ea, $eb, \&_cmp, sub { $_[0] < 0 ? 1 : 0 });
         },
     },
     {
@@ -198,7 +198,7 @@ use vars qw( @cmpOps );
         casematters => 0,
         exec => sub {
             my( $clientData, $a ) = @_;
-            return !$a->evaluate($clientData);
+            return $a->evaluate($clientData) ? 0 : 1;
         },
     },
     {

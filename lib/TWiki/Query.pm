@@ -53,11 +53,17 @@ use vars qw ( %aliases %isArrayType );
 %isArrayType =
   map { $_ => 1 } qw( FILEATTACHMENT FIELD PREFERENCE );
 
+# $data is the indexed object
+# $field is the scalar being used to index the object
 sub _getField {
     my( $this, $data, $field ) = @_;
 
     my $result;
     if (ref($data) eq 'TWiki::Meta') {
+        # The object being indexed is a TWiki::Meta object, so
+        # we have to use a different approach to treating it
+        # as an associative array. The first thing to do is to
+        # apply our "alias" shortcuts.
         my $realField = $field;
         if( $aliases{$field} ) {
             $realField = $aliases{$field};
@@ -70,42 +76,65 @@ sub _getField {
             } else {
                 $result = $data->get( $realField );
             }
+        } elsif ($realField eq 'name') {
+            # Special accessor to compensate for lack of a topic
+            # name anywhere in the saved fields of meta
+            return $data->{_topic};
+        } elsif ($realField eq 'web') {
+            # Special accessor to compensate for lack of a web
+            # name anywhere in the saved fields of meta
+            return $data->{_web};
         } else {
+            # The field name isn't an alias, check to see if it's
+            # the form name
             my $form = $data->get( 'FORM' );
             if( $form && $field eq $form->{name}) {
-                # SHORTCUT; is it the form name? If so, give me the fields
+                # SHORTCUT;it's the form name, so give me the fields
                 # as if the 'field' keyword had been used.
                 # TODO: This is where multiple form support needs to reside.
-                # Return the array of fields
+                # Return the array of FIELD for further indexing.
                 my @e = $data->find( 'FIELD' );
                 return \@e;
             } else {
-                # SHORTCUT; not a predefined name; grope in the fields instead.
-                # TODO: Needs to error out if there are multiple forms.
+                # SHORTCUT; not a predefined name; assume it's a field
+                # 'name' instead.
+                # SMELL: Needs to error out if there are multiple forms -
+                # or perhaps have a heuristic that gives access to the
+                # uniquely named field.
                 $result = $data->get( 'FIELD', $field );
                 $result = $result->{value} if $result;
             }
         }
     } elsif( ref( $data ) eq 'ARRAY' ) {
-        my @res;
-        foreach my $f ( @$data ) {
-            my $val = $this->_getField( $f, $field );
-            push( @res, $val ) if defined( $val );
-        }
-        if (scalar( @res )) {
-            $result = \@res;
+        # Indexing an array object. The index will be one of:
+        # 1. An integer, which is an implicit index='x' query
+        # 2. A name, which is an implicit name='x' query
+        if( $field =~ /^\d+$/ ) {
+            # Integer index
+            $result = $data->[$field];
         } else {
-            # SHORTCUT; The field name wasn't seen in any of the records.
-            # try again, this time matching 'name' and returning 'value'
+            # String index
+            my @res;
+            # Get all array entries that match the field
             foreach my $f ( @$data ) {
-                next unless ref($f) eq 'HASH';
-                if ($f->{name} && $f->{name} eq $field
-                      && defined $f->{value}) {
-                    push( @res, $f->{value} );
-                }
+                my $val = $this->_getField( $f, $field );
+                push( @res, $val ) if defined( $val );
             }
             if (scalar( @res )) {
                 $result = \@res;
+            } else {
+                # The field name wasn't explicitly seen in any of the records.
+                # Try again, this time matching 'name' and returning 'value'
+                foreach my $f ( @$data ) {
+                    next unless ref($f) eq 'HASH';
+                    if ($f->{name} && $f->{name} eq $field
+                          && defined $f->{value}) {
+                        push( @res, $f->{value} );
+                    }
+                }
+                if (scalar( @res )) {
+                    $result = \@res;
+                }
             }
         }
     } elsif( ref( $data ) eq 'HASH' ) {
@@ -117,20 +146,21 @@ sub _getField {
 }
 
 # <DEBUG SUPPORT>
-my $ind = 0;
-sub _blat {
-    my $a = shift;
+sub toString {
+    my ($a) = @_;
     return 'undef' unless defined($a);
     if (ref($a) eq 'ARRAY') {
-        return '['.join(',', map { _blat($_) } @$a).']'
+        return '['.join(',', map { toString($_) } @$a).']'
     } elsif (ref($a) eq 'TWiki::Meta') {
         return $a->stringify();
     } elsif (ref($a) eq 'HASH') {
-        return '{'.join(',', map { "$_=>"._blat($a->{$_}) } keys %$a).'}'
+        return '{'.join(',', map { "$_=>".toString($a->{$_}) } keys %$a).'}'
     } else {
         return $a;
     }
 }
+
+my $ind = 0;
 # </DEBUG SUPPORT>
 
 sub evaluate {
@@ -157,7 +187,7 @@ sub evaluate {
         $ind-- if MONITOR_EVAL;
         print STDERR ('-' x $ind).'}' if MONITOR_EVAL;
     }
-    print STDERR ' -> ',_blat($result),"\n" if MONITOR_EVAL;
+    print STDERR ' -> ',toString($result),"\n" if MONITOR_EVAL;
 
     return $result;
 }
@@ -186,7 +216,11 @@ my @operators = (
         exec => sub {
             my( $domain, $a, $b ) = @_;
             my $lval = $a->evaluate( $domain );
-            return $b->evaluate( [ $lval, $domain->[1] ]);
+            my $res = $b->evaluate( [ $lval, $domain->[1] ]);
+            if (ref($res) eq 'ARRAY' && scalar(@$res) == 1) {
+                return $res->[0];
+            }
+            return $res;
         },
     },
     {
