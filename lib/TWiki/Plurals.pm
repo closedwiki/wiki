@@ -63,10 +63,10 @@ sub singularForm {
     # SMELL Lang settings should be set per web
     return undef unless( $TWiki::cfg{PluralToSingular} );
     return undef unless( $pluralForm =~ /s$/ );
-    return undef unless( (defined($TWiki::cfg{Site}{Lang}) and $TWiki::cfg{Site}{Lang} eq 'en')
-                         or $web eq $TWiki::cfg{UsersWebName}
-                         or $web eq $TWiki::cfg{SystemWebName}
-                       );
+    return undef unless( !defined($TWiki::cfg{Site}{Lang}) or
+                           $TWiki::cfg{Site}{Lang} eq 'en'
+                             or $web eq $TWiki::cfg{UsersWebName}
+                               or $web eq $TWiki::cfg{SystemWebName} );
     # Topic name is plural in form
     my $singularForm = $pluralForm;
     $singularForm =~ s/ies$/y/;      # plurals like policy / policies

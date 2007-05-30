@@ -282,8 +282,8 @@ sub _addListItem {
     }
 }
 
-# Given that we have just seen the end of a table, work out the head
-# and foot sections
+# Given that we have just seen the end of a table, work out the thead,
+# tbody and tfoot sections
 sub _addTHEADandTFOOT {
     my( $lines ) = @_;
     # scan back to the head of the table
@@ -293,7 +293,11 @@ sub _addTHEADandTFOOT {
     my $footLines = 0;
     my $headLines = 0;
     while( $i >= 0 && $lines->[$i] ne $TABLEMARKER ) {
-        if( $lines->[$i] =~ s/$TRMARK=(["'])(.*?)\1//i) {
+        if( $lines->[$i] =~ /^\s*$/ ) {
+            # Remove blank lines in tables; they generate spurious <p>'s
+            splice( @$lines, $i, 1 );
+        }
+        elsif( $lines->[$i] =~ s/$TRMARK=(["'])(.*?)\1//i) {
             if( $2 ) {
                 if( $inFoot ) {
                     $footLines++;
@@ -316,11 +320,16 @@ sub _addTHEADandTFOOT {
     }
     if( $footLines ) {
         push( @$lines, '</tfoot>');
-        splice( @$lines, scalar( @$lines ) - $footLines, 0, '<tfoot>');
+        my $firstFoot = scalar( @$lines ) - $footLines;
+        splice( @$lines, $firstFoot, 0, '</tbody><tfoot>');
+    } else {
+        push( @$lines, '</tbody>');
     }
     if( $headLines ) {
-        splice( @$lines, $i + 1 + $headLines, 0, '</thead>');
+        splice( @$lines, $i + 1 + $headLines, 0, '</thead><tbody>');
         splice( @$lines, $i + 1, 0, '<thead>');
+    } else {
+        splice( @$lines, $i + 1, 0, '<tbody>');
     }
 }
 
@@ -1104,7 +1113,6 @@ sub getRenderedVersion {
         # Finish the list
         unless( $isList ) {
             _addListItem( $this, \@result, '', '', '' );
-            $isList = 0;
         }
 
         push( @result, $line );
