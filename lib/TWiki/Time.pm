@@ -73,6 +73,9 @@ Handles the following formats:
 Default TWiki format
    * 31 Dec 2001 - 23:59
 
+TWiki format without time (defaults to 00:00)
+   * 31 Dec 2001
+
 Date seperated by '/', '.' or '-', time with '.' or ':'
 Date and time separated by ' ', '.' and/or '-'
    * 2001/12/31 23:59:59
@@ -107,10 +110,11 @@ sub parseTime {
     }
 
     # try "31 Dec 2001 - 23:59"  (TWiki date)
-    if ($date =~ /(\d+)\s+([a-z]{3})\s+(\d+)[-\s]+(\d+):(\d+)/i) {
+    # or "31 Dec 2001"
+    if ($date =~ /(\d+)\s+([a-z]{3})\s+(\d+)(?:[-\s]+(\d+):(\d+))?/i) {
         my $year = $3;
         $year -= 1900 if( $year > 1900 );
-        return timegm( 0, $5, $4, $1, $MON2NUM{lc($2)}, $year ) - $tzadj;
+        return timegm( 0, $5||0, $4||0, $1, $MON2NUM{lc($2)}, $year ) - $tzadj;
     }
 
     # try "2001/12/31 23:59:59" or "2001.12.31.23.59.59" (RCS date)
