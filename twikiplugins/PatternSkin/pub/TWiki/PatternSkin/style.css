@@ -500,7 +500,7 @@ table.twikiFormTable th.twikiFormTableHRow a:visited {
 .twikiSmallish {
 	font-size:94%; /*S2*/
 }
-.twikiNew { }
+.twikiNew {}
 .twikiSummary {
 	font-size:86%; line-height:110%; /*S3*/
 }
@@ -530,8 +530,6 @@ table.twikiFormTable th.twikiFormTableHRow a:visited {
 .twikiHelp {
 	padding:1em;
 	margin:0 0 -1px 0;
-	border-width:1px 0;
-	border-style:solid;
 }
 .twikiHelp ul,
 .twikiHelp li {
@@ -758,7 +756,7 @@ html>body #patternLeftBarContents .twikiHierarchicalNavigation { /* Mozilla */
 	text-decoration:none;
 }
 .patternTopicAction .patternSaveOptions {
-	margin-bottom:.5em;
+	margin-top:.5em;
 }
 .patternTopicAction .patternSaveOptions .patternSaveOptionsContents {
 	padding:.2em 0;
