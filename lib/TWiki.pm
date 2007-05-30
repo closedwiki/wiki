@@ -3025,7 +3025,7 @@ sub INCLUDE {
 
     # Do not show TOC in included topic if TOC_HIDE_IF_INCLUDED
     # preference has been set
-    if( isTrue( $this->{prefs}->getPreferencesValue( 'TOC_HIDE_IF_INCLUDED' )) {
+    if( isTrue( $this->{prefs}->getPreferencesValue( 'TOC_HIDE_IF_INCLUDED' ))) {
         $text =~ s/%TOC(?:{(.*?)})?%//g;
     }
 
