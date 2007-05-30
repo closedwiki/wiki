@@ -10,30 +10,12 @@ In the example above, if CONDITION evaluates to TRUE, then THEN will be included
 
 Note that because of the way TWiki evaluates, then whatever is in the THEN and ELSE parameters will already have been expanded by the time the condition is actually evaluated. The standard FormatTokens can be used in the THEN and ELSE parameters when you need to delay evaluation of (for example) a TWiki variable.
 
-The basic syntax of a condition is as follows:
-<verbatim>
-expr ::= '(' expr ')' ;
-expr ::= andexpr | andexpr 'or' expr ;
-andexpr ::= notexpr | notexpr 'and' andexpr ;
-notexpr ::= basexpr | 'not' baseexpr ;
-basexpr ::= atom | uop atom | atom bop basexpr ;
-uop ::= 'context' | 'defined' | '$' | 'lc' | 'uc' ;
-bop ::= '=' | '!=' | '>' | '<' | '>=' | '<=' | '~' ;
-atom ::= context identifier, TWiki variable name, single-quoted string, or configuration item
-</verbatim>
-| *Operators* ||
-| =AND= | True if both sides are true |
-| =OR= | True if one or other side is true |
-| =NOT= | negate the following expression |
-| <nop>=, !<nop>= | String comparison |
-| =lc(x)= | Converts x to lower case, Use for caseless comparisons. |
-| =uc(x)= | Converts x to UPPER CASE. Use for caseless comparisons. |
-| =d2n(x)= | Converts a date/time (expressed in [[TimeSpecifications][one of the formats that TWiki can parse]]) to a number of seconds since 1st Jan 1970. You should always convert a string date using =d2n= before you compare it with another date. Times without a timezone are assumed to be in server local time. |
-| &lt;, &gt;, &lt;=, &gt;= | Comparison. If both terms are numbers, the order is numeric. Otherwise it is alphabetic (applies to all comparison operators) |
-| =~= | wildcard match ('*' will match any number of characters, '?' will match any single character e.g. "$WIKINAME ~ '*Smit?'") |
+The basic syntax of a condition is the same as [[QuerySearch][the syntax used for queries]], with the addition of the following special operators:
+
 | context | True if the current context is set (see below) |
 | defined | True if a preference variable or url parameter of this name is defined. |
-| $ | expands a URL parameter or [[TWikiVariables][TWikiVariable]]. Plugin handlers *are not called*. Built-in variables and user-defined preferences are supported. You can pass a limited subset of parameters to TWiki variables by enclosing the variable name in single quotes; for example, =$ 'VARIABLE{value}'=. The ='VARIABLE{value}'= string may *not* contain quotes (' or "). |
+| $ | expands a URL parameter or [[TWikiVariables][TWikiVariable]] name. Plugin handlers *are not called*. Built-in variables and user-defined preferences are supported. You can pass a limited subset of parameters to TWiki variables by enclosing the variable name in single quotes; for example, =$ 'VARIABLE{value}'=. The ='VARIABLE{value}'= string may *not* contain quotes (' or "). |
+| {X} | expands to the value of the configuration variable {X} - for example, ={ScriptUrlPath}= |
 examples:
 <verbatim>
 TWiki variable defined or not
@@ -84,3 +66,5 @@ Text comparison
 In addition there is a context identifier for each enabled plugin; for example, if =Gallous<nop>BreeksPlugin= is installed *and enabled*, then the context ID =Gallous<nop>BreeksPluginEnabled= will be set. Other extensions may set additional context identifiers.
 
 The =%<nop>IF%= statement is deliberately kept simple. In particular, note that there is no way to conditionally execute a Set statement. If you need more sophisticated control over formatting, then consider using the SpreadSheetPlugin.
+
+Note also that while the [[QuerySearch][query syntax]] can be used to access form fields, there are some contexts in which an IF statement may be used where there is no topic context, or the topic context is not what you expected.

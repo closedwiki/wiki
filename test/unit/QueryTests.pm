@@ -158,6 +158,8 @@ sub test_string_bops {
 sub test_num_uops {
     my $this = shift;
     $this->check("d2n '".TWiki::Time::formatTime(0,'$iso')."'", 0);
+    $this->check("length attachments", 2);
+    $this->check("length META:PREFERENCE", 5);
 }
 
 sub test_num_bops {

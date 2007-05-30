@@ -4,12 +4,12 @@
 
 ---+ package TWiki::Query
 
-A Query object is a representation of a SEARCH query over the form fields
-and other meta-data of a topic.
+A Query object is a representation of a query over the TWiki database.
 
 Fields are given by name, and values by strings or numbers. Strings should always be surrounded by 'single-quotes'. Numbers can be signed integers or decimals. Single quotes in values may be escaped using backslash (\).
 
-See TWiki.QuerySearch for details of the query language.
+See TWiki.QuerySearch for details of the query language. At the time of writing
+only a subset of the entire query language is supported, for use in searching.
 
 A query object implements the =evaluate= method as its general
 contract with the rest of the world. This method does a "hard work" evaluation
@@ -20,6 +20,8 @@ able to do it better....
 
 package TWiki::Query;
 use base 'TWiki::InfixParser::Node';
+
+use Assert;
 
 # 1 for debug
 sub MONITOR_EVAL { 0 };
@@ -173,7 +175,8 @@ sub evaluate {
     print STDERR ('-' x $ind).$this->stringify() if MONITOR_EVAL;
 
     if (!ref( $this->{op})) {
-        if ($this->{op} == 1) {
+        if ($this->{op} == $TWiki::InfixParser::NAME &&
+              defined $clientData->[0]) {
             # a name; look it up in clientData
             $result = $this->_getField( $clientData->[0], $this->{params}[0]);
         } else {
@@ -198,7 +201,6 @@ use base 'TWiki::InfixParser';
 use strict;
 use Assert;
 use Error qw( :try );
-use TWiki::If; # for comparison ops
 
 # Operators
 # In the follow, exec is a function that evaluates the node. The $domain
@@ -208,7 +210,197 @@ use TWiki::If; # for comparison ops
 # a reference to an array (such as attachments), a reference to a hash (such
 # as TOPICINFO) or a scalar. Arrays can contain other arrays and hashes.
 # Operators that only take a subset of these types must check the data type.
-my @operators = (
+
+# Export operators for use in other derivative syntaxes
+use vars qw( @operators );
+
+@operators = (
+    {
+        name => 'lc',
+        prec => 600,
+        arity => 1,
+        casematters => 0,
+        exec => sub {
+            my( $clientData, $a ) = @_;
+            my $val = $a->evaluate($clientData) || '';
+            if (ref($val) eq 'ARRAY') {
+                my @res = map { lc($_) } @$val;
+                return \@res;
+            }
+            return lc( $val );
+        },
+    },
+    {
+        name => 'uc',
+        prec => 600,
+        arity => 1,
+        casematters => 0,
+        exec => sub {
+            my( $clientData, $a ) = @_;
+            my $val = $a->evaluate($clientData) || '';
+            if (ref($val) eq 'ARRAY') {
+                my @res = map { uc($_) } @$val;
+                return \@res;
+            }
+            return uc( $val );
+        },
+    },
+    {
+        name => 'd2n',
+        prec => 600,
+        arity => 1,
+        casematters => 0,
+        exec => sub {
+            my( $clientData, $a ) = @_;
+            my $val = $a->evaluate($clientData) || '';
+            if (ref($val) eq 'ARRAY') {
+                my @res = map { _d2n($_) } @$val;
+                return \@res;
+            }
+            return _d2n( $val );
+        },
+    },
+    {
+        name => 'length',
+        prec => 600,
+        arity => 1,
+        casematters => 0,
+        exec => sub {
+            my( $clientData, $a ) = @_;
+            my $val = $a->evaluate($clientData) || '';
+            if (ref($val) eq 'ARRAY') {
+                return scalar( @$val );
+            }
+            return 1;
+        },
+    },
+    {
+        name => '=',
+        prec => 500,
+        arity => 2, # binary
+        exec => sub {
+            my( $clientData, $a, $b ) = @_;
+            my $ea = $a->evaluate($clientData) || '';
+            my $eb = $b->evaluate($clientData) || '';
+            return _evalTest($ea, $eb, \&_cmp, sub { $_[0] == 0 ? 1 : 0 });
+        },
+    },
+    {
+        name => '~', # LIKE
+        prec => 500,
+        arity => 2,
+        exec => sub {
+            my( $clientData, $a, $b ) = @_;
+            my $ea = $a->evaluate($clientData) || '';
+            my $eb = $b->evaluate($clientData) || '';
+            return _evalTest($ea, $eb,
+                          sub {
+                              my $expr = quotemeta($_[1]);
+                              # quotemeta will have escapes * and ? wildcards
+                              $expr =~ s/\\\?/./g;
+                              $expr =~ s/\\\*/.*/g;
+                              defined($_[0]) && defined($_[1]) &&
+                                $_[0] =~ m/$expr/ ? 1 : 0
+                            });
+        },
+    },
+    {
+        name => '!=',
+        prec => 500,
+        arity => 2, # binary
+        exec => sub {
+            my( $clientData, $a, $b ) = @_;
+            my $ea = $a->evaluate($clientData) || '';
+            my $eb = $b->evaluate($clientData) || '';
+            return _evalTest($ea, $eb, \&_cmp, sub { $_[0] != 0 ? 1 : 0 });
+        },
+    },
+    {
+        name => '>=',
+        prec => 400,
+        arity => 2, # binary
+        exec => sub {
+            my( $clientData, $a, $b ) = @_;
+            my $ea = $a->evaluate($clientData) || 0;
+            my $eb = $b->evaluate($clientData) || 0;
+            return _evalTest($ea, $eb, \&_cmp, sub { $_[0] >= 0 ? 1 : 0 });
+        },
+    },
+    {
+        name => '<=',
+        prec => 400,
+        arity => 2, # binary
+        exec => sub {
+            my( $clientData, $a, $b ) = @_;
+            my $ea = $a->evaluate($clientData) || 0;
+            my $eb = $b->evaluate($clientData) || 0;
+            return _evalTest($ea, $eb, \&_cmp, sub { $_[0] <= 0 ? 1 : 0 });
+        },
+    },
+    {
+        name => '>',
+        prec => 400,
+        arity => 2, # binary
+        exec => sub {
+            my( $clientData, $a, $b ) = @_;
+            my $ea = $a->evaluate($clientData) || 0;
+            my $eb = $b->evaluate($clientData) || 0;
+            return _evalTest($ea, $eb, \&_cmp, sub { $_[0] > 0 ? 1 : 0 });
+        },
+    },
+    {
+        name => '<',
+        prec => 400,
+        arity => 2, # binary
+        exec => sub {
+            my( $clientData, $a, $b ) = @_;
+            my $ea = $a->evaluate($clientData) || 0;
+            my $eb = $b->evaluate($clientData) || 0;
+            return _evalTest($ea, $eb, \&_cmp, sub { $_[0] < 0 ? 1 : 0 });
+        },
+    },
+    {
+        name => 'not',
+        prec => 300,
+        arity => 1, # unary
+        casematters => 0,
+        exec => sub {
+            my( $clientData, $a ) = @_;
+            return $a->evaluate($clientData) ? 0 : 1;
+        },
+    },
+    {
+        name => 'and',
+        prec => 200,
+        arity => 2, # binary
+        casematters => 0,
+        exec => sub {
+            my( $clientData, $a, $b ) = @_;
+            return 0 unless $a->evaluate($clientData);
+            return $b->evaluate($clientData);
+        },
+    },
+    {
+        name => 'or',
+        prec => 100,
+        arity => 2, # binary
+        casematters => 0,
+        exec => sub {
+            my( $clientData, $a, $b ) = @_;
+            return 1 if $a->evaluate($clientData);
+            return $b->evaluate($clientData);
+        },
+    },
+    {
+        name => '(',
+        arity => 1,
+        prec => 1000,
+        close => ')',
+        exec => sub {
+            my( $clientData, $a ) = @_;
+            return $a->evaluate( $clientData );
+        },
+    },
     {
         name => '.',
         prec => 800,
@@ -273,17 +465,63 @@ my @operators = (
         close => ']',
         exec => \&_where,
     },
-    # Comparison ops, shared with %IF
-    @TWiki::If::cmpOps,
    );
 
 sub new {
-    my( $class ) = @_;
+    my( $class, $options ) = @_;
 
-    my $this = $class->SUPER::new(
-        'TWiki::Query', \@operators,
-        words => qr/[A-Z][A-Z0-9_:]*/i);
+    $options->{words} ||= qr/[A-Z][A-Z0-9_:]*/i;
+    $options->{nodeClass} ||= 'TWiki::Query';
+    my $this = $class->SUPER::new($options);
+    foreach my $op ( @operators ) {
+        $this->addOperator( $op );
+    }
     return $this;
+}
+
+sub _isNumber {
+    return shift =~ m/^[+-]?(\d+\.\d+|\d+\.|\.\d+|\d+)([eE][+-]?\d+)?$/;
+}
+
+# Private static wrapper around TWiki::parseTime
+sub _d2n {
+    my $date = shift;
+    eval {
+        $date = TWiki::Time::parseTime( $date, 1);
+    };
+    # ignore $@
+    return $date;
+}
+
+sub _cmp {
+    my ($a, $b, $sub) = @_;
+    if (_isNumber($a) && _isNumber($b)) {
+        return &$sub($a <=> $b);
+    } else {
+        return &$sub($a cmp $b);
+    }
+}
+
+sub _evalTest {
+    my $a = shift;
+    my $b = shift;
+    my $sub = shift;
+
+    if (ref($a) eq 'ARRAY') {
+        my @res;
+        foreach my $lhs (@$a) {
+            push(@res, $lhs) if &$sub($lhs, $b, @_);
+        }
+        if (scalar(@res) == 0) {
+            return undef;
+        } elsif (scalar(@res) == 1) {
+            return $res[0];
+        }
+        return \@res;
+    } else {
+        return &$sub($a, $b, @_);
+    }
+
 }
 
 sub _where {

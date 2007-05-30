@@ -1,6 +1,4 @@
 # See bottom of file for copyright and license details
-use strict;
-use Assert;
 
 =pod
 
@@ -20,239 +18,42 @@ Support for the conditions in %IF{} statements.
 =cut
 
 package TWiki::If;
-use base 'TWiki::InfixParser';
+use TWiki::Query;
+use base 'TWiki::QueryParser';
 
-sub _isNumber {
-    return shift =~ m/^[+-]?(\d+\.\d+|\d+\.|\.\d+|\d+)([eE][+-]?\d+)?$/;
-}
+use strict;
+use Assert;
 
-sub _cmp {
-    my ($a, $b, $sub) = @_;
-    if (_isNumber($a) && _isNumber($b)) {
-        return &$sub($a <=> $b);
-    } else {
-        return &$sub($a cmp $b);
-    }
-}
+sub new {
+    my( $class ) = @_;
 
-sub _evalTest {
-    my $a = shift;
-    my $b = shift;
-    my $sub = shift;
-
-    if (ref($a) eq 'ARRAY') {
-        my @res;
-        foreach my $lhs (@$a) {
-            push(@res, $lhs) if &$sub($lhs, $b, @_);
-        }
-        if (scalar(@res) == 0) {
-            return undef;
-        } elsif (scalar(@res) == 1) {
-            return $res[0];
-        }
-        return \@res;
-    } else {
-        return &$sub($a, $b, @_);
-    }
-
-}
-
-# Export cmpOps for use in other modules
-use vars qw( @cmpOps );
-
-@cmpOps = (
-    {
-        name => 'lc',
-        prec => 600,
-        arity => 1,
-        casematters => 0,
-        exec => sub {
-            my( $clientData, $a ) = @_;
-            my $val = $a->evaluate($clientData) || '';
-            if (ref($val) eq 'ARRAY') {
-                my @res = map { lc($_) } @$val;
-                return \@res;
-            }
-            return lc( $val );
-        },
-    },
-    {
-        name => 'uc',
-        prec => 600,
-        arity => 1,
-        casematters => 0,
-        exec => sub {
-            my( $clientData, $a ) = @_;
-            my $val = $a->evaluate($clientData) || '';
-            if (ref($val) eq 'ARRAY') {
-                my @res = map { uc($_) } @$val;
-                return \@res;
-            }
-            return uc( $val );
-        },
-    },
-    {
-        name => 'd2n',
-        prec => 600,
-        arity => 1,
-        casematters => 0,
-        exec => sub {
-            my( $clientData, $a ) = @_;
-            my $val = $a->evaluate($clientData) || '';
-            if (ref($val) eq 'ARRAY') {
-                my @res = map { _d2n($_) } @$val;
-                return \@res;
-            }
-            return _d2n( $val );
-        },
-    },
-    {
-        name => '=',
-        prec => 500,
-        arity => 2, # binary
-        exec => sub {
-            my( $clientData, $a, $b ) = @_;
-            my $ea = $a->evaluate($clientData) || '';
-            my $eb = $b->evaluate($clientData) || '';
-            return _evalTest($ea, $eb, \&_cmp, sub { $_[0] == 0 ? 1 : 0 });
-        },
-    },
-    {
-        name => '~', # LIKE
-        prec => 500,
-        arity => 2,
-        exec => sub {
-            my( $clientData, $a, $b ) = @_;
-            my $ea = $a->evaluate($clientData) || '';
-            my $eb = $b->evaluate($clientData) || '';
-            return _evalTest($ea, $eb,
-                          sub {
-                              my $expr = quotemeta($_[1]);
-                              # quotemeta will have escapes * and ? wildcards
-                              $expr =~ s/\\\?/./g;
-                              $expr =~ s/\\\*/.*/g;
-                              defined($_[0]) && defined($_[1]) &&
-                                $_[0] =~ m/$expr/ ? 1 : 0
-                            });
-        },
-    },
-    {
-        name => '!=',
-        prec => 500,
-        arity => 2, # binary
-        exec => sub {
-            my( $clientData, $a, $b ) = @_;
-            my $ea = $a->evaluate($clientData) || '';
-            my $eb = $b->evaluate($clientData) || '';
-            return _evalTest($ea, $eb, \&_cmp, sub { $_[0] != 0 ? 1 : 0 });
-        },
-    },
-    {
-        name => '>=',
-        prec => 400,
-        arity => 2, # binary
-        exec => sub {
-            my( $clientData, $a, $b ) = @_;
-            my $ea = $a->evaluate($clientData) || 0;
-            my $eb = $b->evaluate($clientData) || 0;
-            return _evalTest($ea, $eb, \&_cmp, sub { $_[0] >= 0 ? 1 : 0 });
-        },
-    },
-    {
-        name => '<=',
-        prec => 400,
-        arity => 2, # binary
-        exec => sub {
-            my( $clientData, $a, $b ) = @_;
-            my $ea = $a->evaluate($clientData) || 0;
-            my $eb = $b->evaluate($clientData) || 0;
-            return _evalTest($ea, $eb, \&_cmp, sub { $_[0] <= 0 ? 1 : 0 });
-        },
-    },
-    {
-        name => '>',
-        prec => 400,
-        arity => 2, # binary
-        exec => sub {
-            my( $clientData, $a, $b ) = @_;
-            my $ea = $a->evaluate($clientData) || 0;
-            my $eb = $b->evaluate($clientData) || 0;
-            return _evalTest($ea, $eb, \&_cmp, sub { $_[0] > 0 ? 1 : 0 });
-        },
-    },
-    {
-        name => '<',
-        prec => 400,
-        arity => 2, # binary
-        exec => sub {
-            my( $clientData, $a, $b ) = @_;
-            my $ea = $a->evaluate($clientData) || 0;
-            my $eb = $b->evaluate($clientData) || 0;
-            return _evalTest($ea, $eb, \&_cmp, sub { $_[0] < 0 ? 1 : 0 });
-        },
-    },
-    {
-        name => 'not',
-        prec => 300,
-        arity => 1, # unary
-        casematters => 0,
-        exec => sub {
-            my( $clientData, $a ) = @_;
-            return $a->evaluate($clientData) ? 0 : 1;
-        },
-    },
-    {
-        name => 'and',
-        prec => 200,
-        arity => 2, # binary
-        casematters => 0,
-        exec => sub {
-            my( $clientData, $a, $b ) = @_;
-            return 0 unless $a->evaluate($clientData);
-            return $b->evaluate($clientData);
-        },
-    },
-    {
-        name => 'or',
-        prec => 100,
-        arity => 2, # binary
-        casematters => 0,
-        exec => sub {
-            my( $clientData, $a, $b ) = @_;
-            return 1 if $a->evaluate($clientData);
-            return $b->evaluate($clientData);
-        },
-    },
-    {
-        name => '(',
-        arity => 1,
-        prec => 1000,
-        close => ')',
-        exec => sub {
-            my( $clientData, $a ) = @_;
-            return $a->evaluate( $clientData );
-        },
-    },
-   );
-
-my @operators = (
-    {
+    my $this = $class->SUPER::new({
+        nodeClass => 'TWiki::IfNode',
+        words => qr/([A-Za-z][\w:]+|({\w+})+)/});
+    $this->addOperator({
         name => 'context',
         prec => 600,
         arity => 1, # unary
         casematters => 0,
         exec => sub {
-            my( $session, $a ) = @_;
-            return $session->inContext($a->evaluate($session)) || 0;
-        },
-    },
-    {
+            my( $domain, $a ) = @_;
+            my $text = $a->evaluate([undef, undef]) || '';
+            my $session = $domain->[1]->{_session};
+            throw Error::Simple('No context in which to evaluate "'.
+                                  $a->stringify().'"') unless $session;
+            return $session->inContext($text) || 0;
+        }
+       });
+    $this->addOperator({
         name => '$',
         prec => 600,
         arity => 1, # unary
         exec => sub {
-            my( $session, $a ) = @_;
-            my $text = $a->evaluate($session) || '';
+            my( $domain, $a ) = @_;
+            my $session = $domain->[1]->{_session};
+            throw Error::Simple('No context in which to evaluate "'.
+                                  $a->stringify().'"') unless $session;
+            my $text = $a->evaluate([undef, undef]) || '';
             if( $text && defined( $session->{cgiQuery}->param( $text ))) {
                 return $session->{cgiQuery}->param( $text );
             }
@@ -262,15 +63,18 @@ my @operators = (
                                  $session->{webName});
             return $text || '';
         },
-    },
-    {
+       });
+    $this->addOperator({
         name => 'defined',
         prec => 600,
         arity => 1, # unary
         casematters => 0,
         exec => sub {
-            my( $session, $a ) = @_;
-            my $eval =  $a->evaluate($session);
+            my( $domain, $a ) = @_;
+            my $session = $domain->[1]->{_session};
+            throw Error::Simple('No context in which to evaluate "'.
+                                  $a->stringify().'"') unless $session;
+            my $eval =  $a->evaluate([undef, undef]);
             return 0 unless $eval;
             return 1 if( defined( $session->{cgiQuery}->param( $eval )));
             return 1 if( defined(
@@ -278,39 +82,23 @@ my @operators = (
             return 1 if( defined( $session->{SESSION_TAGS}{$eval} ));
             return 0;
         },
-    },
-    @cmpOps,
-   );
+       });
 
-sub new {
-    my( $class ) = @_;
-
-    my $this = $class->SUPER::new(
-        'TWiki::IfNode', \@operators,
-        words => qr/(\w+|({\w+})+)/);
     return $this;
-}
-
-# Private static wrapper around TWiki::parseTime
-sub _d2n {
-    my $date = shift;
-    eval {
-        $date = TWiki::Time::parseTime( $date, 1);
-    };
-    # ignore $@
-    return $date;
 }
 
 # Private subclass specialised to handle {} syntax
 package TWiki::IfNode;
-use base 'TWiki::InfixParser::Node';
+use base 'TWiki::Query';
 
 sub newLeaf {
     my( $class, $val, $type ) = @_;
-    if( $type == 1 && $val =~ /^({\w+})+$/) {
+    if( $type == $TWiki::InfixParser::NAME && $val =~ /^({\w+})+$/) {
         eval '$val = $TWiki::cfg'.$val;
+        return $class->SUPER::newLeaf($val, $TWiki::InfixParser::STRING);
+    } else {
+        return $class->SUPER::newLeaf($val, $type);
     }
-    return $class->SUPER::newLeaf($val, $type);
 }
 
 1;

@@ -60,7 +60,7 @@ sub evaluate {
     if (!ref( $this->{op})) {
         $result = $this->{params}[0];
         if (MONITOR_EVAL) {
-            print STDERR "LEAF: ",(defined($result)?$result:'undef'),"\n" 
+            print STDERR "LEAF: ",(defined($result)?$result:'undef'),"\n";
         }
     } else {
         my $fn = $this->{op}->{exec};
@@ -77,7 +77,7 @@ sub stringify {
     my $this = shift;
 
     unless( ref( $this->{op} )) {
-        if( $this->{op} == 3 ) {
+        if( $this->{op} == $TWiki::InfixParser::STRING ) {
             return "'$this->{params}[0]'";
         } else {
             return $this->{params}[0];

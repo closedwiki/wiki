@@ -2268,7 +2268,7 @@ sub spaceOutWikiWord {
 
 =pod
 
----++ ObjectMethod expandAllTags(\$text, $topic, $web)
+---++ ObjectMethod expandAllTags(\$text, $topic, $web, $meta)
 Expands variables by replacing the variables with their
 values. Some example variables: %<nop>TOPIC%, %<nop>SCRIPTURL%,
 %<nop>WIKINAME%, etc.
@@ -2288,7 +2288,7 @@ The rules for tag expansion are:
 sub expandAllTags {
     my $this = shift;
     my $text = shift; # reference
-    my ( $topic, $web ) = @_;
+    my ( $topic, $web, $meta ) = @_;
     $web =~ s#\.#/#go;
 
     # push current context
@@ -2336,7 +2336,7 @@ sub _processTags {
 
     my $depth = shift;
 
-    # my( $topic, $web ) = @_;
+    # my( $topic, $web, $meta ) = @_;
 
     unless ( $depth ) {
         my $mess = "Max recursive depth reached: $text";
@@ -2459,7 +2459,7 @@ sub _expandTagOnTopicRendering {
     my $this = shift;
     my $tag = shift;
     my $args = shift;
-    # my( $topic, $web ) = @_;
+    # my( $topic, $web, $meta ) = @_;
 
     my $e = $this->{prefs}->getPreferencesValue( $tag );
     unless( defined( $e )) {
@@ -2663,7 +2663,7 @@ sub handleCommonTags {
     $this->{SESSION_TAGS}{INCLUDINGWEB} = $theWeb;
     $this->{SESSION_TAGS}{INCLUDINGTOPIC} = $theTopic;
 
-    expandAllTags( $this, \$text, $theTopic, $theWeb );
+    expandAllTags( $this, \$text, $theTopic, $theWeb, $meta );
 
     $text = $this->{renderer}->takeOutBlocks( $text, 'verbatim',
                                               $verbatim);
@@ -2673,7 +2673,7 @@ sub handleCommonTags {
     $this->{plugins}->commonTagsHandler( $text, $theTopic, $theWeb, 0, $meta );
 
     # process tags again because plugin hook may have added more in
-    expandAllTags( $this, \$text, $theTopic, $theWeb );
+    expandAllTags( $this, \$text, $theTopic, $theWeb, $meta );
 
     $this->{SESSION_TAGS}{INCLUDINGWEB} = $memW;
     $this->{SESSION_TAGS}{INCLUDINGTOPIC} = $memT;
@@ -2872,7 +2872,7 @@ sub PLUGINVERSION {
 }
 
 sub IF {
-    my ( $this, $params ) = @_;
+    my ( $this, $params, $topic, $web, $meta ) = @_;
 
     unless( $ifFactory ) {
         require TWiki::If;
@@ -2883,7 +2883,7 @@ sub IF {
     my $result;
     try {
         $expr = $ifFactory->parse( $params->{_DEFAULT} );
-        if( $expr->evaluate( $this )) {
+        if( $expr->evaluate( [ $meta, $meta ] )) {
             $result = expandStandardEscapes( $params->{then} || '' );
         } else {
             $result = expandStandardEscapes( $params->{else} || '' );
@@ -3023,12 +3023,13 @@ sub INCLUDE {
 
     $text = applyPatternToIncludedText( $text, $pattern ) if( $pattern );
 
-    # Do not show TOC in included topic if TOC_HIDE_IF_INCLUDED preference has been set
-    if ( $this->{prefs}->getPreferencesValue('TOC_HIDE_IF_INCLUDED') eq 'on' ) {
-        $text =~ s/%TOC(?:{(.*?)})?%//go;
+    # Do not show TOC in included topic if TOC_HIDE_IF_INCLUDED
+    # preference has been set
+    if( isTrue( $this->{prefs}->getPreferencesValue( 'TOC_HIDE_IF_INCLUDED' )) {
+        $text =~ s/%TOC(?:{(.*?)})?%//g;
     }
 
-    expandAllTags( $this, \$text, $includedTopic, $includedWeb );
+    expandAllTags( $this, \$text, $includedTopic, $includedWeb, $meta );
 
     # 4th parameter tells plugin that its called for an included file
     $this->{plugins}->commonTagsHandler( $text, $includedTopic,
@@ -3036,7 +3037,7 @@ sub INCLUDE {
 
     # We have to expand tags again, because a plugin may have inserted additional
     # tags.
-    expandAllTags( $this, \$text, $includedTopic, $includedWeb );
+    expandAllTags( $this, \$text, $includedTopic, $includedWeb, $meta );
 
     # If needed, fix all 'TopicNames' to 'Web.TopicNames' to get the
     # right context so that links continue to work properly
@@ -3048,7 +3049,7 @@ sub INCLUDE {
                                             pre => 1,
                                             noautolink => 1} );
         # handle tags again because of plugin hook
-        expandAllTags( $this, \$text, $includedTopic, $includedWeb );
+        expandAllTags( $this, \$text, $includedTopic, $includedWeb, $meta );
     }
 
     # restore the tags
