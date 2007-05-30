@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1179949934" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiUserMapping_micha" date="1180543279" format="1.1" version="1.3"}%
 <!--
 
    PLEASE DO NOT EDIT THIS TOPIC
@@ -10,7 +10,20 @@
 -->
 ---+!! <nop>%TOPIC%
 This plugin can be used to establish an online-voting system. Votes are
-collected in a separate file. Inspired by the TWiki:Plugins/PollPlugin.
+collected in a separate file. There are two types of voting:
+   * *select mode*: vote on a given choice
+   * *star mode*: collect ratings on a given set of options
+You can only vote once; the last vote overrides the former. A voter can vote anonymously
+on "open" votes. Anonymous votes are distinguished based on the remote address and time of
+the voter. To vote on a "closed" poll (=open="0"=), you will have to login first. Your
+username is then used to keep you from voting multiple times on the same question.
+
+Every poll has got an identification which distinguishes it from several on the same page
+or - when you've defined it to be global (=global="1"=) - collect votes on the same
+poll from all over the site.
+
+The result of a poll is displayed alongside with the vote form (todo: decouple that).
+
 
 ---++ Example
 %VOTE{id="FavouriteMeal" select1="Drink" options1="Beer,Wine,Milk,Water" select2="Food" options2="Steak,Bread,Pasta,Pizza"}%
