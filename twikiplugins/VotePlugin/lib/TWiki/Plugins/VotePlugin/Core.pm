@@ -126,21 +126,20 @@ HEAD
     my %keyValueFreq; # frequency of a specific value for a given key
     my %totalVotes;   # total votes for a given key
     foreach my $voter (keys %votes) {
+        print STDERR "voter=$voter\n" if $debug;
         foreach my $key (keys %{$votes{$voter}}) {
+            print STDERR "key=$key\n" if $debug;
             foreach my $v (keys %{$votes{$voter}{$key}}) {
+                print STDERR "v=$v\n" if $debug;
                 my $weight = $votes{$voter}{$key}{$v};
+                print STDERR "weight=$weight\n" if $debug;
                 $keyValueFreq{$key}{$v} += $weight;
                 $totalVotes{$key} += $weight;
             }
         }
     }
 
-    my $needSubmit = !(scalar(@prompts) == 1 &&
-                         $prompts[0]->{type} eq 'stars');
-    # SMELL: the current javascript does not support selecting
-    # multiple votes and submit them all in one
-    $needSubmit = 0; # kill this line if that's implemented
-
+    my $needSubmit = $prompts[0]->{type} ne 'stars';
 
     my $act = TWiki::Func::getScriptUrl($web, $topic, 'viewauth');
     my $rows = '';
@@ -188,7 +187,7 @@ HEAD
     }
     if ($needSubmit) {
         $rows .= CGI::Tr(CGI::td(
-            { colspan => 2},
+            { colspan => 3},
             CGI::submit(
                 { name=> 'OK', value=>'OK',
                   style=>'color:green'})));
@@ -285,8 +284,8 @@ sub registerVote {
     my $user = TWiki::Func::getWikiUserName();
     my $isOpen = ($query->param('isSecret'))?0:1;
     my $ident = getIdent($isOpen, $user, $date);
-    $ident = int(rand(100)) 
-      if $debug; # for testing
+#    $ident = int(rand(100)) 
+#      if $debug; # for testing
 
     # Apply a weighting for the voting user
     my $weightsTopic = TWiki::Func::getPreferencesValue(
