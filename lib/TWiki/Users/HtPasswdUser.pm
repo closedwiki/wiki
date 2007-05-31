@@ -34,6 +34,7 @@ use strict;
 use Assert;
 use Error qw( :try );
 use TWiki::Users::Password;
+use TWiki::ListIterator;
 
 @TWiki::Users::HtPasswdUser::ISA = qw( TWiki::Users::Password );
 
@@ -66,8 +67,23 @@ sub new {
     }
     return $this;
 }
+sub finish {
+    my $this = shift;
+    $this->{passworddata} = undef;
+}
+
+sub fetchUsers {
+    my $this = shift;
+    ASSERT($this->isa( 'TWiki::Users::HtPasswdUser')) if DEBUG;
+    my $db = _readPasswd($this);
+    my @users = sort keys %$db;
+    return new TWiki::ListIterator(\@users);
+}
 
 sub _readPasswd {
+    my $this = shift;
+    return $this->{passworddata} if (defined($this->{passworddata}));
+
     my $data = {};
     if ( ! -e $TWiki::cfg{Htpasswd}{FileName} ) {
         return $data;
@@ -82,6 +98,7 @@ sub _readPasswd {
         }
     }
     close( IN_FILE );
+    $this->{passworddata} = $data;
     return $data;
 }
 
@@ -153,7 +170,7 @@ sub fetchPass {
 
     if( $login ) {
         try {
-            my $db = _readPasswd();
+            my $db = $this->_readPasswd();
             if( exists $db->{$login} ) {
                 $ret = $db->{$login}->{pass};
             } else {
@@ -183,7 +200,7 @@ sub setPassword {
     }
 
     try {
-        my $db = _readPasswd();
+        my $db = $this->_readPasswd();
         $db->{$login}->{pass} = $this->encrypt( $login, $newUserPassword, 1 );
         $db->{$login}->{emails} ||= '';
         _savePasswd( $db );
@@ -203,7 +220,7 @@ sub removeUser {
     $this->{error} = undef;
 
     try {
-        my $db = _readPasswd();
+        my $db = $this->_readPasswd();
         unless( $db->{$login} ) {
             $this->{error} = 'No such user '.$login;
         } else {
@@ -246,7 +263,7 @@ sub getEmails {
     my( $this, $login ) = @_;
 
     # first try the mapping cache
-    my $db = _readPasswd();
+    my $db = $this->_readPasswd();
     if( $db->{$login}->{emails}) {
         return split(/;/, $db->{$login}->{emails});
     }
@@ -259,7 +276,7 @@ sub setEmails {
     my $login = shift;
     ASSERT($login) if DEBUG;
 
-    my $db = _readPasswd();
+    my $db = $this->_readPasswd();
     unless ($db->{$login}) {
         $db->{$login}->{pass} = '';
     }

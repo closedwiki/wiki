@@ -207,7 +207,11 @@ sub testLoad {
     $this->assert($k =~ s/^SadOldMan,//,$k);
     $this->assert($k =~ s/^SorryOldMan,//,$k);
     $this->assert($k =~ s/^StupidOldMan,//,$k);
+    $this->assert($k =~ s/^TWikiAdminGroup,//,$k);
+    $this->assert($k =~ s/^TWikiContributor,//,$k);
     $this->assert($k =~ s/^TWikiGuest,//,$k);
+    $this->assert($k =~ s/^TWikiRegistrationAgent,//,$k);
+    $this->assert($k =~ s/^UnknownUser,//,$k);
     $this->assert($k =~ s/^ZebediahUser//,$k);
     $this->assert_str_equals("",$k);
 }

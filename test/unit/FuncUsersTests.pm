@@ -88,8 +88,14 @@ sub test_wikiNameToEmails {
                              join(',', reverse sort @emails));
 }
 
-sub test_eachUser {
+sub test_eachUserAllowLoginName {
     my $this = shift;
+    $TWiki::cfg{Register}{AllowLoginName} = 1;
+    # Force a re-read
+    $this->{twiki} = new TWiki();
+    $TWiki::Plugins::SESSION = $this->{twiki};
+    @TWikiFntestCase::mails = ();
+
     my @list;
     my $ite = TWiki::Func::eachUser();
     while ($ite->hasNext()) {
@@ -97,8 +103,27 @@ sub test_eachUser {
         push(@list, $u);
     }
     my $ulist = join(',', sort @list);
-    $this->assert_str_equals("ScumBag,TWikiGuest,UserA,UserB,UserC", $ulist);
+    $this->assert_str_equals("ScumBag,TWikiAdminGroup,TWikiContributor,TWikiGuest,TWikiRegistrationAgent,UnknownUser,UserA,UserB,UserC", $ulist);
 }
+
+sub test_eachUserDontAllowLoginName {
+    my $this = shift;
+    $TWiki::cfg{Register}{AllowLoginName} = 0;
+    # Force a re-read
+    $this->{twiki} = new TWiki();
+    $TWiki::Plugins::SESSION = $this->{twiki};
+    @TWikiFntestCase::mails = ();
+
+    my @list;
+    my $ite = TWiki::Func::eachUser();
+    while ($ite->hasNext()) {
+        my $u = $ite->next();
+        push(@list, $u);
+    }
+    my $ulist = join(',', sort @list);
+    $this->assert_str_equals("TWikiAdminGroup,TWikiContributor,TWikiGuest,TWikiRegistrationAgent,UnknownUser,scum,usera,userb,userc", $ulist);
+}
+
 
 sub test_eachGroupTraditional {
     my $this = shift;
@@ -200,7 +225,8 @@ sub test_eachMembershipDefault {
         my $g = $it->next();
         push(@list, $g);
     }
-    $this->assert_str_equals('ScumGroup', sort join(',', @list));
+$this->annotate($TWiki::Plugins::SESSION->{user}." is member of...\n");
+    $this->assert_str_equals('TWikiBaseGroup,ScumGroup', sort join(',', @list));
 }
 
 sub test_eachGroupMember {

@@ -72,7 +72,13 @@ sub _set {
     my( $meta, $text) = $twiki->{store}->readTopic($user, $web, $topic);
     $text =~ s/^\s*\* $type $pref =.*$//gm;
     $text .= "\n\t* $type $pref = $val\n";
-    $twiki->{store}->saveTopic($user, $web, $topic, $text, $meta);
+    try {
+        $twiki->{store}->saveTopic($user, $web, $topic, $text, $meta);
+    } catch TWiki::AccessControlException with {
+        $this->assert(0,shift->stringify());
+    } catch Error::Simple with {
+        $this->assert(0,shift->stringify()||'');
+    };
 }
 
 sub _setDefaultPref {
@@ -108,7 +114,6 @@ sub _setUserPref {
 
 sub test_system {
     my $this = shift;
-
     $this->_setDefaultPref("SOURCE", "DEFAULT");
     $this->_setDefaultPref("FINALPREFERENCES", "");
     $this->_setSitePref("FINALPREFERENCES", "");

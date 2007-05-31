@@ -412,7 +412,7 @@ sub setEmails {
 
 =pod
 
----++ ObjectMethod isAdmin( $user ) -> $boolean
+---++ ObjectMethod isAdmin( $cUID ) -> $boolean
 
 True if the user is an admin
    * is $TWiki::cfg{SuperAdminGroup}
@@ -421,11 +421,26 @@ True if the user is an admin
 =cut
 
 sub isAdmin {
-    my( $this, $user ) = @_;
+    my( $this, $cUID ) = @_;
     my $isAdmin = 0;
-	$this->ASSERT_IS_CANONICAL_USER_ID($user) if DEBUG;
+	$this->ASSERT_IS_CANONICAL_USER_ID($cUID) if DEBUG;
 
-    return $this->getMapping($user)->isAdmin( $user );
+
+    my $mapping = $this->getMapping($cUID);
+    my $otherMapping = ($mapping eq $this->{basemapping}) ? $this->{mapping} : $this->{basemapping};
+    my $wikiname = $this->getMapping($cUID)->getWikiName($cUID);
+    my $cUIDList = $otherMapping->findUserByWikiName($wikiname);
+    my $othercUID = $cUIDList->[0]  if scalar(@$cUIDList);
+
+    if (($mapping eq $otherMapping) ||
+        (!defined($othercUID))) {
+        return $mapping->isAdmin( $cUID );
+    }
+	
+    return ($mapping->isAdmin( $cUID ) || $otherMapping->isAdmin( $othercUID ));
+
+
+#    return $this->getMapping($user)->isAdmin( $cUID );
 }
 
 =pod
@@ -551,6 +566,10 @@ Use it as follows:
 =cut
 
 sub eachUser {
+	my $this = shift;
+	my @list = ($this->{basemapping}->eachUser( @_ ), $this->{mapping}->eachUser( @_ ));
+    return new TWiki::AggregateIterator(\@list, 1);
+
     return shift->{mapping}->eachUser( @_ );
 }
 
@@ -603,7 +622,8 @@ QUESTION: is the $user parameter here a string, or a canonical_id??
 =cut
 
 sub isGroup {
-    return shift->{mapping}->isGroup( @_ );
+    my $this = shift;
+    return ($this->{basemapping}->isGroup( @_ )) || ($this->{mapping}->isGroup( @_ ));
 }
 
 =pod
@@ -616,7 +636,23 @@ Test if user is in the given group.
 
 sub isInGroup {
 	my ($this, $cUID, $group) = @_;
-    return $this->getMapping($cUID)->isInGroup( $cUID, $group );
+
+    my $mapping = $this->getMapping($cUID);
+    my $otherMapping = ($mapping eq $this->{basemapping}) ? $this->{mapping} : $this->{basemapping};
+    my $wikiname = $this->getMapping($cUID)->getWikiName($cUID);
+    my $cUIDList = $otherMapping->findUserByWikiName($wikiname);
+    my $othercUID = $cUIDList->[0]  if scalar(@$cUIDList);
+#print STDERR "---------------------------$cUID == $wikiname == $othercUID\n";
+
+    if (($mapping eq $otherMapping) ||
+        (!defined($othercUID))) {
+        return $mapping->isInGroup( $cUID, $group );
+    }
+	
+    return ($mapping->isInGroup( $cUID, $group ) || $otherMapping->isInGroup( $othercUID, $group ));
+
+	
+#	return $this->getMapping($cUID)->isInGroup( $cUID, $group );
 }
 
 =pod
@@ -630,7 +666,24 @@ is a member of.
 
 sub eachMembership {
 	my ($this, $cUID) = @_;
-    return shift->getMapping($cUID)->eachMembership( $cUID );
+
+    my $mapping = $this->getMapping($cUID);
+    my $otherMapping = ($mapping eq $this->{basemapping}) ? $this->{mapping} : $this->{basemapping};
+    my $wikiname = $this->getMapping($cUID)->getWikiName($cUID);
+    my $cUIDList = $otherMapping->findUserByWikiName($wikiname);
+    my $othercUID = $cUIDList->[0]  if scalar(@$cUIDList);
+#print STDERR "---------------------------$cUID == $wikiname == $othercUID\n";
+
+    if (($mapping eq $otherMapping) ||
+        (!defined($othercUID))) {
+        return $mapping->eachMembership( $cUID );
+    }
+	
+	my @list = ($mapping->eachMembership( $cUID ), $otherMapping->eachMembership( $othercUID ));
+    return new TWiki::AggregateIterator(\@list, 1);
+	
+#	my ($this, $cUID) = @_;
+#    return shift->getMapping($cUID)->eachMembership( $cUID );
 }
 
 =pod

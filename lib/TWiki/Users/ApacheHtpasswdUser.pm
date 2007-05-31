@@ -52,6 +52,13 @@ sub new {
     return $this;
 }
 
+sub fetchUsers {
+    my $this = shift;
+    ASSERT($this->isa( 'TWiki::Users::HtPasswdUser')) if DEBUG;
+    my @users = $this->{apache}->fetchUsers();
+    return new ListIterator(\@users);
+}
+
 sub fetchPass {
     my( $this, $login ) = @_;
     ASSERT( $login ) if DEBUG;

@@ -165,10 +165,22 @@ $wikiname = '' unless (defined($wikiname));
 			($login  && $login eq $TWiki::cfg{AdminUserLogin}) ||
 			($wikiname  && $wikiname eq $TWiki::cfg{AdminUserWikiName}) ) 
 #TODO: i'd like to have base handle guest too, but something goes wrong			
-#			||
-#		   ( ($cUID  && $cUID eq $this->{L2U}{$TWiki::cfg{DefaultUserLogin}}) || 
-#			($login  && $login eq $TWiki::cfg{DefaultUserLogin}) ||
-#			($wikiname  && $wikiname eq $TWiki::cfg{DefaultUserWikiName}) )
+			||
+		   ( ($cUID  && $cUID eq $this->{L2U}{$TWiki::cfg{DefaultUserLogin}}) || 
+			($login  && $login eq $TWiki::cfg{DefaultUserLogin}) ||
+			($wikiname  && $wikiname eq $TWiki::cfg{DefaultUserWikiName}) )
+			||
+		   ( ($cUID  && $cUID eq $this->{L2U}{'unknown'}) || 
+			($login  && $login eq 'unknown') ||
+			($wikiname  && $wikiname eq $this->{U2W}{$this->{L2U}{'unknown'}}) )
+			||
+		   ( ($cUID  && $cUID eq $this->{L2U}{'TWikiContributor'}) || 
+			($login  && $login eq 'TWikiContributor') ||
+			($wikiname  && $wikiname eq $this->{U2W}{$this->{L2U}{'TWikiContributor'}}) )
+			||
+		   ( ($cUID  && $cUID eq $this->{L2U}{'TWikiRegistrationAgent'}) || 
+			($login  && $login eq 'TWikiRegistrationAgent') ||
+			($wikiname  && $wikiname eq $this->{U2W}{$this->{L2U}{'TWikiRegistrationAgent'}}) )
 		);
 }
 
