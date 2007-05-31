@@ -2883,6 +2883,9 @@ sub IF {
     my $result;
     try {
         $expr = $ifFactory->parse( $params->{_DEFAULT} );
+        unless( $meta ) {
+            $meta = new TWiki::Meta( $this, $web, $topic );
+        }
         if( $expr->evaluate( [ $meta, $meta ] )) {
             $result = expandStandardEscapes( $params->{then} || '' );
         } else {
