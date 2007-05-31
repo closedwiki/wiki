@@ -422,7 +422,15 @@ sub eachUser {
 
     _loadMapping( $this );
     my @list = keys(%{$this->{U2W}});
-    return new TWiki::ListIterator( \@list );
+    my $iter = new TWiki::ListIterator( \@list );
+    $iter->{filter} = sub {  #don't claim users that are handled by the basemapping
+                    my $cUID = $_[0] || '';
+                    my $login = $this->{session}->{users}->getLoginName($cUID);
+                    my $wikiname =  $this->{session}->{users}->getWikiName($cUID);
+                    #print STDERR "**** $cUID  $login  $wikiname \n";
+                    return !($TWiki::Plugins::SESSION->{users}->{basemapping}->handlesUser ( undef, $login, $wikiname) ); 
+    }; 
+    return $iter;
 }
 
 
@@ -911,7 +919,7 @@ sub ASSERT_IS_USER_DISPLAY_NAME {
 
 =pod
 
----++ ClassMethod _cacheUser ($session, $impl)
+---++ ObjectMethod _cacheUser ($wikiname, $login)
 
 Construct the user management object
 
@@ -1003,28 +1011,33 @@ PRIVATE subclasses should *not* implement this.
 
 sub _loadMapping {
     my $this = shift;
-
     return if $this->{CACHED};
     $this->{CACHED} = 1;
 
-    my $store = $this->{session}->{store};
-    if( $store->topicExists($TWiki::cfg{UsersWebName},
-                            $TWiki::cfg{UsersTopicName} )) {
-        my $text = $store->readTopicRaw( undef,
-                                      $TWiki::cfg{UsersWebName},
-                                      $TWiki::cfg{UsersTopicName},
-                                      undef );
-        # Get the WikiNames and userids, and build hashes in both directions
-        # This matches:
-        #   * TWikiGuest - guest - 10 Mar 2005
-        #   * TWikiGuest - 10 Mar 2005
-        $text =~ s/^\s*\* (?:$TWiki::regex{webNameRegex}\.)?($TWiki::regex{wikiWordRegex})\s*(?:-\s*(\S+)\s*)?-.*$/_cacheUser( $this, $1, $2)/gome;
-    }
-    # Always map the guest user (even though they may not be able to
-    # log in, we still need them as a default).
-    unless ($this->{L2U}->{$TWiki::cfg{DefaultUserLogin}}) {
-        _cacheUser( $this, $TWiki::cfg{DefaultUserWikiName},
-                    $TWiki::cfg{DefaultUserLogin});
+    #mapping from login to WikiName is done in the TWikiUserTopic
+    #TODO: should only really do this mapping IF the use is in the password file.
+    if ($TWiki::cfg{Register}{AllowLoginName} eq 1) {
+        my $store = $this->{session}->{store};
+        if( $store->topicExists($TWiki::cfg{UsersWebName},
+                                $TWiki::cfg{UsersTopicName} )) {
+            my $text = $store->readTopicRaw( undef,
+                                          $TWiki::cfg{UsersWebName},
+                                          $TWiki::cfg{UsersTopicName},
+                                          undef );
+            # Get the WikiNames and userids, and build hashes in both directions
+            # This matches:
+            #   * TWikiGuest - guest - 10 Mar 2005
+            #   * TWikiGuest - 10 Mar 2005
+            $text =~ s/^\s*\* (?:$TWiki::regex{webNameRegex}\.)?($TWiki::regex{wikiWordRegex})\s*(?:-\s*(\S+)\s*)?-.*$/_cacheUser( $this, $1, $2)/gome;
+        }
+    } else {
+        #loginnames _are_ WikiNames so ask the Password handler for list of users
+        my $iter = $this->{passwords}->fetchUsers();
+#        $it->{process} = sub { return $_[0] + 1 };
+        while ($iter->hasNext()) {
+            my $login = $iter->next();
+            _cacheUser($this, $login, $login);
+        }
     }
 }
 
