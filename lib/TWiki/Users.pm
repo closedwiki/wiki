@@ -109,7 +109,7 @@ sub new {
     $TWiki::cfg{AdminUserLogin} = $TWiki::cfg{AdminUserWikiName} unless ($TWiki::cfg{Register}{AllowLoginName});
 
     $this->{loginManager} = TWiki::LoginManager::makeLoginManager( $session );
-    unless (( $session->{cgiQuery}->param('sudo') && $session->{cgiQuery}->param('sudo') eq 'sudo' )) {
+    unless ( $session->inContext('sudo_login')) {
         #don't take not of session info if the user has asked for a sudo login
         $this->{remoteUser} = $this->initialiseUserFromSession($session);
     }
@@ -124,11 +124,7 @@ sub new {
 
     my $implUserMappingManager = $TWiki::cfg{UserMappingManager};
     $implUserMappingManager = 'TWiki::Users::TWikiUserMapping' if( $implUserMappingManager eq 'none' );
-#    $implUserMappingManager = 'TWiki::Users::BaseUserMapping' if( $session->{cgiQuery}->param('sudo') && $session->{cgiQuery}->param('sudo') eq 'sudo' );
-#    $implUserMappingManager = 'TWiki::Users::BaseUserMapping' if( $this->{remoteUser} && $this->{remoteUser} eq $TWiki::cfg{AdminUserLogin} );
-#print STDERR 'remoteUser = '.($this->{remoteUser}||'undef').' twikiadmin = '.$TWiki::cfg{AdminUserLogin};
-    
-#print STDERR "making an $implUserMappingManager";
+
 	if ( $implUserMappingManager eq 'TWiki::Users::BaseUserMapping') {
 		$this->{mapping} = $this->{basemapping};   #TODO: probly make undef..
 	} else {
@@ -142,6 +138,23 @@ sub new {
     $implUserMappingManager =~ /^TWiki::Users::(.*)$/;
     
     return $this;
+}
+
+
+=pod
+
+---++ ObjectMethod loginTemplateName () -> templateFile
+
+allows UserMappings to come with customised login screens - that should preffereably only over-ride the UI function
+
+=cut
+
+sub loginTemplateName {
+    my $this = shift;
+
+    #use login.sudo.tmpl for admin logins
+    return $this->{basemapping}->loginTemplateName() if ($this->{session}->inContext('sudo_login'));
+    return $this->{mapping}->loginTemplateName() || 'login';
 }
 
 =pod

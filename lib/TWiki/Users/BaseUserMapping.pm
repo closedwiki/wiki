@@ -30,7 +30,6 @@ No registration - this is a read only usermapper
    * TWikiAdmin - uses the password that was set in Configure (IF its not null)
    * TWikiGuest - password guest
    * UnknownUser
- TODO:
    * TWikiContributor - 1 Jan 2005
    * TWikiRegistrationAgent - 1 Jan 2005
    
@@ -108,6 +107,18 @@ sub new {
     return $this;
 }
 
+
+=pod
+
+---++ ObjectMethod loginTemplateName () -> templateFile
+
+allows UserMappings to come with customised login screens - that should preffereably only over-ride the UI function
+
+=cut
+
+sub loginTemplateName {
+    return 'login.sudo';
+}
 
 =pod
 

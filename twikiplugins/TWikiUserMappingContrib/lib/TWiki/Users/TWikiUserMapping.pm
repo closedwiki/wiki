@@ -83,6 +83,18 @@ sub new {
 
 =pod
 
+---++ ObjectMethod loginTemplateName () -> templateFile
+
+allows UserMappings to come with customised login screens - that should preffereably only over-ride the UI function
+
+=cut
+
+sub loginTemplateName {
+    return 'login';
+}
+
+=pod
+
 ---++ ObjectMethod finish ()
 
 cleans up references

@@ -142,8 +142,10 @@ sub login {
     # Eat these so there's no risk of accidental passthrough
     $query->delete('origurl', 'username', 'password');
 
+    # UserMappings can over-ride where the login template is defined
+    my $loginTemplate = $users->loginTemplateName();        #defaults to login.tmpl
     my $tmpl = $twiki->{templates}->readTemplate(
-        'login', $twiki->getSkin() );
+        $loginTemplate, $twiki->getSkin() );
 
     my $banner = $twiki->{templates}->expandTemplate( 'LOG_IN_BANNER' );
     my $note = '';
