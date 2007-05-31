@@ -72,12 +72,11 @@ sub test_unquoted {
 sub test_escapes {
 	my $this = shift;
 
-	my $attrs = TWiki::Attrs->new("var1=\\\"val1 var2= \\\'val2, var3 = 3 var4 =val4 var5=".'"\\\\\\""', 1);
+	my $attrs = TWiki::Attrs->new("var1=\\\"val1 var2= \\\'val2, var3 = 3 var4 =val4", 1);
 	$this->assert_str_equals("\"val1", $attrs->remove("var1"));
 	$this->assert_str_equals("\'val2", $attrs->remove("var2"));
 	$this->assert_str_equals("3", $attrs->remove("var3"));
 	$this->assert_str_equals("val4", $attrs->remove("var4"));
-	$this->assert_str_equals("\\\"", $attrs->remove("var5"));
 	$this->assert($attrs->isEmpty());
 }
 
