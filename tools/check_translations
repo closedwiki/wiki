@@ -75,6 +75,7 @@ my $text = '';
 $text .= "| *Language* | *Translated* | *Fuzzy* | *Unstranslated* | *% translated* ||\n" unless $raw;
 
 for my $file (<locale/*.po>) {
+  print "I: Checking $file ...\n" unless $raw;
   my $output = `LANG=C msgfmt --statistics --output=/dev/null $file 2>&1`;
   if ($raw) {
     print "$file: $output";
