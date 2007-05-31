@@ -103,17 +103,17 @@ EOF
 }
 
 sub _TWISTYSHOW {
-    return _twistyWrapInSpan(_twistyBtn(@_, 'show'));
+    return _twistyWrapInSpan(_twistyBtn('show', @_));
 }
 
 sub _TWISTYHIDE {
-    return _twistyWrapInSpan(_twistyBtn(@_, 'hide'));
+    return _twistyWrapInSpan(_twistyBtn('hide', @_));
 }
 
 sub _TWISTYBUTTON {
     return _twistyWrapInSpan(
-      _twistyBtn(@_, 'show') . 
-      _twistyBtn(@_, 'hide'));
+      _twistyBtn('show', @_) . 
+      _twistyBtn('hide', @_));
 }
 
 sub _TWISTY {
@@ -150,7 +150,7 @@ sub _TWISTYTOGGLE {
 sub _ENDTWISTYTOGGLE {
     my($session, $params, $theTopic, $theWeb) = @_;
     my $mode = shift @modes;
-    my $modeTag = ($mode ne '') ? '</'.$mode.'>' : '';
+    my $modeTag = ($mode) ? '</'.$mode.'>' : '';
     return $modeTag._twistyCloseDiv();
 }
 
@@ -184,7 +184,7 @@ sub postRenderingHandler {
 }
 
 sub _twistyBtn {
-    my($session, $params, $theTopic, $theWeb, $theState) = @_;
+    my($theState, $session, $params, $theTopic, $theWeb) = @_;
 
     _addHeader();
 
