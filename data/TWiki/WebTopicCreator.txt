@@ -10,16 +10,12 @@
 %IF{"'%HIDE_NON_WIKI_WORD_WARNINGS%'!='on'" then="<p>$percntINCLUDE{$quot$percntWEB$percnt.$percntTOPIC$percnt$quot section=$quotallownonwikiword$quot}$percnt</p>"}%
 </div><!--/twikiFormStep-->
 <div class="twikiFormStep">
-%TWISTY{id="parent" prefix="<h3>!!" link="%MAKETEXT{"Topic parent:"}%" firststart="show" remember="on" showimgleft="%ICONURLPATH{toggleopen}%"
-hideimgleft="%ICONURLPATH{toggleclose}%" suffix="</h3>"}%
+---+++ %MAKETEXT{"Topic parent:"}%
 <p>%INCLUDE{"%WEB%.%TOPIC%" section="topicparent"}%</p>
-%ENDTWISTY%
 </div><!--/twikiFormStep-->
 <div class="twikiFormStep">
-%TWISTY{id="template" prefix="<h3>!!" link="%MAKETEXT{"Use template:"}%" firststart="show" remember="on" showimgleft="%ICONURLPATH{toggleopen}%"
-hideimgleft="%ICONURLPATH{toggleclose}%" suffix="</h3>"}%
+---+++ %MAKETEXT{"Use template:"}%
 <p>%INCLUDE{"%WEB%.%TOPIC%" section="topictemplate"}%</p>
-%ENDTWISTY%
 </div><!--/twikiFormStep-->
 <div class="twikiFormStep twikiLast">
 <p>%INCLUDE{"%WEB%.%TOPIC%" section="submit"}%</p>
