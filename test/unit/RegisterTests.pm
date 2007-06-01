@@ -807,7 +807,8 @@ sub test_resetPasswordOkay {
     my $oldPassU = 1;   #force set
     $this->assert($this->{twiki}->{users}->setPassword( $cUID, $newPassU, $oldPassU ));
     $this->assert($this->{twiki}->{users}->checkPassword( $this->{new_user_login}, $newPassU ));
-
+    my @emails = $this->{twiki}->{users}->getEmails($cUID);
+    $this->assert_str_equals($this->{new_user_email}, $emails[0]);
 
     my $query = new CGI (
                          {
@@ -848,6 +849,9 @@ sub test_resetPasswordOkay {
 
     #lets make sure the password actually was reset
     $this->assert(!$this->{twiki}->{users}->checkPassword( $cUID, $newPassU ));
+    my @post_emails = $this->{twiki}->{users}->getEmails($cUID);
+    $this->assert_str_equals($this->{new_user_email}, $post_emails[0]);
+
 }
 
 sub test_resetPasswordNoSuchUser {
