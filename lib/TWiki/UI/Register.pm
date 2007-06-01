@@ -1227,7 +1227,8 @@ sub _getDataFromQuery {
             my $form = {};
             $form->{required} = $2;
             my $name = $3;
-            my $value = $query->param($1.$2.$3);
+            my @values = $query->param($1.$2.$3);
+            my $value = join(',', @values); #deal with multivalue fields like checkboxen
             $form->{name} = $name;
             $form->{value} = $value;
             if ( $name eq 'Password' ) {
