@@ -51,12 +51,6 @@
 #   The variable $n will expand to newline in the parameters
 #   =alttext=, =default=, =separator=, and =format=.
 #
-#
-#
-# Change history:
-# r2.000 2005/09/09 - changes to make it work with Dakar.
-# r1.000 2004/10/01 - initial revision
-#
 
 
 # =========================
@@ -130,7 +124,7 @@ sub getFormFieldList
        $params->{_DEFAULT}=$formField;
        $text .= '%FORMFIELD{"'.$formField.'" '
                .'format="'.$format.'" '
-               .'topic="'.$topic.'" '
+	       .'topic="'.$formTopic.'" '
                .'default="'.$default.'" '
                .'alttext="'.$alttext.'" '
                .'}%';
@@ -138,7 +132,6 @@ sub getFormFieldList
        $text.= $separator;
     }
 
-    TWiki::Func::writeDebug($text);
     return $text;
 }
 
