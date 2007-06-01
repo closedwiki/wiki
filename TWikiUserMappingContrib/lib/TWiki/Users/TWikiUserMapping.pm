@@ -685,7 +685,7 @@ sub getEmails {
 
 =pod
 
----++ ObjectMethod setEmails($user, @emails)
+---++ ObjectMethod setEmails($user, @emails) -> boolean
 
 Set the email address(es) for the given user.
 The password manager is tried first, and if it doesn't want to know the
