@@ -584,7 +584,6 @@ sub changePassword {
     my $passwordA = $query->param( 'password' );
     my $passwordB = $query->param( 'passwordA' );
     my $email = $query->param( 'email' );
-
     my $topicName = $query->param( 'TopicName' );
 
     # check if required fields are filled in
@@ -644,7 +643,8 @@ sub changePassword {
     }
 
     if( defined $email ) {
-        $users->setEmails($user, split(/\s+/, $email) );
+        my $cUID = $users->getCanonicalUserID($user);
+        my $return = $users->setEmails($cUID, split(/\s+/, $email) );
     }
 
     # OK - password may be changed

@@ -678,6 +678,8 @@ sub test_shortPassword {
 
     try {
         TWiki::UI::Register::register_cgi($this->{twiki});
+        my $cUID = $this->{twiki}->{users}->getCanonicalUserID($this->{new_user_login});
+        $this->assert($this->{twiki}->{users}->userExists($cUID), "new user created");
     } catch TWiki::OopsException with {
         my $e = shift;
         $this->assert_str_equals("attention", $e->{template}, $e->stringify());
@@ -799,6 +801,13 @@ sub test_resetPasswordOkay {
     ### with a known email address (else oopsregemail)
 
     $this->registerAccount();
+    my $cUID = $this->{twiki}->{users}->getCanonicalUserID($this->{new_user_login});
+    $this->assert($this->{twiki}->{users}->userExists($cUID), "new user created");
+    my $newPassU = '12345';
+    my $oldPassU = 1;   #force set
+    $this->assert($this->{twiki}->{users}->setPassword( $cUID, $newPassU, $oldPassU ));
+    $this->assert($this->{twiki}->{users}->checkPassword( $this->{new_user_login}, $newPassU ));
+
 
     my $query = new CGI (
                          {
@@ -836,6 +845,9 @@ sub test_resetPasswordOkay {
     my $mess = $TWikiFnTestCase::mails[0];
     $this->assert_matches(qr/From: $TWiki::cfg{WebMasterName} <$TWiki::cfg{WebMasterEmail}>/,$mess);
     $this->assert_matches(qr/To: .*\b$this->{new_user_email}/,$mess);
+
+    #lets make sure the password actually was reset
+    $this->assert(!$this->{twiki}->{users}->checkPassword( $cUID, $newPassU ));
 }
 
 sub test_resetPasswordNoSuchUser {
@@ -1304,6 +1316,73 @@ sub test_3951 {
         $this->assert(0, "expected an oops redirect");
     };
 }
+
+
+################################################################################
+################################ RESET EMAIL TESTS ##########################
+
+sub test_resetEmailOkay {
+    my $this = shift;
+
+    ## Need to create an account (else oopsnotwikiuser)
+    ### with a known email address (else oopsregemail)
+    ### need to know the password too
+    $this->registerAccount();
+
+    my $cUID = $this->{twiki}->{users}->getCanonicalUserID($this->{new_user_login});
+    $this->assert($this->{twiki}->{users}->userExists($cUID), "new user created");
+    my $newPassU = '12345';
+    my $oldPassU = 1;   #force set
+    $this->assert($this->{twiki}->{users}->setPassword( $cUID, $newPassU, $oldPassU ));
+    my $newEmail =  'UnitEmail@home.org.au';
+
+    my $query = new CGI (
+                         {
+                          'LoginName' => [
+                                          $this->{new_user_login}
+                                         ],
+                          'TopicName' => [
+                                          'ChangeEmailAddress'
+                                         ],
+                          'username' => [
+                                         $this->{new_user_login}
+                                         ],
+                          'oldpassword' => [
+                                         '12345'
+                                         ],
+                          'email' => [
+                                         $newEmail
+                                         ],
+                          'action' => [
+                                       'resetPassword'
+                                      ]
+                         });
+
+    $query->path_info( '/'.$this->{users_web}.'/WebHome' );
+    $this->{twiki}->finish();
+    $this->{twiki} = new TWiki($this->{new_user_login}, $query);
+    $this->{twiki}->{net}->setMailHandler(\&TWikiFnTestCase::sentMail);
+    try {
+        TWiki::UI::Register::changePassword($this->{twiki});
+    } catch TWiki::AccessControlException with {
+        my $e = shift;
+        $this->assert(0, $e->stringify);
+    } catch TWiki::OopsException with {
+        my $e = shift;
+        $this->assert_str_equals("attention", $e->{template}, $e->stringify());
+        $this->assert_str_equals("email_changed", $e->{def}, $e->stringify());
+        $this->assert_str_equals($newEmail, ${$e->{params}}[0], ${$e->{params}}[0]);
+    } catch Error::Simple with {
+        $this->assert(0, shift->stringify());
+    } otherwise {
+        $this->assert(0, "expected an oops redirect");
+    };
+
+    my @emails = $this->{twiki}->{users}->getEmails($cUID);
+    $this->assert_str_equals($newEmail, $emails[0]);
+}
+
+
 
 1;
 

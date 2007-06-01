@@ -417,10 +417,10 @@ user mapping manager is tried.
 
 sub setEmails {
     my $this = shift;
-    my $user = shift;
-	$this->ASSERT_IS_CANONICAL_USER_ID($user) if DEBUG;
-
-    return $this->getMapping($user)->getEmails( $user, @_ );
+    my $cUID = shift;
+    my @emails = @_;
+	$this->ASSERT_IS_CANONICAL_USER_ID($cUID) if DEBUG;
+    return $this->getMapping($cUID)->setEmails( $cUID, @emails );
 }
 
 =pod
