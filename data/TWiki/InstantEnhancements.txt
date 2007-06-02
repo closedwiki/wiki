@@ -173,7 +173,7 @@ With a simple one or two-line default topic form available for every topic  - in
 ---
 ---++ Add Your Favorite <nop>JavaScript Features
 
-You're no doubt familiar or better with HTML, JS, and "webmastering". Without getting into the TWikiTemplates system yet, you can easily edit the ==view.tmpl== (in the =templates= directory) for some dramatic effects. The top of the template is mostly regular HTML with some variables. Open up some space in the ==&lt;head&gt;== area, and you can drop in reliable <nop>JavaScripts - a pop-up window script, for example - or tag it as an external script.
+You're no doubt familiar or better with HTML, JS, and "webmastering". Without getting into the TWikiTemplates system yet, you can easily edit the ==view.pattern.tmpl== (if you are using default pattern skin) (in the =templates= directory) for some dramatic effects. The top of the template is mostly regular HTML with some variables. Open up some space in the ==&lt;head&gt;== area, and you can drop in reliable <nop>JavaScripts - a pop-up window script, for example - or tag it as an external script.
 
    * %T% Obviously, you can do the same - place a link to an external stylesheet as well. If you set values for standard HTML tags, you can control a good deal of the type size, style and color with out adding CSS tags. __example__
 

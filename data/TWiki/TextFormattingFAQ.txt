@@ -35,7 +35,7 @@ If you want to display angle brackets, enter them as HTML codes instead of typin
 
 A question mark after a word is a link to a topic that doesn't yet exist - click it to create the new page. This is a TWiki feature - typing a MeaningfulTitle in a comment is an invitation for someone else to add a new branch to the topic.  
 
-To prevent auto-linking - say you want to enter a word like <nop>JavaScript (the proper spelling!) - prefix the WikiStyleWord with an exclamation point: 
+To prevent auto-linking - say you want to enter a word like <nop>JavaScript - prefix the WikiStyleWord with an exclamation point: 
 
    * =!WikiStyleWord= displays as !WikiStyleWord
 
