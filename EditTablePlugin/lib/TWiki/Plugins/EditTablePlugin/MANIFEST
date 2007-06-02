@@ -4,7 +4,7 @@ lib/TWiki/Plugins/EditTablePlugin/Core.pm 0444
 pub/TWiki/EditTablePlugin/btn_delete_disabled.gif 0644
 pub/TWiki/EditTablePlugin/btn_delete.gif 0644
 pub/TWiki/EditTablePlugin/btn_move.gif 0644
-pub/TWiki/EditTablePlugin/btn_target.gif 0644
+#pub/TWiki/EditTablePlugin/btn_target.gif 0644
 pub/TWiki/EditTablePlugin/edittable.css 0644
 pub/TWiki/EditTablePlugin/edittable.gif 0644
 pub/TWiki/EditTablePlugin/edittable.js 0644
