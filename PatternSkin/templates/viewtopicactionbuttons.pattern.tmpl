@@ -1,4 +1,4 @@
-%TMPL:DEF{"topicactionbuttons"}%%TMPL:P{"activatable_edit_or_create"}%%TMPL:P{"sep"}%%TMPL:P{context="WysiwygPluginEnabled" then="activatable_edit_wysiwyg"}%%TMPL:P{context="WysiwygPluginEnabled" then="sep"}%%TMPL:P{"activatable_attach"}%%TMPL:P{"sep"}%%TMPL:P{"printable"}%%TMPL:P{"raw_or_view"}%%TMPL:P{"sep"}%%TMPL:P{"backlinks"}%%TMPL:P{"sep"}%%TMPL:P{"revisions"}%%TMPL:P{"sep"}%%TMPL:P{"activatable_more"}%%TMPL:END%
+%TMPL:DEF{"topicactionbuttons"}%%TMPL:P{"activatable_edit_or_create"}%%TMPL:P{"sep"}%%TMPL:P{"wysiwyg"}%%TMPL:P{"activatable_attach"}%%TMPL:P{"sep"}%%TMPL:P{"printable"}%%TMPL:P{"raw_or_view"}%%TMPL:P{"sep"}%%TMPL:P{"backlinks"}%%TMPL:P{"sep"}%%TMPL:P{"revisions"}%%TMPL:P{"sep"}%%TMPL:P{"activatable_more"}%%TMPL:END%
 
 
 %TMPL:DEF{"topicaction"}%<a name="topic-actions"> </a><div class="patternTopicActions"><div class="patternTopicAction"><span class="patternActionButtons"> %TMPL:P{"topicactionbuttons"}%</span></div></div><!--/patternTopicActions-->%TMPL:END%
@@ -10,10 +10,10 @@
 %TMPL:DEF{"edit_topic_link"}%<span class="patternButton"><a href='%SCRIPTURL{"edit"}%/%WEB%/%TOPIC%?t=%GMTIME{"$epoch"}%%TMPL:P{"url_param_editaction"}%' rel='nofollow' %MAKETEXT{"title='Edit this topic text' accesskey='e'>&Edit"}%</a></span>%TMPL:END%
 
 
-%TMPL:DEF{"edit_wysiwyg_link"}%<span class="patternButton"><a href='%SCRIPTURL{"edit"}%/%WEB%/%TOPIC%?cover=%COMPOSER%&t=%GMTIME{"$epoch"}%' rel='nofollow' %MAKETEXT{"title='Edit this topic text' accesskey='w'>&WYSIWYG"}%</a></span>%TMPL:END%
+%TMPL:DEF{"edit_wysiwyg_link"}%<span class="patternButton"><a href='%SCRIPTURL{"edit"}%/%WEB%/%TOPIC%?cover=%COMPOSER%&t=%GMTIME{"$epoch"}%' rel='nofollow' %MAKETEXT{"title='Edit this topic text' accesskey='w'>&WYSIWYG"}%</a></span>%TMPL:P{"sep"}%%TMPL:END%
 
 
-%TMPL:DEF{"wysiwyg_create_topic_link"}%<span class="patternButton"><a href='%SCRIPTURL{"edit"}%/%WEB%/%TOPIC%?cover=%COMPOSER%&t=%GMTIME{"$epoch"}%' rel='nofollow' %MAKETEXT{"title='Create this topic' accesskey='w'>Create (&WYSIWYG)"}%</a></span>%TMPL:END%
+%TMPL:DEF{"wysiwyg_create_topic_link"}%<span class="patternButton"><a href='%SCRIPTURL{"edit"}%/%WEB%/%TOPIC%?cover=%COMPOSER%&t=%GMTIME{"$epoch"}%' rel='nofollow' %MAKETEXT{"title='Create this topic' accesskey='w'>Create (&WYSIWYG)"}%</a></span>%TMPL:P{"sep"}%%TMPL:END%
 
 
 %TMPL:DEF{"view_topic_link"}%<span class='patternButton'><a href='%SCRIPTURL{"view"}%/%WEB%/%TOPIC%' rel='nofollow' %MAKETEXT{"title='View topic' accesskey='v'>&View topic"}%</a></span>%TMPL:END%
@@ -53,11 +53,13 @@
 
 %TMPL:DEF{"edit_or_create"}%%TMPL:P{context="new_topic" then="create_topic_link" else="edit_topic_link"}%%TMPL:END%
 
+%TMPL:DEF{"wysiwyg"}%%IF{"context WysiwygPluginEnabled and $COMPOSER" then="$percntTMPL:P{$quotactivatable_edit_wysiwyg$quot}$percnt"}%%TMPL:END%
+
+%TMPL:DEF{"activatable_edit_wysiwyg"}%%TMPL:P{context="inactive" then="inactive_wysiwyg" else="wysiwyg_edit_or_create"}%%TMPL:END%
+
 %TMPL:DEF{"wysiwyg_edit_or_create"}%%TMPL:P{context="new_topic" then="wysiwyg_create_topic_link" else="edit_wysiwyg_link"}%%TMPL:END%
 
 %TMPL:DEF{"activatable_edit_or_create"}%%TMPL:P{context="inactive" then="inactive_edit_with_view_topic" else="edit_or_create"}%%TMPL:END%
-
-%TMPL:DEF{"activatable_edit_wysiwyg"}%%TMPL:P{context="inactive" then="inactive_wysiwyg" else="wysiwyg_edit_or_create"}%%TMPL:END%
 
 
 
