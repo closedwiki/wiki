@@ -36,58 +36,77 @@ sub handleVote {
 
     TWiki::Func::addToHEAD('VotePlugin_STARS', <<HEAD);
 <link href="$pubUrlPath/voting.css" rel="stylesheet" type="text/css" media="screen" />
-<script type='text/javascript' src='$pubUrlPath/voting.js' />
+<script type='text/javascript' src='$pubUrlPath/voting.js'></script>
 HEAD
 
-    my $id =       $params->{id}      || '_default';
-    my $isGlobal = $params->{global}  || 0;
-    my $isOpen =   $params->{open}    || 0;
+    my $id =       defined($params->{id}) ? $params->{id} : '_default';
+    my $isGlobal = defined($params->{global}) ? $params->{global} : 0;
+    my $isOpen =   defined($params->{open}) ? $params->{open} : 1;
+    my $isSecret = defined($params->{secret}) ? $params->{secret} : 1;
+    my $saveto =   $params->{saveto};
 
     if (defined TWiki::Func::getCgiQuery()->param('register_vote')) {
-      registerVote($web, $topic, $id);
+        registerVote($web, $topic, $id);
     } else {
-      #print STDERR "no register_vote\n";
+        #print STDERR "no register_vote\n";
     }
 
     my @prompts = ();
 
+    my $defaultStarsFormat =
+      '| $key | $small<small>Score: $score, My vote: $mylast, Total votes: $sum</small> |';
+    my $defaultSelectFormat =  '| $key | $prompt | $bars |';
+    my $defaultChartFormat = '<div>$bar(300) $option $perc% ($score)</div>';
+
+    if (defined($params->{style})) {
+        # Compatibility
+        my $format = '';
+        if ($params->{style} =~ /perc/) {
+            $format .= '$perc% ';
+        }
+        if ($params->{style} =~ /total/) {
+            $format .= '($freq)';
+        }
+        if ($params->{style} =~ /sum/) {
+            $format .= '$sum votes';
+        }
+        $defaultSelectFormat = $format;
+    }
+    my $separator = $params->{separator} || "\n";
+
+    # Compatibility
     if (defined($params->{select})) {
         push(@prompts, {
             type => 'select',
-            name => $params->{select},
+            name => expandFormattingTokens($params->{select}),
+            format => $defaultSelectFormat,
             options =>
-              [ map { expandVars($_) }
+              [ map { expandFormattingTokens($_) }
                   split(/\s*,\s*/, $params->{options} || '') ]});
-    }
-    if (defined($params->{stars})) {
-        push(@prompts, {
-            type => 'stars',
-            name => $params->{stars},
-            width => $params->{width} || 5 });
     }
 
     my $n = 1;
-    my $ok = 1;
-    while ($ok) {
-        $ok = 0;
+    while (1) {
         if (defined($params->{"select$n"})) {
             push(@prompts, {
                 type => 'select',
-                name => expandVars($params->{"select$n"}),
+                name => expandFormattingTokens($params->{"select$n"}),
+                format => $params->{"format$n"} || $defaultSelectFormat,
+                chart => $params->{"chart$n"} || $defaultChartFormat,
                 options =>
-                  [ map { expandVars($_) }
+                  [ map { expandFormattingTokens($_) }
                       split(/\s*,\s*/, $params->{"options$n"} || '') ]});
-            $ok = 1;
-        }
-        if (defined($params->{"stars$n"})) {
+        } elsif (defined($params->{"stars$n"})) {
             unless (($params->{"width$n"} || 5) =~ /^\d+$/) {
                 return inlineError("Expected integer width for stars$n=");
             }
             push(@prompts, {
                 type => 'stars',
                 name => $params->{"stars$n"},
+                format => $params->{"format$n"} || $defaultStarsFormat,
                 width => $params->{"width$n"} || 5 });
-            $ok = 1;
+        } else {
+            last;
         }
         $n++;
     }
@@ -98,28 +117,35 @@ HEAD
     }
 
     # read in the votes
-    my $votesFile = getVotesFile($web, $topic, $id, $isGlobal);
+    my $lines = getVoteData($web, $topic, $id, $isGlobal, $saveto);
     my %votes;
 
     my %lastVote;
-    if (open(VOTES, "<$votesFile")) {
-        local $/ = "\n";
-        while (my $line = <VOTES>) {
-            chomp($line);
-            if ($line =~ /^([^\|]+)\|([^\|]+)\|(.*?)\|(.+)$/) {
-                my $date = $1;
-                my $voter = $2;
-                my $weight = $3;
-                my $data = $4;
-                foreach my $item (split(/\|/, $data)) {
-                    if ($item =~ /^(.+)=(.+)$/) {
-                        $votes{$voter}{$1}{$2} = $weight;
-                        $lastVote{$voter}{$1} = $2;
-                    }
+    foreach my $line (split/\r?\n/, $lines) {
+        if ($line =~ /^\|(.*)\|$/) {
+            my @data = split(/\|/, $1);
+            my $vid = $data[0];
+            next unless $vid eq $id;
+            my $voter = $data[1];
+            my $weight = $data[2];
+            foreach my $item (split(/,/, $data[3] || '')) {
+                if ($item =~ /^(.+)=(.+)$/) {
+                    $votes{$voter}{$1}{$2} = $weight;
+                    $lastVote{$voter}{$1} = $2;
+                }
+            }
+        } elsif (!$saveto && $line =~ /^([^\|]+)\|([^\|]+)\|(.*?)\|(.+)$/) {
+            # Old format - compatibility only
+            my $voter = $2;
+            my $weight = $3;
+            my $data = $4;
+            foreach my $item (split(/\|/, $data)) {
+                if ($item =~ /^(.+)=(.+)$/) {
+                    $votes{$voter}{$1}{$2} = $weight;
+                    $lastVote{$voter}{$1} = $2;
                 }
             }
         }
-        close VOTES;
     }
 
     # collect statistics
@@ -139,19 +165,26 @@ HEAD
         }
     }
 
+    # Do we need a submit button?
     my $needSubmit = $prompts[0]->{type} ne 'stars';
 
-    my $act = TWiki::Func::getScriptUrl($web, $topic, 'viewauth');
-    my $rows = '';
+    my $act;
+    if ($isOpen) {
+        $act = TWiki::Func::getScriptUrl($web, $topic, 'view');
+    } else {
+        $act = TWiki::Func::getScriptUrl($web, $topic, 'viewauth');
+    }
+    my @rows;
     foreach my $prompt (@prompts) {
         my $key = $prompt->{name};
-        my $row = CGI::td($key);
+        my $row;
+
         if ($prompt->{type} eq 'stars') {
             # The average is the sum of all the votes cast
             my $sum = 0;
             my $votes = 0;
             foreach my $voter (keys %votes) {
-                $sum += $lastVote{$voter}{$key};
+                $sum += $lastVote{$voter}{$key} || 0;
                 $votes++;
             }
             my $average = ($votes ? $sum / $votes : 0);
@@ -163,8 +196,8 @@ HEAD
                 }
             }
             my $myLastVote =
-              $lastVote{getIdent($isOpen)}{$key} || 0;
-            $row .= CGI::td(lineOfStars(
+              $lastVote{getIdent($isSecret, $isOpen)}{$key} || 0;
+            push(@rows, lineOfStars(
                 $id, $prompt, $needSubmit, $act,
                 $average, $myLastVote, $totalVoters));
         }
@@ -175,89 +208,35 @@ HEAD
             foreach my $optionName (@{$prompt->{options}}) {
                 $opts .= CGI::option($optionName);
             }
+            my $select = CGI::Select(
+                {name=>'voteplugin_'.$key, size=>1}, $opts);
 
-            $row .= CGI::td(
-                CGI::Select({name=>'voteplugin_'.$key,
-                             size=>1}, $opts))
-              . CGI::td(chartResult(
-                  $key, \%keyValueFreq,
-                  \%totalVotes, $params));
+            push(@rows, showSelect(
+                $prompt, $select, \%keyValueFreq,
+                \%totalVotes, $params));
         }
-        $rows .= CGI::Tr($row);
     }
+    my $result = join($separator, @rows)."\n";
     if ($needSubmit) {
-        $rows .= CGI::Tr(CGI::td(
-            { colspan => 3},
-            CGI::submit(
-                { name=> 'OK', value=>'OK',
-                  style=>'color:green'})));
+        $result .= CGI::submit(
+            { name=> 'OK', value=>'OK',
+              style=>'color:green'});
     }
-    my $result = CGI::table({class=>'twikiTable voteTable'},$rows);
     $result .= CGI::input({type=>'hidden',
                            name=>'register_vote', value=>$id});
     $result .= CGI::input({type=>'hidden',
                            name=>'isGlobal', value=>$isGlobal});
     $result .= CGI::input({type=>'hidden',
-                           name=>'isSecret', value=>!$isOpen});
+                           name=>'isSecret', value=>$isSecret});
+    $result .= CGI::input({type=>'hidden',
+                           name=>'isOpen', value=>$isOpen});
+    $result .= CGI::input({type=>'hidden',
+                           name=>'saveTo', value=>$saveto});
 
     # why is CGI::form not part of my CGI.pm?
-    $result = "<form id='$id' action='$act' method='post'>".$result.'</form>';
+    $result = "<form id='$id' action='$act' method='post'>\n".$result.'</form>';
 
-    return "<literal>\n$result\n</literal>";
-}
-
-###############################################################################
-sub chartResult {
-    my ($key, $keyValueFreq, $totalVotes, $params) = @_;
-    my $color =    $params->{color}   || '';
-    my $bgcolor =  $params->{bgcolor} || '';
-    my $style =    $params->{style}   || 'bar,perc,total';
-    my $width =    $params->{width}   || '300';
-
-    my $rows = '';
-    foreach my $value (sort {$keyValueFreq->{$key}{$b} <=>
-                               $keyValueFreq->{$key}{$a}}
-                         keys %{$keyValueFreq->{$key}}) {
-        my $row = CGI::td($value);
-        my $freq = $keyValueFreq->{$key}{$value};
-        my $perc = int(1000 * $freq / $totalVotes->{$key}) / 10;
-        my $totals = '';
-        if ($style =~ /perc/) {
-            $totals .= "$perc\% ";
-        }
-        if ($style =~ /total/) {
-            $totals .= "($freq)";
-        }
-        my $data = '';
-        if ($style =~ /bar/) {
-            my $graph = CGI::img({src=>$pubUrlPath.'/leftbar.gif',
-                                  alt=>"leftbar",
-                                  height=>"14"});
-            $graph .= CGI::img({src=>$pubUrlPath.'/mainbar.gif',
-                                alt=>"mainbar",
-                                height=>14,
-                                width=>($width/100*$perc)});
-            $graph .= CGI::img({src=>$pubUrlPath.'/rightbar.gif',
-                                  alt=>"leftbar",
-                                  height=>"14"});
-            $row .= CGI::td({
-                style=>'white-space:nowrap;border:0px;'.
-                  ($bgcolor ? "background:$bgcolor;" : '').
-                    ($color ? "color:$color;" : '')}, $graph);
-            $row .= CGI::td({
-                align=>"left",
-                style=> 'white-space:nowrap;border:0px;'.
-                  ($bgcolor ? "background:$bgcolor;" : '').
-                    ($color ? "color:$color;" : '')}, $totals);
-        } else {
-            $row .= CGI::td($totals);
-        }
-        if ($style =~ /sum/) {
-            $row .= CGI::td($totalVotes->{$key}.' votes');
-        }
-        $rows .= CGI::Tr($row);
-    }
-    return CGI::table({width => '100%'}, $rows);
+    return $result;
 }
 
 ###############################################################################
@@ -271,19 +250,10 @@ sub registerVote {
 
     return unless $id eq $query->param('register_vote');
 
-    my $votesFile = getVotesFile(
-        $web, $topic, $id,  $query->param('isGlobal'));
-
-    # open and lock the votes
-    open(VOTES, ">>$votesFile") || die "cannot append $votesFile";
-    flock(VOTES, LOCK_EX); # wait for exclusive rights
-    seek(VOTES, 0, 2); # seek EOF in case someone else appended 
-    # stuff while we where waiting
-
-    my $date = getLocaldate();
     my $user = TWiki::Func::getWikiUserName();
-    my $isOpen = ($query->param('isSecret'))?0:1;
-    my $ident = getIdent($isOpen, $user, $date);
+    my $isSecret = $query->param('isSecret') || 0;
+    my $isOpen = $query->param('isOpen') || 0;
+    my $ident = getIdent($isSecret, $isOpen);
 #    $ident = int(rand(100)) 
 #      if $debug; # for testing
 
@@ -309,23 +279,69 @@ sub registerVote {
     }
 
     # write the votes
-    print VOTES "$date|$ident|$weight";
+    my $voteData = "|$id|$ident|$weight|";
+    my @v;
     foreach my $key ($query->param()) {
         my $val = $query->param($key);
         next unless $key =~ s/^voteplugin_//;
-        print VOTES "|$key=$val";
+        push @v, "$key=$val";
     }
-    print VOTES "\n";
+    $voteData .= join(',', @v) . "|\n";
 
-    # unlock and close
-    flock(VOTES,LOCK_UN);
-    close VOTES;
-
+    saveVotesData($web, $topic, $id,  $query->param('isGlobal') || 0,
+                  $query->param('saveTo') || '', $voteData);
     # invalidate cache entry
     if (defined &TWiki::Cache::invalidateEntry) {
         TWiki::Cache::invalidateEntry($web, $topic);
     }
 }
+
+sub saveVotesData {
+    my ($web, $topic, $id, $isGlobal, $saveto, $voteData) = @_;
+    if ($saveto) {
+        my $text = '';
+        $saveto =~ /(.*)/;
+        my ($vw, $vt) = TWiki::Func::normalizeWebTopicName($web, $1);
+        if (TWiki::Func::topicExists($vw, $vt)) {
+            $text = TWiki::Func::readTopicText( $vw, $vt );
+        }
+        $text .= $voteData;
+        TWiki::Func::saveTopicText($vw, $vt, $text, 1, 1);
+    } else {
+        my $votesFile = getVotesFile($web, $topic, $id, $isGlobal);
+        # open and lock the votes
+        open(VOTES, ">>$votesFile") || die "cannot append $votesFile";
+        flock(VOTES, LOCK_EX); # wait for exclusive rights
+        seek(VOTES, 0, 2); # seek EOF in case someone else appended
+        # stuff while we were waiting
+        print VOTES $voteData;
+        # unlock and close
+        flock(VOTES, LOCK_UN);
+        close VOTES;
+    }
+}
+
+sub getVoteData {
+    my ($web, $topic, $id, $isGlobal, $saveto) = @_;
+
+    my $lines = '';
+    if ($saveto) {
+        my ($vw, $vt) = TWiki::Func::normalizeWebTopicName($web, $saveto);
+        if (TWiki::Func::topicExists($vw, $vt)) {
+            my $meta;
+            ( $meta, $lines ) = TWiki::Func::readTopic( $vw, $vt );
+        }
+    } else {
+        my $votesFile = getVotesFile($web, $topic, $id, $isGlobal);
+        if (open(F, "<$votesFile")) {
+            local $/ = undef;
+            $lines = <F>;
+            close(F);
+        }
+    }
+    return $lines;
+}
+
 
 ###############################################################################
 sub getVotesFile {
@@ -389,57 +405,140 @@ sub inlineError {
 }
 
 ###############################################################################
-sub expandVars {
+sub expandFormattingTokens {
     my $text = shift;
+    $text =~ s/\$quote/\'/go;# Compatibility
+
+    return $text;
     if( defined( &TWiki::Func::decodeFormatTokens )) {
         $text = TWiki::Func::decodeFormatTokens( $text );
     } else {
-        $text =~ s/\$percnt/\%/go;
-        $text =~ s/\$dollar/\$/go;
-        $text =~ s/\$quote/\'/go;
-        $text =~ s/\$n/\n/go;
-        $text =~ s/\$doublequote/\"/go;
+        $text =~ s/\$n\(\)/\n/gs;
+        $text =~ s/\$n\b/\n$1/gs;
+        $text =~ s/\$nop(\(\))?//gs;
+        $text =~ s/\$quot(\(\))?/\"/gs;
+        $text =~ s/\$percnt(\(\))?/\%/gs;
+        $text =~ s/\$dollar(\(\))?/\$/gs;
     }
+    $text =~ s/\$doublequote?/\"/gs;
     return $text;
 }
 
 ###############################################################################
 sub getIdent {
-    my ($isOpen, $user, $date) = @_;
+    my ($id, $isSecret, $isOpen) = @_;
 
-    $user ||= TWiki::Func::getWikiUserName();
-    $date ||= getLocaldate();
+    my $user = TWiki::Func::getWikiUserName();
 
-    my $ident = $user;
+    my $ident;
 
-    $ident = md5_base64("$ENV{REMOTE_ADDR}$user$date") 
-      unless $isOpen;
+    if ($isOpen) {
+        my $date = getLocaldate();
+        $ident = "$ENV{REMOTE_ADDR},$user,$date";
+    } else {
+        $ident = $user;
+    }
 
-    return $ident;
+    if ($isSecret) {
+        return md5_base64($ident);
+    } else {
+        return $ident;
+    }
+}
+
+###############################################################################
+sub showSelect {
+    my ($prompt, $select, $keyValueFreq, $totalVotes, $params) = @_;
+
+    my $key = $prompt->{name};
+    my $totty = $totalVotes->{$key} || 0;
+    my $row = $prompt->{format};
+    $row =~ s/\$key/$key/g;
+    $row =~ s/\$prompt/$select/g;
+    $row =~ s/\$sum/$totty/;
+    my $bars = '';
+    foreach my $value (sort {$keyValueFreq->{$key}{$b} <=>
+                               $keyValueFreq->{$key}{$a}}
+                         keys %{$keyValueFreq->{$key}}) {
+        my $score = $keyValueFreq->{$key}{$value} || 0;
+        my $perc = $totty ? int(1000 * $score / $totty) / 10 : 0;
+        my $bar = expandFormattingTokens($prompt->{chart});
+        $bar =~ s/\$option/$value/;
+        $bar =~ s/\$perc/$perc/g;
+        $bar =~ s/\$score/$score/g;
+        $bar =~ s/\$bar(\((\d+)\))?/_makeBar($2, $perc, $params)/ge;
+        $bars .= $bar;
+    }
+    $row =~ s/\$bars/$bars/g;
+    return $row;
+}
+
+sub _makeBar {
+    my ($width, $perc, $params) = @_;
+    $width = $params->{width} || $width || 300;
+    my $graph = CGI::img(
+        { src=>$pubUrlPath.'/leftbar.gif',
+          alt=>'leftbar',
+          height=>14});
+    $graph .= CGI::img(
+        { src => $pubUrlPath.'/mainbar.gif',
+          alt => 'mainbar',
+          height => 14,
+          width => $width / 100 * $perc });
+    $graph .= CGI::img(
+        { src=>$pubUrlPath.'/rightbar.gif',
+          alt => 'rightbar',
+          #width => $width - $width / 100 * $perc,
+          height => 14});
+    return $graph;
 }
 
 ###############################################################################
 sub lineOfStars {
-    my ($form, $prompt, $needSubmit, $act, $count, $myLast, $total) = @_;
-    my $width = 25 * scalar(@_);
-    my $row = '';
-    for (1..$prompt->{width}) {
-        my $class = ($_ > $count) ? 'voteClear' : 'voteSet';
-        $row .= CGI::td(CGI::a({
-            class=>$class,
-            title=>$_,
-            href=>"javascript:VotePlugin_clicked('$form', '$prompt->{name}', $_);"}
-          ));
-    }
+    my ($form, $prompt, $needSubmit, $act, $score, $myLast, $total) = @_;
+    my $max = $prompt->{width};
 
-    $row .= CGI::td(
-        CGI::input(
-            {type=>'hidden',
-             name => "voteplugin_$prompt->{name}",
-             id => "${form}_$prompt->{name}",
-             value => $count})
-            . CGI::small("My last vote $myLast, Total voters $total"));
-    return CGI::table({class=>'voteStarRating'}, CGI::Tr($row));
+    my $row = expandFormattingTokens($prompt->{format});
+    $row =~ s/\$key/$prompt->{name}/g;
+    $row =~ s/\$sum/$total/g;
+    $row =~ s/\$score/$score/g;
+    my $perc = $total ? int(1000 * $score / $total) / 10 : 0;
+    $row =~ s/\$perc/$perc/g;
+    $row =~ s/\$mylast/$myLast/g;
+
+    my $size = ($row =~ /\$small/) ? 10 : 25;
+    my $style = $size < 25 ? ' small-star' : '';
+
+    my $lis = CGI::li(
+        {
+            class=>'current-rating',
+            style=>'width:'.($size * $score).'px',
+        }, CGI::input(
+        {
+            type => 'hidden',
+            name => 'voteplugin_'.$prompt->{name},
+            id => $form.'_'.$prompt->{name},
+            value => '0',
+        }));
+
+    foreach my $i (1..$max) {
+        $lis .= CGI::li(
+            CGI::a(
+                {
+                    href=>"javascript:VotePlugin_clicked('$form',".
+                      "'$prompt->{name}', $i)",
+                    style=>'width:'.($size * $i).
+                      'px;z-index:'.($max - $i + 1),
+                }, $i));
+    }
+    my $ul = CGI::ul(
+        {
+            class=>'star-rating'.$style,
+            style=>'width:'.($max * $size).'px',
+        }, $lis);
+    $row =~ s/\$(small|large)/$ul/g;
+
+    return $row;
 }
 
 1;

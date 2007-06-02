@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiUserMapping_micha" date="1180543279" format="1.1" version="1.3"}%
+%META:TOPICINFO{author="TWikiContributor" date="1180543279" format="1.1" version="1.3"}%
 <!--
 
    PLEASE DO NOT EDIT THIS TOPIC
@@ -9,24 +9,50 @@
    Instead, you could check your fix in, raise a bug in the Bugs web, or mail the author.
 -->
 ---+!! <nop>%TOPIC%
-This plugin can be used to establish an online-voting system. Votes are
-collected in a separate file. There are two types of voting:
-   * *select mode*: vote on a given choice
-   * *star mode*: collect ratings on a given set of options
-You can only vote once; the last vote overrides the former. A voter can vote anonymously
-on "open" votes. Anonymous votes are distinguished based on the remote address and time of
-the voter. To vote on a "closed" poll (=open="0"=), you will have to login first. Your
-username is then used to keep you from voting multiple times on the same question.
+This plugin can be used to build an online-voting system, or _poll_.
+There are two ways to vote for an item:
+   * *select*: vote for a given choice from a selection  <br /><img src="%ATTACHURLPATH%/example_select.gif" />
+   * *rate*: give something a rating (a number of stars) <br /><img src="%ATTACHURLPATH%/example_stars.gif" />
+A single poll can mix and match the different vote types.
 
-Every poll has got an identification which distinguishes it from several on the same page
-or - when you've defined it to be global (=global="1"=) - collect votes on the same
-poll from all over the site.
+Polls can be _open_ or _closed_. You don't have to log in to vote in an open
+poll, but you are restricted to one vote per poll per user per calendar
+date. You have to log in to vote on a closed vote, but you are restricted to
+one vote per user. You can change your vote in either open or closed votes,
+though if you do that on a different date in an open vote, it will count as
+a new vote. Polls are _open_ by default.
 
-The result of a poll is displayed alongside with the vote form (todo: decouple that).
+The results of a poll can be held in _secret_. If a poll is secret, no
+records are kept of who voted for what. Polls are _secret_ by default.
 
+You can choose whether to save the resuts of the vote in a _topic_ or in a
+_secret place_. If you choose to save the results in a topic, you can protect
+that topic using the normal TWiki access control mechanisms, and the vote
+will still work. Saving in a topic has the advantage that you can easily
+post-process the results in TWiki, but it's a bit more work to set up so
+polls are saved in a _secret place_ by default.
+
+Polls are either _local_ to the topic they are defined in, or are _global_ to
+the entire TWiki. Each poll has an _ID_ which distinguishes it from other
+polls. These IDs are local to the topic for local polls, but can be shared
+between topics if the poll is made _global_.
+
+The result of a poll is displayed in the polling form.
 
 ---++ Example
+You create a poll using the %VOTE twiki variable. For example,
+
+=%<nop>VOTE{id="FavouriteMeal" select1="Drink" options1="Beer,Wine,Milk,Water" select2="Food" options2="Steak,Bread,Pasta,Pizza"}%=
+
+displays as (if the plugin is installed and enabled)
+
 %VOTE{id="FavouriteMeal" select1="Drink" options1="Beer,Wine,Milk,Water" select2="Food" options2="Steak,Bread,Pasta,Pizza"}%
+
+and
+
+=%<nop>VOTE{id="Jazzers" stars1="Herbie Mann" stars2="Horace Silver" stars3="Thelonious Monk"}%=
+
+displays as
 
 %VOTE{id="Jazzers" stars1="Herbie Mann" stars2="Horace Silver" stars3="Thelonious Monk"}%
 
@@ -35,33 +61,69 @@ The result of a poll is displayed alongside with the vote form (todo: decouple t
 The %<nop>VOTE{ ... }% macro defines a poll using the following options:
 | *name* | *description* | *example* |
 | =id= | \
-The identifier of a poll. This must be unique within the topic. \
+The identifier of the poll. \
 You can have multiple independent votes in the same \
-topic. | <nop>FavouriteMeal |
-| =style= | \
-Specifies the style of the poll result. Possible values are a \
-combination of =bar=, =perc=, =total=, =stars= and =sum= to specify the \
-display style of the poll results (the default is =bar,perc,total=). | =bar= |
-| =select<i>&lt;n&gt;</i>= | \
-As you can see in the example above, multiple \
-decisions can be made within the same poll. \
-You can have as many selects per %VOTE as you want. | =Drinks= |
-| =options<i>&lt;n&gt;</i>= | \
-Each select&lt;n&gt; must have a corresponding set of options that \
-the voter will select from. | =Beer,Wine,Milk= |
-| =global= | If set to ="on"=, this makes the =id= global in your TWiki. \
-Votes with global id's accumulate; the same id in two topics are \
-effectively both the same vote. | |
-| =open= | Normally votes are recorded anonymously i.e. the database does *not* record who voted. If this option is set to ="on"=, then the database will record who voted. | |
+topic. | =id="Dining"= |
+| =select<i>N</i>= | \
+Defines the name of a *select* vote, where you select one from a ranges of \
+options. \
+=N= is a number that identifies this item within the poll e.g. =select1=, =select2= etc. You must number all =select= and =stars= parameters uniquely and sequentially (e.g. =select1 stars2 select3= | =select1="Drink"= |
+| =options<i>N</i>= | \
+Each =select<i>N</i>= must have a corresponding =options<i>N</i>= that \
+defines a comma-separated list of the options that can be selected between. | =options1="Beer,Wine,Milk"= |
+| =stars<i>N</i>= | \
+Defines the name of a *rate* vote, where you rate something by giving it \
+a number of stars. \
+=N= is a number that identifies this item within the poll e.g. =select1=, =stars2= etc. You must number all =select= and =stars= parameters uniquely and sequentially (e.g. =select1 stars2 select3= | =stars2="Usability"= |
+| =width<i>N</i>= | \
+Each =stars<i>N</i>= must have a corresponding =width<i>N</i>=. This gives the number of \
+stars to show e.g. =width1="5"= will show 5 stars. | =width2="10"= |
+| =format<i>N</i>= | \
+Defines the format of the results display. See [[#FormattingResults][formatting results]], below. | =format="$large"= |
+| =chart<i>N</i>= | \
+Defines the format of a single bar in the results bar chart generated for the corresponding  =select= (for =select= type only). See [[#FormattingResults][formatting results]], below. | =chart="&lt;p>$option $score&lt;/p>"= |
+| =separator= | Defines the string to be used to separate each row in the result. | =separator="&lt;br/>"= |
+| =global= | If set to "0", this makes the =id= local to this topic (the default). If set to "1" it will be a global poll that can be accessed from many topics. | =global="1"= |
+| =open= | If set to "0" this is a closed vote. If set to "1" it is open (the default) | =open="1"= |
+| =secret= | If set to "0", then the database will record who voted. If set to "1", votes are secret (the default) | =secret="1"= |
+| =saveto= | If set to the name of a topic, the poll results will be appended to the end of that topic. The results are formatted as a TWiki table for easy post-processing. | =saveto="Main.VoteResults"= |
 
-=select= and =option= can use the pseudo variables =$percnt=, =$dollar=, 
-=$quote= and =$doublequote= to render the respective characters in the vote
-output.
+%X% The =style= parameter has been _deprecated_ and should not be used
+(though it still works). The =color= and =bgcolor= paramaters have been removed.
+
+#FormattingResults
+---+++ Formatting the Results
+Each item in the poll has a results display next to it (are as part of it in the case of stars). The =format= parameter is used to control how this is displayed. It is usually used to define a row in a TWiki table, and is expands once for each =stars= and once for each option in a =select=.
+
+The =format= parameter is a string that can include the following formatting tokens:
+| =$key= | Expands to the name of the item (e.g. the value of =select1=). |
+| =$prompt= | Expands to a drop-down selector that allows the user to pick the option they want to vote for (for =select= items only) |
+| =$bars= | Expands to a sorted list of bar charts showing the number of votes for this option. Each bar in the chart is formatted according to the format defined in the corresponding =chart= parameter. |
+| =$sum= | Expands to the total number of votes cast |
+| =$score= | Expands to the mean of all the ratings (for =stars=) |
+| =$perc= | Expands to =100*$score/$sum= |
+| =$mylast= | Expands to my last rating (for =stars= items only) |
+| =$small= | Expands to the star rating bar, using small stars (mutually exclusive with =$large=) |
+| =$large= | Expands to the star rating bar, using large stars (mutually exclusive with =$small=) |
+
+The =chart= parameter defines the format of each bar in the bar chart that is generated for each option in the corresponding =select=.
+| =$bar(<i>N</i>)= | Expands to the coloured bar used to show the popularity of this option. <i>N</i>is the required total width of the bar in pixels. |
+| =$option= | Expands to the name of the option that this bar is for |
+| =$perc= | Expands to =100*$score/$sum= |
+| =$score= | Expands to the total number of votes cast for this option |
+
+   * The default =format= for a =select= is: =| $key | $item $prompt | $bars |=
+   * The default =chart= is =&lt;div>$bar(300) $option $perc% ($score)&lt;/div>=
+   * The default =format= for =stars= is: =| $key | $small&lt;br />&lt;small>Score: $score, My vote: $myLast, Total votes: $total&lt;/small> ||=
+
+The default =separator= is a newline.
+
+=select=, =option=, =format= and =chart= can all use the standard
+formatting tokens
+=$percnt=, =$dollar=, =$quot= and =$n= to render the respective characters.
 
 The %<nop>VOTE{ ... }% will generate the selection box(es) and the poll
 results.
-
-The plugin will count only your latest vote. You may only vote once a day.
 
 You can weight the vote results by setting the !TWikiPreference
 =%<nop>VOTEPLUGIN_WEIGHTINGS%= to the name of a topic that is used
@@ -89,9 +151,9 @@ The weighting topic applies to all votes in the scope of the =%<nop>VOTEPLUGIN_W
 |  Plugin Author: | TWiki:Main/MichaelDaum |
 |  Copyright &copy;: | 2005-2007, Michael Daum http://wikiring.de |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | v1.32 |
+|  Plugin Version: | %$VERSION% |
 |  Change History: | &nbsp; | 
-|               | Added =global= and =VOTEPLUGIN_WEIGHTINGS= - TWiki:Main/CrawfordCurrie |
+|               | Added =global=, =open=, =secret=, flexible formatting, and =VOTEPLUGIN_WEIGHTINGS= - TWiki:Main/CrawfordCurrie |
 |  31 Aug 2006: | added NO_PREFS_IN_TOPIC |
 |  15 Aug 2006: | added "use strict" and fixed revealing errors |
 |  27 Apr 2006: | added lazy compilation |
@@ -113,4 +175,6 @@ The weighting topic applies to all votes in the scope of the =%<nop>VOTEPLUGIN_W
 |  Feedback: | TWiki:Plugins/%TOPIC%Dev |
 |  Appraisal: | TWiki:Plugins/%TOPIC%Appraisal |
 
+%META:FILEATTACHMENT{name="example_select.gif" attr="h" comment="" version="1"}%
+%META:FILEATTACHMENT{name="example_stars.gif" attr="h" comment="" version="1"}%
 -- TWiki:Main.MichaelDaum - 31 Aug 2006

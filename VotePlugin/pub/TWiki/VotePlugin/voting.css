@@ -1,21 +1,62 @@
-.voteStarRating {
-  margin: 0;
-  padding: 0;
+.voteTable {
   border: 0;
+  padding: 0;
+  margin: 0;
 }
-.voteClear {
-  background:url(alt_star.gif) top left repeat-x;
-  width: 25px;
-  height: 25px;	
-  float:left;
+.star-rating,
+.star-rating a:hover,
+.star-rating a:active,
+.star-rating a:focus,
+.star-rating .current-rating{
+	background: url(star.gif) left -1000px repeat-x;
 }
-.voteSet {
-  background:url(alt_star.gif) center left repeat-x;		
-  width: 25px;
-  height: 25px;	
-  float:left;
+.star-rating{
+	position:relative;
+	width:125px;
+	height:25px;
+	overflow:hidden;
+	list-style:none;
+	margin:0;
+	padding:0;
+	background-position: left top;
 }
-.voteClear:hover,
-.voteSet:hover {
-  background:url(alt_star.gif) bottom left repeat-x;		
+.star-rating li{
+	display: inline;
+}
+.star-rating a, 
+.star-rating .current-rating{
+	position:absolute;
+	top:0;
+	left:0;
+	text-indent:-1000em;
+	height:25px;
+	line-height:25px;
+	outline:none;
+	overflow:hidden;
+	border: none;
+}
+.star-rating a:hover,
+.star-rating a:active,
+.star-rating a:focus{
+	background-position: left bottom;
+}
+
+.star-rating .current-rating{
+	z-index:1;
+	background-position: left center;
+}	
+
+/* smaller star */
+.small-star{
+	width:50px;
+	height:10px;
+}
+.small-star,
+.small-star a:hover,
+.small-star a:active,
+.small-star a:focus,
+.small-star .current-rating{
+	background-image: url(star_small.gif);
+	line-height: 10px;
+	height: 10px;
 }
