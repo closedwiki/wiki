@@ -14,9 +14,12 @@
 		total += results[i];
 	}
 	var text = "<br />" + "%MAKETEXT{"Number of topics:"}%" + " <b>" + total + " <\/b>";
-	twiki.HTML.setHtmlOfElementWithId('twikiNumberOfResultsContainer', text);
-	if (total < 10) {
-		twiki.HTML.setHtmlOfElementWithId('twikiBottomResultCount', '');
+	var elem = document.getElementById('twikiNumberOfResultsContainer');
+	if (elem) {
+		elem.innerHTML = text;
+		if (total < 10) {
+			elem.innerHTML = '';
+		}
 	}
 //]]>
 </script>%TMPL:END%
