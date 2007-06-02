@@ -66,7 +66,7 @@ color:#ccc;
 
 <verbatim>
 %STARTSECTION{"personalInfo"}%%INCLUDE{"PersonalInfo" section="personalInfoStyle"}%<div class="pIparagraphFrame personalInfo">
----+!! %FORMFIELD{"FirstName" topic="%BASETOPIC%"}% %FORMFIELD{"LastName" topic="%BASETOPIC%"}%
+---+!! <nop>%FORMFIELD{"FirstName" topic="%BASETOPIC%"}% %FORMFIELD{"LastName" topic="%BASETOPIC%"}%
 %INCLUDE{"LayoutModules" section="paragraphWithImageLeftStyle"}%
 <form name="main" action="%SCRIPTURLPATH{"save"}%/%BASEWEB%/%BASETOPIC%" method="post">
 <input type="hidden" name="editaction" value="form" />
@@ -108,9 +108,14 @@ color:#ccc;
 ---++ directSearch
 
 <verbatim>
-%STARTSECTION{"directSearch" title=%TITLE% maxresults=%MAXRESULTS%}% %title%  %BR%
+%STARTSECTION{"directSearch" title="%TITLE%" maxresults="%MAXRESULTS%"}% <div> %title% </div>
 <input type="text" class="twikiInputField" size="12" id="personalInfoSearchBox" name="personalInfoSearchBox" onkeyup="showResults(); return false;" />
 <div id="personalInfoSearchResults"><!-- search results will be displayed here --></div>
+<script language="javascript" type="text/javascript">
+// <![CDATA[
+var PERSONALINFO_MAX_RESULTS = %IF{"defined maxresults" then="%URLPARAM{"maxresults" default="%maxresults%"}%" else="12"}%;
+// ]]>
+</script>
 %IF{"context AttachContentPluginEnabled" then='%INCLUDE{"PersonalInfo" section="directSearchScriptFile"}%' else='%INCLUDE{"PersonalInfo" section="directSearchScript" raw="on" literal="on"}%'}%
 <style type="text/css" media="all">
 #personalInfoSearchResults td {
@@ -125,9 +130,10 @@ padding:.1em .25em;
 
 <verbatim>
 %STARTSECTION{"directSearchScript"}%<script language="javascript" type="text/javascript">%STARTSECTION{"directSearchScriptCode"}%
-var MAX_RESULTS = %IF{"defined maxresults" then="%URLPARAM{"maxresults" default="%maxresults%"}%" else="12"}%;
 var userData = new Array(%INCLUDE{"PersonalInfo" section="directSearchData"}%);
 function showResults() {
+	var PERSONALINFO_MAX_RESULTS;
+	if (!PERSONALINFO_MAX_RESULTS) PERSONALINFO_MAX_RESULTS = 12;
 	var output = "";
 	var resultCount = 0;
 	var query = document.getElementById("personalInfoSearchBox").value.toLowerCase();
@@ -135,7 +141,7 @@ function showResults() {
 		var regex = new RegExp("\\b" + query, "gi");
 		output = "<table cellpadding=\u00270\u0027 cellspacing=\u00270\u0027>";
 		var i = 0;
-		while ( i < userData.length && resultCount < MAX_RESULTS) {
+		while ( i < userData.length && resultCount < PERSONALINFO_MAX_RESULTS) {
 			var linkLabel = "";
 			var name = userData[i].name;
 			if (name.match(regex)) {
