@@ -1,4 +1,5 @@
 data/TWiki/BeautifierPlugin.txt NEW
+data/TWiki/VarCODE.txt NEW
 lib/Beautifier/Context.pm NEW
 lib/Beautifier/Core.pm NEW
 lib/Beautifier/HFile.pm NEW
