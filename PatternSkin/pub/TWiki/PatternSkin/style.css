@@ -702,7 +702,6 @@ html>body #patternLeftBarContents .twikiHierarchicalNavigation { /* Mozilla */
 .patternMetaMenu select option {
 	font-size:.86em; /* use em instead of % for consistent size */
 	margin:0;
-	width:8em;
 }
 .patternMetaMenu select option {
 	padding:1px 0 0 0;
