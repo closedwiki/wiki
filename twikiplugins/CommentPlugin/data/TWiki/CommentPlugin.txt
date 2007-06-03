@@ -255,9 +255,10 @@ These can be set in !TWikiPreferences, in !WebPreferences or in individual topic
 
 ---++ Plugin Info
 
-|  Plugin Author: | TWiki:Main.DavidWeller, TWiki:Main.PeterMasiar, TWiki:Main.CrawfordCurrie http://www.c-dot.co.uk |
+|  Plugin Author: | TWiki:Main.CrawfordCurrie http://www.c-dot.co.uk inspired by the work of TWiki:Main.DavidWeller and TWiki:Main.PeterMasiar |
 |  Plugin Version: | %$VERSION% |
 |  Change History: | |
+|  14021 | Bugs:Item3755 Fixed incorrect handling of line terminators when targeting an anchor |
 |  13311 | Added option to define a comment template in any topic. Pass the topic location with =templatetopic= (either =topic= or =web.topic=). See an example in [[CommentPluginExamples#TemplateTopic][CommentPluginExamples:templatetopic]]. |
 |  12822 | Bugs:Item3598 minor doc fixes |
 |  12750 | Bugs:Item3510 added a note about the changed template spec in TWiki 4.1.0. Code remains unchanged |
@@ -287,4 +288,3 @@ These can be set in !TWikiPreferences, in !WebPreferences or in individual topic
 
 __Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
 
--- TWiki:Main/CrawfordCurrie - %$DATE%

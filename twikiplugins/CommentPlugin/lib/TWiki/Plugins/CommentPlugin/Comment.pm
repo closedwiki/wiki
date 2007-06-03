@@ -208,11 +208,13 @@ sub _handleInput {
 sub _getTemplate {
     my ( $name, $topic, $web, $templatetopic, $warn ) = @_;
 
+    $warn ||= '';
+
     # Get the templates.
     my $templateFile = $templatetopic
         || TWiki::Func::getPreferencesValue('COMMENTPLUGIN_TEMPLATES')
         || 'comments';
-    
+
     my $templates =
       TWiki::Func::loadTemplate( $templateFile );
     if (! $templates ) {
@@ -285,7 +287,7 @@ sub _buildNewTopic {
     my $inpost = 0;
     my $text = '';
     foreach my $line ( split( /\r?\n/, $_[0] )) {
-        if( $line =~ /^%META:[^{]+{[^}]*}%/ ) {
+        if( $line =~ /^%META:[A-Z]+{[^}]*}%/ ) {
             if ( $inpost) {
                 $postmeta .= $line."\n";
             } else {
@@ -317,11 +319,9 @@ sub _buildNewTopic {
             } elsif ( $anchor ) {
                 # position relative to anchor
                 if ( $position eq 'BEFORE' ) {
-                    $output =~ s/\n$//;
-                    $text =~ s/^($anchor)\b/$output\n$1/m;
+                    $text =~ s/^($anchor\s)/$output$1/m;
                 } else { # AFTER
-                    $output =~ s/^\n+//;
-                    $text =~ s/^($anchor)\b/$1\n$output/m;
+                    $text =~ s/^($anchor\s)/$1$output/m;
                 }
             } else {
                 # Position relative to index'th comment
