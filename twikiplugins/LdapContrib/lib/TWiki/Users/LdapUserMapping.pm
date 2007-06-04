@@ -143,9 +143,13 @@ sub groupMembers {
 	push @{$memberUser->{groups}}, $group; # backlink the user to the group
       }
     } else {
-      # fallback to twiki groups
-      if ($this->{ldap}{twikiGroupsBackoff}) {
+      # fallback to twiki groups,
+      # try also to find the SuperAdminGroup
+      if ($this->{ldap}{twikiGroupsBackoff} 
+        || $group->wikiName eq $TWiki::cfg{SuperAdminGroup}) {
         return $this->SUPER::groupMembers($group) || [];
+      } else {
+        $group->{members} = [];
       }
     }
   }
@@ -178,6 +182,9 @@ user resolution, and should be as fast as possible.
 
 sub lookupLoginName {
   my ($this, $name) = @_;
+
+  # make all login names same case for LDAP
+  $name = lc($name);
 
   $this->{ldap}->writeDebug("called lookupLoginName($name)");
 
@@ -231,6 +238,7 @@ sub lookupWikiName {
 
   # removing leading web
   $name =~ s/^.*\.(.*?)$/$1/o;
+  $name =~ lc($name);
 
   $this->{ldap}->writeDebug("called lookupWikiName($name)");
 
@@ -336,15 +344,19 @@ sub loadLdapMapping {
     # insert results into the mapping
     while (my $entry = $mesg->pop_entry()) {
       my $loginName = $entry->get_value($this->{ldap}{loginAttribute});
-      $loginName = from_utf8(-string=>$loginName, -charset=>$TWiki::cfg{Site}{CharSet});
       my $dn = $entry->dn();
+      $loginName = from_utf8(-string=>$loginName, -charset=>$TWiki::cfg{Site}{CharSet})
+        unless $TWiki::cfg{Site}{CharSet} =~ /^utf-?8$/i;
+      $loginName = lc($loginName);
 
       # construct the wikiName
       my $wikiName;
       foreach my $attr (@{$this->{ldap}{wikiNameAttributes}}) {
         my $value = $entry->get_value($attr);
         next unless $value;
-        $value = from_utf8(-string=>$value, -charset=>$TWiki::cfg{Site}{CharSet});
+        $value = from_utf8(-string=>$value, -charset=>$TWiki::cfg{Site}{CharSet})
+          unless $TWiki::cfg{Site}{CharSet} =~ /^utf-?8$/i;
+
         unless ($this->{ldap}{normalizeWikiName}) {
           $wikiName .= $value;
           next;
@@ -555,7 +567,8 @@ sub getGroupMembers {
   # fetch all members
   my @members = ();
   foreach my $member ($groupEntry->get_value($this->{ldap}{memberAttribute})) {
-    $member = from_utf8(-string=>$member, -charset=>$TWiki::cfg{Site}{CharSet});
+    $member = from_utf8(-string=>$member, -charset=>$TWiki::cfg{Site}{CharSet})
+      unless $TWiki::cfg{Site}{CharSet} =~ /^utf-?8$/i;
 
     $this->{ldap}->writeDebug("found member=$member");
 
