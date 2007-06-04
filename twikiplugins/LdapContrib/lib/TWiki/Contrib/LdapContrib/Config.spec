@@ -131,10 +131,13 @@ $TWiki::cfg{Ldap}{MemberIndirection} = 0;
 #
 # Refresh rate when the ldap cache is fetched from the LDAP server; 
 # a value of -1 means unlimitted caching; 
-# a value of 0 disables the cache; 
 # default is -1. Note, that this will only take effect if you use a perl accelerator like speedy-cgi, mod-perl
 # or fastcgi.
 $TWiki::cfg{Ldap}{MaxCacheHits} = -1;
+
+# **NUMBER**
+# Time in seconds when cache data expires and is reloaded anew.
+$TWiki::cfg{Ldap}{MaxCacheAge} = 600;
 
 # **STRING 50**
 # Prevent certain names from being looked up in LDAP

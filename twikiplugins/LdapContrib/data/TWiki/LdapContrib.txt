@@ -143,10 +143,12 @@ These are:
    * negotiate ssl when binding to the server; possible values: 0, 1
      <verbatim>$TWiki::cfg{Ldap}{SSL} = 0; </verbatim>
    * refresh rate when the LDAP cache is fetched from the LDAP server; 
-     a value of -1 means unlimitted caching; 
-     a value of 0 disables the caching; 
      default is -1
      <verbatim>$TWiki::cfg{Ldap}{MaxCacheHits} = -1; </verbatim>
+   * maximum time a cache is kept; default is 600 seconds;
+     the cache is actually expiring if one of the settings
+     <nop>MaxCacheHits or <nop>MaxCacheAge becomes valid.
+     <verbatim>$TWiki::cfg{Ldap}{MaxCacheAge} = 600; </verbatim>
    * enable/disable mapping LDAP groups; default is 0
      <verbatim>$TWiki::cfg{Ldap}{MapGroups} = 0; </verbatim>
    * prevent certain names from being looked up in LDAP
@@ -242,11 +244,13 @@ take precedence. If switched off <nop>TWikiGroups are ignored.
    This work was partly funded by [[http://www.spanlink.com][Spanlink Communications]] and \
    [[http://www.trivadis.com][Trivadis]] |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Version: | v1.02 |
+|  Version: | v1.10 |
 |  Change History: | |
 |  04 June 2007: | don't be casesensitive for login names; \
                    fixed several utf8 issues; \
-                   fixed crash when no groups where found |
+                   fixed crash when no groups where found;\
+                   caching mapping privately; added <nop>MaxCacheAge; \
+                   added support for nested LDAP groups |
 |  30 Apr 2007: | fixed return value on illegal lookup calls |
 |  24 Apr 2007: | be robust against the lookup-API being called with the wrong parameters; \
                   added =Debug= flag; \
