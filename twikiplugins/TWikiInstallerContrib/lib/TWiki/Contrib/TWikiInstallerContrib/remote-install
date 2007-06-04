@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 <<________________________________________________________________________________;
 
-IF YOU SEE THIS INSTEAD OF THE INSTALLATION WEB PAGE,
+IF YOU SEE THIS NOTICE INSTEAD OF THE INSTALLATION WEB PAGE, YOUR APACHE FAILS YOU
 
 * CREATE A .htaccess FILE IN THE SAME DIRECTORY THAT THIS SCRIPT IS LOCATED:
 
@@ -78,7 +78,7 @@ my $q = CGI::new() or die $!;
 # object data
 my $LocalSiteCfg;
 my $twikiAdmin = $q->param('TWikiAdmin') || '';
-my $wikiWebMaster = $q->param('WIKIWEBMASTER') || $ENV{SERVER_ADMIN};
+my $WebMasterEmail = $q->param('WebMasterEmail') || $ENV{SERVER_ADMIN} || "webmaster\@$ENV{HTTP_HOST}";
 my $TWikiFor = $q->param('TWikiFor');
 #my $TWikiFor = $q->param('TWikiFor') || 'http://localhost/~twikibuilder/twiki.org.zip';
 my $perl = $q->param( 'perl' ) || $EXECUTABLE_NAME;
@@ -100,8 +100,7 @@ __CSS__
 		     },
     -onload => "expand_collapse_repositories('twiki.org'); checkEnableInstallButton(event);",
     -onkeyup => "checkEnableInstallButton(event)",
-    -onmousedown => "checkEnableInstallButton(event)",
-    -onmouseup => "checkEnableInstallButton(event)",
+    -onclick => "checkEnableInstallButton(event)",
     -script => q{
 function isEmpty(str) {
 	return str === '';
@@ -111,16 +110,19 @@ function checkEnableInstallButton(e) {
 	
 	var disabled = false;
 	
-	var required_fields = [ 'TWikiFor', 'configure_admin', 'configure_password', 'configure_password2', 'WIKIWEBMASTER', 'TWikiAdmin', 'perl' ];
+	var required_fields = [ 'TWikiFor', 'configure_admin', 'configure_password', 'configure_password2', 'WebMasterEmail', 'TWikiAdmin', 'perl', 'force_installation' ];
 	for ( i=0; i<required_fields.length; ++i ) {
 		var field = required_fields[i];
 		var el = document.getElementById( field );
-		if ( isEmpty(el.value) ) { disabled = true }
+		if ( el ) {
+			if ( isEmpty(el.value) ) { disabled = true }
+			if ( el.type === 'checkbox' && !el.checked ) { disabled = true }
 		
-		// show/hide help elements
-		var elHelp = document.getElementById(field+'_help');
-		if ( elHelp ) {
-			elHelp.style.display = ( e.target === el ? '' : 'none' );
+			// show/hide help elements
+			var elHelp = document.getElementById(field+'_help');
+			if ( elHelp ) {
+				elHelp.style.display = ( e.target === el ? '' : 'none' );
+			}
 		}
 	}
 
@@ -154,8 +156,7 @@ my %installedPlugins;	# which plugins get installed/are encountered
 my $twikiDir = "$FindBin::Bin";
 
 my ( $twikiPath ) = $ENV{SCRIPT_NAME} =~ m|(.*)/.*|;		# remove the script name from the path
-$twikiPath .= '/twiki';
-print STDERR "twikiPath=[$twikiPath]\n";
+#print STDERR "twikiPath=[$twikiPath]\n";
 
 # automatically detect required script suffix from this script's filename
 my ( $scriptSuffix ) = $ENV{SCRIPT_NAME} =~ m|.*/.*(\..*)$|;
@@ -190,14 +191,9 @@ my $mapTWikiDirs = {
 ################################################################################
 # already installed?
 ################################################################################
-my $fForceInstallation = $q->param( 'force' );
-if ( -e "$FindBin::Bin/LocalLib.cfg" && !$fForceInstallation ) {
-    print $q->p( "TWiki is already installed! (you can ", $q->tt( 'force=1' ), " a (re)installation)" );
-    
-    print $q->p( $q->a( { -href => continueToWikiUrl() }, "Proceed to the wiki" ) );
-    print $q->p( $q->a( { -href => continueToConfigureUrl() }, "Configure the wiki" ) );
-
-    exit 0;
+sub isTWikiAlreadyInstalled
+{
+    return -e "$FindBin::Bin/bin/LocalLib.cfg";
 }
 
 ################################################################################
@@ -260,6 +256,7 @@ print "<h1>Installing...</h1>\n";
 
 my $archive_file = 'install.zip';
 unless ( -e $archive_file ) {
+    print STDERR "downloading $TWikiFor\n";
     my ( $tar, $error ) = getUrl({ url => $TWikiFor, outfile => $archive_file });
     die $error if $error;
 
@@ -329,7 +326,8 @@ close( FH ) or die "Can't close $fnLocalSiteCfg: $! ???";
 ################################################################################
 # setup configure
 if ( $q->param( 'configure_admin' ) ) {
-    my $htpasswd_params = "-b $localDirConfig->{DataDir} $q->param('configure_admin') $q->param('configure_password')";
+    my $htpasswd_file = $localDirConfig->{DataDir}.'/.htpasswd';
+    my $htpasswd_params = ( -e $htpasswd_file ? '' : '-c ' ) . "-b $htpasswd_file " . $q->param('configure_admin') . ' ' . $q->param('configure_password');
     `htpasswd $htpasswd_params`;
 }
 
@@ -438,14 +436,16 @@ EOT
 
 # SMELL: calculate ErrorDocument URL
 
-open ( HTACCESS, '>', "$localDirConfig->{BinDir}/.htaccess" ) or die $@;
+#print STDERR "mtw/b: ", $mapTWikiDirs->{bin}->{dest}, "\n";
+open ( HTACCESS, '>', $mapTWikiDirs->{bin}->{dest} . '/.htaccess' ) or warn $!;
 print HTACCESS $BinHtAccess, "\n";
 print HTACCESS "ErrorDocument 401 bin/view$scriptSuffix/TWiki/TWikiRegistration\n";
 close HTACCESS;
 
 #foreach my $dir qw( pub/Trash data lib locale logs templates test tools twikiplugins ) {
+#foreach my $dir qw( data lib locale logs templates test tools twikiplugins ) {
 #    my $abs_dir = $localDirConfig->{}/$dir;
-#    open( HTACCESS, '>', "$abs_dir/.htaccess" ) or die $@;
+#    open( HTACCESS, '>', "$abs_dir/.htaccess" ) or warn $@;
 #    print HTACCESS "Deny from all\n";
 #    close( HTACCESS );
 #}
@@ -554,6 +554,9 @@ my $repository = {
 
     my ( $twikiUrl ) = $ENV{SCRIPT_URI} =~ m|^(.*/)|;
 
+    my $strHtmlForceInstallation = isTWikiAlreadyInstalled() ?
+	'<input type=checkbox name=force_installation id=force_installation> <b>Existing TWiki installation detected.</b> Allow forced installation by overwriting files.<br/>' : '';
+
     $text .= qq{
 <div id="container"><a id="topofpage"></a><div class="section">
 <!--==========================================================================================-->
@@ -571,12 +574,11 @@ The TWiki Installer will install a TWiki release to<br />
 </ol>
 -->
 <form method="post" action="" enctype="application/x-www-form-urlencoded" />
-<input type="hidden" name="force" value="$fForceInstallation" />
 <!--==========================================================================================-->
 <fieldset><legend>1. Choose a TWiki Release</legend>
 
 TWiki release to install <input type="text" name="TWikiFor" id="TWikiFor" value="http://twiki.org/p/pub/Codev/Release/TWiki-4.1.2.zip" size="50" />
-<div class=help>Select a TWiki release from the list below <i>or</i> enter a URL manually.
+<div class=help>Select a TWiki release from the list below <i>or</i> enter a URL manually
 <!-- By the way, this should also be able to install TWiki extensions -->
 </div>
 }
@@ -595,23 +597,24 @@ password <input $htpasswd_avail type=password name=configure_password id=configu
 verify password $htpasswd_avail <input type=password name=configure_password2 id=configure_password2 /> <span id=password_mismatch></span><br/>
 <div class=help id=configure_password2_help>Type in the same password again<br/></div></fieldset></div>
 
-<b>TWikiAdmin</b>: <input type="text" name="TWikiAdmin" id="TWikiAdmin" size="35" value="$twikiAdmin" /><br />
+<b>TWikiAdmin</b> <input type="text" name="TWikiAdmin" id="TWikiAdmin" size="35" value="$twikiAdmin" /><br />
 <div class=help id=TWikiAdmin_help>This TWiki account will be created and added to the <a target="_new" href="http://twiki.org/cgi-bin/view/TWiki/TWikiAccessControl#The_Super_Admin_Group">TWikiAdminGroup</a>. 
-A password will be automatically generated and sent to the email specified by WIKIWEBMASTER below<br/></div>
+A password will be automatically generated and sent to the email specified by WebMasterEmail below<br/></div>
 
-<b>WIKIWEBMASTER</b>: <input type="text" name="WIKIWEBMASTER" id=WIKIWEBMASTER value="$wikiWebMaster" size="35" /><br />
-<div class=help id=WIKIWEBMASTER_help>This will automatically set the TWiki webmaster email address <a target="_new" href="http://twiki.org/cgi-bin/view/TWiki/TWikiPreferences#Email_and_Proxy_Server_Settings">WIKIWEBMASTER</a> in Main.TWikiPreferences<br/></div>
+<b>WebMasterEmail</b> <input type="text" name="WebMasterEmail" id=WebMasterEmail value="$WebMasterEmail" size="35" /><br />
+<div class=help id=WebMasterEmail_help>This will automatically set the TWiki webmaster email address <a target="_new" href="http://twiki.org/cgi-bin/view/TWiki/TWikiPreferences#Email_and_Proxy_Server_Settings">WebMasterEmail</a> <!-- in Main.TWikiPreferences --><br/></div>
 
 <!--
-<b>WIKIWEBMASTERNAME</b>: <input type="text" name="WIKIWEBMASTERNAME" value="TWiki Administrator" size="35" /><br />
+<b>WebMasterEmailNAME</b> <input type="text" name="WebMasterEmailNAME" value="TWiki Administrator" size="35" /><br />
 <br/>
 -->
 
-<b>perl</b> (full path): <input type="text" name="perl" id="perl" value="$perl" size="30" /> (automatically detected)<br/>
+<b>perl</b> (full path) <input type="text" name="perl" id="perl" value="$perl" size="30" /> (automatically detected)<br/>
 <div class=help id=perl_help>You may also change it to a perl accelerator, e.g,. <a target="_new" href="http://www.daemoninc.com/SpeedyCGI/">SpeedyCGI</a><br/></div>
 </fieldset>
 <!--==========================================================================================-->
 <fieldset><legend>3. Install TWiki!</legend>
+$strHtmlForceInstallation
 <input type="submit" name="install" id="install" value="Install" /> to $twikiDir <br />
 </fieldset>
 <!--==========================================================================================-->
@@ -670,8 +673,8 @@ sub installationMenu {
 		      . $q->b( 'TWikiAdmin' ) . ': '
 		      . $q->textfield( -name => 'TWikiAdmin', -default => $twikiAdmin, -size => 25 )
 		      . $q->br
-		      . $q->b( 'WIKIWEBMASTER' ) . ': '
-		      . $q->textfield( -name => 'WIKIWEBMASTER', -default => $wikiWebMaster, -size => 25 )
+		      . $q->b( 'WebMasterEmail' ) . ': '
+		      . $q->textfield( -name => 'WebMasterEmail', -default => $WebMasterEmail, -size => 25 )
 		      . $q->br
 		      );
 			    
