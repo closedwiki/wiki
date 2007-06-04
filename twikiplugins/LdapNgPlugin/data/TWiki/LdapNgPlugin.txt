@@ -90,7 +90,7 @@ The %TOPIC% will use the default configuration of the LdapContrib in your =Local
 |  Copyright &copy;: | 2006 Michael Daum http://wikiring.com %BR% \
    This work was partly funded by Spanlink Communications |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | v1.00 |
+|  Plugin Version: | v1.01 |
 |  Change History: | &nbsp; |
 |  04 June 2007: | don't convert from/to utf8 if the site charset is already utf8 |
 |  18 Dec 2006: | added support for addresses as specified in RFC4517 |
