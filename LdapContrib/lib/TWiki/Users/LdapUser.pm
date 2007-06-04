@@ -21,8 +21,6 @@ use strict;
 use TWiki::Users::Password;
 use TWiki::Contrib::LdapContrib;
 
-use vars qw(%U2DN %U2EMAILS);
-
 @TWiki::Users::LdapUser::ISA = qw( TWiki::Users::Password );
 
 =pod
@@ -63,14 +61,7 @@ sub new {
   my ($class, $session) = @_;
 
   my $this = bless($class->SUPER::new( $session ), $class);
-  $this->{ldap} = &TWiki::Contrib::LdapContrib::getLdapContrib();
-
-  # explicitly refresh the ldap cache
-  my $refresh = $session->{cgiQuery}->param('refreshldap') || '';
-  if ($refresh eq 'on') {
-    %U2DN = ();
-    %U2EMAILS = ();
-  }
+  $this->{ldap} = &TWiki::Contrib::LdapContrib::getLdapContrib($session);
 
   return $this;
 }
@@ -127,18 +118,15 @@ sub checkPassword {
 
 
   # lookup cache
-  if (defined($U2DN{$login})) {
-    $this->{ldap}->writeDebug("found dn for $login in cache: $U2DN{$login}");
-  } else {
-    $U2DN{$login} = '';
+  my $dn = $this->{ldap}{cache}{DN2U}{$login};
+  unless ($dn) {
     my $entry = $this->{ldap}->getAccount($login);
-    if ($entry) {
-      $U2DN{$login} = $entry->dn();
-    } else {
-      return 0;
-    }
+    return 0 unless $entry;
+    $dn = $entry->dn();
+    $this->{ldap}{cache}{DN2U}{$login} = $dn;
+    $this->{ldap}{cache}{U2DN}{$dn} = $login;
   }
-  return $this->{ldap}->connect($U2DN{$login}, $passU);
+  return $this->{ldap}->connect($dn, $passU);
 }
 
 =pod 
@@ -154,30 +142,28 @@ if this is not the case we fallback to twiki's default behavior
 sub getEmails {
   my ($this, $login) = @_;
 
-  $login = lc($login);
   $this->{ldap}->writeDebug("getEmails($login)");
 
   # guest has no email addrs
   return () if $login eq $TWiki::cfg{DefaultUserWikiName};
 
   # lookup cache
-  if (defined($U2EMAILS{$login})) {
-    $this->{ldap}->writeDebug("found emails for $login in cache: ".join(',',@{$U2EMAILS{$login}}));
-  } else {
-    my $entry = $this->{ldap}->getAccount($login);
-    if ($entry) {
-      @{$U2EMAILS{$login}} = $entry->get_value('mail');
-    }
+  $login = lc($login);
+  my $emails = $this->{ldap}{cache}{U2EMAILS}{$login};
+  return @$emails if $emails;
+
+  my $entry = $this->{ldap}->getAccount($login);
+  @{$emails} = $entry->get_value($this->{ldap}{mailAttribute}) if $entry;
+
+  unless ($emails) {
+    # fall back to the default approach
+    $this->{ldap}->writeDebug("fall back to default approach to get email addresses");
+    @{$emails} = $this->SUPER::getEmails($login) || ();
+    $this->{ldap}->writeDebug("found emails for $login: ".join(',',@{$emails}));
   }
-  return @{$U2EMAILS{$login}} if $U2EMAILS{$login};
+  $this->{ldap}{cache}{U2EMAILS}{$login} = $emails;
 
-  # fall back to the default approach
-  $this->{ldap}->writeDebug("fall back to default approach to get email addresses");
-
-  @{$U2EMAILS{$login}} = $this->SUPER::getEmails($login) || ();
-  $this->{ldap}->writeDebug("found emails for $login: ".join(',',@{$U2EMAILS{$login}}));
-
-  return @{$U2EMAILS{$login}};
+  return @{$emails};
 }
 
 =pod ObjectMethod finish()
@@ -190,7 +176,7 @@ i.e. destroy the ldap object.
 sub finish {
   my $this = shift;
 
-  $this->{ldap}->disconnect() if $this->{ldap};
+  $this->{ldap}->finish() if $this->{ldap};
   $this->{ldap} = undef;
 
   # for safety call the SUPER finisher

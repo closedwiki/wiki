@@ -23,11 +23,12 @@ use Net::LDAP::Control::Paged;
 use Net::LDAP::Constant qw(LDAP_SUCCESS LDAP_SIZELIMIT_EXCEEDED LDAP_CONTROL_PAGED);
 use Digest::MD5 qw( md5_hex );
 use Unicode::MapUTF8 qw(from_utf8 to_utf8);
+use TWiki::Contrib::LdapContrib::Cache;
 
 use vars qw($VERSION $RELEASE $sharedLdapContrib);
 
 $VERSION = '$Rev$';
-$RELEASE = 'v1.02';
+$RELEASE = 'v1.10';
 
 =begin text
 
@@ -80,7 +81,7 @@ sub writeDebug {
 
 =begin text
 
----++++ new(host=>'...', base=>'...', ...) -> $ldap
+---++++ new($session, host=>'...', base=>'...', ...) -> $ldap
 
 Construct a new TWiki::Contrib::LdapContrib object
 
@@ -107,6 +108,7 @@ in =lib/LocalSite.cfg=.
 
 sub new {
   my $class = shift;
+  my $session = shift;
 
   my $this = {
     ldap=>undef,# connect later
@@ -129,6 +131,7 @@ sub new {
 
     loginAttribute=>$TWiki::cfg{Ldap}{LoginAttribute} || 'uid',
 
+
     wikiNameAttribute=>$TWiki::cfg{Ldap}{WikiNameAttributes} 
       || $TWiki::cfg{Ldap}{WikiNameAttribute} || 'cn',
 
@@ -146,10 +149,13 @@ sub new {
     ssl=>$TWiki::cfg{Ldap}{SSL} || 0,
     mapGroups=>$TWiki::cfg{Ldap}{MapGroups} || 0,
 
+    mailAttribute=>$TWiki::cfg{Ldap}{MailAttribute} || 'mail',
+
     exclude=>$TWiki::cfg{Ldap}{Exclude} || 
       'TWikiGuest, TWikiContributor, TWikiRegistrationAgent, TWikiAdminGroup, NobodyGroup',
 
     pageSize=>$TWiki::cfg{Ldap}{PageSize} || 200,
+    isConnected=>0,
     @_
   };
   $this->{normalizeWikiName} = 1 unless defined $this->{normalizeWikiName};
@@ -164,12 +170,15 @@ sub new {
   bless($this, $class);
   $this->writeDebug("constructed a new LdapContrib object");
 
+  # init the ldap cache
+  $this->{cache} = TWiki::Contrib::LdapContrib::Cache::init($session);
+
   return $this;
 }
 
 =begin text
 
----++++ getLdapContrib() -> $ldap
+---++++ getLdapContrib($session) -> $ldap
 
 Returns a standard singleton TWiki::Contrib::LdapContrib object based on the site-wide
 configuration. 
@@ -177,7 +186,13 @@ configuration.
 =cut
 
 sub getLdapContrib {
-  $sharedLdapContrib = new TWiki::Contrib::LdapContrib unless $sharedLdapContrib;
+  my $session = shift;
+
+  if ($sharedLdapContrib) {
+    $sharedLdapContrib->{cache} = TWiki::Contrib::LdapContrib::Cache::init($session);
+  } else {
+    $sharedLdapContrib = new TWiki::Contrib::LdapContrib($session);
+  }
   return $sharedLdapContrib;
 }
 
@@ -209,27 +224,28 @@ sub connect {
   }
 
   # authenticated bind
+  my $msg;
   if (defined($dn)) {
     die "illegal call to connect()" unless defined($passwd);
-    my $msg = $this->{ldap}->bind($dn, password=>$passwd);
+    $msg = $this->{ldap}->bind($dn, password=>$passwd);
     $this->writeDebug("bind for $dn");
-    my $isOk = ($this->checkError($msg) == LDAP_SUCCESS)?1:0;
-    $this->writeDebug("failed to bind") unless $isOk;
-    return $isOk;
   } 
 
   # proxy user 
-  if ($this->{bindDN} && $this->{bindPassword}) {
-    my $msg = $this->{ldap}->bind($this->{bindDN},password=>$this->{bindPassword});
+  elsif ($this->{bindDN} && $this->{bindPassword}) {
     $this->writeDebug("proxy bind");
-    my $isOk = ($this->checkError($msg) == LDAP_SUCCESS)?1:0;
-    $this->writeDebug("failed to bind") unless $isOk;
-    return $isOk;
+    $msg = $this->{ldap}->bind($this->{bindDN},password=>$this->{bindPassword});
   }
   
   # anonymous bind
-  $this->writeDebug("anonymous bind");
-  return 1
+  else {
+    $this->writeDebug("anonymous bind");
+    $msg = $this->{ldap}->bind;
+  }
+
+  $this->{isConnected} = ($this->checkError($msg) == LDAP_SUCCESS)?1:0;
+  $this->writeDebug("failed to bind") unless $this->{isConnected};
+  return $this->{isConnected};
 }
 
 =begin text
@@ -244,11 +260,27 @@ a reconnect and possibly rebind as a different user.
 sub disconnect {
   my $this = shift;
 
-  #$this->writeDebug("called disconnect()");
-  return unless $this->{ldap};
+  if (defined($this->{ldap}) && $this->{isConnected}) {
+    $this->writeDebug("called disconnect()");
 
-  $this->{ldap}->unbind();
-  $this->{ldap} = undef;
+    $this->{ldap}->unbind();
+    $this->{ldap} = undef;
+    $this->{isConnected} = 0;
+  }
+}
+
+=begin text
+
+---++++ finish
+
+finalize this ldap object.
+
+=cut
+
+sub finish {
+  my $this = shift;
+  TWiki::Contrib::LdapContrib::Cache::finish();
+  $this->disconnect();
 }
 
 
