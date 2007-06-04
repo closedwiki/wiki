@@ -175,6 +175,7 @@ sub getUser {
     # Ignore remote user if we got here via an error
     unless (($ENV{REDIRECT_STATUS} || 0) >= 400 ) {
         $authUser = $query->remote_user() if $query;
+        TWiki::LoginManager::_trace($this, "apache getUser says ".($authUser||'undef'));
     }
     return $authUser;
 }

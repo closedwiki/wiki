@@ -109,10 +109,9 @@ sub new {
     $TWiki::cfg{AdminUserLogin} = $TWiki::cfg{AdminUserWikiName} unless ($TWiki::cfg{Register}{AllowLoginName});
 
     $this->{loginManager} = TWiki::LoginManager::makeLoginManager( $session );
-    unless ( $session->inContext('sudo_login')) {
-        #don't take not of session info if the user has asked for a sudo login
-        $this->{remoteUser} = $this->initialiseUserFromSession($session);
-    }
+    # setup the cgi session, from a cookie or the url. this may return
+    # the login, but even if it does, plugins will get the chance to override (in TWiki.pm)
+    $this->{remoteUser} = $this->{loginManager}->loadSession( $session->{remoteUser} );    
     $this->{remoteUser} = $TWiki::cfg{DefaultUserLogin} unless (defined($this->{remoteUser}));
 
     #making basemapping
@@ -168,20 +167,12 @@ should really be PRIVATE.
 sub getMapping {
 	my ($this, $cUID, $login, $wikiname) = @_;
 
-$cUID ||= '';
-$login ||= '';
-$wikiname ||= '';
-
-#my $test = $this->{basemapping}->handlesUser($cUID, $login, $wikiname);
-#print STDERR "{basemapping}->handlesUser($cUID, $login, $wikiname) returns $test";
+	$cUID ||= '';
+	$login ||= '';
+	$wikiname ||= '';
 
 	return $this->{basemapping} if ($this->{basemapping}->handlesUser($cUID, $login, $wikiname));
-#print STDERR "using mapping";
-#	return $this->{basemapping} if( $this->{session}->{cgiQuery}->param('sudo') && $this->{session}->{cgiQuery}->param('sudo') eq 'sudo' );
-#	return $this->{basemapping} if( $this->{remoteUser} && $this->{remoteUser} eq $TWiki::cfg{AdminUserLogin} );
 	return $this->{mapping} if ($this->{mapping}->handlesUser($cUID, $login, $wikiname));
-#print STDERR "no-one cared($cUID, $login, $wikiname)";	
-	#return $this->{basemapping}; #ouch, no-one cares
 	return $this->{mapping};#TODO: I think it should fall back to basemapping, but to do that I need to get even more clever :/
 }
 
@@ -216,29 +207,6 @@ sub finish {
 sub supportsRegistration {
     my( $this ) = @_;
     return $this->{mapping}->supportsRegistration();
-}
-
-=pod
-
----++ ObjectMethod initialiseUserFromSession ($session) -> $login (string)
-
-loads user info from the loginManager's session system
-
-=cut
-
-sub initialiseUserFromSession {
-    my( $this, $session ) = @_;
-    my $login = $session->{remoteUser};
-    #unset the existing user if we're wanting to login a TWikiAdmin
-    if ($session->inContext('sudo_login')) {
-        $login = undef
-    } else {
-        # setup the cgi session, from a cookie or the url. this may return
-        # the login, but even if it does, plugins will get the chance to override
-        # it below.
-        $login = $this->{loginManager}->loadSession( $login );
-    }
-    return $login;
 }
 
 =pod

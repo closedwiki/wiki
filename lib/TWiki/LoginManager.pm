@@ -53,7 +53,7 @@ Early in TWiki::new, the login manager is created. The creation of the login man
    1 Creates the login manager object
 Slightly later in TWiki::new, loginManager->loadSession is called.
    1 Calls loginManager->getUser to get the username *before* the session is created
-      * TWiki::LoginManager::ApacheLogin looks at REMOTE_USER
+      * TWiki::LoginManager::ApacheLogin looks at REMOTE_USER (only for authenticated scripts)
       * TWiki::LoginManager::TemplateLogin just returns undef
    1 reads the TWIKISID cookie to get the SID (or the TWIKISID parameters in the CGI query if cookies aren't available, or IP2SID mapping if that's enabled).
    1 Creates the CGI::Session object, and the session is thereby read.
@@ -183,7 +183,7 @@ sub new {
 
 =pod
 
----++ ClassMethod new ($session, $impl)
+---++ ClassMethod _real_trace ($session, $impl)
 
 Construct the user management object
 
@@ -206,13 +206,12 @@ if( $TWiki::cfg{Trace}{LoginManager} ) {
 
 =pod
 
----++ ClassMethod new ($session, $impl)
+---++ ClassMethod _IP2SID ($session, $impl)
 
-Construct the user management object
+ read/write IP to SID map, return SID
 
 =cut
 
-# read/write IP to SID map, return SID
 sub _IP2SID {
     my( $sid ) = @_;
 
@@ -315,13 +314,16 @@ sub loadSession {
     die CGI::Session->errstr() unless $this->{_cgisession};
     _trace($this, "Opened session");
 
-    if( $authUser ) {
-        _trace($this, "Webserver says user is $authUser");
-    } else {
-        $authUser = TWiki::Sandbox::untaintUnchecked(
+    _trace($this, "Webserver says user is $authUser") if( $authUser );
+    
+    my $sessionUser = TWiki::Sandbox::untaintUnchecked(
             $this->{_cgisession}->param( 'AUTHUSER' ));
+    _trace($this, "session says user is ".($sessionUser||'undef'));
+    if ((!defined($authUser)) || ($sessionUser  && $sessionUser eq $TWiki::cfg{AdminUserLogin})) {
+    	$authUser = $sessionUser;
+	    #_trace($this, "session set to $authUser");
     }
-
+    
     # if we couldn't get the login manager or the http session to tell
     # us who the user is, then let's use the CGI "remote user"
     # variable (which may have been set manually by a unit test,
@@ -340,13 +342,26 @@ sub loadSession {
     $authUser ||= $defaultUser;
 
     # is this a logout?
-    if( $query && $query->param( 'logout' ) ) {
-        _trace($this, "User is logging out");
-        my $origurl = $ENV{HTTP_REFERER} || $query->url().$query->path_info();
-        $this->redirectCgiQuery( $query, $origurl );
-        $authUser = undef;
+    if (($authUser  && $authUser ne $TWiki::cfg{DefaultUserLogin}) &&
+    	( $query && $query->param( 'logout' ) )) {
+        my $sudoUser = TWiki::Sandbox::untaintUnchecked(
+            $this->{_cgisession}->param( 'SUDOFROMAUTHUSER' ));
+       
+        if ($sudoUser) {
+        	_trace($this, "User is logging out to $sudoUser");
+        	$twiki->writeLog( 'sudo logout', '', 'from '.($authUser ||''), $sudoUser );
+        	$this->{_cgisession}->clear( 'SUDOFROMAUTHUSER' );
+        	$authUser = $sudoUser;
+        } else {
+	        _trace($this, "User is logging out");
+	        my $origurl = $ENV{HTTP_REFERER} || $query->url().$query->path_info();
+	        #TODO: 
+	        $query->delete('logout');	#lets avoid infinite loops
+    	    $this->redirectCgiQuery( $query, $origurl );
+        	$authUser = undef;
+        }
     }
-
+    $query->delete('logout');
     $this->userLoggedIn( $authUser );
 
     $twiki->{SESSION_TAGS}{SESSIONID} = $this->{_cgisession}->id();
@@ -453,9 +468,12 @@ sub expireDeadSessions {
 
 ---++ ObjectMethod userLoggedIn( $login, $wikiname)
 
-Called when the user logs in. It's invoked from TWiki::UI::Register::finish
-for instance, when the user follows the link in their verification email
-message.
+Called when the user is known. It's invoked from TWiki::UI::Register::finish
+for instance,
+   1 when the user follows the link in their verification email message
+   2 or when the session store is read
+   3 when the user authenticates (via templatelogin / sudo)
+   
    * =$login= - string login name
    * =$wikiname= - string wikiname
 
@@ -479,9 +497,15 @@ sub userLoggedIn {
     }
     if( $authUser && $authUser ne $TWiki::cfg{DefaultUserLogin} ) {
         _trace($this, "Session is authenticated");
+        _trace($this, 'converting from '.($twiki->{remoteUser}||'undef').' to '.$authUser);
+        #TODO: right now anyone that makes a template login url can log in multiple times - should i forbid it
         if( $TWiki::cfg{UseClientSessions} ) {
+	        if (defined($twiki->{remoteUser}) && $twiki->inContext('sudo_login')) {
+        		$twiki->writeLog( 'sudo login', '', 'from '.($twiki->{remoteUser}||''), $authUser );
+          	    $this->{_cgisession}->param( 'SUDOFROMAUTHUSER', $twiki->{remoteUser} );
+        	}   
+        	#TODO: these are bare login's, so if and when there are multiple usermappings, this would need to include cUID..     
             $this->{_cgisession}->param( 'AUTHUSER', $authUser );
-#            $this->{_cgisession}->param( 'cUID', $twiki->{users}->getCanonicalUserID($authUser) );
         }
         $twiki->enterContext( 'authenticated' );
     } else {
@@ -502,9 +526,9 @@ sub userLoggedIn {
 
 =pod
 
----++ ClassMethod new ($session, $impl)
+---++ ObjectMethod _myScriptURLRE ($thisl)
 
-Construct the user management object
+
 
 =cut
 
@@ -533,9 +557,8 @@ sub _myScriptURLRE {
 
 =pod
 
----++ ClassMethod new ($session, $impl)
+---++ ObjectMethod _rewriteURL ($thisl)
 
-Construct the user management object
 
 =cut
 
@@ -577,9 +600,8 @@ sub _rewriteURL {
 
 =pod
 
----++ ClassMethod new ($session, $impl)
+---++ ObjectMethod _rewriteFORM ($thisl)
 
-Construct the user management object
 
 =cut
 
@@ -648,9 +670,8 @@ sub endRenderingHandler {
 
 =pod
 
----++ ClassMethod new ($session, $impl)
+---++ ObjectMethod _pushCookie ($thisl)
 
-Construct the user management object
 
 =cut
 
@@ -888,9 +909,8 @@ sub getUser {
 
 =pod
 
----++ ClassMethod new ($session, $impl)
+---++ ObjectMethod _LOGIN ($thisl)
 
-Construct the user management object
 
 =cut
 
@@ -913,9 +933,8 @@ sub _LOGIN {
 
 =pod
 
----++ ClassMethod new ($session, $impl)
+---++ ObjectMethod _LOGOUTURL ($thisl)
 
-Construct the user management object
 
 =cut
 
@@ -934,9 +953,8 @@ sub _LOGOUTURL {
 
 =pod
 
----++ ClassMethod new ($session, $impl)
+---++ ObjectMethod _LOGOUT ($thisl)
 
-Construct the user management object
 
 =cut
 
@@ -958,9 +976,8 @@ sub _LOGOUT {
 
 =pod
 
----++ ClassMethod new ($session, $impl)
+---++ ObjectMethod _AUTHENTICATED ($thisl)
 
-Construct the user management object
 
 =cut
 
@@ -979,9 +996,7 @@ sub _AUTHENTICATED {
 
 =pod
 
----++ ClassMethod new ($session, $impl)
-
-Construct the user management object
+---++ ObjectMethod _CANLOGIN ($thisl)
 
 =cut
 
@@ -999,9 +1014,7 @@ sub _CANLOGIN {
 
 =pod
 
----++ ClassMethod new ($session, $impl)
-
-Construct the user management object
+---++ ObjectMethod _SESSION_VARIABLE ($thisl)
 
 =cut
 
@@ -1009,8 +1022,8 @@ sub _SESSION_VARIABLE {
     my( $twiki, $params ) = @_;
     my $this = $twiki->{users}->{loginManager};
     ASSERT($this->isa('TWiki::LoginManager')) if DEBUG;
-    my $name = $params->{_DEFAULT};
-
+ 	my $name = $params->{_DEFAULT};
+ 
     if( defined( $params->{set} ) ) {
         $this->setSessionValue( $name, $params->{set} );
         return '';
@@ -1025,9 +1038,8 @@ sub _SESSION_VARIABLE {
 
 =pod
 
----++ ClassMethod new ($session, $impl)
+---++ ObjectMethod _LOGINURL ($thisl)
 
-Construct the user management object
 
 =cut
 
@@ -1041,9 +1053,7 @@ sub _LOGINURL {
 
 =pod
 
----++ ClassMethod new ($session, $impl)
-
-Construct the user management object
+---++ ObjectMethod _dispLogon ($thisl)
 
 =cut
 

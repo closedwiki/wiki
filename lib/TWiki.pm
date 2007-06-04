@@ -1510,7 +1510,7 @@ sub writeLog {
     my $user = shift;
 
     $user ||= $this->{user};
-    $user = $this->{users}->getLoginName( $user );
+    $user = $this->{users}->getLoginName( $user ) if ($this->{users});
 
     if( $user eq $cfg{DefaultUserLogin} ) {
        my $cgiQuery = $this->{cgiQuery};
