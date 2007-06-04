@@ -17,7 +17,7 @@ package TWiki::Plugins::LdapNgPlugin::Core;
 
 use strict;
 use vars qw($ldap $debug);
-use Unicode::MapUTF8 qw(to_utf8 from_utf8);
+use Unicode::MapUTF8 qw(from_utf8);
 use TWiki::Contrib::LdapContrib;
 
 $debug = 0; # toggle me
@@ -75,9 +75,6 @@ sub handleLdap {
     ssl=>$theSSL,
   );
 
-  # encode theFilter string
-  $theFilter = to_utf8(-string=> $theFilter, -charset=>$TWiki::cfg{Site}{CharSet});
-
   # search 
   my $search = $ldap->search(
     filter=>$theFilter, 
@@ -122,7 +119,8 @@ sub handleLdap {
   $theFooter = expandVars($theSep.$theFooter,count=>$count) if $theFooter;
 
   #$result = $session->UTF82SiteCharSet($result) || $result;
-  $result = from_utf8(-string=>$result, -charset=>$TWiki::cfg{Site}{CharSet});
+  $result = from_utf8(-string=>$result, -charset=>$TWiki::cfg{Site}{CharSet})
+    unless $TWiki::cfg{Site}{CharSet} =~ /^utf-?8$/i;
   $result = &TWiki::Func::expandCommonVariables("$theHeader$result$theFooter", 
     $topic, $web);
 
@@ -157,7 +155,7 @@ sub expandVars {
     $value =~ s/\\\$/\$/go;
     $value =~ s/\\\\/\\/go;
 
-    $format =~ s/\$$key\b/$value/g;
+    $format =~ s/\$$key\b/$value/gi;
     #writeDebug("$key=$value");
   }
 
