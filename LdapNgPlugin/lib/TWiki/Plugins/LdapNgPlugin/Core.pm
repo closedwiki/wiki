@@ -68,6 +68,7 @@ sub handleLdap {
   # new connection
   $ldap->disconnect() if $ldap;
   $ldap = new TWiki::Contrib::LdapContrib(
+    $session,
     base=>$theBase,
     host=>$theHost,
     port=>$thePort,
