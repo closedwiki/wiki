@@ -22,11 +22,12 @@ use Net::LDAP;
 use Net::LDAP::Control::Paged;
 use Net::LDAP::Constant qw(LDAP_SUCCESS LDAP_SIZELIMIT_EXCEEDED LDAP_CONTROL_PAGED);
 use Digest::MD5 qw( md5_hex );
+use Unicode::MapUTF8 qw(from_utf8 to_utf8);
 
 use vars qw($VERSION $RELEASE $sharedLdapContrib);
 
 $VERSION = '$Rev$';
-$RELEASE = 'v1.01';
+$RELEASE = 'v1.02';
 
 =begin text
 
@@ -212,14 +213,18 @@ sub connect {
     die "illegal call to connect()" unless defined($passwd);
     my $msg = $this->{ldap}->bind($dn, password=>$passwd);
     $this->writeDebug("bind for $dn");
-    return ($this->checkError($msg) == LDAP_SUCCESS)?1:0;
+    my $isOk = ($this->checkError($msg) == LDAP_SUCCESS)?1:0;
+    $this->writeDebug("failed to bind") unless $isOk;
+    return $isOk;
   } 
 
   # proxy user 
   if ($this->{bindDN} && $this->{bindPassword}) {
     my $msg = $this->{ldap}->bind($this->{bindDN},password=>$this->{bindPassword});
     $this->writeDebug("proxy bind");
-    return ($this->checkError($msg) == LDAP_SUCCESS)?1:0;
+    my $isOk = ($this->checkError($msg) == LDAP_SUCCESS)?1:0;
+    $this->writeDebug("failed to bind") unless $isOk;
+    return $isOk;
   }
   
   # anonymous bind
@@ -301,6 +306,7 @@ search using $ldap->{loginFilter} in the subtree defined by $ldap->{userBase}.
 sub getAccount {
   my ($this, $login) = @_;
 
+  $login = lc($login);
   $this->writeDebug("called getAccount($login)");
   return undef if $this->{excludeMap}{$login};
 
@@ -421,6 +427,8 @@ sub getGroupNames {
 
   while (my $entry = $msg->pop_entry()) {
     my $groupName = $entry->get_value($groupAttribute);
+    $groupName = from_utf8(-string=>$groupName, -charset=>$TWiki::cfg{Site}{CharSet})
+      unless $TWiki::cfg{Site}{CharSet} =~ /^utf-?8$/i;
     $this->{groupNames}{$groupName} = 1;
   }
 
@@ -477,6 +485,9 @@ sub search {
   $args{limit} = 0 unless $args{limit};
   $args{attrs} = ['*'] unless $args{attrs};
 
+  $args{filter} = to_utf8(-string=> $args{filter}, -charset=>$TWiki::cfg{Site}{CharSet})
+    if $args{filter} && $TWiki::cfg{Site}{CharSet} !~ /^utf-?8$/i;
+
   if ($this->{debug}) {
     my $attrString = join(',', @{$args{attrs}});
     $this->writeDebug("called search(filter=$args{filter}, base=$args{base}, scope=$args{scope}, limit=$args{limit}, attrs=$attrString)");
@@ -496,7 +507,11 @@ sub search {
     $this->writeDebug("error in search: ".$this->getError());
     return undef;
   }
-  $this->writeDebug("done search");
+  if ($this->{debug}) {
+    $this->writeDebug("found ".$msg->count." entries");
+    $this->writeDebug("done search");
+  }
+
 
   return $msg;
 }

@@ -242,8 +242,11 @@ take precedence. If switched off <nop>TWikiGroups are ignored.
    This work was partly funded by [[http://www.spanlink.com][Spanlink Communications]] and \
    [[http://www.trivadis.com][Trivadis]] |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Version: | v1.01 |
+|  Version: | v1.02 |
 |  Change History: | |
+|  04 June 2007: | don't be casesensitive for login names; \
+                   fixed several utf8 issues; \
+                   fixed crash when no groups where found |
 |  30 Apr 2007: | fixed return value on illegal lookup calls |
 |  24 Apr 2007: | be robust against the lookup-API being called with the wrong parameters; \
                   added =Debug= flag; \
@@ -279,4 +282,4 @@ take precedence. If switched off <nop>TWikiGroups are ignored.
 |  Appraisal: | TWiki:Plugins/%TOPIC%Appraisal |
 
 
--- TWiki:Main/MichaelDaum - 30 April 2007
+-- TWiki:Main/MichaelDaum - 04 June 2007

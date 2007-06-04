@@ -154,6 +154,7 @@ if this is not the case we fallback to twiki's default behavior
 sub getEmails {
   my ($this, $login) = @_;
 
+  $login = lc($login);
   $this->{ldap}->writeDebug("getEmails($login)");
 
   # guest has no email addrs
