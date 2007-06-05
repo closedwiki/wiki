@@ -1,7 +1,7 @@
 %META:TOPICINFO{author="TWikiContributor" date="1138738574" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{}%
 <table border="0" cellpadding="0" cellspacing="0" style="width:100%; margin-top:11px;">
-<tr><td valign="middle"><a href="%WEBLOGOURL%"><img src="%WEBLOGOIMG%" border="0" alt="%WEBLOGOALT%" /></a></td>
+<tr><td valign="middle"><span class="twikiImage"><a href="%WEBLOGOURL%"><img src="%WEBLOGOIMG%" border="0" alt="%WEBLOGOALT%" style="border:none;" /></a></span></td>
 <td align="right" valign="top" class="patternMetaMenu">
 <noautolink>
    * <form name="jumpForm" action="%SCRIPTURLPATH{"view"}%/%BASEWEB%/%BASETOPIC%"><input id="jumpFormField" type="text" class="twikiInputField" name="topic" value="" size="18" onfocus="twiki.Form.clearBeforeFocusText(this);" onblur="twiki.Form.restoreBeforeFocusText(this);" /><script type="text/javascript">var el=twiki.Form.getFormElement("jumpForm","jumpFormField"); twiki.Form.initBeforeFocusText(el,"%MAKETEXT{"Jump"}%");</script><noscript>&nbsp;<input type="submit" class="twikiButton" size="5" name="submit" value="%MAKETEXT{"Jump"}%" />&nbsp;</noscript></form>

@@ -561,6 +561,10 @@ a.twikiLinkInHeaderRight {
 	border-width:1px;
 	border-style:solid;
 }
+.twikiImage a:link,
+.twikiImage a:visited {
+	background:none;
+}
 .twikiNoBreak {
 	white-space:nowrap;
 }
