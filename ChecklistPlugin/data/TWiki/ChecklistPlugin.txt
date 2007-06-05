@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="rohdedan" date="1178886199" format="1.0" version="1.61"}%
+%META:TOPICINFO{author="TWikiContributor" date="1181039931" format="1.0" version="1.62"}%
 ---+!! Checklist Plugin
 
 <nop>ChecklistPlugin creates simple checklists. 
@@ -370,6 +370,10 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 	1 Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
 	  | *File:* | *Description:* |
 	  | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
+	  | ==data/TWiki/VarCHECKLIST.txt== | documentation |
+	  | ==data/TWiki/VarCHECKLISTSTART.txt== | documentation |
+	  | ==data/TWiki/VarCHECKLISTEND.txt== | documentation |
+	  | ==data/TWiki/VarCLI.txt== | documentation | 
 	  | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
 	  | ==pub/TWiki/%TOPIC%/itemstatechange.js== | <nop>JavaScript/AJAX module |
 	1 Linux/UNIX: Don't forget to change owner of data/TWiki/%TOPIC%.txt to your WWW server uid/gid (e.g: chown wwwrun:wwwrun ...).
@@ -382,8 +386,9 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.DanielRohde |
-|  Plugin Version: | v1.024 (20 Apr 2007) |
+|  Plugin Version: | v1.025 (BETA) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  v1.025 (BETA) | TWiki:Main.DanielRohde: added documentation requested by TWiki:Main.PeterThoeny |
 |  v1.024 (20 Apr 2007) | TWiki:Main.DanielRohde: fixed missing ')' in generated !JavaScript commands |
 |  v1.023 (1 Mar 2007) | TWiki:Main.DanielRohde: fixed minor anchor link bug reported by TWiki:Main.KeithHelfrich; fixed tooltip position bug |
 |  v1.022 (12 Feb 2007) | TWiki:Main.DanielRohde: improved AJAX performance; added new feature (state selection for reset button); fixed %<nop>TOC% bug reported by TWiki:Main.HelenJohnstone; fixed some minor and major bugs (mod_perl, description stripping, =static= feature, 'text' icons);  removed useforms feature |
