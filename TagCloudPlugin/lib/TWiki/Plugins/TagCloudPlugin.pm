@@ -24,7 +24,7 @@ use vars qw(
 );
 
 $VERSION = '$Rev$';
-$RELEASE = 'v0.41';
+$RELEASE = 'v1.00';
 $NO_PREFS_IN_TOPIC = 1;
 $SHORTDESCRIPTION = 'Renders a tag cloud given a list of terms';
 

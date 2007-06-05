@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1142021683" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1142021683" format="1.1" version="$Rev$"}%
 <!--
 
    PLEASE DO NOT EDIT THIS TOPIC
@@ -77,13 +77,13 @@ Parameters:
    * =filter=: regular expression of characters to be filtered out; possible values
      are 'on': to remove a predefined set of special chars, 'off' don't filter at all
      or an arbitrary string of characters to be replaced with a single space; default value
-     is 'on'
+     is 'off'
    * =exclude=: regular expression of terms to exclude from the tag cloud
      (default: undefined)
    * =include=: regular expression of terms that should be included
      (default: undefined)
    * =buckets=: number of buckets which to sort terms into
-     (default: 40)
+     (default: 10)
    * =sort=: sort terms in the tag cloud alphabetically or by weight (alpha or weight)
      (default: alpha)
    * =group=: format string to distinguish groups within the sortion; if the tag cloud is
@@ -96,7 +96,7 @@ Parameters:
      (default: off)
    * =min=: minimum times a term must occur to be included in the tag cloud 
    * =offset=: integer value that is added to the weight number of a term
-     (default: 1)
+     (default: 10)
    * =lowercase=: switch on/off converting terms to lowercase
      (default: off)
    * =plural=: switch on/off counting plurals, if set to off plural terms are matched
@@ -197,10 +197,12 @@ Cloud for the above text:
 -->
 
 |  Plugin Author: | TWiki:Main.MichaelDaum |
-|  Copyright &copy;: | 2006, Michael Daum |
+|  Copyright &copy;: | 2006-2007, Michael Daum http://wikiring.de |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | v0.41|
+|  Plugin Version: | v1.00|
 |  Change History: | &nbsp; |
+|  05 June 2007: | better default values, e.g. filter is off by default now; \
+                   fixed expansion of standard escapes |
 |  31 Aug 2006: | added filter parameter to customize special chars to be excluded; \
                   added NO_PREFS_IN_TOPIC |
 |  10 Mar 2006: | added grouping |
@@ -220,7 +222,7 @@ Cloud for the above text:
 |  Plugin Home: | TWiki:Plugins/%TOPIC% |
 |  Feedback: | TWiki:Plugins/%TOPIC%Dev |
 
--- TWiki:Main/MichaelDaum - 31 Aug 2006
+-- TWiki:Main/MichaelDaum - 05 June 2007
 
 
-%META:FILEATTACHMENT{name="TagCloud.jpg" attachment="TagCloud.jpg" attr="" comment="" date="1141219293" path="TagCloud.jpg" size="22049" stream="TagCloud.jpg" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="TagCloud.jpg" attachment="TagCloud.jpg" attr="" comment="" date="1141219293" path="TagCloud.jpg" size="22049" stream="TagCloud.jpg" user="TWikiContributor" version="1"}%
