@@ -47,8 +47,8 @@ pre, code, tt {
 	color:#7A4707;
 }
 blockquote {
-	border-color:#D5E6F3;
-	background-color:#edf5f7;
+	border-color:#ddd;
+	background-color:#f7fafc;
 }
 blockquote h2 {
 	background:none;
@@ -77,13 +77,13 @@ h3, h4, h5, h6 {
 }
 .twikiNewLink a:link sup,
 .twikiNewLink a:visited sup {
-	color:#666;
+	color:#777;
 	border-color:#ddd;
 }
 .twikiNewLink a:hover sup {
-	background-color:#D6000F;
+	background-color:#d6000f;
 	color:#FBF7E8;
-	border-color:#D6000F;
+	border-color:#d6000f;
 }
 .twikiNewLink {
 	border-color:#ddd;
@@ -100,16 +100,11 @@ h3, h4, h5, h6 {
 :link:hover,
 :visited:hover {
 	color:#FBF7E8;
-	background-color:#D6000F;
+	background-color:#d6000f;
 }
 :link:hover img,
 :visited:hover img {
 	background-color:transparent;
-}
-/* fix for hover over transparent logo: */
-#patternTopBar :link:hover img,
-#patternTopBar :visited:hover img {
-	background:#fff;
 }
 .patternTopic a:visited {
 	color:#666;
@@ -147,7 +142,7 @@ select {
 .twikiSubmitDisabled:active {
 	border-color:#fff #ccc #ccc #fff;
 	color:#bbb;
-	background-color:#edf5f7;
+	background-color:#f7fafc;
 }
 .twikiTextarea,
 .twikiInputField,
@@ -163,14 +158,14 @@ select {
 	background-color:#fff;
 }
 .twikiTextareaRawView {
-	color:#666;
+	color:#777;
 }
 .twikiInputFieldDisabled {
 	color:#bbb;
 	background-color:#fafaf8;
 }
 .twikiInputFieldReadOnly {
-	color:#666;
+	color:#777;
 }
 .twikiSelect {
 	border-color:#888 #e8e8e8 #e8e8e8 #888;
@@ -184,7 +179,7 @@ select {
 	background-color:#fafaf8;
 }
 .twikiInputFieldBeforeFocus {
-	color:#666;
+	color:#777;
 }
 
 /*	-----------------------------------------------------------
@@ -251,7 +246,7 @@ a:hover.twistyTrigger {
 
 table.twikiFormTable th.twikiFormTableHRow,
 table.twikiFormTable td.twikiFormTableRow {
-	color:#666;
+	color:#777;
 }
 .twikiEditForm {
 	color:#000;
@@ -291,7 +286,7 @@ table.twikiFormTable th.twikiFormTableHRow font {
 }
 
 .twikiFormSteps {
-	background-color:#edf5f7;
+	background-color:#f7fafc;
 	border-color:#ede8db;
 }
 .twikiFormStep {
@@ -302,7 +297,7 @@ table.twikiFormTable th.twikiFormTableHRow font {
 	background-color:transparent;
 }
 .twikiToc .twikiTocTitle {
-	color:#666;
+	color:#777;
 }
 .twikiBroadcastMessage {
 	background-color:#ff0;
@@ -332,7 +327,6 @@ table.twikiFormTable th.twikiFormTableHRow font {
 }
 .twikiHelp {
 	background-color:#edf5f7;
-	border-color:#D5E6F3;
 }
 .twikiAccessKey {
 	color:inherit;
@@ -347,6 +341,9 @@ a:hover .twikiAccessKey {
 	border-color:#eee;
 	background-color:#fff;
 }
+.twikiImage a:hover img {
+	border-color:#d6000f;
+}
 
 /*	-----------------------------------------------------------
 	Pattern skin specific elements
@@ -356,7 +353,7 @@ a:hover .twikiAccessKey {
 }
 /* Left bar */
 #patternLeftBarContents {
-	color:#666;
+	color:#777;
 }
 #patternLeftBarContents .patternWebIndicator {
 	color:#000;
@@ -398,7 +395,7 @@ a:hover .twikiAccessKey {
 #patternLeftBarContents .patternLeftBarPersonal a:hover,
 #patternLeftBarContents .twikiHierarchicalNavigation a:hover {
 	color:#FBF7E8;
-	background-color:#D6000F;
+	background-color:#d6000f;
 }
 #patternLeftBarContents .twikiHierarchicalNavigation {
 	background:#fff;
@@ -407,7 +404,7 @@ a:hover .twikiAccessKey {
 	border-color:#ede8db;
 }
 .patternTopicAction {
-	color:#666;
+	color:#777;
 	border-color:#ede8db;
 	background-color:#faf5e8;
 }
@@ -420,14 +417,14 @@ a:hover .twikiAccessKey {
 }
 .patternActionButtons a:link,
 .patternActionButtons a:visited {
-	color:#D6000F;
+	color:#d6000f;
 }
 .patternActionButtons a:hover {
 	color:#FBF7E8;
 }
 .patternTopicAction .twikiAccessKey {
-	color:#D6000F;
-	border-color:#D6000F;
+	color:#d6000f;
+	border-color:#d6000f;
 }
 .patternTopicAction label {
 	color:#000;
@@ -436,7 +433,7 @@ a:hover .twikiAccessKey {
 	color:#8E9195;
 }
 .patternSigLine {
-	color:#666;
+	color:#777;
 }
 .patternToolBar .patternButton s,
 .patternToolBar .patternButton strike,
@@ -447,7 +444,7 @@ a:hover .twikiAccessKey {
 }
 .patternToolBar .patternButton a:link,
 .patternToolBar .patternButton a:visited {
-	color:#666;
+	color:#777;
 }
 .patternToolBar .patternButton s,
 .patternToolBar .patternButton strike {
@@ -455,9 +452,9 @@ a:hover .twikiAccessKey {
 	border-color:#e0e0e0;
 }
 .patternToolBar .patternButton a:hover {
-	background-color:#D6000F;
+	background-color:#d6000f;
 	color:#FBF7E8;
-	border-color:#D6000F;
+	border-color:#d6000f;
 }
 .patternToolBar .patternButton img {
 	background-color:transparent;
@@ -468,7 +465,7 @@ a:hover .twikiAccessKey {
 .patternToolBar a:link .twikiAccessKey,
 .patternToolBar a:visited .twikiAccessKey {
 	color:inherit;
-	border-color:#666;
+	border-color:#777;
 }
 .patternToolBar a:hover .twikiAccessKey {
 	background-color:transparent;
@@ -550,7 +547,7 @@ h4.patternSearchResultsHeader {
 
 .patternBookView .twikiTopRow {
 	background-color:transparent; /* set to WEBBGCOLOR in css.pattern.tmpl */
-	color:#666;
+	color:#777;
 }
 .patternBookView .twikiBottomRow {
 	border-color:#ddd;
