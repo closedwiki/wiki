@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1177061496" format="1.0" version="$Rev$"}%
+%META:TOPICINFO{author="rohdedan" date="1178886199" format="1.0" version="1.61"}%
 ---+!! Checklist Plugin
 
 <nop>ChecklistPlugin creates simple checklists. 
@@ -276,7 +276,7 @@ Examples:
 | stateicons | %<nop>CLI%<br/>%<nop>CHECKLIST%<br/>%<nop>CHECKLISTSTART% | icons for all states separated by a ='&brvbar;'= (default: =<nop>:-I&brvbar;<nop>:ok:=); if you use common variables like =%<nop>Y%= in stateicons you have to use the =&lt;nop&gt;= tag after the first =%=, e.g: =%&lt;nop&gt;Y%=  | =stateicons="<nop>:-I&brvbar;<nop>:ok:"= |
 | statesel | %<nop>CLI%<br/>%<nop>CHECKLIST%<br/>%<nop>CHECKLISTSTART% | enables/disables state selection popup (default: off) | =statesel="on"= |
 | statetopic | %<nop>CLI%<br/>%<nop>CHECKLIST%<br/>%<nop>CHECKLISTSTART% | set the checklist item state topic (default: =&lt;<nop>YourTopicName&gt;ChecklistItemState=) | =statetopic="MyItemStateTopic"= | 
-| static | %<nop>CLI%<br/>%<nop>CHECKLIST%<br/>%<nop>CHECKLISTSTART% | allow/disallow state changes of checklist items (usefull if you create summary pages of some items of different checklists) | =static="off"= |
+| static | %<nop>CLI%<br/>%<nop>CHECKLIST%<br/>%<nop>CHECKLISTSTART% | allow/disallow state changes of checklist items (useful if you create summary pages of some items of different checklists) | =static="off"= |
 | template | %<nop>CLI%<br/>%<nop>CHECKLIST%<br/>%<nop>CHECKLISTSTART% | template name (see Plugin settings / Templates ) | =template="patchday"= |
 | text | %<nop>CLI% | text will be attached to the item and will be clickable  | =text="my first step"= |
 | tooltip | %<nop>CLI%<br/>%<nop>CHECKLIST%<br/>%<nop>CHECKLISTSTART% | sets the tooltip of the state icons (substituted variables: %<nop>STATE% - current state; %<nop>NEXTSTATE% - next state; %<nop>STATEICON% - state icon; %<nop>NEXTSTATEICON% - next state icon; %<nop>STATES% - comma separated list of all states; %<nop>STATECOUNT% - number of states; %<nop>LEGEND% - a legend of all states and state icons) | =tooltip="%<nop>STATE%"= |
