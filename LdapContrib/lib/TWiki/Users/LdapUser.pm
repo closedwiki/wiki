@@ -178,8 +178,6 @@ sub finish {
 
   $this->{ldap}->finish() if $this->{ldap};
   $this->{ldap} = undef;
-
-  # for safety call the SUPER finisher
   $this->SUPER::finish();
 }
 

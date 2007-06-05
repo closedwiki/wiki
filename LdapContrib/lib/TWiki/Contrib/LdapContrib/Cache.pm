@@ -85,6 +85,7 @@ during this request.
 
 sub finish {
   return unless $doneInit;
+  return unless $TWiki::Plugins::SESSION;
 
   if ($TWiki::cfg{Ldap}{Debug}) {
     writeDebug("finishing");
