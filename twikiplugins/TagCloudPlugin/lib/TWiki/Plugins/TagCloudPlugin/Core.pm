@@ -39,11 +39,11 @@ sub handleTagCloud {
   my $theSep = $params->{separator} || $params->{sep} || '$n';
   my $theFormat = $params->{format} || 
     '<span style="font-size:$weightpx">$term</span>';
-  my $theBuckets = $params->{buckets} || 40;
+  my $theBuckets = $params->{buckets} || 10;
   my $theSort = $params->{sort} || 'alpha';
   my $theReverse = $params->{reverse} || 'off';
   my $theMin = $params->{min} || 1;
-  my $theOffset = $params->{offset} || 0;
+  my $theOffset = $params->{offset} || 10;
   my $theStopWords = $params->{stopwords} || 'off';
   my $theSplit = $params->{split} || '[/,\.?\s]+';
   my $theExclude = $params->{exclude} || '';
@@ -53,13 +53,13 @@ sub handleTagCloud {
   my $thePlural = $params->{plural} || 'on';
   my $theWarn = $params->{warn} || 'on';
   my $theGroup = $params->{group} || '';
-  my $theFilter = $params->{filter} || 'on';
+  my $theFilter = $params->{filter} || 'off';
 
   # fix params
   $theBuckets =~ s/[^\d]//go;
   $theMin =~ s/[^\d]//go;
   $theOffset =~ s/[^\d]//go;
-  $theBuckets = 40 if $theBuckets < 2;
+  $theBuckets = 10 if $theBuckets < 2;
   $theSort = 'alpha' unless $theSort =~ /^(alpha|weight)$/;
   $theReverse = 'off' unless $theReverse =~ /^(on|off)$/;
   $theLowerCase = 'off' unless $theLowerCase =~ /^(on|off)$/;
@@ -77,7 +77,9 @@ sub handleTagCloud {
   }
 
   # generate term list
+
   if (&expandVariables($theTerms)) {
+    writeDebug("initially theTerms=$theTerms\n");
     $theTerms = &TWiki::Func::expandCommonVariables($theTerms, $theTopic, $theWeb);
   }
 
@@ -85,6 +87,7 @@ sub handleTagCloud {
   my %termCount;
 
   # remove special chars
+  writeDebug("theFilter=$theFilter");
   writeDebug("before theTerms=$theTerms\n");
   if ($theFilter eq 'off') {
     # nop
@@ -198,7 +201,7 @@ sub handleTagCloud {
 	$text .= $theFormat;
       } else {
 	$lastGroup = $group;
-	$text .= '<span style="white-space:nowrap">'.$theGroup.$theFormat.'</span>';
+	$text .= $theGroup.$theFormat;
       }
     }
     &expandVariables($text, 
@@ -233,9 +236,9 @@ sub expandVariables {
     }
   }
   $found = 1 if $_[0] =~ s/\$percnt/\%/go;
-  $found = 1 if $_[0] =~ s/\$dollar/\$/go;
-  $found = 1 if $_[0] =~ s/\$n/\n/go;
   $found = 1 if $_[0] =~ s/\$nop//g;
+  $found = 1 if $_[0] =~ s/\$n/\n/go;
+  $found = 1 if $_[0] =~ s/\$dollar/\$/go;
 
   return $found;
 }
