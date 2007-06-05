@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1178283753" format="1.0" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1181042237" format="1.0" version="$Rev$"}%
 ---+ <nop>RackPlannerPlugin
 The <nop>RackPlannerPlugin handles the tag =%<nop>RACKPLANNER%= and renders a rack overview (HTML table) with devices (computer, router, switches, ...). 
 ---++ Syntax Rules
@@ -138,6 +138,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 	* Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
 	  | *File:* | *Description:* |
 	  | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
+	  | ==data/TWiki/VarRACKPLANNER.txt== | Documentation |
 	  | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
 	  | ==lib/TWiki/Plugins/%TOPIC%/RackPlanner.pm== | Plugin Perl library |
 	  | ==pub/TWiki/%TOPIC%/rackplannertooltips.js== | <nop>JavaScript module |
@@ -152,9 +153,9 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Plugin Author: | TWiki:Main.DanielRohde |
 |  Copyright: | &copy; 2006, TWiki:Main.DanielRohde |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | V1.005 (BETA) |
+|  Plugin Version: | V1.005 (5 Jun 2007) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  V1.005 (BETA) | TWiki:Main.DanielRohde: fixed links in 'connected to' or 'owner' field bug; added new attribute (clicktooltip...) |
+|  V1.005 (5 Jun 2007) | TWiki:Main.DanielRohde: fixed links in 'connected to' or 'owner' field bug; added new attribute (clicktooltip...); added documentation |
 |  V1.004 (20 Apr 2007) | TWiki:Main.DanielRohde: fixed replacement in =tooltipformat= bug; improved =tooltipformat=; improved HTML rendering performance; added and fixed documenation; | 
 |  V1.003 (6 Mar 2007) | TWiki:Main.DanielRohde: fixed displayowner/displaynotes bug reported by TWiki:Main.PatrickTuite; added horizontal rendering feature requested by TWiki:Main.OlofStockhaus; added new attributes (tooltip..., columnwidth, textdir); fixed HTML validation bug; |
 |  V1.002 (26 Oct 2006): | TWiki:Main.DanielRohde: allowed multiple entries in a single unit; fixed rendering bug reported by TWiki:Main.SteveWray; fixed link color bug reported by TWiki:Main.SteveWray |
