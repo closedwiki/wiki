@@ -160,7 +160,9 @@ twiki.Form = {
 	*/
 	initBeforeFocusText:function(el, inText) {
 		el.FP_defaultValue = inText;
-		twiki.Form.restoreBeforeFocusText(el);
+		if (!el.value || el.value == inText) {
+			twiki.Form._setDefaultStyle(el);
+		}
 	},
 	
 	/**
@@ -183,9 +185,17 @@ twiki.Form = {
 	*/
 	restoreBeforeFocusText:function(el) {
 		if (!el.value && el.FP_defaultValue) {
-			el.value = el.FP_defaultValue;
-			twiki.CSS.addClass(el, "twikiInputFieldBeforeFocus");
+			twiki.Form._setDefaultStyle(el);
 		}
+	},
+	
+	/**
+	Sets the value and style of unfocussed or empty text field.
+	@param el : (HTMLElement) the input field that has default text
+	*/
+	_setDefaultStyle:function(el) {
+		el.value = el.FP_defaultValue;
+		twiki.CSS.addClass(el, "twikiInputFieldBeforeFocus");
 	}
 	
 };
