@@ -4,8 +4,8 @@
 
 %TMPL:DEF{"commonattachtableattributes"}%tablerules="rows" valign="middle" dataalign="center,left,left,right,left,left, left,center" datavalign="top" headercolor="#0066cc" databg="#ffffff" headerbg="#ffffff" headerbgsorted="#eeeeee" databgsorted="#f5f5f5" %TMPL:END%
 
-%TMPL:DEF{"topicattachmentwisty"}%%TWISTYSHOW{id="attachmentslist" firststart="show" link="%MAKETEXT{"Show attachments"}%" imgleft="%ICONURLPATH{toggleopen}%"}%%TWISTYHIDE{id="attachmentslist" link="%MAKETEXT{"Hide attachments"}%" imgleft="%ICONURLPATH{toggleclose}%"}%<span class="twikiGrayText" id="attachTableAttachmentCount"></span>
-%TWISTYTOGGLE{id="attachmentslist" mode="div" remember="on"}%%TMPL:END%
+%TMPL:DEF{"topicattachmentwisty"}%%TWISTY{id="topicattachmentslist" firststart="show" mode="div" remember="on" prefix="<h4 style='margin:0; border:none;'>" link="%MAKETEXT{"Attachments"}%" showimgleft="%ICONURLPATH{toggleopen}%"
+hideimgleft="%ICONURLPATH{toggleclose}%" suffix="<span id='attachTableAttachmentCount'></span></h4>"}%%TMPL:END%
 
 %{ Header definition for topic attachments and top table in attach screen }%
 %TMPL:DEF{ATTACH:files:header(basic)}%<div class="twikiAttachments">
@@ -23,17 +23,23 @@
 %TMPL:END%
 
 %{ Footer for topic attachment table }%
-%TMPL:DEF{ATTACH:files:footer}%%ENDTWISTYTOGGLE%</div><!--//twikiAttachments-->
+%TMPL:DEF{ATTACH:files:footer}%%ENDTWISTY%</div><!--//twikiAttachments-->
 <script type="text/javascript">
 //<![CDATA[
 	var table = document.getElementById("twikiAttachmentsTable");
 	if (table) {
 		var count = table.getElementsByTagName("tr").length - 1;
-		var countStr = "(" + count + ")";
-		var showlink = document.getElementById('attachmentslistshow');
-		if (showlink != undefined) showlink.firstChild.innerHTML += " " + countStr;
-		var hidelink = document.getElementById('attachmentslisthide');
-		if (hidelink != undefined) hidelink.firstChild.innerHTML += " " + countStr;
+		var countStr = " " + "<span class='attachTableAttachmentCount'>" + "(" + count + ")" + "<\/span>";
+		var showElem = document.getElementById('topicattachmentslistshow');
+		if (showElem != undefined) {
+			var labelElem = showElem.getElementsByTagName('a')[0].getElementsByTagName('span')[0];
+			labelElem.innerHTML += countStr;
+		}
+		var hideElem = document.getElementById('topicattachmentslisthide');
+		if (hideElem != undefined) {
+			var labelElem = hideElem.getElementsByTagName('a')[0].getElementsByTagName('span')[0];
+			labelElem.innerHTML += countStr;
+		}
 	}
 //]]>
 </script>
