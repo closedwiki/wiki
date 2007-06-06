@@ -124,8 +124,6 @@ Save the topic
    * Set GRAYED_OUT_TEXT = #8E9195
 ---++++ STRONG_TEXT Dark text, header (dark gray)
    * Set STRONG_TEXT = #333
----++++ SEPARATOR Seperator in topic action bar
-   * Set SEPARATOR = #aaa
 	
 ---+++ Background colors
 ---++++ GENERAL_BACKGROUND General background color (if not set in  MAIN_BACKGROUND_COLOR) (white)

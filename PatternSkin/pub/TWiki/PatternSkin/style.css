@@ -436,6 +436,9 @@ table.twikiFormTable td {
 .twikiAttachments caption {
 	display:none;
 }
+.twikiAttachments .attachTableAttachmentCount {
+	font-size:86%; /*S3*/
+}
 table.twikiFormTable th.twikiFormTableHRow a:link,
 table.twikiFormTable th.twikiFormTableHRow a:visited {
 	text-decoration:none;
