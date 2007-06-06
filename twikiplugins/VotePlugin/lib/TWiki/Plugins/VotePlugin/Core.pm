@@ -39,10 +39,19 @@ sub handleVote {
 <script type='text/javascript' src='$pubUrlPath/voting.js'></script>
 HEAD
 
+    my $defaults = TWiki::Func::getPreferencesValue('VOTEPLUGIN_DEFAULTS')
+      || '';
+
+    while ($defaults =~ s/^\s*(\w+)=\"(.*?)\"//) {
+        $params->{$1} = $2 unless defined $params->{$1};
+    }
+
     my $id =       defined($params->{id}) ? $params->{id} : '_default';
-    my $isGlobal = defined($params->{global}) ? $params->{global} : 0;
-    my $isOpen =   defined($params->{open}) ? $params->{open} : 1;
-    my $isSecret = defined($params->{secret}) ? $params->{secret} : 1;
+    my $isGlobal = isTrue($params->{global}, 0);
+    my $isOpen =   isTrue($params->{open}, 1);
+    my $isSecret = isTrue($params->{secret}, 1);
+    my $bayesian = isTrue($params->{bayesian}, 0);
+
     my $saveto =   $params->{saveto};
 
     if (defined TWiki::Func::getCgiQuery()->param('register_vote')) {
@@ -125,13 +134,12 @@ HEAD
         if ($line =~ /^\|(.*)\|$/) {
             my @data = split(/\|/, $1);
             my $vid = $data[0];
-            next unless $vid eq $id;
             my $voter = $data[1];
             my $weight = $data[2];
             foreach my $item (split(/,/, $data[3] || '')) {
                 if ($item =~ /^(.+)=(.+)$/) {
-                    $votes{$voter}{$1}{$2} = $weight;
-                    $lastVote{$voter}{$1} = $2;
+                    my ($row, $choice) = ($1, $2);
+                    $votes{$voter}{$vid}{$row} = [ $choice, $weight ];
                 }
             }
         } elsif (!$saveto && $line =~ /^([^\|]+)\|([^\|]+)\|(.*?)\|(.+)$/) {
@@ -141,32 +149,52 @@ HEAD
             my $data = $4;
             foreach my $item (split(/\|/, $data)) {
                 if ($item =~ /^(.+)=(.+)$/) {
-                    $votes{$voter}{$1}{$2} = $weight;
-                    $lastVote{$voter}{$1} = $2;
+                    my ($row, $choice) = ($1, $2);
+                    $votes{$voter}{$id}{$row} = [ $choice, $weight ];
                 }
             }
         }
     }
 
-    # collect statistics
+    # Terminology:
+    # An =id= is the identifier of a %VOTE
+    # A =key= is the identifier of a vote row e.g. stars="" or select=""
+    # A =choice= is the identified of one of the options in a key
+
+    # collect statistics. This is complicated by the fact that we
+    # have top level keys (represented by $key) which can receive
+    # a rating for lines of stars, and also individual values in a
+    # select, each of which has its own frequency. For the purposes
+    # of this analysis, a line of stars is treated as having a single
+    # leaf value, so the frequency of that value should be the same as the
+    # total number of votes for the key.
     my %keyValueFreq; # frequency of a specific value for a given key
     my %totalVotes;   # total votes for a given key
+    my %totalVoters;  # how many different people voted for each key
+    my %totalRate;    # Total of all ratings for each key
+    my %items;        # Hash of id's that have the same key
+    my $voteSum = 0;  # Sum of the number of votes on all rated items
+    my $rateSum = 0;  # Sum of all ratings of rated items
     foreach my $voter (keys %votes) {
-        print STDERR "voter=$voter\n" if $debug;
-        foreach my $key (keys %{$votes{$voter}}) {
-            print STDERR "key=$key\n" if $debug;
-            foreach my $v (keys %{$votes{$voter}{$key}}) {
-                print STDERR "v=$v\n" if $debug;
-                my $weight = $votes{$voter}{$key}{$v};
-                print STDERR "weight=$weight\n" if $debug;
-                $keyValueFreq{$key}{$v} += $weight;
+        foreach my $vid (keys %{$votes{$voter}}) {
+            foreach my $key (keys %{$votes{$voter}{$vid}}) {
+                my $choice = $votes{$voter}{$vid}{$key}->[0];
+                my $weight = $votes{$voter}{$vid}{$key}->[1];
+                $keyValueFreq{$vid}{$key}{$choice} += $weight;
                 $totalVotes{$key} += $weight;
+                $items{$key}{$vid} = 1;
+                $voteSum += $weight;
+                if ($choice =~ /^[\d.]+$/) {
+                    $totalRate{$key} += $choice * $weight;
+                    $rateSum += $choice * $weight;
+                }
+                $totalVoters{$key}++;
             }
         }
     }
 
     # Do we need a submit button?
-    my $needSubmit = $prompts[0]->{type} ne 'stars';
+    my $needSubmit = scalar(@prompts) > 1;
 
     my $act;
     if ($isOpen) {
@@ -180,26 +208,28 @@ HEAD
         my $row;
 
         if ($prompt->{type} eq 'stars') {
-            # The average is the sum of all the votes cast
-            my $sum = 0;
-            my $votes = 0;
-            foreach my $voter (keys %votes) {
-                $sum += $lastVote{$voter}{$key} || 0;
-                $votes++;
-            }
-            my $average = ($votes ? $sum / $votes : 0);
+            my $numItems = scalar(keys(%{$items{$key}}));
 
-            my $totalVoters = 0;
-            foreach my $voter (keys %votes) {
-                if (defined($votes{$voter}{$key})) {
-                    $totalVoters++;
+            # avg_num_votes: The average number of votes of all items that have
+            # num_votes>0
+            # avg_rating: The average rating of each item (again, of those that
+            # have num_votes>0)
+            my $avg_num_votes = $numItems ? $voteSum / $numItems : 0;
+            my $avg_rating = $voteSum ? $rateSum / $voteSum : 0;
+            my $myLastVote =
+              $votes{getIdent($isSecret, $isOpen)}{$id}{$key}->[0] || 0;
+            my $mean = 0;
+            if ($totalVotes{$key}) {
+                $mean = $totalRate{$key} / $totalVotes{$key};
+                if ($bayesian) {
+                    $mean = ($avg_num_votes * $avg_rating +
+                               $totalVotes{$key} * $mean) /
+                                 ($avg_num_votes + $totalVotes{$key});
                 }
             }
-            my $myLastVote =
-              $lastVote{getIdent($isSecret, $isOpen)}{$key} || 0;
-            push(@rows, lineOfStars(
+            push(@rows, showLineOfStars(
                 $id, $prompt, $needSubmit, $act,
-                $average, $myLastVote, $totalVoters));
+                $mean, $myLastVote, $totalVoters{$key} || 0));
         }
         else {
             my $opts = CGI::option({selected=>'selected',
@@ -208,12 +238,15 @@ HEAD
             foreach my $optionName (@{$prompt->{options}}) {
                 $opts .= CGI::option($optionName);
             }
-            my $select = CGI::Select(
-                {name=>'voteplugin_'.$key, size=>1}, $opts);
+            my $o = { name => 'voteplugin_'.$key, size => 1 };
+            unless ($needSubmit) {
+                $o->{onchange} = 'javacript: submit()';
+            }
+            my $select = CGI::Select($o, $opts);
 
             push(@rows, showSelect(
-                $prompt, $select, \%keyValueFreq,
-                \%totalVotes, $params));
+                $prompt, $select, \%{$keyValueFreq{$id}{$key}},
+                $totalVotes{$id}{$key}, $params));
         }
     }
     my $result = join($separator, @rows)."\n";
@@ -451,16 +484,17 @@ sub showSelect {
     my ($prompt, $select, $keyValueFreq, $totalVotes, $params) = @_;
 
     my $key = $prompt->{name};
-    my $totty = $totalVotes->{$key} || 0;
+    my $totty = $totalVotes || 0;
     my $row = $prompt->{format};
     $row =~ s/\$key/$key/g;
     $row =~ s/\$prompt/$select/g;
     $row =~ s/\$sum/$totty/;
     my $bars = '';
-    foreach my $value (sort {$keyValueFreq->{$key}{$b} <=>
-                               $keyValueFreq->{$key}{$a}}
-                         keys %{$keyValueFreq->{$key}}) {
-        my $score = $keyValueFreq->{$key}{$value} || 0;
+    foreach my $value (sort {$keyValueFreq->{$b} <=>
+                               $keyValueFreq->{$a}}
+                         keys %{$keyValueFreq}) {
+        my $score = $keyValueFreq->{$value} || 0;
+
         my $perc = $totty ? int(1000 * $score / $totty) / 10 : 0;
         my $bar = expandFormattingTokens($prompt->{chart});
         $bar =~ s/\$option/$value/;
@@ -494,15 +528,16 @@ sub _makeBar {
 }
 
 ###############################################################################
-sub lineOfStars {
-    my ($form, $prompt, $needSubmit, $act, $score, $myLast, $total) = @_;
+sub showLineOfStars {
+    my ($form, $prompt, $needSubmit, $act,
+        $mean, $myLast, $total) = @_;
     my $max = $prompt->{width};
 
     my $row = expandFormattingTokens($prompt->{format});
     $row =~ s/\$key/$prompt->{name}/g;
     $row =~ s/\$sum/$total/g;
-    $row =~ s/\$score/$score/g;
-    my $perc = $total ? int(1000 * $score / $total) / 10 : 0;
+    $row =~ s/\$score/$mean/g;
+    my $perc = $total ? int(1000 * $mean / $total) / 10 : 0;
     $row =~ s/\$perc/$perc/g;
     $row =~ s/\$mylast/$myLast/g;
 
@@ -512,7 +547,7 @@ sub lineOfStars {
     my $lis = CGI::li(
         {
             class=>'current-rating',
-            style=>'width:'.($size * $score).'px',
+            style=>'width:'.($size * $mean).'px',
         }, CGI::input(
         {
             type => 'hidden',
@@ -520,15 +555,24 @@ sub lineOfStars {
             id => $form.'_'.$prompt->{name},
             value => '0',
         }));
+    if ($needSubmit) {
+        $lis .= CGI::li(
+            {
+                class=>'my-rating',
+                id => $prompt->{name}.'_rated',
+                style=>'width:0px; z-index:2',
+            }, '&nbsp;');
+    }
 
     foreach my $i (1..$max) {
         $lis .= CGI::li(
             CGI::a(
                 {
                     href=>"javascript:VotePlugin_clicked('$form',".
-                      "'$prompt->{name}', $i)",
+                      "'$prompt->{name}', $i, ".
+                        ($needSubmit ? 'false' : 'true').", $size)",
                     style=>'width:'.($size * $i).
-                      'px;z-index:'.($max - $i + 1),
+                      'px;z-index:'.($max - $i + 2),
                 }, $i));
     }
     my $ul = CGI::ul(
@@ -539,6 +583,20 @@ sub lineOfStars {
     $row =~ s/\$(small|large)/$ul/g;
 
     return $row;
+}
+
+sub isTrue {
+    my( $value, $default ) = @_;
+
+    $default ||= 0;
+
+    return $default unless defined( $value );
+
+    $value =~ s/^\s*(.*?)\s*$/$1/gi;
+    $value =~ s/off//gi;
+    $value =~ s/no//gi;
+    $value =~ s/false//gi;
+    return ( $value ) ? 1 : 0;
 }
 
 1;
