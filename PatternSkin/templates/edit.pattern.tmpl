@@ -73,7 +73,11 @@
 
 
 
-%TMPL:DEF{"sig_textareabuttons"}%<div class="patternSigLine">%TMPL:P{"sig"}%%TMPL:P{"textareabuttons"}%<br class="twikiClear" /></div><!-- /patternSigLine-->%TMPL:END%
+%TMPL:DEF{"textarea"}%<div class="twikiEditTextarea"><textarea class="twikiTextarea twikiEditboxStyleProportional" id="topic" name="text" rows="%EDITBOXHEIGHT%" cols="%EDITBOXWIDTH%" style='%EDITBOXSTYLE%' onkeydown='handleKeyDown(event)'>%TEXT%</textarea><script type="text/javascript">initTextArea();</script>
+%TMPL:P{"sig_textareabuttons"}%</div><!--/twikiEditTextarea-->%TMPL:END%
+
+
+%TMPL:DEF{"sig_textareabuttons"}%<div class="patternSigLine" style='%EDITBOXSTYLE%'>%TMPL:P{"sig"}%%TMPL:P{"textareabuttons"}%<br class="twikiClear" /></div><!-- /patternSigLine-->%TMPL:END%
 
 
 
@@ -118,8 +122,7 @@
 %TMPL:DEF{"content"}%%TMPL:P{"formstart"}%%TMPL:P{"formattop"}%
 %TMPL:P{"toolbar"}%
 %TMPL:P{"pagehelp"}%
-%TMPL:P{"textarea"}%<script type="text/javascript">initTextArea();</script>
-%TMPL:P{"sig_textareabuttons"}%
+%TMPL:P{"textarea"}%
 %TMPL:P{"formatbottom"}%%TMPL:P{"topicaction"}%
 %TMPL:P{"formend"}%
 %TMPL:P{"pagehelp_nojavascript"}%%TMPL:END%

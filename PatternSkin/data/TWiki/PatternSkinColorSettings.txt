@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1181065724" format="1.1" reprev="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1181155272" format="1.1" reprev="1.1" version="1.1"}%
 ---+ !!Color scheme settings for %TWIKIWEB%.PatternSkin
 Use this topic to change the color settings of %TWIKIWEB%.PatternSkin. When this topic is saved, the attachment =theme-colors.css= will be updated with new color values. This method relies on TWiki:Plugins.AttachContentPlugin to work.
 
@@ -139,9 +139,9 @@ Save the topic
 ---++++ TOPIC_ACTION_BACKGROUND Topic action row (light yellow)
    * Set TOPIC_ACTION_BACKGROUND = #faf5e8
 ---++++ HEADER_BACKGROUND H1, H2, etc header (light yellow) 
-   * Set HEADER_BACKGROUND = #FDFAF3
+   * Set HEADER_BACKGROUND = #fdfaf3
 ---++++ ATTACHMENT_AND_FORM_BACKGROUND Attachment, form (light yellow)
-   * Set ATTACHMENT_AND_FORM_BACKGROUND = #FEFCF6
+   * Set ATTACHMENT_AND_FORM_BACKGROUND = #fefcf6
 ---++++ DIFF_HEADER_BACKGROUND Diff header (dark gray) (same as GRAYED_OUT_TEXT)
    * Set DIFF_HEADER_BACKGROUND = #ccc
 ---++++ BROADCAST_MESSAGE
@@ -172,8 +172,8 @@ Save the topic
    * Set NEUTRAL_BORDER = #ddd
 ---++++ SEPARATOR_BORDER HR line, bottom of h2, attachment table, form (brown)
    * Set SEPARATOR_BORDER = #ede8db
----++++ MINOR_SEPARATOR_BORDER Header H3..H6 bottom (75% of SEPARATOR_BORDER)
-   * Set MINOR_SEPARATOR_BORDER = #E9E4D2
+---++++ MINOR_SEPARATOR_BORDER Header H3..H6 bottom
+   * Set MINOR_SEPARATOR_BORDER = #faf5e4
 ---++++ LAYOUT_ELEMENT_BORDER Main layout elements (neutral tone) 
    * Set LAYOUT_ELEMENT_BORDER = #ccc
 ---++++ TABLE_BORDER Table border, sup (light neutral tone)
@@ -755,6 +755,10 @@ table.patternDiffOptions img {
 
 /* edit.pattern.tmpl */
 
+.patternEditPage .twikiEditTextarea {
+	background-color:%ATTACHMENT_AND_FORM_BACKGROUND%;
+	border-color:%MINOR_SEPARATOR_BORDER% %MINOR_SEPARATOR_BORDER% %NEUTRAL_BORDER% %MINOR_SEPARATOR_BORDER%;
+}
 .twikiChangeFormButton .twikiButton,
 .twikiChangeFormButtonHolder .twikiButton { /* looks like a link */
 	color:%LINK_TEXT_NORMAL%;
