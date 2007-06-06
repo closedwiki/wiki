@@ -62,7 +62,7 @@ sub renderForEdit {
         $size = $this->{minSize};
     }
     my $params = {
-        class => 'twikiEditFormSelect',
+        class => 'twikiSelect twikiEditFormSelect',
         name => $this->{name},
         size => $this->{size},
     };
