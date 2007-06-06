@@ -374,7 +374,7 @@ blockquote {
 }
 .patternEditPage .twikiFormTable td,
 .patternEditPage .twikiFormTable th {
-	padding:.4em .5em;
+	padding:.3em .4em;
 	border-style:solid;
 	border-width:0 0 1px 0;
 	vertical-align:middle;
@@ -931,6 +931,14 @@ table.patternDiffOptions input {
 
 /* edit.pattern.tmpl */
 
+.patternEditPage .twikiEditTextarea {
+	padding:.3em .25em .4em .25em;
+	border-style:solid;
+	border-width:1px;
+}
+.patternEditPage .twikiForm {
+	margin:0;
+}
 .patternEditPage .twikiForm h1,
 .patternEditPage .twikiForm h2,
 .patternEditPage .twikiForm h3 {
@@ -945,7 +953,6 @@ table.patternDiffOptions input {
 	font-family:"Lucida Grande", verdana, arial, sans-serif;
 }
 .twikiChangeFormButtonHolder {
-	margin:.25em 0;
 	float:right;
 }
 .twikiChangeFormButton .twikiButton,
@@ -960,8 +967,7 @@ table.patternDiffOptions input {
 	width:100%;
 }
 .patternSigLine {
-	margin:0 0 .25em 0;
-	padding:.25em .5em;
+	margin:.25em 0 0 0;
 }
 .patternEditPage .patternTopicActions {
 	margin:.5em 0 0 0;

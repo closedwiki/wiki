@@ -65,11 +65,11 @@ h1 a:hover {
 	color:#FBF7E8;
 }
 h2 {
-	background-color:#FDFAF3;
+	background-color:#fdfaf3;
 	border-color:#ede8db;
 }
 h3, h4, h5, h6 {
-	border-color:#E9E4D2;
+	border-color:#faf5e4;
 }
 /* to override old Render.pm coded font color style */
 .twikiNewLink font {
@@ -226,7 +226,7 @@ a:hover.twistyTrigger {
 
 /* RevCommentPlugin */
 .revComment .patternTopicAction {
-	background-color:#FEFCF6;
+	background-color:#fefcf6;
 }
 
 /*	-----------------------------------------------------------
@@ -265,7 +265,7 @@ table.twikiFormTable td.twikiFormTableRow {
 }
 .patternContent .twikiAttachments,
 .patternContent .twikiForm {
-	background-color:#FEFCF6;
+	background-color:#fefcf6;
 	border-color:#ede8db;
 }
 .twikiAttachments table,
@@ -513,7 +513,7 @@ table#twikiSearchTable th {
 
 h3.patternSearchResultsHeader,
 h4.patternSearchResultsHeader {
-	background-color:#FEFCF6;
+	background-color:#fefcf6;
 	border-color:#ccc;
 }
 h4.patternSearchResultsHeader {
@@ -564,6 +564,10 @@ table.patternDiffOptions img {
 
 /* edit.pattern.tmpl */
 
+.patternEditPage .twikiEditTextarea {
+	background-color:#fefcf6;
+	border-color:#faf5e4 #faf5e4 #ddd #faf5e4;
+}
 .twikiChangeFormButton .twikiButton,
 .twikiChangeFormButtonHolder .twikiButton { /* looks like a link */
 	color:#06c;
