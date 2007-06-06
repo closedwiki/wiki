@@ -146,8 +146,9 @@ See the FlexWebListExamples.
 |  Plugin Author: | TWiki:Main.MichaelDaum |
 |  Copyright &copy;: | 2006-2007, MichaelDaum http://wikiring.de |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | v1.00 |
+|  Plugin Version: | v1.10 |
 |  Change History: | &nbsp; |
+|  21 May 2007: | added <nop>FlexWebListNavi |
 |  08 May 2007: | docu fixes, respect HOMETOPIC in the examples |
 |  10 Mar 2007: | fixed expansion of $n and $nop |
 |  13 Oct 2006: | don't bail out entering a non-existing web |
@@ -171,4 +172,4 @@ See the FlexWebListExamples.
 |  Feedback: | TWiki:Plugins/%TOPIC%Dev |
 |  Appraisal: | TWiki:Plugins/%TOPIC%Appraisal |
 
--- TWiki:Main/MichaelDaum - 08 May 2007
+-- TWiki:Main/MichaelDaum - 21 May 2007
