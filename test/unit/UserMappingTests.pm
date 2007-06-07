@@ -82,11 +82,17 @@ sub test_WikiNameTWikiUserMapping {
 }
 sub test_LoginNameTWikiUserMapping {
     my $this = shift;
-    
     $TWiki::cfg{Register}{AllowLoginName} = 1; 
     $this->setup_new_session();    
     $this->set_up_user();
   	$this->std_tests($this->{user_id}, $this->{twiki}->{users}->webDotWikiName($this->{user_id}));
+}
+sub test_non_existantIser {
+    my $this = shift;
+    #$TWiki::cfg{Register}{AllowLoginName} = 1; 
+    $this->setup_new_session();    
+    $this->set_up_user();
+  	$this->std_tests('nonexistantUser', 'notawikiword');
 }
 
 sub std_tests {
