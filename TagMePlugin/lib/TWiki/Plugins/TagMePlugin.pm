@@ -4,6 +4,7 @@
 # Copyright (c) 2006 Fred Morris, m3047-twiki@inwa.net
 # Copyright (c) 2007 Crawford Currie, http://c-dot.co.uk
 # Copyright (c) 2007 Sven Dowideit, SvenDowideit@DistributedINFORMATION.com
+# Copyright (c) 2007 Arthur Clemens, arthur@visiblearea.com
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -32,8 +33,8 @@ use vars qw(
   $alphaNum $doneHeader $normalizeTagInput $lineRegex $topicsRegex
 );
 
-$VERSION    = '1.039';
-$RELEASE    = 'Any TWiki';
+$VERSION    = '1.040';
+$RELEASE    = 'TWiki 4';
 $pluginName = 'TagMePlugin';    # Name of this Plugin
 
 $initialized = 0;
@@ -1162,8 +1163,8 @@ sub _canChange {
     foreach (@groupsAndUsers) {
         my $name = $_;
         $name =~ s/(Main\.|\%MAINWEB\%\.)//go;
-        return 1 if ( $name eq TWiki::Func::getWikiName(undef) );
-        return 1 if TWiki::Func::isGroupMember( $name, undef );
+        return 1 if ( $name eq TWiki::Func::getWikiName(undef) ); # user is listed
+        return 1 if _isGroupMember( $name );
     }
 
     # this user is not in list
@@ -1225,7 +1226,7 @@ sub _handlePostChangeRequest {
 
     my ( $meta, $text ) =
       TWiki::Func::readTopic( $installWeb, $tagChangeRequestTopic );
-    $text .= "$requestLine";
+    $text .= $requestLine;
     TWiki::Func::saveTopic( $installWeb, $tagChangeRequestTopic, $meta, $text,
         { comment => 'posted tag change request' } );
 
@@ -1380,6 +1381,14 @@ sub _writeLog {
           : TWiki::Store::writeLog( "tagme", "$web.$topic", $theText );
         _writeDebug("TAGME action, $web.$topic, $theText");
     }
+}
+
+# =========================
+sub _isGroupMember {
+    my $group = shift;
+    
+    return TWiki::Func::isGroupMember ( $group, undef ) if $TWiki::Plugins::VERSION >= 1.2;
+    return $TWiki::Plugins::SESSION->{user}->isInList($group);
 }
 
 # =========================
