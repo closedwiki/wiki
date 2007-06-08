@@ -28,7 +28,7 @@ use TWiki::Contrib::LdapContrib::Cache;
 use vars qw($VERSION $RELEASE $sharedLdapContrib);
 
 $VERSION = '$Rev$';
-$RELEASE = 'v1.10';
+$RELEASE = 'v1.11';
 
 =begin text
 

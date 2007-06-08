@@ -20,7 +20,7 @@ package TWiki::Contrib::LdapContrib::Cache;
 use strict;
 use Storable qw(lock_store lock_retrieve);
 
-use vars qw ($cache $doneInit);
+use vars qw ($cache $session);
 
 =pod
 
@@ -31,10 +31,8 @@ initializes the cache.
 =cut
 
 sub init {
-  my ($session) = @_;
-
-  return $cache if $doneInit;
-  $doneInit = 1;
+  return $cache if $session;
+  ($session) = @_;
 
   # load
   unless ($cache) {
@@ -44,6 +42,8 @@ sub init {
     if (-f $cacheFile)  {
       writeDebug("loading ldap cache from $cacheFile");
       $cache = lock_retrieve($cacheFile);
+    } else {
+      writeDebug("cache not found");
     }
   }
   my $refresh = $session->{cgiQuery}->param('refreshldap') || '';
@@ -51,25 +51,29 @@ sub init {
 
   my $maxCacheHist = $TWiki::cfg{Ldap}{MaxCacheHits};
   $maxCacheHist = -1 unless defined $maxCacheHist;
-  my $cacheAge = time() - $cache->{lastUpdate};
   my $maxCacheAge = $TWiki::cfg{Ldap}{MaxCacheAge};
   $maxCacheAge = 600 unless defined $maxCacheAge;
+
+  my $cacheAge = 9999999999;
+  my $now = time();
+  $cacheAge = $now - $cache->{lastUpdate} if $cache;
 
   # clear to reload it
   if (!$cache || 
     $cache->{cacheHits} == 0 || 
     $cacheAge > $maxCacheAge ||
     $refresh) {
+
+    writeDebug("updating cache");
     $cache = {};
     $cache->{cacheHits} = $maxCacheHist;
-    $cache->{lastUpdate} = time();
+    $cache->{lastUpdate} = $now;
   } else {
     $cache->{cacheHits}--;
   }
 
   writeDebug("cacheHits=".abs($cache->{cacheHits}));
   writeDebug("cacheAge=$cacheAge");
-
 
   return $cache;
 }
@@ -84,20 +88,26 @@ during this request.
 =cut
 
 sub finish {
-  return unless $doneInit;
-  return unless $TWiki::Plugins::SESSION;
+  return unless $session;
 
-  if ($TWiki::cfg{Ldap}{Debug}) {
-    writeDebug("finishing");
-    #writeDebug(stringify());
-  }
+  # sometimes twiki calls the finish methods in the
+  # middle of destroying the twiki objects and all
+  # its delegations; so don't rely on the store to
+  # be still there; for example, this happens during
+  # save.
+  return unless $session->{store}; 
 
-  my $dir = TWiki::Func::getWorkArea('LdapContrib');
+  writeDebug("writing ldap cache to file");
+  #writeDebug(stringify() if $TWiki::cfg{Ldap}{Debug};
+
+  # store it
+  my $dir = $session->{store}->getWorkArea('LdapContrib');
   mkdir $dir unless -d $dir;
   my $file = $dir.'/LdapCache';
   lock_store($cache, $file);
+  writeDebug("done");
 
-  $doneInit = 0;
+  $session = undef;
 }
 
 =pod 

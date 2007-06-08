@@ -170,6 +170,9 @@ user resolution, and should be as fast as possible.
 sub lookupLoginName {
   my ($this, $thisName) = @_;
 
+  # no login names for groups
+  return $thisName if $this->isGroup($thisName);
+
   $this->{ldap}->writeDebug("called lookupLoginName($thisName)");
 
   my $wikiName;
@@ -184,7 +187,7 @@ sub lookupLoginName {
 	$this->{ldap}->writeDebug("found loginName in cache");
 	return $wikiName;
       }
-      $wikiName = $this->{ldap}{cache}{W2U}{$name};
+      $wikiName = $this->{ldap}{cache}{W2U}{$thisName};
       if (defined($wikiName)) {
 	$this->{ldap}->writeDebug("hey, you called lookupLoginName with a wikiName");
 	return undef;
@@ -200,7 +203,7 @@ sub lookupLoginName {
     $this->{ldap}->writeDebug("found loginName in cache again");
     return $wikiName;
   }
-  $wikiName = $this->{ldap}{cache}{W2U}{$name};
+  $wikiName = $this->{ldap}{cache}{W2U}{$thisName};
   if (defined($wikiName)) {
     $this->{ldap}->writeDebug("hey, you called lookupLoginName with a wikiName again");
     return undef;
@@ -208,7 +211,12 @@ sub lookupLoginName {
  
   # fallback
   $this->{ldap}->writeDebug("asking SUPER");
-  $wikiName = $this->SUPER::lookupLoginName($thisName) || $thisName;
+  $wikiName = $this->SUPER::lookupLoginName($thisName);
+  
+  unless ($wikiName) {
+    $this->{ldap}->writeDebug("WOOPS, wikiName for $thisName not found");
+    $wikiName = $thisName;
+  }
 
   $wikiName =~ s/^(.*)\.(.*?)$/$2/;
   $this->{ldap}->writeDebug("got wikiName=$wikiName and loginName=$thisName");
@@ -228,23 +236,26 @@ user resolution, and should be as fast as possible.
 =cut
 
 sub lookupWikiName {
-  my ($this, $name) = @_;
-
-  $this->{ldap}->writeDebug("called lookupWikiName($name)");
+  my ($this, $wikiName) = @_;
 
   # removing leading web
-  $name =~ s/^.*\.(.*?)$/$1/o;
-  my $loginName;
+  $wikiName =~ s/^.*\.(.*?)$/$1/o;
 
-  unless ($this->{ldap}{excludeMap}{$name}) {
+  # no login names for groups
+  return $wikiName if $this->isGroup($wikiName);
+
+  $this->{ldap}->writeDebug("called lookupWikiName($wikiName)");
+
+  my $loginName;
+  unless ($this->{ldap}{excludeMap}{$wikiName}) {
     while (1) {
       # load the mapping in parts as long as needed
-      $loginName = $this->{ldap}{cache}{W2U}{$name};
+      $loginName = $this->{ldap}{cache}{W2U}{$wikiName};
       if (defined($loginName) && $loginName ne '_unknown_') {
 	$this->{ldap}->writeDebug("found wikiName in cache");
         return $loginName; 
       }
-      $loginName = $this->{ldap}{cache}{U2W}{$name};
+      $loginName = $this->{ldap}{cache}{U2W}{$wikiName};
       if (defined($loginName)) {
 	$this->{ldap}->writeDebug("hey, you called lookupWikiName with a loginName");
         return undef;
@@ -255,12 +266,12 @@ sub lookupWikiName {
   }
 
   # look it up
-  $loginName = $this->{ldap}{cache}{W2U}{$name};
+  $loginName = $this->{ldap}{cache}{W2U}{$wikiName};
   if (defined($loginName) && $loginName ne '_unknown_') {
     $this->{ldap}->writeDebug("found wikiName in cache again");
     return $loginName;
   }
-  $loginName = $this->{ldap}{cache}{U2W}{$name};
+  $loginName = $this->{ldap}{cache}{U2W}{$wikiName};
   if (defined($loginName)) {
     $this->{ldap}->writeDebug("hey, you called lookupWikiName with a loginName again");
     return undef;
@@ -268,10 +279,10 @@ sub lookupWikiName {
 
   # fallback
   $this->{ldap}->writeDebug("asking SUPER");
-  $loginName = $this->SUPER::lookupWikiName($name) || '_unknown_';
-  $this->{ldap}->writeDebug("got wikiName=$name and loginName=$loginName");
-  $this->{ldap}{cache}{U2W}{$loginName} = $name;
-  $this->{ldap}{cache}{W2U}{$name} = $loginName;
+  $loginName = $this->SUPER::lookupWikiName($wikiName) || '_unknown_';
+  $this->{ldap}->writeDebug("got wikiName=$wikiName and loginName=$loginName");
+  $this->{ldap}{cache}{U2W}{$loginName} = $wikiName;
+  $this->{ldap}{cache}{W2U}{$wikiName} = $loginName;
 
   return undef if $loginName eq '_unknown_';
   return $loginName;
