@@ -35,6 +35,7 @@ Another great plugin from the <a href="http://wikiring.com"><b>WikiRing</b> <img
 |  Copyright: | &copy; 2007 Escape Studios |
 |  License: | [[http://www.gnu.org/licenses/gpl.html][GPL (Gnu General Public License)]] |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  8 Jun 2007 | Minor bugfixes |
 |  6 Jun 2007 | First version |
 |  Dependencies: | %$DEPENDENCIES% |
 |  Plugin Home: | http://twiki.org/cgi-bin/view/Plugins/SearchSummaryPlugin |
