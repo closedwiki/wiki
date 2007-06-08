@@ -203,6 +203,7 @@ sub getLocationBreadCrumbs {
 
       # check end of loop
       last if 
+        $topic eq $homeTopic ||
 	$seen{"$web.$topic"} ||
 	!TWiki::Func::topicExists($web,$topic);
 
