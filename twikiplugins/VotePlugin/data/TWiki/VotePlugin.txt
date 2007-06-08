@@ -83,12 +83,12 @@ Defines the format of the results display. See [[#FormattingResults][formatting 
 | =chart<i>N</i>= | \
 Defines the format of a single bar in the results bar chart generated for the corresponding  =select= (for =select= type only). See [[#FormattingResults][formatting results]], below. | =chart="&lt;p>$option $score&lt;/p>"= |
 | =separator= | Defines the string to be used to separate each row in the result. | =separator="&lt;br/>"= |
-| =global= | If set to "off", this makes the =id= local to this topic (the default). If set to "on" it will be a global poll that can be accessed from many topics. | =global="on"= |
-| =open= | If set to "off" this is a closed vote. If set to "on" it is open (the default) | =open="on"= |
-| =secret= | If set to "off", then the database will record who voted. If set to "on", votes are secret (the default) | =secret="on"= |
+| =global= | If set to ="off"=, this makes the =id= local to this topic (the default). If set to ="on"= it will be a global poll that can be accessed from many topics. | =global="on"= |
+| =open= | If set to ="off"= this is a closed vote. If set to ="on"= it is open (the default) | =open="on"= |
+| =secret= | If set to ="off"=, then the database will record who voted. If set to ="on"=, votes are secret (the default) | =secret="on"= |
 | =saveto= | If set to the name of a topic, the poll results will be appended to the end of that topic. The results are formatted as a TWiki table for easy post-processing. | =saveto="Main.VoteResults"= |
-| =bayesian= | If set to "on", rating averages will be computed using the Bayesian average of this item against all the other items _that have the same item in their =stars= field_. This requires all the participating %VOTEs to be =global=, or to save their results to the same place using =saveto=. See http://www.thebroth.com/blog/118/bayesian-rating for more information about Bayesian rating. | =bayesian="off"= |
-
+| =bayesian= | If set to ="on"=, rating averages will be computed using the Bayesian average of this item against all the other items _that have the same item in their =stars= field_. This requires all the participating %VOTEs to be =global=, or to save their results to the same place using =saveto=. See http://www.thebroth.com/blog/118/bayesian-rating for more information about Bayesian rating. | =bayesian="off"= |
+| =submit= | If set to ="off"=, this makes the %VOTE display the results of the vote without prompting for any input. This is useful when - for example - you want to show the results of a global vote in another topic. |
 %X% The =style= parameter has been _deprecated_ and should not be used
 (though it still works). The =color= and =bgcolor= paramaters have been removed.
 
