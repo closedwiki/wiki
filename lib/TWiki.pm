@@ -322,6 +322,7 @@ BEGIN {
     $functionTags{WIKIUSERSTOPIC}  = sub { $TWiki::cfg{UsersTopicName} };
     $functionTags{WIKIWEBMASTER}   = sub { $TWiki::cfg{WebMasterEmail} };
     $functionTags{WIKIWEBMASTERNAME} = sub { $TWiki::cfg{WebMasterName} };
+    $functionTags{TWIKIADMINLOGIN} = sub { $TWiki::cfg{AdminUserLogin} };
     $functionTags{NOFOLLOW} =
       sub { $TWiki::cfg{NoFollow} ? 'rel='.$TWiki::cfg{NoFollow} : '' };
     $functionTags{ALLOWLOGINNAME} =
