@@ -51,7 +51,7 @@ HEAD
     my $isOpen =   isTrue($params->{open}, 1);
     my $isSecret = isTrue($params->{secret}, 1);
     my $bayesian = isTrue($params->{bayesian}, 0);
-
+    my $submit =   isTrue($params->{submit}, 1);
     my $saveto =   $params->{saveto};
 
     if (defined TWiki::Func::getCgiQuery()->param('register_vote')) {
@@ -228,7 +228,7 @@ HEAD
                 }
             }
             push(@rows, showLineOfStars(
-                $id, $prompt, $needSubmit, $act,
+                $id, $prompt, $submit, $needSubmit, $act,
                 $mean, $myLastVote, $totalVoters{$key} || 0));
         }
         else {
@@ -242,32 +242,34 @@ HEAD
             unless ($needSubmit) {
                 $o->{onchange} = 'javacript: submit()';
             }
-            my $select = CGI::Select($o, $opts);
+            my $select = $submit ? CGI::Select($o, $opts) : '';
 
             push(@rows, showSelect(
-                $prompt, $select, \%{$keyValueFreq{$id}{$key}},
+                $id, $prompt, $submit, $select, $keyValueFreq{$id}{$key},
                 $totalVotes{$id}{$key}, $params));
         }
     }
     my $result = join($separator, @rows)."\n";
-    if ($needSubmit) {
+    if ($submit && $needSubmit) {
         $result .= CGI::submit(
             { name=> 'OK', value=>'OK',
               style=>'color:green'});
     }
-    $result .= CGI::input({type=>'hidden',
-                           name=>'register_vote', value=>$id});
-    $result .= CGI::input({type=>'hidden',
-                           name=>'isGlobal', value=>$isGlobal});
-    $result .= CGI::input({type=>'hidden',
-                           name=>'isSecret', value=>$isSecret});
-    $result .= CGI::input({type=>'hidden',
-                           name=>'isOpen', value=>$isOpen});
-    $result .= CGI::input({type=>'hidden',
-                           name=>'saveTo', value=>$saveto});
+    if ($submit) {
+        $result .= CGI::input({type=>'hidden',
+                               name=>'register_vote', value=>$id});
+        $result .= CGI::input({type=>'hidden',
+                               name=>'isGlobal', value=>$isGlobal});
+        $result .= CGI::input({type=>'hidden',
+                               name=>'isSecret', value=>$isSecret});
+        $result .= CGI::input({type=>'hidden',
+                               name=>'isOpen', value=>$isOpen});
+        $result .= CGI::input({type=>'hidden',
+                               name=>'saveTo', value=>$saveto});
 
-    # why is CGI::form not part of my CGI.pm?
-    $result = "<form id='$id' action='$act' method='post'>\n".$result.'</form>';
+        $result = "<form id='$id' action='$act' method='post'>\n".
+          $result.'</form>';
+    }
 
     return $result;
 }
@@ -481,7 +483,7 @@ sub getIdent {
 
 ###############################################################################
 sub showSelect {
-    my ($prompt, $select, $keyValueFreq, $totalVotes, $params) = @_;
+    my ($id, $prompt, $submit, $select, $keyValueFreq, $totalVotes, $params) = @_;
 
     my $key = $prompt->{name};
     my $totty = $totalVotes || 0;
@@ -509,7 +511,7 @@ sub showSelect {
 
 sub _makeBar {
     my ($width, $perc, $params) = @_;
-    $width = $params->{width} || $width || 300;
+    $width = $width || $params->{width} || 300;
     my $graph = CGI::img(
         { src=>$pubUrlPath.'/leftbar.gif',
           alt=>'leftbar',
@@ -529,7 +531,7 @@ sub _makeBar {
 
 ###############################################################################
 sub showLineOfStars {
-    my ($form, $prompt, $needSubmit, $act,
+    my ($form, $prompt, $submit, $needSubmit, $act,
         $mean, $myLast, $total) = @_;
     my $max = $prompt->{width};
 
@@ -564,16 +566,18 @@ sub showLineOfStars {
             }, '&nbsp;');
     }
 
-    foreach my $i (1..$max) {
-        $lis .= CGI::li(
-            CGI::a(
-                {
-                    href=>"javascript:VotePlugin_clicked('$form',".
-                      "'$prompt->{name}', $i, ".
-                        ($needSubmit ? 'false' : 'true').", $size)",
-                    style=>'width:'.($size * $i).
-                      'px;z-index:'.($max - $i + 2),
-                }, $i));
+    if ($submit) {
+        foreach my $i (1..$max) {
+            $lis .= CGI::li(
+                CGI::a(
+                    {
+                        href=>"javascript:VotePlugin_clicked('$form',".
+                          "'$prompt->{name}', $i, ".
+                            ($needSubmit ? 'false' : 'true').", $size)",
+                        style=>'width:'.($size * $i).
+                          'px;z-index:'.($max - $i + 2),
+                    }, $i));
+        }
     }
     my $ul = CGI::ul(
         {
