@@ -1,6 +1,10 @@
 data/TWiki/VotePlugin.txt 0644
 lib/TWiki/Plugins/VotePlugin/Core.pm 0644
 lib/TWiki/Plugins/VotePlugin.pm 0644
+pub/TWiki/VotePlugin/ie_star.gif 0644
+pub/TWiki/VotePlugin/ie_star_small.gif 0644
+pub/TWiki/VotePlugin/ie_pick_star.gif 0644
+pub/TWiki/VotePlugin/ie_pick_star_small.gif 0644
 pub/TWiki/VotePlugin/star.gif 0644
 pub/TWiki/VotePlugin/star_small.gif 0644
 pub/TWiki/VotePlugin/pick_star.gif 0644
