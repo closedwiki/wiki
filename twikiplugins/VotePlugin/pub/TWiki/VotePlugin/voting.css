@@ -1,7 +1,7 @@
 .voteTable {
-  border: 0;
-  padding: 0;
-  margin: 0;
+	border: 0;
+	padding: 0;
+	margin: 0;
 }
 .star-rating,
 .star-rating a:hover,
@@ -9,9 +9,11 @@
 .star-rating a:active,
 .star-rating .current-rating{
 	background: url(star.gif) left -1000px repeat-x;
+	_background: url(ie_star.gif) left -1000px repeat-x;
 }
 .my-rating{
 	background: url(pick_star.gif) left -1000px repeat-x;
+	_background: url(ie_pick_star.gif) left -1000px repeat-x;
 }
 .star-rating{
 	position:relative;
@@ -75,11 +77,13 @@
 .small-star a:active,
 .small-star .current-rating{
 	background-image: url(star_small.gif);
+	_background-image: url(ie_star_small.gif);
 	line-height: 10px;
 	height: 10px;
 }
 .small-star .my-rating{
 	background-image: url(pick_star_small.gif);
+	_background-image: url(ie_pick_star_small.gif);
 	line-height: 10px;
 	height: 10px;
 }
