@@ -68,7 +68,6 @@ to a user.
 *NOTE:* 
    * wherever the code references $user, its a canonical_id
    * wherever the code references $group, its a group_name
-     (TODO: extract a canonical_group_id and mapping)
 
 =cut
 

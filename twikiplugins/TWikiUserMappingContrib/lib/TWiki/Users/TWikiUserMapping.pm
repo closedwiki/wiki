@@ -162,27 +162,25 @@ sub login2canonical {
     # use bytes to ignore character encoding
     $login =~ s/([^a-zA-Z0-9])/'_'.sprintf('%02d', ord($1))/ge;
     no bytes;
-    # further uniquify the UID in test mode, to increase the fragility
-#    return "UID${login}UID" if DEBUG;
-    $login = 'TWikiUserMapping_'.$login;
+    $login = $this->{mapping_id}.$login;
    
     return $login;
 }
 
-
 =pod
 
----++ ObjectMethod canonical2login ($cUID) -> login
+---++ ObjectMethod _canonical2login ($cUID) -> login
 
 converts an internal cUID to that user's login
 (undef on failure)
 
 =cut
 
-sub canonical2login {
+sub _canonical2login {
     my( $this, $user ) = @_;
     ASSERT($user) if DEBUG;
-    $user =~ s/TWikiUserMapping_//;
+	ASSERT($this->{mapping_id}) if DEBUG;
+    $user =~ s/$this->{mapping_id}//;
    
     use bytes;
     # use bytes to ignore character encoding
@@ -342,13 +340,13 @@ sub removeUser {
 sub getWikiName {
     my ($this, $user) = @_;
 
-#    $user =~ s/^TWikiUserMapping_//;
+#    $user =~ s/^$this->{mapping_id}//e;
     if( $TWiki::cfg{Register}{AllowLoginName} ) {
         _loadMapping( $this );
-        return $this->{U2W}->{$user} || canonical2login( $this, $user );
+        return $this->{U2W}->{$user} || _canonical2login( $this, $user );
     } else {
         # If the mapping isn't enabled there's no point in loading it
-        return canonical2login( $this, $user );
+        return _canonical2login( $this, $user );
     }
 }
 
@@ -362,7 +360,7 @@ Map a canonical user name to a login name
 
 sub getLoginName {
     my ($this, $user) = @_;
-    return canonical2login( $this, $user );
+    return _canonical2login( $this, $user );
 }
 
 =pod
@@ -400,7 +398,7 @@ sub userExists {
     # Do this to avoid a password manager lookup
     return 1 if $cUID eq $this->{session}->{user};
 
-    my $loginName = $this->canonical2login( $cUID );
+    my $loginName = $this->_canonical2login( $cUID );
 
     if( $loginName eq $TWiki::cfg{DefaultUserLogin} ) {
         return $loginName;
@@ -896,7 +894,7 @@ sub ASSERT_IS_CANONICAL_USER_ID {
     my( $this, $user_id ) = @_;
 #print STDERR "ASSERT_IS_CANONICAL_USER_ID($user_id)";
 #    ASSERT($user_id =~/^UID$(\s+)UID$/) if DEBUG;
-#    ASSERT( $user_id =~/^TWikiUserMapping_/ );	#refine with more specific regex
+#    ASSERT( $user_id =~/^$this->{mapping_id}/e );	#refine with more specific regex
 
 }
 

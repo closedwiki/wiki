@@ -68,40 +68,40 @@ sub new {
 
 #set up our users
     $this->{L2U} = {
-		$TWiki::cfg{AdminUserLogin}=>'BaseUserMapping_333', 
-		$TWiki::cfg{DefaultUserLogin}=>'BaseUserMapping_666', 
-		unknown=>'BaseUserMapping_999',
-		TWikiContributor=>'BaseUserMapping_111',
-		TWikiRegistrationAgent=>'BaseUserMapping_222'
+		$TWiki::cfg{AdminUserLogin}=>$this->{mapping_id}.'333', 
+		$TWiki::cfg{DefaultUserLogin}=>$this->{mapping_id}.'666', 
+		unknown=>$this->{mapping_id}.'999',
+		TWikiContributor=>$this->{mapping_id}.'111',
+		TWikiRegistrationAgent=>$this->{mapping_id}.'222'
 	};
     $this->{U2L} = {
-		'BaseUserMapping_333'=>$TWiki::cfg{AdminUserLogin}, 
-		'BaseUserMapping_666'=>$TWiki::cfg{DefaultUserLogin}, 
-		'BaseUserMapping_999'=>'unknown',
-		'BaseUserMapping_111'=>'TWikiContributor',
-		'BaseUserMapping_222'=>'TWikiRegistrationAgent'
+		$this->{mapping_id}.'333'=>$TWiki::cfg{AdminUserLogin}, 
+		$this->{mapping_id}.'666'=>$TWiki::cfg{DefaultUserLogin}, 
+		$this->{mapping_id}.'999'=>'unknown',
+		$this->{mapping_id}.'111'=>'TWikiContributor',
+		$this->{mapping_id}.'222'=>'TWikiRegistrationAgent'
 	};
     $this->{U2W} = {
-		'BaseUserMapping_333'=>$TWiki::cfg{AdminUserWikiName}, 
-		'BaseUserMapping_666'=>$TWiki::cfg{DefaultUserWikiName}, 
-		'BaseUserMapping_999'=>'UnknownUser',
-		'BaseUserMapping_111'=>'TWikiContributor',
-		'BaseUserMapping_222'=>'TWikiRegistrationAgent'
+		$this->{mapping_id}.'333'=>$TWiki::cfg{AdminUserWikiName}, 
+		$this->{mapping_id}.'666'=>$TWiki::cfg{DefaultUserWikiName}, 
+		$this->{mapping_id}.'999'=>'UnknownUser',
+		$this->{mapping_id}.'111'=>'TWikiContributor',
+		$this->{mapping_id}.'222'=>'TWikiRegistrationAgent'
 	};
     $this->{W2U} = {
-		$TWiki::cfg{AdminUserWikiName}=>'BaseUserMapping_333', 
-		$TWiki::cfg{DefaultUserWikiName}=>'BaseUserMapping_666', 
-		UnknownUser=>'BaseUserMapping_999',
-		TWikiContributor=>'BaseUserMapping_111',
-		TWikiRegistrationAgent=>'BaseUserMapping_222'
+		$TWiki::cfg{AdminUserWikiName}=>$this->{mapping_id}.'333', 
+		$TWiki::cfg{DefaultUserWikiName}=>$this->{mapping_id}.'666', 
+		UnknownUser=>$this->{mapping_id}.'999',
+		TWikiContributor=>$this->{mapping_id}.'111',
+		TWikiRegistrationAgent=>$this->{mapping_id}.'222'
 	};
-    $this->{U2E} = {'BaseUserMapping_333'=>'not@home.org.au'};
-    $this->{U2P} = {'BaseUserMapping_333'=>$TWiki::cfg{Password}};
+    $this->{U2E} = {$this->{mapping_id}.'333'=>'not@home.org.au'};
+    $this->{U2P} = {$this->{mapping_id}.'333'=>$TWiki::cfg{Password}};
     
     
     $this->{GROUPS} = {
-		$TWiki::cfg{SuperAdminGroup}=>['BaseUserMapping_333'],
-		TWikiBaseGroup=>['BaseUserMapping_333', 'BaseUserMapping_666', 'BaseUserMapping_999', 'BaseUserMapping_111', 'BaseUserMapping_222']
+		$TWiki::cfg{SuperAdminGroup}=>[$this->{mapping_id}.'333'],
+		TWikiBaseGroup=>[$this->{mapping_id}.'333', $this->{mapping_id}.'666', $this->{mapping_id}.'999', $this->{mapping_id}.'111', $this->{mapping_id}.'222']
 	};
 
     return $this;
@@ -170,29 +170,11 @@ sub handlesUser {
 $cUID = '' unless (defined($cUID));
 $login = '' unless (defined($login));
 $wikiname = '' unless (defined($wikiname));
-	
-	return (
-		( ($cUID  && $cUID =~ /^$this->{mapping_id}/ ) || 
-			($login  && $login eq $TWiki::cfg{AdminUserLogin}) ||
-			($wikiname  && $wikiname eq $TWiki::cfg{AdminUserWikiName}) ) 
-#TODO: i'd like to have base handle guest too, but something goes wrong			
-			||
-		   ( ($cUID  && $cUID eq $this->{L2U}{$TWiki::cfg{DefaultUserLogin}}) || 
-			($login  && $login eq $TWiki::cfg{DefaultUserLogin}) ||
-			($wikiname  && $wikiname eq $TWiki::cfg{DefaultUserWikiName}) )
-			||
-		   ( ($cUID  && $cUID eq $this->{L2U}{'unknown'}) || 
-			($login  && $login eq 'unknown') ||
-			($wikiname  && $wikiname eq $this->{U2W}{$this->{L2U}{'unknown'}}) )
-			||
-		   ( ($cUID  && $cUID eq $this->{L2U}{'TWikiContributor'}) || 
-			($login  && $login eq 'TWikiContributor') ||
-			($wikiname  && $wikiname eq $this->{U2W}{$this->{L2U}{'TWikiContributor'}}) )
-			||
-		   ( ($cUID  && $cUID eq $this->{L2U}{'TWikiRegistrationAgent'}) || 
-			($login  && $login eq 'TWikiRegistrationAgent') ||
-			($wikiname  && $wikiname eq $this->{U2W}{$this->{L2U}{'TWikiRegistrationAgent'}}) )
-		);
+
+return 1 if (defined($this->{U2L}{$cUID}));
+return 1 if (defined($this->{L2U}{$login}));
+return 1 if (defined($this->{W2U}{$wikiname}));
+return 0;
 }
 
 
@@ -617,7 +599,7 @@ sub checkPassword {
         return 1;   #yay, you've passed
     }
 #be a little more helpful to the admin
-    if (($cUID eq 'BaseUserMapping_333') && (!$hash)) {
+    if (($cUID eq $this->{mapping_id}.'333') && (!$hash)) {
         $this->{error} = 'To login as '.$login.', you must set {Password} in configure';
         return;
     }    
