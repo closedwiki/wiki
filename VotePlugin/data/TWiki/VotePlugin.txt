@@ -88,7 +88,8 @@ Defines the format of a single bar in the results bar chart generated for the co
 | =secret= | If set to ="off"=, then the database will record who voted. If set to ="on"=, votes are secret (the default) | =secret="on"= |
 | =saveto= | If set to the name of a topic, the poll results will be appended to the end of that topic. The results are formatted as a TWiki table for easy post-processing. | =saveto="Main.VoteResults"= |
 | =bayesian= | If set to ="on"=, rating averages will be computed using the Bayesian average of this item against all the other items _that have the same item in their =stars= field_. This requires all the participating %VOTEs to be =global=, or to save their results to the same place using =saveto=. See http://www.thebroth.com/blog/118/bayesian-rating for more information about Bayesian rating. | =bayesian="off"= |
-| =submit= | If set to ="off"=, this makes the %VOTE display the results of the vote without prompting for any input. This is useful when - for example - you want to show the results of a global vote in another topic. |
+| =submit= | If set to ="off"=, this makes the %VOTE display the results of the vote without prompting for any input. This is useful when - for example - you want to show the results of a global vote, without permitting more voting. |
+
 %X% The =style= parameter has been _deprecated_ and should not be used
 (though it still works). The =color= and =bgcolor= paramaters have been removed.
 
@@ -162,6 +163,7 @@ The weighting topic applies to all votes in the scope of the =%<nop>VOTEPLUGIN_W
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | %$VERSION% |
 |  Change History: | &nbsp; | 
+|   8 Jun 2007: | Added =submit= - TWiki:Main/CrawfordCurrie |
 |   6 Jun 2007: | Added =global=, =open=, =secret=, =format=, =chart=, =saveto=, =VOTEPLUGIN_WEIGHTINGS=, bayesian averaging - TWiki:Main/CrawfordCurrie |
 |  31 Aug 2006: | added NO_PREFS_IN_TOPIC |
 |  15 Aug 2006: | added "use strict" and fixed revealing errors |
