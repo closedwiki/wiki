@@ -9,6 +9,12 @@ $RELEASE = '0.01';
 $SHORTDESCRIPTION = 'Change the way search summaries are displayed';
 $NO_PREFS_IN_TOPIC = 1;
 
+my $TMLTRUNC = 162;
+my $PLAINTRUNC = 70;
+my $MINTRUNC = 16;
+# max number of lines in a summary (best to keep it even)
+my $SUMMARYLINES = 6;
+
 use vars qw( %official %params );
 
 sub searchWeb {
@@ -30,6 +36,13 @@ sub makeTopicSummary {
       $prefs->getPreferencesValue('SEARCHSUMMARYPLUGIN_CONTEXT')
         || 30;
 
+    # limit to n chars
+    my $trunc = $flags || '';
+    unless( $trunc =~ s/^.*?([0-9]+).*$/$1/ ) {
+        $trunc = $TMLTRUNC;
+    }
+    $trunc = $MINTRUNC if( $trunc < $MINTRUNC );
+
     my @caller = caller();
     if (!length($terms) ||
           $type ne 'word' && $type ne 'keyword' && $type ne 'literal' ||
@@ -41,6 +54,7 @@ sub makeTopicSummary {
     $text =~ s/\n+/ /g;
 
     my $keystrs;
+    my $length = 0;
     if ($type eq 'literal') {
         $keystrs = quotemeta($terms);
     } else {
@@ -73,6 +87,7 @@ sub makeTopicSummary {
     foreach my $i (0..$#segs) {
         if ($segs[$i] =~ /^($keystrs)$/) {
             $segs[$i] = CGI::span({class=>$cssClass}, $1);
+            $length += length($1);
         } else {
             if ($i > 0) {
                 if ($i < $#segs) {
@@ -80,14 +95,14 @@ sub makeTopicSummary {
                     # display x chars to the left and right of the matching
                     # data.
                     if (length($segs[$i]) > 2 * $context) {
-                        $segs[$i] =~ s/(.{$context}).*(.{$context})/$1&hellip;$2/o;
+                        $segs[$i] =~ s/(.{$context}).*(.{$context})/$this->protectPlainText($1).'&hellip;'.$this->protectPlainText($2)/eo;
                     }
                 } else {
                     # IF the matching string is at the start or end of the
                     # topic body the mutual offset will not be maintained
                     # pushing the character offset to be great one side.
                     if (length($segs[$i]) > $context) {
-                        $segs[$i] =~ s/(.{$context}).*$/$1&hellip;/o;
+                        $segs[$i] =~ s/(.{$context}).*$/$this->protectPlainText($1).'&hellip;'/eo;
                     }
                 }
             } else {
@@ -95,9 +110,15 @@ sub makeTopicSummary {
                 # body the mutual offset will not be maintained pushing the
                 # character offset to be great one side.
                 if (length($segs[$i]) > $context) {
-                    $segs[$i] =~ s/.*?(.{$context})$/&hellip;$1/o;
+                    $segs[$i] =~ s/.*?(.{$context})$/'&hellip;'.$this->protectPlainText($1)/eo;
                 }
             }
+            $length += length($segs[$i]);
+        }
+        if ($length >= $trunc) {
+            splice(@segs, $i+1);
+            push(@segs, '&hellip;');
+            last;
         }
     }
 

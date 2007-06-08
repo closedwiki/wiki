@@ -1,7 +1,7 @@
 ---+!! !SearchSummaryPlugin
 <!--
 One line description, required for extensions repository catalog.
-   * Set SHORTDESCRIPTION = Improve the way search summaries are presented
+   * Set SHORTDESCRIPTION = Show search terms and surrounding context in topic summaries
 -->
 %SHORTDESCRIPTION%
 
@@ -9,7 +9,7 @@ One line description, required for extensions repository catalog.
 
 Improves the presentation of summaries for =keyword=, =word= and =literal= searches, by displaying topic content on either side of the search terms wherever they are found in the topic. Especially useful for searches in documentation.
 
-For example, %<nop>SEARCH{"cat +spasm" type="keyword"}% produces:
+For example, =%<nop>SEARCH{"cat +spasm" type="keyword"}%= produces:
 
 <img src="%ATTACHURLPATH%/screenshot.gif" />
 
@@ -17,7 +17,7 @@ This plugin only works with TWiki-4 or later.
 
 ---++ Usage
 
-Install and enable the plugin. It "just works". You can change the size of the context (the number of characters either side of a search term) by setting the [[TWikiVariables][TWikiVariable]] =SEARCHSUMMARYPLUGIN_CONTEXT= (the default is 30). You can change the CSS class used to highlight search terms by setting =SEARCHSUMMARYPLUGIN_CSSCLASS=. The default is =twikiAlert=.
+Install and enable the plugin. It "just works". You can change the size of the context (the number of characters either side of a search term) by setting the [[%TWIKIWEB%.TWikiVariables][TWikiVariable]] =SEARCHSUMMARYPLUGIN_CONTEXT= (the default is 30). You can change the CSS class used to highlight search terms by setting =SEARCHSUMMARYPLUGIN_CSSCLASS=. The default is =twikiAlert=.
 
 ---++ Installation Instructions
 
