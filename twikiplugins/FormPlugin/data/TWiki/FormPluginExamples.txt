@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1176591878" format="1.1" reprev="1.1" version="1.1"}%
+%META:TOPICINFO{author="BaseUserMapping_333" date="1181390096" format="1.1" reprev="1.2" version="1.2"}%
 
 ---+!! Form Plugin Examples
 See [[FormPlugin]]
@@ -386,9 +386,12 @@ mandatory="on"
 
 ---++ Validation
 
+If the form is filled in correctly you will be redirected to %WEB%.%HOMETOPIC%.
+
 %STARTFORM{
 name="validationTestForm"
-action="viewauth"
+action="view"
+topic="%WEB%.%HOMETOPIC%"
 method="POST"
 formcssclass="twikiFormSteps"
 elementcssclass="twikiFormStep"
@@ -408,7 +411,7 @@ title="Your salary:"
 default=""
 mandatory="on"
 validate="float"
-hint="Including the cents after the comma"
+hint="You may include decimal numbers"
 }%
 %FORMELEMENT{
 name="Checkname"
@@ -425,6 +428,7 @@ type="submit"
 default="Try me"
 }%
 %ENDFORM%
+
 
 
 ---++ Substitution of field references
@@ -472,6 +476,45 @@ buttonlabel="Submit"
 }%
 %ENDFORM%
 
+
+---++ Upload
+
+%STARTFORM{
+name="uploadform"
+action="upload"
+topic="%WEB%.%TOPIC%"
+method="POST"
+validate="off"
+}%
+%FORMELEMENT{
+type="upload"
+name="filepath"
+title="Attach new file"
+size="70"
+}%
+%FORMELEMENT{
+name="filecomment"
+type="text"
+title="Comment"
+}%
+%FORMELEMENT{
+name="hidefile"
+type="checkbox"
+options="on=Do not show attachment in table"
+}%
+%FORMELEMENT{
+name="createlink"
+type="checkbox"
+options="on=Create a link to the attached file"
+}%
+%FORMELEMENT{
+type="submit"
+buttonlabel="Upload file"
+}%
+%ENDFORM%
+
+
+
 ---++ !SendEmailPlugin form
 
 E-mail form for SendEmailPlugin - form works if the plugin is installed and enabled.
@@ -511,3 +554,35 @@ type="submit"
 default="Send"
 }%
 %ENDFORM%
+
+
+
+---++ Accessing other sites: Flickr
+This form lets you search for Flickr photos that have been tagged with a name.
+
+%STARTFORM{
+name="flickr"
+action="http://www.flickr.com/photos/tags/$Name/$Netherlands"
+method="POST"
+}%
+%FORMELEMENT{
+name="Name"
+title="Search name on Flickr:"
+type="text"
+default="Sander"
+hint="Enter a first name, such as Sander, Johan or Annemieke"
+}% %FORMELEMENT{
+name="Netherlands"
+type="checkbox"
+options="clusters/netherlands-amsterdam-geotagged/"
+labels="In the Netherlands"
+default="clusters/netherlands-amsterdam-geotagged/"
+hint="Shows pictures from the Netherlands only if these are geo-tagged"
+}%
+%FORMELEMENT{
+type="submit"
+buttonlabel="Show me photos!"
+}%
+%ENDFORM%
+
+
