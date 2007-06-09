@@ -38,6 +38,7 @@ sub noop {}
 
 sub import {
     no warnings 'redefine';
+    no strict 'refs';
     if( $ENV{TWIKI_ASSERTS} ) {
         *DEBUG = *ASSERTS_ON;
         Assert->export_to_level(1, @_);
@@ -47,6 +48,7 @@ sub import {
         *{$caller.'::UNTAINTED'} = \&ASSERTS_OFF;
         *{$caller.'::DEBUG'} = \&ASSERTS_OFF;
     }
+    use strict 'refs';
     use warnings 'redefine';
 }
 
