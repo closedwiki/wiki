@@ -200,7 +200,7 @@ CSS styles:
 }
 .tagmetags a:link,
 .tagmetags a:visited {
-	color:#06c;
+	color:#8E9195; /* all links are gray; for blue links use: #06c */
 	text-decoration:none;
 }
 .tagmetags a:hover {
