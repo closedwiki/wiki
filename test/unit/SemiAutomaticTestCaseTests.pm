@@ -21,6 +21,7 @@ sub find_tests {
     eval "use TWiki::Plugins::TestFixturePlugin";
     if ($@) {
         print STDERR "Cannot run semi-automatic test cases; could not find TestFixturePlugin";
+        $twiki->finish();
         return;
     }
     my $suite = Test::Unit::TestSuite->empty_new("TaseCaseAutoTests");
@@ -31,6 +32,7 @@ sub find_tests {
         *$test = sub { shift->run_testcase($case) };
         use strict 'refs';
     }
+    $twiki->finish();
 }
 
 sub new {
@@ -57,6 +59,10 @@ sub run_testcase {
         close F;
         $this->assert(0, "$testcase FAILED - output in $testcase.html");
     }
+    $twiki->finish();
+}
+
+sub test_suppresswarning {
 }
 
 1;

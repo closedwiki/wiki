@@ -61,7 +61,7 @@ sub test_sectionFirst {
     my $this = shift;
 
     my $result  =  $this->_viewSection('first');
-    $this->assert_matches(qr(^\s?This is the first section\s?$)s,$result);
+    $this->assert_matches(qr(^\s*This is the first section\s*$)s,$result);
 }
 
 # ----------------------------------------------------------------------
@@ -72,9 +72,9 @@ sub test_sectionOuter {
     my $this = shift;
 
     my $result  =  $this->_viewSection('outer');
-    $this->assert_matches(qr(^\s?This is the start of the outer section)s,$result);
+    $this->assert_matches(qr(^\s*This is the start of the outer section)s,$result);
     $this->assert_matches(qr(This is the whole content of the inner section)s,$result);
-    $this->assert_matches(qr(This is the end of the outer section\s?$)s,$result);
+    $this->assert_matches(qr(This is the end of the outer section\s*$)s,$result);
 }
 
 # ----------------------------------------------------------------------
@@ -84,7 +84,7 @@ sub test_sectionInner {
     my $this = shift;
 
     my $result  =  $this->_viewSection('inner');
-    $this->assert_matches(qr(^\s?This is the whole content of the inner section\s?$)s,$result);
+    $this->assert_matches(qr(^\s*This is the whole content of the inner section\s*$)s,$result);
 }
 
 # ----------------------------------------------------------------------
@@ -96,7 +96,7 @@ sub test_sectionNotExisting {
     my $this = shift;
 
     my $result  =  $this->_viewSection('notExisting');
-    $this->assert_matches(qr/\s?/,$result);
+    $this->assert_matches(qr/\s*/,$result);
 }
 
 1;

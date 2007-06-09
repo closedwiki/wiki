@@ -47,7 +47,6 @@ my $testtopic3 = "InitTestTopic3";
 my $testform = "InitTestForm";
 my $testtmpl = "InitTestTemplate";
 
-my $twiki;
 my $user;
 my $testuser1 = "TestUser1";
 my $testuser2 = "TestUser2";
@@ -135,29 +134,29 @@ sub set_up {
     my $this = shift;
     $this->SUPER::set_up();
 
-    $twiki = new TWiki();
-    $user = $twiki->{user};
+    $this->{twiki} = new TWiki();
+    $user = $this->{twiki}->{user};
 
-    $aurl = $twiki->getPubUrl(1, $testweb, $testform);
-    $surl = $twiki->getScriptUrl(1);
+    $aurl = $this->{twiki}->getPubUrl(1, $testweb, $testform);
+    $surl = $this->{twiki}->getScriptUrl(1);
 
-    $twiki->{store}->createWeb($user, $testweb);
+    $this->{twiki}->{store}->createWeb($user, $testweb);
 
 
-    $TWiki::Plugins::SESSION = $twiki;
+    $TWiki::Plugins::SESSION = $this->{twiki};
     TWiki::Func::saveTopicText( $testweb, $testtopic1, $testtext1, 1, 1 );
     TWiki::Func::saveTopicText( $testweb, $testtopic2, $testtext2, 1, 1 );
     TWiki::Func::saveTopicText( $testweb, $testtopic3, $testtext3, 1, 1 );
     TWiki::Func::saveTopicText( $testweb, $testform, $testform1, 1, 1 );
     TWiki::Func::saveTopicText( $testweb, $testtmpl, $testtmpl1, 1, 1 );
     TWiki::Func::saveTopicText( $testweb, "MyeditTemplate", $edittmpl1, 1, 1 );
-    $twiki->enterContext('edit');
+    $this->{twiki}->enterContext('edit');
 }
 
 sub tear_down {
     my $this = shift;
-    $this->removeWebFixture($twiki, $testweb);
-    eval {$twiki->finish()};
+    $this->removeWebFixture($this->{twiki}, $testweb);
+    $this->{twiki}->finish();
     $this->SUPER::tear_down();
 }
 
@@ -173,157 +172,156 @@ sub get_formfield {
 sub setup_formtests {
   my ( $this, $web, $topic, $params ) = @_;
 
-  $twiki->{webName} = $web;
-  $twiki->{topicName} = $topic;
-  my $render = $twiki->{renderer};
+  $this->{twiki}->{webName} = $web;
+  $this->{twiki}->{topicName} = $topic;
+  my $render = $this->{twiki}->{renderer};
 
   use TWiki::Attrs;
   my $attr = new TWiki::Attrs( $params );
   foreach my $k ( keys %$attr ) {
     next if $k eq '_RAW';
-    $twiki->{cgiQuery}->param( -name=>$k, -value=>$attr->{$k});
+    $this->{twiki}->{cgiQuery}->param( -name=>$k, -value=>$attr->{$k});
   }
 
   # Now generate the form. We pass a template which throws everything away
   # but the form to allow for simpler analysis.
-  my ( $text, $tmpl ) = TWiki::UI::Edit::init_edit( $twiki, 'myedit' );
+  my ( $text, $tmpl ) = TWiki::UI::Edit::init_edit( $this->{twiki}, 'myedit' );
 
   return $tmpl;
 
 }
 
 sub test_form {
-  my $this = shift;
-  
-  my $text = setup_formtests( $this, $testweb, $testtopic1, "formtemplate=\"$testweb.$testform\"" );
+    my $this = shift;
 
-  $this->assert_html_matches('<input type="text" name="IssueName" value="My first defect" size="73" class="twikiInputField twikiEditFormTextField" />', get_formfield(1, $text));
-  $this->assert_html_matches('<textarea name="IssueDescription"  rows="5" cols="55" class="twikiInputField twikiEditFormTextAreaField">
+    my $text = setup_formtests( $this, $testweb, $testtopic1, "formtemplate=\"$testweb.$testform\"" );
+
+    $this->assert_html_matches('<input type="text" name="IssueName" value="My first defect" size="73" class="twikiInputField twikiEditFormTextField" />', get_formfield(1, $text));
+    $this->assert_html_matches('<textarea name="IssueDescription"  rows="5" cols="55" class="twikiInputField twikiEditFormTextAreaField">
 Simple description of problem</textarea>', get_formfield(2, $text));
-  $this->assert_html_matches('<select name="IssueType" class="twikiEditFormSelect" size="1"><option class="twikiEditFormOption">Defect</option><option class="twikiEditFormOption">Enhancement</option><option class="twikiEditFormOption">Other</option></select>', get_formfield(3, $text));
-  $this->assert_html_matches('<input type="hidden" name="History1" value="' . $aurl . '"  />', get_formfield(4, $text));
-  $this->assert_html_matches('<input type="text" name="History2" value="' . $aurl . '" size="20" class="twikiInputField twikiEditFormTextField" />', get_formfield(5, $text));
-  $this->assert_html_matches('<input type="hidden" name="History3" value="%ATTACHURL%"  />', get_formfield(6, $text));
-  $this->assert_html_matches('<input type="text" name="History4" value="%ATTACHURL%" size="20" class="twikiInputField twikiEditFormTextField" />', get_formfield(7, $text));
-
+    $this->assert_html_matches('<select name="IssueType" class="twikiSelect twikiEditFormSelect" size="1"><option class="twikiEditFormOption">Defect</option><option class="twikiEditFormOption">Enhancement</option><option class="twikiEditFormOption">Other</option></select>', get_formfield(3, $text));
+    $this->assert_html_matches('<input type="hidden" name="History1" value="' . $aurl . '"  />', get_formfield(4, $text));
+    $this->assert_html_matches('<input type="text" name="History2" value="' . $aurl . '" size="20" class="twikiInputField twikiEditFormTextField" />', get_formfield(5, $text));
+    $this->assert_html_matches('<input type="hidden" name="History3" value="%ATTACHURL%"  />', get_formfield(6, $text));
+    $this->assert_html_matches('<input type="text" name="History4" value="%ATTACHURL%" size="20" class="twikiInputField twikiEditFormTextField" />', get_formfield(7, $text));
 }
 
 sub test_tmpl_form {
-  # Pass formTemplate and templateTopic
-  my $this = shift;
-  
-  my $text = setup_formtests( $this, $testweb, $testtopic1, "formtemplate=\"$testweb.$testform\" templatetopic=\"$testweb.$testtmpl\"" );
+    # Pass formTemplate and templateTopic
+    my $this = shift;
+    
+    my $text = setup_formtests( $this, $testweb, $testtopic1, "formtemplate=\"$testweb.$testform\" templatetopic=\"$testweb.$testtmpl\"" );
 
-  $this->assert_html_matches('<input type="text" name="IssueName" value="My first defect" size="73" class="twikiInputField twikiEditFormTextField" />', get_formfield(1, $text));
-  $this->assert_html_matches('<textarea name="IssueDescription"  rows="5" cols="55" class="twikiInputField twikiEditFormTextAreaField">
+    $this->assert_html_matches('<input type="text" name="IssueName" value="My first defect" size="73" class="twikiInputField twikiEditFormTextField" />', get_formfield(1, $text));
+    $this->assert_html_matches('<textarea name="IssueDescription"  rows="5" cols="55" class="twikiInputField twikiEditFormTextAreaField">
 Simple description of problem</textarea>', get_formfield(2, $text));
-  $this->assert_html_matches('<select name="IssueType" class="twikiEditFormSelect" size="1"><option class="twikiEditFormOption">Defect</option><option class="twikiEditFormOption">Enhancement</option><option class="twikiEditFormOption">Other</option></select>', get_formfield(3, $text));
-  $this->assert_html_matches('<input type="hidden" name="History1" value="' . $aurl . '" />', get_formfield(4, $text));
-  $this->assert_html_matches('<input type="text" name="History2" value="' . $aurl . '" size="20" class="twikiInputField twikiEditFormTextField" />', get_formfield(5, $text));
-  $this->assert_html_matches('<input type="hidden" name="History3" value="%ATTACHURL%"  />', get_formfield(6, $text));
-  $this->assert_html_matches('<input type="text" name="History4" value="%ATTACHURL%" size="20" class="twikiInputField twikiEditFormTextField" />', get_formfield(7, $text));
+    $this->assert_html_matches('<select name="IssueType" class="twikiSelect twikiEditFormSelect" size="1"><option class="twikiEditFormOption">Defect</option><option class="twikiEditFormOption">Enhancement</option><option class="twikiEditFormOption">Other</option></select>', get_formfield(3, $text));
+    $this->assert_html_matches('<input type="hidden" name="History1" value="' . $aurl . '" />', get_formfield(4, $text));
+    $this->assert_html_matches('<input type="text" name="History2" value="' . $aurl . '" size="20" class="twikiInputField twikiEditFormTextField" />', get_formfield(5, $text));
+    $this->assert_html_matches('<input type="hidden" name="History3" value="%ATTACHURL%"  />', get_formfield(6, $text));
+    $this->assert_html_matches('<input type="text" name="History4" value="%ATTACHURL%" size="20" class="twikiInputField twikiEditFormTextField" />', get_formfield(7, $text));
 
 }
 
 sub test_tmpl_form_new {
-  # Pass formTemplate and templateTopic to empty topic
-  my $this = shift;
-  
-  my $text = setup_formtests( $this, $testweb, "${testtopic1}XXXXXXXXXX", "formtemplate=\"$testweb.$testform\" templatetopic=\"$testweb.$testtmpl\"" );
+    # Pass formTemplate and templateTopic to empty topic
+    my $this = shift;
+    
+    my $text = setup_formtests( $this, $testweb, "${testtopic1}XXXXXXXXXX", "formtemplate=\"$testweb.$testform\" templatetopic=\"$testweb.$testtmpl\"" );
 
-  $this->assert_html_matches('<input type="text" name="IssueName" value="_An issue_" size="73" class="twikiInputField twikiEditFormTextField" />', get_formfield(1, $text));
-  $this->assert_html_matches('<textarea name="IssueDescription"  rows="5" cols="55" class="twikiInputField twikiEditFormTextAreaField">
+    $this->assert_html_matches('<input type="text" name="IssueName" value="_An issue_" size="73" class="twikiInputField twikiEditFormTextField" />', get_formfield(1, $text));
+    $this->assert_html_matches('<textarea name="IssueDescription"  rows="5" cols="55" class="twikiInputField twikiEditFormTextAreaField">
 ---+ Example problem</textarea>', get_formfield(2, $text));
-  $this->assert_html_matches('<select name="IssueType" class="twikiEditFormSelect" size="1"><option class="twikiEditFormOption" selected="selected">Defect</option><option class="twikiEditFormOption">Enhancement</option><option class="twikiEditFormOption">Other</option></select>', get_formfield(3, $text));
-  $this->assert_html_matches('<input type="hidden" name="History1" value="%SCRIPTURL%"  />', get_formfield(4, $text));
-  $this->assert_html_matches('<input type="text" name="History2" value="%SCRIPTURL%" size="20" class="twikiInputField twikiEditFormTextField" />', get_formfield(5, $text));
-  $this->assert_html_matches('<input type="hidden" name="History3" value="%SCRIPTURL%"  />', get_formfield(6, $text));
-  $this->assert_html_matches('<input type="text" name="History4" value="%SCRIPTURL%" size="20" class="twikiInputField twikiEditFormTextField" />', get_formfield(7, $text));
+    $this->assert_html_matches('<select name="IssueType" class="twikiSelect twikiEditFormSelect" size="1"><option class="twikiEditFormOption" selected="selected">Defect</option><option class="twikiEditFormOption">Enhancement</option><option class="twikiEditFormOption">Other</option></select>', get_formfield(3, $text));
+    $this->assert_html_matches('<input type="hidden" name="History1" value="%SCRIPTURL%"  />', get_formfield(4, $text));
+    $this->assert_html_matches('<input type="text" name="History2" value="%SCRIPTURL%" size="20" class="twikiInputField twikiEditFormTextField" />', get_formfield(5, $text));
+    $this->assert_html_matches('<input type="hidden" name="History3" value="%SCRIPTURL%"  />', get_formfield(6, $text));
+    $this->assert_html_matches('<input type="text" name="History4" value="%SCRIPTURL%" size="20" class="twikiInputField twikiEditFormTextField" />', get_formfield(7, $text));
 
 }
 
 sub test_tmpl_form_existingform {
-  # Pass formTemplate and templateTopic to topic with form
-  my $this = shift;
-  
-  my $text = setup_formtests( $this, $testweb, "$testtopic2", "formtemplate=\"$testweb.$testform\" templatetopic=\"$testweb.$testtmpl\"" );
+    # Pass formTemplate and templateTopic to topic with form
+    my $this = shift;
+    
+    my $text = setup_formtests( $this, $testweb, "$testtopic2", "formtemplate=\"$testweb.$testform\" templatetopic=\"$testweb.$testtmpl\"" );
 
-  $this->assert_html_matches('<input type="text" name="IssueName" value="_An issue_" size="73" class="twikiInputField twikiEditFormTextField" />', get_formfield(1, $text));
-  $this->assert_html_matches('<textarea name="IssueDescription"  rows="5" cols="55" class="twikiInputField twikiEditFormTextAreaField">
+    $this->assert_html_matches('<input type="text" name="IssueName" value="_An issue_" size="73" class="twikiInputField twikiEditFormTextField" />', get_formfield(1, $text));
+    $this->assert_html_matches('<textarea name="IssueDescription"  rows="5" cols="55" class="twikiInputField twikiEditFormTextAreaField">
 ---+ Example problem</textarea>', get_formfield(2, $text));
-  $this->assert_html_matches('<select name="IssueType" class="twikiEditFormSelect" size="1"><option class="twikiEditFormOption" selected="selected">Defect</option><option class="twikiEditFormOption">Enhancement</option><option class="twikiEditFormOption">Other</option></select>', get_formfield(3, $text));
-  $this->assert_html_matches('<input type="hidden" name="History1" value="%SCRIPTURL%"  />', get_formfield(4, $text));
-  $this->assert_html_matches('<input type="text" name="History2" value="%SCRIPTURL%" size="20" class="twikiInputField twikiEditFormTextField" />', get_formfield(5, $text));
-  $this->assert_html_matches('<input type="hidden" name="History3" value="%SCRIPTURL%"  />', get_formfield(6, $text));
-  $this->assert_html_matches('><input type="text" name="History4" value="%SCRIPTURL%" size="20" class="twikiInputField twikiEditFormTextField" />', get_formfield(7, $text));
+    $this->assert_html_matches('<select name="IssueType" class="twikiSelect twikiEditFormSelect" size="1"><option class="twikiEditFormOption" selected="selected">Defect</option><option class="twikiEditFormOption">Enhancement</option><option class="twikiEditFormOption">Other</option></select>', get_formfield(3, $text));
+    $this->assert_html_matches('<input type="hidden" name="History1" value="%SCRIPTURL%"  />', get_formfield(4, $text));
+    $this->assert_html_matches('<input type="text" name="History2" value="%SCRIPTURL%" size="20" class="twikiInputField twikiEditFormTextField" />', get_formfield(5, $text));
+    $this->assert_html_matches('<input type="hidden" name="History3" value="%SCRIPTURL%"  />', get_formfield(6, $text));
+    $this->assert_html_matches('><input type="text" name="History4" value="%SCRIPTURL%" size="20" class="twikiInputField twikiEditFormTextField" />', get_formfield(7, $text));
 
 }
 
 sub test_tmpl_form_params {
-  # Pass query parameters
-  my $this = shift;
-  
-  my $text = setup_formtests( $this, $testweb, "$testtopic1", "formtemplate=\"$testweb.$testform\" templatetopic=\"$testweb.$testtmpl\" IssueName=\"_An issue_\" IssueDescription=\"---+ Example problem\" IssueType=\"Defect\" History1=\"%SCRIPTURL%\" History2=\"%SCRIPTURL%\" History3=\"\$percntSCRIPTURL%\" History4=\"\$percntSCRIPTURL%\" " );
+    # Pass query parameters
+    my $this = shift;
+    
+    my $text = setup_formtests( $this, $testweb, "$testtopic1", "formtemplate=\"$testweb.$testform\" templatetopic=\"$testweb.$testtmpl\" IssueName=\"_An issue_\" IssueDescription=\"---+ Example problem\" IssueType=\"Defect\" History1=\"%SCRIPTURL%\" History2=\"%SCRIPTURL%\" History3=\"\$percntSCRIPTURL%\" History4=\"\$percntSCRIPTURL%\" " );
 
-  $this->assert_html_matches('<input type="text" name="IssueName" value="_An issue_" size="73" class="twikiInputField twikiEditFormTextField" />', get_formfield(1, $text));
-  $this->assert_html_matches('<textarea name="IssueDescription"  rows="5" cols="55" class="twikiInputField twikiEditFormTextAreaField">
+    $this->assert_html_matches('<input type="text" name="IssueName" value="_An issue_" size="73" class="twikiInputField twikiEditFormTextField" />', get_formfield(1, $text));
+    $this->assert_html_matches('<textarea name="IssueDescription"  rows="5" cols="55" class="twikiInputField twikiEditFormTextAreaField">
 ---+ Example problem</textarea>', get_formfield(2, $text));
-  $this->assert_html_matches('<select name="IssueType" class="twikiEditFormSelect" size="1"><option class="twikiEditFormOption" selected="selected">Defect</option><option class="twikiEditFormOption">Enhancement</option><option class="twikiEditFormOption">Other</option></select>', get_formfield(3, $text));
-  $this->assert_html_matches('<input type="hidden" name="History1" value="%SCRIPTURL%"  />', get_formfield(4, $text));
-  $this->assert_html_matches('<input type="text" name="History2" value="%SCRIPTURL%" size="20" class="twikiInputField twikiEditFormTextField" />', get_formfield(5, $text));
-  $this->assert_html_matches('<input type="hidden" name="History3" value="%SCRIPTURL%"  />', get_formfield(6, $text));
-  $this->assert_html_matches('<input type="text" name="History4" value="%SCRIPTURL%" size="20" class="twikiInputField twikiEditFormTextField" />', get_formfield(7, $text));
+    $this->assert_html_matches('<select name="IssueType" class="twikiSelect twikiEditFormSelect" size="1"><option class="twikiEditFormOption" selected="selected">Defect</option><option class="twikiEditFormOption">Enhancement</option><option class="twikiEditFormOption">Other</option></select>', get_formfield(3, $text));
+    $this->assert_html_matches('<input type="hidden" name="History1" value="%SCRIPTURL%"  />', get_formfield(4, $text));
+    $this->assert_html_matches('<input type="text" name="History2" value="%SCRIPTURL%" size="20" class="twikiInputField twikiEditFormTextField" />', get_formfield(5, $text));
+    $this->assert_html_matches('<input type="hidden" name="History3" value="%SCRIPTURL%"  />', get_formfield(6, $text));
+    $this->assert_html_matches('<input type="text" name="History4" value="%SCRIPTURL%" size="20" class="twikiInputField twikiEditFormTextField" />', get_formfield(7, $text));
 
 }
 
 sub test_tmpl_form_existingform_params {
-  # Pass query parameters, with field values present
-  my $this = shift;
-  
-  my $text = setup_formtests( $this, $testweb, "$testtopic2", "formtemplate=\"$testweb.$testform\" templatetopic=\"$testweb.$testtmpl\" IssueName=\"My first defect\" IssueDescription=\"Simple description of problem\" IssueType=\"Enhancement\" History1=\"%ATTACHURL%\" History2=\"%ATTACHURL%\" History3=\"\$percntATTACHURL%\" History4=\"\$percntATTACHURL%\" " );
+    # Pass query parameters, with field values present
+    my $this = shift;
+    
+    my $text = setup_formtests( $this, $testweb, "$testtopic2", "formtemplate=\"$testweb.$testform\" templatetopic=\"$testweb.$testtmpl\" IssueName=\"My first defect\" IssueDescription=\"Simple description of problem\" IssueType=\"Enhancement\" History1=\"%ATTACHURL%\" History2=\"%ATTACHURL%\" History3=\"\$percntATTACHURL%\" History4=\"\$percntATTACHURL%\" " );
 
-  $this->assert_html_matches('<input type="text" name="IssueName" value="My first defect" size="73" class="twikiInputField twikiEditFormTextField" />', get_formfield(1, $text));
-  $this->assert_html_matches('<textarea name="IssueDescription"  rows="5" cols="55" class="twikiInputField twikiEditFormTextAreaField">
+    $this->assert_html_matches('<input type="text" name="IssueName" value="My first defect" size="73" class="twikiInputField twikiEditFormTextField" />', get_formfield(1, $text));
+    $this->assert_html_matches('<textarea name="IssueDescription"  rows="5" cols="55" class="twikiInputField twikiEditFormTextAreaField">
 Simple description of problem</textarea>', get_formfield(2, $text));
-  $this->assert_html_matches('<select name="IssueType" class="twikiEditFormSelect" size="1"><option class="twikiEditFormOption">Defect</option><option class="twikiEditFormOption" selected="selected">Enhancement</option><option class="twikiEditFormOption">Other</option></select>', get_formfield(3, $text));
-  $this->assert_html_matches('<input type="hidden" name="History1" value="%ATTACHURL%"  />', get_formfield(4, $text));
-  $this->assert_html_matches('<input type="text" name="History2" value="%ATTACHURL%" size="20" class="twikiInputField twikiEditFormTextField" />', get_formfield(5, $text));
-  $this->assert_html_matches('<input type="hidden" name="History3" value="%ATTACHURL%"  />', get_formfield(6, $text));
-  $this->assert_html_matches('<input type="text" name="History4" value="%ATTACHURL%" size="20" class="twikiInputField twikiEditFormTextField" />', get_formfield(7, $text));
+    $this->assert_html_matches('<select name="IssueType" class="twikiSelect twikiEditFormSelect" size="1"><option class="twikiEditFormOption">Defect</option><option class="twikiEditFormOption" selected="selected">Enhancement</option><option class="twikiEditFormOption">Other</option></select>', get_formfield(3, $text));
+    $this->assert_html_matches('<input type="hidden" name="History1" value="%ATTACHURL%"  />', get_formfield(4, $text));
+    $this->assert_html_matches('<input type="text" name="History2" value="%ATTACHURL%" size="20" class="twikiInputField twikiEditFormTextField" />', get_formfield(5, $text));
+    $this->assert_html_matches('<input type="hidden" name="History3" value="%ATTACHURL%"  />', get_formfield(6, $text));
+    $this->assert_html_matches('<input type="text" name="History4" value="%ATTACHURL%" size="20" class="twikiInputField twikiEditFormTextField" />', get_formfield(7, $text));
 
 }
 
 sub test_tmpl_form_new_params {
-  # Pass query parameters, new topic
-  my $this = shift;
-  
-  my $text = setup_formtests( $this, $testweb, "${testtopic1}XXXXXXXXXX", "formtemplate=\"$testweb.$testform\" templatetopic=\"$testweb.$testtmpl\" IssueName=\"My first defect\" IssueDescription=\"Simple description of problem\" IssueType=\"Enhancement\" History1=\"%ATTACHURL%\" History2=\"%ATTACHURL%\" History3=\"\$percntATTACHURL%\" History4=\"\$percntATTACHURL%\" " );
+    # Pass query parameters, new topic
+    my $this = shift;
+    
+    my $text = setup_formtests( $this, $testweb, "${testtopic1}XXXXXXXXXX", "formtemplate=\"$testweb.$testform\" templatetopic=\"$testweb.$testtmpl\" IssueName=\"My first defect\" IssueDescription=\"Simple description of problem\" IssueType=\"Enhancement\" History1=\"%ATTACHURL%\" History2=\"%ATTACHURL%\" History3=\"\$percntATTACHURL%\" History4=\"\$percntATTACHURL%\" " );
 
-  $this->assert_html_matches('<input type="text" name="IssueName" value="My first defect" size="73" class="twikiInputField twikiEditFormTextField" />', get_formfield(1, $text));
-  $this->assert_html_matches('<textarea name="IssueDescription"  rows="5" cols="55" class="twikiInputField twikiEditFormTextAreaField">
+    $this->assert_html_matches('<input type="text" name="IssueName" value="My first defect" size="73" class="twikiInputField twikiEditFormTextField" />', get_formfield(1, $text));
+    $this->assert_html_matches('<textarea name="IssueDescription"  rows="5" cols="55" class="twikiInputField twikiEditFormTextAreaField">
 Simple description of problem</textarea>', get_formfield(2, $text));
-  $this->assert_html_matches('<select name="IssueType" class="twikiEditFormSelect" size="1"><option class="twikiEditFormOption">Defect</option><option class="twikiEditFormOption" selected="selected">Enhancement</option><option class="twikiEditFormOption">Other</option></select>', get_formfield(3, $text));
-  $this->assert_html_matches('<input type="hidden" name="History1" value="%ATTACHURL%"  />', get_formfield(4, $text));
-  $this->assert_html_matches('<input type="text" name="History2" value="%ATTACHURL%" size="20" class="twikiInputField twikiEditFormTextField" />', get_formfield(5, $text));
-  $this->assert_html_matches('<input type="hidden" name="History3" value="%ATTACHURL%"  />', get_formfield(6, $text));
-  $this->assert_html_matches('<input type="text" name="History4" value="%ATTACHURL%" size="20" class="twikiInputField twikiEditFormTextField" />', get_formfield(7, $text));
+    $this->assert_html_matches('<select name="IssueType" class="twikiSelect twikiEditFormSelect" size="1"><option class="twikiEditFormOption">Defect</option><option class="twikiEditFormOption" selected="selected">Enhancement</option><option class="twikiEditFormOption">Other</option></select>', get_formfield(3, $text));
+    $this->assert_html_matches('<input type="hidden" name="History1" value="%ATTACHURL%"  />', get_formfield(4, $text));
+    $this->assert_html_matches('<input type="text" name="History2" value="%ATTACHURL%" size="20" class="twikiInputField twikiEditFormTextField" />', get_formfield(5, $text));
+    $this->assert_html_matches('<input type="hidden" name="History3" value="%ATTACHURL%"  />', get_formfield(6, $text));
+    $this->assert_html_matches('<input type="text" name="History4" value="%ATTACHURL%" size="20" class="twikiInputField twikiEditFormTextField" />', get_formfield(7, $text));
 
 }
 
 sub test_tmpl_form_notext_params {
-  # Pass query parameters, no text
-  my $this = shift;
-  
-  my $text = setup_formtests( $this, $testweb, $testtopic1, "formtemplate=\"$testweb.$testform\" templatetopic=\"$testweb.$testtmpl\" IssueName=\"My first defect\" IssueDescription=\"Simple description of problem\" IssueType=\"Enhancement\" History1=\"%ATTACHURL%\" History2=\"%ATTACHURL%\" History3=\"\$percntATTACHURL%\" History4=\"\$percntATTACHURL%\" text=\"\"" );
+    # Pass query parameters, no text
+    my $this = shift;
+    
+    my $text = setup_formtests( $this, $testweb, $testtopic1, "formtemplate=\"$testweb.$testform\" templatetopic=\"$testweb.$testtmpl\" IssueName=\"My first defect\" IssueDescription=\"Simple description of problem\" IssueType=\"Enhancement\" History1=\"%ATTACHURL%\" History2=\"%ATTACHURL%\" History3=\"\$percntATTACHURL%\" History4=\"\$percntATTACHURL%\" text=\"\"" );
 
-  $this->assert_html_matches('<input type="text" name="IssueName" value="My first defect" size="73" class="twikiInputField twikiEditFormTextField" />', get_formfield(1, $text));
-  $this->assert_html_matches('<textarea name="IssueDescription"  rows="5" cols="55" class="twikiInputField twikiEditFormTextAreaField">
+    $this->assert_html_matches('<input type="text" name="IssueName" value="My first defect" size="73" class="twikiInputField twikiEditFormTextField" />', get_formfield(1, $text));
+    $this->assert_html_matches('<textarea name="IssueDescription"  rows="5" cols="55" class="twikiInputField twikiEditFormTextAreaField">
 Simple description of problem</textarea>', get_formfield(2, $text));
-  $this->assert_html_matches('<select name="IssueType" class="twikiEditFormSelect" size="1"><option class="twikiEditFormOption">Defect</option><option class="twikiEditFormOption" selected="selected">Enhancement</option><option class="twikiEditFormOption">Other</option></select>', get_formfield(3, $text));
-  $this->assert_html_matches('<input type="hidden" name="History1" value="%ATTACHURL%"  />', get_formfield(4, $text));
-  $this->assert_html_matches('<input type="text" name="History2" value="%ATTACHURL%" size="20" class="twikiInputField twikiEditFormTextField" />', get_formfield(5, $text));
-  $this->assert_html_matches('<input type="hidden" name="History3" value="%ATTACHURL%"  />', get_formfield(6, $text));
-  $this->assert_html_matches('<input type="text" name="History4" value="%ATTACHURL%" size="20" class="twikiInputField twikiEditFormTextField" />', get_formfield(7, $text));
+    $this->assert_html_matches('<select name="IssueType" class="twikiSelect twikiEditFormSelect" size="1"><option class="twikiEditFormOption">Defect</option><option class="twikiEditFormOption" selected="selected">Enhancement</option><option class="twikiEditFormOption">Other</option></select>', get_formfield(3, $text));
+    $this->assert_html_matches('<input type="hidden" name="History1" value="%ATTACHURL%"  />', get_formfield(4, $text));
+    $this->assert_html_matches('<input type="text" name="History2" value="%ATTACHURL%" size="20" class="twikiInputField twikiEditFormTextField" />', get_formfield(5, $text));
+    $this->assert_html_matches('<input type="hidden" name="History3" value="%ATTACHURL%"  />', get_formfield(6, $text));
+    $this->assert_html_matches('<input type="text" name="History4" value="%ATTACHURL%" size="20" class="twikiInputField twikiEditFormTextField" />', get_formfield(7, $text));
 
 }
 
@@ -333,17 +331,17 @@ Simple description of problem</textarea>', get_formfield(2, $text));
 #              * No expansion of TWiki variables (%SCRIPTURL%)
 #              * No expansion if $percnt
 sub test_dont_expand_on_edit {
-  my $this = shift;
-  
-  my $text = setup_formtests( $this, $testweb, $testtopic3 );
+    my $this = shift;
+    
+    my $text = setup_formtests( $this, $testweb, $testtopic3 );
 
-  $this->assert_html_matches('<input type="text" name="IssueName" value="My first defect" size="73" class="twikiInputField twikiEditFormTextField" />', get_formfield(1, $text));
-  $this->assert_html_matches('<textarea name="IssueDescription"  rows="5" cols="55" class="twikiInputField twikiEditFormTextAreaField">
+    $this->assert_html_matches('<input type="text" name="IssueName" value="My first defect" size="73" class="twikiInputField twikiEditFormTextField" />', get_formfield(1, $text));
+    $this->assert_html_matches('<textarea name="IssueDescription"  rows="5" cols="55" class="twikiInputField twikiEditFormTextAreaField">
 Simple description of problem</textarea>', get_formfield(2, $text));
-#  $this->assert_matches(qr/<select [^>]+><option ([^>]+| selected)>Defect<\/option>/, get_formfield(3, $text));
-   $this->assert_html_matches('<select name="IssueType" class="twikiEditFormSelect" size="1"><option class="twikiEditFormOption" selected="selected">Defect</option><option class="twikiEditFormOption">Enhancement</option><option class="twikiEditFormOption">Other</option></select>', get_formfield(3, $text));
-  $this->assert_html_matches('<input type="hidden" name="History1" value="%SCRIPTURL%"  />', get_formfield(4, $text));
-  $this->assert_html_matches('<input type="hidden" name="History3" value="$percntSCRIPTURL%"  />', get_formfield(6, $text));
+    #  $this->assert_matches(qr/<select [^>]+><option ([^>]+| selected)>Defect<\/option>/, get_formfield(3, $text));
+    $this->assert_html_matches('<select name="IssueType" class="twikiSelect twikiEditFormSelect" size="1"><option class="twikiEditFormOption" selected="selected">Defect</option><option class="twikiEditFormOption">Enhancement</option><option class="twikiEditFormOption">Other</option></select>', get_formfield(3, $text));
+    $this->assert_html_matches('<input type="hidden" name="History1" value="%SCRIPTURL%"  />', get_formfield(4, $text));
+    $this->assert_html_matches('<input type="hidden" name="History3" value="$percntSCRIPTURL%"  />', get_formfield(6, $text));
 }
 
 1;

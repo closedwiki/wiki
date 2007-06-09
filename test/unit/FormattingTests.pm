@@ -555,7 +555,7 @@ EXPECTED
 sub test_USInHeader {
     my $this = shift;
     my $expected = <<EXPECTED;
-<nop><h3><a name="Test_with_link_in_header_Undersc"></a>Test with link in header: Underscore_topic</h3>
+<nop><h3><a name="Test with link in header: Unders"></a>Test with link in header: Underscore_topic</h3>
 EXPECTED
 
     my $actual = <<ACTUAL;

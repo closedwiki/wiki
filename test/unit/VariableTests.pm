@@ -10,8 +10,6 @@ use base qw( TWikiFnTestCase );
 use TWiki;
 use Error qw( :try );
 
-my $twiki;
-
 sub set_up {
     my $this = shift;
 
@@ -19,7 +17,8 @@ sub set_up {
 
     my $query = new CGI("");
     $query->path_info("/$this->{test_web}/$this->{test_topic}");
-    $twiki = new TWiki('scum', $query);
+    $this->{twiki}->finish();
+    $this->{twiki} = new TWiki('scum', $query);
 }
 
 sub new {
@@ -29,7 +28,7 @@ sub new {
 
 sub test_embeddedExpansions {
     my $this = shift;
-    $twiki->{prefs}->pushPreferenceValues(
+    $this->{twiki}->{prefs}->pushPreferenceValues(
         'TOPIC',
         { EGGSAMPLE => 'Egg sample',
           A => 'EGG',
@@ -45,22 +44,22 @@ sub test_embeddedExpansions {
           XB => 'PLAR',
       });
 
-    my $result = $twiki->handleCommonTags("%%A%%B%%", $this->{test_web}, $this->{test_topic});
+    my $result = $this->{twiki}->handleCommonTags("%%A%%B%%", $this->{test_web}, $this->{test_topic});
     $this->assert_equals('Egg sample', $result);
 
-    $result = $twiki->handleCommonTags("%C%%D%", $this->{test_web}, $this->{test_topic});
+    $result = $this->{twiki}->handleCommonTags("%C%%D%", $this->{test_web}, $this->{test_topic});
     $this->assert_equals('Egg sample', $result);
 
-    $result = $twiki->handleCommonTags("%E%%F%", $this->{test_web}, $this->{test_topic});
+    $result = $this->{twiki}->handleCommonTags("%E%%F%", $this->{test_web}, $this->{test_topic});
     $this->assert_equals('Egg sample', $result);
 
-    $result = $twiki->handleCommonTags("%%XA{}%%XB{}%%", $this->{test_web}, $this->{test_topic});
+    $result = $this->{twiki}->handleCommonTags("%%XA{}%%XB{}%%", $this->{test_web}, $this->{test_topic});
     $this->assert_equals('Exem plar', $result);
 
-    $result = $twiki->handleCommonTags("%%XA%%XB%{}%", $this->{test_web}, $this->{test_topic});
+    $result = $this->{twiki}->handleCommonTags("%%XA%%XB%{}%", $this->{test_web}, $this->{test_topic});
     $this->assert_equals('Exem plar', $result);
 
-    $result = $twiki->handleCommonTags("%%%PA%%%%SB{}%%%", $this->{test_web}, $this->{test_topic});
+    $result = $this->{twiki}->handleCommonTags("%%%PA%%%%SB{}%%%", $this->{test_web}, $this->{test_topic});
     $this->assert_equals('Egg sample', $result);
 
 }
@@ -81,7 +80,7 @@ Kill me
 %USERINFO{format="$emails,$username,$wikiname,$wikiusername"}%
 %ENDSECTION{name="fred" type="section"}%
 END
-    my $result = $twiki->expandVariablesOnTopicCreation($text, $this->{test_user});
+    my $result = $this->{twiki}->expandVariablesOnTopicCreation($text, $this->{test_user});
     my $xpect = <<END;
 scum
 
@@ -108,7 +107,7 @@ sub test_userExpansions {
 %USERINFO{format="$emails,$username,$wikiname,$wikiusername"}%
 %USERINFO{"TWikiGuest" format="$emails,$username,$wikiname,$wikiusername"}%
 END
-    my $result = $twiki->handleCommonTags($text, $this->{test_web}, $this->{test_topic});
+    my $result = $this->{twiki}->handleCommonTags($text, $this->{test_web}, $this->{test_topic});
     my $xpect = <<END;
 scum
 ScumBag

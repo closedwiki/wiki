@@ -170,7 +170,7 @@ sub getTWikiLibDir {
 }
 
 BEGIN {
-
+    use Monitor;
     use TWiki::Sandbox;   # system command sandbox
     use TWiki::Configure::Load;    # read configuration files
 
@@ -488,9 +488,11 @@ BEGIN {
     # "shared" between mod_perl instances
     $sharedSandbox = new TWiki::Sandbox(
         $TWiki::cfg{OS}, $TWiki::cfg{DetailedOS} );
+    Monitor::MARK('Static configuration loaded');
 };
 
 use TWiki::Access;    # access control
+use TWiki::Meta;      # meta-data handling
 use TWiki::Attach;    # file attachments
 use TWiki::Attrs;     # tag attribute handling
 use TWiki::Form;      # forms
@@ -655,7 +657,6 @@ core settings.
 sub writePageHeader {
     my( $this, $query, $pageType, $contentType, $contentLength ) = @_;
 
-    ASSERT($this->isa( 'TWiki')) if DEBUG;
 
     $query = $this->{cgiQuery} unless $query;
 
@@ -803,7 +804,6 @@ TODO: but what exactly is passthrough intended to do?
 sub redirect {
     my( $this, $url, $passthru, $action_redirectto ) = @_;
 
-    ASSERT($this->isa( 'TWiki')) if DEBUG;
 
     my $query = $this->{cgiQuery};
     # if we got here without a query, there's not much more we can do
@@ -983,7 +983,6 @@ is returned in a quadruple:
 sub readOnlyMirrorWeb {
     my( $this, $theWeb ) = @_;
 
-    ASSERT($this->isa( 'TWiki')) if DEBUG;
 
     my @mirrorInfo = ( '', '', '', '' );
     if( $TWiki::cfg{SiteWebTopicName} ) {
@@ -1019,7 +1018,6 @@ Get the currently requested skin path
 sub getSkin {
     my $this = shift;
 
-    ASSERT($this->isa( 'TWiki')) if DEBUG;
 
     my $skinpath = $this->{prefs}->getPreferencesValue( 'SKIN' ) || '';
 
@@ -1067,7 +1065,6 @@ If either the web or the topic is defined, will generate a full url (including w
 sub getScriptUrl {
     my( $this, $absolute, $script, $web, $topic, @params ) = @_;
 
-    ASSERT($this->isa( 'TWiki')) if DEBUG;
     $absolute ||= ($this->inContext( 'command_line' ) ||
                      $this->inContext( 'rss' ) ||
                        $this->inContext( 'absolute_urls' ));
@@ -1237,7 +1234,6 @@ name.
 sub normalizeWebTopicName {
     my( $this, $web, $topic ) = @_;
 
-    ASSERT($this->isa( 'TWiki')) if DEBUG;
     ASSERT(defined $topic) if DEBUG;
 
     if( $topic =~ m|^(.*)[./](.*?)$| ) {
@@ -1270,6 +1266,7 @@ Constructs a new TWiki object. Parameters are taken from the query object.
 sub new {
     my( $class, $login, $query, $initialContext ) = @_;
 
+    Monitor::MARK("Static compilation complete");
     $query ||= new CGI( {} );
     my $this = bless( {}, $class );
 
@@ -1286,7 +1283,7 @@ sub new {
     $this->{attach} = new TWiki::Attach( $this );
     # cache CGI information in the session object
     $this->{cgiQuery} = $query;
-    
+
     $this->{remoteUser} = $login;	#use login as a default (set when running from cmd line)
     $this->{users} = new TWiki::Users( $this );
 	$this->{remoteUser} = $this->{users}->{remoteUser};
@@ -1458,38 +1455,53 @@ sub new {
 
     $TWiki::Plugins::SESSION = $this;
 
+    Monitor::MARK("TWiki session created");
+
     return $this;
 }
 
-# Uncomment when enabling AutoLoader
-#__END__
+=begin twiki
 
-=pod
-
----++ ObjectMethod finish
-
-Complete processing after the client's HTTP request has been responded
-to. Right now this does two things:
-   1 calling TWiki::LoginManager (via {users}) to flushing the user's session (if any) to disk,
-   2 breaking circular references to allow garbage collection in persistent
-     environments
+---++ ObjectMethod finish()
+Break circular references.
 
 =cut
 
+# Note to developers; please undef *all* fields in the object explicitly,
+# whether they are references or not. That way this method is "golden
+# documentation" of the live fields in the object.
 sub finish {
     my $this = shift;
+    $this->{plugins}->finish() if $this->{plugins};
+    $this->{users}->finish() if $this->{users};
+    $this->{prefs}->finish() if $this->{prefs};
+    $this->{templates}->finish() if $this->{templates};
+    $this->{renderer}->finish() if $this->{renderer};
+    $this->{sandbox}->finish() if $this->{sandbox};
+    $this->{net}->finish() if $this->{net};
+    $this->{store}->finish() if $this->{store};
+    $this->{search}->finish() if $this->{search};
+    $this->{attach}->finish() if $this->{attach};
+    $this->{security}->finish() if $this->{security};
+    $this->{i18n}->finish() if $this->{i18n};
 
-#    use Data::Dumper;
-#    $Data::Dumper::Indent = 1;
-#    warn "prepared to finish";
-#    warn Dumper($this);
+    undef $this->{_HTMLHEADERS};
+    undef $this->{cgiQuery};
+    undef $this->{urlHost};
+    undef $this->{web};
+    undef $this->{topic};
+    undef $this->{webName};
+    undef $this->{topicName};
+    undef $this->{_ICONMAP};
+    undef $this->{context};
+    undef $this->{remoteUser};
+    undef $this->{requestedWebName}; # Web name before renaming
+    undef $this->{scriptUrlPath};
+    undef $this->{user};
+    undef $this->{SESSION_TAGS};
+    undef $this->{_INCLUDES};
+}
 
-    $this->{prefs}->finish();
-    $this->{users}->finish();
-    $this->{store}->finish();
-
-    %$this = ();
- }
 =pod
 
 ---++ ObjectMethod writeLog( $action, $webTopic, $extra, $user )
@@ -1504,7 +1516,7 @@ Write the log for an event to the logfile
 
 sub writeLog {
     my $this = shift;
-    ASSERT($this->isa( 'TWiki')) if DEBUG;
+
     my $action = shift || '';
     my $webTopic = shift || '';
     my $extra = shift || '';
@@ -1542,7 +1554,6 @@ intervention. Use this for defensive programming warnings (e.g. assertions).
 
 sub writeWarning {
     my $this = shift;
-    ASSERT($this->isa( 'TWiki')) if DEBUG;
     _writeReport( $this, $TWiki::cfg{WarningFileName}, @_ );
 }
 
@@ -1557,7 +1568,6 @@ Prints date, time, and contents of $text to $TWiki::cfg{DebugFileName}, typicall
 
 sub writeDebug {
     my $this = shift;
-    ASSERT($this->isa( 'TWiki')) if DEBUG;
     _writeReport( $this, $TWiki::cfg{DebugFileName}, @_ );
 }
 
@@ -2045,7 +2055,6 @@ expected in templates that must be statically expanded in new content.
 sub expandVariablesOnTopicCreation {
     my ( $this, $text, $user, $theWeb, $theTopic ) = @_;
 
-    ASSERT($this->isa( 'TWiki')) if DEBUG;
     $user ||= $this->{user};
 
     # Chop out templateonly sections
@@ -2644,7 +2653,6 @@ at a time when meta isn't available.
 sub handleCommonTags {
     my( $this, $text, $theWeb, $theTopic, $meta ) = @_;
 
-    ASSERT($this->isa( 'TWiki')) if DEBUG;
     ASSERT($theWeb) if DEBUG;
     ASSERT($theTopic) if DEBUG;
 
@@ -2714,7 +2722,6 @@ result in it being added many times.
 
 sub addToHEAD {
 	my ($this, $tag, $header) = @_;
-    ASSERT($this->isa( 'TWiki')) if DEBUG;
 	
 	$header = $this->handleCommonTags( $header, $this->{webName},
                                        $this->{topicName} );
@@ -3617,7 +3624,6 @@ sub SEP {
 #move to compatibility plugin in TWiki5
 sub WIKINAME_deprecated {
     my ( $this, $params ) = @_;
-    ASSERT($this->isa( 'TWiki')) if DEBUG;
 
     $params->{format} = $this->{prefs}->getPreferencesValue( 'WIKINAME' ) ||
       '$wikiname';
@@ -3629,7 +3635,6 @@ sub WIKINAME_deprecated {
 #move to compatibility plugin in TWiki5
 sub USERNAME_deprecated {
     my ( $this, $params ) = @_;
-    ASSERT($this->isa( 'TWiki')) if DEBUG;
 
     $params->{format} = $this->{prefs}->getPreferencesValue( 'USERNAME' ) ||
       '$username';
@@ -3641,7 +3646,6 @@ sub USERNAME_deprecated {
 #move to compatibility plugin in TWiki5
 sub WIKIUSERNAME_deprecated {
     my ( $this, $params ) = @_;
-    ASSERT($this->isa( 'TWiki')) if DEBUG;
 
     $params->{format} =
       $this->{prefs}->getPreferencesValue( 'WIKIUSERNAME' ) ||

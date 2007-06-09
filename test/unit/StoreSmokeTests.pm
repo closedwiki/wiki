@@ -80,7 +80,7 @@ sub set_up {
 sub tear_down {
     my $this = shift;
     $this->removeWebFixture($twiki, $testweb);
-    eval {$twiki->finish()};
+    $twiki->finish();
     $this->SUPER::tear_down();
 }
 
@@ -266,6 +266,7 @@ sub verify_releaselocksonsave {
                        forcenewrevision => [ 1 ],
                       });
     $query->path_info( "/$testweb/$topic" );
+    $twiki->finish();
     $twiki = new TWiki( $testUser1, $query );
     try {
         $this->capture( \&TWiki::UI::Save::save,  $twiki );
@@ -286,6 +287,7 @@ sub verify_releaselocksonsave {
                       });
 
     $query->path_info( "/$testweb/$topic" );
+    $twiki->finish();
     $twiki = new TWiki( $testUser2, $query );
     try {
         $this->capture( \&TWiki::UI::Save::save,  $twiki );

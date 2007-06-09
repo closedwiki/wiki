@@ -15,7 +15,6 @@ use TWiki::LoginManager;
 use TWiki::UI::View;
 use TWiki::UI::Edit;
 
-my $session;
 my $agent = 'TWikiRegistrationAgent';
 my $userLogin;
 my $userWikiName;
@@ -43,7 +42,9 @@ sub list_tests {
             foreach my $userManagerImpl qw( TWiki::Users::TWikiUserMapping TWiki::Users::BaseUserMapping) {
                 my $fn = $i;
                 $fn =~ s/\W/_/g;
-                my $sfn = 'ClientTests::test_'.$fn.$LoginImpl.$userManagerImpl;
+                my $sfn = 'test_'.$fn.$LoginImpl.$userManagerImpl;
+                $sfn =~ s/::/_/g;
+                $sfn = 'ClientTests::'.$sfn;
                 no strict 'refs';
                 *$sfn = sub {
                     my $this = shift;
@@ -64,7 +65,7 @@ sub set_up {
     my $this = shift;
     $this->SUPER::set_up();
 
-    $session = new TWiki();
+    $this->{twiki} = new TWiki();
     $this->assert($TWiki::cfg{TempfileDir} && -d $TWiki::cfg{TempfileDir});
     $TWiki::cfg{UseClientSessions} = 1;
     $TWiki::cfg{PasswordManager} = "TWiki::Users::HtPasswdUser";
@@ -76,15 +77,15 @@ sub set_up {
 
 sub set_up_user {
     my $this = shift;
-    if ($session->{users}->supportsRegistration()) {
+    if ($this->{twiki}->{users}->supportsRegistration()) {
         $userLogin = 'joe';
         $userWikiName = 'JoeDoe';
-	    $user_id = $session->{users}->addUser( $userLogin, $userWikiName, 'secrect_password', 'email@home.org.au');
+	    $user_id = $this->{twiki}->{users}->addUser( $userLogin, $userWikiName, 'secrect_password', 'email@home.org.au');
 	    $this->annotate("create $userLogin user - cUID = $user_id\n");
     } else {
         $userLogin = $TWiki::cfg{AdminUserLogin};
-        $user_id = $session->{users}->getCanonicalUserID($userLogin);
-        $userWikiName = $session->{users}->getWikiName($user_id);
+        $user_id = $this->{twiki}->{users}->getCanonicalUserID($userLogin);
+        $userWikiName = $this->{twiki}->{users}->getWikiName($user_id);
 	    $this->annotate("no rego support (using admin)\n");
     }
 #print STDERR "\n------------- set_up_user (login: $userLogin) (cUID:$user_id) -----------------\n";
@@ -92,14 +93,14 @@ sub set_up_user {
 
 sub tear_down {
     my $this = shift;
-    eval {$session->finish()};
+    eval {$this->{twiki}->finish()};
     $this->SUPER::tear_down();
 }
 
 sub capture {
     my $this = shift;
-    my( $proc, $session ) = @_;
-    $session->{users}->{loginManager}->checkAccess();
+    my( $proc, $twiki ) = @_;
+    $twiki->{users}->{loginManager}->checkAccess();
     $this->SUPER::capture( @_ );
 }
 
@@ -109,14 +110,18 @@ sub verify_edit {
     my $this = shift;
     my ( $query, $text );
 
-    $query = new CGI ({});
+    #close this TWiki session - its using the wrong mapper and login
+    $this->{twiki}->finish();
+
+    $query = new CGI({});
     $query->path_info( "/Main/WebHome" );
-    $ENV{SCRIPT_NAME} = "view";
-    $session->finish();#close this TWiki session - its using the wrong mapper and login
-    $session = new TWiki( undef, $query );
+    $ENV{SCRIPT_NAME} = "edit";
+    $this->{twiki} = new TWiki( undef, $query );
+    delete $ENV{SCRIPT_NAME};
+
     $this->set_up_user();
     try {
-        $text = $this->capture( \&TWiki::UI::View::view, $session );
+        $text = $this->capture( \&TWiki::UI::View::view, $this->{twiki} );
     } catch TWiki::OopsException with {
         $this->assert(0,shift->stringify());
     } catch Error::Simple with {
@@ -125,12 +130,14 @@ sub verify_edit {
 
     $query = new CGI ({});
     $query->path_info( "/Main/WebHome?breaklock=1" );
+    $this->{twiki}->finish();
+
     $ENV{SCRIPT_NAME} = "edit";
-    $session->finish();
-    $session = new TWiki( undef, $query );
+    $this->{twiki} = new TWiki( undef, $query );
+    delete $ENV{SCRIPT_NAME};
 
     try {
-        $text = $this->capture( \&TWiki::UI::Edit::edit, $session );
+        $text = $this->capture( \&TWiki::UI::Edit::edit, $this->{twiki} );
     } catch TWiki::AccessControlException with {
     } catch Error::Simple with {
         $this->assert(0,shift->stringify());
@@ -143,16 +150,19 @@ sub verify_edit {
 
     $query = new CGI ({});
     $query->path_info( "/Main/WebHome" );
-    $ENV{SCRIPT_NAME} = "edit";
-    $session->finish();
+    $this->{twiki}->finish();
 
     $this->annotate("new session using $userLogin\n");
-    $session = new TWiki( $userLogin, $query );
-    
+    $this->{twiki}->finish();
+
+    $ENV{SCRIPT_NAME} = "edit";
+    $this->{twiki} = new TWiki( $userLogin, $query );
+    delete $ENV{SCRIPT_NAME};
+
     #clear the lease - one of the previous tests may have different usermapper & thus different user
     TWiki::Func::setTopicEditLock('Main', 'WebHome', 0);
     try {
-        $text = $this->capture( \&TWiki::UI::Edit::edit, $session );
+        $text = $this->capture( \&TWiki::UI::Edit::edit, $this->{twiki} );
     } catch TWiki::OopsException with {
         $this->assert(0,shift->stringify());
     } catch Error::Simple with {

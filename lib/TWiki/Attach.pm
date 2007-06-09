@@ -43,18 +43,32 @@ use TWiki::Time;
 
 =pod
 
----++ ClassMethod new( $session )
+---++ ClassMethod new($session)
 
-Constructor
+Constructor.
 
 =cut
 
 sub new {
     my ( $class, $session ) = @_;
-    my $this = bless( {}, $class );
-    ASSERT($session->isa( 'TWiki')) if DEBUG;
-    $this->{session} = $session;
+    my $this = bless( { session => $session }, $class );
+
     return $this;
+}
+
+=begin twiki
+
+---++ ObjectMethod finish()
+Break circular references.
+
+=cut
+
+# Note to developers; please undef *all* fields in the object explicitly,
+# whether they are references or not. That way this method is "golden
+# documentation" of the live fields in the object.
+sub finish {
+    my $this = shift;
+    undef $this->{session};
 }
 
 =pod
@@ -72,7 +86,6 @@ view, using templates for the header, footer and each row.
 
 sub renderMetaData {
     my( $this, $web, $topic, $meta, $attrs ) = @_;
-    ASSERT($this->isa( 'TWiki::Attach')) if DEBUG;
 
     my $showAll = $attrs->{all};
     my $showAttr = $showAll ? 'h' : '';
@@ -122,7 +135,6 @@ Generate a version history table for a single attachment
 
 sub formatVersions {
     my( $this, $web, $topic, %attrs ) = @_;
-    ASSERT($this->isa( 'TWiki::Attach')) if DEBUG;
 
     my $store = $this->{session}->{store};
     my $users = $this->{session}->{users};
@@ -248,7 +260,6 @@ Build a link to the attachment, suitable for insertion in the topic.
 
 sub getAttachmentLink {
     my ( $this, $user, $web, $topic, $attName, $meta ) = @_;
-    ASSERT($this->isa( 'TWiki::Attach')) if DEBUG;
 
     my $att = $meta->get( 'FILEATTACHMENT', $attName );
     my $fileComment = $att->{comment};
@@ -569,7 +580,6 @@ Migrate old HTML format
 
 sub migrateToFileAttachmentMacro {
     my ( $this, $meta, $text ) = @_;
-    ASSERT($this->isa( 'TWiki::Attach')) if DEBUG;
     ASSERT($meta->isa( 'TWiki::Meta')) if DEBUG;
 
     my ( $before, $atext, $after ) = split( /<!--TWikiAttachment-->/, $text );
@@ -623,7 +633,6 @@ CODE_SMELL: Is this really necessary? upgradeFrom1v0beta?
 
 sub upgradeFrom1v0beta {
     my( $this, $meta ) = @_;
-    ASSERT($this->isa( 'TWiki::Attach')) if DEBUG;
     my $users = $this->{session}->{users};
 
     my @attach = $meta->find( 'FILEATTACHMENT' );

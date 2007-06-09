@@ -62,13 +62,27 @@ Constructor. Creates a new template database object.
 
 sub new {
     my ( $class, $session ) = @_;
-    ASSERT($session->isa( 'TWiki')) if DEBUG;
-    my $this = bless( {}, $class );
-    $this->{session} = $session;
+    my $this = bless( { session => $session }, $class );
 
     $this->{VARS} = { sep => ' | ' };
 
     return $this;
+}
+
+=begin twiki
+
+---++ ObjectMethod finish()
+Break circular references.
+
+=cut
+
+# Note to developers; please undef *all* fields in the object explicitly,
+# whether they are references or not. That way this method is "golden
+# documentation" of the live fields in the object.
+sub finish {
+    my $this = shift;
+    undef $this->{VARS};
+    undef $this->{session};
 }
 
 =pod
@@ -81,7 +95,6 @@ Return true if the template exists and is loaded into the cache
 
 sub haveTemplate {
     my ( $this, $template ) = @_;
-    ASSERT($this->isa( 'TWiki::Templates')) if DEBUG;
 
     return exists( $this->{VARS}->{$template} );
 }
@@ -114,7 +127,6 @@ $tmpls->expandTemplate('context="view" then="sigh" else="humph"');
 
 sub expandTemplate {
     my( $this, $params ) = @_;
-    ASSERT($this->isa( 'TWiki::Templates')) if DEBUG;
 
     my $attrs = new TWiki::Attrs( $params );
     my $value = $this->tmplP( $attrs );
@@ -209,7 +221,6 @@ list of loaded templates, overwriting any previous definition.
 
 sub readTemplate {
     my( $this, $name, $skins, $web ) = @_;
-    ASSERT($this->isa( 'TWiki::Templates')) if DEBUG;
 
     $this->{files} = ();
 

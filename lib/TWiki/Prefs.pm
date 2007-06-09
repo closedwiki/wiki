@@ -56,9 +56,8 @@ pushed onto the stack.
 
 sub new {
     my( $class, $session, $cache ) = @_;
-    my $this = bless( {}, $class );
-    ASSERT($session->isa( 'TWiki')) if DEBUG;
-    $this->{session} = $session;
+    my $this = bless( { session => $session }, $class );
+
     push( @{$this->{PREFS}}, $cache ) if defined( $cache );
     # $this->{TOPICS} - hash of TWiki::Prefs objects, for solitary topics
     # $this->{WEBS} - hash of TWiki::Prefs objects, for solitary webs
@@ -68,27 +67,36 @@ sub new {
     return $this;
 }
 
-=pod
+=begin twiki
 
----++ ObjectMethod finish
-Complete processing after the client's HTTP request has been responded
-to. 
-   1 breaking circular references to allow garbage collection in persistent
-     environments
+---++ ObjectMethod finish()
+Break circular references.
 
 =cut
 
+# Note to developers; please undef *all* fields in the object explicitly,
+# whether they are references or not. That way this method is "golden
+# documentation" of the live fields in the object.
 sub finish {
     my $this = shift;
 
-    $this->{TEXT}      =  {};
-    $this->{TOPICS}    =  {};
-    my $prefswebs       =  $this->{WEBS};
-    while (my ($pref_key,$wprefs) = each %$prefswebs) {
-       $wprefs->{PREFS} = ();
+    foreach (@{$this->{PREFS}}) {
+        $_->finish();
     }
-    $this->{WEBS}      =  {};
-    @{$this->{PREFS}}  =  ();
+    undef $this->{PREFS};
+
+    foreach (values %{$this->{TOPICS}}) {
+        $_->finish();
+    }
+    undef $this->{TOPICS};
+
+    foreach (values %{$this->{WEBS}}) {
+        $_->finish();
+    }
+    undef $this->{WEBS};
+
+    undef $this->{LOCAL};
+    undef $this->{session};
 }
 
 =pod
@@ -105,7 +113,6 @@ preferences stack.
 
 sub pushPreferences {
     my( $this, $web, $topic, $type, $prefix ) = @_;
-    ASSERT($this->isa( 'TWiki::Prefs')) if DEBUG;
     my $top;
 
     if( $this->{PREFS} ) {

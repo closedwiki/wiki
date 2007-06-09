@@ -97,8 +97,7 @@ sub new {
 	};
     $this->{U2E} = {$this->{mapping_id}.'333'=>$TWiki::cfg{WebMasterEmail}};
     $this->{U2P} = {$this->{mapping_id}.'333'=>$TWiki::cfg{Password}};
-    
-    
+
     $this->{GROUPS} = {
 		$TWiki::cfg{SuperAdminGroup}=>[$this->{mapping_id}.'333'],
 		TWikiBaseGroup=>[$this->{mapping_id}.'333', $this->{mapping_id}.'666', $this->{mapping_id}.'999', $this->{mapping_id}.'111', $this->{mapping_id}.'222']
@@ -107,6 +106,28 @@ sub new {
     return $this;
 }
 
+=begin twiki
+
+---++ ObjectMethod finish()
+Break circular references.
+
+=cut
+
+# Note to developers; please undef *all* fields in the object explicitly,
+# whether they are references or not. That way this method is "golden
+# documentation" of the live fields in the object.
+sub finish {
+    my $this = shift;
+    undef $this->{U2L};
+    undef $this->{U2W};
+    undef $this->{U2P};
+    undef $this->{U2E};
+    undef $this->{L2U};
+    undef $this->{W2U};
+    undef $this->{GROUPS};
+    undef $this->{mapping_id};
+    undef $this->{session};
+}
 
 =pod
 
@@ -119,27 +140,6 @@ allows UserMappings to come with customised login screens - that should preffere
 sub loginTemplateName {
     return 'login.sudo';
 }
-
-=pod
-
----++ ObjectMethod finish ()
-
-cleans up references
-
-=cut
-
-# Complete processing after the client's HTTP request has been responded
-# to by breaking references (if any)
-sub finish {
-    my $this = shift;
-    delete $this->{U2L};
-    delete $this->{U2W};
-    delete $this->{U2P};
-    delete $this->{L2U};
-    delete $this->{W2U};
-    delete $this->{GROUPS};
-}
-
 
 =pod
 
@@ -357,7 +357,6 @@ method in that module for details.
 
 sub eachUser {
     my( $this ) = @_;
-    ASSERT($this->isa( 'TWiki::Users::BaseUserMapping')) if DEBUG;
 
     my @list = keys(%{$this->{U2W}});
     return new TWiki::ListIterator( \@list );
@@ -376,7 +375,6 @@ method in that module for details.
 sub eachGroupMember {
     my $this = shift;
     my $group = shift;
-    ASSERT($this->isa( 'TWiki::Users::BaseUserMapping')) if DEBUG;
 
 #TODO: implemend expanding of nested groups
     my $members = $this->{GROUPS}{$group};
@@ -502,8 +500,7 @@ sub findUserByEmail {
     my( $this, $email ) = @_;
 
     throw Error::Simple(
-          'IMPLEMENT ME BaseUserMapper');
-    return $this->{_MAP_OF_EMAILS}->{$email};
+          'IMPLEMENT ME TWiki::BaseUserMapping');
 }
 
 =pod
@@ -594,7 +591,7 @@ Returns 1 on success, undef on failure.
 
 sub checkPassword {
     my( $this, $login, $pass ) = @_;
-    
+
   	$this->ASSERT_IS_USER_LOGIN_ID($login) if DEBUG;
     my $cUID = login2canonical( $this, $login );
     return unless ($cUID);  #user not found
@@ -603,11 +600,11 @@ sub checkPassword {
     if ($hash && (crypt($pass, $hash) eq $hash)) {
         return 1;   #yay, you've passed
     }
-#be a little more helpful to the admin
+    #be a little more helpful to the admin
     if (($cUID eq $this->{mapping_id}.'333') && (!$hash)) {
         $this->{error} = 'To login as '.$login.', you must set {Password} in configure';
-        return;
-    }    
+    }
+    return 0;
 }
 
 =pod
@@ -630,10 +627,7 @@ sub setPassword {
     my( $this, $user, $newPassU, $oldPassU ) = @_;
 	$this->ASSERT_IS_CANONICAL_USER_ID($user) if DEBUG;
     throw Error::Simple(
-          'cannot change user passwords using BaseUserMapper');
-
-    return $this->{passwords}->setPassword(
-        $this->getLoginName( $user ), $newPassU, $oldPassU);
+          'cannot change user passwords using TWiki::BaseUserMapping');
 }
 
 =pod
@@ -679,7 +673,7 @@ used for debugging to ensure we are actually passing a user login
 
 sub ASSERT_IS_USER_LOGIN_ID {
     my( $this, $user_login ) = @_;
-    
+    1;
 }
 
 
@@ -693,7 +687,7 @@ used for debugging to ensure we are actually passing a user display_name (common
 
 sub ASSERT_IS_USER_DISPLAY_NAME {
     my( $this, $user_display ) = @_;
-    
+    1;
 }
 
 1;

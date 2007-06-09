@@ -50,7 +50,6 @@ sub new {
     return bless {}, $_[0];
 }
 
-
 =pod
 
 ---++ ObjectMethod parseText( $text, $prefs )

@@ -53,7 +53,7 @@ sub set_up {
 
     my $query = new CGI("");
     $query->path_info("/$this->{test_web}/$this->{test_topic}");
-    eval {$this->{twiki}->finish()};
+
     $this->{twiki} = new TWiki(undef, $query);
     $TWiki::Plugins::SESSION = $this->{twiki};
     @mails = ();
@@ -128,8 +128,11 @@ sub registerUser {
     } otherwise {
         $this->assert(0, "expected an oops redirect");
     };
+    $twiki->finish();
     # Reload caches
-    $this->{twiki} = new TWiki(undef, $this->{twiki}->{cgiQuery});
+    my $q = $this->{twiki}->{cgiQuery};
+    $this->{twiki}->finish();
+    $this->{twiki} = new TWiki(undef, $q);
     $this->{twiki}->{net}->setMailHandler(\&TWikiFnTestCase::sentMail);
 }
 

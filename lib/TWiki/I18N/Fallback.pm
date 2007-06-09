@@ -30,6 +30,10 @@ sub new {
     return $this;
 }
 
+sub finish {
+    # No data, nothing to do
+}
+
 sub maketext {
     my ( $this, $text, @args ) = @_;
 

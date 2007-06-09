@@ -49,7 +49,7 @@ sub tear_down {
     my $this = shift;
     File::Path::rmtree("$TWiki::cfg{DataDir}/$testWeb");
     File::Path::rmtree("$TWiki::cfg{PubDir}/$testWeb");
-    eval {$twiki->finish()};
+    $twiki->finish();
     $this->SUPER::tear_down();
 }
 

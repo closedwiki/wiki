@@ -6,8 +6,6 @@ use base qw( TWikiTestCase );
 use TWiki;
 use Error qw( :try );
 
-my $twiki;
-
 # Make sure it's a wikiname so we can check squab handling
 my $testWeb = 'HierarchicalWebsTestsTestWeb';
 my $testWebSubWeb = 'SubWeb';
@@ -28,24 +26,24 @@ sub set_up {
        
 
     try {
-        $twiki = new TWiki('AdminUser');
+        $this->{twiki} = new TWiki('AdminUser');
 
-        $twiki->{store}->createWeb( $twiki->{user}, $testWeb );
-        $this->assert( $twiki->{store}->webExists( $testWeb ) );
-        $twiki->{store}->saveTopic( $twiki->{user},
+        $this->{twiki}->{store}->createWeb( $this->{twiki}->{user}, $testWeb );
+        $this->assert( $this->{twiki}->{store}->webExists( $testWeb ) );
+        $this->{twiki}->{store}->saveTopic( $this->{twiki}->{user},
                                     $testWeb,
                                     $TWiki::cfg{HomeTopicName},
                                     "SMELL" );
-        $this->assert( $twiki->{store}->topicExists(
+        $this->assert( $this->{twiki}->{store}->topicExists(
             $testWeb, $TWiki::cfg{HomeTopicName} ) );
 
-        $twiki->{store}->createWeb( $twiki->{user}, $testWebSubWebPath );
-        $this->assert( $twiki->{store}->webExists( $testWebSubWebPath ) );
-        $twiki->{store}->saveTopic( $twiki->{user},
+        $this->{twiki}->{store}->createWeb( $this->{twiki}->{user}, $testWebSubWebPath );
+        $this->assert( $this->{twiki}->{store}->webExists( $testWebSubWebPath ) );
+        $this->{twiki}->{store}->saveTopic( $this->{twiki}->{user},
                                     $testWebSubWebPath,
                                     $TWiki::cfg{HomeTopicName},
                                     "SMELL" );
-        $this->assert( $twiki->{store}->topicExists(
+        $this->assert( $this->{twiki}->{store}->topicExists(
             $testWebSubWebPath, $TWiki::cfg{HomeTopicName} ) );
 
     } catch Error::Simple with {
@@ -56,9 +54,9 @@ sub set_up {
 sub tear_down {
     my $this = shift;
 
-    $twiki->{store}->removeWeb(undef, $testWebSubWebPath);
-    $twiki->{store}->removeWeb(undef, $testWeb);
-    eval {$twiki->finish()};
+    $this->{twiki}->{store}->removeWeb(undef, $testWebSubWebPath);
+    $this->{twiki}->{store}->removeWeb(undef, $testWeb);
+    $this->{twiki}->finish();
 
     $this->SUPER::tear_down();
 }
@@ -70,110 +68,116 @@ sub new {
 
 sub test_createSubSubWeb {
     my $this = shift;
-    $twiki = new TWiki();
-    my $twikiUserObject = $twiki->{user};
+    $this->{twiki}->finish();
+
+    $this->{twiki} = new TWiki();
+    my $user = $this->{twiki}->{user};
 
     my $webTest = 'Item0';
-    $twiki->{store}->createWeb( $twikiUserObject,
+    $this->{twiki}->{store}->createWeb( $user,
                                 "$testWebSubWebPath/$webTest" );
-    $this->assert( $twiki->{store}->webExists(
+    $this->assert( $this->{twiki}->{store}->webExists(
         "$testWebSubWebPath/$webTest" ) );
 
     $webTest = 'Item0_';
-    $twiki->{store}->createWeb( $twikiUserObject,
+    $this->{twiki}->{store}->createWeb( $user,
                                 "$testWebSubWebPath/$webTest" );
-    $this->assert( $twiki->{store}->webExists(
+    $this->assert( $this->{twiki}->{store}->webExists(
         "$testWebSubWebPath/$webTest" ) );
 }
 
 sub test_createSubWebTopic {
     my $this = shift;
-    $twiki = new TWiki();
-    my $twikiUserObject = $twiki->{user};
+    $this->{twiki}->finish();
+    $this->{twiki} = new TWiki();
+    my $user = $this->{twiki}->{user};
 
-    $twiki->{store}->saveTopic(
-			       $twiki->{user}, $testWebSubWebPath, $testTopic,
+    $this->{twiki}->{store}->saveTopic(
+			       $this->{twiki}->{user}, $testWebSubWebPath, $testTopic,
 			       "page stuff\n"
 			       );
-    $this->assert( $twiki->{store}->topicExists(
+    $this->assert( $this->{twiki}->{store}->topicExists(
         $testWebSubWebPath, $testTopic ) );
 }
 
 sub test_include_subweb_non_wikiword_topic {
     my $this = shift;
-    $twiki = new TWiki();
-    my $twikiUserObject = $twiki->{user};
+    $this->{twiki}->finish();
+    $this->{twiki} = new TWiki();
+    my $user = $this->{twiki}->{user};
 
     my $baseTopic = 'IncludeSubWebNonWikiWordTopic';
     my $includeTopic = 'Topic';
     my $testText = 'TEXT';
 
     # create the (including) page
-    $twiki->{store}->saveTopic( $twiki->{user},
+    $this->{twiki}->{store}->saveTopic( $this->{twiki}->{user},
                                 $testWebSubWebPath, $baseTopic, <<__TOPIC__ );
 %INCLUDE{ "$testWebSubWebPath/$includeTopic" }%
 __TOPIC__
-    $this->assert( $twiki->{store}->topicExists( $testWebSubWebPath,
+    $this->assert( $this->{twiki}->{store}->topicExists( $testWebSubWebPath,
                                                  $baseTopic ) );
 
     # create the (included) page
-    $twiki->{store}->saveTopic( $twiki->{user}, $testWebSubWebPath,
+    $this->{twiki}->{store}->saveTopic( $this->{twiki}->{user}, $testWebSubWebPath,
                                 $includeTopic, $testText );
-    $this->assert( $twiki->{store}->topicExists( $testWebSubWebPath,
+    $this->assert( $this->{twiki}->{store}->topicExists( $testWebSubWebPath,
                                                  $includeTopic ) );
 
     # verify included page's text
-    { my ( undef, $text ) = $twiki->{store}->readTopic(
-        $twikiUserObject, $testWebSubWebPath, $includeTopic );
+    { my ( undef, $text ) = $this->{twiki}->{store}->readTopic(
+        $user, $testWebSubWebPath, $includeTopic );
     $this->assert_matches( qr/$testText\s*$/, $text );
     }
 
     # base page should evaluate (more or less) to the included page's text
-    { my ( undef, $text ) = $twiki->{store}->readTopic(
-        $twikiUserObject, $testWebSubWebPath, $baseTopic );
-    $text = $twiki->handleCommonTags( $text, $testWebSubWebPath, $baseTopic );
+    { my ( undef, $text ) = $this->{twiki}->{store}->readTopic(
+        $user, $testWebSubWebPath, $baseTopic );
+    $text = $this->{twiki}->handleCommonTags( $text, $testWebSubWebPath, $baseTopic );
     $this->assert_matches( qr/$testText\s*$/, $text );
     }
 }
 
 sub test_create_subweb_with_same_name_as_a_topic {
     my $this = shift;
-    $twiki = new TWiki();
-    my $twikiUserObject = $twiki->{user};
+    $this->{twiki}->finish();
+    $this->{twiki} = new TWiki();
+    my $user = $this->{twiki}->{user};
 
     my $testTopic = 'SubWeb';
     my $testText = 'TOPIC';
 
     # create the page
-    $twiki->{store}->saveTopic(
-        $twiki->{user}, $testWebSubWebPath, $testTopic, $testText );
-    $this->assert( $twiki->{store}->topicExists(
+    $this->{twiki}->{store}->saveTopic(
+        $this->{twiki}->{user}, $testWebSubWebPath, $testTopic, $testText );
+    $this->assert( $this->{twiki}->{store}->topicExists(
         $testWebSubWebPath, $testTopic ) );
 
-    my ( undef, $text ) = $twiki->{store}->readTopic(
-        $twikiUserObject, $testWebSubWebPath, $testTopic );
+    my ( undef, $text ) = $this->{twiki}->{store}->readTopic(
+        $user, $testWebSubWebPath, $testTopic );
     $this->assert_matches( qr/$testText\s*$/, $text );
 
     # create the subweb with the same name as the page
-    $twiki->{store}->createWeb(
-        $twikiUserObject, "$testWebSubWebPath/$testTopic" );
-    $this->assert( $twiki->{store}->webExists(
+    $this->{twiki}->{store}->createWeb(
+        $user, "$testWebSubWebPath/$testTopic" );
+    $this->assert( $this->{twiki}->{store}->webExists(
         "$testWebSubWebPath/$testTopic" ) );
 
-    ( undef, $text ) = $twiki->{store}->readTopic(
-        $twikiUserObject, $testWebSubWebPath, $testTopic );
+    ( undef, $text ) = $this->{twiki}->{store}->readTopic(
+        $user, $testWebSubWebPath, $testTopic );
     $this->assert_matches( qr/$testText\s*$/, $text );
 
-    $twiki->{store}->removeWeb(
-        $twikiUserObject, "$testWebSubWebPath/$testTopic" );
-    $this->assert( ! $twiki->{store}->webExists(
+    $this->{twiki}->{store}->removeWeb(
+        $user, "$testWebSubWebPath/$testTopic" );
+    $this->assert( ! $this->{twiki}->{store}->webExists(
         "$testWebSubWebPath/$testTopic" ) );
 }
 
 sub test_url_parameters {
     my $this = shift;
-    $twiki = new TWiki();
-    my $twikiUserObject = $twiki->{user};
+    $this->{twiki}->finish();
+    $this->{twiki} = new TWiki();
+    my $user = $this->{twiki}->{user};
 
     my $topicquery;
 
@@ -183,26 +187,28 @@ sub test_url_parameters {
         topic => "$testWebSubWebPath",
 	} );
 
-    $twiki = new TWiki( $TWiki::cfg{DefaultUserName}, $topicquery );
+    $this->{twiki}->finish();
+    $this->{twiki} = new TWiki( $TWiki::cfg{DefaultUserName}, $topicquery );
 
     # Item3243:  PTh and haj suggested to change the spec
-    $this->assert_str_equals($testWeb, $twiki->{webName});
-    $this->assert_str_equals($testWebSubWeb, $twiki->{topicName});
+    $this->assert_str_equals($testWeb, $this->{twiki}->{webName});
+    $this->assert_str_equals($testWebSubWeb, $this->{twiki}->{topicName});
 
     # make a topic with the same name as the subweb. Now the previous
     # query should hit that topic
-    $twiki->{store}->saveTopic(
-        $twiki->{user}, $testWeb, $testWebSubWeb, "nowt" );
+    $this->{twiki}->{store}->saveTopic(
+        $this->{twiki}->{user}, $testWeb, $testWebSubWeb, "nowt" );
 
     $topicquery = new CGI( {
         action => 'view',
         topic => "$testWebSubWebPath",
 	} );
 
-    $twiki = new TWiki( $TWiki::cfg{DefaultUserName}, $topicquery );
+    $this->{twiki}->finish();
+    $this->{twiki} = new TWiki( $TWiki::cfg{DefaultUserName}, $topicquery );
 
-    $this->assert_str_equals($testWeb, $twiki->{webName});
-    $this->assert_str_equals($testWebSubWeb, $twiki->{topicName});
+    $this->assert_str_equals($testWeb, $this->{twiki}->{webName});
+    $this->assert_str_equals($testWebSubWeb, $this->{twiki}->{topicName});
 
     # try a query with a non-existant topic in the subweb.
     $topicquery = new CGI( {
@@ -210,10 +216,11 @@ sub test_url_parameters {
         topic => "$testWebSubWebPath/NonExistant",
 	} );
 
-    $twiki = new TWiki( $TWiki::cfg{DefaultUserName}, $topicquery );
+    $this->{twiki}->finish();
+    $this->{twiki} = new TWiki( $TWiki::cfg{DefaultUserName}, $topicquery );
 
-    $this->assert_str_equals($testWebSubWebPath, $twiki->{webName});
-    $this->assert_str_equals('NonExistant', $twiki->{topicName});
+    $this->assert_str_equals($testWebSubWebPath, $this->{twiki}->{webName});
+    $this->assert_str_equals('NonExistant', $this->{twiki}->{topicName});
 
     # Note that this implictly tests %TOPIC% and %WEB% expansions, because
     # they come directly from {webName}
@@ -226,10 +233,11 @@ sub test_squab_simple {
 
     my $query = new CGI("");
     $query->path_info("/$testWeb/NonExistant");
-    $twiki = new TWiki( $TWiki::cfg{DefaultUserName}, $query);
+    $this->{twiki}->finish();
+    $this->{twiki} = new TWiki( $TWiki::cfg{DefaultUserName}, $query);
 
     my $text = "[[$testWeb]]";
-    $text = $twiki->{renderer}->getRenderedVersion(
+    $text = $this->{twiki}->{renderer}->getRenderedVersion(
         $text, $testWeb, 'NonExistant');
     $this->assert_matches(qr!<span class="twikiNewLink">$testWeb<a.*href=".*edit$TWiki::cfg{ScriptSuffix}/$testWeb/$testWeb\?topicparent=$testWeb.NonExistant"!, $text);
 }
@@ -243,10 +251,11 @@ sub test_squab_subweb {
     # Make a query that should set topic=$testSubWeb
     my $query = new CGI("");
     $query->path_info("/$testWeb/NonExistant");
-    $twiki = new TWiki( $TWiki::cfg{DefaultUserName}, $query);
+    $this->{twiki}->finish();
+    $this->{twiki} = new TWiki( $TWiki::cfg{DefaultUserName}, $query);
 
     my $text = "[[$testWebSubWeb]]";
-    $text = $twiki->{renderer}->getRenderedVersion(
+    $text = $this->{twiki}->{renderer}->getRenderedVersion(
         $text, $testWeb, 'NonExistant');
     $this->assert_matches(qr!<span class="twikiNewLink">$testWebSubWeb<a.*href=".*edit$TWiki::cfg{ScriptSuffix}/$testWeb/$testWebSubWeb\?topicparent=$testWeb.NonExistant"!, $text);
 }
@@ -259,10 +268,11 @@ sub test_squab_subweb_full_path {
     # Make a query that should set topic=$testSubWeb
     my $query = new CGI("");
     $query->path_info("/$testWeb/NonExistant");
-    $twiki = new TWiki( $TWiki::cfg{DefaultUserName}, $query);
+    $this->{twiki}->finish();
+    $this->{twiki} = new TWiki( $TWiki::cfg{DefaultUserName}, $query);
 
     my $text = "[[$testWeb.$testWebSubWeb]]";
-    $text = $twiki->{renderer}->getRenderedVersion(
+    $text = $this->{twiki}->{renderer}->getRenderedVersion(
         $text, $testWeb, 'NonExistant');
     $this->assert_matches(qr!<span class="twikiNewLink">$testWeb.$testWebSubWeb<a.*href=".*edit$TWiki::cfg{ScriptSuffix}/$testWeb/$testWebSubWeb\?topicparent=$testWeb.NonExistant"!, $text);
 }
@@ -275,13 +285,14 @@ sub test_squab_subweb_wih_topic {
     # Make a query that should set topic=$testSubWeb
     my $query = new CGI("");
     $query->path_info("/$testWeb/NonExistant");
-    $twiki = new TWiki( $TWiki::cfg{DefaultUserName}, $query);
+    $this->{twiki}->finish();
+    $this->{twiki} = new TWiki( $TWiki::cfg{DefaultUserName}, $query);
 
-    $twiki->{store}->saveTopic($twiki->{user}, $testWeb, $testWebSubWeb, "");
-    $this->assert($twiki->{store}->topicExists($testWeb, $testWebSubWeb));
+    $this->{twiki}->{store}->saveTopic($this->{twiki}->{user}, $testWeb, $testWebSubWeb, "");
+    $this->assert($this->{twiki}->{store}->topicExists($testWeb, $testWebSubWeb));
 
     my $text = "[[$testWebSubWeb]]";
-    $text = $twiki->{renderer}->getRenderedVersion(
+    $text = $this->{twiki}->{renderer}->getRenderedVersion(
         $text, $testWeb, 'NonExistant');
     $this->assert_matches(qr!<a href=".*view$TWiki::cfg{ScriptSuffix}/$testWeb/$testWebSubWeb" class="twikiLink">$testWebSubWeb</a>!, $text);
 }
@@ -294,13 +305,14 @@ sub test_squab_full_path_with_topic {
     # Make a query that should set topic=$testSubWeb
     my $query = new CGI("");
     $query->path_info("/$testWeb/NonExistant");
-    $twiki = new TWiki( $TWiki::cfg{DefaultUserName}, $query);
+    $this->{twiki}->finish();
+    $this->{twiki} = new TWiki( $TWiki::cfg{DefaultUserName}, $query);
 
-    $twiki->{store}->saveTopic($twiki->{user}, $testWeb, $testWebSubWeb, "");
-    $this->assert($twiki->{store}->topicExists($testWeb, $testWebSubWeb));
+    $this->{twiki}->{store}->saveTopic($this->{twiki}->{user}, $testWeb, $testWebSubWeb, "");
+    $this->assert($this->{twiki}->{store}->topicExists($testWeb, $testWebSubWeb));
 
     my $text = "[[$testWeb.$testWebSubWeb]]";
-    $text = $twiki->{renderer}->getRenderedVersion(
+    $text = $this->{twiki}->{renderer}->getRenderedVersion(
         $text, $testWeb, 'NonExistant');
     $this->assert_matches(qr!<a href=".*view$TWiki::cfg{ScriptSuffix}/$testWeb/$testWebSubWeb" class="twikiLink">$testWeb.$testWebSubWeb</a>!, $text);
 }
@@ -313,13 +325,14 @@ sub test_squab_path_to_topic_in_subweb {
     # Make a query that should set topic=$testSubWeb
     my $query = new CGI("");
     $query->path_info("/$testWeb/NonExistant");
-    $twiki = new TWiki( $TWiki::cfg{DefaultUserName}, $query);
+    $this->{twiki}->finish();
+    $this->{twiki} = new TWiki( $TWiki::cfg{DefaultUserName}, $query);
 
-    $twiki->{store}->saveTopic($twiki->{user}, $testWeb, $testWebSubWeb, "");
-    $this->assert($twiki->{store}->topicExists($testWeb, $testWebSubWeb));
+    $this->{twiki}->{store}->saveTopic($this->{twiki}->{user}, $testWeb, $testWebSubWeb, "");
+    $this->assert($this->{twiki}->{store}->topicExists($testWeb, $testWebSubWeb));
 
     my $text = "[[$testWeb.$testWebSubWeb.WebHome]]";
-    $text = $twiki->{renderer}->getRenderedVersion(
+    $text = $this->{twiki}->{renderer}->getRenderedVersion(
         $text, $testWeb, 'NonExistant');
     $this->assert_matches(qr!<a href=".*view$TWiki::cfg{ScriptSuffix}/$testWeb/$testWebSubWeb/$TWiki::cfg{HomeTopicName}" class="twikiLink">$testWeb.$testWebSubWeb.$TWiki::cfg{HomeTopicName}</a>!, $text);
 
@@ -331,10 +344,11 @@ sub test_WEBLIST_all {
 
     my $query = new CGI("");
     $query->path_info("/$testWeb/WebHome");
-    $twiki = new TWiki( $TWiki::cfg{DefaultUserName}, $query);
+    $this->{twiki}->finish();
+    $this->{twiki} = new TWiki( $TWiki::cfg{DefaultUserName}, $query);
 
     my $text = ' %WEBLIST{format="$name" separator=", "}% ';
-    $text = $twiki->handleCommonTags($text, $testWeb, 'WebHome');
+    $text = $this->{twiki}->handleCommonTags($text, $testWeb, 'WebHome');
     foreach my $web ('HierarchicalWebsTestsTestWeb', 'HierarchicalWebsTestsTestWeb/SubWeb', 'Main', 'Sandbox', 'TWiki', 'TestCases') {
         $this->assert_matches(qr!\b$web\b!, $text);
     }
@@ -345,10 +359,11 @@ sub test_WEBLIST_relative {
 
     my $query = new CGI("");
     $query->path_info("/$testWeb/WebHome");
-    $twiki = new TWiki( $TWiki::cfg{DefaultUserName}, $query);
+    $this->{twiki}->finish();
+    $this->{twiki} = new TWiki( $TWiki::cfg{DefaultUserName}, $query);
 
     my $text = ' %WEBLIST{format="$name" separator=", " subwebs="'.$testWeb.'"}% ';
-    $text = $twiki->handleCommonTags($text, $testWeb, 'WebHome');
+    $text = $this->{twiki}->handleCommonTags($text, $testWeb, 'WebHome');
     $this->assert_matches(qr! $testWebSubWebPath !, $text);
 }
 
@@ -357,10 +372,11 @@ sub test_WEBLIST_end {
 
     my $query = new CGI("");
     $query->path_info("/$testWeb/WebHome");
-    $twiki = new TWiki( $TWiki::cfg{DefaultUserName}, $query);
+    $this->{twiki}->finish();
+    $this->{twiki} = new TWiki( $TWiki::cfg{DefaultUserName}, $query);
 
     my $text = ' %WEBLIST{format="$name" separator=", " subwebs="'.$testWebSubWebPath.'"}% ';
-    $text = $twiki->handleCommonTags($text, $testWeb, 'WebHome');
+    $text = $this->{twiki}->handleCommonTags($text, $testWeb, 'WebHome');
     $this->assert_matches(qr!  !, $text);
 }
 

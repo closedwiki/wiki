@@ -72,7 +72,7 @@ sub tear_down {
     $this->removeWebFixture($twiki, $testUsersWeb);
     $this->removeWebFixture($twiki, $testSysWeb);
     $this->removeWebFixture($twiki, $testNormalWeb);
-    eval {$twiki->finish()};
+    $twiki->finish();
     $this->SUPER::tear_down();
 }
 
@@ -139,7 +139,6 @@ sub createFakeUser {
 
 sub testAddUsers {
     my $this = shift;
-    $twiki = new TWiki();
     my $ttpath = "$TWiki::cfg{DataDir}/$TWiki::cfg{UsersWebName}/$TWiki::cfg{UsersTopicName}.txt";
     my $me =  "TWikiRegistrationAgent";
 
@@ -170,7 +169,6 @@ sub testAddUsers {
 sub testLoad {
     my $this = shift;
 
-    $twiki = new TWiki();
     my $me = "TWikiRegistrationAgent";
     $ttpath = "$TWiki::cfg{DataDir}/$TWiki::cfg{UsersWebName}/$TWiki::cfg{UsersTopicName}.txt";
 
@@ -187,6 +185,7 @@ sub testLoad {
     # deliberate repeat
     $twiki->{users}->{mapping}->addUser( "zuser","ZebediahUser", $me);
     # find a nonexistent user to force a cache read
+    $twiki->finish();
     $twiki = new TWiki();
     my $n = $twiki->{users}->{mapping}->lookupLoginName("auser");
     $this->assert_str_equals($n, $auser_id);    

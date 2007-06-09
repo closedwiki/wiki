@@ -46,25 +46,25 @@ for any required TWiki services.
 sub new {
     my( $class, $session ) = @_;
 
-    my $this = bless( {}, $class );
+    my $this = bless( { session => $session }, $class );
     $this->{error} = undef;
-    $this->{session} = $session;
     return $this;
 }
 
-=pod
+=begin twiki
 
----++ ObjectMethod finish
-
-Complete processing after the client's HTTP request has been responded
-to.
-   1 breaking circular references to allow garbage collection in persistent
-     environments
+---++ ObjectMethod finish()
+Break circular references.
 
 =cut
 
+# Note to developers; please undef *all* fields in the object explicitly,
+# whether they are references or not. That way this method is "golden
+# documentation" of the live fields in the object.
 sub finish {
     my $this = shift;
+    undef $this->{error};
+    undef $this->{session};
 }
 
 =pod

@@ -39,21 +39,21 @@ sub do_test {
     $this->assert_html_equals($expected, $actual);
 }
 
-sub test_simpleTableusingTablePlugin {
+sub test_simpleTableusing {
     my $this = shift;
     my $expected = <<EXPECTED;
 <nop>
 <nop>
 <nop>
-<table style="border-width:1px;" cellspacing="0" cellpadding="0" class="twikiTable" border="1">
+<table cellspacing="0" cellpadding="0" class="twikiTable" border="1">
     <tr class="twikiTableEven">
-        <td bgcolor="#ffffff" valign="top" style="vertical-align:top;" class="twikiFirstCol"> a </td><td bgcolor="#ffffff" valign="top" style="vertical-align:top;"> b </td>
+        <td bgcolor="#ffffff" valign="top" class="twikiFirstCol"> a </td><td bgcolor="#ffffff" valign="top" > b </td>
     </tr>
     <tr class="twikiTableOdd">
-        <td bgcolor="#edf4f9" valign="top" style="vertical-align:top;" class="twikiFirstCol"> 2 </td><td bgcolor="#edf4f9" valign="top" style="vertical-align:top;"> 3 </td>
+        <td bgcolor="#edf4f9" valign="top" class="twikiFirstCol"> 2 </td><td bgcolor="#edf4f9" valign="top" > 3 </td>
     </tr>
     <tr class="twikiTableEven">
-        <td bgcolor="#ffffff" valign="top" style="vertical-align:top;" class="twikiFirstCol twikiLast"> ok </td><td bgcolor="#ffffff" valign="top" style="vertical-align:top;" class="twikiLast"> bad </td>
+        <td bgcolor="#ffffff" valign="top" class="twikiFirstCol twikiLast"> ok </td><td bgcolor="#ffffff" valign="top" class="twikiLast"> bad </td>
     </tr>
 </table>
 EXPECTED
@@ -77,17 +77,17 @@ sub test_simpleTheadTableusingTablePlugin {
 <nop>
 <nop>
 <nop>
-<table style="border-width:1px;" cellspacing="0" cellpadding="0" class="twikiTable" border="1">
+<table cellspacing="0" cellpadding="0" class="twikiTable" border="1">
     <thead>
         <tr class="twikiTableEven">
-            <th bgcolor="#6b7f93" valign="top" style="vertical-align:top;" class="twikiFirstCol" maxcols="0"> <a rel="nofollow" href="$url?sortcol=0;table=1;up=0#sorted_table" style="color:#ffffff" title="Sort by this column">a</a> </th><th bgcolor="#6b7f93" valign="top" style="vertical-align:top;" maxcols="0"> <a rel="nofollow" href="$url?sortcol=1;table=1;up=0#sorted_table" style="color:#ffffff" title="Sort by this column">b</a> </th>
+            <th bgcolor="#6b7f93" valign="top" class="twikiFirstCol" maxcols="0"> <a rel="nofollow" href="$url?sortcol=0;table=1;up=0#sorted_table" title="Sort by this column"><font color="#ffffff">a</font></a> </th><th bgcolor="#6b7f93" valign="top" maxcols="0"> <a rel="nofollow" href="$url?sortcol=1;table=1;up=0#sorted_table" title="Sort by this column"><font color="#ffffff">b</font></a> </th>
         </tr>
     </thead>
     <tr class="twikiTableOdd">
-        <td bgcolor="#ffffff" valign="top" style="vertical-align:top;" class="twikiFirstCol"> 2 </td><td bgcolor="#ffffff" valign="top" style="vertical-align:top;"> 3 </td>
+        <td bgcolor="#ffffff" valign="top" class="twikiFirstCol"> 2 </td><td bgcolor="#ffffff" valign="top" > 3 </td>
     </tr>
     <tr class="twikiTableEven">
-        <td bgcolor="#edf4f9" valign="top" style="vertical-align:top;" class="twikiFirstCol twikiLast"> ok </td><td bgcolor="#edf4f9" valign="top" style="vertical-align:top;" class="twikiLast"> bad </td>
+        <td bgcolor="#edf4f9" valign="top" class="twikiFirstCol twikiLast"> ok </td><td bgcolor="#edf4f9" valign="top" class="twikiLast"> bad </td>
     </tr>
 </table>
 EXPECTED
@@ -106,16 +106,16 @@ sub test_simpleTfootTableusingTablePlugin {
 <nop>
 <nop>
 <nop>
-<table style="border-width:1px;" cellspacing="0" cellpadding="0" class="twikiTable" border="1">
+<table cellspacing="0" cellpadding="0" class="twikiTable" border="1">
     <tr class="twikiTableEven">
-        <td bgcolor="#ffffff" valign="top" style="vertical-align:top;" class="twikiFirstCol"> a </td><td bgcolor="#ffffff" valign="top" style="vertical-align:top;"> b </td>
+        <td bgcolor="#ffffff" valign="top" class="twikiFirstCol"> a </td><td bgcolor="#ffffff" valign="top"> b </td>
     </tr>
     <tr class="twikiTableOdd">
-        <td bgcolor="#edf4f9" valign="top" style="vertical-align:top;" class="twikiFirstCol"> 2 </td><td bgcolor="#edf4f9" valign="top" style="vertical-align:top;"> 3 </td>
+        <td bgcolor="#edf4f9" valign="top" class="twikiFirstCol"> 2 </td><td bgcolor="#edf4f9" valign="top" > 3 </td>
     </tr>
     <tfoot>
          <tr class="twikiTableEven">
-            <th bgcolor="#6b7f93" valign="top" style="vertical-align:top;" class="twikiFirstCol twikiLast" maxcols="0"> <span style="color:#ffffff"> <strong> ok </strong> </span> </th><th bgcolor="#6b7f93" valign="top" style="vertical-align:top;" class="twikiLast" maxcols="0"> <span style="color:#ffffff"> <strong> bad </strong> </span> </th>
+            <th bgcolor="#6b7f93" valign="top" class="twikiFirstCol twikiLast" maxcols="0"> <font color="#ffffff">ok</font> </th><th bgcolor="#6b7f93" valign="top" class="twikiLast" maxcols="0"> <font color="#ffffff">bad</font> </th>
         </tr>
     </tfoot>
 </table>
@@ -141,10 +141,11 @@ sub test_doubleTheadTableusingTablePlugin {
 <nop>
 <nop>
 <nop>
-<table style="border-width:1px;" cellspacing="0" cellpadding="0" class="twikiTable" border="1"><thead><tr class="twikiTableEven"><th bgcolor="#6b7f93" valign="top" style="vertical-align:top;" class="twikiFirstCol" maxcols="0"> <a rel="nofollow" href="$url?sortcol=0;table=1;up=0#sorted_table" style="color:#ffffff" title="Sort by this column">a</a> </th><th bgcolor="#6b7f93" valign="top" style="vertical-align:top;" maxcols="0"> <a rel="nofollow" href="$url?sortcol=1;table=1;up=0#sorted_table" style="color:#ffffff" title="Sort by this column">b</a> </th></tr></thead>
-<thead><tr class="twikiTableOdd"><th bgcolor="#6b7f93" valign="top" style="vertical-align:top;" class="twikiFirstCol" maxcols="0"> <span style="color:#ffffff"> <strong> c </strong> </span> </th><th bgcolor="#6b7f93" valign="top" style="vertical-align:top;" maxcols="0"> <span style="color:#ffffff"> <strong> c </strong> </span> </th></tr></thead>
-<tr class="twikiTableEven"><td bgcolor="#ffffff" valign="top" style="vertical-align:top;" class="twikiFirstCol"> 2 </td><td bgcolor="#ffffff" valign="top" style="vertical-align:top;"> 3 </td></tr>
-<tr class="twikiTableOdd"><td bgcolor="#edf4f9" valign="top" style="vertical-align:top;" class="twikiFirstCol twikiLast"> ok </td><td bgcolor="#edf4f9" valign="top" style="vertical-align:top;" class="twikiLast"> bad </td></tr>
+
+<table cellspacing="0" cellpadding="0" class="twikiTable" border="1"><thead><tr class="twikiTableEven"><th bgcolor="#6b7f93" valign="top" class="twikiFirstCol" maxcols="0"> <a rel="nofollow" href="http://localhost/TemporaryTableFormattingTestWebTableFormatting/TestTopicTableFormatting?sortcol=0;table=1;up=0#sorted_table" title="Sort by this column"><font color="#ffffff">a</font></a> </th><th bgcolor="#6b7f93" valign="top" maxcols="0"> <a rel="nofollow" href="http://localhost/TemporaryTableFormattingTestWebTableFormatting/TestTopicTableFormatting?sortcol=1;table=1;up=0#sorted_table" title="Sort by this column"><font color="#ffffff">b</font></a> </th></tr></thead>
+<thead><tr class="twikiTableOdd"><th bgcolor="#6b7f93" valign="top" class="twikiFirstCol" maxcols="0"> <font color="#ffffff">c</font> </th><th bgcolor="#6b7f93" valign="top" maxcols="0"> <font color="#ffffff">c</font> </th></tr></thead>
+<tr class="twikiTableEven"><td bgcolor="#ffffff" valign="top" class="twikiFirstCol"> 2 </td><td bgcolor="#ffffff" valign="top"> 3 </td></tr>
+<tr class="twikiTableOdd"><td bgcolor="#edf4f9" valign="top" class="twikiFirstCol twikiLast"> ok </td><td bgcolor="#edf4f9" valign="top" class="twikiLast"> bad </td></tr>
 </table>
 EXPECTED
     my $actual = <<ACTUAL;
@@ -169,25 +170,10 @@ sub test_doubleTheadandTfootTableusingTablePlugin {
 <nop>
 <nop>
 <nop>
-<table style="border-width:1px;" cellspacing="0" cellpadding="0" class="twikiTable" border="1">
-    <thead>
-        <tr class="twikiTableEven">
-            <th bgcolor="#6b7f93" valign="top" style="vertical-align:top;" class="twikiFirstCol" maxcols="0"> <span style="color:#ffffff"> <strong> a </strong> </span> </th><th bgcolor="#6b7f93" valign="top" style="vertical-align:top;" maxcols="0"> <span style="color:#ffffff"> <strong> b </strong> </span> </th>
-        </tr>
-    </thead>
-    <thead>
-        <tr class="twikiTableOdd">
-            <th bgcolor="#6b7f93" valign="top" style="vertical-align:top;" class="twikiFirstCol" maxcols="0"> <a rel="nofollow" href="$url?sortcol=0;table=1;up=0#sorted_table" style="color:#ffffff" title="Sort by this column">c</a> </th><th bgcolor="#6b7f93" valign="top" style="vertical-align:top;" maxcols="0"> <a rel="nofollow" href="$url?sortcol=1;table=1;up=0#sorted_table" style="color:#ffffff" title="Sort by this column">c</a> </th>
-        </tr>
-    </thead>
-    <tr class="twikiTableEven">
-        <td bgcolor="#ffffff" valign="top" style="vertical-align:top;" class="twikiFirstCol"> 2 </td><td bgcolor="#ffffff" valign="top" style="vertical-align:top;"> 3 </td>
-    </tr>
-    <tfoot>
-        <tr class="twikiTableOdd">
-            <th bgcolor="#6b7f93" valign="top" style="vertical-align:top;" class="twikiFirstCol twikiLast" maxcols="0"> <span style="color:#ffffff"> <strong> ok </strong> </span> </th><th bgcolor="#6b7f93" valign="top" style="vertical-align:top;" class="twikiLast" maxcols="0"> <span style="color:#ffffff"> <strong> bad </strong> </span> </th>
-        </tr>
-    </tfoot>
+<table cellspacing="0" cellpadding="0" class="twikiTable" border="1"><thead><tr class="twikiTableEven"><th bgcolor="#6b7f93" valign="top" class="twikiFirstCol" maxcols="0"> <font color="#ffffff">a</font> </th><th bgcolor="#6b7f93" valign="top" maxcols="0"> <font color="#ffffff">b</font> </th></tr></thead>
+<thead><tr class="twikiTableOdd"><th bgcolor="#6b7f93" valign="top" class="twikiFirstCol" maxcols="0"> <a rel="nofollow" href="http://localhost/TemporaryTableFormattingTestWebTableFormatting/TestTopicTableFormatting?sortcol=0;table=1;up=0#sorted_table" title="Sort by this column"><font color="#ffffff">c</font></a> </th><th bgcolor="#6b7f93" valign="top" maxcols="0"> <a rel="nofollow" href="http://localhost/TemporaryTableFormattingTestWebTableFormatting/TestTopicTableFormatting?sortcol=1;table=1;up=0#sorted_table" title="Sort by this column"><font color="#ffffff">c</font></a> </th></tr></thead>
+<tr class="twikiTableEven"><td bgcolor="#ffffff" valign="top" class="twikiFirstCol"> 2 </td><td bgcolor="#ffffff" valign="top"> 3 </td></tr>
+<tfoot><tr class="twikiTableOdd"><th bgcolor="#6b7f93" valign="top" class="twikiFirstCol twikiLast" maxcols="0"> <font color="#ffffff">ok</font> </th><th bgcolor="#6b7f93" valign="top" class="twikiLast" maxcols="0"> <font color="#ffffff">bad</font> </th></tr></tfoot>
 </table>
 EXPECTED
     my $actual = <<ACTUAL;

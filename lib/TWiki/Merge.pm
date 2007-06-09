@@ -31,7 +31,7 @@ Support for merging strings
 package TWiki::Merge;
 
 use Assert;
-use CGI qw( :html );
+use CGI;
 
 =pod
 

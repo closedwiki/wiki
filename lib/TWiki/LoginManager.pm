@@ -111,7 +111,6 @@ sub makeLoginManager {
         #promote / login to internal twiki admin
         $twiki->enterContext('sudo_login');
     }
-    
 
     if( $TWiki::cfg{UseClientSessions} &&
           !$twiki->inContext( 'command_line' )) {
@@ -161,9 +160,8 @@ Construct the user management object
 # protected: Construct new client object.
 sub new {
     my ( $class, $twiki ) = @_;
-    my $this = bless( {}, $class );
-    ASSERT($twiki->isa( 'TWiki')) if DEBUG;
-    $this->{twiki} = $twiki;
+    my $this = bless( { twiki => $twiki }, $class );
+
     $twiki->leaveContext( 'can_login' );
     $this->{_cookies} = [];
     map{ $this->{_authScripts}{$_} = 1; }
@@ -180,6 +178,26 @@ sub new {
     return $this;
 }
 
+=begin twiki
+
+---++ ObjectMethod finish()
+Break circular references.
+
+=cut
+
+# Note to developers; please undef *all* fields in the object explicitly,
+# whether they are references or not. That way this method is "golden
+# documentation" of the live fields in the object.
+sub finish {
+    my $this = shift;
+    $this->complete(); # call to flush the session if not already done
+    undef $this->{_cookies};
+    undef $this->{_authScripts};
+    undef $this->{_cgisession};
+    undef $this->{_haveCookie};
+    undef $this->{_MYSCRIPTURL};
+    undef $this->{twiki};
+}
 
 =pod
 
@@ -406,14 +424,14 @@ sub checkAccess {
 
 =pod
 
----++ ObjectMethod finish
+---++ ObjectMethod complete()
 
 Complete processing after the client's HTTP request has been responded
 to. Flush the user's session (if any) to disk.
 
 =cut
 
-sub finish {
+sub complete {
     my $this = shift;
 
     if( $this->{_cgisession} ) {
@@ -918,7 +936,6 @@ sub _LOGIN {
     #my( $twiki, $params, $topic, $web ) = @_;
     my $twiki = shift;
     my $this = $twiki->{users}->{loginManager};
-    ASSERT($this->isa('TWiki::LoginManager')) if DEBUG;
 
     return '' if $twiki->inContext( 'authenticated' );
 
@@ -941,7 +958,6 @@ sub _LOGIN {
 sub _LOGOUTURL {
     my( $twiki, $params, $topic, $web ) = @_;
     my $this = $twiki->{users}->{loginManager};
-    ASSERT($this->isa('TWiki::LoginManager')) if DEBUG;
 
     return $twiki->getScriptUrl(
         0, 'view',
@@ -961,7 +977,6 @@ sub _LOGOUTURL {
 sub _LOGOUT {
     my( $twiki, $params, $topic, $web ) = @_;
     my $this = $twiki->{users}->{loginManager};
-    ASSERT($this->isa('TWiki::LoginManager')) if DEBUG;
 
     return '' unless $twiki->inContext( 'authenticated' );
 
@@ -984,7 +999,6 @@ sub _LOGOUT {
 sub _AUTHENTICATED {
     my( $twiki, $params ) = @_;
     my $this = $twiki->{users}->{loginManager};
-    ASSERT($this->isa('TWiki::LoginManager')) if DEBUG;
 
     if( $twiki->inContext( 'authenticated' )) {
         return $params->{then} || 1;
@@ -1003,7 +1017,6 @@ sub _AUTHENTICATED {
 sub _CANLOGIN {
     my( $twiki, $params ) = @_;
     my $this = $twiki->{users}->{loginManager};
-    ASSERT($this->isa('TWiki::LoginManager')) if DEBUG;
     if( $twiki->inContext( 'can_login' )) {
         return $params->{then} || 1;
     } else {
@@ -1021,7 +1034,6 @@ sub _CANLOGIN {
 sub _SESSION_VARIABLE {
     my( $twiki, $params ) = @_;
     my $this = $twiki->{users}->{loginManager};
-    ASSERT($this->isa('TWiki::LoginManager')) if DEBUG;
  	my $name = $params->{_DEFAULT};
  
     if( defined( $params->{set} ) ) {
@@ -1046,7 +1058,6 @@ sub _SESSION_VARIABLE {
 sub _LOGINURL {
     my( $twiki, $params ) = @_;
     my $this = $twiki->{users}->{loginManager};
-    ASSERT($this->isa('TWiki::LoginManager')) if DEBUG;
     return $this->loginUrl();
 }
 

@@ -12,12 +12,10 @@ sub new {
 	return $self;
 }
 
-my $twiki;
-
 sub set_up {
     my $this = shift();
 
-    my $twiki = new TWiki();
+    $this->{twiki} = new TWiki();
     $this->SUPER::set_up();
 
     $TWiki::cfg{Htpasswd}{FileName} = '/tmp/junkpasswd';
@@ -28,7 +26,7 @@ sub set_up {
 
 sub tear_down {
     my $this = shift;
-    eval {$twiki->finish()};
+    $this->{twiki}->finish();
     $this->SUPER::tear_down();
     unlink('/tmp/junkpasswd');
 }
@@ -144,7 +142,7 @@ sub doTests {
 sub test_htpasswd_crypt {
     my $this = shift;
     $TWiki::cfg{Htpasswd}{Encoding} = 'crypt';
-    my $impl = new TWiki::Users::HtPasswdUser($twiki);
+    my $impl = new TWiki::Users::HtPasswdUser($this->{twiki});
     $this->assert($impl);
     $this->doTests($impl, 1);
 }
@@ -168,7 +166,7 @@ sub test_htpasswd_sha1 {
     }
 
     $TWiki::cfg{Htpasswd}{Encoding} = 'sha1';
-    my $impl = new TWiki::Users::HtPasswdUser($twiki);
+    my $impl = new TWiki::Users::HtPasswdUser($this->{twiki});
     $this->assert($impl);
     $this->doTests($impl,0);
 }
@@ -184,14 +182,14 @@ sub detest_htpasswd_md5 {
     }
 
     $TWiki::cfg{Htpasswd}{Encoding} = 'md5';
-    my $impl = new TWiki::Users::HtPasswdUser($twiki);
+    my $impl = new TWiki::Users::HtPasswdUser($this->{twiki});
     $this->doTests($impl,0);
 }
 
 sub detest_htpasswd_plain {
     my $this = shift;
     $TWiki::cfg{Htpasswd}{Encoding} = 'sha1';
-    my $impl = new TWiki::Users::HtPasswdUser($twiki);
+    my $impl = new TWiki::Users::HtPasswdUser($this->{twiki});
 
     $this->doTests($impl, 0);
 }
@@ -207,7 +205,7 @@ sub test_htpasswd_apache {
         return;
     }
 
-    my $impl = TWiki::Users::ApacheHtpasswdUser->new($twiki);
+    my $impl = TWiki::Users::ApacheHtpasswdUser->new($this->{twiki});
     # apache doesn't create the file, so need to init it
     open(F,">$TWiki::cfg{Htpasswd}{FileName}");
     close(F);

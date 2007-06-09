@@ -59,7 +59,6 @@ package TWiki::Meta;
 use strict;
 use Error qw(:try);
 use Assert;
-use TWiki::Merge;
 
 =pod
 
@@ -72,12 +71,10 @@ Construct a new, empty object to contain meta-data for the given topic.
 
 sub new {
     my ( $class, $session, $web, $topic ) = @_;
-    ASSERT($session->isa( 'TWiki')) if DEBUG;
-    my $this = bless( {}, $class );
+    my $this = bless( { _session => $session }, $class );
 
-    # Note: internal fields must be prepended with _. All other
+    # Note: internal fields are prepended with _. All uppercase
     # fields will be assumed to be meta-data.
-    $this->{_session} = $session;
 
     ASSERT($web) if DEBUG;
     ASSERT($topic) if DEBUG;
@@ -88,6 +85,23 @@ sub new {
     $this->{FILEATTACHMENT} = [];
 
     return $this;
+}
+
+=begin twiki
+
+---++ ObjectMethod finish()
+Break circular references.
+
+=cut
+
+# Note to developers; please undef *all* fields in the object explicitly,
+# whether they are references or not. That way this method is "golden
+# documentation" of the live fields in the object.
+sub finish {
+    my $this = shift;
+    undef $this->{_web};
+    undef $this->{_topic};
+    undef $this->{_session};
 }
 
 =pod
@@ -130,14 +144,13 @@ $meta->put( 'FIELD', { name => 'MaxAge', title => 'Max Age', value =>'103' } );
 
 sub put {
     my( $this, $type, $args ) = @_;
-    ASSERT($this->isa( 'TWiki::Meta')) if DEBUG;
 
     my $data = $this->{$type};
     if( $data ) {
-      # overwrite old single value
-      $data->[0] = $args;
+        # overwrite old single value
+        $data->[0] = $args;
     } else {
-      push( @{$this->{$type}}, $args );
+        push( @{$this->{$type}}, $args );
     }
 }
 
@@ -159,7 +172,6 @@ $meta->putKeyed( 'FIELD', { name => 'MaxAge', title => 'Max Age', value =>'103' 
 
 sub putKeyed {
     my( $this, $type, $args ) = @_;
-    ASSERT($this->isa( 'TWiki::Meta')) if DEBUG;
 
     my $data = $this->{$type};
     if( $data ) {
@@ -197,7 +209,6 @@ $meta->putAll( 'FIELD',
 
 sub putAll {
     my( $this, $type, @array ) = @_;
-    ASSERT($this->isa( 'TWiki::Meta')) if DEBUG;
 
     $this->{$type} = \@array;
 }
@@ -224,7 +235,6 @@ my $topicinfo = $meta->get( 'TOPICINFO' ); # get the TOPICINFO hash
 
 sub get {
     my( $this, $type, $keyValue ) = @_;
-    ASSERT($this->isa( 'TWiki::Meta')) if DEBUG;
 
     my $data = $this->{$type};
     if( $data ) {
@@ -257,7 +267,6 @@ my $attachments = $meta->find( 'FILEATTACHMENT' );
 
 sub find {
     my( $this, $type ) = @_;
-    ASSERT($this->isa( 'TWiki::Meta')) if DEBUG;
 
     my $itemsr = $this->{$type};
     my @items = ();
@@ -283,7 +292,6 @@ With a $type and a $key it will remove only the specific item.
 
 sub remove {
     my( $this, $type, $keyValue ) = @_;
-    ASSERT($this->isa( 'TWiki::Meta')) if DEBUG;
 
     if( $keyValue ) {
        my $data = $this->{$type};
@@ -323,7 +331,6 @@ only data where ={name}= matches $nameFilter.
 
 sub copyFrom {
     my( $this, $otherMeta, $type, $filter ) = @_;
-    ASSERT($this->isa( 'TWiki::Meta')) if DEBUG;
     ASSERT($otherMeta->isa( 'TWiki::Meta')) if DEBUG;
 
     if( $type ) {
@@ -352,7 +359,6 @@ Return the number of entries of the given type
 
 sub count {
     my( $this, $type ) = @_;
-    ASSERT($this->isa( 'TWiki::Meta')) if DEBUG;
     my $data = $this->{$type};
 
     return scalar @$data if( defined( $data ));
@@ -375,7 +381,6 @@ $rev is an integer revision number.
 
 sub getRevisionInfo {
     my( $this, $fromrev ) = @_;
-    ASSERT($this->isa( 'TWiki::Meta')) if DEBUG;
     my $store = $this->{_session}->{store};
 
     my $topicinfo = $this->get( 'TOPICINFO' );
@@ -424,6 +429,7 @@ sub merge {
             my $thisD = $this->get( 'FIELD', $otherD->{name} );
             if ( $thisD && $thisD->{value} ne $otherD->{value} ) {
                 if( $formDef->isTextMergeable( $thisD->{name} )) {
+                    require TWiki::Merge;
                     my $merged = TWiki::Merge::merge2(
                         'A', $otherD->{value}, 'B', $thisD->{value},
                         '.*?\s+',

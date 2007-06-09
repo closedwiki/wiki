@@ -57,9 +57,7 @@ Note that $web, $topic and $attachment must be untainted!
 
 sub new {
     my( $class, $session, $web, $topic, $attachment ) = @_;
-    #ASSERT($session->isa( 'TWiki')) if DEBUG;
-    my $this = bless( {}, $class );
-    $this->{session} = $session;
+    my $this = bless( { session => $session }, $class );
 
     utf8::downgrade( $web ) if( $web && $] >= 5.008 );
     $this->{web} = $web;
@@ -92,6 +90,27 @@ sub new {
     $TWiki::cfg{Store}{RememberChangesFor} ||= 31 * 24 * 60 * 60;
 
     return $this;
+}
+
+=begin twiki
+
+---++ ObjectMethod finish()
+Break circular references.
+
+=cut
+
+# Note to developers; please undef *all* fields in the object explicitly,
+# whether they are references or not. That way this method is "golden
+# documentation" of the live fields in the object.
+sub finish {
+    my $this = shift;
+    undef $this->{file};
+    undef $this->{rcsFile};
+    undef $this->{web};
+    undef $this->{topic};
+    undef $this->{attachment};
+    undef $this->{searchFn};
+    undef $this->{session};
 }
 
 # Used in subclasses for late initialisation during object creation

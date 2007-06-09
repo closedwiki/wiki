@@ -38,13 +38,29 @@ use vars qw( $LWPavailable );
 
 sub new {
     my ( $class, $session ) = @_;
-    ASSERT($session->isa( 'TWiki')) if DEBUG;
-    my $this = bless( {}, $class );
+    my $this = bless( { session => $session }, $class );
 
-    $this->{session} = $session;
     $this->{mailHandler} = undef;
 
     return $this;
+}
+
+=begin twiki
+
+---++ ObjectMethod finish()
+Break circular references.
+
+=cut
+
+# Note to developers; please undef *all* fields in the object explicitly,
+# whether they are references or not. That way this method is "golden
+# documentation" of the live fields in the object.
+sub finish {
+    my $this = shift;
+    undef $this->{mailHandler};
+    undef $this->{HELLO_HOST};
+    undef $this->{MAIL_HOST};
+    undef $this->{session};
 }
 
 =pod
@@ -147,6 +163,7 @@ sub getExternalResource {
             $req .= "Authorization: Basic $base64";
         }
 
+        # Reference to TWiki variables used for compatibility
         my $prefs = $this->{session}->{prefs};
         my $proxyHost = $prefs->getPreferencesValue('PROXYHOST') ||
           $TWiki::cfg{PROXY}{HOST};
@@ -287,7 +304,6 @@ Date: ...\nFrom: ...\nTo: ...\nCC: ...\nSubject: ...\n\nMailBody...
 
 sub sendEmail {
     my( $this, $text, $retries ) = @_;
-    ASSERT($this->isa( 'TWiki::Net')) if DEBUG;
     $retries ||= 1;
 
     unless( defined $this->{mailHandler} ) {

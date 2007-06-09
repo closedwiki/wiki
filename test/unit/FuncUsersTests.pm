@@ -23,6 +23,7 @@ sub set_up {
 
     $this->SUPER::set_up();
 
+    $this->{twiki}->finish();
     $this->{twiki} = new TWiki('AdminUser');
 
     try {
@@ -59,6 +60,7 @@ sub set_up {
         $this->assert(0,shift->stringify()||'');
     };
     # Force a re-read
+    $this->{twiki}->finish();
     $this->{twiki} = new TWiki();
     $TWiki::Plugins::SESSION = $this->{twiki};
     @TWikiFntestCase::mails = ();
@@ -92,6 +94,7 @@ sub test_eachUserAllowLoginName {
     my $this = shift;
     $TWiki::cfg{Register}{AllowLoginName} = 1;
     # Force a re-read
+    $this->{twiki}->finish();
     $this->{twiki} = new TWiki();
     $TWiki::Plugins::SESSION = $this->{twiki};
     @TWikiFntestCase::mails = ();
@@ -110,6 +113,7 @@ sub test_eachUserDontAllowLoginName {
     my $this = shift;
     $TWiki::cfg{Register}{AllowLoginName} = 0;
     # Force a re-read
+    $this->{twiki}->finish();
     $this->{twiki} = new TWiki();
     $TWiki::Plugins::SESSION = $this->{twiki};
     @TWikiFntestCase::mails = ();
@@ -131,6 +135,7 @@ sub test_eachGroupTraditional {
 
     $TWiki::cfg{SuperAdminGroup} = 'TWikiAdminGroup';
     # Force a re-read
+    $this->{twiki}->finish();
     $this->{twiki} = new TWiki();
     $TWiki::Plugins::SESSION = $this->{twiki};
     @TWikiFntestCase::mails = ();
@@ -152,6 +157,7 @@ sub test_eachGroupCustomAdmin {
 
     $TWiki::cfg{SuperAdminGroup} = 'Super Admin';
     # Force a re-read
+    $this->{twiki}->finish();
     $this->{twiki} = new TWiki();
     $TWiki::Plugins::SESSION = $this->{twiki};
     @TWikiFntestCase::mails = ();

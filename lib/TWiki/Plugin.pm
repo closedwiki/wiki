@@ -82,22 +82,41 @@ use vars qw( @registrableHandlers %deprecated );
 
 sub new {
     my ( $class, $session, $name, $module ) = @_;
-    ASSERT($session->isa( 'TWiki')) if DEBUG;
-
-    my $this = bless( {}, $class );
+    my $this = bless( { session => $session }, $class );
     $name = TWiki::Sandbox::untaintUnchecked( $name );
     $this->{name} = $name || '';
-    $this->{session} = $session;
     $this->{module} = $module || 'TWiki::Plugins::'.$name;
 
     return $this;
+}
+
+=begin twiki
+
+---++ ObjectMethod finish()
+Break circular references.
+
+=cut
+
+# Note to developers; please undef *all* fields in the object explicitly,
+# whether they are references or not. That way this method is "golden
+# documentation" of the live fields in the object.
+sub finish {
+    my $this = shift;
+
+    undef $this->{name};
+    undef $this->{installWeb};
+    undef $this->{module};
+    undef $this->{errors};
+    undef $this->{disabled};
+    undef $this->{no_topic};
+    undef $this->{description};
+    undef $this->{session};
 }
 
 # Load and verify a plugin, invoking any early registration
 # handlers. Return the user resulting from the user handler call.
 sub load {
     my ( $this ) = @_;
-    ASSERT($this->isa( 'TWiki::Plugin')) if DEBUG;
 
     # look for the plugin installation web (needed for attached files)
     # in the order:
@@ -179,7 +198,6 @@ sub load {
 # register plugin settings
 sub registerSettings {
     my ( $this, $plugins ) = @_;
-    ASSERT($this->isa( 'TWiki::Plugin')) if DEBUG;
 
     return if $this->{disabled};
 
@@ -201,7 +219,6 @@ sub registerSettings {
 # invoke plugin initialisation and register handlers.
 sub registerHandlers {
     my ( $this, $plugins ) = @_;
-    ASSERT($this->isa( 'TWiki::Plugin')) if DEBUG;
 
     return if $this->{disabled};
 
@@ -251,7 +268,6 @@ sub invoke {
 # SMELL: may die if the plugin doesn't compile
 sub getVersion {
     my $this = shift;
-    ASSERT($this->isa( 'TWiki::Plugin')) if DEBUG;
 
     no strict 'refs';
     return ${$this->{module}.'::VERSION'} || '';
@@ -262,7 +278,6 @@ sub getVersion {
 # SMELL: may die if the plugin doesn't compile
 sub getRelease {
     my $this = shift;
-    ASSERT($this->isa( 'TWiki::Plugin')) if DEBUG;
 
     no strict 'refs';
     return ${$this->{module}.'::RELEASE'} || '';
@@ -272,7 +287,6 @@ sub getRelease {
 # Get the description string for the given plugin
 sub getDescription {
     my $this = shift;
-    ASSERT($this->isa( 'TWiki::Plugin')) if DEBUG;
 
     unless( defined $this->{description} ) {
         my $pref = uc( $this->{name} ) . '_SHORTDESCRIPTION';

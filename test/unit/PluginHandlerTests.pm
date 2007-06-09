@@ -137,6 +137,7 @@ EOF
         $this->assert(0,shift->stringify());
     };
     $TWiki::cfg{Plugins}{$this->{plugin_name}}{Enabled} = 1;
+    $this->{twiki}->finish();
     $this->{twiki} = new TWiki(); # default user
     eval "\$TWiki::Plugins::$this->{plugin_name}::tester = \$this;";
     $this->checkCalls(1, 'initPlugin');
@@ -303,6 +304,7 @@ INNER
 # types have been reinserted (so markers are still present)
 sub endRenderingHandler {
     my ( $text ) = @_;
+    $text =~ s/^\n//s;
     $text =~ s/\d+${TWiki::TranslationToken}--/NUMBERx--/g;
     $text =~ s/${TWiki::TranslationToken}/x/g;
     $tester->assert_str_equals(<<INNER, $text);
@@ -327,6 +329,7 @@ sub postRenderingHandler {
     my ($text) = @_;
     $tester->assert_str_equals(<<INNER, "$text\n");
 endRenderingHandler
+
 preRenderingHandler
 startRenderingHandler
 
@@ -397,6 +400,7 @@ HERE
     $this->assert_str_equals(<<HERE, $out);
 postRenderingHandler
 endRenderingHandler
+
 preRenderingHandler
 startRenderingHandler
 

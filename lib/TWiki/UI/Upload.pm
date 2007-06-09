@@ -220,19 +220,22 @@ sub upload {
                 params => [ $fileName, $maxSize ] );
         }
     }
-
     try {
+        # SMELL: use of undocumented CGI::tmpFileName
+        my $tfp = $query->tmpFileName( $query->param( 'filepath' ));
         $session->{store}->saveAttachment(
             $webName, $topic, $fileName, $user,
-            { dontlog => !$TWiki::cfg{Log}{upload},
-              comment => $fileComment,
-              hide => $hideFile,
-              createlink => $createLink,
-              stream => $stream,
-              filepath => $filePath,
-              filesize => $fileSize,
-              filedate => $fileDate,
-          } );
+            {
+                dontlog => !$TWiki::cfg{Log}{upload},
+                comment => $fileComment,
+                hide => $hideFile,
+                createlink => $createLink,
+                stream => $stream,
+                filepath => $filePath,
+                filesize => $fileSize,
+                filedate => $fileDate,
+                tmpFilename => $tfp,
+            } );
     } catch Error::Simple with {
         throw TWiki::OopsException( 'attention',
                                     def => 'save_error',

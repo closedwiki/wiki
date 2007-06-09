@@ -43,7 +43,8 @@ sub setup_new_session() {
     $ENV{SCRIPT_NAME} = "view";
     $this->{twiki}->finish();#close this TWiki session - its using the wrong mapper and login
 	
-    $this->{twiki} = new TWiki( undef, $query );   
+    $this->{twiki}->finish();
+    $this->{twiki} = new TWiki( undef, $query );
 }
 
 sub set_up_user {

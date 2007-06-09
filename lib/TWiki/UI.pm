@@ -31,7 +31,7 @@ use strict;
 use Error qw( :try );
 use Assert;
 use CGI::Carp qw( fatalsToBrowser );
-use CGI qw( :cgi -any );
+use CGI qw( -any );
 
 use TWiki;
 use TWiki::OopsException;
@@ -197,6 +197,7 @@ sub run {
         print "Unspecified error";
     };
 
+    # Finished with the session
     $session->finish();
 }
 

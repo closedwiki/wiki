@@ -29,14 +29,13 @@ See documentation of that class for descriptions of the methods of this class.
 =cut
 
 package TWiki::Users::HtPasswdUser;
+use base 'TWiki::Users::Password';
 
 use strict;
 use Assert;
 use Error qw( :try );
 use TWiki::Users::Password;
 use TWiki::ListIterator;
-
-@TWiki::Users::HtPasswdUser::ISA = qw( TWiki::Users::Password );
 
 # 'Use locale' for internationalisation of Perl sorting in getTopicNames
 # and other routines - main locale settings are done in TWiki::setupLocale
@@ -67,14 +66,25 @@ sub new {
     }
     return $this;
 }
+
+=begin twiki
+
+---++ ObjectMethod finish()
+Break circular references.
+
+=cut
+
+# Note to developers; please undef *all* fields in the object explicitly,
+# whether they are references or not. That way this method is "golden
+# documentation" of the live fields in the object.
 sub finish {
     my $this = shift;
-    $this->{passworddata} = undef;
+    $this->SUPER::finish();
+    undef $this->{passworddata};
 }
 
 sub fetchUsers {
     my $this = shift;
-    ASSERT($this->isa( 'TWiki::Users::HtPasswdUser')) if DEBUG;
     my $db = _readPasswd($this);
     my @users = sort keys %$db;
     return new TWiki::ListIterator(\@users);
@@ -126,7 +136,6 @@ sub _savePasswd {
 sub encrypt {
     my ( $this, $login, $passwd, $fresh ) = @_;
 
-    ASSERT($this->isa( 'TWiki::Users::HtPasswdUser')) if DEBUG;
 
     $passwd ||= '';
 
@@ -165,7 +174,6 @@ sub encrypt {
 
 sub fetchPass {
     my ( $this, $login ) = @_;
-    ASSERT($this->isa( 'TWiki::Users::HtPasswdUser')) if DEBUG;
     my $ret = 0;
 
     if( $login ) {
@@ -188,7 +196,6 @@ sub fetchPass {
 
 sub setPassword {
     my ( $this, $login, $newUserPassword, $oldUserPassword ) = @_;
-    ASSERT($this->isa( 'TWiki::Users::HtPasswdUser')) if DEBUG;
 
     if( defined( $oldUserPassword )) {
         unless( $oldUserPassword eq '1') {
@@ -215,7 +222,6 @@ sub setPassword {
 
 sub removeUser {
     my ( $this, $login ) = @_;
-    ASSERT($this->isa( 'TWiki::Users::HtPasswdUser')) if DEBUG;
     my $result = undef;
     $this->{error} = undef;
 
@@ -236,7 +242,6 @@ sub removeUser {
 
 sub checkPassword {
     my ( $this, $login, $password ) = @_;
-    ASSERT($this->isa( 'TWiki::Users::HtPasswdUser')) if DEBUG;
     my $encryptedPassword = $this->encrypt( $login, $password );
 
     $this->{error} = undef;

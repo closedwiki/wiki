@@ -16,7 +16,6 @@ my $oldtopic = "OldTopic";
 my $newtopic = "NewTopic";
 my $othertopic = "OtherTopic";
 my $notawwtopic = "random";
-my $twiki;
 my $originaltext = <<THIS;
 1 $oldweb.$oldtopic
 $oldweb.$oldtopic 2
@@ -64,13 +63,13 @@ sub set_up {
     $TWiki::cfg{LoginManager} = 'TWiki::LoginManager::TemplateLogin';      
     $TWiki::cfg{Register}{EnableNewUserRegistration} = 1;
 
-    $twiki = new TWiki( "TestUser1", new CGI({topic=>"/$oldweb/$oldtopic"}));
+    $this->{twiki} = new TWiki( "TestUser1", new CGI({topic=>"/$oldweb/$oldtopic"}));
     
-    $twiki->{store}->createWeb($twiki->{user}, $oldweb);
-    $twiki->{store}->createWeb($twiki->{user}, $newweb);
+    $this->{twiki}->{store}->createWeb($this->{twiki}->{user}, $oldweb);
+    $this->{twiki}->{store}->createWeb($this->{twiki}->{user}, $newweb);
 
-    $TWiki::Plugins::SESSION = $twiki;
-    my $meta = new TWiki::Meta($twiki, $oldweb, $oldtopic);
+    $TWiki::Plugins::SESSION = $this->{twiki};
+    my $meta = new TWiki::Meta($this->{twiki}, $oldweb, $oldtopic);
     $meta->putKeyed( "FIELD", {name=>"$oldweb",
                           value=>"$oldweb"} );
     $meta->putKeyed( "FIELD", {name=>"$oldweb.$oldtopic",
@@ -83,28 +82,28 @@ sub set_up {
                           value=>"$newweb.$newtopic"} );
     $meta->put( "TOPICPARENT", {name=> "$oldweb.$oldtopic"} );
 
-    $twiki->{store}->saveTopic( $twiki->{user}, $oldweb, $oldtopic,
+    $this->{twiki}->{store}->saveTopic( $this->{twiki}->{user}, $oldweb, $oldtopic,
                                 $originaltext, $meta );
-    $twiki->{store}->saveTopic( $twiki->{user}, $oldweb, $othertopic,
+    $this->{twiki}->{store}->saveTopic( $this->{twiki}->{user}, $oldweb, $othertopic,
                                 $originaltext, $meta );
-    $twiki->{store}->saveTopic( $twiki->{user}, $newweb, $othertopic,
+    $this->{twiki}->{store}->saveTopic( $this->{twiki}->{user}, $newweb, $othertopic,
                                 $originaltext, $meta );
-    $twiki->{store}->saveTopic( $twiki->{user}, $newweb,
+    $this->{twiki}->{store}->saveTopic( $this->{twiki}->{user}, $newweb,
                                 $TWiki::cfg{HomeTopicName},
                                 "junk", $meta );
 }
 
 sub tear_down {
     my $this = shift;
-    $this->removeWebFixture($twiki,$oldweb);
-    $this->removeWebFixture($twiki,$newweb);
-    eval {$twiki->finish()};
+    $this->removeWebFixture($this->{twiki},$oldweb);
+    $this->removeWebFixture($this->{twiki},$newweb);
+    $this->{twiki}->finish();
     $this->SUPER::tear_down();
 }
 
 sub check {
     my($this, $web, $topic, $emeta, $expected, $num) = @_;
-    my($meta,$actual) = $twiki->{store}->readTopic( undef, $web, $topic );
+    my($meta,$actual) = $this->{twiki}->{store}->readTopic( undef, $web, $topic );
     my @old = split(/\n+/, $expected);
     my @new = split(/\n+/, $actual);
 
@@ -119,34 +118,34 @@ sub test_referringtopics {
     my $this = shift;
     my $ott = TWiki::spaceOutWikiWord( $oldtopic );
     my $lott = lc($ott);
-    $twiki->{store}->saveTopic( $twiki->{user}, $oldweb, 'MatchMeOne',
+    $this->{twiki}->{store}->saveTopic( $this->{twiki}->{user}, $oldweb, 'MatchMeOne',
                                 <<THIS );
 [[$ott]]
 THIS
-    $twiki->{store}->saveTopic( $twiki->{user}, $oldweb, 'MatchMeTwo',
+    $this->{twiki}->{store}->saveTopic( $this->{twiki}->{user}, $oldweb, 'MatchMeTwo',
                                 <<THIS );
 [[$lott]]
 THIS
-    $twiki->{store}->saveTopic( $twiki->{user}, $newweb, 'MatchMeThree',
+    $this->{twiki}->{store}->saveTopic( $this->{twiki}->{user}, $newweb, 'MatchMeThree',
                                 <<THIS );
 [[$oldweb.$ott]]
 THIS
-    $twiki->{store}->saveTopic( $twiki->{user}, $newweb, 'MatchMeFour',
+    $this->{twiki}->{store}->saveTopic( $this->{twiki}->{user}, $newweb, 'MatchMeFour',
                                 <<THIS );
 [[$oldweb.$lott]]
 THIS
-    $twiki->{store}->saveTopic( $twiki->{user}, $oldweb, 'NoMatch',
+    $this->{twiki}->{store}->saveTopic( $this->{twiki}->{user}, $oldweb, 'NoMatch',
                                 <<THIS );
 Refer to $ott and $lott
 THIS
-    $twiki->{store}->saveTopic( $twiki->{user}, $newweb, 'NoMatch',
+    $this->{twiki}->{store}->saveTopic( $this->{twiki}->{user}, $newweb, 'NoMatch',
                                 <<THIS );
 Refer to $ott and $lott
 THIS
     # Just $oldweb
     my $refs;
     $refs = TWiki::UI::Manage::getReferringTopics(
-        $twiki, $oldweb, $oldtopic, 0);
+        $this->{twiki}, $oldweb, $oldtopic, 0);
     $this->assert_str_equals("HASH", ref($refs));
     my @expected;
     @expected =  ( "$oldweb.$othertopic",
@@ -165,7 +164,7 @@ THIS
 
     # All webs
     $refs = TWiki::UI::Manage::getReferringTopics(
-        $twiki, $oldweb, $oldtopic, 1);
+        $this->{twiki}, $oldweb, $oldtopic, 1);
     foreach my $r ( keys %$refs ) {
         unless ($r =~ /^($oldweb|$newweb)\./) {
             delete $refs->{$r};
@@ -199,12 +198,13 @@ sub test_rename_oldwebnewtopic {
                         });
 
     $query->path_info( "/$oldweb/SanityCheck" );
-    $twiki = new TWiki( "TestUser1", $query );
-    $TWiki::Plugins::SESSION = $twiki;
-    $this->capture(\&TWiki::UI::Manage::rename, $twiki );
+    $this->{twiki}->finish();
+    $this->{twiki} = new TWiki( "TestUser1", $query );
+    $TWiki::Plugins::SESSION = $this->{twiki};
+    $this->capture(\&TWiki::UI::Manage::rename, $this->{twiki} );
 
-    $this->assert( $twiki->{store}->topicExists( $oldweb, $newtopic ));
-    $this->assert(!$twiki->{store}->topicExists( $oldweb, $oldtopic ));
+    $this->assert( $this->{twiki}->{store}->topicExists( $oldweb, $newtopic ));
+    $this->assert(!$this->{twiki}->{store}->topicExists( $oldweb, $oldtopic ));
     $this->check($oldweb, $newtopic, undef, <<THIS, 1);
 1 $newtopic
 $newtopic 2
@@ -309,12 +309,13 @@ sub test_rename_newweboldtopic {
                         });
 
     $query->path_info("/$oldweb" );
-    $twiki = new TWiki( "TestUser1", $query );
-    $TWiki::Plugins::SESSION = $twiki;
-    $this->capture( \&TWiki::UI::Manage::rename, $twiki );
+    $this->{twiki}->finish();
+    $this->{twiki} = new TWiki( "TestUser1", $query );
+    $TWiki::Plugins::SESSION = $this->{twiki};
+    $this->capture( \&TWiki::UI::Manage::rename, $this->{twiki} );
 
-    $this->assert( $twiki->{store}->topicExists( $newweb, $oldtopic ));
-    $this->assert(!$twiki->{store}->topicExists( $oldweb, $oldtopic ));
+    $this->assert( $this->{twiki}->{store}->topicExists( $newweb, $oldtopic ));
+    $this->assert(!$this->{twiki}->{store}->topicExists( $oldweb, $oldtopic ));
 
     $this->check($newweb, $oldtopic, undef, <<THIS, 4);
 1 $oldtopic
@@ -417,13 +418,13 @@ sub test_rename_from_lowercase {
     my $this       =  shift;
     my $oldtopic   =  'lowercase';
     my $newtopic   =  'upperCase';
-    my $meta       =  new TWiki::Meta($twiki, $oldweb, $oldtopic);
+    my $meta       =  new TWiki::Meta($this->{twiki}, $oldweb, $oldtopic);
     my $topictext  =  <<THIS;
 One lowercase
 Twolowercase
 [[lowercase]]
 THIS
-    $twiki->{store}->saveTopic( $twiki->{user}, $oldweb, $oldtopic,
+    $this->{twiki}->{store}->saveTopic( $this->{twiki}->{user}, $oldweb, $oldtopic,
                                 $topictext, $meta );
     my $query = new CGI({
         action   => 'rename',
@@ -434,9 +435,10 @@ THIS
     });
 
     $query->path_info("/$oldweb" );
-    $twiki = new TWiki( "TestUser1", $query );
-    $TWiki::Plugins::SESSION = $twiki;
-    my ($text,$result)  =  $this->capture( \&TWiki::UI::Manage::rename, $twiki );
+    $this->{twiki}->finish();
+    $this->{twiki} = new TWiki( "TestUser1", $query );
+    $TWiki::Plugins::SESSION = $this->{twiki};
+    my ($text,$result)  =  $this->capture( \&TWiki::UI::Manage::rename, $this->{twiki} );
     my $ext = $TWiki::cfg{ScriptSuffix};
     $this->assert_matches(qr/^Status:\s+302/s,$text);
     $this->assert_matches(qr([lL]ocation:\s+\S+?/view$ext/$oldweb/UpperCase)s,$text);
@@ -451,9 +453,9 @@ sub test_accessRenameRestrictedTopic {
     my $this       =  shift;
     my $oldtopic   =  'lowercase';
     my $newtopic   =  'upperCase';
-    my $meta       =  new TWiki::Meta($twiki, $oldweb, $oldtopic);
+    my $meta       =  new TWiki::Meta($this->{twiki}, $oldweb, $oldtopic);
     my $topictext  =  "   * Set ALLOWTOPICRENAME = GungaDin\n";
-    $twiki->{store}->saveTopic( $twiki->{user}, $oldweb, $oldtopic,
+    $this->{twiki}->{store}->saveTopic( $this->{twiki}->{user}, $oldweb, $oldtopic,
                                 $topictext, $meta );
     my $query = new CGI({
                          action   => 'rename',
@@ -463,10 +465,11 @@ sub test_accessRenameRestrictedTopic {
                         });
 
     $query->path_info("/$oldweb" );
-    $twiki = new TWiki( "TestUser1", $query );
-    $TWiki::Plugins::SESSION = $twiki;
+    $this->{twiki}->finish();
+    $this->{twiki} = new TWiki( "TestUser1", $query );
+    $TWiki::Plugins::SESSION = $this->{twiki};
     try {
-        my ($text,$result) = TWiki::UI::Manage::rename( $twiki );
+        my ($text,$result) = TWiki::UI::Manage::rename( $this->{twiki} );
         $this->assert(0);
     } catch TWiki::OopsException with {
         $this->assert_str_equals('OopsException(accessdenied/topic_access web=>TemporaryRenameOldWeb topic=>lowercase params=>[RENAME,access not allowed on topic])', shift->stringify());
@@ -476,9 +479,9 @@ sub test_accessRenameRestrictedTopic {
 sub test_accessRenameRestrictedWeb {
     my $this       =  shift;
     my $oldtopic   =  'WebPreferences';
-    my $meta       =  new TWiki::Meta($twiki, $oldweb, $oldtopic);
+    my $meta       =  new TWiki::Meta($this->{twiki}, $oldweb, $oldtopic);
     my $topictext  =  "   * Set ALLOWWEBRENAME = GungaDin\n";
-    $twiki->{store}->saveTopic( $twiki->{user}, $oldweb, $oldtopic,
+    $this->{twiki}->{store}->saveTopic( $this->{twiki}->{user}, $oldweb, $oldtopic,
                                 $topictext, $meta );
     my $query = new CGI({
                          action   => 'rename',
@@ -488,10 +491,11 @@ sub test_accessRenameRestrictedWeb {
                         });
 
     $query->path_info("/$oldweb" );
-    $twiki = new TWiki( "TestUser1", $query );
-    $TWiki::Plugins::SESSION = $twiki;
+    $this->{twiki}->finish();
+    $this->{twiki} = new TWiki( "TestUser1", $query );
+    $TWiki::Plugins::SESSION = $this->{twiki};
     try {
-        my ($text,$result) = TWiki::UI::Manage::rename( $twiki );
+        my ($text,$result) = TWiki::UI::Manage::rename( $this->{twiki} );
         $this->assert(0);
     } catch TWiki::OopsException with {
         $this->assert_str_equals('OopsException(accessdenied/topic_access web=>TemporaryRenameOldWeb topic=>WebPreferences params=>[RENAME,access not allowed on web])', shift->stringify());
@@ -503,7 +507,7 @@ sub test_leaseReleasemeLetMeGo {
     my $this =  shift;
 
     # Grab a lease
-    $twiki->{store}->setLease($oldweb, $oldtopic, $twiki->{user}, 1000);
+    $this->{twiki}->{store}->setLease($oldweb, $oldtopic, $this->{twiki}->{user}, 1000);
 
     my $query = new CGI({
                          action   => 'rename',
@@ -513,11 +517,12 @@ sub test_leaseReleasemeLetMeGo {
                         });
 
     $query->path_info("/$oldweb" );
-    $twiki = new TWiki( "TestUser1", $query );
-    $TWiki::Plugins::SESSION = $twiki;
-    $this->capture(\&TWiki::UI::Manage::rename, $twiki );
+    $this->{twiki}->finish();
+    $this->{twiki} = new TWiki( "TestUser1", $query );
+    $TWiki::Plugins::SESSION = $this->{twiki};
+    $this->capture(\&TWiki::UI::Manage::rename, $this->{twiki} );
 
-    my $lease = $twiki->{store}->getLease($oldweb, $oldtopic);
+    my $lease = $this->{twiki}->{store}->getLease($oldweb, $oldtopic);
     $this->assert_null($lease, $lease);
 }
 

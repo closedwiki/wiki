@@ -142,7 +142,7 @@ sub registerAccount {
                         });
 
     try {
-        TWiki::UI::Register::finish(
+        TWiki::UI::Register::complete(
             $this->{twiki}, $TWiki::cfg{RegistrationApprovals} );
     } catch TWiki::OopsException with {
         my $e = shift;

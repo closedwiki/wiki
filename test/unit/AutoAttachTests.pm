@@ -22,7 +22,6 @@ sub new {
     return $this;
 }
 
-my $session;
 my %cfg;
 
 use Data::Dumper;
@@ -34,8 +33,6 @@ sub set_up {
     $this->SUPER::set_up();
     $TWiki::cfg{WarningFileName} = "/tmp/junk";
     $TWiki::cfg{LogFileName} = "/tmp/junk";
-
-    $session = new TWiki();
 }
 
 sub set_up_topic {
@@ -44,7 +41,7 @@ sub set_up_topic {
     my $topic = shift;
     my $text = "hi";
 
-    $session->{store}->saveTopic(
+    $this->{twiki}->{store}->saveTopic(
         $this->{test_user_wikiname}, $this->{test_web}, $topic, $text );
 
 }
@@ -57,10 +54,10 @@ sub addMissingAttachment {
     my $file = shift; 
     my $comment = shift; 
 
-    $this->assert($session->{store}->topicExists($this->{test_web}, $topic));
+    $this->assert($this->{twiki}->{store}->topicExists($this->{test_web}, $topic));
 
-    my ($meta, $text) = $session->{store}->readTopic( 
-    $session->{user}, $this->{test_web}, $topic );
+    my ($meta, $text) = $this->{twiki}->{store}->readTopic( 
+    $this->{twiki}->{user}, $this->{test_web}, $topic );
 
     $meta->putKeyed( 'FILEATTACHMENT',
                        {
@@ -74,7 +71,7 @@ sub addMissingAttachment {
                              attr    => ''
                         }
                        );
-    $session->{store}->saveTopic($session->{user}, $this->{test_web}, $topic, $text, $meta);
+    $this->{twiki}->{store}->saveTopic($this->{twiki}->{user}, $this->{test_web}, $topic, $text, $meta);
 }
 
 # We create a 3 more attachment entries:
@@ -120,7 +117,7 @@ sub test_autoattach {
     $this->sneakAttachmentsAddedToTopic($topic, 'sneakedfile1.txt','sneakedfile2.txt', 'commavfilesshouldbeignored2.txt,v','_hiddenAttachment.txt', 'ressurectedComment.txt');
 
 
-    my ($meta, $text) = simulate_view($session, $this->{test_web}, $topic);
+    my ($meta, $text) = $this->simulate_view($this->{test_web}, $topic);
     my @attachments = $meta->find( 'FILEATTACHMENT' );
 #    printAttachments(@attachments); # leave as comment unless debugging
 
@@ -179,7 +176,7 @@ sub verify_normal_attachment {
     my $topic = shift;
     my $attachment = shift;
 
-    $this->assert($session->{store}->topicExists($this->{test_web}, $topic));
+    $this->assert($this->{twiki}->{store}->topicExists($this->{test_web}, $topic));
 
     open( FILE, ">/tmp/$attachment" );
     print FILE "Test attachment\n";
@@ -189,30 +186,30 @@ sub verify_normal_attachment {
     my $doNotLogChanges = 0;
     my $doUnlock = 1;
 
-    $session->{store}->saveAttachment(
+    $this->{twiki}->{store}->saveAttachment(
         $this->{test_web}, $topic, $attachment, $this->{test_user_wikiname},
         { file => "/tmp/$attachment", comment => 'comment 1' } );
 
     # Check revision number
-    my $rev = $session->{store}->getRevisionNumber(
+    my $rev = $this->{twiki}->{store}->getRevisionNumber(
         $this->{test_web}, $topic, $attachment);
     $this->assert_num_equals(1,$rev);
 
 }
 
 sub simulate_view {
-    my ($session, $web, $topic) = @_;
+    my ($this, $web, $topic) = @_;
 
-    my $oldWebName = $session->{webName};
-    my $oldTopicName = $session->{topicName};
+    my $oldWebName = $this->{twiki}->{webName};
+    my $oldTopicName = $this->{twiki}->{topicName};
 
-    $session->{webName} = $web;
-    $session->{topicName} = $topic;
+    $this->{twiki}->{webName} = $web;
+    $this->{twiki}->{topicName} = $topic;
 
-    my ($meta, $text) = $session->{store}->readTopic($session->{user}, $web, $topic);
+    my ($meta, $text) = $this->{twiki}->{store}->readTopic($this->{twiki}->{user}, $web, $topic);
 
-    $session->{webName} = $oldWebName;
-    $session->{topicName} = $oldTopicName;
+    $this->{twiki}->{webName} = $oldWebName;
+    $this->{twiki}->{topicName} = $oldTopicName;
 
 
     return ($meta, $text);

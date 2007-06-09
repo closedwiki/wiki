@@ -105,13 +105,13 @@ sub register_cgi {
         if ($needApproval) {
             throw Error::Simple('Approval code has not been written!');
         }
-        finish( $session, $tempUserDir);
+        complete( $session, $tempUserDir);
     }
     elsif ($action eq 'resetPassword') {
         resetPassword( $session );
     }
     elsif ($action eq 'approve') {
-        finish($session, $tempUserDir );
+        complete($session, $tempUserDir );
     }
     else {
         registerAndNext($session, $tempUserDir);
@@ -341,7 +341,7 @@ sub registerAndNext {
   if ($TWiki::cfg{Register}{NeedVerification}) {
      _requireVerification($session, $tempUserDir);
   } else {
-     finish($session);
+     complete($session);
   }
 }
 
@@ -709,16 +709,8 @@ sub verifyEmailAddress {
 
 }
 
-=pod
-
----++ StaticMethod finish
-
-Presently this is called in RegisterCgiScript directly after a call to verify.
-The separation is intended for the RegistrationApprovals functionality
-
-=cut
-
-sub finish {
+# Complete a registration
+sub complete {
     my( $session, $tempUserDir) = @_;
 
     my $topic = $session->{topicName};

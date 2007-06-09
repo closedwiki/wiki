@@ -63,7 +63,7 @@ sub evaluate {
             print STDERR "LEAF: ",(defined($result)?$result:'undef'),"\n";
         }
     } else {
-        my $fn = $this->{op}->{exec};
+        my $fn = $this->{op}->{evaluate};
         $result = &$fn( $clientData, @{$this->{params}} );
         if (MONITOR_EVAL) {
             print STDERR "NODE: ",$this->stringify()," -> ",

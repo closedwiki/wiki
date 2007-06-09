@@ -82,9 +82,10 @@ sub setup_view {
     $query->path_info( "$web/$topic" );
     $twiki = new TWiki( $this->{test_user_login}, $query );
     my ($text, $result) = $this->capture( \&TWiki::UI::View::view, $twiki);
-    my @lines = split( /\n\r?/, $text ) if $result;
-    shift @lines; shift @lines; shift @lines; shift @lines; shift @lines;
-    return join("\n", @lines);
+    $twiki->finish();
+    $text =~ s/\r//g;
+    $text =~ s/^.*?\n\n+//s; # remove CGI header
+    return $text;
 }
 
 # This test verifies the handling of preamble (the text following
@@ -94,21 +95,30 @@ sub test_prepostamble {
     my $text;
 
     $text = $this->setup_view( $this->{test_web}, 'TestTopic1', 'viewone' );
-    $this->assert_equals('pretemplatepreCONTENT
-postposttemplate', $text);
+    $this->assert_equals('pretemplate
+preCONTENT
+post
+posttemplate', $text);
 
     $text = $this->setup_view( $this->{test_web}, 'TestTopic1', 'viewtwo' );
-    $this->assert_equals('pretemplateCONTENT
-postposttemplate', $text);
+    $this->assert_equals('pretemplate
+CONTENT
+post
+posttemplate', $text);
 
     $text = $this->setup_view( $this->{test_web}, 'TestTopic1', 'viewthree' );
-    $this->assert_equals('pretemplatepreCONTENTposttemplate', $text);
+    $this->assert_equals('pretemplate
+preCONTENT
+posttemplate', $text);
 
     $text = $this->setup_view( $this->{test_web}, 'TestTopic1', 'viewfour' );
-    $this->assert_equals('pretemplateCONTENTposttemplate', $text);
+    $this->assert_equals('pretemplate
+CONTENT
+posttemplate', $text);
 
     $text = $this->setup_view( $this->{test_web}, 'TestTopic1', 'viewfive' );
-    $this->assert_equals('pretemplateposttemplate', $text);
+    $this->assert_equals('pretemplate
+posttemplate', $text);
 }
 
 1;

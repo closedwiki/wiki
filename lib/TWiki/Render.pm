@@ -1,4 +1,4 @@
-# Module of TWiki Enterprise Collaboration Platform, http://TWiki.org/
+## Module of TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
 # Copyright (C) 2001-2007 Peter Thoeny, peter@thoeny.org
 # and TWiki Contributors. All Rights Reserved. TWiki Contributors
@@ -74,31 +74,46 @@ BEGIN {
 
 ---++ ClassMethod new ($session)
 
-Creates a new renderer with initial state from preference values
-(LINKTOOLTIPINFO)
+Creates a new renderer
 
 =cut
 
 sub new {
     my ( $class, $session ) = @_;
-    my $this = bless( {}, $class );
-    ASSERT($session->isa( 'TWiki')) if DEBUG;
-
-    $this->{session} = $session;
-
-    $this->{NEWLINKFORMAT} =
-      $session->{prefs}->getPreferencesValue('NEWLINKFORMAT')
-        || '<span class="twikiNewLink">$text<a href="%SCRIPTURLPATH{"edit"}%/$web/$topic?topicparent=%WEB%.%TOPIC%" '.
-	   'rel="nofollow" title="%MAKETEXT{"Create this topic"}%">'.
-           '?</a></span>';
-    # tooltip init
-    $this->{LINKTOOLTIPINFO} =
-      $session->{prefs}->getPreferencesValue('LINKTOOLTIPINFO')
-        || '';
-    $this->{LINKTOOLTIPINFO} = '$username - $date - r$rev: $summary'
-      if( TWiki::isTrue( $this->{LINKTOOLTIPINFO} ));
+    my $this = bless( { session => $session }, $class );
 
     return $this;
+}
+
+=begin twiki
+
+---++ ObjectMethod finish()
+Break circular references.
+
+=cut
+
+# Note to developers; please undef *all* fields in the object explicitly,
+# whether they are references or not. That way this method is "golden
+# documentation" of the live fields in the object.
+sub finish {
+    my $this = shift;
+    undef $this->{NEWLINKFORMAT};
+    undef $this->{LINKTOOLTIPINFO};
+    undef $this->{LIST};
+    undef $this->{ffCache};
+    undef $this->{session};
+}
+
+sub _newLinkFormat {
+    my $this = shift;
+    unless( $this->{NEWLINKFORMAT} ) {
+        $this->{NEWLINKFORMAT} =
+          $this->{session}->{prefs}->getPreferencesValue('NEWLINKFORMAT')
+            || '<span class="twikiNewLink">$text<a href="%SCRIPTURLPATH{edit}%/$web/$topic?topicparent=%WEB%.%TOPIC%" '.
+              'rel="nofollow" title="%MAKETEXT{"Create this topic"}%">'.
+                '?</a></span>';
+    }
+    return $this->{NEWLINKFORMAT};
 }
 
 =pod
@@ -396,8 +411,8 @@ sub _makeAnchorHeading {
     # filter '!!', '%NOTOC%'
     $text =~ s/$TWiki::regex{headerPatternNoTOC}//o;
     my $html = '<nop><h'.$theLevel.'>';
-    $html .= CGI::a( { name=>$anchorName }, '' );
-    $html .= CGI::a( { name=>$compatAnchorName }, '')
+    $html .= CGI::a( { name => $anchorName }, '' );
+    $html .= CGI::a( { name => $compatAnchorName }, '')
       if( $compatAnchorName ne $anchorName );
     $html .= ' '.$text.' </h'.$theLevel.'>';
 
@@ -417,7 +432,6 @@ Build a valid HTML anchor name
 
 sub makeAnchorName {
     my( $this, $anchorName, $compatibilityMode ) = @_;
-    ASSERT($this->isa( 'TWiki::Render')) if DEBUG;
 
     if( !$compatibilityMode &&
           $anchorName =~ /^$TWiki::regex{anchorRegex}$/ ) {
@@ -427,20 +441,19 @@ sub makeAnchorName {
 
     # strip out potential links so they don't get rendered.
     # remove double bracket link
-    $anchorName =~ s/\s*\[\s*\[.*?\]\s*\[(.*?)\]\s*\]/$1/go;
-    $anchorName =~ s/\s*\[\s*\[\s*(.*?)\s*\]\s*\]/$1/go;
+    $anchorName =~ s/\[(?:\[.*?\])?\[(.*?)\]\s*\]/$1/g;
     # add an _ before bare WikiWords
     $anchorName =~ s/($TWiki::regex{wikiWordRegex})/_$1/go;
 
     if( $compatibilityMode ) {
         # remove leading/trailing underscores first, allowing them to be
         # reintroduced
-        $anchorName =~ s/^[\s\#\_]*//;
-        $anchorName =~ s/[\s\_]*$//;
+        $anchorName =~ s/^[\s#_]*//;
+        $anchorName =~ s/[\s_]*$//;
     }
-    $anchorName =~ s/<[\/]?\w[^>]*>//gi;    # remove HTML tags
-    $anchorName =~ s/\&\#?[a-zA-Z0-9]*;//g; # remove HTML entities
-    $anchorName =~ s/\&//g;                 # remove &
+    $anchorName =~ s/<\/?[a-zA-Z][^>]*>//gi;  # remove HTML tags
+    $anchorName =~ s/&#?[a-zA-Z0-9]+;//g; # remove HTML entities
+    $anchorName =~ s/&//g;                # remove &
     # filter TOC excludes if not at beginning
     $anchorName =~ s/^(.+?)\s*$TWiki::regex{headerPatternNoTOC}.*/$1/o;
     # filter '!!', '%NOTOC%'
@@ -454,11 +467,11 @@ sub makeAnchorName {
     }
     $anchorName =~ s/__+/_/g;           # remove excessive '_' chars
     if ( !$compatibilityMode ) {
-        $anchorName =~ s/^[\s\#\_]*//;  # no leading space nor '#', '_'
+        $anchorName =~ s/^[\s#_]+//;  # no leading space nor '#', '_'
     }
     $anchorName =~ s/^(.{32})(.*)$/$1/; # limit to 32 chars - FIXME: Use Unicode chars before truncate
     if ( !$compatibilityMode ) {
-        $anchorName =~ s/[\s\_]*$//;    # no trailing space, nor '_'
+        $anchorName =~ s/[\s_]+$//;    # no trailing space, nor '_'
     }
 
     # No need to encode 8-bit characters in anchor due to UTF-8 URL support
@@ -470,6 +483,13 @@ sub makeAnchorName {
 # Warning: Slower performance if enabled.
 sub _linkToolTipInfo {
     my( $this, $theWeb, $theTopic ) = @_;
+    unless( defined( $this->{LINKTOOLTIPINFO} )) {
+        $this->{LINKTOOLTIPINFO} =
+          $this->{session}->{prefs}->getPreferencesValue('LINKTOOLTIPINFO')
+            || '';
+        $this->{LINKTOOLTIPINFO} = '$username - $date - r$rev: $summary'
+          if( TWiki::isTrue( $this->{LINKTOOLTIPINFO} ));
+    }
     return '' unless( $this->{LINKTOOLTIPINFO} );
     return '' if( $this->{LINKTOOLTIPINFO} =~ /^off$/i );
     return '' unless( $this->{session}->inContext( 'view' ));
@@ -524,7 +544,6 @@ SMELL: why is this available to Func?
 
 sub internalLink {
     my( $this, $theWeb, $theTopic, $theLinkText, $theAnchor, $doLinkToMissingPages, $doKeepWeb, $hasExplicitLinkLabel ) = @_;
-    ASSERT($this->isa( 'TWiki::Render')) if DEBUG;
     # SMELL - shouldn't it be callable by TWiki::Func as well?
 
     #PN: Webname/Subweb/ -> Webname/Subweb
@@ -630,7 +649,7 @@ sub _renderExistingWikiWord {
 sub _renderNonExistingWikiWord {
     my ($this, $web, $topic, $text) = @_;
 
-    my $ans = $this->{NEWLINKFORMAT};
+    my $ans = $this->_newLinkFormat;
     $ans =~ s/\$web/$web/g;
     $ans =~ s/\$topic/$topic/g;
     $ans =~ s/\$text/$text/g;
@@ -811,7 +830,6 @@ Returns the fully rendered expansion of a %FORMFIELD{}% tag.
 
 sub renderFORMFIELD {
     my ( $this, $params, $topic, $web ) = @_;
-    ASSERT($this->isa( 'TWiki::Render')) if DEBUG;
 
     my $formField = $params->{_DEFAULT};
     my $formTopic = $params->{topic};
@@ -895,7 +913,6 @@ The main rendering function.
 
 sub getRenderedVersion {
     my( $this, $text, $theWeb, $theTopic ) = @_;
-    ASSERT($this->isa( 'TWiki::Render')) if DEBUG;
 
     return '' unless $text;  # nothing to do
 
@@ -1235,7 +1252,6 @@ $opts:
 
 sub TML2PlainText {
     my( $this, $text, $web, $topic, $opts ) = @_;
-    ASSERT($this->isa( 'TWiki::Render')) if DEBUG;
     $opts ||= '';
 
     $text =~ s/\r//g;  # SMELL, what about OS10?
@@ -1338,7 +1354,6 @@ to that length.
 
 sub makeTopicSummary {
     my( $this, $theText, $theTopic, $theWeb, $theFlags ) = @_;
-    ASSERT($this->isa( 'TWiki::Render')) if DEBUG;
     $theFlags ||= '';
 
     my $htext = $this->TML2PlainText( $theText, $theWeb, $theTopic, $theFlags);
@@ -1386,7 +1401,6 @@ sub makeTopicSummary {
 # to re-write all the takeOuts to use a different placeholder
 sub _takeOutProtected {
 	my( $this, $intext, $re, $id, $map ) = @_;
-	ASSERT($this->isa( 'TWiki::Render')) if DEBUG;
 
 	$intext =~ s/($re)/_replaceBlock($1, $id, $map)/ge;
 
@@ -1413,7 +1427,6 @@ sub _replaceBlock {
 #Reverses the actions of takeOutProtected.
 sub _putBackProtected {
     my( $this, $text, $id, $map, $callback ) = @_;
-    ASSERT($this->isa( 'TWiki::Render')) if DEBUG;
     ASSERT(ref($map) eq 'HASH') if DEBUG;
 
     foreach my $placeholder ( keys %$map ) {
@@ -1450,7 +1463,6 @@ processing the data before re-insertion.
 
 sub takeOutBlocks {
     my( $this, $intext, $tag, $map ) = @_;
-    ASSERT($this->isa( 'TWiki::Render')) if DEBUG;
 
     return $intext unless( $intext =~ m/<$tag\b/i );
 
@@ -1534,7 +1546,6 @@ And if you set $newtag to '', we replace the taken out block with the valuse its
 
 sub putBackBlocks {
     my( $this, $text, $map, $tag, $newtag, $callback ) = @_;
-    ASSERT($this->isa( 'TWiki::Render')) if DEBUG;
 
     $newtag = $tag if (!defined($newtag));
 
@@ -1580,7 +1591,6 @@ Obtain and render revision info for a topic.
 
 sub renderRevisionInfo {
     my( $this, $web, $topic, $meta, $rrev, $format ) = @_;
-    ASSERT($this->isa( 'TWiki::Render')) if DEBUG;
     my $store = $this->{session}->{store};
     my $users = $this->{session}->{users};
 
@@ -1643,7 +1653,6 @@ In non-tml, lines are truncated to 70 characters. Differences are shown using + 
 
 sub summariseChanges {
     my( $this, $user, $web, $topic, $orev, $nrev, $tml ) = @_;
-    ASSERT($this->isa( 'TWiki::Render')) if DEBUG;
     my $summary = '';
     my $store = $this->{session}->{store};
 
@@ -1737,7 +1746,6 @@ The return result replaces $line in $newText.
 
 sub forEachLine {
     my( $this, $text, $fn, $options ) = @_;
-    ASSERT($this->isa( 'TWiki::Render')) if DEBUG;
 
     $options->{in_pre} = 0;
     $options->{in_pre} = 0;
@@ -1969,7 +1977,6 @@ to them changed to include the web specifier.
 
 sub replaceWebInternalReferences {
     my( $this, $text, $meta, $oldWeb, $oldTopic, $newWeb, $newTopic ) = @_;
-    ASSERT($this->isa( 'TWiki::Render')) if DEBUG;
 
     my @topics = $this->{session}->{store}->getTopicNames( $oldWeb );
     my $options =

@@ -17,14 +17,13 @@
 # As per the GPL, removal of this notice is prohibited.
 
 package TWiki::Users::ApacheHtpasswdUser;
+use base 'TWiki::Users::Password';
 
 use Apache::Htpasswd;
 use Assert;
 use strict;
 use TWiki::Users::Password;
 use Error qw( :try );
-
-@TWiki::Users::ApacheHtpasswdUser::ISA = qw( TWiki::Users::Password );
 
 =pod
 
@@ -44,17 +43,31 @@ provided mainly as an example of how to write a new password manager.
 sub new {
     my( $class, $session ) = @_;
 
-    my $this = bless( $class->SUPER::new( $session ), $class );
+    my $this = $class->SUPER::new( $session );
     $this->{apache} = new Apache::Htpasswd
       ( { passwdFile => $TWiki::cfg{Htpasswd}{FileName} } );
-    $this->{error} = undef;
 
     return $this;
 }
 
+=begin twiki
+
+---++ ObjectMethod finish()
+Break circular references.
+
+=cut
+
+# Note to developers; please undef *all* fields in the object explicitly,
+# whether they are references or not. That way this method is "golden
+# documentation" of the live fields in the object.
+sub finish {
+    my $this = shift;
+    $this->SUPER::finish()
+    undef $this->{apache};
+}
+
 sub fetchUsers {
     my $this = shift;
-    ASSERT($this->isa( 'TWiki::Users::HtPasswdUser')) if DEBUG;
     my @users = $this->{apache}->fetchUsers();
     return new ListIterator(\@users);
 }

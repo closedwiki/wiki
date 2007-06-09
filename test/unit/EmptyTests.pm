@@ -9,7 +9,6 @@ use base qw( TWikiTestCase );
 use TWiki;
 use Error qw( :try );
 
-my $twiki;
 my $topicquery;
 
 sub set_up {
@@ -22,20 +21,20 @@ sub set_up {
     $topicquery = new CGI( '' );
     $topicquery->path_info( '/TestCases/WebHome' );
     try {
-        $twiki = new TWiki( 'AdminUser' || '' );
-        my $twikiUserObject = $twiki->{user};
+        $this->{twiki} = new TWiki( 'AdminUser' || '' );
+        my $user = $this->{twiki}->{user};
 
         # You can create webs here; don't forget to tear them down
 
         # Create a web like this:
-        $twiki->{store}->createWeb(
-            $twikiUserObject,
+        $this->{twiki}->{store}->createWeb(
+            $user,
             "Temporarytestweb1",
             "_default");
 
         # Copy a system web like this:
-        $twiki->{store}->createWeb(
-            $twikiUserObject,
+        $this->{twiki}->{store}->createWeb(
+            $user,
             "Temporarytwikiweb",
             "TWiki");
 
@@ -58,9 +57,9 @@ sub tear_down {
 
     # Remove fixture webs; warning, if one of these
     # dies, you may end up with spurious test webs
-    $this->removeWebFixture($twiki, "Temporarytestweb1");
-    $this->removeWebFixture($twiki, "Temporarytwikiweb");
-    eval {$twiki->finish()};
+    $this->removeWebFixture($this->{twiki}, "Temporarytestweb1");
+    $this->removeWebFixture($this->{twiki}, "Temporarytwikiweb");
+    $this->{twiki}->finish() if $this->{twiki};
 
     # Always do this, and always do it last
     $this->SUPER::tear_down();
@@ -76,8 +75,6 @@ sub new {
 
 sub test_ {
     my $this = shift;
-    $twiki = new TWiki();
-
 }
 
 #================================================================================

@@ -123,11 +123,7 @@ The plugins and the handlers are carefully ordered.
 
 sub new {
     my ( $class, $session ) = @_;
-
-    my $this = bless( {}, $class );
-
-    ASSERT($session->isa( 'TWiki')) if DEBUG;
-    $this->{session} = $session;
+    my $this = bless( { session => $session }, $class );
 
     unless( $inited ) {
         TWiki::registerTagHandler( 'PLUGINDESCRIPTIONS',
@@ -140,6 +136,26 @@ sub new {
     }
 
     return $this;
+}
+
+=begin twiki
+
+---++ ObjectMethod finish()
+Break circular references.
+
+=cut
+
+# Note to developers; please undef *all* fields in the object explicitly,
+# whether they are references or not. That way this method is "golden
+# documentation" of the live fields in the object.
+sub finish {
+    my $this = shift;
+    undef $this->{registeredHandlers};
+    foreach (@{$this->{plugins}}) {
+        $_->finish();
+    }
+    undef $this->{plugins};
+    undef $this->{session};
 }
 
 =pod
@@ -158,7 +174,6 @@ If allDisabled is set, no plugin handlers will be called.
 
 sub load {
     my ( $this, $allDisabled ) = @_;
-    ASSERT($this->isa( 'TWiki::Plugins')) if DEBUG;
 
     my %lookup;
 
@@ -235,7 +250,6 @@ Push plugin settings onto preference stack
 
 sub settings {
     my $this = shift;
-    ASSERT($this->isa( 'TWiki::Plugins')) if DEBUG;
 
     # Set the session for this call stack
     local $TWiki::Plugins::SESSION = $this->{session};
@@ -255,7 +269,6 @@ Initialisation that is done after the user is known.
 
 sub enable {
     my $this = shift;
-    ASSERT($this->isa( 'TWiki::Plugins')) if DEBUG;
     my $prefs = $this->{session}->{prefs};
     my $dissed = $prefs->getPreferencesValue('DISABLEDPLUGINS') || '';
     my %disabled = map { $_ => 1 } split(/,\s*/, $dissed);
@@ -289,7 +302,6 @@ be found or is not active, 0 is returned.
 
 sub getPluginVersion {
     my ( $this, $thePlugin ) = @_;
-    ASSERT($this->isa( 'TWiki::Plugins')) if DEBUG;
 
     return $VERSION unless $thePlugin;
 
@@ -316,7 +328,6 @@ when the event is to be processed.
 
 sub addListener {
     my( $this, $c, $h ) = @_;
-    ASSERT($this->isa( 'TWiki::Plugins')) if DEBUG;
 
     push( @{$this->{registeredHandlers}{$c}}, $h );
 }
@@ -324,7 +335,6 @@ sub addListener {
 sub _dispatch {
     # must be shifted to clear parameter vector
     my $this = shift;
-    ASSERT($this->isa( 'TWiki::Plugins')) if DEBUG;
     my $handlerName = shift;
     foreach my $plugin ( @{$this->{registeredHandlers}{$handlerName}} ) {
         # Set the value of $SESSION for this call stack
@@ -438,7 +448,6 @@ Called by the register script
 
 sub registrationHandler {
     my $this = shift;
-    ASSERT($this->isa( 'TWiki::Plugins')) if DEBUG;
     #my( $web, $wikiName, $loginName ) = @_;
     _dispatch( $this, 'registrationHandler', @_ );
 }

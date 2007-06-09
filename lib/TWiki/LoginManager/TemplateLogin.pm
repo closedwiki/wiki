@@ -52,14 +52,13 @@ Construct the TemplateLogin object
 
 sub new {
     my( $class, $session ) = @_;
-    my $this = bless( $class->SUPER::new($session), $class );
+    my $this = $class->SUPER::new($session);
     $session->enterContext( 'can_login' );
     if ($TWiki::cfg{Sessions}{ExpireCookiesAfter}) {
         $session->enterContext( 'can_remember_login' );
     }
     return $this;
 }
-
 
 =pod
 

@@ -44,18 +44,23 @@ my $session;
 sub set_up {
     my $this = shift;
     $this->SUPER::set_up();
-    $session = new TWiki();
+    $this->{twiki} = new TWiki();
 
-    $m1 = TWiki::Meta->new($session, $web, $topic);
+    $m1 = TWiki::Meta->new($this->{twiki}, $web, $topic);
     $m1->put( "TOPICINFO", $args );
     $m1->putKeyed( "FIELD", $args );
     $m1->putKeyed( "FIELD", $args2 );
 }
 
+sub tear_down {
+    my $this = shift;
+    $this->{twiki}->finish() if $this->{twiki};
+}
+
 # Field that can only have one copy
 sub test_single {
     my $this = shift;
-    my $meta = TWiki::Meta->new($session, $web, $topic);
+    my $meta = TWiki::Meta->new($this->{twiki}, $web, $topic);
     
     $meta->put( "TOPICINFO", $args );
     my $vals = $meta->get( "TOPICINFO" );
@@ -71,7 +76,7 @@ sub test_single {
 
 sub test_multiple {
     my $this = shift;
-    my $meta = TWiki::Meta->new($session, $web, $topic);
+    my $meta = TWiki::Meta->new($this->{twiki}, $web, $topic);
     
     $meta->putKeyed( "FIELD", $args );
     my $vals = $meta->get( "FIELD", "a" );
@@ -94,7 +99,7 @@ sub test_multiple {
 
 sub test_removeSingle {
     my $this = shift;
-    my $meta = TWiki::Meta->new($session, $web, $topic);
+    my $meta = TWiki::Meta->new($this->{twiki}, $web, $topic);
     
     $meta->put( "TOPICINFO", $args );
     $this->assert( $meta->count( "TOPICINFO" ) == 1, "Should be one item" );
@@ -104,7 +109,7 @@ sub test_removeSingle {
 
 sub test_removeMultiple {
     my $this = shift;
-    my $meta = TWiki::Meta->new($session, $web, $topic);
+    my $meta = TWiki::Meta->new($this->{twiki}, $web, $topic);
     
     $meta->putKeyed( "FIELD", $args );
     $meta->putKeyed( "FIELD", $args2 );
@@ -124,7 +129,7 @@ sub test_removeMultiple {
 
 sub test_foreach {
     my $this = shift;
-    my $meta = TWiki::Meta->new($session, $web, $topic);
+    my $meta = TWiki::Meta->new($this->{twiki}, $web, $topic);
 
     $meta->putKeyed( "FIELD", { name => "a", value => "aval" } );
     $meta->putKeyed( "FIELD", { name => "b", value => "bval" } );
@@ -175,14 +180,14 @@ sub fleegle {
 
 sub test_copyFrom {
     my $this = shift;
-    my $meta = TWiki::Meta->new($session, $web, $topic);
+    my $meta = TWiki::Meta->new($this->{twiki}, $web, $topic);
 
     $meta->putKeyed( "FIELD", { name => "a", value => "aval" } );
     $meta->putKeyed( "FIELD", { name => "b", value => "bval" } );
     $meta->putKeyed( "FIELD", { name => "c", value => "cval" } );
     $meta->put( "FINAGLE", { name => "a", value => "aval" } );
 
-    my $new = new TWiki::Meta( $session, $web, $topic );
+    my $new = new TWiki::Meta( $this->{twiki}, $web, $topic );
     $new->copyFrom($meta);
 
     my $d = {};
@@ -193,7 +198,7 @@ sub test_copyFrom {
     $this->assert($d->{collected} =~ s/FINAGLE.value:aval;//);
     $this->assert_str_equals("", $d->{collected});
 
-    $new = new TWiki::Meta( $session, $web, $topic );
+    $new = new TWiki::Meta( $this->{twiki}, $web, $topic );
     $new->copyFrom($meta, 'FIELD');
 
     $new->forEachSelectedValue(qr/^FIELD$/, qr/^value$/, \&fleegle, $d);
@@ -202,7 +207,7 @@ sub test_copyFrom {
     $this->assert($d->{collected} =~ s/FIELD.value:cval;//);
     $this->assert_str_equals("", $d->{collected});
 
-    $new = new TWiki::Meta( $session, $web, $topic );
+    $new = new TWiki::Meta( $this->{twiki}, $web, $topic );
     $new->copyFrom($meta, 'FIELD', qr/^(a|b)$/);
     $new->forEachSelectedValue(qr/^FIELD$/, qr/^value$/, \&fleegle, $d);
     $this->assert($d->{collected} =~ s/FIELD.value:aval;//);

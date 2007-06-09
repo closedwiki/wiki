@@ -91,6 +91,28 @@ sub new {
     return $this;
 }
 
+=begin twiki
+
+---++ ObjectMethod finish()
+Break circular references.
+
+=cut
+
+# Note to developers; please undef *all* fields in the object explicitly,
+# whether they are references or not. That way this method is "golden
+# documentation" of the live fields in the object.
+sub finish {
+    my $this = shift;
+    undef $this->{MANAGER};
+    undef $this->{TYPE};
+    undef $this->{SOURCE};
+    undef $this->{CONTEXT};
+    undef $this->{values};
+    undef $this->{locals};
+    undef $this->{final};
+    undef $this->{SetHere};
+}
+
 =pod
 
 ---++ ObjectMethod finalise( $parent )
@@ -126,7 +148,6 @@ with the key prefix (default '').
 
 sub loadPrefsFromTopic {
     my( $this, $web, $topic, $keyPrefix ) = @_;
-    ASSERT($this->isa( 'TWiki::Prefs::PrefsCache')) if DEBUG;
 
     $keyPrefix ||= '';
 
@@ -160,12 +181,12 @@ be parsed to extract meta-data.
 
 sub loadPrefsFromText {
     my( $this, $text, $meta, $web, $topic ) = @_;
-    ASSERT($this->isa( 'TWiki::Prefs::PrefsCache')) if DEBUG;
 
     $this->{SOURCE} = $web.'.'.$topic;
 
     my $session = $this->{MANAGER}->{session};
     unless( $meta ) {
+        require TWiki::Meta;
         $meta = new TWiki::Meta( $session, $web, $topic );
         $session->{store}->extractMetaData( $meta, \$text );
     }

@@ -57,13 +57,12 @@ Construct the ApacheLogin object
 
 sub new {
     my( $class, $session ) = @_;
-    my $this = bless( $class->SUPER::new($session), $class );
+    my $this = $class->SUPER::new($session);
     $session->enterContext( 'can_login' );
     # Can't logout, though
     TWiki::registerTagHandler('LOGOUT', sub { return '' });
     return $this;
 }
-
 
 =pod
 
@@ -168,8 +167,7 @@ returns the userLogin if stored in the apache CGI query (ie session)
 
 sub getUser {
     my $this = shift;
-    ASSERT($this->isa( 'TWiki::LoginManager::ApacheLogin')) if DEBUG;
-    
+
     my $query = $this->{twiki}->{cgiQuery};
     my $authUser;
     # Ignore remote user if we got here via an error
@@ -178,31 +176,6 @@ sub getUser {
         TWiki::LoginManager::_trace($this, "apache getUser says ".($authUser||'undef'));
     }
     return $authUser;
-}
-
-
-=pod
-
----++ ObjectMethod checkSession ()
-
-TODO: what did this do? I can't find its use anywhere!
-
-=cut
-
-sub checkSession {
-    my $this = shift;
-    my $cgisession = $this->{cgisession};
-    my $query = $this->{twiki}->{cgiQuery};
-    my $authUserSessionVar = $TWiki::LoginManager::authUserSessionVar;
-
-    $cgisession->clear() if(
-        defined($cgisession) && defined($cgisession->param) &&
-        defined($query) && defined( $query->remote_user() ) &&
-        defined($authUserSessionVar) &&
-        defined( $cgisession->param( $authUserSessionVar ) ) &&
-        $query->remote_user() ne '' &&
-        $cgisession->param( $authUserSessionVar ) ne '' &&
-        $query->remote_user() ne $cgisession->param( $authUserSessionVar ) );
 }
 
 1;

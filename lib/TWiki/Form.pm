@@ -59,14 +59,13 @@ May throw TWiki::OopsException
 
 sub new {
     my( $class, $session, $web, $form, $def ) = @_;
-    my $this = bless( {}, $class );
+    my $this = bless( { session => $session }, $class );
 
     ( $web, $form ) =
       $session->normalizeWebTopicName( $web, $form );
 
     my $store = $session->{store};
 
-    $this->{session} = $session;
     $this->{web} = $web;
     $this->{topic} = $form;
 
@@ -88,6 +87,27 @@ sub new {
     }
 
     return $this;
+}
+
+=begin twiki
+
+---++ ObjectMethod finish()
+Break circular references.
+
+=cut
+
+# Note to developers; please undef *all* fields in the object explicitly,
+# whether they are references or not. That way this method is "golden
+# documentation" of the live fields in the object.
+sub finish {
+    my $this = shift;
+    undef $this->{web};
+    undef $this->{topic};
+    foreach (@{$this->{fields}}) {
+        $_->finish();
+    }
+    undef $this->{fields};
+    undef $this->{session};
 }
 
 # Get definition from supplied topic text
@@ -272,7 +292,6 @@ from $meta
 
 sub renderForEdit {
     my( $this, $web, $topic, $meta ) = @_;
-    ASSERT($this->isa( 'TWiki::Form')) if DEBUG;
     ASSERT($meta->isa( 'TWiki::Meta')) if DEBUG;
     my $session = $this->{session};
 
@@ -394,7 +413,6 @@ missing from the query.
 
 sub getFieldValuesFromQuery {
     my( $this, $query, $meta ) = @_;
-    ASSERT($this->isa( 'TWiki::Form')) if DEBUG;
     ASSERT($meta->isa( 'TWiki::Meta')) if DEBUG;
     my @missing;
     my $seen = 0;

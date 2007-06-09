@@ -59,7 +59,6 @@ sub new {
     $this->{REAL_SAFE_PIPE_OPEN} = 1;     # supports open(FH, '-|")
     $this->{EMULATED_SAFE_PIPE_OPEN} = 1; # supports pipe() and fork()
 
-
     # filter the support based on what platforms are proven
     # not to work.
     #from the Activestate Docco this is _only_ defined on ActiveState Perl
@@ -90,6 +89,19 @@ sub new {
     return $this;
 };
 
+=begin twiki
+
+---++ ObjectMethod finish()
+Break circular references.
+
+=cut
+
+# Note to developers; please undef *all* fields in the object explicitly,
+# whether they are references or not. That way this method is "golden
+# documentation" of the live fields in the object.
+sub finish {
+    my $this = shift;
+}
 
 =pod
 
@@ -242,7 +254,6 @@ sub sanitizeAttachmentName {
 
 sub _buildCommandLine {
     my ($this, $template, %params) = @_;
-    ASSERT($this->isa( 'TWiki::Sandbox' )) if DEBUG;
     my @arguments;
 
     $template ||= '';
@@ -353,7 +364,6 @@ ensures that the shell does not interpret any of the passed arguments.
 sub sysCommand {
     ASSERT(scalar(@_) % 2 == 0) if DEBUG;
     my ($this, $template, %params) = @_;
-    ASSERT($this->isa( 'TWiki::Sandbox')) if DEBUG;
 
     #local $SIG{__DIE__} = &_safeDie;
 

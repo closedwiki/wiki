@@ -58,12 +58,24 @@ Constructor for the singleton Search engine object.
 
 sub new {
     my ( $class, $session ) = @_;
-    my $this = bless( {}, $class );
-
-    ASSERT( $session->isa('TWiki') ) if DEBUG;
-    $this->{session} = $session;
+    my $this = bless( { session => $session }, $class );
 
     return $this;
+}
+
+=begin twiki
+
+---++ ObjectMethod finish()
+Break circular references.
+
+=cut
+
+# Note to developers; please undef *all* fields in the object explicitly,
+# whether they are references or not. That way this method is "golden
+# documentation" of the live fields in the object.
+sub finish {
+    my $this = shift;
+    undef $this->{session};
 }
 
 # Untaints the search value (text string, regex or search expression) by
@@ -435,7 +447,6 @@ FIXME: =callback= cannot work with format parameter (consider format='| $topic |
 
 sub searchWeb {
     my $this = shift;
-    ASSERT( $this->isa('TWiki::Search') ) if DEBUG;
     my %params        = @_;
     my $callback      = $params{_callback};
     my $cbdata        = $params{_cbdata};

@@ -35,12 +35,18 @@ sub new {
     return $self;
 }
 
+use Cwd;
 # Use this to save the TWiki cfg to a backing store during start_up
 # so it can be temporarily changed during tests.
 sub set_up {
     my $this = shift;
 
     $this->SUPER::set_up();
+
+    $this->{__EnvSafe} = {};
+    foreach my $sym (%ENV) {
+        $this->{__EnvSafe}->{$sym} = $ENV{$sym};
+    }
 
     # force a read of $TWiki::cfg
     my $tmp = new TWiki();
@@ -76,11 +82,18 @@ sub set_up {
     close(F);
 }
 
-# Restores TWiki::cfg from backup
+# Restores TWiki::cfg and %ENV from backup
 sub tear_down {
     my $this = shift;
-    eval {$this->{twiki}->finish()};
+    $this->{twiki}->finish() if $this->{twiki};
     %TWiki::cfg = eval $this->{__TWikiSafe};
+    foreach my $sym (keys %ENV) {
+        unless( defined( $this->{__EnvSafe}->{$sym} )) {
+            delete $ENV{$sym};
+        } else {
+            $ENV{$sym} = $this->{__EnvSafe}->{$sym};
+        }
+    }
 }
 
 sub _copy {

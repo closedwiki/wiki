@@ -53,7 +53,7 @@ sub tear_down {
 
     unlink "$TWiki::cfg{DataDir}/$web/.changes";
 
-    eval {$twiki->finish()};
+    $twiki->finish();
     $this->SUPER::tear_down();
 }
 

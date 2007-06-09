@@ -377,6 +377,7 @@ data/_empty/WebPreferences.txt 0644
 data/mime.types 0644
 index.html 0444
 lib/Assert.pm 0444
+lib/Monitor.pm 0444
 lib/CPAN/lib/Algorithm/Diff.pm 0444
 lib/CPAN/lib/Error.pm 0444
 lib/CPAN/lib/Locale/Maketext/Extract.pm 0444
@@ -499,7 +500,6 @@ lib/TWiki/Configure/UIs/UPDATE.pm 0444
 lib/TWiki/Configure/UIs/Value.pm 0444
 lib/TWiki/Configure/Value.pm 0444
 lib/TWiki/Configure/Valuer.pm 0444
-lib/TWiki/Data/DelimitedFile.pm 0444
 lib/TWiki/Form.pm 0444
 lib/TWiki/Form/Checkbox.pm 0444
 lib/TWiki/Form/FieldDefinition.pm 0444

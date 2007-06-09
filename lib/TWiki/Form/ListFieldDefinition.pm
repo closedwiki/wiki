@@ -15,6 +15,22 @@ use base 'TWiki::Form::FieldDefinition';
 use strict;
 use Assert;
 
+=begin twiki
+
+---++ ObjectMethod finish()
+Break circular references.
+
+=cut
+
+# Note to developers; please undef *all* fields in the object explicitly,
+# whether they are references or not. That way this method is "golden
+# documentation" of the live fields in the object.
+sub finish {
+    my $this = shift;
+    $this->SUPER::finish();
+    undef $this->{_options};
+}
+
 # PROTECTED - parse the {value} and extract a list of options.
 # Done lazily to avoid repeated topic reads.
 sub getOptions {

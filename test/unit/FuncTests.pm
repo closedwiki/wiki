@@ -74,6 +74,7 @@ sub test_getViewUrl {
 
     $result = TWiki::Func::getViewUrl ( "", "AndMash" );
     $this->assert_matches(qr!/$ss/Sausages/AndMash!, $result );
+    $TWiki::Plugins::SESSION->finish();
 }
 
 sub test_getScriptUrl {
@@ -95,6 +96,7 @@ sub test_getScriptUrl {
 
     $result = TWiki::Func::getScriptUrl ( "", "AndMash", 'wibble' );
     $this->assert_matches(qr!/$ss/$this->{users_web}/AndMash!, $result );
+    $TWiki::Plugins::SESSION->finish();
 }
 
 sub test_getOopsUrl {

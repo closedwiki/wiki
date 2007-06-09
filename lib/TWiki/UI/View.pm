@@ -35,6 +35,7 @@ package TWiki::UI::View;
 
 use strict;
 use integer;
+use Monitor;
 
 use TWiki;
 use TWiki::UI;
@@ -275,29 +276,32 @@ sub view {
     my( $start, $end );
     if( $tmpl =~ m/^(.*)%TEXT%(.*)$/s ) {
         my @starts = split( /%STARTTEXT%/, $1 );
-	if ( $#starts > 0 ) {   # we know that there is something before %STARTTEXT%
-	  $start = $starts[0];
-	  $text = $starts[1] . $text;
-	} else {
-	  $start = $1;
-	}
+        if ( $#starts > 0 ) {
+            # we know that there is something before %STARTTEXT%
+            $start = $starts[0];
+            $text = $starts[1] . $text;
+        } else {
+            $start = $1;
+        }
         my @ends = split( /%ENDTEXT%/, $2 );
-	if ( $#ends > 0 ) {  # we know that there is something after %ENDTEXT%
-	  $text .= $ends[0];
-	  $end = $ends[1];
-	} else {
-	  $end = $2;
-	}
+        if ( $#ends > 0 ) {
+            # we know that there is something after %ENDTEXT%
+            $text .= $ends[0];
+            $end = $ends[1];
+        } else {
+            $end = $2;
+        }
     } else {
         my @starts = split( /%STARTTEXT%/, $tmpl );
-	if ( $#starts > 0 ) {  # we know that there is something before %STARTTEXT%
-	  $start = $starts[0];
-	  $text = $starts[1];
-	} else {
-	  $start = $tmpl;
-	  $text = '';
-	}
-	$end = '';
+        if ( $#starts > 0 ) {
+            # we know that there is something before %STARTTEXT%
+            $start = $starts[0];
+            $text = $starts[1];
+        } else {
+            $start = $tmpl;
+            $text = '';
+        }
+        $end = '';
     }
 
     # If minimalist is set, images and anchors will be stripped from text
@@ -332,6 +336,7 @@ sub view {
     # to download plain text for the topic. So when the skin is 'text'
     # we do _not_ want to create a textarea.
     # raw=on&skin=text is deprecated; use raw=text instead.
+    Monitor::MARK('Ready to render');
     if( $raw eq 'text' || $raw eq 'all' || ( $raw && $skin eq 'text' )) {
         # use raw text
         $page = $text;
@@ -341,32 +346,37 @@ sub view {
         $session->enterContext( 'header_text' );
         $page = _prepare($start, @args);
         $session->leaveContext( 'header_text' );
+        Monitor::MARK('Rendered header');
 
         if( $raw ) {
-	    if ($text) {
-	      my $p = $session->{prefs};
-	      $page .=
-		CGI::textarea( -readonly => 'readonly',
-			       -rows => $p->getPreferencesValue('EDITBOXHEIGHT'),
-			       -cols => $p->getPreferencesValue('EDITBOXWIDTH'),
-			       -style => $p->getPreferencesValue('EDITBOXSTYLE'),
-			       -class => 'twikiTextarea twikiTextareaRawView',
-			       -default => $text
-			     );
-	    }
+            if ($text) {
+                my $p = $session->{prefs};
+                $page .=
+                  CGI::textarea(
+                      -readonly => 'readonly',
+                      -rows => $p->getPreferencesValue('EDITBOXHEIGHT'),
+                      -cols => $p->getPreferencesValue('EDITBOXWIDTH'),
+                      -style => $p->getPreferencesValue('EDITBOXSTYLE'),
+                      -class => 'twikiTextarea twikiTextareaRawView',
+                      -default => $text
+                     );
+            }
         } else {
             $session->enterContext( 'body_text' );
             $page .= _prepare($text, @args);
             $session->leaveContext( 'body_text' );
         }
 
+        Monitor::MARK('Rendered body');
         $session->enterContext( 'footer_text' );
         $page .= _prepare($end, @args);
         $session->leaveContext( 'footer_text' );
+        Monitor::MARK('Rendered footer');
     }
     # Output has to be done in one go, because if we generate the header and
     # then redirect because of some later constraint, some browsers fall over
-    $session->writeCompletePage( $page, 'view', $contentType )
+    $session->writeCompletePage( $page, 'view', $contentType );
+    Monitor::MARK('Wrote HTML');
 }
 
 sub _prepare {

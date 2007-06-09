@@ -44,9 +44,9 @@ use strict;
 use Assert;
 use Error qw( :try );
 
-use TWiki::Meta ();
-use TWiki::Time ();
-use TWiki::AccessControlException ();
+use TWiki::Meta;
+use TWiki::Time;
+use TWiki::AccessControlException;
 
 use vars qw( $STORE_FORMAT_VERSION );
 
@@ -62,7 +62,7 @@ BEGIN {
 
 =pod
 
----++ ClassMethod new()
+---++ ClassMethod new($session)
 
 Construct a Store module, linking in the chosen sub-implementation.
 
@@ -70,11 +70,7 @@ Construct a Store module, linking in the chosen sub-implementation.
 
 sub new {
     my ( $class, $session ) = @_;
-    ASSERT($session->isa('TWiki')) if DEBUG;
-
-    my $this = bless( {}, $class );
-
-    $this->{session} = $session;
+    my $this = bless( { session => $session }, $class );
 
     $this->{IMPL} = 'TWiki::Store::'.$TWiki::cfg{StoreImpl};
     eval 'use '.$this->{IMPL};
@@ -85,20 +81,20 @@ sub new {
     return $this;
 }
 
-=pod
+=begin twiki
 
----++ ObjectMethod finish
-
-Complete processing after the client's HTTP request has been responded
-to.
-   1 breaking circular references to allow garbage collection in persistent
-     environments
+---++ ObjectMethod finish()
+Break circular references.
 
 =cut
 
+# Note to developers; please undef *all* fields in the object explicitly,
+# whether they are references or not. That way this method is "golden
+# documentation" of the live fields in the object.
 sub finish {
     my $this = shift;
-    $this->{IMPL}->finish();
+    undef $this->{IMPL};
+    undef $this->{session};
 }
 
 # PRIVATE
@@ -133,7 +129,6 @@ TWiki::Meta object.  (The topic text is, as usual, just a string.)
 
 sub readTopic {
     my( $this, $user, $web, $topic, $version ) = @_;
-    ASSERT($this->isa('TWiki::Store')) if DEBUG;
     $web =~ s#\.#/#go;
 
     if (defined $version) {
@@ -147,8 +142,8 @@ sub readTopic {
 
     # Override meta with that blended from pub.
     if ($TWiki::cfg{AutoAttachPubFiles} &&
-        $web eq $this->{session}{webName} && # only check the currently requested topic
-        $topic eq $this->{session}{topicName}) {
+        $web eq $this->{session}->{webName} && # only check the currently requested topic
+        $topic eq $this->{session}->{topicName}) {
 
       my @knownAttachments = $meta->find('FILEATTACHMENT');
       my @attachmentsFoundInPub = _findAttachments($this, $web, $topic, \@knownAttachments);
@@ -249,7 +244,6 @@ $web and $topic _must_ be untainted.
 
 sub readTopicRaw {
     my( $this, $user, $web, $topic, $version ) = @_;
-    ASSERT($this->isa('TWiki::Store')) if DEBUG;
     $web =~ s#\.#/#go;
 
     # test if topic contains a webName to override $web
@@ -295,7 +289,6 @@ All parameters must be defined, and must be untainted.
 sub moveAttachment {
     my( $this, $oldWeb, $oldTopic, $oldAttachment,
         $newWeb, $newTopic, $newAttachment, $user ) = @_;
-    ASSERT($this->isa('TWiki::Store')) if DEBUG;
     my $users = $this->{session}->{users};
 
     $this->lockTopic( $user, $oldWeb, $oldTopic );
@@ -377,7 +370,6 @@ Permissions are checked for the user name passed in.
 
 sub getAttachmentStream {
     my ( $this, $user, $web, $topic, $att ) = @_;
-    ASSERT($this->isa('TWiki::Store')) if DEBUG;
 
     if( $user &&
           !$this->{session}->{security}->checkAccessPermission
@@ -403,7 +395,6 @@ returns @($attachmentName => [stat]) for any given web, topic
 sub getAttachmentList {
     my( $this, $web, $topic ) = @_;
 
-    ASSERT($this->isa('TWiki::Store')) if DEBUG;
     my $handler = _getHandler( $this, $web, $topic );
     return $handler->getAttachmentList($web, $topic);
 }
@@ -419,7 +410,6 @@ Determine if the attachment already exists on the given topic
 sub attachmentExists {
     my( $this, $web, $topic, $att ) = @_;
 
-    ASSERT($this->isa('TWiki::Store')) if DEBUG;
     my $handler = _getHandler( $this, $web, $topic, $att );
     return $handler->storedDataExists();
 }
@@ -449,7 +439,6 @@ All parameters must be defined and must be untainted.
 
 sub moveTopic {
     my( $this, $oldWeb, $oldTopic, $newWeb, $newTopic, $user ) = @_;
-    ASSERT($this->isa('TWiki::Store')) if DEBUG;
 
     my $handler = _getHandler( $this, $oldWeb, $oldTopic, '' );
     my $rev = $handler->numRevisions();
@@ -524,7 +513,6 @@ All parrameters must be defined and must be untainted.
 
 sub moveWeb {
     my( $this, $oldWeb, $newWeb, $user ) = @_;
-    ASSERT($this->isa('TWiki::Store')) if DEBUG;
 
     $oldWeb =~ s/\./\//go;
     $newWeb =~ s/\./\//go;
@@ -585,7 +573,6 @@ If $theRev is not given, the most recent rev is assumed.
 sub readAttachment {
     my ( $this, $user, $web, $topic, $attachment, $theRev ) = @_;
 
-    ASSERT($this->isa('TWiki::Store')) if DEBUG;
 
     if( $user &&
           !$this->{session}->{security}->checkAccessPermission
@@ -613,7 +600,6 @@ WORKS FOR ATTACHMENTS AS WELL AS TOPICS
 
 sub getRevisionNumber {
     my( $this, $web, $topic, $attachment ) = @_;
-    ASSERT($this->isa('TWiki::Store')) if DEBUG;
 
     $attachment = '' unless $attachment;
 
@@ -653,7 +639,6 @@ Return reference to an array of [ diffType, $right, $left ]
 
 sub getRevisionDiff {
     my( $this, $user, $web, $topic, $rev1, $rev2, $contextLines ) = @_;
-    ASSERT($this->isa('TWiki::Store')) if DEBUG;
     ASSERT(defined($contextLines)) if DEBUG;
     if( $user ) {
         my $r1;
@@ -719,7 +704,6 @@ coming from meta and Store revision information being out of step.
 
 sub getRevisionInfo {
     my( $this, $web, $topic, $rev, $attachment ) = @_;
-    ASSERT($this->isa('TWiki::Store')) if DEBUG;
 
     $rev ||= 0;
 
@@ -836,7 +820,6 @@ Save a new revision of the topic, calling plugins handlers as appropriate.
 
 sub saveTopic {
     my( $this, $user, $web, $topic, $text, $meta, $options ) = @_;
-    ASSERT($this->isa('TWiki::Store')) if DEBUG;
     ASSERT($user) if DEBUG;
     $web =~ s#\.#/#go;
     $meta = _removeAutoAttachmentsFromMeta( $this, $meta );
@@ -910,6 +893,7 @@ sub saveTopic {
 | =filepath= | Client path to file |
 | =filesize= | Size of uploaded data |
 | =filedate= | Date |
+| =tmpFilename= | Pathname of the server file the stream is attached to. Required if stream is set. |
 
 Saves a new revision of the attachment, invoking plugin handlers as
 appropriate.
@@ -920,7 +904,6 @@ If file is not set, this is a properties-only save.
 
 sub saveAttachment {
     my( $this, $web, $topic, $attachment, $user, $opts ) = @_;
-    ASSERT($this->isa('TWiki::Store')) if DEBUG;
     ASSERT(defined($opts)) if DEBUG;
     my $action;
     my $plugins = $this->{session}->{plugins};
@@ -947,6 +930,7 @@ sub saveAttachment {
               throw Error::Simple('Could not open '.$opts->{file} );
             binmode($opts->{stream}) ||
               throw Error::Simple( $opts->{file}.' binmode failed: '.$! );
+            $opts->{tmpFilename} = $opts->{file};
         }
         if ( $opts->{stream} ) {
             $action = 'upload';
@@ -954,38 +938,27 @@ sub saveAttachment {
             $attrs = {
                 attachment => $attachment,
                 stream => $opts->{stream},
-                user => $user
-#                user => $users->webDotWikiName($user)
+                tmpFilename => $opts->{tmpFilename},
+                user => $user,
+#                user => $users->webDotWikiName($user),
                };
             $attrs->{comment} = $opts->{comment}
               if (defined($opts->{comment}));
 
             my $handler = _getHandler( $this, $web, $topic, $attachment );
 
-            my $tmpFile;
-
             if( $plugins->haveHandlerFor( 'beforeAttachmentSaveHandler' )) {
-                # SMELL: legacy spec of beforeAttachmentSaveHandler requires
-                # a local copy of the stream. This could be a problem for
-                # very big data files.
-                use File::Temp;
-                my $fh;
-                # Note: do *not* rely on UNLINK => 1, because in a mod_perl
-                # context the destructor may not be called for a *long* time.
-                # Call tempfile in a list context so that file does not get
-                # deleted when closed.
-                ( $fh, $tmpFile ) = File::Temp::tempfile();
-                binmode( $fh );
-                # transfer 512KB blocks
-                my $transfer;
-                my $r;
-                while( $r = sysread( $opts->{stream}, $transfer, 0x80000 )) {
-                    syswrite( $fh, $transfer, $r );
+                # Because of the way CGI works, the stream is actually attached
+                # to a file that is already on disc. So all we need to do
+                # is determine that filename, close the stream, process the
+                # upload and then reopen the stream on the resultant file.
+                close( $opts->{stream} );
+                if (!defined($attrs->{tmpFilename})) {
+                    throw Error::Simple(
+                        "Cannot call beforeAttachmentSaveHandler; CGI did not provide a temporary file name");
                 }
-                close( $fh );
-                $attrs->{tmpFilename} = $tmpFile;
                 $plugins->beforeAttachmentSaveHandler( $attrs, $topic, $web );
-                open( $opts->{stream}, "<$tmpFile" );
+                open( $opts->{stream}, "<$attrs->{tmpFilename}" );
                 binmode( $opts->{stream} );
             }
             my $error;
@@ -996,8 +969,6 @@ sub saveAttachment {
             } catch Error::Simple with {
                 $error = shift;
             };
-
-            unlink( $tmpFile ) if( $tmpFile && -e $tmpFile );
 
             if( $plugins->haveHandlerFor( 'afterAttachmentSaveHandler' )) {
                 $plugins->afterAttachmentSaveHandler( $attrs, $topic, $web,
@@ -1013,17 +984,15 @@ sub saveAttachment {
             $attrs->{path} = $opts->{filepath} if (defined($opts->{filepath}));
             $attrs->{size} = $opts->{filesize} if (defined($opts->{filesize}));
             $attrs->{date} = $opts->{filedate} if (defined($opts->{filedate}));
-            $attrs->{attr} = ( $opts->{hide} ) ? 'h' : '';
-
-            $meta->putKeyed( 'FILEATTACHMENT', $attrs );
         } else {
+            # Property change
             $action = 'save';
             $attrs = $meta->get( 'FILEATTACHMENT', $attachment );
             $attrs->{name} = $attachment;
-            $attrs->{attr} = ( $opts->{hide} ) ? 'h' : '';
             $attrs->{comment} = $opts->{comment} if (defined($opts->{comment}));
-            $meta->putKeyed( 'FILEATTACHMENT', $attrs );
         }
+        $attrs->{attr} = ( $opts->{hide} ) ? 'h' : '';
+        $meta->putKeyed( 'FILEATTACHMENT', $attrs );
 
         if( $opts->{createlink} ) {
             $text .= $this->{session}->{attach}->getAttachmentLink(
@@ -1232,7 +1201,6 @@ _note_ the locks used when a topic is edited; those are Leases
 
 sub lockTopic {
     my ( $this, $locker, $web, $topic ) = @_;
-    ASSERT($this->isa('TWiki::Store')) if DEBUG;
     ASSERT($web && $topic) if DEBUG;
 
     my $handler = _getHandler( $this, $web, $topic );
@@ -1277,7 +1245,6 @@ _note_ the locks used when a topic is edited; those are Leases
 
 sub unlockTopic {
     my ( $this, $user, $web, $topic ) = @_;
-    ASSERT($this->isa('TWiki::Store')) if DEBUG;
 
     my $handler = _getHandler( $this, $web, $topic );
     $handler->setLock( 0, $user );
@@ -1296,7 +1263,6 @@ A web _has_ to have a home topic to be a web.
 
 sub webExists {
     my( $this, $web ) = @_;
-    ASSERT($this->isa('TWiki::Store')) if DEBUG;
     $web =~ s#\.#/#go;
 
     return 0 unless defined $web;
@@ -1317,7 +1283,6 @@ Test if topic exists
 sub topicExists {
     my( $this, $web, $topic ) = @_;
     $web =~ s#\.#/#go;
-    ASSERT($this->isa('TWiki::Store')) if DEBUG;
     ASSERT(defined($topic)) if DEBUG;
 
     return 0 unless $topic;
@@ -1339,7 +1304,6 @@ sub topicExists {
 #
 sub extractMetaData {
     my( $this, $meta, $rtext ) = @_;
-    ASSERT($this->isa('TWiki::Store')) if DEBUG;
     ASSERT(defined($$rtext)) if DEBUG;
     my $users = $this->{session}->{users};
 
@@ -1414,7 +1378,6 @@ of use by Render.pm.
 
 sub getTopicParent {
     my( $this, $web, $topic ) = @_;
-    ASSERT($this->isa('TWiki::Store')) if DEBUG;
     ASSERT(defined($web)) if DEBUG;
     ASSERT(defined($topic)) if DEBUG;
 
@@ -1471,7 +1434,6 @@ order.
 
 sub eachChange {
     my ( $this, $web, $time ) = @_;
-    ASSERT($this->isa('TWiki::Store')) if DEBUG;
     $web =~ s#\.#/#go;
 
     my $handler = _getHandler( $this, $web );
@@ -1519,7 +1481,6 @@ Return a topic list, e.g. =( 'WebChanges',  'WebHome', 'WebIndex', 'WebNotify' )
 
 sub getTopicNames {
     my( $this, $web ) = @_ ;
-    ASSERT($this->isa('TWiki::Store')) if DEBUG;
 
     $web =~ s#\.#/#go;
 
@@ -1546,7 +1507,6 @@ sub-webs recursively.
 
 sub getListOfWebs {
     my( $this, $filter, $web ) = @_;
-    ASSERT($this->isa('TWiki::Store')) if DEBUG;
     $filter ||= '';
     $web ||= '';
     $web =~ s#\.#/#g;
@@ -1590,20 +1550,12 @@ sub _getSubWebs {
     my( $this, $web ) = @_ ;
 
     my $handler = _getHandler( $this, $web );
-    my @tmpList = $handler->getWebNames();
-    # filter only those webs that meet the webExists criteria
-    my @webList;
+    my @webList = $handler->getWebNames();
     if( $web ) {
-        # sub-web
-        @webList = sort
-          grep { $this->webExists( $_ ) } # filter non-web dirs
-            map { $web.'/'.$_ }           # add hierarchical path
-              @tmpList;
-    } else {
-        # root level (no parent web)
-        @webList = sort
-          grep { $this->webExists( $_ ) } # filter non-web dirs
-            @tmpList;
+        # sub-web, add hierarchical path
+        foreach (@webList) {
+            $_ = "$web/$_";
+        }
     }
 
     if( $TWiki::cfg{EnableHierarchicalWebs} ) {
@@ -1637,7 +1589,6 @@ the web preferences topic in the new web.
 
 sub createWeb {
     my ( $this, $user, $newWeb, $baseWeb, $opts ) = @_;
-    ASSERT($this->isa('TWiki::Store')) if DEBUG;
 
     unless( $baseWeb ) {
         # For a web to be a web, it has to have at least one topic
@@ -1711,10 +1662,6 @@ sub removeWeb {
 
 # STATIC Write a meta-data key=value pair
 # The encoding is reversed in _readKeyValues
-# SMELL: this uses a really bad escape encoding
-# 1. it doesn't handle all characters that need escaping.
-# 2. it's excessively noisy
-# 3. it's not a reversible encoding; \r's are lost
 sub _writeKeyValue {
     my( $key, $value ) = @_;
 
@@ -1813,7 +1760,6 @@ by annotating the text with meta informtion.
 
 sub getDebugText {
     my ( $this, $meta, $text ) = @_;
-    ASSERT($this->isa('TWiki::Store')) if DEBUG;
 
     return _writeMeta( $meta, $text );
 }
@@ -1831,7 +1777,6 @@ This method should be used to sanitise user-provided revision IDs.
 
 sub cleanUpRevID {
     my ( $this, $rev ) = @_;
-    ASSERT($this->isa('TWiki::Store')) if DEBUG;
 
     return 0 unless $rev;
 
@@ -1854,7 +1799,6 @@ SMELL: Does not fix up meta-data!
 
 sub copyTopic {
     my ( $this, $user, $fromWeb, $fromTopic, $toWeb, $toTopic ) = @_;
-    ASSERT($this->isa('TWiki::Store')) if DEBUG;
     $fromWeb =~ s#\.#/#go;
     $toWeb =~ s#\.#/#go;
 

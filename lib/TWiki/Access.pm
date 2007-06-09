@@ -35,22 +35,33 @@ sub MONITOR { 0 }
 
 =pod
 
----++ ClassMethod new()
+---++ ClassMethod new($session)
 
-Construct a new singleton object to manage the permissions
-database.
+Constructor.
 
 =cut
 
 sub new {
     my ( $class, $session ) = @_;
-    my $this = bless( {}, $class );
-    ASSERT($session->isa( 'TWiki')) if MONITOR;
-    $this->{session} = $session;
-
-    %{$this->{GROUPS}} = ();
+    my $this = bless( { session => $session }, $class );
 
     return $this;
+}
+
+=begin twiki
+
+---++ ObjectMethod finish()
+Break circular references.
+
+=cut
+
+# Note to developers; please undef *all* fields in the object explicitly,
+# whether they are references or not. That way this method is "golden
+# documentation" of the live fields in the object.
+sub finish {
+    my $this = shift;
+    undef $this->{failure};
+    undef $this->{session};
 }
 
 =pod
@@ -85,7 +96,6 @@ If the check fails, the reason can be recoveered using getReason.
 
 sub checkAccessPermission {
     my( $this, $mode, $user, $text, $meta, $topic, $web ) = @_;
-    ASSERT($this->isa( 'TWiki::Access')) if MONITOR;
 
     undef $this->{failure};
 

@@ -90,7 +90,7 @@ BEGIN {
 
 =pod
 
----++ ClassMethod new ($session, $impl)
+---++ ClassMethod new ($session)
 
 Construct the user management object
 
@@ -98,11 +98,8 @@ Construct the user management object
 
 sub new {
     my ( $class, $session ) = @_;
-    ASSERT($session->isa( 'TWiki')) if DEBUG;
-    my $this = bless( {}, $class );
+    my $this = bless( { session => $session }, $class );
 
-    $this->{session} = $session;
-    
     #correct the DefaultUserLogin if $TWiki::cfg{Register}{AllowLoginName} is off
     $TWiki::cfg{DefaultUserLogin} = $TWiki::cfg{DefaultUserWikiName} unless ($TWiki::cfg{Register}{AllowLoginName});
     $TWiki::cfg{AdminUserLogin} = $TWiki::cfg{AdminUserWikiName} unless ($TWiki::cfg{Register}{AllowLoginName});
@@ -110,7 +107,7 @@ sub new {
     $this->{loginManager} = TWiki::LoginManager::makeLoginManager( $session );
     # setup the cgi session, from a cookie or the url. this may return
     # the login, but even if it does, plugins will get the chance to override (in TWiki.pm)
-    $this->{remoteUser} = $this->{loginManager}->loadSession( $session->{remoteUser} );    
+    $this->{remoteUser} = $this->{loginManager}->loadSession( $session->{remoteUser} );
     $this->{remoteUser} = $TWiki::cfg{DefaultUserLogin} unless (defined($this->{remoteUser}));
 
     #making basemapping
@@ -134,10 +131,31 @@ sub new {
     $session->enterContext('registration_supported') if $this->supportsRegistration();
     $session->enterContext('registration_enabled') if $TWiki::cfg{Register}{EnableNewUserRegistration};
     $implUserMappingManager =~ /^TWiki::Users::(.*)$/;
-    
+
     return $this;
 }
 
+=begin twiki
+
+---++ ObjectMethod finish()
+Break circular references.
+
+=cut
+
+# Note to developers; please undef *all* fields in the object explicitly,
+# whether they are references or not. That way this method is "golden
+# documentation" of the live fields in the object.
+sub finish {
+    my $this = shift;
+
+    $this->{loginManager}->finish() if $this->{loginManager};
+    $this->{basemapping}->finish() if $this->{basemapping};
+    $this->{mapping}->finish() if $this->{mapping};
+    undef $this->{loginManager};
+    undef $this->{basemapping};
+    undef $this->{mapping};
+    undef $this->{session};
+}
 
 =pod
 
@@ -173,26 +191,6 @@ sub getMapping {
 	return $this->{basemapping} if ($this->{basemapping}->handlesUser($cUID, $login, $wikiname));
 	return $this->{mapping} if ($this->{mapping}->handlesUser($cUID, $login, $wikiname));
 	return $this->{mapping};#TODO: I think it should fall back to basemapping, but to do that I need to get even more clever :/
-}
-
-=pod
-
----++ ObjectMethod finish()
-
-Complete processing after the client's HTTP request has been responded
-to.
-   1 breaking circular references to allow garbage collection in persistent
-     environments
-   1 let more complex usermappers & password handlers close their connections
-
-=cut
-
-sub finish {
-    my $this = shift;
-    
-    $this->{loginManager}->finish();
-    $this->{mapping}->finish();
-    $this->{basemapping}->finish();
 }
 
 =pod

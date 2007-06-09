@@ -2,8 +2,9 @@
 require 5.006;
 
 package TWikiUnitTestsSuite;
-
 use base qw(Test::Unit::TestSuite);
+
+use strict;
 
 sub name { 'TWikiSuite' };
 
@@ -15,13 +16,13 @@ sub include_tests {
     my @list;
     opendir(DIR, ".") || die "Failed to open .";
     foreach my $i (sort readdir(DIR)) {
-        next if $i =~ /^EmptyTests/;
-        if ($i =~ /^Fn_[A-Z]+\.pm$/ ||
-              $i =~ /^.*Tests\.pm$/) {
+        next if $i =~ /^Empty/;
+        if ($i =~ /^Fn_[A-Z]+\.pm$/ || $i =~ /^.*Tests\.pm$/) {
             push(@list, $i);
         }
     }
     closedir(DIR);
+
     # Add standard extensions tests
     if ($ENV{TWIKI_HOME} && -e "$ENV{TWIKI_HOME}/tools/MANIFEST") {
         open(F, "$ENV{TWIKI_HOME}/tools/MANIFEST") || die $!;
@@ -34,8 +35,7 @@ sub include_tests {
             my $d = "../../$1/test/unit/$2";
             next unless (-e "$d/${2}Suite.pm");
             push(@INC, $d);
-            print STDERR "Added ${2}Suite\n";
-            $this->add_test("${2}Suite");
+            push(@list, "${2}Suite.pm");
         }
     }
     close(F);

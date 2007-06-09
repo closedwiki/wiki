@@ -30,13 +30,35 @@ Form.pm for how it is called. Subclasses should pass @_ on to this class.
 sub new {
     my $class = shift;
     my %attrs = @_;
+    ASSERT($attrs{session}) if DEBUG;
 
     $attrs{name} ||= '';
     $attrs{attributes} ||= '';
     $attrs{type} ||= ''; # default
     $attrs{size} =~ s/^\s*//;
     $attrs{size} =~ s/\s*$//;
+
     return bless(\%attrs, $class);
+}
+
+=begin twiki
+
+---++ ObjectMethod finish()
+Break circular references.
+
+=cut
+
+# Note to developers; please undef *all* fields in the object explicitly,
+# whether they are references or not. That way this method is "golden
+# documentation" of the live fields in the object.
+sub finish {
+    my $this = shift;
+
+    undef $this->{name};
+    undef $this->{attributes};
+    undef $this->{type};
+    undef $this->{size};
+    undef $this->{session};
 }
 
 =pod
