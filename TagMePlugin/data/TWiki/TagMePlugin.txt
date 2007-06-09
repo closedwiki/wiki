@@ -169,7 +169,7 @@ The list of skins can be appended, for instance: =tagme,corporate,pattern=.
 
 ---+++ Customizing the appearance
 If you customize your site you probably want to change overall appearance. You can find instructions how to do that - at least for default pattern skin - in [[%TWIKIWEB%.PatternSkinCssCookbook]]. %BR%
-The short summmary is:
+The short summary is:
    * Create an empty CSS file, for instance =sitestyle.css=
    * Copy the CSS styles for =tagmetags= (see below at [[%TOPIC%#ExampleStyle][Example styles used on twiki.org]]) into the file
    * Attach the file to [[%MAINWEB%.TWikiPreferences]]
