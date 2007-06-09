@@ -30,7 +30,7 @@
 
 %TMPL:DEF{"windowtitle"}%<title>%TMPL:P{"titleaction"}% <nop>%TOPIC%%TMPL:P{"titlesep"}%%WEB%%TMPL:P{"titlesep"}%<nop>%WIKITOOLNAME%</title>%TMPL:END%
 
-%TMPL:DEF{"twikistyle"}%%TMPL:INCLUDE{"css"}%%TMPL:END%
+%TMPL:DEF{"twikistyle"}%%TMPL:INCLUDE{"css"}%%TMPL:END%%TMPL:END%
 
 %TMPL:DEF{"head"}%<head>
 	%TMPL:P{"windowtitle"}%
@@ -138,8 +138,8 @@
 %TMPL:DEF{"login_actions"}%%IF{"context authenticated" then='%MAKETEXT{"Hello [_1]!" args="[[%WIKIUSERNAME%][%SPACEOUT{%WIKINAME%}%]]"}%%BR%%LOGOUT%' else='%LOGIN% %MAKETEXT{"or"}% [[%TWIKIWEB%.TWikiRegistration][%MAKETEXT{"Register"}%]]'}%%TMPL:END%
 
 %{ app-style page layout }%
-%{ optional inline CSS styles to be placed in body text: }%
-%TMPL:DEF{"bodystyle"}%%TMPL:END%
+%{ additional style }%
+%TMPL:DEF{"templatestyle"}%%TMPL:END%
 %{ title string in page: }%
 %TMPL:DEF{"pagetitle"}%%TMPL:END%
 %{ main application contents: }%
