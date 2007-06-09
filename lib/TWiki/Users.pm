@@ -366,10 +366,11 @@ Duplicates are removed from the list.
 =cut
 
 sub getEmails {
-    my( $this, $user ) = @_;
-	$this->ASSERT_IS_CANONICAL_USER_ID($user) if DEBUG;
+    my( $this, $cUID ) = @_;
+	$cUID = $this->getLegacycUID($cUID);
+	#$this->ASSERT_IS_CANONICAL_USER_ID($cUID) if DEBUG;
 
-    return $this->getMapping($user)->getEmails( $user );
+    return $this->getMapping($cUID)->getEmails( $cUID );
 }
 
 =pod
@@ -403,8 +404,9 @@ True if the user is an admin
 sub isAdmin {
     my( $this, $cUID ) = @_;
     my $isAdmin = 0;
-	$this->ASSERT_IS_CANONICAL_USER_ID($cUID) if DEBUG;
-
+	#$this->ASSERT_IS_CANONICAL_USER_ID($cUID) if DEBUG;
+	
+	$cUID = $this->getLegacycUID($cUID);
 
     my $mapping = $this->getMapping($cUID);
     my $otherMapping = ($mapping eq $this->{basemapping}) ? $this->{mapping} : $this->{basemapping};
@@ -418,9 +420,37 @@ sub isAdmin {
     }
 	
     return ($mapping->isAdmin( $cUID ) || $otherMapping->isAdmin( $othercUID ));
+}
 
+sub getLegacycUID {
+	my( $this, $cUID ) = @_;
+	
+	unless (($cUID =~ /^$this->{basemapping}->{mapping_id}/) ||
+					($cUID =~ /^$this->{mapping}->{mapping_id}/)) {
+		#legacy mode - cUID is not actually a new style cUIDList
+						
+		#its a web.wikiname (worst case)
+		my ($web, $topic) = $this->{session}->normalizeWebTopicName('', $cUID);
+	    my $cUIDList = $this->getMapping(undef, undef, $topic)->findUserByWikiName($topic);
+		if (scalar(@$cUIDList)) {
+    		$cUID = $cUIDList->[0];
+		} else {
+			#its a login (also works for basemapping rego agent
+			$cUID = $this->getMapping(undef, $cUID)->login2canonical($cUID);
+		}
+		
+		#its a wikinames
+#	    my $cUIDList = $this->getMapping(undef, undef, $cUID)->findUserByWikiName($cUID);
+#    	my $cUID = $cUIDList->[0]  if scalar(@$cUIDList);
+		#its a web.wikiname (worst case)
+#		my ($web, $topic) = $this->{session}->normalizeWebTopicName('', $cUID);
+#	    my $cUIDList = $this->getMapping(undef, undef, $topic)->findUserByWikiName($topic);
+#    	my $cUID = $cUIDList->[0]  if scalar(@$cUIDList);		
+	}
 
-#    return $this->getMapping($user)->isAdmin( $cUID );
+	$this->ASSERT_IS_CANONICAL_USER_ID($cUID) if DEBUG;
+	
+	return $cUID;
 }
 
 =pod
@@ -460,7 +490,7 @@ sub isInList {
 
 =pod
 
----++ ObjectMethod getLoginName($user) -> $string
+---++ ObjectMethod getLoginName($cUID) -> $string
 
 Get the login name of a user.
 
@@ -468,7 +498,8 @@ Get the login name of a user.
 
 sub getLoginName {
     my( $this, $cUID) = @_;
-	#$this->ASSERT_IS_CANONICAL_USER_ID($cUID) if DEBUG;
+#	$this->ASSERT_IS_CANONICAL_USER_ID($cUID) if DEBUG;
+	$cUID = $this->getLegacycUID($cUID);
 	
 	my $login = $this->getMapping($cUID)-> getLoginName($cUID) if ($this->getMapping($cUID));
     return $login || 'unknown';
@@ -485,11 +516,11 @@ Get the wikiname to display for a canonical user identifier.
 sub getWikiName {
     my ($this, $cUID ) = @_;
     ASSERT($cUID) if DEBUG;
-
     # CC commented this out because it was causing test failures in the
     # client tests when trying to view a topic where the history contains
     # a non-existant user.
-	#$this->ASSERT_IS_CANONICAL_USER_ID($cUID) if DEBUG;
+#	$this->ASSERT_IS_CANONICAL_USER_ID($cUID) if DEBUG;
+	$cUID = $this->getLegacycUID($cUID);
 
     my $wikiname = $this->getMapping($cUID)->getWikiName($cUID) if ($this->getMapping($cUID));
     return $wikiname || "UnknownUser";

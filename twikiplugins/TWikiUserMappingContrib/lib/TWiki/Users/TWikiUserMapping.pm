@@ -338,16 +338,23 @@ sub removeUser {
 =cut
 
 sub getWikiName {
-    my ($this, $user) = @_;
+    my ($this, $cUID) = @_;
+	
+	 ASSERT($cUID =~ /^$this->{mapping_id}/) if DEBUG;
 
-#    $user =~ s/^$this->{mapping_id}//e;
+	
+	my $wikiname;
+#    $cUID =~ s/^$this->{mapping_id}//;
     if( $TWiki::cfg{Register}{AllowLoginName} ) {
         _loadMapping( $this );
-        return $this->{U2W}->{$user} || _canonical2login( $this, $user );
+        $wikiname = $this->{U2W}->{$cUID}
     } else {
         # If the mapping isn't enabled there's no point in loading it
-        return _canonical2login( $this, $user );
     }
+	$wikiname = $wikiname || _canonical2login( $this, $cUID );
+#print STDERR "--------------------------------------cUID : $cUID => $wikiname\n";	
+    return $wikiname;
+ 
 }
 
 =pod
@@ -706,15 +713,13 @@ sub setEmails {
 
 =pod
 
----++ ClassMethod new ($session, $impl)
+---++ ObjectMethod mapper_getEmails ($user)
 
-Construct the user management object
+Only used if passwordManager->isManagingEmails= = =false
+(The emails are stored in the user topics.
 
 =cut
 
-# Called from TWiki::Users. See the documentation of the corresponding
-# method in that module for details.
-# Only used if =passwordManager->isManagingEmails= = =false=.
 sub mapper_getEmails {
     my( $this, $user ) = @_;
     
@@ -744,15 +749,13 @@ sub mapper_getEmails {
 
 =pod
 
----++ ClassMethod new ($session, $impl)
+---++ ClassMethod mapper_setEmails ($user, @emails)
 
-Construct the user management object
+Only used if =passwordManager->isManagingEmails= = =false=.
+(emails are stored in user topics
 
 =cut
 
-# Called from TWiki::Users. See the documentation of the corresponding
-# method in that module for details.
-# Only used if =passwordManager->isManagingEmails= = =false=.
 sub mapper_setEmails {
     my $this = shift;
     my $user = shift;

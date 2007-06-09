@@ -95,7 +95,7 @@ sub new {
 		TWikiContributor=>$this->{mapping_id}.'111',
 		TWikiRegistrationAgent=>$this->{mapping_id}.'222'
 	};
-    $this->{U2E} = {$this->{mapping_id}.'333'=>'not@home.org.au'};
+    $this->{U2E} = {$this->{mapping_id}.'333'=>$TWiki::cfg{WebMasterEmail}};
     $this->{U2P} = {$this->{mapping_id}.'333'=>$TWiki::cfg{Password}};
     
     
@@ -174,6 +174,11 @@ $wikiname = '' unless (defined($wikiname));
 return 1 if (defined($this->{U2L}{$cUID}));
 return 1 if (defined($this->{L2U}{$login}));
 return 1 if (defined($this->{W2U}{$wikiname}));
+
+#deal with legacy cUIDs
+return 1 if (defined($this->{L2U}{$cUID}));			#cUID stored is login
+return 1 if (defined($this->{W2U}{$cUID}));			#cUID stored is wikiname
+
 return 0;
 }
 
@@ -435,7 +440,7 @@ sub eachMembership {
 
 =pod
 
----++ ObjectMethod isAdmin( $user ) -> $boolean
+---++ ObjectMethod isAdmin( $cUID ) -> $boolean
 
 True if the user is an admin
    * is a member of the $TWiki::cfg{SuperAdminGroup}
@@ -443,12 +448,12 @@ True if the user is an admin
 =cut
 
 sub isAdmin {
-    my( $this, $user ) = @_;
+    my( $this, $cUID ) = @_;
     my $isAdmin = 0;
-	$this->ASSERT_IS_CANONICAL_USER_ID($user) if DEBUG;
+	$this->ASSERT_IS_CANONICAL_USER_ID($cUID) if DEBUG;
 
     my $sag = $TWiki::cfg{SuperAdminGroup};
-    $isAdmin = $this->isInGroup( $user, $sag );
+    $isAdmin = $this->isInGroup( $cUID, $sag );
 
     return $isAdmin;
 }

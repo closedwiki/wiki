@@ -802,7 +802,7 @@ sub test_resetPasswordOkay {
 
     $this->registerAccount();
     my $cUID = $this->{twiki}->{users}->getCanonicalUserID($this->{new_user_login});
-    $this->assert($this->{twiki}->{users}->userExists($cUID), "new user created");
+    $this->assert($this->{twiki}->{users}->userExists($cUID), " $cUID does not exist?");
     my $newPassU = '12345';
     my $oldPassU = 1;   #force set
     $this->assert($this->{twiki}->{users}->setPassword( $cUID, $newPassU, $oldPassU ));
@@ -1389,5 +1389,3 @@ sub test_resetEmailOkay {
 
 
 1;
-
-
