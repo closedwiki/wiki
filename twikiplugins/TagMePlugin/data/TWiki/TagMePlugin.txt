@@ -162,11 +162,13 @@ To show the tag interface at the top of the page directly below the breadcrumb (
 
 This template is in fact a 'skin' template. To enable it, write in [[%MAINWEB%.TWikiPreferences]]:
 <pre>
-   * Set S<nop>KIN = tagme, %SKIN%
+   * Set S<nop>KIN = tagme,pattern
 </pre>
+The list of skins can be appended, for instance: =tagme,corporate,pattern=.
+
 
 ---+++ Customizing the appearance
-If you customize your site you probably want to change overall appearance. You can find instructions how to do that - at least for default pattern skin - in [[PatternSkinCssCookbook]]. %BR%
+If you customize your site you probably want to change overall appearance. You can find instructions how to do that - at least for default pattern skin - in [[%TWIKIWEB%.PatternSkinCssCookbook]]. %BR%
 The short summmary is:
    * Create an empty CSS file, for instance =sitestyle.css=
    * Copy the CSS styles for =tagmetags= (see below at [[%TOPIC%#ExampleStyle][Example styles used on twiki.org]]) into the file
