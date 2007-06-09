@@ -32,7 +32,7 @@ pre {
 %IF{ "$ USERLAYOUTURL" then="@import url('%USERLAYOUTURL%');"}%
 %IF{ "$ USERSTYLEURL"  then="@import url('%USERSTYLEURL%');"}%
 %IF{ "$ USERCOLORSURL" then="@import url('%USERCOLORSURL%');"}%
-</style>%TMPL:END%
+</style>%TMPL:P{"templatestyle"}%%TMPL:END%
 
 
 %TMPL:DEF{"stylesprint"}%<style type="text/css" media="all">
