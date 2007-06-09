@@ -2,7 +2,7 @@
 %IF{"defined Name and $ Name != ''" then="---+!! Hello %URLPARAM{"Name"}%!" else="---+!! Form Plugin"}%
 *Lets you create simple and advanced web forms.*
 
-*Note:* for TWiki versions before 4.2, form POSTs are converted to GETs.
+*Note:* for TWiki versions before 4.2, form POSTs are converted to GETs. This means that all form values will be visible in the browser url, and that there is a limit to the amount of data sent. TWiki 4.2 is strongly recommended.
 
 %TOC%
 	
@@ -11,7 +11,7 @@
       * Add input fields, textareas, dropdown select boxes, checkboxes, radio buttons
       * Set preselected values
    * Create a uniform layout
-   * Call TWiki scripts or custom scripts
+   * Call TWiki scripts (view, edit, upload, save) or custom scripts
    * Use entered field values as variables
    * Validate the form before it performs its action
       * Usability tested error feedback
@@ -72,6 +72,7 @@ buttonlabel="Submit"
    name="..."
    action="..."
    method="..."
+   validate="..."
    topic="..."
    web="..."
    anchor="..."
@@ -126,7 +127,8 @@ Most parameters are optional. See below for a detailed explanation.
 | =name=      | The name of the form. Must be unique. | required |- | =name="personaldata"= |
 | =action=    | Action of the form. For example: %BR%\
  =view=, =viewauth=, =edit=, =save=, =%<nop>SCRIPTURL{view}%/%<nop>WEB%/WebHome= | required |- | =action="viewauth"= |
-| =topic=     | Only if =action= is set to =view=, =viewauth=, =edit=, of =save=: the target topic of the action. =Webname.TopicName= syntax may be used. |- |the current topic | =topic="%<nop>WEB%.WebHome"= |
+| =validate=  | Set to ="off=" to disable form validation; overrules any FORMELEMENT =validate= parameters. |  |validation is enabled | =validate="off"= | 
+| =topic=     | Only if =action= is set to =view=, =viewauth=, =edit=, =upload= or =save=: the target topic of the action. =Webname.TopicName= syntax may be used. |- |the current topic | =topic="%<nop>WEB%.WebHome"= |
 | =web=     | Only if =action= is set to =view=, =viewauth=, =edit=, of =save=: the target web of the action. |- |the current web | =web="Main"= |
 | =anchor=  | The anchor link the form should be linked to after submission. If not set the default notification anchor link is used to directly point to possible problems. |- |=FormPluginNotification= | =anchor="MyForm"= |
 | =method=    | GET or POST ([[http://www.cs.tut.fi/~jkorpela/forms/methods.html][What's the difference?]]) |- | =GET= | =method="POST"= |
@@ -154,6 +156,7 @@ Use =%<nop>URLPARAM{"element_name"}%= to retrieve the value of a submitted form 
 | =type=      | Type of the element: \
  %BB% =text= - creates a textfield; use =size= and =maxlength= to set the length \
  %BB% =password= - creates a password textfield; otherwise same as =text= \
+ %BB% =upload= - creates an upload field; when used with parameter =type="upload"= and STARTFORM parameter =action="upload"=, set the =name= to ="filepath"= \
  %BB% =textarea= - creates a textarea; use =rows= and =cols= to set the size \
  %BB% =select= - creates a variable sized selection box; use =size= to set the visible number of items \
  %BB% =selectmulti= - same as =select= with multiple items selectable \
@@ -301,10 +304,60 @@ This allows to use entered field values as variables. For example:
 See =FORMELEMENT:validate= for usage instructions. %BR%
 Use =%<nop>FORMSTATUS{}%= to retrieve the status of the form; see [[#FormStatus][FORMSTATUS]].
 
-
-      
 ---++ Examples
 See [[FormPluginExamples]]
+
+
+---+++ Upload form
+A TWiki upload form to attach a file to a topic should contain these parameters:
+   * STARTFORM param =action="upload"=
+   * STARTFORM param =topic= and =web=, or use the more compact =topic="Web.TopicName"= format
+   * STARTFORM param =method="POST"=
+   * STARTFORM param =validate="off"= - form validation does not work with file upload
+   * FORMELEMENT param =name="filepath"=
+   
+Example:
+<verbatim>
+%STARTFORM{
+name="uploadform"
+action="upload"
+topic="%WEB%.%TOPIC%"
+method="POST"
+validate="off"
+}%
+%FORMELEMENT{
+type="upload"
+name="filepath"
+title="Attach new file"
+size="70"
+}%
+%FORMELEMENT{
+type="submit"
+buttonlabel="Upload file"
+}%
+%ENDFORM%
+</verbatim>
+
+Optionally additional attachment parameters can be set with these fields:
+<verbatim>
+%FORMELEMENT{
+name="filecomment"
+type="text"
+title="Comment"
+}%
+%FORMELEMENT{
+name="hidefile"
+type="checkbox"
+options="on=Do not show attachment in table"
+}%
+%FORMELEMENT{
+name="createlink"
+type="checkbox"
+options="on=Create a link to the attached file"
+}%
+</verbatim>
+
+See the working example in [[FormPluginExamples#Upload][FormPluginExamples:Upload]]
 
 
 
@@ -349,16 +402,19 @@ Plugin settings are stored as preferences variables. To reference a plugin setti
 
 ---++ Plugin Installation Instructions
 
-!FormPlugin requires TWiki 4.2.
+TWiki 4.2 is strongly recommended.
 
 __Note:__ You do not need to install anything on the browser to use this plugin. The following instructions are for the administrator who installs the plugin on the server where TWiki is running. 
 
    * Download the ZIP file from the Plugin web (see below)
    * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
      | *File:* | *Description:* |
-     | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
-     | ==data/TWiki/%TOPIC%.txt,v== | Plugin topic repository |
-     | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
+     | ==data/TWiki/FormPlugin.txt== | Plugin topic |
+     | ==data/TWiki/FormPluginExamples.txt== | Working examples |
+     | ==lib/TWiki/Plugins/FormPlugin.pm== | Plugin Perl module |
+     | ==lib/TWiki/Plugins/FormPlugin/Validate.pm== | Plugin Perl module for form validation |
+     | ==pub/TWiki/FormPlugin/formplugin.css== | Style Sheet  |
+     | ==pub/TWiki/FormPlugin/error.gif== | Error icon  |
 
 
 
@@ -366,8 +422,9 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 
 |  Plugin Author: | TWiki:Main.ArthurClemens |
 |  Other authors: | =Validate.pm=, originally =CGI::Validate= by Zenin <zenin@archive.rhps.org> aka Byron Brummer <byron@omix.com>. Copyright (c) 1997,1998 OMIX, Inc. All rights reserved. Use is granted under the same terms of Perl. |
-|  Plugin Version: | 19 May 2007  |
+|  Plugin Version: | 09 Jun 2007 (V1.0.5)  |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  09 Jun 2007 | 1.0.5 Added upload parameter; option to turn off form validation; custom javascript has been replaced by code in =pub/TWiki/TWikiJavascripts/twikiForm.js=; added Flickr example. |
 |  27 May 2007 | 1.0.4 Update javascript calls to new =twikiForm.js=. |
 |  19 May 2007 | 1.0.3 Added element attributes: =focus=, =disabled=, =readonly=; Javascript parameters =beforeclick=, =onFocus=, =onBlur=, =onMouseOver=, =onMouseOut=, =onSelect=, =onChange=, =onClick=, =onKeyUp=; form parameter =onSubmit=. Fallback for form POSTs and TWiki versions earlier than 4.2: POST requests are converted to GET requests. |
 |  15 May 2007 | 1.0.2 Added form attribute =elementformat=; changed parameter names for consistency: =class= to =cssclass=, =elementformat= to =fieldformat=.  |

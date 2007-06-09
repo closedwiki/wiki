@@ -1,7 +1,7 @@
 # Plugin for TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
-# Copyright (c) 2006 by Meredith Lesly, Kenneth Lavrsen
-# and TWiki Contributors. All Rights Reserved. TWiki Contributors
+# Copyright (c) 2007 by Arthur Clemens
+# All Rights Reserved. TWiki Contributors
 # are listed in the AUTHORS file in the root of this distribution.
 # NOTE: Please extend that file, not this notice.
 #
@@ -38,7 +38,7 @@ use vars
 # status of the plugin. It is used by the build automation tools, so
 # you should leave it alone.
 $VERSION = '$Rev: 11069$';
-$RELEASE = '1.0.';
+$RELEASE = '1.0.5';
 
 # Name of this Plugin, only used in this module
 $pluginName = 'FormPlugin';
@@ -318,7 +318,7 @@ sub _startForm {
 
 # do not delete param $FORM_SUBMIT_TAG as we might want to know if this form is validated
             my $method = _method( $params->{'method'} );
-            if ( $method eq 'POST' && $TWiki::Plugins::VERSION < 1.13 ) {
+            if ( $method eq 'POST' && $TWiki::Plugins::VERSION < 1.2 ) {
 
                 # on previous versions redirecting a POST does not work
                 # because the request is changed to a GET
@@ -330,7 +330,7 @@ sub _startForm {
                 # delete original POST data
                 $query->delete_all();
                 TWiki::Func::writeDebug(
-"FormPlugin - POST and Plugins::VERSION < 1.13 -- converting all key-values to a parameter string: actionurl="
+"FormPlugin - POST and Plugins::VERSION < 1.2 -- converting all key-values to a parameter string: actionurl="
                       . $actionurl )
                   if $debug;
                 TWiki::Func::redirectCgiQuery( undef, $actionurl );
@@ -498,7 +498,6 @@ sub _displayForm {
     my $formcssclass = $params->{'formcssclass'} || '';
     my $webParam     = $params->{'web'};
     my $topicParam   = $params->{'topic'};
-    my $anchor       = $params->{'anchor'} || $NOTIFICATION_ANCHOR_NAME;
 
     # store for element rendering
     $currentForm{'name'} = $name;
@@ -513,12 +512,18 @@ sub _displayForm {
         $topic = $currentTopic;
     }
 
+    my $anchor = $params->{'anchor'} || $NOTIFICATION_ANCHOR_NAME;
+    $anchor = undef if !$topicParam;
+    
     my $actionUrl = '';
     if ( $actionParam eq 'save' ) {
         $actionUrl = "%SCRIPTURL{save}%/$web/$topic";
     }
     elsif ( $actionParam eq 'edit' ) {
         $actionUrl = "%SCRIPTURL{edit}%/$web/$topic";
+    }
+    elsif ( $actionParam eq 'upload' ) {
+        $actionUrl = "%SCRIPTURL{upload}%/$web/$topic";
     }
     elsif ( $actionParam eq 'view' ) {
         $actionUrl = "%SCRIPTURL{view}%/$web/$topic";
@@ -539,11 +544,14 @@ sub _displayForm {
     $startFormParameters{'-name'}     = $name;
     $startFormParameters{'-method'}   = $method;
     $startFormParameters{'-onSubmit'} = $onSubmit if $onSubmit;
-    $startFormParameters{'-action'} =
-      $currentUrl;    # first post to current topic and retrieve dynamic values
+    
+    my $disableValidation = $params->{'validate'} eq 'off';
+    # with validation (default on), first post to current topic and retrieve dynamic values
+    $startFormParameters{'-action'} = $disableValidation ? $actionUrl : $currentUrl;
 
-    my $formStart = CGI::start_form(%startFormParameters);
-
+    # multi-part is needed for upload. Why not always use it?
+    #my $formStart = CGI::start_form(%startFormParameters);
+    my $formStart = CGI::start_multipart_form(%startFormParameters);
     my $formClassAttr = $formcssclass ? " class=\"$formcssclass\"" : '';
     $formStart .= "<div$formClassAttr>\n<!--FormPlugin form start-->";
 
@@ -789,6 +797,9 @@ sub _getFormElementHtml {
           _getPasswordFieldHtml( $session, $name, $value, $size, $maxlength,
             %extraAttributes );
     }
+    elsif ( $type eq 'upload' ) {
+        $element = _getUploadHtml( $session, $name, 'starting value', $size, $maxlength, %extraAttributes );
+    }
     elsif ( $type eq 'submit' ) {
         $element =
           _getSubmitButtonHtml( $session, $name, $value, %extraAttributes );
@@ -906,6 +917,17 @@ sub _getPasswordFieldHtml {
 
     my %attributes = _textfieldAttributes(@_);
     return CGI::password_field(%attributes);
+}
+
+=pod
+
+=cut
+
+sub _getUploadHtml {
+    my ( $session, $name, $value, $size, $maxlength, %extraAttributes ) = @_;
+
+    my %attributes = _textfieldAttributes(@_);
+	return CGI::filefield(%attributes);
 }
 
 =pod
