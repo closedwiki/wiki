@@ -154,7 +154,43 @@ The Plugin handles a =%<nop>TAGME{}%= variable that performs different actions. 
 	  | =tag="..."= | Name of tag | (required) |
 	  | =nostatus="on"= | Turn off status text shown when a tag is removed or voted on | (show status text) |
 
----++ CSS Styles
+
+#TagsOnPage
+---++ How to put tags on every page
+
+To show the tag interface at the top of the page directly below the breadcrumb (like on twiki.org), use the default template =view.tagme.tmpl= in the templates directory.
+
+This template is in fact a 'skin' template. To enable it, write in [[%MAINWEB%.TWikiPreferences]]:
+<pre>
+   * Set S<nop>KIN = tagme, %SKIN%
+</pre>
+
+---+++ Customizing the appearance
+If you customize your site you probably want to change overall appearance. You can find instructions how to do that - at least for default pattern skin - in [[PatternSkinCssCookbook]]. %BR%
+The short summmary is:
+   * Create an empty CSS file, for instance =sitestyle.css=
+   * Copy the CSS styles for =tagmetags= (see below at [[%TOPIC%#ExampleStyle][Example styles used on twiki.org]]) into the file
+   * Attach the file to [[%MAINWEB%.TWikiPreferences]]
+   * In [[%MAINWEB%.TWikiPreferences]], write: 
+   <verbatim>
+   * Set USERSTYLEURL = %PUBURL%/%MAINWEB%/TWikiPreferences/sitestyle.css
+   </verbatim>
+
+---+++ Other places for the tag interface
+To show the tags in the top bar, edit [[%TWIKIWEB%.WebTopBar]] and copy:
+<verbatim>
+<div class="tagmetags">
+Tags: %TAGME{ tpaction="%URLPARAM{tpaction}%" web="%WEB%" tag="%URLPARAM{tag}%" }%, [[TWiki.TagMeViewAllTags][view all tags]]
+</div>
+</verbatim>
+
+To show the tags at the bottom of every page, write in [[%MAINWEB%.TWikiPreferences]]:
+<verbatim>
+ * Set WEBCOPYRIGHT = Tags: %TAGME{ tpaction="%URLPARAM{tpaction}%" web="%WEB%" tag="%URLPARAM{tag}%" }%, [[TWiki.TagMeViewAllTags][view all tags]] %BR% Copyright &copy; 1999-%GMTIME{"$year"}% by... etc
+</verbatim>
+
+---++ Tag styles
+---+++ CSS Styles
 !TagMePlugin writes the following CSS styles:
 
 | *Class*             | *Used where* |
@@ -179,6 +215,7 @@ If users are allowed to use spaces in their tag names (when =NORMALIZE_TAG_INPUT
 }
 </verbatim>
 
+#ExampleStyle
 ---+++ Example styles used on twiki.org
 To show the 'tags shown on a topic': 
 
@@ -210,6 +247,7 @@ CSS styles:
 	color:#8E9195; /* gray for non-links */
 }
 </verbatim>
+
 
 #PluginSettings
 ---++ Plugin Settings
@@ -260,11 +298,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 			* Determine who will be allowed to rename and delete tags.
 			* For international character support: set =NORMALIZE_TAG_INPUT= to 0.
 			* To allow any user input as tag name also set =NORMALIZE_TAG_INPUT= to 0.
-		* Add the =%<nop>TAGME{}%= variable to the page decoration. It should be exactly of the form =%<nop>TAGME{ tpaction="%<nop>URLPARAM{tpaction}%" tag="%<nop>URLPARAM{tag}%" }%=. This should be placed somewhere so as to be rendered for every topic.
-			* For the tag interface to appear at the top of the page directly below the breadcrumb (like on twiki.org), employ the simplest and most upgrade-resilient technique: modify your [[Main.TWikiPreferences]] and add the =tagme= template to your skin, e.g.:<br /><code>   * Set S<nop>KIN = tagme, %SKIN%</code>
-			* or, add the =%<nop>TAGME{}%= fragment somewhere in the skin's topic templates, such as the %TWIKIWEB%.WebTopBar. 
-			* or, another good place is =WEBCOPYRIGHT= since it gets displayed by every topic view. Example setting in the [[%MAINWEB%.TWikiPreferences]]:<br />
-				<code> * Set WEBCOPYRIGHT = Tags: %<nop>TAGME{ tpaction="%<nop>URLPARAM{tpaction}%" tag="%<nop>URLPARAM{tag}%" }%%<nop>BR% Copyright &copy; 1999-%GMTIME{"$year"}% by...</code>
+		* To put the tags interface on every page, see the instructions above at [[%TOPIC%#TagsOnPage][How to put tags on every page]]
 	* Test if the installation was successful:
 		* Go to [[TagMeCreateNewTag]] and add a tag
 
