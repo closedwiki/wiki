@@ -16,7 +16,7 @@
 <tr bgcolor="#EAE9DE"><td style="width:100%;"></td></tr>
 <tr bgcolor="#F6F4EB"><td style="width:100%;">
 Show topics tagged with 
-<select name="tag" multiple="multiple" size="4">
+<select class="twikiSelect" name="tag" multiple="multiple" size="4">
 %TAGME{ tpaction="showalltags" format="<option $marker>$tag</option>" separator="$n" selection="%URLPARAM{"tag" multiple="on" separator=","}%" }% </select>
 &nbsp; by
 <input type="radio" name="by" id="byall" value="all" %CALC{"$IF($EXACT(%URLPARAM{by}%,me), , checked=\"checked\")"}% /><label for="byall">all users</label> <input type="radio" name="by" id="byme" value="me" %CALC{"$IF($EXACT(%URLPARAM{by}%,me), checked=\"checked\")"}% /><label for="byme">me only</label> &nbsp; <input type="submit" class="twikiButton" value="Go" /> </td>

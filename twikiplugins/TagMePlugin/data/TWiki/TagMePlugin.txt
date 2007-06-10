@@ -207,6 +207,18 @@ To show the tags at the bottom of every page, write in [[%MAINWEB%.TWikiPreferen
 | =tagMeVoteCount=    | Around vote count number |
 | =tagMeNotification= | =span=: One-line notification feedback after adding or removal of a tag and on in this process |
 | =tagMeNotification= | =div=: Block of notification feedback after creation of a tag and on errors in this process |
+| =tagmeAction=       | Link style for buttons add and remove tag vote |
+| =tagmeNavigation=   | Table style for tabbed admin pages |
+
+---++++ Search results CSS Styles
+| *Class*                   | *Used where* |
+| =tagmeRelated=            | Text style of the line "Related tags (Click to refine the search)" |
+| =tagmeResultsTable=       | Table style for search results |
+| =tagmeResultsTableHeader= | Table header with link to topic, last modified date and author. These have the additional classes =td.tagmeTopicTd=, =td.tagmeDateTd=, =td.tagmeAuthorTd=, =tagmeTopicTdWeb= |
+| =tagmeResultsDetails=     | Wrapper around =tagmeResultsSummary= and =tagmeResultsDetails= |
+| =tagmeResultsSummary=     | The topic summary |
+| =tagmeResultsTags=        | List of tags for the topic |
+
 
 ---+++ Preventing link wrap
 If users are allowed to use spaces in their tag names (when =NORMALIZE_TAG_INPUT= is set to 0), tag links may break halfway to the next line. To prevent wrapping, add a wrapper =div= around the tags:
