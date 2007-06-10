@@ -526,9 +526,10 @@ table.twikiFormTable th.twikiFormTableHRow a:visited {
 .twikiPageForm td.first {
 	padding-top:1em;
 }
-.twikiBroadcastMessage {
-	padding:.25em .5em;
-	margin:0 0 1em 0;
+.twikiBroadcastMessage,
+.twikiNotification {
+	padding:.5em 20px; /* side padding same as twikiFormStep */
+	margin:1em 0;
 }
 .twikiHelp {
 	padding:1em;
