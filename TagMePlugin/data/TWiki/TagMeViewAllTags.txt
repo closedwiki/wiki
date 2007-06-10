@@ -15,8 +15,9 @@
 <tr bgcolor="#EAE9DE"><td style="width:100%;"></td></tr>
 </td></tr></table>
 
-%TAGME{ tpaction="showalltags" format="<a href=\"%SCRIPTURL{view}%/%WEB%/TagMeSearch?tag=$tag\" style=\"font-size:$size%\">$tag</a>" separator=", " }%
-%STOPINCLUDE%
+<div class="tagmeTagCloud" style="line-height:2em;">
+%TAGME{ tpaction="showalltags" format="<a href=\"%SCRIPTURL{view}%/%WEB%/TagMeSearch?tag=$tag\" style=\"font-size:$size%\">$tag</a>" separator="&nbsp; " minsize="94" maxsize="220"}%
+</div>%STOPINCLUDE%
 
 %BR%
 <span class="twikiGrayText">Other tag options: [[TagMeCreateNewTag][Create new tag]], [[TagMeRenameTag][Rename tag]], [[TagMeDeleteTag][Delete tag]]</span>
