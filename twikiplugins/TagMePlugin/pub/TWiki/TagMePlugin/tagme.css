@@ -43,6 +43,9 @@ div.tagMeNotification {
 .tagmeRelated {
 	font-weight:bold;
 }
+.tagmeTagCloud a {
+	white-space:nowrap;
+}
 
 /*
 TagMeSearch results table
