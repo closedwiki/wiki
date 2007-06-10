@@ -274,7 +274,7 @@ sub _createNoJavascriptSelectBox {
     my (@notSeen) = @_;
 
     my $selectControl = '';
-    $selectControl .= '<select name="tag"> <option></option> ';
+    $selectControl .= '<select class="twikiSelect" name="tag"> <option></option> ';
     foreach (@notSeen) {
         $selectControl .= "<option>$_</option> ";
     }
@@ -300,6 +300,7 @@ sub _createJavascriptSelectBox {
 function createSelectBox(inText, inElemId) {
 	var selectBox = document.createElement('SELECT');
 	selectBox.name = "tag";
+	selectBox.className = "twikiSelect";
 	document.getElementById(inElemId).appendChild(selectBox);
 	var items = inText.split("#");
 	var i, ilen = items.length;
@@ -474,17 +475,21 @@ sub _showAllTags {
               . "a topic of interest, and add a tag from the list, or put your "
               . "vote on an existing tag.";
         }
-        my $max = 1;
 
-        my %order = map { ( $_, $max++ ) }
-          sort { $tagCount{$a} <=> $tagCount{$b} }
-          keys(%tagCount);
+        my @ordered = sort { $tagCount{$a} <=> $tagCount{$b} } keys(%tagCount);
+        my %order = map { ( $_, $tagCount{$_} ) }
+          @ordered;
+        my $smallestItem = $ordered[0];
+        my $largestItem = $ordered[$#ordered];
+        my $smallest = $order{$smallestItem};
+        my $largest = $order{$largestItem};
+        my $sizingFactor = ($maxSize - $minSize) / ($largest - $smallest);
         my $size   = 0;
         my $tmpSep = '_#_';
         $text = join(
             $separator,
             map {
-                $size = int( $maxSize * ( $order{$_} + 1 ) / $max );
+                $size = int( $minSize + ( $order{$_} * $sizingFactor ) );                
                 $size = $minSize if ( $size < $minSize );
                 $line = $format;
                 $line =~ s/(tag\=)\$tag/$1$tmpSep\$tag$tmpSep/go;
