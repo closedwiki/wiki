@@ -3,6 +3,10 @@
 
 Plugin to tag wiki content collectively in order to find content by tags and to get a meaningful page ranking.
 
+<div class="twikiNotification" style="padding:.5em 20px; margin:1em 0; background-color:#ffc;">
+__Note__: If you have upgraded !TagMePlugin and appear to have lost all your old tags: copy all your tag files from =pub/TWiki/TagMePlugin/= files to =pub/_work_areas/TagMePlugin/= and they should magically re-appear.
+</div>
+
 %TOC%
 
 ---++ Introduction
