@@ -337,9 +337,9 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Plugin Author: | TWiki:Main.TWikiContributor ([[http://www.structuredwikis.com/peter.html][blog]]) |
 |  Copyright: | &copy; 2006, Peter@Thoeny.org, [[http://www.structuredwikis.com/][StructuredWikis LLC]] |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 10 June 2007 (V1.041) |
+|  Plugin Version: | 11 June 2007 (V1.042) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  10 Jun 2007: | Arthur Clemens: fixed sizing of tags with the same tag count; fixed CSS class for select box; updated documentation with "How to put tags on every page". |
+|  11 Jun 2007: | Arthur Clemens: fixed sizing of tags with the same tag count; fixed CSS class for select box; updated documentation with "How to put tags on every page". |
 |  07 Jun 2007: | Arthur Clemens: removed dependency on (unreleased) TWiki 4.2. |
 |  21 May 2007: | TWiki:Main.WillNorris: added =view.tagme.tmpl= and updated installation instructions. |
 |  30 Apr 2007: | Arthur Clemens: fixed calculation of sizes in tag cloud; if =mincount= is passed only the shown tags are calculated. |

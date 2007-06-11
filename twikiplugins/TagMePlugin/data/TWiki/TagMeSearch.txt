@@ -19,7 +19,7 @@ Show topics tagged with
 <select class="twikiSelect" name="tag" multiple="multiple" size="4">
 %TAGME{ tpaction="showalltags" format="<option $marker>$tag</option>" separator="$n" selection="%URLPARAM{"tag" multiple="on" separator=","}%" }% </select>
 &nbsp; by
-<input type="radio" name="by" id="byall" value="all" %CALC{"$IF($EXACT(%URLPARAM{by}%,me), , checked=\"checked\")"}% /><label for="byall">all users</label> <input type="radio" name="by" id="byme" value="me" %CALC{"$IF($EXACT(%URLPARAM{by}%,me), checked=\"checked\")"}% /><label for="byme">me only</label> &nbsp; <input type="submit" class="twikiButton" value="Go" /> </td>
+<input type="radio" name="by" id="byall" value="all" %CALC{"$IF($EXACT(%URLPARAM{by}%,me), , checked=\"checked\")"}% /><label for="byall">all users</label> <input type="radio" name="by" id="byme" value="me" %CALC{"$IF($EXACT(%URLPARAM{by}%,me), checked=\"checked\")"}% /><label for="byme">me only</label> <input type="submit" class="twikiSubmit" value="Go" /> </td>
 </tr></table>
 </form>
 
