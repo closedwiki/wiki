@@ -33,7 +33,7 @@ use vars qw(
   $alphaNum $doneHeader $normalizeTagInput $lineRegex $topicsRegex
 );
 
-$VERSION    = '1.041';
+$VERSION    = '1.042';
 $RELEASE    = 'TWiki 4';
 $pluginName = 'TagMePlugin';    # Name of this Plugin
 
@@ -347,6 +347,10 @@ sub _addNewButton {
 # =========================
 sub _showAllTags {
     my ($attr) = @_;
+    
+    my @allTags = _readAllTags();
+    return 'Create your first tag...' if scalar @allTags == 0;
+    
     my $qWeb      = TWiki::Func::extractNameValuePair( $attr, 'web' );
     my $qTopic    = TWiki::Func::extractNameValuePair( $attr, 'topic' );
     my $exclude   = TWiki::Func::extractNameValuePair( $attr, 'exclude' );
@@ -407,7 +411,7 @@ sub _showAllTags {
                 $marker = ' selected="selected" ' if ( $selected{$tag} );
                 $line =~ s/\$marker/$marker/g;
                 $line;
-              } _readAllTags()
+              } @allTags
         );
     }
     else {
@@ -415,7 +419,7 @@ sub _showAllTags {
         # slow processing
         # SMELL: Quick hack, should be done with nice data structure
         my %tagCount = ();
-        my %allTags  = map {$_=>1} _readAllTags();
+        my %allTags  = map {$_=>1} @allTags;
         my %myTags   = ();
         my $webTopic = '';
 
@@ -443,7 +447,7 @@ sub _showAllTags {
                 }
             }
         }
-
+        
         if ($minCount) {
 
             # remove items below the threshold
