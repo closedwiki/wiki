@@ -14,6 +14,10 @@
 
 use vars qw( $twikiLibPath $CPANBASE );
 
+#development and debugging settings
+#$ENV{TWIKI_ASSERTS} = 1;
+#$ENV{TWIKI_MONITOR} = 1;
+
 # -------------- Path to lib directory containing TWiki.pm. 
 #
 # REQUIRED
@@ -36,4 +40,3 @@ $twikiLibPath = "/absolute/path/to/your/lib";
 
 
 1; # Required for successful module loading
-
