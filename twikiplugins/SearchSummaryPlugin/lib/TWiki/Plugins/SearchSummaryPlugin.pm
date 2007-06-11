@@ -74,6 +74,8 @@ sub makeTopicSummary {
                     split( /[\s]+/, $terms ));
     }
 
+    $keystrs = "(?i:$keystrs)" unless TWiki::isTrue($params{casesensitive});
+
     if ($topic =~ /$keystrs/) {
         # IF the matching string data is in the topic name summary
         # processing acts as default with no processing.
@@ -82,6 +84,10 @@ sub makeTopicSummary {
 
     # Split the text on the search terms
     my @segs = split(/($keystrs)/, $text);
+
+    if (scalar(@segs) < 2) {
+        return &{$TWiki::Plugins::SearchSummaryPlugin::official{makeTopicSummary}}(@_);
+    }
 
     my $preceded = 0;
     foreach my $i (0..$#segs) {
@@ -121,7 +127,6 @@ sub makeTopicSummary {
             last;
         }
     }
-
 
     $text = join('', @segs);
 
