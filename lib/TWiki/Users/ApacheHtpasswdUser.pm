@@ -62,7 +62,7 @@ Break circular references.
 # documentation" of the live fields in the object.
 sub finish {
     my $this = shift;
-    $this->SUPER::finish()
+    $this->SUPER::finish();
     undef $this->{apache};
 }
 
