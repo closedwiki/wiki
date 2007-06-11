@@ -16,13 +16,17 @@ shown, a time relative to the last MARK and a time relative to the first MARK
 (which is always set the first time this package is used). The final column
 is total memory.
 
+NOTE: it uses /proc - so its linux specific...
+
 =cut
+
+
 
 package Monitor;
 
 use strict;
 
-use vars qw(@times);
+use vars qw(@times @methodStats);
 
 sub get_stat_info {
     # open and read the main stat file
@@ -58,9 +62,11 @@ BEGIN {
         import Benchmark ':hireswallclock';
         die $@ if $@;
         *MARK = \&mark;
+        *MonitorMethod = \&_monitorMethod;
         MARK('START');
     } else {
         *MARK = sub {};
+        *MonitorMethod = sub {};
     }
 }
 
@@ -73,6 +79,7 @@ sub tidytime {
 }
 
 sub END {
+    return unless ($ENV{TWIKI_MONITOR});
     MARK('END');
     my $lastbm;
     my $firstbm;
@@ -87,7 +94,64 @@ sub END {
         }
         $lastbm = $bm;
     }
+	my %methods;
+	foreach my $call (@methodStats) {
+		$methods{$call->{method}} = {count=>0,min=>99999999,max=>0} unless defined($methods{$call->{method}} );
+		$methods{$call->{method}}{count} +=1;
+		my $diff = timediff($call->{out}, $call->{in});
+		#my $diff = $call->{out}{rss} - $call->{in}{rss};
+		#$methods{$call->{method}}{min} = $diff if ($methods{$call->{method}}{min} > $diff);
+		#$methods{$call->{method}}{max} = $diff if ($methods{$call->{method}}{max} < $diff);
+		if (defined($methods{$call->{method}}{total})) {
+			$methods{$call->{method}}{total} = Benchmark::timesum($methods{$call->{method}}{total}, $diff);
+		} else {
+			$methods{$call->{method}}{total} = $diff;
+		}
+	}
+	print STDERR "\n| method | count | min | max | total |";
+	foreach my $method (sort keys %methods) {
+		print STDERR "\n| $method | $methods{$method}{count} | "
+			#methods{$method}{min} | methods{$method}{max} | "
+			.timestr($methods{$method}{total})." |";
+	}
     print STDERR "\n";
+}
+
+#BEWARE - though this is extremely useful to show whats fast / slow in a Class, its also a potentially 
+#deadly hack
+#method wrapper - http://chainsawblues.vox.com/library/posts/page/1/
+sub _monitorMethod {
+	my ($package, $method) = @_;
+	
+	if (!defined($method)) {
+		no strict "refs";
+		foreach my $symname (sort keys %{"${package}::"}) {
+			next if ($symname =~ /^ASSERT/ );
+			next if ($symname =~ /^DEBUG/ );
+			next if ($symname =~ /^UNTAINTED/ );
+			_monitorMethod($package, $symname);
+		}
+	} else {
+		my $old =  ($package)->can($method); # look up along MRO
+		return if (!defined($old));
+		#print STDERR "monitoring $package :: $method)";
+		{
+			no warnings 'redefine';
+			no strict "refs";
+			*{"${package}::$method"} = sub {
+				#Monitor::MARK("begin $package $method");
+				my $in_stat = get_stat_info($$);
+				my $in_bench = new Benchmark();
+				my $self = shift;
+				my @result = $self->$old(@_);
+				my $out_bench = new Benchmark();
+				#Monitor::MARK("end   $package $method  => ".($result||'undef'));
+				my $out_stat = get_stat_info($$);
+    			push(@methodStats, {method=> "${package}::$method", in=>$in_bench, in_stat=>$in_stat, out=>$out_bench, out_stat=>$out_stat });
+				return wantarray ? @result : $result[0];
+			}
+		}
+	}
 }
 
 1;
