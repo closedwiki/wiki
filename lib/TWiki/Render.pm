@@ -1672,6 +1672,7 @@ sub summariseChanges {
             $otext, $web, $topic, 'nonop' )."\n".
               $ometa->stringify( $metaPick );
 
+	require TWiki::Merge;
         my $blocks = TWiki::Merge::simpleMerge( $otext, $ntext, qr/[\r\n]+/ );
         # sort through, keeping one line of context either side of a change
         my @revised;
