@@ -4,7 +4,7 @@
 Plugin to tag wiki content collectively in order to find content by tags and to get a meaningful page ranking.
 
 <div class="twikiNotification" style="padding:.5em 20px; margin:1em 0; background-color:#ffc;">
-__Note__: If you have upgraded !TagMePlugin and appear to have lost all your old tags: copy all your tag files from =pub/TWiki/TagMePlugin/= files to =pub/_work_areas/TagMePlugin/= and they should magically re-appear.
+__Note__: (TWiki 4.2) If you have upgraded !TagMePlugin and appear to have lost all your old tags: copy all your tag files from =pub/TWiki/TagMePlugin/= files to =pub/_work_areas/TagMePlugin/= and they should magically re-appear.
 </div>
 
 %TOC%
@@ -337,7 +337,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Plugin Author: | TWiki:Main.TWikiContributor ([[http://www.structuredwikis.com/peter.html][blog]]) |
 |  Copyright: | &copy; 2006, Peter@Thoeny.org, [[http://www.structuredwikis.com/][StructuredWikis LLC]] |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 11 June 2007 (V1.042) |
+|  Plugin Version: | 12 June 2007 (V1.043) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
 |  11 Jun 2007: | Arthur Clemens: fixed sizing of tags with the same tag count; fixed CSS class for select box; updated documentation with "How to put tags on every page". |
 |  07 Jun 2007: | Arthur Clemens: removed dependency on (unreleased) TWiki 4.2. |
