@@ -64,12 +64,12 @@ function edittableInit(form_name, asset_url) {
 	attachEvent(tableform, 'submit', submitHandler);
 
 	var somerow = searchNodeTreeForTagName(tableform, "TR");
+
 	if (somerow != null) {
 		var row_container = somerow.parentNode;
 		sEditTable = new EditTableObject(tableform, row_container);
 		insertActionButtons(asset_url);
 		insertRowSeparators();
-
 	}
 	sRowSelection = new RowSelectionObject(asset_url);
 	retrieveAlternatingRowColors();
@@ -148,15 +148,14 @@ function getEventAttr(evt, pname) {
 */
 function insertActionButtons(asset_url) {
 
-  var rownr=0;
   var action_cell, action_butt;
-  
-  for(var child = sEditTable.row_container.firstChild; child != null;
-          child = child.nextSibling) {
+
+  for(var rowpos = 0; rowpos < sEditTable.numrows; rowpos++) {
+    var rownr = sEditTable.revidx[rowpos];
+    var child = sEditTable.rows[rownr];
     if (child.tagName == 'TR') {
 		action_cell = document.createElement('TD');
 		addClass(action_cell, 'editTableActionCell');
-		
 		action_cell.id = 'et_actioncell' + rownr;
 		{
 			action_butt = document.createElement('IMG');
@@ -184,7 +183,6 @@ function insertActionButtons(asset_url) {
 			action_cell.appendChild(action_butt);
 		}		
 		child.insertBefore(action_cell, child.firstChild);
-		rownr++;
     }
   }
   // set styling for the last action_cell to remove the bottom border
@@ -197,24 +195,19 @@ function insertActionButtons(asset_url) {
 */
 function insertRowSeparators() {
 
-  var rownr=0;
+  var child;
   var sep_row, columns;
-  var table = sEditTable.row_container;
-  while(table.tagName != 'TABLE') {
-    table = table.parentNode;
-  }
 
-  for(var child = sEditTable.row_container.firstChild; child != null;
-          child = child.nextSibling) {
-    if (child.tagName == 'TR') {
-		columns = countRowColumns(child);
-		sep_row = makeSeparatorRow(rownr, columns);
-		sEditTable.row_container.insertBefore(sep_row, child);
-		rownr++;
-    }
+  for(var rowpos = 0; rowpos < sEditTable.numrows; rowpos++) {
+    var rownr = sEditTable.revidx[rowpos];
+    child     = sEditTable.rows[rownr];
+    columns = countRowColumns(child);
+    sep_row = makeSeparatorRow(rownr, columns);
+    child.parentNode.insertBefore(sep_row, child);
   }
   sep_row = makeSeparatorRow(null, columns);
-  sEditTable.row_container.appendChild(sep_row);
+  child.parentNode.appendChild(sep_row);
+  sEditTable.last_separator = sep_row;
 }
 
 
@@ -280,13 +273,14 @@ function selectRow(rownr) {
 		top_image            = "url(" + sRowSelection.topImage + ")";
 		bottom_image         = "url(" + sRowSelection.bottomImage + ")";
 		var sep_row = sRowSelection.row.previousSibling;
-		while (sep_row != null && sep_row.tagName != 'TR') {
-			sep_row = sep_row.previousSibling;
-		}
 		sRowSelection.topSep = sep_row;
-		sep_row = sRowSelection.row.nextSibling;
-		while (sep_row != null && sep_row.tagName != 'TR') {
-			sep_row = sep_row.nextSibling;
+		
+		var next_rowpos = sEditTable.positions[rownr]+1;
+		if (next_rowpos < sEditTable.numrows) {
+			var next_rownr = sEditTable.revidx[next_rowpos];
+			sep_row = sEditTable.rows[next_rownr].previousSibling;
+		} else {
+			sep_row = sEditTable.last_separator;
 		}
 		sRowSelection.bottomSep = sep_row;
 	}
@@ -386,10 +380,9 @@ function deleteHandler(evt) {
   var from_row_pos = sEditTable.positions[rownr];
 
   // Remove the from_row from the table.
-  var row_container      = sEditTable.row_container;
   var from_row_elem      = sEditTable.rows[rownr];
-  row_container.removeChild(from_row_elem.previousSibling);
-  row_container.removeChild(from_row_elem);
+  from_row_elem.parentNode.removeChild(from_row_elem.previousSibling);
+  from_row_elem.parentNode.removeChild(from_row_elem);
 
   // Update all rows after from_row.
   for(var pos=from_row_pos+1; pos < sEditTable.numrows; pos++) {
@@ -484,6 +477,7 @@ function moveRow(from_row, to_row) {
   var from_row_pos = sEditTable.positions[from_row];
   var to_row_pos;
 
+
   // If the end separator row was selected, use the last row.
   if (to_row == null) {
     to_row_pos = sEditTable.numrows-1;
@@ -495,6 +489,7 @@ function moveRow(from_row, to_row) {
       to_row = sEditTable.revidx[to_row_pos];
     }
   }
+  alert ('Moving row from ' + from_row_pos + ' to ' + to_row_pos);
 
   var inc = 1;
   if(to_row_pos == -1 || from_row_pos > to_row_pos) {
@@ -503,12 +498,11 @@ function moveRow(from_row, to_row) {
   if (from_row == to_row) { return;   }
 
   // Remove the from_row from the table.
-  var row_container      = sEditTable.row_container;
   var from_row_elem      = sEditTable.rows[from_row];
   var from_row_sep       = from_row_elem.previousSibling;
   workaroundIECheckboxBug(from_row_elem);
-  row_container.removeChild(from_row_sep);
-  row_container.removeChild(from_row_elem);
+  from_row_elem.parentNode.removeChild(from_row_sep);
+  from_row_elem.parentNode.removeChild(from_row_elem);
 
   // Update all rows after from_row up to to_row.
   for(var pos=from_row_pos+inc; pos != to_row_pos+inc; pos+=inc) {
@@ -521,17 +515,37 @@ function moveRow(from_row, to_row) {
 
   var insertion_target;
   if (inc == 1) {
-    insertion_target = sEditTable.rows[to_row].nextSibling;
+    insertion_target = sEditTable.rows[to_row]
+    insertAfter(from_row_elem, insertion_target);
+    insertAfter(from_row_sep,  insertion_target);
   } else {
     insertion_target = sEditTable.rows[to_row].previousSibling;
+    insertBefore(from_row_sep,  insertion_target);
+    insertBefore(from_row_elem, insertion_target);
   }
-  row_container.insertBefore(from_row_sep, insertion_target);
-  row_container.insertBefore(from_row_elem, insertion_target);
   sEditTable.positions[from_row] = to_row_pos;
   sEditTable.revidx[to_row_pos]  = from_row;
   updateRowlabels(from_row, to_row_pos-from_row_pos);
+  fixStyling();
+}
 
-	fixStyling();
+/**
+
+*/
+function insertAfter(newnode, oldnode) {
+  var parent = oldnode.parentNode;
+  if(oldnode.nextSibling == null) {
+    parent.appendChild(newnode);
+  } else {
+    parent.insertBefore(newnode, oldnode.nextSibling);
+  }
+}
+
+/**
+
+*/
+function insertBefore(newnode, oldnode) {
+  oldnode.parentNode.insertBefore(newnode, oldnode);
 }
 
 /**
@@ -573,20 +587,46 @@ function EditTableObject(tableform, row_container) {
   this.row_container       = row_container;
   this.rows                = new Array();
   this.positions           = new Array();
-  this.rowids              = new Array();
   this.revidx              = new Array();
   this.numrows             = 0;
-  var row_elem             = row_container.firstChild;
+  this.last_separator      = null;
+  var got_thead            = 0;
+  var first_head           = 0;
 
-  while(row_elem != null) {
-    if(row_elem.tagName == "TR") {
-      this.rows[this.numrows]       = row_elem;
-      this.positions[this.numrows]  = this.numrows;
-      this.revidx[this.numrows]     = this.numrows;
-      this.rowids[this.numrows]     = 'tr' + (this.numrows+1);
-      this.numrows++;
+  // If rows are contained in <THEAD> and <TBODY> elements, then we must be
+  // sure to iterate over all of them.
+  while(row_container != null) {
+
+    // If there was a tbody before the first thead, we'll have to correct
+    // our notion of the row positions, because browsers display the header
+    // above the body.
+    if (row_container.tagName == "THEAD" && got_thead == 0) {
+      first_head = this.numrows;
+      got_thead  = 1;
     }
-    row_elem = row_elem.nextSibling;
+
+    var row_elem = row_container.firstChild;
+    while(row_elem != null) {
+      if(row_elem.tagName == "TR") {
+        this.rows[this.numrows]       = row_elem;
+        this.positions[this.numrows]  = this.numrows - first_head;
+        this.revidx[this.numrows - first_head] = this.numrows;
+        this.numrows++;
+      }
+      row_elem = row_elem.nextSibling;
+    }
+
+    // If we hit a THEAD that was preceded by other rows, make corrections.
+    if (first_head > 0) {
+      var num_headrows  = this.numrows - first_head;
+      for(var body_rownum = 0; body_rownum < first_head; body_rownum++) {
+        this.positions[body_rownum] = body_rownum + first_head;
+        this.revidx[body_rownum+first_head] = body_rownum;
+      }
+      first_head = 0;
+    }
+
+    row_container = row_container.nextSibling;
   }
   return this;
 }
