@@ -129,6 +129,11 @@ sub _monitorMethod {
 			next if ($symname =~ /^ASSERT/ );
 			next if ($symname =~ /^DEBUG/ );
 			next if ($symname =~ /^UNTAINTED/ );
+			next if ($symname =~ /^except/ );
+			next if ($symname =~ /^otherwise/ );
+			next if ($symname =~ /^finally/ );
+			next if ($symname =~ /^try/ );
+			next if ($symname =~ /^with/ );
 			_monitorMethod($package, $symname);
 		}
 	} else {
