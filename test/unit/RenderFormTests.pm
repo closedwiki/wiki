@@ -121,7 +121,7 @@ sub test_TML_in_forms {
     $this->assert_str_equals(((($children[0]->content_list())[0]->content_list())[0]->content_list())[0], 'InitializationForm');
     $this->compare_field_from_form_fmt('<em>An issue</em>
 ', 1, @children);
-    $this->compare_field_from_form_fmt('<h1><a name="Example problem"></a> Example problem </h1>
+    $this->compare_field_from_form_fmt('<h1><a name="Example_problem"></a> Example problem </h1>
 ', 2, @children);
     $this->compare_field_from_form_fmt('<strong>Defect</strong>
 ', 3, @children);

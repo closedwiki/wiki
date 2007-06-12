@@ -461,7 +461,7 @@ sub makeAnchorName {
 
     # For most common alphabetic-only character encodings (i.e. iso-8859-*),
     # remove non-alpha characters 
-    if( defined($TWiki::cfg{Site}{CharSet}) &&
+    if( !defined($TWiki::cfg{Site}{CharSet}) ||
           $TWiki::cfg{Site}{CharSet} =~ /^iso-?8859-?/i ) {
         $anchorName =~ s/[^$TWiki::regex{mixedAlphaNum}]+/_/g;
     }
