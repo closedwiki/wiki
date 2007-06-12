@@ -4,13 +4,25 @@
 <verbatim>
 %STARTSECTION{"paragraphWithImageLeft"}%<div class="pIparagraphWithImageLeft">
 <div class="pIparagraphWithImageLeftImage">
-<div class="twikiImage"><img src="%imagePath%" alt="" /></div><!--/twikiImage-->
+<div class="twikiImage pIimage">%INCLUDE{"%TOPIC%" section="image"}%</div><!--/twikiImage-->
 </div><!--/pIparagraphWithImageLeftImage-->
 <div class="pIparagraphWithImageLeftText">
 %text%
 </div><!--/pIparagraphWithImageLeftText-->
 <br class="twikiClear" />
 </div><!--/pIparagraphWithImageLeft-->%ENDSECTION{"paragraphWithImageLeft"}%
+</verbatim>
+
+<verbatim>
+%STARTSECTION{"image"}%%IF{"context ImagePluginEnabled" then="$percntINCLUDE{$quot$percntTOPIC$percnt$quot section=$quotimagePluginImage$quot}$percnt" else="$percntINCLUDE{$quot$percntTOPIC$percnt$quot section=$quotpubImage$quot}$percnt"}%%ENDSECTION{"image"}%
+</verbatim>
+
+<verbatim>
+%STARTSECTION{"pubImage"}%%IF{"defined imgName" then="%IF{"$imgType!='nolink'" then="<a href='%PUBURL%/%imgWeb%/%imgTopic%/%imgName%'>"}%<img src='%PUBURL%/%imgWeb%/%imgTopic%/%imgName%' alt='' title='%IF{"defined imgTitle" then="%imgTitle%" else="%MAKETEXT{"Enlarge"}%"}%' />%IF{"$imgType!='nolink'" then="</a>"}%" else="<img src='%PUBURL%/%TWIKIWEB%/PersonalInfoAddOn/silhouette.gif' alt='' title=%IF{"defined imgTitle" then='%imgTitle%' else='"%MAKETEXT{"Enlarge"}%"'}% />"}%%ENDSECTION{"pubImage"}%
+</verbatim>
+
+<verbatim>
+%STARTSECTION{"imagePluginImage"}%%IMAGE{"%IF{"defined imgName" then="%imgName%" else="silhouette.gif"}%" warn="off" topic="%IF{"defined imgName" then="%imgTopic%" else="PersonalInfoAddOn"}%" web="%IF{"defined imgName" then="%imgWeb%" else="%TWIKIWEB%"}%" size="%IF{"defined imgWidth" then="%imgWidth%"}%x%IF{"defined imgHeight" then="%imgHeight%"}%" %IF{"$imgType='nolink'" then="format=\"<img border=\\"0\\" align=\\"middle\\" src=\\"$src\\" alt=\\"$alt\\" width=\\"$width\\" height=\\"$height\\" longdesc=\\"$desc\\" title=\\"$title\\" />\" "}% title="%IF{"defined imgTitle" then='%imgTitle%' else='"%MAKETEXT{"Enlarge"}%"'}%" }%%ENDSECTION{"imagePluginImage"}%
 </verbatim>
 
 <verbatim>
@@ -24,7 +36,8 @@ background-color:#FEFCF6;
 margin:1em 0 0 0;
 }
 .pIparagraphWithImageLeftText {
-margin-left:145px; /* img width 120px + spacing 25px */
+margin-left:%URLPARAM{"imgWidth" default="120"}%px;
+padding-left:25px;
 }
 .pIparagraphWithImageLeftImage {
 float:left;
@@ -34,19 +47,7 @@ float:left;
 
 <verbatim>
 %STARTSECTION{"imageStyle"}%<style type="text/css" media="all">
-/* twiki style for installations not up to date with the latest */
-.twikiImage img {
-padding:3px;
-border-width:1px;
-border-style:solid;
-}
-.twikiImage img {
-border-color:#eee;
-background-color:#fff;
-}
-/* */
-.twikiImage img {
-width:120px;
+.pIimage img {%IF{"defined imgWidth" then="width:%imgWidth%px;" else="width:120px;"}%%IF{"defined imgHeight" then="height:%imgHeight%px;"}%
 vertical-align:middle;
 }
 </style>%ENDSECTION{"imageStyle"}%

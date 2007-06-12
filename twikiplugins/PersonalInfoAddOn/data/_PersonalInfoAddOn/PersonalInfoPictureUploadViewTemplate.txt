@@ -11,25 +11,22 @@
 %TMPL:DEF{"existingattachments"}%%TMPL:END%
 
 
+%TMPL:DEF{"pagetitle"}%%MAKETEXT{"Upload a new personal picture"}%%TMPL:END%
 
-%TMPL:DEF{"pagetitlecontents"}%%MAKETEXT{"Upload a new personal picture"}%%TMPL:END%
 
+%TMPL:DEF{"titleaction"}%%MAKETEXT{"(upload picture)"}% %TMPL:END%
 
 
 %TMPL:DEF{"topicactionbuttons"}%<input type="submit" class="twikiSubmit" value='%MAKETEXT{"Upload file"}%' /> %MAKETEXT{"or"}% <a href="%SCRIPTURL{view}%/%WEB%/%TOPIC%?template=PersonalInfoPictureView">%MAKETEXT{"Cancel"}%</a>%TMPL:END%
 
 
-
-%TMPL:DEF{"attachform"}%<div class="twikiFormSteps">
-<div class="twikiFormStep twikiLast">
----+++ %MAKETEXT{"Attach new file"}%
-
-%IF{"$ATTACHFILESIZELIMIT > 0" then="%MAKETEXT{"Upload up to [_1] KB." args="%ATTACHFILESIZELIMIT%"}%" else="%MAKETEXT{"There is no size limit for uploaded files."}%"}%
-
-<input class="twikiInputField" type="file" name="filepath" value="" size="30" />
-<input type="hidden" name="filecomment" value="" />
+%TMPL:DEF{"hiddenfields"}%<input type="hidden" name="filecomment" value="" />
 <input type="hidden" name="createlink" value="" />
 <input type="hidden" name="hidefile" value="true" />
-<input type="hidden" name="redirectto" value="%SCRIPTURL{view}%/%WEB%/%TOPIC%?template=PersonalInfoPictureView" />
-</div><!-- /twikiFormStep-->
-</div><!-- /twikiFormSteps-->%TMPL:END%
+<input type="hidden" name="redirectto" value="%SCRIPTURL{view}%/%WEB%/%TOPIC%?template=PersonalInfoPictureView" />%TMPL:END%
+
+%TMPL:DEF{"previous"}%%TMPL:END%
+%TMPL:DEF{"comment"}%%TMPL:END%
+%TMPL:DEF{"properties"}%%TMPL:END%
+%TMPL:DEF{"notes"}%%TMPL:END%
+%TMPL:DEF{"extranotes"}%%TMPL:END%
