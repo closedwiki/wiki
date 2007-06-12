@@ -489,7 +489,6 @@ function moveRow(from_row, to_row) {
       to_row = sEditTable.revidx[to_row_pos];
     }
   }
-  alert ('Moving row from ' + from_row_pos + ' to ' + to_row_pos);
 
   var inc = 1;
   if(to_row_pos == -1 || from_row_pos > to_row_pos) {
