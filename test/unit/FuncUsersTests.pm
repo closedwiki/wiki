@@ -183,6 +183,8 @@ sub test_isAnAdmin {
         $u =~ /.*\.(.*)/;
         $TWiki::Plugins::SESSION->{user} = $u;
         $this->assert(!TWiki::Func::isAnAdmin(), $u);
+        my $cUID = $this->{twiki}->{users}->getCanonicalUserID($u);
+        $this->assert($this->{twiki}->{users}->isAdmin($cUID));
     }
 }
 

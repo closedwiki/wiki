@@ -50,6 +50,10 @@ sub test_formatted {
     my $ui = $this->{twiki}->handleCommonTags('%USERINFO{"ScumBag" format="W$wikiusernameU$wikinameE$emailsG$groupsE"}%', $this->{test_web}, $this->{test_topic});
     $this->assert_str_equals(
         "W$TWiki::cfg{UsersWebName}.ScumBagUScumBagEscumbag\@example.comGGropeGroupE", $ui);
+
+    my $guest_ui = $this->{twiki}->handleCommonTags('%USERINFO{"TWikiGuest" format="W$wikiusernameU$wikinameE$emailsG$groupsE"}%', $this->{test_web}, $this->{test_topic});
+    $this->assert_str_equals(
+		"WTemporaryUSERINFOUsersWeb.TWikiGuestUTWikiGuestEGTWikiBaseGroup, GropeGroupE", $guest_ui);
 }
 
 1;
