@@ -79,6 +79,8 @@ use TWiki::Time;
 use TWiki::ListIterator;
 use TWiki::AggregateIterator;
 use TWiki::LoginManager;    # client session handling
+#use Monitor;
+#Monitor::MonitorMethod('TWiki::Users');
 
 BEGIN {
     # Do a dynamic 'use locale' for this module
@@ -132,6 +134,9 @@ sub new {
     $session->enterContext('registration_enabled') if $TWiki::cfg{Register}{EnableNewUserRegistration};
     $implUserMappingManager =~ /^TWiki::Users::(.*)$/;
 
+	#caches
+	$this->{getWikiName} = {};
+	
     return $this;
 }
 
@@ -155,6 +160,7 @@ sub finish {
     undef $this->{basemapping};
     undef $this->{mapping};
     undef $this->{session};
+	undef $this->{getWikiName};
 }
 
 =pod
@@ -514,14 +520,13 @@ Get the wikiname to display for a canonical user identifier.
 sub getWikiName {
     my ($this, $cUID ) = @_;
     ASSERT($cUID) if DEBUG;
-    # CC commented this out because it was causing test failures in the
-    # client tests when trying to view a topic where the history contains
-    # a non-existant user.
-#	$this->ASSERT_IS_CANONICAL_USER_ID($cUID) if DEBUG;
+	return $this->{getWikiName}->{$cUID} if (defined($this->{getWikiName}->{$cUID}));
+
 	$cUID = $this->getLegacycUID($cUID);
 
     my $wikiname = $this->getMapping($cUID)->getWikiName($cUID) if ($this->getMapping($cUID));
-    return $wikiname || "UnknownUser";
+	$this->{getWikiName}->{$cUID} = $wikiname || "UnknownUser";
+    return $this->{getWikiName}->{$cUID};
 }
 
 =pod
