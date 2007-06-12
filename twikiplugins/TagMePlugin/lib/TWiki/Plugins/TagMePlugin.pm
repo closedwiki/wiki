@@ -33,7 +33,7 @@ use vars qw(
   $alphaNum $doneHeader $normalizeTagInput $lineRegex $topicsRegex
 );
 
-$VERSION    = '1.042';
+$VERSION    = '1.043';
 $RELEASE    = 'TWiki 4';
 $pluginName = 'TagMePlugin';    # Name of this Plugin
 
@@ -487,7 +487,8 @@ sub _showAllTags {
         my $largestItem = $ordered[$#ordered];
         my $smallest = $order{$smallestItem};
         my $largest = $order{$largestItem};
-        my $sizingFactor = ($maxSize - $minSize) / ($largest - $smallest);
+        my $div = ($largest - $smallest) || 1; # prevent division by zero
+        my $sizingFactor = ($maxSize - $minSize) / $div;
         my $size   = 0;
         my $tmpSep = '_#_';
         $text = join(
