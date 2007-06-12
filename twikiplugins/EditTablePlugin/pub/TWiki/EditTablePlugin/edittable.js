@@ -47,7 +47,7 @@ function removeClass(el, className) {
 }
       
 /**
-
+Create user control elements and initialize table manipulation objects.
 */
 
 // Build the list of edittables.
@@ -96,10 +96,10 @@ function edittableInit(form_name, asset_url) {
 */
 // Create the etrow_id# inputs to tell the server about row changes we made.
 function submitHandler(evt) {
-  var inp, ilen = sEditTable.numrows;
-  for(var i=0; i<ilen; i++) {
-    var inpname = 'etrow_id'+(i+1);
-    var row_id  = sEditTable.revidx[i]+1;
+  var inp;
+  for(var pos=0; pos<sEditTable.numrows; pos++) {
+    var inpname = 'etrow_id'+(pos+1);
+    var row_id  = sEditTable.revidx[pos]+1;
     inp = document.createElement('INPUT');
     inp.setAttribute('type', 'hidden');
     inp.setAttribute('name', inpname);
@@ -578,12 +578,13 @@ function RowSelectionObject(asset_url) {
 }
 
 /**
-
+Construct an EditTable object.  This includes building an array of all the
+rows in a table, and making a map of row numbers to row positions (and the
+reverse).
 */
 
 function EditTableObject(tableform, row_container) {
   this.tableform           = tableform;
-  this.row_container       = row_container;
   this.rows                = new Array();
   this.positions           = new Array();
   this.revidx              = new Array();
@@ -596,9 +597,9 @@ function EditTableObject(tableform, row_container) {
   // sure to iterate over all of them.
   while(row_container != null) {
 
-    // If there was a tbody before the first thead, we'll have to correct
+    // If there were any rows before the first thead, we'll have to correct
     // our notion of the row positions, because browsers display the header
-    // above the body.
+    // above the body instead of in the order they appear in the DOM.
     if (row_container.tagName == "THEAD" && got_thead == 0) {
       first_head = this.numrows;
       got_thead  = 1;
@@ -615,12 +616,13 @@ function EditTableObject(tableform, row_container) {
       row_elem = row_elem.nextSibling;
     }
 
-    // If we hit a THEAD that was preceded by other rows, make corrections.
+    // Now make any necessary position adjustments to account for an
+    // out-of-order THEAD.
     if (first_head > 0) {
       var num_headrows  = this.numrows - first_head;
       for(var body_rownum = 0; body_rownum < first_head; body_rownum++) {
-        this.positions[body_rownum] = body_rownum + first_head;
-        this.revidx[body_rownum+first_head] = body_rownum;
+        this.positions[body_rownum] = body_rownum + num_headrows;
+        this.revidx[body_rownum+num_headrows] = body_rownum;
       }
       first_head = 0;
     }
