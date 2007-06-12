@@ -1,39 +1,67 @@
-%META:TOPICINFO{author="TWikiContributor" date="1173050334" format="1.1" reprev="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1181684909" format="1.1" version="1.1"}%
 ---+!! Personal Info !AddOn
 
-*User personalisation and reference tool.*
+*User personalisation and user search tool.*
 
 A set of elements to enhance user information on the user homepage:
    * User picture
    * Quick overview of the most common user information
    * Quickly edit user information
-   * Search tools over this information
+
+Search tools to find users:
+   * Quick find phone list
+   * Quick find face book 
 
 When installed, see [[_PersonalInfoAddOn.PersonalInfoHome]] for additional details.
 
 %TOC{title="On this page:"}%
 
----++ Examples (screenshots)
+---++ Examples
 
-<img src="%ATTACHURLPATH%/personalInfo.jpg" style="border:1px solid #ddd;"  alt="Screenshot of personalInfo block" width='858' height='249' />
+---+++ User homepage
+The user homepage with user picture and most common information 'lifted' from the extended !UserForm. The information that is shown is configurable.
 
-<img src="%ATTACHURLPATH%/personalInfo_edit.jpg" style="border:1px solid #ddd;" alt="Screenshot of personalInfo: edit data" width='858' height='284' />
+<div class="twikiImage"><img src="%ATTACHURLPATH%/userpage.png" alt="Screenshot of personalInfo block" width='728' height='300' /></div>
 
-<img src="%ATTACHURLPATH%/personalInfo_set_picture.jpg" style="border:1px solid #ddd;" alt="Screenshot of personalInfo: set picture screen" width='936' height='350' />
+---+++ Edit mode of user information
+Foolproof editing of most common user data.
 
-<img src="%ATTACHURLPATH%/phone_list.jpg" style="border:1px solid #ddd;" alt="Screenshot of phone list quick search" width='373' height='136' />
+<div class="twikiImage"><img src="%ATTACHURLPATH%/userpage_edit.png" alt="Screenshot of personalInfo: edit data" width='728' height='300' /></div>
+
+---+++ Choosing a personal picture
+Each user can have multiple pictures and select one of them.
+
+<div class="twikiImage"><img src="%ATTACHURLPATH%/userpage_select_picture.png" alt="Screenshot of personalInfo: set picture screen" width='879' height='534' /></div>
+
+If TWiki:Plugins.ImagePlugin is installed, pictures are scaled on the server so camera pictures can be safely uploaded without fear of network congestion.
+
+---+++ Quick search phone list
+When installed at our homepage this quickly became the killer app of our intranet twiki.
+
+If TWiki:Plugins/AttachContentPlugin is installed, data is read from a saved attachment file. Each time a user makes a change to the user topic this file is updated.
+
+<div class="twikiImage"><img src="%ATTACHURLPATH%/phonelist.png" alt="Screenshot of phone list quick search" width='314' height='236' /></div>
+
+---+++ Face book
+Similar to the phone list but with pictures.
+
+<div class="twikiImage"><img src="%ATTACHURLPATH%/facebook.png" alt="Screenshot of face book page" width='728' height='408' /></div>
 
 ---++ Settings
 
-   * Set SHORTDESCRIPTION = User personalisation and reference tool
+   * Set SHORTDESCRIPTION = User personalisation and user search tool
+
+---++ A note on upgrading
+If you are upgrading from a previous version of this add-on, please note that any customizations in !PersonalInfo will be overwritten. If you have made any customizations, copy them and re-add them to the new !PersonalInfo topic.
 
 ---++ Installation Instructions
 
    * Download the ZIP file from the Plugin web (see below).
    * Unzip ==%TOPIC%.zip== in your ($TWIKI_ROOT) directory.
    * Copy the files from =/data/_PersonalInfoAddOn= to your user Web (by default Main).
-   * !PersonalInfoAddOn is based on TWiki 4.1 with !PatternSkin.
-   * Optional plugin: TWiki:Plugins/AttachContentPlugin for a faster quickSearch module 
+   * Optional plugins:
+      * TWiki:Plugins/AttachContentPlugin for a faster quick search module 
+      * TWiki:Plugins/ImagePlugin for server-side image rendering
    * Alternatively,
       * Manually resolve the dependencies listed below.
       %$DEPENDENCIES%
@@ -43,22 +71,23 @@ When installed, see [[_PersonalInfoAddOn.PersonalInfoHome]] for additional detai
 | Authors: | TWiki:Main.ArthurClemens |
 | Copyright &copy;: | 2007 Arthur Clemens |
 | License: | [[http://www.gnu.org/copyleft/gpl.html][GPL]] |
-| |!PersonalInfoAddOn is based on TWiki 4.1 with !PatternSkin. |
 | Dependencies: | %$DEPENDENCIES% |
-| 07 Apr 2007 | Arthur Clemens: 1.1.2 Update to match PatternSkin svn release number 13320. |
-| 07 Mar 2007 | Arthur Clemens: 1.1.1 Fixed CSS bug on Win Explorer 6.  |
-| 06 Mar 2007 | Arthur Clemens: 1.1 Modularized include sections to make these easier to override: all local overrides can now safely happen in the !PersonalInfo topic.  |
-| 06 Mar 2007 | Arthur Clemens: 1.0.2 Added =phoneListXML= output.  |
-| 05 Mar 2007 | Arthur Clemens: 1.0.1 Small documentation updates.  |
-| 04 Mar 2007 | Arthur Clemens: 1.0 First release.  |
+| 12 Jun 2007 | 1.2 Update for TWiki 4.2 template refactoring (so the add-on will work with default skin as well); images can now be rendered using !ImagePlugin; added "table of all users" and face book. |
+| 07 Apr 2007 | 1.1.2 Update to match PatternSkin svn release number 13320. |
+| 07 Mar 2007 | 1.1.1 Fixed CSS bug on Win Explorer 6.  |
+| 06 Mar 2007 | 1.1 Modularized include sections to make these easier to override: all local overrides can now safely happen in the !PersonalInfo topic.  |
+| 06 Mar 2007 | 1.0.2 Added =phoneListXML= output.  |
+| 05 Mar 2007 | 1.0.1 Small documentation updates.  |
+| 04 Mar 2007 | 1.0 First release.  |
 | Demo url:  |   |
 | Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 | Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 | Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
 
-%META:FILEATTACHMENT{name="silhouette.gif" attachment="silhouette.gif" attr="h" comment="Default silhouette image" date="1173044970" path="silhouette.gif" size="1177" stream="silhouette.gif" user="Main.TWikiContributor" version="1"}%
-%META:FILEATTACHMENT{name="personalInfo.jpg" attachment="personalInfo.jpg" attr="h" comment="Screenshot of personalInfo block" date="1173049752" path="personalInfo.jpg" size="36507" stream="personalInfo.jpg" user="Main.TWikiContributor" version="1"}%
-%META:FILEATTACHMENT{name="personalInfo_set_picture.jpg" attachment="personalInfo_set_picture.jpg" attr="h" comment="Screenshot of personalInfo: set picture screen" date="1173050036" path="personalInfo_set_picture.jpg" size="45162" stream="personalInfo_set_picture.jpg" user="Main.TWikiContributor" version="1"}%
-%META:FILEATTACHMENT{name="personalInfo_edit.jpg" attachment="personalInfo_edit.jpg" attr="h" comment="Screenshot of personalInfo: edit data" date="1173050247" path="personalInfo_edit.jpg" size="39498" stream="personalInfo_edit.jpg" user="Main.TWikiContributor" version="1"}%
-%META:FILEATTACHMENT{name="phone_list.jpg" attachment="phone_list.jpg" attr="h" comment="Screenshot of phone list quick search" date="1173050334" path="phone_list.jpg" size="8364" stream="phone_list.jpg" user="Main.TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="userpage_edit.png" attr="" autoattached="1" comment="" date="1181684125" path="userpage_edit.png" size="59193" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="facebook.png" attr="" autoattached="1" comment="" date="1181684152" path="facebook.png" size="195158" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="userpage.png" attr="" autoattached="1" comment="" date="1181684046" path="userpage.png" size="59462" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="userpage_select_picture.png" attr="" autoattached="1" comment="" date="1181684268" path="userpage_select_picture.png" size="104724" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="phonelist.png" attr="" autoattached="1" comment="" date="1181684188" path="phonelist.png" size="15764" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="silhouette.gif" attr="h" autoattached="1" comment="Default silhouette image" date="1180882660" path="silhouette.gif" size="1177" user="Main.TWikiContributor" version="1"}%

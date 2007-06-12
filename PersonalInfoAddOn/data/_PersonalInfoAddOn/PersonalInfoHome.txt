@@ -10,15 +10,19 @@ This topic is meant for administrators and serves as introduction springboard to
 
 ---++ Reference for administrators
 Distribution files:
-   * PersonalInfoHome - (this topic) documentation
-   * PersonalInfoModules - modules (INCLUDE sections) used by the !AddOn application
-   * PersonalInfo - Customizations of PersonalInfoModules. When making changes always change PersonalInfo only so PersonalInfoModules can stay intact. This makes future upgrades a lot easier.
-   * PersonalInfoUserViewTemplate - template for the display of user homepages that will show the =personalInfo= block
-   * PersonalInfoPictureViewTemplate - template for the selection screen of user pictures
-   * PersonalInfoPictureDeleteViewTemplate - template for the deletion of a user picture
-   * PersonalInfoPictureUploadViewTemplate - template for the upload of a new user picture
+   * [[PersonalInfoHome]] - (this topic) documentation
+   * [[PersonalInfoModules]] - modules (INCLUDE sections) used by the !AddOn application
+   * [[PersonalInfo]] - Customizations of [[PersonalInfoModules]]. When making changes always change PersonalInfo only so PersonalInfoModules can stay intact. This makes future upgrades a lot easier.
+   * [[PersonalInfoFaceBook]] - Quick search with user pictures
+   * [[PersonalInfoUserViewTemplate]] - template for the display of user homepages that will show the =personalInfo= block
+   * [[PersonalInfoPictureViewTemplate]] - template for the selection screen of user pictures
+   * [[PersonalInfoPictureDeleteViewTemplate]] - template for the deletion of a user picture
+   * [[PersonalInfoPictureUploadViewTemplate]] - template for the upload of a new user picture
 
 All these files need to reside in your user web (by default Main).
+
+---+++ Diagram of main pages
+<div class="twikiImage"><img src="%PUBURL%/%TWIKIWEB%/PersonalInfoAddOn/template_diagram.png" alt="Diagram of main pages" width='800' height='409' /></div>
 
 ---++ Documentation of the INCLUDE sections in PersonalInfo.
 
@@ -73,6 +77,7 @@ This include is written in PersonalInfoUserViewTemplate:
 
 %ICON{hand}% Creates:
 
+%INCLUDE{"PersonalInfo" section="personalInfoStyle"}%
 %INCLUDE{"PersonalInfo" section="personalInfo"}%
 
 
@@ -90,17 +95,16 @@ Usage:
 %INCLUDE{"PersonalInfo" section="directSearch" title="*Phone list*" maxresults="10"}%
 </verbatim>
 
-| *Parameter*  | *Description* |
-| =title=      | Title above the input box |
-| =maxresults= | The number of users that are displayed |
-
+| *Parameter*  | *Description* | *Default value* |
+| =title=      | Title above the input box | no title |
+| =maxresults= | The number of users that are displayed; use =-1= to show all users | 12 |
+| =inputfieldsize= | The width of the input field | 12 |
 
 %ICON{hand}% Creates:
 
-%INCLUDE{"PersonalInfo" section="directSearch" title="*Phone list*" maxresults="10"}%
+%INCLUDE{"PersonalInfo" section="directSearch" title="*Phone list*" inputfieldsize="20"}%
 
 (try to find John Doe - the %MAINWEB%.PersonalInfoDemoUser - by either first or last name)
-
 
 
 
@@ -150,6 +154,49 @@ PersonalInfo?section=personalSearch;skin=text;q=
 
 %ICON{hand}% <a href="%SCRIPTURL{view}%/%WEB%/PersonalInfo?section=personalSearch;skin=text;q=a">View personalSearch with the letter 'a'</a>
 
+
+
+
+---+++ tableOfAllUsers
+*Creates a table of all users.*
+
+Usage: create a topic and write the line:
+<verbatim>
+%INCLUDE{"PersonalInfo" section="tableOfAllUsers"}%
+</verbatim>
+or use the url:
+<verbatim>
+PersonalInfo?section=tableOfAllUsers;template=viewplain
+</verbatim>
+
+%ICON{hand}% <a href="%SCRIPTURL{view}%/%WEB%/PersonalInfo?section=tableOfAllUsers;template=viewplain">Printable list</a>
+
+
+---+++ pictures
+*Creates a grid view of all user pictures.*
+
+Parameters:
+   * =imgHeight= - height of the pictures
+   
+Usage: create a topic and write the line:
+<verbatim>
+%INCLUDE{"PersonalInfo" section="pictures" title="Face book" imgHeight="100"}%
+</verbatim>
+or use the url:
+<verbatim>
+PersonalInfo?section=pictures;template=viewplain
+</verbatim>
+
+%ICON{hand}% See [[PersonalInfoFaceBook]]
+
+*Note:* for performance this topic uses TWiki:Plugins/VarCachePlugin if installed and enabled.
+
+---+++ pictureFilterSearch
+*Quickly sift through user pictures.*
+
+This module adds a search box to the picture grid.
+
+%ICON{hand}% See the example on [[PersonalInfoFaceBook]]
 
 
 
