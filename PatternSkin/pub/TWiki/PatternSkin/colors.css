@@ -112,6 +112,12 @@ h3, h4, h5, h6 {
 .patternTopic a:hover {
 	color:#FBF7E8;
 }
+.patternTopic .twikiUnvisited a:visited {
+	color:#06c;
+}
+.patternTopic .twikiUnvisited a:hover {
+	color:#FBF7E8;
+}
 
 /* Form elements */
 

@@ -301,6 +301,12 @@ h3, h4, h5, h6 {
 .patternTopic a:hover {
 	color:%LINK_TEXT_HOVER%;
 }
+.patternTopic .twikiUnvisited a:visited {
+	color:%LINK_TEXT_NORMAL%;
+}
+.patternTopic .twikiUnvisited a:hover {
+	color:%LINK_TEXT_HOVER%;
+}
 
 /* Form elements */
 
