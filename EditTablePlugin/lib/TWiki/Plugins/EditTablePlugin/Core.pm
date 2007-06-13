@@ -555,7 +555,8 @@ sub inputElement {
               class => 'twikiInputField editTableInput',
               id => 'id'.$theName,
               size=> $size,
-              value => $theValue });
+              value => $theValue,
+              override => 1 });
         $text .= saveEditCellFormat( $cellFormat, $theName );
         eval 'use TWiki::Contrib::JSCalendarContrib';
         unless ( $@ ) {
