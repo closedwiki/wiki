@@ -33,7 +33,7 @@ use vars qw(
   $alphaNum $doneHeader $normalizeTagInput $lineRegex $topicsRegex
 );
 
-$VERSION    = '1.043';
+$VERSION    = '1.044';
 $RELEASE    = 'TWiki 4';
 $pluginName = 'TagMePlugin';    # Name of this Plugin
 
@@ -349,7 +349,7 @@ sub _showAllTags {
     my ($attr) = @_;
     
     my @allTags = _readAllTags();
-    return 'Create your first tag...' if scalar @allTags == 0;
+    return '' if scalar @allTags == 0;
     
     my $qWeb      = TWiki::Func::extractNameValuePair( $attr, 'web' );
     my $qTopic    = TWiki::Func::extractNameValuePair( $attr, 'topic' );
