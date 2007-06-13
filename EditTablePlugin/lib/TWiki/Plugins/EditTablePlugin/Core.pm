@@ -116,18 +116,17 @@ sub process {
                     $rowNr--;
                     next;
                 }
-                s/^(\s*)\|(.*)/handleTableRow( $1, $2, $tableNr, $cgiRows, $rowNr, $doEdit, 0, $theWeb, $theTopic )/eo;
+                s/^(\s*)\|(.*)/handleTableRow( $1, $2, $tableNr, 0, $rowNr, $doEdit, 0, $theWeb, $theTopic )/eo;
 
             } elsif( $insideTable ) {
                 # end of table
                 $insideTable = 0;
-                $cgiRows += $addRows;
-                if( $doEdit && $cgiRows >= 0 && $rowNr < $cgiRows ) {
-                    while( $rowNr < $cgiRows ) {
+                if( $doEdit && $cgiRows >= 0) {
+                    while( $rowNr < $cgiRows + $addRows) {
                         $rowNr++;
-                        $result .= handleTableRow(
-                            '', '', $tableNr, $cgiRows, $rowNr, $doEdit,
-                            0, $theWeb, $theTopic ) . "\n";
+                        $result .= handleTableRow('', '', $tableNr,
+                                      $rowNr > $cgiRows, $rowNr, $doEdit, 0,
+                                      $theWeb, $theTopic ) . "\n";
                     }
                 }
                 $result .= handleTableEnd( $theWeb, $rowNr, $doEdit );
@@ -145,13 +144,13 @@ sub process {
                        if( $params{'header'} ) {
                            $rowNr++;
                            $result .= handleTableRow(
-                               $preSp, '', $tableNr, $cgiRows, $rowNr,
+                               $preSp, '', $tableNr, 2, $rowNr,
                                $doEdit, 0, $theWeb, $theTopic ) . "\n";
                         }
                         do {
                             $rowNr++;
                             $result .= handleTableRow(
-                                $preSp, '', $tableNr, $cgiRows, $rowNr,
+                                $preSp, '', $tableNr, 3, $rowNr,
                                 $doEdit, 0, $theWeb, $theTopic ) . "\n";
                         } while( $rowNr < $cgiRows );
                     }
@@ -394,8 +393,9 @@ sub saveEditCellFormat {
 
 sub inputElement {
     my ( $theTableNr, $theRowNr, $theCol, $theName, $theValue,
-       $theWeb, $theTopic ) = @_;
+       $digestedCellValue, $theWeb, $theTopic ) = @_;
 
+    my $rawValue = $theValue;
     my $text = '';
     my $i = @format - 1;
     $i = $theCol if( $theCol < $i );
@@ -518,7 +518,7 @@ sub inputElement {
         # being processed (inside of this unless() statement) do we actually
         # go out and read the original topic.  Thus the reason for the
         # following unless() so we only read the topic the first time through.
-        unless( defined $table ) {
+        unless( defined $table and $digestedCellValue ) {
             # To deal with the situation where TWiki variables, like
             # %CALC%, have already been processed and end up getting saved
             # in the table that way (processed), we need to read in the
@@ -526,10 +526,12 @@ sub inputElement {
             my $topicContents = TWiki::Func::readTopicText( $TWiki::Plugins::EditTablePlugin::web, $TWiki::Plugins::EditTablePlugin::topic );
             $table = TWiki::Plugins::Table->new( $topicContents );
         }
-        my $cell = $table->getCell( $theTableNr, $theRowNr - 1, $theCol );
+        my $cell = $digestedCellValue 
+                 ? $table->getCell( $theTableNr, $theRowNr - 1, $theCol )
+                 : $rawValue;
         $theValue = $cell if( defined $cell );  # original value from file
         $theValue = TWiki::Plugins::EditTablePlugin::encodeValue( $theValue ) unless( $theValue eq '' );
-        $theValue = "\*$theValue\*" if( $isHeader );
+        $theValue = "\*$theValue\*" if( $isHeader and $digestedCellValue );
         $text .= "<input type=\"hidden\" name=\"$theName\" value=\"$theValue\" />";
         $text = "\*$text\*" if( $isHeader );
 
@@ -583,7 +585,7 @@ sub inputElement {
 }
 
 sub handleTableRow {
-    my ( $thePre, $theRow, $theTableNr, $theRowMax, $theRowNr, $doEdit, $doSave, $theWeb, $theTopic ) = @_;
+    my ( $thePre, $theRow, $theTableNr, $newRow, $theRowNr, $doEdit, $doSave, $theWeb, $theTopic ) = @_;
 
     $thePre = '' unless( defined( $thePre ) );
     my $text = "$thePre\|";
@@ -598,12 +600,13 @@ sub handleTableRow {
         my $val = '';
         my $cellFormat = '';
         my $cell = '';
+        my $digested = 0;
         my $cellDefined = 0;
         my $col = 0;
         while( $col < $nrCols ) {
             $col += 1;
             $cellDefined = 0;
-            $val = $query->param( "etcell${rowID}x$col" );
+            $val = $newRow ? undef : $query->param( "etcell${rowID}x$col" );
             if( $val && $val =~ /^Chkbx: (etcell.*)/ ) {
                 # Multiple checkboxes, val has format "Chkbx: etcell4x2x2 etcell4x2x3 ..."
                 my $chkBoxeNames = $1;
@@ -627,6 +630,7 @@ sub handleTableRow {
                 $cell = $val;
             } elsif( $col <= @cells ) {
                 $cell = $cells[$col-1];
+                $digested = 1; # Flag that we are using non-raw cell text.
                 $cellDefined = 1 if( length( $cell ) > 0 );
                 $cell =~ s/^\s//o;
                 $cell =~ s/\s$//o;
@@ -662,7 +666,7 @@ sub handleTableRow {
                      $cell = '' unless( defined $cell && $cell ne '' ); # Proper handling of '0'
                      $cell =~ s/\,.*$//o if( $val eq 'select' || $val eq 'date' );
                 }
-                $text .= inputElement( $theTableNr, $theRowNr, $col-1, "etcell${theRowNr}x$col", $cell, $theWeb, $theTopic ) . " \|";
+                $text .= inputElement( $theTableNr, $theRowNr, $col-1, "etcell${theRowNr}x$col", $cell, $digested, $theWeb, $theTopic ) . " \|";
             }
         }
     } else {
