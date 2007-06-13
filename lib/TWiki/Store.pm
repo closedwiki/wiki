@@ -1322,8 +1322,15 @@ sub extractMetaData {
     my $endMeta = 0;
 
     $$rtext =~ s(^%META:([^{]+){(.*)}%\r?\n)
-      ($endMeta = 1;
-       $meta->putKeyed( $1, _readKeyValues( $2, $format )), '')gem;
+      (
+          $endMeta = 1;
+          my $keys = _readKeyValues( $2, $format );
+          if (defined($keys->{name})) {
+              # don't attempt to save it keyed unless it has a name
+              $meta->putKeyed( $1, $keys);
+          }
+          '';
+         )gem;
 
     # eat the extra newline put in to separate text from tail meta-data
     $$rtext =~ s/\n$//s if $endMeta;
