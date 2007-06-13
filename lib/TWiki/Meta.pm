@@ -106,6 +106,18 @@ sub finish {
 
 =pod
 
+---++ ClassMethod session()
+
+Get the session
+
+=cut
+
+sub session {
+    return $_[0]->{_session};
+}
+
+=pod
+
 ---++ ClassMethod web()
 
 Get the web name

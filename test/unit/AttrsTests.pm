@@ -213,7 +213,7 @@ sub huey {
     return $s;
 }
 
-sub detest_string {
+sub check_string {
     my( $this, $s ) = @_;
 
     my $new = new TWiki::Attrs($s,0);
@@ -228,25 +228,25 @@ sub detest_string {
 sub test_compatibility1 {
     my $this = shift;
     my $s = ' "abc\" def="ghi" jkl" def="mno" pqr=" stu="\"vwx""';
-    $this->detest_string( $s );
+    $this->check_string( $s );
 }
 
 sub test_compatibility2 {
     my $this = shift;
     my $s = ' def="m\"no" pqr=" stu="vwx""';
-    $this->detest_string( $s );
+    $this->check_string( $s );
 }
 
 sub test_compatibility3 {
     my $this = shift;
     my $s = " bloody \" hell ";
-    $this->detest_string( $s );
+    $this->check_string( $s );
 }
 
 sub test_compatibility4 {
     my $this = shift;
     my $s = "  ";
-    $this->detest_string( $s );
+    $this->check_string( $s );
 }
 
 sub test_compatibility5 {
@@ -258,7 +258,7 @@ sub test_compatibility5 {
     $s = "\n";
     $new = new TWiki::Attrs($s,0);
     $s = "\"The\nCat\" format=\"Shat\nOn\nThe\nMat\"";
-    $this->detest_string( $s );
+    $this->check_string( $s );
 }
 
 sub test_raw {

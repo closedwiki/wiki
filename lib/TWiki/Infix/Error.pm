@@ -1,12 +1,12 @@
 =pod
 
----+ package TWiki::InfixParser::Error
+---+ package TWiki::Infix::Error
 
-Class of errors used with TWiki::InfixParser
+Class of errors used with TWiki::Infix::Parser
 
 =cut
 
-package TWiki::InfixParser::Error;
+package TWiki::Infix::Error;
 use base 'Error';
 
 use strict;

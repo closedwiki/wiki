@@ -1,7 +1,9 @@
 package QueryTests;
 use base 'TWikiFnTestCase';
 
-use TWiki::Query;
+use TWiki::Query::Parser;
+use TWiki::Query::HoistREs;
+use TWiki::Query::Node;
 use TWiki::Meta;
 use strict;
 
@@ -66,18 +68,20 @@ sub set_up {
 
 sub check {
     my ( $this, $s, $r ) = @_;
-    my $queryParser = new TWiki::QueryParser();
+    my $queryParser = new TWiki::Query::Parser();
     my $query = $queryParser->parse($s);
     my $meta = $this->{meta};
-    my $val = $query->evaluate( [ $meta, $meta ] );
+    my $val = $query->evaluate( tom=>$meta, data=>$meta );
     if(ref($r)) {
         $this->assert_deep_equals(
             $r, $val,
-            "Expected $r, got ".TWiki::Query::toString($val)." for $s");
+            "Expected $r, got ".TWiki::Query::Node::toString($val)." for $s in ".
+           join(' ', caller));
     } else {
         $this->assert_str_equals(
             $r, $val,
-            "Expected $r, got ".TWiki::Query::toString($val)." for $s");
+            "Expected $r, got ".TWiki::Query::Node::toString($val)." for $s in ".
+           join(' ', caller));
     }
 }
 
@@ -219,6 +223,96 @@ sub test_brackets {
             }
         }
     }
+}
+
+sub test_hoistSimple {
+    my $this = shift;
+    my $s = "number=99";
+    my $queryParser = new TWiki::Query::Parser();
+    my $query = $queryParser->parse($s);
+    require TWiki::Query::HoistREs;
+    my @filter = TWiki::Query::HoistREs::hoist( $query ) || 'undef';
+    #print STDERR "HoistS ",$query->stringify()," -> /",join(';', @filter),"/\n";
+    $this->assert_str_equals('^%META:FIELD{name="number".*\bvalue="99"',
+                            join(';', @filter));
+    my $meta = $this->{meta};
+    my $val = $query->evaluate( tom=>$meta, data=>$meta );
+}
+
+sub test_hoistSimple2 {
+    my $this = shift;
+    my $s = "99=number";
+    my $queryParser = new TWiki::Query::Parser();
+    my $query = $queryParser->parse($s);
+    require TWiki::Query::HoistREs;
+    my @filter = TWiki::Query::HoistREs::hoist( $query ) || 'undef';
+    #print STDERR "HoistS ",$query->stringify()," -> /",join(';', @filter),"/\n";
+    $this->assert_str_equals('^%META:FIELD{name="number".*\bvalue="99"',
+                            join(';', @filter));
+    my $meta = $this->{meta};
+    my $val = $query->evaluate( tom=>$meta, data=>$meta );
+}
+
+sub test_hoistCompound {
+    my $this = shift;
+    my $s = "number=99 AND string='String' and (moved.by='AlbertCamus' OR moved.by ~ '*bert*')";
+    my $queryParser = new TWiki::Query::Parser();
+    my $query = $queryParser->parse($s);
+    require TWiki::Query::HoistREs;
+    my @filter = TWiki::Query::HoistREs::hoist( $query );
+    #print STDERR "HoistC ",$query->stringify()," -> /",join(';', @filter),"/\n";
+    $this->assert_str_equals('^%META:FIELD{name="number".*\bvalue="99"',
+                             $filter[0]);
+    $this->assert_str_equals('^%META:FIELD{name="string".*\bvalue="String"',
+                             $filter[1]);
+    $this->assert_str_equals('^%META:TOPICMOVED{.*\bby="AlbertCamus"|^%META:TOPICMOVED{.*\bby=".*bert.*"',
+                             $filter[2]);
+    my $meta = $this->{meta};
+    my $val = $query->evaluate( tom=>$meta, data=>$meta );
+}
+
+sub test_hoistCompound2 {
+    my $this = shift;
+    my $s = "(moved.by='AlbertCamus' OR moved.by ~ '*bert*') AND number=99 AND string='String'";
+    my $queryParser = new TWiki::Query::Parser();
+    my $query = $queryParser->parse($s);
+    require TWiki::Query::HoistREs;
+    my @filter = TWiki::Query::HoistREs::hoist( $query );
+    #print STDERR "HoistC ",$query->stringify()," -> /",join(';', @filter),"/\n";
+    $this->assert_str_equals('^%META:TOPICMOVED{.*\bby="AlbertCamus"|^%META:TOPICMOVED{.*\bby=".*bert.*"',
+                             $filter[0]);
+    $this->assert_str_equals('^%META:FIELD{name="number".*\bvalue="99"',
+                             $filter[1]);
+    $this->assert_str_equals('^%META:FIELD{name="string".*\bvalue="String"',
+                             $filter[2]);
+    my $meta = $this->{meta};
+    my $val = $query->evaluate( tom=>$meta, data=>$meta );
+}
+
+sub test_hoistAlias {
+    my $this = shift;
+    my $s = "info.date=12345";
+    my $queryParser = new TWiki::Query::Parser();
+    my $query = $queryParser->parse($s);
+    require TWiki::Query::HoistREs;
+    my @filter = TWiki::Query::HoistREs::hoist( $query ) || 'undef';
+    $this->assert_str_equals('^%META:TOPICINFO{.*\bdate="12345"',
+                             join(';', @filter));
+    my $meta = $this->{meta};
+    my $val = $query->evaluate( tom=>$meta, data=>$meta );
+}
+
+sub test_hoistFormField {
+    my $this = shift;
+    my $s = "TestForm.number=99";
+    my $queryParser = new TWiki::Query::Parser();
+    my $query = $queryParser->parse($s);
+    require TWiki::Query::HoistREs;
+    my @filter = TWiki::Query::HoistREs::hoist( $query ) || 'undef';
+    $this->assert_str_equals('^%META:FIELD{name="number".*\bvalue="99"',
+                             join(';', @filter));
+    my $meta = $this->{meta};
+    my $val = $query->evaluate( tom=>$meta, data=>$meta );
 }
 
 1;

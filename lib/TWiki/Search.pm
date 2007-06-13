@@ -694,13 +694,13 @@ sub searchWeb {
 
     if( $type eq 'query' ) {
         unless( defined( $queryParser )) {
-            require TWiki::Query;
-            $queryParser = TWiki::QueryParser->new();
+            require TWiki::Query::Parser;
+            $queryParser = new TWiki::Query::Parser();
         }
         my $error = '';
         try {
             $query = $queryParser->parse( $searchString );
-        } catch TWiki::InfixParser::Error with {
+        } catch TWiki::Infix::Error with {
             # Pass the error on to the caller
             throw Error::Simple( shift->stringify());
         };

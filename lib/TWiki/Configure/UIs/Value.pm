@@ -53,10 +53,6 @@ sub open_html {
         }
     }
 
-    if ($isExpert && !$experts && !$broken) {
-        return '';
-    }
-
     my $class = $value->{typename};
     $class .= ' mandatory' if ($value->{mandatory});
     my $prompter = $type->prompt(
@@ -65,8 +61,13 @@ sub open_html {
 
 	my $hiddenText = $this->hidden( 'TYPEOF:'.$keys, $value->{typename} );
 	my $cssClass = 'docdata info';
-	# Hide row if the hidden input field is the only contents
-	$cssClass .= ' twikiHidden' if $info eq '';
+	# Hide row if the hidden input field is the only contents or this
+    # is experts mode
+    if (!$broken
+         && $info eq ''
+           || $isExpert && !$experts) {
+        $cssClass .= ' twikiHidden';
+    }
     my $td = CGI::td(
         { colspan => 2, class=>$cssClass },
         $hiddenText.$info );

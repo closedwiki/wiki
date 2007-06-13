@@ -353,15 +353,36 @@ sub searchInWebMetaData {
     local $/;
     my $store = $this->{session}->{store};
 
-    # SMELL: stunningly inefficient. Really need to do a better
-    # job of cacheing metadata
+    # Optimisation: hoist regular expressions out of the query to use with
+    # grep, so we can narrow down the set of topics that we have to evaluate
+    # the query on.
+
+    # SMELL: not sure exactly where the breakpoint is between the
+    # costs of hoisting and the advantages of hoisting. Benchmarks suggest
+    # that it's around 6 topics, though this may vary depending on disk
+    # speed and memory size. It also depends on the complexity of the query.
+    if (scalar(@$topics) > 6) {
+        require TWiki::Query::HoistREs;
+        my @filter = TWiki::Query::HoistREs::hoist( $query );
+        foreach my $token (@filter) {
+            my $m = $this->searchInWebContent(
+                $token, $topics,
+                {
+                    type => 'regex',
+                    casesensitive => 1,
+                    files_without_match => 1,
+                });
+            @$topics = keys %$m;
+        }
+    }
+
     my %matches;
     foreach my $topic ( @$topics ) {
         next unless open(FILE, "<$sDir/$topic.txt");
         my $text = <FILE>;
         my $meta = new TWiki::Meta( $this->{session}, $this->{web}, $topic);
         $store->extractMetaData( $meta, \$text );
-        my $match = $query->evaluate( [ $meta, $meta ] );
+        my $match = $query->evaluate( tom=>$meta, data=>$meta );
         if( $match ) {
             $matches{$topic} = $match;
         }

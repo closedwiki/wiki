@@ -518,4 +518,71 @@ sub test_badQuery1 {
     $this->assert_matches(qr/Error was: Syntax error in 'A \* B' at ' \* B'/s, $result);
 }
 
+# Compare performance of an RE versus a query. Only enable this if you are
+# interested in benchmarking.
+sub benchmarktest_largeQuery {
+    my $this = shift;
+    # Generate 1000 topics
+    # half (500) of these match the first term of the AND
+    # 100 match the second
+    # 10 match the third
+    # 1 matches the fourth
+
+    for my $n (1..21) {
+        my $vA = ($n <= 500) ? 'A' : 'B';
+        my $vB = ($n <= 100) ? 'A' : 'B';
+        my $vC = ($n <= 10) ? 'A' : 'B';
+        my $vD = ($n == 1) ? 'A' : 'B';
+        my $vE = ($n == 2) ? 'A' : 'B';
+        my $text = <<HERE;
+%META:TOPICINFO{author="TWikiUserMapping_guest" date="12" format="1.1" version="1.2"}%
+---+ Progressive Sexuality
+A Symbol Interpreted In American Architecture. Meta-Physics Of Marxism & Poverty In The American Landscape. Exploration Of Crime In Mexican Sculptures: A Study Seen In American Literature. Brief Survey Of Suicide In Italian Art: The Big Picture. Special Studies In Bisexual Female Architecture. Brief Survey Of Suicide In Polytheistic Literature: Analysis, Analysis, and Critical Thinking. Radical Paganism: Modern Theories. Liberal Mexican Religion In The Modern Age. Selected Topics In Global Warming: $vD Policy In Modern America. Survey Of The Aesthetic Minority Revolution In The American Landscape. Populist Perspectives: Myth & Reality. Ethnicity In Modern America: The Bisexual Latino Condition. Postmodern Marxism In Modern America. Female Literature As A Progressive Genre. Horror & Life In Recent Times. The Universe Of Female Values In The Postmodern Era.
+
+---++ Work, Politics, And Conflict In European Drama: A Symbol Interpreted In 20th Century Poetry
+Sexuality & Socialism In Modern Society. Special Studies In Early Egyptian Art: A Study Of Globalism In The United States. Meta-Physics Of Synchronized Swimming: The Baxter-Floyd Principle At Work. Ad-Hoc Investigation Of Sex In Middle Eastern Art: Contemporary Theories. Concepts In Eastern Mexican Folklore. The Liberated Dimension Of Western Minority Mythology. French Art Interpretation: A Figure Interpreted In American Drama
+
+---+ Theories Of Liberal Pre-Cubism & The Crowell Law.
+We are committed to enhance vertical sub-functionalities and skill sets. Our function is to competently reinvent our mega-relationships. Our responsibility is to expertly engineer content. Our obligation is to continue to zealously simplify our customer-centric paradigms as part of our five-year plan to successfully market an overhyped more expensive line of products and produce more dividends for our serfs. $vA It is our mission to optimize progressive schemas and supply-chains to better serve the country. We are committed to astutely deliver our net-niches, user-centric face time, and assets in order to dominate the economy. It is our goal to conveniently facilitate our e-paradigms, our frictionless skill sets, and our architectures to shore up revenue for our workers. Our goal is to work towards skillfully enabling catalysts for metrics.
+
+We resolve to endeavor to synthesize our sub-partnerships in order that we may intelligently unleash bleeding-edge total quality management as part of our master plan to burgeon our bottom line. It is our business to work to enhance our initiatives in order that we may take $vB over the nation and take over the country. It's our task to reinvent massively-parallel relationships. We execute a strategic plan to quickly facilitate our niches and enthusiastically maximize our extensible perspectives.
+
+Our obligation is to work to spearhead cutting-edge portals so that hopefully we may successfully market an overhyped poor product line.
+
+We have committed to work to effectively facilitate global e-channels as part of a larger $vC strategy to create a higher quality product and create a lot of bucks. Our duty is to work to empower our revolutionary functionalities and simplify our idiot-proof synergies as a component of our plan to beat the snot out of our enemies. We resolve to engage our mega-eyeballs, our e-bandwidth, and intuitive face time in order to earn a lot of scratch. It's our obligation to generate our niches.
+
+---+ It is our job to strive to simplify our bandwidth.
+We have committed to enable customer-centric supply-chains and our mega-channels as part of our business plan to meet the wants of our valued customers.
+We have committed to take steps towards $vE reinventing our cyber-key players and harnessing frictionless net-communities so that hopefully we may better serve our customers.
+%META:FORM{name="TestForm"}%
+%META:FIELD{name="FieldA" attributes="" title="Banother Field" value="$vA"}%
+%META:FIELD{name="FieldB" attributes="" title="Banother Field" value="$vB"}%
+%META:FIELD{name="FieldC" attributes="" title="Banother Field" value="$vC"}%
+%META:FIELD{name="FieldD" attributes="" title="Banother Field" value="$vD"}%
+%META:FIELD{name="FieldE" attributes="" title="Banother Field" value="$vE"}%
+HERE
+        $this->{twiki}->{store}->saveTopic(
+            $this->{twiki}->{user}, $this->{test_web},
+            "QueryTopic$n", $text);
+    }
+    require Benchmark;
+
+    # Search using a regular expression
+    my $start = new Benchmark;
+    my $result = $this->{twiki}->handleCommonTags(
+        '%SEARCH{"^[%]META:FIELD{name=\"FieldA\".*\bvalue=\"A\";^[%]META:FIELD{name=\"FieldB\".*\bvalue=\"A\";^[%]META:FIELD{name=\"FieldC\".*\bvalue=\"A\";^[%]META:FIELD{name=\"FieldD\".*\bvalue=\"A\"|^[%]META:FIELD{name=\"FieldE\".*\bvalue=\"A\"" type="regex" nonoise="on" format="$topic" separator=" "}%',
+        $this->{test_web}, $this->{test_topic});
+    my $retime = Benchmark::timediff(new Benchmark, $start);
+    $this->assert_str_equals('QueryTopic1 QueryTopic2', $result);
+
+    # Repeat using a query
+    $start = new Benchmark;
+    $result = $this->{twiki}->handleCommonTags(
+        '%SEARCH{"FieldA=\'A\' AND FieldB=\'A\' AND FieldC=\'A\' AND (FieldD=\'A\' OR FieldE=\'A\')" type="query" nonoise="on" format="$topic" separator=" "}%',
+        $this->{test_web}, $this->{test_topic});
+    my $querytime = Benchmark::timediff(new Benchmark, $start);
+    $this->assert_str_equals('QueryTopic1 QueryTopic2', $result);
+    print STDERR "Query ".Benchmark::timestr($querytime),"\nRE ".Benchmark::timestr($retime),"\n";
+}
+
 1;

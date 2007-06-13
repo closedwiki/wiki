@@ -2,7 +2,7 @@
 
 =pod
 
----+ package TWiki::InfixParser
+---+ package TWiki::Infix::Parser
 
 A simple stack-based parser that parses infix expressions with nonary,
 unary and binary operators specified using an operator table.
@@ -11,22 +11,16 @@ Escapes are supported in strings, using backslash.
 
 =cut
 
-package TWiki::InfixParser;
+package TWiki::Infix::Parser;
 
 use strict;
 use Assert;
 use Error qw( :try );
-use TWiki::InfixParser::Error;
-use TWiki::InfixParser::Node;
+use TWiki::Infix::Error;
+use TWiki::Infix::Node;
 
 # Set to 1 for debug
 sub MONITOR_PARSER { 0 };
-
-# Leaf token types
-use vars qw ($NAME $STRING $NUMBER);
-$NAME = 1;
-$NUMBER = 2;
-$STRING = 3;
 
 =pod
 
@@ -49,7 +43,7 @@ following two functions:
      is a variable-length list of parameters, left to right. $op
      is a reference to the operator hash in the \@opers list.
 These functions should throw Error::Simple in the event of errors.
-TWiki::InfixParser::Node is such a class, ripe for subclassing.
+TWiki::Infix::Node is such a class, ripe for subclassing.
 
 The remaining parameters are named, and specify options that affect the
 behaviour of the parser:
@@ -89,10 +83,10 @@ sub new {
 
 =pod
 
----++ ObjectMethod addOperator(\%oper)
+---++ ObjectMethod addOperator(%oper)
 Add an operator to the parser.
 
-=\%oper= is a reference to a hash, containing the following fields:
+=%oper= is a hash, containing the following fields:
    * =name= - operator string
    * =prec= - operator precedence, positive non-zero integer.
      Larger number => higher precedence.
@@ -116,8 +110,8 @@ by the parser.
 =cut
 
 sub addOperator {
-    my( $this, $oper ) = @_;
-    push( @{$this->{operators}}, $oper );
+    my $this = shift;
+    push( @{$this->{operators}}, { @_ } );
     $this->{initialised} = 0;
 }
 
@@ -174,7 +168,7 @@ Parses =$string=, calling =newLeaf= and =newNode= in the client class
 as necessary to create a parse tree. Returns the result of calling =newNode=
 on the root of the parse.
 
-Throws TWiki::InfixParser::Error in the event of parse errors.
+Throws TWiki::Infix::Error in the event of parse errors.
 
 =cut
 
@@ -189,7 +183,7 @@ sub parse {
 sub _parse {
     my( $this, $expr, $input, $term ) = @_;
 
-    throw TWiki::InfixParser::Error("Empty expression")
+    throw TWiki::Infix::Error("Empty expression")
       unless $expr =~ /\S/;
 
     my @opers = ();
@@ -210,15 +204,18 @@ sub _parse {
             } elsif ($$input =~ s/^\s*(['"])(|.*?[^\\])\1//) {
                 print STDERR "Tok: qs '$1'\n" if MONITOR_PARSER;
                 my $val = $2;
-                push( @opands, $this->{client_class}->newLeaf($val, $STRING));
+                push( @opands, $this->{client_class}->newLeaf(
+                    $val, $TWiki::Infix::Node::STRING));
             } elsif ($$input =~ s/^\s*($this->{numbers})//) {
                 print STDERR "Tok: number '$1'\n" if MONITOR_PARSER;
                 my $val = $1;
-                push( @opands, $this->{client_class}->newLeaf($val, $NUMBER));
+                push( @opands, $this->{client_class}->newLeaf(
+                    $val, $TWiki::Infix::Node::NUMBER));
             } elsif ($$input =~ s/^\s*($this->{words})//) {
                 print STDERR "Tok: word '$1'\n" if MONITOR_PARSER;
                 my $val = $1;
-                push( @opands, $this->{client_class}->newLeaf($val, $NAME));
+                push( @opands, $this->{client_class}->newLeaf(
+                    $val, $TWiki::Infix::Node::NAME));
             } elsif ($$input =~ s/^\s*($this->{bracket_op_REs})//) {
                 my $opname = $1;
                 print STDERR "Tok: open bracket $opname\n" if MONITOR_PARSER;
@@ -232,18 +229,18 @@ sub _parse {
                 print STDERR "Tok: close bracket $term\n" if MONITOR_PARSER;
                 last;
             } else {
-                throw TWiki::InfixParser::Error(
+                throw TWiki::Infix::Error(
                     'Syntax error', $expr, $$input);
             }
         }
         _apply($this, 0, \@opers, \@opands);
     } catch Error::Simple with {
         # Catch errors thrown during the tree building process
-        throw TWiki::InfixParser::Error(shift, $expr, $$input);
+        throw TWiki::Infix::Error(shift, $expr, $$input);
     };
-    throw TWiki::InfixParser::Error(
+    throw TWiki::Infix::Error(
         'Missing operator', $expr, $$input) unless scalar(@opands) == 1;
-    throw TWiki::InfixParser::Error(
+    throw TWiki::Infix::Error(
         'Excess operators ('.
           join(' ', map { $_->{name} } @opers).')', $expr, $$input)
       if scalar(@opers);
@@ -267,7 +264,7 @@ sub _apply {
         while ($arity--) {
             unshift(@prams, pop(@$opands));
             # Should never get thrown, but just in case...
-            throw TWiki::InfixParser::Error("Missing operand to '$op->{name}'")
+            throw TWiki::Infix::Error("Missing operand to '$op->{name}'")
               unless $prams[0];
         }
         if (MONITOR_PARSER) {

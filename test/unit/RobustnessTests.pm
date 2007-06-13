@@ -20,7 +20,7 @@ sub tear_down {
     $this->{twiki}->finish();
 }
 
-sub detest_untaint {
+sub test_untaint {
     my $this = shift;
 
     $this->assert_str_equals('', TWiki::Sandbox::untaintUnchecked (''));
@@ -28,7 +28,7 @@ sub detest_untaint {
     $this->assert_null(TWiki::Sandbox::untaintUnchecked (undef));
 }
 
-sub detest_normalize {
+sub test_normalize {
     my $this = shift;
 
     $this->assert_str_equals( 'abc', TWiki::Sandbox::normalizeFileName ('abc'));
@@ -65,7 +65,7 @@ sub detest_normalize {
     $this->assert_str_equals('a/..b', TWiki::Sandbox::normalizeFileName ('a/..b'));
 }
 
-sub detest_sanitizeAttachmentName {
+sub test_sanitizeAttachmentName {
     my $this = shift;
     
     $this->assert_str_equals('abc', TWiki::Sandbox::sanitizeAttachmentName ('abc'));
@@ -87,7 +87,7 @@ sub detest_sanitizeAttachmentName {
     $this->assert_str_equals($untainted, TWiki::Sandbox::sanitizeAttachmentName ($tainted));
 }
 
-sub detest_buildCommandLine {
+sub test_buildCommandLine {
     my $this = shift;
     $this->assert_deep_equals(['a', 'b', 'c'],
                               [$this->{twiki}->{sandbox}->_buildCommandLine('a b c', ())]);
@@ -139,14 +139,14 @@ sub verify {
     $this->assert_str_equals("urmf\n", $out);
 }
 
-sub detest_executeRSP {
+sub test_executeRSP {
     my $this = shift;
     $this->{twiki}->{sandbox}->{REAL_SAFE_PIPE_OPEN} = 1;
     $this->{twiki}->{sandbox}->{EMULATED_SAFE_PIPE_OPEN} = 0;
     $this->verify();
 }
 
-sub detest_executeESP {
+sub test_executeESP {
     my $this = shift;
     $this->{twiki}->{sandbox}->{REAL_SAFE_PIPE_OPEN} = 0;
     $this->{twiki}->{sandbox}->{EMULATED_SAFE_PIPE_OPEN} = 1;

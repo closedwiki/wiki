@@ -304,6 +304,6 @@ option3
 ---++ Actual
 
 <!-- actual -->
-%SEARCH{ "^FormattedSearch.$" web="%BASEWEB%" scope="topic" type="regex" nonoise="on" format="$percntIF{$quot$parent$quot then=$quot<nop>$topic parent is <nop>$parent$n$quot else=$quot<nop>$quot}$percnt" }%
+%SEARCH{ "^FormattedSearch[12]" web="%BASEWEB%" scope="topic" type="regex" nonoise="on" format="<nop>$topic $percntIF{$quot'$parent'$quot then=$quotparent is <nop>$parent$n$quot else=$quot<nop>$quot}$percnt" }%
 <!-- /actual -->
 

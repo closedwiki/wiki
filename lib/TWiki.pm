@@ -102,7 +102,7 @@ use vars qw(
             $TRUE
             $FALSE
             $sharedSandbox
-            $ifFactory
+            $ifParser
            );
 
 # Token character that must not occur in any normal text - converted
@@ -2331,6 +2331,9 @@ sub expandAllTags {
     $this->{SESSION_TAGS}{WEB}     = $memWeb;
 }
 
+# set this to 1 to print debugging
+sub TRACE_TAG_PARSER { 0 }
+
 # Process TWiki %TAGS{}% by parsing the input tokenised into
 # % separated sections. The parser is a simple stack-based parse,
 # sufficient to ensure nesting of tags is correct, but no more
@@ -2341,6 +2344,7 @@ sub _processTags {
     my $this = shift;
     my $text = shift;
     my $tagf = shift;
+    my $tell = 0;
 
     return '' unless defined( $text );
 
@@ -2370,16 +2374,14 @@ sub _processTags {
     # referring to the top of the stack for efficiency. This var
     # should be considered to be $stack[$#stack]
 
-    #my $tell = 1; # uncomment all tell lines set this to 1 to print debugging
-
     while ( scalar( @queue )) {
         my $token = shift( @queue );
-        #print STDERR ' ' x $tell,"PROCESSING $token \n" if $tell;
+        print STDERR ' ' x $tell,"PROCESSING $token \n" if TRACE_TAG_PARSER;
 
         # each % sign either closes an existing stacked context, or
         # opens a new context.
         if ( $token eq '%' ) {
-            #print STDERR ' ' x $tell,"CONSIDER $stackTop\n" if $tell;
+            print STDERR ' ' x $tell,"CONSIDER $stackTop\n" if TRACE_TAG_PARSER;
             # If this is a closing }%, try to rejoin the previous
             # tokens until we get to a valid tag construct. This is
             # a bit of a hack, but it's hard to think of a better
@@ -2389,23 +2391,23 @@ sub _processTags {
                 while ( scalar( @stack) &&
                         $stackTop !~ /^%($regex{tagNameRegex}){.*}$/so ) {
                     my $top = $stackTop;
-                    #print STDERR ' ' x $tell,"COLLAPSE $top \n" if $tell;
+                    print STDERR ' ' x $tell,"COLLAPSE $top \n" if TRACE_TAG_PARSER;
                     $stackTop = pop( @stack ) . $top;
                 }
             }
             # /s so you can have newlines in parameters
             if ( $stackTop =~ m/^%(($regex{tagNameRegex})(?:{(.*)})?)$/so ) {
                 my( $expr, $tag, $args ) = ( $1, $2, $3 );
-                #print STDERR ' ' x $tell,"POP $tag\n" if $tell;
+                print STDERR ' ' x $tell,"POP $tag\n" if TRACE_TAG_PARSER;
                 my $e = &$tagf( $this, $tag, $args, @_ );
 
                 if ( defined( $e )) {
-                    #print STDERR ' ' x $tell--,"EXPANDED $tag -> $e\n" if $tell;
+                    print STDERR ' ' x $tell--,"EXPANDED $tag -> $e\n" if TRACE_TAG_PARSER;
                     $stackTop = pop( @stack );
                     # Recursively expand tags in the expansion of $tag
                     $stackTop .= _processTags($this, $e, $tagf, $depth-1, @_ );
                 } else { # expansion failed
-                    #print STDERR ' ' x $tell++,"EXPAND $tag FAILED\n" if $tell;
+                    print STDERR ' ' x $tell++,"EXPAND $tag FAILED\n" if TRACE_TAG_PARSER;
                     # To handle %NOP
                     # correctly, we have to handle the %VAR% case differently
                     # to the %VAR{}% case when a variable expansion fails.
@@ -2437,7 +2439,7 @@ sub _processTags {
             } else {
                 push( @stack, $stackTop );
                 $stackTop = '%'; # push a new context
-                #$tell++ if ( $tell );
+                $tell++ if TRACE_TAG_PARSER;
             }
         } else {
             $stackTop .= $token;
@@ -2455,7 +2457,7 @@ sub _processTags {
 
     $this->{renderer}->putBackBlocks( \$stackTop, $verbatim, 'verbatim' );
 
-    #print STDERR "FINAL $stackTop\n" if $tell;
+    print STDERR "FINAL $stackTop\n" if TRACE_TAG_PARSER;
 
     return $stackTop;
 }
@@ -2882,24 +2884,24 @@ sub PLUGINVERSION {
 sub IF {
     my ( $this, $params, $topic, $web, $meta ) = @_;
 
-    unless( $ifFactory ) {
-        require TWiki::If;
-        $ifFactory = new TWiki::If();
+    unless( $ifParser ) {
+        require TWiki::If::Parser;
+        $ifParser = new TWiki::If::Parser();
     }
 
     my $expr;
     my $result;
     try {
-        $expr = $ifFactory->parse( $params->{_DEFAULT} );
+        $expr = $ifParser->parse( $params->{_DEFAULT} );
         unless( $meta ) {
             $meta = new TWiki::Meta( $this, $web, $topic );
         }
-        if( $expr->evaluate( [ $meta, $meta ] )) {
+        if( $expr->evaluate( tom=>$meta, data=>$meta )) {
             $result = expandStandardEscapes( $params->{then} || '' );
         } else {
             $result = expandStandardEscapes( $params->{else} || '' );
         }
-    } catch TWiki::InfixParser::Error with {
+    } catch TWiki::Infix::Error with {
         my $e = shift;
         $result = $this->inlineAlert(
             'alerts', 'generic', 'IF{', $params->stringify(), '}:',
@@ -3202,7 +3204,6 @@ sub SEARCH {
     $params->{basetopic} = $topic;
     $params->{search} = $params->{_DEFAULT} if( $params->{_DEFAULT} );
     $params->{type} = $this->{prefs}->getPreferencesValue( 'SEARCHVARDEFAULTTYPE' ) unless( $params->{type} );
-
     my $s;
     try {
         $s = $this->{search}->searchWeb( %$params );
