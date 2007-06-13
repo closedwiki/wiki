@@ -706,14 +706,14 @@ sub doSaveTable {
                     $rowNr--;
                     next;
                 }
-                s/^(\s*)\|(.*)/&handleTableRow( $1, $2, $tableNr, $cgiRows, $rowNr, 1, 1, $theWeb, $theTopic )/eo;
+                s/^(\s*)\|(.*)/&handleTableRow( $1, $2, $tableNr, 0, $rowNr, 1, 1, $theWeb, $theTopic )/eo;
 
             } elsif( $insideTable ) {
                 $insideTable = 0;
                 if( $rowNr < $cgiRows ) {
                     while( $rowNr < $cgiRows ) {
                         $rowNr++;
-                        $result .= handleTableRow( $preSp, '', $tableNr, $cgiRows, $rowNr, 1, 1, $theWeb, $theTopic ) . "\n";
+                        $result .= handleTableRow( $preSp, '', $tableNr, 0, $rowNr, 1, 1, $theWeb, $theTopic ) . "\n";
                     }
                 }
                 $doSave = 0;
@@ -725,11 +725,11 @@ sub doSaveTable {
                     $rowNr = 0;
                     if( $params{'header'} ) {
                         $rowNr++;
-                        $result .= handleTableRow( $preSp, '', $tableNr, $cgiRows, $rowNr,1 , 1, $theWeb, $theTopic ) . "\n";
+                        $result .= handleTableRow( $preSp, '', $tableNr, 0, $rowNr,1 , 1, $theWeb, $theTopic ) . "\n";
                     }
                     while( $rowNr < $cgiRows ) {
                         $rowNr++;
-                        $result .= handleTableRow( $preSp, '', $tableNr, $cgiRows, $rowNr, 1, 1, $theWeb, $theTopic ) . "\n";
+                        $result .= handleTableRow( $preSp, '', $tableNr, 0, $rowNr, 1, 1, $theWeb, $theTopic ) . "\n";
                     }
                 }
                 $doSave = 0;
