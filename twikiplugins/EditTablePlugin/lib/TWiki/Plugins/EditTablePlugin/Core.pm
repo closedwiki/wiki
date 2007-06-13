@@ -50,6 +50,7 @@ sub process {
     my $insideTable = 0;
     my $doEdit = 0;
     my $cgiRows = -1;
+    my $addRows = 0;
 
     $_[0] =~ s/\r//go;
     $_[0] =~ s/\\\n//go;  # Join lines ending in "\"
@@ -84,7 +85,7 @@ sub process {
 
                } elsif( $query->param( 'etaddrow' ) ) {
                    # [Add row] button pressed
-                   $cgiRows++ if( $cgiRows >= 0 );
+                   $addRows++ if( $cgiRows >= 0 );
                    $doEdit = doEnableEdit( $theWeb, $theTopic, 0 );
                    return unless( $doEdit );
 
@@ -120,6 +121,7 @@ sub process {
             } elsif( $insideTable ) {
                 # end of table
                 $insideTable = 0;
+                $cgiRows += $addRows;
                 if( $doEdit && $cgiRows >= 0 && $rowNr < $cgiRows ) {
                     while( $rowNr < $cgiRows ) {
                         $rowNr++;
