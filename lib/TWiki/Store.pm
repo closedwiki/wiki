@@ -1906,7 +1906,7 @@ to their parent.
 sub searchInWebMetaData {
     my( $this, $query, $web, $topics ) = @_;
     ASSERT($query);
-    ASSERT($query->isa('TWiki::Query'));
+    ASSERT($query->isa('TWiki::Query::Node'));
     $web =~ s#\.#/#go;
 
     my $handler = _getHandler( $this, $web );
