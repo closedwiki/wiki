@@ -107,7 +107,10 @@ sub forceAuthentication {
                 $url = $twiki->{urlHost}.$twiki->{scriptUrlPath}.'/'.
                        $scriptName.'auth'.$TWiki::cfg{ScriptSuffix};
             }
-            $url .= '/' . $ENV{PATH_INFO} if $ENV{PATH_INFO};
+            if ($ENV{PATH_INFO}) {
+                $url .= '/' unless $url =~ m#/$# || $ENV{PATH_INFO} =~ m#^/#;
+                $url .= $ENV{PATH_INFO};
+            }
         }
         # Redirect with passthrough so we don't lose the original query params
         $twiki->redirect( $url, 1 );
