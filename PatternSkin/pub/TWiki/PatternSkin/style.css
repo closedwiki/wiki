@@ -94,7 +94,7 @@ h1.patternTemplateTitle {
 }
 h2.patternTemplateTitle {
 	text-align:center;
-	font-size:135%;
+	font-size:140%;
 }
 /* Links */
 /* somehow the twikiNewLink style have to be before the general link styles */
@@ -153,7 +153,7 @@ textarea,
 input,
 select {
 	vertical-align:middle;
-	font-family:"Lucida Grande", verdana, arial, sans-serif;
+	font-family:arial, "Lucida Grande", verdana, sans-serif;
 }
 .twikiTextarea {
 	padding:1px;
@@ -633,7 +633,6 @@ a.twikiLinkInHeaderRight {
 #patternLeftBarContents li,
 #patternLeftBarContents .twikiHierarchicalNavigation {
 	overflow:hidden;
-	text-overflow:ellipsis;
 }
 html>body #patternLeftBarContents li { /* Mozilla */
 	overflow:visible;
@@ -954,7 +953,7 @@ table.patternDiffOptions input {
 	font-family:"Courier New", courier, monaco, monospace;
 }
 .twikiEditboxStyleProportional {
-	font-family:"Lucida Grande", verdana, arial, sans-serif;
+	font-family:arial, "Lucida Grande", verdana, sans-serif;
 }
 .twikiChangeFormButtonHolder {
 	float:right;
