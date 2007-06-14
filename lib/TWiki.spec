@@ -752,8 +752,7 @@ $TWiki::cfg{LowerNational} = '';
 # (i.e. Encode for Perl 5.8 or higher, or Unicode::MapUTF8 for other Perl
 # versions).  For example, if the locale 'ja_JP.eucjp' exists on your system
 # but only 'euc-jp' is supported by Unicode::MapUTF8, set this to 'euc-jp'.
-# If you don't define it, it will automatically be defaulted from the
-# {Site}{Locale}. Only used if {UseLocale} is set.
+# If you don't define it, it will automatically be defaulted.
 $TWiki::cfg{Site}{CharSet} = undef;
 
 # **STRING 20 EXPERT**

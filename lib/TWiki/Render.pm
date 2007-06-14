@@ -1128,7 +1128,7 @@ sub getRenderedVersion {
         }
 
         # Finish the list
-        unless( $isList ) {
+        unless( $isList || $isFirst ) {
             _addListItem( $this, \@result, '', '', '' );
         }
 

@@ -9,8 +9,7 @@ use strict;
 #
 # | *Handler*                    | *Tested by* |
 # | afterAttachmentSaveHandler   | *untested* |
-# | afterCommonTagsHandler       | test_commonTagsHandlers |
-# | afterEditHandler             | *untested* |
+# | afterCommonTagsHandler       | test_commonTagsH# | afterEditHandler             | *untested* |
 # | afterRenameHandler           | *untested* |
 # | afterSaveHandler             | *untested* |
 # | beforeAttachmentSaveHandler  | *untested* |
@@ -329,7 +328,6 @@ sub postRenderingHandler {
     my ($text) = @_;
     $tester->assert_str_equals(<<INNER, "$text\n");
 endRenderingHandler
-
 preRenderingHandler
 startRenderingHandler
 
@@ -400,7 +398,6 @@ HERE
     $this->assert_str_equals(<<HERE, $out);
 postRenderingHandler
 endRenderingHandler
-
 preRenderingHandler
 startRenderingHandler
 

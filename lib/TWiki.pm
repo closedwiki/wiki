@@ -349,7 +349,8 @@ BEGIN {
         setlocale(&LC_CTYPE, $TWiki::cfg{Site}{Locale});
     }
 
-    $functionTags{CHARSET}   = sub { $TWiki::cfg{Site}{CharSet} || '' };
+    $functionTags{CHARSET}   = sub { $TWiki::cfg{Site}{CharSet} ||
+                                       'iso-8859-1' };
     $functionTags{SHORTLANG} = sub { $TWiki::cfg{Site}{Lang} || '' };
     $functionTags{LANG}      = sub { $TWiki::cfg{Site}{FullLang} || '' };
 
