@@ -6,7 +6,7 @@
 <script type="text/javascript">
 //<![CDATA[
 	twiki.Event.addLoadEvent(initForm, true);
-	function setfocus() {
+	function initForm() {
 		document.loginform.username.focus();
 	}
 //]]>
@@ -85,7 +85,7 @@
 </div><!-- /twikiFormStep-->
 %TMPL:P{"usernamestep"}%
 %TMPL:P{"passwordstep"}%
-<div class="twikiFormStep twikiLast">
+<div class="twikiFormStep">
 <input class="twikiSubmit" type="submit" value='%MAKETEXT{"Logon"}%' tabindex="3" />
 %IF{"$ERROR != ''" then="%BR% _Error: %ERROR%_"}%
 </div><!-- /twikiFormStep-->
