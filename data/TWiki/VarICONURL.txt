@@ -1,7 +1,6 @@
-%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.2" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiVariables"}%
 #VarICONURL
-
 ---+++ ICONURL{"name"} -- URL of small documentation graphic or icon
    * Generates the full URL of a TWikiDocGraphics image, which TWiki renders as an image. The related =%<nop>ICON{"name"}%= generates the full HTML img tag. Specify image name or full filename (see [[#VarICON][ICON]] for details on filenames.)
    * Syntax: =%<nop>ICONURL{"name"}%=

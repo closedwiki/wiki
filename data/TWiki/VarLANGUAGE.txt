@@ -1,7 +1,6 @@
-%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.2" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiVariables"}%
 #VarLANGUAGE
-
 ---+++ LANGUAGE -- current user's language
    * Returns the language code for the language used as the current user. This is the language actually used by TWiki Internationalization (e.g. in user interface).
    * The language is detected from the user's browser, unless some site/web/user/session-defined setting overrides it:

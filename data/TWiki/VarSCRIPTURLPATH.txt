@@ -1,7 +1,6 @@
-%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.2" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiVariables"}%
 #VarSCRIPTURLPATH
-
 ---+++ SCRIPTURLPATH -- base URL path of TWiki scripts
    * As =%<nop>SCRIPTURL%=, but doesn't include the protocol and host part of the URL
    * Syntax: =%<nop>SCRIPTURLPATH%=

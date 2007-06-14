@@ -1,7 +1,6 @@
-%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.2" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiVariables"}%
 #VarHTTP
-
 ---+++ HTTP -- get HTTP headers
    * Called with the name of an HTTP header field, returns its value. Capitalization and the use of hyphens versus underscores are not significant.
    * Syntax: =%<nop>HTTP%=

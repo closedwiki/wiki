@@ -1,7 +1,6 @@
-%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.2" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiVariables"}%
 #VarMETA
-
 ---+++ META -- displays meta-data
    * Provided mainly for use in templates, this variable generates the parts of the topic view that relate to meta-data (attachments, forms etc.) The =formfield= item is the most likely to be useful to casual users.
    * Syntax: =%<nop>META{ "item" ...}%=

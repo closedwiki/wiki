@@ -1,7 +1,6 @@
-%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.2" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiVariables"}%
 #VarICONURLPATH
-
 ---+++ ICONURLPATH{"name"} -- URL path of small documentation graphic or icon
    * Generates the URL path of a TWikiDocGraphics image, typically used in an HTML img tag. Specify image name or full filename (see [[#VarICON][ICON]] for details on filenames.)
    * Syntax: =%<nop>ICONURLPATH{"name"}%=

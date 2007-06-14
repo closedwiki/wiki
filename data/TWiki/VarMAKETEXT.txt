@@ -1,7 +1,6 @@
-%META:TOPICINFO{author="TWikiContributor" date="1160971176" format="1.2" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1160971176" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiVariables"}%
 #VarMAKETEXT
-
 ---+++ MAKETEXT -- creates text using TWiki's <nop>I18N infrastructure
    * Syntax: =%<nop>MAKETEXT{"string" args="..."}=
    * Supported parameters:

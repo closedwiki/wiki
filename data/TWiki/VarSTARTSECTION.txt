@@ -1,7 +1,6 @@
-%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.2" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiVariables"}%
 #VarSTARTSECTION
-
 ---+++ STARTSECTION -- marks the start of a section within a topic
    * Section boundaries are defined with =%<nop>STARTSECTION{}%= and =%<nop>ENDSECTION{}%=.
    * Sections may be given a name to help identify them, and/or a type, which changes how they are used.

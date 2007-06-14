@@ -1,7 +1,6 @@
-%META:TOPICINFO{author="TWikiContributor" date="1163887844" format="1.2" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1163887844" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiVariables"}%
 #VarINCLUDE
-
 ---+++ INCLUDE{"page"} -- include other topic or web page
    * Syntax: =%<nop>INCLUDE{"page" ...}%=
    * Supported parameters:
