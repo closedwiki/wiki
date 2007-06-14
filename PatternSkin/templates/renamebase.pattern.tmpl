@@ -5,7 +5,7 @@
 %TMPL:DEF{"templatescript"}%<script type="text/javascript">
 //<![CDATA[
 	var pageElem = null;
-	addLoadEvent(setPageElem);
+	twiki.Event.addLoadEvent(setPageElem);
 	function setPageElem() {
 		pageElem = document.rename;
 	}

@@ -5,7 +5,7 @@
 %TMPL:DEF{"templatescript"}%
 <script type="text/javascript">
 //<![CDATA[
-	addLoadEvent(setfocus);
+	twiki.Event.addLoadEvent(initForm, true);
 	function setfocus() {
 		document.loginform.username.focus();
 	}
