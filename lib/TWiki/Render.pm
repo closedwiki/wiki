@@ -423,8 +423,8 @@ sub _makeAnchorHeading {
 
 ---++ ObjectMethod makeAnchorName($anchorName, $compatibilityMode) -> $anchorName
 
-   * =$anchorName= -
-   * =$compatibilityMode= -
+   * =$anchorName= - the unprocessed anchor name
+   * =$compatibilityMode= - SMELL: compatibility with *what*?? Who knows. :-(
 
 Build a valid HTML anchor name
 

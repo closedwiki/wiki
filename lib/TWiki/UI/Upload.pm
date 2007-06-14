@@ -111,16 +111,18 @@ sub attach {
         # must come after templates have been read
         $atext .= $session->{attach}->formatVersions( $webName, $topic, %$args );
     }
-    $tmpl =~ s/%ATTACHTABLE%/$atext/go;
-    $tmpl =~ s/%FILEUSER%/$fileWikiUser/go;
+    $tmpl =~ s/%ATTACHTABLE%/$atext/g;
+    $tmpl =~ s/%FILEUSER%/$fileWikiUser/g;
     $session->enterContext( 'can_render_meta', $meta );
     $tmpl = $session->handleCommonTags( $tmpl, $webName, $topic );
     $tmpl = $session->{renderer}->getRenderedVersion( $tmpl, $webName, $topic );
-    $tmpl =~ s/%HIDEFILE%/$isHideChecked/go;
-    $tmpl =~ s/%FILENAME%/$fileName/go;
-    $tmpl =~ s/%FILEPATH%/$args->{path}/go;
+    $tmpl =~ s/%HIDEFILE%/$isHideChecked/g;
+    $tmpl =~ s/%FILENAME%/$fileName/g;
+    $fileName = TWiki::urlEncode($fileName);
+    $tmpl =~ s/%E_FILENAME%/$fileName/g;
+    $tmpl =~ s/%FILEPATH%/$args->{path}/g;
     $args->{comment} = TWiki::entityEncode( $args->{comment} );
-    $tmpl =~ s/%FILECOMMENT%/$args->{comment}/go;
+    $tmpl =~ s/%FILECOMMENT%/$args->{comment}/g;
 
     $session->writeCompletePage( $tmpl );
 }
