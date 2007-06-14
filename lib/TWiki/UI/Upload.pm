@@ -118,7 +118,9 @@ sub attach {
     $tmpl = $session->{renderer}->getRenderedVersion( $tmpl, $webName, $topic );
     $tmpl =~ s/%HIDEFILE%/$isHideChecked/g;
     $tmpl =~ s/%FILENAME%/$fileName/g;
-    $fileName = TWiki::urlEncode($fileName);
+    # Really aggressive URL encoding, required to protect wikiwords
+    # See Bugs:Item3289, Bugs:Item3623
+    $fileName =~ s/([^A-Za-z0-9])/'%'.sprintf('%02x',ord($1))/ge;
     $tmpl =~ s/%E_FILENAME%/$fileName/g;
     $tmpl =~ s/%FILEPATH%/$args->{path}/g;
     $args->{comment} = TWiki::entityEncode( $args->{comment} );

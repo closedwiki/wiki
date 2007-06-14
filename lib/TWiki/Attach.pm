@@ -233,6 +233,12 @@ sub _expandAttrs {
     elsif ( $attr eq 'FILE' ) {
         return $file;
     }
+    elsif ( $attr eq 'EFILE' ) {
+        # Really aggressive URL encoding, required to protect wikiwords
+        # See Bugs:Item3289, Bugs:Item3623
+        $file =~ s/([^A-Za-z0-9])/'%'.sprintf('%02x',ord($1))/ge;
+        return $file;
+    }
     elsif ( $attr eq 'DATE' ) {
         return TWiki::Time::formatTime( $info->{date} || 0 );
     }
