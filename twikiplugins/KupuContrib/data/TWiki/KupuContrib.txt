@@ -88,6 +88,7 @@ This contrib is heavily based on the TWiki::Plugins.KupuEditorAddOn, and the aut
 |  License | [[http://www.gnu.org/licenses/gpl.html][GPL (Gnu General Public License)]] |
 |  Contrib Version: | %$VERSION% |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  14 Jun 2007 | Bugs:Item4116 fix to make it work with VIEW_TEMPLATE |
 |  12119 | Split out of WysiwygPlugin |
 |  11538 | Minor doc updates, minor fixes to spacing in lists, integrated Koen Marten's template topic patch |
 |  9671 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item2025'>Item2025</a>  corrected handling of SPAN and FONT tags used for colour changes |
