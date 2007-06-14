@@ -106,7 +106,7 @@ sub test_eachUserAllowLoginName {
         push(@list, $u);
     }
     my $ulist = join(',', sort @list);
-    $this->assert_str_equals("ScumBag,TWikiAdminGroup,TWikiContributor,TWikiGuest,TWikiRegistrationAgent,UnknownUser,UserA,UserB,UserC", $ulist);
+    $this->assert_str_equals("AdminUser,ScumBag,TWikiContributor,TWikiGuest,TWikiRegistrationAgent,UnknownUser,UserA,UserB,UserC", $ulist);
 }
 
 sub test_eachUserDontAllowLoginName {
@@ -125,7 +125,7 @@ sub test_eachUserDontAllowLoginName {
         push(@list, $u);
     }
     my $ulist = join(',', sort @list);
-    $this->assert_str_equals("TWikiAdminGroup,TWikiContributor,TWikiGuest,TWikiRegistrationAgent,UnknownUser,scum,usera,userb,userc", $ulist);
+    $this->assert_str_equals("AdminUser,TWikiContributor,TWikiGuest,TWikiRegistrationAgent,UnknownUser,scum,usera,userb,userc", $ulist);
 }
 
 

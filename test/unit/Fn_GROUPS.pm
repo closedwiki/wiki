@@ -30,9 +30,9 @@ sub test_basic {
         '%GROUPS%', $this->{test_web}, $this->{test_topic});
     $this->assert_str_equals(<<HUMPH, "$ui\n");
 | *Group* | *Members* |
+| <nop>AdminGroup | [[TemporaryGROUPSUsersWeb.AdminUser][AdminUser]] |
 | <nop>GropeGroup | [[TemporaryGROUPSUsersWeb.ScumBag][ScumBag]] [[TemporaryGROUPSUsersWeb.TWikiGuest][TWikiGuest]] |
-| <nop>TWikiAdminGroup | [[TemporaryGROUPSUsersWeb.TWikiAdminGroup][TWikiAdminGroup]] |
-| <nop>TWikiBaseGroup | [[TemporaryGROUPSUsersWeb.TWikiAdminGroup][TWikiAdminGroup]] [[TemporaryGROUPSUsersWeb.TWikiGuest][TWikiGuest]] [[TemporaryGROUPSUsersWeb.UnknownUser][UnknownUser]] [[TemporaryGROUPSUsersWeb.TWikiContributor][TWikiContributor]] [[TemporaryGROUPSUsersWeb.TWikiRegistrationAgent][TWikiRegistrationAgent]] |
+| <nop>TWikiBaseGroup | [[TemporaryGROUPSUsersWeb.AdminUser][AdminUser]] [[TemporaryGROUPSUsersWeb.TWikiGuest][TWikiGuest]] [[TemporaryGROUPSUsersWeb.UnknownUser][UnknownUser]] [[TemporaryGROUPSUsersWeb.TWikiContributor][TWikiContributor]] [[TemporaryGROUPSUsersWeb.TWikiRegistrationAgent][TWikiRegistrationAgent]] |
 HUMPH
 }
 

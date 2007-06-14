@@ -59,6 +59,9 @@ sub set_up {
     # Move logging into a temporary directory
     $TWiki::cfg{LogFileName} = "$TWiki::cfg{TempfileDir}/TWikiTestCase.log";
     $TWiki::cfg{WarningFileName} = "$TWiki::cfg{TempfileDir}/TWikiTestCase.warn";
+    $TWiki::cfg{AdminUserWikiName} = 'AdminUser';
+    $TWiki::cfg{AdminUserLogin} = 'root';
+    $TWiki::cfg{SuperAdminGroup} = 'AdminGroup';
 
     # Disable/enable plugins so that only core extensions (those defined
     # in tools/MANIFEST) are enabled, but they are *all* enabled.

@@ -95,6 +95,7 @@ sub test_prepostamble {
     my $text;
 
     $text = $this->setup_view( $this->{test_web}, 'TestTopic1', 'viewone' );
+    $text =~ s/\n+$//s;
     $this->assert_equals('pretemplatepreCONTENT
 postposttemplate', $text);
 

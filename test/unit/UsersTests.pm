@@ -199,6 +199,7 @@ sub testLoad {
     };
     my $k = join(",",sort map {$twiki->{users}->getWikiName($_)} @l);
     $this->assert($k =~ s/^AaronUser,//,$k);
+    $this->assert($k =~ s/^AdminUser,//,$k);
     $this->assert($k =~ s/^AttilaTheHun,//,$k);
     $this->assert($k =~ s/^BungditDin,//,$k);
     $this->assert($k =~ s/^GeorgeUser,//,$k);
@@ -206,7 +207,6 @@ sub testLoad {
     $this->assert($k =~ s/^SadOldMan,//,$k);
     $this->assert($k =~ s/^SorryOldMan,//,$k);
     $this->assert($k =~ s/^StupidOldMan,//,$k);
-    $this->assert($k =~ s/^TWikiAdminGroup,//,$k);
     $this->assert($k =~ s/^TWikiContributor,//,$k);
     $this->assert($k =~ s/^TWikiGuest,//,$k);
     $this->assert($k =~ s/^TWikiRegistrationAgent,//,$k);
@@ -239,7 +239,7 @@ sub test_getListOfGroups {
     my @l = ();
     while ($i->hasNext()) { push(@l, $i->next()) };
     my $k = join(',', sort @l);
-    $this->assert_str_equals("AmishGroup,BaptistGroup,TWikiAdminGroup,TWikiBaseGroup", $k);
+    $this->assert_str_equals("AdminGroup,AmishGroup,BaptistGroup,TWikiBaseGroup", $k);
 }
 
 sub test_groupMembers {
