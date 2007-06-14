@@ -8,22 +8,26 @@
 
 __Related topics:__ %WIKIUSERSTOPIC%, TWikiGroups, %TWIKIWEB%.TWikiAccessControl
 
-__%X% NOTE:__ You can login as the built in Admin user using the password set in configure via [[%SCRIPTURL{login}%?sudo=sudo][SUDO admin login]]
+__%X% NOTE:__ You can login as the built-in Admin user using the password set in configure.
+   * First you need to be logged in as a normal registered user
+   * Then change your current status by authenticating as _TWikiAdminGroup_ and using the password set in configure using the special [[%SCRIPTURL{login}%?sudo=sudo][temporary admin login]].
+   * Once you are a member of the !TWikiAdminGroup you automatically get admin previledges when you do a normal login.
 
-__%X% NOTE:__ If you happen to lock yourself out of <nop>TWikiAdminGroup during setup activities, you can edit this group topic at file system level using any text file editor (as a last resort.)
+__%X% NOTE:__ If you happen to lock yourself out of <nop>TWikiAdminGroup during setup activities or have forgotten the configure password, you can edit this group topic at file system level using any text file editor (as a last resort.)
 
 
 <table bgcolor="yellow"><tr><td>
 __Setup Note to Administrator:__
-   a. Verify that user authentication is working
-   a. Edit this group topic (click Edit)
+   a. To add yourself as the member of the admin group you must be [[%TWIKIWEB%.TWikiRegistration][registered]] as a normal user
+   a. Next you must %LOGIN% as this normal user
+   a. Change your current status by authenticating as _TWikiAdminGroup_ and using the password set in configure using the special [[%SCRIPTURL{login}%?sudo=sudo][temporary admin login]].
+   a. You can now edit this topic
    a. Insert wanted %MAINWEB%.TWikiUsers in the TWiki Administrator Group by listing them in the GROUP setting %BR%
-      (please remove the demonstration user 'ATWikiUser' as well)
+      (it is important that you remove the demonstration user 'ATWikiUser' as well)
    a. Save this topic
    a. Verify that new members show up properly in the group listing at %MAINWEB%.TWikiGroups
-   a. Write protect this topic by removing the # sign from the ALLOWTOPICCHANGE setting
-   a. Save this topic again - <nop>TWikiAdminGroup is now locked to allow editing only by listed users in GROUP
+   a. Make sure always to keep this topic write protected by keeping the already defined ALLOWTOPICCHANGE setting
    a. The ALLOWTOPICHANGE and ALLOWTOPICRENAME settings in [[%TWIKIWEB%.TWikiPreferences]] and [[%MAINWEB%.TWikiPreferences]] have already been set to this group (<nop>TWikiAdminGroup), 
       restricting edit of site-wide preferences to the TWiki Administrator Group
-   a. Remove this setup note after you have finished setup
+   a. You can remove this setup note after you have finished setup
 </td></tr></table>
