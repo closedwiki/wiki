@@ -1,13 +1,6 @@
 %TMPL:INCLUDE{"twiki"}%
 
-%TMPL:DEF{"templatescript"}%
-<script type="text/javascript">
-//<![CDATA[
-	var pageElem = document.renameweb;
-//]]>
-</script>
-<script type="text/javascript" src="%PUBURLPATH%/%TWIKIWEB%/TWikiJavascripts/twiki_renamebase.js"></script>
-%TMPL:END%
+%TMPL:DEF{"templatescript"}%<script type="text/javascript" src="%PUBURLPATH%/%TWIKIWEB%/TWikiJavascripts/twiki_renamebase.js"></script>%TMPL:END%
 
 %TMPL:DEF{"content"}%
 <form method="post" name="renameweb" action="%SCRIPTURLPATH{"rename"}%/%WEB%">
@@ -37,7 +30,7 @@
 
 %GLOBAL_SEARCH%
 
-<input type="button" value="Select all" onclick="checkAll(true);" />&nbsp;<input type="button" value="Clear" onclick="checkAll(false);" /> checkboxes of referenced topics
+<input type="button" value="Select all" onclick="checkAll(document.renameweb,true);" />&nbsp;<input type="button" value="Clear" onclick="checkAll(document.renameweb,false);" /> checkboxes of referenced topics
 
 __Note:__
    * Get help on
