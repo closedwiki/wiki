@@ -193,12 +193,13 @@ sub std_tests {
 my $output = <<'THIS';
 <div class="twikiAttachments">
 | *[[%TWIKIWEB%.FileAttachment][Attachment]]* | *Action* | *Size* | *Date* | *Who* | *Comment* |
-| <img width="16" alt="png" align="top" src="%PUBURL%/TWiki/TWikiDocGraphics/png.gif" height="16" border="0" /><span class="twikiHidden">png</span> | <a href="%PUBURL%/%WEB%/%TOPIC%/home.org.au.png">home.org.au.png</a> | <a href="%SCRIPTURLPATH{"attach"}%/%WEB%/%TOPIC%?filename=home.org.au.png&revInfo=1" title='%MAKETEXT{"change, update, previous revisions, move, delete..."}%'rel='nofollow'>%MAKETEXT{"manage"}%</a> |  4.1&nbsp;K|<span class="twikiNoBreak">31 May 2007 - 21:58</span> |UUUUUUUUUU  |&nbsp;  |
+| <a href="%PUBURL%/%WEB%/%TOPIC%/%ENCODE{home.org.au.png}%">home.org.au.png</a> | <a href="%SCRIPTURLPATH{"attach"}%/%WEB%/%TOPIC%?filename=%ENCODE{home.org.au.png}%;revInfo=1" title='%MAKETEXT{"change, update, previous revisions, move, delete..."}%'rel='nofollow'>%MAKETEXT{"manage"}%</a> |  4.1&nbsp;K|<span class="twikiNoBreak">31 May 2007 - 21:58</span> |UUUUUUUUUU  |&nbsp;  |
 </div>
+
 THIS
 	$output =~ s/UUUUUUUUUU/$displayedName/e;
-    $output =~ s/%PUBURL%/$TWiki::cfg{PubUrlPath}/e;
-	$this->assert_str_equals($output, $renderedMeta."\n");
+#    $output =~ s/%PUBURL%/$TWiki::cfg{PubUrlPath}/e;
+	$this->assert_str_equals($output, $renderedMeta."\n\n");
 
     
 #see if leases and locks have similar issues
