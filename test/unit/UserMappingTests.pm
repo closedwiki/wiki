@@ -195,11 +195,10 @@ my $output = <<'THIS';
 | *[[%TWIKIWEB%.FileAttachment][Attachment]]* | *Action* | *Size* | *Date* | *Who* | *Comment* |
 | <a href="%PUBURL%/%WEB%/%TOPIC%/%ENCODE{home.org.au.png}%">home.org.au.png</a> | <a href="%SCRIPTURLPATH{"attach"}%/%WEB%/%TOPIC%?filename=%ENCODE{home.org.au.png}%;revInfo=1" title='%MAKETEXT{"change, update, previous revisions, move, delete..."}%'rel='nofollow'>%MAKETEXT{"manage"}%</a> |  4.1&nbsp;K|<span class="twikiNoBreak">31 May 2007 - 21:58</span> |UUUUUUUUUU  |&nbsp;  |
 </div>
-
 THIS
 	$output =~ s/UUUUUUUUUU/$displayedName/e;
 #    $output =~ s/%PUBURL%/$TWiki::cfg{PubUrlPath}/e;
-	$this->assert_str_equals($output, $renderedMeta."\n\n");
+	$this->assert_str_equals($output, $renderedMeta."\n");
 
     
 #see if leases and locks have similar issues
