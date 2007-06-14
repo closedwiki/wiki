@@ -3161,7 +3161,7 @@ sub REVINFO {
     my $cgiQuery = $this->{cgiQuery};
     my $cgiRev = '';
     $cgiRev = $cgiQuery->param('rev') if( $cgiQuery );
-    my $rev = $cgiRev || $params->{rev} || '';
+    my $rev = $params->{rev} || $cgiRev || '';
 
     return $this->{renderer}->renderRevisionInfo( $web, $topic, undef,
                                                   $rev, $format );
