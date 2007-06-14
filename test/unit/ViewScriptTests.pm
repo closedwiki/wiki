@@ -95,30 +95,21 @@ sub test_prepostamble {
     my $text;
 
     $text = $this->setup_view( $this->{test_web}, 'TestTopic1', 'viewone' );
-    $this->assert_equals('pretemplate
-preCONTENT
-post
-posttemplate', $text);
+    $this->assert_equals('pretemplatepreCONTENT
+postposttemplate', $text);
 
     $text = $this->setup_view( $this->{test_web}, 'TestTopic1', 'viewtwo' );
-    $this->assert_equals('pretemplate
-CONTENT
-post
-posttemplate', $text);
+    $this->assert_equals('pretemplateCONTENT
+postposttemplate', $text);
 
     $text = $this->setup_view( $this->{test_web}, 'TestTopic1', 'viewthree' );
-    $this->assert_equals('pretemplate
-preCONTENT
-posttemplate', $text);
+    $this->assert_equals('pretemplatepreCONTENTposttemplate', $text);
 
     $text = $this->setup_view( $this->{test_web}, 'TestTopic1', 'viewfour' );
-    $this->assert_equals('pretemplate
-CONTENT
-posttemplate', $text);
+    $this->assert_equals('pretemplateCONTENTposttemplate', $text);
 
     $text = $this->setup_view( $this->{test_web}, 'TestTopic1', 'viewfive' );
-    $this->assert_equals('pretemplate
-posttemplate', $text);
+    $this->assert_equals('pretemplateposttemplate', $text);
 }
 
 1;
