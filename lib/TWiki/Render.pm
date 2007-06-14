@@ -1034,9 +1034,9 @@ sub getRenderedVersion {
 
     # other entities
     $text =~ s/&(\w+);/$TWiki::TranslationToken$1;/g;      # "&abc;"
-    $text =~ s/&(#[0-9]+);/$TWiki::TranslationToken$1;/g;  # "&#123;"
+    $text =~ s/&(#x?[0-9a-f]+);/$TWiki::TranslationToken$1;/gi;  # "&#123;"
     $text =~ s/&/&amp;/g;                         # escape standalone "&"
-    $text =~ s/$TWiki::TranslationToken(#[0-9]+;)/&$1/go;
+    $text =~ s/$TWiki::TranslationToken(#x?[0-9a-f]+;)/&$1/goi;
     $text =~ s/$TWiki::TranslationToken(\w+;)/&$1/go;
 
     # Headings

@@ -632,4 +632,11 @@ ACTUAL
     $this->do_test($expected, $actual);
 }
 
+sub test_4067_entities {
+    my $this = shift;
+    my $actual = "&#131; &#x005A; &#X004E; &amp;";
+    my $expected = $actual;
+    $this->do_test($expected, $actual);
+}
+
 1;
