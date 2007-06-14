@@ -1,12 +1,13 @@
 /**
-Checks/unchecks all checkboxes in a form. Assumes that the form is set as pageElem.
+Checks/unchecks all checkboxes in form inForm.
 */
-function checkAll(theCheck) {
+function checkAll(inForm, inState) {
 	// find button element index
+	if (inForm == undefined) return;
 	var i, j = 0;
-	for (i = 0; i < pageElem.length; ++i) {
-		if (pageElem.elements[i].name.match("referring_topics")) {
-			pageElem.elements[i].checked = theCheck;
+	for (i = 0; i < inForm.length; ++i) {
+		if (inForm.elements[i].name.match("referring_topics")) {
+			inForm.elements[i].checked = inState;
 		}
 	}
 }
