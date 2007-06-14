@@ -27,7 +27,7 @@
 %TMPL:DEF{"topicaction"}%
    <input type="submit" class="twikiSubmit" value=" &nbsp; Upload file &nbsp; " /> %TMPL:P{"sep"}%
    <input type="submit" class="twikiSubmit" name="changeproperties" value="Change properties only" />  %TMPL:P{"sep"}%
-   <a href="%SCRIPTURLPATH{"rename"}%/%WEB%/%TOPIC%?attachment=%E_FILENAME%" rel='nofollow'>Move or delete attachment</a> %TMPL:P{"sep"}%
+   <a href="%SCRIPTURLPATH{"rename"}%/%WEB%/%TOPIC%?attachment=%ENCODE{%FILENAME%}%" rel='nofollow'>Move or delete attachment</a> %TMPL:P{"sep"}%
    [[%WEB%.%TOPIC%][Cancel]] %TMPL:END%
 %TMPL:DEF{"fileuser"}%(%FILEUSER%)%TMPL:END%
 %TMPL:P{"attach"}%

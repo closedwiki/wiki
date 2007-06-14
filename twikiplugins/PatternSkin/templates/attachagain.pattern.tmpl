@@ -6,7 +6,7 @@
 
 
 
-%TMPL:DEF{"pagetitle"}%%MAKETEXT{"Update attachment [_1] on [_2]" args="[[%ATTACHURLPATH%/%E_FILENAME%][%FILENAME%]],[[%TOPIC%]]"}%%TMPL:END%
+%TMPL:DEF{"pagetitle"}%%MAKETEXT{"Update attachment [_1] on [_2]" args="[[%ATTACHURLPATH%/%ENCODE{%FILENAME%}%][%FILENAME%]],[[%TOPIC%]]"}%%TMPL:END%
 
 
 
@@ -34,7 +34,7 @@
 
 
 
-%TMPL:DEF{"movedelete"}%<div class="patternMoveAttachment"><a href="%SCRIPTURLPATH{"rename"}%/%WEB%/%TOPIC%?template=moveattachment&attachment=%E_FILENAME%" rel='nofollow'><span class="twikiLinkLabel">%MAKETEXT{"Move"}%</span></a> %MAKETEXT{"or"}% <a href="%SCRIPTURLPATH{"rename"}%/%WEB%/%TOPIC%?web=%TRASHWEB%&template=renameattachmentdelete&attachment=%E_FILENAME%" rel='nofollow'><span class="twikiLinkLabel">%MAKETEXT{"Delete"}%</span></a> =%FILENAME%= </div>%TMPL:END%
+%TMPL:DEF{"movedelete"}%<div class="patternMoveAttachment"><a href="%SCRIPTURLPATH{"rename"}%/%WEB%/%TOPIC%?template=moveattachment&attachment=%ENCODE{%FILENAME%}%" rel='nofollow'><span class="twikiLinkLabel">%MAKETEXT{"Move"}%</span></a> %MAKETEXT{"or"}% <a href="%SCRIPTURLPATH{"rename"}%/%WEB%/%TOPIC%?web=%TRASHWEB%&template=renameattachmentdelete&attachment=%ENCODE{%FILENAME%}%" rel='nofollow'><span class="twikiLinkLabel">%MAKETEXT{"Delete"}%</span></a> =%FILENAME%= </div>%TMPL:END%
 
 
 
