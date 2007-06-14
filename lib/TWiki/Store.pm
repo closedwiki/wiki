@@ -1338,24 +1338,28 @@ sub extractMetaData {
     # If there is no meta data then convert from old format
     if( ! $meta->count( 'TOPICINFO' ) ) {
         if ( $$rtext =~ /<!--TWikiAttachment-->/ ) {
-            $$rtext = $this->{session}->{attach}->migrateToFileAttachmentMacro( $meta,
-                                                                                $$rtext );
+            require TWiki::Compatibility;
+            $$rtext = TWiki::Compatibility::migrateToFileAttachmentMacro(
+                $this->{session}, $meta, $$rtext );
         }
 
         if ( $$rtext =~ /<!--TWikiCat-->/ ) {
             require TWiki::Compatibility;
-            $$rtext = TWiki::Compatibility::upgradeCategoryTable( $this->{session}, $meta->web(), $meta->topic(),
-                                                                  $meta, $$rtext );
+            $$rtext = TWiki::Compatibility::upgradeCategoryTable(
+                $this->{session}, $meta->web(), $meta->topic(),
+                $meta, $$rtext );
         }
     } elsif( $format eq '1.0beta' ) {
+        require TWiki::Compatibility;
         # This format used live at DrKW for a few months
         if( $$rtext =~ /<!--TWikiCat-->/ ) {
-            require TWiki::Compatibility;
-            $$rtext = TWiki::Compatibility::upgradeCategoryTable( $this->{session}, $meta->web(), $meta->topic(),
-                                                                  $meta,
-                                                                  $$rtext );
+            $$rtext = TWiki::Compatibility::upgradeCategoryTable(
+                $this->{session}, $meta->web(), $meta->topic(),
+                $meta,
+                $$rtext );
         }
-        $this->{session}->{attach}->upgradeFrom1v0beta( $meta );
+        TWiki::Compatibility::upgradeFrom1v0beta(
+            $this->{session}, $meta );
         if( $meta->count( 'TOPICMOVED' ) ) {
             my $moved = $meta->get( 'TOPICMOVED' );
             $meta->put( 'TOPICMOVED', $moved );

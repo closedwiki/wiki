@@ -16,8 +16,10 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #
 # As per the GPL, removal of this notice is prohibited.
-
+#
 package TWiki::Compatibility;
+
+use Assert;
 
 =pod
 
@@ -191,6 +193,127 @@ sub upgradeCategoryTable {
         $session->writeWarning( "Form: get find category template twikicatitems for Web $web" );
     }
     return $text;
+}
+
+#Get file attachment attributes for old html
+#format.
+sub _getOldAttachAttr {
+    my( $session, $atext ) = @_;
+    my $fileName='';
+	my $filePath='';
+	my $fileSize='';
+	my $fileDate='';
+	my $fileUser='';
+	my $fileComment='';
+    my $before='';
+	my $item='';
+	my $after='';
+    my $users = $session->{users};
+
+    ( $before, $fileName, $after ) = split( /<(?:\/)*TwkFileName>/, $atext );
+    if( ! $fileName ) { $fileName = ''; }
+    if( $fileName ) {
+        ( $before, $filePath,    $after ) = split( /<(?:\/)*TwkFilePath>/, $atext );
+        if( ! $filePath ) { $filePath = ''; }
+        $filePath =~ s/<TwkData value="(.*)">//go;
+        if( $1 ) { $filePath = $1; } else { $filePath = ''; }
+        $filePath =~ s/\%NOP\%//goi;   # delete placeholder that prevents WikiLinks
+        ( $before, $fileSize,    $after ) = split( /<(?:\/)*TwkFileSize>/, $atext );
+        if( ! $fileSize ) { $fileSize = '0'; }
+        ( $before, $fileDate,    $after ) = split( /<(?:\/)*TwkFileDate>/, $atext );
+        if( ! $fileDate ) { 
+            $fileDate = '';
+        } else {
+            $fileDate =~ s/&nbsp;/ /go;
+            $fileDate = TWiki::Time::parseTime( $fileDate );
+        }
+        ( $before, $fileUser, $after ) = split( /<(?:\/)*TwkFileUser>/, $atext );
+        if( ! $fileUser ) {
+            $fileUser = '';
+        } else {
+            $fileUser = $users->getLoginName($fileUser) if $fileUser;
+        }
+        $fileUser =~ s/ //go;
+        ( $before, $fileComment, $after ) = split( /<(?:\/)*TwkFileComment>/, $atext );
+        if( ! $fileComment ) { $fileComment = ''; }
+    }
+
+    return ( $fileName, $filePath, $fileSize, $fileDate, $fileUser, $fileComment );
+}
+
+=pod
+
+---++ migrateToFileAttachmentMacro ( $session, $meta, $text  ) -> $text
+
+Migrate old HTML format
+
+=cut
+
+sub migrateToFileAttachmentMacro {
+    my ( $session, $meta, $text ) = @_;
+    ASSERT($meta->isa( 'TWiki::Meta')) if DEBUG;
+
+    my ( $before, $atext, $after ) = split( /<!--TWikiAttachment-->/, $text );
+    $text = $before || '';
+    $text .= $after if( $after );
+    $atext  = '' if( ! $atext  );
+
+    if( $atext =~ /<TwkNextItem>/ ) {
+        my $line = '';
+        foreach $line ( split( /<TwkNextItem>/, $atext ) ) {
+            my( $fileName, $filePath, $fileSize, $fileDate, $fileUser, $fileComment ) =
+              _getOldAttachAttr( $session, $line );
+
+            if( $fileName ) {
+                $meta->putKeyed( 'FILEATTACHMENT',
+                            {
+                             name    => $fileName,
+                             version => '',
+                             path    => $filePath,
+                             size    => $fileSize,
+                             date    => $fileDate,
+                             user    => $fileUser,
+                             comment => $fileComment,
+                             attr    => ''
+                            });
+            }
+        }
+    } else {
+        # Format of macro that came before META:ATTACHMENT
+        my $line = '';
+        foreach $line ( split( /\r?\n/, $atext ) ) {
+            if( $line =~ /%FILEATTACHMENT{\s"([^"]*)"([^}]*)}%/ ) {
+                my $name = $1;
+                my $values = new TWiki::Attrs( $2 );
+                $values->{name} = $name;
+                $meta->putKeyed( 'FILEATTACHMENT', $values );
+            }
+        }
+    }
+
+    return $text;
+}
+
+=pod
+
+---++ upgradeFrom1v0beta ( $session, $meta  ) -> $text
+
+=cut
+
+sub upgradeFrom1v0beta {
+    my( $session, $meta ) = @_;
+    my $users = $session->{users};
+
+    my @attach = $meta->find( 'FILEATTACHMENT' );
+    foreach my $att ( @attach ) {
+        my $date = $att->{date} || 0;
+        if( $date =~ /-/ ) {
+            $date =~ s/&nbsp;/ /go;
+            $date = TWiki::Time::parseTime( $date );
+        }
+        $att->{date} = $date;
+        $att->{user} = $users->webDotWikiName($att->{user});
+    }
 }
 
 1;
