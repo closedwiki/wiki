@@ -38,6 +38,7 @@ sub list_tests {
                     my $this = shift;
                     $TWiki::cfg{LoginManager} = $LoginImpl;
                     $TWiki::cfg{UserMappingManager} = $userManagerImpl;
+                    verify_set_up($this);
                     &$i($this);
                 };
                 use strict 'refs';
@@ -47,8 +48,9 @@ sub list_tests {
     }
     return @set;
 }
-
-sub set_up {
+#delay the calling of set_up til after the cfg's are set by above closure
+sub set_up {}
+sub verify_set_up {
     my $this = shift;
 
     $this->SUPER::set_up();
