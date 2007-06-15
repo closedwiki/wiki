@@ -1,14 +1,11 @@
-use strict;
-
 # tests for TWiki::Time
 
 package TimeTests;
-
-use base qw( Test::Unit::TestCase );
+use base qw( TWikiTestCase );
 
 use strict;
 use TWiki::Time;
-use POSIX;
+require POSIX;
 use Time::Local;
 
 sub new {

@@ -98,19 +98,33 @@ sub assert_does_not_match {
 }
 
 sub assert_deep_equals {
-    my ($this, $expected, $got, $mess) = @_;
+    my ($this, $expected, $got, $mess, $sniffed) = @_;
+
+    $sniffed = {} unless $sniffed;
+
+    if (ref($expected)) {
+        # Cycle eliminator.
+        if (defined($sniffed->{$expected})) {
+            $this->assert_equals($sniffed->{$expected}, $got);
+            return;
+        }
+
+        $sniffed->{$expected} = $got;
+    }
 
     if (UNIVERSAL::isa($expected, 'ARRAY')) {
         $this->assert(UNIVERSAL::isa($got, 'ARRAY'));
         for ( 0..$#$expected ) {
-            $this->assert_deep_equals($expected->[$_], $got->[$_], $mess);
+            $this->assert_deep_equals($expected->[$_], $got->[$_],
+                                      $mess, $sniffed);
         }
     }
     elsif (UNIVERSAL::isa($expected, 'HASH')) {
         $this->assert(UNIVERSAL::isa($got, 'HASH'));
         my %matched;
         for ( keys %$expected ) {
-            $this->assert_deep_equals($expected->{$_}, $got->{$_}, $mess);
+            $this->assert_deep_equals($expected->{$_}, $got->{$_},
+                                      $mess, $sniffed);
             $matched{$_} = 1;
         }
         for (keys %$got) {
@@ -119,8 +133,8 @@ sub assert_deep_equals {
     }
     elsif (UNIVERSAL::isa($expected, 'REF') ||
         UNIVERSAL::isa($expected, 'SCALAR')) {
-        $this->assert_equals(ref($expected), ref($got));
-        $this->assert_deep_equals($$expected, $$got, $mess);
+        $this->assert_equals(ref($expected), ref($got), $mess);
+        $this->assert_deep_equals($$expected, $$got, $mess, $sniffed);
     }
     else {
         $this->assert_equals($expected, $got, $mess);
