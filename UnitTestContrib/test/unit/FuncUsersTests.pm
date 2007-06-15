@@ -26,7 +26,7 @@ sub list_tests {
     for my $i ($clz->functions()) {
         next unless $i =~ /::verify_/;
         foreach my $LoginImpl qw( TWiki::LoginManager::TemplateLogin TWiki::LoginManager::ApacheLogin none) {
-            foreach my $userManagerImpl qw( TWiki::Users::TWikiUserMapping TWiki::Users::BaseUserMapping) {
+            foreach my $userManagerImpl qw( TWiki::Users::TWikiUserMapping) {           # TWiki::Users::BaseUserMapping) {
 #TODO: add things like AllowLoginName into the mix
                 my $fn = $i;
                 $fn =~ s/\W/_/g;
@@ -225,7 +225,7 @@ sub verify_eachGroupCustomAdmin {
     if ($TWiki::cfg{UserMappingManager} eq 'TWiki::Users::BaseUserMapping') {
          @correctList = qw/TWikiBaseGroup/;
     } else {
-         @correctList = qw/ AandBGroup AandCGroup BandCGroup ScumGroup TWikiAdminGroup TWikiBaseGroup/;     #TWikiAdminGroup is defined as a topic ...
+         @correctList = qw/ AandBGroup AandCGroup BandCGroup ScumGroup TWikiBaseGroup/; 
     }
     push @correctList, $TWiki::cfg{SuperAdminGroup};
     my $correct = join(',', sort @correctList);
