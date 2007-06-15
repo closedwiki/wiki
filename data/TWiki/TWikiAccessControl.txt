@@ -61,7 +61,7 @@ The GROUP setting is a comma-separated list of users and/or other groups. Exampl
    * ==Set GROUP = %MAINWEB%.<nop>SomeUser, %MAINWEB%.<nop>OtherUser, %MAINWEB%.<nop>SomeGroup==
 
 The ALLOWTOPICCHANGE setting defines who is allowed to change the group topic; it is a comma delimited list of users and groups. You typically want to restrict that to the members of the group itself, so it should contain the name of the topic. This prevents users not in the group from editing the topic to give themselves or others access. For example, for the <nop>KasabianGroup topic write:
-   * ==Set ALLOWTOPICCHANGE = %MAINWEB%.<nop>KasabianGroup==
+   * ==Set <nop>ALLOWTOPICCHANGE = %MAINWEB%.<nop>KasabianGroup==
 
 __%X% Note:__ TWiki has strict formatting rules. Make sure you have three spaces, an asterisk, and an extra space in front of any access control rule.
 
