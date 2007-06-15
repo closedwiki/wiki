@@ -104,8 +104,8 @@ sub test_userExpansions {
 %WIKINAME%
 %WIKIUSERNAME%
 %USERINFO%
-%USERINFO{format="$emails,$username,$wikiname,$wikiusername"}%
-%USERINFO{"TWikiGuest" format="$emails,$username,$wikiname,$wikiusername"}%
+%USERINFO{format="$cUID,$emails,$username,$wikiname,$wikiusername"}%
+%USERINFO{"TWikiGuest" format="$cUID,$emails,$username,$wikiname,$wikiusername"}%
 END
     my $result = $this->{twiki}->handleCommonTags($text, $this->{test_web}, $this->{test_topic});
     my $xpect = <<END;
@@ -113,9 +113,10 @@ scum
 ScumBag
 $this->{users_web}.ScumBag
 scum, $this->{users_web}.ScumBag, scumbag\@example.com
-scumbag\@example.com,scum,ScumBag,$this->{users_web}.ScumBag
-,guest,TWikiGuest,$this->{users_web}.TWikiGuest
+TWikiUserMapping_scum,scumbag\@example.com,scum,ScumBag,$this->{users_web}.ScumBag
+BaseUserMapping_666,,guest,TWikiGuest,$this->{users_web}.TWikiGuest
 END
+    $this->annotate("TWiki::cfg{Register}{AllowLoginName} == ".$TWiki::cfg{Register}{AllowLoginName});
     $this->assert_str_equals($xpect, $result);
 }
 

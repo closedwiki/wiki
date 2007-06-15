@@ -103,8 +103,8 @@ sub new {
     my $this = bless( { session => $session }, $class );
 
     #correct the DefaultUserLogin if $TWiki::cfg{Register}{AllowLoginName} is off
-    $TWiki::cfg{DefaultUserLogin} = $TWiki::cfg{DefaultUserWikiName} unless ($TWiki::cfg{Register}{AllowLoginName});
-    $TWiki::cfg{AdminUserLogin} = $TWiki::cfg{AdminUserWikiName} unless ($TWiki::cfg{Register}{AllowLoginName});
+    #$TWiki::cfg{DefaultUserLogin} = $TWiki::cfg{DefaultUserWikiName} 
+    #$TWiki::cfg{AdminUserLogin} = $TWiki::cfg{AdminUserWikiName} unless ($TWiki::cfg{Register}{AllowLoginName});
 
     $this->{loginManager} = TWiki::LoginManager::makeLoginManager( $session );
     # setup the cgi session, from a cookie or the url. this may return
