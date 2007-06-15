@@ -26,15 +26,6 @@ my %cfg;
 
 use Data::Dumper;
 
-# Set up the test fixture
-sub set_up {
-    my $this = shift;
-
-    $this->SUPER::set_up();
-    $TWiki::cfg{WarningFileName} = "/tmp/junk";
-    $TWiki::cfg{LogFileName} = "/tmp/junk";
-}
-
 sub set_up_topic {
     my $this = shift;
     # Create topic
@@ -178,7 +169,7 @@ sub verify_normal_attachment {
 
     $this->assert($this->{twiki}->{store}->topicExists($this->{test_web}, $topic));
 
-    open( FILE, ">/tmp/$attachment" );
+    open( FILE, ">$TWiki::cfg{TempfileDir}/$attachment" );
     print FILE "Test attachment\n";
     close(FILE);
 
@@ -188,7 +179,9 @@ sub verify_normal_attachment {
 
     $this->{twiki}->{store}->saveAttachment(
         $this->{test_web}, $topic, $attachment, $this->{test_user_wikiname},
-        { file => "/tmp/$attachment", comment => 'comment 1' } );
+        { file => "$TWiki::cfg{TempfileDir}/$attachment", comment => 'comment 1' } );
+
+    unlink "$TWiki::cfg{TempfileDir}/$attachment";
 
     # Check revision number
     my $rev = $this->{twiki}->{store}->getRevisionNumber(

@@ -38,13 +38,11 @@ if ($ENV{TWIKI_ASSERTS}) {
 
 if ($ARGV[0] eq '-clean') {
     shift @ARGV;
-    `rm -rf /tmp/junk*`;
     `rm -f $TWiki::cfg{TempfileDir}/*`;
     `rm -rf $TWiki::cfg{DataDir}/Temp*`;
     `rm -rf $TWiki::cfg{PubDir}/Temp*`;
 }
 
-testForFiles('/tmp/junk*'); #this is hardcoded into some tests :(
 testForFiles($TWiki::cfg{TempfileDir}.'/*');
 testForFiles($TWiki::cfg{DataDir}.'/Temp*');
 testForFiles($TWiki::cfg{PubDir}.'/Temp*');

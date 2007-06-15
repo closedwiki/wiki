@@ -15,10 +15,10 @@ sub new {
 sub set_up {
     my $this = shift();
 
-    $this->{twiki} = new TWiki();
     $this->SUPER::set_up();
 
-    $TWiki::cfg{Htpasswd}{FileName} = '/tmp/junkpasswd';
+    $this->{twiki} = new TWiki();
+    $TWiki::cfg{Htpasswd}{FileName} = "$TWiki::cfg{TempfileDir}/junkpasswd";
     open(F, ">$TWiki::cfg{Htpasswd}{FileName}") || die $!;
     print F "";
     close F;
@@ -26,9 +26,9 @@ sub set_up {
 
 sub tear_down {
     my $this = shift;
+    unlink $TWiki::cfg{Htpasswd}{FileName};
     $this->{twiki}->finish();
     $this->SUPER::tear_down();
-    unlink('/tmp/junkpasswd');
 }
 
 my $users1 = {

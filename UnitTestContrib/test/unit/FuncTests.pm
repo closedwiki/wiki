@@ -19,7 +19,7 @@ sub new {
 sub set_up {
     my $this = shift;
     $this->SUPER::set_up();
-
+    $this->{tmpdatafile} = $TWiki::cfg{TempfileDir}.'/tmpity-tmp.gif';
     $this->{test_web2} = $this->{test_web}.'Extra';
     $this->assert_null($this->{twiki}->{store}->createWeb(
         $this->{twiki}->{user}, $this->{test_web2}));
@@ -27,6 +27,7 @@ sub set_up {
 
 sub tear_down {
     my $this = shift;
+    unlink $this->{tmpdatafile};
     $this->removeWebFixture($this->{twiki},$this->{test_web2});
     $this->SUPER::tear_down();
 }
@@ -160,18 +161,17 @@ sub test_attachments {
 
     my $data = "\0b\1l\2a\3h\4b\5l\6a\7h";
     my $attnm = 'blahblahblah.gif';
-    my $tmpfile = '/tmp/tmpity-tmp.gif';
     my $name1 = 'blahblahblah.gif';
     my $name2 = 'bleagh.sniff';
     my $topic = "BlahBlahBlah";
 
     my $stream;
-    $this->assert(open($stream,">$tmpfile"));
+    $this->assert(open($stream,">$this->{tmpdatafile}"));
     binmode($stream);
     print $stream $data;
     close($stream);
 
-    $this->assert(open($stream, "<$tmpfile"));
+    $this->assert(open($stream, "<$this->{tmpdatafile}"));
     binmode($stream);
 
 	TWiki::Func::saveTopicText( $this->{test_web}, $topic,'' );
@@ -197,7 +197,7 @@ sub test_attachments {
         {
             dontlog => 1,
             comment => 'Ciamar a tha u',
-            file => $tmpfile,
+            file => $this->{tmpdatafile},
             filepath => '/local/file',
             filesize => 999,
             filedate => 0,
@@ -208,7 +208,6 @@ sub test_attachments {
     @attachments = $meta->find( 'FILEATTACHMENT' );
     $this->assert_str_equals($name1, $attachments[0]->{name} );
     $this->assert_str_equals($name2, $attachments[1]->{name} );
-    unlink("$tmpfile");
 
     my $x = TWiki::Func::readAttachment($this->{test_web}, $topic, $name1);
     $this->assert_str_equals($data, $x);
@@ -271,8 +270,7 @@ sub test_moveAttachment {
 	TWiki::Func::saveTopicText( $this->{test_web}, "SourceTopic", "Wibble" );
     my $stream;
     my $data = "\0b\1l\2a\3h\4b\5l\6a\7h";
-    my $tmpfile = "temporary.dat";
-    $this->assert(open($stream,">$tmpfile"));
+    $this->assert(open($stream,">$this->{tmpdatafile}"));
     binmode($stream);
     print $stream $data;
     close($stream);
@@ -281,12 +279,11 @@ sub test_moveAttachment {
         {
             dontlog => 1,
             comment => 'Feasgar Bha',
-            file => $tmpfile,
+            file => $this->{tmpdatafile},
             filepath => '/local/file',
             filesize => 999,
             filedate => 0,
       } );
-    unlink($tmpfile);
     $this->assert(TWiki::Func::attachmentExists( $this->{test_web}, "SourceTopic",
                                                   "Name1"));
 
