@@ -49,52 +49,50 @@ sub list_tests {
     return @set;
 }
 #delay the calling of set_up til after the cfg's are set by above closure
-sub set_up {}
+sub set_up {
+    my $this = shift;
+    $this->SUPER::set_up();
+}
 sub verify_set_up {
     my $this = shift;
-
-    $this->SUPER::set_up();
 
     $this->{twiki}->finish();
     $this->{twiki} = new TWiki($TWiki::cfg{AdminUserLogin});
 
-    try {
-        # Create an admin group/user
-        $this->{twiki}->{store}->saveTopic(
-            $this->{twiki}->{user}, $this->{users_web}, 'TWikiAdminGroup',
-            '   * Set GROUP = '.$this->{twiki}->{user}.", TWikiAdminGroup\n");
-
-        $this->registerUser('usera', 'User', 'A', 'user@example.com');
-        $this->registerUser('userb', 'User', 'B', 'user@example.com');
-        $this->registerUser('userc', 'User', 'C', 'userc@example.com;userd@example.com');
-
-        $this->{twiki}->{store}->saveTopic(
-            $this->{twiki}->{user},
-            $this->{users_web}, 'AandBGroup',
-            "   * Set GROUP = UserA, UserB");
-        $this->{twiki}->{store}->saveTopic(
-            $this->{twiki}->{user},
-            $this->{users_web}, 'AandCGroup',
-            "   * Set GROUP = UserA, UserC");
-        $this->{twiki}->{store}->saveTopic(
-            $this->{twiki}->{user},
-            $this->{users_web}, 'BandCGroup',
-            "   * Set GROUP = UserC, UserB");
-        $this->{twiki}->{store}->saveTopic(
-            $this->{twiki}->{user},
-            $this->{users_web}, 'ScumGroup',
-            "   * Set GROUP = $TWiki::cfg{DefaultUserWikiName}");
-
-    } catch TWiki::AccessControlException with {
-        my $e = shift;
-        $this->assert(0,$e->stringify());
-    } catch Error::Simple with {
-        $this->assert(0,shift->stringify()||'');
-    };
-    # Force a re-read
-    $this->{twiki}->finish();
-    $this->{twiki} = new TWiki();
-    $TWiki::Plugins::SESSION = $this->{twiki};
+    if ($this->{twiki}->inContext('registration_supported') && $this->{twiki}->inContext('registration_enabled'))  {
+        try {
+            $this->registerUser('usera', 'User', 'A', 'user@example.com');
+            $this->registerUser('userb', 'User', 'B', 'user@example.com');
+            $this->registerUser('userc', 'User', 'C', 'userc@example.com;userd@example.com');
+    
+            $this->{twiki}->{store}->saveTopic(
+                $this->{twiki}->{user},
+                $this->{users_web}, 'AandBGroup',
+                "   * Set GROUP = UserA, UserB");
+            $this->{twiki}->{store}->saveTopic(
+                $this->{twiki}->{user},
+                $this->{users_web}, 'AandCGroup',
+                "   * Set GROUP = UserA, UserC");
+            $this->{twiki}->{store}->saveTopic(
+                $this->{twiki}->{user},
+                $this->{users_web}, 'BandCGroup',
+                "   * Set GROUP = UserC, UserB");
+            $this->{twiki}->{store}->saveTopic(
+                $this->{twiki}->{user},
+                $this->{users_web}, 'ScumGroup',
+                "   * Set GROUP = $TWiki::cfg{DefaultUserWikiName}");
+    
+        } catch TWiki::AccessControlException with {
+            my $e = shift;
+            $this->assert(0,$e->stringify());
+        } catch Error::Simple with {
+            $this->assert(0,shift->stringify()||'');
+        };
+        # Force a re-read
+        $this->{twiki}->finish();
+        $this->{twiki} = new TWiki();
+        $TWiki::Plugins::SESSION = $this->{twiki};
+    }
     @TWikiFntestCase::mails = ();
 }
 
@@ -327,22 +325,22 @@ sub verify_getCanonicalUserID_extended {
     my $admin_cUID = $this->{twiki}->{users}->getCanonicalUserID($TWiki::cfg{AdminUserLogin});
     $this->assert_str_equals($admin_cUID, TWiki::Func::getCanonicalUserID($admin_cUID));
     $this->assert_str_equals($admin_cUID, TWiki::Func::getCanonicalUserID($TWiki::cfg{AdminUserLogin}));
-#    $this->assert_str_equals($admin_cUID, TWiki::Func::getCanonicalUserID($TWiki::cfg{AdminUserWikiName}));
-#    $this->assert_str_equals($admin_cUID, TWiki::Func::getCanonicalUserID($TWiki::cfg{UsersWebName}.'.'.$TWiki::cfg{AdminUserWikiName}));
+    $this->assert_str_equals($admin_cUID, TWiki::Func::getCanonicalUserID($TWiki::cfg{AdminUserWikiName}));
+    $this->assert_str_equals($admin_cUID, TWiki::Func::getCanonicalUserID($TWiki::cfg{UsersWebName}.'.'.$TWiki::cfg{AdminUserWikiName}));
 
     my $usera_cUID = $this->{twiki}->{users}->getCanonicalUserID('usera');
     $this->assert_str_equals($usera_cUID, TWiki::Func::getCanonicalUserID($usera_cUID));
-#    $this->assert_str_equals($usera_cUID, TWiki::Func::getCanonicalUserID('usera'));
-#    $this->assert_str_equals($usera_cUID, TWiki::Func::getCanonicalUserID('UserA'));
-#    $this->assert_str_equals($usera_cUID, TWiki::Func::getCanonicalUserID($TWiki::cfg{UsersWebName}.'.'.'UserA'));
+    $this->assert_str_equals($usera_cUID, TWiki::Func::getCanonicalUserID('usera'));
+    $this->assert_str_equals($usera_cUID, TWiki::Func::getCanonicalUserID('UserA'));
+    $this->assert_str_equals($usera_cUID, TWiki::Func::getCanonicalUserID($TWiki::cfg{UsersWebName}.'.'.'UserA'));
 
     #TODO: consider how to render unkown user's
     my $nonexistantuser_cUID = $this->{twiki}->{users}->getCanonicalUserID('nonexistantuser');
     $this->annotate($nonexistantuser_cUID);
     $this->assert_str_equals($nonexistantuser_cUID, TWiki::Func::getCanonicalUserID($nonexistantuser_cUID));
     $this->assert_str_equals($nonexistantuser_cUID, TWiki::Func::getCanonicalUserID('nonexistantuser'));
-#    $this->assert_str_equals($nonexistantuser_cUID, TWiki::Func::getCanonicalUserID('NonExistantUser'));
-#    $this->assert_str_equals($nonexistantuser_cUID, TWiki::Func::getCanonicalUserID($TWiki::cfg{UsersWebName}.'.'.'NonExistantUser'));
+    $this->assert_str_equals($nonexistantuser_cUID, TWiki::Func::getCanonicalUserID('NonExistantUser'));
+    $this->assert_str_equals($nonexistantuser_cUID, TWiki::Func::getCanonicalUserID($TWiki::cfg{UsersWebName}.'.'.'NonExistantUser'));
 
     #TODO: consider how to render unkown user's
     my $AandBGroup_cUID = $this->{twiki}->{users}->getCanonicalUserID('AandBGroup');
@@ -367,7 +365,7 @@ sub verify_getWikiName_extended {
     my $admin_cUID = $this->{twiki}->{users}->getCanonicalUserID($TWiki::cfg{AdminUserLogin});
     $this->annotate($admin_cUID.' => '.$TWiki::cfg{AdminUserLogin}.' => '.$TWiki::cfg{AdminUserWikiName});
     $this->assert_str_equals($TWiki::cfg{AdminUserWikiName}, TWiki::Func::getWikiName($admin_cUID));
-#    $this->assert_str_equals($TWiki::cfg{AdminUserWikiName}, TWiki::Func::getWikiName($TWiki::cfg{AdminUserLogin}));
+    $this->assert_str_equals($TWiki::cfg{AdminUserWikiName}, TWiki::Func::getWikiName($TWiki::cfg{AdminUserLogin}));
     $this->assert_str_equals($TWiki::cfg{AdminUserWikiName}, TWiki::Func::getWikiName($TWiki::cfg{AdminUserWikiName}));
     $this->assert_str_equals($TWiki::cfg{AdminUserWikiName}, TWiki::Func::getWikiName($TWiki::cfg{UsersWebName}.'.'.$TWiki::cfg{AdminUserWikiName}));
 
@@ -407,7 +405,7 @@ sub verify_getWikiUserName_extended {
 	
     my $admin_cUID = $this->{twiki}->{users}->getCanonicalUserID($TWiki::cfg{AdminUserLogin});
     $this->assert_str_equals($TWiki::cfg{UsersWebName}.'.'.$TWiki::cfg{AdminUserWikiName}, TWiki::Func::getWikiUserName($admin_cUID));
-#    $this->assert_str_equals($TWiki::cfg{UsersWebName}.'.'.$TWiki::cfg{AdminUserWikiName}, TWiki::Func::getWikiUserName($TWiki::cfg{AdminUserLogin}));
+    $this->assert_str_equals($TWiki::cfg{UsersWebName}.'.'.$TWiki::cfg{AdminUserWikiName}, TWiki::Func::getWikiUserName($TWiki::cfg{AdminUserLogin}));
     $this->assert_str_equals($TWiki::cfg{UsersWebName}.'.'.$TWiki::cfg{AdminUserWikiName}, TWiki::Func::getWikiUserName($TWiki::cfg{AdminUserWikiName}));
     $this->assert_str_equals($TWiki::cfg{UsersWebName}.'.'.$TWiki::cfg{AdminUserWikiName}, TWiki::Func::getWikiUserName($TWiki::cfg{UsersWebName}.'.'.$TWiki::cfg{AdminUserWikiName}));
 
@@ -439,19 +437,19 @@ sub verify_wikiToUserName_extended {
 	
 #TODO: not sure that this method needs to be able to convert _any_ to login
     my $guest_cUID = $this->{twiki}->{users}->getCanonicalUserID($TWiki::cfg{DefaultUserLogin});
-##    $this->assert_str_equals($TWiki::cfg{DefaultUserLogin}, TWiki::Func::wikiToUserName($guest_cUID));
+    $this->assert_str_equals($TWiki::cfg{DefaultUserLogin}, TWiki::Func::wikiToUserName($guest_cUID));
     $this->assert_str_equals($TWiki::cfg{DefaultUserLogin}, TWiki::Func::wikiToUserName($TWiki::cfg{DefaultUserLogin}));
     $this->assert_str_equals($TWiki::cfg{DefaultUserLogin}, TWiki::Func::wikiToUserName($TWiki::cfg{DefaultUserWikiName}));
     $this->assert_str_equals($TWiki::cfg{DefaultUserLogin}, TWiki::Func::wikiToUserName($TWiki::cfg{UsersWebName}.'.'.$TWiki::cfg{DefaultUserWikiName}));
 	
     my $admin_cUID = $this->{twiki}->{users}->getCanonicalUserID($TWiki::cfg{AdminUserLogin});
-##    $this->assert_str_equals($TWiki::cfg{AdminUserLogin}, TWiki::Func::wikiToUserName($admin_cUID));
+    $this->assert_str_equals($TWiki::cfg{AdminUserLogin}, TWiki::Func::wikiToUserName($admin_cUID));
     $this->assert_str_equals($TWiki::cfg{AdminUserLogin}, TWiki::Func::wikiToUserName($TWiki::cfg{AdminUserLogin}));
     $this->assert_str_equals($TWiki::cfg{AdminUserLogin}, TWiki::Func::wikiToUserName($TWiki::cfg{AdminUserWikiName}));
     $this->assert_str_equals($TWiki::cfg{AdminUserLogin}, TWiki::Func::wikiToUserName($TWiki::cfg{UsersWebName}.'.'.$TWiki::cfg{AdminUserWikiName}));
 
     my $usera_cUID = $this->{twiki}->{users}->getCanonicalUserID('usera');
-##    $this->assert_str_equals('usera', TWiki::Func::wikiToUserName($usera_cUID));
+    $this->assert_str_equals('usera', TWiki::Func::wikiToUserName($usera_cUID));
     $this->assert_str_equals('usera', TWiki::Func::wikiToUserName('usera'));
     $this->assert_str_equals('usera', TWiki::Func::wikiToUserName('UserA'));
     $this->assert_str_equals('usera', TWiki::Func::wikiToUserName($TWiki::cfg{UsersWebName}.'.'.'UserA'));
@@ -459,7 +457,7 @@ sub verify_wikiToUserName_extended {
     #TODO: consider how to render unkown user's
     my $nonexistantuser_cUID = $this->{twiki}->{users}->getCanonicalUserID('nonexistantuser');
     $this->annotate($nonexistantuser_cUID);
-##    $this->assert_str_equals('nonexistantuser', TWiki::Func::wikiToUserName($nonexistantuser_cUID));
+    $this->assert_str_equals('nonexistantuser', TWiki::Func::wikiToUserName($nonexistantuser_cUID));
     $this->assert_str_equals('nonexistantuser', TWiki::Func::wikiToUserName('nonexistantuser'));
     $this->assert_str_equals('NonExistantUser', TWiki::Func::wikiToUserName('NonExistantUser'));
     $this->assert_str_equals('NonExistantUser', TWiki::Func::wikiToUserName($TWiki::cfg{UsersWebName}.'.'.'NonExistantUser'));
@@ -530,7 +528,7 @@ sub verify_isGroupMember_extended {
     $this->assert(!TWiki::Func::isGroupMember('AandBGroup', $TWiki::cfg{UsersWebName}.'.'.$TWiki::cfg{AdminUserWikiName}));
 
     my $usera_cUID = $this->{twiki}->{users}->getCanonicalUserID('usera');
-##    $this->assert(TWiki::Func::isGroupMember('AandBGroup', $usera_cUID));
+    $this->assert(TWiki::Func::isGroupMember('AandBGroup', $usera_cUID));
     $this->assert(TWiki::Func::isGroupMember('AandBGroup', 'usera'));
     $this->assert(TWiki::Func::isGroupMember('AandBGroup', 'UserA'));
     $this->assert(TWiki::Func::isGroupMember('AandBGroup', $TWiki::cfg{UsersWebName}.'.'.'UserA'));
@@ -552,24 +550,20 @@ sub verify_isGroupMember_extended {
     $this->assert(!TWiki::Func::isGroupMember('AandBGroup', $TWiki::cfg{UsersWebName}.'.'.'AandBGroup'));
 
 #baseusermapping group
-#    my $guest_cUID = $this->{twiki}->{users}->getCanonicalUserID($TWiki::cfg{DefaultUserLogin});
     $this->assert(!TWiki::Func::isGroupMember($TWiki::cfg{SuperAdminGroup}, $TWiki::cfg{DefaultUserLogin}));
     $this->assert(!TWiki::Func::isGroupMember($TWiki::cfg{SuperAdminGroup}, $guest_cUID));
     $this->assert(!TWiki::Func::isGroupMember($TWiki::cfg{SuperAdminGroup}, $TWiki::cfg{DefaultUserWikiName}));
     $this->assert(!TWiki::Func::isGroupMember($TWiki::cfg{SuperAdminGroup}, $TWiki::cfg{UsersWebName}.'.'.$TWiki::cfg{DefaultUserWikiName}));
 	
-#    my $admin_cUID = $this->{twiki}->{users}->getCanonicalUserID($TWiki::cfg{AdminUserLogin});
-##    $this->assert(TWiki::Func::isGroupMember($TWiki::cfg{SuperAdminGroup}, $admin_cUID));
+    $this->assert(TWiki::Func::isGroupMember($TWiki::cfg{SuperAdminGroup}, $admin_cUID));
     $this->assert(TWiki::Func::isGroupMember($TWiki::cfg{SuperAdminGroup}, $TWiki::cfg{AdminUserLogin}));
     $this->assert(TWiki::Func::isGroupMember($TWiki::cfg{SuperAdminGroup}, $TWiki::cfg{AdminUserWikiName}));
     $this->assert(TWiki::Func::isGroupMember($TWiki::cfg{SuperAdminGroup}, $TWiki::cfg{UsersWebName}.'.'.$TWiki::cfg{AdminUserWikiName}));
 
-#    my $usera_cUID = $this->{twiki}->{users}->getCanonicalUserID('usera');
-##    $this->assert(!TWiki::Func::isGroupMember($TWiki::cfg{SuperAdminGroup}, $usera_cUID));
+    $this->assert(!TWiki::Func::isGroupMember($TWiki::cfg{SuperAdminGroup}, $usera_cUID));
     $this->assert(!TWiki::Func::isGroupMember($TWiki::cfg{SuperAdminGroup}, 'usera'));
     $this->assert(!TWiki::Func::isGroupMember($TWiki::cfg{SuperAdminGroup}, 'UserA'));
     $this->assert(!TWiki::Func::isGroupMember($TWiki::cfg{SuperAdminGroup}, $TWiki::cfg{UsersWebName}.'.'.'UserA'));
-
 }
 
 1;
