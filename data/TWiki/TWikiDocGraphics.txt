@@ -29,6 +29,7 @@ Other usage: [[%TOPIC%#Usage_extended][see below]].
 | <img src="%ATTACHURLPATH%/filter.gif" alt="Filter" title="Filter" />  | =filter.gif= | Filter | =%<nop>ICON{filter}%= |
 | <img src="%ATTACHURLPATH%/gear.gif" alt="Gear" title="Gear" />  | =gear.gif= | Gear | =%<nop>ICON{gear}%= |
 | <img src="%ATTACHURLPATH%/globe.gif" alt="Globe" title="Globe" />  | =globe.gif= | Globe | =%<nop>ICON{globe}%= |
+| <img src="%ATTACHURLPATH%/map.gif" alt="Map" title="Map" />  | =map.gif= | Map | =%<nop>ICON{map}%= |
 | <img src="%ATTACHURLPATH%/hand.gif" alt="Pointing hand" title="Pointing hand" />  | =hand.gif= | Pointing hand | =%<nop>ICON{hand}%= |
 | <img src="%ATTACHURLPATH%/help.gif" alt="Help" title="Help" />  | =help.gif= | Help | =%<nop>H%=, =%<nop>ICON{help}%= |
 | <img src="%ATTACHURLPATH%/info.gif" alt="Information" title="Information" />  | =info.gif= | Info | =%<nop>ICON{info}%= |
@@ -553,5 +554,6 @@ __Contributors:__ Most icons on this page were originally designed by TWiki:Main
 %META:FILEATTACHMENT{name="filter.gif" attr="" autoattached="1" comment="" date="1169565034" path="filter.gif" size="341" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="led-box-red.gif" attr="" autoattached="1" comment="" date="1169565034" path="led-box-red.gif" size="393" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="globe.gif" attr="" autoattached="1" comment="" date="1169565034" path="globe.gif" size="601" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="map.gif" attr="" autoattached="1" comment="" date="1181928995" path="map.gif" size="932" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="dot_udlr.gif" attr="" autoattached="1" comment="" date="1169565034" path="dot_udlr.gif" size="111" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="warning.gif" attr="" autoattached="1" comment="" date="1169565034" path="warning.gif" size="215" user="UnknownUser" version=""}%
