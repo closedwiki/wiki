@@ -17,6 +17,8 @@ This Contrib replaces the old Test::Unit based framework that we used previously
 
 To run the unit tests, =cd= to =test/unit= and type =perl ../bin/TestRunner.pl TWikiSuite.pm=. The TWikiSuite package will collect all the other tests in the =test/unit= directory and run them. Any test failures are reported during the test run and again at the end of the run.
 
+Sometimes sessions in a live TWiki hang around, or a test can fail leaving fragments of fixtures behind. These sessions and fragments may stop the tests from being run again, as the tests require an cleanroom environment to run in. You can instruct the test runner to clean up any fragments passing =-clean= to =TestRunner.pl= - but use it with great care, as it deletes webs and files from =/tmp= without waiting for confirmation from you!
+
 ---++ Details
 
 The =TestRunner.pl= script accepts a list of the names of test files in the current directory. it performs some preliminaries and environment checking before invoking a =Unit::TestRunner= that does the real work. This class iterates over the list of test files, and runs the tests. It maintains a record of any failures, and reports them at the end of the run.

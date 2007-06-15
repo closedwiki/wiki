@@ -2,7 +2,7 @@ use strict;
 
 # tests for basic formatting
 
-package TableFormattingTests;
+package TableRenderingTests;
 
 use base qw( TWikiFnTestCase );
 

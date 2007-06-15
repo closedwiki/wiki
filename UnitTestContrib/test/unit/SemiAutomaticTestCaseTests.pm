@@ -10,9 +10,10 @@ use TWiki::UI::View;
 use CGI;
 use Error qw( :try );
 
-find_tests();
+sub list_tests {
+    my ($this, $suite) = @_;
+    my @set = $this->SUPER::list_tests(@_);
 
-sub find_tests {
     my $twiki = new TWiki();
     unless( $twiki->{store}->webExists('TestCases')) {
         print STDERR "Cannot run semi-automatic test cases; TestCases web not found";
@@ -24,20 +25,16 @@ sub find_tests {
         $twiki->finish();
         return;
     }
-    my $suite = Test::Unit::TestSuite->empty_new("TaseCaseAutoTests");
     foreach my $case ($twiki->{store}->getTopicNames('TestCases')) {
         next unless $case =~ /^TestCaseAuto/;
         my $test = 'SemiAutomaticTestCaseTests::test_'.$case;
         no strict 'refs';
         *$test = sub { shift->run_testcase($case) };
         use strict 'refs';
+        push(@set, $test);
     }
     $twiki->finish();
-}
-
-sub new {
-    my $this = shift()->SUPER::new("TestCaseAuto", @_);
-    return $this;
+    return @set;
 }
 
 sub run_testcase {
