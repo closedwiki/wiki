@@ -22,40 +22,38 @@ BEGIN {
 
 use strict;
 use TWiki;   # If you take this out then TestRunner.pl will fail on IndigoPerl
-use Test::Unit::Debug qw(debug_pkgs);
-use Test::Unit::TestRunner;
+use Unit::TestRunner;
 use Cwd;
 
 unless (defined $ENV{TWIKI_ASSERTS}) {
-  print "exporting TWIKI_ASSERTS=1 for extra checking; disable by exporting TWIKI_ASSERTS=0\n";
-  $ENV{TWIKI_ASSERTS} = 1;
+    print "exporting TWIKI_ASSERTS=1 for extra checking; disable by exporting TWIKI_ASSERTS=0\n";
+    $ENV{TWIKI_ASSERTS} = 1;
 }
 
 if ($ENV{TWIKI_ASSERTS}) {
-  print "Assert checking on $ENV{TWIKI_ASSERTS}\n";
+    print "Assert checking on $ENV{TWIKI_ASSERTS}\n";
 } else {
-  print "Assert checking off $ENV{TWIKI_ASSERTS}\n";
+    print "Assert checking off $ENV{TWIKI_ASSERTS}\n";
 }
 
-#make sure our environment is sufficiently clean to run tests
-#DON"T RUN THIS :)
-#my $dangerousRemover = 'rm -r /tmp/junk* ; rm  '.$TWiki::cfg{TempfileDir}.'/[cde]* ; rm '.$TWiki::cfg{TempfileDir}.'/* ; rm -r '.$TWiki::cfg{DataDir}.'/Temp*';
-#`$dangerousRemover`;
+if ($ARGV[0] eq '-clean') {
+    shift @ARGV;
+    `rm -rf /tmp/junk*`;
+    `rm -f $TWiki::cfg{TempfileDir}/*`;
+    `rm -rf $TWiki::cfg{DataDir}/Temp*`;
+    `rm -rf $TWiki::cfg{PubDir}/Temp*`;
+}
+
 testForFiles('/tmp/junk*'); #this is hardcoded into some tests :(
 testForFiles($TWiki::cfg{TempfileDir}.'/*');
 testForFiles($TWiki::cfg{DataDir}.'/Temp*');
+testForFiles($TWiki::cfg{PubDir}.'/Temp*');
 
-
-# Uncomment and edit to debug individual packages.
-#debug_pkgs(qw/Test::Unit::TestCase/);
-
-my $testrunner = Test::Unit::TestRunner->new();
-print "\n---------------\nRunning: ".join(',', @ARGV)."\n";
+my $testrunner = Unit::TestRunner->new();
 $testrunner->start(@ARGV);
 
 sub testForFiles {
     my $test = shift;
-    
     my $list = `ls $test 2> /dev/null`;
     die "please remove $test to run tests\n" unless ($list eq '');
 }

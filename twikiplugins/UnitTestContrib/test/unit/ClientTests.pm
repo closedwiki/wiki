@@ -33,7 +33,7 @@ sub new {
 
 sub list_tests {
     my $this = shift;
-    my @set = $this->SUPER::list_tests();
+    my @set = $this->SUPER::list_tests(@_);
 
     my $clz = new Devel::Symdump(qw(ClientTests));
     for my $i ($clz->functions()) {

@@ -8,8 +8,8 @@
 # you can always create a new web based on that web.
 #
 package TWikiTestCase;
+use base 'Unit::TestCase';
 
-use base qw(Test::Unit::TestCase);
 use Data::Dumper;
 use HTMLDiffer;
 
@@ -31,7 +31,8 @@ use File::Temp;
 my $cleanup  =  $ENV{TWIKI_DEBUG_KEEP} ? 0 : 1;
 
 sub new {
-    my $self = shift()->SUPER::new(@_);
+    my $class = shift;
+    my $self = $class->SUPER::new(@_);
     return $self;
 }
 
@@ -41,7 +42,7 @@ use Cwd;
 sub set_up {
     my $this = shift;
 
-    $this->SUPER::set_up();
+    #$this->SUPER::set_up();
 
     $this->{__EnvSafe} = {};
     foreach my $sym (%ENV) {
@@ -128,76 +129,6 @@ sub _copy {
     else {
         return $n;
     }
-}
-
-# 1:1 HTML comparison. Correctly compares attributes in tags. Uses HTML::Parser
-# which is tolerant of unbalanced tags, so the actual may have unbalanced
-# tags which will _not_ be detected.
-sub assert_html_equals {
-    my( $this, $e, $a, $mess ) = @_;
-
-    my ($package, $filename, $line) = caller(0);
-    my $opts =
-      {
-       options => 'rex',
-       reporter =>
-       \&HTMLDiffer::defaultReporter,
-       result => ''
-      };
-
-    $mess ||= "$a\ndoes not equal\n$e";
-    $this->assert($e, "$filename:$line\n$mess");
-    $this->assert($a, "$filename:$line\n$mess");
-    if( HTMLDiffer::diff($e, $a, $opts)) {
-        $this->assert(0, "$filename:$line\n$mess\n$opts->{result}");
-    }
-}
-
-# Uses a regular-expression match to try to match a block of HTML in a larger
-# block of HTML. Not too clever about tag attributes.
-sub assert_html_matches {
-    my ($this, $e, $a, $mess ) = @_;
-
-    $mess ||= "$a\ndoes not match\n$e";
-    my ($package, $filename, $line) = caller(0);
-    unless( HTMLDiffer::html_matches($e, $a)) {
-        $this->assert(0, "$filename:$line\n$mess");
-    }
-}
-
-# invoke a subroutine while grabbing stdout, so the "http
-# response" doesn't flood the console that you're running the
-# unit test from.
-# $this->capture(\&proc, ...) -> $stdout
-# ... params get passed on to &proc
-sub capture {
-    my $this = shift;
-    my $proc = shift;
-
-    # take copy of the file descriptor
-    open(OLDOUT, ">&STDOUT");
-    open(STDOUT, ">/tmp/cgi");
-
-    my $text = undef;
-    my @params = @_;
-    my $result;
-
-    try {
-        $result = &$proc( @params );
-    } finally {
-        close(STDOUT)            or die "Can't close STDOUT: $!";
-        open(STDOUT, ">&OLDOUT") or die "Can't restore stderr: $!";
-        close(OLDOUT)            or die "Can't close OLDOUT: $!";
-    };
-
-    $text = '';
-    open(FH, '/tmp/cgi');
-    local $/ = undef;
-    $text = <FH>;
-    close(FH);
-    unlink('/tmp/cgi');
-
-    return ( $text, $result );
 }
 
 sub removeWebFixture {

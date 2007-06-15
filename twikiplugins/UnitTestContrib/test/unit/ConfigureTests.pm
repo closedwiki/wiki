@@ -2,7 +2,7 @@ package ConfigureTests;
 
 use strict;
 
-use base qw(Test::Unit::TestCase);
+use base qw(TWikiTestCase);
 
 use Error qw( :try );
 use File::Temp;

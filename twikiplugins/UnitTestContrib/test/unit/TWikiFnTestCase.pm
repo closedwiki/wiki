@@ -11,8 +11,7 @@ use strict;
 # 4. A single user has been pre-registered, wikinamed 'ScumBag'
 
 package TWikiFnTestCase;
-
-use base qw( TWikiTestCase );
+use base 'TWikiTestCase';
 
 use TWiki;
 use TWiki::UI::Register;
@@ -50,7 +49,6 @@ sub set_up {
     $TWiki::cfg{Register}{NeedVerification} = 0;
     $TWiki::cfg{MinPasswordLength} = 0;
     $TWiki::cfg{UsersWebName} = $this->{users_web};
-
     my $query = new CGI("");
     $query->path_info("/$this->{test_web}/$this->{test_topic}");
 

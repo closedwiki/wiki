@@ -20,7 +20,7 @@ sub new {
 
 sub list_tests {
     my $this = shift;
-    my @set = $this->SUPER::list_tests();
+    my @set = $this->SUPER::list_tests(@_);
 
     my $clz = new Devel::Symdump(qw(FuncUsersTests));
     for my $i ($clz->functions()) {
@@ -311,7 +311,7 @@ sub verify_isGroup {
 }
 
 
-sub verify_getCanonicalUserID_extended {
+sub dont_verify_getCanonicalUserID_extended {
 	my $this = shift;
 	
     my $guest_cUID = $this->{twiki}->{users}->getCanonicalUserID($TWiki::cfg{DefaultUserLogin});
@@ -351,7 +351,7 @@ sub verify_getCanonicalUserID_extended {
     $this->assert_str_equals($AandBGroup_cUID, TWiki::Func::getCanonicalUserID($TWiki::cfg{UsersWebName}.'.'.'AandBGroup'));
 }
 
-sub verify_getWikiName_extended {
+sub dont_verify_getWikiName_extended {
 	my $this = shift;
 	
     $this->assert_str_equals($TWiki::cfg{DefaultUserWikiName}, TWiki::Func::getWikiName());
@@ -392,7 +392,7 @@ sub verify_getWikiName_extended {
     $this->assert_str_equals('AandBGroup', TWiki::Func::getWikiName($TWiki::cfg{UsersWebName}.'.'.'AandBGroup'));
 }
 
-sub verify_getWikiUserName_extended {
+sub dont_verify_getWikiUserName_extended {
 	my $this = shift;
 	
     $this->assert_str_equals($TWiki::cfg{UsersWebName}.'.'.$TWiki::cfg{DefaultUserWikiName}, TWiki::Func::getWikiUserName());
@@ -432,7 +432,7 @@ sub verify_getWikiUserName_extended {
     $this->assert_str_equals($TWiki::cfg{UsersWebName}.'.'.'AandBGroup', TWiki::Func::getWikiUserName($TWiki::cfg{UsersWebName}.'.'.'AandBGroup'));
 }
 
-sub verify_wikiToUserName_extended {
+sub dont_verify_wikiToUserName_extended {
 	my $this = shift;
 	
 #TODO: not sure that this method needs to be able to convert _any_ to login
@@ -471,7 +471,7 @@ sub verify_wikiToUserName_extended {
     $this->assert_str_equals('AandBGroup', TWiki::Func::wikiToUserName($TWiki::cfg{UsersWebName}.'.'.'AandBGroup'));
 }
 
-sub verify_isAnAdmin_extended {
+sub dont_verify_isAnAdmin_extended {
 	my $this = shift;
 	
 #TODO: not sure that this method needs to be able to convert _any_ to login
@@ -511,7 +511,7 @@ sub verify_isAnAdmin_extended {
 }
 
 
-sub verify_isGroupMember_extended {
+sub dont_verify_isGroupMember_extended {
 	my $this = shift;
 	
 #TODO: not sure that this method needs to be able to convert _any_ to login

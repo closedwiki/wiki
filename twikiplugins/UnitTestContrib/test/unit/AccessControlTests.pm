@@ -5,7 +5,8 @@ package AccessControlTests;
 use base qw(TWikiFnTestCase);
 
 sub new {
-    my $self = shift()->SUPER::new('AccessControl', @_);
+    my $class = shift;
+    my $self = $class->SUPER::new('AccessControl', @_);
     return $self;
 }
 

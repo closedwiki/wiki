@@ -512,7 +512,7 @@ sub test_isTrue {
 #DEFAULTS
     $this->assert_equals(0, TWiki::Func::isTrue());
     $this->assert_equals(1, TWiki::Func::isTrue(undef, 1));
-    $this->assert_equals(0, TWiki::Func::isTrue(undef, 'bad'));
+    $this->assert_equals(0, TWiki::Func::isTrue(undef, undef));
 
 #TRUE
     $this->assert_equals(1, TWiki::Func::isTrue('true', 'bad'));
