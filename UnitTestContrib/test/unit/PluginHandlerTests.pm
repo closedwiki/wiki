@@ -125,7 +125,7 @@ HERE
     close(F);
     try {
         $this->{twiki}->{store}->saveTopic(
-            $this->{twiki}->{users}->findUserByWikiName('TWikiAdminGroup')->[0],
+            $this->{twiki}->{users}->findUserByWikiName($TWiki::cfg{AdminUserWikiName})->[0],
             $TWiki::cfg{SystemWebName},
             $this->{plugin_name}, <<'EOF');
    * Set PLUGINVAR = Blah
