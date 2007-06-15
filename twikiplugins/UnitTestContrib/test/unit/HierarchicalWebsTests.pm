@@ -18,12 +18,11 @@ sub set_up {
     $this->SUPER::set_up();
 
     $TWiki::cfg{EnableHierarchicalWebs} = 1;
-    $TWiki::cfg{Htpasswd}{FileName} = '/tmp/junkpasswd';
+    $TWiki::cfg{Htpasswd}{FileName} = '$TWiki::cfg{TempfileDir}/junkpasswd';
     $TWiki::cfg{PasswordManager} = 'TWiki::Users::HtPasswdUser';
     $TWiki::cfg{UserMappingManager} = 'TWiki::Users::TWikiUserMapping';
     $TWiki::cfg{LoginManager} = 'TWiki::LoginManager::TemplateLogin';   
     $TWiki::cfg{Register}{EnableNewUserRegistration} = 1;
-       
 
     try {
         $this->{twiki} = new TWiki('AdminUser');
@@ -54,6 +53,7 @@ sub set_up {
 sub tear_down {
     my $this = shift;
 
+    unlink $TWiki::cfg{Htpasswd}{FileName};
     $this->{twiki}->{store}->removeWeb(undef, $testWebSubWebPath);
     $this->{twiki}->{store}->removeWeb(undef, $testWeb);
     $this->{twiki}->finish();

@@ -20,7 +20,7 @@ my $user = "TestUser1";
 
 my $rTopic = "TestTopic";
 my $twiki;
-my $saveWF;
+
 
 sub set_up {
     my $this = shift;
@@ -37,16 +37,21 @@ sub set_up {
     # run as TWikiSuite
     #$twiki->{sandbox}->{REAL_SAFE_PIPE_OPEN} = 0;
     #$twiki->{sandbox}->{EMULATED_SAFE_PIPE_OPEN} = 0;
-    $saveWF = $TWiki::cfg{WarningFileName};
-    $TWiki::cfg{WarningFileName} = "/tmp/junk";
+
+    $TWiki::cfg{WarningFileName} = "$TWiki::cfg{TempfileDir}/junk";
     die unless $twiki;
     die unless $twiki->{prefs};
     File::Path::mkpath("$TWiki::cfg{DataDir}/$testWeb");
     File::Path::mkpath("$TWiki::cfg{PubDir}/$testWeb");
+    $this->assert(open(F, ">$TWiki::cfg{TempfileDir}/itme3122"), $!);
+    print F "old";
+    $this->assert(close(F), $!);
 }
 
 sub tear_down {
     my $this = shift;
+    unlink $TWiki::cfg{WarningFileName};
+    unlink "$TWiki::cfg{TempfileDir}/itme3122";
     File::Path::rmtree("$TWiki::cfg{DataDir}/$testWeb");
     File::Path::rmtree("$TWiki::cfg{PubDir}/$testWeb");
     $twiki->finish();
@@ -569,17 +574,13 @@ HERE
 sub verify_Item3122 {
     my( $this, $class ) = @_;
 
-    $this->assert(open(F, ">/tmp/itme3122"), $!);
-    print F "old";
-    $this->assert(close(F), $!);
-
     my $rcs = $class->new( $twiki, $testWeb, 'Item3122', 'itme3122' );
     $rcs->addRevisionFromText("new", "more", "idiot", time());
     my $text = $rcs->getRevision(1);
     $this->assert_equals("new", $text);
     $rcs = $class->new( $twiki, $testWeb, 'Item3122', 'itme3122' );
     my $fh;
-    $this->assert(open($fh, "</tmp/itme3122"), $!);
+    $this->assert(open($fh, "<$TWiki::cfg{TempfileDir}/itme3122"), $!);
     $rcs->addRevisionFromStream($fh, "more", "idiot", time());
     close($fh);
     $text = $rcs->getRevision(1);

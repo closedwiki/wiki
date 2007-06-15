@@ -43,6 +43,10 @@ sub set_up {
 	
 	$twiki->{user} = 'TestUser';
 	$user = $twiki->{user};
+    open( FILE, ">$TWiki::cfg{TempfileDir}/testfile.gif" );
+    print FILE "one two three";
+    close(FILE);
+
 }
 
 sub tear_down {
@@ -51,6 +55,7 @@ sub tear_down {
     $this->removeWebFixture($twiki, $web)
       if( -e "$TWiki::cfg{DataDir}/$web");
 
+    unlink("$TWiki::cfg{TempfileDir}/testfile.gif");
     unlink "$TWiki::cfg{DataDir}/$web/.changes";
 
     $twiki->finish();
@@ -369,13 +374,11 @@ sub test_beforeSaveHandlerChangeBoth {
 	$twiki->{store}->removeWeb($twiki->{user}, $web);
 }
 
-my $attachment = "afile.txt";
-
 # Handler used in next test
 sub beforeAttachmentSaveHandler {
     my( $attrHash, $topic, $web ) = @_;
     die "attachment $attrHash->{attachment}"
-      unless $attrHash->{attachment} eq $attachment;
+      unless $attrHash->{attachment} eq "testfile.gif";
     die "comment $attrHash->{comment}"
       unless $attrHash->{comment} eq "a comment";
     die "user ".$user unless $user eq $twiki->{user};
@@ -398,7 +401,7 @@ sub beforeAttachmentSaveHandler {
 sub afterAttachmentSaveHandler {
     my( $attrHash, $topic, $web, $error ) = @_;
     die "attachment $attrHash->{attachment}"
-      unless $attrHash->{attachment} eq $attachment;
+      unless $attrHash->{attachment} eq "testfile.gif";
     die "comment $attrHash->{comment}"
       unless $attrHash->{comment} eq "a comment";
     die "user ".$user->stringify()
@@ -412,10 +415,6 @@ sub test_attachmentSaveHandlers {
         value  => "fieldvalue",
        };
 
-    open( FILE, ">/tmp/$attachment" );
-    print FILE "one two three";
-    close(FILE);
-
 	$twiki->{store}->createWeb($twiki->{user}, $web, '_default');
 	$twiki->{store}->saveTopic( $twiki->{user}, $web, $topic, "", undef );
 
@@ -425,16 +424,15 @@ sub test_attachmentSaveHandlers {
     push(@{$twiki->{plugins}->{registeredHandlers}{afterAttachmentSaveHandler}},
         new TWiki::Plugin($twiki, "StoreTestPlugin", 'StoreTests'));
 
-    $twiki->{store}->saveAttachment($web, $topic, $attachment, $user,
-                                    { file => "/tmp/$attachment",
-                                      comment => "a comment" } );
+    $twiki->{store}->saveAttachment(
+        $web, $topic, "testfile.gif", $user,
+        { file => "$TWiki::cfg{TempfileDir}/testfile.gif",
+          comment => "a comment" } );
 
     my $text = $twiki->{store}->readAttachment(
         $twiki->{user},
-        $web, $topic, $attachment);
+        $web, $topic, "testfile.gif");
     $this->assert_str_equals("one four three", $text);
-
-    unlink("/tmp/$attachment");
 
 	$twiki->{store}->removeWeb($twiki->{user}, $web);
 }

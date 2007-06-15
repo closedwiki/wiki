@@ -32,8 +32,6 @@ use Cwd;
 
 my $systemWeb = "TemporaryRegisterTestsSystemWeb";
 
-my $approvalsDir  =  '/tmp/RegistrationApprovals';
-
 # Override randowm password generator
 $TWiki::Users::password = "foo";
 
@@ -52,7 +50,7 @@ sub set_up {
     $TWiki::cfg{PasswordManager} = 'TWiki::Users::HtPasswdUser';
     $TWiki::cfg{SuperAdminGroup} = "PowerRangers";
     $TWiki::cfg{UserInterfaceInternationalisation} = 0;
-    $TWiki::cfg{RegistrationApprovals} = $approvalsDir;
+    $TWiki::cfg{RegistrationApprovals} = "$TWiki::cfg{TempfileDir}/approvals";
     $TWiki::cfg{Register}{NeedVerification} = 1;
     $TWiki::cfg{MinPasswordLength} = 0;
     $TWiki::cfg{UserMappingManager} = 'TWiki::Users::TWikiUserMapping';
@@ -122,7 +120,7 @@ sub tear_down {
     my $this = shift;
 
     $this->removeWebFixture($this->{twiki}, $systemWeb);
-    File::Path::rmtree($approvalsDir);
+    File::Path::rmtree($TWiki::cfg{RegistrationApprovals});
     $this->SUPER::tear_down();
 }
 

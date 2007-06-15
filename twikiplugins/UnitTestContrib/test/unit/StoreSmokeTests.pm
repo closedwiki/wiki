@@ -53,13 +53,13 @@ sub set_up {
     my $this = shift;
 
     $this->SUPER::set_up();
-    $TWiki::cfg{WarningFileName} = "/tmp/junk";
-    $TWiki::cfg{LogFileName} = "/tmp/junk";
+    $TWiki::cfg{WarningFileName} = "$TWiki::cfg{TempfileDir}/junk";
+    $TWiki::cfg{LogFileName} = "$TWiki::cfg{TempfileDir}/junk";
 
     $twiki = new TWiki();
 
-#TODO: re-do to test other choices
-    $TWiki::cfg{Htpasswd}{FileName} = '/tmp/junkpasswd';
+    #TODO: re-do to test other choices
+    $TWiki::cfg{Htpasswd}{FileName} = '$TWiki::cfg{TempfileDir}/junkpasswd';
     $TWiki::cfg{PasswordManager} = 'TWiki::Users::HtPasswdUser';
     $TWiki::cfg{UserMappingManager} = 'TWiki::Users::TWikiUserMapping';
     $TWiki::cfg{LoginManager} = 'TWiki::LoginManager::TemplateLogin';  
@@ -79,6 +79,9 @@ sub set_up {
 
 sub tear_down {
     my $this = shift;
+    unlink $TWiki::cfg{WarningFileName};
+    unlink $TWiki::cfg{LogFileName};
+    unlink $TWiki::cfg{Htpasswd}{FileName};
     $this->removeWebFixture($twiki, $testweb);
     $twiki->finish();
     $this->SUPER::tear_down();
@@ -152,7 +155,7 @@ sub verify_checkin_attachment {
     }
 
     my $attachment = "afile.txt";
-    open( FILE, ">/tmp/$attachment" );
+    open( FILE, ">$TWiki::cfg{TempfileDir}/$attachment" );
     print FILE "Test attachment\n";
     close(FILE);
 
@@ -161,19 +164,23 @@ sub verify_checkin_attachment {
     my $doUnlock = 1;
 
     $twiki->{store}->saveAttachment($testweb, $topic, $attachment, $user,
-                                { file => "/tmp/$attachment" } );
+                                { file => "$TWiki::cfg{TempfileDir}/$attachment" } );
+    unlink "$TWiki::cfg{TempfileDir}/$attachment";
 
     # Check revision number
     my $rev = $twiki->{store}->getRevisionNumber($testweb, $topic, $attachment);
     $this->assert_num_equals(1,$rev);
 
     # Save again and check version number goes up by 1
-    open( FILE, ">/tmp/$attachment" );
+    open( FILE, ">$TWiki::cfg{TempfileDir}/$attachment" );
     print FILE "Test attachment\nAnd a second line";
     close(FILE);
 
     $twiki->{store}->saveAttachment( $testweb, $topic, $attachment, $user,
-                                  { file => "/tmp/$attachment" } );
+                                  { file => "$TWiki::cfg{TempfileDir}/$attachment" } );
+
+    unlink "$TWiki::cfg{TempfileDir}/$attachment";
+
     # Check revision number
     $rev = $twiki->{store}->getRevisionNumber( $testweb, $topic, $attachment );
     $this->assert_num_equals(2, $rev);
@@ -192,13 +199,13 @@ sub verify_rename() {
     $this->assert(!$twiki->{store}->topicExists($newWeb, $newTopic));
 
     my $attachment = "afile.txt";
-    open( FILE, ">/tmp/$attachment" );
+    open( FILE, ">$TWiki::cfg{TempfileDir}/$attachment" );
     print FILE "Test her attachment to me\n";
     close(FILE);
     $user = $testUser2;
     $twiki->{userName} = $user;
     $twiki->{store}->saveAttachment($oldWeb, $oldTopic, $attachment, $user,
-                                { file => "/tmp/$attachment" } );
+                                { file => "$TWiki::cfg{TempfileDir}/$attachment" } );
 
     my $oldRevAtt =
       $twiki->{store}->getRevisionNumber( $oldWeb, $oldTopic, $attachment );
