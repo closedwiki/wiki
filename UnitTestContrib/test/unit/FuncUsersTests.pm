@@ -38,7 +38,7 @@ sub list_tests {
                     my $this = shift;
                     $TWiki::cfg{LoginManager} = $LoginImpl;
                     $TWiki::cfg{UserMappingManager} = $userManagerImpl;
-                    verify_set_up($this);
+                    set_up_for_verify($this);
                     &$i($this);
                 };
                 use strict 'refs';
@@ -53,7 +53,7 @@ sub set_up {
     my $this = shift;
     $this->SUPER::set_up();
 }
-sub verify_set_up {
+sub set_up_for_verify {
     my $this = shift;
 
     $this->{twiki}->finish();
