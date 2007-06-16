@@ -31,40 +31,42 @@ sub new {
     return $this;
 }
 
-sub list_tests {
-    my $this = shift;
-    my @set = $this->SUPER::list_tests(@_);
-
-    my $clz = new Devel::Symdump(qw(ClientTests));
-    for my $i ($clz->functions()) {
-        next unless $i =~ /::verify_/;
-        foreach my $LoginImpl qw( TWiki::LoginManager::TemplateLogin TWiki::LoginManager::ApacheLogin none) {
-            foreach my $userManagerImpl qw( TWiki::Users::TWikiUserMapping TWiki::Users::BaseUserMapping) {
-                my $fn = $i;
-                $fn =~ s/\W/_/g;
-                my $sfn = 'test_'.$fn.$LoginImpl.$userManagerImpl;
-                $sfn =~ s/::/_/g;
-                $sfn = 'ClientTests::'.$sfn;
-                no strict 'refs';
-                *$sfn = sub {
-                    my $this = shift;
-                    $TWiki::cfg{LoginManager} = $LoginImpl;
-                    $TWiki::cfg{UserMappingManager} = $userManagerImpl;
-                    &$i($this);
-                };
-                use strict 'refs';
-                push(@set, $sfn);
-            }
-        }
-    }
-    return @set;
+sub TemplateLoginManager {
+    $TWiki::cfg{LoginManager} = 'TWiki::LoginManager::TemplateLogin';
 }
 
-sub set_up {
+sub ApacheLoginManager {
+    $TWiki::cfg{LoginManager} = 'TWiki::LoginManager::ApacheLogin';
+}
+
+sub NoLoginManager {
+    $TWiki::cfg{LoginManager} = 'TWiki::LoginManager';
+}
+
+sub BaseUserMapping {
+    my $this = shift;
+    $TWiki::cfg{UserMappingManager} = 'TWiki::Users::BaseUserMapping';
+    $this->set_up_for_verify();
+}
+
+sub TWikiUserMapping {
+    my $this = shift;
+    $TWiki::cfg{UserMappingManager} = 'TWiki::Users::TWikiUserMapping';
+    $this->set_up_for_verify();
+}
+
+# See the pod doc in Unit::TestCase for details of how to use this
+sub fixture_groups {
+    return (
+        [ 'TemplateLoginManager', 'ApacheLoginManager', 'NoLoginManager' ],
+        [ 'TWikiUserMapping', 'BaseUserMapping' ] );
+}
+
+sub set_up_for_verify {
 #print STDERR "\n------------- set_up -----------------\n";
     my $this = shift;
-    $this->SUPER::set_up();
 
+    $this->{twiki}->finish() if $this->{twiki};
     $this->{twiki} = new TWiki();
     $this->assert($TWiki::cfg{TempfileDir} && -d $TWiki::cfg{TempfileDir});
     $TWiki::cfg{UseClientSessions} = 1;

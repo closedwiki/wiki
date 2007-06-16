@@ -18,41 +18,39 @@ sub new {
     return $self;
 }
 
-sub list_tests {
-    my $this = shift;
-    my @set = $this->SUPER::list_tests(@_);
+sub TemplateLoginManager {
+    $TWiki::cfg{LoginManager} = 'TWiki::LoginManager::TemplateLogin';
+}
 
-    my $clz = new Devel::Symdump(qw(FuncUsersTests));
-    for my $i ($clz->functions()) {
-        next unless $i =~ /::verify_/;
-        foreach my $LoginImpl qw( TWiki::LoginManager::TemplateLogin TWiki::LoginManager::ApacheLogin none) {
-            foreach my $userManagerImpl qw( TWiki::Users::TWikiUserMapping) {           # TWiki::Users::BaseUserMapping) {
-#TODO: add things like AllowLoginName into the mix
-                my $fn = $i;
-                $fn =~ s/\W/_/g;
-                my $sfn = 'verify_'.$fn.$LoginImpl.$userManagerImpl;
-                $sfn =~ s/::/_/g;
-                $sfn = 'FuncUsersTests::'.$sfn;
-                no strict 'refs';
-                *$sfn = sub {
-                    my $this = shift;
-                    $TWiki::cfg{LoginManager} = $LoginImpl;
-                    $TWiki::cfg{UserMappingManager} = $userManagerImpl;
-                    set_up_for_verify($this);
-                    &$i($this);
-                };
-                use strict 'refs';
-                push(@set, $sfn);
-            }
-        }
-    }
-    return @set;
+sub ApacheLoginManager {
+    $TWiki::cfg{LoginManager} = 'TWiki::LoginManager::ApacheLogin';
 }
-#delay the calling of set_up til after the cfg's are set by above closure
-sub set_up {
+
+sub NoLoginManager {
+    $TWiki::cfg{LoginManager} = 'TWiki::LoginManager';
+}
+
+sub BaseUserMapping {
     my $this = shift;
-    $this->SUPER::set_up();
+    $TWiki::cfg{UserMappingManager} = 'TWiki::Users::BaseUserMapping';
+    $this->set_up_for_verify();
 }
+
+sub TWikiUserMapping {
+    my $this = shift;
+    $TWiki::cfg{UserMappingManager} = 'TWiki::Users::TWikiUserMapping';
+    $this->set_up_for_verify();
+}
+
+# See the pod doc in Unit::TestCase for details of how to use this
+sub fixture_groups {
+    return (
+        [ 'TemplateLoginManager', 'ApacheLoginManager', 'NoLoginManager' ],
+#        [ 'TWikiUserMapping', 'BaseUserMapping' ] );
+        [ 'TWikiUserMapping' ] );
+}
+
+#delay the calling of set_up til after the cfg's are set by above closure
 sub set_up_for_verify {
     my $this = shift;
 
@@ -64,7 +62,6 @@ sub set_up_for_verify {
             $this->registerUser('usera', 'User', 'A', 'user@example.com');
             $this->registerUser('userb', 'User', 'B', 'user@example.com');
             $this->registerUser('userc', 'User', 'C', 'userc@example.com;userd@example.com');
-    
             $this->{twiki}->{store}->saveTopic(
                 $this->{twiki}->{user},
                 $this->{users_web}, 'AandBGroup',
@@ -81,7 +78,6 @@ sub set_up_for_verify {
                 $this->{twiki}->{user},
                 $this->{users_web}, 'ScumGroup',
                 "   * Set GROUP = $TWiki::cfg{DefaultUserWikiName}");
-    
         } catch TWiki::AccessControlException with {
             my $e = shift;
             $this->assert(0,$e->stringify());
