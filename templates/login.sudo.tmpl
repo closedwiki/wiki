@@ -7,31 +7,10 @@
 %TMPL:DEF{"NEW_USER_NOTE"}%Enter a new username and password to change identity%TMPL:END%
 %TMPL:DEF{"UNRECOGNISED_USER"}%Unrecognised user and/or password.%TMPL:END%
 
-%TMPL:DEF{"authenticationnote"}%<p><span class="twikiSmallish twikiGrayText">%MAKETEXT{"Enter the TWiki Administrator user or login as set in configure."}%</span></p>%TMPL:END%
+%TMPL:DEF{"usernamefield"}%<input class="twikiInputField" type="text" size="40" name="username" value="%TWIKIADMINLOGIN%" />%TMPL:END%
 
-%TMPL:DEF{"usernamestep"}%<div class="twikiFormStep">
----+++ %MAKETEXT{"Username"}%
+%TMPL:DEF{"usernamenote"}%%TMPL:END%
 
-<input class="twikiInputField" type="text" size="40" name="username" value="%TWIKIADMINLOGIN%" tabindex="1" />
-%TMPL:P{"authenticationnote"}%
-</div><!-- /twikiFormStep-->%TMPL:END%
+%TMPL:DEF{"passwordnote"}%%TMPL:END%
 
-
-%TMPL:DEF{"rememberbox"}%%TMPL:END%
-
-
-%TMPL:DEF{"passwordstep"}%<div class="twikiFormStep">
----+++ %MAKETEXT{"Password"}%
-
-<input class="patternFormFieldVerticalForm twikiInputField" type="password" size="40" name="password" value="" tabindex="2" />%TMPL:P{"forgotpasswordnote"}%
-%TMPL:P{context="can_remember_login" then="rememberbox"}%
-</div><!-- /twikiFormStep-->%TMPL:END%
-
-
-%TMPL:DEF{"forgotpasswordnote"}%%TMPL:END%
-
-
-%TMPL:DEF{"seealsonote"}%<div class="twikiSmallish twikiGrayText">
-%MAKETEXT{"If you have any questions, please contact [_1]." args="%WIKIWEBMASTER%"}%
-</div>%TMPL:END%
-
+%TMPL:DEF{"authrealm"}%%MAKETEXT{"Enter the TWiki Administrator user or login as set in configure."}%%TMPL:END%

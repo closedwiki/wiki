@@ -1,45 +1,76 @@
 %TMPL:INCLUDE{"twiki"}%
 
-%TMPL:DEF{"webaction"}% TWiki User Authentication %TMPL:END%
-%TMPL:DEF{"topicaction"}% %TMPL:END%
-%TMPL:DEF{"LOG_IN_BANNER"}%Please enter your username and password%TMPL:END%
-%TMPL:DEF{"LOGGED_IN_BANNER"}% %MAINWEB%.%WIKINAME% is currently logged in%TMPL:END%
-%TMPL:DEF{"NEW_USER_NOTE"}%Enter a new username and password to change identity%TMPL:END%
-%TMPL:DEF{"UNRECOGNISED_USER"}%Unrecognised user and/or password.%TMPL:END%
+%TMPL:DEF{"templatescript"}%
+<script type="text/javascript">
+//<![CDATA[
+	twiki.Event.addLoadEvent(initForm, true);
+	function initForm() {
+		document.loginform.username.focus();
+	}
+//]]>
+</script>%TMPL:END%
 
+%TMPL:DEF{"webaction"}%%MAKETEXT{"TWiki User Authentication"}%%TMPL:END%
+%TMPL:DEF{"topicaction"}%%TMPL:END%
+%TMPL:DEF{"titleaction"}%%MAKETEXT{"(login)"}% %TMPL:END%
+%TMPL:DEF{"LOG_IN_BANNER"}%%MAKETEXT{"Please enter your username and password"}%%TMPL:END%
+%TMPL:DEF{"LOGGED_IN_BANNER"}%%MAKETEXT{"[_1] is currently logged in" args="%MAINWEB%.%WIKINAME%"}%%TMPL:END%
+%TMPL:DEF{"NEW_USER_NOTE"}%%MAKETEXT{"Enter a new username and password to change identity"}%%TMPL:END%
+%TMPL:DEF{"UNRECOGNISED_USER"}%<span class="twikiAlert">%MAKETEXT{"Unrecognised user and/or password"}%</span>%TMPL:END%
 
-%TMPL:DEF{"content"}%
----+ %BANNER%
-%NOTE%
-%AUTHREALM%
-<form action='%SCRIPTURLPATH{"login"}%/%WEB%/%TOPIC%' method='post'>
-<table border='0'>
-<tr><th>Username</th><td>
-<input type='text' size='30' name='username' value='%URLPARAM{"username"}%' />
-</td></tr><tr><th>Password</th><td>
-<input type='password' size='30' name='password' value='' />
-</td></tr></table>
-<literal>
+%TMPL:DEF{"titleaction"}%%MAKETEXT{"([_1] login)" args="<nop>%WIKITOOLNAME%"}%%TMPL:END%
+
+%TMPL:DEF{"notestep"}%---++ %BANNER%
+<p>
+%TMPL:P{"note"}%
+</p>%TMPL:END%
+
+%TMPL:DEF{"note"}%%TMPL:P{"error"}%<p>%NOTE%</p>%TMPL:END%
+
+%TMPL:DEF{"authrealm"}%%AUTHREALM%%TMPL:END%
+
+%TMPL:DEF{"formstart"}%<form action='%SCRIPTURLPATH{"login"}%/%WEB%/%TOPIC%' name='loginform' method='post'>%TMPL:END%
+
+%TMPL:DEF{"formend"}%<literal>
 %QUERYPARAMS{format="<input type='hidden' name='$name' value='$percntENCODE{$quot()$value$quot type=$quot()html$quot}$percnt' />"}%
-</literal>
-<input type="hidden" name="origurl" value="%ORIGURL%" />
-<input type='submit' value='Logon' />
-%IF{"$ERROR" then="%BR% _Error: %ERROR%._"}%
-</form>
-<p />
-%TMPL:P{"topicinfo"}%
+</literal><input type="hidden" name="origurl" value="%ORIGURL%" /></form>%TMPL:END%
+
+%TMPL:DEF{"error"}%%IF{"$ERROR" then='<p class="twikiAlert"><strong>%MAKETEXT{"Error: [_1]" args="%ERROR%"}%</strong></p>'}%%TMPL:END%
+
+%TMPL:DEF{"usernamefield"}%<input type='text' class='twikiInputField' size='40' name='username' value='%URLPARAM{"usernamestep"}%' />%TMPL:END%
+
+%TMPL:DEF{"usernamestep"}%<p> *%MAKETEXT{"Username"}%* %BR%
+%TMPL:P{"usernamefield"}% %TMPL:P{"usernamenote"}%%BR%%TMPL:P{"authrealm"}%</p>%TMPL:END%
+
+%TMPL:DEF{"usernamenote"}%%TMPL:END%
+
+%TMPL:DEF{"passwordfield"}%<input type='password' class='twikiInputField' size='40' name='password' value='' />%TMPL:END%
+
+%TMPL:DEF{"passwordstep"}%<p> *%MAKETEXT{"Password"}%* %BR%
+%TMPL:P{"passwordfield"}% %TMPL:P{"passwordnote"}%
+%TMPL:P{context="can_remember_login" then="rememberbox"}%
+</p>%TMPL:END%
+
+%TMPL:DEF{"passwordnote"}%[[%TWIKIWEB%.ResetPassword][%MAKETEXT{"I forgot my password"}%]]%TMPL:END%
+
+%TMPL:DEF{"rememberbox"}%<p><input id="remember" name="remember" type="checkbox" value="1" /><label for="remember">&nbsp;%MAKETEXT{"Remember me on this computer"}%</label></p>%TMPL:END%
+
+%TMPL:DEF{"submitstep"}%%TMPL:P{"submit"}%%TMPL:END%
+
+%TMPL:DEF{"submit"}%<p><input type='submit' class='twikiSubmit'' value='%MAKETEXT{"Logon"}%' /></p>%TMPL:END%
+
+%TMPL:DEF{"seealsonote"}%%MAKETEXT{"If you have any questions, please contact [_1]." args="%WIKIWEBMASTER%"}%%TMPL:END%
+
+%TMPL:DEF{"form"}%%TMPL:P{"formstart"}%
+%TMPL:P{"notestep"}%
+<fieldset>
+%TMPL:P{"usernamestep"}%%TMPL:P{"passwordstep"}%%TMPL:P{"submitstep"}%
+</fieldset>
+%TMPL:P{"formend"}%
 %TMPL:END%
 
-
-%TMPL:DEF{"head"}%
-<head>
- <title><nop>%WIKITOOLNAME% User Authentication</title>
- <meta http-equiv="Content-Type" content="text/html; charset=%CHARSET%" />
- <meta name="robots" content="noindex" />
- %HTTP_EQUIV_ON_VIEW%
- <base href="%SCRIPTURL{%SCRIPTNAME%}%/%WEB%/%TOPIC%"></base>
- %TMPL:P{"twikistyle"}%
- %TMPL:P{"templatecustomstyle"}%
- <!-- add JS script here -->
-</head>
+%TMPL:DEF{"content"}%
+%TMPL:P{"form"}%
+%TMPL:P{"seealsonote"}%
+%TMPL:P{"topicinfo"}%
 %TMPL:END%
