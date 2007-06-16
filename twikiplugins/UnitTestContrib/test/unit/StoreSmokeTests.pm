@@ -14,49 +14,33 @@ use Devel::Symdump;
 
 my $testweb = "TemporaryStoreSmokeTestsTestWeb";
 
-sub new {
-    my $self = shift()->SUPER::new(@_);
-    return $self;
-}
-
-my $twiki;
-
 my $testUser1;
 my $testUser2;
 
-sub list_tests {
+sub RcsLite {
     my $this = shift;
-    my @set = $this->SUPER::list_tests(@_);
+    $TWiki::cfg{StoreImpl} = 'RcsLite';
+    $this->set_up_for_verify();
+}
 
-    my $clz = new Devel::Symdump(qw(StoreSmokeTests));
-    for my $i ($clz->functions()) {
-        next unless $i =~ /::verify_/;
-        foreach my $impl qw(  RcsWrap RcsLite ) {
-            my $fn = $i;
-            $fn =~ s/\W/_/g;
-            my $sfn = 'StoreSmokeTests::test_'.$fn.$impl;
-            no strict 'refs';
-            *$sfn = sub {
-                my $this = shift;
-                $TWiki::cfg{StoreImpl} = $impl;
-                &$i($this);
-            };
-            use strict 'refs';
-            push(@set, $sfn);
-        }
-    }
-    return @set;
+sub RcsWrap {
+    my $this = shift;
+    $TWiki::cfg{StoreImpl} = 'RcsWrap';
+    $this->set_up_for_verify();
+}
+
+sub fixture_groups {
+    return ( [ 'RcsLite', 'RcsWrap' ] );
 }
 
 # Set up the test fixture
-sub set_up {
+sub set_up_for_verify {
     my $this = shift;
 
-    $this->SUPER::set_up();
     $TWiki::cfg{WarningFileName} = "$TWiki::cfg{TempfileDir}/junk";
     $TWiki::cfg{LogFileName} = "$TWiki::cfg{TempfileDir}/junk";
 
-    $twiki = new TWiki();
+    $this->{twiki} = new TWiki();
 
     #TODO: re-do to test other choices
     $TWiki::cfg{Htpasswd}{FileName} = '$TWiki::cfg{TempfileDir}/junkpasswd';
@@ -66,7 +50,7 @@ sub set_up {
     $TWiki::cfg{Register}{EnableNewUserRegistration} = 1;
     
     #$this->annotate(" session is running as ".TWiki::Func::getWikiName());
-    #$this->annotate("\nusermapper: ".$twiki->{users}->{mapping_id});
+    #$this->annotate("\nusermapper: ".$this->{twiki}->{users}->{mapping_id});
     
 
     # Use just the wikiname (don't create a complete user) because the
@@ -74,7 +58,7 @@ sub set_up {
     # required.
     $testUser1 = "DummyUserOne";
     $testUser2 = "DummyUserTwo";
-    $twiki->{store}->createWeb( $twiki->{user}, $testweb);
+    $this->{twiki}->{store}->createWeb( $this->{twiki}->{user}, $testweb);
 }
 
 sub tear_down {
@@ -82,19 +66,16 @@ sub tear_down {
     unlink $TWiki::cfg{WarningFileName};
     unlink $TWiki::cfg{LogFileName};
     unlink $TWiki::cfg{Htpasswd}{FileName};
-    $this->removeWebFixture($twiki, $testweb);
-    $twiki->finish();
+    $this->removeWebFixture($this->{twiki}, $testweb);
+    $this->{twiki}->finish() if $this->{twiki};
     $this->SUPER::tear_down();
-}
-
-sub test_noise {
 }
 
 sub verify_notopic {
     my $this = shift;
     my $topic = "UnitTest1";
-    my $rev = $twiki->{store}->getRevisionNumber( $testweb, "UnitTest1" );
-    $this->assert(!$twiki->{store}->topicExists($testweb, $topic));
+    my $rev = $this->{twiki}->{store}->getRevisionNumber( $testweb, "UnitTest1" );
+    $this->assert(!$this->{twiki}->{store}->topicExists($testweb, $topic));
     $this->assert_num_equals(0, $rev);
 }
 
@@ -104,13 +85,13 @@ sub verify_checkin {
     my $text = "hi";
     my $user = $testUser1;
 
-    $this->assert(!$twiki->{store}->topicExists($testweb,$topic));
-    $twiki->{store}->saveTopic( $user, $testweb, $topic, $text );
+    $this->assert(!$this->{twiki}->{store}->topicExists($testweb,$topic));
+    $this->{twiki}->{store}->saveTopic( $user, $testweb, $topic, $text );
 
-    my $rev = $twiki->{store}->getRevisionNumber( $testweb, $topic );
+    my $rev = $this->{twiki}->{store}->getRevisionNumber( $testweb, $topic );
     $this->assert_num_equals(1, $rev);
 
-    my( $meta, $text1 ) = $twiki->{store}->readTopic(
+    my( $meta, $text1 ) = $this->{twiki}->{store}->readTopic(
         $user, $testweb, $topic, undef, 0 );
 
     $text1 =~ s/[\s]*$//go;
@@ -120,18 +101,18 @@ sub verify_checkin {
     my( $dateMeta, $authorMeta, $revMeta ) = $meta->getRevisionInfo();
     $this->assert_num_equals( 1, $revMeta, "Rev from meta data should be 1 when first created $revMeta" );
 
-    $meta = new TWiki::Meta($twiki, $testweb, $topic);
+    $meta = new TWiki::Meta($this->{twiki}, $testweb, $topic);
     my( $dateMeta0, $authorMeta0, $revMeta0 ) = $meta->getRevisionInfo();
     $this->assert_num_equals( $revMeta0, $revMeta );
     # Check-in with different text, under different user (to force change)
     $user = $testUser2;
     $text = "bye";
 
-    $twiki->{store}->saveTopic($user, $testweb, $topic, $text, $meta );
+    $this->{twiki}->{store}->saveTopic($user, $testweb, $topic, $text, $meta );
 
-    $rev = $twiki->{store}->getRevisionNumber( $testweb, $topic );
+    $rev = $this->{twiki}->{store}->getRevisionNumber( $testweb, $topic );
     $this->assert_num_equals(2, $rev );
-    ( $meta, $text1 ) = $twiki->{store}->readTopic( $user, $testweb, $topic, undef, 0 );
+    ( $meta, $text1 ) = $this->{twiki}->{store}->readTopic( $user, $testweb, $topic, undef, 0 );
     ( $dateMeta, $authorMeta, $revMeta ) = $meta->getRevisionInfo();
     $this->assert_num_equals(2, $revMeta, "Rev from meta should be 2 after one change" );
 }
@@ -144,7 +125,7 @@ sub verify_checkin_attachment {
     my $text = "hi";
     my $user = $testUser1;
 
-    $twiki->{store}->saveTopic($user, $testweb, $topic, $text );
+    $this->{twiki}->{store}->saveTopic($user, $testweb, $topic, $text );
 
     # ensure pub directory for topic exists (SMELL surely not needed?)
     my $dir = $TWiki::cfg{PubDir};
@@ -163,12 +144,12 @@ sub verify_checkin_attachment {
     my $doNotLogChanges = 0;
     my $doUnlock = 1;
 
-    $twiki->{store}->saveAttachment($testweb, $topic, $attachment, $user,
+    $this->{twiki}->{store}->saveAttachment($testweb, $topic, $attachment, $user,
                                 { file => "$TWiki::cfg{TempfileDir}/$attachment" } );
     unlink "$TWiki::cfg{TempfileDir}/$attachment";
 
     # Check revision number
-    my $rev = $twiki->{store}->getRevisionNumber($testweb, $topic, $attachment);
+    my $rev = $this->{twiki}->{store}->getRevisionNumber($testweb, $topic, $attachment);
     $this->assert_num_equals(1,$rev);
 
     # Save again and check version number goes up by 1
@@ -176,13 +157,13 @@ sub verify_checkin_attachment {
     print FILE "Test attachment\nAnd a second line";
     close(FILE);
 
-    $twiki->{store}->saveAttachment( $testweb, $topic, $attachment, $user,
+    $this->{twiki}->{store}->saveAttachment( $testweb, $topic, $attachment, $user,
                                   { file => "$TWiki::cfg{TempfileDir}/$attachment" } );
 
     unlink "$TWiki::cfg{TempfileDir}/$attachment";
 
     # Check revision number
-    $rev = $twiki->{store}->getRevisionNumber( $testweb, $topic, $attachment );
+    $rev = $this->{twiki}->{store}->getRevisionNumber( $testweb, $topic, $attachment );
     $this->assert_num_equals(2, $rev);
 }
 
@@ -195,47 +176,47 @@ sub verify_rename() {
     my $newTopic = "UnitTest2Moved";
     my $user = $testUser1;
 
-    $twiki->{store}->saveTopic($user, $oldWeb, $oldTopic, "Elucidate the goose" );
-    $this->assert(!$twiki->{store}->topicExists($newWeb, $newTopic));
+    $this->{twiki}->{store}->saveTopic($user, $oldWeb, $oldTopic, "Elucidate the goose" );
+    $this->assert(!$this->{twiki}->{store}->topicExists($newWeb, $newTopic));
 
     my $attachment = "afile.txt";
     open( FILE, ">$TWiki::cfg{TempfileDir}/$attachment" );
     print FILE "Test her attachment to me\n";
     close(FILE);
     $user = $testUser2;
-    $twiki->{userName} = $user;
-    $twiki->{store}->saveAttachment($oldWeb, $oldTopic, $attachment, $user,
+    $this->{twiki}->{userName} = $user;
+    $this->{twiki}->{store}->saveAttachment($oldWeb, $oldTopic, $attachment, $user,
                                 { file => "$TWiki::cfg{TempfileDir}/$attachment" } );
 
     my $oldRevAtt =
-      $twiki->{store}->getRevisionNumber( $oldWeb, $oldTopic, $attachment );
+      $this->{twiki}->{store}->getRevisionNumber( $oldWeb, $oldTopic, $attachment );
     my $oldRevTop =
-      $twiki->{store}->getRevisionNumber( $oldWeb, $oldTopic );
+      $this->{twiki}->{store}->getRevisionNumber( $oldWeb, $oldTopic );
 
     $user = $testUser1;
-    $twiki->{user} = $user;
+    $this->{twiki}->{user} = $user;
 
     #$TWiki::Sandbox::_trace = 1;
-    $twiki->{store}->moveTopic($oldWeb, $oldTopic, $newWeb,
+    $this->{twiki}->{store}->moveTopic($oldWeb, $oldTopic, $newWeb,
                                $newTopic, $user);
     #$TWiki::Sandbox::_trace = 0;
 
-    $this->assert(!$twiki->{store}->topicExists($oldWeb, $oldTopic));
-    $this->assert(!$twiki->{store}->attachmentExists($oldWeb, $oldTopic,
+    $this->assert(!$this->{twiki}->{store}->topicExists($oldWeb, $oldTopic));
+    $this->assert(!$this->{twiki}->{store}->attachmentExists($oldWeb, $oldTopic,
                                                      $attachment));
-    $this->assert($twiki->{store}->topicExists($newWeb, $newTopic));
-    $this->assert($twiki->{store}->attachmentExists($newWeb, $newTopic,
+    $this->assert($this->{twiki}->{store}->topicExists($newWeb, $newTopic));
+    $this->assert($this->{twiki}->{store}->attachmentExists($newWeb, $newTopic,
                                                     $attachment));
 
     my $newRevAtt =
-      $twiki->{store}->getRevisionNumber($newWeb, $newTopic, $attachment );
+      $this->{twiki}->{store}->getRevisionNumber($newWeb, $newTopic, $attachment );
     $this->assert_num_equals($oldRevAtt, $newRevAtt);
 
     # Topic is modified in move, because meta information is updated
     # to indicate move
     # THIS IS NOW DONE IN UI::Manage
 #    my $newRevTop =
-#      $twiki->{store}->getRevisionNumber( $newWeb, $newTopic );
+#      $this->{twiki}->{store}->getRevisionNumber( $newWeb, $newTopic );
 #    $this->assert_matches(qr/^\d+$/, $newRevTop);
 #    my $revTopShouldBe = $oldRevTop + 1;
 #    $this->assert_num_equals($revTopShouldBe, $newRevTop );
@@ -244,7 +225,7 @@ sub verify_rename() {
 sub verify_releaselocksonsave {
     my $this = shift;
     my $topic = "MultiEditTopic";
-    my $meta = new TWiki::Meta($twiki, $testweb, $topic);
+    my $meta = new TWiki::Meta($this->{twiki}, $testweb, $topic);
 
     # create rev 1 as TestUser1
     my $query = new CGI ({
@@ -254,9 +235,9 @@ sub verify_releaselocksonsave {
                          });
     $query->path_info( "/$testweb/$topic" );
 
-    $twiki = new TWiki( $testUser1, $query );
+    $this->{twiki} = new TWiki( $testUser1, $query );
     try {
-        $this->capture(\&TWiki::UI::Save::save, $twiki );
+        $this->capture(\&TWiki::UI::Save::save, $this->{twiki} );
     } catch TWiki::OopsException with {
         my $e = shift;
         print $e->stringify();
@@ -273,10 +254,10 @@ sub verify_releaselocksonsave {
                        forcenewrevision => [ 1 ],
                       });
     $query->path_info( "/$testweb/$topic" );
-    $twiki->finish();
-    $twiki = new TWiki( $testUser1, $query );
+    $this->{twiki}->finish();
+    $this->{twiki} = new TWiki( $testUser1, $query );
     try {
-        $this->capture( \&TWiki::UI::Save::save,  $twiki );
+        $this->capture( \&TWiki::UI::Save::save,  $this->{twiki} );
     } catch TWiki::OopsException with {
         my $e = shift;
         print $e->stringify();
@@ -294,10 +275,10 @@ sub verify_releaselocksonsave {
                       });
 
     $query->path_info( "/$testweb/$topic" );
-    $twiki->finish();
-    $twiki = new TWiki( $testUser2, $query );
+    $this->{twiki}->finish();
+    $this->{twiki} = new TWiki( $testUser2, $query );
     try {
-        $this->capture( \&TWiki::UI::Save::save,  $twiki );
+        $this->capture( \&TWiki::UI::Save::save,  $this->{twiki} );
         $this->annotate("\na merge notice exception should have been thrown for /$testweb/$topic");
         $this->assert(0);
     } catch TWiki::OopsException with {

@@ -13,6 +13,7 @@ sub start {
     my $this = shift;
     my @files = @_;
     @{$this->{failures}} = ();
+    my $passes = 0;
 
     # First use all the tests to get them compiled
     while (scalar(@files)) {
@@ -39,6 +40,7 @@ sub start {
                 $tester->set_up();
                 try {
                     $tester->$test();
+                    $passes++;
                 } catch Error::Simple with {
                     my $e = shift;
                     print "*** ",$e->stringify(),"\n";
@@ -56,6 +58,7 @@ sub start {
         print scalar(@{$this->{failures}})." failures\n";
         print  join("\n---------------------------\n",
                     @{$this->{failures}}),"\n";
+        print "$passes of ",$passes + scalar(@{$this->{failures}})," test cases passed\n";
     } else {
         print "All tests passed\n";
     }

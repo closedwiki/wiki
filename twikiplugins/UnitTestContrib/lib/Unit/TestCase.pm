@@ -19,15 +19,90 @@ sub set_up {
 sub tear_down {
 }
 
+sub _fixture_test {
+    my ($this, $set_up, $test) = @_;
+    $this->$set_up();
+    $this->$test();
+}
+
+=pod
+
+Implement this to return an array of arrays, each of which is a list
+of the names of fixture setup functions. For example, ( [ A, B ], [ C, D] ).
+
+This will generate a call for each of the functions whose names start
+with verify_ in the test package, with a call to each of the setup
+functions. For example, say we have a test function called verify_this.
+Then the test functions generated will be:
+   verify_this_A_C
+   verify_this_A_D
+   verify_this_B_C
+   verify_this_B_D
+
+The setup functions are called in order; for example, verify_this_A_C is
+implemented as:
+   $this->A();
+   $this->C();
+   $this->verify_this();
+
+=cut
+
+sub fixture_groups {
+    return ();
+}
+
 sub list_tests {
     my ($this, $suite) = @_;
     die "No suite" unless $suite;
     my @tests;
+    my @verifies;
     my $clz = new Devel::Symdump($suite);
     for my $i ($clz->functions()) {
         if ($i =~ /^$suite\:\:test/) {
             push(@tests, $i);
+        } elsif ($i =~ /^$suite\:\:(verify.*$)/) {
+            push(@verifies, $1);
         }
+    }
+    my $fg = $this->fixture_groups();
+
+    # Generate a verify method for each combination of the different
+    # fixture methods
+    my @setups = ();
+    push(@tests, _gen_verification_functions(
+        \@setups, $suite, \@verifies,
+        $this->fixture_groups()));
+    return @tests;
+}
+
+sub _gen_verification_functions {
+    my $setups = shift;
+    my $suite = shift;
+    my $verifies = shift;
+    my $group = shift;
+    my @tests;
+    foreach my $setup_function (@$group) {
+        push(@$setups, $setup_function);
+        if (scalar(@_)) {
+            push (@tests, _gen_verification_functions(
+                $setups, $suite, $verifies, @_));
+        } else {
+            foreach my $verify (@$verifies) {
+                my $fn = $suite.'::'.$verify.'_'.join('_', @$setups);
+                my $sup = join(';', map { '$this->'.$_.'()' } @$setups);
+                my $code = <<SUB;
+*$fn = sub {
+    my \$this = shift;
+    $sup;
+    \$this->$verify();
+}
+SUB
+                eval $code;
+                die $@ if $@;
+                push(@tests, $fn);
+            }
+        }
+        pop(@$setups);
     }
     return @tests;
 }
