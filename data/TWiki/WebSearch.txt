@@ -25,15 +25,15 @@ zeroresults="%IF{ "defined search" then="on" else="off" }%"
 <form action="%SCRIPTURLPATH{view}%/%INCLUDINGWEB%/%INCLUDINGTOPIC%">
 <table id="twikiSearchTable" border="0" cellspacing="0" cellpadding="0">
 <tr>
-<td colspan="2" class="first">
+<td colspan="2" class="twikiFirstCol">
   <input type="text" class="twikiInputField" name="search" value="%URLPARAM{ "search" encode="entity" }%" size="40" /> 
   <input type="submit" class="twikiSubmit" value='%MAKETEXT{"Search"}%' /><span class="twikiSmall">&nbsp;&nbsp;[[%INCLUDINGWEB%.WebSearchAdvanced][%MAKETEXT{"Advanced search"}%]] | [[%TWIKIWEB%.SearchHelp][%MAKETEXT{"Help"}%]]</span>
 <div class="twikiSmall" style="padding:1em 0 0 0;">%MAKETEXT{"TIP: to search for all topics that contain =\"SOAP\"=, =\"WSDL\"=, a literal =\"web service\"=, but not =\"shampoo\"=, write:"}% <code>soap wsdl "web service" -shampoo</code></div>
 </td>
 </tr>
 <tr>
-<th class="last">%MAKETEXT{"Search where:"}%</th>
-<td class="last">
+<th class="twikiLast">%MAKETEXT{"Search where:"}%</th>
+<td class="twikiLast">
 <input type="radio" class="twikiRadioButton" id="textbody" name="scope" value="text" %IF{" '%URLPARAM{"scope"}%' = 'text' " then="checked=\"checked\"" else=""}% /><label for="textbody"> %MAKETEXT{"Text body"}%</label>&nbsp;&nbsp;&nbsp;<input type="radio" class="twikiRadioButton" id="topictitle" name="scope" value="topic" %IF{" '%URLPARAM{scope}%' = 'topic' " then="checked=\"checked\"" else=""}% /><label for="topictitle"> %MAKETEXT{"Topic title"}%</label>&nbsp;&nbsp;&nbsp;<input type="radio" class="twikiRadioButton" id="both" name="scope" value="all" %IF{" '%URLPARAM{"scope" default="all"}%' = 'all' " then="checked=\"checked\"" else=""}% /><label for="both"> %MAKETEXT{"Both body and title"}%</label>
 <hr />
 <input type="checkbox" class="twikiCheckbox" id="web" name="web" %IF{" '%URLPARAM{web}%' = 'all'" then="checked=\"checked\"" else=""}% /><label for="web"> %MAKETEXT{"All public webs"}%</label> <span class="twikiSmall">%MAKETEXT{"(otherwise search [_1] Web only)" args="<nop>%INCLUDINGWEB%"}%</span>

@@ -721,7 +721,6 @@ pub/TWiki/TWikiDocGraphics/locktopic.gif 0644
 pub/TWiki/TWikiDocGraphics/locktopicgray.gif 0644
 pub/TWiki/TWikiDocGraphics/logout.gif 0644
 pub/TWiki/TWikiDocGraphics/mail.gif 0644
-pub/TWiki/TWikiDocGraphics/map.gif 0644
 pub/TWiki/TWikiDocGraphics/mdb.gif 0644
 pub/TWiki/TWikiDocGraphics/minus.gif 0644
 pub/TWiki/TWikiDocGraphics/monospace.gif 0644
@@ -876,6 +875,7 @@ pub/TWiki/TWikiLogos/T-logo-88x31.png 0644
 pub/TWiki/TWikiLogos/T-logo.svg 0644
 pub/TWiki/TWikiLogos/favicon.ico 0644
 pub/TWiki/TWikiTemplates/testscreen.gif 0644
+pub/TWiki/TWikiTemplates/default.css 0644
 pub/TWiki/WabiSabi/wabisabi.gif 0644
 pub/TWiki/WebPreferences/Dakar.gif 0644
 pub/TWiki/WebPreferences/favicon.ico 0644

@@ -9,7 +9,7 @@ _Skins overlay regular templates to give different looks and feels to TWiki scre
 
 TWiki uses TWikiTemplates files as the basis of all the screens it uses to interact with users. Each screen has an associated template file that contains the basic layout of the screen. This is then filled in by the code to generate what you see in the browser.
 
-TWiki ships with a default set of template files that give a basic look-and-feel. TWiki also includes support for _skins_ that can be selected to give different, more sophisticated, look and feels. A default TWiki installation will usually start up with the PatternSkin already selected. Skins may also be defined by third parties and loaded into a TWiki installation to give more options. To see how TWiki looks when *no* skin is selected, [[%SCRIPTURL{"view"}%/%WEB%/%TOPIC%?skin=not_a_skin][view this topic with a non-existant skin]].
+TWiki ships with a default set of template files that give a very basic, CSS-themable, look-and-feel. TWiki also includes support for _skins_ that can be selected to give different, more sophisticated, look and feels. A default TWiki installation will usually start up with the PatternSkin already selected. Skins may also be defined by third parties and loaded into a TWiki installation to give more options. To see how TWiki looks when *no* skin is selected, [[%SCRIPTURL{"view"}%/%WEB%/%TOPIC%?skin=not_a_skin][view this topic with a non-existant skin]].
 
 Topic text is not affected by the choice of skin, though a skin can be defined to use a CSS (Cascading Style Sheet), which can sometimes give a radically different appearance to the text.
 
@@ -24,15 +24,17 @@ __See other types of extensions:__ TWikiAddOns, TWikiContribs, TWikiPlugins
 
 ---++ Changing the default TWiki skin
 
-TWiki default ships with the skin PatternSkin activated. If you want to modify the layout, colors or even the templates to suit your own needs, have a look first at the topics PatternSkinCustomization and PatternSkinCssCookbook.
+TWiki default ships with the skin PatternSkin activated. You can set the skin for the whole site, a single web or topic, or for each user individually, by setting the SKIN variable to the name of a skin. If the skin you select doesn't exist, then TWiki will pick up the default templates.
 
 ---++ Defining Skins
 
-You may want to define your own skin, for example to comply with corporate web guidelines, or because you have a aesthetic vision that you want to share.
+You may want to define your own skin, for example to comply with corporate web guidelines, or because you have a aesthetic vision that you want to share. There are a couple of places you an start doing this.
 
 The TWikiTemplates files used for skins are located in the =twiki/templates= directory and are named according to the skin: ==&lt;scriptname&gt;.&lt;skin&gt;.tmpl==. Skin files may also be defined in TWiki topics - see TWikiTemplates for details.
 
 To start creating a new skin, copy the default TWikiTemplates (like =view.tmpl=), or copy an existing skin to use as a base for your own skin. You should only need to copy the files you intend to customise, as TWiki can be configured to fall back to another skin if a template is not defined in your skin. Name the files as described above (for example =view.myskin.tmpl=.
+
+If you use PatternSkin as your starting point, and you want to modify the layout, colors or even the templates to suit your own needs, have a look first at the topics PatternSkinCustomization and PatternSkinCssCookbook.
 
 For your own TWiki skin you are encouraged to show a small 80x31 pixel <a href="http://twiki.org/"><img src="%PUBURL%/%TWIKIWEB%/TWikiLogos/T-logo-80x15.gif" alt="This site is powered by the TWiki collaboration platform" width="80" height="15" title="This site is powered by the TWiki collaboration platform" border="0" /></a> logo at the bottom of your skin:
 

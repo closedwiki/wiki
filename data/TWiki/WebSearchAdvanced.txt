@@ -33,7 +33,7 @@ zeroresults="%IF{ "defined search" then="on" else="off" }%"
 <form action="%SCRIPTURLPATH{view}%/%INCLUDINGWEB%/%INCLUDINGTOPIC%">
 <table id="twikiSearchTable" border="0" cellspacing="0" cellpadding="0">
 <tr>
-<td colspan="2" class="first">
+<td colspan="2" class="twikiFirstCol">
   <input class="twikiInputField" type="text" name="search" value="%URLPARAM{ "search" encode="entity" }%" size="40" /> 
   <input type="submit" class="twikiSubmit" value='%MAKETEXT{"Search"}%' /><span class="twikiSmall">&nbsp;&nbsp;[[%INCLUDINGWEB%.WebSearch][%MAKETEXT{"Simple search"}%]]&nbsp;|&nbsp;[[%TWIKIWEB%.SearchHelp][%MAKETEXT{"Help"}%]]</span>
 <div class="twikiSmall" style="padding:1em 0 0 0;">%MAKETEXT{"TIP: to search for all topics that contain =\"SOAP\"=, =\"WSDL\"=, a literal =\"web service\"=, but not =\"shampoo\"=, write:"}% <code>soap wsdl "web service" -shampoo</code></div>
@@ -78,8 +78,8 @@ zeroresults="%IF{ "defined search" then="on" else="off" }%"
 </td>
 </tr>
 <tr>
-<th class="last">%MAKETEXT{"Limit results to:"}%</th>
-<td class="last"><input type="text" class="twikiInputField" id="limit" name="limit" size="3" value="%IF{" '%URLPARAM{"limit" default="all"}%' = 'all' " then="all" else="%URLPARAM{limit}%"}%" /><label for="limit"> %MAKETEXT{"Topics per web"}% </label><span class="twikiSmall">%MAKETEXT{"(=all= to show all topics)"}%</span>
+<th class="twikiLast">%MAKETEXT{"Limit results to:"}%</th>
+<td class="twikiLast"><input type="text" class="twikiInputField" id="limit" name="limit" size="3" value="%IF{" '%URLPARAM{"limit" default="all"}%' = 'all' " then="all" else="%URLPARAM{limit}%"}%" /><label for="limit"> %MAKETEXT{"Topics per web"}% </label><span class="twikiSmall">%MAKETEXT{"(=all= to show all topics)"}%</span>
 </td>
 </tr>
 </table>
