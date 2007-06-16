@@ -637,9 +637,34 @@ sub getDefaultUserName {
 
 =pod
 
----+++ getWikiName( ) -> $wikiName
+---+++ getCanonicalUserID( $user ) -> $cUID
 
-Get Wiki name of logged in user
+return the cUID of the specified user
+if $user is undefined Get the cUID of logged in user
+
+   * $user can be a cUID, login, wikiname or web.wikiname
+
+Return: =$wikiName= Wiki Name, e.g. ='JohnDoe'=
+
+*Since:* TWiki::Plugins::VERSION 1.000 (7 Dec 2002)
+
+=cut
+
+sub getCanonicalUserID {
+	my $user = shift || $TWiki::Plugins::SESSION->{user};
+    ASSERT($TWiki::Plugins::SESSION) if DEBUG;
+    my $users = $TWiki::Plugins::SESSION->{users};
+    return $users->getCanonicalUserID( $user );
+}
+
+=pod
+
+---+++ getWikiName( $user ) -> $wikiName
+
+return the WikiName of the specified user
+if $user is undefined Get Wiki name of logged in user
+
+   * $user can be a cUID, login, wikiname or web.wikiname
 
 Return: =$wikiName= Wiki Name, e.g. ='JohnDoe'=
 
@@ -648,17 +673,20 @@ Return: =$wikiName= Wiki Name, e.g. ='JohnDoe'=
 =cut
 
 sub getWikiName {
+	my $user = shift || $TWiki::Plugins::SESSION->{user};
     ASSERT($TWiki::Plugins::SESSION) if DEBUG;
-    my $user = $TWiki::Plugins::SESSION->{user};
     my $users = $TWiki::Plugins::SESSION->{users};
     return $users->getWikiName( $user );
 }
 
 =pod
 
----+++ getWikiUserName( ) -> $wikiName
+---+++ getWikiUserName($user ) -> $wikiName
 
-Get Wiki name of logged in user with web prefix
+return the userWeb.WikiName of the specified user
+if $user is undefined Get Wiki name of logged in user
+
+   * $user can be a cUID, login, wikiname or web.wikiname
 
 Return: =$wikiName= Wiki Name, e.g. ="Main.JohnDoe"=
 
@@ -667,9 +695,11 @@ Return: =$wikiName= Wiki Name, e.g. ="Main.JohnDoe"=
 =cut
 
 sub getWikiUserName {
+	my $user = shift || $TWiki::Plugins::SESSION->{user};
+
     ASSERT($TWiki::Plugins::SESSION) if DEBUG;
     my $users = $TWiki::Plugins::SESSION->{users};
-    return $users->webDotWikiName($TWiki::Plugins::SESSION->{user});
+    return $users->webDotWikiName($user);
 }
 
 =pod
@@ -805,6 +835,7 @@ sub isGuest {
 
 Find out if the user is an admin or not. If the user is not given,
 the currently logged-in user is assumed.
+   * $login can be either a login, or a CUID
 
 *Since:* TWiki::Plugins::VERSION 1.2
 
@@ -829,6 +860,8 @@ if( TWiki::Func::isGroupMember( "HesperionXXGroup", "jordi" )) {
 }
 </verbatim>
 If =$user= is =undef=, it defaults to the currently logged-in user.
+
+   * $login can be a login name, or a cUID
 
 *Since:* TWiki::Plugins::VERSION 1.2
 
