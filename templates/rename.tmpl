@@ -4,7 +4,5 @@
 %TMPL:DEF{"newtopic"}%<input name="newtopic" value="%NEW_TOPIC%" size="36" />%TMPL:END%
 %TMPL:DEF{"newweb"}%<select name="newweb">%WEBLIST{"<option $marker value=$qname>$name</option>" webs="%TRASHWEB%,public" selection="%NEW_WEB%" separator=" "}%</select>%TMPL:END%
 %TMPL:DEF{"notes"}%%TMPL:P{"nonwikiword"}%%TMPL:END%
-%TMPL:DEF{"topicaction"}%
- <input type="submit" class="twikiSubmit" value="Rename/Move" />
- %TMPL:P{"sep"}% [[%WEB%.%TOPIC%][Cancel]] %TMPL:END%
+%TMPL:DEF{"topicactionbuttons"}%<input type="submit" class="twikiSubmit" value="Rename/Move" />%TMPL:P{"sep"}%[[%WEB%.%TOPIC%][Cancel]]%TMPL:END%
 %TMPL:P{"rename"}%
