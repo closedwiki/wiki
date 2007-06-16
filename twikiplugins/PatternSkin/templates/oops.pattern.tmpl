@@ -1,6 +1,2 @@
-%TMPL:INCLUDE{"twiki"}%
-
-%TMPL:DEF{"pagetitle"}%%TMPL:P{"heading"}%%TMPL:END%
-
-%TMPL:DEF{"content"}%%IF{" '%TMPL:P{"webaction"}%' = '' " then="" else="<h3><span class='twikiAlert'>%TMPL:P{"webaction"}%</span></h3>"}%
-%TMPL:P{"message"}%%TMPL:P{"topicaction"}%%TMPL:END%
+%TMPL:INCLUDE{"oops"}%
+%TMPL:DEF{"bodyclassname"}%patternNoViewPage patternOopsPage%TMPL:END%

@@ -4,13 +4,13 @@
 <form name="main" action="%SCRIPTURLPATH{"save"}%/%WEB%/%TOPIC%?action_save=1">
 <div class="twikiFormSteps">
 <div class="twikiFormStep">
-%MAKETEXT{"Current parent:"}% %IF{"'NONE%SEARCH{ "^%TOPIC%$" scope="topic" regex="on" nosearch="on" nototal="on" format="$parent" }%'='NONE'" then="(none)" else='%SEARCH{ "^%TOPIC%$" scope="topic" regex="on" nosearch="on" nototal="on" format="[[$web.$parent][$parent]]" }%' }%
+---+++ %MAKETEXT{"Current parent:"}% %IF{"'NONE%SEARCH{ "^%TOPIC%$" scope="topic" regex="on" nosearch="on" nototal="on" format="$parent" }%'='NONE'" then="(none)" else='%SEARCH{ "^%TOPIC%$" scope="topic" regex="on" nosearch="on" nototal="on" format="[[$web.$parent][$parent]]" }%' }%
 </div>
 <div class="twikiFormStep">
-%MAKETEXT{"Select topic parent:"}% %BR%
+---+++ %MAKETEXT{"Select topic parent:"}% %BR%
 %IF{"defined pickparent" then="<select name='topicparent' size='10' class='twikiSelect' tabindex='12'>$percntTOPICLIST{$quot<option $marker value='$name'>$name</option>$quot separator=$quot$quot selection=$quot$percntMETASEARCH{type=$quotparent$quot}$percnt}$percnt<option value=$quot$quot>$percntMAKETEXT{$quot(no parent, orphaned topic)$quot}$percnt</option></select>" else="<input type='text' size='40' class='twikiInputField' />&nbsp;<a href='$percntSCRIPTURLPATH{oops}$percnt/$percntWEB$percnt/$percntTOPIC$percnt?template=oopsmore;$percntQUERYSTRING$percnt;pickparent=1'>%MAKETEXT{"Pick from a list"}%</a>"}%
 </div>
-<div class="twikiFormStep twikiLast">
+<div class="twikiFormStep">
 <input type='submit' class='twikiButton' value='%MAKETEXT{"Set new parent"}%' />
 </div>
 </div>
