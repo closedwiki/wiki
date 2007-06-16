@@ -973,6 +973,7 @@ table.patternDiffOptions input {
 .patternSigLine {
 	margin:.25em 0 0 0;
 }
+.patternOopsPage .patternTopicActions,
 .patternEditPage .patternTopicActions {
 	margin:1em 0 0 0;
 }
