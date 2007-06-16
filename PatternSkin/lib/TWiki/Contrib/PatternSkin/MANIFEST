@@ -87,9 +87,6 @@ templates/login.pattern.tmpl 0444
 templates/logo.pattern.tmpl 0444
 templates/moveattachment.pattern.tmpl 0444
 templates/oops.pattern.tmpl 0444
-templates/oopsaccessdenied.pattern.tmpl 0444
-templates/oopsattention.pattern.tmpl 0444
-templates/oopsleaseconflict.pattern.tmpl 0444
 templates/oopsmore.pattern.tmpl 0444
 templates/oopsmorebacklinks.pattern.tmpl 0444
 templates/oopsmorechildtopics.pattern.tmpl 0444
@@ -98,7 +95,6 @@ templates/oopsmorerename.pattern.tmpl 0444
 templates/oopsmorerevision.pattern.tmpl 0444
 templates/oopsmoresetparent.pattern.tmpl 0444
 templates/oopsmoresettings.pattern.tmpl 0444
-templates/oopssaveerr.pattern.tmpl 0444
 templates/preview.pattern.tmpl 0444
 templates/rdiff.pattern.tmpl 0444
 templates/rename.pattern.tmpl 0444
