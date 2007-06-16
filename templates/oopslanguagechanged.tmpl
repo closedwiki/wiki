@@ -1,17 +1,20 @@
-%TMPL:INCLUDE{"twiki"}%
+%TMPL:INCLUDE{"oops"}%
+
 %TMPL:DEF{"titleaction"}% %MAKETEXT{"(change language)"}% %TMPL:END%
-%TMPL:DEF{"webaction"}%%TMPL:END%
+
 %TMPL:DEF{"heading"}%%MAKETEXT{"Change language"}%%TMPL:END%
-%TMPL:DEF{"topicaction"}% <a name="Actions"> </a><div class="patternTopicAction"><span class="patternActionButtons"> [[%WEB%.%TOPIC%][%MAKETEXT{"OK"}%]]</span></div>  %TMPL:END%
 
-%TMPL:DEF{"content"}%
+%TMPL:DEF{"topicactionbuttons"}%[[%WEB%.%TOPIC%][%MAKETEXT{"OK"}%]]%TMPL:END%
 
-%SESSION_VARIABLE{"LANGUAGE" set="%URLPARAM{language}%"}%
+%TMPL:DEF{"templatescript"}%<script type="text/javascript">
+//<![CDATA[
+	window.location.href = '%SCRIPTURLPATH{"view"}%/%WEB%/%TOPIC%';
+//]]>
+</script>%TMPL:END%
 
-%MAKETEXT{"Your language will be changed to [_1] from the next screen. You will be redirected to there right now. If you aren't, ~[~[[_2]~]~[click here~]~] to proceed." args="*%SESSION_VARIABLE{LANGUAGE}%*, %SCRIPTURLPATH{"view"}%/%WEB%/%TOPIC%"}%
+%TMPL:DEF{"pagetitle"}%%TMPL:P{"heading"}%%TMPL:END%
 
-<script type="text/javascript">
-window.location.href = '%SCRIPTURLPATH{"view"}%/%WEB%/%TOPIC%';
-</script>
-%TMPL:P{"topicinfo"}%
-%TMPL:END%
+%TMPL:DEF{"webaction"}% *%MAKETEXT{"Attention"}%* %TMPL:END%
+
+%TMPL:DEF{"message"}%%SESSION_VARIABLE{"LANGUAGE" set="%URLPARAM{language}%"}%
+%MAKETEXT{"Your language will be changed to [_1] from the next screen. You will be redirected to there right now. If you aren't, ~[~[[_2]~]~[click here~]~] to proceed." args="*%SESSION_VARIABLE{LANGUAGE}%*, %SCRIPTURLPATH{"view"}%/%WEB%/%TOPIC%"}%%TMPL:END%

@@ -1,10 +1,9 @@
-%TMPL:INCLUDE{"twiki"}%
+%TMPL:INCLUDE{"oops"}%
 %TMPL:DEF{"titleaction"}%(more) %TMPL:END%
 %TMPL:DEF{"webaction"}% *Topic actions* %TMPL:END%
 %TMPL:DEF{"heading"}%More Actions on Topic [[%TOPIC%]]%TMPL:END%
 
-%TMPL:DEF{"content"}%
-
+%TMPL:DEF{"message"}%
    * *%MAKETEXT{"Delete topic"}%*
       * <b><a href="%SCRIPTURLPATH{"rename"}%/%WEB%/%TOPIC%?newweb=%TRASHWEB%&amp;nonwikiword=on" rel='nofollow'>%MAKETEXT{"Delete topic..."}%</a></b>,
         %MAKETEXT{"looking for references in _all public webs_"}% *%MAKETEXT{"(recommended)"}%*
@@ -30,7 +29,7 @@
 <input type="hidden" name="t" value="%GMTIME{"$epoch"}%" />
    * *%MAKETEXT{"Set new topic parent"}%*
       * Step 1: Select topic parent:
-%IF{"defined pickparent" then="<select name='topicparent' size='10' class='twikiSelect' tabindex='12'>$percntTOPICLIST{$quot<option $marker value='$name'>$name</option>$quot separator=$quot$quot selection=$quot$percntMETASEARCH{type=$quotparent$quot}$percnt$quot}$percnt<option value=$quot$quot>$percntMAKETEXT{$quot(no parent, orphaned topic)$quot}$percnt</option></select>" else="<input type='text' size='40' class='twikiInputField' />&nbsp;<a href='$percntSCRIPTURLPATH{oops}$percnt/$percntWEB$percnt/$percntTOPIC$percnt?template=oopsmore;$percntQUERYSTRING$percnt;pickparent=1'>%MAKETEXT{"Pick from a list"}%</a>"}%
+%IF{"defined pickparent" then="      * <select name='topicparent' size='10' class='twikiSelect' tabindex='12'>$percntTOPICLIST{$quot<option $marker value='$name'>$name</option>$quot separator=$quot$quot selection=$quot$percntMETASEARCH{type=$quotparent$quot}$percnt$quot}$percnt<option value=$quot$quot>$percntMAKETEXT{$quot(no parent, orphaned topic)$quot}$percnt</option></select>" else="      * <input type='text' size='40' class='twikiInputField' />&nbsp;<a href='$percntSCRIPTURLPATH{oops}$percnt/$percntWEB$percnt/$percntTOPIC$percnt?template=oopsmore;$percntQUERYSTRING$percnt;pickparent=1'>%MAKETEXT{"Pick from a list"}%</a>"}%
       * Step 2: Continue to <input type="submit" class="twikiSubmit" value="Edit" /> and save <nop>%TOPIC% to activate the new parent
         <input type="hidden" name="t" value="%SERVERTIME{$year$mo$day$hour$min$sec}%" />
 </form>
@@ -61,9 +60,5 @@
 %IF{"$ param1!='0'" then="-->" }%
 
    * *%MAKETEXT{"Edit topic preference settings"}%*
-      * <a href="%SCRIPTURLPATH{"manage"}%/%WEB%/%TOPIC%?action=editSettings" rel='nofollow'>Edit settings</a> for this topic 
-
- %TMPL:P{"topicinfo"}%
- %TMPL:END%
-
-%TMPL:DEF{"topicaction"}% [[%WEB%.%TOPIC%][Cancel]] %TMPL:END%
+      * <a href="%SCRIPTURLPATH{"manage"}%/%WEB%/%TOPIC%?action=editSettings" rel='nofollow'>Edit settings</a> for this topic
+%TMPL:END%
