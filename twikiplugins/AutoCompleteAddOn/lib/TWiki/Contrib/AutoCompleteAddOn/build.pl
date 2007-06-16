@@ -1,6 +1,6 @@
 #!/usr/bin/perl -w
 #
-# Build for AutocompleteAddOn
+# Build for AutoCompleteAddOn
 #
 BEGIN {
   foreach my $pc (split(/:/, $ENV{TWIKI_LIBS})) {
@@ -11,7 +11,7 @@ BEGIN {
 use TWiki::Contrib::Build;
 
 # Create the build object
-$build = new TWiki::Contrib::Build( 'AutocompleteAddOn' );
+$build = new TWiki::Contrib::Build( 'AutoCompleteAddOn' );
 
 # Build the target on the command line, or the default target
 $build->build($build->{target});
