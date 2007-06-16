@@ -924,8 +924,8 @@ Note: Cairo gets the first row wrong, by any sensible definition.
 <!-- expected B_IN_TABLE -->
 <table border="1" cellspacing="0" cellpadding="0" class="twikiTable">
 <thead>
-<tr><th bgcolor="#99CCCC"> <strong>_ * __ = ==</strong> </th><th bgcolor="#99CCCC"> <strong>_ * __ = ==</strong> </th></tr>
-<tr><th bgcolor="#99CCCC"> <strong>aa</strong> </th><th bgcolor="#99CCCC"> <strong>bb</strong> </th></tr>
+<tr><th> <strong>_ * __ = ==</strong> </th><th> <strong>_ * __ = ==</strong> </th></tr>
+<tr><th> <strong>aa</strong> </th><th> <strong>bb</strong> </th></tr>
 </thead>
 <tbody>
 <tr><td> * </td><td> * </td></tr>

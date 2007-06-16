@@ -266,7 +266,7 @@ WikiWordAfterList
 ---+++ Expected
 <!-- expected SIMPLE TABLE -->
 <p />
-<table border="1" cellspacing="0" cellpadding="0" class=twikiTable><thead><tr><th bgcolor="#99CCCC"> <strong>L</strong> </th><th bgcolor="#99CCCC"> <strong>C</strong> </th><th bgcolor="#99CCCC"> <strong>R</strong> </th></tr></thead>
+<table border="1" cellspacing="0" cellpadding="0" class=twikiTable><thead><tr><th> <strong>L</strong> </th><th> <strong>C</strong> </th><th> <strong>R</strong> </th></tr></thead>
 <tbody>
 <tr><td>  A2  </td><td align="center">	2	</td><td align="right">	2  </td></tr>
 
@@ -469,11 +469,11 @@ nowt!%MAINWEB%
 <table cellpadding="0" cellspacing="0" border="1" class=twikiTable>
 <thead>
 <tr>
-  <th bgcolor="#99CCCC"><strong>A0 all rows</strong></th>
-  <th bgcolor="#99CCCC"><strong>B0</strong></th>
-  <th bgcolor="#99CCCC"><strong>C0 widen this col</strong></th>
-  <th bgcolor="#99CCCC"><strong><span class="twikiNewLink">D0LinkInColHeader<a href="%SCRIPTURLPATH{"edit"}%/TestCases/D0LinkInColHeader?topicparent=TestCases.TestCaseAutoFormatting" rel="nofollow" title="Create this topic">?</a></span></strong></th>
-  <th bgcolor="#99CCCC"><strong>E0 not a link this time</strong></th>
+  <th><strong>A0 all rows</strong></th>
+  <th><strong>B0</strong></th>
+  <th><strong>C0 widen this col</strong></th>
+  <th><strong><span class="twikiNewLink">D0LinkInColHeader<a href="%SCRIPTURLPATH{"edit"}%/TestCases/D0LinkInColHeader?topicparent=TestCases.TestCaseAutoFormatting" rel="nofollow" title="Create this topic">?</a></span></strong></th>
+  <th><strong>E0 not a link this time</strong></th>
  </tr></thead>
 <tbody>
  <tr>
@@ -481,7 +481,7 @@ nowt!%MAINWEB%
   <td>  B1 left </td>
   <td align="center">   C1 center  </td>
   <td align="right">   D1 right </td>
-  <th bgcolor="#99CCCC"><strong>E1 strong</strong></th>
+  <th><strong>E1 strong</strong></th>
  </tr>
  <tr>
   <td> ^</td>

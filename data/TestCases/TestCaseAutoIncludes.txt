@@ -42,7 +42,6 @@ And called for some hot buttered toast.
 <!-- expected expand FNF -->
 <p></p><p /><p />
 <span class='twikiAlert'>Warning: Can't find topic TestCases.FileNotFound</span>
-<p></p>
 <!-- /expected -->
 </noautolink>
 ---++ Actual

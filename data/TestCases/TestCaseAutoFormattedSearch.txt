@@ -165,11 +165,11 @@ Found 4
 <table cellspacing="0" cellpadding="0" class="twikiTable" border="1">
 <thead>
 <tr>
-<th bgcolor="#99CCCC"><strong> Topic </strong></th>
-<th bgcolor="#99CCCC"><strong> Summary </strong></th>
-<th bgcolor="#99CCCC"><strong> Name </strong></th>
-<th bgcolor="#99CCCC"><strong> Role </strong></th>
-<th bgcolor="#99CCCC"><strong> Testsample </strong></th>
+<th><strong> Topic </strong></th>
+<th><strong> Summary </strong></th>
+<th><strong> Name </strong></th>
+<th><strong> Role </strong></th>
+<th><strong> Testsample </strong></th>
 </tr></thead><tbody>
 <tr><td>  <a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/TestCases/FormattedSearch1" class="twikiLink">FormattedSearch1</a>  </td>
 <td>  Michael Anchor is a famous Danish painter. He never painted $web, $n, $nop, $quot, $percnt or $dollar. He was married to Anna Anchor who was also a great painter. ...  </td>
