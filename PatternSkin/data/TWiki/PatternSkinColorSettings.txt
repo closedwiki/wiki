@@ -100,7 +100,7 @@ Save the topic
    
 ---+++ Forms
 ---++++ INPUT_FIELD_BORDERS Input field borders
-   * Set INPUT_FIELD_BORDERS = #888 #e8e8e8 #e8e8e8 #888
+   * Set INPUT_FIELD_BORDERS = #bbb #f2f2f2 #f2f2f2 #bbb
 ---++++ FORM_INPUT_BORDER Textarea, input and select (darker gray)
    * Set FORM_INPUT_BORDER = #aaa
 ---++++ FORM_BORDER Form (same as twikiTable border)
@@ -482,10 +482,10 @@ table.twikiFormTable th.twikiFormTableHRow font {
 
 .twikiFormSteps {
 	background-color:%ACTIVE_FORM_BACKGROUND%;
-	border-color:%SEPARATOR_BORDER%;
+	border-color:%TABLE_BORDER_LIGHT%;
 }
 .twikiFormStep {
-	border-color:%SEPARATOR_BORDER%;
+	border-color:%TABLE_BORDER_LIGHT%;
 }
 .twikiFormStep h3,
 .twikiFormStep h4 {
@@ -832,7 +832,6 @@ tr.twikiDiffDebug .twikiDiffUnchangedText {
 	background-position:0 .35em;
 }
 /*#patternLeftBarContents .patternLeftBarPersonal,*/
-#twikiLogin,
 #patternLeftBarContents .tipsOfTheDayContents {
 	background-image:url(gradient_blue.gif);
 	background-repeat:repeat-x;

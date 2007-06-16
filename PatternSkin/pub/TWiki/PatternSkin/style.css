@@ -146,14 +146,12 @@ form {
 	margin:0;
 	padding:0;
 }
-html>body select { /* Mozilla */
-	font-size:94%;	
-}
 textarea,
 input,
 select {
 	vertical-align:middle;
 	font-family:arial, "Lucida Grande", verdana, sans-serif;
+	font-size:100%;
 }
 .twikiTextarea {
 	padding:1px;
@@ -165,7 +163,6 @@ select {
 	border-width:1px;
 	border-style:solid;
 	padding:.1em .2em;
-	font-size:94%;
 	font-weight:bold;
 	vertical-align:middle;
 }
@@ -180,17 +177,19 @@ select {
 .twikiInputFieldDisabled,
 .twikiInputFieldReadOnly,
 .twikiSelect {
-	border-width:1px;
+	border-width:2px;
 	border-style:solid;
-	font-size:94%; /*S2*/
+}
+.twikiTextarea,
+.twikiInputField,
+.twikiInputFieldDisabled,
+.twikiInputFieldReadOnly {
+	font-size:100%; /*S2*/
 }
 .twikiInputField,
 .twikiInputFieldDisabled,
 .twikiInputFieldReadOnly {
 	padding:.1em .2em;
-}
-textarea {
-	font-size:100%;
 }
 blockquote {
 	border-style:solid;
@@ -221,8 +220,9 @@ blockquote {
 	border-style:solid;
 }
 #patternBottomBarContents {
-	padding:1em;
-	font-size:86%; line-height:110%; /*S3*/
+	padding:1em 0;
+	font-size:86%; /*S3*/
+	line-height:110%;
 	text-align:center;
 }
 #patternMainContents {
@@ -238,7 +238,6 @@ blockquote {
 
 /* TagMePlugin */
 .tagMePlugin select {
-	font-size:.86em; /* use em instead of % for consistent size */
 	margin:0 .25em 0 0;
 }
 .tagMePlugin input { 
@@ -456,17 +455,24 @@ table.twikiFormTable th.twikiFormTableHRow a:visited {
 	border-width:0 0 1px 0;
 	border-style:solid;
 }
+.twikiFormStep h2,
 .twikiFormStep h3,
 .twikiFormStep h4 {
-	font-size:115%;
 	border:none;
 	margin:0;
 	padding:0;
+	background:none;
+}
+.twikiFormStep h2 {
+	font-size:130%;
+	font-weight:bold;
 }
 .twikiFormStep h3 {
+	font-size:115%;
 	font-weight:bold;
 }
 .twikiFormStep h4 {
+	font-size:115%;
 	font-weight:normal;
 }
 .twikiFormStep p {
@@ -474,7 +480,7 @@ table.twikiFormTable th.twikiFormTableHRow a:visited {
 }
 .twikiFormSteps .twikiLast {
 	border-bottom-style:solid;
-	border-bottom-width:1px;
+	border-bottom-width:0px;
 }
 .twikiToc {
 	margin:1em 0;
@@ -505,7 +511,8 @@ table.twikiFormTable th.twikiFormTableHRow a:visited {
 }
 .twikiNew {}
 .twikiSummary {
-	font-size:86%; line-height:110%; /*S3*/
+	font-size:86%; /*S3*/
+	line-height:110%;
 }
 .twikiEmulatedLink {
 	text-decoration:underline;
@@ -652,9 +659,7 @@ html>body #patternLeftBarContents .twikiHierarchicalNavigation { /* Mozilla */
 .twikiHierarchicalNavigation .twikiParentTopic li {}
 .twikiHierarchicalNavigation .twikiChildTopics li {}
 
-.patternTop {
-	font-size:94%; /*S2*/
-}
+.patternTop {}
 /* Button tool bar */
 .patternToolBar {
 	margin:.4em 0 0 0;
@@ -707,7 +712,6 @@ html>body #patternLeftBarContents .twikiHierarchicalNavigation { /* Mozilla */
 .patternMetaMenu input,
 .patternMetaMenu select,
 .patternMetaMenu select option {
-	font-size:.86em; /* use em instead of % for consistent size */
 	margin:0;
 }
 .patternMetaMenu select option {
@@ -745,9 +749,6 @@ html>body #patternLeftBarContents .twikiHierarchicalNavigation { /* Mozilla */
 	padding:.4em 20px; /*S5*/
 	border-width:1px 0 0 0;
 	border-style:solid;
-}
-.patternViewPage .patternTopicAction {
-	font-size:94%; /*S2*/
 }
 .patternActionButtons a:link,
 .patternActionButtons a:visited {
@@ -852,7 +853,7 @@ h4.patternSearchResultsHeader {
 .patternSearchResult .twikiNew {
 	border-width:1px;
 	border-style:solid;
-	font-size:85%; /*S3*/
+	font-size:86%; /*S3*/
 	padding:0 1px;
 	font-weight:bold;
 }

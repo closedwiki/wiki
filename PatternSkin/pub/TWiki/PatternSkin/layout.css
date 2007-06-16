@@ -122,7 +122,8 @@ from esc tab hack moz min-height solution ***/
 
 /* Pages that are not view */
 
-.patternNoViewPage #patternOuter {
+.patternNoViewPage #patternOuter,
+.patternNoViewPage #patternBottomBarContents {
 	/* no left bar, margin at both sides */
 	margin-left:4%;
 	margin-right:4%;
@@ -131,7 +132,9 @@ from esc tab hack moz min-height solution ***/
 /* edit.pattern.tmpl */
 
 .patternEditPage #patternOuter,
-.patternPreviewPage #patternOuter {
+.patternPreviewPage #patternOuter,
+.patternEditPage #patternBottomBarContents,
+.patternPreviewPage #patternBottomBarContents {
 	margin-left:0;
 	margin-right:0;
 }

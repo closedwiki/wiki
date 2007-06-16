@@ -155,7 +155,7 @@ select {
 .twikiInputFieldDisabled,
 .twikiInputFieldReadOnly,
 .twikiSelect {
-	border-color:#888 #e8e8e8 #e8e8e8 #888;
+	border-color:#bbb #f2f2f2 #f2f2f2 #bbb;
 }
 .twikiTextarea,
 .twikiInputField,
@@ -174,14 +174,14 @@ select {
 	color:#777;
 }
 .twikiSelect {
-	border-color:#888 #e8e8e8 #e8e8e8 #888;
+	border-color:#bbb #f2f2f2 #f2f2f2 #bbb;
 	color:#000;
 	background-color:#fff;
 }
 .twikiInputFieldDisabled,
 .twikiSelectDisabled {
 	color:#bbb;
-	border-color:#888 #e8e8e8 #e8e8e8 #888;
+	border-color:#bbb #f2f2f2 #f2f2f2 #bbb;
 	background-color:#fafaf8;
 }
 .twikiInputFieldBeforeFocus {
@@ -293,10 +293,10 @@ table.twikiFormTable th.twikiFormTableHRow font {
 
 .twikiFormSteps {
 	background-color:#f7fafc;
-	border-color:#ede8db;
+	border-color:#e2e7eb;
 }
 .twikiFormStep {
-	border-color:#ede8db;
+	border-color:#e2e7eb;
 }
 .twikiFormStep h3,
 .twikiFormStep h4 {
@@ -643,7 +643,6 @@ tr.twikiDiffDebug .twikiDiffUnchangedText {
 	background-position:0 .35em;
 }
 /*#patternLeftBarContents .patternLeftBarPersonal,*/
-#twikiLogin,
 #patternLeftBarContents .tipsOfTheDayContents {
 	background-image:url(gradient_blue.gif);
 	background-repeat:repeat-x;
