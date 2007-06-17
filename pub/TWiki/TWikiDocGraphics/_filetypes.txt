@@ -72,6 +72,7 @@ pps ppt
 ppt ppt
 proj sniff
 ps ps
+psd psd
 pwz ppt
 py py
 ra ram
@@ -94,6 +95,7 @@ ttf ttf
 txt txt
 tz zip
 vbs mov
+vsd vsd
 wav wav
 wri wri
 xbm bmp
