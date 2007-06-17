@@ -1,4 +1,4 @@
-%TMPL:DEF{"sep"}% | %TMPL:END%
+%TMPL:DEF{"sep"}%<span class="twikiSeparator"> | </span>%TMPL:END%
 %TMPL:DEF{"titlesep"}% &lt; %TMPL:END%
 %TMPL:DEF{"LOG_IN"}%Log In%TMPL:END%
 %TMPL:DEF{"LOG_OUT"}%Log Out%TMPL:END%
@@ -47,79 +47,51 @@
 
 %TMPL:DEF{"webaction"}%%TMPL:END%
 
-%TMPL:DEF{"bodystart"}%<body bgcolor="#ffffff">
+%TMPL:DEF{"bodyclassname"}%%TMPL:END%
+
+%TMPL:DEF{"bodystart"}%<body class="%TMPL:P{"bodyclassname"}%"><div class="twikiPage">
 #PageTop %TMPL:END%
+%TMPL:DEF{"bodyend"}%</div><!--/twikiPage--></body></html>%TMPL:END%
 
 %TMPL:DEF{"attachments"}%%TMPL:END%
 
-%TMPL:DEF{"standardheader"}%<form name="main" action="%SCRIPTURLPATH{"view"}%/%WEB%/%TOPIC%">
-<table width="100%" border="0" cellpadding="3" cellspacing="0">
- <tr>
-  <td rowspan="2" valign="middle" width="1%">
-   <noautolink>
-   <a href="%WEBLOGOURL%" rel='nofollow'><img src="%WEBLOGOIMG%" border="0" alt="%WEBLOGOALT%" /></a>
-   </noautolink>
-  </td><td>
-   <div style="padding:3px;display:inline;background-color:%WEBBGCOLOR%"><a href="%SCRIPTURLPATH{"view"}%/%WEB%/%HOMETOPIC%">%WEB%</a></div>
-   &gt; %META{"parent" nowebhome="on" suffix=" &gt;"}%
-   <font size="+1"><b>%TOPIC%</b> %TMPL:P{"titleaction"}%</font>
-  </td><td align="right">
-   <font size="-2">%WIKITOOLNAME% webs: <br />
-   %WIKIWEBLIST% </font>
-  </td>
- </tr>
- <tr>
-  <td>
-   <nop>%TMPL:P{"webaction"}%
-  </td><td align="right">
-<font size="-2">%TMPL:P{"login"}%</font>
-  </td>
- </tr>
-</table></form>%TMPL:END%
+%TMPL:DEF{"standardheader"}%<div>
+<div class="twikiLeft"><noautolink><a href="%WEBLOGOURL%" rel='nofollow'><img src="%WEBLOGOIMG%" border="0" alt="%WEBLOGOALT%" /></a></noautolink></div>
+<div class="twikiLeft">
+<span style="margin:0 0 0 1em; padding:3px; background-color:%WEBBGCOLOR%"><a href="%SCRIPTURLPATH{"view"}%/%WEB%/%HOMETOPIC%">%WEB%</a></span> &gt; %META{"parent" nowebhome="on" suffix=" &gt;"}% <b>%TOPIC%</b> %TMPL:P{"titleaction"}%
+</div>
+<div class="twikiRight twikiSmall">%WIKITOOLNAME% webs: %WIKIWEBLIST% &nbsp; %TMPL:P{"login"}%</div><br class="twikiClear" />
+</div>
+<form name="main" action="%SCRIPTURLPATH{"view"}%/%WEB%/%TOPIC%">
+%TMPL:P{"webaction"}%
+</form>%TMPL:END%
 
-%TMPL:DEF{"simpleheader"}%<table width="100%" border="0" cellpadding="5" cellspacing="0">
- <tr>
-  <td rowspan="2" valign="middle" width="1%">
-   <noautolink>
-   <img src="%WEBLOGOIMG%" border="0" alt="%WEBLOGOALT%" />
-   </noautolink>
-  </td><td>
-   <div style="padding:3px;display:inline;background-color:%WEBBGCOLOR%">%WEB%&nbsp;</div> . <font size="+2"><b>%TOPIC%</b> %TMPL:P{"titleaction"}%</font>
-  </td><td> %TMPL:P{"headerhelp"}%
-  </td>
- </tr>
- <tr>
-  <td colspan="2">
-   %TMPL:P{"webaction"}%
-  </td>
- </tr>
-</table>%TMPL:END%
+%TMPL:DEF{"simpleheader"}%<div>
+<div class="twikiLeft"><noautolink><img src="%WEBLOGOIMG%" border="0" alt="%WEBLOGOALT%" /></noautolink></div>
+<div class="twikiLeft">
+<span style="margin:0 0 0 1em; padding:3px; background-color:%WEBBGCOLOR%">%WEB%&nbsp;</span> %TOPIC% %TMPL:P{"titleaction"}%</div><br class="twikiClear" />
+</div>
+%TMPL:P{"headerhelp"}%%TMPL:END%
 
-%TMPL:DEF{"copyright"}%<div class="TWikiCopyright">
-<font size="-2"> %WEBCOPYRIGHT% </font>
-</div>%TMPL:END%
+%TMPL:DEF{"copyright"}%<div class="twikiCopyright">%WEBCOPYRIGHT%</div>%TMPL:END%
 
 %TMPL:DEF{"footernote"}%%TMPL:END%
 
 %TMPL:DEF{"standardfooter"}%
-#PageBottom <table width="100%" border="0" cellpadding="3" cellspacing="0">
- <tr>
-  <td> %TMPL:P{"footernote"}%</td>
-  <td width="50%"> %TMPL:P{"copyright"}%</td>
- </tr>
-</table>%TMPL:END%
-
-%TMPL:DEF{"bodyend"}%</body></html>%TMPL:END%
+#PageBottom
+%TMPL:P{"footernote"}%
+%TMPL:P{"copyright"}%
+%TMPL:END%
 
 %TMPL:DEF{"canceltopicaction"}%[[%WEB%.%TOPIC%][Cancel]]%TMPL:END%
 %TMPL:DEF{"topicaction"}%%TMPL:P{"topicactionbuttons"}%%TMPL:END%
 %TMPL:DEF{"topicactionbuttons"}%%TMPL:P{"canceltopicaction"}%%TMPL:END%
 
-%TMPL:DEF{"topicinfo"}%<table width="100%" border="0" cellpadding="3" cellspacing="0">
-<tr bgcolor="%WEBBGCOLOR%">
-<td valign="top"> %TMPL:P{"topicaction"}% </td></tr></table>%TMPL:END%
+%TMPL:DEF{"topicinfo"}%<div style="background:%WEBBGCOLOR%">
+%TMPL:P{"topicaction"}%
+</div>%TMPL:END%
 
-%TMPL:DEF{"main"}%%TMPL:P{"bodystyle"}%<div class="twikiMiddleContainer"><div class="twikiMain">
+%TMPL:DEF{"main"}%<div class="twikiMiddleContainer"><div class="twikiMain">
 %TMPL:P{"simpleheader"}%%TMPL:P{"pagetitlestylewrapper"}%
 %TMPL:P{"content"}%%TMPL:P{"standardfooter"}%</div></div>%TMPL:END%
 
@@ -135,15 +107,15 @@
 
 %TMPL:DEF{"login"}%%TMPL:P{context="can_login" then="login_actions"}%%TMPL:END%
 
-%TMPL:DEF{"login_actions"}%%IF{"context authenticated" then='%MAKETEXT{"Hello [_1]!" args="[[%WIKIUSERNAME%][%SPACEOUT{%WIKINAME%}%]]"}%%BR%%LOGOUT%' else='%LOGIN% %MAKETEXT{"or"}% [[%TWIKIWEB%.TWikiRegistration][%MAKETEXT{"Register"}%]]'}%%TMPL:END%
+%TMPL:DEF{"login_actions"}%%IF{"context authenticated" then='<strong>%MAKETEXT{"Hello [_1]!</strong>" args="[[%WIKIUSERNAME%][%SPACEOUT{%WIKINAME%}%]]"}% %LOGOUT%' else='%LOGIN% %MAKETEXT{"or"}% [[%TWIKIWEB%.TWikiRegistration][%MAKETEXT{"Register"}%]]'}%%TMPL:END%
 
 %{ app-style page layout }%
 %{ additional style }%
 %TMPL:DEF{"templatestyle"}%%TMPL:END%
 %{ title string in page: }%
-%TMPL:DEF{"pagetitle"}%%TMPL:END%
+%TMPL:DEF{"pagetitle"}%%TMPL:P{"webaction"}%%TMPL:END%
 %{ main application contents: }%
-%TMPL:DEF{"pagetitlestylewrapper"}%<h1>%TMPL:P{"pagetitle"}%</h1>%TMPL:END%
+%TMPL:DEF{"pagetitlestylewrapper"}%<h1>!!%TMPL:P{"pagetitle"}%</h1>%TMPL:END%
 %{ default content: }%
 
 %TMPL:P{"htmldoctype"}%
