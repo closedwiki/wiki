@@ -44,9 +44,6 @@ pub/TWiki/PatternSkin/form_gradient.gif 0644
 pub/TWiki/PatternSkin/gradient_blue.gif 0644
 pub/TWiki/PatternSkin/gradient_yellow.gif 0644
 pub/TWiki/PatternSkin/layout.css 0644
-pub/TWiki/PatternSkin/oopsmore_diff_debug.gif 0644
-pub/TWiki/PatternSkin/oopsmore_diff_sequential.gif 0644
-pub/TWiki/PatternSkin/oopsmore_diff_sidebyside.gif 0644
 pub/TWiki/PatternSkin/patternskin_screenshot_full.png 0644
 pub/TWiki/PatternSkin/patternskin_screenshot.jpg 0644
 pub/TWiki/PatternSkin/print.css 0644
@@ -87,14 +84,6 @@ templates/login.pattern.tmpl 0444
 templates/logo.pattern.tmpl 0444
 templates/moveattachment.pattern.tmpl 0444
 templates/oops.pattern.tmpl 0444
-templates/oopsmore.pattern.tmpl 0444
-templates/oopsmorebacklinks.pattern.tmpl 0444
-templates/oopsmorechildtopics.pattern.tmpl 0444
-templates/oopsmoredelete.pattern.tmpl 0444
-templates/oopsmorerename.pattern.tmpl 0444
-templates/oopsmorerevision.pattern.tmpl 0444
-templates/oopsmoresetparent.pattern.tmpl 0444
-templates/oopsmoresettings.pattern.tmpl 0444
 templates/preview.pattern.tmpl 0444
 templates/rdiff.pattern.tmpl 0444
 templates/rename.pattern.tmpl 0444
