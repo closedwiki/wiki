@@ -25,16 +25,14 @@
 <input type="hidden" name="rev" value="%URLPARAM{"rev"}%" />
 <input type="hidden" name="cmd" value="%CMD%" />%TMPL:END%
 
+%TMPL:DEF{"sig"}%<div><div class="twikiLeft"><label for="sig" class="twikiGrayText">%MAKETEXT{"Your signature to copy/paste:"}%&nbsp;&nbsp;</label><input class="twikiInputFieldReadOnly" size="41" name="sig" type="text" readonly="readonly" title='%MAKETEXT{"Select, copy and paste your signature text to the bottom of your entry"}%' id="sig" value="-- <nop>%WIKIUSERNAME% - %DATE%" /></div><br class="twikiClear"><!--/twikiLeft--></div>%TMPL:END%
+
 %TMPL:DEF{"content"}%<form name="main" action="%SCRIPTURLPATH{"save"}%/%WEB%/%TOPIC%" method="post">
 %TMPL:P{"textarea"}%
 %TMPL:P{"formparameters"}%
 See below for help in editing this page.
-<table border="0" cellpadding="2" cellspacing="0">
- <tr>
-  <td><b>-- <nop>%WIKIUSERNAME% - %DATE%</b></td>
-  <td> &nbsp;&nbsp; <code>&lt;==</code> Your signature for easy copy and paste (triple click to select)</td>
- </tr>
-</table> %FORMFIELDS% %TMPL:P{"topicinfo"}%</form>%TMPL:END%
+%TMPL:P{"sig"}%
+%FORMFIELDS% %TMPL:P{"topicinfo"}%</form>%TMPL:END%
 
 %TMPL:DEF{"footernote"}%<font color="#333333" size="-1"> 
 %INCLUDE{"%TWIKIWEB%.WikiSyntaxSummary"}% 
@@ -43,4 +41,4 @@ See below for help in editing this page.
 %TMPL:DEF{"topicactionbuttons"}%<input type="submit" class="twikiSubmit" name="action_cancel" value="Cancel" id="cancel" />%TMPL:P{"sep"}%<input type="submit" class="twikiSubmit" name="action_save" value="Save" id="save" />%TMPL:P{"sep"}%<input type="submit" class="twikiSubmit" name="action_preview" value="Preview" id="preview" />%TMPL:END%
 %TMPL:DEF{"titleaction"}%(edit) %TMPL:END%
 %TMPL:DEF{"titlehelp"}% %TMPL:END%
-%TMPL:DEF{"webaction"}%Change topic%TMPL:END%
+%TMPL:DEF{"webaction"}%Edit topic%TMPL:END%
