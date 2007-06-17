@@ -1172,8 +1172,6 @@ $TWiki::cfg{WarningsAreErrors} = $FALSE;
 # *PLUGINS* Marker used by bin/configure script - do not remove!
 # The plugins listed below were discovered by searching the @INC path for
 # modules that match the TWiki standard e.g. TWiki/Plugins/MyPlugin.pm.
-# see <a href="view/TWiki/InstalledPlugins">Installed Plugins</a> for
-# diagnostics
 $TWiki::cfg{Plugins}{PreferencesPlugin}{Enabled} = 1;
 $TWiki::cfg{Plugins}{SmiliesPlugin}{Enabled} = 1;
 $TWiki::cfg{Plugins}{CommentPlugin}{Enabled} = 1;
