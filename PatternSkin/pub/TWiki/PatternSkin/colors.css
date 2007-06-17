@@ -562,12 +562,6 @@ h4.patternSearchResultsHeader {
 	color:#8E9195;
 }
 
-/* oopsmore.pattern.tmpl */
-
-table.patternDiffOptions img {
-	border-color:#ccc;
-}
-
 /* edit.pattern.tmpl */
 
 .patternEditPage .twikiEditTextarea {

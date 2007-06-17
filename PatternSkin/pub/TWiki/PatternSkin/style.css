@@ -52,7 +52,7 @@ pre {
     width:100%;
     margin:1em 0; /* Win IE tries to make this bigger otherwise */
 }
-/* IE behavior for pre is defined in twiki.pattern.tmpl in conditional comment */
+/* IE behavior for pre is defined in css.pattern.tmpl in conditional comment */
 html>body pre { /* hide from IE */
 	/*\*/ overflow:auto !important; /* */ overflow:scroll; width:auto; /* for Mac Safari */
 }
@@ -62,7 +62,12 @@ ol, ul {
 ol li, ul li {
 	line-height:1.4em; /*S1*/
 }
-	
+blockquote {
+	border-style:solid;
+	border-width:0 0 0 3px;
+	padding:.5em 1.25em;
+}
+
 /* Text */
 h1, h2, h3, h4, h5, h6 {
 	line-height:104%;
@@ -89,7 +94,7 @@ h2, h3, h4, h5, h6 {
 	height:auto;	
 }
 h1.patternTemplateTitle {
-	font-size:150%;
+	font-size:160%;
 	text-align:center;
 }
 h2.patternTemplateTitle {
@@ -191,12 +196,6 @@ select {
 .twikiInputFieldReadOnly {
 	padding:.1em .2em;
 }
-blockquote {
-	border-style:solid;
-	border-width:0 0 0 3px;
-	padding:.5em 1.25em;
-}
-
 
 /* LAYOUT ELEMENTS */
 /* for specific layout sub-elements see further down */
@@ -467,13 +466,10 @@ table.twikiFormTable th.twikiFormTableHRow a:visited {
 	font-size:130%;
 	font-weight:bold;
 }
-.twikiFormStep h3 {
-	font-size:115%;
-	font-weight:bold;
-}
+.twikiFormStep h3,
 .twikiFormStep h4 {
 	font-size:115%;
-	font-weight:normal;
+	font-weight:bold;
 }
 .twikiFormStep p {
 	margin:.3em 0;
@@ -911,26 +907,6 @@ h4.patternSearchResultsHeader {
 
 .patternNoViewPage #patternMainContents {
 	padding-top:1.5em;
-}
-
-
-/* oopsmore.pattern.tmpl */
-
-table.patternDiffOptions {
-	margin:.5em 0;
-	border:none;
-}
-table.patternDiffOptions td {
-	border:none;
-	text-align:center;
-}
-table.patternDiffOptions img {
-	padding:0 10px;
-	border-width:1px;
-	border-style:solid;
-}
-table.patternDiffOptions input {
-	border:0;
 }
 
 /* edit.pattern.tmpl */
