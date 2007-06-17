@@ -378,7 +378,6 @@ sub _emitTR {
             }
         }
         if( /^\s*\*(.*)\*\s*$/ ) {
-            push( @attr, bgcolor => '#99CCCC' );
             $cells .= CGI::th( { @attr }, CGI::strong( " $1 " ))."\n";
         } else {
             $cells .= CGI::td( { @attr }, " $_ " )."\n";

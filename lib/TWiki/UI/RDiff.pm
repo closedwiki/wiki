@@ -206,11 +206,11 @@ sub _renderDebug
   	
 	if ($diffType ne '+') {
    	    $result .= CGI::Tr( {class=>'twikiDiffDebug'},
-		    CGI::td( {class=>'twikiDiffDebugLeft'.$styleClassLeft}, CGI::div( $left) ));
+		    CGI::td( {class=>'twikiDiffDebugLeft '.$styleClassLeft}, CGI::div( $left) ));
 	}
 	if (($diffType ne '-') && ($diffType ne 'l')) {
 	    $result .= CGI::Tr( {class=>'twikiDiffDebug'},
-		    CGI::td( {class=>'twikiDiffDebugRight'.$styleClassRight}, CGI::div( $right) ));
+		    CGI::td( {class=>'twikiDiffDebugRight '.$styleClassRight}, CGI::div( $right) ));
 	}
         # unhide html comments (<!-- --> type tags)
         $result =~  s/<!--(.*?)-->/<pre>&lt;--$1--&gt;<\/pre>/gos;
@@ -219,7 +219,7 @@ sub _renderDebug
 }
 
 sub _sequentialRow {
-    my( $bg, $hdrcls, $bodycls, $data, $code, $char ) = @_;
+    my( $bg, $hdrcls, $bodycls, $data, $code, $char, $session ) = @_;
     my $row = '';
     if( $char ) {
         $row = CGI::td({bgcolor=>$format{$code}[0],
@@ -236,7 +236,7 @@ sub _sequentialRow {
         return CGI::Tr(CGI::td({bgcolor=>$bg,
                                 class=>"twikiDiff${hdrcls}Header",
                                 colspan=>9},
-                               CGI::b( " $hdrcls: "))).$row;
+                               CGI::b( $session->{i18n}->maketext($hdrcls).': '))).$row;
     } else {
         return $row;
     }
@@ -258,37 +258,42 @@ sub _renderSequential
     if ( $diffType eq '-') {
         $result .=
           _sequentialRow( '#FFD7D7',
-                          ($session->{i18n}->maketext('Deleted')),
+                          'Deleted',
                           'Deleted',
                           _renderCellData( $session, $left, $web, $topic ),
-                          '-', '&lt;');
+                          '-', '&lt;',
+                          $session);
     } elsif ( $diffType eq '+') {
         $result .=
           _sequentialRow( '#D0FFD0',
-                          ($session->{i18n}->maketext('Added')),
+                          'Added',
                           'Added',
                           _renderCellData( $session, $right, $web, $topic ),
-                          '+', '&gt;' );
+                          '+', '&gt;',
+                          $session );
     } elsif ( $diffType eq 'u') {
         $result .=
           _sequentialRow( undef,
-                          ($session->{i18n}->maketext('Unchanged')),
+                          'Unchanged',
                           'Unchanged',
                           _renderCellData( $session, $right, $web, $topic ),
-                          'u', '' );
+                          'u', '',
+                          $session );
     } elsif ( $diffType eq 'c') {
         $result .=
           _sequentialRow( '#D0FFD0',
-                          ($session->{i18n}->maketext('Changed')),
+                          'Changed',
                           'Deleted',
                           _renderCellData( $session, $left, $web, $topic ),
-                          '-', '&lt;' );
+                          '-', '&lt;',
+                          $session );
         $result .=
           _sequentialRow( undef,
-                          ($session->{i18n}->maketext('Changed')),
+                          'Changed',
                           'Added',
                           _renderCellData( $session, $right, $web, $topic ),
-                          '+', '&gt;' );
+                          '+', '&gt;',
+                          $session );
     } elsif ( $diffType eq 'l' && $left ne '' && $right ne '' ) {
         $result .= CGI::Tr({bgcolor=>$format{l}[0],
                             class=>'twikiDiffLineNumberHeader'},
