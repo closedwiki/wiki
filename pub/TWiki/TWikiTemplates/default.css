@@ -1,20 +1,96 @@
 /* Simple CSS demonstrating use of css to theme the default TWiki templates.
- * Note to installers; do *not* modify this file, and don;t assume it will
+ * Note to installers; do *not* modify this file, and don't assume it will
  * remain unchanged in the future. If you want to create your own themed
  * CSS, then create your own skin that overrides %TMPL:DEF{"templatestyle"}%
  * and loads your own CSS file instead.
  */
 
+html body {
+	font-size:104%;
+	voice-family:"\"}\""; 
+	voice-family:inherit;
+	font-size:small;
+}
+html>body { /* Mozilla */
+	font-size:small;	
+}
+p {
+	margin:1em 0 0 0;
+}
+table {
+}
+th {
+	line-height:1.15em;
+}
+label {
+	padding:.15em .3em .15em 0; /* same vertical padding as twikiInputField */
+}
+strong, b {
+	font-weight:bold;
+}
+hr {
+	height:1px;
+	border:none;
+}
+/* put overflow pre in a scroll area */
+pre {
+    width:100%;
+    margin:1em 0; /* Win IE tries to make this bigger otherwise */
+}
+/* IE behavior for pre is defined in css.tmpl in conditional comment */
+html>body pre { /* hide from IE */
+	/*\*/ overflow:auto !important; /* */ overflow:scroll; width:auto; /* for Mac Safari */
+}
+ol, ul {
+	margin-top:0;
+}
+ol li, ul li {
+	line-height:1.4em; /*S1*/
+}
+/* Form elements */
+form { 
+	display:inline;
+	margin:0;
+	padding:0;
+}
+textarea,
+input,
+select {
+	vertical-align:middle;
+	font-family:arial, sans-serif;
+	font-size:100%;
+}
+input,
+select option {
+	padding:1px;
+}
+textarea {
+	padding:1px;
+	font-size:100%;
+}
+blockquote {
+}
+
+/*	-----------------------------------------------------------
+	TWiki styles
+	-----------------------------------------------------------	*/
+
+.twikiPage {
+	font-family:arial, sans-serif;
+	line-height:1.4em;
+	/* change font size here */
+	font-size:105%;
+	padding:1em;
+	background:#fff;
+}
 .twikiNewLink font {
 	color:inherit;
 }
-
 .twikiNewLink a:link sup,
 .twikiNewLink a:visited sup {
 	color:#666;
 	border-color:#ccc;
 }
-
 .twikiNewLink a:hover sup {
 	background-color:#D6000F;
 	color:#FBF7E8;
@@ -24,26 +100,46 @@
 .twikiNewLink {
 	border-color:#ccc;
 }
+:link:focus,
+:visited:focus,
+:link,
+:visited,
+:link:active,
+:visited:active {
+	color:#06c;
+	background-color:transparent;
+}
+:link:hover,
+:visited:hover {
+	color:#FBF7E8;
+	background-color:#d6000f;
+}
+:link:hover img,
+:visited:hover img {
+	background-color:transparent;
+}
 
 /* Form elements */
 
 .twikiSubmit,
+.twikiButton,
+.twikiCheckbox {
+	padding:.1em .3em;
+}
+.twikiCheckbox,
+.twikiRadioButton {
+	margin:0 .3em 0 0;
+	border:0;
+}
+.twikiSubmit,
 .twikiButton {
-	border-color:#ddd #aaa #aaa #ddd;
-	color:#333;
-	background-color:#fff;
 }
 .twikiSubmit:active,
 .twikiButton:active {
-	border-color:#999 #ccc #ccc #999;
-	color:#000;
 }
 
 .twikiInputField,
 .twikiSelect {
-	border-color:#aaa #ddd #ddd #aaa;
-	color:#000;
-	background-color:#fff;
 }
 
 .twikiTable,
@@ -51,20 +147,18 @@
 	border-color:#ccc;
 }
 .twikiTable th {
-	background-color: #99BBEE;
-	border-color:#ccc;// #fff;
+	background-color:#9be;
+	border-color:#ccc;
 }
 .twikiTable th a:link,
 .twikiTable th a:visited,
 .twikiTable th a font {
 	color:#fff;
 }
-
-/*	-----------------------------------------------------------
-	TWiki styles
-	-----------------------------------------------------------	*/
-
 .twikiGrayText {
+	color:#8E9195;
+}
+.twikiSeparator {
 	color:#8E9195;
 }
 .twikiGrayText a:link,
@@ -100,13 +194,12 @@ table.twikiFormTable {
 }
 .twikiFormStep h3,
 .twikiFormStep h4 {
-	background-color:transparent;
 }
 .twikiToc .twikiTocTitle {
 	color:#666;
 }
 .twikiBroadcastMessage {
-	background-color:yellow;
+	background-color:#ff0;
 }
 .twikiBroadcastMessage b,
 .twikiBroadcastMessage strong {
@@ -195,19 +288,16 @@ tr.twikiDiffDebug .twikiDiffUnchangedText {
 .twikiDiffLineNumberHeader {
 	background-color:#ccc;
 }
-
 .twikiLeft {
 	float:left;
 	position:relative;
 }
-
 .twikiRight {
 	position:relative;
 	float:right;
 	display:inline;
 	margin:0;
 }
-
 .twikiClear {
 	/* to clean up floats */
 	margin:0;
@@ -247,53 +337,6 @@ tr.twikiDiffDebug .twikiDiffUnchangedText {
 .twikiNewLink a:hover sup {
 	text-decoration:none;
 }
-
-
-/* Form elements */
-form { 
-	display:inline;
-	margin:0;
-	padding:0;
-}
-textarea,
-input,
-select {
-	vertical-align:middle;
-	border-style:ridge;
-    border-color:black;
-	font-family:"Lucida Grande", verdana, arial, sans-serif;
-}
-
-input,
-select option {
-	padding:1px;
-}
-.twikiSubmit,
-.twikiButton,
-.twikiCheckbox {
-	border-width:1px;
-	border-style:solid;
-	padding:.1em .3em;
-	font-size:94%;
-	font-weight:bold;
-	vertical-align:middle;
-}
-.twikiCheckbox,
-.twikiRadioButton {
-	margin:0 .3em 0 0;
-	border:0;
-}
-
-textarea {
-	padding:1px;
-	font-size:100%;
-}
-blockquote {
-	border-style:solid;
-	border-width:0 0 0 3px;
-	padding:.5em 1.25em;
-}
-
 .twikiTable {
 	border-style:solid;
 	border-width:1px;
@@ -323,11 +366,6 @@ blockquote {
 .twikiEditForm {
 	margin:0 0 .5em 0;
 }
-
-/*	-----------------------------------------------------------
-	TWiki styles
-	-----------------------------------------------------------	*/
-
 .twikiLast,
 .twikiForm .twikiLast,
 .twikiTable .twikiLast {
@@ -414,11 +452,10 @@ table.twikiFormTable th.twikiFormTableHRow a:link,
 table.twikiFormTable th.twikiFormTableHRow a:visited {
 	text-decoration:none;
 }
-
 .twikiFormSteps {
 	text-align:left;
 	padding:.25em 0 0 0;
-	border-width:1px 0;
+	border-width:1px 0 0 0;
 	border-style:solid;
 }
 .twikiFormStep {
@@ -427,37 +464,37 @@ table.twikiFormTable th.twikiFormTableHRow a:visited {
 	border-width:0 0 1px 0;
 	border-style:solid;
 }
+.twikiFormStep h2,
 .twikiFormStep h3,
 .twikiFormStep h4 {
-	font-size:115%;
 	border:none;
 	margin:0;
 	padding:0;
+	background:none;
+}
+.twikiFormStep h2 {
+	font-size:130%;
+	font-weight:bold;
 }
 .twikiFormStep h3 {
+	font-size:115%;
 	font-weight:bold;
 }
 .twikiFormStep h4 {
+	font-size:115%;
 	font-weight:normal;
 }
 .twikiFormStep p {
 	margin:.3em 0;
 }
+.twikiFormSteps .twikiLast {
+	border-bottom-style:solid;
+	border-bottom-width:0px;
+}
 
 .twikiToc {
 	margin:1em 0;
 	padding:.3em 0 .6em 0;
-}
-.twikiToc ul {
-	list-style:none;
-	padding:0 0 0 .5em;
-	margin:0;
-}
-.twikiToc li {
-	margin-left:1em;
-	padding-left:1em;
-	background-repeat:no-repeat;
-	background-position:0 .5em;
 }
 .twikiToc .twikiTocTitle {
 	margin:0;
@@ -466,14 +503,16 @@ table.twikiFormTable th.twikiFormTableHRow a:visited {
 }
 
 .twikiSmall {
-	font-size:86%; line-height:110%; /*S3*/
+	font-size:86%;
+	line-height:110%; /*S3*/
 }
 .twikiSmallish {
 	font-size:94%; /*S2*/
 }
 .twikiNew { }
 .twikiSummary {
-	font-size:86%; line-height:110%; /*S3*/
+	font-size:86%;
+	line-height:110%; /*S3*/
 }
 .twikiEmulatedLink {
 	text-decoration:underline;
@@ -584,20 +623,9 @@ a.twikiLinkInHeaderRight {
 	text-decoration:underline;
 	font-weight:normal;
 }
-
 tr.twikiDiffDebug td {
 	border-width:1px;
 	border-style:solid;
-}
-
-body {
-	margin: 0;
-	color: #000000;
-	background: #FFFFFF;
-	font-family: Arial, sans-serif;
-	font-weight: normal;
-	font-size: small;
-	line-height: 150%;
 }
 
 /*
@@ -609,7 +637,7 @@ twikiAnchorLink
 twikiConflict
 twikiContentFooter
 twikiContentHeader
-TWikiCopyright
+twikiCopyright
 twikiDiffLineNumberHeader
 twikiDiffTable
 twikiEditFormCalendarButton
@@ -630,7 +658,6 @@ twikiLink
 twikiMain
 twikiMiddleContainer
 twikiNoBreak
-twikiSeparator
 twikiTableEven
 twikiTableOdd
 twikiTextarea
