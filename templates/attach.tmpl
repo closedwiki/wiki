@@ -9,7 +9,7 @@ __Notes:__
    * *Link checkbox:* If the attached file is a JPG, GIF or PNG image and you check the box, it will create an inline image (e.g. show the image) at the end of the topic.  For other file types a simple link will be created.
 %TMPL:END%
 
-%TMPL:DEF{"existingattachments"}%%META{"attachments" all="on" title="<h3>%MAKETEXT{"Attachments of [_1]" args="<nop>%TOPIC%"}%</h3>"}%%TMPL:END%
+%TMPL:DEF{"existingattachments"}%%META{"attachments" all="on" title="<h2>%MAKETEXT{"Attachments of [_1]" args="<nop>%TOPIC%"}%</h2>"}%%TMPL:END%
 
 %TMPL:DEF{"attachform"}%%TMPL:P{"attachformstart"}%%TMPL:P{"previous"}%%TMPL:P{"newfile"}%%TMPL:P{"comment"}%%TMPL:P{"properties"}%%TMPL:P{"hiddenfields"}%%TMPL:P{"attachformend"}%%TMPL:END%
 
