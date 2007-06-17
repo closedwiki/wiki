@@ -57,6 +57,9 @@ A wide range of standard styles are used in the TWiki core code and topics, and 
 |.twikiDiffUnchangedText  |RDiff.pm  |
 |.twikiDiffUnchangedTextContents  |RDiff.pm  |
 |.twikiDiffLineNumberHeader  |RDiff.pm  |
+|.twikiDiffDebug  |RDiff.pm  |
+|.twikiDiffDebugRight  |RDiff.pm  |
+|.twikiDiffDebugLeft  |RDiff.pm  |
 
 |.twikiToc  |TWiki.pm  |
 |.twikiTocTitle  |TWiki.pm  |
