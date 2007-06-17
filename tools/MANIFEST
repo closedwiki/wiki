@@ -739,6 +739,7 @@ pub/TWiki/TWikiDocGraphics/pdf.gif 0644
 pub/TWiki/TWikiDocGraphics/pencil.gif 0644
 pub/TWiki/TWikiDocGraphics/person.gif 0644
 pub/TWiki/TWikiDocGraphics/persons.gif 0644
+pub/TWiki/TWikiDocGraphics/photo.gif 0644
 pub/TWiki/TWikiDocGraphics/pl.gif 0644
 pub/TWiki/TWikiDocGraphics/plugin.gif 0644
 pub/TWiki/TWikiDocGraphics/plus.gif 0644
@@ -747,6 +748,7 @@ pub/TWiki/TWikiDocGraphics/ppt.gif 0644
 pub/TWiki/TWikiDocGraphics/printtopic.gif 0644
 pub/TWiki/TWikiDocGraphics/proportional.gif 0644
 pub/TWiki/TWikiDocGraphics/ps.gif 0644
+pub/TWiki/TWikiDocGraphics/psd.gif 0644
 pub/TWiki/TWikiDocGraphics/puzzle.gif 0644
 pub/TWiki/TWikiDocGraphics/py.gif 0644
 pub/TWiki/TWikiDocGraphics/question.gif 0644
@@ -807,7 +809,9 @@ pub/TWiki/TWikiDocGraphics/txt.gif 0644
 pub/TWiki/TWikiDocGraphics/unchecked.gif 0644
 pub/TWiki/TWikiDocGraphics/up.gif 0644
 pub/TWiki/TWikiDocGraphics/updated.gif 0644
+pub/TWiki/TWikiDocGraphics/video.gif 0644
 pub/TWiki/TWikiDocGraphics/viewtopic.gif 0644
+pub/TWiki/TWikiDocGraphics/vsd.gif 0644
 pub/TWiki/TWikiDocGraphics/warning.gif 0644
 pub/TWiki/TWikiDocGraphics/watch.gif 0644
 pub/TWiki/TWikiDocGraphics/wav.gif 0644
