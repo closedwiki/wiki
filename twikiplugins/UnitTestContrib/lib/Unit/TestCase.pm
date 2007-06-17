@@ -4,6 +4,8 @@ use strict;
 use Error qw( :try );
 use Carp;
 
+$Carp::Verbose = 1;
+
 sub new {
     my $class = shift;
     my $this = bless({}, $class);
@@ -112,6 +114,7 @@ sub assert {
     return 1 if $bool;
     $mess ||= "Assertion failed";
     $mess = join("\n", @{$this->{annotations}})."\n".$mess;
+    $mess = Carp::longmess($mess);
     die $mess;
 }
 
