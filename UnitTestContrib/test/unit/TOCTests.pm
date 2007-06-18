@@ -129,7 +129,9 @@ sub test_parameters {
     next if ($c eq " * ");
     my $res = $c->{href};
     $res =~ s/#.*$//o;  # Delete anchor
-    $this->assert_str_equals('?param2=no%20luck;param1=a%20little%20luck', $res);
+    $this->assert_matches(qr/\?[\w;&=%]+$/, $res);
+    $this->assert_matches(qr/param2=no%20luck/, $res);
+    $this->assert_matches(qr/param1=a%20little%20luck/, $res);
   }
 }
 

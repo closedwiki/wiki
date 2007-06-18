@@ -1,6 +1,6 @@
 use strict;
 
-package UsersTests;
+package TWikiUserMappingTests;
 
 # Some basic tests for TWiki::Users::TWikiUserMapping
 #
@@ -17,31 +17,25 @@ my $twiki;
 my $saveTopic;
 my $ttpath;
 
-my $testSysWeb = 'TemporaryTestUsersSystemWeb';
-my $testNormalWeb = "TemporaryTestUsersWeb";
-my $testUsersWeb = "TemporaryTestUsersUsersWeb";
-my $testTopic = "TmpUsersTopic".time();
+my $testSysWeb = 'TemporaryTWikiUserMappingTestsSystemWeb';
+my $testNormalWeb = "TemporaryTWikiUserMappingTestsNormalWeb";
+my $testUsersWeb = "TemporaryTWikiUserMappingTestsUsersWeb";
 my $testUser;
-
-my $topicquery;
-
-my $original;
 
 sub set_up {
     my $this = shift;
 
     $this->SUPER::set_up();
 
-    $original = $TWiki::cfg{SystemWebName};
+    my $original = $TWiki::cfg{SystemWebName};
+    $TWiki::cfg{Htpasswd}{FileName} = "$TWiki::cfg{TempfileDir}/junkhtpasswd";
     $TWiki::cfg{UsersWebName} = $testUsersWeb;
     $TWiki::cfg{SystemWebName} = $testSysWeb;
     $TWiki::cfg{LocalSitePreferences} = "$testUsersWeb.TWikiPreferences";
     $TWiki::cfg{UserMappingManager} = 'TWiki::Users::TWikiUserMapping';
     $TWiki::cfg{Register}{AllowLoginName} = 1;
     $TWiki::cfg{Register}{EnableNewUserRegistration} = 1;
-    
-    $topicquery = new CGI( "" );
-    $topicquery->path_info("/$testNormalWeb/$testTopic");
+
     try {
         $twiki = new TWiki($TWiki::cfg{SuperAdminGroup});
         $twiki->{store}->createWeb($twiki->{user}, $testUsersWeb);
@@ -72,6 +66,7 @@ sub tear_down {
     $this->removeWebFixture($twiki, $testUsersWeb);
     $this->removeWebFixture($twiki, $testSysWeb);
     $this->removeWebFixture($twiki, $testNormalWeb);
+    unlink $TWiki::cfg{Htpasswd}{FileName};
     $twiki->finish();
     $this->SUPER::tear_down();
 }
