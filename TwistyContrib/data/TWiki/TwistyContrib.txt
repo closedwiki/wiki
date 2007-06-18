@@ -7,7 +7,7 @@
 
 It is recommended to use the !TwistyPlugin as it eases the deployment and use of this contrib.
 
-This Contrib should work in all versions of TWiki. It has been tested against [[TWiki:Codev.CairoRelease][TWiki 3]] and [[TWiki:Codev.DakarRelease][TWiki 4]].
+This Contrib should work with [[TWiki:Codev.DakarRelease][TWiki 4]] and newer.
 
 %TOC{title="On this page:"}%
 
@@ -154,14 +154,26 @@ When you want to use links, write:
 	* Optionally, run ==%TOPIC%_installer== to automatically check and install other TWiki modules that this module depends on. You can also do this step manually.
 	* Alternatively, manually make sure the dependencies listed in the table below are resolved.
 	%$DEPENDENCIES%
+	* !TwistyContrib uses these header includes:
+	<verbatim>
+<style type="text/css" media="all">
+@import url("%PUBURL%/%TWIKIWEB%/TwistyContrib/twist.css");
+</style>
+<script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/TWikiJavascripts/twikilib.js"></script>
+<script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/TWikiJavascripts/twikiPref.js"></script>
+<script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/TWikiJavascripts/twikiCSS.js"></script>
+<script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/BehaviourContrib/behaviour.compressed.js"></script>
+<script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/TwistyContrib/twist.compressed.js"></script>
+</verbatim>
 
 
 ---++ Contrib Info
 
-| Authors: | !JavaScript created by TWiki:Main.SamHasler, Contrib packaged by  TWiki:Main.RafaelAlvarez |
-| Copyright &copy;: | 2005 Sam Hasler and Rafael Alvarez, 2006 Arthur Clemens |
+| Authors: | !JavaScript written by TWiki:Main.ArthurClemens, Contrib packaged by  TWiki:Main.RafaelAlvarez, original !JavaScript written by TWiki:Main.SamHasler. |
+| Copyright &copy;: | 2005 Sam Hasler and Rafael Alvarez, 2006,2007 Arthur Clemens |
 | License: | [[http://www.gnu.org/copyleft/gpl.html][GPL]] |
 | Dependencies: | %$DEPENDENCIES% |
+| 18 Jun 2007 | 1.3 Arthur Clemens - Updated with TWiki 4 !JavaScript files. |
 | 25 Oct 2006 | 1.2 Arthur Clemens - Updated !JavaScript to support !TwistyPlugin version 1.2  |
 | 26 Sep 2006 | 1.010 Arthur Clemens - Complete !JavaScript rewrite |
 | 12 Sep 2005 | 1.000 First Version |
