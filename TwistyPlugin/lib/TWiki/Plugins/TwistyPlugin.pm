@@ -27,6 +27,8 @@ It has two major features:
 
 package TWiki::Plugins::TwistyPlugin;
 
+use TWiki::Func;
+use CGI::Cookie;
 use strict;
 
 use vars qw( $VERSION $RELEASE $pluginName $debug @modes $doneHeader $twistyCount
@@ -41,9 +43,13 @@ $VERSION = '$Rev$';
 # This is a free-form string you can use to "name" your own plugin version.
 # It is *not* used by the build automation tools, but is reported as part
 # of the version number in PLUGINDESCRIPTIONS.
-$RELEASE = '1.2.0';
+$RELEASE = '1.3.0';
 
 $pluginName = 'TwistyPlugin';
+
+my $TWISTYPLUGIN_COOKIE_PREFIX = "TwistyContrib_";
+my $TWISTYPLUGIN_CONTENT_HIDDEN = 0;
+my $TWISTYPLUGIN_CONTENT_SHOWN = 1;
 
 #there is no need to document this.
 sub initPlugin {
@@ -94,7 +100,9 @@ sub _addHeader {
 <style type="text/css" media="all">
 @import url("%PUBURL%/%TWIKIWEB%/TwistyContrib/twist.css");
 </style>
-<script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/TWikiJavascripts/twiki.js"></script>
+<script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/TWikiJavascripts/twikilib.js"></script>
+<script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/TWikiJavascripts/twikiPref.js"></script>
+<script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/TWikiJavascripts/twikiCSS.js"></script>
 <script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/BehaviourContrib/behaviour.compressed.js"></script>
 <script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/TwistyContrib/twist.compressed.js"></script>
 EOF
@@ -140,10 +148,11 @@ sub _TWISTYTOGGLE {
     unshift @modes,$mode;
     
     my $isTrigger = 0;
-    my @propList = _createHtmlProperties($idTag, $params, $isTrigger);
+    my $cookieState = _readCookie($session, $idTag);
+    my @propList = _createHtmlProperties(undef, $idTag, $params, $isTrigger, $cookieState);
     my $props = @propList ? " ".join(" ",@propList) : '';
     my $modeTag = '<'.$mode.$props.'>';
-    $modeTag .= _createJavascriptTriggerCall($idTag);
+    $modeTag .= _createJavascriptTriggerCall($session, $idTag);
     return _twistyOpenDiv().$modeTag;
 }
 
@@ -197,9 +206,11 @@ sub _twistyBtn {
 		return '';
 	}
     my $idTag = $id.$theState if ( $theState) || '';
+    
     my $defaultLink = ( $theState eq 'show' ) ? $prefShowLink : $prefHideLink;
     # link="" takes precedence over showlink="" and hidelink=""
     my $link = $params->{'link'};
+    
     if (!defined $link) {
     	# if 'link' is not set, try 'showlink' / 'hidelink'
     	$link = $params->{$theState.'link'};
@@ -222,16 +233,18 @@ sub _twistyBtn {
 	my $isTrigger = 1;
     my $props = '';
     if ($idTag && $params) {
-	    my @propList = _createHtmlProperties($idTag, $params, $isTrigger);
+        my $cookieState = _readCookie($session, $idTag);
+	    my @propList = _createHtmlProperties($theState, $idTag, $params, $isTrigger, $cookieState);
     	$props = @propList ? " ".join(" ",@propList) : '';
     }
     my $triggerTag = '<span'.$props.'>'.$imgLinkTag.'</span>';
-    $triggerTag .= _createJavascriptTriggerCall($idTag);
+    $triggerTag .= _createJavascriptTriggerCall($session, $idTag);
+    
     return $triggerTag;
 }
 
 sub _createHtmlProperties {
-	my($idTag, $params, $isTrigger) = @_;
+	my($theState, $idTag, $params, $isTrigger, $cookieState) = @_;
 	my $class = $params->{'class'} || '';
     my $start = $params->{start} || '';
     my $startHide = ($start eq 'hide');
@@ -252,6 +265,40 @@ sub _createHtmlProperties {
     push (@classList, 'twistyFirstStartHide') if $firstStartHide;
     push (@classList, 'twistyFirstStartShow') if $firstStartShow;
     
+=pod
+
+    # Mimic the rules in twist.js, function _update()
+    
+    if ($cookieState == $TWISTYPLUGIN_CONTENT_HIDDEN) {
+        if ($isTrigger && $theState eq 'hide') {
+            push (@classList, 'twistyHidden');
+        }
+        if (!$isTrigger) {
+            push (@classList, 'twistyHidden');
+        }
+    }
+    if ($cookieState == $TWISTYPLUGIN_CONTENT_SHOWN) {
+        if ($isTrigger && $theState eq 'show') {
+            push (@classList, 'twistyHidden');
+        }
+    }
+    if (!$cookieState && $isTrigger) {
+    	# don't assume javascript is on
+    	# in case of no javascript, the controls should be hidden
+    	push (@classList, 'twistyMakeVisible');
+    }
+    if ($isTrigger) {
+    	push (@classList, 'twistyTrigger');
+    }
+    if (!$isTrigger) {
+    	# content
+    	push (@classList, 'twistyContent');
+    	push (@classList, 'twistyMakeHidden') if !$noscriptHide; # don't set hidden directly but make it hidden with javascript, no browser without script will be able to see content
+    	push (@classList, 'twistyMakeVisible') if $noscriptHide;
+    }
+    
+=cut
+
     if ($isTrigger) {
     	push (@classList, 'twistyTrigger');
     	push (@classList, 'twistyMakeVisible');
@@ -267,7 +314,7 @@ sub _createHtmlProperties {
     push (@propList, 'id="'.$idTag.'"');
     push (@propList, 'class="'.join(" ",@classList).'"');
     return @propList;
-}
+} 
 
 =pod
 If we write a JavaScript tag here, it will be removed at render time in 
@@ -276,9 +323,25 @@ So we create a semi-variable tag here and convert it to a JavaScript tag in #pos
 =cut
 
 sub _createJavascriptTriggerCall {
-	my($idTag) = @_;
-        $needPostRenderingHandler = 1; # notifies postRenderingHandler and beforeCommonTagsHandler
-	return '%_TWISTYSCRIPT{"TWiki.TwistyPlugin.init("'.$idTag.'");"}%';
+	my($session, $idTag) = @_;
+
+    $needPostRenderingHandler = 1; # notifies postRenderingHandler and beforeCommonTagsHandler
+	return '%_TWISTYSCRIPT{"twiki.TwistyPlugin.init("'.$idTag.'");"}%';
+}
+
+sub _readCookie {
+    my($session, $idTag) = @_;
+    
+    return '' if !$idTag;
+    
+    # which state do we use?
+    my $query = $session->{cgiQuery};
+    my $cookie = $query->cookie('TWIKIPREF');
+    my $tag = $idTag;
+    $tag =~ s/^(.*)(hide|show|toggle)$/$1/go;
+    my $key = $TWISTYPLUGIN_COOKIE_PREFIX . $tag;
+    my $value = $cookie =~ s/$key\=(.*?)/$1/g;
+    return $value;
 }
 
 sub _twistyWrapInDiv {
