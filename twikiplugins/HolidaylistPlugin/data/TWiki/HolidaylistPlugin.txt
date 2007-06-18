@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1181041089" format="1.0" version="1.5"}%
+%META:TOPICINFO{author="TWikiContributor" date="1181041089" format="1.0" version="$Rev$"}%
 ---+!! <nop>HolidaylistPlugin</nop>
 
 %TOC%
@@ -228,9 +228,9 @@ The syntax follows that of the !CalendarPlugin. See TWiki:Plugins.CalendarPlugin
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.PeterJones, TWiki:Main.DanielRohde |
-|  Plugin Version: | v1.022 (BETA) |
+|  Plugin Version: | v1.022 (18 Jun 2007) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  v1.022 (BETA) | TWiki:Main.DanielRohde: added documentation requested by TWiki:Main.PeterThoeny |
+|  v1.022 (18 Jun 2007) | TWiki:Main.DanielRohde: added documentation requested by TWiki:Main.PeterThoeny; fixed type (on=off bug) |
 |  v1.021 (20 Apr 2007) | TWiki:Main.DanielRohde: fixed minor HTML bug reported by TWiki:Main.JfMacaud; added month header feature (showmonthheader attribute) requested by Rikard Johansson; fixed some minor bugs (documentation, preferences handling); |
 |  v1.020 (21 Sep 2006) | TWiki:Main.DanielRohde: added week attribute requested by TWiki:Main.JanFilipsky; added tooltip to day headers; |
 |  v1.019 (7 Aug 2006) | TWiki:Main.DanielRohde: improved navigation; fixed %<nop>ICON% tag handling bug reported by TWiki:Main.UlfJastrow; |

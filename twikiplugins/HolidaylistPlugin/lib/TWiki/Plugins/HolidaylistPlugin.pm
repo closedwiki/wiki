@@ -89,7 +89,8 @@ $VERSION = '$Rev$';
 # of the version number in PLUGINDESCRIPTIONS.
 $RELEASE = 'Dakar';
 
-$REVISION = '1.021'; #dro# fixed minor HTML bug reported by TWiki:Main.JfMacaud; added month header feature (showmonthheader attribute) requested by Rikard Johansson; fixed some minor bugs (documentation, preferences handling);
+$REVISION = '1.0.22'; #dro# added documentation requested by TWiki:Main.PeterThoeny; fixed typo (on=off bug)
+#$REVISION = '1.021'; #dro# fixed minor HTML bug reported by TWiki:Main.JfMacaud; added month header feature (showmonthheader attribute) requested by Rikard Johansson; fixed some minor bugs (documentation, preferences handling);
 #$REVISION = '1.020'; #dro# added week attribute requested by TWiki:Main.JanFilipsky; added tooltip to day headers;
 #$REVISION = '1.019'; #dro# improved navigation; fixed %<nop>ICON% tag handling bug reported by TWiki:Main.UlfJastrow;
 #$REVISION = '1.018'; #dro# fixed periodic event bug; added navigation feature
@@ -265,7 +266,7 @@ sub initOptions() {
 		my $v = $params{$option};
 		if (defined $v) {
 			if (grep /^\Q$option\E$/, @flagOptions) {
-				$options{$option} = ($v!~/^(0|on|off)$/i);
+				$options{$option} = ($v!~/^(0|false|no|off)$/i);
 			} else {
 				$options{$option} = $v;
 			}

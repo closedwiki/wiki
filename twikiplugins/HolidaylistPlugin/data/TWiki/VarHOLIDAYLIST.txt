@@ -1,5 +1,5 @@
-%META:TOPICINFO{author="TWikiContributor" date="1181040969" format="1.1" version="1.1"}%
-%META:TOPICPARENT{name="WebHome"}%
+%META:TOPICINFO{author="TWikiContributor" date="1181040969" format="1.1" version="$Rev$"}%
+%META:TOPICPARENT{name="TWikiVariables"}%
 #VarHOLIDAYLIST
 ---+++ HOLIDAYLIST -- add a vacation list to a topic
    * The =%<nop>HOLIDAYLIST%= variable is handled by the HolidaylistPlugin.
