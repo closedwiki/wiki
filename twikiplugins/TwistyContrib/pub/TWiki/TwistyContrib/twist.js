@@ -6,7 +6,9 @@ http://alex.dojotoolkit.org/shrinksafe/
 /**
 Singleton class. Requires behaviour.js from BehaviourContrib.
 */
-TWiki.TwistyPlugin = new function () {
+var twiki;
+if (!twiki) twiki = {};
+twiki.TwistyPlugin = new function () {
 
 	var self = this;
 	
@@ -42,36 +44,36 @@ TWiki.TwistyPlugin = new function () {
 	*/
 	this._toggleTwisty = function (ref) {
 		if (!ref) return;
-		ref.state = (ref.state == TWiki.TwistyPlugin.CONTENT_HIDDEN) ? TWiki.TwistyPlugin.CONTENT_SHOWN : TWiki.TwistyPlugin.CONTENT_HIDDEN;
+		ref.state = (ref.state == twiki.TwistyPlugin.CONTENT_HIDDEN) ? twiki.TwistyPlugin.CONTENT_SHOWN : twiki.TwistyPlugin.CONTENT_HIDDEN;
 		self._update(ref, true);
 	}
 	
 	/**
 	Updates the states of UI trinity 'show', 'hide' and 'content'.
 	Saves new state in a cookie if one of the elements has CSS class 'twistyRememberSetting'.
-	@param ref : (Object) TWiki.TwistyPlugin.Storage object
+	@param ref : (Object) twiki.TwistyPlugin.Storage object
 	@privileged
 	*/
 	this._update = function (ref, inMaySave) {
 		var showControl = ref.show;
 		var hideControl = ref.hide;
 		var contentElem = ref.toggle;
-		if (ref.state == TWiki.TwistyPlugin.CONTENT_SHOWN) {
+		if (ref.state == twiki.TwistyPlugin.CONTENT_SHOWN) {
 			// show content
-			addClass(showControl, 'twistyHidden');	// hide 'show'
-			removeClass(hideControl, 'twistyHidden'); // show 'hide'
-			removeClass(contentElem, 'twistyHidden'); // show content
+			twiki.CSS.addClass(showControl, 'twistyHidden');	// hide 'show'
+			twiki.CSS.removeClass(hideControl, 'twistyHidden'); // show 'hide'
+			twiki.CSS.removeClass(contentElem, 'twistyHidden'); // show content
 		} else {
 			// hide content
-			removeClass(showControl, 'twistyHidden'); // show 'show'	
-			addClass(hideControl, 'twistyHidden'); // hide 'hide'
-			addClass(contentElem, 'twistyHidden'); // hide content
+			twiki.CSS.removeClass(showControl, 'twistyHidden'); // show 'show'	
+			twiki.CSS.addClass(hideControl, 'twistyHidden'); // hide 'hide'
+			twiki.CSS.addClass(contentElem, 'twistyHidden'); // hide content
 		}
 		if (inMaySave && ref.saveSetting) {
-	        setPref(TWiki.TwistyPlugin.COOKIE_PREFIX + ref.name, ref.state);
+	        twiki.Pref.setPref(twiki.TwistyPlugin.COOKIE_PREFIX + ref.name, ref.state);
 		}
 		if (ref.clearSetting) {
-	        setPref(TWiki.TwistyPlugin.COOKIE_PREFIX + ref.name, "");
+	        twiki.Pref.setPref(twiki.TwistyPlugin.COOKIE_PREFIX + ref.name, "");
 		}
 	}
 	
@@ -85,14 +87,14 @@ TWiki.TwistyPlugin = new function () {
 		var name = self._getName(e.id);
 		var ref = self._storage[name];
 		if (!ref) {
-			ref = new TWiki.TwistyPlugin.Storage();
+			ref = new twiki.TwistyPlugin.Storage();
 		}
-		if (hasClass(e, "twistyRememberSetting")) ref.saveSetting = true;
-		if (hasClass(e, "twistyForgetSetting")) ref.clearSetting = true;
-		if (hasClass(e, "twistyStartShow")) ref.startShown = true;
-		if (hasClass(e, "twistyStartHide")) ref.startHidden = true;
-		if (hasClass(e, "twistyFirstStartShow")) ref.firstStartShown = true;
-		if (hasClass(e, "twistyFirstStartHide")) ref.firstStartHidden = true;
+		if (twiki.CSS.hasClass(e, "twistyRememberSetting")) ref.saveSetting = true;
+		if (twiki.CSS.hasClass(e, "twistyForgetSetting")) ref.clearSetting = true;
+		if (twiki.CSS.hasClass(e, "twistyStartShow")) ref.startShown = true;
+		if (twiki.CSS.hasClass(e, "twistyStartHide")) ref.startHidden = true;
+		if (twiki.CSS.hasClass(e, "twistyFirstStartShow")) ref.firstStartShown = true;
+		if (twiki.CSS.hasClass(e, "twistyFirstStartHide")) ref.firstStartHidden = true;
 		ref.name = name;
 		var type = self._getType(e.id);
 		ref[type] = e;
@@ -110,7 +112,7 @@ TWiki.TwistyPlugin = new function () {
 	}
 	
 	/**
-	Key-value set of TWiki.TwistyPlugin.Storage objects. The value is accessed by twisty id identifier name.
+	Key-value set of twiki.TwistyPlugin.Storage objects. The value is accessed by twisty id identifier name.
 	@example var ref = self._storage["demo"];
 	@privileged
 	*/
@@ -125,25 +127,25 @@ TWiki.TwistyPlugin = new function () {
 		Show control, hide control
 		*/
 		'.twistyTrigger' : function(e) {
-			TWiki.TwistyPlugin.init(e.id);
+			twiki.TwistyPlugin.init(e.id);
 		},
 		/**
 		Content element
 		*/
 		'.twistyContent' : function(e) {
-			TWiki.TwistyPlugin.init(e.id);
+			twiki.TwistyPlugin.init(e.id);
 		},
 		/**
 		Content element
 		*/
 		'.twistyExpandAll' : function(e) {
 			e.onclick = function() {
-				TWiki.TwistyPlugin.toggleAll(TWiki.TwistyPlugin.CONTENT_SHOWN);
+				twiki.TwistyPlugin.toggleAll(twiki.TwistyPlugin.CONTENT_SHOWN);
 			}
 		},
 		'.twistyCollapseAll' : function(e) {
 			e.onclick = function() {
-				TWiki.TwistyPlugin.toggleAll(TWiki.TwistyPlugin.CONTENT_HIDDEN);
+				twiki.TwistyPlugin.toggleAll(twiki.TwistyPlugin.CONTENT_HIDDEN);
 			}
 		}
 	};
@@ -153,23 +155,23 @@ TWiki.TwistyPlugin = new function () {
 /**
 Public constants.
 */
-TWiki.TwistyPlugin.CONTENT_HIDDEN = 0;
-TWiki.TwistyPlugin.CONTENT_SHOWN = 1;
-TWiki.TwistyPlugin.COOKIE_PREFIX = "TwistyContrib_";
+twiki.TwistyPlugin.CONTENT_HIDDEN = 0;
+twiki.TwistyPlugin.CONTENT_SHOWN = 1;
+twiki.TwistyPlugin.COOKIE_PREFIX = "TwistyContrib_";
 
 /**
 The cached full TWiki cookie string so the data has to be read only once during init.
 */
-TWiki.TwistyPlugin.prefList;
+twiki.TwistyPlugin.prefList;
 
 /**
 Initializes a twisty HTML element (either show control, hide control or content 'toggle') by registering and setting the visible state.
 Calls _register() and _update().
 @public
 @param inId : (String) id of HTMLElement
-@return The stored TWiki.TwistyPlugin.Storage object.
+@return The stored twiki.TwistyPlugin.Storage object.
 */
-TWiki.TwistyPlugin.init = function(inId) {
+twiki.TwistyPlugin.init = function(inId) {
 	var e = document.getElementById(inId);
 	if (!e) return;
 
@@ -181,30 +183,30 @@ TWiki.TwistyPlugin.init = function(inId) {
 	// else register
 	ref = this._register(e);
 	
-	if (hasClass(e, "twistyMakeHidden")) replaceClass(e, "twistyMakeHidden", "twistyHidden");
-	if (hasClass(e, "twistyMakeVisible")) removeClass(e, "twistyMakeVisible");
+	if (twiki.CSS.hasClass(e, "twistyMakeHidden")) twiki.CSS.replaceClass(e, "twistyMakeHidden", "twistyHidden");
+	if (twiki.CSS.hasClass(e, "twistyMakeVisible")) twiki.CSS.removeClass(e, "twistyMakeVisible");
 	
 	if (ref.show && ref.hide && ref.toggle) {
 		// all Twisty elements present
-		if (TWiki.TwistyPlugin.prefList == null) {
+		if (twiki.TwistyPlugin.prefList == null) {
 			// cache complete cookie string
-			TWiki.TwistyPlugin.prefList = getPrefList();
+			twiki.TwistyPlugin.prefList = twiki.Pref.getPrefList();
 		}
-		var cookie = getPrefValueFromPrefList(TWiki.TwistyPlugin.COOKIE_PREFIX + ref.name, TWiki.TwistyPlugin.prefList);
-		if (ref.firstStartHidden) ref.state = TWiki.TwistyPlugin.CONTENT_HIDDEN;
-		if (ref.firstStartShown) ref.state = TWiki.TwistyPlugin.CONTENT_SHOWN;
+		var cookie = twiki.Pref.getPrefValueFromPrefList(twiki.TwistyPlugin.COOKIE_PREFIX + ref.name, twiki.TwistyPlugin.prefList);
+		if (ref.firstStartHidden) ref.state = twiki.TwistyPlugin.CONTENT_HIDDEN;
+		if (ref.firstStartShown) ref.state = twiki.TwistyPlugin.CONTENT_SHOWN;
 		// cookie setting may override  firstStartHidden and firstStartShown
-		if (cookie && cookie == "0") ref.state = TWiki.TwistyPlugin.CONTENT_HIDDEN;
-		if (cookie && cookie == "1") ref.state = TWiki.TwistyPlugin.CONTENT_SHOWN;
+		if (cookie && cookie == "0") ref.state = twiki.TwistyPlugin.CONTENT_HIDDEN;
+		if (cookie && cookie == "1") ref.state = twiki.TwistyPlugin.CONTENT_SHOWN;
 		// startHidden and startShown may override cookie
-		if (ref.startHidden) ref.state = TWiki.TwistyPlugin.CONTENT_HIDDEN;
-		if (ref.startShown) ref.state = TWiki.TwistyPlugin.CONTENT_SHOWN;
+		if (ref.startHidden) ref.state = twiki.TwistyPlugin.CONTENT_HIDDEN;
+		if (ref.startShown) ref.state = twiki.TwistyPlugin.CONTENT_SHOWN;
 		this._update(ref, false);
 	}
 	return ref;	
 }
 
-TWiki.TwistyPlugin.toggleAll = function(inState) {
+twiki.TwistyPlugin.toggleAll = function(inState) {
 	var i;
 	for (var i in this._storage) {
 		var e = this._storage[i];
@@ -216,9 +218,9 @@ TWiki.TwistyPlugin.toggleAll = function(inState) {
 /**
 Storage container for properties of a twisty HTML element: show control, hide control or toggle content.
 */
-TWiki.TwistyPlugin.Storage = function () {
+twiki.TwistyPlugin.Storage = function () {
 	this.name;										// String
-	this.state = TWiki.TwistyPlugin.CONTENT_HIDDEN;	// Number
+	this.state = twiki.TwistyPlugin.CONTENT_HIDDEN;	// Number
 	this.hide;										// HTMLElement
 	this.show;										// HTMLElement
 	this.toggle;									// HTMLElement (content element)
