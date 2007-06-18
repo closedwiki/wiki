@@ -858,7 +858,7 @@ sub _writeRegistrationDetailsToTopic {
 
     $meta->put( 'TOPICPARENT', { 'name' => $TWiki::cfg{UsersTopicName}} );
 
-    $session->{store}->saveTopic($agent, $TWiki::cfg{UsersWebName},
+    $session->{store}->saveTopic($session->{users}->getCanonicalUserID($agent), $TWiki::cfg{UsersWebName},
                                  $user, $text, $meta );
     return $log;
 }
