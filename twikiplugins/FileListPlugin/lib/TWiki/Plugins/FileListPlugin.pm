@@ -77,6 +77,7 @@ sub _handleFileList
 	my $alttext = $params{'alt'}    || '';
 	
 	my $filter = $params{"filter"}; # "abc, def" syntax. Substring match will be used
+	my $hideHidden = (grep { $_ eq $params{"hide"} } ('on', 'yes', '1')) ? 1 : 0; # don't hide by default
 	
 	 # check if the user has permissions to view the topic
 	my $user = TWiki::Func::getWikiName();
@@ -108,6 +109,9 @@ sub _handleFileList
 		my $attrUser = $attachment->{user};
 		my $attrComment = $attachment->{comment};
 		my $attrAttr = $attachment->{attr};
+
+		# skip if the attachment is hidden
+		next if ($attrAttr =~ /h/i && $hideHidden);
 		
 		# I18N: To support attachments via UTF-8 URLs to attachment
 		# directories/files that use non-UTF-8 character sets, go through viewfile. 
@@ -149,6 +153,11 @@ sub _handleFileList
 			my $attrVersion=$attachment->{Version};
 			my $viewfileUrl = TWiki::Func::getScriptUrl($thisWeb, $thisTopic, "viewfile") . "?rev=$attrVersion&filename=$file";
 			$s =~ s/\$viewfileUrl/$viewfileUrl/; 
+		}
+		
+		if ( $s =~ /\$hidden/ ) {
+			my $hidden = ( $attrAttr =~ /h/i ) ? 'hidden' : '';
+			$s =~ s/\$hidden/$hidden/g;
 		}
 	
 		my $fileUrl = $pubUrl . "/$thisWeb/$thisTopic/$file";

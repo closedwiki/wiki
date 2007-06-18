@@ -20,6 +20,7 @@ View permissions are honored: if the user is not allowed to view the referring t
 | =header=    | If there are hits this header is prepended | |
 | =footer=    | If there are hits this footer is appended | |
 | =alt=       | Alternate text if nothing is found | |
+| =hide=      | Wether !FileListPlugin should hide the attachments marked as hidden. Disabled by default, set to "yes", "on" or "1" to enable | |
 
 | *Format parameter* | *Comment* |
 | =$fileName=  | Name of the file |
@@ -31,6 +32,7 @@ View permissions are honored: if the user is not allowed to view the referring t
 | =$fileUrl=  | URL of the file, assumes =ATTACHURL= path |
 | =$viewfileUrl= | Full path with =viewfile= as script name |
 | =$fileActionUrl= | Full path of management URL for this file (for changing properties etcetera) |
+| =$hidden= | 'hidden' if the attachment is hidden, nothing otherwise |
 | =$n= | newline character |
 | =$br= | =&lt;br /&gt;= tag |
 
@@ -72,6 +74,7 @@ Output (if installed):
 | Copyright &copy;: | TWiki:Main.VinodKulkarni, TWiki:Main.SopanShewale (2006), TWiki:Main.ArthurClemens (2006) |
 | License: | [[http://www.gnu.org/copyleft/gpl.html][GPL]] |
 | Dependencies: | %$DEPENDENCIES% |
+| 18 Jun 2007 | TWiki:Main/AntonioTerceiro: added support for handling hidden attchments. |
 | 08 Apr 2007 - v.0.9 | TWiki:Main.OliverKrueger: added header, footer and alt params. |
 | 17 Dec 2006 - v.0.8 | TWiki:Main.ArthurClemens: reworked for TWiki 4.1 and optimized; activated =filter= parameter, added topic view permission check. |
 | 03 Mar 2006 - v.0.7 | TWiki:Main.SopanShewale: reworked for TWiki 4 |
