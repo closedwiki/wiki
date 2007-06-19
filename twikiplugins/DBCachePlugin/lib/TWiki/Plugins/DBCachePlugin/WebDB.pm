@@ -250,6 +250,14 @@ sub expandPath {
   $thePath =~ s/\[([^\]]+)\]/$1/o;
 
   #print STDERR "DEBUG: expandPath($theRoot, $thePath)\n";
+
+  if ($thePath =~ /^info.author$/) {
+    if (defined(&TWiki::Users::getWikiName)) {# TWiki-4.2 onwards
+      my $author = $theRoot->fastget('info')->fastget('author');
+      my $session = $TWiki::Plugins::SESSION;
+      return $session->{users}->getWikiName($author);
+    }
+  }
   if ($thePath =~ /^(.*?) and (.*)$/) {
     my $first = $1;
     my $tail = $2;
@@ -303,6 +311,12 @@ sub expandPath {
       }
     }
     return $this->expandPath($root, $tail)
+  }
+
+  if ($thePath =~ /^%/) {
+    # SMELL: is topic='' ok?
+    $thePath = &TWiki::Func::expandCommonVariables($thePath, '', $this->{web});
+    return $this->expandPath($theRoot, $thePath);
   }
 
   #print STDERR "DEBUG: result is empty\n";
