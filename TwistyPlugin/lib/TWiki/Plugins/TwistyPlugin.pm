@@ -340,6 +340,8 @@ sub _readCookie {
     my $tag = $idTag;
     $tag =~ s/^(.*)(hide|show|toggle)$/$1/go;
     my $key = $TWISTYPLUGIN_COOKIE_PREFIX . $tag;
+    return $TWISTYPLUGIN_CONTENT_SHOWN
+      unless (defined($key) && defined($cookie));
     my $value = $cookie =~ s/$key\=(.*?)/$1/g;
     return $value;
 }
