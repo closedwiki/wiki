@@ -123,7 +123,10 @@ sub handleDBQUERY {
 	$temp =~ s#\)#${TranslationToken}#g;
 	$temp/geo;
       $format =~ s/\$expand\((.*?)\)/
-	my $temp = $theDB->expandPath($topicObj, $1);
+        my $temp = $1;
+        $temp = _expandVariables($temp, $topicWeb, $topicName,
+          topic=>$topicName, web=>$topicWeb, index=>$index, count=>$count);
+	$temp = $theDB->expandPath($topicObj, $temp);
 	$temp =~ s#\)#${TranslationToken}#g;
 	$temp/geo;
       $format =~ s/\$formatTime\((.*?)(?:,\s*'([^']*?)')?\)/TWiki::Func::formatTime($theDB->expandPath($topicObj, $1), $2)/geo; # single quoted

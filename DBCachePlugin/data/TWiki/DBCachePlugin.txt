@@ -194,12 +194,17 @@ Following variables are expanded in format strings:
 In its most basic form =$expand(Ref)= is identical to =$formfield(Ref)=. In addition
 =$expand()= can be used to refer to topic properties of related topics that can be reached from the current one using the '@' symbol. For example, if a topic A uses a form that contains a field named "Ref" and specifies a reference to 
 another topic B (by using its name) you can access the "Headline" in B from A using =$expand(@Ref.Headline)=.
+
 A formfield accessor can be a composed one using 'or' and 'and'. Example: =$expand(Name or Author)=
 will expand to the value of the formfield "Name" if it exists and is non-empty and to the value 
 of the formfield "Author" otherwise. More valid examples:
    * =$expand(@Ref.Headline)=: headline of the refered topic
    * =$expand(Nr and '.')=: append a dot to the formfield value "Nr" if it exists
    * =$expand(Name or Author)=: expand to "Name" or "Author"
+
+A formfield accessor can be computed using <nop>TWikiMarkup. If the string starts with '%',
+it is expanded and its result is taken as the real formfield accessor. This is useful when the 
+name of the formfield must be computed by different means.
 
 ---+++ DBRECURSE
 Traverse topic-to-topic relations, like the intrinsic parent-child relation
@@ -402,8 +407,10 @@ following is the default paramenter (omitting the #)
 |  Plugin Author: | TWiki:Main.MichaelDaum |
 |  Copyright &copy;: | 2005-2007, Michael Daum http://wikiring.de |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | v1.53 |
+|  Plugin Version: | v1.60 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  19 Jun 2007: | added TWiki-4.2 upwards compatibility hack to display users as <nop>WikiNames; \
+                  added expand(%TML%) feature |
 |  08 May 2007: | fixed loading db cache file since recent changes in <nop>DBCacheContrib |
 |  03 Apr 2007: | fixed $date(format) in ATTACHMENTS; \
                   fixed 'segfault' in DBRECURSE while formatting sub-results |
@@ -462,4 +469,4 @@ following is the default paramenter (omitting the #)
 |  Feedback: | TWiki:Plugins/%TOPIC%Dev |
 |  Appraisal: | TWiki:Plugins/%TOPIC%Appraisal |
 
--- TWiki:Main.MichaelDaum - 08 May 2007
+-- TWiki:Main.MichaelDaum - 19 Jun 2007
