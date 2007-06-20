@@ -12,7 +12,7 @@
    * use a span or div for the content
    * set a class for the content span or div
 
-Twisty has a fallback mechanism in case !JavaScript is not available: all content is displayed and the control buttons are hidden. Unless parameter =noscript="hide"= is used to specifically set the content to hide.
+Twisty has a fallback mechanism in case !JavaScript is not available: all content is displayed and the control buttons are hidden.
 
 %TOC{title="On this page:"}%
 
@@ -31,28 +31,27 @@ The typical !TwistyPlugin triad will look like this (pseudo code):
 %TWISTYTOGGLE{}% my content %ENDTWISTYTOGGLE%
 </verbatim>
 
-
-
----+++ Working Twisty
+---+++ Shorthand
 
 The Twisty triad is conveniently packed into shorthand =%<nop>TWISTY{some parameters}% Collapsing content %<nop>ENDTWISTY%=:
 
 <verbatim>
-%TWISTY{showlink="Show..." hidelink="Hide"}%
+%TWISTY{}%
 my twisty content
 %ENDTWISTY%
 </verbatim>
 
-It will look like this:
+Will generate:
 
-%TWISTY{showlink="Show..." hidelink="Hide"}%
+%TWISTY{}%
 %RED% my twisty content %ENDCOLOR%
 %ENDTWISTY%
 
+You may have noticed that no parameters are passed to =%<nop>TWISTY{}%= but the show and hide links _do_ have text! The default values are fetched from plugin settings =TWISTYSHOWLINK= and =TWISTYHIDELINK=, see [[#PluginSettings][Plugin Settings]] below.
 
 
 ---+++ Twisty with icons
-We will use =mode="div"= to put the collapsing content below the button.
+We will use =mode="div"= to put the collapsing content below the button (the default mode is ="span"=).
 
 <verbatim>
 %TWISTY{mode="div" showlink="Show..." hidelink="Hide"
@@ -166,6 +165,8 @@ my twisty content
 
 
 ---+++ Other use: hide interface parts in case of no !JavaScript
+%RED% *NOTE:* paramater =noscript= has been deprecated as of version 1.4, as this should be done by scripts provided with twiki templates. Deprecated does not mean it is removed - the parameter will keep on working for a while and be removed at a later stage. %ENDCOLOR%
+
 You can use Twisty to show interface elements that should only be visible with !JavaScript enabled. For instance the textbox control buttons in the edit screen need !JavaScript to work. If a visitor does not have !JavaScript on it would not make sense to show these buttons.
 
 Put the "JavaScript content" in an almost bare bones Twisty. Write =showlink="" hidelink=""= to not display any default link texts.
@@ -237,13 +238,13 @@ hideimgleft="%ICONURLPATH{toggleclose}%" suffix="</h4>"}%
 You can toggle all Twisties on or off at once by putting a link or button on the page with class =twistyExpandAll= or =twistyCollapseAll=.
 
 <verbatim>
-<button class="twistyExpandAll twikiButton">Expand all</button> 
+<button class="twistyExpandAll twikiButton">Expand all</button><br />
 <button class="twistyCollapseAll twikiButton">Collapse all</button>
 </verbatim>
 
 Creates these controls:
 
-<button class="twistyExpandAll twikiButton">Expand all</button> 
+<button class="twistyExpandAll twikiButton">Expand all</button><br />
 <button class="twistyCollapseAll twikiButton">Collapse all</button>
 
 When you want to use links, write:
@@ -251,14 +252,14 @@ When you want to use links, write:
 <verbatim>
 #VarTOGGLE
 
-<a href="#TOGGLE" class="twistyExpandAll">Expand all</a> 
+<a href="#TOGGLE" class="twistyExpandAll">Expand all</a><br />
 <a href="#TOGGLE" class="twistyCollapseAll">Collapse all</a>
 </verbatim>
 
 
 #VarTOGGLE
 
-<a href="#TOGGLE" class="twistyExpandAll">Expand all</a> 
+<a href="#TOGGLE" class="twistyExpandAll">Expand all</a><br />
 <a href="#TOGGLE" class="twistyCollapseAll">Collapse all</a>
 
 
@@ -390,6 +391,7 @@ Major features are:
    * Automatically fills in default values
    * Global preference settings can be set in this topic or locally in individual topics
 
+#PluginSettings
 ---++ Plugin Settings
 
 Plugin settings are stored as preferences variables. To reference
@@ -424,6 +426,7 @@ a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>T
 | Copyright &copy;: | 2005 Rafael Alvarez, 2006, 2007 Arthur Clemens |
 | License: | [[http://www.gnu.org/copyleft/gpl.html][GPL]] |
 | Dependencies: | %$DEPENDENCIES% |
+| 20 Jun 2007 | 1.4 Arthur Clemens - Updated to work without ugly inserted javascript 'init' calls. This will change nothing to the functionality, but it will produce cleaner HTML, while at the same time the twisty is still set immediately (not at page onload) and graceful fallback in case of no javascript is maintained. Parameter =noscript= is now deprecated as this should be done by scripts provided with twiki templates - but it will keep on working for a while. |
 | 19 Jun 2006 | 1.3 Arthur Clemens - Updated with TWiki 4 !JavaScript files. |
 | 25 Oct 2006 | 1.2 New variables to set default values: =TWISTYSHOWLINK=, =TWISTYHIDELINK=, =TWISTYMODE=, =TWISTYREMEMBER=; property =id= is no longer required as this is automatically set (still recommended in some cases with =remember="on"=); property value =remember="off"= will clear a previously stored cookie; new properties =prefix= and =suffix=; !JavaScript to collapse or expand all Twisties on the page.  |
 | 27 Sep 2006 | 1.101 Fixes !JavaScript handling when !AllowInlineScript in configure is not set |
