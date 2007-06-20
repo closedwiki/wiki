@@ -55,7 +55,10 @@ sub set_up {
     $this->{__TWikiSafe} = Data::Dumper->Dump([\%TWiki::cfg], ['*TWiki::cfg']);
     $tmp->finish();
 
-    $TWiki::cfg{TempfileDir} = File::Temp::tempdir( CLEANUP => $cleanup );
+    $TWiki::cfg{WorkingDir} = File::Temp::tempdir( CLEANUP => $cleanup );
+    mkdir("$TWiki::cfg{WorkingDir}/tmp");
+    mkdir("$TWiki::cfg{WorkingDir}/registration_approvals");
+    mkdir("$TWiki::cfg{WorkingDir}/work_areas");
 
     # Move logging into a temporary directory
     $TWiki::cfg{LogFileName} = "$TWiki::cfg{TempfileDir}/TWikiTestCase.log";
@@ -90,6 +93,7 @@ sub set_up {
 sub tear_down {
     my $this = shift;
     $this->{twiki}->finish() if $this->{twiki};
+    File::Path::rmtree($TWiki::cfg{WorkingDir});
     %TWiki::cfg = eval $this->{__TWikiSafe};
     foreach my $sym (keys %ENV) {
         unless( defined( $this->{__EnvSafe}->{$sym} )) {

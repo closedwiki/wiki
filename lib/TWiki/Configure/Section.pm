@@ -43,6 +43,20 @@ sub addChild {
     push(@{$this->{children}}, $child);
 }
 
+sub isExpertsOnly {
+    my $this = shift;
+    if (!defined($this->{isExpert})) {
+        $this->{isExpert} = 1;
+        foreach my $kid (@{$this->{children}}) {
+            if (!$kid->isExpertsOnly()) {
+                $this->{isExpert} = 0;
+                last;
+            }
+        }
+    }
+    return $this->{isExpert};
+}
+
 sub visit {
     my ($this, $visitor) = @_;
     my %visited;

@@ -17,10 +17,7 @@
 use strict;
 
 package TWiki::Configure::Checkers::RCS::delRevCmd;
-
-use TWiki::Configure::Checkers::RCS::Checker;
-
-use base 'TWiki::Configure::Checkers::RCS::Checker';
+use base 'TWiki::Configure::Checker';
 
 sub check {
     my $this = shift;

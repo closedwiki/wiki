@@ -48,7 +48,7 @@ sub warnAboutWindowsBackSlashes {
 }
 
 sub guessMajorDir {
-    my ($this, $cfg, $dir ) = @_;
+    my ($this, $cfg, $dir, $silent ) = @_;
     my $msg = '';
     if( !$TWiki::cfg{$cfg} || $TWiki::cfg{$cfg} eq 'NOT SET') {
         use FindBin;
@@ -58,7 +58,7 @@ sub guessMajorDir {
         $TWiki::cfg{$cfg} = File::Spec->catfile(@root, $dir);
         $msg = $this->guessed();
     }
-    unless (-d $TWiki::cfg{$cfg}) {
+    unless ($silent || -d $TWiki::cfg{$cfg}) {
         $msg .= $this->ERROR('Directory does not exist');
     }
     return $msg;
@@ -140,33 +140,30 @@ sub checkCanCreateFile {
 # and Cygwin.
 sub checkGnuProgram {
     my ($this, $prog) = @_;
-    my $n = '';
+    my $mess = '';
 
     if( $TWiki::cfg{OS} eq 'UNIX' ||
           $TWiki::cfg{OS} eq 'WINDOWS' &&
             $TWiki::cfg{DetailedOS} eq 'cygwin' ) {
-        $prog =~ s/^\s*(\S+)\s.*$/$1/;
-        $prog =~ /^(.*)$/;
+        # SMELL: assumes no spaces in program pathnames
+        $prog =~ /^\s*(\S+)/;
         $prog = $1;
-        # check for taintedness
-        die "$prog is tainted" unless eval { $n = $prog, kill 0; 1 };
         my $diffOut = ( `$prog --version 2>&1` || "");
         my $notFound = ( $? != 0 );
         if( $notFound ) {
-            $n = $this->WARN("'$prog' program was not found on the ",
-                      "current PATH.");
+            $mess = $this->ERROR("'$prog' was not found on the current PATH");
         } elsif ( $diffOut !~ /\bGNU\b/ ) {
             # Program found on path, complain if no GNU in version output
-            $n = $this->WARN("'$prog' program was found on the PATH ",
+            $mess = $this->WARN("'$prog' program was found on the PATH ",
                       "but is not GNU $prog - this may cause ",
                       "problems. $diffOut");
-        } else {
-            $diffOut =~ /(\d+(\.\d+)+)/;
-            $n = "($prog is version $1).";
+        #} else {
+            #$diffOut =~ /(\d+(\.\d+)+)/;
+            #$mess = "($prog is version $1).";
         }
     }
 
-    return $n;
+    return $mess;
 }
 
 # Return a string of settingBlocks giving the status of various
@@ -249,6 +246,72 @@ sub check {
     my ($this, $value) = @_;
     # default behaviour; do nothing
     return '';
+}
+
+sub copytree {
+    my ($this, $from, $to) = @_;
+    my $e = '';
+
+    if( -d $from ) {
+        if( !-e $to ) {
+            mkdir($to) || return "Failed to mkdir $to: $!<br />";
+        } elsif (!-d $to) {
+            return "Existing $to is in the way<br />";
+        }
+
+        my $d;
+        return "Failed to copy $from: $!<br />" unless opendir($d, $from);
+        foreach my $f ( grep { !/^\./ } readdir $d ) {
+            $e .= $this->copytree( "$from/$f", "$to/$f" );
+        }
+        closedir($d);
+    }
+
+    if( !$e && !-e $to ) {
+        if( !File::Copy::copy( $from, $to )) {
+            $e = "Failed to copy $from to $to: $!<br />";
+        }
+    }
+    return $e;
+}
+
+my $rcsverRequired = 5.7;
+
+sub checkRCSProgram {
+    my ($this, $key) = @_;
+
+    return 'Not used in this configuration.'
+      unless $TWiki::cfg{StoreImpl} eq 'RcsWrap';
+
+    my $mess = '';
+    my $err = '';
+    my $prog = $TWiki::cfg{RCS}{$key} || '';
+    $prog =~ s/^\s*(\S+)\s.*$/$1/;
+    $prog =~ /^(.*)$/; $prog = $1;
+    if( !$prog ) {
+        $err .= $key.' is not set';
+    } else {
+        my $version = `$prog -V` || '';
+        if ( $version =~ /(\d+(\.\d+)+)/ ) {
+            $version = $1;
+        } else {
+            $err .= $this->ERROR($prog.' did not return a version number (or might not exist..)');
+        }
+        if( $version =~ /^\d/ && $version < $rcsverRequired ) {
+            # RCS too old
+            $err .= $prog.' is too old, upgrade to version '.
+              $rcsverRequired.' or higher.';
+        }
+    }
+    if( $err ) {
+        $mess .= $this->ERROR( $err .<<HERE
+TWiki will probably not work with this RCS setup. Either correct the setup, or
+switch to RcsLite. To enable RCSLite you need to change the setting of
+{StoreImpl} to 'RcsLite'.
+HERE
+                       );
+    }
+    return $mess;
 }
 
 1;

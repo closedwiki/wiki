@@ -33,14 +33,22 @@ sub new {
 
     $this->{keys} = '';
     $this->{opts} = '';
+    $this->{expertsOnly} = 0;
     $this->set(@_);
 
     if (defined $this->{opts}) {
         $this->{mandatory} = ($this->{opts} =~ /(\b|^)M(\b|$)/);
         $this->{hidden} = ($this->{opts} =~ /(\b|^)H(\b|$)/);
+        $this->{expertsOnly} = 1
+          if ($this->{opts} =~ s/\bEXPERT\b//);
     }
 
     return $this;
+}
+
+sub isExpertsOnly {
+    my $this = shift;
+    return $this->{expertsOnly};
 }
 
 sub getKeys {

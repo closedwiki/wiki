@@ -120,16 +120,28 @@ my $OS = $TWiki::cfg{OS} || '';
 # $TWiki::cfg{LocalesDir} = '/home/httpd/twiki/po';
 
 # **PATH M**
-# Directory where temporary files used by twiki are stored.
-# Passthrough files are used by TWiki to work around the limitations of HTTP and
-# session files (when enabled) which are files used to record data about active
-# users - for example, whether they are logged in or not. 
-# <b>Security Note:</b> The directory must <b>not</b> be
-# browseable from the web, otherwise it could be used to intercept parameters
-# used when someone logs in! Additionally it is recommended to setup access
-# rights to this directory so only the web server user can create files.
-# Otherwise it could be used to mount an attack on the server!
-$TWiki::cfg{TempfileDir} = '/tmp/twiki';
+# Directory where TWiki stores files that are required for the management
+# of TWiki, but are not normally required to be browsed from the web.
+# A number of subdirectories will be created automatically under this
+# directory:
+# <ul><li>{WorkingDir}<tt>/tmp/</tt> - used for security-related temporary
+# files (these files can be deleted at any time without permanent damage)
+# <ul><li>
+# <i>Passthrough files</i> are used by TWiki to work around the limitations
+# of HTTP when redirecting URLs</li>
+# <li><i>Session files</i> are used to record information about active
+# users - for example, whether they are logged in or not.</li>
+# </ul>
+# For obvious reasons, these files must <b>not</b> be browseable from the web!
+# Additionally you are recommended to restrict access rights to this directory
+# so only the web server user can create files.</li>
+# <li>{WorkingDir}<tt>/work_areas</tt> - these are work areas used by
+# extensions that need to store data on the disc </li>
+# <li>{WorkingDir}<tt>/registration_approvals</tt> - this is used by the
+# default TWiki registration process to store registrations that are pending
+# verification.</li>
+# </ul>
+# $TWiki::cfg{WorkingDir} = '/home/httpd/twiki/working';
 
 # **STRING 10**
 # Suffix of TWiki CGI scripts (e.g. .cgi or .pl). You may need to set this
@@ -152,7 +164,7 @@ $TWiki::cfg{Password} = '';
 #
 # See TWiki.TWikiUserAuthentication for a full discussion of the pros and
 # cons of using persistent sessions. Session files are stored in the
-# {TempfileDir}.
+# <tt>{WorkingDir}/tmp</tt> directory.
 $TWiki::cfg{UseClientSessions} = 1;
 
 # **STRING 20 EXPERT**
@@ -211,8 +223,9 @@ $TWiki::cfg{Sessions}{UseIPMatching} = 1;
 # client IP addresses are known to be unique.
 # If this option is enabled, TWiki will <b>not</b> store cookies in the
 # browser.
-# The mapping is held in the file $TWiki::cfg{TempfileDir}/ip2sid. If you turn
-# this option on, you can safely turn {Sessions}{IDsInURLs} <i>off</i>.
+# The mapping is held in the file $TWiki::cfg{WorkingDir}/tmp/ip2sid.
+# If you turn this option on, you can safely turn {Sessions}{IDsInURLs}
+# <i>off</i>.
 $TWiki::cfg{Sessions}{MapIP2SID} = 0;
 
 #---++ Authentication
@@ -298,7 +311,7 @@ $TWiki::cfg{AuthRealm} =
 'Enter your TWiki.LoginName. (Typically First name and last name, no space, no dots, capitalized, e.g. !JohnSmith, unless you chose otherwise). Visit TWiki.TWikiRegistration if you do not have one.';
 
 #---++ User Mapping
-# **SELECTCLASS TWiki::Users::*UserMapping**
+# **SELECTCLASS TWiki::Users::*UserMapping EXPERT**
 # This allows advanced users to write and over-ride the TWiki User and group mappings
 # rather than the loginname->TWikiUser and Groups definitions comming from TWiki 
 # user and group topics. Currently only TWikiUserMapping is implemented.
@@ -772,7 +785,7 @@ $TWiki::cfg{PluralToSingular} = $TRUE;
 
 #---+ Store settings
 
-# **SELECT RcsWrap,RcsLite EXPERT**
+# **SELECT RcsWrap,RcsLite**
 # Default store implementation.
 # <ul><li>RcsWrap uses normal RCS executables.</li>
 # <li>RcsLite uses a 100% Perl simplified implementation of RCS.
@@ -929,14 +942,6 @@ $TWiki::cfg{RCS}{EgrepCmd} = '/bin/egrep %CS{|-i}% %DET{|-l}% -H -- %TOKEN|U% %F
 # Full path to GNU-compatible fgrep program. This is used for searching when
 # {SearchAlgorithm} is 'TWiki::Store::SearchAlgorithms::Forking'.
 $TWiki::cfg{RCS}{FgrepCmd} = '/bin/fgrep %CS{|-i}% %DET{|-l}% -H -- %TOKEN|U% %FILES|F%';
-
-# **PATH**
-# Path to the directory where the RCS store implementation will create
-# plugin work areas. Plugin work areas are directories that are managed
-# by plugins, for example for temporary files. The directory has to be
-# readable and writable by the webserver user. Some plugins may require
-# that the directories are visible on the web.
-$TWiki::cfg{RCS}{WorkAreaDir} = '$TWiki::cfg{PubDir}/_work_areas';
 
 # **BOOLEAN**
 # Set to enable hierarchical webs. Without this setting, TWiki will only
@@ -1156,11 +1161,6 @@ $TWiki::cfg{LeaseLengthLessForceful} = 3600;
 # for example /etc/httpd/mime.types, or use the default shipped in
 # the TWiki data directory.
 $TWiki::cfg{MimeTypesFileName} = '$TWiki::cfg{DataDir}/mime.types';
-
-# **PATH EXPERT**
-# Directory where registration approvals are held. Should be somewhere
-# that is not browsable from the web.
-$TWiki::cfg{RegistrationApprovals} = '$TWiki::cfg{DataDir}/RegistrationApprovals';
 
 # **BOOLEAN EXPERT**
 # If set, this will cause TWiki to treat warnings as errors that will

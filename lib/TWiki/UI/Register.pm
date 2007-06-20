@@ -76,7 +76,6 @@ sub register_cgi {
     # absolute URL context for email generation
     $session->enterContext('absolute_urls');
 
-    my $tempUserDir = $TWiki::cfg{RegistrationApprovals};
     my $needApproval = 0;
 
     # Register -> Verify -> Approve -> Finish
@@ -98,23 +97,23 @@ sub register_cgi {
                                     topic => $session->{topicName},
                                     def => 'registration_disabled' );
       }
-      registerAndNext($session, $tempUserDir);
+      registerAndNext($session);
     }
     elsif ($action eq 'verify') {
-        verifyEmailAddress( $session, $tempUserDir );
+        verifyEmailAddress( $session );
         if ($needApproval) {
             throw Error::Simple('Approval code has not been written!');
         }
-        complete( $session, $tempUserDir);
+        complete( $session);
     }
     elsif ($action eq 'resetPassword') {
         resetPassword( $session );
     }
     elsif ($action eq 'approve') {
-        complete($session, $tempUserDir );
+        complete($session );
     }
     else {
-        registerAndNext($session, $tempUserDir);
+        registerAndNext($session);
     }
 
     $session->leaveContext('absolute_urls');
@@ -325,7 +324,7 @@ sub _makeFormFieldOrderMatch {
 
 =pod
 
----++ StaticMethod registerAndNext($session, $tempUserDir) 
+---++ StaticMethod registerAndNext($session) 
 
 This is called when action = register or action = ""
 
@@ -336,10 +335,10 @@ Hopefully we will get workflow integrated and rewrite this to be table driven
 =cut
 
 sub registerAndNext {
-  my ($session, $tempUserDir) = @_;
+  my ($session) = @_;
   register( $session );
   if ($TWiki::cfg{Register}{NeedVerification}) {
-     _requireVerification($session, $tempUserDir);
+     _requireVerification($session);
   } else {
      complete($session);
   }
@@ -367,12 +366,10 @@ sub register {
     _validateRegistration( $session, $data, 1 );
 }
 
-#   1 generates a activation password
-#   2 calls _putRegDetailsByCode(activation password)
-#   3 sends them a 'registerconfirm' email.
-#   4 redirects browser to 'regconfirm'
+# Generate a registration record, and mail the registrant with the code.
+# Redirects the browser to the confirmation screen.
 sub _requireVerification {
-    my ($session, $tmpDir) = @_;
+    my ($session) = @_;
 
     my $query = $session->{cgiQuery};
     my $topic = $session->{topicName};
@@ -384,7 +381,18 @@ sub _requireVerification {
 
     $data->{VerificationCode} =
       $data->{WikiName}.'.'.TWiki::Users::randomPassword();
-    _putRegDetailsByCode( $data, $tmpDir );
+
+    my $file = _codeFile( $data->{VerificationCode} );
+    open( F, ">$file" ) or throw Error::Simple( 'Failed to open file: '.$! );
+    print F '# Verification code',"\n";
+    # SMELL: wierd jiggery-pokery required, otherwise Data::Dumper screws
+    # up the form fields when it saves. Perl bug? Probably to do with
+    # chucking around arrays, instead of references to them.
+    my $form = $data->{form};
+    $data->{form} = undef;
+    print F Data::Dumper->Dump( [ $data, $form ], [ 'data', 'form' ] );
+    $data->{form} = $form;
+    close( F );
 
     $session->writeLog(
         'regstart', $TWiki::cfg{UsersWebName}.'.'.$data->{WikiName},
@@ -681,10 +689,10 @@ sub changePassword {
 
 =pod
 
----++ StaticMethod verifyEmailAddress($session, $tempUserDir)
+---++ StaticMethod verifyEmailAddress($session)
 
 This is called: on receipt of the activation password -> RegisterCgiScript -> here
-   1 calls _reloadUserContext(activation password)
+   1 calls _loadPendingRegistration(activation password)
    2 throws oops if appropriate
    3 calls emailRegistrationConfirmations
    4 still calls 'oopssendmailerr' if a problem, but this is not done uniformly
@@ -692,13 +700,13 @@ This is called: on receipt of the activation password -> RegisterCgiScript -> he
 =cut
 
 sub verifyEmailAddress {
-    my( $session, $tempUserDir ) = @_;
+    my( $session ) = @_;
 
     my $code = $session->{cgiQuery}->param('code');
     unless( $code ) {
         throw Error::Simple( 'verifyEmailAddress: no verification code!');
     }
-    my $data = _reloadUserContext( $session, $code, $tempUserDir );
+    my $data = _loadPendingRegistration( $session, $code );
 
     if (! exists $data->{Email}) {
         throw Error::Simple( 'verifyEmailAddress: no email address!');
@@ -711,7 +719,7 @@ sub verifyEmailAddress {
 
 # Complete a registration
 sub complete {
-    my( $session, $tempUserDir) = @_;
+    my( $session) = @_;
 
     my $topic = $session->{topicName};
     my $web = $session->{webName};
@@ -720,8 +728,8 @@ sub complete {
 
 	my $data;
 	if ($TWiki::cfg{Register}{NeedVerification}) {
-		$data = _reloadUserContext( $session, $code, $tempUserDir );
-		_deleteUserContext( $code, $tempUserDir );
+		$data = _loadPendingRegistration( $session, $code );
+		_clearPendingRegistrationsForUser( $code );
 	} else {
 	    $data = _getDataFromQuery( $query, $query->param() );
 	    $data->{webName} = $web;
@@ -1099,49 +1107,31 @@ sub _sendEmail {
     return $session->{net}->sendEmail($text);
 }
 
-# | In | reference to the users data structure |
-# | Out | none |
-# dies if fails to store
-sub _putRegDetailsByCode {
-    my ($data, $tmpDir) = @_;
-
-    my $file = _verificationCodeFilename( $data->{VerificationCode}, $tmpDir );
-    unless( -d $tmpDir ) {
-        require File::Path;
-        File::Path::mkpath( $tmpDir ) || throw Error::Simple( $! );
-    }
-    open( F, ">$file" ) or throw Error::Simple( 'Failed to open file: '.$! );
-    print F '# Verification code',"\n";
-    # SMELL: wierd jiggery-pokery required, otherwise Data::Dumper screws
-    # up the form fields when it saves. Perl bug? Probably to do with
-    # chucking around arrays, instead of references to them.
-    my $form = $data->{form};
-    $data->{form} = undef;
-    print F Dumper( $data, $form );
-    $data->{form} = $form;
-    close( F );
-}
-
-sub _verificationCodeFilename {
-    my ( $code, $tmpDir ) = @_;
+sub _codeFile {
+    my ( $code ) = @_;
     ASSERT( $code ) if DEBUG;
-    my $file = $tmpDir . '/'.$code;
-    $file = TWiki::Sandbox::normalizeFileName( $file );
-    return $file;
+    throw Error::Simple("bad code") unless $code =~ /^(\w+)\.(\d+)$/;
+    return "$TWiki::cfg{WorkingDir}/registration_approvals/$1.$2";
 }
 
-#| In | activation code |
-#| Out | reference to user the user's data structure
-#Dies if fails to get
-sub _getRegDetailsByCode {
-    my ( $code, $tmpDir ) = @_;
-    my $file = _verificationCodeFilename( $code, $tmpDir );
-    use vars qw( $VAR1 $VAR2 );
-    do $file;
-    $VAR1->{form} = $VAR2 if $VAR2;
-    throw Error::Simple( 'Bad activation code '.$code ) if $!;
-    return $VAR1;
+sub _codeWikiName {
+    my ( $code ) = @_;
+    ASSERT( $code ) if DEBUG;
+    $code =~ s/\.\d+$//;
+    return $code;
 }
+
+sub _clearPendingRegistrationsForUser {
+    my $code = shift;
+    my $file = _codeFile( $code );
+    # Remove the integer code to leave just the wikiname
+    $file =~ s/\.\d+$//;
+    foreach my $f (<$file.*>) {
+        unlink( TWiki::Sandbox::untaintUnchecked( $f ));
+    }
+}
+
+use vars qw( $data $form );
 
 # Redirects user and dies if cannot load.
 # Dies if loads and does not match.
@@ -1150,64 +1140,53 @@ sub _getRegDetailsByCode {
 # Assumptions: In error handling we assume that the verification code
 #              starts with the wikiname under consideration, and that the
 #              random code does not contain a '.'.
-sub _reloadUserContext {
-    my( $session, $code, $tmpDir ) = @_;
+sub _loadPendingRegistration {
+    my( $session, $code ) = @_;
 
     ASSERT($code) if DEBUG;
 
-    my $verificationFilename = _verificationCodeFilename( $code, $tmpDir );
-    unless( -f $verificationFilename ){
-        my( $wikiName ) = $code =~ /(.*)\./;
+    my $file;
+    try {
+        $file = _codeFile( $code );
+    } catch Error::Simple with {
+        throw TWiki::OopsException(
+            'attention',
+            def => 'bad_ver_code',
+            params => [ $code, 'Invalid code' ],
+           );
+    };
+
+    unless( -f $file ){
+        my $wikiName = _codeWikiName( $code );
         my $users = $session->{users}->findUserByWikiName( $wikiName );
         if( scalar( @{$users} ) &&
               $session->{users}->userExists( $users->[0] )) {
-            throw TWiki::OopsException('attention',
-                                       def => 'duplicate_activation',
-                                       params => [ $wikiName ],
-                                      );
+            throw TWiki::OopsException(
+                'attention',
+                def => 'duplicate_activation',
+                params => [ $wikiName ],
+               );
         }
-        else {
-            throw TWiki::OopsException('attention',
-                                       def => 'bad_ver_code',
-                                       params => [ $code, '.' ],
-                                      );
-        }
+        throw TWiki::OopsException(
+            'attention',
+            def => 'bad_ver_code',
+            params => [ $code, 'Code is not recognised' ],
+           );
     }
 
-    my $data = _getRegDetailsByCode( $code, $tmpDir );
-    my $error = _validateUserContext( $code, $tmpDir );
-
-    if( $error ) {
-        throw TWiki::OopsException( 'attention',
-                                    def => 'bad_ver_code',
-                                    params => [ $code, $error ] );
-    }
+    do $file;
+    $data->{form} = $form if $form;
+    throw TWiki::OopsException(
+        'attention',
+        def => 'bad_ver_code',
+        params => [ $code, 'Bad activation code' ] ) if $!;
+    throw TWiki::OopsException(
+        'attention',
+        def => 'bad_ver_code',
+        params => [ $code, 'Invalid activation code ' ] )
+      unless $data->{VerificationCode} eq $code;
 
     return $data;
-}
-
-# Returns undef if no problem, else returns what's wrong
-sub _validateUserContext {
-    my ($code, $tmpDir ) = @_;
-    my ($name) = $code =~ /^([^.]+)\./;
-    my %data   = %{ _getRegDetailsByCode( $code, $tmpDir ) };    #SMELL - expensive?
-    return 'Invalid activation code' unless $code eq $data{VerificationCode};
-    return 'Name in activation code does not match'
-      unless $name eq $data{WikiName};
-    return;
-}
-
-#SMELL: 'Context'?
-sub _deleteUserContext {
-    my $code = shift;
-    my $tmpDir = TWiki::Sandbox::untaintUnchecked( shift );
-    $code =~ s/^([^.]+)\.//;
-    my $name = TWiki::Sandbox::untaintUnchecked( $1 );
-
-    foreach (<$tmpDir/$name.*>) {
-        unlink( TWiki::Sandbox::untaintUnchecked( $_ ));
-    }
-    # ^^ In case a user registered twice, etc...
 }
 
 sub _getDataFromQuery {

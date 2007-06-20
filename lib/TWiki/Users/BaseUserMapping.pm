@@ -157,7 +157,7 @@ sub supportsRegistration {
 
 =pod
 
----++ ObjectMethod handlesUser ( $cUID, $login, $wikiname) 
+---++ ObjectMethod handlesUser ( $cUID, $login, $wikiname) -> $boolean
 
 Called by the TWiki::User object to determine which loaded mapping to use for a given user (must be fast)
 in the BaseUserMapping case, we know all the users we deal specialise in.
@@ -166,20 +166,26 @@ in the BaseUserMapping case, we know all the users we deal specialise in.
 
 sub handlesUser {
 	my ($this, $cUID, $login, $wikiname) = @_;
-	
-$cUID = '' unless (defined($cUID));
-$login = '' unless (defined($login));
-$wikiname = '' unless (defined($wikiname));
 
-return 1 if (defined($this->{U2L}{$cUID}));
-return 1 if (defined($this->{L2U}{$login}));
-return 1 if (defined($this->{W2U}{$wikiname}));
+    $cUID = '' unless (defined($cUID));
+    $login = '' unless (defined($login));
+    $wikiname = '' unless (defined($wikiname));
 
-#deal with legacy cUIDs
-return 1 if (defined($this->{L2U}{$cUID}));			#cUID stored is login
-return 1 if (defined($this->{W2U}{$cUID}));			#cUID stored is wikiname
+    if (defined($this->{U2L}{$cUID})) {
+        return 1;
+    } elsif (defined($this->{L2U}{$login})) {
+        return 1;
+    } elsif (defined($this->{W2U}{$wikiname})) {
+        return 1;
+    } elsif (defined($this->{L2U}{$cUID})) {
+        #cUID stored is login
+        return 1;
+    } elsif (defined($this->{W2U}{$cUID})) {
+        #cUID stored is wikiname
+        return 1;
+    }
 
-return 0;
+    return 0;
 }
 
 

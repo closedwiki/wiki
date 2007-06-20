@@ -26,18 +26,16 @@ use base 'TWiki::Configure::UI';
 # Generates the appropriate HTML for getting a value to configure the
 # entry. The actual input field is decided by the type.
 sub open_html {
-    my ($this, $value, $valuer, $experts) = @_;
+    my ($this, $value, $valuer, $expert) = @_;
 
     my $type = $value->getType();
     return '' if $value->{hidden};
 
-    my $trclass = '';
     my $info = '';
-    my $isExpert = 0;
-    if ($value->{opts} =~ /(\b|^)EXPERT(\b|$)/i) {
+    my $isExpert = 0; # true if this is an EXPERT setting
+    if ($value->isExpertsOnly()) {
         $isExpert = 1;
         $info = CGI::h6('EXPERT') . $info;
-        $trclass = 'expertsOnly';
     }
     $info .= $value->{desc};
     my $keys = $value->getKeys();
@@ -53,46 +51,49 @@ sub open_html {
         }
     }
 
-    my $class = $value->{typename};
-    $class .= ' mandatory' if ($value->{mandatory});
-    my $prompter = $type->prompt(
-       $keys, $value->{opts}, $valuer->currentValue($value));
-    $prompter = CGI::span({class=>$class}, $prompter);
-
-	my $hiddenText = $this->hidden( 'TYPEOF:'.$keys, $value->{typename} );
-	my $cssClass = 'docdata info';
-	# Hide row if the hidden input field is the only contents or this
-    # is experts mode
-    if (!$broken
-         && $info eq ''
-           || $isExpert && !$experts) {
-        $cssClass .= ' twikiHidden';
-    }
-    my $td = CGI::td(
-        { colspan => 2, class=>$cssClass },
-        $hiddenText.$info );
-    my $row1;
-
-    if ($value->{hidden}) {
-    	# This seems never to happen
-        $row1 = CGI::Tr({class => 'hiddenRow '.$trclass }, $td)."\n";
-    } else {
-        $row1 = CGI::Tr({ class => $trclass }, $td)."\n";
+	# Hide rows if this is an EXPERT setting in non-experts mode, or
+    # this is a hidden value
+	my $hiddenClass = '';
+    if( !$broken && ($isExpert && !$expert || $value->{hidden})) {
+        $hiddenClass = ' twikiHidden';
     }
 
-    $keys = CGI::span({class=>'mandatory'}, $keys) if $value->{mandatory};
+    # Generate the documentation row
+	my $hiddenInput = $this->hidden( 'TYPEOF:'.$keys, $value->{typename} );
+    my $row1 = $hiddenInput.$info;
 
+    # Generate col1 of the prompter row
     my $row2col1 = $keys;
+    $row2col1 = CGI::span({class=>'mandatory'}, $row2col1)
+      if $value->{mandatory};
     if ($value->needsSaving($valuer)) {
         my $v = $valuer->defaultValue($value) || '';
         $row2col1 .= CGI::span({title => 'default = '.$v,
                                 class => 'twikiAlert'}, '&delta;');
     }
 
-    return $row1.
-      CGI::Tr( { class => $trclass },
-          CGI::td({class=>'firstCol'}, $row2col1)."\n".
-              CGI::td({class=>'secondCol'}, $prompter))."\n";
+    # Generate col2 of the prompter row
+    my $row2col2;
+    if ($broken || !$isExpert || $expert) {
+        # Generate a prompter for the value.
+        my $class = $value->{typename};
+        $class .= ' mandatory' if ($value->{mandatory});
+        $row2col2 = CGI::span(
+            { class=>$class },
+            $type->prompt(
+                $keys, $value->{opts}, $valuer->currentValue($value)));
+    } else {
+        # Non-expert - just pass the value through a hidden
+        $row2col2 = CGI::hidden($keys, $valuer->currentValue($value));
+    }
+
+    return CGI::Tr(
+        { class => $hiddenClass },
+        CGI::td( { colspan => 2, class=>'docdata info' }, $row1))."\n"
+        . CGI::Tr(
+            { class => $hiddenClass },
+            CGI::td({class=>'firstCol'}, $row2col1)."\n"
+                . CGI::td({class=>'secondCol'}, $row2col2))."\n";
 }
 
 sub close_html {

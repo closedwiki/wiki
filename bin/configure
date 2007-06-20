@@ -230,7 +230,6 @@ foreach my $module (
     'File::Copy',
     'File::Temp',
     'TWiki::Configure::Checker',
-    'TWiki::Configure::Checkers::RCS::Checker',
     'TWiki::Configure::CSS',
     'TWiki::Configure::Item',
     'TWiki::Configure::JS',
@@ -606,7 +605,7 @@ HERE
 HERE
 }
         print <<HERE;
-</li>
+     </li>
     </ul>
    </div><!-- remark-->
   </div><!--explanation-->

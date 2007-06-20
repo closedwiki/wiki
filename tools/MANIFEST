@@ -423,11 +423,9 @@ lib/TWiki/Configure/Checkers/MimeTypesFileName.pm 0444
 lib/TWiki/Configure/Checkers/MinPasswordLength.pm 0444
 lib/TWiki/Configure/Checkers/NameFilter.pm 0444
 lib/TWiki/Configure/Checkers/OS.pm 0444
-lib/TWiki/Configure/Checkers/TempfileDir.pm 0444
 lib/TWiki/Configure/Checkers/PubDir.pm 0444
 lib/TWiki/Configure/Checkers/PubUrlPath.pm 0444
 lib/TWiki/Configure/Checkers/RCS/asciiFileSuffixes.pm 0444
-lib/TWiki/Configure/Checkers/RCS/Checker.pm 0444
 lib/TWiki/Configure/Checkers/RCS/EgrepCmd.pm 0444
 lib/TWiki/Configure/Checkers/RCS/ExtOption.pm 0444
 lib/TWiki/Configure/Checkers/RCS/FgrepCmd.pm 0444
@@ -969,3 +967,8 @@ tools/native_search/Makefile.PL 0555
 tools/native_search/test.pl 0555
 tools/native_search/NativeTWikiSearch.xs 0555
 twiki_httpd_conf.txt 0444
+working/tmp/README 0444
+working/registration_approvals/README 0444
+working/.htaccess 0660
+working/README 0444
+working/work_areas/README 0444

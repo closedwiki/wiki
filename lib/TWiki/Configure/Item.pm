@@ -55,6 +55,10 @@ sub addToDesc {
     $this->{desc} .= "$desc\n";
 }
 
+sub isExpertsOnly {
+    return 0;
+}
+
 sub haveSettingFor {
     die "Implementation required";
 }

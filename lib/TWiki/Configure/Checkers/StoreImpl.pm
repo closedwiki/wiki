@@ -28,12 +28,21 @@ sub check {
     my $mess = '';
     if( $TWiki::cfg{StoreImpl} eq 'RcsWrap') {
         # Check that GNU diff is found in PATH; used by rcsdiff
-        $mess .= $this->NOTE(
-            <<EOF,
-Note: The 'diff' program found on the path is used by RcsWrap to compare
-revisions
-EOF
-            $this->checkGnuProgram('diff'));
+        $mess .= $this->checkGnuProgram('diff');
+        # Check all the RCS programs
+        $mess .= $this->checkRCSProgram('initBinaryCmd');
+        $mess .= $this->checkRCSProgram('initTextCmd');
+        $mess .= $this->checkRCSProgram('tmpBinaryCmd');
+        $mess .= $this->checkRCSProgram('ciCmd');
+        $mess .= $this->checkRCSProgram('ciDateCmd');
+        $mess .= $this->checkRCSProgram('coCmd');
+        $mess .= $this->checkRCSProgram('histCmd');
+        $mess .= $this->checkRCSProgram('infoCmd');
+        $mess .= $this->checkRCSProgram('histCmd');
+        $mess .= $this->checkRCSProgram('diffCmd');
+        $mess .= $this->checkRCSProgram('lockCmd');
+        $mess .= $this->checkRCSProgram('unlockCmd');
+        $mess .= $this->checkRCSProgram('delRevCmd');
     }
 
     return $mess;

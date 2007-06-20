@@ -109,7 +109,7 @@ sub run {
         if ($cache && $cache =~ /^([a-f0-9]{32})$/) {
             $cache = $1;
             # Read cached post parameters
-            my $passthruFilename = $TWiki::cfg{TempfileDir} . '/passthru_' . $cache;
+            my $passthruFilename = $TWiki::cfg{WorkingDir} . '/tmp/passthru_' . $cache;
             if (open(F, '<'.$passthruFilename)) {
                 local $/;
                 if (TRACE_PASSTHRU) {

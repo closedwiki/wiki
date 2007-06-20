@@ -899,15 +899,10 @@ sub cacheQuery {
     my $md5 = new Digest::MD5();
     $md5->add($$, time(), rand(time));
     my $uid = $md5->hexdigest();
-    my $passthruFilename = $TWiki::cfg{TempfileDir} . '/passthru_' . $uid;
+    my $passthruFilename = "$TWiki::cfg{WorkingDir}/tmp/passthru_$uid";
 
-    unless ( -d $TWiki::cfg{TempfileDir} ) {
-        unless ( mkdir($TWiki::cfg{TempfileDir}) ) {
-            die "Could not create $TWiki::cfg{TempfileDir} for passthrough files";
-        }
-    }
-
-    open(F, ">$passthruFilename") || die "{TempfileDir} cache not writable $!";
+    open(F, ">$passthruFilename") ||
+      die "Unable to open $TWiki::cfg{WorkingDir}/tmp for write; check the setting of {WorkingDir} in configure, and check file permissions: $!";
     $query->save(\*F);
     close(F);
     return 'twiki_redirect_cache='.$uid;
@@ -1268,6 +1263,11 @@ sub new {
     my( $class, $login, $query, $initialContext ) = @_;
 
     Monitor::MARK("Static compilation complete");
+
+    # Compatibility; not used except maybe in plugins
+    $TWiki::cfg{TempfileDir} = "$TWiki::cfg{WorkingDir}/tmp"
+      unless defined($TWiki::cfg{TempfileDir});
+
     $query ||= new CGI( {} );
     my $this = bless( {}, $class );
 

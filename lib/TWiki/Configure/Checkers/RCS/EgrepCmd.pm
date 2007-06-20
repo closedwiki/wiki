@@ -25,9 +25,7 @@ use base 'TWiki::Configure::Checker';
 sub check {
     my $this = shift;
 
-    return $this->NOTE('Not used for {RCS}{SearchAlgorithm} '.
-                         $TWiki::cfg{RCS}{SearchAlgorithm}) unless
-      $TWiki::cfg{RCS}{SearchAlgorithm} =~ /Forking$/;
+    return '' unless $TWiki::cfg{RCS}{SearchAlgorithm} =~ /Forking$/;
     return $this->checkGnuProgram($TWiki::cfg{RCS}{EgrepCmd});
 }
 

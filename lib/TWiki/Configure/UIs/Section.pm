@@ -31,25 +31,29 @@ use base 'TWiki::Configure::UI';
 # depth == 2 are twisty sections
 # depth > 2 are subsections
 sub open_html {
-    my ($this, $section, $valuer) = @_;
+    my ($this, $section, $valuer, $expert) = @_;
 
     my $depth = $section->getDepth();
 
     if ($depth > 2) {
         # A running section has no subtable, just a header row
-        my $fn = 'CGI::h'.$depth;
-        no strict 'refs';
-        my $head = &$fn($section->{headline});
-        use strict 'refs';
-        $head .= $section->{desc} if $section->{desc};
-        return '<tr><td colspan=2>'.$head.'</td></tr>';
+        if (!$expert && $section->isExpertsOnly()) {
+            return '';
+        } else {
+            my $fn = 'CGI::h'.$depth;
+            no strict 'refs';
+            my $head = &$fn($section->{headline});
+            use strict 'refs';
+            $head .= $section->{desc} if $section->{desc};
+            return '<tr><td colspan=2>'.$head.'</td></tr>';
+        }
     }
 
     my $id = $this->_makeAnchor( $section->{headline} );
     my $linkId = 'blockLink'.$id;
     my $linkAnchor = $id.'link';
 
-    my $mess  =  $this->collectMessages($section);
+    my $mess = $this->collectMessages($section);
 
     my $guts = "<!-- $depth $section->{headline} -->";
     if ($depth == 2) {
@@ -74,7 +78,7 @@ sub open_html {
       CGI::start_table(
           { width => '100%', -border => 0, -cellspacing => 0,
             -cellpadding => 0, -cols => 2})."\n";
-    
+
     # Put info text inside table row for visual consistency
 	if ($depth == 2) {
 		$guts .= CGI::Tr(
@@ -87,7 +91,7 @@ sub open_html {
 }
 
 sub close_html {
-    my ($this, $section) = @_;
+    my ($this, $section, $expert) = @_;
     my $depth = $section->getDepth();
     my $end = '';
     if ($depth <= 2) {
