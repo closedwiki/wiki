@@ -1,9 +1,8 @@
 # Plugin for TWiki Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 2006 Michael Daum <micha@nats.informatik.uni-hamburg.de>
+# Copyright (C) 2006-2007 Michael Daum http://wikiring.de
 #
 # Based on the NatSkinPlugin
-# Copyright (C) 2003-2006 Michael Daum <micha@nats.informatik.uni-hamburg.de>
 #
 # Additional copyrights apply to some or all of the code in this
 # file as follows:
@@ -20,16 +19,18 @@
 
 package TWiki::Plugins::IfDefinedPlugin;
 
+use TWiki::Attrs;
 use strict;
 use vars qw( 
   $VERSION $RELEASE $debug 
   $currentAction 
+  $baseWeb $baseTopic
   $currentWeb $currentTopic
   $NO_PREFS_IN_TOPIC $SHORTDESCRIPTION
 );
 
 $VERSION = '$Rev$';
-$RELEASE = 'v0.96';
+$RELEASE = 'v1.00';
 $NO_PREFS_IN_TOPIC = 1;
 $SHORTDESCRIPTION = 'Render content conditionally';
 $debug = 0; # toggle me
@@ -42,7 +43,7 @@ sub writeDebug {
 
 ###############################################################################
 sub initPlugin {
-  ($currentTopic, $currentWeb) = @_;
+  ($baseTopic, $baseWeb) = @_;
 
   $currentAction = undef;
   return 1;
@@ -50,61 +51,70 @@ sub initPlugin {
 
 ###############################################################################
 sub commonTagsHandler {
-  $_[0] =~ s/(\s*)%IFDEFINED{(.*?)}%(\s*)/&renderIfDefined($2, $1, $3)/geos;
-  $_[0] =~ s/(\s*)%IFACCESS{(.*?)}%(\s*)/&renderIfAccess($2, $1, $3)/geos;
-  while ($_[0] =~ s/(\s*)%IFDEFINEDTHEN{(?!.*%IFDEFINEDTHEN)(.*?)}%\s*(.*?)\s*%FIDEFINED%(\s*)/&renderIfDefinedThen($2, $3, $1, $4)/geos) {
+# $_[0]: $text, $_[1]: $topic, $_[2]: $web
+  $currentWeb = $_[2];
+  $currentTopic = $_[1];
+
+  $_[0] =~ s/(\s*)%IFDEFINED{(.*?)}%(\s*)/&handleIfDefined($2, $1, $3)/geos;
+  $_[0] =~ s/(\s*)%IFACCESS%(\s*)/&handleIfAccess(undef, $1, $2)/geos;
+  $_[0] =~ s/(\s*)%IFACCESS{(.*?)}%(\s*)/&handleIfAccess($2, $1, $3)/geos;
+  $_[0] =~ s/(\s*)%IFEXISTS{(.*?)}%(\s*)/&handleIfExists($2, $1, $3)/geos;
+  while ($_[0] =~ s/(\s*)%IFDEFINEDTHEN{(?!.*%IFDEFINEDTHEN)(.*?)}%(.*?)%FIDEFINED%(\s*)/&handleIfDefinedThen($2, $3, $1, $4)/geos) {
     # nop
   }
 }
 
 ###############################################################################
-sub renderIfDefined {
+sub handleIfDefined {
   my ($args, $before, $after) = @_;
 
-  $args = '' unless $args;
+  #writeDebug("called handleIfDefined($args)");
 
-  #writeDebug("called renderIfDefined($args)");
-  
-  my $theVariable = &TWiki::Func::extractNameValuePair($args);
-  my $theAction = &TWiki::Func::extractNameValuePair($args, 'action') || '';
-  my $theThen = &TWiki::Func::extractNameValuePair($args, 'then') || $theVariable;
-  my $theElse = &TWiki::Func::extractNameValuePair($args, 'else') || '';
-  my $theGlue = &TWiki::Func::extractNameValuePair($args, 'glue') || 'on';
-  my $theAs = &TWiki::Func::extractNameValuePair($args, 'as') || '.+';
+  $args ||= '';
+  my $params = new TWiki::Attrs($args);
+  my $theVariable = $params->{_DEFAULT} || '';
+  my $theAction = $params->{action} || '';
+  my $theThen = $params->{then} || $theVariable;
+  my $theElse = $params->{else} || '';
+  my $theGlue = $params->{glue} || 'on';
+  my $theAs = $params->{as} || '.+';
 
   &escapeParameter($theThen);
   &escapeParameter($theElse);
 
-  return &ifDefinedImpl($theVariable, $theAction, $theThen, $theElse, undef, $before, $after, $theGlue, $theAs);
+  return &ifDefinedImpl(
+    $theVariable, $theAction, $theThen, $theElse, undef, $before, $after,
+    $theGlue, $theAs);
 }
 
 ###############################################################################
-sub renderIfDefinedThen {
+sub handleIfDefinedThen {
   my ($args, $text, $before, $after) = @_;
 
-  $args = '' unless $args;
+  #writeDebug("called handleIfDefinedThen($args)");
 
-  #writeDebug("called renderIfDefinedThen($args)");
+  $args ||= '';
+  my $params = new TWiki::Attrs($args);
+  my $theVariable = $params->{_DEFAULT} || '';
+  my $theAction = $params->{action} || '';
+  my $theGlue = $params->{glue} || 'on'; 
+  my $theAs = $params->{as} || '.+'; 
 
   my $theThen = $text; 
   my $theElse = '';
   my $elsIfArgs = '';
-
-  if ($text =~ /^(.*?)\s*%ELSIFDEFINED{(.*?)}%\s*(.*)\s*$/gos) {
+  if ($text =~ /^(.*?)\s*%ELSIFDEFINED{(.*?)}%(.*)$/gos) {
     $theThen = $1;
     $elsIfArgs = $2;
     $theElse = $3;
-  } elsif ($text =~ /^(.*?)\s*%ELSEDEFINED%\s*(.*)\s*$/gos) {
+  } elsif ($text =~ /^(.*?)\s*%ELSEDEFINED%(.*)$/gos) {
     $theThen = $1;
     $theElse = $2;
   }
 
-  my $theVariable = &TWiki::Func::extractNameValuePair($args);
-  my $theAction = &TWiki::Func::extractNameValuePair($args, 'action') || '';
-  my $theGlue = &TWiki::Func::extractNameValuePair($args, 'glue') || 'on';
-  my $theAs = &TWiki::Func::extractNameValuePair($args, 'as') || '.+';
-
-  return &ifDefinedImpl($theVariable, $theAction, $theThen, $theElse, $elsIfArgs, $before, $after, $theGlue, $theAs);
+  return &ifDefinedImpl(
+    $theVariable, $theAction, $theThen, $theElse, $elsIfArgs, $before, $after,
+    $theGlue, $theAs);
 }
 
 
@@ -160,29 +170,55 @@ sub ifDefinedImpl {
 }
 
 ###############################################################################
-sub renderIfAccess {
+sub handleIfExists {
   my ($args, $before, $after) = @_;
 
-  $args = '' unless $args;
+  $args ||= '';
+  my $params = new TWiki::Attrs($args);
+  my $theGlue = $params->{glue} || 'on';
+  my $theWebTopic = $params->{_DEFAULT} || $params->{topic} || "$currentWeb.$currentTopic";
+  my $theThen = $params->{then} || '1';
+  my $theElse = $params->{else} || '0';
 
-  #writeDebug("called renderIfAccess($args)");
-  
-  my $theWebTopic = &TWiki::Func::extractNameValuePair($args) || $currentTopic;
-  my $theType = &TWiki::Func::extractNameValuePair($args, 'type') || 'view';
-  my $theUser = &TWiki::Func::extractNameValuePair($args, 'user') || TWiki::Func::getWikiName();
-  my $theThen = &TWiki::Func::extractNameValuePair($args, 'then') || '1';
-  my $theElse = &TWiki::Func::extractNameValuePair($args, 'else') || '0';
-  my $theGlue = &TWiki::Func::extractNameValuePair($args, 'glue') || 'on';
+  my ($thisWeb, $thisTopic) = TWiki::Func::normalizeWebTopicName($currentWeb, $theWebTopic);
+  my $doesExist = TWiki::Func::topicExists($thisWeb, $thisTopic);
+  my $result = ($doesExist)?$theThen:$theElse;
+
+  $result = TWiki::Func::expandCommonVariables($result, $currentTopic, $currentWeb)
+    if &escapeParameter($result, web=>$thisWeb, topic=>$thisTopic);
+
+  $before = '' if ($theGlue eq 'on') || !$before;
+  $after = '' if ($theGlue eq 'on') || !$after;
+
+  return $before.$result.$after;
+}
+
+###############################################################################
+sub handleIfAccess {
+  my ($args, $before, $after) = @_;
+
+  #writeDebug("called handleIfAccess($args)");
+  $args ||= '';
+  my $params = new TWiki::Attrs($args);
+  my $theWebTopic = $params->{_DEFAULT} || $params->{topic} || $currentTopic;
+  my $theType = $params->{type} || 'view';
+  my $theUser = $params->{user} || TWiki::Func::getWikiName();
+  my $theThen = $params->{then} || '1';
+  my $theElse = $params->{else} || '0';
+  my $theGlue = $params->{glue} || 'on';
+
+  $theType = 'change' if $theType =~ /^edit$/i;
 
   my ($thisWeb, $thisTopic) = TWiki::Func::normalizeWebTopicName($currentWeb, $theWebTopic);
   my $hasAccess = TWiki::Func::checkAccessPermission($theType, $theUser, undef, $thisTopic, $thisWeb);
+
   #writeDebug("hasAccess=$hasAccess");
   #writeDebug("theUser=$theUser hasAccess=$hasAccess thisWeb=$thisWeb thisTopic=$thisTopic");
 
   my $result = ($hasAccess)?$theThen:$theElse;
 
   $result = TWiki::Func::expandCommonVariables($result, $currentTopic, $currentWeb)
-    if &escapeParameter($result);
+    if &escapeParameter($result, web=>$thisWeb, topic=>$thisTopic);
 
   #writeDebug("result=$result");
 
@@ -194,15 +230,22 @@ sub renderIfAccess {
 
 ###############################################################################
 sub escapeParameter {
+  my (undef, %params) = @_;
   return 0 unless $_[0];
 
   my $found = 0;
+  foreach my $key (keys %params) {
+    if ($_[0] =~ s/\$$key\b/$params{$key}/g) {
+      $found = 1;
+      print STDERR "found key=$key, value=$params{$key}\n";
+    }
+  }
 
+  $found = 1 if $_[0] =~ s/\$percnt/%/g;
+  $found = 1 if $_[0] =~ s/\$nop//g;
   $found = 1 if $_[0] =~ s/\\n/\n/g;
   $found = 1 if $_[0] =~ s/\$n/\n/g;
   $found = 1 if $_[0] =~ s/\\%/%/g;
-  $found = 1 if $_[0] =~ s/\$nop//g;
-  $found = 1 if $_[0] =~ s/\$percnt/%/g;
   $found = 1 if $_[0] =~ s/\$dollar/\$/g;
 
   return $found;

@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1023947640" format="1.0" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1023947640" format="1.0" version="$Rev$"}%
 <!--
 
    PLEASE DO NOT EDIT THIS TOPIC
@@ -125,6 +125,22 @@ The other parameters are:
    * =else="&lt;else-clause>"=: the string to be returned if no access is granted, defaults to "0"
    * =glue="on|off"=: apply glue around the IFACCESS tag or not, defaults to "on"
 
+---+++ IFEXISTS
+*Syntax*:
+<verbatim>
+%IFEXISTS{"<webtopic>"
+  [then="<then-clause>"] 
+  [else="<else-clause>"] 
+  [glue="on|off"]}%
+</verbatim>
+
+This tag checks if =webtopic= exists and expands =then-clause= or =else-clause= as needed.
+A similar functionality is available using 
+=%<nop>CALC{"$IF($EXIST(&lt;webtopic>,&lt;then-clause>),&lt;else-clause>)"}%=
+of the SpreadSheetPlugin.
+This is still preferable if you need more computation based on CALC in the 
+then/else branches. The IFEXISTS version however is more lightweigted, comes with a much simpler syntax 
+and allows more complex <nop>TWikiMarkup in the then/else branches.
 
 ---++ Demo
    * Set FOO = foo
@@ -149,10 +165,12 @@ The other parameters are:
    * Set SHORTDESCRIPTION = Render content conditionally
 -->
 |  Plugin Author: | TWiki:Main.MichaelDaum |
-|  Copyright &copy;: | 2006, MichaelDaum@WikiRing.com |
+|  Copyright &copy;: | 2006-2007, Michael Daum http://wikiring.de |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | v0.96 |
+|  Plugin Version: | v1.00 |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
+|  20 Jun 2007: | added IFEXISTS ;\
+                  make use of TWiki-4 APIs for speed improvements |
 |  18 Dec 2006: | removed support for cairo and beijing; added IFACCESS tag: checks access of some user on a topic |
 |  18 Sep 2006: | allow multinline values to be checked |
 |  31 Aug 2006: | added NO_PREFS_IN_TOPIC |
@@ -170,4 +188,4 @@ The other parameters are:
 |  Feedback: | TWiki:Plugins/%TOPIC%Dev |
 
 
--- TWiki:Main.MichaelDaum - 18 Dec 2006
+-- TWiki:Main.MichaelDaum - 20 Jun 2007
