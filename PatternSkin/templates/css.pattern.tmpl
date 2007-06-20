@@ -1,4 +1,5 @@
-%TMPL:DEF{"twikistyle"}%%TMPL:P{"stylesscreen"}%
+%TMPL:INCLUDE{"css"}%
+%TMPL:DEF{"defaultstyle"}%%TMPL:P{"stylesscreen"}%
 %TMPL:P{"stylesprint"}%%TMPL:END%
 
 
@@ -15,24 +16,11 @@
 %IF{ "$ TWIKISTYLEURL"  then="@import url('%TWIKISTYLEURL%');"}%
 %IF{ "$ TWIKICOLORSURL" then="@import url('%TWIKICOLORSURL%');"}%
 </style>
-<!--[if IE]><style type="text/css" media="screen">
-pre {
-	overflow-x:auto;
-	padding-bottom:expression(this.scrollWidth > this.offsetWidth ? 16 : 0);
-}
-</style>
-<![endif]-->
-<!--[if lte IE 6]> 
-<style type="text/css">
-#patternLeftBar {
-	position:relative; /* IE 5.5 needs this or the contents won't show outside the parent container on print. IE 6.0 needs it only during printable copy! */
-}
-</style><![endif]-->
 %TMPL:P{"stylesdynamic"}%<style type="text/css" media="all">
 %IF{ "$ USERLAYOUTURL" then="@import url('%USERLAYOUTURL%');"}%
 %IF{ "$ USERSTYLEURL"  then="@import url('%USERSTYLEURL%');"}%
 %IF{ "$ USERCOLORSURL" then="@import url('%USERCOLORSURL%');"}%
-</style>%TMPL:P{"templatestyle"}%%TMPL:END%
+</style>%TMPL:END%
 
 
 %TMPL:DEF{"stylesprint"}%<style type="text/css" media="all">
