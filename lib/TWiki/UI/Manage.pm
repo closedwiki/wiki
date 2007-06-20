@@ -322,7 +322,7 @@ sub rename {
                 params => [
                     $newWeb, $newTopic,
                     $attachment,
-                    $session->{i18n}->maketext('Attachment does not exist')
+                    $session->i18n->maketext('Attachment does not exist')
                    ] );
         }
 
@@ -340,7 +340,7 @@ sub rename {
                     params => [
                         $newWeb, $newTopic,
                         $attachment,
-                        $session->{i18n}->maketext(
+                        $session->i18n->maketext(
                             'Attachment already exists in new topic')
                        ] );
             }
@@ -467,7 +467,6 @@ sub _renameweb {
     my $confirm = $query->param( 'confirm' ) || '';
     my $doAllowNonWikiWord = $query->param( 'nonwikiword' ) || '';
     my $store = $session->{store};
-    my $security = $session->{security};
 
     TWiki::UI::checkWebExists(
         $session, $oldWeb, $TWiki::cfg{WebPrefsTopicName}, 'rename' );
@@ -544,12 +543,12 @@ sub _renameweb {
                        $webTopicInfo{modify}{$ref}{leaseuser} ne $user);
                 $webTopicInfo{modify}{$ref}{summary} = $refs{$ref};
                 $webTopicInfo{modify}{$ref}{access} =
-                  $security->checkAccessPermission('CHANGE', $user,
+                  $session->security->checkAccessPermission('CHANGE', $user,
                                                    undef, undef, $webTopic,
                                                    $webIter);
                 if(!$webTopicInfo{modify}{$ref}{access}) {
                     $webTopicInfo{modify}{$ref}{accessReason} =
-                      $security->getReason();
+                      $session->security->getReason();
                 }
                 $totalReferralAccess = 0 unless
                   $webTopicInfo{modify}{$ref}{access};
@@ -583,11 +582,11 @@ sub _renameweb {
                   if(defined($webTopicInfo{move}{$wit}{leaseuser}) &&
                        $webTopicInfo{move}{$wit}{leaseuser} ne $user);
                 $webTopicInfo{move}{$wit}{access} =
-                  $security->checkAccessPermission('RENAME', $user,
+                  $session->security->checkAccessPermission('RENAME', $user,
                                                    undef, undef, $webTopic,
                                                    $webIter);
                 $webTopicInfo{move}{$wit}{accessReason} =
-                  $security->getReason();
+                  $session->security->getReason();
                 $totalWebAccess = ($totalWebAccess &
                                      $webTopicInfo{move}{$wit}{access});
             }
@@ -627,13 +626,13 @@ sub _renameweb {
                       @{$webTopicInfo{movelocked}} ) {
                     $nocontinue = 'style="display:none;"';
                 }
-                my $mvd = join(' ', @{$webTopicInfo{movedenied}} ) || ($session->{i18n}->maketext('(none)'));
+                my $mvd = join(' ', @{$webTopicInfo{movedenied}} ) || ($session->i18n->maketext('(none)'));
                 $mvd = substr($mvd, 0, 300).'... (more)'
                   if( length($mvd) > 300);
-                my $mvl = join(' ', @{$webTopicInfo{movelocked}} ) || ($session->{i18n}->maketext('(none)'));
+                my $mvl = join(' ', @{$webTopicInfo{movelocked}} ) || ($session->i18n->maketext('(none)'));
                 $mvl = substr($mvl, 0, 300).'... (more)'
                   if( length($mvl) > 300);
-                my $mdd = join(' ', @{$webTopicInfo{modifydenied}} ) || ($session->{i18n}->maketext('(none)'));
+                my $mdd = join(' ', @{$webTopicInfo{modifydenied}} ) || ($session->i18n->maketext('(none)'));
                 $mdd = substr($mdd, 0, 300).'... (more)'
                   if( length($mdd) > 300);
                 my $mdl = join(' ', @{$webTopicInfo{modifylocked}} ) || ($session->{i18n}->maketext('(none)'));
@@ -777,8 +776,7 @@ sub move {
         # If the web changed, replace local refs to the topics
         # in $oldWeb with full $oldWeb.topic references so that
         # they still work.
-        my $renderer = $session->{renderer};
-        $renderer->replaceWebInternalReferences(
+        $session->renderer->replaceWebInternalReferences(
             \$text, $meta,
             $oldWeb, $oldTopic, $newWeb, $newTopic );
     }
@@ -792,7 +790,7 @@ sub move {
        inWeb => $newWeb,
        fullPaths => 0,
       };
-    $text = $session->{renderer}->forEachLine(
+    $text = $session->renderer->forEachLine(
         $text, \&TWiki::Render::replaceTopicReferences, $options );
 
     $meta->put( 'TOPICMOVED',
@@ -828,16 +826,16 @@ sub _newTopicScreen {
     $nonWikiWordFlag = 'checked="checked"' if( $doAllowNonWikiWord );
 
     if( $attachment ) {
-        $tmpl = $session->{templates}->readTemplate(
+        $tmpl = $session->templates->readTemplate(
             $tmplname || 'moveattachment', $skin );
         $tmpl =~ s/%FILENAME%/$attachment/go;
     } elsif( $confirm ) {
-        $tmpl = $session->{templates}->readTemplate( 'renameconfirm', $skin );
+        $tmpl = $session->templates->readTemplate( 'renameconfirm', $skin );
     } elsif( $newWeb eq $TWiki::cfg{TrashWebName} &&
                $oldWeb ne $TWiki::cfg{TrashWebName}) {
-        $tmpl = $session->{templates}->readTemplate( 'renamedelete', $skin );
+        $tmpl = $session->templates->readTemplate( 'renamedelete', $skin );
     } else {
-        $tmpl = $session->{templates}->readTemplate( 'rename', $skin );
+        $tmpl = $session->templates->readTemplate( 'rename', $skin );
     }
 
     if( !$attachment && $newWeb eq $TWiki::cfg{TrashWebName} ) {
@@ -859,7 +857,7 @@ sub _newTopicScreen {
         my $refs;
         my $search = '';
         if( $currentWebOnly ) {
-            $search = $session->{i18n}->maketext('(skipped)');
+            $search = $session->i18n->maketext('(skipped)');
         } else {
             $refs = getReferringTopics( $session, $oldWeb, $oldTopic, 1 );
             foreach my $entry ( sort keys %$refs ) {
@@ -877,7 +875,7 @@ sub _newTopicScreen {
                                   $refs->{$entry} ));
             }
             unless( $search ) {
-                $search = ($session->{i18n}->maketext('(none)'));
+                $search = ($session->i18n->maketext('(none)'));
             } else {
                 $search = CGI::start_table().$search.CGI::end_table();
             }
@@ -902,7 +900,7 @@ sub _newTopicScreen {
                               $refs->{$entry} ));
         }
         unless( $search ) {
-            $search = ($session->{i18n}->maketext('(none)'));
+            $search = ($session->i18n->maketext('(none)'));
         } else {
             $search = CGI::start_table().$search.CGI::end_table();
         }
@@ -910,7 +908,7 @@ sub _newTopicScreen {
     }
 
     $tmpl = $session->handleCommonTags( $tmpl, $oldWeb, $oldTopic );
-    $tmpl = $session->{renderer}->getRenderedVersion( $tmpl, $oldWeb, $oldTopic );
+    $tmpl = $session->renderer->getRenderedVersion( $tmpl, $oldWeb, $oldTopic );
     $session->writeCompletePage( $tmpl );
 }
 
@@ -980,7 +978,7 @@ sub _newWebScreen {
     my $newParent = join( '/', @newParentPath );
     my $accessCheckWeb = $newParent;
     my $accessCheckTopic = $TWiki::cfg{WebPrefsTopicName};
-    my $templates = $session->{templates};
+    my $templates = $session->templates;
 
     if( $confirm eq 'getlock' ) {
         $tmpl = $templates->readTemplate( 'renamewebconfirm' );
@@ -1012,13 +1010,13 @@ sub _newWebScreen {
     my( $movelocked, $refdenied, $reflocked ) = ( '', '', '' );
     $movelocked = join(', ', @{$webTopicInfoRef->{movelocked}} )
       if $webTopicInfoRef->{movelocked};
-    $movelocked = ($session->{i18n}->maketext('(none)')) unless $movelocked;
+    $movelocked = ($session->i18n->maketext('(none)')) unless $movelocked;
     $refdenied = join(', ', @{$webTopicInfoRef->{modifydenied}} )
       if $webTopicInfoRef->{modifydenied};
-    $refdenied = ($session->{i18n}->maketext('(none)')) unless $refdenied;
+    $refdenied = ($session->i18n->maketext('(none)')) unless $refdenied;
     $reflocked = join(', ', @{$webTopicInfoRef->{modifylocked}} )
       if $webTopicInfoRef->{modifylocked};
-    $reflocked = ($session->{i18n}->maketext('(none)')) unless $reflocked;
+    $reflocked = ($session->i18n->maketext('(none)')) unless $reflocked;
 
     $tmpl =~ s/%MOVE_LOCKED%/$movelocked/;
     $tmpl =~ s/%REF_DENIED%/$refdenied/;
@@ -1049,7 +1047,7 @@ sub _newWebScreen {
                          );
     }
     unless( $search ) {
-        $search = ($session->{i18n}->maketext('(none)'));
+        $search = ($session->i18n->maketext('(none)'));
     } else {
         $search = CGI::start_table().$search.CGI::end_table();
     }
@@ -1072,7 +1070,7 @@ sub _newWebScreen {
                             $refs->{$entry} ));
     }
     unless( $search ) {
-        $search = ($session->{i18n}->maketext('(none)'));
+        $search = ($session->i18n->maketext('(none)'));
     } else {
         $search = CGI::start_table().$search.CGI::end_table();
     }
@@ -1080,7 +1078,7 @@ sub _newWebScreen {
 
     $tmpl = $session->handleCommonTags(
         $tmpl, $oldWeb, $TWiki::cfg{HomeTopicName} );
-    $tmpl = $session->{renderer}->getRenderedVersion(
+    $tmpl = $session->renderer->getRenderedVersion(
         $tmpl, $oldWeb, $TWiki::cfg{HomeTopicName} );
     $session->writeCompletePage( $tmpl );
 }
@@ -1113,7 +1111,7 @@ Returns a hash that maps the web.topic name to a summary of the lines that match
 sub getReferringTopics {
     my( $session, $web, $topic, $allWebs ) = @_;
     my $store = $session->{store};
-    my $renderer = $session->{renderer};
+    my $renderer = $session->renderer;
     $web =~ s#\.#/#go;
     my @webs = ( $web );
 
@@ -1159,7 +1157,7 @@ sub getReferringTopics {
 sub _updateReferringTopics {
     my ( $session, $oldWeb, $oldTopic, $newWeb, $newTopic, $refs ) = @_;
     my $store = $session->{store};
-    my $renderer = $session->{renderer};
+    my $renderer = $session->renderer;
     my $user = $session->{user};
     my $options =
       {
@@ -1203,7 +1201,7 @@ sub _updateReferringTopics {
 sub _updateWebReferringTopics {
     my ( $session, $oldWeb, $newWeb, $refs ) = @_;
     my $store = $session->{store};
-    my $renderer = $session->{renderer};
+    my $renderer = $session->renderer;
     my $user = $session->{user};
     my $options =
       {
@@ -1261,9 +1259,9 @@ sub _editSettings {
     }
 
     my $skin = $session->getSkin();
-    my $tmpl = $session->{templates}->readTemplate( 'settings', $skin );
+    my $tmpl = $session->templates->readTemplate( 'settings', $skin );
     $tmpl = $session->handleCommonTags( $tmpl, $web, $topic, $meta );
-    $tmpl = $session->{renderer}->getRenderedVersion( $tmpl, $web, $topic );
+    $tmpl = $session->renderer->getRenderedVersion( $tmpl, $web, $topic );
 
     $tmpl =~ s/%TEXT%/$settings/o;
     $tmpl =~ s/%ORIGINALREV%/$orgRev/g;
@@ -1348,15 +1346,15 @@ sub _restoreRevision {
 	# read the current topic
 	my ( $meta, $text ) =
 		  $session->{store}->readTopic( undef, $web, $topic, undef ); 
-	my $security = $session->{security};
 	my $user = $session->{user};
-	if ( !$security->checkAccessPermission( 'change', $user, $text, $meta, $topic, $web ) ) {
+	if ( !$session->security->checkAccessPermission(
+        'change', $user, $text, $meta, $topic, $web ) ) {
 		# user has no permission to change the topic
 		throw TWiki::OopsException( 'accessdenied',
-								def => 'topic_access',
-								web => $web,
-								topic => $topic,
-								params => [ 'change', 'denied' ]);
+                                    def => 'topic_access',
+                                    web => $web,
+                                    topic => $topic,
+                                    params => [ 'change', 'denied' ]);
 	}
 	$session->{cgiQuery}->delete('action');
 	TWiki::UI::Edit::edit( $session );

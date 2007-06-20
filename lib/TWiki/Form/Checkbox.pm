@@ -31,12 +31,12 @@ sub renderForEdit {
         $extra = CGI::br();
         $extra .= CGI::button
           ( -class => 'twikiCheckBox twikiEditFormCheckboxButton',
-            -value => $session->{i18n}->maketext('Set all'),
+            -value => $session->i18n->maketext('Set all'),
             -onClick => 'checkAll(this,2,'.$boxes.',true)' );
         $extra .= '&nbsp;';
         $extra .= CGI::button
           ( -class => 'twikiCheckBox twikiEditFormCheckboxButton',
-            -value => $session->{i18n}->maketext('Clear all'),
+            -value => $session->i18n->maketext('Clear all'),
             -onClick => 'checkAll(this,1,'.$boxes.',false)');
     }
     $value = '' unless defined( $value ) && length( $value );

@@ -579,7 +579,7 @@ the form definition.
 sub renderFormForDisplay {
     my $this = shift;
 
-    my $templates = $this->{_session}->{templates};
+    my $templates = $this->{_session}->templates;
     my $form = $this->get( 'FORM' );
 
     return '' unless( $form );

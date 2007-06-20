@@ -38,29 +38,23 @@ Global variables are avoided wherever possible to avoid problems
 with CGI accelerators such as mod_perl.
 
 ---++ Public Data members
-   * =attach=           TWiki::Attach singleton
    * =cgiQuery=         Pointer to the CGI::
    * =context=          Hash of context ids
-   * =i18n=             TWiki::I18N singleton
    * moved: =loginManager=     TWiki::LoginManager singleton (moved to TWiki::Users)
-   * =net=              TWiki::Net singleton
    * =plugins=          TWiki::Plugins singleton
    * =prefs=            TWiki::Prefs singleton
    * =remoteUser=       Login ID when using ApacheLogin. Maintained for
                         compatibility only, do not use.
-   * =renderer=         TWiki::Render singleton
    * =requestedWebName= Name of web found in URL path or =web= URL parameter
    * =sandbox=          TWiki::Sandbox singleton
    * =scriptUrlPath=    URL path to the current script. May be dynamically
                         extracted from the URL path if {GetScriptUrlFromCgi}.
                         Only required to support {GetScriptUrlFromCgi} and
                         not consistently used. Avoid.
-   * =search=           TWiki::Search singleton
    * =security=         TWiki::Access singleton
    * =SESSION_TAGS=     Hash of TWiki variables whose value is specific to
                         the current CGI request.
    * =store=            TWiki::Store singleton
-   * =templates=        TWiki::Templates singleton
    * =topicName=        Name of topic found in URL path or =topic= URL
                         parameter
    * =urlHost=          Host part of the URL (including the protocol)
@@ -170,9 +164,9 @@ sub getTWikiLibDir {
 }
 
 BEGIN {
-    use Monitor;
-    use TWiki::Sandbox;   # system command sandbox
-    use TWiki::Configure::Load;    # read configuration files
+    require Monitor;
+    require TWiki::Sandbox;            # system command sandbox
+    require TWiki::Configure::Load;    # read configuration files
 
     $TRUE = 1;
     $FALSE = 0;
@@ -492,22 +486,6 @@ BEGIN {
     Monitor::MARK('Static configuration loaded');
 };
 
-use TWiki::Access;    # access control
-use TWiki::Meta;      # meta-data handling
-use TWiki::Attach;    # file attachments
-use TWiki::Attrs;     # tag attribute handling
-use TWiki::Form;      # forms
-use TWiki::Net;       # SMTP, get URL
-use TWiki::Plugins;   # plugins handler
-use TWiki::Prefs;     # preferences
-use TWiki::Render;    # HTML generation
-use TWiki::Search;    # search engine
-use TWiki::Store;     # file I/O and rcs related functions
-use TWiki::Templates; # TWiki template language
-use TWiki::Time;      # date/time conversions
-use TWiki::Users;     # user handler
-use TWiki::I18N;      # i18n handler
-
 =pod
 
 ---++ ObjectMethod UTF82SiteCharSet( $utf8 ) -> $ascii
@@ -676,6 +654,8 @@ sub writePageHeader {
 
     if ($pageType && $pageType eq 'edit') {
         # Get time now in HTTP header format
+        require TWiki::Time;
+        ASSERT(!$@, $@) if DEBUG;
         my $lastModifiedString =
           TWiki::Time::formatTime(time, '$http', 'gmtime');
 
@@ -987,14 +967,14 @@ sub readOnlyMirrorWeb {
         if( $mirrorSiteName && $mirrorSiteName ne $TWiki::cfg{SiteWebTopicName} ) {
             my $mirrorViewURL  =
               $this->{prefs}->getWebPreferencesValue( 'MIRRORVIEWURL', $theWeb );
-            my $mirrorLink = $this->{templates}->readTemplate( 'mirrorlink' );
+            my $mirrorLink = $this->templates->readTemplate( 'mirrorlink' );
             $mirrorLink =~ s/%MIRRORSITENAME%/$mirrorSiteName/g;
             $mirrorLink =~ s/%MIRRORVIEWURL%/$mirrorViewURL/g;
             $mirrorLink =~ s/\s*$//g;
-            my $mirrorNote = $this->{templates}->readTemplate( 'mirrornote' );
+            my $mirrorNote = $this->templates->readTemplate( 'mirrornote' );
             $mirrorNote =~ s/%MIRRORSITENAME%/$mirrorSiteName/g;
             $mirrorNote =~ s/%MIRRORVIEWURL%/$mirrorViewURL/g;
-            $mirrorNote = $this->{renderer}->getRenderedVersion
+            $mirrorNote = $this->renderer->getRenderedVersion
               ( $mirrorNote, $theWeb, $TWiki::cfg{HomeTopic} );
             $mirrorNote =~ s/\s*$//g;
             @mirrorInfo = ( $mirrorSiteName, $mirrorViewURL, $mirrorLink, $mirrorNote );
@@ -1276,16 +1256,18 @@ sub new {
 
     # create the various sub-objects
     $this->{sandbox} = $sharedSandbox;
+    require TWiki::Plugins;
+    ASSERT(!$@, $@) if DEBUG;
     $this->{plugins} = new TWiki::Plugins( $this );
-    $this->{net} = new TWiki::Net( $this );
+    require TWiki::Store;
+    ASSERT(!$@, $@) if DEBUG;
     $this->{store} = new TWiki::Store( $this );
-    $this->{search} = new TWiki::Search( $this );
-    $this->{templates} = new TWiki::Templates( $this );
-    $this->{attach} = new TWiki::Attach( $this );
     # cache CGI information in the session object
     $this->{cgiQuery} = $query;
 
     $this->{remoteUser} = $login;	#use login as a default (set when running from cmd line)
+    require TWiki::Users;
+    ASSERT(!$@, $@) if DEBUG;
     $this->{users} = new TWiki::Users( $this );
 	$this->{remoteUser} = $this->{users}->{remoteUser};
 
@@ -1296,8 +1278,6 @@ sub new {
         $ENV{PATH} = $TWiki::cfg{SafeEnvPath};
     }
     delete @ENV{ qw( IFS CDPATH ENV BASH_ENV ) };
-
-    $this->{security} = new TWiki::Access( $this );
 
     my $web = '';
     my $topic = $query->param( 'topic' );
@@ -1401,6 +1381,8 @@ sub new {
         $this->{urlHost} = $TWiki::cfg{DefaultUrlHost};
     }
 
+    require TWiki::Prefs;
+    ASSERT(!$@, $@) if DEBUG;
     my $prefs = new TWiki::Prefs( $this );
     $this->{prefs} = $prefs;
 
@@ -1444,21 +1426,150 @@ sub new {
     $prefs->pushPreferenceValues( 'SESSION',
                                   $this->{users}->{loginManager}->getSessionValues() );
 
-    # requires preferences (such as LINKTOOLTIPINFO)
-    $this->{renderer} = new TWiki::Render( $this );
-
     # Finish plugin initialization - register handlers
     $this->{plugins}->enable();
-
-    # language information; must be loaded after
-    # *all possible preferences sources* are available
-    $this->{i18n} = TWiki::I18N::get( $this );
 
     $TWiki::Plugins::SESSION = $this;
 
     Monitor::MARK("TWiki session created");
 
     return $this;
+}
+
+=begin twiki
+
+---++ ObjectMethod renderer()
+Get a reference to the renderer object. Done lazily because not everyone
+needs the renderer.
+
+=cut
+
+sub renderer {
+    my( $this ) = @_;
+
+    unless( $this->{renderer} ) {
+        require TWiki::Render;
+        ASSERT(!$@, $@) if DEBUG;
+        # requires preferences (such as LINKTOOLTIPINFO)
+        $this->{renderer} = new TWiki::Render( $this );
+    }
+    return $this->{renderer};
+}
+
+=begin twiki
+
+---++ ObjectMethod attach()
+Get a reference to the attach object. Done lazily because not everyone
+needs the attach.
+
+=cut
+
+sub attach {
+    my( $this ) = @_;
+
+    unless( $this->{attach} ) {
+        require TWiki::Attach;
+        ASSERT(!$@, $@) if DEBUG;
+        $this->{attach} = new TWiki::Attach( $this );
+    }
+    return $this->{attach};
+}
+
+=begin twiki
+
+---++ ObjectMethod templates()
+Get a reference to the templates object. Done lazily because not everyone
+needs the templates.
+
+=cut
+
+sub templates {
+    my( $this ) = @_;
+
+    unless( $this->{templates} ) {
+        require TWiki::Templates;
+        ASSERT(!$@, $@) if DEBUG;
+        $this->{templates} = new TWiki::Templates( $this );
+    }
+    return $this->{templates};
+}
+
+=begin twiki
+
+---++ ObjectMethod i18n()
+Get a reference to the i18n object. Done lazily because not everyone
+needs the i18ner.
+
+=cut
+
+sub i18n {
+    my( $this ) = @_;
+
+    unless( $this->{i18n} ) {
+        require TWiki::I18N;
+        ASSERT(!$@, $@) if DEBUG;
+        # language information; must be loaded after
+        # *all possible preferences sources* are available
+        $this->{i18n} = new TWiki::I18N( $this );
+    }
+    return $this->{i18n};
+}
+
+=begin twiki
+
+---++ ObjectMethod search()
+Get a reference to the search object. Done lazily because not everyone
+needs the searcher.
+
+=cut
+
+sub search {
+    my( $this ) = @_;
+
+    unless( $this->{search} ) {
+        require TWiki::Search;
+        ASSERT(!$@, $@) if DEBUG;
+        $this->{search} = new TWiki::Search( $this );
+    }
+    return $this->{search};
+}
+
+=begin twiki
+
+---++ ObjectMethod security()
+Get a reference to the security object. Done lazily because not everyone
+needs the security.
+
+=cut
+
+sub security {
+    my( $this ) = @_;
+
+    unless( $this->{security} ) {
+        require TWiki::Access;
+        ASSERT(!$@, $@) if DEBUG;
+        $this->{security} = new TWiki::Access( $this );
+    }
+    return $this->{security};
+}
+
+=begin twiki
+
+---++ ObjectMethod net()
+Get a reference to the net object. Done lazily because not everyone
+needs the net.
+
+=cut
+
+sub net {
+    my( $this ) = @_;
+
+    unless( $this->{net} ) {
+        require TWiki::Net;
+        ASSERT(!$@, $@) if DEBUG;
+        $this->{net} = new TWiki::Net( $this );
+    }
+    return $this->{net};
 }
 
 =begin twiki
@@ -1581,6 +1692,8 @@ sub _writeReport {
     my ( $this, $log, $message ) = @_;
 
     if ( $log ) {
+        require TWiki::Time;
+        ASSERT(!$@, $@) if DEBUG;
         my $time =
           TWiki::Time::formatTime( time(), '$year$mo', 'servertime');
         $log =~ s/%DATE%/$time/go;
@@ -1723,7 +1836,7 @@ sub _includeUrl {
             }
             if( $incWeb ne $web || $incTopic ne $topic ) {
                 # CODE_SMELL: Does not account for not yet authenticated user
-                unless( $this->{security}->checkAccessPermission(
+                unless( $this->security->checkAccessPermission(
                     'VIEW', $this->{user}, undef, undef, $incTopic, $incWeb ) ) {
                     return _includeWarning( $this, $warn, 'access_denied',
                                                    "$incWeb.$incTopic" );
@@ -1752,7 +1865,7 @@ sub _includeUrl {
         return $text;
     }
 
-    my $response = $this->{net}->getExternalResource( $url );
+    my $response = $this->net->getExternalResource( $url );
     if( !$response->is_error()) {
         my $contentType = $response->header('content-type');
         $text = $response->content();
@@ -1799,7 +1912,10 @@ sub _includeUrl {
 #    * $headingPatternHt : &lt;h[1-6]> HTML section heading &lt;/h[1-6]>
 sub _TOC {
     my ( $this, $text, $defaultTopic, $defaultWeb, $args ) = @_;
-    
+
+    require TWiki::Attrs;
+    ASSERT(!$@, $@) if DEBUG;
+
     my $params = new TWiki::Attrs( $args );
     # get the topic name attribute
     my $topic = $params->{_DEFAULT} || $defaultTopic;
@@ -1823,7 +1939,7 @@ sub _TOC {
     $title = CGI::span( { class => 'twikiTocTitle' }, $title ) if( $title );
 
     if( $web ne $defaultWeb || $topic ne $defaultTopic ) {
-        unless( $this->{security}->checkAccessPermission
+        unless( $this->security->checkAccessPermission
                 ( 'VIEW', $this->{user}, undef, undef, $topic, $web ) ) {
             return $this->inlineAlert( 'alerts', 'access_denied',
                                        $web, $topic );
@@ -1838,9 +1954,9 @@ sub _TOC {
     my $highest = 99;
     my $result  = '';
     my $verbatim = {};
-    $text = $this->{renderer}->takeOutBlocks( $text, 'verbatim',
+    $text = $this->renderer->takeOutBlocks( $text, 'verbatim',
                                                $verbatim);
-    $text = $this->{renderer}->takeOutBlocks( $text, 'pre',
+    $text = $this->renderer->takeOutBlocks( $text, 'pre',
                                                $verbatim);
 
     # Find URL parameters
@@ -1871,7 +1987,7 @@ sub _TOC {
             # cut TOC exclude '---+ heading !! exclude this bit'
             $line =~ s/\s*$regex{headerPatternNoTOC}.+$//go;
             next unless $line;
-            my $anchor = $this->{renderer}->makeAnchorName( $line );
+            my $anchor = $this->renderer->makeAnchorName( $line );
             $highest = $level if( $level < $highest );
             my $tabs = "\t" x $level;
             # Remove *bold*, _italic_ and =fixed= formatting
@@ -1923,10 +2039,10 @@ sub inlineAlert {
     my $template = shift;
     my $def = shift;
 
-    my $text = $this->{templates}->readTemplate( 'oops'.$template,
+    my $text = $this->templates->readTemplate( 'oops'.$template,
                                                  $this->getSkin() );
     if( $text ) {
-        my $blah = $this->{templates}->expandTemplate( $def );
+        my $blah = $this->templates->expandTemplate( $def );
         $text =~ s/%INSTANTIATE%/$blah/;
         # web and topic can be anything; they are not used
         $text = $this->handleCommonTags( $text, $this->{webName},
@@ -1979,6 +2095,8 @@ sub parseSections {
     my $offset = 0;
     foreach my $bit (split(/(%(?:START|END)SECTION(?:{.*?})?%)/, $_[0] )) {
         if( $bit =~ /^%STARTSECTION(?:{(.*)})?%$/) {
+            require TWiki::Attrs;
+            ASSERT(!$@, $@) if DEBUG;
             my $attrs = new TWiki::Attrs( $1 );
             $attrs->{type} ||= 'section';
             $attrs->{name} = $attrs->{_DEFAULT} || $attrs->{name} ||
@@ -2001,6 +2119,8 @@ sub parseSections {
             $sections{$id} = $attrs;
             push( @list, $attrs );
         } elsif( $bit =~ /^%ENDSECTION(?:{(.*)})?%$/ ) {
+            require TWiki::Attrs;
+            ASSERT(!$@, $@) if DEBUG;
             my $attrs = new TWiki::Attrs( $1 );
             $attrs->{type} ||= 'section';
             $attrs->{name} = $attrs->{_DEFAULT} || $attrs->{name} || '';
@@ -2363,7 +2483,7 @@ sub _processTags {
     }
 
     my $verbatim = {};
-    $text = $this->{renderer}->takeOutBlocks( $text, 'verbatim',
+    $text = $this->renderer->takeOutBlocks( $text, 'verbatim',
                                                $verbatim);
 
     # See Item1442
@@ -2456,7 +2576,7 @@ sub _processTags {
 
     #$stackTop =~ s/$percent/%/go;
 
-    $this->{renderer}->putBackBlocks( \$stackTop, $verbatim, 'verbatim' );
+    $this->renderer->putBackBlocks( \$stackTop, $verbatim, 'verbatim' );
 
     print STDERR "FINAL $stackTop\n" if TRACE_TAG_PARSER;
 
@@ -2473,6 +2593,8 @@ sub _expandTagOnTopicRendering {
     my $tag = shift;
     my $args = shift;
     # my( $topic, $web, $meta ) = @_;
+    require TWiki::Attrs;
+    ASSERT(!$@, $@) if DEBUG;
 
     my $e = $this->{prefs}->getPreferencesValue( $tag );
     unless( defined( $e )) {
@@ -2667,7 +2789,7 @@ sub handleCommonTags {
 
     #use a "global var", so included topics can extract and putback 
     #their verbatim blocks safetly.
-    $text = $this->{renderer}->takeOutBlocks( $text, 'verbatim',
+    $text = $this->renderer->takeOutBlocks( $text, 'verbatim',
                                               $verbatim);
 
     my $memW = $this->{SESSION_TAGS}{INCLUDINGWEB};
@@ -2677,7 +2799,7 @@ sub handleCommonTags {
 
     expandAllTags( $this, \$text, $theTopic, $theWeb, $meta );
 
-    $text = $this->{renderer}->takeOutBlocks( $text, 'verbatim',
+    $text = $this->renderer->takeOutBlocks( $text, 'verbatim',
                                               $verbatim);
 
 
@@ -2700,7 +2822,7 @@ sub handleCommonTags {
     # table rows properly
     $text =~ s/^<nop>\r?\n//gm;
 
-    $this->{renderer}->putBackBlocks( \$text, $verbatim, 'verbatim' );
+    $this->renderer->putBackBlocks( \$text, $verbatim, 'verbatim' );
 
     # TWiki Plugin Hook (for cache Plugins only)
     $this->{plugins}->afterCommonTagsHandler(
@@ -2859,12 +2981,12 @@ sub FORMFIELD {
     my $cgiQuery = $this->{cgiQuery};
     my $cgiRev = $cgiQuery->param('rev') if( $cgiQuery );
     $params->{rev} = $cgiRev;
-    return $this->{renderer}->renderFORMFIELD( $params, $topic, $web );
+    return $this->renderer->renderFORMFIELD( $params, $topic, $web );
 }
 
 sub TMPLP {
     my( $this, $params ) = @_;
-    return $this->{templates}->tmplP( $params );
+    return $this->templates->tmplP( $params );
 }
 
 sub VAR {
@@ -2895,6 +3017,8 @@ sub IF {
     try {
         $expr = $ifParser->parse( $params->{_DEFAULT} );
         unless( $meta ) {
+            require TWiki::Meta;
+            ASSERT(!$@, $@) if DEBUG;
             $meta = new TWiki::Meta( $this, $web, $topic );
         }
         if( $expr->evaluate( tom=>$meta, data=>$meta )) {
@@ -2997,7 +3121,7 @@ sub INCLUDE {
       $this->{store}->readTopic( undef, $includedWeb, $includedTopic,
                                  $rev );
 
-    unless( $this->{security}->checkAccessPermission(
+    unless( $this->security->checkAccessPermission(
         'VIEW', $this->{user}, $text, $meta, $includedTopic, $includedWeb )) {
         if( isTrue( $warn )) {
             return $this->inlineAlert( 'alerts', 'access_denied',
@@ -3058,7 +3182,7 @@ sub INCLUDE {
     if( $includedWeb ne $includingWeb ) {
 	    my $removed = {};
 
-        $text = $this->{renderer}->forEachLine(
+        $text = $this->renderer->forEachLine(
             $text, \&_fixupIncludedTopic, { web => $includedWeb,
                                             pre => 1,
                                             noautolink => 1} );
@@ -3164,7 +3288,7 @@ sub REVINFO {
     $cgiRev = $cgiQuery->param('rev') if( $cgiQuery );
     my $rev = $params->{rev} || $cgiRev || '';
 
-    return $this->{renderer}->renderRevisionInfo( $web, $topic, undef,
+    return $this->renderer->renderRevisionInfo( $web, $topic, undef,
                                                   $rev, $format );
 }
 
@@ -3207,7 +3331,7 @@ sub SEARCH {
     $params->{type} = $this->{prefs}->getPreferencesValue( 'SEARCHVARDEFAULTTYPE' ) unless( $params->{type} );
     my $s;
     try {
-        $s = $this->{search}->searchWeb( %$params );
+        $s = $this->search->searchWeb( %$params );
     } catch Error::Simple with {
         my $message = shift->{-text};
         # Block recursions kicked off by the text being repeated in the
@@ -3453,7 +3577,7 @@ sub ATTACHURL {
 
 sub LANGUAGE {
     my $this = shift;
-    return $this->{i18n}->language();
+    return $this->i18n->language();
 }
 
 sub LANGUAGES {
@@ -3467,7 +3591,7 @@ sub LANGUAGES {
     my $marker = $params->{marker} || 'selected="selected"';
 
     # $languages is a hash reference:
-    my $languages = $this->{i18n}->enabled_languages();
+    my $languages = $this->i18n->enabled_languages();
 
     my @tags = sort(keys(%{$languages}));
 
@@ -3517,7 +3641,7 @@ sub MAKETEXT {
     }
 
     # do the magic:
-    my $result  =  $this->{i18n}->maketext($str, @args);
+    my $result = $this->i18n->maketext($str, @args);
 
     # replace accesskeys:
     $result =~ s#(^|[^&])&([a-zA-Z])#$1<span class='twikiAccessKey'>$2</span>#g;
@@ -3589,17 +3713,17 @@ sub META {
 
     if( $option eq 'form' ) {
         # META:FORM and META:FIELD
-        return $meta->renderFormForDisplay( $this->{templates} );
+        return $meta->renderFormForDisplay( $this->templates );
     } elsif ( $option eq 'formfield' ) {
         # a formfield from within topic text
-        return $this->{renderer}->renderFormField( $meta, $params );
+        return $this->renderer->renderFormField( $meta, $params );
     } elsif( $option eq 'attachments' ) {
         # renders attachment tables
-        return $this->{attach}->renderMetaData( $web, $topic, $meta, $params );
+        return $this->attach->renderMetaData( $web, $topic, $meta, $params );
     } elsif( $option eq 'moved' ) {
-        return $this->{renderer}->renderMoved( $web, $topic, $meta, $params );
+        return $this->renderer->renderMoved( $web, $topic, $meta, $params );
     } elsif( $option eq 'parent' ) {
-        return $this->{renderer}->renderParent( $web, $topic, $meta, $params );
+        return $this->renderer->renderParent( $web, $topic, $meta, $params );
     }
 
     return '';
@@ -3619,7 +3743,7 @@ sub NOP {
 # Shortcut to %TMPL:P{"sep"}%
 sub SEP {
     my $this = shift;
-    return $this->{templates}->expandTemplate('sep');
+    return $this->templates->expandTemplate('sep');
 }
 
 #deprecated functionality, now implemented using %USERINFO%

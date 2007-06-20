@@ -143,10 +143,10 @@ sub login {
 
     # UserMappings can over-ride where the login template is defined
     my $loginTemplate = $users->loginTemplateName();        #defaults to login.tmpl
-    my $tmpl = $twiki->{templates}->readTemplate(
+    my $tmpl = $twiki->templates->readTemplate(
         $loginTemplate, $twiki->getSkin() );
 
-    my $banner = $twiki->{templates}->expandTemplate( 'LOG_IN_BANNER' );
+    my $banner = $twiki->templates->expandTemplate( 'LOG_IN_BANNER' );
     my $note = '';
     my $topic = $twiki->{topicName};
     my $web = $twiki->{webName};
@@ -156,8 +156,8 @@ sub login {
     $cgisession->param( 'REMEMBER', $remember ) if $cgisession;
     if( $cgisession && $cgisession->param( 'AUTHUSER' ) &&
         $loginName && $loginName ne $cgisession->param( 'AUTHUSER' )) {
-        $banner = $twiki->{templates}->expandTemplate( 'LOGGED_IN_BANNER' );
-        $note = $twiki->{templates}->expandTemplate( 'NEW_USER_NOTE' );
+        $banner = $twiki->templates->expandTemplate( 'LOGGED_IN_BANNER' );
+        $note = $twiki->templates->expandTemplate( 'NEW_USER_NOTE' );
      }
 
     my $error = '';
@@ -178,7 +178,7 @@ sub login {
             $twikiSession->redirect($origurl, 1 );
             return;
         } else {
-            $banner = $twiki->{templates}->expandTemplate('UNRECOGNISED_USER');
+            $banner = $twiki->templates->expandTemplate('UNRECOGNISED_USER');
         }
     }
 
@@ -188,7 +188,7 @@ sub login {
     $twiki->{prefs}->pushPreferenceValues('SESSION', {ORIGURL=>$origurl, BANNER=>$banner, NOTE=>$note, ERROR=>$error});
 
     $tmpl = $twiki->handleCommonTags( $tmpl, $web, $topic );
-    $tmpl = $twiki->{renderer}->getRenderedVersion( $tmpl, '' );
+    $tmpl = $twiki->renderer->getRenderedVersion( $tmpl, '' );
     $tmpl =~ s/<nop>//g;
     $twiki->writePageHeader( $query );
     print $tmpl;

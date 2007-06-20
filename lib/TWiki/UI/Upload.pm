@@ -101,22 +101,22 @@ sub attach {
 
     my $fileWikiUser = '';
     if( $fileName ) {
-        $tmpl = $session->{templates}->readTemplate( 'attachagain', $skin );
+        $tmpl = $session->templates->readTemplate( 'attachagain', $skin );
         my $u = $args->{user};
         $fileWikiUser = $users->webDotWikiName($u) if $u;
     } else {
-        $tmpl = $session->{templates}->readTemplate( 'attachnew', $skin );
+        $tmpl = $session->templates->readTemplate( 'attachnew', $skin );
     }
     if ( $fileName ) {
         # must come after templates have been read
-        $atext .= $session->{attach}->formatVersions( $webName, $topic, %$args );
+        $atext .= $session->attach->formatVersions( $webName, $topic, %$args );
     }
     $tmpl =~ s/%ATTACHTABLE%/$atext/g;
     $tmpl =~ s/%FILEUSER%/$fileWikiUser/g;
     $tmpl =~ s/%FILENAME%/$fileName/g;
     $session->enterContext( 'can_render_meta', $meta );
     $tmpl = $session->handleCommonTags( $tmpl, $webName, $topic );
-    $tmpl = $session->{renderer}->getRenderedVersion( $tmpl, $webName, $topic );
+    $tmpl = $session->renderer->getRenderedVersion( $tmpl, $webName, $topic );
     $tmpl =~ s/%HIDEFILE%/$isHideChecked/g;
     $tmpl =~ s/%FILEPATH%/$args->{path}/g;
     $args->{comment} = TWiki::entityEncode( $args->{comment} );

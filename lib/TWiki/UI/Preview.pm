@@ -23,7 +23,6 @@ use strict;
 use TWiki;
 use TWiki::UI;
 use TWiki::UI::Save;
-use TWiki::Form;
 use Error qw( :try );
 use TWiki::OopsException;
 
@@ -44,6 +43,8 @@ sub preview {
     my $form = $meta->get('FORM') || '';
     if( $form ) {
         $form = $form->{name}; # used later on as well
+        require TWiki::Form;
+        ASSERT(!$@, $@) if DEBUG;
         my $formDef = new TWiki::Form( $session, $web, $form );
         unless( $formDef ) {
             throw TWiki::OopsException( 'attention',
@@ -58,7 +59,7 @@ sub preview {
     $session->{plugins}->afterEditHandler( $text, $topic, $web );
 
     my $skin = $session->getSkin();
-    my $tmpl = $session->{templates}->readTemplate( 'preview', $skin );
+    my $tmpl = $session->templates->readTemplate( 'preview', $skin );
     if( $saveOpts->{minor} ) {
         $tmpl =~ s/%DONTNOTIFYCHECKBOX%/checked="checked"/go;
     } else {
@@ -86,7 +87,7 @@ sub preview {
 
     my $dispText = $text;
     $dispText = $session->handleCommonTags( $dispText, $web, $topic, $meta );
-    $dispText = $session->{renderer}->getRenderedVersion( $dispText, $web, $topic );
+    $dispText = $session->renderer->getRenderedVersion( $dispText, $web, $topic );
 
     # Disable links and inputs in the text
     $dispText =~ s#<a\s[^>]*>(.*?)</a>#<span class="twikiEmulatedLink">$1</span>#gis;
@@ -95,7 +96,7 @@ sub preview {
     $dispText =~ s/(<[^>]*\bon[A-Za-z]+=)('[^']*'|"[^"]*")/$1''/gis;
 
     $tmpl = $session->handleCommonTags( $tmpl, $web, $topic, $meta );
-    $tmpl = $session->{renderer}->getRenderedVersion( $tmpl, $web, $topic );
+    $tmpl = $session->renderer->getRenderedVersion( $tmpl, $web, $topic );
     $tmpl =~ s/%TEXT%/$dispText/go;
     $tmpl =~ s/%FORMFIELDS%/$formFields/go;
 

@@ -101,9 +101,9 @@ sub stringify {
 
     if ($this->{template} && $this->{def} && $session) {
         # load the defs
-        $session->{templates}->readTemplate( 'oops'.$this->{template},
+        $session->templates->readTemplate( 'oops'.$this->{template},
                                              $session->getSkin() );
-        my $message = $session->{templates}->expandTemplate( $this->{def} );
+        my $message = $session->templates->expandTemplate( $this->{def} );
         $message = $session->handleCommonTags(
             $message, $this->{web}, $this->{topic} );
         my $n = 1;

@@ -194,6 +194,8 @@ sub buildNewTopic {
     }
 
     if( $formName ) {
+        require TWiki::Form;
+        ASSERT(!$@, $@) if DEBUG;
         $formDef = new TWiki::Form( $session, $webName, $formName );
         unless( $formDef ) {
             throw TWiki::OopsException(

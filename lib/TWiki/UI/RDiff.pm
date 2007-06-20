@@ -79,7 +79,7 @@ sub _renderCellData {
           ('|*META '.$1.'*|'._renderAttrs($2).'|')gem;
 
         $data = $session->handleCommonTags( $data, $web, $topic );
-        $data = $session->{renderer}->getRenderedVersion( $data, $web, $topic );
+        $data = $session->renderer->getRenderedVersion( $data, $web, $topic );
         # Match up table tags, remove comments
         if( $data =~ m/<\/?(th|td|table)\b/i ) {
             # data has <th> or <td>, need to fix ables
@@ -158,9 +158,9 @@ sub _renderSideBySide
                             class=>$format{l}[1],
                            },
                            CGI::th({align=>'center'},
-                                   ($session->{i18n}->maketext('Line: [_1]',$left))).
+                                   ($session->i18n->maketext('Line: [_1]',$left))).
                            CGI::th({align=>'center'},
-                                   ($session->{i18n}->maketext('Line: [_1]',$right)))
+                                   ($session->i18n->maketext('Line: [_1]',$right)))
                           );
     }
     # unhide html comments (<!-- --> type tags)
@@ -236,7 +236,7 @@ sub _sequentialRow {
         return CGI::Tr(CGI::td({bgcolor=>$bg,
                                 class=>"twikiDiff${hdrcls}Header",
                                 colspan=>9},
-                               CGI::b( $session->{i18n}->maketext($hdrcls).': '))).$row;
+                               CGI::b( $session->i18n->maketext($hdrcls).': '))).$row;
     } else {
         return $row;
     }
@@ -299,7 +299,7 @@ sub _renderSequential
                             class=>'twikiDiffLineNumberHeader'},
                            CGI::th({align=>'left',
                                     colspan=>9},
-                                    ($session->{i18n}->maketext('Line: [_1] to [_2]',$left,$right))
+                                    ($session->i18n->maketext('Line: [_1] to [_2]',$left,$right))
                                   )
                            );
     }
@@ -428,7 +428,7 @@ sub diff {
     my $rev2 = $query->param( 'rev2' );
 
     my $skin = $session->getSkin();
-    my $tmpl = $session->{templates}->readTemplate( 'rdiff', $skin );
+    my $tmpl = $session->templates->readTemplate( 'rdiff', $skin );
     $tmpl =~ s/\%META{.*?}\%//go;  # remove %META{'parent'}%
 
     my( $before, $difftmpl, $after, $tail) = split( /%REPEAT%/, $tmpl);
@@ -459,7 +459,7 @@ sub diff {
     $before =~ s/%REVTITLE1%/$revTitle1/go;
     $before =~ s/%REVTITLE2%/$revTitle2/go;
     $before = $session->handleCommonTags( $before, $webName, $topic );
-    $before = $session->{renderer}->getRenderedVersion( $before, $webName, $topic );
+    $before = $session->renderer->getRenderedVersion( $before, $webName, $topic );
 
     my $page = $before;
 
@@ -481,10 +481,10 @@ sub diff {
         my $rInfo = '';
         my $text;
         if ( $r1 > $r2 + 1) {
-            $rInfo = $session->{i18n}->maketext(
+            $rInfo = $session->i18n->maketext(
                 "Changes from r[_1] to r[_2]", $r2, $r1);
         } else {
-            $rInfo = $session->{renderer}->renderRevisionInfo(
+            $rInfo = $session->renderer->renderRevisionInfo(
                 $webName, $topic, undef, $r1, '$date - $wikiusername' );
         }
         # eliminate white space to prevent wrap around in HR table:
@@ -550,7 +550,7 @@ sub diff {
             0, 'view', $webName, $topic, rev => $i ),
                               rel => 'nofollow' },
                             $i);
-        my $revInfo = $session->{renderer}->renderRevisionInfo( $webName, $topic, undef, $i );
+        my $revInfo = $session->renderer->renderRevisionInfo( $webName, $topic, undef, $i );
         $tailResult .= $tail;
         $tailResult =~ s/%REVTITLE%/$revTitle/go;
         $tailResult =~ s/%REVINFO%/$revInfo/go;
@@ -562,7 +562,7 @@ sub diff {
     $after =~ s/%MAXREV%/$maxrev/go;
 
     $after = $session->handleCommonTags( $after, $webName, $topic );
-    $after = $session->{renderer}->getRenderedVersion( $after, $webName, $topic );
+    $after = $session->renderer->getRenderedVersion( $after, $webName, $topic );
     $page .= $after;
 
     $session->writeCompletePage( $page );

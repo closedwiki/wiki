@@ -239,7 +239,7 @@ sub getExternalResource {
     ASSERT($TWiki::Plugins::SESSION) if DEBUG;
     ASSERT(defined $url) if DEBUG;
 
-    return $TWiki::Plugins::SESSION->{net}->getExternalResource( $url );
+    return $TWiki::Plugins::SESSION->net->getExternalResource( $url );
 }
 
 =pod
@@ -1055,7 +1055,7 @@ sub checkAccessPermission {
         $user );
     $login = [ $TWiki::cfg{DefaultUserLogin} ] unless(
         $login && scalar(@$login));
-    return $TWiki::Plugins::SESSION->{security}->checkAccessPermission(
+    return $TWiki::Plugins::SESSION->security->checkAccessPermission(
         $type, $login->[0], $text, $meta, $topic, $web );
 }
 
@@ -1294,11 +1294,11 @@ sub checkTopicEditLock {
             my $who = $lease->{user};
             my $past = TWiki::Time::formatDelta(
                 time()-$lease->{taken},
-                $TWiki::Plugins::SESSION->{i18n}
+                $TWiki::Plugins::SESSION->i18n
                );
             my $future = TWiki::Time::formatDelta(
                 $lease->{expires}-time(),
-                $TWiki::Plugins::SESSION->{i18n}
+                $TWiki::Plugins::SESSION->i18n
                );
             my $url = getScriptUrl(
                 $web, $topic, 'oops',
@@ -1431,7 +1431,7 @@ sub saveTopicText {
 
     # check access permission
     unless( $ignorePermissions ||
-            $session->{security}->checkAccessPermission(
+            $session->security->checkAccessPermission(
                 'CHANGE', $session->{user}, undef, undef,
                 $topic, $web )
           ) {
@@ -1840,7 +1840,7 @@ Return: =$text=    Template text
 sub readTemplate {
 #   my( $name, $skin ) = @_;
     ASSERT($TWiki::Plugins::SESSION) if DEBUG;
-    return $TWiki::Plugins::SESSION->{templates}->readTemplate( @_ );
+    return $TWiki::Plugins::SESSION->templates->readTemplate( @_ );
 }
 
 =pod
@@ -1865,7 +1865,7 @@ If template text is found, extracts include statements and fully expands them.
 
 sub loadTemplate {
     ASSERT($TWiki::Plugins::SESSION) if DEBUG;
-    return $TWiki::Plugins::SESSION->{templates}->readTemplate( @_ );
+    return $TWiki::Plugins::SESSION->templates->readTemplate( @_ );
 }
 
 =pod
@@ -1885,7 +1885,7 @@ file. See the documentation on TWiki templates for more information.
 
 sub expandTemplate {
     ASSERT($TWiki::Plugins::SESSION) if DEBUG;
-    return $TWiki::Plugins::SESSION->{templates}->expandTemplate( @_ );
+    return $TWiki::Plugins::SESSION->templates->expandTemplate( @_ );
 }
 
 =pod
@@ -2021,7 +2021,7 @@ Return: =$text=    XHTML text, e.g. ='&lt;b>bold&lt;/b> and &lt;code>fixed font&
 sub renderText {
 #   my( $text, $web ) = @_;
     ASSERT($TWiki::Plugins::SESSION) if DEBUG;
-    return $TWiki::Plugins::SESSION->{renderer}->getRenderedVersion( @_ );
+    return $TWiki::Plugins::SESSION->renderer->getRenderedVersion( @_ );
 }
 
 =pod
@@ -2045,7 +2045,7 @@ sub internalLink {
     my $pre = shift;
     ASSERT($TWiki::Plugins::SESSION) if DEBUG;
 #   my( $web, $topic, $label, $anchor, $anchor, $createLink ) = @_;
-    return $pre . $TWiki::Plugins::SESSION->{renderer}->internalLink( @_ );
+    return $pre . $TWiki::Plugins::SESSION->renderer->internalLink( @_ );
 }
 
 =pod
@@ -2082,7 +2082,7 @@ Leave a blank line between the last header field and the message body.
 sub sendEmail {
     #my( $text, $retries ) = @_;
     ASSERT($TWiki::Plugins::SESSION) if DEBUG;
-    return $TWiki::Plugins::SESSION->{net}->sendEmail( @_ );
+    return $TWiki::Plugins::SESSION->net->sendEmail( @_ );
 }
 
 =pod

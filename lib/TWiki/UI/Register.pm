@@ -41,7 +41,6 @@ use strict;
 use TWiki;
 use TWiki::Net;
 use TWiki::Plugins;
-use TWiki::Form;
 use Data::Dumper;
 use Error qw( :try );
 use TWiki::UI;
@@ -789,10 +788,10 @@ sub complete {
     }
 
     if( $status ) {
-        $status = $session->{i18n}->maketext(
+        $status = $session->i18n->maketext(
             'Warning: Could not send confirmation email')."\n\n$status";
     } else {
-        $status = $session->{i18n}->maketext(
+        $status = $session->i18n->maketext(
             'A confirmation e-mail has been sent to [_1]',
             TWiki::entityEncode( $data->{Email} ));
     }
@@ -876,6 +875,9 @@ sub _populateUserTopicForm {
     my ( $session, $formName, $meta, $data ) = @_;
 
     my %inform;
+    require TWiki::Form;
+    ASSERT(!$@, $@) if DEBUG;
+
     my $form =
       new TWiki::Form( $session, $TWiki::cfg{UsersWebName}, $formName );
 
@@ -924,7 +926,7 @@ sub _emailRegistrationConfirmations {
 
     my $skin = $session->getSkin();
     my $template =
-      $session->{templates}->readTemplate( 'registernotify', $skin );
+      $session->templates->readTemplate( 'registernotify', $skin );
     my $email =
       _buildConfirmationEmail( $session,
                                $data,
@@ -932,17 +934,17 @@ sub _emailRegistrationConfirmations {
                                $TWiki::cfg{Register}{HidePasswd}
                              );
 
-    my $warnings = $session->{net}->sendEmail( $email);
+    my $warnings = $session->net->sendEmail( $email);
 
     $template =
-      $session->{templates}->readTemplate( 'registernotifyadmin', $skin );
+      $session->templates->readTemplate( 'registernotifyadmin', $skin );
     $email =
       _buildConfirmationEmail( $session,
                                $data,
                                $template,
                                1 );
 
-    my $err = $session->{net}->sendEmail( $email );
+    my $err = $session->net->sendEmail( $email );
     if( $err ) {
         # don't tell the user about this one
         $session->writeWarning('Could not confirm registration: '.$err);
@@ -1091,7 +1093,7 @@ sub _validateRegistration {
 sub _sendEmail {
     my( $session, $template, $p ) = @_;
 
-    my $text = $session->{templates}->readTemplate( $template );
+    my $text = $session->templates->readTemplate( $template );
     $p->{Introduction} ||= '';
     $p->{Name} ||= $p->{WikiName};
     $text =~ s/%LOGINNAME%/$p->{LoginName}/geo;
@@ -1104,7 +1106,7 @@ sub _sendEmail {
     $text = $session->handleCommonTags(
         $text, $TWiki::cfg{UsersWebName}, $p->{WikiName} );
 
-    return $session->{net}->sendEmail($text);
+    return $session->net->sendEmail($text);
 }
 
 sub _codeFile {

@@ -112,7 +112,7 @@ sub test_TML_in_forms {
     my $this = shift;
     my($meta, $text) = $twiki->{store}->readTopic(undef, $testweb, $testtopic1);
     my $res = $meta->renderFormForDisplay();
-    my $render = $twiki->{renderer};
+    my $render = $twiki->renderer;
     $res = $render->getRenderedVersion($res, $testweb, $testtopic1);
 
     my @children = get_HTML_tree_from_form( $res );
@@ -135,7 +135,7 @@ sub test_formatted_TML_in_forms {
     my $this = shift;
     my($meta, $text) = $twiki->{store}->readTopic(undef, $testweb, $testtopic2);
     my $res = $meta->renderFormForDisplay();
-    my $render = $twiki->{renderer};
+    my $render = $twiki->renderer;
     $res = $render->getRenderedVersion($res, $testweb, $testtopic2);
 
     my @children = get_HTML_tree_from_form( $res );
@@ -170,7 +170,7 @@ sub test_render_formfield_raw {
 
     my $this = shift;
     my($meta, $text) = $twiki->{store}->readTopic(undef, $testweb, $testtopic2);
-    my $render = $twiki->{renderer};
+    my $render = $twiki->renderer;
     my $res;
 
     $res = $render->renderFormField( $meta, new TWiki::Attrs('name="IssueDescription" newline="$n" bar="|"') );

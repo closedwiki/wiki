@@ -203,7 +203,7 @@ sub renderMoved {
         my $putBack = '';
         if( $web eq $toWeb && $topic eq $toTopic ) {
             $putBack  = ' - '.
-              CGI::a( { title=>($this->{session}->{i18n}->maketext(
+              CGI::a( { title=>($this->{session}->i18n->maketext(
                                   'Click to move topic back to previous location, with option to change references.')
                                ),
                         href => $this->{session}->getScriptUrl
@@ -214,10 +214,10 @@ sub renderMoved {
                          nonwikiword => 'checked' ),
                         rel => 'nofollow'
                       },
-                      $this->{session}->{i18n}->maketext('put it back') );
+                      $this->{session}->i18n->maketext('put it back') );
         }
         $text = CGI::i(
-          $this->{session}->{i18n}->maketext("[_1] moved from [_2] on [_3] by [_4]",
+          $this->{session}->i18n->maketext("[_1] moved from [_2] on [_3] by [_4]",
                                              "<nop>$toWeb.<nop>$toTopic",
                                              "<nop>$fromWeb.<nop>$fromTopic",
                                              $date,

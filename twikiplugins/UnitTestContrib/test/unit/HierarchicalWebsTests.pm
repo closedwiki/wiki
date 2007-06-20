@@ -237,7 +237,7 @@ sub test_squab_simple {
     $this->{twiki} = new TWiki( $TWiki::cfg{DefaultUserName}, $query);
 
     my $text = "[[$testWeb]]";
-    $text = $this->{twiki}->{renderer}->getRenderedVersion(
+    $text = $this->{twiki}->renderer->getRenderedVersion(
         $text, $testWeb, 'NonExistant');
     $this->assert_matches(qr!<span class="twikiNewLink">$testWeb<a.*href=".*edit$TWiki::cfg{ScriptSuffix}/$testWeb/$testWeb\?topicparent=$testWeb.NonExistant"!, $text);
 }
@@ -255,7 +255,7 @@ sub test_squab_subweb {
     $this->{twiki} = new TWiki( $TWiki::cfg{DefaultUserName}, $query);
 
     my $text = "[[$testWebSubWeb]]";
-    $text = $this->{twiki}->{renderer}->getRenderedVersion(
+    $text = $this->{twiki}->renderer->getRenderedVersion(
         $text, $testWeb, 'NonExistant');
     $this->assert_matches(qr!<span class="twikiNewLink">$testWebSubWeb<a.*href=".*edit$TWiki::cfg{ScriptSuffix}/$testWeb/$testWebSubWeb\?topicparent=$testWeb.NonExistant"!, $text);
 }
@@ -272,7 +272,7 @@ sub test_squab_subweb_full_path {
     $this->{twiki} = new TWiki( $TWiki::cfg{DefaultUserName}, $query);
 
     my $text = "[[$testWeb.$testWebSubWeb]]";
-    $text = $this->{twiki}->{renderer}->getRenderedVersion(
+    $text = $this->{twiki}->renderer->getRenderedVersion(
         $text, $testWeb, 'NonExistant');
     $this->assert_matches(qr!<span class="twikiNewLink">$testWeb.$testWebSubWeb<a.*href=".*edit$TWiki::cfg{ScriptSuffix}/$testWeb/$testWebSubWeb\?topicparent=$testWeb.NonExistant"!, $text);
 }
@@ -292,7 +292,7 @@ sub test_squab_subweb_wih_topic {
     $this->assert($this->{twiki}->{store}->topicExists($testWeb, $testWebSubWeb));
 
     my $text = "[[$testWebSubWeb]]";
-    $text = $this->{twiki}->{renderer}->getRenderedVersion(
+    $text = $this->{twiki}->renderer->getRenderedVersion(
         $text, $testWeb, 'NonExistant');
     $this->assert_matches(qr!<a href=".*view$TWiki::cfg{ScriptSuffix}/$testWeb/$testWebSubWeb" class="twikiLink">$testWebSubWeb</a>!, $text);
 }
@@ -312,7 +312,7 @@ sub test_squab_full_path_with_topic {
     $this->assert($this->{twiki}->{store}->topicExists($testWeb, $testWebSubWeb));
 
     my $text = "[[$testWeb.$testWebSubWeb]]";
-    $text = $this->{twiki}->{renderer}->getRenderedVersion(
+    $text = $this->{twiki}->renderer->getRenderedVersion(
         $text, $testWeb, 'NonExistant');
     $this->assert_matches(qr!<a href=".*view$TWiki::cfg{ScriptSuffix}/$testWeb/$testWebSubWeb" class="twikiLink">$testWeb.$testWebSubWeb</a>!, $text);
 }
@@ -332,7 +332,7 @@ sub test_squab_path_to_topic_in_subweb {
     $this->assert($this->{twiki}->{store}->topicExists($testWeb, $testWebSubWeb));
 
     my $text = "[[$testWeb.$testWebSubWeb.WebHome]]";
-    $text = $this->{twiki}->{renderer}->getRenderedVersion(
+    $text = $this->{twiki}->renderer->getRenderedVersion(
         $text, $testWeb, 'NonExistant');
     $this->assert_matches(qr!<a href=".*view$TWiki::cfg{ScriptSuffix}/$testWeb/$testWebSubWeb/$TWiki::cfg{HomeTopicName}" class="twikiLink">$testWeb.$testWebSubWeb.$TWiki::cfg{HomeTopicName}</a>!, $text);
 

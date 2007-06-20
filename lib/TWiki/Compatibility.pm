@@ -125,7 +125,7 @@ May throw TWiki::OopsException
 sub upgradeCategoryTable {
     my( $session, $web, $topic, $meta, $text ) = @_;
 
-    my $icat = $session->{templates}->readTemplate( 'twikicatitems' );
+    my $icat = $session->templates->readTemplate( 'twikicatitems' );
 
     if( $icat ) {
         my @items = ();

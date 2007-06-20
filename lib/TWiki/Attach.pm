@@ -96,7 +96,7 @@ sub renderMetaData {
 	my @attachments = $meta->find( 'FILEATTACHMENT' );
     return '' unless @attachments;
 
-    my $templates = $this->{session}->{templates};
+    my $templates = $this->{session}->templates;
     $templates->readTemplate($tmplname);
 
 	my $rows = '';
@@ -141,7 +141,7 @@ sub formatVersions {
     my $latestRev =
       $store->getRevisionNumber( $web, $topic, $attrs{name} );
 
-    my $templates = $this->{session}->{templates};
+    my $templates = $this->{session}->templates;
     $templates->readTemplate('attachtables');
 
     my $header = $templates->expandTemplate('ATTACH:versions:header');

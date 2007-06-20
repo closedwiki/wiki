@@ -504,7 +504,7 @@ sub searchWeb {
     $baseWeb =~ s/\./\//go;
 
     my $session  = $this->{session};
-    my $renderer = $session->{renderer};
+    my $renderer = $session->renderer;
 
     # Limit search results
     if ( $limit =~ /(^\d+$)/o ) {
@@ -608,7 +608,7 @@ sub searchWeb {
     else {
         $template = 'search';
     }
-    $tmpl = $session->{templates}->readTemplate($template);
+    $tmpl = $session->templates->readTemplate($template);
 
     # SMELL: the only META tags in a template will be METASEARCH
     # Why the heck are they being filtered????
@@ -964,7 +964,7 @@ s/\$createwikiusername/_getRev1Info( $this, $web, $topic, 'wikiusername', $r1inf
                 my $srev = 'r' . $revNum;
                 if ( $revNum eq '0' || $revNum eq '1' ) {
                     $srev = CGI::span( { class => 'twikiNew' },
-                        ( $this->{session}->{i18n}->maketext('NEW') ) );
+                        ( $this->{session}->i18n->maketext('NEW') ) );
                 }
                 $out =~ s/%REVISION%/$srev/o;
                 $out =~ s/%AUTHOR%/$users->webDotWikiName($ru)/e;
@@ -983,7 +983,7 @@ s/\$createwikiusername/_getRev1Info( $this, $web, $topic, 'wikiusername', $r1inf
                     $text =
                       $session->handleCommonTags( $text, $web, $topic, $meta );
                     $text =
-                      $session->{renderer}
+                      $session->renderer
                       ->getRenderedVersion( $text, $web, $topic );
 
                     # FIXME: What about meta data rendering?
@@ -1220,7 +1220,7 @@ sub _extractTopicInfo {
     $info->{revNum}   = $revnum;
 
     $info->{allowView} =
-      $session->{security}
+      $session->security
       ->checkAccessPermission( 'VIEW', $session->{user}, $text, $meta, $topic,
         $web );
 

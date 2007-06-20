@@ -15,7 +15,7 @@ sub renderForEdit {
     # even though it's not accessible for standard edits. Some contribs
     # may want to override this to make labels editable.
     my $session = $this->{session};
-    my $renderedValue = $session->{renderer}->getRenderedVersion
+    my $renderedValue = $session->renderer->getRenderedVersion
       ( $session->handleCommonTags( $value, $web, $topic ));
     return ( '',
              CGI::hidden( -name => $this->{name},

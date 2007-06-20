@@ -48,7 +48,7 @@ sub changes {
 
     my $skin = $session->getSkin();
 
-    my $text = $session->{templates}->readTemplate( 'changes', $skin );
+    my $text = $session->templates->readTemplate( 'changes', $skin );
 
     my( $page, $eachChange, $after) = split( /%REPEAT%/, $text );
 
@@ -71,7 +71,7 @@ sub changes {
         next if $done{$change->{topic}};
         next unless $session->{store}->topicExists( $webName, $change->{topic} );
         try {
-            my $summary = $session->{renderer}->summariseChanges(
+            my $summary = $session->renderer->summariseChanges(
                 $session->{user}, $webName, $change->{topic}, $change->{revision} );
             my $thisChange = $eachChange;
             $thisChange =~ s/%TOPICNAME%/$change->{topic}/go;
@@ -86,7 +86,7 @@ sub changes {
             }
             $thisChange =~ s/%TIME%/$time/g;
             $thisChange =~ s/%REVISION%/$srev/go;
-            $thisChange = $session->{renderer}->getRenderedVersion
+            $thisChange = $session->renderer->getRenderedVersion
               ( $thisChange, $webName, $change->{topic} );
             $thisChange =~ s/%TEXTHEAD%/$summary/go;
             $page .= $thisChange;
@@ -102,7 +102,7 @@ sub changes {
     $page .= $after;
 
     $page = $session->handleCommonTags( $page, $webName, $topic );
-    $page = $session->{renderer}->getRenderedVersion($page, $webName, $topic );
+    $page = $session->renderer->getRenderedVersion($page, $webName, $topic );
 
     $session->writeCompletePage( $page );
 }

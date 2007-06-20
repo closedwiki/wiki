@@ -244,7 +244,7 @@ sub _link {
     $string =~ s/[\[\]]//go;
 
     $topic ||= $string;
-    $tooltip ||= $this->{session}->{i18n}->maketext(
+    $tooltip ||= $this->{session}->i18n->maketext(
         'Click to see details in separate window');
 
     my $web;
@@ -298,7 +298,7 @@ sub renderForEdit {
     if( $this->{mandatoryFieldsPresent} ) {
         $session->enterContext( 'mandatoryfields' );
     }
-    my $tmpl = $session->{templates}->readTemplate( "form" );
+    my $tmpl = $session->templates->readTemplate( "form" );
     $tmpl = $session->handleCommonTags( $tmpl, $web, $topic, $meta );
 
     # Note: if WEBFORMS preference is not set, can only delete form.

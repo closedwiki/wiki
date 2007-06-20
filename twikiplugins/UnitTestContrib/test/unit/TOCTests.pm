@@ -83,7 +83,7 @@ sub setup_TOCtests {
 
   $twiki->{webName} = $web;
   $twiki->{topicName} = $topic;
-  my $render = $twiki->{renderer};
+  my $render = $twiki->renderer;
 
   use TWiki::Attrs;
   my $attr = new TWiki::Attrs( $params );

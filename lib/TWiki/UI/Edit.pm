@@ -36,7 +36,6 @@ package TWiki::UI::Edit;
 use strict;
 use Assert;
 use TWiki;
-use TWiki::Form;
 use TWiki::Plugins;
 use TWiki::Prefs;
 use TWiki::Store;
@@ -137,7 +136,7 @@ sub init_edit {
                             $TWiki::cfg{LeaseLengthLessForceful} ) {
                         $def = 'lease_old';
                         $past = TWiki::Time::formatDelta(
-                            $t - $lease->{expires}, $session->{i18n} );
+                            $t - $lease->{expires}, $session->i18n );
                         $future = '';
                     }
                 }
@@ -147,7 +146,7 @@ sub init_edit {
                     $past = TWiki::Time::formatDelta(
                         $t - $lease->{taken}, $session->{i18n} );
                     $future = TWiki::Time::formatDelta(
-                        $lease->{expires} - $t, $session->{i18n} );
+                        $lease->{expires} - $t, $session->i18n );
                 }
                 if( $def ) {
                     # use a 'keep' redirect to ensure we pass parameter
@@ -206,10 +205,10 @@ sub init_edit {
 	$session->{prefs}->getPreferencesValue('EDIT_TEMPLATE') ||
         $templateName;
     $tmpl =
-      $session->{templates}->readTemplate( $template.$editaction, $skin );
+      $session->templates->readTemplate( $template.$editaction, $skin );
 
     if( !$tmpl && $template ne $templateName ) {
-        $tmpl = $session->{templates}->readTemplate( $templateName, $skin );
+        $tmpl = $session->templates->readTemplate( $templateName, $skin );
     }
 
     if( !$tmpl ) {
@@ -334,13 +333,15 @@ sub init_edit {
     $session->enterContext( 'can_render_meta', $meta );
 
     $tmpl = $session->handleCommonTags( $tmpl, $webName, $topic, $meta );
-    $tmpl = $session->{renderer}->getRenderedVersion( $tmpl, $webName, $topic );
+    $tmpl = $session->renderer->getRenderedVersion( $tmpl, $webName, $topic );
     # Don't want to render form fields, so this after getRenderedVersion
     my $formMeta = $meta->get( 'FORM' );
     my $form = '';
     my $formText = '';
     $form = $formMeta->{name} if( $formMeta );
     if( $form && !$saveCmd ) {
+        require TWiki::Form;
+        ASSERT(!$@, $@) if DEBUG;
         my $formDef = new TWiki::Form( $session, $templateWeb, $form );
         unless( $formDef ) {
             throw TWiki::OopsException(
@@ -361,7 +362,7 @@ sub init_edit {
             $formText = $formDef->renderForEdit( $webName, $topic, $meta );
         }
     } elsif( !$saveCmd && $session->{prefs}->getWebPreferencesValue( 'WEBFORMS', $webName )) {
-        $formText = $session->{templates}->readTemplate( "addform", $skin );
+        $formText = $session->templates->readTemplate( "addform", $skin );
         $formText = $session->handleCommonTags(
             $formText, $webName, $topic, $meta );
     }

@@ -109,14 +109,14 @@ BEGIN {
 
 =pod
 
----++ ClassMethod get ( $session )
+---++ ClassMethod new ( $session )
 
 Constructor. Gets the language object corresponding to the current user's language.
 
 =cut
 
-sub get {
-    my $session  = shift;
+sub new {
+    my ($class, $session ) = @_;
     ASSERT($session->isa( 'TWiki')) if DEBUG;
 
     unless ($initialised) {

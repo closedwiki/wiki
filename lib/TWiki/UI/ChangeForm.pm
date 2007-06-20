@@ -45,7 +45,7 @@ sub generate {
     my( $session, $web, $topic, $editaction ) = @_;
     ASSERT($session->isa( 'TWiki')) if DEBUG;
 
-    my $page = $session->{templates}->readTemplate( 'changeform' );
+    my $page = $session->templates->readTemplate( 'changeform' );
     my $q = $session->{cgiQuery};
 
     my $store = $session->{store};
@@ -92,7 +92,7 @@ sub generate {
     $page =~ s/%REDIRECTTO%/$redirectTo/go;
 
     $page = $session->handleCommonTags( $page, $web, $topic );
-    $page = $session->{renderer}->getRenderedVersion( $page, $web, $topic );
+    $page = $session->renderer->getRenderedVersion( $page, $web, $topic );
 
     my $text = CGI::hidden( -name => 'text', -value => $q->param( 'text' ) );
     $page =~ s/%TEXT%/$text/go;

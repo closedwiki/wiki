@@ -180,9 +180,9 @@ sub view {
       $session->{prefs}->getPreferencesValue( 'VIEW_TEMPLATE' ) ||
         'view';
 
-    my $tmpl = $session->{templates}->readTemplate( $template, $skin );
+    my $tmpl = $session->templates->readTemplate( $template, $skin );
     if( !$tmpl && $template ne 'view' ) {
-        $tmpl = $session->{templates}->readTemplate( 'view', $skin );
+        $tmpl = $session->templates->readTemplate( 'view', $skin );
     }
 
     if( !$tmpl ) {
@@ -246,9 +246,9 @@ sub view {
         $doingRev--;
     }
 
-    my $ri = $session->{renderer}->renderRevisionInfo( $webName,
-                                                       $topicName,
-                                                       $meta );
+    my $ri = $session->renderer->renderRevisionInfo( $webName,
+                                                     $topicName,
+                                                     $meta );
     $tmpl =~ s/%REVINFO%/$ri/go;
     $tmpl =~ s/%REVISIONS%/$revs/go;
 
@@ -383,7 +383,7 @@ sub _prepare {
     my( $text, $session, $webName, $topicName, $meta, $minimalist) = @_;
 
     $text = $session->handleCommonTags( $text, $webName, $topicName, $meta );
-    $text = $session->{renderer}->getRenderedVersion( $text, $webName, $topicName );
+    $text = $session->renderer->getRenderedVersion( $text, $webName, $topicName );
     $text =~ s/( ?) *<\/?(nop|noautolink)\/?>\n?/$1/gois;
 
     if( $minimalist ) {
@@ -422,6 +422,14 @@ sub viewfile {
     } else {
         $fileName = pop( @path );
     }
+    if (!$fileName) {
+        throw TWiki::OopsException( 'attention',
+                                    def => 'no_such_attachment',
+                                    web => 'Unknown',
+                                    topic => 'Unknown',
+                                    params => [ 'viewfile', '?' ] );
+    }
+
     my $topic = pop( @path );
     my $webName = join('.', @path );
 

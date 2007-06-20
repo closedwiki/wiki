@@ -103,7 +103,7 @@ sub oops {
 
     my $skin = $session->getSkin();
 
-    my $tmplData = $session->{templates}->readTemplate( $tmplName, $skin );
+    my $tmplData = $session->templates->readTemplate( $tmplName, $skin );
 
     if( ! $tmplData ) {
         $tmplData = CGI::start_html()
@@ -114,7 +114,7 @@ sub oops {
     } else {
         if( defined $def ) {
             # if a def is specified, instantiate that def
-            my $blah = $session->{templates}->expandTemplate( $def );
+            my $blah = $session->templates->expandTemplate( $def );
             $tmplData =~ s/%INSTANTIATE%/$blah/;
         }
         $tmplData = $session->handleCommonTags( $tmplData, $web, $topic );
@@ -126,7 +126,7 @@ sub oops {
         $tmplData =~ s/%(PARAM\d+)%/
           CGI::span({class=>'twikiAlert'},"MISSING $1 ")/ge if DEBUG;
         $tmplData = $session->handleCommonTags( $tmplData, $web, $topic );
-        $tmplData = $session->{renderer}->getRenderedVersion( $tmplData, $web,
+        $tmplData = $session->renderer->getRenderedVersion( $tmplData, $web,
                                                               $topic );
     }
 

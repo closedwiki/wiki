@@ -186,7 +186,7 @@ sub std_tests {
 #render diff & history to make sure those are all wikiname
 
 #render attahcment tables, and rev history of attachment tables, all must be wikiname
-	my $renderedMeta = $this ->{twiki}->{attach}->renderMetaData ( $this->{test_web}, 'CuidWithMappers' , 
+	my $renderedMeta = $this ->{twiki}->attach->renderMetaData ( $this->{test_web}, 'CuidWithMappers' , 
 				$meta, {template=>'attachtables.tmpl'} );
 	$this->assert_not_null($renderedMeta);
 	#TODO: redo this with custom tmpl and check each username

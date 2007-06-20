@@ -942,7 +942,7 @@ sub _LOGIN {
 
     my $url = $this->loginUrl();
     if( $url ) {
-        my $text = $twiki->{templates}->expandTemplate('LOG_IN');
+        my $text = $twiki->templates->expandTemplate('LOG_IN');
         return CGI::a( { href=>$url }, $text );
     }
     return '';
@@ -983,7 +983,7 @@ sub _LOGOUT {
 
     my $url = _LOGOUTURL( @_ );
     if( $url ) {
-        my $text = $twiki->{templates}->expandTemplate('LOG_OUT');
+        my $text = $twiki->templates->expandTemplate('LOG_OUT');
         return CGI::a( {href=>$url }, $text );
     }
     return '';
@@ -1085,7 +1085,7 @@ sub _dispLogon {
         $urlToUse = _rewriteURL( $this, $urlToUse );
     }
 
-    my $text = $twiki->{templates}->expandTemplate('LOG_IN');
+    my $text = $twiki->templates->expandTemplate('LOG_IN');
     return CGI::a({ class => 'twikiAlert', href => $urlToUse }, $text );
 }
 

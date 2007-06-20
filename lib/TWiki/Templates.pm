@@ -384,7 +384,7 @@ sub validateFile {
 sub validateTopic {
    my( $session, $store, $user, $topic, $web ) = @_;
    return $store->topicExists( $web, $topic ) && 
-   $session->{security}->checkAccessPermission(
+   $session->security->checkAccessPermission(
        'VIEW', $user, undef, undef, $topic, $web );
 }
 

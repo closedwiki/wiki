@@ -263,12 +263,12 @@ sub readTopicRaw {
     # from the (raw) text passed
     # SMELL: assumes that the backend can't store meta outside the topic
     if( $user &&
-          !$this->{session}->{security}->checkAccessPermission
+          !$this->{session}->security->checkAccessPermission
             ( 'VIEW', $user, $text, undef, $topic, $web )) {
         my $users = $this->{session}->{users};
         throw TWiki::AccessControlException(
             'VIEW', $user, $web, $topic,
-            $this->{session}->{security}->getReason());
+            $this->{session}->security->getReason());
     }
 
     return $text;
@@ -295,20 +295,20 @@ sub moveAttachment {
     try {
         my( $ometa, $otext ) = $this->readTopic( undef, $oldWeb, $oldTopic );
         if( $user &&
-              !$this->{session}->{security}->checkAccessPermission
+              !$this->{session}->security->checkAccessPermission
                 ( 'CHANGE', $user, $otext, $ometa, $oldTopic, $oldWeb )) {
             throw TWiki::AccessControlException(
                 'CHANGE', $user, $oldWeb, $oldTopic,
-                $this->{session}->{security}->getReason());
+                $this->{session}->security->getReason());
         }
 
         my ( $nmeta, $ntext ) = $this->readTopic( undef, $newWeb, $newTopic );
         if( $user &&
-              !$this->{session}->{security}->checkAccessPermission
+              !$this->{session}->security->checkAccessPermission
                 ( 'CHANGE', $user, $ntext, $nmeta, $newTopic, $newWeb )) {
             throw TWiki::AccessControlException(
                 'CHANGE', $user, $newWeb, $newTopic,
-                $this->{session}->{security}->getReason());
+                $this->{session}->security->getReason());
         }
 
         # Remove file attachment from old topic
@@ -372,12 +372,12 @@ sub getAttachmentStream {
     my ( $this, $user, $web, $topic, $att ) = @_;
 
     if( $user &&
-          !$this->{session}->{security}->checkAccessPermission
+          !$this->{session}->security->checkAccessPermission
             ( 'VIEW', $user, undef, undef, $topic, $web )) {
         my $users = $this->{session}->{users};
         throw TWiki::AccessControlException(
             'VIEW', $user, $web, $topic,
-            $this->{session}->{security}->getReason());
+            $this->{session}->security->getReason());
     }
 
     my $handler = _getHandler( $this, $web, $topic, $att );
@@ -456,12 +456,12 @@ sub moveTopic {
         my $otext = $this->readTopicRaw( undef, $oldWeb, $oldTopic );
         # Note: undef $meta param will cause $otext to be parsed for meta
         if( $user &&
-              !$this->{session}->{security}->checkAccessPermission
+              !$this->{session}->security->checkAccessPermission
                 ( 'CHANGE', $user, $otext, undef, $oldTopic, $oldWeb )) {
             throw TWiki::AccessControlException(
                 'CHANGE', $user,
                 $oldWeb, $oldTopic,
-                $this->{session}->{security}->getReason());
+                $this->{session}->security->getReason());
         }
 
         my ( $nmeta, $ntext );
@@ -469,11 +469,11 @@ sub moveTopic {
             ( $nmeta, $ntext ) = $this->readTopic( undef, $newWeb, $newTopic );
         }
         if( $user &&
-              !$this->{session}->{security}->checkAccessPermission
+              !$this->{session}->security->checkAccessPermission
                 ( 'CHANGE', $user, $ntext, $nmeta, $newTopic, $newWeb )) {
             throw TWiki::AccessControlException(
                 'CHANGE', $user, $newWeb, $newTopic,
-                $this->{session}->{security}->getReason());
+                $this->{session}->security->getReason());
         }
 
         $handler->moveTopic( $newWeb, $newTopic );
@@ -575,12 +575,12 @@ sub readAttachment {
 
 
     if( $user &&
-          !$this->{session}->{security}->checkAccessPermission
+          !$this->{session}->security->checkAccessPermission
             ( 'VIEW', $user, undef, undef, $topic, $web )) {
         my $users = $this->{session}->{users};
         throw TWiki::AccessControlException(
             'VIEW', $user, $web, $topic,
-            $this->{session}->{security}->getReason());
+            $this->{session}->security->getReason());
     }
 
     my $handler = _getHandler( $this, $web, $topic, $attachment );
@@ -827,11 +827,11 @@ sub saveTopic {
 
     $options = {} unless defined( $options );
     if( $user &&
-          !$this->{session}->{security}->checkAccessPermission
+          !$this->{session}->security->checkAccessPermission
             ( 'CHANGE', $user, undef, undef, $topic, $web )) {
         throw TWiki::AccessControlException(
             'CHANGE', $user, $web, $topic,
-            $this->{session}->{security}->getReason());
+            $this->{session}->security->getReason());
     }
     my $plugins = $this->{session}->{plugins};
     # Semantics inherited from Cairo. See
@@ -917,12 +917,12 @@ sub saveAttachment {
         my( $meta, $text ) = $this->readTopic( undef, $web, $topic, undef );
 
         if( $user &&
-              !$this->{session}->{security}->checkAccessPermission
+              !$this->{session}->security->checkAccessPermission
                 ( 'CHANGE', $user, $text, $meta, $topic, $web )) {
 
             throw TWiki::AccessControlException(
                 'CHANGE', $user, $web, $topic,
-                $this->{session}->{security}->getReason());
+                $this->{session}->security->getReason());
         }
 
         if( $opts->{file} && !$opts->{stream} ) {
@@ -995,7 +995,7 @@ sub saveAttachment {
         $meta->putKeyed( 'FILEATTACHMENT', $attrs );
 
         if( $opts->{createlink} ) {
-            $text .= $this->{session}->{attach}->getAttachmentLink(
+            $text .= $this->{session}->attach->getAttachmentLink(
                 $user, $web, $topic, $attachment, $meta );
         }
 
@@ -1543,7 +1543,7 @@ sub getListOfWebs {
     }
 
     if( $filter =~ /\ballowed\b/ ) {
-        my $security = $this->{session}->{security};
+        my $security = $this->{session}->security;
         @webList =
           grep {
               $security->checkAccessPermission(
@@ -1861,7 +1861,7 @@ sub searchMetaData {
 
     my $text = '';
     if ($params->{format}) {
-        $text = $this->{session}->{search}->searchWeb(
+        $text = $this->{session}->search->searchWeb(
             format	       => $params->{format},
             search        => $searchVal,
             web           => $attrWeb,
@@ -1875,7 +1875,7 @@ sub searchMetaData {
             inline        => 1,
            );
     } else {
-        $this->{session}->{search}->searchWeb(
+        $this->{session}->search->searchWeb(
             _callback     => \&_collate,
             _cbdata       => \$text,,
             search        => $searchVal,
