@@ -219,7 +219,7 @@ Gets a private directory uniquely identified by $key. The directory is
 intended as a work area for plugins.
 
 The standard is a directory named the same as "key" under
-$TWiki::cfg{RCS}{WorkAreaDir}
+$TWiki::cfg{WorkingDir}/work_areas
 
 =cut
 
@@ -230,7 +230,7 @@ sub getWorkArea {
     $key = TWiki::Sandbox::normalizeFileName( $key );
     throw Error::Simple( "Bad work area name $key" ) unless ( $key );
 
-    my $dir =  "$TWiki::cfg{RCS}{WorkAreaDir}/$key";
+    my $dir =  "$TWiki::cfg{WorkingDir}/work_areas/$key";
 
     unless( -d $dir ) {
         mkdir( $dir ) || throw Error::Simple(<<ERROR);
