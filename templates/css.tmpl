@@ -3,7 +3,6 @@
 %TMPL:DEF{"twikistyle"}%%TMPL:P{"twikibase"}%
 %TMPL:P{"defaultstyle"}%
 %TMPL:P{"iespecificstyle"}%
-%TMPL:P{"javascriptaffectedstyle"}%
 %TMPL:P{"templatestyle"}%%TMPL:END%
 
 
@@ -30,9 +29,3 @@ pre {
 	position:relative; /* IE 5.5 needs this or the contents won't show outside the parent container on print. IE 6.0 needs it only during printable copy! */
 }
 </style><![endif]-->%TMPL:END%
-
-
-%TMPL:DEF{"javascriptaffectedstyle"}%<script type="text/javascript">
-var styleText = '<style type="text/css" media="all">.twikiMakeVisible{display:inline;}.twikiMakeVisibleInline{display:inline;}.twikiMakeVisibleBlock{display:block;}.twikiMakeHidden{display:none;}</style>';
-document.write(styleText);
-</script>%TMPL:END%
