@@ -32,8 +32,8 @@ use Cwd;
 
 my $systemWeb = "TemporaryRegisterTestsSystemWeb";
 
-# Override randowm password generator
-$TWiki::Users::password = "foo";
+# Override random password generator with an impossible password
+$TWiki::Users::password = "80808080808";
 
 sub new {
     my $this = shift()->SUPER::new('Registration', @_);
@@ -50,7 +50,6 @@ sub set_up {
     $TWiki::cfg{PasswordManager} = 'TWiki::Users::HtPasswdUser';
     $TWiki::cfg{SuperAdminGroup} = "PowerRangers";
     $TWiki::cfg{UserInterfaceInternationalisation} = 0;
-    $TWiki::cfg{RegistrationApprovals} = "$TWiki::cfg{TempfileDir}/approvals";
     $TWiki::cfg{Register}{NeedVerification} = 1;
     $TWiki::cfg{MinPasswordLength} = 0;
     $TWiki::cfg{UserMappingManager} = 'TWiki::Users::TWikiUserMapping';
@@ -111,8 +110,6 @@ EOF
 
     $Error::Debug = 1;
 
-    setupUnregistered();
-
     @TWikiFnTestCase::mails = ();
 }
 
@@ -120,7 +117,6 @@ sub tear_down {
     my $this = shift;
 
     $this->removeWebFixture($this->{twiki}, $systemWeb);
-    File::Path::rmtree($TWiki::cfg{RegistrationApprovals});
     $this->SUPER::tear_down();
 }
 
@@ -130,18 +126,18 @@ sub registerAccount {
 
     $this->registerVerifyOk();
 
-    my $query = new CGI({
-                         'code' => [
-                                    $this->{new_user_wikiname}.".foo"
-                                   ],
-                         'action' => [
-                                      'verify'
-                                     ]
-                        });
+    my $query = new CGI(
+        {
+            'code' => [
+                "$this->{new_user_wikiname}.$TWiki::Users::password"
+               ],
+            'action' => [
+                'verify'
+               ]
+           });
 
     try {
-        TWiki::UI::Register::complete(
-            $this->{twiki}, $TWiki::cfg{RegistrationApprovals} );
+        TWiki::UI::Register::complete( $this->{twiki} );
     } catch TWiki::OopsException with {
         my $e = shift;
         $this->assert_str_equals("attention", $e->{template},
@@ -334,7 +330,7 @@ EOF
 }
 
 #Register a user, and then verify it
-#Assumes the verification code is foo
+#Assumes the verification code is $TWiki::Users::password
 sub registerVerifyOk {
     my $this = shift;
     $TWiki::cfg{Register}{NeedVerification}  =  1;
@@ -391,7 +387,7 @@ sub registerVerifyOk {
         $this->assert(0, "expected an oops redirect");
     };
 
-    my $code = shift || $this->{new_user_wikiname}.".foo";
+    my $code = shift || "$this->{new_user_wikiname}.$TWiki::Users::password";
     $query = new CGI ({
                        'code' => [
                                   $code
@@ -406,8 +402,7 @@ sub registerVerifyOk {
     $this->{twiki}->{net}->setMailHandler(\&TWikiFnTestCase::sentMail);
 
     try {
-        TWiki::UI::Register::verifyEmailAddress(
-            $this->{twiki}, $TWiki::cfg{RegistrationApprovals});
+        TWiki::UI::Register::verifyEmailAddress($this->{twiki});
     } catch TWiki::AccessControlException with {
         my $e = shift;
         $this->assert(0, $e->stringify);
@@ -488,7 +483,7 @@ sub test_registerBadVerify {
         $this->assert(0, "expected an oops redirect");
     };
 
-    my $code = $this->{test_user_wikiname}.'.bad.foo';
+    my $code = "$this->{test_user_wikiname}.bad.$TWiki::Users::password";
     $query = new CGI ({
         'code' => [
             $code
@@ -503,8 +498,7 @@ sub test_registerBadVerify {
     $this->{twiki}->{net}->setMailHandler(\&TWikiFnTestCase::sentMail);
 
     try {
-        TWiki::UI::Register::verifyEmailAddress(
-            $this->{twiki}, $TWiki::cfg{RegistrationApprovals});
+        TWiki::UI::Register::verifyEmailAddress($this->{twiki});
     } catch TWiki::AccessControlException with {
         my $e = shift;
         $this->assert(0, $e->stringify);
@@ -523,7 +517,7 @@ sub test_registerBadVerify {
     $this->assert_matches(qr/From: $TWiki::cfg{WebMasterName} <$TWiki::cfg{WebMasterEmail}>/,$mess);
     $this->assert_matches(qr/To: .*\b$this->{new_user_email}\b/,$mess);
     # check the verification code
-    $this->assert_matches(qr/'$this->{new_user_wikiname}\.foo'/,$mess);
+    $this->assert_matches(qr/'$this->{new_user_wikiname}\.$TWiki::Users::password'/,$mess);
 }
 
 
@@ -739,7 +733,7 @@ sub test_duplicateActivation {
 
     # For verification process everything including finish(), so don't just
     # call verifyEmails
-    my $code = shift || "$this->{new_user_wikiname}.foo";
+    my $code = shift || "$this->{new_user_wikiname}.$TWiki::Users::password";
     $query = CGI->new ({'code'   => [$code],
                         'action' => ['verify'],
                     });
@@ -983,24 +977,6 @@ sub test_resetPasswordNoPassword {
     @TWikiFnTestCase::mails = ();
 }
 
-
-my $name;
-my $code;
-my $dir;
-my $regSave;
-
-sub setupUnregistered {
-    $name = "MartinCleaver";
-    $code = "$name.ba";
-
-
-    $regSave = {
-                doh => "homer",
-                VerificationCode => $code,
-                WikiName => $name
-               };
-}
-
 =pod
 
 Create an incomplete registration, and try to finish it off.
@@ -1011,18 +987,24 @@ Once complete, try again - the second attempt at completion should fail.
 sub test_UnregisteredUser {
     my $this = shift;
 
-    TWiki::UI::Register::_putRegDetailsByCode($regSave, $TWiki::cfg{RegistrationApprovals});
+    my $regSave = {
+                doh => "homer",
+                VerificationCode => "GitWit.0",
+                WikiName => "GitWit"
+               };
 
-    my $result = TWiki::UI::Register::_getRegDetailsByCode($code, $TWiki::cfg{RegistrationApprovals});
-    $this->assert_equals("homer", $result->{doh} );
+    my $file = TWiki::UI::Register::_codeFile( $regSave->{VerificationCode} );
+    $this->assert(open( F, ">$file" ));
+    print F Data::Dumper->Dump( [ $regSave, undef ], [ 'data', 'form' ] );
+    close F;
 
-    my $result2 = TWiki::UI::Register::_reloadUserContext($session, $code, $TWiki::cfg{RegistrationApprovals});
+    my $result2 = TWiki::UI::Register::_loadPendingRegistration($session, "GitWit.0");
     $this->assert_deep_equals($result2, $regSave);
 
     try {
         # this is a deliberate attempt to reload an already used token.
         # this should fail!
-        TWiki::UI::Register::_deleteUserContext( $code, $TWiki::cfg{RegistrationApprovals} );
+        TWiki::UI::Register::_clearPendingRegistrationsForUser("GitWit.0");
     } catch TWiki::OopsException with {
         my $e = shift;
         $this->assert_matches(qr/has no file/, $e->stringify());
@@ -1144,7 +1126,7 @@ sub test_buildRegistrationEmail {
                             'name' => 'Password',
                            }
                           ],
-                'VerificationCode' => $this->{new_user_wikiname}.'.foo',
+                'VerificationCode' => "$this->{new_user_wikiname}.$TWiki::Users::password",
                 'Name' => $this->{new_user_fullname},
                 'webName' => $this->{users_web},
                 'WikiName' => $this->{new_user_wikiname},
