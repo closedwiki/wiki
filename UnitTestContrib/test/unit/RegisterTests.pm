@@ -367,7 +367,7 @@ sub registerVerifyOk {
     $query->path_info( "/$this->{users_web}/TWikiRegistration" );
     $this->{twiki}->finish();
     $this->{twiki} = new TWiki( $TWiki::cfg{DefaultUserLogin}, $query);
-    $this->{twiki}->{net}->setMailHandler(\&TWikiFnTestCase::sentMail);
+    $this->{twiki}->net->setMailHandler(\&TWikiFnTestCase::sentMail);
 
     try {
         TWiki::UI::Register::register_cgi($this->{twiki});
@@ -399,7 +399,7 @@ sub registerVerifyOk {
     $query->path_info( "/$this->{users_web}/TWikiRegistration" );
     $this->{twiki}->finish();
     $this->{twiki} = new TWiki( $TWiki::cfg{DefaultUserLogin},$query);
-    $this->{twiki}->{net}->setMailHandler(\&TWikiFnTestCase::sentMail);
+    $this->{twiki}->net->setMailHandler(\&TWikiFnTestCase::sentMail);
 
     try {
         TWiki::UI::Register::verifyEmailAddress($this->{twiki});
@@ -463,7 +463,7 @@ sub test_registerBadVerify {
     $query->path_info( "/$this->{users_web}/TWikiRegistration" );
     $this->{twiki}->finish();
     $this->{twiki} = new TWiki( $TWiki::cfg{DefaultUserLogin}, $query);
-    $this->{twiki}->{net}->setMailHandler(\&TWikiFnTestCase::sentMail);
+    $this->{twiki}->net->setMailHandler(\&TWikiFnTestCase::sentMail);
     try {
         TWiki::UI::Register::register_cgi($this->{twiki});
     } catch TWiki::OopsException with {
@@ -495,7 +495,7 @@ sub test_registerBadVerify {
     $query->path_info( "/$this->{users_web}/TWikiRegistration" );
     $this->{twiki}->finish();
     $this->{twiki} = new TWiki( $TWiki::cfg{DefaultUserLogin}, $query);
-    $this->{twiki}->{net}->setMailHandler(\&TWikiFnTestCase::sentMail);
+    $this->{twiki}->net->setMailHandler(\&TWikiFnTestCase::sentMail);
 
     try {
         TWiki::UI::Register::verifyEmailAddress($this->{twiki});
@@ -559,7 +559,7 @@ sub test_registerNoVerifyOk {
     $query->path_info( "/$this->{users_web}/TWikiRegistration" );
     $this->{twiki}->finish();
     $this->{twiki} = new TWiki( $TWiki::cfg{DefaultUserLogin}, $query);
-    $this->{twiki}->{net}->setMailHandler(\&TWikiFnTestCase::sentMail);
+    $this->{twiki}->net->setMailHandler(\&TWikiFnTestCase::sentMail);
 
     try {
         TWiki::UI::Register::register_cgi($this->{twiki});
@@ -620,7 +620,7 @@ sub test_rejectShortPassword {
     $query->path_info( "/$this->{users_web}/TWikiRegistration" );
     $this->{twiki}->finish();
     $this->{twiki} = new TWiki( $TWiki::cfg{DefaultUserLogin}, $query);
-    $this->{twiki}->{net}->setMailHandler(\&TWikiFnTestCase::sentMail);
+    $this->{twiki}->net->setMailHandler(\&TWikiFnTestCase::sentMail);
 
     try {
         TWiki::UI::Register::register_cgi($this->{twiki});
@@ -666,7 +666,7 @@ sub test_shortPassword {
     $query->path_info( "/$this->{users_web}/TWikiRegistration" );
     $this->{twiki}->finish();
     $this->{twiki} = new TWiki( $TWiki::cfg{DefaultUserLogin}, $query);
-    $this->{twiki}->{net}->setMailHandler(\&TWikiFnTestCase::sentMail);
+    $this->{twiki}->net->setMailHandler(\&TWikiFnTestCase::sentMail);
 
     try {
         TWiki::UI::Register::register_cgi($this->{twiki});
@@ -711,7 +711,7 @@ sub test_duplicateActivation {
                       });
     $query->path_info( "/$this->{users_web}/TWikiRegistration" );
     $this->{twiki} = TWiki->new($TWiki::cfg{DefaultUserName}, $query);
-    $this->{twiki}->{net}->setMailHandler(\&TWikiFnTestCase::sentMail);
+    $this->{twiki}->net->setMailHandler(\&TWikiFnTestCase::sentMail);
     try {
         TWiki::UI::Register::register_cgi($this->{twiki});
     } catch TWiki::OopsException with {
@@ -739,7 +739,7 @@ sub test_duplicateActivation {
                     });
     $query->path_info( "/$this->{users_web}/TWikiRegistration" );
     $this->{twiki} = TWiki->new($TWiki::cfg{DefaultUserName},$query);
-    $this->{twiki}->{net}->setMailHandler(\&TWikiFnTestCase::sentMail);
+    $this->{twiki}->net->setMailHandler(\&TWikiFnTestCase::sentMail);
     try {
         TWiki::UI::Register::register_cgi($this->{twiki});
     } catch TWiki::OopsException with {
@@ -763,7 +763,7 @@ sub test_duplicateActivation {
                     });
     $query->path_info( "/$this->{users_web}/TWikiRegistration" );
     $this->{twiki} = TWiki->new($TWiki::cfg{DefaultUserName},$query);
-    $this->{twiki}->{net}->setMailHandler(\&sentMail);
+    $this->{twiki}->net->setMailHandler(\&sentMail);
     try {
         TWiki::UI::Register::register_cgi($this->{twiki});
     } catch TWiki::OopsException with {
@@ -818,7 +818,7 @@ sub test_resetPasswordOkay {
     $query->path_info( '/'.$this->{users_web}.'/WebHome' );
     $this->{twiki}->finish();
     $this->{twiki} = new TWiki( $TWiki::cfg{DefaultUserLogin}, $query);
-    $this->{twiki}->{net}->setMailHandler(\&TWikiFnTestCase::sentMail);
+    $this->{twiki}->net->setMailHandler(\&TWikiFnTestCase::sentMail);
 
     try {
         TWiki::UI::Register::resetPassword($this->{twiki});
@@ -866,7 +866,7 @@ sub test_resetPasswordNoSuchUser {
     $query->path_info( '/.'.$this->{users_web}.'/WebHome' );
     $this->{twiki}->finish();
     $this->{twiki} = new TWiki( $TWiki::cfg{DefaultUserLogin}, $query);
-    $this->{twiki}->{net}->setMailHandler(\&TWikiFnTestCase::sentMail);
+    $this->{twiki}->net->setMailHandler(\&TWikiFnTestCase::sentMail);
 
     try {
         TWiki::UI::Register::resetPassword($this->{twiki});
@@ -908,7 +908,7 @@ sub test_resetPasswordNeedPrivilegeForMultipleReset {
     $query->path_info( '/.'.$this->{users_web}.'/WebHome' );
     $this->{twiki}->finish();
     $this->{twiki} = new TWiki( $TWiki::cfg{DefaultUserLogin}, $query);
-    $this->{twiki}->{net}->setMailHandler(\&TWikiFnTestCase::sentMail);
+    $this->{twiki}->net->setMailHandler(\&TWikiFnTestCase::sentMail);
 
     try {
         TWiki::UI::Register::resetPassword($this->{twiki});
@@ -955,7 +955,7 @@ sub test_resetPasswordNoPassword {
 
     $this->{twiki}->finish();
     $this->{twiki} = new TWiki( $TWiki::cfg{DefaultUserLogin}, $query);
-    $this->{twiki}->{net}->setMailHandler(\&TWikiFnTestCase::sentMail);
+    $this->{twiki}->net->setMailHandler(\&TWikiFnTestCase::sentMail);
 
     try {
         TWiki::UI::Register::resetPassword($this->{twiki});
@@ -1060,7 +1060,7 @@ EOM
     $query->path_info( "/$this->{test_web}/$regTopic" );
     $this->{twiki}->finish();
     $this->{twiki} = new TWiki( $this->{test_user_login}, $query);
-    $this->{twiki}->{net}->setMailHandler(\&TWikiFnTestCase::sentMail);
+    $this->{twiki}->net->setMailHandler(\&TWikiFnTestCase::sentMail);
     $this->{twiki}->{topicName} = $regTopic;
     $this->{twiki}->{webName} = $this->{test_web};
     try {
@@ -1153,7 +1153,7 @@ EOM
 
     $this->{twiki}->finish();
     $this->{twiki} = new TWiki( $TWiki::cfg{DefaultUserLogin});
-    $this->{twiki}->{net}->setMailHandler(\&TWikiFnTestCase::sentMail);
+    $this->{twiki}->net->setMailHandler(\&TWikiFnTestCase::sentMail);
 
     my $actual = TWiki::UI::Register::_buildConfirmationEmail
        ($this->{twiki},
@@ -1218,7 +1218,7 @@ sub test_disabled_registration {
     $query->path_info( "/$this->{users_web}/TWikiRegistration" );
     $this->{twiki}->finish();
     $this->{twiki} = new TWiki( $TWiki::cfg{DefaultUserLogin}, $query);
-    $this->{twiki}->{net}->setMailHandler(\&TWikiFnTestCase::sentMail);
+    $this->{twiki}->net->setMailHandler(\&TWikiFnTestCase::sentMail);
 
     try {
         TWiki::UI::Register::register_cgi($this->{twiki});    
@@ -1280,7 +1280,7 @@ sub test_3951 {
     $query->path_info( "/$this->{users_web}/TWikiRegistration" );
     $this->{twiki}->finish();
     $this->{twiki} = new TWiki( $TWiki::cfg{DefaultUserLogin}, $query);
-    $this->{twiki}->{net}->setMailHandler(\&TWikiFnTestCase::sentMail);
+    $this->{twiki}->net->setMailHandler(\&TWikiFnTestCase::sentMail);
 
     try {
         TWiki::UI::Register::register_cgi($this->{twiki});
@@ -1345,7 +1345,7 @@ sub test_resetEmailOkay {
     $query->path_info( '/'.$this->{users_web}.'/WebHome' );
     $this->{twiki}->finish();
     $this->{twiki} = new TWiki($this->{new_user_login}, $query);
-    $this->{twiki}->{net}->setMailHandler(\&TWikiFnTestCase::sentMail);
+    $this->{twiki}->net->setMailHandler(\&TWikiFnTestCase::sentMail);
     try {
         TWiki::UI::Register::changePassword($this->{twiki});
     } catch TWiki::AccessControlException with {

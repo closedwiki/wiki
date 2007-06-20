@@ -174,7 +174,7 @@ sub setup_formtests {
 
   $this->{twiki}->{webName} = $web;
   $this->{twiki}->{topicName} = $topic;
-  my $render = $this->{twiki}->{renderer};
+  my $render = $this->{twiki}->renderer;
 
   use TWiki::Attrs;
   my $attr = new TWiki::Attrs( $params );

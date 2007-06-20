@@ -45,7 +45,7 @@ sub do_test {
     my $topicName = $this->{test_topic};
 
     $actual = $session->handleCommonTags( $actual, $webName, $topicName );
-    $actual = $session->{renderer}->getRenderedVersion( $actual, $webName, $topicName );
+    $actual = $session->renderer->getRenderedVersion( $actual, $webName, $topicName );
 
     $this->assert_html_equals($expected, $actual);
 }

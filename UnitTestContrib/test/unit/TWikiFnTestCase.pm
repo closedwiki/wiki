@@ -34,7 +34,6 @@ sub new {
 
 sub set_up {
     my $this = shift;
-
     $this->SUPER::set_up();
 
     $TWiki::cfg{StoreImpl} = "RcsWrap";
@@ -55,7 +54,7 @@ sub set_up {
     $this->{twiki} = new TWiki(undef, $query);
     $TWiki::Plugins::SESSION = $this->{twiki};
     @mails = ();
-    $this->{twiki}->{net}->setMailHandler(\&TWikiFnTestCase::sentMail);
+    $this->{twiki}->net->setMailHandler(\&TWikiFnTestCase::sentMail);
     $this->{twiki}->{store}->createWeb( $this->{twiki}->{user}, $this->{test_web} );
     $this->{twiki}->{store}->createWeb( $this->{twiki}->{user}, $this->{users_web} );
     $this->{test_user_forename} = 'Scum';
@@ -109,7 +108,7 @@ sub registerUser {
     $query->path_info( "/$this->{users_web}/TWikiRegistration" );
 
     my $twiki = new TWiki(undef, $query);
-    $twiki->{net}->setMailHandler(\&TWikiFnTestCase::sentMail);
+    $twiki->net->setMailHandler(\&TWikiFnTestCase::sentMail);
     try {
         TWiki::UI::Register::register_cgi($twiki);
     } catch TWiki::OopsException with {
@@ -131,7 +130,7 @@ sub registerUser {
     my $q = $this->{twiki}->{cgiQuery};
     $this->{twiki}->finish();
     $this->{twiki} = new TWiki(undef, $q);
-    $this->{twiki}->{net}->setMailHandler(\&TWikiFnTestCase::sentMail);
+    $this->{twiki}->net->setMailHandler(\&TWikiFnTestCase::sentMail);
 }
 
 1;

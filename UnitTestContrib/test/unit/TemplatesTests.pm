@@ -37,7 +37,7 @@ sub set_up {
 
     
     $session = new TWiki();
-    $tmpls = $session->{templates};
+    $tmpls = $session->templates;
     
     $TWiki::cfg{TemplateDir} = $test_tmpls;
     $TWiki::cfg{DataDir} = $test_data;

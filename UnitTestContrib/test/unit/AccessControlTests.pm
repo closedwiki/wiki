@@ -59,14 +59,14 @@ sub tear_down {
 
 sub DENIED {
     my( $this, $web, $topic, $mode, $user ) = @_;
-    $this->assert(!$this->{twiki}->{security}->checkAccessPermission
+    $this->assert(!$this->{twiki}->security->checkAccessPermission
                   ($mode, $user,undef,undef,$topic,$web),
                   "$user $mode $web.$topic");
 }
 
 sub PERMITTED {
     my( $this, $web, $topic, $mode, $user ) = @_;
-    $this->assert($this->{twiki}->{security}->checkAccessPermission
+    $this->assert($this->{twiki}->security->checkAccessPermission
                   ($mode, $user,undef,undef,$topic,$web),
                  "$user $mode $web.$topic");
 }
@@ -266,23 +266,23 @@ THIS
 sub checkText {
     my ($this, $text, $meta) = @_;
 
-    $this->assert(!$this->{twiki}->{security}->checkAccessPermission
+    $this->assert(!$this->{twiki}->security->checkAccessPermission
                   ('VIEW', $MrOrange,
                    $text,$meta,$testTopic,$this->{test_web}),
                   " 'VIEW' $this->{test_web}.$testTopic");
-    $this->assert($this->{twiki}->{security}->checkAccessPermission
+    $this->assert($this->{twiki}->security->checkAccessPermission
                   ('VIEW', $MrGreen,
                    $text,$meta,$testTopic,$this->{test_web}),
                   " 'VIEW' $this->{test_web}.$testTopic");
-    $this->assert(!$this->{twiki}->{security}->checkAccessPermission
+    $this->assert(!$this->{twiki}->security->checkAccessPermission
                   ('VIEW', $MrYellow,
                    $text,$meta,$testTopic,$this->{test_web}),
                   " 'VIEW' $this->{test_web}.$testTopic");
-    $this->assert(!$this->{twiki}->{security}->checkAccessPermission
+    $this->assert(!$this->{twiki}->security->checkAccessPermission
                   ('VIEW', $MrWhite,
                    $text,$meta,$testTopic,$this->{test_web}),
                   " 'VIEW' $this->{test_web}.$testTopic");
-    $this->assert(!$this->{twiki}->{security}->checkAccessPermission
+    $this->assert(!$this->{twiki}->security->checkAccessPermission
                   ('VIEW', $MrBlue,
                    $text,$meta,$testTopic,$this->{test_web}),
                   " 'VIEW' $this->{test_web}.$testTopic");

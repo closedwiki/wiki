@@ -71,7 +71,7 @@ sub set_up {
     # in tools/MANIFEST) are enabled, but they are *all* enabled.
 
     # First disable all plugins
-    foreach my $k (%{$TWiki::cfg{Plugins}}) {
+    foreach my $k (keys %{$TWiki::cfg{Plugins}}) {
         $TWiki::cfg{Plugins}{$k}{Enabled} = 0;
     }
     # then reenable only those listed in MANIFEST
@@ -82,7 +82,7 @@ sub set_up {
     }
     local $/ = "\n";
     while (<F>) {
-        if (/^!include .*?([^\/]+)$/) {
+        if (/^!include .*?([^\/]+Plugin)$/) {
             $TWiki::cfg{Plugins}{$1}{Enabled} = 1;
         }
     }
