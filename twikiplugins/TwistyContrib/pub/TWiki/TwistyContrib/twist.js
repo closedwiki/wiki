@@ -58,7 +58,6 @@ twiki.TwistyPlugin = new function () {
 		var showControl = ref.show;
 		var hideControl = ref.hide;
 		var contentElem = ref.toggle;
-
 		if (ref.state == twiki.TwistyPlugin.CONTENT_SHOWN) {
 			// show content
 			twiki.CSS.addClass(showControl, 'twistyHidden');	// hide 'show'
@@ -189,7 +188,9 @@ twiki.TwistyPlugin.init = function(inId) {
 	ref = this._register(e);
 	
 	twiki.CSS.replaceClass(e, "twistyMakeHidden", "twistyHidden");
-	twiki.CSS.removeClass(e, "twistyMakeVisible");
+	twiki.CSS.removeClass(e, "twikiMakeVisible");
+	twiki.CSS.removeClass(e, "twikiMakeVisibleBlock");
+	twiki.CSS.removeClass(e, "twikiMakeVisibleInline");
 	twiki.CSS.removeClass(e, "twikiMakeHidden");
 	
 	if (ref.show && ref.hide && ref.toggle) {

@@ -169,10 +169,12 @@ When you want to use links, write:
 
 ---++ Contrib Info
 
-| Authors: | !JavaScript written by TWiki:Main.ArthurClemens, Contrib packaged by  TWiki:Main.RafaelAlvarez, original !JavaScript written by TWiki:Main.SamHasler. |
-| Copyright &copy;: | 2005 Sam Hasler and Rafael Alvarez, 2006,2007 Arthur Clemens |
+| Authors: | !JavaScript written by TWiki:Main.ArthurClemens; Contrib packaged by  TWiki:Main.RafaelAlvarez; original !JavaScript written by TWiki:Main.SamHasler. |
+| Copyright &copy;: | 2005 Sam Hasler and Rafael Alvarez; 2006,2007 Arthur Clemens |
 | License: | [[http://www.gnu.org/copyleft/gpl.html][GPL]] |
 | Dependencies: | %$DEPENDENCIES% |
+| Plugin&nbsp;Version: | 20 Jun 2007 (version 1.4.1)  |
+| Change&nbsp;History: | <!-- versions below in reverse order -->&nbsp; |
 | 20 Jun 2007 | 1.4 Arthur Clemens - Updated script so TwistyPlugin can work without extra javascript 'init' calls. |
 | 18 Jun 2007 | 1.3 Arthur Clemens - Updated with TWiki 4 !JavaScript files. |
 | 25 Oct 2006 | 1.2 Arthur Clemens - Updated !JavaScript to support !TwistyPlugin version 1.2  |
@@ -184,5 +186,6 @@ When you want to use links, write:
 
 __Related Topics:__ %TWIKIWEB%.TWikiPreferences
  
-%META:FILEATTACHMENT{name="twist.js" attachment="twist.js" attr="" comment="!JavaScript library" date="1126427179" path="twist.js" size="3441" stream="twist.js" user="TWikiContributors" version="0"}%
-%META:FILEATTACHMENT{name="twist.css" attachment="twist.css" attr="" comment="Style Sheet" date="1126427224" path="twist.css" size="122" stream="twist.css" user="TWikiContributors" version="0"}%
+%META:FILEATTACHMENT{name="twist.js" attachment="twist.js" attr="" comment="!JavaScript library" date="1126427179" path="twist.js" size="3441" stream="twist.js" user="TWikiContributor" version="0"}%
+%META:FILEATTACHMENT{name="twist.compressed.js" attachment="twist.compressed.js" attr="" comment="Compressed version of the !JavaScript library" date="1126427179" path="twist.compressed.js" size="3441" stream="twist.compressed.js" user="TWikiContributor" version="0"}%
+%META:FILEATTACHMENT{name="twist.css" attachment="twist.css" attr="" comment="Style Sheet" date="1126427224" path="twist.css" size="122" stream="twist.css" user="TWikiContributor" version="0"}%
