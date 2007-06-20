@@ -238,13 +238,12 @@ hideimgleft="%ICONURLPATH{toggleclose}%" suffix="</h4>"}%
 You can toggle all Twisties on or off at once by putting a link or button on the page with class =twistyExpandAll= or =twistyCollapseAll=.
 
 <verbatim>
-<button class="twistyExpandAll twikiButton">Expand all</button><br />
-<button class="twistyCollapseAll twikiButton">Collapse all</button>
+<button class="twistyExpandAll twikiButton">Expand all</button> &nbsp; <button class="twistyCollapseAll twikiButton">Collapse all</button>
 </verbatim>
 
 Creates these controls:
 
-<button class="twistyExpandAll twikiButton">Expand all</button><br />
+<button class="twistyExpandAll twikiButton">Expand all</button> &nbsp; 
 <button class="twistyCollapseAll twikiButton">Collapse all</button>
 
 When you want to use links, write:
@@ -252,14 +251,14 @@ When you want to use links, write:
 <verbatim>
 #VarTOGGLE
 
-<a href="#TOGGLE" class="twistyExpandAll">Expand all</a><br />
+<a href="#TOGGLE" class="twistyExpandAll">Expand all</a> &nbsp; 
 <a href="#TOGGLE" class="twistyCollapseAll">Collapse all</a>
 </verbatim>
 
 
 #VarTOGGLE
 
-<a href="#TOGGLE" class="twistyExpandAll">Expand all</a><br />
+<a href="#TOGGLE" class="twistyExpandAll">Expand all</a> &nbsp; 
 <a href="#TOGGLE" class="twistyCollapseAll">Collapse all</a>
 
 
@@ -426,6 +425,8 @@ a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>T
 | Copyright &copy;: | 2005 Rafael Alvarez, 2006, 2007 Arthur Clemens |
 | License: | [[http://www.gnu.org/copyleft/gpl.html][GPL]] |
 | Dependencies: | %$DEPENDENCIES% |
+| Plugin&nbsp;Version: | 20 Jun 2007 (version 1.4.1)  |
+| Change&nbsp;History: | <!-- versions below in reverse order -->&nbsp; |
 | 20 Jun 2007 | 1.4 Arthur Clemens - Updated to work without ugly inserted javascript 'init' calls. This will change nothing to the functionality, but it will produce cleaner HTML, while at the same time the twisty is still set immediately (not at page onload) and graceful fallback in case of no javascript is maintained. Parameter =noscript= is now deprecated as this should be done by scripts provided with twiki templates - but it will keep on working for a while. |
 | 19 Jun 2006 | 1.3 Arthur Clemens - Updated with TWiki 4 !JavaScript files. |
 | 25 Oct 2006 | 1.2 New variables to set default values: =TWISTYSHOWLINK=, =TWISTYHIDELINK=, =TWISTYMODE=, =TWISTYREMEMBER=; property =id= is no longer required as this is automatically set (still recommended in some cases with =remember="on"=); property value =remember="off"= will clear a previously stored cookie; new properties =prefix= and =suffix=; !JavaScript to collapse or expand all Twisties on the page.  |

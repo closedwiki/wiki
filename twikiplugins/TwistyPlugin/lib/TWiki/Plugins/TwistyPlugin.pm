@@ -44,7 +44,7 @@ $VERSION = '$Rev$';
 # This is a free-form string you can use to "name" your own plugin version.
 # It is *not* used by the build automation tools, but is reported as part
 # of the version number in PLUGINDESCRIPTIONS.
-$RELEASE = '1.4.0';
+$RELEASE = '1.4.1';
 
 $pluginName = 'TwistyPlugin';
 
@@ -115,16 +115,11 @@ sub _addHeader {
 <script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/TWikiJavascripts/twikiCSS.js"></script>
 <script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/BehaviourContrib/behaviour.compressed.js"></script>
 <script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/TwistyContrib/twist.compressed.js"></script>
-<style type="text/css" media="all">
-.twikiMakeVisible,
-.twikiMakeVisibleInline,
-.twikiMakeVisibleBlock {
-	display:none; /* will be made visible with javascript */
-}
-</style>
 <script type="text/javascript">
+// <![CDATA[
 var styleText = '<style type="text/css" media="all">.twikiMakeVisible{display:inline;}.twikiMakeVisibleInline{display:inline;}.twikiMakeVisibleBlock{display:block;}.twikiMakeHidden{display:none;}</style>';
 document.write(styleText);
+// ]]>
 </script>
 EOF
 

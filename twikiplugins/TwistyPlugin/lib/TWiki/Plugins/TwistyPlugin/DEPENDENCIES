@@ -1,1 +1,1 @@
-TWiki::Contrib::TwistyContrib,>=1.400,perl,Required. Twisty javascript library
+TWiki::Contrib::TwistyContrib,>=1.4.1,perl,Required. Twisty javascript library
