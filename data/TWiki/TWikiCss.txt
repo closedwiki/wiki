@@ -109,6 +109,10 @@ A wide range of standard styles are used in the TWiki core code and topics, and 
 |.twikiFormSteps  |container around a form, such as the attach form: attach.tmpl |
 |.twikiFormStep  |form row |
 |.twikiNoBreak   | no break on whitespace |
+|.twikiMakeVisible  |For elements that should only be visible with javascript on: default set to hidden, is made visible by javascript. Defaults to inline. |
+|.twikiMakeVisibleInline  |For =span= elements that should only be visible with javascript on: default set to hidden, is made visible by javascript. |
+|.twikiMakeVisibleBlock  |For =div= elements that should only be visible with javascript on: default set to hidden, is made visible by javascript. |
+|.twikiMakeHidden  |For elements that should be *hidden* with javascript on: no default style, is made hidden by javascript. |
 
 ---+++ TWiki Styles used in =configure=
 |#twikiLogin  |CSS.pm  |
