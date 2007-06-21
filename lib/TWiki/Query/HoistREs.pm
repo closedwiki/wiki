@@ -63,7 +63,8 @@ sub hoist {
             return ( $rhs );
         }
     } else {
-        return ( _hoistOR($node) );
+        my $or = _hoistOR($node);
+        return ( $or ) if $or;
     }
 
     print STDERR "\tFAILED\n" if MONITOR_HOIST;
