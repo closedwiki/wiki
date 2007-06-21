@@ -24,9 +24,9 @@
 package TWiki::Plugin;
 
 use strict;
-use TWiki;
-use TWiki::Sandbox;
 use Assert;
+
+require TWiki::Plugins;
 
 use vars qw( @registrableHandlers %deprecated );
 
@@ -83,6 +83,7 @@ use vars qw( @registrableHandlers %deprecated );
 sub new {
     my ( $class, $session, $name, $module ) = @_;
     my $this = bless( { session => $session }, $class );
+    require TWiki::Sandbox;
     $name = TWiki::Sandbox::untaintUnchecked( $name );
     $this->{name} = $name || '';
     $this->{module} = $module || 'TWiki::Plugins::'.$name;

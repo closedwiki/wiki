@@ -29,9 +29,11 @@ package TWiki::Search;
 
 use strict;
 use Assert;
-use TWiki::Sandbox;
-use TWiki::Time;
 use Error qw( :try );
+
+require TWiki;
+require TWiki::Sandbox;
+require TWiki::Render; # SMELL: expensive
 
 my $emptySearch = 'something.Very/unLikelyTo+search-for;-)';
 
@@ -820,8 +822,8 @@ sub searchWeb {
         }
 
         if ($date) {
-            use TWiki::Time;
-            my @ends       = &TWiki::Time::parseInterval($date);
+            require TWiki::Time;
+            my @ends       = TWiki::Time::parseInterval($date);
             my @resultList = ();
             foreach my $topic (@topicList) {
 
@@ -860,6 +862,7 @@ sub searchWeb {
                   _extractTopicInfo( $this, $web, $topic, 0, undef );
             }
             my $epochSecs = $topicInfo->{$topic}->{modified};
+            require TWiki::Time;
             my $revDate   = TWiki::Time::formatTime($epochSecs);
             my $isoDate =
               TWiki::Time::formatTime( $epochSecs, '$iso', 'gmtime' );
@@ -1268,6 +1271,7 @@ sub _getRev1Info {
     my $users = $this->{session}->{users};
 
     unless ( $info->{webTopic} && $info->{webTopic} eq $key ) {
+        require TWiki::Meta;
         my $meta = new TWiki::Meta( $this->{session}, $web, $topic );
         my ( $d, $u ) = $meta->getRevisionInfo(1);
         $info->{date}     = $d;
@@ -1284,6 +1288,7 @@ sub _getRev1Info {
         return $users->webDotWikiName( $info->{user} );
     }
     if ( $attr eq 'date' ) {
+        require TWiki::Time;
         return TWiki::Time::formatTime( $info->{date} );
     }
 

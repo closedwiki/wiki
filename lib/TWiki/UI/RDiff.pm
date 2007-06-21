@@ -29,15 +29,10 @@ package TWiki::UI::RDiff;
 
 use strict;
 use Assert;
-
-use TWiki;
-use TWiki::Store;
-use TWiki::Prefs;
-use TWiki::UI;
-use TWiki::Time;
-
 use Error qw( :try );
-use TWiki::OopsException;
+
+require TWiki;
+require TWiki::UI;
 
 #TODO: this needs to be exposed to plugins and whoever might want to over-ride the rendering of diffs
 #Hash, indexed by diffType (+,-,c,u,l.....)
@@ -106,7 +101,9 @@ sub _renderCellData {
 # Simple method to expand attribute values in a format string
 sub _renderAttrs {
     my( $p, $f) = @_;
+    require TWiki::Attrs;
     my $attrs = new TWiki::Attrs( $p );
+    require TWiki::Store;
     if( $f ) {
         for my $key ( keys %$attrs ) {
             my $av = TWiki::Store::dataDecode( $attrs->{$key} );
@@ -388,7 +385,7 @@ sub _renderRevisionDiff
 
 =diff= command handler.
 This method is designed to be
-invoked via the =TWiki::UI::run= method.
+invoked via the =UI::run= method.
 
 Renders the differences between version of a TwikiTopic
 | topic | topic that we are showing the differences of |

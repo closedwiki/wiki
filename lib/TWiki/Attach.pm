@@ -35,12 +35,6 @@ package TWiki::Attach;
 use strict;
 use Assert;
 
-use TWiki::Attrs;
-use TWiki::Store;
-use TWiki::Prefs;
-use TWiki::Meta;
-use TWiki::Time;
-
 =pod
 
 ---++ ClassMethod new($session)
@@ -190,6 +184,8 @@ sub _expandAttrs {
     my ( $this, $attr, $web, $topic, $info ) = @_;
     my $file = $info->{name};
     my $users = $this->{session}->{users};
+
+    require TWiki::Time;
 
     if ( $attr eq 'REV' ) {
         return $info->{version};

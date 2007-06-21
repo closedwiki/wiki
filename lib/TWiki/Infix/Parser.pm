@@ -16,8 +16,8 @@ package TWiki::Infix::Parser;
 use strict;
 use Assert;
 use Error qw( :try );
-use TWiki::Infix::Error;
-use TWiki::Infix::Node;
+require TWiki::Infix::Error;
+require TWiki::Infix::Node;
 
 # Set to 1 for debug
 sub MONITOR_PARSER { 0 };

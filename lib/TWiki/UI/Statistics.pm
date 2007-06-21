@@ -37,6 +37,9 @@ use File::Copy qw(copy);
 use IO::File;
 use Error qw( :try );
 
+require TWiki;
+require TWiki::Sandbox;
+
 my $debug = 0;
 
 BEGIN {
@@ -53,7 +56,7 @@ BEGIN {
 
 =statistics= command handler.
 This method is designed to be
-invoked via the =TWiki::UI::run= method.
+invoked via the =UI::run= method.
 
 Generate statistics topic.
 If a web is specified in the session object, generate WebStatistics
@@ -83,6 +86,7 @@ sub statistics {
     _printMsg( $session, '!Do not interrupt this script!' );
     _printMsg( $session, '(Please wait until page download has finished)' );
 
+    require TWiki::Time;
     unless( $logDate ) {
         $logDate =
           TWiki::Time::formatTime( time(), '$year$mo', 'servertime' );

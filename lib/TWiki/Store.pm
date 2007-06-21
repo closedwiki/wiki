@@ -40,13 +40,13 @@ types of error.
 package TWiki::Store;
 
 use strict;
-
 use Assert;
 use Error qw( :try );
 
-use TWiki::Meta;
-use TWiki::Time;
-use TWiki::AccessControlException;
+require TWiki;
+require TWiki::Meta;
+require TWiki::Sandbox;
+require TWiki::AccessControlException;
 
 use vars qw( $STORE_FORMAT_VERSION );
 
@@ -73,7 +73,7 @@ sub new {
     my $this = bless( { session => $session }, $class );
 
     $this->{IMPL} = 'TWiki::Store::'.$TWiki::cfg{StoreImpl};
-    eval 'use '.$this->{IMPL};
+    eval 'require '.$this->{IMPL};
     if( $@ ) {
         die "$this->{IMPL} compile failed $@";
     }
@@ -1128,6 +1128,8 @@ sub repRev {
 
     if( ( $TWiki::cfg{Log}{save} ) && ! ( $options->{dontlog} ) ) {
         # write log entry
+        require TWiki::Time;
+
         my $extra = "repRev $rev by " .
           $revuser .
             ' '. TWiki::Time::formatTime( $revdate, '$rcs', 'gmtime' );
@@ -1469,7 +1471,7 @@ sub addTOPICINFO {
           version => '1.'.$rev,
           date    => $time,
           author  => $user,
-          format  => $TWiki::Store::STORE_FORMAT_VERSION,
+          format  => $STORE_FORMAT_VERSION,
          );
     # if this is a reprev, then store the revision that was affected.
     # Required so we can tell when a merge is based on something that

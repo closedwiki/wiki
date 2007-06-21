@@ -27,14 +27,12 @@ package TWiki::UI::Changes;
 
 use strict;
 
-use TWiki;
-use TWiki::Prefs;
-use TWiki::Store;
-use TWiki::UI;
-use TWiki::Merge;
-use TWiki::Time;
 use Assert;
 use Error qw( :try );
+
+require TWiki;
+require TWiki::UI;
+require TWiki::Time;
 
 # Command handler for changes command
 sub changes {

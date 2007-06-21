@@ -75,9 +75,8 @@ use strict;
 use Error qw( :try );
 use Assert;
 
-use TWiki::Time;
-use TWiki::Plugins;
-use TWiki::Attrs;
+require TWiki;
+require TWiki::Plugins;
 
 =pod
 
@@ -1292,6 +1291,7 @@ sub checkTopicEditLock {
 
         if( $remain > 0 ) {
             my $who = $lease->{user};
+            require TWiki::Time;
             my $past = TWiki::Time::formatDelta(
                 time()-$lease->{taken},
                 $TWiki::Plugins::SESSION->i18n
@@ -1450,6 +1450,7 @@ sub saveTopicText {
       unless( defined $text );
 
     # extract meta data and merge old attachment meta data
+    require TWiki::Meta;
     my $meta = new TWiki::Meta( $session, $web, $topic );
     $session->{store}->extractMetaData( $meta, \$text );
     $meta->remove( 'FILEATTACHMENT' );
@@ -2553,6 +2554,7 @@ file names to legal server names.
 =cut
 
 sub sanitizeAttachmentName {
+    require TWiki::Sandbox;
     return TWiki::Sandbox::sanitizeAttachmentName(@_);
 }
 
@@ -2626,6 +2628,7 @@ Return: =$text=        Formatted time string
 
 sub formatTime {
 #   my ( $epSecs, $format, $timezone ) = @_;
+    require TWiki::Time;
     return TWiki::Time::formatTime( @_ );
 }
 
@@ -2668,6 +2671,7 @@ Return: =%params=  Hash containing all parameters. The nameless parameter is sto
 
 sub extractParameters {
     my( $attr ) = @_;
+    require TWiki::Attrs;
     my $params = new TWiki::Attrs( $attr );
     # take out _RAW and _ERROR (compatibility)
     delete $params->{_RAW};
@@ -2698,6 +2702,7 @@ Return: =$value=   Extracted value
 =cut
 
 sub extractNameValuePair {
+    require TWiki::Attrs;
     return TWiki::Attrs::extractValue( @_ );
 }
 
@@ -2863,6 +2868,7 @@ sub formatGmTime {
     # FIXME: Write warning based on flag (disabled for now); indicate who is calling this function
     ## writeWarning( 'deprecated use of Func::formatGmTime' );
 
+    require TWiki::Time;
     return TWiki::Time::formatTime( @_, 'gmtime' );
 }
 
@@ -2952,7 +2958,7 @@ sub checkDependencies {
         my $msg = '';
         my $const = '';
 
-        eval "use $dep->{package}";
+        eval "require $dep->{package}";
         if ( $@ ) {
             $msg .= "it could not be found: $@";
             $ok = 0;

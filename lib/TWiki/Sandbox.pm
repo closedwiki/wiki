@@ -33,7 +33,10 @@ package TWiki::Sandbox;
 use strict;
 use Assert;
 use Error qw( :try );
-use File::Spec;
+
+require File::Spec;
+
+require TWiki;
 
 # TODO: Sandbox module should probably use custom 'die' handler so that
 # output goes only to web server error log - otherwise it might give

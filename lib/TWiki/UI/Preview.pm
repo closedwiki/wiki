@@ -20,11 +20,11 @@
 package TWiki::UI::Preview;
 
 use strict;
-use TWiki;
-use TWiki::UI;
-use TWiki::UI::Save;
 use Error qw( :try );
-use TWiki::OopsException;
+
+require TWiki;
+require TWiki::UI::Save;
+require TWiki::OopsException;
 
 sub preview {
     my $session = shift;
@@ -44,7 +44,6 @@ sub preview {
     if( $form ) {
         $form = $form->{name}; # used later on as well
         require TWiki::Form;
-        ASSERT(!$@, $@) if DEBUG;
         my $formDef = new TWiki::Form( $session, $web, $form );
         unless( $formDef ) {
             throw TWiki::OopsException( 'attention',

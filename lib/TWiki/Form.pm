@@ -33,8 +33,6 @@ package TWiki::Form;
 use strict;
 use Assert;
 use Error qw( :try );
-use TWiki::OopsException;
-use CGI qw( -any );
 
 # The following are reserved as URL parameters to scripts and may not be
 # used as field names in forms.
@@ -210,7 +208,7 @@ sub createField {
     my $class = $type;
     $class =~ /^(\w*)/; # cut off +buttons etc
     $class = 'TWiki::Form::'.ucfirst($1);
-    eval 'use '.$class;
+    eval 'require '.$class;
     if( $@ ) {
         ASSERT(0, $@) if DEBUG;
         # Type not available; use base type
@@ -293,6 +291,7 @@ from $meta
 sub renderForEdit {
     my( $this, $web, $topic, $meta ) = @_;
     ASSERT($meta->isa( 'TWiki::Meta')) if DEBUG;
+    require CGI;
     my $session = $this->{session};
 
     if( $this->{mandatoryFieldsPresent} ) {

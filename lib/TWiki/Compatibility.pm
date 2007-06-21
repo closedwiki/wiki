@@ -167,6 +167,7 @@ sub upgradeCategoryTable {
             return;
         }
 
+        require TWiki::Form;
         my $def = new TWiki::Form($session, $web, $defaultFormTemplate );
         $meta->put( 'FORM', { name => $defaultFormTemplate } );
 
@@ -225,6 +226,7 @@ sub _getOldAttachAttr {
             $fileDate = '';
         } else {
             $fileDate =~ s/&nbsp;/ /go;
+            require TWiki::Time;
             $fileDate = TWiki::Time::parseTime( $fileDate );
         }
         ( $before, $fileUser, $after ) = split( /<(?:\/)*TwkFileUser>/, $atext );
@@ -281,6 +283,7 @@ sub migrateToFileAttachmentMacro {
     } else {
         # Format of macro that came before META:ATTACHMENT
         my $line = '';
+        require TWiki::Attrs;
         foreach $line ( split( /\r?\n/, $atext ) ) {
             if( $line =~ /%FILEATTACHMENT{\s"([^"]*)"([^}]*)}%/ ) {
                 my $name = $1;
@@ -303,6 +306,7 @@ sub migrateToFileAttachmentMacro {
 sub upgradeFrom1v0beta {
     my( $session, $meta ) = @_;
     my $users = $session->{users};
+    require TWiki::Time;
 
     my @attach = $meta->find( 'FILEATTACHMENT' );
     foreach my $att ( @attach ) {

@@ -30,11 +30,10 @@ package TWiki::UI;
 use strict;
 use Error qw( :try );
 use Assert;
-use CGI::Carp qw( fatalsToBrowser );
-use CGI qw( -any );
 
-use TWiki;
-use TWiki::OopsException;
+require TWiki;
+require TWiki::Sandbox;
+require TWiki::OopsException;
 
 sub TRACE_PASSTHRU {
     # Change to a 1 to trace passthrough

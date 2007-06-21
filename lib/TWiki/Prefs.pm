@@ -42,8 +42,9 @@ a user to override protections from their home topic!)
 
 package TWiki::Prefs;
 
-use TWiki::Prefs::PrefsCache;
 use Assert;
+
+require TWiki::Prefs::PrefsCache;
 
 =pod
 

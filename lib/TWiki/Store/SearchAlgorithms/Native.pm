@@ -17,6 +17,7 @@
 #
 package TWiki::Store::SearchAlgorithms::Native;
 
+use Assert;
 use NativeTWikiSearch;
 
 =pod
@@ -37,6 +38,7 @@ Rude and crude, this makes no attempt to handle UTF-8.
 sub search {
     my ($searchString, $topics, $options, $sDir) = @_;
 
+    $searchString ||= '';
     if (!$options->{type} || $options->{type} ne 'regex') {
         # Escape non-word chars in search string for plain text search
         $searchString =~ s/(\W)/\\$1/g;

@@ -107,12 +107,13 @@ package TWiki::Store::RcsLite;
 use base 'TWiki::Store::RcsFile';
 
 use strict;
-
-use Algorithm::Diff;
-use FileHandle;
 use Assert;
-use TWiki::Time;
 use Error qw( :try );
+
+use FileHandle;
+
+require TWiki::Store;
+require TWiki::Sandbox;
 
 #
 # As well as the field inherited from RcsFile, the object for each file
@@ -301,6 +302,7 @@ sub _process {
             if( /^([0-9]+)\.([0-9]+)\s+date\s+(\d\d(\d\d)?(\.\d\d){5}?);$/o ) {
                 $state = 'delta.author';
                 $num = $2;
+                require TWiki::Time;
                 $revs[$num]->{date} = TWiki::Time::parseTime($3);
             }
         } elsif( $state eq 'delta.author' ) {
@@ -538,6 +540,7 @@ sub revisionDiff {
 	
     my $lNew = _split( $text1 );
     my $lOld = _split( $text2 );
+    require Algorithm::Diff;
     my $diff = Algorithm::Diff::sdiff( $lNew, $lOld );
 
     foreach my $ele ( @$diff ) {
@@ -674,6 +677,7 @@ sub _split {
 # of differences in RCS difference format.
 sub _diff {
     my( $new, $old ) = @_;
+    require Algorithm::Diff;
     my $diffs = Algorithm::Diff::diff( $new, $old );
 	#print STDERR "DIFF '",join('\n',@$new),"' and '",join('\n',@$old),"'\n";
     # Convert the differences to RCS format

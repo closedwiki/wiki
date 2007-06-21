@@ -33,8 +33,6 @@ Handle conversion of plural topic names to singular form.
 
 package TWiki::Plurals;
 
-use TWiki;
-
 =pod
 
 ---++ StaticMethod singularForm($web, $pluralForm) -> $singularForm

@@ -28,8 +28,8 @@ UI functions for searching.
 package TWiki::UI::Search;
 
 use strict;
-use TWiki;
-use TWiki::UI;
+
+require TWiki;
 
 =pod
 
@@ -73,7 +73,15 @@ sub search {
     my $webName = $session->{webName};
     my $topic = $session->{topicName};
 
-    TWiki::UI::checkWebExists( $session, $webName, $topic, 'search' );
+    unless ( $session->{store}->webExists( $webName ) ) {
+        require TWiki::OopsException;
+        throw TWiki::OopsException(
+            'accessdenied',
+            def => 'no_such_web',
+            web => $webName,
+            topic => $topic,
+            params => [ 'search' ] );
+    }
 
     # The CGI.pm docs claim that it returns all of the values in a
     # multiple select if called in a list context, but that may not

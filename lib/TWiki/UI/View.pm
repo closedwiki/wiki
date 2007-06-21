@@ -37,9 +37,13 @@ use strict;
 use integer;
 use Monitor;
 
-use TWiki;
-use TWiki::UI;
-use TWiki::Time;
+use CGI::Carp qw( fatalsToBrowser );
+use CGI qw( -any ); # pretty basic, this
+
+require TWiki;
+require TWiki::UI;
+require TWiki::Sandbox;
+require TWiki::OopsException;
 
 =pod
 
@@ -47,7 +51,7 @@ use TWiki::Time;
 
 =view= command handler.
 This method is designed to be
-invoked via the =TWiki::UI::run= method.
+invoked via the =UI::run= method.
 
 Generate a complete HTML page that represents the viewed topics.
 The view is controlled by CGI parameters as follows:
@@ -92,6 +96,7 @@ sub view {
     # text and meta of the chosen rev of the topic
     my( $meta, $text );
     if( $topicExists ) {
+        require TWiki::Time;
         ( $currMeta, $currText ) = $store->readTopic
           ( $session->{user}, $webName, $topicName, undef );
         TWiki::UI::checkAccess( $session, $webName, $topicName,
@@ -401,7 +406,7 @@ sub _prepare {
 
 =viewfile= command handler.
 This method is designed to be
-invoked via the =TWiki::UI::run= method.
+invoked via the =UI::run= method.
 Command handler for viewfile. View a file in the browser.
 Some parameters are passed in CGI query:
 | =filename= | Attachment to view |

@@ -30,8 +30,8 @@ package TWiki::UI::ChangeForm;
 use strict;
 use Error qw( :try );
 use Assert;
-use TWiki;
-use TWiki::OopsException;
+
+require TWiki;
 
 =pod
 

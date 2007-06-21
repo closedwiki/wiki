@@ -36,14 +36,15 @@ Refer to Store.pm for models of usage.
 package TWiki::Store::RcsFile;
 
 use strict;
-
-use File::Copy;
-use File::Spec;
-use File::Path;
-use File::Basename;
 use Assert;
-use TWiki::Time;
-use TWiki::Sandbox;
+
+require File::Copy;
+require File::Spec;
+require File::Path;
+require File::Basename;
+
+require TWiki::Store;
+require TWiki::Sandbox;
 
 =pod
 
@@ -349,6 +350,8 @@ to their parent.
 
 sub searchInWebMetaData {
     my( $this, $query, $topics ) = @_;
+    require TWiki::Meta;
+
     my $sDir = $TWiki::cfg{DataDir}.'/'.$this->{web}.'/';
     local $/;
     my $store = $this->{session}->{store};

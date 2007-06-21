@@ -31,11 +31,6 @@ use strict;
 use Assert;
 use Error qw( :try );
 
-use TWiki::Time;
-use TWiki::Sandbox;
-
-use vars qw( $LWPavailable );
-
 sub new {
     my ( $class, $session ) = @_;
     my $this = bless( { session => $session }, $class );
@@ -123,7 +118,8 @@ sub getExternalResource {
         return new TWiki::Net::HTTPResponse("Bad URL: $url");
     }
 
-    if( _LWPavailable( $this )) {
+    require LWP;
+    unless( $@ ) {
         return _GETUsingLWP( $this, $url );
     }
 
@@ -199,7 +195,7 @@ sub getExternalResource {
 
         # No LWP, but may have HTTP::Response which would make life easier
         # (it has a much more thorough parser)
-        eval 'use HTTP::Response';
+        eval 'require HTTP::Response';
         if ($@) {
             # Nope, no HTTP::Response, have to do things the hard way :-(
             require TWiki::Net::HTTPResponse;
@@ -211,14 +207,6 @@ sub getExternalResource {
         $response = new TWiki::Net::HTTPResponse(shift);
     };
     return $response;
-}
-
-sub _LWPavailable {
-    unless( defined $LWPavailable ) {
-        eval 'use LWP';
-        $LWPavailable = !$@;
-    }
-    return $LWPavailable
 }
 
 sub _GETUsingLWP {
@@ -253,6 +241,7 @@ sub _installMailHandler {
     if( $this->{MAIL_HOST} ) {
         # See Codev.RegisterFailureInsecureDependencyCygwin for why
         # this must be untainted
+        require TWiki::Sandbox;
         $this->{MAIL_HOST} =
           TWiki::Sandbox::untaintUnchecked( $this->{MAIL_HOST} );
         eval {	# May fail if Net::SMTP not installed
@@ -313,6 +302,7 @@ sub sendEmail {
     return 'No mail handler available' unless $this->{mailHandler};
 
     # Put in a Date header, mainly for Qmail
+    require TWiki::Time;
     my $dateStr = TWiki::Time::formatTime(time, '$email');
     $text = "Date: " . $dateStr . "\n" . $text;
 

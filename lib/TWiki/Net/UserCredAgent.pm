@@ -22,8 +22,6 @@
 package TWiki::Net::UserCredAgent;
 use base 'LWP::UserAgent';
 
-use TWiki;
-
 sub new {
     my ($class, $user, $pass) = @_;
     my $this = $class->SUPER::new();

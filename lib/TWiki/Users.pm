@@ -75,10 +75,9 @@ package TWiki::Users;
 
 use strict;
 use Assert;
-use TWiki::Time;
-use TWiki::ListIterator;
-use TWiki::AggregateIterator;
-use TWiki::LoginManager;    # client session handling
+
+require TWiki::AggregateIterator;
+
 #use Monitor;
 #Monitor::MonitorMethod('TWiki::Users');
 
@@ -106,6 +105,7 @@ sub new {
     #$TWiki::cfg{DefaultUserLogin} = $TWiki::cfg{DefaultUserWikiName} 
     #$TWiki::cfg{AdminUserLogin} = $TWiki::cfg{AdminUserWikiName} unless ($TWiki::cfg{Register}{AllowLoginName});
 
+    require TWiki::LoginManager;
     $this->{loginManager} = TWiki::LoginManager::makeLoginManager( $session );
     # setup the cgi session, from a cookie or the url. this may return
     # the login, but even if it does, plugins will get the chance to override (in TWiki.pm)
@@ -114,8 +114,8 @@ sub new {
 
     #making basemapping
     my $implBaseUserMappingManager = $TWiki::cfg{BaseUserMappingManager} || 'TWiki::Users::BaseUserMapping';
-    eval "use $implBaseUserMappingManager";
-    die "BaseUser Mapping Manager: $@" if $@;
+    eval "require $implBaseUserMappingManager";
+    die $@ if $@;
     $this->{basemapping} = $implBaseUserMappingManager->new( $session );
     $implBaseUserMappingManager =~ /^TWiki::Users::(.*)$/;
 
@@ -125,8 +125,8 @@ sub new {
 	if ( $implUserMappingManager eq 'TWiki::Users::BaseUserMapping') {
 		$this->{mapping} = $this->{basemapping};   #TODO: probly make undef..
 	} else {
-    	eval "use $implUserMappingManager";
-    	die "User Mapping Manager: $@" if $@;
+    	eval "require $implUserMappingManager";
+        die $@ if $@;
     	$this->{mapping} = $implUserMappingManager->new( $session );
     }
     #the UI for rego supported/not is different from rego temporarily turned off

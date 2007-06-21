@@ -655,7 +655,6 @@ sub writePageHeader {
     if ($pageType && $pageType eq 'edit') {
         # Get time now in HTTP header format
         require TWiki::Time;
-        ASSERT(!$@, $@) if DEBUG;
         my $lastModifiedString =
           TWiki::Time::formatTime(time, '$http', 'gmtime');
 
@@ -1257,17 +1256,14 @@ sub new {
     # create the various sub-objects
     $this->{sandbox} = $sharedSandbox;
     require TWiki::Plugins;
-    ASSERT(!$@, $@) if DEBUG;
     $this->{plugins} = new TWiki::Plugins( $this );
     require TWiki::Store;
-    ASSERT(!$@, $@) if DEBUG;
     $this->{store} = new TWiki::Store( $this );
     # cache CGI information in the session object
     $this->{cgiQuery} = $query;
 
     $this->{remoteUser} = $login;	#use login as a default (set when running from cmd line)
     require TWiki::Users;
-    ASSERT(!$@, $@) if DEBUG;
     $this->{users} = new TWiki::Users( $this );
 	$this->{remoteUser} = $this->{users}->{remoteUser};
 
@@ -1382,7 +1378,6 @@ sub new {
     }
 
     require TWiki::Prefs;
-    ASSERT(!$@, $@) if DEBUG;
     my $prefs = new TWiki::Prefs( $this );
     $this->{prefs} = $prefs;
 
@@ -1449,7 +1444,6 @@ sub renderer {
 
     unless( $this->{renderer} ) {
         require TWiki::Render;
-        ASSERT(!$@, $@) if DEBUG;
         # requires preferences (such as LINKTOOLTIPINFO)
         $this->{renderer} = new TWiki::Render( $this );
     }
@@ -1469,7 +1463,6 @@ sub attach {
 
     unless( $this->{attach} ) {
         require TWiki::Attach;
-        ASSERT(!$@, $@) if DEBUG;
         $this->{attach} = new TWiki::Attach( $this );
     }
     return $this->{attach};
@@ -1488,7 +1481,6 @@ sub templates {
 
     unless( $this->{templates} ) {
         require TWiki::Templates;
-        ASSERT(!$@, $@) if DEBUG;
         $this->{templates} = new TWiki::Templates( $this );
     }
     return $this->{templates};
@@ -1507,7 +1499,6 @@ sub i18n {
 
     unless( $this->{i18n} ) {
         require TWiki::I18N;
-        ASSERT(!$@, $@) if DEBUG;
         # language information; must be loaded after
         # *all possible preferences sources* are available
         $this->{i18n} = new TWiki::I18N( $this );
@@ -1528,7 +1519,6 @@ sub search {
 
     unless( $this->{search} ) {
         require TWiki::Search;
-        ASSERT(!$@, $@) if DEBUG;
         $this->{search} = new TWiki::Search( $this );
     }
     return $this->{search};
@@ -1547,7 +1537,6 @@ sub security {
 
     unless( $this->{security} ) {
         require TWiki::Access;
-        ASSERT(!$@, $@) if DEBUG;
         $this->{security} = new TWiki::Access( $this );
     }
     return $this->{security};
@@ -1566,7 +1555,6 @@ sub net {
 
     unless( $this->{net} ) {
         require TWiki::Net;
-        ASSERT(!$@, $@) if DEBUG;
         $this->{net} = new TWiki::Net( $this );
     }
     return $this->{net};
@@ -1693,7 +1681,6 @@ sub _writeReport {
 
     if ( $log ) {
         require TWiki::Time;
-        ASSERT(!$@, $@) if DEBUG;
         my $time =
           TWiki::Time::formatTime( time(), '$year$mo', 'servertime');
         $log =~ s/%DATE%/$time/go;
@@ -1914,7 +1901,6 @@ sub _TOC {
     my ( $this, $text, $defaultTopic, $defaultWeb, $args ) = @_;
 
     require TWiki::Attrs;
-    ASSERT(!$@, $@) if DEBUG;
 
     my $params = new TWiki::Attrs( $args );
     # get the topic name attribute
@@ -2096,7 +2082,6 @@ sub parseSections {
     foreach my $bit (split(/(%(?:START|END)SECTION(?:{.*?})?%)/, $_[0] )) {
         if( $bit =~ /^%STARTSECTION(?:{(.*)})?%$/) {
             require TWiki::Attrs;
-            ASSERT(!$@, $@) if DEBUG;
             my $attrs = new TWiki::Attrs( $1 );
             $attrs->{type} ||= 'section';
             $attrs->{name} = $attrs->{_DEFAULT} || $attrs->{name} ||
@@ -2120,7 +2105,6 @@ sub parseSections {
             push( @list, $attrs );
         } elsif( $bit =~ /^%ENDSECTION(?:{(.*)})?%$/ ) {
             require TWiki::Attrs;
-            ASSERT(!$@, $@) if DEBUG;
             my $attrs = new TWiki::Attrs( $1 );
             $attrs->{type} ||= 'section';
             $attrs->{name} = $attrs->{_DEFAULT} || $attrs->{name} || '';
@@ -2594,7 +2578,6 @@ sub _expandTagOnTopicRendering {
     my $args = shift;
     # my( $topic, $web, $meta ) = @_;
     require TWiki::Attrs;
-    ASSERT(!$@, $@) if DEBUG;
 
     my $e = $this->{prefs}->getPreferencesValue( $tag );
     unless( defined( $e )) {
@@ -3018,7 +3001,6 @@ sub IF {
         $expr = $ifParser->parse( $params->{_DEFAULT} );
         unless( $meta ) {
             require TWiki::Meta;
-            ASSERT(!$@, $@) if DEBUG;
             $meta = new TWiki::Meta( $this, $web, $topic );
         }
         if( $expr->evaluate( tom=>$meta, data=>$meta )) {

@@ -29,7 +29,6 @@ Support for strings translation and language detection.
 
 package TWiki::I18N;
 
-use TWiki;
 use Assert;
 
 use vars qw( $initialised @initErrors );

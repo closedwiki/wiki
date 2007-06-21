@@ -17,8 +17,6 @@
 #
 # As per the GPL, removal of this notice is prohibited.
 
-use strict;
-
 =pod
 
 ---+ package TWiki::Prefs::PrefsCache
@@ -44,9 +42,11 @@ session, for example when searching.
 
 package TWiki::Prefs::PrefsCache;
 
-use TWiki::Prefs::Parser;
-
+use strict;
 use Assert;
+
+require TWiki;
+require TWiki::Prefs::Parser;
 
 use vars qw( $parser );
 

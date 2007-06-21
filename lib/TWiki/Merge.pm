@@ -18,7 +18,6 @@
 # As per the GPL, removal of this notice is prohibited.
 
 use strict;
-use Algorithm::Diff;
 
 =pod
 
@@ -31,7 +30,8 @@ Support for merging strings
 package TWiki::Merge;
 
 use Assert;
-use CGI;
+
+require CGI;
 
 =pod
 
@@ -77,6 +77,7 @@ sub merge2 {
     ASSERT($session && $session->isa('TWiki')) if DEBUG;
 
     my @out;
+    require Algorithm::Diff;
     Algorithm::Diff::traverse_balanced( \@a, \@b,
                                         {
                                          MATCH => \&_acceptA,

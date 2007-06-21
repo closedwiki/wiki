@@ -17,8 +17,6 @@
 #
 # As per the GPL, removal of this notice is prohibited.
 
-use strict;
-
 =pod
 
 ---+ UNPUBLISHED package TWiki::Prefs::Parser
@@ -34,7 +32,10 @@ simply returns the recognized settings in the order it sees them in.
 
 package TWiki::Prefs::Parser;
 
+use strict;
 use Assert;
+
+require TWiki;
 
 my $settingPrefPrefix = 'PREFERENCE_';
 

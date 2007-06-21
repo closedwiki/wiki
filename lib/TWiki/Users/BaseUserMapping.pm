@@ -45,9 +45,8 @@ package TWiki::Users::BaseUserMapping;
 use strict;
 use Assert;
 use Error qw( :try );
-use TWiki::Time;
-use TWiki::ListIterator;
 
+require TWiki::ListIterator;
 
 =pod
 

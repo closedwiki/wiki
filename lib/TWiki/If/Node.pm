@@ -11,6 +11,8 @@ Node class for the result of an If statement parse
 package TWiki::If::Node;
 use base 'TWiki::Query::Node';
 
+require TWiki::Infix::Node;
+
 sub newLeaf {
     my( $class, $val, $type ) = @_;
     if( $type == $TWiki::Infix::Node::NAME && $val =~ /^({\w+})+$/) {

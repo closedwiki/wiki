@@ -34,8 +34,6 @@ use base 'TWiki::Users::Password';
 use strict;
 use Assert;
 use Error qw( :try );
-use TWiki::Users::Password;
-use TWiki::ListIterator;
 
 # 'Use locale' for internationalisation of Perl sorting in getTopicNames
 # and other routines - main locale settings are done in TWiki::setupLocale
@@ -87,6 +85,7 @@ sub fetchUsers {
     my $this = shift;
     my $db = _readPasswd($this);
     my @users = sort keys %$db;
+    require TWiki::ListIterator;
     return new TWiki::ListIterator(\@users);
 }
 

@@ -31,11 +31,13 @@ UI delegate for attachment management functions
 package TWiki::UI::Upload;
 
 use strict;
-use TWiki;
-use TWiki::UI;
+use Assert;
 use Error qw( :try );
-use TWiki::OopsException;
-use File::Spec;
+
+require TWiki;
+require TWiki::UI;
+require TWiki::Sandbox;
+require TWiki::OopsException;
 
 =pod
 
@@ -43,7 +45,7 @@ use File::Spec;
 
 =upload= command handler.
 This method is designed to be
-invoked via the =TWiki::UI::run= method.
+invoked via the =UI::run= method.
 
 Adds the meta-data for an attachment to a toic. Does *not* upload
 the attachment itself, just modifies the meta-data.
@@ -131,7 +133,7 @@ sub attach {
 
 =upload= command handler.
 This method is designed to be
-invoked via the =TWiki::UI::run= method.
+invoked via the =UI::run= method.
 CGI parameters, passed in $query:
 
 | =hidefile= | if defined, will not show file in attachment table |

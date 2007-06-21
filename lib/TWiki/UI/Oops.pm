@@ -28,15 +28,16 @@ UI delegate for oops function
 package TWiki::UI::Oops;
 
 use strict;
-use TWiki;
 use Assert;
+
+require TWiki;
 
 =pod
 
 ---++ StaticMethod oops_cgi($session)
 
 =oops= command handler.
-This method is designed to be invoked via the =TWiki::UI::run= method.
+This method is designed to be invoked via the =UI::run= method.
 CGI parameters:
 | =template= | name of template to use |
 | =paramN= | Parameter for expansion of template |

@@ -21,7 +21,6 @@
 # Locale::Maketext isn't available.
 
 package TWiki::I18N::Fallback;
-
 use base 'TWiki::I18N';
 
 sub new {

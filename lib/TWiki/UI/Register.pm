@@ -38,14 +38,12 @@ User registration handling.
 package TWiki::UI::Register;
 
 use strict;
-use TWiki;
-use TWiki::Net;
-use TWiki::Plugins;
-use Data::Dumper;
-use Error qw( :try );
-use TWiki::UI;
-use TWiki::OopsException;
 use Assert;
+use Error qw( :try );
+
+require TWiki;
+require TWiki::OopsException;
+require TWiki::Sandbox;
 
 my $agent = 'TWikiRegistrationAgent';
 
@@ -65,7 +63,7 @@ my %SKIPKEYS = (
 
 =register= command handler.
 This method is designed to be
-invoked via the =TWiki::UI::run= method.
+invoked via the =UI::run= method.
 
 =cut
 
@@ -378,8 +376,11 @@ sub _requireVerification {
     $data->{LoginName} ||= $data->{WikiName};
     $data->{webName} = $web;
 
+    require TWiki::Users;
     $data->{VerificationCode} =
       $data->{WikiName}.'.'.TWiki::Users::randomPassword();
+
+    require Data::Dumper;
 
     my $file = _codeFile( $data->{VerificationCode} );
     open( F, ">$file" ) or throw Error::Simple( 'Failed to open file: '.$! );
@@ -423,7 +424,7 @@ sub _requireVerification {
 ---++ StaticMethod resetPassword($session)
 
 Generates a password. Mails it to them and asks them to change it. Entry
-point intended to be called from TWiki::UI::run
+point intended to be called from UI::run
 
 =cut
 
@@ -507,6 +508,7 @@ sub _resetUsersPassword {
         return 0;
     }
 
+    require TWiki::Users;
     my $password = TWiki::Users::randomPassword();
 
     unless( $users->setPassword( $user, $password, 1 )) {
@@ -876,7 +878,6 @@ sub _populateUserTopicForm {
 
     my %inform;
     require TWiki::Form;
-    ASSERT(!$@, $@) if DEBUG;
 
     my $form =
       new TWiki::Form( $session, $TWiki::cfg{UsersWebName}, $formName );

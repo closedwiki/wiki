@@ -20,10 +20,10 @@ package TWiki::Store::Subversive;
 
 use strict;
 use Assert;
-use File::Spec;
 
-use TWiki;
-use TWiki::Time;
+require File::Spec;
+
+require TWiki::Sandbox;
 
 sub new {
     my( $class, $session, $web, $topic, $attachment ) = @_;

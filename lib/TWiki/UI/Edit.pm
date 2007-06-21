@@ -35,13 +35,11 @@ package TWiki::UI::Edit;
 
 use strict;
 use Assert;
-use TWiki;
-use TWiki::Plugins;
-use TWiki::Prefs;
-use TWiki::Store;
-use TWiki::UI;
 use Error qw( :try );
-use TWiki::OopsException;
+
+require TWiki;
+require TWiki::UI;
+require TWiki::OopsException;
 
 =pod
 
@@ -49,7 +47,7 @@ use TWiki::OopsException;
 
 Edit command handler.
 This method is designed to be
-invoked via the =TWiki::UI::run= method.
+invoked via the =UI::run= method.
 Most parameters are in the CGI query:
 
 | =cmd= | Undocumented save command, passed on to save script |
@@ -128,6 +126,8 @@ sub init_edit {
                 my $why = $lease->{message};
                 my $def;
                 my $t = time();
+                require TWiki::Time;
+
                 if( $t > $lease->{expires} ) {
                     # The lease has expired, but see if we are still
                     # expected to issue a "less forceful' warning
@@ -341,7 +341,6 @@ sub init_edit {
     $form = $formMeta->{name} if( $formMeta );
     if( $form && !$saveCmd ) {
         require TWiki::Form;
-        ASSERT(!$@, $@) if DEBUG;
         my $formDef = new TWiki::Form( $session, $templateWeb, $form );
         unless( $formDef ) {
             throw TWiki::OopsException(

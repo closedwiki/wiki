@@ -51,6 +51,8 @@ package TWiki::Templates;
 
 use Assert;
 
+require TWiki::Attrs;
+
 =pod
 
 ---++ ClassMethod new ( $session )

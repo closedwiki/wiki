@@ -268,7 +268,10 @@ sub OP_d2n {
     return $this->_evalUnary(
         sub {
             my $date = shift;
-            eval { $date = TWiki::Time::parseTime( $date, 1); };
+            eval {
+                require TWiki::Time;
+                $date = TWiki::Time::parseTime( $date, 1);
+            };
             # ignore $@
             return $date;
         },

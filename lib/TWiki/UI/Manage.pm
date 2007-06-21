@@ -29,12 +29,12 @@ package TWiki::UI::Manage;
 
 use strict;
 use Assert;
-use TWiki;
-use TWiki::UI;
-use TWiki::Sandbox;
 use Error qw( :try );
-use TWiki::OopsException;
-use TWiki::UI::Register;
+
+require TWiki;
+require TWiki::UI;
+require TWiki::OopsException;
+require TWiki::Sandbox;
 
 =pod
 
@@ -42,7 +42,7 @@ use TWiki::UI::Register;
 
 =manage= command handler.
 This method is designed to be
-invoked via the =TWiki::UI::run= method.
+invoked via the =UI::run= method.
 
 =cut
 
@@ -54,10 +54,13 @@ sub manage {
     if( $action eq 'createweb' ) {
         _createWeb( $session );
     } elsif( $action eq 'changePassword' ) {
+        require TWiki::UI::Register;
         TWiki::UI::Register::changePassword( $session );
     } elsif( $action eq 'resetPassword' ) {
+        require TWiki::UI::Register;
         TWiki::UI::Register::resetPassword( $session );
     } elsif ($action eq 'bulkRegister') {
+        require TWiki::UI::Register;
         TWiki::UI::Register::bulkRegister( $session );
     } elsif( $action eq 'deleteUserAccount' ) {
         _removeUser( $session );
@@ -225,7 +228,7 @@ sub _createWeb {
 
 =rename= command handler.
 This method is designed to be
-invoked via the =TWiki::UI::run= method.
+invoked via the =UI::run= method.
 Rename the given topic. Details of the new topic name are passed in CGI
 parameters:
 
@@ -790,6 +793,7 @@ sub move {
        inWeb => $newWeb,
        fullPaths => 0,
       };
+    require TWiki::Render;
     $text = $session->renderer->forEachLine(
         $text, \&TWiki::Render::replaceTopicReferences, $options );
 
@@ -1112,6 +1116,8 @@ sub getReferringTopics {
     my( $session, $web, $topic, $allWebs ) = @_;
     my $store = $session->{store};
     my $renderer = $session->renderer;
+    require TWiki::Render;
+
     $web =~ s#\.#/#go;
     my @webs = ( $web );
 
@@ -1158,6 +1164,7 @@ sub _updateReferringTopics {
     my ( $session, $oldWeb, $oldTopic, $newWeb, $newTopic, $refs ) = @_;
     my $store = $session->{store};
     my $renderer = $session->renderer;
+    require TWiki::Render;
     my $user = $session->{user};
     my $options =
       {
@@ -1202,6 +1209,8 @@ sub _updateWebReferringTopics {
     my ( $session, $oldWeb, $newWeb, $refs ) = @_;
     my $store = $session->{store};
     my $renderer = $session->renderer;
+    require TWiki::Render;
+
     my $user = $session->{user};
     my $options =
       {
@@ -1279,6 +1288,7 @@ sub _saveSettings {
     # set up editing session
     my ( $currMeta, $currText ) =
       $session->{store}->readTopic( undef, $web, $topic, undef );
+    require TWiki::Meta;
     my $newMeta = new TWiki::Meta( $session, $web, $topic );
     $newMeta->copyFrom( $currMeta );
 
@@ -1337,10 +1347,6 @@ sub _handleSave {
 
 sub _restoreRevision {
     my ( $session ) = @_;
-    
-    use TWiki::Access;
-    use TWiki::UI::Edit;
-    
 	my $topic = $session->{topicName};
 	my $web = $session->{webName};
 	# read the current topic
@@ -1357,6 +1363,7 @@ sub _restoreRevision {
                                     params => [ 'change', 'denied' ]);
 	}
 	$session->{cgiQuery}->delete('action');
+    require TWiki::UI::Edit;
 	TWiki::UI::Edit::edit( $session );
 }
 

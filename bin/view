@@ -27,5 +27,6 @@ BEGIN {
     require 'setlib.cfg';
 }
 
+use TWiki::UI;
 use TWiki::UI::View;
 TWiki::UI::run( \&TWiki::UI::View::view, view => 1 );

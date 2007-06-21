@@ -36,7 +36,8 @@ use base 'TWiki::Store::RcsFile';
 use strict;
 use Assert;
 
-use TWiki::Time;
+require TWiki::Store;
+require TWiki::Sandbox;
 
 # implements RcsFile
 sub new {
@@ -152,6 +153,7 @@ sub replaceRevision {
     }
 
     TWiki::Store::RcsFile::saveFile( $this, $this->{file}, $text );
+    require TWiki::Time;
 	$date = TWiki::Time::formatTime( $date , '$rcs', 'gmtime');
 
     _lock( $this );
@@ -300,6 +302,7 @@ sub getRevisionInfo {
             if( $rcsOut =~ /^.*?date: ([^;]+);  author: ([^;]*);[^\n]*\n([^\n]*)\n/s ) {
                 my $user = $2;
                 my $comment = $3;
+                require TWiki::Time;
                 my $date = TWiki::Time::parseTime( $1 );
                 my $rev = $version;
                 if( $rcsOut =~ /revision 1.([0-9]*)/ ) {
@@ -407,6 +410,7 @@ sub _ci {
 
     my( $cmd, $rcsOutput, $exit );
     if( defined( $date )) {
+        require TWiki::Time;
         $date = TWiki::Time::formatTime( $date , '$rcs', 'gmtime');
         $cmd = $TWiki::cfg{RCS}{ciDateCmd};
         ($rcsOutput, $exit)= $this->{session}->{sandbox}->sysCommand(
@@ -470,6 +474,7 @@ sub getRevisionAtTime {
     if ( !-e $this->{rcsFile} ) {
         return undef;
     }
+    require TWiki::Time;
 	$date = TWiki::Time::formatTime( $date , '$rcs', 'gmtime');
     my ($rcsOutput, $exit) = $this->{session}->{sandbox}->sysCommand(
         $TWiki::cfg{RCS}{rlogDateCmd},

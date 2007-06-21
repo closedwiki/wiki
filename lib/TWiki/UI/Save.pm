@@ -34,12 +34,13 @@ UI delegate for save function
 package TWiki::UI::Save;
 
 use strict;
-use TWiki;
-use TWiki::UI;
 use Error qw( :try );
-use TWiki::OopsException;
-use TWiki::Merge;
 use Assert;
+
+require TWiki;
+require TWiki::UI;
+require TWiki::Meta;
+require TWiki::OopsException;
 
 # Used by save and preview
 sub buildNewTopic {
@@ -195,7 +196,6 @@ sub buildNewTopic {
 
     if( $formName ) {
         require TWiki::Form;
-        ASSERT(!$@, $@) if DEBUG;
         $formDef = new TWiki::Form( $session, $webName, $formName );
         unless( $formDef ) {
             throw TWiki::OopsException(
@@ -251,6 +251,8 @@ sub buildNewTopic {
                $odate && $date && $odate ne $date ) &&
                  $author ne $user ) {
 
+            require TWiki::Merge;
+
             my $pti = $prevMeta->get( 'TOPICINFO' );
             if( $pti->{reprev} && $pti->{version} &&
                   $pti->{reprev} == $pti->{version} ) {
@@ -287,7 +289,7 @@ sub buildNewTopic {
 
 Command handler for =save= command.
 This method is designed to be
-invoked via the =TWiki::UI::run= method.
+invoked via the =UI::run= method.
 
 See TWiki.TWikiScripts for details of parameters.
 
@@ -510,7 +512,7 @@ WARN
     }
 
     my( $newMeta, $newText, $saveOpts, $merged ) =
-      TWiki::UI::Save::buildNewTopic($session, 'save');
+      buildNewTopic($session, 'save');
 
     if( $saveaction =~ /^(save|checkpoint)$/ ) {
         $session->{plugins}->afterEditHandler( $newText, $topic, $web, $newMeta );

@@ -30,14 +30,7 @@ package TWiki::Render;
 use strict;
 use Assert;
 
-# Use -any to force creation of functions for unrecognised tags, like del and ins,
-# on earlier releases of CGI.pm (pre 2.79)
-use CGI qw( -any );
-
-use TWiki::Plurals ();
-use TWiki::Attach ();
-use TWiki::Attrs ();
-use TWiki::Time ();
+require TWiki::Time;
 
 # Used to generate unique placeholders for when we lift blocks out of the
 # text during rendering. 
@@ -497,6 +490,7 @@ sub _linkToolTipInfo {
     my $store = $this->{session}->{store};
     my $users = $this->{session}->{users};
     # SMELL: we ought not to have to fake this. Topic object model, please!!
+    require TWiki::Meta;
     my $meta = new TWiki::Meta( $this->{session}, $theWeb, $theTopic );
     my( $date, $user, $rev ) = $meta->getRevisionInfo();
     my $text = $this->{LINKTOOLTIPINFO};
@@ -589,6 +583,7 @@ sub _renderWikiWord {
     my $singular = '';
     unless( $topicExists ) {
         # topic not found - try to singularise
+        require TWiki::Plurals;
         $singular = TWiki::Plurals::singularForm($theWeb, $theTopic);
         if( $singular ) {
             $topicExists = $store->topicExists( $theWeb, $singular );

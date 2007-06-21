@@ -74,8 +74,8 @@ package TWiki::LoginManager;
 use strict;
 use Assert;
 use Error qw( :try );
-use TWiki;
-use TWiki::Sandbox;
+
+require TWiki::Sandbox;
 
 BEGIN {
     # suppress stupid warning in CGI::Cookie
@@ -141,8 +141,8 @@ sub makeLoginManager {
         if ($twiki->inContext('sudo_login')) {   #TODO: move selection into BaseUserMapper
             $loginManager = 'TWiki::LoginManager::TemplateLogin';
         }
-        eval 'use '. $loginManager;
-        throw Error::Simple( $@ ) if $@;
+        eval "require $loginManager";
+        die $@ if $@;
         $mgr = $loginManager->new( $twiki );
     }
     return $mgr;
@@ -415,6 +415,7 @@ sub checkAccess {
         if( defined $script && $this->{_authScripts}{$script} ) {
             my $topic = $twiki->{topicName};
             my $web = $twiki->{webName};
+            require TWiki::AccessControlException;
             throw TWiki::AccessControlException(
                 $script, $twiki->{user},
                 $web, $topic,
@@ -708,6 +709,7 @@ sub _pushCookie {
     # on the same machine and inherit the authorities of a prior user.
     if ($TWiki::cfg{Sessions}{ExpireCookiesAfter} &&
           $this->getSessionValue( 'REMEMBER' )) {
+        require TWiki::Time;
         my $exp = TWiki::Time::formatTime(
             time() + $TWiki::cfg{Sessions}{ExpireCookiesAfter},
             '$dow, $day-$month-$ye $hours:$minutes:$seconds GMT');

@@ -75,8 +75,8 @@ package TWiki::Plugins;
 
 use strict;
 use Assert;
-use TWiki::Plugin;
-use TWiki::Func;
+
+require TWiki::Plugin;
 
 use vars qw ( $VERSION $SESSION $inited );
 

@@ -29,8 +29,8 @@ Time handling functions.
 package TWiki::Time;
 
 use strict;
-use Time::Local;
-use TWiki;
+
+require TWiki;
 
 # Constants
 use vars qw( @ISOMONTH @WEEKDAY @MONTHLENS %MON2NUM );
@@ -100,13 +100,16 @@ If the date format was not recognised, will return 0.
 
 sub parseTime {
     my( $date, $defaultLocal ) = @_;
+
+    require Time::Local;
+
     # NOTE: This routine *will break* if input is not one of below formats!
     my $tzadj = 0; # Zulu
     if ($defaultLocal) {
         # Local time at midnight on the epoch gives us minus the 
         # local difference. e.g. CST is GMT + 1, so midnight Jan 1 1970 CST
         # is -01:00Z
-        $tzadj = -timelocal(0, 0, 0, 1, 0, 70);
+        $tzadj = -Time::Local::timelocal(0, 0, 0, 1, 0, 70);
     }
 
     # try "31 Dec 2001 - 23:59"  (TWiki date)
@@ -114,7 +117,7 @@ sub parseTime {
     if ($date =~ /(\d+)\s+([a-z]{3})\s+(\d+)(?:[-\s]+(\d+):(\d+))?/i) {
         my $year = $3;
         $year -= 1900 if( $year > 1900 );
-        return timegm( 0, $5||0, $4||0, $1, $MON2NUM{lc($2)}, $year ) - $tzadj;
+        return Time::Local::timegm( 0, $5||0, $4||0, $1, $MON2NUM{lc($2)}, $year ) - $tzadj;
     }
 
     # try "2001/12/31 23:59:59" or "2001.12.31.23.59.59" (RCS date)
@@ -122,7 +125,7 @@ sub parseTime {
     if ($date =~ m!(\d+)[./\-](\d+)[./\-](\d+)[.\s\-]+(\d+)[.:](\d+)[.:](\d+)!) {
         my $year = $1;
         $year -= 1900 if( $year > 1900 );
-        return timegm( $6, $5, $4, $3, $2-1, $year ) - $tzadj;
+        return Time::Local::timegm( $6, $5, $4, $3, $2-1, $year ) - $tzadj;
     }
 
     # try "2001/12/31 23:59" or "2001.12.31.23.59" (RCS short date)
@@ -130,7 +133,7 @@ sub parseTime {
     if ($date =~ m!(\d+)[./\-](\d+)[./\-](\d+)[.\s\-]+(\d+)[.:](\d+)!) {
         my $year = $1;
         $year -= 1900 if( $year > 1900 );
-        return timegm( 0, $5, $4, $3, $2-1, $year ) - $tzadj;
+        return Time::Local::timegm( 0, $5, $4, $3, $2-1, $year ) - $tzadj;
     }
     
     # ISO date
@@ -145,7 +148,7 @@ sub parseTime {
             $tzadj = ($1||'').((($2 * 60) + ($3||0)) * 60);
             $tzadj -= 0;
         }
-        return timegm( $s, $m, $h, $D, $M, $Y ) - $tzadj;
+        return Time::Local::timegm( $s, $m, $h, $D, $M, $Y ) - $tzadj;
     }
 
     # give up, return start of epoch (01 Jan 1970 GMT)
@@ -248,9 +251,9 @@ sub _weekNumber {
     my( $day, $mon, $year, $wday ) = @_;
 
     # calculate the calendar week (ISO 8601)
-    my $nextThursday = timegm(0, 0, 0, $day, $mon, $year) +
+    my $nextThursday = Time::Local::timegm(0, 0, 0, $day, $mon, $year) +
       (3 - ($wday + 6) % 7) * 24 * 60 * 60; # nearest thursday
-    my $firstFourth = timegm(0, 0, 0, 4, 0, $year); # january, 4th
+    my $firstFourth = Time::Local::timegm(0, 0, 0, 4, 0, $year); # january, 4th
     return sprintf('%.0f', ($nextThursday - $firstFourth) / ( 7 * 86400 )) + 1;
 }
 
