@@ -37,7 +37,7 @@ sub set_up {
     $TWiki::cfg{Register}{EnableNewUserRegistration} = 1;
 
     try {
-        $twiki = new TWiki($TWiki::cfg{SuperAdminGroup});
+        $twiki = new TWiki($TWiki::cfg{AdminUserLogin});
         $twiki->{store}->createWeb($twiki->{user}, $testUsersWeb);
         # the group is recursive to force a recursion block
         $twiki->{store}->saveTopic(

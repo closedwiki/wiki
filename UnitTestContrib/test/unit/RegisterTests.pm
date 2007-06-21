@@ -168,6 +168,7 @@ sub registerAccount {
     } otherwise {
         $this->assert(0, "expected an oops redirect");
     };
+    $this->assert($this->{twiki}->{store}->topicExists($TWiki::cfg{UsersWebName}, $this->{new_user_wikiname}));
 }
 
 sub test_userTopicWithPMWithoutForm {
@@ -255,7 +256,7 @@ sub test_userTopicWithoutPMWithForm {
 EOF
 
     $this->registerAccount();
-
+    
     my( $meta, $text ) = $this->{twiki}->{store}->readTopic(
         undef, $TWiki::cfg{UsersWebName}, $this->{new_user_wikiname});
 
@@ -319,6 +320,7 @@ EOF
     $this->registerAccount();
     my( $meta, $text ) = $this->{twiki}->{store}->readTopic(
         undef, $TWiki::cfg{UsersWebName}, $this->{new_user_wikiname});
+	$this->assert_not_null($meta->get('FORM'));
     $this->assert_str_equals("$this->{users_web}.UserForm", $meta->get('FORM')->{name});
     $this->assert_str_equals(
         $this->{new_user_fname}, $meta->get('FIELD', 'FirstName')->{value});
@@ -328,6 +330,7 @@ EOF
     $this->assert_str_equals('', $meta->get('FIELD', 'Email')->{value});
     $this->assert_matches(qr/^\s*$/s, $text);
 }
+
 
 #Register a user, and then verify it
 #Assumes the verification code is $TWiki::Users::password

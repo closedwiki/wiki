@@ -2,7 +2,7 @@ use strict;
 
 package RenameTests;
 
-use base qw(TWikiTestCase);
+use base qw(TWikiFnTestCase);
 
 use strict;
 use TWiki;
@@ -56,14 +56,14 @@ sub set_up {
     my $this = shift;
 
     $this->SUPER::set_up();
-    $TWiki::cfg{EnableHierarchicalWebs} = 1;
-    $TWiki::cfg{Htpasswd}{FileName} = '$TWiki::cfg{TempfileDir}/junkpasswd';
-    $TWiki::cfg{PasswordManager} = 'TWiki::Users::HtPasswdUser';
-    $TWiki::cfg{UserMappingManager} = 'TWiki::Users::TWikiUserMapping';
-    $TWiki::cfg{LoginManager} = 'TWiki::LoginManager::TemplateLogin';      
-    $TWiki::cfg{Register}{EnableNewUserRegistration} = 1;
+#    $TWiki::cfg{EnableHierarchicalWebs} = 1;
+#    $TWiki::cfg{Htpasswd}{FileName} = '$TWiki::cfg{TempfileDir}/junkpasswd';
+#    $TWiki::cfg{PasswordManager} = 'TWiki::Users::HtPasswdUser';
+#    $TWiki::cfg{UserMappingManager} = 'TWiki::Users::TWikiUserMapping';
+#    $TWiki::cfg{LoginManager} = 'TWiki::LoginManager::TemplateLogin';      
+#    $TWiki::cfg{Register}{EnableNewUserRegistration} = 1;
 
-    $this->{twiki} = new TWiki( "TestUser1", new CGI({topic=>"/$oldweb/$oldtopic"}));
+    $this->{twiki} = new TWiki( $this->{test_user_login}, new CGI({topic=>"/$oldweb/$oldtopic"}));
     
     $this->{twiki}->{store}->createWeb($this->{twiki}->{user}, $oldweb);
     $this->{twiki}->{store}->createWeb($this->{twiki}->{user}, $newweb);
@@ -95,10 +95,8 @@ sub set_up {
 
 sub tear_down {
     my $this = shift;
-    unlink $TWiki::cfg{Htpasswd}{FileName};
     $this->removeWebFixture($this->{twiki},$oldweb);
     $this->removeWebFixture($this->{twiki},$newweb);
-    $this->{twiki}->finish();
     $this->SUPER::tear_down();
 }
 
@@ -200,7 +198,7 @@ sub test_rename_oldwebnewtopic {
 
     $query->path_info( "/$oldweb/SanityCheck" );
     $this->{twiki}->finish();
-    $this->{twiki} = new TWiki( "TestUser1", $query );
+    $this->{twiki} = new TWiki( $this->{test_user_login}, $query );
     $TWiki::Plugins::SESSION = $this->{twiki};
     $this->capture(\&TWiki::UI::Manage::rename, $this->{twiki} );
 
@@ -311,7 +309,7 @@ sub test_rename_newweboldtopic {
 
     $query->path_info("/$oldweb" );
     $this->{twiki}->finish();
-    $this->{twiki} = new TWiki( "TestUser1", $query );
+    $this->{twiki} = new TWiki( $this->{test_user_login}, $query );
     $TWiki::Plugins::SESSION = $this->{twiki};
     $this->capture( \&TWiki::UI::Manage::rename, $this->{twiki} );
 
@@ -437,7 +435,7 @@ THIS
 
     $query->path_info("/$oldweb" );
     $this->{twiki}->finish();
-    $this->{twiki} = new TWiki( "TestUser1", $query );
+    $this->{twiki} = new TWiki( $this->{test_user_login}, $query );
     $TWiki::Plugins::SESSION = $this->{twiki};
     my ($text,$result)  =  $this->capture( \&TWiki::UI::Manage::rename, $this->{twiki} );
     my $ext = $TWiki::cfg{ScriptSuffix};
@@ -467,7 +465,7 @@ sub test_accessRenameRestrictedTopic {
 
     $query->path_info("/$oldweb" );
     $this->{twiki}->finish();
-    $this->{twiki} = new TWiki( "TestUser1", $query );
+    $this->{twiki} = new TWiki( $this->{test_user_login}, $query );
     $TWiki::Plugins::SESSION = $this->{twiki};
     try {
         my ($text,$result) = TWiki::UI::Manage::rename( $this->{twiki} );
@@ -493,7 +491,7 @@ sub test_accessRenameRestrictedWeb {
 
     $query->path_info("/$oldweb" );
     $this->{twiki}->finish();
-    $this->{twiki} = new TWiki( "TestUser1", $query );
+    $this->{twiki} = new TWiki( $this->{test_user_login}, $query );
     $TWiki::Plugins::SESSION = $this->{twiki};
     try {
         my ($text,$result) = TWiki::UI::Manage::rename( $this->{twiki} );
@@ -519,7 +517,7 @@ sub test_leaseReleasemeLetMeGo {
 
     $query->path_info("/$oldweb" );
     $this->{twiki}->finish();
-    $this->{twiki} = new TWiki( "TestUser1", $query );
+    $this->{twiki} = new TWiki( $this->{test_user_login}, $query );
     $TWiki::Plugins::SESSION = $this->{twiki};
     $this->capture(\&TWiki::UI::Manage::rename, $this->{twiki} );
 

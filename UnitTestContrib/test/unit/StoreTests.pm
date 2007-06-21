@@ -2,7 +2,7 @@
 require 5.006;
 package StoreTests;
 
-use base qw(TWikiTestCase);
+use base qw(TWikiFnTestCase);
 
 use TWiki;
 use strict;
@@ -26,23 +26,15 @@ sub new {
     return $self;
 }
 
-my $web = "TemporaryTestStoreWeb";
+my $web = "TestStoreWeb";
 my $topic = "TestStoreTopic";
-
-my $twiki;
-my $user;
 
 sub set_up {
     my $this = shift;
 
     $this->SUPER::set_up();
-    $twiki = new TWiki();
+#    $this->{twiki} = new TWiki($this->{test_user_login});
 	
-	#TODO: we should share common set up and tear down code
-    # we need to make sure we have a TestUser topic
-	
-	$twiki->{user} = 'TestUser';
-	$user = $twiki->{user};
     open( FILE, ">$TWiki::cfg{TempfileDir}/testfile.gif" );
     print FILE "one two three";
     close(FILE);
@@ -52,13 +44,13 @@ sub set_up {
 sub tear_down {
     my $this = shift;
 
-    $this->removeWebFixture($twiki, $web)
+    $this->removeWebFixture($this->{twiki}, $web)
       if( -e "$TWiki::cfg{DataDir}/$web");
 
     unlink("$TWiki::cfg{TempfileDir}/testfile.gif");
     unlink "$TWiki::cfg{DataDir}/$web/.changes";
 
-    $twiki->finish();
+    #$this->{twiki}->finish();
     $this->SUPER::tear_down();
 }
 
@@ -67,82 +59,82 @@ sub tear_down {
 sub test_CreateEmptyWeb {
     my $this = shift;
 
-	$this->assert_not_null( $twiki->{store} );
+	$this->assert_not_null( $this->{twiki}->{store} );
 	
 	#create an empty web
-	$this->assert( ! $twiki->{store}->createWeb($twiki->{user},$web));		#TODO: how can this succeed without a user? to check perms?
-	$this->assert( $twiki->{store}->webExists($web) );
-	my @topics = $twiki->{store}->getTopicNames($web);
+	$this->assert( ! $this->{twiki}->{store}->createWeb($this->{twiki}->{user},$web));		#TODO: how can this succeed without a user? to check perms?
+	$this->assert( $this->{twiki}->{store}->webExists($web) );
+	my @topics = $this->{twiki}->{store}->getTopicNames($web);
 	$this->assert_equals( 1, scalar(@topics), join(" ",@topics) );#we expect there to be only the home topic
-	$twiki->{store}->removeWeb($twiki->{user}, $web);
+	$this->{twiki}->{store}->removeWeb($this->{twiki}->{user}, $web);
 }
 
 sub test_CreateWeb {
     my $this = shift;
 
-	$this->assert_not_null( $twiki->{store} );
+	$this->assert_not_null( $this->{twiki}->{store} );
 	
 	#create a web using _default 
 	#TODO how should this fail if we are testing a store impl that does not have a _deault web ?
-	$twiki->{store}->createWeb($twiki->{user}, $web, '_default');
-	$this->assert( $twiki->{store}->webExists($web) );
-	my @topics = $twiki->{store}->getTopicNames($web);
-	my @defaultTopics = $twiki->{store}->getTopicNames('_default');
+	$this->{twiki}->{store}->createWeb($this->{twiki}->{user}, $web, '_default');
+	$this->assert( $this->{twiki}->{store}->webExists($web) );
+	my @topics = $this->{twiki}->{store}->getTopicNames($web);
+	my @defaultTopics = $this->{twiki}->{store}->getTopicNames('_default');
 	$this->assert_equals( $#topics, $#defaultTopics,
                           join(",",@topics)." != ".join(',',@defaultTopics));
-	$twiki->{store}->removeWeb($twiki->{user}, $web);
+	$this->{twiki}->{store}->removeWeb($this->{twiki}->{user}, $web);
 }
 
 sub test_CreateWebWithNonExistantBaseWeb {
     my $this = shift;
 
-	$this->assert_not_null( $twiki->{store} );
+	$this->assert_not_null( $this->{twiki}->{store} );
 	
 	#create a web using non-exsisatant Web 
     my $ok = 0;
     try {
-        $twiki->{store}->createWeb($twiki->{user}, $web, 'DoesNotExists');
+        $this->{twiki}->{store}->createWeb($this->{twiki}->{user}, $web, 'DoesNotExists');
     } catch Error::Simple with {
         $ok = 1;
     };
     $this->assert($ok);
-	$this->assert( ! $twiki->{store}->webExists($web) );
+	$this->assert( ! $this->{twiki}->{store}->webExists($web) );
 }
 
 
 sub test_CreateSimpleTopic {
     my $this = shift;
 
-	$twiki->{store}->createWeb($twiki->{user}, $web, '_default');
-	$this->assert( $twiki->{store}->webExists($web) );
-	$this->assert( ! $twiki->{store}->topicExists($web, $topic) );
+	$this->{twiki}->{store}->createWeb($this->{twiki}->{user}, $web, '_default');
+	$this->assert( $this->{twiki}->{store}->webExists($web) );
+	$this->assert( ! $this->{twiki}->{store}->topicExists($web, $topic) );
 	
 	my $meta = undef;
 	my $text = "This is some test text\n   * some list\n   * content\n :) :)";
-	$twiki->{store}->saveTopic( $user, $web, $topic, $text, $meta );
-	$this->assert( $twiki->{store}->topicExists($web, $topic) );
-	my ($readMeta, $readText) = $twiki->{store}->readTopic($user, $web, $topic);
+	$this->{twiki}->{store}->saveTopic( $this->{test_user_login}, $web, $topic, $text, $meta );
+	$this->assert( $this->{twiki}->{store}->topicExists($web, $topic) );
+	my ($readMeta, $readText) = $this->{twiki}->{store}->readTopic($this->{test_user_login}, $web, $topic);
 
     # ignore whitspace at end of data
     $readText =~ s/\s*$//s;
 
 	$this->assert_equals($text, $readText);
-	$twiki->{store}->removeWeb($twiki->{user}, $web);
+	$this->{twiki}->{store}->removeWeb($this->{twiki}->{user}, $web);
 }
 
 sub test_CreateSimpleMetaTopic {
     my $this = shift;
 
-	$twiki->{store}->createWeb($twiki->{user}, $web, '_default');
-	$this->assert( $twiki->{store}->webExists($web) );
-	$this->assert( ! $twiki->{store}->topicExists($web, $topic) );
+	$this->{twiki}->{store}->createWeb($this->{twiki}->{user}, $web, '_default');
+	$this->assert( $this->{twiki}->{store}->webExists($web) );
+	$this->assert( ! $this->{twiki}->{store}->topicExists($web, $topic) );
 	
 	my $text = '';
-	my $meta = new TWiki::Meta($twiki, $web, $topic);
-	$twiki->{store}->saveTopic( $user, $web, $topic, $text, $meta );
-	$this->assert( $twiki->{store}->topicExists($web, $topic) );
+	my $meta = new TWiki::Meta($this->{twiki}, $web, $topic);
+	$this->{twiki}->{store}->saveTopic( $this->{test_user_login}, $web, $topic, $text, $meta );
+	$this->assert( $this->{twiki}->{store}->topicExists($web, $topic) );
 	
-	my ($readMeta, $readText) = $twiki->{store}->readTopic($user, $web, $topic);
+	my ($readMeta, $readText) = $this->{twiki}->{store}->readTopic($this->{test_user_login}, $web, $topic);
     # ignore whitspace at end of data
     $readText =~ s/\s*$//s;
 
@@ -152,22 +144,22 @@ sub test_CreateSimpleMetaTopic {
     $meta->remove('TOPICINFO');
     @{$meta->{FILEATTACHMENT}} = () unless $meta->{FILEATTACHMENT};
 	$this->assert_deep_equals($meta, $readMeta);
-	$twiki->{store}->removeWeb($twiki->{user}, $web);
+	$this->{twiki}->{store}->removeWeb($this->{twiki}->{user}, $web);
 }
 
 sub test_CreateSimpleCompoundTopic {
     my $this = shift;
 
-	$twiki->{store}->createWeb($twiki->{user}, $web, '_default');
-	$this->assert( $twiki->{store}->webExists($web) );
-	$this->assert( ! $twiki->{store}->topicExists($web, $topic) );
+	$this->{twiki}->{store}->createWeb($this->{twiki}->{user}, $web, '_default');
+	$this->assert( $this->{twiki}->{store}->webExists($web) );
+	$this->assert( ! $this->{twiki}->{store}->topicExists($web, $topic) );
 	
 	my $text = "This is some test text\n   * some list\n   * content\n :) :)";
-	my $meta = new TWiki::Meta($twiki, $web, $topic);
-	$twiki->{store}->saveTopic( $user, $web, $topic, $text, $meta );
-	$this->assert( $twiki->{store}->topicExists($web, $topic) );
+	my $meta = new TWiki::Meta($this->{twiki}, $web, $topic);
+	$this->{twiki}->{store}->saveTopic( $this->{test_user_login}, $web, $topic, $text, $meta );
+	$this->assert( $this->{twiki}->{store}->topicExists($web, $topic) );
 	
-	my ($readMeta, $readText) = $twiki->{store}->readTopic($user, $web, $topic);
+	my ($readMeta, $readText) = $this->{twiki}->{store}->readTopic($this->{test_user_login}, $web, $topic);
 
     # ignore whitspace at end of data
     $readText =~ s/\s*$//s;
@@ -178,86 +170,86 @@ sub test_CreateSimpleCompoundTopic {
     $meta->remove('TOPICINFO');
     @{$meta->{FILEATTACHMENT}} = () unless $meta->{FILEATTACHMENT};
     $this->assert_deep_equals($meta, $readMeta);
-	$twiki->{store}->removeWeb($twiki->{user}, $web);
+	$this->{twiki}->{store}->removeWeb($this->{twiki}->{user}, $web);
 }
 
 sub test_getRevisionInfo {
     my $this = shift;
 
-	$twiki->{store}->createWeb($twiki->{user}, $web, '_default');
-	$this->assert( $twiki->{store}->webExists($web) );
+	$this->{twiki}->{store}->createWeb($this->{twiki}->{user}, $web, '_default');
+	$this->assert( $this->{twiki}->{store}->webExists($web) );
 	my $text = "This is some test text\n   * some list\n   * content\n :) :)";
-	my $meta = new TWiki::Meta($twiki, $web, $topic);
-	$twiki->{store}->saveTopic( $user, $web, $topic, $text, $meta );
+	my $meta = new TWiki::Meta($this->{twiki}, $web, $topic);
+	$this->{twiki}->{store}->saveTopic( $this->{test_user_login}, $web, $topic, $text, $meta );
 
-	$this->assert_equals(1, $twiki->{store}->getRevisionNumber($web, $topic));
+	$this->assert_equals(1, $this->{twiki}->{store}->getRevisionNumber($web, $topic));
 
     $text .= "\nnewline";
-	$twiki->{store}->saveTopic( $user, $web, $topic, $text, $meta, { forcenewrevision => 1 } );
+	$this->{twiki}->{store}->saveTopic( $this->{test_user_login}, $web, $topic, $text, $meta, { forcenewrevision => 1 } );
 
-	my ($readMeta, $readText) = $twiki->{store}->readTopic($user, $web, $topic);
+	my ($readMeta, $readText) = $this->{twiki}->{store}->readTopic($this->{test_user_login}, $web, $topic);
     # ignore whitspace at end of data
     $readText =~ s/\s*$//s;
 	$this->assert_equals($text, $readText);
-	$this->assert_equals(2, $twiki->{store}->getRevisionNumber($web, $topic));
-	my ( $infodate, $infouser, $inforev, $infocomment ) = $twiki->{store}->getRevisionInfo($web, $topic);
-	$this->assert_equals($user, $infouser);
+	$this->assert_equals(2, $this->{twiki}->{store}->getRevisionNumber($web, $topic));
+	my ( $infodate, $infouser, $inforev, $infocomment ) = $this->{twiki}->{store}->getRevisionInfo($web, $topic);
+	$this->assert_equals($this->{test_user_login}, $infouser);
 	$this->assert_equals(2, $inforev);
 	
 	#TODO
 	#getRevisionDiff (  $web, $topic, $rev1, $rev2, $contextLines  ) -> \@diffArray
-	$twiki->{store}->removeWeb($twiki->{user}, $web);
+	$this->{twiki}->{store}->removeWeb($this->{twiki}->{user}, $web);
 }
 
 sub test_moveTopic {
     my $this = shift;
 
-	$twiki->{store}->createWeb($twiki->{user}, $web, '_default');
-	$this->assert( $twiki->{store}->webExists($web) );
+	$this->{twiki}->{store}->createWeb($this->{twiki}->{user}, $web, '_default');
+	$this->assert( $this->{twiki}->{store}->webExists($web) );
 	my $text = "This is some test text\n   * some list\n   * content\n :) :)";
-	my $meta = new TWiki::Meta($twiki, $web, $topic);
-	$twiki->{store}->saveTopic( $user, $web, $topic, $text, $meta );
+	my $meta = new TWiki::Meta($this->{twiki}, $web, $topic);
+	$this->{twiki}->{store}->saveTopic( $this->{test_user_login}, $web, $topic, $text, $meta );
 
 	$text = "This is some test text\n   * some list\n   * $topic\n   * content\n :) :)";
-	$twiki->{store}->saveTopic( $user, $web, $topic.'a', $text, $meta );
+	$this->{twiki}->{store}->saveTopic( $this->{test_user_login}, $web, $topic.'a', $text, $meta );
 	$text = "This is some test text\n   * some list\n   * $topic\n   * content\n :) :)";
-	$twiki->{store}->saveTopic( $user, $web, $topic.'b', $text, $meta );
+	$this->{twiki}->{store}->saveTopic( $this->{test_user_login}, $web, $topic.'b', $text, $meta );
 	$text = "This is some test text\n   * some list\n   * $topic\n   * content\n :) :)";
-	$twiki->{store}->saveTopic( $user, $web, $topic.'c', $text, $meta );
+	$this->{twiki}->{store}->saveTopic( $this->{test_user_login}, $web, $topic.'c', $text, $meta );
 	
-	$twiki->{store}->moveTopic($web, $topic, $web, 'TopicMovedToHere', $user);
+	$this->{twiki}->{store}->moveTopic($web, $topic, $web, 'TopicMovedToHere', $this->{test_user_login});
 	
 	#compare number of refering topics?
 	#compare list of references to moved topic
-	$twiki->{store}->removeWeb($twiki->{user}, $web);
+	$this->{twiki}->{store}->removeWeb($this->{twiki}->{user}, $web);
 
 }
 
 sub test_leases {
     my $this = shift;
 
-	$twiki->{store}->createWeb($twiki->{user}, $web, '_default');
+	$this->{twiki}->{store}->createWeb($this->{twiki}->{user}, $web, '_default');
     my $testtopic = $TWiki::cfg{HomeTopicName};
 
-    my $lease = $twiki->{store}->getLease($web, $testtopic);
+    my $lease = $this->{twiki}->{store}->getLease($web, $testtopic);
     $this->assert_null($lease);
 
-    my $locker = $twiki->{user};
+    my $locker = $this->{twiki}->{user};
     my $set = time();
-    $twiki->{store}->setLease($web, $testtopic, $locker, 10);
+    $this->{twiki}->{store}->setLease($web, $testtopic, $locker, 10);
 
     # check the lease
-    $lease = $twiki->{store}->getLease($web, $testtopic);
+    $lease = $this->{twiki}->{store}->getLease($web, $testtopic);
     $this->assert_not_null($lease);
     $this->assert_str_equals($locker, $lease->{user});
     $this->assert($set, $lease->{taken});
     $this->assert($lease->{taken}+10, $lease->{expires});
 
     # clear the lease
-    $twiki->{store}->clearLease( $web, $testtopic );
-    $lease = $twiki->{store}->getLease($web, $testtopic);
+    $this->{twiki}->{store}->clearLease( $web, $testtopic );
+    $lease = $this->{twiki}->{store}->getLease($web, $testtopic);
     $this->assert_null($lease);
-	$twiki->{store}->removeWeb($twiki->{user}, $web);
+	$this->{twiki}->{store}->removeWeb($this->{twiki}->{user}, $web);
 }
 
 # Handler used in next test
@@ -280,22 +272,22 @@ sub test_beforeSaveHandlerChangeText {
         value  => "fieldvalue",
        };
 
-	$twiki->{store}->createWeb($twiki->{user}, $web, '_default');
-	$this->assert( $twiki->{store}->webExists($web) );
-	$this->assert( ! $twiki->{store}->topicExists($web, $topic) );
+	$this->{twiki}->{store}->createWeb($this->{twiki}->{user}, $web, '_default');
+	$this->assert( $this->{twiki}->{store}->webExists($web) );
+	$this->assert( ! $this->{twiki}->{store}->topicExists($web, $topic) );
 	
     # inject a handler directly into the plugins object
-    push(@{$twiki->{plugins}->{registeredHandlers}{beforeSaveHandler}},
-        new TWiki::Plugin($twiki, "StoreTestPlugin", 'StoreTests'));
+    push(@{$this->{twiki}->{plugins}->{registeredHandlers}{beforeSaveHandler}},
+        new TWiki::Plugin($this->{twiki}, "StoreTestPlugin", 'StoreTests'));
 
 	my $text = 'CHANGETEXT';
-	my $meta = new TWiki::Meta($twiki, $web, $topic);
+	my $meta = new TWiki::Meta($this->{twiki}, $web, $topic);
     $meta->putKeyed( "FIELD", $args );
 
-	$twiki->{store}->saveTopic( $user, $web, $topic, $text, $meta );
-	$this->assert( $twiki->{store}->topicExists($web, $topic) );
+	$this->{twiki}->{store}->saveTopic( $this->{test_user_login}, $web, $topic, $text, $meta );
+	$this->assert( $this->{twiki}->{store}->topicExists($web, $topic) );
 	
-	my ($readMeta, $readText) = $twiki->{store}->readTopic($user, $web, $topic);
+	my ($readMeta, $readText) = $this->{twiki}->{store}->readTopic($this->{test_user_login}, $web, $topic);
     # ignore whitspace at end of data
     $readText =~ s/\s*$//s;
 
@@ -305,7 +297,7 @@ sub test_beforeSaveHandlerChangeText {
     # set expected meta
     $meta->putKeyed('FIELD', {name=>'fieldname', value=>'text'});
 	$this->assert_str_equals($meta->stringify(), $readMeta->stringify());
-	$twiki->{store}->removeWeb($twiki->{user}, $web);
+	$this->{twiki}->{store}->removeWeb($this->{twiki}->{user}, $web);
 }
 
 sub test_beforeSaveHandlerChangeMeta {
@@ -315,22 +307,22 @@ sub test_beforeSaveHandlerChangeMeta {
         value  => "fieldvalue",
        };
 
-	$twiki->{store}->createWeb($twiki->{user}, $web, '_default');
-	$this->assert( $twiki->{store}->webExists($web) );
-	$this->assert( ! $twiki->{store}->topicExists($web, $topic) );
+	$this->{twiki}->{store}->createWeb($this->{twiki}->{user}, $web, '_default');
+	$this->assert( $this->{twiki}->{store}->webExists($web) );
+	$this->assert( ! $this->{twiki}->{store}->topicExists($web, $topic) );
 	
     # inject a handler directly into the plugins object
-    push(@{$twiki->{plugins}->{registeredHandlers}{beforeSaveHandler}},
-        new TWiki::Plugin($twiki, "StoreTestPlugin", 'StoreTests'));
+    push(@{$this->{twiki}->{plugins}->{registeredHandlers}{beforeSaveHandler}},
+        new TWiki::Plugin($this->{twiki}, "StoreTestPlugin", 'StoreTests'));
 
 	my $text = 'CHANGEMETA';
-	my $meta = new TWiki::Meta($twiki, $web, $topic);
+	my $meta = new TWiki::Meta($this->{twiki}, $web, $topic);
     $meta->putKeyed( "FIELD", $args );
 
-	$twiki->{store}->saveTopic( $user, $web, $topic, $text, $meta );
-	$this->assert( $twiki->{store}->topicExists($web, $topic) );
+	$this->{twiki}->{store}->saveTopic( $this->{test_user_login}, $web, $topic, $text, $meta );
+	$this->assert( $this->{twiki}->{store}->topicExists($web, $topic) );
 	
-	my ($readMeta, $readText) = $twiki->{store}->readTopic($user, $web, $topic);
+	my ($readMeta, $readText) = $this->{twiki}->{store}->readTopic($this->{test_user_login}, $web, $topic);
     # ignore whitspace at end of data
     $readText =~ s/\s*$//s;
 
@@ -338,7 +330,7 @@ sub test_beforeSaveHandlerChangeMeta {
     # set expected meta
     $meta->putKeyed('FIELD', {name=>'fieldname', value=>'meta'});
 	$this->assert_str_equals($meta->stringify(), $readMeta->stringify());
-	$twiki->{store}->removeWeb($twiki->{user}, $web);
+	$this->{twiki}->{store}->removeWeb($this->{twiki}->{user}, $web);
 }
 
 sub test_beforeSaveHandlerChangeBoth {
@@ -348,22 +340,22 @@ sub test_beforeSaveHandlerChangeBoth {
         value  => "fieldvalue",
        };
 
-	$twiki->{store}->createWeb($twiki->{user}, $web, '_default');
-	$this->assert( $twiki->{store}->webExists($web) );
-	$this->assert( ! $twiki->{store}->topicExists($web, $topic) );
+	$this->{twiki}->{store}->createWeb($this->{twiki}->{user}, $web, '_default');
+	$this->assert( $this->{twiki}->{store}->webExists($web) );
+	$this->assert( ! $this->{twiki}->{store}->topicExists($web, $topic) );
 	
     # inject a handler directly into the plugins object
-    push(@{$twiki->{plugins}->{registeredHandlers}{beforeSaveHandler}},
-        new TWiki::Plugin($twiki, "StoreTestPlugin", 'StoreTests'));
+    push(@{$this->{twiki}->{plugins}->{registeredHandlers}{beforeSaveHandler}},
+        new TWiki::Plugin($this->{twiki}, "StoreTestPlugin", 'StoreTests'));
 
 	my $text = 'CHANGEMETA CHANGETEXT';
-	my $meta = new TWiki::Meta($twiki, $web, $topic);
+	my $meta = new TWiki::Meta($this->{twiki}, $web, $topic);
     $meta->putKeyed( "FIELD", $args );
 
-	$twiki->{store}->saveTopic( $user, $web, $topic, $text, $meta );
-	$this->assert( $twiki->{store}->topicExists($web, $topic) );
+	$this->{twiki}->{store}->saveTopic( $this->{test_user_login}, $web, $topic, $text, $meta );
+	$this->assert( $this->{twiki}->{store}->topicExists($web, $topic) );
 	
-	my ($readMeta, $readText) = $twiki->{store}->readTopic($user, $web, $topic);
+	my ($readMeta, $readText) = $this->{twiki}->{store}->readTopic($this->{test_user_login}, $web, $topic);
     # ignore whitspace at end of data
     $readText =~ s/\s*$//s;
 
@@ -371,7 +363,7 @@ sub test_beforeSaveHandlerChangeBoth {
     # set expected meta
     $meta->putKeyed('FIELD', {name=>'fieldname', value=>'meta'});
 	$this->assert_str_equals($meta->stringify(), $readMeta->stringify());
-	$twiki->{store}->removeWeb($twiki->{user}, $web);
+	$this->{twiki}->{store}->removeWeb($this->{twiki}->{user}, $web);
 }
 
 # Handler used in next test
@@ -381,7 +373,6 @@ sub beforeAttachmentSaveHandler {
       unless $attrHash->{attachment} eq "testfile.gif";
     die "comment $attrHash->{comment}"
       unless $attrHash->{comment} eq "a comment";
-    die "user ".$user unless $user eq $twiki->{user};
 
     open(F, "<".$attrHash->{tmpFilename}) ||
       die "$attrHash->{tmpFilename}: $!";
@@ -404,8 +395,6 @@ sub afterAttachmentSaveHandler {
       unless $attrHash->{attachment} eq "testfile.gif";
     die "comment $attrHash->{comment}"
       unless $attrHash->{comment} eq "a comment";
-    die "user ".$user->stringify()
-      unless $user eq $twiki->{user};
 }
 
 sub test_attachmentSaveHandlers {
@@ -415,47 +404,47 @@ sub test_attachmentSaveHandlers {
         value  => "fieldvalue",
        };
 
-	$twiki->{store}->createWeb($twiki->{user}, $web, '_default');
-	$twiki->{store}->saveTopic( $twiki->{user}, $web, $topic, "", undef );
+	$this->{twiki}->{store}->createWeb($this->{twiki}->{user}, $web, '_default');
+	$this->{twiki}->{store}->saveTopic( $this->{twiki}->{user}, $web, $topic, "", undef );
 
     # SMELL: assumed implementation
-    push(@{$twiki->{plugins}->{registeredHandlers}{beforeAttachmentSaveHandler}},
-        new TWiki::Plugin($twiki, "StoreTestPlugin", 'StoreTests'));
-    push(@{$twiki->{plugins}->{registeredHandlers}{afterAttachmentSaveHandler}},
-        new TWiki::Plugin($twiki, "StoreTestPlugin", 'StoreTests'));
+    push(@{$this->{twiki}->{plugins}->{registeredHandlers}{beforeAttachmentSaveHandler}},
+        new TWiki::Plugin($this->{twiki}, "StoreTestPlugin", 'StoreTests'));
+    push(@{$this->{twiki}->{plugins}->{registeredHandlers}{afterAttachmentSaveHandler}},
+        new TWiki::Plugin($this->{twiki}, "StoreTestPlugin", 'StoreTests'));
 
-    $twiki->{store}->saveAttachment(
-        $web, $topic, "testfile.gif", $user,
+    $this->{twiki}->{store}->saveAttachment(
+        $web, $topic, "testfile.gif", $this->{test_user_login},
         { file => "$TWiki::cfg{TempfileDir}/testfile.gif",
           comment => "a comment" } );
 
-    my $text = $twiki->{store}->readAttachment(
-        $twiki->{user},
+    my $text = $this->{twiki}->{store}->readAttachment(
+        $this->{twiki}->{user},
         $web, $topic, "testfile.gif");
     $this->assert_str_equals("one four three", $text);
 
-	$twiki->{store}->removeWeb($twiki->{user}, $web);
+	$this->{twiki}->{store}->removeWeb($this->{twiki}->{user}, $web);
 }
 
 sub test_eachChange {
     my $this = shift;
-    $twiki->{store}->createWeb($twiki->{user}, $web);
+    $this->{twiki}->{store}->createWeb($this->{twiki}->{user}, $web);
     $TWiki::cfg{Store}{RememberChangesFor} = 5; # very bad memory
     sleep(1);
     my $start = time();
-    $twiki->{store}->saveTopic( $twiki->{user}, $web, "ClutterBuck",
+    $this->{twiki}->{store}->saveTopic( $this->{twiki}->{user}, $web, "ClutterBuck",
                                 "One" );
-    $twiki->{store}->saveTopic( $twiki->{user}, $web, "PiggleNut",
+    $this->{twiki}->{store}->saveTopic( $this->{twiki}->{user}, $web, "PiggleNut",
                                 "One" );
     # Wait a second
     sleep(1);
     my $mid = time();
-    $twiki->{store}->saveTopic( $twiki->{user}, $web, "ClutterBuck",
+    $this->{twiki}->{store}->saveTopic( $this->{twiki}->{user}, $web, "ClutterBuck",
                                 "One", undef, { forcenewrevision => 1 } );
-    $twiki->{store}->saveTopic( $twiki->{user}, $web, "PiggleNut",
+    $this->{twiki}->{store}->saveTopic( $this->{twiki}->{user}, $web, "PiggleNut",
                                 "Two", undef, { forcenewrevision => 1 } );
     my $change;
-    my $it = $twiki->{store}->eachChange($web, $start);
+    my $it = $this->{twiki}->{store}->eachChange($web, $start);
     $this->assert($it->hasNext());
     $change = $it->next();
     $this->assert_str_equals("PiggleNut", $change->{topic});
@@ -473,7 +462,7 @@ sub test_eachChange {
     $this->assert_str_equals("ClutterBuck", $change->{topic});
     $this->assert_equals(1, $change->{revision});
     $this->assert(!$it->hasNext());
-    $it = $twiki->{store}->eachChange($web, $mid);
+    $it = $this->{twiki}->{store}->eachChange($web, $mid);
     $this->assert($it->hasNext());
     $change = $it->next();
     $this->assert_str_equals("PiggleNut", $change->{topic});
