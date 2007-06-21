@@ -31,7 +31,7 @@ sub test_basic {
     my $ui = $this->{twiki}->handleCommonTags(
         '%USERINFO%', $this->{test_web}, $this->{test_topic});
     $this->assert_str_equals(
-        "TWikiGuest, $TWiki::cfg{UsersWebName}.TWikiGuest, ", $ui);
+        $TWiki::cfg{DefaultUserLogin}.", $TWiki::cfg{UsersWebName}.".$TWiki::cfg{DefaultUserWikiName}.", ", $ui);
 }
 
 sub test_withUser {

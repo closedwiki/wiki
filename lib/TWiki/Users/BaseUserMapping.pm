@@ -165,26 +165,16 @@ in the BaseUserMapping case, we know all the users we deal specialise in.
 
 sub handlesUser {
 	my ($this, $cUID, $login, $wikiname) = @_;
-
-    $cUID = '' unless (defined($cUID));
-    $login = '' unless (defined($login));
-    $wikiname = '' unless (defined($wikiname));
-
-    if (defined($this->{U2L}{$cUID})) {
-        return 1;
-    } elsif (defined($this->{L2U}{$login})) {
-        return 1;
-    } elsif (defined($this->{W2U}{$wikiname})) {
-        return 1;
-    } elsif (defined($this->{L2U}{$cUID})) {
-        #cUID stored is login
-        return 1;
-    } elsif (defined($this->{W2U}{$cUID})) {
-        #cUID stored is wikiname
-        return 1;
-    }
-
-    return 0;
+	
+	$cUID = '' unless (defined($cUID));
+	$login = '' unless (defined($login));
+	$wikiname = '' unless (defined($wikiname));
+	
+	return 1 if (defined($this->{U2L}{$cUID}));
+	return 1 if (defined($this->{L2U}{$login}));
+	return 1 if (defined($this->{W2U}{$wikiname}));
+	
+	return 0;
 }
 
 

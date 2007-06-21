@@ -260,20 +260,21 @@ sub _registerSingleBulkUser {
 
     my $users = $session->{users};
 
-    if( $settings->{doOverwriteTopics} ||
-          !$session->{store}->topicExists( $row->{webName},
-                                           $row->{WikiName} ) ) {
-        $log .= _createUserTopic($session, $row);
-    } else {
-        $log .= "$b1 Not writing user topic $row->{WikiName}\n";
-    }
-
     try {
         # Add the user to the user management system. May throw an exception
-        my $user = $users->addUser(
+        my $cUID = $users->addUser(
             $row->{LoginName}, $row->{WikiName},
             $row->{Password}, $row->{Email} );
         $log .= "$b1 $row->{WikiName} has been added to the password and user mapping managers\n";
+        
+	    if( $settings->{doOverwriteTopics} ||
+	          !$session->{store}->topicExists( $row->{webName},
+	                                           $row->{WikiName} ) ) {
+	        $log .= _createUserTopic($session, $row);
+	    } else {
+	        $log .= "$b1 Not writing user topic $row->{WikiName}\n";
+	    }
+        $users->setEmails($cUID, $row->{Email});
 
         $session->writeLog('bulkregister',
                            $row->{webName}.'.'.$row->{WikiName},
@@ -502,7 +503,7 @@ sub _resetUsersPassword {
 
     my $user = $users->getCanonicalUserID( $login );
     my $message = '';
-    unless( $users->userExists( $user )) {
+    unless( $user && $users->userExists( $user )) {
         # Not an error.
         $$pMess .= $session->inlineAlert( 'alerts', 'missing_user', $user);
         return 0;
@@ -748,15 +749,12 @@ sub complete {
         $data->{LoginName} ||= $data->{WikiName};
     }
 
-    # Create the user topic. We have to do this before adding the
-    # user to the user management system, because some user mappers
-    # use the user topic to store data.
-    my $log = _createUserTopic($session, $data);
-
     my $users = $session->{users};
     try {
-        $users->addUser( $data->{LoginName}, $data->{WikiName},
+        my $cUID = $users->addUser( $data->{LoginName}, $data->{WikiName},
                          $data->{Password}, $data->{Email} );
+        my $log = _createUserTopic($session, $data);
+        $users->setEmails($cUID, $data->{Email});
     } catch Error::Simple with {
         my $e = shift;
         # Log the error
@@ -1012,7 +1010,7 @@ sub _validateRegistration {
     # Check if the login name is already registered
     my $users = $session->{users};
     my $user = $users->getCanonicalUserID( $data->{LoginName} );
-    if( $users->userExists( $user )) {
+    if( $user && $users->userExists( $user )) {
         throw TWiki::OopsException( 'attention',
                                     web => $data->{webName},
                                     topic => $session->{topicName},

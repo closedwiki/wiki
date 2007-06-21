@@ -650,7 +650,8 @@ Return: =$wikiName= Wiki Name, e.g. ='JohnDoe'=
 =cut
 
 sub getCanonicalUserID {
-	my $user = shift || $TWiki::Plugins::SESSION->{user};
+	my $user = shift;
+	return $TWiki::Plugins::SESSION->{user} unless ($user);
     ASSERT($TWiki::Plugins::SESSION) if DEBUG;
     my $users = $TWiki::Plugins::SESSION->{users};
     return $users->getCanonicalUserID( $user );

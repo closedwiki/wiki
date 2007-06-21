@@ -102,7 +102,7 @@ sub new {
     my $this = bless( { session => $session }, $class );
 
     #correct the DefaultUserLogin if $TWiki::cfg{Register}{AllowLoginName} is off
-    #$TWiki::cfg{DefaultUserLogin} = $TWiki::cfg{DefaultUserWikiName} 
+    #$TWiki::cfg{DefaultUserLogin} = $TWiki::cfg{DefaultUserWikiName} ;
     #$TWiki::cfg{AdminUserLogin} = $TWiki::cfg{AdminUserWikiName} unless ($TWiki::cfg{Register}{AllowLoginName});
 
     require TWiki::LoginManager;
@@ -128,6 +128,22 @@ sub new {
     	eval "require $implUserMappingManager";
         die $@ if $@;
     	$this->{mapping} = $implUserMappingManager->new( $session );
+    	
+    	#add all the basemapper users to the impl mapping to allow us Group mixing between mappers
+    	#yes, this is a dirty looking hack, but it does suggest that putting the 'caches' of both usermapping in one place might work.
+    	foreach my $cUID (keys %{$this->{basemapping}->{U2L}}) {
+    		my $wikiname = $this->{basemapping}->getWikiName($cUID);
+    		my $login = $this->{basemapping}->getLoginName($cUID);
+    		#$cUID =~ s/^$this->{basemapping}->{mapping_id}/$this->{mapping}->{mapping_id}/;
+    		#print STDERR "\npreload from basemapping $cUID, $wikiname, $login";
+	    	$this->{mapping}->{U2W}->{$cUID}     = $wikiname;
+	    	if  ($TWiki::cfg{Register}{AllowLoginName}) {
+		    	$this->{mapping}->{L2U}->{$login}    = $cUID;
+	    	} else {
+		    	$this->{mapping}->{L2U}->{$wikiname}    = $cUID;
+	    	}
+	    	$this->{mapping}->{W2U}->{$wikiname} = $cUID;
+	    }
     }
     #the UI for rego supported/not is different from rego temporarily turned off
     $session->enterContext('registration_supported') if $this->supportsRegistration();
@@ -188,15 +204,20 @@ should really be PRIVATE.
 =cut
 
 sub getMapping {
-	my ($this, $cUID, $login, $wikiname) = @_;
+	my ($this, $cUID, $login, $wikiname, $noFallBack) = @_;
 
 	$cUID ||= '';
 	$login ||= '';
 	$wikiname ||= '';
+	
+	$wikiname =~ s/^$TWiki::cfg{UsersWebName}\.//;
+	
+	$noFallBack = 0 unless (defined($noFallBack));
 
 	return $this->{basemapping} if ($this->{basemapping}->handlesUser($cUID, $login, $wikiname));
 	return $this->{mapping} if ($this->{mapping}->handlesUser($cUID, $login, $wikiname));
-	return $this->{mapping};#TODO: I think it should fall back to basemapping, but to do that I need to get even more clever :/
+	return $this->{mapping} unless ($noFallBack == 1);			#TODO: I think it should fall back to basemapping, but to do that I need to get even more clever :/
+	return undef;
 }
 
 =pod
@@ -229,10 +250,8 @@ sub initialiseUser {
     $login = $plogin if $plogin;
 
     # if we get here without a login id, we are a guest
-    $login ||= $TWiki::cfg{DefaultUserLogin};
-
-    # Determine the canonical ID for this login
-    return $this->getCanonicalUserID( $login );    
+    my $cUID = $this->getCanonicalUserID( $login ) || $this->getCanonicalUserID( $TWiki::cfg{DefaultUserLogin} );
+	return $cUID;
 }
 
 # global used by test harness to give predictable results
@@ -305,16 +324,57 @@ sub getCanonicalUserID {
     my( $this, $login ) = @_;
 	$this->ASSERT_IS_USER_LOGIN_ID($login) if DEBUG;
 	
-#	my $wikiname = $this->getMapping($cUID)->getWikiName($cUID) if ($this->getMapping($cUID));
-#    return $wikiname || "UnknownUser";
+    #if its one of the known cUID's, then just return itself
+    my $testMapping = $this->getMapping($login, undef, undef, 1);
+    return $login if ($testMapping && $testMapping->canonical2login ($login));	#passed a valid cUID
     
-    
-	my $cUID = $this->getMapping(undef, $login)->login2canonical( $login ) if ($this->getMapping(undef, $login));
-    ASSERT($cUID) if DEBUG;
-	$this->ASSERT_IS_CANONICAL_USER_ID($cUID) if DEBUG;
-#	print STDERR $cUID || '(NO cUID)';	
+    my $cUID;
+    my $mapping = $this->getMapping(undef, $login, $login);
+    if ($mapping) {
+		$cUID = $mapping->login2canonical( $login );
+		
+		unless ($cUID) {	#must be a wikiname
+			my( $web, $topic ) = $this->{session}->normalizeWebTopicName( '', $login );
+		    my $found = $this->findUserByWikiName($topic);
+    		$cUID = $found->[0] if scalar(@$found);
+#			print STDERR "\nfindUserByWikiName";	
+		}
+    }
+
+#	print STDERR "\ngetCanonicalUserID($login) => ".($cUID || '(NO cUID)');	
 
     return $cUID;
+}
+
+sub getLegacycUID {
+	my( $this, $cUID ) = @_;
+		
+	unless (($cUID =~ /^$this->{basemapping}->{mapping_id}/) ||
+					($cUID =~ /^$this->{mapping}->{mapping_id}/)) {
+		#legacy mode - cUID is not actually a new style cUIDList
+						
+		#its a web.wikiname (worst case)
+		my ($web, $topic) = $this->{session}->normalizeWebTopicName('', $cUID);
+	    my $cUIDList = $this->getMapping(undef, undef, $topic)->findUserByWikiName($topic);
+		if (scalar(@$cUIDList)) {
+    		$cUID = $cUIDList->[0];
+		} else {
+			#its a login (also works for basemapping rego agent
+			$cUID = $this->getMapping(undef, $cUID)->login2canonical($cUID);
+		}
+		
+		#its a wikinames
+#	    my $cUIDList = $this->getMapping(undef, undef, $cUID)->findUserByWikiName($cUID);
+#    	my $cUID = $cUIDList->[0]  if scalar(@$cUIDList);
+		#its a web.wikiname (worst case)
+#		my ($web, $topic) = $this->{session}->normalizeWebTopicName('', $cUID);
+#	    my $cUIDList = $this->getMapping(undef, undef, $topic)->findUserByWikiName($topic);
+#    	my $cUID = $cUIDList->[0]  if scalar(@$cUIDList);		
+	}
+
+	$this->ASSERT_IS_CANONICAL_USER_ID($cUID) if DEBUG;
+	
+	return $cUID;
 }
 
 =pod
@@ -408,6 +468,7 @@ True if the user is an admin
 sub isAdmin {
     my( $this, $cUID ) = @_;
     my $isAdmin = 0;
+    ASSERT($cUID);
 	#$this->ASSERT_IS_CANONICAL_USER_ID($cUID) if DEBUG;
 	
 	$cUID = $this->getLegacycUID($cUID);
@@ -424,37 +485,6 @@ sub isAdmin {
     }
 	
     return ($mapping->isAdmin( $cUID ) || $otherMapping->isAdmin( $othercUID ));
-}
-
-sub getLegacycUID {
-	my( $this, $cUID ) = @_;
-	
-	unless (($cUID =~ /^$this->{basemapping}->{mapping_id}/) ||
-					($cUID =~ /^$this->{mapping}->{mapping_id}/)) {
-		#legacy mode - cUID is not actually a new style cUIDList
-						
-		#its a web.wikiname (worst case)
-		my ($web, $topic) = $this->{session}->normalizeWebTopicName('', $cUID);
-	    my $cUIDList = $this->getMapping(undef, undef, $topic)->findUserByWikiName($topic);
-		if (scalar(@$cUIDList)) {
-    		$cUID = $cUIDList->[0];
-		} else {
-			#its a login (also works for basemapping rego agent
-			$cUID = $this->getMapping(undef, $cUID)->login2canonical($cUID);
-		}
-		
-		#its a wikinames
-#	    my $cUIDList = $this->getMapping(undef, undef, $cUID)->findUserByWikiName($cUID);
-#    	my $cUID = $cUIDList->[0]  if scalar(@$cUIDList);
-		#its a web.wikiname (worst case)
-#		my ($web, $topic) = $this->{session}->normalizeWebTopicName('', $cUID);
-#	    my $cUIDList = $this->getMapping(undef, undef, $topic)->findUserByWikiName($topic);
-#    	my $cUID = $cUIDList->[0]  if scalar(@$cUIDList);		
-	}
-
-	$this->ASSERT_IS_CANONICAL_USER_ID($cUID) if DEBUG;
-	
-	return $cUID;
 }
 
 =pod
@@ -505,7 +535,7 @@ sub getLoginName {
 #	$this->ASSERT_IS_CANONICAL_USER_ID($cUID) if DEBUG;
 	$cUID = $this->getLegacycUID($cUID);
 	
-	my $login = $this->getMapping($cUID)-> getLoginName($cUID) if ($this->getMapping($cUID));
+	my $login = $this->getMapping($cUID)-> getLoginName($cUID) if ($cUID && $this->getMapping($cUID));
     return $login || 'unknown';
 }
 
@@ -522,10 +552,10 @@ sub getWikiName {
     ASSERT($cUID) if DEBUG;
 	return $this->{getWikiName}->{$cUID} if (defined($this->{getWikiName}->{$cUID}));
 
-	$cUID = $this->getLegacycUID($cUID);
+	my $legacycUID = $this->getLegacycUID($cUID);
 
-    my $wikiname = $this->getMapping($cUID)->getWikiName($cUID) if ($this->getMapping($cUID));
-	$this->{getWikiName}->{$cUID} = $wikiname || "UnknownUser";
+    my $wikiname = $this->getMapping($legacycUID)->getWikiName($legacycUID) if ($legacycUID && $this->getMapping($legacycUID));
+	$this->{getWikiName}->{$cUID} = $wikiname || "UnknownUser ($cUID)";
     return $this->{getWikiName}->{$cUID};
 }
 
