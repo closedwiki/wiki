@@ -48,7 +48,6 @@ use Error qw( :try );
 use TWiki::Time;
 use TWiki::ListIterator;
 
-
 =pod
 
 ---++ ClassMethod new ($session, $impl)
@@ -64,13 +63,13 @@ sub new {
     my $this = bless( {}, $class );
     $this->{session} = $session;
     $this->{mapping_id} = 'TWikiUserMapping_';
-    
+
     my $implPasswordManager = $TWiki::cfg{PasswordManager};
     $implPasswordManager = 'TWiki::Users::Password'
       if( $implPasswordManager eq 'none' );
     eval "use $implPasswordManager";
     die "Password Manager: $@" if $@;
-    $this->{passwords} = $implPasswordManager->new( $session );    
+    $this->{passwords} = $implPasswordManager->new( $session );
 
     #$this->{U2L} = {};
     $this->{L2U} = {};
@@ -80,6 +79,26 @@ sub new {
     return $this;
 }
 
+=begin twiki
+
+---++ ObjectMethod finish()
+Break circular references.
+
+=cut
+
+# Note to developers; please undef *all* fields in the object explicitly,
+# whether they are references or not. That way this method is "golden
+# documentation" of the live fields in the object.
+sub finish {
+    my $this = shift;
+    $this->{passwords}->finish() if $this->{passwords};
+    undef $this->{L2U};
+    undef $this->{U2W};
+    undef $this->{W2U};
+    undef $this->{mapping_id};
+    undef $this->{passwords};
+    undef $this->{session};
+}
 
 =pod
 
@@ -92,27 +111,6 @@ allows UserMappings to come with customised login screens - that should preffere
 sub loginTemplateName {
     return 'login';
 }
-
-=pod
-
----++ ObjectMethod finish ()
-
-cleans up references
-
-=cut
-
-# Complete processing after the client's HTTP request has been responded
-# to by breaking references (if any)
-sub finish {
-    my $this = shift;
-    #delete $this->{U2L};
-    delete $this->{L2U};
-    delete $this->{U2W};
-    delete $this->{W2U};
-    
-    $this->{passwords}->finish();
-}
-
 
 =pod
 
@@ -340,7 +338,7 @@ sub removeUser {
 sub getWikiName {
     my ($this, $cUID) = @_;
 	
-	 ASSERT($cUID =~ /^$this->{mapping_id}/) if DEBUG;
+    #ASSERT($cUID =~ /^$this->{mapping_id}/) if DEBUG;
 
 	
 	my $wikiname;
@@ -435,7 +433,6 @@ method in that module for details.
 
 sub eachUser {
     my( $this ) = @_;
-    ASSERT($this->isa( 'TWiki::Users::TWikiUserMapping')) if DEBUG;
 
     _loadMapping( $this );
     my @list = keys(%{$this->{U2W}});
@@ -465,7 +462,6 @@ method in that module for details.
 sub eachGroupMember {
     my $this = shift;
     my $group = shift;
-    ASSERT($this->isa( 'TWiki::Users::TWikiUserMapping')) if DEBUG;
     my $store = $this->{session}->{store};
     my $users = $this->{session}->{users};
 
@@ -990,7 +986,7 @@ sub _getListOfGroups {
         my $users = $this->{session}->{users};
         $this->{groupsList} = [];
 
-        $this->{session}->{search}->searchWeb
+        $this->{session}->search->searchWeb
           (
               _callback     => \&_collateGroups,
               _cbdata       =>  { list => $this->{groupsList},
@@ -1088,6 +1084,5 @@ sub _expandUserList {
     }
     return \@l;
 }
-
 
 1;
