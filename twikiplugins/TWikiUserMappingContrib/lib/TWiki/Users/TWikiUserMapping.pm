@@ -167,14 +167,14 @@ sub login2canonical {
 
 =pod
 
----++ ObjectMethod _canonical2login ($cUID) -> login
+---++ ObjectMethod canonical2login ($cUID) -> login
 
 converts an internal cUID to that user's login
 (undef on failure)
 
 =cut
 
-sub _canonical2login {
+sub canonical2login {
     my( $this, $user ) = @_;
     ASSERT($user) if DEBUG;
 	ASSERT($this->{mapping_id}) if DEBUG;
@@ -349,7 +349,7 @@ sub getWikiName {
     } else {
         # If the mapping isn't enabled there's no point in loading it
     }
-	$wikiname = $wikiname || _canonical2login( $this, $cUID );
+	$wikiname = $wikiname || canonical2login( $this, $cUID );
 #print STDERR "--------------------------------------cUID : $cUID => $wikiname\n";	
     return $wikiname;
  
@@ -365,7 +365,7 @@ Map a canonical user name to a login name
 
 sub getLoginName {
     my ($this, $user) = @_;
-    return _canonical2login( $this, $user );
+    return canonical2login( $this, $user );
 }
 
 =pod
@@ -403,7 +403,7 @@ sub userExists {
     # Do this to avoid a password manager lookup
     return 1 if $cUID eq $this->{session}->{user};
 
-    my $loginName = $this->_canonical2login( $cUID );
+    my $loginName = $this->canonical2login( $cUID );
 
     if( $loginName eq $TWiki::cfg{DefaultUserLogin} ) {
         return $loginName;
