@@ -46,10 +46,12 @@ char ** XS_unpack_charPtrPtr(SV* rv) {
 		ssv = av_fetch(av, x, 0);
 		if (ssv != NULL){
             s[x] = (char *)malloc( SvCUR(*ssv) + 1 );
-			if (SvPOK(*ssv))
+            // Test commented out; fails with some perl versions, for no
+            // good reason
+			//if (SvPOK(*ssv))
 				strcpy(s[x], SvPV(*ssv, PL_na));
-			else
-				warn("unpack_args: array elem %d was not a string.", x);
+			//else
+			//	warn("unpack_args: array elem %d was not a string.", x);
 		}
 	}
 	s[x] = (char*)NULL; /* sentinel */
