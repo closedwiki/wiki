@@ -135,33 +135,40 @@ in the BaseUserMapping case, we know all the users we deal specialise in.
 
 sub handlesUser {
 	my ($this, $cUID, $login, $wikiname) = @_;
+	
+	$cUID = '' unless ($cUID);
 
-    #if ( $user_id =~ /^($this->{mapping_id})/ || ($this->{mapping_id} eq 'TWikiUserMapping_'));
-	#TODO: should really see if there is a mapping_id on the front and bail if we don't grok it..
-	return 1;
+	return 1 if ( $cUID =~ /^($this->{mapping_id})/ );
+	return 1 if ($login && $this->lookupLoginName( $login ));
+#	return 1 if ($wikiname && $this->findUserByWikiName( $wikiname ));
+	return 0;
 }
 
 
 =pod
 
----++ ObjectMethod login2canonical ($login) -> cUID
+---++ ObjectMethod login2canonical ($login, $dontcheck) -> cUID
 
 Convert a login name to the corresponding canonical user name. The
 canonical name can be any string of 7-bit alphanumeric and underscore
 characters, and must correspond 1:1 to the login name.
 (undef on failure)
 
+(if dontcheck is true, return a cUID for a nonexistant user too - used for registration)
+
 =cut
 
 sub login2canonical {
-    my( $this, $login ) = @_;
+    my( $this, $login, $dontcheck ) = @_;
+#print STDERR "\nTWikiUserMapping::login2canonical($login)";
+	return unless (($dontcheck) || defined($this->{L2U}->{$login}) || (defined($this->{passwords}->fetchPass( $login ))) );
 
     use bytes;
     # use bytes to ignore character encoding
     $login =~ s/([^a-zA-Z0-9])/'_'.sprintf('%02d', ord($1))/ge;
     no bytes;
     $login = $this->{mapping_id}.$login;
-   
+#print STDERR " OK ($login)";   
     return $login;
 }
 
@@ -235,6 +242,7 @@ sub addUser {
         }
 
         unless( $this->{passwords}->setPassword( $login, $password )) {
+        	#print STDERR "\n Failed to add user:  ".$this->{passwords}->error();
             throw Error::Simple(
                 'Failed to add user: '.$this->{passwords}->error());
         }
@@ -259,6 +267,7 @@ sub addUser {
 
     # add to the mapping caches
     my $user = _cacheUser( $this, $wikiname, $login );
+    ASSERT($user) if DEBUG;
 
     # add name alphabetically to list
     foreach my $line ( split( /\r?\n/, $text) ) {
@@ -337,9 +346,8 @@ sub removeUser {
 
 sub getWikiName {
     my ($this, $cUID) = @_;
-	
-    #ASSERT($cUID =~ /^$this->{mapping_id}/) if DEBUG;
-
+	ASSERT($cUID) if DEBUG;
+	ASSERT($cUID =~ /^$this->{mapping_id}/) if DEBUG;
 	
 	my $wikiname;
 #    $cUID =~ s/^$this->{mapping_id}//;
@@ -381,8 +389,8 @@ exists. Called by TWiki::Users
 
 sub lookupLoginName {
     my ($this, $login) = @_;
-
     _loadMapping( $this );
+#print STDERR "\nlookupLoginName($login)=> ".($this->{L2U}->{$login}||'NOT FOUND');
     return $this->{L2U}->{$login};
 }
 
@@ -818,7 +826,7 @@ sub findUserByWikiName {
         # The wikiname is also the login name, so we can just convert
         # it directly to a cUID
         my $cUID = login2canonical( $this, $wn );
-        if( $skipExistanceCheck || $this->userExists( $cUID )) {
+        if( $skipExistanceCheck || ($cUID && $this->userExists( $cUID )) ) {
             push( @users, login2canonical( $this, $wn ));
         }
     }
@@ -928,39 +936,42 @@ sub ASSERT_IS_USER_DISPLAY_NAME {
 
 =pod
 
----++ ObjectMethod _cacheUser ($wikiname, $login)
+---++ ObjectMethod _cacheUser ($wikiname, $login) => cUID
 
-Construct the user management object
+# PRIVATE
+
+TODO: and probably flawed in light of multiple cUIDs mapping to one wikiname
 
 =cut
 
-# PRIVATE
+
 sub _cacheUser {
     my($this, $wikiname, $login) = @_;
     ASSERT($wikiname) if DEBUG;
 
     $login ||= $wikiname;
 
-    my $user = login2canonical( $this, $login );
+    my $cUID = login2canonical( $this, $login, 1 );
+    return unless ($cUID);
+    ASSERT($cUID) if DEBUG;
 
-    #$this->{U2L}->{$user}     = $login;
-    $this->{U2W}->{$user}     = $wikiname;
-    $this->{L2U}->{$login}    = $user;
-    $this->{W2U}->{$wikiname} = $user;
+    #$this->{U2L}->{$cUID}     = $login;
+    $this->{U2W}->{$cUID}     = $wikiname;
+    $this->{L2U}->{$login}    = $cUID;
+    $this->{W2U}->{$wikiname} = $cUID;
 
-    return $user;
+    return $cUID;
 }
 
 
 =pod
 
----++ ClassMethod new ($session, $impl)
+---++ ClassMethod _collateGroups ($ref, $group)
 
-Construct the user management object
+PRIVATE callback for search function to collate results
 
 =cut
 
-# PRIVATE callback for search function to collate results
 sub _collateGroups {
     my $ref = shift;
     my $group = shift;
@@ -971,13 +982,12 @@ sub _collateGroups {
 
 =pod
 
----++ ClassMethod new ($session, $impl)
+---++ ObjectMethod _getListOfGroups ()
 
-Construct the user management object
+PRIVATE get a list of groups defined in this TWiki
 
 =cut
 
-# PRIVATE get a list of groups defined in this TWiki
 sub _getListOfGroups {
     my $this = shift;
     ASSERT(ref($this) eq 'TWiki::Users::TWikiUserMapping') if DEBUG;
@@ -1037,7 +1047,7 @@ sub _loadMapping {
             # This matches:
             #   * TWikiGuest - guest - 10 Mar 2005
             #   * TWikiGuest - 10 Mar 2005
-            $text =~ s/^\s*\* (?:$TWiki::regex{webNameRegex}\.)?($TWiki::regex{wikiWordRegex})\s*(?:-\s*(\S+)\s*)?-.*$/_cacheUser( $this, $1, $2)/gome;
+            $text =~ s/^\s*\* (?:$TWiki::regex{webNameRegex}\.)?($TWiki::regex{wikiWordRegex})\s*(?:-\s*(\S+)\s*)?-.*$/(_cacheUser( $this, $1, $2)||'')/gome;
         }
     } else {
         #loginnames _are_ WikiNames so ask the Password handler for list of users
@@ -1053,14 +1063,13 @@ sub _loadMapping {
 
 =pod
 
----++ ClassMethod new ($session, $impl)
+---++ ObjectMethod _expandUserList ($names )
 
-Construct the user management object
+Get a list of *canonical user ids* from a text string containing a
+list of user *wiki* names and *group ids*.
 
 =cut
 
-# Get a list of *canonical user ids* from a text string containing a
-# list of user *wiki* names and *group ids*.
 sub _expandUserList {
     my( $this, $names ) = @_;
 
