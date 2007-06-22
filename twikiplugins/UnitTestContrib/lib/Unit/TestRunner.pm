@@ -18,7 +18,10 @@ sub start {
     # First use all the tests to get them compiled
     while (scalar(@files)) {
         my $suite = shift @files;
-        $suite =~ s/\.pm$//;
+        $suite =~ s/^(.*?)(\w+)\.pm$/$2/;
+        if ($1) {
+            push(@INC, $1);
+        }
         eval "use $suite";
         if ($@) {
             my $m = "*** Failed to use $suite: $@";
