@@ -82,6 +82,8 @@ A user may be listed many times in the <nop>%NOTIFYTOPIC% topic. Where a user ha
 
 If a _TWiki group_ is listed for notification, the group will be recursively expanded to the e-mail addresses of all members.
 
+__%X% Warning: Because an email address is not linked to a user name, there is no way for TWiki to check access controls for email addresses. A user identified by an email address will only be sent change notifications if the topic they are asubscribed to is readable by guest users. You can limit what email addresses can be used in <nop>%NOTIFYTOPIC%, or even block use of emails altogther, using the ={MailerContrib}{EmailFilterIn} setting in =configure=.
+
 __%T% Tip:__ List names in alphabetical order to make it easier to find the names.
 %STOPINCLUDE%
 
@@ -89,7 +91,7 @@ In the future it is intended that individual users will be able to control the f
 
 %RED% __Note__ =mailnotify= ignores permissions in webs. It is entirely possible for a user to get added to one of the subscription topics in a web, when they are not authorised to view the topics in that web. This could result in them having access to sensitive information, particularly with news mode. %ENDCOLOR%
 
-Note that when using the "news mode" ! or ? specifiers are used the entire topic text is mailed out as HTML. The =newsletter= template is used to generate the content in this mail, using whatever skin is selected in the topic being mailed.
+Note that when using the "news mode" =!= or =?= specifiers the entire topic text is mailed out as HTML. The =newsletter= template is used to generate the content in this mail, using whatever skin is selected in the topic being mailed.
 
 In addition, the %<nop>STARTPUBLISH% and %<nop>STOPPUBLISH% markers used by TWiki:Plugins.PublishContrib to delimit the text to be published are respected.
 
@@ -100,6 +102,8 @@ The second part of the module is a code library that provides the services for o
 ---+ Installation Instructions
 %$INSTALL_INSTRUCTIONS%
    * To make sure the installation was successful, run the =mailnotify= script from the command line, with no parameters. In this case it will print out what it would have done to STDOUT.
+*Additional settings*
+   * You can change the regular expression that matches email addresses in <nop>%NOTIFYTOPIC% using the ={MailerContrib}{EmailFilterIn} setting in =configure=. This allows you to limit the domains to which emails can be sent, or even block email addresses altogether.
 
 ---++ Setting up your cron job(s)
 You need to set up a =cron= (or equivalent) job to run =tools/mailnotify=.
@@ -147,6 +151,7 @@ Newsletters are sent after formatting using the standard =view= template, using 
 |  License: | GPL |
 |  Version: | %$VERSION% |
 |  Change History: | |
+|  22 Jun 2007 | Bugs:Item4284 - added access control checks and email filter |
 |  21 May 2007 | Bugs:Item3969 - 8bit email fix (TWiki:Main.WillNorris) |
 |  13623 | Bugs:Item4014 no changes was resetting the notify time to 0. Thanks to TWiki:Main.JeffCrawford for nailing this down. |
 |  12496 | <a rel='nofollow' href='http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item3415'>Item3415</a> mailnotify did not send notifications to intranet users because of wrong call to findUser. |

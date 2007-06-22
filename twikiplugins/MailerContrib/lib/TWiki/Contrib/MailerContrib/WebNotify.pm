@@ -1,7 +1,7 @@
 # Module of TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
 # Copyright (C) 2004 Wind River Systems Inc.
-# Copyright (C) 1999-2006 TWiki Contributors.
+# Copyright (C) 1999-2007 TWiki Contributors.
 # All Rights Reserved. TWiki Contributors
 # are listed in the AUTHORS file in the root of this distribution.
 # NOTE: Please extend that file, not this notice.
@@ -20,10 +20,9 @@
 
 use strict;
 
-use TWiki::Func;
-
-use TWiki::Contrib::MailerContrib::Subscriber;
-use TWiki::Contrib::MailerContrib::Subscription;
+require TWiki::Func;
+require TWiki::Contrib::MailerContrib::Subscriber;
+require TWiki::Contrib::MailerContrib::Subscription;
 
 =pod
 
@@ -207,6 +206,10 @@ sub processChange {
         my $subscriber = $this->{subscribers}{$name};
         my $subs = $subscriber->isSubscribedTo( $topic, $db );
         if ($subs && !$subscriber->isUnsubscribedFrom( $topic, $db )) {
+
+            next unless TWiki::Func::checkAccessPermission(
+                'VIEW', $name, undef, $topic, $this->{web}, undef );
+
             my $emails = $subscriber->getEmailAddresses();
             if( $emails && scalar( @$emails )) {
                 foreach my $email ( @$emails ) {
@@ -285,7 +288,7 @@ sub _load {
     $text =~ s/\\\r?\n//gs;
     my $webRE = qr/$TWiki::cfg{UsersWebName}\.|%MAINWEB%\./o;
     foreach my $line ( split ( /\r?\n/, $text )) {
-        if ( $line =~ /^\s+\*\s$webRE?($TWiki::regex{wikiWordRegex})\s+\-\s+($TWiki::regex{emailAddrRegex})/o ) {
+        if ( $line =~ /^\s+\*\s$webRE?($TWiki::regex{wikiWordRegex})\s+\-\s+($TWiki::cfg{MailerContrib}{EmailFilterIn})/ ) {
             # * Main.WikiName - email@domain
             # * %MAINWEB%.WikiName - email@domain
             if ( $1 ne $TWiki::cfg{DefaultUserWikiName} ) {
@@ -301,14 +304,14 @@ sub _load {
             $this->subscribe($1, '*', 0 );
             $in_pre = 0;
         }
-        elsif ( $line =~ /^\s+\*\s($TWiki::regex{emailAddrRegex})\s*$/o ) {
+        elsif ( $line =~ /^\s+\*\s($TWiki::cfg{MailerContrib}{EmailFilterIn})\s*$/ ) {
             # * email@domain
             $this->subscribe($1, '*', 0 );
             $in_pre = 0;
         }
-        elsif ( $line =~ /^\s+\*\s($TWiki::regex{emailAddrRegex})\s*:(.*)$/o ) {
+        elsif ( $line =~ /^\s+\*\s($TWiki::cfg{MailerContrib}{EmailFilterIn})\s*:(.*)$/ ) {
             # * email@domain: topics
-            $this->_parsePages( $1, $3 );
+            $this->_parsePages( $1, $2 );
             $in_pre = 0;
         }
         elsif ( $line =~ /^\s+\*\s$webRE?([$TWiki::regex{mixedAlphaNum}]+)\s*:(.*)$/o ) {
@@ -344,7 +347,7 @@ sub _parsePages {
         }
     }
     if ( $spec =~ m/\S/ ) {
-        print STDERR "Badly formatted subscription list $ospec\n";
+        print STDERR "Badly formatted subscription for $who: $ospec\n";
     }
 }
 
