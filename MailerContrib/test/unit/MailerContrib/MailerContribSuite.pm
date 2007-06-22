@@ -48,7 +48,7 @@ sub set_up {
 
     $TWiki::cfg{EnableHierarchicalWebs} = 1;
 
-    $this->{twiki}->{net}->setMailHandler(\&TWikiFnTestCase::sentMail);
+    $this->{twiki}->net->setMailHandler(\&TWikiFnTestCase::sentMail);
 
     my $user = $this->{twiki}->{user};
     my $text;
@@ -68,7 +68,7 @@ sub set_up {
 
     # Must create a new twiki to force re-registration of users
     $this->{twiki} = new TWiki();
-    $this->{twiki}->{net}->setMailHandler(\&TWikiFnTestCase::sentMail);
+    $this->{twiki}->net->setMailHandler(\&TWikiFnTestCase::sentMail);
     @TWikiFnTestCase::mails = ();
 
     @specs =
@@ -214,6 +214,11 @@ sub set_up {
         $meta->put( "TOPICPARENT", { name => "$web.TestTopic2" } );
         $this->{twiki}->{store}->saveTopic( $user, $web, "TestTopic21",
                                     "This is TestTopic21 so there", $meta);
+
+        $meta = new TWiki::Meta($this->{twiki},$web,"TestTopicDenied");
+        $this->{twiki}->{store}->saveTopic(
+            $user, $web, "TestTopicDenied",
+            "   * Set ALLOWTOPICVIEW = TestUser1", $meta);
 
         # add a second rev to TestTopic2 so the base rev is 2
         ( $meta, $text ) = $this->{twiki}->{store}->readTopic(undef,$web,"TestTopic2");
@@ -419,6 +424,36 @@ sub testCovers {
         'AxB', 0, '!');
     $this->assert(!$s1->covers($s2));
     $this->assert($s2->covers($s1));
+}
+
+# Check filter-in on email addresses
+sub testExcluded {
+    my $this = shift;
+
+    $TWiki::cfg{MailerContrib}{EmailFilterIn} = '\w+\@example.com';
+
+    my $s = <<'HERE';
+   * bad@disallowed.com: *
+   * good@example.com: *
+HERE
+
+    my $meta = new TWiki::Meta($this->{twiki},$this->{test_web},"WebNotify");
+    $meta->put( "TOPICPARENT", { name => "$this->{test_web}.WebHome" } );
+    $this->{twiki}->{store}->saveTopic(
+        $this->{twiki}->{user}, $this->{test_web}, "WebNotify",
+        "Before\n${s}After",
+        $meta);
+    TWiki::Contrib::Mailer::mailNotify( [ $this->{test_web} ], $this->{twiki}, 0 );
+
+    my %matched;
+    foreach my $message ( @TWikiFnTestCase::mails ) {
+        next unless $message;
+        $message =~ /^To: (.*?)$/m;
+        my $mailto = $1;
+        $this->assert($mailto, $message);
+        $this->assert_str_equals('good@example.com', $mailto, $mailto);
+    }
+    #print "REPORT\n",join("\n\n", @TWikiFnTestCase::mails);
 }
 
 1;

@@ -38,6 +38,8 @@ use TWiki;
 use TWiki::Plugins;
 use Assert;
 
+require TWiki::Contrib::MailerContrib::WebNotify;
+
 =pod
 
 ---++ new($name)
@@ -65,7 +67,7 @@ sub getEmailAddresses {
     my $this = shift;
 
     unless ( defined( $this->{emails} )) {
-        if ( $this->{name} =~ /^$TWiki::regex{emailAddrRegex}/o ) {
+        if ( $this->{name} =~ /^$TWiki::cfg{MailerContrib}{EmailFilterIn}$/ ) {
             push( @{$this->{emails}}, $this->{name} );
         } else {
             my $users = $TWiki::Plugins::SESSION->{users};

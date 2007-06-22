@@ -33,11 +33,15 @@ package TWiki::Contrib::Mailer;
 use strict;
 
 use URI;
+use CGI qw(-any);
 
-use TWiki;
-use TWiki::Contrib::MailerContrib::WebNotify;
-use TWiki::Contrib::MailerContrib::Change;
-use TWiki::Contrib::MailerContrib::UpData;
+require TWiki;
+require TWiki::Plugins;
+require TWiki::Time;
+require TWiki::Func;
+require TWiki::Contrib::MailerContrib::WebNotify;
+require TWiki::Contrib::MailerContrib::Change;
+require TWiki::Contrib::MailerContrib::UpData;
 
 use vars qw ( $VERSION $RELEASE $verbose );
 
@@ -90,6 +94,9 @@ sub mailNotify {
 
     # absolute URL context for email generation
     $context->{absolute_urls} = 1;
+
+    $TWiki::cfg{MailerContrib}{EmailFilterIn} ||=
+      '[A-Za-z0-9\.+-_]+\@[A-Za-z0-9.-]+';
 
     my $report = '';
     foreach my $web ( TWiki::Func::getListOfWebs( 'user ') ) {
@@ -198,7 +205,6 @@ sub _processSubscriptions {
         $notify->processChange(
             $change, $db, \%changeset, \%seenset, \%allSet );
     }
-
     # For each topic, see if there's a compulsory subscription independent
     # of the time since last notify
     foreach my $topic (TWiki::Func::getTopicList($web)) {
