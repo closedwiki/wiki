@@ -77,9 +77,8 @@ use strict;
 use Assert;
 
 require TWiki::AggregateIterator;
-
-#use Monitor;
-#Monitor::MonitorMethod('TWiki::Users');
+use Monitor;
+Monitor::MonitorMethod('TWiki::Users');
 
 BEGIN {
     # Do a dynamic 'use locale' for this module
@@ -346,37 +345,6 @@ sub getCanonicalUserID {
     return $cUID;
 }
 
-sub getLegacycUID {
-	my( $this, $cUID ) = @_;
-		
-	unless (($cUID =~ /^$this->{basemapping}->{mapping_id}/) ||
-					($cUID =~ /^$this->{mapping}->{mapping_id}/)) {
-		#legacy mode - cUID is not actually a new style cUIDList
-						
-		#its a web.wikiname (worst case)
-		my ($web, $topic) = $this->{session}->normalizeWebTopicName('', $cUID);
-	    my $cUIDList = $this->getMapping(undef, undef, $topic)->findUserByWikiName($topic);
-		if (scalar(@$cUIDList)) {
-    		$cUID = $cUIDList->[0];
-		} else {
-			#its a login (also works for basemapping rego agent
-			$cUID = $this->getMapping(undef, $cUID)->login2canonical($cUID);
-		}
-		
-		#its a wikinames
-#	    my $cUIDList = $this->getMapping(undef, undef, $cUID)->findUserByWikiName($cUID);
-#    	my $cUID = $cUIDList->[0]  if scalar(@$cUIDList);
-		#its a web.wikiname (worst case)
-#		my ($web, $topic) = $this->{session}->normalizeWebTopicName('', $cUID);
-#	    my $cUIDList = $this->getMapping(undef, undef, $topic)->findUserByWikiName($topic);
-#    	my $cUID = $cUIDList->[0]  if scalar(@$cUIDList);		
-	}
-
-	$this->ASSERT_IS_CANONICAL_USER_ID($cUID) if DEBUG;
-	
-	return $cUID;
-}
-
 =pod
 
 ---++ ObjectMethod findUserByWikiName( $wn ) -> \@users
@@ -431,7 +399,7 @@ Duplicates are removed from the list.
 
 sub getEmails {
     my( $this, $cUID ) = @_;
-	$cUID = $this->getLegacycUID($cUID);
+	$cUID = $this->getCanonicalUserID($cUID);
 	#$this->ASSERT_IS_CANONICAL_USER_ID($cUID) if DEBUG;
 
     return $this->getMapping($cUID)->getEmails( $cUID );
@@ -471,7 +439,7 @@ sub isAdmin {
     ASSERT($cUID);
 	#$this->ASSERT_IS_CANONICAL_USER_ID($cUID) if DEBUG;
 	
-	$cUID = $this->getLegacycUID($cUID);
+	$cUID = $this->getCanonicalUserID($cUID);
 
     my $mapping = $this->getMapping($cUID);
     my $otherMapping = ($mapping eq $this->{basemapping}) ? $this->{mapping} : $this->{basemapping};
@@ -533,7 +501,7 @@ Get the login name of a user.
 sub getLoginName {
     my( $this, $cUID) = @_;
 #	$this->ASSERT_IS_CANONICAL_USER_ID($cUID) if DEBUG;
-	$cUID = $this->getLegacycUID($cUID);
+	$cUID = $this->getCanonicalUserID($cUID);
 	
 	my $login = $this->getMapping($cUID)-> getLoginName($cUID) if ($cUID && $this->getMapping($cUID));
     return $login || 'unknown';
@@ -541,7 +509,7 @@ sub getLoginName {
 
 =pod
 
----++ ObjectMethod getWikiName($user) -> $wikiName
+---++ ObjectMethod getWikiName($cUID) -> $wikiName
 
 Get the wikiname to display for a canonical user identifier.
 
@@ -552,7 +520,7 @@ sub getWikiName {
     ASSERT($cUID) if DEBUG;
 	return $this->{getWikiName}->{$cUID} if (defined($this->{getWikiName}->{$cUID}));
 
-	my $legacycUID = $this->getLegacycUID($cUID);
+	my $legacycUID = $this->getCanonicalUserID($cUID);
 
     my $wikiname = $this->getMapping($legacycUID)->getWikiName($legacycUID) if ($legacycUID && $this->getMapping($legacycUID));
 	$this->{getWikiName}->{$cUID} = $wikiname || "UnknownUser ($cUID)";
