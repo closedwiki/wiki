@@ -180,7 +180,7 @@ sub handlesUser {
 
 =pod
 
----++ ObjectMethod login2canonical ($login) -> cUID
+---++ ObjectMethod getCanonicalUserID ($login) -> cUID
 
 Convert a login name to the corresponding canonical user name. The
 canonical name can be any string of 7-bit alphanumeric and underscore
@@ -189,7 +189,7 @@ characters, and must correspond 1:1 to the login name.
 
 =cut
 
-sub login2canonical {
+sub getCanonicalUserID {
     my( $this, $login ) = @_;
 
     my $cUID;
@@ -212,18 +212,18 @@ sub login2canonical {
 
 =pod
 
----++ ObjectMethod canonical2login ($cUID) -> login
+---++ ObjectMethod getLoginName ($cUID) -> login
 
 converts an internal cUID to that user's login
 (undef on failure)
 
 =cut
 
-sub canonical2login {
+sub getLoginName {
     my( $this, $user ) = @_;
     ASSERT($user) if DEBUG;
     
-#print STDERR "login2canonical($user) = ";
+#print STDERR "getCanonicalUserID($user) = ";
 #print STDERR $this->{U2L}->{$user};
     
     return $this->{U2L}{$user};
@@ -292,38 +292,7 @@ sub removeUser {
 sub getWikiName {
     my ($this, $cUID) = @_;
     
-    return $this->{U2W}->{$cUID} || canonical2login( $this, $cUID );
-}
-
-
-=pod
-
----++ ObjectMethod getLoginName ($cUID) -> login
-
-Map a canonical user name to a login name
-
-=cut
-
-sub getLoginName {
-    my ($this, $cUID) = @_;
-    return canonical2login( $this, $cUID );
-}
-
-
-=pod
-
----++ ObjectMethod lookupLoginName ($login) - cUID
-
-PROTECTED
-Map a login name to the corresponding canonical user name. This is used for
-lookups, and should be as fast as possible. Returns undef if no such user
-exists. Called by TWiki::Users
-
-=cut
-sub lookupLoginName {
-    my ($this, $login) = @_;
-
-    return login2canonical($this, $login);
+    return $this->{U2W}->{$cUID} || getLoginName( $this, $cUID );
 }
 
 =pod
@@ -564,12 +533,12 @@ sub findUserByWikiName {
             # mapping. We have to do this because TWiki defines access controls
             # in terms of mapped users, and if a wikiname is *missing* from the
             # mapping there is "no such user".
-            push( @users, login2canonical( $this, $wn ));
+            push( @users, getCanonicalUserID( $this, $wn ));
         }
 #    } else {
         # The wikiname is also the login name, so we can just convert
         # it to a canonical user id
-#        push( @users, login2canonical( $this, $wn ));
+#        push( @users, getCanonicalUserID( $this, $wn ));
     }
     return \@users;
 }
@@ -588,7 +557,7 @@ sub checkPassword {
     my( $this, $login, $pass ) = @_;
 
   	$this->ASSERT_IS_USER_LOGIN_ID($login) if DEBUG;
-    my $cUID = login2canonical( $this, $login );
+    my $cUID = getCanonicalUserID( $this, $login );
     return unless ($cUID);  #user not found
 
     my $hash = $this->{U2P}->{$cUID};

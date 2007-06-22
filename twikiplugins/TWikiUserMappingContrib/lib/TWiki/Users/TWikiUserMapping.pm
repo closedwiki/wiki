@@ -139,61 +139,10 @@ sub handlesUser {
 	$cUID = '' unless ($cUID);
 
 	return 1 if ( $cUID =~ /^($this->{mapping_id})/ );
-	return 1 if ($login && $this->lookupLoginName( $login ));
+	return 1 if ($login && $this->getLoginName( $login ));
 #	return 1 if ($wikiname && $this->findUserByWikiName( $wikiname ));
 	return 0;
 }
-
-
-=pod
-
----++ ObjectMethod login2canonical ($login, $dontcheck) -> cUID
-
-Convert a login name to the corresponding canonical user name. The
-canonical name can be any string of 7-bit alphanumeric and underscore
-characters, and must correspond 1:1 to the login name.
-(undef on failure)
-
-(if dontcheck is true, return a cUID for a nonexistant user too - used for registration)
-
-=cut
-
-sub login2canonical {
-    my( $this, $login, $dontcheck ) = @_;
-#print STDERR "\nTWikiUserMapping::login2canonical($login)";
-	return unless (($dontcheck) || defined($this->{L2U}->{$login}) || (defined($this->{passwords}->fetchPass( $login ))) );
-
-    use bytes;
-    # use bytes to ignore character encoding
-    $login =~ s/([^a-zA-Z0-9])/'_'.sprintf('%02d', ord($1))/ge;
-    no bytes;
-    $login = $this->{mapping_id}.$login;
-#print STDERR " OK ($login)";   
-    return $login;
-}
-
-=pod
-
----++ ObjectMethod canonical2login ($cUID) -> login
-
-converts an internal cUID to that user's login
-(undef on failure)
-
-=cut
-
-sub canonical2login {
-    my( $this, $user ) = @_;
-    ASSERT($user) if DEBUG;
-	ASSERT($this->{mapping_id}) if DEBUG;
-    $user =~ s/$this->{mapping_id}//;
-   
-    use bytes;
-    # use bytes to ignore character encoding
-    $user =~ s/_(\d\d)/chr($1)/ge;
-    no bytes;
-    return $user;
-}
-
 
 =pod
 
@@ -336,6 +285,70 @@ sub removeUser {
 }
 
 
+
+=pod
+
+---++ ObjectMethod getCanonicalUserID ($login, $dontcheck) -> cUID
+
+Convert a login name to the corresponding canonical user name. The
+canonical name can be any string of 7-bit alphanumeric and underscore
+characters, and must correspond 1:1 to the login name.
+(undef on failure)
+
+(if dontcheck is true, return a cUID for a nonexistant user too - used for registration)
+
+=cut
+
+sub getCanonicalUserID {
+    my( $this, $login, $dontcheck ) = @_;
+#print STDERR "\nTWikiUserMapping::getCanonicalUserID($login)";
+	return unless (($dontcheck) || defined($this->{L2U}->{$login}) || (defined($this->{passwords}->fetchPass( $login ))) );
+
+    use bytes;
+    # use bytes to ignore character encoding
+    $login =~ s/([^a-zA-Z0-9])/'_'.sprintf('%02d', ord($1))/ge;
+    no bytes;
+    $login = $this->{mapping_id}.$login;
+#print STDERR " OK ($login)";   
+    return $login;
+}
+
+=pod
+
+---++ ObjectMethod getLoginName ($cUID) -> login
+
+converts an internal cUID to that user's login
+(undef on failure)
+
+=cut
+
+sub getLoginName {
+    my( $this, $user ) = @_;
+    ASSERT($user) if DEBUG;
+	ASSERT($this->{mapping_id}) if DEBUG;
+    $user =~ s/$this->{mapping_id}//;
+   
+    use bytes;
+    # use bytes to ignore character encoding
+    $user =~ s/_(\d\d)/chr($1)/ge;
+    no bytes;
+    return $user;
+}
+
+=pod
+
+---++ ObjectMethod getLoginName ($cUID) -> login
+
+Map a canonical user name to a login name
+
+=cut
+
+sub DELETE_getLoginName {
+    my ($this, $user) = @_;
+    _loadMapping( $this );
+    return getLoginName( $this, $user );
+}
+
 =pod
 
 ---++ ObjectMethod getWikiName ($cUID) -> wikiname
@@ -357,43 +370,11 @@ sub getWikiName {
     } else {
         # If the mapping isn't enabled there's no point in loading it
     }
-	$wikiname = $wikiname || canonical2login( $this, $cUID );
+	$wikiname = $wikiname || getLoginName( $this, $cUID );
 #print STDERR "--------------------------------------cUID : $cUID => $wikiname\n";	
     return $wikiname;
  
 }
-
-=pod
-
----++ ObjectMethod getLoginName ($cUID) -> login
-
-Map a canonical user name to a login name
-
-=cut
-
-sub getLoginName {
-    my ($this, $user) = @_;
-    return canonical2login( $this, $user );
-}
-
-=pod
-
----++ ObjectMethod lookupLoginName ($login) - cUID
-
-PROTECTED
-Map a login name to the corresponding canonical user name. This is used for
-lookups, and should be as fast as possible. Returns undef if no such user
-exists. Called by TWiki::Users
-
-=cut
-
-sub lookupLoginName {
-    my ($this, $login) = @_;
-    _loadMapping( $this );
-#print STDERR "\nlookupLoginName($login)=> ".($this->{L2U}->{$login}||'NOT FOUND');
-    return $this->{L2U}->{$login};
-}
-
 
 =pod
 
@@ -411,7 +392,7 @@ sub userExists {
     # Do this to avoid a password manager lookup
     return 1 if $cUID eq $this->{session}->{user};
 
-    my $loginName = $this->canonical2login( $cUID );
+    my $loginName = $this->getLoginName( $cUID );
 
     if( $loginName eq $TWiki::cfg{DefaultUserLogin} ) {
         return $loginName;
@@ -628,7 +609,7 @@ sub findUserByEmail {
         my $logins = $this->{passwords}->findLoginByEmail( $email );
         if (defined $logins) {
             foreach my $l ( @$logins ) {
-                $l = $this->lookupLoginName( $l );
+                $l = $this->getLoginName( $l );
                 push( @users, $l ) if $l;
             }
         }
@@ -820,14 +801,14 @@ sub findUserByWikiName {
             # mapping. We have to do this because TWiki defines access controls
             # in terms of mapped users, and if a wikiname is *missing* from the
             # mapping there is "no such user".
-            push( @users, login2canonical( $this, $wn ));
+            push( @users, getCanonicalUserID( $this, $wn ));
         }
     } else {
         # The wikiname is also the login name, so we can just convert
         # it directly to a cUID
-        my $cUID = login2canonical( $this, $wn );
+        my $cUID = getCanonicalUserID( $this, $wn );
         if( $skipExistanceCheck || ($cUID && $this->userExists( $cUID )) ) {
-            push( @users, login2canonical( $this, $wn ));
+            push( @users, getCanonicalUserID( $this, $wn ));
         }
     }
     return \@users;
@@ -951,7 +932,7 @@ sub _cacheUser {
 
     $login ||= $wikiname;
 
-    my $cUID = login2canonical( $this, $login, 1 );
+    my $cUID = getCanonicalUserID( $this, $login, 1 );
     return unless ($cUID);
     ASSERT($cUID) if DEBUG;
 

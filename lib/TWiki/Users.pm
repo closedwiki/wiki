@@ -325,12 +325,12 @@ sub getCanonicalUserID {
 	
     #if its one of the known cUID's, then just return itself
     my $testMapping = $this->getMapping($login, undef, undef, 1);
-    return $login if ($testMapping && $testMapping->canonical2login ($login));	#passed a valid cUID
+    return $login if ($testMapping && $testMapping->getLoginName ($login));	#passed a valid cUID
     
     my $cUID;
     my $mapping = $this->getMapping(undef, $login, $login);
     if ($mapping) {
-		$cUID = $mapping->login2canonical( $login );
+		$cUID = $mapping->getCanonicalUserID( $login );
 		
 		unless ($cUID) {	#must be a wikiname
 			my( $web, $topic ) = $this->{session}->normalizeWebTopicName( '', $login );

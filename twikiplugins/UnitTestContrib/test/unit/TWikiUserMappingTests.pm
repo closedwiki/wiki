@@ -182,7 +182,7 @@ sub testLoad {
     # find a nonexistent user to force a cache read
     $twiki->finish();
     $twiki = new TWiki();
-    my $n = $twiki->{users}->{mapping}->lookupLoginName("auser");
+    my $n = $twiki->{users}->{mapping}->getCanonicalUserID("auser");
     $this->assert_str_equals($n, $auser_id);    
     $this->assert_str_equals("AaronUser", $twiki->{users}->getWikiName($n));
     $this->assert_str_equals("auser", $twiki->{users}->getLoginName($n));
