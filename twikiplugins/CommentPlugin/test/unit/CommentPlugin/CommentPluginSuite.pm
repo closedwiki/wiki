@@ -1,9 +1,6 @@
 package CommentPluginSuite;
+use base 'Unit::TestSuite';
 
-use base qw(Test::Unit::TestSuite);
-
-sub name { 'CommentPluginSuite' };
-
-sub include_tests { qw(CommentPluginTests) };
+sub include_tests { return 'CommentPluginTests' };
 
 1;

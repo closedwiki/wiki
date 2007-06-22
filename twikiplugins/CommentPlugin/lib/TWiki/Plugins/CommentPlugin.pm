@@ -24,7 +24,8 @@ package TWiki::Plugins::CommentPlugin;
 
 use strict;
 
-use TWiki::Func;
+require TWiki::Func;
+require TWiki::Plugins;
 
 use vars qw( $VERSION $RELEASE $SHORTDESCRIPTION $NO_PREFS_IN_TOPIC );
 
@@ -36,7 +37,7 @@ $VERSION = '$Rev$';
 # This is a free-form string you can use to "name" your own plugin version.
 # It is *not* used by the build automation tools, but is reported as part
 # of the version number in PLUGINDESCRIPTIONS.
-$RELEASE = 'Dakar';
+$RELEASE = 'TWiki-4';
 
 $SHORTDESCRIPTION = 'Allows users to quickly post comments to a page without an edit/preview/save cycle';
 
@@ -44,10 +45,9 @@ sub initPlugin {
     #my ( $topic, $web, $user, $installWeb ) = @_;
 
     if( $TWiki::Plugins::VERSION < 1.026 ) {
-        TWiki::Func::writeWarning( "Version mismatch between CommentPlugin $VERSION and Plugins.pm $TWiki::Plugins::VERSION. Plugins.pm >= 1.026 required." );
+        TWiki::Func::writeWarning( "CommentPlugin $VERSION requires TWiki::Plugins::VERSION >= 1.026, $TWiki::Plugins::VERSION found." );
+        return 0;
     }
-
-    TWiki::Func::registerTagHandler( "TIME", \&_TIME );
 
     return 1;
 }
@@ -56,10 +56,6 @@ sub commonTagsHandler {
     my ( $text, $topic, $web, $meta ) = @_;
 
     require TWiki::Plugins::CommentPlugin::Comment;
-    if ($@) {
-        TWiki::Func::writeWarning( $@ );
-        return 0;
-    }
 
     my $query = TWiki::Func::getCgiQuery();
     return unless( defined( $query ));
@@ -78,10 +74,7 @@ sub beforeSaveHandler {
     #my ( $text, $topic, $web ) = @_;
 
     require TWiki::Plugins::CommentPlugin::Comment;
-    if ($@) {
-        TWiki::Func::writeWarning( $@ );
-        return 0;
-    }
+
     my $query = TWiki::Func::getCgiQuery();
     return unless $query;
 
@@ -89,10 +82,6 @@ sub beforeSaveHandler {
 
     return unless( defined( $action ) && $action eq 'save' );
     TWiki::Plugins::CommentPlugin::Comment::save( @_ );
-}
-
-sub _TIME {
-    return TWiki::Time::formatTime( time(), '$hour:$min' );
 }
 
 1;
