@@ -28,23 +28,11 @@ Inserts an edit box into the page that allows users to type in and save comments
 	* signed or unsigned, dated or undated (as defined by a template),
 	* in other topics, or other positions within the current topic.
 
----++ Syntax Rules
-
-Write the command =%<nop>COMMENT{= _attributes_ =}%= anywhere in a TWiki topic. =%<nop>COMMENT%= is also legal.
-
+---++ Syntax
 #StandardAttrs
-The following attributes are recognized (see also [[#MoreAttrs][additional attributes]]):
-	| *Name* | *Description* |
-	| =type= | This is the name of the template to use for this comment. Comment templates are defined in a TWiki template - see [[#TemPlates][Customisation]], below. If this attribute is not defined, the type is whatever is defined by COMMENTPLUGIN_DEFAULT_TYPE, either in this topic or in your WebPreferences. By default this is 'below'. |
-	| =default= | Default text to put into the textarea of the prompt. |
-	| =target= | Name of the topic to add the comment to. Defaults to the current topic. |
-	| =location= | Regular expression specifying the comment location in the target topic. Read _carefully_ below! |
-	| =mode= | For compatability with older versions only, synonymous with =type= |
-	| =nonotify= | Set to "on" to disable change notification for target topics |
-	| =noform= | Set to "on" to disable the automatic form that encloses your comment block - _remember_ to insert =&lt;form&gt;= tags yourself! See CommentPluginExamples#noform for an example. |
-	| =nopost= | Set to "on" to disable insertion of the posted text into the topic. |
-	| =remove= | Set to "on" to remove the comment prompt after the first time it is clicked. |
-	| =button= | Button label text; by default =Add comment=.  |
+Write =%<nop>COMMENT{<i>attributes</i>}%= anywhere in a TWiki topic.
+%INCLUDE{"%SYSTEMWEB%.VarCOMMENT" section="attributes"}%
+(See also [[#MoreAttrs][additional attributes]])
 
 ---+++ Positioning the comment
 =%COMMENT= supports several ways to specify _where_ a comment should be inserted in the target topic. This is referred to as the _location_ of the comment.
@@ -258,6 +246,7 @@ These can be set in !TWikiPreferences, in !WebPreferences or in individual topic
 |  Plugin Author: | TWiki:Main.CrawfordCurrie http://www.c-dot.co.uk inspired by the work of TWiki:Main.DavidWeller and TWiki:Main.PeterMasiar |
 |  Plugin Version: | %$VERSION% |
 |  Change History: | |
+|  22 Jun 2007 | Removed the long-deprecated =%TIME= (use %GMTIME instead). Minor doc changes |
 |  14021 | Bugs:Item3755 Fixed incorrect handling of line terminators when targeting an anchor |
 |  13311 | Added option to define a comment template in any topic. Pass the topic location with =templatetopic= (either =topic= or =web.topic=). See an example in [[CommentPluginExamples#TemplateTopic][CommentPluginExamples:templatetopic]]. |
 |  12822 | Bugs:Item3598 minor doc fixes |

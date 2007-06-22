@@ -2,7 +2,7 @@ use strict;
 
 package CommentPluginTests;
 
-use base qw(TWikiTestCase);
+use base qw(TWikiFnTestCase);
 
 use strict;
 use TWiki;
@@ -11,40 +11,29 @@ use TWiki::Plugins::CommentPlugin;
 use TWiki::Plugins::CommentPlugin::Comment;
 use CGI;
 
-my $baseweb = "TestCommentPluginTestWeb";
-my $targetweb = "TestCommentPluginTargetWeb";
-my $basetopic = "TestCommentPluginTopic";
-my $targettopic = "TargetTopic";
-
-my $thePathInfo = "/$baseweb/$basetopic";
-my $twiki;
-
 # Set up the test fixture
 sub set_up {
     my $this = shift;
 
     $this->SUPER::set_up();
 
-    $twiki = new TWiki( "TestUser1" );
-
-    $twiki->{store}->createWeb($twiki->{user}, $baseweb);
-    $twiki->{store}->createWeb($twiki->{user}, $targetweb);
-
-    $TWiki::Plugins::SESSION = $twiki;
+    $this->{target_web} = "$this->{test_web}Target";
+    $this->{target_topic} = "$this->{test_topic}Target";
+    $this->{twiki}->{store}->createWeb(
+        $this->{twiki}->{user}, $this->{target_web});
 }
 
 sub tear_down {
     my $this = shift;
+    $this->{twiki}->{store}->removeWeb($this->{twiki}->{user}, $this->{target_web});
     $this->SUPER::tear_down();
-    $twiki->{store}->removeWeb($twiki->{user}, $baseweb);
-    $twiki->{store}->removeWeb($twiki->{user}, $targetweb);
 }
 
 sub writeTopic {
-    my( $web, $topic, $text ) = @_;
-    my $meta = new TWiki::Meta($twiki, $web, $topic);
-    $twiki->{store}->saveTopic( $twiki->{user}, $web, $topic, $text,
-                                $meta );
+    my( $this, $web, $topic, $text ) = @_;
+    my $meta = new TWiki::Meta($this->{twiki}, $web, $topic);
+    $this->{twiki}->{store}->saveTopic(
+        $this->{twiki}->{user}, $web, $topic, $text, $meta );
 }
 
 sub trim {
@@ -60,15 +49,15 @@ sub inputTest {
     my $eidx = 1;
     my $sattrs = "";
 
-    $web ||= $baseweb;
-    $topic ||= $basetopic;
+    $web ||= $this->{test_web};
+    $topic ||= $this->{test_topic};
 
-    if ($web ne $baseweb || $topic ne $basetopic || $anchor) {
+    if ($web ne $this->{test_web} || $topic ne $this->{test_topic} || $anchor) {
 
         $sattrs = 'target="';
 
-        $sattrs .= "$web." unless ($web eq $baseweb);
-        $sattrs .= $topic unless ($topic eq $basetopic);
+        $sattrs .= "$web." unless ($web eq $this->{test_web});
+        $sattrs .= $topic unless ($topic eq $this->{test_topic});
 
         if ( $anchor) {
             $anchor = '#'.$anchor;
@@ -108,13 +97,13 @@ $commentref
 BottomOfTopic
 HERE
 
-    writeTopic($web, $topic, $sample);
+    $this->writeTopic($web, $topic, $sample);
     my $pidx = $eidx;
     my $html =
       TWiki::Plugins::CommentPlugin::Comment::_handleInput(
           $sattrs,
-          $baseweb,
-          $basetopic,
+          $this->{test_web},
+          $this->{test_topic},
           \$pidx,
           "The Message",
           "",
@@ -222,7 +211,7 @@ HERE
         $refexpr = $commentref;
     }
 
-    if( $topic eq $basetopic && $web eq $baseweb ) {
+    if( $topic eq $this->{test_topic} && $web eq $this->{test_web} ) {
         if ( $type eq "top") {
             $this->assert_matches(qr/$comm.*TopOfTopic/s, $text);
         } elsif ( $type eq "bottom" ) {
@@ -247,22 +236,22 @@ sub test_below {
 
 sub test_targetTopic {
     my $this = shift;
-    $this->inputTest("bottom", undef, $targettopic, undef, undef, 0);
+    $this->inputTest("bottom", undef, $this->{target_topic}, undef, undef, 0);
 }
 
 sub test_targetWebTopic {
     my $this = shift;
-    $this->inputTest("bottom", $targetweb, $targettopic, undef, undef, 0);
+    $this->inputTest("bottom", $this->{target_web}, $this->{target_topic}, undef, undef, 0);
 }
 
 sub test_targetWebTopicAnchorTop {
     my $this = shift;
-    $this->inputTest("top", $targetweb, $targettopic, "TargetAnchor", undef, 0);
+    $this->inputTest("top", $this->{target_web}, $this->{target_topic}, "TargetAnchor", undef, 0);
 }
 
 sub test_targetWebTopicAnchorBottom {
     my $this = shift;
-    $this->inputTest("bottom", $targetweb, $targettopic, "TargetAnchor", undef, 0);
+    $this->inputTest("bottom", $this->{target_web}, $this->{target_topic}, "TargetAnchor", undef, 0);
 }
 
 sub test_location {
@@ -288,8 +277,8 @@ sub test_reverseCompat {
     my $html =
       TWiki::Plugins::CommentPlugin::Comment::_handleInput
           ("rows=99 cols=104 mode=after button=HoHo id=sausage",,
-           $basetopic,
-           $baseweb,
+           $this->{test_topic},
+           $this->{test_web},
            \$pidx,
            "The Message",
 	 "",
@@ -305,9 +294,9 @@ sub test_locationOverridesAnchor {
     my $pidx = 0;
     my $html =
       TWiki::Plugins::CommentPlugin::Comment::_handleInput
-          ("target=\"$baseweb.ATopic#AAnchor\" location=\"AnRE\"",
-           $basetopic,
-           $baseweb,
+          ("target=\"$this->{test_web}.ATopic#AAnchor\" location=\"AnRE\"",
+           $this->{test_topic},
+           $this->{test_web},
            \$pidx,
            "The Message",
 	 "",
@@ -323,13 +312,13 @@ before
 %COMMENT{nopost="on"}%
 after
 HERE
-    writeTopic($baseweb, $basetopic, $sample);
+    $this->writeTopic($this->{test_web}, $this->{test_topic}, $sample);
     my $pidx = 0;
     my $html =
       TWiki::Plugins::CommentPlugin::Comment::_handleInput(
           'nopost="on"',
-          $baseweb,
-          $basetopic,
+          $this->{test_web},
+          $this->{test_topic},
           \$pidx,
           "The Message",
           "",
@@ -345,7 +334,7 @@ HERE
                          'comment' => $comm,
                          'comment_nopost' => 'on',
                         });
-    $query->path_info("/$baseweb/$basetopic");
+    $query->path_info("/$this->{test_web}/$this->{test_topic}");
 
     my $session = new TWiki( $TWiki::cfg{DefaultUserLoginName}, $query);
     my $text = "Ignore this text";
@@ -353,7 +342,7 @@ HERE
     # invoke the save handler
     $this->capture(\&TWiki::UI::Save::save, $session );
 
-    $text = TWiki::Func::readTopicText($baseweb, $basetopic);
+    $text = TWiki::Func::readTopicText($this->{test_web}, $this->{test_topic});
     # make sure it hasn't changed
     $text =~ s/^%META.*?\n//gm;
     $this->assert_str_equals($sample, $text);
@@ -367,13 +356,13 @@ before
 %COMMENT{remove="on"}%
 after
 HERE
-    writeTopic($baseweb, $basetopic, $sample);
+    $this->writeTopic($this->{test_web}, $this->{test_topic}, $sample);
     my $pidx = 99;
     my $html =
       TWiki::Plugins::CommentPlugin::Comment::_handleInput(
           'remove="on"',
-          $baseweb,
-          $basetopic,
+          $this->{test_web},
+          $this->{test_topic},
           \$pidx,
           "The Message",
           "",
@@ -390,7 +379,7 @@ HERE
                          'comment_remove' => '0',
                          'comment_index' => '99',
                         });
-    $query->path_info("/$baseweb/$basetopic");
+    $query->path_info("/$this->{test_web}/$this->{test_topic}");
 
     my $session = new TWiki( $TWiki::cfg{DefaultUserLoginName}, $query);
     my $text = "Ignore this text";
@@ -398,7 +387,7 @@ HERE
     # invoke the save handler
     $this->capture(\&TWiki::UI::Save::save, $session );
 
-    $text = TWiki::Func::readTopicText($baseweb, $basetopic);
+    $text = TWiki::Func::readTopicText($this->{test_web}, $this->{test_topic});
     # make sure it hasn't changed
     $text =~ s/^%META.*?\n//gm;
     $this->assert_str_equals(<<HERE,
@@ -416,13 +405,13 @@ before
 %COMMENT{remove="on"}%
 after
 HERE
-    writeTopic($baseweb, $basetopic, $sample);
+    $this->writeTopic($this->{test_web}, $this->{test_topic}, $sample);
     my $pidx = 99;
     my $html =
       TWiki::Plugins::CommentPlugin::Comment::_handleInput(
           'default="wibble"',
-          $baseweb,
-          $basetopic,
+          $this->{test_web},
+          $this->{test_topic},
           \$pidx,
           undef,
           "",
