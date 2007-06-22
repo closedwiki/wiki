@@ -31,7 +31,7 @@ Inserts an edit box into the page that allows users to type in and save comments
 ---++ Syntax
 #StandardAttrs
 Write =%<nop>COMMENT{<i>attributes</i>}%= anywhere in a TWiki topic.
-%INCLUDE{"%SYSTEMWEB%.VarCOMMENT" section="attributes"}%
+%INCLUDE{"%SYSTEMWEB%.VarCOMMENT" section="comment_attributes"}%
 (See also [[#MoreAttrs][additional attributes]])
 
 ---+++ Positioning the comment
