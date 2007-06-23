@@ -47,22 +47,17 @@ sub set_up {
     my $this = shift;
     $this->SUPER::set_up();
 
-    $TWiki::cfg{PasswordManager} = 'TWiki::Users::HtPasswdUser';
-    $TWiki::cfg{SuperAdminGroup} = "PowerRangers";
-    $TWiki::cfg{UserInterfaceInternationalisation} = 0;
-    $TWiki::cfg{Register}{NeedVerification} = 1;
-    $TWiki::cfg{MinPasswordLength} = 0;
-    $TWiki::cfg{UserMappingManager} = 'TWiki::Users::TWikiUserMapping';
-    $TWiki::cfg{Register}{EnableNewUserRegistration} = 1;
-
     $this->{new_user_login} = 'sqwauk';
     $this->{new_user_fname} = 'Walter';
     $this->{new_user_sname} = 'Pigeon';
     $this->{new_user_email} = 'kakapo@ground.dwelling.parrot.net';
     $this->{new_user_wikiname} =
       "$this->{new_user_fname}$this->{new_user_sname}";
-    $this->{new_user_fullname} =
+     $this->{new_user_fullname} =
       "$this->{new_user_fname} $this->{new_user_sname}";
+
+	#if $TWiki::cfg{AllowLoginName} is false, wikiname must == loginname
+    $this->{new_user_login} = $this->{new_user_wikiname} if (!$TWiki::cfg{AllowLoginName});
 
     try {
         $this->{twiki}->{store}->saveTopic($this->{twiki}->{user},
@@ -170,8 +165,64 @@ sub registerAccount {
     };
     $this->assert($this->{twiki}->{store}->topicExists($TWiki::cfg{UsersWebName}, $this->{new_user_wikiname}));
 }
+###################################
+#verify tests
 
-sub test_userTopicWithPMWithoutForm {
+sub AllowLoginName {
+    my $this = shift;
+    $TWiki::cfg{AllowLoginName} = 1;
+}
+sub DontAllowLoginName {
+    my $this = shift;
+    $TWiki::cfg{AllowLoginName} = 0;
+}
+
+sub TemplateLoginManager {
+    $TWiki::cfg{LoginManager} = 'TWiki::LoginManager::TemplateLogin';
+}
+
+sub ApacheLoginManager {
+    $TWiki::cfg{LoginManager} = 'TWiki::LoginManager::ApacheLogin';
+}
+
+sub NoLoginManager {
+    $TWiki::cfg{LoginManager} = 'TWiki::LoginManager';
+}
+
+sub BaseUserMapping {
+    my $this = shift;
+    $TWiki::cfg{UserMappingManager} = 'TWiki::Users::BaseUserMapping';
+    $this->set_up_for_verify();
+}
+
+sub TWikiUserMapping {
+    my $this = shift;
+    $TWiki::cfg{UserMappingManager} = 'TWiki::Users::TWikiUserMapping';
+    $this->set_up_for_verify();
+}
+
+# See the pod doc in Unit::TestCase for details of how to use this
+sub fixture_groups {
+    return (
+        [ 'TemplateLoginManager', 'ApacheLoginManager', 'NoLoginManager' ],
+        [ 'AllowLoginName', 'DontAllowLoginName'],
+#        [ 'TWikiUserMapping', 'BaseUserMapping' ] );
+        [ 'TWikiUserMapping' ] );
+}
+
+#delay the calling of set_up til after the cfg's are set by above closure
+sub set_up_for_verify {
+    my $this = shift;
+    
+    $this->{twiki}->finish();
+    $this->{twiki} = new TWiki();
+    $TWiki::Plugins::SESSION = $this->{twiki};
+
+    @TWikiFntestCase::mails = ();
+}
+
+###################################
+sub verify_userTopicWithPMWithoutForm {
     my $this = shift;
     $this->registerAccount();
     my( $meta, $text ) = $this->{twiki}->{store}->readTopic(
@@ -187,7 +238,7 @@ sub test_userTopicWithPMWithoutForm {
     $this->assert_matches(qr/\s*AFTER\s*/, $text);
 }
 
-sub test_userTopicWithoutPMWithoutForm {
+sub verify_userTopicWithoutPMWithoutForm {
     my $this = shift;
     # Switch off the password manager to force email to be written to user
     # topic
@@ -207,7 +258,7 @@ sub test_userTopicWithoutPMWithoutForm {
     $this->assert_matches(qr/\s*AFTER\s*/, $text);
 }
 
-sub test_userTopicWithoutPMWithForm {
+sub verify_userTopicWithoutPMWithForm {
     my $this = shift;
     # Switch off the password manager to force email to be written to user
     # topic
@@ -274,7 +325,7 @@ EOF
     $this->assert_matches(qr/^\s*$/s, $text);
 }
 
-sub test_userTopicWithPMWithForm {
+sub verify_userTopicWithPMWithForm {
     my $this = shift;
 
     # Change the new user topic to include the form
@@ -431,7 +482,7 @@ sub registerVerifyOk {
 }
 
 #Register a user, then give a bad verification code. It should barf.
-sub test_registerBadVerify {
+sub verify_registerBadVerify {
     my $this = shift;
     $TWiki::cfg{Register}{NeedVerification}  =  1;
     my $query = new CGI ({
@@ -526,7 +577,7 @@ sub test_registerBadVerify {
 
 # Register a user with verification explicitly switched off
 # (SUPER's tear_down will take care for re-installing %TWiki::cfg)
-sub test_registerNoVerifyOk {
+sub verify_registerNoVerifyOk {
     my $this = shift;
     $TWiki::cfg{Register}{NeedVerification}  =  0;
     my $query = new CGI ({
@@ -600,7 +651,7 @@ sub test_registerNoVerifyOk {
 
 
 # Register a user with a password which is too short - must be rejected
-sub test_rejectShortPassword {
+sub verify_rejectShortPassword {
     my $this = shift;
     $TWiki::cfg{Register}{NeedVerification}  =  0;
     $TWiki::cfg{MinPasswordLength}           =  6;
@@ -645,7 +696,7 @@ sub test_rejectShortPassword {
 }
 
 # Register a user with a password which is too short
-sub test_shortPassword {
+sub verify_shortPassword {
     my $this = shift;
     $TWiki::cfg{Register}{NeedVerification}  =  0;
     $TWiki::cfg{MinPasswordLength}           =  6;
@@ -698,7 +749,7 @@ sub test_shortPassword {
 # Verifies: Most of the things which are verified during normal
 #           registration with Verification, plus Oops for
 #           duplicate verification
-sub test_duplicateActivation {
+sub verify_duplicateActivation {
     my $this = shift;
 
     # Start similar to registration with verification
@@ -789,7 +840,7 @@ sub test_duplicateActivation {
 ################################################################################
 ################################ RESET PASSWORD TESTS ##########################
 
-sub test_resetPasswordOkay {
+sub verify_resetPasswordOkay {
     my $this = shift;
 
     ## Need to create an account (else oopsnotwikiuser)
@@ -849,7 +900,7 @@ sub test_resetPasswordOkay {
 
 }
 
-sub test_resetPasswordNoSuchUser {
+sub verify_resetPasswordNoSuchUser {
     my $this = shift;
     # This time we don't set up the testWikiName, so it should fail.
 
@@ -890,7 +941,7 @@ sub test_resetPasswordNoSuchUser {
 }
 
 
-sub test_resetPasswordNeedPrivilegeForMultipleReset {
+sub verify_resetPasswordNeedPrivilegeForMultipleReset {
     my $this = shift;
     # This time we don't set up the testWikiName, so it should fail.
 
@@ -935,7 +986,7 @@ sub test_resetPasswordNeedPrivilegeForMultipleReset {
 
 # This test make sure that the system can't reset passwords
 # for a user currently absent from .htpasswd
-sub test_resetPasswordNoPassword {
+sub verify_resetPasswordNoPassword {
     my $this = shift;
 
     $this->registerAccount();
@@ -987,7 +1038,7 @@ Once complete, try again - the second attempt at completion should fail.
 
 =cut
 
-sub test_UnregisteredUser {
+sub verify_UnregisteredUser {
     my $this = shift;
 
     my $regSave = {
@@ -1018,7 +1069,7 @@ sub test_UnregisteredUser {
     $this->assert_equals(0, scalar(@TWikiFnTestCase::mails));
 }
 
-sub test_missingElements {
+sub verify_missingElements {
     my $this = shift;
     my @present = ("one","two","three");
     my @required = ("one","two","six");
@@ -1028,7 +1079,7 @@ sub test_missingElements {
     $this->assert_deep_equals( [TWiki::UI::Register::_missingElements(\@present, \@present)], []);
 }
 
-sub test_bulkRegister {
+sub verify_bulkRegister {
     my $this = shift;
 
     my $testReg = <<'EOM';
@@ -1086,7 +1137,7 @@ EOM
     $this->assert_equals(0, scalar(@TWikiFnTestCase::mails));
 }
 
-sub test_buildRegistrationEmail {
+sub verify_buildRegistrationEmail {
     my ($this) = shift;
 
     my %data = (
@@ -1184,7 +1235,7 @@ sub visible {
  $a;
 }
 
-sub test_disabled_registration {
+sub verify_disabled_registration {
     my $this = shift;
     $TWiki::cfg{Register}{EnableNewUserRegistration} = 0;
     $TWiki::cfg{Register}{NeedVerification}  =  0;
@@ -1308,7 +1359,7 @@ sub test_3951 {
 ################################################################################
 ################################ RESET EMAIL TESTS ##########################
 
-sub test_resetEmailOkay {
+sub verify_resetEmailOkay {
     my $this = shift;
 
     ## Need to create an account (else oopsnotwikiuser)
@@ -1369,6 +1420,77 @@ sub test_resetEmailOkay {
     $this->assert_str_equals($newEmail, $emails[0]);
 }
 
+#test for http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item3400
+sub verify_resetPassword_NoTWikiUsersEntry {
+    my $this = shift;
+
+    ## Need to create an account (else oopsnotwikiuser)
+    ### with a known email address (else oopsregemail)
+
+    $this->registerAccount();
+    
+    #Remove the TWikiUsers entry - by deleting it :)
+    $this->{twiki}->{store}->moveTopic(  $TWiki::cfg{UsersWebName}, $TWiki::cfg{UsersTopicName}, 
+    		$TWiki::cfg{UsersWebName}, $TWiki::cfg{UsersTopicName}.'DELETED', $TWiki::cfg{AdminUserLogin} );
+    #force a reload to unload existing user caches, and then restart as guest
+    $this->{twiki}->finish();
+    $this->{twiki} = new TWiki();
+    $TWiki::Plugins::SESSION = $this->{twiki}; 
+    
+    $this->assert(!TWiki::Func::topicExists($TWiki::cfg{UsersWebName}, $TWiki::cfg{UsersTopicName}));   
+    
+    my $cUID = $this->{twiki}->{users}->getCanonicalUserID($this->{new_user_login});
+    $this->assert($this->{twiki}->{users}->userExists($cUID), " $cUID does not exist?");
+    my $newPassU = '12345';
+    my $oldPassU = 1;   #force set
+    $this->assert($this->{twiki}->{users}->setPassword( $cUID, $newPassU, $oldPassU ));
+    $this->assert($this->{twiki}->{users}->checkPassword( $this->{new_user_login}, $newPassU ));
+    my @emails = $this->{twiki}->{users}->getEmails($cUID);
+    $this->assert_str_equals($this->{new_user_email}, $emails[0]);
+
+    my $query = new CGI (
+                         {
+                          'LoginName' => [
+                                          $this->{new_user_login}
+                                         ],
+                          'TopicName' => [
+                                          'ResetPassword'
+                                         ],
+                          'action' => [
+                                       'resetPassword'
+                                      ]
+                         });
+
+    $query->path_info( '/'.$this->{users_web}.'/WebHome' );
+    $this->{twiki}->finish();
+    $this->{twiki} = new TWiki( $TWiki::cfg{DefaultUserLogin}, $query);
+    $this->{twiki}->net->setMailHandler(\&TWikiFnTestCase::sentMail);
+
+    try {
+        TWiki::UI::Register::resetPassword($this->{twiki});
+    } catch TWiki::AccessControlException with {
+        my $e = shift;
+        $this->assert(0, $e->stringify);
+    } catch TWiki::OopsException with {
+        my $e = shift;
+        $this->assert_str_equals("attention", $e->{template}, $e->stringify());
+        $this->assert_str_equals("reset_ok", $e->{def}, $e->stringify());
+    } catch Error::Simple with {
+        $this->assert(0, shift->stringify());
+    } otherwise {
+        $this->assert(0, "expected an oops redirect");
+    };
+    $this->assert_equals(1, scalar(@TWikiFnTestCase::mails));
+    my $mess = $TWikiFnTestCase::mails[0];
+    $this->assert_matches(qr/From: $TWiki::cfg{WebMasterName} <$TWiki::cfg{WebMasterEmail}>/,$mess);
+    $this->assert_matches(qr/To: .*\b$this->{new_user_email}/,$mess);
+
+    #lets make sure the password actually was reset
+    $this->assert(!$this->{twiki}->{users}->checkPassword( $cUID, $newPassU ));
+    my @post_emails = $this->{twiki}->{users}->getEmails($cUID);
+    $this->assert_str_equals($this->{new_user_email}, $post_emails[0]);
+
+}
 
 
 1;
