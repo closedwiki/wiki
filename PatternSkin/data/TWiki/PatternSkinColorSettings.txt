@@ -528,9 +528,12 @@ table.twikiFormTable th.twikiFormTableHRow font {
 	border-color:%GRAYED_OUT_TEXT%;
 }
 a:link .twikiAccessKey,
-a:visited .twikiAccessKey,
-a:hover .twikiAccessKey {
+a:visited .twikiAccessKey {
 	color:inherit;
+}
+a:hover .twikiAccessKey {
+	color:%LINK_TEXT_HOVER%;
+	background-color:%LINK_TEXT_ACTION_BUTTON%;
 }
 .twikiImage img {
 	border-color:%IMAGE_BORDER%;
@@ -749,12 +752,6 @@ h4.patternSearchResultsHeader {
 }
 .patternBookView .patternSearchResultCount {
 	color:%GRAYED_OUT_TEXT%;
-}
-
-/* oopsmore.pattern.tmpl */
-
-table.patternDiffOptions img {
-	border-color:%LAYOUT_ELEMENT_BORDER%;
 }
 
 /* edit.pattern.tmpl */

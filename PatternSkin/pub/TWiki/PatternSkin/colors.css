@@ -339,9 +339,12 @@ table.twikiFormTable th.twikiFormTableHRow font {
 	border-color:#8E9195;
 }
 a:link .twikiAccessKey,
-a:visited .twikiAccessKey,
-a:hover .twikiAccessKey {
+a:visited .twikiAccessKey {
 	color:inherit;
+}
+a:hover .twikiAccessKey {
+	color:#FBF7E8;
+	background-color:#d6000f;
 }
 .twikiImage img {
 	border-color:#eee;
