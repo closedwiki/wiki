@@ -670,12 +670,14 @@ $TWiki::cfg{LogFileName} = '$TWiki::cfg{DataDir}/log%DATE%.txt';
 $TWiki::cfg{UserInterfaceInternationalisation} = $FALSE;
 
 # *LANGUAGES* Marker used by bin/configure script - do not remove!
+$TWiki::cfg{Languages}{bg}{Enabled} = 1;
 $TWiki::cfg{Languages}{cs}{Enabled} = 1;
 $TWiki::cfg{Languages}{da}{Enabled} = 1;
 $TWiki::cfg{Languages}{de}{Enabled} = 1;
 $TWiki::cfg{Languages}{es}{Enabled} = 1;
 $TWiki::cfg{Languages}{fr}{Enabled} = 1;
 $TWiki::cfg{Languages}{it}{Enabled} = 1;
+$TWiki::cfg{Languages}{jp}{Enabled} = 1;
 $TWiki::cfg{Languages}{nl}{Enabled} = 1;
 $TWiki::cfg{Languages}{pl}{Enabled} = 1;
 $TWiki::cfg{Languages}{pt}{Enabled} = 1;
