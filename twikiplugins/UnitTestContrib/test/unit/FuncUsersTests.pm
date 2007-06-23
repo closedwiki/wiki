@@ -18,6 +18,15 @@ sub new {
     return $self;
 }
 
+sub AllowLoginName {
+    my $this = shift;
+    $TWiki::cfg{AllowLoginName} = 1;
+}
+sub DontAllowLoginName {
+    my $this = shift;
+    $TWiki::cfg{AllowLoginName} = 0;
+}
+
 sub TemplateLoginManager {
     $TWiki::cfg{LoginManager} = 'TWiki::LoginManager::TemplateLogin';
 }
@@ -46,6 +55,7 @@ sub TWikiUserMapping {
 sub fixture_groups {
     return (
         [ 'TemplateLoginManager', 'ApacheLoginManager', 'NoLoginManager' ],
+        [ 'AllowLoginName', 'DontAllowLoginName'],
 #        [ 'TWikiUserMapping', 'BaseUserMapping' ] );
         [ 'TWikiUserMapping' ] );
 }
@@ -165,6 +175,7 @@ sub verify_eachUserDontAllowLoginName {
     if ($TWiki::cfg{UserMappingManager} eq 'TWiki::Users::BaseUserMapping') {
          @correctList = qw/TWikiContributor TWikiGuest TWikiRegistrationAgent UnknownUser/;
     } else {
+#TODO: should reture WikiName's - trouble is that this means wikiname==loginname - and they were registered with them different
          @correctList = qw/TWikiContributor TWikiGuest TWikiRegistrationAgent UnknownUser scum usera userb userc/;
     }
     push @correctList, $TWiki::cfg{AdminUserWikiName};
