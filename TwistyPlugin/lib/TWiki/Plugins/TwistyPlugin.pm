@@ -44,7 +44,7 @@ $VERSION = '$Rev$';
 # This is a free-form string you can use to "name" your own plugin version.
 # It is *not* used by the build automation tools, but is reported as part
 # of the version number in PLUGINDESCRIPTIONS.
-$RELEASE = '1.4.1';
+$RELEASE = '1.4.2';
 
 $pluginName = 'TwistyPlugin';
 
@@ -243,6 +243,7 @@ sub _twistyBtn {
 
     my $isTrigger = 1;
     my $props     = '';
+
     if ( $idTag && $params ) {
         my $cookieState = _readCookie( $session, $idTag );
         my @propList =
@@ -258,15 +259,24 @@ sub _createHtmlProperties {
     my ( $twistyControlState, $idTag, $mode, $params, $isTrigger, $cookie ) =
       @_;
     my $class = $params->{'class'} || '';
-    my $start = $params->{start}   || '';
-    my $startHidden = ( $start eq 'hide' );
-    my $startShown  = ( $start eq 'show' );
     my $firststart = $params->{'firststart'} || '';
-    my $firstStartHidden = ( $firststart eq 'hide' );
-    my $firstStartShown  = ( $firststart eq 'show' );
+    my $firstStartHidden;
+    $firstStartHidden = 1 if ( $firststart eq 'hide' );
+    my $firstStartShown;
+    $firstStartShown = 1 if ( $firststart eq 'show' );
+    my $cookieShow;
+    $cookieShow = 1 if defined $cookie && $cookie == 1;
+    my $cookieHide;
+    $cookieHide = 1 if defined $cookie && $cookie == 0;
+    my $start = $params->{start} || '';
+    my $startHidden;
+    $startHidden = 1 if ( $start eq 'hide' );
+    my $startShown;
+    $startShown = 1 if ( $start eq 'show' );
     my $remember = $params->{'remember'} || $prefRemember;
-    my $noscript = $params->{'noscript'} || '';              # deprecated
-    my $noscriptHide = ( $noscript eq 'hide' );              # deprecated
+    my $noscript = $params->{'noscript'} || '';
+    my $noscriptHide;
+    $noscriptHide = 1 if ( $noscript eq 'hide' );
     $mode ||= $prefMode;
 
     my @classList = ();
@@ -279,18 +289,15 @@ sub _createHtmlProperties {
     push( @classList, 'twistyFirstStartShow' ) if $firstStartShown;
 
     # Mimic the rules in twist.js, function _update()
-    my $state;
+    my $state = '';
     $state = $TWISTYPLUGIN_CONTENT_HIDDEN if $firstStartHidden;
-    $state = $TWISTYPLUGIN_CONTENT_SHOWN  if $firstStartShown;
-
+    $state = $TWISTYPLUGIN_CONTENT_SHOWN if $firstStartShown;
     # cookie setting may override  firstStartHidden and firstStartShown
-    $state = $TWISTYPLUGIN_CONTENT_HIDDEN if defined $cookie && $cookie == 0;
-    $state = $TWISTYPLUGIN_CONTENT_SHOWN  if defined $cookie && $cookie == 1;
-
+    $state = $TWISTYPLUGIN_CONTENT_HIDDEN if $cookieHide;
+    $state = $TWISTYPLUGIN_CONTENT_SHOWN  if $cookieShow;
     # startHidden and startShown may override cookie
     $state = $TWISTYPLUGIN_CONTENT_HIDDEN if $startHidden;
     $state = $TWISTYPLUGIN_CONTENT_SHOWN  if $startShown;
-    $state = $TWISTYPLUGIN_CONTENT_SHOWN  if $noscriptHide;
 
     # assume trigger should be hidden
     # unless explicitly said otherwise
@@ -344,28 +351,37 @@ sub _createHtmlProperties {
     return @propList;
 }
 
+=pod
+
+Reads a setting from the TWIKIPREF cookie.
+Returns:
+   * 1 if the cookie has been set (meaning: show content)
+   * 0 if the cookie is '0' (meaning: hide content)
+   * undef if no cookie has been set
+
+=cut
+
 sub _readCookie {
     my ( $session, $idTag ) = @_;
 
     return '' if !$idTag;
 
     # which state do we use?
-    my $query  = $session->{cgiQuery};
-    my $cookie = $query->cookie('TWIKIPREF');
+    my $cgi = new CGI;
+    my $cookie = $cgi->cookie('TWIKIPREF');
     my $tag    = $idTag;
     $tag =~ s/^(.*)(hide|show|toggle)$/$1/go;
     my $key = $TWISTYPLUGIN_COOKIE_PREFIX . $tag;
 
-    return $TWISTYPLUGIN_CONTENT_SHOWN
-      unless ( defined($key) && defined($cookie) );
+    return unless ( defined($key) && defined($cookie) );
 
     my $value = '';
-    {
-        $cookie =~ s/$key\=(.*?)(\||$)/$1/g;
-        $value = $1;
-    }
-
-    return $value eq '1';
+	if ($cookie =~ m/\b$key\=(.+?)\b/gi) {
+		$value = $1;
+	}
+    
+    return if $value eq '';
+    return ($value eq '1') ? 1 : 0;
 }
 
 sub _wrapInButtonHtml {
