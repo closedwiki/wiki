@@ -191,9 +191,8 @@ Usage:
 	width:%IF{"defined size" then="%size%" else="20em"}%;
 }
 #%IF{"defined name" then="%name%"}%autocompleteResults {
-	position:absolute;
+	position:relative;
 	width:%IF{"defined size" then="%size%" else="20em"}%;
-	top:1.6em;
 }
 #%IF{"defined name" then="%name%"}%autocompleteResults .yui-ac-content {
 	position:absolute;
@@ -305,6 +304,9 @@ Usage (only if you are using a customized =javascript= section):
 | Copyright &copy;: | 2007 Arthur Clemens |
 | License: | [[http://www.gnu.org/copyleft/gpl.html][GPL]] |
 | Dependencies: | %$DEPENDENCIES% |
+| Add-on&nbsp;Version: | 23 Jun 2007 (version 1.0.1)  |
+| Change&nbsp;History: | <!-- versions below in reverse order -->&nbsp; |
+| 23 Jun 2007 | 1.0.1 Fixed CSS to work with Internet Explorer.  |
 | 16 Jun 2007 | 1.0 First release.  |
 | Demo url:  |   |
 | Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
