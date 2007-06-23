@@ -44,9 +44,9 @@ foreach my $arg ( @ARGV ) {
     }
 }
 
-use TWiki::Contrib::Mailer;
+use TWiki::Contrib::MailerContrib;
 
-my $report =
-  TWiki::Contrib::Mailer::mailNotify( \@webs, undef, $verbose, \@exwebs );
+my $report = TWiki::Contrib::MailerContrib::mailNotify(
+    \@webs, undef, $verbose, \@exwebs );
 
 print $report."\n" if $verbose;

@@ -20,7 +20,7 @@
 
 =pod
 
----+ package TWiki::Contrib::Mailer
+---+ package TWiki::Contrib::MailerContrib
 
 Package of support for extended Web<nop>Notify notification, supporting per-topic notification and notification of changes to children.
 
@@ -28,7 +28,7 @@ Also supported is a simple API that can be used to change the Web<nop>Notify top
 
 =cut
 
-package TWiki::Contrib::Mailer;
+package TWiki::Contrib::MailerContrib;
 
 use strict;
 
