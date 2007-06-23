@@ -24,6 +24,7 @@ use base 'TWiki::Configure::Types::STRING';
 
 sub prompt {
     my( $this, $id, $opts, $value ) = @_;
+    $value ||= '';
     $value = "$value";
     while ($value =~ s/^\(\?-xism:(.*)\)$/$1/) { };
     $value =~ s/([[\x01-\x09\x0b\x0c\x0e-\x1f"%&'*<=>@[_\|])/'&#'.ord($1).';'/ge;
@@ -39,15 +40,15 @@ sub string2value {
 
 sub equals {
     my ($this, $val, $def) = @_;
-    while ($val =~ s/^\(\?-xism:(.*)\)$/$1/) {
-    }
-    while ($def =~ s/^\(\?-xism:(.*)\)$/$1/) {
-    }
     if (!defined $val) {
         return 0 if defined $def;
         return 1;
     } elsif (!defined $def) {
         return 0;
+    }
+    while ($val =~ s/^\(\?-xism:(.*)\)$/$1/) {
+    }
+    while ($def =~ s/^\(\?-xism:(.*)\)$/$1/) {
     }
     return $val eq $def;
 }
