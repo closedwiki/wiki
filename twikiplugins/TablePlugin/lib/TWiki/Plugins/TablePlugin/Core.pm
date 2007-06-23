@@ -135,10 +135,12 @@ sub _parseParameters {
 
     $tmp = $params{tableframe};
     $tableFrame = $tmp if ( defined $tmp && $tmp ne '' );
-
+    $useCss{cellBorder} = 1 if $useCss && ( defined $tmp && $tmp ne '' );
+    
     $tmp = $params{tablerules};
     $tableRules = $tmp if ( defined $tmp && $tmp ne '' );
-
+    $useCss{cellBorder} = 1 if $useCss && ( defined $tmp && $tmp ne '' );
+    
     $tmp = $params{cellpadding};
     $cellPadding = $tmp if ( defined $tmp && $tmp ne '' );
 
@@ -147,7 +149,7 @@ sub _parseParameters {
 
     $tmp = $params{cellborder};
     $cellBorder = $tmp if ( defined $tmp && $tmp ne '' );
-    $useCss{cellBorder} = 1 if $useCss && defined $tmp;
+    $useCss{cellBorder} = 1 if $useCss && ( defined $tmp && $tmp ne '' );
 
     $tmp = $params{headeralign};
     @headerAlign = split( /,\s*/, $tmp ) if ( defined $tmp );
@@ -424,27 +426,28 @@ sub _processTableRow {
                 $type = 'td';
             }
 
-            if ( $cellBorder ne '' ) {
-                my $theCellBorder = $cellBorder;
-                if ( $tableRules eq 'none' ) {
-
-             # if tablerules are set to none we don't want cell borders anywhere
-                    $theCellBorder = 0;
-                }
-                if ( $tableRules eq 'cols' ) {
-                    $theCellBorder = 0;
-                }
-                if ( $tableRules eq 'groups' && $type eq 'th' ) {
-                    $attr->{style} .= 'border-bottom-style:solid;';
-                    $attr->{style} .= 'border-top-style:solid;';
-                    $attr->{style} .= 'border-left-style:none;';
-                }
-                if ( $tableRules eq 'groups' && $type eq 'td' ) {
-                    $theCellBorder = 0;
-                }
-                $attr->{style} .= 'border-width:'.$theCellBorder.'px;' 
-                  if $useCss{cellBorder};
-            }
+			my $theCellBorder = $cellBorder;
+			if ( $tableRules eq 'none' ) {
+		         # if tablerules are set to none we don't want cell
+		         # borders anywhere
+				$theCellBorder = 0;
+			}
+			if ( $tableRules eq 'cols' ) {
+				$theCellBorder |= 1;
+				$attr->{style} .= 'border-style:none solid;';
+			}
+			if ( $tableRules eq 'all' ) {
+				$theCellBorder |= 1;
+				$attr->{style} .= 'border-style:solid;';
+			}
+			if ( $tableRules eq 'groups' && $type eq 'th' ) {
+				$theCellBorder |= 1;
+				$attr->{style} .= 'border-style:solid none;';
+			}
+			if ( $tableRules eq 'groups' && $type eq 'td' ) {
+				$theCellBorder = 0;
+			}
+			$attr->{style} .= 'border-width:'.$theCellBorder.'px;';
 
             push @row, { text => $value, attrs => $attr, type => $type };
         }
