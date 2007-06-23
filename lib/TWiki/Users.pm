@@ -317,6 +317,8 @@ given login. The canonical user ID is an alphanumeric string that is unique
 to the login name, and can be mapped back to a login name and the
 corresponding wiki name using the methods of this class.
 
+returns undef if the user does not exist.
+
 =cut
 
 sub getCanonicalUserID {
@@ -340,7 +342,7 @@ sub getCanonicalUserID {
 		}
     }
 
-#	print STDERR "\ngetCanonicalUserID($login) => ".($cUID || '(NO cUID)');	
+	#print STDERR "\nTWiki::Users::getCanonicalUserID($login) => ".($cUID || '(NO cUID)');	
 
     return $cUID;
 }
@@ -435,11 +437,9 @@ True if the user is an admin
 
 sub isAdmin {
     my( $this, $cUID ) = @_;
-    my $isAdmin = 0;
-    ASSERT($cUID);
-	#$this->ASSERT_IS_CANONICAL_USER_ID($cUID) if DEBUG;
 	
 	$cUID = $this->getCanonicalUserID($cUID);
+    return unless (defined($cUID));
 
     my $mapping = $this->getMapping($cUID);
     my $otherMapping = ($mapping eq $this->{basemapping}) ? $this->{mapping} : $this->{basemapping};
@@ -523,7 +523,7 @@ sub getWikiName {
 	my $legacycUID = $this->getCanonicalUserID($cUID);
 
     my $wikiname = $this->getMapping($legacycUID)->getWikiName($legacycUID) if ($legacycUID && $this->getMapping($legacycUID));
-	$this->{getWikiName}->{$cUID} = $wikiname || "UnknownUser ($cUID)";
+	$this->{getWikiName}->{$cUID} = $wikiname || "UnknownUser (<nop>$cUID)";
     return $this->{getWikiName}->{$cUID};
 }
 
@@ -648,7 +648,8 @@ Test if user is in the given group.
 
 sub isInGroup {
 	my ($this, $cUID, $group) = @_;
-
+    return unless (defined($cUID));
+    
     my $mapping = $this->getMapping($cUID);
     my $otherMapping = ($mapping eq $this->{basemapping}) ? $this->{mapping} : $this->{basemapping};
     my $wikiname = $this->getMapping($cUID)->getWikiName($cUID);
@@ -693,9 +694,6 @@ sub eachMembership {
 	
 	my @list = ($mapping->eachMembership( $cUID ), $otherMapping->eachMembership( $othercUID ));
     return new TWiki::AggregateIterator(\@list, 1);
-	
-#	my ($this, $cUID) = @_;
-#    return shift->getMapping($cUID)->eachMembership( $cUID );
 }
 
 =pod

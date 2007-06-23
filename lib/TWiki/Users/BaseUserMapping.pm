@@ -205,6 +205,7 @@ sub getCanonicalUserID {
         #my @list = findUserByWikiName($this, $login);
         #$cUID = shift @list;
 #    }  
+#print STDERR "\nBaseUserMapping::getCanonicalUserID($login) => $cUID";
 
     return $cUID;
 }

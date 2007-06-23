@@ -302,6 +302,7 @@ characters, and must correspond 1:1 to the login name.
 sub getCanonicalUserID {
     my( $this, $login, $dontcheck ) = @_;
 #print STDERR "\nTWikiUserMapping::getCanonicalUserID($login)";
+
 	return unless (($dontcheck) || defined($this->{L2U}->{$login}) || (defined($this->{passwords}->fetchPass( $login ))) );
 
     use bytes;
@@ -324,29 +325,23 @@ converts an internal cUID to that user's login
 
 sub getLoginName {
     my( $this, $user ) = @_;
+    my $dontcheck;
     ASSERT($user) if DEBUG;
 	ASSERT($this->{mapping_id}) if DEBUG;
+	
+	#can't call userExists - its recursive
+	#return unless (userExists($this, $user));
+	
     $user =~ s/$this->{mapping_id}//;
    
     use bytes;
     # use bytes to ignore character encoding
     $user =~ s/_(\d\d)/chr($1)/ge;
     no bytes;
+    
+	return unless (($dontcheck) || defined($this->{L2U}->{$user}) || (defined($this->{passwords}->fetchPass( $user ))) );    
+    
     return $user;
-}
-
-=pod
-
----++ ObjectMethod getLoginName ($cUID) -> login
-
-Map a canonical user name to a login name
-
-=cut
-
-sub DELETE_getLoginName {
-    my ($this, $user) = @_;
-    _loadMapping( $this );
-    return getLoginName( $this, $user );
 }
 
 =pod

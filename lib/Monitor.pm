@@ -6,6 +6,16 @@ use Monitor;
 Monitor::MARK("Description of event");
 Monitor::MARK("Another event");
 
+or, to monitor all the calls to a module
+
+use Monitor;
+Monitor::MonitorMethod('TWiki::Users');
+
+or a function
+
+use Monitor;
+Monitor::MonitorMethod('TWiki::Users', 'getCanonicalUserID');
+
 Then set the environment variable TWIKI_MONITOR to a perl true value, and
 run the script from the command line e.g:
 $ cd bin
@@ -84,16 +94,16 @@ sub END {
     my $lastbm;
     my $firstbm;
     my %mash;
-    foreach my $bm (@times) {
-        $firstbm = $bm unless $firstbm;
-        if ($lastbm) {
-            my $s = tidytime($bm->[1], $lastbm->[1]);
-            my $t = tidytime($bm->[1], $firstbm->[1]);
-            $s = "\n| $bm->[0] | $s | $t | $bm->[2]->{vsize} |";
-            print STDERR $s;
-        }
-        $lastbm = $bm;
-    }
+#    foreach my $bm (@times) {
+#        $firstbm = $bm unless $firstbm;
+#        if ($lastbm) {
+#            my $s = tidytime($bm->[1], $lastbm->[1]);
+#            my $t = tidytime($bm->[1], $firstbm->[1]);
+#            $s = "\n| $bm->[0] | $s | $t | $bm->[2]->{vsize} |";
+#            print STDERR $s;
+#        }
+#        $lastbm = $bm;
+#    }
 	my %methods;
 	foreach my $call (@methodStats) {
 		$methods{$call->{method}} = {count=>0,min=>99999999,max=>0} unless defined($methods{$call->{method}} );

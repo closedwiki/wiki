@@ -706,7 +706,8 @@ sub getWikiUserName {
 
 ---+++ wikiToUserName( $wikiName ) -> $loginName
 
-Translate a Wiki name to a login name based on [[%MAINWEB%.TWikiUsers]] topic
+Translate a Wiki name (or login/cUID if it can) to a login name based on 
+[[%MAINWEB%.TWikiUsers]] topic
    * =$wikiName= - Wiki name, e.g. ='Main.JohnDoe'= or ='JohnDoe'=
 Return: =$loginName=   Login name of user, e.g. ='jdoe'=, or undef if not
 matched.
@@ -724,8 +725,9 @@ sub wikiToUserName {
     ASSERT($TWiki::Plugins::SESSION) if DEBUG;
     return '' unless $wiki;
     my $users = $TWiki::Plugins::SESSION->{users};
-    my $found = $users->findUserByWikiName($wiki);
-    return $users->getLoginName( $found->[0] ) if scalar(@$found);
+    
+    my $cUID = $users->getCanonicalUserID($wiki);
+    return $users->getLoginName($cUID) if ($cUID);
     return undef;
 }
 
@@ -861,7 +863,7 @@ if( TWiki::Func::isGroupMember( "HesperionXXGroup", "jordi" )) {
 </verbatim>
 If =$user= is =undef=, it defaults to the currently logged-in user.
 
-   * $login can be a login name, or a cUID
+   * $login can be a login name, or a cUID, or WikiName
 
 *Since:* TWiki::Plugins::VERSION 1.2
 
@@ -873,9 +875,9 @@ sub isGroupMember {
 
     return () unless $users->isGroup($group);
     if( $user ) {
-        my $login = wikiToUserName( $user );
-        return 0 unless $login;
-        $user = $users->getCanonicalUserID( $login );
+        #my $login = wikiToUserName( $user );
+        #return 0 unless $login;
+        $user = $users->getCanonicalUserID( $user );
     } else {
         $user = $TWiki::Plugins::SESSION->{user};
     }
