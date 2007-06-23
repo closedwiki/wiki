@@ -24,13 +24,11 @@
 package TWiki::Plugins::PreferencesPlugin;
 
 use strict;
-use CGI ( -any );
-use Error qw( :try );
 
-use vars qw(
-            $web $topic $user $installWeb $VERSION $RELEASE $pluginName
-            $query @shelter
-           );
+require TWiki::Func;    # The plugins API
+require TWiki::Plugins; # For the API version
+
+use vars qw( $VERSION $RELEASE @shelter );
 
 # This should always be $Rev$ so that TWiki can determine the checked-in
 # status of the plugin. It is used by the build automation tools, so
@@ -40,18 +38,18 @@ $VERSION = '$Rev$';
 # This is a free-form string you can use to "name" your own plugin version.
 # It is *not* used by the build automation tools, but is reported as part
 # of the version number in PLUGINDESCRIPTIONS.
-$RELEASE = 'Dakar';
+$RELEASE = 'TWiki-4.2';
 
 my $MARKER = "\007";
 
+# Markers used during form generation
+my $START_MARKER  = $MARKER.'STARTPREF'.$MARKER;
+my $END_MARKER    = $MARKER.'ENDPREF'.$MARKER;
+
 sub initPlugin {
-    ( $topic, $web, $user, $installWeb ) = @_;
-
-    $pluginName = 'PreferencesPlugin';
-
     # check for Plugins.pm versions
     if( $TWiki::Plugins::VERSION < 1.026 ) {
-        TWiki::Func::writeWarning( 'Version mismatch between '.$pluginName.' and Plugins.pm' );
+        TWiki::Func::writeWarning( 'Version mismatch between PreferencesPlugin and Plugins.pm' );
         return 0;
     }
     @shelter = ();
@@ -60,60 +58,68 @@ sub initPlugin {
 }
 
 sub beforeCommonTagsHandler {
-    ### my ( $text, $topic, $web ) = @_;  
-    return unless ( $_[0] =~ m/%EDITPREFERENCES{(.*?)}%/ );
+    ### my ( $text, $topic, $web ) = @_;
+    my $topic = $_[1];
+    my $web = $_[2];
+    return unless ( $_[0] =~ m/%EDITPREFERENCES(?:{(.*?)})?%/ );
+
+    require CGI;
+    require TWiki::Attrs;
+    my $formDef;
     my $attrs = new TWiki::Attrs( $1 );
-    my($formWeb, $form ) = TWiki::Func::normalizeWebTopicName( $web, $attrs->{_DEFAULT} );
+    if( defined( $attrs->{_DEFAULT} )) {
+        my( $formWeb, $form ) = TWiki::Func::normalizeWebTopicName(
+            $web, $attrs->{_DEFAULT} );
 
-    # SMELL: Unpublished API. No choice, though :-(
-    my $formDef = new TWiki::Form( $TWiki::Plugins::SESSION, $formWeb, $form );
+        # SMELL: Unpublished API. No choice, though :-(
+        require TWiki::Form;    # SMELL
+        $formDef =
+          new TWiki::Form( $TWiki::Plugins::SESSION, $formWeb, $form );
+    }
 
-    $query = TWiki::Func::getCgiQuery();
+    my $query = TWiki::Func::getCgiQuery();
 
     my $action = lc $query->param( 'prefsaction' );
+    $query->Delete( 'prefsaction' );
+    $action =~ s/\s.*$//;
+
     if ( $action eq 'edit' ) {
         TWiki::Func::setTopicEditLock( $web, $topic, 1 );
 
         $_[0] =~ s(^((?:\t|   )+\*\sSet\s)(\w+)\s\=(.*$(\n[ \t]+[^\s*].*$)*))
           ($1._generateEditField($web, $topic, $2, $3, $formDef))gem;
-        $_[0] =~ s(%EDITPREFERENCES.*%)
-          (_generateButtons($web, $topic, 0))eo;
-
-    } elsif ( $action eq 'cancel' ) {
-        TWiki::Func::setTopicEditLock( $web, $topic, 0 );
-        my $url = TWiki::Func::getViewUrl( $web, $topic );
-        TWiki::Func::redirectCgiQuery( $query, $url );
-        return 0;
-
-    } elsif ( $action eq 'save' ) {
-
-        my $text = TWiki::Func::readTopicText( $web, $topic );
-        $text =~ s(^((?:\t|   )+\*\sSet\s)(\w+)\s\=\s(.*)$)
-          ($1._saveSet($web, $topic, $2, $3, $formDef))mgeo;
-
-        my $error = TWiki::Func::saveTopicText( $web, $topic, $text, '' );
-        TWiki::Func::setTopicEditLock( $web, $topic, 0 );
-        my $url;
-        if( $error ) {
-            $url = $error;
-        } else {
-            $url = TWiki::Func::getViewUrl( $web, $topic );
-        }
-        TWiki::Func::redirectCgiQuery( $query, $url );
-        return 0;
-
-    } else {
-        # implicit action="view"
-        $_[0] =~ s(%EDITPREFERENCES.*%)
-          (_generateButtons($web, $topic, 1))ge;
+        $_[0] =~ s/%EDITPREFERENCES({.*?})?%/
+          _generateControlButtons($web, $topic)/ge;
+        my $viewUrl = TWiki::Func::getScriptUrl(
+            $web, $topic, 'viewauth' );
+        my $startForm = CGI::start_form(
+            -name => 'editpreferences',
+            -method => 'post',
+            -action => $viewUrl );
+        $startForm =~ s/\s+$//s;
+        my $endForm = CGI::end_form();
+        $endForm =~ s/\s+$//s;
+        $_[0] =~ s/^(.*?)$START_MARKER(.*)$END_MARKER(.*?)$/$1$startForm$2$endForm$3/s;
+        $_[0] =~ s/$START_MARKER|$END_MARKER//gs;
     }
 
-    my $viewUrl = TWiki::Func::getScriptUrl( $web, $topic, 'viewauth', 0 );
-    $_[0] = CGI::start_form(-name => 'editpreferences', -method => 'post',
-                            -class => 'preferencesPluginForm',
-                            -action => $viewUrl ).
-                              $_[0].
-                                CGI::end_form();
+    if( $action eq 'cancel' ) {
+        TWiki::Func::setTopicEditLock( $web, $topic, 0 );
+
+    } elsif( $action eq 'save' ) {
+
+        my( $meta, $text ) = TWiki::Func::readTopic( $web, $topic );
+        $text =~ s(^((?:\t|   )+\*\sSet\s)(\w+)\s\=\s(.*)$)
+          ($1._saveSet($query, $web, $topic, $2, $3, $formDef))mgeo;
+        TWiki::Func::saveTopic( $web, $topic, $meta, $text );
+        TWiki::Func::setTopicEditLock( $web, $topic, 0 );
+        # Finish with a redirect so that the *new* values are seen
+        my $viewUrl = TWiki::Func::getScriptUrl( $web, $topic, 'view' );
+        TWiki::Func::redirectCgiQuery( undef, $viewUrl );
+        return;
+    }
+    # implicit action="view", or drop through from "save" or "cancel"
+    $_[0] =~ s/%EDITPREFERENCES({.*?})?%/_generateEditButton($web, $topic)/ge;
 }
 
 # Use the post-rendering handler to plug our formatted editor units
@@ -142,15 +148,25 @@ sub _generateEditField {
     my( $web, $topic, $name, $value, $formDef ) = @_;
     $value =~ s/^\s*(.*?)\s*$/$1/ge;
 
-    my $html;
+    my ($extras, $html);
 
     if( $formDef ) {
-        my $fieldDef = _getField( $formDef, $name );
-        if( $fieldDef ) {
-            # SMELL: use of unpublished core function
-            my $extras;
+        my $fieldDef;
+        if (defined(&TWiki::Form::getField)) {
+            # TWiki 4.2 and later
+            $fieldDef = $formDef->getField( $name );
+        } else {
+            # TWiki < 4.2
+            $fieldDef = _getField( $formDef, $name );
+        }
+        if( defined(&TWiki::Form::renderFieldForEdit)) {
+            # TWiki < 4.2 SMELL: use of unpublished core function
             ( $extras, $html ) =
               $formDef->renderFieldForEdit( $fieldDef, $web, $topic, $value);
+        } else {
+            # TWiki 4.2 and later SMELL: use of unpublished core function
+            ( $extras, $html ) =
+              $fieldDef->renderForEdit( $web, $topic, $value );
         }
     }
     unless( $html ) {
@@ -162,26 +178,46 @@ sub _generateEditField {
 
     push( @shelter, $html );
 
-    return CGI::span({class=>'twikiAlert',
-                      style=>'font-weight:bold;'},
-                     $name . ' = SHELTER' . $MARKER . $#shelter);
+    return $START_MARKER.
+      CGI::span({class=>'twikiAlert',
+                 style=>'font-weight:bold;'},
+                $name . ' = SHELTER' . $MARKER . $#shelter).$END_MARKER;
 }
 
-# Generate the buttons that replace the EDITPREFERENCES tag, depending
-# on the mode
-sub _generateButtons {
-    my( $web, $topic, $doEdit ) = @_;
+# Generate the button that replaces the EDITPREFERENCES tag in view mode
+sub _generateEditButton {
+    my( $web, $topic ) = @_;
 
-    my $text = '';
-    if ( $doEdit ) {
-        $text .= CGI::submit(-name=>'prefsaction', -value=>'Edit', -class=>'twikiButton');
-    } else {
-        $text .= CGI::submit(-name=>'prefsaction', -value=>'Save new settings', -class=>'twikiSubmit',
-        -accesskey=>'s');
-        $text .= '&nbsp;';
-        $text .= CGI::submit(-name=>'prefsaction', -value=>'Cancel', -class=>'twikiButton',
-        -accesskey=>'c');
-    }
+    my $viewUrl = TWiki::Func::getScriptUrl(
+        $web, $topic, 'viewauth' );
+    my $text = CGI::start_form(
+        -name => 'editpreferences',
+        -method => 'post',
+        -action => $viewUrl );
+    $text .= CGI::input({
+        type => 'hidden',
+        name => 'prefsaction',
+        value => 'edit'});
+    $text .= CGI::submit(-name => 'edit',
+                         -value=>'Edit Preferences',
+                         -class=>'twikiButton');
+    $text .= CGI::end_form();
+    $text =~ s/\n//sg;
+    return $text;
+}
+
+# Generate the buttons that replace the EDITPREFERENCES tag in edit mode
+sub _generateControlButtons {
+    my( $web, $topic ) = @_;
+
+    my $text = $START_MARKER.CGI::submit(-name=>'prefsaction',
+                                         -value=>'Save new settings',
+                                         -class=>'twikiSubmit',
+                                         -accesskey=>'s');
+    $text .= '&nbsp;';
+    $text .= CGI::submit(-name=>'prefsaction', -value=>'Cancel',
+                         -class=>'twikiButton',
+                         -accesskey=>'c').$END_MARKER;
     return $text;
 }
 
@@ -189,7 +225,7 @@ sub _generateButtons {
 # if there is a new value for the Set and generate a new
 # Set statement.
 sub _saveSet {
-    my( $web, $topic, $name, $value, $formDef ) = @_;
+    my( $query, $web, $topic, $name, $value, $formDef ) = @_;
 
     my $newValue = $query->param( $name ) || $value;
 
