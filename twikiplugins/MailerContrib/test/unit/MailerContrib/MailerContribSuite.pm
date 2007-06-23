@@ -3,7 +3,7 @@ use strict;
 package MailerContribSuite;
 use base qw(TWikiFnTestCase);
 
-use TWiki::Contrib::Mailer;
+use TWiki::Contrib::MailerContrib;
 
 my $testWeb2;
 
@@ -304,7 +304,7 @@ sub testSimple {
     my $this = shift;
 
     my @webs = ( $this->{test_web}, $this->{users_web} );
-    TWiki::Contrib::Mailer::mailNotify( \@webs, $this->{twiki}, 0 );
+    TWiki::Contrib::MailerContrib::mailNotify( \@webs, $this->{twiki}, 0 );
     #print "REPORT\n",join("\n\n", @TWikiFnTestCase::mails);
 
     my %matched;
@@ -349,7 +349,7 @@ sub testSubweb {
     my $this = shift;
 
     my @webs = ( $testWeb2, $this->{users_web} );
-    TWiki::Contrib::Mailer::mailNotify( \@webs, $this->{twiki}, 0 );
+    TWiki::Contrib::MailerContrib::mailNotify( \@webs, $this->{twiki}, 0 );
     #print "REPORT\n",join("\n\n", @TWikiFnTestCase::mails);
 
     my %matched;
@@ -443,7 +443,7 @@ HERE
         $this->{twiki}->{user}, $this->{test_web}, "WebNotify",
         "Before\n${s}After",
         $meta);
-    TWiki::Contrib::Mailer::mailNotify( [ $this->{test_web} ], $this->{twiki}, 0 );
+    TWiki::Contrib::MailerContrib::mailNotify( [ $this->{test_web} ], $this->{twiki}, 0 );
 
     my %matched;
     foreach my $message ( @TWikiFnTestCase::mails ) {
