@@ -24,7 +24,7 @@ use base 'TWiki::Configure::Types::STRING';
 
 sub prompt {
     my( $this, $id, $opts, $value ) = @_;
-    $value ||= '';
+    $value = '' unless defined($value);
     $value = "$value";
     while ($value =~ s/^\(\?-xism:(.*)\)$/$1/) { };
     $value =~ s/([[\x01-\x09\x0b\x0c\x0e-\x1f"%&'*<=>@[_\|])/'&#'.ord($1).';'/ge;
