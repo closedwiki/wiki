@@ -61,7 +61,7 @@ displays as
 ---++ Syntax
 #StandardAttrs
 Write =%<nop>VOTE{ ... }%= in the text of a a TWiki topic to define a poll
-%INCLUDE{"%SYSTEMWEB%.VarVOTE" section="vote_attributes"}%
+%$INCLUDE{data/TWiki/VarVOTESource.txt}%
 
 %X% The =style= parameter has been _deprecated_ and should not be used
 (though it still works). The =color= and =bgcolor= parameters have been removed.
