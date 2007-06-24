@@ -66,13 +66,18 @@ A wide range of standard styles are used in the TWiki core code and topics, and 
 
 
 ---+++ TWiki Styles in Plugins
+---++++ TablePlugin
+|=.twikiTable=  |The table  |
+|=.twikiSortedCol=  |A sorted column  |
+|=.twikiSortedAscendingCol=  |Sorted column, ascending  |
+|=.twikiSortedDescendingCol=  |Sorted column, descending  |
+|=.tableSortIcon=  |The sort icon holder (span)  |
+|=.twikiFirstCol=  |The first column  |
+|=.twikiTableEven= |Even numbered rows  |
+|=.twikiTableOdd= |Odd numbered rows  |
+|=.twikiTableCol= + column number  | Unique column identifier, for instance: =twikiTableCol0= |
+|=.twikiTableRow= + type + row number | Unique row identifier, for instance: =twikiTableRowdataBg0= |
 
-|.twikiTable  |TablePlugin  |
-|.twikiSortedAscendingCol  |TablePlugin  |
-|.twikiSortedDescendingCol  |TablePlugin  |
-|.twikiFirstCol  |TablePlugin  |
-|.twikiTableEven |TablePlugin  |
-|.twikiTableOdd |TablePlugin  |
 
 ---+++ TWiki Styles in Templates
 

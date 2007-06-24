@@ -81,7 +81,7 @@
 | 3 | ghi | pqr | 15 Jan 2006 |
 
 ---++ =headerbgsorted=
-%TABLE{headerbgsorted="#990000"}%
+%TABLE{databg="#ffc" databgsorted="#fc3" headerbg="#903" headerbgsorted="#600" initsort="1"}%
 | *One* | *Two* | *Three* | *Four* |
 | 1 | abc | vwx | 01 Jan 1900 |
 | 2 | def | stu | 31 Dec 1999 |
@@ -113,9 +113,9 @@ no initdirection specified, column 3
 
 ---++ =headercolor=
 <verbatim>
-%TABLE{headercolor="#990000" headerbg="#eeeeee"}%
+%TABLE{headercolor="#900" headerbg="#eee" headerbgsorted="#ddd"}%
 </verbatim>
-%TABLE{headercolor="#990000" headerbg="#eeeeee"}%
+%TABLE{headercolor="#900" headerbg="#eee" headerbgsorted="#ddd"}%
 | *One* | *Two* | *Three* | *Four* |
 | 1 | abc | vwx | 01 Jan 1900 |
 | 2 | def | stu | 31 Dec 1999 |
@@ -131,9 +131,9 @@ no initdirection specified, column 3
 
 ---++ =datacolor=
 <verbatim>
-%TABLE{datacolor="#ff0000"}%
+%TABLE{datacolor="#f00,#f93"}%
 </verbatim>
-%TABLE{datacolor="#ff0000"}%
+%TABLE{datacolor="#f00,#f93"}%
 | *One* | *Two* | *Three* | *Four* |
 | 1 | abc | vwx | 01 Jan 1900 |
 | 2 | def | stu | 31 Dec 1999 |
@@ -448,18 +448,6 @@ no initdirection specified, column 3
 | 2 | def | stu | 31 Dec 1999 |
 | 3 | ghi | pqr | 15 Jan 2006 |
 
-Should render as:
-<table border=1 rules=groups>
-<thead>
-<tr> <th>One</th> <th>Two</th> <th>Three</th> <th>Four</th></tr>
-</thead>
-<tbody>
-<tr> <td>1</td> <td>abc</td> <td>vwx</td> <td>01 Jan 1900</td> </tr>
-<tr> <td>2</td> <td>def</td> <td>stu</td> <td>31 Dec 1999</td> </tr>
-<tr> <td>3</td> <td>ghi</td> <td>pqr</td> <td>15 Jan 2006</td> </tr>
-</tbody>
-</table>
-_Note that each browser renders this differently, so its quite impossible to get it right._
 
 ---++++ With =footerrows=
 <verbatim>
@@ -505,9 +493,9 @@ _Note that each browser renders this differently, so its quite impossible to get
 ---++ =tableframe=
 ---+++ =void=
 <verbatim>
-%TABLE{tableframe="void" tablerules="none"}%
+%TABLE{tableframe="void" tablerules="none" tableborder="4"}%
 </verbatim>
-%TABLE{tableframe="void" tablerules="none"}%
+%TABLE{tableframe="void" tablerules="none" tableborder="4"}%
 | *One* | *Two* | *Three* | *Four* |
 | 1 | abc | vwx | 01 Jan 1900 |
 | 2 | def | stu | 31 Dec 1999 |
@@ -515,9 +503,9 @@ _Note that each browser renders this differently, so its quite impossible to get
 
 ---+++ =above=
 <verbatim>
-%TABLE{tableframe="above" tablerules="none"}%
+%TABLE{tableframe="above" tablerules="none" tableborder="4"}%
 </verbatim>
-%TABLE{tableframe="above" tablerules="none"}%
+%TABLE{tableframe="above" tablerules="none" tableborder="4"}%
 | *One* | *Two* | *Three* | *Four* |
 | 1 | abc | vwx | 01 Jan 1900 |
 | 2 | def | stu | 31 Dec 1999 |
@@ -525,9 +513,9 @@ _Note that each browser renders this differently, so its quite impossible to get
 
 ---+++ =below=
 <verbatim>
-%TABLE{tableframe="below" tablerules="none"}%
+%TABLE{tableframe="below" tablerules="none" tableborder="4"}%
 </verbatim>
-%TABLE{tableframe="below" tablerules="none"}%
+%TABLE{tableframe="below" tablerules="none" tableborder="4"}%
 | *One* | *Two* | *Three* | *Four* |
 | 1 | abc | vwx | 01 Jan 1900 |
 | 2 | def | stu | 31 Dec 1999 |
@@ -535,9 +523,9 @@ _Note that each browser renders this differently, so its quite impossible to get
 
 ---+++ =lhs=
 <verbatim>
-%TABLE{tableframe="lhs" tablerules="none"}%
+%TABLE{tableframe="lhs" tablerules="none" tableborder="4"}%
 </verbatim>
-%TABLE{tableframe="lhs" tablerules="none"}%
+%TABLE{tableframe="lhs" tablerules="none" tableborder="4"}%
 | *One* | *Two* | *Three* | *Four* |
 | 1 | abc | vwx | 01 Jan 1900 |
 | 2 | def | stu | 31 Dec 1999 |
@@ -545,9 +533,9 @@ _Note that each browser renders this differently, so its quite impossible to get
 
 ---+++ =rhs=
 <verbatim>
-%TABLE{tableframe="rhs" tablerules="none"}%
+%TABLE{tableframe="rhs" tablerules="none" tableborder="4"}%
 </verbatim>
-%TABLE{tableframe="rhs" tablerules="none"}%
+%TABLE{tableframe="rhs" tablerules="none" tableborder="4"}%
 | *One* | *Two* | *Three* | *Four* |
 | 1 | abc | vwx | 01 Jan 1900 |
 | 2 | def | stu | 31 Dec 1999 |
@@ -555,9 +543,9 @@ _Note that each browser renders this differently, so its quite impossible to get
 
 ---+++ =hsides=
 <verbatim>
-%TABLE{tableframe="hsides" tablerules="none"}%
+%TABLE{tableframe="hsides" tablerules="none" tableborder="4"}%
 </verbatim>
-%TABLE{tableframe="hsides" tablerules="none"}%
+%TABLE{tableframe="hsides" tablerules="none" tableborder="4"}%
 | *One* | *Two* | *Three* | *Four* |
 | 1 | abc | vwx | 01 Jan 1900 |
 | 2 | def | stu | 31 Dec 1999 |
@@ -565,9 +553,9 @@ _Note that each browser renders this differently, so its quite impossible to get
 
 ---+++ =vsides=
 <verbatim>
-%TABLE{tableframe="vsides" tablerules="none"}%
+%TABLE{tableframe="vsides" tablerules="none" tableborder="4"}%
 </verbatim>
-%TABLE{tableframe="vsides" tablerules="none"}%
+%TABLE{tableframe="vsides" tablerules="none" tableborder="4"}%
 | *One* | *Two* | *Three* | *Four* |
 | 1 | abc | vwx | 01 Jan 1900 |
 | 2 | def | stu | 31 Dec 1999 |
@@ -575,9 +563,9 @@ _Note that each browser renders this differently, so its quite impossible to get
 
 ---+++ =box=
 <verbatim>
-%TABLE{tableframe="box" tablerules="none"}%
+%TABLE{tableframe="box" tablerules="none" tableborder="4"}%
 </verbatim>
-%TABLE{tableframe="box" tablerules="none"}%
+%TABLE{tableframe="box" tablerules="none" tableborder="4"}%
 | *One* | *Two* | *Three* | *Four* |
 | 1 | abc | vwx | 01 Jan 1900 |
 | 2 | def | stu | 31 Dec 1999 |
@@ -585,9 +573,9 @@ _Note that each browser renders this differently, so its quite impossible to get
 
 ---+++ =border=
 <verbatim>
-%TABLE{tableframe="border" tablerules="none"}%
+%TABLE{tableframe="border" tablerules="none" tableborder="4"}%
 </verbatim>
-%TABLE{tableframe="border" tablerules="none"}%
+%TABLE{tableframe="border" tablerules="none" tableborder="4"}%
 | *One* | *Two* | *Three* | *Four* |
 | 1 | abc | vwx | 01 Jan 1900 |
 | 2 | def | stu | 31 Dec 1999 |
