@@ -45,8 +45,4 @@
 	}
 	%IF{ "defined PAGEBGCOLOR and $ PAGEBGCOLOR != ''" then='html body, #patternPage, #patternBottomBar, .patternPreviewArea, #patternOuter, #patternTopBar { background-color:%PAGEBGCOLOR%;}
 	#patternOuter {background-image:none;}'}%
-	%IF{ "context TablePluginEnabled" then='.twikiTable .tableSortIcon img {visibility:hidden;}'}%
-	%IF{ "context TablePluginEnabled" then='.twikiTable .tableSortUp {background:url("%ICONURL{tablesortup}%") no-repeat;}'}%
-	%IF{ "context TablePluginEnabled" then='.twikiTable .tableSortDown {background:url("%ICONURL{tablesortdown}%") no-repeat;}'}%
-	%IF{ "context TablePluginEnabled" then='.twikiTable .tableSortDiamond {background:url("%ICONURL{tablesortdiamond}%") no-repeat;}'}%
 </style>%TMPL:END%
