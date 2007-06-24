@@ -192,9 +192,3 @@ This plugin is pre-installed with your TWiki release. You should not have to ins
 
 __Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins, %TWIKIWEB%.StandardColors
 
-
-
-
-%META:FILEATTACHMENT{name="up.gif" attr="" comment="Up arrow" date="1070351625" path="C:\Data\MyTWiki\Plugins\TablePlugin\pub\TWiki\TablePlugin\up.gif" size="867" user="TWikiContributor" version="1.1"}%
-%META:FILEATTACHMENT{name="down.gif" attr="" comment="Down arrow" date="1070351653" path="C:\Data\MyTWiki\Plugins\TablePlugin\pub\TWiki\TablePlugin\down.gif" size="867" user="TWikiContributor" version="1.1"}%
-%META:FILEATTACHMENT{name="diamond.gif" attr="" comment="Diamond symbol" date="1070351672" path="C:\Data\MyTWiki\Plugins\TablePlugin\pub\TWiki\TablePlugin\diamond.gif" size="881" user="TWikiContributor" version="1.1"}%
