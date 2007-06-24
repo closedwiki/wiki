@@ -110,13 +110,20 @@ BEGIN {
 
 ---++ ClassMethod new ( $session )
 
-Constructor. Gets the language object corresponding to the current user's language.
+Constructor. Gets the language object corresponding to the current users
+language. If $session is not a TWiki object reference, just calls
+Local::Maketext::new (the superclass constructor)
 
 =cut
 
 sub new {
-    my ($class, $session ) = @_;
-    ASSERT($session->isa( 'TWiki')) if DEBUG;
+    my $class = shift;
+    my( $session ) = @_;
+
+    unless( ref($session) && $session->isa('TWiki') ) {
+        # it's recursive
+        return $class->SUPER::new(@_);
+    }
 
     unless ($initialised) {
         foreach my $error (@initErrors) {
