@@ -1,4 +1,5 @@
 data/TWiki/VotePlugin.txt 0644
+data/TWiki/VarVOTE.txt 0644
 lib/TWiki/Plugins/VotePlugin/Core.pm 0644
 lib/TWiki/Plugins/VotePlugin.pm 0644
 pub/TWiki/VotePlugin/ie_star.gif 0644

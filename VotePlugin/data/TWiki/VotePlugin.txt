@@ -58,40 +58,13 @@ displays as
 
 ---++ Syntax Rules
 
-The %<nop>VOTE{ ... }% macro defines a poll using the following options:
-| *name* | *description* | *example* |
-| =id= | \
-The identifier of the poll. \
-You can have multiple independent votes in the same \
-topic. | =id="Dining"= |
-| =select<i>N</i>= | \
-Defines the name of a *select* vote, where you select one from a ranges of \
-options. \
-=N= is a number that identifies this item within the poll e.g. =select1=, =select2= etc. You must number all =select= and =stars= parameters uniquely and sequentially (e.g. =select1 stars2 select3= | =select1="Drink"= |
-| =options<i>N</i>= | \
-Each =select<i>N</i>= must have a corresponding =options<i>N</i>= that \
-defines a comma-separated list of the options that can be selected between. | =options1="Beer,Wine,Milk"= |
-| =stars<i>N</i>= | \
-Defines the name of a *rate* vote, where you rate something by giving it \
-a number of stars. \
-=N= is a number that identifies this item within the poll e.g. =select1=, =stars2= etc. You must number all =select= and =stars= parameters uniquely and sequentially (e.g. =select1 stars2 select3= | =stars2="Usability"= |
-| =width<i>N</i>= | \
-Each =stars<i>N</i>= must have a corresponding =width<i>N</i>=. This gives the number of \
-stars to show e.g. =width1="5"= will show 5 stars. | =width2="10"= |
-| =format<i>N</i>= | \
-Defines the format of the results display. See [[#FormattingResults][formatting results]], below. | =format="$large"= |
-| =chart<i>N</i>= | \
-Defines the format of a single bar in the results bar chart generated for the corresponding  =select= (for =select= type only). See [[#FormattingResults][formatting results]], below. | =chart="&lt;p>$option $score&lt;/p>"= |
-| =separator= | Defines the string to be used to separate each row in the result. | =separator="&lt;br/>"= |
-| =global= | If set to ="off"=, this makes the =id= local to this topic (the default). If set to ="on"= it will be a global poll that can be accessed from many topics. | =global="on"= |
-| =open= | If set to ="off"= this is a closed vote. If set to ="on"= it is open (the default) | =open="on"= |
-| =secret= | If set to ="off"=, then the database will record who voted. If set to ="on"=, votes are secret (the default) | =secret="on"= |
-| =saveto= | If set to the name of a topic, the poll results will be appended to the end of that topic. The results are formatted as a TWiki table for easy post-processing. | =saveto="Main.VoteResults"= |
-| =bayesian= | If set to ="on"=, rating averages will be computed using the Bayesian average of this item against all the other items _that have the same item in their =stars= field_. This requires all the participating %VOTEs to be =global=, or to save their results to the same place using =saveto=. See http://www.thebroth.com/blog/118/bayesian-rating for more information about Bayesian rating. | =bayesian="off"= |
-| =submit= | If set to ="off"=, this makes the %VOTE display the results of the vote without prompting for any input. This is useful when - for example - you want to show the results of a global vote, without permitting more voting. |
+---++ Syntax
+#StandardAttrs
+Write =%<nop>VOTE{ ... }%= in the text of a a TWiki topic to define a poll
+%INCLUDE{"%SYSTEMWEB%.VarVOTE" section="vote_attributes"}%
 
 %X% The =style= parameter has been _deprecated_ and should not be used
-(though it still works). The =color= and =bgcolor= paramaters have been removed.
+(though it still works). The =color= and =bgcolor= parameters have been removed.
 
 You can change the defaults for any or all of the above parameters by defining
 the [[TWikiVariables][TWikiVariable]] =VOTEPLUGIN_DEFAULTS= to be a parameter string e.g.
@@ -163,6 +136,8 @@ The weighting topic applies to all votes in the scope of the =%<nop>VOTEPLUGIN_W
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | %$VERSION% |
 |  Change History: | &nbsp; | 
+|  24 Jun 2007: | Bugs:ItemItem4298: fixed secret switch. Item4200: added VarVOTE. - TWiki:Main/CrawfordCurrie |
+|  11 Jun 2007: | Bugs:Item4235 - removed excess newlines, fixed separator - TWiki:Main/CrawfordCurrie |
 |   8 Jun 2007: | Added =submit= - TWiki:Main/CrawfordCurrie |
 |   6 Jun 2007: | Added =global=, =open=, =secret=, =format=, =chart=, =saveto=, =VOTEPLUGIN_WEIGHTINGS=, bayesian averaging - TWiki:Main/CrawfordCurrie |
 |  31 Aug 2006: | added NO_PREFS_IN_TOPIC |
@@ -177,15 +152,12 @@ The weighting topic applies to all votes in the scope of the =%<nop>VOTEPLUGIN_W
 |  14 Apr 2005: | incorporated =getLocaldate()= function |
 |  16 Mar 2005: | use Cache API only if its there; delayed =use &lt;package&gt;= | 
 |   7 Mar 2005: | Initial version |
-|  TWiki Dependency: | $TWiki::Plugins::VERSION 1.024 |
-|  CPAN Dependencies: | none |
-|  Other Dependencies: | none |
-|  Perl Version: | >=5.6.1 |
-|  TWiki:Plugins/Benchmark: | TWiki:TWiki/GoodStyle nn%, TWiki:TWiki/FormattedSearch nn%, %TOPIC% nn% |
+|  Dependencies: | %$DEPENDENCIES% |
 |  Plugin Home: | TWiki:Plugins/%TOPIC% |
 |  Feedback: | TWiki:Plugins/%TOPIC%Dev |
 |  Appraisal: | TWiki:Plugins/%TOPIC%Appraisal |
 
 %META:FILEATTACHMENT{name="example_select.gif" attr="h" comment="" version="1"}%
 %META:FILEATTACHMENT{name="example_stars.gif" attr="h" comment="" version="1"}%
+
 -- TWiki:Main.MichaelDaum - 31 Aug 2006

@@ -30,6 +30,7 @@ $SHORTDESCRIPTION = 'Simple way to count votes';
 
 ###############################################################################
 sub initPlugin {
+    my ($topic, $web) = @_;
     $isInitialized = 0;
     TWiki::Func::registerTagHandler('VOTE', \&handleVote);
     return 1;
@@ -43,6 +44,10 @@ sub handleVote {
         eval 'use TWiki::Plugins::VotePlugin::Core;';
         die $@ if $@;
         $isInitialized = 1;
+        # Register vote now so we only get it done once per topic. It doesn't
+        # matter which %VOTE triggers this, as the query carries all the info
+        # about where to save the data, the id etc.
+        TWiki::Plugins::VotePlugin::Core::registerVote();
     }
 
     return TWiki::Plugins::VotePlugin::Core::handleVote(@_);
