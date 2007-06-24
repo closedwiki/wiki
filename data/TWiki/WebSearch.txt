@@ -14,7 +14,7 @@ zeroresults="%IF{ "defined search" then="on" else="off" }%"
 <script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/TWikiJavascripts/twikiHTML.js"></script>
 <script type="text/javascript">
 //<![CDATA[
-	var linkText='<a href="#" onclick="location.hash=\'twikiSearchForm\'; return false;"><span class="patternLinkLabel twikiSmallish">%MAKETEXT{"Modify search"}%</span></a>';
+	var linkText='<a href="#" onclick="location.hash=\'twikiSearchForm\'; return false;"><span class="twikiLinkLabel twikiSmallish">%MAKETEXT{"Modify search"}%</span></a>';
 	%IF{"defined search" then="twiki.HTML.setHtmlOfElementWithId('twikiModifySearchContainer', '&nbsp;&nbsp;' + linkText);"}%
 //]]>
 </script>
