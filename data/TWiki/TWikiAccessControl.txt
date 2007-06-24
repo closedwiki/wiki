@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1176971123" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1182639423" format="1.1" version="$Rev$"}%
 %TOC%
 %STARTINCLUDE%
 
@@ -211,7 +211,7 @@ Use the following setup to authenticate users for topic viewing in all webs and 
    1. *Restrict* view access to selected Users and Groups. Set one or both of these variables in its %WEBPREFSTOPIC% topic:
       * ==Set <nop>DENYWEBVIEW = &lt; list of Users and Groups &gt;==
       * ==Set <nop>ALLOWWEBVIEW = &lt; list of Users and Groups &gt;==
-      * __Note:__ =DENYWEBVIEW= is evaluated before =ALLOWWEBVIEW=. Access is denied if the authenticated person is in the =DENYWEBVIEW= list, or not in the =ALLOWWEBVIEW= list. Access is granted in case =DENYWEBVIEW= and =ALLOWWEBVIEW= is not defined.
+      * __Note:__ =DENYWEBVIEW= is evaluated before =ALLOWWEBVIEW=. Access is denied if the authenticated person is in the =DENYWEBVIEW= list, or not in the =ALLOWWEBVIEW= list. Access is granted if =DENYWEBVIEW= and =ALLOWWEBVIEW= are not defined.
    1. If you still want public users to be able to register automatically follow TWiki:TWiki.RegisterOnViewRestrictedSite.
 
 ---+++ Authenticate and Restrict Selected Webs Only
@@ -221,7 +221,7 @@ Use the following setup to provide unrestricted viewing access to open webs, wit
    1. *Restrict* view access to selected Users and Groups. Set one or both of these variables in its %WEBPREFSTOPIC% topic:
       * ==Set <nop>DENYWEBVIEW = &lt; list of Users and Groups &gt;==
       * ==Set <nop>ALLOWWEBVIEW = &lt; list of Users and Groups &gt;==
-      * __Note:__ =DENYWEBVIEW= is evaluated before =ALLOWWEBVIEW=. Access is denied if the authenticated person is in the =DENYWEBVIEW= list, or not in the =ALLOWWEBVIEW= list. Access is granted in case =DENYWEBVIEW= and =ALLOWWEBVIEW= is not defined.
+      * __Note:__ =DENYWEBVIEW= is evaluated before =ALLOWWEBVIEW=. Access is denied if the authenticated person is in the =DENYWEBVIEW= list, or not in the =ALLOWWEBVIEW= list. Access is granted if =DENYWEBVIEW= and =ALLOWWEBVIEW= are not defined.
 
 ---+++ Hide Control Settings
 
