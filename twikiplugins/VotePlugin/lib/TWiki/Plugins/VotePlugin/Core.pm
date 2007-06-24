@@ -54,12 +54,6 @@ HEAD
     my $submit =   isTrue($params->{submit}, 1);
     my $saveto =   $params->{saveto};
 
-    if (defined TWiki::Func::getCgiQuery()->param('register_vote')) {
-        registerVote($web, $topic, $id);
-    } else {
-        #print STDERR "no register_vote\n";
-    }
-
     my @prompts = ();
 
     my $defaultStarsFormat =
@@ -81,7 +75,9 @@ HEAD
         }
         $defaultSelectFormat = $format;
     }
-    my $separator = $params->{separator} || "\n";
+    my $separator = $params->{separator};
+
+    $separator = "\n" unless defined $separator;
 
     # Compatibility
     if (defined($params->{select})) {
@@ -136,21 +132,24 @@ HEAD
             my $vid = $data[0];
             my $voter = $data[1];
             my $weight = $data[2];
+            my $date = (scalar(@data) > 4) ? $data[4] : '';
+
             foreach my $item (split(/,/, $data[3] || '')) {
                 if ($item =~ /^(.+)=(.+)$/) {
                     my ($row, $choice) = ($1, $2);
-                    $votes{$voter}{$vid}{$row} = [ $choice, $weight ];
+                    $votes{$voter}{$vid}{$row} = [ $choice, $weight, $date ];
                 }
             }
         } elsif (!$saveto && $line =~ /^([^\|]+)\|([^\|]+)\|(.*?)\|(.+)$/) {
             # Old format - compatibility only
+            my $date = $1;
             my $voter = $2;
             my $weight = $3;
             my $data = $4;
             foreach my $item (split(/\|/, $data)) {
                 if ($item =~ /^(.+)=(.+)$/) {
                     my ($row, $choice) = ($1, $2);
-                    $votes{$voter}{$id}{$row} = [ $choice, $weight ];
+                    $votes{$voter}{$id}{$row} = [ $choice, $weight, $date ];
                 }
             }
         }
@@ -238,7 +237,7 @@ HEAD
             foreach my $optionName (@{$prompt->{options}}) {
                 $opts .= CGI::option($optionName);
             }
-            my $o = { name => 'voteplugin_'.$key, size => 1 };
+            my $o = { name => 'vote_data_'.$key, size => 1 };
             unless ($needSubmit) {
                 $o->{onchange} = 'javacript: submit()';
             }
@@ -249,26 +248,28 @@ HEAD
                 $totalVotes{$id}{$key}, $params));
         }
     }
-    my $result = join($separator, @rows)."\n";
+    my $result = join($separator, @rows);
     if ($submit && $needSubmit) {
-        $result .= CGI::submit(
+        $result .= "\n".CGI::submit(
             { name=> 'OK', value=>'OK',
               style=>'color:green'});
     }
     if ($submit) {
-        $result .= CGI::input({type=>'hidden',
-                               name=>'register_vote', value=>$id});
-        $result .= CGI::input({type=>'hidden',
-                               name=>'isGlobal', value=>$isGlobal});
-        $result .= CGI::input({type=>'hidden',
-                               name=>'isSecret', value=>$isSecret});
-        $result .= CGI::input({type=>'hidden',
-                               name=>'isOpen', value=>$isOpen});
-        $result .= CGI::input({type=>'hidden',
-                               name=>'saveTo', value=>$saveto});
+        my $hiddens =
+          CGI::input({type=>'hidden',
+                      name=>'vote_register', value=>$id})
+        . CGI::input({type=>'hidden',
+                      name=>'vote_isGlobal', value=>$isGlobal})
+        . CGI::input({type=>'hidden',
+                      name=>'vote_isSecret', value=>$isSecret})
+        . CGI::input({type=>'hidden',
+                      name=>'vote_isOpen', value=>$isOpen})
+        . CGI::input({type=>'hidden',
+                      name=>'vote_saveTo', value=>$saveto})
+        . CGI::input({type=>'hidden',
+                      name=>'vote_inTopic', value=>"$web.$topic"});
 
-        $result = "<form id='$id' action='$act' method='post'>\n".
-          $result.'</form>';
+        $result = "<form id='$id' action='$act' method='post'>$hiddens$separator$result</form>";
     }
 
     return $result;
@@ -276,18 +277,21 @@ HEAD
 
 ###############################################################################
 sub registerVote {
-    my ($web, $topic, $id) = @_;
-
     #print STDERR "called registerVote()\n";
 
     # check parameters
     my $query = TWiki::Func::getCgiQuery();
+    my $id = $query->param('vote_register');
 
-    return unless $id eq $query->param('register_vote');
+    return unless defined $id;
 
+    my $web;
+    my $topic = $query->param('vote_inTopic');
+    ($web, $topic) = TWiki::Func::normalizeWebTopicName('', $topic);
     my $user = TWiki::Func::getWikiUserName();
-    my $isSecret = $query->param('isSecret') || 0;
-    my $isOpen = $query->param('isOpen') || 0;
+    my $isSecret = $query->param('vote_isSecret') || 0;
+
+    my $isOpen = $query->param('vote_isOpen') || 0;
     my $ident = getIdent($isSecret, $isOpen);
 #    $ident = int(rand(100)) 
 #      if $debug; # for testing
@@ -318,13 +322,13 @@ sub registerVote {
     my @v;
     foreach my $key ($query->param()) {
         my $val = $query->param($key);
-        next unless $key =~ s/^voteplugin_//;
+        next unless $key =~ s/^vote_data_//;
         push @v, "$key=$val";
     }
-    $voteData .= join(',', @v) . "|\n";
+    $voteData .= join(',', @v) . '|' . _getLocalDate() . "|\n";
 
-    saveVotesData($web, $topic, $id,  $query->param('isGlobal') || 0,
-                  $query->param('saveTo') || '', $voteData);
+    saveVotesData($web, $topic, $id,  $query->param('vote_isGlobal') || 0,
+                  $query->param('vote_saveTo') || '', $voteData);
     # invalidate cache entry
     if (defined &TWiki::Cache::invalidateEntry) {
         TWiki::Cache::invalidateEntry($web, $topic);
@@ -426,8 +430,7 @@ sub normalizeFileName {
 
 
 ###############################################################################
-sub getLocaldate {
-
+sub _getLocalDate {
     my( $sec, $min, $hour, $mday, $mon, $year) = localtime(time());
     $year = sprintf("%.4u", $year + 1900);  # Y2K fix
     my $date = sprintf("%.2u-%.2u-%.2u", $year, $mon, $mday);
@@ -461,14 +464,14 @@ sub expandFormattingTokens {
 
 ###############################################################################
 sub getIdent {
-    my ($id, $isSecret, $isOpen) = @_;
+    my ($isSecret, $isOpen) = @_;
 
     my $user = TWiki::Func::getWikiUserName();
 
     my $ident;
 
     if ($isOpen) {
-        my $date = getLocaldate();
+        my $date = _getLocalDate();
         $ident = "$ENV{REMOTE_ADDR},$user,$date";
     } else {
         $ident = $user;
@@ -534,12 +537,13 @@ sub showLineOfStars {
     my ($form, $prompt, $submit, $needSubmit, $act,
         $mean, $myLast, $total) = @_;
     my $max = $prompt->{width};
+    my $perc = $total ? int(1000 * $mean / $total) / 10 : 0;
 
+    $mean = sprintf("%.3g", $mean);
     my $row = expandFormattingTokens($prompt->{format});
     $row =~ s/\$key/$prompt->{name}/g;
     $row =~ s/\$sum/$total/g;
     $row =~ s/\$score/$mean/g;
-    my $perc = $total ? int(1000 * $mean / $total) / 10 : 0;
     $row =~ s/\$perc/$perc/g;
     $row =~ s/\$mylast/$myLast/g;
 
@@ -553,7 +557,7 @@ sub showLineOfStars {
         }, CGI::input(
         {
             type => 'hidden',
-            name => 'voteplugin_'.$prompt->{name},
+            name => 'vote_data_'.$prompt->{name},
             id => $form.'_'.$prompt->{name},
             value => '0',
         }));
