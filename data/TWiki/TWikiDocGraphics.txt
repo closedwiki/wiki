@@ -193,9 +193,9 @@ Other usage: [[%TOPIC%#Usage_extended][see below]].
 | *&nbsp;* | *File Name* | *Description* | *Write...* |
 | <img src="%ATTACHURLPATH%/monospace.gif" alt="Monospace" title="Monospace" />  | =monospace.gif= | Monospace | =%<nop>ICON{monospace}%= |
 | <img src="%ATTACHURLPATH%/proportional.gif" alt="Proportional" title="Proportional" />  | =proportional.gif= | Proportional | =%<nop>ICON{proportional}%= |
-| <img src="%ATTACHURLPATH%/tablesortdiamond.gif" alt="Sort table" title="Sort table" />  | =tablesortdiamond.gif= | Sort table | =%<nop>ICON{tablesortdiamond}%= |
-| <img src="%ATTACHURLPATH%/tablesortdown.gif" alt="Sort table descending" title="Sort table descending" />  | =tablesortdown.gif= | Sort table descending | =%<nop>ICON{tablesortdown}%= |
-| <img src="%ATTACHURLPATH%/tablesortup.gif" alt="Sort table ascending" title="Sort table ascending" />  | =tablesortup.gif= | Sort table ascending | =%<nop>ICON{tablesortup}%= |
+| <img src="%ATTACHURLPATH%/tablesortdiamond.gif" alt="Sort table" title="Sort table" />  | =tablesortdiamond.gif= | Sort table | =&lt;img src="%<nop>ICONURL{tablesortdiamond}%" width="11" height="13" alt="Sort table" border="0" /&gt;= |
+| <img src="%ATTACHURLPATH%/tablesortdown.gif" alt="Sort table descending" title="Sort table descending" />  | =tablesortdown.gif= | Sort table descending | =&lt;img src="%<nop>ICONURL{tablesortdown}%" width="11" height="13" alt="Sort table descending" border="0" /&gt;= |
+| <img src="%ATTACHURLPATH%/tablesortup.gif" alt="Sort table ascending" title="Sort table ascending" />  | =tablesortup.gif= | Sort table ascending | =&lt;img src="%<nop>ICONURL{tablesortup}%" width="11" height="13" alt="Sort table ascending" border="0" /&gt;= |
 | <img src="%ATTACHURLPATH%/toggleopen.gif" alt="Open toggle, Twisty open toggle" title="Open toggle, Twisty open toggle" />  | =toggleopen.gif= | Open toggle, Twisty open toggle | =%<nop>ICON{toggleopen}%= |
 | <img src="%ATTACHURLPATH%/toggleclose.gif" alt="Close toggle, Twisty close toggle" title="Close toggle, Twisty close toggle" />  | =toggleclose.gif= | Close toggle, Twisty close toggle | =%<nop>ICON{toggleclose}%= |
 | <img src="%ATTACHURLPATH%/toggleopen-small.gif" alt="Open toggle, Twisty open toggle" title="Open toggle, Twisty open toggle" />  | =toggleopen-small.gif= | Open toggle, Twisty open toggle | =%<nop>ICON{toggleopen-small}%= |
