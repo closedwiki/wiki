@@ -1,6 +1,3 @@
 data/TWiki/TablePlugin.txt 0644
 lib/TWiki/Plugins/TablePlugin.pm 0444
 lib/TWiki/Plugins/TablePlugin/Core.pm 0444
-pub/TWiki/TablePlugin/diamond.gif 0644
-pub/TWiki/TablePlugin/down.gif 0644
-pub/TWiki/TablePlugin/up.gif 0644

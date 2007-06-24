@@ -56,8 +56,6 @@ a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, for example, =
 
 	* Default table attributes:
 		* Set TABLEATTRIBUTES = tableborder="1" cellpadding="0" cellspacing="0" valign="top" headercolor="#ffffff" headerbg="#6b7f93" headerbgsorted="#334455" headercolor="#ffffff" databg="#ffffff,#edf4f9" databgsorted="#f5f5f5,#dce7ee"
-		* Classic skin table attributes:
-			* #Set TABLEATTRIBUTES = tableborder="1" cellpadding="0" cellspacing="1" headerbg="#99cccc" databg="#ffffff,#ffffcc"
 
 ---++ Table Attributes
 
@@ -117,6 +115,28 @@ Line before table: =%<nop>TABLE{ sort="on" tableborder="0" cellpadding="4" cells
 | 1-Jan-2003 |
 | 2-Jan-2005 |
 
+
+---++ !TablePlugin and CSS
+Information for programmers.
+
+!TablePlugin implements the following precedence:
+   * the =TABLEATTRIBUTE= settings only write html styling, no CSS
+   * the =TABLEATTRIBUTE= settings can be overridden by a skin's CSS
+   * the =TABLE= tag attributes are converted to CSS styling, written in the head; these override any skin's CSS
+    
+---+++ CSS written by !TablePlugin
+|=.twikiTable=  |The table  |
+|=.twikiSortedCol=  |A sorted column  |
+|=.twikiSortedAscendingCol=  |Sorted column, ascending  |
+|=.twikiSortedDescendingCol=  |Sorted column, descending  |
+|=.tableSortIcon=  |The sort icon holder (span)  |
+|=.twikiFirstCol=  |The first column  |
+|=.twikiTableEven= |Even numbered rows  |
+|=.twikiTableOdd= |Odd numbered rows  |
+|=.twikiTableCol= + column number  | Unique column identifier, for instance: =twikiTableCol0= |
+|=.twikiTableRow= + type + row number | Unique row identifier, for instance: =twikiTableRowdataBg0= |
+
+
 ---++ Plugin Installation Instructions
 This plugin is pre-installed with your TWiki release. You should not have to install it other than to do an upgrade.
 
@@ -124,11 +144,8 @@ This plugin is pre-installed with your TWiki release. You should not have to ins
 	* Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
 	  | *File:* | *Description:* |
 	  | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
-	  | ==data/TWiki/%TOPIC%.txt,v== | Plugin topic repository |
 	  | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
-	  | ==pub/TWiki/%TOPIC%/diamond.gif== | Diamond symbol |
-	  | ==pub/TWiki/%TOPIC%/down.gif== | Down arrow |
-	  | ==pub/TWiki/%TOPIC%/up.gif== | Up arrow |
+	  | ==lib/TWiki/Plugins/%TOPIC%/Core.pm== | Plugin Perl module |
 	* (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
 	* Test if the plugin is correctly installed:
 		* Check above example if the table renders as expected
@@ -137,8 +154,9 @@ This plugin is pre-installed with your TWiki release. You should not have to ins
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main/JohnTalintyre, TWiki:Main/PeterThoeny |
-|  Plugin Version: | 1.022 |
+|  Plugin Version: | 1.023 |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
+|  24 Jun 2007 | 1.023: Arthur Clemens: Inline styles are now written to the head; updated default sort icons (from TWikiDocGraphics). |
 |  23 Jun 2007 | 1.022: Arthur Clemens: Fixed styling of param =tablerules= on Internet Explorer. |
 |  23 May 2007 | 1.021: Michael Daum: Fixed css attribute priority to cooperate nicely with skin themes. |
 |  27 Dec 2006 | 1.020: Kenneth Lavrsen: Fixed initsort so all tables can be initsorted and not only the first. When you sort a table by clicking on the header of a column the table gets sorted accordingly. When you click the header of another table the previously sorted table goes back being sorted as specified by initsort. |
