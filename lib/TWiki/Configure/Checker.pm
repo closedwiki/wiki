@@ -268,6 +268,8 @@ sub copytree {
     }
 
     if( !$e && !-e $to ) {
+	require File::Copy; 
+	import File::Copy ();
         if( !File::Copy::copy( $from, $to )) {
             $e = "Failed to copy $from to $to: $!<br />";
         }
