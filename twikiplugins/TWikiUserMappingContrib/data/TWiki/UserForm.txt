@@ -4,7 +4,7 @@
 __Note:__ This is a maintenance topic, used by the TWiki administrator.
 
 This form defines the form of the home pages of registered TWiki users listed
-in %WIKIUSERSTOPIC%. *Do not edit this topic* - if you want to customise the
+in %MAINWEB%.%WIKIUSERSTOPIC%. *Do not edit this topic* - if you want to customise the
 user form, then:
    1 Take a copy of this topic and save it to %MAINWEB%.<nop>UserForm
    1 Customise %MAINWEB%.<nop>UserForm
@@ -30,5 +30,5 @@ user form, then:
 
 __%X% Note:__ Please keep the %TWIKIWEB%.TWikiRegistration form and this form definition in sync. When you update this form you need to edit/save the %TWIKIWEB%.NewUserTemplate topic. This ensures that the fields are in the right order.
 
-__Related topics:__ %WIKIUSERSTOPIC%, UserViewTemplate, %TWIKIWEB%.NewUserTemplate, UserHomepageHeader, %TWIKIWEB%.TWikiForms, %TWIKIWEB%.TWikiRegistration
+__Related topics:__ %MAINWEB%.%WIKIUSERSTOPIC%, %MAINWEB%.UserViewTemplate, %TWIKIWEB%.NewUserTemplate, %MAINWEB%.UserHomepageHeader, %TWIKIWEB%.TWikiForms, %TWIKIWEB%.TWikiRegistration
 

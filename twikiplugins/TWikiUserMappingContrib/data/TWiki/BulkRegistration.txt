@@ -11,9 +11,9 @@ To announce them use the BulkResetPassword feature: this will assign a new rando
 
 ---++ Bulk Registration usage
 
-Any fields you define in this table will end up in the User's topic. If a form (such as %MAINWEB%.UserForm) is attached to NewUserTemplate then the data will go in as META:FIELDS, meaning that you can use SEARCH formfield constructs to search. 
+Any fields you define in this table will end up in the User's topic. If a form (such as %TWIKIWEB%.UserForm) is attached to NewUserTemplate then the data will go in as META:FIELDS, meaning that you can use SEARCH formfield constructs to search. 
 
-If you use the %MAINWEB%.UserForm then ensure that it contains all the fields you define here. Otherwise they will disappear when the user edits their home topic!
+If you use the %TWIKIWEB%.UserForm then ensure that it contains all the fields you define here. Otherwise they will disappear when the user edits their home topic!
 
 ---+++ Mandatory fields
    * !WikiName 
@@ -42,7 +42,7 @@ The following should be inserted into your REGISTERTOPIC as a table.
 </verbatim>
 
 To use this:
-   1 Make sure that the Custom fields appear on the %MAINWEB%.UserForm
+   1 Make sure that the Custom fields appear on the %TWIKIWEB%.UserForm
    2 Copy the above table to your clipboard
    3 Click through and paste this on %REGISTERTOPIC%, save the topic and return here.
    4 Click the Bulk register button below
@@ -51,7 +51,7 @@ To use this:
 
 Notes:
    1 The first row of the table dictates the heading format and that the fieldnames must be plain, i.e. *must not contain bolded* entries.
-   2 You are responsible for ensuring that the fieldnames appear in the [[%MAINWEB%.UserForm]]
+   2 You are responsible for ensuring that the fieldnames appear in the [[%TWIKIWEB%.UserForm]]
    3 Only administrators can run this.
 
 <form name="bulkRegister" action="%SCRIPTURLPATH{"manage"}%/%REGISTERTOPIC%" method="post">
