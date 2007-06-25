@@ -46,6 +46,8 @@ my %reservedFieldNames =
 
 ---++ ClassMethod new ( $session, $web, $form, $def )
 
+Looks up a form in the session object or, if it hasn't been read yet,
+reads it frm the form definition topic on disc.
    * $web - default web to recover form from, if $form doesn't specify a web
    * =$form= - topic name to read form definition from
    * =$def= - optional. a reference to a list of field definitions. if present,
@@ -57,31 +59,39 @@ May throw TWiki::OopsException
 
 sub new {
     my( $class, $session, $web, $form, $def ) = @_;
-    my $this = bless( { session => $session }, $class );
 
     ( $web, $form ) =
       $session->normalizeWebTopicName( $web, $form );
 
-    my $store = $session->{store};
+    my $this = $session->{forms}->{"$web.$form"};
+    unless( $this ) {
 
-    $this->{web} = $web;
-    $this->{topic} = $form;
+        $this = bless(
+            {
+                session => $session,
+                web => $web,
+                topic => $form,
+            }, $class );
 
-    unless ( $def ) {
+        unless ( $def ) {
 
-        # Read topic that defines the form
-        unless( $store->topicExists( $web, $form ) ) {
-            return undef;
+            my $store = $session->{store};
+
+            # Read topic that defines the form
+            unless( $store->topicExists( $web, $form ) ) {
+                return undef;
+            }
+            my( $meta, $text ) =
+              $store->readTopic( $session->{user}, $web, $form, undef );
+
+            $this->{fields} = _parseFormDefinition( $this, $meta, $text );
+
+        } else {
+
+            $this->{fields} = $def;
+
         }
-        my( $meta, $text ) =
-          $store->readTopic( $session->{user}, $web, $form, undef );
-
-        $this->{fields} = _parseFormDefinition( $this, $meta, $text );
-
-    } else {
-
-        $this->{fields} = $def;
-
+        $session->{forms}->{"$web.$form"} = $this;
     }
 
     return $this;
@@ -106,6 +116,22 @@ sub finish {
     }
     undef $this->{fields};
     undef $this->{session};
+}
+
+=pod
+
+---++ StaticMethod fieldTitle2FieldName($title) -> $name
+Chop out all except A-Za-z0-9_. from a field name to create a
+valid "name" for storing in meta-data
+
+=cut
+
+sub fieldTitle2FieldName {
+    my( $text ) = @_;
+    return '' unless defined( $text );
+    $text =~ s/<nop>//g; # support <nop> character in title
+    $text =~ s/[^A-Za-z0-9_\.]//g;
+    return $text;
 }
 
 # Get definition from supplied topic text
@@ -164,12 +190,13 @@ sub _parseFormDefinition {
             $tooltip =~ s/\s*$//go;
 
             my $definingTopic = "";
-            if( $title =~ /\[\[(.+)\]\[(.+)\]\]/ )  { # use common defining
-                $definingTopic = _cleanField( $1 );   # topics with different
-                $title = $2;                          # field titles
+            if( $title =~ /\[\[(.+)\]\[(.+)\]\]/ )  {
+                # use common defining topics with different field titles
+                $definingTopic = fieldTitle2FieldName( $1 );
+                $title = $2;
             }
 
-            my $name = _cleanField( $title );
+            my $name = fieldTitle2FieldName( $title );
 
             # Rename fields with reserved names
             if( $reservedFieldNames{$name} ) {
@@ -216,22 +243,6 @@ sub createField {
         $class = 'TWiki::Form::FieldDefinition';
     }
     return $class->new( session => $this->{session}, type => $type, @_ );
-}
-
-# Chop out all except A-Za-z0-9_ from a field name to create a
-# valid "name" for storing in meta-data
-sub _cleanField {
-    my( $text ) = @_;
-    return '' unless defined( $text );
-    # TODO: make this dependent on a 'character set includes non-alpha'
-    # setting in TWiki.cfg - and do same in Render.pm re 8859 test.
-    # I18N: don't get rid of non-ASCII characters
-    # TW: this is applied to the key in the field; it is not obvious
-    # why we need I18N in the key (albeit there could be collisions due
-    # to the filtering... but all the current topics are keyed on _cleanField
-    $text =~ s/<nop>//go;    # support <nop> character in title
-    $text =~ s/[^A-Za-z0-9_\.]//go;
-    return $text;
 }
 
 # Generate a link to the given topic, so we can bring up details in a
@@ -488,6 +499,32 @@ returned list should be treated as *read only* (must not be written to).
 sub getFields {
     my $this = shift;
     return $this->{fields};
+}
+
+sub renderForDisplay {
+    my( $this, $meta ) = @_;
+
+    my $templates = $this->{session}->templates;
+    $templates->readTemplate('formtables');
+
+    my $text = $templates->expandTemplate('FORM:display:header');
+
+	my $rowTemplate = $templates->expandTemplate('FORM:display:row');
+    foreach my $fieldDef ( @{$this->{fields}} ) {
+        my $fm = $meta->get( 'FIELD', $fieldDef->{name} );
+        next unless $fm;
+        my $fa = $fm->{attributes} || '';
+        unless ( $fa =~ /H/ ) {
+            my $row = $rowTemplate;
+             # Legacy; was %A_TITLE% before it was $title
+            $row =~ s/%A_TITLE%/\$title/g;
+            $row =~ s/%A_VALUE%/\$value/g; # Legacy
+            $text .= $fieldDef->renderForDisplay( $row, $fm->{value} );
+        }
+    }
+    $text .= $templates->expandTemplate('FORM:display:footer');
+    $text =~ s/%A_TITLE%/$this->{topic}/g;
+    return $text;
 }
 
 1;

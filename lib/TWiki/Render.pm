@@ -1,21 +1,5 @@
-## Module of TWiki Enterprise Collaboration Platform, http://TWiki.org/
-#
-# Copyright (C) 2001-2007 Peter Thoeny, peter@thoeny.org
-# and TWiki Contributors. All Rights Reserved. TWiki Contributors
-# are listed in the AUTHORS file in the root of this distribution.
-# NOTE: Please extend that file, not this notice.
-#
-# This program is free software; you can redistribute it and/or
-# modify it under the terms of the GNU General Public License
-# as published by the Free Software Foundation; either version 2
-# of the License, or (at your option) any later version. For
-# more details read LICENSE in the root of this distribution.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-#
-# As per the GPL, removal of this notice is prohibited.
+# See bottom of file for license and copyright information
+package TWiki::Render;
 
 =pod
 
@@ -24,8 +8,6 @@
 This module provides most of the actual HTML rendering code in TWiki.
 
 =cut
-
-package TWiki::Render;
 
 use strict;
 use Assert;
@@ -216,33 +198,6 @@ sub renderMoved {
                                              $date,
                                              $by)) . $putBack;
     }
-    return $text;
-}
-
-=pod
-
----++ ObjectMethod renderFormField($web, $topic, $meta, $params) -> $text
-
-Render meta-data for a single formfield
-
-=cut
-
-sub renderFormField {
-    my( $this, $meta, $attrs ) = @_;
-    my $text = '';
-    my $name = $attrs->{name};
-    $text = renderFormFieldArg( $meta, $name ) if( $name );
-    my $newline = $attrs->{newline};
-    if ( defined $newline ) {
-      $newline =~ s/\$n/\n/gos;
-    } else {
-      $newline = "<br />";
-    }
-    my $bar = $attrs->{bar} || "&#124;";
-    # change any new line character sequences to <br />
-    $text =~ s/\r?\n/$newline/gos;
-    # escape "|" to HTML entity
-    $text =~ s/\|/$bar/gos;
     return $text;
 }
 
@@ -2031,52 +1986,6 @@ sub _replaceInternalRefs {
 
 =pod
 
----++ StaticMethod renderFormFieldArg( $meta, $args ) -> $text
-
-Parse the arguments to a $formfield specification and extract
-the relevant formfield from the given meta data.
-
-   * =args= string containing name of form field
-
-In addition to the name of a field =args= can be appended with a commas
-followed by a string format (\d+)([,\s*]\.\.\.)?). This supports the formatted
-search function $formfield and is used to shorten the returned string or a 
-hyphenated string.
-
-=cut
-
-sub renderFormFieldArg {
-    my( $meta, $args ) = @_;
-
-    my $name = $args;
-    my $breakArgs = '';
-    my @params = split( /\,\s*/, $args, 2 );
-    if( @params > 1 ) {
-        $name = $params[0] || '';
-        $breakArgs = $params[1] || 1;
-    }
-    my $value = '';
-    my @fields = $meta->find( 'FIELD' );
-    foreach my $field ( @fields ) {
-        my $title = quotemeta($field->{title} || $field->{name});
-        if( $name =~ /^($field->{name}|$title)$/ ) {
-            $value = $field->{value};
-            $value = '' unless defined( $value );
-            if ( $breakArgs ) {
-                $value =~ s/^\s*(.*?)\s*$/$1/go;
-                $value = breakName( $value, $breakArgs );
-            }
-            # Item3489, Item2837. Prevent $vars in formfields from
-            # being expanded in formatted searches.
-            $value =~ s/\$(n|nop|quot|percnt|dollar)/\$<nop>$1/go;
-            return $value;
-        }
-    }
-    return '';
-}
-
-=pod
-
 ---++ StaticMethod breakName( $text, $args) -> $text
 
    * =$text= - text to "break"
@@ -2112,4 +2021,72 @@ sub breakName {
     return $text;
 }
 
+=pod
+
+---++ StaticMethod protectFormFieldValue($value, $attrs) -> $html
+
+Given the value of a form field, and a set of attributes that control how
+to display that value, protect the value from further processing.
+
+The protected value is determined from the value of the field after:
+   * newlines are replaced with &lt;br> or the value of $attrs->{newline}
+   * processing through breakName if $attrs->{break} is defined
+   * escaping of $vars if $attrs->{protectdollar} is defined
+   * | is replaced with &amp;#124; or the value of $attrs->{bar} if defined
+
+=cut
+
+sub protectFormFieldValue {
+    my( $value, $attrs ) = @_;
+
+    $value = '' unless defined( $value );
+
+    if( $attrs && $attrs->{break} ) {
+        $value =~ s/^\s*(.*?)\s*$/$1/g;
+        $value = breakName( $value, $attrs->{break} );
+    }
+
+    # Item3489, Item2837. Prevent $vars in formfields from
+    # being expanded in formatted searches.
+    if( $attrs && $attrs->{protectdollar}) {
+        $value =~ s/\$(n|nop|quot|percnt|dollar)/\$<nop>$1/g;
+    }
+
+    # change newlines
+    my $newline = '<br />';
+    if( $attrs && defined $attrs->{newline} ) {
+        $newline = $attrs->{newline};
+        $newline =~ s/\$n/\n/gs;
+    }
+    $value =~ s/\r?\n/$newline/gs;
+
+    # change vbars
+    my $bar = '&#124;';
+    if( $attrs && $attrs->{bar} ) {
+        $bar = $attrs->{bar};
+    }
+    $value =~ s/\|/$bar/g;
+
+    return $value;
+}
+
 1;
+__DATA__
+# Module of TWiki Enterprise Collaboration Platform, http://TWiki.org/
+#
+# Copyright (C) 2001-2007 Peter Thoeny, peter@thoeny.org
+# and TWiki Contributors. All Rights Reserved. TWiki Contributors
+# are listed in the AUTHORS file in the root of this distribution.
+# NOTE: Please extend that file, not this notice.
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version. For
+# more details read LICENSE in the root of this distribution.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+#
+# As per the GPL, removal of this notice is prohibited.

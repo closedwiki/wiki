@@ -1,21 +1,5 @@
-# Module of TWiki Enterprise Collaboration Platform, http://TWiki.org/
-#
-# Copyright (C) 2000-2007 Peter Thoeny, peter@thoeny.org
-# and TWiki Contributors. All Rights Reserved. TWiki Contributors
-# are listed in the AUTHORS file in the root of this distribution.
-# NOTE: Please extend that file, not this notice.
-#
-# This program is free software; you can redistribute it and/or
-# modify it under the terms of the GNU General Public License
-# as published by the Free Software Foundation; either version 2
-# of the License, or (at your option) any later version. For
-# more details read LICENSE in the root of this distribution.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-#
-# As per the GPL, removal of this notice is prohibited.
+# See bottom of file for license and copyright information
+package TWiki::Search;
 
 =pod
 
@@ -24,8 +8,6 @@
 This module implements all the search functionality.
 
 =cut
-
-package TWiki::Search;
 
 use strict;
 use Assert;
@@ -999,7 +981,7 @@ s/\$summary(?:\(([^\)]*)\))?/$renderer->makeTopicSummary( $text, $topic, $web, $
                     $out =~
 s/\$changes(?:\(([^\)]*)\))?/$renderer->summariseChanges($ru,$web,$topic,$1,$revNum)/ges;
                     $out =~
-s/\$formfield\(\s*([^\)]*)\s*\)/TWiki::Render::renderFormFieldArg( $meta, $1 )/ges;
+s/\$formfield\(\s*([^\)]*)\s*\)/displayFormField( $meta, $1 )/ges;
                     $out =~
 s/\$parent\(([^\)]*)\)/TWiki::Render::breakName( $meta->getParent(), $1 )/ges;
                     $out =~ s/\$parent/$meta->getParent()/ges;
@@ -1233,8 +1215,7 @@ sub _extractTopicInfo {
         ( $info->{$sortfield} ) = $meta->getRevisionInfo(1);
     }
     elsif ( !defined( $info->{$sortfield} ) ) {
-        $info->{$sortfield} =
-          TWiki::Render::renderFormFieldArg( $meta, $sortfield );
+        $info->{$sortfield} = displayFormField( $meta, $sortfield );
     }
 
     return $info;
@@ -1258,6 +1239,37 @@ sub _getTextAndMeta {
         $text =~ s/%TOPIC%/$topic/gos;
     }
     return ( $meta, $text );
+}
+
+=pod
+
+---++ StaticMethod displayFormField( $meta, $args ) -> $text
+
+Parse the arguments to a $formfield specification and extract
+the relevant formfield from the given meta data.
+
+   * =args= string containing name of form field
+
+In addition to the name of a field =args= can be appended with a commas
+followed by a string format (\d+)([,\s*]\.\.\.)?). This supports the formatted
+search function $formfield and is used to shorten the returned string or a 
+hyphenated string.
+
+=cut
+
+sub displayFormField {
+    my( $meta, $args ) = @_;
+
+    my $name = $args;
+    my $breakArgs = '';
+    my @params = split( /\,\s*/, $args, 2 );
+    if( @params > 1 ) {
+        $name = $params[0] || '';
+        $breakArgs = $params[1] || 1;
+    }
+
+    return $meta->renderFormFieldForDisplay(
+        $name, '$value', { break => $breakArgs, protectdollar => 1 } );
 }
 
 # Returns the topic revision info of the base version,
@@ -1315,3 +1327,22 @@ sub _countPattern {
 }
 
 1;
+__DATA__
+# Module of TWiki Enterprise Collaboration Platform, http://TWiki.org/
+#
+# Copyright (C) 2000-2007 Peter Thoeny, peter@thoeny.org
+# and TWiki Contributors. All Rights Reserved. TWiki Contributors
+# are listed in the AUTHORS file in the root of this distribution.
+# NOTE: Please extend that file, not this notice.
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version. For
+# more details read LICENSE in the root of this distribution.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+#
+# As per the GPL, removal of this notice is prohibited.

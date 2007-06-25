@@ -275,6 +275,32 @@ sub populateMetaFromQueryData {
     return 1;
 }
 
+=pod
+
+---++ ObjectMethod renderForDisplay($format, $attrs) -> $html
+
+Render the field for display, under the control of $attrs.
+
+The following vars in $format are expanded:
+   $title - title of the form field
+   $value - expanded to the *protected* value of the form field
+
+The value is protected by TWiki::Render::protectFormFieldValue.
+
+=cut
+
+sub renderForDisplay {
+    my( $this, $format, $value, $attrs ) = @_;
+    ASSERT(!$attrs || ref($attrs) eq 'HASH') if DEBUG;
+
+    $value = TWiki::Render::protectFormFieldValue( $value, $attrs );
+
+    $format =~ s/\$title/$this->{title}/g;
+    $format =~ s/\$value/$value/g;
+
+    return $format;
+}
+
 1;
 __DATA__
 

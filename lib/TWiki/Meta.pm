@@ -1,21 +1,4 @@
-# Module of TWiki Enterprise Collaboration Platform, http://TWiki.org/
-#
-# Copyright (C) 2001-2007 Peter Thoeny, peter@thoeny.org
-# and TWiki Contributors. All Rights Reserved. TWiki Contributors
-# are listed in the AUTHORS file in the root of this distribution.
-# NOTE: Please extend that file, not this notice.
-#
-# This program is free software; you can redistribute it and/or
-# modify it under the terms of the GNU General Public License
-# as published by the Free Software Foundation; either version 2
-# of the License, or (at your option) any later version. For
-# more details read LICENSE in the root of this distribution.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-#
-# As per the GPL, removal of this notice is prohibited.
+# See bottom of file for license and copyright information
 
 =pod
 
@@ -571,42 +554,93 @@ sub getFormName {
 
 ---++ ObjectMethod renderFormForDisplay() -> $html
 
-Render the form contained in the meta for display. Does not require
-the form definition.
+Render the form contained in the meta for display.
 
 =cut
 
 sub renderFormForDisplay {
     my $this = shift;
 
-    my $templates = $this->{_session}->templates;
-    my $form = $this->get( 'FORM' );
+    my $fname = $this->getFormName();
 
-    return '' unless( $form );
+    require TWiki::Form;
+    return '' unless $fname;
 
-    $templates->readTemplate('formtables');
+    my $form = new TWiki::Form( $this->{_session}, $this->{_web}, $fname );
 
-    my $name = $form->{name};
+    if( $form ) {
+        return $form->renderForDisplay( $this );
+    } else {
+        return CGI::span({class => 'twikiAlert'},
+                         "Form definition '$fname' not found");
+    }
+}
 
-    my $text = $templates->expandTemplate('FORM:display:header');
+=pod
 
-	my $rowTemplate = $templates->expandTemplate('FORM:display:row');
-    my @fields = $this->find( 'FIELD' );
-    foreach my $field ( @fields ) {
-        my $fa = $field->{attributes} || '';
-        unless ( $fa =~ /H/ ) {
-            my $value = $field->{value};
-            $value = '&nbsp;' unless defined($value);
-            my $title = $field->{title} || $field->{name};
-            my $row = $rowTemplate;
-            $row =~ s/%A_TITLE%/$title/g;
-            $row =~ s/%A_VALUE%/$value/g;
-            $text .= $row;
+---++ ObjectMethod renderFormFieldForDisplay($name, $format, $attrs) -> $text
+
+Render a single formfield, using the $format. See
+TWiki::Form::FormField::renderForDisplay for a description of how the value
+is rendered.
+
+=cut
+
+sub renderFormFieldForDisplay {
+    my( $this, $name, $format, $attrs ) = @_;
+
+    my $value;
+    my $mf = $this->get( 'FIELD', $name );
+    unless( $mf ) {
+        # Not a valid field name, maybe it's a title.
+        require TWiki::Form;
+        $name = TWiki::Form::fieldTitle2FieldName( $name );
+        $mf = $this->get( 'FIELD', $name);
+    }
+    return $format unless $mf; # field not found
+
+    $value = $mf->{value};
+
+    my $fname = $this->getFormName();
+    if( $fname ) {
+        require TWiki::Form;
+        my $form = new TWiki::Form( $this->{_session}, $this->{_web}, $fname );
+        if( $form ) {
+            my $field = $form->getField( $name );
+            if( $field ) {
+                return $field->renderForDisplay( $format, $value, $attrs );
+            }
         }
     }
-    $text .= $templates->expandTemplate('FORM:display:footer');
-    $text =~ s/%A_TITLE%/$name/g;
-    return $text;
+    # Form or field wasn't found, do your best!
+    my $f = $this->get( 'FIELD', $name );
+    if( $f ) {
+        $format =~ s/\$title/$f->{title}/;
+        $value = TWiki::Render::protectFormFieldValue( $value, $attrs );
+        $format =~ s/\$value/$value/;
+    }
+    return $format;
 }
 
 1;
+
+__DATA__
+
+Module of TWiki Enterprise Collaboration Platform, http://TWiki.org/
+
+Copyright (C) 2001-2007 Peter Thoeny, peter@thoeny.org
+and TWiki Contributors. All Rights Reserved. TWiki Contributors
+are listed in the AUTHORS file in the root of this distribution.
+NOTE: Please extend that file, not this notice.
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version. For
+more details read LICENSE in the root of this distribution.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+As per the GPL, removal of this notice is prohibited.
