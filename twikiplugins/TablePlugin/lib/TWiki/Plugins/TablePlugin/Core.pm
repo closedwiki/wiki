@@ -730,7 +730,6 @@ sub _addStylesToHead {
     if ( $cssAttrs{tableBorder} ) {
         my $tableBorderWidth = $cssAttrs{tableBorder} || 0;
         my $attr = 'border-width:' . $tableBorderWidth . 'px;';
-        $attr .= 'border-style:solid;';
         push( @styles, "$selector {$attr}" );
     }
 
