@@ -1,0 +1,68 @@
+---+!! !AutoCompletePlugin
+<!--
+One line description, required for extensions repository catalog.
+    * Set SHORTDESCRIPTION = Provides an Autocomplete input field based on Yahoo's User Interface Library
+-->
+This plugin allows you to create an autocomplete input field based on Yahoo's User Interface Library.
+
+All this plugin does is implement Arthur Clemens' TWiki:Plugins/AutoCompleteAddOn as a plugin, which allows users to provide an autocomplete text box using the =%<nop>AUTOCOMPLETE%= syntax, and also in %TWIKIWEB%.TWikiForms (shown below).
+
+<img src="%ATTACHURLPATH%/AutoCompletePluginScreenshot.png" alt="screenshot.png" />
+
+%TOC%
+
+---++ Usage
+
+Before you can use this plugin, you need to set up some data for the autocomplete. An example of this can be found at Sandbox.AutoCompletePluginTestData.
+
+---+++ In Topics and Templates
+
+This plugin expands the =%<nop>AUTOCOMPLETE{...}%= variable, which takes the parameters described in %TOPIC%#Parameters.
+
+---+++ In !TWikiForms
+
+To use this plugin in %TWIKIWEB%.TWikiForms, create a form template as descibed in %TWIKIWEB%.TWikiForms#Defining_a_Form. This plugin adds the =autocomplete= type of field. To pass the parameters required by the plugin, place them in the =Values= column. An example is shown below:
+
+| *Name* | *Type* | *Size* | *Values* | *Tooltip message* | *Attributes* |
+| Username | autocomplete | 25em | datatopic="Sandbox.AutoCompletePluginTestData" datasection="usernames" delimchar="," itemformat="item[0] + ' (' + item[1] + ')'" | |  | 
+
+You can use the same attributes as you would in topics, except =name=, =size=, =value= and =formname=, as these are already provided by the form definition.
+
+---+++ Parameters
+
+| *Parameter* | *Comment* | *Default* | *Example* |
+| =name= | A unique name for the textfield | required | =name="users"= |
+| =datatopic= | The topic with data. Should be formatted as comma-separated string, or as an array of arrays (see Sandbox.AutoCompletePluginTestData#usernames for an example). Use with =datasection=. | required | =datatopic="Sandbox.AutoCompletePluginTestData"= |
+| =datasection | The topic section with data. Use with =datatopic=. | required | =datasection="usernames"= |
+| =size= | The width of the input field in em or px. | =20em= | =size="20em" or size="200px"= |
+| =value= | Default value of the input field | none | =value="%TOPIC%"= |
+| =formname= | Name of the form which the input field is part of | none | =form="userlist"= |
+| =itemformat= | The format of an item string in the autocomplete list. Use if the autocomplete list should display different names than the input field - for instance with full person names. The javascript input argument is =item=. | =item= | =itemformat="item[0] + ' (' + item[1] + ')'"= |
+| =delimchar= | Used to accept multiple delimeted queries. | none | =delimchar=","= |
+
+---++ Installation Instructions
+
+%$INSTALL_INSTRUCTIONS%
+
+---++ Plugin Files
+
+   | *File:* | *Description:* |
+%$MANIFEST%
+
+---++ Plugin Info
+
+|  Plugin Author(s): | TWiki:Main.AndrewRJones |
+|  Copyright: | &copy; 2007, TWiki:Main.AndrewRJones |
+|  License: | [[http://www.gnu.org/licenses/gpl.html][GPL (Gnu General Public License)]] |
+|  Plugin Version: | %$VERSION% |
+|  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  14277 | Bugs:Item4301 - Initial release |
+|  Dependencies: | %$DEPENDENCIES% |
+|  [[TWiki:Plugins/Benchmark][Benchmarks]]: | %TWIKIWEB%.GoodStyle nn%, %TWIKIWEB%.FormattedSearch nn%, AutoCompletePlugin nn% |
+|  Plugin Home: | http://twiki.org/cgi-bin/view/Plugins/AutoCompletePlugin |
+|  Feedback: | http://twiki.org/cgi-bin/view/Plugins/AutoCompletePluginDev |
+|  Appraisal: | http://twiki.org/cgi-bin/view/Plugins/AutoCompletePluginAppraisal |
+
+__Related Topics:__ %TWIKIWEB%.TWikiPlugins, %TWIKIWEB%.DeveloperDocumentationCategory, %TWIKIWEB%.AdminDocumentationCategory, %TWIKIWEB%.TWikiPreferences
+
+<!-- Do _not_ attempt to edit this topic; it is auto-generated. Please add comments/questions/remarks to the feedback topic on twiki.org instead. -->
