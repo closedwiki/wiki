@@ -133,25 +133,25 @@ sub _parseParameters {
     $tmp = $params{tableborder};
     if ( defined $tmp && $tmp ne '' ) {
         $tableBorder = $tmp;
-        $cssAttrs{tableBorder} = $tableBorder;
+        $cssAttrs{tableBorder} = $tableBorder if $useCss;
     }
 
     $tmp = $params{tableframe};
     if ( defined $tmp && $tmp ne '' ) {
         $tableFrame = $tmp;
-        $cssAttrs{tableFrame} = $tableFrame;
+        $cssAttrs{tableFrame} = $tableFrame if $useCss;
     }
 
     $tmp = $params{tablerules};
     if ( defined $tmp && $tmp ne '' ) {
         $tableRules = $tmp;
-        $cssAttrs{tableRules} = $tableRules;
+        $cssAttrs{tableRules} = $tableRules if $useCss;
     }
 
     $tmp = $params{cellpadding};
     if ( defined $tmp && $tmp ne '' ) {
         $cellPadding = $tmp;
-        $cssAttrs{cellPadding} = $cellPadding;
+        $cssAttrs{cellPadding} = $cellPadding if $useCss;
     }
 
     $tmp = $params{cellspacing};
@@ -162,31 +162,31 @@ sub _parseParameters {
     $tmp = $params{cellborder};
     if ( defined $tmp && $tmp ne '' ) {
         $cellBorder = $tmp;
-        $cssAttrs{cellBorder} = $cellBorder;
+        $cssAttrs{cellBorder} = $cellBorder if $useCss;
     }
 
     $tmp = $params{headeralign};
     if ( defined $tmp && $tmp ne '' ) {
         @headerAlign = split( /,\s*/, $tmp );
-        $cssAttrs{headerAlign} = @headerAlign;
+        $cssAttrs{headerAlign} = @headerAlign if $useCss;
     }
 
     $tmp = $params{dataalign};
     if ( defined $tmp && $tmp ne '' ) {
         @dataAlign = split( /,\s*/, $tmp );
-        $cssAttrs{dataAlign} = @dataAlign;
+        $cssAttrs{dataAlign} = @dataAlign if $useCss;
     }
 
     $tmp = $params{tablewidth};
     if ( defined $tmp && $tmp ne '' ) {
         $tableWidth = $tmp;
-        $cssAttrs{tableWidth} = $tableWidth;
+        $cssAttrs{tableWidth} = $tableWidth if $useCss;
     }
 
     $tmp = $params{columnwidths};
     if ( defined $tmp && $tmp ne '' ) {
         @columnWidths = split( /, */, $tmp );
-        $cssAttrs{columnWidths} = @columnWidths;
+        $cssAttrs{columnWidths} = @columnWidths if $useCss;
     }
 
     $tmp = $params{headerrows};
@@ -203,25 +203,25 @@ sub _parseParameters {
     $tmp = $params{valign};
     if ( defined $tmp && $tmp ne '' ) {
         $vAlign = $tmp if ( defined $tmp );
-        $cssAttrs{vAlign} = $vAlign;
+        $cssAttrs{vAlign} = $vAlign if $useCss;
     }
 
     $tmp = $params{datavalign};
     if ( defined $tmp && $tmp ne '' ) {
         $dataVAlign = $tmp if ( defined $tmp );
-        $cssAttrs{dataVAlign} = $dataVAlign;
+        $cssAttrs{dataVAlign} = $dataVAlign if $useCss;
     }
 
     $tmp = $params{headervalign};
     if ( defined $tmp && $tmp ne '' ) {
         $headerVAlign = $tmp if ( defined $tmp );
-        $cssAttrs{headerVAlign} = $headerVAlign;
+        $cssAttrs{headerVAlign} = $headerVAlign if $useCss;
     }
 
     my $tmpheaderbg = $params{headerbg};
     if ( defined $tmpheaderbg && $tmpheaderbg ne '' ) {
         $headerBg = $tmpheaderbg;
-        $cssAttrs{headerBg} = $headerBg;
+        $cssAttrs{headerBg} = $headerBg if $useCss;
     }
 
     # only set headerbgsorted color if it is defined in %TABLE{}% attributes
@@ -229,23 +229,23 @@ sub _parseParameters {
     $tmp = $params{headerbgsorted};
     if ( defined $tmp && $tmp ne '' ) {
         $headerBgSorted = $tmp;
-        $cssAttrs{headerBgSorted} = $headerBgSorted;
+        $cssAttrs{headerBgSorted} = $headerBgSorted if $useCss;
     }
     elsif ( defined $tmpheaderbg ) {
         $headerBgSorted = $tmpheaderbg;
-        $cssAttrs{headerBgSorted} = $headerBgSorted;
+        $cssAttrs{headerBgSorted} = $headerBgSorted if $useCss;
     }
 
     $tmp = $params{headercolor};
     if ( defined $tmp && $tmp ne '' ) {
         $headerColor = $tmp if ( defined $tmp );
-        $cssAttrs{headerColor} = $headerColor;
+        $cssAttrs{headerColor} = $headerColor if $useCss;
     }
 
     my $tmpdatabg = $params{databg};
     if ( defined $tmpdatabg && $tmpdatabg ne '' ) {
         @dataBg = split( /,\s*/, $tmpdatabg );
-        $cssAttrs{dataBg} = @dataBg;
+        $cssAttrs{dataBg} = @dataBg if $useCss;
     }
 
     # only set databgsorted color if it is defined in %TABLE{}% attributes
@@ -253,17 +253,17 @@ sub _parseParameters {
     $tmp = $params{databgsorted};
     if ( defined $tmp && $tmp ne '' ) {
         @dataBgSorted = split( /,\s*/, $tmp );
-        $cssAttrs{dataBgSorted} = @dataBgSorted;
+        $cssAttrs{dataBgSorted} = @dataBgSorted if $useCss;
     }
     elsif ( defined $tmpdatabg ) {
         @dataBgSorted = split( /,\s*/, $tmpdatabg );
-        $cssAttrs{dataBgSorted} = @dataBgSorted;
+        $cssAttrs{dataBgSorted} = @dataBgSorted if $useCss;
     }
 
     $tmp = $params{datacolor};
     if ( defined $tmp && $tmp ne '' ) {
         @dataColor = split( /,\s*/, $tmp ) if ( defined $tmp );
-        $cssAttrs{dataColor} = @dataColor;
+        $cssAttrs{dataColor} = @dataColor if $useCss;
     }
 
     $tmp = $params{id};
@@ -727,7 +727,7 @@ sub _addStylesToHead {
     }
 
     # tableborder
-    {
+    if ( $cssAttrs{tableBorder} ) {
         my $tableBorderWidth = $cssAttrs{tableBorder} || 0;
         my $attr = 'border-width:' . $tableBorderWidth . 'px;';
         $attr .= 'border-style:solid;';
@@ -735,7 +735,7 @@ sub _addStylesToHead {
     }
 
     # cellborder
-    {
+    if ( $cssAttrs{cellBorder} ) {
         my $cellBorderWidth = $cssAttrs{cellBorder} || 0;
         my $attr = 'border-width:' . $cellBorderWidth . 'px;';
         push( @styles, "$selector td {$attr}" );
