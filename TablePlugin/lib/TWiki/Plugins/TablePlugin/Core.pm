@@ -1055,7 +1055,7 @@ sub emitTable {
     my $dataColorCount = 0;
 
     foreach my $row (@curTable) {
-        my $rowtext  = "\n\t";
+        my $rowtext  = '';
         my $colCount = 0;
 
         # keep track of header cells: if all cells are header cells, do not
@@ -1267,7 +1267,7 @@ sub emitTable {
             next if ( $type eq 'Y' );
             my $fn = 'CGI::' . $type;
             no strict 'refs';
-            $rowtext .= &$fn( $attr, " $cell " );
+            $rowtext .= "\n\t\t" . &$fn( $attr, " $cell " );
             use strict 'refs';
         }    # foreach my $fcell ( @$row )
 
@@ -1297,8 +1297,9 @@ sub emitTable {
             $trClassName =
               _appendRowNumberCssClass( $trClassName, 'dataColor', $modRowNum );
         }
-        my $rowHTML = CGI::Tr( { class => $trClassName }, $rowtext );
-
+        $rowtext .= "\n\t";
+        my $rowHTML = "\n\t" . CGI::Tr( { class => $trClassName }, $rowtext );
+        
         $isHeaderRow = ( $headerCellCount == $colCount );
         my $isFooterRow = ( ( $numberOfRows - $rowCount ) <= $footerRows );
 
@@ -1321,11 +1322,11 @@ sub emitTable {
         else {
             $dataColorCount++;
         }
-        $text .= $currTablePre . $rowHTML . "\n";
+        $text .= $currTablePre . $rowHTML;
         $rowCount++;
     }    # foreach my $row ( @curTable )
 
-    $text .= $currTablePre . CGI::end_table() . "\n";
+    $text .= $currTablePre . "\n" . CGI::end_table() . "\n";
     _setDefaults();
     return $text;
 }
