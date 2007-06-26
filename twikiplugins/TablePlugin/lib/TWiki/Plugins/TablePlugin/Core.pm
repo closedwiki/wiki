@@ -678,7 +678,7 @@ sub _addStylesToHead {
     if ( !$didWriteDefaultStyle ) {
         my $id       = 'default';
         my $selector = '.twikiTable';
-        my $attr     = 'margin:0 0 0 .25em; vertical-align:text-bottom;';
+        my $attr     = 'padding-left:.3em; vertical-align:text-bottom;';
         push( @styles, ".tableSortIcon img {$attr}" );
 
         if ($cellPadding) {
@@ -697,7 +697,7 @@ sub _addStylesToHead {
     my $selector = '.twikiTable' . '#' . $id;
 
     # tablerules
-    if ( $cssAttrs{tableRules} ) {
+    if ( defined $cssAttrs{tableRules} ) {
         if ( $cssAttrs{tableRules} eq 'all' ) {
             my $attr = 'border-style:solid;';
             push( @styles, "$selector td {$attr}" );
@@ -725,16 +725,49 @@ sub _addStylesToHead {
             push( @styles, "$selector td {$attr}" );
         }
     }
+    
+    # tableframe 
+    if ( defined $cssAttrs{tableFrame} ) {
+        my $attr = '';
+        if ( $cssAttrs{tableFrame} eq 'void' ) {
+            $attr = 'border-style:none;';
+        }
+        if ( $cssAttrs{tableFrame} eq 'above' ) {
+            $attr = 'border-style:solid none none none;';
+        }
+        if ( $cssAttrs{tableFrame} eq 'below' ) {
+            $attr = 'border-style:none none solid none;';
+        }
+        if ( $cssAttrs{tableFrame} eq 'lhs' ) {
+            $attr = 'border-style:none none none solid;';
+        }
+        if ( $cssAttrs{tableFrame} eq 'rhs' ) {
+            $attr = 'border-style:none solid none none;';
+        }
+        if ( $cssAttrs{tableFrame} eq 'hsides' ) {
+            $attr = 'border-style:solid none solid none;';
+        }
+        if ( $cssAttrs{tableFrame} eq 'vsides' ) {
+            $attr = 'border-style:none solid none solid;';
+        }
+        if ( $cssAttrs{tableFrame} eq 'box' ) {
+            $attr = 'border-style:solid;';
+        }
+        if ( $cssAttrs{tableFrame} eq 'border' ) {
+            $attr = 'border-style:solid;';
+        }
+        push( @styles, "$selector {$attr}" );
+    }
 
     # tableborder
-    if ( $cssAttrs{tableBorder} ) {
+    if ( defined $cssAttrs{tableBorder} ) {
         my $tableBorderWidth = $cssAttrs{tableBorder} || 0;
         my $attr = 'border-width:' . $tableBorderWidth . 'px;';
         push( @styles, "$selector {$attr}" );
     }
 
     # cellborder
-    if ( $cssAttrs{cellBorder} ) {
+    if ( defined $cssAttrs{cellBorder} ) {
         my $cellBorderWidth = $cssAttrs{cellBorder} || 0;
         my $attr = 'border-width:' . $cellBorderWidth . 'px;';
         push( @styles, "$selector td {$attr}" );
@@ -742,32 +775,32 @@ sub _addStylesToHead {
     }
 
     # tablewidth
-    if ( $cssAttrs{tableWidth} ) {
+    if ( defined $cssAttrs{tableWidth} ) {
         my $attr = 'width:' . $cssAttrs{tableWidth} . ';';
         push( @styles, "$selector {$attr}" );
     }
 
     # valign
-    if ( $cssAttrs{vAlign} ) {
+    if ( defined $cssAttrs{vAlign} ) {
         my $attr = 'vertical-align:' . $cssAttrs{vAlign} . ';';
         push( @styles, "$selector td {$attr}" );
         push( @styles, "$selector th {$attr}" );
     }
 
     # headerVAlign
-    if ( $cssAttrs{headerVAlign} ) {
+    if ( defined $cssAttrs{headerVAlign} ) {
         my $attr = 'vertical-align:' . $cssAttrs{headerVAlign} . ';';
         push( @styles, "$selector th {$attr}" );
     }
 
     # dataVAlign
-    if ( $cssAttrs{dataVAlign} ) {
+    if ( defined $cssAttrs{dataVAlign} ) {
         my $attr = 'vertical-align:' . $cssAttrs{dataVAlign} . ';';
         push( @styles, "$selector td {$attr}" );
     }
 
     # headerbg
-    if ( $cssAttrs{headerBg} ) {
+    if ( defined $cssAttrs{headerBg} ) {
         unless ( $cssAttrs{headerBg} =~ /none/i ) {
             my $attr = 'background-color:' . $cssAttrs{headerBg} . ';';
             push( @styles, "$selector th {$attr}" );
@@ -775,7 +808,7 @@ sub _addStylesToHead {
     }
 
     # headerbgsorted
-    if ( $cssAttrs{headerBgSorted} ) {
+    if ( defined $cssAttrs{headerBgSorted} ) {
         unless ( $cssAttrs{headerBgSorted} =~ /none/i ) {
             my $attr = 'background-color:' . $cssAttrs{headerBgSorted} . ';';
             push( @styles, "$selector th.twikiSortedAscendingCol {$attr}" );
@@ -784,7 +817,7 @@ sub _addStylesToHead {
     }
 
     # headercolor
-    if ( $cssAttrs{headerColor} ) {
+    if ( defined $cssAttrs{headerColor} ) {
         my $attr = 'color:' . $cssAttrs{headerColor} . ';';
         push( @styles, "$selector th {$attr}" );
         push( @styles, "$selector th a:link {$attr}" );
@@ -802,7 +835,7 @@ sub _addStylesToHead {
     }
 
     # databg (array)
-    if ( $cssAttrs{dataBg} ) {
+    if ( defined $cssAttrs{dataBg} ) {
         unless ( $cssAttrs{dataBg} =~ /none/i ) {
             my $count = 0;
             foreach (@dataBg) {
@@ -816,7 +849,7 @@ sub _addStylesToHead {
     }
 
     # databgsorted (array)
-    if ( $cssAttrs{dataBgSorted} ) {
+    if ( defined $cssAttrs{dataBgSorted} ) {
         unless ( $cssAttrs{dataBgSorted} =~ /none/i ) {
             my $count = 0;
             foreach (@dataBgSorted) {
@@ -831,7 +864,7 @@ sub _addStylesToHead {
     }
 
     # datacolor (array)
-    if ( $cssAttrs{dataColor} ) {
+    if ( defined $cssAttrs{dataColor} ) {
         unless ( $cssAttrs{dataColor} =~ /none/i ) {
             my $count = 0;
             foreach (@dataColor) {
@@ -846,7 +879,7 @@ sub _addStylesToHead {
     }
 
     # columnwidths
-    if ( $cssAttrs{columnWidths} ) {
+    if ( defined $cssAttrs{columnWidths} ) {
         my $count = 0;
         foreach (@columnWidths) {
             my $colSelector = 'twikiTableCol' . $count;
@@ -859,7 +892,7 @@ sub _addStylesToHead {
     }
 
     # headeralign
-    if ( $cssAttrs{headerAlign} ) {
+    if ( defined $cssAttrs{headerAlign} ) {
         if ( scalar @headerAlign == 1 ) {
             my $align = $headerAlign[0];
             my $attr  = 'text-align:' . $align . ';';
@@ -878,7 +911,7 @@ sub _addStylesToHead {
     }
 
     # dataAlign
-    if ( $cssAttrs{dataAlign} ) {
+    if ( defined $cssAttrs{dataAlign} ) {
         if ( scalar @dataAlign == 1 ) {
             my $align = $dataAlign[0];
             my $attr  = 'text-align:' . $align . ';';
@@ -899,7 +932,7 @@ sub _addStylesToHead {
     # cellspacing : no good css equivalent; use table tag attribute
 
     # cellpadding
-    if ( $cssAttrs{cellPadding} ) {
+    if ( defined $cssAttrs{cellPadding} ) {
         my $attr = 'padding:' . $cssAttrs{cellPadding} . 'px;';
         push( @styles, "$selector td {$attr}" );
         push( @styles, "$selector th {$attr}" );
@@ -1307,7 +1340,7 @@ sub emitTable {
 
            # this makes one tfoot element per header row due to the line by line
            # nature of this parser - which might be a good thing..
-            $rowHTML = CGI::tfoot($rowHTML);
+            $rowHTML = "\n" . CGI::tfoot($rowHTML . "\n");
         }
         elsif ($isHeaderRow) {
 
