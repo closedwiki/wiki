@@ -2,7 +2,7 @@
 
 %{ These templates define the tables used to display attachments. }%
 
-%TMPL:DEF{"commonattachtableattributes"}%tablerules="rows" valign="middle" dataalign="center,left,left,right,left,left, left,center" datavalign="top" headercolor="#0066cc" databg="#ffffff" headerbg="#ffffff" headerbgsorted="#eeeeee" databgsorted="#f5f5f5" %TMPL:END%
+%TMPL:DEF{"commonattachtableattributes"}%valign="middle" dataalign="center,left,left,right,left,left,left,center" datavalign="top" headercolor="#0066cc" databg="#ffffff" headerbg="#ffffff" headerbgsorted="#eeeeee" databgsorted="#f5f5f5" %TMPL:END%
 
 %TMPL:DEF{"topicattachmentwisty"}%%TWISTY{id="topicattachmentslist" firststart="show" mode="div" remember="on" prefix="<h4 style='margin:0; border:none;'>" link="%MAKETEXT{"Attachments"}%" showimgleft="%ICONURLPATH{toggleopen}%"
 hideimgleft="%ICONURLPATH{toggleclose}%" suffix="<span id='attachTableAttachmentCount'></span></h4>"}%%TMPL:END%
