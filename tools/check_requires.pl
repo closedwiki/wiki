@@ -11,7 +11,7 @@
 # problems.
 #
 my $trace = 0;
-my @files = grep { !m#/(CPAN|Configure|Upgrade)/# } split(/\n/, `find ./TWiki -name '*.pm' -print`);
+my @files = grep { !m#/CPAN/# } split(/\n/, `find ./TWiki -name '*.pm' -print`);
 my @modules = @files;
 @modules = sort { length($a) < length($b) }
   map { s/\.pm$//; s#^\./##; s#/#::#g; $_ } @modules;
