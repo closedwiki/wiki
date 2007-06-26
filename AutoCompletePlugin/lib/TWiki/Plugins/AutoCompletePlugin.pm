@@ -68,6 +68,7 @@ sub renderFormFieldForEditHandler {
     $params{name} = $name;
     $params{size} = $size;
     $params{value} = $value;
+    $params{class} = 'twikiInputField twikiEditFormTextField';
 
     return _createTextfield(\%params);
 
@@ -115,12 +116,12 @@ sub _createTextfield {
 
     my $textfield = CGI::textfield( { id => $params->{name} . 'Input',
                                       name => $params->{name},
-                                      class => 'twikiInputField twikiEditFormTextField autoCompleteInput',
+                                      class => $params->{class} . 'autoCompleteInput',
                                       value => $params->{value} } );
 
     my $results = '<div id="' . $params->{name} . 'Results" class="autoCompleteResults"></div>';
 
-    return ($js . "\n" . $textfield . "\n" . $results);
+    return ($js . $textfield . "\n" . $results);
 
 }
 

@@ -26,7 +26,12 @@ To use this plugin in %TWIKIWEB%.TWikiForms, create a form template as descibed 
 | *Name* | *Type* | *Size* | *Values* | *Tooltip message* | *Attributes* |
 | Username | autocomplete | 25em | datatopic="Sandbox.AutoCompletePluginTestData" datasection="usernames" delimchar="," itemformat="item[0] + ' (' + item[1] + ')'" | |  | 
 
-You can use the same attributes as you would in topics, except =name=, =size=, =value= and =formname=, as these are already provided by the form definition.
+You can use many of same attributes as you would in topics, except the following:
+   * =name=
+   * =size=
+   * =value=
+   * =class=
+   * =formname=
 
 ---+++ Parameters
 
@@ -36,6 +41,7 @@ You can use the same attributes as you would in topics, except =name=, =size=, =
 | =datasection | The topic section with data. Use with =datatopic=. | required | =datasection="usernames"= |
 | =size= | The width of the input field in em or px. | =20em= | =size="20em" or size="200px"= |
 | =value= | Default value of the input field | none | =value="%TOPIC%"= |
+| =class= | Name of css class to add to the input field | none | =class="twikiInputField"= |
 | =formname= | Name of the form which the input field is part of | none | =form="userlist"= |
 | =itemformat= | The format of an item string in the autocomplete list. Use if the autocomplete list should display different names than the input field - for instance with full person names. The javascript input argument is =item=. | =item= | =itemformat="item[0] + ' (' + item[1] + ')'"= |
 | =delimchar= | Used to accept multiple delimeted queries. | none | =delimchar=","= |
@@ -56,7 +62,7 @@ You can use the same attributes as you would in topics, except =name=, =size=, =
 |  License: | [[http://www.gnu.org/licenses/gpl.html][GPL (Gnu General Public License)]] |
 |  Plugin Version: | %$VERSION% |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  14280 | Bugs:Item4304 - Various bug fixes and enhancements |
+|  14282 | Bugs:Item4304 - Various bug fixes and enhancements |
 |  14277 | Bugs:Item4301 - Initial release |
 |  Dependencies: | %$DEPENDENCIES% |
 |  [[TWiki:Plugins/Benchmark][Benchmarks]]: | %TWIKIWEB%.GoodStyle nn%, %TWIKIWEB%.FormattedSearch nn%, AutoCompletePlugin nn% |
