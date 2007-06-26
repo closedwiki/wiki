@@ -20,7 +20,7 @@
 %IF{"defined sortdirection and $ sortdirection != ''" then='<input type="hidden" name="sortdirection" value="%URLPARAM{"sortdirection" default="%sortdirection%" encode="url"}%" />'}%<nop>
 <div class="twikiLeft blogPostViewOptionsFilter">
 <strong>%MAKETEXT{"Limit to:"}%</strong>%BR%
-<select name="limit" onchange="document.forms.blogPostCategorySelection.submit()">
+<select class="twikiSelect" name="limit" onchange="document.forms.blogPostCategorySelection.submit()">
 %IF{"defined limit and $ limit != '' and $ limit != 'no_limit'" then='<option selected>%URLPARAM{"limit" default="%limit%"}%</option><option disabled value="">-----</option>'}%
 <option %IF{"defined limit and $ limit = ''" then='selected'}% value="no_limit">%MAKETEXT{"No limit"}%</option>'}%
 <option>10</option>
@@ -31,15 +31,15 @@
 </div>
 <div class="twikiLeft blogPostViewOptionsFilter">
 <strong>%MAKETEXT{"Category:"}%</strong> <noautolink><a class="blogPostAddOnViewOptionsSubscribeLink" title='%IF{"defined category and $ category != ''" then="%MAKETEXT{"RSS newsfeed: subscribe to blog posts in category [_1]" args="%URLPARAM{"category" encode="entity"}%"}%" else="%MAKETEXT{"RSS newsfeed: subscribe to blog posts in all categories"}%"}%' href='%SCRIPTURL{"view"}%/%BASEWEB%/WebRss?search=%ENCODE{"[T]opicType.*value\=.*(BlogPost);[C]ategory.*value\=.*(%URLPARAM{"category"}%)" type="url"}%;regex=on;casesensitive=on;excludetopic=BlogPostTemplate,BlogPost;limit=16;scope=text'>%MAKETEXT{"Subscribe"}%</a></noautolink>%BR%
-<select name="category" onchange="document.forms.blogPostCategorySelection.submit()">
+<select class="twikiSelect" name="category" onchange="document.forms.blogPostCategorySelection.submit()">
 %IF{"defined category and $ category != ''" then='<option selected>%URLPARAM{"category" default="%category%"}%</option><option disabled value="">-----</option>'"}%
 <option %IF{"defined category and $ category = ''" then='selected'}% value="">%MAKETEXT{"All categories"}%</option>
 %SEARCH{"   *\s*.*?" topic="BlogCategory" type="regex" multiple="on" casesensitive="on" nonoise="on" format="<option>$pattern(.*   \*\s([^\n]*).*)</option>"}%
 </select>
 </div>
 <br class="twikiClear" />
-</form>
 </div>
+</form>
 <br class="twikiClear" />
 <div class="blogPostAddOnViewOptionsDivider"></div>
 </div>
@@ -50,5 +50,7 @@ document.getElementById("noJsUpdateButton").style.display = 'none';
 /* ]]> */
 </script>
 <div class="blogPostAddOnOverview">
-%SEARCH{"[T]opicType.*value\=.*(BlogPost)%IF{"defined category and $ category != ''" then=";[C]ategory.*value\=.*(%URLPARAM{"category" encode="entity" default="%category%"}%)"}%" web="%WEB%" nonoise="on" excludetopic="*Template" type="regex" casesensitive="on" format="<div class=\"blogPostAddOnItem\"><h3>[[$web.$topic#BlogPosts][$formfield(Title)]]</h3><div class=\"twikiGrayText twikiSmallish blogPostAddOnHeaderInfo\">%MAKETEXT{"[_1] by [_2] in [_3]" args="$createdate, $formfield(Author), [[%SCRIPTURL{view}%/%BASEWEB%/%BASETOPIC%?category=<nop>$formfield(Category);sort=<nop>%URLPARAM{"sort" encode="url"}%;limit=%URLPARAM{"limit"}%#BlogPosts][<nop>$formfield(Category)]]"}%</div><div class=\"blogPostAddOnSummary\">$summary</div>$percnt$nopSEARCH{$quot$topicComments$quot scope=$quottopic$quot nonoise=$quoton$quot format=$quot<img src='$percntICONURL{bubble}$percnt' width='16' height='16' border='0' alt='' /> <span class='twikiSmallish'><a href='$percntSCRIPTURL{view}$percnt/$web/$topic?r=$dollarrev#BlogPostPrompt'>Latest comment</a> <span class='twikiGrayText'>by [[$dollarwikiusername][$dollarwikiname]] - $dollardate</span></span>$quot}$percnt</div>"  order="%IF{"defined sort" then="%URLPARAM{"sort" encode="url" default="%sort%"}%" else="created"}%" reverse="%IF{"defined sortdirection" then="%URLPARAM{"sortdirection" encode="url" default="%sortdirection%"}%" else=""}%" limit="%IF{"defined limit" then="%URLPARAM{"limit" encode="url" default="%limit%"}%" else="all"}%" "}%
+%SEARCH{"[T]opicType.*value\=.*(BlogPost)%IF{"defined category and $ category != ''" then=";[C]ategory.*value\=.*(%URLPARAM{"category" encode="entity" default="%category%"}%)"}%" web="%WEB%" nonoise="on" excludetopic="*Template" type="regex" casesensitive="on" format="<div class=\"blogPostAddOnItem\">
+---+++!! [[$web.$topic#BlogPosts][$formfield(Title)]]
+<div class=\"twikiGrayText twikiSmallish blogPostAddOnHeaderInfo\">%MAKETEXT{"[_1] by [_2] in [_3]" args="$createdate, $formfield(Author), [[%SCRIPTURL{view}%/%BASEWEB%/%BASETOPIC%?category=<nop>$formfield(Category);sort=<nop>%URLPARAM{"sort" encode="url"}%;limit=%URLPARAM{"limit"}%#BlogPosts][<nop>$formfield(Category)]]"}%</div><div class=\"blogPostAddOnSummary\">$summary</div>$percnt$nopSEARCH{$quot$topicComments$quot scope=$quottopic$quot nonoise=$quoton$quot format=$quot<span class='blogPostAddOnLatestComment'><span class='blogPostAddOnLatestCommentCount'>Comments: $dollarcount(.*?(#CommentDate).*)</span> - <a href='$percntSCRIPTURL{view}$percnt/$web/$topic?r=$dollarrev#BlogPostPrompt'>latest comment by $percntSPACEOUT{$quot<nop>$dollarwikiname$quot}$percnt - $dollardate</a></span>$quot}$percnt</div>"  order="%IF{"defined sort" then="%URLPARAM{"sort" encode="url" default="%sort%"}%" else="created"}%" reverse="%IF{"defined sortdirection" then="%URLPARAM{"sortdirection" encode="url" default="%sortdirection%"}%" else=""}%" limit="%IF{"defined limit" then="%URLPARAM{"limit" encode="url" default="%limit%"}%" else="all"}%" "}%
 </div>%STOPINCLUDE%

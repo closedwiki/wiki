@@ -22,7 +22,6 @@
 }
 .blogPostAddOnViewOptions select,
 #noJsUpdateButton {
-	font-size:.86em; /* use em instead of % for consistent size */
 	margin:0 .25em 0 0;
 }
 .blogPostViewOptionsFilter {
@@ -39,6 +38,10 @@ a.blogPostAddOnViewOptionsSubscribeLink:visited {
 .blogPostAddOnViewOptionsDivider {
 	padding:0 0 .5em 0;
 }
+.blogPostAddOnLatestComment {
+	font-size:94%;
+}
+.blogPostAddOnLatestCommentCount {}
 /* list of posts */
 .blogPostAddOnOverview {
 	padding:0 1em;
@@ -60,7 +63,7 @@ a.blogPostAddOnViewOptionsSubscribeLink:visited {
 	text-decoration:none;
 }
 .blogPostAddOnSummary {
-	margin:.5em 0 0 0;
+	margin:.5em 0;
 }
 /* post */
 h1.blogAddOnTitle {
