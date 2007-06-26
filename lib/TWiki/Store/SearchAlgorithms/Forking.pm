@@ -60,7 +60,9 @@ sub search {
     } else {
         $program =~ s/%DET{(.*?)\|.*?}%/$1/g;
     }
-    $searchString =~ s/^(.*)$/\\b$1\\b/g if $options->{wordboundaries};
+    if ($options->{wordboundaries} ) {
+        $searchString = '\b'.quotemeta( $searchString ).'\b';
+    }
 
     # process topics in sets, fix for Codev.ArgumentListIsTooLongForSearch
     my $maxTopicsInSet = 512; # max number of topics for a grep call
@@ -78,7 +80,7 @@ sub search {
         # and 1 otherwise. But the exit status is 2 if an error occurred,
         # unless the -q or --quiet or --silent option is used and a selected
         # line is found."
-        throw Error::Simple($program.' returned an error')
+        throw Error::Simple("$program Grep for '$searchString' returned error")
           if $exit > 1;
         $matches .= $m unless $exit;
         @set = splice( @take, 0, $maxTopicsInSet );

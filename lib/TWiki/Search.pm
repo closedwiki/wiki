@@ -17,8 +17,6 @@ require TWiki;
 require TWiki::Sandbox;
 require TWiki::Render; # SMELL: expensive
 
-my $emptySearch = 'something.Very/unLikelyTo+search-for;-)';
-
 my $queryParser;
 
 BEGIN {
@@ -193,8 +191,12 @@ sub _tokensFromSearchString {
     }
     elsif ( $type eq 'literal' || $type eq 'query' ) {
 
-        # Literal search (old style) or query
-        $tokens[0] = $searchString;
+        if( $searchString eq '' ) {
+            # Legacy: empty search returns nothing
+        } else {
+            # Literal search (old style) or query
+            $tokens[0] = $searchString;
+        }
 
     }
     else {
@@ -465,12 +467,12 @@ sub searchWeb {
     my $sortOrder = $params{order}   || '';
     my $revSort        = TWiki::isTrue( $params{reverse} );
     my $scope          = $params{scope} || '';
-    my $searchString   = $params{search} || $emptySearch;
+    my $searchString   = $params{search} || '';
     my $separator      = $params{separator};
     my $template       = $params{template} || '';
     my $topic          = $params{topic} || '';
     my $type           = $params{type} || '';
-    
+
     my $wordBoundaries = 0;
     if ( $type eq 'word' ) {
         # 'word' is exactly the same as 'keyword', except we will be searching
@@ -478,7 +480,7 @@ sub searchWeb {
         $type = 'keyword';
         $wordBoundaries = 1;
     }
-    
+
     my $webName        = $params{web} || '';
     my $date           = $params{date} || '';
     my $recurse        = $params{'recurse'} || '';
@@ -646,7 +648,6 @@ sub searchWeb {
     # Generate 'Search:' part showing actual search string used
     unless ($noSearch) {
         my $searchStr = $searchString;
-        $searchStr = '' if ( $searchString eq $emptySearch );
         $searchStr  =~ s/&/&amp;/go;
         $searchStr  =~ s/</&lt;/go;
         $searchStr  =~ s/>/&gt;/go;
