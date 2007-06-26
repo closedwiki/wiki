@@ -18,9 +18,9 @@ package TWiki::Plugins::AutoCompletePlugin;
 
 use strict;
 
-use vars qw( $VERSION $RELEASE $SHORTDESCRIPTION $debug $pluginName $NO_PREFS_IN_TOPIC );
+use vars qw( $VERSION $RELEASE $SHORTDESCRIPTION $debug $pluginName $NO_PREFS_IN_TOPIC $id $doneYui $doneStyle @loadedData);
 
-$VERSION = '$Rev$';
+$VERSION = '$Rev: 14277 (24 Jun 2007) $';
 $RELEASE = 'TWiki-4.2';
 $SHORTDESCRIPTION = 'Provides an Autocomplete input field based on Yahoo\'s User Interface Library';
 
@@ -37,6 +37,12 @@ sub initPlugin {
         TWiki::Func::writeWarning( "Version mismatch between $pluginName and Plugins.pm" );
         return 0;
     }
+
+    # global variables
+    $id = 0;
+    $doneYui = 0;
+    $doneStyle = 0;
+    @loadedData = ();
 
     TWiki::Func::registerTagHandler( 'AUTOCOMPLETE', \&_handleTag );
 
@@ -69,6 +75,7 @@ sub renderFormFieldForEditHandler {
 
 # =========================
 sub _createTextfield {
+
     my $params = shift;
 
     unless( $params->{name} ){
@@ -77,45 +84,89 @@ sub _createTextfield {
     unless( TWiki::Func::topicExists( undef, $params->{datatopic} ) ){
         return _returnError( "$params->{datatopic} does not exist." );
     }
+    unless( $params->{datasection} ){
+        return _returnError( "The 'datasection' parameter is required." );
+    }
 
-    _addJavascript(
-        $params->{name},
-        $params->{datatopic},
-        $params->{datasection},
-        $params->{itemformat} || 'item',
-        $params->{delimchar} || 'null'
-    );
+    # unique id
+    $id ++;
+
+    my $size = $params->{size} || '20em';
+    unless( $size =~ m/em|px/ ){
+        $size .= 'em';
+    }
+
     _addYUI();
     _addStyle(
-        $params->{name},
-        $params->{size} || '20em',
+        $size,
         $params->{formname}
+    );
+
+    my $dataVar = _addData (
+        $params->{datatopic},
+        $params->{datasection}
+    );
+    my $js = _getJavascript(
+        $params->{name},
+        $dataVar,
+        $params->{itemformat} || 'item',
+        $params->{delimchar} || 'null'
     );
 
     my $textfield = CGI::textfield( { id => $params->{name} . 'Input',
                                       name => $params->{name},
-                                      class => 'twikiInputField twikiEditFormTextField',
+                                      class => 'twikiInputField twikiEditFormTextField autoCompleteInput',
                                       value => $params->{value} } );
 
-    my $results = '<div id="' . $params->{name} . 'Results"></div>';
+    my $results = '<div id="' . $params->{name} . 'Results" class="autoCompleteResults"></div>';
 
-    return ($textfield . "\n" . $results);
+    return ($js . "\n" . $textfield . "\n" . $results);
 
 }
 
 # =========================
-# adds the javascript that makes it all work
-sub _addJavascript {
-    my ( $name, $datatopic, $datasection, $itemformat, $delemchar ) = @_;
+# adds the data to the head
+# beofre it does this, it checks the data has not already been loaded on this topic
+# if it has, will use the same one again
+# this is good for performance if the same autocomplete is used multiple times on one topic (it does happen :-)
+sub _addData {
+    my ( $datatopic, $datasection ) = @_;
+
+    my $dataVar = $datatopic;
+    $dataVar =~ s/\.//;
+    $dataVar .= "_$datasection";
+
+    if(! grep( /$dataVar/, @loadedData ) ){
+        # data has not been loaded before
+
+        push( @loadedData, $dataVar );
+
+        my $data = TWiki::Func::expandCommonVariables(
+            "%INCLUDE{\"$datatopic\" section=\"$datasection\"}%"
+        );
+
+        my $out = '<script type="text/javascript">' . "\n"
+                . "var $dataVar = [$data]; \n"
+                . '</script>';
+
+        TWiki::Func::addToHEAD( $pluginName . '_data' . $id, $out );
+    }
+
+    return $dataVar;
+}
+
+# the javascript that makes it all work
+sub _getJavascript {
+    my ( $name, $dataVar, $itemformat, $delemchar ) = @_;
 
     my $Input = $name . 'Input';
     my $Results = $name . 'Results';
 
     my $js = <<"EOT";
 <script type="text/javascript">
-    twiki.Event.addLoadEvent(initAutoComplete, true);
-    function initAutoComplete() {
-        var topics = [%INCLUDE{"$datatopic" section="$datasection"}%];
+    YAHOO.util.Event.addListener(window, "load", initAutoComplete$id);
+    function initAutoComplete$id() {
+        var topics = $dataVar;
         var oACDS = new YAHOO.widget.DS_JSArray(topics);
         var topicAC = new YAHOO.widget.AutoComplete("$Input", "$Results", oACDS);
         topicAC.queryDelay = 0;
@@ -131,13 +182,16 @@ sub _addJavascript {
 </script>
 EOT
 
-    TWiki::Func::addToHEAD($pluginName . '_js', $js);
+    return $js;
 }
 
 # adds the YUI Javascript files from header
 # these are from the YahooUserInterfaceContrib, if installed
 # or directly from the internet (See http://developer.yahoo.com/yui/articles/hosting/)
 sub _addYUI {
+
+    return if ( $doneYui == 1 );
+    $doneYui = 1;
 
     my $yui;
         
@@ -157,10 +211,14 @@ sub _addYUI {
 
 # adds style sheet
 sub _addStyle {
-    my ( $name, $size, $formName ) = @_;
 
-    my $Input = '#' . $name . 'Input';
-    my $Results = '#' . $name . 'Results';
+    return if ( $doneStyle == 1 );
+    $doneStyle = 1;
+
+    my ( $size, $formName ) = @_;
+
+    my $Input = '.autoCompleteInput';
+    my $Results = '.autoCompleteResults';
 
     my $style = <<"EOT";
 <style type="text/css" media="all">

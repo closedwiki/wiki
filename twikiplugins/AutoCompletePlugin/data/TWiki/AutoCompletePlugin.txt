@@ -56,6 +56,7 @@ You can use the same attributes as you would in topics, except =name=, =size=, =
 |  License: | [[http://www.gnu.org/licenses/gpl.html][GPL (Gnu General Public License)]] |
 |  Plugin Version: | %$VERSION% |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  14280 | Bugs:Item4304 - Various bug fixes and enhancements |
 |  14277 | Bugs:Item4301 - Initial release |
 |  Dependencies: | %$DEPENDENCIES% |
 |  [[TWiki:Plugins/Benchmark][Benchmarks]]: | %TWIKIWEB%.GoodStyle nn%, %TWIKIWEB%.FormattedSearch nn%, AutoCompletePlugin nn% |
