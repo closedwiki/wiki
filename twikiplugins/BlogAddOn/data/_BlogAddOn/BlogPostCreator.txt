@@ -37,12 +37,12 @@ function canSubmit() {
 </div>
 <div class="twikiFormStep">
 *%MAKETEXT{"Category:"}%* %MAKETEXT{"(you may choose later)"}% %BR%
-<select name="Category">
+<select name="Category" class="twikiSelect">
 <option>%MAKETEXT{"Select..."}%</option>
 %SEARCH{"   *\s*.*?" topic="BlogCategory" type="regex" multiple="on" casesensitive="on" nonoise="on" format="<option>$pattern(.*   \*\s*([^\n]*).*)</option>"}%
 </select> <span class="twikiSmallish">[[BlogCategory][%MAKETEXT{"Add categories..."}%]]</span>
 </div>
-<div class="twikiFormStep twikiLast">
+<div class="twikiFormStep">
 <input type="hidden" name="Title" />
 <input type="hidden" name="nonwikiword" value="on" />
 <input type="hidden" name="onlywikiname" value="off" />
