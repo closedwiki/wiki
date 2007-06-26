@@ -293,6 +293,7 @@ sub renderForDisplay {
     my( $this, $format, $value, $attrs ) = @_;
     ASSERT(!$attrs || ref($attrs) eq 'HASH') if DEBUG;
 
+    require TWiki::Render;
     $value = TWiki::Render::protectFormFieldValue( $value, $attrs );
 
     $format =~ s/\$title/$this->{title}/g;

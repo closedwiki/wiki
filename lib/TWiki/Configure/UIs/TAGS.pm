@@ -21,6 +21,7 @@ use strict;
 use base 'TWiki::Configure::UI';
 
 use TWiki::Configure::Type;
+use TWiki::Configure::Value;
 
 sub ui {
     my %modules;

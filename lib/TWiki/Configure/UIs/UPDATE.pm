@@ -15,14 +15,12 @@
 #
 # As per the GPL, removal of this notice is prohibited.
 package TWiki::Configure::UIs::UPDATE;
+use base 'TWiki::Configure::UI';
 
 use strict;
 
 use TWiki::Configure::UI;
-
-use base 'TWiki::Configure::UI';
-
-use TWiki::Configure::Type;
+use TWiki::Configure::TWikiCfg;
 
 sub ui {
     my ($this, $root, $valuer, $updated) = @_;

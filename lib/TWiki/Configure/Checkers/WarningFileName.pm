@@ -15,12 +15,12 @@
 #
 # As per the GPL, removal of this notice is prohibited.
 package TWiki::Configure::Checkers::WarningFileName;
+use base 'TWiki::Configure::Checker';
 
 use strict;
 
 use TWiki::Configure::Checker;
-
-use base 'TWiki::Configure::Checker';
+use TWiki::Configure::Load;
 
 sub check {
     my $this = shift;

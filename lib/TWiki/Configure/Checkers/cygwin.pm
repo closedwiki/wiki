@@ -14,15 +14,17 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #
 # As per the GPL, removal of this notice is prohibited.
-use strict;
-
 package TWiki::Configure::Checkers::cygwin;
 
+use strict;
+
 sub check {
+    my $this = shift;
+
     # Get Cygwin perl's package version number
-    my $pkg = `perl -v`; 
-    if ($?) { 
-        return TWiki::Configure::Checker::WARN(<<HERE);
+    my $pkg = `perl -v`;
+    if ($?) {
+        return $this->WARN(<<HERE);
 Cannot identify perl package version - cygcheck or grep not installed
 HERE
     } else {

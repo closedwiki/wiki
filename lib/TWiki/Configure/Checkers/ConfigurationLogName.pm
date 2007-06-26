@@ -18,9 +18,10 @@ package TWiki::Configure::Checkers::ConfigurationLogName;
 
 use strict;
 
-use TWiki::Configure::Checker;
-
 use base 'TWiki::Configure::Checker';
+
+use TWiki::Configure::Checker;
+use TWiki::Configure::Load;
 
 sub check {
     my $this = shift;

@@ -17,14 +17,13 @@
 #
 # Plug-in module for finding and handling plugins
 package TWiki::Configure::PLUGINS;
+use base 'TWiki::Configure::Pluggable';
 
 use strict;
 
 use TWiki::Configure::Pluggable;
-
-use base 'TWiki::Configure::Pluggable';
-
 use TWiki::Configure::Type;
+use TWiki::Configure::Value;
 
 my $scanner = TWiki::Configure::Type::load('SELECTCLASS');
 

@@ -66,7 +66,6 @@ use strict;
 use Data::Dumper;
 
 use TWiki::Configure::Section;
-use TWiki::Configure::Checker;
 use TWiki::Configure::Value;
 use TWiki::Configure::Pluggable;
 use TWiki::Configure::Item;

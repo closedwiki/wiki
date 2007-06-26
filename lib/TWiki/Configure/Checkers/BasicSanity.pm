@@ -48,6 +48,7 @@ sub ui {
     }
 
     # Get default settings by reading .spec files
+    require TWiki::Configure::Load;
     TWiki::Configure::Load::readDefaults();
 
     $TWiki::defaultCfg = _copy( \%TWiki::cfg );

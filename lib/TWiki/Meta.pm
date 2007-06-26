@@ -616,6 +616,7 @@ sub renderFormFieldForDisplay {
     my $f = $this->get( 'FIELD', $name );
     if( $f ) {
         $format =~ s/\$title/$f->{title}/;
+        require TWiki::Render;
         $value = TWiki::Render::protectFormFieldValue( $value, $attrs );
         $format =~ s/\$value/$value/;
     }

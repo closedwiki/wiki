@@ -16,8 +16,9 @@
 # As per the GPL, removal of this notice is prohibited.
 #
 package TWiki::Configure::UIs::Root;
-
 use base 'TWiki::Configure::UIs::Section';
+
+use TWiki::Configure::UI;
 
 # Visit the nodes in a tree of configuration items, and generate
 # their UIs.
