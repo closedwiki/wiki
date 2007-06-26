@@ -80,15 +80,15 @@
 | 2 | def | stu | 31 Dec 1999 |
 | 3 | ghi | pqr | 15 Jan 2006 |
 
----++ =headerbgsorted=
-%TABLE{databg="#ffc" databgsorted="#fc3" headerbg="#903" headerbgsorted="#600" initsort="1"}%
+---++ headerbgsorted
+%TABLE{databg="#ffffcc" databgsorted="#ffcc33" headerbg="#990033" headerbgsorted="#660000" initsort="1"}%
 | *One* | *Two* | *Three* | *Four* |
 | 1 | abc | vwx | 01 Jan 1900 |
 | 2 | def | stu | 31 Dec 1999 |
 | 3 | ghi | pqr | 15 Jan 2006 |
 
 
----++ =initsort=
+---++ initsort
 
 initdirection="up", column 1
 %TABLE{sort="on" initsort="1" initdirection="up"}%
@@ -111,11 +111,11 @@ no initdirection specified, column 3
 | 2 | def | stu | 31 Dec 1999 |
 | 3 | ghi | pqr | 15 Jan 2006 |
 
----++ =headercolor=
+---++ headercolor
 <verbatim>
-%TABLE{headercolor="#900" headerbg="#eee" headerbgsorted="#ddd"}%
+%TABLE{headercolor="#990000" headerbg="#eeeeee" headerbgsorted="#dddddd"}%
 </verbatim>
-%TABLE{headercolor="#900" headerbg="#eee" headerbgsorted="#ddd"}%
+%TABLE{headercolor="#990000" headerbg="#eeeeee" headerbgsorted="#dddddd"}%
 | *One* | *Two* | *Three* | *Four* |
 | 1 | abc | vwx | 01 Jan 1900 |
 | 2 | def | stu | 31 Dec 1999 |
@@ -129,17 +129,17 @@ no initdirection specified, column 3
 | *Header 2* | Morel iptul domor tis ales, duit ausel vem eul iriure domor eu, feugias numma.  |
 | *Header 3* | Neque porro quisquam est qui dolorem ipsum dolor sit amet, consectetur, adipisci velit.  |
 
----++ =datacolor=
+---++ datacolor
 <verbatim>
-%TABLE{datacolor="#f00,#f93"}%
+%TABLE{datacolor="#ff0000,#ff9933"}%
 </verbatim>
-%TABLE{datacolor="#f00,#f93"}%
+%TABLE{datacolor="#ff0000,#ff9933"}%
 | *One* | *Two* | *Three* | *Four* |
 | 1 | abc | vwx | 01 Jan 1900 |
 | 2 | def | stu | 31 Dec 1999 |
 | 3 | ghi | pqr | 15 Jan 2006 |
 
----++ =tableborder=
+---++ tableborder
 ---+++ tableborder="5"
 <verbatim>
 %TABLE{tableborder="5"}%
@@ -160,7 +160,7 @@ no initdirection specified, column 3
 | 2 | def | stu | 31 Dec 1999 |
 | 3 | ghi | pqr | 15 Jan 2006 |
 
----++ =cellpadding=
+---++ cellpadding
 <verbatim>
 %TABLE{cellpadding="15"}%
 </verbatim>
@@ -170,7 +170,7 @@ no initdirection specified, column 3
 | 2 | def | stu | 31 Dec 1999 |
 | 3 | ghi | pqr | 15 Jan 2006 |
 
----++ =cellspacing=
+---++ cellspacing
 <verbatim>
 %TABLE{cellspacing="15"}%
 </verbatim>
@@ -180,7 +180,7 @@ no initdirection specified, column 3
 | 2 | def | stu | 31 Dec 1999 |
 | 3 | ghi | pqr | 15 Jan 2006 |
 
----++ =cellborder=
+---++ cellborder
 ---+++ cellborder="0"
 <verbatim>
 %TABLE{cellborder="0" tableborder="0"}%
@@ -209,7 +209,7 @@ no initdirection specified, column 3
 |2  |def|  stu  |  31 Dec 1999|
 |3 xxxxxxxxxxxxxx  |ghi xxxxxxxx  |  pqr  |  xxxxxxxxx 15 Jan 2006|
 
----+++ =valign=
+---+++ valign
 <verbatim>
 %TABLE{valign="top"}%
 </verbatim>
@@ -246,7 +246,7 @@ no initdirection specified, column 3
 | 2 | def | Sed ut perspiciatis, unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam eaque ipsa, quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt, explicabo. | 31 Dec 1999 |
 | 3 | ghi | pqr | 15 Jan 2006 |
 
----+++ =headervalign=
+---+++ headervalign
 <verbatim>
 %TABLE{headervalign="top"}%
 </verbatim>
@@ -283,7 +283,7 @@ no initdirection specified, column 3
 | 2 | def | Sed ut perspiciatis, unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam eaque ipsa, quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt, explicabo. | 31 Dec 1999 |
 | 3 | ghi | pqr | 15 Jan 2006 |
 
----+++ =datavalign=
+---+++ datavalign
 <verbatim>
 %TABLE{datavalign="top"}%
 </verbatim>
@@ -320,7 +320,7 @@ no initdirection specified, column 3
 | 2 | def | Sed ut perspiciatis, unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam eaque ipsa, quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt, explicabo. | 31 Dec 1999 |
 | 3 | ghi | pqr | 15 Jan 2006 |
 
----+++ Combined =headervalign= and =datavalign=
+---+++ Combined headervalign and datavalign
 <verbatim>
 %TABLE{headervalign="bottom" datavalign="top"}%
 </verbatim>
@@ -330,7 +330,7 @@ no initdirection specified, column 3
 | 2 | def | Sed ut perspiciatis, unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam eaque ipsa, quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt, explicabo. | 31 Dec 1999 |
 | 3 | ghi | pqr | 15 Jan 2006 |
 
----+++ =headeralign=
+---+++ headeralign
 
 <verbatim>
 %TABLE{headeralign="left"}%
@@ -368,7 +368,7 @@ no initdirection specified, column 3
 | 2 | def | Sed ut perspiciatis, unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam eaque ipsa, quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt, explicabo. | 31 Dec 1999 |
 | 3 | ghi | pqr | 15 Jan 2006 |
 
----++++ Mixed =headeralign=
+---++++ Mixed headeralign
 
 <verbatim>
 %TABLE{headeralign="right,left,justify,right"}%
@@ -379,7 +379,7 @@ no initdirection specified, column 3
 | 2222 | defdefdefdefdefdefdefdef | Sed ut perspiciatis, unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam eaque ipsa, quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt, explicabo. Sed ut perspiciatis, unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam eaque ipsa, quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt, explicabo. | 31 Dec 1999 |
 | 33333333 | ghi | pqr | 15 Jan 2006 |
 
----+++ =dataalign=
+---+++ dataalign
 
 <verbatim>
 %TABLE{dataalign="left"}%
@@ -417,7 +417,7 @@ no initdirection specified, column 3
 | 2 | def | Sed ut perspiciatis, unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam eaque ipsa, quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt, explicabo. Sed ut perspiciatis, unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam eaque ipsa, quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt, explicabo. | 31 Dec 1999 |
 | 3 | ghi | pqr | 15 Jan 2006 |
 
----++++ Mixed =dataalign=
+---++++ Mixed dataalign
 <verbatim>
 %TABLE{dataalign="right,left,justify,right"}%
 </verbatim>
@@ -427,8 +427,8 @@ no initdirection specified, column 3
 | 2222 | defdefdefdefdefdefdefdef | Sed ut perspiciatis, unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam eaque ipsa, quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt, explicabo. Sed ut perspiciatis, unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam eaque ipsa, quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt, explicabo. | 31 Dec 1999 |
 | 33333333 | ghi | pqr | 15 Jan 2006 |
 
----++ =tablerules=
----+++ =none=
+---++ tablerules
+---+++ none
 <verbatim>
 %TABLE{tablerules="none" headerbg="#ffffff" headercolor="#ff0000"}%
 </verbatim>
@@ -438,7 +438,7 @@ no initdirection specified, column 3
 | 2 | def | stu | 31 Dec 1999 |
 | 3 | ghi | pqr | 15 Jan 2006 |
 
----+++ =groups=
+---+++ groups
 <verbatim>
 %TABLE{tablerules="groups" headerbg="#ffffff" headercolor="#ff0000"}%
 </verbatim>
@@ -449,7 +449,7 @@ no initdirection specified, column 3
 | 3 | ghi | pqr | 15 Jan 2006 |
 
 
----++++ With =footerrows=
+---++++ With footerrows
 <verbatim>
 %TABLE{footerrows="1" tablerules="groups" headerbg="#ffffff" headercolor="#ff0000"}%
 </verbatim>
@@ -460,7 +460,7 @@ no initdirection specified, column 3
 | 3 | ghi | pqr | 15 Jan 2006 |
 | *Footer row* ||||||
 
----+++ =cols=
+---+++ cols
 <verbatim>
 %TABLE{tablerules="cols"}%
 </verbatim>
@@ -470,7 +470,7 @@ no initdirection specified, column 3
 | 2 | def | stu | 31 Dec 1999 |
 | 3 | ghi | pqr | 15 Jan 2006 |
 
----+++ =rows=
+---+++ rows
 <verbatim>
 %TABLE{tablerules="rows"}%
 </verbatim>
@@ -480,7 +480,7 @@ no initdirection specified, column 3
 | 2 | def | stu | 31 Dec 1999 |
 | 3 | ghi | pqr | 15 Jan 2006 |
 
----+++ =all=
+---+++ all
 <verbatim>
 %TABLE{tablerules="all"}%
 </verbatim>
@@ -490,8 +490,8 @@ no initdirection specified, column 3
 | 2 | def | stu | 31 Dec 1999 |
 | 3 | ghi | pqr | 15 Jan 2006 |
 
----++ =tableframe=
----+++ =void=
+---++ tableframe
+---+++ void
 <verbatim>
 %TABLE{tableframe="void" tablerules="none" tableborder="4"}%
 </verbatim>
@@ -501,7 +501,7 @@ no initdirection specified, column 3
 | 2 | def | stu | 31 Dec 1999 |
 | 3 | ghi | pqr | 15 Jan 2006 |
 
----+++ =above=
+---+++ above
 <verbatim>
 %TABLE{tableframe="above" tablerules="none" tableborder="4"}%
 </verbatim>
@@ -511,7 +511,7 @@ no initdirection specified, column 3
 | 2 | def | stu | 31 Dec 1999 |
 | 3 | ghi | pqr | 15 Jan 2006 |
 
----+++ =below=
+---+++ below
 <verbatim>
 %TABLE{tableframe="below" tablerules="none" tableborder="4"}%
 </verbatim>
@@ -521,7 +521,7 @@ no initdirection specified, column 3
 | 2 | def | stu | 31 Dec 1999 |
 | 3 | ghi | pqr | 15 Jan 2006 |
 
----+++ =lhs=
+---+++ lhs
 <verbatim>
 %TABLE{tableframe="lhs" tablerules="none" tableborder="4"}%
 </verbatim>
@@ -531,7 +531,7 @@ no initdirection specified, column 3
 | 2 | def | stu | 31 Dec 1999 |
 | 3 | ghi | pqr | 15 Jan 2006 |
 
----+++ =rhs=
+---+++ rhs
 <verbatim>
 %TABLE{tableframe="rhs" tablerules="none" tableborder="4"}%
 </verbatim>
@@ -541,7 +541,7 @@ no initdirection specified, column 3
 | 2 | def | stu | 31 Dec 1999 |
 | 3 | ghi | pqr | 15 Jan 2006 |
 
----+++ =hsides=
+---+++ hsides
 <verbatim>
 %TABLE{tableframe="hsides" tablerules="none" tableborder="4"}%
 </verbatim>
@@ -551,7 +551,7 @@ no initdirection specified, column 3
 | 2 | def | stu | 31 Dec 1999 |
 | 3 | ghi | pqr | 15 Jan 2006 |
 
----+++ =vsides=
+---+++ vsides
 <verbatim>
 %TABLE{tableframe="vsides" tablerules="none" tableborder="4"}%
 </verbatim>
@@ -561,7 +561,7 @@ no initdirection specified, column 3
 | 2 | def | stu | 31 Dec 1999 |
 | 3 | ghi | pqr | 15 Jan 2006 |
 
----+++ =box=
+---+++ box
 <verbatim>
 %TABLE{tableframe="box" tablerules="none" tableborder="4"}%
 </verbatim>
@@ -571,7 +571,7 @@ no initdirection specified, column 3
 | 2 | def | stu | 31 Dec 1999 |
 | 3 | ghi | pqr | 15 Jan 2006 |
 
----+++ =border=
+---+++ border
 <verbatim>
 %TABLE{tableframe="border" tablerules="none" tableborder="4"}%
 </verbatim>
@@ -582,7 +582,7 @@ no initdirection specified, column 3
 | 3 | ghi | pqr | 15 Jan 2006 |
 
 
----++ =tablewidth=
+---++ tablewidth
 ---+++ in percentages
 <verbatim>
 %TABLE{tablewidth="50%"}%
@@ -603,7 +603,7 @@ no initdirection specified, column 3
 | 2 | def | stu | 31 Dec 1999 |
 | 3 | ghi | pqr | 15 Jan 2006 |
 
----++ =columnwidths=
+---++ columnwidths
 ---+++ in percentage
 <verbatim>
 %TABLE{columnwidths="10%,20%,30%,40%"}%
@@ -624,7 +624,7 @@ no initdirection specified, column 3
 | 2 | def | stu | 31 Dec 1999 |
 | 3 | ghi | pqr | 15 Jan 2006 |
 
----++ =headerrows=
+---++ headerrows
 <verbatim>
 %TABLE{headerrows="2"}%
 </verbatim>
@@ -635,7 +635,7 @@ no initdirection specified, column 3
 | 2 | def | stu | 31 Dec 1999 |
 | 3 | ghi | pqr | 15 Jan 2006 |
 
----++ =footerrows=
+---++ footerrows
 <verbatim>
 %TABLE{footerrows="1"}%
 </verbatim>
@@ -646,7 +646,7 @@ no initdirection specified, column 3
 | 3 | ghi | pqr | 15 Jan 2006 |
 | *Footer row* ||||||
 
----++ =id=
+---++ id
 <verbatim>
 %TABLE{id="myTestTable"}%
 </verbatim>
@@ -656,7 +656,7 @@ no initdirection specified, column 3
 | 2 | def | stu | 31 Dec 1999 |
 | 3 | ghi | pqr | 15 Jan 2006 |
 
----++ =summary=
+---++ summary
 <verbatim>
 %TABLE{summary="This is a summary"}%
 </verbatim>
@@ -666,7 +666,7 @@ no initdirection specified, column 3
 | 2 | def | stu | 31 Dec 1999 |
 | 3 | ghi | pqr | 15 Jan 2006 |
 
----++ =caption=
+---++ caption
 <verbatim>
 %TABLE{caption="This is a caption"}%
 </verbatim>
