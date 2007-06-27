@@ -97,9 +97,8 @@ sub _setDefaults {
     $tableId        = '';
     $tableSummary   = '';
     $tableCaption   = '';
-    %cssAttrs       = ();
     undef $initSort;
-
+    %cssAttrs       = ();
     _parseParameters( $pluginAttrs, 0 );
     _parseParameters( $prefsAttrs,  0 );    # Preferences setting
 }
@@ -113,7 +112,7 @@ sub _parseParameters {
     return '' unless ( $args =~ /\S/ );
 
     my %params = TWiki::Func::extractParameters($args);
-
+    
     # Defines which column to initially sort : ShawnBradford 20020221
     my $tmp = $params{initsort};
     $initSort = $tmp if ($tmp);
@@ -271,7 +270,7 @@ sub _parseParameters {
         $tableId = 'table' . $tmp;
     }
     else {
-        $tableId = 'table' . $tableCount;
+        $tableId = 'table' . ( $tableCount + 1 );
     }
     $cssAttrs{tableId} = $tableId;
 
@@ -1340,13 +1339,13 @@ sub emitTable {
 
            # this makes one tfoot element per header row due to the line by line
            # nature of this parser - which might be a good thing..
-            $rowHTML = "\n" . CGI::tfoot($rowHTML . "\n");
+            $rowHTML = "\n\t" . CGI::tfoot($rowHTML . "\n\t");
         }
         elsif ($isHeaderRow) {
 
            # this makes one thead element per header row due to the line by line
            # nature of this parser - which might be a good thing..
-            $rowHTML = CGI::thead($rowHTML);
+            $rowHTML = "\n\t" . CGI::thead($rowHTML . "\n\t");
 
             # reset data color count to start with first color after
             # each table heading
