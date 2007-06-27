@@ -126,9 +126,9 @@ The =chart= parameter defines the format of each bar in the bar chart that is ge
 | =$perc= | Expands to =100*$score/$sum= |
 | =$score= | Expands to the total number of votes cast for this option |
 
-   * The default =format= for a =select= is: =| $key | $item $prompt | $bars |=
+   * The default =format= for a =select= is: =| $key | $prompt | $bars |=
    * The default =chart= is =&lt;div>$bar(300) $option $perc% ($score)&lt;/div>=
-   * The default =format= for =stars= is: =| $key | $small&lt;br />&lt;small>Score: $score, My vote: $myLast, Total votes: $total&lt;/small> ||=
+   * The default =format= for =stars= is: =| $key | $small&lt;br />&lt;small>Score: $score, My vote: $mylast, Total votes: $sum&lt;/small> ||=
 
 The default =separator= is a newline.
 
@@ -168,6 +168,7 @@ The weighting topic applies to all votes in the scope of the =%<nop>VOTEPLUGIN_W
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | %$VERSION% |
 |  Change History: | &nbsp; | 
+|  27 Jun 2007: | Bugs:Item : abstracted out TWiki:Plugins.RatingContrib, and modified the code to be tolerant of forms within forms - TWiki:Main/CrawfordCurrie |
 |  24 Jun 2007: | Bugs:ItemItem4298: fixed secret switch. Item4200: added VarVOTE. - TWiki:Main/CrawfordCurrie |
 |  11 Jun 2007: | Bugs:Item4235 - removed excess newlines, fixed separator - TWiki:Main/CrawfordCurrie |
 |   8 Jun 2007: | Added =submit= - TWiki:Main/CrawfordCurrie |
