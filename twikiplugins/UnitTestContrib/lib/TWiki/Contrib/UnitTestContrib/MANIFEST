@@ -49,7 +49,6 @@ test/unit/TableRenderingTests.pm 0755
 test/unit/TemplatesTests.pm 0644
 test/unit/TimeTests.pm 0644
 test/unit/UserMappingTests.pm 0755
-test/unit/UsersTests.pm 0644
 test/unit/VariableTests.pm 0644
 test/unit/ViewParamSectionTests.pm 0755
 test/unit/ViewScriptTests.pm 0644
