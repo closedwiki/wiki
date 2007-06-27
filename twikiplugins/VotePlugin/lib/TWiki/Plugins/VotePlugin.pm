@@ -32,6 +32,7 @@ $SHORTDESCRIPTION = 'Simple way to count votes';
 sub initPlugin {
     my ($topic, $web) = @_;
     $isInitialized = 0;
+    require TWiki::Func;
     TWiki::Func::registerTagHandler('VOTE', \&handleVote);
     return 1;
 }

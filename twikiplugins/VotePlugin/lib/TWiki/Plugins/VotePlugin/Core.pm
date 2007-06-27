@@ -34,11 +34,6 @@ sub handleVote {
         $pubUrlPath = TWiki::Func::getPubUrlPath().'/'.TWiki::Func::getTwikiWebname().'/VotePlugin';
     }
 
-    TWiki::Func::addToHEAD('VotePlugin_STARS', <<HEAD);
-<link href="$pubUrlPath/voting.css" rel="stylesheet" type="text/css" media="screen" />
-<script type='text/javascript' src='$pubUrlPath/voting.js'></script>
-HEAD
-
     my $defaults = TWiki::Func::getPreferencesValue('VOTEPLUGIN_DEFAULTS')
       || '';
 
@@ -192,15 +187,25 @@ HEAD
         }
     }
 
-    # Do we need a submit button?
-    my $needSubmit = scalar(@prompts) > 1;
-
     my $act;
     if ($isOpen) {
         $act = TWiki::Func::getScriptUrl($web, $topic, 'view');
     } else {
         $act = TWiki::Func::getScriptUrl($web, $topic, 'viewauth');
     }
+
+    # Additional hidden parameters that accompany the form submission
+    my %hidden = (
+        vote_register => $id,
+        vote_isGlobal => $isGlobal,
+        vote_isSecret => $isSecret,
+        vote_isOpen => $isOpen,
+        vote_saveTo => $saveto,
+        vote_inTopic => "$web.$topic");
+
+    # Do we need a submit button?
+    my $needSubmit = scalar(@prompts) > 1;
+
     my @rows;
     foreach my $prompt (@prompts) {
         my $key = $prompt->{name};
@@ -249,29 +254,21 @@ HEAD
         }
     }
     my $result = join($separator, @rows);
-    if ($submit && $needSubmit) {
-        $result .= "\n".CGI::submit(
-            { name=> 'OK', value=>'OK',
-              style=>'color:green'});
-    }
     if ($submit) {
-        my $hiddens =
-          CGI::input({type=>'hidden',
-                      name=>'vote_register', value=>$id})
-        . CGI::input({type=>'hidden',
-                      name=>'vote_isGlobal', value=>$isGlobal})
-        . CGI::input({type=>'hidden',
-                      name=>'vote_isSecret', value=>$isSecret})
-        . CGI::input({type=>'hidden',
-                      name=>'vote_isOpen', value=>$isOpen})
-        . CGI::input({type=>'hidden',
-                      name=>'vote_saveTo', value=>$saveto})
-        . CGI::input({type=>'hidden',
-                      name=>'vote_inTopic', value=>"$web.$topic"});
-
-        $result = "<form id='$id' action='$act' method='post'>$hiddens$separator$result</form>";
+        my $hiddens = '';
+        while (my ($k, $v) = each %hidden) {
+            $hiddens .= CGI::input(
+                { type => 'hidden', name => $k, value => $v });
+        }
+        # Don't use CGI::form because it generates TML-busting newlines
+        $result = "<form id='$id' action='$act' method='post'>$hiddens$separator$result";
+        if ($needSubmit) {
+            $result .= $separator.CGI::submit(
+                { name=> 'OK', value=>'OK',
+                  style=>'color:green'});
+        }
+        $result = "$result$separator</form>";
     }
-
     return $result;
 }
 
@@ -546,48 +543,16 @@ sub showLineOfStars {
     $row =~ s/\$score/$mean/g;
     $row =~ s/\$perc/$perc/g;
     $row =~ s/\$mylast/$myLast/g;
-
-    my $size = ($row =~ /\$small/) ? 10 : 25;
-    my $style = $size < 25 ? ' small-star' : '';
-
-    my $lis = CGI::li(
-        {
-            class=>'current-rating',
-            style=>'width:'.($size * $mean).'px',
-        }, CGI::input(
-        {
-            type => 'hidden',
-            name => 'vote_data_'.$prompt->{name},
-            id => $form.'_'.$prompt->{name},
-            value => '0',
-        }));
-    if ($needSubmit) {
-        $lis .= CGI::li(
-            {
-                class=>'my-rating',
-                id => $prompt->{name}.'_rated',
-                style=>'width:0px; z-index:2',
-            }, '&nbsp;');
-    }
-
+    require TWiki::Contrib::RatingContrib;
+    my $eAttrs;
     if ($submit) {
-        foreach my $i (1..$max) {
-            $lis .= CGI::li(
-                CGI::a(
-                    {
-                        href=>"javascript:VotePlugin_clicked('$form',".
-                          "'$prompt->{name}', $i, ".
-                            ($needSubmit ? 'false' : 'true').", $size)",
-                        style=>'width:'.($size * $i).
-                          'px;z-index:'.($max - $i + 2),
-                    }, $i));
-        }
+        $eAttrs = {
+            onChange =>
+              "javascript: document.getElementById('$form').submit()" };
     }
-    my $ul = CGI::ul(
-        {
-            class=>'star-rating'.$style,
-            style=>'width:'.($max * $size).'px',
-        }, $lis);
+    my $ul = TWiki::Contrib::RatingContrib::renderRating(
+        'vote_data_'.$prompt->{name}, $max, $row =~ /\$small/, $mean, $eAttrs);
+
     $row =~ s/\$(small|large)/$ul/g;
 
     return $row;
