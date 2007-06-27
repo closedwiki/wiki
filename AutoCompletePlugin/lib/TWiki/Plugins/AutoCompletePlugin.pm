@@ -114,9 +114,17 @@ sub _createTextfield {
         $params->{delimchar} || 'null'
     );
 
+    my $class;
+
+    if( $params->{class} ){
+        $class = $params->{class} . ' autoCompleteInput';
+    } else {
+        $class = 'autoCompleteInput';
+    }
+
     my $textfield = CGI::textfield( { id => $params->{name} . 'Input',
                                       name => $params->{name},
-                                      class => $params->{class} . 'autoCompleteInput',
+                                      class => $class,
                                       value => $params->{value} } );
 
     my $results = '<div id="' . $params->{name} . 'Results" class="autoCompleteResults"></div>';
@@ -127,7 +135,7 @@ sub _createTextfield {
 
 # =========================
 # adds the data to the head
-# beofre it does this, it checks the data has not already been loaded on this topic
+# before it does this, it checks the data has not already been loaded on this topic
 # if it has, will use the same one again
 # this is good for performance if the same autocomplete is used multiple times on one topic (it does happen :-)
 sub _addData {
@@ -218,12 +226,19 @@ sub _addStyle {
 
     my ( $size, $formName ) = @_;
 
+    my $form;
+    if( $formName ){
+        $form = '#' . $formName;
+    } else {
+        $form = 'form';
+    }
+
     my $Input = '.autoCompleteInput';
     my $Results = '.autoCompleteResults';
 
     my $style = <<"EOT";
 <style type="text/css" media="all">
-$formName form {
+$form {
     position:relative;
 }
 $Input {
