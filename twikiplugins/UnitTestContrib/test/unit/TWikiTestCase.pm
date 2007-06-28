@@ -46,6 +46,7 @@ sub set_up {
 
     $this->{__EnvSafe} = {};
     foreach my $sym (%ENV) {
+        next unless defined($sym);
         $this->{__EnvSafe}->{$sym} = $ENV{$sym};
     }
 
