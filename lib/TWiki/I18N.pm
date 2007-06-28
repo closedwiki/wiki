@@ -178,6 +178,23 @@ sub new {
     return $this;
 }
 
+=begin twiki
+
+---++ ObjectMethod finish()
+Break circular references.
+
+=cut
+
+# Note to developers; please undef *all* fields in the object explicitly,
+# whether they are references or not. That way this method is "golden
+# documentation" of the live fields in the object.
+sub finish {
+    my $this = shift;
+    undef $this->{enabled_languages};
+    undef $this->{checked_enabled};
+    undef $this->{session};
+}
+
 =pod
 
 ---++ ObjectMethod maketext( $text ) -> $translation
