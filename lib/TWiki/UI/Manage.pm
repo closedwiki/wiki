@@ -200,7 +200,7 @@ sub _createWeb {
     my $opts = {
         # Set permissions such that only the creating user can modify the
         # web preferences
-        ALLOWTOPICCHANGE => $session->{users}->wikiName($user),
+        ALLOWTOPICCHANGE => $session->{users}->getWikiName($user),
         ALLOWTOPICRENAME => 'nobody',
     };
     foreach my $p ($query->param()) {
