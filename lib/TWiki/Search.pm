@@ -508,8 +508,10 @@ sub searchWeb {
 
     $type = 'regex' if ( $params{regex} );
 
-    # Filter the search string for security and untaint it
-    $searchString = _filterSearchString( $this, $searchString, $type );
+    if ($type ne 'query') {
+        # Filter the search string for security
+        $searchString = _filterSearchString( $this, $searchString, $type );
+    }
 
     my $mixedAlpha = $TWiki::regex{mixedAlpha};
     if ( defined($separator) ) {
