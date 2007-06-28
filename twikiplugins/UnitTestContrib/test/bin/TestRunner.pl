@@ -38,8 +38,11 @@ if ($ENV{TWIKI_ASSERTS}) {
 
 if ($ARGV[0] eq '-clean') {
     shift @ARGV;
-    `rm -rf $TWiki::cfg{DataDir}/Temp*`;
-    `rm -rf $TWiki::cfg{PubDir}/Temp*`;
+    require File::Path;
+    my @x = glob "$TWiki::cfg{DataDir}/Temp*";
+    File::Path::rmtree([@x]) if scalar(@x);
+    @x = glob "$TWiki::cfg{PubDir}/Temp*";
+    File::Path::rmtree([@x]) if scalar(@x);
 }
 
 testForFiles($TWiki::cfg{DataDir}.'/Temp*');
@@ -50,8 +53,8 @@ $testrunner->start(@ARGV);
 
 sub testForFiles {
     my $test = shift;
-    my $list = `ls $test 2> /dev/null`;
-    die "please remove $test to run tests\n" unless ($list eq '');
+    my @list = glob $test;
+    die "Please remove $test (or run with the -clean option) to run tests\n" if (scalar(@list));
 }
 
 1;

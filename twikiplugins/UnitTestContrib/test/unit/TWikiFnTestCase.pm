@@ -36,7 +36,7 @@ sub set_up {
     my $this = shift;
     $this->SUPER::set_up();
 
-    $TWiki::cfg{StoreImpl} = "RcsWrap";
+    $TWiki::cfg{StoreImpl} = "RcsLite";
     $TWiki::cfg{AutoAttachPubFiles} = 0;
     $TWiki::cfg{Register}{AllowLoginName} = 1;
     $TWiki::cfg{Htpasswd}{FileName} = "$TWiki::cfg{WorkingDir}/htpasswd";
@@ -115,8 +115,7 @@ sub registerUser {
         my $e = shift;
         $this->assert_str_equals("attention", $e->{template},$e->stringify());
         $this->assert_str_equals(
-            "thanks", $e->{def},
-            $e->stringify().`cat $TWiki::cfg{Htpasswd}{FileName}`);
+            "thanks", $e->{def}, $e->stringify());
     } catch TWiki::AccessControlException with {
         my $e = shift;
         $this->assert(0, $e->stringify);
