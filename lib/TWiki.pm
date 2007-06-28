@@ -47,6 +47,7 @@ with CGI accelerators such as mod_perl.
 use strict;
 use Assert;
 use Error qw( :try );
+use CGI;             # Always required to get the CGI object
 
 require 5.005;       # For regex objects and internationalisation
 
@@ -326,8 +327,6 @@ BEGIN {
     # Tell CGI.pm which charset we are using if not default
     if( defined $TWiki::cfg{Site}{CharSet} &&
           $TWiki::cfg{Site}{CharSet} !~ /^iso-?8859-?1$/io ) {
-        require CGI;
-        import CGI ();
         CGI::charset( $TWiki::cfg{Site}{CharSet} );
     }
 
