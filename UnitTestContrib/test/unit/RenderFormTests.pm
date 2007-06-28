@@ -7,34 +7,42 @@ use base qw(TWikiFnTestCase);
 use strict;
 
 use TWiki::Meta;
+use File::Temp;
 
 my $testtopic1 = "TestTopic1";
 my $testtopic2 = "TestTopic2";
+use vars qw( $codedir );
+
+BEGIN {
+    # create a fabby little type, just to make sure it gets called
+    $codedir = File::Temp::tempdir( CLEANUP => 1 );
+    mkdir("$codedir/TWiki") || die $!;
+    mkdir("$codedir/TWiki/Form") || die $!;
+    open(F, ">$codedir/TWiki/Form/Nuffin.pm") || die $!;
+
+    my $code = <<CODE;
+package TWiki::Form::Nuffin;
+use base 'TWiki::Form::FieldDefinition';
+
+sub renderForEdit {
+    return ('EXTRA', 'SWEET');
+}
+
+sub renderForDisplay {
+    return 'SOUR';
+}
+
+1;
+CODE
+    print F $code;
+    close(F) || die $!;
+    push(@INC, $codedir);
+}
 
 # Set up the test fixture
 sub set_up {
     my $this = shift;
     $this->SUPER::set_up();
-
-    # create a fabby little type, just to make sure it gets called
-    my $dir = File::Temp::tempdir( CLEANUP => 1 );
-    mkdir("$dir/TWiki");
-    mkdir("$dir/TWiki/Form");
-    open(F, ">$dir/TWiki/Form/Nuffin.pm");
-    print F <<HERE;
-    package TWiki::Form::Nuffin;
-    use base 'TWiki::Form::FieldDefinition';
-
-    sub renderForEdit {
-        return ('EXTRA', "SWEET");
-    }
-
-    sub renderForDisplay {
-        return "SOUR";
-    }
-    1;
-HERE
-    push(@INC, $dir);
 
     TWiki::Func::saveTopic( $this->{test_web}, "WebPreferences", undef, <<HERE );
    * Set WEBFORMS = InitializationForm

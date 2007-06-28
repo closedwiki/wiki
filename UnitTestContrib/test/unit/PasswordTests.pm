@@ -154,14 +154,14 @@ sub test_htpasswd_sha1 {
     if( $@ ) {
         my $mess = $@;
         $mess =~ s/\(\@INC contains:.*$//s;
-        print STDERR "\nSKIPPED SHA1 TESTS: $mess\n";
+        print STDERR "*** CANNOT RUN SHA1 TESTS: $mess\n";
         return;
     }
     eval 'use Digest::SHA1';
     if( $@ ) {
         my $mess = $@;
         $mess =~ s/\(\@INC contains:.*$//s;
-        print STDERR "\nSKIPPED SHA1 TESTS: $mess\n";
+        print STDERR "*** CANNOT RUN TESTS: $mess\n";
         return;
     }
 
@@ -177,7 +177,7 @@ sub detest_htpasswd_md5 {
     if( $@ ) {
         my $mess = $@;
         $mess =~ s/\(\@INC contains:.*$//s;
-        print STDERR "\nSKIPPED SHA1 TESTS: $mess\n";
+        print STDERR "*** CANNOT RUN SHA1 TESTS: $mess\n";
         return;
     }
 
@@ -201,7 +201,7 @@ sub test_htpasswd_apache {
     if( $@ ) {
         my $mess = $@;
         $mess =~ s/\(\@INC contains:.*$//s;
-        print STDERR "\nSKIPPED APACHE HTPASSWD TESTS: $mess\n";
+        print STDERR "*** CANNOT RUN APACHE HTPASSWD TESTS: $mess\n";
         return;
     }
 

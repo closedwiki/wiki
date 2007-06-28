@@ -28,7 +28,16 @@ sub RcsWrap {
 }
 
 sub fixture_groups {
-    return ( [ 'RcsLite', 'RcsWrap' ] );
+    my $groups = [ 'RcsLite' ];
+    eval {
+        `co -V`; # Check to see if we have co
+    };
+    if ($@ || $?) {
+        print STDERR "*** CANNOT RUN RcsWrap TESTS - NO COMPATIBLE co: $@\n";
+    } else {
+        push(@$groups, 'RcsWrap');
+    }
+    return ( $groups );
 }
 
 # Set up the test fixture

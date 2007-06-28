@@ -20,7 +20,32 @@ my $user = "TestUser1";
 
 my $rTopic = "TestTopic";
 my $twiki;
+my $class;
 
+sub RcsLite {
+    my $this = shift;
+    $TWiki::cfg{StoreImpl} = 'RcsLite';
+    $class = 'TWiki::Store::RcsLite';
+}
+
+sub RcsWrap {
+    my $this = shift;
+    $TWiki::cfg{StoreImpl} = 'RcsWrap';
+    $class = 'TWiki::Store::RcsWrap';
+}
+
+sub fixture_groups {
+    my $groups = [ 'RcsLite' ];
+    eval {
+        `co -V`; # Check to see if we have co
+    };
+    if ($@ || $?) {
+        print STDERR "*** CANNOT RUN RcsWrap TESTS - NO COMPATIBLE co: $@\n";
+    } else {
+        push(@$groups, 'RcsWrap');
+    }
+    return ( $groups );
+}
 
 sub set_up {
     my $this = shift;
@@ -67,8 +92,8 @@ sub test_mktmp {
 }
 
 # Tests reprev, for both Wrap and Lite
-sub verifyRepRev {
-    my ($this, $class) = @_;
+sub verify_RepRev {
+    my ($this) = @_;
     my $topic = "RcsRepRev";
 
     my $rcs = $class->new( $twiki, $testWeb, $topic, "" );
@@ -91,8 +116,8 @@ sub verifyRepRev {
     $this->assert_equals( "then this", $rcs->getRevision(2) );
 }
 
-sub verifyRepRev2839 {
-    my ($this, $class) = @_;
+sub verify_RepRev2839 {
+    my ($this) = @_;
     my $topic = "RcsRepRev";
 
     my $rcs = $class->new( $twiki, $testWeb, $topic, "" );
@@ -116,17 +141,18 @@ sub verifyRepRev2839 {
 }
 
 # Tests locking - Wrap only
-sub test_RcsWrapOnly_ciLocked {
+sub verify_RcsWrapOnly_ciLocked {
+
+    return unless $class =~ /RcsWrap/;
+
     my $this = shift;
     my $topic = "CiTestLockedTempDeleteMeItsOk";
     # create the fixture
     my $rcs = TWiki::Store::RcsWrap->new( $twiki, $testWeb, $topic, "" );
     $rcs->addRevisionFromText( "Shooby Dooby", "original", "BungditDin" );
-    # hack the lock so someone else has it
-    my $user = `whoami`;
-    chop($user);
+    # hack the lock
     my $vfile = $rcs->{file}.",v";
-    `co -f -q -l $vfile`;
+    `co -f -q -l $vfile`; # Only if we have co
     unlink("$topic.txt");
 
     # file is now locked by blocker_socker, save some new text
@@ -141,97 +167,148 @@ sub test_RcsWrapOnly_ciLocked {
     $this->assert_matches(qr/SheikAlot/s, $txt);
 }
 
-BEGIN {
-    my @simpleTests =
-      (
-       [ "a", "b\n", "c\n" ],
-       [ "a", "b", "a\n", "b", "a", "b\n","a\nb\n" ],
-       [ "a\n", "b" ],
-       [ "" ],
-       [ "", "a" ],
-       [ "", "a", "a\n", "a\n\n", "a\n\n\n" ],
-       [ "", "a", "a\n", "a\nb" ],
-       [ "", "a", "a\n", "a\nb", "a\nb\n" ],
-       [ "", "\n", "\n\n", "a", "a\n", "a\n\n", "\na","\n\na", "" ],
-       [ "a", "b", "a\n", "b", "a", "b\n","a\nb\n", "a\nc\n" ],
-       [ "one\n", "1\n2\n", "one\nthree\n4\n", "one\ntwo\nthree\n" ],
-       [ "three\nfour\n", "one\ntwo\nthree\n" ],
-       [ '@expand@\n', "strict;\n", "head 1.99;\n" ],
-       [ '@expand@', "strict;\n", "head 1.99;\n" ],
-       [ "a".chr(0xFF), "b".chr(0xFF) ]
-      );
-
-    my @diffTests =
-      (
-       [ "1\n", "2\n" ],
-       [ "\n", "1\n" ],
-       [ "1\n", "2\n" ],
-       [ "2\n", "1\n" ],
-       [ "1\n2\n3\n", "a\n1\n2\n3\nb\n" ],
-       [ "a\n1\n2\n3\nb\n", "1\n2\n3\n" ],
-       [ "1\n2\n3\n", "a\nb\n1\n2\n3\nb\nb\n" ],
-       [ "a\nb\n1\n2\n3\nb\nb\n", "1\n2\n3\n" ],
-       [ "1\n2\n3\n4\n5\n6\n7\n8\none\nabc\nABC\ntwo\n",
-         "A\n1\n2\n3\none\nIII\niii\ntwo\nthree\n"],
-       [ "A\n1\n2\n3\none\nIII\niii\ntwo\nthree\n",
-         "1\n2\n3\n4\n5\n6\n7\n8\none\nabc\nABC\ntwo\n" ],
-       [ "one\ntwo\nthree\nfour\nfive\nsix\n",
-         "one\nA\ntwo\nB\nC\nfive\n" ],
-       [ "A\nB\n", "A\nC\n\nB\n" ],
-      );
-
-    foreach my $impl qw( RcsLite RcsWrap ) {
-        my $class = 'TWiki::Store::'.$impl;
-        my $fn = 'RcsTests::test_'.$impl;
-        my $sfn;
-        my $i;
-
-        for $i ( 0..$#simpleTests ) {
-            $sfn = $fn.'_getRevision'.$i;
-            *$sfn = sub { shift->verifyGetRevision( $class,
-                                                    $simpleTests[$i] ) };
-        }
-
-        $sfn = $fn.'_getBinaryRevision';
-        *$sfn = sub { shift->verifyGetBinaryRevision( $class ) };
-
-        for $i ( 0..$#diffTests ) {
-            $sfn = $fn.'_diffs'.$i;
-            *$sfn = sub { shift->verifyDifferences( $class,
-                                                    $diffTests[$i] ) };
-        }
-
-        $sfn = $fn.'_keywords';
-        *$sfn = sub { shift->verifyKeywords( $class ) };
-
-        $sfn = $fn.'_repRev';
-        *$sfn = sub { shift->verifyRepRev( $class ) };
-
-        $sfn = $fn.'_revAtTime';
-        *$sfn = sub { shift->verifyRevAtTime( $class ) };
-
-        $sfn = $fn.'_revInfo';
-        *$sfn = sub { shift->verifyRevInfo( $class ) };
-
-        $sfn = $fn.'_MissingVrestoreRev';
-        *$sfn = sub { shift->verifyMissingVrestoreRev( $class ) };
-
-        $sfn = $fn.'_MissingVrepRev';
-        *$sfn = sub { shift->verifyMissingVrepRev( $class ) };
-
-        $sfn = $fn.'_MissingVdelRev';
-        *$sfn = sub { shift->verifyMissingVdelRev( $class ) };
-
-        $sfn = $fn.'_Item2957';
-        *$sfn = sub { shift->verify_Item2957( $class ) };
-
-        $sfn = $fn.'_Item3122';
-        *$sfn = sub { shift->verify_Item3122( $class ) };
-    }
+sub verify_simple1 {
+    my $this = shift;
+    $this->checkGetRevision([ "a", "b\n", "c\n" ]);
 }
 
-sub verifyGetRevision {
-    my( $this, $class, $revs ) = @_;
+sub verify_simple2 {
+    my $this = shift;
+    $this->checkGetRevision([ "a", "b", "a\n", "b", "a", "b\n","a\nb\n" ]);
+}
+
+sub verify_simple3 {
+    my $this = shift;
+    $this->checkGetRevision([ "a\n", "b" ]);
+}
+
+sub verify_simple4 {
+    my $this = shift;
+    $this->checkGetRevision([ "" ]);
+}
+
+sub verify_simple5 {
+    my $this = shift;
+    $this->checkGetRevision([ "", "a" ]);
+}
+
+sub verify_simple6 {
+    my $this = shift;
+    $this->checkGetRevision([ "", "a", "a\n", "a\n\n", "a\n\n\n" ]);
+}
+
+sub verify_simple7 {
+    my $this = shift;
+    $this->checkGetRevision([ "", "a", "a\n", "a\nb" ]);
+}
+
+sub verify_simple8 {
+    my $this = shift;
+    $this->checkGetRevision([ "", "a", "a\n", "a\nb", "a\nb\n" ]);
+}
+
+sub verify_simple9 {
+    my $this = shift;
+    $this->checkGetRevision([ "", "\n", "\n\n", "a", "a\n", "a\n\n", "\na","\n\na", "" ]);
+}
+
+sub verify_simple10 {
+    my $this = shift;
+    $this->checkGetRevision([ "a", "b", "a\n", "b", "a", "b\n","a\nb\n", "a\nc\n" ]);
+}
+
+sub verify_simple11 {
+    my $this = shift;
+    $this->checkGetRevision([ "one\n", "1\n2\n", "one\nthree\n4\n", "one\ntwo\nthree\n" ]);
+}
+
+sub verify_simple12 {
+    my $this = shift;
+    $this->checkGetRevision([ "three\nfour\n", "one\ntwo\nthree\n" ]);
+}
+
+sub verify_simple13 {
+    my $this = shift;
+    $this->checkGetRevision([ '@expand@\n', "strict;\n", "head 1.99;\n" ]);
+}
+
+sub verify_simple14 {
+    my $this = shift;
+    $this->checkGetRevision([ '@expand@', "strict;\n", "head 1.99;\n" ]);
+}
+
+sub verify_simple15 {
+    my $this = shift;
+    $this->checkGetRevision([ "a".chr(0xFF), "b".chr(0xFF) ] );
+}
+
+sub verify_simple16 {
+    my $this = shift;
+    $this->checkDifferences([ "1\n", "2\n" ]);
+}
+
+sub verify_simple17 {
+    my $this = shift;
+    $this->checkDifferences([ "\n", "1\n" ]);
+}
+
+sub verify_simple18 {
+    my $this = shift;
+    $this->checkDifferences([ "1\n", "2\n" ]);
+}
+
+sub verify_simple19 {
+    my $this = shift;
+    $this->checkDifferences([ "2\n", "1\n" ]);
+}
+
+sub verify_simple20 {
+    my $this = shift;
+    $this->checkDifferences([ "1\n2\n3\n", "a\n1\n2\n3\nb\n" ]);
+}
+
+sub verify_simple21 {
+    my $this = shift;
+    $this->checkDifferences([ "a\n1\n2\n3\nb\n", "1\n2\n3\n" ]);
+}
+
+sub verify_simple22 {
+    my $this = shift;
+    $this->checkDifferences([ "1\n2\n3\n", "a\nb\n1\n2\n3\nb\nb\n" ]);
+}
+
+sub verify_simple23 {
+    my $this = shift;
+    $this->checkDifferences([ "a\nb\n1\n2\n3\nb\nb\n", "1\n2\n3\n" ]);
+}
+
+sub verify_simple24 {
+    my $this = shift;
+    $this->checkDifferences([ "1\n2\n3\n4\n5\n6\n7\n8\none\nabc\nABC\ntwo\n",
+                              "A\n1\n2\n3\none\nIII\niii\ntwo\nthree\n"]);
+}
+
+sub verify_simple25 {
+    my $this = shift;
+    $this->checkDifferences(
+        [ "A\n1\n2\n3\none\nIII\niii\ntwo\nthree\n",
+          "1\n2\n3\n4\n5\n6\n7\n8\none\nabc\nABC\ntwo\n" ]);
+}
+
+sub verify_simple26 {
+    my $this = shift;
+    $this->checkDifferences(
+        [ "one\ntwo\nthree\nfour\nfive\nsix\n",
+          "one\nA\ntwo\nB\nC\nfive\n" ]);
+}
+
+sub verify_simple27 {
+    my $this = shift;
+    $this->checkDifferences([ "A\nB\n", "A\nC\n\nB\n" ]);
+}
+
+sub checkGetRevision {
+    my( $this, $revs ) = @_;
     my $topic = "TestRcsTopic";
 
     my $rcs = $class->new( $twiki, $testWeb, $topic );
@@ -252,8 +329,8 @@ sub verifyGetRevision {
     }
 }
 
-sub verifyGetBinaryRevision {
-    my( $this, $class, $revs ) = @_;
+sub verify_GetBinaryRevision {
+    my( $this, $revs ) = @_;
     my $topic = "TestRcsTopic";
 
     my $atttext1 = "\000123\003\n";
@@ -283,8 +360,8 @@ sub verifyGetBinaryRevision {
 }
 
 # ensure RCS keywords are not expanded in the checked-out version
-sub verifyKeywords {
-    my( $this, $class ) = @_;
+sub verify_Keywords {
+    my( $this ) = @_;
     my $topic = "TestRcsTopic";
     my $check = '$Author$ $Date$ $Header$ $Id$ $Locker$ $Log$ $Name$ $RCSfile$ $Revision$ $Source$ $State$';
     my $rcs = $class->new( $twiki, $testWeb, $topic, undef );
@@ -295,8 +372,8 @@ sub verifyKeywords {
     close(F);
 }
 
-sub verifyDifferences {
-    my( $this, $class, $set ) = @_;
+sub checkDifferences {
+    my( $this, $set ) = @_;
     my($from, $to) = @$set;
     my $topic = "RcsDiffTest";
     my $rcs = $class->new( $twiki, $testWeb, $topic, "" );
@@ -341,8 +418,8 @@ sub verifyDifferences {
     $this->assert_str_equals($to, join("\n",@$data));
 }
 
-sub verifyRevAtTime {
-    my( $this, $class ) = @_;
+sub verify_RevAtTime {
+    my( $this ) = @_;
 
     my $rcs = $class->new( $twiki, $testWeb, 'AtTime', "" );
     $rcs->addRevisionFromText( "Rev0\n", '', "RcsWrapper", 0 );
@@ -358,8 +435,8 @@ sub verifyRevAtTime {
     $this->assert_equals(3, $r);
 }
 
-sub verifyRevInfo {
-    my( $this, $class ) = @_;
+sub verify_RevInfo {
+    my( $this ) = @_;
 
     my $rcs = $class->new( $twiki, $testWeb, 'RevInfo', "" );
     $rcs->addRevisionFromText( "Rev1\n", 'FirstComment', "FirstUser", 0 );
@@ -410,8 +487,8 @@ sub verifyRevInfo {
 
 # If a .txt file exists with no ,v and we perform an op on that
 # file, a ,v must be created for rev 1 before the op is completed.
-sub verifyMissingVrestoreRev {
-    my( $this, $class ) = @_;
+sub verify_MissingVrestoreRev {
+    my( $this ) = @_;
 
     my $file = "$TWiki::cfg{DataDir}/$testWeb/MissingV.txt";
 
@@ -443,8 +520,8 @@ sub verifyMissingVrestoreRev {
 
 # If a .txt file exists with no ,v and we perform an op on that
 # file, a ,v must be created for rev 1 before the op is completed.
-sub verifyMissingVrepRev {
-    my( $this, $class ) = @_;
+sub verify_MissingVrepRev {
+    my( $this ) = @_;
 
     my $file = "$TWiki::cfg{DataDir}/$testWeb/MissingV.txt";
 
@@ -474,8 +551,8 @@ sub verifyMissingVrepRev {
     unlink("$file,v");
 }
 
-sub verifyMissingVdelRev {
-    my( $this, $class ) = @_;
+sub verify_MissingVdelRev {
+    my( $this ) = @_;
 
     my $file = "$TWiki::cfg{DataDir}/$testWeb/MissingV.txt";
 
@@ -527,7 +604,7 @@ sub verifyMissingVdelRev {
 }
 
 sub verify_Item2957 {
-    my( $this, $class ) = @_;
+    my( $this ) = @_;
     my $rev1 = <<HERE;
 A
 C
@@ -572,7 +649,7 @@ HERE
 }
 
 sub verify_Item3122 {
-    my( $this, $class ) = @_;
+    my( $this ) = @_;
 
     my $rcs = $class->new( $twiki, $testWeb, 'Item3122', 'itme3122' );
     $rcs->addRevisionFromText("new", "more", "idiot", time());
