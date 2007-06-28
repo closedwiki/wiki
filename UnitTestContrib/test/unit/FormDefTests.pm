@@ -7,6 +7,7 @@ use base qw(TWikiTestCase);
 
 use TWiki;
 use TWiki::Prefs;
+use TWiki::Form;
 use strict;
 use Assert;
 use Error qw( :try );
@@ -50,7 +51,7 @@ sub test_minimalForm {
 | *Name* | *Type* | *Size* |
 | Date | date | 30 |
 FORM
-    my $def = new TWiki::Form($twiki, $testNormalWeb, 'TestForm');
+    my $def = TWiki::Form->new($twiki, $testNormalWeb, 'TestForm');
 
     $this->assert_equals(1, scalar @{$def->getFields()});
     my $f = $def->getField('Date');
