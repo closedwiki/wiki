@@ -1,0 +1,33 @@
+---+!! !HTTPDUserAdminContrib
+<!--
+One line description, required for extensions repository catalog.
+    * Set SHORTDESCRIPTION = 
+-->
+%SHORTDESCRIPTION%
+
+%TOC%
+
+---++ Usage
+
+---++ Examples
+
+---++ Installation Instructions
+
+%$INSTALL_INSTRUCTIONS%
+
+---++ Contrib Info
+
+|  Contrib Author(s): | |
+|  Copyright: | &copy; |
+|  License: | [[http://www.gnu.org/licenses/gpl.html][GPL (Gnu General Public License)]] |
+|  Contrib Version: | %$VERSION% |
+|  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  Dependencies: | %$DEPENDENCIES% |
+|  [[TWiki:Plugins/Benchmark][Benchmarks]]: | %TWIKIWEB%.GoodStyle nn%, %TWIKIWEB%.FormattedSearch nn%, HTTPDUserAdminContrib nn% |
+|  Contrib Home: | http://twiki.org/cgi-bin/view/Plugins/HTTPDUserAdminContrib |
+|  Feedback: | http://twiki.org/cgi-bin/view/Plugins/HTTPDUserAdminContribDev |
+|  Appraisal: | http://twiki.org/cgi-bin/view/Plugins/HTTPDUserAdminContribAppraisal |
+
+__Related Topics:__ %TWIKIWEB%.TWikiContribs, %TWIKIWEB%.DeveloperDocumentationCategory, %TWIKIWEB%.AdminDocumentationCategory, %TWIKIWEB%.TWikiPreferences
+
+<!-- Do _not_ attempt to edit this topic; it is auto-generated. Please add comments/questions/remarks to the feedback topic on twiki.org instead. -->
