@@ -268,9 +268,12 @@ sub capture {
     my $this = shift;
     my $proc = shift;
 
+    require File::Temp;
+    my $tmpdir = File::Temp::tempdir(CLEANUP => 1);
+
     # take copy of the file descriptor
     open(OLDOUT, ">&STDOUT");
-    open(STDOUT, ">/tmp/cgi");
+    open(STDOUT, ">$tmpdir/data");
 
     my $text = undef;
     my @params = @_;
@@ -285,11 +288,10 @@ sub capture {
     };
 
     $text = '';
-    open(FH, '/tmp/cgi');
+    open(FH, "$tmpdir/data");
     local $/ = undef;
     $text = <FH>;
     close(FH);
-    unlink('/tmp/cgi');
 
     return ( $text, $result );
 }
