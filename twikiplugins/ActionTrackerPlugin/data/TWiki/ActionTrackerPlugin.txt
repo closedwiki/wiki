@@ -376,7 +376,7 @@ These settings can be overridden in the Web<nop>Preferences topic of the current
 |  Plugin Author: | TWiki:Main/CrawfordCurrie, http://c-dot.co.uk |
 |  Plugin Version: | %$VERSION% |
 |  Change History: | |
-| 21 May 2007 | Bugs:Item3969 - 8bit email fix (TWiki:Main.WillNorris) |
+|  21 May 2007 | Bugs:Item3969 - 8bit email fix (TWiki:Main.WillNorris) |
 |  12958 | Bugs:Item3638 Fixed edit link for IE7 |
 |  12878 | putting styles.css file at the top of the html header so that \
          skins have a chance to override the defaults; \
@@ -404,7 +404,7 @@ These settings can be overridden in the Web<nop>Preferences topic of the current
 |  14 Feb 2002 | Sorted ACTIONSEARCH results by due date; Fixed bugs editaction kills form data, Actions flagged as late the day before, TWiki table and bullet formatting doesn't work within action text |
 |  11 Jan 2002 | Added ACTIONSEARCH for selected webs and topics; Changed action editor to use a template; Eliminated UNIX dependencies; Fixed formatting of actions in bulleted lists |
 |  9 Jan 2002 | Bugfix version |
-|  Perl Version: | 5.8 |
+|  Dependencies: | %$DEPENDENCIES% |
 |  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/ActionTrackerPlugin |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/ActionTrackerPluginDev |
 
