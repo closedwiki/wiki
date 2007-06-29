@@ -639,6 +639,9 @@ HERE
 
     $rcs = $class->new( $twiki, $testWeb, 'Item2957', '' );
     my $text = $rcs->getRevision(1);
+    if ($TWiki::cfg{OS} eq 'WINDOWS') {
+        $text =~ s/\r\n/\n/sg;
+    }
     $this->assert_equals($rev1, $text);
     $rcs = $class->new( $twiki, $testWeb, 'Item2957', '' );
     $text = $rcs->getRevision(2);

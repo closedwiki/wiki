@@ -42,7 +42,7 @@ use Cwd;
 sub set_up {
     my $this = shift;
 
-    #$this->SUPER::set_up();
+    $this->SUPER::set_up();
 
     $this->{__EnvSafe} = {};
     foreach my $sym (%ENV) {
@@ -94,7 +94,9 @@ sub set_up {
 sub tear_down {
     my $this = shift;
     $this->{twiki}->finish() if $this->{twiki};
-    File::Path::rmtree($TWiki::cfg{WorkingDir});
+    eval {
+	File::Path::rmtree($TWiki::cfg{WorkingDir});
+    };
     %TWiki::cfg = eval $this->{__TWikiSafe};
     foreach my $sym (keys %ENV) {
         unless( defined( $this->{__EnvSafe}->{$sym} )) {

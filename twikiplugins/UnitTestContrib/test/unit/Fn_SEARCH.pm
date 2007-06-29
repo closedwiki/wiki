@@ -19,6 +19,7 @@ sub set_up {
     my $this = shift;
 
     $this->SUPER::set_up();
+
     $this->{twiki}->{store}->saveTopic(
         $this->{twiki}->{user}, $this->{test_web},
         'OkTopic', "BLEEGLE blah/matchme.blah");
@@ -38,12 +39,6 @@ sub Forking {
 }
 
 sub Native {
-    eval "require TWiki::Store::SearchAlgorithms::Native";
-    if ($@) {
-        print STDERR "\nWARNING: unable to test native search, extension module may not be installed\n";
-        return;
-    }
-
     $TWiki::cfg{RCS}{SearchAlgorithm} =
       "TWiki::Store::SearchAlgorithms::Native";
 }
@@ -56,7 +51,15 @@ sub PurePerl {
 }
 
 sub fixture_groups {
-    return ( [ 'Forking', 'Native', 'PurePerl' ] );
+    my $groups = [ 'Forking', 'PurePerl' ];
+    eval "require TWiki::Store::SearchAlgorithms::Native";
+    if ($@ || !defined(&NativeTWikiSearch::cgrep)) {
+        print STDERR "\nWARNING: unable to test native search, module may not be installed\n";
+    } else {
+        push(@$groups, 'Native');
+    }
+
+    return ( $groups );
 }
 
 sub verify_simple  {
@@ -378,8 +381,8 @@ sub verify_quote_literal {
         $this->{test_web}, $this->{test_topic});
 
     $this->assert_does_not_match(qr/OkTopic/, $result);
-    $this->assert_does_not_match(qr/Ok-Topic/, $result);
     $this->assert_does_not_match(qr/Ok\+Topic/, $result);
+    $this->assert_does_not_match(qr/Ok-Topic/, $result);
 
 }
 
