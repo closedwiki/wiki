@@ -38,6 +38,9 @@ require File::Spec;
 
 require TWiki;
 
+# Set to 1 to trace commands to STDERR
+sub TRACE { 0 }
+
 # TODO: Sandbox module should probably use custom 'die' handler so that
 # output goes only to web server error log - otherwise it might give
 # useful debugging information to someone developing an exploit.
@@ -66,11 +69,8 @@ sub new {
     # not to work.
     #from the Activestate Docco this is _only_ defined on ActiveState Perl
     if( defined( &Win32::BuildNumber )) {	
-#        if ( $isActivePerl and $] < 5.008 ) {
-#           # Sven has not found either to work (yet?)
-            $this->{REAL_SAFE_PIPE_OPEN} = 0;
-            $this->{EMULATED_SAFE_PIPE_OPEN} = 0;
-#        }
+         $this->{REAL_SAFE_PIPE_OPEN} = 0;
+         $this->{EMULATED_SAFE_PIPE_OPEN} = 0;
     }
 
     # 'Safe' means no need to filter in on this platform - check 
@@ -84,10 +84,6 @@ sub new {
     } else {
         $this->{CMDQUOTE} = '"';
     }
-
-    # Set to 1 to trace all command executions to STDERR
-    $this->{TRACE} = 0;
-    #$this->{TRACE} = 1;             # DEBUG
 
     return $this;
 };
@@ -379,6 +375,8 @@ sub sysCommand {
     $template =~ /(^.*?)\s+(.*)$/;
     my $path = $1;
     my $pTmpl = $2;
+    my $cmd;
+    my $cq = $this->{CMDQUOTE};
 
     # Build argument list from template
     my @args = _buildCommandLine( $this, $pTmpl, %params );
@@ -452,13 +450,10 @@ sub sysCommand {
         # No safe pipes available, use the shell as last resort (with
         # earlier filtering in unless administrator forced filtering out)
 
-        # This really is last ditch. It would be amazing if a platform
-        # had to rely on this. In fact, I question why we have it at all.
-        # Sven: as of 11-July-2005 this is the only way to get ActiveStatePerl 
-        # & IIS working (no cygwin)
+        # This appears to be the only way to get ActiveStatePerl working
 
-        my $cq = $this->{CMDQUOTE};
-        my $cmd = $path.' '.$cq.join($cq.' '.$cq, @args).$cq;
+        # Escape the cmd quote using \
+        $cmd = $path.' '.$cq.join($cq.' '.$cq, map { s/$cq/\\$cq/g; $_ } @args).$cq;
         open( OLDERR, '>&STDERR' ) || die "Can't steal STDERR: $!";
         open( STDERR, '>'.File::Spec->devnull());
         $data = `$cmd`;
@@ -466,14 +461,15 @@ sub sysCommand {
         close( STDERR );
         open( STDERR, '>&OLDERR' ) || die "Can't restore STDERR: $!";
         close(OLDERR);
+
         $exit = ( $? >> 8 );
         # Do *not* return the error message; it contains sensitive path info.
-        print STDERR "$cmd failed: $!" if $exit;
+        print STDERR "\n$cmd failed: $exit\n" if (TRACE && $exit);
     }
 
-    if( $this->{TRACE} ) {
-        my $cq = $this->{CMDQUOTE};
-        my $cmd = $path.' '.$cq.join($cq.' '.$cq, @args).$cq;
+    if( TRACE ) {
+        $cmd ||= $path.' '.$cq.join($cq.' '.$cq, @args).$cq;
+        $data ||= '';
         print STDERR $cmd,' -> ',$data,"\n";
     }
     return ( $data, $exit );

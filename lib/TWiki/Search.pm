@@ -60,100 +60,6 @@ sub finish {
     undef $this->{session};
 }
 
-# Untaints the search value (text string, regex or search expression) by
-# 'filtering in' valid characters only.
-sub _filterSearchString {
-    my $this         = shift;
-    my $searchString = shift;
-    my $type         = shift;
-
-    # Use filtering-out of regexes only if (1) on a safe sandbox platform
-    # OR (2) administrator has explicitly configured $forceUnsafeRegexes == 1.
-    #
-    # Only well-secured intranet sites, authenticated for all access
-    # (view, edit, attach, search, etc), AND forced to use unsafe
-    # platforms, should use the $forceUnsafeRegexes flag.
-    my $unsafePlatform = ( not( $this->{session}->{sandbox}->{SAFE} ) );
-
-    # FIXME: Use of new global
-    my $useFilterIn =
-      ( $unsafePlatform and not $TWiki::cfg{ForceUnsafeRegexes} );
-
-    ########################################################################
-    # SMELL: commented out useless condition; $langAlphabetic was always 1,#
-    # and is now removed from TWiki.pm. What was this supposed to do?      #
-    ########################################################################
-# Non-alphabetic language sites (e.g. Japanese and Chinese) cannot use
-# filtering-in and must use safe pipes, since TWiki does not currently
-# support Unicode, required for filtering-in.  Alphabetic languages such
-# as English, French, Russian, Greek and most European languages are
-# handled by filtering-in.
-#if ( not $TWiki::langAlphabetic and $unsafePlatform ) {
-#    # Best option is to upgrade Perl.
-#    die "You are using a non-alphabetic language on a non-safe-pipes platform.  This is a serious SECURITY RISK,\nso TWiki cannot be used as it is currently installed - please\nread TWiki:Codev/SafePipes for options to avoid or remove this risk.";
-#}
-
-    my $mixedAlphaNum = $TWiki::regex{mixedAlphaNum};
-
-    my $validChars;    # String of valid characters or POSIX
-                       # regex elements (e.g. [:alpha:] from
-                       # _setupRegexes) - designed to
-                       # be used within a character class.
-
-    if ( $type eq 'regex' ) {
-
-   # Regular expression search - example: soap;wsdl;web service;!shampoo;[Ff]red
-        if ($useFilterIn) {
-
-            # Filter in
-            # TWiki search syntax and limited regex syntax
-            $validChars = ${mixedAlphaNum} . ' !;.[]\\*\\+';
-        }
-        else {
-
-# Filter out - only for use on safe pipe platform or
-# if forced by admin
-# FIXME: Review and test since first versions were broken
-# SMELL: CC commented out next two lines as they escape
-# escape chars in REs
-#$searchString =~ s/(^|[^\\])(['"`\\])/$1\\$2/g;    # Escape all types of quotes and backslashes
-#$searchString =~ s/([\@\$])\(/$1\\\(/g;          # Escape @( ... ) and $( ... )
-        }
-
-    }
-    elsif ( $type eq 'literal' ) {
-
-        # Filter in
-        # Literal search - search for exactly what was typed in (old style
-        # TWiki non-regex search)
-        # Alphanumeric, spaces, selected punctuation
-        $validChars = ${mixedAlphaNum} . ' \.';
-
-    }
-    else {
-
-        # FIXME: spaces not working - url encoded in search pattern
-        # Filter in
-        # Keyword search (new style, Google-like).
-        # Example: soap +wsdl +"web service" -shampoo
-        $validChars = ${mixedAlphaNum} . ' +"-';
-    }
-
-    if ($useFilterIn) {
-
-        # Clean up - delete all invalid characters
-        # FIXME: be sure to escape special characters in literal
-        $searchString =~ s/[^${validChars}]+//go;
-    }
-
-    # Untaint - same for filtering in and out since already sanitised
-    $searchString =~ /^(.*)$/;
-    $searchString = $1;
-
-    # Limit string length
-    $searchString = substr( $searchString, 0, 1500 );
-}
-
 =pod
 
 ---++ StaticMethod getTextPattern (  $text, $pattern  )
@@ -336,7 +242,6 @@ sub _searchTopics {
 
         # scope='text', e.g. grep search on topic text:
         unless ( $scope eq 'topic' ) {
-
             my $matches = $store->searchInWebContent(
                 $token, $web,
                 \@topicList,
@@ -507,11 +412,6 @@ sub searchWeb {
     $limit = 32000 unless ($limit);
 
     $type = 'regex' if ( $params{regex} );
-
-    if ($type ne 'query') {
-        # Filter the search string for security
-        $searchString = _filterSearchString( $this, $searchString, $type );
-    }
 
     my $mixedAlpha = $TWiki::regex{mixedAlpha};
     if ( defined($separator) ) {
