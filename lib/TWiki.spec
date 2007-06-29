@@ -154,6 +154,36 @@ $TWiki::cfg{ScriptSuffix} = '';
 # Configuration password (not prompted)
 $TWiki::cfg{Password} = '';
 
+#---++ Paths
+# **PATH**
+# Path control. If set, overrides the default PATH setting to control
+# where TWiki looks for programs. By restricting this path to just a few key
+# directories, you increase the security of your TWiki. If security is not
+# an issue, leave the setting blank.
+# <ol>
+# <li>Unix or Linux
+#  <ul>
+#   <li>Path separator is :</li>
+#   <li>Make sure diff and shell (Bourne or bash type) are found on path.</li>
+#   <li>Typical setting is <tt>/bin:/usr/bin</tt></li>
+#  </ul>
+# <li>Windows ActiveState Perl, using DOS shell</li>
+#  <ul>
+#   <li>path separator is ;</li>
+#   <li>The Windows system directory is required.</li>
+#   <li>Use '\' not '/' in pathnames.</li>
+#   <li>Typical setting is <tt>C:\windows\system32</tt></li>
+#  </ul>
+# <li>Windows Cygwin Perl</li>
+#  <ul>
+#   <li>path separator is :</li>
+#   <li>The Windows system directory is required.</li>
+#   <li>Use '/' not '\' in pathnames.</li>
+#   <li>Typical setting is <tt>/cygdrive/c/windows/system32</tt></li>
+#  </ul>
+# </ol>
+$TWiki::cfg{SafeEnvPath} = '';
+
 #---++ Sessions
 
 # **BOOLEAN**
@@ -397,56 +427,6 @@ $TWiki::cfg{Htpasswd}{FileName} = '$TWiki::cfg{DataDir}/.htpasswd';
 # <dt>plain</dt><dd> stores passwords as plain text (no encryption).</dd>
 # </dl>
 $TWiki::cfg{Htpasswd}{Encoding} = 'crypt';
-
-#---++ Paths
-# **PATH EXPERT**
-# Path control. If set, overrides the default PATH setting to control
-# where TWiki looks for programs. Check notes for your operating
-# system. NOTE: it is better to use full pathnames in the paths to
-# external programs, rather than relying on this path.
-# <ol>
-#  <li> Unix or Linux
-#   <ul>
-#    <li> path separator is :</li>
-#    <li> ensure diff and shell (Bourne or bash type) is found on 
-#      the path.</li>
-#   </ul>
-#  </li>
-#  <li> Windows ActiveState Perl, with non-Cygwin RCS, OR no
-#      PERL5SHELL setting.
-#   <ul>
-#    <li> path separator is ;</li>
-#    <li> The Windows system directory (e.g. c:\winnt\system32) is
-#      required in this path.</li>
-#    <li> Must NOT use '/' in pathnames as this upsets cmd.exe -
-#      single '' is OK using Perl single-quoted string.</li>
-#   </ul>
-#  </li>
-#  <li> Windows: ActiveState Perl, with Cygwin RCS and PERL5SHELL set
-#      to 'c:/cygwin/bin/bash.exe -c'
-#   <ul>
-#    <li> path separator is ;</li>
-#    <li> best to avoid 'c:/foo' type paths, because it can cause a
-#      Perl 'Insecure directory in $ENV{PATH}' error.
-#      The best approach is to convert 'c:/foo' to '/cygdrive/c/foo'
-#      - odd looking but it works!  The Windows system directory 
-#      (e.g. /cygdrive/c/winnt/system32) is required in this path.
-#      For example:
-#      /cygdrive/c/YOURCYGWINDIR/bin;/cygdrive/c/YOURWINDOWSDIR/system32</li>
-#   </ul>
-#  </li>
-#  <li> Windows: ActiveState Perl, with non-Cygwin RCS,
-#       OR no PERL5SHELL setting.
-#   <ul>
-#    <li> path separator is ';'</li>
-#    <li> The Windows system directory is required in this path.
-#       Must NOT use / in directories on the path as this upsets
-#       cmd.exe - single '\' is OK using Perl single quoted string.
-#       </li>
-#   </ul>
-#  </li>
-# </ol>
-$TWiki::cfg{SafeEnvPath} = '/bin:/usr/bin';
 
 #---++ Miscellaneous
 
