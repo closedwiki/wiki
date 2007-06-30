@@ -654,8 +654,8 @@ sub unzip {
     } else {
         print STDERR "Archive::Zip is not installed; trying unzip on the command line\n";
         print `unzip $archive`;
-        if ( $! ) {
-            print STDERR "unzip failed: $!\n";
+        if ( $? ) {
+            print STDERR "unzip failed: $?\n";
             return 0;
         }
     }
@@ -692,8 +692,8 @@ sub untar {
     } else {
         print STDERR "Archive::Tar is not installed; trying tar on the command-line\n";
         print `tar xvf$compressed $archive`;
-        if ( $! ) {
-            print STDERR "tar failed: $!\n";
+        if ( $? ) {
+            print STDERR "tar failed: $?\n";
             return 0;
         }
     }
