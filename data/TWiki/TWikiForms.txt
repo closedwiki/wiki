@@ -64,13 +64,13 @@ You can also retrieve possible values for =select=, =checkbox= or =radio= types 
      | Public FAQ |
 </blockquote>
 
-Field values can also be obtained as the result of a %TWIKIWEB%.FormattedSearch. For example,
+Field values can also be set using the result of expanding other TWiki variables. For example,
 
 <blockquote>
 =%<nop>SEARCH{"Office$" scope="topic" web="%<nop>MAINWEB%" nonoise="on" type="regex" format="$web.$topic" separator=", " }%=
 </blockquote>
 
-when used in the value field of the form definition, this will find all topic names in the Main web which end in "Office" and use them as the legal field values.
+When used in the value field of the form definition, this will find all topic names in the Main web which end in "Office" and use them as the legal field values.
 
 #EnablingForms
 ---++ Enabling Forms by Web
@@ -101,7 +101,7 @@ Forms have to be enabled for each individual web. The ==WEBFORMS== variable in W
        </verbatim>
    * __%T% Tip:__ For TWiki applications you can [[TWikiTemplates#AutomaticallyGeneratedTopicname][automatically generate unique topicnames]].
 
-   * __%X% Note:__ Initial values will not be submitted to the form of a new topic if you only use the formtemplate parameter.
+   * __%X% Note:__ Initial values will *not* be set in the form of a new topic if you _only_ use the formtemplate parameter.
 
 ---++ Changing a form
    * You can change a form definition, and TWiki will try to make sure you don't lose any data from the topics that use that form. 
@@ -163,7 +163,10 @@ For example, a simple form just supporting entry of a name and a date would look
    * The field value will be used to initialize a field when a form is created, unless specific values are given by the topic template or query parameters. The first item in the list for a select or radio type is the default item. For =label=, =text=, and =textarea= fields the value may also contain commas. =checkbox= fields cannot be initialized through the form template.
    * Leading and trailing spaces are _not_ significant.
    * Field values can also be generated through a %TWIKIWEB%.FormattedSearch, which must yield a suitable table as the result.
-   * Variables in the initial values of a form definition get expanded when form values are initialized from the form definition. The FormatTokens can be used to prevent expansion.
+   * Variables in the initial values of a form definition get expanded when the form definition is loaded.
+      * If you want to use a =|= character in the initial values field, you have to precede it with a backslash, thus: =\|=.
+      * You can use =&lt;nop>= to prevent TWiki variables from being expanded.
+      * The FormatTokens can be used to prevent expansion of other characters.
 *General Notes:*
    * The topic definition is not read when a topic is viewed.
    * Form definition topics can be protected in the usual manner, using  TWikiAccessControl, to limit who can change the form template and/or individual value lists. Note that view access is required to be able to edit topics that use the form definition, though view access to the form definition is _not_ required to view a topic where the form has been used.

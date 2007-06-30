@@ -145,25 +145,23 @@ sub _parseFormDefinition {
     my $store = $this->{session}->{store};
     my @fields = ();
     my $inBlock = 0;
-    $text =~ s/\\\r?\n//go; # remove trailing '\' and join continuation lines
+    $text =~ s/\r//g;
+    $text =~ s/\\\n//g; # remove trailing '\' and join continuation lines
 
     # | *Name:* | *Type:* | *Size:* | *Value:*  | *Tooltip message:* | *Attributes:* |
     # Tooltip and attributes are optional
-    foreach( split( /\r?\n/, $text ) ) {
-        if( /^\s*\|.*Name[^|]*\|.*Type[^|]*\|.*Size[^|]*\|/ ) {
+    foreach my $line ( split( /\n/, $text ) ) {
+        if( $line =~ /^\s*\|.*Name[^|]*\|.*Type[^|]*\|.*Size[^|]*\|/ ) {
             $inBlock = 1;
             next;
         }
         # Only insist on first field being present FIXME - use oops page instead?
-        if( $inBlock && s/^\s*\|//o ) {
-            my( $title, $type, $size, $vals, $tooltip, $attributes ) = split( /\|/ );
-            $title ||= '';
-            $title =~ s/^\s*//go;
-            $title =~ s/\s*$//go;
+        if( $inBlock && $line =~ s/^\s*\|\s*// ) {
+            $line =~ s/\\\|/\007/g; # protect \| from split
+            my( $title, $type, $size, $vals, $tooltip, $attributes ) =
+              map { s/\007/|/g; $_ } split( /\s*\|\s*/, $line );
 
-            $attributes ||= '';
-            $attributes =~ s/\s*//go;
-            $attributes = '' if( ! $attributes );
+            $title ||= '';
 
             $type ||= '';
             $type = lc $type;
@@ -171,23 +169,30 @@ sub _parseFormDefinition {
             $type =~ s/\s*$//go;
             $type = 'text' if( ! $type );
 
+            $size ||= '';
+
             $vals ||= '';
             $vals = $this->{session}->handleCommonTags(
                 $vals, $this->{web}, $this->{topic}, $meta);
             $vals =~ s/<\/?(nop|noautolink)\/?>//go;
-            $vals =~ s/^\s*//go;
-            $vals =~ s/\s*$//go;
+            $vals =~ s/^\s+//g;
+            $vals =~ s/\s+$//g;
 
-            # SMELL: What is this??? This looks like a hack!
-            if( $vals eq '$users' ) {
-                $vals = $TWiki::cfg{UsersWebName} . '.' .
-                  join( ", ${TWiki::cfg{UsersWebName}}.",
-                        ( $store->getTopicNames( $TWiki::cfg{UsersWebName} ) ) );
-            }
+            # SMELL: This expansion of $users is undocumented, AFAICT not
+            # used, and downright *dangerous* (it won't work with a non-TWiki
+            # user mapping for example) so in the interests of good hygiene,
+            # I have removed it (CC, 30 Jun 07).
+            #if( $vals eq '$users' ) {
+            #    $vals = $TWiki::cfg{UsersWebName} . '.' .
+            #      join( ", ${TWiki::cfg{UsersWebName}}.",
+            #        ( $store->getTopicNames( $TWiki::cfg{UsersWebName} )));
+            #}
 
             $tooltip ||= '';
-            $tooltip =~ s/^\s*//go;
-            $tooltip =~ s/\s*$//go;
+
+            $attributes ||= '';
+            $attributes =~ s/\s*//go;
+            $attributes = '' if( ! $attributes );
 
             my $definingTopic = "";
             if( $title =~ /\[\[(.+)\]\[(.+)\]\]/ )  {

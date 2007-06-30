@@ -1,57 +1,24 @@
 # Copyright (C) 2006 WikiRing http://wikiring.com
 # Tests for form def parser
-require 5.006;
 package FormDefTests;
 
-use base qw(TWikiTestCase);
+use base qw(TWikiFnTestCase);
 
 use TWiki;
-use TWiki::Prefs;
 use TWiki::Form;
 use strict;
 use Assert;
 use Error qw( :try );
 
-sub new {
-    my $self = shift()->SUPER::new(@_);
-    return $self;
-}
-
-my $prefix = 'TemporaryTestFormDefs';
-my $testSysWeb = $prefix.'SystemWeb';
-my $testNormalWeb = $prefix.'NormalWeb';
-my $testUsersWeb = $prefix.'UsersWeb';
-my $testTopic = $prefix.'TestTopic';
-my $testUser;
-
-my $twiki;
-
-sub set_up {
-    my $this = shift;
-
-    $this->SUPER::set_up();
-
-    $twiki = new TWiki();
-    $twiki->{store}->createWeb($twiki->{user}, $testNormalWeb);
-}
-
-sub tear_down {
-    my $this = shift;
-
-    $this->removeWebFixture($twiki, $testNormalWeb);
-    eval {$twiki->finish()};
-    $this->SUPER::tear_down();
-}
-
 sub test_minimalForm {
     my $this = shift;
 
-    $twiki->{store}->saveTopic(
-        $twiki->{user}, $testNormalWeb, 'TestForm', <<FORM);
+    $this->{twiki}->{store}->saveTopic(
+        $this->{twiki}->{user}, $this->{test_web}, 'TestForm', <<FORM);
 | *Name* | *Type* | *Size* |
 | Date | date | 30 |
 FORM
-    my $def = TWiki::Form->new($twiki, $testNormalWeb, 'TestForm');
+    my $def = TWiki::Form->new($this->{twiki}, $this->{test_web}, 'TestForm');
 
     $this->assert_equals(1, scalar @{$def->getFields()});
     my $f = $def->getField('Date');
@@ -68,13 +35,13 @@ FORM
 sub test_allCols {
     my $this = shift;
 
-    $twiki->{store}->saveTopic(
-        $twiki->{user}, $testNormalWeb, 'TestForm', <<FORM);
+    $this->{twiki}->{store}->saveTopic(
+        $this->{twiki}->{user}, $this->{test_web}, 'TestForm', <<FORM);
 | *Name*     | *Type*   | *Size* | *Value* | *Tooltip* | *Attributes* |
 | Select     | select   | 2..4   | a,b,c   | Tippity   | M            |
 | Checky Egg | checkbox | 1      | 1,2,3,4   | Blip      |              |
 FORM
-    my $def = new TWiki::Form($twiki, $testNormalWeb, 'TestForm');
+    my $def = new TWiki::Form($this->{twiki}, $this->{test_web}, 'TestForm');
 
     $this->assert_equals(2, scalar @{$def->getFields()});
     my $f = $def->getField('Select');
@@ -102,19 +69,19 @@ FORM
 sub test_valsFromOtherTopic {
     my $this = shift;
 
-    $twiki->{store}->saveTopic(
-        $twiki->{user}, $testNormalWeb, 'TestForm', <<FORM);
+    $this->{twiki}->{store}->saveTopic(
+        $this->{twiki}->{user}, $this->{test_web}, 'TestForm', <<FORM);
 | *Name*         | *Type* | *Size* | *Value*   |
 | Vals Elsewhere | select |        |           |
 FORM
-    $twiki->{store}->saveTopic(
-        $twiki->{user}, $testNormalWeb, 'ValsElsewhere', <<FORM);
+    $this->{twiki}->{store}->saveTopic(
+        $this->{twiki}->{user}, $this->{test_web}, 'ValsElsewhere', <<FORM);
 | *Name* |
 | ValOne |
 | RowName |
 | Age |
 FORM
-    my $def = new TWiki::Form($twiki, $testNormalWeb, 'TestForm');
+    my $def = new TWiki::Form($this->{twiki}, $this->{test_web}, 'TestForm');
 
     $this->assert_equals(1, scalar @{$def->getFields()});
     my $f = $def->getField('ValsElsewhere');
@@ -131,19 +98,19 @@ FORM
 sub test_squabValRef {
     my $this = shift;
 
-    $twiki->{store}->saveTopic(
-        $twiki->{user}, $testNormalWeb, 'TestForm', <<FORM);
+    $this->{twiki}->{store}->saveTopic(
+        $this->{twiki}->{user}, $this->{test_web}, 'TestForm', <<FORM);
 | *Name*         | *Type* | *Size* | *Value*   |
-| [[$testNormalWeb.Splodge][Vals Elsewhere]] | select |        |           |
+| [[$this->{test_web}.Splodge][Vals Elsewhere]] | select |        |           |
 FORM
-    $twiki->{store}->saveTopic(
-        $twiki->{user}, $testNormalWeb, 'Splodge', <<FORM);
+    $this->{twiki}->{store}->saveTopic(
+        $this->{twiki}->{user}, $this->{test_web}, 'Splodge', <<FORM);
 | *Name* |
 | ValOne |
 | RowName |
 | Age |
 FORM
-    my $def = new TWiki::Form($twiki, $testNormalWeb, 'TestForm');
+    my $def = new TWiki::Form($this->{twiki}, $this->{test_web}, 'TestForm');
 
     $this->assert_equals(1, scalar @{$def->getFields()});
     my $f = $def->getField('ValsElsewhere');
@@ -152,7 +119,32 @@ FORM
     $this->assert_str_equals('Vals Elsewhere', $f->{title});
     $this->assert_str_equals('ValOne,RowName,Age',
                              join(',', @{$f->getOptions()}));
-    $this->assert_str_equals($testNormalWeb.'.Splodge', $f->{definingTopic});
+    $this->assert_str_equals($this->{test_web}.'.Splodge', $f->{definingTopic});
+}
+
+sub test_searchForOptions {
+    my $this = shift;
+
+    $this->{twiki}->{store}->saveTopic(
+        $this->{twiki}->{user}, $this->{test_web}, 'TestForm', <<'FORM');
+| *Name*         | *Type* | *Size* | *Value*   |
+| Ecks | select | 1 | %SEARCH{"^\\| (Age\|Beauty)" type="regex" nonoise="on" separator="," format="$topic"}% |
+FORM
+    $this->{twiki}->{store}->saveTopic(
+        $this->{twiki}->{user}, $this->{test_web}, 'SplodgeOne', <<FORM);
+| Age |
+FORM
+    $this->{twiki}->{store}->saveTopic(
+        $this->{twiki}->{user}, $this->{test_web}, 'SplodgeTwo', <<FORM);
+| Beauty |
+FORM
+    my $def = new TWiki::Form($this->{twiki}, $this->{test_web}, 'TestForm');
+
+    $this->assert_equals(1, scalar @{$def->getFields()});
+    my $f = $def->getField('Ecks');
+    $this->assert_str_equals(
+        'SplodgeOne,SplodgeTwo',
+        join(',', sort @{$f->getOptions()}));
 }
 
 1;
