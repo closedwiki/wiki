@@ -178,11 +178,14 @@ Behaviour.register(myrules);
 
 
 #CodeUpdate
----++ Code update version 1.1 with faster DOM queries
+---++ Code update notes
+---+++ Version 1.1 with faster DOM queries
 Windows Explorer suffers from slow DOM querying. That means that IE will choke on long pages whenever Behaviour code is used.
 
 Dean Edwards has written up code to [[http://dean.edwards.name/weblog/2006/03/faster/][let IE run faster DOM queries]], with a speed-up hack to Behaviour. This code - updated to make it run cross platform - is now integrated into the distributed javascript. Firefox and Safari won't get any faster than they are, but on IE the speed difference is significant.
 
+---+++ Version 1.2 with faster DOM queries (again)
+Another speed update to call Behaviour's =apply= earlier than on page =onload= (which happens when all images have been downloaded). Support for Explorer, Firefox, Safari and Opera 9.0b2.
 
 
 ---++ Development
@@ -216,8 +219,11 @@ For details see the Behaviour website.
 | Copyright: | Code: version 1.1 - Copyright (c) Ben Nolan and Simon Willison. Distribution and updates: TWiki:Main.ArthurClemens. |
 | License: | BSD |
 | Dependencies: | %$DEPENDENCIES% |
-| 08 Mar 2007| 1.1 Integrated code by Dean Edwards (see [[#CodeUpdate][Code update version 1.1 with faster DOM queries]]). |
-| 04 Jun 2006| 1.0  First Version. Included Behaviour version: 1.1. |
+| Contrib&nbsp;Version: | 1.2 |
+| Change&nbsp;History: | <!-- specify latest version first -->&nbsp; |
+| 02 Jul 2007 | 1.2 Integrated other faster code by Dean Edwards: [[http://dean.edwards.name/weblog/2006/06/again/][faster onload (again)]]. |
+| 08 Mar 2007 | 1.1 Integrated code by Dean Edwards (see [[#CodeUpdate][Code update version 1.1 with faster DOM queries]]). |
+| 04 Jun 2006 | 1.0  First Version. Included Behaviour version: 1.1. |
 |  Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 |  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
