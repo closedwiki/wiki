@@ -254,6 +254,7 @@ document.getElementsBySelector = function(selector) {
 */
 
 
+
 // Speed up written by Dean Edwards, 2006
 // http://dean.edwards.name/weblog/2006/03/faster
 // Made code cross-platform by Arthur Clemens, 2007
@@ -308,4 +309,56 @@ if (Selectors) {
 		// call the old register function
 		this._register(sheet);
 	}
+}
+
+// Do not wait for onload call
+// by Dean Edwards/Matthias Miller/John Resig, 2006
+
+Behaviour._apply = Behaviour.apply;
+Behaviour.apply = function() {
+	if (this.applied) return;
+	this.applied = true;
+	this._apply();
+};
+
+Behaviour.init = function() {
+	// quit if this function has already been called
+	if (arguments.callee.done) return;
+	
+	// flag this function so we don't do the same thing twice
+	arguments.callee.done = true;
+	
+	// kill the timer
+	if (_timer) {
+		clearInterval(_timer);
+		_timer = null;
+	}
+	
+	Behaviour.apply();
+};
+
+/* for Mozilla */
+if (document.addEventListener) {
+	document.addEventListener("DOMContentLoaded", Behaviour.init, false);
+}
+
+/* for Internet Explorer */
+/*@cc_on @*/
+/*@if (@_win32)
+	document.write("<script id=__ie_onload defer src=javascript:void(0)><\/script>");
+	var script = document.getElementById("__ie_onload");
+	script.onreadystatechange = function() {
+		if (this.readyState == "complete") {
+			Behaviour.init(); // call the onload handler
+		}
+	};
+/*@end @*/
+
+/* for Safari */
+if (navigator.vendor && navigator.vendor.match(/Apple/)) { // sniff
+	var _timer = setInterval(function() {
+		if (/loaded|complete/.test(document.readyState)) {
+			Behaviour.init(); // call the onload handler
+		}
+	}, 10);
 }
