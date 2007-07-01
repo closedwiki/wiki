@@ -269,6 +269,10 @@ sub handleVote {
         }
         $result = "$result$separator</form>";
     }
+    # Render tables and remove newlines
+    # so we can embed votes in TWiki tables
+    $result = TWiki::Func::renderText($result);
+    $result =~ s/\n//g;
     return $result;
 }
 
