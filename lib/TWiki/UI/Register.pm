@@ -742,7 +742,7 @@ sub complete {
     }
 
     if (! exists $data->{LoginName}) {
-        if( $TWiki::cfg{AllowLoginName} ) {
+        if( $TWiki::cfg{Register}{AllowLoginName} ) {
             # This should have been populated
             throw Error::Simple( 'no LoginName after reload');
         }

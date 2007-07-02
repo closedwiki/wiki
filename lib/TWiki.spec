@@ -341,15 +341,19 @@ $TWiki::cfg{AuthRealm} =
 'Enter your TWiki.LoginName. (Typically First name and last name, no space, no dots, capitalized, e.g. !JohnSmith, unless you chose otherwise). Visit TWiki.TWikiRegistration if you do not have one.';
 
 #---++ User Mapping
-# **SELECTCLASS TWiki::Users::*UserMapping EXPERT**
-# This allows advanced users to write and over-ride the TWiki User and group mappings
-# rather than the loginname->TWikiUser and Groups definitions comming from TWiki 
-# user and group topics. Currently only TWikiUserMapping is implemented.
+# **SELECTCLASS TWiki::Users::*UserMapping**
+# The user mapping is used to equate login names, used with external
+# authentication systems, with TWiki user identities. By default only
+# two mappings are available, though other mappings *may* be installed to
+# support authentication providers.
 # <ol><li>
-# TWiki::Users::TWikiUserMapping - uses TWiki user and group topics to determine user
-#   information and group memberships
+#  TWiki::Users::TWikiUserMapping - uses TWiki user and group topics to
+#  determine user information, and group memberships.
 # </li><li>
-# TWiki::Users::BaseUserMapping - has only 2 users, {TWikiAdminUser} and {TWikiGuestUser}, with the Admin's login and password being set from this configure script. <b>no User registration.</b> (needs TemplateLogin)
+#  TWiki::Users::BaseUserMapping - has only 2 users, {TWikiAdminUser} and
+#  {TWikiGuestUser}, with the Admins login and password being set from this
+#  configure script. <b>Does not support User registration</b>, and
+#  only works with TemplateLogin.
 # </li></ol>
 $TWiki::cfg{UserMappingManager} = 'TWiki::Users::TWikiUserMapping';
 
@@ -357,8 +361,9 @@ $TWiki::cfg{UserMappingManager} = 'TWiki::Users::TWikiUserMapping';
 # **BOOLEAN**
 # If you want users to be able to use a login ID other than their
 # wikiname, you need to turn this on. It controls whether the 'LoginName'
-# box appears during the user registration process, and whether TWiki
-# tries to map login names to wikinames.
+# box appears during the user registration process, and is used to tell
+# the User Mapping module whether to map login names to wikinames or not
+# (if it supports mappings, that is).
 $TWiki::cfg{Register}{AllowLoginName} = $FALSE;
 
 # **BOOLEAN**

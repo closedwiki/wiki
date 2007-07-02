@@ -193,19 +193,12 @@ sub getCanonicalUserID {
     my( $this, $login ) = @_;
 
     my $cUID;
-#    if ($TWiki::cfg{Register}{AllowLoginName}) {
-       	$this->ASSERT_IS_USER_LOGIN_ID($login) if DEBUG;
-    	$cUID = $this->{L2U}{$login};
-#    } else {
-        #BaseUserMapper _can_ assume that WikiNames are unique
-#    	$this->ASSERT_IS_USER_DISPLAY_NAME($login) if DEBUG;
-#    	$cUID = $this->{W2U}{$login};
+    $this->ASSERT_IS_USER_LOGIN_ID($login) if DEBUG;
+    $cUID = $this->{L2U}{$login};
 
-        #alternative impl - slower, but more re-useable
-        #my @list = findUserByWikiName($this, $login);
-        #$cUID = shift @list;
-#    }  
-#print STDERR "\nBaseUserMapping::getCanonicalUserID($login) => $cUID";
+    #alternative impl - slower, but more re-useable
+    #my @list = findUserByWikiName($this, $login);
+    #$cUID = shift @list;
 
     return $cUID;
 }
@@ -524,7 +517,7 @@ sub findUserByWikiName {
 
     if( $this->isGroup( $wn )) {
         push( @users, $wn);
-    } else { #elsif( $TWiki::cfg{Register}{AllowLoginName} ) {
+    } else {
         # Add additional mappings defined in TWikiUsers
         if( $this->{W2U}->{$wn} ) {
             push( @users, $this->{W2U}->{$wn} );

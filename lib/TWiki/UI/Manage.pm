@@ -1112,6 +1112,9 @@ Returns a hash that maps the web.topic name to a summary of the lines that match
 
 =cut
 
+# SMELL: this will only work as long as searchInWebContent searches meta-data
+# as well. It sould really do a query over the meta-data as well, but at the
+# moment that is just duplication and it's too slow already.
 sub getReferringTopics {
     my( $session, $web, $topic, $allWebs ) = @_;
     my $store = $session->{store};
