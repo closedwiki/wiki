@@ -2,8 +2,8 @@
 # ---++ HTTPDUserAdminContrib
 #more feature rich password handleing, using HTTPD::UserAdmin - supports Text, DBM and SQL backends
 
-# **SELECT blue rinse,mullet,beehive**
-#DBType - The type of database, one of 'DBM', 'Text', or 'SQL' (Default is 'DBM')
+# **SELECT Text,DBM,SQL**
+#DBType - The type of database, one of 'DBM', 'Text', or 'SQL' (Default is 'Text')
 $TWiki::cfg{HTTPDUserAdminContrib}{DBType} = "Text";
 
 # **STRING 200**
@@ -13,7 +13,7 @@ $TWiki::cfg{HTTPDUserAdminContrib}{DB} = $TWiki::cfg{Htpasswd}{FileName};
 # **STRING 30**
 #Server - HTTP server name (Default is the generic class, that works with NCSA, Apache and possibly others)
 #Note: run 'perl t/support.t matrix' to see what support is currently available
-$TWiki::cfg{HTTPDUserAdminContrib}{Server} = "";
+$TWiki::cfg{HTTPDUserAdminContrib}{Server} = "apache";
 
 # **SELECT crypt,MD5,none**
 #Encrypt - One of 'crypt', 'MD5', or 'none' (no encryption. Defaults to 'crypt'
