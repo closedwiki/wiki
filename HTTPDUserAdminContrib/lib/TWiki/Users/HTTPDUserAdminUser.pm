@@ -51,23 +51,23 @@ sub new {
     #$this->{apache} = new Apache::Htpasswd
     #  ( { passwdFile => $TWiki::cfg{Htpasswd}{FileName} } );
 	my @configuration =  (
-			DBType =>					$TWiki::cfg{HTTPDUserAdminContrib}{DBType} | 'Text',
-			Host =>						$TWiki::cfg{HTTPDUserAdminContrib}{Host} | '',
-			Port =>						$TWiki::cfg{HTTPDUserAdminContrib}{Port} | '',
-			DB =>						$TWiki::cfg{HTTPDUserAdminContrib}{DB} | $TWiki::cfg{Htpasswd}{FileName},
+			DBType =>					$TWiki::cfg{HTTPDUserAdminContrib}{DBType} || 'Text',
+			Host =>						$TWiki::cfg{HTTPDUserAdminContrib}{Host} || '',
+			Port =>						$TWiki::cfg{HTTPDUserAdminContrib}{Port} || '',
+			DB =>						$TWiki::cfg{HTTPDUserAdminContrib}{DB} || $TWiki::cfg{Htpasswd}{FileName},
 			#uncommenting User seems to crash when using Text DBType :(
 			#User =>						$TWiki::cfg{HTTPDUserAdminContrib}{User},
-			Auth =>						$TWiki::cfg{HTTPDUserAdminContrib}{Auth} | '',
-			Encrypt =>					$TWiki::cfg{HTTPDUserAdminContrib}{Encrypt} | 'crypt',
-			Locking =>					$TWiki::cfg{HTTPDUserAdminContrib}{Locking} | '',
-			Path =>						$TWiki::cfg{HTTPDUserAdminContrib}{Path} | '',
+			Auth =>						$TWiki::cfg{HTTPDUserAdminContrib}{Auth} || '',
+			Encrypt =>					$TWiki::cfg{HTTPDUserAdminContrib}{Encrypt} || 'crypt',
+			Locking =>					$TWiki::cfg{HTTPDUserAdminContrib}{Locking} || '',
+			Path =>						$TWiki::cfg{HTTPDUserAdminContrib}{Path} || '',
 			Debug =>					$TWiki::cfg{HTTPDUserAdminContrib}{Debug},
-			Flags =>					$TWiki::cfg{HTTPDUserAdminContrib}{Flags} | '',
-			Driver =>					$TWiki::cfg{HTTPDUserAdminContrib}{Driver} | '',
+			Flags =>					$TWiki::cfg{HTTPDUserAdminContrib}{Flags} || '',
+			Driver =>					$TWiki::cfg{HTTPDUserAdminContrib}{Driver} || '',
 			Server =>					$TWiki::cfg{HTTPDUserAdminContrib}{Server},	#undef == go detect
-			UserTable =>				$TWiki::cfg{HTTPDUserAdminContrib}{UserTable} | '',
-			NameField =>				$TWiki::cfg{HTTPDUserAdminContrib}{NameField} | '',
-			PasswordField =>			$TWiki::cfg{HTTPDUserAdminContrib}{PasswordField} | '',
+			UserTable =>				$TWiki::cfg{HTTPDUserAdminContrib}{UserTable} || '',
+			NameField =>				$TWiki::cfg{HTTPDUserAdminContrib}{NameField} || '',
+			PasswordField =>			$TWiki::cfg{HTTPDUserAdminContrib}{PasswordField} || '',
              );
 
     $this->{userDatabase} = new HTTPD::UserAdmin(@configuration);
@@ -163,20 +163,19 @@ sub error {
 }
 
 sub isManagingEmails {
-    return 0;#until i figure out the bug...
+    return 1;
 }
 
 # emails are stored in extra info field as a ; separated list
 sub getEmails {
     my( $this, $login) = @_;
-	my %settings = $this->{userDatabase}->fetch($login, ('emails', ''));
+	my $settings = $this->{userDatabase}->fetch($login, ('emails'));
+	
 	
 	use Data::Dumper;
-	
-	
-	
-	#print STDERR "\nsettings . ".%settings." ..".Dumper(%settings, keys(%settings));
-    my @r = split(/;/, $settings{emails});
+	print STDERR "\nsettings . ".$settings." ..".Dumper($settings, keys(%{$settings}));
+
+    my @r = split(/;/, $$settings{emails});
     $this->{error} = undef;
     return @r;
 }
@@ -184,7 +183,7 @@ sub getEmails {
 sub setEmails {
     my $this = shift;
     my $login = shift;
-    my $r = $this->{userDatabase}->update($login, undef,  join(';', @_) );
+    my $r = $this->{userDatabase}->update($login, undef,  {emails=>join(';', @_)} );
     $this->{error} =  undef;
     return $r;
 }
