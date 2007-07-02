@@ -37,50 +37,52 @@
    
 */   
 
-var Behaviour = {
-	list : new Array,
+if (!Behaviour) {
+	var Behaviour = {
+		list : new Array,
+		
+		register : function(sheet){
+			Behaviour.list.push(sheet);
+		},
+		
+		start : function(){
+			Behaviour.addLoadEvent(function(){
+				Behaviour.apply();
+			});
+		},
+		
+		apply : function(){
+			for (h=0;sheet=Behaviour.list[h];h++){
+				for (selector in sheet){
+					list = document.getElementsBySelector(selector);
+					
+					if (!list){
+						continue;
+					}
 	
-	register : function(sheet){
-		Behaviour.list.push(sheet);
-	},
-	
-	start : function(){
-		Behaviour.addLoadEvent(function(){
-			Behaviour.apply();
-		});
-	},
-	
-	apply : function(){
-		for (h=0;sheet=Behaviour.list[h];h++){
-			for (selector in sheet){
-				list = document.getElementsBySelector(selector);
-				
-				if (!list){
-					continue;
-				}
-
-				for (i=0;element=list[i];i++){
-					sheet[selector](element);
+					for (i=0;element=list[i];i++){
+						sheet[selector](element);
+					}
 				}
 			}
-		}
-	},
-	
-	addLoadEvent : function(func){
-		var oldonload = window.onload;
+		},
 		
-		if (typeof window.onload != 'function') {
-			window.onload = func;
-		} else {
-			window.onload = function() {
-				oldonload();
-				func();
+		addLoadEvent : function(func){
+			var oldonload = window.onload;
+			
+			if (typeof window.onload != 'function') {
+				window.onload = func;
+			} else {
+				window.onload = function() {
+					oldonload();
+					func();
+				}
 			}
 		}
 	}
+	
+	Behaviour.start();
 }
-
-Behaviour.start();
 
 /*
    The following code is Copyright (C) Simon Willison 2004.
@@ -314,28 +316,32 @@ if (Selectors) {
 // Do not wait for onload call
 // by Dean Edwards/Matthias Miller/John Resig, 2006
 
-Behaviour._apply = Behaviour.apply;
-Behaviour.apply = function() {
-	if (this.applied) return;
-	this.applied = true;
-	this._apply();
-};
-
-Behaviour.init = function() {
-	// quit if this function has already been called
-	if (arguments.callee.done) return;
-	
-	// flag this function so we don't do the same thing twice
-	arguments.callee.done = true;
-	
-	// kill the timer
-	if (_timer) {
-		clearInterval(_timer);
-		_timer = null;
-	}
-	
-	Behaviour.apply();
-};
+var _timer;
+if (!Behaviour._apply) {
+	Behaviour._apply = Behaviour.apply;
+	Behaviour.apply = function() {
+		if (this.applied) return;
+		this.applied = true;
+		this._apply();
+	};
+}
+if (!Behaviour.init) {
+	Behaviour.init = function() {
+		// quit if this function has already been called
+		if (arguments.callee.done) return;
+		
+		// flag this function so we don't do the same thing twice
+		arguments.callee.done = true;
+		
+		// kill the timer
+		if (_timer) {
+			clearInterval(_timer);
+			_timer = null;
+		}
+		
+		Behaviour.apply();
+	};
+}
 
 /* for Mozilla */
 if (document.addEventListener) {
@@ -355,10 +361,13 @@ if (document.addEventListener) {
 /*@end @*/
 
 /* for Safari */
+
 if (navigator.vendor && navigator.vendor.match(/Apple/)) { // sniff
-	var _timer = setInterval(function() {
-		if (/loaded|complete/.test(document.readyState)) {
-			Behaviour.init(); // call the onload handler
-		}
-	}, 10);
+	if (!_timer) {
+		_timer = setInterval(function() {
+			if (/loaded|complete/.test(document.readyState)) {
+				Behaviour.init(); // call the onload handler
+			}
+		}, 10);
+	}
 }
