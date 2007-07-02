@@ -1,7 +1,7 @@
 ---+!! !HTTPDUserAdminContrib
 <!--
 One line description, required for extensions repository catalog.
-    * Set SHORTDESCRIPTION = A User and Password module supporting text or DBM format htpasswd files, and SQL using HTTPD::UserAdmin CPAN module 
+   * Set SHORTDESCRIPTION = A User and Password module supporting text or DBM format htpasswd files, and SQL using HTTPD::UserAdmin CPAN module 
 -->
 %SHORTDESCRIPTION%
 
