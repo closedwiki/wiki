@@ -176,17 +176,21 @@ sub new {
 
     my $manifest = _findRelativeTo( $buildpldir, 'MANIFEST' );
     ($this->{files}, $this->{other_modules}) =
-      readManifest($this->{basedir},'',$manifest,sub{exit(1)});
+      TWiki::Contrib::BuildContrib::BaseBuild::readManifest(
+          $this->{basedir}, '' , $manifest, sub{ exit(1) });
 
     # Generate a TWiki table representing the manifest contents
     # and a hash table representing the files
     my $mantable = '';
+    my $rawman = '';
     my $hashtable = '';
     foreach my $file (@{$this->{files}}) {
+        $rawman .= "$file->{name},$file->{permissions},$file->{description}\n";
         $mantable .= "   | ==" . $file->{name} . '== | ' .
           $file->{description} . ' |'.$NL;
         $hashtable .= "'$file->{name}'=>$file->{permissions},";
     }
+    $this->{RAW_MANIFEST} = $rawman;
     $this->{MANIFEST} = $mantable;
     $this->{FILES} = $hashtable;
 
@@ -207,8 +211,11 @@ sub new {
     }
 
     my $deptable = '';
+    my $rawdeps = '';
     my $a = ' align="left"';
     foreach my $dep (@{$this->{dependencies}}) {
+        $rawdeps .=
+          "$dep->{name},$dep->{version},$dep->{trigger},$dep->{type},$dep->{description}\n";
         my $v = $dep->{version};
         $v =~ s/&/&amp;/go;
         $v =~ s/>/&gt;/go;
@@ -218,6 +225,7 @@ sub new {
           CGI::td({align=>'left'}, $dep->{description});
         $deptable .= CGI::Tr( $cells );
     }
+    $this->{RAW_DEPENDENCIES} = $rawdeps;
     $this->{DEPENDENCIES} = 'None';
     if ($deptable) {
         my $cells = CGI::th('Name').CGI::th('Version').CGI::th('Description');
@@ -357,7 +365,7 @@ sub _loadDependenciesFrom {
 
     my $deps = _findRelativeTo($module, 'DEPENDENCIES');
     die 'Failed to find DEPENDENCIES for '.$module unless $deps && -f $deps;
-    my $condition = '';
+    my $condition = 1;
     if (-f $deps) {
         open(PF, '<'.$deps) || die 'Failed to open '.$deps;
         while (my $line = <PF>) {
@@ -371,7 +379,7 @@ sub _loadDependenciesFrom {
                     version=>'',
                     description=>$3,
                     trigger=>$condition);
-                $condition='';
+                $condition = 1;
             } elsif ($line =~ m/^([^,]+),([^,]*),\s*(\w*)\s*,\s*(.+)$/o) {
                 $this->_addDependency(
                     name=>$1,
@@ -379,7 +387,7 @@ sub _loadDependenciesFrom {
                     type=>$3,
                     description=>$4,
                     trigger=>$condition);
-                $condition='';
+                $condition = 1;
             } else {
                 warn 'WARNING: LINE '.$line.' IN '.$deps.' IGNORED';
             }

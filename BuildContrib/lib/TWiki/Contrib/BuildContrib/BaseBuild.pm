@@ -14,10 +14,6 @@
 #
 package TWiki::Contrib::BuildContrib::BaseBuild;
 
-use Exporter;
-
-@ISA=(Exporter);
-@EXPORT=qw(readManifest);
 use strict;
 
 =pod
@@ -87,20 +83,20 @@ sub readManifest {
             unless( $permissions ) {
                 # No permissions in MANIFEST, apply defaults
                 if ($name =~ /\.pm$/) {
-                    $permissions = 0444;
+                    $permissions = '0444';
                 } elsif ($name =~ /\.pl$/) {
-                    $permissions = 0554;
+                    $permissions = '0554';
                 } elsif ($name =~ /^data\/.*\.txt$/ ||
                            $name =~ /^pub\//) {
-                    $permissions = 0664;
+                    $permissions = '0664';
                 } elsif ($name =~ /^bin\//) {
-                    $permissions = 0555;
+                    $permissions = '0555';
                 } else {
-                    $permissions = 0444;
+                    $permissions = '0444';
                 }
             }
-            $permissions = 0 unless defined $permissions;
-            $permissions =~ s/^00/0/;
+            $permissions = "0$permissions";
+            $permissions =~ s/^0+/0/;
             my $n = { name => $name, description => ($desc || ''),
                       permissions => $permissions };
             push(@files, $n);
