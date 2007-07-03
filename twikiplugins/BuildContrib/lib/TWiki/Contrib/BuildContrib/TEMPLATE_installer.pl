@@ -1,9 +1,9 @@
 #!perl
 # Install script for %$MODULE%
 #
-# Note that *_installer and *_installer.pl are THE SAME FILE
+# Note that %$MODULE%_installer and %$MODULE%_installer.pl are THE SAME FILE
 #
-# Copyright (C) 2004 Crawford Currie http://c-dot.co.uk
+# Copyright (C) 2004-2007 Crawford Currie http://c-dot.co.uk
 #
 # NOTE TO THE DEVELOPER: THIS FILE IS GENERATED AUTOMATICALLY
 # BY THE BUILD PROCESS DO NOT EDIT IT - IT WILL BE OVERWRITTEN
@@ -49,9 +49,30 @@ my $PACKAGES_URL = '%$UPLOADTARGETPUB%/%$UPLOADTARGETWEB%';
 my $noconfirm = 0;
 my $inactive = 0;
 my $twiki;
-my %manifest = ( %$FILES% );
-my @deps = ( %$SATISFIES% );
-my $dakar;
+
+# Extract MANIFEST and DEPENDENCIES from the __DATA__
+undef $/;
+my @DATA = split(/<<<< (.*?) >>>>\s*\n/, <DATA>);
+shift @DATA; # remove header comment
+my %data = @DATA;
+my %manifest;
+foreach my $row (split(/\r?\n/, $data{MANIFEST})) {
+    my ($file, $perms, $desc) = split(',', $row, 3);
+    $manifest{$file} = $perms;
+}
+my @deps;
+foreach my $row (split(/\r?\n/, $data{DEPENDENCIES})) {
+    my ($module, $condition, $trigger, $type, $desc) = split(',', $row, 5);
+    push(@deps, {
+        name=>$module,
+        type=>$type,
+        version=>$condition, # version condition
+        trigger => $trigger, # ONLYIF condition
+        description=>$desc,
+    });
+}
+
+my $twiki4OrMore;
 my %available;
 my $lwp;
 my @archTypes = ( '.tgz', '.tar.gz', '.zip' );
@@ -87,17 +108,28 @@ BEGIN {
     # added in Dakar.
     if( &$check_perl_module( 'TWiki::Merge' )) {
         eval "use TWiki";
-        $twiki = new TWiki();
-        $dakar = 1;
+        # We have to get the admin user, as a guest user may be blocked.
+        # TWiki 4.2 has AdminUserLogin; for earlier releases, we need to
+        # do something a bit different.
+        my $user = $TWiki::cfg{AdminUserLogin} || '';
+        $twiki = new TWiki($user);
+        unless (defined $TWiki::cfg{AdminUserLogin}) {
+            # Compatibility with 3.0 < TWiki < 4.2
+            $TWiki::Plugins::SESSION = $twiki;
+            $twiki->{user} =
+              $twiki->{users}->findUser($TWiki::cfg{AdminUserWikiName},
+                                        $TWiki::cfg{AdminUserWikiName});
+        }
+        $twiki4OrMore = 1;
     } else {
-        # Not Dakar
+        # Not TWiki-4
         no strict;
         do 'lib/TWiki.cfg';
         if( -e 'lib/LocalSite.cfg') {
             do 'lib/LocalSite.cfg';
         }
         use strict;
-        $dakar = 0;
+        $twiki4OrMore = 0;
     }
 
     if( &$check_perl_module( 'LWP' )) {
@@ -451,7 +483,7 @@ sub setConfig {
 
     # is this Cairo or earlier? If it is, we need to include
     # LocalSite.cfg from TWiki.cfg
-    unless( $dakar ) {
+    unless( $twiki4OrMore ) {
         open(F, "<lib/TWiki.cfg");
         undef $/;
         $txt = <F>;
@@ -709,9 +741,8 @@ sub checkin {
     # If this is Dakar, we have a good chance of completing the
     # install.
     my $err = 1;
+
     if( $twiki ) {
-        my $user =
-          $twiki->{users}->findUser($TWiki::cfg{AdminUserWikiName}, $TWiki::cfg{AdminUserWikiName});
         if( $file ) {
             my $origfile = $TWiki::cfg{PubDir} . '/' . $web . '/' . $topic . '/' . $file;
             print "Add attachment $origfile\n";
@@ -723,21 +754,25 @@ Adding file: $file to installation ....
 DONE
             # Need copy of file to upload it, use temporary location
             # Use non object version of File::Temp for Perl 5.6.1 compatibility
-            my ($tmp, $tmpfilename)  = File::Temp::tempfile(unlink=>1);
-            File::Copy::copy($origfile, $tmpfilename) ||
-              die "$origfile could not be copied to tmp dir ($tmpfilename).";
             my @stats = stat $origfile;
             my $fileSize = $stats[7];
             my $fileDate = $stats[9];
-            $err = $twiki->{store}->saveAttachment(
-                $web, $topic, $file, $user,
-                { comment => 'Saved by install script',
-                  file => $tmpfilename,
-                  filesize => $fileSize,
-                  filedate => $fileDate } );
-            # Logic in Store.pm unfortunately returns two different codes for attachments
-            # and topics
-            $err = !$err;
+
+            # make sure it's readable and writable by the current user
+            chmod(($stats[2] & 07777) | 0600, $origfile);
+
+            my ($tmp, $tmpfilename) = File::Temp::tempfile(unlink=>1);
+            File::Copy::copy($origfile, $tmpfilename) ||
+              die "$origfile could not be copied to tmp dir ($tmpfilename): $!";
+            eval {
+                TWiki::Func::saveAttachment(
+                    $web, $topic, $file,
+                    { comment => 'Saved by install script',
+                      file => $tmpfilename,
+                      filesize => $fileSize,
+                      filedate => $fileDate } );
+            };
+            $err = $@;
         } else {
             print "Add topic $web.$topic\n";
             return 1 if ($inactive);
@@ -746,11 +781,14 @@ DONE
 Adding topic: $web.$topic to installation ....
 DONE
             # read the topic to recover meta-data
-            my( $meta, $text ) =
-              $twiki->{store}->readTopic( $user, $web, $topic );
-            $err = $twiki->{store}->saveTopic
-              ( $user, $web, $topic, $text, $meta,
-                { comment => 'Saved by install script' } );
+            eval {
+                my( $meta, $text ) =
+                  TWiki::Func::readTopic( $web, $topic );
+                TWiki::Func::saveTopic(
+                    $web, $topic, $meta, $text,
+                    { comment => 'Saved by install script' } );
+            };
+            $err = $@;
         }
     }
     return ( !$err );
@@ -806,7 +844,7 @@ sub emplace {
     foreach $file ( keys %manifest ) {
         my $source = "$source/$file";
         my $target = remap($file);
-        print "Install $target, permissions 0",sprintf('%0.3o', $manifest{$file}),"\n";
+        print "Install $target, permissions $manifest{$file}\n";
         unless ($inactive) {
             if (-e $target) {
                 unless (File::Copy::move($target, "$target.bak")) {
@@ -824,7 +862,7 @@ sub emplace {
             push(@pub, $target);
         }
         unless( $inactive ) {
-            chmod( $manifest{$file}, $target ) ||
+            chmod( oct($manifest{$file}), $target ) ||
               print STDERR "WARNING: cannot set permissions on $target: $!\n";
         }
     }
@@ -860,6 +898,8 @@ sub usage {
 Usage: %$MODULE%_installer -an install
        %$MODULE%_installer -an uninstall
        %$MODULE%_installer -an upgrade
+       %$MODULE%_installer manifest
+       %$MODULE%_installer dependencies
 
 Operates on the directory tree below where it is run from,
 so should be run from the top level of your TWiki installation.
@@ -877,6 +917,15 @@ it, overwriting your existing zip and installer script.
    dependencies
 -n means don't write any files into my current install, just
    tell me what you would do
+
+manifest will generate a list of the files in the package on
+standard output. The list is generated in the same format as
+the MANIFEST files used by BuildContrib.
+
+dependencies will generate a list of dependencies on standard
+output. the list is generated in the same format as the
+DEPENDENCIES files used by BuidContrib.
+
 DONE
 }
 
@@ -946,7 +995,6 @@ DONE
 
 unshift( @INC, 'lib' );
 
-print "\n### %$MODULE% Installer ###\n\n";
 my $n = 0;
 my $action = 'install';
 while ( $n < scalar( @ARGV ) ) {
@@ -954,7 +1002,7 @@ while ( $n < scalar( @ARGV ) ) {
         $noconfirm = 1;
     } elsif( $ARGV[$n] eq '-n' ) {
         $inactive = 1;
-    } elsif( $ARGV[$n] =~ m/(install|uninstall|upgrade)/ ) {
+    } elsif( $ARGV[$n] =~ m/(install|uninstall|upgrade|manifest|dependencies)/ ) {
         $action = $1;
     } else {
         usage( );
@@ -963,6 +1011,25 @@ while ( $n < scalar( @ARGV ) ) {
     $n++;
 }
 
+if ($action eq 'manifest') {
+    foreach my $row (split(/\r?\n/, $data{MANIFEST})) {
+        my ($file, $perms, $desc) = split(',', $row, 3);
+        print "$file $perms $desc\n";
+    }
+    exit 0;
+}
+
+if ($action eq 'dependencies') {
+    foreach my $dep (@deps) {
+        if ($dep->{trigger} && $dep->{trigger} != '1') {
+            print "ONLYIF $dep->{trigger}\n";
+        }
+        print "$dep->{name},$dep->{version},$dep->{type},$dep->{description}\n";
+    }
+    exit 0;
+}
+
+print "\n### %$MODULE% Installer ###\n\n";
 print <<DONE;
 This installer must be run from the root directory of your TWiki
 installation.
@@ -988,3 +1055,12 @@ if( $action eq 'uninstall' ) {
 }
 
 1;
+
+# MANIFEST and DEPENDENCIES are done this way
+# to make it easy to extract them from this script.
+
+__DATA__
+<<<< MANIFEST >>>>
+%$RAW_MANIFEST%
+<<<< DEPENDENCIES >>>>
+%$RAW_DEPENDENCIES%

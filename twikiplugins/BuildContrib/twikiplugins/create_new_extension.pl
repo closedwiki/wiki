@@ -1,7 +1,7 @@
 #! /usr/bin/perl -w
 # Script for TWiki Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 2006 TWikiContributors. All righrts reserved.
+# Copyright (C) 2006-2007 TWikiContributors. All rights reserved.
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -91,6 +91,9 @@ usage(), exit 1 unless $def{TYPE};
 
 $def{STUBS} = $def{TYPE} eq 'Plugin' ? 'Plugins' : 'Contrib';
 
+$def{SHORTDESCRIPTION} = prompt("Enter a one-line description of the extension: ", '');
+$def{SHORTDESCRIPTION} =~ s/'/\\'/g;
+
 # Templates for all required files are in this script, after __DATA__
 $/ = undef;
 my @DATA = split(/<<<< (.*?) >>>>\s*\n/, <DATA>);
@@ -98,8 +101,13 @@ shift @DATA;
 my %data = @DATA;
 my $stubPath = "$def{MODULE}/lib/TWiki/$def{STUBS}";
 if ($def{TYPE} eq 'Plugin') {
-    writeFile($stubPath, "$def{MODULE}.pm",
-              getFile("EmptyPlugin/lib/TWiki/Plugins/EmptyPlugin.pm"));
+    my $rewrite = getFile("EmptyPlugin/lib/TWiki/Plugins/EmptyPlugin.pm");
+    # Tidy up
+    $rewrite =~ s/^.*?__NOTE:__ /$data{PLUGIN_HEADER}/s;
+    $rewrite =~ s/^# change the package name.*$//m;
+    $rewrite =~ s/(SHORTDESCRIPTION = ').*?'/$1%\$SHORTDESCRIPTION%'/;
+    $rewrite =~ s/EmptyPlugin/%\$MODULE%/sg;
+    writeFile($stubPath, "$def{MODULE}.pm", $rewrite );
 } else {
     writeFile($stubPath, "$def{MODULE}.pm",
               $data{PM}.($data{"PM_$def{TYPE}"} || ''));
@@ -208,6 +216,24 @@ $build->build($build->{target});
 data/TWiki/%$MODULE%.txt 0644 Documentation
 lib/TWiki/%$STUBS%/%$MODULE%.pm 0644 Perl module
 
+<<<< PLUGIN_HEADER >>>>
+# %$TYPE% for TWiki Collaboration Platform, http://TWiki.org/
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details, published at
+# http://www.gnu.org/copyleft/gpl.html
+
+=pod
+
+---+ package TWiki::Plugins::%$MODULE%
+
 <<<< PM >>>>
 # %$TYPE% for TWiki Collaboration Platform, http://TWiki.org/
 #
@@ -230,13 +256,13 @@ use vars qw( $VERSION $RELEASE $SHORTDESCRIPTION );
 
 $VERSION = '$Rev$';
 $RELEASE = '';
-$SHORTDESCRIPTION = '';
+$SHORTDESCRIPTION = '%$SHORTDESCRIPTION%';
 
 <<<< TXT >>>>
 ---+!! !%$MODULE%
 <!--
 One line description, required for extensions repository catalog.
-    * Set SHORTDESCRIPTION = 
+   * Set SHORTDESCRIPTION = %$SHORTDESCRIPTION%
 -->
 %SHORTDESCRIPTION%
 
@@ -258,7 +284,6 @@ One line description, required for extensions repository catalog.
 |  %$TYPE% Version: | %$VERSION% |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
 |  Dependencies: | %$DEPENDENCIES% |
-|  [[TWiki:Plugins/Benchmark][Benchmarks]]: | %TWIKIWEB%.GoodStyle nn%, %TWIKIWEB%.FormattedSearch nn%, %$MODULE% nn% |
 |  %$TYPE% Home: | %$UPLOADTARGETSCRIPT%/view%$UPLOADTARGETSUFFIX%/%$UPLOADTARGETWEB%/%$MODULE% |
 |  Feedback: | %$UPLOADTARGETSCRIPT%/view%$UPLOADTARGETSUFFIX%/%$UPLOADTARGETWEB%/%$MODULE%Dev |
 |  Appraisal: | %$UPLOADTARGETSCRIPT%/view%$UPLOADTARGETSUFFIX%/%$UPLOADTARGETWEB%/%$MODULE%Appraisal |

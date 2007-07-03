@@ -1,5 +1,3 @@
-Test::Unit,>=0.24,cpan,Optional, required for unit testing. Available from CPAN:Test::Unit
-Pod::Text,>=0,cpan,POD documentation extracter. Available from CPAN:Pod::Text
 File::Spec,>0,cpan,Used to convert relative paths to absolute. Available from CPAN:File::Spec
 File::Find,>0,cpan,Used to find file components. Available from CPAN:File::Find
 File::Copy,>0,cpan,Used to copy files. Available from CPAN:File::Copy
@@ -9,4 +7,4 @@ Carp,>=0,cpan,May be required for lib/TWiki/Contrib/Build.pm
 Error,>=0,cpan,May be required for lib/TWiki/Contrib/Build.pm
 Exporter,>=0,cpan,May be required for lib/TWiki/Contrib/BuildContrib/BaseBuild.pm
 LWP,>=0,cpan,May be required for lib/TWiki/Contrib/Build.pm
-POSIX,>=0,cpan,May be required for lib/TWiki/Contrib/Build.pm
+POSIX,>=0,cpan,Required for lib/TWiki/Contrib/Build.pm
