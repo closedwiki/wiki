@@ -1358,7 +1358,7 @@ sub emitTable {
         $rowCount++;
     }    # foreach my $row ( @curTable )
 
-    $text .= $currTablePre . "\n" . CGI::end_table() . "\n";
+    $text .= $currTablePre . CGI::end_table() . "\n";
     _setDefaults();
     return $text;
 }
