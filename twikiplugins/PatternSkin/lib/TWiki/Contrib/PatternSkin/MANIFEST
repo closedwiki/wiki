@@ -69,9 +69,6 @@ templates/attach.pattern.tmpl 0444
 templates/attachagain.pattern.tmpl 0444
 templates/attachnew.pattern.tmpl 0444
 templates/attachtables.pattern.tmpl 0444
-templates/backlinks.pattern.tmpl 0444
-templates/backlinksallwebs.pattern.tmpl 0444
-templates/backlinksweb.pattern.tmpl 0444
 templates/changeform.pattern.tmpl 0444
 templates/changes.pattern.tmpl 0444
 templates/css.pattern.tmpl 0444
