@@ -73,6 +73,9 @@ STYLE
     while (my ($key, $value) = each %{$vars}) {
         $urps->{$key} = $value if $key =~ /^erp_/;
     }
+
+    my $endsWithNewline = ($_[0] =~ /\n$/)?1:0;
+
     my $content = TWiki::Plugins::EditRowPlugin::Table::parseTables(
         @_, $urps);
 
@@ -130,7 +133,7 @@ STYLE
         }
     }
 
-    $_[0] = join("\n", @$content)."\n" if $hasTables;
+    $_[0] = join("\n", @$content).($endsWithNewline?"\n":'') if $hasTables;
 }
 
 # Replace content with a marker to prevent it being munged by TWiki
