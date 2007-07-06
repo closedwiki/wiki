@@ -4,9 +4,7 @@
 
 %TMPL:DEF{"webaction"}%%TMPL:END%
 
-%TMPL:DEF{"heading"}%!!More Actions on Topic [[%TOPIC%]]%TMPL:END%
-
-%TMPL:DEF{"toc"}%%TOC%%TMPL:END%
+%TMPL:DEF{"heading"}%More Actions on Topic [[%TOPIC%]]%TMPL:END%
 
 %TMPL:DEF{"topicactionbuttons"}%%TMPL:P{"canceltopicaction"}%%TMPL:END%
 
@@ -86,8 +84,7 @@ table.twikiDiffOptions img {
 ---++++ %MAKETEXT{"View previous topic revision"}% (1 ... %PARAM1%)
 <form name="main" action="%SCRIPTURLPATH{"view"}%/%WEB%/%TOPIC%">
    * %MAKETEXT{"View revision:"}% <input class="twikiInputField" type="text" name="rev" size="6" value="%PARAM2%" /> &nbsp;
-     <input type="checkbox" class="twikiCheckbox" id="raw" name="raw" /><label for="raw">%MAKETEXT{"in raw text format"}%</label> &nbsp;
-     <input type="submit" class="twikiButton" value='%MAKETEXT{"View"}%' />
+     <input type="checkbox" class="twikiCheckbox" id="raw" name="raw" /><label for="raw">%MAKETEXT{"in raw text format"}%</label> <input type="submit" class="twikiButton" value='%MAKETEXT{"View"}%' />
 </form>
 ---++++ %MAKETEXT{"Compare revisions"}%
 %TMPL:P{"cssTwikiDiffOptions"}%
@@ -112,7 +109,7 @@ table.twikiDiffOptions img {
 
 
 
-%TMPL:DEF{"message"}%%TMPL:P{"toc"}%
+%TMPL:DEF{"message"}%
 %TMPL:P{"revision"}%
 %TMPL:P{"settings"}%
 %TMPL:P{"delete"}%
