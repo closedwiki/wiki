@@ -258,8 +258,9 @@ sub _link {
     $string =~ s/[\[\]]//go;
 
     $topic ||= $string;
-    $tooltip ||= $this->{session}->i18n->maketext(
+    my $defaultToolTip = $this->{session}->i18n->maketext(
         'Click to see details in separate window');
+    $tooltip ||= $defaultToolTip;
 
     my $web;
     ( $web, $topic ) =
@@ -281,7 +282,7 @@ sub _link {
     } else {
         my $expanded = $this->{session}->handleCommonTags(
             $string, $web, $topic, $meta );
-        if ( $tooltip ) {
+        if ( $tooltip ne $defaultToolTip ) {
             $link = CGI::span ( { title => $tooltip }, $expanded );
         } else {
             $link = $expanded;
