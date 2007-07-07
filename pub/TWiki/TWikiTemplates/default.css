@@ -14,6 +14,9 @@ html body {
 html>body { /* Mozilla */
 	font-size:small;	
 }
+h1, h2, h3, h4, h5, h6 {
+	line-height:104%;
+}
 p {
 	margin:1em 0 0 0;
 }
@@ -223,7 +226,6 @@ table.twikiFormTable {
 }
 .twikiHelp {
 	background-color:#f8fbfc;
-	border-color:#D5E6F3;
 }
 .twikiAccessKey {
 	color:inherit;
@@ -540,8 +542,6 @@ table.twikiFormTable th.twikiFormTableHRow a:visited {
 .twikiHelp {
 	padding:1em;
 	margin:0 0 -1px 0;
-	border-width:1px 0;
-	border-style:solid;
 }
 .twikiHelp ul,
 .twikiHelp li {
