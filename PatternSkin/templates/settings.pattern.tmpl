@@ -1,56 +1,27 @@
-%TMPL:INCLUDE{"edit"}%
-
+%TMPL:INCLUDE{"settings"}%
 
 
 %TMPL:DEF{"titleaction"}%%MAKETEXT{"(set preferences)"}% %TMPL:END%
 
 
-
 %TMPL:DEF{"webaction"}%%MAKETEXT{"Preferences for"}%%TMPL:END%
-
 
 
 %TMPL:DEF{"pagetitle"}%%TMPL:P{"webaction"}% %TOPIC%%TMPL:END%
 
 
-
-%TMPL:DEF{"formstart"}%<div class="patternFormHolder twistyMakeHidden" id="formHolder">
-<form name="main" action="%SCRIPTURLPATH{"manage"}%/%WEB%/%TOPIC%" method="post">
-<input type="hidden" name="action" value="saveSettings" />
-<input type="hidden" name="originalrev" value="%ORIGINALREV%" />
-%TMPL:END%
-
-%TMPL:DEF{"formend"}%</form>%TMPL:END%
-
-
-
 %TMPL:DEF{"saveoptions"}%%TMPL:END%
 %TMPL:DEF{"sig"}%%TMPL:END%
 
-
-
 %TMPL:DEF{"action_buttons"}%%TMPL:P{"button_save"}% %MAKETEXT{"or"}% %TMPL:P{"canceltopicaction"}%%TMPL:END%
-
-%TMPL:DEF{"button_save"}%<input type="submit" class="twikiSubmit" name="action_save" id="save" %MAKETEXT{"value='Save' accesskey='s'"}% />%TMPL:END%
-
 
 
 %TMPL:DEF{"accesskeys_help"}%%ICON{info}% <a href="#%MAKETEXT{"Opens page in new window"}%" onclick="launchWindow('%TWIKIWEB%', 'AccessKeys'); return false;">%MAKETEXT{"Access keys"}%</a>: %MAKETEXT{"S = Save, C = Cancel"}%%TMPL:END%
-
-
-
-%TMPL:DEF{"help"}%
-   * %MAKETEXT{"Get help on <a target='TWikiVariables' onclick=\"return launchWindow('[_1]','TWikiVariables')\" href='[_2]' rel='nofollow'>Setting topic preferences</a>." args="%TWIKIWEB%,%SCRIPTURLPATH{"view"}%/%TWIKIWEB%/TWikiVariables"}%
-   * %MAKETEXT{"Each preference has the syntax"}% <br />
-     %MAKETEXT{"~[multiple of 3 spaces~] * ~[space~] Set ~[space~] VARIABLENAME ~[space~] = ~[value~]"}%
-%TMPL:END%
-
 
 
 %TMPL:DEF{"content"}%%TMPL:P{"formstart"}%
 %TMPL:P{"toolbar"}%
 %TMPL:P{"pagehelp"}%
 %TMPL:P{"textarea"}%
-%TMPL:P{"sig_textareabuttons"}%
-%TMPL:P{"topicaction"}%
+%TMPL:P{"topicinfo"}%
 %TMPL:P{"formend"}%%TMPL:P{"pagehelp_nojavascript"}%%TMPL:END%
