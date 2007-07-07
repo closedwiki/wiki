@@ -56,7 +56,7 @@ sub changes {
           'This page is showing major changes only. '.
             CGI::a( { href => $query->url()."/$webName?minor=1",
                       rel => 'nofollow' }, 'View all changes' );
-        $comment = CGI::span( { class => 'twikiHelp' }, $comment );
+        $comment = CGI::div( { class => 'twikiHelp' }, $comment );
         $page .= $comment;
     }
     my %done = ();
