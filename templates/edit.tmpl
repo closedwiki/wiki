@@ -28,8 +28,8 @@
 
 
 %TMPL:DEF{"form"}%%FORMFIELDS%%TMPL:END%
-%TMPL:DEF{"formattop"}%%TMPL:END%
-%TMPL:DEF{"formatbottom"}%%TMPL:P{"form"}%%TMPL:END%
+%TMPL:DEF{"formtop"}%%TMPL:END%
+%TMPL:DEF{"formbottom"}%%TMPL:P{"form"}%%TMPL:END%
 
 %TMPL:DEF{"formstart"}%<div class="twikiFormHolder twistyMakeHidden" id="formHolder">
 <form name="main" action="%SCRIPTURLPATH{"save"}%/%WEB%/%TOPIC%" method="post">%TMPL:END%
@@ -61,9 +61,9 @@
 %TMPL:DEF{"topicactionbuttons"}%<input type="submit" class="twikiSubmit" name="action_cancel" value="Cancel" id="cancel" />%TMPL:P{"sep"}%<input type="submit" class="twikiSubmit" name="action_save" value="Save" id="save" />%TMPL:P{"sep"}%<input type="submit" class="twikiSubmit" name="action_preview" value="Preview" id="preview" />%TMPL:END%
 
 
-%TMPL:DEF{"content"}%%TMPL:P{"formstart"}%%TMPL:P{"formattop"}%
+%TMPL:DEF{"content"}%%TMPL:P{"formstart"}%%TMPL:P{"formtop"}%
 %TMPL:P{"textarea"}%
 See below for help in editing this page.
 %TMPL:P{"sig"}%
-%TMPL:P{"formatbottom"}%
+%TMPL:P{"formbottom"}%
 %TMPL:P{"topicinfo"}%%TMPL:P{"formend"}%%TMPL:END%
