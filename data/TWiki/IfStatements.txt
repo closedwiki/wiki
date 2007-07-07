@@ -1,6 +1,5 @@
-%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev: 6036 $"}%
-
----+ =IF= Statements
+%META:TOPICINFO{author="TWikiContributor" date="1183830381" format="1.1" version="$Rev$"}%
+---+ IF Statements
 
 The =%<nop>IF%= construct gives TWiki the power to include content in topics based on the value of simple expressions.
 
@@ -16,25 +15,46 @@ The basic syntax of a condition is the same as [[QuerySearch][the syntax used fo
 | defined | True if a preference variable or url parameter of this name is defined. |
 | $ | expands a URL parameter or [[TWikiVariables][TWikiVariable]] name. Plugin handlers *are not called*. Built-in variables and user-defined preferences are supported. You can pass a limited subset of parameters to TWiki variables by enclosing the variable name in single quotes; for example, =$ 'VARIABLE{value}'=. The ='VARIABLE{value}'= string may *not* contain quotes (' or "). |
 | {X} | expands to the value of the configuration variable {X} - for example, ={ScriptUrlPath}= |
-examples:
-<verbatim>
-TWiki variable defined or not
-%IF{"defined WIKINAME" then="WIKINAME is defined" else="WIKINAME is not defined"}%
 
+__Examples:__
+
+1. TWiki variable defined or not
+<verbatim>
+%IF{"defined WIKINAME" then="WIKINAME is defined" else="WIKINAME is not defined"}%
+</verbatim>
+
+2. Compare TWiki variable
+<verbatim>
 You are %IF{ "$ WIKINAME='TWikiGuest' and not defined OPEN_DAY" then="not" }% allowed to
 %IF{ "context view" then="view" else="edit"}% this TWiki today.
+</verbatim>
 
-URL parameter
+3. URL parameter
+<verbatim>
 %IF{ "defined search" then="Search: $percntURLPARAM{search}$percnt" else="No search passed in"}%
+</verbatim>
 
-Configuration item set or not
-%IF{ "{AntiSpam}{HideUserDetails}" then="User details are hidden" }%
-
+4. Range test on URL parameter
+<verbatim>
 url param t is %IF{ "0 < $ t and $ t < 1000" then="in" else="out of"}% range.
+</verbatim>
 
-Text comparison
+5. Text comparison of URL parameter
+<verbatim>
 %IF{ "$'URLPARAM{scope}'='text'" then="Plain text search" }% 
 </verbatim>
+
+6. Configuration item set or not
+<verbatim>
+%IF{ "{AntiSpam}{HideUserDetails}" then="User details are hidden" }%
+</verbatim>
+
+7. Plugin enabled test
+<verbatim>
+TablePlugin is %IF{ "context TablePluginEnabled" then="enabled" else="disabled" }%.
+</verbatim>
+expands to: %BR%
+TablePlugin is %IF{ "context TablePluginEnabled" then="enabled" else="disabled" }%.
 
 *Configuration items* are defined in [[%SCRIPTURLPATH{"configure"}%][configure]]. You cannot see the value of a configuration item, you can only see if the item is set or not.
 
