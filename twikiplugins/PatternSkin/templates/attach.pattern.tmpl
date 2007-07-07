@@ -2,13 +2,10 @@
 %TMPL:DEF{"logo"}%%TMPL:END%
 
 
-
 %TMPL:DEF{"bodyclassname"}%patternNoViewPage patternAttachPage%TMPL:END%
 
 
-
 %TMPL:DEF{"titleaction"}%%MAKETEXT{"(attach)"}% %TMPL:END%
-
 
 
 %TMPL:DEF{"pagetitle"}%%MAKETEXT{"Attach image or document on [_1]" args="[[%TOPIC%]]"}%%TMPL:END%
@@ -19,17 +16,13 @@
 </div><!--//patternTop-->%TMPL:END%
 
 
-
 %TMPL:DEF{"pagehelp"}%%TWISTYTOGGLE{id="attachhelp" mode="div" class="twikiHelp" remember="on" noscript="hide"}%%TMPL:P{"notes"}%%TMPL:P{"extranotes"}%%ENDTWISTYTOGGLE%%TMPL:END%
 
 %TMPL:DEF{"pagehelp_nojavascript"}%<br />%TWISTYTOGGLE{id="pagehelp_nojavascript" mode="div" class="twikiHelp" start="hide"}%%TMPL:P{"notes"}%%TMPL:P{"extranotes"}%%ENDTWISTYTOGGLE%%TMPL:END%
 
 
-
 %TMPL:DEF{"notes"}%
-   * %MAKETEXT{"*Help:* Please see <a target='TWikiVariables' onclick=\"return launchWindow('[_1]','FileAttachment')\" href='' rel='nofollow'>FileAttachment</a> for more information about attaching files." args="%TWIKIWEB%"}%
-%TMPL:END%
-
+   * %MAKETEXT{"*Help:* Please see <a target='TWikiVariables' onclick=\"return launchWindow('[_1]','FileAttachment')\" href='' rel='nofollow'>FileAttachment</a> for more information about attaching files." args="%TWIKIWEB%"}%%TMPL:END%
 
 
 %TMPL:DEF{"formstart"}%<div class="patternAttachForm"><form name="main" enctype="multipart/form-data" action="%SCRIPTURLPATH{"upload"}%/%WEB%/%TOPIC%" method="post">%TMPL:END%
@@ -51,9 +44,9 @@
 
 %TMPL:DEF{"comment"}%<div class="twikiFormStep">
 ---+++ %MAKETEXT{"Comment"}%
-
+<p>
 %MAKETEXT{"Describe the file so other people know what it is."}%
-
+</p>
 <input class="twikiInputField" type="text" name="filecomment" value="%FILECOMMENT%" size="70" />
 </div><!-- /twikiFormStep-->%TMPL:END%
 
@@ -64,7 +57,6 @@
 
 <input type="checkbox" class="twikiCheckbox" id="hidefile" name="hidefile" %HIDEFILE% /><label for="hidefile">%MAKETEXT{"Do not show attachment in table"}%</label> <span class="twikiGrayText">%MAKETEXT{"Attachments will not be shown in topic view page."}%</span>
 </div><!-- /twikiFormStep-->%TMPL:P{"changepropertiesaction"}%%TMPL:END%
-
 
 
 %TMPL:DEF{"content"}%%TMPL:P{"toolbar"}%
