@@ -1,5 +1,6 @@
 %{ This is a default template }%%TMPL:INCLUDE{"twiki"}%
 
+
 %TMPL:DEF{"templatescript"}%<script type="text/javascript" src="%PUBURLPATH%/%TWIKIWEB%/TWikiJavascripts/twikiPref.js"></script>
 <script type="text/javascript" src="%PUBURLPATH%/%TWIKIWEB%/TWikiJavascripts/twikiCSS.js"></script>
 <script type="text/javascript" src="%PUBURLPATH%/%TWIKIWEB%/TWikiJavascripts/twikiEvent.js"></script>
@@ -10,7 +11,32 @@
 // ]]>
 </script>%TMPL:END%
 
+
+%TMPL:DEF{"titleaction"}%%MAKETEXT{"(edit)"}% %TMPL:END%
+
+
+%TMPL:DEF{"webaction"}%%MAKETEXT{"Change topic"}%%TMPL:END%
+
+
+%TMPL:DEF{"pagetitle"}%<nop>%TOPIC% %MAKETEXT{"(edit)"}%%TMPL:END%
+
+
+%TMPL:DEF{"help"}%%INCLUDE{"%TWIKIWEB%.WikiSyntaxSummary"}%%TMPL:END%
+
+
 %TMPL:DEF{"textarea"}%<div class="twikiEditTextarea"><textarea class="twikiTextarea twikiEditboxStyleProportional" id="topic" name="text" rows="%EDITBOXHEIGHT%" cols="%EDITBOXWIDTH%" style='%EDITBOXSTYLE%' onkeydown='handleKeyDown(event)'>%TEXT%</textarea></div><!--/twikiEditTextarea-->%TMPL:END%
+
+
+%TMPL:DEF{"form"}%%FORMFIELDS%%TMPL:END%
+%TMPL:DEF{"formattop"}%%TMPL:END%
+%TMPL:DEF{"formatbottom"}%%TMPL:P{"form"}%%TMPL:END%
+
+%TMPL:DEF{"formstart"}%<div class="patternFormHolder twistyMakeHidden" id="formHolder">
+<form name="main" action="%SCRIPTURLPATH{"save"}%/%WEB%/%TOPIC%" method="post">%TMPL:END%
+
+%TMPL:DEF{"formend"}%%TMPL:P{"formparameters"}%
+</form></div><!-- /patternFormHolder-->%TMPL:END%
+
 
 %TMPL:DEF{"formparameters"}%<input type="hidden" name="originalrev" value="%ORIGINALREV%" />
 <input type="hidden" name="skin" value="%URLPARAM{"skin"}%" />
@@ -25,20 +51,19 @@
 <input type="hidden" name="rev" value="%URLPARAM{"rev"}%" />
 <input type="hidden" name="cmd" value="%CMD%" />%TMPL:END%
 
+
 %TMPL:DEF{"sig"}%<div><div class="twikiLeft"><label for="sig" class="twikiGrayText">%MAKETEXT{"Your signature to copy/paste:"}%&nbsp;&nbsp;</label><input class="twikiInputFieldReadOnly" size="41" name="sig" type="text" readonly="readonly" title='%MAKETEXT{"Select, copy and paste your signature text to the bottom of your entry"}%' id="sig" value="-- <nop>%WIKIUSERNAME% - %DATE%" /></div><br class="twikiClear"><!--/twikiLeft--></div>%TMPL:END%
 
-%TMPL:DEF{"content"}%<form name="main" action="%SCRIPTURLPATH{"save"}%/%WEB%/%TOPIC%" method="post">
+
+%TMPL:DEF{"content"}%%TMPL:P{"formstart"}%%TMPL:P{"formattop"}%
 %TMPL:P{"textarea"}%
-%TMPL:P{"formparameters"}%
 See below for help in editing this page.
 %TMPL:P{"sig"}%
-%FORMFIELDS% %TMPL:P{"topicinfo"}%</form>%TMPL:END%
+%TMPL:P{"formatbottom"}%
+%TMPL:P{"topicinfo"}%%TMPL:P{"formend"}%%TMPL:END%
 
-%TMPL:DEF{"footernote"}%<font color="#333333" size="-1"> 
-%INCLUDE{"%TWIKIWEB%.WikiSyntaxSummary"}% 
-</font>%TMPL:END%
+
+%TMPL:DEF{"footernote"}%%TMPL:P{"help"}%%TMPL:END%
+
 
 %TMPL:DEF{"topicactionbuttons"}%<input type="submit" class="twikiSubmit" name="action_cancel" value="Cancel" id="cancel" />%TMPL:P{"sep"}%<input type="submit" class="twikiSubmit" name="action_save" value="Save" id="save" />%TMPL:P{"sep"}%<input type="submit" class="twikiSubmit" name="action_preview" value="Preview" id="preview" />%TMPL:END%
-%TMPL:DEF{"titleaction"}%(edit) %TMPL:END%
-%TMPL:DEF{"titlehelp"}% %TMPL:END%
-%TMPL:DEF{"webaction"}%Edit topic%TMPL:END%

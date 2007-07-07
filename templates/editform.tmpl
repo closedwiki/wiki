@@ -1,17 +1,10 @@
 %{ This is a default template }%%TMPL:INCLUDE{"edit"}%
 
 %TMPL:DEF{"focus"}%%TMPL:END%
-%TMPL:DEF{"titleaction"}%(edit form)%TMPL:END%
+%TMPL:DEF{"titleaction"}%%MAKETEXT{"(edit form)"}% %TMPL:END%
+%TMPL:DEF{"pagetitle"}%<nop>%TOPIC% %MAKETEXT{"(edit form)"}%%TMPL:END%
 %TMPL:DEF{"footernote"}% %TMPL:END%
 
-%TMPL:DEF{"content"}%
-<form name="main" action="%SCRIPTURLPATH{"save"}%/%WEB%/%TOPIC%" method="post">
-<input type="hidden" id="topic" name="text" value="%TEXT%" />
-<input type="hidden" name="editaction" value="form" />
-<input type="hidden" name="originalrev" value="%ORIGINALREV%" />
-<input type="hidden" name="redirectto" value="%REDIRECTTO%" />
-<input type="hidden" name="formtemplate" value="%FORMTEMPLATE%" />
-<input type="hidden" name="topicparent" value="%TOPICPARENT%" />
-<input type="hidden" name="cmd" value="%CMD%" />
-%FORMFIELDS%
-%TMPL:P{"topicinfo"}%</form>%TMPL:END%
+%TMPL:DEF{"content"}%%TMPL:P{"formstart"}%%TMPL:P{"formatbottom"}%
+%TMPL:P{"topicinfo"}%
+%TMPL:P{"formend"}%%TMPL:END%
