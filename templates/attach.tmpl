@@ -1,6 +1,7 @@
 %{ This is a default template }%%TMPL:INCLUDE{"twiki"}%
 
 
+
 %TMPL:DEF{"notes"}%
 __Notes:__
 
@@ -11,7 +12,7 @@ __Notes:__
 
 %TMPL:DEF{"existingattachments"}%%META{"attachments" all="on" title="<h2>%MAKETEXT{"Attachments of [_1]" args="<nop>%TOPIC%"}%</h2>"}%%TMPL:END%
 
-%TMPL:DEF{"attachform"}%%TMPL:P{"attachformstart"}%%TMPL:P{"previous"}%%TMPL:P{"newfile"}%%TMPL:P{"comment"}%%TMPL:P{"properties"}%%TMPL:P{"hiddenfields"}%%TMPL:P{"attachformend"}%%TMPL:END%
+%TMPL:DEF{"attachform"}%%TMPL:P{"attachformstart"}%%TMPL:P{"newfile"}%%TMPL:P{"comment"}%%TMPL:P{"properties"}%%TMPL:P{"hiddenfields"}%%TMPL:P{"attachformend"}%%TMPL:END%
 
 %TMPL:DEF{"attachformstart"}%<table width="100%">%TMPL:END%
 
