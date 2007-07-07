@@ -34,6 +34,8 @@ strong, b {
 hr {
 	height:1px;
 	border:none;
+	color:#aaa;
+	background-color:#aaa;
 }
 /* put overflow pre in a scroll area */
 pre {
