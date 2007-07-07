@@ -46,3 +46,18 @@
 	%IF{ "defined PAGEBGCOLOR and $ PAGEBGCOLOR != ''" then='html body, #patternPage, #patternBottomBar, .patternPreviewArea, #patternOuter, #patternTopBar { background-color:%PAGEBGCOLOR%;}
 	#patternOuter {background-image:none;}'}%
 </style>%TMPL:END%
+
+
+%TMPL:DEF{"iespecificstyle"}%<!--[if IE]><style type="text/css" media="screen">
+pre {
+	overflow-x:auto;
+	padding-bottom:expression(this.scrollWidth > this.offsetWidth ? 16 : 0);
+}
+</style>
+<![endif]-->
+<!--[if lte IE 6]> 
+<style type="text/css">
+#patternLeftBar {
+	position:relative; /* IE 5.5 needs this or the contents won't show outside the parent container on print. IE 6.0 needs it only during printable copy! */
+}
+</style><![endif]-->%TMPL:END%
