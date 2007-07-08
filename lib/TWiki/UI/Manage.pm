@@ -1022,9 +1022,12 @@ sub _newWebScreen {
     $tmpl =~ s/%REF_DENIED%/$refdenied/;
     $tmpl =~ s/%REF_LOCKED%/$reflocked/;
 
+    my $refresh_prompt = ($session->i18n->maketext('Refresh'));
+    my $submit_prompt = ($session->i18n->maketext('Move/Rename'));
+    
     my $submitAction =
-      ( $movelocked || $reflocked ) ? 'refresh_prompt' : 'submit_prompt';
-    $tmpl =~ s/%RENAMEWEB_SUBMIT%/\%$submitAction\%/go;
+      ( $movelocked || $reflocked ) ? $refresh_prompt : $submit_prompt;
+    $tmpl =~ s/%RENAMEWEB_SUBMIT%/$submitAction/go;
 
     my $refs;
     my $search = '';
