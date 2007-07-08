@@ -1,42 +1,64 @@
-%{ This is a default template }%%TMPL:INCLUDE{"twiki"}%
+%{ This is a default template }%%TMPL:INCLUDE{"renamedelete"}%
 
-%TMPL:DEF{"templatescript"}%<script type="text/javascript" src="%PUBURLPATH%/%TWIKIWEB%/TWikiJavascripts/twiki_renamebase.js"></script>%TMPL:END%
 
-%TMPL:DEF{"content"}%
-<form method="post" name="renameweb" action="%SCRIPTURLPATH{"rename"}%/%WEB%">
-<input type="hidden" name="action" value="renameweb" />
-<input type="hidden" name="confirm" value="getlock" />
----+ %TMPL:P{"webaction"}% <code>%WEB%</code>
+%TMPL:DEF{"pagetitle"}%%TMPL:P{"webaction"}% <nop>%WEB%%TMPL:END%
 
-| |  *Web:* ||
-|  *From:* |    <nop>%NEW_PARENTWEB%. |%NEW_SUBWEB%   |
-|  *To:* |  %TMPL:P{"newparentweb"}%. |%TMPL:P{"newsubweb"}%  |
-%TMPL:P{"notes"}%
 
----++ Notices
-*Topics which are currently being edited by other users in the <nop>%WEB% Web:*
+%TMPL:DEF{"towebtitle"}%---+++ %MAKETEXT{"New web name:"}%%TMPL:END%
+
+
+%TMPL:DEF{"parentwebtitle"}%---+++ %MAKETEXT{"New parent web:"}%%TMPL:END%
+
+
+%TMPL:DEF{"newtopic"}%%TMPL:END%
+
+
+%TMPL:DEF{"newweb"}%%TMPL:P{"newparentweb"}%.%TMPL:P{"newsubweb"}%%TMPL:END%
+
+
+%TMPL:DEF{"changefrom"}%%TMPL:END%
+
+
+%TMPL:DEF{"formend"}%<input type="hidden" name="action" value="renameweb" />
+<input type="hidden" name="confirm" value="getlock" /></form>%TMPL:END%
+
+
+%TMPL:DEF{"searchresults"}%
+---+++ %MAKETEXT{"Update links"}%
+<blockquote>
+*%MAKETEXT{"Topics which are currently being edited by other users in the [_1] Web:" args="<nop>%WEB%"}%* %BR%
 %MOVE_LOCKED%
 
-*Topics which refer to this web and are are currently being edited by other users:* %REF_LOCKED%
+*%MAKETEXT{"Topics which refer to this web and are are currently being edited by other users:"}%* %BR%
+%REF_LOCKED%
 
-*Topics which refer to this web that you do not have permission to change:*
+*%MAKETEXT{"Topics which refer to this web that you do not have permission to change:"}%* %BR%
 %REF_DENIED%
-
----++ Change links in topics that refer to <nop>%WEB%.Topicname in the <nop>%WEB% Web:
-
+</blockquote>
+*%TMPL:P{"updatenote"}%*
+<blockquote>
+---++++ %MAKETEXT{"Change links in topics that refer to ![_1] in the [_2] Web:" args="%WEB%, <nop>%WEB%"}%
 %LOCAL_SEARCH%
 
----++ Change links in topics that refer to <nop>%WEB% in any Web:
-
+---++++ %MAKETEXT{"Change links in topics that refer to ![_1] in any Web:" args="%WEB%"}%
 %GLOBAL_SEARCH%
+%TMPL:P{"checkuncheck"}%
+</blockquote>%TMPL:END%
 
-<input type="button" value="Select all" onclick="checkAll(document.renameweb,true);" />&nbsp;<input type="button" value="Clear" onclick="checkAll(document.renameweb,false);" /> checkboxes of referenced topics
 
-__Note:__
-   * Get help on
-     <a target="ManagingWebs" onclick="return launchWindow('%TWIKIWEB%','ManagingWebs')" href="%SCRIPTURLPATH{"view"}%/%TWIKIWEB%/ManagingWebs" rel='nofollow'>Renaming and moving webs</a>.
+%TMPL:DEF{"notegethelp"}%
+   * %MAKETEXT{"Get help on <a target='ManagingWebs' onclick=\"return launchWindow('[_1]','ManagingTopics')\" href=\"[_2]\" rel='nofollow'>Renaming and moving webs</a>." args="%TWIKIWEB%,%SCRIPTURLPATH{"view"}%/%TWIKIWEB%/ManagingWebs"}%
    * Select the %TRASHWEB% Web to delete the topic.
-   * The checkmarked topics will be updated. 
-%TMPL:P{"topicinfo"}%
-</form>%TMPL:END%
+%TMPL:P{"notecheckmarkedtopics"}%
+%TMPL:END%
 
+
+%TMPL:DEF{"parentweb"}%
+%TMPL:P{"parentwebtitle"}%
+<p>%TMPL:P{"newparentweb"}%%TMPL:P{"parentwebhelp"}%</p>%TMPL:END%
+
+%TMPL:DEF{"parentwebstep"}%%TMPL:P{"parentweb"}%%TMPL:END%
+
+
+%TMPL:DEF{"renameformsteps"}%%TMPL:P{"toweb"}%
+%IF{"{EnableHierarchicalWebs}" then='%TMPL:P{"parentwebstep"}%'}%%TMPL:P{"searchresultsstep"}%%TMPL:END%

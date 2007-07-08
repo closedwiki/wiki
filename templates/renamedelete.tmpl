@@ -1,11 +1,44 @@
 %{ This is a default template }%%TMPL:INCLUDE{"renamebase"}%
-%TMPL:DEF{"templatescript"}%<script type="text/javascript" src="%PUBURLPATH%/%TWIKIWEB%/TWikiJavascripts/twiki_renamebase.js"></script>%TMPL:END%
-%TMPL:DEF{"titleaction"}%(delete) %TMPL:END%
-%TMPL:DEF{"webaction"}%Delete%TMPL:END%
-%TMPL:DEF{"newtopic"}%<input name="newtopic" value="%NEW_TOPIC%" size="36" />%TMPL:END%
-%TMPL:DEF{"newweb"}%<select name="newweb">%WEBLIST{"<option $marker value=$qname>$name</option>" webs="%TRASHWEB%,public" selection="%NEW_WEB%" separator=" "}%</select>%TMPL:END%
-%TMPL:DEF{"notes"}%%TMPL:P{"namehelp"}% <br />
-%TMPL:P{"nonwikiword"}%%TMPL:END%
-%TMPL:DEF{"namehelp"}%__Note:__ This name has been chosen so it doesn't conflict with any other topics already in the %NEW_WEB% web.%TMPL:END%
-%TMPL:DEF{"topicactionbuttons"}%<input type="submit" class="twikiSubmit" value="Delete" />%TMPL:P{"sep"}%[[%WEB%.%TOPIC%][Cancel]]%TMPL:END%
-%TMPL:P{"rename"}%
+
+
+%TMPL:DEF{"templatescript"}%<script type="text/javascript" src="%PUBURLPATH%/%TWIKIWEB%/TWikiJavascripts/twiki_renamebase.js"></script>
+<script type="text/javascript">
+	twiki.Event.addLoadEvent(uncheckAll);
+	function uncheckAll() {
+		checkAll(document.rename,false)
+	}
+</script>
+%TMPL:END%
+
+
+%TMPL:DEF{"titleaction"}%%MAKETEXT{"(delete)"}% %TMPL:END%
+
+
+%TMPL:DEF{"webaction"}%%MAKETEXT{"Delete"}%%TMPL:END%
+
+
+%TMPL:DEF{"changefromtitle"}%---+++ %MAKETEXT{"Current location:"}% <nop>%WEB%.%TOPIC%%TMPL:END%
+
+
+%TMPL:DEF{"newweb"}%<input type="hidden" name="newweb" value="%TRASHWEB%" />%TMPL:END%
+
+
+%TMPL:DEF{"towebtitle"}%---+++ %MAKETEXT{"Move topic to web:"}% <nop>%TRASHWEB%%TMPL:END%
+
+
+%TMPL:DEF{"totopictitle"}%---+++ %MAKETEXT{"Optionally change topic name:"}%%TMPL:END%
+
+
+%TMPL:DEF{"newtopic"}%<p><input name="newtopic" class="twikiInputField" value="%NEW_TOPIC%" size="36" /> %TMPL:P{"namehelp"}%</p>%TMPL:P{"nonwikiword"}% %TMPL:END%
+
+
+%TMPL:DEF{"namehelp"}%<span>%MAKETEXT{"This name has been chosen so it doesn't conflict with any other topics already in the [_1] web." args="%NEW_WEB%"}%</span>%TMPL:END%
+
+
+%TMPL:DEF{"movewebhelp"}%%TMPL:END%
+
+
+%TMPL:DEF{"updatenote"}%%MAKETEXT{"Checked topics will be updated to point to the new topic location."}% <span class="twikiAlert" style="font-weight:bold;">%MAKETEXT{"Not recommended when deleting a topic."}%</span><p />%TMPL:END%
+
+
+%TMPL:DEF{"topicactionbuttons"}%<input type="submit" class="twikiSubmit" value='%MAKETEXT{"Delete"}%' /> %MAKETEXT{"or"}% %TMPL:P{"canceltopicaction"}%%TMPL:END%

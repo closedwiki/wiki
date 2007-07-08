@@ -4,13 +4,13 @@
 %TMPL:DEF{"LOG_IN"}%Log In%TMPL:END%
 %TMPL:DEF{"LOG_OUT"}%Log Out%TMPL:END%
 
-%TMPL:DEF{"nonwikiwordwarning"}%<input type="checkbox" id="nonwikiword" name="nonwikiword" %NONWIKIWORDFLAG% /><label for="nonwikiword">%MAKETEXT{"Allow non <nop>WikiWord for the new topic name"}%</label><br />%TMPL:P{"nonwikiwordhelp"}%%TMPL:END%
+%TMPL:DEF{"nonwikiwordwarning"}%<p><input type="checkbox" id="nonwikiword" name="nonwikiword" %NONWIKIWORDFLAG% /><label for="nonwikiword">%MAKETEXT{"Allow non <nop>WikiWord for the new topic name"}%</label><br />%TMPL:P{"nonwikiwordhelp"}%</p>%TMPL:END%
 
 %TMPL:DEF{"nonwikiwordhelp"}% %MAKETEXT{"It's usually best to choose a <a target='WikiWord' onclick=\"return launchWindow('[_1]','WikiWord')\" href='[_1]' rel='nofollow'>WikiWord</a> for the new topic name, otherwise automatic linking may not work. Characters not allowed in topic names, such as spaces will automatically be removed." args="%TWIKIWEB%,%SCRIPTURLPATH{"view"}%/%TWIKIWEB%/WikiWord"}%%TMPL:END%
 
 %TMPL:DEF{"nonwikiwordallowed"}%<input type="hidden" name="nonwikiword" value="on" />%TMPL:END%
 
-%TMPL:DEF{"nonwikiword"}%%IF{"$HIDE_NON_WIKI_WORD_WARNINGS!=on" then="$percntTMPL:P{$quotnonwikiwordwarning$quot}$percnt" else="$percntTMPL:P{$quotnonwikiwordallowed$quot}$percnt"}%%TMPL:END%
+%TMPL:DEF{"nonwikiword"}%%IF{"$HIDE_NON_WIKI_WORD_WARNINGS!='on'" then="$percntTMPL:P{$quotnonwikiwordwarning$quot}$percnt" else="$percntTMPL:P{$quotnonwikiwordallowed$quot}$percnt"}%%TMPL:END%
 
 %TMPL:DEF{"htmldoctype"}%<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="%LANG%" lang="%LANG%">%TMPL:END%
@@ -28,7 +28,7 @@
 			} );
 	}
 //]]>
-</script>%TMPL:P{"templatescript"}%%TMPL:END%
+</script>%TMPL:P{"skinscript"}%%TMPL:P{"templatescript"}%%TMPL:END%
 
 %TMPL:DEF{"windowtitle"}%<title>%TMPL:P{"titleaction"}% <nop>%TOPIC%%TMPL:P{"titlesep"}%%WEB%%TMPL:P{"titlesep"}%<nop>%WIKITOOLNAME%</title>%TMPL:END%
 

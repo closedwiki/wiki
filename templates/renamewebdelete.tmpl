@@ -1,11 +1,1 @@
 %{ This is a default template }%%TMPL:INCLUDE{"renamewebbase"}%
-%TMPL:DEF{"templatescript"}%<script type="text/javascript" src="%PUBURLPATH%/%TWIKIWEB%/TWikiJavascripts/twiki_renamebase.js"></script>%TMPL:END%
-%TMPL:DEF{"titleaction"}%(delete) %TMPL:END%
-%TMPL:DEF{"webaction"}%Delete%TMPL:END%
-%TMPL:DEF{"newsubweb"}%<input name="newsubweb" value="%NEW_SUBWEB%" size="36" />%TMPL:END%
-%TMPL:DEF{"newparentweb"}%<select name="newparentweb">%WEBLIST{"<option $marker value=$qname>$name</option>" webs="%TRASHWEB%,public" selection="%NEW_PARENTWEB%" separator=" "}%</select>%TMPL:END%
-%TMPL:DEF{"notes"}%%TMPL:P{"namehelp"}% <br />
-%TMPL:P{"nonwikiword"}%%TMPL:END%
-%TMPL:DEF{"namehelp"}%__Note:__ This name has been chosen so it doesn't conflict with any other topics already in the %NEW_PARENTWEB% web. %TMPL:END%
-%TMPL:DEF{"topicactionbuttons"}%<input type="submit" class="twikiSubmit" value="Delete" />%TMPL:P{"sep"}%[[%WEB%.%TOPIC%][Cancel]]%TMPL:END%
-%TMPL:P{"renameweb"}%
