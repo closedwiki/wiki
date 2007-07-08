@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1182639423" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1183870141" format="1.1" version="$Rev$"}%
 %TOC%
 %STARTINCLUDE%
 
@@ -99,9 +99,12 @@ You can define restrictions on who is allowed to view a <nop>%WIKITOOLNAME% web.
       * ==Set <nop>DENYWEBRENAME = &lt; comma-delimited list of Users and Groups &gt;==
       * ==Set <nop>ALLOWWEBRENAME = &lt; comma-delimited list of Users and Groups &gt;==
 
-If your site allows hierarchical webs, then access to sub-webs is determined from the access controls of the parent web, plus the access controls in the sub-web. So, if the parent web has ==ALLOWWEBVIEW== set, this will also apply to the subweb.
+If your site allows hierarchical webs, then access to sub-webs is determined from the access controls of the parent web, plus the access controls in the sub-web. So, if the parent web has ==ALLOWWEBVIEW== set, this will also apply to the subweb. Also note that you will need to ensure that the parent web's ==FINALPREFERENCES== does not include the access control settings listed above. Otherwise you will not be able override the parent web's access control settings in sub-webs.
 
 Creation and renaming of sub-webs is controlled by the WEBCHANGE setting on the parent web (or ROOTCHANGE for [[#RootWebs][root webs]]). Renaming is additionally restricted by the setting of WEBRENAME in the web itself.
+
+__Note:__  If you restrict access to the %MAINWEB%, make sure to add the =TWikiRegistrationAgent= so that users can register. Example:
+      * ==Set <nop>ALLOWWEBCHANGE = !TWikiAdminGroup, !TWikiRegistrationAgent==
 
 __Note:__  For Web level access rights Setting any of these settings to an empty value has the same effect as not setting them at all. Please note that the documentation of TWiki 4.0 and earlier versions of TWiki 4.1 did not reflect the actual implementation, e.g. an empty ALLOWWEBVIEW does _not_ prevent anyone from viewing the web, and an an empty DENYWEBVIEW does _not_ allow all to view the web.
 
