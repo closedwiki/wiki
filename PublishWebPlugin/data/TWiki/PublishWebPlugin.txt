@@ -7,7 +7,7 @@ Utility to publish a TWiki web to static HTML pages. Useful to maintain a static
 
 ---++ Description and Syntax Rules
 
-One web (defined in the PUBLISHWEBNAME setting) serves as the master for the static HTML pages. The Plugin generates an HTML pages every time a user saves a topic in the Publish web. The static HTML files are based on a TWiki skin of choice. All referred attachments (images etc) are copied to a publish directory.
+One web (defined in the PUBLISHWEBNAME setting) serves as the master for the static HTML pages. The Plugin generates an HTML page every time a user saves a topic in the Publish web. The static HTML files are based on a TWiki skin of choice. All referred attachments (images etc) are copied to a publish directory.
 
 ---+++ Topics and Links
 	* The home topic is assumed to be =Index=
