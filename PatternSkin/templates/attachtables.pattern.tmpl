@@ -26,10 +26,10 @@ hideimgleft="%ICONURLPATH{toggleclose}%" suffix="<span id='attachTableAttachment
 %TMPL:DEF{ATTACH:files:footer}%%ENDTWISTY%</div><!--//twikiAttachments-->
 <script type="text/javascript">
 //<![CDATA[
-	var table = document.getElementById("twikiAttachmentsTable");
+	var table = document.getElementById("tabletwikiAttachmentsTable");
 	if (table) {
 		var count = table.getElementsByTagName("tr").length - 1;
-		var countStr = " " + "<span class='attachTableAttachmentCount'>" + "(" + count + ")" + "<\/span>";
+		var countStr = " " + "<span class='attachTableAttachmentCount'>" + count + "<\/span>";
 		var showElem = document.getElementById('topicattachmentslistshow');
 		if (showElem != undefined) {
 			var labelElem = showElem.getElementsByTagName('a')[0].getElementsByTagName('span')[0];
