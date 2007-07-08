@@ -1003,10 +1003,6 @@ sub _newWebScreen {
         }
     }
 
-    my $subWebStyle = 'style="display:none;"';
-    $subWebStyle = '' if $TWiki::cfg{EnableHierarchicalWebs};
-
-    $tmpl =~ s/%SUBWEBSENABLE%/$subWebStyle/g;
     $tmpl =~ s/%NEW_PARENTWEB%/$newParent/go;
     $tmpl =~ s/%NEW_SUBWEB%/$newSubWeb/go;
     $tmpl =~ s/%TOPIC%/$TWiki::cfg{HomeTopicName}/go;
