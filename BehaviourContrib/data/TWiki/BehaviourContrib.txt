@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1162394433" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1183913691" format="1.1" reprev="1." version="1.1"}%
 ---+!! !Behaviour Javascript framework Contrib
 
 This contrib packages the third-party =Behaviour= Javascript event library, available from http://bennolan.com/behaviour/.
@@ -122,7 +122,7 @@ var myrules = {
 	'.link%TWIKIWEB%%HOMETOPIC% a' : function(el){
 		el.onclick = function() {
 			// open in a popup with no other attributes than template 'viewplain'
-			launchTheWindow(this.href,null,null,null,"viewplain");
+			twiki.Window.openPopup(this.href,{template:"viewplain"});
 			return false;
 		}
 	}
@@ -140,13 +140,14 @@ Creates:
 
 <span class="link%TWIKIWEB%%HOMETOPIC%">[[%TWIKIWEB%.%HOMETOPIC%][TWiki Web Home]]</span>
 
+<script type="text/javascript" src="%PUBURLPATH%/%TWIKIWEB%/TWikiJavascripts/twikiWindow.js"></script>
 <script type="text/javascript">
 // <![CDATA[
 var myrules = {
 	'.link%TWIKIWEB%%HOMETOPIC% a' : function(el){
 		el.onclick = function() {
 			// open in a popup with no other attributes than template 'viewplain'
-			launchTheWindow(this.href,null,null,null,"viewplain");
+			twiki.Window.openPopup(this.href,{template:"viewplain"});
 			return false;
 		}
 	}
@@ -219,7 +220,7 @@ For details see the Behaviour website.
 | Copyright: | Code: version 1.1 - Copyright (c) Ben Nolan and Simon Willison. Distribution and updates: TWiki:Main.ArthurClemens. |
 | License: | BSD |
 | Dependencies: | %$DEPENDENCIES% |
-| Contrib&nbsp;Version: | 1.2.1 |
+| Contrib&nbsp;Version: | 1.2.2 |
 | Change&nbsp;History: | <!-- specify latest version first -->&nbsp; |
 | 02 Jul 2007 | 1.2 Integrated other faster code by Dean Edwards: [[http://dean.edwards.name/weblog/2006/06/again/][faster onload (again)]]. |
 | 08 Mar 2007 | 1.1 Integrated code by Dean Edwards (see [[#CodeUpdate][Code update version 1.1 with faster DOM queries]]). |
