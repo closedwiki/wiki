@@ -121,8 +121,8 @@ twiki.HTML = {
 	},
 	
 	/**
-	Inserts a new HTMLElement after an existing element.
-	@param el : (HTMLElement) (required) the element to insert after
+	Inserts a new HTMLElement before an existing element.
+	@param el : (HTMLElement) (required) the element to insert before
 	@param inType : (String) (required) element type of the new HTMLElement: 'p', 'b', 'span', etc
 	@param inHtmlContents : (String) (optional) element HTML contents
 	@param inAttributes : (Object) (optional) value object with attributes to set to the new element
@@ -199,7 +199,6 @@ twiki.HTML = {
 				"margin":"0 0 1em 0"
     		}
     	};
-	};
 	twiki.HTML.setNodeAttributesInList(nodeList, attributes);
 	</pre>
 	*/
