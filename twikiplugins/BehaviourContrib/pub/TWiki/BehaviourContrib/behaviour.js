@@ -1,4 +1,9 @@
 /*
+To compress this file you can use Dojo ShrinkSafe compressor at
+http://alex.dojotoolkit.org/shrinksafe/
+*/
+
+/*
    Behaviour v1.1 by Ben Nolan, June 2005. Based largely on the work
    of Simon Willison (see comments by Simon below).
 
@@ -263,60 +268,61 @@ document.getElementsBySelector = function(selector) {
 
 // this object will manage CSS expressions used to query the DOM
 var Selectors;
-if (document.createStyleSheet) Selectors = {
-	styleSheet: document.createStyleSheet(),
-	cache: {},
-	length: 0,
-	
-	register: function(sheet) {
-		// create the CSS expression and add it to the style sheet
-		var cssText = [], index;
-		for (var selector in sheet) {
-			index = this.length++;
-			// have to store by index too as the expression hack does not like
-			//  spaces in strings for some strange reason
-			this.cache[index] = this.cache[selector] = [];
-			cssText.push(selector + "{behavior:expression(Selectors.store(" + index + ",this))}");
+if (!Selectors) {
+	if (document.createStyleSheet) Selectors = {
+		styleSheet: document.createStyleSheet(),
+		cache: {},
+		length: 0,
+		
+		register: function(sheet) {
+			// create the CSS expression and add it to the style sheet
+			var cssText = [], index;
+			for (var selector in sheet) {
+				index = this.length++;
+				// have to store by index too as the expression hack does not like
+				//  spaces in strings for some strange reason
+				this.cache[index] = this.cache[selector] = [];
+				cssText.push(selector + "{behavior:expression(Selectors.store(" + index + ",this))}");
+			}
+			this.styleSheet.cssText = cssText.join("\n");
+		},
+		
+		store: function(index, element) {
+			// called from the CSS expression
+			// store the matched DOM node
+			this.cache[index].push(element);
+			element.runtimeStyle.behavior = "none";
+		},
+		
+		tidy: function() {
+			// clean up after behaviors have been applied
+			delete this.cache;
+			this.styleSheet.cssText = "";
 		}
-		this.styleSheet.cssText = cssText.join("\n");
-	},
-	
-	store: function(index, element) {
-		// called from the CSS expression
-		// store the matched DOM node
-		this.cache[index].push(element);
-		element.runtimeStyle.behavior = "none";
-	},
-	
-	tidy: function() {
-		// clean up after behaviors have been applied
-		delete this.cache;
-		this.styleSheet.cssText = "";
+	}
+	if (Selectors) {
+		// override getElementsBySelector
+		document._getElementsBySelector = document.getElementsBySelector;
+		document.getElementsBySelector = function(selector) {
+			if (!Selectors.cache || /\[/.test(selector)) { // attribute selectors not supported by IE5/6
+				return document._getElementsBySelector(selector);
+			} else { // use the cache
+				return Selectors.cache[selector];
+			}
+		};
+		// override Behaviour's register function
+		Behaviour._register = Behaviour.register;
+		Behaviour.register = function(sheet) {
+			Selectors.register(sheet);
+			// call the old register function
+			this._register(sheet);
+		}
 	}
 }
-if (Selectors) {
-	// override getElementsBySelector
-	document._getElementsBySelector = document.getElementsBySelector;
-	document.getElementsBySelector = function(selector) {
-		if (!Selectors.cache || /\[/.test(selector)) { // attribute selectors not supported by IE5/6
-			return document._getElementsBySelector(selector);
-		} else { // use the cache
-			return Selectors.cache[selector];
-		}
-	};
-	// override Behaviour's register function
-	Behaviour._register = Behaviour.register;
-	Behaviour.register = function(sheet) {
-		Selectors.register(sheet);
-		// call the old register function
-		this._register(sheet);
-	}
-}
-
 // Do not wait for onload call
 // by Dean Edwards/Matthias Miller/John Resig, 2006
 
-var _timer;
+var _behaviourOnloadTimer;
 if (!Behaviour._apply) {
 	Behaviour._apply = Behaviour.apply;
 	Behaviour.apply = function() {
@@ -334,9 +340,9 @@ if (!Behaviour.init) {
 		arguments.callee.done = true;
 		
 		// kill the timer
-		if (_timer) {
-			clearInterval(_timer);
-			_timer = null;
+		if (_behaviourOnloadTimer) {
+			clearInterval(_behaviourOnloadTimer);
+			_behaviourOnloadTimer = null;
 		}
 		
 		Behaviour.apply();
@@ -363,8 +369,8 @@ if (document.addEventListener) {
 /* for Safari */
 
 if (navigator.vendor && navigator.vendor.match(/Apple/)) { // sniff
-	if (!_timer) {
-		_timer = setInterval(function() {
+	if (!_behaviourOnloadTimer) {
+		_behaviourOnloadTimer = setInterval(function() {
 			if (/loaded|complete/.test(document.readyState)) {
 				Behaviour.init(); // call the onload handler
 			}
