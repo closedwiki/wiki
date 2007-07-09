@@ -629,7 +629,9 @@ tr.twikiDiffDebug td {
 	border-width:1px;
 	border-style:solid;
 }
-
+.twikiCopyright {
+	margin:1em 0 0 0;
+}
 /*
  * The following additional classes are used by TWiki, but are not defined
  * by this CSS
@@ -639,7 +641,6 @@ twikiAnchorLink
 twikiConflict
 twikiContentFooter
 twikiContentHeader
-twikiCopyright
 twikiDiffLineNumberHeader
 twikiDiffTable
 twikiEditFormCalendarButton
