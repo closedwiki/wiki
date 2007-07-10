@@ -38,7 +38,7 @@ use vars qw(
 );
 
 $pluginName = 'TreePlugin';
-$VERSION = '1.2';
+$VERSION = '1.3';
 $RootLabel = "_RootLabel_";    # what we use to label the root of a tree if not a topic
 
 # =========================
@@ -143,7 +143,9 @@ sub HandleTreeTag
         
     # if bookView, read bookview file as format
     if ($doBookView) {
-        $formatter->data( "format", &TWiki::Func::readTemplate("booktree") );
+        #SL: disable bookview until we fix it 
+        return "%RED%bookview is broken in this version of $installWeb.TreePlugin.%ENDCOLOR%"
+        #$formatter->data( "format", &TWiki::Func::readTemplate("booktree") );
     }
     else {
 
@@ -172,7 +174,8 @@ sub HandleTreeTag
     #   * Create TWikiNode objects 
     #   * Populate hash of nodes/topics
     foreach ( split /\n/, $search ) {
-        my ( $nodeWeb, $nodeTopic, $nodeFormat ) = split /\|/;    # parse out node data
+        my ( $nodeWeb, $nodeTopic, $nodeFormat ) = split (/\|/,$_,3);    # parse out node data
+        &TWiki::Func::writeDebug("SEARCH LINE: $nodeWeb, $nodeTopic, $nodeFormat") if $debug;  
         my $nodeId = "$nodeWeb.$nodeTopic";
         
         #If no node format default to the formatter's format     
@@ -393,8 +396,10 @@ sub setFormatter {
     # $FormatMap{$name} = $formatter;
 }
 
-
-
+# allow other classes to see the installation web
+sub installWeb {
+    return $installWeb;
+}
 
 
 1;

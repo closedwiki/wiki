@@ -73,6 +73,16 @@ sub toHTMLFormat {
 
     #&TWiki::Func::writeDebug("toHTMLFormat: ".$this->name()) if $TWiki::Plugins::TreePlugin::debug;   
 
+    #This make sure we don't render a node more than once
+    #thus preventing endless loop when dealing with inconsitant relationship 
+    if ($this->{_rendered})
+        {
+        return "";        
+        }
+    #Mark this node as being rendered 
+    $this->{_rendered}=1;
+
+
     $formatter->initNode( $this, $num, $level );
 
     my $childrenText = "";

@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="StephaneLenclud" date="1175942782" format="1.1" reprev="1.14" version="1.14"}%
+%META:TOPICINFO{author="StephaneLenclud" date="1184108836" format="1.1" reprev="1.16" version="1.16"}%
 ---+!! Tree Plugin
 
 Renders topics' parent-child relationships as hierarchical tree view. Useful for dynamic site maps and threads.
@@ -27,17 +27,17 @@ Renders topics' parent-child relationships as hierarchical tree view. Useful for
 |=startlevel=| The depth of the tree to start showing nodes from. To hide the root node, supply =startlevel="1"= (root is level 0). The displayed node depths are relative to the root topic. | =0= or =1= if =topic= is not specified |
 |=stoplevel=| The depth of the tree to show, relative to start level. | =999= | 
 |=header=| If specified output the value within a =&lt;div&gt;= of class =treePluginHeader=. | none |
-|=bookview=| List topics in BookView form | none | 
+|=bookview=| List topics in BookView form. %RED%Not supported from v0.9. Instead use something like: %ENDCOLOR% <verbatim>%TREE{topic="GrandParent" formatting="outline" format="$outnum $topic <br /> $summary <hr />"}%</verbatim> | none | 
 |=format=| Specify the format for each node (=outline= & =coloroutline=). \
 The following pseudo-variable are supported on top of the ones described in TWiki.FormattedSearch: <br />\
  =$spacetopic= - the topic with spaces <br />\
  =$level= - the tree depth of the topic (in whatever format) <br />\
  =$count= - the topic's child position <br />\
  =$index= - the index of the topic in the tree. Starts from one. Most useful when used in combination with [[TWiki:Plugins.TreeBrowserPlugin][TreeBrowserPlugin]] <br />\
- =$onum= - outline number for the topic (eg, 1.3.4.2)  <br />\
+ =$outnum= - outline number for the topic (eg, 1.3.4.2)  <br />\
  =$url= - the current topic's URL <br />\
  =$author= - the topic's last author %RED%Not supported from v0.9. Use =%<nop>AUTHOR%= instead. %ENDCOLOR% <br />\
- =$modTime= - the topic's modification time. %RED%Not supported from v0.9%ENDCOLOR% <br />\
+ =$modTime= - the topic's modification time. %RED%Not supported from v0.9. Use =$date= instead. %ENDCOLOR% <br />\
 | none |
 | =formatbranch= | - specify the format for a group of children (=outline= & =coloroutline=)  <br />\
  =$parent= - the text of a node  <br />\
@@ -104,6 +104,7 @@ Specify plug-in settings on %MAINWEB%.TWikiPreferences using:
 | CPAN&nbsp;Dependencies: | none _(test package relies on Wiki:PerlUnit)_ |
 | Perl Version: | 5.0, 5.6.1, 5.8.7 |
 | Change&nbsp;History: | <!-- specify latest version first -->&nbsp; |
+| 11 Jul 2007 | 1.3 - Fixed =$onum= to =$outnum= in documentation. Fixed endless loop on inconsistent/looping parent/child relationship. Not supporting =bookview= any more. Fixed =imageoutline:thread= not rendering.  By TWiki:Main.StephaneLenclud | 
 | 7 Apr 2007 | 1.2 - Documentation improvement. Adding =includetopic= parameter. By TWiki:Main.StephaneLenclud | 
 | 6 Apr 2007 | 1.1 - Even more code cleaning. Rewrote tree building algorithm. Orphaned topics are now sorted as if child of the web root. No more blank line in the middle of the tree. Adding =nodiv= parameter. By TWiki:Main.StephaneLenclud | 
 | 6 Apr 2007 | 1.0 - More code cleaning. Testing most formatting. Better support for =web="all"=. By TWiki:Main.StephaneLenclud | 
