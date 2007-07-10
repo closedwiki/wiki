@@ -99,7 +99,6 @@ sub _createTextfield {
 
     _addYUI();
     _addStyle(
-        $size,
         $params->{formname}
     );
 
@@ -115,19 +114,20 @@ sub _createTextfield {
     );
 
     my $class;
-
-    if( $params->{class} ){
-        $class = $params->{class} . ' autoCompleteInput';
-    } else {
-        $class = 'autoCompleteInput';
-    }
+    $params->{class}
+        ? $class = $params->{class} . ' autoCompleteInput'
+        : $class = 'autoCompleteInput';
 
     my $textfield = CGI::textfield( { id => $params->{name} . 'Input',
                                       name => $params->{name},
                                       class => $class,
+                                      style => "width:$size;",
                                       value => $params->{value} } );
 
-    my $results = '<div id="' . $params->{name} . 'Results" class="autoCompleteResults"></div>';
+    my $results = CGI::div( { id => $params->{name} . 'Results',
+                              class => 'autoCompleteResults',
+                              style => "width:$size;" } );
+    $results .= '</div>';
 
     return ($js . $textfield . "\n" . $results);
 
@@ -224,7 +224,7 @@ sub _addStyle {
     return if ( $doneStyle == 1 );
     $doneStyle = 1;
 
-    my ( $size, $formName ) = @_;
+    my ( $formName ) = @_;
 
     my $form;
     if( $formName ){
@@ -241,12 +241,8 @@ sub _addStyle {
 $form {
     position:relative;
 }
-$Input {
-    width:$size;
-}
 $Results {
     position:relative;
-    width:$size;
 }
 $Results .yui-ac-content {
     position:absolute;
