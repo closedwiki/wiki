@@ -13,7 +13,7 @@ All this plugin does is implement Arthur Clemens' TWiki:Plugins/AutoCompleteAddO
 
 ---++ Usage
 
-Before you can use this plugin, you need to set up some data for the autocomplete. An example of this can be found at Sandbox.AutoCompletePluginTestData.
+Before you can use this plugin, you need to set up some data for the autocomplete. Examples can be found at Sandbox.AutoCompletePluginTestData.
 
 ---+++ In Topics and Templates
 
@@ -38,7 +38,7 @@ You can use many of same attributes as you would in topics, except the following
 | *Parameter* | *Comment* | *Default* | *Example* |
 | =name= | A unique name for the textfield | required | =name="users"= |
 | =datatopic= | The topic with data. Should be formatted as comma-separated string, or as an array of arrays (see Sandbox.AutoCompletePluginTestData#usernames for an example). Use with =datasection=. | required | =datatopic="Sandbox.AutoCompletePluginTestData"= |
-| =datasection | The topic section with data. Use with =datatopic=. | required | =datasection="usernames"= |
+| =datasection= | The topic section with data. Use with =datatopic=. | required | =datasection="usernames"= |
 | =size= | The width of the input field in em or px. | =20em= | =size="20em" or size="200px"= |
 | =value= | Default value of the input field | none | =value="%TOPIC%"= |
 | =class= | Name of css class to add to the input field | none | =class="twikiInputField"= |
@@ -62,7 +62,8 @@ You can use many of same attributes as you would in topics, except the following
 |  License: | [[http://www.gnu.org/licenses/gpl.html][GPL (Gnu General Public License)]] |
 |  Plugin Version: | %$VERSION% |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  14380 | Bugs:Item4342 - Only sets correct size for one texfield in topic |
+|  14381 | Bugs:Item4345 - Was adding 'null' after input if =delimchar= not set |
+|  14379 | Bugs:Item4342 - Only sets correct size for one texfield in topic |
 |  14290 | Bugs:Item4304 - Various bug fixes and enhancements |
 |  14277 | Bugs:Item4301 - Initial release |
 |  Dependencies: | %$DEPENDENCIES% |

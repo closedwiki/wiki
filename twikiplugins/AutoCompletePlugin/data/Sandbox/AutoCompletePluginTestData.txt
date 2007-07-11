@@ -8,4 +8,10 @@ Data is returned as an array of arrays. %BR%
 
 %STARTSECTION{"usernames"}%%SEARCH{ "[F]irstName.*value=.*()" web="%MAINWEB%" type="regex" nonoise="on" excludetopic="UserForm,PersonalInfo,PersonalInfoDocumentation,TWikiContributor,TWikiGuest,UnknownUser" format="[\"$topic\", \"$formfield(FirstName) $formfield(LastName)\"]" separator=","}%%ENDSECTION{"usernames"}%
 
+---++ topiclist
+
+%STARTSECTION{"topiclist"}%
+%TOPICLIST{"[\"$name\"]" separator=", " web="%URLPARAM{"web"}%"}%
+%ENDSECTION{"topiclist"}%
+
 _Please feel free to post more examples at TWiki:Plugins.AutoCompletePluginDev and I will include them in the next release._
