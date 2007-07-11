@@ -44,7 +44,7 @@ $VERSION = '$Rev$';
 # This is a free-form string you can use to "name" your own plugin version.
 # It is *not* used by the build automation tools, but is reported as part
 # of the version number in PLUGINDESCRIPTIONS.
-$RELEASE = '1.4.2';
+$RELEASE = '1.4.3';
 
 $pluginName = 'TwistyPlugin';
 
@@ -127,29 +127,36 @@ EOF
 }
 
 sub _TWISTYSHOW {
-    return _wrapInButtonHtml( _twistyBtn( 'show', @_ ) );
+    my $btn = _twistyBtn( 'show', @_ );
+    return _wrapInButtonHtml( $btn );
 }
 
 sub _TWISTYHIDE {
-    return _wrapInButtonHtml( _twistyBtn( 'hide', @_ ) );
+    my $btn = _twistyBtn( 'hide', @_ );
+    return _wrapInButtonHtml( $btn );
 }
 
 sub _TWISTYBUTTON {
-    return _wrapInButtonHtml(
-        _twistyBtn( 'show', @_ ) . _twistyBtn( 'hide', @_ ) );
+    my ( $session, $params, $theTopic, $theWeb ) = @_;
+
+    my $btnShow = _twistyBtn( 'show', @_ );
+    my $btnHide = _twistyBtn( 'hide', @_ );
+    my $prefix = $params->{'prefix'} || '';
+    my $suffix = $params->{'suffix'} || '';
+    my $btn = $prefix . ' ' . $btnShow . $btnHide . ' ' . $suffix;
+    return _wrapInButtonHtml( $btn );
 }
 
 sub _TWISTY {
     my ( $session, $params, $theTopic, $theWeb ) = @_;
+    
     _addHeader();
     $twistyCount++;
     my $id = $params->{'id'};
     if ( !defined $id || $id eq '' ) {
         $params->{'id'} = 'twistyId' . $theWeb . $theTopic . $twistyCount;
     }
-    my $prefix = $params->{'prefix'} || '';
-    my $suffix = $params->{'suffix'} || '';
-    return $prefix . _TWISTYBUTTON(@_) . ' ' . $suffix . ' ' . _TWISTYTOGGLE(@_);
+    return _TWISTYBUTTON(@_) . ' ' . _TWISTYTOGGLE(@_);
 }
 
 sub _TWISTYTOGGLE {
