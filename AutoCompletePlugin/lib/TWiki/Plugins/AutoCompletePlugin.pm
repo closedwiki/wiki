@@ -118,11 +118,33 @@ sub _createTextfield {
         ? $class = $params->{class} . ' autoCompleteInput'
         : $class = 'autoCompleteInput';
 
-    my $textfield = CGI::textfield( { id => $params->{name} . 'Input',
-                                      name => $params->{name},
-                                      class => $class,
-                                      style => "width:$size;",
-                                      value => $params->{value} } );
+    # parameters for textfield
+    my %textfieldParams = (
+        id => $params->{name} . 'Input',
+        name => $params->{name},
+        class => $class,
+        style => "width:$size;"
+    );
+
+    # Optional parameters
+    $textfieldParams{value} = $params->{value}
+        if $params->{value};
+    $textfieldParams{tabindex} = $params->{tabindex}
+        if $params->{tabindex};
+    $textfieldParams{onblur} = $params->{onblur}
+        if $params->{onblur};
+    $textfieldParams{onfocus} = $params->{onfocus}
+        if $params->{onfocus};
+    $textfieldParams{onselect} = $params->{onselect}
+        if $params->{onselect};
+    $textfieldParams{onchange} = $params->{onchange}
+        if $params->{onchange};
+    $textfieldParams{onmouseover} = $params->{onmouseover}
+        if $params->{onmouseover};
+    $textfieldParams{onmouseout} = $params->{onmouseout}
+        if $params->{onmouseout};
+
+    my $textfield = CGI::textfield( \%textfieldParams );
 
     my $results = CGI::div( { id => $params->{name} . 'Results',
                               class => 'autoCompleteResults',
@@ -230,11 +252,9 @@ sub _addStyle {
     my ( $formName ) = @_;
 
     my $form;
-    if( $formName ){
-        $form = '#' . $formName;
-    } else {
-        $form = 'form';
-    }
+    $formName
+        ? $form = '#' . $formName
+        : $form = 'form';
 
     my $Input = '.autoCompleteInput';
     my $Results = '.autoCompleteResults';
