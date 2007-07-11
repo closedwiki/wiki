@@ -44,7 +44,7 @@ my twisty content
 Will generate:
 
 %TWISTY{}%
-%RED% my twisty content %ENDCOLOR%
+%GREEN% my twisty content %ENDCOLOR%
 %ENDTWISTY%
 
 You may have noticed that no parameters are passed to =%<nop>TWISTY{}%= but the show and hide links _do_ have text! The default values are fetched from plugin settings =TWISTYSHOWLINK= and =TWISTYHIDELINK=, see [[#PluginSettings][Plugin Settings]] below.
@@ -66,7 +66,7 @@ It will look like this:
 %TWISTY{mode="div" showlink="Show..." hidelink="Hide"
 showimgleft="%ICONURLPATH{toggleopen-small}%" 
 hideimgleft="%ICONURLPATH{toggleclose-small}%"}%
-%RED% my twisty content %ENDCOLOR%
+%GREEN% my twisty content %ENDCOLOR%
 %ENDTWISTY%
 
 To put icons at the right side, write
@@ -81,7 +81,7 @@ my twisty content
 %TWISTY{mode="div" showlink="Show&nbsp;" hidelink="Hide&nbsp;"
 showimgright="%ICONURLPATH{toggleopen-small}%" 
 hideimgright="%ICONURLPATH{toggleclose-small}%"}%
-%RED% my twisty content %ENDCOLOR%
+%GREEN% my twisty content %ENDCOLOR%
 %ENDTWISTY%
 
 
@@ -97,7 +97,7 @@ my twisty content
 </verbatim>
 
 %TWISTY{showlink="Show..." hidelink="Hide" remember="on"}%
-%RED% my twisty content %ENDCOLOR%
+%GREEN% my twisty content %ENDCOLOR%
 %ENDTWISTY%
 
 If a Twisty state has been stored in a TWIKIPREF cookie before, it can be cleared by using =remember="off"=:
@@ -109,7 +109,7 @@ my twisty content
 </verbatim>
 
 %TWISTY{showlink="Show..." hidelink="Hide" remember="off"}%
-%RED% my twisty content %ENDCOLOR%
+%GREEN% my twisty content %ENDCOLOR%
 %ENDTWISTY%
 
 *NOTE:* Twisty ids are generated automatically. If you need control over exactly _which_ Twisty should be remembered, add the parameter =id=:
@@ -137,7 +137,7 @@ my twisty content
 </verbatim>
 
 %TWISTY{showlink="Show..." hidelink="Hide" start="show"}%
-%RED% my twisty content %ENDCOLOR%
+%GREEN% my twisty content %ENDCOLOR%
 %ENDTWISTY%
 
 Likewise use =start="hide"= to start with hidden content.
@@ -149,7 +149,7 @@ my twisty content
 </verbatim>
 
 %TWISTY{showlink="Show..." hidelink="Hide" start="hide"}%
-%RED% my twisty content %ENDCOLOR%
+%GREEN% my twisty content %ENDCOLOR%
 %ENDTWISTY%
 
 
@@ -165,7 +165,7 @@ my twisty content
 </verbatim>
 
 %TWISTY{showlink="Show..." hidelink="Hide" firststart="show"}%
-%RED% my twisty content %ENDCOLOR%
+%GREEN% my twisty content %ENDCOLOR%
 %ENDTWISTY%
 
 
@@ -214,7 +214,7 @@ my twisty content
 
 Generates: %BR%
 %TWISTY{mode="div" showlink="Show..." hidelink="Hide" class="twikiHelp"}%
-%RED% my twisty content %ENDCOLOR%
+%GREEN% my twisty content %ENDCOLOR%
 %ENDTWISTY%
 
 
@@ -229,12 +229,14 @@ my twisty content
 %ENDTWISTY%
 </verbatim>
 
+Add the =!!= to prevent the twisty header appear in the table of contents when you use =%<nop>TOC%=.
+
 Will create:
 
 %TWISTY{prefix="<h4>!!" link="Header"
 showimgleft="%ICONURLPATH{toggleopen}%"
 hideimgleft="%ICONURLPATH{toggleclose}%" suffix="</h4>"}%
-%RED% my twisty content %ENDCOLOR%
+%GREEN% my twisty content %ENDCOLOR%
 %ENDTWISTY%
 
 ---+++ All on, all off
@@ -291,11 +293,11 @@ Usage: =%<nop>TWISTY{ ... }% Toggable contents %<nop>ENDTWISTY%=
     | =class=        | CSS class name | Class for Twisty div or span | optional, default none |
     | =prefix=       | Text      | Text to display before the show/hide links | optional, default none |
     | =suffix=       | Text      | Text to display after the show/hide links | optional, default none |
-    | =img=          | Image url | %RED%Deprecated, use showimgleft, hideimgleft, showimgright or hideimgright.%ENDCOLOR% | optional, defaults to no image |
-    | =imgleft=      | Image url | %RED%Deprecated, use showimgleft, hideimgleft, showimgright or hideimgright.%ENDCOLOR% | optional, defaults to no image |
-    | =imgright=     | Image url | %RED%Deprecated, use showimgleft, hideimgleft, showimgright or hideimgright.%ENDCOLOR% | optional, defaults to no image |
-    | =hideimg=      | Image url | %RED%Deprecated, use showimgleft, hideimgleft, showimgright or hideimgright.%ENDCOLOR% | optional, defaults to no image |
-    | =showimg=      | Image url | %RED%Deprecated, use showimgleft, hideimgleft, showimgright or hideimgright.%ENDCOLOR% | optional, defaults to no image |
+    | =img=          | Image url | %GREEN%Deprecated, use showimgleft, hideimgleft, showimgright or hideimgright.%ENDCOLOR% | optional, defaults to no image |
+    | =imgleft=      | Image url | %GREEN%Deprecated, use showimgleft, hideimgleft, showimgright or hideimgright.%ENDCOLOR% | optional, defaults to no image |
+    | =imgright=     | Image url | %GREEN%Deprecated, use showimgleft, hideimgleft, showimgright or hideimgright.%ENDCOLOR% | optional, defaults to no image |
+    | =hideimg=      | Image url | %GREEN%Deprecated, use showimgleft, hideimgleft, showimgright or hideimgright.%ENDCOLOR% | optional, defaults to no image |
+    | =showimg=      | Image url | %GREEN%Deprecated, use showimgleft, hideimgleft, showimgright or hideimgright.%ENDCOLOR% | optional, defaults to no image |
    * Related [[#VarTWISTYSHOW][TWISTYBUTTON]] and [[#VarTWISTYTOGGLE][TWISTYTOGGLE]]
 
 #VarENDTWISTY
@@ -429,8 +431,9 @@ a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>T
 | Copyright &copy;: | 2005 Rafael Alvarez, 2006, 2007 Arthur Clemens |
 | License: | [[http://www.gnu.org/copyleft/gpl.html][GPL]] |
 | Dependencies: | %$DEPENDENCIES% |
-| Plugin&nbsp;Version: | 23 Jun 2007 (version 1.4.2)  |
+| Plugin&nbsp;Version: | 11 Jul 2007 (version 1.4.3)  |
 | Change&nbsp;History: | <!-- versions below in reverse order -->&nbsp; |
+| 11 Jul 2007 | 1.4.3 Arthur Clemens - Fix invalid html when =prefix= and =suffix= is used. |
 | 23 Jun 2007 | 1.4.2 Arthur Clemens - Fixed bugs with parameters =firststart= and =noscript= (since version 1.4). |
 | 20 Jun 2007 | 1.4 Arthur Clemens - Updated to work without ugly inserted javascript 'init' calls. This will change nothing to the functionality, but it will produce cleaner HTML, while at the same time the twisty is still set immediately (not at page onload) and graceful fallback in case of no javascript is maintained. |
 | 19 Jun 2006 | 1.3 Arthur Clemens - Updated with TWiki 4 !JavaScript files. |
