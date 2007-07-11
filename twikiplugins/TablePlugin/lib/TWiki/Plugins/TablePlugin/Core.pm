@@ -1177,7 +1177,9 @@ sub emitTable {
                 # I use this)
                 # html attribute
                 $attr->{bgcolor} = $headerBg unless ( $headerBg =~ /none/i );
-                $attr->{maxCols} = $maxCols;
+                # attribute 'maxcols' does not exist in html
+                # so commenting out
+                #$attr->{maxCols} = $maxCols;
 
                 if ($isSorted) {
                     if ( $currentSortDirection == $sortDirection{'ASCENDING'} )
