@@ -110,7 +110,7 @@ sub _createTextfield {
         $params->{name},
         $dataVar,
         $params->{itemformat} || 'item',
-        $params->{delimchar} || 'null'
+        $params->{delimchar} || ''
     );
 
     my $class;
@@ -166,10 +166,13 @@ sub _addData {
 
 # the javascript that makes it all work
 sub _getJavascript {
-    my ( $name, $dataVar, $itemformat, $delemchar ) = @_;
+    my ( $name, $dataVar, $itemformat, $delimchar ) = @_;
 
     my $Input = $name . 'Input';
     my $Results = $name . 'Results';
+
+    $delimchar = "topicAC.delimChar = \"$delimchar\""
+        if $delimchar;
 
     my $js = <<"EOT";
 <script type="text/javascript">
@@ -183,7 +186,7 @@ sub _getJavascript {
         topicAC.useIFrame = false;
         topicAC.prehighlightClassName = "yui-ac-prehighlight";
         topicAC.typeAhead = false;
-        topicAC.delimChar = "$delemchar";
+        $delimchar
         topicAC.allowBrowserAutocomplete = false;
         topicAC.useShadow = false;
         topicAC.formatResult = function(item, query) { return $itemformat; };
