@@ -1,9 +1,11 @@
 %META:TOPICINFO{author="TWikiContributor" date="1131431859" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="WebHome"}%
----+ %MAKETEXT{"Create New Topic in [_1] Web" args="<nop>%BASEWEB%"}%
 
 %INCLUDE{"%WEB%.%TOPIC%" section="formstart"}%
 <div class="twikiFormSteps">
+<div class="twikiFormStep">
+---++ %MAKETEXT{"Create New Topic in [_1] Web" args="<nop>%BASEWEB%"}%
+</div><!--/twikiFormStep-->
 <div class="twikiFormStep">
 ---------------------------------------------+++ %MAKETEXT{"Topic name:"}%
 <p>%INCLUDE{"%WEB%.%TOPIC%" section="topicname"}%</p>
@@ -53,7 +55,6 @@ The generated topic name is written to a 'feedback' field.
 function canSubmit(inForm, inShouldConvertInput) {
 	
 	var inputForTopicName = inForm.topic.value;
-	if (!inputForTopicName) return;
 
 	/* Topic names of zero length are not allowed */
 	if (inputForTopicName.length == 0) {
