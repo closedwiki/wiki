@@ -1,4 +1,3 @@
-
 /* 
 Basic layout derived from http://www.positioniseverything.net/articles/pie-maker/pagemaker_form.php.
 I've changed many so things that I won't put a full copyright notice. However all hacks (and comments!) are far beyond my knowledge and this deserves full credits:
@@ -94,7 +93,6 @@ from esc tab hack moz min-height solution ***/
 	overflow:hidden;
 }
 #patternLeftBarContents {
-	left:-1px;
 	position:relative;
 	/* for margins and paddings use style.css */
 }
@@ -119,46 +117,3 @@ from esc tab hack moz min-height solution ***/
 	clear:both;
 	width:100%;
 }
-
-/* Pages that are not view */
-
-.patternNoViewPage #patternOuter,
-.patternNoViewPage #patternBottomBarContents {
-	/* no left bar, margin at both sides */
-	margin-left:4%;
-	margin-right:4%;
-}
-
-/* edit.pattern.tmpl */
-
-.patternEditPage #patternOuter,
-.patternPreviewPage #patternOuter,
-.patternEditPage #patternBottomBarContents,
-.patternPreviewPage #patternBottomBarContents {
-	margin-left:0;
-	margin-right:0;
-}
-
-.twikiLeft {
-	float:left;
-	position:relative;
-}
-.twikiRight {
-	position:relative;
-	float:right;
-	display:inline;
-	margin:0;
-}
-.twikiClear {
-	/* to clean up floats */
-	margin:0;
-	padding:0;
-	height:0;
-	line-height:0px;
-	clear:both;
-	display:block;
-}
-.twikiHidden {
-	display:none;
-}
-

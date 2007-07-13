@@ -4,8 +4,7 @@
 
 %TMPL:DEF{"commonattachtableattributes"}%valign="middle" dataalign="center,left,left,right,left,left,left,center" datavalign="top" headercolor="#0066cc" databg="#ffffff" headerbg="#ffffff" headerbgsorted="#eeeeee" databgsorted="#f5f5f5" %TMPL:END%
 
-%TMPL:DEF{"topicattachmentwisty"}%%TWISTY{id="topicattachmentslist" firststart="show" mode="div" remember="on" prefix="<h4 style='margin:0; border:none;'>" link="%MAKETEXT{"Attachments"}%" showimgleft="%ICONURLPATH{toggleopen}%"
-hideimgleft="%ICONURLPATH{toggleclose}%" suffix="<span id='attachTableAttachmentCount'></span></h4>"}%%TMPL:END%
+%TMPL:DEF{"topicattachmentwisty"}%%TWISTY{id="topicattachmentslist" firststart="show" mode="div" remember="on" prefix="<h4 style='margin:0; padding-left:0; border:none;'>" link="%MAKETEXT{"Attachments"}%" showimgleft="%ICONURLPATH{toggleopen}%" hideimgleft="%ICONURLPATH{toggleclose}%" suffix="<span id='attachTableAttachmentCount'></span></h4>"}%%TMPL:END%
 
 %{ Header definition for topic attachments and top table in attach screen }%
 %TMPL:DEF{ATTACH:files:header(basic)}%<div class="twikiAttachments">
@@ -29,7 +28,7 @@ hideimgleft="%ICONURLPATH{toggleclose}%" suffix="<span id='attachTableAttachment
 	var table = document.getElementById("tabletwikiAttachmentsTable");
 	if (table) {
 		var count = table.getElementsByTagName("tr").length - 1;
-		var countStr = " " + "<span class='attachTableAttachmentCount'>" + count + "<\/span>";
+		var countStr = " " + "<span class='attachTableAttachmentCount'>" + " ("  + count + ")" + "<\/span>";
 		var showElem = document.getElementById('topicattachmentslistshow');
 		if (showElem != undefined) {
 			var labelElem = showElem.getElementsByTagName('a')[0].getElementsByTagName('span')[0];
