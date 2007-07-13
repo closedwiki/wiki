@@ -95,7 +95,7 @@ Preference settings local to your site should be set in [[%LOCALSITEPREFS%]] (th
       * Set EDITBOXHEIGHT = 22
 
    * Style of text edit box. Set to =width: 99%= for full window width (default; this will overwrite the EDITBOXWIDTH setting), or =width: auto= to disable. This setting works for IE and some other recent browsers. (can be overwritten by user preferences)
-      * Set EDITBOXSTYLE = width: 99%
+      * Set EDITBOXSTYLE = width:99%
 
    * Default state of the __Force New Revision__ (ForceNewRevision) check box in preview. Check box is initially checked if =Set FORCENEWREVISIONCHECKBOX = checked="checked"=, or unchecked if empty: (can be overwritten by user preferences)
       * Set FORCENEWREVISIONCHECKBOX = 
@@ -142,10 +142,6 @@ Preference settings local to your site should be set in [[%LOCALSITEPREFS%]] (th
 
    * Broadcast message for skins supporting a %<nop>BROADCASTMESSAGE% at the top of the page: (IMPORTANT: Set to empty message if not used; #Comment out unused messages)
       * Set BROADCASTMESSAGE = 
-      * #Set BROADCASTMESSAGE = <table border="0" cellpadding="3" cellspacing="0" width="100%"><tr><td bgcolor="yellow"><font color="red"><strong>NOTE:</strong></font>
-        Edit and Attach will be disabled today between 05:00 PM and 06:00 PM PDT (00:00 to 01:00 GMT) for a scheduled <nop>%WIKITOOLNAME% maintenance.
-        </td></tr></table>
-      * If you use PatternSkin:
       * #Set BROADCASTMESSAGE = <div class="twikiBroadcastMessage"> *NOTE:* Edit and Attach will be disabled today between 05:00 PM and 06:00 PM PDT (00:00 to 01:00 GMT) for a scheduled <nop>%WIKITOOLNAME% maintenance.</div>
 
    * Users or groups allowed to [[%TWIKIWEB%.ManagingWebs][create new top-level webs]]: (ex: %MAINWEB%.WebCreatorsGroup). If set to nothing, only administrators will be able to do this.
@@ -208,9 +204,8 @@ Preference settings local to your site should be set in [[%LOCALSITEPREFS%]] (th
       * Set USERCOLORSURL = 
 
    * *PatternSkin header settings*
-      * Example settings, remove dashes to activate:
       * #Set WEBHEADERART = %PUBURLPATH%/%TWIKIWEB%/PatternSkin/TWiki_header.gif
-      * #Set WEBHEADERBGCOLOR = #ffffff
+      * #Set WEBHEADERBGCOLOR = #faf8f0
       
 ---+++ Skin icons
 
