@@ -208,8 +208,9 @@ Preference settings local to your site should be set in [[%LOCALSITEPREFS%]] (th
       * Set USERCOLORSURL = 
 
    * *PatternSkin header settings*
-      * Set WEBHEADERART = %PUBURLPATH%/%TWIKIWEB%/PatternSkin/TWiki_header.gif
-      * Set WEBHEADERBGCOLOR = #ffffff
+      * Example settings, remove dashes to activate:
+      * #Set WEBHEADERART = %PUBURLPATH%/%TWIKIWEB%/PatternSkin/TWiki_header.gif
+      * #Set WEBHEADERBGCOLOR = #ffffff
       
 ---+++ Skin icons
 
