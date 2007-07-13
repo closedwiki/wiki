@@ -55,9 +55,9 @@
 
 %TMPL:DEF{"edit_or_create"}%%TMPL:P{context="new_topic" then="create_topic_link" else="edit_topic_link"}%%TMPL:END%
 
-%TMPL:DEF{"action_wysiwyg"}%%TMPL:P{"wysiwyg"}%%TMPL:END%
+%TMPL:DEF{"action_wysiwyg"}%%TMPL:P{"wysiwyg"}%%TMPL:P{"sep"}%%TMPL:END%
 
-%TMPL:DEF{"wysiwyg"}%%IF{"context WysiwygPluginEnabled and $COMPOSER" then="$percntTMPL:P{$quotactivatable_edit_wysiwyg$quot}$percnt$percntTMPL:P{$quotsep$quot}$percnt"}%%TMPL:END%
+%TMPL:DEF{"wysiwyg"}%%IF{"context WysiwygPluginEnabled and $COMPOSER" then="$percntTMPL:P{$quotactivatable_edit_wysiwyg$quot}$percnt"}%%TMPL:END%
 
 %TMPL:DEF{"activatable_edit_wysiwyg"}%%TMPL:P{context="inactive" then="inactive_wysiwyg" else="wysiwyg_edit_or_create"}%%TMPL:END%
 
