@@ -173,7 +173,7 @@ sub bulkRegister {
     my @data;
     my $gotHdr = 0;
     foreach my $line ( split( /\r?\n/, $text ) ) {
-        if( $line =~ /^\|\s*(.*?)\s*\|$/) {
+        if( $line =~ /^\s*\|\s*(.*?)\s*\|\s*$/) {
             if( $gotHdr ) {
                 my $i = 0;
                 my %row = map { $fields[$i++] => $_ } split( /\s*\|\s*/, $1 );
@@ -198,7 +198,7 @@ sub bulkRegister {
         #-- Following two lines untaint WikiName as required and verify it is
         #-- not zero length
         if (!$row->{WikiName}) {
-            $log .= "---++ Failed to register user on row $n; no !WikiName\n";
+            $log .= "---++ Failed to register user on row $n: no !WikiName\n";
             next;
         }
         $row->{WikiName} = TWiki::Sandbox::untaintUnchecked($row->{WikiName});
