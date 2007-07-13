@@ -10,5 +10,5 @@
    * [[WebRss][ %ICON{"feed"}% %MAKETEXT{"RSS Feed"}%]]
    * [[WebStatistics][ %ICON{"statistics"}% %MAKETEXT{"Statistics"}%]]
    * [[WebPreferences][ %ICON{"wrench"}% %MAKETEXT{"Preferences"}%]]
-%INCLUDE{ "%TWIKIWEB%.TWikiTipsOfTheDayInclude" warn="off" }%
+
 %INCLUDE{ "%TWIKIWEB%.WebLeftBarWebsList" }%

@@ -4,8 +4,8 @@
 %TMPL:DEF{"bodyclassname"}%patternNoViewPage patternRenamePage%TMPL:END%
 
 
-%TMPL:DEF{"toolbar"}%<div class="patternTop">%TWISTYSHOW{id="renamehelp" link="%MAKETEXT{"Show help"}%" imgleft="%ICONURLPATH{toggleopen-small}%"}%%TWISTYHIDE{id="renamehelp" link="%MAKETEXT{"Hide help"}%" imgleft="%ICONURLPATH{toggleclose-small}%"}%
-</div><!--//patternTop-->%TMPL:END%
+%TMPL:DEF{"toolbar"}%<div class="patternTop">%TWISTYBUTTON{id="renamehelp" firststart="show" mode="div" remember="on" link="%MAKETEXT{"Show help"}%" showimgleft="%ICONURLPATH{toggleopen}%"
+hideimgleft="%ICONURLPATH{toggleclose}%"}%</div><!--//patternTop-->%TMPL:END%
 
 
 %TMPL:DEF{"pagehelp"}%%TWISTYTOGGLE{id="renamehelp" mode="div" class="twikiHelp" remember="on" noscript="hide"}%%TMPL:P{"notes"}%%ENDTWISTYTOGGLE%%TMPL:END%

@@ -19,8 +19,9 @@
 %TMPL:DEF{"attachmentsbottom"}%%TMPL:P{"attachmentsatbottom"}%%TMPL:END%
 
 
-%TMPL:DEF{"topicpathinfo"}%<div class="patternHomePath"><span class="twikiRight">%TMPL:P{"revinfo"}%</span>%TMPL:P{"breadcrumb"}%<br class="twikiClear" /></div><!-- /patternHomePath-->%TMPL:END%
+%TMPL:DEF{toolbar_buttons}%<span class="patternButton">%TMPL:P{"activatable_edit_or_create"}%</span><span class="patternButton">%TMPL:P{"wysiwyg"}%</span><span class="patternButton">%TMPL:P{"activatable_attach"}%</span>%TMPL:END%
 
+%TMPL:DEF{"top"}%<div class="patternTop"><span class="patternHomePath twikiLeft twikiGrayText">%TMPL:P{"breadcrumb"}%</span><!-- /patternHomePath--><span class="patternToolBar twikiRight">%TMPL:P{"toolbar_buttons"}%</span><!-- /patternToolBar--><br class="twikiClear" /></div><!--/patternTop-->%TMPL:END%
 
 %TMPL:DEF{"topicpathseparator"}%<span class='twikiSeparator'>&nbsp;&gt;&nbsp;</span>%TMPL:END%
 
@@ -30,21 +31,18 @@
 
 %TMPL:DEF{"breadcrumb:wikitoolname"}%[[%MAINWEB%.%HOMETOPIC%][%WIKITOOLNAME%]]%TMPL:P{"topicpathseparator"}%%TMPL:END%
 
-%TMPL:DEF{"breadcrumb:currentweb"}%<a href="%SCRIPTURLPATH{"view"}%/%WEB%/%HOMETOPIC%"><img src="%ICONURLPATH{web-bg-small}%" border="0" alt="" width="13" height="13" style="background-color:%WEBBGCOLOR%" />&nbsp;%MAKETEXT{"[_1] Web" args="<nop>%WEB%"}%</a>%TMPL:END%
+%TMPL:DEF{"breadcrumb:currentweb"}%<img src="%ICONURLPATH{web-bg-small}%" border="0" alt="" width="13" height="13" style="background-color:%WEBBGCOLOR%" />&nbsp;<a href="%SCRIPTURLPATH{"view"}%/%WEB%/%HOMETOPIC%">%MAKETEXT{"[_1] Web" args="<nop>%WEB%"}%</a>%TMPL:END%
 
-%TMPL:DEF{"breadcrumb:currenttopic"}%%TMPL:P{"topicpathseparator"}%<span title="%WEB%.%TOPIC%"><nop>%TOPIC%</span>%TMPL:END%
+%TMPL:DEF{"breadcrumb:annotation"}%%IF{"defined rev" then=" %MAKETEXT{"(revision [_1]" args="%URLPARAM{"rev"}%)"}%"}%%IF{"defined raw" then=" %MAKETEXT{"(raw view)"}%"}%%TMPL:END%
 
-
-
-%TMPL:DEF{"revinfo"}% <span class="patternRevInfo">%REVINFO%</span>%TMPL:END%
+%TMPL:DEF{"breadcrumb:currenttopic"}%%TMPL:P{"topicpathseparator"}%<span title='%WEB%.%TOPIC% - %REVINFO{format="$rev - $date - <nop>$wikiusername"}%'>[[%TOPIC%]]%TMPL:P{"breadcrumb:annotation"}%</span>%TMPL:END%
 
 %{ DEPRECATED: beforetext and aftertext }%
 %{ compatibility transition older than 4.2: }%
 %TMPL:DEF{"contentheader"}%%TMPL:P{"beforetext"}%%TMPL:END%
 %TMPL:DEF{"contentfooter"}%%TMPL:P{"aftertext"}%%TMPL:END%
 
-%TMPL:DEF{"patterntopiccontents"}%%TMPL:P{"toolbar"}%
-%TMPL:P{"topicpathinfo"}%%TMPL:P{"contentheaderstylewrapper"}%%TMPL:P{"formtop"}%%TMPL:P{"attachmentstop"}%<div class="patternContent"><div class="patternTopic">%TMPL:P{"content"}%</div><!-- /patternTopic-->
+%TMPL:DEF{"patterntopiccontents"}%%TMPL:P{"top"}%%TMPL:P{"contentheaderstylewrapper"}%%TMPL:P{"formtop"}%%TMPL:P{"attachmentstop"}%<div class="patternContent"><div class="patternTopic">%TMPL:P{"content"}%</div><!-- /patternTopic-->
 %TMPL:P{"contentfooterstylewrapper"}%%TMPL:P{"formbottom"}%%TMPL:P{"attachmentsbottom"}%</div><!-- /patternContent-->
 %TMPL:P{"topicaction"}%%TMPL:P{"footernote"}%%TMPL:END%
 
@@ -54,6 +52,7 @@
 
 %TMPL:DEF{"content"}%%TMPL:P{"simpleheader"}% %TEXT% %TMPL:END%
 
+%TMPL:DEF{"printaction"}%%TMPL:P{"activatable_printable"}%%TMPL:END%
 
 %TMPL:DEF{"footernote"}%%TMPL:P{"topicinfo"}%%TMPL:END%
-%TMPL:DEF{"topicinfo"}%<div class="patternMoved">%META{"moved"}%</div><!-- /patternMoved-->%TMPL:END%
+%TMPL:DEF{"topicinfo"}%<div class="patternInfo twikiGrayText"><div class="patternRevInfo">%MAKETEXT{"Topic revision:"}% %REVINFO%</div><!-- /patternRevInfo--><div class="patternMoved">%META{"moved"}%</div><!-- /patternMoved--></div><!-- /patternInfo-->%TMPL:END%

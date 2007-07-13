@@ -1,11 +1,12 @@
 %TMPL:INCLUDE{"twiki"}%
-%TMPL:INCLUDE{"logo"}%
 %TMPL:INCLUDE{"viewtopicactionbuttons"}%
 %TMPL:INCLUDE{"viewbottombar"}%
 
 %TMPL:DEF{"sep"}%<span class='twikiSeparator'>&nbsp;|&nbsp;</span>%TMPL:END%
 %TMPL:DEF{"LOG_IN"}%%MAKETEXT{"Log In"}%%TMPL:END%
 %TMPL:DEF{"LOG_OUT"}%%MAKETEXT{"Log Out"}%%TMPL:END%
+
+%TMPL:DEF{"logo"}%<div class="patternSimpleLogo"><img src="%WIKILOGOIMG%" border="0" alt="%WIKILOGOALT%"/></div>%TMPL:END%
 
 %TMPL:DEF{"canceltopicaction"}%<a href="%SCRIPTURLPATH{"view"}%/%WEB%/%TOPIC%" title='%MAKETEXT{"Back to topic"}%' %MAKETEXT{"accesskey='c'"}% rel='nofollow'>%MAKETEXT{"&Cancel"}%</a>%TMPL:END%
 
@@ -17,7 +18,9 @@
 
 %TMPL:DEF{"patterntopiccontents"}%<div class="patternTopic">%TMPL:P{"pagetitlestylewrapper"}% %TMPL:P{"content"}%</div><!-- /patternTopic-->%TMPL:END%
 
-%TMPL:DEF{"topicaction"}%<a name="topic-actions"></a><div class="patternTopicActions"><div class="patternTopicAction"><span class="patternActionButtons"> %TMPL:P{"topicactionbuttons"}%</span></div></div><!--/patternTopicActions-->%TMPL:END%
+%TMPL:DEF{"printaction"}%%TMPL:END%
+
+%TMPL:DEF{"topicaction"}%<a name="topic-actions"></a><div class="patternTopicActions"><div class="patternTopicAction">%TMPL:P{"printaction"}%<span class="patternActionButtons twikiLeft"> %TMPL:P{"topicactionbuttons"}%</span><br class="twikiClear" /></div></div><!--/patternTopicActions-->%TMPL:END%
 
 %TMPL:DEF{"topicinfo"}%%TMPL:P{"topicaction"}%%TMPL:END%
 
@@ -34,8 +37,7 @@
 %TMPL:P{"twikistyle"}%
 </head>%TMPL:END%
 
-%TMPL:DEF{"skinscript"}%<script type="text/javascript" src="%PUBURLPATH%/%TWIKIWEB%/BehaviourContrib/behaviour.compressed.js"></script>
-<script type="text/javascript" src="%PUBURLPATH%/%TWIKIWEB%/TWikiJavascripts/twikiHTML.js"></script>%TMPL:END%
+%TMPL:DEF{"skinscript"}%<script type="text/javascript" src="%PUBURLPATH%/%TWIKIWEB%/PatternSkin/pattern.js"></script>%TMPL:END%
 
 %TMPL:DEF{"bodystart"}%<body class="%TMPL:P{"bodyclassname"}%">
 #PageTop%TMPL:END%
