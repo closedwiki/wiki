@@ -114,9 +114,11 @@ sub _createTextfield {
     );
 
     my $class;
-    $params->{class}
-        ? $class = $params->{class} . ' autoCompleteInput'
-        : $class = 'autoCompleteInput';
+    if( $params->{class} ){
+        $class .= $params->{class} . ' autoCompleteInput';
+    } else {
+        $class = 'autoCompleteInput';
+    }
 
     # parameters for textfield
     my %textfieldParams = (
@@ -252,9 +254,11 @@ sub _addStyle {
     my ( $formName ) = @_;
 
     my $form;
-    $formName
-        ? $form = '#' . $formName
-        : $form = 'form';
+    if( $formName ){
+        $form = '#' . $formName;
+    } else {
+        $form = 'form';
+    }
 
     my $Input = '.autoCompleteInput';
     my $Results = '.autoCompleteResults';
