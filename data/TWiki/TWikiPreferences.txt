@@ -142,7 +142,7 @@ Preference settings local to your site should be set in [[%LOCALSITEPREFS%]] (th
 
    * Broadcast message for skins supporting a %<nop>BROADCASTMESSAGE% at the top of the page: (IMPORTANT: Set to empty message if not used; #Comment out unused messages)
       * Set BROADCASTMESSAGE = 
-      * #Set BROADCASTMESSAGE = <div class="twikiBroadcastMessage"> *NOTE:* Edit and Attach will be disabled today between 05:00 PM and 06:00 PM PDT (00:00 to 01:00 GMT) for a scheduled <nop>%WIKITOOLNAME% maintenance.</div>
+      * #Set BROADCASTMESSAGE = *NOTE:* Edit and Attach will be disabled today between 05:00 PM and 06:00 PM PDT (00:00 to 01:00 GMT) for a scheduled <nop>%WIKITOOLNAME% maintenance.
 
    * Users or groups allowed to [[%TWIKIWEB%.ManagingWebs][create new top-level webs]]: (ex: %MAINWEB%.WebCreatorsGroup). If set to nothing, only administrators will be able to do this.
       * Set ALLOWROOTCHANGE = %MAINWEB%.TWikiAdminGroup
