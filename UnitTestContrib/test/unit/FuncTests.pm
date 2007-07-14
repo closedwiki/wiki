@@ -637,5 +637,26 @@ sub test_eachChangeSince {
     $this->assert(!$it->hasNext());
 }
 
+# Check consistency between getListofWebs and webExists
+sub test_4308 {
+    my $this = shift;
+    my @list = TWiki::Func::getListOfWebs('user');
+    foreach my $web (@list) {
+        $this->assert(TWiki::Func::webExists($web), $web);
+    }
+    @list = TWiki::Func::getListOfWebs('user public');
+    foreach my $web (@list) {
+        $this->assert(TWiki::Func::webExists($web), $web);
+    }
+    @list = TWiki::Func::getListOfWebs('template');
+    foreach my $web (@list) {
+        $this->assert(TWiki::Func::webExists($web), $web);
+    }
+    @list = TWiki::Func::getListOfWebs('public template');
+    foreach my $web (@list) {
+        $this->assert(TWiki::Func::webExists($web), $web);
+    }
+}
+
 1;
 
