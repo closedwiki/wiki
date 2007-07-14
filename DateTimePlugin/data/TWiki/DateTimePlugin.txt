@@ -1,6 +1,4 @@
-%META:TOPICINFO{author="AurelioAHeckert" date="1112113921" format="1.0" version="1.9"}%
 ---+!! <nop>DateTimePlugin
-
 <table cellpadding="5" cellspacing="5"><tr bgcolor="#F0F0F0">
 <th width="50%">English</th><th width="50%">Portugês</th></tr><tr><td>
 This plugin is an extension of the [[%TWIKIWEB%.TWikiVariables][TWiki variable]] =%<nop>GMTIME{"format"}%= that allows to show dates and hours with free formatting (with extra options), Internationalization and with a displacement of relative time.
@@ -322,7 +320,7 @@ Para a internacionalização, insira os nomes dos meses e dias da semana separados
 		* Set myGreenwich = -3
 
 	* One line description, shown in the %TWIKIWEB%.TextFormattingRules topic:
-		* Set SHORTDESCRIPTION = Extends the =%<nop>GMTIME{"format"}%= variable with more options and internationalization suport.
+      * Set SHORTDESCRIPTION = Supports date display with free formatting, extra options and internationalization.
 
 	* Set DEBUG to 1 to get debug messages in =data/debug.txt=. Default: =0=
 		* Set DEBUG = 0
