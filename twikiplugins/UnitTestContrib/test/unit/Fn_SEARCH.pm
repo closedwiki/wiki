@@ -743,4 +743,13 @@ HERE
     print STDERR "Query ".Benchmark::timestr($querytime),"\nRE ".Benchmark::timestr($retime),"\n";
 }
 
+sub test_4347 {
+    my $this = shift;
+
+    my $result = $this->{twiki}->handleCommonTags(
+        "%SEARCH{\"$this->{test_topic}\" scope=\"topic\" nonoise=\"on\" format=\"\$formfield(Blah)\"}%",
+        $this->{test_web}, $this->{test_topic});
+    $this->assert_str_equals('', $result);
+}
+
 1;
