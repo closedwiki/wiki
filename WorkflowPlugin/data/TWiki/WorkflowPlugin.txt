@@ -1,6 +1,7 @@
-%META:TOPICINFO{author="TWikiGuest" date="1159057575" format="1.1" reprev="1.3" version="1.3"}%
 ---+ %TOPIC%
-
+<!--
+   * Set SHORTDESCRIPTION = Associate a "state" with a topic and then control the work flow that the topic progresses through as content is added.
+-->
 TWiki benefits from the fact that every user can modify a topic instantly without restrictions. However sometimes you want to be able to associate a "state" with a topic and then control the work flow that the topic progresses through as content is added. 
 <div style="float:right">
 %ATTACHURL%/Flow.gif
@@ -115,33 +116,7 @@ a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>W
 
 ---++ Plugin Installation Instructions
 
-__Note:__ This plugin works on TWiki 4 and later only. For a version under Cairo, please download [[%SCRIPTURL{"viewfile"}%/%WEB%/%TOPIC%?rev=1;filename=ApprovalPlugin.zip][this version]].
-
-__Note:__ You do not need to install anything on the browser to use this plugin. The following instructions are for the administrator who installs the plugin on the TWiki server.
-   * This plugin works only with TWiki 4 and beyond.
-   * Download the ZIP file from the Plugin web (see below)
-   * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
-      | ==data/TWiki/WorkflowPlugin.txt== | Plugin doc page |
-   | ==lib/TWiki/Plugins/WorkflowPlugin.pm== | Plugin Perl module |
-   | ==pub/TWiki/WorkflowPlugin/Flow.gif== | Example image |
-   | ==pub/TWiki/WorkflowPlugin/Flow.draw== | Example image |
-   | ==pub/TWiki/WorkflowPlugin/convert.pl== | Conversion script |
-   | ==data/Sandbox/DefectWorkflow.txt== | Example workflow |
-   | ==data/Sandbox/DefectOne.txt== | Example defect |
-   | ==data/Sandbox/DefectTwo.txt== | Example defect |
-   | ==data/Sandbox/ApprovalViewTemplate.txt== | Template for DefectTwo style |
-   | ==data/Sandbox/InitialForm.txt== | Forms for defect workflow |
-   | ==data/Sandbox/SubmittedForm.txt== | Forms for defect workflow |
-   | ==data/Sandbox/CompletedForm.txt== | Forms for defect workflow |
-   | ==data/Sandbox/ControlledDocument.txt== | Example document |
-   | ==data/Sandbox/DocumentApprovalWorkflow.txt== | Example workflow |
-   | ==data/Sandbox/UnderRevisionForm.txt== | Forms for defect workflow |
-   | ==data/Sandbox/QMApprovalForm.txt== | Forms for approval workflow |
-   | ==data/Sandbox/TMApprovalForm.txt== | Forms for approval workflow |
-   | ==data/Sandbox/ApprovedForm.txt== | Forms for approval workflow |
-
-   * Optionally, run ==%TOPIC%_installer.pl== to automatically check and install other TWiki modules that this module depends on. You can also do this step manually. Alternatively, manually make sure the dependencies listed in the table below are resolved.
-   * Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
+%$INSTALL_INSTRUCTIONS%
 
 __Note:__ The script =[[%ATTACHURL/convert.pl][convert.pl]]= supplied will convert topics written for the !ApprovalPlugin to the WorkflowPlugin. The script takes a topic at the standard input and outputs the converted topic on standard output.
 

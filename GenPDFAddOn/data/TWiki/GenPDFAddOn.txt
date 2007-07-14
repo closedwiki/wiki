@@ -4,8 +4,10 @@
 <!-- PDFSTOP -->
 %TOC%
 <!-- PDFSTART -->
-
-Generate PDF from TWiki pages.
+<!--
+   * Set SHORTDESCRIPTION = Generate a PDF from a single TWiki page
+-->
+%SHORTDESCRIPTION%
 
 <em>
 This is a substantial re-write of the TWiki:Codev.PrintUsingPDF pdf script. It essentially accomplishes the same goal but with more integration with TWiki (e.g. use of TWiki variables for configuration and the TWiki rendering methods instead of using a hacked version of the =TWiki::view= for generating HTML) as well as more modular code structure (i.e. most of the logic is moved to a perl package).
