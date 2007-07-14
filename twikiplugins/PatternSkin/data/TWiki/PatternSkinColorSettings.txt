@@ -299,20 +299,20 @@ h3, h4, h5, h6 {
 .patternTopic a:hover {
 	color:%LINK_TEXT_HOVER%;
 }
-.patternTopic h1 a:link, .patternTopic h1 a:visited,
-.patternTopic h2 a:link, .patternTopic h2 a:visited,
-.patternTopic h3 a:link, .patternTopic h3 a:visited,
-.patternTopic h4 a:link, .patternTopic h4 a:visited,
-.patternTopic h5 a:link, .patternTopic h5 a:visited,
-.patternTopic h6 a:link, .patternTopic h6 a:visited {
+#patternMainContents h1 a:link, #patternMainContents h1 a:visited,
+#patternMainContents h2 a:link, #patternMainContents h2 a:visited,
+#patternMainContents h3 a:link, #patternMainContents h3 a:visited,
+#patternMainContents h4 a:link, #patternMainContents h4 a:visited,
+#patternMainContents h5 a:link, #patternMainContents h5 a:visited,
+#patternMainContents h6 a:link, #patternMainContents h6 a:visited {
 	color:%HEADER_TEXT%;
 }
-.patternTopic h1 a:hover,
-.patternTopic h2 a:hover,
-.patternTopic h3 a:hover,
-.patternTopic h4 a:hover,
-.patternTopic h5 a:hover,
-.patternTopic h6 a:hover {
+#patternMainContents h1 a:hover,
+#patternMainContents h2 a:hover,
+#patternMainContents h3 a:hover,
+#patternMainContents h4 a:hover,
+#patternMainContents h5 a:hover,
+#patternMainContents h6 a:hover {
 	color:%LINK_TEXT_HOVER%;
 }
 .patternTopic .twikiUnvisited a:visited {
