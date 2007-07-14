@@ -23,20 +23,45 @@
 # with a value. The UI type is used to guide a visitor which is run
 # over the structure to generate the UI.
 #
-use strict;
-
 package TWiki::Configure::UI;
+
+use strict;
+use File::Spec;
+use FindBin;
 
 use vars qw ($totwarnings $toterrors);
 
 sub new {
     my ($class, $item) = @_;
 
-    my $this = bless( {}, $class);
     Carp::confess unless $item;
+
+    my $this = bless( { item => $item }, $class);
     $this->{item} = $item;
 
+    my $replist = <<DEFAULTS;
+;TWiki.org=(http://twiki.org/cgi-bin/view/Plugins/,http://twiki.org/p/pub/Plugins/);$ENV{TWIKI_REPOSITORIES};
+DEFAULTS
+
+    while ($replist =~ s/[;\s]+(.*?)=\((.*?),(.*?)(?:,(.*?),(.*?))?\)\s*;/;/) {
+        push(@{$this->{repositories}},
+             { name => $1, data => $2, pub => $3, user => $4, pass => $5});
+    }
+
+    $this->{bin} = $FindBin::Bin;
+    my @root = File::Spec->splitdir($this->{bin});
+    pop(@root);
+    $this->{root} = File::Spec->catfile(@root, '');
+
     return $this;
+}
+
+sub getRepository {
+    my ($this, $reponame) = @_;
+    foreach my $place (@{$this->{repositories}}) {
+        return $place if $place->{name} eq $reponame;
+    }
+    return undef;
 }
 
 # Static UI factory
@@ -71,45 +96,15 @@ sub loadChecker {
     return $checker;
 }
 
-# Basic unauthenticated tcp HTTP 1.0 get on port 80
-# dies on any failure
+# Returns a response object as described in TWiki::Net
 sub getUrl {
     my ($this, $url) = @_;
 
-    die "Bad URL $url " unless $url =~ m#^(\w+)://(.*?)(/.*)$#;
-    my ($protocol, $host, $path) = ($1, $2, $3);
-    my $port = 80;
-    if ($host =~ s/:(\d+)$//) {
-        $port = $1;
-    }
-    my $req = "GET $path HTTP/1.0\r\nHost: $host\r\nUser-agent: TWikiConfigure/1.0 +http://twiki.org/\r\n\r\n";
-    if ($TWiki::cfg{PROXY}{HOST} && $TWiki::cfg{PROXY}{PORT}) {
-        $req = "GET http://$host:$port$path HTTP/1.0\r\nUser-agent: TWikiConfigure/1.0 +http://twiki.org/\r\n\r\n";
-        $host = $TWiki::cfg{PROXY}{HOST};
-        $port = $TWiki::cfg{PROXY}{PORT};
-    }
-
-    require Socket;
-
-    my $ipaddr = Socket::inet_aton($host);
-    die "inet_aton: host cannot be found" unless $ipaddr;
-    my $packedaddr = Socket::sockaddr_in( $port, $ipaddr );
-    my $proto = getprotobyname('tcp');
-    die "getprotobyname: No proto" unless $proto;
-    unless (socket(*SOCK, &Socket::PF_INET, &Socket::SOCK_STREAM, $proto)) {
-        die "socket: $!.";
-    }
-    unless (connect(*SOCK, $packedaddr)) {
-        die "connect: $!.\n$req";
-    }
-    select SOCK;
-    local $| = 1;
-    local $/ = undef;
-    print SOCK $req;
-    my $result = <SOCK>;
-    close( SOCK );
-    select STDOUT;
-    return $result;
+    require TWiki::Net;
+    my $tn = new TWiki::Net();
+    my $response = $tn->getExternalResource($url);
+    $tn->finish();
+    return $response;
 }
 
 # STATIC Used by a whole bunch of things that just need to show a key-value row

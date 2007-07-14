@@ -2,7 +2,11 @@
 
 ---+ Quick Menu Skin
 
-A functional skin that replaces the left bar with a customizable Javascript menu system.
+<!--
+   * Set SHORTDESCRIPTION = A functional skin that replaces the left bar with a customizable Javascript menu system.
+-->
+%SHORTDESCRIPTION%
+
 
 ---++ Screen Shot
 

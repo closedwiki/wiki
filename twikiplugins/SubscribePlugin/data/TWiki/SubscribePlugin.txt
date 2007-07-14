@@ -1,24 +1,14 @@
 ---+ Subscribe Plugin
 
-This is a companion plugin to the MailerContrib. It allows you to trivially
-add a "Subscribe me" link to topics to get subscribed to changes.
+<!--
+   * Set SHORTDESCRIPTION = This is a companion plugin to the MailerContrib. It allows you to trivially add a "Subscribe me" link to topics to get subscribed to changes.
+-->
+%SHORTDESCRIPTION%
 
 Example (only works if plugin is installed, and you are logged in (not %MAINWEB%.TWikiGuest)): %SUBSCRIBE%
 
 ---++ Usage
-Anywhere in a topic or template:
-   * =%<nop>SUBSCRIBE{...}%= or simply =%<nop>SUBSCRIBE%=
-
-| *Parameter* | *Default* | *Meaning* |
-| =who= | Logged-in user | Who to subscribe (wikiname, no web) |
-| =topic= | Current topic | Topic to subscribe to. Wildcards may be used e.g. =topic="Item*"= will subscribe to all topics starting with =Item=. Use =topic="Main.*"= to subscribe to the !WebNotify for that web. |
-| =unsubscribe= | Not set | If set to "on", will *unsubscribe* the user |
-| =format= | Simple HTML Link with an action anchor "Subscribe" or "Unsubscribe" | Defines custom look-and-feel for subscribe link using the following format variables: =$topics=, =$url=, =$wikiname=, =$action= |
-| =formatunsubscribe= | =format= | Serves same function as =format=, but allows the user to define a different format than =subscribe=. |
-
-   * The button toggles subscribe/unsubscribe if the user is already subscribed or vice versa. So after the next click on the button, the user will be unsubscribed.
-   * The plugin will do the best it can to optimise the subscription lists in WebNotify.
-   * Subscription events will return to the topic originally being viewed.
+%INCLUDE{"VarSUBSCRIBE" section="subscribe_attributes"}%
 
 ---++ Access Controls
 The guest user is not allowed to subscribe for notification.
@@ -28,35 +18,7 @@ You don't need =VIEW= access to the WebNotify topic in order to subscribe to cha
 %X% Note that permissions on individual topics are *not* checked when subscription mails are sent out, so be very careful about who you allow to subscribe.
 
 ---++ Plugin Installation Instructions
-
-You do not need to install anything in the browser to use this extension. The following instructions are for the administrator who installs the extension on the server where TWiki is running.
-
-Like many other TWiki extensions, this module is shipped with a fully automatic installer script written using the Build<nop>Contrib.
-   * If you have TWiki 4.1 or later, and Perl 5.8, you can install from the =configure= interface (Go to Plugins->Find More Extensions)
-      * The webserver user has to have permission to write to all areas of your installation for this to work.
-   * If you have a permanent connection to the internet (and Perl 5.8), you are recommended to use the automatic installer script
-      * Just download the =SubscribePlugin_installer= perl script and run it.
-   * *Notes:*
-      * The installer script will:
-         * Automatically resolve dependencies,
-         * Copy files into the right places in your local install (even if you have renamed data directories),
-         * check in new versions of any installed files that have existing RCS histories files in your existing install (such as topics).
-         * If the $TWIKI_PACKAGES environment variable is set to point to a directory, the installer will try to get archives from there. Otherwise it will try to download from twiki.org or cpan.org, as appropriate.
-         * (Developers only: the script will look for twikiplugins/SubscribePlugin/SubscribePlugin.tgz before downloading from TWiki.org)
-      * If you don't have a permanent connection, you can still use the automatic installer, by downloading all required TWiki archives to a local directory.
-         * Point the environment variable =$TWIKI_PACKAGES= to this directory, and the installer script will look there first for required TWiki packages.
-            * =$TWIKI_PACKAGES= is actually a path; you can list several directories separated by :
-         * If you are behind a firewall that blocks access to CPAN, you can build a local CPAN mini-mirror, as described at http://twiki.org/cgi-bin/view/Codev/BuildingDakar#CPAN_local_minimirror
-   * If you don't want to use the installer script, or have problems on your platform (e.g. you don't have Perl 5.8), then you can still install manually:
-      1 Download and unpack one of the =.zip= or =.tgz= archives to a temporary directory.
-      1 Manually copy the contents across to the relevant places in your TWiki installation.
-      1 Check in any installed files that have existing =,v= files in your existing install (take care *not* to lock the files when you check in)
-      1 Manually edit !LocalSite.cfg to set any configuration variables.
-      1 Run =configure= and enable the module, if it is a plugin.
-      1 Repeat from step 1 for any missing dependencies.
-
-
-The plugin is currently %IF{"context SubscribePluginEnabled" then="installed and enabled" else="not installed, or not enabled in [[%SCRIPTURLPATH{configure}%][configure]]"}%.
+%$INSTALL_INSTRUCTIONS%
 
 ---++ Plugin Info
 
@@ -67,7 +29,6 @@ This plugin is brought to you by the [[http://wikiring.com][WikiRing]] - working
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | %$VERSION% |
 |  Dependencies: | %$DEPENDENCIES% |
-|  Dependencies: | TWiki:Plugins.MailerContrib >=13511,perl,TWiki 4 mailer module |
 | Change&nbsp;History: | |
 |  13966 | Bugs:Item4155 Fixed for 4.0.x and 4.1.x |
 |  13787 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item4010'>Item4010</a>fix web subscription, and =format= parameters. - TWiki:Main.SvenDowideit |

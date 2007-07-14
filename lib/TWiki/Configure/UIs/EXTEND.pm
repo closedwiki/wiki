@@ -17,29 +17,12 @@
 use strict;
 
 package TWiki::Configure::UIs::EXTEND;
-
-use TWiki::Configure::UI;
-
 use base 'TWiki::Configure::UI';
+
 use File::Temp;
 use File::Copy;
+use File::Spec;
 use Cwd;
-
-sub new {
-    my $class = shift;
-    my $this = bless($class->SUPER::new(@_), $class);
-
-    push(@{$this->{repositories}},
-         { data => 'http://twiki.org/cgi-bin/view/Plugins/',
-           pub => 'http://twiki.org/p/pub/Plugins/' } );
-
-    $this->{bin} = $FindBin::Bin;
-    my @root = File::Spec->splitdir($this->{bin});
-    pop(@root);
-    $this->{root} = File::Spec->catfile(@root, '');
-
-    return $this;
-}
 
 sub ui {
     my $this = shift;
@@ -47,12 +30,16 @@ sub ui {
     my $ar;
     my $extension = $query->param('extension');
     my $ext = '.tgz';
-    my $arf = $query->param('pub').$extension.'/'.$extension.$ext;
+    my $repository = $this->getRepository($query->param('repository'));
+    my $arf = $repository->{pub}.$extension.'/'.$extension.$ext;
 
     print "<br/>Fetching $arf...<br />\n";
-    eval {
-        $ar = $this->getUrl($arf);
-    };
+    my $response = $this->getUrl($arf);
+    if (!$response->is_error()) {
+        eval { $ar = $response->content(); };
+    } else {
+        $@ = $response->message();
+    }
 
     if ($@) {
         print $this->WARN(<<HERE);
@@ -68,11 +55,14 @@ Extension may not have been packaged correctly.
 Trying for a .zip file instead.
 HERE
         $ext = '.zip';
-        $arf = $query->param('pub').$extension.'/'.$extension.$ext;
+        $arf = $repository->{pub}.$extension.'/'.$extension.$ext;
         print "<br/>Fetching $arf...<br />\n";
-        eval {
-            $ar = $this->getUrl($arf);
-        };
+        $response = $this->getUrl($arf);
+        if (!$response->is_error()) {
+            eval { $ar = $response->content(); };
+        } else {
+            $@ = $response->message();
+        }
         if ($@) {
             print $this->WARN(<<HERE);
 I can't download $arf because of the following error:

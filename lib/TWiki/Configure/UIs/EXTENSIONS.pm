@@ -15,66 +15,42 @@
 #
 # As per the GPL, removal of this notice is prohibited.
 package TWiki::Configure::UIs::EXTENSIONS;
-
-use strict;
-
-use TWiki::Configure::UI;
-
 use base 'TWiki::Configure::UI';
 
+use strict;
 use TWiki::Configure::Type;
 
-use Data::Dumper;
-use Cwd;
-use File::Spec;
-use FindBin;
-
-my $root;
-
 my @tableHeads =
-  qw(topic description version installedVersion testedOn testedOnOS install );
+  qw(image topic description version installedVersion testedOn install );
 my %headNames = (
+    image => '',
     topic => 'Extension',
     description => 'Description',
     version => 'Most Recent Version',
     installedVersion => 'Installed Version',
-    testedOn => 'Tested On',
+    testedOn => 'Tested On TWiki',
     testedOnOS => 'Tested On OS',
     install => 'Action',
    );
 
-sub new {
-    my $class = shift;
-    my $this = bless({}, $class);
-    my $replist = $ENV{TWIKI_REPOSITORIES} || '';
-    $replist .= <<DEFAULTS;
-TWiki.org=(http://twiki.org/cgi-bin/view/Plugins/,http://twiki.org/p/pub/Plugins/)
-DEFAULTS
-    $replist = ";$replist;";
-    while ($replist =~ s/[;\s]+(.*?)=\((.*?),(.*?)\)\s*;/;/so) {
-        push(@{$this->{repositories}}, { name => $1, data => $2, pub => $3 });
-    }
-    $this->{bin} = $FindBin::Bin;
-    my @root = File::Spec->splitdir($this->{bin});
-    pop(@root);
-    $this->{root} = File::Spec->catfile(@root, '');
-
-    return $this;
-}
-
-# Download the report page from the repository, and extract a list of
+# Download the report page from the repository, and extract a hash of
 # available extensions
 sub _getListOfExtensions {
     my $this = shift;
 
     if (!$this->{list}) {
-        $this->{list} = [];
+        $this->{list} = {};
         foreach my $place ( @{$this->{repositories}} ) {
             print CGI::div("Consulting $place->{name}...");
-            my $page = $this->getUrl(
-                $place->{data}.'FastReport?skin=text&contenttype=text/plain');
-            # SMELL handle failure to connect
-            $page =~ s/{(.*?)}/$this->_parseRow($1, $place)/ges;
+            my $url = $place->{data}.
+                  'FastReport?skin=text&contenttype=text/plain';
+            my $response = $this->getUrl($url);
+            if (!$response->is_error()) {
+                my $page = $response->content();
+                $page =~ s/{(.*?)}/$this->_parseRow($1, $place)/ges;
+            #} else {
+            #    die "$url ".$response->message();
+            }
         }
     }
     return $this->{list};
@@ -83,11 +59,13 @@ sub _getListOfExtensions {
 sub _parseRow {
     my ($this, $row, $place) = @_;
     my %data;
-    $row =~ s/^ *(\w+): *(.*?) *$/$data{$1}=$2;''/gem;
+    return '' unless $row =~ s/^ *(\w+): *(.*?) *$/$data{$1} = $2;''/gem;
     $data{installedVersion} = $this->_getInstalledVersion($data{topic});
+    $data{repository} = $place->{name};
     $data{data} = $place->{data};
     $data{pub} = $place->{pub};
-    push(@{$this->{list}}, \%data);
+    die "$row: ".Data::Dumper->Dump([\%data]) unless $data{topic};
+    $this->{list}->{$data{topic}} = \%data;
     return '';
 }
 
@@ -99,15 +77,16 @@ sub ui {
 
     my $rows = 0;
     my $installed = 0;
-    foreach my $ext (@{$this->_getListOfExtensions()}) {
+    my $exts = $this->_getListOfExtensions();
+    foreach my $key (sort keys %$exts) {
+        my $ext = $exts->{$key};
         my $row = '';
         foreach my $f (@tableHeads) {
             my $text;
             if ($f eq 'install') {
                 my $link = $TWiki::query->url().
                   '?action=InstallExtension'.
-                    ';data='.$ext->{data}.
-                    ';pub='.$ext->{pub}.
+                    ';repository='.$ext->{repository}.
                     ';extension='.$ext->{topic};
                 $text = 'Install';
                 if ($ext->{installedVersion}) {
@@ -143,11 +122,13 @@ INTRO
     $page .= CGI::table({class=>'twikiForm'},$table);
     $page .= <<'HELP';
 <p />
-You can add more repositories to the search path by defining the
-environment variable <code>$TWIKI_REPOSITORIES</code>. Repositories are just
-TWiki webs which contain published extensions, same as the Plugins
-web on TWiki.org.
+TWiki exctension repositories are just TWiki webs which contain published
+extensions, same as the Plugins web on TWiki.org.
 
+You can add more repositories to the search path by defining the
+environment variable <code>$TWIKI_REPOSITORIES</code> in
+<tt>bin/LocalLib.cfg</tt>, thus:<br />
+<tt>$ENV{TWIKI_REPOSITORIES} = '<i>repositories</i>';</tt><p />
 <code>$TWIKI_REPOSITORIES</code> has to be a semicolon-separated list of repository specifications, <i>name=(list,pub)</i>, where:
 <ul>
 <li><i>name</i> is the symbolic name of the repository e.g. TWiki.org</li>
@@ -159,6 +140,7 @@ extensions in a special parseable format (see the
 For example,<code>
 twiki.org=(http://twiki.org/cgi-bin/view/Plugins/FastReport?skin=text&contenttype=text/plain,http://twiki.org/p/pub/Plugins/);
 wikiring.com=(http://wikiring.com/bin/view/Extensions/FastReport?skin=text&contenttype=text/plain,http://wikiring.com/bin/viewfile/Extensions/)</code><p />
+Note that you can pass authentication information in the URL, for example: <tt>http://User:password\@the.server.com/</tt>.
 HELP
     return $page;
 }
@@ -171,10 +153,8 @@ sub _getInstalledVersion {
 
     if ($module =~ /Plugin$/) {
         $lib = 'Plugins';
-    } elsif ($module =~ /(Contrib|Add[Oo]n|Skin)$/) {
-        $lib = 'Contrib';
     } else {
-        return undef;
+        $lib = 'Contrib';
     }
 
     my $path = 'TWiki::'.$lib.'::'.$module;
@@ -182,7 +162,9 @@ sub _getInstalledVersion {
     my $check = 'use '.$path.'; $version = $'.$path.'::VERSION;';
     eval $check;
     #print STDERR $@ if $@ && DEBUG;
-    $version =~ s/^\s*\$Rev:\s*(\d+)\s*\$$/$1/ if $version;
+    if ($version) {
+        $version =~ s/^\s*\$Rev:\s*(.*?)\s*\$$/$1/;
+    }
     return $version;
 }
 

@@ -1,21 +1,4 @@
-# Module of TWiki Enterprise Collaboration Platform, http://TWiki.org/
-#
-# Copyright (C) 2001-2007 Peter Thoeny, peter@thoeny.org
-# and TWiki Contributors. All Rights Reserved. TWiki Contributors
-# are listed in the AUTHORS file in the root of this distribution.
-# NOTE: Please extend that file, not this notice.
-#
-# This program is free software; you can redistribute it and/or
-# modify it under the terms of the GNU General Public License
-# as published by the Free Software Foundation; either version 2
-# of the License, or (at your option) any later version. For
-# more details read LICENSE in the root of this distribution.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-#
-# As per the GPL, removal of this notice is prohibited.
+# See bottom of file for license and copyright information
 
 =begin twiki
 
@@ -25,12 +8,17 @@ Object that brokers access to network resources.
 
 =cut
 
+# This module is used by configure, and as such must *not* 'use TWiki',
+# or any other module that uses it. Always run configure to test after
+# changing the module.
+
 package TWiki::Net;
 
 use strict;
 use Assert;
 use Error qw( :try );
 
+# note that the session is *optional*
 sub new {
     my ( $class, $session ) = @_;
     my $this = bless( { session => $session }, $class );
@@ -118,7 +106,7 @@ sub getExternalResource {
         return new TWiki::Net::HTTPResponse("Bad URL: $url");
     }
 
-    require LWP;
+    eval "use LWP";
     unless( $@ ) {
         return _GETUsingLWP( $this, $url );
     }
@@ -159,12 +147,15 @@ sub getExternalResource {
             $req .= "Authorization: Basic $base64";
         }
 
-        # Reference to TWiki variables used for compatibility
-        my $prefs = $this->{session}->{prefs};
-        my $proxyHost = $prefs->getPreferencesValue('PROXYHOST') ||
-          $TWiki::cfg{PROXY}{HOST};
-        my $proxyPort = $prefs->getPreferencesValue('PROXYPORT') ||
-          $TWiki::cfg{PROXY}{PORT};
+        # SMELL: Reference to TWiki variables used for compatibility
+        my ($proxyHost, $proxyPort);
+        if ($this->{session} && $this->{session}->{prefs}) {
+            my $prefs = $this->{session}->{prefs};
+            $proxyHost = $prefs->getPreferencesValue('PROXYHOST');
+            $proxyPort = $prefs->getPreferencesValue('PROXYPORT');
+        }
+        $proxyHost ||= $TWiki::cfg{PROXY}{HOST};
+        $proxyPort ||= $TWiki::cfg{PROXY}{PORT};
         if($proxyHost && $proxyPort) {
             $req = "GET http://$host:$port$url HTTP/1.0\r\n";
             $host = $proxyHost;
@@ -230,13 +221,14 @@ sub _GETUsingLWP {
 sub _installMailHandler {
     my $this = shift;
     my $handler = 0; # Not undef
-    my $prefs = $this->{session}->{prefs};
+    if ($this->{session} && $this->{session}->{prefs}) {
+        my $prefs = $this->{session}->{prefs};
+        $this->{MAIL_HOST}  = $prefs->getPreferencesValue( 'SMTPMAILHOST' );
+        $this->{HELLO_HOST} = $prefs->getPreferencesValue( 'SMTPSENDERHOST' );
+    }
 
-    $this->{MAIL_HOST}  = $prefs->getPreferencesValue( 'SMTPMAILHOST' ) ||
-      $TWiki::cfg{SMTP}{MAILHOST};
-    $this->{HELLO_HOST} = $prefs->getPreferencesValue( 'SMTPSENDERHOST' ) ||
-      $TWiki::cfg{SMTP}{SENDERHOST};
-
+    $this->{MAIL_HOST}  ||= $TWiki::cfg{SMTP}{MAILHOST};
+    $this->{HELLO_HOST} ||= $TWiki::cfg{SMTP}{SENDERHOST};
 
     if( $this->{MAIL_HOST} ) {
         # See Codev.RegisterFailureInsecureDependencyCygwin for why
@@ -248,7 +240,8 @@ sub _installMailHandler {
             require Net::SMTP;
         };
         if( $@ ) {
-            $this->{session}->writeWarning( "SMTP not available: $@" );
+            $this->{session}->writeWarning( "SMTP not available: $@" )
+              if ($this->{session});
         } else {
             $handler = \&_sendEmailByNetSMTP;
         }
@@ -318,8 +311,10 @@ sub sendEmail {
             # caused by SMTP or perl, and give away info about the
             # install that we don't want to share.
             unless( $e =~ /^ERROR/ ) {
-                $this->{session}->writeWarning( $e );
-                $e = "Mail could not be sent - see TWiki warning log.";
+                if ($this->{session}) {
+                    $this->{session}->writeWarning( $e );
+                    $e = "Mail could not be sent - see TWiki warning log.";
+                }
             }
             $errors .= $e."\n";
             sleep( $back_off );
@@ -439,3 +434,23 @@ sub _sendEmailByNetSMTP {
 }
 
 1;
+__DATA__
+
+Module of TWiki Enterprise Collaboration Platform, http://TWiki.org/
+
+Copyright (C) 2001-2007 Peter Thoeny, peter@thoeny.org
+and TWiki Contributors. All Rights Reserved. TWiki Contributors
+are listed in the AUTHORS file in the root of this distribution.
+NOTE: Please extend that file, not this notice.
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version. For
+more details read LICENSE in the root of this distribution.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+As per the GPL, removal of this notice is prohibited.
