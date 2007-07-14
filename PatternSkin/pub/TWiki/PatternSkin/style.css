@@ -504,9 +504,12 @@ table.twikiFormTable th.twikiFormTableHRow a:visited {
 .twikiBroadcastMessage,
 .twikiNotification {
 	padding:.5em 20px; /*S5*/
+}
+.twikiNotification {
 	margin:1em 0;
 }
 .twikiBroadcastMessage {
+	margin:0 0 1.25em 0;
 	border-width:1px;
 	border-style:solid none;
 }

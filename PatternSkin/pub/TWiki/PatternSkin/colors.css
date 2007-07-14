@@ -55,13 +55,8 @@ blockquote {
 blockquote h2 {
 	background:none;
 }
-h1, h2, h3, h4, h5, h6,
-.patternTopic h1 a:link,
-.patternTopic h1 a:visited {
+h1, h2, h3, h4, h5, h6 {
 	color:#800;
-}
-.patternTopic h1 a:hover {
-	color:#fff;
 }
 h2 {
 	background-color:#fcf8ec;
@@ -110,6 +105,22 @@ h3, h4, h5, h6 {
 	color:#666;
 }
 .patternTopic a:hover {
+	color:#fff;
+}
+.patternTopic h1 a:link, .patternTopic h1 a:visited,
+.patternTopic h2 a:link, .patternTopic h2 a:visited,
+.patternTopic h3 a:link, .patternTopic h3 a:visited,
+.patternTopic h4 a:link, .patternTopic h4 a:visited,
+.patternTopic h5 a:link, .patternTopic h5 a:visited,
+.patternTopic h6 a:link, .patternTopic h6 a:visited {
+	color:#800;
+}
+.patternTopic h1 a:hover,
+.patternTopic h2 a:hover,
+.patternTopic h3 a:hover,
+.patternTopic h4 a:hover,
+.patternTopic h5 a:hover,
+.patternTopic h6 a:hover {
 	color:#fff;
 }
 .patternTopic .twikiUnvisited a:visited {
@@ -165,7 +176,7 @@ select {
 }
 .twikiInputField:active,
 .twikiInputField:focus {
-	background-color:#fcf6dd;
+	background-color:#fff9d1;
 }
 
 .twikiTextareaRawView {
@@ -221,7 +232,7 @@ a:hover.twistyTrigger {
 
 /* TipsContrib */
 .tipsOfTheDay {
-	background-color:#fcf6dd;
+	background-color:#fff9d1;
 }
 .patternTopic .tipsOfTheDayHeader {
 	color:#333;
@@ -310,14 +321,14 @@ table.twikiFormTable th.twikiFormTableHRow font {
 	color:#666;
 }
 .twikiBroadcastMessage {
-	background-color:#fcf6dd;
+	background-color:#fff9d1;
 	border-color:#ffdf4c;
 }
 .twikiNotification {
-	background-color:#fcf6dd;
+	background-color:#fff9d1;
 }
 .twikiHelp {
-	background-color:#fcf6dd;
+	background-color:#fff9d1;
 }
 .twikiBroadcastMessage b,
 .twikiBroadcastMessage strong {
