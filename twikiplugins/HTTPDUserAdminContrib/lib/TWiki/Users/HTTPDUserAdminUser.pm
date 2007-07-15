@@ -68,12 +68,12 @@ sub new {
 			UserTable =>				$TWiki::cfg{HTTPDUserAdminContrib}{UserTable} || '',
 			NameField =>				$TWiki::cfg{HTTPDUserAdminContrib}{NameField} || '',
 			PasswordField =>			$TWiki::cfg{HTTPDUserAdminContrib}{PasswordField} || '',
-			Debug =>				1
+			#Debug =>				1
              );
 
     $this->{userDatabase} = new HTTPD::UserAdmin(@configuration);
 	
-	print STDERR "new HTTPDAuth".join(', ', $this->{userDatabase}->list())."\n";
+	print STDERR "new HTTPDAuth".join(', ', $this->{userDatabase}->list())."\n" if ($TWiki::cfg{HTTPDUserAdminContrib}{Debug});
 
     return $this;
 }

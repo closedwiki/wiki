@@ -3809,9 +3809,10 @@ sub GROUPS {
     my @table;
     while( $groups->hasNext() ) {
         my $group = $groups->next();
-        # Nop it to prevent wikiname expansion. Groups may not be defined as
-        # topics, but may come from the user mapper.
-        my $descr = "| <nop>$group |";
+        # Nop it to prevent wikiname expansion unless the topic exists.
+		my $groupLink = "<nop>$group";
+		$groupLink = '[['.$TWiki::cfg{UsersWebName}.".$group][$group]]" if ($this->{store}->topicExists($TWiki::cfg{UsersWebName}, $group));
+        my $descr = "| $groupLink |";
         my $it = $this->{users}->eachGroupMember( $group );
         while( $it->hasNext() ) {
             my $user = $it->next();
