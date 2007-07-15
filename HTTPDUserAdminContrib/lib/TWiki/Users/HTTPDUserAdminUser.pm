@@ -68,6 +68,7 @@ sub new {
 			UserTable =>				$TWiki::cfg{HTTPDUserAdminContrib}{UserTable} || '',
 			NameField =>				$TWiki::cfg{HTTPDUserAdminContrib}{NameField} || '',
 			PasswordField =>			$TWiki::cfg{HTTPDUserAdminContrib}{PasswordField} || '',
+			Debug =>				1
              );
 
     $this->{userDatabase} = new HTTPD::UserAdmin(@configuration);
@@ -169,11 +170,12 @@ sub isManagingEmails {
 # emails are stored in extra info field as a ; separated list
 sub getEmails {
     my( $this, $login) = @_;
+	return unless ($this->{userDatabase}->exists($login));
 	my $settings = $this->{userDatabase}->fetch($login, ('emails'));
 	
 	
-	use Data::Dumper;
-	print STDERR "\nsettings . ".$settings." ..".Dumper($settings, keys(%{$settings}));
+	#use Data::Dumper;
+	#print STDERR "\nsettings . ".$settings." ..".Dumper($settings, keys(%{$settings}));
 
     my @r = split(/;/, $$settings{emails});
     $this->{error} = undef;
