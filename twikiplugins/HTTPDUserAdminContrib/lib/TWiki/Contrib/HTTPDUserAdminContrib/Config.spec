@@ -21,7 +21,7 @@ $TWiki::cfg{HTTPDUserAdminContrib}{Encrypt} = "crypt";
 
 # **BOOLEAN**
 #Locking - Boolean, Lock Text and DBM files (Default is true)
-$TWiki::cfg{HTTPDUserAdminContrib}{Locking} = "";
+$TWiki::cfg{HTTPDUserAdminContrib}{Locking} = "true";
 
 # **PATH**
 #Path - Relative DB files are resolved to this value (Default is '.')

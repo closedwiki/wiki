@@ -28,14 +28,14 @@ No registration - this is a read only usermapper
 
 ---+++ Users
    * TWikiAdmin - uses the password that was set in Configure (IF its not null)
-   * TWikiGuest - password guest
+   * TWikiGuest
    * UnknownUser
    * TWikiContributor - 1 Jan 2005
    * TWikiRegistrationAgent - 1 Jan 2005
    
 ---+++ Groups
    * $TWiki::cfg{SuperAdminGroup}
-   * 
+   * TWikiBaseGroup
    
 
 =cut
