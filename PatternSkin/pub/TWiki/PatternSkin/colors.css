@@ -789,7 +789,7 @@ a.twikiButton:active {
 	background-position:16px -84px;
 }
 #patternLeftBarContents {
-	padding-bottom:120px; /* reflection bottom image: 100px high; extra padding 20px */
+	padding-bottom:70px; /* reflection bottom image: 50px high; extra padding 20px */
 	background-image:url(bg_sidebar_reflection.gif);
 	background-repeat:repeat-x;
 	background-position:bottom left;
