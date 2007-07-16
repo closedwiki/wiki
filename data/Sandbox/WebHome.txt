@@ -1,8 +1,4 @@
-%META:TOPICINFO{author="BaseUserMapping_333" date="1181951854" format="1.1" version="1.7"}%
-<div class="tagmetags">
-Tags: %TAGME{ tpaction="%URLPARAM{tpaction}%" web="%WEB%" tag="%URLPARAM{tag}%" }%, [[TWiki.TagMeViewAllTags][view all tags]]
-</div>
-
+%META:TOPICINFO{author="TWikiContributor" date="1181951854" format="1.1" version="1.1"}%
 ---+!! %MAKETEXT{"Welcome to the [_1] web" args="<nop>%WEB%"}%
 
 %MAKETEXT{"The [_1] web is the sandbox you can use for testing. Everybody is welcome to add or delete some stuff. It is recommended to walk through the [_2] to get a jumpstart on the [_3] tool. A good rule of thumb is to add at the end of the page and sign and date it with your [_4]." args="<b><nop>%WEB%</b>,%TWIKIWEB%.TWikiTutorial,<nop>%WIKITOOLNAME%,%TWIKIWEB%.WikiName"}%
@@ -41,28 +37,3 @@ Tags: %TAGME{ tpaction="%URLPARAM{tpaction}%" web="%WEB%" tag="%URLPARAM{tag}%" 
 
 
    * Set ALLOWTOPICCHANGE = Main.TWikiAdminGroup
-
-%META:FORM{name="Main.UserForm"}%
-%META:FIELD{name="FirstName" attributes="" title="<nop>FirstName" value=""}%
-%META:FIELD{name="LastName" attributes="" title="<nop>LastName" value=""}%
-%META:FIELD{name="OrganisationName" attributes="" title="<nop>OrganisationName" value=""}%
-%META:FIELD{name="OrganisationURL" attributes="" title="<nop>OrganisationURL" value=""}%
-%META:FIELD{name="Profession" attributes="" title="Profession" value=""}%
-%META:FIELD{name="Country" attributes="" title="Country" value=""}%
-%META:FIELD{name="State" attributes="" title="State" value=""}%
-%META:FIELD{name="Address" attributes="" title="Address" value=""}%
-%META:FIELD{name="Location" attributes="" title="Location" value=""}%
-%META:FIELD{name="Telephone" attributes="" title="Telephone" value=""}%
-%META:FIELD{name="VoIP" attributes="" title="<nop>VoIP" value=""}%
-%META:FIELD{name="InstantMessagingIM" attributes="" title="<nop>InstantMessaging (IM)" value=""}%
-%META:FIELD{name="Email" attributes="" title="Email" value=""}%
-%META:FIELD{name="HomePage" attributes="" title="<nop>HomePage" value=""}%
-%META:FIELD{name="Comment" attributes="" title="Comment" value=""}%
-%META:FIELD{name="Picture" attributes="H" title="Picture" value=""}%
-%META:FIELD{name="WorkStatus" attributes="H" title="<nop>WorkStatus" value="Current"}%
-%META:FIELD{name="WorkEmail" attributes="H" title="<nop>WorkEmail" value=""}%
-%META:FIELD{name="WorkPhone" attributes="H" title="<nop>WorkPhone" value=""}%
-%META:FIELD{name="WorkPhoneMobile" attributes="H" title="<nop>WorkPhoneMobile" value=""}%
-%META:FIELD{name="WorkLocation" attributes="H" title="<nop>WorkLocation" value=""}%
-%META:FILEATTACHMENT{name="test.php.txt" attr="" autoattached="1" comment="test comment" date="1176589413" path="test.php.txt" size="6" user="Main.ArthurClemens" version="1"}%
-%META:FILEATTACHMENT{name="logo.gif" attr="" autoattached="1" comment="" date="1181343174" path="logo.gif" size="565" user="BaseUserMapping_333" version="1"}%
