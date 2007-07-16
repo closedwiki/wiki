@@ -944,6 +944,7 @@ a.twikiButton:active {
 }
 .patternTextareaButton {
 	border-color:#fffefd #b8b6ad #b8b6ad #fffefd;
+	overflow:hidden;
 }
 .patternButtonFontSelector {
 	background-image:url(button_font_selector.gif);
