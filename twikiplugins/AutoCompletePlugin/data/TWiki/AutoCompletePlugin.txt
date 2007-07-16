@@ -47,12 +47,29 @@ You can use many of same attributes as you would in topics, except the following
 | =itemformat= | The format of an item string in the autocomplete list. Use if the autocomplete list should display different names than the input field - for instance with full person names. The javascript input argument is =item=. | =item= | =itemformat="item[0] + ' (' + item[1] + ')'"= |
 | =delimchar= | Used to accept multiple delimeted queries. | none | =delimchar=","= |
 | =onblur=, =onfocus=, =onchange=, =onselect=, =onmouseover=, =onmouseout= | Javascript parameters for the textfield. | none | =onfocus="twiki.Form.clearBeforeFocusText(this);"= |
+| =itemselecthandler= | Defines a javascript function to be executed when an item is selected. See http://developer.yahoo.com/yui/autocomplete/#customevents. | none | =itemselecthandler="submitJumpForm"= |
 
 ---+++ Example
 
-If installed, the following should create an jump box:
+If installed, the following should create an jump box (TWiki 4.1):
 
-<form name="jumpForm" action="%SCRIPTURLPATH{"view"}%/%BASEWEB%/%BASETOPIC%">%AUTOCOMPLETE{ name="topic" datatopic="Sandbox.AutoCompletePluginTestData"  datasection="topiclist" value="Jump" formname="jumpForm" class="twikiInputField patternFormFieldDefaultColor" onfocus="clearDefaultandCSS(this);" onblur="setDefaultText(this);" size="128px" }%</form>
+__Source:__
+<verbatim>
+<script type="text/javascript">
+var SubmitJump = function(sType, aArgs) {
+    document.jumpForm.submit();
+}
+</script>
+<form name="jumpForm" action="%SCRIPTURLPATH{"view"}%/%BASEWEB%/%BASETOPIC%">%AUTOCOMPLETE{ name="topic" datatopic="Sandbox.AutoCompletePluginTestData"  datasection="topiclist" value="Jump" formname="jumpForm" class="twikiInputField patternFormFieldDefaultColor" onfocus="clearDefaultandCSS(this);" onblur="setDefaultText(this);" itemselecthandler="SubmitJump" size="128px" }%</form>
+</verbatim>
+
+__Rendered:__
+<script type="text/javascript">
+var SubmitJump = function(sType, aArgs) {
+    document.jumpForm.submit();
+}
+</script>
+<form name="jumpForm" action="%SCRIPTURLPATH{"view"}%/%BASEWEB%/%BASETOPIC%">%AUTOCOMPLETE{ name="topic" datatopic="Sandbox.AutoCompletePluginTestData"  datasection="topiclist" value="Jump" formname="jumpForm" class="twikiInputField patternFormFieldDefaultColor" onfocus="clearDefaultandCSS(this);" onblur="setDefaultText(this);" itemselecthandler="SubmitJump" size="128px" }%</form>
 
 ---++ Installation Instructions
 
@@ -70,6 +87,7 @@ If installed, the following should create an jump box:
 |  License: | [[http://www.gnu.org/licenses/gpl.html][GPL (Gnu General Public License)]] |
 |  Plugin Version: | %$VERSION% |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  14413 | Bugs:Item4369 - Allow users to define their own item select handler |
 |  14391 | Bugs:Item4356 - Class names not being added |
 |  14382 | Bugs:Item4346 - Added Javascript parameters (=onblur=, =onfocus=, etc) |
 |  14381 | Bugs:Item4345 - Was adding 'null' after input if =delimchar= not set |
