@@ -581,7 +581,7 @@ a.twikiLinkInHeaderRight {
 	text-align:left;
 }
 #patternLeftBarContents {
-	margin:0 0 1em 1em;
+	margin:0 0 1em 0;
 	padding:1em .5em 2em 1em; /* bottom padding is set in colors.css for the reflection image */
 }
 
