@@ -616,7 +616,7 @@ a.twikiLinkInHeaderRight {
 /* bottom paddings */
 #patternMainContents,
 #patternBottomBarContents {
-	padding-bottom:3em;
+	padding-bottom:2em;
 }
 
 .patternTopic {
