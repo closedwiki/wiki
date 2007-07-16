@@ -653,9 +653,8 @@ a.twikiLinkInHeaderRight {
 	background-color:transparent;
 }
 #patternLeftBarContents .patternLeftBarPersonal {
-	margin:0 0 1em -1em; /*S6*/
+	margin:0 -1em 1em -1em; /*S6*/
 	padding:0 1em 1em 1em; /*S6*/
-	width:100%;
 }
 html>body #patternLeftBarContents li { /* Mozilla */
 	overflow:visible;
