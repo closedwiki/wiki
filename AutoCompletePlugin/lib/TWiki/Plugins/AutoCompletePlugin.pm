@@ -110,7 +110,8 @@ sub _createTextfield {
         $params->{name},
         $dataVar,
         $params->{itemformat} || 'item',
-        $params->{delimchar} || ''
+        $params->{delimchar} || '',
+        $params->{itemselecthandler} || ''
     );
 
     my $class;
@@ -190,13 +191,15 @@ sub _addData {
 
 # the javascript that makes it all work
 sub _getJavascript {
-    my ( $name, $dataVar, $itemformat, $delimchar ) = @_;
+    my ( $name, $dataVar, $itemformat, $delimchar, $customEvent ) = @_;
 
     my $Input = $name . 'Input';
     my $Results = $name . 'Results';
 
     $delimchar = "topicAC.delimChar = \"$delimchar\""
         if $delimchar;
+    $customEvent = "topicAC.itemSelectEvent.subscribe($customEvent);"
+        if $customEvent;
 
     my $js = <<"EOT";
 <script type="text/javascript">
@@ -213,6 +216,7 @@ sub _getJavascript {
         $delimchar
         topicAC.allowBrowserAutocomplete = false;
         topicAC.useShadow = false;
+        $customEvent
         topicAC.formatResult = function(item, query) { return $itemformat; };
     }
 </script>
