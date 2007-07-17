@@ -443,6 +443,7 @@ table.twikiFormTable th.twikiFormTableHRow a:visited {
 	padding-bottom:.25em;
 }
 .twikiActionFormStepSign {
+	position:relative;
 	float:left;
 	font-size:104%;
 	margin-left:-20px; /* half of S5 */
@@ -567,13 +568,15 @@ a.twikiLinkInHeaderRight {
 	font-size:105%;
 }
 #patternTopBar {
-	border-width:0 0 1px 0;
-	border-style:solid;
-	overflow:hidden;
+	border-width:1px;
+	border-style:none none solid none;
 }
 #patternBottomBar {
 	border-width:1px 0 0 0;
 	border-style:solid;
+}
+#patternBottomBarContents {
+	font-size:94%; /*S2*/
 }
 #patternWebBottomBar {
 	font-size:94%; /*S2*/
@@ -582,12 +585,15 @@ a.twikiLinkInHeaderRight {
 }
 #patternLeftBarContents {
 	margin:0 0 1em 0;
-	padding:1em .5em 2em 1em; /* bottom padding is set in colors.css for the reflection image */
+	padding-right:.5em;
+	padding-left:1em;
+	 /* bottom padding is set in colors.css for the reflection image */
 }
 
 /* top paddings */
 #patternMainContents,
-#patternBottomBarContents {
+#patternBottomBarContents,
+#patternLeftBarContents {
 	padding-top:1em;
 }
 .patternNoViewPage #patternMainContents {
@@ -636,8 +642,10 @@ a.twikiLinkInHeaderRight {
 	margin-right:2%;
 }
 
-#patternLeftBarContents a img {
-	margin:1px 0 0 0;
+#patternLeftBarContents {}
+#patternLeftBarContents img {
+	margin:0 3px 0 0;
+	vertical-align:text-bottom;
 }
 #patternLeftBarContents a:link,
 #patternLeftBarContents a:visited {
@@ -652,9 +660,18 @@ a.twikiLinkInHeaderRight {
 	border:none;
 	background-color:transparent;
 }
-#patternLeftBarContents .patternLeftBarPersonal {
-	margin:0 -1em 1em -1em; /*S6*/
-	padding:0 1em 1em 1em; /*S6*/
+#patternLeftBarContents .patternLeftBarPersonal,
+#patternLeftBarContents .patternWebIndicator {
+	margin:0 -1em .5em -1em; /*S6*/
+	padding:0 1em .5em 1em; /*S6*/
+/*	
+	border-style:none none solid none;
+	border-width:1px;
+*/
+}
+#patternLeftBarContents .patternWebIndicator {
+	font-size:1.3em;
+	font-weight:bold;
 }
 html>body #patternLeftBarContents li { /* Mozilla */
 	overflow:visible;
@@ -683,15 +700,20 @@ html>body #patternLeftBarContents li { /* Mozilla */
 	margin:0 0 0 .5em;
 }
 
-.patternTop {}
-
-/* breadcrumb */
-.patternHomePath {}
 .patternHomePath a:link,
 .patternHomePath a:visited {
 	text-decoration:none;
+	border-style:none none solid none;
+	border-width:1px;
 }
-.patternToolBar {}
+
+/* breadcrumb */
+.patternHomePathTitle {
+	display:none;
+}
+.patternToolBar {
+	margin:-.2em 0 .2em 0;
+}
 .patternToolBar .patternButton {
 	float:left;
 }
@@ -702,14 +724,19 @@ html>body #patternLeftBarContents li { /* Mozilla */
 	display:block;
 	border-width:1px;
 	border-style:solid;
-	padding:.1em .55em;
-	margin:-.2em 0 .1em .25em;
+	padding:.1em .35em;
+	margin:0 0 0 .25em;
 	font-weight:bold;
 }
 .patternToolBar .patternButton a:link,
 .patternToolBar .patternButton a:visited {
 	text-decoration:none;
 	outline:none;
+}
+.patternToolBar .patternButton a:hover,
+.patternToolBar .patternButton a:hover {
+	border-width:1px;
+	border-style:solid;
 }
 .patternToolBar .patternButton a:active {
 	outline:none;
@@ -766,7 +793,9 @@ html>body #patternLeftBarContents li { /* Mozilla */
 .patternInfo {
 	margin:1.5em 0 0 0;
 }
-.patternRevInfo {}
+.patternRevInfo {
+	font-size:94%;
+}
 .patternMoved {
 	margin:1em 0;
 }
@@ -1003,3 +1032,5 @@ tr.twikiDiffDebug td {
 .twikiDiffLineNumberHeader {
 	padding:.3em 0;
 }
+
+
