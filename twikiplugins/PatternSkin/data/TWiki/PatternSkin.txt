@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributors" date="1160971176" format="1.1" version="1.2"}%
+%META:TOPICINFO{author="TWikiContributor" date="1160971176" format="1.1" version="1.1"}%
 %STARTINCLUDE%
 <!--
    * Set SHORTDESCRIPTION = <nop>PatternSkin provides a CSS based default look and feel for TWiki - flexible and <nop>W3C-compliant. Its layout and color scheme are designed to provide a nice, clean and productive editing environment
@@ -157,7 +157,6 @@ Leave remarks, suggestions and other feedback in TWiki:Plugins.PatternSkinDev.
 %META:FILEATTACHMENT{name="bg_buttoncancel_gradient.gif" attr="" autoattached="1" comment="" date="1184016448" path="bg_buttoncancel_gradient.gif" size="1544" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="style.css" attr="" autoattached="1" comment="" date="1184361490" path="style.css" size="19292" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="striped_gray.gif" attr="" autoattached="1" comment="" date="1182955036" path="striped_gray.gif" size="238" user="TWikiContributor" version=""}%
-%META:FILEATTACHMENT{name="bg_sidebar_reflection.gif" attr="" autoattached="1" comment="" date="1184346541" path="bg_sidebar_reflection.gif" size="296" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="striped_yellow.gif" attr="" autoattached="1" comment="" date="1182955036" path="striped_yellow.gif" size="238" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="pattern.js" attr="" autoattached="1" comment="" date="1184192338" path="pattern.js" size="3526" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="colors.css" attr="" autoattached="1" comment="" date="1184360679" path="colors.css" size="16740" user="TWikiContributor" version=""}%
