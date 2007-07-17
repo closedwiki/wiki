@@ -264,7 +264,6 @@ sub allActionsInWeb {
 	my $topics = $attrs->{topic};
 
 	@tops = grep( /^$topics$/, @tops ) if ( $topics );
-
     my $grep =
       TWiki::Func::searchInWebContent( '%ACTION{.*}%', $web,
                                        \@tops,

@@ -1,9 +1,8 @@
 # Tests for module ActionSet.pm
-
 package FileActionSetTests;
+use base qw(TWikiFnTestCase);
 
 use strict;
-use base qw(TWikiFnTestCase);
 
 use TWiki::Plugins::ActionTrackerPlugin::Action;
 use TWiki::Plugins::ActionTrackerPlugin::ActionSet;
@@ -30,35 +29,41 @@ sub set_up {
     $this->{twiki}->{store}->createWeb($this->{twiki}->{user}, $t2);
     $this->{test_web_2} = $t2;
 
-    $this->{twiki}->{store}->saveTopic( $this->{twiki}->{user}, $this->{test_web}, "Topic1", <<HERE);
+    $this->{twiki}->{store}->saveTopic(
+        $this->{twiki}->{user}, $this->{test_web}, "Topic1", <<HERE);
 %ACTION{who=$TWiki::cfg{UsersWebName}.C,due="3 Jan 02",open}% C_open_ontime"),
 HERE
 
-    $this->{twiki}->{store}->saveTopic($this->{twiki}->{user},$this->{test_web}, "Topic2", <<HERE);
+    $this->{twiki}->{store}->saveTopic(
+        $this->{twiki}->{user},$this->{test_web}, "Topic2", <<HERE);
 %ACTION{who=A,due="1 Jun 2001",open}% <<EOF
 A_open_late
 EOF
 %ACTION{who=$this->{test_user_wikiname},due="1 Jun 2001",open}% $this->{test_user_wikiname}_open_late
 HERE
 
-    $this->{twiki}->{store}->saveTopic($this->{twiki}->{user}, $this->{test_web_2},
-                               "WebNotify", <<'HERE');
+    $this->{twiki}->{store}->saveTopic(
+        $this->{twiki}->{user}, $this->{test_web_2},
+        "WebNotify", <<'HERE');
    * MowGli - mowgli\@jungle.book
 
 HERE
 
-    $this->{twiki}->{store}->saveTopic($this->{twiki}->{user},$this->{test_web_2}, "Topic2", <<"HERE");
+    $this->{twiki}->{store}->saveTopic(
+        $this->{twiki}->{user},$this->{test_web_2}, "Topic2", <<"HERE");
 %ACTION{who=$TWiki::cfg{UsersWebName}.A,due="1 Jan 02",closed}% A_closed_ontime
 %ACTION{who=Blah.B,due="29 Jan 2010",open}% B_open_ontime
 HERE
 
-    $this->{twiki}->{store}->saveTopic($this->{twiki}->{user},$this->{test_web_2}, "Topic2", <<"HERE");
+    $this->{twiki}->{store}->saveTopic(
+        $this->{twiki}->{user},$this->{test_web_2}, "Topic2", <<"HERE");
 %ACTION{who=$TWiki::cfg{UsersWebName}.A,due="1 Jan 02",closed}% A_closed_ontime
 %ACTION{who=Blah.B,due="29 Jan 2010",open}% B_open_ontime
 HERE
 
     # Create a secret topic that should *NOT* be found
-    $this->{twiki}->{store}->saveTopic($this->{twiki}->{user},$this->{test_web_2}, "SecretTopic", <<HERE);
+    $this->{twiki}->{store}->saveTopic(
+        $this->{twiki}->{user},$this->{test_web_2}, "SecretTopic", <<HERE);
 %ACTION{who=$TWiki::cfg{UsersWebName}.IlyaKuryakin,due="1 Jan 02",closed}% A_closed_ontime
 %ACTION{who=JamesBond,due="29 Jan 2010",open}% B_open_ontime
    * Set ALLOWTOPICVIEW = $TWiki::cfg{UsersWebName}.ErnstBlofeld
@@ -67,7 +72,8 @@ HERE
 
 sub tear_down {
     my $this = shift;
-    $this->{twiki}->{store}->removeWeb($this->{twiki}->{user}, $this->{test_web_2});
+    $this->{twiki}->{store}->removeWeb(
+        $this->{twiki}->{user}, $this->{test_web_2});
     $this->SUPER::tear_down();
 }
 

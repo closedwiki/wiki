@@ -480,6 +480,8 @@ sub _handleActionSearch {
     my $fmt;
     my $fmts = $attrs->remove( "format" );
     my $hdrs = $attrs->remove( "header" );
+    my $foot = $attrs->remove( "footer" );
+    my $sep = $attrs->remove( "separator" );
     my $orient = $attrs->remove( "orient" );
     my $sort = $attrs->remove( "sort" );
     if ( defined( $fmts ) || defined( $hdrs ) || defined( $orient )) {

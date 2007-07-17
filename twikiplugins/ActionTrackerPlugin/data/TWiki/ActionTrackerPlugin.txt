@@ -75,7 +75,7 @@ Write the command =%<nop>ACTIONSEARCH{= _attributes_ =}%= anywhere in a TWiki to
 	| =who= | See [[#PeopleAnchor][People]] | Person responsible for closing the action. |
 	| =notify= | See [[#PeopleAnchor][People]] | Persons who want to be notified of a change |
 	| =state= | =late=, or any legal state value | Set to =late= to search for late actions; set to any any legal state value to search for actions in that state. See [[#SettingsAnchor][Settings]] for details on how to extend the state set. |
-	| =within= | a number of days | Search for actions that are within a number of days of their due date. Usually used in conjunction with other attributes, such as <code>state="open"</code>. Works in both directions, so you can use this to search for actions which _are going to fall due_ within a certain number of days, or a negative number for actions that _fell due_ between a time in the past and now. |
+    | =within= | a number of days | Search for actions that are within a number of days of their due date. Usually used in conjunction with other attributes, such as <code>state="open"</code>. If you give it a simple number _N_, it will match actions that are due within _N_ days *either side* of the current date. If you give _N_ with a leading '+', this restricts the search to _N_ days in the future. If you give _N_ with a leading '-', it matches only actions that _fell due_ in the last _N_ days. |
 	| =web= | Perl regular expression | A regular expression that matches the names of all the webs to search. If this attribute is omitted, the default is to search only the current web. Searching many webs is much slower, especially in a large installation. Webs marked NOSEARCHALL will not be searched. | 
 	| =topic= | Perl regular expression | A regular expression that matches the names of all the topics to search. If this attribute is omitted, the default is to search all the topics in the selected webs. | 
 	| =due= | Absolute or relative date expression. See [[#DateFormats][Date Formats]] | Due date for the action. |
@@ -86,7 +86,9 @@ Write the command =%<nop>ACTIONSEARCH{= _attributes_ =}%= anywhere in a TWiki to
 	| =uid= | 6 digit number | Unique ID of the action. |
 	| =format= | Presentation format | See [[#CustomIsation][Formatting tables]] |
 	| =header= | Presentation format | See [[#CustomIsation][Formatting tables]] |
+	| =footer= | Presentation format | See [[#CustomIsation][Formatting tables]] |
 	| =orient= | Presentation format | See [[#CustomIsation][Formatting tables]] |
+	| =separator= | Presentation format | See [[#CustomIsation][Formatting tables]] |
 	| =sort= | Comma-separated list of field names | Fields to sort the matched actions by. For example, <code>sort="$who,$due"</code> will sort by who first and then due. This field is optional; by default the table will be sorted by due date. |
 For example,
 <pre>
@@ -180,7 +182,8 @@ ActionTrackerPlugin comes with a notifier script, like the =mailnotify= script u
 The frequency with which actions are notified depends on how you set up your cron (or equivalent) jobs on the server.
 
 The =actionnotify= script interprets its parameters as a search expression of the same type as that used in %<nop>ACTIONSEARCH%. All actions which match that expression will be notified to their owners.
-
+For example:
+<pre> actionnotify "header=\"| Assigned to | Due ||\"" format=\"'| $who | $due | $edit |'\" state="open" </pre>
 Note that the =actionnotify= script must be run from the =bin= directory. This is so it can pick up the TWiki path configuration file, =setlib.cfg=.
 
 For example, you could set up the cron jobs as follows:
@@ -250,11 +253,11 @@ __Notes:__
 
 ---++ Formatting search tables
 
-The =header=, =format= and =orient= parameters of =%<nop>ACTIONSEARCH{}%= support formatting of the action table using a similar syntax to that described in %TWIKIWEB%.FormattedSearch. For example:
+The =header=, =footer, =format=, =separator= and =orient= parameters of =%<nop>ACTIONSEARCH{}%= support formatting of the action table using a similar syntax to that described in %TWIKIWEB%.FormattedSearch. For example:
 <pre>
-%<nop>ACTIONSEARCH{ web="Directors" state="open" format="|$who|$text|$edit|" header="|Director|Films||" orient="rows" }%
+%<nop>ACTIONSEARCH{ web="Directors" state="open" format="|$who|$text|$edit|" header="|*Director*|*Films*||" footer="|*Director*|*Films*|" separator="$n" orient="rows" }%
 </pre>
-
+The available =$formattingtokens= are:
 | *Name:* | *Expands To:* |
 | =$who= | Who is responsible for the action |
 | =$due= | When the action is due |
@@ -273,6 +276,7 @@ The =header=, =format= and =orient= parameters of =%<nop>ACTIONSEARCH{}%= suppor
 | =$quot= | Double quote (="=). |
 | =$percnt= | Percent sign (=%=) |
 | =$dollar= | Dollar sign (=$=) |
+The header and format parameters can also be used with the actionnotify script.
 
 A default format for actions and action search results can be defined in this topic or the Web<nop>Preferences topic of the current web. See [[#SettingsAnchor][Settings]] for more details.
 
@@ -338,7 +342,7 @@ These settings can be overridden in the Web<nop>Preferences topic of the current
 	* The alternative text format of an action, as seen by a mail recipient who doesn't accept HTML in mail. Used when mailing action or change notifications.
 		* Set TEXTFORMAT = Action for $who, due $due, $state$n$text$n
 
-	* Full URL of the CSS to use in formatting actions.
+	* Full URL of the CSS to use in formatting actions. This file is also called from the mail generated by the =actionnotify= script.
 	* Set CSS = %PUBURL%/%TWIKIWEB%/ActionTrackerPlugin/styles.css
 
 	* The format of the fields in the action editor. You can also set EDITBOXWIDTH and EDITBOXHEIGHT to override the defaults (which are %EDITBOXWIDTH%x%EDITBOXHEIGHT%) just for the action editor.

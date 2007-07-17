@@ -1,8 +1,7 @@
-use strict;
-
 package ActionNotifyTests;
-
 use base qw(TWikiFnTestCase);
+
+use strict;
 
 use TWiki::Plugins::ActionTrackerPlugin::Action;
 use TWiki::Plugins::ActionTrackerPlugin::ActionSet;
