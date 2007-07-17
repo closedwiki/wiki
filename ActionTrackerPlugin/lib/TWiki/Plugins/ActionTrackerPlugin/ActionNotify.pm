@@ -64,13 +64,14 @@ sub doNotifications {
     my ( $webName, $expr, $debugMailer ) = @_;
 
     my $attrs = new TWiki::Attrs( $expr, 1 );
-    my $hdr =
-      TWiki::Func::getPreferencesValue( 'ACTIONTRACKERPLUGIN_TABLEHEADER' )
+    my $hdr = $attrs->{header} # if the header attribute exists: take this.
+          || TWiki::Func::getPreferencesValue( 'ACTIONTRACKERPLUGIN_TABLEHEADER' )
           || '| Assigned to | Due date | Description | State | Notify ||';
-
-    my $bdy =
-      TWiki::Func::getPreferencesValue( 'ACTIONTRACKERPLUGIN_TABLEFORMAT' )
+    delete $attrs->{header}; # Delete this attribute, because it mashes up the ActionSearch.
+    my $bdy = $attrs->{format} # if the format attribute exists: take this.
+          || TWiki::Func::getPreferencesValue( 'ACTIONTRACKERPLUGIN_TABLEFORMAT' )
           || '| $who | $due | $text | $state | $notify | $edit |';
+    delete $attrs->{format}; # Delete this attribute, because it mashes up the ActionSearch.
     my $orient =
       TWiki::Func::getPreferencesFlag( 'ACTIONTRACKERPLUGIN_TABLEORIENT' )
           || 'cols';

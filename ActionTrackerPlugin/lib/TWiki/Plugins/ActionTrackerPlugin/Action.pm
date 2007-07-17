@@ -422,9 +422,8 @@ sub formatTime {
             $stime = localtime( $time );
             $stime =~ s/(\w+)\s+(\w+)\s+(\w+)\s+([^\s]+)\s+(\w+).*/$1, $3 $2 $5/o;
         }
-    } else {
-        $stime = "BAD DATE see %TWIKIWEB%.ActionTrackerPlugin#DateFormats";
     }
+    $stime ||= "BAD DATE see %TWIKIWEB%.ActionTrackerPlugin#DateFormats";
     return $stime;
 }
 
@@ -499,13 +498,20 @@ sub _matchType_date {
 # action falls due
 sub _matchField_within {
     my ( $this, $val ) = @_;
-    my $secs = $this->secsToGo();
-    my $slack = $secs - $val * 60 * 60 * 24;
+    my $signed = ($val =~ /^[+-]/) ? 1 : 0;
+    my $toGoSecs = $this->secsToGo(); # negative if past
+    my $rangeSecs = $val * 60 * 60 * 24;
 
-    if ($val > 0) {
-        return ($slack <= 0) if ($secs > 0);
+    if ($signed) {
+        if ($val < 0) {
+            return $toGoSecs <= 0 && $toGoSecs >= $rangeSecs;
+        } else {
+            return $toGoSecs >= 0 && $toGoSecs <= $rangeSecs;
+        }
     } else {
-        return ($slack >= 0) if ($secs < 0);
+        # e.g. within="7", all actions that fall due within within 7 days
+        # either side of now
+        return abs($toGoSecs) <= abs($rangeSecs);
     }
 }
 

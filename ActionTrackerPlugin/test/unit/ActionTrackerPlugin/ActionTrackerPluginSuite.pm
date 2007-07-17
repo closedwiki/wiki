@@ -1,8 +1,5 @@
 package ActionTrackerPluginSuite;
-
-use base qw(Test::Unit::TestSuite);
-
-sub name { 'ActionTrackerPlugin' };
+use base qw(Unit::TestSuite);
 
 sub include_tests {
     qw( ActionTests SimpleActionSetTests FileActionSetTests ExtendedActionSetTests ActionNotifyTests LiveActionSetTests ActionTrackerPluginTests );

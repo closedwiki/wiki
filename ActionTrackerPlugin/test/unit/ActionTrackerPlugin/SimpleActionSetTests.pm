@@ -1,9 +1,8 @@
 # Tests for module Action.pm
-use strict;
-
 package SimpleActionSetTests;
+use base qw( TWikiFnTestCase );
 
-use base qw( TWikiTestCase );
+use strict;
 
 use TWiki::Plugins::ActionTrackerPlugin::Action;
 use TWiki::Plugins::ActionTrackerPlugin::ActionSet;
@@ -22,40 +21,37 @@ BEGIN {
     $TWiki::cfg{Plugins}{ActionTrackerPlugin}{Enabled} = 1;
 };
 
-my $actions;
 my ($sup, $ss);
+
 sub set_up {
     my $this = shift;
     $this->SUPER::set_up();
 
-    my $twiki = new TWiki( "TestRunner" );
-    $TWiki::Plugins::SESSION = $twiki;
-
     TWiki::Plugins::ActionTrackerPlugin::Action::forceTime("2 Jan 2002");
-    $actions = new TWiki::Plugins::ActionTrackerPlugin::ActionSet();
+    $this->{actions} = new TWiki::Plugins::ActionTrackerPlugin::ActionSet();
     my $action = new TWiki::Plugins::ActionTrackerPlugin::Action
       ("Test", "Topic", 0,
        "who=A,due=1-Jan-02,open",
        "Test_Main_A_open_late");
-    $actions->add($action);
+    $this->{actions}->add($action);
     $action = new TWiki::Plugins::ActionTrackerPlugin::Action
       ("Test", "Topic", 1,
-       "who=Main.A,due=1-Jan-02,closed",
+       "who=$this->{users_web}.A,due=1-Jan-02,closed",
        "Test_Main_A_closed_ontime");
-    $actions->add($action);
+    $this->{actions}->add($action);
     $action = new TWiki::Plugins::ActionTrackerPlugin::Action
       ("Test", "Topic", 2,
        "who=Blah.B,due=\"29 Jan 2010\",open",
        "Test_Blah_B_open_ontime");
-    $actions->add($action);
+    $this->{actions}->add($action);
     $sup = $TWiki::cfg{DefaultUrlHost}.$TWiki::cfg{ScriptUrlPath};
     $ss = $TWiki::cfg{ScriptSuffix};
 }
 
 sub tear_down {
     my $this = shift;
+    $this->{actions} = undef;
     $this->SUPER::tear_down();
-    $actions = undef;
 }
 
 sub testAHTable {
@@ -66,7 +62,7 @@ sub testAHTable {
         "rows",
         "", "");
     my $s;
-    $s = $actions->formatAsHTML( $fmt, "href", 0, 'atp' );
+    $s = $this->{actions}->formatAsHTML( $fmt, "href", 0, 'atp' );
     $s =~ s/\n//go;
     $s =~ s/(;t=\d+)//g;
     $s =~ s/\s+//g;
@@ -88,20 +84,20 @@ sub testAHTable {
  <tr>
   <th>Edit</th>
   <td>
-   <a href="$sup/edit$ss/Test/Topic?skin=action,pattern;atp_action=AcTion0">edit</a>
+   <a href="$sup/edit$ss/Test/Topic?skin=action%2cpattern;atp_action=AcTion0">edit</a>
   </td>
   <td>
-   <a href="$sup/edit$ss/Test/Topic?skin=action,pattern;atp_action=AcTion1">edit</a>
+   <a href="$sup/edit$ss/Test/Topic?skin=action%2cpattern;atp_action=AcTion1">edit</a>
   </td>
   <td>
-   <a href="$sup/edit$ss/Test/Topic?skin=action,pattern;atp_action=AcTion2">edit</a>
+   <a href="$sup/edit$ss/Test/Topic?skin=action%2cpattern;atp_action=AcTion2">edit</a>
   </td>
  </tr>
 </table>
 HERE
     $cmp =~ s/\s+//g;
     $this->assert_html_equals($cmp, $s);
-    $s = $actions->formatAsHTML( $fmt, "name", 0, 'atp' );
+    $s = $this->{actions}->formatAsHTML( $fmt, "name", 0, 'atp' );
     $s =~ s/\n//go;
     $s =~ /(;t=\d+)/;
     $t = $1;
@@ -120,11 +116,11 @@ HERE
 <td>Topic</td></tr>
 <tr>
 <th>Edit</th>
-<td><a href="$sup/edit$ss/Test/Topic?skin=action,pattern;atp_action=AcTion0$t">edit</a></td>
-<td><a href="$sup/edit$ss/Test/Topic?skin=action,pattern;atp_action=AcTion1$t">edit</a></td>
-<td><a href="$sup/edit$ss/Test/Topic?skin=action,pattern;atp_action=AcTion2$t">edit</a></td></tr></table>
+<td><a href="$sup/edit$ss/Test/Topic?skin=action%2cpattern;atp_action=AcTion0$t">edit</a></td>
+<td><a href="$sup/edit$ss/Test/Topic?skin=action%2cpattern;atp_action=AcTion1$t">edit</a></td>
+<td><a href="$sup/edit$ss/Test/Topic?skin=action%2cpattern;atp_action=AcTion2$t">edit</a></td></tr></table>
 HERE
-    $s = $actions->formatAsHTML( $fmt, "name", 1, 'atp' );
+    $s = $this->{actions}->formatAsHTML( $fmt, "name", 1, 'atp' );
     $s =~ s/\n//go;
     $s =~ /(;t=\d+)/;
     $t = $1;
@@ -142,9 +138,9 @@ HERE
 <td>Topic</td></tr>
 <tr>
 <th>Edit</th>
-<td><a href="$sup/edit$ss/Test/Topic?skin=action,pattern;atp_action=AcTion0$t" onclick="return editWindow('$sup/edit$ss/Test/Topic?skin=action,pattern;atp_action=AcTion0$t')">edit</a></td>
-<td><a href="$sup/edit$ss/Test/Topic?skin=action,pattern;atp_action=AcTion1$t" onclick="return editWindow('$sup/edit$ss/Test/Topic?skin=action,pattern;atp_action=AcTion1$t')">edit</a></td>
-<td><a href="$sup/edit$ss/Test/Topic?skin=action,pattern;atp_action=AcTion2$t" onclick="return editWindow('$sup/edit$ss/Test/Topic?skin=action,pattern;atp_action=AcTion2$t')">edit</a></td></tr></table>
+<td><a href="$sup/edit$ss/Test/Topic?skin=action%2cpattern;atp_action=AcTion0$t" onclick="return editWindow('$sup/edit$ss/Test/Topic?skin=action%2cpattern;atp_action=AcTion0$t')">edit</a></td>
+<td><a href="$sup/edit$ss/Test/Topic?skin=action%2cpattern;atp_action=AcTion1$t" onclick="return editWindow('$sup/edit$ss/Test/Topic?skin=action%2cpattern;atp_action=AcTion1$t')">edit</a></td>
+<td><a href="$sup/edit$ss/Test/Topic?skin=action%2cpattern;atp_action=AcTion2$t" onclick="return editWindow('$sup/edit$ss/Test/Topic?skin=action%2cpattern;atp_action=AcTion2$t')">edit</a></td></tr></table>
 HERE
 }
 
@@ -156,7 +152,7 @@ sub testAVTable {
         "cols",
         "", "",);
     my $s;
-    $s = $actions->formatAsHTML( $fmt, "href", 0, 'atp' );
+    $s = $this->{actions}->formatAsHTML( $fmt, "href", 0, 'atp' );
     $s =~ s/\n//go;
     $s =~ /(;t=\d+)/;
     my $t = $1;
@@ -169,17 +165,17 @@ sub testAVTable {
 <tr>
 <td>Test</td>
 <td>Topic</td>
-<td><a href="$sup/edit$ss/Test/Topic?skin=action,pattern;atp_action=AcTion0$t">edit</a></td></tr>
+<td><a href="$sup/edit$ss/Test/Topic?skin=action%2cpattern;atp_action=AcTion0$t">edit</a></td></tr>
 <tr>
 <td>Test</td>
 <td>Topic</td>
-<td><a href="$sup/edit$ss/Test/Topic?skin=action,pattern;atp_action=AcTion1$t">edit</a></td></tr>
+<td><a href="$sup/edit$ss/Test/Topic?skin=action%2cpattern;atp_action=AcTion1$t">edit</a></td></tr>
 <tr>
 <td>Test</td>
 <td>Topic</td>
-<td><a href="$sup/edit$ss/Test/Topic?skin=action,pattern;atp_action=AcTion2$t">edit</a></td></tr></table>
+<td><a href="$sup/edit$ss/Test/Topic?skin=action%2cpattern;atp_action=AcTion2$t">edit</a></td></tr></table>
 HERE
-    $s = $actions->formatAsHTML( $fmt, "name", 0, 'atp' );
+    $s = $this->{actions}->formatAsHTML( $fmt, "name", 0, 'atp' );
     $s =~ s/\n//go;
     $s =~ /(;t=\d+)/;
     $t = $1;
@@ -195,25 +191,25 @@ HERE
 Test</td>
 <td>Topic</td>
 <td>
-<a href="$sup/edit$ss/Test/Topic?skin=action,pattern;atp_action=AcTion0$t">edit</a>
+<a href="$sup/edit$ss/Test/Topic?skin=action%2cpattern;atp_action=AcTion0$t">edit</a>
 </td></tr>
 <tr>
 <td>
 <a name="AcTion1" />
 Test</td>
 <td>Topic</td>
-<td><a href="$sup/edit$ss/Test/Topic?skin=action,pattern;atp_action=AcTion1$t">edit</a></td></tr>
+<td><a href="$sup/edit$ss/Test/Topic?skin=action%2cpattern;atp_action=AcTion1$t">edit</a></td></tr>
 <tr>
 <td>
 <a name="AcTion2" />
 Test</td>
 <td>Topic</td>
-<td><a href="$sup/edit$ss/Test/Topic?skin=action,pattern;atp_action=AcTion2$t">edit</a>
+<td><a href="$sup/edit$ss/Test/Topic?skin=action%2cpattern;atp_action=AcTion2$t">edit</a>
 </td>
 </tr>
 </table>
 HERE
-    $s = $actions->formatAsHTML( $fmt, "name", 1, 'atp' );
+    $s = $this->{actions}->formatAsHTML( $fmt, "name", 1, 'atp' );
     $s =~ s/\n//go;
     $s =~ /(;t=\d+)/;
     $t = $1;
@@ -226,22 +222,22 @@ HERE
 <tr>
 <td><a name="AcTion0" />Test</td>
 <td>Topic</td>
-<td><a href="$sup/edit$ss/Test/Topic?skin=action,pattern;atp_action=AcTion0$t" onclick="return editWindow('$sup/edit$ss/Test/Topic?skin=action,pattern;atp_action=AcTion0$t')">edit</a></td></tr>
+<td><a href="$sup/edit$ss/Test/Topic?skin=action%2cpattern;atp_action=AcTion0$t" onclick="return editWindow('$sup/edit$ss/Test/Topic?skin=action%2cpattern;atp_action=AcTion0$t')">edit</a></td></tr>
 <tr>
 <td><a name="AcTion1" />Test</td>
 <td>Topic</td>
-<td><a href="$sup/edit$ss/Test/Topic?skin=action,pattern;atp_action=AcTion1$t" onclick="return editWindow('$sup/edit$ss/Test/Topic?skin=action,pattern;atp_action=AcTion1$t')">edit</a></td></tr>
+<td><a href="$sup/edit$ss/Test/Topic?skin=action%2cpattern;atp_action=AcTion1$t" onclick="return editWindow('$sup/edit$ss/Test/Topic?skin=action%2cpattern;atp_action=AcTion1$t')">edit</a></td></tr>
 <tr>
 <td><a name="AcTion2" />Test</td>
 <td>Topic</td>
-<td><a href="$sup/edit$ss/Test/Topic?skin=action,pattern;atp_action=AcTion2$t" onclick="return editWindow('$sup/edit$ss/Test/Topic?skin=action,pattern;atp_action=AcTion2$t')">edit</a></td></tr></table>
+<td><a href="$sup/edit$ss/Test/Topic?skin=action%2cpattern;atp_action=AcTion2$t" onclick="return editWindow('$sup/edit$ss/Test/Topic?skin=action%2cpattern;atp_action=AcTion2$t')">edit</a></td></tr></table>
 HERE
 }
 
 sub testSearchOpen {
     my $this = shift;
     my $attrs = new TWiki::Attrs("state=open",1);
-    my $chosen = $actions->search($attrs);
+    my $chosen = $this->{actions}->search($attrs);
     my $fmt = new TWiki::Plugins::ActionTrackerPlugin::Format(
         "", "", "", "\$text");
     my $text = $chosen->stringify($fmt);
@@ -253,7 +249,7 @@ sub testSearchOpen {
 sub testSearchClosed {
     my $this = shift;
     my $attrs = new TWiki::Attrs("closed",1);
-    my $chosen = $actions->search($attrs);
+    my $chosen = $this->{actions}->search($attrs);
     my $fmt = new TWiki::Plugins::ActionTrackerPlugin::Format(
         "", "", "", "\$text");
     my $text = $chosen->stringify($fmt);
@@ -263,7 +259,7 @@ sub testSearchClosed {
 sub testSearchWho {
     my $this = shift;
     my $attrs = new TWiki::Attrs("who=A",1);
-    my $chosen = $actions->search($attrs);
+    my $chosen = $this->{actions}->search($attrs);
     my $fmt = new TWiki::Plugins::ActionTrackerPlugin::Format(
         "", "", "", "\$text");
     my $text = $chosen->stringify($fmt);
@@ -273,7 +269,7 @@ sub testSearchWho {
 sub testSearchLate {
     my $this = shift;
     my $attrs = new TWiki::Attrs("late",1);
-    my $chosen = $actions->search($attrs);
+    my $chosen = $this->{actions}->search($attrs);
     my $fmt = new TWiki::Plugins::ActionTrackerPlugin::Format(
         "", "", "", "\$text");
     my $text = $chosen->stringify($fmt);
@@ -284,7 +280,7 @@ sub testSearchLate {
 sub testSearchLate2 {
     my $this = shift;
     my $attrs = new TWiki::Attrs("state=\"late\"",1);
-    my $chosen = $actions->search($attrs);
+    my $chosen = $this->{actions}->search($attrs);
     my $fmt = new TWiki::Plugins::ActionTrackerPlugin::Format(
         "", "", "", "\$text");
     my $text = $chosen->stringify($fmt);
@@ -295,7 +291,7 @@ sub testSearchLate2 {
 sub testSearchAll {
     my $this = shift;
     my $attrs = new TWiki::Attrs("",1);
-    my $chosen = $actions->search($attrs);
+    my $chosen = $this->{actions}->search($attrs);
     my $fmt = new TWiki::Plugins::ActionTrackerPlugin::Format(
         "", "", "", "\$text");
     my $text = $chosen->stringify($fmt);
@@ -306,6 +302,7 @@ sub testSearchAll {
 
 # add more actions to the fixture
 sub addMoreActions {
+    my $this = shift;
     my $moreactions = new TWiki::Plugins::ActionTrackerPlugin::ActionSet();
     my $fmt = new TWiki::Plugins::ActionTrackerPlugin::Format(
         "", "", "", "\$text");
@@ -314,16 +311,16 @@ sub addMoreActions {
         "who=C,due=\"1 Jan 02\",open",
         "C_open_late");
     $moreactions->add($action);
-    $actions->concat( $moreactions );
+    $this->{actions}->concat( $moreactions );
 }
 
 # x1 so it gets executed second last
 sub testx1Search {
     my $this = shift;
-    addMoreActions();
+    $this->addMoreActions();
     my $fmt = new TWiki::Plugins::ActionTrackerPlugin::Format("", "", "", "\$text");
     my $attrs = new TWiki::Attrs("late",1);
-    my $chosen = $actions->search($attrs);
+    my $chosen = $this->{actions}->search($attrs);
     my $text = $chosen->stringify($fmt);
     $this->assert_matches(qr/A_open_late/, $text);
     $this->assert_matches(qr/C_open_late/o, $text);
@@ -333,13 +330,13 @@ sub testx1Search {
 # x2 so it gets executed last
 sub testx2Actionees {
     my $this = shift;
-    addMoreActions();
+    $this->addMoreActions();
     my $attrs = new TWiki::Attrs("late",1);
-    my $chosen = $actions->search($attrs);
+    my $chosen = $this->{actions}->search($attrs);
     my %peeps;
     $chosen->getActionees(\%peeps);
-    $this->assert_not_null($peeps{"Main.A"});
-    $this->assert_not_null($peeps{"Main.C"});
+    $this->assert_not_null($peeps{"$this->{users_web}.A"});
+    $this->assert_not_null($peeps{"$this->{users_web}.C"});
     $this->assert_null($peeps{"Blah.B"});
 }
 
