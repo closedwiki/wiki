@@ -818,7 +818,7 @@ sub redirect {
              template => 'oopsaccessdenied',
              def => 'topic_access',
              param1 => 'redirect',
-             param2 => 'unsafe redirect to '.TWiki::entityEncode( $url ).
+             param2 => 'unsafe redirect to '.$url.
                ': host does not match {DefaultUrlHost} "'.
                  $TWiki::cfg{DefaultUrlHost}.'"'
             );

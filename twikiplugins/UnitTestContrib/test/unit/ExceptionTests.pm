@@ -5,6 +5,7 @@ use strict;
 
 use Error qw( :try );
 use TWiki::OopsException;
+use TWiki::UI::Oops;
 
 # Check an OopsException with one non-array parameter
 sub test_simpleOopsException {
@@ -47,8 +48,8 @@ sub test_multiparamOopsException {
         $this->assert_str_equals('topicname', $e->{topic});
         $this->assert_str_equals('templatename', $e->{template});
         $this->assert_str_equals(
-            'phlegm,&#60;pus&#62;', join(',', @{$e->{params}}));
-        $this->assert_str_equals('OopsException(templatename web=>webname topic=>topicname params=>[phlegm,&#60;pus&#62;])', $e->stringify());
+            'phlegm,<pus>', join(',', @{$e->{params}}));
+        $this->assert_str_equals('OopsException(templatename web=>webname topic=>topicname params=>[phlegm,<pus>])', $e->stringify());
     };
 }
 
@@ -81,6 +82,29 @@ sub test_AccessControlException {
         'Because it was there.');
     $this->assert_str_equals("AccessControlException: Access to FRY Spiders.FlumpNuts for burger is denied. Because it was there.", $ace->stringify());
 
+}
+
+sub test_oopsScript {
+    my $this = shift;
+    my $query = new CGI({
+        skin => 'none',
+        template => 'oopsgeneric',
+        def => 'message',
+        param1 => 'heading',
+        param2 => '<pus>',
+        param3 => 'snot@dot.dat',
+        param4 => 'phlegm',
+        param5 => "the cat\nsat on\nthe rat"});
+    my $session = new TWiki(undef, $query);
+    my ($output, $result) = $this->capture(\&TWiki::UI::Oops::oops, $session,
+                   "Flum", "DeDum", $query, 0);
+    $this->assert_matches(qr/^phlegm$/m, $output);
+    $this->assert_matches(qr/^&#60;pus&#62;$/m, $output);
+    $this->assert_matches(qr/^snot&#64;dot.dat$/m, $output);
+    $this->assert_matches(qr/^the cat$/m, $output);
+    $this->assert_matches(qr/^sat on$/m, $output);
+    $this->assert_matches(qr/^the rat$/m, $output);
+    $this->assert_matches(qr/^phlegm$/m, $output);
 }
 
 1;

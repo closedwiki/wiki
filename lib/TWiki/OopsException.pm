@@ -66,6 +66,8 @@ The remaining parameters are interpreted as key-value pairs. The following keys 
 For an example of how to use the =def= parameter, see the =oopsattention=
 template.
 
+NOTE: parameter values are automatically and unconditionally entity-encoded
+
 =cut
 
 sub new {
@@ -81,11 +83,7 @@ sub new {
             if( ref( $val ) ne 'ARRAY') {
                 $val = [ $val ];
             }
-            # entity-encode all param values, to block any attempt to
-            # embed HTML in their values
-            foreach my $p ( @$val ) {
-                push( @{$this->{params}}, TWiki::entityEncode( $p ) );
-            }
+            $this->{params} = $val;
         } else {
             $this->{$key} = $val || '';
         }

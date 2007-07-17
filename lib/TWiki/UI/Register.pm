@@ -400,7 +400,7 @@ sub _requireVerification {
         $data->{Email}, $data->{WikiName} );
 
     my $err = _sendEmail( $session, 'registerconfirm', $data );
-    my $em = TWiki::entityEncode( $data->{Email} );
+    my $em = $data->{Email};
 
     if($err) {
         throw TWiki::OopsException(
@@ -792,8 +792,7 @@ sub complete {
             'Warning: Could not send confirmation email')."\n\n$status";
     } else {
         $status = $session->i18n->maketext(
-            'A confirmation e-mail has been sent to [_1]',
-            TWiki::entityEncode( $data->{Email} ));
+            'A confirmation e-mail has been sent to [_1]', $data->{Email} );
     }
 
     # and finally display thank you page
@@ -1059,7 +1058,7 @@ sub _validateRegistration {
             web => $data->{webName},
             topic => $session->{topicName},
             def => 'bad_email',
-            params => [ TWiki::entityEncode( $data->{Email} ) ] );
+            params => [ $data->{Email} ] );
     }
 
     return unless $requireForm;

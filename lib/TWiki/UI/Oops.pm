@@ -81,7 +81,7 @@ sub oops {
         # Use oops parameters from the keep hash instead
         $tmplName = $keep->{template};
         $def = $keep->{def};
-        if( ref($keep->{params}) eq "ARRAY" ) {
+        if( ref($keep->{params}) eq 'ARRAY' ) {
             foreach my $p ( @{$keep->{params}} ) {
                 push( @params, $p );
                 $n++;
@@ -121,6 +121,8 @@ sub oops {
         $tmplData = $session->handleCommonTags( $tmplData, $web, $topic );
         $n = 1;
         foreach my $param ( @params ) {
+            # Entity-encode, to block any potential HTML payload
+            $param = TWiki::entityEncode( $param );
             $tmplData =~ s/%PARAM$n%/$param/g;
             $n++;
         }
