@@ -30,7 +30,9 @@
 
 %TMPL:DEF{"stylesdynamic"}%<style type="text/css" media="all">
 	/* Styles that are set using variables */
-	.patternBookView .twikiTopRow {
+	.patternBookView .twikiTopRow,
+	.patternWebIndicator a img,
+	.patternWebIndicator a:hover img {
 		background-color:%WEBBGCOLOR%;
 	}
 	%IF{ "defined WEBHEADERART and $ WEBHEADERART != ''" then='#patternTopBar { background-image:url("%WEBHEADERART%"); background-repeat:no-repeat;}'}%

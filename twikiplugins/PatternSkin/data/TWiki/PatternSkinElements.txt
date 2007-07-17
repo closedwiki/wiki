@@ -14,7 +14,7 @@
 ---++ h2 header [[%TOPIC%][with link]] - no newline
 *Intro text.* Normal text. Normal text. Normal text. Normal text. Normal text. Normal text. Normal text. Normal text. Normal text. Normal text. Normal text. Normal text. Normal text. Normal text. Normal text. Normal text. Normal text. Normal text. Normal text. Normal text. Normal text. Normal text. Normal text. Normal text. Normal text. Normal text. Normal text. Normal text. Normal text. Normal text.
 
----+++ h3 header [[%TOPIC%][with link]]
+---+++ h3 header [[%TOPIC%][with link]] and a very long header text a very long header text a very long header text a very long header text a very long header text a very long header text a very long header text
 
 *Intro text.* Normal text. Normal text. Normal text. Normal text. Normal text. Normal text. Normal text. Normal text. Normal text. Normal text. Normal text. Normal text. Normal text. Normal text. Normal text. Normal text. Normal text. Normal text. Normal text. Normal text. Normal text. Normal text. Normal text. Normal text. Normal text. Normal text. Normal text. Normal text. Normal text. Normal text.
 
@@ -74,14 +74,14 @@ A lot more of verbatim text lot more of verbatim text lot more of verbatim text 
 
 Bullet list:
    * Item A
-   * Item B
+   * Item B a very long list text a very long list text a very long list text a very long list text a very long list text a very long list text a very long list text a very long list text a very long list text
       * Item B.1
       * Item B.2
    * Item C
 
 Numbered list:
    1 Item 1
-   1 Item 2
+   1 Item 2 a very long list text a very long list text a very long list text a very long list text a very long list text a very long list text a very long list text a very long list text a very long list text
       1 Item 2.1
       1 Item 2.2
    1 Item 3

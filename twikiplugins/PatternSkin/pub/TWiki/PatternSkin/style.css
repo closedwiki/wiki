@@ -58,12 +58,8 @@ html>body pre { /* hide from IE */
 }
 ol, ul {
 	margin-top:0;
-	line-height:1.5em; /*S1*/
 }
-ol li, ul li {
-	line-height:1.3em; /* smaller than S1 to 'group' wrapping lines */
-	margin:.2em 0; /* add to get S1 */
-}
+ol li, ul li {}
 blockquote {
 	padding:.5em 1.25em;
 }
@@ -400,7 +396,11 @@ table.twikiFormTable th.twikiFormTableHRow a:link,
 table.twikiFormTable th.twikiFormTableHRow a:visited {
 	text-decoration:none;
 }
-.attachTableAttachmentCount {
+.twikiAttachments .twistyTrigger .twikiLinkLabel {
+	font-size:122%; /* h4 size */
+	font-weight:bold;
+}
+.patternAttachmentCount {
 	font-weight:normal;
 }
 .twikiFormSteps {
@@ -443,11 +443,10 @@ table.twikiFormTable th.twikiFormTableHRow a:visited {
 	padding-bottom:.25em;
 }
 .twikiActionFormStepSign {
-	position:relative;
-	float:left;
+	position:absolute;
 	font-size:104%;
 	margin-left:-20px; /* half of S5 */
-	margin-top:-1px;
+	margin-top:-.15em;
 }
 .twikiToc {
 	margin:1em 0;
@@ -575,9 +574,7 @@ a.twikiLinkInHeaderRight {
 	border-width:1px 0 0 0;
 	border-style:solid;
 }
-#patternBottomBarContents {
-	font-size:94%; /*S2*/
-}
+#patternBottomBarContents {}
 #patternWebBottomBar {
 	font-size:94%; /*S2*/
 	line-height:125%;
@@ -662,16 +659,16 @@ a.twikiLinkInHeaderRight {
 }
 #patternLeftBarContents .patternLeftBarPersonal,
 #patternLeftBarContents .patternWebIndicator {
-	margin:0 -1em .5em -1em; /*S6*/
-	padding:0 1em .5em 1em; /*S6*/
-/*	
-	border-style:none none solid none;
-	border-width:1px;
-*/
+	padding:0 1em .75em 1em;
+	margin:0 -1em .75em -1em; /*S6*/
 }
-#patternLeftBarContents .patternWebIndicator {
-	font-size:1.3em;
+.patternWebIndicator a {
+	font-size:1.1em;
 	font-weight:bold;
+}
+
+#patternLeftBarContents li {
+	overflow:hidden;
 }
 html>body #patternLeftBarContents li { /* Mozilla */
 	overflow:visible;
@@ -707,12 +704,7 @@ html>body #patternLeftBarContents li { /* Mozilla */
 	border-width:1px;
 }
 
-/* breadcrumb */
-.patternHomePathTitle {
-	display:none;
-}
 .patternToolBar {
-	margin:-.2em 0 .2em 0;
 }
 .patternToolBar .patternButton {
 	float:left;
@@ -725,7 +717,7 @@ html>body #patternLeftBarContents li { /* Mozilla */
 	border-width:1px;
 	border-style:solid;
 	padding:.1em .35em;
-	margin:0 0 0 .25em;
+	margin:-.2em 0 .2em .25em;
 	font-weight:bold;
 }
 .patternToolBar .patternButton a:link,
@@ -1032,5 +1024,3 @@ tr.twikiDiffDebug td {
 .twikiDiffLineNumberHeader {
 	padding:.3em 0;
 }
-
-
