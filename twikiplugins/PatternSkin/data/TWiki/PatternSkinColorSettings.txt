@@ -48,7 +48,7 @@ Save the topic
 ---++++ LINK_BACKGROUND_HOVER Link background hover
    * Set LINK_BACKGROUND_HOVER = #d6000f
 ---++++ SIDE_BAR_LINK_TEXT Side bar link text
-   * Set SIDE_BAR_LINK_TEXT = #333
+   * Set SIDE_BAR_LINK_TEXT = #555
 ---++++ LINK_TEXT_NORMAL_TABLE_HEADER Table header link text
    * Set LINK_TEXT_NORMAL_TABLE_HEADER = #fff
 ---++++ LINK_TEXT_NORMAL_BORDER_TABLE_HEADER Table header link border
@@ -123,9 +123,9 @@ Save the topic
 ---++++ NEUTRAL_BACKGROUND
    * Set NEUTRAL_BACKGROUND = #fdfaf1
 ---++++ TOP_BAR_BACKGROUND Top bar background
-   * Set TOP_BAR_BACKGROUND = %NEUTRAL_BACKGROUND%
+   * Set TOP_BAR_BACKGROUND = #fefcf7
 ---++++ TOPIC_ACTION_BACKGROUND Topic action row
-   * Set TOPIC_ACTION_BACKGROUND = #fcf8ec
+   * Set TOPIC_ACTION_BACKGROUND = #fdfaf2
 ---++++ HEADER_BACKGROUND h2, h3
    * Set HEADER_BACKGROUND = %TOPIC_ACTION_BACKGROUND%
 ---++++ ATTACHMENT_AND_FORM_BACKGROUND Attachment, form (light yellow, same as top bar)
@@ -149,7 +149,7 @@ Save the topic
 ---++++ IMAGE_BORDER Image border
    * Set IMAGE_BORDER = #eee
 ---++++ FORM_STEP_BORDER Form step border
-   * Set FORM_STEP_BORDER = %TABLE_BORDER%
+   * Set FORM_STEP_BORDER = #d9e8ef
 ---++++ NOTIFICATION_BORDER Broadcast message
    * Set NOTIFICATION_BORDER = #ffdf4c
    
@@ -208,7 +208,6 @@ Do not change the text below this line unless you know what you are doing!
 #patternLeftBar,
 #patternWrapper {}
 #patternBottomBar {
-	background-color:%NEUTRAL_BACKGROUND%;
 	border-color:%SEPARATOR_BORDER%;
 }
 #patternBottomBarContents,
@@ -223,7 +222,7 @@ Do not change the text below this line unless you know what you are doing!
 /* GENERAL HTML ELEMENTS */
 
 html body {
-	background-color:%NEUTRAL_BACKGROUND%;
+	background-color:%MAIN_BACKGROUND_COLOR%;
 	color:%MAIN_TEXT_COLOR%;
 }
 /* be kind to netscape 4 that doesn't understand inheritance */
@@ -570,6 +569,22 @@ a:hover .twikiAccessKey {
 #patternPage {
 	background-color:%MAIN_BACKGROUND_COLOR%;
 }
+.patternHomePath a:link,
+.patternHomePath a:visited {
+	border-color:%NEUTRAL_BORDER%;
+}
+.patternTop a:hover {
+	border:none;
+}
+.patternRevInfo,
+.patternRevInfo a:link,
+.patternRevInfo a:visited {
+	color:%DISABLED_TEXT%;
+}
+.patternRevInfo a:hover {
+	color:%LINK_TEXT_HOVER%;
+}
+
 /* Left bar */
 #patternLeftBarContents {
 	color:%GENERAL_TEXT%;
@@ -590,6 +605,12 @@ a:hover .twikiAccessKey {
 #patternLeftBarContents strong {
 	color:%STRONG_TEXT%;
 }
+/*
+#patternLeftBarContents .patternLeftBarPersonal,
+#patternLeftBarContents .patternWebIndicator {
+	border-color:%FORM_STEP_BORDER%;
+}
+*/
 #patternLeftBarContents .patternLeftBarPersonal a:link,
 #patternLeftBarContents .patternLeftBarPersonal a:visited {
 	color:%LINK_TEXT_NORMAL%;
@@ -937,11 +958,6 @@ a.twikiButton:active {
 	background-color:#edece6;
 	color:#bbb;
 }
-#patternLeftBarContents .patternLeftBarPersonal {
-	background-image:url(border_sidebar_personal.gif);
-	background-repeat:repeat-x;
-	background-position:bottom left;
-}
 .patternTextareaButton {
 	border-color:#fffefd #b8b6ad #b8b6ad #fffefd;
 	overflow:hidden;
@@ -987,7 +1003,13 @@ a.twikiButton:active {
 	background-repeat:repeat-x;
 	background-position:bottom left;
 }
-.patternHomePath a {
+.patternTop a {
+	background-image:url(border_sidebar_personal.gif);
+	background-repeat:repeat-x;
+	background-position:bottom left;
+}
+#patternLeftBarContents .patternLeftBarPersonal,
+#patternLeftBarContents .patternWebIndicator {
 	background-image:url(border_sidebar_personal.gif);
 	background-repeat:repeat-x;
 	background-position:bottom left;
