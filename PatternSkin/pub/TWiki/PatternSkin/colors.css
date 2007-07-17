@@ -6,6 +6,7 @@
 
 #patternTopBar {
 	border-color:#e7e2da;
+	background-color:#fefcf7;
 }
 #patternMain { /* don't set a background here; use patternOuter */ }
 #patternOuter {
@@ -13,14 +14,16 @@
 	border-color:#cfcfcf;
 }
 #patternLeftBar,
-#patternWrapper {}
+#patternWrapper {
+	background-color:#f5f9fb;
+}
 #patternBottomBar {
 	border-color:#e7e2da;
 }
 #patternBottomBarContents,
 #patternBottomBarContents a:link,
 #patternBottomBarContents a:visited {
-	color:#666;
+	color:#777;
 }
 #patternBottomBarContents a:hover {
 	color:#fff;
@@ -69,7 +72,7 @@ h3, h4, h5, h6 {
 }
 .twikiNewLink a:link sup,
 .twikiNewLink a:visited sup {
-	color:#666;
+	color:#777;
 	border-color:#ddd;
 }
 .twikiNewLink a:hover sup {
@@ -178,14 +181,14 @@ select {
 }
 
 .twikiTextareaRawView {
-	color:#666;
+	color:#777;
 }
 .twikiInputFieldDisabled {
 	color:#bbb;
 	background-color:#fafaf8;
 }
 .twikiInputFieldReadOnly {
-	color:#666;
+	color:#777;
 }
 .twikiSelect {
 	border-color:#bbb #f2f2f2 #f2f2f2 #bbb;
@@ -199,7 +202,7 @@ select {
 	background-color:#fafaf8;
 }
 .twikiInputFieldBeforeFocus {
-	color:#666;
+	color:#777;
 }
 
 /*	-----------------------------------------------------------
@@ -222,7 +225,7 @@ select {
 
 /* TwistyContrib */
 .twistyPlaceholder {
-	color:#666;
+	color:#777;
 }
 a:hover.twistyTrigger {
 	color:#fff;
@@ -246,11 +249,11 @@ a:hover.twistyTrigger {
 	-----------------------------------------------------------	*/
 
 .twikiGrayText {
-	color:#666;
+	color:#777;
 }
 .twikiGrayText a:link,
 .twikiGrayText a:visited {
-	color:#666;
+	color:#777;
 }
 .twikiGrayText a:hover {
 	color:#fff;
@@ -258,7 +261,7 @@ a:hover.twistyTrigger {
 
 table.twikiFormTable th.twikiFormTableHRow,
 table.twikiFormTable td.twikiFormTableRow {
-	color:#666;
+	color:#777;
 }
 .twikiEditForm {
 	color:#000;
@@ -306,7 +309,7 @@ table.twikiFormTable th.twikiFormTableHRow font {
 }
 .twikiFormStep h3,
 .twikiFormStep h4 {
-	color:#666;
+	color:#777;
 }
 .twikiFormStep h3,
 .twikiFormStep h4 {
@@ -316,7 +319,7 @@ table.twikiFormTable th.twikiFormTableHRow font {
 	color:#4571d0;
 }
 .twikiToc .twikiTocTitle {
-	color:#666;
+	color:#777;
 }
 .twikiBroadcastMessage {
 	background-color:#fff9d1;
@@ -350,7 +353,7 @@ table.twikiFormTable th.twikiFormTableHRow font {
 }
 .twikiAccessKey {
 	color:inherit;
-	border-color:#666;
+	border-color:#777;
 }
 a:link .twikiAccessKey,
 a:visited .twikiAccessKey {
@@ -376,27 +379,25 @@ a:hover .twikiAccessKey {
 #patternPage {
 	background-color:#fff;
 }
-
 .patternHomePath a:link,
 .patternHomePath a:visited {
 	border-color:#ddd;
 }
-.patternHomePath a:hover {
+.patternTop a:hover {
 	border:none;
 }
-.patternRevInfo,
-.patternRevInfo a:link,
-.patternRevInfo a:visited {
+.patternHomePath .patternRevInfo,
+.patternHomePath .patternRevInfo a:link,
+.patternHomePath .patternRevInfo a:visited {
 	color:#bbb;
 }
-.patternRevInfo a:hover {
+.patternHomePath .patternRevInfo a:hover {
 	color:#fff;
 }
 
 /* Left bar */
 #patternLeftBarContents {
 	color:#000;
-	background-color:#f5f9fb;
 }
 #patternLeftBarContents hr {
 	color:#e7e2da;
@@ -413,12 +414,6 @@ a:hover .twikiAccessKey {
 #patternLeftBarContents strong {
 	color:#333;
 }
-/*
-#patternLeftBarContents .patternLeftBarPersonal,
-#patternLeftBarContents .patternWebIndicator {
-	border-color:#d9e8ef;
-}
-*/
 #patternLeftBarContents .patternLeftBarPersonal a:link,
 #patternLeftBarContents .patternLeftBarPersonal a:visited {
 	color:#4571d0;
@@ -430,7 +425,7 @@ a:hover .twikiAccessKey {
 .patternTopicActions {
 	border-color:#e7e2da;
 	background-color:#fdfaf2;
-	color:#666;
+	color:#777;
 }
 .patternTopicAction {
 	border-color:#e7e2da;
@@ -460,10 +455,10 @@ a:hover .twikiAccessKey {
 	color:#000;
 }
 .patternHelpCol {
-	color:#666;
+	color:#777;
 }
 .patternSigLine {
-	color:#666;
+	color:#777;
 }
 .patternToolBar a:link .twikiAccessKey,
 .patternToolBar a:visited .twikiAccessKey {
@@ -481,16 +476,16 @@ a:hover .twikiAccessKey {
 
 /* WebSearch, WebSearchAdvanced */
 table#twikiSearchTable {
-	border-color:#e7e2da;
+	border-color:#d9e8ef;
 }
 table#twikiSearchTable th,
 table#twikiSearchTable td {
 	background-color:#fff;
-	border-color:#e7e2da;
+	border-color:#d9e8ef;
 }
 table#twikiSearchTable hr {
-	border-color:#e7e2da;
-	background-color:#e7e2da;
+	border-color:#d9e8ef;
+	background-color:#d9e8ef;
 }
 table#twikiSearchTable th {
 	color:#000;
@@ -534,13 +529,13 @@ h4.patternSearchResultsHeader {
 
 .patternBookView .twikiTopRow {
 	background-color:transparent; /* set to WEBBGCOLOR in css.pattern.tmpl */
-	color:#666;
+	color:#777;
 }
 .patternBookView .twikiBottomRow {
 	border-color:#e7e2da;
 }
 .patternBookView .patternSearchResultCount {
-	color:#666;
+	color:#777;
 }
 
 /* edit.pattern.tmpl */
@@ -596,7 +591,7 @@ tr.twikiDiffDebug .twikiDiffAddedText {
 }
 /* Unchanged */
 tr.twikiDiffDebug .twikiDiffUnchangedText {
-	color:#666;
+	color:#777;
 }
 .twikiDiffUnchangedTextContents { }
 .twikiDiffLineNumberHeader {
@@ -618,7 +613,7 @@ h2,
 	background-position:0 .35em;
 }
 #patternOuter,
-#patternWrapper {
+#patternTopBar {
 	/* gradient yellow of left bar and main */
 	background-image:url(bg_outer_gradient.gif);
 	background-repeat:repeat-x;
@@ -766,8 +761,6 @@ a.twikiButton:active {
 	background-color:#edece6;
 	color:#bbb;
 }
-
-
 .patternTextareaButton {
 	border-color:#fffefd #b8b6ad #b8b6ad #fffefd;
 	overflow:hidden;
@@ -807,12 +800,6 @@ a.twikiButton:active {
 .patternButtonShrink:active {
 	background-position:16px -84px;
 }
-#patternLeftBarContents {
-	padding-bottom:70px; /* reflection bottom image: 50px high; extra padding 20px */
-	background-image:url(bg_sidebar_reflection.gif);
-	background-repeat:repeat-x;
-	background-position:bottom left;
-}
 #patternLeftBarContents .patternLeftBarPersonal,
 #patternLeftBarContents .patternWebIndicator {
 	background-image:url(border_sidebar_personal.gif);
@@ -825,7 +812,7 @@ a.twikiButton:active {
 li.patternLogOut,
 li.patternLogIn {
 	padding-left:13px;
-	background-position:0 .25em;
+	background-position:0 .4em;
 	background-repeat:no-repeat;
 }
 .patternLeftBarPersonal li {

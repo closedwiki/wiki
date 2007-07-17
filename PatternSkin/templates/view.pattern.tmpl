@@ -18,13 +18,13 @@
 %TMPL:DEF{"attachmentsbottom"}%%TMPL:P{"attachmentsatbottom"}%%TMPL:END%
 
 
-%TMPL:DEF{toolbar_buttons}%%TMPL:P{"activatable_edit_or_create"}%%TMPL:P{"wysiwyg"}%%TMPL:P{"activatable_attach"}%%TMPL:END%
+%TMPL:DEF{"toolbar_buttons"}%%TMPL:P{"activatable_edit_or_create"}%%TMPL:P{"wysiwyg"}%%TMPL:P{"activatable_attach"}%%TMPL:END%
 
 %TMPL:DEF{"top"}%<div class="patternTop"><span class="patternHomePath twikiLeft twikiGrayText">%TMPL:P{"breadcrumb"}%</span><!-- /patternHomePath--><span class="patternToolBar twikiRight">%TMPL:P{"toolbar_buttons"}%</span><!-- /patternToolBar--><br class="twikiClear" /></div><!--/patternTop-->%TMPL:END%
 
 %TMPL:DEF{"topicpathseparator"}%<span class='twikiSeparator'>&nbsp;&gt;&nbsp;</span>%TMPL:END%
 
-%TMPL:DEF{"breadcrumb"}%%TMPL:P{"breadcrumb:title"}%%TMPL:P{"breadcrumb:wikitoolname"}%%TMPL:P{"breadcrumb:currentweb"}%%META{"parent" nowebhome="on" prefix="%TMPL:P{"topicpathseparator"}%" suffix=""}%%TMPL:P{"breadcrumb:currenttopic"}%%TMPL:END%
+%TMPL:DEF{"breadcrumb"}%%{"breadcrumb:title"}%%TMPL:P{"breadcrumb:wikitoolname"}%%TMPL:P{"breadcrumb:currentweb"}%%META{"parent" nowebhome="on" prefix="%TMPL:P{"topicpathseparator"}%" suffix=""}%%TMPL:P{"breadcrumb:currenttopic"}%%TMPL:END%
 
 %TMPL:DEF{"breadcrumb:title"}%<span class="patternHomePathTitle">%MAKETEXT{"You are here:"}% </span> %TMPL:END%
 

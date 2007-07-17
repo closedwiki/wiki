@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1184370473" format="1.1" reprev="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1184702326" format="1.1" reprev="1.1" version="1.1"}%
 ---+ !!Color scheme settings for %TWIKIWEB%.PatternSkin
 Use this topic to change the color settings of %TWIKIWEB%.PatternSkin. When this topic is saved, the attachment =theme-colors.css= will be updated with new color values. This method relies on TWiki:Plugins.AttachContentPlugin to work.
 
@@ -9,7 +9,7 @@ Use this topic to change the color settings of %TWIKIWEB%.PatternSkin. When this
 ---+++!! Step 1
 Let %TWIKIWEB%.PatternSkin point to the custom-made colors style sheet. In [[%MAINWEB%.TWikiPreferences]] put:
 <pre>
-   * <nop>Set USERCOLORSURL = %<nop>PUBURLPATH%/%<nop>MAINWEB%/TWikiPreferences/theme-colors.css
+   * <nop>Set USERCOLORSURL = %<nop>PUBURLPATH%/%<nop>MAINWEB%/PatternSkinColorSettings/theme-colors.css
 </pre>
 
 ---+++!! Step 2
@@ -32,7 +32,7 @@ Save the topic
 ---++++ LIGHT_ON_DARK_TEXT_COLOR Light on dark text color
    * Set LIGHT_ON_DARK_TEXT_COLOR = #fff
 ---++++ GRAYED_TEXT_COLOR
-   * Set GRAYED_TEXT_COLOR = #666
+   * Set GRAYED_TEXT_COLOR = #777
    
 ---+++ Links
 ---++++ LINK_TEXT_NORMAL Link normal text
@@ -109,7 +109,7 @@ Save the topic
 ---++++ CODE_TEXT Code text, left bar text and links
    * Set CODE_TEXT = #7A4707
 ---++++ MUTED_TEXT Muted text (dark gray)
-   * Set MUTED_TEXT = #666
+   * Set MUTED_TEXT = #777
 ---++++ GRAYED_OUT_TEXT Grayed out text
    * Set GRAYED_OUT_TEXT = %GRAYED_TEXT_COLOR%
 ---++++ STRONG_TEXT Dark text, header (dark gray)
@@ -206,7 +206,9 @@ Do not change the text below this line unless you know what you are doing!
 	border-color:%LAYOUT_ELEMENT_BORDER%;
 }
 #patternLeftBar,
-#patternWrapper {}
+#patternWrapper {
+	background-color:%SIDE_BAR_BACKGROUND%;
+}
 #patternBottomBar {
 	border-color:%SEPARATOR_BORDER%;
 }
@@ -576,19 +578,18 @@ a:hover .twikiAccessKey {
 .patternTop a:hover {
 	border:none;
 }
-.patternRevInfo,
-.patternRevInfo a:link,
-.patternRevInfo a:visited {
+.patternHomePath .patternRevInfo,
+.patternHomePath .patternRevInfo a:link,
+.patternHomePath .patternRevInfo a:visited {
 	color:%DISABLED_TEXT%;
 }
-.patternRevInfo a:hover {
+.patternHomePath .patternRevInfo a:hover {
 	color:%LINK_TEXT_HOVER%;
 }
 
 /* Left bar */
 #patternLeftBarContents {
 	color:%GENERAL_TEXT%;
-	background-color:%SIDE_BAR_BACKGROUND%;
 }
 #patternLeftBarContents hr {
 	color:%SEPARATOR_BORDER%;
@@ -605,12 +606,6 @@ a:hover .twikiAccessKey {
 #patternLeftBarContents strong {
 	color:%STRONG_TEXT%;
 }
-/*
-#patternLeftBarContents .patternLeftBarPersonal,
-#patternLeftBarContents .patternWebIndicator {
-	border-color:%FORM_STEP_BORDER%;
-}
-*/
 #patternLeftBarContents .patternLeftBarPersonal a:link,
 #patternLeftBarContents .patternLeftBarPersonal a:visited {
 	color:%LINK_TEXT_NORMAL%;
@@ -810,7 +805,7 @@ h2,
 	background-position:0 .35em;
 }
 #patternOuter,
-#patternWrapper {
+#patternTopBar {
 	/* gradient yellow of left bar and main */
 	background-image:url(bg_outer_gradient.gif);
 	background-repeat:repeat-x;
@@ -996,17 +991,6 @@ a.twikiButton:active {
 }
 .patternButtonShrink:active {
 	background-position:16px -84px;
-}
-#patternLeftBarContents {
-	padding-bottom:70px; /* reflection bottom image: 50px high; extra padding 20px */
-	background-image:url(bg_sidebar_reflection.gif);
-	background-repeat:repeat-x;
-	background-position:bottom left;
-}
-.patternTop a {
-	background-image:url(border_sidebar_personal.gif);
-	background-repeat:repeat-x;
-	background-position:bottom left;
 }
 #patternLeftBarContents .patternLeftBarPersonal,
 #patternLeftBarContents .patternWebIndicator {
