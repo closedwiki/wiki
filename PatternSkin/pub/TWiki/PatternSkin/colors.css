@@ -6,7 +6,6 @@
 
 #patternTopBar {
 	border-color:#e7e2da;
-	background-color:#fdfaf1;
 }
 #patternMain { /* don't set a background here; use patternOuter */ }
 #patternOuter {
@@ -16,7 +15,6 @@
 #patternLeftBar,
 #patternWrapper {}
 #patternBottomBar {
-	background-color:#fdfaf1;
 	border-color:#e7e2da;
 }
 #patternBottomBarContents,
@@ -31,7 +29,7 @@
 /* GENERAL HTML ELEMENTS */
 
 html body {
-	background-color:#fdfaf1;
+	background-color:#fff;
 	color:#000;
 }
 /* be kind to netscape 4 that doesn't understand inheritance */
@@ -59,7 +57,7 @@ h1, h2, h3, h4, h5, h6 {
 	color:#800;
 }
 h2 {
-	background-color:#fcf8ec;
+	background-color:#fdfaf2;
 	border-color:#e7e2da;
 }
 h3, h4, h5, h6 {
@@ -301,10 +299,10 @@ table.twikiFormTable th.twikiFormTableHRow font {
 
 .twikiFormSteps {
 	background-color:#f1f6fa;
-	border-color:#e7e2da;
+	border-color:#d9e8ef;
 }
 .twikiFormStep {
-	border-color:#e7e2da;
+	border-color:#d9e8ef;
 }
 .twikiFormStep h3,
 .twikiFormStep h4 {
@@ -378,6 +376,23 @@ a:hover .twikiAccessKey {
 #patternPage {
 	background-color:#fff;
 }
+
+.patternHomePath a:link,
+.patternHomePath a:visited {
+	border-color:#ddd;
+}
+.patternHomePath a:hover {
+	border:none;
+}
+.patternRevInfo,
+.patternRevInfo a:link,
+.patternRevInfo a:visited {
+	color:#bbb;
+}
+.patternRevInfo a:hover {
+	color:#fff;
+}
+
 /* Left bar */
 #patternLeftBarContents {
 	color:#000;
@@ -389,7 +404,7 @@ a:hover .twikiAccessKey {
 }
 #patternLeftBarContents a:link,
 #patternLeftBarContents a:visited {
-	color:#333;
+	color:#555;
 }
 #patternLeftBarContents a:hover {
 	color:#fff;
@@ -398,6 +413,12 @@ a:hover .twikiAccessKey {
 #patternLeftBarContents strong {
 	color:#333;
 }
+/*
+#patternLeftBarContents .patternLeftBarPersonal,
+#patternLeftBarContents .patternWebIndicator {
+	border-color:#d9e8ef;
+}
+*/
 #patternLeftBarContents .patternLeftBarPersonal a:link,
 #patternLeftBarContents .patternLeftBarPersonal a:visited {
 	color:#4571d0;
@@ -408,7 +429,7 @@ a:hover .twikiAccessKey {
 
 .patternTopicActions {
 	border-color:#e7e2da;
-	background-color:#fcf8ec;
+	background-color:#fdfaf2;
 	color:#666;
 }
 .patternTopicAction {
@@ -745,11 +766,8 @@ a.twikiButton:active {
 	background-color:#edece6;
 	color:#bbb;
 }
-#patternLeftBarContents .patternLeftBarPersonal {
-	background-image:url(border_sidebar_personal.gif);
-	background-repeat:repeat-x;
-	background-position:bottom left;
-}
+
+
 .patternTextareaButton {
 	border-color:#fffefd #b8b6ad #b8b6ad #fffefd;
 	overflow:hidden;
@@ -795,7 +813,8 @@ a.twikiButton:active {
 	background-repeat:repeat-x;
 	background-position:bottom left;
 }
-.patternHomePath a {
+#patternLeftBarContents .patternLeftBarPersonal,
+#patternLeftBarContents .patternWebIndicator {
 	background-image:url(border_sidebar_personal.gif);
 	background-repeat:repeat-x;
 	background-position:bottom left;

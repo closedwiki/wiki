@@ -18,7 +18,7 @@
 %TMPL:DEF{"attachmentsbottom"}%%TMPL:P{"attachmentsatbottom"}%%TMPL:END%
 
 
-%TMPL:DEF{toolbar_buttons}%<span class="patternButton">%TMPL:P{"activatable_edit_or_create"}%</span><span class="patternButton">%TMPL:P{"wysiwyg"}%</span><span class="patternButton">%TMPL:P{"activatable_attach"}%</span>%TMPL:END%
+%TMPL:DEF{toolbar_buttons}%%TMPL:P{"activatable_edit_or_create"}%%TMPL:P{"wysiwyg"}%%TMPL:P{"activatable_attach"}%%TMPL:END%
 
 %TMPL:DEF{"top"}%<div class="patternTop"><span class="patternHomePath twikiLeft twikiGrayText">%TMPL:P{"breadcrumb"}%</span><!-- /patternHomePath--><span class="patternToolBar twikiRight">%TMPL:P{"toolbar_buttons"}%</span><!-- /patternToolBar--><br class="twikiClear" /></div><!--/patternTop-->%TMPL:END%
 
@@ -32,7 +32,7 @@
 
 %TMPL:DEF{"breadcrumb:currentweb"}%<img src="%ICONURLPATH{web-bg-small}%" border="0" alt="" width="13" height="13" style="background-color:%WEBBGCOLOR%" />&nbsp;<a href="%SCRIPTURLPATH{"view"}%/%WEB%/%HOMETOPIC%">%MAKETEXT{"[_1] Web" args="<nop>%WEB%"}%</a>%TMPL:END%
 
-%TMPL:DEF{"breadcrumb:annotation"}%%IF{"defined rev" then=" %MAKETEXT{"(revision [_1]" args="%URLPARAM{"rev"}%)"}%"}%%IF{"defined raw" then=" %MAKETEXT{"(raw view)"}%"}%%TMPL:END%
+%TMPL:DEF{"breadcrumb:annotation"}%%IF{"defined rev" then=" %MAKETEXT{"(revision [_1]" args="%URLPARAM{"rev"}%)"}%" else=" <span class='patternRevInfo'>(%REVINFO{format="$date, $wikiusername"}%)</span>"}%%IF{"defined raw" then=" %MAKETEXT{"(raw view)"}%"}%%TMPL:END%
 
 %TMPL:DEF{"breadcrumb:currenttopic"}%%TMPL:P{"topicpathseparator"}%<span title='%WEB%.%TOPIC% - %REVINFO{format="$rev - $date - <nop>$wikiusername"}%'>[[%TOPIC%]]%TMPL:P{"breadcrumb:annotation"}%</span>%TMPL:END%
 
@@ -59,4 +59,4 @@
 %TMPL:DEF{"printaction"}%%TMPL:P{"activatable_printable"}%%TMPL:END%
 
 %TMPL:DEF{"footernote"}%%TMPL:P{"topicinfo"}%%TMPL:END%
-%TMPL:DEF{"topicinfo"}%<div class="patternInfo twikiGrayText"><div class="patternRevInfo">%MAKETEXT{"Topic revision:"}% %REVINFO%</div><!-- /patternRevInfo--><div class="patternMoved">%META{"moved"}%</div><!-- /patternMoved--></div><!-- /patternInfo-->%TMPL:END%
+%TMPL:DEF{"topicinfo"}%<div class="patternInfo twikiGrayText"><div class="patternMoved">%META{"moved"}%</div><!-- /patternMoved--></div><!-- /patternInfo-->%TMPL:END%

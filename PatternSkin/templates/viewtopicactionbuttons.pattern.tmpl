@@ -1,4 +1,4 @@
-%TMPL:DEF{"topicactionbuttons"}%%TMPL:P{"action_activatable_edit_or_create"}%%TMPL:P{"action_wysiwyg"}%%TMPL:P{"action_activatable_attach"}%%TMPL:P{"action_raw_or_view"}%%TMPL:P{"action_backlinks_simple"}%%TMPL:P{"action_revisions"}%%TMPL:P{"activatable_more"}%%TMPL:END%
+%TMPL:DEF{"topicactionbuttons"}%%TMPL:P{"action_activatable_edit_or_create"}%%TMPL:P{"action_wysiwyg"}%%TMPL:P{"action_printable"}%%TMPL:P{"action_activatable_attach"}%%TMPL:P{"action_raw_or_view"}%%TMPL:P{"action_backlinks_simple"}%%TMPL:P{"action_revisions"}%%TMPL:P{"activatable_more"}%%TMPL:END%
 
 
 %TMPL:DEF{"create_topic_link"}%<span class="patternButton"><a href='%SCRIPTURL{"edit"}%/%WEB%/%TOPIC%?t=%GMTIME{"$epoch"}%%TMPL:P{"url_param_editaction"}%' rel='nofollow' %MAKETEXT{"title='Create new topic' accesskey='c'>&Create"}%</a></span>%TMPL:END%
@@ -21,11 +21,11 @@
 
 %TMPL:DEF{"more_link"}%<span class='patternButton'><a href='%SCRIPTURLPATH{"oops"}%/%WEB%/%TOPIC%?template=oopsmore&param1=%MAXREV%&param2=%CURRREV%' rel='nofollow' %MAKETEXT{"title='Delete or rename this topic; set parent topic; view and compare revisions' accesskey='m'>&More topic actions"}%</a></span>%TMPL:END%
 
-%TMPL:DEF{"old_action_printable"}%%TMPL:P{"printable"}%%TMPL:P{"sep"}%%TMPL:END%
+%TMPL:DEF{"action_printable"}%%TMPL:P{"printable"}%%TMPL:P{"sep"}%%TMPL:END%
 
-%TMPL:DEF{"printable"}%<span class='patternButton patternPrintButton'><a href='%SCRIPTURLPATH{"view"}%/%WEB%/%TOPIC%?cover=print%QUERYPARAMSTRING%%REVARG%' rel='nofollow' %MAKETEXT{"title='Printable version of this topic' accesskey='p'>&Print version"}%</a></span>%TMPL:END%
+%TMPL:DEF{"printable"}%<span class='patternButton'><a href='%SCRIPTURLPATH{"view"}%/%WEB%/%TOPIC%?cover=print%QUERYPARAMSTRING%%REVARG%' rel='nofollow' %MAKETEXT{"title='Printable version of this topic' accesskey='p'>&Print version"}%</a></span>%TMPL:END%
 
-%TMPL:DEF{"activatable_printable"}%<span class="patternActionButtons twikiRight">%TMPL:P{"printable"}%</span>%TMPL:END%
+%TMPL:DEF{"activatable_printable"}%%TMPL:P{"printable"}%%TMPL:END%
 
 
 %TMPL:DEF{"backlinks_web_link"}%<span class='patternButton'><a href='%SCRIPTURLPATH{"oops"}%/%WEB%/%TOPIC%?template=backlinksweb' rel='nofollow' %MAKETEXT{"title='Search the [_1] Web for topics that link to here' accesskey='b'>We&b" args="<nop>%WEB%"}%</a></span>%TMPL:END%
