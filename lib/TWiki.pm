@@ -734,7 +734,8 @@ sub _getRedirectUrl {
 
    * $url - url or twikitopic to redirect to
    * $passthrough - (optional) parameter to **FILLMEIN**
-   * $action_redirectto - (optional) redirect to where ?redirectto= points to if its valid
+   * $action_redirectto - (optional) redirect to where ?redirectto=
+     points to (if it's valid)
 
 Redirects the request to =$url=, *unless*
    1 It is overridden by a plugin declaring a =redirectCgiQueryHandler=.
@@ -742,16 +743,19 @@ Redirects the request to =$url=, *unless*
    1 $query->param('noredirect') is set to a true value.
 Thus a redirect is only generated when in a CGI context.
 
-Normally this method will ignore parameters to the current query.
-If $passthrough is set, then it will pass all parameters that were passed
-to the current query on to the redirect target. If the request_method was
-GET, then all parameters can be passed in the URL. If the
-request_method was POST then it caches the form data and passes over a
-cache reference in the redirect GET.
+Normally this method will ignore parameters to the current query. Sometimes,
+for example when redirecting to a login page during authentication (and then
+again from the login page to the original requested URL), you want to make
+sure all parameters are passed on, and for this $passthrough should be set to
+true. In this case it will pass all parameters that were passed to the
+current query on to the redirect target. If the request_method for the
+current query was GET, then all parameters will be passed by encoding them
+in the URL (after ?). If the request_method was POST, then there is a risk the
+URL would be too big for the receiver, so it caches the form data and passes
+over a cache reference in the redirect GET.
 
-Passthrough is only meaningful if the redirect target is on the same server.
-TODO: but what exactly is passthrough intended to do?
-
+NOTE: Passthrough is only meaningful if the redirect target is on the same
+server.
 
 =cut
 
@@ -762,9 +766,10 @@ sub redirect {
     my $query = $this->{cgiQuery};
     # if we got here without a query, there's not much more we can do
     return unless $query;
-    # if noredirect is set, don't generate the redirect, throw an exception instead.
-    # This is a HACK used to support TWikiDrawPlugin. It is deprecated and must be
-    # replaced by REST handlers in the plugin.
+
+    # SMELL: if noredirect is set, don't generate the redirect, throw an
+    # exception instead. This is a HACK used to support TWikiDrawPlugin.
+    # It is deprecated and must be replaced by REST handlers in the plugin.
     if( $query->param( 'noredirect' )) {
         die "ERROR: $url";
         return;
@@ -775,7 +780,7 @@ sub redirect {
         $url = $redir if ($redir);
     }
 
-    if ($passthru) {
+    if ($passthru && defined $ENV{REQUEST_METHOD}) {
         my $existing = '';
         if ($url =~ s/\?(.*)$//) {
             $existing = $1;
@@ -805,7 +810,7 @@ sub redirect {
     # do this check as late as possible to catch _any_ last minute hacks
     # TODO: this should really use URI
     if (!isRedirectSafe($url)) {
-         #goto oops if URL is trying to take us somewhere dangerous
+         # goto oops if URL is trying to take us somewhere dangerous
          $url = $this->getScriptUrl(
              1, 'oops',
              $this->{web} || $TWiki::cfg{UsersWebName},
@@ -813,15 +818,17 @@ sub redirect {
              template => 'oopsaccessdenied',
              def => 'topic_access',
              param1 => 'redirect',
-             param2 => 'unsafe redirect to '.$url.
+             param2 => 'unsafe redirect to '.TWiki::entityEncode( $url ).
                ': host does not match {DefaultUrlHost} "'.
                  $TWiki::cfg{DefaultUrlHost}.'"'
             );
     }
 
 
-    return if( $this->{plugins}->redirectCgiQueryHandler( $query, $url ) );
-    #SMELL: this is a bad breaking of encapsulation: the loginManager should just modify the url, then the redirect should only happen here.
+    return if( $this->{plugins}->redirectCgiQueryHandler( $query, $url ));
+
+    # SMELL: this is a bad breaking of encapsulation: the loginManager
+    # should just modify the url, then the redirect should only happen here.
     return if( $this->{users}->{loginManager}->redirectCgiQuery( $query, $url ) );
     die "Login manager returned 0 from redirectCgiQuery";
 }

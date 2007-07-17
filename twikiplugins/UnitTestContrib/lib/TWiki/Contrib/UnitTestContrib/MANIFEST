@@ -9,6 +9,7 @@ test/unit/ClientTests.pm 0755
 test/unit/ConfigureTests.pm 0644
 test/unit/EmptyTests.pm 0644
 test/unit/ExampleTests.pm 0644
+test/unit/ExceptionTests.pm 0644
 test/unit/Fn_GROUPS.pm 0644
 test/unit/Fn_IF.pm 0644
 test/unit/Fn_INCLUDE.pm 0644

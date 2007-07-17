@@ -77,10 +77,18 @@ sub new {
       if DEBUG;
     while ( my $key = shift @_ ) {
         my $val = shift @_;
-        $this->{$key} = $val || '';
-    }
-    if( $this->{params} && ref( $this->{params} ) ne 'ARRAY') {
-        $this->{params} = [ $this->{params} ];
+        if( $key eq 'params' ) {
+            if( ref( $val ) ne 'ARRAY') {
+                $val = [ $val ];
+            }
+            # entity-encode all param values, to block any attempt to
+            # embed HTML in their values
+            foreach my $p ( @$val ) {
+                push( @{$this->{params}}, TWiki::entityEncode( $p ) );
+            }
+        } else {
+            $this->{$key} = $val || '';
+        }
     }
     return $this;
 }
@@ -120,11 +128,7 @@ sub stringify {
         $s .= ' topic=>'.$this->{topic} if $this->{topic};
         $s .= ' keep=>1' if $this->{keep};
         if( defined $this->{params} ) {
-            if( ref($this->{params}) eq 'ARRAY' ) {
-                $s .= ' params=>['.join( ",", @{$this->{params}} ).']';
-            } else {
-                $s .= ' params=>'.$this->{params};
-            }
+            $s .= ' params=>['.join( ',', @{$this->{params}} ).']';
         }
         return $s.')';
     }
@@ -157,7 +161,8 @@ sub redirect {
     my $url = $session->getScriptUrl(
         1, 'oops', $this->{web}, $this->{topic}, @p);
     while( my $p = shift( @p )) {
-        $session->{cgiQuery}->param( -name => $p, -value => shift( @p ));
+        $session->{cgiQuery}->param(
+            -name => $p, -value => shift( @p ));
     }
     $session->redirect( $url, 1 );
 }
