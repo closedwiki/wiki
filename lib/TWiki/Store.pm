@@ -1330,7 +1330,10 @@ sub extractMetaData {
           if (defined($keys->{name})) {
               # don't attempt to save it keyed unless it has a name
               $meta->putKeyed( $1, $keys);
-          }
+          } else {
+              $meta->put( $1, $keys);
+	  }
+	  
           '';
          )gem;
 
