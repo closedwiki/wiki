@@ -23,7 +23,7 @@ When you type a !WikiWord, you establish a hyperlink. It's as easy as that.
    * Uppercase letter(s)
    * Optional lowercase or uppercase letter(s) or number(s)
 
-*!WikiWord syntax in [[Wikipedia:Extended_Backus_Naur_Form][Extended Backus&#8211;Naur]] form:*
+!WikiWord syntax in [[Wikipedia:Extended_Backus_Naur_Form][Extended Backus.Naur form]] (EBNF):
 
 <verbatim>
     wikiWord        = upperLetters , lowerNumLetters , upperLetters , { alphaNum } ;
@@ -80,3 +80,6 @@ When you write the name of a topic, it becomes a link. There are more ways
    * %X% When linking to a <nop>%HOMETOPIC% topic _in another web_, the link will be rendered as the name of the web, e.g. =Sandbox.%HOMETOPIC%= becomes Sandbox.%HOMETOPIC%.
 
 __Related Topics:__ WikiSyntax, TextFormattingRules
+%STOPINCLUDE%
+
+-- __Contributors:__ TWiki:Main.PeterThoeny, TWiki:Main.ArthurClemens, TWiki:Main.CrawfordCurrie
