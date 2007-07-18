@@ -122,7 +122,7 @@ sub test_MatchesOpen {
     my $action =
       new TWiki::Plugins::ActionTrackerPlugin::Action(
           "Test", "Topic", 0,
-          'who="JohnDoe,SlyStallone,'.$TWiki::cfg{DefaultUserWikiName}.'" due="2 Jun 02" state=open notify="SamPeckinpah,QuentinTarantino" created="1 Jan 1999" creator="ThomasMoore"',
+          'who="JohnDoe,SlyStallone,'.$TWiki::cfg{DefaultUserWikiName}.'" due="2 Jun 02" state=open notify="SamPeckinpah,QuentinTarantino" created="1999-01-01" creator="ThomasMoore"',
           "A new action");
 
     my $attrs = new TWiki::Attrs("who=JohnDoe",1);
@@ -217,7 +217,7 @@ sub test_MatchesOpen {
     $attrs = new TWiki::Attrs("creator=QuentinTarantino",1);
     $this->assert(!$action->matches($attrs));
 
-    $attrs = new TWiki::Attrs('created="1-Jan-1999"',1);
+    $attrs = new TWiki::Attrs('created="1999-01-01"',1);
     $this->assert($action->matches($attrs));
     $attrs = new TWiki::Attrs('created="2 Jun 02"',1);
     $this->assert(!$action->matches($attrs));
@@ -291,11 +291,11 @@ sub test_StringFormattingOpen {
     # make it late
     TWiki::Plugins::ActionTrackerPlugin::Action::forceTime("3 Jun 2002");
     $s = $fmt->formatStringTable([$action]);
-    $this->assert_str_equals("Due: Sun, 2 Jun 2002 (LATE)\n", $s);
+    $this->assert_str_equals("Due: Sun, 02 Jun 2002 (LATE)\n", $s);
     # make it ontime
     TWiki::Plugins::ActionTrackerPlugin::Action::forceTime("1 Jun 2002");
     $s = $fmt->formatStringTable([$action]);
-    $this->assert_str_equals("Due: Sun, 2 Jun 2002\n", $s);
+    $this->assert_str_equals("Due: Sun, 02 Jun 2002\n", $s);
     # make it late again
     TWiki::Plugins::ActionTrackerPlugin::Action::forceTime("3 Jun 2002");
     $fmt = new TWiki::Plugins::ActionTrackerPlugin::Format(
@@ -314,7 +314,7 @@ sub test_StringFormattingOpen {
     $fmt = new TWiki::Plugins::ActionTrackerPlugin::Format(
         "","", "","|\$created|");
     $s = $fmt->formatStringTable([$action]);
-    $this->assert_str_equals("|Fri, 1 Jan 1999|\n", $s);
+    $this->assert_str_equals("|Fri, 01 Jan 1999|\n", $s);
     $fmt = new TWiki::Plugins::ActionTrackerPlugin::Format(
         "","", "","|\$edit|");
     $s = $fmt->formatStringTable([$action]);
@@ -349,7 +349,7 @@ sub test_StringFormattingClosed {
         "","", "", "|\$closed|\$closer|");
     my $s = $fmt->formatStringTable([$action]);
     $this->assert_str_equals(
-        $s, "|Wed, 1 Jan 2003|$this->{users_web}.LucBesson|\n");
+        $s, "|Wed, 01 Jan 2003|$this->{users_web}.LucBesson|\n");
 }
 
 sub test_VerticalOrient {
@@ -366,7 +366,7 @@ sub test_VerticalOrient {
     $s =~ s/<table class=\"atp\">//;
     $s =~ s/<\/table>//;
     $s =~ s/\n//g;
-    $this->assert_str_equals("<tr><th>Who</th><td><a name=\"AcTion0\" />$this->{users_web}.JohnDoe</td></tr><tr><th>Due</th><td><span class=\"atpOpen\">Sun, 2 Jun 2002</span></td></tr>", $s);
+    $this->assert_str_equals("<tr><th>Who</th><td><a name=\"AcTion0\" />$this->{users_web}.JohnDoe</td></tr><tr><th>Due</th><td><span class=\"atpOpen\">Sun, 02 Jun 2002</span></td></tr>", $s);
 }
 
 sub test_HTMLFormattingOpen {
@@ -386,7 +386,7 @@ sub test_HTMLFormattingOpen {
     TWiki::Plugins::ActionTrackerPlugin::Action::forceTime("3 Jun 2002");
     $s = $fmt->formatHTMLTable([$action], "href", 0, 'atp');
     $this->assert_html_matches(
-        "<td> <span class=\"atpWarn\">Sun, 2 Jun 2002</span> </td>", $s);
+        "<td> <span class=\"atpWarn\">Sun, 02 Jun 2002</span> </td>", $s);
 
     # make it ontime
     TWiki::Plugins::ActionTrackerPlugin::Action::forceTime("1 Jun 2002");
@@ -394,7 +394,7 @@ sub test_HTMLFormattingOpen {
         "", "| \$due |", "");
     $s = $fmt->formatHTMLTable([$action], "href", 0, 'atp');
     $this->assert_html_matches(
-        "<td> <span class=\"atpOpen\">Sun, 2 Jun 2002</span>  </td>", $s);
+        "<td> <span class=\"atpOpen\">Sun, 02 Jun 2002</span>  </td>", $s);
 
     # Make it late again
     TWiki::Plugins::ActionTrackerPlugin::Action::forceTime("3 Jun 2002");
@@ -421,7 +421,7 @@ sub test_HTMLFormattingOpen {
     $fmt = new TWiki::Plugins::ActionTrackerPlugin::Format(
         "", "| \$created |", "");
     $s = $fmt->formatHTMLTable([$action], "href", 0, 'atp');
-    $this->assert_html_matches("<td> Fri, 1 Jan 1999 </td>", $s );
+    $this->assert_html_matches("<td> Fri, 01 Jan 1999 </td>", $s );
 
     $fmt = new TWiki::Plugins::ActionTrackerPlugin::Format(
         "", "| \$edit |", "");
@@ -463,7 +463,7 @@ sub test_HTMLFormattingOpen {
         "", "| \$due |", "");
     $s = $fmt->formatHTMLTable([$action], "href", 0, 'atp');
     $this->assert_html_matches(
-        "<td> <span class=\"atpOpen\">Sun, 2 Jun 2002</span> </td>", $s );
+        "<td> <span class=\"atpOpen\">Sun, 02 Jun 2002</span> </td>", $s );
 
     $fmt = new TWiki::Plugins::ActionTrackerPlugin::Format(
         "", "|\$who|\$creator|", "");
@@ -484,7 +484,7 @@ sub test_HTMLFormattingClose {
         "", "|\$closed|\$closer|", "");
     my $s = $fmt->formatHTMLTable([$action], "href", 0, 'atp');
     $this->assert_html_matches(
-        "<td>Wed, 1 Jan 2003</td><td>$this->{users_web}.LucBesson</td>", $s );
+        "<td>Wed, 01 Jan 2003</td><td>$this->{users_web}.LucBesson</td>", $s );
 }
 
 sub test_AutoPopulation {
@@ -514,7 +514,7 @@ sub test_AutoPopulation {
           "who=me", "action");
     $action->populateMissingFields();
     $fmt = new TWiki::Plugins::ActionTrackerPlugin::Format(
-        "","","","|\$who|\$due|");
+        "","","","|\$who|\$created|");
     $s = $fmt->formatStringTable([$action]);
     $this->assert_str_equals("|$this->{users_web}.$TWiki::cfg{DefaultUserWikiName}|Fri, 31 May 2002|\n", $s);
 }
@@ -527,14 +527,14 @@ sub test_ToString {
     TWiki::Plugins::ActionTrackerPlugin::Action::forceTime("30 Sep 2001");
     $action->populateMissingFields();
     my $s = $action->stringify();
-    $s =~ s/ uid=\"\d+\"//o;
-    $s =~ s/ created=\"30-Sep-2001\"//o;
-    $s =~ s/ creator=\"$this->{users_web}\.$TWiki::cfg{DefaultUserWikiName}\"//o;
-    $s =~ s/ who=\"$this->{users_web}\.$TWiki::cfg{DefaultUserWikiName}\"//o;
-    $s =~ s/ due=\"2-Jun-2002\"//o;
-    $s =~ s/ closed=\"30-Sep-2001\"//o;
-    $s =~ s/ closer=\"$this->{users_web}\.$TWiki::cfg{DefaultUserWikiName}\"//o;
-    $s =~ s/ state=\"closed\"//o;
+    $s =~ s/ uid="\d+"//o;
+    $s =~ s/ created="2001-09-30"//o;
+    $s =~ s/ creator="$this->{users_web}\.$TWiki::cfg{DefaultUserWikiName}"//o;
+    $s =~ s/ who="$this->{users_web}\.$TWiki::cfg{DefaultUserWikiName}"//o;
+    $s =~ s/ due="2002-06-02"//o;
+    $s =~ s/ closed="2001-09-30"//o;
+    $s =~ s/ closer="$this->{users_web}\.$TWiki::cfg{DefaultUserWikiName}"//o;
+    $s =~ s/ state="closed"//o;
     $this->assert_str_equals("%ACTION{ }% A new action", $s);
 
     $action = TWiki::Plugins::ActionTrackerPlugin::Action->new(
@@ -648,13 +648,13 @@ sub test_FindChanges {
         "<tr class=\"atpChanges\"><td class=\"atpChanges\">who</td><td class=\"atpChanges\">$this->{users_web}.JohnDoe</td><td class=\"atpChanges\">$this->{users_web}.JaneDoe</td></tr>",
         $text);
     $this->assert_html_matches(
-        "<tr class=\"atpChanges\"><td class=\"atpChanges\">due</td><td class=\"atpChanges\"><span class=\"atpOpen\">Sun, 2 Jun 2002</span></td><td class=\"atpChanges\"><span class=\"atpClosed\">Tue, 2 Jun 2009</span></td></tr>",
+        "<tr class=\"atpChanges\"><td class=\"atpChanges\">due</td><td class=\"atpChanges\"><span class=\"atpOpen\">Sun, 02 Jun 2002</span></td><td class=\"atpChanges\"><span class=\"atpClosed\">Tue, 02 Jun 2009</span></td></tr>",
         $text);
     $this->assert_html_matches(
         "<tr class=\"atpChanges\"><td class=\"atpChanges\">state</td><td class=\"atpChanges\">open</td><td class=\"atpChanges\">closed</td></tr>",
         $text);
     $this->assert_html_matches(
-        "<tr class=\"atpChanges\"><td class=\"atpChanges\">created</td><td class=\"atpChanges\">Fri, 1 Jan 1999</td><td class=\"atpChanges\"> *removed* </td></tr>",
+        "<tr class=\"atpChanges\"><td class=\"atpChanges\">created</td><td class=\"atpChanges\">Fri, 01 Jan 1999</td><td class=\"atpChanges\"> *removed* </td></tr>",
         $text);
     $this->assert_html_matches(
         "<tr class=\"atpChanges\"><td class=\"atpChanges\">creator</td><td class=\"atpChanges\"> *missing* </td><td class=\"atpChanges\">$this->{users_web}.ThomasMoore</td></tr>",
@@ -673,18 +673,18 @@ sub test_XtendTypes {
 
     my $action = TWiki::Plugins::ActionTrackerPlugin::Action->new(
         "Test", "Topic", 0,
-        'who=JohnDoe due="2 Jun 02" state=open,plaintiffs="fred.bloggs@limp.net,JoeShmoe",decision="cut off their heads" sentencing=2-mar-2006 sentence="5 years"',
+        'who=JohnDoe due="2002-06-02" state=open,plaintiffs="fred.bloggs@limp.net,JoeShmoe",decision="cut off their heads" sentencing=2-mar-2006 sentence="5 years"',
                                                                    "A court action");
 
     $s = $action->stringify();
     $s =~ s/ who="$this->{users_web}.JohnDoe"//o;
     $s =~ s/ A court action//o;
     $s =~ s/ state="open"//o;
-    $s =~ s/ due="2-Jun-2002"//o; 
+    $s =~ s/ due="2002-06-02"//o; 
     $s =~ s/ plaintiffs="fred.bloggs\@limp.net, $this->{users_web}.JoeShmoe"//o;
     $s =~ s/ decision="cut off their heads"//o;
     $s =~ s/ who="$this->{users_web}\.$TWiki::cfg{DefaultUserWikiName}"//o;
-    $s =~ s/ sentencing="2-Mar-2006"//o;
+    $s =~ s/ sentencing="2006-03-02"//o;
     $s =~ s/ sentence="5 years"//o;
     $this->assert_str_equals("%ACTION{ }%", $s);
 
@@ -713,7 +713,7 @@ sub test_XtendTypes {
     $fmt = new TWiki::Plugins::ActionTrackerPlugin::Format(
         "", "","","\$sentencing");
     $s = $fmt->formatStringTable([$action]);
-    $this->assert_str_equals("Thu, 2 Mar 2006\n", $s);
+    $this->assert_str_equals("Thu, 02 Mar 2006\n", $s);
 
     my $attrs = TWiki::Attrs->new("sentence=\"5 years\"");
     $this->assert($action->matches($attrs));
@@ -768,16 +768,16 @@ sub test_CreateFromQuery {
       TWiki::Plugins::ActionTrackerPlugin::Action::createFromQuery(
           "Web","Topic",10,$query);
     my $chosen = $action->stringify();
-    $chosen =~ s/ state=\"open\"//o;
-    $chosen =~ s/ creator=\"$this->{users_web}.Creator\"//o;
-    $chosen =~ s/ notify=\"$this->{users_web}.Notifyee\"//o;
-    $chosen =~ s/ closer=\"$this->{users_web}.Closer\"//o;
-    $chosen =~ s/ due=\"4-May-2003\"//o;
-    $chosen =~ s/ closed=\"2-May-2003\"//o;
-    $chosen =~ s/ who=\"$this->{users_web}.Who\"//o;
-    $chosen =~ s/ created=\"3-May-2003\"//o;
-    $chosen =~ s/ uid=\"UID\"//o;
-    $this->assert_str_equals($chosen, "%ACTION{ }% Text");
+    $chosen =~ s/ state="open"//o;
+    $chosen =~ s/ creator="$this->{users_web}.Creator"//o;
+    $chosen =~ s/ notify="$this->{users_web}\.Notifyee"//o;
+    $chosen =~ s/ closer="$this->{users_web}\.Closer"//o;
+    $chosen =~ s/ due="4-May-2003"//o;
+    $chosen =~ s/ closed="2-May-2003"//o;
+    $chosen =~ s/ who="$this->{users_web}\.Who"//o;
+    $chosen =~ s/ created="2003-05-01"//o;
+    $chosen =~ s/ uid="UID"//o;
+    $this->assert_matches(qr/^%ACTION{\s*}% Text$/, $chosen, );
 }
 
 sub test_FormatForEditHidden {
@@ -805,11 +805,11 @@ sub test_FormatForEditHidden {
     $this->assert_matches(qr/value="$this->{users_web}\.Closer"/, $1);
     $s =~ s(<input (.*?name="due".*?)/>)();
     $this->assert_matches(qr/type="hidden"/, $1);
-    $this->assert_matches(qr/value=\"Sun, 4 May 2003\"/, $1);
-    $s =~ s(<input (.*?name=\"closed\".*?)/>)();
+    $this->assert_matches(qr/value="Sun, 4 May 2003"/, $1);
+    $s =~ s(<input (.*?name="closed".*?)/>)();
     $this->assert_matches(qr/type="hidden"/, $1);
     $this->assert_matches(qr/value="Fri, 2 May 2003"/, $1);
-    $s =~ s(<input (.*?name=\"created\".*?)/>)();
+    $s =~ s(<input (.*?name="created".*?)/>)();
     $this->assert_matches(qr/type="hidden"/, $1);
     $this->assert_matches(qr/value="Sat, 3 May 2003"/, $1);
     $s =~ s(<input (.*?name="uid".*?)/>)();
@@ -891,7 +891,7 @@ sub test_FormatForEdit {
     $fmt = new TWiki::Plugins::ActionTrackerPlugin::Format( "|Due|", "|\$due|", "","");
     $s = $action->formatForEdit($fmt);
     $s =~ /value=\"(.*?)\"/;
-    $this->assert_str_equals($1, "Fri, 4 May 2001");
+    $this->assert_str_equals($1, "Fri, 04 May 2001");
 }
 
 sub test_ExtendStates {
@@ -921,6 +921,34 @@ sub test_ExtendStates {
     $s =~ s/\s+//go;
     $this->assert_str_equals("State", $s);
     TWiki::Plugins::ActionTrackerPlugin::Action::unextendTypes();
+}
+
+# Test for empty due
+sub test_4373 {
+    my $this = shift;
+
+    my $action =
+      new TWiki::Plugins::ActionTrackerPlugin::Action(
+          "Test", "Topic", 0,
+          'who="SlyStallone" state=open ',
+          "A new action");
+
+    my $attrs = new TWiki::Attrs("who=$this->{users_web}.SlyStallone",1);
+    $this->assert($action->matches($attrs));
+    $attrs = new TWiki::Attrs('state="open"',1);
+    $this->assert($action->matches($attrs));
+
+    $attrs = new TWiki::Attrs("late",1);
+    $this->assert($action->matches($attrs));
+
+    $attrs = new TWiki::Attrs("within='+1'",1);
+    $this->assert(!$action->matches($attrs));
+    $attrs = new TWiki::Attrs("within='1'",1);
+    $this->assert($action->matches($attrs));
+
+    TWiki::Plugins::ActionTrackerPlugin::Action::forceTime("31 May 2002");
+    $attrs = new TWiki::Attrs('due="31 May 02"',1);
+    $this->assert($action->matches($attrs));
 }
 
 1;

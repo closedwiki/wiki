@@ -42,7 +42,7 @@ _( Discussion in TWiki:Plugins/ActionTrackerPluginDev )_
 Write the command =%<nop>ACTION{= _attributes_ =}%= anywhere in a TWiki topic. All the text following the final % up to the next end-of-line is taken as the action description. Standard attributes are
 	| *Name* | *Value* | *Description* | *Auto-completed* |
 	| =who= | See [[#PeopleAnchor][People]] | The person or team responsible for completing the action. | current user |
-	| =due= | See [[#DateFormats][Date Formats]] | The due date | today |
+	| =due= | See [[#DateFormats][Date Formats]] | The due date | |
 	| =state= | =open= or =closed= | Set to =open= if the action is still open; set to =closed= if the action is closed. To extend the state set, see [[#NonStandardAttributes][Non-standard attributes]]. | open |
 	| =notify= | See [[#PeopleAnchor][People]] | wikinames, or e-mail addresses, of people to notify when the action changes. See [[#NotiFication][Notification]] for details on action notification. | |
 	| =creator= | See [[#PeopleAnchor][People]] | Who created the action. | current user |
@@ -66,7 +66,9 @@ EOF
 </pre>
 The delimiter must be a sequence of alphanumeric characters, and the closing delimiter must be on a line of its own.
 
-The fields with an entry in the 'Auto-completed' column are automatically filled in, if they are missing, whenever someone saves the topic containing the action. The default values are as indicated in the table. You can override this behaviour by providing values for any of these attributes when you type the action. __Note:__ you are __not__ recommended to provide a value for the =uid= (see [[#UiDs][UIDs]]) field!
+The fields with an entry in the 'Auto-completed' column are automatically filled in, if they are missing, whenever someone saves the topic containing the action. The default values are as indicated in the table. You can override this behaviour by providing values for any of these attributes when you type the action. __Note:__ you must __not__ provide a value for the =uid= (see [[#UiDs][UIDs]]) field!
+
+Note that the =due= field is not auto-completed. If you don't specify a due date for an action, the action is treated as due on a 'to be decided' (TBD) date. TBD actions are always shown in action searches, to help encourage you to timeframe them.
 
 ---++ Action searches
 
@@ -380,6 +382,7 @@ These settings can be overridden in the Web<nop>Preferences topic of the current
 |  Plugin Author: | TWiki:Main/CrawfordCurrie, http://c-dot.co.uk |
 |  Plugin Version: | %$VERSION% |
 |  Change History: | |
+|              | Bugs:Item4373 - added TBD action dates; in the process, changed default date store format to ISO for consistency with TWiki. |
 |  21 May 2007 | Bugs:Item3969 - 8bit email fix (TWiki:Main.WillNorris) |
 |  12958 | Bugs:Item3638 Fixed edit link for IE7 |
 |  12878 | putting styles.css file at the top of the html header so that \
