@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1159992769" format="1.0" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1184734707" format="1.1" version="1.2"}%
 ---+!! What is a !WikiWord?
 A !WikiWord consists of two or more words with initial capitals, run together. *WikiWords are topic names.* A TWiki topic name always has a fixed format: two or more words with initial capitals, run together. Like the name of the current topic: *WikiWord*. When you type the name of a topic, you create a link to that topic. You type =%HOMETOPIC%= and on saving the page this becomes %HOMETOPIC%. It's as easy as that.
 
@@ -22,6 +22,23 @@ When you type a !WikiWord, you establish a hyperlink. It's as easy as that.
    * Lowercase letter(s) or numbers(s)
    * Uppercase letter(s)
    * Optional lowercase or uppercase letter(s) or number(s)
+
+*!WikiWord syntax in [[Wikipedia:Extended_Backus_Naur_Form][Extended Backus&#8211;Naur]] form:*
+
+<verbatim>
+    wikiWord        = upperLetters , lowerNumLetters , upperLetters , { alphaNum } ;
+    upperLetters    = upperCase , { upperCase } ;
+    lowerNumLetters = lowerNum , { lowerNum } ;
+    alphaNum        = upperCase | lowerCase | digit ;
+    lowerNum        = lowerCase | digit ;
+    lowerCase       = "a" | "b" | "c" | "d" | "e" | "f" | "g" | "h" | "i"
+                    | "j" | "k" | "l" | "m" | "n" | "o" | "p" | "q" | "r"
+                    | "s" | "t" | "u" | "v" | "w" | "x" | "y" | "z" ;
+    upperCase       = "A" | "B" | "C" | "D" | "E" | "F" | "G" | "H" | "I"
+                    | "J" | "K" | "L" | "M" | "N" | "O" | "P" | "Q" | "R"
+                    | "S" | "T" | "U" | "V" | "W" | "X" | "Y" | "Z" ;
+    digit           = "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" ;
+</verbatim>
 
 ---++ Good examples of !WikiWords
 
