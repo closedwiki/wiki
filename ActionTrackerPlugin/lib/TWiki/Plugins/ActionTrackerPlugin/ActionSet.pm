@@ -107,16 +107,16 @@ sub sort {
                 # COVERAGE ON
             }
             # default to sorting on due
-            $a->{due} ||= 0;
-            $b->{due} ||= 0;
-            $a->{due} <=> $b->{due};
+            my $x = $a->{due} || 0;
+            my $y = $b->{due} || 0;
+            return $x <=> $y;
         } @{$this->{ACTIONS}};
     } else {
         @{$this->{ACTIONS}} =
           sort {
-              $a->{due} ||= 0;
-              $b->{due} ||= 0;
-              $a->{due} <=> $b->{due}
+              my $x = $a->{due} || 0;
+              my $y = $b->{due} || 0;
+              return $x <=> $y;
           } @{$this->{ACTIONS}};
     }
 }

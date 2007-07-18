@@ -1,19 +1,39 @@
-#
-# Copyright (C) Motorola 2002 - All rights reserved
-#
-# TWiki extension that adds tags for action tracking
-#
-# This program is free software; you can redistribute it and/or
-# modify it under the terms of the GNU General Public License
-# as published by the Free Software Foundation; either version 2
-# of the License, or (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details, published at 
-# http://www.gnu.org/copyleft/gpl.html
-#
+# See bottom of file for copyright and license information
+
+=begin twiki
+
+---+ package TWiki::Plugins::ActionTrackerPlugin::Action
+
+Object that represents a single action
+
+Fields:
+web:
+           Web the action was found in
+topic:
+         Topic the action was found in
+ACTION_NUMBER:
+ The number of the action in the topic (deprecated)
+text:
+          The text of the action
+who:
+           The person responsible for the action
+due:
+           When the action is due
+notify:
+        List of people to notify when the action changes
+uid:
+           Unique identifier for the action
+creator:
+       Who created the action
+created:
+       When the action was created
+closer:
+        Who closed the action
+closed:
+        When the action was closed
+
+=cut
+
 package TWiki::Plugins::ActionTrackerPlugin::Action;
 
 use strict;
@@ -31,22 +51,6 @@ use TWiki::Attrs;
 
 use TWiki::Plugins::ActionTrackerPlugin::AttrDef;
 use TWiki::Plugins::ActionTrackerPlugin::Format;
-
-# Object that represents a single action
-
-# Fields:
-# web           Web the action was found in
-# topic         Topic the action was found in
-# ACTION_NUMBER The number of the action in the topic (deprecated)
-# text          The text of the action
-# who           The person responsible for the action
-# due           When the action is due
-# notify        List of people to notify when the action changes
-# uid           Unique identifier for the action
-# creator       Who created the action
-# created       When the action was created
-# closer        Who closed the action
-# closed        When the action was closed
 
 use vars qw( $now );
 
@@ -69,56 +73,80 @@ my $nw = 35;
 my %basetypes =
   (
    changedsince =>
-   new TWiki::Plugins::ActionTrackerPlugin::AttrDef( 'noload', 0, 0, 0, undef ),
+     new TWiki::Plugins::ActionTrackerPlugin::AttrDef(
+         'noload', 0, 0, 0, undef ),
    closed       =>
-   new TWiki::Plugins::ActionTrackerPlugin::AttrDef( 'date',  $dw, 1, 0, undef ),
+     new TWiki::Plugins::ActionTrackerPlugin::AttrDef(
+         'date',  $dw, 1, 0, undef ),
    closer       =>
-   new TWiki::Plugins::ActionTrackerPlugin::AttrDef( 'names', $nw, 1, 0, undef ),
+     new TWiki::Plugins::ActionTrackerPlugin::AttrDef(
+         'names', $nw, 1, 0, undef ),
    created      =>
-   new TWiki::Plugins::ActionTrackerPlugin::AttrDef( 'date',  $dw, 1, 0, undef ),
+     new TWiki::Plugins::ActionTrackerPlugin::AttrDef(
+         'date',  $dw, 1, 0, undef ),
    creator      =>
-   new TWiki::Plugins::ActionTrackerPlugin::AttrDef( 'names', $nw, 1, 0, undef ),
+     new TWiki::Plugins::ActionTrackerPlugin::AttrDef(
+         'names', $nw, 1, 0, undef ),
    dollar       =>
-   new TWiki::Plugins::ActionTrackerPlugin::AttrDef( 'noload', 0, 0, 0, undef ),
+     new TWiki::Plugins::ActionTrackerPlugin::AttrDef(
+         'noload', 0, 0, 0, undef ),
    due          =>
-   new TWiki::Plugins::ActionTrackerPlugin::AttrDef( 'date',  $dw, 1, 0, undef ),
+     new TWiki::Plugins::ActionTrackerPlugin::AttrDef(
+         'date',  $dw, 1, 0, undef ),
    edit         =>
-   new TWiki::Plugins::ActionTrackerPlugin::AttrDef( 'noload', 0, 0, 0, undef ),
+     new TWiki::Plugins::ActionTrackerPlugin::AttrDef(
+         'noload', 0, 0, 0, undef ),
    format       =>
-   new TWiki::Plugins::ActionTrackerPlugin::AttrDef( 'noload', 0, 0, 0, undef ),
+     new TWiki::Plugins::ActionTrackerPlugin::AttrDef(
+         'noload', 0, 0, 0, undef ),
    header       =>
-   new TWiki::Plugins::ActionTrackerPlugin::AttrDef( 'noload', 0, 0, 0, undef ),
+     new TWiki::Plugins::ActionTrackerPlugin::AttrDef(
+         'noload', 0, 0, 0, undef ),
    late         =>
-   new TWiki::Plugins::ActionTrackerPlugin::AttrDef( 'noload', 0, 0, 0, undef ),
+     new TWiki::Plugins::ActionTrackerPlugin::AttrDef(
+         'noload', 0, 0, 0, undef ),
    n            =>
-   new TWiki::Plugins::ActionTrackerPlugin::AttrDef( 'noload', 0, 0, 0, undef ),
+     new TWiki::Plugins::ActionTrackerPlugin::AttrDef(
+         'noload', 0, 0, 0, undef ),
    nop          =>
-   new TWiki::Plugins::ActionTrackerPlugin::AttrDef( 'noload', 0, 0, 0, undef ),
+     new TWiki::Plugins::ActionTrackerPlugin::AttrDef(
+         'noload', 0, 0, 0, undef ),
    notify       =>
-   new TWiki::Plugins::ActionTrackerPlugin::AttrDef( 'names', $nw, 1, 0, undef ),
+     new TWiki::Plugins::ActionTrackerPlugin::AttrDef(
+         'names', $nw, 1, 0, undef ),
    percnt       =>
-   new TWiki::Plugins::ActionTrackerPlugin::AttrDef( 'noload', 0, 0, 0, undef ),
+     new TWiki::Plugins::ActionTrackerPlugin::AttrDef(
+         'noload', 0, 0, 0, undef ),
    quot         =>
-   new TWiki::Plugins::ActionTrackerPlugin::AttrDef( 'noload', 0, 0, 0, undef ),
+     new TWiki::Plugins::ActionTrackerPlugin::AttrDef(
+         'noload', 0, 0, 0, undef ),
    sort         =>
-   new TWiki::Plugins::ActionTrackerPlugin::AttrDef( 'noload', 0, 0, 0, undef ),
+     new TWiki::Plugins::ActionTrackerPlugin::AttrDef(
+         'noload', 0, 0, 0, undef ),
    state        =>
-   new TWiki::Plugins::ActionTrackerPlugin::AttrDef( 'select', 1, 1, 1,
-                                                     [ 'open','closed' ] ),
+     new TWiki::Plugins::ActionTrackerPlugin::AttrDef(
+         'select', 1, 1, 1, [ 'open','closed' ] ),
    text         =>
-   new TWiki::Plugins::ActionTrackerPlugin::AttrDef( 'noload', 0, 1, 0, undef ),
+     new TWiki::Plugins::ActionTrackerPlugin::AttrDef(
+         'noload', 0, 1, 0, undef ),
    topic        =>
-   new TWiki::Plugins::ActionTrackerPlugin::AttrDef( 'noload', 0, 1, 0, undef ),
+     new TWiki::Plugins::ActionTrackerPlugin::AttrDef(
+         'noload', 0, 1, 0, undef ),
    uid          =>
-   new TWiki::Plugins::ActionTrackerPlugin::AttrDef( 'text',  $nw, 1, 0, undef ),
+     new TWiki::Plugins::ActionTrackerPlugin::AttrDef(
+         'text',  $nw, 1, 0, undef ),
    web          =>
-   new TWiki::Plugins::ActionTrackerPlugin::AttrDef( 'noload', 0, 1, 0, undef ),
+     new TWiki::Plugins::ActionTrackerPlugin::AttrDef(
+         'noload', 0, 1, 0, undef ),
    who          =>
-   new TWiki::Plugins::ActionTrackerPlugin::AttrDef( 'names', $nw, 1, 0, undef ),
+     new TWiki::Plugins::ActionTrackerPlugin::AttrDef(
+         'names', $nw, 1, 0, undef ),
    within       =>
-   new TWiki::Plugins::ActionTrackerPlugin::AttrDef( 'noload', 0, 1, 0, undef ),
+     new TWiki::Plugins::ActionTrackerPlugin::AttrDef(
+         'noload', 0, 1, 0, undef ),
    ACTION_NUMBER=>
-   new TWiki::Plugins::ActionTrackerPlugin::AttrDef( 'noload', 0, 0, 0, undef ),
+     new TWiki::Plugins::ActionTrackerPlugin::AttrDef(
+         'noload', 0, 0, 0, undef ),
   );
 
 my %types = %basetypes;
@@ -156,8 +184,13 @@ sub new {
             }
             $this->{$key} = join( ', ', @names );
         } elsif ( $type eq 'date' ) {
-            if ( defined( $val )) {
-                $this->{$key} = Time::ParseDate::parsedate( $val, %pdopt );
+            if( defined( $val )) {
+                if ($key eq 'due' && $val !~ /\W/) {
+                    # special case of an empty date
+                    $this->{$key} = '';
+                } else {
+                    $this->{$key} = Time::ParseDate::parsedate( $val, %pdopt );
+                }
             }
         } elsif ( $type !~ 'noload' ) {
             # treat as plain string; text, select
@@ -315,8 +348,8 @@ sub populateMissingFields {
         $this->{who} = $me;
     }
 
-    if ( !defined( $this->{due} )) {
-        $this->{due} = $now;
+    if( !$this->{due} ) {
+        $this->{due} = 0; # '' means 'to be decided'
     }
 
     if ( !defined( $this->{creator} )) {
@@ -410,20 +443,17 @@ sub getAnchor {
 sub formatTime {
     my ( $time, $format ) = @_;
     my $stime;
-    if ( $time ) {
-        if ( $format eq 'attr' ) {
-            $stime = localtime( $time );
-            $stime =~ s/(\w+)\s+(\w+)\s+(\w+)\s+([^\s]+)\s+(\w+).*/$3-$2-$5/o;
-            #      } elsif ( $format eq "uid" ) {
-            #	my @els = localtime( $time );
-            #	# year yearday hour min sec
-            #	$stime = "$els[5]$els[7]$els[2]$els[1]$els[0]";
-        } else {
-            $stime = localtime( $time );
-            $stime =~ s/(\w+)\s+(\w+)\s+(\w+)\s+([^\s]+)\s+(\w+).*/$1, $3 $2 $5/o;
-        }
+
+    # Default to time=0, which means 'to be decided'
+    $time ||= 0;
+
+    if (!$time) {
+        $stime = '';
+    } elsif ( $format eq 'attr' ) {
+        $stime = TWiki::Func::formatTime( $time, '$year-$mo-$day', 'servertime' );
+    } else {
+        $stime = TWiki::Func::formatTime( $time, '$wday, $day $month $year', 'servertime' );
     }
-    $stime ||= "BAD DATE see %TWIKIWEB%.ActionTrackerPlugin#DateFormats";
     return $stime;
 }
 
@@ -432,7 +462,9 @@ sub formatTime {
 sub secsToGo {
     my $this = shift;
 
-    if ( defined( $this->{due} )) {
+    # The ponderous test supports empty due dates, which are always treated
+    # as being late
+    if( $this->{due} ) {
         return $this->{due} - $now;
     }
     return -1;
@@ -454,10 +486,11 @@ sub daysToGo {
 # PUBLIC true if due time is before now and not closed
 sub isLate {
     my $this = shift;
+    return 1 if !$this->{due};
     if ( $this->{state} eq 'closed' ) {
         return 0;
     }
-    return ( ($this->{due} - $now) < 0 );
+    return $this->secsToGo() < 0 ? 1 : 0;
 }
 
 # PRIVATE match the passed names against the given names type field.
@@ -527,6 +560,13 @@ sub _matchField_closed {
     }
 }
 
+# PRIVATE match attribute "due"
+sub _matchField_due {
+    my ( $this, $val ) = @_;
+    return 1 if( !$this->{due} ); # empty due always matches
+    return $this->_matchType_date( 'due', $val );
+}
+
 # PRIVATE match boolean attribute "open"
 sub _matchField_open {
     my $this = shift;
@@ -594,14 +634,15 @@ sub _formatType_date {
     return formatTime( $this->{$fld}, 'string' );
 }
 
-# PRIVATE format the given field (takes precedence of standard
+# PRIVATE format the given field (takes precedence over standard
 # date formatting)
 sub _formatField_due {
     my ( $this, $asHTML ) = @_;
     my $text = formatTime( $this->{due}, 'string' );
 
-    if ( !defined($this->{due}) ) {
+    if( !$this->{due} ) {
         if( $asHTML ) {
+            $text ||= '&nbsp;';
             $text = CGI::span( { class=>'atpError' }, $text );
         }
     } elsif( $this->isLate() ) {
@@ -707,7 +748,7 @@ sub fuzzyMatches {
          $this->{who} eq $old->{who} ) {
         $sum += 2;
     }
-    if ( defined( $this->{due} ) && defined( $old->{due} ) &&
+    if( defined($this->{due}) && defined($old->{due}) &&
          $this->{due} == $old->{due} ) {
         $sum += 1;
     }
@@ -899,3 +940,20 @@ sub formatForEdit {
 }
 
 1;
+__DATA__
+#
+# Copyright (C) Motorola 2002 - All rights reserved
+#
+# TWiki extension that adds tags for action tracking
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details, published at 
+# http://www.gnu.org/copyleft/gpl.html
+#
