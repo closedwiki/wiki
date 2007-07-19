@@ -294,13 +294,13 @@ $TWiki::cfg{DefaultUserWikiName} = 'TWikiGuest';
 # **STRING 20 EXPERT**
 # An admin user login is is required by the install script for some addons and 
 # plugins, usually to gain write access to the TWiki web.
-# If you change this you risk making topics uneditable.
-$TWiki::cfg{AdminUserWikiName} = 'TWikiAdminGroup';
-# **STRING 20 EXPERT**
-# An admin user login is is required by the install script for some addons and 
-# plugins, usually to gain write access to the TWiki web.
-# If you change this you risk making topics uneditable.
+# If you change this you risk making topics uneditable. This user is also used by the 
+# sudo admin login (matched with the configure password, if set) 
+# see: Main.TWikiAdminGroup
 $TWiki::cfg{AdminUserLogin} = 'admin';
+# **STRING 20 EXPERT**
+# An admin user WikiName what is displayed for actions done by the AdminUserLogin
+$TWiki::cfg{AdminUserWikiName} = 'TWikiAdminGroup';
 
 # **STRING 20 EXPERT**
 # Group of users that can use special action=repRev and action=delRev
