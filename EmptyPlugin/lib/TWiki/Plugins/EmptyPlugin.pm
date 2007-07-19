@@ -157,7 +157,7 @@ sub initPlugin {
 
     # Allow a sub to be called from the REST interface 
     # using the provided alias
-    # TWiki::Func::registerRESTHandler('example', \&restExample);
+    TWiki::Func::registerRESTHandler('example', \&restExample);
 
     # Plugin correctly initialized
     return 1;
