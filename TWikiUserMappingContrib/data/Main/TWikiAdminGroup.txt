@@ -2,25 +2,26 @@
 ---+ TWiki Administrator Group
 
    * Member list:
-      * Set GROUP = ATWikiUser
+      * Set GROUP = 
    * Persons/group who can change the list:
       * Set ALLOWTOPICCHANGE = TWikiAdminGroup
 
 __Related topics:__ %WIKIUSERSTOPIC%, TWikiGroups, %TWIKIWEB%.TWikiAccessControl
 
 __%X% NOTE:__ You can login as the built-in Admin user using the password set in configure.
-   * First you need to be logged in as a normal registered user
-   * Then change your current status by authenticating as _TWikiAdminGroup_ and using the password set in configure using the special [[%SCRIPTURL{login}%?sudo=sudo][temporary admin login]].
-   * Once you are a member of the !TWikiAdminGroup you automatically get admin previledges when you do a normal login.
+   * Unless your TWiki is configured to use TemplateLogin, you need to be logged in as a normal registered user
+   * Authenticate as the internal TWiki administrator using the [[%SCRIPTURL{login}%?sudo=sudo][internal admin login]] (use the password set in configure).
+   * Once you are a member of the !TWikiAdminGroup you automatically get admin privileges when you do a normal login.
+   * to log out as internal TWiki administrator can be done using %LOGOUT%
 
-__%X% NOTE:__ If you happen to lock yourself out of <nop>TWikiAdminGroup during setup activities or have forgotten the configure password, you can edit this group topic at file system level using any text file editor (as a last resort.)
+__%X% NOTE:__ If you lock yourself out of <nop>TWikiAdminGroup during setup activities and have forgotten the configure password, you can edit this group topic at file system level using any text file editor (as a last resort.)
 
 
 <table bgcolor="yellow"><tr><td>
 __Setup Note to Administrator:__
    a. To add yourself as the member of the admin group you must be [[%TWIKIWEB%.TWikiRegistration][registered]] as a normal user
    a. Next you must %LOGIN% as this normal user
-   a. Change your current status by authenticating as _TWikiAdminGroup_ and using the password set in configure using the special [[%SCRIPTURL{login}%?sudo=sudo][temporary admin login]].
+   a. Authenticate as the internal TWiki administrator using the [[%SCRIPTURL{login}%?sudo=sudo][internal admin login]] (use the password set in configure).
    a. You can now edit this topic
    a. Insert wanted %MAINWEB%.TWikiUsers in the TWiki Administrator Group by listing them in the GROUP setting %BR%
       (it is important that you remove the demonstration user 'ATWikiUser' as well)
