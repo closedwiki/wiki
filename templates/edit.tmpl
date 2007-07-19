@@ -38,7 +38,10 @@
 </form></div><!-- /twikiFormHolder-->%TMPL:END%
 
 
-%TMPL:DEF{"formparameters"}%<input type="hidden" name="originalrev" value="%ORIGINALREV%" />
+%TMPL:DEF{"formparameters"}%%TMPL:P{"formparameters:edit"}%%TMPL:END%
+
+
+%TMPL:DEF{"formparameters:edit"}%<input type="hidden" name="originalrev" value="%ORIGINALREV%" />
 <input type="hidden" name="skin" value="%URLPARAM{"skin"}%" />
 <input type="hidden" name="cover" value="%URLPARAM{"cover"}%" />
 <input type="hidden" name="redirectto" value="%REDIRECTTO%" />
