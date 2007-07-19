@@ -18,23 +18,23 @@
 %TMPL:DEF{"attachmentsbottom"}%%TMPL:P{"attachmentsatbottom"}%%TMPL:END%
 
 
-%TMPL:DEF{"toolbar_buttons"}%%TMPL:P{"activatable_edit_or_create"}%%TMPL:P{"wysiwyg"}%%TMPL:P{"activatable_attach"}%%TMPL:END%
+%TMPL:DEF{"top:toolbarbuttons"}%%TMPL:P{"activatable_edit_or_create"}%%TMPL:P{"wysiwyg"}%%TMPL:P{"activatable_attach"}%%TMPL:END%
 
-%TMPL:DEF{"top"}%<div class="patternTop"><span class="patternHomePath twikiLeft twikiGrayText">%TMPL:P{"breadcrumb"}%</span><!-- /patternHomePath--><span class="patternToolBar twikiRight">%TMPL:P{"toolbar_buttons"}%</span><!-- /patternToolBar--><br class="twikiClear" /></div><!--/patternTop-->%TMPL:END%
+%TMPL:DEF{"top"}%<div class="patternTop"><span class="patternHomePath twikiLeft">%TMPL:P{"breadcrumb"}%</span><!-- /patternHomePath--><span class="patternToolBar twikiRight">%TMPL:P{"top:toolbarbuttons"}%</span><!-- /patternToolBar--><br class="twikiClear" /></div><!--/patternTop-->%TMPL:END%
 
-%TMPL:DEF{"topicpathseparator"}%<span class='twikiSeparator'>&nbsp;&gt;&nbsp;</span>%TMPL:END%
+%TMPL:DEF{"breadcrumb:separator"}%<span class='twikiSeparator'>&nbsp;&gt;&nbsp;</span>%TMPL:END%
 
-%TMPL:DEF{"breadcrumb"}%%{"breadcrumb:title"}%%TMPL:P{"breadcrumb:wikitoolname"}%%TMPL:P{"breadcrumb:currentweb"}%%META{"parent" nowebhome="on" prefix="%TMPL:P{"topicpathseparator"}%" suffix=""}%%TMPL:P{"breadcrumb:currenttopic"}%%TMPL:END%
+%TMPL:DEF{"breadcrumb"}%%{"breadcrumb:title"}%%TMPL:P{"breadcrumb:wikitoolname"}%%TMPL:P{"breadcrumb:currentweb"}%%META{"parent" nowebhome="on" prefix="%TMPL:P{"breadcrumb:separator"}%" suffix=""}%%TMPL:P{"breadcrumb:currenttopic"}%%TMPL:END%
 
 %TMPL:DEF{"breadcrumb:title"}%<span class="patternHomePathTitle">%MAKETEXT{"You are here:"}% </span> %TMPL:END%
 
-%TMPL:DEF{"breadcrumb:wikitoolname"}%[[%MAINWEB%.%HOMETOPIC%][%WIKITOOLNAME%]]%TMPL:P{"topicpathseparator"}%%TMPL:END%
+%TMPL:DEF{"breadcrumb:wikitoolname"}%[[%MAINWEB%.%HOMETOPIC%][%WIKITOOLNAME%]]%TMPL:P{"breadcrumb:separator"}%%TMPL:END%
 
 %TMPL:DEF{"breadcrumb:currentweb"}%<img src="%ICONURLPATH{web-bg-small}%" border="0" alt="" width="13" height="13" style="background-color:%WEBBGCOLOR%" />&nbsp;<a href="%SCRIPTURLPATH{"view"}%/%WEB%/%HOMETOPIC%">%MAKETEXT{"[_1] Web" args="<nop>%WEB%"}%</a>%TMPL:END%
 
 %TMPL:DEF{"breadcrumb:annotation"}%%IF{"defined rev" then=" %MAKETEXT{"(revision [_1]" args="%URLPARAM{"rev"}%)"}%" else=" <span class='patternRevInfo'>(%REVINFO{format="$date, $wikiusername"}%)</span>"}%%IF{"defined raw" then=" %MAKETEXT{"(raw view)"}%"}%%TMPL:END%
 
-%TMPL:DEF{"breadcrumb:currenttopic"}%%TMPL:P{"topicpathseparator"}%<span title='%WEB%.%TOPIC% - %REVINFO{format="$rev - $date - <nop>$wikiusername"}%'>[[%TOPIC%]]%TMPL:P{"breadcrumb:annotation"}%</span>%TMPL:END%
+%TMPL:DEF{"breadcrumb:currenttopic"}%%TMPL:P{"breadcrumb:separator"}%[[%TOPIC%]]%TMPL:P{"breadcrumb:annotation"}%%TMPL:END%
 
 %{ DEPRECATED: beforetext and aftertext }%
 %{ compatibility transition older than 4.2: }%

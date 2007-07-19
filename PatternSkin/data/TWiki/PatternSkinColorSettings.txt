@@ -1,30 +1,30 @@
-%META:TOPICINFO{author="TWikiContributor" date="1184702326" format="1.1" reprev="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1184871810" format="1.1" reprev="1.1" version="1.1"}%
 ---+ !!Color scheme settings for %TWIKIWEB%.PatternSkin
 Use this topic to change the color settings of %TWIKIWEB%.PatternSkin. When this topic is saved, the attachment =theme-colors.css= will be updated with new color values. This method relies on TWiki:Plugins.AttachContentPlugin to work.
-
-%ICON{"info"}% See [[PatternSkinCustomization]] how to activate this color CSS file.
 
 
 ---++!! Usage
 ---+++!! Step 1
 Let %TWIKIWEB%.PatternSkin point to the custom-made colors style sheet. In [[%MAINWEB%.TWikiPreferences]] put:
-<pre>
-   * <nop>Set USERCOLORSURL = %<nop>PUBURLPATH%/%<nop>MAINWEB%/PatternSkinColorSettings/theme-colors.css
-</pre>
+<verbatim>
+   * Set USERCOLORSURL = %PUBURLPATH%/%TWIKIWEB%/PatternSkin/theme-colors.css
+</verbatim>
 
 ---+++!! Step 2
 Edit this topic, and change the color variables as you like. 
 
 ---+++!! Step 3
-Save the topic
+Save the topic. This will generate an [[%PUBURLPATH%/%TWIKIWEB%/PatternSkin/theme-colors.css][attachment]] to topic [[PatternSkin]].
 
 %IF{"context AttachContentPluginEnabled" then='<div class="twikiHelp"><a href="%SCRIPTURL{save}%/%WEB%/%TOPIC%?action_save=1" class="twikiButton">Update the !CSS file for this page now</a></div>'}%
+
+%ICON{"info"}% For more help on customizing styles, see [[PatternSkinCustomization]].
 
 ---++!! Color variables  
 %TOC%
 
 ---++ Logical groupings
----+++ Text on background
+---+++ Text
 ---++++ MAIN_TEXT_COLOR Main text color
    * Set MAIN_TEXT_COLOR = #000
 ---++++ MAIN_BACKGROUND_COLOR Main background color
@@ -33,6 +33,16 @@ Save the topic
    * Set LIGHT_ON_DARK_TEXT_COLOR = #fff
 ---++++ GRAYED_TEXT_COLOR
    * Set GRAYED_TEXT_COLOR = #777
+---++++ GENERAL_TEXT General text (if not set in MAIN_BACKGROUND_COLOR) (black)
+   * Set GENERAL_TEXT = #000
+---++++ HEADER_TEXT Header text
+   * Set HEADER_TEXT = #800
+---++++ CODE_TEXT Code text, left bar text and links
+   * Set CODE_TEXT = #7A4707
+---++++ MUTED_TEXT Muted text (dark gray)
+   * Set MUTED_TEXT = %GRAYED_TEXT_COLOR%
+---++++ GRAYED_OUT_TEXT Grayed out text
+   * Set GRAYED_OUT_TEXT = %GRAYED_TEXT_COLOR%
    
 ---+++ Links
 ---++++ LINK_TEXT_NORMAL Link normal text
@@ -49,22 +59,12 @@ Save the topic
    * Set LINK_BACKGROUND_HOVER = #d6000f
 ---++++ SIDE_BAR_LINK_TEXT Side bar link text
    * Set SIDE_BAR_LINK_TEXT = #555
----++++ LINK_TEXT_NORMAL_TABLE_HEADER Table header link text
-   * Set LINK_TEXT_NORMAL_TABLE_HEADER = #fff
----++++ LINK_TEXT_NORMAL_BORDER_TABLE_HEADER Table header link border
-   * Set LINK_TEXT_NORMAL_BORDER_TABLE_HEADER = #bbb
----++++ LINK_TEXT_SORTED_TABLE_HEADER Sorted table header link text
-   * Set LINK_TEXT_SORTED_TABLE_HEADER = #fff
----++++ LINK_TEXT_HOVER_TABLE_HEADER Table header link hover text
-   * Set LINK_TEXT_HOVER_TABLE_HEADER = #fff
----++++ LINK_BORDER_TABLE_SELECTED_COLUMN_HEADER Link border in selected column header
-   * Set LINK_BORDER_TABLE_SELECTED_COLUMN_HEADER = #999
    
 ---+++ Disabled
 ---++++ DISABLED_BORDER Disabled border
    * Set DISABLED_BORDER = #e0e0e0
 ---++++ DISABLED_TEXT Disabled text
-   * Set DISABLED_TEXT = #bbb
+   * Set DISABLED_TEXT = #aaa
 ---++++ DISABLED_BACKGROUND Disabled background
    * Set DISABLED_BACKGROUND = #fafaf8
 ---++++ BUTTON_BORDERS_DISABLED Disabled button borders
@@ -99,21 +99,6 @@ Save the topic
    * Set SUBMIT_BUTTON_BORDER_TEXT = #fff
 ---++++ SELECT_BORDER Select border
    * Set SELECT_BORDER = #888
-   
----++ Color groupings
----+++ Text colors
----++++ GENERAL_TEXT General text (if not set in MAIN_BACKGROUND_COLOR) (black)
-   * Set GENERAL_TEXT = #000
----++++ HEADER_TEXT Header text
-   * Set HEADER_TEXT = #800
----++++ CODE_TEXT Code text, left bar text and links
-   * Set CODE_TEXT = #7A4707
----++++ MUTED_TEXT Muted text (dark gray)
-   * Set MUTED_TEXT = #777
----++++ GRAYED_OUT_TEXT Grayed out text
-   * Set GRAYED_OUT_TEXT = %GRAYED_TEXT_COLOR%
----++++ STRONG_TEXT Dark text, header (dark gray)
-   * Set STRONG_TEXT = #333
 	
 ---+++ Background colors
 ---++++ GENERAL_BACKGROUND General background color (if not set in  MAIN_BACKGROUND_COLOR) (white)
@@ -172,6 +157,16 @@ Save the topic
    * Set TABLE_DATA_MIX_BACKGROUND = #f7fafc
 ---++++ TABLE_BORDER Table border, sup (light neutral tone)
    * Set TABLE_BORDER = %SEPARATOR_BORDER%
+---++++ LINK_TEXT_NORMAL_TABLE_HEADER Table header link text
+   * Set LINK_TEXT_NORMAL_TABLE_HEADER = #fff
+---++++ LINK_TEXT_NORMAL_BORDER_TABLE_HEADER Table header link border
+   * Set LINK_TEXT_NORMAL_BORDER_TABLE_HEADER = #bbb
+---++++ LINK_TEXT_SORTED_TABLE_HEADER Sorted table header link text
+   * Set LINK_TEXT_SORTED_TABLE_HEADER = #fff
+---++++ LINK_TEXT_HOVER_TABLE_HEADER Table header link hover text
+   * Set LINK_TEXT_HOVER_TABLE_HEADER = #fff
+---++++ LINK_BORDER_TABLE_SELECTED_COLUMN_HEADER Link border in selected column header
+   * Set LINK_BORDER_TABLE_SELECTED_COLUMN_HEADER = #999
    
 ---+++ Forms
 ---++++ INPUT_FIELD_BORDERS Input field borders
@@ -190,9 +185,9 @@ Save the topic
 Do not change the text below this line unless you know what you are doing!
 -------------------------------------------------------------------------------
 <verbatim>
-%STARTATTACH{"theme-colors.css"}%
+%STARTATTACH{"theme-colors.css" web="%TWIKIWEB%" topic="PatternSkin"}%
 /* PatternSkin colors */
-/* Generated by AttachContentPlugin from TWiki.PatternSkinColorSettings */
+/* Generated by AttachContentPlugin from %WEB%.%TOPIC% */
 
 /* LAYOUT ELEMENTS */
 
@@ -427,9 +422,6 @@ a:hover.twistyTrigger {
 .tipsOfTheDay {
 	background-color:%NOTIFICATION_BACKGROUND%;
 }
-.patternTopic .tipsOfTheDayHeader {
-	color:%STRONG_TEXT%;
-}
 
 /* RevCommentPlugin */
 .revComment .patternTopicAction {
@@ -574,14 +566,16 @@ a:hover .twikiAccessKey {
 .patternHomePath a:link,
 .patternHomePath a:visited {
 	border-color:%NEUTRAL_BORDER%;
+	color:%LINK_TEXT_NORMAL_VISITED%;
 }
 .patternTop a:hover {
 	border:none;
+	color:%LINK_TEXT_HOVER%;
 }
 .patternHomePath .patternRevInfo,
 .patternHomePath .patternRevInfo a:link,
 .patternHomePath .patternRevInfo a:visited {
-	color:%DISABLED_TEXT%;
+	color:%GRAYED_OUT_TEXT%;
 }
 .patternHomePath .patternRevInfo a:hover {
 	color:%LINK_TEXT_HOVER%;
@@ -592,8 +586,8 @@ a:hover .twikiAccessKey {
 	color:%GENERAL_TEXT%;
 }
 #patternLeftBarContents hr {
-	color:%SEPARATOR_BORDER%;
-	background-color:%SEPARATOR_BORDER%;
+	color:%FORM_STEP_BORDER%;
+	background-color:%FORM_STEP_BORDER%;
 }
 #patternLeftBarContents a:link,
 #patternLeftBarContents a:visited {
@@ -601,10 +595,6 @@ a:hover .twikiAccessKey {
 }
 #patternLeftBarContents a:hover {
 	color:%LINK_TEXT_HOVER%;
-}
-#patternLeftBarContents b,
-#patternLeftBarContents strong {
-	color:%STRONG_TEXT%;
 }
 #patternLeftBarContents .patternLeftBarPersonal a:link,
 #patternLeftBarContents .patternLeftBarPersonal a:visited {
