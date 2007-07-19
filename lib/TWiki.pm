@@ -3821,10 +3821,16 @@ sub GROUPS {
 		$groupLink = '[['.$TWiki::cfg{UsersWebName}.".$group][$group]]" if ($this->{store}->topicExists($TWiki::cfg{UsersWebName}, $group));
         my $descr = "| $groupLink |";
         my $it = $this->{users}->eachGroupMember( $group );
+        my $limit_output = 32;
         while( $it->hasNext() ) {
             my $user = $it->next();
             $descr .= ' [['.$this->{users}->webDotWikiName($user).']['.
               $this->{users}->getWikiName( $user ).']]';
+           if ($limit_output == 0) {
+               $descr .= '<div>%MAKETEXT{"user list truncated"}%</div>';
+               last;
+           }
+           $limit_output--;
         }
         push( @table, "$descr |");
     }
