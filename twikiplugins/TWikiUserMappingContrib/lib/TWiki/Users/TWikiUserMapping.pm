@@ -45,8 +45,10 @@ package TWiki::Users::TWikiUserMapping;
 use strict;
 use Assert;
 use Error qw( :try );
-use TWiki::Time;
-use TWiki::ListIterator;
+
+require TWiki::Users;
+require TWiki::Plugins;
+require TWiki::ListIterator;
 
 =pod
 
@@ -67,8 +69,8 @@ sub new {
     my $implPasswordManager = $TWiki::cfg{PasswordManager};
     $implPasswordManager = 'TWiki::Users::Password'
       if( $implPasswordManager eq 'none' );
-    eval "use $implPasswordManager";
-    die "Password Manager: $@" if $@;
+    eval "require $implPasswordManager";
+    die $@ if $@;
     $this->{passwords} = $implPasswordManager->new( $session );
 
     #$this->{U2L} = {};
@@ -212,6 +214,8 @@ sub addUser {
     my $result = '';
     my $entry = "   * $wikiname - ";
     $entry .= $login . " - " if $login;
+
+    require TWiki::Time;
     my $today = TWiki::Time::formatTime(time(), $TWiki::cfg{DefaultDateFormat}, 'gmtime');
 
     # add to the mapping caches
@@ -422,11 +426,11 @@ sub eachUser {
     my @list = keys(%{$this->{U2W}});
     my $iter = new TWiki::ListIterator( \@list );
     $iter->{filter} = sub {  #don't claim users that are handled by the basemapping
-                    my $cUID = $_[0] || '';
-                    my $login = $this->{session}->{users}->getLoginName($cUID);
-                    my $wikiname =  $this->{session}->{users}->getWikiName($cUID);
-                    #print STDERR "**** $cUID  $login  $wikiname \n";
-                    return !($TWiki::Plugins::SESSION->{users}->{basemapping}->handlesUser ( undef, $login, $wikiname) ); 
+        my $cUID = $_[0] || '';
+        my $login = $this->{session}->{users}->getLoginName($cUID);
+        my $wikiname =  $this->{session}->{users}->getWikiName($cUID);
+        #print STDERR "**** $cUID  $login  $wikiname \n";
+        return !($TWiki::Plugins::SESSION->{users}->{basemapping}->handlesUser ( undef, $login, $wikiname) );
     }; 
     return $iter;
 }
@@ -659,7 +663,7 @@ sub getEmails {
             }
         } else {
             # And any on offer from the user mapping manager
-            foreach ($this->mapper_getEmails( $user )) {
+            foreach (mapper_getEmails( $this->{session}, $user )) {
                 $emails{$_} = 1;
             }
         }
@@ -686,27 +690,31 @@ sub setEmails {
     if( $this->{passwords}->isManagingEmails()) {
         $this->{passwords}->setEmails( $this->getLoginName( $user ), @_ );
     } else {
-        $this->mapper_setEmails( $user, @_ );
+        mapper_setEmails( $this->{session}, $user, @_ );
     }
 }
 
 
 =pod
 
----++ ObjectMethod mapper_getEmails ($user)
+---++ StaticMethod mapper_getEmails($session, $user)
 
 Only used if passwordManager->isManagingEmails= = =false
 (The emails are stored in the user topics.
 
+Note: This method is PUBLIC because it is used by the tools/upgrade_emails.pl
+script, which needs to kick down to the mapper to retrieve email addresses
+from TWiki topics.
+
 =cut
 
 sub mapper_getEmails {
-    my( $this, $user ) = @_;
-    
+    my( $session, $user ) = @_;
+
     my ($meta, $text) =
-      $this->{session}->{store}->readTopic(
+      $session->{store}->readTopic(
           undef, $TWiki::cfg{UsersWebName},
-          $this->{session}->{users}->getWikiName($user) );
+          $session->{users}->getWikiName($user) );
 
     my @addresses;
 
@@ -726,10 +734,9 @@ sub mapper_getEmails {
     return @addresses;
 }
 
-
 =pod
 
----++ ClassMethod mapper_setEmails ($user, @emails)
+---++ StaticMethod mapper_setEmails ($session, $user, @emails)
 
 Only used if =passwordManager->isManagingEmails= = =false=.
 (emails are stored in user topics
@@ -737,15 +744,15 @@ Only used if =passwordManager->isManagingEmails= = =false=.
 =cut
 
 sub mapper_setEmails {
-    my $this = shift;
+    my $session = shift;
     my $user = shift;
 
     my $mails = join( ';', @_ );
 
-    $user = $this->{session}->{users}->getWikiName( $user );
+    $user = $session->{users}->getWikiName( $user );
 
     my ($meta, $text) =
-      $this->{session}->{store}->readTopic(
+      $session->{store}->readTopic(
           undef, $TWiki::cfg{UsersWebName},
           $user);
 
@@ -763,7 +770,7 @@ sub mapper_setEmails {
         }
     }
 
-    $this->{session}->{store}->saveTopic(
+    $session->{store}->saveTopic(
         $user, $TWiki::cfg{UsersWebName}, $user, $text, $meta );
 }
 
@@ -1011,7 +1018,7 @@ sub _loadMapping {
 
     #mapping from login to WikiName is done in the TWikiUserTopic
     #TODO: should only really do this mapping IF the use is in the password file.
-    if ($TWiki::cfg{Register}{AllowLoginName} eq 1) {
+    if ($TWiki::cfg{Register}{AllowLoginName}) {
         my $store = $this->{session}->{store};
         if( $store->topicExists($TWiki::cfg{UsersWebName},
                                 $TWiki::cfg{UsersTopicName} )) {
