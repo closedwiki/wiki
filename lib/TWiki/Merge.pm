@@ -202,6 +202,7 @@ sub simpleMerge {
     my @b = split( /($sep)/, $ib );
 
     my $out = [];
+    require Algorithm::Diff;
     Algorithm::Diff::traverse_balanced( \@a, \@b,
                                         {
                                          MATCH => \&_sAcceptA,
@@ -310,7 +311,7 @@ sub merge3 {
     my @a = split( /(.+?$sep)/, $ia );
     my @b = split( /(.+?$sep)/, $ib );
     my @c = split( /(.+?$sep)/, $ic );
-
+    require Algorithm::Diff;
     my @bdiffs = Algorithm::Diff::sdiff( \@a, \@b );
     my @cdiffs = Algorithm::Diff::sdiff( \@a, \@c );
 
