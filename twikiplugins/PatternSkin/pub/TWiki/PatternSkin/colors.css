@@ -159,7 +159,7 @@ select {
 .twikiSubmitDisabled,
 .twikiSubmitDisabled:active {
 	border-color:#fff #ccc #ccc #fff;
-	color:#bbb;
+	color:#aaa;
 	background-color:#f1f6fa;
 }
 .twikiTextarea,
@@ -181,10 +181,10 @@ select {
 }
 
 .twikiTextareaRawView {
-	color:#777;
+	color:#333;
 }
 .twikiInputFieldDisabled {
-	color:#bbb;
+	color:#aaa;
 	background-color:#fafaf8;
 }
 .twikiInputFieldReadOnly {
@@ -197,7 +197,7 @@ select {
 }
 .twikiInputFieldDisabled,
 .twikiSelectDisabled {
-	color:#bbb;
+	color:#aaa;
 	border-color:#bbb #f2f2f2 #f2f2f2 #bbb;
 	background-color:#fafaf8;
 }
@@ -234,9 +234,6 @@ a:hover.twistyTrigger {
 /* TipsContrib */
 .tipsOfTheDay {
 	background-color:#fff9d1;
-}
-.patternTopic .tipsOfTheDayHeader {
-	color:#333;
 }
 
 /* RevCommentPlugin */
@@ -382,14 +379,16 @@ a:hover .twikiAccessKey {
 .patternHomePath a:link,
 .patternHomePath a:visited {
 	border-color:#ddd;
+	color:#666;
 }
 .patternTop a:hover {
 	border:none;
+	color:#fff;
 }
 .patternHomePath .patternRevInfo,
 .patternHomePath .patternRevInfo a:link,
 .patternHomePath .patternRevInfo a:visited {
-	color:#bbb;
+	color:#777;
 }
 .patternHomePath .patternRevInfo a:hover {
 	color:#fff;
@@ -400,8 +399,8 @@ a:hover .twikiAccessKey {
 	color:#000;
 }
 #patternLeftBarContents hr {
-	color:#e7e2da;
-	background-color:#e7e2da;
+	color:#d9e8ef;
+	background-color:#d9e8ef;
 }
 #patternLeftBarContents a:link,
 #patternLeftBarContents a:visited {
@@ -409,10 +408,6 @@ a:hover .twikiAccessKey {
 }
 #patternLeftBarContents a:hover {
 	color:#fff;
-}
-#patternLeftBarContents b,
-#patternLeftBarContents strong {
-	color:#333;
 }
 #patternLeftBarContents .patternLeftBarPersonal a:link,
 #patternLeftBarContents .patternLeftBarPersonal a:visited {
@@ -432,7 +427,7 @@ a:hover .twikiAccessKey {
 }
 .patternTopicAction s,
 .patternTopicAction strike {
-	color:#bbb;
+	color:#aaa;
 }
 .patternTopicAction .twikiSeparator {
 	color:#e7e2da;
@@ -812,7 +807,7 @@ a.twikiButton:active {
 li.patternLogOut,
 li.patternLogIn {
 	padding-left:13px;
-	background-position:0 .4em;
+	background-position:0 .25em;
 	background-repeat:no-repeat;
 }
 .patternLeftBarPersonal li {
