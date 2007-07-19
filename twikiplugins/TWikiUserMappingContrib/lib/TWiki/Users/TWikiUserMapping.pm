@@ -146,6 +146,65 @@ sub handlesUser {
 	return 0;
 }
 
+
+=pod
+
+---++ ObjectMethod getCanonicalUserID ($login, $dontcheck) -> cUID
+
+Convert a login name to the corresponding canonical user name. The
+canonical name can be any string of 7-bit alphanumeric and underscore
+characters, and must correspond 1:1 to the login name.
+(undef on failure)
+
+(if dontcheck is true, return a cUID for a nonexistant user too - used for registration)
+
+=cut
+
+sub getCanonicalUserID {
+    my( $this, $login, $dontcheck ) = @_;
+#print STDERR "\nTWikiUserMapping::getCanonicalUserID($login)";
+
+	return unless (($dontcheck) || defined($this->{L2U}->{$login}) || (defined($this->{passwords}->fetchPass( $login ))) );
+
+    use bytes;
+    # use bytes to ignore character encoding
+    $login =~ s/([^a-zA-Z0-9])/'_'.sprintf('%02d', ord($1))/ge;
+    no bytes;
+    $login = $this->{mapping_id}.$login;
+#print STDERR " OK ($login)";   
+    return $login;
+}
+
+=pod
+
+---++ ObjectMethod getLoginName ($cUID) -> login
+
+converts an internal cUID to that user's login
+(undef on failure)
+
+=cut
+
+sub getLoginName {
+    my( $this, $user ) = @_;
+    my $dontcheck;
+    ASSERT($user) if DEBUG;
+	ASSERT($this->{mapping_id}) if DEBUG;
+	
+	#can't call userExists - its recursive
+	#return unless (userExists($this, $user));
+	
+    $user =~ s/$this->{mapping_id}//;
+   
+    use bytes;
+    # use bytes to ignore character encoding
+    $user =~ s/_(\d\d)/chr($1)/ge;
+    no bytes;
+    
+	return unless (($dontcheck) || defined($this->{L2U}->{$user}) || (defined($this->{passwords}->fetchPass( $user ))) );    
+    
+    return $user;
+}
+
 =pod
 
 ---++ ClassMethod addUser ($login, $wikiname, $password, $emails) -> cUID
@@ -288,65 +347,6 @@ sub removeUser {
     # SMELL: currently a nop, needs someone to implement it
 }
 
-
-
-=pod
-
----++ ObjectMethod getCanonicalUserID ($login, $dontcheck) -> cUID
-
-Convert a login name to the corresponding canonical user name. The
-canonical name can be any string of 7-bit alphanumeric and underscore
-characters, and must correspond 1:1 to the login name.
-(undef on failure)
-
-(if dontcheck is true, return a cUID for a nonexistant user too - used for registration)
-
-=cut
-
-sub getCanonicalUserID {
-    my( $this, $login, $dontcheck ) = @_;
-#print STDERR "\nTWikiUserMapping::getCanonicalUserID($login)";
-
-	return unless (($dontcheck) || defined($this->{L2U}->{$login}) || (defined($this->{passwords}->fetchPass( $login ))) );
-
-    use bytes;
-    # use bytes to ignore character encoding
-    $login =~ s/([^a-zA-Z0-9])/'_'.sprintf('%02d', ord($1))/ge;
-    no bytes;
-    $login = $this->{mapping_id}.$login;
-#print STDERR " OK ($login)";   
-    return $login;
-}
-
-=pod
-
----++ ObjectMethod getLoginName ($cUID) -> login
-
-converts an internal cUID to that user's login
-(undef on failure)
-
-=cut
-
-sub getLoginName {
-    my( $this, $user ) = @_;
-    my $dontcheck;
-    ASSERT($user) if DEBUG;
-	ASSERT($this->{mapping_id}) if DEBUG;
-	
-	#can't call userExists - its recursive
-	#return unless (userExists($this, $user));
-	
-    $user =~ s/$this->{mapping_id}//;
-   
-    use bytes;
-    # use bytes to ignore character encoding
-    $user =~ s/_(\d\d)/chr($1)/ge;
-    no bytes;
-    
-	return unless (($dontcheck) || defined($this->{L2U}->{$user}) || (defined($this->{passwords}->fetchPass( $user ))) );    
-    
-    return $user;
-}
 
 =pod
 

@@ -434,8 +434,8 @@ sub isAdmin {
     my $mapping = $this->_getMapping($cUID);
     my $otherMapping = ($mapping eq $this->{basemapping}) ? $this->{mapping} : $this->{basemapping};
     my $wikiname = $this->_getMapping($cUID)->getWikiName($cUID);
-    my $cUIDList = $otherMapping->findUserByWikiName($wikiname);
-    my $othercUID = $cUIDList->[0]  if scalar(@$cUIDList);
+    my $cUIDList = $otherMapping->findUserByWikiName($wikiname) if ($wikiname);
+    my $othercUID = $cUIDList->[0]  if (($cUIDList) && scalar(@$cUIDList));
 
     if (($mapping eq $otherMapping) ||
         (!defined($othercUID))) {
