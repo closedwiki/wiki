@@ -619,20 +619,27 @@ HERE
 
     print '<div class="options" id="options">';
     print CGI::div(
-        { class => 'optionHeader'},
+        { class => 'optionHeader' },
         CGI::span(
-            { class => 'twikiLeft' },
-            'Settings' .
-              CGI::span(
-                  { class => 'twikiSmall' },
-                  'Click the buttons below to open each section')).
-                    CGI::span(
-                        { class => 'twikiSmall twikiRight' },
-                        CGI::a(
-                            { href => '#', rel => 'nofollow',
-                              onclick => 'toggleAllOptions(true); return false;'},
-                            'Open all options')).
-                              CGI::br());
+            'Settings'
+              . CGI::span(
+                { class => 'twikiSmall' },
+                'Click the buttons below to open each section'
+              )
+          )
+          . '&nbsp;'
+          . CGI::span(
+            { class => 'twikiSmall' },
+            CGI::a(
+                {
+                    href    => '#',
+                    rel     => 'nofollow',
+                    onclick => 'toggleAllOptions(true); return false;'
+                },
+                'Open all options'
+            )
+          )
+    );
 
     print $eui->ui();
     print $osui->ui() if $osui;
