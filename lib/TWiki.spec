@@ -376,10 +376,10 @@ $TWiki::cfg{Register}{EnableNewUserRegistration} = $TRUE;
 # Note that TWiki sends admins a separate confirmation.
 $TWiki::cfg{Register}{HidePasswd} = $TRUE;
 
-# **BOOLEAN EXPERT**
+# **BOOLEAN**
 # Whether registrations must be verified by the user following
 # a link sent in an email to the user's registered email address
-$TWiki::cfg{Register}{NeedVerification} = $TRUE;
+$TWiki::cfg{Register}{NeedVerification} = $FALSE;
 
 #---++ Passwords
 # **SELECTCLASS none,TWiki::Users::*User**
