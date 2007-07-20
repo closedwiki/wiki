@@ -12,6 +12,80 @@ sub css {
 1;
 __DATA__
 
+/* TWiki base CSS */
+
+.twikiMakeVisible,
+.twikiMakeVisibleInline,
+.twikiMakeVisibleBlock {
+	display:none; /* will be made visible with javascript */
+}
+.twikiLeft {
+	float:left;
+	position:relative;
+}
+.twikiRight {
+	position:relative;
+	float:right;
+	display:inline;
+	margin:0;
+}
+.twikiClear {
+	/* to clean up floats */
+	margin:0;
+	padding:0;
+	height:0;
+	line-height:0px;
+	clear:both;
+	display:block;
+}
+.twikiHidden {
+	display:none;
+}
+.twikiSmall {
+	font-size:86%;
+	line-height:110%; /*S3*/
+}
+.twikiSmallish {
+	font-size:94%; /*S2*/
+}
+.twikiBroadcastMessage {
+	background-color:#ff0;
+	padding:.25em .5em;
+	margin:0 0 1em 0;
+}
+.twikiBroadcastMessage b,
+.twikiBroadcastMessage strong {
+	color:#f00;
+}
+.twikiAlert,
+.twikiAlert code {
+	color:#f00;
+}
+.twikiEmulatedLink {
+	text-decoration:underline;
+}
+.twikiAccessKey {
+	text-decoration:none;
+	border-width:0 0 1px 0;
+	border-style:solid;
+}
+a:hover .twikiAccessKey {
+	text-decoration:none;
+	border:none;
+}
+.twikiImage img {
+	padding:3px;
+	border-width:1px;
+	border-style:solid;
+}
+.twikiPreviewArea {
+	border-width:1px;
+	border-style:solid;
+	border-color:#f00;
+	margin:0 -0.5em 2em -0.5em;
+	padding:.5em;
+}
+
 /* 
 Basic layout derived from http://www.positioniseverything.net/articles/pie-maker/pagemaker_form.php.
 I've changed many so things that I won't put a full copyright notice. However all hacks (and comments!) are far beyond my knowledge and this deserves full credits:
@@ -207,6 +281,11 @@ blockquote {
 .patternPrintPage blockquote {
 	border-style:solid;
 	border-width:0 0 0 3px;
+}
+form { 
+	display:inline;
+	margin:0;
+	padding:0;
 }
 
 /* Text */
@@ -1658,6 +1737,7 @@ a.blockLink {
     display:block;
     padding:0.25em 1em;
     border-bottom:1px solid #aaa;
+    border-top:1px solid #f2f4f6;
 	font-weight:bold;
 }
 a:link.blockLink,
@@ -1674,11 +1754,14 @@ a:visited.blockLinkOff {
 a:link.blockLinkOn,
 a:visited.blockLinkOn {
     background-color:#c4cbd6;
+	border-bottom-color:#3f4e67;
+    border-top-color:#fff;
 }
 a.blockLink:hover {
 	background-color:#c4cbd6;
     color:#3f4e67;
     border-bottom-color:#3f4e67;
+    border-top-color:#fff;
 }
 div.explanation {
 	background-color:#fff9d1;
@@ -1705,7 +1788,7 @@ div.options div.optionHeader a {
     border-style:solid;
     border-color:#eee #999 #999 #eee;
     background-color:#eee;
-	padding:.25em .5em;
+	padding:0 .5em;
 	text-decoration:none;
 }
 div.options div.optionHeader a:link:hover,
