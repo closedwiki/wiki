@@ -4,7 +4,7 @@
 #
 # Copy/Rename this file to YourOwnPlugin.pm and rename the package line below
 
-package EmptyMediaWiki2TWikiPlugin;
+package TWiki::Contrib::MediaWiki2TWikiAddOn::EmptyPlugin;
 use strict;
 
 ##############################################################################
