@@ -696,7 +696,9 @@ html>body #patternLeftBarContents li { /* Mozilla */
 .patternMetaMenu ul li .twikiSelect {
 	margin:0 0 0 .5em;
 }
-
+.patternHomePath .twikiSeparator {
+	padding:0 .5em;
+}
 .patternHomePath a:link,
 .patternHomePath a:visited {
 	text-decoration:none;
