@@ -81,7 +81,7 @@ sub initBinary {
         # Sometimes (on Windows?) rcs file not formed, so check for it
         throw Error::Simple( $TWiki::cfg{RCS}{initBinaryCmd}.
                                ' of '.$this->hidePath($this->{rcsFile}).
-                                 ' failed to create history file ');
+                                 ' failed to create history file');
     }
 }
 
@@ -108,7 +108,7 @@ sub initText {
         # Sometimes (on Windows?) rcs file not formed, so check for it
         throw Error::Simple( $TWiki::cfg{RCS}{initTextCmd}.
                                ' of '.$this->hidePath($this->{rcsFile}).
-                                 ' failed to create history file ');
+                                 ' failed to create history file');
     }
 }
 
