@@ -643,6 +643,17 @@ a.twikiLinkInHeaderRight {
 #patternLeftBarContents a:visited {
 	text-decoration:none;
 }
+#patternLeftBarContents .patternLeftBarPersonal a:link,
+#patternLeftBarContents .patternLeftBarPersonal a:visited {
+	text-decoration:underline;
+}
+#patternLeftBarContents .patternLeftBarPersonal ul a:link,
+#patternLeftBarContents .patternLeftBarPersonal ul a:visited {
+	text-decoration:none;
+}
+#patternLeftBarContents .patternLeftBarPersonal ul a:hover {
+	text-decoration:underline;
+}
 #patternLeftBarContents ul {
 	padding:0;
 	margin:0;
