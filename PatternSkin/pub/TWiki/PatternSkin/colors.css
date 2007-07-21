@@ -406,14 +406,6 @@ a:hover .twikiAccessKey {
 #patternLeftBarContents a:hover {
 	color:#fff;
 }
-#patternLeftBarContents .patternLeftBarPersonal a:link,
-#patternLeftBarContents .patternLeftBarPersonal a:visited {
-	color:#4571d0;
-}
-#patternLeftBarContents .patternLeftBarPersonal a:hover {
-	color:#fff;
-}
-
 .patternTopicActions {
 	border-color:#e7e2da;
 	background-color:#fdfaf2;

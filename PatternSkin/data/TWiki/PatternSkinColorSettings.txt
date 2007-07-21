@@ -593,13 +593,6 @@ a:hover .twikiAccessKey {
 #patternLeftBarContents a:hover {
 	color:%LINK_TEXT_HOVER%;
 }
-#patternLeftBarContents .patternLeftBarPersonal a:link,
-#patternLeftBarContents .patternLeftBarPersonal a:visited {
-	color:%LINK_TEXT_NORMAL%;
-}
-#patternLeftBarContents .patternLeftBarPersonal a:hover {
-	color:%LINK_TEXT_HOVER%;
-}
 
 .patternTopicActions {
 	border-color:%MINOR_SEPARATOR_BORDER%;
