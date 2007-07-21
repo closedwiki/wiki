@@ -112,12 +112,6 @@ from esc tab hack moz min-height solution ***/
 	height:1%; /* or Win IE won't display a background */
 	/* for margins/paddings use style.css */
 }
-#patternTopToolBar {
-	/* Top bar y and height is defined in viewtopbar.pattern.tmpl */
-	z-index:1; /*** Critical value for Moz/Opera Background Column colors fudge to work ***/
-	position:absolute;
-	width:100%;
-}
 #patternBottomBar {
 	z-index:1; /* Critical value for Moz/Opera Background Column colors fudge to work */
 	clear:both;

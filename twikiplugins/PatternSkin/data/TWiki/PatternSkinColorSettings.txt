@@ -235,9 +235,6 @@ pre, code, tt {
 }
 blockquote {
 	background-color:%ACTIVE_FORM_BACKGROUND%;
-}
-.patternRenamePage blockquote,
-.patternPrintPage blockquote {
 	border-color:%NEUTRAL_BORDER%;
 }
 blockquote h2 {
