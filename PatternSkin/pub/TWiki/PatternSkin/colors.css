@@ -48,9 +48,6 @@ pre, code, tt {
 }
 blockquote {
 	background-color:#f1f6fa;
-}
-.patternRenamePage blockquote,
-.patternPrintPage blockquote {
 	border-color:#ddd;
 }
 blockquote h2 {
