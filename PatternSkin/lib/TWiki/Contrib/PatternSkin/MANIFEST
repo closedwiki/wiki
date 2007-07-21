@@ -39,10 +39,8 @@ pub/TWiki/PatternSkin/bg_buttoncancel_gradient.gif 0644
 pub/TWiki/PatternSkin/bg_outer_gradient.gif 0644
 pub/TWiki/PatternSkin/bg_submit_gradient.gif 0644
 pub/TWiki/PatternSkin/border_sidebar_personal.gif 0644
-pub/TWiki/PatternSkin/bullet-blue.gif 0644
-pub/TWiki/PatternSkin/bullet-child-black.gif 0644
-pub/TWiki/PatternSkin/bullet-child.gif 0644
-pub/TWiki/PatternSkin/bullet-down.gif 0644
+pub/TWiki/PatternSkin/bullet-personal_sidebar.gif 0644
+pub/TWiki/PatternSkin/bullet-toc.gif 0644
 pub/TWiki/PatternSkin/bullet-lock.gif 0644
 pub/TWiki/PatternSkin/button_arrow.gif 0644
 pub/TWiki/PatternSkin/button_font_selector.gif 0644

@@ -137,12 +137,11 @@ Leave remarks, suggestions and other feedback in TWiki:Plugins.PatternSkinDev.
 %META:FILEATTACHMENT{name="bg_button_gradient.gif" attr="" autoattached="1" comment="" date="1183811042" path="bg_button_gradient.gif" size="1473" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="print.css" attr="" autoattached="1" comment="" date="1182955036" path="print.css" size="3033" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="bg_button_small_gradient.gif" attr="" autoattached="1" comment="" date="1183811027" path="bg_button_small_gradient.gif" size="1337" user="TWikiContributor" version=""}%
-%META:FILEATTACHMENT{name="bullet-child-black.gif" attr="" autoattached="1" comment="" date="1182955036" path="bullet-child-black.gif" size="54" user="TWikiContributor" version=""}%
+%META:FILEATTACHMENT{name="bullet-toc.gif" attr="" autoattached="1" comment="" date="1182955036" path="bullet-toc.gif" size="54" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="striped_blue.gif" attr="" autoattached="1" comment="" date="1182955036" path="striped_blue.gif" size="238" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="bg_submit_gradient.gif" attr="" autoattached="1" comment="" date="1183665090" path="bg_submit_gradient.gif" size="1476" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="background_action.gif" attr="" autoattached="1" comment="" date="1182955036" path="background_action.gif" size="229" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="background_form_element.gif" attr="" autoattached="1" comment="" date="1182955036" path="background_form_element.gif" size="70" user="TWikiContributor" version=""}%
-%META:FILEATTACHMENT{name="bullet-child.gif" attr="" autoattached="1" comment="" date="1182955036" path="bullet-child.gif" size="54" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="bullet-down.gif" attr="" autoattached="1" comment="" date="1183989197" path="bullet-down.gif" size="59" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="bg_outer_gradient.gif" attr="" autoattached="1" comment="" date="1184332033" path="bg_outer_gradient.gif" size="433" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="striped_white.gif" attr="" autoattached="1" comment="" date="1182955036" path="striped_white.gif" size="234" user="TWikiContributor" version=""}%
@@ -161,4 +160,4 @@ Leave remarks, suggestions and other feedback in TWiki:Plugins.PatternSkinDev.
 %META:FILEATTACHMENT{name="pattern.js" attr="" autoattached="1" comment="" date="1184192338" path="pattern.js" size="3526" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="colors.css" attr="" autoattached="1" comment="" date="1184360679" path="colors.css" size="16740" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="button_arrow.gif" attr="" autoattached="1" comment="" date="1184105722" path="button_arrow.gif" size="1297" user="TWikiContributor" version=""}%
-%META:FILEATTACHMENT{name="bullet-blue.gif" attr="" autoattached="1" comment="" date="1183989183" path="bullet-blue.gif" size="60" user="TWikiContributor" version=""}%
+%META:FILEATTACHMENT{name="bullet-personal_sidebar.gif" attr="" autoattached="1" comment="" date="1183989183" path="bullet-personal_sidebar.gif" size="60" user="TWikiContributor" version=""}%
