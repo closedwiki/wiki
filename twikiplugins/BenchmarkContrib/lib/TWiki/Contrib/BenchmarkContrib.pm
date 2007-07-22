@@ -27,7 +27,7 @@ sub profile {
     }
 
     my $profiler_package  =  "TWiki::Contrib::BenchmarkContrib::$profiler";
-    eval "use $profiler_package";
+    eval "require $profiler_package";
     die $@ if $@;
 
     $profiler_package->profile($twiki,$scriptName,$benchmarkWeb);
