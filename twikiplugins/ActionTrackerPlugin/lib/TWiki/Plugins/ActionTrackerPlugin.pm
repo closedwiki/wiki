@@ -26,6 +26,8 @@ use Assert;
 use TWiki::Func;
 use TWiki::Plugins;
 
+use Error qw( :try );
+
 # =========================
 use vars qw(
             $web $topic $user $installWeb $VERSION $RELEASE $initialised
@@ -65,6 +67,8 @@ sub initPlugin {
 
     $initialised = 0;
     $doneHeader = 0;
+
+    TWiki::Func::registerRESTHandler( 'update', \&_updateRESTHandler );
 
     return 1;
 };
@@ -571,5 +575,83 @@ sub _handleActionNotify {
     return "<!-- from an --> <pre>$text</pre> <!-- end from an -->";
 }
 # COVERAGE ON
+
+sub _updateRESTHandler {
+    my $session = shift;
+    my $query = TWiki::Func::getCgiQuery();
+    try {
+        _lazyInit();
+        _updateSingleAction(
+            $query->param('topic'),
+            $query->param('uid'),
+            $query->param('field') => $query->param('value'));
+        print CGI::header('text/plain', 200); # simple message
+    } catch Error::Simple with {
+        my $e = shift;
+        print CGI::header('text/plain', 500);
+        print $e->{-text};
+    } catch TWiki::AccessControlException with {
+        my $e = shift;
+        print CGI::header('text/plain', 500);
+        print $e->stringify();
+    };
+    return undef;
+}
+
+sub _updateSingleAction {
+    my ( $topic, $uid, %changes ) = @_;
+
+    my $web;
+    ($web, $topic) = TWiki::Func::normalizeWebTopicName(undef, $topic);
+    my ($meta, $text) = TWiki::Func::readTopic($web, $topic);
+
+    my $descr;
+    my $attrs;
+    my $gathering;
+    my $processAction = 0;
+    my $an = 0;
+    my %seenUID;
+
+    # FORMAT DEPENDANT ACTION SCAN
+    my $result = '';
+    foreach my $line ( split( /\r?\n/, $text )) {
+        if ( $gathering ) {
+            if ( $line =~ m/^$gathering\b.*/ ) {
+                $gathering = undef;
+                $processAction = 1;
+            } else {
+                $descr .= "$line\n";
+                next;
+            }
+        } elsif ( $line =~ m/^(.*?)%ACTION{(.*?)}%(.*)$/o ) {
+            $result .= $1;
+            $attrs = $2;
+            $descr = $3;
+            if ( $descr =~ m/\s*\<\<(\w+)\s*(.*)$/o ) {
+                $descr = $2;
+                $gathering = $1;
+                next;
+            }
+            $processAction = 1;
+        } else {
+            $result .= "$line\n";
+        }
+
+        if ( $processAction ) {
+            my $action = new TWiki::Plugins::ActionTrackerPlugin::Action
+              ( $web, $topic, $an, $attrs, $descr );
+            if ($action->{uid} == $uid) {
+                foreach my $key (keys %changes) {
+                    $action->{$key} = $changes{$key};
+                }
+            }
+            $result .= $action->stringify() . "\n";
+            $an++;
+            $processAction = 0;
+        }
+    }
+    TWiki::Func::saveTopic($web, $topic, $meta, $result,
+                           { comment => 'atp save' });
+}
 
 1;

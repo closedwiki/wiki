@@ -365,6 +365,8 @@ These settings can be overridden in the Web<nop>Preferences topic of the current
 	* Non-standard attributes - see [[#NonStandardAttributes][Non-standard attributes]] above.
 		* Set EXTRAS = 
 
+   * If set to 1, the action tracker will show action states using a drop-down menu, to allow viewers to quickly and easily change action states. You can disable this feature by setting this to 0
+      * Set ENABLESTATESHORTCUT = 1
 	* Set to 1 to enable debug features, including the undocumented =%<nop>ACTIONNOTIFICATIONS{}%= and =%<nop>ACTIONTRACKERPREFS%= features.
 		* Set DEBUG = 0
 
