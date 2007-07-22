@@ -72,11 +72,11 @@ sub profile {
 
     # admins are allowed to change wikiname of viewer
     my $user           =  $twiki->{user};
-    my $wikiname       =  $user->wikiName();
+    my $wikiname       =  $twiki->{users}->getWikiName($user);
     my $viewer         =  $query->param('viewer') || $wikiname;
     ($viewer)          =  $viewer =~ /($TWiki::regex{wikiWordRegex})/;
     if ($viewer ne $wikiname) {
-	if ($user->isAdmin()) {
+	if ($twiki->{users}->isAdmin($user)) {
 	    my $users      =  $query->{users};
 	    my $login  =  $users->findUser($viewer,$viewer,"don't create");
 	    if ($login) {
@@ -96,12 +96,12 @@ sub profile {
     # run the TWiki script
     #    * as a command line script, so that we don't have to set up a
     #      complete CGI %ENV hash
-    #    * for that we have to kill $ENV{GATEWAY_INTERFACE} to make
+    #    * for that, we have to kill $ENV{GATEWAY_INTERFACE} to make
     #      sure that TWiki will use command_line syntax instead of CGI.pm
     #    * capturing STDOUT
     #    * redirecting profiling output to a temporary file
     my $tempfile       =  File::Spec->tmpdir() . "/profile.$$";
-    $ENV{PERL_DPROF_OUT_FILE_NAME} = $tempfile;
+    $ENV{PERL_DPROF_OUT_FILE_NAME} = $tempfile; # per spec of DProf.pm
     $ENV{GATEWAY_INTERFACE} = '';
     my $stdout         =  `perl -T -d:$profiler $conf_par $method -user $viewer -skin $skin $web.$topic`;
 
@@ -155,7 +155,7 @@ sub profile {
 ---+ Performance Profile for [[$web.$topic]]
 
 \%INCLUDE{"$benchmarkWeb.WebHome" section="benchmarkform" PROFILER="$profiler" PROFILEMETHOD="$method" PROFILEREVISION="$revision" PROFILESKIN="$skin" PROFILETOPIC="$topic" PROFILEVIEWER="$viewer" PROFILEWEB="$web"}%
-
+<noautolink>
 |  *Total Elapsed Time:* ||||  $total_elapsed sec ||
 |    *User+System Time:* ||||  $total_usersys sec ||
 EOT
@@ -165,6 +165,7 @@ EOT
 	$tr  =~  s/  (\S+)  |$/ $1  |/;
 	$text .= $tr;
     }
+    $text .= "</noautolink>\n";
 
     # prepare for saving the topic by running TWiki::UI::Save::save
     $twiki->{webName}    =  $benchmarkWeb;
