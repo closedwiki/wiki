@@ -55,7 +55,7 @@ a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, for example, =
 		* Set SORT = all
 
 	* Default table attributes:
-		* Set TABLEATTRIBUTES = tableborder="1" cellpadding="0" cellspacing="0" valign="top" headercolor="#ffffff" headerbg="#6b7f93" headerbgsorted="#334455" headercolor="#ffffff" databg="#ffffff,#edf4f9" databgsorted="#f5f5f5,#dce7ee" tablerules="rows"
+		* Set TABLEATTRIBUTES = tableborder="1" cellpadding="0" cellspacing="0" valign="top" headercolor="#ffffff" headerbg="#6b7f93" headerbgsorted="#334455" databg="#ffffff,#edf4f9" databgsorted="#f5f5f5,#dce7ee" tablerules="rows"
 
 ---++ Table Attributes
 
@@ -154,7 +154,7 @@ This plugin is pre-installed with your TWiki release. You should not have to ins
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main/JohnTalintyre, TWiki:Main/PeterThoeny |
-|  Plugin Version: | 1.028 |
+|  Plugin Version: | 1.029 |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
 |  27 Jun 2007 | 1.024 - 1.027 Various small bug fixes. |
 |  24 Jun 2007 | 1.023: Arthur Clemens: Inline styles are now written to the head; updated default sort icons (from %TWIKIWEB%.TWikiDocGraphics). |
