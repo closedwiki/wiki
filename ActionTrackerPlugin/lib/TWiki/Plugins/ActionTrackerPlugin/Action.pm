@@ -8,29 +8,29 @@ Object that represents a single action
 
 Fields:
 web:
-           Web the action was found in
+         Web the action was found in
 topic:
          Topic the action was found in
 ACTION_NUMBER:
- The number of the action in the topic (deprecated)
+         The number of the action in the topic (deprecated)
 text:
-          The text of the action
+         The text of the action
 who:
-           The person responsible for the action
+         The person responsible for the action
 due:
-           When the action is due
+         When the action is due
 notify:
-        List of people to notify when the action changes
+         List of people to notify when the action changes
 uid:
-           Unique identifier for the action
+         Unique identifier for the action
 creator:
-       Who created the action
+         Who created the action
 created:
-       When the action was created
+         When the action was created
 closer:
-        Who closed the action
+         Who closed the action
 closed:
-        When the action was closed
+         When the action was closed
 
 =cut
 
@@ -39,18 +39,15 @@ package TWiki::Plugins::ActionTrackerPlugin::Action;
 use strict;
 use integer;
 
-use CGI;
-use Assert;
+require CGI;
+require Text::Soundex;
+require Time::ParseDate;
 
-use TWiki::Func;
+require TWiki::Func;
+require TWiki::Attrs;
 
-use Text::Soundex;
-use Time::ParseDate;
-
-use TWiki::Attrs;
-
-use TWiki::Plugins::ActionTrackerPlugin::AttrDef;
-use TWiki::Plugins::ActionTrackerPlugin::Format;
+require TWiki::Plugins::ActionTrackerPlugin::AttrDef;
+require TWiki::Plugins::ActionTrackerPlugin::Format;
 
 use vars qw( $now );
 
@@ -664,6 +661,30 @@ sub _formatField_due {
     return $text;
 }
 
+sub _formatField_state {
+    my ( $this, $asHTML ) = @_;
+    return $this->{state} unless $asHTML;
+    return $this->{state} unless
+      TWiki::Func::getPreferencesFlag(
+          'ACTIONTRACKERPLUGIN_ENABLESTATESHORTCUT' );
+
+    my $input = '';
+    foreach my $option (@{$types{state}->{values}}) {
+        my %attrs;
+        $attrs{selected} = 'selected' if ($option eq $this->{state});
+        $input .= CGI::option(\%attrs, $option);
+    }
+    TWiki::Func::addToHEAD('ATP_JS', <<HEAD);
+<script type='text/javascript' src='%PUBURLPATH%/%TWIKIWEB%/ActionTrackerPlugin/atp.js'></script>
+HEAD
+    return CGI::Select(
+        {
+            onChange => 'atp_update("%SCRIPTURLPATH{rest}%/ActionTrackerPlugin/update?topic='.
+              $this->{web}.'.'.$this->{topic}.
+                ';uid='.$this->{uid}.'", "state", this.value)' },
+        $input);
+}
+
 # PRIVATE format text field
 sub _formatField_text {
     my ( $this, $asHTML, $type ) = @_;
@@ -826,7 +847,6 @@ sub findChanges {
 # and text after the action.
 sub findActionByUID {
     my ( $web, $topic, $text, $uid ) = @_;
-    ASSERT( $uid );
 
     my $sn = -1;
     if ( $uid =~ m/^AcTion(\d+)$/o ) {

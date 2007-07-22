@@ -243,8 +243,8 @@ sub formatHTMLTable {
         foreach $i ( @{$this->{FIELDS}} ) {
             my $c;
             my $entry = $i;
-            $entry =~ s/\$(\w+)(\(\))?/&_expandHTML( $object, $1, 1,
-                                                     $jump, $newWindow )/geos;
+            $entry =~ s/\$(\w+)(\(\))?/
+              _expandHTML( $object, $1, 1, $jump, $newWindow )/ges;
             if( !$anchored ) {
                 $entry = CGI::a( { name=>$object->getAnchor() } ).$entry;
                 $anchored = 1;
@@ -260,8 +260,8 @@ sub formatHTMLTable {
 }
 
 # PRIVATE generate an HTML table from a 2D-array of rows and
-# a, optional list of anchors, one for each row. The anchors
-# are more useful if the table is oriented as rows.
+# an optional list of anchors, one for each row. The anchors
+# are only useful if the table is oriented as rows.
 sub _generateHTMLTable {
     my ( $this, $rows, $class ) = @_;
     my $a = {};
@@ -269,7 +269,7 @@ sub _generateHTMLTable {
     my $text = CGI::start_table( $a );
     my $i;
 
-    if ( $this->{ORIENTATION} eq "rows" ) {
+    if ( $this->{ORIENTATION} eq 'rows' ) {
         for ( $i = 0; $i <= $#{$this->{HEADINGS}}; $i++ ) {
             my $head = ${$this->{HEADINGS}}[$i];
             my $row = CGI::th($head );
