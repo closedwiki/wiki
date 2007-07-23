@@ -605,6 +605,12 @@ sub _appendFirstColumnCssClass {
     return _appendToClassList( $classList, 'twikiFirstCol' );
 }
 
+sub _appendLastColumnCssClass {
+    my ($classList) = @_;
+
+    return _appendToClassList( $classList, 'twikiLastCol' );
+}
+
 sub _appendLastRowCssClass {
     my ($classList) = @_;
 
@@ -1091,7 +1097,7 @@ sub emitTable {
     my $rowCount       = 0;
     my $numberOfRows   = scalar(@curTable);
     my $dataColorCount = 0;
-
+    
     foreach my $row (@curTable) {
         my $rowtext  = '';
         my $colCount = 0;
@@ -1100,7 +1106,8 @@ sub emitTable {
         # update the data color count
         my $headerCellCount = 0;
         my $isHeaderRow     = 0;
-
+        my $numberOfCols   = scalar(@$row);
+        
         foreach my $fcell (@$row) {
 
             # check if cell exists
@@ -1300,6 +1307,10 @@ sub emitTable {
             # CSS class name
             $attr->{class} = _appendFirstColumnCssClass( $attr->{class} )
               if $colCount == 0;
+            my $isLastCol = ( $colCount == $numberOfCols - 1 );
+            $attr->{class} = _appendLastColumnCssClass( $attr->{class} )
+              if $isLastCol;
+              
             $attr->{class} = _appendLastRowCssClass( $attr->{class} )
               if $isLastRow;
 
