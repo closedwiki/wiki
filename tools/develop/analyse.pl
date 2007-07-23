@@ -48,6 +48,16 @@ my %rename = (
     crawfordcurrie => "CrawfordCurrie",
     talintj => "JohnTalintyre",
     dabright => "DavidBright",
+    nicholaslee => "NicholasLee",
+    cvs2svn => "SvenDowideit",
+    omeldahl => "OleCMeldahl",
+    'alex-kane' => 'AlexKane',
+    brianspinar => "BrianSpinar",
+    rellery => "RichardEllery",
+    rohde2 => "DanielRohde",
+    wadeturland => "WadeTurland",
+    pklausner => "PeterKlausner",
+    andreabacco => "AndreaBacco",
    );
 
 my $coreExt = join ('|',
