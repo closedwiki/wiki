@@ -2,6 +2,10 @@
 %TMPL:DEF{"logo"}%%TMPL:END%%{ don't show a logo to make best use of screen estate }%
 
 
+%TMPL:DEF{"skinscript"}%<script type="text/javascript" src="%PUBURLPATH%/%TWIKIWEB%/PatternSkin/pattern.js"></script>
+<script type="text/javascript" src="%PUBURLPATH%/%TWIKIWEB%/PatternSkin/pattern_edit.js"></script>%TMPL:END%
+
+
 %TMPL:DEF{"toolbar"}%<div class="patternTop">%TWISTYBUTTON{id="edithelp" firststart="show" mode="div" remember="on" link="%MAKETEXT{"Edit help"}%" showimgleft="%ICONURLPATH{toggleopen}%"
 hideimgleft="%ICONURLPATH{toggleclose}%"}%</div><!--//patternTop-->%TMPL:END%
 
