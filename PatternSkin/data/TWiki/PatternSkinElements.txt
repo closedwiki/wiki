@@ -1,6 +1,11 @@
 %META:TOPICINFO{author="TWikiContributor" date="1165884692" format="1.1" reprev="1.1" version="1.1"}%
 %META:TOPICPARENT{name="PatternSkin"}%
+<!--
 <div class="twikiBroadcastMessage"> <strong>NOTE:</strong> Edit and Attach will be disabled today between 05:00 PM and 06:00 PM PDT (00:00 to 01:00 GMT) for a scheduled TWiki maintenance.</div>
+-->
+
+
+
 
 ---+!! h1 header [[%TOPIC%][with link]]
 
@@ -115,24 +120,6 @@ Numbered list:
 </div><!--/twikiBottomRow--></div><!--/patternSearchResult--><div class="patternSearchResult"><div class="twikiTopRow"><div class="twikiLeft"><a href="/twiki4/MAIN/bin/view/TWiki/TWikiAjaxContrib"><b>TWikiAjaxContrib</b></a></div><div class="twikiRight twikiSRAuthor"> <a href="/twiki4/MAIN/bin/view/Main/TWikiContributor" class="twikiLink">TWikiContributor</a></div><div class="twikiRight twikiSRRev">r2 - <a href="/twiki4/MAIN/bin/rdiff/TWiki/TWikiAjaxContrib" rel='nofollow'>02 Nov 2006 - 22:04</a>&nbsp;</div><br class="twikiClear" /></div><!--/twikiTopRow--><div class="twikiBottomRow"><div class="twikiSummary twikiGrayText">TWikiAjaxContrib TWikiAjaxContrib provides a convenience wrapper class around Yahoo's Connection Manager (AJAX). Goals are: To make it possible for plugins ...</div><!--/twikiSummary-->
 </div><!--/twikiBottomRow--></div><!--/patternSearchResult--><div class="patternSearchResult"><div class="twikiTopRow"><div class="twikiLeft"><a href="/twiki4/MAIN/bin/view/TWiki/TWikiAjaxContribExamples"><b>TWikiAjaxContribExamples</b></a></div><div class="twikiRight twikiSRAuthor"> <a href="/twiki4/MAIN/bin/view/Main/TWikiContributor" class="twikiLink">TWikiContributor</a></div><div class="twikiRight twikiSRRev">r2 - <a href="/twiki4/MAIN/bin/rdiff/TWiki/TWikiAjaxContribExamples" rel='nofollow'>02 Nov 2006 - 22:04</a>&nbsp;</div><br class="twikiClear" /></div><!--/twikiTopRow--><div class="twikiBottomRow"><div class="twikiSummary twikiGrayText">!TWikiAjaxContrib Examples Code examples and demos for TWikiAjaxContrib. Default loading indicator Because TWiki files are served along dynamic urls we cannot use ...</div><!--/twikiSummary-->
 </div><!--/twikiBottomRow--></div><!--/patternSearchResult--><div class="patternSearchResultCount" id="twikiBottomResultCount">Number of topics: <b>3</b></div><!--/patternSearchResultCount-->
-<script type="text/javascript">
-// write results at the top
-//<![CDATA[
-	var text = "<br />" + "Number of topics:" + "<b>3<\/b>";
-	insertHtml(text, 'twikiNumberOfResultsContainer');
-	var count = 3;
-	if (count < 10) {
-		insertHtml('', 'twikiBottomResultCount');
-	}
-//]]>
-</script>
-<p />
-<script type="text/javascript">
-//<![CDATA[
-   var linkText='<a href="#" onclick="location.hash=\'twikiSearchForm\'; return false;"><span class="patternLinkLabel twikiSmallish">Modify search</span></a>';
-   insertHtml('&nbsp;&nbsp;' + linkText, 'twikiModifySearchContainer');
-//]]>
-</script>
 <p />
 <a name="twikiSearchForm"></a>
 <div class="twikiPageForm">
