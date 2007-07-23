@@ -597,7 +597,7 @@ sub renderFormFieldForDisplay {
         $name = TWiki::Form::fieldTitle2FieldName( $name );
         $mf = $this->get( 'FIELD', $name);
     }
-    return $format unless $mf; # field not found
+    return '' unless $mf; # field not found
 
     $value = $mf->{value};
 
