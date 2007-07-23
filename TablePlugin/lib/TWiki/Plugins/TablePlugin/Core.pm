@@ -605,12 +605,6 @@ sub _appendFirstColumnCssClass {
     return _appendToClassList( $classList, 'twikiFirstCol' );
 }
 
-sub _appendLastColumnCssClass {
-    my ($classList) = @_;
-
-    return _appendToClassList( $classList, 'twikiLastCol' );
-}
-
 sub _appendLastRowCssClass {
     my ($classList) = @_;
 
@@ -844,8 +838,9 @@ sub _addStylesToHead {
         unless ( $cssAttrs{dataBg} =~ /none/i ) {
             my $count = 0;
             foreach (@dataBg) {
-                my $rowSelector = 'twikiTableRow' . 'dataBg' . $count;
                 my $color       = $_;
+                next if !$color;
+                my $rowSelector = 'twikiTableRow' . 'dataBg' . $count;
                 my $attr        = 'background-color:' . $_ . ';';
                 push( @styles, "$selector tr.$rowSelector td {$attr}" );
                 $count++;
@@ -858,8 +853,9 @@ sub _addStylesToHead {
         unless ( $cssAttrs{dataBgSorted} =~ /none/i ) {
             my $count = 0;
             foreach (@dataBgSorted) {
-                my $rowSelector = 'twikiTableRow' . 'dataBgSorted' . $count;
                 my $color       = $_;
+                next if !$color;
+                my $rowSelector = 'twikiTableRow' . 'dataBgSorted' . $count;
                 my $attr        = 'background-color:' . $_ . ';';
                 push( @styles,
                     "$selector tr.$rowSelector td.twikiSortedCol {$attr}" );
@@ -873,8 +869,9 @@ sub _addStylesToHead {
         unless ( $cssAttrs{dataColor} =~ /none/i ) {
             my $count = 0;
             foreach (@dataColor) {
-                my $rowSelector = 'twikiTableRow' . 'dataColor' . $count;
                 my $color       = $_;
+                next if !$color;
+                my $rowSelector = 'twikiTableRow' . 'dataColor' . $count;
                 my $attr        = 'color:' . $_ . ';';
                 push( @styles, "$selector tr.$rowSelector td {$attr}" );
                 push( @styles, "$selector tr.$rowSelector td font {$attr}" );
@@ -887,8 +884,9 @@ sub _addStylesToHead {
     if ( defined $cssAttrs{columnWidths} ) {
         my $count = 0;
         foreach (@columnWidths) {
-            my $colSelector = 'twikiTableCol' . $count;
             my $width       = $_;
+            next if !$width;
+            my $colSelector = 'twikiTableCol' . $count;
             my $attr        = 'width:' . $_ . ';';
             push( @styles, "$selector td.$colSelector {$attr}" );
             push( @styles, "$selector th.$colSelector {$attr}" );
@@ -906,8 +904,9 @@ sub _addStylesToHead {
         else {
             my $count = 0;
             foreach (@headerAlign) {
-                my $colSelector = 'twikiTableCol' . $count;
                 my $width       = $_;
+                next if !$width;
+                my $colSelector = 'twikiTableCol' . $count;
                 my $attr        = 'text-align:' . $_ . ';';
                 push( @styles, "$selector th.$colSelector {$attr}" );
                 $count++;
@@ -925,8 +924,9 @@ sub _addStylesToHead {
         else {
             my $count = 0;
             foreach (@dataAlign) {
-                my $colSelector = 'twikiTableCol' . $count;
                 my $width       = $_;
+                next if !$width;
+                my $colSelector = 'twikiTableCol' . $count;
                 my $attr        = 'text-align:' . $_ . ';';
                 push( @styles, "$selector td.$colSelector {$attr}" );
                 $count++;
@@ -1091,7 +1091,7 @@ sub emitTable {
     my $rowCount       = 0;
     my $numberOfRows   = scalar(@curTable);
     my $dataColorCount = 0;
-    
+
     foreach my $row (@curTable) {
         my $rowtext  = '';
         my $colCount = 0;
@@ -1100,8 +1100,7 @@ sub emitTable {
         # update the data color count
         my $headerCellCount = 0;
         my $isHeaderRow     = 0;
-        my $numberOfCols   = scalar(@$row);
-        
+
         foreach my $fcell (@$row) {
 
             # check if cell exists
@@ -1301,10 +1300,6 @@ sub emitTable {
             # CSS class name
             $attr->{class} = _appendFirstColumnCssClass( $attr->{class} )
               if $colCount == 0;
-            my $isLastCol = ( $colCount == $numberOfCols - 1 );
-            $attr->{class} = _appendLastColumnCssClass( $attr->{class} )
-              if $isLastCol;
-              
             $attr->{class} = _appendLastRowCssClass( $attr->{class} )
               if $isLastRow;
 
