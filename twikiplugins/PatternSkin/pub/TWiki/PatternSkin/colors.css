@@ -214,7 +214,7 @@ select {
 .twikiTable th {
 	border-color:#e7e2da #fff;
 }
-.twikiTable th.twikiFirst {
+.twikiTable th.twikiFirstCol {
 	border-left-color:#e7e2da;
 }
 .twikiTable th a:link,

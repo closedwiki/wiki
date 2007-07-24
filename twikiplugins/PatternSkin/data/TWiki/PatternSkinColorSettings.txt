@@ -401,7 +401,7 @@ select {
 .twikiTable th {
 	border-color:%TABLE_BORDER% %LIGHT_ON_DARK_TEXT_COLOR%;
 }
-.twikiTable th.twikiFirst {
+.twikiTable th.twikiFirstCol {
 	border-left-color:%LIGHT_ON_DARK_TEXT_COLOR%;
 }
 .twikiTable th a:link,
