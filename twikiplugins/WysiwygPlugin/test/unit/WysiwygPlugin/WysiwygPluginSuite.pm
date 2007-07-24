@@ -19,12 +19,10 @@
 
 package WysiwygPluginSuite;
 
-use base qw(Test::Unit::TestSuite);
-
-sub name { 'WysiwygPluginTests' };
+use base qw(Unit::TestSuite);
 
 sub include_tests {
-    qw(TranslatorTests WysiwygPluginTests);
+    return qw(TranslatorTests WysiwygPluginTests);
 };
 
 1;

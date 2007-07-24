@@ -924,6 +924,15 @@ HERE
           tml => '%<nop>DISPLAYTIME{"$hou:$min"}%',
           html => '<span class="TMLnop">%DISPLAYTIME{"$hou:$min"}%</span>',
       },
+      {
+          exec => 3,
+          name => 'Item4410',
+          tml => <<'HERE',
+   * x
+| Y |
+HERE
+          html => '<ul><li>x</li></ul><table cellspacing="1" cellpadding="0" border="1"><tr><td>Y</td></tr></table>',
+      },
      ];
 
 
