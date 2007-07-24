@@ -1437,8 +1437,7 @@ sub handler {
         if (s/%TABLE(?:{(.*?)})?%/_parseParameters($1, 1)/se) {
             $acceptable = 1;
         }
-        elsif ( $acceptable
-            && s/^(\s*)\|(.*\|\s*)$/_processTableRow($1,$2)/eo )
+        elsif ( s/^(\s*)\|(.*\|\s*)$/_processTableRow($1,$2)/eo )
         {
             $insideTABLE = 1;
         }
