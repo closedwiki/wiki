@@ -214,6 +214,9 @@ select {
 .twikiTable th {
 	border-color:#e7e2da #fff;
 }
+.twikiTable th.twikiFirst {
+	border-left-color:#e7e2da;
+}
 .twikiTable th a:link,
 .twikiTable th a:visited,
 .twikiTable th a font {
