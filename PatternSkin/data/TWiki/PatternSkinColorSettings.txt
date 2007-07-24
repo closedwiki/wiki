@@ -399,7 +399,10 @@ select {
 	border-color:%TABLE_BORDER%;
 }
 .twikiTable th {
-	border-color:%TABLE_BORDER% %MAIN_BACKGROUND_COLOR%;
+	border-color:%TABLE_BORDER% %LIGHT_ON_DARK_TEXT_COLOR%;
+}
+.twikiTable th.twikiFirst {
+	border-left-color:%LIGHT_ON_DARK_TEXT_COLOR%;
 }
 .twikiTable th a:link,
 .twikiTable th a:visited,
