@@ -55,9 +55,12 @@ upload screens. This avoids the need to add any scripts to the bin dir.
 
 package TWiki::Plugins::WysiwygPlugin;
 
-use CGI qw( -any );
+use CGI qw( :cgi -any );
+
 use strict;
-use TWiki::Func;
+
+require TWiki::Func;    # The plugins API
+require TWiki::Plugins; # For the API version
 
 use vars qw( $VERSION $RELEASE $MODERN $SKIN $SHORTDESCRIPTION );
 use vars qw( $html2tml $tml2html $recursionBlock $imgMap $cairoCalled );
