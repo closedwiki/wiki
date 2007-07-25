@@ -69,7 +69,7 @@ BEGIN {
       . '/TWikiDocGraphics/';
     $unsortEnabled        = 1;    # if true, table columns can be unsorted
     $didWriteDefaultStyle = 0;
-    my %defaultCssAttrs  = ();
+    my %defaultCssAttrs = ();
 }
 
 sub _setDefaults {
@@ -98,15 +98,15 @@ sub _setDefaults {
     @dataBg         = ( '#ecf2f8', '#ffffff' );
     @dataBgSorted   = ();
     @dataColor      = ();
-    
+
     undef $initSort;
-    
-	# Preferences setting
-	# It seems overkill to redo this every time!
-	my %pluginParams = TWiki::Func::extractParameters($pluginAttrs);
-	my %prefsParams = TWiki::Func::extractParameters($prefsAttrs);
-	my %combinedParams = ( %pluginParams, %prefsParams );
-	_parseParameters( 1, 'default', %combinedParams );
+
+    # Preferences setting
+    # It seems overkill to redo this every time!
+    my %pluginParams   = TWiki::Func::extractParameters($pluginAttrs);
+    my %prefsParams    = TWiki::Func::extractParameters($prefsAttrs);
+    my %combinedParams = ( %pluginParams, %prefsParams );
+    _parseParameters( 1, 'default', %combinedParams );
 }
 
 # Table attributes defined as a Plugin setting, a preferences setting
@@ -114,20 +114,21 @@ sub _setDefaults {
 sub _parseParameters {
     my ( $useCss, $writeDefaults, %params ) = @_;
 
-	return '' if !keys %params;
-	
-    %cssAttrs       = ();
-    
+    return '' if !keys %params;
+
+    %cssAttrs = ();
+
     my $tmp;
-    
+
     $tmp = $params{id};
     if ( defined $tmp && $tmp ne '' && $tmp ne $tableId ) {
         $tableId = 'table' . $tmp;
     }
     elsif ( !$writeDefaults ) {
         $tableId = 'table' . ( $tableCount + 1 );
-    } else {
-    	$tableId = 'default';
+    }
+    else {
+        $tableId = 'default';
     }
     $cssAttrs{tableId} = $tableId;
 
@@ -150,40 +151,61 @@ sub _parseParameters {
     $tmp = $params{tableborder};
     if ( defined $tmp && $tmp ne '' ) {
         $tableBorder = $tmp if $tmp ne $tableBorder;
-        if ( $useCss && ( !defined $defaultCssAttrs{'tableBorder'} || $tmp ne $defaultCssAttrs{'tableBorder'} )) {
-			$cssAttrs{tableBorder} = $tableBorder;
-			$defaultCssAttrs{tableBorder} = $tableBorder if $writeDefaults;
-		}
+        if (
+            $useCss
+            && ( !defined $defaultCssAttrs{'tableBorder'}
+                || $tmp ne $defaultCssAttrs{'tableBorder'} )
+          )
+        {
+            $cssAttrs{tableBorder} = $tableBorder;
+            $defaultCssAttrs{tableBorder} = $tableBorder if $writeDefaults;
+        }
     }
 
     $tmp = $params{tableframe};
     if ( defined $tmp && $tmp ne '' && $tmp ne $tableFrame ) {
         $tableFrame = $tmp;
-        if ( $useCss && ( !defined $defaultCssAttrs{'tableFrame'} || $tmp ne $defaultCssAttrs{'tableFrame'} )) {
-			$cssAttrs{tableFrame} = $tableFrame;
-			$defaultCssAttrs{tableFrame} = $tableFrame if $writeDefaults;
-		}
+        if (
+            $useCss
+            && ( !defined $defaultCssAttrs{'tableFrame'}
+                || $tmp ne $defaultCssAttrs{'tableFrame'} )
+          )
+        {
+            $cssAttrs{tableFrame} = $tableFrame;
+            $defaultCssAttrs{tableFrame} = $tableFrame if $writeDefaults;
+        }
     }
 
     $tmp = $params{tablerules};
     if ( defined $tmp && $tmp ne '' && $tmp ne $tableRules ) {
         $tableRules = $tmp;
-        if ( $useCss && ( !defined $defaultCssAttrs{'tableRules'} || $tmp ne $defaultCssAttrs{'tableRules'} )) {
-			$cssAttrs{tableRules} = $tableRules;
-			$defaultCssAttrs{tableRules} = $tableRules if $writeDefaults;
-		}
+        if (
+            $useCss
+            && ( !defined $defaultCssAttrs{'tableRules'}
+                || $tmp ne $defaultCssAttrs{'tableRules'} )
+          )
+        {
+            $cssAttrs{tableRules} = $tableRules;
+            $defaultCssAttrs{tableRules} = $tableRules if $writeDefaults;
+        }
     }
 
     $tmp = $params{cellpadding};
     if ( defined $tmp && $tmp ne '' && $tmp ne $cellPadding ) {
         $cellPadding = $tmp;
-        if ( $useCss && ( !defined $defaultCssAttrs{'cellPadding'} || $tmp ne $defaultCssAttrs{'cellPadding'} )) {
-			$cssAttrs{cellPadding} = $cellPadding;
-			$defaultCssAttrs{cellPadding} = $cellPadding if $writeDefaults;
-		}
+        if (
+            $useCss
+            && ( !defined $defaultCssAttrs{'cellPadding'}
+                || $tmp ne $defaultCssAttrs{'cellPadding'} )
+          )
+        {
+            $cssAttrs{cellPadding} = $cellPadding;
+            $defaultCssAttrs{cellPadding} = $cellPadding if $writeDefaults;
+        }
     }
 
     $tmp = $params{cellspacing};
+
     # not used in CSS
     if ( defined $tmp && $tmp ne '' && $tmp ne $cellSpacing ) {
         $cellSpacing = $tmp;
@@ -192,66 +214,96 @@ sub _parseParameters {
     $tmp = $params{cellborder};
     if ( defined $tmp && $tmp ne '' && $tmp ne $cellBorder ) {
         $cellBorder = $tmp;
-        if ( $useCss && ( !defined $defaultCssAttrs{'cellBorder'} || $tmp ne $defaultCssAttrs{'cellBorder'} )) {
-			$cssAttrs{cellBorder} = $cellBorder;
-			$defaultCssAttrs{cellBorder} = $cellBorder if $writeDefaults;
-		}
+        if (
+            $useCss
+            && ( !defined $defaultCssAttrs{'cellBorder'}
+                || $tmp ne $defaultCssAttrs{'cellBorder'} )
+          )
+        {
+            $cssAttrs{cellBorder} = $cellBorder;
+            $defaultCssAttrs{cellBorder} = $cellBorder if $writeDefaults;
+        }
     }
 
     $tmp = $params{headeralign};
     if ( defined $tmp && $tmp ne '' ) {
-        $tmp =~ s/ //go; # remove spaces 
-		if ($tmp ne join(',', @headerAlign)) {
-			@headerAlign = split( /,/, $tmp );
-        	if ( $useCss && ( !defined $defaultCssAttrs{'headerAlign'} || $tmp ne $defaultCssAttrs{'headerAlign'} )) {
-				$cssAttrs{headerAlign} = $tmp; # store string
-				$defaultCssAttrs{headerAlign} = $tmp if $writeDefaults; # store string
-			}    
-		}
+        $tmp =~ s/ //go;    # remove spaces
+        if ( $tmp ne join( ',', @headerAlign ) ) {
+            @headerAlign = split( /,/, $tmp );
+            if (
+                $useCss
+                && ( !defined $defaultCssAttrs{'headerAlign'}
+                    || $tmp ne $defaultCssAttrs{'headerAlign'} )
+              )
+            {
+                $cssAttrs{headerAlign}        = $tmp;    # store string
+                $defaultCssAttrs{headerAlign} = $tmp
+                  if $writeDefaults;                     # store string
+            }
+        }
     }
 
     $tmp = $params{dataalign};
-    if ( defined $tmp && $tmp ne '') {
-        $tmp =~ s/ //go; # remove spaces 
-		if ($tmp ne join(',', @dataAlign)) {
-			@dataAlign = split( /,/, $tmp );
-        	if ( $useCss && ( !defined $defaultCssAttrs{'dataAlign'} || $tmp ne $defaultCssAttrs{'dataAlign'} )) {
-				$cssAttrs{dataAlign} = $tmp; # store string
-				$defaultCssAttrs{dataAlign} = $tmp if $writeDefaults; # store string
-			}
-		}
+    if ( defined $tmp && $tmp ne '' ) {
+        $tmp =~ s/ //go;                                 # remove spaces
+        if ( $tmp ne join( ',', @dataAlign ) ) {
+            @dataAlign = split( /,/, $tmp );
+            if (
+                $useCss
+                && ( !defined $defaultCssAttrs{'dataAlign'}
+                    || $tmp ne $defaultCssAttrs{'dataAlign'} )
+              )
+            {
+                $cssAttrs{dataAlign}        = $tmp;      # store string
+                $defaultCssAttrs{dataAlign} = $tmp
+                  if $writeDefaults;                     # store string
+            }
+        }
     }
 
     $tmp = $params{tablewidth};
     if ( defined $tmp && $tmp ne '' && $tmp ne $tableWidth ) {
         $tableWidth = $tmp;
-		if ( $useCss && ( !defined $defaultCssAttrs{'tableWidth'} || $tmp ne $defaultCssAttrs{'tableWidth'} )) {
-			$cssAttrs{tableWidth} = $tableWidth;
-			$defaultCssAttrs{tableWidth} = $tableWidth if $writeDefaults;
-		}
+        if (
+            $useCss
+            && ( !defined $defaultCssAttrs{'tableWidth'}
+                || $tmp ne $defaultCssAttrs{'tableWidth'} )
+          )
+        {
+            $cssAttrs{tableWidth} = $tableWidth;
+            $defaultCssAttrs{tableWidth} = $tableWidth if $writeDefaults;
+        }
     }
 
     $tmp = $params{columnwidths};
     if ( defined $tmp && $tmp ne '' ) {
-        $tmp =~ s/ //go; # remove spaces 
-		if ($tmp ne join(',', @columnWidths)) {
-			@columnWidths = split( /,/, $tmp );
-			if ( $useCss && ( !defined $defaultCssAttrs{'columnWidths'} || $tmp ne $defaultCssAttrs{'columnWidths'} )) {
-				$cssAttrs{columnWidths} = $tmp; # store string
-				$defaultCssAttrs{columnWidths} = $tmp if $writeDefaults; # store string
-			}
-		}
+        $tmp =~ s/ //go;    # remove spaces
+        if ( $tmp ne join( ',', @columnWidths ) ) {
+            @columnWidths = split( /,/, $tmp );
+            if (
+                $useCss
+                && ( !defined $defaultCssAttrs{'columnWidths'}
+                    || $tmp ne $defaultCssAttrs{'columnWidths'} )
+              )
+            {
+                $cssAttrs{columnWidths}        = $tmp;    # store string
+                $defaultCssAttrs{columnWidths} = $tmp
+                  if $writeDefaults;                      # store string
+            }
+        }
     }
 
     $tmp = $params{headerrows};
     if ( defined $tmp && $tmp ne '' && $tmp ne $headerRows ) {
-    	# not used in CSS
+
+        # not used in CSS
         $headerRows = $tmp;
         $headerRows = 1 if ( $headerRows < 1 );
     }
 
     $tmp = $params{footerrows};
     if ( defined $tmp && $tmp ne '' && $tmp ne $footerRows ) {
+
         # not used in CSS
         $footerRows = $tmp;
     }
@@ -259,104 +311,158 @@ sub _parseParameters {
     $tmp = $params{valign};
     if ( defined $tmp && $tmp ne '' && $tmp ne $vAlign ) {
         $vAlign = $tmp if ( defined $tmp );
-		if ( $useCss && ( !defined $defaultCssAttrs{'vAlign'} || $tmp ne $defaultCssAttrs{'vAlign'} )) {
-			$cssAttrs{vAlign} = $vAlign;
-			$defaultCssAttrs{vAlign} = $vAlign if $writeDefaults;
-		}
+        if (
+            $useCss
+            && ( !defined $defaultCssAttrs{'vAlign'}
+                || $tmp ne $defaultCssAttrs{'vAlign'} )
+          )
+        {
+            $cssAttrs{vAlign} = $vAlign;
+            $defaultCssAttrs{vAlign} = $vAlign if $writeDefaults;
+        }
     }
 
     $tmp = $params{datavalign};
     if ( defined $tmp && $tmp ne '' && $tmp ne $dataVAlign ) {
         $dataVAlign = $tmp if ( defined $tmp );
-		if ( $useCss && ( !defined $defaultCssAttrs{'dataVAlign'} || $tmp ne $defaultCssAttrs{'dataVAlign'} )) {
-			$cssAttrs{dataVAlign} = $dataVAlign;
-			$defaultCssAttrs{dataVAlign} = $dataVAlign if $writeDefaults;
-		}
+        if (
+            $useCss
+            && ( !defined $defaultCssAttrs{'dataVAlign'}
+                || $tmp ne $defaultCssAttrs{'dataVAlign'} )
+          )
+        {
+            $cssAttrs{dataVAlign} = $dataVAlign;
+            $defaultCssAttrs{dataVAlign} = $dataVAlign if $writeDefaults;
+        }
     }
 
     $tmp = $params{headervalign};
     if ( defined $tmp && $tmp ne '' && $tmp ne $headerVAlign ) {
         $headerVAlign = $tmp if ( defined $tmp );
-		if ( $useCss && ( !defined $defaultCssAttrs{'headerVAlign'} || $tmp ne $defaultCssAttrs{'headerVAlign'} )) {
-			$cssAttrs{headerVAlign} = $headerVAlign;
-			$defaultCssAttrs{headerVAlign} = $headerVAlign if $writeDefaults;
-		}
+        if (
+            $useCss
+            && ( !defined $defaultCssAttrs{'headerVAlign'}
+                || $tmp ne $defaultCssAttrs{'headerVAlign'} )
+          )
+        {
+            $cssAttrs{headerVAlign} = $headerVAlign;
+            $defaultCssAttrs{headerVAlign} = $headerVAlign if $writeDefaults;
+        }
     }
 
-    my $tmpheaderbg = $params{headerbg};    
-    if ( defined $tmpheaderbg && $tmpheaderbg ne '' && $tmpheaderbg ne $headerBg ) {
+    my $tmpheaderbg = $params{headerbg};
+    if (   defined $tmpheaderbg
+        && $tmpheaderbg ne ''
+        && $tmpheaderbg ne $headerBg )
+    {
         $headerBg = $tmpheaderbg;
-		if ( $useCss && ( !defined $defaultCssAttrs{'headerBg'} || $tmpheaderbg ne $defaultCssAttrs{'headerBg'} )) {
-			$cssAttrs{headerBg} = $headerBg;
-			$defaultCssAttrs{headerBg} = $headerBg if $writeDefaults;
-		}
+        if (
+            $useCss
+            && ( !defined $defaultCssAttrs{'headerBg'}
+                || $tmpheaderbg ne $defaultCssAttrs{'headerBg'} )
+          )
+        {
+            $cssAttrs{headerBg} = $headerBg;
+            $defaultCssAttrs{headerBg} = $headerBg if $writeDefaults;
+        }
     }
 
     # only set headerbgsorted color if it is defined
-    # otherwise use headerbg        
-	my $tmphbgsorted = $tmpheaderbg;
+    # otherwise use headerbg
+    my $tmphbgsorted = $tmpheaderbg;
     $tmp = $params{headerbgsorted};
-    if ( defined $tmp && $tmp ne '') {
+    if ( defined $tmp && $tmp ne '' ) {
         $tmphbgsorted = $tmp;
     }
 
-    if ( defined $tmphbgsorted && $tmphbgsorted ne '' && $tmphbgsorted ne $headerBgSorted ) {
+    if (   defined $tmphbgsorted
+        && $tmphbgsorted ne ''
+        && $tmphbgsorted ne $headerBgSorted )
+    {
         $headerBgSorted = $tmphbgsorted;
-		if ( $useCss && ( !defined $defaultCssAttrs{'headerBgSorted'} || $tmphbgsorted ne $defaultCssAttrs{'headerBgSorted'} )) {
-			$cssAttrs{headerBgSorted} = $tmphbgsorted;
-			$defaultCssAttrs{headerBgSorted} = $tmphbgsorted if $writeDefaults;
-		}
+        if (
+            $useCss
+            && ( !defined $defaultCssAttrs{'headerBgSorted'}
+                || $tmphbgsorted ne $defaultCssAttrs{'headerBgSorted'} )
+          )
+        {
+            $cssAttrs{headerBgSorted} = $tmphbgsorted;
+            $defaultCssAttrs{headerBgSorted} = $tmphbgsorted if $writeDefaults;
+        }
     }
 
     $tmp = $params{headercolor};
     if ( defined $tmp && $tmp ne '' && $tmp ne $headerColor ) {
         $headerColor = $tmp;
-		if ( $useCss && ( !defined $defaultCssAttrs{'headerColor'} || $tmp ne $defaultCssAttrs{'headerColor'} )) {
-			$cssAttrs{headerColor} = $headerColor;
-			$defaultCssAttrs{headerColor} = $headerColor if $writeDefaults;
-		}
+        if (
+            $useCss
+            && ( !defined $defaultCssAttrs{'headerColor'}
+                || $tmp ne $defaultCssAttrs{'headerColor'} )
+          )
+        {
+            $cssAttrs{headerColor} = $headerColor;
+            $defaultCssAttrs{headerColor} = $headerColor if $writeDefaults;
+        }
     }
 
     my $tmpdatabg = $params{databg};
     if ( defined $tmpdatabg && $tmpdatabg ne '' ) {
-        $tmpdatabg =~ s/ //go; # remove spaces 
-		if ($tmpdatabg ne join(',', @dataBg)) {
-			@dataBg = split( /,/, $tmpdatabg );
-			if ( $useCss && ( !defined $defaultCssAttrs{'dataBg'} || $tmpdatabg ne $defaultCssAttrs{'dataBg'} )) {
-				$cssAttrs{dataBg} = $tmpdatabg; # store string
-				$defaultCssAttrs{dataBg} = $tmpdatabg if $writeDefaults; # store string
-			}
-		}
+        $tmpdatabg =~ s/ //go;    # remove spaces
+        if ( $tmpdatabg ne join( ',', @dataBg ) ) {
+            @dataBg = split( /,/, $tmpdatabg );
+            if (
+                $useCss
+                && ( !defined $defaultCssAttrs{'dataBg'}
+                    || $tmpdatabg ne $defaultCssAttrs{'dataBg'} )
+              )
+            {
+                $cssAttrs{dataBg}        = $tmpdatabg;    # store string
+                $defaultCssAttrs{dataBg} = $tmpdatabg
+                  if $writeDefaults;                      # store string
+            }
+        }
     }
 
     # only set databgsorted color if it is defined
-    # otherwise use databg    
+    # otherwise use databg
     my $tmpdatabgsorted = $tmpdatabg;
     $tmp = $params{databgsorted};
-    if ( defined $tmp && $tmp ne '') {
+    if ( defined $tmp && $tmp ne '' ) {
         $tmpdatabgsorted = $tmp;
     }
     if ( defined $tmpdatabgsorted && $tmpdatabgsorted ne '' ) {
-    	$tmpdatabgsorted =~ s/ //go; # remove spaces
-		if ($tmpdatabgsorted ne join(',', @dataBgSorted)) {
-			@dataBgSorted = split( /,/, $tmpdatabgsorted );
-			if ( $useCss && ( !defined $defaultCssAttrs{'dataBgSorted'} || $tmpdatabgsorted ne $defaultCssAttrs{'dataBgSorted'} )) {
-				$cssAttrs{dataBgSorted} = $tmpdatabgsorted; # store string
-				$defaultCssAttrs{dataBgSorted} = $tmpdatabgsorted if $writeDefaults; # store string
-			}
-		}
+        $tmpdatabgsorted =~ s/ //go;    # remove spaces
+        if ( $tmpdatabgsorted ne join( ',', @dataBgSorted ) ) {
+            @dataBgSorted = split( /,/, $tmpdatabgsorted );
+            if (
+                $useCss
+                && ( !defined $defaultCssAttrs{'dataBgSorted'}
+                    || $tmpdatabgsorted ne $defaultCssAttrs{'dataBgSorted'} )
+              )
+            {
+                $cssAttrs{dataBgSorted} = $tmpdatabgsorted;    # store string
+                $defaultCssAttrs{dataBgSorted} = $tmpdatabgsorted
+                  if $writeDefaults;                           # store string
+            }
+        }
     }
 
     $tmp = $params{datacolor};
     if ( defined $tmp && $tmp ne '' ) {
-        $tmp =~ s/ //go; # remove spaces 
-		if ($tmp ne join(',', @dataColor)) {
-			@dataColor = split( /,/, $tmp );
-			if ( $useCss && ( !defined $defaultCssAttrs{'dataColor'} || $tmp ne $defaultCssAttrs{'dataColor'} )) {
-				$cssAttrs{dataColor} = $tmp; # store string
-				$defaultCssAttrs{dataColor} = $tmp if $writeDefaults; # store string
-			}
-		}
+        $tmp =~ s/ //go;                                       # remove spaces
+        if ( $tmp ne join( ',', @dataColor ) ) {
+            @dataColor = split( /,/, $tmp );
+            if (
+                $useCss
+                && ( !defined $defaultCssAttrs{'dataColor'}
+                    || $tmp ne $defaultCssAttrs{'dataColor'} )
+              )
+            {
+                $cssAttrs{dataColor}        = $tmp;            # store string
+                $defaultCssAttrs{dataColor} = $tmp
+                  if $writeDefaults;                           # store string
+            }
+        }
     }
 
     $tmp = $params{summary};
@@ -369,10 +475,12 @@ sub _parseParameters {
         $tableCaption = $tmp;
     }
 
-    if ( $writeDefaults) {
-    	# just uncomment to write plugin settings as css styles ( .twikiTable{ ... } )
-        #_addStylesToHead( $useCss, $writeDefaults, %defaultCssAttrs );
-    } else {
+    if ($writeDefaults) {
+
+  # just uncomment to write plugin settings as css styles ( .twikiTable{ ... } )
+  #_addStylesToHead( $useCss, $writeDefaults, %defaultCssAttrs );
+    }
+    else {
         _addStylesToHead( $useCss, $writeDefaults, %cssAttrs );
     }
 
@@ -780,6 +888,7 @@ sub _addStylesToHead {
             push( @styles, "$selector td {$attr}" );
             push( @styles, "$selector th {$attr}" );
         }
+
         #_writeStyleToHead( $id, @styles );
         $didWriteDefaultStyle = 1;
     }
@@ -788,9 +897,9 @@ sub _addStylesToHead {
     return if !$useCss;
 
     my $selector = '.twikiTable';
-    my $id       = $writeDefaults ? $writeDefaults : $cssAttrs{tableId};
+    my $id = $writeDefaults ? $writeDefaults : $cssAttrs{tableId};
     $selector .= '#' . $id if !$writeDefaults;
-    
+
     # tablerules
     if ( defined $cssAttrs{tableRules} ) {
         if ( $cssAttrs{tableRules} eq 'all' ) {
@@ -820,8 +929,8 @@ sub _addStylesToHead {
             push( @styles, "$selector td {$attr}" );
         }
     }
-    
-    # tableframe 
+
+    # tableframe
     if ( defined $cssAttrs{tableFrame} ) {
         my $attr = '';
         if ( $cssAttrs{tableFrame} eq 'void' ) {
@@ -934,11 +1043,11 @@ sub _addStylesToHead {
             my $count = 0;
             my @attrDataBg = split( /,/, $cssAttrs{dataBg} );
             foreach (@attrDataBg) {
-                my $color       = $_;
+                my $color = $_;
                 next if !$color;
                 my $rowSelector = 'twikiTableRow' . 'dataBg';
                 $rowSelector .= $count;
-                my $attr        = 'background-color:' . $_ . ';';
+                my $attr = 'background-color:' . $_ . ';';
                 push( @styles, "$selector tr.$rowSelector td {$attr}" );
                 $count++;
             }
@@ -951,11 +1060,11 @@ sub _addStylesToHead {
             my $count = 0;
             my @attrDataBgSorted = split( /,/, $cssAttrs{dataBgSorted} );
             foreach (@attrDataBgSorted) {
-                my $color       = $_;
+                my $color = $_;
                 next if !$color;
                 my $rowSelector = 'twikiTableRow' . 'dataBg';
                 $rowSelector .= $count;
-                my $attr        = 'background-color:' . $_ . ';';
+                my $attr = 'background-color:' . $_ . ';';
                 push( @styles,
                     "$selector tr.$rowSelector td.twikiSortedCol {$attr}" );
                 $count++;
@@ -969,11 +1078,11 @@ sub _addStylesToHead {
             my $count = 0;
             my @attrDataColor = split( /,/, $cssAttrs{dataColor} );
             foreach (@attrDataColor) {
-                my $color       = $_;
+                my $color = $_;
                 next if !$color;
                 my $rowSelector = 'twikiTableRow' . 'dataColor';
                 $rowSelector .= $count;
-                my $attr        = 'color:' . $_ . ';';
+                my $attr = 'color:' . $_ . ';';
                 push( @styles, "$selector tr.$rowSelector td {$attr}" );
                 push( @styles, "$selector tr.$rowSelector td font {$attr}" );
                 $count++;
@@ -986,11 +1095,11 @@ sub _addStylesToHead {
         my $count = 0;
         my @attrColumnWidths = split( /,/, $cssAttrs{columnWidths} );
         foreach (@attrColumnWidths) {
-            my $width       = $_;
+            my $width = $_;
             next if !$width;
             my $colSelector = 'twikiTableCol';
             $colSelector .= $count;
-            my $attr        = 'width:' . $_ . ';';
+            my $attr = 'width:' . $_ . ';';
             push( @styles, "$selector td.$colSelector {$attr}" );
             push( @styles, "$selector th.$colSelector {$attr}" );
             $count++;
@@ -1008,11 +1117,11 @@ sub _addStylesToHead {
         else {
             my $count = 0;
             foreach (@attrHeaderAlign) {
-                my $width       = $_;
+                my $width = $_;
                 next if !$width;
                 my $colSelector = 'twikiTableCol';
                 $colSelector .= $count;
-                my $attr        = 'text-align:' . $_ . ';';
+                my $attr = 'text-align:' . $_ . ';';
                 push( @styles, "$selector th.$colSelector {$attr}" );
                 $count++;
             }
@@ -1030,11 +1139,11 @@ sub _addStylesToHead {
         else {
             my $count = 0;
             foreach (@attrDataAlign) {
-                my $width       = $_;
+                my $width = $_;
                 next if !$width;
                 my $colSelector = 'twikiTableCol';
                 $colSelector .= $count;
-                my $attr        = 'text-align:' . $_ . ';';
+                my $attr = 'text-align:' . $_ . ';';
                 push( @styles, "$selector td.$colSelector {$attr}" );
                 $count++;
             }
@@ -1074,17 +1183,19 @@ sub emitTable {
     }
 
     my $sortThisTable = _shouldISortThisTable( $curTable[ $headerRows - 1 ] );
-    my $tattrs        = {
-        class       => 'twikiTable'
-    };
-	$tattrs->{border}      = $tableBorder if defined $tableBorder && $tableBorder ne '';
-	$tattrs->{cellspacing} = $cellSpacing if defined $cellSpacing && $cellSpacing ne '';
-	$tattrs->{cellpadding} = $cellPadding if defined $cellPadding && $cellPadding ne '';
-    $tattrs->{id}      = $tableId      if defined $tableId && $tableId ne '';
-    $tattrs->{summary} = $tableSummary if defined $tableSummary && $tableSummary ne '';
-    $tattrs->{frame}   = $tableFrame   if defined $tableFrame && $tableFrame ne '';
-    $tattrs->{rules}   = $tableRules   if defined $tableRules && $tableRules ne '';
-    $tattrs->{width}   = $tableWidth   if defined $tableWidth && $tableWidth ne '';
+    my $tattrs = { class => 'twikiTable' };
+    $tattrs->{border} = $tableBorder
+      if defined $tableBorder && $tableBorder ne '';
+    $tattrs->{cellspacing} = $cellSpacing
+      if defined $cellSpacing && $cellSpacing ne '';
+    $tattrs->{cellpadding} = $cellPadding
+      if defined $cellPadding && $cellPadding ne '';
+    $tattrs->{id} = $tableId if defined $tableId && $tableId ne '';
+    $tattrs->{summary} = $tableSummary
+      if defined $tableSummary && $tableSummary ne '';
+    $tattrs->{frame} = $tableFrame if defined $tableFrame && $tableFrame ne '';
+    $tattrs->{rules} = $tableRules if defined $tableRules && $tableRules ne '';
+    $tattrs->{width} = $tableWidth if defined $tableWidth && $tableWidth ne '';
 
     my $text = $currTablePre . CGI::start_table($tattrs);
     $text .= $currTablePre . CGI::caption($tableCaption) if ($tableCaption);
@@ -1198,7 +1309,7 @@ sub emitTable {
     my $rowCount       = 0;
     my $numberOfRows   = scalar(@curTable);
     my $dataColorCount = 0;
-    
+
     foreach my $row (@curTable) {
         my $rowtext  = '';
         my $colCount = 0;
@@ -1207,8 +1318,8 @@ sub emitTable {
         # update the data color count
         my $headerCellCount = 0;
         my $isHeaderRow     = 0;
-        my $numberOfCols   = scalar(@$row);
-        
+        my $numberOfCols    = scalar(@$row);
+
         foreach my $fcell (@$row) {
 
             # check if cell exists
@@ -1291,6 +1402,7 @@ sub emitTable {
                 # I use this)
                 # html attribute
                 $attr->{bgcolor} = $headerBg unless ( $headerBg =~ /none/i );
+
                 # attribute 'maxcols' does not exist in html
                 # so commenting out
                 #$attr->{maxCols} = $maxCols;
@@ -1365,7 +1477,7 @@ sub emitTable {
                 # $type is not 'th'
                 if (@dataBg) {
                     my $bgcolor;
-                    if ($isSorted && @dataBgSorted) {
+                    if ( $isSorted && @dataBgSorted ) {
                         $bgcolor =
                           $dataBgSorted[ $dataColorCount %
                           ( $#dataBgSorted + 1 ) ];
@@ -1411,7 +1523,7 @@ sub emitTable {
             my $isLastCol = ( $colCount == $numberOfCols - 1 );
             $attr->{class} = _appendLastColumnCssClass( $attr->{class} )
               if $isLastCol;
-              
+
             $attr->{class} = _appendLastRowCssClass( $attr->{class} )
               if $isLastRow;
 
@@ -1451,7 +1563,7 @@ sub emitTable {
         }
         $rowtext .= "\n\t";
         my $rowHTML = "\n\t" . CGI::Tr( { class => $trClassName }, $rowtext );
-        
+
         $isHeaderRow = ( $headerCellCount == $colCount );
         my $isFooterRow = ( ( $numberOfRows - $rowCount ) <= $footerRows );
 
@@ -1459,13 +1571,13 @@ sub emitTable {
 
            # this makes one tfoot element per header row due to the line by line
            # nature of this parser - which might be a good thing..
-            $rowHTML = "\n\t" . CGI::tfoot($rowHTML . "\n\t");
+            $rowHTML = "\n\t" . CGI::tfoot( $rowHTML . "\n\t" );
         }
         elsif ($isHeaderRow) {
 
            # this makes one thead element per header row due to the line by line
            # nature of this parser - which might be a good thing..
-            $rowHTML = "\n\t" . CGI::thead($rowHTML . "\n\t");
+            $rowHTML = "\n\t" . CGI::thead( $rowHTML . "\n\t" );
 
             # reset data color count to start with first color after
             # each table heading
@@ -1524,8 +1636,6 @@ sub handler {
         $prefsAttrs = TWiki::Func::getPreferencesValue('TABLEATTRIBUTES');
         _setDefaults();
 
-
-		
         $TWiki::Plugins::TablePlugin::initialised = 1;
     }
 
@@ -1537,11 +1647,13 @@ sub handler {
     my $acceptable = $sortAllTables;
     my @lines = split( /\r?\n/, $_[0] );
     for (@lines) {
-        if (s/%TABLE(?:{(.*?)})?%/_parseParameters(1,undef,TWiki::Func::extractParameters($1))/se) {
+        if (
+s/%TABLE(?:{(.*?)})?%/_parseParameters(1,undef,TWiki::Func::extractParameters($1))/se
+          )
+        {
             $acceptable = 1;
         }
-        elsif ( s/^(\s*)\|(.*\|\s*)$/_processTableRow($1,$2)/eo )
-        {
+        elsif (s/^(\s*)\|(.*\|\s*)$/_processTableRow($1,$2)/eo) {
             $insideTABLE = 1;
         }
         elsif ($insideTABLE) {
