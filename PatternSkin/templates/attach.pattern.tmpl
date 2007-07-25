@@ -15,9 +15,9 @@
 hideimgleft="%ICONURLPATH{toggleclose}%"}%</div><!--//patternTop-->%TMPL:END%
 
 
-%TMPL:DEF{"pagehelp"}%%TWISTYTOGGLE{id="attachhelp" mode="div" class="twikiHelp" remember="on" noscript="hide"}%%TMPL:P{"notes"}%%TMPL:P{"extranotes"}%%ENDTWISTYTOGGLE%%TMPL:END%
+%TMPL:DEF{"pagehelp"}%%TWISTYTOGGLE{id="attachhelp" mode="div" remember="on" noscript="hide"}%<div class="twikiHelp">%TMPL:P{"notes"}%</div>%TMPL:P{"extranotes"}%%ENDTWISTYTOGGLE%%TMPL:END%
 
-%TMPL:DEF{"pagehelp_nojavascript"}%<br />%TWISTYTOGGLE{id="pagehelp_nojavascript" mode="div" class="twikiHelp" start="hide"}%%TMPL:P{"notes"}%%TMPL:P{"extranotes"}%%ENDTWISTYTOGGLE%%TMPL:END%
+%TMPL:DEF{"pagehelp_nojavascript"}%<br />%TWISTYTOGGLE{id="pagehelp_nojavascript" mode="div" start="hide"}%<div class="twikiHelp">%TMPL:P{"notes"}%</div>%TMPL:P{"extranotes"}%%ENDTWISTYTOGGLE%%TMPL:END%
 
 
 %TMPL:DEF{"notes"}%
