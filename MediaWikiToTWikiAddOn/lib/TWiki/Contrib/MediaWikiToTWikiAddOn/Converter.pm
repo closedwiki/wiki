@@ -14,7 +14,8 @@
 package TWiki::Contrib::MediaWikiToTWikiAddOn::Converter;
 
 use strict;
-use vars qw(%language);
+use vars qw(%language $attachmentTemplate
+  $translationToken0 $translationToken1 $translationToken2);
 
 BEGIN {
   %language = (
@@ -49,9 +50,10 @@ $SIG{__DIE__} = \&Carp::confess;
 $Carp::Verbose = 3;
 
 # global vars
-my $translationToken0 = "\0";
-my $translationToken1 = "\1";
-my $translationToken2 = "\2";
+$translationToken0 = "\0";
+$translationToken1 = "\1";
+$translationToken2 = "\2";
+$attachmentTemplate = '%META:FILEATTACHMENT{name="%file%" attachment="%file%" attr="" comment="%comment%" date="%date%" path="%file%" size="%size%" stream="%file%" user="%user%" version="1"}%';
 
 ##############################################################################
 sub new {
@@ -81,10 +83,11 @@ sub new {
   $this->{templates} = {};
   $this->{namespaces} = {};
   $this->{externalLinkCounter} = 0;
-  $this->{language} = \{$language{$this->{language}}};
+  $this->{language} = $language{$this->{language}};
   $this->{genTOC} = {};
   $this->{callbacks} = {};
   $this->{categories} = {};
+  $this->{titleCache} = {};
   #$this->{session} = new TWiki;
 
   $this = bless($this, $class);
@@ -256,6 +259,7 @@ sub writeWarning {
 }
 
 ##############################################################################
+# entry to this module
 sub convert {
   my $this = shift;
 
@@ -295,6 +299,8 @@ sub convert {
     my ($twWeb, $twTopic) = $this->getTitle($page);
     my $webTopicName = "$twWeb.$twTopic";
 
+    $this->writeDebug("### processing $mwTitle -> $webTopicName");
+
     # create directories for namespaces
     $this->createWeb($twWeb);
 
@@ -302,7 +308,7 @@ sub convert {
     $this->execHandler('before', $page, $text);
 
     # create 
-    $this->createPage($page, $text) || $this->createRedirect($page, $text);
+    next unless $this->createPage($page, $text) || $this->createRedirect($page, $text);
 
     # execute afterConvert handler
     $this->execHandler('after', $page, $text);
@@ -366,8 +372,6 @@ sub createPage {
   my $this = shift;
   my $page = shift;
 
-  return 0 if $page->redirect;
-
   # analyse the title
   my ($twWeb, $twTopic) = $this->getTitle($page);
   my $webTopicName = "$twWeb.$twTopic";
@@ -375,12 +379,9 @@ sub createPage {
   my $mwTitle = $page->title;
   if ($this->{seenPage}{$webTopicName}) {
     $this->writeWarning("'$mwTitle' clashes with '$this->{seenPage}{$webTopicName}' on '$webTopicName'");
-    return 0;
   }
   $this->{seenPage}{$webTopicName} = $mwTitle;
-
-  #$this->writeDebug("creating page '$webTopicName'");
-
+  $this->writeDebug("creating page '$webTopicName'");
 
   # process text
   $this->convertMarkup($page, 1, $_[0]);
@@ -425,7 +426,7 @@ sub saveTopic {
 
   $web ||= $this->{targetWeb};
 
-  #$this->writeDebug("called saveTopic(page, text, $web, $topic)");
+  $this->writeDebug("called saveTopic(page, text, $web, $topic)");
   my $author;
   my $date;
   if ($page) {
@@ -452,14 +453,34 @@ sub saveTopic {
   $web =~ s/\/$//go;
   my $topicFileName = $TWiki::cfg{DataDir}.'/'.$web.'/'.$topic.'.txt';
 
+  my $defaultWebFileName = $TWiki::cfg{DataDir}.'/'.$this->{defaultWeb}.'/'.$topic.'.txt';
+
+  if (-f $topicFileName && ! -f $defaultWebFileName) { # overwriting default topics is ok
+    my $index = 0;
+    my $newTopicFileName;
+    $topicFileName =~ s/\.txt$//o;
+    do  {
+      $index++;
+      $newTopicFileName = $topicFileName.'_DOUBLE_'.$index.'.txt';
+    } while (-f $newTopicFileName);
+    $this->writeWarning("woops $topicFileName.txt already exists ... renaming it to $newTopicFileName");
+    $topicFileName = $newTopicFileName;
+    if ($page) {
+      if ($page->redirect) {
+        $this->writeWarning("this is a redirect page");
+      } else {
+        $this->writeWarning("this is NO redirect page");
+      }
+    }
+  }
+
   if ($this->{dry}) {
     $this->writeDebug("would create file '$topicFileName'");
   } else {
-    #$this->writeDebug("creating file '$topicFileName'");
+    $this->writeDebug("creating file '$topicFileName'");
     unless (open(FILE, ">$topicFileName")) {
       die "Can't create file $topicFileName - $!\n";
     }
-    #binmode(FILE, ":utf8");
     print FILE $text;
     close( FILE);
   }
@@ -489,13 +510,16 @@ sub convertMarkup {
   $_[0] =~ s/<ref name="(.+?)">(.+?)<\/ref>/$this->handleFootNote($page, $2, $1)/ges;
   $_[0] =~ s/<ref>(.+?)<\/ref>/$this->handleFootNote($page, $1)/ges;
 
+  # gallery
+  $_[0] =~ s/<gallery(.*?)?>(.*?)<\/gallery>/$this->handleGallery($page, $1, $2)/ges;
+
   # multimedia
   $_[0] =~ s/\[\[$this->{language}{Image}:(.+?)\]\]/$this->handleImage($page, $1)/ge;
   $_[0] =~ s/\[\[$this->{language}{Media}:(.+?)\]\]/$this->handleMedia($page, $1)/ge;
 
   # mailto
   $_[0] =~ s/\[mailto:([^\s]+?)\]/$1/g;
-  $_[0] =~ s/\[mailto:(.*?) (.*?)\]/[${translationToken0}[mailto:$1][$2]]/g;
+  $_[0] =~ s/\[mailto:(.*?) (.*?)\]/\[${translationToken0}\[mailto:$1\]\[$2\]\]/g;
 
   # exteral link
   $_[0] =~ s/\[?\[((?:https?|ftp)\:.+?)(?:[ \|]+(.+?))?\]\]?/$this->handleExternalLink($page, $1, $2)/ge;
@@ -841,6 +865,35 @@ sub handleTemplateVariable {
 }
 
 ##############################################################################
+sub handleGallery {
+  my ($this, $page, $args, $text) = @_;
+
+  my $result = '';
+  #$result = "<!-- DEBUG: $text -->\n";
+  my $imageTag = "$this->{language}{Image}";
+  my @images;
+  foreach my $line (split(/[\n\r]/, $text)) {
+    $line =~ s/^\s*(.*?)\s*$/$1/;
+    $line =~ s/^Image://go;
+    $line =~ s/^$imageTag://go;
+    next unless $line;
+    if ($line =~ /^(.*?)(?:\|(.*))?$/) {
+      my $file = ucfirst($1);
+      my $comment = $2;
+      $file =~ s/^\s+//g;
+      $file =~ s/\s+$//g;
+      $file =~ s/ +/_/g;
+      push @images, $file;
+      # attach the image
+      $this->attachMedia($page, $file, $comment);
+    }
+  }
+  $result .= '%IMAGEGALLERY{include="'.join('|',@images).'"}%'."\n";
+
+  return $result;
+}
+
+##############################################################################
 sub handleImage {
   my ($this, $page, $text) = @_;
 
@@ -906,13 +959,15 @@ sub handleMedia {
 
 ##############################################################################
 sub attachMedia {
-  my ($this, $page, $file) = @_;
+  my ($this, $page, $file, $comment) = @_;
 
   return unless $this->{images}; # did we say ...
 
   # find out where the image is
   $file =~ s/^\s+//go;
   $file =~ s/\s+$//go;
+
+  $comment ||= '';
 
   # cope with attachments that have umlauts in their name
   my $utf8file = $file;
@@ -962,7 +1017,7 @@ sub attachMedia {
   }
 
   # create attachment
-  my $attachmentText = '%META:FILEATTACHMENT{name="%file%" attachment="%file%" attr="" comment="" date="%date%" path="%file%" size="%size%" stream="%file%" user="%user%" version="1"}%';
+  my $attachmentText = $attachmentTemplate;
   my $author = $page->username || 'UnknownUser';
   my $size = `du -b $source`;
   $size =~ s/^(\d+).*$/$1/s;
@@ -971,6 +1026,7 @@ sub attachMedia {
   $attachmentText =~ s/%date%/$time/g;
   $attachmentText =~ s/%user%/$author/g;
   $attachmentText =~ s/%size%/$size/g;
+  $attachmentText =~ s/%comment%/$comment/g;
 
   $page->{_attachments} ||= ();
 
@@ -984,7 +1040,7 @@ sub attachMedia {
 sub handleInternalLink {
   my ($this, $page, $text) = @_;
 
-  #$this->writeDebug("handleInternalLink(".$page->title.", $text)");
+  $this->writeDebug("handleInternalLink(".$page->title.", $text)");
 
   my $linkText = $text;
   my $topicName = $text;
@@ -1000,7 +1056,7 @@ sub handleInternalLink {
   # links have to be full qualified to cope with semantic differences properly
   my $result = "\[$translationToken0\[$webTopicName][$linkText]]";
 
-  #$this->writeDebug("internal link [[$text]] -> $result");
+  $this->writeDebug("internal link [[$text]] -> $result");
   return $result;
 }
 
@@ -1031,11 +1087,18 @@ sub getTitle {
 
   $title ||= $page->title if $page;
 
+  my $webName = '';
+  my $topicName = '';
+
+  my $cacheEntry = $this->{titleCache}{$title};
+  if (defined $cacheEntry) {
+    return @$cacheEntry;
+  }
+
   # exec title handler
   $this->execHandler('title', $page, $title);
 
-  my $webName = '';
-  my $topicName = $title;
+  $topicName = $title;
   my $anchor = '';
 
   if ($topicName =~ /^(.*)#(.*?)$/) {
@@ -1044,7 +1107,7 @@ sub getTitle {
   }
 
   if ($topicName =~ /^(.+?):(.*)$/) {
-    if (defined $this->{namespaces}{$1}) {
+#    if (defined $this->{namespaces}{$1}) {
       $webName = $1;
       $topicName = $2;
 #    } else {
@@ -1052,8 +1115,8 @@ sub getTitle {
 #	$this->writeWarning("unknown namespace '$1'");
 #	$this->{warnedNamespace}{$1} = 1;
 #      }
-    }
-#    $this->writeDebug("found explicite webName=$webName");
+#    }
+    $this->writeDebug("found explicite webName=$webName");
   }
 
   $topicName = $this->getCamelCase($topicName);
@@ -1078,15 +1141,18 @@ sub getTitle {
 
   # get the web name
   $webName ||= $this->{targetWeb};
-  if ($this->{webMap}{$webName}) {
-    $webName = $this->{webMap}{$webName} 
+  my $mappedWebName = $this->{webMap}{$webName};
+  if ($mappedWebName) {
+    $this->writeDebug("found web '$webName' in mapping ... renaming it to '$mappedWebName'");
+    $webName = $mappedWebName;
   } else {
     $webName = $this->{targetWeb}.'.'.$webName
       if $webName ne $this->{targetWeb};
   }
 
   $this->writeDebug("converting title '$title' -> webName=$webName, topicName=$topicName");
-
+  
+  $this->{titleCache}{$title} = [$webName, $topicName];
   return ($webName, $topicName);
 }
 
@@ -1176,11 +1242,11 @@ sub handleCategory {
   $text =~ s/^\s+//gs;
   $text =~ s/\s+$//gs;
 
-  $this->writeDebug("topic=$topic");
-  $this->writeDebug("title=$title");
-  $this->writeDebug("summary=$summary");
-  $this->writeDebug("parents=".join(',',@parentCategories));
-  $this->writeDebug("text='$text'");
+  #$this->writeDebug("topic=$topic");
+  #$this->writeDebug("title=$title");
+  #$this->writeDebug("summary=$summary");
+  #$this->writeDebug("parents=".join(',',@parentCategories));
+  #$this->writeDebug("text='$text'");
 
   my $category = {
     title=>$title,
