@@ -163,7 +163,7 @@ sub anchor {
 sub edit {
     my $tag = shift;
     my $url = "%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/TheWeb/TheTopic?skin=action&action=$tag&t={*\\d+*}";
-    return "<a href=\"$url\" onclick=\"return editWindow('$url')\">edit</a>";
+    return "<a href=\"$url\" onclick=\"return atp_editWindow('$url')\">edit</a>";
 }
 
 sub action {

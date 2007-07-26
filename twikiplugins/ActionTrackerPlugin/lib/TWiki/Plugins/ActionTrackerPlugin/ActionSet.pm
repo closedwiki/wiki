@@ -107,15 +107,15 @@ sub sort {
                 # COVERAGE ON
             }
             # default to sorting on due
-            my $x = $a->{due} || 0;
-            my $y = $b->{due} || 0;
+            my $x = $a->secsToGo();
+            my $y = $b->secsToGo();
             return $x <=> $y;
         } @{$this->{ACTIONS}};
     } else {
         @{$this->{ACTIONS}} =
           sort {
-              my $x = $a->{due} || 0;
-              my $y = $b->{due} || 0;
+              my $x = $a->secsToGo();
+              my $y = $b->secsToGo();
               return $x <=> $y;
           } @{$this->{ACTIONS}};
     }

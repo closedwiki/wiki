@@ -15,49 +15,31 @@
 # GNU General Public License for more details, published at 
 # http://www.gnu.org/copyleft/gpl.html
 #
-# Based on EmptyPlugin
-#
-
-# =========================
 package TWiki::Plugins::ActionTrackerPlugin;
 
 use strict;
 use Assert;
-use TWiki::Func;
-use TWiki::Plugins;
-
 use Error qw( :try );
 
-# =========================
-use vars qw(
-            $web $topic $user $installWeb $VERSION $RELEASE $initialised
-            $allActions $useNewWindow $debug $SHORTDESCRIPTION
-            $pluginName $defaultFormat $doneHeader
-           );
+require TWiki::Func;
+require TWiki::Plugins;
 
-# This should always be $Rev$ so that TWiki can determine the checked-in
-# status of the plugin. It is used by the build automation tools, so
-# you should leave it alone.
+use vars qw( $VERSION $RELEASE $initialised $SHORTDESCRIPTION );
+
 $VERSION = '$Rev$';
-
-# This is a free-form string you can use to "name" your own plugin version.
-# It is *not* used by the build automation tools, but is reported as part
-# of the version number in PLUGINDESCRIPTIONS.
 $RELEASE = '21 May 2007';
-
 $SHORTDESCRIPTION = 'Adds support for action tags in topics, and automatic notification of action statuses';
-
 $initialised = 0;
-$pluginName = 'ActionTrackerPlugin';
-$installWeb = 'TWiki';
 
+my $doneHeader = 0;
 my $actionNumber = 0;
-my %prefs;
+my $defaultFormat;
+
+# Map default options
+my $options;
 
 sub initPlugin {
-    ( $topic, $web, $user, $installWeb ) = @_;
 
-    # check for Plugins.pm versions
     # COVERAGE OFF standard plugin code
 
     if( $TWiki::Plugins::VERSION < 1.026 ) {
@@ -76,30 +58,18 @@ sub initPlugin {
 sub commonTagsHandler {
     my( $otext, $topic, $web, $meta ) = @_;
 
-    unless ($doneHeader) {
-      my $header = <<'HERE';
-<!-- ActionTrackerPlugin -->
-<link rel="stylesheet" href="%ACTIONTRACKERPLUGIN_CSS%" type="text/css" media="all" />
-<script type="text/javascript">
-  function editWindow(url) {
-    win=open(url,"none","titlebar=0,width=900,height=400,resizable,scrollbars");
-    if (win) {win.focus();}
-    return false;
-  }
-</script>
-<!-- /ActionTrackerPlugin -->
-HERE
-
-      if ($_[0] =~ s/<head>(.*?[\r\n]+)/<head>$1$header\n/o) {
-        $doneHeader = 1;
-      }
-    }
-
     return unless ( $_[0] =~ m/%ACTION.*{.*}%/o );
 
     if ( !$initialised ) {
         return unless _lazyInit();
     }
+
+    TWiki::Func::addToHEAD('ACTIONTRACKERPLUGIN_CSS', <<HERE);
+<link rel="stylesheet" href="$options->{CSS}" type="text/css" media="all" />
+HERE
+    TWiki::Func::addToHEAD('ACTIONTRACKERPLUGIN_JS', <<'HERE');
+<script type='text/javascript' src='%PUBURLPATH%/%TWIKIWEB%/ActionTrackerPlugin/atp.js'></script>
+HERE
 
     # Format actions in the topic.
     # Done this way so we get tables built up by
@@ -131,7 +101,7 @@ HERE
                     # than just spaces or tabs
                     $text .=
                       $actionSet->formatAsHTML( $defaultFormat, 'name',
-                                                $useNewWindow,
+                                                $options->{USENEWWINDOW},
                                                'atpDef') .
                                                  "\n";
                     $actionSet = undef;
@@ -150,7 +120,7 @@ HERE
             if ( $actionSet ) {
                 $text .=
                   $actionSet->formatAsHTML( $defaultFormat, 'name',
-                                            $useNewWindow, 'atpDef' ) .
+                                            $options->{USENEWWINDOW}, 'atpDef' ) .
                                               "\n";
                 $actionSet = undef;
             }
@@ -171,13 +141,13 @@ HERE
     if ( $actionSet ) {
         $text .=
           $actionSet->formatAsHTML( $defaultFormat, 'name',
-                                    $useNewWindow, 'atpDef' );
+                                    $options->{USENEWWINDOW}, 'atpDef' );
     }
 
     $_[0] = $text;
     $_[0] =~ s/%ACTIONSEARCH{(.*)?}%/&_handleActionSearch($web, $1)/geo;
     # COVERAGE OFF debug only
-    if ( $debug ) {
+    if ( $options->{DEBUG} ) {
         $_[0] =~ s/%ACTIONNOTIFICATIONS{(.*?)}%/&_handleActionNotify($web, $1)/geo;
     }
     # COVERAGE ON
@@ -242,20 +212,17 @@ sub beforeEditHandler {
 
     $tmpl =~ s/%UID%/$uid/go;
 
-    my $useNewWindow =
-      TWiki::Func::getPreferencesValue( "ACTIONTRACKERPLUGIN_USENEWWINDOW" )
-          || 0;
     my $submitCmd = "preview";
     my $submitCmdName = "Preview";
     my $submitScript = "";
     my $cancelScript = "";
     my $submitCmdOpt = "";
 
-    if ( TWiki::Func::getPreferencesValue( "ACTIONTRACKERPLUGIN_NOPREVIEW" )) {
+    if( $options->{NOPREVIEW} ) {
         $submitCmd = "save";
         $submitCmdName = "Save";
         $submitCmdOpt = "?unlock=on";
-        if ( $useNewWindow ) {
+        if ( $options->{USENEWWINDOW} ) {
             # I'd like close the subwindow here, but not sure how. Like this,
             # the ONCLICK overrides the ACTION and closes the window before
             # the POST is done. All the various solutions I've found on the
@@ -264,7 +231,7 @@ sub beforeEditHandler {
             #$submitScript = "onclick=\"document.form.submit();window.close();return true\"";
         }
     }
-    if ( $useNewWindow ) {
+    if ( $options->{USENEWWINDOW} ) {
         $cancelScript = "onclick=\"window.close();\"";
     }
 
@@ -274,29 +241,16 @@ sub beforeEditHandler {
     $tmpl =~ s/%SUBMITCMDOPT%/$submitCmdOpt/go;
     $tmpl =~ s/%SUBMITCOMMAND%/$submitCmd/go;
 
-    my $hdrs =
-      TWiki::Func::getPreferencesValue( "ACTIONTRACKERPLUGIN_EDITHEADER" )
-          || '| Assigned to | Due date | State | Notify |';
-    my $body =
-      TWiki::Func::getPreferencesValue( "ACTIONTRACKERPLUGIN_EDITFORMAT" )
-          || '| $who | $due | $state | $notify |';
-    my $vert =
-      TWiki::Func::getPreferencesValue( "ACTIONTRACKERPLUGIN_EDITORIENT" )
-          || 'cols';
-
-    my $fmt = new TWiki::Plugins::ActionTrackerPlugin::Format( $hdrs, $body, $vert, "", "" );
+    my $fmt = new TWiki::Plugins::ActionTrackerPlugin::Format(
+        $options->{EDITHEADER},
+        $options->{EDITFORMAT},
+        $options->{EDITORIENT},
+        "", "" );
     my $editable = $action->formatForEdit( $fmt );
     $tmpl =~ s/%EDITFIELDS%/$editable/o;
 
-    my $ebh =
-      TWiki::Func::getPreferencesValue( "ACTIONTRACKERPLUGIN_EDITBOXHEIGHT")
-          || TWiki::Func::getPreferencesValue( 'EDITBOXHEIGHT' );
-    $tmpl =~ s/%EBH%/$ebh/go;
-
-    my $ebw =
-      TWiki::Func::getPreferencesValue( "ACTIONTRACKERPLUGIN_EDITBOXWIDTH")
-          || TWiki::Func::getPreferencesValue( 'EDITBOXWIDTH' );
-    $tmpl =~ s/%EBW%/$ebw/go;
+    $tmpl =~ s/%EBH%/$options->{EDITBOXHEIGHT}/go;
+    $tmpl =~ s/%EBW%/$options->{EDITBOXWIDTH}/go;
 
     $text = $action->{text};
     # Process the text so it's nice to edit. This gets undone in Action.pm
@@ -363,7 +317,8 @@ sub afterEditHandler {
     }
 
     my $action =
-      TWiki::Plugins::ActionTrackerPlugin::Action::createFromQuery( $_[2], $topic, $an, $query );
+      TWiki::Plugins::ActionTrackerPlugin::Action::createFromQuery(
+          $_[2], $_[1], $an, $query );
 
     $action->populateMissingFields();
 
@@ -371,7 +326,7 @@ sub afterEditHandler {
     $text = "$pretext$text\n$posttext"; 
 
     # take the opportunity to fill in the missing fields in actions
-    _addMissingAttributes( $text, $topic, $_[2] );
+    _addMissingAttributes( $text, $_[1], $_[2] );
 
     $_[0] = $text;
 }
@@ -455,7 +410,7 @@ sub _addMissingAttributes {
 
         if ( $processAction ) {
             my $action = new TWiki::Plugins::ActionTrackerPlugin::Action
-              ( $web, $topic, $an, $attrs, $descr );
+              ( $_[2], $_[1], $an, $attrs, $descr );
             $action->populateMissingFields();
             if ( $seenUID{$action->{uid}} ) {
                 # This can happen if there has been a careless
@@ -499,7 +454,7 @@ sub _handleActionSearch {
 
     my $actions = TWiki::Plugins::ActionTrackerPlugin::ActionSet::allActionsInWebs( $web, $attrs, 0 );
     $actions->sort( $sort );
-    return $actions->formatAsHTML( $fmt, "href", $useNewWindow,
+    return $actions->formatAsHTML( $fmt, "href", $options->{USENEWWINDOW},
                                    'atpSearch' );
 }
 
@@ -508,44 +463,24 @@ sub _lazyInit {
 
     require TWiki::Attrs;
     require Time::ParseDate;
+    require TWiki::Plugins::ActionTrackerPlugin::Options;
     require TWiki::Plugins::ActionTrackerPlugin::Action;
     require TWiki::Plugins::ActionTrackerPlugin::ActionSet;
     require TWiki::Plugins::ActionTrackerPlugin::Format;
     require TWiki::Plugins::ActionTrackerPlugin::ActionNotify;
 
-    # Get plugin debug flag
-    $debug = TWiki::Func::getPreferencesFlag( "ACTIONTRACKERPLUGIN_DEBUG" )
-      || 0;
+    $options = TWiki::Plugins::ActionTrackerPlugin::Options::load();
 
-    $useNewWindow =
-      TWiki::Func::getPreferencesValue( "ACTIONTRACKERPLUGIN_USENEWWINDOW" )
-          || 0;
-
-    my $hdr = 
-      TWiki::Func::getPreferencesValue( "ACTIONTRACKERPLUGIN_TABLEHEADER" )
-          || '| Assigned to | Due date | Description | State | Notify ||';
-    my $bdy =
-      TWiki::Func::getPreferencesValue( "ACTIONTRACKERPLUGIN_TABLEFORMAT" )
-          || '| $who | $due | $text | $state | $notify | $edit |';
-    my $textform =
-      TWiki::Func::getPreferencesValue( "ACTIONTRACKERPLUGIN_TEXTFORMAT" )
-          || 'Action for $who, due $due, $state$n$text$n';
-    my $orient =
-      TWiki::Func::getPreferencesValue( "ACTIONTRACKERPLUGIN_TABLEORIENT" )
-          || 'cols';
-    my $changes =
-      TWiki::Func::getPreferencesValue( "ACTIONTRACKERPLUGIN_NOTIFYCHANGES" )
-          || '$who,$due,$state,$text';
     $defaultFormat = new TWiki::Plugins::ActionTrackerPlugin::Format(
-        $hdr, $bdy, $orient, $textform, $changes );
+        $options->{TABLEHEADER},
+        $options->{TABLEFORMAT},
+        $options->{TABLEORIENT},
+        $options->{TEXTFORMAT},
+        $options->{NOTIFYCHANGES} );
 
-    my $extras =
-      TWiki::Func::getPreferencesValue( "ACTIONTRACKERPLUGIN_EXTRAS" )
-          || '';
-
-    if( $extras ) {
+    if( $options->{EXTRAS} ) {
         my $e = TWiki::Plugins::ActionTrackerPlugin::Action::extendTypes(
-            $extras );
+            $options->{EXTRAS} );
         # COVERAGE OFF safety net
         if ( defined( $e )) {
             TWiki::Func::writeWarning( "- TWiki::Plugins::ActionTrackerPlugin ERROR $e" );

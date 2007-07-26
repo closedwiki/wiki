@@ -438,7 +438,7 @@ sub test_HTMLFormattingOpen {
     $this->assert($s =~ m(<td>\s*<a (.*?)>edit</a>\s*</td>), $s);
     my $x = $1;
     $this->assert_matches(qr/href="$url\d+"/, $x);
-    $this->assert_matches(qr/onclick="return editWindow\('$url\d+'\)"/, $x);
+    $this->assert_matches(qr/onclick="return atp_editWindow\('$url\d+'\)"/, $x);
 
     $fmt = new TWiki::Plugins::ActionTrackerPlugin::Format(
         "", "| \$web.\$topic |", "");
