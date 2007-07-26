@@ -7,6 +7,7 @@ use TWiki::Plugins::ActionTrackerPlugin::Action;
 use TWiki::Plugins::ActionTrackerPlugin::ActionSet;
 use TWiki::Plugins::ActionTrackerPlugin::ActionNotify;
 use TWiki::Plugins::ActionTrackerPlugin::Format;
+use TWiki::Plugins::ActionTrackerPlugin::Options;
 use Time::ParseDate;
 use TWiki::Attrs;
 use TWiki::Store::RcsLite;
@@ -112,7 +113,7 @@ HERE
 %ACTION{who=TWikiFormGroup,due="4 Jan 01",state=open}% A4: late 
 HERE
     $this->{twiki}->{store}->saveTopic($this->{twiki}->{user},$this->{users_web}, "Topic2", <<'HERE');
-%ACTION{who=EMailGroup,due="5 Jan 01",state=open}% A5: late
+%ACTION{who=EMailGroup,due="2001-01-05",state=open}% A5: late
 %ACTION{who="ActorOne,ActorTwo,ActorThree,ActorFour,TWikiFormGroup,ActorFive,ActorSix,actor.7@seven.net,ActorEight,EMailGroup",due="6 Jan 99",open}% A6: late
 HERE
 
@@ -120,18 +121,18 @@ HERE
     my $t1 = Time::ParseDate::parsedate("21 Jun 2001");
     $rcs->addRevisionFromText(<<HERE, 'Initial revision', 'crawford', $t1);
 %META:TOPICINFO{author="guest" date="$t1" format="1.0" version="1.1"}%
-%ACTION{uid="666" who=ActorFive,due="22-jun-2001",notify=$this->{users_web}.ActorFive}% A7: Date change
-%ACTION{who="$this->{users_web}.ActorFour",due="22-jul-2001",notify=ActorFive}% A8: Text change
+%ACTION{uid="666" who=ActorFive,due="2001-06-22",notify=$this->{users_web}.ActorFive}% A7: Date change
+%ACTION{who="$this->{users_web}.ActorFour",due="2001-07-22",notify=ActorFive}% A8: Text change
 %ACTION{uid=1234 who=NonEntity notify=ActorFive}% A9: No change
 HERE
 
     my $t2 = Time::ParseDate::parsedate("21 Jun 2003");
     $rcs->addRevisionFromText(<<HERE, '*** empty log message ***', 'crawford', $t2);
 %META:TOPICINFO{author="guest" date="$t2" format="1.0" version="1.2"}%
-%ACTION{uid="666" who=ActorFive,due="22-jun-2002",notify=$this->{users_web}.ActorFive}% A7: Date change
+%ACTION{uid="666" who=ActorFive,due="2002-06-22",notify=$this->{users_web}.ActorFive}% A7: Date change
 %ACTION{who=EMailGroup,due="5 Jan 01",state=open,notify=nobody}% No change
-%ACTION{who=ActorFive,due="22-jun-2002" notify=$this->{users_web}.ActorOne}% Stuck in
-%ACTION{who=ActorSix,due="22-jul-2001",notify="$this->{users_web}.ActorSix,$this->{users_web}.ActorEight"}% A8: Text cha
+%ACTION{who=ActorFive,due="2002-06-22" notify=$this->{users_web}.ActorOne}% Stuck in
+%ACTION{who=ActorSix,due="2001-07-22",notify="$this->{users_web}.ActorSix,$this->{users_web}.ActorEight"}% A8: Text cha
 nge from original, late
 %ACTION{uid=1234 who=NonEntity notify=ActorFive}% A9: No change
 HERE
@@ -287,7 +288,7 @@ sub test_C_ChangedSince {
     my $this = shift;
     TWiki::Plugins::ActionTrackerPlugin::Action::forceTime("2 Jan 2002");
     TWiki::Plugins::ActionTrackerPlugin::ActionNotify::doNotifications(
-        $this->{twiki}->{webName}, 'changedsince="1 dec 2001"' );
+        $this->{twiki}->{webName}, 'changedsince="1 dec 2001" web="'.$this->{test_web}.'"' );
     my $saw = "";
     my $html;
 

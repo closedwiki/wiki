@@ -138,9 +138,9 @@ HERE
 <td>Topic</td></tr>
 <tr>
 <th>Edit</th>
-<td><a href="$sup/edit$ss/Test/Topic?skin=action%2cpattern;atp_action=AcTion0$t" onclick="return editWindow('$sup/edit$ss/Test/Topic?skin=action%2cpattern;atp_action=AcTion0$t')">edit</a></td>
-<td><a href="$sup/edit$ss/Test/Topic?skin=action%2cpattern;atp_action=AcTion1$t" onclick="return editWindow('$sup/edit$ss/Test/Topic?skin=action%2cpattern;atp_action=AcTion1$t')">edit</a></td>
-<td><a href="$sup/edit$ss/Test/Topic?skin=action%2cpattern;atp_action=AcTion2$t" onclick="return editWindow('$sup/edit$ss/Test/Topic?skin=action%2cpattern;atp_action=AcTion2$t')">edit</a></td></tr></table>
+<td><a href="$sup/edit$ss/Test/Topic?skin=action%2cpattern;atp_action=AcTion0$t" onclick="return atp_editWindow('$sup/edit$ss/Test/Topic?skin=action%2cpattern;atp_action=AcTion0$t')">edit</a></td>
+<td><a href="$sup/edit$ss/Test/Topic?skin=action%2cpattern;atp_action=AcTion1$t" onclick="return atp_editWindow('$sup/edit$ss/Test/Topic?skin=action%2cpattern;atp_action=AcTion1$t')">edit</a></td>
+<td><a href="$sup/edit$ss/Test/Topic?skin=action%2cpattern;atp_action=AcTion2$t" onclick="return atp_editWindow('$sup/edit$ss/Test/Topic?skin=action%2cpattern;atp_action=AcTion2$t')">edit</a></td></tr></table>
 HERE
 }
 
@@ -222,15 +222,15 @@ HERE
 <tr>
 <td><a name="AcTion0" />Test</td>
 <td>Topic</td>
-<td><a href="$sup/edit$ss/Test/Topic?skin=action%2cpattern;atp_action=AcTion0$t" onclick="return editWindow('$sup/edit$ss/Test/Topic?skin=action%2cpattern;atp_action=AcTion0$t')">edit</a></td></tr>
+<td><a href="$sup/edit$ss/Test/Topic?skin=action%2cpattern;atp_action=AcTion0$t" onclick="return atp_editWindow('$sup/edit$ss/Test/Topic?skin=action%2cpattern;atp_action=AcTion0$t')">edit</a></td></tr>
 <tr>
 <td><a name="AcTion1" />Test</td>
 <td>Topic</td>
-<td><a href="$sup/edit$ss/Test/Topic?skin=action%2cpattern;atp_action=AcTion1$t" onclick="return editWindow('$sup/edit$ss/Test/Topic?skin=action%2cpattern;atp_action=AcTion1$t')">edit</a></td></tr>
+<td><a href="$sup/edit$ss/Test/Topic?skin=action%2cpattern;atp_action=AcTion1$t" onclick="return atp_editWindow('$sup/edit$ss/Test/Topic?skin=action%2cpattern;atp_action=AcTion1$t')">edit</a></td></tr>
 <tr>
 <td><a name="AcTion2" />Test</td>
 <td>Topic</td>
-<td><a href="$sup/edit$ss/Test/Topic?skin=action%2cpattern;atp_action=AcTion2$t" onclick="return editWindow('$sup/edit$ss/Test/Topic?skin=action%2cpattern;atp_action=AcTion2$t')">edit</a></td></tr></table>
+<td><a href="$sup/edit$ss/Test/Topic?skin=action%2cpattern;atp_action=AcTion2$t" onclick="return atp_editWindow('$sup/edit$ss/Test/Topic?skin=action%2cpattern;atp_action=AcTion2$t')">edit</a></td></tr></table>
 HERE
 }
 

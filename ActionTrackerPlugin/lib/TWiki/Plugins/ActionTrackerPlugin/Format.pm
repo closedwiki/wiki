@@ -17,7 +17,7 @@
 use strict;
 use integer;
 
-use TWiki::Func;
+require TWiki::Func;
 
 # Object that represents a header and fields format
 # This is where all formatting should be done; there should

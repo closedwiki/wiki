@@ -37,6 +37,9 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
 package TWiki::Plugins::ActionTrackerPlugin::ActionNotify;
 
 my $wikiWordRE;
+my $options;
+
+use TWiki::Plugins::ActionTrackerPlugin::Options;
 
 # PUBLIC actionnotify script entry point. Reinitialises TWiki.
 #
@@ -52,10 +55,9 @@ sub actionNotify {
 
     if ( $expr =~ s/DEBUG//o ) {
         print doNotifications( $twiki->{webName}, $expr, 1 ),"\n";
-        return;
+    } else {
+        doNotifications( $twiki->{webName}, $expr, 0 );
     }
-
-    doNotifications( $twiki->{webName}, $expr, 0 );
 }
 
 # Entry point separated from main entry point, because we may want
@@ -63,36 +65,29 @@ sub actionNotify {
 sub doNotifications {
     my ( $webName, $expr, $debugMailer ) = @_;
 
-    my $attrs = new TWiki::Attrs( $expr, 1 );
-    my $hdr = $attrs->{header} # if the header attribute exists: take this.
-          || TWiki::Func::getPreferencesValue( 'ACTIONTRACKERPLUGIN_TABLEHEADER' )
-          || '| Assigned to | Due date | Description | State | Notify ||';
-    delete $attrs->{header}; # Delete this attribute, because it mashes up the ActionSearch.
-    my $bdy = $attrs->{format} # if the format attribute exists: take this.
-          || TWiki::Func::getPreferencesValue( 'ACTIONTRACKERPLUGIN_TABLEFORMAT' )
-          || '| $who | $due | $text | $state | $notify | $edit |';
-    delete $attrs->{format}; # Delete this attribute, because it mashes up the ActionSearch.
-    my $orient =
-      TWiki::Func::getPreferencesFlag( 'ACTIONTRACKERPLUGIN_TABLEORIENT' )
-          || 'cols';
-    my $textform =
-      TWiki::Func::getPreferencesValue( 'ACTIONTRACKERPLUGIN_TEXTFORMAT' )
-          || 'Action for $who, due $due, $state$n$text$n';
-    my $changes =
-      TWiki::Func::getPreferencesValue( 'ACTIONTRACKERPLUGIN_NOTIFYCHANGES' )
-          || '$who,$due,$state,$text';
+    $options = TWiki::Plugins::ActionTrackerPlugin::Options::load();
+    # Disable the state shortcut in mails
+    $options->{ENABLESTATESHORTCUT} = 0;
 
-    my $format = new TWiki::Plugins::ActionTrackerPlugin::Format( $hdr, $bdy, $orient, $textform, $changes );
+    my $attrs = new TWiki::Attrs( $expr, 1 );
+    my $hdr = $attrs->remove('header') || $options->{TABLEHEADER};
+    my $bdy = $attrs->remove('format') || $options->{TABLEFORMAT};
+
+    my $orient = $options->{TABLEORIENT};
+    my $textform = $options->{TEXTFORMAT};
+    my $changes = $options->{NOTIFYCHANGES};
+
+    my $format = new TWiki::Plugins::ActionTrackerPlugin::Format(
+        $hdr, $bdy, $orient, $textform, $changes );
 
     my $result = '';
-    my $webs = $attrs->{web} || '.*';
-    my $topics = $attrs->{topic} || '.*';
+    my $webs = $attrs->remove('web') || '.*';
+    my $topics = $attrs->remove('topic') || '.*';
 
     # Okay, we have tables of all the actions and a partial set of the
     # people who can be notified.
     my %notifications = ();
     my %people = ();
-
     my $date = $attrs->remove( 'changedsince' );
     if ( defined( $date )) {
         # need to get rid of formatting done in actionnotify perl script
@@ -105,7 +100,6 @@ sub doNotifications {
             }
         }
     }
-
     my $actions;
     if ( !$attrs->isEmpty() ) {
         # Get all the actions that match the search
@@ -337,9 +331,8 @@ sub _composeActionsMail {
     my ( $actionsString, $actionsHTML, $changesString, $changesHTML,
          $since, $mailaddr, $format ) = @_;
 
-    my $from =  $TWiki::cfg{WebMasterEmail} ||
-      TWiki::Func::getPreferencesValue( 'WIKIWEBMASTER' ) ||
-          'twikiwebmaster@example.com';
+    my $from = $TWiki::cfg{WebMasterEmail} ||
+      TWiki::Func::getPreferencesValue( 'WIKIWEBMASTER' ) || '';
 
     my $text = TWiki::Func::readTemplate( 'actionnotify' ) || <<'HERE';
 From: %EMAILFROM%
@@ -469,7 +462,6 @@ sub _findChangesInWeb {
 # $date is a string, not an integer
 sub _findChangesInWebs {
     my ( $webs, $topics, $date, $format, $notifications ) = @_;
-
     my @weblist = grep { /^$webs$/ } TWiki::Func::getListOfWebs( 'user' );
     foreach my $web ( @weblist ) {
         _findChangesInWeb( $web, $topics, $date,

@@ -464,7 +464,10 @@ sub secsToGo {
     if( $this->{due} ) {
         return $this->{due} - $now;
     }
-    return -1;
+    # No due date, use default
+    require TWiki::Plugins::ActionTrackerPlugin::Options;
+    return
+      $TWiki::Plugins::ActionTrackerPlugin::Options::options{DEFAULTDUE};
 }
 
 # PUBLIC return number of days to go before due date, negative if action
@@ -664,9 +667,11 @@ sub _formatField_due {
 sub _formatField_state {
     my ( $this, $asHTML ) = @_;
     return $this->{state} unless $asHTML;
+    return $this->{state} unless $this->{uid};
+    # SMELL: assumes a prior call has loaded the options
+    require TWiki::Plugins::ActionTrackerPlugin::Options;
     return $this->{state} unless
-      TWiki::Func::getPreferencesFlag(
-          'ACTIONTRACKERPLUGIN_ENABLESTATESHORTCUT' );
+      $TWiki::Plugins::ActionTrackerPlugin::Options::options{ENABLESTATESHORTCUT};
 
     my $input = '';
     foreach my $option (@{$types{state}->{values}}) {
@@ -674,14 +679,13 @@ sub _formatField_state {
         $attrs{selected} = 'selected' if ($option eq $this->{state});
         $input .= CGI::option(\%attrs, $option);
     }
-    TWiki::Func::addToHEAD('ATP_JS', <<HEAD);
-<script type='text/javascript' src='%PUBURLPATH%/%TWIKIWEB%/ActionTrackerPlugin/atp.js'></script>
-HEAD
     return CGI::Select(
         {
-            onChange => 'atp_update("%SCRIPTURLPATH{rest}%/ActionTrackerPlugin/update?topic='.
+            onChange => 'atp_update(this, "%SCRIPTURLPATH{rest}%/ActionTrackerPlugin/update?topic='.
               $this->{web}.'.'.$this->{topic}.
-                ';uid='.$this->{uid}.'", "state", this.value)' },
+                ';uid='.$this->{uid}.'", "state")',
+            class => 'atpState'.$this->{state},
+        },
         $input);
 }
 
@@ -724,7 +728,7 @@ sub _formatField_edit {
     my $attrs = { href => $url };
     if ( $newWindow ) {
         # Javascript window call
-        $attrs->{onclick} = "return editWindow('$url')";
+        $attrs->{onclick} = "return atp_editWindow('$url')";
     }
     return CGI::a( $attrs, 'edit' );
 }
@@ -812,6 +816,7 @@ sub _partialMatch {
 # people interested in notification.
 sub findChanges {
     my ( $this, $old, $format, $notifications ) = @_;
+
 
     # COVERAGE OFF safety net
     if ( !defined( $this->{notify} ) || $this->{notify} !~ m/\w/o ) {

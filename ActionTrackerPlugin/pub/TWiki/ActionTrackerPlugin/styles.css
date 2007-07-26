@@ -54,3 +54,10 @@
   background-color: yellow;
 }
 
+/* CSS classes used for the SELECT element when ENABLESTATESHORTCUT is on. */
+.atpStateopen { 
+  background-color: orange;
+}
+.atpStateclosed { 
+  background-color: #D0D0D0;
+}
