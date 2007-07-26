@@ -1,5 +1,6 @@
 data/TWiki/MediaWikiToTWikiAddOn.txt 0644
 lib/CPAN/lib/Parse/MediaWikiDump.pm 0644
+lib/TWiki/Contrib/MediaWikiToTWikiAddOn/Converter.pm 0644
 lib/TWiki/Contrib/MediaWikiToTWikiAddOn/EmptyPlugin.pm 0644
 lib/TWiki/Contrib/MediaWikiToTWikiAddOn/build.pl 0644
 lib/TWiki/Contrib/MediaWikiToTWikiAddOn.pm 0644
