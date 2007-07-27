@@ -658,5 +658,13 @@ sub test_4308 {
     }
 }
 
+sub test_4411 {
+    my $this = shift;
+    $this->assert(TWiki::Func::isGuest(), $this->{twiki}->{user});
+    $this->{twiki}->finish();
+    $this->{twiki} = new TWiki($TWiki::cfg{AdminUserLogin});
+    $this->assert(!TWiki::Func::isGuest(), $this->{twiki}->{user});
+}
+
 1;
 
