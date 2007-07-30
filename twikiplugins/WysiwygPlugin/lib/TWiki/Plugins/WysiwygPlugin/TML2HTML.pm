@@ -322,6 +322,10 @@ sub _getRenderedVersion {
         # Table: | cell | cell |
         # allow trailing white space after the last |
         if( $line =~ m/^(\s*\|.*\|\s*)$/ ) {
+            if ($isList) {
+                $this->_addListItem( \@result, '', '', '' );
+                $isList = 0;
+            }
             unless( $insideTABLE ) {
                 push( @result, CGI::start_table(
                     { border=>1, cellpadding=>0, cellspacing=>1 } ));
@@ -335,10 +339,10 @@ sub _getRenderedVersion {
         }
 
         # Lists and paragraphs
-        if ( $line =~ s/^\s*$/<p \/>/o ) {
+        if ( $line =~ s/^\s*$/<p \/>/ ) {
             $isList = 0;
         }
-        elsif ( $line =~ m/^(\S+?)/o ) {
+        elsif ( $line =~ m/^\S/ ) {
             $isList = 0;
         }
         elsif ( $line =~ m/^(\t|   )+\S/ ) {
