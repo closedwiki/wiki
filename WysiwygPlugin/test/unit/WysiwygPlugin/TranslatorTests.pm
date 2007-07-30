@@ -53,7 +53,15 @@ for( my $i = 0; $i < 32; $i++) {
 # will use tml. Only use where round-trip can't be closed because
 # we are testing deprecated syntax.
 
-my $data =
+my $pick_test;
+#$pick_test = 'Item4410';
+gen_compare_tests();
+gen_file_tests();
+
+my $data;
+
+BEGIN {
+$data =
   [
       {
           exec => 3,
@@ -934,47 +942,52 @@ HERE
           html => '<ul><li>x</li></ul><table cellspacing="1" cellpadding="0" border="1"><tr><td>Y</td></tr></table>',
       },
      ];
+};
 
-
-
-for (my $i = 0; $i < scalar(@$data); $i++) {
-    my $datum = $data->[$i];
-    #next unless( $datum->{name} eq 'images' );
-    if ( $datum->{exec} & 1 ) {
-        my $fn = 'TranslatorTests::test_TML2HTML_'.$datum->{name};
-        no strict 'refs';
-        *$fn = sub { my $this = shift; $this->compareTML_HTML( $datum ) };
-        use strict 'refs';
-    }
-    if ( $datum->{exec} & 2 ) {
-        my $fn = 'TranslatorTests::test_HTML2TML_'.$datum->{name};
-        no strict 'refs';
-        *$fn = sub { my $this = shift; $this->compareHTML_TML( $datum ) };
-        use strict 'refs';
+sub gen_compare_tests {
+    for (my $i = 0; $i < scalar(@$data); $i++) {
+        my $datum = $data->[$i];
+        if (defined($pick_test)) {
+            next unless( $datum->{name} eq $pick_test );
+        }
+        if ( $datum->{exec} & 1 ) {
+            my $fn = 'TranslatorTests::test_TML2HTML_'.$datum->{name};
+            no strict 'refs';
+            *$fn = sub { my $this = shift; $this->compareTML_HTML( $datum ) };
+            use strict 'refs';
+        }
+        if ( $datum->{exec} & 2 ) {
+            my $fn = 'TranslatorTests::test_HTML2TML_'.$datum->{name};
+            no strict 'refs';
+            *$fn = sub { my $this = shift; $this->compareHTML_TML( $datum ) };
+            use strict 'refs';
+        }
     }
 }
 
-foreach my $d (@INC) {
-    if (-d "$d/test_html" && $d =~ /WysiwygPlugin/) {
-        opendir( D, "$d/test_html" ) or die;
-        foreach my $file (grep { /^.*\.html$/i } readdir D ) {
-            $file =~ s/\.html$//;
-            my $test = { name => $file };
-            open(F, "<$d/test_html/$file.html");
-            undef $/;
-            $test->{html} = <F>;
-            close(F);
-            next unless -e "$d/result_tml/$file.txt";
-            open(F, "<$d/result_tml/$file.txt");
-            undef $/;
-            $test->{finaltml} = <F>;
-            close(F);
-            my $fn = 'TranslatorTests::test_HTML2TML_FILE_'.$test->{name};
-            no strict 'refs';
-            *$fn = sub { shift->compareHTML_TML( $test ) };
-            use strict 'refs';
+sub gen_file_tests {
+    foreach my $d (@INC) {
+        if (-d "$d/test_html" && $d =~ /WysiwygPlugin/) {
+            opendir( D, "$d/test_html" ) or die;
+            foreach my $file (grep { /^.*\.html$/i } readdir D ) {
+                $file =~ s/\.html$//;
+                my $test = { name => $file };
+                open(F, "<$d/test_html/$file.html");
+                undef $/;
+                $test->{html} = <F>;
+                close(F);
+                next unless -e "$d/result_tml/$file.txt";
+                open(F, "<$d/result_tml/$file.txt");
+                undef $/;
+                $test->{finaltml} = <F>;
+                close(F);
+                my $fn = 'TranslatorTests::test_HTML2TML_FILE_'.$test->{name};
+                no strict 'refs';
+                *$fn = sub { shift->compareHTML_TML( $test ) };
+                use strict 'refs';
+            }
+            last;
         }
-        last;
     }
 }
 
