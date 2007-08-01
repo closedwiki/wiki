@@ -62,7 +62,7 @@ sub fixture_groups {
     return ( $groups );
 }
 
-sub verify_simple  {
+sub deverify_simple  {
     my $this = shift;
 
     my $result = $this->{twiki}->handleCommonTags(
@@ -74,7 +74,7 @@ sub verify_simple  {
     $this->assert_matches(qr/Ok\+Topic/, $result);
 }
 
-sub verify_angleb {
+sub deverify_angleb {
     my $this = shift;
     # Test regex with \< and \>, used in rename searches
     my $result = $this->{twiki}->handleCommonTags(
@@ -86,7 +86,7 @@ sub verify_angleb {
     $this->assert_does_not_match(qr/Ok\+Topic/, $result);
 }
 
-sub verify_topicName {
+sub deverify_topicName {
     my $this = shift;
     # Test topic name search
     my $result = $this->{twiki}->handleCommonTags(
@@ -98,7 +98,7 @@ sub verify_topicName {
     $this->assert_matches(qr/Ok\+Topic/, $result);
 }
 
-sub verify_regex_trivial {
+sub deverify_regex_trivial {
     my $this = shift;
     my $result = $this->{twiki}->handleCommonTags(
         '%SEARCH{"blah" type="regex" scope="text" nonoise="on" format="$topic"}%',
@@ -109,7 +109,7 @@ sub verify_regex_trivial {
     $this->assert_matches(qr/Ok\+Topic/, $result);
 }
 
-sub verify_literal {
+sub deverify_literal {
     my $this = shift;
     # literal
     my $result = $this->{twiki}->handleCommonTags(
@@ -122,7 +122,7 @@ sub verify_literal {
 }
 
 
-sub verify_keyword {
+sub deverify_keyword {
     my $this = shift;
     # keyword
     my $result = $this->{twiki}->handleCommonTags(
@@ -134,7 +134,7 @@ sub verify_keyword {
     $this->assert_matches(qr/Ok\+Topic/, $result);
 }
 
-sub verify_word {
+sub deverify_word {
     my $this = shift;
 
     # word
@@ -147,7 +147,7 @@ sub verify_word {
     $this->assert_does_not_match(qr/Ok\+Topic/, $result);
 }
 
-sub verify_regex_match {
+sub deverify_regex_match {
     my $this = shift;
 
     my $result = $this->{twiki}->handleCommonTags(
@@ -160,7 +160,7 @@ sub verify_regex_match {
 }
 
 
-sub verify_literal_match {
+sub deverify_literal_match {
     my $this = shift;
     # literal
     my $result = $this->{twiki}->handleCommonTags(
@@ -172,7 +172,7 @@ sub verify_literal_match {
     $this->assert_matches(qr/Ok\+Topic/, $result);
 }
 
-sub verify_keyword_match {
+sub deverify_keyword_match {
     my $this = shift;
 
     # keyword
@@ -185,7 +185,7 @@ sub verify_keyword_match {
     $this->assert_matches(qr/Ok\+Topic/, $result);
 }
 
-sub verify_word_match {
+sub deverify_word_match {
     my $this = shift;
     # word
     my $result = $this->{twiki}->handleCommonTags(
@@ -197,7 +197,7 @@ sub verify_word_match {
     $this->assert_does_not_match(qr/Ok\+Topic/, $result);
 }
 
-sub verify_regex_matchme {
+sub deverify_regex_matchme {
     my $this = shift;
 
     # ---------------------
@@ -212,7 +212,7 @@ sub verify_regex_matchme {
     $this->assert_matches(qr/Ok\+Topic/, $result);
 }
 
-sub verify_literal_matchme {
+sub deverify_literal_matchme {
     my $this = shift;
     # literal
     my $result = $this->{twiki}->handleCommonTags(
@@ -224,7 +224,7 @@ sub verify_literal_matchme {
     $this->assert_matches(qr/Ok\+Topic/, $result);
 }
 
-sub verify_keyword_matchme {
+sub deverify_keyword_matchme {
     my $this = shift;
 
     # keyword
@@ -238,7 +238,7 @@ sub verify_keyword_matchme {
 
 }
 
-sub verify_word_matchme {
+sub deverify_word_matchme {
     my $this = shift;
     # word
     my $result = $this->{twiki}->handleCommonTags(
@@ -251,7 +251,7 @@ sub verify_word_matchme {
 
 }
 
-sub verify_minus_regex {
+sub deverify_minus_regex {
     my $this = shift;
     # ---------------------
     # Search string 'matchme -dont'
@@ -265,7 +265,7 @@ sub verify_minus_regex {
     $this->assert_does_not_match(qr/Ok\+Topic/, $result);
 }
 
-sub verify_minus_literal {
+sub deverify_minus_literal {
     my $this = shift;
     # literal
     my $result = $this->{twiki}->handleCommonTags(
@@ -278,7 +278,7 @@ sub verify_minus_literal {
 
 }
 
-sub verify_minus_keyword {
+sub deverify_minus_keyword {
     my $this = shift;
     # keyword
     my $result = $this->{twiki}->handleCommonTags(
@@ -291,7 +291,7 @@ sub verify_minus_keyword {
 
 }
 
-sub verify_minus_word {
+sub deverify_minus_word {
     my $this = shift;
     # word
     my $result = $this->{twiki}->handleCommonTags(
@@ -304,7 +304,7 @@ sub verify_minus_word {
 
 }
 
-sub verify_slash_regex {
+sub deverify_slash_regex {
     my $this = shift;
     # ---------------------
     # Search string 'blah/matchme.blah'
@@ -319,7 +319,7 @@ sub verify_slash_regex {
 
 }
 
-sub verify_slash_literal {
+sub deverify_slash_literal {
     my $this = shift;
     # literal
     my $result = $this->{twiki}->handleCommonTags(
@@ -332,7 +332,7 @@ sub verify_slash_literal {
 
 }
 
-sub verify_slash_keyword {
+sub deverify_slash_keyword {
     my $this = shift;
     # keyword
     my $result = $this->{twiki}->handleCommonTags(
@@ -345,7 +345,7 @@ sub verify_slash_keyword {
 
 }
 
-sub verify_slash_word {
+sub deverify_slash_word {
     my $this = shift;
     # word
     my $result = $this->{twiki}->handleCommonTags(
@@ -358,7 +358,7 @@ sub verify_slash_word {
 
 }
 
-sub verify_quote_regex {
+sub deverify_quote_regex {
     my $this = shift;
     # ---------------------
     # Search string 'BLEEGLE dont'
@@ -373,7 +373,7 @@ sub verify_quote_regex {
 
 }
 
-sub verify_quote_literal {
+sub deverify_quote_literal {
     my $this = shift;
     # literal
     my $result = $this->{twiki}->handleCommonTags(
@@ -386,7 +386,7 @@ sub verify_quote_literal {
 
 }
 
-sub verify_quote_keyword {
+sub deverify_quote_keyword {
     my $this = shift;
     # keyword
     my $result = $this->{twiki}->handleCommonTags(
@@ -399,7 +399,7 @@ sub verify_quote_keyword {
 
 }
 
-sub verify_quote_word {
+sub deverify_quote_word {
     my $this = shift;
     # word
     my $result = $this->{twiki}->handleCommonTags(
@@ -411,7 +411,7 @@ sub verify_quote_word {
     $this->assert_matches(qr/Ok\+Topic/, $result);
 }
 
-sub verify_SEARCH_3860 {
+sub deverify_SEARCH_3860 {
     my $this = shift;
     my $result = $this->{twiki}->handleCommonTags(
         <<'HERE', $this->{test_web}, $this->{test_topic});
@@ -426,7 +426,7 @@ HERE
     $this->assert_str_equals("$wn $this->{users_web}.$wn\n", $result);
 }
 
-sub verify_search_empty_regex {
+sub deverify_search_empty_regex {
     my $this = shift;
 
     my $result = $this->{twiki}->handleCommonTags(
@@ -435,7 +435,7 @@ sub verify_search_empty_regex {
     $this->assert_str_equals("", $result);
 }
 
-sub verify_search_empty_literal {
+sub deverify_search_empty_literal {
     my $this = shift;
 
     my $result = $this->{twiki}->handleCommonTags(
@@ -444,7 +444,7 @@ sub verify_search_empty_literal {
     $this->assert_str_equals("", $result);
 }
 
-sub verify_search_empty_keyword {
+sub deverify_search_empty_keyword {
     my $this = shift;
 
     my $result = $this->{twiki}->handleCommonTags(
@@ -453,7 +453,7 @@ sub verify_search_empty_keyword {
     $this->assert_str_equals("", $result);
 }
 
-sub verify_search_empty_word {
+sub deverify_search_empty_word {
     my $this = shift;
 
     my $result = $this->{twiki}->handleCommonTags(
@@ -462,7 +462,7 @@ sub verify_search_empty_word {
     $this->assert_str_equals("", $result);
 }
 
-sub verify_search_numpty_regex {
+sub deverify_search_numpty_regex {
     my $this = shift;
 
     my $result = $this->{twiki}->handleCommonTags(
@@ -471,7 +471,7 @@ sub verify_search_numpty_regex {
     $this->assert_str_equals("", $result);
 }
 
-sub verify_search_numpty_literal {
+sub deverify_search_numpty_literal {
     my $this = shift;
 
     my $result = $this->{twiki}->handleCommonTags(
@@ -480,7 +480,7 @@ sub verify_search_numpty_literal {
     $this->assert_str_equals("", $result);
 }
 
-sub verify_search_numpty_keyword {
+sub deverify_search_numpty_keyword {
     my $this = shift;
 
     my $result = $this->{twiki}->handleCommonTags(
@@ -489,7 +489,7 @@ sub verify_search_numpty_keyword {
     $this->assert_str_equals("", $result);
 }
 
-sub verify_search_numpty_word {
+sub deverify_search_numpty_word {
     my $this = shift;
 
     my $result = $this->{twiki}->handleCommonTags(
@@ -539,7 +539,7 @@ HERE
 
 my $stdCrap = 'type="query" nonoise="on" format="$topic" separator=" "}%';
 
-sub test_parentQuery {
+sub detest_parentQuery {
     my $this = shift;
 
     $this->set_up_for_queries();
@@ -549,7 +549,7 @@ sub test_parentQuery {
     $this->assert_str_equals('QueryTopic', $result);
 }
 
-sub test_attachmentSizeQuery1 {
+sub detest_attachmentSizeQuery1 {
     my $this = shift;
 
     $this->set_up_for_queries();
@@ -559,7 +559,7 @@ sub test_attachmentSizeQuery1 {
     $this->assert_str_equals('QueryTopic QueryTopicTwo', $result);
 }
 
-sub test_attachmentSizeQuery2 {
+sub detest_attachmentSizeQuery2 {
     my $this = shift;
 
     $this->set_up_for_queries();
@@ -569,7 +569,7 @@ sub test_attachmentSizeQuery2 {
     $this->assert_str_equals('QueryTopicTwo', $result);
 }
 
-sub test_indexQuery {
+sub detest_indexQuery {
     my $this = shift;
 
     $this->set_up_for_queries();
@@ -579,7 +579,7 @@ sub test_indexQuery {
     $this->assert_str_equals('QueryTopicTwo', $result);
 }
 
-sub test_gropeQuery {
+sub detest_gropeQuery {
     my $this = shift;
 
     $this->set_up_for_queries();
@@ -589,7 +589,7 @@ sub test_gropeQuery {
     $this->assert_str_equals('QueryTopic QueryTopicTwo', $result);
 }
 
-sub test_gropeQuery2 {
+sub detest_gropeQuery2 {
     my $this = shift;
 
     $this->set_up_for_queries();
@@ -599,7 +599,7 @@ sub test_gropeQuery2 {
     $this->assert_str_equals('QueryTopic QueryTopicTwo', $result);
 }
 
-sub test_formQuery {
+sub detest_formQuery {
     my $this = shift;
 
     $this->set_up_for_queries();
@@ -609,7 +609,7 @@ sub test_formQuery {
     $this->assert_str_equals('QueryTopicTwo', $result);
 }
 
-sub test_formQuery2 {
+sub detest_formQuery2 {
     my $this = shift;
 
     $this->set_up_for_queries();
@@ -619,7 +619,7 @@ sub test_formQuery2 {
     $this->assert_str_equals('QueryTopic', $result);
 }
 
-sub test_formQuery3 {
+sub detest_formQuery3 {
     my $this = shift;
 
     $this->set_up_for_queries();
@@ -629,7 +629,7 @@ sub test_formQuery3 {
     $this->assert_str_equals('QueryTopic', $result);
 }
 
-sub test_formQuery4 {
+sub detest_formQuery4 {
     my $this = shift;
 
     $this->set_up_for_queries();
@@ -639,7 +639,7 @@ sub test_formQuery4 {
     $this->assert_str_equals('QueryTopic', $result);
 }
 
-sub test_formQuery5 {
+sub detest_formQuery5 {
     my $this = shift;
 
     $this->set_up_for_queries();
@@ -653,7 +653,7 @@ sub test_formQuery5 {
     $this->assert_str_equals('QueryTopicTwo', $result);
 }
 
-sub test_refQuery {
+sub detest_refQuery {
     my $this = shift;
 
     $this->set_up_for_queries();
@@ -666,7 +666,7 @@ sub test_refQuery {
 # make sure syntax errors are handled cleanly. All the error cases thrown by
 # the infix parser are tested more thoroughly in Fn_IF, and don't have to
 # be re-tested here.
-sub test_badQuery1 {
+sub detest_badQuery1 {
     my $this = shift;
 
     $this->set_up_for_queries();
