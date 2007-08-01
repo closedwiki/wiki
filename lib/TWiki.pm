@@ -1257,8 +1257,13 @@ sub new {
     # Make %ENV safer, preventing hijack of the search path
     # SMELL: can this be done in a BEGIN block? Or is the environment
     # set per-query?
+    # Item4382: Default $ENV{PATH} must be untainted because TWiki runs
+    # with use strict and calling external programs that writes on the disk
+    # will fail unless Perl seens it as set to safe value.
     if( $TWiki::cfg{SafeEnvPath} ) {
         $ENV{PATH} = $TWiki::cfg{SafeEnvPath};
+    } else {
+        $ENV{PATH} = TWiki::Sandbox::untaintUnchecked( $ENV{PATH} );
     }
     delete @ENV{ qw( IFS CDPATH ENV BASH_ENV ) };
 
