@@ -277,26 +277,31 @@ BEGIN {
     }
 
     # Constant tags dependent on the config
+    $functionTags{ALLOWLOGINNAME}  =
+      sub { $TWiki::cfg{Register}{AllowLoginName} || 0 };
     $functionTags{AUTHREALM}       = sub { $TWiki::cfg{AuthRealm} };
+    $functionTags{DEFAULTURLHOST}  = sub { $TWiki::cfg{DefaultUrlHost} };
     $functionTags{HOMETOPIC}       = sub { $TWiki::cfg{HomeTopicName} };
-    $functionTags{MAINWEB}         = sub { $TWiki::cfg{UsersWebName} };
-    $functionTags{TRASHWEB}        = sub { $TWiki::cfg{TrashWebName} };
+    $functionTags{LOCALSITEPREFS}  = sub { $TWiki::cfg{LocalSitePreferences} };
+    $functionTags{NOFOLLOW}        =
+      sub { $TWiki::cfg{NoFollow} ? 'rel='.$TWiki::cfg{NoFollow} : '' };
     $functionTags{NOTIFYTOPIC}     = sub { $TWiki::cfg{NotifyTopicName} };
     $functionTags{SCRIPTSUFFIX}    = sub { $TWiki::cfg{ScriptSuffix} };
-    $functionTags{LOCALSITEPREFS}  = sub { $TWiki::cfg{LocalSitePreferences} };
     $functionTags{STATISTICSTOPIC} = sub { $TWiki::cfg{Stats}{TopicName} };
-    $functionTags{TWIKIWEB}        = sub { $TWiki::cfg{SystemWebName} };
+    $functionTags{SYSTEMWEB}       = sub { $TWiki::cfg{SystemWebName} };
+    $functionTags{TRASHWEB}        = sub { $TWiki::cfg{TrashWebName} };
+    $functionTags{TWIKIADMINLOGIN} = sub { $TWiki::cfg{AdminUserLogin} };
+    $functionTags{USERSWEB}        = sub { $TWiki::cfg{UsersWebName} };
     $functionTags{WEBPREFSTOPIC}   = sub { $TWiki::cfg{WebPrefsTopicName} };
-    $functionTags{DEFAULTURLHOST}  = sub { $TWiki::cfg{DefaultUrlHost} };
     $functionTags{WIKIPREFSTOPIC}  = sub { $TWiki::cfg{SitePrefsTopicName} };
     $functionTags{WIKIUSERSTOPIC}  = sub { $TWiki::cfg{UsersTopicName} };
     $functionTags{WIKIWEBMASTER}   = sub { $TWiki::cfg{WebMasterEmail} };
     $functionTags{WIKIWEBMASTERNAME} = sub { $TWiki::cfg{WebMasterName} };
-    $functionTags{TWIKIADMINLOGIN} = sub { $TWiki::cfg{AdminUserLogin} };
-    $functionTags{NOFOLLOW} =
-      sub { $TWiki::cfg{NoFollow} ? 'rel='.$TWiki::cfg{NoFollow} : '' };
-    $functionTags{ALLOWLOGINNAME} =
-      sub { $TWiki::cfg{Register}{AllowLoginName} || 0 };
+
+    # Compatibility synonyms, deprecated in 4.2 but still used throughout
+    # the documentation.
+    $functionTags{MAINWEB}         = $functionTags{USERSWEB};
+    $functionTags{TWIKIWEB}        = $functionTags{SYSTEMWEB};
 
     # locale setup
     #
@@ -1198,7 +1203,8 @@ sub normalizeWebTopicName {
     }
     $web ||= $cfg{UsersWebName};
     $topic ||= $cfg{HomeTopicName};
-    $web =~ s/%((MAIN|TWIKI|USERS|SYSTEM|DOC)WEB)%/_expandTagOnTopicRendering( $this,$1)||''/e;
+    while( $web =~ s/%((MAIN|TWIKI|USERS|SYSTEM|DOC)WEB)%/_expandTagOnTopicRendering( $this,$1)||''/e ) {
+    }
     $web =~ s#\.#/#go;
     return( $web, $topic );
 }

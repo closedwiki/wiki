@@ -9,7 +9,7 @@
 
 _Official list of stable TWiki functions for Plugin developers_
 
-This module defines official functions that [[%TWIKIWEB%.TWikiPlugins][Plugins]]
+This module defines official functions that [[%SYSTEMWEB%.TWikiPlugins][Plugins]]
 can use to interact with the TWiki engine and content.
 
 Refer to TWiki.EmptyPlugin and lib/TWiki/Plugins/EmptyPlugin.pm for a template Plugin and documentation on how to write a Plugin.
@@ -331,7 +331,7 @@ the standard scripts in the 'bin' directory each has a context
 identifier - the view script has 'view', the edit script has 'edit'
 etc. So you can easily tell what 'type' of script your Plugin is
 being called within. The core context identifiers are listed
-in the %TWIKIWEB%.TWikiTemplates topic. Please be careful not to
+in the %SYSTEMWEB%.TWikiTemplates topic. Please be careful not to
 overwrite any of these identifiers!
 
 Context identifiers can be used to communicate between Plugins, and between
@@ -999,7 +999,7 @@ sub eachGroupMember {
 ---+++ checkAccessPermission( $type, $wikiName, $text, $topic, $web, $meta ) -> $boolean
 
 Check access permission for a topic based on the
-[[%TWIKIWEB%.TWikiAccessControl]] rules
+[[%SYSTEMWEB%.TWikiAccessControl]] rules
    * =$type=     - Access type, required, e.g. ='VIEW'=, ='CHANGE'=.
    * =$wikiName= - WikiName of remote user, required, e.g. ="PeterThoeny"=.
      If =$wikiName= is '', 0 or =undef= then access is *always permitted*.
@@ -1815,7 +1815,7 @@ sub moveAttachment {
 
 ---+++ readTemplate( $name, $skin ) -> $text
 
-Read a template or skin. Embedded [[%TWIKIWEB%.TWikiTemplates][template directives]] get expanded
+Read a template or skin. Embedded [[%SYSTEMWEB%.TWikiTemplates][template directives]] get expanded
    * =$name= - Template name, e.g. ='view'=
    * =$skin= - Comma-separated list of skin names, optional, e.g. ='print'=
 Return: =$text=    Template text
@@ -1996,7 +1996,7 @@ sub expandCommonVariables {
 
 ---+++ renderText( $text, $web ) -> $text
 
-Render text from TWiki markup into XHTML as defined in [[%TWIKIWEB%.TextFormattingRules]]
+Render text from TWiki markup into XHTML as defined in [[%SYSTEMWEB%.TextFormattingRules]]
    * =$text= - Text to render, e.g. ='*bold* text and =fixed font='=
    * =$web=  - Web name, optional, e.g. ='Main'=. The current web is taken if missing
 Return: =$text=    XHTML text, e.g. ='&lt;b>bold&lt;/b> and &lt;code>fixed font&lt;/code>'=
