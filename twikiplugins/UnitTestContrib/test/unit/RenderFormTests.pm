@@ -221,15 +221,87 @@ sub test_render_for_edit {
         $this->{twiki}, $this->{test_web}, "InitializationForm" );
     my $res = $formDef->renderForEdit($this->{test_web}, $testtopic1, $meta);
     $this->assert_html_equals(<<'HERE', $res);
-<div class="twikiForm twikiEditForm"><table class="twikiFormTable"><tr><th class="twikiFormTableHRow" colspan="2"><a rel="nofollow" target="InitializationForm" href="/MAIN/bin/view/TemporaryRenderFormTestsTestWebRenderFormTests/InitializationForm" title="Click to see details in separate window" onclick="return launchWindow(&quot;TemporaryRenderFormTestsTestWebRenderFormTests&quot;,&quot;InitializationForm&quot;)">TemporaryRenderFormTestsTestWebRenderFormTests.InitializationForm</a> <input type="submit" name="action_replaceform" value='Replace form...' class="twikiChangeFormButton twikiButton" /></th></tr>
-<tr><th align="right"><span title="Click to see details in separate window">Issue Name</span></th><td align="left"><input type="text" name="IssueName" value="_An issue_" size="40" class="twikiInputField twikiEditFormTextField" /></td></tr>
-<tr><th align="right"><span title="Click to see details in separate window">State</span></th><td align="left"><table><tr><td><label><input type="radio" name="State" value="none"  label="none" class="twikiRadioButton twikiEditFormRadioField"/>none</label></td></tr></table></td></tr>
-<tr><th align="right"><span title="Click to see details in separate window">Issue Description</span></th><td align="left"><input type="hidden" name="IssueDescription" value="---+ Example problem"  /><div class="twikiEditFormLabelField"><nop><h1><a name="Example_problem"></a> Example problem </h1></div></td></tr>
-<tr><th align="right"><span title="Click to see details in separate window">Issue 1</span></th><td align="left"><select name="Issue1" class="twikiSelect twikiEditFormSelect" size="1"></select></td></tr>
-<tr><th align="right"><span title="Click to see details in separate window">Issue 2</span>EXTRA</th><td align="left">SWEET</td></tr>
-<tr><th align="right"><span title="Click to see details in separate window">Issue 3</span></th><td align="left"><table></table><input type="hidden" name="Issue3" value="" /></td></tr>
-<tr><th align="right"><span title="Click to see details in separate window">Issue 4</span></th><td align="left"><textarea name="Issue4"  rows="4" cols="50" class="twikiInputField twikiEditFormTextAreaField">
-Defect</textarea></td></tr> </table>  </div>
+<div class="twikiForm twikiEditForm">
+<table class="twikiFormTable">
+ <tr>
+  <th class="twikiFormTableHRow" colspan="2">
+   <a rel="nofollow" target="InitializationForm" href="/MAIN/bin/view/TemporaryRenderFormTestsTestWebRenderFormTests/InitializationForm" title="Click to see details in separate window" onclick="return launchWindow(&quot;TemporaryRenderFormTestsTestWebRenderFormTests&quot;,&quot;InitializationForm&quot;)">TemporaryRenderFormTestsTestWebRenderFormTests.InitializationForm</a>
+   <input type="submit" name="action_replaceform" value='Replace form...' class="twikiChangeFormButton twikiButton" />
+  </th>
+ </tr>
+ <tr>
+  <th align="right">
+   Issue Name
+  </th>
+  <td align="left">
+   <input type="text" name="IssueName" value="_An issue_" size="40" class="twikiInputField twikiEditFormTextField" />
+  </td>
+ </tr>
+ <tr>
+  <th align="right">
+   State</th>
+  <td align="left">
+   <table>
+    <tr>
+     <td>
+      <label>
+       <input type="radio" name="State" value="none" label="none" class="twikiRadioButton twikiEditFormRadioField"/>
+       none
+      </label>
+     </td>
+    </tr>
+   </table>
+  </td>
+ </tr>
+ <tr>
+  <th align="right">
+   Issue Description
+  </th>
+  <td align="left"><input type="hidden" name="IssueDescription" value="---+ Example problem"  />
+   <div class="twikiEditFormLabelField">
+    <nop>
+    <h1>
+     <a name="Example_problem"></a> Example problem
+    </h1>
+   </div>
+  </td>
+ </tr>
+ <tr>
+  <th align="right">
+   Issue 1
+  </th>
+  <td align="left">
+   <select name="Issue1" class="twikiSelect twikiEditFormSelect" size="1">
+   </select>
+  </td>
+ </tr>
+ <tr>
+  <th align="right">
+   Issue 2EXTRA
+  </th>
+  <td align="left">SWEET
+  </td></tr>
+ <tr>
+  <th align="right">
+   Issue 3
+  </th>
+  <td align="left">
+   <table></table>
+   <input type="hidden" name="Issue3" value="" />
+  </td>
+ </tr>
+ <tr>
+  <th align="right">
+   Issue 4
+  </th>
+  <td align="left">
+   <textarea name="Issue4"  rows="4" cols="50" class="twikiInputField twikiEditFormTextAreaField">
+Defect
+   </textarea>
+  </td>
+ </tr>
+</table>
+</div>
 HERE
 }
 
