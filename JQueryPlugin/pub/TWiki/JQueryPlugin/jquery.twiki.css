@@ -137,9 +137,9 @@
 }
 .treeview, 
 .treeview ul { 
-  padding: 0;
-  margin: 0;
-  list-style: none;
+  padding: 0 !important;
+  margin: 0 !important;
+  list-style: none !important;
 }	
 
 .treeview li { 

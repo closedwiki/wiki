@@ -81,7 +81,7 @@ nisi. Mauris est urna, fermentum vel, luctus sed, luctus eu, elit. In nulla.
 ---+++ Rounded corners
 <div style="width:520px;">
   <div class="jqRounded" style="width:250px;float:left;margin:5px">
-    <h2 style="color:white;background:#778cca;border:0px">1. Lorem ipsum dolor sit amet</h2>
+    <h2 style="color:#ffffff;background:#778cca;border:0px">1. Lorem ipsum dolor sit amet</h2>
     <div style="background:#bfdded;color:black">
       Consectetuer adipiscing elit. Nulla dui turpis,
       convallis eget, lacinia id, vulputate ut, ipsum. Donec sed sem. Ut tempus. Nunc
@@ -90,7 +90,7 @@ nisi. Mauris est urna, fermentum vel, luctus sed, luctus eu, elit. In nulla.
     </div>
   </div>
   <div class="jqRounded" style="width:250px;float:right;margin:5px">
-    <h2 style="color:white;background:#9DC35B;border:0px;">2. Lorem ipsum dolor sit amet</h2>
+    <h2 style="color:#ffffff;background:#9DC35B;border:0px;">2. Lorem ipsum dolor sit amet</h2>
     <div style="background:#C4E786;color:black">
       Consectetuer adipiscing elit. Nulla dui turpis,
       convallis eget, lacinia id, vulputate ut, ipsum. Donec sed sem. Ut tempus. Nunc
@@ -99,7 +99,7 @@ nisi. Mauris est urna, fermentum vel, luctus sed, luctus eu, elit. In nulla.
     </div>
   </div>
   <div class="jqRounded" style="width:250px;float:left;margin:5px;">
-    <h2 style="color:white;background:#DBB13F;border:0px;">3. Lorem ipsum dolor sit amet</h2>
+    <h2 style="color:#ffffff;background:#DBB13F;border:0px;">3. Lorem ipsum dolor sit amet</h2>
     <div style="background:#ffd154;color:black">
       Consectetuer adipiscing elit. Nulla dui turpis,
       convallis eget, lacinia id, vulputate ut, ipsum. Donec sed sem. Ut tempus. Nunc
@@ -108,7 +108,7 @@ nisi. Mauris est urna, fermentum vel, luctus sed, luctus eu, elit. In nulla.
     </div>
   </div>
   <div class="jqRounded" style="width:250px;float:right;margin:5px">
-    <h2 style="color:white;background:#aa0000;border:0px;">4. Lorem ipsum dolor sit amet</h2>
+    <h2 style="color:#ffffff;background:#aa0000;border:0px;">4. Lorem ipsum dolor sit amet</h2>
     <div style="background:#EDC2C2;color:black">
       Consectetuer adipiscing elit. Nulla dui turpis,
       convallis eget, lacinia id, vulputate ut, ipsum. Donec sed sem. Ut tempus. Nunc
