@@ -227,7 +227,7 @@
 
 		// save current
 		current = this;
-		title = this.tooltipText;
+		title = ""+this.tooltipText;
 		
 		if ( this.tSettings.bodyHandler ) {
 			helper.title.hide();
