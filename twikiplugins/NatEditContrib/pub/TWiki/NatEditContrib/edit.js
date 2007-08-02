@@ -1,5 +1,6 @@
 // copied and adapted from phpBB
 // copied and adapted from MediaWiki
+// IE range selection adapted from http://twiki.org/cgi-bin/view/Plugins/SmartEditAddOn
 
 var txtarea;
 
@@ -30,19 +31,19 @@ function natInsertTags(tagOpen, sampleText, tagClose) {
     var startPos = txtarea.selectionStart;
     var endPos = txtarea.selectionEnd;
     var scrollTop = txtarea.scrollTop;
-    var myText = (txtarea.value).substring(startPos, endPos);
+    var theSelection = (txtarea.value).substring(startPos, endPos);
 
     if (endPos - startPos > 0) {
       replaced = true;
     }
-    if (!myText) {
-      myText = sampleText;
+    if (!theSelection) {
+      theSelection = sampleText;
     }
-    if (myText.charAt(myText.length - 1) == " ") { 
+    if (theSelection.charAt(theSelection.length - 1) == " ") { 
       // exclude ending space char, if any
-      subst = tagOpen + myText.substring(0, (myText.length - 1)) + tagClose + " ";
+      subst = tagOpen + theSelection.substring(0, (theSelection.length - 1)) + tagClose + " ";
     } else {
-      subst = tagOpen + myText + tagClose;
+      subst = tagOpen + theSelection + tagClose;
     }
     txtarea.value = 
       txtarea.value.substring(0, startPos) + subst +
@@ -52,18 +53,119 @@ function natInsertTags(tagOpen, sampleText, tagClose) {
 
     //set new selection
     if (replaced) {
-      var cPos = startPos + tagOpen.length + myText.length + tagClose.length;
+      var cPos = startPos + tagOpen.length + theSelection.length + tagClose.length;
       txtarea.selectionStart = cPos;
       txtarea.selectionEnd = cPos;
     } else {
       txtarea.selectionStart = startPos + tagOpen.length;
-      txtarea.selectionEnd = startPos + tagOpen.length + myText.length;
+      txtarea.selectionEnd = startPos + tagOpen.length + theSelection.length;
     }
     txtarea.scrollTop = scrollTop;
   }
 
   if (txtarea.createTextRange) {
     txtarea.caretPos = document.selection.createRange().duplicate();
+  }
+}
+
+//used for line oriented tags - like bulleted lists
+//if you have a multiline selection, the tagOpen/tagClose is added to each line
+
+//if there is no selection, select the entire current line
+//if there is a selection, select the entire line for each line selected
+function natInsertListTag(tagOpen, sampleText, tagClose) {
+var startPos, endPos;
+  // IE
+    if (!txtarea.selectionStart) {
+    
+        var originalRange = document.selection.createRange().duplicate();
+        var mySelection = originalRange.text;
+                        if(mySelection != null){
+                                endPos = mySelection.length;
+                        } else {
+                            endPos = 0;
+                        }
+                        {//nasty cursor stuff - as createRange stuff breaks when you don't have a selection
+                                txtarea.focus();
+                                var c  = "\001";
+                                var sel = document.selection.createRange();
+                                var original = sel.text;
+                                var dul = sel.duplicate(); 
+                                dul.moveToElementText(txtarea);
+                                sel.text = c;
+                                startPos  = (dul.text.indexOf(c));
+                                sel.moveStart('character',-1);
+                                sel.text = original;
+                        }
+                        endPos+=startPos;
+    
+    //alert(startPos+', '+endPos);
+  } else {//FF, opera safari, etc
+    startPos = txtarea.selectionStart;
+    endPos = txtarea.selectionEnd;
+  }
+
+    
+    //at this point we need to expand the selection to the \n before the startPos, and after the endPos
+    var adjustedEndPos = txtarea.value.indexOf('\n', endPos+1);
+    if ((adjustedEndPos != -1) && (adjustedEndPos > endPos) && ( txtarea.value.charAt(endPos) != '\n')  && ( txtarea.value.charAt(endPos) != '\r')) {
+        endPos = adjustedEndPos;
+    }
+    var adjustedStartPos = txtarea.value.lastIndexOf('\n', startPos-1);
+    if ((adjustedStartPos != -1) && (adjustedStartPos < startPos)) {
+        startPos = adjustedStartPos+1;
+    }
+    
+    var scrollTop = txtarea.scrollTop;
+    var theSelection = (txtarea.value).substring(startPos, endPos);
+    
+    if (!theSelection) {
+      theSelection = sampleText;
+    }
+    
+    var pre =   txtarea.value.substring(0, startPos);
+    var post = txtarea.value.substring(endPos, txtarea.value.length);
+    
+    //test if it is a multi-line selection, and if so, add tagOpen&tagClose to each line
+    var lines = theSelection.split(/\r?\n/);
+    var modifiedSelection = '';
+    for (var i=0;i<lines.length;i++) {
+        var line = lines[i];
+        if ( (tagOpen == '') && (sampleText == '') && (tagClose == '') ) {
+            //special case - undent (remove 3 spaces, and bullet or numbered list if outdenting away)
+            subst = line.replace(/^   (\* |\d |\d\. )?/, '');
+        } else {
+            if (line.match(/^(   )*(   (\*|\d|\d\.) )/) &&
+                (tagOpen.match(/^(   )*(   (\*|\d|\d\.) )/))) {
+                subst = line.replace(/   (\* |\d |\d\. )/, tagOpen);
+            } else {
+                subst = tagOpen + line + tagClose;
+            }
+        }
+        modifiedSelection = modifiedSelection + subst;
+        if (i+1<lines.length) modifiedSelection = modifiedSelection + '\n';
+    }
+    txtarea.value = pre + modifiedSelection + post;
+
+
+      if (!txtarea.selectionStart) {
+      //IE
+         txtarea.focus();
+         var range = txtarea.createTextRange();
+         range.collapse(true);
+               
+         var ctrlR = pre.replace(/[^\r]/g, '');     //ranges don't seem to 'count' the \r chars :/
+                
+         range.moveStart("character", startPos-ctrlR.length);
+         range.moveEnd("character", modifiedSelection.length);
+         range.select();
+      } else {
+        txtarea.focus();
+        //set new selection
+        var cPos = startPos + modifiedSelection.length;
+        txtarea.selectionStart = startPos;
+        txtarea.selectionEnd = cPos;
+        txtarea.scrollTop = scrollTop;
   }
 }
 
@@ -125,11 +227,51 @@ function natEditInit() {
     txtarea = document.main.text;
   } else {
     // some alternate form? take the first one we can find
-    // var areas = document.getElementsByTagName('textarea');
+    var areas = document.getElementsByTagName('textarea');
     txtarea = areas[0];
   }
   fixHeightOfTheText();
   establishOnResize();
+  
+  
+  if (twiki.JQueryPluginEnabled) {
+        $(function() { 
+        // cache the question element 
+        var natEditTableDialog = $('#natEditTableDialog')[0]; 
+ 
+        $('#natEditTableButtonLink').click(function() { 
+            $.blockUI(natEditTableDialog, { width: '275px' }); 
+        }); 
+ 
+        $('#yes').click(function() { 
+            //read the rows&col's and create table to that spec
+            var rows = $('#rows').val()
+            var cols = $('#columns').val();
+            $.unblockUI(); 
+            
+            var newTable = '';
+            for (var i=0;i< rows;i++) {
+                newTable += '|';
+                for (var j=0;j< cols;j++) {
+                    if (i == 0) {
+                        newTable += ' ** ';
+                    } else {
+                        newTable += '   ';
+                    }
+                    newTable += ' |';
+                }
+                newTable += '\n';
+            }
+            natInsertTags('','',newTable);
+            //txtarea.value += 'NEWTABLE\n\n' + newTable;
+
+            return false; 
+        }); 
+ 
+         $('#cancel').click($.unblockUI); 
+        }); 
+    }
+  
 
   return true;
 }
