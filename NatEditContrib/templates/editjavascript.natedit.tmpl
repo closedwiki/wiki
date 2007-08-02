@@ -3,6 +3,26 @@
 <script type="text/javascript" src="%PUBURLPATH%/%TWIKIWEB%/NatEditContrib/edit.js"></script>
 <script type="text/javascript">
 // button functions
+
+function natEditTableButtonAction() {
+//this function get replaced if JQueryPlugin is installed
+  natInsertTags(%IF{"defined NATEDIT_TABLE" then="%NATEDIT_TABLE%" else="'\n| ** | ** | ** |\n|    |    |    |\n|    |    |    |\n', '', ''"}%);
+}
+function natEditNumberedButtonAction() {
+  natInsertListTag(%IF{"defined NATEDIT_NUMBERED" then="%NATEDIT_NUMBERED%" else="'   1 ','numbered bullet',''"}%);
+}
+function natEditBulletButtonAction() {
+  natInsertListTag(%IF{"defined NATEDIT_BULLET" then="%NATEDIT_BULLET%" else="'   * ','bullet',''"}%);
+}
+function natEditIndentButtonAction() {
+  natInsertListTag(%IF{"defined NATEDIT_INDENT" then="%NATEDIT_INDENT%" else="'   ','', ''"}%);
+}
+function natEditUndentButtonAction() {
+  natInsertListTag(%IF{"defined NATEDIT_UNDENT" then="%NATEDIT_UNDENT%" else="'','', ''"}%);
+}
+
+
+
 function natEditSignatureButtonAction() {
   natInsertTags(%IF{"defined NATEDIT_SIGNATURE" then="%NATEDIT_SIGNATURE%" else="'-- ','%WIKIUSERNAME%',' - %DATE%'"}%);
 }

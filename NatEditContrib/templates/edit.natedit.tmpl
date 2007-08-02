@@ -11,7 +11,15 @@
 </style>
 %TMPL:END%
 
-%TMPL:DEF{"bottombar"}%%TMPL:END%
+%TMPL:DEF{"bottombar"}%%{used to make the dynamic tables in (if JQueryPlugin is on) natEditTableButtonAction}%<div id="natEditTableDialog" style="display:none; cursor: default"> 
+<div class="twikiForm twikiEditForm"><table class="twikiFormTable" width="100%">
+<tr><th colspan="2"><h1>Create a new table?</h1> </th></tr>
+<tr><td>Rows: </td><td><input type="text" id="rows" value="5"class="twikiInputField twikiEditFormTextField" />  </td></tr>
+<tr><td>Columns: </td><td><input type="text" id="columns" value="3" class="twikiInputField twikiEditFormTextField" /> </td></tr>
+<tr><td></td><td><input type="button" id="yes" value="Yes" class="twikiChangeFormButton twikiButton" /> 
+<input type="button" id="cancel" value="Cancel" class="twikiChangeFormButton twikiButton" /> </td></tr>
+</table></div>
+</div> %TMPL:END%
 
 %TMPL:DEF{"content"}%
 %TMPL:P{"pagetitle"}%
