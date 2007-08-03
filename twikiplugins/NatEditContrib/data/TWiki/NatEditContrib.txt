@@ -52,6 +52,7 @@ of button images. You can create a new theme "foo" by creating a CSS file
 </pre>
 See the default theme for the CSS classes used for the individual buttons.
 
+<img src="%ATTACHURLPATH%/word-natedit.jpg" alt="word-natedit.jpg" style="float:right;" width="300px"  />
 ---+++ Word theme
 The Word theme for NatEditContrib uses not only a custom CSS style, but also a customisation of the icon order, and customised Help.
 
@@ -60,8 +61,8 @@ This is acheived through the use of the TWiki Template path - over-riding the or
 Create new table can either be a static 3x3 table, or, If you install and enable JQueryPlugin, will use a popup dialog that lets the user choose the number of rows and columns.
 <pre>
    * <!-- -->Set SKIN = jquery,word.natedit,natedit,pattern
-   * <!-- -->Set NATEDIT_THEME = Word
-   * <!-- -->Set NATEDIT_HELPTEXT = WordNatEditHelpText
+   * <!-- -->Set NATEDIT_THEME = word
+   * <!-- -->Set NATEDIT_HELPTEXT = TWiki.NatEditWordHelpText
 </pre>
 
 ---+++ Markup
