@@ -3,8 +3,11 @@ package Unit::TestCase;
 use strict;
 use Error qw( :try );
 use Carp;
+use Unit::HTMLDiffer;
 
 $Carp::Verbose = 1;
+
+use vars qw( $differ );
 
 sub new {
     my $class = shift;
@@ -235,26 +238,29 @@ sub assert_html_equals {
       {
        options => 'rex',
        reporter =>
-       \&HTMLDiffer::defaultReporter,
+       \&Unit::HTMLDiffer::defaultReporter,
        result => ''
       };
 
     $mess ||= "$a\ndoes not equal\n$e";
     $this->assert($e, "$filename:$line\n$mess");
     $this->assert($a, "$filename:$line\n$mess");
-    if( HTMLDiffer::diff($e, $a, $opts)) {
+    $differ ||= new Unit::HTMLDiffer();
+    if( $differ->diff($e, $a, $opts)) {
         $this->assert(0, "$filename:$line\n$mess\n$opts->{result}");
     }
 }
 
-# Uses a regular-expression match to try to match a block of HTML in a larger
-# block of HTML. Not too clever about tag attributes.
+# See if a block of HTML occurs in a larger
+# block of HTML. Both blocks must be well-formed HTML.
 sub assert_html_matches {
     my ($this, $e, $a, $mess ) = @_;
 
+    $differ ||= new Unit::HTMLDiffer();
+
     $mess ||= "$a\ndoes not match\n$e";
     my ($package, $filename, $line) = caller(0);
-    unless( HTMLDiffer::html_matches($e, $a)) {
+    unless( $differ->html_matches($e, $a)) {
         $this->assert(0, "$filename:$line\n$mess");
     }
 }

@@ -253,7 +253,7 @@ sub test_tmpl_form_existingform {
     $this->assert_html_matches('<input type="hidden" name="History1" value="%SCRIPTURL%"  />', get_formfield(4, $text));
     $this->assert_html_matches('<input type="text" name="History2" value="%SCRIPTURL%" size="20" class="twikiInputField twikiEditFormTextField" />', get_formfield(5, $text));
     $this->assert_html_matches('<input type="hidden" name="History3" value="%SCRIPTURL%"  />', get_formfield(6, $text));
-    $this->assert_html_matches('><input type="text" name="History4" value="%SCRIPTURL%" size="20" class="twikiInputField twikiEditFormTextField" />', get_formfield(7, $text));
+    $this->assert_html_matches('<input type="text" name="History4" value="%SCRIPTURL%" size="20" class="twikiInputField twikiEditFormTextField" />', get_formfield(7, $text));
 
 }
 
