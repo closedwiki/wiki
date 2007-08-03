@@ -80,8 +80,9 @@ sub convert {
     return '' unless $content;
 
     $content =~ s/\\\n/ /g;
+    $content =~ s/\t/   /g;
 
-    $content =~ s/[$TT0$TT1]/!/go;	
+    $content =~ s/[$TT0$TT1$TT2]/!/go;	
 
     # Render TML constructs to tagged HTML
     $content = $this->_getRenderedVersion( $content );
@@ -94,18 +95,43 @@ sub convert {
 }
 
 sub _liftOut {
-    my( $this, $text ) = @_;
+    my( $this, $text, $type, $encoding ) = @_;
+    $text = $this->_unLift($text);
     my $n = scalar( @{$this->{refs}} );
-    push( @{$this->{refs}}, $text );
-    return $TT1.$n.$TT1;
+    push( @{$this->{refs}},
+          { type => $type,
+            encoding => $encoding || 'span',
+            text => $text } );
+    return $TT1.$n.$TT2;
+}
+
+sub _unLift {
+    my( $this, $text) = @_;
+    # Restore everything that was lifted out
+    while( $text =~ s#$TT1([0-9]+)$TT2#$this->{refs}->[$1]->{text}#g ) {
+    }
+    return $text;
 }
 
 sub _dropBack {
     my( $this, $text) = @_;
     # Restore everything that was lifted out
-    while( $text =~ s/$TT1([0-9]+)$TT1/$this->{refs}->[$1]/gi ) {
+    while($text =~ s#$TT1([0-9]+)$TT2#$this->_dropIn($1)#ge) {
     }
     return $text;
+}
+
+sub _dropIn {
+    my ($this, $n) = @_;
+    my $thing = $this->{refs}->[$n];
+    return $thing->{text} if $thing->{encoding} eq 'NONE';
+    my $method = 'CGI::'.$thing->{encoding};
+    my $text = $thing->{text};
+    $text = _encodeEntities($text) if
+      $thing->{type} eq 'PROTECTED' || $thing->{type} eq 'VERBATIM';
+    no strict 'refs';
+    return &$method({class => 'WYSIWYG_'.$thing->{type} }, $text);
+    use strict 'refs';
 }
 
 # Parse and convert twiki variables. If we are not using span markers
@@ -127,19 +153,15 @@ sub _processTags {
         if( $token eq '%' ) {
             if( $stackTop =~ /}$/ ) {
                 while( scalar( @stack) &&
-                         $stackTop !~ /^%(<nop(result| *\/)?>)?([A-Z0-9_:]+){.*}$/o ) {
+                         $stackTop !~ /^%([A-Z0-9_:]+){.*}$/o ) {
                     $stackTop = pop( @stack ) . $stackTop;
                 }
             }
-            if( $stackTop =~ m/^%(<nop(?:result| *\/)?>)?([A-Z0-9_:]+)({.*})?$/o ) {
-                my $nop = $1 || '';
-                my $tag = $2 . ( $3 || '' );
+            if( $stackTop =~ m/^%([A-Z0-9_:]+)({.*})?$/o ) {
+                my $tag = $1 . ( $2 || '' );
                 $tag = '%'.$tag.'%';
-                if( $nop ) {
-                    $nop =~ s/[<>]//g;
-                    $tag = CGI::span( { class=>'TML'.$nop }, $tag );
-                }
-                $stackTop = pop( @stack ).$this->_liftOut( $tag );
+                $stackTop = pop( @stack ).
+                  $this->_liftOut($tag, 'PROTECTED');
             } else {
                 push( @stack, $stackTop );
                 $stackTop = '%'; # push a new context
@@ -156,71 +178,10 @@ sub _processTags {
     return $stackTop;
 }
 
-sub _makeLink {
-    my( $this, $url, $text ) = @_;
-    $text ||= $url;
-    $url = $this->_liftOut($url);
-    return CGI::a( { href => $url }, $text );
-}
-
-sub _makeWikiWord {
-    my( $this, $text, $web, $topic, $anchor ) = @_;
-    my $url = &{$this->{opts}->{getViewUrl}}( $web, $topic );
-    $url .= $anchor if $anchor;
-    return $this->_makeLink( $url, $text );
-}
-
-sub _expandRef {
-    my( $this, $ref ) = @_;
-    if( $this->{opts}->{expandVarsInURL} ) {
-        my $origtxt = $this->{refs}->[$ref];
-        my $newtxt =
-          &{$this->{opts}->{expandVarsInURL}}( $origtxt, $this->{opts} );
-        return $newtxt if $newtxt ne $origtxt;
-    }
-    return "$TT1$ref$TT1";
-}
-
 sub _expandURL {
     my( $this, $url ) = @_;
     return $url unless ( $this->{opts}->{expandVarsInURL} );
     return &{$this->{opts}->{expandVarsInURL}}( $url, $this->{opts} );
-}
-
-sub _makeSquab {
-    my( $this, $url, $text ) = @_;
-
-    my $save = $url;
-    $url =~ s/$TT1([0-9]+)$TT1/$this->_expandRef($1)/ge;
-    if( $url =~ /[<>"\x00-\x1f]/ ) {
-        # we didn't manage to expand some variables in the url
-        # path. Give up.
-        # If we can't completely expand the URL, then don't expand
-        # *any* of it (hence $save)
-        return defined($text) ? "[[$save][$text]]" : "[[$save]]";
-    }
-
-    unless( $text ) {
-        # forced link [[Word]] or [[url]]
-        $text = $url;
-        if( $url !~ /^($TWiki::regex{linkProtocolPattern}:|\/)/ ) {
-            my $wurl = $url;
-            $wurl =~ s/(^| )(.)/\U$2/g;
-            if( $wurl =~ /^(?:($TWiki::regex{webNameRegex})\.)?(.*)$/ ) {
-                $url = &{$this->{opts}->{getViewUrl}}( $1, $2 );
-            } else {
-                $url = &{$this->{opts}->{getViewUrl}}( undef, $wurl );
-            }
-        }
-    } elsif ($url =~ /^(?:($TWiki::regex{webNameRegex})\.)?($TWiki::regex{wikiWordRegex})($TWiki::regex{anchorRegex})?$/) {
-        # Valid wikiword expression
-        my $a = $3 || '';
-        $url = &{$this->{opts}->{getViewUrl}}( $1, $2 ) . $a;
-    }
-
-    $text =~ s/(?<=[\s\(])((?:($TWiki::regex{webNameRegex})\.)?($TWiki::regex{wikiWordRegex}))/<nop>$1/gom;
-
-    return $this->_makeLink($url, $text);
 }
 
 # Lifted straight out of DevelopBranch Render.pm
@@ -237,39 +198,42 @@ sub _getRenderedVersion {
     $text =~ s/^\n*//s;
     $text =~ s/\n*$//s;
 
-    my $removed = {}; # Map of placeholders to tag parameters and text
-    $text = _takeOutBlocks( $text, 'verbatim', $removed );
+    $this->{removed} = {}; # Map of placeholders to tag parameters and text
+
+    $text = $this->_takeOutBlocks( $text, 'verbatim' );
+
+    $text = $this->_takeOutSets( $text );
 
     # Remove PRE to prevent TML interpretation of text inside it
-    $text = _takeOutBlocks( $text, 'pre', $removed );
+    $text = $this->_takeOutBlocks( $text, 'pre' );
 
     # change !%XXX to %<nop>XXX
-    $text =~ s/!%(?=[A-Z]+({|%))/%<nop>/g;
+    $text =~ s/!%(?=[A-Z][A-Z0-9_]*[{%])/%<nop>/g;
 
-    # change <nop>%XXX to %<nopresult>XXX. A nop before th % indicates
-    # that the result of the tag expansion is to be nopped
-    $text =~ s/<nop>%(?=[A-Z]+({|%))/%<nopresult>/g;
+    # Change ' !AnyWord' to ' <nop>AnyWord',
+    $text =~ s/$STARTWW!(?=[\w\*\=])/<nop>/gm;
 
-    # Pull comments
-    $text =~ s/(<!--.*?-->)/$this->_liftOut($1)/ges;
+    # Change ' ![[...' to ' [<nop>[...'
+    $text =~ s/(^|\s)\!\[\[/$1\[<nop>\[/gm;
+
+    # Protect comments
+    $text =~ s/(<!--.*?-->)/$this->_liftOut($1, 'PROTECTED')/ges;
 
     # Remove TML pseudo-tags so they don't get protected like HTML tags
-    $text =~ s/<(.?(noautolink|nop|nopresult).*?)>/$TT1($1)$TT1/gi;
+    # (verbatim and pre have already been handled, above)
+    $text =~ s/<(.?(noautolink|nop).*?)>/$TT1($1)$TT1/gi;
 
-    # Expand selected TWiki variables in IMG tags so that images appear in the
-    # editor as images
-    $text =~ s/(<img [^>]*src=)(["'])(.*?)\2/$1.$2.$this->_expandURL($3).$2/gie;
-    # protect HTML tags by pulling them out
-    $text =~ s/(<\/?[a-z]+(\s[^>]*)?>)/ $this->_liftOut($1) /gei;
+    # Handle inline IMG tags specially
+    $text =~ s/(<img [^>]*>)/$this->_takeOutIMGTag($1)/gei;
+
+    # protect HTML tags
+    $text =~ s/(<\/?[a-z]+(\s[^>]*)?>)/ $this->_liftOut($1, 'PROTECTED') /gei;
 
     # Replace TML pseudo-tags
     $text =~ s/$TT1\((.*?)\)$TT1/<$1>/go;
 
-    # Convert TWiki tags to spans outside parameters
+    # Convert TWiki tags to spans outside prtected text
     $text = $this->_processTags( $text );
-
-    # Change ' !AnyWord' to ' <nop>AnyWord',
-    $text =~ s/$STARTWW!(?=[\w\*\=])/<nop>/gm;
 
     $text =~ s/\\\n//gs;  # Join lines ending in '\'
 
@@ -296,7 +260,7 @@ sub _getRenderedVersion {
     $text =~ s/}$TT0/>/go;
 
     # standard URI
-    $text =~ s/(?:^|(?<=[-*\s(]))($TWiki::regex{linkProtocolPattern}:([^\s<>"]+[^\s*.,!?;:)<]))/$this->_makeLink($1,$1)/geo;
+    $text =~ s/((^|(?<=[-*\s(]))$TWiki::regex{linkProtocolPattern}:[^\s<>"]+[^\s*.,!?;:)<])/$this->_liftOut($1, 'LINK')/geo;
 
     # other entities
     $text =~ s/&(\w+);/$TT0$1;/g;      # "&abc;"
@@ -356,7 +320,7 @@ sub _getRenderedVersion {
                 $this->_addListItem( \@result, 'dl', 'dd', $1, '' );
                 $isList = 1;
             }
-            elsif ( $line =~ s/^((\t|   )+)\* /<li> /o ) {
+            elsif ( $line =~ s/^((\t|   )+)\*(\s|$)/<li> /o ) {
                 # Unnumbered list
                 $this->_addListItem( \@result, 'ul', 'li', $1, '' );
                 $isList = 1;
@@ -407,72 +371,53 @@ sub _getRenderedVersion {
 
     # Handle [[][] and [[]] links
 
-    # Escape rendering: Change ' ![[...' to ' [<nop>[...', for final unrendered ' [[...' output
-    $text =~ s/(^|\s)\!\[\[/$1\[<nop>\[/gm;
-
     # We _not_ support [[http://link text]] syntax
 
-    # detect and escape nopped [[][]]
-    $text =~ s(\[<nop(?: *\/)?>(\[.*?\](?:\[.*?\])?)\])
-      ([<span class="TMLnop">$1</span>])g;
-    $text =~ s(!\[(\[.*?\])(\[.*?\])?\])
-      ([<span class="TMLnop">$1$2</span>])g;
-
-    # Spaced-out Wiki words with alternative link text
-    # i.e. [[$1][$3]]
-
-    $text =~ s/\[\[([^\]]*)\](?:\[([^\]]+)\])?\]/$this->_makeSquab($1,$2)/ge;
+    # [[][]]
+    $text =~ s/(\[\[[^\]]*\](\[[^\]]*\])?\])/$this->_liftOut($1, 'LINK')/ge;
 
     # Handle WikiWords
-    $text = _takeOutBlocks( $text, 'noautolink', $removed );
+    $text = $this->_takeOutBlocks( $text, 'noautolink' );
 
-    $text =~ s#<nop(?: */)?>($TWiki::regex{wikiWordRegex}|$TWiki::regex{abbrevRegex})#<span class="TMLnop">$1</span>#gom;
+    $text =~ s/$STARTWW(($TWiki::regex{webNameRegex}\.)?$TWiki::regex{wikiWordRegex}($TWiki::regex{anchorRegex})?)/$this->_liftOut($1, 'LINK')/geom;
 
-    $text =~ s/$STARTWW((?:($TWiki::regex{webNameRegex})\.)?($TWiki::regex{wikiWordRegex})($TWiki::regex{anchorRegex})?)/$this->_makeWikiWord($1,$2,$3,$4)/geom;
-    foreach my $placeholder ( keys %$removed ) {
-        my $pm = $removed->{$placeholder}{params}->{class};
+    while (my ($placeholder, $val) = each %{$this->{removed}} ) {
+        my $pm = $val->{params}->{class};
         if( $placeholder =~ /^noautolink/i ) {
             if( $pm ) {
-                $pm = join(' ', ( split( /\s+/, $pm ), 'TMLnoautolink' ));
+                $pm = join(' ', ( split( /\s+/, $pm ), 'WYSIWYG_NOAUTOLINK' ));
             } else {
-                $pm = 'TMLnoautolink';
+                $pm = 'WYSIWYG_NOAUTOLINK';
             }
-            $removed->{$placeholder}{params}->{class} = $pm;
+            $val->{params}->{class} = $pm;
         } elsif( $placeholder =~ /^verbatim/i ) {
             if( $pm ) {
-                $pm = join(' ', ( split( /\s+/, $pm ), 'TMLverbatim' ));
+                $pm = join(' ', ( split( /\s+/, $pm ), 'WYSIWYG_VERBATIM' ));
             } else {
-                $pm = 'TMLverbatim';
+                $pm = 'WYSIWYG_VERBATIM';
             }
-            $removed->{$placeholder}{params}->{class} = $pm;
+            $val->{params}->{class} = $pm;
         }
     }
 
-    _putBackBlocks( $text, $removed, 'noautolink', 'div' );
+    $this->_putBackBlocks( $text, 'noautolink', 'div' );
 
-    _putBackBlocks( $text, $removed, 'pre' );
+    $this->_putBackBlocks( $text, 'pre' );
 
     # replace verbatim with pre in the final output
-    _putBackBlocks( $text, $removed, 'verbatim', 'pre',
-                    \&_encodeEntities );
+    $this->_putBackBlocks( $text, 'verbatim', 'pre', \&_encodeEntities );
 
-    # There shouldn't be any lingering <nopresult>s, but just
-    # in case there are, convert them to <nop>s so they get removed.
-    $text =~ s/<nopresult>/<nop>/g;
+    $text =~ s/(<nop>)/$this->_liftOut($1, 'PROTECTED')/ge;
 
     return $text;
 }
 
 sub _encodeEntities {
     my $text = shift;
-
-    # use HTML::Entities if it's available
-    eval "use HTML::Entities";
-    if ($@) {
-        $text =~ s/(\W)/'&#x'.sprintf(".2%h", ord($1)).';'/ge;
-    } else {
-        return HTML::Entities::encode_entities( $text );
-    }
+    $text =~ s/([\000-\011\013-\037<&>'"\200-\277])/'&#'.ord($1).';'/ges;
+    $text =~ s/ /&nbsp;/g;
+    $text =~ s/\n/<br \/>/gs;
+    return $text;
 }
 
 # Make the html for a heading
@@ -489,9 +434,53 @@ sub _makeHeading {
     use strict 'refs';
 }
 
+sub _takeOutIMGTag {
+    my ($this, $text) = @_;
+    # Expand selected TWiki variables in IMG tags so that images appear in the
+    # editor as images
+    $text =~ s/(<img [^>]*src=)(["'])(.*?)\2/$1.$2.$this->_expandURL($3).$2/gie;
+    return $this->_liftOut($text, '', 'NONE');
+}
+
+# Pull out TWiki Set statements, to prevent unwanted munging
+sub _takeOutSets {
+    my $this = $_[0];
+    my $setRegex =
+      qr/^((?:\t|   )+\*\s+(?:Set|Local)\s+(?:$TWiki::regex{tagNameRegex})\s*=)(.*)$/o;
+
+    my $lead;
+    my $value;
+    my @outtext;
+    foreach( split( /\r?\n/, $_[1] ) ) {
+        if( m/$setRegex/s ) {
+            if( defined $lead ) {
+                push(@outtext, $lead.$this->_liftOut($value, 'PROTECTED'));
+            }
+            $lead = $1;
+            $value = defined($2) ? $2 : '';
+            next;
+        }
+
+        if( defined $lead ) {
+            if( /^(   |\t)+ *[^\s]/ && !/$TWiki::regex{bulletRegex}/o ) {
+                # follow up line, extending value
+                $value .= "\n".$_;
+                next;
+            }
+            push(@outtext, $lead.$this->_liftOut($value, 'PROTECTED'));
+            undef $lead;
+        }
+        push(@outtext, $_);
+    }
+    if( defined $lead ) {
+        push(@outtext, $lead.$this->_liftOut($value, 'PROTECTED'));
+    }
+    return join("\n", @outtext);
+}
+
 # Lifted straight out of DevelopBranch Render.pm
 sub _takeOutBlocks {
-    my( $intext, $tag, $map ) = @_;
+    my( $this, $intext, $tag ) = @_;
     die unless $tag;
     return '' unless $intext;
     return $intext unless ( $intext =~ m/<$tag\b/ );
@@ -518,8 +507,10 @@ sub _takeOutBlocks {
             my $rest = $2;
             unless ( --$depth ) {
                 my $placeholder = $tag.$n;
-                $map->{$placeholder}{params} = _parseParams( $tagParams );
-                $map->{$placeholder}{text} = $scoop;
+                $this->{removed}->{$placeholder} = {
+                    params => _parseParams( $tagParams ),
+                    text => $scoop,
+                };
 
                 $line = $TT0.$placeholder.$TT0;
                 $n++;
@@ -538,29 +529,29 @@ sub _takeOutBlocks {
         #     $scoop .= "</$tag>\n";
         # }
         my $placeholder = $tag.$n;
-        $map->{$placeholder}{params} = _parseParams( $tagParams );
-        $map->{$placeholder}{text} = $scoop;
+        $this->{removed}->{$placeholder} = {
+            params => _parseParams( $tagParams ),
+            text => $scoop,
+        };
         $out .= $TT0.$placeholder.$TT0;
     }
 
     return $out;
 }
 
-# Lifted straight out of DevelopBranch Render.pm
 sub _putBackBlocks {
-    my( $text, $map, $tag, $newtag, $callback ) = @_;
+    my( $this, $text, $tag, $newtag, $callback ) = @_;
     my $fn = 'CGI::'.($newtag || $tag);
     $newtag ||= $tag;
-    my @k = keys %$map;
-    foreach my $placeholder ( @k ) {
+    while (my ($placeholder, $val) = each %{$this->{removed}}) {
         if( $placeholder =~ /^$tag\d+$/ ) {
-            my $params = $map->{$placeholder}{params};
-            my $val = $map->{$placeholder}{text};
+            my $params = $val->{params};
+            my $val = $val->{text};
             $val = &$callback( $val ) if ( defined( $callback ));
             no strict 'refs';
-            $_[0] =~ s/$TT0$placeholder$TT0/&$fn($params,$val)/e;
+            $_[1] =~ s/$TT0$placeholder$TT0/&$fn($params, $val)/e;
             use strict 'refs';
-            delete( $map->{$placeholder} );
+            delete( $this->{removed}->{$placeholder} );
         }
     }
 }

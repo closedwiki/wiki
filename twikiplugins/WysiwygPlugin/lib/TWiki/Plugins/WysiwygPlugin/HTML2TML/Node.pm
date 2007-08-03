@@ -291,7 +291,8 @@ sub _defaultTag {
     my( $flags, $text ) = $this->_flatten( $options );
     my $tag = lc( $this->{tag} );
     my $p = _htmlParams( $this->{attrs}, $options );
-    if( $text =~ /^\s+$/ ) {
+
+    if( $text =~ /^\s*$/ ) {
         return ( $flags, '<'.$tag.$p.' />' );
     } else {
         return ( $flags, '<'.$tag.$p.'>'.$text.'</'.$tag.'>' );
@@ -324,11 +325,12 @@ sub _convertList {
         next unless $kid->{tag} =~ m/^(dt|dd|li)$/i;
         if( $isdl && ( lc( $kid->{tag} ) eq 'dt' )) {
             # DT, set the bullet type for subsequent DT
-            $basebullet = $kid->_flatten( $WC::NO_BLOCK_TML ).':';
+            $basebullet = $kid->_flatten( $WC::NO_BLOCK_TML );
+            $basebullet =~ s/\s+$//;
+            $basebullet .= ':';
             $basebullet =~ s/$WC::CHECKn/ /g;
-            if( $basebullet =~ /[$WC::CHECKw ]/ ) {
-                $basebullet = "\$ $basebullet";
-            }
+            $basebullet =~ s/^\s+//;
+            $basebullet = "\$ $basebullet";
             $pendingDT = 1; # remember in case there is no DD
             next;
         }
@@ -501,7 +503,8 @@ sub _H {
           $this->{attrs}->{class} =~ /\bnotoc\b/ ) {
         $notoc = '!!';
     }
-    $contents =~ s/^\s*/ /;
+    $contents =~ s/^\s+/ /;
+    $contents =~ s/\s+$//;
     my $res = $WC::CHECKn.'---'.('+' x $depth).$notoc.
       $WC::CHECKs.$contents.$WC::CHECKn;
     return ( $flags | $WC::BLOCK_TML, $res );
@@ -534,21 +537,6 @@ sub _handleNOPRESULT {
 
 # tags we ignore completely (contents as well)
 sub _handleDOCTYPE { return ( 0, '' ); }
-
-sub _handleVERBATIM {
-    my( $this, $options ) = @_;
-    my( $flags, $text ) = $this->_flatten( $WC::NO_TML | $WC::NO_HTML );
-
-    $text =~ s!<br( /)?>!$WC::NBBR!gi;
-    $text =~ s!<p( /)?>!$WC::NBBR!gi;
-    $text =~ s!</(p|br)>!!gi;
-    $text = HTML::Entities::decode_entities( $text );
-    $text =~ s/ /$WC::NBSP/g;
-    $text =~ s/$WC::CHECKn/$WC::NBBR/g;
-    my $p = _htmlParams( $this->{attrs}, $options, 'TMLverbatim' );
-    return ( $WC::BLOCK_TML,
-             "$WC::CHECKn<verbatim$p>$WC::CHECKn".$text."$WC::CHECKn</verbatim>$WC::CHECKn" );
-}
 
 sub _LIST {
     my( $this, $options ) = @_;
@@ -666,20 +654,16 @@ sub _handleBODY { return _flatten( @_ ); }
 sub _handleBR {
     my( $this, $options ) = @_;
     my($f, $kids ) = $this->_flatten( $options );
-    if( ( $options & $WC::NO_BLOCK_TML ) ||
-        $this->{prev} && !$this->{prev}->{tag} &&
-        $this->{prev}->{text} =~ /\S/ &&
-        $this->{next} && !$this->{next}->{tag} &&
-        $this->{prev}->{text} =~ /\S/ ) {
-        my $reason = '';
-#        if ( $options & $WC::NO_BLOCK_TML ) {
-#            $reason = 'A';
-#        } else {
-#            $reason = 'B'.$this->{prev}->{text}.';'.$this->{next}->{text};
-#        }
+    if( !($options & $WC::BR2NL) &&
+          (( $options & $WC::NO_BLOCK_TML ) ||
+             $this->{prev} && !$this->{prev}->{tag} &&
+               $this->{prev}->{text} =~ /\S/ &&
+                 $this->{next} && !$this->{next}->{tag} &&
+                   $this->{prev}->{text} =~ /\S/ )) {
         # Special case; if the immediately siblings are text
-        # nodes, then we have to use a <br>
-        return (0, '<br '.$reason.'/>'.$kids);
+        # nodes, then we have to use a <br> (unless we have been explicitly
+        # asked to use newlines)
+        return (0, '<br />'.$kids);
     }
     return ($f, $WC::NBBR.$kids);
 }
@@ -707,11 +691,11 @@ sub _handleDFN { return _flatten( @_ ); };
 sub _handleDIV {
     my( $this, $options ) = @_;
     if( defined( $this->{attrs}->{class} ) &&
-          $this->{attrs}->{class} =~ /\bTMLnoautolink\b/ ) {
+          $this->{attrs}->{class} =~ /\WYSIWYG_NOAUTOLINK\b/ ) {
         my( $flags, $text ) = $this->_flatten( $options );
-        my $p = _htmlParams( $this->{attrs}, $options, 'TMLnoautolink' );
-        return ($WC::BLOCK_TML, "$WC::CHECKn<noautolink$p>$WC::CHECKn".$text.
-                "$WC::CHECKn</noautolink>$WC::CHECKn");
+        my $p = _htmlParams( $this->{attrs}, $options, 'WYSIWYG_NOAUTOLINK' );
+        return ($WC::BLOCK_TML, "<noautolink$p>".$text.
+                "</noautolink>");
     }
 
     return (0, undef);
@@ -787,17 +771,6 @@ sub _handleIMG {
 
 sub _handleINPUT {
     my( $this, $options ) = @_;
-    if( $this->{attrs}->{class} &&
-          $this->{attrs}->{class} =~ /\bTMLvariable\b/ ) {
-        my $text = $this->{attrs}->{value} || '';
-        my $var = _trim($text);
-        my $nop = ($options & $WC::NOP_ALL) ? '<nop>' : '';
-        # don't create unnamed variables
-        $var = '%'.$nop.$var.'%' if( $var );
-        my $flags;
-        ( $flags, $text ) = $this->_flatten( $options | $WC::NO_BLOCK_TML );
-        return (0, $var.$text);
-    }
     if( $options & $WC::VERY_CLEAN ) {
         return $this->_flatten( $options );
     }
@@ -833,21 +806,40 @@ sub _handlePARAM { return ( 0, '' ); }
 sub _handlePRE {
     my( $this, $options ) = @_;
 
-    if( $this->{attrs}->{class} &&
-        $this->{attrs}->{class} =~ /\bTMLverbatim\b/ ) {
-        return $this->_handleVERBATIM( $options );
+    if( $this->{attrs}->{class}) {
+        if ($this->{attrs}->{class} =~ /\bWYSIWYG_VERBATIM\b/) {
+            my( $flags, $text ) = $this->_PROTECTED($options);
+            my $p = _htmlParams($this->{attrs}, $options, 'WYSIWYG_VERBATIM');
+            return ($flags, "<verbatim$p>$text</verbatim>");
+        }
     }
-
     # Note: can't use CGI::pre because it won't put the newlines that
     # twiki needs in
     unless( $options & $WC::NO_BLOCK_TML ) {
         my( $flags, $text ) = $this->_flatten( $options | $WC::NO_BLOCK_TML );
         my $p = _htmlParams( $this->{attrs}, $options );
         $text =~ s/<br( \/)?>/$WC::NBBR/g;
-        return ($WC::BLOCK_TML, "$WC::CHECKn<pre$p>$WC::CHECKn".$text.
-                "$WC::CHECKn</pre>$WC::CHECKn");
+        return ($WC::BLOCK_TML, "<pre$p>".$text.
+                "</pre>");
     }
     return ( 0, undef );
+}
+
+sub _PROTECTED {
+    my ($this, $options) = @_;
+
+    # Expand brs, which are used in the protected encoding in place of
+    # newlines, and nbsps, which are used in place of spaces. These tokens
+    # are special because the JS editors don't handle the equivalent encoded
+    # entities correctly.
+    my( $flags, $text ) = $this->_flatten(
+        $options | $WC::BR2NL );
+
+    $text = HTML::Entities::decode_entities($text);
+    # &nbsp; decodes to \240, which we want to make a space
+    $text =~ s/\240/ /gis;
+
+    return ($flags, $text);
 }
 
 sub _handleQ    { return _flatten( @_ ); };
@@ -860,35 +852,13 @@ sub _handleSAMP { return _handleTT( @_ ); };
 sub _handleSPAN {
     my( $this, $options ) = @_;
     if( defined( $this->{attrs}->{class} )) {
-        if( $this->{attrs}->{class} =~ /\bTMLvariable\b/ ) {
-            my( $flags, $text ) = $this->_flatten(
-                $options | $WC::NO_BLOCK_TML );
-            my $var = _trim($text);
-            my $nop = ($options & $WC::NOP_ALL) ? '<nop>' : '';
-            # don't create unnamed variables
-            $var = '%'.$nop.$var.'%' if( $var );
-            return (0, $var);
+        if( $this->{attrs}->{class} =~ /\bWYSIWYG_PROTECTED\b/) {
+            return $this->_PROTECTED($options);
         }
 
-        if( $this->{attrs}->{class} =~ /\bTMLcomment\b/ ) {
-            my( $flags, $text ) = $this->_flatten(
-                $options | $WC::NO_BLOCK_TML );
-            return (0, '<!--'.$text.'-->' );
+        if( $this->{attrs}->{class} =~ /\bWYSIWYG_LINK\b/) {
+            return $this->_flatten( $options | $WC::NO_BLOCK_TML );
         }
-
-        if( $this->{attrs}->{class} =~ /\bTMLnop\b/) {
-            my( $flags, $kids ) = $this->_flatten(
-                $options | $WC::NOP_ALL );
-            $kids =~ s/%([A-Z0-9_:]+({.*})?)%/%<nop>$1%/g;
-            return ( $flags, $kids );
-        }
-
-        if( $this->{attrs}->{class} =~ /\bTMLnopresult\b/) {
-            my( $flags, $kids ) = $this->_flatten( $options );
-            return ( $flags, '<nop>'.$kids );
-        }
-
-        delete $this->{attrs}->{class};
     }
 
     # ignore the span if there are no attrs
@@ -954,12 +924,6 @@ sub _handleTD { return _flatten( @_ ); }
 
 sub _handleTEXTAREA {
     my( $this, $options ) = @_;
-    if( $this->{attrs}->{class} &&
-        $this->{attrs}->{class} =~ /\bTMLcomment\b/ ) {
-        my( $flags, $text ) = $this->_flatten( $options | $WC::NO_BLOCK_TML );
-        return (0, "<!--\n".$text."\n-->" );
-    }
-
     if( $options & $WC::VERY_CLEAN ) {
         return $this->_flatten( $options );
     }

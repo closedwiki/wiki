@@ -38,16 +38,18 @@ package WC;
 | $NOP_ALL | Flag that gets passed _down_ into generator functions. NOP all variables and WikiWords. |
 | $BLOCK_TML | Flag passed up from generator functions; set if expansion includes block TML |
 | $VERY_CLEAN | Flag passed to indicate that HTML must be aggressively cleaned (unrecognised or unuseful tags stripped out) |
+| $BR2NL | Flag set if BR tags are to be converted to newlines |
 
 =cut
 
-use vars qw( $NO_TML $NO_BLOCK_TML $NOP_ALL $BLOCK_TML );
+use vars qw( $NO_TML $NO_BLOCK_TML $NOP_ALL $BLOCK_TML $BR2NL );
 
 $NO_HTML      = 1 << 0;
 $NO_TML       = 1 << 1;
 $NO_BLOCK_TML = 1 << 2;
 $NOP_ALL      = 1 << 3;
 $VERY_CLEAN   = 1 << 4;
+$BR2NL        = 1 << 5;
 
 $BLOCK_TML    = $NO_BLOCK_TML;
 
