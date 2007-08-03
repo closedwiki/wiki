@@ -179,7 +179,7 @@ sub afterEditHandler {
     my $query = TWiki::Func::getCgiQuery();
     return unless $query;
 
-#    return unless defined( $query->param( 'wysiwyg_edit' ));
+    return unless defined( $query->param( 'wysiwyg_edit' ));
 
     # Switch off wysiwyg_edit so it doesn't try to transform again in
     # the beforeSaveHandler
