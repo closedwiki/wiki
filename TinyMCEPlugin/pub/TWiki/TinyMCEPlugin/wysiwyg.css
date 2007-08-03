@@ -1,0 +1,20 @@
+/* Text recognised as links is painted with this class */
+.WYSIWYG_LINK {
+  background-color:#fdfdff;
+}
+/* Areas where autolink is disabled are painted thus */
+.WYSIWYG_NOAUTOLINK {
+  background-color:#fdfdff;
+}
+/* Protected areas, such as comments and twiki variables, are
+   painted with this class */
+.WYSIWYG_PROTECTED { 
+  font-family:"Courier New", courier, monaco, monospace;
+  background-color:#caffee;
+}
+/* Verbatim sections are painted with this */
+.WYSIWYG_VERBATIM { 
+  font-family:"Courier New", courier, monaco, monospace;
+  background-color:#eeffac;
+  background-image:url(verbatim.png);
+}

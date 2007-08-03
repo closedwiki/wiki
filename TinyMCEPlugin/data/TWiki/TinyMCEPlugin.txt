@@ -1,0 +1,42 @@
+---+!! !TinyMCEPlugin
+<!--
+One line description, required for extensions repository catalog.
+   * Set SHORTDESCRIPTION = Integration of the TinyMCE Wysiwym Editor
+-->
+%SHORTDESCRIPTION%
+
+%TOC%
+This is an integration of the <a href="http://tinymce.moxiecode.com?id=powered_by_tinymce_mini"><img src="http://tinymce.sourceforge.net/buttons/tinymce_button.png" border="0" width="80" height="15" alt="TinyMCE" /></a> WYSIWYG editor. This is great little editor, fast and highly functional, and supporting a wide range of browsers.
+
+The integration uses the TWiki:Plugins.WysiwygPlugin to translate text to and from a format that !TinyMCE can edit.
+
+Unlike the other editor integrations in TWiki, which install "Word in a Browser" style editors, this plugin to swaps out the _standard_ text areas in an edit and replaces them with WYSIWYG editors. This means you get WYSIWYG editors for textareas in forms, as well as for the main text of the topic. It can also co-exist alongside other WYSIWYG editors, such as Kupu.
+
+The editor automatically "switches itself off" (i.e. reverts to the old text-only window) when editing topics that contain TWiki content it can't handle, such as complex TWiki variables.
+
+*Caveat*: %TOPIC% is designed for editing TWiki topics, not as a general purpose HTML editor. It will work fine on topics that contain text, TML formatting, and most HTML. However, because of the complexity of transforming TML into HTML and back, complex TML, and mixing HTML and TML may not give exactly the results you expect.
+
+---++ Installation Instructions
+
+First follow the installation instructions to install the Plugin:
+
+%$INSTALL_INSTRUCTIONS%
+
+*Do not forget to enable the WysiwygPlugin and the TinyMCEPlugin in =configure= or it won't work*. If the installation is successful you should see the WYSIWYG editor when you edit a topic.
+
+---++ Plugin Info
+
+|  Plugin Author(s): | TWiki:Main.CrawfordCurrie |
+|  Plugin Version: | %$VERSION% |
+|  Copyright: | &copy; 2007 Crawford Currie http://c-dot.co.uk |
+|             | This package also includes the complete sources for version 2.1.1.1 of the !TinyMCE editor |
+|  License: | [[http://www.gnu.org/licenses/gpl.html][GPL (Gnu General Public License)]] |
+|  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  Dependencies: | %$DEPENDENCIES% |
+|  Plugin Home: | http://twiki.org/cgi-bin/view/Plugins/TinyMCEPlugin |
+|  Feedback: | http://twiki.org/cgi-bin/view/Plugins/TinyMCEPluginDev |
+|  Appraisal: | http://twiki.org/cgi-bin/view/Plugins/TinyMCEPluginAppraisal |
+
+<!-- Do _not_ attempt to edit this topic; it is auto-generated. Please add comments/questions/remarks to the Dev topic instead. -->
+
+%META:FILEATTACHMENT{name="tinymce.gif" attr="h" comment="screenshot"}%
