@@ -105,7 +105,7 @@ sub convert {
 
     # get rid of nasties
     $text =~ s/\r//g;
-    $text =~ s/\t/ /g;
+    $text =~ s/\t/   /g;
     $this->_resetStack();
     $this->parse( $text );
     $this->eof();

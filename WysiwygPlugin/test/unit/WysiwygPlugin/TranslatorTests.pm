@@ -33,7 +33,9 @@ use TWiki::Plugins::WysiwygPlugin;
 use TWiki::Plugins::WysiwygPlugin::TML2HTML;
 use TWiki::Plugins::WysiwygPlugin::HTML2TML;
 
-use vars qw( $notml2html $nohtml2tml $unsafe);
+use vars qw( $mask $unsafe $protecton $protectoff
+             $preon $preoff
+             $linkon $linkoff $nop );
 
 for( my $i = 0; $i < 32; $i++) {
     $unsafe .= chr($i) unless $i == 10;
@@ -53,22 +55,37 @@ for( my $i = 0; $i < 32; $i++) {
 # will use tml. Only use where round-trip can't be closed because
 # we are testing deprecated syntax.
 
-my $pick_test;
-#$pick_test = 'Item4410';
+my $mask;
+#$mask = 1; # TML 2 HTML only
+#$mask = 2; # HTML 2 TML only
+$mask = 3; # Both ways
+my $pick_test; # set this to the name of a single test to execute
+
 gen_compare_tests();
-gen_file_tests();
+#gen_file_tests();
 
 my $data;
 
 BEGIN {
-$data =
+    #$notml2html = 1; # uncomment to disable tml2html tests
+    #$nohtml2tml = 1; # uncomment to disable html2tml tests
+    $protecton = '<span class="WYSIWYG_PROTECTED">';
+    $preon = '<pre class="WYSIWYG_PROTECTED">';
+    $linkon = '<span class="WYSIWYG_LINK">';
+
+    $linkoff = $protectoff = '</span>';
+    $preoff = '</pre>';
+
+    $nop = '<nop>';
+
+    $data =
   [
       {
           exec => 3,
           name => 'Pling',
           tml => 'Move !ItTest/site/ToWeb5 leaving web5 as !MySQL host',
-          html => <<'HERE',
-Move <span class="TMLnop">ItTest</span>/site/ToWeb5 leaving web5 as <span class="TMLnop">MySQL</span> host
+          html => <<HERE,
+Move ${nop}ItTest/site/ToWeb5 leaving web5 as ${nop}MySQL host
 HERE
           finaltml => <<'HERE',
 Move <nop>ItTest/site/ToWeb5 leaving web5 as <nop>MySQL host
@@ -78,21 +95,21 @@ HERE
           exec => 3,
           name => 'linkAtStart',
           tml => 'LinkAtStart',
-          html => '<a href="%!page!%/Current/LinkAtStart">LinkAtStart</a>'
-         },
+          html => $linkon.'LinkAtStart'.$linkoff,
+      },
       {
           exec => 3,
           name => 'otherWebLinkAtStart',
           tml => 'OtherWeb.LinkAtStart',
-          html => '<a href="%!page!%/OtherWeb/LinkAtStart">OtherWeb.LinkAtStart</a>',
+          html => $linkon.'OtherWeb.LinkAtStart'.$linkoff,
       },
       {
           exec => 3,
           name => 'currentWebLinkAtStart',
           tml => 'Current.LinkAtStart',
-          html => '<a href="%!page!%/Current/LinkAtStart">Current.LinkAtStart</a>',
-          finaltml => 'LinkAtStart'
-         },
+          html => $linkon.'Current.LinkAtStart'.$linkoff,
+          finaltml => 'Current.LinkAtStart',
+      },
       {
           exec => 3,
           name => 'simpleParas',
@@ -124,8 +141,8 @@ HERE
       {
           exec => 3,
           name => 'strongLink',
-          html => <<'HERE',
-<b>reminded about<a href="http://www.koders.com">http://www.koders.com</a></b>
+          html => <<HERE,
+<b>reminded about${linkon}http://www.koders.com${linkoff}</b>
 HERE
           tml => '*reminded about http://www.koders.com*',
           finaltml => '*reminded about http://www.koders.com*',
@@ -173,16 +190,7 @@ HERE
           exec => 3,
           name => 'simpleVerbatim',
           html => <<'HERE',
-<pre class="TMLverbatim">
-&#60;verbatim&#62;
-Description
-&#60;/verbatim&#62;
-class CatAnimal {
-  void purr() {
-    code &#60;here&#62;
-  }
-}
-</pre>
+<pre class="WYSIWYG_VERBATIM"><br />&#60;verbatim&#62;<br />Description<br />&#60;/verbatim&#62;<br />class&nbsp;CatAnimal&nbsp;{<br />&nbsp;&nbsp;void&nbsp;purr()&nbsp;{<br />&nbsp;&nbsp;&nbsp;&nbsp;code&nbsp;&#60;here&#62;<br />&nbsp;&nbsp;}<br />}<br /></pre>
 HERE
           tml => <<'HERE',
 <verbatim>
@@ -201,7 +209,7 @@ HERE
       {
           exec => 3,
           name => 'simpleHR',
-          html => '<hr /><hr />--',
+          html => '<hr class="TMLhr"/><hr class="TMLhr"/>--',
           tml => <<'HERE',
 ---
 -------
@@ -269,9 +277,9 @@ HERE
       {
           exec => 3,
           name => 'mixedList',
-          html => <<'HERE',
+          html => <<"HERE",
 <ol><li>Things</li><li>Stuff
-<ul><li>Banana Stuff</li><li>Other</li><li></li></ul></li><li>Something</li><li>kello<br />kitty</li></ol>
+<ul><li>Banana Stuff</li><li>Other</li><li></li></ul></li><li>Something</li><li>kello$protecton&lt;br&nbsp;/&gt;${protectoff}kitty</li></ol>
 HERE
           tml => <<'HERE',
    1 Things
@@ -288,7 +296,8 @@ HERE
           exec => 3,
           name => 'definitionList',
           html => <<'HERE',
-<dl><dt>Sushi</dt><dd>Japan</dd><dt>Dim Sum</dt><dd>S. F.</dd><dt>Sauerkraut</dt><dd>Germany</dd></dl>
+<dl> <dt> Sushi
+</dt><dd>Japan</dd><dt>Dim Sum</dt><dd>S. F.</dd><dt>Sauerkraut</dt><dd>Germany</dd></dl>
 HERE
           tml => <<'HERE',
    $ Sushi: Japan
@@ -297,9 +306,9 @@ HERE
 
 HERE
           finaltml => <<'HERE',
-   Sushi: Japan
+   $ Sushi: Japan
    $ Dim Sum: S. F.
-   Sauerkraut: Germany
+   $ Sauerkraut: Germany
 
 HERE
       },
@@ -307,7 +316,7 @@ HERE
           exec => 3,
           name => 'simpleTable',
           html => <<'HERE',
-<table border="1" cellpadding="0" cellspacing="1"><tr><td><b>L</b></td><td><b>C</b></td><td><b>R</b></td></tr><tr><td>A2</td><td class="align-center" style="text-align: center">2</td><td class="align-right" style="text-align: right">2</td></tr><tr><td>A3</td><td class="align-center" style="text-align: center">3</td><td class="align-left" style="text-align: left">3</td></tr><tr><td>A4-6</td><td>four</td><td>four</td></tr><tr><td>^</td><td>five</td><td>five</td></tr></table><p /><table border="1" cellpadding="0" cellspacing="1"><tr><td>^</td><td>six</td><td>six</td></tr></table>
+<table border="1" cellpadding="0" cellspacing="1"><tr><td><b>L</b></td><td><b>C</b></td><td><b>R</b></td></tr><tr><td> A2</td><td style="text-align: center" class="align-center"> 2</td><td style="text-align: right" class="align-right"> 2</td></tr><tr><td> A3</td><td style="text-align: center" class="align-center"> 3</td><td style="text-align: left" class="align-left"> 3</td></tr><tr><td> A4-6</td><td> four</td><td> four</td></tr><tr><td>^</td><td> five</td><td> five</td></tr></table><p /><table border="1" cellpadding="0" cellspacing="1"><tr><td>^</td><td> six</td><td> six</td></tr></table>
 HERE
           tml => <<'HERE',
 
@@ -364,21 +373,21 @@ HERE
       {
           exec => 3,
           name => 'noppedWikiword',
-          html => '<span class="TMLnop">SunOS</span>',
+          html => "${nop}SunOS",
           tml => '!SunOS',
           finaltml => '<nop>SunOS',
       },
       {
           exec => 2,
           name => 'noppedPara',
-          html => '<span class="TMLnop">BeFore SunOS AfTer</span>',
+          html => "${nop}BeFore SunOS AfTer",
           tml => '<nop>BeFore <nop>SunOS <nop>AfTer',
       },
       {
           exec => 2,
           name => 'noppedVariable',
           html => <<'HERE',
-<span class="TMLnop">%MAINWEB%</nop>
+%${nop}MAINWEB%</nop>
 HERE
           tml => '%<nop>MAINWEB%'
          },
@@ -398,8 +407,8 @@ HERE
       {
           exec => 3,
           name => 'mailtoLink',
-          html => <<'HERE',
-<a href="mailto:a@z.com">Mail</a><a href="mailto:?subject=Hi">Hi</a>
+          html => <<HERE,
+$linkon\[[mailto:a\@z.com][Mail]]${linkoff} $linkon\[[mailto:?subject=Hi][Hi]]${linkoff}
 HERE
           tml => '[[mailto:a@z.com][Mail]] [[mailto:?subject=Hi][Hi]]',
           finaltml => <<'HERE',
@@ -415,7 +424,7 @@ HERE
       {
           exec => 3,
           name => 'variousWikiWords',
-          html => '<a href="%!page!%/Current/WebPreferences">WebPreferences</a><p />%MAINWEB%.TWikiUsers<p /><a href="%!page!%/Current/CompleteAndUtterNothing">CompleteAndUtterNothing</a><p /><a href="%!page!%/Current/LinkBox">LinkBox</a><a href="%!page!%/Current/LinkBoxs">LinkBoxs</a><a href="%!page!%/Current/LinkBoxies">LinkBoxies</a><a href="%!page!%/Current/LinkBoxess">LinkBoxess</a><a href="%!page!%/Current/LinkBoxesses">LinkBoxesses</a><a href="%!page!%/Current/LinkBoxes">LinkBoxes</a>',
+          html => "${linkon}WebPreferences${linkoff}<p />$protecton%MAINWEB%$protectoff.TWikiUsers<p />${linkon}CompleteAndUtterNothing${linkoff}<p />${linkon}LinkBox$linkoff${linkon}LinkBoxs${linkoff}${linkon}LinkBoxies${linkoff}${linkon}LinkBoxess${linkoff}${linkon}LinkBoxesses${linkoff}${linkon}LinkBoxes${linkoff}",
           tml => 'WebPreferences
 
 %MAINWEB%.TWikiUsers
@@ -429,215 +438,213 @@ LinkBoxess
 LinkBoxesses
 LinkBoxes
 ',
-          finaltml => 'WebPreferences
-
-%MAINWEB%.TWikiUsers
-
-CompleteAndUtterNothing
-
-LinkBox LinkBoxs LinkBoxies LinkBoxess LinkBoxesses LinkBoxes',
       },
       {
           exec => 2,
           name => 'variousWikiWordsNopped',
-          html => '<span class="TMLnop"><a href="%!page!%/Current/WebPreferences">WebPreferences</a> %MAINWEB%.TWikiUsers <a href="%!page!%/Current/CompleteAndUtterNothing">CompleteAndUtterNothing</a>',
+          html => "${nop}${linkon}WebPreferences${linkoff} %${nop}MAINWEB%.TWikiUsers ${nop}CompleteAndUtterNothing",
           tml => '<nop>WebPreferences %<nop>MAINWEB%.TWikiUsers <nop>CompleteAndUtterNothing',
       },
       {
           exec => 3,
           name => 'squabsWithVars',
-          html => '<a href="%!page!%/Current/WikiSyntax">wiki syntax</a>[[%MAINWEB%.TWiki users]] escaped: [<span class="TMLnop">[wiki syntax]</span>]',
+          html => "${linkon}[[wiki syntax]]$linkoff$linkon\[[%MAINWEB%.TWiki users]]${linkoff}
+escaped:
+[<nop>[wiki syntax]]",
           tml => '[[wiki syntax]][[%MAINWEB%.TWiki users]]
 escaped:
 ![[wiki syntax]]',
-          finaltml => '[[WikiSyntax][wiki syntax]][[%MAINWEB%.TWiki users]] escaped: [<nop>[wiki syntax]]',
+          finaltml => '[[wiki syntax]][[%MAINWEB%.TWiki users]]
+escaped:
+[<nop>[wiki syntax]]',
       },
       {
           exec => 3,
           name => 'squabsWithWikiWordsAndLink',
-          html => '<a href="%!page!%/Current/WikiSyntax">syntax</a><a href="http://gnu.org">GNU</a><a href="http://xml.org">XML</a>',
+          html => "${linkon}[[WikiSyntax][syntax]]${linkoff} ${linkon}[[http://gnu.org][GNU]]${linkoff} ${linkon}[[http://xml.org][XML]]${linkoff}",
           tml => '[[WikiSyntax][syntax]] [[http://gnu.org][GNU]] [[http://xml.org][XML]]',
       },
       {
           exec => 3,
           name => 'squabWithAnchor',
-          html => '<a href="%!page!%/Current/FleegleHorn#TrumpetHack">FleegleHorn#TrumpetHack</a>',
+          html => "${linkon}FleegleHorn#TrumpetHack${linkoff}",
           tml => 'FleegleHorn#TrumpetHack'
          },
       {
           exec => 3,
           name => 'plingedVarOne',
-          html => '<span class="TMLnop">%MAINWEB%</span>nowt',
+          html => "%<nop>MAINWEB%nowt",
           tml => '!%MAINWEB%nowt',
           finaltml => '%<nop>MAINWEB%nowt'
          },
       {
           exec => 3,
           name => 'plingedVarTwo',
-          html => 'nowt<span class="TMLnop">%MAINWEB%</span>',
+          html => "nowt%${nop}MAINWEB%",
           tml => 'nowt!%MAINWEB%',
           finaltml => 'nowt%<nop>MAINWEB%',
       },
       {
           exec => 3,
           name => 'WEBvar',
-          html => '%WEB%',
+          html => "${protecton}%WEB%${protectoff}",
           tml => '%WEB%'
          },
       {
           exec => 3,
           name => 'ICONvar1',
-          html => '%ICON{}%',
+          html => "${protecton}%ICON{}%${protectoff}",
           tml => '%ICON{}%'
          },
       {
           exec => 3,
           name => 'ICONvar2',
-          html => '%ICON{""}%',
-          tml => '%ICON{""}%'
+          html => "${protecton}%ICON{&#34;&#34;}%${protectoff}",
+          tml => '%ICON{""}%',
          },
       {
           exec => 3,
           name => 'ICONvar3',
-          html => '%ICON{"Fleegle"}%',
+          html => "${protecton}%ICON{&#34;Fleegle&#34;}%${protectoff}",
           tml => '%ICON{"Fleegle"}%'
          },
       {
           exec => 3,
           name => 'URLENCODEvar',
-          html => '%URLENCODE{""}%',
+          html => "${protecton}%URLENCODE{&#34;&#34;}%${protectoff}",
           tml => '%URLENCODE{""}%'
          },
       {
           exec => 3,
           name => 'ENCODEvar',
-          html => '%ENCODE{""}%',
+          html => "${protecton}%ENCODE{&#34;&#34;}%${protectoff}",
           tml => '%ENCODE{""}%'
          },
       {
           exec => 3,
           name => 'INTURLENCODEvar',
-          html => '%INTURLENCODE{""}%',
+          html => "${protecton}%INTURLENCODE{&#34;&#34;}%${protectoff}",
           tml => '%INTURLENCODE{""}%'
          },
       {
           exec => 3,
           name => 'MAINWEBvar',
-          html => '%MAINWEB%',
+          html => "${protecton}%MAINWEB%${protectoff}",
           tml => '%MAINWEB%'
          },
       {
           exec => 3,
           name => 'TWIKIWEBvar',
-          html => '%TWIKIWEB%',
+          html => "${protecton}%TWIKIWEB%${protectoff}",
           tml => '%TWIKIWEB%'
          },
       {
           exec => 3,
           name => 'HOMETOPICvar',
-          html => '%HOMETOPIC%',
+          html => "${protecton}%HOMETOPIC%${protectoff}",
           tml => '%HOMETOPIC%'
          },
       {
           exec => 3,
           name => 'WIKIUSERSTOPICvar',
-          html => '%WIKIUSERSTOPIC%',
+          html => $protecton.'%WIKIUSERSTOPIC%'.$protectoff,
           tml => '%WIKIUSERSTOPIC%'
          },
       {
           exec => 3,
           name => 'WIKIPREFSTOPICvar',
-          html => '%WIKIPREFSTOPIC%',
+          html => $protecton.'%WIKIPREFSTOPIC%'.$protectoff,
           tml => '%WIKIPREFSTOPIC%'
          },
       {
           exec => 3,
           name => 'WEBPREFSTOPICvar',
-          html => '%WEBPREFSTOPIC%',
+          html => $protecton.'%WEBPREFSTOPIC%'.$protectoff,
           tml => '%WEBPREFSTOPIC%'
          },
       {
           exec => 3,
           name => 'NOTIFYTOPICvar',
-          html => '%NOTIFYTOPIC%',
+          html => $protecton.'%NOTIFYTOPIC%'.$protectoff,
           tml => '%NOTIFYTOPIC%'
          },
       {
           exec => 3,
           name => 'STATISTICSTOPICvar',
-          html => '%STATISTICSTOPIC%',
+          html => $protecton.'%STATISTICSTOPIC%'.$protectoff,
           tml => '%STATISTICSTOPIC%'
          },
       {
           exec => 3,
           name => 'STARTINCLUDEvar',
-          html => '%STARTINCLUDE%',
+          html => $protecton.'%STARTINCLUDE%'.$protectoff,
           tml => '%STARTINCLUDE%'
          },
       {
           exec => 3,
           name => 'STOPINCLUDEvar',
-          html => '%STOPINCLUDE%',
+          html => $protecton.'%STOPINCLUDE%'.$protectoff,
           tml => '%STOPINCLUDE%'
          },
       {
           exec => 3,
           name => 'SECTIONvar',
-          html => '%SECTION{""}%',
+          html => $protecton.'%SECTION{&#34;&#34;}%'.$protectoff,
           tml => '%SECTION{""}%'
          },
       {
           exec => 3,
           name => 'ENDSECTIONvar',
-          html => '%ENDSECTION%',
+          html => $protecton.'%ENDSECTION%'.$protectoff,
           tml => '%ENDSECTION%'
          },
       {
           exec => 3,
           name => 'FORMFIELDvar1',
-          html => '%FORMFIELD{"" topic="" alttext="" default="" format="$value"}%',
+          html => $protecton.'%FORMFIELD{&#34;&#34;&nbsp;topic=&#34;&#34;&nbsp;alttext=&#34;&#34;&nbsp;default=&#34;&#34;&nbsp;format=&#34;$value&#34;}%'.$protectoff,
           tml => '%FORMFIELD{"" topic="" alttext="" default="" format="$value"}%',
       },
       {
           exec => 3,
           name => 'FORMFIELDvar2',
-          html => '%FORMFIELD{"TopicClassification" topic="" alttext="" default="" format="$value"}%',
+          html => $protecton.'%FORMFIELD{&#34;TopicClassification&#34;&nbsp;topic=&#34;&#34;&nbsp;alttext=&#34;&#34;&nbsp;default=&#34;&#34;&nbsp;format=&#34;$value&#34;}%'.$protectoff,
           tml => '%FORMFIELD{"TopicClassification" topic="" alttext="" default="" format="$value"}%',
       },
       {
           exec => 3,
           name => 'SPACEDTOPICvar',
-          html => '%SPACEDTOPIC%',
+          html => $protecton.'%SPACEDTOPIC%'.$protectoff,
           tml => '%SPACEDTOPIC%'
          },
       {
           exec => 3,
           name => 'RELATIVETOPICPATHvar1',
-          html => '%RELATIVETOPICPATH{}%',
+          html => $protecton.'%RELATIVETOPICPATH{}%'.$protectoff,
           tml => '%RELATIVETOPICPATH{}%'
          },
       {
           exec => 3,
           name => 'RELATIVETOPICPATHvar2',
-          html => '%RELATIVETOPICPATH{Sausage}%',
+          html => $protecton.'%RELATIVETOPICPATH{Sausage}%'.$protectoff,
           tml => '%RELATIVETOPICPATH{Sausage}%'
          },
       {
           exec => 3,
           name => 'RELATIVETOPICPATHvar3',
-          html => '%RELATIVETOPICPATH{"Chips"}%',
+          html => $protecton.'%RELATIVETOPICPATH{&#34;Chips&#34;}%'.$protectoff,
           tml => '%RELATIVETOPICPATH{"Chips"}%'
          },
       {
           exec => 3,
           name => 'SCRIPTNAMEvar',
-          html => '%SCRIPTNAME%',
+          html => $protecton.'%SCRIPTNAME%'.$protectoff,
           tml => '%SCRIPTNAME%'
          },
       {
           exec => 3,
           name => 'nestedVerbatim',
-          html => 'Outside<pre class="TMLverbatim">Inside</pre>Outside',
+          html => 'Outside
+<pre class="WYSIWYG_VERBATIM"><br />Inside<br /></pre>Outside',
           tml => 'Outside
 <verbatim>
 Inside
@@ -647,7 +654,9 @@ Outside',
       {
           exec => 3,
           name => 'nestedPre',
-          html => 'Outside<pre class="twikiAlert TMLverbatim">Inside</pre>Outside',
+          html => 'Outside
+<pre class="twikiAlert WYSIWYG_VERBATIM"><br />Inside<br /></pre>
+Outside',
           tml => 'Outside
 <verbatim class="twikiAlert">
 Inside
@@ -658,24 +667,22 @@ Outside
       {
           exec => 3,
           name => 'nestedIndentedVerbatim',
-          html => 'Outside<pre class="TMLverbatim">Inside</pre>Outside',
+          html => 'Outside<pre class="WYSIWYG_VERBATIM"><br />Inside<br />&nbsp;&nbsp;&nbsp;</pre>Outside',
           tml => 'Outside
    <verbatim>
 Inside
    </verbatim>
 Outside
 ',
-          finaltml => 'Outside
-<verbatim>
-Inside
-</verbatim>
-Outside
-',
       },
       {
           exec => 3,
           name => 'nestedIndentedPre',
-          html => 'Outside<pre>Inside</pre>Outside',
+          html => 'Outside
+<pre>
+Inside
+</pre>
+Outside',
           tml => 'Outside
 <pre>
 Inside
@@ -685,7 +692,11 @@ Outside',
       {
           exec => 3,
           name => 'classifiedPre',
-          html => 'Outside<pre class="twikiAlert">Inside</pre>Outside',
+          html => 'Outside
+<pre class="twikiAlert">
+Inside
+</pre>
+Outside',
           tml => 'Outside
 <pre class="twikiAlert">
 Inside
@@ -702,15 +713,19 @@ Inside
    </pre>
 Outside',
           finaltml => 'Outside
-<pre>
+   <pre>
 Inside
-</pre>
+   </pre>
 Outside',
       },
       {
           exec => 3,
           name => 'NAL',
-          html => 'Outside<div class="TMLnoautolink">Inside</div>Outside',
+          html => 'Outside
+<div class="TMLnoautolink">
+Inside
+</div>
+Outside',
           tml => 'Outside
 <noautolink>
 Inside
@@ -720,7 +735,12 @@ Outside',
       {
           exec => 3,
           name => 'classifiedNAL',
-          html => 'Outside<div class="twikiAlert TMLnoautolink">Inside</div>Outside',
+          html => 'Outside
+<div class="twikiAlert TMLnoautolink">
+Inside
+</div>
+Outside
+',
           tml => 'Outside
 <noautolink class="twikiAlert">
 Inside
@@ -730,24 +750,23 @@ Outside',
       {
           exec => 3,
           name => 'indentedNAL',
-          html => 'Outside<div class="TMLnoautolink">Inside</div>Outside',
+          html => 'Outside
+<div class="TMLnoautolink">
+Inside
+</div>
+Outside
+',
           tml => 'Outside
    <noautolink>
 Inside
    </noautolink>
 Outside
 ',
-          finaltml => 'Outside
-<noautolink>
-Inside
-</noautolink>
-Outside
-',
       },
       {
           exec => 3,
           name => 'linkInHeader',
-          html => '<h3 class="TML"> Test with<a href="%!page!%/Current/LinkInHeader">LinkInHeader</a></h3>',
+          html => "<h3 class=\"TML\"> Test with${linkon}LinkInHeader${linkoff}</h3>",
           tml => '---+++ Test with LinkInHeader
 ',
       },
@@ -799,9 +818,8 @@ Outside
       {
           exec => 3,
           name=>"TWikiTagsInHTMLParam",
-          html=>'<a href="%!page!%/Burble/Barf">Burble</a>',
+          html=>"${linkon}[[%!page!%/Burble/Barf][Burble]]${linkoff}",
           tml => '[[%!page!%/Burble/Barf][Burble]]',
-          finaltml => '[[Burble.Barf][Burble]]',
       },
       {
           exec => 2,
@@ -824,14 +842,14 @@ HERE
       {
           exec => 3,
           name => 'linkToOtherWeb',
-          html => '<a href="%!page!%/Sandbox/WebHome">this</a>',
+          html => "${linkon}[[Sandbox.WebHome][this]]${linkoff}",
           tml => '[[Sandbox.WebHome][this]]',
       },
       {
           exec => 3,
           name => 'anchoredLink',
           tml => '[[FAQ.NetworkInternet#Pomona_Network][Test Link]]',
-          html => '<a href="%!page!%/FAQ/NetworkInternet#Pomona_Network">Test Link</a>',
+          html => "${linkon}[[FAQ.NetworkInternet#Pomona_Network][Test Link]]${linkoff}",
       },
       {
           exec => 2,
@@ -845,33 +863,45 @@ HERE
       {
           exec => 3,
           name => 'variableInIMGtag',
-          html => '<img src="%ATTACHURLPATH%/T-logo-16x16.gif" />',
+          html => '<img src="/MAIN/pub/Current/TestTopic/T-logo-16x16.gif" />',
           tml  => '<img src="%ATTACHURLPATH%/T-logo-16x16.gif" />',
-          finaltml => '<img src="%ATTACHURLPATH%/T-logo-16x16.gif"></img>'
-         },
+          finaltml => '<img src="%ATTACHURLPATH%/T-logo-16x16.gif" />',
+      },
+      {
+          exec => 3,
+          name => 'setCommand',
+          tml => <<HERE,
+   * Set FLIBBLE = <break> <cake/>
+     </break>
+   * %FLIBBLE%
+      * Set FLEEGLE = easy gum
+HERE
+          html => '<ul>
+<li> Set FLIBBLE =<span class="WYSIWYG_PROTECTED">&nbsp;&#60;break&#62;&nbsp;&#60;cake/&#62;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&#60;/break&#62;</span></li><li><span class="WYSIWYG_PROTECTED">%FLIBBLE%</span><ul><li>Set FLEEGLE =<span class="WYSIWYG_PROTECTED">&nbsp;easy&nbsp;gum</span></li></ul></li></ul>',
+      },
       {
           exec => 3,
           name => 'twikiWebSnarf',
-          html => '[[%TWIKIWEB%.TopicName][bah]]',
+          html => $linkon.'[[%TWIKIWEB%.TopicName][bah]]'.$linkoff,
           tml  => '[[%TWIKIWEB%.TopicName][bah]]',
       },
       {
           exec => 3,
           name => 'mainWebSnarf',
-          html => '[[%MAINWEB%.TopicName][bah]]',
+          html => "${linkon}\[[%MAINWEB%.TopicName][bah]]$linkoff",
           tml  => '[[%MAINWEB%.TopicName][bah]]',
       },
       {
           exec => 3,
           name => 'mainFormWithVars',
-          html => '<form action="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INTURLENCODE{"%WEB%"}%/">',
+          html => $protecton.'<form&nbsp;action=&#34;%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INTURLENCODE{&#34;%WEB%&#34;}%/&#34;>'.$protectoff,
           tml  => '<form action="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INTURLENCODE{"%WEB%"}%/">',
       },
       {
           exec => 3,
           name => "Item871",
           tml => "[[Test]] Entry [[TestPage][Test Page]]\n",
-          html => '<a href="%!page!%/Current/Test">Test</a> Entry<a href="%!page!%/Current/TestPage">Test Page</a>',
+          html => "${linkon}[[Test]]${linkoff} Entry ${linkon}[[TestPage][Test Page]]${linkoff}",
       },
       {
           exec => 0,
@@ -886,7 +916,7 @@ EOE
       {
           exec => 3,
           name => 'Item945',
-          html => '%SEARCH{"ReqNo" scope="topic" regex="on" nosearch="on" nototal="on" casesensitive="on" format="$percntCALC{$IF($NOT($FIND(%TOPIC%,$formfield(ReqParents))), <nop>, [[$topic]] - $formfield(ReqShortDescript) %BR% )}$percnt"}%',
+          html => $protecton.'%SEARCH{&#34;ReqNo&#34;&nbsp;scope=&#34;topic&#34;&nbsp;regex=&#34;on&#34;&nbsp;nosearch=&#34;on&#34;&nbsp;nototal=&#34;on&#34;&nbsp;casesensitive=&#34;on&#34;&nbsp;format=&#34;$percntCALC{$IF($NOT($FIND(%TOPIC%,$formfield(ReqParents))),&nbsp;&#60;nop&#62;,&nbsp;[[$topic]]&nbsp;-&nbsp;$formfield(ReqShortDescript)&nbsp;%BR%&nbsp;)}$percnt&#34;}%'.$protectoff,
           tml  => '%SEARCH{"ReqNo" scope="topic" regex="on" nosearch="on" nototal="on" casesensitive="on" format="$percntCALC{$IF($NOT($FIND(%TOPIC%,$formfield(ReqParents))), <nop>, [[$topic]] - $formfield(ReqShortDescript) %BR% )}$percnt"}%',
       },
       {
@@ -894,16 +924,13 @@ EOE
           name => "WebAndTopic",
           tml => "Current.TestTopic Sandbox.TestTopic [[Current.TestTopic]] [[Sandbox.TestTopic]]",
           html => <<HERE,
-<a href="%!page!%/Current/TestTopic">Current.TestTopic</a>
-<a href="%!page!%/Sandbox/TestTopic">Sandbox.TestTopic</a>
-<a href="%!page!%/Current/TestTopic">Current.TestTopic</a>
-<a href="%!page!%/Sandbox/TestTopic">Sandbox.TestTopic</a>
+${linkon}Current.TestTopic${linkoff}
+${linkon}Sandbox.TestTopic${linkoff}
+${linkon}\[[Current.TestTopic]]${linkoff}
+${linkon}\[[Sandbox.TestTopic]]${linkoff}
 HERE
           finaltml => <<HERE,
-TestTopic
-Sandbox.TestTopic
-TestTopic
-Sandbox.TestTopic
+Current.TestTopic Sandbox.TestTopic [[Current.TestTopic]] [[Sandbox.TestTopic]]
 HERE
       },
       {
@@ -911,26 +938,26 @@ HERE
           name => 'Item1140',
           html => '<img src="%!page!%/T-logo-16x16.gif" />',
           tml  => '<img src="%!page!%/T-logo-16x16.gif" />',
-          finaltml => '<img src=\'%SCRIPTURL{"view"}%/T-logo-16x16.gif\'></img>'
+          finaltml => '<img src=\'%SCRIPTURL{"view"}%/T-logo-16x16.gif\' />'
          },
       {
           exec => 3,
           name => 'Item1175',
           tml => '[[WebCTPasswords][Resetting a WebCT Password]]',
-          html => '<a href="%!page!%/Current/WebCTPasswords">Resetting a <span class="TMLnop">WebCT</span> Password</a>',
-          finaltml => '[[WebCTPasswords][Resetting a <nop>WebCT Password]]',
+          html => "${linkon}[[WebCTPasswords][Resetting a WebCT Password]]${linkoff}",
+          finaltml => '[[WebCTPasswords][Resetting a WebCT Password]]',
       },
       {
           exec => 3,
           name => 'Item1259',
-          html => "Spleem<!--\n   * Set SPOG = dreep\n-->Splom",
+          html => "Spleem$protecton&#60;!--<br />&nbsp;&nbsp;&nbsp;*&nbsp;Set&nbsp;SPOG&nbsp;=&nbsp;dreep<br />--&#62;${protectoff}Splom",
           tml => "Spleem<!--\n   * Set SPOG = dreep\n-->Splom",
       },
       {
           exec => 3,
           name => 'Item1317',
           tml => '%<nop>DISPLAYTIME{"$hou:$min"}%',
-          html => '<span class="TMLnop">%DISPLAYTIME{"$hou:$min"}%</span>',
+          html => "%${nop}DISPLAYTIME\{\"\$hou:\$min\"}%",
       },
       {
           exec => 3,
@@ -941,6 +968,36 @@ HERE
 HERE
           html => '<ul><li>x</li></ul><table cellspacing="1" cellpadding="0" border="1"><tr><td>Y</td></tr></table>',
       },
+      {
+          exec => 3,
+          name => 'Item4426',
+          tml => <<'HERE',
+   * x
+   *
+   * y
+HERE
+          html => '<ul>
+<li>x
+</li><li></li><li>y
+</li></ul>',
+          finaltml => <<'HERE',
+   * x
+   * 
+   * y
+HERE
+      },
+      {
+          exec => 3,
+          name => 'Item3735',
+          tml => "fred *%WIKINAME%* fred",
+          html => "fred <b>$protecton%WIKINAME%$protectoff</b> fred",
+      },
+      {
+          exec => 3,
+          name => 'brInProtectedRegion',
+          html => $protecton."&#60;!--Fred<br />Jo&nbsp;e<br />Sam--&#62;".$protectoff,
+          tml => "<!--Fred\nJo e\nSam-->",
+      },
      ];
 };
 
@@ -950,16 +1007,16 @@ sub gen_compare_tests {
         if (defined($pick_test)) {
             next unless( $datum->{name} eq $pick_test );
         }
-        if ( $datum->{exec} & 1 ) {
+        if ( (($mask & $datum->{exec}) & 1)) {
             my $fn = 'TranslatorTests::test_TML2HTML_'.$datum->{name};
             no strict 'refs';
             *$fn = sub { my $this = shift; $this->compareTML_HTML( $datum ) };
             use strict 'refs';
         }
-        if ( $datum->{exec} & 2 ) {
+        if (($mask & $datum->{exec}) & 2) {
             my $fn = 'TranslatorTests::test_HTML2TML_'.$datum->{name};
             no strict 'refs';
-            *$fn = sub { my $this = shift; $this->compareHTML_TML( $datum ) };
+            *$fn = sub { my $this = shift; $this->compareRoundTrip( $datum ) };
             use strict 'refs';
         }
     }
@@ -1006,31 +1063,32 @@ use HTML::Diff;
 
 sub normaliseEntities {
     my $text = shift;
-    $text = HTML::Entities::decode_entities($text);
-    $text = HTML::Entities::encode_entities
-      ($text, "\000\001\002\003\004\005\006\007\010\013\014\015");
-    $text = HTML::Entities::encode_entities($text,"\016-\037");
-    $text = HTML::Entities::encode_entities($text,"\200-\377");
+    # Convert text entities to &# representation
+    $text =~ s/(&\w+;)/'&#'.ord(HTML::Entities::decode_entities($1)).';'/ge;
     return $text;
 }
+
+=pod
 
 sub _compareHTML {
     my ( $this, $expected, $actual ) = @_;
 
     my $result = '';
-    $expected = normaliseEntities($expected);
-    $expected =~ s/ +/ /gs;
-    $expected =~ s/^\s+//s;
-    $expected =~ s/\s+$//s;
-    $expected =~ s/\s+</</g;
-    $expected =~ s/>\s+/>/g;
+    $expected =~ s/(&[^;]+;)/normaliseEntities($1)/ge;
+#    $expected =~ s/ +/ /gs;
+#    $expected =~ s/^\s+//s;
+#    $expected =~ s/\s+$//s;
+#    $expected =~ s/\s+</</g;
+#    $expected =~ s/>\s+/>/g;
 
-    $actual = normaliseEntities($actual);
-    $actual =~ s/ +/ /gs;
-    $actual =~ s/^\s+//s;
-    $actual =~ s/\s+$//s;
-    $actual =~ s/\s+</</g;
-    $actual =~ s/>\s+/>/g;
+    $actual =~ s/(&[^;]+;)/normaliseEntities($1)/ge;
+#    $actual =~ s/ +/ /gs;
+#    $actual =~ s/^\s+//s;
+#    $actual =~ s/\s+$//s;
+#    $actual =~ s/\s+</</g;
+#    $actual =~ s/>\s+/>/g;
+
+    return if $actual eq $expected;
 
     my $diffs = HTML::Diff::html_word_diff( $expected, $actual );
     my $failed = 0;
@@ -1038,11 +1096,11 @@ sub _compareHTML {
 
     foreach my $diff ( @$diffs ) {
         my $a = $diff->[1];
-        $a =~ s/^\s+//;
-        $a =~ s/\s+$//s;
+        #$a =~ s/^\s+//;
+        #$a =~ s/\s+$//s;
         my $b = $diff->[2];
-        $b =~ s/^\s+//;
-        $b =~ s/\s+$//s;
+        #$b =~ s/^\s+//;
+        #$b =~ s/\s+$//s;
         my $ok = 0;
         #print "$diff->[0] | $diff->[1] | $diff->[2]\n";
         if ( $diff->[0] eq 'u' || $a eq $b || _tagSame($a, $b)) {
@@ -1091,6 +1149,8 @@ sub _paramsSame {
     return $b eq $a;
 }
 
+=cut
+
 sub compareTML_HTML {
     my ( $this, $args ) = @_;
 
@@ -1109,7 +1169,37 @@ sub compareTML_HTML {
             expandVarsInURL => \&TWiki::Plugins::WysiwygPlugin::expandVarsInURL,
         });
 
-    $this->_compareHTML($html, $tx, 1);
+    $this->assert_html_equals($html, $tx);
+}
+
+sub compareRoundTrip {
+    my ( $this, $args ) = @_;
+    my $page = $this->{twiki}->getScriptUrl(1, 'view', 'Current', 'TestTopic');
+    $page =~ s/\/Current\/TestTopic.*$//;
+
+    my $tml = $args->{tml}||'';
+    $tml =~ s/%!page!%/$page/g;
+
+    my $txer = new TWiki::Plugins::WysiwygPlugin::TML2HTML();
+    my $html = $txer->convert(
+        $tml,
+        {
+            web => 'Current', topic => 'TestTopic',
+            getViewUrl => \&TWiki::Plugins::WysiwygPlugin::getViewUrl,
+            expandVarsInURL => \&TWiki::Plugins::WysiwygPlugin::expandVarsInURL,
+        });
+
+    $txer = new TWiki::Plugins::WysiwygPlugin::HTML2TML();
+    my $tx = $txer->convert(
+        $html,
+        {
+            web => 'Current', topic => 'TestTopic',
+            convertImage => \&convertImage,
+            rewriteURL => \&TWiki::Plugins::WysiwygPlugin::postConvertURL,
+        });
+    my $finaltml = $args->{finaltml} || $tml;
+    $finaltml =~ s/%!page!%/$page/g;
+    $this->_compareTML($finaltml, $tx, $args->{name});
 }
 
 sub compareHTML_TML {
@@ -1117,9 +1207,12 @@ sub compareHTML_TML {
 
     my $page = $this->{twiki}->getScriptUrl(1, 'view', 'Current', 'TestTopic');
     $page =~ s/\/Current\/TestTopic.*$//;
-    my $html = $args->{html}||''; $html =~ s/%!page!%/$page/g;
-    my $finaltml = $args->{finaltml}||''; $finaltml =~ s/%!page!%/$page/g;
-    my $tml = $args->{tml}||''; $tml =~ s/%!page!%/$page/g;
+    my $html = $args->{html}||'';
+    $html =~ s/%!page!%/$page/g;
+    my $tml = $args->{tml}||'';
+    $tml =~ s/%!page!%/$page/g;
+    my $finaltml = $args->{finaltml}||'$tml';
+    $finaltml =~ s/%!page!%/$page/g;
 
     my $txer = new TWiki::Plugins::WysiwygPlugin::HTML2TML();
     my $tx = $txer->convert(
@@ -1129,17 +1222,13 @@ sub compareHTML_TML {
             convertImage => \&convertImage,
             rewriteURL => \&TWiki::Plugins::WysiwygPlugin::postConvertURL,
         });
-    if( $finaltml ) {
-        $this->_compareTML($finaltml, $tx, $args->{name});
-    } else {
-        $this->_compareTML($tml, $tx, $args->{name});
-    }
+    $this->_compareTML($finaltml, $tx, $args->{name});
 }
 
 sub encode {
     my $s = shift;
-
-#    $s =~ s/([\000-\037])/'#'.ord($1)/ge;
+    # used for debugging odd chars
+    #    $s =~ s/([\000-\037])/'#'.ord($1)/ge;
     return $s;
 }
 

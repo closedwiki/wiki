@@ -179,7 +179,7 @@ sub afterEditHandler {
     my $query = TWiki::Func::getCgiQuery();
     return unless $query;
 
-    return unless defined( $query->param( 'wysiwyg_edit' ));
+#    return unless defined( $query->param( 'wysiwyg_edit' ));
 
     # Switch off wysiwyg_edit so it doesn't try to transform again in
     # the beforeSaveHandler
@@ -389,11 +389,6 @@ sub _populateVars {
 
     for my $i (0..$#VARS) {
         my $nvar = $VARS[$i];
-        if($opts->{markvars}) {
-            # SMELL: this is clunky.... but the markvars transformation has
-            # already happened by the time this is used.
-            $nvar =~ s/^%(.*)%$/CGI::span({class=>"TMLvariable"}, $1)/e;
-        }
         $opts->{match}[$i] = $nvar;
         $exp[$i] ||= '';
     }
@@ -510,7 +505,7 @@ sub isWysiwygEditable {
         $exclusions = TWiki::Func::getPreferencesValue('WYSIWYG_EXCLUDE')
           || '';
     }
-    return unless $exclusions;
+    return 1 unless $exclusions;
 
     my $calls_ok = TWiki::Func::getPreferencesValue(
         'WYSIWYG_EDITABLE_CALLS' ) || 'DO NOT MATCH';
@@ -518,24 +513,24 @@ sub isWysiwygEditable {
     my $ok = 1;
     if( $exclusions =~ /calls/
           && $_[0] =~ /%((?!($calls_ok){)[A-Z_]+{.*?})%/s ) {
-        #print STDERR "WYSIWYG_DEBUG: has calls $1\n";
+        print STDERR "WYSIWYG_DEBUG: has calls $1\n";
         $ok = 0;
     }
     if( $exclusions =~ /variables/ && $_[0] =~ /%([A-Z_]+)%/s ) {
-        #print STDERR "$exclusions WYSIWYG_DEBUG: has variables $1\n";
+        print STDERR "$exclusions WYSIWYG_DEBUG: has variables $1\n";
         $ok = 0;
     }
     if( $exclusions =~ /html/ &&
           $_[0] =~ /<\/?((?!literal|verbatim|noautolink|nop|br)\w+)/ ) {
-        #print STDERR "WYSIWYG_DEBUG: has html: $1\n";
+        print STDERR "WYSIWYG_DEBUG: has html: $1\n";
         $ok = 0;
     }
     if( $exclusions =~ /comments/ && $_[0] =~ /<[!]--/ ) {
-        #print STDERR "WYSIWYG_DEBUG: has comments\n";
+        print STDERR "WYSIWYG_DEBUG: has comments\n";
         $ok = 0;
     }
     if( $exclusions =~ /pre/ && $_[0] =~ /<pre\w/ ) {
-        #print STDERR "WYSIWYG_DEBUG: has pre\n";
+        print STDERR "WYSIWYG_DEBUG: has pre\n";
         $ok = 0;
     }
     return $ok;
