@@ -11,7 +11,6 @@ package TWikiTestCase;
 use base 'Unit::TestCase';
 
 use Data::Dumper;
-use HTMLDiffer;
 
 use TWiki;
 use strict;
