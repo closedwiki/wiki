@@ -3462,7 +3462,8 @@ sub URLPARAM {
         }
     }
     unless( $value ) {
-        $value = $params->{default} || '';
+        $value = $params->{default};
+        $value = '' unless defined $value;
     }
     return $value;
 }
