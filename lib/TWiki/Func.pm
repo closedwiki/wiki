@@ -811,7 +811,9 @@ Test if logged in user is a guest (TWikiGuest)
 
 sub isGuest {
     ASSERT($TWiki::Plugins::SESSION) if DEBUG;
-    return $TWiki::Plugins::SESSION->{user} eq $TWiki::cfg{DefaultUserWikiName};
+    return $TWiki::Plugins::SESSION->{user} eq
+      $TWiki::Plugins::SESSION->{users}->getCanonicalUserID(
+          $TWiki::cfg{DefaultUserLogin} );
 }
 
 =pod
