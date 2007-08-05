@@ -2972,6 +2972,7 @@ sub TMPLP {
 sub VAR {
     my( $this, $params, $topic, $inweb ) = @_;
     my $key = $params->{_DEFAULT};
+    return '' unless $key;
     my $web = $params->{web} || $inweb;
     # handle %MAINWEB%-type cases
     ( $web, $topic ) = $this->normalizeWebTopicName( $web, $topic );
