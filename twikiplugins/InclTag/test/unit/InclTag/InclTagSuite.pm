@@ -1,6 +1,6 @@
 package InclTagSuite;
 
-use base qw(Test::Unit::TestSuite);
+use base qw(Unit::TestSuite);
 
 sub name { 'InclTagSuite' };
 

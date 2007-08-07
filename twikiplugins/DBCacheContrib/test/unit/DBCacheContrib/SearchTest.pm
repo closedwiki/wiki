@@ -1,5 +1,5 @@
 package SearchTest;
-use base qw(Test::Unit::TestCase);
+use base qw(Unit::TestCase);
 
 use TWiki::Contrib::DBCacheContrib::Map;
 use TWiki::Contrib::DBCacheContrib::Search;

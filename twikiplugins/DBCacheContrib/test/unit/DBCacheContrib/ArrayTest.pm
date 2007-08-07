@@ -4,7 +4,7 @@ use TWiki::Contrib::DBCacheContrib::Array;
 use TWiki::Contrib::DBCacheContrib::Map;
 use TWiki::Contrib::DBCacheContrib::Search;
 
-use base qw(Test::Unit::TestCase);
+use base qw(Unit::TestCase);
 
 sub new {
     my $self = shift()->SUPER::new(@_);

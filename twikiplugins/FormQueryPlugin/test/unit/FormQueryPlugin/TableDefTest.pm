@@ -1,6 +1,6 @@
 package TableDefTest;
 
-use base qw(Test::Unit::TestCase);
+use base qw(Unit::TestCase);
 use TWiki::Plugins::FormQueryPlugin::TableDef;
 use TWiki::Contrib::DBCacheContrib::Map;
 

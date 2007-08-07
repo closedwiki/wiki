@@ -1,6 +1,6 @@
 package TablerowDefTest;
 
-use base qw(Test::Unit::TestCase);
+use base qw(Unit::TestCase);
 use TWiki::Plugins::FormQueryPlugin::TablerowDef;
 use TWiki::Contrib::DBCacheContrib::Map;
 
