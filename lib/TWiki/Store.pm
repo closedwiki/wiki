@@ -1259,7 +1259,7 @@ sub unlockTopic {
 Test if web exists
    * =$web= - Web name, required, e.g. ='Sandbox'=
 
-A web _has_ to have a home topic to be a web.
+A web _has_ to have a preferences topic to be a web.
 
 =cut
 
@@ -1556,7 +1556,8 @@ sub getListOfWebs {
           } @webList;
     }
 
-    return sort @webList;
+    # Only return webs that really exist
+    return sort grep { $this->webExists( $_ ) } @webList;
 }
 
 # get a list of directories within the named web directory. If hierarchical
