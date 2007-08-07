@@ -409,6 +409,8 @@ sub _getRenderedVersion {
 
     $text =~ s/(<nop>)/$this->_liftOut($1, 'PROTECTED')/ge;
 
+    #print STDERR "TML2HTML = '$text'\n";
+
     return $text;
 }
 
@@ -512,7 +514,7 @@ sub _takeOutBlocks {
                     text => $scoop,
                 };
 
-                $line = $TT0.$placeholder.$TT0;
+                $line = $TT0.$placeholder.$TT0.$rest;
                 $n++;
             }
         }

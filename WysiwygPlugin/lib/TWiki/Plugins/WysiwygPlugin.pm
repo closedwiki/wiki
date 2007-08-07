@@ -214,7 +214,7 @@ sub _postProcess {
     my $opts = {
         web => $_[2],
         topic => $_[1],
-        convertImage => \&convertImage,
+        convertImage => \&_convertImage,
         rewriteURL => \&postConvertURL,
         very_clean => 1, # aggressively polish saved HTML
     };
@@ -453,12 +453,11 @@ sub postConvertURL {
     return $url.$anchor.$parameters;
 }
 
-# callback used to convert an image reference into a TWiki variable
-# callback passed to the HTML2TML convertor
-sub convertImage {
-    my( $x, $opts ) = @_;
+# Callback used to convert an image reference into a TWiki variable.
+sub _convertImage {
+    my( $src, $opts ) = @_;
 
-    return undef unless $x;
+    return undef unless $src;
 
     local $recursionBlock = 1; # block calls to beforeCommonTagshandler
 
@@ -477,7 +476,7 @@ sub convertImage {
         }
     }
 
-    return $imgMap->{$x};
+    return $imgMap->{$src};
 }
 
 # Replace content with a marker to prevent it being munged by TWiki
