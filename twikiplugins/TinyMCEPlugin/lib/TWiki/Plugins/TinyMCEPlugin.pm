@@ -33,9 +33,12 @@ sub beforeEditHandler {
 
     my $query = TWiki::Func::getCgiQuery();
 
+    my $init = TWiki::Func::getPreferencesValue('TINYMCEPLUGIN_INIT')
+      || <<'HERE';
+'
+HERE
+
     require TWiki::Plugins::WysiwygPlugin;
-#    return unless TWiki::Plugins::WysiwygPlugin::isWysiwygEditable(
-#        $_[0], $TWiki::cfg{Plugins}{TinyMCEPlugin}{EXCLUDE});
 
     # SMELL: why do we need twiki.js?
     # _src.js for debug
@@ -45,26 +48,7 @@ sub beforeEditHandler {
 <script type="text/javascript">
 // <![CDATA[
 tinyMCE.init({
- mode : "textareas",
- force_br_newlines : true,
- theme : "advanced",
-// theme_advanced_disable: "strikethrough,justifyleft,justifyright,justifycenter,justifyfull,cleanup,sub,sup,anchor,charmap,removeformat,separator,styleselect,visualaid,hr",
- gecko_spellcheck : true,
- convert_urls : false,
- relative_urls : false,
- remove_script_host : false,
- plugins : "table,searchreplace",
- theme_advanced_buttons3_add : "search,replace",
- //theme_advanced_layout_manager : "RowLayout",
- setupcontent_callback : "tinymce_plugin_setUpContent",
- init_instance_callback : "tinymce_plugin_addWysiwygTagToForm",
- theme_advanced_toolbar_align : "left",
- theme_advanced_buttons1 : "bold,italic,separator,bullist,numlist,separator,outdent,indent,separator,undo,redo,separator,link,unlink,removeformat,hr,visualaid,separator,sub,sup,separator,styleselect,formatselect,anchor,image,help,code,charmap",
- theme_advanced_buttons2: "",
- theme_advanced_buttons3: "",
- theme_advanced_toolbar_location: "top",
- theme_advanced_styles : "LINK=WYSIWYG_LINK;PROTECTED=WYSIWYG_PROTECTED;NOAUTOLINK=WYSIWYG_NOAUTOLINK;VERBATIM=WYSIWYG_VERBATIM",
- content_css : "%PUBURLPATH%/%TWIKIWEB%/TinyMCEPlugin/wysiwyg.css,%PUBURLPATH%/%TWIKIWEB%/TWikiTemplates/base.css,%PUBURLPATH%/%TWIKIWEB%/PatternSkin/style.css,%PUBURLPATH%/%TWIKIWEB%/PatternSkin/colors.css"
+$init
 });
 // ]]>
 </script>
@@ -72,12 +56,14 @@ SCRIPT
 
     $_[0] = TWiki::Plugins::WysiwygPlugin::TranslateTML2HTML($_[0]);
 }
+
 sub afterEditHandler {
     #my( $text, $topic, $web ) = @_;
     my $query = TWiki::Func::getCgiQuery();
     return unless $query;
     return if $query->{wysiwyg_blocked};
     $query->{wysiwyg_blocked} = 1;
+    $query->delete( 'wysiwyg_edit' ); # just in case
     require TWiki::Plugins::WysiwygPlugin;
     TWiki::Plugins::WysiwygPlugin::_postProcess( @_ );
 }
