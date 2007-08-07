@@ -4,7 +4,7 @@ use TWiki::Plugins::FormQueryPlugin::TableFormat;
 use TWiki::Contrib::DBCacheContrib::Map;
 use TWiki::Contrib::DBCacheContrib::Array;
 use TWiki::Func;
-use base qw(Test::Unit::TestCase);
+use base qw(Unit::TestCase);
 
 #$TWiki::regex{mixedAlpha} = "[:alpha:]";
 

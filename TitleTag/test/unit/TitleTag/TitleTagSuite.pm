@@ -1,6 +1,6 @@
 package TitleTagSuite;
 
-use base qw(Test::Unit::TestSuite);
+use base qw(Unit::TestSuite);
 
 sub name { 'TitleTagSuite' };
 
