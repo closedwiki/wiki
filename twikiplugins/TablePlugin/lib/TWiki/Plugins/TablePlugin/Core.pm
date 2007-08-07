@@ -1614,7 +1614,6 @@ sub handler {
         $plist .= '&' if $plist;
         $url = $cgi->url . $cgi->path_info() . '?' . $plist;
         $url =~ s/\&/\&amp;/go;
-
         $sortColFromUrl =
           $cgi->param('sortcol');    # zero based: 0 is first column
         $requestedTable = $cgi->param('table');

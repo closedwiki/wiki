@@ -25,6 +25,9 @@ use strict;
 
 package TWiki::Plugins::TablePlugin;
 
+require TWiki::Func;    # The plugins API
+require TWiki::Plugins; # For the API version
+
 use vars qw( $topic $installWeb $VERSION $RELEASE $initialised );
 
 # This should always be $Rev$ so that TWiki can determine the checked-in
@@ -63,8 +66,7 @@ sub preRenderingHandler {
       $_[0] =~ /%TABLE{.*?}%/;
 
     # on-demand inclusion
-    eval 'use TWiki::Plugins::TablePlugin::Core';
-    die $@ if $@;
+    require TWiki::Plugins::TablePlugin::Core;
     TWiki::Plugins::TablePlugin::Core::handler( @_ );
 }
 
