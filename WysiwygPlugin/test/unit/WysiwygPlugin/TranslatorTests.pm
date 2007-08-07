@@ -1020,6 +1020,54 @@ Extra spaces???
 %COMMENT%
 TML
           },
+          {
+              name => 'paraConversions1',
+              exec => $TML2HTML | $HTML2TML | $ROUNDTRIP,
+              html => 'Paraone
+Paratwo
+<p />
+Parathree
+<p />
+<p />
+Parafour',
+              tml => 'Paraone
+Paratwo
+
+Parathree
+
+
+Parafour',
+              finaltml => 'Paraone Paratwo
+
+Parathree
+
+
+Parafour',
+          },
+          {
+              name => 'paraConversionsTinyMCE',
+              exec => $HTML2TML,
+              html => 'Paraone
+Paratwo
+<p>&nbsp;</p>
+Parathree
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+Parafour',
+              tml => 'Paraone
+Paratwo
+
+Parathree
+
+
+Parafour',
+              finaltml => 'Paraone Paratwo
+
+Parathree
+
+
+Parafour',
+          },
          ];
 
 sub gen_compare_tests {
