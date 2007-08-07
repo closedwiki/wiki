@@ -400,7 +400,7 @@ sub _getRenderedVersion {
         }
     }
 
-    $this->_putBackBlocks( $text, 'noautolink', 'div' );
+    $this->_putBackBlocks( $text, 'noautolink', 'span' );
 
     $this->_putBackBlocks( $text, 'pre' );
 

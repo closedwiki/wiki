@@ -716,14 +716,6 @@ sub _handleDFN { return _flatten( @_ ); };
 
 sub _handleDIV {
     my( $this, $options ) = @_;
-    if( defined( $this->{attrs}->{class} ) &&
-          $this->{attrs}->{class} =~ /\bWYSIWYG_NOAUTOLINK\b/ ) {
-        my( $flags, $text ) = $this->_flatten( $options );
-        my $p = _htmlParams( $this->{attrs}, $options, 'WYSIWYG_NOAUTOLINK' );
-        return ($WC::BLOCK_TML, "<noautolink$p>".$text.
-                "</noautolink>");
-    }
-
     return (0, undef);
 }
 
@@ -880,6 +872,15 @@ sub _handleSPAN {
     if( defined( $this->{attrs}->{class} )) {
         if( $this->{attrs}->{class} =~ /\bWYSIWYG_PROTECTED\b/) {
             return $this->_PROTECTED($options);
+        }
+
+        if( defined( $this->{attrs}->{class} ) &&
+              $this->{attrs}->{class} =~ /\bWYSIWYG_NOAUTOLINK\b/ ) {
+            my( $flags, $text ) = $this->_flatten( $options );
+            my $p = _htmlParams( $this->{attrs}, $options,
+                                 'WYSIWYG_NOAUTOLINK' );
+            return ($WC::BLOCK_TML, "<noautolink$p>".$text.
+                      "</noautolink>");
         }
 
         if( $this->{attrs}->{class} =~ /\bWYSIWYG_LINK\b/) {
