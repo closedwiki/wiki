@@ -115,7 +115,7 @@ sub _trim {
     my $s = shift;
 
     $s =~ s/^[ \t\n$WC::CHECKn$WC::CHECKw$WC::CHECKs]+//o;
-    $s =~ s/[ \t\n$WC::CHECKn$WC::CHECKw$WC::CHECKs]+$//o;
+    $s =~ s/[ \t\n$WC::CHECKn$WC::CHECKw]+$//o;
     return $s;
 }
 
@@ -142,32 +142,57 @@ sub rootGenerate {
 
     my( $f, $tml ) = $this->generate($opts);
 
+    # Debug support
+    #my $bef = $tml;
+    #$bef =~ s/([\000-\037])/'%'.ord($1)/ges;
+    #die "'$bef'";
+
     $tml=~ s/&nbsp;/$WC::NBSP/go;
 
     # isolate whitespace checks and convert to $NBSP
     $tml =~ s/$WC::CHECKw$WC::CHECKw+/$WC::CHECKw/go;
-    $tml =~ s/([$WC::CHECKn$WC::CHECKs$WC::NBSP$WC::NBBR\s])$WC::CHECKw/$1/go;
-    $tml =~ s/$WC::CHECKw([$WC::CHECKn$WC::CHECKs$WC::NBSP$WC::NBBR\s])/$1/go;
+    $tml =~ s/(?<=[$WC::CHECKn$WC::CHECKs$WC::NBSP $WC::TAB$WC::NBBR])$WC::CHECKw//go;
+    $tml =~ s/$WC::CHECKw(?=[$WC::CHECKn$WC::CHECKs$WC::NBSP $WC::NBBR])//go;
+    $tml =~ s/^($WC::CHECKw)+//gos;
+    $tml =~ s/($WC::CHECKw)+$//gos;
     $tml =~ s/($WC::CHECKw)+/$WC::NBSP/go;
 
     # isolate $CHECKs and convert to $NBSP
     $tml =~ s/$WC::CHECKs$WC::CHECKs+/$WC::CHECKs/go;
-    $tml =~ s/([ $WC::NBSP])$WC::CHECKs/$1/go;
+    $tml =~ s/([ $WC::NBSP$WC::TAB])$WC::CHECKs/$1/go;
     $tml =~ s/$WC::CHECKs( |$WC::NBSP)/$1/go;
     $tml =~ s/($WC::CHECKs)+/$WC::NBSP/go;
 
+    # isolate $NBBR and convert to \n. First clean out empty paras
+    $tml =~ s/$WC::NBBR( |$WC::NBSP)+$WC::NBBR/$WC::NBBR$WC::NBBR/go;
+    $tml =~ s/ +$WC::NBBR/$WC::NBBR/g;
+    $tml =~ s/$WC::NBBR +/$WC::NBBR/g;
+    # Now convert adjacent NBBRs to recreate empty lines
+    # 1 NBBR  -> 1 newline
+    # 2 NBBRs -> <p /> - 1 blank line - 2 newlines
+    # 3 NBBRs -> 3 newlines
+    # 4 NBBRs -> <p /><p /> - 3 newlines
+    # 5 NBBRs -> 4 newlines
+    # 6 NBBRs -> <p /><p /><p /> - 3 blank lines - 4 newlines
+    # 7 NBBRs -> 5 newlines
+    # 8 NBBRs -> <p /><p /><p /><p /> - 4 blank lines - 5 newlines
+    $tml =~ s#($WC::NBBR$WC::NBBR$WC::NBBR$WC::NBBR+)#
+      "\n" x ((length($1) + 1) / 2 + 1)
+        #geo;
+
     # isolate $CHECKn and convert to $NBBR
+    $tml =~ s/$WC::CHECKn([$WC::NBSP $WC::TAB])*$WC::CHECKn/$WC::CHECKn/go;
     $tml =~ s/$WC::CHECKn$WC::CHECKn+/$WC::CHECKn/go;
     $tml =~ s/^$WC::CHECKn//gom;
     $tml =~ s/$WC::CHECKn$//gom;
     $tml =~ s/(?<=$WC::NBBR)$WC::CHECKn//gom;
     $tml =~ s/$WC::CHECKn(?=$WC::NBBR)//gom;
-    $tml =~ s/($WC::CHECKn)+/$WC::NBBR/gos;
+    $tml =~ s/$WC::CHECKn+/$WC::NBBR/gos;
 
-    # isolate $NBBR and convert to \n
-    $tml =~ s/\n*$WC::NBBR\n*/$WC::NBBR/gs;
-    $tml =~ s/$WC::NBBR$WC::NBBR+/$WC::NBBR$WC::NBBR/go;
-    $tml =~ s/$WC::NBBR/\n/go;
+    $tml =~ s/$WC::NBBR/\n/gos;
+
+    # Convert tabs to NBSP
+    $tml =~ s/$WC::TAB/$WC::NBSP$WC::NBSP$WC::NBSP/g;
 
     # isolate $NBSP and convert to space
     $tml =~ s/ +$WC::NBSP/$WC::NBSP/go;
@@ -247,7 +272,8 @@ sub _flatten {
 
     foreach my $kid ( @{$this->{children}} ) {
         my( $f, $t ) = $kid->generate( $options );
-        if( $text && $text =~ /\w$/ && $t =~ /^\w/ ) {
+        if (!($options & $WC::KEEP_WS)
+              && $text && $text =~ /\w$/ && $t =~ /^\w/) {
             # if the last child ends in a \w and this child
             # starts in a \w, we need to insert a space
             $text .= ' ';
@@ -319,7 +345,7 @@ sub _convertList {
     foreach my $kid ( @{$this->{children}} ) {
         # be tolerant of dl, ol and ul with no li
         if( $kid->{tag} =~ m/^[dou]l$/i ) {
-            $text .= $kid->_convertList( $indent."   " );
+            $text .= $kid->_convertList( $indent.$WC::TAB );
             next;
         }
         next unless $kid->{tag} =~ m/^(dt|dd|li)$/i;
@@ -330,7 +356,7 @@ sub _convertList {
             $basebullet .= ':';
             $basebullet =~ s/$WC::CHECKn/ /g;
             $basebullet =~ s/^\s+//;
-            $basebullet = "\$ $basebullet";
+            $basebullet = '$ '.$basebullet;
             $pendingDT = 1; # remember in case there is no DD
             next;
         }
@@ -343,14 +369,14 @@ sub _convertList {
             my $t;
             if( $grandkid->{tag} =~ /^[dou]l$/i ) {
                 $spawn = _trim( $spawn );
-                $t = $grandkid->_convertList( $indent."   " );
+                $t = $grandkid->_convertList( $indent.$WC::TAB );
             } else {
                 ( $f, $t ) = $grandkid->generate( $WC::NO_BLOCK_TML );
                 $t =~ s/$WC::CHECKn/ /g;
             }
             $spawn .= $t;
         }
-        $spawn =~ s/ +$//;
+        $spawn = _trim($spawn);
         $text .= $WC::CHECKn.$indent.$bullet.$WC::CHECKs.$spawn.$WC::CHECKn;
         $pendingDT = 0;
         $basebullet = '' if $isdl;
@@ -544,7 +570,7 @@ sub _LIST {
         !$this->_isConvertableList( $options | $WC::NO_BLOCK_TML )) {
         return ( 0, undef );
     }
-    return ( $WC::BLOCK_TML, $this->_convertList( "   " ));
+    return ( $WC::BLOCK_TML, $this->_convertList( $WC::TAB ));
 }
 
 # Performs initial cleanup of the parse tree before generation. Walks the
@@ -665,7 +691,7 @@ sub _handleBR {
         # asked to use newlines)
         return (0, '<br />'.$kids);
     }
-    return ($f, $WC::NBBR.$kids);
+    return ($f, "\n".$kids);
 }
 
 # CAPTION
@@ -691,7 +717,7 @@ sub _handleDFN { return _flatten( @_ ); };
 sub _handleDIV {
     my( $this, $options ) = @_;
     if( defined( $this->{attrs}->{class} ) &&
-          $this->{attrs}->{class} =~ /\WYSIWYG_NOAUTOLINK\b/ ) {
+          $this->{attrs}->{class} =~ /\bWYSIWYG_NOAUTOLINK\b/ ) {
         my( $flags, $text ) = $this->_flatten( $options );
         my $p = _htmlParams( $this->{attrs}, $options, 'WYSIWYG_NOAUTOLINK' );
         return ($WC::BLOCK_TML, "<noautolink$p>".$text.
@@ -758,13 +784,13 @@ sub _handleIMG {
     }
 
     return (0, undef) unless $this->{context} &&
-      $this->{context}->{convertImage};
+      defined $this->{context}->{convertImage};
 
     my $alt = &{$this->{context}->{convertImage}}(
         $this->{attrs}->{src},
         $this->{context} );
     if( $alt ) {
-        return (0, " $alt ");
+        return (0, $alt);
     }
     return ( 0, undef );
 }
@@ -798,7 +824,8 @@ sub _handleP {
 
     my( $f, $kids ) = $this->_flatten( $options );
     return ($f, '<p />'.$kids) if( $options & $WC::NO_BLOCK_TML );
-    return ($f | $WC::BLOCK_TML, $WC::NBBR.$WC::NBBR.$kids);
+    $kids = _trim($kids);
+    return ($f | $WC::BLOCK_TML, $WC::NBBR.$kids.$WC::NBBR);
 }
 
 sub _handlePARAM { return ( 0, '' ); }
@@ -816,9 +843,9 @@ sub _handlePRE {
     # Note: can't use CGI::pre because it won't put the newlines that
     # twiki needs in
     unless( $options & $WC::NO_BLOCK_TML ) {
-        my( $flags, $text ) = $this->_flatten( $options | $WC::NO_BLOCK_TML );
+        my( $flags, $text ) = $this->_flatten(
+            $options | $WC::NO_BLOCK_TML | $WC::BR2NL | $WC::KEEP_WS );
         my $p = _htmlParams( $this->{attrs}, $options );
-        $text =~ s/<br( \/)?>/$WC::NBBR/g;
         return ($WC::BLOCK_TML, "<pre$p>".$text.
                 "</pre>");
     }
@@ -833,8 +860,7 @@ sub _PROTECTED {
     # are special because the JS editors don't handle the equivalent encoded
     # entities correctly.
     my( $flags, $text ) = $this->_flatten(
-        $options | $WC::BR2NL );
-
+        $options | $WC::BR2NL | $WC::KEEP_WS);
     $text = HTML::Entities::decode_entities($text);
     # &nbsp; decodes to \240, which we want to make a space
     $text =~ s/\240/ /gis;
@@ -859,6 +885,9 @@ sub _handleSPAN {
         if( $this->{attrs}->{class} =~ /\bWYSIWYG_LINK\b/) {
             return $this->_flatten( $options | $WC::NO_BLOCK_TML );
         }
+
+        # ignore all other classes
+        delete $this->{attrs}->{class};
     }
 
     # ignore the span if there are no attrs

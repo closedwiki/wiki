@@ -50,6 +50,7 @@ $NO_BLOCK_TML = 1 << 2;
 $NOP_ALL      = 1 << 3;
 $VERY_CLEAN   = 1 << 4;
 $BR2NL        = 1 << 5;
+$KEEP_WS      = 1 << 6;
 
 $BLOCK_TML    = $NO_BLOCK_TML;
 
@@ -69,14 +70,15 @@ satisfies the format requirements.
 
 =cut
 
-use vars qw( $CHECKn $CHECKw $CHECKs $NBSP $NBBR );
+use vars qw( $CHECKn $CHECKw $CHECKs $NBSP $NBBR $TAB );
 $CHECKn = "\001"; # require adjacent newline (\n or $NBBR)
 $CHECKs = "\002"; # require adjacent space character (' ' or $NBSP)
 $CHECKw = "\003"; # require adjacent whitespace (\s|$NBBR|$NBSP)
 $NBSP   = "\004"; # unbreakable space
-$NBBR   = "\005"; # unbreakable newline
+$NBBR   = "\005"; # para break required
 $CHECK1 = "\006"; # start of wiki-word
 $CHECK2 = "\007"; # end of wiki-word
+$TAB    = "\t";   # list indent
 
 =pod
 

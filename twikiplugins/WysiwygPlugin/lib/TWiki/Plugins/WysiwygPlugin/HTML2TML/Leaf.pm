@@ -47,7 +47,10 @@ sub new {
 sub generate {
     my( $this, $options ) = @_;
     my $t = $this->{text};
-    $t =~ s/\n/$WC::CHECKn/g;
+    if (!($options & $WC::KEEP_WS)) {
+        $t =~ s/\n/$WC::CHECKw/g;
+        $t =~ s/  +/ /g;
+    }
     if( $options & $WC::NOP_ALL ) {
         # escape all embedded wikiwords
         $t =~ s/$WC::STARTWW($TWiki::regex{wikiWordRegex})/<nop>$1/go;
