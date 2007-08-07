@@ -23,10 +23,13 @@ sub include_tests {
 
     # Add standard extensions tests
     my $read_manifest = 0;
-    if ($ENV{TWIKI_HOME} && -e "$ENV{TWIKI_HOME}/tools/MANIFEST"&&
-          open(F, "$ENV{TWIKI_HOME}/tools/MANIFEST")) {
-        $read_manifest = 1;
-    } elsif (open(F, "../../tools/MANIFEST")) {
+    my $home = $ENV{TWIKI_HOME};
+    unless ($home) {
+        require Cwd;
+        $home = Cwd::abs_path('../..');
+    }
+
+    if (open(F, "$home/tools/MANIFEST")) {
         $read_manifest = 1;
     } else {
         # dunno which plugins we require
@@ -36,7 +39,7 @@ sub include_tests {
         local $/ = "\n";
         while (<F>) {
             if (m#^!include (twikiplugins/\w+)/.*?/(\w+)$#) {
-                my $d = "../../$1/test/unit/$2";
+                my $d = "$home/$1/test/unit/$2";
                 next unless (-e "$d/${2}Suite.pm");
                 push(@INC, $d);
                 push(@list, "${2}Suite.pm");
@@ -44,6 +47,7 @@ sub include_tests {
         }
         close(F);
     }
+    print STDERR "Running tests from ",join(', ', @list),"\n";
     return @list;
 };
 
