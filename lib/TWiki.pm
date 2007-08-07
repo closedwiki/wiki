@@ -3423,12 +3423,13 @@ sub QUERYPARAMS {
 sub URLPARAM {
     my( $this, $params ) = @_;
     my $param     = $params->{_DEFAULT} || '';
-    my $newLine   = $params->{newline} || '';
+    my $newLine   = $params->{newline};
     my $encode    = $params->{encode};
     my $multiple  = $params->{multiple};
-    my $separator = $params->{separator} || "\n";
+    my $separator = $params->{separator};
+    $separator="\n" unless (defined $separator);
 
-    my $value = '';
+    my $value;
     if( $this->{cgiQuery} ) {
         if( TWiki::isTrue( $multiple )) {
             my @valueArray = $this->{cgiQuery}->param( $param );
@@ -3447,21 +3448,22 @@ sub URLPARAM {
             }
         } else {
             $value = $this->{cgiQuery}->param( $param );
-            $value = '' unless( defined $value );
         }
     }
-    $value =~ s/\r?\n/$newLine/go if( $newLine );
-    if ( $encode ) {
-        if ( $encode =~ /^entit(y|ies)$/i ) {
-            $value = entityEncode( $value );
-        } elsif ( $encode =~ /^quotes?$/i ) {
-            $value =~ s/\"/\\"/go;    # escape quotes with backslash (Bugs:Item3383 fix)
-        } else {
-            $value =~ s/\r*\n\r*/<br \/>/; # Legacy
-            $value = urlEncode( $value );
+    if( defined $value ) {
+        $value =~ s/\r?\n/$newLine/go if( defined $newLine );
+        if ( $encode ) {
+            if ( $encode =~ /^entit(y|ies)$/i ) {
+                $value = entityEncode( $value );
+            } elsif ( $encode =~ /^quotes?$/i ) {
+                $value =~ s/\"/\\"/go;    # escape quotes with backslash (Bugs:Item3383 fix)
+            } else {
+                $value =~ s/\r*\n\r*/<br \/>/; # Legacy
+                $value = urlEncode( $value );
+            }
         }
     }
-    unless( $value ) {
+    unless( defined $value ) {
         $value = $params->{default};
         $value = '' unless defined $value;
     }
