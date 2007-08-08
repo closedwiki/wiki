@@ -174,7 +174,7 @@ HERE
               exec => $ROUNDTRIP,
               name => 'simpleVerbatim',
               html => <<'HERE',
-<pre class="WYSIWYG_VERBATIM"><br />&#60;verbatim&#62;<br />Description<br />&#60;/verbatim&#62;<br />class&nbsp;CatAnimal&nbsp;{<br />&nbsp;&nbsp;void&nbsp;purr()&nbsp;{<br />&nbsp;&nbsp;&nbsp;&nbsp;code&nbsp;&#60;here&#62;<br />&nbsp;&nbsp;}<br />}<br /></pre>
+<pre class="TMLverbatim"><br />&#60;verbatim&#62;<br />Description<br />&#60;/verbatim&#62;<br />class&nbsp;CatAnimal&nbsp;{<br />&nbsp;&nbsp;void&nbsp;purr()&nbsp;{<br />&nbsp;&nbsp;&nbsp;&nbsp;code&nbsp;&#60;here&#62;<br />&nbsp;&nbsp;}<br />}<br /></pre>
 HERE
               tml => <<'HERE',
 <verbatim>
@@ -208,9 +208,11 @@ HERE
           {
               exec => $ROUNDTRIP,
               name => 'simpleBullList',
-              html => '<ul><li>bullet item</li></ul>',
+              html => 'Before<ul><li>bullet item</li></ul>After',
               tml => <<'HERE',
+Before
    * bullet item
+After
 HERE
           },
           {
@@ -296,9 +298,12 @@ HERE
               exec => $ROUNDTRIP,
               name => 'simpleTable',
               html => <<'HERE',
+Before
 <table border="1" cellpadding="0" cellspacing="1"><tr><td><b>L</b></td><td><b>C</b></td><td><b>R</b></td></tr><tr><td> A2</td><td style="text-align: center" class="align-center"> 2</td><td style="text-align: right" class="align-right"> 2</td></tr><tr><td> A3</td><td style="text-align: center" class="align-center"> 3</td><td style="text-align: left" class="align-left"> 3</td></tr><tr><td> A4-6</td><td> four</td><td> four</td></tr><tr><td>^</td><td> five</td><td> five</td></tr></table><p /><table border="1" cellpadding="0" cellspacing="1"><tr><td>^</td><td> six</td><td> six</td></tr></table>
+After
 HERE
               tml => <<'HERE',
+Before
 | *L* | *C* | *R* |
 | A2 |  2  |  2 |
 | A3 |  3  | 3  |
@@ -306,9 +311,11 @@ HERE
 |^| five | five |
 
 |^| six | six |
+After
 
 HERE
               finaltml => <<'HERE',
+Before
 | *L* | *C* | *R* |
 | A2 |  2  |  2 |
 | A3 |  3  | 3  |
@@ -316,6 +323,7 @@ HERE
 | ^ | five | five |
 
 | ^ | six | six |
+After
 HERE
           },
           {
@@ -626,7 +634,7 @@ EVERYWHERE
               exec => $ROUNDTRIP,
               name => 'nestedVerbatim',
               html => 'Outside
- <pre class="WYSIWYG_VERBATIM"><br />Inside<br /></pre>Outside',
+ <pre class="TMLverbatim"><br />Inside<br /></pre>Outside',
               tml => 'Outside
  <verbatim>
  Inside
@@ -640,7 +648,7 @@ EVERYWHERE
               exec => $TML2HTML | $ROUNDTRIP,
               name => 'nestedPre',
               html => 'Outside
- <pre class="twikiAlert WYSIWYG_VERBATIM"><br />&nbsp;&nbsp;Inside<br />&nbsp;&nbsp;</pre>
+ <pre class="twikiAlert TMLverbatim"><br />&nbsp;&nbsp;Inside<br />&nbsp;&nbsp;</pre>
  Outside',
               tml => 'Outside <verbatim class="twikiAlert">
   Inside
@@ -649,7 +657,7 @@ EVERYWHERE
           {
               exec => $ROUNDTRIP,
               name => 'nestedIndentedVerbatim',
-              html => 'Outside<pre class="WYSIWYG_VERBATIM"><br />Inside<br />&nbsp;&nbsp;&nbsp;</pre>Outside',
+              html => 'Outside<pre class="TMLverbatim"><br />Inside<br />&nbsp;&nbsp;&nbsp;</pre>Outside',
               tml => 'Outside
     <verbatim>
  Inside
@@ -1067,6 +1075,13 @@ Parathree
 
 
 Parafour',
+          },
+          {
+              name => 'paraAfterList',
+              exec => $HTML2TML | $ROUNDTRIP,
+              tml => '   * list
+Paraone',
+              html => '<ul><li>list</li></ul>Paraone',
           },
          ];
 
