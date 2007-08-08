@@ -826,9 +826,9 @@ sub _handlePRE {
     my( $this, $options ) = @_;
 
     if( $this->{attrs}->{class}) {
-        if ($this->{attrs}->{class} =~ /\bWYSIWYG_VERBATIM\b/) {
+        if ($this->{attrs}->{class} =~ /\bTMLverbatim\b/) {
             my( $flags, $text ) = $this->_PROTECTED($options);
-            my $p = _htmlParams($this->{attrs}, $options, 'WYSIWYG_VERBATIM');
+            my $p = _htmlParams($this->{attrs}, $options, 'TMLverbatim');
             return ($flags, "<verbatim$p>$text</verbatim>");
         }
     }
