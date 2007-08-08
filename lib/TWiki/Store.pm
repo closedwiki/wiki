@@ -1471,10 +1471,11 @@ sub addTOPICINFO {
           # compatibility; older versions of the code use
           # RCS rev numbers save with them so old code can
           # read these topics
-          version => '1.'.$rev,
-          date    => $time,
-          author  => $user,
-          format  => $STORE_FORMAT_VERSION,
+          version   => '1.'.$rev,
+          date      => $time,
+          author    => $users->getWikiName($user), # Compatibility
+          authoruid => $user, # Always this use in preference
+          format    => $STORE_FORMAT_VERSION,
          );
     # if this is a reprev, then store the revision that was affected.
     # Required so we can tell when a merge is based on something that

@@ -383,7 +383,7 @@ sub getRevisionInfo {
     my( $date, $author, $rev, $comment );
     if( $topicinfo ) {
         $date = $topicinfo->{date} ;
-        $author = $topicinfo->{author};
+        $author = $topicinfo->{authoruid} || $topicinfo->{author};
         $rev = $topicinfo->{version};
         $rev =~ s/^\$Rev(:\s*\d+)?\s*\$$/0/; # parse out SVN keywords in doc
         $rev =~ s/^\d+\.//;
