@@ -529,7 +529,7 @@ sub renderForDisplay {
         }
     }
     $text .= $templates->expandTemplate('FORM:display:footer');
-    $text =~ s/%A_TITLE%/$this->{topic}/g;
+    $text =~ s/%A_TITLE%/$this->{web}.$this->{topic}][$this->{topic}/g;
     return $text;
 }
 
