@@ -273,11 +273,11 @@ sub _renderHorizontal {
 					$fillCols[$rackNumber]=$colspan-1;
 
 					my $unitId = "RPP_${rpId}_${rackNumber}_".abs($unit);
-					my ($fgcolor, $bgcolor, $style) = &_getColorsAndStyle($$entryRef{'colimg'});
+					my ($fgcolor, $bgcolor, $style) = &_getColorsAndStyle($$entryRef{'colimg'},($$entryRef{'server'}=~/\//));
 
 					my $title= $$entryRef{'formfactor'}.'('.abs($unit).'-'.(abs($unit+$colspan-1)).')';
 
-					$tooltips .= &_renderHiddenTooltip("${unitId}_TT", $unitId, &_renderJSTooltipText("${unitId}_TT",$entryRef, abs($unit),abs($unit+$colspan-1)), $fgcolor, $bgcolor) if $options{'enablejstooltips'};
+					$tooltips .= &_renderHiddenTooltip("${unitId}_TT", $unitId, &_renderJSTooltipText("${unitId}_TT",$entryRef, abs($unit),abs($unit+$colspan-1)), $style) if $options{'enablejstooltips'};
 
 					my $tooltipshow=$options{'enablejstooltips'}?"rppTooltipShow('${unitId}_TT','$unitId',$options{'tooltipfixleft'},$options{'tooltipfixtop'},true);":"";
 					my($onmouseover, $onclick);
@@ -431,9 +431,9 @@ sub _render {
 					$fillRows=$rowspan-1;
 					my $title =  $$entryRef{'formfactor'}.'('.abs($unit).'-'.(abs($unit+$rowspan-1)).')';
 
-					($fgcolor, $bgcolor, $style) = &_getColorsAndStyle($$entryRef{'colimg'});
+					($fgcolor, $bgcolor, $style) = &_getColorsAndStyle($$entryRef{'colimg'},($$entryRef{'server'}=~/\//));
 
-					$tooltips .= &_renderHiddenTooltip("${unitId}_TT", $unitId, &_renderJSTooltipText("${unitId}_TT", $entryRef, abs($unit),abs($unit+$rowspan-1)), $fgcolor, $bgcolor) if $options{'enablejstooltips'};
+					$tooltips .= &_renderHiddenTooltip("${unitId}_TT", $unitId, &_renderJSTooltipText("${unitId}_TT", $entryRef, abs($unit),abs($unit+$rowspan-1)), $style) if $options{'enablejstooltips'};
 					$itd .= &_renderTextContent($entryRef);
 					my $tooltipshow=$options{'enablejstooltips'}?"rppTooltipShow('${unitId}_TT','$unitId',$options{'tooltipfixleft'},$options{'tooltipfixtop'},true);":"";
 					my($onmouseover, $onclick);
@@ -546,16 +546,22 @@ sub _renderConflictCell {
 }
 # =========================
 sub _renderHiddenTooltip {
-	my ($id, $pId, $text, $fgcolor, $bgcolor) = @_;
+	my ($id, $pId, $text, $style) = @_;
 
-	$fgcolor=$options{'tooltipfgcolor'} if defined $options{'tooltipfgcolor'} && $options{'tooltipfgcolor'} ne "";
-	$fgcolor=$options{'tooltipfgcolor'} if defined $options{'tooltipbgcolor'} && $options{'tooltipbgcolor'} ne "";
+	my $fgcolor=$options{'tooltipfgcolor'} if defined $options{'tooltipfgcolor'} && $options{'tooltipfgcolor'} ne "";
+	my $bgcolor=$options{'tooltipbgcolor'} if defined $options{'tooltipbgcolor'} && $options{'tooltipbgcolor'} ne "";
+
+	$style="" unless defined $style;
+
+	$bgcolor=$options{'devicebgcolor'} if !defined $bgcolor && $style !~ /background-color:/;
 	
+	$style.=";background-color:$bgcolor" if defined $bgcolor && $style !~ /background-color:/;
+	$style.=";color:$fgcolor" if defined $fgcolor && $style !~ /(^color:|;\s*color:)/;
 
 	return $cgi->div(
 		{
 		 -id=>${id},
-		 -style=>"text-align:left;visibility:hidden;position:absolute;top:0;left:0;z-index:2;font: normal $options{'fontsize'} sans-serif;padding: 3px; border: solid 1px; background-color: $bgcolor; color: $fgcolor",
+		 -style=>"text-align:left;visibility:hidden;position:absolute;top:0;left:0;z-index:2;font: normal $options{'fontsize'} sans-serif;padding: 3px; border: solid 1px; $style",
 		},
 		$text
 		);
@@ -581,13 +587,14 @@ sub _renderTextContent {
 		
 
 		my $text=$s;
+
 		$text.=":" if ( $options{'displayconnectedto'}||$options{'displayowner'}||$options{'displaynotes'});
 		$text.=" $connectedto " if defined $connectedto && $options{'displayconnectedto'};
 		$text.=" $owner " if defined $owner &&  $options{'displayowner'};
 		$text.=" $note " if defined $note && $options{'displaynotes'};
 
 		$text .= &_renderIconContent($connectedto,$note);
-		my ($fgcolor, $bgcolor, $style) = &_getColorsAndStyle($colors);
+		my ($fgcolor, $bgcolor, $style) = &_getColorsAndStyle($colors,($$entryRef{'server'}!~/\//));
 
 		$text = &TWiki::Func::renderText($text);
 
@@ -657,12 +664,20 @@ sub _renderIconContent {
 }
 # =========================
 sub _getColorsAndStyle {
-	my ($colors) = @_;
+	my ($colors,$denybgimage) = @_;
 	my ($fgcolor,$bgcolor,$style) = ($options{'devicefgcolor'}, $options{'devicebgcolor'}, "");
+	#$denybgimage = 1 unless defined $denybgimage;
+		
+	if (($colors=~s/\@([a-z0-9]+)//i)&&(!$denybgimage)) {
+		$style .= $style eq '' ? '' : ';';
+		$style.='background-position:center;background-repeat:no-repeat;'
+			.'background-image:url('.TWiki::Func::getPubUrlPath().'/'.TWiki::Func::getTwikiWebname().'/'.$pluginName.'/'.$1.'.png)';
+			
+	}
 	foreach my $colimg (split(/\s*,\s*/, $colors)) {
 		if ($colimg=~/[^\s][\.\/\:]/) {
 			$style .= $style eq '' ? '' : ';';
-			$style .= 'background-image:url('._encode_entities($colimg).');';
+			$style .= 'background-position:center;background-repeat:no-repeat;background-image:url('._encode_entities($colimg).');';
 		} elsif ($colimg=~/^(\#[\d\w]+|\w+)$/) {
 			if ($style!~/background-color:/) {
 				$bgcolor=_encode_entities($colimg);
@@ -671,7 +686,7 @@ sub _getColorsAndStyle {
 			} else {
 				$fgcolor=_encode_entities($colimg);
 				$style .= $style eq '' ? '' : ';';
-				$style.='color:'.$fgcolor;
+				$style .='color:'.$fgcolor;
 			}
 		}
 	}
