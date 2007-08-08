@@ -23,6 +23,9 @@ These settings override the defaults for this web only. See [[%TWIKIWEB%.TWikiPr
    * Comma separated list of *forms* that can be attached to topics in this web. See %TWIKIWEB%.TWikiForms for more information.
       * Set WEBFORMS = TWikiPreferencesForm
 
+   * Copyright notice for the TWiki web.
+      * Set WEBCOPYRIGHT = <span class="twikiRight"> <a href="http://twiki.org/"><img src="%PUBURLPATH%/%TWIKIWEB%/TWikiLogos/T-logo-80x15.gif" alt="This site is powered by the TWiki collaboration platform" width="80" height="15" title="This site is powered by the TWiki collaboration platform" border="0" /></a></span>%MAKETEXT{"Copyright &&copy; by the contributing authors. All material on this collaboration platform is the property of the contributing authors." args="1999-%GMTIME{$year}%"}% <br /> %MAKETEXT{"Ideas, requests, problems regarding [_1]? <a href='[_2]'>Send feedback</a>" args="<nop>%WIKITOOLNAME%,mailto:%WIKIWEBMASTER%?subject=%WIKITOOLNAME%%20Feedback%20on%20%BASEWEB%.%BASETOPIC%"}% %IF{"$ WEB= $ TWIKIWEB" then="<br /> __Note:__ Please contribute updates to this topic on TWiki.org at TWiki:TWiki.%BASETOPIC%"}%
+
    * Users or groups who __are not__ / __are__ allowed to __view__ / __change__ / __rename__ topics in the <nop>%WEB% web: (See %TWIKIWEB%.TWikiAccessControl).
       * Set ALLOWWEBCHANGE = %MAINWEB%.TWikiAdminGroup
       * Set ALLOWWEBRENAME = %MAINWEB%.TWikiAdminGroup
