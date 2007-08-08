@@ -1,15 +1,16 @@
-%META:TOPICINFO{author="TWikiContributor" date="1181042237" format="1.0" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1181042297" format="1.0" version="$Rev$"}%
 ---+ <nop>RackPlannerPlugin
 The <nop>RackPlannerPlugin handles the tag =%<nop>RACKPLANNER%= and renders a rack overview (HTML table) with devices (computer, router, switches, ...). 
 ---++ Syntax Rules
 Devices are defined within a TWiki table. Following columns are supported:
 
 | *Device* | *Rack* | *Starting Unit* | *Form Factor* | *Connected to:* | *Owner* | *Color/Image* | *Notes* |
-| device name(s) (separated by =' / '= or =' # '=) | rack name | a starting unit (a number between 1 and =units=) | a form factor (units, e.g. 4U, 2, 1U, ...) | device(s) is/are connected to ... (comma separated list of other devices, ports ...); every 'connected to' item is displayed as a icon (see =connectedtoicon=, e.g. %M%) with the text as tooltip; if you use links the icons are also links; | the device owner(s) is/are displayed as tooltip of the device name | colors or a background image URL for the table data cell | notes are displayed as a icon (=notesicon= e.g. %P%) with the note as tooltip; if you use a link the icon is also a link |
+| device name(s) (separated by =' / '= or =' # '=) | rack name | a starting unit (a number between 1 and =units=) | a form factor (units, e.g. 4U, 2, 1U, ...) | device(s) is/are connected to ... (comma separated list of other devices, ports ...); every 'connected to' item is displayed as a icon (see =connectedtoicon=, e.g. %M%) with the text as tooltip; if you use links the icons are also links; | the device owner(s) is/are displayed as tooltip of the device name | colors or a background image (a URL or shortcut, e.g. @sun - see attachments) for the table data cell | notes are displayed as a icon (=notesicon= e.g. %P%) with the note as tooltip; if you use a link the icon is also a link |
 | *must* | *must*| *must* | *must* | *optional* | *optional* | *optional* | *optional* | 
 |  *Examples*  ||||||||
 | Server1 | RackS21 | 10 | 2U | port31 | server admins | blue,white | not in use |
 | Patchfield1 / Switch2 | RackS21 | 40 | 1U | switch3 / router4 | network admins / network admins | blue,white / green,white | 3 ports free / 8 ports free |
+| SunServer2 | RackS21 | 15 | 4U | port12 | sun server admins | blue,white,@sun | |
 
 You can use following =%<nop>EDITTABLE%= tag (EditTablePlugin must be installed) to simplify some things (%X% it must be one line): 
 <verbatim>
@@ -87,7 +88,7 @@ Usage: =%<nop>RACKPLANNER{attribute1="value" attribute2="value" ... }%=
 %EDITTABLE{format="|text,10,|text,10,|text,5,1|select,1,1U,2U,3U,4U,5U,6U,7U,8U,9U,10U|text,20,|text,20,|text,10,|textarea,3x20|" header="|*Device*|*Rack*|*Starting Unit*|*Form Factor*|*Connected to:*|*Owner*|*Color/Image*|*Notes*|"}%
 |*Device*|*Rack*|*Starting Unit*|*Form Factor*|*Connected to:*|*Owner*|*Color/Image*|*Notes*|
 | server01 | rack1 | 1 | 1U |  | me |  | some notes to server1 |
-| server02 | rack1 | 5 | 4U | ConnectedToOtherTopic, ConnectedToAnotherTopic,And to a E100 |  |  | some notes |
+| server02 | rack1 | 5 | 4U | ConnectedToOtherTopic, ConnectedToAnotherTopic,And to a E100 |  | @sun | some notes |
 | server03 | rack1 | 4 | 1U |  |  |  | conflict with server02 |
 | server04 | rack2 | 40 | 5U | P123 | someone else | green,white | goes to .. |
 | a very very very very  long text | rack2 | 1 | 1U |  |  | green | [[MyNotes][with linked notes]] |
@@ -142,6 +143,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 	  | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
 	  | ==lib/TWiki/Plugins/%TOPIC%/RackPlanner.pm== | Plugin Perl library |
 	  | ==pub/TWiki/%TOPIC%/rackplannertooltips.js== | <nop>JavaScript module |
+	  | ==pub/TWiki/%TOPIC%/*.png | some base icons for devices |
 
 	* Configure the Plugin:
 		* TWiki 4.0 and up: Run the [[%SCRIPTURL%/configure%SCRIPTSUFFIX%][configure]] script to enable the Plugin
@@ -153,8 +155,9 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Plugin Author: | TWiki:Main.DanielRohde |
 |  Copyright: | &copy; 2006, TWiki:Main.DanielRohde |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | V1.005 (5 Jun 2007) |
+|  Plugin Version: | V1.006 (BETA) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  V1.006 (BETA) | fixed minor tooltip foreground/background color bug; added device icon shortcut feature; added some base device icons; |
 |  V1.005 (5 Jun 2007) | TWiki:Main.DanielRohde: fixed links in 'connected to' or 'owner' field bug; added new attribute (clicktooltip...); added documentation |
 |  V1.004 (20 Apr 2007) | TWiki:Main.DanielRohde: fixed replacement in =tooltipformat= bug; improved =tooltipformat=; improved HTML rendering performance; added and fixed documenation; | 
 |  V1.003 (6 Mar 2007) | TWiki:Main.DanielRohde: fixed displayowner/displaynotes bug reported by TWiki:Main.PatrickTuite; added horizontal rendering feature requested by TWiki:Main.OlofStockhaus; added new attributes (tooltip..., columnwidth, textdir); fixed HTML validation bug; |
@@ -172,4 +175,3 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 
 __Related Topics:__ %TWIKIWEB%.TWikiPlugins, %TWIKIWEB%.DeveloperDocumentationCategory, %TWIKIWEB%.AdminDocumentationCategory, %TWIKIWEB%.TWikiPreferences
 -- TWiki:Main.DanielRohde - 31 Aug 2006
-
