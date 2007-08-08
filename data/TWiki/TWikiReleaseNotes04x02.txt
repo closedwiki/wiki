@@ -11,8 +11,6 @@ TWiki Release 4.2.0 introduces some good enhancements and quite many bug fixes s
 
 The development team has done everything to maintain full compatibility with topics generated in TWiki-4.0 and there are no changes to the topic format.
 
-TWiki 4.1.1 addresses a series of bugs found in the first 4 weeks after the release of TWiki 4.1.0.
-
 ---++ Pre-installed Extensions
 
 TWiki 4.2.0 is shipped with
@@ -60,7 +58,22 @@ shipped with this release for an example that you can copy.
 
    * NEWTOPICLINKSYMBOL preference which was deprecated in 4.1 has now been removed from the code. If you used this simply modify the !TWikiPreference NEWLINKFORMAT setting which allows you much more control of the appearance of new links.
 
+---++ !UserForm and !NewUserTemplate Customization
+
+When a new user registers on TWiki his user topic is created based on the =NewUserTemplate= and =UserForm=.
+
+The =NewUserTemplate= was located in the TWiki web and the =UserForm= in the Main web. When upgrading TWiki these were some of the topics you had to take care not to overwrite.
+
+From 4.2.0 the =UserForm= and =NewUserTemplate= are distributed in the TWiki web. If you create the two in the Main web the Main web version will be used instead. So if you tailor the user topic format or the form then you should always copy the two files to the Main web and modify the ones in the Main web. When you later upgrade TWiki your tailored template and form will not be overwritten.
+
+---++ !TWikiUsers no longer distributed
+
+The =Main.TWikiUsers= topic contains all the registered users. It is a topic you do not want to overwrite when you upgrade TWiki.
+
+From 4.2.0 this file is no longer included in the TWiki distribution. When you register the first time TWiki creates the =Main.TWikiUsers= topic in the Main web if it does not exist already. This means that you can now upgrade TWiki without risk of overwriting the important =TWikiUsers= topic.
+
 ---++ Deprecation Notices
+
 
 
 
