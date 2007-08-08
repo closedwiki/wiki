@@ -62,8 +62,10 @@ use strict;
 require TWiki::Func;    # The plugins API
 require TWiki::Plugins; # For the API version
 
-use vars qw( $VERSION $RELEASE $MODERN $SKIN $SHORTDESCRIPTION );
-use vars qw( $html2tml $tml2html $recursionBlock $imgMap $cairoCalled );
+use Assert;
+
+use vars qw( $VERSION $RELEASE $SKIN $SHORTDESCRIPTION );
+use vars qw( $html2tml $tml2html $recursionBlock $imgMap );
 use vars qw( %TWikiCompatibility @refs );
 
 $SHORTDESCRIPTION = 'Translator framework for Wysiwyg editors';
@@ -74,13 +76,6 @@ $RELEASE = 'TWiki-4.2';
 
 sub initPlugin {
     my( $topic, $web, $user, $installWeb ) = @_;
-
-    if( defined( &TWiki::Func::normalizeWebTopicName )) {
-        $MODERN = 1;
-    } else {
-        # SMELL: nasty global var needed for Cairo
-        $cairoCalled = 0;
-    }
 
     $SKIN = TWiki::Func::getPreferencesValue( 'WYSIWYGPLUGIN_WYSIWYGSKIN' );
 
@@ -169,7 +164,7 @@ sub beforeSaveHandler {
 
     return unless defined( $query->param( 'wysiwyg_edit' ));
 
-    _postProcess( @_ );
+    $_[0] = postProcess( @_ );
 }
 
 # This handler is invoked *before* a merge, and only from the edit
@@ -185,13 +180,12 @@ sub afterEditHandler {
     # the beforeSaveHandler
     $query->delete( 'wysiwyg_edit' );
 
-    _postProcess( @_ );
+    $_[0] = postProcess( @_ );
 }
 
-# Invoked when the selected skin is in use to convert HTML to
-# TML (best efforts)
-sub _postProcess {
-    #my( $text, $topic, $web ) = @_;
+# Invoked to convert HTML to TML (best efforts)
+sub postProcess {
+    my( $text, $topic, $web ) = @_;
 
     unless( $html2tml ) {
         require TWiki::Plugins::WysiwygPlugin::HTML2TML;
@@ -199,39 +193,27 @@ sub _postProcess {
         $html2tml = new TWiki::Plugins::WysiwygPlugin::HTML2TML();
     }
 
-    my @rescue;
-
     # SMELL: really, really bad smell; bloody core should NOT pass text
     # with embedded meta to plugins! It is VERY BAD DESIGN!!!
-    $_[0] =~ s/^(%META:[A-Z]+{.*?}%)\s*$/push(@rescue,$1);'<!--META_'.
-      scalar(@rescue).'_META-->'/gem;
-
-    unless( $MODERN ) {
-        # undo the munging that has already been done (grrrrrrrrrr!!!!)
-        $_[0] =~ s/\t/   /g;
+    my $top = '';
+    if ($text =~ s/^(%META:[A-Z]+{.*?}%\r?\n)//s) {
+        $top = $1;
     }
+    my $bottom = '';
+    $text =~ s/^(%META:[A-Z]+{.*?}%\r?\n)/$bottom = "$1$bottom";''/gem;
 
     my $opts = {
-        web => $_[2],
-        topic => $_[1],
+        web => $web,
+        topic => $topic,
         convertImage => \&_convertImage,
         rewriteURL => \&postConvertURL,
         very_clean => 1, # aggressively polish saved HTML
     };
+    $text = $html2tml->convert( $text, $opts );
 
-    # Let's just set this and see what happens....
-    $opts->{very_clean} = 1;
+    $text =~ s/\s+$/\n/s;
 
-    $_[0] = $html2tml->convert( $_[0], $opts );
-
-    unless( $MODERN ) {
-        # redo the munging
-        $_[0] =~ s/   /\t/g;
-    }
-
-    $_[0] =~ s/\n<!--META_(\d+)_META-->/\n$rescue[$1-1]/gs;
-    # Add a newline if one has been eaten
-    $_[0] =~ s/<!--META_(\d+)_META-->/\n$rescue[$1-1]/g;
+    return $top.$text.$bottom;
 }
 
 # Handler used to process text in a =view= URL to generate text/html
@@ -246,16 +228,7 @@ sub _postProcess {
 sub beforeCommonTagsHandler {
     #my ( $text, $topic, $web, $meta )
     return if $recursionBlock;
-    if( $MODERN ) {
-        return unless TWiki::Func::getContext()->{body_text};
-    } else {
-        # DANGEROUS SMELL: only way to tell what we are processing is
-        # the order of the calls to commonTagsHandler - the first call after
-        # initPlugin is the body text in Cairo. We only want to process the
-        # body text.
-        return if( $cairoCalled );
-        $cairoCalled = 1;
-    }
+    return unless TWiki::Func::getContext()->{body_text};
 
     my $query = TWiki::Func::getCgiQuery();
 

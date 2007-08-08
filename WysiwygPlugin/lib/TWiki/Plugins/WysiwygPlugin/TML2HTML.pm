@@ -392,9 +392,9 @@ sub _getRenderedVersion {
             $val->{params}->{class} = $pm;
         } elsif( $placeholder =~ /^verbatim/i ) {
             if( $pm ) {
-                $pm = join(' ', ( split( /\s+/, $pm ), 'WYSIWYG_VERBATIM' ));
+                $pm = join(' ', ( split( /\s+/, $pm ), 'TMLverbatim' ));
             } else {
-                $pm = 'WYSIWYG_VERBATIM';
+                $pm = 'TMLverbatim';
             }
             $val->{params}->{class} = $pm;
         }
