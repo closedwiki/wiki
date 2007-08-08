@@ -11,11 +11,14 @@
      | =name= | form field to search, for =field= type searches. May be a regular expression (see [[#VarSEARCH][SEARCH]]). | |
      | =value= | form field value, for =field= type searches. May be a regular expression (see [[#VarSEARCH][SEARCH]]). | |
      | =title="Title"= | Text that is prefixed to any search results | empty |
+     | =format="..."= | Custom format results. Supports same format strings as [[#VarSEARCH][SEARCH]]. See *[[FormattedSearch]]* for usage, variables &amp; examples | Results in table |
      | =default="none"= | Default text shown if no search hit | empty |
    * Example: =%<nop>METASEARCH{type="topicmoved" web="%<nop>WEB%" topic="%<nop>TOPIC%" title="This topic used to exist and was moved to: "}%=
    * Example: You may want to use this in WebTopicViewTemplate and WebTopicNonWikiTemplate:<br /> =%<nop>METASEARCH{type="parent" web="%<nop>WEB%" topic="%<nop>TOPIC%" title="Children: "}%=
    * Example: =%<nop>METASEARCH{type="field" name="Country" value="China"}%=
    * Related: [[#VarSEARCH][SEARCH]], [[#VarMETA][META]]
+   * __%X% Note:__ METASEARCH is deprecated in favour of the new and much more powerful query type search. See [[#VarSEARCH][SEARCH]] and QuerySearch.
+
 %STOPINCLUDE%
 
 __Related Topics:__ UserDocumentationCategory

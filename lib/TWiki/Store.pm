@@ -1836,6 +1836,7 @@ which may contain:
 | =title= | Title prepended to the returned search results |
 | =default= | defualt value if there are no results |
 | =web= | web to search in, default is all webs |
+| =format= | string for custom formatting results |
 The idea is that people can search for meta-data values without having to be
 aware of how or where meta-data is stored.
 
