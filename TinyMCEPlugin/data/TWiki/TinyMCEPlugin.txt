@@ -14,8 +14,6 @@ Unlike the other editor integrations in TWiki, which install "Word in a Browser"
 
 The editor automatically "switches itself off" (i.e. reverts to the old text-only window) when editing topics that contain TWiki content it can't handle, such as complex TWiki variables.
 
-*Caveat*: %TOPIC% is designed for editing TWiki topics, not as a general purpose HTML editor. It will work fine on topics that contain text, TML formatting, and most HTML. However, because of the complexity of transforming TML into HTML and back, complex TML, and mixing HTML and TML may not give exactly the results you expect.
-
 ---++ Installation Instructions
 
 First follow the installation instructions to install the Plugin:
@@ -27,7 +25,8 @@ First follow the installation instructions to install the Plugin:
    * *Click* on edit of any topic.
 
 ---++ Settings
-This setting contains all the options passed to the TinyMCE editor on startup. For a full explanation of the available options, and guidance on reconfiguring TinyMCE, see the [[http://wiki.moxiecode.com/index.php/TinyMCE:Configuration][Moxicode TinyMCE Wiki]]. Note the inclusion of the Pattern Skin standard CSS files in the =content_css= setting.
+This setting contains all the options passed to the TinyMCE editor on startup. 
+For a full explanation of the available options, and guidance on reconfiguring TinyMCE, see the [[http://wiki.moxiecode.com/index.php/TinyMCE:Configuration][Moxicode TinyMCE Wiki]]. Note the inclusion of the Pattern Skin standard CSS files in the =content_css= setting.
    * Set INIT = mode : "textareas",
    cleanup : false,
    theme : "advanced",
@@ -44,6 +43,7 @@ This setting contains all the options passed to the TinyMCE editor on startup. F
    theme_advanced_toolbar_location: "top",
    theme_advanced_styles : "NOAUTOLINK=WYSIWYG_NOAUTOLINK;VERBATIM=WYSIWYG_VERBATIM",
    content_css : "%PUBURLPATH%/%TWIKIWEB%/TinyMCEPlugin/wysiwyg.css,%PUBURLPATH%/%TWIKIWEB%/TWikiTemplates/base.css,%TWIKISTYLEURL%,%TWIKICOLORSURL%"
+You can override this setting in the same way as any other TWiki variable, by setting =TINYMCEPLUGIN_INIT= in the site, web or topic preferences. You are *not* recommended to edit the setting here.
 
 ---++ Plugin Info
 

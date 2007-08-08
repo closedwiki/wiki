@@ -1,7 +1,6 @@
 # Release manifest for TinyMCEPlugin
 data/TWiki/TinyMCEPlugin.txt 0644
 lib/TWiki/Plugins/TinyMCEPlugin.pm 0644
-lib/TWiki/Plugins/TinyMCEPlugin/Config.spec 0644
 pub/TWiki/TinyMCEPlugin/tinymce/changelog 0755
 pub/TWiki/TinyMCEPlugin/tinymce/docs/index.html 0755
 pub/TWiki/TinyMCEPlugin/tinymce/examples/example_advanced.css 0755

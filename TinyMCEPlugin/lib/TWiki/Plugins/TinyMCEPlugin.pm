@@ -71,7 +71,7 @@ sub afterEditHandler {
         # safely post-process.
     }
     require TWiki::Plugins::WysiwygPlugin;
-    TWiki::Plugins::WysiwygPlugin::postProcess( @_ );
+    $_[0] = TWiki::Plugins::WysiwygPlugin::postProcess( @_ );
 }
 
 1;
