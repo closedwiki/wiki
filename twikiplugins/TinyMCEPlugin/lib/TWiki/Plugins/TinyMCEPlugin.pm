@@ -61,11 +61,17 @@ sub afterEditHandler {
     #my( $text, $topic, $web ) = @_;
     my $query = TWiki::Func::getCgiQuery();
     return unless $query;
-    return if $query->{wysiwyg_blocked};
-    $query->{wysiwyg_blocked} = 1;
-    $query->delete( 'wysiwyg_edit' ); # just in case
+
+    if ($TWiki::cfg{Plugins}{WysiwygPlugin}{Enabled}) {
+        # if the wysiwyg plugin is enabled, we don't want to do anything
+        # if wysiwyg_edit is enabled, as the WysiwygPlugin afterEditHandler
+        # will deal with it.
+        return if $query->param( 'wysiwyg_edit' );
+        # otherwise wysiwygplugin isn't going to do anything, so we can
+        # safely post-process.
+    }
     require TWiki::Plugins::WysiwygPlugin;
-    TWiki::Plugins::WysiwygPlugin::_postProcess( @_ );
+    TWiki::Plugins::WysiwygPlugin::postProcess( @_ );
 }
 
 1;
