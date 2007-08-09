@@ -5,7 +5,7 @@ package ClientTests;
 # This is woefully incomplete, but it does at least check that
 # LoginManager.pm compiles okay.
 
-use base qw(TWikiTestCase);
+use base qw(TWikiFnTestCase);
 
 use CGI;
 use Error qw( :try );
@@ -20,15 +20,14 @@ my $userLogin;
 my $userWikiName;
 my $user_id;
 
-sub new {
-    my $this = shift()->SUPER::new(@_);
-    my $var = $_[0];
-    $var =~ s/\W//g;
-    $this->{test_web} = 'Temporary'.$var.'TestWeb'.$var;
-    $this->{test_topic} = 'TestTopic'.$var;
-    $this->{users_web} = 'Temporary'.$var.'UsersWeb';
-    $this->{twiki} = undef;
-    return $this;
+sub set_up {
+    my $this = shift;
+    $this->SUPER::set_up();
+    $this->{twiki}->{store}->saveTopic(
+        $this->{twiki}->{user}, $this->{test_web},
+        $this->{test_topic}, <<CONSTRAINT);
+   * Set ALLOWTOPICCHANGE = TWikiAdminGroup
+CONSTRAINT
 }
 
 sub TemplateLoginManager {
@@ -40,7 +39,7 @@ sub ApacheLoginManager {
 }
 
 sub NoLoginManager {
-    $TWiki::cfg{LoginManager} = 'TWiki::LoginManager';
+    $TWiki::cfg{LoginManager} = 'none';
 }
 
 sub BaseUserMapping {
@@ -63,7 +62,7 @@ sub fixture_groups {
 }
 
 sub set_up_for_verify {
-#print STDERR "\n------------- set_up -----------------\n";
+    #print STDERR "\n------------- set_up -----------------\n";
     my $this = shift;
 
     $this->{twiki}->finish() if $this->{twiki};
@@ -88,15 +87,9 @@ sub set_up_user {
         $userLogin = $TWiki::cfg{AdminUserLogin};
         $user_id = $this->{twiki}->{users}->getCanonicalUserID($userLogin);
         $userWikiName = $this->{twiki}->{users}->getWikiName($user_id);
-	    $this->annotate("no rego support (using admin)\n");
+	    $this->annotate("no registration support (using admin)\n");
     }
 #print STDERR "\n------------- set_up_user (login: $userLogin) (cUID:$user_id) -----------------\n";
-}
-
-sub tear_down {
-    my $this = shift;
-    eval {$this->{twiki}->finish()};
-    $this->SUPER::tear_down();
 }
 
 sub capture {
@@ -116,7 +109,7 @@ sub verify_edit {
     $this->{twiki}->finish();
 
     $query = new CGI({});
-    $query->path_info( "/Main/WebHome" );
+    $query->path_info( "/$this->{test_web}/$this->{test_topic}" );
     $ENV{SCRIPT_NAME} = "edit";
     $this->{twiki} = new TWiki( undef, $query );
     delete $ENV{SCRIPT_NAME};
@@ -131,7 +124,7 @@ sub verify_edit {
     };
 
     $query = new CGI ({});
-    $query->path_info( "/Main/WebHome?breaklock=1" );
+    $query->path_info( "/$this->{test_web}/$this->{test_topic}?breaklock=1" );
     $this->{twiki}->finish();
 
     $ENV{SCRIPT_NAME} = "edit";
@@ -145,33 +138,23 @@ sub verify_edit {
         $this->assert(0,shift->stringify());
     } otherwise {
         unless( $TWiki::cfg{LoginManager} eq 'none' ) {
-            $this->assert(0, "expected an oops redirect ".
-                            $TWiki::cfg{LoginManager});
+            $this->assert(0, "expected an access control exception: ".
+                            $TWiki::cfg{LoginManager}."\n$text");
         }
     };
 
     $query = new CGI ({});
-    $query->path_info( "/Main/WebHome" );
+    $query->path_info( "/$this->{test_web}/$this->{test_topic}" );
     $this->{twiki}->finish();
 
     $this->annotate("new session using $userLogin\n");
-    $this->{twiki}->finish();
 
     $ENV{SCRIPT_NAME} = "edit";
     $this->{twiki} = new TWiki( $userLogin, $query );
     delete $ENV{SCRIPT_NAME};
 
     #clear the lease - one of the previous tests may have different usermapper & thus different user
-    TWiki::Func::setTopicEditLock('Main', 'WebHome', 0);
-    try {
-        $text = $this->capture( \&TWiki::UI::Edit::edit, $this->{twiki} );
-    } catch TWiki::OopsException with {
-        $this->assert(0,shift->stringify());
-    } catch Error::Simple with {
-        $this->assert(0,shift->stringify());
-    } otherwise {
-	    $this->assert(0,shift->stringify());
-    };
+    TWiki::Func::setTopicEditLock($this->{test_web}, $this->{test_topic}, 0);
 }
 
 

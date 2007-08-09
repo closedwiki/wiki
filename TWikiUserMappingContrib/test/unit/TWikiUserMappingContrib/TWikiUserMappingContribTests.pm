@@ -2,7 +2,7 @@ use strict;
 
 # tests the new UserMapping including dealing with legacy cUIDs
 
-package UserMappingTests;
+package TWikiUserMappingContribTests;
 
 use base qw( TWikiFnTestCase );
 
@@ -16,7 +16,7 @@ some text that is there.
 THIS
 
 sub new {
-    my $self = shift()->SUPER::new('UserMappingTests', @_);
+    my $self = shift()->SUPER::new('TWikiuserMappingContribTests', @_);
     return $self;
 }
 
@@ -25,7 +25,7 @@ sub set_up {
 
     $this->SUPER::set_up();
 
-#default settings	
+    #default settings	
 	$TWiki::cfg{LoginManager} = 'TWiki::LoginManager::TemplateLogin';
     $TWiki::cfg{UserMappingManager} = 'TWiki::Users::TWikiUserMapping';
     $TWiki::cfg{UseClientSessions} = 1;
@@ -49,12 +49,12 @@ sub setup_new_session() {
 
 sub set_up_user {
     my $this = shift;
-    
-my $agent = 'TWikiRegistrationAgent';
-my $userLogin;
-my $userWikiName;
-my $user_id;
-    
+
+    my $agent = 'TWikiRegistrationAgent';
+    my $userLogin;
+    my $userWikiName;
+    my $user_id;
+
     if ($this->{twiki}->{users}->supportsRegistration()) {
         $userWikiName = 'JoeDoe';
         $userLogin = $userWikiName;
@@ -92,11 +92,12 @@ sub test_LoginNameTWikiUserMapping {
 #legacy topic forms
 sub test_valid_login_no_Mapper_in_cUID {
     my $this = shift;
-    $TWiki::cfg{Register}{AllowLoginName} = 1; 
-    $this->setup_new_session();    
+    $TWiki::cfg{Register}{AllowLoginName} = 1;
+    $this->setup_new_session();
     $this->set_up_user();
   	$this->std_tests($this->{userLogin}, $this->{twiki}->{users}->webDotWikiName($this->{user_id}));
 }
+
 sub test_valid_wikiname_no_Mapper_in_cUID {
     my $this = shift;
     $TWiki::cfg{Register}{AllowLoginName} = 1; 
@@ -104,6 +105,7 @@ sub test_valid_wikiname_no_Mapper_in_cUID {
     $this->set_up_user();
   	$this->std_tests($this->{userWikiName}, $this->{twiki}->{users}->webDotWikiName($this->{user_id}));
 }
+
 sub test_web_and_wikiname_no_Mapper_in_cUID {
     my $this = shift;
     $TWiki::cfg{Register}{AllowLoginName} = 1; 
@@ -111,6 +113,7 @@ sub test_web_and_wikiname_no_Mapper_in_cUID {
     $this->set_up_user();
   	$this->std_tests($this->{twiki}->{users}->webDotWikiName($this->{user_id}), $this->{twiki}->{users}->webDotWikiName($this->{user_id}));
 }
+
 sub test_valid_login_no_Mapper_in_cUID_NOAllowLoginName {
     my $this = shift;
     #$TWiki::cfg{Register}{AllowLoginName} = 1; 
@@ -118,6 +121,7 @@ sub test_valid_login_no_Mapper_in_cUID_NOAllowLoginName {
     $this->set_up_user();
   	$this->std_tests($this->{userLogin}, $this->{twiki}->{users}->webDotWikiName($this->{user_id}));
 }
+
 sub test_valid_wikiname_no_Mapper_in_cUID_NOAllowLoginName {
     my $this = shift;
     #$TWiki::cfg{Register}{AllowLoginName} = 1; 
@@ -125,6 +129,7 @@ sub test_valid_wikiname_no_Mapper_in_cUID_NOAllowLoginName {
     $this->set_up_user();
   	$this->std_tests($this->{userWikiName}, $this->{twiki}->{users}->webDotWikiName($this->{user_id}));
 }
+
 sub test_web_and_wikiname_no_Mapper_in_cUID_NOAllowLoginName {
     my $this = shift;
     #$TWiki::cfg{Register}{AllowLoginName} = 1; 
@@ -158,11 +163,11 @@ sub std_tests {
 	$this->{twiki}->{users}-> ASSERT_IS_CANONICAL_USER_ID($user);
 
     my ($meta, $text) = $this->{twiki}->{store}->readTopic($this->{twiki}->{user}, $this->{test_web}, 'CuidWithMappers');
-    
+
     my $topicinfo = $meta->get( 'TOPICINFO');
-	$this->assert_not_null($topicinfo->{'author'});
-	$this->{twiki}->{users}->ASSERT_IS_CANONICAL_USER_ID($topicinfo->{'author'});
-	$this->assert_str_equals('BaseUserMapping_666', $topicinfo->{'author'});#render the topic, make sure we're seeing NO cUIDs, and WikiNames for all known users
+	$this->assert_not_null($topicinfo->{author});
+	$this->{twiki}->{users}->ASSERT_IS_CANONICAL_USER_ID($topicinfo->{author});
+	$this->assert_str_equals('BaseUserMapping_666', $topicinfo->{author});#render the topic, make sure we're seeing NO cUIDs, and WikiNames for all known users
 	#parse meta output
     $this->assert( $meta->count( "FILEATTACHMENT" ) == 1, "Should be one item" );
 

@@ -21,7 +21,8 @@
 
 ---+ package TWiki::Users::TWikiUserMapping
 
-User mapping is the process by which TWiki maps from a username (a login name) to a wikiname and back. It is also where groups are maintained.
+User mapping is the process by which TWiki maps from a username (a login name)
+to a wikiname and back. It is also where groups are maintained.
 
 By default TWiki maintains user topics and group topics in the %MAINWEB% that
 define users and group. These topics are
@@ -41,16 +42,13 @@ Subclasses should be named 'XxxxUserMapping' so that configure can find them.
 =cut
 
 package TWiki::Users::TWikiUserMapping;
+use base 'TWiki::UserMapping';
 
 use strict;
 use Assert;
 use Error qw( :try );
 
-require TWiki::Users;
-require TWiki::Plugins;
-require TWiki::ListIterator;
-
-=pod
+=begin twiki
 
 ---++ ClassMethod new ($session, $impl)
 
@@ -62,9 +60,8 @@ for any required TWiki services.
 sub new {
     my( $class, $session ) = @_;
 
-    my $this = bless( {}, $class );
-    $this->{session} = $session;
-    $this->{mapping_id} = 'TWikiUserMapping_';
+    # The null mapping name is reserved for TWiki for backward-compatibility
+    my $this = $class->SUPER::new( $session, '' );
 
     my $implPasswordManager = $TWiki::cfg{PasswordManager};
     $implPasswordManager = 'TWiki::Users::Password'
@@ -93,28 +90,16 @@ Break circular references.
 # documentation" of the live fields in the object.
 sub finish {
     my $this = shift;
+
     $this->{passwords}->finish() if $this->{passwords};
     undef $this->{L2U};
     undef $this->{U2W};
     undef $this->{W2U};
-    undef $this->{mapping_id};
     undef $this->{passwords};
-    undef $this->{session};
+    $this->SUPER::finish();
 }
 
-=pod
-
----++ ObjectMethod loginTemplateName () -> templateFile
-
-allows UserMappings to come with customised login screens - that should preffereably only over-ride the UI function
-
-=cut
-
-sub loginTemplateName {
-    return 'login';
-}
-
-=pod
+=begin twiki
 
 ---++ ObjectMethod supportsRegistration () -> false
 return 1 if the UserMapper supports registration (ie can create new users)
@@ -125,29 +110,32 @@ sub supportsRegistration {
     return 1;
 }
 
+=begin twiki
 
-=pod
+---++ ObjectMethod handlesUser ( $cUID, $login, $wikiname) -> $boolean
 
----++ ObjectMethod handlesUser ( $cUID, $login, $wikiname) 
-
-Called by the TWiki::User object to determine which loaded mapping to use for a given user (must be fast)
-in the BaseUserMapping case, we know all the users we deal specialise in.
+Called by the TWiki::Users object to determine which loaded mapping
+to use for a given user (must be fast).
 
 =cut
 
 sub handlesUser {
 	my ($this, $cUID, $login, $wikiname) = @_;
 	
-	$cUID = '' unless ($cUID);
-
-	return 1 if ( $cUID =~ /^($this->{mapping_id})/ );
+    if (defined $cUID && !length($this->{mapping_id})) {
+        # Normal behaviour; if there is no user mapping specified, it's ours
+        return 1 if $cUID !~ /^[A-Za-z]+_/;
+    } else {
+        # Used when (if) TWikiUserMapping is subclassed
+        return 1 if ( defined $cUID && $cUID =~ /^($this->{mapping_id})/ );
+    }
 	return 1 if ($login && $this->getLoginName( $login ));
 #	return 1 if ($wikiname && $this->findUserByWikiName( $wikiname ));
 	return 0;
 }
 
 
-=pod
+=begin twiki
 
 ---++ ObjectMethod getCanonicalUserID ($login, $dontcheck) -> cUID
 
@@ -162,20 +150,22 @@ characters, and must correspond 1:1 to the login name.
 
 sub getCanonicalUserID {
     my( $this, $login, $dontcheck ) = @_;
-#print STDERR "\nTWikiUserMapping::getCanonicalUserID($login)";
+    #print STDERR "\nTWikiUserMapping::getCanonicalUserID($login)";
 
-	return unless (($dontcheck) || defined($this->{L2U}->{$login}) || (defined($this->{passwords}->fetchPass( $login ))) );
+	return unless (($dontcheck) ||
+                     defined($this->{L2U}->{$login}) ||
+                       (defined($this->{passwords}->fetchPass( $login ))) );
 
     use bytes;
     # use bytes to ignore character encoding
     $login =~ s/([^a-zA-Z0-9])/'_'.sprintf('%02d', ord($1))/ge;
     no bytes;
     $login = $this->{mapping_id}.$login;
-#print STDERR " OK ($login)";   
+#print STDERR " OK ($login)";
     return $login;
 }
 
-=pod
+=begin twiki
 
 ---++ ObjectMethod getLoginName ($cUID) -> login
 
@@ -188,13 +178,13 @@ sub getLoginName {
     my( $this, $user ) = @_;
     my $dontcheck;
     ASSERT($user) if DEBUG;
-	ASSERT($this->{mapping_id}) if DEBUG;
 	
 	#can't call userExists - its recursive
 	#return unless (userExists($this, $user));
 	
-    $user =~ s/$this->{mapping_id}//;
-   
+    # Remove the mapping id in case this is a subclass
+    $user =~ s/$this->{mapping_id}// if $this->{mapping_id};
+
     use bytes;
     # use bytes to ignore character encoding
     $user =~ s/_(\d\d)/chr($1)/ge;
@@ -205,9 +195,9 @@ sub getLoginName {
     return $user;
 }
 
-=pod
+=begin twiki
 
----++ ClassMethod addUser ($login, $wikiname, $password, $emails) -> cUID
+---++ ObjectMethod addUser ($login, $wikiname, $password, $emails) -> cUID
 
 no registration, this is a read only user mapping
 throws an Error::Simple 
@@ -248,6 +238,7 @@ sub addUser {
         # add a new user
 
         unless( defined( $password )) {
+            require TWiki::Users;
             $password = TWiki::Users::randomPassword();
         }
 
@@ -329,7 +320,7 @@ sub addUser {
 }
 
 
-=pod
+=begin twiki
 
 ---++ ObjectMethod removeUser( $user ) -> $boolean
 
@@ -348,7 +339,7 @@ sub removeUser {
 }
 
 
-=pod
+=begin twiki
 
 ---++ ObjectMethod getWikiName ($cUID) -> wikiname
 
@@ -375,7 +366,7 @@ sub getWikiName {
  
 }
 
-=pod
+=begin twiki
 
 ---++ ObjectMethod userExists($cUID) -> $boolean
 
@@ -410,7 +401,7 @@ sub userExists {
     return undef;
 }
 
-=pod
+=begin twiki
 
 ---++ ObjectMethod eachUser () -> listIterator of cUIDs
 
@@ -424,21 +415,23 @@ sub eachUser {
 
     _loadMapping( $this );
     my @list = keys(%{$this->{U2W}});
+    require TWiki::ListIterator;
     my $iter = new TWiki::ListIterator( \@list );
-    $iter->{filter} = sub {  #don't claim users that are handled by the basemapping
+    $iter->{filter} = sub {
+        #don't claim users that are handled by the basemapping
         my $cUID = $_[0] || '';
         my $login = $this->{session}->{users}->getLoginName($cUID);
         my $wikiname =  $this->{session}->{users}->getWikiName($cUID);
         #print STDERR "**** $cUID  $login  $wikiname \n";
+        require TWiki::Plugins;
         return !($TWiki::Plugins::SESSION->{users}->{basemapping}->handlesUser ( undef, $login, $wikiname) );
-    }; 
+    };
     return $iter;
 }
 
-
 my %expanding;
 
-=pod
+=begin twiki
 
 ---++ ObjectMethod eachGroupMember ($group) ->  listIterator of cUIDs
 
@@ -476,11 +469,12 @@ sub eachGroupMember {
         delete $expanding{$group};
     }
 
+    require TWiki::ListIterator;
     return new TWiki::ListIterator( $members );
 }
 
 
-=pod
+=begin twiki
 
 ---++ ObjectMethod isGroup ($user) -> boolean
 TODO: what is $user - wikiname, UID ??
@@ -498,7 +492,7 @@ sub isGroup {
     return $user =~ /Group$/;
 }
 
-=pod
+=begin twiki
 
 ---++ ObjectMethod eachGroup () -> ListIterator of groupnames
 
@@ -510,11 +504,12 @@ method in that module for details.
 sub eachGroup {
     my ( $this ) = @_;
     _getListOfGroups( $this );
+    require TWiki::ListIterator;
     return new TWiki::ListIterator( \@{$this->{groupsList}} );
 }
 
 
-=pod
+=begin twiki
 
 ---++ ObjectMethod eachMembership ($cUID) -> ListIterator of groups this user is in
 
@@ -528,6 +523,7 @@ sub eachMembership {
     my @groups = ();
 
     _getListOfGroups( $this );
+    require TWiki::ListIterator;
     my $it = new TWiki::ListIterator( \@{$this->{groupsList}} );
     $it->{filter} = sub {
         $this->isInGroup($user, $_[0]);
@@ -535,7 +531,7 @@ sub eachMembership {
     return $it;
 }
 
-=pod
+=begin twiki
 
 ---++ ObjectMethod isAdmin( $user ) -> $boolean
 
@@ -561,7 +557,7 @@ sub isAdmin {
 }
 
 
-=pod
+=begin twiki
 
 ---++ ObjectMethod isInGroup ($user, $group, $scanning) -> bool
 
@@ -588,7 +584,7 @@ sub isInGroup {
     return 0;
 }
 
-=pod
+=begin twiki
 
 ---++ ObjectMethod findUserByEmail( $email ) -> \@users
    * =$email= - email address to look up
@@ -629,7 +625,7 @@ sub findUserByEmail {
     return \@users;
 }
 
-=pod
+=begin twiki
 
 ---++ ObjectMethod getEmails($user) -> @emailAddress
 
@@ -672,7 +668,7 @@ sub getEmails {
     return keys %emails;
 }
 
-=pod
+=begin twiki
 
 ---++ ObjectMethod setEmails($user, @emails) -> boolean
 
@@ -695,7 +691,7 @@ sub setEmails {
 }
 
 
-=pod
+=begin twiki
 
 ---++ StaticMethod mapper_getEmails($session, $user)
 
@@ -734,7 +730,7 @@ sub mapper_getEmails {
     return @addresses;
 }
 
-=pod
+=begin twiki
 
 ---++ StaticMethod mapper_setEmails ($session, $user, @emails)
 
@@ -775,7 +771,7 @@ sub mapper_setEmails {
 }
 
 
-=pod
+=begin twiki
 
 ---++ ObjectMethod findUserByWikiName ($wikiname) -> list of cUIDs associated with that wikiname
 
@@ -816,7 +812,7 @@ sub findUserByWikiName {
     return \@users;
 }
 
-=pod
+=begin twiki
 
 ---++ ObjectMethod checkPassword( $userName, $passwordU ) -> $boolean
 
@@ -833,7 +829,7 @@ sub checkPassword {
         $userName, $pw);
 }
 
-=pod
+=begin twiki
 
 ---++ ObjectMethod setPassword( $user, $newPassU, $oldPassU ) -> $boolean
 
@@ -856,7 +852,7 @@ sub setPassword {
         $this->getLoginName( $user ), $newPassU, $oldPassU);
 }
 
-=pod
+=begin twiki
 
 ---++ ObjectMethod passwordError( ) -> $string
 
@@ -872,7 +868,7 @@ sub passwordError {
     return $this->{passwords}->error();
 }
 
-=pod
+=begin twiki
 
 ---++ ObjectMethod ASSERT_IS_CANONICAL_USER_ID( $user_id ) -> $boolean
 
@@ -881,43 +877,10 @@ used for debugging to ensure we are actually passing a canonical_id
 =cut
 
 sub ASSERT_IS_CANONICAL_USER_ID {
-    my( $this, $user_id ) = @_;
-#print STDERR "ASSERT_IS_CANONICAL_USER_ID($user_id)";
-#    ASSERT($user_id =~/^UID$(\s+)UID$/) if DEBUG;
-#    ASSERT( $user_id =~/^$this->{mapping_id}/e );	#refine with more specific regex
-
+    # NOP because there is no mapping_id
 }
 
-=pod
-
----++ ObjectMethod ASSERT_IS_USER_LOGIN_ID( $user_login ) -> $boolean
-
-used for debugging to ensure we are actually passing a user login
-
-=cut
-
-sub ASSERT_IS_USER_LOGIN_ID {
-    my( $this, $user_login ) = @_;
-    
-}
-
-
-=pod
-
----++ ObjectMethod ASSERT_IS_USER_DISPLAY_NAME( $user_display ) -> $boolean
-
-used for debugging to ensure we are actually passing a user display_name (commonly a WikiWord Name)
-
-=cut
-
-sub ASSERT_IS_USER_DISPLAY_NAME {
-    my( $this, $user_display ) = @_;
-    
-}
-
-
-
-=pod
+=begin twiki
 
 ---++ ObjectMethod _cacheUser ($wikiname, $login) => cUID
 
@@ -947,7 +910,7 @@ sub _cacheUser {
 }
 
 
-=pod
+=begin twiki
 
 ---++ ClassMethod _collateGroups ($ref, $group)
 
@@ -963,7 +926,7 @@ sub _collateGroups {
 }
 
 
-=pod
+=begin twiki
 
 ---++ ObjectMethod _getListOfGroups ()
 
@@ -1001,7 +964,7 @@ sub _getListOfGroups {
     return $this->{groupsList};
 }
 
-=pod
+=begin twiki
 
 ---++ ClassMethod _loadMapping ($session, $impl)
 Build hash to translate between username (e.g. jsmith)
@@ -1044,7 +1007,7 @@ sub _loadMapping {
 }
 
 
-=pod
+=begin twiki
 
 ---++ ObjectMethod _expandUserList ($names )
 
