@@ -173,10 +173,10 @@ sub test_render_formfield_with_form {
     my($meta, $text) =
       $this->{twiki}->{store}->readTopic(undef, $this->{test_web}, $testtopic2);
     my $res = $meta->renderFormForDisplay();
-    $this->assert_html_equals(<<'HERE', $res);
+    $this->assert_html_equals(<<HERE, $res);
 <div class="twikiForm">
 <table class='twikiFormTable' border='1'><tr><th class='twikiFormTableHRow twikiFirstCol' colspan='2'>
-[[InitializationForm]]
+[[$this->{test_web}.InitializationForm][InitializationForm]]
 </th></tr><tr valign='top'><td class='twikiFormTableRow twikiFirstCol' align='right'> Issue Name </td><td>
 _An issue_
 </td></tr><tr valign='top'><td class='twikiFormTableRow twikiFirstCol' align='right'> Issue Description </td><td>
@@ -193,10 +193,10 @@ HERE
     ($meta, $text) =
       $this->{twiki}->{store}->readTopic(undef, $this->{test_web}, $testtopic1);
     $res = $meta->renderFormForDisplay();
-    $this->assert_html_equals(<<'HERE', $res);
+    $this->assert_html_equals(<<HERE, $res);
 <div class="twikiForm">
 <table class='twikiFormTable' border='1'><tr><th class='twikiFormTableHRow twikiFirstCol' colspan='2'>
-[[InitializationForm]]
+[[$this->{test_web}.InitializationForm][InitializationForm]]
 </th></tr><tr valign='top'><td class='twikiFormTableRow twikiFirstCol' align='right'> Issue Name </td><td>
 _An issue_
 </td></tr><tr valign='top'><td class='twikiFormTableRow twikiFirstCol' align='right'> Issue Description </td><td>
