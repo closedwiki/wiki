@@ -1473,8 +1473,7 @@ sub addTOPICINFO {
           # read these topics
           version   => '1.'.$rev,
           date      => $time,
-          author    => $users->getWikiName($user), # Compatibility
-          authoruid => $user, # Always this use in preference
+          author    => $user,
           format    => $STORE_FORMAT_VERSION,
          );
     # if this is a reprev, then store the revision that was affected.

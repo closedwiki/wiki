@@ -1,14 +1,13 @@
+!include twikiplugins/BehaviourContrib/lib/TWiki/Contrib/BehaviourContrib
 !include twikiplugins/ClassicSkin/lib/TWiki/Contrib/ClassicSkin
 !include twikiplugins/CommentPlugin/lib/TWiki/Plugins/CommentPlugin
 !include twikiplugins/EditTablePlugin/lib/TWiki/Plugins/EditTablePlugin
 !include twikiplugins/EmptyPlugin/lib/TWiki/Plugins/EmptyPlugin
 !include twikiplugins/InterwikiPlugin/lib/TWiki/Plugins/InterwikiPlugin
 !include twikiplugins/JSCalendarContrib/lib/TWiki/Contrib/JSCalendarContrib
+!include twikiplugins/KupuContrib/lib/TWiki/Contrib/KupuContrib
 !include twikiplugins/MailerContrib/lib/TWiki/Contrib/MailerContrib
 !include twikiplugins/PatternSkin/lib/TWiki/Contrib/PatternSkin
-!include twikiplugins/TwistyContrib/lib/TWiki/Contrib/TwistyContrib
-!include twikiplugins/BehaviourContrib/lib/TWiki/Contrib/BehaviourContrib
-!include twikiplugins/TwistyPlugin/lib/TWiki/Plugins/TwistyPlugin
 !include twikiplugins/PreferencesPlugin/lib/TWiki/Plugins/PreferencesPlugin
 !include twikiplugins/RenderListPlugin/lib/TWiki/Plugins/RenderListPlugin
 !include twikiplugins/SlideShowPlugin/lib/TWiki/Plugins/SlideShowPlugin
@@ -16,9 +15,12 @@
 !include twikiplugins/SpreadSheetPlugin/lib/TWiki/Plugins/SpreadSheetPlugin
 !include twikiplugins/TablePlugin/lib/TWiki/Plugins/TablePlugin
 !include twikiplugins/TipsContrib/lib/TWiki/Contrib/TipsContrib
-!include twikiplugins/WysiwygPlugin/lib/TWiki/Plugins/WysiwygPlugin
-!include twikiplugins/KupuContrib/lib/TWiki/Contrib/KupuContrib
+!include twikiplugins/TinyMCEPlugin/lib/TWiki/Plugins/TinyMCEPlugin
 !include twikiplugins/TWikiUserMappingContrib/lib/TWiki/Contrib/TWikiUserMappingContrib
+!include twikiplugins/TwistyContrib/lib/TWiki/Contrib/TwistyContrib
+!include twikiplugins/TwistyPlugin/lib/TWiki/Plugins/TwistyPlugin
+!include twikiplugins/WysiwygPlugin/lib/TWiki/Plugins/WysiwygPlugin
+
 AUTHORS 0444
 COPYING 0444
 COPYRIGHT 0444

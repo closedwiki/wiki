@@ -195,17 +195,21 @@ sub loginTemplateName {
 sub _getMapping {
 	my ($this, $cUID, $login, $wikiname, $noFallBack) = @_;
 
-	$cUID ||= '';
-	$login ||= '';
-	$wikiname ||= '';
+	$cUID = '' unless defined $cUID;
+	$login = '' unless defined $login;
+	$wikiname = '' unless defined $wikiname;
 	
 	$wikiname =~ s/^$TWiki::cfg{UsersWebName}\.//;
 	
 	$noFallBack = 0 unless (defined($noFallBack));
 
-	return $this->{basemapping} if ($this->{basemapping}->handlesUser($cUID, $login, $wikiname));
-	return $this->{mapping} if ($this->{mapping}->handlesUser($cUID, $login, $wikiname));
-	return $this->{mapping} unless ($noFallBack);			#TODO: I think it should fall back to basemapping, but to do that I need to get even more clever :/
+	return $this->{basemapping}
+      if ($this->{basemapping}->handlesUser($cUID, $login, $wikiname));
+	return $this->{mapping}
+      if ($this->{mapping}->handlesUser($cUID, $login, $wikiname));
+    # TODO: I think it should fall back to basemapping, but to do that
+    # I need to get even more clever :/
+	return $this->{mapping} unless ($noFallBack);
 	return undef;
 }
 
@@ -315,10 +319,19 @@ sub getCanonicalUserID {
     my( $this, $login ) = @_;
 	$this->ASSERT_IS_USER_LOGIN_ID($login) if DEBUG;
 	
-    #if its one of the known cUID's, then just return itself
-    my $testMapping = $this->_getMapping($login, undef, undef, 1);
-    return $login if ($testMapping && $testMapping->getLoginName ($login));	#passed a valid cUID
-    
+    # if its one of the known cUID's, then just return itself
+    # SMELL: CC added $login as the second param, because otherwise the
+    # usernames defined by the base mapper get intercepted by the
+    # TWikiuserMapping, which *also* defines the guest user.
+    # My understanding is that the base user mapper users must always
+    # override those defined in the TWikiUserMapping, even though that makes
+    # it impossible to retain 100% compatibility (guest user edits will get
+    # saved as edits by BaseMapping_666).
+    my $testMapping = $this->_getMapping($login, $login, undef, 1);
+
+    # passed a valid cUID?
+    return $login if ($testMapping && $testMapping->getLoginName($login));
+
     my $cUID;
     my $mapping = $this->_getMapping(undef, $login, $login);
     if ($mapping) {
