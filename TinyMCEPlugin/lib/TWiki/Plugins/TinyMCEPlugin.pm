@@ -40,16 +40,16 @@ HERE
 
     require TWiki::Plugins::WysiwygPlugin;
 
-    # SMELL: why do we need twiki.js?
     # _src.js for debug
     TWiki::Func::addToHEAD('tinyMCE', <<SCRIPT);
-<script language="javascript" type="text/javascript" src="%PUBURLPATH%/%TWIKIWEB%/TinyMCEPlugin/tinymce/jscripts/tiny_mce/tiny_mce_src.js"></script>
-<script type="text/javascript" src="%PUBURLPATH%/%TWIKIWEB%/TinyMCEPlugin/twiki.js"></script>
+<script language="javascript" type="text/javascript" src="%PUBURL%/%TWIKIWEB%/TinyMCEPlugin/tinymce/jscripts/tiny_mce/tiny_mce.js"></script>
+<script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/TinyMCEPlugin/twiki.js"></script>
 <script type="text/javascript">
 // <![CDATA[
-tinyMCE.init({
-$init
-});
+function initTextArea () {
+	textareaInited = true;
+}
+tinyMCE.init({ $init });
 // ]]>
 </script>
 SCRIPT

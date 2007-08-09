@@ -11,10 +11,12 @@
    painted with this class */
 .WYSIWYG_PROTECTED { 
   font-family: "Courier New", courier, monaco, monospace;
-  color:#7A4707; # from Pattern Skin, color for pre text
+  color:#7A4707; /* from Pattern Skin, color for pre text */
+  white-space: pre nowrap;
 }
 /* Verbatim sections are painted with this */
-.WYSIWYG_VERBATIM { 
+.TMLverbatim { 
   font-family:"Courier New", courier, monaco, monospace;
   background-image:url(verbatim.png);
+  white-space: pre nowrap;
 }
