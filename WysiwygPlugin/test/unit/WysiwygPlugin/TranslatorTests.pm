@@ -43,11 +43,10 @@ my $ROUNDTRIP = 1 << 2; # test tml => => finaltml
 my $mask = $TML2HTML | $HTML2TML | $ROUNDTRIP;
 
 my $protecton = '<span class="WYSIWYG_PROTECTED">';
-my $preon = '<pre class="WYSIWYG_PROTECTED">';
 my $linkon = '<span class="WYSIWYG_LINK">';
 my $protectoff = '</span>';
 my $linkoff = '</span>';
-my $preoff = '</pre>';
+my $preoff = '</span>';
 my $nop = '<nop>';
 
 # The following big table contains all the testcases. These are
@@ -160,7 +159,7 @@ HERE
               exec => $ROUNDTRIP,
               name => 'mixtureOfFormats',
               html => <<'HERE',
-<i>this</i><i>should</i><i>italicise</i><i>each</i><i>word</i><p /><b>and</b><b>this</b><b>should</b><b>embolden</b><b>each</b><b>word</b><p /><i>mixing</i><b>them</b><i>should</i><b>work</b>
+<p><i>this</i><i>should</i><i>italicise</i><i>each</i><i>word</i><p /><b>and</b><b>this</b><b>should</b><b>embolden</b><b>each</b><b>word</b></p><p><i>mixing</i><b>them</b><i>should</i><b>work</b></p>
 HERE
               tml => <<'HERE',
 _this_ _should_ _italicise_ _each_ _word_
@@ -174,7 +173,7 @@ HERE
               exec => $ROUNDTRIP,
               name => 'simpleVerbatim',
               html => <<'HERE',
-<pre class="TMLverbatim"><br />&#60;verbatim&#62;<br />Description<br />&#60;/verbatim&#62;<br />class&nbsp;CatAnimal&nbsp;{<br />&nbsp;&nbsp;void&nbsp;purr()&nbsp;{<br />&nbsp;&nbsp;&nbsp;&nbsp;code&nbsp;&#60;here&#62;<br />&nbsp;&nbsp;}<br />}<br /></pre>
+<span class="TMLverbatim"><br />&#60;verbatim&#62;<br />Description<br />&#60;/verbatim&#62;<br />class&nbsp;CatAnimal&nbsp;{<br />&nbsp;&nbsp;void&nbsp;purr()&nbsp;{<br />&nbsp;&nbsp;&nbsp;&nbsp;code&nbsp;&#60;here&#62;<br />&nbsp;&nbsp;}<br />}<br /></span>
 HERE
               tml => <<'HERE',
 <verbatim>
@@ -407,7 +406,7 @@ HERE
               exec => $ROUNDTRIP,
               name => 'mailtoLink2',
               html => ' a@z.com ',
-              tml => ' a@z.com',
+              tml => 'a@z.com',
           },
           {
               exec => $ROUNDTRIP,
@@ -634,7 +633,7 @@ EVERYWHERE
               exec => $ROUNDTRIP,
               name => 'nestedVerbatim',
               html => 'Outside
- <pre class="TMLverbatim"><br />Inside<br /></pre>Outside',
+ <span class="TMLverbatim"><br />Inside<br /></span>Outside',
               tml => 'Outside
  <verbatim>
  Inside
@@ -647,9 +646,8 @@ EVERYWHERE
           {
               exec => $TML2HTML | $ROUNDTRIP,
               name => 'nestedPre',
-              html => 'Outside
- <pre class="twikiAlert TMLverbatim"><br />&nbsp;&nbsp;Inside<br />&nbsp;&nbsp;</pre>
- Outside',
+              html => '<p>
+Outside <pre class="twikiAlert TMLverbatim"><br />&nbsp;&nbsp;Inside<br />&nbsp;&nbsp;</pre> Outside </p>',
               tml => 'Outside <verbatim class="twikiAlert">
   Inside
   </verbatim> Outside',
@@ -657,7 +655,7 @@ EVERYWHERE
           {
               exec => $ROUNDTRIP,
               name => 'nestedIndentedVerbatim',
-              html => 'Outside<pre class="TMLverbatim"><br />Inside<br />&nbsp;&nbsp;&nbsp;</pre>Outside',
+              html => 'Outside<span class="TMLverbatim"><br />Inside<br />&nbsp;&nbsp;&nbsp;</span>Outside',
               tml => 'Outside
     <verbatim>
  Inside
@@ -689,18 +687,12 @@ Outside',
               exec => $HTML2TML | $ROUNDTRIP,
               name => 'classifiedPre',
               html => 'Outside
- <pre class="twikiAlert">
+ <span class="twikiAlert">
  Inside
- </pre>
+ </span>
  Outside',
-              tml => 'Outside
-<pre class="twikiAlert">
- Inside
- </pre>
-Outside',
-              finaltml => 'Outside <pre class="twikiAlert">
- Inside
- </pre> Outside',
+              tml => 'Outside <span class="twikiAlert"> Inside </span> Outside',
+              finaltml => 'Outside <span class="twikiAlert"> Inside </span> Outside',
           },
           {
               exec => $ROUNDTRIP,
@@ -833,7 +825,7 @@ Inside
 5 <span class="arfle" lang="fr">francais</span>
 HERE
               tml => <<HERE,
-1 2 3 4 francais 5 francais
+1 <span class="arfle" /> 2 3 4 francais 5 <span class="arfle">francais</span>
 HERE
           },
           {
@@ -1031,13 +1023,17 @@ TML
           {
               name => 'paraConversions1',
               exec => $TML2HTML | $HTML2TML | $ROUNDTRIP,
-              html => 'Paraone
+              html => '<p>
+Paraone
 Paratwo
-<p />
+</p>
+<p>
 Parathree
-<p />
-<p />
-Parafour',
+</p>
+<p></p>
+<p>
+Parafour
+</p>',
               tml => 'Paraone
 Paratwo
 

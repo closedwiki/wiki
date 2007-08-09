@@ -815,7 +815,7 @@ sub _handleP {
     my( $this, $options ) = @_;
 
     my( $f, $kids ) = $this->_flatten( $options );
-    return ($f, '<p />'.$kids) if( $options & $WC::NO_BLOCK_TML );
+    return ($f, '<p>'.$kids.'</p>') if( $options & $WC::NO_BLOCK_TML );
     $kids = _trim($kids);
     return ($f | $WC::BLOCK_TML, $WC::NBBR.$kids.$WC::NBBR);
 }
@@ -874,6 +874,12 @@ sub _handleSPAN {
             return $this->_PROTECTED($options);
         }
 
+        if ($this->{attrs}->{class} =~ /\bTMLverbatim\b/) {
+            my( $flags, $text ) = $this->_PROTECTED($options);
+            my $p = _htmlParams($this->{attrs}, $options, 'TMLverbatim');
+            return ($flags, "<verbatim$p>$text</verbatim>");
+        }
+
         if( defined( $this->{attrs}->{class} ) &&
               $this->{attrs}->{class} =~ /\bWYSIWYG_NOAUTOLINK\b/ ) {
             my( $flags, $text ) = $this->_flatten( $options );
@@ -888,7 +894,7 @@ sub _handleSPAN {
         }
 
         # ignore all other classes
-        delete $this->{attrs}->{class};
+        #delete $this->{attrs}->{class};
     }
 
     # ignore the span if there are no attrs

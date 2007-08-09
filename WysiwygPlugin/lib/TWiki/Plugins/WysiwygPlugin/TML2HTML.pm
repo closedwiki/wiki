@@ -265,98 +265,117 @@ sub _getRenderedVersion {
     # other entities
     $text =~ s/&(\w+);/$TT0$1;/g;      # "&abc;"
     $text =~ s/&(#[0-9]+);/$TT0$1;/g;  # "&#123;"
-    #$text =~ s/&/&amp;/g;                         # escape standalone "&"
+    #$text =~ s/&/&amp;/g;             # escape standalone "&"
     $text =~ s/$TT0(#[0-9]+;)/&$1/go;
     $text =~ s/$TT0(\w+;)/&$1/go;
 
-    # Headings
-    # '----+++++++' rule
-    $text =~ s/$TWiki::regex{headerPatternDa}/_makeHeading($2,length($1))/geom;
-
     # Horizontal rule
     my $hr = CGI::hr({class => 'TMLhr'});
-    $text =~ s/^---+/$hr/gm;
+    $text =~ s/^---+$/$hr/gm;
 
     # Now we really _do_ need a line loop, to process TML
     # line-oriented stuff.
-    my $isList = 0;		# True when within a list
-    my $insideTABLE = 0;
-    my @result = ();
+    my $inList = 0;		 # True when within a list type
+    my $inTable = 0;     # True when within a table type
+    my $inParagraph = 1; # True when within a P
+    my @result = ( '<p>' );
     foreach my $line ( split( /\n/, $text )) {
         # Table: | cell | cell |
         # allow trailing white space after the last |
         if( $line =~ m/^(\s*\|.*\|\s*)$/ ) {
-            if ($isList) {
-                $this->_addListItem( \@result, '', '', '' );
-                $isList = 0;
-            }
-            unless( $insideTABLE ) {
+            push(@result, '</p>') if $inParagraph;
+            $inParagraph = 0;
+            $this->_addListItem( \@result, '', '', '' ) if $inList;
+            $inList = 0;
+            unless( $inTable ) {
                 push( @result, CGI::start_table(
                     { border=>1, cellpadding=>0, cellspacing=>1 } ));
             }
             push( @result, _emitTR($1) );
-            $insideTABLE = 1;
+            $inTable = 1;
             next;
-        } elsif( $insideTABLE ) {
+        }
+
+        if( $inTable ) {
             push( @result, CGI::end_table() );
-            $insideTABLE = 0;
+            $inTable = 0;
         }
 
-        # Lists and paragraphs
-        if ( $line =~ s/^\s*$/<p \/>/ ) {
-            $isList = 0;
-        }
-        elsif ( $line =~ m/^\S/ ) {
-            $isList = 0;
-        }
-        elsif ( $line =~ m/^(\t|   )+\S/ ) {
-            if ( $line =~ s/^((\t|   )+)\$\s(([^:]+|:[^\s]+)+?):\s/<dt> $3 <\/dt><dd> /o ) {
-                # Definition list
-                $this->_addListItem( \@result, 'dl', 'dd', $1, '' );
-                $isList = 1;
+        if ($line =~ /$TWiki::regex{headerPatternDa}/o) {
+            # Running head
+            $this->_addListItem( \@result, '', '', '' ) if $inList;
+            $inList = 0;
+            push(@result, '</p>') if $inParagraph;
+            $inParagraph = 0;
+            $line = _makeHeading($2, length($1));
+
+        } elsif ($line =~ /^\s*$/) {
+            # Blank line
+            push(@result, '</p>') if $inParagraph;
+            $inParagraph = 0;
+            $line = '<p>';
+            $this->_addListItem( \@result, '', '', '' ) if $inList;
+            $inList = 0;
+            $inParagraph = 1;
+
+        } elsif ( $line =~ s/^((\t|   )+)\$\s(([^:]+|:[^\s]+)+?):\s/<dt> $3 <\/dt><dd> /o ) {
+            # Definition list
+            push(@result, '</p>') if $inParagraph;
+            $inParagraph = 0;
+            $this->_addListItem( \@result, 'dl', 'dd', $1, '' );
+            $inList = 1;
+
+        } elsif ( $line =~ s/^((\t|   )+)(\S+?):\s/<dt> $3<\/dt><dd> /o ) {
+            # Definition list
+            push(@result, '</p>') if $inParagraph;
+            $inParagraph = 0;
+            $this->_addListItem( \@result, 'dl', 'dd', $1, '' );
+            $inList = 1;
+
+        } elsif ( $line =~ s/^((\t|   )+)\*(\s|$)/<li> /o ) {
+            # Unnumbered list
+            push(@result, '</p>') if $inParagraph;
+            $inParagraph = 0;
+            $this->_addListItem( \@result, 'ul', 'li', $1, '' );
+            $inList = 1;
+
+        } elsif ( $line =~ m/^((\t|   )+)([1AaIi]\.|\d+\.?) ?/ ) {
+            # Numbered list
+            push(@result, '</p>') if $inParagraph;
+            $inParagraph = 0;
+            my $ot = $3;
+            $ot =~ s/^(.).*/$1/;
+            if( $ot !~ /^\d$/ ) {
+                $ot = ' type="'.$ot.'"';
+            } else {
+                $ot = '';
             }
-            elsif ( $line =~ s/^((\t|   )+)(\S+?):\s/<dt> $3<\/dt><dd> /o ) {
-                # Definition list
-                $this->_addListItem( \@result, 'dl', 'dd', $1, '' );
-                $isList = 1;
-            }
-            elsif ( $line =~ s/^((\t|   )+)\*(\s|$)/<li> /o ) {
-                # Unnumbered list
-                $this->_addListItem( \@result, 'ul', 'li', $1, '' );
-                $isList = 1;
-            }
-            elsif ( $line =~ m/^((\t|   )+)([1AaIi]\.|\d+\.?) ?/ ) {
-                # Numbered list
-                my $ot = $3;
-                $ot =~ s/^(.).*/$1/;
-                if( $ot !~ /^\d$/ ) {
-                    $ot = ' type="'.$ot.'"';
-                } else {
-                    $ot = '';
-                }
-                $line =~ s/^((\t|   )+)([1AaIi]\.|\d+\.?) ?/<li$ot> /;
-                $this->_addListItem( \@result, 'ol', 'li', $1, $ot );
-                $isList = 1;
-            }
+            $line =~ s/^((\t|   )+)([1AaIi]\.|\d+\.?) ?/<li$ot> /;
+            $this->_addListItem( \@result, 'ol', 'li', $1, $ot );
+            $inList = 1;
+
         } else {
-            $isList = 0;
-        }
-
-        # Finish the list
-        if( ! $isList ) {
-            $this->_addListItem( \@result, '', '', '' );
-            $isList = 0;
+            # Other line
+            $this->_addListItem( \@result, '', '', '' ) if $inList;
+            $inList = 0;
         }
 
         push( @result, $line );
     }
 
-    if( $insideTABLE ) {
+    if( $inTable ) {
         push( @result, '</table>' );
+    } elsif ($inList) {
+        $this->_addListItem( \@result, '', '', '' );
+    } elsif ($inParagraph) {
+        push(@result, '</p>');
     }
-    $this->_addListItem( \@result, '', '', '' );
 
     $text = join("\n", @result );
+
+    # Trim any extra Ps from the top and bottom.
+    $text =~ s#^(\s*<p>\s*</p>)+##s;
+    $text =~ s#(<p>\s*</p>\s*)+$##s;
 
     $text =~ s(${STARTWW}==([^\s]+?|[^\s].*?[^\s])==$ENDWW)
       (CGI::b(CGI::code($1)))gem;
@@ -404,7 +423,7 @@ sub _getRenderedVersion {
 
     $this->_putBackBlocks( $text, 'pre' );
 
-    # replace verbatim with pre in the final output
+    # replace verbatim with pre in the final output, with encoded entities
     $this->_putBackBlocks( $text, 'verbatim', 'pre', \&_encodeEntities );
 
     $text =~ s/(<nop>)/$this->_liftOut($1, 'PROTECTED')/ge;
