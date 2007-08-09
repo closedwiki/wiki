@@ -395,9 +395,6 @@ lib/TWiki/Access.pm 0444
 lib/TWiki/AccessControlException.pm 0444
 lib/TWiki/Attach.pm 0444
 lib/TWiki/Attrs.pm 0444
-lib/TWiki/Client.pm 0444
-lib/TWiki/Client/ApacheLogin.pm 0444
-lib/TWiki/Client/TemplateLogin.pm 0444
 lib/TWiki/Compatibility.pm 0444
 lib/TWiki/Configure/CSS.pm 0444
 lib/TWiki/Configure/Checker.pm 0444
@@ -515,6 +512,9 @@ lib/TWiki/If.pm 0444
 lib/TWiki/InfixParser.pm 0444
 lib/TWiki/InfixParser/Error.pm 0444
 lib/TWiki/InfixParser/Node.pm 0444
+lib/TWiki/LoginManager.pm 0444
+lib/TWiki/LoginManager/ApacheLogin.pm 0444
+lib/TWiki/LoginManager/TemplateLogin.pm 0444
 lib/TWiki/Merge.pm 0444
 lib/TWiki/Meta.pm 0444
 lib/TWiki/Net.pm 0444
@@ -552,11 +552,12 @@ lib/TWiki/UI/Search.pm 0444
 lib/TWiki/UI/Statistics.pm 0444
 lib/TWiki/UI/Upload.pm 0444
 lib/TWiki/UI/View.pm 0444
-lib/TWiki/User.pm 0444
+lib/TWiki/UserMapping.pm 0444
 lib/TWiki/Users.pm 0444
 lib/TWiki/Users/ApacheHtpasswdUser.pm 0444
 lib/TWiki/Users/HtPasswdUser.pm 0444
 lib/TWiki/Users/Password.pm 0444
+lib/TWiki/Users/BaseUserMapping.pm 0444
 locale/TWiki.pot 0444
 locale/cs.po 0444
 locale/da.po 0444

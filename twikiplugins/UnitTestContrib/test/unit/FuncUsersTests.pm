@@ -53,11 +53,22 @@ sub TWikiUserMapping {
 
 # See the pod doc in Unit::TestCase for details of how to use this
 sub fixture_groups {
+
+    return (
+        [ 'NoLoginManager' ],
+        [ 'AllowLoginName'],
+        [ 'TWikiUserMapping' ] );
+
+=pod
+
     return (
         [ 'TemplateLoginManager', 'ApacheLoginManager', 'NoLoginManager' ],
         [ 'AllowLoginName', 'DontAllowLoginName'],
 #        [ 'TWikiUserMapping', 'BaseUserMapping' ] );
         [ 'TWikiUserMapping' ] );
+
+=cut
+
 }
 
 #delay the calling of set_up til after the cfg's are set by above closure
@@ -341,12 +352,9 @@ sub verify_isGroup {
     $this->assert(!TWiki::Func::isGroup('UserA'));
 }
 
-
 sub verify_getCanonicalUserID_extended {
 	my $this = shift;
-	
     my $guest_cUID = $this->{twiki}->{users}->getCanonicalUserID($TWiki::cfg{DefaultUserLogin});
-    $this->assert_str_equals('BaseUserMapping_666', TWiki::Func::getCanonicalUserID());
 
     $this->assert_str_equals($guest_cUID, TWiki::Func::getCanonicalUserID());
 
