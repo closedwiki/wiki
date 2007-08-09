@@ -22,26 +22,8 @@
 This plugin is responsible for translating TML to HTML before an edit starts
 and translating the resultant HTML back into TML.
 
-The flow of control is as follows:
-   1 User hits "edit"
-   2 if the skin is WYSIWYGPLUGIN_WYSIWYGSKIN, the beforeEditHandler
-      filters the edit
-   3 The 'edit' template is instantiated with all the js and css
-      * JS, WYSIWYG and plain text formats are available for embedding
-        the content into the template, if that's what the editor requires.
-   4 editor JS starts up and optionally invokes view URL with the
-     'wysiwyg_edit=1' parameter to obtain the clean document (if it wasn't
-     provided in the template)
-      * The beforeCommonTagsHandler is implemented by the plugin in this
-        mode. This handler formats the text and then stores it away so the rest
-        of twiki rendering can't do anything to it. In the postRenderingHandler
-        it drops the stored text back into the template.
-   5 User edits
-   6 editor saves by posting to 'save' with the 'wysiwyg_edit=1' parameter.
-     The beforeSaveHandler sees this and converts the HTML back to TML.
-
 Note: In the case of a new topic, you might expect to see the "create topic"
-screen in the editor when it goesback to twiki for the topic content. This
+screen in the editor when it goes back to twiki for the topic content. This
 doesn't happen because the earliest possible handler is called on the topic
 content and not the template. The template is effectively ignored and a blank
 document is sent to the editor.
@@ -85,6 +67,9 @@ sub initPlugin {
     TWiki::Func::registerTagHandler('OTOPIC',\&_OTOPICTAG);
     TWiki::Func::registerTagHandler('WYSIWYG_TEXT',\&_WYSIWYG_TEXT);
     TWiki::Func::registerTagHandler('JAVASCRIPT_TEXT',\&_JAVASCRIPT_TEXT);
+
+    TWiki::Func::registerRESTHandler('tml2html', \&_restTML2HTML);
+    TWiki::Func::registerRESTHandler('html2tml', \&_restHTML2TML);
 
     # Plugin correctly initialized
     return 1;
@@ -527,4 +512,37 @@ sub TranslateTML2HTML {
        );
 }
 
+# Rest handler for use from Javascript
+sub _restTML2HTML {
+    my ($session) = @_;
+    my $tml = TWiki::Func::getCgiQuery()->param('text');
+    my $html = TranslateTML2HTML(
+        $tml, $session->{webName}, $session->{topicName} );
+    print CGI::header('text/plain');
+    print $html;
+}
+
+# Rest handler for use from Javascript
+sub _restHTML2TML {
+    my ($session) = @_;
+    unless( $html2tml ) {
+        require TWiki::Plugins::WysiwygPlugin::HTML2TML;
+
+        $html2tml = new TWiki::Plugins::WysiwygPlugin::HTML2TML();
+    }
+    my $html = TWiki::Func::getCgiQuery()->param('text');
+    my $tml = $html2tml->convert(
+        $html,
+        {
+            web => $session->{webName},
+            topic => $session->{topicName},
+            getViewUrl => \&getViewUrl,
+            expandVarsInURL => \&expandVarsInURL,
+            very_clean => 1,
+        });
+    print CGI::header('text/plain');
+    print $tml;
+}
+
 1;
+

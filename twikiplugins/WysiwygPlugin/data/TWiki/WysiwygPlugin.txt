@@ -38,17 +38,20 @@ There is also the advantage that the translator can be used to import HTML from 
 
 Both translators can be used directly from Perl scripts, for example to build your own stand-alone translators.
 
-A stand-alone convertor script for HTML to TWiki is included in the installation. It can be found in the top-level =tools= directory and is called =html2tml.pl=.
+Stand-alone convertor scripts for HTML to TWiki and TWiki to HTML are included in the installation. They can be found in the top-level =tools= directory and is called =html2tml.pl=.
 
----+++ Integrating a Wysiwyg Editor
-The plugin can be used to generate HTML for an editor in two ways; first, by generating the HTML for the content-to-be-edited directly in the edit template, and second, through a URL that can be used to fetch the content-to-be-edited from the server.
+---+++ Integrating a HTML Editor
+The plugin can be used to integrate an HTML editor in a number of different ways.
+   1 The HTML for the content-to-be-edited can be generated directly in the edit template.
+   1 A URL can be used to fetch the content-to-be-edited from the server, for use in an IFRAME.
+   1 REST handlers can be called from Javacript to convert content.
 
----++++ Getting content in the edit template
+---++++ Generating content directly in the edit template
 This is the scenario used by the standard TWiki text editor, except that the text is pre-converted to HTML before inclusion in the template.
 
 The flow of control is as follows:
    1 User hits "edit".
-   1 The =beforeEditHandler= filters the edit, blocking any attempt to edit restricted content
+   1 The =beforeEditHandler= filters the edit
    1 The =edit= template containing the JS editor is instantiated. The following variables are available for expansion in the template:
       * =%<nop>WYSIWYG_TEXT%= expands to the HTML of the content-to-be-edited. This is suitable for use in a =textarea=.
       * =%<nop>JAVASCRIPT_TEXT%= expands to the HTML of the content-to-be-edited in a javascript constant.
@@ -56,7 +59,7 @@ The flow of control is as follows:
 =WYSIWYGPLUGIN_WYSIWYGSKIN= *must* be set for this to work.
 
 ---++++ Fetching content from a URL
-In this scenario, the edit template is generated *without* the content-to-be-edited. The content is retrieved from the server using a URL e.g. from an =IFRAME= or using a =XmlHttpRequest=.
+In this scenario, the edit template is generated *without* the content-to-be-edited. The content is retrieved from the server using a URL e.g. from an =IFRAME=.
 
 The flow of control is as follows:
    1 User hits "edit".
@@ -85,6 +88,19 @@ Attachment uploads can be handled by URL requests from the editor to the TWiki
      302 redirect at the end of the upload can simply be ignored.
    * You can pass =noredirect= to the =upload= script to suppress the redirect. In this case
      you will get a =text/plain= response of =OK= followed by a message if everything went well, or an error message if it did not.
+
+---+++ REST handlers
+If you are confident in Javascript you can use REST handlers with =XmlHttpRequest= to convert content from TML to HTML and back again.
+
+The plugin defines the following REST handlers:
+
+=.../rest/WysiwygPlugin/html2tml?topic=Web.Topic;text=htmltexttotranslate=
+
+Converts the HTML text to TML. =topic= *must* be specified.
+
+=.../rest/WysiwygPlugin/tml2html?topic=Web.Topic;text=tmltexttotranslate=
+
+Converts the TML text to HTML. =topic= *must* be specified. The response is a =text/plain= page of converted content.
 
 ---++ Plugin Installation Instructions
 %$INSTALL_INSTRUCTIONS%
