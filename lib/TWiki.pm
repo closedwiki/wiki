@@ -3274,16 +3274,23 @@ sub REVINFO {
 
 sub ENCODE {
     my( $this, $params ) = @_;
-    my $type = $params->{type} || '';
+    my $type = $params->{type} || 'url';
     my $text = $params->{_DEFAULT} || '';
+    return _encode($type, $text);
+}
+
+sub _encode {
+    my ($type, $text) = @_;
+
     if ( $type =~ /^entit(y|ies)$/i ) {
         return entityEncode( $text );
     } elsif ( $type =~ /^html$/i ) {
         return entityEncode( $text, "\n\r" );
     } elsif ( $type =~ /^quotes?$/i ) {
-        $text =~ s/\"/\\"/go;    # escape quotes with backslash (Bugs:Item3383 fix)
+        # escape quotes with backslash (Bugs:Item3383 fix)
+        $text =~ s/\"/\\"/go;
         return $text;
-    } else {
+    } elsif ($type =~ /^url$/i) {
         $text =~ s/\r*\n\r*/<br \/>/; # Legacy.
         return urlEncode( $text );
     }
@@ -3405,13 +3412,18 @@ sub QUERYSTRING {
 sub QUERYPARAMS {
     my ( $this, $params ) = @_;
     return '' unless $this->{cgiQuery};
-    my $format = defined $params->{format} ? $params->{format} : '$name=$value';
+    my $format = defined $params->{format} ? $params->{format} :
+      '$name=$value';
     my $separator = defined $params->{separator} ? $params->{separator} : "\n";
+    my $encoding = $params->{encoding} || '';
 
     my @list;
     foreach my $name ( $this->{cgiQuery}->param() ) {
         # Issues multi-valued parameters as separate hiddens
         my $value = $this->{cgiQuery}->param( $name );
+        if ($encoding) {
+            $value = _encode($encoding, $value);
+        }
         my $entry = $format;
         $entry =~ s/\$name/$name/g;
         $entry =~ s/\$value/$value/;

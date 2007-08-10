@@ -7,6 +7,7 @@
    * Parameters:
       * =format="..."= format string for each entry, default =$name=$value=
       * =separator="..."= separator string, default =separator="$n"= (newline)
+      * =encoding="..."= the encoding to apply to parameter values; see [[VarENCODE][ENCODE]] for a description of the available encodings. If this parameter is not given, no encoding is performed.
    * The following escape sequences are expanded in the format string:
 | *Sequence:* | *Expands To:* |
 | =$name= | Name of the parameter |
@@ -14,5 +15,5 @@
 %INCLUDE{FormatTokens}%
 
    * Example:
-      * =%<nop>QUERYPARAMS{format="&lt;input type='hidden' name='$name' value='$percntENCODE{$quot()$value$quot type=$quot()html$quot}$percnt' />"}%=
+      * =%<nop>QUERYPARAMS{format="&lt;input type='hidden' name='$name' value='$value' encoding="entity" />"}%=
    * See also [[VarQUERYSTRING][QUERYSTRING]], [[#VarURLPARAM][URLPARAM]]

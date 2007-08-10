@@ -32,7 +32,7 @@
 %TMPL:DEF{"formstart"}%<form action='%SCRIPTURLPATH{"login"}%/%WEB%/%TOPIC%' name='loginform' method='post'>%TMPL:END%
 
 %TMPL:DEF{"formend"}%<literal>
-%QUERYPARAMS{format="<input type='hidden' name='$name' value='$percntENCODE{$quot()$value$quot type=$quot()html$quot}$percnt' />"}%
+%QUERYPARAMS{encoding="entity" format="<input type='hidden' name='$name' value='$value' />"}%
 </literal><input type="hidden" name="origurl" value="%ORIGURL%" /></form>%TMPL:END%
 
 %TMPL:DEF{"error"}%%IF{"$ERROR" then='<p class="twikiAlert"><strong>%MAKETEXT{"Error: [_1]" args="%ERROR%"}%</strong></p>'}%%TMPL:END%
