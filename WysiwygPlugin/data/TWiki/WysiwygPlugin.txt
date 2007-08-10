@@ -157,6 +157,7 @@ which is correct by construction, but does not render correctly in TWiki. This p
 |  License | [[http://www.gnu.org/licenses/gpl.html][GPL (Gnu General Public License)]] |
 |  Plugin Version: | %$VERSION% |
 |  Change History: | |
+|  |  |
 |  13701 | Made use of HTML::Entities optional; fixed encoding problem with nbsp on IE; Bugs:Item1742 support for simultaneous edits (post edit merge) |
 |  12422 | Added JAVASCRIPT_TEXT to support editors that require topic text in a JS var |
 |  12161 | Added support for embedded editable HTML in the edit template |

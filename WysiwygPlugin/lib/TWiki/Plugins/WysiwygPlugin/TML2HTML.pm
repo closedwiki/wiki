@@ -631,25 +631,24 @@ sub _addListItem {
 sub _emitTR {
     my $row = shift;
 
-    $row =~ s/\t/   /g;  # change tabs to space
-    $row =~ s/^(\s*)\|//;
+    $row =~ s/\t/   /g;   # change tabs to space
+    $row =~ s/^(\s*)\|//; # Remove leading junk
     my $pre = $1;
 
     my @tr;
-
     while( $row =~ s/^(.*?)\|// ) {
         my $cell = $1;
-
-        if( $cell eq '' ) {
-            $cell = '%SPAN%';
-        }
-
         my $attr = {};
 
+        # make sure there's something there in empty cells. Otherwise
+        # the editor may compress it to (visual) nothing.
+        $cell =~ s/^\s+$/&nbsp;/g;
+
         my( $left, $right ) = ( 0, 0 );
-        if( $cell =~ /^(\s*).*?(\s*)$/ ) {
+        if( $cell =~ /^(\s*)(.*?)(\s*)$/ ) {
             $left = length( $1 );
-            $right = length( $2 );
+            $right = length( $3 );
+            $cell = $2;
         }
 
         if( $left > $right ) {
@@ -663,16 +662,27 @@ sub _emitTR {
             $attr->{style} = 'text-align: center';
         }
 
-        # make sure there's something there in empty cells. Otherwise
-        # the editor will compress it to (visual) nothing.
-        $cell =~ s/^\s*$/&nbsp;/g;
+        my $fn = "CGI::td";
+        if ($cell =~ s/^\*(.+)\*$/$1/) {
+            $fn = "CGI::th";
+        }
 
-        # Removed TH to avoid problems with handling table headers. TWiki
-        # allows TH anywhere, but editors assume top row only, mostly.
-        # See Item1185
-        push( @tr, CGI::td( $attr, $cell ));
+        push(@tr, { fn => $fn, attr => $attr, text => $cell });
     }
-    return $pre.CGI::Tr( join( '', @tr));
+    # Work out colspans
+    my $colspan = 0;
+    for (my $i = $#tr; $i >= 0; $i--) {
+        if ($i && length($tr[$i]->{text}) == 0) {
+            $colspan++;
+        } elsif ($colspan) {
+            $tr[$i]->{attr}->{colspan} = $colspan + 1;
+            $colspan = 0;
+        }
+    }
+    no strict 'refs';
+    return $pre.CGI::Tr(join('', map { &{$_->{fn}}($_->{attr}, $_->{text}) }
+                               @tr));
+    use strict 'refs';
 }
 
 1;

@@ -12,7 +12,7 @@
 .WYSIWYG_PROTECTED { 
   font-family: "Courier New", courier, monaco, monospace;
   color:#7A4707; /* from Pattern Skin, color for pre text */
-  white-space: pre nowrap;
+  white-space: pre;
 }
 /* Verbatim sections are painted with this */
 .TMLverbatim { 
