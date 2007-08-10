@@ -841,13 +841,22 @@ HERE
               html => "${linkon}[[FAQ.NetworkInternet#Pomona_Network][Test Link]]${linkoff}",
           },
           {
-              exec => $HTML2TML,
-              name => 'tableInBold',
-              html => '<b>abcd<table><tr><td>efg</td><td> </td></tr><tr><td> </td><td> </td></tr></table></b>',
-              tml  => '<b>abcd
-| efg ||
-|||
-</b>',
+              exec => $TML2HTML | $ROUNDTRIP,
+              name => 'tableWithColSpans',
+              html => '<p>abcd
+</p>
+<table cellspacing="1" cellpadding="0" border="1">
+<tr><td colspan="2">efg</td><td></td><td>&nbsp;</td></tr>
+<tr><td colspan="3"></td><td></td><td></td></tr></table>
+hijk',
+              tml  => 'abcd
+| efg || |
+||||
+hijk',
+              finaltml  => 'abcd
+| efg || |
+| |||
+hijk',
           },
           {
               exec => $ROUNDTRIP,

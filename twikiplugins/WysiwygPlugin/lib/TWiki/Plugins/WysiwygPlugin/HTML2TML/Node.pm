@@ -456,6 +456,16 @@ sub _isConvertableTable {
     return 1;
 }
 
+# Tidy up whitespace in a table cell. We use [\000-\040] to catch
+# all the WC:: special characters, and also strip trailing BRs, as
+# added by some table editors.
+sub _TDtrim {
+    my $td = shift;
+    $td =~ s/^[\000-\040]+//;
+    $td =~ s/(<br \/>|<br>|[\000-\040])+$//;
+    return $td;
+}
+
 # probe down into a list item to determine if the
 # containing table can be converted to TML.
 sub _isConvertableTableRow {
@@ -463,15 +473,15 @@ sub _isConvertableTableRow {
     my( $flags, $text );
 
     my @row;
+    my $ignoreCols = 0;
     foreach my $kid ( @{$this->{children}} ) {
-        if( lc( $kid->{tag} ) eq 'th' ) {
+        if (lc($kid->{tag}) eq 'th') {
             ( $flags, $text ) = $kid->_flatten( $options );
-            $text = _trim( $text );
-            $text = ' *'._trim( $text ).'* ' if $text;
-        } elsif(lc( $kid->{tag} ) eq 'td' ) {
+            $text = _TDtrim( $text );
+            $text = "*$text*" if length($text);
+        } elsif (lc($kid->{tag}) eq 'td' ) {
             ( $flags, $text ) = $kid->_flatten( $options );
-            $text = _trim( $text );
-            $text = ' '.$text.' ' if $text;
+            $text = _TDtrim( $text );
         } elsif( !$kid->{tag} ) {
             next;
         } else {
@@ -479,28 +489,40 @@ sub _isConvertableTableRow {
             return 0;
         }
         return 0 if( $flags & $WC::BLOCK_TML );
-        $text = '' if $text =~ /%SPAN%/;
-        # tidy up whitespace, including \ns. We user [\0- ] to catch
-        # all the WC:: special characters as well.
-        $text =~ s/^[\0- ]*(.+?)[\0- ]*$/ $1 /;
+
         if( $kid->{attrs} ) {
             my $a = _deduceAlignment( $kid );
             if( $text && $a eq 'right' ) {
-                $text = ' '.$text;
+                $text = $WC::NBSP.$text;
             } elsif( $text && $a eq 'center' ) {
-                $text = ' '.$text.' ';
+                $text = $WC::NBSP.$text.$WC::NBSP;
             } elsif( $text && $a eq 'left' ) {
-                $text .= ' ';
+                $text .= $WC::NBSP;
             }
             if( $kid->{attrs}->{rowspan} && $kid->{attrs}->{rowspan} > 1 ) {
                 return 0;
             }
         }
+        $text =~ s/&nbsp;/$WC::NBSP/g;
+        if (--$ignoreCols > 0) {
+            # colspanned
+            $text = '';
+        } elsif ($text =~ /^$WC::NBSP*$/) {
+            $text = $WC::NBSP;
+        } else {
+            $text = $WC::NBSP.$text.$WC::NBSP;
+        }
+        if( $kid->{attrs} && $kid->{attrs}->{colspan} &&
+              $kid->{attrs}->{colspan} > 1 ) {
+            $ignoreCols = $kid->{attrs}->{colspan};
+        }
+        # Pad to allow wikiwords to work
         push( @row, $text );
     }
     return \@row;
 }
 
+# Work out the alignment of a table cell from the style and/or class
 sub _deduceAlignment {
     my $td = shift;
 
