@@ -6,7 +6,7 @@
    * Persons/group who can change the list:
       * Set ALLOWTOPICCHANGE = TWikiAdminGroup
 
-__Related topics:__ %WIKIUSERSTOPIC%, TWikiGroups, %TWIKIWEB%.TWikiAccessControl
+__Related topics:__ %WIKIUSERSTOPIC%, TWikiGroups, %SYSTEMWEB%.TWikiAccessControl
 
 __%X% NOTE:__ You can login as the built-in Admin user using the password set in configure.
    * Unless your TWiki is configured to use !TemplateLogin, you first need to be logged in as a normal registered user
@@ -18,15 +18,15 @@ __%X% NOTE:__ If you lock yourself out of <nop>TWikiAdminGroup during setup acti
 
 <table bgcolor="yellow"><tr><td>
 __Setup Note to Administrator:__
-   a. To add yourself as the member of the admin group you must be [[%TWIKIWEB%.TWikiRegistration][registered]] as a normal user
+   a. To add yourself as the member of the admin group you must be [[%SYSTEMWEB%.TWikiRegistration][registered]] as a normal user
    a. Next you must %LOGIN% as this normal user
-   a. Authenticate as the internal TWiki administrator using the [[%SCRIPTURL{login}%?sudo=sudo][internal admin login]] (use the username already suggested and use the password set in configure).
+   a. Authenticate as the internal TWiki administrator using the [[%SCRIPTURL{login}%/%WEB%/%TOPIC%?sudo=sudo][internal admin login]] (use the username already suggested and use the password set in configure).
    a. You can now edit this topic
    a. Insert wanted users in the TWiki Administrator Group by listing them in the GROUP setting %BR%
       (example =* Set GROUP = !JohnSmith, !JamesBond=)
    a. Save this topic
-   a. Verify that new members show up properly in the group listing at %MAINWEB%.TWikiGroups
+   a. Verify that new members show up properly in the group listing at %USERSWEB%.TWikiGroups
    a. Make sure always to keep this topic write protected by keeping the already defined ALLOWTOPICCHANGE setting
-   a. The ALLOWTOPICHANGE and ALLOWTOPICRENAME settings in [[%TWIKIWEB%.TWikiPreferences]] and [[%MAINWEB%.TWikiPreferences]] have already been set to this group (<nop>TWikiAdminGroup), 
+   a. The ALLOWTOPICHANGE and ALLOWTOPICRENAME settings in [[%SYSTEMWEB%.TWikiPreferences]] and [[%USERSWEB%.TWikiPreferences]] have already been set to this group (<nop>TWikiAdminGroup), 
       restricting edit of site-wide preferences to the TWiki Administrator Group
 </td></tr></table>
