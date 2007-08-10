@@ -28,7 +28,7 @@
 %TMPL:P{context="can_remember_login" then="rememberbox"}%
 </td></tr></table>
 <literal>
-%QUERYPARAMS{format="<input type='hidden' name='$name' value='$percntENCODE{$quot()$value$quot type=$quot()html$quot}$percnt' />"}%
+%QUERYPARAMS{encoding="entity" format="<input type='hidden' name='$name' value='$value' />"}%
 </literal>
 <input type="hidden" name="origurl" value="%ORIGURL%" />
 <input type='submit' value='Logon' />
