@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1163024618" format="1.1" reprev="1.4" version="1.4"}%
+%META:TOPICINFO{author="PeterThoeny" date="1186881349" format="1.1" version="$Rev$"}%
 ---+!! Interwiki Plugin
 
 The <nop>%TOPIC% links ==ExternalSite:Page== text to external sites based on aliases defined in the %TWIKIWEB%.InterWikis topic. This plugin is inspired by <nop>UseMod Wiki's inter-wiki links, http://www.usemod.com/cgi-bin/wiki.pl?InterWiki.
@@ -51,10 +51,11 @@ a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, for example, =
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.AndreaSterbini, TWiki:Main.PeterThoeny |
-|  Copyright: | &copy; 2006, TWiki:Main.AndreaSterbini, [[http://www.structuredwikis.com/][Peter Thoeny]]|
+|  Copyright: | &copy; 2001-2007, TWiki:Main.AndreaSterbini, [[http://www.twiki.net/][Peter Thoeny]]|
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 11935 |
+|  Plugin Version: | 14538 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  11 Aug 2007: | 14538 - Fixed broken ISBN link (TWiki:Main.PeterThoeny) |
 |  08 Nov 2006: | 11935 - Added css =class="interwikiLink"= (TWiki:Main.PeterThoeny) |
 |  07 Nov 2006: | 11924 - Added INTERLINKFORMAT; removed redundant SUPPRESSTOOLTIP; allow @ signs in page part of interwiki link; support single digit page part (TWiki:Main.PeterThoeny) |
 |  26 Feb 2005: | 1.008 TWiki:Main.CrawfordCurrie cleaned up code and made Dakar-ready |
@@ -80,4 +81,4 @@ a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, for example, =
 
 __Related Topics:__ %TWIKIWEB%.TWikiPlugins, %TWIKIWEB%.DeveloperDocumentationCategory, %TWIKIWEB%.AdminDocumentationCategory, %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.InterWikis
 
--- TWiki:Main.PeterThoeny - 08 Nov 2006
+-- TWiki:Main.PeterThoeny - 11 Aug 2007
