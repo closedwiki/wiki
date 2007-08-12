@@ -28,11 +28,10 @@ See also TWiki::Plugins::WysiwygPlugin::TML2HTML::Node
 =cut
 
 package TWiki::Plugins::WysiwygPlugin::HTML2TML::Leaf;
+use TWiki::Plugins::WysiwygPlugin::HTML2TML::WC;
+use base 'WC';
 
 use strict;
-
-use TWiki::Plugins::WysiwygPlugin::HTML2TML::WC;
-@TWiki::Plugins::WysiwygPlugin::HTML2TML::Leaf::ISA = qw( WC );
 
 sub new {
     my( $class, $text ) = @_;
@@ -48,6 +47,7 @@ sub generate {
     my( $this, $options ) = @_;
     my $t = $this->{text};
     if (!($options & $WC::KEEP_WS)) {
+        $t =~ s/\t/   /g;
         $t =~ s/\n/$WC::CHECKw/g;
         $t =~ s/  +/ /g;
     }
@@ -63,6 +63,10 @@ sub generate {
 sub stringify {
     my $this = shift;
     return $this->{text};
+}
+
+sub isInline {
+    return 1;
 }
 
 1;

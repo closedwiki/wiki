@@ -105,8 +105,6 @@ sub convert {
 
     # get rid of nasties
     $text =~ s/\r//g;
-    $text =~ s/\t/   /g;
-    # We have to keep newlines, because they matter within <pre>
     $this->_resetStack();
     $this->parse( $text );
     $this->eof();
