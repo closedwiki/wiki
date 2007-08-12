@@ -25,7 +25,9 @@ $SHORTDESCRIPTION = 'Integration of TinyMCE with WysiwygPlugin';
 use TWiki::Func;
 
 sub initPlugin {
-    return 1;
+    my $disabled = TWiki::Func::getPreferencesValue(
+        'TINYMCEPLUGIN_DISABLE');
+    return $disabled ? 0 : 1;
 }
 
 sub beforeEditHandler {
@@ -54,22 +56,26 @@ tinyMCE.init({ $init });
 </script>
 SCRIPT
 
-    $_[0] = TWiki::Plugins::WysiwygPlugin::TranslateTML2HTML($_[0]);
+    $_[0] = '<!--WYSIWYG-->'.
+      TWiki::Plugins::WysiwygPlugin::TranslateTML2HTML($_[0]);
 }
 
 sub afterEditHandler {
     #my( $text, $topic, $web ) = @_;
     my $query = TWiki::Func::getCgiQuery();
     return unless $query;
+    # Check for our flag
+    return unless $_[0] =~ s/^<!--WYSIWYG-->//s;
 
     if ($TWiki::cfg{Plugins}{WysiwygPlugin}{Enabled}) {
         # if the wysiwyg plugin is enabled, we don't want to do anything
         # if wysiwyg_edit is enabled, as the WysiwygPlugin afterEditHandler
         # will deal with it.
-        return if $query->param( 'wysiwyg_edit' );
+        $query->param( 'wysiwyg_edit' );
         # otherwise wysiwygplugin isn't going to do anything, so we can
-        # safely post-process.
+        # post-process.
     }
+
     require TWiki::Plugins::WysiwygPlugin;
     $_[0] = TWiki::Plugins::WysiwygPlugin::postProcess( @_ );
 }
