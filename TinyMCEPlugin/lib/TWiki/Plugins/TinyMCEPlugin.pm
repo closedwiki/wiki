@@ -24,16 +24,29 @@ $SHORTDESCRIPTION = 'Integration of TinyMCE with WysiwygPlugin';
 
 use TWiki::Func;
 
+my $secret_id = 'TinyMCE WYSIWYG content - do not remove this comment';
+
 sub initPlugin {
+    return _isAvailable();
+}
+
+sub _isAvailable {
     my $disabled = TWiki::Func::getPreferencesValue(
         'TINYMCEPLUGIN_DISABLE');
+
+    # Check the client browser to see if it is supported by TinyMCE
+    my $query = TWiki::Func::getCgiQuery();
+    if ($query->user_agent() =~ /(Konqueror|Opera)/i) {
+        $disabled = 1;
+    }
+
     return $disabled ? 0 : 1;
 }
 
 sub beforeEditHandler {
     #my ($text, $topic, $web) = @_;
 
-    my $query = TWiki::Func::getCgiQuery();
+    return unless _isAvailable();
 
     my $init = TWiki::Func::getPreferencesValue('TINYMCEPLUGIN_INIT')
       || <<'HERE';
@@ -56,16 +69,19 @@ tinyMCE.init({ $init });
 </script>
 SCRIPT
 
-    $_[0] = '<!--WYSIWYG-->'.
+    $_[0] = '<!--'.$secret_id.'-->'.
       TWiki::Plugins::WysiwygPlugin::TranslateTML2HTML($_[0]);
 }
 
 sub afterEditHandler {
     #my( $text, $topic, $web ) = @_;
+
+    return unless _isAvailable();
+
     my $query = TWiki::Func::getCgiQuery();
     return unless $query;
     # Check for our flag
-    return unless $_[0] =~ s/^<!--WYSIWYG-->//s;
+    return unless $_[0] =~ s/^<!--$secret_id-->//so;
 
     if ($TWiki::cfg{Plugins}{WysiwygPlugin}{Enabled}) {
         # if the wysiwyg plugin is enabled, we don't want to do anything
