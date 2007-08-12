@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1163743824" format="1.0" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1186906075" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiSite"}%
 ---+!! References on Wiki and Collaboration
 
@@ -7,6 +7,8 @@ Some useful articles and books around collaboration and the Wiki technology in p
 %TOC%
 
 ---++ Wiki Technology and TWiki
+
+   * Book: Wikis for Dummies; by Dan Woods and Peter Thoeny; Whiley; ISBN:9780470043998
 
    * Book: The Wiki Way, Quick Collaboration on the Web; by Bo Leuf and Ward Cunningham; Addison-Wesley Pub Co; ISBN:020171499X
 
@@ -53,5 +55,4 @@ Some useful articles and books around collaboration and the Wiki technology in p
    * Book: Extreme Programming in Practice; by James W. Newkirk and Robert C. Martin; Addison-Wesley Pub Co; ISBN:0201709376
 
    * Book: Extreme Programming Explored; by William C. Wake and Bill Wake; Addison-Wesley Pub Co; ISBN:0201733978
-
 
