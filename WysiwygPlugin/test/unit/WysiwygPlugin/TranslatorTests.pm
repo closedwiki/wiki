@@ -260,7 +260,7 @@ HERE
               name => 'mixedList',
               html => <<"HERE",
 <ol><li>Things</li><li>Stuff
-<ul><li>Banana Stuff</li><li>Other</li><li></li></ul></li><li>Something</li><li>kello$protecton&lt;br&nbsp;/&gt;${protectoff}kitty</li></ol>
+<ul><li>Banana Stuff</li><li>Other</li><li></li></ul></li><li>Something</li><li>kello$protecton&lt;br&nbsp;/&gt;${protectoff}hitty</li></ol>
 HERE
               tml => <<'HERE',
    1 Things
@@ -269,7 +269,7 @@ HERE
       * Other
       * 
    1 Something
-   1 kello<br />kitty
+   1 kello<br />hitty
 HERE
           },
           {
@@ -388,7 +388,7 @@ RedHat & SuSE
 </noautolink>
 HERE
               finaltml => <<'HERE',
-<noautolink> RedHat & SuSE </noautolink>
+<noautolink>RedHat & SuSE</noautolink>
 HERE
           },
           {
@@ -684,15 +684,16 @@ Outside',
  </pre> Outside',
           },
           {
-              exec => $HTML2TML | $ROUNDTRIP,
+              exec => $HTML2TML,
               name => 'classifiedPre',
               html => 'Outside
- <span class="twikiAlert">
+ <pre class="twikiAlert">
  Inside
- </span>
+ </pre>
  Outside',
-              tml => 'Outside <span class="twikiAlert"> Inside </span> Outside',
-              finaltml => 'Outside <span class="twikiAlert"> Inside </span> Outside',
+              tml => 'Outside <pre class="twikiAlert">
+ Inside
+ </pre> Outside',
           },
           {
               exec => $ROUNDTRIP,
@@ -722,7 +723,7 @@ Inside
  Inside
  </noautolink>
  Outside',
-              finaltml => 'Outside <noautolink> Inside </noautolink> Outside',
+              finaltml => 'Outside <noautolink>Inside</noautolink> Outside',
           },
           {
               exec => $ROUNDTRIP,
@@ -738,7 +739,7 @@ Inside
  Inside
  </noautolink>
  Outside',
-              finaltml => 'Outside <noautolink class="twikiAlert"> Inside </noautolink> Outside',
+              finaltml => 'Outside <noautolink class="twikiAlert">Inside</noautolink> Outside',
           },
           {
               exec => $ROUNDTRIP,
@@ -755,7 +756,7 @@ Inside
     </noautolink>
  Outside
  ',
-              finaltml => 'Outside <noautolink> Inside </noautolink> Outside',
+              finaltml => 'Outside <noautolink>Inside</noautolink> Outside',
           },
           {
               exec => $ROUNDTRIP,
@@ -785,7 +786,7 @@ Inside
               exec => $HTML2TML,
               name => 'htmlAndBody',
               html => '<html> good <body>good </body></html>',
-              tml => ' good good',
+              tml => 'good good',
           },
           {
               exec => $HTML2TML,
@@ -821,11 +822,11 @@ Inside
 1 <span class="arfle"></span>
 2 <span lang="jp"></span>
 3 <span></span>
-4 <span lang="fr">francais</span>
-5 <span class="arfle" lang="fr">francais</span>
+4 <span style="chanel">francais</span>
+5 <span class="fr">francais</span>
 HERE
               tml => <<HERE,
-1 <span class="arfle" /> 2 3 4 francais 5 <span class="arfle">francais</span>
+1 2 3 4 <span style="chanel">francais</span> 5 francais
 HERE
           },
           {
@@ -877,6 +878,16 @@ HERE
               html => '<ul>
 <li> Set FLIBBLE =<span class="WYSIWYG_PROTECTED">&nbsp;&#60;break&#62;&nbsp;&#60;cake/&#62;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&#60;/break&#62;</span></li><li><span class="WYSIWYG_PROTECTED">%FLIBBLE%</span><ul><li>Set FLEEGLE =<span class="WYSIWYG_PROTECTED">&nbsp;easy&nbsp;gum</span></li></ul></li></ul>',
 },
+          {
+              exec => $HTML2TML,
+              name => 'tinyMCESetCommand',
+              tml => <<HERE,
+Before
+   * Set FLIBBLE = phlegm
+After
+HERE
+              html => 'Before<p class="WYSIWYG_PROTECTED">&nbsp;&nbsp; * Set FLIBBLE = phlegm</p>After',
+          },
           {
               exec => $ROUNDTRIP,
               name => 'twikiWebSnarf',
@@ -1015,8 +1026,8 @@ HERE
 <ul><li> Clean up toolbar </li> </ul><ul><li>  Test tools </li> </ul><p> Garbles Bargles         Smargles</p>      <p /><p>Flame grilled </p><p>-- <span class="WYSIWYG_LINK">Main.JohnSilver</span> - 05 Aug 2007</p><p>Extra spaces???</p><p><span class="WYSIWYG_PROTECTED">%COMMENT%</span></p>
 HTML
               tml => <<TML,
-   * Clean up toolbar
-   * Test tools
+   * Clean up toolbar 
+   * Test tools 
 Garbles Bargles Smargles
 
 
@@ -1087,6 +1098,30 @@ Parafour',
               tml => '   * list
 Paraone',
               html => '<ul><li>list</li></ul>Paraone',
+          },
+          {
+              name => 'brInText',
+              exec => $HTML2TML,
+              tml => 'pilf<br />flip',
+              html => 'pilf<br>flip',
+          },
+          {
+              name => 'brInSource',
+              exec => $TML2HTML | $ROUNDTRIP,
+              tml => 'pilf<br />flip',
+              html => '<p>
+pilf<span class="WYSIWYG_PROTECTED">&#60;br&nbsp;/&#62;</span>flip
+</p>',
+          },
+          {
+              exec => $ROUNDTRIP,
+              name => 'wtf',
+              html => <<"HERE",
+<ol><li>w$protecton&lt;br&nbsp;/&gt;${protectoff}g</li></ol>
+HERE
+              tml => <<'HERE',
+   1 w<br />g
+HERE
           },
          ];
 

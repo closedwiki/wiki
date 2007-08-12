@@ -38,11 +38,13 @@ package WC;
 | $NOP_ALL | Flag that gets passed _down_ into generator functions. NOP all variables and WikiWords. |
 | $BLOCK_TML | Flag passed up from generator functions; set if expansion includes block TML |
 | $VERY_CLEAN | Flag passed to indicate that HTML must be aggressively cleaned (unrecognised or unuseful tags stripped out) |
-| $BR2NL | Flag set if BR tags are to be converted to newlines |
+| $BR2NL | Flag set to force BR tags to be converted to newlines. |
+| $KEEP_WS | Set to force the generator to keep all whitespace. Otherwise whitespace gets collapsed (as it is when HTML is rendered) |
 
 =cut
 
 use vars qw( $NO_TML $NO_BLOCK_TML $NOP_ALL $BLOCK_TML $BR2NL );
+use vars qw( $CHECKn $CHECKw $CHECKs $NBSP $NBBR $TAB $PON $POFF );
 
 $NO_HTML      = 1 << 0;
 $NO_TML       = 1 << 1;
@@ -51,40 +53,78 @@ $NOP_ALL      = 1 << 3;
 $VERY_CLEAN   = 1 << 4;
 $BR2NL        = 1 << 5;
 $KEEP_WS      = 1 << 6;
+$PROTECTED    = 1 << 7;
 
 $BLOCK_TML    = $NO_BLOCK_TML;
 
+my %cc = (
+    'NBSP'   => 14, # unbreakable space
+    'NBBR'   => 15, # para break required
+    'CHECKn' => 16, # require adjacent newline (\n or $NBBR)
+    'CHECKs' => 17, # require adjacent space character (' ' or $NBSP)
+    'CHECKw' => 18, # require adjacent whitespace (\s|$NBBR|$NBSP)
+    'CHECK1' => 19, # start of wiki-word
+    'CHECK2' => 20, # end of wiki-word
+    'TAB'    => 21, # list indent
+    'PON'    => 22, # protect on
+    'POFF'   => 23, # protect off
+);
+
+sub debugEncode {
+    my $string = shift;
+    while (my ($k, $v) = each %cc) {
+        my $c = chr($v);
+        $string =~ s/$c/\%$k/g;
+    }
+    return $string;
+}
+
 =pod
 
----++ Assertions
-The generator works by expanding to "decorated" text, where the decorators
-are non-printable characters. These characters act express format
-requirements - for example, the need to have a newline before some text,
-or the need for a space. Whitespace is collapsed down to the minimum that
-satisfies the format requirements.
+---++ Forced whitespace
+These single-character shortcuts are used to assert the presence of
+non-breaking whitespace.
 
-| $CHECKn | Marker that gets inserted in text in spaces where there must be an adjacent newline |
-| $CHECKs | Marker that gets inserted in text in spaces where there must be a adjacent whitespace |
-| $NBSP | Non-breaking space, never gets deleted |
-| $NBBR | Non-breaking linebreak; never gets deleted |
+| $NBSP | Non-breaking space |
+| $NBBR | Non-breaking linebreak |
 
 =cut
 
-use vars qw( $CHECKn $CHECKw $CHECKs $NBSP $NBBR $TAB );
-$CHECKn = "\001"; # require adjacent newline (\n or $NBBR)
-$CHECKs = "\002"; # require adjacent space character (' ' or $NBSP)
-$CHECKw = "\003"; # require adjacent whitespace (\s|$NBBR|$NBSP)
-$NBSP   = "\004"; # unbreakable space
-$NBBR   = "\005"; # para break required
-$CHECK1 = "\006"; # start of wiki-word
-$CHECK2 = "\007"; # end of wiki-word
-$TAB    = "\t";   # list indent
+$NBSP   = chr($cc{NBSP});
+$NBBR   = chr($cc{NBBR});
+
+=pod
+
+---++ Inline Assertions
+The generator works by expanding to "decorated" text, where the decorators
+are characters below ' '. These characters act to express format
+requirements - for example, the need to have a newline before some text,
+or the need for a space. The generator sticks this format requirements into
+the text stream, and they are then optimised down to the minimum in a post-
+process.
+
+| $CHECKn | there must be an adjacent newline (\n or $NBBR) |
+| $CHECKs | there must be an adjacent space (' ' or $NBSP) |
+| $CHECKw | There must be adjacent whitespace (\s or $NBBR or $NBSP) |
+| $CHECK1 | Marks the start of an inline wikiword. |
+| $CHECK2 | Marks the end of an inline wikiword. |
+| $TAB    | Shorthand for an indent level in a list |
+
+=cut
+
+$CHECKn = chr($cc{CHECKn});
+$CHECKs = chr($cc{CHECKs});
+$CHECKw = chr($cc{CHECKw});
+$CHECK1 = chr($cc{CHECK1});
+$CHECK2 = chr($cc{CHECK2});
+$TAB    = chr($cc{TAB});
+$PON    = chr($cc{PON});
+$POFF   = chr($cc{POFF});
 
 =pod
 
 ---++ REs
-REs for matching delimiters of wikiwords
-must be consistent with TML2HTML.pm (and Render.pm of course)
+REs for matching delimiters of wikiwords, must be consistent with TML2HTML.pm
 
 | $STARTWW | Zero-width match for the start of a wikiword |
 | $ENDWW | Zero-width match for the end of a wikiword |
@@ -98,104 +138,13 @@ $STARTWW = qr/^|(?<=[ \t\n\(\!])/om;
 $ENDWW = qr/$|(?=[ \t\n\,\.\;\:\!\?\)])/om;
 $PROTOCOL = qr/^(file|ftp|gopher|http|https|irc|news|nntp|telnet|mailto):/;
 
-# Table of HTML tags that says whether they should have a newline before
-# them when they are encountered in a preformatted (verbatim) block. This
-# supports very crude formatting during removal of HTML tags.
-use vars qw( %BREAK_BEFORE );
-
-%BREAK_BEFORE = (
-    A => 0,
-    ABBR => 0,
-    ACRONYM => 0,
-    ADDRESS => 0,
-    APPLET => 1,
-    AREA => 0,
-    B => 0,
-    BASE => 0,
-    BASEFONT => 0,
-    BDO => 0,
-    BIG => 0,
-    BLOCKQUOTE => 1,
-    BODY => 1,
-    BR => 1,
-    BUTTON => 0,
-    CAPTION => 0,
-    CENTER => 1,
-    CITE => 0,
-    CODE => 0,
-    COL => 0,
-    COLGROUP => 0,
-    DD => 0,
-    DEL => 0,
-    DFN => 0,
-    DIR => 1,
-    DIV => 1,
-    DL => 1,
-    DT => 1,
-    EM => 0,
-    FIELDSET => 1,
-    FONT => 0,
-    FORM => 1,
-    FRAME => 1,
-    FRAMESET => 1,
-    H1 => 1,
-    H2 => 1,
-    H3 => 1,
-    H4 => 1,
-    H5 => 1,
-    H6 => 1,
-    HEAD => 1,
-    HR => 1,
-    HTML => 1,
-    I => 0,
-    IFRAME => 0,
-    IMG => 0,
-    INPUT => 0,
-    INS => 0,
-    ISINDEX => 1,
-    KBD => 0,
-    LABEL => 0,
-    LEGEND => 1,
-    LI => 1,
-    LINK => 1,
-    MAP => 1,
-    MENU => 1,
-    META => 1,
-    NOFRAMES => 0,
-    NOSCRIPT => 1,
-    OBJECT => 1,
-    OL => 1,
-    OPTGROUP => 0,
-    OPTION => 0,
-    P => 1,
-    PARAM => 1,
-    PRE => 1,
-    Q => 0,
-    S => 0,
-    SAMP => 0,
-    SCRIPT => 1,
-    SELECT => 0,
-    SMALL => 0,
-    SPAN => 0,
-    STRIKE => 0,
-    STRONG => 0,
-    STYLE => 1,
-    SUB => 0,
-    SUP => 0,
-    TABLE => 1,
-    TBODY => 1,
-    TD => 0,
-    TEXTAREA => 1,
-    TFOOT => 1,
-    TH => 0,
-    THEAD => 1,
-    TITLE => 1,
-    TR => 1,
-    TT => 0,
-    U => 0,
-    UL => 1,
-    VAR => 0,
-   );
+# HTML elements that are strictly block type, as defined by
+# http://www.htmlhelp.com/reference/html40/block.html.
+# Block type elements do not require
+# <br /> to be generated for newlines on the boundary - see WC::isInline.
+my %isOnlyBlockType = map { $_ => 1 }
+  qw( ADDRESS BLOCKQUOTE CENTER DIR DIV DL FIELDSET FORM H1 H2 H3 H4 H5 H6
+      HR ISINDEX MENU NOFRAMES NOSCRIPT OL P PRE TABLE UL );
 
 # pure virtual
 sub generate {
@@ -228,6 +177,18 @@ sub cleanParseTree {
 
 sub stringify {
     return '';
+}
+
+# Determine if the node - and all it's child nodes - satisfy the criteria
+# for an HTML inline element.
+sub isInline {
+    # This imnpl is actually for Nodes; Leaf overrides it
+    my $this = shift;
+    return 0 if $isOnlyBlockType{lc($this->{tag})};
+    foreach my $kid ( @{$this->{children}} ) {
+        return 0 unless $kid->isInline();
+    }
+    return 1;
 }
 
 1;

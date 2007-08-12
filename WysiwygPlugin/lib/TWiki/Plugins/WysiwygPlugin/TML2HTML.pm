@@ -90,6 +90,9 @@ sub convert {
     # Substitute back in protected elements
     $content = $this->_dropBack( $content );
 
+    # DEBUG
+    #print STDERR "TML2HTML = '$content'\n";
+
     # This should really use a template, but what the heck...
     return $content;
 }
@@ -427,8 +430,6 @@ sub _getRenderedVersion {
     $this->_putBackBlocks( $text, 'verbatim', 'pre', \&_encodeEntities );
 
     $text =~ s/(<nop>)/$this->_liftOut($1, 'PROTECTED')/ge;
-
-    #print STDERR "TML2HTML = '$text'\n";
 
     return $text;
 }
