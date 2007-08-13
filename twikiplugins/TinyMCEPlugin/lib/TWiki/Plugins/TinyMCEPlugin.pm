@@ -36,10 +36,11 @@ sub _isAvailable {
 
     # Check the client browser to see if it is supported by TinyMCE
     my $query = TWiki::Func::getCgiQuery();
-    if ($query->user_agent() =~ /(Konqueror|Opera)/i) {
+    if ($query && $query->user_agent() &&
+          $query->user_agent() =~ /(Konqueror|Opera)/i) {
         $disabled = 1;
     }
-die "FUCKSHIT" if $disabled;
+
     return $disabled ? 0 : 1;
 }
 
@@ -87,7 +88,7 @@ sub afterEditHandler {
         # if the wysiwyg plugin is enabled, we don't want to do anything
         # if wysiwyg_edit is enabled, as the WysiwygPlugin afterEditHandler
         # will deal with it.
-        $query->param( 'wysiwyg_edit' );
+        return if ($query->param( 'wysiwyg_edit' ));
         # otherwise wysiwygplugin isn't going to do anything, so we can
         # post-process.
     }
