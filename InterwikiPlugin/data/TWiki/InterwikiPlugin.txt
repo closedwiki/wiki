@@ -53,8 +53,9 @@ a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, for example, =
 |  Plugin Author: | TWiki:Main.AndreaSterbini, TWiki:Main.PeterThoeny |
 |  Copyright: | &copy; 2001-2007, TWiki:Main.AndreaSterbini, [[http://www.twiki.net/][Peter Thoeny]]|
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 14538 |
+|  Plugin Version: | %$VERSION% |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  13 Aug 2007: | 14545 - Bugs:Item4451 - Added Bugs: rule (TWiki:Main.CrawfordCurrie) |
 |  11 Aug 2007: | 14538 - Fixed broken ISBN link (TWiki:Main.PeterThoeny) |
 |  08 Nov 2006: | 11935 - Added css =class="interwikiLink"= (TWiki:Main.PeterThoeny) |
 |  07 Nov 2006: | 11924 - Added INTERLINKFORMAT; removed redundant SUPPRESSTOOLTIP; allow @ signs in page part of interwiki link; support single digit page part (TWiki:Main.PeterThoeny) |
