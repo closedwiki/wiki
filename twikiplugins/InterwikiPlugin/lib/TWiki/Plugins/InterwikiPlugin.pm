@@ -37,6 +37,9 @@ package TWiki::Plugins::InterwikiPlugin;
 
 use strict;
 
+require TWiki::Func;    # The plugins API
+require TWiki::Plugins; # For the API version
+
 use vars qw(
             $VERSION
             $RELEASE
