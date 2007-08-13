@@ -39,7 +39,7 @@ sub _isAvailable {
     if ($query->user_agent() =~ /(Konqueror|Opera)/i) {
         $disabled = 1;
     }
-
+die "FUCKSHIT" if $disabled;
     return $disabled ? 0 : 1;
 }
 
@@ -81,7 +81,7 @@ sub afterEditHandler {
     my $query = TWiki::Func::getCgiQuery();
     return unless $query;
     # Check for our flag
-    return unless $_[0] =~ s/^<!--$secret_id-->//so;
+    return unless $_[0] =~ s/<!--$secret_id-->//so;
 
     if ($TWiki::cfg{Plugins}{WysiwygPlugin}{Enabled}) {
         # if the wysiwyg plugin is enabled, we don't want to do anything
