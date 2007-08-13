@@ -35,6 +35,7 @@ Whenever you write ==ExternalSite:Page== it will be linked automatically to the 
 
 | *Alias:* | *URL:* | *Tooltip Text:* |
 | Advogato | http://www.advogato.org/ | '$page' on Advogato community site (with peer review) |
+| Bugs | http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/ | The TWiki issue tracking site |
 | C2find | http://c2.com/cgi/wiki?FindPage&value= | Search '$page' on the original 'WikiWikiWeb' site |
 | DokuWiki | http://wiki.splitbrain.org/wiki: | '$page' on Doku Wiki site |
 | DolphinWiki | http://www.object-arts.co.uk/wiki/html/Dolphin/$page.htm | '$page' on Dolphin Wiki site |
