@@ -2,7 +2,8 @@
    Templates for the mails sent out by mailnotify for newsletters.
 }%
 
-%TMPL:DEF{"NEWS:header"}%To: %EMAILTO%
+%TMPL:DEF{"NEWS:header"}%From: %WIKIWEBMASTERNAME% <%WIKIWEBMASTER%>
+To: %EMAILTO%
 Subject: %WIKITOOLNAME% %WEB%.%TOPIC%
 MIME-Version: 1.0
 Content-Type: text/html; charset=%CHARSET%
