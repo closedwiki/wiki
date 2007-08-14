@@ -157,6 +157,7 @@ which is correct by construction, but does not render correctly in TWiki. This p
 |  License | [[http://www.gnu.org/licenses/gpl.html][GPL (Gnu General Public License)]] |
 |  Plugin Version: | %$VERSION% |
 |  Change History: | |
+|  14548 | Bugs:Item4453 - noautolink was breaking lists |
 |  14541 | Support for entry of TML constructs such as Set |
 |  14538 | Extensive rewrite to remove a lot of the "clever bits" that try to be too smart with TML and HTML embedded in the topic. By simply passing that through as editable text, we defer to the client side the choice of doing something clever with it, which makes the whole editing experience an awful lot better. |
 |  13701 | Made use of HTML::Entities optional; fixed encoding problem with nbsp on IE; Bugs:Item1742 support for simultaneous edits (post edit merge) |
