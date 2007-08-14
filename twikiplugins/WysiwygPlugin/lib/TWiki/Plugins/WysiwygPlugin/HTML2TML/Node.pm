@@ -929,7 +929,7 @@ sub _handleSPAN {
           $this->_hasClass('WYSIWYG_NOAUTOLINK')) {
         my( $flags, $text ) = $this->_flatten( $options );
         my $p = _htmlParams( $this->{attrs}, $options);
-        return ($WC::BLOCK_TML, "<noautolink$p>".$text.
+        return ($flags, "<noautolink$p>".$text.
                   "</noautolink>");
     }
 
