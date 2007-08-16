@@ -108,7 +108,7 @@ sub merge {
    * =$html= - Template to expand keys within
 Expand an HTML template using the values in this change. The following
 keys are expanded: %<nop>TOPICNAME%, %<nop>AUTHOR%, %<nop>TIME%,
-%<nop>REVISION%, %<nop>TEXTHEAD%.
+%<nop>REVISION%, %<nop>BASE_REV%, %<nop>CUR_REV%, %<nop>TEXTHEAD%.
 
 Returns the expanded template.
 
@@ -128,6 +128,8 @@ sub expandHTML {
     $html =~ s/%AUTHOR%/$this->{AUTHOR}/g;
     my $tim =  TWiki::Time::formatTime( $this->{TIME} );
     $html =~ s/%TIME%/$tim/go;
+    $html =~ s/%CUR_REV%/$this->{CURR_REV}/g;
+    $html =~ s/%BASE_REV%/$this->{BASE_REV}/g;
     my $frev = '';
     if( $this->{CURR_REV} ) {
         if( $this->{CURR_REV} > 1 ) {
@@ -177,6 +179,8 @@ sub expandPlain {
     $template =~ s/%TOPICNAME%/$this->{TOPIC}/g;
     $template =~ s/%AUTHOR%/$this->{AUTHOR}/g;
     $template =~ s/%TIME%/$tim/g;
+    $template =~ s/%CUR_REV%/$this->{CURR_REV}/g;
+    $template =~ s/%BASE_REV%/$this->{BASE_REV}/g;
     my $frev = '';
     if( $this->{CURR_REV} ) {
         if( $this->{CURR_REV} > 1 ) {

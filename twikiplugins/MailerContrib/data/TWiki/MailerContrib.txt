@@ -151,6 +151,7 @@ Newsletters are sent after formatting using the standard =view= template, using 
 |  License: | GPL |
 |  Version: | %$VERSION% |
 |  Change History: | |
+|  14550 | Bugs:Item4461 - 'Changed' link now points to most recent changes, not the entire history |
 |  22 Jun 2007 | Bugs:Item4284 - added access control checks and email filter |
 |  21 May 2007 | Bugs:Item3969 - 8bit email fix (TWiki:Main.WillNorris) |
 |  13623 | Bugs:Item4014 no changes was resetting the notify time to 0. Thanks to TWiki:Main.JeffCrawford for nailing this down. |
