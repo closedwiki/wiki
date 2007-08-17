@@ -201,6 +201,7 @@ sub processChange {
     my ( $this, $change, $db, $changeSet, $seenSet, $allSet ) = @_;
 
     my $topic = $change->{TOPIC};
+    my $web = $change->{WEB};
 
     foreach my $name ( keys %{$this->{subscribers}} ) {
         my $subscriber = $this->{subscribers}{$name};
@@ -226,8 +227,7 @@ sub processChange {
                     }
                 }
             } else {
-                print STDERR "WARNING: Failed to find email for ".
-                  $subscriber->stringify()."\n";
+		$this->_emailWarn($subscriber,$name,$web);
             }
         }
     }
@@ -349,6 +349,18 @@ sub _parsePages {
     if ( $spec =~ m/\S/ ) {
         print STDERR "Badly formatted subscription for $who: $ospec\n";
     }
+}
+
+# PRIVATE emailWarn to warn when an email address cannot be found for a subscriber.
+sub _emailWarn {
+  my ($this, $subscriber, $name, $web) = @_;
+
+  # Make sure we only warn once.  Don't want to see this for every Topic we are notifying on.
+  unless(defined $this->{'nomail'}{$name}) {
+    $this->{'nomail'}{$name} = 1;
+    print STDERR "WARNING: Failed to find email for ".
+      $subscriber->stringify()." monitoring $web\n";
+  }
 }
 
 1;

@@ -287,7 +287,7 @@ sub _sendChangesMails {
         my $error = TWiki::Func::sendEmail( $mail, 5 );
 
         if ($error) {
-            print STDERR "Error sending mail: $error\n";
+            print STDERR "Error sending mail forf $web: $error\n";
             $report .= $error."\n";
         } else {
             print "Notified $email of changes in $web\n" if $verbose;
@@ -406,7 +406,7 @@ sub _sendNewsletterMail {
         my $error = TWiki::Func::sendEmail( $mail, 5 );
 
         if ($error) {
-            print STDERR "Error sending mail: $error\n";
+            print STDERR "Error sending mail for $web: $error\n";
             $report .= $error."\n";
         } else {
             print "Sent newletter for $web to $email\n" if $verbose;
