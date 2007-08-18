@@ -49,7 +49,7 @@ testForFiles($TWiki::cfg{DataDir}.'/Temp*');
 testForFiles($TWiki::cfg{PubDir}.'/Temp*');
 
 my $testrunner = Unit::TestRunner->new();
-$testrunner->start(@ARGV);
+exit $testrunner->start(@ARGV);
 
 sub testForFiles {
     my $test = shift;
