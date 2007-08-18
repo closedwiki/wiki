@@ -62,8 +62,10 @@ sub start {
         print  join("\n---------------------------\n",
                     @{$this->{failures}}),"\n";
         print "$passes of ",$passes + scalar(@{$this->{failures}})," test cases passed\n";
+        return scalar(@{$this->{failures}});
     } else {
         print "All tests passed\n";
+	return 0;
     }
 }
 
