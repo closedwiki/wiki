@@ -245,7 +245,12 @@ sub handleIMAGE {
     #TWiki::Func::writeWarning("ImagePlugin - $this->{errorMsg}");
     return $this->inlineError($params);
   }
+
+  # For compatibility with i18n-characters in file names, encode urls (as TWiki.pm/viewfile does for attachment names in general)
   my $thumbFileUrl = $pubUrlPath.'/'.$imgWeb.'/'.$imgTopic.'/'.$imgInfo->{file};
+  $thumbFileUrl = TWiki::urlEncode($thumbFileUrl);
+  my $encHref   = $params->{href};
+  $encHref      = TWiki::urlEncode($encHref);
 
   # format result
   my $result = $params->{format} || '';
@@ -289,7 +294,7 @@ sub handleIMAGE {
   } else {
     $result =~ s/\$mouseout//go;
   }
-  $result =~ s/\$href/$params->{href}/g;
+  $result =~ s/\$href/$encHref/g;
   $result =~ s/\$src/$thumbFileUrl/g;
   $result =~ s/\$height/$imgInfo->{height}/g;
   $result =~ s/\$width/$imgInfo->{width}/g;
