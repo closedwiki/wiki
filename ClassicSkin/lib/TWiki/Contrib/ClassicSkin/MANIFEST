@@ -1,4 +1,5 @@
-data/TWiki/ClassicSkin.txt  0644
+data/Main/ClassicSkinUserViewTemplate.txt 0644
+data/TWiki/ClassicSkin.txt 0644
 pub/TWiki/ClassicSkin/screenshot.gif 0644
 pub/TWiki/ClassicSkin/fullscreen.gif 0644
 lib/TWiki/Contrib/ClassicSkin.pm 0444
