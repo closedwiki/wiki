@@ -16,7 +16,7 @@
 %BR%
 %TEXT%
 #TopicEnd
-%TMPL:P{"attachments"}%
 %TMPL:END%
 
+%TMPL:P{"attachments"}%
 %TMPL:P{"topicinfo"}%
