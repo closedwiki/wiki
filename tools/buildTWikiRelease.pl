@@ -11,6 +11,7 @@
 unless ( -e 'MAIN' ) {
    `svn co http://svn.twiki.org/svn/twiki/branches/MAIN > checkouMAIN.log`;
 } else {
+   `svn status | grep ? | sed 's/?/rm -r/' | sh`;
    `svn up`;
 }
 
@@ -59,7 +60,7 @@ print "\n\n ready to build release\n";
 #   3. cd tools
 #   4. perl build.pl release
 #      * Note: if you specify a release name the script will attempt to commit to svn 
-`perl pseudo-install.pl BuildContrib`
+`perl pseudo-install.pl BuildContrib`;
 chdir('tools');
 `perl build.pl release -auto`;
 
