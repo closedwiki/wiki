@@ -25,7 +25,7 @@
 %IF{ "not defined create" then="%SEARCH{ "META.TOPICMOVED.*from\=\"%BASEWEB%.%BASETOPIC%\"" nosearch="on" nototal="on" type="regex" format="%BR%%ICON{arrowbright}% $percntRED% $percntMAKETEXT{\"This topic has moved to [_1].\" args=\"[[$web.$topic]]\"}$percnt $percntENDCOLOR%" }%"}%
 
 ---+++ %MAKETEXT{"Do you wish to create the topic [_1]?" args="'%BASETOPIC%'"}%
-%ICON{arrowbright}% [[%SCRIPTURL{view}%/%BASEWEB%/%TOPIC%?create=on&newtopic=%BASETOPIC%][%MAKETEXT{"Create '[_1]'" args="<nop>%BASETOPIC%"}%]]
+%ICON{arrowbright}% [[%SCRIPTURL{view}%/%BASEWEB%/%BASETOPIC%?create=on&newtopic=%BASETOPIC%][%MAKETEXT{"Create '[_1]'" args="<nop>%BASETOPIC%"}%]]
 %ENDSECTION{"options"}%
 %IF{"$'URLPARAM{create}'='on'" then='</pre>'}%
 %INCLUDE{"%TWIKIWEB%.%IF{"$'URLPARAM{create}'='on'" then='WebTopicCreator' else='IGNOREINCLUDE'}%" warn="off"}%
