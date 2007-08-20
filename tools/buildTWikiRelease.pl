@@ -36,12 +36,8 @@ my $return = `$unitTests`;
 my $errorcode = $? >> 8;
 die "\n\n$errorcode: unit test failures - need to fix them first\n" unless ($errorcode == 0);
 
-#these tests now are run from the unit test suite
-#`cd ../..`;
-#`perl pseudo-install.pl -link TestFixturePlugin`;
-
-
-#`perl tools/MemoryCycleTests.pl`;
+chdir($twikihome);
+#`perl tools/MemoryCycleTests.pl > memoryCycleTests.log`;
 #`cd tools; perl check_manifest.pl`;
 #`cd data; grep '%META:TOPICINFO{' */*.txt | grep -v TestCases | grep -v 'author="TWikiContributor".*version="\$Rev'`;
 
@@ -55,14 +51,17 @@ die "\n\n$errorcode: unit test failures - need to fix them first\n" unless ($err
 
 print "\n\n ready to build release\n";
 
-#TODO:    1.  Install default plugins (hard copy)
-#          * perl pseudo-install.pl default to install the plugins specified in MANIFEST 
-#             2. use the configure script to make your system basically functional
-#                       * ensure that your apache has sufficient file and directory permissions for data and pub 
-#                          3. cd tools
-#                             4. perl build.pl release
-#                                       * Note: if you specify a release name the script will attempt to commit to svn 
-#
+#TODO: clean the setup again
+#   1.  Install default plugins (hard copy)
+#      * perl pseudo-install.pl default to install the plugins specified in MANIFEST 
+#   2. use the configure script to make your system basically functional
+#      * ensure that your apache has sufficient file and directory permissions for data and pub 
+#   3. cd tools
+#   4. perl build.pl release
+#      * Note: if you specify a release name the script will attempt to commit to svn 
+`perl pseudo-install.pl BuildContrib`
+chdir('tools');
+`perl build.pl release -auto`;
 
 
 

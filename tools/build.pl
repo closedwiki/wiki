@@ -1,7 +1,7 @@
 #!/usr/bin/perl -w
 #
 # Build for TWiki
-# Crawford Currie
+# Crawford Currie & Sven Dowideit
 # Copyright (C) TWikiContributors, 2005
 
 use strict;
@@ -34,10 +34,18 @@ package TWikiBuild;
 
 sub new {
     my $class = shift;
+    my $autoBuild;	#set if this is an automatic build
     my $name;
 
     if( scalar(@ARGV) > 1) {
         $name = pop( @ARGV );
+	if ( $name eq '-auto' ) {
+		#build a name from major.minor.patch.-auto.svnrev
+		my $rev=`svn info ..`;
+		$rev =~ /Revision: (\d*)/m;
+		$name = getCurrentTWikiRELEASE().'-auto'.$1;
+		$autoBuild = 1;
+	}
     }
 
 print <<END;
@@ -83,39 +91,41 @@ generate histories for any data or pub files that changed since then.
 
 END
 
+    unless ($autoBuild) {
     if( $name ||
           TWiki::Contrib::Build::ask("Do you want to name this release?",
                                      'n')) {
-        while( $name !~ /^\d\.\d+\.\d+(-\w+)?$/ ) {
-            $name =
-              TWiki::Contrib::Build::prompt(
-                  "Enter name of this release: ", $name);
+            while( $name !~ /^\d\.\d+\.\d+(-\w+)?$/ ) {
+                $name =
+                  TWiki::Contrib::Build::prompt(
+                      "Enter name of this release: ", $name);
+            }
+            # SMELL: should really check that the name actually *follows* the
+            # last name generated
+            $name = 'TWiki-'.$name;
+            open(PM, "<../lib/TWiki.pm") || die $!;
+            local $/ = undef;
+            my $content = <PM>;
+            close(PM);
+            $content =~ /\$RELEASE\s*=\s*'(.*?)'/;
+            $content =~ s/(\$RELEASE\s*=\s*').*?(')/$1$name$2/;
+            open(PM, ">../lib/TWiki.pm") || die $!;
+            print PM $content;
+            close(PM);
+            # Note; the commit is unconditional, because we *must* update
+            # TWiki.pm before building.
+            my $tim = 'BUILD '.$name.' at '.gmtime().' GMT';
+            my $cmd = "svn propset LASTBUILD '$tim' ../lib/TWiki.pm";
+            print `$cmd`;
+            #print "$cmd\n";
+            die $@ if $@;
+            $cmd = "svn commit -m 'Item000: $tim' ../lib/TWiki.pm";
+            print `$cmd`;
+            #print "$cmd\n";
+            die $@ if $@;
+        } else {
+            $name = 'TWiki';
         }
-        # SMELL: should really check that the name actually *follows* the
-        # last name generated
-        $name = 'TWiki-'.$name;
-        open(PM, "<../lib/TWiki.pm") || die $!;
-        local $/ = undef;
-        my $content = <PM>;
-        close(PM);
-        $content =~ /\$RELEASE\s*=\s*'(.*?)'/;
-        $content =~ s/(\$RELEASE\s*=\s*').*?(')/$1$name$2/;
-        open(PM, ">../lib/TWiki.pm") || die $!;
-        print PM $content;
-        close(PM);
-        # Note; the commit is unconditional, because we *must* update
-        # TWiki.pm before building.
-        my $tim = 'BUILD '.$name.' at '.gmtime().' GMT';
-        my $cmd = "svn propset LASTBUILD '$tim' ../lib/TWiki.pm";
-        print `$cmd`;
-        #print "$cmd\n";
-        die $@ if $@;
-        $cmd = "svn commit -m 'Item000: $tim' ../lib/TWiki.pm";
-        print `$cmd`;
-        #print "$cmd\n";
-        die $@ if $@;
-    } else {
-        $name = 'TWiki';
     }
 
     my $this = $class->SUPER::new( $name, "TWiki" );
@@ -279,4 +289,15 @@ my $build = new TWikiBuild();
 
 # Build the target on the command line, or the default target
 $build->build($build->{target});
+
+
+#returns the version number portion in the $RELEASE line in TWiki.pm
+sub getCurrentTWikiRELEASE {
+        open(PM, "<../lib/TWiki.pm") || die $!;
+        local $/ = undef;
+        my $content = <PM>;
+        close(PM);
+        $content =~ /\$RELEASE\s*=\s*'TWiki-(.*?)'/;
+	return $1;
+}
 
