@@ -264,7 +264,7 @@ __You get: (simulated)__ <br />
 </td>
 <td valign="top" width="25%">
 __You get: (if installed)__ <br />
-<dot engine="dot" antialias="on" size="300x300" library="Sandbox.TestDot3">
+<dot engine="dot" antialias="on" size="300x300" library="TWiki.DirectedGraphPlugin">
 digraph G {
 	 edge [arrowhead=none color=blue];
 	 node [fontcolor=blue color=white];
