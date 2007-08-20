@@ -186,7 +186,7 @@ data/TWiki/TextEditor.txt 0644
 data/TWiki/TextFormattingFAQ.txt 0644
 data/TWiki/TextFormattingRules.txt 0644
 data/TWiki/TimBernersLee.txt 0644
-data/TWiki/TimeInterval.txt 0644
+data/TWiki/TimeSpecifications.txt 0644
 data/TWiki/UserDocumentationCategory.txt 0644
 data/TWiki/UserToolsCategory.txt 0644
 data/TWiki/UsingHTML.txt 0644
@@ -487,7 +487,6 @@ lib/TWiki/Configure/UIs/AUTH.pm 0444
 lib/TWiki/Configure/UIs/EXTEND.pm 0444
 lib/TWiki/Configure/UIs/EXTENSIONS.pm 0444
 lib/TWiki/Configure/UIs/LANGUAGES.pm 0444
-lib/TWiki/Configure/UIs/MAIN.pm 0444
 lib/TWiki/Configure/UIs/PLUGINS.pm 0444
 lib/TWiki/Configure/UIs/PasswordProtected.pm 0444
 lib/TWiki/Configure/UIs/Root.pm 0444
@@ -510,10 +509,11 @@ lib/TWiki/Func.pm 0444
 lib/TWiki/I18N.pm 0444
 lib/TWiki/I18N/Extract.pm 0444
 lib/TWiki/I18N/Fallback.pm 0444
-lib/TWiki/If.pm 0444
-lib/TWiki/InfixParser.pm 0444
-lib/TWiki/InfixParser/Error.pm 0444
-lib/TWiki/InfixParser/Node.pm 0444
+lib/TWiki/If/Node.pm 0444
+lib/TWiki/If/Parser.pm 0444
+lib/TWiki/Infix/Parser.pm 0444
+lib/TWiki/Infix/Error.pm 0444
+lib/TWiki/Infix/Node.pm 0444
 lib/TWiki/LoginManager.pm 0444
 lib/TWiki/LoginManager/ApacheLogin.pm 0444
 lib/TWiki/LoginManager/TemplateLogin.pm 0444
@@ -527,7 +527,9 @@ lib/TWiki/Plurals.pm 0444
 lib/TWiki/Prefs.pm 0444
 lib/TWiki/Prefs/Parser.pm 0444
 lib/TWiki/Prefs/PrefsCache.pm 0444
-lib/TWiki/Query.pm 0444
+lib/TWiki/Query/Node.pm 0444
+lib/TWiki/Query/HoistREs.pm 0444
+lib/TWiki/Query/Parser.pm 0444
 lib/TWiki/Render.pm 0444
 lib/TWiki/Sandbox.pm 0444
 lib/TWiki/Search.pm 0444
