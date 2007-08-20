@@ -54,20 +54,11 @@ package TWiki::Plugins::DiskUsagePlugin;    # change the package name and $plugi
 
 # =========================
 use vars qw(
-        $web $topic $user $installWeb $VERSION $RELEASE $pluginName
+        $web $topic $user $installWeb $VERSION $pluginName
         $debug $exampleCfgVar $usedColour $unusedColour
     );
 
-# This should always be $Rev$ so that TWiki can determine the checked-in
-# status of the plugin. It is used by the build automation tools, so
-# you should leave it alone.
-$VERSION = '$Rev$';
-
-# This is a free-form string you can use to "name" your own plugin version.
-# It is *not* used by the build automation tools, but is reported as part
-# of the version number in PLUGINDESCRIPTIONS.
-$RELEASE = 'Dakar';
-
+$VERSION = '1.010';
 $pluginName = 'DiskUsagePlugin';  # Name of this Plugin
 
 # =========================
@@ -94,11 +85,25 @@ sub initPlugin
 }
 
 sub logSizes {
-    my $debugSize = -s $TWiki::debugFilename;
-    my $warningSize = -s $TWiki::warningFilename;
-
-    return "   * Debug log is $debugSize\n".
-           "   * Warning log is $warningSize\n";
+    my $debugSize = -s $TWiki::cfg{DebugFileName};
+    my $configSize = -s $TWiki::cfg{ConfigurationLogName};
+    my $logfile = $TWiki::cfg{LogFileName};
+    my $warningfile = $TWiki::cfg{WarningFileName};
+# allow for logfiles that have %DATE% in the filename...
+# obtain the size for the current log file...
+    my $time = TWiki::Time::formatTime( time(), '$year$mo', 'servertime');
+    $logfile =~ s/%DATE%/$time/go;
+    $warningfile =~ s/%DATE%/$time/go;
+    my $logSize = -s $logfile;
+    my $warningSize = -s $warningfile;
+    if (not $debugSize) { $debugSize = 0; };
+    if (not $warningSize) { $warningSize = 0; };
+    if (not $logSize) { $logSize = 0; };
+    if (not $configSize) { $configSize = 0; };
+    return "   * Debug log is $debugSize bytes\n".
+           "   * Current Warning log is $warningSize bytes\n".
+           "   * Current Access log is $logSize bytes\n".
+           "   * Configuration log is $configSize bytes\n";
 } 
 
 
@@ -106,46 +111,46 @@ sub diskusage {
     my $web = TWiki::Func::extractNameValuePair( @_, "web" );
     $web =~ s/\W//go;
     TWiki::Func::writeDebug( "- ${pluginName}::diskusage($web)" ) if $debug;
-
-    my $dd = TWiki::Func::getDataDir();
-    my $cmd = "/usr/bin/du -k $dd/$web/*.txt 2>&1";
-
+    my $datadir = $TWiki::cfg{DataDir};
+    my $cmd = "/usr/bin/du -b $datadir/$web/*.txt 2>&1";
     my @lines = `$cmd`;
     my %usageByTopic;
 
     foreach my $line (@lines) {
-      my ($kb, $file) = split /\s+/, $line;
+      my ($bytes, $file) = split /\s+/, $line;
       $topic = $file;
-      $topic =~ s!$dd/(.*).txt!$1!;
+      $topic =~ s!$datadir/(.*).txt!$1!;
       $topic =~ s!/!.!;
-      $usageByTopic{$topic}{text} = $kb;
-      my $sz = (-s "$file,v") || 0;
-      $usageByTopic{$topic}{history} = $sz % 1024;
+      $usageByTopic{$topic}{text} = $bytes || 0;
+      $usageByTopic{$topic}{history} = (-s "$file,v") || 0;
     }
-
-    $cmd = "/usr/bin/du -k $TWiki::pubDir/$web/* 2>&1";
+    my $pubdir = $TWiki::cfg{PubDir};
+    $cmd = "/usr/bin/du -b $pubdir/$web/* 2>&1";
 
     @lines = `$cmd`;
     my %pubByTopic;
 
     foreach my $line (@lines) {
-      my ($kb, $topic) = split /\s+/, $line;
-      $topic =~ s!$TWiki::pubDir/(.*)!$1!;
+      my ($bytes, $topic) = split /\s+/, $line;
+      $topic =~ s!$pubdir/(.*)!$1!;
       $topic =~ s!/!.!;
-      $usageByTopic{$topic}{attachments} = $kb;
+      $usageByTopic{$topic}{attachments} = $bytes || 0;
     }
 
-    my $ans = "| *Topic* | *Topic (Kb)* | *History (Kb)* | *Attachments (Kb)* | *Total (Kb)*| \n";
+    my $ans = "| *Topic* | *Topic (bytes)* | *History (bytes)* | *Attachments (bytes)* | *Total (bytes)*| \n";
     my @topics = sort keys %usageByTopic;
+    my $sum = 0;
     foreach my $topic (@topics) {
-       my $lineTotal = $usageByTopic{$topic}{text} + 
-		+ $usageByTopic{$topic}{history} +
-		+ $usageByTopic{$topic}{attachments};
-       $ans .= "| $topic |  ". $usageByTopic{$topic}{text} 
-             ."|  ". $usageByTopic{$topic}{history}
-             ."|  ". $usageByTopic{$topic}{attachments} 
+       my $lineTotal = ($usageByTopic{$topic}{text} || 0)
+		+ ($usageByTopic{$topic}{history} || 0)
+		+ ($usageByTopic{$topic}{attachments} || 0);
+       $ans .= "| $topic |  ". ($usageByTopic{$topic}{text} || "0")
+             ."|  ". ($usageByTopic{$topic}{history} || "0")
+             ."|  ". ($usageByTopic{$topic}{attachments} || "0")
              ."|  ". $lineTotal . "|\n";
+       $sum += $lineTotal;
     }
+    $ans .= "| Total |||| ". $sum ."|\n"; 
 
     return $ans;
 }
@@ -154,26 +159,46 @@ sub quotaData {
     my $cmd = "/usr/bin/quota -v 2>&1";
 
     my @lines = `$cmd`;
-    my $lastLine = $lines[$#lines];
+    my $lastLine = $lines[$#lines] || "";
     my @fields = split /\s+/, $lastLine;
     return ($fields[2], $fields[3]);
 }
 
 sub quotaString {
     my ($blocks, $quota) = quotaData();
-    return "$blocks of $quota";
+    if ($quota)
+    {
+        return "$blocks of $quota";
+    }
+    else
+    {
+        return "No Quota";
+    }
 }
 
 sub quotaPercentage {
     my ($blocks, $quota) = quotaData();
-    return $blocks / $quota;
+    if ($quota)
+    {    
+       return $blocks / $quota;
+    }
+    else
+    {
+       return 0;
+    }
 }
 
 
 sub quotaGraph {
     my $length = quotaPercentage() * 100;
-    return "<TABLE WIDTH=100 CELLSPACING=0 CELLPADDING=0><TR><TD BGCOLOR=$usedColour WIDTH='$length'></TD><TD bgcolor=$unusedColour>&nbsp;</TD><TR></TABLE>"
-
+    if ($length)
+    {
+        return "<TABLE WIDTH=100 CELLSPACING=0 CELLPADDING=0><TR><TD BGCOLOR=$usedColour WIDTH='$length'></TD><TD bgcolor=$unusedColour>&nbsp;</TD><TR></TABLE>"
+    }
+    else
+    {
+        return "";
+    }
 }
 sub quota {
    return quotaGraph(). " ".quotaString(); 
