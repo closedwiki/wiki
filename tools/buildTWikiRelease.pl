@@ -11,8 +11,10 @@
 unless ( -e 'MAIN' ) {
    `svn co http://svn.twiki.org/svn/twiki/branches/MAIN > checkouMAIN.log`;
 } else {
+   chdir('MAIN');
    `svn status | grep ? | sed 's/?/rm -r/' | sh`;
    `svn up`;
+   chdir('..');
 }
 
 chdir('MAIN');
@@ -24,6 +26,12 @@ chomp($twikihome);
 `chmod 777 lib`;
 #TODO: add a trivial and correct LocalSite.cfg
 `chmod -R 777 data pub`;
+
+#TODO: replace this code with 'configure' from comandline
+my $localsite = getLocalSite($twikihome);
+open(LS, '>lib/LocalSite.cfg');
+print LS $localsite;
+close(LS);
 
 
 `perl pseudo-install.pl default`;
@@ -61,10 +69,24 @@ print "\n\n ready to build release\n";
 #   4. perl build.pl release
 #      * Note: if you specify a release name the script will attempt to commit to svn 
 `perl pseudo-install.pl BuildContrib`;
-chdir('tools');
-`perl build.pl release -auto`;
+chdir('lib');
+`perl ../tools/build.pl release -auto`;
 
 
 
 
+sub getLocalSite {
+   my $twikidir = shift;
 
+#   open(TS, $twikidir.'/lib/TWiki.spec');
+#   local $/ = undef;
+#   my $localsite = <TS>;
+#   close(TS);
+   my $localsite = `grep 'TWiki::cfg' $twikidir/lib/TWiki.spec`;
+
+   $localsite =~ s|/home/httpd/twiki|$twikidir|g;
+   $localsite =~ s|# $TWiki|$TWiki|g;
+
+   return $localsite;
+}
+1;
