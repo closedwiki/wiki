@@ -16,8 +16,10 @@
 package TWiki::Plugins::TestFixturePlugin;
 
 use strict;
-use TWiki::Func;
-use TWiki::Plugins::TestFixturePlugin::HTMLDiffer;
+
+require TWiki::Func;    # The plugins API
+require TWiki::Attrs;
+require TWiki::Plugins::TestFixturePlugin::HTMLDiffer;
 
 # This is a test plugin designed to interact with TWiki testcases.
 # It should NOT be shipped with a release.
