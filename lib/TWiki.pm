@@ -189,7 +189,7 @@ BEGIN {
         ICONURLPATH       => \&ICONURLPATH,
         IF                => \&IF,
         INCLUDE           => \&INCLUDE,
-        INTURLENCODE      => \&INTURLENCODE,
+        INTURLENCODE      => \&INTURLENCODE_deprecated,
         LANGUAGES         => \&LANGUAGES,
         MAKETEXT          => \&MAKETEXT,
         META              => \&META,
@@ -316,12 +316,13 @@ BEGIN {
 
         # Load POSIX for I18N support.
         require POSIX;
-        import POSIX qw( locale_h LC_CTYPE );
+        import POSIX qw( locale_h LC_CTYPE LC_COLLATE );
 
         # SMELL: mod_perl compatibility note: If TWiki is running under Apache,
         # won't this play with the Apache process's locale settings too?
         # What effects would this have?
         setlocale(&LC_CTYPE, $TWiki::cfg{Site}{Locale});
+        setlocale(&LC_COLLATE, $TWiki::cfg{Site}{Locale});
     }
 
     $functionTags{CHARSET}   = sub { $TWiki::cfg{Site}{CharSet} ||
@@ -393,8 +394,10 @@ BEGIN {
     # characters allowed
     $regex{emailAddrRegex} = qr/([A-Za-z0-9\.\+\-\_]+\@[A-Za-z0-9\.\-]+)/;
 
-    # Filename regex, for attachments
-    $regex{filenameRegex} = qr/[$regex{mixedAlphaNum}\.]+/o;
+    # Filename regex to used to match invalid characters in attachments - allow
+    # alphanumeric characters, spaces, underscores, etc.
+    # TODO: Get this to work with I18N chars - currently used only with UseLocale off
+    $regex{filenameInvalidCharRegex} = qr/[^$regex{mixedAlphaNum}\. _-]/o;
 
     # Multi-character alpha-based regexes
     $regex{mixedAlphaNumRegex} = qr/[$regex{mixedAlphaNum}]*/o;
@@ -489,17 +492,18 @@ sub UTF82SiteCharSet {
     if ( $TWiki::cfg{Site}{CharSet} =~ /^utf-?8$/i ) {
         # warn if using Perl older than 5.8
         if( $] <  5.008 ) {
-            $this->writeWarning( 'UTF-8 not supported on Perl '.$].
+            $this->writeWarning( 'UTF-8 not remotely supported on Perl '.$].
                                  ' - use Perl 5.8 or higher..' );
         }
 
-        # SMELL: is this true yet?
+        # We still don't have Codev.UnicodeSupport
         $this->writeWarning( 'UTF-8 not yet supported as site charset -'.
                              'TWiki is likely to have problems' );
         return $text;
     }
 
-    # Convert into ISO-8859-1 if it is the site charset
+    # Convert into ISO-8859-1 if it is the site charset.  This conversion
+    # is *not valid for ISO-8859-15*.
     if ( $TWiki::cfg{Site}{CharSet} =~ /^iso-?8859-?1$/i ) {
         # ISO-8859-1 maps onto first 256 codepoints of Unicode
         # (conversion from 'perldoc perluniintro')
@@ -586,9 +590,9 @@ sub writeCompletePage {
     }
 
     unless( $this->inContext('command_line')) {
-        # can't use simple length() in case we have UNICODE
-        # see perldoc -f length
-        my $len = do { use bytes; length( $text ); };
+	# FIXME: Defer next line until we have Codev.UnicodeSupport - too 5.8 dependent
+        # my $len = do { use bytes; length( $text ); };
+        my $len = length( $text ); 
         $this->writePageHeader( undef, $pageType, $contentType, $len );
     }
     print $text;
@@ -1118,8 +1122,14 @@ sub getPubUrl {
           $this->normalizeWebTopicName( $web, $topic );
 
         my $path = '/'.$web.'/'.$topic;
-        $path .= '/'.$attachment if $attachment;
-        $url .= urlEncode( $path );
+	if( $attachment ) {
+	    $path .= '/'.$attachment;
+	    # Attachments are served directly by web server, need to handle
+	    # URL encoding specially
+	    $url .= urlEncodeAttachment ( $path );
+	} else {
+	    $url .= urlEncode( $path );
+	}
     }
 
     return $url;
@@ -1327,9 +1337,9 @@ sub new {
     $web = $TWiki::cfg{UsersWebName} unless $web;
     $this->{webName} = TWiki::Sandbox::untaintUnchecked( $web );
 
-    # Convert UTF-8 web and topic name from URL into site charset
-    # if necessary - no effect if URL is not in UTF-8
-    # handle topic and web names seperately; encoding is not necessarily shared
+    # Convert UTF-8 web and topic name from URL into site charset if necessary 
+    # SMELL: merge these two cases, browsers just don't mix two encodings in one URL
+    # - can also simplify into 2 lines by making function return unprocessed text if no conversion
     my $webNameTemp = $this->UTF82SiteCharSet( $this->{webName} );
     if ( $webNameTemp ) {
         $this->{webName} = $webNameTemp;
@@ -1342,6 +1352,7 @@ sub new {
 
     # Item3270 - here's the appropriate place to enforce TWiki spec:
     # All topic name sources are evaluated, site charset applied
+    # SMELL: This untaint unchecked is duplicate of one just above
     $this->{topicName}  =
         TWiki::Sandbox::untaintUnchecked(ucfirst $this->{topicName});
 
@@ -2286,6 +2297,47 @@ sub entityDecode {
 
 =pod
 
+---++ StaticMethod urlEncodeAttachment ( $text )
+
+For attachments, URL-encode specially to 'freeze' any characters >127 in the
+site charset (e.g. ISO-8859-1 or KOI8-R), by doing URL encoding into native
+charset ($siteCharset) - used when generating attachment URLs, to enable the
+web server to serve attachments, including images, directly.  
+
+This encoding is required to handle the cases of:
+
+    - browsers that generate UTF-8 URLs automatically from site charset URLs - now quite common
+    - web servers that directly serve attachments, using the site charset for
+      filenames, and cannot convert UTF-8 URLs into site charset filenames
+
+The aim is to prevent the browser from converting a site charset URL in the web
+page to a UTF-8 URL, which is the default.  Hence we 'freeze' the URL into the
+site character set through URL encoding. 
+
+In two cases, no URL encoding is needed:  For EBCDIC mainframes, we assume that 
+site charset URLs will be translated (outbound and inbound) by the web server to/from an
+EBCDIC character set. For sites running in UTF-8, there's no need for TWiki to
+do anything since all URLs and attachment filenames are already in UTF-8.
+
+=cut
+
+sub urlEncodeAttachment {
+    my( $text ) = @_;
+
+    my $usingEBCDIC = ( 'A' eq chr(193) ); 	# Only true on EBCDIC mainframes
+
+    if( $TWiki::cfg{Site}{CharSet} eq "utf-8" or $usingEBCDIC ) {
+	# Just let browser do UTF-8 URL encoding 
+	return $text;
+    }
+
+    # Freeze into site charset through URL encoding
+    return urlEncode( $text );
+}
+
+
+=pod
+
 ---++ StaticMethod urlEncode( $string ) -> encoded string
 
 Encode by converting characters that are illegal in URLs to
@@ -2295,17 +2347,21 @@ be applied to URLs themselves, as it escapes reserved
 characters such as = and ?.
 
 RFC 1738, Dec. '94:
-<verbatim>>
-...Only alphanumerics [0-9a-zA-Z], the special
-characters $-_.+!*'(), and reserved characters used for their
-reserved purposes may be used unencoded within a URL.
-</verbatim>
+    <verbatim>
+    ...Only alphanumerics [0-9a-zA-Z], the special
+    characters $-_.+!*'(), and reserved characters used for their
+    reserved purposes may be used unencoded within a URL.
+    </verbatim>
+
 Reserved characters are $&+,/:;=?@ - these are _also_ encoded by
 this method.
 
-SMELL: For non-ISO-8859-1 $TWiki::cfg{Site}{CharSet}, need to convert to
-UTF-8 before URL encoding. This encoding only supports 8-bit
-character codes.
+This URL-encoding handles all character encodings including ISO-8859-*,
+KOI8-R, EUC-* and UTF-8. 
+
+This may not handle EBCDIC properly, as it generates an EBCDIC URL-encoded
+URL, but mainframe web servers seem to translate this outbound before it hits browser
+- see CGI::Util::escape for another approach.
 
 =cut
 
@@ -3486,7 +3542,7 @@ sub URLPARAM {
 # TWiki Feb2003 release - encoding is no longer needed since UTF-URLs are now
 # directly supported, but it is provided for backward compatibility with
 # skins that may still be using the deprecated %INTURLENCODE%.
-sub INTURLENCODE {
+sub INTURLENCODE_deprecated {
     my( $this, $params ) = @_;
     # Just strip double quotes, no URL encoding - Mozilla UTF-8 URLs
     # directly supported now
