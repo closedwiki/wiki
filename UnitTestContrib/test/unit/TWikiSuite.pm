@@ -29,7 +29,7 @@ sub include_tests {
         $home = Cwd::abs_path('../..');
     }
 
-    if (open(F, "$home/tools/MANIFEST")) {
+    if (open(F, "$home/lib/MANIFEST")) {
         $read_manifest = 1;
     } else {
         # dunno which plugins we require
