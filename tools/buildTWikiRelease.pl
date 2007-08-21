@@ -37,7 +37,8 @@ close(LS);
 
 
 `perl pseudo-install.pl default`;
-`perl pseudo-install.pl UnitTestContrib`;
+`perl pseudo-install.pl UnitTestContrib`; # required for all testcases
+`perl pseudo-install.pl TestFixturePlugin`; # required for semi-auto testcases to run
 
 #run unit tests
 #TODO: testrunner should exit == 0 if no errors?
