@@ -9,8 +9,11 @@
 # Copyright (C) TWikiContributors, 2005
 
 unless ( -e 'MAIN' ) {
+   print STDERR "doing a fresh checkout\n";
    `svn co http://svn.twiki.org/svn/twiki/branches/MAIN > checkouMAIN.log`;
 } else {
+#TODO: should really do an svn revert..
+   print STDERR "using existing checkout, removing ? files";
    chdir('MAIN');
    `svn status | grep ? | sed 's/?/rm -r/' | sh`;
    `svn up`;
@@ -85,7 +88,7 @@ sub getLocalSite {
    my $localsite = `grep 'TWiki::cfg' $twikidir/lib/TWiki.spec`;
 
    $localsite =~ s|/home/httpd/twiki|$twikidir|g;
-   $localsite =~ s|# $TWiki|$TWiki|g;
+   $localsite =~ s|# \$TWiki|\$TWiki|g;
 
    return $localsite;
 }

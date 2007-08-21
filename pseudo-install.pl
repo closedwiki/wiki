@@ -28,7 +28,7 @@ sub usage {
     -copy - copy instead of linking
     -uninstall - self explanatory (doesn't remove dirs)
     all - install all modules found in twikiplugins
-    default - install modules listed in tools/MANIFEST
+    default - install modules listed in lib/MANIFEST
     <module>... one or more modules to install e.g. FirstPlugin SomeContrib ...
 EOM
 
@@ -195,7 +195,7 @@ if ($ARGV[0] eq "all") {
   @modules = ( grep { /(Tag|Plugin|Contrib|Skin|AddOn)$/ } readdir( D ));
   closedir( D );
 } elsif ($ARGV[0] eq "default") {
-    open(F, "<", "tools/MANIFEST") || die "Could not open MANIFEST: $!";
+    open(F, "<", "lib/MANIFEST") || die "Could not open MANIFEST: $!";
     local $/ = "\n";
     @modules =
       map { /(\w+)$/; $1 }
