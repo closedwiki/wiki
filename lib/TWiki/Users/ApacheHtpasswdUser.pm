@@ -94,6 +94,13 @@ sub removeUser {
     ASSERT( $login ) if DEBUG;
 
     $this->{error} = undef;
+
+    #don't ask to remove a user that does not exist - Apache::Htpasswd carpsA
+    unless ( $this->{apache}->fetchPass( $login ) ) {
+        $this->{error} = "User does not exist";
+        return;
+    }
+
     my $r;
     try {
         $r = $this->{apache}->htDelete( $login );
