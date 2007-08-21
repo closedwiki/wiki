@@ -11,16 +11,15 @@
 unless ( -e 'MAIN' ) {
    print STDERR "doing a fresh checkout\n";
    `svn co http://svn.twiki.org/svn/twiki/branches/MAIN > checkouMAIN.log`;
+   chdir('MAIN');
 } else {
 #TODO: should really do an svn revert..
    print STDERR "using existing checkout, removing ? files";
    chdir('MAIN');
    `svn status | grep ? | sed 's/?/rm -r/' | sh`;
    `svn up`;
-   chdir('..');
 }
 
-chdir('MAIN');
 my $twikihome = `pwd`;
 chomp($twikihome);
 

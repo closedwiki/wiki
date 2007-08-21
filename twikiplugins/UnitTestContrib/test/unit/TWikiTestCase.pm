@@ -68,17 +68,17 @@ sub set_up {
     $TWiki::cfg{SuperAdminGroup} = 'AdminGroup';
 
     # Disable/enable plugins so that only core extensions (those defined
-    # in tools/MANIFEST) are enabled, but they are *all* enabled.
+    # in lib/MANIFEST) are enabled, but they are *all* enabled.
 
     # First disable all plugins
     foreach my $k (keys %{$TWiki::cfg{Plugins}}) {
         $TWiki::cfg{Plugins}{$k}{Enabled} = 0;
     }
     # then reenable only those listed in MANIFEST
-    if ($ENV{TWIKI_HOME} && -e "$ENV{TWIKI_HOME}/tools/MANIFEST") {
-        open(F, "$ENV{TWIKI_HOME}/tools/MANIFEST") || die $!;
+    if ($ENV{TWIKI_HOME} && -e "$ENV{TWIKI_HOME}/lib/MANIFEST") {
+        open(F, "$ENV{TWIKI_HOME}/lib/MANIFEST") || die $!;
     } else {
-        open(F, "../../tools/MANIFEST") || die $!;
+        open(F, "../../lib/MANIFEST") || die $!;
     }
     local $/ = "\n";
     while (<F>) {
