@@ -31,11 +31,11 @@ Designed by: Crawford Currie
 %TOC{"TocFixture"}%
 <!-- /actual -->
 </td></tr><tr valign="top"><td>
-<!-- expected expand -->
+<!-- expected expand rex wine -->
 <div class="twikiToc">
 <span class="twikiTocTitle">The Top</span>
 <ul>
-<li> <a href="?@URLPARAMS#H1 &lt;!--1--&gt;">H1 <!--1--></a>
+<li> <a href="?@URLPARAMS#H1_1">H1 <!--1--></a>
 <ul>
 <li> <a href="?@URLPARAMS#H2">H2</a>
 </li>

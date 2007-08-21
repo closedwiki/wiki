@@ -37,10 +37,13 @@ Designed by: Crawford Currie
 		total += results[i];
 	}
 	var text = "<br />" + "Number of topics:" + " <b>" + total + " <\/b>";
-	insertHtml(text, 'twikiNumberOfResultsContainer');
-	if (total < 10) {
-		insertHtml('', 'twikiBottomResultCount');
-	}
+    var elem = document.getElementById('twikiNumberOfResultsContainer');
+    if (elem) {
+       elem.innerHTML = text;
+       if (total < 10) {
+          elem.innerHTML = '';
+       }
+    }
 //]]>
 </script>
 <!-- /expected -->
