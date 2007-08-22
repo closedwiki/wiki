@@ -485,10 +485,11 @@ sub _actionNext {
 
 # Invoked by "find more extensions" button in the Extensions section
 sub _actionFindMoreExtensions {
+    my $root = new TWiki::Configure::Root();
     print CGI::h1( 'Find TWiki Extensions');
     print '<div class="patternContent"><div class="patternTopic">';
 
-    my $ui = _checkLoadUI('EXTENSIONS');
+    my $ui = _checkLoadUI('EXTENSIONS',$root);
     return 1 unless $ui;
 
     print $ui->ui();
