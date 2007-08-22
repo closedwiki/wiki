@@ -56,7 +56,7 @@ HERE
 
     # Set the default site charset
     unless( defined( $TWiki::cfg{Site}{CharSet}) ) {
-        $TWiki::cfg{Site}{CharSet} = 'iso-8859-15';
+        $TWiki::cfg{Site}{CharSet} = 'iso-8859-1';
     }
 
     # Extract the default site language - ignores '@euro' part of

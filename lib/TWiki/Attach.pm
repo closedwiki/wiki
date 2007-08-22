@@ -271,6 +271,8 @@ sub getAttachmentLink {
     my $imgSize = '';
     my $prefs = $this->{session}->{prefs};
     my $store = $this->{session}->{store};
+    # I18N: URL-encode the attachment filename 
+    my $fileURL = TWiki::urlEncodeAttachment( $attName );
 
     if( $attName =~ /\.(gif|jpg|jpeg|png)$/i ) {
         # inline image
@@ -292,7 +294,7 @@ sub getAttachmentLink {
 
         $fileLink = $prefs->getPreferencesValue( 'ATTACHEDIMAGEFORMAT' );
         unless( $fileLink ) {
-            push( @attrs, src=>"%ATTACHURLPATH%/$attName" );
+            push( @attrs, src=>"%ATTACHURLPATH%/$fileURL" );
             push( @attrs, alt=>$attName );
             return "   * $fileComment: ".CGI::br().CGI::img({ @attrs });
         }
@@ -300,11 +302,15 @@ sub getAttachmentLink {
         # normal attached file
         $fileLink = $prefs->getPreferencesValue( 'ATTACHEDFILELINKFORMAT' );
         unless( $fileLink ) {
-            return "   * [[%ATTACHURL%/$attName][$attName]]: $fileComment";
+            return "   * [[%ATTACHURL%/$fileURL][$attName]]: $fileComment";
         }
     }
 
-    $fileLink =~ s/\$name/$attName/g;
+    # I18N: Site specified %ATTACHEDIMAGEFORMAT% or %ATTACHEDFILELINKFORMAT%,
+    # ensure that filename is URL encoded - first $name must be URL.
+    $fileLink =~ s/\$name/$fileURL/;
+    $fileLink =~ s/\$name/$attName/;
+
     $fileLink =~ s/\$comment/$fileComment/g;
     $fileLink =~ s/\$size/$imgSize/g;
     $fileLink =~ s/\\t/\t/go;
@@ -324,8 +330,7 @@ sub _imgsize {
     my( $x, $y) = ( 0, 0 );
 
     if( defined( $file ) ) {
-        # for crappy MS OSes - Win/Dos/NT use is NOT SUPPORTED
-        binmode( $file );
+        binmode( $file );		# For Windows
         my $s;
         return ( 0, 0 ) unless ( read( $file, $s, 4 ) == 4 );
         seek( $file, 0, 0 );

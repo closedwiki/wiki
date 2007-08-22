@@ -98,7 +98,10 @@ sub test_sanitizeAttachmentName {
     my $tainted = $ENV{PATH};
     my $untainted = $tainted;
     $untainted =~ s/(.*?)/$1/;
+    $untainted =~ s{[\\/]+$}{};          # Get rid of trailing slash/backslash (unlikely)
+    $untainted =~ s!^.*[\\/]!!;          # Get rid of directory part
     $untainted =~ s/^([\.\/\\]*)*(.*?)$/$2/go;
+
     $this->assert_str_equals($untainted, TWiki::Sandbox::sanitizeAttachmentName ($tainted));
 }
 

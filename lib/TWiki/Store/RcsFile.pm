@@ -60,18 +60,14 @@ sub new {
     my( $class, $session, $web, $topic, $attachment ) = @_;
     my $this = bless( { session => $session }, $class );
 
-    utf8::downgrade( $web ) if( $web && $] >= 5.008 );
     $this->{web} = $web;
 
     if( $topic ) {
         my $rcsSubDir = ( $TWiki::cfg{RCS}{useSubDir} ? '/RCS' : '' );
 
-        utf8::downgrade( $topic ) if( $] >= 5.008 );
         $this->{topic} = $topic;
 
         if( $attachment ) {
-            utf8::downgrade( $attachment ) if( $] >= 5.008 );
-
             $this->{attachment} = $attachment;
 
             $this->{file} = $TWiki::cfg{PubDir}.'/'.$web.'/'.
