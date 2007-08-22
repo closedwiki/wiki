@@ -2,18 +2,18 @@
 %STARTINCLUDE%
 ---+!! TWiki Upgrade Guide
 
-_This guide covers upgrading from a previous version of TWiki (such as Cairo or TWiki4.0) to TWiki 4.1__
+_This guide covers upgrading from a previous version of TWiki (such as Cairo or TWiki4.0) to TWiki 4.2__
 
 %TOC%
 
 ---++ Overview
 
-TWiki-4.0.0 was a major new release. TWiki-4.1.0 is a minor release without dramatic changes since 4.0.0
+TWiki-4.0.0 was a major new release. TWiki-4.1.0 was a minor release without dramatic changes since 4.0.0. TWiki-4.2.0 is also a minor release containing a few new features that can be seen by the end user, a large number of bug fixes, and a face lift for the skin. It also contains some important updates under the hood to the way users are handled which enables new types of authentication and integration with other systems. The most important new feature is the QuerySearch feature.
 
 ---++ Upgrade Requirements
 
    * Please review the AdminSkillsAssumptions before you upgrade TWiki
-   * Review TWiki:TWiki.TWikiUpgradeTo04x00x00 for latest information and experience notes.
+   * Review TWiki:TWiki.TWikiUpgradeTo04x02 for latest information and experience notes.
    * To upgrade from a release prior to TWiki Release 01-Sep-2004, start with TWiki:TWiki.UpgradingTWiki on TWiki.org
    * To upgrade from a standard TWiki Release 01-Sep-2004 to the latest TWiki-4.X Production Release, follow the instructions below
    * Once the upgrade has been applied, an existing earlier installation will still be able to read all the topics, but should not be used to write. Make sure you take a backup!
@@ -21,7 +21,7 @@ TWiki-4.0.0 was a major new release. TWiki-4.1.0 is a minor release without dram
 
 ---++ Major Changes Compared to TWiki Release 01-Sep-2004 and TWiki Release 4.0.0
 
-See TWikiReleaseNotes04x00 and TWikiReleaseNotes04x01
+See TWikiReleaseNotes04x00, TWikiReleaseNotes04x01 and TWikiReleaseNotes04x02
 
 
 #ManualUpgradeProcedure
@@ -42,13 +42,16 @@ The main steps are:
 
    * Follow the installation instructions in INSTALL.html which you find in the root of the new installation. Install the new release in a new directory. Do not install on top of the old release.
    * Use the [[%SCRIPTURL{configure}%][configure]] script to configure TWiki.
-      * If you are upgrading from a 4.0.x release, carry over the configure settings from the old release.
+      * If you are upgrading from a 4.x.x release, you can carry over the configure settings from the old release.
+      * You need to run configure and save the configuration once when you upgrade as this will update the altered and added settings.
+      * You can also choose to start with a fresh configuration and walk through all the settings using your old !LocalSite.cfg as a reference. This way you will not have old obsolete settings in the new !LocalSite.cfg.
+      * If at any time during the installation you want to start over from fresh all you need to do is delete the =lib/LocalSite.cfg= file and re-run configure.
    * Additional resources
       * TWiki:TWiki.UpgradingTWiki04x00PatchReleases
       * TWiki:TWiki.InstallingTWiki#OtherPlatforms
       * TWiki:TWiki.ApacheConfigGenerator
       * TWiki:TWiki.SettingFileAccessRightsLinuxUnix
-      * Your =lib/TWiki.cfg= from the old TWiki installation is a good resource for some of the settings you will need but you cannot reuse the old TWiki.cfg.
+      * If you upgrade from an older TWiki your =lib/TWiki.cfg= from the old TWiki installation is a good resource for some of the settings you will need but you cannot reuse the old TWiki.cfg.
    * Make sure you have a working basic TWiki before you continue
 
 ---+++ Install Extensions
@@ -59,12 +62,12 @@ The main steps are:
    * Check the plugin topics from your old TWiki installation. There may be plugin settings that you want to transfer to the new TWiki installation.
      %BR% __%H% Hint:__ For an easier upgrade later on, set the plugin preferences settings in the [[%LOCALSITEPREFS%]] topic, not in the plugin topic. To identify the plugin, prefix the name of the setting with the capitalized name of the plugin. For example, to change the =DEFAULT_TYPE= setting of the CommentPlugin, create a =COMMENTPLUGIN_DEFAULT_TYPE= setting in <nop>%LOCALSITEPREFS%.
    * Typical plugin settings you may have altered.
-      *  CommentPlugin - Set DEFAULT_TYPE
+      * CommentPlugin - Set DEFAULT_TYPE
       * EditTablePlugin - Set CHANGEROWS, Set QUIETSAVE, and Set EDITBUTTON
       * InterwikiPlugin - Set RULESTOPIC
       * InterWikis - If you added your own rules you should save this topic and not overwrite it.
       * SlideShowPlugin - Make sure you did not change the embedded 'Default Slide Template' If you did you should save it. It is a bad idea to do. It is better to define your own slide show templates as separate topics that do not get overwritten when you upgrade.
-      * SmiliesPlugin - Did you add your own smileys? No smileys were added 4.0.0 and 4.0.2 so you can just leave this topic as it is.
+      * SmiliesPlugin - Did you add your own smileys? No real changes were made to the smilies topic October 2005 so you can just leave this topic as it is.
       * TablePlugin - Set TABLEATTRIBUTES   
    * Remember that a plugin must be activated in [[%SCRIPTURLPATH{"configure"}%][configure]].
 
